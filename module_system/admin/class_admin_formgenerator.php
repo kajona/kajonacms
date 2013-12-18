@@ -105,9 +105,26 @@ class class_admin_formgenerator {
      * @return bool
      */
     public function validateForm() {
-        foreach($this->arrFields as $objOneField)
-            if($objOneField->getBitMandatory() && !$objOneField->validateValue())
-                $this->addValidationError($objOneField->getStrEntryName(), $objOneField->getStrValidationErrorMsg());
+        $objLang = class_carrier::getInstance()->getObjLang();
+
+        foreach($this->arrFields as $objOneField) {
+
+            //mandatory field
+            if($objOneField->getBitMandatory()) {
+                //if field is empty
+                if(trim($objOneField->getStrValue()) === "" || is_null($objOneField->getStrValue())) {
+                    $this->addValidationError($objOneField->getStrEntryName()."_empty", $objLang->getLang("commons_field_empty_error", "system", array($objOneField->getStrLabel())));
+                }
+            }
+
+            //if field is not empty -> validate
+            if(!(trim($objOneField->getStrValue()) === "" || is_null($objOneField->getStrValue()))) {
+                if(!$objOneField->validateValue()) {
+                    $this->addValidationError($objOneField->getStrEntryName(), $objOneField->getStrValidationErrorMsg());
+                }
+            }
+
+        }
 
         return count($this->arrValidationErrors) == 0;
     }
