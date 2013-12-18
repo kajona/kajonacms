@@ -11,8 +11,8 @@
  * The main purpose is to reduce the code stored at class_admin
  *
  * @package module_system
- * @author sidler@mulchprod.de
- * @since 4.0
+ * @author  sidler@mulchprod.de
+ * @since   4.0
  */
 class class_admin_helper {
 
@@ -20,11 +20,11 @@ class class_admin_helper {
      * Adds a menu-button to the second entry of the path-array. The menu renders the list of all modules installed,
      * including a quick-jump link.
      *
-     * @static
      *
-     * @param $arrPathEntries
+     * @param array $arrPathEntries
      * @param string $strSourceModule
      *
+     * @static
      * @internal param array $arrModuleActions
      * @return string
      */
@@ -87,9 +87,8 @@ class class_admin_helper {
     /**
      * Fetches the list of actions for a single module, saved to the session for performance reasons
      *
-     * @static
-     *
      * @param class_module_system_module $objModule
+     * @static
      *
      * @return array
      */
@@ -130,15 +129,17 @@ class class_admin_helper {
     /**
      * Static helper to flush the complete backend navigation cache for the current session
      * May be used during language-changes or user-switches
+     *
+     * @return void
      */
     public static function flushActionNavigationCache() {
 
         $arrAspects = class_module_system_aspect::getObjectList();
 
         foreach(class_module_system_module::getModulesInNaviAsArray() as $arrOneModule) {
-            $objOneModule = class_module_system_module::getModuleByName($arrOneModule["module_name"])->getAdminInstanceOfConcreteModule();
+            $objOneModule = class_module_system_module::getModuleByName($arrOneModule["module_name"]);
             foreach($arrAspects as $objOneAspect)
-                class_carrier::getInstance()->getObjSession()->sessionUnset(__CLASS__."adminNaviEntries".get_class($objOneModule).$objOneAspect->getSystemid());
+                class_carrier::getInstance()->getObjSession()->sessionUnset(__CLASS__."adminNaviEntries".$objOneModule->getSystemid().$objOneAspect->getSystemid());
         }
 
     }
