@@ -14,7 +14,7 @@
  * @since 4.0
  * @package module_system
  */
-class class_date_validator implements interface_validator {
+class class_date_validator implements interface_validator_extended {
 
     /**
      * Validates the passed chunk of data.
@@ -44,5 +44,16 @@ class class_date_validator implements interface_validator {
      */
     public function getStrName() {
         return "date";
+    }
+
+    /**
+     * Gets the validation message of the validator.
+     *
+     * @return string
+     */
+    public function getValidationMessage() {
+        $objLang = class_carrier::getInstance()->getObjLang();
+        $strDateFormat = $objLang->getLang("dateStyleShort", "system");
+        return $objLang->getLang("commons_validator_date_validationmessage", "system", array($strDateFormat));
     }
 }

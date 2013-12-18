@@ -113,7 +113,7 @@ class class_admin_formgenerator {
             if($objOneField->getBitMandatory()) {
                 //if field is empty
                 if(trim($objOneField->getStrValue()) === "" || is_null($objOneField->getStrValue())) {
-                    $this->addValidationError($objOneField->getStrEntryName()."_empty", $objLang->getLang("commons_field_empty_error", "system", array($objOneField->getStrLabel())));
+                    $this->addValidationError($objOneField->getStrEntryName()."_empty", $objLang->getLang("commons_validator_field_empty", "system", array($objOneField->getStrLabel())));
                 }
             }
 

@@ -271,10 +271,17 @@ class class_formentry_base {
     }
 
     public function getStrValidationErrorMsg() {
-        if($this->strValidationErrorMsg != "")
+        if($this->strValidationErrorMsg != "") {
             return $this->strValidationErrorMsg;
-        else
-            return $this->getStrLabel();
+        }
+        else {
+            if($this->getObjValidator() instanceof interface_validator_extended) {
+                return "'".$this->getStrLabel()."' :".$this->getObjValidator()->getValidationMessage();
+            }
+            else {
+                return "'".$this->getStrLabel()."'";
+            }
+        }
     }
 
 

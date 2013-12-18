@@ -14,7 +14,7 @@
  * @since 4.3
  * @package module_system
  */
-class class_int_validator implements interface_validator {
+class class_int_validator implements interface_validator_extended {
 
     /**
      * Validates the passed chunk of data.
@@ -37,5 +37,15 @@ class class_int_validator implements interface_validator {
      */
     public function getStrName() {
         return "int";
+    }
+
+    /**
+     * Gets the validation message of the validator.
+     *
+     * @return string
+     */
+    public function getValidationMessage() {
+        $objLang = class_carrier::getInstance()->getObjLang();
+        return $objLang->getLang("commons_validator_int_validationmessage", "system");
     }
 }

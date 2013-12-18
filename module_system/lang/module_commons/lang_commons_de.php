@@ -69,3 +69,8 @@ $lang["commons_unlock"]                  = "Datensatz entsperren";
 $lang["commons_yes"]                     = "Ja";
 $lang["commons_reset"]                     = "Zurücksetzen";
 $lang["commons_dropdown_dataplaceholder"]= "Bitte wählen...";
+
+$lang["commons_validator_field_empty"]= "'{0}' ist leer";
+$lang["commons_validator_numeric_validationmessage"]= "Das Feld muss numerische Werte enthalten";
+$lang["commons_validator_int_validationmessage"]= "Das Feld muss Ganzzahlen enthalten";
+$lang["commons_validator_date_validationmessage"]= "Das Feld muss ein Datumsformat im Format '{0}' enthalten";

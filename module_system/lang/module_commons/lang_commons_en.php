@@ -69,3 +69,9 @@ $lang["commons_unlock"]                  = "Unlock record";
 $lang["commons_yes"]                     = "Yes";
 $lang["commons_reset"]                     = "Reset";
 $lang["commons_dropdown_dataplaceholder"]= "Please select...";
+
+
+$lang["commons_validator_field_empty"]= "'{0}' is empty";
+$lang["commons_validator_numeric_validationmessage"]= "The field must contain numeric values";
+$lang["commons_validator_int_validationmessage"]= "The field must contain integer values";
+$lang["commons_validator_date_validationmessage"]= "The field must contain a date format '{0}'";
