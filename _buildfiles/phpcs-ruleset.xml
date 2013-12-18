@@ -34,11 +34,13 @@
         <exclude name="PEAR.Commenting.ClassComment.WrongStyle"/>
         <exclude name="PEAR.Commenting.ClassComment.MissingTag"/>
         <exclude name="PEAR.Commenting.ClassComment.InvalidAuthors"/>
+        <exclude name="PEAR.Commenting.ClassComment.TagIndent"/>
         <exclude name="PEAR.Commenting.FileComment.WrongStyle"/>
         <exclude name="PEAR.Commenting.FileComment.WrongTagOrder"/>
         <exclude name="PEAR.Commenting.FileComment.TagsNotGrouped"/>
         <exclude name="PEAR.Commenting.FileComment.MissingTag"/>
         <exclude name="PEAR.Commenting.FileComment.InvalidAuthors"/>
+        <exclude name="PEAR.Commenting.FileComment.TagIndent"/>
         <exclude name="PEAR.ControlStructures.ControlSignature"/>
         <exclude name="PEAR.Commenting.FunctionComment.SpacingAfterParams"/>
         <exclude name="PEAR.Commenting.FunctionComment.SpacingBeforeTags"/>
