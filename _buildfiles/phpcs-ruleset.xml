@@ -37,6 +37,7 @@
         <exclude name="PEAR.Commenting.FileComment.WrongTagOrder"/>
         <exclude name="PEAR.Commenting.FileComment.TagsNotGrouped"/>
         <exclude name="PEAR.Commenting.FileComment.MissingTag"/>
+        <exclude name="PEAR.Commenting.FileComment.InvalidAuthors"/>
         <exclude name="PEAR.ControlStructures.ControlSignature"/>
         <exclude name="PEAR.Commenting.FunctionComment.SpacingAfterParams"/>
         <exclude name="PEAR.Commenting.FunctionComment.SpacingBeforeTags"/>
