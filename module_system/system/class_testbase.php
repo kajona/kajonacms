@@ -98,9 +98,9 @@ abstract class class_testbase extends PHPUnit_Framework_TestCase {
                             }
                         }
                     }
-                    else if($strDataType == "int") {
+                    else if($strDataType == "int" || $strDataType == "numeric") {
                         if($strFieldType != "dropdown") {
-                            $objMethodValue = 0;
+                            $objMethodValue = 1;
                         }
                     }
                     else if($strDataType == "class_date") {
@@ -108,6 +108,9 @@ abstract class class_testbase extends PHPUnit_Framework_TestCase {
                     }
                     else if($strDataType == "bool") {
                             $objMethodValue = false;
+                    }
+                    else {
+                        continue;//continue with foreach
                     }
 
                     $objReflectionMethod->invoke($obj, $objMethodValue);
