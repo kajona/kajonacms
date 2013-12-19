@@ -64,6 +64,14 @@ abstract class class_testbase extends PHPUnit_Framework_TestCase {
     }
 
 
+    /**
+     * Crreates an object of type '$strClassType'.
+     *
+     * @param $strClassType - the name of the class as a string
+     * @param $strParentId - the parent id of the object to be created
+     *
+     * @return object
+     */
     protected function createObject($strClassType, $strParentId) {
         //create the object
         $objReflector = new ReflectionClass($strClassType);
@@ -94,7 +102,7 @@ abstract class class_testbase extends PHPUnit_Framework_TestCase {
                             $objMethodValue = $strPropName."_".$obj->getStrSystemid();
 
                             if(uniStrlen($objMethodValue) > 20) {
-                                $objMethodValue = uniStrTrim($objMethodValue, 19);
+                                $objMethodValue = uniStrTrim($objMethodValue, 20, "");
                             }
                         }
                     }
