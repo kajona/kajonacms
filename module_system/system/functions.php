@@ -437,8 +437,8 @@ function dateToString($objDate, $bitLong = true, $strFormat = "") {
     $strReturn = "";
     if($objDate != null) {
 
-        //if the $objDate is a string, conver it to date object
-        if(is_string($objDate) && !is_object($objDate)) {
+        //if the $objDate is a string, convert it to date object
+        if(!$objDate instanceof class_date && uniEreg("([0-9]){14}", $objDate)) {
             $objDate = new class_date($objDate);
         }
 
