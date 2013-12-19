@@ -46,7 +46,9 @@ class class_element_guestbook_admin extends class_element_admin implements inter
      */
     private $intAmount;
 
-
+    /**
+     * @return class_admin_formgenerator|null
+     */
     public function getAdminForm() {
         $objForm = parent::getAdminForm();
 
@@ -61,6 +63,7 @@ class class_element_guestbook_admin extends class_element_admin implements inter
 
     /**
      * @param string $strTemplate
+     * @return void
      */
     public function setStrTemplate($strTemplate) {
         $this->strTemplate = $strTemplate;
@@ -75,6 +78,7 @@ class class_element_guestbook_admin extends class_element_admin implements inter
 
     /**
      * @param string $strGuestbook
+     * @return void
      */
     public function setStrGuestbook($strGuestbook) {
         $this->strGuestbook = $strGuestbook;
@@ -89,6 +93,7 @@ class class_element_guestbook_admin extends class_element_admin implements inter
 
     /**
      * @param int $intAmount
+     * @return void
      */
     public function setIntAmount($intAmount) {
         $this->intAmount = $intAmount;
