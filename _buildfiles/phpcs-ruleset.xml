@@ -35,6 +35,7 @@
         <exclude name="PEAR.Commenting.ClassComment.MissingTag"/>
         <exclude name="PEAR.Commenting.ClassComment.InvalidAuthors"/>
         <exclude name="PEAR.Commenting.ClassComment.TagIndent"/>
+        <exclude name="PEAR.Commenting.ClassComment.WrongTagOrder"/>
         <exclude name="PEAR.Commenting.FileComment.WrongStyle"/>
         <exclude name="PEAR.Commenting.FileComment.WrongTagOrder"/>
         <exclude name="PEAR.Commenting.FileComment.TagsNotGrouped"/>
