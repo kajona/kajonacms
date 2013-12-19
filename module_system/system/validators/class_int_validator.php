@@ -7,7 +7,7 @@
 ********************************************************************************************************/
 
 /**
- * A simple validator to validate a positive integer.
+ * A simple validator to validate an integer.
  * By default, the string must contain a single char, the max length is unlimited.
  *
  * @author sidler@mulchprod.de
@@ -24,7 +24,7 @@ class class_int_validator implements interface_validator_extended {
      * @return bool
      */
     public function validate($objValue) {
-        return is_numeric($objValue) && ctype_digit(strval($objValue));
+        return preg_match("/^-?[0-9]+$/", $objValue);
     }
 
 

@@ -7,14 +7,14 @@
 ********************************************************************************************************/
 
 /**
- * A simple validator to validate is a string has a length of exactly two chars
+ * A simple validator to validate a positive integer.
  * By default, the string must contain a single char, the max length is unlimited.
  *
- * @author sidler@mulchprod.de
- * @since 4.0
+ * @author stefan.meyer1@yahoo.de
+ * @since 4.4
  * @package module_system
  */
-class class_twochars_validator implements interface_validator {
+class class_posint_validator implements interface_validator_extended {
 
     /**
      * Validates the passed chunk of data.
@@ -24,11 +24,7 @@ class class_twochars_validator implements interface_validator {
      * @return bool
      */
     public function validate($objValue) {
-
-        if(!is_string($objValue))
-            return false;
-
-        return uniStrlen($objValue) === 2;
+        return preg_match("/^[0-9]+$/", $objValue);
     }
 
 
@@ -40,6 +36,16 @@ class class_twochars_validator implements interface_validator {
      * @return string
      */
     public function getStrName() {
-        return "twochars";
+        return "posint";
+    }
+
+    /**
+     * Gets the validation message of the validator.
+     *
+     * @return string
+     */
+    public function getValidationMessage() {
+        $objLang = class_carrier::getInstance()->getObjLang();
+        return $objLang->getLang("commons_validator_posint_validationmessage", "system");
     }
 }
