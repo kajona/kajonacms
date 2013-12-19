@@ -11,14 +11,14 @@
 
 //editable entries
 $lang["action_execute_search"]           = "Execute search";
-$lang["action_new"]                      = "New Search";
+$lang["action_new"]                      = "Create search";
 $lang["delete_question"]                 = "Do you really want to delete the search &quot;<b>%%element_name%%</b>&quot;?";
 $lang["form_additionalheader"]           = "Additional filter";
 $lang["form_search_objChangeEnddate"]    = "Change to";
 $lang["form_search_objChangeStartdate"]  = "Change from";
 $lang["form_search_query"]               = "Searchterm";
 $lang["header_amount"]                   = "Number";
-$lang["header_query"]                    = "Seachterm";
+$lang["header_query"]                    = "Searchterm";
 $lang["hitlist_text1"]                   = "The search for";
 $lang["hitlist_text2"]                   = "found";
 $lang["hitlist_text3"]                   = "results";

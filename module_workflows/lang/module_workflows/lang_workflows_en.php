@@ -17,7 +17,7 @@ $lang["_workflows_trigger_authkey_"]     = "Auth-Key";
 $lang["_workflows_trigger_authkey_hint"] = "Use the auth-key as a secret when triggering the workflow-engine. Only if the passed auth-key matches the saved auth-key, the workflows will be triggered. This avoids that third-party clients could trigger the workflows (DOS-attack).<br />Use the following URL to trigger the workflow engine, e.g. using a cron-job: <br />"._xmlpath_."?module=workflows&action=trigger&authkey=".(defined("_workflows_trigger_authkey_") ? _workflows_trigger_authkey_ : "");
 $lang["action_edit_handler"]             = "Edit default values";
 $lang["action_instantiate_handler"]      = "Create a new workflow instance";
-$lang["action_list_handlers"]            = "Workflow-Handlers";
+$lang["action_list_handlers"]            = "Workflow handlers";
 $lang["action_show_details"]             = "Show details";
 $lang["delete_question"]                 = "Do you really want to delete the workflow &quot;<b>%%element_name%%</b>&quot;?";
 $lang["header_list_all"]                 = "All workflows";
