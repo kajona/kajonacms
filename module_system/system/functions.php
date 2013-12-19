@@ -435,12 +435,13 @@ function timeToString($intTime, $bitLong = true) {
  */
 function dateToString($objDate, $bitLong = true, $strFormat = "") {
     $strReturn = "";
-    if($objDate != null) {
 
-        //if the $objDate is a string, convert it to date object
-        if(!$objDate instanceof class_date && uniEreg("([0-9]){14}", $objDate)) {
-            $objDate = new class_date($objDate);
-        }
+    //if the $objDate is a string, convert it to date object
+    if($objDate != null && !$objDate instanceof class_date && uniEreg("([0-9]){14}", $objDate)) {
+        $objDate = new class_date($objDate);
+    }
+
+    if($objDate instanceof class_date) {
 
         //convert to a current date
         if($strFormat == "") {

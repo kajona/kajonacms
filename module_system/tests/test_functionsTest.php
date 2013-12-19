@@ -2,8 +2,14 @@
 
 require_once (__DIR__."/../../module_system/system/class_testbase.php");
 
+/**
+ * Class class_test_functions
+ */
 class class_test_functions extends class_testbase  {
 
+    /**
+     * @return void
+     */
     public function testReplaceTextLinks() {
         /**
          * @todo: white-space handling is still messed up
@@ -27,5 +33,45 @@ class class_test_functions extends class_testbase  {
         $this->assertEquals("hello <a href=\"http://www.kajona.de\">http://www.kajona.de</a> world", replaceTextLinks("hello <a href=\"http://www.kajona.de\">http://www.kajona.de</a> world"));
     }
 
+    /**
+     * @return void
+     */
+    public function testDateToString() {
+
+        class_carrier::getInstance()->getObjLang()->setStrTextLanguage("de");
+
+        $this->assertEquals("15.05.2013", dateToString(new class_date(20130515122324), false));
+        $this->assertEquals("15.05.2013 12:23:24", dateToString(new class_date(20130515122324), true));
+
+        $this->assertEquals("15.05.2013", dateToString(new class_date("20130515122324"), false));
+        $this->assertEquals("15.05.2013 12:23:24", dateToString(new class_date("20130515122324"), true));
+
+        $this->assertEquals("15.05.2013", dateToString(20130515122324, false));
+        $this->assertEquals("15.05.2013 12:23:24", dateToString(20130515122324, true));
+
+        $this->assertEquals("15.05.2013", dateToString("20130515122324", false));
+        $this->assertEquals("15.05.2013 12:23:24", dateToString("20130515122324", true));
+
+
+        $this->assertEquals("", dateToString(null));
+        $this->assertEquals("", dateToString(""));
+        $this->assertEquals("", dateToString("asdfsfdsfdsfds"));
+
+
+
+        class_carrier::getInstance()->getObjLang()->setStrTextLanguage("en");
+
+        $this->assertEquals("05/15/2013", dateToString(new class_date(20130515122324), false));
+        $this->assertEquals("05/15/2013 12:23:24", dateToString(new class_date(20130515122324), true));
+
+        $this->assertEquals("05/15/2013", dateToString(new class_date("20130515122324"), false));
+        $this->assertEquals("05/15/2013 12:23:24", dateToString(new class_date("20130515122324"), true));
+
+        $this->assertEquals("05/15/2013", dateToString(20130515122324, false));
+        $this->assertEquals("05/15/2013 12:23:24", dateToString(20130515122324, true));
+
+        $this->assertEquals("05/15/2013", dateToString("20130515122324", false));
+        $this->assertEquals("05/15/2013 12:23:24", dateToString("20130515122324", true));
+    }
 }
 
