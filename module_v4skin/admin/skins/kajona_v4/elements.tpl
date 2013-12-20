@@ -1276,51 +1276,11 @@ The language switch surrounds the buttons
 
 <dashboard_wrapper>
     <table class="dashBoard"><tr>%%entries%%</tr></table>
-
     <script type="text/javascript">
-
-        $('.adminwidgetColumn > li').each(function () {
-            var widget = $(this);
-            var systemId = widget.data('systemid');
-            var content = widget.find('.content').first();
-            KAJONA.admin.ajax.genericAjaxCall('dashboard', 'getWidgetContent', systemId, function(data, status, jqXHR) {
-                if (status == 'success') {
-                    content.removeClass('loadingContainer');
-                    content.html( $.parseJSON(data) );
-                    //TODO use jquerys eval?
-                    KAJONA.util.evalScript(data);
-                    KAJONA.admin.tooltip.initTooltip();
-                } else {
-                    //KAJONA.admin.statusDisplay.messageError('<b>Request failed!</b><br />' + data);
-                }
-            });
-        });
-
-        $("ul.adminwidgetColumn").each(function(index) {
-
-            $(this).sortable({
-                items: 'li.dbEntry',
-                handle: 'h2',
-                forcePlaceholderSize: true,
-                cursor: 'move',
-                connectWith: '.adminwidgetColumn',
-                placeholder: 'dashboardPlaceholder',
-                stop: function(event, ui) {
-                    //search list for new pos
-                    var intPos = 0;
-                    $(".dbEntry").each(function(index) {
-                        intPos++;
-                        if($(this).data("systemid") == ui.item.data("systemid")) {
-                            KAJONA.admin.ajax.genericAjaxCall("dashboard", "setDashboardPosition", ui.item.data("systemid") + "&listPos=" + intPos+"&listId="+ui.item.closest('ul').attr('id'), KAJONA.admin.ajax.regularCallback)
-                            return false;
-                        }
-                    });
-                },
-                delay: KAJONA.util.isTouchDevice() ? 2000 : 0
-            }).find("h2").css("cursor", "move");
+        KAJONA.admin.loader.loadFile('/core/module_dashboard/admin/scripts/dashboard.js', function() {
+            KAJONA.admin.dashboard.init();
         });
     </script>
-
 </dashboard_wrapper>
 
 ---------------------------------------------------------------------------------------------------------

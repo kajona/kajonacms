@@ -9,6 +9,8 @@
 
 
 /**
+ * The dashboard admin class
+ *
  * @package module_dashboard
  * @author sidler@mulchprod.de
  *
@@ -23,11 +25,13 @@ class class_module_dashboard_admin extends class_admin implements interface_admi
     private $strStartYearKey = "DASHBOARD_CALENDAR_START_YEAR";
 
 
+    /**
+     * @return array
+     */
     public function getOutputModuleNavi() {
         $arrReturn = array();
         $arrReturn[] = array("view", getLinkAdmin($this->arrModule["modul"], "list", "", $this->getLang("modul_titel"), "", "", true, "adminnavi"));
         $arrReturn[] = array("view", getLinkAdmin($this->arrModule["modul"], "calendar", "", $this->getLang("action_calendar"), "", "", true, "adminnavi"));
-        //$arrReturn[] = array("view", getLinkAdmin($this->arrModule["modul"], "sitemap", "", $this->getLang("actionSitemap"), "", "", true, "adminnavi"));
         $arrReturn[] = array("", "");
         $arrReturn[] = array("edit", getLinkAdmin($this->arrModule["modul"], "addWidgetToDashboard", "", $this->getLang("action_add_widget_to_dashboard"), "", "", true, "adminnavi"));
         $arrReturn[] = array("", "");
@@ -35,6 +39,9 @@ class class_module_dashboard_admin extends class_admin implements interface_admi
         return $arrReturn;
     }
 
+    /**
+     * @return array
+     */
     protected function getArrOutputNaviEntries() {
         $arrReturn = parent::getArrOutputNaviEntries();
         if(isset($arrReturn[count($arrReturn)-2]))
@@ -368,14 +375,6 @@ JS;
         return $strReturn;
     }
 
-    /**
-     * @return string
-     * @permissions view
-     * @autoTestable
-     */
-    protected function actionSitemap() {
-        return $this->objToolkit->getAdminSitemap();
-    }
 }
 
 
