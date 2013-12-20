@@ -7,7 +7,8 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 395
+//Kajona Language Editor Core Build 398
+
 
 //editable entries
 $lang["action_config"]                   = "Einstellungen";
@@ -24,6 +25,7 @@ $lang["message_reply"]                   = "Antworten";
 $lang["message_sender"]                  = "Absender";
 $lang["message_sent_success"]            = "Die Nachricht wurde erfolgreich verschickt.";
 $lang["message_subject"]                 = "Betreff";
+$lang["message_to"]                      = "An";
 $lang["message_type"]                    = "Typ";
 $lang["messageprovider_packageupdate_name"] = "Update-Meldungen";
 $lang["modul_titel"]                     = "Nachrichten";
