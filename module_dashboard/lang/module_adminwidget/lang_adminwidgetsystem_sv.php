@@ -9,6 +9,7 @@
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
 //Kajona Language Editor Core Build 395
 
+
 //editable entries
 $lang["note_content"]                    = "Innehåll";
 $lang["note_name"]                       = "Anteckningar";
@@ -31,8 +32,6 @@ $lang["systemcheck_checkboxphp"]         = "PHP kontroll";
 $lang["systemcheck_kajona_filepresent"]  = "tillgänglig";
 $lang["systemcheck_kajona_writeper"]     = "Skrivrättigheter på";
 $lang["systemcheck_name"]                = "Systemkontroll";
-$lang["systemcheck_no"]                  = "Nej";
 $lang["systemcheck_php_regglobal"]       = "PHP Register globals: ";
 $lang["systemcheck_php_safemode"]        = "PHP Safe mode: ";
 $lang["systemcheck_php_urlfopen"]        = "PHP Tillåt url fopen: ";
-$lang["systemcheck_yes"]                 = "Ja";

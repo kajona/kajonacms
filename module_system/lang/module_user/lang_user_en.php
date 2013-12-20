@@ -7,10 +7,11 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 395
+//Kajona Language Editor Core Build 398
 
 //non-editable entries
 $lang["permissions_header"]              = array(0 => "View", 1 => "Edit", 2 => "Delete", 3 => "Permissions", 4 => "Logs", 5 => "", 6 => "", 7 => "", 8 => "");
+
 
 //editable entries
 $lang["_admin_skin_default_"]            = "Default admin skin";
@@ -20,6 +21,11 @@ $lang["_user_log_nrofrecords_"]          = "Number of rows";
 $lang["_user_log_nrofrecords_hint"]      = "Defines the number of rows to be shown in the login logfile.";
 $lang["_user_selfedit_"]                 = "Edit own profile";
 $lang["_user_selfedit_hint"]             = "Defines, if the user is allowed to change its own profile.";
+$lang["action_edit_user"]                = "Edit user";
+$lang["action_group_edit"]               = "Edit group";
+$lang["action_group_member"]             = "Show members of the group";
+$lang["action_group_new"]                = "Create group";
+$lang["action_new_user"]                 = "Create user";
 $lang["fehler_speichern"]                = "An error occurred while saving profile!";
 $lang["form_group_desc"]                 = "Description";
 $lang["form_user_city"]                  = "City";
@@ -42,15 +48,12 @@ $lang["group_usersource"]                = "Group-Source";
 $lang["gruppe_anlegen_erfolg"]           = "Group was saved successfully";
 $lang["gruppe_anlegen_fehler"]           = "An error occurred while saving group";
 $lang["gruppe_anlegen_fehler_name"]      = "Please provide a group name";
-$lang["action_group_edit"]               = "Edit group";
 $lang["gruppe_bearbeiten_x"]             = "This group can't be edited";
 $lang["gruppe_loeschen_erfolg"]          = "The group was deleted successfully";
 $lang["gruppe_loeschen_fehler"]          = "An error occurred while deleting group";
 $lang["gruppe_loeschen_frage"]           = "Do you really want to delete the group &quot;<b>%%element_name%%</b>&quot;?";
 $lang["gruppe_loeschen_x"]               = "This group can't be deleted";
-$lang["action_group_member"]               = "Show members of the group";
 $lang["gruppen"]                         = "Groups: ";
-$lang["action_group_new"]                 = "Create group";
 $lang["gruppen_liste"]                   = "All groups";
 $lang["lang_bg"]                         = "Bulgarian";
 $lang["lang_de"]                         = "German";
@@ -81,7 +84,7 @@ $lang["login_print"]                     = "Print page";
 $lang["login_printview"]                 = "Open print-view";
 $lang["login_profileTitle"]              = "Edit profile";
 $lang["login_sessid"]                    = "Session-ID";
-$lang["login_sitmap"]                    = "Sitemap";
+$lang["login_sitemap"]                   = "Sitemap";
 $lang["login_status"]                    = "Status";
 $lang["login_statusTitle"]               = "Logged in as";
 $lang["login_status_0"]                  = "Login Error";
@@ -120,8 +123,6 @@ $lang["user_accept"]                     = "Select user";
 $lang["user_active"]                     = "Change status (is active)";
 $lang["user_admin"]                      = "Admin login";
 $lang["user_aktiv"]                      = "Active";
-$lang["action_new_user"]                    = "Create user";
-$lang["action_edit_user"]                 = "Edit user";
 $lang["user_browser"]                    = "Search user";
 $lang["user_browser_reset"]              = "Remove user";
 $lang["user_browser_show"]               = "Show users";

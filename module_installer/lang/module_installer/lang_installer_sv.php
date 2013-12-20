@@ -7,11 +7,11 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 395
+//Kajona Language Editor Core Build 398
+
 
 //editable entries
 $lang["installer_config_dbdriver"]       = "Drivruting till databas";
-$lang["installer_config_dbdriverinfo"]   = "Moduler tillgängliga i systemet";
 $lang["installer_config_dbhostname"]     = "Databasserver";
 $lang["installer_config_dbname"]         = "Databasnamn";
 $lang["installer_config_dbpassword"]     = "Databaslösenord";

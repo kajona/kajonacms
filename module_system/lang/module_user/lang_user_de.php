@@ -7,10 +7,11 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 395
+//Kajona Language Editor Core Build 398
 
 //non-editable entries
 $lang["permissions_header"]              = array(0 => "Anzeigen", 1 => "Bearbeiten", 2 => "Löschen", 3 => "Rechte", 4 => "Logs", 5 => "", 6 => "", 7 => "", 8 => "");
+
 
 //editable entries
 $lang["_admin_skin_default_"]            = "Standard-Admin-Skin";
@@ -20,6 +21,11 @@ $lang["_user_log_nrofrecords_"]          = "Anzahl Zeilen";
 $lang["_user_log_nrofrecords_hint"]      = "Definiert die Anzahl an Zeilen, die im Login-Protokoll ausgegeben werden sollen.";
 $lang["_user_selfedit_"]                 = "Eigene Daten bearbeiten";
 $lang["_user_selfedit_hint"]             = "Legt fest, ob ein Benutzer seine eigenen Daten bearbeiten darf";
+$lang["action_edit_user"]                = "Benutzer bearbeiten";
+$lang["action_group_edit"]               = "Gruppe bearbeiten";
+$lang["action_group_member"]             = "Mitglieder der Gruppe anzeigen";
+$lang["action_group_new"]                = "Neue Gruppe";
+$lang["action_new_user"]                 = "Neuer Benutzer";
 $lang["fehler_speichern"]                = "Beim Speichern des Benutzers ist ein Fehler aufgetreten!";
 $lang["form_group_desc"]                 = "Beschreibung";
 $lang["form_user_city"]                  = "Ort";
@@ -42,15 +48,12 @@ $lang["group_usersource"]                = "Gruppenquelle";
 $lang["gruppe_anlegen_erfolg"]           = "Gruppe erfolgreich gespeichert";
 $lang["gruppe_anlegen_fehler"]           = "Fehler beim Speichern der Gruppe";
 $lang["gruppe_anlegen_fehler_name"]      = "Bitte Gruppenname angeben";
-$lang["action_group_edit"]               = "Gruppe bearbeiten";
 $lang["gruppe_bearbeiten_x"]             = "Diese Gruppe kann nicht bearbeitet werden";
 $lang["gruppe_loeschen_erfolg"]          = "Löschen erfolgreich";
 $lang["gruppe_loeschen_fehler"]          = "Löschen fehlerhaft";
 $lang["gruppe_loeschen_frage"]           = "Möchten Sie die Gruppe &quot;<b>%%element_name%%</b>&quot; wirklich löschen?";
 $lang["gruppe_loeschen_x"]               = "Diese Gruppe kann nicht gelöscht werden";
-$lang["action_group_member"]               = "Mitglieder der Gruppe anzeigen";
 $lang["gruppen"]                         = "Gruppen: ";
-$lang["action_group_new"]                 = "Neue Gruppe";
 $lang["gruppen_liste"]                   = "Alle Gruppen";
 $lang["lang_bg"]                         = "Bulgarisch";
 $lang["lang_de"]                         = "Deutsch";
@@ -121,8 +124,6 @@ $lang["user_accept"]                     = "Benutzer auswählen";
 $lang["user_active"]                     = "Status ändern (ist aktiv)";
 $lang["user_admin"]                      = "Admin-Login";
 $lang["user_aktiv"]                      = "Aktiv";
-$lang["action_new_user"]                    = "Neuer Benutzer";
-$lang["action_edit_user"]                 = "Benutzer bearbeiten";
 $lang["user_browser"]                    = "Benutzer suchen";
 $lang["user_browser_reset"]              = "Benutzer entfernen";
 $lang["user_browser_show"]               = "Benutzer anzeigen";

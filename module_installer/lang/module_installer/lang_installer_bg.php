@@ -9,6 +9,7 @@
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
 //Kajona Language Editor Core Build 395
 
+
 //editable entries
 $lang["installer_config_dbdriver"]       = "Вид база данни";
 $lang["installer_config_dbhostname"]     = "Сървър база данни: ";

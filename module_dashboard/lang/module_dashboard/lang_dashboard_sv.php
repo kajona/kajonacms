@@ -9,11 +9,11 @@
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
 //Kajona Language Editor Core Build 395
 
+
 //editable entries
 $lang["action_add_widget_to_dashboard"]  = "Infoga widget";
 $lang["action_calendar"]                 = "Kalender";
 $lang["addWidgetNextStep"]               = "Nästa";
-$lang["addWidgetSave"]                   = "Spara";
 $lang["calendar_next"]                   = "Nästa månad  &gt;&gt;";
 $lang["calendar_prev"]                   = "&lt;&lt; föregående månad";
 $lang["calendar_weekday"]                = "måndag,tisdag,onsdag,torsdag,fredag,lördag,söndag";

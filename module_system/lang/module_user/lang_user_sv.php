@@ -7,7 +7,8 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 395
+//Kajona Language Editor Core Build 398
+
 
 //editable entries
 $lang["_admin_skin_default_"]            = "Standard administrations-skin";
@@ -17,10 +18,12 @@ $lang["_user_log_nrofrecords_"]          = "Antal rader";
 $lang["_user_log_nrofrecords_hint"]      = "Definierar hur många rader som skall visas i inloggningsprotokollet.";
 $lang["_user_selfedit_"]                 = "Redigera egna data";
 $lang["_user_selfedit_hint"]             = "Bestämmer om en användare skall kunna redigeras sina egna data";
-$lang["admin"]                           = "Admin inloggning";
-$lang["fehler_recht"]                    = "Inte tillräckliga rättigheter för denna åtgärd";
+$lang["action_edit_user"]                = "Redigera användare";
+$lang["action_group_edit"]               = "Redigera grupp";
+$lang["action_group_member"]             = "Visa gruppens medlemmar";
+$lang["action_group_new"]                = "Ny grupp";
+$lang["action_new_user"]                 = "Ny användare";
 $lang["fehler_speichern"]                = "Ett fel uppstod vid sparande av användare!";
-$lang["form_user_active"]                = "Aktiverad";
 $lang["form_user_city"]                  = "Ort";
 $lang["form_user_date"]                  = "Födelsedatum";
 $lang["form_user_email"]                 = "E-mail";
@@ -34,19 +37,15 @@ $lang["form_user_street"]                = "Gata";
 $lang["form_user_tel"]                   = "Telefon";
 $lang["group_accept"]                    = "Ta över grupp";
 $lang["group_memberlist"]                = "Gruppens medlemmar";
-$lang["gruppe"]                          = "Gruppens namn";
 $lang["gruppe_anlegen_erfolg"]           = "Sparande av gruppen har lyckats";
 $lang["gruppe_anlegen_fehler"]           = "Fel uppstod vid sparande av gruppen";
 $lang["gruppe_anlegen_fehler_name"]      = "Vänligen ange gruppens namn";
-$lang["action_group_edit"]               = "Redigera grupp";
 $lang["gruppe_bearbeiten_x"]             = "Denna grupp kan inte redigeras";
 $lang["gruppe_loeschen_erfolg"]          = "Radering har lyckats";
 $lang["gruppe_loeschen_fehler"]          = "Ett fel uppstod vid radering";
 $lang["gruppe_loeschen_frage"]           = "Vill du verkligen rader gruppen &quot;<b>%%element_name%%</b>&quot;?";
 $lang["gruppe_loeschen_x"]               = "Denna grupp kan inte raderas";
-$lang["action_group_member"]               = "Visa gruppens medlemmar";
 $lang["gruppen"]                         = "Grupper";
-$lang["action_group_new"]                 = "Ny grupp";
 $lang["gruppen_liste"]                   = "Alla grupper";
 $lang["lang_bg"]                         = "Bulgariska";
 $lang["lang_de"]                         = "Tyska";
@@ -60,7 +59,6 @@ $lang["login_changeButton"]              = "Ändra lösenord";
 $lang["login_change_error"]              = "Ett fel uppstod vid förfrågan";
 $lang["login_change_success"]            = "Ändring av lösenord har lyckats. Du ka nu  <a href=\"_webpath_/admin\">logga in</a>på systemet.";
 $lang["login_dashboard"]                 = "Startsida";
-$lang["login_datum"]                     = "Datum";
 $lang["login_ip"]                        = "IP-adress";
 $lang["login_loginButton"]               = "Logga in";
 $lang["login_loginCookiesInfo"]          = "Vänligen tillåt cookies i webläsaren och ladda upp sidan på nytt för att kunna utnyttja alla funktioner.";
@@ -82,13 +80,10 @@ $lang["login_user"]                      = "Användare";
 $lang["loginlog"]                        = "Inloggningsprotokoll";
 $lang["mitglied_loeschen"]               = "Radera användare från grupp";
 $lang["mitglied_loeschen_erfolg"]        = "Radering av användare från gruppen har lyckats";
-$lang["mitglied_loeschen_fehler"]        = "Fel har uppstått vid radering";
 $lang["mitglied_loeschen_frage"]         = "Vill du verkligen radera användare &quot;<b>%%element_name%%</b>&quot;från gruppen?";
 $lang["mitglied_speichern_erfolg"]       = "Sparande av tillhörighet har lyckats";
 $lang["mitglied_speichern_fehler"]       = "Ett fel uppstod vid sparande av tillhörighet";
-$lang["modul_rechte"]                    = "Modulrättigheter";
 $lang["modul_titel"]                     = "Användare";
-$lang["portal"]                          = "Portalinloggning";
 $lang["quickhelp_edit"]                  = "Detta formulär används för att redigera eller skapa en ny användare.<br />Om användaren har aktiverats, då kan han i princip logga in på system.<br />I tillägg måste området i vilket användaren kan logga in definieras.";
 $lang["quickhelp_grouplist"]             = "På sidan \"alla  grupper\" visas alla existerande grupper. Dessa grupper kan redigeras, gruppmedlemmar tilläggas, raderad och nya grupper skapas.<br />Gästers liksom administratörers grupper kan inte redigeras, då dessa är förutsättningen för att systemet skall fungera.";
 $lang["quickhelp_groupmember"]           = "Listar alla medlemmar i en grupp. För att ta bort en medlem i en grupp räcker det med att radera tillhörigheten. Skall en medlem läggas till gruppen måste detta göras direkt i dialogen för användare.";
@@ -105,12 +100,9 @@ $lang["required_passwort"]               = "Lösenord";
 $lang["required_passwort2"]              = "Bekräfta lösenord";
 $lang["required_user_existing"]          = "Användarnamn finns redan";
 $lang["required_username"]               = "Användarnamn";
-$lang["submit"]                          = "Spara";
 $lang["user"]                            = "Användare";
 $lang["user_accept"]                     = "Välj användare";
 $lang["user_active"]                     = "Ändra status (är aktiverad)";
-$lang["action_new_user"]                    = "Ny användare";
-$lang["action_edit_user"]                 = "Redigera användare";
 $lang["user_browser"]                    = "Sök användare";
 $lang["user_browser_show"]               = "Visa användare";
 $lang["user_erfolg"]                     = "Sparande av användare har lyckats";
@@ -137,4 +129,3 @@ $lang["user_resend_password_hint"]       = "Vid skickandet av ett nytt lösenord
 $lang["user_skin"]                       = "Admin-skin";
 $lang["user_system"]                     = "Systeminställningar";
 $lang["user_zugehoerigkeit"]             = "Grupptillhörigheter";
-$lang["username"]                        = "Användarnamn";

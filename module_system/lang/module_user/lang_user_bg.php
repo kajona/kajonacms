@@ -7,7 +7,8 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 395
+//Kajona Language Editor Core Build 398
+
 
 //editable entries
 $lang["_admin_skin_default_"]            = "Начален административен скин";
@@ -17,6 +18,11 @@ $lang["_user_log_nrofrecords_"]          = "Брой на редове";
 $lang["_user_log_nrofrecords_hint"]      = "Определи колко реда да се показват в дневника за грешки при вписване.";
 $lang["_user_selfedit_"]                 = "Личен профил";
 $lang["_user_selfedit_hint"]             = "Определя дали потребителя може сам да си променя информацията от профила.";
+$lang["action_edit_user"]                = "Редактирай потребител";
+$lang["action_group_edit"]               = "Редактирай група";
+$lang["action_group_member"]             = "Покажи членовете на групата";
+$lang["action_group_new"]                = "Създай група";
+$lang["action_new_user"]                 = "Създай потребител";
 $lang["fehler_speichern"]                = "Възникна грешка при запазването на профила!";
 $lang["form_user_city"]                  = "Град";
 $lang["form_user_date"]                  = "Дата на раждане";
@@ -34,15 +40,12 @@ $lang["group_name"]                      = "Име на група";
 $lang["gruppe_anlegen_erfolg"]           = "Групата бе запазена успешно";
 $lang["gruppe_anlegen_fehler"]           = "Възникна грешка при запазването на групата";
 $lang["gruppe_anlegen_fehler_name"]      = "Моля напишете име на групата";
-$lang["action_group_edit"]               = "Редактирай група";
 $lang["gruppe_bearbeiten_x"]             = "Тази група не може да бъде редактирана";
 $lang["gruppe_loeschen_erfolg"]          = "Групата бе изтрита успешно";
 $lang["gruppe_loeschen_fehler"]          = "Възникна грешка при премахването на групата";
 $lang["gruppe_loeschen_frage"]           = "Наистина ли искате да премахнете групата &quot;<b>%%element_name%%</b>&quot;?";
 $lang["gruppe_loeschen_x"]               = "Тази група не може да бъде изтрита.";
-$lang["action_group_member"]               = "Покажи членовете на групата";
 $lang["gruppen"]                         = "Групи";
-$lang["action_group_new"]                 = "Създай група";
 $lang["gruppen_liste"]                   = "Всички групи";
 $lang["lang_bg"]                         = "Български";
 $lang["lang_de"]                         = "Немски";
@@ -96,8 +99,6 @@ $lang["user"]                            = "Потребител";
 $lang["user_active"]                     = "Промени статус (активен)";
 $lang["user_admin"]                      = "Административно вписване";
 $lang["user_aktiv"]                      = "Активен";
-$lang["action_new_user"]                    = "Създай потребител";
-$lang["action_edit_user"]                 = "Редактирай потребител";
 $lang["user_erfolg"]                     = "Потребителят запазен успешно";
 $lang["user_fehler"]                     = "Възникна грешка при запазването на потребителя";
 $lang["user_fehler_mail"]                = "Моля попълнете валиден електронен адрес <a href=\"javascript:history.back(-1)\">върни се</a>";

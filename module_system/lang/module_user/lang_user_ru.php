@@ -7,10 +7,11 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 395
+//Kajona Language Editor Core Build 398
 
 //non-editable entries
 $lang["permissions_header"]              = array(0 => "Просмотр", 1 => "Изменить", 2 => "Удалить", 3 => "Permissions", 4 => "Logs", 5 => "", 6 => "", 7 => "", 8 => "");
+
 
 //editable entries
 $lang["_admin_skin_default_"]            = "Скин админа по умолчанию";
@@ -20,6 +21,11 @@ $lang["_user_log_nrofrecords_"]          = "Количество строк";
 $lang["_user_log_nrofrecords_hint"]      = "Определяет количество строк, которые будут показаны в логин протоколе.";
 $lang["_user_selfedit_"]                 = "Личные данные";
 $lang["_user_selfedit_hint"]             = "Устанавливает, может ли пользователь изменять свои собственные данные.";
+$lang["action_edit_user"]                = "Настройки пользователя";
+$lang["action_group_edit"]               = "Изменить группу";
+$lang["action_group_member"]             = "Показать участников группы";
+$lang["action_group_new"]                = "Создать группу";
+$lang["action_new_user"]                 = "Создать пользователя";
 $lang["fehler_speichern"]                = "Ошибка при сохранении профайла!";
 $lang["form_user_city"]                  = "Город";
 $lang["form_user_date"]                  = "Дата рождения";
@@ -30,7 +36,6 @@ $lang["form_user_name"]                  = "Фамилия";
 $lang["form_user_pass"]                  = "Пароль";
 $lang["form_user_pass2"]                 = "Пароль";
 $lang["form_user_postal"]                = "Индекс";
-$lang["form_user_skin"]                  = "Админ скин";
 $lang["form_user_street"]                = "Улица";
 $lang["form_user_tel"]                   = "Телефон";
 $lang["group_memberlist"]                = "Участники группы ";
@@ -38,15 +43,12 @@ $lang["group_name"]                      = "Название группы";
 $lang["gruppe_anlegen_erfolg"]           = "Группа была успешно сохранена";
 $lang["gruppe_anlegen_fehler"]           = "Ошибка при сохранении группы";
 $lang["gruppe_anlegen_fehler_name"]      = "Пожалуйста, введите название группы";
-$lang["action_group_edit"]               = "Изменить группу";
 $lang["gruppe_bearbeiten_x"]             = "Эта группа не может быть изменена";
 $lang["gruppe_loeschen_erfolg"]          = "Группа успешно удалена";
 $lang["gruppe_loeschen_fehler"]          = "Ошибка при удалении группы";
 $lang["gruppe_loeschen_frage"]           = "Действительно удалить группу &quot;<b>%%element_name%%</b>&quot;?";
 $lang["gruppe_loeschen_x"]               = "Группа не может быть удалена";
-$lang["action_group_member"]               = "Показать участников группы";
 $lang["gruppen"]                         = "Группы: ";
-$lang["action_group_new"]                 = "Создать группу";
 $lang["gruppen_liste"]                   = "Все группы";
 $lang["lang_bg"]                         = "Болгарский";
 $lang["lang_de"]                         = "Deutsch";
@@ -100,8 +102,6 @@ $lang["user"]                            = "Пользователь: ";
 $lang["user_active"]                     = "Изменить статус (активный)";
 $lang["user_admin"]                      = "Админ логин";
 $lang["user_aktiv"]                      = "Активный";
-$lang["action_new_user"]                    = "Создать пользователя";
-$lang["action_edit_user"]                 = "Настройки пользователя";
 $lang["user_erfolg"]                     = "Пользователь успешно сохранен";
 $lang["user_fehler"]                     = "Ошибка при сохранении пользователя";
 $lang["user_fehler_mail"]                = "Пожалуйста, введите действующий электронный адрес <a href=\"javascript:history.back(-1)\">back</a>";
