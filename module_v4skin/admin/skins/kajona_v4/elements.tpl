@@ -421,7 +421,7 @@ Regular Password-Field
     <div class="control-group">
         <label for="%%name%%" class="control-label">%%title%%</label>
         <div class="controls">
-            <input type="password" id="%%name%%" name="%%name%%" value="%%value%%" class="input-xlarge %%class%%" %%readonly%%>
+            <input type="password" autocomplete="off" id="%%name%%" name="%%name%%" value="%%value%%" class="input-xlarge %%class%%" %%readonly%%>
         </div>
     </div>
 </input_password>
