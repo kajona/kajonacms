@@ -7,7 +7,8 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 395
+//Kajona Language Editor Core Build 398
+
 
 //editable entries
 $lang["action_logbook"]                  = "Дневник";
@@ -20,7 +21,6 @@ $lang["cropWarningCrop"]                 = "Изрежи";
 $lang["cropWarningDialogHeader"]         = "Потвърди изрязване";
 $lang["cropWarningSaving"]               = "Внимание: Изрязването на снимката рефлектира навсякъде където се ползва изображението. Продължи?<br />";
 $lang["cropWarningUnsavedHint"]          = "Манипулациите по изображението не са запазени!\\nНаистина ли отхвърляте промените?\\n\\nНатисни \'откажи\' с двойно щракане върху изображението запазвате промените.";
-$lang["delete_question"]                 = "Наистина ли искате да премахнете снимката &quot;<b>%%element_name%%</b>&quot;?";
 $lang["download_link"]                   = "Download";
 $lang["form_mediamanager_subtitle"]      = "Субтитри";
 $lang["header_amount"]                   = "Количество";

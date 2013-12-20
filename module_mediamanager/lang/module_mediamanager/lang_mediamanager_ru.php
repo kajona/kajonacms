@@ -7,7 +7,8 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 395
+//Kajona Language Editor Core Build 398
+
 
 //editable entries
 $lang["action_logbook"]                  = "Системный журнал";
@@ -20,7 +21,6 @@ $lang["cropWarningCrop"]                 = "Кроп";
 $lang["cropWarningDialogHeader"]         = "Подтвердить кроп";
 $lang["cropWarningSaving"]               = "Пожалуйста, обратите внимание: Кроп влияет на все варианты использования картинки. Все равно выполнить?<br />";
 $lang["cropWarningUnsavedHint"]          = "Ваши действия с картинкой еще не сохранены!\\nВы действительно хотите совершить действие?\\n\\nЧтобы сохранить действия нажмите на \"Отменить\" и сделайте двойной щелчок на картинку.";
-$lang["delete_question"]                 = "Вы действительно хотите удалить изображение &quot;<b>%%element_name%%</b>&quot;?";
 $lang["download_link"]                   = "Download";
 $lang["form_mediamanager_subtitle"]      = "Подзаголовок";
 $lang["header_amount"]                   = "Количество";

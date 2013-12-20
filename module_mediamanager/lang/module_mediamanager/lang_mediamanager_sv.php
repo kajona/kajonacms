@@ -7,33 +7,25 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 395
+//Kajona Language Editor Core Build 398
+
 
 //editable entries
 $lang["action_logbook"]                  = "Loggbok";
 $lang["action_logbook_flush"]            = "Töm loggbok";
 $lang["action_mass_sync"]                = "Synkronisera alla";
 $lang["action_open_folder"]              = "Visa mapp";
-$lang["backlink"]                        = "Föregående";
 $lang["cropImage"]                       = "Beskär bild";
 $lang["cropImageAccept"]                 = "Spara beskärning";
 $lang["cropWarningCrop"]                 = "Redan beskuren";
 $lang["cropWarningDialogHeader"]         = "Bekräfta beskärning";
 $lang["cropWarningSaving"]               = "Vänligen beakta: Beskärning av bilder påverkar all användning av bilderna! Fortsätt i alla fall?<br />";
 $lang["cropWarningUnsavedHint"]          = "Ändringarna av bilden har ännu inte sparats!\\nVill du verkligen förkasta ändringarna?\\n\\nFör att spara ändringarna välj \"avbryt\" och dubbelklicka på bilden.";
-$lang["delete_question"]                 = "Vill du verkligen ta bort &quot;<b>%%element_name%%</b>&quot;?";
 $lang["download_link"]                   = "Download";
 $lang["form_mediamanager_description"]   = "Beskrivningej";
 $lang["form_mediamanager_name"]          = "Namn";
 $lang["form_mediamanager_subtitle"]      = "Undertitel";
-$lang["forwardlink"]                     = "Nästa";
-$lang["galerie_ordner_link"]             = "Visa";
-$lang["gallery_rating_permissions"]      = "Icke tillräckliga rättigheter.";
-$lang["gallery_rating_rate1"]            = "Betygsätt bild med";
-$lang["gallery_rating_rate2"]            = "poäng!";
-$lang["gallery_rating_voted"]            = "Du har redan poängsatt denna bild.";
 $lang["header_amount"]                   = "Antal";
-$lang["header_date"]                     = "Datum";
 $lang["header_file"]                     = "Fil";
 $lang["header_id"]                       = "Nedladdning-ID";
 $lang["header_ip"]                       = "IP/värdnamn";

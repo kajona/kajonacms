@@ -7,10 +7,11 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 395
+//Kajona Language Editor Core Build 398
 
 //non-editable entries
 $lang["permissions_header"]              = array(0 => "Anzeigen", 1 => "Bearbeiten", 2 => "Löschen", 3 => "Rechte", 4 => "Upload", 5 => "Download", 6 => "Voting", 7 => "", 8 => "");
+
 
 //editable entries
 $lang["_mediamanager_default_filesrepoid_"] = "Standard Dateien-Repository";
