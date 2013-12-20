@@ -7,7 +7,8 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 395
+//Kajona Language Editor Core Build 398
+
 
 //editable entries
 $lang["action_execute_search"]           = "Suche ausführen";
@@ -23,10 +24,10 @@ $lang["hitlist_text1"]                   = "Die Suche nach";
 $lang["hitlist_text2"]                   = "ergab";
 $lang["hitlist_text3"]                   = "Treffer";
 $lang["modul_titel"]                     = "Suche";
+$lang["search_details"]                  = "Ausführliches Ergebnis anzeigen";
 $lang["search_modules"]                  = "Suchmodul";
 $lang["search_search"]                   = "Suche";
 $lang["searchterm_label"]                = "Suchbegriff";
 $lang["select_all"]                      = "Alle Module";
 $lang["stats_title"]                     = "Suchanfragen";
 $lang["submit_label"]                    = "Suchen";
-$lang["search_details"]                  = "Ausführliches Ergebnis anzeigen";
