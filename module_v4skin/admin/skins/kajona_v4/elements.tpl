@@ -562,6 +562,12 @@ function is called after selecting a date, e.g. to hide the calendar
                             autoclose: true,
                             language: '%%calendarLang%%'
                         });
+
+                        if($('#%%calendarId%%').is(':focus')) {
+                            $('#%%calendarId%%').blur();
+                            $('#%%calendarId%%').focus();
+                        }
+
                     }, true);
                 }, true);
             </script>
@@ -589,6 +595,12 @@ function is called after selecting a date, e.g. to hide the calendar
                             autoclose: true,
                             language: '%%calendarLang%%'
                         });
+
+                        if($('#%%calendarId%%').is(':focus')) {
+                            $('#%%calendarId%%').blur();
+                            $('#%%calendarId%%').focus();
+                        }
+
                     }, true);
                 }, true);
             </script>
