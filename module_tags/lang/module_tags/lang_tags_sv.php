@@ -12,7 +12,6 @@
 //editable entries
 $lang["button_add"]                      = "Infoga";
 $lang["delete_question"]                 = "Vill du verkligen radera taggen &quot;<b>%%element_name%%</b>&quot;?";
-$lang["error_permissions"]               = "Inte tillräckliga rättigheter för att utföra denna handling";
 $lang["form_tags_name"]                  = "Tagnamn";
 $lang["modul_rechte"]                    = "Modulrättigheter";
 $lang["modul_titel"]                     = "Tags";
