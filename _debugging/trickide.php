@@ -37,6 +37,7 @@ define("_system_dbdump_amount_", 5);
 define("_system_mod_rewrite_", "");
 define("_system_portal_disablepage_", "");
 define("_system_release_time_", "");
+define("_system_portal_disable_", false);
 
 define("_stats_duration_online_", 10);
 define("_stats_nrofrecords_", "");

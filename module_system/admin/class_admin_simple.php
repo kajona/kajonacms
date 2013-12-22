@@ -17,6 +17,9 @@ abstract class class_admin_simple extends class_admin {
 
     private  $strPeAddon = "";
 
+    /**
+     * @param string $strSystemid
+     */
     public function __construct($strSystemid = "") {
         parent::__construct($strSystemid);
 
@@ -31,7 +34,8 @@ abstract class class_admin_simple extends class_admin {
 
     /**
      * Overwritten in order to inject a toolbar per record. may be useful for certain actions
-     * @param $arrContent
+     * @param array &$arrContent
+     * @return void
      */
     protected function onRenderOutput(&$arrContent) {
 
@@ -91,6 +95,7 @@ abstract class class_admin_simple extends class_admin {
      *
      * @permissions delete
      * @throws class_exception
+     * @return void
      */
     protected function actionDelete() {
         $objRecord = class_objectfactory::getInstance()->getObject($this->getSystemid());
@@ -98,19 +103,24 @@ abstract class class_admin_simple extends class_admin {
             if(!$objRecord->deleteObject())
                 throw new class_exception("error deleting object ".strip_tags($objRecord->getStrDisplayName()), class_exception::$level_ERROR);
 
+            $strTargetUrl = urldecode($this->getParam("reloadUrl"));
 
-            $strTargetUrl = "admin=1&module=".$this->getArrModule("modul");
+            if($strTargetUrl == "" || uniStrpos($strTargetUrl, $this->getSystemid()) !== false) {
 
-            $intI = 1;
-            while($this->getHistory($intI) !== null) {
-                $strTargetUrl = $this->getHistory($intI++);
+                $strTargetUrl = "admin=1&module=".$this->getArrModule("modul");
 
-                if(uniStrpos($strTargetUrl, $this->getSystemid()) === false) {
-                    if(uniStrpos($strTargetUrl, "admin=1") === false)
-                        $strTargetUrl = "admin=1&module=".$this->getArrModule("modul");
+                $intI = 1;
+                while($this->getHistory($intI) !== null) {
+                    $strTargetUrl = $this->getHistory($intI++);
 
-                    break;
+                    if(uniStrpos($strTargetUrl, $this->getSystemid()) === false) {
+                        if(uniStrpos($strTargetUrl, "admin=1") === false)
+                            $strTargetUrl = "admin=1&module=".$this->getArrModule("modul");
+
+                        break;
+                    }
                 }
+
             }
 
             $this->adminReload(_indexpath_."?".$strTargetUrl.($this->getParam("pe") != "" ? "&peClose=1" : ""));
@@ -125,6 +135,7 @@ abstract class class_admin_simple extends class_admin {
      *
      * @permissions edit
      * @throws class_exception
+     * @return void
      */
     protected function actionCopyObject() {
         $objRecord = class_objectfactory::getInstance()->getObject($this->getSystemid());
@@ -137,11 +148,11 @@ abstract class class_admin_simple extends class_admin {
         else
             throw new class_exception("error loading object ".$this->getSystemid(), class_exception::$level_ERROR);
     }
-    
-    
+
+
     /**
      * Returns the action name for a given class name.
-     * 
+     *
      * @param string $strAction
      * @param interface_model $objInstance
      * @return string specific action name
@@ -316,7 +327,7 @@ abstract class class_admin_simple extends class_admin {
      * Renders the action to jump a level upwards.
      * Overwrite this method if you want to provide such an action.
      *
-     * @param $strListIdentifier
+     * @param string $strListIdentifier
      * @return string
      */
     protected function renderLevelUpAction($strListIdentifier) {
@@ -329,8 +340,8 @@ abstract class class_admin_simple extends class_admin {
      * Make sure to pass a full eventhandler, e.g. onclick="document.location=''"
      * Overwrite this method if you want to provide such an action.
      *
-     * @param $objOneIterable
-     * @param $strListIdentifier
+     * @param interface_admin_listable $objOneIterable
+     * @param string $strListIdentifier
      *
      * @return string
      */
@@ -443,7 +454,7 @@ abstract class class_admin_simple extends class_admin {
     protected function renderPermissionsAction(class_model $objListEntry) {
         if($objListEntry->rightRight() && $this->strPeAddon == "") {
             return $this->objToolkit->listButton(
-                getLinkAdminDialog(
+                class_link::getLinkAdminDialog(
                     "right",
                     $this->getActionNameForClass("change", $objListEntry),
                     "&systemid=".$objListEntry->getSystemid().$this->strPeAddon,
@@ -487,9 +498,9 @@ abstract class class_admin_simple extends class_admin {
      */
     protected function renderCopyAction(class_model $objListEntry) {
         if($objListEntry->rightEdit() && $this->strPeAddon == "") {
-            $strHref = getLinkAdminHref($objListEntry->getArrModule("modul"), $this->getActionNameForClass("copyObject", $objListEntry), "&systemid=".$objListEntry->getSystemid().$this->strPeAddon);
+            $strHref = class_link::getLinkAdminHref($objListEntry->getArrModule("modul"), $this->getActionNameForClass("copyObject", $objListEntry), "&systemid=".$objListEntry->getSystemid().$this->strPeAddon);
             return $this->objToolkit->jsDialog(3).$this->objToolkit->listButton(
-                getLinkAdminManual(" onclick='jsDialog_3.init();' href='".$strHref."'", "", $this->getLang("commons_edit_copy"), "icon_copy")
+                class_link::getLinkAdminManual(" onclick='jsDialog_3.init();' href='".$strHref."'", "", $this->getLang("commons_edit_copy"), "icon_copy")
             );
         }
         return "";
@@ -537,7 +548,7 @@ abstract class class_admin_simple extends class_admin {
     /**
      * If multiple new actions are given, all buttons are merged into a new, single button.
      * The button itself is rendering the different buttons using a new dropdown-menu.
-     * @param $arrActions
+     * @param array $arrActions
      * @return string
      */
     private function mergeNewEntryActions($arrActions) {
@@ -577,7 +588,7 @@ abstract class class_admin_simple extends class_admin {
      * If one or more handler(s) are returned, the checkboxes to select a list of records
      * are rendered.
      *
-     * @param $strListIdentifier
+     * @param string $strListIdentifier
      *
      * @return class_admin_batchaction[]
      */
@@ -586,6 +597,9 @@ abstract class class_admin_simple extends class_admin {
     }
 
 
+    /**
+     * @return array
+     */
     protected function getDefaultActionHandlers() {
         return array(
             new class_admin_batchaction(class_adminskin_helper::getAdminImage("icon_delete"), getLinkAdminXml("system", "delete", "&systemid=%systemid%"), $this->getLang("commons_batchaction_delete")),
@@ -619,10 +633,17 @@ abstract class class_admin_simple extends class_admin {
         return "";
     }
 
+    /**
+     * @param string $strPeAddon
+     * @return void
+     */
     public function setStrPeAddon($strPeAddon) {
         $this->strPeAddon = $strPeAddon;
     }
 
+    /**
+     * @return string
+     */
     public function getStrPeAddon() {
         return $this->strPeAddon;
     }

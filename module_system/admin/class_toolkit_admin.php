@@ -1117,9 +1117,9 @@ class class_toolkit_admin extends class_toolkit {
      * when the icon was clicked. So set the link-href-param for the final deletion, otherwise the
      * user has no more chance to delete the record!
      *
-     * @param $strElementName
-     * @param $strQuestion
-     * @param $strLinkHref
+     * @param string $strElementName
+     * @param string $strQuestion
+     * @param string $strLinkHref
      * @return string
      */
     public function listDeleteButton($strElementName, $strQuestion, $strLinkHref) {
@@ -1130,9 +1130,18 @@ class class_toolkit_admin extends class_toolkit {
 
         $strQuestion = uniStrReplace("%%element_name%%", htmlToString($strElementName, true), $strQuestion);
 
+        //get the reload-url
+        $objHistory = new class_history();
+        $strParam = "reloadUrl=".urlencode($objHistory->getAdminHistory());
+
+        if(uniSubstr($strLinkHref, -4) == ".php" || uniSubstr($strLinkHref, -5) == ".html")
+            $strParam = "?".$strParam;
+        else
+            $strParam = "&".$strParam;
+
         //create the list-button and the js code to show the dialog
-        $strButton = getLinkAdminManual(
-            "href=\"#\" onclick=\"javascript:jsDialog_1.setTitle('".class_carrier::getInstance()->getObjLang()->getLang("dialog_deleteHeader", "system")."'); jsDialog_1.setContent('".$strQuestion."', '".class_carrier::getInstance()->getObjLang()->getLang("dialog_deleteButton", "system")."',  '".$strLinkHref."'); jsDialog_1.init(); return false;\"",
+        $strButton = class_link::getLinkAdminManual(
+            "href=\"#\" onclick=\"javascript:jsDialog_1.setTitle('".class_carrier::getInstance()->getObjLang()->getLang("dialog_deleteHeader", "system")."'); jsDialog_1.setContent('".$strQuestion."', '".class_carrier::getInstance()->getObjLang()->getLang("dialog_deleteButton", "system")."',  '".$strLinkHref.$strParam."'); jsDialog_1.init(); return false;\"",
             "",
             class_carrier::getInstance()->getObjLang()->getLang("commons_delete", "system"),
             "icon_delete"
@@ -2171,9 +2180,9 @@ class class_toolkit_admin extends class_toolkit {
 
     /**
      * Renders the list of aspects available
-     * @param $strLastModule
-     * @param $strLastAction
-     * @param $strLastSystemid
+     * @param string $strLastModule
+     * @param string $strLastAction
+     * @param string $strLastSystemid
      *
      * @return string
      * @todo param handling? remove params?

@@ -136,6 +136,8 @@ class class_request_dispatcher {
                         class_carrier::getInstance()->getObjSession()->sessionUnset(class_module_login_admin::SESSION_PARAMS);
                     }
 
+                    //set the current backend skin. right here to do it only once.
+                    class_adminskin_helper::defineSkinWebpath();
 
                     if(_xmlLoader_) {
                         if($objModuleRequested->getStrXmlNameAdmin() != "") {
@@ -150,6 +152,14 @@ class class_request_dispatcher {
                         }
                     }
                     else {
+
+                        //fill the history array to track actions
+                        $objHistory = new class_history();
+                        //Writing to the history
+                        if(class_carrier::getInstance()->getParam("folderview") == "") {
+                            $objHistory->setAdminHistory();
+                        }
+
                         $objConcreteModule = $objModuleRequested->getAdminInstanceOfConcreteModule();
                         //$objConcreteModule->action($strAction);
                         $objConcreteModule->action();
@@ -247,6 +257,11 @@ class class_request_dispatcher {
                 if($strModule == "pages") {
                     $strAction = "";
                 }
+
+                //fill the history array to track actions
+                $objHistory = new class_history();
+                $objHistory->setPortalHistory();
+
                 $objModuleRequested = $objModule->getPortalInstanceOfConcreteModule();
                 $strReturn = $objModuleRequested->action($strAction);
             }

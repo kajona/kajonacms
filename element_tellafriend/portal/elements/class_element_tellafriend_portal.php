@@ -115,7 +115,6 @@ class class_element_tellafriend_portal extends class_element_portal implements i
 
     /**
      * Creates an email to send to a friend
-
      */
     private function sendForm() {
         //load url the user visited before

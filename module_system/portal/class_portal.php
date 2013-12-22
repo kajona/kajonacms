@@ -76,7 +76,6 @@ abstract class class_portal {
 
     private $strAction; //current action to perform (GET/POST)
     private $strSystemid; //current systemid
-    private $arrHistory; //Stack containing the 5 urls last visited
     protected $arrModule = array(); //Array containing info about the current module
     protected $strTemplateArea; //String containing the current Area for the templateobject
     protected $strOutput;
@@ -108,11 +107,6 @@ abstract class class_portal {
         $this->objLang = $objCarrier->getObjLang();
         $this->objTemplate = $objCarrier->getObjTemplate();
         $this->objSystemCommon = new class_module_system_common($strSystemid);
-
-        //Writing to the history
-        if(!_xmlLoader_) {
-            $this->setHistory();
-        }
 
         //And keep the action
         $this->strAction = $this->getParam("action");
@@ -163,10 +157,10 @@ abstract class class_portal {
      * Therefore the list of permissions, named after the "permissions" annotation are validated against
      * the module currently loaded.
      *
-     * @see class_rights::validatePermissionString
      *
      * @param string $strAction
      *
+     * @see class_rights::validatePermissionString
      * @throws class_exception
      * @return string
      * @since 3.4
@@ -202,7 +196,7 @@ abstract class class_portal {
 
                     //redirect to the error page
                     if($this->getPagename() != _pages_errorpage_) {
-                        $this->portalReload(getLinkPortalHref(_pages_errorpage_, ""));
+                        $this->portalReload(class_link::getLinkPortalHref(_pages_errorpage_, ""));
                         return "";
                     }
 
@@ -264,6 +258,7 @@ abstract class class_portal {
      *
      * @param string $strKey Key
      * @param mixed $mixedValue Value
+     * @return void
      */
     public function setParam($strKey, $mixedValue) {
         class_carrier::getInstance()->setParam($strKey, $mixedValue);
@@ -423,6 +418,7 @@ abstract class class_portal {
      *
      * @param string $strKey
      * @param mixed $strValue
+     * @return void
      */
     public function setArrModuleEntry($strKey, $strValue) {
         $this->arrModule[$strKey] = $strValue;
@@ -430,53 +426,16 @@ abstract class class_portal {
 
 
     /**
-     * Holds the last 5 URLs the user called in the Session
-     * Admin and Portal are seperated arrays, but don't care about that...
-
-     */
-    protected function setHistory() {
-        //Loading the current history from session
-        $this->arrHistory = $this->objSession->getSession("portalHistory");
-
-        $strQueryString = getServer("QUERY_STRING");
-        //Clean Querystring of emtpy actions
-        if(uniSubstr($strQueryString, -8) == "&action=") {
-            $strQueryString = substr_replace($strQueryString, "", -8);
-        }
-        //And insert just, if different to last entry
-        if($strQueryString == $this->getHistory()) {
-            return;
-        }
-        //If we reach up here, we can enter the current query
-        if($this->arrHistory !== false) {
-            array_unshift($this->arrHistory, $strQueryString);
-            while(count($this->arrHistory) > 5) {
-                array_pop($this->arrHistory);
-            }
-        }
-        else {
-            $this->arrHistory[] = $strQueryString;
-        }
-        //saving the new array to session
-        $this->objSession->setSession("portalHistory", $this->arrHistory);
-
-        return;
-    }
-
-    /**
      * Returns the URL at the given position (from HistoryArray)
      *
      * @param int $intPosition
-     *
+     * @deprecated use class_history::getPortalHistory() instead
+     * @see class_history::getPortalHistory()
      * @return string
      */
     protected function getHistory($intPosition = 0) {
-        if(isset($this->arrHistory[$intPosition])) {
-            return $this->arrHistory[$intPosition];
-        }
-        else {
-            return "History error!";
-        }
+        $objHistory = new class_history();
+        return $objHistory->getPortalHistory($intPosition);
     }
 
     // --- TextMethods & Languages --------------------------------------------------------------------------
@@ -519,11 +478,12 @@ abstract class class_portal {
      * Includes the passing of an class_lang_wrapper by default.
      * NOTE: Removes placeholders. If unwanted, call directly.
      *
+     * @param array $arrContent
+     * @param string $strIdentifier
+     *
      * @see class_template::fill_template
      * @since 3.2.0
      *
-     * @param array $arrContent
-     * @param string $strIdentifier
      *
      * @return string
      */
@@ -597,6 +557,7 @@ abstract class class_portal {
      * <b>Use ONLY this method and DO NOT use header("Location: ...");</b>
      *
      * @param string $strUrlToLoad
+     * @return void
      */
     public function portalReload($strUrlToLoad) {
         //replace constants in url
@@ -621,6 +582,9 @@ abstract class class_portal {
         return $this->objModule;
     }
 
+    /**
+     * @return string
+     */
     protected function getStrPortalLanguage() {
         $objLanguage = new class_module_languages_language();
         return $objLanguage->getPortalLanguage();

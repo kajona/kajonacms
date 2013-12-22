@@ -17,40 +17,43 @@
 class class_cookie {
 
 
-	/**
-	 * Constructor
-	 */
-	public function __construct() {
-	}
+    /**
+     * Constructor
+     */
+    public function __construct() {
+    }
 
-	/**
-	 * Sends a cookie to the browser
-	 *
-	 * @param string $strName
-	 * @param string $strValue
-	 * @param int $intTime
-	 * @return bool
-	 */
-	public function setCookie($strName, $strValue, $intTime = 0) {
-	    //cookie is 30 days valid
-	    if($intTime == 0)
-	       $intTime = time()+60*60*24*30;
+    /**
+     * Sends a cookie to the browser
+     *
+     * @param string $strName
+     * @param string $strValue
+     * @param int $intTime
+     *
+     * @return bool
+     */
+    public function setCookie($strName, $strValue, $intTime = 0) {
+        //cookie is 30 days valid
+        if($intTime == 0) {
+            $intTime = time() + 60 * 60 * 24 * 30;
+        }
 
         $strPath = _webpath_;
 
-	    return setcookie($strName, $strValue, $intTime);
-	    return setcookie($strName, $strValue, $intTime, $strPath);
-	}
+        return setcookie($strName, $strValue, $intTime);
+        return setcookie($strName, $strValue, $intTime, $strPath);
+    }
 
-	/**
-	 * Gets the value of a cookie
-	 *
-	 * @param string $strName
-	 * @return mixed
-	 */
-	public function getCookie($strName) {
-	    return getCookie($strName);
-	}
+    /**
+     * Gets the value of a cookie
+     *
+     * @param string $strName
+     *
+     * @return mixed
+     */
+    public function getCookie($strName) {
+        return getCookie($strName);
+    }
 
 }
 
