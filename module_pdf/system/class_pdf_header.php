@@ -18,7 +18,6 @@
 class class_pdf_header implements interface_pdf_header {
 
 
-
     /**
      * Writes the header for a single page.
      * Use the passed $objPdf to access the pdf.
@@ -29,16 +28,15 @@ class class_pdf_header implements interface_pdf_header {
 
         $objPdf->SetY(3);
 
-		$objPdf->SetFont('helvetica', '', 8);
+        $objPdf->SetFont('helvetica', '', 8);
 
         // Title
-		$objPdf->Cell(0, 0, "\n".$objPdf->getTitle(), 'B', 0, 'C');
+        $objPdf->Cell(0, 0, "\n".$objPdf->getTitle(), 'B', 0, 'C');
 
-        
-		// Line break
-		$objPdf->Ln(30);
 
-	}
+        // Line break
+        $objPdf->Ln(30);
 
+    }
 
 }

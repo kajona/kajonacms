@@ -175,8 +175,14 @@ class class_pdf {
      * @param int $intHeight
      * @param array $bitBorders array of boolean: array(top, right, bottom, left)
      * @param string $strAlign one of self::$TEXT_ALIGN_CENTER, self::$TEXT_ALIGN_RIGHT, self::$TEXT_ALIGN_LEFT
+     * @param bool $bitFill
+     * @param int|string $intX
+     * @param int|string $intY
+     * @param int $bitCursorPos 1 = next line, 0 = to the right
+     *
+     * @return void
      */
-    public function addMultiCell($strContent = '', $intWidth = 0, $intHeight = 0, $bitBorders = array(false, false, false, false), $strAlign = "L") {
+    public function addMultiCell($strContent = '', $intWidth = 0, $intHeight = 0, $bitBorders = array(false, false, false, false), $strAlign = "L", $bitFill = false, $intX = '', $intY = '', $bitCursorPos = 1) {
 
         $strBorders = "";
         if($bitBorders[0]) {
@@ -196,7 +202,7 @@ class class_pdf {
             $strBorders = 0;
         }
 
-        $this->objPdf->MultiCell($intWidth, $intHeight, $strContent, $strBorders, $strAlign);
+        $this->objPdf->MultiCell($intWidth, $intHeight, $strContent, $strBorders, $strAlign, $bitFill, $bitCursorPos, $intX, $intY);
     }
 
     /**
