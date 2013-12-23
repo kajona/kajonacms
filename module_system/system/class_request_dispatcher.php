@@ -120,6 +120,9 @@ class class_request_dispatcher {
         $objLanguage = new class_module_languages_language();
         $objLanguage->setStrAdminLanguageToWorkOn($strLanguageParam);
 
+        //set the current backend skin. right here to do it only once.
+        class_adminskin_helper::defineSkinWebpath();
+
         //validate login-status / process login-request
         if($strModule != "login" && $this->objSession->isLoggedin()) {
             if($this->objSession->isAdmin()) {
@@ -136,8 +139,6 @@ class class_request_dispatcher {
                         class_carrier::getInstance()->getObjSession()->sessionUnset(class_module_login_admin::SESSION_PARAMS);
                     }
 
-                    //set the current backend skin. right here to do it only once.
-                    class_adminskin_helper::defineSkinWebpath();
 
                     if(_xmlLoader_) {
                         if($objModuleRequested->getStrXmlNameAdmin() != "") {

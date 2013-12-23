@@ -47,7 +47,7 @@ class class_adminskin_helper {
     /**
      * Loads the file-system path for a single skin
      * @static
-     * @param $strSkin
+     * @param string $strSkin
      * @return string
      */
     public static function getPathForSkin($strSkin) {
@@ -60,6 +60,7 @@ class class_adminskin_helper {
     /**
      * Internal helper, sets the current skinwebpath to be used by skins
      * @static
+     * @return void
      */
     public static function defineSkinWebpath() {
         if(!defined("_skinwebpath_"))
@@ -70,7 +71,7 @@ class class_adminskin_helper {
      * Makes use of the admin-skin image-mapper to resolve an image-name into a
      * real image-tag / script / whatever
      *
-     * @param $strName
+     * @param string $strName
      * @param string $strAlt
      * @param bool $bitBlockTooltip
      * @param string $strEntryId
