@@ -1132,12 +1132,14 @@ class class_toolkit_admin extends class_toolkit {
 
         //get the reload-url
         $objHistory = new class_history();
-        $strParam = "reloadUrl=".urlencode($objHistory->getAdminHistory());
-
-        if(uniSubstr($strLinkHref, -4) == ".php" || uniSubstr($strLinkHref, -5) == ".html")
-            $strParam = "?".$strParam;
-        else
-            $strParam = "&".$strParam;
+        $strParam = "";
+        if(uniStrpos($strLinkHref, "javascript:") === false) {
+            $strParam = "reloadUrl=".urlencode($objHistory->getAdminHistory());
+            if(uniSubstr($strLinkHref, -4) == ".php" || uniSubstr($strLinkHref, -5) == ".html")
+                $strParam = "?".$strParam;
+            else
+                $strParam = "&".$strParam;
+        }
 
         //create the list-button and the js code to show the dialog
         $strButton = class_link::getLinkAdminManual(

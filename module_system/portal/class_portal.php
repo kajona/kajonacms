@@ -200,6 +200,7 @@ abstract class class_portal {
                         return "";
                     }
 
+                    class_response_object::getInstance()->setStrStatusCode(class_http_statuscodes::SC_UNAUTHORIZED);
                     throw new class_exception("you are not authorized/authenticated to call this action", class_exception::$level_ERROR);
                 }
             }

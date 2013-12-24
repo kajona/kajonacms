@@ -108,7 +108,8 @@ class class_module_dashboard_admin extends class_admin implements interface_admi
                 ($objDashboardWidget->rightDelete() ? $this->objToolkit->listDeleteButton(
                     $objDashboardWidget->getConcreteAdminwidget()->getWidgetName(),
                     $this->getLang("widgetDeleteQuestion"),
-                    getLinkAdminHref($this->arrModule["modul"], "deleteWidget", "&systemid=".$objDashboardWidget->getSystemid())
+                    "javascript:KAJONA.admin.dashboard.removeWidget(\'".$objDashboardWidget->getSystemid()."\');"
+//                    getLinkAdminHref($this->arrModule["modul"], "deleteWidget", "&systemid=".$objDashboardWidget->getSystemid())
                 )  : ""),
                 $objDashboardWidget->getConcreteAdminwidget()->getLayoutSection()
             )
@@ -119,7 +120,7 @@ class class_module_dashboard_admin extends class_admin implements interface_admi
 
     /**
      * Creates a calendar-based view of the current month.
-     * Single objects may register themself to be rendered within the calendar.
+     * Single objects may register themselves to be rendered within the calendar.
      * The calendar-view consists of a view single elements:
      * +---------------------------+
      * | control-elements (pager)  |

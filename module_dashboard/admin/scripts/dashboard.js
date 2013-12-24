@@ -9,6 +9,22 @@ if (!KAJONA) {
 
 KAJONA.admin.dashboard = {
 
+    removeWidget : function(strSystemid) {
+        KAJONA.admin.ajax.genericAjaxCall('dashboard', 'deleteWidget', strSystemid, function(data, status, jqXHR) {
+            if (status == 'success') {
+
+                $("li[data-systemid="+strSystemid+"]").remove();
+                KAJONA.admin.statusDisplay.displayXMLMessage(data);
+                jsDialog_1.hide();
+
+            } else {
+                KAJONA.admin.statusDisplay.messageError('<b>Request failed!</b><br />' + data);
+            }
+        });
+
+        return false;
+    },
+
     init : function() {
 
         $('.adminwidgetColumn > li').each(function () {

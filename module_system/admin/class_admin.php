@@ -658,6 +658,7 @@ abstract class class_admin {
                 }
 
                 if(!class_carrier::getInstance()->getObjRights()->validatePermissionString($strPermissions, $objObjectToCheck)) {
+                    class_response_object::getInstance()->setStrStatusCode(class_http_statuscodes::SC_UNAUTHORIZED);
                     $this->strOutput = $this->getLang("commons_error_permissions");
                     throw new class_exception("you are not authorized/authenticated to call this action", class_exception::$level_ERROR);
                 }

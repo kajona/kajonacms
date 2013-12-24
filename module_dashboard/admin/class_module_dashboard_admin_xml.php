@@ -18,8 +18,6 @@
  * @module dashboard
  * @moduleId _dashboard_module_id_
  *
- * @module dashboard
- * @moduleId _dashboard_module_id_
  */
 class class_module_dashboard_admin_xml extends class_admin implements interface_xml_admin {
 
@@ -27,33 +25,41 @@ class class_module_dashboard_admin_xml extends class_admin implements interface_
     private $strStartYearKey = "DASHBOARD_CALENDAR_START_YEAR";
 
     /**
+     * Removes a single widget
+     *
+     * @permissions delete
+     * @return string
+     */
+    protected function actionDeleteWidget() {
+        $objWidget = new class_module_dashboard_widget($this->getSystemid());
+        $strName = $objWidget->getStrDisplayName();
+        $objWidget->deleteObject();
+        return "<message>".$this->getLang("deleteWidgetSuccess", array($strName))."</message>";
+    }
+
+
+    /**
      * saves the new position of a widget on the dashboard.
-     * updates the sorting AND the assigned colum
+     * updates the sorting AND the assigned column
      *
      * @return string
+     * @permissions edit
      */
     protected function actionSetDashboardPosition() {
         $strReturn = "";
 
         $objWidget = new class_module_dashboard_widget($this->getSystemid());
-        //check permissions
-        if($objWidget->rightEdit()) {
-            $intNewPos = $this->getParam("listPos");
-            $objWidget->setStrColumn($this->getParam("listId"));
-            $objWidget->updateObjectToDb();
-            $this->objDB->flushQueryCache();
+        $intNewPos = $this->getParam("listPos");
+        $objWidget->setStrColumn($this->getParam("listId"));
+        $objWidget->updateObjectToDb();
+        $this->objDB->flushQueryCache();
 
-            $objWidget = new class_module_dashboard_widget($this->getSystemid());
-            if($intNewPos != "")
-                $objWidget->setAbsolutePosition($intNewPos);
+        $objWidget = new class_module_dashboard_widget($this->getSystemid());
+        if($intNewPos != "")
+            $objWidget->setAbsolutePosition($intNewPos);
 
 
-            $strReturn .= "<message>".$objWidget->getStrDisplayName()." - ".$this->getLang("setDashboardPosition")."</message>";
-        }
-        else {
-            class_response_object::getInstance()->setStrStatusCode(class_http_statuscodes::SC_UNAUTHORIZED);
-            $strReturn .= "<message><error>".xmlSafeString($this->getLang("commons_error_permissions"))."</error></message>";
-        }
+        $strReturn .= "<message>".$objWidget->getStrDisplayName()." - ".$this->getLang("setDashboardPosition")."</message>";
 
         return $strReturn;
     }
@@ -62,6 +68,7 @@ class class_module_dashboard_admin_xml extends class_admin implements interface_
      * Renderes the content of a single widget.
      *
      * @return string
+     * @permissions view
      */
     protected function actionGetWidgetContent() {
 

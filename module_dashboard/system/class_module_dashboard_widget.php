@@ -67,7 +67,6 @@ class class_module_dashboard_widget extends class_model implements interface_mod
      * @return string[]
      */
     public function getListOfWidgetsAvailable() {
-        $arrReturn = array();
 
         return class_resourceloader::getInstance()->getFolderContent("/admin/widgets/", array(".php"), false, function(&$strFilename) {
             if($strFilename != "interface_adminwidget.php" && $strFilename != "class_adminwidget.php") {
@@ -98,13 +97,13 @@ class class_module_dashboard_widget extends class_model implements interface_mod
     /**
      * Implementing callback to react on user-delete events
      *
-     * Called whenever a records was deleted using the common methods.
+     * Called whenever a record was deleted using the common methods.
      * Implement this method to be notified when a record is deleted, e.g. to to additional cleanups afterwards.
      * There's no need to register the listener, this is done automatically.
      *
      * Make sure to return a matching boolean-value, otherwise the transaction may be rolled back.
      *
-     * @param $strSystemid
+     * @param string $strSystemid
      * @param string $strSourceClass
      *
      * @return bool
@@ -156,7 +155,7 @@ class class_module_dashboard_widget extends class_model implements interface_mod
         $arrReturn = array();
         if(count($arrRows) > 0) {
             foreach ($arrRows as $arrOneRow) {
-            	$arrReturn[] = new class_module_dashboard_widget($arrOneRow["system_id"]);
+                $arrReturn[] = new class_module_dashboard_widget($arrOneRow["system_id"]);
             }
 
         }
@@ -168,11 +167,10 @@ class class_module_dashboard_widget extends class_model implements interface_mod
      * If not given, the node is created on the fly.
      * Those nodes are required to ensure a proper sort-handling on the system-table
      *
-     * @static
-     *
-     * @param $strUserid
+     * @param string $strUserid
      * @param string $strAspectId
      * @return string
+     * @static
      */
     public static function getWidgetsRootNodeForUser($strUserid, $strAspectId = "") {
 
@@ -245,7 +243,7 @@ class class_module_dashboard_widget extends class_model implements interface_mod
      * Callback method, triggered each time a user logs into the system for the very first time.
      * May be used to trigger actions or initial setups for the user.
      *
-     * @param $strUserid
+     * @param string $strUserid
      *
      * @return bool
      */
@@ -266,30 +264,54 @@ class class_module_dashboard_widget extends class_model implements interface_mod
     }
 
 
+    /**
+     * @param string $strColumn
+     * @return void
+     */
     public function setStrColumn($strColumn) {
         $this->strColumn = $strColumn;
     }
+
+    /**
+     * @param string $strUser
+     * @return void
+     */
     public function setStrUser($strUser) {
         $this->strUser = $strUser;
     }
 
+    /**
+     * @return string
+     */
     public function getStrColumn() {
         return $this->strColumn;
     }
+
+    /**
+     * @return string
+     */
     public function getStrUser() {
         return $this->strUser;
     }
 
+    /**
+     * @return string
+     */
     public function getStrAspect() {
         return $this->strAspect;
     }
 
+    /**
+     * @param string $strAspect
+     * @return void
+     */
     public function setStrAspect($strAspect) {
         $this->strAspect = $strAspect;
     }
 
     /**
      * @param string $strClass
+     * @return void
      */
     public function setStrClass($strClass) {
         $this->strClass = $strClass;
@@ -304,6 +326,7 @@ class class_module_dashboard_widget extends class_model implements interface_mod
 
     /**
      * @param string $strContent
+     * @return void
      */
     public function setStrContent($strContent) {
         $this->strContent = $strContent;
