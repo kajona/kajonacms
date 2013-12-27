@@ -26,6 +26,7 @@ class class_module_news_feed extends class_model implements interface_model, int
      *
      * @fieldType text
      * @fieldMandatory
+     * @fieldLabel form_feed_title
      */
     private $strTitle = "";
 
@@ -35,7 +36,7 @@ class class_module_news_feed extends class_model implements interface_model, int
      *
      * @fieldType text
      * @fieldMandatory
-     * @fieldLabel commons_title
+     * @fieldLabel form_feed_urltitle
      */
     private $strUrlTitle = "";
 
@@ -44,6 +45,7 @@ class class_module_news_feed extends class_model implements interface_model, int
      * @tableColumn news_feed.news_feed_link
      *
      * @fieldType text
+     * @fieldLabel form_feed_link
      */
     private $strLink = "";
 
@@ -52,6 +54,7 @@ class class_module_news_feed extends class_model implements interface_model, int
      * @tableColumn news_feed.news_feed_desc
      *
      * @fieldType textarea
+     * @fieldLabel form_feed_desc
      */
     private $strDesc = "";
 
@@ -60,6 +63,7 @@ class class_module_news_feed extends class_model implements interface_model, int
      * @tableColumn news_feed.news_feed_page
      * @fieldType page
      * @fieldMandatory
+     * @fieldLabel form_feed_page
      */
     private $strPage = "";
 
@@ -68,6 +72,7 @@ class class_module_news_feed extends class_model implements interface_model, int
      * @tableColumn news_feed.news_feed_cat
      *
      * @fieldType dropdown
+     * @fieldLabel form_feed_cat
      */
     private $strCat = "";
 

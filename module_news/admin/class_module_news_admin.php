@@ -50,6 +50,9 @@ class class_module_news_admin extends class_admin_evensimpler implements interfa
 
     }
 
+    /**
+     * @return array
+     */
     public function getOutputModuleNavi() {
         $arrReturn = array();
         $arrReturn[] = array("view", getLinkAdmin($this->arrModule["modul"], "listNewsAndCategories", "", $this->getLang("commons_list"), "", "", true, "adminnavi"));
@@ -60,7 +63,11 @@ class class_module_news_admin extends class_admin_evensimpler implements interfa
         return $arrReturn;
     }
 
-
+    /**
+     * @param class_model $objListEntry
+     *
+     * @return array
+     */
     protected function renderAdditionalActions(class_model $objListEntry) {
         if($objListEntry instanceof class_module_news_category) {
             return array(
@@ -80,8 +87,13 @@ class class_module_news_admin extends class_admin_evensimpler implements interfa
 
         return array();
     }
-    
-    
+
+    /**
+     * @param string $strAction
+     * @param interface_model $objInstance
+     *
+     * @return string
+     */
     protected function getActionNameForClass($strAction, $objInstance) {
         if ($strAction == "list" && ($objInstance instanceof class_module_news_news || $objInstance instanceof class_module_news_category)) {
             return "listNewsAndCategories";
@@ -89,8 +101,13 @@ class class_module_news_admin extends class_admin_evensimpler implements interfa
         
         return parent::getActionNameForClass($strAction, $objInstance);
     }
-    
-    
+
+    /**
+     * @param string $strListIdentifier
+     * @param bool $bitDialog
+     *
+     * @return array|string
+     */
     protected function getNewEntryAction($strListIdentifier, $bitDialog = false) {
         if($strListIdentifier == class_module_news_admin::STR_CAT_LIST) {
             return $this->objToolkit->listButton(getLinkAdmin($this->getArrModule("modul"), "newCategory", "", $this->getLang("commons_create_category"), $this->getLang("commons_create_category"), "icon_new"));
@@ -235,6 +252,10 @@ class class_module_news_admin extends class_admin_evensimpler implements interfa
         return $strReturn;
     }
 
+
+    /**
+     * @return void
+     */
     protected function actionAddNewsToLanguageset() {
         $objNews = class_objectfactory::getInstance()->getObject($this->getSystemid());
         if($objNews->rightEdit()) {
@@ -249,6 +270,9 @@ class class_module_news_admin extends class_admin_evensimpler implements interfa
         }
     }
 
+    /**
+     * @return void
+     */
     protected function actionAssignToLanguageset() {
         $objNews = class_objectfactory::getInstance()->getObject($this->getSystemid());
         if($objNews->rightEdit()) {
@@ -263,6 +287,9 @@ class class_module_news_admin extends class_admin_evensimpler implements interfa
         }
     }
 
+    /**
+     * @return void
+     */
     protected function actionRemoveFromLanguageset() {
         $objNews = class_objectfactory::getInstance()->getObject($this->getSystemid());
         if($objNews->rightEdit()) {
@@ -277,53 +304,6 @@ class class_module_news_admin extends class_admin_evensimpler implements interfa
     
 
     /**
-     * Shows the form to edit or create news
-     *
-     * @param string $strMode new || edit
-     * @param class_admin_formgenerator $objForm
-     *
-     * @return string
-     */
-    protected function actionNewNews($strMode = "new", class_admin_formgenerator $objForm = null) {
-        $strReturn = "";
-        $objNews = new class_module_news_news();
-        if($strMode == "edit") {
-            $objNews = new class_module_news_news($this->getSystemid());
-            $objNews->getLockManager()->lockRecord();
-
-            if(!$objNews->rightEdit()) {
-                return $this->getLang("commons_error_permissions");
-            }
-
-            //search the languages maintained
-            $objLanguageManager = class_module_languages_languageset::getLanguagesetForSystemid($this->getSystemid());
-            if($objLanguageManager != null) {
-
-                $arrMaintained = $objLanguageManager->getArrLanguageSet();
-                $arrDD = array();
-                foreach($arrMaintained as $strLanguageId => $strSystemid) {
-                    $objLanguage = new class_module_languages_language($strLanguageId);
-                    $arrDD[$strSystemid] = $this->getLang("lang_" . $objLanguage->getStrName(), "languages");
-                }
-
-                class_module_languages_admin::enableLanguageSwitch();
-                class_module_languages_admin::setArrLanguageSwitchEntries($arrDD);
-                class_module_languages_admin::setStrOnChangeHandler("window.location='" . getLinkAdminHref("news", "editNews") . (_system_mod_rewrite_ == "true" ? "?" : "&") . "systemid='+this.value+'&pe=" . $this->getParam("pe") . "';");
-                class_module_languages_admin::setStrActiveKey($this->getSystemid());
-            }
-        }
-
-        if($objForm == null) {
-            $objForm = $this->getNewsAdminForm($objNews);
-        }
-
-        $objForm->addField(new class_formentry_hidden("", "mode"))->setStrValue($strMode);
-        $strReturn .= $objForm->renderForm(getLinkAdminHref($this->getArrModule("modul"), "saveNews"));
-        return $strReturn;
-    }
-
-
-    /**
      * Saves the passed values as a new category to the db
      *
      * @return string "" in case of success
@@ -331,6 +311,9 @@ class class_module_news_admin extends class_admin_evensimpler implements interfa
      */
     protected function actionSaveNews() {
         $objNews = null;
+
+        $this->setStrCurObjectTypeName("News");
+        $this->setCurObjectClassName("class_module_news_news");
 
         if($this->getParam("mode") == "new") {
             $objNews = new class_module_news_news();
@@ -342,9 +325,12 @@ class class_module_news_admin extends class_admin_evensimpler implements interfa
 
         if($objNews != null) {
 
-            $objForm = $this->getNewsAdminForm($objNews);
+            $objForm = $this->getAdminForm($objNews);
             if(!$objForm->validateForm()) {
-                return $this->actionNewNews($this->getParam("mode"), $objForm);
+                if($this->getParam("mode") == "new")
+                    return $this->actionNew();
+                else
+                    return $this->actionEdit();
             }
 
             $objForm->updateSourceObject();
@@ -368,25 +354,56 @@ class class_module_news_admin extends class_admin_evensimpler implements interfa
         return $this->getLang("commons_error_permissions");
     }
 
-    
+
+    /**
+     * @param interface_model $objInstance
+     *
+     * @return class_admin_formgenerator
+     */
     protected function getAdminForm(interface_model $objInstance) {
+
+        $objForm = parent::getAdminForm($objInstance);
         
         if ($objInstance instanceof class_module_news_news) {
-            return $this->getNewsAdminForm($objInstance);
+            $objForm = $this->getNewsAdminForm($objInstance, $objForm);
         }
         else if ($objInstance instanceof class_module_news_feed) {
-            return $this->getFeedAdminForm($objInstance);
+            $objForm = $this->getFeedAdminForm($objInstance, $objForm);
         }
         
-        return parent::getAdminForm($objInstance);
+        return $objForm;
     }
-    
 
-    private function getNewsAdminForm(class_module_news_news $objNews) {
+
+    /**
+     * @param class_module_news_news $objNews
+     * @param class_admin_formgenerator $objForm
+     *
+     * @return class_admin_formgenerator
+     */
+    private function getNewsAdminForm(class_module_news_news $objNews, class_admin_formgenerator $objForm) {
+
+
+        if($objNews->getSystemid() != $this->getObjModule()->getSystemid()) {
+            //search the languages maintained
+            $objLanguageManager = class_module_languages_languageset::getLanguagesetForSystemid($this->getSystemid());
+            if($objLanguageManager != null) {
+
+                $arrMaintained = $objLanguageManager->getArrLanguageSet();
+                $arrDD = array();
+                foreach($arrMaintained as $strLanguageId => $strSystemid) {
+                    $objLanguage = new class_module_languages_language($strLanguageId);
+                    $arrDD[$strSystemid] = $this->getLang("lang_" . $objLanguage->getStrName(), "languages");
+                }
+
+                class_module_languages_admin::enableLanguageSwitch();
+                class_module_languages_admin::setArrLanguageSwitchEntries($arrDD);
+                class_module_languages_admin::setStrOnChangeHandler("window.location='" . getLinkAdminHref("news", "editNews") . (_system_mod_rewrite_ == "true" ? "?" : "&") . "systemid='+this.value+'&pe=" . $this->getParam("pe") . "';");
+                class_module_languages_admin::setStrActiveKey($this->getSystemid());
+            }
+        }
+
         
-        $objForm = new class_admin_formgenerator("news", $objNews);
-        $objForm->generateFieldsFromObject();
-
         $arrCats = class_module_news_category::getObjectList();
         if(count($arrCats) > 0) {
             $objForm->addField(new class_formentry_headline())->setStrValue($this->getLang("commons_categories"));
@@ -409,10 +426,14 @@ class class_module_news_admin extends class_admin_evensimpler implements interfa
         return $objForm;
     }
 
-    
-    private function getFeedAdminForm(class_module_news_feed $objFeed) {
-        $objForm = new class_admin_formgenerator("feed", $objFeed);
-        $objForm->generateFieldsFromObject();
+
+    /**
+     * @param class_module_news_feed $objFeed
+     * @param class_admin_formgenerator $objForm
+     *
+     * @return class_admin_formgenerator
+     */
+    private function getFeedAdminForm(class_module_news_feed $objFeed, class_admin_formgenerator $objForm) {
 
         $arrNewsCats = class_module_news_category::getObjectList();
         $arrCatsDD = array();
