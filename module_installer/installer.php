@@ -435,7 +435,7 @@ class class_installer {
             $arrTemplate["module_hint"] = "";
 
             if($objHandler->getVersionInstalled() !== null) {
-                $arrTemplate["module_hint"] .= $this->getLang("installer_versioninstalled", "system").$objHandler->getVersionInstalled()."<br />";
+                $arrTemplate["module_hint"] .= $this->getLang("installer_versioninstalled").$objHandler->getVersionInstalled()."<br />";
             }
 
             //check missing modules
@@ -448,13 +448,13 @@ class class_installer {
                     $objPackage = $objPackagemanager->getPackage($strOneModule);
 
                     if($objPackage === null || $objPackage->getBitProvidesInstaller() || version_compare($strVersion, $objPackage->getStrVersion(), ">")) {
-                        $arrTemplate["module_hint"] .= $this->getLang("installer_systemversion_needed", "system").$strOneModule." >= ".$strVersion."<br />";
+                        $arrTemplate["module_hint"] .= $this->getLang("installer_systemversion_needed").$strOneModule." >= ".$strVersion."<br />";
                     }
 
                 }
 
                 else if(version_compare($strVersion, class_module_system_module::getModuleByName(trim($strOneModule))->getStrVersion(), ">")) {
-                    $arrTemplate["module_hint"] .= $this->getLang("installer_systemversion_needed", "system").$strOneModule." >= ".$strVersion."<br />";
+                    $arrTemplate["module_hint"] .= $this->getLang("installer_systemversion_needed").$strOneModule." >= ".$strVersion."<br />";
                 }
             }
 
@@ -539,7 +539,7 @@ class class_installer {
             $arrTemplate["module_hint"] = "";
 
             if($objHandler->getVersionInstalled() !== null) {
-                $arrTemplate["module_hint"] = $this->getLang("installer_versioninstalled", "system").$objHandler->getVersionInstalled();
+                $arrTemplate["module_hint"] = $this->getLang("installer_versioninstalled").$objHandler->getVersionInstalled();
             }
             else {
                 //check missing modules
@@ -551,7 +551,7 @@ class class_installer {
                 }
 
                 if(trim($strRequired) != "")
-                    $arrTemplate["module_hint"] = $this->getLang("installer_modules_needed", "system").substr($strRequired, 0, -2);
+                    $arrTemplate["module_hint"] = $this->getLang("installer_modules_needed").substr($strRequired, 0, -2);
             }
 
             if($objHandler->isInstallable())
