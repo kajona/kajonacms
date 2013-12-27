@@ -24,6 +24,7 @@ class class_module_languages_language extends class_model implements interface_m
      * @tableColumn language_name
      *
      * @fieldType dropdown
+     * @fieldLabel commons_title
      * @fieldMandatory
      * @fieldValidator twochars
      */
