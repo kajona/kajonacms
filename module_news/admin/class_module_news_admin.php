@@ -124,7 +124,7 @@ class class_module_news_admin extends class_admin_evensimpler implements interfa
         $objIterator->setPageNumber($this->getParam("pv"));
         $objIterator->setArraySection(class_module_news_news::getObjectList($this->getParam("filterId"), $objIterator->calculateStartPos(), $objIterator->calculateEndPos()));
 
-        $strReturn .= $this->renderList($objIterator, false, class_module_news_admin::STR_NEWS_LIST);
+        $strReturn .= $this->renderList($objIterator, false, class_module_news_admin::STR_NEWS_LIST, false, "&filterId=".$this->getParam("filterId"));
 
         return $strReturn;
     }
