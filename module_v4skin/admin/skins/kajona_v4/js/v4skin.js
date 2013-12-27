@@ -140,7 +140,6 @@ KAJONA.v4skin = {
                 if($('#'+$objCur.attr('id')+'_id'))
                     $( '#'+$objCur.attr('id')+'_id' ).val( ui.item.systemid );
             }
-            return false;
         };
 
         this.create = function( event, ui ) {
