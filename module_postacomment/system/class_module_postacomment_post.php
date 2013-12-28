@@ -18,7 +18,7 @@
  * @module postacomment
  * @moduleId _postacomment_modul_id_
  */
-class class_module_postacomment_post extends class_model implements interface_model, interface_sortable_rating, interface_admin_listable, interface_recorddeleted_listener {
+class class_module_postacomment_post extends class_model implements interface_model, interface_sortable_rating, interface_admin_listable {
 
     /**
      * @var string
@@ -74,6 +74,9 @@ class class_module_postacomment_post extends class_model implements interface_mo
     private $strAssignedLanguage;
 
 
+    /**
+     * @return string
+     */
     public function getStrDisplayName() {
         return $this->getStrTitle();
     }
@@ -147,7 +150,7 @@ class class_module_postacomment_post extends class_model implements interface_mo
 					 FROM "._dbprefix_."postacomment,
 						  "._dbprefix_."system
 					 WHERE system_id = postacomment_id "
-					 . $strFilter ."
+                     . $strFilter ."
 					 ORDER BY postacomment_page ASC,
 						      postacomment_language ASC,
 							  postacomment_date DESC";
@@ -200,53 +203,31 @@ class class_module_postacomment_post extends class_model implements interface_mo
         return $arrRow["COUNT(*)"];
     }
 
+
     /**
-     * Called whenever a records was deleted using the common methods.
-     * Implement this method to be notified when a record is deleted, e.g. to to additional cleanups afterwards.
-     * There's no need to register the listener, this is done automatically.
-     *
-     * Make sure to return a matching boolean-value, otherwise the transaction may be rolled back.
-     *
-     * @param $strSystemid
-     * @param string $strSourceClass
-     *
-     * @return bool
+     * @return string
      */
-    public function handleRecordDeletedEvent($strSystemid, $strSourceClass) {
-        $bitReturn = true;
-        //module installed?
-        if($strSourceClass == "class_module_postacomment_post" || class_module_system_module::getModuleByName("postacomment") == null)
-            return true;
-
-        //ok, so search for a records matching
-        $arrPosts1 = class_module_postacomment_post::loadPostList(false, $strSystemid);
-        $arrPosts2 = class_module_postacomment_post::loadPostList(false, "", $strSystemid);
-
-        //and delete
-        foreach($arrPosts1 as $objOnePost) {
-            $bitReturn &= $objOnePost->deleteObject();
-        }
-
-        foreach($arrPosts2 as $objOnePost) {
-            $bitReturn &= $objOnePost->deleteObject();
-        }
-
-        return $bitReturn;
-    }
-
-
     public function getStrTitle() {
         return $this->strTitle;
     }
 
+    /**
+     * @return string
+     */
     public function getStrComment() {
         return $this->strComment;
     }
 
+    /**
+     * @return string
+     */
     public function getStrUsername() {
         return $this->strUsername;
     }
 
+    /**
+     * @return int
+     */
     public function getIntDate() {
         if($this->intDate == null || $this->intDate == "") {
             $this->intDate = time();
@@ -255,35 +236,79 @@ class class_module_postacomment_post extends class_model implements interface_mo
         return $this->intDate;
     }
 
+    /**
+     * @return string
+     */
     public function getStrAssignedPage() {
         return $this->strAssignedPage;
     }
 
+    /**
+     * @return string
+     */
     public function getStrAssignedSystemid() {
         return $this->strAssignedSystemid;
     }
+
+    /**
+     * @return string
+     */
     public function getStrAssignedLanguage() {
         return $this->strAssignedLanguage;
     }
 
+    /**
+     * @param string $strTitle
+     * @return void
+     */
     public function setStrTitle($strTitle) {
         $this->strTitle = $strTitle;
     }
+
+    /**
+     * @param string $strComment
+     * @return void
+     */
     public function setStrComment($strComment) {
         $this->strComment = $strComment;
     }
+
+    /**
+     * @param string $strUsername
+     * @return void
+     */
     public function setStrUsername($strUsername) {
         $this->strUsername = $strUsername;
     }
+
+    /**
+     * @param int $intDate
+     * @return void
+     */
     public function setIntDate($intDate) {
         $this->intDate = $intDate;
     }
+
+    /**
+     * @param string $strAssignedPage
+     * @return void
+     */
     public function setStrAssignedPage($strAssignedPage) {
         $this->strAssignedPage = $strAssignedPage;
     }
+
+    /**
+     * @param string $strAssignedSystemid
+     * @return void
+     */
     public function setStrAssignedSystemid($strAssignedSystemid) {
         $this->strAssignedSystemid = $strAssignedSystemid;
     }
+
+    /**
+     * @param string $strAssignedLanguage
+     * @return void
+     */
     public function setStrAssignedLanguage($strAssignedLanguage) {
         $this->strAssignedLanguage = $strAssignedLanguage;
     }

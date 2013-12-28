@@ -23,10 +23,10 @@ interface interface_statuschanged_listener {
      *
      * Make sure to return a matching boolean-value, otherwise the transaction may be rolled back.
      *
-     * @abstract
-     * @param $strSystemid
-     * @param $intNewStatus
+     * @param string $strSystemid
+     * @param int $intNewStatus
      *
+     * @abstract
      * @return bool
      */
     public function handleStatusChangedEvent($strSystemid, $intNewStatus);

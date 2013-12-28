@@ -24,12 +24,13 @@
  * @module languages
  * @moduleId _languages_modul_id_
  */
-class class_module_languages_languageset extends class_model implements interface_model, interface_recorddeleted_listener {
+class class_module_languages_languageset extends class_model implements interface_model {
 
     private $arrLanguageSet = array();
 
     /**
      * Inits the current object and loads the language-mappings
+     * @return void
      */
     protected function initObjectInternal() {
         $strQuery = "SELECT * FROM " . _dbprefix_ . "languages_languageset WHERE languageset_id = ?";
@@ -81,7 +82,7 @@ class class_module_languages_languageset extends class_model implements interfac
                            (languageset_id, languageset_language, languageset_systemid) VALUES
                            (?, ?, ?)";
 
-            $bitReturn &= $this->objDB->_pQuery($strQuery, array($this->getSystemid(), $strLanguage, $strSystemid));
+            $bitReturn = $bitReturn && $this->objDB->_pQuery($strQuery, array($this->getSystemid(), $strLanguage, $strSystemid));
         }
 
         return $bitReturn;
@@ -154,6 +155,7 @@ class class_module_languages_languageset extends class_model implements interfac
      * Removes a single systemid from a languageset
      *
      * @param string $strSystemid
+     * @return string
      */
     public function removeSystemidFromLanguageeset($strSystemid) {
         foreach($this->arrLanguageSet as $strId => $strSetSystemid) {
@@ -218,26 +220,6 @@ class class_module_languages_languageset extends class_model implements interfac
         return new $objLanguageset;
     }
 
-    /**
-     * Searches for languagesets containing the current systemid. either as a language or a referenced record.
-     * Called whenever a records was deleted using the common methods.
-     * Implement this method to be notified when a record is deleted, e.g. to to additional cleanups afterwards.
-     * There's no need to register the listener, this is done automatically.
-     * Make sure to return a matching boolean-value, otherwise the transaction may be rolled back.
-     *
-     * @param $strSystemid
-     * @param string $strSourceClass
-     *
-     * @return bool
-     */
-    public function handleRecordDeletedEvent($strSystemid, $strSourceClass) {
-        //fire a plain query on the database, much faster then searching for matching records
-        $strQuery = "DELETE FROM " . _dbprefix_ . "languages_languageset
-                      WHERE languageset_language = ?
-                         OR languageset_systemid = ?";
-
-        return class_carrier::getInstance()->getObjDB()->_pQuery($strQuery, array($strSystemid, $strSystemid));
-    }
 
     /**
      * Returns the list of current associations

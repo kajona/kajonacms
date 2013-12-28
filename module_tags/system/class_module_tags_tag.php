@@ -13,7 +13,6 @@
  * - Representing the tag itself
  * - Acting as a wrapper to all tag-handling related methods such as assigning a tag
  *
- *
  * @package module_tags
  * @author sidler@mulchprod.de
  * @since 3.4
@@ -22,7 +21,7 @@
  * @module tags
  * @moduleId _tags_modul_id_
  */
-class class_module_tags_tag extends class_model implements interface_model, interface_recorddeleted_listener, interface_admin_listable, interface_recordcopied_listener, interface_search_resultobject {
+class class_module_tags_tag extends class_model implements interface_model, interface_admin_listable, interface_search_resultobject {
 
     /**
      * @var string
@@ -69,6 +68,9 @@ class class_module_tags_tag extends class_model implements interface_model, inte
     }
 
 
+    /**
+     * @return string
+     */
     public function getStrDisplayName() {
         return $this->getStrName();
     }
@@ -223,9 +225,12 @@ class class_module_tags_tag extends class_model implements interface_model, inte
         }
 
         //search them by name
-        usort($arrReturn, function(class_module_tags_tag $objA, class_module_tags_tag $objB) {
-            return strcmp($objA->getStrName(), $objB->getStrName());
-        });
+        usort(
+            $arrReturn,
+            function (class_module_tags_tag $objA, class_module_tags_tag $objB) {
+                return strcmp($objA->getStrName(), $objB->getStrName());
+            }
+        );
 
         return $arrReturn;
     }
@@ -272,8 +277,8 @@ class class_module_tags_tag extends class_model implements interface_model, inte
     /**
      * Loads a list of assigned records and creates the concrete instances.
      *
-     * @param $intStart
-     * @param $intEnd
+     * @param int $intStart
+     * @param int $intEnd
      * @return class_model[]
      */
     public function getArrAssignedRecords($intStart = null, $intEnd = null) {
@@ -368,53 +373,12 @@ class class_module_tags_tag extends class_model implements interface_model, inte
         return $this->objDB->_pQuery($strQuery, $arrParams);
     }
 
+
     /**
-     * Searches for tags assigned to the systemid to be deleted.
-     *
-     * Called whenever a records was deleted using the common methods.
-     * Implement this method to be notified when a record is deleted, e.g. to to additional cleanups afterwards.
-     * There's no need to register the listener, this is done automatically.
-     *
-     * Make sure to return a matching boolean-value, otherwise the transaction may be rolled back.
-     *
-     * @param $strSystemid
-     * @param string $strSourceClass
+     * @param string $strNewPrevid
      *
      * @return bool
      */
-    public function handleRecordDeletedEvent($strSystemid, $strSourceClass) {
-        if($strSourceClass == "class_module_tags_tag" || class_module_system_module::getModuleByName("tags") == null)
-            return true;
-
-        //delete memberships. Fire a plain query, faster then searching.
-        $strQuery = "DELETE FROM "._dbprefix_."tags_member WHERE tags_systemid=?";
-        $bitReturn = $this->objDB->_pQuery($strQuery, array($strSystemid));
-
-        return $bitReturn;
-    }
-
-    /**
-     * Called whenever a record was copied.
-     * copies the tag-assignments from the source object to the target object
-     *
-     * @param $strOldSystemid
-     * @param $strNewSystemid
-     *
-     * @return bool
-     */
-    public function handleRecordCopiedEvent($strOldSystemid, $strNewSystemid) {
-        $strQuery = "SELECT tags_tagid, tags_attribute, tags_owner
-                       FROM "._dbprefix_."tags_member
-                      WHERE tags_systemid = ?";
-        $arrRows = $this->objDB->getPArray($strQuery, array($strOldSystemid));
-        foreach($arrRows as $arrSingleRow) {
-            $strQuery = "INSERT INTO "._dbprefix_."tags_member (tags_memberid, tags_tagid, tags_systemid, tags_attribute, tags_owner) VALUES (?, ?, ?, ?, ?)";
-            $this->objDB->_pQuery($strQuery, array(generateSystemid(), $arrSingleRow["tags_tagid"], $strNewSystemid, $arrSingleRow["tags_attribute"], $arrSingleRow["tags_owner"]));
-        }
-
-        return true;
-    }
-
     public function copyObject($strNewPrevid = "") {
 
         $strPrefix = $this->getStrName()."_";
@@ -442,18 +406,32 @@ class class_module_tags_tag extends class_model implements interface_model, inte
         return true;
     }
 
+    /**
+     * @return string
+     */
     public function getStrName() {
         return $this->strName;
     }
 
+    /**
+     * @param string $strName
+     * @return void
+     */
     public function setStrName($strName) {
         $this->strName = trim($strName);
     }
 
+    /**
+     * @param int $intPrivate
+     * @return void
+     */
     public function setIntPrivate($intPrivate) {
         $this->intPrivate = $intPrivate;
     }
 
+    /**
+     * @return int
+     */
     public function getIntPrivate() {
         return $this->intPrivate;
     }

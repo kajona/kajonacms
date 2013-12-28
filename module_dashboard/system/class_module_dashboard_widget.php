@@ -17,7 +17,7 @@
  * @module dashboard
  * @moduleId _dashboard_module_id_
  */
-class class_module_dashboard_widget extends class_model implements interface_model, interface_recorddeleted_listener, interface_userfirstlogin_listener {
+class class_module_dashboard_widget extends class_model implements interface_model {
 
     /**
      * @var string
@@ -66,7 +66,7 @@ class class_module_dashboard_widget extends class_model implements interface_mod
      *
      * @return string[]
      */
-    public function getListOfWidgetsAvailable() {
+    public static function getListOfWidgetsAvailable() {
 
         return class_resourceloader::getInstance()->getFolderContent("/admin/widgets/", array(".php"), false, function(&$strFilename) {
             if($strFilename != "interface_adminwidget.php" && $strFilename != "class_adminwidget.php") {
@@ -94,32 +94,7 @@ class class_module_dashboard_widget extends class_model implements interface_mod
     }
 
 
-    /**
-     * Implementing callback to react on user-delete events
-     *
-     * Called whenever a record was deleted using the common methods.
-     * Implement this method to be notified when a record is deleted, e.g. to to additional cleanups afterwards.
-     * There's no need to register the listener, this is done automatically.
-     *
-     * Make sure to return a matching boolean-value, otherwise the transaction may be rolled back.
-     *
-     * @param string $strSystemid
-     * @param string $strSourceClass
-     *
-     * @return bool
-     */
-    public function handleRecordDeletedEvent($strSystemid, $strSourceClass) {
-        if($strSourceClass == "class_module_user_user" && validateSystemid($strSystemid)) {
-            $strQuery = "SELECT dashboard_id FROM "._dbprefix_."dashboard WHERE dashboard_user = ?";
-            $arrRows = $this->objDB->getPArray($strQuery, array($strSystemid), null, null, false);
-            foreach($arrRows as $arrOneRow) {
-                $objWidget = new class_module_dashboard_widget($arrOneRow["dashboard_id"]);
-                $objWidget->deleteObject();
-            }
-        }
 
-        return true;
-    }
 
     /**
      * Looks up the widgets placed in a given column and
@@ -237,30 +212,6 @@ class class_module_dashboard_widget extends class_model implements interface_mod
 
         }
         return $arrReturn;
-    }
-
-    /**
-     * Callback method, triggered each time a user logs into the system for the very first time.
-     * May be used to trigger actions or initial setups for the user.
-     *
-     * @param string $strUserid
-     *
-     * @return bool
-     */
-    public function handleUserFirstLoginEvent($strUserid) {
-        $bitReturn = true;
-
-        //get all widgets and call them in order
-        $arrWidgets = $this->getListOfWidgetsAvailable();
-        foreach($arrWidgets as $strOneWidgetClass) {
-            /** @var $objInstance interface_adminwidget */
-            $objInstance = new $strOneWidgetClass();
-
-            $bitReturn = $bitReturn && $objInstance->onFistLogin($strUserid);
-
-        }
-
-        return $bitReturn;
     }
 
 

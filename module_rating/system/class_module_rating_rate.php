@@ -17,7 +17,7 @@
  * @module rating
  * @moduleId _rating_modul_id_
  */
-class class_module_rating_rate extends class_model implements interface_model, interface_recorddeleted_listener {
+class class_module_rating_rate extends class_model implements interface_model {
 
     const RATING_COOKIE = "kj_ratingHistory";
 
@@ -168,42 +168,9 @@ class class_module_rating_rate extends class_model implements interface_model, i
 
     }
 
-
     /**
-     * Searches for ratings belonging to the systemid
-     * to be deleted.
-     * Overwrites class_model::doAdditionalCleanupsOnDeletion($strSystemid)
-     *
-     * @param string $strSystemid
-     * @param string $strSourceClass
-     *
      * @return bool
-     * @overwrites
      */
-    public function handleRecordDeletedEvent($strSystemid, $strSourceClass) {
-        $bitReturn = true;
-
-        //ratings installed as a module?
-        if($strSourceClass == "class_module_rating_rate" || class_module_system_module::getModuleByName("rating") == null)
-            return true;
-
-        //ok, so delete matching records
-        //fetch the matching ids..
-        $strQuery = "SELECT rating_id
-                     FROM "._dbprefix_."rating"."
-                     WHERE rating_systemid = ? ";
-        $arrRows = $this->objDB->getPArray($strQuery, array($strSystemid));
-
-        if(count($arrRows) > 0) {
-            foreach($arrRows as $arrOneRow) {
-                $objRating = new class_module_rating_rate($arrOneRow["rating_id"]);
-                $bitReturn = $bitReturn && $objRating->deleteObject();
-            }
-        }
-
-        return $bitReturn;
-    }
-
     protected function deleteObjectInternal() {
         //delete the corresponding history entries
         $strQuery = "DELETE FROM "._dbprefix_."rating_history"." WHERE rating_history_rating=? ";
@@ -232,14 +199,25 @@ class class_module_rating_rate extends class_model implements interface_model, i
     }
 
 
+    /**
+     * @return string
+     */
     public function getStrRatingSystemid() {
         return $this->strRatingSystemid;
     }
 
+    /**
+     * @return string
+     */
     public function getStrRatingChecksum() {
         return $this->strRatingChecksum;
     }
 
+    /**
+     * @param bool $bitRound
+     *
+     * @return float
+     */
     public function getFloatRating($bitRound = true) {
         if($this->floatRating == "")
             return 0.0;
@@ -247,6 +225,9 @@ class class_module_rating_rate extends class_model implements interface_model, i
         return $this->floatRating;
     }
 
+    /**
+     * @return int
+     */
     public function getIntHits() {
         if($this->intHits == "")
             return 0;
@@ -255,14 +236,26 @@ class class_module_rating_rate extends class_model implements interface_model, i
     }
 
 
+    /**
+     * @param string $strRatingSystemid
+     * @return void
+     */
     public function setStrRatingSystemid($strRatingSystemid) {
         $this->strRatingSystemid = $strRatingSystemid;
     }
 
+    /**
+     * @param string $strRatingChecksum
+     * @return void
+     */
     public function setStrRatingChecksum($strRatingChecksum) {
         $this->strRatingChecksum = $strRatingChecksum;
     }
 
+    /**
+     * @param float $floatRating
+     * @return void
+     */
     public function setFloatRating($floatRating) {
         if($floatRating > class_module_rating_rate::$intMaxRatingValue) {
             $floatRating = class_module_rating_rate::$intMaxRatingValue;
@@ -273,6 +266,10 @@ class class_module_rating_rate extends class_model implements interface_model, i
         $this->floatRating = $floatRating;
     }
 
+    /**
+     * @param int $intHits
+     * @return void
+     */
     public function setIntHits($intHits) {
         $this->intHits = $intHits;
     }

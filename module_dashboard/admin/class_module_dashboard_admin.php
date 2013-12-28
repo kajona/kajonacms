@@ -249,8 +249,7 @@ JS;
         $strReturn = "";
         //step 1: select a widget, plz
         if($this->getParam("step") == "") {
-            $objSystemWidget = new class_module_dashboard_widget();
-            $arrWidgetsAvailable = $objSystemWidget->getListOfWidgetsAvailable();
+            $arrWidgetsAvailable = class_module_dashboard_widget::getListOfWidgetsAvailable();
 
             $arrDD = array();
             foreach ($arrWidgetsAvailable as $strOneWidget) {

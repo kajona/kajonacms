@@ -17,11 +17,10 @@
 interface interface_userfirstlogin_listener {
 
     /**
-     *
      * Callback method, triggered each time a user logs into the system for the very first time.
      * May be used to trigger actions or initial setups for the user.
      *
-     * @param $strUserid
+     * @param string $strUserid
      *
      * @return bool
      */

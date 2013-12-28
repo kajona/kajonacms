@@ -20,13 +20,11 @@ interface interface_recordcopied_listener {
      * Called whenever a record was copied.
      * Useful to perform additional actions, e.g. update / duplicate foreign assignments.
      *
+     *
+     * @param string $strOldSystemid
+     * @param string $strNewSystemid
+     *
      * @abstract
-     *
-     * @param $strOldSystemid
-     * @param $strNewSystemid
-     *
-     * @internal param $strSystemid
-     * @internal param $intNewStatus
      * @return bool
      */
     public function handleRecordCopiedEvent($strOldSystemid, $strNewSystemid);
