@@ -29,15 +29,6 @@ abstract class class_ui_base {
     protected $objConfig = null;
 
     /**
-     * Object to the database
-     *
-     * @todo remove direct link, afaik only required in element subclass -> may be moved to class_element_admin
-     * @deprecated
-     * @var class_db
-     */
-    protected $objDB = null;
-
-    /**
      * Toolkit-Object
      *
      * @var class_toolkit_admin|class_toolkit_portal
@@ -115,7 +106,6 @@ abstract class class_ui_base {
         $objCarrier = class_carrier::getInstance();
 
         $this->objConfig = $objCarrier->getObjConfig();
-        $this->objDB = $objCarrier->getObjDB();
         $this->objSession = $objCarrier->getObjSession();
         $this->objLang = $objCarrier->getObjLang();
         $this->objTemplate = $objCarrier->getObjTemplate();
