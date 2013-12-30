@@ -8,77 +8,21 @@
 ********************************************************************************************************/
 
 /**
- * Base class for all module-classes in the portal
+ * Base class for all portal-interface classes.
+ * Extend this class (or one of its subclasses) to generate portal-views.
+ *
+ * The action-method() takes care of calling your action-handlers.
+ * If the URL-param "action" is set to "list", the controller calls your
+ * action method "actionList()". Return the rendered output, everything else is generated
+ * automatically.
  *
  * @package module_system
  * @author sidler@mulchprod.de
+ * @see class_admin::action()
  */
-abstract class class_portal {
+abstract class class_portal extends class_ui_base {
 
-    const STR_MODULE_ANNOTATION = "@module";
-    const STR_MODULEID_ANNOTATION = "@moduleId";
-
-    /**
-     * Instance of class_config
-     *
-     * @var class_config
-     */
-    protected $objConfig = null; //Object containing config-data
-
-    /**
-     * Instance of class_db
-     *
-     * @var class_db
-     */
-    protected $objDB = null; //Object to the database
-
-    /**
-     * Instance of class_toolkit_portal
-     *
-     * @var class_toolkit_portal
-     */
-    protected $objToolkit = null; //Toolkit-Object
-
-    /**
-     * Instance of class_session
-     *
-     * @var class_session
-     */
-    protected $objSession = null; //Object containing the session-management
-
-    /**
-     * Instance of class_template
-     *
-     * @var class_template
-     */
-    protected $objTemplate = null; //Object to handle templates
-
-    /**
-     * Instance of class_lang
-     *
-     * @var class_lang
-     */
-    private $objLang = null; //Object managing the lang-files
-
-    /**
-     * Instance of class_module_system_common
-     *
-     * @var class_module_system_common
-     */
-    private $objSystemCommon = null;
-
-    /**
-     * Instance of the current modules' definition
-     *
-     * @var class_module_system_module
-     */
-    private $objModule = null;
-
-    private $strAction; //current action to perform (GET/POST)
-    private $strSystemid; //current systemid
-    protected $arrModule = array(); //Array containing info about the current module
     protected $strTemplateArea; //String containing the current Area for the templateobject
-    protected $strOutput;
     protected $arrElementData = array();
 
     /**
@@ -89,45 +33,9 @@ abstract class class_portal {
      */
     public function __construct($arrElementData = array(), $strSystemid = "") {
 
-        //Setting SystemID
-        if($strSystemid == "") {
-            $this->setSystemid(class_carrier::getInstance()->getParam("systemid"));
-        }
-        else {
-            $this->setSystemid($strSystemid);
-        }
+        parent::__construct($strSystemid);
 
-        //Generating all the required objects. For this we use our cool cool carrier-object
-        //take care of loading just the necessary objects
-        $objCarrier = class_carrier::getInstance();
-        $this->objConfig = $objCarrier->getObjConfig();
-        $this->objDB = $objCarrier->getObjDB();
-        $this->objToolkit = $objCarrier->getObjToolkit("portal");
-        $this->objSession = $objCarrier->getObjSession();
-        $this->objLang = $objCarrier->getObjLang();
-        $this->objTemplate = $objCarrier->getObjTemplate();
-        $this->objSystemCommon = new class_module_system_common($strSystemid);
-
-        //And keep the action
-        $this->strAction = $this->getParam("action");
-        //in most cases, the list is the default action if no other action was passed
-        if($this->strAction == "") {
-            $this->strAction = "list";
-        }
-
-        //try to load the current module-name and the moduleId by reflection
-        $objReflection = new class_reflection($this);
-        if(!isset($this->arrModule["modul"])) {
-            $arrAnnotationValues = $objReflection->getAnnotationValuesFromClass(self::STR_MODULE_ANNOTATION);
-            if(count($arrAnnotationValues) > 0)
-                $this->setArrModuleEntry("modul", trim($arrAnnotationValues[0]));
-        }
-
-        if(!isset($this->arrModule["moduleId"])) {
-            $arrAnnotationValues = $objReflection->getAnnotationValuesFromClass(self::STR_MODULEID_ANNOTATION);
-            if(count($arrAnnotationValues) > 0)
-                $this->setArrModuleEntry("moduleId", constant(trim($arrAnnotationValues[0])));
-        }
+        $this->objToolkit = class_carrier::getInstance()->getObjToolkit("portal");
 
         //set the pagename
         if($this->getParam("page") == "") {
@@ -137,10 +45,9 @@ abstract class class_portal {
         //set the correct language
         $objLanguage = new class_module_languages_language();
         //set current language to the texts-object
-        $this->objLang->setStrTextLanguage($objLanguage->getStrPortalLanguage());
+        $this->getObjLang()->setStrTextLanguage($objLanguage->getStrPortalLanguage());
 
         $this->arrElementData = $arrElementData;
-
     }
 
 
@@ -168,10 +75,10 @@ abstract class class_portal {
     public function action($strAction = "") {
 
         if($strAction == "") {
-            $strAction = $this->strAction;
+            $strAction = $this->getAction();
         }
         else {
-            $this->strAction = $strAction;
+            $this->setAction($strAction);
         }
 
         //search for the matching method - build method name
@@ -254,86 +161,6 @@ abstract class class_portal {
     }
 
 
-    /**
-     * Writes a value to the params-array
-     *
-     * @param string $strKey Key
-     * @param mixed $mixedValue Value
-     * @return void
-     */
-    public function setParam($strKey, $mixedValue) {
-        class_carrier::getInstance()->setParam($strKey, $mixedValue);
-    }
-
-    /**
-     * Returns a value from the params-Array
-     *
-     * @param string $strKey
-     *
-     * @return string else ""
-     */
-    public function getParam($strKey) {
-        return class_carrier::getInstance()->getParam($strKey);
-    }
-
-    /**
-     * Returns the complete Params-Array
-     *
-     * @return mixed
-     */
-    public final function getAllParams() {
-        return class_carrier::getAllParams();
-    }
-
-    /**
-     * returns the action used for the current request
-     *
-     * @return string
-     */
-    public final function getAction() {
-        return (string)$this->strAction;
-    }
-
-    /**
-     * sets the action used for the current request
-     *
-     * @param string $strAction
-     *
-     * @return string
-     */
-    public final function setAction($strAction) {
-        $this->strAction = $strAction;
-    }
-
-
-    /**
-     * Sets the current SystemID
-     *
-     * @param string $strID
-     *
-     * @return bool
-     * @final
-     */
-    public final function setSystemid($strID) {
-        if(validateSystemid($strID)) {
-            $this->strSystemid = $strID;
-            return true;
-        }
-        else {
-            return false;
-        }
-    }
-
-    /**
-     * Returns the current SystemID
-     *
-     * @return string
-     * @final
-     */
-    public final function getSystemid() {
-        return $this->strSystemid;
-    }
-
 
     /**
      * Gets the status of a systemRecord
@@ -384,49 +211,6 @@ abstract class class_portal {
 
 
     /**
-     * Generates a sorted array of systemids, reaching from the passed systemid up
-     * until the assigned module-id
-     *
-     * @param string $strSystemid
-     *
-     * @return mixed
-     * @deprecated
-     */
-    public function getPathArray($strSystemid = "") {
-        $objCommon = new class_module_system_common($strSystemid);
-        $objCommon->getPathArray($strSystemid);
-    }
-
-    /**
-     * Returns a value from the $arrModule array.
-     * If the requested key not exists, returns ""
-     *
-     * @param string $strKey
-     *
-     * @return string
-     */
-    public function getArrModule($strKey) {
-        if(isset($this->arrModule[$strKey])) {
-            return $this->arrModule[$strKey];
-        }
-        else {
-            return "";
-        }
-    }
-
-    /**
-     * Writes a key-value-pair to the arrModule
-     *
-     * @param string $strKey
-     * @param mixed $strValue
-     * @return void
-     */
-    public function setArrModuleEntry($strKey, $strValue) {
-        $this->arrModule[$strKey] = $strValue;
-    }
-
-
-    /**
      * Returns the URL at the given position (from HistoryArray)
      *
      * @param int $intPosition
@@ -439,40 +223,6 @@ abstract class class_portal {
         return $objHistory->getPortalHistory($intPosition);
     }
 
-    // --- TextMethods & Languages --------------------------------------------------------------------------
-
-    /**
-     * Used to load a property.
-     * If you want to provide a list of parameters but no module (automatic loading), pass
-     * the parameters array as the second argument (an array). In this case the module is resolved
-     * internally.
-     *
-     * @param string $strName
-     * @param string|array $strModule Either the module name (if required) or an array of parameters
-     * @param array $arrParameters
-     *
-     * @return string
-     */
-    public function getLang($strName, $strModule = "", $arrParameters = array()) {
-        if(is_array($strModule))
-            $arrParameters = $strModule;
-
-        if($strModule == "" || is_array($strModule)) {
-            $strModule = $this->getArrModule("modul");
-        }
-
-        //Now we have to ask the Text-Object to return the text
-        return $this->objLang->getLang($strName, $strModule, $arrParameters);
-    }
-
-    /**
-     * Returns the current Text-Object Instance
-     *
-     * @return class_lang
-     */
-    protected function getObjLang() {
-        return $this->objLang;
-    }
 
     /**
      * Wrapper to class_template::fillTemplate().
@@ -492,28 +242,6 @@ abstract class class_portal {
         return $this->objTemplate->fillTemplate($arrContent, $strIdentifier, true);
     }
 
-
-    // --- PageCache Features -------------------------------------------------------------------------------
-
-    /**
-     * Deletes the complete Pages-Cache
-     *
-     * @return bool
-     */
-    public function flushCompletePagesCache() {
-        return class_cache::flushCache("class_element_portal");
-    }
-
-    /**
-     * Removes one page from the cache
-     *
-     * @param string $strPagename
-     *
-     * @return bool
-     */
-    public function flushPageFromPagesCache($strPagename) {
-        return class_cache::flushCache("class_element_portal", $strPagename);
-    }
 
     /**
      * Returns the name of the page to be loaded
@@ -567,21 +295,6 @@ abstract class class_portal {
         class_response_object::getInstance()->setStrRedirectUrl($strUrlToLoad);
     }
 
-
-    /**
-     * Returns the current instance of class_module_system_module, based on the current subclass.
-     * Lazy-loading, so loaded on first access.
-     *
-     * @return class_module_system_module|null
-     */
-    protected function getObjModule() {
-
-        if($this->objModule == null) {
-            $this->objModule = class_module_system_module::getModuleByName($this->arrModule["modul"]);
-        }
-
-        return $this->objModule;
-    }
 
     /**
      * @return string
