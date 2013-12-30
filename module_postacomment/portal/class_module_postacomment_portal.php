@@ -117,7 +117,7 @@ class class_module_postacomment_portal extends class_portal implements interface
             if($this->getParam("comment_name") == "" && $this->objSession->isLoggedin())
                 $this->setParam("comment_name", $this->objSession->getUsername());
 
-            $arrForm["formaction"] = getLinkPortalHref($this->getPagename(), "", "postComment", "", $this->getSystemid());
+            $arrForm["formaction"] = class_link::getLinkPortalHref($this->getPagename(), "", "postComment", "", $this->getSystemid());
             $arrForm["comment_name"] = $this->getParam("comment_name");
             $arrForm["comment_subject"] = $this->getParam("comment_subject");
             $arrForm["comment_message"] = $this->getParam("comment_message");
@@ -162,6 +162,7 @@ class class_module_postacomment_portal extends class_portal implements interface
      * Saves a post to the databases
      *
      * @permissions right1
+     * @return string
      */
     protected function actionPostComment() {
 
@@ -192,7 +193,7 @@ class class_module_postacomment_portal extends class_portal implements interface
 
 
         $strMailtext = $this->getLang("new_comment_mail")."\r\n\r\n".$objPost->getStrComment()."\r\n";
-        $strMailtext .= getLinkAdminHref("postacomment", "edit", "&systemid=".$objPost->getSystemid(), false);
+        $strMailtext .= class_link::getLinkAdminHref("postacomment", "edit", "&systemid=".$objPost->getSystemid(), false);
         $objMessageHandler = new class_module_messaging_messagehandler();
         $arrGroups = array();
         $allGroups = class_module_user_group::getObjectList();
@@ -200,7 +201,12 @@ class class_module_postacomment_portal extends class_portal implements interface
             if(class_rights::getInstance()->checkPermissionForGroup($objOneGroup->getSystemid(), class_rights::$STR_RIGHT_EDIT, $this->getObjModule()->getSystemid()))
                 $arrGroups[] = $objOneGroup;
         }
-        $objMessageHandler->sendMessage($strMailtext, $arrGroups, new class_messageprovider_postacomment());
+
+
+        $objMessage = new class_module_messaging_message();
+        $objMessage->setStrBody($strMailtext);
+        $objMessage->setStrMessageProvider(new class_messageprovider_postacomment());
+        $objMessageHandler->sendMessageObject($objMessage, $arrGroups);
 
         $this->portalReload(_indexpath_."?".$this->getHistory(0));
         return "";
@@ -211,7 +217,7 @@ class class_module_postacomment_portal extends class_portal implements interface
      *
      * @return bool
      */
-    public function validateForm() {
+    private function validateForm() {
         $bitReturn = true;
 
         $strTemplateId = $this->objTemplate->readTemplate("/module_postacomment/".$this->arrElementData["char1"], "validation_error_row");
@@ -236,6 +242,7 @@ class class_module_postacomment_portal extends class_portal implements interface
      * setter. Pass the systemid (!) of the page to load.
      *
      * @param string $strPagefilter
+     * @return void
      */
     public function setStrPagefilter($strPagefilter) {
         $this->strPagefilter = $strPagefilter;

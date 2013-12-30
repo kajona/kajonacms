@@ -30,12 +30,6 @@ abstract class class_admin extends class_ui_base {
     private $arrOutput;
 
     /**
-     * @var array
-     * @deprecated
-     */
-    protected $arrValidationErrors = array(); //Array to keep found validation errors
-
-    /**
      * Constructor
      *
      * @param string $strSystemid
@@ -421,43 +415,6 @@ abstract class class_admin extends class_ui_base {
         return $this->strOutput;
     }
 
-
-    //--- FORM-Validation -----------------------------------------------------------------------------------
-
-    /**
-     * Returns the array of validationErrors
-     *
-     * @return mixed
-     * @deprecated
-     */
-    public function getValidationErrors() {
-        return $this->arrValidationErrors;
-    }
-
-    /**
-     * Adds a validation error to the array of errors
-     *
-     * @param string $strField
-     * @param string $strErrormessage
-     * @deprecated
-     *
-     * @return void
-     */
-    public function addValidationError($strField, $strErrormessage) {
-        $this->arrValidationErrors[$strField] = $strErrormessage;
-    }
-
-    /**
-     * Removes a validation error from the array of errors
-     *
-     * @param string $strField
-     * @deprecated
-     *
-     * @return void
-     */
-    public function removeValidationError($strField) {
-        unset($this->arrValidationErrors[$strField]);
-    }
 
     /**
      * Use this method to reload a specific url.

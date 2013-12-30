@@ -41,6 +41,8 @@ abstract class class_element_admin extends class_admin {
 
     private $arrElementData = array();
 
+    private $arrValidationErrors = array();
+
     /**
      * Constructor
      */
@@ -329,7 +331,7 @@ abstract class class_element_admin extends class_admin {
     /**
      * Loads the validator identified by the passed name.
      *
-     * @param $strName
+     * @param string $strName
      * @return interface_validator
      * @throws class_exception
      * @deprecated
@@ -361,8 +363,8 @@ abstract class class_element_admin extends class_admin {
             $strTargetTable = _dbprefix_.$arrTables[0];
 
         }
-        else if(isset($this->arrModule["table"]) && $this->arrModule["table"] != "")
-            $strTargetTable =  $this->arrModule["table"];
+        else if($this->getArrModule("table") != "")
+            $strTargetTable =  $this->getArrModule("table");
 
         //Element-Table given?
         if($strTargetTable != "") {
@@ -397,6 +399,7 @@ abstract class class_element_admin extends class_admin {
 
     /**
      * @throws class_exception
+     * @return void
      */
     public function updateForeignElement() {
         $objAnnotations = new class_reflection($this);
@@ -577,6 +580,7 @@ abstract class class_element_admin extends class_admin {
      * need to call this setter in concrete element classes.
      *
      * @param bool $bitDoValidation
+     * @return void
      */
     public final function setDoValidation($bitDoValidation) {
         $this->bitDoValidation = $bitDoValidation;
@@ -588,7 +592,7 @@ abstract class class_element_admin extends class_admin {
      * Using this form-section is usefull for mostly unused settings.
      *
      * @param string $strContent
-     *
+     * @return void
      * @since 3.3
      *
      * @todo
@@ -611,6 +615,7 @@ abstract class class_element_admin extends class_admin {
      * Sets the array of parameters passed by the request
      *
      * @param array $arrParamData
+     * @return void
      */
     public function setArrParamData($arrParamData) {
         $this->arrParamData = $arrParamData;

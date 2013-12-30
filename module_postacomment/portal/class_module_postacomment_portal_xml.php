@@ -122,7 +122,7 @@ class class_module_postacomment_portal_xml extends class_portal implements inter
      *
      * @return bool
      */
-    public function validateForm() {
+    private function validateForm() {
         $bitReturn = true;
 
         $strTemplateId = $this->objTemplate->readTemplate("/module_postacomment/".$this->getParam("comment_template"), "validation_error_row");

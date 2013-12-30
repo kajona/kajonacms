@@ -115,6 +115,7 @@ class class_element_tellafriend_portal extends class_element_portal implements i
 
     /**
      * Creates an email to send to a friend
+     * @return void
      */
     private function sendForm() {
         //load url the user visited before
@@ -167,10 +168,10 @@ class class_element_tellafriend_portal extends class_element_portal implements i
         $objEmail->setHtml($strEmailBody);
 
         if($objEmail->sendMail()) {
-            $this->portalReload(getLinkPortalHref($this->arrElementData["tellafriend_success"]));
+            $this->portalReload(class_link::getLinkPortalHref($this->arrElementData["tellafriend_success"]));
         }
         else {
-            $this->portalReload(getLinkPortalHref($this->arrElementData["tellafriend_error"]));
+            $this->portalReload(class_link::getLinkPortalHref($this->arrElementData["tellafriend_error"]));
         }
     }
 }
