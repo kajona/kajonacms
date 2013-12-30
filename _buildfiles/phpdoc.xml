@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<phpdocumentor>
+    <title>Kajona API Docs</title>
+    <parser>
+        <default-package-name>module_system</default-package-name>
+    </parser>
+    <transformer>
+        <target>build/api</target>
+    </transformer>
+    <files>
+        <directory>.</directory>
+        <ignore>*tcpdf*</ignore>
+        <ignore>*pchart*</ignore>
+        <ignore>*yui*</ignore>
+        <ignore>*ezcomponents*</ignore>
+        <ignore>*phpexcel*</ignore>
+        <ignore>*phpqrcode*</ignore>
+    </files>
+    <!--<plugins>-->
+        <!--<plugin path="Core">-->
+            <!--<option name="a">value</option>-->
+        <!--</plugin>-->
+    <!--</plugins>-->
+</phpdocumentor>

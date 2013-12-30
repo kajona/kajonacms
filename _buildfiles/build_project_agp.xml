@@ -15,7 +15,7 @@
      ====================================================================== -->
 <project name="Kajona Project Build" default="buildSqliteFast" basedir=".">
 
-    <import file="build_jenkins_agp.xml" as="kajonav4"/>
+    <import file="build_jenkins_agp.xml" as="agpv5"/>
 
     <description>
         This file is a template to build a project based on Kajona.
