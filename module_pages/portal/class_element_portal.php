@@ -76,7 +76,7 @@ abstract class class_element_portal extends class_portal {
             $strQuery = "SELECT *
     						FROM ".$this->getTable()."
     						WHERE content_id = ? ";
-            return $this->objDB->getPRow($strQuery, array($strSystemid));
+            return class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array($strSystemid));
         }
         else
             return array();

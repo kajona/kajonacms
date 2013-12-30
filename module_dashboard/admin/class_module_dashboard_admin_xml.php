@@ -52,7 +52,7 @@ class class_module_dashboard_admin_xml extends class_admin implements interface_
         $intNewPos = $this->getParam("listPos");
         $objWidget->setStrColumn($this->getParam("listId"));
         $objWidget->updateObjectToDb();
-        $this->objDB->flushQueryCache();
+        class_carrier::getInstance()->getObjDB()->flushQueryCache();
 
         $objWidget = new class_module_dashboard_widget($this->getSystemid());
         if($intNewPos != "")

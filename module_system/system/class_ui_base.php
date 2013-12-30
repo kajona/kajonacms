@@ -95,6 +95,7 @@ abstract class class_ui_base {
     /**
      * Array containing information about the current module
      * @var array
+     * @deprecated direct access is no longer allowed
      */
     protected $arrModule = array();
 
@@ -104,6 +105,9 @@ abstract class class_ui_base {
      */
     protected $strOutput = "";
 
+    /**
+     * @param string $strSystemid
+     */
     public function __construct($strSystemid = "") {
 
         //Generating all the required objects. For this we use our cool cool carrier-object
@@ -258,7 +262,7 @@ abstract class class_ui_base {
      */
     protected function getObjModule() {
         if($this->objModule == null) {
-            $this->objModule = class_module_system_module::getModuleByName($this->arrModule["modul"]);
+            $this->objModule = class_module_system_module::getModuleByName($this->getArrModule("modul"));
         }
 
         return $this->objModule;

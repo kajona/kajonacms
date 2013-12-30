@@ -22,7 +22,10 @@
  */
 abstract class class_portal extends class_ui_base {
 
-    protected $strTemplateArea; //String containing the current Area for the templateobject
+
+    /**
+     * @var array
+     */
     protected $arrElementData = array();
 
     /**

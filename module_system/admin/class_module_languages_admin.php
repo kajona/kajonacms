@@ -195,7 +195,7 @@ class class_module_languages_admin extends class_admin_simple implements interfa
 
             //check if the current active one was deleted. if, then reset. #kajona trace id 613
             if($this->getLanguageToWorkOn() == $objLang->getStrName()) {
-                $this->objDB->flushQueryCache();
+                class_carrier::getInstance()->getObjDB()->flushQueryCache();
                 $arrLangs = class_module_languages_language::getObjectList();
                 if(count($arrLangs) > 0) {
                     $objLang->setStrAdminLanguageToWorkOn($arrLangs[0]->getStrName());

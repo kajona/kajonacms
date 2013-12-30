@@ -88,7 +88,7 @@ class class_module_tags_admin_xml extends class_admin implements interface_xml_a
             if(!$objTag->assignToSystemrecord($strSystemid, $strAttribute))
                 $bitError = true;
 
-            $this->objDB->flushQueryCache();
+            class_carrier::getInstance()->getObjDB()->flushQueryCache();
         }
 
         if(!$bitError)

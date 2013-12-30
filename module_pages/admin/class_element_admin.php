@@ -77,9 +77,9 @@ abstract class class_element_admin extends class_admin {
     /**
      * Legacy method for elements not yet supporting the annotation based forms / content updates
      *
-     * @param $arrElementData
+     * @param array $arrElementData
      * @deprecated
-     *
+     * @return string
      */
     public function getEditForm($arrElementData) {
 
@@ -390,7 +390,7 @@ abstract class class_element_admin extends class_admin {
     					   AND system_id = ? ";
 
         }
-        $this->arrElementData = $this->objDB->getPRow($strQuery, array($this->getSystemid()));
+        $this->arrElementData = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array($this->getSystemid()));
         return $this->arrElementData;
     }
 
@@ -411,7 +411,7 @@ abstract class class_element_admin extends class_admin {
         if($strElementTableColumns != "") {
 
             //open new tx
-            $this->objDB->transactionBegin();
+            class_carrier::getInstance()->getObjDB()->transactionBegin();
 
             $arrElementParams = $this->getArrParamData();
 
@@ -428,7 +428,7 @@ abstract class class_element_admin extends class_admin {
                     }
 
                     $arrParams[] = $strColumnValue;
-                    $arrInserts[] = " " . $this->objDB->encloseColumnName($strTableColumnName) . " = ? ";
+                    $arrInserts[] = " " . class_carrier::getInstance()->getObjDB()->encloseColumnName($strTableColumnName) . " = ? ";
                 }
 
                 $strRowUpdates = implode(", ", $arrInserts);
@@ -438,11 +438,11 @@ abstract class class_element_admin extends class_admin {
 
                 $arrParams[] = $this->getSystemid();
 
-                if(!$this->objDB->_pQuery($strUpdateQuery, $arrParams)) {
-                    $this->objDB->transactionRollback();
+                if(!class_carrier::getInstance()->getObjDB()->_pQuery($strUpdateQuery, $arrParams)) {
+                    class_carrier::getInstance()->getObjDB()->transactionRollback();
                 }
                 else {
-                    $this->objDB->transactionCommit();
+                    class_carrier::getInstance()->getObjDB()->transactionCommit();
                 }
             }
             else {

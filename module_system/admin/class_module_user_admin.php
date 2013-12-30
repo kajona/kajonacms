@@ -627,7 +627,7 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
             //Reset the admin-skin cookie to force the new skin
             $objCookie = new class_cookie();
             //flush the db-cache
-            $this->objDB->flushQueryCache();
+            class_carrier::getInstance()->getObjDB()->flushQueryCache();
             $this->objSession->resetUser();
             //and update the cookie
             $objCookie->setCookie("adminskin", $this->objSession->getAdminSkin(false, true));

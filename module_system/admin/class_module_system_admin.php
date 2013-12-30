@@ -511,7 +511,7 @@ JS;
             $objSession = new class_module_system_session($this->getSystemid());
             $objSession->setStrLoginstatus(class_module_system_session::$LOGINSTATUS_LOGGEDOUT);
             $objSession->updateObjectToDb();
-            $this->objDB->flushQueryCache();
+            class_carrier::getInstance()->getObjDB()->flushQueryCache();
         }
 
         //showing a list using the pageview

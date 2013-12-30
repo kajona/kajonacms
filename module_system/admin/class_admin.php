@@ -47,7 +47,7 @@ abstract class class_admin extends class_ui_base {
         parent::__construct($strSystemid);
 
         //default-template: main.tpl
-        if(!isset($this->arrModule["template"])) {
+        if($this->getArrModule("template") == "") {
             $this->setArrModuleEntry("template", "/main.tpl");
         }
 
@@ -156,7 +156,7 @@ abstract class class_admin extends class_ui_base {
             $this->arrOutput["quickhelp"] = $this->getQuickHelp();
         }
         $this->arrOutput["languageswitch"] = (class_module_system_module::getModuleByName("languages") != null ? class_module_system_module::getModuleByName("languages")->getAdminInstanceOfConcreteModule()->getLanguageSwitch() : "");
-        $this->arrOutput["module_id"] = $this->arrModule["moduleId"];
+        $this->arrOutput["module_id"] = $this->getArrModule("moduleId");
         $this->arrOutput["webpathTitle"] = urldecode(str_replace(array("http://", "https://"), array("", ""), _webpath_));
         $this->arrOutput["head"] = "<script type=\"text/javascript\">KAJONA_DEBUG = ".$this->objConfig->getDebug("debuglevel")."; KAJONA_WEBPATH = '"._webpath_."'; KAJONA_BROWSER_CACHEBUSTER = "._system_browser_cachebuster_.";</script>";
 
@@ -174,13 +174,13 @@ abstract class class_admin extends class_ui_base {
             }
             catch(class_exception $objException) {
                 //An error occurred. In most cases, this is because the user ist not logged in, so the login-template was requested.
-                if($this->arrModule["template"] == "/login.tpl") {
+                if($this->getArrModule("template") == "/login.tpl") {
                     throw new class_exception("You have to be logged in to use the portal editor!!!", class_exception::$level_ERROR);
                 }
             }
         }
         else {
-            $strTemplateID = $this->objTemplate->readTemplate(class_adminskin_helper::getPathForSkin($this->objSession->getAdminSkin()) . $this->arrModule["template"], "", true);
+            $strTemplateID = $this->objTemplate->readTemplate(class_adminskin_helper::getPathForSkin($this->objSession->getAdminSkin()) . $this->getArrModule("template"), "", true);
         }
         return $this->objTemplate->fillTemplate($this->arrOutput, $strTemplateID);
     }
@@ -192,6 +192,7 @@ abstract class class_admin extends class_ui_base {
      *
      * @param array &$arrContent
      * @see class_admin::getModuleOutput
+     * @return void
      */
     protected function onRenderOutput(&$arrContent) {
 
@@ -204,7 +205,7 @@ abstract class class_admin extends class_ui_base {
      * @return void
      */
     private function validateAndUpdateCurrentAspect() {
-        if(_xmlLoader_ === true || $this->arrModule["template"] == "/folderview.tpl") {
+        if(_xmlLoader_ === true || $this->getArrModule("template") == "/folderview.tpl") {
             return;
         }
 
@@ -271,15 +272,15 @@ abstract class class_admin extends class_ui_base {
      */
     protected function getArrOutputNaviEntries() {
         $arrReturn = array(
-            getLinkAdmin("dashboard", "", "", $this->getLang("modul_titel", "dashboard")),
-            getLinkAdmin($this->getArrModule("modul"), "", "", $this->getOutputModuleTitle())
+            class_link::getLinkAdmin("dashboard", "", "", $this->getLang("modul_titel", "dashboard")),
+            class_link::getLinkAdmin($this->getArrModule("modul"), "", "", $this->getOutputModuleTitle())
         );
 
         //see, if the current action may be mapped
         $strActionName = $this->getObjLang()->stringToPlaceholder("action_".$this->getAction());
         $strAction = $this->getLang($strActionName);
         if($strAction != "!" . $strActionName . "!") {
-            $arrReturn[] = getLinkAdmin($this->getArrModule("modul"), $this->getAction(), "&systemid=" . $this->getSystemid(), $strAction);
+            $arrReturn[] = class_link::getLinkAdmin($this->getArrModule("modul"), $this->getAction(), "&systemid=" . $this->getSystemid(), $strAction);
         }
 
         return $arrReturn;
@@ -309,7 +310,7 @@ abstract class class_admin extends class_ui_base {
             return $this->getLang("modul_titel");
         }
         else {
-            return $this->arrModule["modul"];
+            return $this->getArrModule("modul");
         }
     }
 
@@ -394,7 +395,7 @@ abstract class class_admin extends class_ui_base {
                     throw new class_exception("called method " . $strMethodName . " not allowed for xml-requests", class_exception::$level_FATALERROR);
                 }
 
-                if($this->arrModule["modul"] != $this->getParam("module") && ($this->getParam("module") != "messaging")) {
+                if($this->getArrModule("modul") != $this->getParam("module") && ($this->getParam("module") != "messaging")) {
                     class_response_object::getInstance()->setStrStatusCode(class_http_statuscodes::SC_UNAUTHORIZED);
                     throw new class_exception("you are not authorized/authenticated to call this action", class_exception::$level_FATALERROR);
                 }
@@ -405,7 +406,7 @@ abstract class class_admin extends class_ui_base {
         else {
             $objReflection = new ReflectionClass($this);
             //if the pe was requested and the current module is a login-module, there are insufficient permissions given
-            if($this->arrModule["template"] == "/login.tpl" && $this->getParam("pe") != "") {
+            if($this->getArrModule("template") == "/login.tpl" && $this->getParam("pe") != "") {
                 throw new class_exception("You have to be logged in to use the portal editor!!!", class_exception::$level_ERROR);
             }
 
