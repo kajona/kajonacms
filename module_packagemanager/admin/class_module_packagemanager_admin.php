@@ -22,12 +22,15 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
 
     private $STR_FILTER_SESSION_KEY = "PACKAGELIST_FILTER_SESSION_KEY";
 
+    /**
+     * @return array
+     */
     public function getOutputModuleNavi() {
         $arrReturn = array();
-        $arrReturn[] = array("view", getLinkAdmin($this->arrModule["modul"], "list", "", $this->getLang("action_list"), "", "", true, "adminnavi"));
-        $arrReturn[] = array("view", getLinkAdmin($this->arrModule["modul"], "listTemplates", "", $this->getLang("action_list_templates"), "", "", true, "adminnavi"));
+        $arrReturn[] = array("view", class_link::getLinkAdmin($this->arrModule["modul"], "list", "", $this->getLang("action_list"), "", "", true, "adminnavi"));
+        $arrReturn[] = array("view", class_link::getLinkAdmin($this->arrModule["modul"], "listTemplates", "", $this->getLang("action_list_templates"), "", "", true, "adminnavi"));
         $arrReturn[] = array("", "");
-        $arrReturn[] = array("right", getLinkAdmin("right", "change", "&changemodule=".$this->arrModule["modul"],  $this->getLang("commons_module_permissions"), "", "", true, "adminnavi"));
+        $arrReturn[] = array("right", class_link::getLinkAdmin("right", "change", "&changemodule=".$this->arrModule["modul"],  $this->getLang("commons_module_permissions"), "", "", true, "adminnavi"));
 
         return $arrReturn;
     }
@@ -45,7 +48,7 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
             $this->objSession->setSession($this->STR_FILTER_SESSION_KEY, $this->getParam("packagelist_filter"));
             $this->setParam("pv", 1);
 
-            $this->adminReload(getLinkAdminHref($this->getArrModule("modul"), "list"));
+            $this->adminReload(class_link::getLinkAdminHref($this->getArrModule("modul"), "list"));
             return "";
         }
 
@@ -53,7 +56,7 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
 
         $strReturn = "";
 
-        $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"]), "list");
+        $strReturn .= $this->objToolkit->formHeader(class_link::getLinkAdminHref($this->arrModule["modul"]), "list");
         $strReturn .= $this->objToolkit->formInputText("packagelist_filter", $this->getLang("packagelist_filter"), $this->objSession->getSession($this->STR_FILTER_SESSION_KEY));
         $strReturn .= $this->objToolkit->formInputSubmit();
         $strReturn .= $this->objToolkit->formInputHidden("doFilter", "1");
@@ -87,7 +90,7 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
 
             if($objHandler->isInstallable()) {
                 $strActions .= $this->objToolkit->listButton(
-                    getLinkAdminDialog(
+                    class_link::getLinkAdminDialog(
                         $this->getArrModule("modul"),
                         "processPackage",
                         "&package=".$objOneMetadata->getStrPath(),
@@ -116,7 +119,7 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
         $strAddActions = "";
         if($this->getObjModule()->rightEdit()) {
             $strAddActions = $this->objToolkit->listButton(
-                getLinkAdminDialog($this->getArrModule("modul"), "addPackage", "", $this->getLang("action_upload_package"), $this->getLang("action_upload_package"), "icon_new", $this->getLang("action_upload_package"))
+                class_link::getLinkAdminDialog($this->getArrModule("modul"), "addPackage", "", $this->getLang("action_upload_package"), $this->getLang("action_upload_package"), "icon_new", $this->getLang("action_upload_package"))
             );
         }
         $strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), "", "", $strAddActions, $intI);
@@ -178,7 +181,7 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
                 //compare the version to trigger additional actions
                 $strLatestVersion = $arrLatestVersion[$strOnePackage];
                 if($bitUpdateAvailable) {
-                    $arrReturn[$strOnePackage] = getLinkAdminDialog(
+                    $arrReturn[$strOnePackage] = class_link::getLinkAdminDialog(
                         $this->getArrModule("modul"),
                         "initPackageUpdate",
                         "&package=".$objHandler->getObjMetadata()->getStrPath(),
@@ -265,7 +268,7 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
                     $strReturn .= $this->objToolkit->warningBox($strWarning);
                 }
 
-                $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->getArrModule("modul"), "installPackage"));
+                $strReturn .= $this->objToolkit->formHeader(class_link::getLinkAdminHref($this->getArrModule("modul"), "installPackage"));
                 $strReturn .= $this->objToolkit->formInputHidden("package", $strFile);
                 $strReturn .= $this->objToolkit->formInputSubmit($this->getLang("package_doinstall"));
                 $strReturn .= $this->objToolkit->formClose();
@@ -337,7 +340,7 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
                 $strReturn .= $this->objToolkit->getPreformatted(array($strLog));
 
                 $strReturn .= $this->objToolkit->formHeader(
-                    getLinkAdminHref($this->getArrModule("modul"), "list"), "", "", "javascript:".$strOnSubmit
+                    class_link::getLinkAdminHref($this->getArrModule("modul"), "list"), "", "", "javascript:".$strOnSubmit
                 );
                 $strReturn .= $this->objToolkit->formInputSubmit($this->getLang("commons_ok"));
                 $strReturn .= $this->objToolkit->formClose();
@@ -389,8 +392,8 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
                 $strReturn .= $this->objToolkit->genericAdminList(
                     generateSystemid(),
                     $objOneProvider->getDisplayTitle(),
-                    getImageAdmin("icon_systemtask"),
-                    getLinkAdmin("packagemanager", "addPackage", "&provider=".get_class($objOneProvider), $this->getLang("provider_select"), $this->getLang("provider_select"), "icon_accept"),
+                    class_adminskin_helper::getAdminImage("icon_systemtask"),
+                    class_link::getLinkAdmin("packagemanager", "addPackage", "&provider=".get_class($objOneProvider), $this->getLang("provider_select"), $this->getLang("provider_select"), "icon_accept"),
                     $intI++
                 );
             }
@@ -461,10 +464,16 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
             return $this->getLang("provider_error_package", "packagemanager");
         }
 
-        $this->adminReload(getLinkAdminHref($this->getArrModule("modul"), "processPackage", "&package=".$strFile));
+        $this->adminReload(class_link::getLinkAdminHref($this->getArrModule("modul"), "processPackage", "&package=".$strFile));
         return "";
     }
 
+    /**
+     * @param string $strLangName
+     * @param null $strLangModule
+     *
+     * @return string
+     */
     protected function renderError($strLangName, $strLangModule = null) {
         $strError = $this->getLang($strLangName, $strLangModule);
         $arrHistory = explode("&", $this->getHistory(0));
@@ -494,27 +503,47 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
         return $this->renderList($objArraySectionIterator);
     }
 
+    /**
+     * @param string $strListIdentifier
+     * @param bool $bitDialog
+     *
+     * @return array
+     */
     protected function getNewEntryAction($strListIdentifier, $bitDialog = false) {
-        $strReturn = "";
+        $arrReturn = array();
         if($this->getObjModule()->rightEdit()) {
-            $strReturn .= $this->objToolkit->listButton(
-                getLinkAdminDialog($this->getArrModule("modul"), "addPackage", "", $this->getLang("action_upload_package"), $this->getLang("action_upload_package"), "icon_upload", $this->getLang("action_upload_package"))
-            );
-            $strReturn .= $this->objToolkit->listButton(getLinkAdmin($this->getArrModule("modul"), "new", "", $this->getLang("action_new_copy"), $this->getLang("action_new_copy"), "icon_new"));
+            $arrReturn[] = $this->objToolkit->listButton(class_link::getLinkAdminDialog($this->getArrModule("modul"), "addPackage", "&systemid=", $this->getLang("action_upload_package"), $this->getLang("action_upload_package"), "icon_upload", $this->getLang("action_upload_package")));
+            $arrReturn[] = $this->objToolkit->listButton(class_link::getLinkAdmin($this->getArrModule("modul"), "new", "", $this->getLang("action_new_copy"), $this->getLang("action_new_copy"), "icon_new"));
         }
 
-        return $strReturn;
+        return $arrReturn;
     }
 
+    /**
+     * @param class_model $objListEntry
+     * @param bool $bitDialog
+     *
+     * @return string
+     */
     protected function renderEditAction(class_model $objListEntry, $bitDialog = false) {
         return "";
     }
 
+    /**
+     * @param class_model $objListEntry
+     *
+     * @return string
+     */
     protected function renderCopyAction(class_model $objListEntry) {
         return "";
     }
 
 
+    /**
+     * @param class_model $objListEntry
+     *
+     * @return string
+     */
     protected function renderStatusAction(class_model $objListEntry) {
         if($objListEntry->rightEdit()) {
             if(_packagemanager_defaulttemplate_ == $objListEntry->getStrName()) {
@@ -528,6 +557,11 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
     }
 
 
+    /**
+     * @param interface_model|class_root $objListEntry
+     *
+     * @return string
+     */
     protected function renderDeleteAction(interface_model $objListEntry) {
         if($objListEntry->rightDelete()) {
             if(_packagemanager_defaulttemplate_ == $objListEntry->getStrName()) {
@@ -535,7 +569,7 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
             }
             else
                 return $this->objToolkit->listDeleteButton(
-                    $objListEntry->getStrDisplayName(), $this->getLang("delete_question"), getLinkAdminHref($this->getArrModule("modul"), "deleteTemplate", "&systemid=".$objListEntry->getSystemid()."")
+                    $objListEntry->getStrDisplayName(), $this->getLang("delete_question"), class_link::getLinkAdminHref($this->getArrModule("modul"), "deleteTemplate", "&systemid=".$objListEntry->getSystemid()."")
                 );
         }
 
@@ -549,7 +583,7 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
      */
     protected function actionDeleteTemplate() {
         parent::actionDelete();
-        $this->adminReload(getLinkAdminHref($this->getArrModule("modul"), "listTemplates"));
+        $this->adminReload(class_link::getLinkAdminHref($this->getArrModule("modul"), "listTemplates"));
     }
 
 
@@ -571,10 +605,13 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
         if($objForm == null)
             $objForm = $this->getPackAdminForm();
 
-        $strReturn = $objForm->renderForm(getLinkAdminHref($this->getArrModule("modul"), "copyPack"));
+        $strReturn = $objForm->renderForm(class_link::getLinkAdminHref($this->getArrModule("modul"), "copyPack"));
         return $strReturn;
     }
 
+    /**
+     * @return class_admin_formgenerator
+     */
     private function getPackAdminForm() {
         $objFormgenerator = new class_admin_formgenerator("pack", new class_module_system_common());
         $objFormgenerator->addField(new class_formentry_text("pack", "name"))->setStrLabel($this->getLang("pack_name"))->setBitMandatory(true)->setStrValue($this->getParam("pack_name"));
@@ -622,15 +659,15 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
         class_classloader::getInstance()->flushCache();
         class_reflection::flushCache();
 
-        $this->adminReload(getLinkAdminHref($this->getArrModule("modul"), "listTemplates"));
+        $this->adminReload(class_link::getLinkAdminHref($this->getArrModule("modul"), "listTemplates"));
         return "";
     }
 
 
     /**
      * Checks if all content of the passed folder is writable
-     * @param $strFolder
-     * @param $arrErrors
+     * @param string $strFolder
+     * @param string[] $arrErrors
      */
     private function checkWritableRecursive($strFolder, &$arrErrors) {
 
