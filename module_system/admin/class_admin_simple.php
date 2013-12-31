@@ -567,7 +567,7 @@ abstract class class_admin_simple extends class_admin {
             $strOneAction = trim($strOneAction);
             //search for a title attribute
             $arrMatches = array();
-            if(preg_match('/title=\"([a-zA-Z0-9\ \-\_]+)\"/i', $strOneAction, $arrMatches)) {
+            if(preg_match('/title=\"([a-zA-Z0-9\ \-\_\/]+)\"/i', $strOneAction, $arrMatches)) {
                 if(uniSubstr($strOneAction, -11) == "</a></span>")
                     $strOneAction = uniSubstr($strOneAction, 0, -11).$arrMatches[1]."</a></span>";
                 else
