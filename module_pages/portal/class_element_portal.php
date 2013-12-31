@@ -347,7 +347,7 @@ abstract class class_element_portal extends class_portal {
         //TODO: check if there are more than one elements in current placeholder before showing shift buttons
         $strMoveHandle = "";
         if($strModule == "pages_content") {
-            $strMoveHandle = "<i href=\"#\" class=\"moveHandle icon-move\" title=\"".class_carrier::getInstance()->getObjLang()->getLang("pe_move", "pages")."\"></i>";
+            $strMoveHandle = "<i href=\"#\" class=\"moveHandle fa fa-arrows\" title=\"".class_carrier::getInstance()->getObjLang()->getLang("pe_move", "pages")."\"></i>";
         }
 
         //---------------------------------------------------
