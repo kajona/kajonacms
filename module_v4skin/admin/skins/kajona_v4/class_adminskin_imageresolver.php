@@ -139,7 +139,7 @@ class class_adminskin_imageresolver implements interface_adminskin_imageresolver
         "icon_update"                      => "<i class='fa fa-cloud-download'></i>",
         "icon_updateDisabled"              => "<span class='fa-stack fa-lg'><i class='fa fa-cloud-download'></i><i class='fa fa-check fa-stack-1x' style='color: green'></i></span>",
         "icon_updateError"                 => "<span class='fa-stack fa-lg'><i class='fa fa-cloud-download'></i><i class='fa fa-exclamation-triangle fa-stack-1x'></i></span>",
-        "icon_upload"                      => "<i class=' icon-upload'></i>",
+        "icon_upload"                      => "<i class='fa fa-upload'></i>",
         "icon_user"                        => "<i class='fa fa-user'></i>",
         "icon_userswitch"                  => "<span class='fa-stack fa-lg'><i class='fa fa-user'></i><i class='fa fa-play fa-stack-1x'></i></span>",
         "icon_word"                        => "<i class='fa fa-ms-word'></i>",
