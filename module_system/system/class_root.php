@@ -547,6 +547,15 @@ abstract class class_root {
         if($this->objStartDate != null || $this->objEndDate != null || $this->objSpecialDate != null)
             $this->bitDatesChanges = true;
 
+        //check if there's a title field, in most cases that could be used to change the title
+        $objReflection = new class_reflection($this);
+        $strGetter = $objReflection->getGetter("strTitle");
+        $strSetter = $objReflection->getSetter("strTitle");
+        if($strGetter != null && $strSetter != null) {
+            $strTitle = call_user_func(array($this, $strGetter));
+            call_user_func(array($this, $strSetter), $strTitle."_copy");
+        }
+
         //prepare the current object
         $this->unsetSystemid();
         $bitReturn = $this->updateObjectToDb($strNewPrevid);

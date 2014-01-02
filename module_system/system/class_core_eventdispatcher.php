@@ -27,7 +27,7 @@ class class_core_eventdispatcher {
 
     /**
      * Returns all classes (here: instances of the class) implementing a given interface
-     * @param $strInterface
+     * @param string $strInterface
      *
      * @return class_model
      */
@@ -44,9 +44,9 @@ class class_core_eventdispatcher {
      * Therefore the implementing interface, the name of the notify-method and an array of arguments sent to the handler
      * are required.
      *
-     * @param $strInterface
-     * @param $strMethodname
-     * @param $arrArguments
+     * @param string $strInterface
+     * @param string $strMethodname
+     * @param array $arrArguments
      *
      * @return bool
      */
@@ -67,11 +67,11 @@ class class_core_eventdispatcher {
      * Triggers all model-classes implementing the interface interface_statuschanged_listener and notifies
      * about a new status set.
      *
-     * @static
-     * @param $strSystemid
-     * @param $intNewStatus
-     * @return bool
+     * @param string $strSystemid
+     * @param int $intNewStatus
      *
+     * @return bool
+     * @static
      * @see interface_statuschanged_listener
      * @deprecated use class_core_eventdispatcher::notifyListeners() instead
      * @see class_core_eventdispatcher::notifyListeners()
@@ -84,14 +84,13 @@ class class_core_eventdispatcher {
      * Triggers all model-classes implementing the interface interface_recorddeleted_listener and notifies them about a
      * deleted record.
      *
-     * @static
-     *
-     * @param $strSystemid
-     * @param $strClass
+     * @param string $strSystemid
+     * @param string $strClass
      *
      * @return bool
      *
      * @see interface_recorddeleted_listener
+     * @static
      * @deprecated use class_core_eventdispatcher::notifyListeners() instead
      * @see class_core_eventdispatcher::notifyListeners()
      */
@@ -104,12 +103,11 @@ class class_core_eventdispatcher {
      * Triggers all model-classes implementing the interface interface_previdchanged_listener and notifies them about a
      * deleted record.
      *
+     * @param string $strSystemid
+     * @param string $strOldPrevid
+     * @param string $strNewPrevid
+     *
      * @static
-     *
-     * @param $strSystemid
-     * @param $strOldPrevid
-     * @param $strNewPrevid
-     *
      * @return bool
      * @see interface_previdchanged_listener
      * @deprecated use class_core_eventdispatcher::notifyListeners() instead
@@ -124,11 +122,10 @@ class class_core_eventdispatcher {
      * Triggers all model-classes implementing the interface interface_recordcopied_listener and notifies them about a
      * copied record.
      *
+     * @param string $strOldSystemid
+     * @param string $strNewSystemid
+     *
      * @static
-     *
-     * @param $strOldSystemid
-     * @param $strNewSystemid
-     *
      * @return bool
      * @see interface_recordcopied_listener
      * @deprecated use class_core_eventdispatcher::notifyListeners() instead
@@ -143,10 +140,9 @@ class class_core_eventdispatcher {
      * Triggers all model-classes implementing the interface interface_userfirstlogin_listener and notifies them about a
      * users first login.
      *
+     * @param string $strUserid
+     *
      * @static
-     *
-     * @param $strUserid
-     *
      * @return bool
      * @see interface_userfirstlogin_listener
      * @deprecated use class_core_eventdispatcher::notifyListeners() instead
@@ -159,8 +155,10 @@ class class_core_eventdispatcher {
 
     /**
      * Loads all business-objects implementing the passed interface
+     *
+     * @param string $strTargetInterface
+     *
      * @static
-     * @param $strTargetInterface
      * @return array
      */
     private static function loadInterfaceImplementers($strTargetInterface) {
