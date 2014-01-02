@@ -1,9 +1,9 @@
 <?php
 /*"******************************************************************************************************
-*   (c) 2013 by Kajona, www.kajona.de                                                              *
+*   (c) 2013-2014 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
-*	$Id:$	                                            *
+*	$Id$	                                            *
 ********************************************************************************************************/
 
 /**
@@ -52,6 +52,9 @@ class class_image2 {
     private $arrOperations = array();
     private $strCacheId;
 
+    /**
+     * Default constructor
+     */
     public function __construct() {
         // Try to overwrite PHP memory-limit so large images can be processed, too
         if(class_carrier::getInstance()->getObjConfig()->getPhpIni("memory_limit") < 128) {
@@ -59,6 +62,9 @@ class class_image2 {
         }
     }
 
+    /**
+     * Default destructor
+     */
     public function __destruct() {
         if ($this->objResource != null) {
             imagedestroy($this->objResource);
@@ -312,6 +318,11 @@ class class_image2 {
         return $this->strCacheId;
     }
 
+    /**
+     * @param $strFormat
+     *
+     * @return bool
+     */
     private function processImage($strFormat) {
         if (!$this->bitImageIsUpToDate) {
             $bitSuccess = $this->finalLoadOrCreate();
@@ -326,6 +337,9 @@ class class_image2 {
         return true;
     }
 
+    /**
+     * @return bool
+     */
     private function finalLoadOrCreate() {
         $bitReturn = false;
 
@@ -368,6 +382,9 @@ class class_image2 {
         return $bitReturn;
     }
 
+    /**
+     * @return bool
+     */
     private function applyOperations() {
         $bitReturn = true;
 
@@ -384,6 +401,12 @@ class class_image2 {
         return $bitReturn;
     }
 
+    /**
+     * @param $strFormat
+     * @param null $strPath
+     *
+     * @return bool
+     */
     private function outputImage($strFormat, $strPath = null) {
         if ($strPath != null) {
             $strPath = _realpath_ . $strPath;
@@ -404,6 +427,11 @@ class class_image2 {
         }
     }
 
+    /**
+     * @param $strFormat
+     *
+     * @return bool
+     */
     private function isCached($strFormat) {
         if (!$this->bitUseCache || $this->bitImageIsUpToDate) {
             return false;
@@ -421,6 +449,9 @@ class class_image2 {
         return false;
     }
 
+    /**
+     * @param $strFormat
+     */
     private function saveCache($strFormat) {
         if ($this->bitUseCache) {
             $strCachePath = $this->getCachePath($strFormat);
@@ -430,10 +461,18 @@ class class_image2 {
         }
     }
 
+    /**
+     * @param $strFormat
+     *
+     * @return string
+     */
     private function getCachePath($strFormat) {
         return $this->strCachePath . "c" . $this->strCacheId . "." . $strFormat;;
     }
 
+    /**
+     * @param $strFormat
+     */
     private function initCacheId($strFormat) {
         $arrayValues = array($this->intWidth, $this->intHeight, $strFormat);
 
@@ -454,6 +493,9 @@ class class_image2 {
         $this->strCacheId = md5($strCacheId);
     }
 
+    /**
+     *
+     */
     private function updateImageResource()
     {
         $this->intWidth = imagesx($this->objResource);
@@ -462,11 +504,22 @@ class class_image2 {
         imagesavealpha($this->objResource, true);
     }
 
+    /**
+     * @param $strName
+     * @param $arrValues
+     *
+     * @return string
+     */
     private static function buildCacheId($strName, $arrValues) {
         $strValues = implode(",", $arrValues);
         return $strName . "(" . $strValues  . ")";
     }
 
+    /**
+     * @param $strPath
+     *
+     * @return string
+     */
     private static function getFormatFromFilename($strPath) {
         $strExtension = getFileExtension($strPath);
 

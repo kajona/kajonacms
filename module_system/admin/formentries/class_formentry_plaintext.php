@@ -1,6 +1,6 @@
 <?php
 /*"******************************************************************************************************
-*   (c) 2013 by Kajona, www.kajona.de                                                              *
+*   (c) 2013-2014 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
 *	$Id$                               *
@@ -8,6 +8,7 @@
 
 /**
  * A formentry to add special code to forms, in most cases hidden js-code
+ *
  * @author sidler@mulchprod.de
  * @since 4.3
  * @package module_system
@@ -15,6 +16,9 @@
 class class_formentry_plaintext extends class_formentry_base implements interface_formentry_printable {
 
 
+    /**
+     * @param string $strName
+     */
     public function __construct($strName = "") {
         parent::__construct("", $strName != "" ? $strName : generateSystemid());
 
@@ -32,6 +36,11 @@ class class_formentry_plaintext extends class_formentry_base implements interfac
         return $this->getStrValue();
     }
 
+    /**
+     * @param string $strKey
+     *
+     * @return string
+     */
     public function updateLabel($strKey = "") {
         return "";
     }

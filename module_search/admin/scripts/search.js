@@ -1,4 +1,4 @@
-//   (c) 2013 by Kajona, www.kajona.de
+//   (c) 2013-2014 by Kajona, www.kajona.de
 //       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt
 //       $Id: jquery.jqplot.custom_helper.js 6181 2013-11-29 15:03:15Z sidler $
 
