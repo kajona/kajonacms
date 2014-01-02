@@ -1,6 +1,7 @@
 <?php
 /*"******************************************************************************************************
-*   (c) 2010-2014 ARTEMEON                                                                              *
+*   (c) 2013-2014 by Kajona, www.kajona.de                                                              *
+*       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
 *	$Id$                            *
 ********************************************************************************************************/
@@ -20,6 +21,7 @@ class class_messageprovider_summary implements interface_messageprovider {
      * Called whenever a message is being deleted
      *
      * @param class_module_messaging_message $objMessage
+     * @return void
      */
     public function onDelete(class_module_messaging_message $objMessage) {
     }
@@ -28,6 +30,7 @@ class class_messageprovider_summary implements interface_messageprovider {
      * Called whenever a message is set as read
      *
      * @param class_module_messaging_message $objMessage
+     * @return void
      */
     public function onSetRead(class_module_messaging_message $objMessage) {
     }
