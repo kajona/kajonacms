@@ -44,6 +44,7 @@ $lang["group_accept"]                    = "Gruppe übernehmen";
 $lang["group_dn"]                        = "Distinguished-Name im Verzeichnis";
 $lang["group_memberlist"]                = "Mitglieder der Gruppe ";
 $lang["group_name"]                      = "Gruppen-Name";
+$lang["group_add_user"]                  = "Benutzer hinzufügen";
 $lang["group_usersource"]                = "Gruppenquelle";
 $lang["gruppe_anlegen_erfolg"]           = "Gruppe erfolgreich gespeichert";
 $lang["gruppe_anlegen_fehler"]           = "Fehler beim Speichern der Gruppe";

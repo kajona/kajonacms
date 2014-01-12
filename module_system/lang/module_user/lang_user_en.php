@@ -40,6 +40,7 @@ $lang["form_user_pass2"]                 = "Password (Confirmation)";
 $lang["form_user_postal"]                = "Postal";
 $lang["form_user_street"]                = "Street";
 $lang["form_user_tel"]                   = "Phone";
+$lang["group_add_user"]                  = "Benutzer hinzufügen";
 $lang["group_accept"]                    = "Select group ";
 $lang["group_dn"]                        = "Distinguished-Name in the directory";
 $lang["group_memberlist"]                = "Members of group ";

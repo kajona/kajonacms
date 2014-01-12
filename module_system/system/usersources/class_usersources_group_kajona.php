@@ -4,7 +4,7 @@
 *   (c) 2007-2014 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
-*	$Id$                                            *
+*	$Id$                          *
 ********************************************************************************************************/
 
 
@@ -41,6 +41,7 @@ class class_usersources_group_kajona extends class_model implements interface_mo
 
     /**
      * Initialises the current object, if a systemid was given
+     * @return void
      */
     protected function initObjectInternal() {
         $strQuery = "SELECT * FROM " . _dbprefix_ . "user_group_kajona WHERE group_id=?";
@@ -190,6 +191,7 @@ class class_usersources_group_kajona extends class_model implements interface_mo
      * @return bool
      */
     public function addMember(interface_usersources_user $objUser) {
+        $this->removeMember($objUser);
         $strQuery = "INSERT INTO " . _dbprefix_ . "user_kajona_members
                        (group_member_group_kajona_id, group_member_user_kajona_id) VALUES
                          (?, ?)";
@@ -222,10 +224,17 @@ class class_usersources_group_kajona extends class_model implements interface_mo
     }
 
 
+    /**
+     * @return string
+     */
     public function getStrDesc() {
         return $this->strDesc;
     }
 
+    /**
+     * @param string $strDesc
+     * @return void
+     */
     public function setStrDesc($strDesc) {
         $this->strDesc = $strDesc;
     }

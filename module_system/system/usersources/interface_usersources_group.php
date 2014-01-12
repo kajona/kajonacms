@@ -20,6 +20,7 @@ interface interface_usersources_group {
      * Adds a new member to the group - if possible
      *
      * @param interface_usersources_user $objUser
+     * @return bool
      */
     public function addMember(interface_usersources_user $objUser);
 
@@ -53,6 +54,7 @@ interface interface_usersources_group {
      * Removes a member from the current group - if possible.
      *
      * @param interface_usersources_user $objUser
+     * @return bool
      */
     public function removeMember(interface_usersources_user $objUser);
 
