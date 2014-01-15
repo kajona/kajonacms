@@ -27,6 +27,8 @@ class class_element_row_admin extends class_element_admin implements interface_a
      * @fieldLabel commons_title
      *
      * @elementContentTitle
+     *
+     * @addSearchIndex
      */
     private $strTitle = "";
 
@@ -38,6 +40,8 @@ class class_element_row_admin extends class_element_admin implements interface_a
      * @fieldTemplateDir /element_row
      * @fieldMandatory
      * @fieldLabel template
+     *
+     * @addSearchIndex
      */
     private $strTemplate = "";
 

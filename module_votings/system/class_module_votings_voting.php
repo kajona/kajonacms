@@ -23,6 +23,7 @@ class class_module_votings_voting extends class_model implements interface_model
     /**
      * @var string
      * @tableColumn votings_voting.votings_voting_title
+     * @addSearchIndex
      *
      * @fieldType textarea
      * @fieldMandatory

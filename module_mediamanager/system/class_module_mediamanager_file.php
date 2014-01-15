@@ -27,12 +27,16 @@ class class_module_mediamanager_file extends class_model implements interface_mo
      * @tableColumn file_name
      *
      * @fieldType text
+     *
+     * @addSearchIndex
      */
     private $strName = "";
 
     /**
      * @var string
      * @tableColumn file_filename
+     *
+     * @addSearchIndex
      */
     private $strFilename = "";
 
@@ -42,6 +46,8 @@ class class_module_mediamanager_file extends class_model implements interface_mo
      * @blockEscaping
      *
      * @fieldType wysiwygsmall
+     *
+     * @addSearchIndex
      */
     private $strDescription = "";
 
@@ -50,6 +56,8 @@ class class_module_mediamanager_file extends class_model implements interface_mo
      * @tableColumn file_subtitle
      *
      * @fieldType text
+     *
+     * @addSearchIndex
      */
     private $strSubtitle = "";
 

@@ -29,6 +29,8 @@ class class_module_guestbook_guestbook extends class_model implements interface_
      * @fieldMandatory
      * @fieldType text
      * @fieldLabel commons_title
+     *
+     * @addSearchIndex
      */
     private $strGuestbookTitle = "";
 

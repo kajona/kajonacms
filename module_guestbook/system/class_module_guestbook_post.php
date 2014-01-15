@@ -24,6 +24,8 @@ class class_module_guestbook_post extends class_model implements interface_model
      * @tableColumn guestbook_post.guestbook_post_name
      *
      * @fieldType text
+     *
+     * @addSearchIndex
      */
     private $strGuestbookPostName = "";
 
@@ -33,6 +35,8 @@ class class_module_guestbook_post extends class_model implements interface_model
      *
      * @fieldType text
      * @fieldValidator email
+     *
+     * @addSearchIndex
      */
     private $strGuestbookPostEmail = "";
 
@@ -41,6 +45,8 @@ class class_module_guestbook_post extends class_model implements interface_model
      * @tableColumn guestbook_post.guestbook_post_page
      *
      * @fieldType text
+     *
+     * @addSearchIndex
      */
     private $strGuestbookPostPage = "";
 
@@ -49,6 +55,8 @@ class class_module_guestbook_post extends class_model implements interface_model
      * @tableColumn guestbook_post.guestbook_post_text
      *
      * @fieldType textarea
+     *
+     * @addSearchIndex
      */
     private $strGuestbookPostText = "";
 

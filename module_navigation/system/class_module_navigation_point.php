@@ -25,6 +25,8 @@ class class_module_navigation_point extends class_model implements interface_mod
      * @fieldMandatory
      * @fieldType text
      * @fieldLabel commons_name
+     *
+     * @addSearchIndex
      */
     private $strName = "";
 
@@ -33,6 +35,8 @@ class class_module_navigation_point extends class_model implements interface_mod
      * @tableColumn navigation_page_e
      * @fieldType file
      * @fieldLabel navigation_page_e
+     *
+     * @addSearchIndex
      */
     private $strPageE = "";
 
@@ -41,12 +45,16 @@ class class_module_navigation_point extends class_model implements interface_mod
      * @tableColumn navigation_page_i
      * @fieldType page
      * @fieldLabel navigation_page_i
+     *
+     * @addSearchIndex
      */
     private $strPageI = "";
 
     /**
      * @var string
      * @tableColumn navigation_folder_i
+     *
+     * @addSearchIndex
      */
     private $strFolderI = "";
 

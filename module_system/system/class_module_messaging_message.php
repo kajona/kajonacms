@@ -36,6 +36,8 @@ class class_module_messaging_message extends class_model implements interface_mo
      * @fieldType text
      * @fieldLabel message_subject
      * @fieldMandatory
+     *
+     * @addSearchIndex
      */
     private $strTitle = "";
 
@@ -45,6 +47,8 @@ class class_module_messaging_message extends class_model implements interface_mo
      * @fieldType textarea
      * @fieldLabel message_body
      * @fieldMandatory
+     *
+     * @addSearchIndex
      */
     private $strBody = "";
 

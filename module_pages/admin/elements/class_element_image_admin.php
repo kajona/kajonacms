@@ -23,6 +23,8 @@ class class_element_image_admin extends class_element_admin implements interface
      *
      * @fieldType text
      * @fieldLabel commons_title
+     *
+     * @addSearchIndex
      */
     private $strTitle = "";
 
@@ -32,6 +34,8 @@ class class_element_image_admin extends class_element_admin implements interface
      *
      * @fieldType page
      * @fieldLabel image_link
+     *
+     * @addSearchIndex
      */
     private $strLink = "";
 
@@ -43,6 +47,8 @@ class class_element_image_admin extends class_element_admin implements interface
      * @fieldLabel commons_image
      *
      * @elementContentTitle
+     *
+     * @addSearchIndex
      */
     private $strImage = "";
 

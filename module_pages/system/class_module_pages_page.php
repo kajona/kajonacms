@@ -26,6 +26,7 @@ class class_module_pages_page extends class_model implements interface_model, in
      * @var string
      * @tableColumn page_name
      * @versionable
+     * @addSearchIndex
      *
      * @fieldMandatory
      * @fieldType text
@@ -42,6 +43,8 @@ class class_module_pages_page extends class_model implements interface_model, in
     /**
      * @var string
      * @versionable
+     *
+     * @addSearchIndex
      */
     private $strKeywords = "";
 
@@ -50,6 +53,8 @@ class class_module_pages_page extends class_model implements interface_model, in
      * @versionable
      *
      * @fieldType textarea
+     *
+     * @addSearchIndex
      */
     private $strDescription = "";
 
@@ -67,12 +72,16 @@ class class_module_pages_page extends class_model implements interface_model, in
      *
      * @fieldMandatory
      * @fieldType text
+     *
+     * @addSearchIndex
      */
     private $strBrowsername = "";
 
     /**
      * @var string
      * @versionable
+     *
+     * @addSearchIndex
      */
     private $strSeostring = "";
 

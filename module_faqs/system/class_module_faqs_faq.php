@@ -23,6 +23,7 @@ class class_module_faqs_faq extends class_model implements interface_model, inte
      * @var string
      * @tableColumn faqs.faqs_question
      * @versionable
+     * @addSearchIndex
      *
      * @fieldType text
      * @fieldMandatory
@@ -34,6 +35,7 @@ class class_module_faqs_faq extends class_model implements interface_model, inte
      * @tableColumn faqs.faqs_answer
      * @blockEscaping
      * @versionable
+     * @addSearchIndex
      *
      * @fieldType wysiwygsmall
      * @fieldMandatory

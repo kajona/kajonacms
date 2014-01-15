@@ -24,6 +24,8 @@ class class_module_mediamanager_repo extends class_model implements interface_mo
      * @fieldMandatory
      * @fieldValidator folder
      * @fieldLabel commons_path
+     *
+     * @addSearchIndex
      */
     private $strPath = "";
 
@@ -33,6 +35,8 @@ class class_module_mediamanager_repo extends class_model implements interface_mo
      * @listOrder
      * @fieldLabel commons_title
      * @fieldType text
+     *
+     * @addSearchIndex
      */
     private $strTitle = "";
 

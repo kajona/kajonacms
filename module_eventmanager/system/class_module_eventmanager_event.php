@@ -25,10 +25,13 @@ class class_module_eventmanager_event extends class_model implements interface_m
      * @var string
      * @tableColumn em_event.em_ev_title
      * @versionable
+     * @addSearchIndex
      *
      * @fieldType text
      * @fieldMandatory
      * @fieldLabel commons_title
+     *
+     * @addSearchIndex
      */
     private $strTitle = "";
 
@@ -37,9 +40,12 @@ class class_module_eventmanager_event extends class_model implements interface_m
      * @tableColumn em_event.em_ev_description
      * @versionable
      * @blockEscaping
+     * @addSearchIndex
      *
      * @fieldType wysiwygsmall
      * @fieldLabel commons_description
+     *
+     * @addSearchIndex
      */
     private $strDescription = "";
 
@@ -47,9 +53,12 @@ class class_module_eventmanager_event extends class_model implements interface_m
      * @var string
      * @tableColumn em_event.em_ev_location
      * @versionable
+     * @addSearchIndex
      *
      * @fieldType textarea
      * @fieldLabel event_location
+     *
+     * @addSearchIndex
      */
     private $strLocation = "";
 

@@ -26,6 +26,8 @@ class class_element_mediaplayer_admin extends class_element_admin implements int
      * @fieldMandatory
      *
      * @elementContentTitle
+     *
+     * @addSearchIndex
      */
     private $strChar1;
 
@@ -35,6 +37,8 @@ class class_element_mediaplayer_admin extends class_element_admin implements int
      *
      * @fieldType file
      * @fieldLabel mediaplayer_preview
+     *
+     * @addSearchIndex
      */
     private $strChar2;
 

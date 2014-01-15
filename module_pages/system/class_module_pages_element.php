@@ -27,6 +27,8 @@ class class_module_pages_element extends class_model implements interface_model,
      * @fieldMandatory
      * @fieldType text
      * @fieldLabel commons_name
+     *
+     * @addSearchIndex
      */
     private $strName = "";
 
@@ -35,6 +37,8 @@ class class_module_pages_element extends class_model implements interface_model,
      * @tableColumn element_class_portal
      *
      * @fieldType dropdown
+     *
+     * @addSearchIndex
      */
     private $strClassPortal = "";
 
@@ -43,6 +47,8 @@ class class_module_pages_element extends class_model implements interface_model,
      * @tableColumn element_class_admin
      *
      * @fieldType dropdown
+     *
+     * @addSearchIndex
      */
     private $strClassAdmin = "";
 

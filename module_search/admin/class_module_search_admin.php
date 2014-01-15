@@ -93,8 +93,6 @@ class class_module_search_admin extends class_admin_simple implements interface_
         if($objSearch != null) {
             $objForm = $this->getSearchAdminForm($objSearch);
 
-
-
             if(!$objForm->validateForm()) {
                 return $this->actionNew($this->getParam("mode"), $objForm);
             }
@@ -105,7 +103,7 @@ class class_module_search_admin extends class_admin_simple implements interface_
 
             $objSearch->updateObjectToDb();
 
-            $this->adminReload(getLinkAdminHref($this->getArrModule("modul"), "", ($this->getParam("pe") != "" ? "&peClose=1" : "")));
+            $this->adminReload(class_link::getLinkAdminHref($this->getArrModule("modul"), "", ($this->getParam("pe") != "" ? "&peClose=1" : "")));
             return "";
         }
 
@@ -150,38 +148,31 @@ class class_module_search_admin extends class_admin_simple implements interface_
 
         // Search Form
         $objForm = $this->getSearchAdminForm($objSearch);
-        $strReturn .= $objForm->renderForm(getLinkAdminHref($this->getArrModule("modul"), "search"), class_admin_formgenerator::BIT_BUTTON_SUBMIT);
+        $strReturn .= $objForm->renderForm(class_link::getLinkAdminHref($this->getArrModule("modul"), "search"), class_admin_formgenerator::BIT_BUTTON_SUBMIT);
 
         // Execute Search
-        $arrResult = array();
         $objSearchCommons = new class_module_search_commons();
-        if($objSearch->getStrQuery() != "") {
-            $arrResult = $objSearchCommons->doAdminSearch($objSearch);
-        }
+        $arrResult = $objSearchCommons->doAdminSearch2($objSearch);
 
-        $objArrayIterator = new class_array_iterator($arrResult);
-        if($this->getParam("pv") > 1 && count($objArrayIterator->getElementsOnPage((int)($this->getParam("pv")))) == 0)
-            $this->setParam("pv", 1);
-
-        $objArraySectionIterator = new class_array_section_iterator(count($arrResult));
+        $objArraySectionIterator = new class_array_section_iterator($objSearchCommons->getIndexedSearchCount($objSearch));
         $objArraySectionIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
-        $objArraySectionIterator->setArraySection($objArrayIterator->getElementsOnPage((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1)));
+        $objArraySectionIterator->setArraySection($objSearchCommons->doIndexedSearch($objSearch, $objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
 
-        $arrResult = $objArraySectionIterator->getArrayExtended(true);
-
+        //convert entries to real objects
         $arrObjects = array();
         /** @var $objSearchResult class_search_result */
         foreach($arrResult as $objSearchResult) {
             $arrObjects[] = $objSearchResult->getObjObject();
         }
 
-        $objArrayIterator->setArrElements($arrObjects);
-        $objArraySectionIterator->setArraySection($objArrayIterator->getElementsOnPage(1));
+        $objArraySectionIterator->setArrElements($arrObjects);
+        $objArraySectionIterator->setArraySection($objArraySectionIterator->getElementsOnPage(1));
 
         $strQueryAppend = "&filtermodules=".$objSearch->getStrInternalFilterModules();
 
         if($objSearch->getObjChangeStartdate() != null)
             $strQueryAppend .= "&search_objchangestartdate=".$objSearch->getObjChangeStartdate()->getLongTimestamp();
+
         if($objSearch->getObjChangeEnddate() != null)
             $strQueryAppend .= "&search_objchangeenddate=".$objSearch->getObjChangeEnddate()->getLongTimestamp();
 
@@ -235,8 +226,24 @@ class class_module_search_admin extends class_admin_simple implements interface_
         $arrResult = array();
         $objSearchCommons = new class_module_search_commons();
         if($strSearchterm != "") {
-            $arrResult = $objSearchCommons->doAdminSearch($objSearch);
+            $arrResult = $objSearchCommons->doAdminSearch2($objSearch, 0, self::INT_MAX_NR_OF_RESULTS);
         }
+
+        $objSearchFunc = function (class_search_result $objA, class_search_result $objB) {
+            //first by module, second by score
+            if($objA->getObjObject() instanceof class_model && $objB->getObjObject() instanceof class_model) {
+                $intCmp = strcmp($objA->getObjObject()->getArrModule("modul"), $objB->getObjObject()->getArrModule("modul"));
+
+                if($intCmp != 0)
+                    return $intCmp;
+                else
+                    return $objA->getIntScore() < $objB->getIntScore();
+            }
+            //fallback: score only
+            return $objA->getIntScore() < $objB->getIntScore();
+        };
+
+        uasort($arrResult, $objSearchFunc);
 
         if($this->getParam("asJson") != "") {
             $strReturn .= $this->createSearchJson($strSearchterm, $arrResult);
@@ -257,16 +264,11 @@ class class_module_search_admin extends class_admin_simple implements interface_
     private function createSearchJson($strSearchterm, $arrResults) {
 
         $arrItems = array();
-        $intI = 0;
         foreach($arrResults as $objOneResult) {
             $arrItem = array();
             //create a correct link
             if($objOneResult->getObjObject() == null || !$objOneResult->getObjObject()->rightView()) {
                 continue;
-            }
-
-            if(++$intI > self::INT_MAX_NR_OF_RESULTS) {
-                break;
             }
 
             $strIcon = "";
@@ -279,7 +281,7 @@ class class_module_search_admin extends class_admin_simple implements interface_
 
             $strLink = $objOneResult->getStrPagelink();
             if($strLink == "") {
-                $strLink = getLinkAdminHref($objOneResult->getObjObject()->getArrModule("modul"), "edit", "&systemid=" . $objOneResult->getStrSystemid());
+                $strLink = class_link::getLinkAdminHref($objOneResult->getObjObject()->getArrModule("modul"), "edit", "&systemid=" . $objOneResult->getStrSystemid());
             }
 
             $arrItem["module"] = class_carrier::getInstance()->getObjLang()->getLang("modul_titel", $objOneResult->getObjObject()->getArrModule("modul"));
@@ -314,17 +316,12 @@ class class_module_search_admin extends class_admin_simple implements interface_
 
 
         //And now all results
-        $intI = 0;
         $strReturn .= "    <resultset>\n";
         foreach($arrResults as $objOneResult) {
 
             //create a correct link
             if($objOneResult->getObjObject() == null || !$objOneResult->getObjObject()->rightView()) {
                 continue;
-            }
-
-            if(++$intI > self::INT_MAX_NR_OF_RESULTS) {
-                break;
             }
 
             $strIcon = "";
@@ -337,7 +334,7 @@ class class_module_search_admin extends class_admin_simple implements interface_
 
             $strLink = $objOneResult->getStrPagelink();
             if($strLink == "") {
-                $strLink = getLinkAdminHref($objOneResult->getObjObject()->getArrModule("modul"), "edit", "&systemid=" . $objOneResult->getStrSystemid());
+                $strLink = class_link::getLinkAdminHref($objOneResult->getObjObject()->getArrModule("modul"), "edit", "&systemid=" . $objOneResult->getStrSystemid());
             }
 
             $strReturn .=
@@ -405,7 +402,7 @@ JS;
     protected function renderAdditionalActions(class_model $objListEntry) {
         if($objListEntry instanceof class_module_search_search) {
             return array(
-                $this->objToolkit->listButton(getLinkAdmin($this->getArrModule("modul"), "search", "&systemid=" . $objListEntry->getSystemid(), $this->getLang("action_execute_search"), $this->getLang("action_execute_search"), "icon_lens")),
+                $this->objToolkit->listButton(class_link::getLinkAdmin($this->getArrModule("modul"), "search", "&systemid=" . $objListEntry->getSystemid(), $this->getLang("action_execute_search"), $this->getLang("action_execute_search"), "icon_lens")),
             );
         }
         else {

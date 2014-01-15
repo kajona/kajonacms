@@ -26,6 +26,8 @@ class class_module_news_category extends class_model implements interface_model,
      * @fieldType text
      * @fieldMandatory
      * @fieldLabel commons_title
+     *
+     * @addSearchIndex
      */
     private $strTitle = "";
 

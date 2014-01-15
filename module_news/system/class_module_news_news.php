@@ -22,6 +22,7 @@ class class_module_news_news extends class_model implements interface_model, int
     /**
      * @var string
      * @tableColumn news.news_title
+     * @addSearchIndex
      *
      * @fieldType text
      * @fieldMandatory
@@ -37,6 +38,7 @@ class class_module_news_news extends class_model implements interface_model, int
      *
      * @fieldType image
      *
+     * @addSearchIndex
      * @versionable
      */
     private $strImage = "";
@@ -51,6 +53,7 @@ class class_module_news_news extends class_model implements interface_model, int
      * @var string
      * @tableColumn news.news_intro
      * @fieldType textarea
+     * @addSearchIndex
      *
      * @versionable
      */
@@ -60,6 +63,7 @@ class class_module_news_news extends class_model implements interface_model, int
      * @var string
      * @tableColumn news.news_text
      * @blockEscaping
+     * @addSearchIndex
      *
      * @fieldType wysiwygsmall
      *

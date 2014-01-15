@@ -25,10 +25,13 @@ class class_module_eventmanager_participant extends class_model implements inter
      * @var string
      * @tableColumn em_participant.em_pt_forename
      * @versionable
+     * @addSearchIndex
      *
      * @fieldType text
      * @fieldMandatory
      * @fieldLabel participant_forename
+     *
+     * @addSearchIndex
      */
     private $strForename = "";
 
@@ -36,10 +39,13 @@ class class_module_eventmanager_participant extends class_model implements inter
      * @var string
      * @tableColumn em_participant.em_pt_lastname
      * @versionable
+     * @addSearchIndex
      *
      * @fieldType text
      * @fieldMandatory
      * @fieldLabel participant_lastname
+     *
+     * @addSearchIndex
      */
     private $strLastname = "";
 
@@ -53,6 +59,8 @@ class class_module_eventmanager_participant extends class_model implements inter
      * @fieldValidator email
      * @fieldMandatory
      * @fieldLabel participant_email
+     *
+     * @addSearchIndex
      */
     private $strEmail = "";
 
@@ -63,6 +71,8 @@ class class_module_eventmanager_participant extends class_model implements inter
      *
      * @fieldType text
      * @fieldLabel participant_phone
+     *
+     * @addSearchIndex
      */
     private $strPhone = "";
 
@@ -96,6 +106,8 @@ class class_module_eventmanager_participant extends class_model implements inter
      *
      * @fieldType textarea
      * @fieldLabel participant_comment
+     *
+     * @addSearchIndex
      */
     private $strComment = "";
 

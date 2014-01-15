@@ -19,6 +19,7 @@ class class_search_result {
 
     private $strResultId;
     private $intHits = 1;
+    private $intScore = 0;
     private $strSystemid;
     private $strPagelink;
     private $strPagename;
@@ -30,6 +31,13 @@ class class_search_result {
         return sha1($this->strSystemid.$this->strPagename.$this->strPagelink);
     }
 
+    public function setIntScore($intScore) {
+        $this->intScore = $intScore;
+    }
+
+    public  function getIntScore() {
+        return $this->intScore;
+    }
 
     public function setIntHits($intHits) {
         $this->intHits = $intHits;

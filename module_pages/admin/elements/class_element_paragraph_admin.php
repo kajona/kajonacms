@@ -25,6 +25,8 @@ class class_element_paragraph_admin extends class_element_admin implements inter
      * @fieldLabel commons_title
      *
      * @elementContentTitle
+     *
+     * @addSearchIndex
      */
     private $strTitle = "";
 
@@ -37,6 +39,8 @@ class class_element_paragraph_admin extends class_element_admin implements inter
      * @fieldLabel paragraph_content
      *
      * @elementContentTitle
+     *
+     * @addSearchIndex
      */
     private $strTextContent = "";
 
@@ -48,6 +52,8 @@ class class_element_paragraph_admin extends class_element_admin implements inter
      * @fieldLabel paragraph_link
      *
      * @elementContentTitle
+     *
+     * @addSearchIndex
      */
     private $strLink = "";
 
@@ -59,6 +65,8 @@ class class_element_paragraph_admin extends class_element_admin implements inter
      * @fieldLabel commons_image
      *
      * @elementContentTitle
+     *
+     * @addSearchIndex
      */
     private $strImage = "";
 

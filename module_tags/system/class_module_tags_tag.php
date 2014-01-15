@@ -28,6 +28,8 @@ class class_module_tags_tag extends class_model implements interface_model, inte
      * @tableColumn tags_tag_name
      * @listOrder
      *
+     * @addSearchIndex
+     *
      * @fieldType text
      * @fieldMandatory
      */
@@ -323,7 +325,7 @@ class class_module_tags_tag extends class_model implements interface_model, inte
             $arrParams[] = $this->objSession->getUserID();
         }
 
-        //check of not already set
+        //check if not already set
         $strQuery = "SELECT COUNT(*)
                        FROM "._dbprefix_."tags_member
                       WHERE tags_systemid= ?
@@ -338,7 +340,12 @@ class class_module_tags_tag extends class_model implements interface_model, inte
                       (tags_memberid, tags_systemid, tags_tagid, tags_attribute, tags_owner) VALUES
                       (?, ?, ?, ?, ?)";
 
-        return $this->objDB->_pQuery($strQuery, array(generateSystemid(), $strTargetSystemid, $this->getSystemid(), $strAttribute, $this->objSession->getUserID()));
+        $bitReturn = $this->objDB->_pQuery($strQuery, array(generateSystemid(), $strTargetSystemid, $this->getSystemid(), $strAttribute, $this->objSession->getUserID()));
+
+        //trigger an object update
+        class_objectfactory::getInstance()->getObject($strTargetSystemid)->updateObjectToDb();
+
+        return $bitReturn;
     }
 
     /**
@@ -370,7 +377,12 @@ class class_module_tags_tag extends class_model implements interface_model, inte
                              AND tags_tagid = ?
                              ".$strPrivate;
 
-        return $this->objDB->_pQuery($strQuery, $arrParams);
+        $bitReturn = $this->objDB->_pQuery($strQuery, $arrParams);
+
+        //trigger an object update
+        class_objectfactory::getInstance()->getObject($strTargetSystemid)->updateObjectToDb();
+
+        return $bitReturn;
     }
 
 
@@ -405,6 +417,7 @@ class class_module_tags_tag extends class_model implements interface_model, inte
 
         return true;
     }
+
 
     /**
      * @return string

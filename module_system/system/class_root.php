@@ -521,6 +521,10 @@ abstract class class_root {
         }
 
 
+        //call the recordUpdated-Listeners
+        class_core_eventdispatcher::notifyRecordUpdatedListeners($this);
+
+
         return $bitReturn;
     }
 

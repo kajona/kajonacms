@@ -18,8 +18,11 @@ class class_installer_search extends class_installer_base implements interface_i
 
     public function install() {
 
+        //Install Index Tables
+        $strReturn = $this->install_index_tables();
+
         //Table for search
-        $strReturn = "Installing table search_search...\n";
+        $strReturn .= "Installing table search_search...\n";
 
         $arrFields = array();
         $arrFields["search_search_id"] 		= array("char20", false);
@@ -84,47 +87,66 @@ class class_installer_search extends class_installer_base implements interface_i
 	public function update() {
 	    $strReturn = "";
         //check installed version and to which version we can update
-        $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
 
-        $strReturn .= "Version found:\n\t Module: ".$arrModul["module_name"].", Version: ".$arrModul["module_version"]."\n\n";
+        $strReturn .= "Version found:\n\t Module: ".$arrModule["module_name"].", Version: ".$arrModule["module_version"]."\n\n";
 
-        $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModul["module_version"] == "3.4.2") {
+        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "3.4.2") {
             $strReturn .= $this->update_342_349();
         }
 
-        $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModul["module_version"] == "3.4.9") {
+        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "3.4.9") {
             $strReturn .= $this->update_342_3491();
         }
 
-        $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModul["module_version"] == "3.4.9.1") {
+        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "3.4.9.1") {
             $strReturn .= $this->update_3491_40();
         }
 
-        $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModul["module_version"] == "4.0") {
+        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "4.0") {
             $strReturn .= "Updating 4.0 to 4.1...\n";
             $strReturn .= "Updating module-versions...\n";
             $this->updateModuleVersion("search", "4.1");
             $this->updateElementVersion("search", "4.1");
         }
 
-        $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModul["module_version"] == "4.1") {
+        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "4.1") {
             $strReturn .= "Updating 4.1 to 4.2...\n";
             $strReturn .= "Updating module-versions...\n";
             $this->updateModuleVersion("search", "4.2");
             $this->updateElementVersion("search", "4.2");
         }
 
-        $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModul["module_version"] == "4.2") {
+        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "4.2") {
             $strReturn .= "Updating 4.2 to 4.3...\n";
             $strReturn .= "Updating module-versions...\n";
             $this->updateModuleVersion("search", "4.3");
             $this->updateElementVersion("search", "4.3");
+
+       }
+
+        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "4.3") {
+            $strReturn .= "Updating 4.3 to 4.4...\n";
+            // Install Index
+            $strReturn .= "Adding index tables...\n";
+            $this->install_index_tables();
+
+            $strReturn .= "Updating index...\n";
+            $objWorker = new class_module_search_indexwriter();
+            $objWorker->clearIndex();
+            $objWorker->indexRebuild();
+
+            $strReturn .= "Updating module-versions...\n";
+            $this->updateModuleVersion("search", "4.4");
+            $this->updateElementVersion("search", "4.4");
+
         }
 
         return $strReturn."\n\n";
@@ -180,5 +202,31 @@ class class_installer_search extends class_installer_base implements interface_i
         return $strReturn;
     }
 
+    private function install_index_tables() {
+
+        //Tables for search documents
+        $strReturn = "Installing table search_index_document...\n";
+
+        $arrFields = array();
+        $arrFields["search_index_document_id"] 		= array("char20", false);
+        $arrFields["search_index_system_id"] 	= array("char20", true);
+
+        if(!$this->objDB->createTable("search_index_document", $arrFields, array("search_index_document_id")))
+            $strReturn .= "An error occured! ...\n";
+
+        $strReturn .= "Installing table search_index_content...\n";
+
+        $arrFields = array();
+        $arrFields["search_index_content_id"] 		= array("char20", false);
+        $arrFields["search_index_content_field_name"] 		= array("char20", false);
+        $arrFields["search_index_content_content"] 	= array("char256", true);
+        $arrFields["search_index_content_score"] 	= array("int", true);
+        $arrFields["search_index_content_document_id"] 	= array("char20", true);
+
+        if(!$this->objDB->createTable("search_index_content", $arrFields, array("search_index_content_id"), array("search_index_content_field_name", "search_index_content_content", "search_index_content_document_id")))
+           $strReturn .= "An error occured! ...\n";
+
+        return $strReturn;
+    }
 
 }

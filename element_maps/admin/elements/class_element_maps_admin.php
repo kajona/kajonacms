@@ -25,6 +25,8 @@ class class_element_maps_admin extends class_element_admin implements interface_
      * @fieldLabel maps_address
      * @fieldMandatory
      *
+     * @addSearchIndex
+     *
      * @elementContentTitle
      */
     private $strChar1;
@@ -34,6 +36,8 @@ class class_element_maps_admin extends class_element_admin implements interface_
      * @tableColumn element_universal.char2
      *
      * @fieldType hidden
+     *
+     * @addSearchIndex
      */
     private $strChar2;
 
@@ -43,6 +47,8 @@ class class_element_maps_admin extends class_element_admin implements interface_
      *
      * @fieldType template
      * @fieldLabel template
+     *
+     * @addSearchIndex
      *
      * @fieldTemplateDir /element_maps
      */
@@ -55,6 +61,8 @@ class class_element_maps_admin extends class_element_admin implements interface_
      *
      * @fieldType wysiwyg
      * @fieldLabel maps_infotext
+     *
+     * @addSearchIndex
      */
     private $strText;
 

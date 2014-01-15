@@ -31,3 +31,5 @@ $lang["searchterm_label"]                = "Search term";
 $lang["select_all"]                      = "All modules";
 $lang["stats_title"]                     = "Searchqueries";
 $lang["submit_label"]                    = "Search";
+$lang["systemtask_search_indexrebuild"]              = "Rebuild search index";
+$lang["worker_indexrebuild_end"]              = "Index was rebuilt successfully.<br /><br />Number of documents in index: {0}<br />Number of entries in index: {1}";

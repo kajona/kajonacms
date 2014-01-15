@@ -26,6 +26,8 @@ class class_module_postacomment_post extends class_model implements interface_mo
      *
      * @fieldType text
      * @fieldLabel form_comment_title
+     *
+     * @addSearchIndex
      */
     private $strTitle;
 
@@ -36,6 +38,8 @@ class class_module_postacomment_post extends class_model implements interface_mo
      * @fieldMandatory
      * @fieldType textarea
      * @fieldLabel postacomment_comment
+     *
+     * @addSearchIndex
      */
     private $strComment;
 

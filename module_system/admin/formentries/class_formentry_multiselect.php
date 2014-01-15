@@ -22,7 +22,7 @@ class class_formentry_multiselect extends class_formentry_base implements interf
         parent::__construct($strFormName, $strSourceProperty, $objSourceObject);
 
         //set the default validator
-        $this->setObjValidator(new class_text_validator());
+        $this->setObjValidator(new class_dummy_validator());
     }
 
     /**

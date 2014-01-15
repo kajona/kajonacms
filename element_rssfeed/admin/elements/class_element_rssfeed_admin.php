@@ -37,6 +37,8 @@ class class_element_rssfeed_admin extends class_element_admin implements interfa
      * @fieldLabel rssfeed_url
      * @fieldMandatory
      *
+     * @addSearchIndex
+     *
      * @elementContentTitle
      */
     private $strChar2;

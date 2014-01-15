@@ -70,7 +70,7 @@ class class_module_search_search extends class_model implements interface_model,
      * @return array
      */
     public function getFilterModules() {
-        if(uniStrlen($this->strInternalFilterModules) > 0) {
+        if(uniStrlen($this->strInternalFilterModules) > 0 && $this->strInternalFilterModules != "-1") {
             return explode(",", $this->strInternalFilterModules);
         }
         return array();
