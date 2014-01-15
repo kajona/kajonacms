@@ -2,7 +2,7 @@
 
 require_once(__DIR__ . "/../../module_system/system/class_testbase.php");
 
-class class_test_searchTest extends class_testbase {
+class class_test_searchIndexEventTest extends class_testbase {
 
     public function testIndexEvent() {
 
