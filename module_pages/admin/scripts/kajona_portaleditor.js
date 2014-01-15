@@ -157,7 +157,6 @@ KAJONA.admin.portaleditor.RTE.init = function () {
                 //validate, if injected <br />s have to be removed. its then up to the
                 //portal element to decide if \n should be nl2br()ed.
                 if(event.editor.config.kajona_strMode == 'textarea') {
-                    debugger;
                     data = data.replace("<br />", "");
                 }
 
