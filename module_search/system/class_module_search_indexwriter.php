@@ -18,7 +18,10 @@ class class_module_search_indexwriter implements interface_recordupdated_listene
     private $objConfig = null;
     private $objDB = null;
 
-    function __construct() {
+    /**
+     * Plain constructor
+     */
+    public function __construct() {
         //Generating all the needed objects. For this we use our cool cool carrier-object
         //take care of loading just the necessary objects
         $this->objConfig = class_carrier::getInstance()->getObjConfig();
@@ -49,7 +52,7 @@ class class_module_search_indexwriter implements interface_recordupdated_listene
      * There's no need to register the listener, this is done automatically.
      * Make sure to return a matching boolean-value, otherwise the transaction may be rolled back.
      *
-     * @param $strSystemid
+     * @param string $strSystemid
      * @param string $strSourceClass The class-name of the object deleted
      *
      * @return bool
@@ -60,7 +63,7 @@ class class_module_search_indexwriter implements interface_recordupdated_listene
 
     /**
      * Removes an entry from the index, based on the systemid. Removes the indexed content and the document.
-     * @param $strSystemid
+     * @param string $strSystemid
      *
      * @return bool
      */
@@ -83,6 +86,8 @@ class class_module_search_indexwriter implements interface_recordupdated_listene
      * @param class_model $objRecord
      *
      * @return bool
+     *
+     * @todo: move to own object
      */
     public function handleRecordUpdatedEvent($objRecord) {
         if(class_module_system_module::getModuleByName("search") !== null)
@@ -90,6 +95,10 @@ class class_module_search_indexwriter implements interface_recordupdated_listene
     }
 
 
+    /**
+     * @param class_model $objInstance
+     * @return void
+     */
     public function indexObject(class_model $objInstance) {
 
         if($objInstance instanceof class_module_pages_pageelement) {
@@ -121,6 +130,12 @@ class class_module_search_indexwriter implements interface_recordupdated_listene
         $this->updateSearchDocumentToDb($objSearchDocument);
     }
 
+    /**
+     * Triggers a full rebuild of the index. The index is not flused before!
+     * @see clearIndex()
+     *
+     * @return void
+     */
     public function indexRebuild() {
         $this->clearIndex();
         $arrObj = $this->getIndexableEntries();
@@ -130,6 +145,9 @@ class class_module_search_indexwriter implements interface_recordupdated_listene
         }
     }
 
+    /**
+     * @return array
+     */
     private function getIndexableEntries(){
         //Load possible existing document if exists
         $strQuery = "SELECT * FROM " . _dbprefix_ . "system ";
@@ -137,12 +155,16 @@ class class_module_search_indexwriter implements interface_recordupdated_listene
         return $this->objDB->getPArray($strQuery, array());
     }
 
+    /**
+     * Clears the complete cache
+     * @return void
+     */
     public function clearIndex() {
         // Delete existing entries
-        $strQuery = "TRUNCATE TABLE " . _dbprefix_ . "search_index_document";
+        $strQuery = "DELETE FROM " . _dbprefix_ . "search_index_document";
         $this->objDB->_pQuery($strQuery, array());
 
-        $strQuery = "TRUNCATE TABLE " . _dbprefix_ . "search_index_content";
+        $strQuery = "DELETE FROM " . _dbprefix_ . "search_index_content";
         $this->objDB->_pQuery($strQuery, array());
     }
 
@@ -184,6 +206,7 @@ class class_module_search_indexwriter implements interface_recordupdated_listene
 
     /**
      * @param class_module_search_content $objSearchContent
+     * @return void
      */
     private function updateSearchContentToDb($objSearchContent) {
         //insert search document
