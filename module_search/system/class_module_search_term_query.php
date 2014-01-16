@@ -64,7 +64,7 @@ class class_module_search_term_query implements interface_search_query {
     public function getListQuery(&$strQuery, &$arrParameters) {
         $strQuery .= "SELECT search_index_document_id, search_index_system_id, sum(search_index_content_score) AS score ";
         $this->internalBuildQuery($strQuery, $arrParameters);
-        $strQuery .= " GROUP BY search_index_document_id ORDER BY score DESC";
+        $strQuery .= " GROUP BY search_index_document_id, search_index_system_id ORDER BY score DESC";
 
     }
 
