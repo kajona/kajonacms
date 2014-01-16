@@ -102,13 +102,14 @@ class class_module_faqs_admin extends class_admin_evensimpler implements interfa
 
 
     protected function getAdminForm(interface_model $objInstance) {
+
+        $objForm = parent::getAdminForm($objInstance);
+
         if($objInstance instanceof class_module_faqs_faq) {
-            $objForm = new class_admin_formgenerator("faq", $objInstance);
-            $objForm->generateFieldsFromObject();
 
             $arrCats = class_module_faqs_category::getObjectList();
             if(count($arrCats) > 0)
-                $objForm->addField(new class_formentry_headline())->setStrValue($this->getLang("commons_categories"));
+                $objForm->addField(new class_formentry_headline("cat_header"))->setStrValue($this->getLang("commons_categories"));
 
             $arrFaqsMember = class_module_faqs_category::getFaqsMember($this->getSystemid());
 
@@ -124,12 +125,12 @@ class class_module_faqs_admin extends class_admin_evensimpler implements interfa
 
             return $objForm;
         }
-        else
-            return parent::getAdminForm($objInstance);
+
+        return $objForm;
     }
 
     /**
-     * Saves the passed values as a new category to the db
+     * Saves the passed values as a new entry to the db
      *
      * @return string "" in case of success
      * @permissions edit
@@ -144,12 +145,15 @@ class class_module_faqs_admin extends class_admin_evensimpler implements interfa
 
         if($objFaq != null) {
 
+            $this->setStrCurObjectTypeName("Faq");
+            $this->setCurObjectClassName("class_module_faqs_faq");
+
             $objForm = $this->getAdminForm($objFaq);
             if(!$objForm->validateForm()) {
                 if($this->getParam("mode") == "new")
-                    return $this->actionNew($this->getParam("mode"), $objForm);
+                    return $this->actionNew($this->getParam("mode"));
                 else
-                    return $this->actionEdit($this->getParam("mode"), $objForm);
+                    return $this->actionEdit($this->getParam("mode"));
             }
 
             $objForm->updateSourceObject();
