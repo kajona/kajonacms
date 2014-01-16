@@ -102,9 +102,9 @@ class class_module_search_boolean_query implements interface_search_query {
      * @return string
      */
     public function getCountQuery(&$strQuery, &$arrParameters) {
-        $strQuery .= "SELECT COUNT(*) FROM (SELECT search_index_document_id, search_index_system_id ";
+        $strQuery .= "SELECT COUNT(*) FROM (SELECT search_ix_document_id, search_ix_system_id ";
         $this->internalBuildQuery($strQuery, $arrParameters);
-        $strQuery .= " GROUP BY search_index_document_id, search_index_system_id) as cq";
+        $strQuery .= " GROUP BY search_ix_document_id, search_ix_system_id) as cq";
     }
 
 
@@ -119,25 +119,25 @@ class class_module_search_boolean_query implements interface_search_query {
     public function getListQuery(&$strQuery, &$arrParameters) {
 
         /* should look like ;-)
-            select search_index_document_id, search_index_system_id , sum(search_index_content_score) as score  from
-              (select search_index_document_id, search_index_system_id from kajona_search_index_document as D
-                left join kajona_system ON search_index_system_id = system_id
+            select search_ix_document_id, search_ix_system_id , sum(search_ix_content_score) as score  from
+              (select search_ix_document_id, search_ix_system_id from kajona_search_ix_document as D
+                left join kajona_system ON search_ix_system_id = system_id
                where
                 system_module_nr in  (1, 2) and
-                exists (select 1 from kajona_search_index_content where search_index_content_content= ? and search_index_document_id= search_index_content_document_id) and
-                exists (select 1 from kajona_search_index_content where search_index_content_content= ? and search_index_document_id= search_index_content_document_id)
+                exists (select 1 from kajona_search_ix_content where search_ix_content_content= ? and search_ix_document_id= search_ix_content_document_id) and
+                exists (select 1 from kajona_search_ix_content where search_ix_content_content= ? and search_ix_document_id= search_ix_content_document_id)
               ) a
-            inner join (select search_index_content_document_id, search_index_content_score from kajona_search_index_content where
-                    (search_index_content_content ='hallo' AND search_index_content_field_name = 'title')
-                    OR (search_index_content_content ='welt')
-                    OR (search_index_content_content ='blub' AND search_index_content_field_name = 'subtitle')) z
-            on  search_index_document_id=search_index_content_document_id group by search_index_document_id;
+            inner join (select search_ix_content_document_id, search_ix_content_score from kajona_search_ix_content where
+                    (search_ix_content_content ='hallo' AND search_ix_content_field_name = 'title')
+                    OR (search_ix_content_content ='welt')
+                    OR (search_ix_content_content ='blub' AND search_ix_content_field_name = 'subtitle')) z
+            on  search_ix_document_id=search_ix_content_document_id group by search_ix_document_id;
         */
 
 
-        $strQuery .= "SELECT search_index_document_id, search_index_system_id , SUM(search_index_content_score) AS score ";
+        $strQuery .= "SELECT search_ix_document_id, search_ix_system_id , SUM(search_ix_content_score) AS score ";
         $this->internalBuildQuery($strQuery, $arrParameters);
-        $strQuery .= " GROUP BY search_index_document_id, search_index_system_id ORDER BY score DESC ";
+        $strQuery .= " GROUP BY search_ix_document_id, search_ix_system_id ORDER BY score DESC ";
 
     }
 
@@ -147,8 +147,8 @@ class class_module_search_boolean_query implements interface_search_query {
      * @param string[] $arrParameters
      */
     private function internalBuildQuery(&$strQuery, &$arrParameters) {
-        $strQuery .= "FROM (SELECT search_index_document_id, search_index_system_id from "._dbprefix_."search_index_document AS D
-                 ".($this->objMetadataFilter != null ? "  LEFT JOIN "._dbprefix_."system ON search_index_system_id = system_id " : "")."
+        $strQuery .= "FROM (SELECT search_ix_document_id, search_ix_system_id from "._dbprefix_."search_ix_document AS D
+                 ".($this->objMetadataFilter != null ? "  LEFT JOIN "._dbprefix_."system ON search_ix_system_id = system_id " : "")."
                      WHERE ";
 
         $strWhereMust = "1=1 ";
@@ -160,7 +160,7 @@ class class_module_search_boolean_query implements interface_search_query {
 
         /* @var $objTerm class_module_search_term */
         foreach($this->arrMustNotOccurs as $objTerm) {
-            $strWhereMust .= "AND NOT EXISTS (select 1 from " . _dbprefix_ . "search_index_content WHERE search_index_content_content= ? ". ($objTerm->getStrField()!=null ? " AND search_index_content_field_name = ? ": "" )  ." AND search_index_document_id = search_index_content_document_id) ";
+            $strWhereMust .= "AND NOT EXISTS (select 1 from " . _dbprefix_ . "search_ix_content WHERE search_ix_content_content= ? ". ($objTerm->getStrField()!=null ? " AND search_ix_content_field_name = ? ": "" )  ." AND search_ix_document_id = search_ix_content_document_id) ";
             $arrParameters[] = $objTerm->getStrText();
 
             if($objTerm->getStrField() != null)
@@ -168,7 +168,7 @@ class class_module_search_boolean_query implements interface_search_query {
         }
         /* @var $objTerm class_module_search_term */
         foreach($this->arrMustOccurs as $objTerm) {
-            $strWhereMust .= "AND exists (select 1 from " . _dbprefix_ . "search_index_content WHERE search_index_content_content= ? ". ($objTerm->getStrField()!=null ? " AND search_index_content_field_name = ? ": "" )  ." AND search_index_document_id = search_index_content_document_id) ";
+            $strWhereMust .= "AND exists (select 1 from " . _dbprefix_ . "search_ix_content WHERE search_ix_content_content= ? ". ($objTerm->getStrField()!=null ? " AND search_ix_content_field_name = ? ": "" )  ." AND search_ix_document_id = search_ix_content_document_id) ";
             $arrParameters[] = $objTerm->getStrText();
 
             if($objTerm->getStrField() != null)
@@ -179,11 +179,11 @@ class class_module_search_boolean_query implements interface_search_query {
         $arrMustShouldTerms = array();
         /* @var $objTerm class_module_search_term */
         foreach ($this->arrMustOccurs as $objTerm) {
-            $strWhere = " (search_index_content_content = ? ";
+            $strWhere = " (search_ix_content_content = ? ";
             $arrParameters[] = $objTerm->getStrText();
 
             if ($objTerm->getStrField() != null) {
-                $strWhere .= "AND search_index_content_field_name = ? ";
+                $strWhere .= "AND search_ix_content_field_name = ? ";
                 $arrParameters[] = $objTerm->getStrField();
             }
             $strWhere .= ")";
@@ -191,19 +191,19 @@ class class_module_search_boolean_query implements interface_search_query {
         }
         /* @var $objTerm class_module_search_term */
         foreach ($this->arrShouldOccurs as $objTerm) {
-            $strWhere = " (search_index_content_content = ? ";
+            $strWhere = " (search_ix_content_content = ? ";
             $arrParameters[] = $objTerm->getStrText();
 
             if ($objTerm->getStrField() != null) {
-                $strWhere .= "AND search_index_content_field_name = ? ";
+                $strWhere .= "AND search_ix_content_field_name = ? ";
                 $arrParameters[] = $objTerm->getStrField();
             }
             $strWhere .= ")";
             $arrMustShouldTerms[]=$strWhere;
         }
 
-        $strQuery .= "INNER JOIN (select search_index_content_document_id, search_index_content_score from " . _dbprefix_ . "search_index_content where ". implode(" OR ", $arrMustShouldTerms).") z
-                        ON search_index_document_id = search_index_content_document_id";
+        $strQuery .= "INNER JOIN (select search_ix_content_document_id, search_ix_content_score from " . _dbprefix_ . "search_ix_content where ". implode(" OR ", $arrMustShouldTerms).") z
+                        ON search_ix_document_id = search_ix_content_document_id";
     }
 
 

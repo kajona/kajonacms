@@ -205,7 +205,7 @@ class class_module_search_commons extends class_model implements interface_model
 
         // check view right
         foreach($arrSearchResult as $arrOneRow) {
-            $objInstance = class_objectfactory::getInstance()->getObject($arrOneRow["search_index_system_id"]);
+            $objInstance = class_objectfactory::getInstance()->getObject($arrOneRow["search_ix_system_id"]);
 
             if($objInstance != null && $objInstance->rightView()) {
                 $objResult = new class_search_result();

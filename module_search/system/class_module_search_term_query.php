@@ -49,9 +49,9 @@ class class_module_search_term_query implements interface_search_query {
      * @param string[] $arrParameters
      */
     public function getCountQuery(&$strQuery, &$arrParameters) {
-        $strQuery .= "SELECT COUNT(*) FROM (SELECT search_index_document_id ";
+        $strQuery .= "SELECT COUNT(*) FROM (SELECT search_ix_document_id ";
         $this->internalBuildQuery($strQuery, $arrParameters);
-        $strQuery .= " GROUP BY search_index_document_id ) as cq";
+        $strQuery .= " GROUP BY search_ix_document_id ) as cq";
     }
 
     /**
@@ -62,9 +62,9 @@ class class_module_search_term_query implements interface_search_query {
      * @param string[] $arrParameters
      */
     public function getListQuery(&$strQuery, &$arrParameters) {
-        $strQuery .= "SELECT search_index_document_id, search_index_system_id, sum(search_index_content_score) AS score ";
+        $strQuery .= "SELECT search_ix_document_id, search_ix_system_id, sum(search_ix_content_score) AS score ";
         $this->internalBuildQuery($strQuery, $arrParameters);
-        $strQuery .= " GROUP BY search_index_document_id, search_index_system_id ORDER BY score DESC";
+        $strQuery .= " GROUP BY search_ix_document_id, search_ix_system_id ORDER BY score DESC";
 
     }
 
@@ -75,10 +75,10 @@ class class_module_search_term_query implements interface_search_query {
      */
     private function internalBuildQuery(&$strQuery, &$arrParameters) {
 
-        $strQuery .= "FROM "._dbprefix_."search_index_document AS D
-                INNER JOIN "._dbprefix_."search_index_content AS z
-                        ON search_index_content_document_id = search_index_document_id
-             ".($this->objMetadataFilter != null ? "  LEFT JOIN "._dbprefix_."system ON search_index_system_id = system_id " : "")."
+        $strQuery .= "FROM "._dbprefix_."search_ix_document AS D
+                INNER JOIN "._dbprefix_."search_ix_content AS z
+                        ON search_ix_content_document_id = search_ix_document_id
+             ".($this->objMetadataFilter != null ? "  LEFT JOIN "._dbprefix_."system ON search_ix_system_id = system_id " : "")."
                      WHERE 1=1 ";
 
         //metadata filter
@@ -86,11 +86,11 @@ class class_module_search_term_query implements interface_search_query {
             $this->objMetadataFilter->getQuery($strQuery, $arrParameters);
         }
 
-        $strQuery .= " AND z.search_index_content_content LIKE ? AND D.search_index_document_id = z.search_index_content_document_id ";
+        $strQuery .= " AND z.search_ix_content_content LIKE ? AND D.search_ix_document_id = z.search_ix_content_document_id ";
         $arrParameters[] = $this->getObjTerm()->getStrText()."%";
 
         if ($this->getObjTerm()->getStrField() != null) {
-            $strQuery .= "AND search_index_content_field_name = ? ";
+            $strQuery .= "AND search_ix_content_field_name = ? ";
             $arrParameters[] = $this->getObjTerm()->getStrField();
         }
     }

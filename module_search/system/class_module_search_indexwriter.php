@@ -33,7 +33,7 @@ class class_module_search_indexwriter implements interface_recordupdated_listene
      * @return int
      */
     public function getNumberOfDocuments() {
-        $arrRow = $this->objDB->getPRow("SELECT COUNT(*) FROM "._dbprefix_."search_index_document", array());
+        $arrRow = $this->objDB->getPRow("SELECT COUNT(*) FROM "._dbprefix_."search_ix_document", array());
         return $arrRow["COUNT(*)"];
     }
 
@@ -42,7 +42,7 @@ class class_module_search_indexwriter implements interface_recordupdated_listene
      * @return int
      */
     public function getNumberOfContentEntries() {
-        $arrRow = $this->objDB->getPRow("SELECT COUNT(*) FROM "._dbprefix_."search_index_content", array());
+        $arrRow = $this->objDB->getPRow("SELECT COUNT(*) FROM "._dbprefix_."search_ix_content", array());
         return $arrRow["COUNT(*)"];
     }
 
@@ -68,11 +68,11 @@ class class_module_search_indexwriter implements interface_recordupdated_listene
      * @return bool
      */
     private function removeRecordFromIndex($strSystemid) {
-        $arrRow = $this->objDB->getPRow("SELECT * FROM "._dbprefix_."search_index_document WHERE search_index_system_id = ?", array($strSystemid));
+        $arrRow = $this->objDB->getPRow("SELECT * FROM "._dbprefix_."search_ix_document WHERE search_ix_system_id = ?", array($strSystemid));
 
-        if(isset($arrRow["search_index_document_id"])) {
-            $this->objDB->_pQuery("DELETE FROM "._dbprefix_."search_index_content WHERE search_index_content_id = ?", array($arrRow["search_index_document_id"]));
-            $this->objDB->_pQuery("DELETE FROM "._dbprefix_."search_index_document WHERE search_index_document_id = ?", array($arrRow["search_index_document_id"]));
+        if(isset($arrRow["search_ix_document_id"])) {
+            $this->objDB->_pQuery("DELETE FROM "._dbprefix_."search_ix_content WHERE search_ix_content_id = ?", array($arrRow["search_ix_document_id"]));
+            $this->objDB->_pQuery("DELETE FROM "._dbprefix_."search_ix_document WHERE search_ix_document_id = ?", array($arrRow["search_ix_document_id"]));
         }
 
         return true;
@@ -161,10 +161,10 @@ class class_module_search_indexwriter implements interface_recordupdated_listene
      */
     public function clearIndex() {
         // Delete existing entries
-        $strQuery = "DELETE FROM " . _dbprefix_ . "search_index_document";
+        $strQuery = "DELETE FROM " . _dbprefix_ . "search_ix_document";
         $this->objDB->_pQuery($strQuery, array());
 
-        $strQuery = "DELETE FROM " . _dbprefix_ . "search_index_content";
+        $strQuery = "DELETE FROM " . _dbprefix_ . "search_ix_content";
         $this->objDB->_pQuery($strQuery, array());
     }
 
@@ -175,28 +175,28 @@ class class_module_search_indexwriter implements interface_recordupdated_listene
     public function updateSearchDocumentToDb($objSearchDocument) {
 
         //Load possible existing document if exists
-        $strQuery = "SELECT * FROM " . _dbprefix_ . "search_index_document " .
-            "WHERE search_index_system_id = ?";
+        $strQuery = "SELECT * FROM " . _dbprefix_ . "search_ix_document " .
+            "WHERE search_ix_system_id = ?";
 
         $arrSearchDocument = $this->objDB->getPRow($strQuery, array($objSearchDocument->getStrSystemId()));
 
         // Delete existing entries
         if(count($arrSearchDocument) > 0) {
-            $strDocumentId = $arrSearchDocument["search_index_document_id"];
+            $strDocumentId = $arrSearchDocument["search_ix_document_id"];
 
 
-            $strQuery = "DELETE FROM " . _dbprefix_ . "search_index_document
-            WHERE search_index_system_id = ?";
+            $strQuery = "DELETE FROM " . _dbprefix_ . "search_ix_document
+            WHERE search_ix_system_id = ?";
             $this->objDB->_pQuery($strQuery, array($objSearchDocument->getStrSystemId()));
 
-            $strQuery = "DELETE FROM " . _dbprefix_ . "search_index_content
-            WHERE search_index_content_document_id = ?";
+            $strQuery = "DELETE FROM " . _dbprefix_ . "search_ix_content
+            WHERE search_ix_content_document_id = ?";
             $this->objDB->_pQuery($strQuery, array($strDocumentId));
         }
 
         //insert search document
-        $strQuery = "INSERT INTO " . _dbprefix_ . "search_index_document
-                        (search_index_document_id, search_index_system_id) VALUES
+        $strQuery = "INSERT INTO " . _dbprefix_ . "search_ix_document
+                        (search_ix_document_id, search_ix_system_id) VALUES
                         (?, ?)";
         $this->objDB->_pQuery($strQuery, array($objSearchDocument->getDocumentId(), $objSearchDocument->getStrSystemId()));
 
@@ -210,8 +210,8 @@ class class_module_search_indexwriter implements interface_recordupdated_listene
      */
     private function updateSearchContentToDb($objSearchContent) {
         //insert search document
-        $strQuery = "INSERT INTO " . _dbprefix_ . "search_index_content
-                        (search_index_content_id, search_index_content_field_name, search_index_content_content, search_index_content_score, search_index_content_document_id) VALUES
+        $strQuery = "INSERT INTO " . _dbprefix_ . "search_ix_content
+                        (search_ix_content_id, search_ix_content_field_name, search_ix_content_content, search_ix_content_score, search_ix_content_document_id) VALUES
                         (?, ?, ?, ?, ?)";
         $this->objDB->_pQuery($strQuery, array($objSearchContent->getStrId(), $objSearchContent->getFieldName(), $objSearchContent->getContent(), $objSearchContent->getScore(), $objSearchContent->getDocumentId()));
     }
