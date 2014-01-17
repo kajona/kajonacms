@@ -106,8 +106,8 @@ abstract class class_testbase extends PHPUnit_Framework_TestCase {
                         if($strFieldType != "dropdown") {
                             $objMethodValue = $strPropName."_".$obj->getStrSystemid();
 
-                            if(uniStrlen($objMethodValue) > 20) {
-                                $objMethodValue = uniStrTrim($objMethodValue, 20, "");
+                            if(uniStrlen($objMethodValue) > 10) {
+                                $objMethodValue = uniStrTrim($objMethodValue, 10, "");
                             }
                         }
                     }
