@@ -218,8 +218,8 @@ class class_installer_search extends class_installer_base implements interface_i
 
         $arrFields = array();
         $arrFields["search_ix_content_id"] 		    = array("char20", false);
-        $arrFields["search_ix_content_field_name"] 	= array("char20", false);
-        $arrFields["search_ix_content_content"] 	= array("char256", true);
+        $arrFields["search_ix_content_field_name"] 	= array("char254", false);
+        $arrFields["search_ix_content_content"] 	= array("char254", true);
         $arrFields["search_ix_content_score"] 	    = array("int", true);
         $arrFields["search_ix_content_document_id"] = array("char20", true);
 
