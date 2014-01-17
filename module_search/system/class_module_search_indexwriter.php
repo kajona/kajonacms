@@ -141,7 +141,9 @@ class class_module_search_indexwriter implements interface_recordupdated_listene
         $arrObj = $this->getIndexableEntries();
 
         foreach($arrObj as $objObj) {
-            $this->indexObject(class_objectfactory::getInstance()->getObject($objObj["system_id"]));
+            $objInstance = class_objectfactory::getInstance()->getObject($objObj["system_id"]);
+            if($objInstance != null)
+                $this->indexObject($objInstance);
         }
     }
 
