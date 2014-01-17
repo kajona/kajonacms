@@ -103,7 +103,7 @@ abstract class class_testbase extends PHPUnit_Framework_TestCase {
                     $objMethodValue = null;
 
                     if($strDataType == "string") {
-                        if($strFieldType != "dropdown") {
+                        if($strFieldType == "text" || $strFieldType == "textarea") {
                             $objMethodValue = $strPropName."_".$obj->getStrSystemid();
 
                             if(uniStrlen($objMethodValue) > 10) {
