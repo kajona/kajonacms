@@ -19,6 +19,12 @@ class class_module_search_standard_analyzer {
     private $arrResults = array();
     private $strText;
 
+    /**
+     * Parses, normalizes and tokens the passed string
+     * @param string $strText
+     *
+     * @return string[]
+     */
     public function analyze($strText) {
         $this->setText($strText);
 
@@ -34,6 +40,7 @@ class class_module_search_standard_analyzer {
 
     /**
      * @param mixed $strText
+     * @return void
      */
     public function setText($strText) {
         $this->strText = $strText;
@@ -41,6 +48,7 @@ class class_module_search_standard_analyzer {
 
     /**
      * Make it lower, baby...
+     * @return void
      */
     private function lowerize() {
         $this->setText(strtolower($this->getText()));
@@ -56,6 +64,7 @@ class class_module_search_standard_analyzer {
     /**
      * Removed all blacklisted tokens from the current set of tokens.
      * Processed after the tokenizing.
+     * @return void
      */
     private function blacklisting() {
 
@@ -68,22 +77,26 @@ class class_module_search_standard_analyzer {
 
     /**
      * Splits the current text into several tokens
+     * @return void
      */
     private function tokenize() {
         $arrResults = array();
-        preg_match_all('/\w{1,}/', $this->getText(), $arrResults);
+        preg_match_all('/\w{1,}/u', $this->getText(), $arrResults);
         $this->setResults($arrResults[0]);
         $this->setResults(array_count_values($this->getResults()));
     }
 
     /**
      * @param array $arrResults
+     * @return void
      */
     public function setResults($arrResults) {
         $this->arrResults = $arrResults;
     }
 
-
+    /**
+     * @return void
+     */
     private function stemming() {
         //TODO: implement stemming maybe later :-)
     }
@@ -97,6 +110,7 @@ class class_module_search_standard_analyzer {
 
     /**
      * Removes marks from the text
+     * @return void
      */
     private function clearmarks() {
         $arrMarks = class_config::getInstance("search_blacklist.php")->getConfig("marks_list");
@@ -105,9 +119,10 @@ class class_module_search_standard_analyzer {
 
     /**
      * analyze only text with more than 2 characters
+     * @return void
      */
     private function clearShortText() {
-        $this->setText(preg_replace('/\b[\w]{1,2}\b/', "", $this->getText()));
+        $this->setText(preg_replace('/\b[\w]{1,2}\b/u', "", $this->getText()));
     }
 
 }

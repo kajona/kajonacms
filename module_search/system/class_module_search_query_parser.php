@@ -19,14 +19,13 @@ class class_module_search_query_parser {
      * @return interface_search_query
      */
     public function parseText($strSearchQuery) {
-        $objSearchQuery = new class_module_search_term_query(new class_module_search_term("blub"));
 
         $arrHits = array();
         preg_match_all('/(?<must>[+-]?)(?<field>\w{1,}(?<semperator>:)){0,1}(?<term>\w{1,})/u', $strSearchQuery, $arrHits, PREG_SET_ORDER);
 
 
         if(count($arrHits) == 1) {
-            $objSearchQuery = new class_module_search_term_query(new class_module_search_term(str_replace(":","", $arrHits[0]['term']), substr($arrHits[0]['field'], 0, -1)));
+            $objSearchQuery = new class_module_search_term_query(new class_module_search_term(str_replace(":", "", $arrHits[0]['term']), substr($arrHits[0]['field'], 0, -1)));
             return $objSearchQuery;
         }
 
@@ -37,7 +36,7 @@ class class_module_search_query_parser {
             $arrNoOperators = array();
 
             foreach($arrHits as $arrHit) {
-                $objTerm = new class_module_search_term(str_replace(":","", $arrHit['term']), substr($arrHit['field'], 0, -1));
+                $objTerm = new class_module_search_term(str_replace(":", "", $arrHit['term']), substr($arrHit['field'], 0, -1));
                 switch($arrHit['must']) {
                     case "+":
                         $arrMusts[] = $objTerm;

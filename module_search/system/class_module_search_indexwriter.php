@@ -196,6 +196,9 @@ class class_module_search_indexwriter implements interface_recordupdated_listene
             $this->objDB->_pQuery($strQuery, array($strDocumentId));
         }
 
+        if(count($objSearchDocument->getContent()) == 0)
+            return;
+
         //insert search document
         $strQuery = "INSERT INTO " . _dbprefix_ . "search_ix_document
                         (search_ix_document_id, search_ix_system_id) VALUES
@@ -204,6 +207,7 @@ class class_module_search_indexwriter implements interface_recordupdated_listene
 
         foreach($objSearchDocument->getContent() as $objSearchContent)
             $this->updateSearchContentToDb($objSearchContent);
+
     }
 
     /**

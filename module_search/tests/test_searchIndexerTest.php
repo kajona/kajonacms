@@ -5,6 +5,23 @@ require_once(__DIR__ . "/../../module_system/system/class_testbase.php");
 class class_test_searchIndexerTest extends class_testbase {
 
 
+    public function testUnicodeIndexer() {
+        $strText = "Hänsel und Gretel verirrten sich schließlich im Wald";
+
+        $objAnalyzer = new class_module_search_standard_analyzer();
+        $arrResults = $objAnalyzer->analyze($strText);
+
+        $arrResults = array_keys($arrResults);
+        $this->assertEquals(count($arrResults), 7);
+        $this->assertEquals($arrResults[0], "hänsel");
+        $this->assertEquals($arrResults[1], "und");
+        $this->assertEquals($arrResults[2], "gretel");
+        $this->assertEquals($arrResults[3], "verirrten");
+        $this->assertEquals($arrResults[4], "sich");
+        $this->assertEquals($arrResults[5], "schließlich");
+        $this->assertEquals($arrResults[6], "wald");
+    }
+
     public function testIndexCreate() {
 
         $objSearchDocument = new class_module_search_document();
