@@ -30,6 +30,7 @@ class class_admin_formgenerator {
     const  STR_MANDATORY_ANNOTATION = "@fieldMandatory";
     const  STR_LABEL_ANNOTATION     = "@fieldLabel";
     const  STR_HIDDEN_ANNOTATION    = "@fieldHidden";
+    const  STR_READONLY_ANNOTATION  = "@fieldReadonly";
 
     const  BIT_BUTTON_SAVE   = 2;
     const  BIT_BUTTON_CLOSE  = 4;
@@ -267,6 +268,7 @@ class class_admin_formgenerator {
         $strMandatory = $objReflection->getAnnotationValueForProperty($strPropertyName, self::STR_MANDATORY_ANNOTATION);
         $strLabel     = $objReflection->getAnnotationValueForProperty($strPropertyName, self::STR_LABEL_ANNOTATION);
         $strHidden    = $objReflection->getAnnotationValueForProperty($strPropertyName, self::STR_HIDDEN_ANNOTATION);
+        $strReadonly  = $objReflection->getAnnotationValueForProperty($strPropertyName, self::STR_READONLY_ANNOTATION);
 
         if($strType === null)
             $strType = "text";
@@ -293,6 +295,13 @@ class class_admin_formgenerator {
             $bitMandatory = true;
 
         $objField->setBitMandatory($bitMandatory);
+
+        $bitReadonly = false;
+        if($strReadonly !== null && $strReadonly !== "false")
+            $bitReadonly = true;
+
+        $objField->setBitReadonly($bitReadonly);
+
 
         if($strValidator !== null)
             $objField->setObjValidator($this->getValidatorInstance($strValidator));
