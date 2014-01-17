@@ -69,10 +69,11 @@ abstract class class_testbase extends PHPUnit_Framework_TestCase {
      *
      * @param $strClassType - the name of the class as a string
      * @param $strParentId - the parent id of the object to be created
+     * @param $arrExcludeFillPoropetry - array of popertynames which will not be set
      *
      * @return object
      */
-    protected function createObject($strClassType, $strParentId) {
+    protected function createObject($strClassType, $strParentId, $arrExcludeFillPoropetry = array()) {
         //create the object
         $objReflector = new ReflectionClass($strClassType);
         $obj = $objReflector->newInstance();
@@ -84,6 +85,10 @@ abstract class class_testbase extends PHPUnit_Framework_TestCase {
         //set properties which are annotated with @var and have a setter method
         foreach($arrReflectionProperties as $objReflectionProperty) {
             $strPropName = $objReflectionProperty->getName();
+
+            if(in_array($strPropName, $arrExcludeFillPoropetry)) {
+                continue;
+            }
 
             //check if the property is annotated with @tablecolumn
             if($objReflectorAnnotated->hasPropertyAnnotation($strPropName, class_orm_mapper::STR_ANNOTATION_TABLECOLUMN)) {
