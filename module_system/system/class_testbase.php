@@ -66,14 +66,16 @@ abstract class class_testbase extends PHPUnit_Framework_TestCase {
 
     /**
      * Crreates an object of type '$strClassType'.
+
      *
-     * @param $strClassType - the name of the class as a string
+*@param $strClassType - the name of the class as a string
      * @param $strParentId - the parent id of the object to be created
-     * @param $arrExcludeFillPoropetry - array of popertynames which will not be set
+     * @param $arrExcludeFillProperty - array of popertynames which will not be set
+
      *
-     * @return object
+*@return object
      */
-    protected function createObject($strClassType, $strParentId, $arrExcludeFillPoropetry = array()) {
+    protected function createObject($strClassType, $strParentId, $arrExcludeFillProperty = array()) {
         //create the object
         $objReflector = new ReflectionClass($strClassType);
         $obj = $objReflector->newInstance();
@@ -86,7 +88,7 @@ abstract class class_testbase extends PHPUnit_Framework_TestCase {
         foreach($arrReflectionProperties as $objReflectionProperty) {
             $strPropName = $objReflectionProperty->getName();
 
-            if(in_array($strPropName, $arrExcludeFillPoropetry)) {
+            if(in_array($strPropName, $arrExcludeFillProperty)) {
                 continue;
             }
 
