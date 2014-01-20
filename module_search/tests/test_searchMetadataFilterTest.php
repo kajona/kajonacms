@@ -128,12 +128,28 @@ class class_test_searchMetadataFilterTest extends class_testbase {
         $arrResults = $this->getResultsFromQuery($objSearchQuery);
         $this->assertEquals(count($arrResults), 1);
 
-
-
-
     }
 
 
+    public function testClassFilter() {
+        //simple module filter
+        $objSearchTerm = new class_module_search_term("blub");
+        $objSearchQuery = new class_module_search_term_query($objSearchTerm);
+        $objMetadataFilter = new class_module_search_metadata_filter();
+        $objMetadataFilter->setArrFilterClasses(array("class_module_system_setting"));
+        $objSearchQuery->setMetadataFilter($objMetadataFilter);
+
+        $arrResults = $this->getResultsFromQuery($objSearchQuery);
+        $this->assertEquals(count($arrResults), 0);
+
+
+        $objMetadataFilter = new class_module_search_metadata_filter();
+        $objMetadataFilter->setArrFilterClasses(array("class_module_system_aspect"));
+        $objSearchQuery->setMetadataFilter($objMetadataFilter);
+
+        $arrResults = $this->getResultsFromQuery($objSearchQuery);
+        $this->assertEquals(count($arrResults), 1);
+    }
 
 
     private function getResultsFromQuery(interface_search_query $objSearchQuery) {

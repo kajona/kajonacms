@@ -30,13 +30,20 @@ class class_module_search_metadata_filter {
     /**
      * @var int[]
      */
-    private $arrFilterModules = null;
+    private $arrFilterModules = array();
+
+    /**
+     * @var string[]
+     */
+    private $arrFilterClasses = array();
 
 
     /**
      * Adds metadata-query parts to the statement to be generated
-     * @param $strQuery
-     * @param $arrParams
+     *
+     * @param string &$strQuery
+     * @param string[] &$arrParams
+     * @return void
      */
     public function getQuery(&$strQuery, &$arrParams) {
 
@@ -50,6 +57,18 @@ class class_module_search_metadata_filter {
             $strIn = substr($strIn, 0, -1);
 
             $strQuery .= " AND system_module_nr in (" . $strIn . ") ";
+        }
+
+        //add the class filter
+        if(count($this->arrFilterClasses) > 0) {
+            $strIn = "";
+            foreach($this->arrFilterClasses as $strOneClass) {
+                $arrParams[] = $strOneClass;
+                $strIn .= "?,";
+            }
+            $strIn = substr($strIn, 0, -1);
+
+            $strQuery .= " AND system_class in (" . $strIn . ") ";
         }
 
         //add the start-date filter
@@ -67,7 +86,7 @@ class class_module_search_metadata_filter {
 
 
     /**
-     * @param $arrFilterModules
+     * @param int[] $arrFilterModules
      * @return void
      */
     public function setFilterModules($arrFilterModules) {
@@ -75,7 +94,7 @@ class class_module_search_metadata_filter {
     }
 
     /**
-     * @return array
+     * @return int[]
      * @return void
      */
     public function getFilterModules() {
@@ -88,6 +107,23 @@ class class_module_search_metadata_filter {
     public function resetFilterModules() {
         $this->arrFilterModules = null;
     }
+
+    /**
+     * @param \string[] $arrFilterClasses
+     * @return void
+     */
+    public function setArrFilterClasses($arrFilterClasses) {
+        $this->arrFilterClasses = $arrFilterClasses;
+    }
+
+    /**
+     * @return \string[]
+     */
+    public function getArrFilterClasses() {
+        return $this->arrFilterClasses;
+    }
+
+
 
     /**
      * @param class_date $objChangeStartDate

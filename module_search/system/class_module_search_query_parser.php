@@ -8,9 +8,12 @@
 ********************************************************************************************************/
 
 /**
+ * The query parser analyzes the search-query as entered / passed by the user and creates the matching objects
+ * to handle the query.
  *
  * @package module_search
  * @author tim.kiefer@kojikui.de
+ * @since 4.4
  */
 class class_module_search_query_parser {
 
