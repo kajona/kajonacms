@@ -9,8 +9,6 @@
 /**
  * Class-loader for all Kajona classes.
  * Implemented as a singleton.
- * May be extended by a project-specific setup. All classes defined in /project/classes/classloader.xml will
- * add or redefine the classes included in the xml-document.
  *
  * @package module_system
  * @author sidler@mulchprod.de
@@ -78,7 +76,6 @@ class class_classloader {
                 $this->scanModules();
 
                 $this->indexAvailableCodefiles();
-                //$this->loadClassloaderConfig();
 
                 $this->bitCacheSaveRequired = true;
             }
@@ -100,12 +97,15 @@ class class_classloader {
         }
     }
 
+    /**
+     * @return void
+     */
     private function scanModules() {
         $this->arrModules = scandir(_corepath_);
 
         $this->arrModules = array_filter(
             $this->arrModules,
-            function($strValue) {
+            function ($strValue) {
                 return preg_match("/(module|element|_)+(.*)/i", $strValue) && is_dir(_corepath_."/".$strValue);
             }
         );
@@ -115,6 +115,8 @@ class class_classloader {
      * Flushes the cache-files.
      * Use this method if you added new modules / classes.
      * The classes are reinitialized automatically.
+     *
+     * @return void
      */
     public function flushCache() {
         $objFilesystem = new class_filesystem();
@@ -130,6 +132,8 @@ class class_classloader {
     /**
      * Indexes all available code-files, so classes.
      * Therefore, all relevant folders are traversed.
+     *
+     * @return void
      */
     private function indexAvailableCodefiles() {
 
@@ -138,7 +142,6 @@ class class_classloader {
         $this->arrFiles = array_merge($this->arrFiles, $this->getClassesInFolder("/admin/statsreports/"));
         $this->arrFiles = array_merge($this->arrFiles, $this->getClassesInFolder("/admin/systemtasks/"));
         $this->arrFiles = array_merge($this->arrFiles, $this->getClassesInFolder("/admin/widgets/"));
-        $this->arrFiles = array_merge($this->arrFiles, $this->getClassesInFolder("/admin/searchplugins/"));
         $this->arrFiles = array_merge($this->arrFiles, $this->getClassesInFolder("/admin/"));
         $this->arrFiles = array_merge($this->arrFiles, $this->getClassesInFolder("/portal/elements/"));
         $this->arrFiles = array_merge($this->arrFiles, $this->getClassesInFolder("/portal/searchplugins/"));
@@ -158,7 +161,7 @@ class class_classloader {
     /**
      * Loads all classes in a single folder, but traversing each module available.
      * Internal helper.
-     * @param $strFolder
+     * @param string $strFolder
      * @return string[]
      */
     private function getClassesInFolder($strFolder) {
@@ -194,7 +197,7 @@ class class_classloader {
     /**
      * The class-loader itself. Loads the class, if existing. Otherwise the chain of class-loaders is triggered.
      *
-     * @param $strClassName
+     * @param string $strClassName
      * @return bool
      */
     public function loadClass($strClassName) {
@@ -218,7 +221,8 @@ class class_classloader {
 
     /**
      * Adds a new folder to the autoload locations
-     * @param $strPath
+     * @param string $strPath
+     * @return void
      */
     public function addClassFolder($strPath){
         $this->arrFiles = array_merge($this->arrFiles, $this->getClassesInFolder($strPath));

@@ -32,7 +32,7 @@ class class_module_search_commons extends class_model implements interface_model
      * Calls the single search-functions, sorts the results and creates the output.
      * Method for portal-searches.
      *
-     * @param $strSearchterm
+     * @param string $strSearchterm
      *
      * @return class_search_result[]
      */
@@ -57,53 +57,13 @@ class class_module_search_commons extends class_model implements interface_model
      * Calls the single search-functions, sorts the results and creates the output.
      * Method for backend-searches.
      *
-     * @param $objSearch class_module_search_search
+     * @param class_module_search_search $objSearch
+     * @param int $intStart
+     * @param int $intEnd
      *
      * @return class_search_result[]
      */
-    public function doAdminSearch(class_module_search_search $objSearch) {
-        $strSearchterm = trim(uniStrReplace("%", "", $objSearch->getStrQuery()));
-        if(uniStrlen($strSearchterm) == 0)
-            return array();
-
-        //Search for search-plugins
-        $arrSearchPlugins = class_resourceloader::getInstance()->getFolderContent("/admin/searchplugins", array(".php"));
-
-        $objSearchFunc = function (class_search_result $objA, class_search_result $objB) {
-            //first by module
-            if($objA->getObjObject() instanceof class_model && $objB->getObjObject() instanceof class_model) {
-                $intCmp = strcmp($objA->getObjObject()->getArrModule("modul"), $objB->getObjObject()->getArrModule("modul"));
-
-                if($intCmp != 0)
-                    return $intCmp;
-                else
-                    return $objA->getIntHits() < $objB->getIntHits();
-            }
-            return $objA->getIntHits() < $objB->getIntHits();
-        };
-
-        $arrHits = $this->doSearch($objSearch, $arrSearchPlugins, $objSearchFunc);
-
-        //if the object is an instace of interface_search_resultobject, the target-link may be updated
-        foreach($arrHits as $objOneResult) {
-            if($objOneResult->getObjObject() instanceof interface_search_resultobject)
-                $objOneResult->setStrPagelink($objOneResult->getObjObject()->getSearchAdminLinkForObject());
-        }
-
-        return $arrHits;
-    }
-
-    /**
-     * Calls the single search-functions, sorts the results and creates the output.
-     * Method for backend-searches.
-     *
-     * @param $objSearch class_module_search_search
-     * @param null $intStart
-     * @param null $intEnd
-     *
-     * @return class_search_result[]
-     */
-    public function doAdminSearch2(class_module_search_search $objSearch, $intStart = null, $intEnd = null) {
+    public function doAdminSearch(class_module_search_search $objSearch, $intStart = null, $intEnd = null) {
 
         $arrHits = $this->doIndexedSearch($objSearch, $intStart, $intEnd);
 
@@ -117,10 +77,10 @@ class class_module_search_commons extends class_model implements interface_model
     }
 
     /**
-     * Internal wrapper, triggers the final search.
+     * Internal wrapper, triggers the final search based on search-plugins (currently portal only)
      *
-     * @param $objSearch class_module_search_search
-     * @param $arrSearchPlugins
+     * @param class_module_search_search $objSearch
+     * @param interface_search_plugin[] $arrSearchPlugins
      * @param null|callable $objSortFunc
      *
      * @return array|class_search_result[]
@@ -143,10 +103,11 @@ class class_module_search_commons extends class_model implements interface_model
 
         $arrHits = $this->mergeDuplicates($arrHits);
 
-        if($objSortFunc == null)
+        if($objSortFunc == null) {
             $objSortFunc = function (class_search_result $objA, class_search_result $objB) {
                 return $objA->getIntHits() < $objB->getIntHits();
             };
+        }
 
         //sort by hits
         uasort($arrHits, $objSortFunc);

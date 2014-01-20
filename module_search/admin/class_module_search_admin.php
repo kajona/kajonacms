@@ -155,7 +155,7 @@ class class_module_search_admin extends class_admin_simple implements interface_
 
         // Execute Search
         $objSearchCommons = new class_module_search_commons();
-        $arrResult = $objSearchCommons->doAdminSearch2($objSearch);
+        $arrResult = $objSearchCommons->doAdminSearch($objSearch);
 
         $objArraySectionIterator = new class_array_section_iterator($objSearchCommons->getIndexedSearchCount($objSearch));
         $objArraySectionIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
@@ -241,7 +241,7 @@ class class_module_search_admin extends class_admin_simple implements interface_
         $arrResult = array();
         $objSearchCommons = new class_module_search_commons();
         if($strSearchterm != "") {
-            $arrResult = $objSearchCommons->doAdminSearch2($objSearch, 0, self::INT_MAX_NR_OF_RESULTS);
+            $arrResult = $objSearchCommons->doAdminSearch($objSearch, 0, self::INT_MAX_NR_OF_RESULTS);
         }
 
         $objSearchFunc = function (class_search_result $objA, class_search_result $objB) {

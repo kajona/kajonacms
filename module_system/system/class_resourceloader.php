@@ -104,6 +104,7 @@ class class_resourceloader {
     /**
      * Deletes all cached resource-information,
      * so the .cache-files.
+     * @return void
      */
     public function flushCache() {
         $objFilesystem = new class_filesystem();
@@ -216,7 +217,7 @@ class class_resourceloader {
      * The array returned is based on [path_to_file] = [filename] where the key is relative to the project-root.
      * No caching is done for lang-files, since the entries are cached by the lang-class, too.
      *
-     * @param $strFolder
+     * @param string $strFolder
      * @return array
      */
     public function getLanguageFiles($strFolder) {
@@ -270,7 +271,7 @@ class class_resourceloader {
      * If you want to filter the list of files being returned, pass a callback/closure as the 4th argument. The callback is used
      * as defined in array_filter
      *
-     * @param $strFolder
+     * @param string $strFolder
      * @param array $arrExtensionFilter
      * @param bool $bitWithSubfolders
      * @param callable $objFilterFunction
@@ -352,7 +353,7 @@ class class_resourceloader {
 
     /**
      * Internal helper to apply the passed callback as an array_walk callback to the list of matching files
-     * @param $arrEntries
+     * @param string[] $arrEntries
      * @param callable $objCallback
      *
      * @return array
