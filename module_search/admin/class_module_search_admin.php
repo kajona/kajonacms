@@ -19,6 +19,9 @@
  */
 class class_module_search_admin extends class_admin_simple implements interface_admin {
 
+    /**
+     * The maximum number of records to return on xml/json requests
+     */
     const INT_MAX_NR_OF_RESULTS = 30;
 
     /**
@@ -26,11 +29,11 @@ class class_module_search_admin extends class_admin_simple implements interface_
      */
     public function getOutputModuleNavi() {
         $arrReturn = array();
-        $arrReturn[] = array("view", getLinkAdmin($this->arrModule["modul"], "search", "", $this->getLang("search_search"), "", "", true, "adminnavi"));
+        $arrReturn[] = array("view", class_link::getLinkAdmin($this->getArrModule("modul"), "search", "", $this->getLang("search_search"), "", "", true, "adminnavi"));
         $arrReturn[] = array("", "");
-        $arrReturn[] = array("view", getLinkAdmin($this->getArrModule("modul"), "list", "", $this->getLang("commons_list"), "", "", true, "adminnavi"));
+        $arrReturn[] = array("view", class_link::getLinkAdmin($this->getArrModule("modul"), "list", "", $this->getLang("commons_list"), "", "", true, "adminnavi"));
         $arrReturn[] = array("", "");
-        $arrReturn[] = array("right", getLinkAdmin("right", "change", "&changemodule=" . $this->arrModule["modul"], $this->getLang("commons_module_permissions"), "", "", true, "adminnavi"));
+        $arrReturn[] = array("right", class_link::getLinkAdmin("right", "change", "&changemodule=" . $this->getArrModule("modul"), $this->getLang("commons_module_permissions"), "", "", true, "adminnavi"));
 
         return $arrReturn;
     }
@@ -60,7 +63,7 @@ class class_module_search_admin extends class_admin_simple implements interface_
         }
 
         $objForm->addField(new class_formentry_hidden("", "mode"))->setStrValue($strMode);
-        return $objForm->renderForm(getLinkAdminHref($this->getArrModule("modul"), "save"));
+        return $objForm->renderForm(class_link::getLinkAdminHref($this->getArrModule("modul"), "save"));
     }
 
     /**
@@ -186,6 +189,12 @@ class class_module_search_admin extends class_admin_simple implements interface_
         return $strReturn;
     }
 
+    /**
+     * @param class_model|interface_admin_listable|interface_model $objOneIterable
+     * @param string $strListIdentifier
+     *
+     * @return string
+     */
     public function getActionIcons($objOneIterable, $strListIdentifier = "") {
         if($strListIdentifier == "searchResultList") {
             //call the original module to render the action-icons
@@ -199,6 +208,12 @@ class class_module_search_admin extends class_admin_simple implements interface_
     }
 
 
+    /**
+     * @param string $strListIdentifier
+     * @param bool $bitDialog
+     *
+     * @return array|string
+     */
     protected function getNewEntryAction($strListIdentifier, $bitDialog = false) {
         if($strListIdentifier != "searchResultList") {
             return parent::getNewEntryAction($strListIdentifier, $bitDialog);
@@ -217,7 +232,7 @@ class class_module_search_admin extends class_admin_simple implements interface_
 
         $strSearchterm = "";
         if($this->getParam("search_query") != "") {
-            $strSearchterm = htmlToString(urldecode($this->getParam("search_query")), true);
+            $strSearchterm = htmlToString(urldecode($this->getParam("search_query")), false);
         }
 
         $objSearch = new class_module_search_search();
@@ -256,7 +271,7 @@ class class_module_search_admin extends class_admin_simple implements interface_
     }
 
     /**
-     * @param $strSearchterm
+     * @param string $strSearchterm
      * @param class_search_result[] $arrResults
      *
      * @return string
@@ -301,7 +316,7 @@ class class_module_search_admin extends class_admin_simple implements interface_
 
 
     /**
-     * @param $strSearchterm
+     * @param string $strSearchterm
      * @param class_search_result[] $arrResults
      *
      * @return string
@@ -399,6 +414,11 @@ JS;
         return $objForm;
     }
 
+    /**
+     * @param class_model $objListEntry
+     *
+     * @return array
+     */
     protected function renderAdditionalActions(class_model $objListEntry) {
         if($objListEntry instanceof class_module_search_search) {
             return array(

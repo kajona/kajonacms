@@ -8,9 +8,11 @@
 ********************************************************************************************************/
 
 /**
+ * A term query is based on a single word, so no boolean combinations
  *
  * @package module_search
  * @author tim.kiefer@kojikui.de
+ * @since 4.4
  */
 class class_module_search_term_query implements interface_search_query {
     /**
@@ -20,6 +22,7 @@ class class_module_search_term_query implements interface_search_query {
 
     /**
      * @param \class_module_search_term $objTerm
+     * @return void
      */
     public function setObjTerm($objTerm) {
         $this->objTerm = $objTerm;
@@ -37,6 +40,9 @@ class class_module_search_term_query implements interface_search_query {
      */
     private $objTerm;
 
+    /**
+     * @param class_module_search_term $objTerm
+     */
     function __construct($objTerm) {
         $this->setObjTerm($objTerm);
     }
@@ -45,8 +51,9 @@ class class_module_search_term_query implements interface_search_query {
     /**
      * Generates a query to count the results matching the current terms.
      *
-     * @param string $strQuery
-     * @param string[] $arrParameters
+     * @param string &$strQuery
+     * @param string[] &$arrParameters
+     * @return void
      */
     public function getCountQuery(&$strQuery, &$arrParameters) {
         $strQuery .= "SELECT COUNT(*) FROM (SELECT search_ix_document_id ";
@@ -58,8 +65,9 @@ class class_module_search_term_query implements interface_search_query {
      * This method builds the query and the matching parameters-array in order to load the list
      * of results.
      *
-     * @param string $strQuery
-     * @param string[] $arrParameters
+     * @param string &$strQuery
+     * @param string[] &$arrParameters
+     * @return void
      */
     public function getListQuery(&$strQuery, &$arrParameters) {
         $strQuery .= "SELECT search_ix_document_id, search_ix_system_id, sum(search_ix_content_score) AS score ";
@@ -70,8 +78,9 @@ class class_module_search_term_query implements interface_search_query {
 
     /**
      * builds the from and where restrictions of the current query
-     * @param $strQuery
-     * @param $arrParameters
+     * @param string &$strQuery
+     * @param string[] &$arrParameters
+     * @return void
      */
     private function internalBuildQuery(&$strQuery, &$arrParameters) {
 
