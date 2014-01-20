@@ -98,7 +98,10 @@ $(function () {
     $(window).on("resize", function() {
         KAJONA.v4skin.breadcrumb.updatePathNavigationEllipsis();
 
-    })
+    });
+
+    //register desktop notifications for messaging
+    KAJONA.util.desktopNotification.grantPermissions();
 
 });
 

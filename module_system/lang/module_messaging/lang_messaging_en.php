@@ -31,3 +31,5 @@ $lang["modul_titel"]                     = "Messages";
 $lang["provider_bymail"]                 = "Email notifications";
 $lang["provider_enabled"]                = "Enabled";
 $lang["provider_title"]                  = "Message-Type";
+$lang["messaging_notification_title"]    = "New Messages";
+$lang["messaging_notification_body"]     = "You received a new message. Click on this notification to open the list of messages.";

@@ -784,6 +784,12 @@ Part to display the login status, user is logged in
                 if(oldCount != objResponse.messageCount) {
                     var strTitle = document.title.replace("("+oldCount+")", "");
                     document.title = "("+objResponse.messageCount+") "+strTitle;
+
+                    if(!KAJONA.admin.messaging.bitFirstLoad && oldCount < objResponse.messageCount) {
+                        KAJONA.util.desktopNotification.showMessage('[lang,messaging_notification_title,messaging]', '[lang,messaging_notification_body,messaging]', function() {
+                            document.location.href = '_indexpath_?admin=1&module=messaging';
+                        });
+                    }
                 }
 
             } else {
@@ -800,6 +806,7 @@ Part to display the login status, user is logged in
             $('#messagingShortlist').append("<li class='divider'></li><li><a href='_indexpath_?admin=1&module=messaging'><i class='fa fa-envelope'></i> [lang,action_show_all,messaging]</a></li>");
 
             window.setTimeout("KAJONA.admin.messaging.pollMessages()", 20000);
+            KAJONA.admin.messaging.bitFirstLoad = false;
         });
     };
     if(%%renderMessages%%) {

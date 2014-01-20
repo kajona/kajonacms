@@ -32,3 +32,5 @@ $lang["modul_titel"]                     = "Nachrichten";
 $lang["provider_bymail"]                 = "E-Mail Benachrichtigung";
 $lang["provider_enabled"]                = "Aktiv";
 $lang["provider_title"]                  = "Nachrichten-Typ";
+$lang["messaging_notification_title"]    = "Neue Nachrichten";
+$lang["messaging_notification_body"]     = "Sie haben eine neue Nachricht erhalten. Klicken Sie auf diese Benachrichtigung um zur Übersicht aller Nachrichten zu gelangen.";

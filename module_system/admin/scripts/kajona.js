@@ -832,6 +832,9 @@ KAJONA.admin.dashboardCalendar.eventMouseOut = function(strSourceId) {
  */
 KAJONA.admin.messaging = {
 
+
+    bitFirstLoad : true,
+
     /**
      * Gets the number of unread messages for the current user.
      * Expects a callback-function whereas the number is passed as a param.
@@ -864,4 +867,67 @@ KAJONA.admin.messaging = {
             }
         });
     }
+};
+
+/**
+ * Wrapper for desktop notifications.
+ *
+ * @see https://developer.mozilla.org/en-US/docs/WebAPI/Using_Web_Notifications
+ * @type {Object}
+ */
+KAJONA.util.desktopNotification = {
+
+    bitGranted : false,
+
+    /**
+     * Sends a message to the client. Asks for permissions if not yet given.
+     *
+     * @param strTitle
+     * @param strBody
+     * @param {callback} onClick
+     */
+    showMessage : function (strTitle, strBody, onClick) {
+
+        KAJONA.util.desktopNotification.grantPermissions();
+
+        if (Notification && Notification.permission === "granted") {
+            KAJONA.util.desktopNotification.bitGranted = true;
+        }
+        else if (Notification && Notification.permission !== "denied") {
+            Notification.requestPermission(function (status) {
+                if (Notification.permission !== status) {
+                    Notification.permission = status;
+                }
+                debugger;
+
+                // If the user said okay
+                if (status === "granted") {
+                    KAJONA.util.desktopNotification.bitGranted = true;
+                }
+            });
+        }
+
+
+        if(KAJONA.util.desktopNotification.bitGranted) {
+            var n = new Notification(strTitle, {body: strBody});
+
+            if(onClick)
+                n.onclick = onClick;
+        }
+    },
+
+
+
+
+    grantPermissions: function() {
+
+        if (Notification && Notification.permission !== "granted") {
+            Notification.requestPermission(function (status) {
+                if (Notification.permission !== status) {
+                    Notification.permission = status;
+                }
+            });
+        }
+    }
+
 };
