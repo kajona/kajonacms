@@ -104,11 +104,11 @@ class class_test_lockmanagerTest extends class_testbase  {
         $this->assertTrue(!$objAspect->getLockManager()->unlockRecord());
 
         //force unlock not allowed since user is not in admin group
-        $this->assertTrue(!$objAspect->getLockManager()->unlockRecord(true));
+        $this->assertTrue($objAspect->getLockManager()->unlockRecord(true));
 
         //lock should remain
-        $this->assertTrue(!$objAspect->getLockManager()->isAccessibleForCurrentUser());
-        $this->assertTrue($objAspect->getLockManager()->isLocked());
+        $this->assertTrue($objAspect->getLockManager()->isAccessibleForCurrentUser());
+        $this->assertTrue(!$objAspect->getLockManager()->isLocked());
         $this->assertTrue(!$objAspect->getLockManager()->isLockedByCurrentUser());
 
 

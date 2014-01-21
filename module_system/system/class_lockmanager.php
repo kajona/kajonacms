@@ -63,14 +63,12 @@ class class_lockmanager {
     /**
      * Unlocks a dataRecord as long as the record is locked by the current one
      *
-     * @param bool $bitForceUnlock unlocks the record, even if the user is not the owner of the lock. must be an admin therefore!
+     * @param bool $bitForceUnlock unlocks the record, even if the user is not the owner of the lock.
      *
      * @return bool
      */
     public function unlockRecord($bitForceUnlock = false) {
-        if($this->isLockedByCurrentUser()
-            || ($bitForceUnlock && in_array(_admins_group_id_, class_carrier::getInstance()->getObjSession()->getGroupIdsAsArray()))
-        ) {
+        if($this->isLockedByCurrentUser() || $bitForceUnlock ) {
 
             $strQuery = "UPDATE " . _dbprefix_ . "system
                             SET system_lock_id='0'
