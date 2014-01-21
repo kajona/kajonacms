@@ -90,7 +90,8 @@ class class_test_searchIndexerTest extends class_testbase {
 
     public function testFullIndexWriter() {
         if(@ini_get("max_execution_time") < 300)
-            set_time_limit(300);
+            @ini_set("max_execution_time", 300);
+
         $indexWriter = new class_module_search_indexwriter();
 
         $time_start = microtime(true);
