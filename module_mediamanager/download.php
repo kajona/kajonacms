@@ -19,18 +19,19 @@ class class_download_manager extends class_root {
     /**
      * Constructor
      *
-     * @param $strSystemid
+     * @param string $strSystemid
      */
     public function __construct($strSystemid) {
         parent::__construct($strSystemid);
 
         //Increase max execution time
-        @ini_set("max_execution_time", "7200");
+        if(@ini_get("max_execution_time") < 7200)
+            @ini_set("max_execution_time", "7200");
     }
 
     /**
      * Sends the requested file to the browser
-
+     * @return string
      */
     public function actionDownload() {
         //Load filedetails

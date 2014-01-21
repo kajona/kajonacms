@@ -198,8 +198,8 @@ class class_image2 {
      * Calling this method will actually start the image processing,
      * if no cached image is available.
      *
-     * @param $strPath
-     * @param null $strFormat
+     * @param string $strPath
+     * @param string $strFormat
      * @return bool
      */
     public function save($strPath, $strFormat = null) {

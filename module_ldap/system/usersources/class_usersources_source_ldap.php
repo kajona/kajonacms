@@ -226,14 +226,15 @@ class class_usersources_source_ldap  implements interface_usersources_usersource
     
     /**
      * Updates all user-data stored in the system. 
-     * This may be a long-running task, so execute this only explicitely
+     * This may be a long-running task, so execute this only explicitly
      * and not during common requests!
      * 
      * @return bool
      */
     public function updateUserData() {
         //sync may take time -> increase the time available
-        @ini_set("max_execution_time", "500");
+        if(@ini_get("max_execution_time") < 500)
+            @ini_set("max_execution_time", "500");
         
         $objLdap = class_ldap::getInstance();
         

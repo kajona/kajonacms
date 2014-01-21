@@ -29,7 +29,8 @@ class class_systemtask_compresspicuploads extends class_systemtask_base implemen
         parent::__construct();
 
         //Increase max execution time
-        @ini_set("max_execution_time", "3600");
+        if(@ini_get("max_execution_time") < 3600)
+            @ini_set("max_execution_time", "3600");
     }
 
 
@@ -77,6 +78,10 @@ class class_systemtask_compresspicuploads extends class_systemtask_base implemen
         return $strReturn;
     }
 
+    /**
+     * @param $strPath
+     * @return void
+     */
     private function recursiveImageProcessing($strPath) {
         $objFilesystem = new class_filesystem();
 
@@ -94,7 +99,7 @@ class class_systemtask_compresspicuploads extends class_systemtask_base implemen
             $objImage->setUseCache(false);
             $objImage->load($strImagePath);
             $objImage->addOperation(new class_image_scale($this->intMaxWidth, $this->intMaxHeight));
-            if($objImage->saveImage($strImagePath)) {
+            if($objImage->save($strImagePath)) {
                 $this->intFilesProcessed++;
             };
         }
