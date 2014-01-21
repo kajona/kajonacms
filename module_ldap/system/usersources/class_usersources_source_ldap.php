@@ -233,7 +233,7 @@ class class_usersources_source_ldap  implements interface_usersources_usersource
      */
     public function updateUserData() {
         //sync may take time -> increase the time available
-        if(@ini_get("max_execution_time") < 500)
+        if(@ini_get("max_execution_time") < 500 && @ini_get("max_execution_time") > 0)
             @ini_set("max_execution_time", "500");
         
         $objLdap = class_ldap::getInstance();

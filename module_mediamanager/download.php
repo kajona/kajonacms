@@ -25,7 +25,7 @@ class class_download_manager extends class_root {
         parent::__construct($strSystemid);
 
         //Increase max execution time
-        if(@ini_get("max_execution_time") < 7200)
+        if(@ini_get("max_execution_time") < 7200 && @ini_get("max_execution_time") > 0)
             @ini_set("max_execution_time", "7200");
     }
 

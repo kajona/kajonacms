@@ -12,7 +12,7 @@ echo "|   Selenium Testsuite Generator                                          
 echo "|                                                                               |\n";
 echo "+-------------------------------------------------------------------------------+\n";
 
-if(@ini_get("max_execution_time") < 2000)
+if(@ini_get("max_execution_time") < 2000 && @ini_get("max_execution_time") > 0)
     @ini_set("max_execution_time", "2000");
 
 class class_seleniumsuite {

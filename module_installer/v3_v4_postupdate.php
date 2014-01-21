@@ -19,7 +19,7 @@ class class_v3_v4_postupdate {
     private $objDB;
 
     public function postUpdate() {
-        if(@ini_get("max_execution_time") < 600)
+        if(@ini_get("max_execution_time") < 600 && @ini_get("max_execution_time") > 0)
             @ini_set("max_execution_time", 600);
 
         $this->objDB = class_carrier::getInstance()->getObjDB();

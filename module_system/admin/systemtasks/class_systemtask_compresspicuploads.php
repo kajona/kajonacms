@@ -29,7 +29,7 @@ class class_systemtask_compresspicuploads extends class_systemtask_base implemen
         parent::__construct();
 
         //Increase max execution time
-        if(@ini_get("max_execution_time") < 3600)
+        if(@ini_get("max_execution_time") < 3600 && @ini_get("max_execution_time") > 0)
             @ini_set("max_execution_time", "3600");
     }
 
