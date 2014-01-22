@@ -668,6 +668,30 @@ class class_module_system_changelog extends class_model implements interface_mod
     }
 
     /**
+     * Fetches all change-sets within the specified period for the given property.
+     *
+     * @static
+     * @param $strSystemid
+     * @param $strProperty
+     * @param class_date $objDateFrom
+     * @param class_date $objDateTo
+     *
+     * @return bool
+     */
+    public static function getValuesForDateRange($strSystemid, $strProperty, class_date $objDateFrom, class_date $objDateTo) {
+        $strQuery = "SELECT change_oldvalue, change_newvalue
+                       FROM "._dbprefix_.self::getTableForClass(class_objectfactory::getInstance()->getClassNameForId($strSystemid))."
+                      WHERE change_systemid = ?
+                        AND change_property = ?
+                        AND change_date >= ?
+                        AND change_date <= ?
+                   ORDER BY change_date DESC ";
+
+        $arrRow = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array($strSystemid, $strProperty, $objDateFrom->getLongTimestamp(), $objDateTo->getLongTimestamp()), 0, 1);
+        return $arrRow;
+    }
+
+    /**
      * Deletes the current object from the system
      * Overwrite!
      *
