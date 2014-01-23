@@ -90,7 +90,9 @@ class class_module_messaging_message extends class_model implements interface_mo
     private $bitOnReadTrigger = false;
 
 
-
+    /**
+     * @return bool
+     */
     public function rightView() {
         return parent::rightView() && $this->getStrUser() == $this->objSession->getUserID();
     }
@@ -244,6 +246,7 @@ class class_module_messaging_message extends class_model implements interface_mo
 
     /**
      * @param boolean $bitRead
+     * @return void
      */
     public function setBitRead($bitRead) {
         if($bitRead === true && $bitRead != $this->bitRead)
@@ -262,6 +265,7 @@ class class_module_messaging_message extends class_model implements interface_mo
 
     /**
      * @param string $strBody
+     * @return void
      */
     public function setStrBody($strBody) {
         $this->strBody = $strBody;
@@ -276,6 +280,7 @@ class class_module_messaging_message extends class_model implements interface_mo
 
     /**
      * @param string $strInternalIdentifier
+     * @return void
      */
     public function setStrInternalIdentifier($strInternalIdentifier) {
         $this->strInternalIdentifier = $strInternalIdentifier;
@@ -290,6 +295,7 @@ class class_module_messaging_message extends class_model implements interface_mo
 
     /**
      * @param string $strUser
+     * @return void
      */
     public function setStrUser($strUser) {
         $this->strUser = $strUser;
@@ -311,11 +317,16 @@ class class_module_messaging_message extends class_model implements interface_mo
 
     /**
      * @param string $strMessageProvider
+     * @return void
      */
     public function setStrMessageProvider($strMessageProvider) {
         $this->strMessageProvider = $strMessageProvider;
     }
 
+    /**
+     * @param interface_messageprovider $objMessageProvider
+     * @return void
+     */
     public function setObjMessageProvider(interface_messageprovider $objMessageProvider) {
         $this->strMessageProvider = get_class($objMessageProvider);
     }
@@ -339,6 +350,7 @@ class class_module_messaging_message extends class_model implements interface_mo
 
     /**
      * @param string $strTitle
+     * @return void
      */
     public function setStrTitle($strTitle) {
         $this->strTitle = $strTitle;
@@ -353,6 +365,7 @@ class class_module_messaging_message extends class_model implements interface_mo
 
     /**
      * @param string $strSenderId
+     * @return void
      */
     public function setStrSenderId($strSenderId) {
         $this->strSenderId = $strSenderId;
@@ -367,6 +380,7 @@ class class_module_messaging_message extends class_model implements interface_mo
 
     /**
      * @param string $strMessageRefId
+     * @return void
      */
     public function setStrMessageRefId($strMessageRefId) {
         $this->strMessageRefId = $strMessageRefId;

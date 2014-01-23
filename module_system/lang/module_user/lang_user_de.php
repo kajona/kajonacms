@@ -153,6 +153,7 @@ $lang["user_portal"]                     = "Portal-Login";
 $lang["user_resend_password_hint"]       = "Mit dem Zusenden eines neuen Passwortes erhält der Benutzer an die hinterlegte E-Mailadresse eine E-Mail mit einem neuen Passwort sowie einem Link zum Ändern des Passwortes. <br />Hierfür muss der Benutzer seinen Benutzernamen kennen.<br />";
 $lang["user_send_message"]               = "Nachricht an den Benutzer schicken";
 $lang["user_skin"]                       = "Admin-Skin";
+$lang["user_startmodule"]                = "Start-Ansicht";
 $lang["user_switch_to"]                  = "Session mit dem gewählten User starten. Zum Zurückkehren zum aktuellen Benutzer ist ein Logout/erneuter Login notwendig.";
 $lang["user_system"]                     = "Systemeinstellungen";
 $lang["user_username"]                   = "Benutzername";

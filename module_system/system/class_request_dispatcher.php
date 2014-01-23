@@ -31,6 +31,10 @@ class class_request_dispatcher {
 
     /**
      * Standard constructor
+     *
+     * @param class_response_object $objResponse
+     *
+     * @return \class_request_dispatcher
      */
     public function __construct(class_response_object $objResponse) {
         $this->arrTimestampStart = gettimeofday();
@@ -305,8 +309,8 @@ class class_request_dispatcher {
     /**
      * Calls the scriptlets in order to process additional tags and in order to enrich the content.
      *
-     * @param $strContent
-     * @param $intContext
+     * @param string $strContent
+     * @param int $intContext
      *
      * @return string
      */
@@ -320,6 +324,7 @@ class class_request_dispatcher {
      * Sends conditional get headers and tries to match sent ones.
      *
      * @param string $strContent
+     * @return void
      */
     private function sendConditionalGetHeaders($strContent) {
 
@@ -341,7 +346,7 @@ class class_request_dispatcher {
     /**
      * Generates debugging-infos, but only in non-xml mode
      *
-     * @param $strReturn
+     * @param string $strReturn
      *
      * @return string
      */

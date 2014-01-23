@@ -341,7 +341,7 @@ class class_module_system_module extends class_model implements interface_model,
      *
      * @param string $strAspectFilter
      *
-     * @return class_module_system_module[]
+     * @return array[]
      * @static
      */
     public static function getModulesInNaviAsArray($strAspectFilter = "") {

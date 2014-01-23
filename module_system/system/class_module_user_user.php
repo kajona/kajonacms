@@ -36,6 +36,7 @@ class class_module_user_user extends class_model implements interface_model, int
     private $intPortal = 0;
     private $strAdminskin = "";
     private $strAdminlanguage = "";
+    private $strAdminModule = "";
     private $strAuthcode = "";
 
 
@@ -135,6 +136,8 @@ class class_module_user_user extends class_model implements interface_model, int
             $this->setStrAdminlanguage($arrRow["user_admin_language"]);
             $this->setSystemid($arrRow["user_id"]);
             $this->setStrAuthcode($arrRow["user_authcode"]);
+            $this->setStrAdminModule($arrRow["user_admin_module"]);
+
         }
     }
 
@@ -154,9 +157,9 @@ class class_module_user_user extends class_model implements interface_model, int
                         user_id, user_active,
                         user_admin, user_portal,
                         user_admin_skin, user_admin_language,
-                        user_logins, user_lastlogin, user_authcode, user_subsystem, user_username
+                        user_logins, user_lastlogin, user_authcode, user_subsystem, user_username, user_admin_module
 
-                        ) VALUES (?,?,?,?,?,?,?,?,?,?,?)";
+                        ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)";
 
             class_logger::getInstance(class_logger::USERSOURCES)->addLogRow("new user for subsystem ".$this->getStrSubsystem()." / ".$this->getStrUsername(), class_logger::$levelInfo);
 
@@ -173,7 +176,8 @@ class class_module_user_user extends class_model implements interface_model, int
                     0,
                     $this->getStrAuthcode(),
                     $this->getStrSubsystem(),
-                    $this->getStrUsername()
+                    $this->getStrUsername(),
+                    $this->getStrAdminModule()
                 )
             );
 
@@ -191,16 +195,16 @@ class class_module_user_user extends class_model implements interface_model, int
 
             $strQuery = "UPDATE "._dbprefix_."user SET
                     user_active=?, user_admin=?, user_portal=?, user_admin_skin=?, user_admin_language=?, user_logins = ?, user_lastlogin = ?, user_authcode = ?, user_subsystem = ?,
-                    user_username =?
+                    user_username =?, user_admin_module = ?
                     WHERE user_id = ?";
 
             $arrParams = array(
-                    (int)$this->getIntActive(),
-                    (int)$this->getIntAdmin(), (int)$this->getIntPortal(), $this->getStrAdminskin(), $this->getStrAdminlanguage(),
-                    (int)$this->getIntLogins(), (int)$this->getIntLastLogin(), $this->getStrAuthcode(),
-                    $this->getStrSubsystem(), $this->getStrUsername(),
-                    $this->getSystemid()
-               );
+                (int)$this->getIntActive(),
+                (int)$this->getIntAdmin(), (int)$this->getIntPortal(), $this->getStrAdminskin(), $this->getStrAdminlanguage(),
+                (int)$this->getIntLogins(), (int)$this->getIntLastLogin(), $this->getStrAuthcode(),
+                $this->getStrSubsystem(), $this->getStrUsername(), $this->getStrAdminModule(),
+                $this->getSystemid()
+             );
 
 
             class_logger::getInstance(class_logger::USERSOURCES)->addLogRow("updated user for subsystem ".$this->getStrSubsystem()." / ".$this->getStrUsername(), class_logger::$levelInfo);
@@ -525,5 +529,21 @@ class class_module_user_user extends class_model implements interface_model, int
     public function getIntRecordStatus() {
         return $this->intActive;
     }
+
+    /**
+     * @param string $strAdminModule
+     * @return void
+     */
+    public function setStrAdminModule($strAdminModule) {
+        $this->strAdminModule = $strAdminModule;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStrAdminModule() {
+        return $this->strAdminModule;
+    }
+
 
 }

@@ -32,10 +32,17 @@ class class_index {
      */
     public $objResponse;
 
+    /**
+     * Default Constructor
+     */
     public function __construct() {
         class_carrier::getInstance();
     }
 
+    /**
+     * Triggers the processing of the current request
+     * @return void
+     */
     public function processRequest() {
 
         $strModule = getGet("module");
@@ -44,7 +51,13 @@ class class_index {
         }
 
         if($strModule == "" && _admin_) {
-            $strModule = "dashboard";
+            if(class_session::getInstance()->isLoggedin()) {
+                $objUser = new class_module_user_user(class_session::getInstance()->getUserID());
+                if($objUser->getStrAdminModule() != "")
+                    $strModule = $objUser->getStrAdminModule();
+            }
+            else
+                $strModule = "dashboard";
         }
 
         if($strModule == "" && !_admin_) {

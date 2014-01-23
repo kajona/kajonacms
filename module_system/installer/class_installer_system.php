@@ -128,6 +128,7 @@ class class_installer_system extends class_installer_base implements interface_i
         $arrFields["user_portal"] = array("int", true);
         $arrFields["user_admin_skin"] = array("char254", true);
         $arrFields["user_admin_language"] = array("char254", true);
+        $arrFields["user_admin_module"] = array("char254", true);
         $arrFields["user_authcode"] = array("char20", true);
 
         if(!$this->objDB->createTable("user", $arrFields, array("user_id")))
@@ -619,6 +620,12 @@ class class_installer_system extends class_installer_base implements interface_i
             $this->objDB->flushQueryCache();
         }
 
+        $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModul["module_version"] == "4.3.2") {
+            $strReturn .= $this->update_432_44();
+            $this->objDB->flushQueryCache();
+        }
+
         return $strReturn."\n\n";
     }
 
@@ -1067,5 +1074,18 @@ class class_installer_system extends class_installer_base implements interface_i
     }
 
 
+    private function update_432_44() {
+        $strReturn = "Updating 4.3.2 to 4.4...\n";
+
+        $strReturn .= "Updating user table...\n";
+        $strQuery = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."user")."
+                            ADD ".$this->objDB->encloseColumnName("user_admin_module")." ".$this->objDB->getDatatype("char254")." NULL";
+        if(!$this->objDB->_pQuery($strQuery, array()))
+            $strReturn .= "An error occured! ...\n";
+
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion("", "4.4");
+        return $strReturn;
+    }
 
 }

@@ -450,6 +450,9 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
             if($objUser->getStrAdminskin() != "" && $objForm->getField("user_skin") != null)
                 $objForm->getField("user_skin")->setStrValue($objUser->getStrAdminskin());
 
+            if($objUser->getStrAdminModule() != "" && $objForm->getField("user_startmodule") != null)
+                $objForm->getField("user_startmodule")->setStrValue($objUser->getStrAdminModule());
+
             $objForm->getField("user_language")->setStrValue($objUser->getStrAdminlanguage());
 
             if(!$bitSelfedit) {
@@ -496,6 +499,16 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
             $arrSkins[$strSkin] = $strSkin;
         }
 
+        //possible start-modules
+        $arrModules = array();
+        foreach(class_module_system_module::getModulesInNaviAsArray() as $arrOneModule) {
+            $objOneModule = class_module_system_module::getModuleByName($arrOneModule["module_name"]);
+            if(!$objOneModule->rightView())
+                continue;
+
+            $arrModules[$objOneModule->getStrName()] = $objOneModule->getAdminInstanceOfConcreteModule()->getLang("modul_titel");
+        }
+
 
         $objForm = new class_admin_formgenerator("user", $objUser);
         $objForm->addField(new class_formentry_headline())->setStrValue($this->getLang("user_personaldata"));
@@ -532,6 +545,12 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
             ->setArrKeyValues($arrLang)
             ->setStrValue(($this->getParam("user_language") != "" ? $this->getParam("user_language") : ""))
             ->setStrLabel($this->getLang("user_language"));
+
+
+        $objForm->addField(new class_formentry_dropdown("user", "startmodule"))
+            ->setArrKeyValues($arrModules)
+            ->setStrValue(($this->getParam("user_startmodule") != "" ? $this->getParam("user_startmodule") : ""))
+            ->setStrLabel($this->getLang("user_startmodule"));
 
 
         if(!$bitSelfedit) {
@@ -620,6 +639,7 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
 
         $objUser->setStrAdminskin($this->getParam("user_skin"));
         $objUser->setStrAdminlanguage($this->getParam("user_language"));
+        $objUser->setStrAdminModule($this->getParam("user_startmodule"));
 
         $objUser->updateObjectToDb();
         $objSourceUser = $objUser->getObjSourceUser();
