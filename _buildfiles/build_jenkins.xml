@@ -88,7 +88,7 @@
     <target name="buildSqliteFull" depends="
 		    								cleanFilesystem, init,
 					    					buildProject, installProjectSqlite,
-					    					lint,phpunit,phploc,pdepend,phpmd-ci,phpcs-ci,phpcpd,generatePhpDocs,phpcb,
+					    					lint,phpunit,phploc,pdepend,phpmd-ci,phpcs-ci,phpcpd,generateDoxygenDocs,phpcb,
 					    					buildFullZip, buildLightZip, buildAllInOneZip" />
 
     <target name="buildMysql" depends="
@@ -457,6 +457,13 @@
     </target>
 
 
+    <target name="generateDoxygenDocs">
+        <echo>Generating PHP API Docs</echo>
+        <exec executable="bash" dir="${basedir}${projectPath}/core">
+            <arg line="-c"/>
+            <arg line="' ( cat ${basedir}/doxygen.cfg ; echo \'INPUT=${basedir}${projectPath}/core\' ; echo \'OUTPUT_DIRECTORY=${basedir}/build/api\' ) | doxygen - '"/>
+        </exec>
+    </target>
 
     <!-- requires phpDocumentor, binary phpdoc -->
     <target name="generatePhpDocs">

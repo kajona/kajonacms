@@ -36,7 +36,7 @@
     <target name="buildSqliteFull" depends="
 		    								cleanFilesystem, init,
 					    					buildProject, installProjectSqlite,
-					    					lint,phpunit,phploc,pdepend,phpmd-ci,phpcs-ci,phpcpd,generatePhpDocs,phpcb,
+					    					lint,phpunit,phploc,pdepend,phpmd-ci,phpcs-ci,phpcpd,generateDoxygenDocs,phpcb,
 					    					buildFullZip" />
 
 
