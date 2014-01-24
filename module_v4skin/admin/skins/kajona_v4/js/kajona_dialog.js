@@ -82,10 +82,11 @@ KAJONA.admin.ModalDialog = function(strDialogId, intDialogType, bitDragging, bit
             }
 
             $modal.css({
-                width: intWidth,
+                width: intWidth /* ,
+                 TODO sir 01/2014: removed the margin left, caused some problems on dialogs. still required testing.
                 'margin-left': function () {
                     return -($(this).width() / 2);
-                }
+                }*/
             });
         } else {
 
