@@ -77,7 +77,8 @@ class class_module_stats_admin extends class_admin implements interface_admin {
 
 
         //stats may take time -> increase the time available
-        @ini_set("max_execution_time", "500");
+        if(@ini_get("max_execution_time") < 500 && @ini_get("max_execution_time") > 0)
+            @ini_set("max_execution_time", "500");
 
         //stats may consume a lot of memory, increase max mem limit
         if(class_carrier::getInstance()->getObjConfig()->getPhpIni("memory_limit") < 30) {
