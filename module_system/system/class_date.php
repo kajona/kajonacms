@@ -28,11 +28,15 @@ class class_date {
 
 
     /**
-     * Creates an instance of the class_date an initialises it with the current date.
+     * Creates an instance of the class_date an initialises it with the current date if no value is passed.
+     * If a value is passed (int, long, class_date), the value is used as the timestamp set to the new date-object.
      *
-     * @param string $longInitValue
+     * @param string|int|class_date $longInitValue
      */
     public function __construct($longInitValue = "") {
+
+        if(is_object($longInitValue) && $longInitValue instanceof class_date)
+            $longInitValue = $longInitValue->getLongTimestamp();
 
         if($longInitValue == "") {
             $this->setTimeInOldStyle(time());
