@@ -898,7 +898,6 @@ KAJONA.util.desktopNotification = {
                 if (Notification.permission !== status) {
                     Notification.permission = status;
                 }
-                debugger;
 
                 // If the user said okay
                 if (status === "granted") {
