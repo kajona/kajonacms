@@ -31,3 +31,4 @@ $lang["setDashboardPosition"]            = "Speichern der Position erfolgreich";
 $lang["widget"]                          = "Widget";
 $lang["widgetDeleteQuestion"]            = "Möchten Sie das Widget &quot;<b>%%element_name%%</b>&quot; wirklich entfernen?";
 $lang["deleteWidgetSuccess"]            = "Das Widget {0} wurde erfolgreich gelöscht";
+$lang["quickhelp_calendar"]                  = "Die Seite Kalender bietet die Möglichkeit, Termine in einem Kalender zu visualisieren. So können hier z.B. Aufgaben an den jeweiligen Fälligkeitsdaten im Kalender dargestellt werden und von hier mittels Anklicken des jeweiligen Sachverhaltes in einer Zusammenfassung mit den entsprechenden Details angezeigt werden.";
