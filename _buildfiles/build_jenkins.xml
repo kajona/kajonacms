@@ -461,7 +461,7 @@
         <echo>Generating PHP API Docs</echo>
         <exec executable="bash" dir="${basedir}${projectPath}/core">
             <arg line="-c"/>
-            <arg line="' ( cat ${basedir}/doxygen.cfg ; echo \'INPUT=${basedir}${projectPath}/core\' ; echo \'OUTPUT_DIRECTORY=${basedir}/build/api\' ) | doxygen - '"/>
+            <arg line="' ( cat ${basedir}/doxygen.cfg ; echo \'INPUT=${basedir}${projectPath}/core\' ; echo \'INPUT_FILTER=${basedir}/doxygenfilter.php\' ; echo \'OUTPUT_DIRECTORY=${basedir}/build/api\' ) | doxygen - '"/>
         </exec>
     </target>
 
