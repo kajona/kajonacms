@@ -29,7 +29,7 @@ class class_text_validator implements interface_validator {
             return false;
 
         $intMin = 1;
-        $intMax = 0;
+        $intMax = 0;//todo does not makes sense here as the else part will never be reached?extract intMax to class variable?
 
         $intLen = uniStrlen($objValue);
         if($intMax == 0) {
