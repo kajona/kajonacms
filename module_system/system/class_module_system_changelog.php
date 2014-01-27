@@ -676,7 +676,7 @@ class class_module_system_changelog extends class_model implements interface_mod
      * @param class_date $objDateFrom
      * @param class_date $objDateTo
      *
-     * @return bool
+     * @return array
      */
     public static function getValuesForDateRange($strSystemid, $strProperty, class_date $objDateFrom, class_date $objDateTo) {
         $strQuery = "SELECT change_oldvalue, change_newvalue
