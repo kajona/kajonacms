@@ -411,7 +411,7 @@ Textarea
     <div class="control-group">
         <label for="%%name%%" class="control-label">%%title%%</label>
         <div class="controls">
-            <textarea name="%%name%%" id="%%name%%" class="input-xlarge %%class%%" rows="4" %%readonly%%>%%value%%</textarea>
+            <textarea name="%%name%%" id="%%name%%" class="input-xlarge %%class%%" rows="%%numberOfRows%%" %%readonly%%>%%value%%</textarea>
         </div>
     </div>
 </input_textarea>

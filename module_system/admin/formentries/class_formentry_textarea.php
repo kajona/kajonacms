@@ -15,6 +15,7 @@ class class_formentry_textarea extends class_formentry_base implements interface
 
     private $strOpener = "";
     private $bitLarge = false;
+    private $intNumberOfRows = 4;
 
     public function __construct($strFormName, $strSourceProperty, $objSourceObject = null) {
         parent::__construct($strFormName, $strSourceProperty, $objSourceObject);
@@ -35,7 +36,7 @@ class class_formentry_textarea extends class_formentry_base implements interface
         if($this->getStrHint() != null)
             $strReturn .= $objToolkit->formTextRow($this->getStrHint());
 
-        $strReturn .= $objToolkit->formInputTextArea($this->getStrEntryName(), $this->getStrLabel(), $this->getStrValue(), $this->bitLarge ? "input-xxlarge" : "", $this->getBitReadonly());
+        $strReturn .= $objToolkit->formInputTextArea($this->getStrEntryName(), $this->getStrLabel(), $this->getStrValue(), $this->bitLarge ? "input-xxlarge" : "", $this->getBitReadonly(), $this->getIntNumberOfRows());
 
         return $strReturn;
     }
@@ -79,6 +80,22 @@ class class_formentry_textarea extends class_formentry_base implements interface
     public function getBitLarge() {
         return $this->bitLarge;
     }
+
+    /**
+     * @param int $intNumberOfRows
+     */
+    public function setIntNumberOfRows($intNumberOfRows) {
+        $this->intNumberOfRows = $intNumberOfRows;
+    }
+
+    /**
+     * @return int
+     */
+    public function getIntNumberOfRows() {
+        return $this->intNumberOfRows;
+    }
+
+
 
 
 }

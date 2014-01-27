@@ -499,9 +499,10 @@ class class_toolkit_admin extends class_toolkit {
      * @param string $strValue
      * @param string $strClass = inputTextarea
      * @param bool $bitReadonly
+     * @param int $numberOfRows
      * @return string
      */
-    public function formInputTextArea($strName, $strTitle = "", $strValue = "", $strClass = "", $bitReadonly = false) {
+    public function formInputTextArea($strName, $strTitle = "", $strValue = "", $strClass = "", $bitReadonly = false, $numberOfRows = 4) {
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "input_textarea");
         $arrTemplate = array();
         $arrTemplate["name"] = $strName;
@@ -509,6 +510,7 @@ class class_toolkit_admin extends class_toolkit {
         $arrTemplate["title"] = $strTitle;
         $arrTemplate["class"] = $strClass;
         $arrTemplate["readonly"] = ($bitReadonly ? " readonly=\"readonly\" " : "");
+        $arrTemplate["numberOfRows"] = $numberOfRows;
         return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
     }
 
