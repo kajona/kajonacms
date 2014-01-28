@@ -48,7 +48,7 @@ class class_formentry_textarea extends class_formentry_base implements interface
      * @return string
      */
     public function getValueAsText() {
-        return $this->getStrValue();
+        return nl2br($this->getStrValue());
     }
 
     /**

@@ -85,7 +85,7 @@ JS;
             $arrRows[] = array(
                 $objOneProvider->getStrName(),
                 "inlineFormEntry 1" => $this->objToolkit->formInputOnOff(get_class($objOneProvider)."_enabled", $this->getLang("provider_enabled"), $objConfig->getBitEnabled() == 1, $bitAlwaysEnabled, $strCallback),
-                "inlineFormEntry 2" => $this->objToolkit->formInputOnOff(get_class($objOneProvider)."_bymail", $this->getLang("provider_bymail"), $objConfig->getBitBymail() == 1, $bitAlwaysMail || $bitAlwaysEnabled, $strCallback, "switch-small ".($bitAlwaysMail ? "blockEnable" : ""))
+                "inlineFormEntry 2" => $this->objToolkit->formInputOnOff(get_class($objOneProvider)."_bymail", $this->getLang("provider_bymail"), $objConfig->getBitBymail() == 1, $bitAlwaysMail, $strCallback, "switch-small ".($bitAlwaysMail ? "blockEnable" : ""))
             );
 
         }
