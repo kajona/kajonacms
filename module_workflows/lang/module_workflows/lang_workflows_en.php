@@ -68,3 +68,4 @@ $lang["workflow_text"]                   = "Text";
 $lang["workflow_text2"]                  = "Text 2";
 $lang["workflow_trigger"]                = "Next execution";
 $lang["workflow_ui"]                     = "Show edit-form for the current step";
+$lang["quickhelp_list_handlers"]                  = "Workflow-Handlers represent the technical part of a single workflow. Handlers are used to set up common parameters of a running instance. In most cases, handlers are available for system-administrators, only.";

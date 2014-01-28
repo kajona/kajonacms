@@ -68,3 +68,4 @@ $lang["workflow_text"]                   = "Text";
 $lang["workflow_text2"]                  = "Text 2";
 $lang["workflow_trigger"]                = "Nächste Ausführung";
 $lang["workflow_ui"]                     = "Bearbeitungsmaske für den aktuellen Schritt anzeigen";
+$lang["quickhelp_list_handlers"]                  = "Workflow-Handler stellen die technische Einheit eines Workflows dar. Handler werden zur Parametrisierung der laufenden Instanzen benötigt. In der Regel stehen Handler nur System-Administratoren zur Verfügung.";
