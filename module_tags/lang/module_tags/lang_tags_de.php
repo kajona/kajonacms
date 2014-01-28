@@ -36,3 +36,5 @@ $lang["favorite_save_remove"]            = "Der Favorit wurde gelöscht";
 $lang["favorite_save_success"]           = "Der Favorit wurde angelegt";
 $lang["tag_favorite_add"]                = "Als Favorit setzen";
 $lang["tag_favorite_remove"]             = "Favorit löschen";
+$lang["quickhelp_list"]                  = "Tags bieten einem Benutzer die Möglichkeit, häufig verwendete Sachverhalte effizient wieder zu finden. Auf verschiedenen Ebenen des Portals können Tags angelegt werden (z.B. einzelne Bewertungen, bestimmte To Dos), die dann im Modul „Tag“ dargestellt werden. n dieser Liste werden alle angelegten Tags eines Benutzers angezeigt. Diese können hier angezeigt und weiter bearbeitet werden. Datensätze, die mit einem Tag versehen wurden können über den Tag schnell aufgelistet werden. Tags dienen also als Schlagworte und zur Gruppierung von Datensätzen.";
+$lang["quickhelp_list_favorites"]         = "Für einen schnellen Zugriff auf Tags können diese als favorisiert markiert werden. Favorisierte Tags werden im Benutzer-Menü links oben für einen direkten Zugriff angezeigt. ";
