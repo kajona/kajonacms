@@ -318,10 +318,9 @@ class class_module_navigation_point extends class_model implements interface_mod
      * Triggers all subelements in order to fetch the additional navigation
      * entries.
      *
-     * @see class_element_portal::getNavigationEntries()
-     *
      * @param class_module_pages_page $objPage
      *
+     * @see class_element_portal::getNavigationEntries()
      * @return class_module_navigation_point[]|array
      * @since 4.0
      */
@@ -357,57 +356,101 @@ class class_module_navigation_point extends class_model implements interface_mod
     }
 
 
+    /**
+     * @return string
+     */
     public function getStrName() {
         return $this->strName;
     }
 
+    /**
+     * @return string
+     */
     public function getStrPageI() {
         return uniStrtolower($this->strPageI);
     }
 
+    /**
+     * @return string
+     */
     public function getStrPageE() {
         return $this->strPageE;
     }
 
+    /**
+     * @return string
+     */
     public function getStrTarget() {
         return $this->strTarget != "" ? $this->strTarget : "_self";
     }
 
+    /**
+     * @return string
+     */
     public function getStrImage() {
         return $this->strImage;
     }
 
+    /**
+     * @param string $strName
+     * @return void
+     */
     public function setStrName($strName) {
         $this->strName = $strName;
     }
 
+    /**
+     * @param string $strPageE
+     * @return void
+     */
     public function setStrPageE($strPageE) {
         $this->strPageE = $strPageE;
     }
 
+    /**
+     * @param string $strPageI
+     * @return void
+     */
     public function setStrPageI($strPageI) {
         $this->strPageI = $strPageI;
     }
 
+    /**
+     * @param string $strTarget
+     * @return void
+     */
     public function setStrTarget($strTarget) {
         $this->strTarget = $strTarget;
     }
 
+    /**
+     * @param string $strImage
+     * @return void
+     */
     public function setStrImage($strImage) {
         $strImage = uniStrReplace(_webpath_, "", $strImage);
         $this->strImage = $strImage;
     }
 
+    /**
+     * @return string
+     * @return void
+     */
     public function getStrFolderI() {
         return $this->strFolderI;
     }
 
+    /**
+     * @param string $strFolderI
+     * @return void
+     */
     public function setStrFolderI($strFolderI) {
         $this->strFolderI = $strFolderI;
     }
 
     /**
      * @param string $strLinkAction
+     * @return void
      */
     public function setStrLinkAction($strLinkAction) {
         $this->strLinkAction = $strLinkAction;
@@ -422,6 +465,7 @@ class class_module_navigation_point extends class_model implements interface_mod
 
     /**
      * @param string $strLinkSystemid
+     * @return void
      */
     public function setStrLinkSystemid($strLinkSystemid) {
         $this->strLinkSystemid = $strLinkSystemid;
@@ -436,6 +480,7 @@ class class_module_navigation_point extends class_model implements interface_mod
 
     /**
      * @param boolean $bitIsForeignNode
+     * @return void
      */
     public function setBitIsForeignNode($bitIsForeignNode) {
         $this->bitIsForeignNode = $bitIsForeignNode;
@@ -448,10 +493,17 @@ class class_module_navigation_point extends class_model implements interface_mod
         return $this->bitIsForeignNode;
     }
 
+    /**
+     * @param string $bitIsPagenode
+     * @return void
+     */
     public function setBitIsPagealias($bitIsPagenode) {
         $this->bitIsPagealias = $bitIsPagenode;
     }
 
+    /**
+     * @return bool
+     */
     public function getBitIsPagealias() {
         return $this->bitIsPagealias;
     }

@@ -155,7 +155,7 @@ class class_module_navigation_tree extends class_model implements interface_mode
 
             if($strKey !== "node" && $strKey !== "subnodes") {
 
-                if($objOneNode->getStatus() == 1 && $objOneNode->rightView()) {
+                if($objOneNode->getIntRecordStatus() == 1 && $objOneNode->rightView()) {
                     $arrTemp = array();
                     $arrTemp["node"] = $objOneNode;
                     $arrTemp["subnodes"] = $this->loadSingleLevel($objOneNode->getSystemid());
@@ -169,18 +169,32 @@ class class_module_navigation_tree extends class_model implements interface_mode
     }
 
 
+    /**
+     * @return string
+     */
     public function getStrName() {
         return $this->strName;
     }
 
+    /**
+     * @param string $strName
+     * @return void
+     */
     public function setStrName($strName) {
         $this->strName = $strName;
     }
 
+    /**
+     * @return string
+     */
     public function getStrFolderId() {
         return $this->strFolderId;
     }
 
+    /**
+     * @param string $strFolderId
+     * @return void
+     */
     public function setStrFolderId($strFolderId) {
         $this->strFolderId = $strFolderId;
     }

@@ -46,7 +46,7 @@ class class_module_navigation_portal extends class_portal implements interface_p
     /**
      * Constructor
      *
-     * @param $arrElementData
+     * @param array $arrElementData
      */
     public function __construct($arrElementData) {
         parent::__construct($arrElementData);
@@ -146,8 +146,8 @@ class class_module_navigation_portal extends class_portal implements interface_p
      * Creates a sitemap recursive level by level
      *
      * @param int $intLevel
-     * @param $objStartEntry
-     * @param $strStack
+     * @param array $objStartEntry
+     * @param string $strStack
      *
      * @internal param string $strSystemid
      * @return string

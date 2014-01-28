@@ -41,9 +41,12 @@ class class_element_navigation_admin extends class_element_admin implements inte
      * @fieldType yesno
      * @fieldLabel navigation_foreign
      */
-    private $intForeign;
+    private $intForeign = 1;
 
 
+    /**
+     * @return class_admin_formgenerator|null
+     */
     public function getAdminForm() {
         $objForm = parent::getAdminForm();
 
@@ -57,6 +60,7 @@ class class_element_navigation_admin extends class_element_admin implements inte
 
     /**
      * @param string $strTemplate
+     * @return void
      */
     public function setStrTemplate($strTemplate) {
         $this->strTemplate = $strTemplate;
@@ -71,6 +75,7 @@ class class_element_navigation_admin extends class_element_admin implements inte
 
     /**
      * @param string $strRepo
+     * @return void
      */
     public function setStrRepo($strRepo) {
         $this->strRepo = $strRepo;
@@ -85,6 +90,7 @@ class class_element_navigation_admin extends class_element_admin implements inte
 
     /**
      * @param int $intForeign
+     * @return void
      */
     public function setIntForeign($intForeign) {
         $this->intForeign = $intForeign;
@@ -94,6 +100,8 @@ class class_element_navigation_admin extends class_element_admin implements inte
      * @return int
      */
     public function getIntForeign() {
+        if($this->intForeign === null)
+            $this->intForeign = 1;
         return $this->intForeign;
     }
 
