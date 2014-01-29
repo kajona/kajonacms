@@ -44,7 +44,7 @@ interface interface_workflows_handler {
      *
      * The state of the workflow is updated afterwards by the controller.
      *
-     * @return bool make sure to return the matching boolean value. It true is returned, the state is shifted to excecuted. Otherwise the workflow is rescheduled.
+     * @return bool make sure to return the matching boolean value. It true is returned, the state is shifted to executed. Otherwise the workflow is rescheduled.
      *
      */
     public function execute();
