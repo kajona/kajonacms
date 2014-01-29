@@ -158,7 +158,7 @@ class class_module_workflows_handler extends class_model implements interface_mo
      * @return interface_workflows_handler
      */
     public function getObjInstanceOfHandler() {
-        if($this->getStrHandlerClass() != "") {
+        if($this->getStrHandlerClass() != "" && class_resourceloader::getInstance()->getPathForFile("/system/workflows/".$this->getStrHandlerClass().".php") !== false) {
             $strClassname = uniStrReplace(".php", "", $this->getStrHandlerClass());
             return new $strClassname();
         }
