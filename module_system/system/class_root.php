@@ -1048,6 +1048,23 @@ abstract class class_root {
     }
 
     /**
+     * Fetches all child nodes recusrsively of the current / passed id.
+     * <b> Only the IDs are fetched since the current object-context is not available!!! </b>
+     *
+     * @param string $strSystemid
+     * @return string[]
+     */
+    public function getAllSubChildNodesAsIdArray($strSystemid = "") {
+        $arrReturn = $this->getChildNodesAsIdArray($strSystemid);
+        if(count($arrReturn) > 0) {
+            foreach($arrReturn as $strId) {
+                $arrReturn = array_merge($arrReturn, $this->getAllSubChildNodesAsIdArray($strId));
+            }
+        }
+        return $arrReturn;
+    }
+
+    /**
      * Sets the Position of a SystemRecord in the currect level one position upwards or downwards
      *
      * @param string $strDirection upwards || downwards
