@@ -32,6 +32,9 @@ class class_pdf {
     public static $FONT_STYLE_UNDERLINE = "U";
     public static $FONT_STYLE_LINE_TROUGH = "D";
 
+    public static $PDF_MARGIN_LEFT = 10;
+    public static $PDF_MARGIN_TOP = 10;
+    public static $PDF_MARGIN_RIGHT = 10;
 
     /**
      * @var class_pdf_tcpdf
@@ -49,7 +52,7 @@ class class_pdf {
         $this->objPdf->SetSubject('Kajona - Free Content Management');
         $this->objPdf->SetKeywords('Kajona, PDF, CMS');
 
-        $this->objPdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
+        $this->objPdf->SetMargins(self::$PDF_MARGIN_LEFT, self::$PDF_MARGIN_TOP, self::$PDF_MARGIN_RIGHT);
 
         //this is the default, so not set excplicitly
         //$pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
