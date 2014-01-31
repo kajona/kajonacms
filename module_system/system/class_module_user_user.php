@@ -136,7 +136,8 @@ class class_module_user_user extends class_model implements interface_model, int
             $this->setStrAdminlanguage($arrRow["user_admin_language"]);
             $this->setSystemid($arrRow["user_id"]);
             $this->setStrAuthcode($arrRow["user_authcode"]);
-            $this->setStrAdminModule($arrRow["user_admin_module"]);
+            if(isset($arrRow["user_admin_module"]))
+                $this->setStrAdminModule($arrRow["user_admin_module"]);
 
         }
     }
@@ -193,18 +194,30 @@ class class_module_user_user extends class_model implements interface_model, int
         }
         else {
 
-            $strQuery = "UPDATE "._dbprefix_."user SET
-                    user_active=?, user_admin=?, user_portal=?, user_admin_skin=?, user_admin_language=?, user_logins = ?, user_lastlogin = ?, user_authcode = ?, user_subsystem = ?,
-                    user_username =?, user_admin_module = ?
-                    WHERE user_id = ?";
+            if(version_compare(class_module_system_module::getModuleByName("user")->getStrVersion(), "4.4", ">=")) {
+                $strQuery = "UPDATE "._dbprefix_."user SET
+                        user_active=?, user_admin=?, user_portal=?, user_admin_skin=?, user_admin_language=?, user_logins = ?, user_lastlogin = ?, user_authcode = ?, user_subsystem = ?,
+                        user_username =?, user_admin_module = ?
+                        WHERE user_id = ?";
+            }
+            else {
+                $strQuery = "UPDATE "._dbprefix_."user SET
+                        user_active=?, user_admin=?, user_portal=?, user_admin_skin=?, user_admin_language=?, user_logins = ?, user_lastlogin = ?, user_authcode = ?, user_subsystem = ?,
+                        user_username =?
+                        WHERE user_id = ?";
+            }
 
             $arrParams = array(
                 (int)$this->getIntActive(),
                 (int)$this->getIntAdmin(), (int)$this->getIntPortal(), $this->getStrAdminskin(), $this->getStrAdminlanguage(),
                 (int)$this->getIntLogins(), (int)$this->getIntLastLogin(), $this->getStrAuthcode(),
-                $this->getStrSubsystem(), $this->getStrUsername(), $this->getStrAdminModule(),
-                $this->getSystemid()
+                $this->getStrSubsystem(), $this->getStrUsername()
              );
+
+            if(version_compare(class_module_system_module::getModuleByName("user")->getStrVersion(), "4.4", ">="))
+                $arrParams[] = $this->getStrAdminModule();
+
+            $arrParams[] = $this->getSystemid();
 
 
             class_logger::getInstance(class_logger::USERSOURCES)->addLogRow("updated user for subsystem ".$this->getStrSubsystem()." / ".$this->getStrUsername(), class_logger::$levelInfo);
