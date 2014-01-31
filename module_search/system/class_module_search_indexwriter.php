@@ -18,6 +18,8 @@ class class_module_search_indexwriter implements interface_recordupdated_listene
     private $objConfig = null;
     private $objDB = null;
 
+    private static $isIndexAvailable = null;
+
     /**
      * Plain constructor
      */
@@ -28,11 +30,28 @@ class class_module_search_indexwriter implements interface_recordupdated_listene
         $this->objDB = class_carrier::getInstance()->getObjDB();
     }
 
+
+    private static function isIndexAvailable() {
+        if(self::$isIndexAvailable === null) {
+            $objSearch = class_module_system_module::getModuleByName("search");
+            if($objSearch != null && $objSearch->getStrVersion() >= 4.4)
+                self::$isIndexAvailable = true;
+            else
+                self::$isIndexAvailable = false;
+        }
+
+        return self::$isIndexAvailable;
+    }
+
+
     /**
      * Returns the number of documents currently in the index
      * @return int
      */
     public function getNumberOfDocuments() {
+        if(!self::isIndexAvailable())
+            return 0;
+
         $arrRow = $this->objDB->getPRow("SELECT COUNT(*) FROM "._dbprefix_."search_ix_document", array());
         return $arrRow["COUNT(*)"];
     }
@@ -42,6 +61,9 @@ class class_module_search_indexwriter implements interface_recordupdated_listene
      * @return int
      */
     public function getNumberOfContentEntries() {
+        if(!self::isIndexAvailable())
+            return 0;
+
         $arrRow = $this->objDB->getPRow("SELECT COUNT(*) FROM "._dbprefix_."search_ix_content", array());
         return $arrRow["COUNT(*)"];
     }
@@ -68,6 +90,10 @@ class class_module_search_indexwriter implements interface_recordupdated_listene
      * @return bool
      */
     private function removeRecordFromIndex($strSystemid) {
+
+        if(!self::isIndexAvailable())
+            return true;
+
         $arrRow = $this->objDB->getPRow("SELECT * FROM "._dbprefix_."search_ix_document WHERE search_ix_system_id = ?", array($strSystemid));
 
         if(isset($arrRow["search_ix_document_id"])) {
@@ -100,6 +126,9 @@ class class_module_search_indexwriter implements interface_recordupdated_listene
      * @return void
      */
     public function indexObject(class_model $objInstance) {
+
+        if(!self::isIndexAvailable())
+            return;
 
         if($objInstance instanceof class_module_pages_pageelement) {
             $objInstance = $objInstance->getConcreteAdminInstance();
@@ -137,6 +166,10 @@ class class_module_search_indexwriter implements interface_recordupdated_listene
      * @return void
      */
     public function indexRebuild() {
+
+        if(!self::isIndexAvailable())
+            return;
+
         $this->clearIndex();
         $arrObj = $this->getIndexableEntries();
 
@@ -162,6 +195,10 @@ class class_module_search_indexwriter implements interface_recordupdated_listene
      * @return void
      */
     public function clearIndex() {
+
+        if(!self::isIndexAvailable())
+            return;
+
         // Delete existing entries
         $strQuery = "DELETE FROM " . _dbprefix_ . "search_ix_document";
         $this->objDB->_pQuery($strQuery, array());
@@ -172,9 +209,12 @@ class class_module_search_indexwriter implements interface_recordupdated_listene
 
     /**
      * @param class_module_search_document $objSearchDocument
-     * @return bool
+     * @return void
      */
     public function updateSearchDocumentToDb($objSearchDocument) {
+
+        if(!self::isIndexAvailable())
+            return;
 
         //Load possible existing document if exists
         $strQuery = "SELECT * FROM " . _dbprefix_ . "search_ix_document " .
