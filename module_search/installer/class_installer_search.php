@@ -78,6 +78,11 @@ class class_installer_search extends class_installer_base implements interface_i
             $strReturn .= "Element already installed!...\n";
         }
 
+        $strReturn .= "Updating index...\n";
+        $objWorker = new class_module_search_indexwriter();
+        $objWorker->clearIndex();
+        $objWorker->indexRebuild();
+
 
 		return $strReturn;
 
@@ -133,20 +138,7 @@ class class_installer_search extends class_installer_base implements interface_i
 
         $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
         if($arrModule["module_version"] == "4.3") {
-            $strReturn .= "Updating 4.3 to 4.4...\n";
-            // Install Index
-            $strReturn .= "Adding index tables...\n";
-            $this->install_index_tables();
-
-            $strReturn .= "Updating index...\n";
-            $objWorker = new class_module_search_indexwriter();
-            $objWorker->clearIndex();
-            $objWorker->indexRebuild();
-
-            $strReturn .= "Updating module-versions...\n";
-            $this->updateModuleVersion("search", "4.4");
-            $this->updateElementVersion("search", "4.4");
-
+            $strReturn .= $this->update_43_44();
         }
 
         return $strReturn."\n\n";
@@ -199,6 +191,27 @@ class class_installer_search extends class_installer_base implements interface_i
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion("search", "4.0");
         $this->updateElementVersion("search", "4.0");
+        return $strReturn;
+    }
+
+    private function update_43_44() {
+        $strReturn = "Updating 4.3 to 4.4...\n";
+        // Install Index
+        $strReturn .= "Adding index tables...\n";
+        $this->install_index_tables();
+
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion("search", "4.4");
+        $this->updateElementVersion("search", "4.4");
+
+        $strReturn .= "Updating index...\n";
+        class_module_system_module::flushCache();
+        class_module_search_indexwriter::resetIndexAvailableCheck();
+        $objWorker = new class_module_search_indexwriter();
+        $objWorker->clearIndex();
+        $objWorker->indexRebuild();
+
+
         return $strReturn;
     }
 

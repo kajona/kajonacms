@@ -14,11 +14,12 @@
  * @package module_search
  * @author tim.kiefer@kojikui.de
  */
-class class_module_search_indexwriter implements interface_recordupdated_listener, interface_recorddeleted_listener {
+class class_module_search_indexwriter {
     private $objConfig = null;
     private $objDB = null;
 
     private static $isIndexAvailable = null;
+
 
     /**
      * Plain constructor
@@ -30,11 +31,14 @@ class class_module_search_indexwriter implements interface_recordupdated_listene
         $this->objDB = class_carrier::getInstance()->getObjDB();
     }
 
-
+    /**
+     * Validates if the search module is installed with a supported index
+     * @return bool
+     */
     private static function isIndexAvailable() {
         if(self::$isIndexAvailable === null) {
             $objSearch = class_module_system_module::getModuleByName("search");
-            if($objSearch != null && $objSearch->getStrVersion() >= 4.4)
+            if($objSearch != null && version_compare($objSearch->getStrVersion(), "4.4", ">="))
                 self::$isIndexAvailable = true;
             else
                 self::$isIndexAvailable = false;
@@ -42,7 +46,6 @@ class class_module_search_indexwriter implements interface_recordupdated_listene
 
         return self::$isIndexAvailable;
     }
-
 
     /**
      * Returns the number of documents currently in the index
@@ -69,27 +72,12 @@ class class_module_search_indexwriter implements interface_recordupdated_listene
     }
 
     /**
-     * Called whenever a records was deleted using the common methods.
-     * Implement this method to be notified when a record is deleted, e.g. to to additional cleanups afterwards.
-     * There's no need to register the listener, this is done automatically.
-     * Make sure to return a matching boolean-value, otherwise the transaction may be rolled back.
-     *
-     * @param string $strSystemid
-     * @param string $strSourceClass The class-name of the object deleted
-     *
-     * @return bool
-     */
-    public function handleRecordDeletedEvent($strSystemid, $strSourceClass) {
-        return $this->removeRecordFromIndex($strSystemid);
-    }
-
-    /**
      * Removes an entry from the index, based on the systemid. Removes the indexed content and the document.
      * @param string $strSystemid
      *
      * @return bool
      */
-    private function removeRecordFromIndex($strSystemid) {
+    public function removeRecordFromIndex($strSystemid) {
 
         if(!self::isIndexAvailable())
             return true;
@@ -103,23 +91,6 @@ class class_module_search_indexwriter implements interface_recordupdated_listene
 
         return true;
     }
-
-
-
-    /**
-     * The event is triggered after the source-object was updated to the database.
-     *
-     * @param class_model $objRecord
-     *
-     * @return bool
-     *
-     * @todo: move to own object
-     */
-    public function handleRecordUpdatedEvent($objRecord) {
-        if(class_module_system_module::getModuleByName("search") !== null)
-            $this->indexObject($objRecord);
-    }
-
 
     /**
      * @param class_model $objInstance
@@ -147,7 +118,6 @@ class class_module_search_indexwriter implements interface_recordupdated_listene
         $arrProperties = $objReflection->getPropertiesWithAnnotation("@addSearchIndex");
         foreach($arrProperties as $strPropertyName => $strAnnotationValue) {
             $getter = $objReflection->getGetter($strPropertyName);
-            $strField = $objReflection->getAnnotationValueForProperty($strPropertyName, class_orm_mapper::STR_ANNOTATION_TABLECOLUMN);
             $strContent = $objInstance->$getter();
             //TODO sir: changed first param from db-field to property name since there may be indexable fields not stored directly to the database
             $objSearchDocument->addContent($strPropertyName, $strContent);
@@ -186,7 +156,6 @@ class class_module_search_indexwriter implements interface_recordupdated_listene
     private function getIndexableEntries(){
         //Load possible existing document if exists
         $strQuery = "SELECT * FROM " . _dbprefix_ . "system ";
-
         return $this->objDB->getPArray($strQuery, array());
     }
 
@@ -247,7 +216,6 @@ class class_module_search_indexwriter implements interface_recordupdated_listene
 
         foreach($objSearchDocument->getContent() as $objSearchContent)
             $this->updateSearchContentToDb($objSearchContent);
-
     }
 
     /**
@@ -262,4 +230,10 @@ class class_module_search_indexwriter implements interface_recordupdated_listene
         $this->objDB->_pQuery($strQuery, array($objSearchContent->getStrId(), $objSearchContent->getFieldName(), $objSearchContent->getContent(), $objSearchContent->getScore(), $objSearchContent->getDocumentId()));
     }
 
+    /**
+     * Resets the internal check whether the search module is available with index support or not.
+     */
+    public static function resetIndexAvailableCheck() {
+        self::$isIndexAvailable = null;
+    }
 }
