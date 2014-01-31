@@ -221,17 +221,42 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
 
             $strReturn .= $this->objToolkit->formHeadline($objHandler->getObjMetadata()->getStrTitle());
             $strReturn .= $this->objToolkit->getTextRow($objHandler->getObjMetadata()->getStrDescription());
-            $strReturn .= $this->objToolkit->getTextRow($this->getLang("package_type")." ".$this->getLang("type_".$objHandler->getObjMetadata()->getStrType()));
-            $strReturn .= $this->objToolkit->getTextRow($this->getLang("package_version")." ".$objHandler->getObjMetadata()->getStrVersion());
-            if($objHandler->getVersionInstalled() != null) {
-                $strReturn .= $this->objToolkit->getTextRow($this->getLang("package_version_installed")." ".$objHandler->getVersionInstalled());
 
+            $arrRows = array();
+            $arrRows[] = array($this->getLang("package_type"), $this->getLang("type_".$objHandler->getObjMetadata()->getStrType()));
+            $arrRows[] = array($this->getLang("package_version"), $objHandler->getObjMetadata()->getStrVersion());
+
+
+            if($objHandler->getVersionInstalled() != null) {
+                $arrRows[] = array($this->getLang("package_version_installed"), $objHandler->getVersionInstalled());
             }
-            $strReturn .= $this->objToolkit->getTextRow($this->getLang("package_author")." ".$objHandler->getObjMetadata()->getStrAuthor());
-            $strReturn .= $this->objToolkit->getTextRow($this->getLang("package_modules"));
+
+
+            $arrRows[] = array($this->getLang("package_author"), $objHandler->getObjMetadata()->getStrAuthor());
+
+            $arrRequiredRows = array();
             foreach($objHandler->getObjMetadata()->getArrRequiredModules() as $strOneModule => $strVersion) {
-                $strReturn .= $this->objToolkit->getTextRow($strOneModule." >= ".$strVersion);
+
+                $strStatus = "";
+
+                //validate the status
+                $objRequired = class_module_system_module::getModuleByName($strOneModule);
+                if($objRequired == null) {
+                    $strStatus = "<span class=\"label label-important\">".$this->getLang("package_missing")."</span>";
+                }
+                else {
+                    if(version_compare($objRequired->getStrVersion(), $strVersion, ">="))
+                        $strStatus = "<span class=\"label label-success\">".$this->getLang("package_version_available")."</span>";
+                    else
+                        $strStatus = "<span class=\"label label-important\">".$this->getLang("package_version_low")."</span>";
+                }
+
+
+                $arrRequiredRows[] = array($strOneModule, " >= ".$strVersion, $strStatus);
             }
+            $arrRows[] = array($this->getLang("package_modules"), $this->objToolkit->dataTable(null, $arrRequiredRows));
+
+            $strReturn .= $this->objToolkit->dataTable(null, $arrRows);
 
             $strReturn .= $this->objToolkit->getTextRow($this->getLang("package_screenshots"));
             foreach($objHandler->getObjMetadata()->getArrScreenshots() as $strOneScreenshot) {

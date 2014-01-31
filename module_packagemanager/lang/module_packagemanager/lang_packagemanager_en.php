@@ -83,3 +83,6 @@ $lang["update_notification_intro"]       = "A new version is available for an in
 $lang["update_notification_package"]     = "Respective package";
 $lang["update_notification_verav"]       = "Available version";
 $lang["update_notification_verinst"]     = "Installed version";
+$lang["package_version_low"] = "Installed version it to old";
+$lang["package_version_available"] = "O.K.";
+$lang["package_missing"] = "Package is not installed";

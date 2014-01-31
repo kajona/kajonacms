@@ -83,3 +83,6 @@ $lang["update_notification_intro"]       = "Für ein installiertes Paket ist ein
 $lang["update_notification_package"]     = "Betreffendes Paket";
 $lang["update_notification_verav"]       = "Verfügbare Version";
 $lang["update_notification_verinst"]     = "Installierte Version";
+$lang["package_version_low"] = "Installierte Version ist zu alt";
+$lang["package_version_available"] = "O.K.";
+$lang["package_missing"] = "Paket nicht installiert";
