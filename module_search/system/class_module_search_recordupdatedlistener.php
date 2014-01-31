@@ -26,5 +26,6 @@ class class_module_search_recordupdatedlistener implements interface_recordupdat
     public function handleRecordUpdatedEvent($objRecord) {
         $objIndex = new class_module_search_indexwriter();
         $objIndex->indexObject($objRecord);
+        return true;
     }
 }

@@ -29,7 +29,7 @@ class class_module_search_objectdeletedlistener implements interface_recorddelet
      */
     public function handleRecordDeletedEvent($strSystemid, $strSourceClass) {
         $objIndex = new class_module_search_indexwriter();
-        $objIndex->removeRecordFromIndex($strSystemid);
+        return $objIndex->removeRecordFromIndex($strSystemid);
     }
 
 }
