@@ -890,6 +890,10 @@ KAJONA.util.desktopNotification = {
 
         KAJONA.util.desktopNotification.grantPermissions();
 
+        //for fucking IE
+        if(typeof Notification == "undefined")
+            return;
+
         if (Notification && Notification.permission === "granted") {
             KAJONA.util.desktopNotification.bitGranted = true;
         }
@@ -919,6 +923,10 @@ KAJONA.util.desktopNotification = {
 
 
     grantPermissions: function() {
+
+        //for fucking IE
+        if(typeof Notification == "undefined")
+            return;
 
         if (Notification && Notification.permission !== "granted") {
             Notification.requestPermission(function (status) {
