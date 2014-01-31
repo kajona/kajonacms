@@ -79,6 +79,8 @@ class class_installer_search extends class_installer_base implements interface_i
         }
 
         $strReturn .= "Updating index...\n";
+        class_module_system_module::flushCache();
+        class_module_search_indexwriter::resetIndexAvailableCheck();
         $objWorker = new class_module_search_indexwriter();
         $objWorker->clearIndex();
         $objWorker->indexRebuild();
