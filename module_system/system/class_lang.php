@@ -159,7 +159,6 @@ class class_lang {
      * @return mixed
      */
     public function replaceParams($strProperty, $arrParameters) {
-        //todo: evaluate against array based strReplace and sprintf
         foreach($arrParameters as $intKey => $strParameter)
             $strProperty = uniStrReplace("{".$intKey."}", $strParameter, $strProperty);
 
