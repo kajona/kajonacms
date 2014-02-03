@@ -29,7 +29,8 @@ class class_scriptlet_langsniffer implements interface_scriptlet {
         if(preg_match_all("/(\![A-Za-z0-9_\-]*)\!/", $strContent, $arrMatches) != 0) {
 
             foreach($arrMatches[0] as $strOneHit) {
-                class_logger::getInstance("langentries.log")->addLogRow("missing lang-entry >".$strOneHit."< found!", class_logger::$levelWarning);
+                if($strOneHit != "!!")
+                    class_logger::getInstance("langentries.log")->addLogRow("missing lang-entry >".$strOneHit."< found!", class_logger::$levelWarning);
             }
         }
 
