@@ -120,6 +120,10 @@ class class_admin_helper {
                 }
             }
 
+            //if the last one is a divider, remove it
+            if($arrFinalItems[count($arrFinalItems)-1] == "")
+                unset($arrFinalItems[count($arrFinalItems)-1]);
+
             class_carrier::getInstance()->getObjSession()->setSession($strKey, $arrFinalItems);
             return $arrFinalItems;
         }
