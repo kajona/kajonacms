@@ -622,7 +622,7 @@ abstract class class_admin_simple extends class_admin {
                 getLinkAdminDialog(
                     "system",
                     "genericChangelog",
-                    "&systemid=".$objListEntry->getSystemid(),
+                    "&systemid=".$objListEntry->getSystemid()."&folderview=1",
                     $this->getLang("commons_edit_history"),
                     $this->getLang("commons_edit_history"),
                     "icon_history",
