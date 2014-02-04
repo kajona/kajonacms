@@ -140,9 +140,15 @@ KAJONA.v4skin = {
             if(ui.item) {
                 var $objCur = $(this);
                 $objCur.val( ui.item.title );
-                if($('#'+$objCur.attr('id')+'_id'))
-                    $( '#'+$objCur.attr('id')+'_id' ).val( ui.item.systemid );
+                if($('#'+$objCur.attr('id')+'_id')) {
+                    $objCur.blur();
+                    $( '#'+$objCur.attr('id')+'_id' ).val( ui.item.systemid);
+
+                    //try to find the next save button
+                    $objCur.closest("form").find("button[type='submit']").focus();
+                }
             }
+
         };
 
         this.create = function( event, ui ) {
