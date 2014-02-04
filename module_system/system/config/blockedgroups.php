@@ -16,4 +16,4 @@
  */
 
 
-$config["blockedgroups"] = "";
+$config["blockedgroups"] = ""._admins_group_id_;

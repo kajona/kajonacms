@@ -143,7 +143,7 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
         }
 
         if($objListEntry instanceof class_module_user_group) {
-            if($objListEntry->getSystemid() != _guests_group_id_ && $objListEntry->getSystemid() != _admins_group_id_) {
+            if($objListEntry->getSystemid() != _guests_group_id_ && $objListEntry->getSystemid() != _admins_group_id_ && $this->isGroupEditable($objListEntry)) {
                 if($objListEntry->rightDelete()) {
                     return $this->objToolkit->listDeleteButton(
                         $objListEntry->getStrDisplayName(), $this->getLang("gruppe_loeschen_frage"), class_link::getLinkAdminHref($this->getArrModule("modul"), "groupDelete", "&systemid=" . $objListEntry->getSystemid())
@@ -244,7 +244,7 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
      */
     protected function renderEditAction(class_model $objListEntry, $bitDialog = false) {
         if($objListEntry instanceof class_module_user_group) {
-            if($objListEntry->getSystemid() != _guests_group_id_ && $objListEntry->getSystemid() != _admins_group_id_) {
+            if($objListEntry->getSystemid() != _guests_group_id_ && $objListEntry->getSystemid() != _admins_group_id_ && $this->isGroupEditable($objListEntry)) {
                 if($objListEntry->rightEdit()) {
                     return $this->objToolkit->listButton(class_link::getLinkAdmin("user", "groupEdit", "&systemid=" . $objListEntry->getSystemid(), "", $this->getLang("action_group_edit"), "icon_edit"));
                 }
@@ -852,6 +852,18 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
 
     }
 
+    private function isGroupEditable(class_module_user_group $objGroup) {
+        //validate possible blocked groups
+        $objConfig = class_config::getInstance("blockedgroups.php");
+        $arrBlockedGroups = explode(",", $objConfig->getConfig("blockedgroups"));
+
+        $bitIsSuperAdmin = in_array(_admins_group_id_, $this->objSession->getGroupIdsAsArray());
+        $bitRenderEdit = $bitIsSuperAdmin || ($objGroup->rightEdit() && !in_array($objGroup->getSystemid(), $arrBlockedGroups));
+
+        return $bitRenderEdit;
+    }
+
+
 
     /**
      * Returns a list of users belonging to a specified group
@@ -868,12 +880,7 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
             $objGroup = new class_module_user_group($this->getSystemid());
 
             //validate possible blocked groups
-            $objConfig = class_config::getInstance("blockedgroups.php");
-            $arrBlockedGroups = explode(",", $objConfig->getConfig("blockedgroups"));
-
-            $bitIsSuperAdmin = in_array(_admins_group_id_, $this->objSession->getGroupIdsAsArray());
-            $bitRenderEdit = $bitIsSuperAdmin || ($objGroup->rightEdit() && !in_array($objGroup->getSystemid(), $arrBlockedGroups));
-
+            $bitRenderEdit = $this->isGroupEditable($objGroup);
 
             $objSourceGroup = $objGroup->getObjSourceGroup();
             $strReturn .= $this->objToolkit->formHeadline($this->getLang("group_memberlist") . "\"" . $objGroup->getStrName() . "\"");
@@ -926,13 +933,7 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
     protected function actionAddUserToGroup() {
         $objGroup = new class_module_user_group($this->getSystemid());
         //validate possible blocked groups
-        $objConfig = class_config::getInstance("blockedgroups.php");
-        $arrBlockedGroups = explode(",", $objConfig->getConfig("blockedgroups"));
-
-        $bitIsSuperAdmin = in_array(_admins_group_id_, $this->objSession->getGroupIdsAsArray());
-        $bitEditAllowed = $bitIsSuperAdmin || ($objGroup->rightEdit() && !in_array($objGroup->getSystemid(), $arrBlockedGroups));
-
-        if(!$bitEditAllowed)
+        if(!$this->isGroupEditable($objGroup))
             return $this->getLang("commons_error_permissions");
 
         $objForm = $this->getGroupMemberForm($objGroup);
@@ -969,6 +970,10 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
     protected function actionGroupMemberDelete() {
         $strReturn = "";
         $objGroup = new class_module_user_group($this->getParam("groupid"));
+        //validate possible blocked groups
+        if(!$this->isGroupEditable($objGroup))
+            return $this->getLang("commons_error_permissions");
+
         $objUser = new class_module_user_user($this->getParam("userid"));
         if($objGroup->getObjSourceGroup()->removeMember($objUser->getObjSourceUser())) {
             $this->adminReload(class_link::getLinkAdminHref($this->getArrModule("modul"), "groupMember", "systemid=" . $this->getParam("groupid")));
@@ -991,6 +996,11 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
     protected function actionGroupDelete() {
         //Delete memberships
         $objGroup = new class_module_user_group($this->getSystemid());
+
+        //validate possible blocked groups
+        if(!$this->isGroupEditable($objGroup))
+            throw new class_exception($this->getLang("gruppe_loeschen_fehler"), class_exception::$level_ERROR);
+
         //delete group
         if($objGroup->deleteObject()) {
             $this->adminReload(class_link::getLinkAdminHref($this->getArrModule("modul"), "groupList"));
@@ -1035,14 +1045,10 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
 
         foreach($arrGroups as $strSingleGroup) {
 
-            if($strSingleGroup == _admins_group_id_ && !$bitShowAdmin) {
-                continue;
-            }
-
-            if(in_array($strSingleGroup, $arrBlockedGroups) && !$bitShowAdmin)
-                continue;
-
             $objSingleGroup = new class_module_user_group($strSingleGroup);
+            if(!$this->isGroupEditable($objSingleGroup))
+                continue;
+
             if(in_array($strSingleGroup, $arrUserGroups)) {
                 //user in group, checkbox checked
                 $strReturn .= $this->objToolkit->formInputCheckbox($objSingleGroup->getSystemid(), $objSingleGroup->getStrName(), true);
@@ -1084,8 +1090,9 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
         //Searching for groups to enter
         foreach($arrGroups as $strSingleGroup) {
 
+            $objGroup = new class_module_user_group($strSingleGroup);
             //skipped for blocked groups, those won't be updated
-            if(!$bitIsSuperAdmin && in_array($strSingleGroup, $arrBlockedGroups))
+            if(!$this->isGroupEditable($objGroup))
                 continue;
 
 
@@ -1093,7 +1100,6 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
 
                 //add the user to this group
                 if(!in_array($strSingleGroup, $arrUserGroups)) {
-                    $objGroup = new class_module_user_group($strSingleGroup);
                     $objGroup->getObjSourceGroup()->addMember($objUser->getObjSourceUser());
                 }
                 else {
@@ -1123,7 +1129,6 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
                 }
             }
         }
-
 
         //loop the users' list in order to remove unwanted relations
         foreach($arrUserGroups as $strValue) {
