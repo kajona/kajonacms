@@ -305,20 +305,25 @@ class class_module_packagemanager_manager {
         return null;
     }
 
+    /**
+     * @param interface_packagemanager_packagemanager $objPackage
+     * @param string $strLatestVersion
+     * @return void
+     */
     private function sendUpdateAvailableMessage(interface_packagemanager_packagemanager $objPackage, $strLatestVersion) {
         //check, if not already sent
         $strIdentifier = sha1(__CLASS__.$objPackage->getObjMetadata()->getStrTitle().$strLatestVersion);
 
         if(count(class_module_messaging_message::getMessagesByIdentifier($strIdentifier)) == 0) {
 
-            $strMailtext = class_carrier::getInstance()->getObjLang()->getLang("update_notification_intro", "packagemanager")."\n";
-            $strMailtext .= class_carrier::getInstance()->getObjLang()->getLang("update_notification_package", "packagemanager")." ".$objPackage->getObjMetadata()->getStrTitle()."\n";
+            $strMailtext = class_carrier::getInstance()->getObjLang()->getLang("update_notification_package", "packagemanager")." ".$objPackage->getObjMetadata()->getStrTitle()."\n";
             $strMailtext .= class_carrier::getInstance()->getObjLang()->getLang("update_notification_verinst", "packagemanager")." ".$objPackage->getObjMetadata()->getStrVersion()."\n";
             $strMailtext .= class_carrier::getInstance()->getObjLang()->getLang("update_notification_verav", "packagemanager")." ".$strLatestVersion."\n";
 
             $objMessageHandler = new class_module_messaging_messagehandler();
             $objMessage = new class_module_messaging_message();
-            $objMessage->setStrTitle($strMailtext);
+            $objMessage->setStrTitle(class_carrier::getInstance()->getObjLang()->getLang("update_notification_intro", "packagemanager"));
+            $objMessage->setStrBody($strMailtext);
             $objMessage->setObjMessageProvider(new class_messageprovider_packageupdate());
             $objMessage->setStrInternalIdentifier($strIdentifier);
             $objMessageHandler->sendMessageObject($objMessage, new class_module_user_group(_admins_group_id_));
