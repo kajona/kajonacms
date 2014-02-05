@@ -107,11 +107,10 @@ class class_test_pages extends class_testbase {
         $objPagelement = new class_module_pages_pageelement($objPagelement->getSystemid());
 
         //and finally create the object
-        /** @var $objElement class_element_admin */
+        /** @var $objElement class_element_paragraph_admin */
         $objElement = $objPagelement->getConcreteAdminInstance();
-        $arrElementData = $objElement->loadElementData();
-        $arrElementData["paragraph_title"] = "autotest";
-        $objElement->setArrParamData($arrElementData);
+
+        $objElement->setStrTitle("autotest");
 
         $objElement->doBeforeSaveToDb();
         $objElement->updateForeignElement();
@@ -123,6 +122,8 @@ class class_test_pages extends class_testbase {
 
         $strNewSystemid = $objPage->getSystemid();
 
+
+        $this->flushDBCache();
 
         $objOldPage = new class_module_pages_page($strOldSystemid);
         $objNewPage = new class_module_pages_page($strNewSystemid);
@@ -147,14 +148,20 @@ class class_test_pages extends class_testbase {
         $this->assertEquals($objOldElement->getStrLanguage(), $objNewElement->getStrLanguage());
         $this->assertEquals($objOldElement->getStrElement(), $objNewElement->getStrElement());
 
-        $objElement = $objOldElement->getConcreteAdminInstance();
-        $arrOldElementData = $objElement->loadElementData();
+        /** @var class_element_paragraph_admin $objOldElementInstance */
+        $objOldElementInstance = $objOldElement->getConcreteAdminInstance();
+        $arrOldElementData = $objOldElementInstance->loadElementData();
 
-        $objElement = $objNewElement->getConcreteAdminInstance();
-        $arrNewElementData = $objElement->loadElementData();
+        /** @var class_element_paragraph_admin $objNewElementInstance */
+        $objNewElementInstance = $objNewElement->getConcreteAdminInstance();
+        $arrNewElementData = $objNewElementInstance->loadElementData();
 
         $this->assertNotEquals($arrOldElementData["content_id"], $arrNewElementData["content_id"]);
         $this->assertEquals($arrOldElementData["paragraph_title"], $arrNewElementData["paragraph_title"]);
+
+        $this->assertEquals($objOldElementInstance->getStrTitle(), $objNewElementInstance->getStrTitle());
+        $this->assertEquals($objOldElementInstance->getStrTitle(), "autotest");
+        $this->assertEquals($objNewElementInstance->getStrTitle(), "autotest");
 
 
         $objNewPage->deleteObject();

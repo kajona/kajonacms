@@ -269,8 +269,6 @@ class class_module_pages_pageelement extends class_model implements interface_mo
         parent::copyObject($strNewPage);
 
         //copy the old contents into the new elements
-
-
         $objElement = $this->getConcreteAdminInstance();
         $arrNewElementData = $objElement->loadElementData();
         $arrElementData["content_id"] = $arrNewElementData["content_id"];
