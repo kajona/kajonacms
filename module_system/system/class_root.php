@@ -593,8 +593,8 @@ abstract class class_root {
     /**
      * Internal helper, checks if a child-node is the descendant of a given base-node
      *
-     * @param $strBaseId
-     * @param $strChildId
+     * @param string $strBaseId
+     * @param string $strChildId
      *
      * @return bool
      */
@@ -1334,6 +1334,7 @@ abstract class class_root {
 
     /**
      * Resets the current systemid
+     * @return void
      */
     protected function unsetSystemid() {
         $this->strSystemid = "";
@@ -1348,10 +1349,17 @@ abstract class class_root {
         return $this->strSystemid;
     }
 
+    /**
+     * @return string
+     */
     public function getStrSystemid() {
         return $this->strSystemid;
     }
 
+    /**
+     * @param string $strSystemid
+     * @return void
+     */
     public function setStrSystemid($strSystemid) {
         if(validateSystemid($strSystemid)) {
             $this->strSystemid = $strSystemid;
@@ -1374,14 +1382,24 @@ abstract class class_root {
     }
 
 
+    /**
+     * @return string
+     */
     public function getStrPrevId() {
         return $this->strPrevId;
     }
 
+    /**
+     * @return string
+     */
     public function getStrOldPrevId() {
         return $this->strOldPrevId;
     }
 
+    /**
+     * @param string $strPrevId
+     * @return void
+     */
     public function setStrPrevId($strPrevId) {
         $this->strPrevId = $strPrevId;
     }
@@ -1401,18 +1419,32 @@ abstract class class_root {
         return $this->getIntModuleNr();
     }
 
+    /**
+     * @return int
+     */
     public function getIntModuleNr() {
         return $this->intModuleNr;
     }
 
+    /**
+     * @param int $intModuleNr
+     * @return void
+     */
     public function setIntModuleNr($intModuleNr) {
         $this->intModuleNr = $intModuleNr;
     }
 
+    /**
+     * @return int
+     */
     public function getIntSort() {
         return $this->intSort;
     }
 
+    /**
+     * @param int $intSort
+     * @return void
+     */
     public function setIntSort($intSort) {
         $this->intSort = $intSort;
     }
@@ -1437,6 +1469,9 @@ abstract class class_root {
             return "System";
     }
 
+    /**
+     * @return string string
+     */
     public function getStrLmUser() {
         return $this->strLmUser;
     }
@@ -1450,34 +1485,62 @@ abstract class class_root {
         return $this->getStrLmUser();
     }
 
+    /**
+     * @param string $strLmUser
+     * @return void
+     */
     public function setStrLmUser($strLmUser) {
         $this->strLmUser = $strLmUser;
     }
 
+    /**
+     * @return int
+     */
     public function getIntLmTime() {
         return $this->intLmTime;
     }
 
+    /**
+     * @param int $strLmTime
+     * @return void
+     */
     public function setIntLmTime($strLmTime) {
         $this->intLmTime = $strLmTime;
     }
 
+    /**
+     * @return string
+     */
     public function getStrLockId() {
         return $this->strLockId;
     }
 
+    /**
+     * @param string $strLockId
+     * @return void
+     */
     public function setStrLockId($strLockId) {
         $this->strLockId = $strLockId;
     }
 
+    /**
+     * @return int
+     */
     public function getIntLockTime() {
         return $this->intLockTime;
     }
 
+    /**
+     * @param int $intLockTime
+     * @return void
+     */
     public function setIntLockTime($intLockTime) {
         $this->intLockTime = $intLockTime;
     }
 
+    /**
+     * @return int
+     */
     public function getLongCreateDate() {
         return $this->longCreateDate;
     }
@@ -1497,14 +1560,25 @@ abstract class class_root {
         return new class_date($this->getLongCreateDate());
     }
 
+    /**
+     * @param int $longCreateDate
+     * @return void
+     */
     public function setLongCreateDate($longCreateDate) {
         $this->longCreateDate = $longCreateDate;
     }
 
+    /**
+     * @return string
+     */
     public function getStrOwner() {
         return $this->strOwner;
     }
 
+    /**
+     * @param string $strOwner
+     * @return void
+     */
     public function setStrOwner($strOwner) {
         $this->strOwner = $strOwner;
     }
@@ -1543,6 +1617,9 @@ abstract class class_root {
         return true;
     }
 
+    /**
+     * @return int
+     */
     public function getIntRecordStatus() {
         return $this->intRecordStatus;
     }
@@ -1606,10 +1683,17 @@ abstract class class_root {
     }
 
 
+    /**
+     * @return string
+     */
     public function getStrRecordComment() {
         return $this->strRecordComment;
     }
 
+    /**
+     * @param string $strRecordComment
+     * @return void
+     */
     public function setStrRecordComment($strRecordComment) {
         if(uniStrlen($strRecordComment) > 254)
             $strRecordComment = uniStrTrim($strRecordComment, 250);
@@ -1618,6 +1702,7 @@ abstract class class_root {
 
     /**
      * @param string $strRecordClass
+     * @return void
      */
     public function setStrRecordClass($strRecordClass) {
         $this->strRecordClass = $strRecordClass;
@@ -1625,6 +1710,7 @@ abstract class class_root {
 
     /**
      * @return string
+     * @return void
      */
     public function getStrRecordClass() {
         return $this->strRecordClass;
@@ -1636,6 +1722,7 @@ abstract class class_root {
      *
      * @param string $strKey
      * @param mixed $mixedValue Value
+     * @return void
      */
     public function setParam($strKey, $mixedValue) {
         class_carrier::getInstance()->setParam($strKey, $mixedValue);
@@ -1694,6 +1781,7 @@ abstract class class_root {
      *
      * @param string $strKey
      * @param mixed $strValue
+     * @return void
      */
     public function setArrModuleEntry($strKey, $strValue) {
         $this->arrModule[$strKey] = $strValue;
@@ -1707,7 +1795,8 @@ abstract class class_root {
      * fired drastically.
      * For best performance, include the matching row of the tables system, system_date and system_rights
      *
-     * @param $arrInitRow
+     * @param array $arrInitRow
+     * @return void
      */
     public function setArrInitRow($arrInitRow) {
         if(isset($arrInitRow["system_id"])) {
@@ -1726,6 +1815,7 @@ abstract class class_root {
 
     /**
      * @param \class_date $objEndDate
+     * @return void
      */
     public function setObjEndDate($objEndDate = null) {
         if(!$objEndDate instanceof class_date && $objEndDate != "" && $objEndDate != null)
@@ -1744,6 +1834,7 @@ abstract class class_root {
 
     /**
      * @param \class_date $objSpecialDate
+     * @return void
      */
     public function setObjSpecialDate($objSpecialDate = null) {
         if(!$objSpecialDate instanceof class_date && $objSpecialDate != "" && $objSpecialDate != null)
@@ -1762,6 +1853,7 @@ abstract class class_root {
 
     /**
      * @param class_date $objStartDate
+     * @return void
      */
     public function setObjStartDate($objStartDate = null) {
         if(!$objStartDate instanceof class_date && $objStartDate != "" && $objStartDate != null)

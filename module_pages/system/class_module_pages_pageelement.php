@@ -268,12 +268,31 @@ class class_module_pages_pageelement extends class_model implements interface_mo
         //duplicate the current elements - afterwards $this is the new element
         parent::copyObject($strNewPage);
 
+        //copy the old contents into the new elements
+
+
         $objElement = $this->getConcreteAdminInstance();
         $arrNewElementData = $objElement->loadElementData();
         $arrElementData["content_id"] = $arrNewElementData["content_id"];
         $arrElementData["page_element_id"] = $arrNewElementData["page_element_id"];
         $arrElementData["system_id"] = $arrNewElementData["system_id"];
         $objElement->setArrParamData($arrElementData);
+
+        //try to find setters to inject the values
+        $objAnnotation = new class_reflection($objElement);
+        $arrMappedProperties = $objAnnotation->getPropertiesWithAnnotation(class_orm_mapper::STR_ANNOTATION_TABLECOLUMN);
+
+        foreach($arrElementData as $strColumn => $strValue) {
+            foreach($arrMappedProperties as $strPropertyname => $strAnnotation) {
+                $strMappedColumn = uniSubstr($strAnnotation, uniStrpos($strAnnotation, ".")+1);
+                if($strColumn == $strMappedColumn) {
+                    $objSetter = $objAnnotation->getSetter($strPropertyname);
+                    if($objSetter != null) {
+                        call_user_func_array(array($objElement, $objSetter), array($strValue));
+                    }
+                }
+            }
+        }
 
         $objElement->doBeforeSaveToDb();
         $objElement->updateForeignElement();

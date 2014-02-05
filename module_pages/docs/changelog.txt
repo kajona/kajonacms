@@ -4,6 +4,7 @@ Module Pages
 V4.4 ----------------------------------------------------------------------------------------------------
 NEW: the wysiwyg adds <br/> on enter
 NEW: in textarea mode, the <br /> tags entered are removed before saving them to the backend. #777
+BUG: copying a page-element lost some properties for annotation based properties
 
 
 
