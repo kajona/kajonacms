@@ -1,6 +1,10 @@
 
 Module Packagemanager
 
+V4.4 ----------------------------------------------------------------------------------------------------
+NEW: styled the package-overview window, e.g. during the installation of a package
+
+
 V4.3 ----------------------------------------------------------------------------------------------------
 BUG: the packagemanager / user list filter could trigger reloads to each other instead of reloading the matching list
 

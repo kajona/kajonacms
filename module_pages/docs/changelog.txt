@@ -1,6 +1,12 @@
 Module Pages
 
 
+V4.4 ----------------------------------------------------------------------------------------------------
+NEW: the wysiwyg adds <br/> on enter
+NEW: in textarea mode, the <br /> tags entered are removed before saving them to the backend. #777
+
+
+
 V4.3 ----------------------------------------------------------------------------------------------------
 NEW: updated elements to make use of new annotation based element-form generation
 NEW: elements may use annotations to declare mapped db-columns, introduced the formgenerator to elements. migration of elements to follow.

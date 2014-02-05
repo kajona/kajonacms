@@ -1,6 +1,29 @@
 Module Search
 
 
+V4.4 ----------------------------------------------------------------------------------------------------
+NEW: in order to be included into a (backend) search result, the view-permission of the record and the view-permission of the matching module are required
+NEW: reintegrated the fastsearch branch. contains a new, index-based search for the backend. therefore each object is indexed during updates. each property to index is marked with @addSearchIndex. #825 all credits go to tkiefer!
+NEW: first part of indexed search (term and boolean queries, manual index build)
+NEW: search support MustNot parameter syntax -welt
+NEW: results ordered by indexed search score
+NEW: simple systemtask to rebuild the search index
+NEW: search by field filter in boolean queries (example: +open +title:kajona)
+NEW: added a new event "recordUpdated", triggered each time a record is - you may guess it - updated
+NEW: on update, object are indexed automatically
+NEW: the search-index is cleaned on object removals. Implemented by listening to record deleted events.
+NEW: added a new event "objectIndexed". classes implementing this interface are notified if an object is added / updated to the index and may add additional content to the source-obejcts' index. Implemented the callback for module tags.
+NEW: index saves word count as score
+NEW: term query use saved word count for scoring
+NEW: sort-results are ordered by the score automatically. the manual sorting is no longer required.
+NEW: class_module_search_metadata_filter is able to generate the filter-query on its own
+NEW: the system-table joins are only created if a metadata-filter is set up
+NEW: added a count-method to the query-interface
+NEW: added a real paging to the search result list (reducing the number of object instantiations)
+NEW: only documents with at least one content-entry are added to the document-index, emtpy documents are skipped
+NEW: removed the backend seach plugins. no longer required, search is index-based
+
+
 V4.3 ----------------------------------------------------------------------------------------------------
 NEW: introduced a new interface "interface_search_resultobject". Currently used to grant objects the possibility to generate the on-click urls for search-results themselves. If not implemented, the entry is added with a generic edit-action. If this isn't sufficient, implement the interface and decide on your own which url you want to return. #832
 BUG: for objects with no string-based properties, the generic backend search could fail due to an erroneous sql query

@@ -1,5 +1,16 @@
 Module Tags
 
+V4.4 ----------------------------------------------------------------------------------------------------
+NEW: tag-favorites may be created / removed inline via an ajax call. #859
+NEW: tagging a record only requires view-permissions, no longer edit permissions since tags are only declarative additions.
+BUG: the tags-autocomplete reacts on enter-key-press as expected, adding the suggested entry to the end of the list of tags instead of replacing them
+BUG: deleting a tag-assignment could fail on sqlite
+BUG: fixed a sql-error on postgres/oracle
+BUG: tags found by the search are linked to the list of assigned records instead of the tags edit-view
+BUG: the tag-overlay missed to set the correct focus #858
+BUG: copying a record with an assigned tag could failed due to an erroneous query
+
+
 V4.2 ----------------------------------------------------------------------------------------------------
 NEW: added a config-entry for private tag assignments by default (yes / no)
 BUG: fixed the right1 permission handling (save tag as favorite)

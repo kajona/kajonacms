@@ -1,6 +1,20 @@
 Module Messaging
 
 
+V4.4 ----------------------------------------------------------------------------------------------------
+NEW: integrated local Notifications into messaging #824
+NEW: messages created as a reply contain the original message-body as a reference #861
+NEW: personal messages can't be disabled locally
+NEW: refactored the messaging api. It is now possible to save the senders' user-id #843.
+NEW: added direct reply action to messages
+NEW: refactored and relayouted the view-message view
+NEW: message-notifications sent by the messaging use the senders-mail address if available
+NEW: the messaging config-page uses a data-table to config the message-sources, way better overview
+NEW: added support for non-deactivatable message-provideres. a new interface interface_messageprovider_extended controls 1. whether the provider may de disabled in general and 2. whether the providers' email-notification may be disabled.  This change is backwards compatible since the new interface extends the existing one. #831
+NEW: removed the method getIdentifier from interface_messageprovider, the provider is now referenced by its classname.
+NEW: added a workflow sending a summary of unread messages to users. The interval in days is configurable as well as the time the summary is sent. The summary is created by a workflow, so a running worflow-engine is required. The summary itself is sent using the messaging subsystem, so each user may dis-/enable the summary on its own. #828
+
+
 V4.3 ----------------------------------------------------------------------------------------------------
 NEW: the admin-action "mailForm" sends messages rather using the messaging subsystem instead of sending direct mails
 NEW: added a subject to messages. if given used as the displayname, otherwise the first part of the body is used. #811

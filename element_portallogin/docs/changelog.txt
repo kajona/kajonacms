@@ -2,3 +2,4 @@ Element Portallogin
 
 V4.3.1 --------------------------------------------------------------------------------------------------
 BUG: The password-reset link missed to include the users' systemid
+BUG: The confirm-account link missed to include the users' systemid

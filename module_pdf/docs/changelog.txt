@@ -1,0 +1,7 @@
+Module PDF
+
+
+V4.4-----------------------------------------------------------------------------------------------------
+NEW: added static variables to setup the margin of pdf-pages manually
+NEW: the default pdf footer got an optional param to add custom text to the footer-bar
+NEW: updated TCPDF to 6.0.047

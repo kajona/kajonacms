@@ -1,5 +1,16 @@
 Module User
 
+V4.4 ----------------------------------------------------------------------------------------------------
+NEW: refactored and streamlined some parts of the blocked-group handling. now integrated into more scenarios of the user management, reduced duplicated code fragments
+NEW: the default-module loaded on login is configurable per user #845
+NEW: when browsing members of a group, users may be added directly #868
+NEW: deleting a user/group triggers a log-entry leveled as "warning", including more details about the object to be deleted
+NEW: the user-formentry accepts active-users / groups only
+NEW: added hint to user form (user needs group assignment) #849
+BUG: some icons from the user-list are hidden in case the user is inactive, e.g. the userswitch or the send new password action
+BUG: if a user edits its own profile (selfedit mode), the username is reset internally to avoid changes by dom-manipulations
+
+
 V4.3 ----------------------------------------------------------------------------------------------------
 NEW: added a remove-icon to the user-selector in order to remove a selected user from the form-field
 NEW: changed the icon for "send new password to user" from icon_mail to icon_mailNew

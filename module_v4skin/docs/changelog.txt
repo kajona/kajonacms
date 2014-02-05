@@ -2,6 +2,41 @@
 Module V4 Skin
 
 
+V4.4 ----------------------------------------------------------------------------------------------------
+NEW: the systemtask status div (as shown in dialogs) has a max-height of 400px
+NEW: added a css-class hiddenOnPrint to hide elements from print-views
+NEW: the delete-button passes the url of the current page as an additional params when deleting an object. this makes sure, that a user working with multiple tabs / windows is redirected to a valid site on object deletions #870
+NEW: the tags and messages quick-access menus add a separator between the concrete records and the "show all" links #860
+NEW: list with paging enabled are sortable, too
+NEW: added data-placeholder option for the chosen dropdown box
+NEW: refactored the js-folder. now based on css-classes instead of direct display-manipulations
+NEW: events are unbind for dialog of type 1 when hiding oder content is set
+NEW: added a class for cancel-buttons
+NEW: moved appendLinkToPathNavigation() from KAJONA.v4skin to KAJONA.breadcrumb.v4skin
+NEW: the new-messages badge no longer uses a bold font
+NEW: merge with fontawesome4 branch: updated fontawesome to V4 #844
+NEW: autocomplete fields are marked with a small keyboard icon. indicates the autocomplete capabilities. #848
+NEW: created a default autocomplete config for the v4 skin, located at KAJONA.v4skin.defaultAutoComplete(). may be used to reduce the amount of js-code required to implement an autocomplete field.
+NEW: the loading.gif indicator is replaced with a css-/fontawesome-based version. all colors are now configurable by css. #846
+NEW: When showing / editing a record, a action-toolbar based on the current record is rendered at the upper right corner, same position as the actions in the list-view. #802
+NEW: the backend-navigation cache is flushed on user-changes / user-switches
+NEW: the pathnavigation is rended using a flexible layout. the path is always a single line, white spaces no longer wrap the path-box. in addition, entries are shortened using a two-step js-approach. the full entry is available on hover.
+NEW: js-message boxes are rendered independent from the current debugging-config-value
+BUG: the fadeOut-timeouts are now handled correctly
+BUG: fixed the th-elements of the permission matrix
+BUG: fixed the layout of some overlays: the left-margin is set to 10px for dialog-contents, added a responsive-customizing less-file for Kajona specific styles
+BUG: the autocomplete search element uses a valid action to build correct target urls
+BUG: patched bootstrap-datepicker to work with fontawesome 4
+BUG: The usermenu hides the tags & messages entries if the user has no permissions to access those modules. #853
+BUG: the mandatory & missing annotation for chozen-dropdowns was missing (no red / orange border/drop-shadow) #855
+BUG: the search-autocomplete dropdown missed to localize the "switch to extended result" link ART#764
+BUG: if a forms first element is a datepicker, the focus is removed and added to the input-field as soon as the datepicker was loaded completely
+BUG: the user-password field is not populated by the browsers' autocomplete function
+BUG: new-links with a slash were scrambled when adding them to the new-menu
+BUG: changed the style of buttons to avoid line-breaks on long labels
+
+
+
 V4.3 ----------------------------------------------------------------------------------------------------
 NEW: fixed styling of file upload, improved layout for small screens
 NEW: better icon for enabling/disabling records; styling of disabled records in admintable

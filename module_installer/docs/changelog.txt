@@ -1,6 +1,11 @@
 Module Installer
 
 
+V4.4 ----------------------------------------------------------------------------------------------------
+BUG: the installer validates if the system module is available before accessing the module table
+
+
+
 V4.3 ----------------------------------------------------------------------------------------------------
 NEW: the installer base-class initializes the metadata.xml automatically, the init-call in the installers' constructor is no longer required.
 BUG: changed directory seperator so that always "/" is being used (else it causes problems under windows)

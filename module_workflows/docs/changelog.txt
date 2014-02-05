@@ -1,7 +1,13 @@
 Module Workflows
 
+V4.4 ----------------------------------------------------------------------------------------------------
+NEW: the workflow-engine is now callable / may be triggered using the url-schema host/xml.php?module=workflows&action=trigger&authkey=SECRET. The secret is stored as a system-setting, avoiding third parties to call the script. Added an initial version of a en-documentation. #834
+BUG: fixed a possible null pointer exception when synchronizing the list of workflows-handlers available
+
+
 V4.3 ----------------------------------------------------------------------------------------------------
 NEW: workflow details are now rendered using the dataTable instead of a plain list
+
 
 V4.2 ----------------------------------------------------------------------------------------------------
 NEW: a workflow-handler may return an instance of class_admin_formgenerator or string containing the generated form NEW: the workflow-backend-view adds the current id to the path-navigation

@@ -1,5 +1,11 @@
 Module JQPlot
 
 
+V4.4 ----------------------------------------------------------------------------------------------------
+NEW: plugin canvasOverlay is now included, added setter and getter for the series options
+BUG: changed the rounding of y-values in mouseovers from toFixed to round. This means, decimals are only added if required and not in every case.
+BUG: Added number format to mouse over values #842
+
+
 V4.3 ----------------------------------------------------------------------------------------------------
 NEW: new charting-library, replacing flot completely

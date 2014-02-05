@@ -1,0 +1,6 @@
+Module News
+
+
+V4.4-----------------------------------------------------------------------------------------------------
+BUG: refactored some parts of class_module_news_admin to be more v4-consistent. the language-switch is shown again when editing linked news-content
+BUG: the news-pages missed to include the category-filter

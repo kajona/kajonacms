@@ -1,0 +1,4 @@
+Module Debugging
+
+V4.4-----------------------------------------------------------------------------------------------------
+BUG: the dbimport script missed to include the class_carrier
