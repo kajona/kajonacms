@@ -5,12 +5,12 @@
         >
     <title>rating</title>
     <description>Provides a graphical way to your visitors in order to rate content. Therefore the classical stars-approach is used.</description>
-    <version>4.3</version>
+    <version>4.4</version>
     <author>Kajona Team</author>
     <type>MODULE</type>
     <providesInstaller>TRUE</providesInstaller>
     <requiredModules>
-        <module name="system" version="4.3" />
-        <module name="pages" version="4.3" />
+        <module name="system" version="4.4" />
+        <module name="pages" version="4.4" />
     </requiredModules>
 </package>

@@ -72,6 +72,12 @@ class class_installer_element_mediaplayer extends class_installer_base implement
             $this->objDB->flushQueryCache();
         }
 
+        if(class_module_pages_element::getElement("mediaplayer")->getStrVersion() == "4.3") {
+            $strReturn .= "Updating element mediaplayer to 4.4...\n";
+            $this->updateElementVersion("mediaplayer", "4.4");
+            $this->objDB->flushQueryCache();
+        }
+
         return $strReturn;
     }
 

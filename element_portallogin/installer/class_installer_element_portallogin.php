@@ -96,6 +96,12 @@ class class_installer_element_portallogin extends class_installer_base implement
             $this->objDB->flushQueryCache();
         }
 
+        if(class_module_pages_element::getElement("portallogin")->getStrVersion() == "4.3.1") {
+            $strReturn .= "Updating element portallogin to 4.4...\n";
+            $this->updateElementVersion("portallogin", "4.4");
+            $this->objDB->flushQueryCache();
+        }
+
         return $strReturn;
     }
 

@@ -133,6 +133,13 @@ class class_installer_guestbook extends class_installer_base  {
             $this->updateElementVersion("guestbook", "4.3");
         }
 
+        $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModul["module_version"] == "4.3") {
+            $strReturn = "Updating 4.3 to 4.4...\n";
+            $this->updateModuleVersion("guestbook", "4.4");
+            $this->updateElementVersion("guestbook", "4.4");
+        }
+
         return $strReturn."\n\n";
 	}
 

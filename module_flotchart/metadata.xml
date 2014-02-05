@@ -4,12 +4,13 @@
         xsi:noNamespaceSchemaLocation="http://apidocs.kajona.de/xsd/package.xsd"
     >
     <title>flotchart</title>
-    <description>flot charting engine. Used to render charts on the client-side, based on the common flot library.</description>
-    <version>4.3</version>
+    <description>flot charting engine. Used to render charts on the client-side, based on the common flot library.
+        This package is replaced by jqPlot and therefore no longer under active development.</description>
+    <version>4.4</version>
     <author>Kajona Team</author>
     <type>MODULE</type>
     <providesInstaller>FALSE</providesInstaller>
     <requiredModules>
-        <module name="system" version="4.3" />
+        <module name="system" version="4.4" />
     </requiredModules>
 </package>

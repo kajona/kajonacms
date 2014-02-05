@@ -73,6 +73,12 @@ class class_installer_element_facebooklikebox extends class_installer_base imple
             $this->objDB->flushQueryCache();
         }
 
+        if(class_module_pages_element::getElement("facebooklikebox")->getStrVersion() == "4.3") {
+            $strReturn .= "Updating element facebooklikebox to 4.4...\n";
+            $this->updateElementVersion("facebooklikebox", "4.4");
+            $this->objDB->flushQueryCache();
+        }
+
         return $strReturn;
     }
 

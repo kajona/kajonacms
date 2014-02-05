@@ -240,7 +240,7 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
                 $strStatus = "";
 
                 //validate the status
-                $objRequired = class_module_system_module::getModuleByName($strOneModule);
+                $objRequired = $objManager->getPackage($strOneModule);
                 if($objRequired == null) {
                     $strStatus = "<span class=\"label label-important\">".$this->getLang("package_missing")."</span>";
                 }

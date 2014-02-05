@@ -76,6 +76,12 @@ class class_installer_element_languageswitch extends class_installer_base implem
             $this->objDB->flushQueryCache();
         }
 
+        if(class_module_pages_element::getElement("languageswitch")->getStrVersion() == "4.3") {
+            $strReturn .= "Updating 4.3 to 4.4...\n";
+            $this->updateElementVersion("languageswitch", "4.4");
+            $this->objDB->flushQueryCache();
+        }
+
         return $strReturn."\n\n";
     }
 

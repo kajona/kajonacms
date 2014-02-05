@@ -113,7 +113,6 @@ class class_installer_workflows extends class_installer_base implements interfac
             $this->updateModuleVersion($this->objMetadata->getStrTitle(), "4.2");
         }
 
-
         $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
         if($arrModul["module_version"] == "4.2") {
             $strReturn .= "Updating 4.2 to 4.3...\n";
@@ -124,6 +123,12 @@ class class_installer_workflows extends class_installer_base implements interfac
         $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
         if($arrModul["module_version"] == "4.3") {
             $strReturn .= $this->update_43_431();
+        }
+
+        $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModul["module_version"] == "4.3.1") {
+            $strReturn .= "Updating 4.3 to 4.4...\n";
+            $this->updateModuleVersion($this->objMetadata->getStrTitle(), "4.4");
         }
 
         return $strReturn."\n\n";

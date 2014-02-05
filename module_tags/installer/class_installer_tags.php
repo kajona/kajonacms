@@ -147,6 +147,14 @@ class class_installer_tags extends class_installer_base implements interface_ins
             $this->objDB->flushQueryCache();
         }
 
+        $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModul["module_version"] == "4.3") {
+            $strReturn .= "Updating 4.3 to 4.4...\n";
+            $this->updateModuleVersion($this->objMetadata->getStrTitle(), "4.4");
+            $this->updateElementVersion($this->objMetadata->getStrTitle(), "4.4");
+            $this->objDB->flushQueryCache();
+        }
+
         return $strReturn."\n\n";
 	}
 

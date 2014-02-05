@@ -91,6 +91,13 @@ class class_installer_dashboard extends class_installer_base implements interfac
             $this->updateModuleVersion("dashboard", "4.3");
         }
 
+        $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModul["module_version"] == "4.3") {
+            $strReturn .= "Updating 4.3 to 4.4...\n";
+            $strReturn .= "Updating module-versions...\n";
+            $this->updateModuleVersion("dashboard", "4.4");
+        }
+
         return $strReturn."\n\n";
 	}
 

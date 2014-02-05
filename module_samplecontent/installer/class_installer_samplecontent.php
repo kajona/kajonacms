@@ -87,36 +87,37 @@ class class_installer_samplecontent extends class_installer_base implements inte
         $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
         if($arrModule["module_version"] == "3.4.2") {
             $strReturn .= "Updating 3.4.2 to 3.4.9...\n";
-            $strReturn .= "Updating module-versions...\n";
             $this->updateModuleVersion("samplecontent", "3.4.9");
         }
 
         $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
         if($arrModule["module_version"] == "3.4.9") {
             $strReturn .= "Updating 3.4.9 to 4.0...\n";
-            $strReturn .= "Updating module-versions...\n";
             $this->updateModuleVersion("samplecontent", "4.0");
         }
 
         $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
         if($arrModule["module_version"] == "4.0") {
             $strReturn .= "Updating 4.0 to 4.1...\n";
-            $strReturn .= "Updating module-versions...\n";
             $this->updateModuleVersion("samplecontent", "4.1");
         }
 
         $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
         if($arrModule["module_version"] == "4.1") {
             $strReturn .= "Updating 4.1 to 4.2...\n";
-            $strReturn .= "Updating module-versions...\n";
             $this->updateModuleVersion("samplecontent", "4.2");
         }
 
         $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
         if($arrModule["module_version"] == "4.2") {
             $strReturn .= "Updating 4.2 to 4.3...\n";
-            $strReturn .= "Updating module-versions...\n";
             $this->updateModuleVersion("samplecontent", "4.3");
+        }
+
+        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "4.3") {
+            $strReturn .= "Updating 4.3 to 4.4...\n";
+            $this->updateModuleVersion("samplecontent", "4.4");
         }
 
         return $strReturn;

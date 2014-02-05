@@ -84,6 +84,12 @@ class class_installer_element_tellafriend extends class_installer_base implement
             $this->objDB->flushQueryCache();
         }
 
+        if(class_module_pages_element::getElement("tellafriend")->getStrVersion() == "4.3") {
+            $strReturn .= "Updating element tellafriend to 4.4...\n";
+            $this->updateElementVersion("tellafriend", "4.4");
+            $this->objDB->flushQueryCache();
+        }
+
         return $strReturn;
     }
 

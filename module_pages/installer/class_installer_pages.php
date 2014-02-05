@@ -305,6 +305,15 @@ class class_installer_pages extends class_installer_base implements interface_in
             $strReturn .= $this->update_42_43();
         }
 
+        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "4.3") {
+            $strReturn = "Updating 4.3 to 4.4...\n";
+            $this->updateModuleVersion("", "4.4");
+            $this->updateElementVersion("row", "4.4");
+            $this->updateElementVersion("paragraph", "4.4");
+            $this->updateElementVersion("image", "4.4");
+        }
+
         return $strReturn."\n\n";
 	}
 
