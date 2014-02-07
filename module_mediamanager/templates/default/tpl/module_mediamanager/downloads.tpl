@@ -39,7 +39,7 @@
 
 <!-- represents a single file
     available placeholders: image_detail_src, file_filename, file_name, file_subtitle, file_description, file_size, file_hits, file_details_href,
-                            file_owner, file_lmtime, file_link, file_link_href, file_id, file_rating
+                            file_owner, file_lmtime, file_link, file_link_href, file_id, file_rating, file_elementid
 -->
 <filelist_file>
     <tr class="portalListRow1">
@@ -66,7 +66,7 @@
 <!-- available placeholders:
    image_src, overview, pathnavigation, backlink, forwardlink, backlink_(1..3), forwardlink_(1..3), filestrip_current
    file_systemid, file_name, file_description, file_subtitle, file_filename, file_size, file_hits, file_rating (if module rating installed),
-   file_owner, file_lmtime, file_link, file_link_href
+   file_owner, file_lmtime, file_link, file_link_href, file_elementid
 -->
 <filedetail>
     %%pathnavigation%%

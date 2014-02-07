@@ -75,7 +75,7 @@
 
 <!-- represents a single file within a filelist
      available placeholders: image_detail_src, file_name, file_filename, file_subtitle, file_description, file_size, file_hits, file_details_href,
-     file_owner, file_lmtime, file_link, file_link_href, file_id
+     file_owner, file_lmtime, file_link, file_link_href, file_id, file_elementid
 -->
 <filelist_file>
     <div class="mmGalleryImage">
@@ -88,7 +88,7 @@
 <!-- available placeholders:
    image_src, overview, pathnavigation, backlink, forwardlink, backlink_(1..3), forwardlink_(1..3), filestrip_current
    file_systemid, file_name, file_description, file_subtitle, file_filename, file_size, file_hits, file_rating (if module rating installed),
-   file_owner, file_lmtime, file_link, file_link_href
+   file_owner, file_lmtime, file_link, file_link_href, file_elementid
 -->
 <filedetail>
     <!-- not used for imagelightbox -->
@@ -96,7 +96,7 @@
 
 
 <!-- available placeholder:
-    file_name, file_system, file_detail_href
+    file_name, file_systemid, file_detail_href, file_elementid
 -->
 <filedetail_strip>
     <!-- not used for imagelightbox -->

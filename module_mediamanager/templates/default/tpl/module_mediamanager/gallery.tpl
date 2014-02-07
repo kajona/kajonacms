@@ -41,7 +41,7 @@ like < filelist >%%file_0%%</ filelist > -->
 
 <!-- represents a single file
      available placeholders: image_detail_src, file_filename, file_name, file_subtitle, file_description, file_size, file_hits, file_details_href,
-                             file_owner, file_lmtime, file_link, file_link_href, file_id, file_rating
+                             file_owner, file_lmtime, file_link, file_link_href, file_id, file_rating, file_elementid
 -->
 <filelist_file>
     <div style="text-align: center;">
@@ -54,7 +54,7 @@ like < filelist >%%file_0%%</ filelist > -->
 <!-- available placeholders:
     image_src, overview, pathnavigation, backlink, forwardlink, backlink_(1..3), forwardlink_(1..3), filestrip_current
     file_systemid, file_name, file_description, file_subtitle, file_filename, file_size, file_hits, file_rating (if module rating installed),
-    file_owner, file_lmtime, file_link, file_link_href
+    file_owner, file_lmtime, file_link, file_link_href, file_elementid
  -->
 <filedetail>
     <p>%%pathnavigation%%</p>
@@ -89,7 +89,7 @@ like < filelist >%%file_0%%</ filelist > -->
 </filedetail>
 
 <!-- available placeholder:
-    file_name, file_system, file_detail_href
+    file_name, file_systemid, file_detail_href, file_elementid
 -->
 <filedetail_strip>
     <a href="%%file_detail_href%%"><img src="[img,%%file_filename%%,60,30]" /></a>

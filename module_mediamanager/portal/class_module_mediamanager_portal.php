@@ -72,10 +72,19 @@ class class_module_mediamanager_portal extends class_portal implements interface
     }
 
 
+    /**
+     * @param int $intStart
+     * @param int $intEnd
+     *
+     * @return class_module_mediamanager_file[]
+     */
     protected function getArrFiles($intStart, $intEnd) {
         return class_module_mediamanager_file::loadFilesDB($this->getSystemid(), false, true, $intStart, $intEnd);
     }
 
+    /**
+     * @return int
+     */
     protected function getNumberOfEntriesOnLevel() {
         return class_module_mediamanager_file::getFileCount($this->getSystemid(), false, true);
     }
@@ -165,6 +174,7 @@ class class_module_mediamanager_portal extends class_portal implements interface
                         $arrFileTemplate["file_description"] = $objOneFile->getStrDescription();
                         $arrFileTemplate["file_size"] = bytesToString($objOneFile->getIntFileSize());
                         $arrFileTemplate["file_hits"] = $objOneFile->getIntHits();
+                        $arrFileTemplate["file_elementid"] = $this->arrElementData["content_id"];
                         $arrFileTemplate["file_lmtime"] = timeToString(filemtime(_realpath_.$objOneFile->getStrFilename()));
                         if(validateSystemid($objOneFile->getOwnerId())) {
                             $objUser = new class_module_user_user($objOneFile->getOwnerId());
@@ -265,7 +275,8 @@ class class_module_mediamanager_portal extends class_portal implements interface
      * Use this hook-method if you want to add additional placeholders to the portal-content of a single file-entry
      * within a list.
      * @param class_module_mediamanager_file $objOneFile
-     * @param $arrTemplate
+     * @param string[] &$arrTemplate
+     * @return void
      */
     protected function fileListTemplateHook(class_module_mediamanager_file $objOneFile, &$arrTemplate) {
 
@@ -299,6 +310,7 @@ class class_module_mediamanager_portal extends class_portal implements interface
         $arrDetailsTemplate["file_size"] = bytesToString($objFile->getIntFileSize());
         $arrDetailsTemplate["file_hits"] = $objFile->getIntHits();
         $arrDetailsTemplate["file_systemid"] = $objFile->getSystemid();
+        $arrDetailsTemplate["file_elementid"] = $this->arrElementData["content_id"];
 
         $arrDetailsTemplate["file_lmtime"] = timeToString(filemtime(_realpath_.$objFile->getStrFilename()));
         if(validateSystemid($objFile->getOwnerId())) {
@@ -396,7 +408,8 @@ class class_module_mediamanager_portal extends class_portal implements interface
             "file_detail_href" => getLinkPortalHref($this->getPagename(), "", "fileDetails", "", $objCurFile->getSystemid(), $this->getStrPortalLanguage(), $objCurFile->getStrName()),
             "file_name" => $objCurFile->getStrName(),
             "file_systemid" => $objCurFile->getStrSystemid(),
-            "file_filename" => $objCurFile->getStrFilename()
+            "file_filename" => $objCurFile->getStrFilename(),
+            "file_elementid" => $this->arrElementData["content_id"]
         );
         $strStripTemplate = $this->objTemplate->readTemplate("/module_mediamanager/".$this->arrElementData["repo_template"], "filedetail_strip");
         return $this->objTemplate->fillTemplate($arrTemplate, $strStripTemplate);
@@ -450,13 +463,13 @@ class class_module_mediamanager_portal extends class_portal implements interface
      * Helper function to generate the matching image.php-url for a given set of params.
      * If possible, the fastest manipulation (only resizing) is used.
      *
-     * @param $strImage
-     * @param $intHeight
-     * @param $intWidth
-     * @param $strText
-     * @param $strOverlayImage
-     * @param $strSystemid
-     * @param $strElementId
+     * @param string $strImage
+     * @param int $intHeight
+     * @param int $intWidth
+     * @param string $strText
+     * @param string $strOverlayImage
+     * @param string $strSystemid
+     * @param string $strElementId
      *
      * @return string
      */
@@ -613,7 +626,9 @@ class class_module_mediamanager_portal extends class_portal implements interface
     }
 
 
-
+    /**
+     * @return array
+     */
     public function getNavigationNodes() {
         $arrReturn = array();
 
@@ -634,6 +649,11 @@ class class_module_mediamanager_portal extends class_portal implements interface
 
     }
 
+    /**
+     * @param string $strParentId
+     *
+     * @return array
+     */
     private function getNavigationNodesHelper($strParentId) {
 
         $arrFoldersDB = class_module_mediamanager_file::loadFilesDB($strParentId, class_module_mediamanager_file::$INT_TYPE_FOLDER, true);
