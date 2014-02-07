@@ -24,7 +24,7 @@
  * $objMail->addAttachement("/portal/pics/kajona/kajona_poweredby.png", "", true);
  * $objMail->sendMail();
  *
- * The subject and the receipients name are encoded by a chunked utf-8 byte string.
+ * The subject and the recipients name are encoded by a chunked utf-8 byte string.
  * If your system runs on php >= 5.3, all text-based content will be encoded by quoted printables.
  *
  *
@@ -144,7 +144,7 @@ class class_mail {
 	/**
 	 * Adds a file to the current mail
 	 * If no mimetype is given, the system tries to lookup the mimetype itself.
-	 * Use $bitInline if the attachment shouldn't appear in the list of attachments in the mail client.
+	 * Use $bitInline if the attachment should not appear in the list of attachments in the mail client.
 	 * Inline-attachments can be used in html-emails like <img src="cid:your-filename.jpg" />
 	 *
 	 * @param string $strFilename
