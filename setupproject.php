@@ -148,7 +148,7 @@ TXT;
 
 Kajona V4 default template-pack.
 
-Please don't change anything within this folder, updated may break your changes
+Please don't change anything within this folder, updates may break your changes
 and overwrite them without further warning.
 
 If you want to adjust or change anything, create a new template pack using the
@@ -157,6 +157,19 @@ select the templates to redefine.
 
 Afterwards change the files in your new templatepack and activate the pack
 in the backend via the package-management.
+
+If you wonder why the folder tpl is empty: The default template-pack loads all templates
+directly aut of the core-packages. If you want to modify the default template tr if you
+want to create a new template, just follow the steps written above:
+
+- Open the backend and click packagemanagement => installed Templates
+- Create a new template-pack and select the templates you want to modify
+  (you are able to add additional templates afterwards)
+- Activate the template pack afterwards
+- The new templatepack is available under /templates, start to browse and modify the files
+  there
+
+Have fun!
 
 
 TXT;
