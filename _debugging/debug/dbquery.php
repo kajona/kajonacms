@@ -20,7 +20,7 @@ if(issetPost("doquery")) {
     if(get_magic_quotes_gpc() == 1)
         $strQuery = stripslashes($strQuery);
 
-	$objDb = $objCarrier->getObjDB();
+	$objDb = class_carrier::getInstance()->getObjDB();
 	echo "query to run ".$strQuery."\n";
 
 	if($objDb->_query($strQuery))
