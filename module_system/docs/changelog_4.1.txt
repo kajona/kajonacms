@@ -31,6 +31,7 @@ Module Navigation
 NEW: removed the parent-field from the navigation point form, the parent-id may be set by drag n drop (#758)
 
 Module Packagemanager
+NEW: the constant _ packagemanager_defaulttemplate _ is available as a runtime constant, too (e.g. to be used within templates)
 NEW: the packagemanager includes a more detailed error message if the package is already installed
 NEW: the list of installed packages is filterable (#750)
 NEW: added a simple updatecheck widget for the contents-dashboard

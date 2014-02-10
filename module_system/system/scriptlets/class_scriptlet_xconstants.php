@@ -29,17 +29,22 @@ class class_scriptlet_xconstants implements interface_scriptlet {
             define("_system_browser_cachebuster_", 0);
 
         $arrConstants = array(
-            0 => "_indexpath_",
-            1 => "_webpath_",
-            2 => "_system_browser_cachebuster_",
-            3 => "_gentime_"
+            "_indexpath_",
+            "_webpath_",
+            "_system_browser_cachebuster_",
+            "_gentime_"
         );
         $arrValues = array(
-            0 => _indexpath_,
-            1 => _webpath_,
-            2 => _system_browser_cachebuster_,
-            3 => date("d.m.y H:i", time())
+            _indexpath_,
+            _webpath_,
+            _system_browser_cachebuster_,
+            date("d.m.y H:i", time())
         );
+
+        if(defined("_packagemanager_defaulttemplate_")) {
+            $arrConstants[] = "_packagemanager_defaulttemplate_";
+            $arrValues[] = _packagemanager_defaulttemplate_;
+        }
 
         if(defined("_skinwebpath_")) {
             $arrConstants[] = "_skinwebpath_";
