@@ -15,8 +15,8 @@ class class_test_zip extends class_testbase  {
         echo "\topening "._realpath_."/test.zip\n";
         $this->assertTrue($objZip->openArchiveForWriting("/files/cache/test.zip"), __FILE__." openArchive");
 
-        $this->assertTrue($objZip->addFile("/core/module_system/system/tables.txt"), __FILE__." addFile");
-        $this->assertTrue($objZip->addFile("/core/module_system/system/tables.txt", "/tables_plain.txt"), __FILE__." addFileRenamed");
+        $this->assertTrue($objZip->addFile("/core/module_system/system/licence_lgpl.txt"), __FILE__." addFile");
+        $this->assertTrue($objZip->addFile("/core/module_system/system/licence_lgpl.txt", "/lgpl_plain.txt"), __FILE__." addFileRenamed");
 
         $this->assertTrue($objZip->addFolder("/core/module_system/system/config"), __FILE__." addFolder");
 
@@ -31,8 +31,8 @@ class class_test_zip extends class_testbase  {
         $objZip = new class_zip();
         $this->assertTrue($objZip->extractArchive("/files/cache/test.zip", "/files/cache/zipextract"), __FILE__." extractArchive");
 
-        $this->assertFileExists(_realpath_."/files/cache/zipextract/core/module_system/system/tables.txt", __FILE__." extractArchive");
-        $this->assertFileExists(_realpath_."/files/cache/zipextract/tables_plain.txt", __FILE__." extractArchive");
+        $this->assertFileExists(_realpath_."/files/cache/zipextract/core/module_system/system/licence_lgpl.txt", __FILE__." extractArchive");
+        $this->assertFileExists(_realpath_."/files/cache/zipextract/lgpl_plain.txt", __FILE__." extractArchive");
 
         $this->assertFileExists(_realpath_."/files/cache/zipextract/core/module_system/system/config/config.php", __FILE__." extractArchive");
 
@@ -55,9 +55,9 @@ class class_test_zip extends class_testbase  {
         $this->assertFileExists(_realpath_."/files/cache/ziptest", __FILE__." checkFileNotExists");
 
         $objFileSystem->folderCreate("/files/cache/ziptest/subdir");
-        $objFileSystem->fileCopy("/core/module_system/system/tables.txt", "/files/cache/ziptest/tables1.txt");
-        $objFileSystem->fileCopy("/core/module_system/system/tables.txt", "/files/cache/ziptest/tables2.txt");
-        $objFileSystem->fileCopy("/core/module_system/system/tables.txt", "/files/cache/ziptest/subdir/tables.txt");
+        $objFileSystem->fileCopy("/core/module_system/system/licence_lgpl.txt", "/files/cache/ziptest/licence_lgpl1.txt");
+        $objFileSystem->fileCopy("/core/module_system/system/licence_lgpl.txt", "/files/cache/ziptest/licence_lgpl2.txt");
+        $objFileSystem->fileCopy("/core/module_system/system/licence_lgpl.txt", "/files/cache/ziptest/subdir/licence_lgpl.txt");
 
         echo "\ttesting class_zip...\n";
 
@@ -75,9 +75,9 @@ class class_test_zip extends class_testbase  {
         $objZip = new class_zip();
         $this->assertTrue($objZip->extractArchive("/files/cache/test.zip", "/files/cache/zipextract"), __FILE__." extractArchive");
 
-        $this->assertFileExists(_realpath_."/files/cache/zipextract/files/cache/ziptest/tables1.txt", __FILE__." extractArchive");
-        $this->assertFileExists(_realpath_."/files/cache/zipextract/files/cache/ziptest/tables2.txt", __FILE__." extractArchive");
-        $this->assertFileExists(_realpath_."/files/cache/zipextract/files/cache/ziptest/subdir/tables.txt", __FILE__." extractArchive");
+        $this->assertFileExists(_realpath_."/files/cache/zipextract/files/cache/ziptest/licence_lgpl1.txt", __FILE__." extractArchive");
+        $this->assertFileExists(_realpath_."/files/cache/zipextract/files/cache/ziptest/licence_lgpl2.txt", __FILE__." extractArchive");
+        $this->assertFileExists(_realpath_."/files/cache/zipextract/files/cache/ziptest/subdir/licence_lgpl.txt", __FILE__." extractArchive");
 
 
 
@@ -101,14 +101,14 @@ class class_test_zip extends class_testbase  {
         $objZip = new class_zip();
         echo "\topening "._realpath_."/test.zip\n";
         $this->assertTrue($objZip->openArchiveForWriting("/files/cache/test.zip"), __FILE__." openArchive");
-        $this->assertTrue($objZip->addFile("/core/module_system/system/tables.txt"), __FILE__." addFile");
+        $this->assertTrue($objZip->addFile("/core/module_system/system/licence_lgpl.txt"), __FILE__." addFile");
         $this->assertTrue($objZip->closeArchive(), __FILE__." closeArchive");
 
         $this->assertFileExists(_realpath_."/files/cache/test.zip", __FILE__." checkFileExists");
 
         echo "\treading files\n";
-        $strTables = $objZip->getFileFromArchive("/files/cache/test.zip", "/core/module_system/system/tables.txt");
-        $this->assertTrue(uniStrpos($strTables, "www.kajona.de") !== false);
+        $strContent = $objZip->getFileFromArchive("/files/cache/test.zip", "/core/module_system/system/licence_lgpl.txt");
+        $this->assertTrue(uniStrpos($strContent, "Preamble") !== false);
 
         echo "\tremoving testfile\n";
         $this->assertTrue($objFileSystem->fileDelete("/files/cache/test.zip"), __FILE__." deleteFile");
