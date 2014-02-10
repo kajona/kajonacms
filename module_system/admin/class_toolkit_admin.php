@@ -1571,7 +1571,7 @@ class class_toolkit_admin extends class_toolkit {
             }
         }
 
-        $arrErrors = $objCalling->getValidationErrors();
+        $arrErrors = method_exists($objCalling, "getValidationErrors") ? $objCalling->getValidationErrors() : array();
         if(count($arrErrors) == 0)
             return $strRendercode;
 
