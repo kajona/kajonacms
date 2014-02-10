@@ -251,8 +251,8 @@ class class_resourceloader {
                     $strKey = array_search($strSingleEntry, $arrReturn);
                     if($strKey !== false) {
                         unset($arrReturn[$strKey]);
-                        $arrReturn[_projectpath_._langpath_."/".$strFolder."/".$strSingleEntry] = $strSingleEntry;
                     }
+                    $arrReturn[_projectpath_._langpath_."/".$strFolder."/".$strSingleEntry] = $strSingleEntry;
 
                 }
 
