@@ -29,6 +29,9 @@ class class_module_tags_objectindexedlistener  implements interface_objectindexe
      * @return bool
      */
     public function handleObjectIndexedEvent($objObject, class_module_search_document $objSearchDocument) {
+        if(class_module_system_module::getModuleByName("tags") == null)
+            return;
+
         //load tags for the object
         $objTags = class_module_tags_tag::getTagsForSystemid($objObject->getSystemid());
 
