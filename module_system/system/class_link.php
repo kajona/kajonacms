@@ -225,8 +225,8 @@ class class_link {
         }
 
         if($strImage == "" && $strText != "") {
-            if($strAlt == "")
-                $strAlt = $strText;
+            $bitTooltip = $bitTooltip && $strAlt != "";
+
             $strLink = "<a href=\"#\" ".($bitPortalEditor ? "class=\"pe_link\"" : "")." ".($bitTooltip ? "title=\"".$strAlt."\" rel=\"tooltip\" " : "")." ".
                 "onclick=\"window.open('".class_link::getLinkAdminHref($strModule, $strAction, $strParams)."','".$strTitle."','scrollbars=yes,resizable=yes,width=".$intWidth.",height=".$intHeight."'); return false;\">".$strText."</a>";
         }
