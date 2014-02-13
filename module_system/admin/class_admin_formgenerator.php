@@ -131,7 +131,7 @@ class class_admin_formgenerator {
     }
 
     /**
-     * @param string $strTargetURI
+     * @param string $strTargetURI If you pass null, no form-tags will be rendered.
      * @param int $intButtonConfig a list of buttons to attach to the end of the form. if you need more then the obligatory save-button,
      *                             pass them combined by a bitwise or, e.g. class_admin_formgenerator::BIT_BUTTON_SAVE | class_admin_formgenerator::$BIT_BUTTON_CANCEL
      *
@@ -147,7 +147,8 @@ class class_admin_formgenerator {
         $this->addField($objField);
 
         $objToolkit = class_carrier::getInstance()->getObjToolkit("admin");
-        $strReturn .= $objToolkit->formHeader($strTargetURI);
+        if($strTargetURI !== null)
+            $strReturn .= $objToolkit->formHeader($strTargetURI);
         $strReturn .= $objToolkit->getValidationErrors($this);
 
         $strHidden = "";
@@ -180,8 +181,8 @@ class class_admin_formgenerator {
             $strReturn .= $objToolkit->formInputSubmit(class_lang::getInstance()->getLang("commons_reset", "system"), "reset", "", "cancelbutton");
 
 
-
-        $strReturn .= $objToolkit->formClose();
+        if($strTargetURI !== null)
+            $strReturn .= $objToolkit->formClose();
 
         if(count($this->arrFields) > 0) {
             reset($this->arrFields);
