@@ -128,10 +128,10 @@ class class_module_messaging_messagehandler {
 
         //try to get a matching sender and place it into the mail
         if(validateSystemid($objMessage->getStrSenderId())) {
-            $objUser = new class_module_user_user($objMessage->getStrSenderId());
+            $objSenderUser = new class_module_user_user($objMessage->getStrSenderId());
             $objValidator = new class_email_validator();
-            if($objValidator->validate($objUser->getStrEmail()))
-                $objMail->setSender($objUser->getStrEmail());
+            if($objValidator->validate($objSenderUser->getStrEmail()))
+                $objMail->setSender($objSenderUser->getStrEmail());
         }
 
         $objMail->setSubject($strSubject);
