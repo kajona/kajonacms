@@ -1,5 +1,7 @@
 Module System
 
+V4.4.1 --------------------------------------------------------------------------------------------------
+BUG: mail-notifications sent by the messaging subsystem could use a wrong recipient for cases where the mail-sender was set explicitly
 
 V4.4 ----------------------------------------------------------------------------------------------------
 NEW: added new method which gets all subnodes of a given node recursively
