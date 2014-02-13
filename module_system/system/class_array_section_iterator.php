@@ -130,7 +130,8 @@ class class_array_section_iterator extends class_array_iterator {
             if(!$this->setCursorPosition($intI)) {
                 break;
             }
-            $arrReturn[] = $this->arrElements[$this->intArrCursor];
+            if(isset($this->arrElements[$this->intArrCursor]))
+                $arrReturn[] = $this->arrElements[$this->intArrCursor];
         }
         return $arrReturn;
     }
