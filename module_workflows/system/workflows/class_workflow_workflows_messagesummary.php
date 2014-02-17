@@ -89,7 +89,8 @@ class class_workflow_workflows_messagesummary implements interface_workflows_han
                 if($objOneMessage->getBitRead() == 0 && !$objOneMessage->getObjMessageProvider() instanceof class_messageprovider_summary)
                     $arrUnreadMessages[] = $objOneMessage;
 
-                //TODO: delete unread summaries
+                if($objOneMessage->getBitRead() == 0 && $objOneMessage->getObjMessageProvider() instanceof class_messageprovider_summary)
+                    $objOneMessage->deleteObject();
             }
 
             $this->createMessageForUser($objOneUser, $arrUnreadMessages);
