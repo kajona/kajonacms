@@ -297,7 +297,6 @@ JS;
 
     /**
      * @return string
-     * @permissions view
      */
     protected function actionEdit() {
         return $this->actionView();
@@ -343,10 +342,31 @@ JS;
      * Creates a summary of the message
      *
      * @return string
-     * @permissions view
      */
     protected function actionView() {
-        $objMessage = new class_module_messaging_message($this->getSystemid());
+        $objMessage = class_objectfactory::getInstance()->getObject($this->getSystemid());
+
+        //different permission handlings
+        if($objMessage !== null && !$objMessage->rightView()) {
+            return $this->strOutput = $this->getLang("commons_error_permissions");
+        }
+        else if($objMessage == null) {
+            $strMessage = $this->objToolkit->jsDialog(1);
+
+            $strText = $this->getLang("message_not_existing");
+            $strOk = $this->getLang("commons_ok");
+            $strLink = class_link::getLinkAdminHref($this->getArrModule("modul"), "list");
+            $strMessage .= "<script type='text/javascript'>
+                KAJONA.admin.loader.loadFile('_webpath_/core/module_v4skin/admin/skins/kajona_v4/js/kajona_dialog.js', function() {
+                    jsDialog_1.setTitle('&nbsp; ');
+                    jsDialog_1.setContent('{$strText}', '{$strOk}', '{$strLink}'); jsDialog_1.init();
+                    $('#'+jsDialog_1.containerId+'_cancelButton').css('display', 'none');
+                });
+            </script>";
+
+            return $strMessage;
+        }
+
 
         if($objMessage->getStrUser() == $this->objSession->getUserID()) {
 

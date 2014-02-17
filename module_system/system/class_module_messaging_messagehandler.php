@@ -114,14 +114,10 @@ class class_module_messaging_messagehandler {
 
         class_carrier::getInstance()->getObjLang()->setStrTextLanguage($objUser->getStrAdminlanguage());
 
-        $strSubject = class_carrier::getInstance()->getObjLang()->getLang("message_subject", "messaging");
-
-        if($objMessage->getStrTitle() != "")
-            $strSubject .= ": ".$objMessage->getStrTitle();
+        $strSubject = $objMessage->getStrTitle() != "" ? $objMessage->getStrTitle() : class_carrier::getInstance()->getObjLang()->getLang("message_notification_subject", "messaging");
 
         $strBody = class_carrier::getInstance()->getObjLang()->getLang("message_prolog", "messaging");
-
-        $strBody .= "\n\n".getLinkAdminHref("messaging", "view", "&systemid=".$objMessage->getSystemid(), false)."\n\n";
+        $strBody .= "\n\n".class_link::getLinkAdminHref("messaging", "view", "&systemid=".$objMessage->getSystemid(), false)."\n\n";
         $strBody .= $objMessage->getStrBody();
 
         $objMail = new class_mail();
