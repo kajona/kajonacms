@@ -93,7 +93,8 @@ class class_workflow_workflows_messagesummary implements interface_workflows_han
                     $objOneMessage->deleteObject();
             }
 
-            $this->createMessageForUser($objOneUser, $arrUnreadMessages);
+            if(count($arrUnreadMessages) > 0)
+                $this->createMessageForUser($objOneUser, $arrUnreadMessages);
         }
 
 
@@ -121,7 +122,7 @@ class class_workflow_workflows_messagesummary implements interface_workflows_han
             $strBody .= $objLang->getLang("message_messagesummary_body_indicator", "workflows", array(++$intI, count($arrMessages)))."\n";
 
             $strBody .= $objLang->getLang("message_subject", "messaging").": ".$objOneMessage->getStrTitle()."\n";
-            $strBody .= $objLang->getLang("message_link", "messaging").": ".getLinkAdminHref("messaging", "view", "&systemid=".$objOneMessage->getSystemid(), false)."\n";
+            $strBody .= $objLang->getLang("message_link", "messaging").": ".class_link::getLinkAdminHref("messaging", "view", "&systemid=".$objOneMessage->getSystemid(), false)."\n";
             $strBody .= $objLang->getLang("message_body", "messaging").":\n".$objOneMessage->getStrBody()."\n";
 
             $strBody .= "\n";
