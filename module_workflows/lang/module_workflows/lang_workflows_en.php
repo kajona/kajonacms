@@ -27,9 +27,12 @@ $lang["instance_responsible_hint"]       = "If the workflow requires the interac
 $lang["instance_systemid"]               = "Relevant systemid";
 $lang["instance_systemid_hint"]          = "If the workflow should be connected with a real object, the objects system-id may be set up here.";
 $lang["list_empty"]                      = "No workflows available";
-$lang["message_messagesummary_body_indicator"] = "Message %%current%% of %%total%%";
-$lang["message_messagesummary_intro"]    = "You have %%count%% unread messages. Following is a summary of all unread messages.";
-$lang["message_messagesummary_subject"]  = "You have %%count%% unread messages";
+
+$lang["message_messagesummary_body_indicator"] = "Message {0} of {1}";
+$lang["message_messagesummary_intro"]    = "You have {0} unread messages. Following is a summary of all unread messages.";
+$lang["message_messagesummary_subject"]  = "You have {0} unread messages";
+
+
 $lang["messageprovider_workflows_summary"] = "Summary of new messages";
 $lang["modul_titel"]                     = "Workflows";
 $lang["module_list_handlers"]            = "Workflow-Handlers";

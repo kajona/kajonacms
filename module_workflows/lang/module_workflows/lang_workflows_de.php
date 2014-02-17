@@ -27,10 +27,12 @@ $lang["instance_responsible_hint"]       = "Sofern der Workflow die Interaktion 
 $lang["instance_systemid"]               = "Betreffende Systemid";
 $lang["instance_systemid_hint"]          = "Sofern der Workflow einem konkreten Datensatz zugeordnet werden soll kann die System-ID des Datensatzes angegeben werden.";
 $lang["list_empty"]                      = "Keine Workflows angelegt";
-$lang["message_messagesummary_body_indicator"] = "Nachricht %%current%% von %%total%%";
-$lang["message_messagesummary_intro"]    = "Sie haben %%count%% neue Nachrichten. Nachfolgend finden Sie eine Zusammenstellung der ungelesenen Nachrichten.";
-$lang["message_messagesummary_subject"]  = "Sie haben %%count%% neue Nachrichten";
+
+$lang["message_messagesummary_body_indicator"] = "Nachricht {0} von {1}";
+$lang["message_messagesummary_intro"]    = "Sie haben {0} neue Nachrichten. Nachfolgend finden Sie eine Zusammenstellung der ungelesenen Nachrichten.";
+$lang["message_messagesummary_subject"]  = "Sie haben {0} neue Nachrichten";
 $lang["messageprovider_workflows_summary"] = "Zusammenfassung neuer Nachrichten";
+
 $lang["modul_titel"]                     = "Workflows";
 $lang["module_list_handlers"]            = "Workflow-Handler";
 $lang["module_mylist"]                   = "Meine Workflows";
