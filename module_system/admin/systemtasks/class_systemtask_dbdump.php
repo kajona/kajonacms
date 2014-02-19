@@ -16,7 +16,7 @@
 class class_systemtask_dbdump extends class_systemtask_base implements interface_admin_systemtask {
 
     private $arrTablesToExlucde = array(
-        "stats_data", "stats_ip2country", "cache"
+        "stats_data", "stats_ip2country", "cache", "search_ix_document", "search_ix_content"
     );
 
     /**
