@@ -62,4 +62,15 @@ class class_messageprovider_personalmessage implements interface_messageprovider
         return false;
     }
 
+    /**
+     * This method is queried when the config-view is rendered.
+     * It controls whether a message-provider is shown in the config-view or not.
+     *
+     * @return mixed
+     * @since 4.5
+     */
+    public function isVisibleInConfigView() {
+        return true;
+    }
+
 }

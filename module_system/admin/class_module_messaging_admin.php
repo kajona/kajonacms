@@ -25,20 +25,26 @@
 class class_module_messaging_admin extends class_admin_evensimpler implements interface_admin {
 
 
+    /**
+     * @return array
+     */
     public function getOutputModuleNavi() {
         $arrReturn = array();
-        $arrReturn[] = array("view", getLinkAdmin($this->arrModule["modul"], "list", "", $this->getLang("commons_list"), "", "", true, "adminnavi"));
-        $arrReturn[] = array("edit", getLinkAdmin($this->arrModule["modul"], "config", "", $this->getLang("action_config"), "", "", true, "adminnavi"));
+        $arrReturn[] = array("view", class_link::getLinkAdmin($this->getArrModule("modul"), "list", "", $this->getLang("commons_list"), "", "", true, "adminnavi"));
+        $arrReturn[] = array("edit", class_link::getLinkAdmin($this->getArrModule("modul"), "config", "", $this->getLang("action_config"), "", "", true, "adminnavi"));
         $arrReturn[] = array("", "");
-        $arrReturn[] = array("right", getLinkAdmin("right", "change", "&changemodule=".$this->arrModule["modul"], $this->getLang("commons_module_permissions"), "", "", true, "adminnavi"));
+        $arrReturn[] = array("right", class_link::getLinkAdmin("right", "change", "&changemodule=".$this->getArrModule("modul"), $this->getLang("commons_module_permissions"), "", "", true, "adminnavi"));
         return $arrReturn;
     }
 
+    /**
+     * @return array
+     */
     protected function getArrOutputNaviEntries() {
         $arrEntries = parent::getArrOutputNaviEntries();
         $objObject = class_objectfactory::getInstance()->getObject($this->getSystemid());
         if($objObject instanceof class_module_messaging_message)
-            $arrEntries[] = getLinkAdmin("messaging", "edit", "&systemid=".$objObject->getSystemid(), $objObject->getStrDisplayName());
+            $arrEntries[] = class_link::getLinkAdmin("messaging", "edit", "&systemid=".$objObject->getSystemid(), $objObject->getStrDisplayName());
 
         return $arrEntries;
     }
@@ -60,22 +66,25 @@ class class_module_messaging_admin extends class_admin_evensimpler implements in
 
         //create callback for the on-off toogle which is passed to formInputOnOff
         $strCallback = <<<JS
-                //data contains the clicked element
-                var inputId = data.el[0].id;
-                var messageProviderType = inputId.slice(0, inputId.lastIndexOf("_"));
+            //data contains the clicked element
+            var inputId = data.el[0].id;
+            var messageProviderType = inputId.slice(0, inputId.lastIndexOf("_"));
 
-                var param1 =inputId+'='+data.value; //value for clicked toggle element
-                var param2 = 'messageprovidertype='+messageProviderType; //messageprovide type
-                var postBody = param1+'&'+param2;
+            var param1 =inputId+'='+data.value; //value for clicked toggle element
+            var param2 = 'messageprovidertype='+messageProviderType; //messageprovide type
+            var postBody = param1+'&'+param2;
 
-                KAJONA.admin.ajax.genericAjaxCall("messaging", "saveConfigAjax", "&"+postBody, KAJONA.admin.ajax.regularCallback);
+            KAJONA.admin.ajax.genericAjaxCall("messaging", "saveConfigAjax", "&"+postBody, KAJONA.admin.ajax.regularCallback);
 
-                if(inputId.indexOf("_enabled") > 0 ) {
-                    $("#"+inputId).closest("tr").find("div.make-switch:not(.blockEnable)").slice(1).bootstrapSwitch("setActive", data.value != 0);
-                }
+            if(inputId.indexOf("_enabled") > 0 ) {
+                $("#"+inputId).closest("tr").find("div.make-switch:not(.blockEnable)").slice(1).bootstrapSwitch("setActive", data.value != 0);
+            }
 JS;
         $arrRows = array();
         foreach($arrMessageproviders as $objOneProvider) {
+
+            if($objOneProvider instanceof interface_messageprovider_extended && !$objOneProvider->isVisibleInConfigView())
+                continue;
 
             $objConfig = class_module_messaging_config::getConfigForUserAndProvider($this->objSession->getUserID(), $objOneProvider);
 
@@ -100,10 +109,15 @@ JS;
         return $strReturn;
     }
 
+    /**
+     * @param class_model $objListEntry
+     *
+     * @return array
+     */
     protected function renderAdditionalActions(class_model $objListEntry) {
         if($objListEntry instanceof class_module_messaging_message) {
             return array(
-                getLinkAdminDialog($this->getArrModule("modul"), "new", "&messaging_user_id=".$objListEntry->getStrSenderId()."&messaging_messagerefid=".$objListEntry->getSystemid()."&messaging_title=RE: ".$objListEntry->getStrTitle(), $this->getLang("message_reply"), $this->getLang("message_reply"), "icon_reply")
+                class_link::getLinkAdminDialog($this->getArrModule("modul"), "new", "&messaging_user_id=".$objListEntry->getStrSenderId()."&messaging_messagerefid=".$objListEntry->getSystemid()."&messaging_title=RE: ".$objListEntry->getStrTitle(), $this->getLang("message_reply"), $this->getLang("message_reply"), "icon_reply")
             );
         }
 
@@ -111,10 +125,21 @@ JS;
     }
 
 
+    /**
+     * @param string $strListIdentifier
+     * @param bool $bitDialog
+     *
+     * @return array|string
+     */
     protected function getNewEntryAction($strListIdentifier, $bitDialog = false) {
         return parent::getNewEntryAction($strListIdentifier, true);
     }
 
+    /**
+     * @param class_model $objListEntry
+     *
+     * @return string
+     */
     protected function renderCopyAction(class_model $objListEntry) {
         return "";
     }
@@ -140,7 +165,7 @@ JS;
 
         }
 
-        $this->adminReload(getLinkAdminHref($this->getArrModule("modul")));
+        $this->adminReload(class_link::getLinkAdminHref($this->getArrModule("modul")));
     }
 
     /**
@@ -183,10 +208,16 @@ JS;
         return "<message>".$strMessage."</message>";
     }
 
+    /**
+     * @param class_model $objListEntry
+     * @param bool $bitDialog
+     *
+     * @return string
+     */
     protected function renderEditAction(class_model $objListEntry, $bitDialog = false) {
         if($objListEntry->rightView()) {
             return $this->objToolkit->listButton(
-                getLinkAdmin(
+                class_link::getLinkAdmin(
                     $objListEntry->getArrModule("modul"),
                     "edit",
                     "&systemid=".$objListEntry->getSystemid(),
@@ -199,6 +230,11 @@ JS;
         return "";
     }
 
+    /**
+     * @param class_model $objListEntry
+     *
+     * @return string
+     */
     protected function renderStatusAction(class_model $objListEntry) {
         return "";
     }
@@ -227,10 +263,15 @@ JS;
 
     }
 
+    /**
+     * @param string $strListIdentifier
+     *
+     * @return array
+     */
     protected function getBatchActionHandlers($strListIdentifier) {
         $arrDefault = $this->getDefaultActionHandlers();
-        $arrDefault[] = new class_admin_batchaction(getImageAdmin("icon_mail"), getLinkAdminXml("messaging", "setRead", "&systemid=%systemid%"), $this->getLang("batchaction_read"));
-        $arrDefault[] = new class_admin_batchaction(getImageAdmin("icon_mailNew"), getLinkAdminXml("messaging", "setUnread", "&systemid=%systemid%"), $this->getLang("batchaction_unread"));
+        $arrDefault[] = new class_admin_batchaction(class_link::getImageAdmin("icon_mail"), class_link::getLinkAdminXml("messaging", "setRead", "&systemid=%systemid%"), $this->getLang("batchaction_read"));
+        $arrDefault[] = new class_admin_batchaction(class_link::getImageAdmin("icon_mailNew"), class_link::getLinkAdminXml("messaging", "setUnread", "&systemid=%systemid%"), $this->getLang("batchaction_unread"));
         return $arrDefault;
     }
 
@@ -273,6 +314,11 @@ JS;
         return "<message><error /></message>";
     }
 
+    /**
+     * @param interface_model $objInstance
+     *
+     * @return class_admin_formgenerator
+     */
     protected function getAdminForm(interface_model $objInstance) {
         $objForm = parent::getAdminForm($objInstance);
 
@@ -282,7 +328,7 @@ JS;
                 if($objRefMessage instanceof class_module_messaging_message) {
 
                     $arrBody = preg_split('/$\R?^/m', $objRefMessage->getStrBody());
-                    array_walk($arrBody, function(&$strValue) {
+                    array_walk($arrBody, function (&$strValue) {
                         $strValue = "> ".$strValue;
                     });
 
@@ -302,6 +348,9 @@ JS;
         return $this->actionView();
     }
 
+    /**
+     * @return string
+     */
     protected function actionNew() {
         $this->setStrCurObjectTypeName("");
         $this->setCurObjectClassName("class_module_messaging_message");
@@ -310,6 +359,9 @@ JS;
     }
 
 
+    /**
+     * @return string
+     */
     protected  function actionSave() {
 
         $this->setArrModuleEntry("template", "/folderview.tpl");
@@ -344,6 +396,7 @@ JS;
      * @return string
      */
     protected function actionView() {
+        /** @var class_module_messaging_message $objMessage */
         $objMessage = class_objectfactory::getInstance()->getObject($this->getSystemid());
 
         //different permission handlings
@@ -445,7 +498,7 @@ JS;
                 "systemid" => $objOneMessage->getSystemid(),
                 "title" => $objOneMessage->getStrDisplayName(),
                 "unread" => $objOneMessage->getBitRead(),
-                "details" => getLinkAdminHref($objOneMessage->getArrModule("modul"), "edit", "&systemid=".$objOneMessage->getSystemid(), false)
+                "details" => class_link::getLinkAdminHref($objOneMessage->getArrModule("modul"), "edit", "&systemid=".$objOneMessage->getSystemid(), false)
             );
         }
 

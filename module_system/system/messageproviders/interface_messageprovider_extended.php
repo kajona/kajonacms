@@ -32,4 +32,14 @@ interface interface_messageprovider_extended extends interface_messageprovider {
      * @return mixed
      */
     public function isAlwaysByMail();
+
+    /**
+     * This method is queried when the config-view is rendered.
+     * It controls whether a message-provider is shown in the config-view or not.
+     *
+     * @return bool
+     * @since 4.5
+     */
+    public function isVisibleInConfigView();
+
 }

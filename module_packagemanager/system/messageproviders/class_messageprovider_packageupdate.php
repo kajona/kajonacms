@@ -14,7 +14,7 @@
  * @package module_messaging
  * @since 4.0
  */
-class class_messageprovider_packageupdate implements interface_messageprovider {
+class class_messageprovider_packageupdate implements interface_messageprovider_extended {
 
     /**
      * Called whenever a message is being deleted
@@ -41,6 +41,38 @@ class class_messageprovider_packageupdate implements interface_messageprovider {
      */
     public function getStrName() {
         return class_carrier::getInstance()->getObjLang()->getLang("messageprovider_packageupdate_name", "messaging");
+    }
+
+    /**
+     * If set to true, the messageprovider may not be disabled by the user.
+     * Messages are always sent to the user.
+     *
+     * @return bool
+     */
+    public function isAlwaysActive() {
+        return false;
+    }
+
+    /**
+     * If set to true, all messages sent by this provider will be sent by mail, too.
+     * The user is not allowed to disable the by-mail flag.
+     * Set this to true with care.
+     *
+     * @return mixed
+     */
+    public function isAlwaysByMail() {
+        return false;
+    }
+
+    /**
+     * This method is queried when the config-view is rendered.
+     * It controls whether a message-provider is shown in the config-view or not.
+     *
+     * @return bool
+     * @since 4.5
+     */
+    public function isVisibleInConfigView() {
+        return class_module_system_module::getModuleByName("packagemanager")->rightView();
     }
 
 }
