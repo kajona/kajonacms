@@ -35,7 +35,7 @@ class class_image_text extends class_image_abstract_operation {
             $strText = html_entity_decode($this->strText, ENT_COMPAT, "UTF-8");
             imagealphablending($objResource, true);
             imagefttext($objResource, $this->floatSize, $this->floatAngle,
-                $this->intX, $this->intY, $intColor, $strFontPath, $strText);
+                $this->intX, $this->intY, $intColor, _realpath_.$strFontPath, $strText);
             imagealphablending($objResource, false);
             return true;
         }
