@@ -1,5 +1,8 @@
 Module System
 
+V4.4.2 --------------------------------------------------------------------------------------------------
+BUG: the image text-plugin used a wrong font-path, therefore text-operations failed (e.g. when rendering a captcha image)
+
 V4.4.1 --------------------------------------------------------------------------------------------------
 BUG: mail-notifications sent by the messaging subsystem could use a wrong recipient for cases where the mail-sender was set explicitly
 
