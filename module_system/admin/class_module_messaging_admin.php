@@ -270,8 +270,8 @@ JS;
      */
     protected function getBatchActionHandlers($strListIdentifier) {
         $arrDefault = $this->getDefaultActionHandlers();
-        $arrDefault[] = new class_admin_batchaction(class_link::getImageAdmin("icon_mail"), class_link::getLinkAdminXml("messaging", "setRead", "&systemid=%systemid%"), $this->getLang("batchaction_read"));
-        $arrDefault[] = new class_admin_batchaction(class_link::getImageAdmin("icon_mailNew"), class_link::getLinkAdminXml("messaging", "setUnread", "&systemid=%systemid%"), $this->getLang("batchaction_unread"));
+        $arrDefault[] = new class_admin_batchaction(class_adminskin_helper::getImageAdmin("icon_mail"), class_link::getLinkAdminXml("messaging", "setRead", "&systemid=%systemid%"), $this->getLang("batchaction_read"));
+        $arrDefault[] = new class_admin_batchaction(class_adminskin_helper::getImageAdmin("icon_mailNew"), class_link::getLinkAdminXml("messaging", "setUnread", "&systemid=%systemid%"), $this->getLang("batchaction_unread"));
         return $arrDefault;
     }
 
