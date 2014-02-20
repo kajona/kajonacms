@@ -155,6 +155,8 @@ class class_csv {
                 class_response_object::getInstance()->addHeader('Cache-control: private, must-revalidate');
                 class_response_object::getInstance()->setStResponseType(class_http_responsetypes::STR_TYPE_CSV);
                 class_response_object::getInstance()->addHeader("Content-Disposition: attachment; filename=" . saveUrlEncode(trim(basename($this->strFilename))));
+
+                class_response_object::getInstance()->sendHeaders();
             }
             else {
                 $objFilesystem->openFilePointer($this->strFilename);
@@ -220,7 +222,6 @@ class class_csv {
             }
 
             if($bitStreamToBrowser) {
-                class_response_object::getInstance()->sendHeaders();
                 flush();
                 die();
             }
