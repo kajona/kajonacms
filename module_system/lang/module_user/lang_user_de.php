@@ -160,3 +160,5 @@ $lang["user_username"]                   = "Benutzername";
 $lang["user_usersource"]                 = "Benutzerquelle";
 $lang["user_zugehoerigkeit"]             = "Gruppenzugehörigkeiten";
 $lang["userlist_filter"]                 = "Filter anwenden";
+$lang["user_active"]                     = "Aktiv";
+$lang["user_inactive"]                   = "Inaktiv";

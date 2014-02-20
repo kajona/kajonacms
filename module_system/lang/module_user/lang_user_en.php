@@ -159,3 +159,5 @@ $lang["user_username"]                   = "Username";
 $lang["user_usersource"]                 = "User-Source";
 $lang["user_zugehoerigkeit"]             = "Group assignments";
 $lang["userlist_filter"]                 = "Apply filter";
+$lang["user_active"]                     = "active";
+$lang["user_inactive"]                   = "inactive";
