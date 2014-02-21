@@ -129,7 +129,10 @@ class class_module_workflows_workflow extends class_model implements interface_m
      * @return string
      */
     public function getStrAdditionalInfo() {
-        return dateToString($this->getObjTriggerDate());
+        if($this->rightEdit())
+            return dateToString($this->getObjTriggerDate());
+        else
+            return false;
     }
 
     /**
