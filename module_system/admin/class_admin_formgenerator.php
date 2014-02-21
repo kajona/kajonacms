@@ -65,6 +65,8 @@ class class_admin_formgenerator {
     private $strHiddenGroupTitle = "additional fields";
     private $bitHiddenElementsVisible = false;
 
+    private $strOnSubmit = "";
+
     /**
      * Creates a new instance of the form-generator.
      *
@@ -148,7 +150,7 @@ class class_admin_formgenerator {
 
         $objToolkit = class_carrier::getInstance()->getObjToolkit("admin");
         if($strTargetURI !== null)
-            $strReturn .= $objToolkit->formHeader($strTargetURI);
+            $strReturn .= $objToolkit->formHeader($strTargetURI, "", "", $this->strOnSubmit);
         $strReturn .= $objToolkit->getValidationErrors($this);
 
         $strHidden = "";
@@ -522,6 +524,25 @@ class class_admin_formgenerator {
     public function getArrFields() {
         return $this->arrFields;
     }
+
+    /**
+     * Allows to inject an onsbumit handler
+     *
+     * @param string $strOnSubmit
+     * @return void
+     */
+    public function setStrOnSubmit($strOnSubmit) {
+        $this->strOnSubmit = $strOnSubmit;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStrOnSubmit() {
+        return $this->strOnSubmit;
+    }
+
+
 
 
 }
