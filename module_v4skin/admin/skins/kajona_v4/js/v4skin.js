@@ -155,11 +155,13 @@ KAJONA.v4skin = {
             var $objCur = $(this);
             $objCur.css('background-image', 'url('+KAJONA_WEBPATH+'/core/module_v4skin/admin/skins/kajona_v4/img/loading-small-still.gif)').css('background-repeat', 'no-repeat').css('background-position', 'right center');
 
-            $('#'+$objCur.attr('id')).keypress(function(event) {
-                if($('#'+$objCur.attr('id')+'_id')) {
-                    $( '#'+$objCur.attr('id')+'_id' ).val( "" );
-                }
-            });
+            if(!$objCur.is('[readonly]')) {
+                $('#'+$objCur.attr('id')).keypress(function(event) {
+                    if($('#'+$objCur.attr('id')+'_id')) {
+                        $( '#'+$objCur.attr('id')+'_id' ).val( "" );
+                    }
+                });
+            }
         }
     }
 };
