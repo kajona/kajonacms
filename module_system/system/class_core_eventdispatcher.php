@@ -64,11 +64,6 @@ class class_core_eventdispatcher {
 
 
     /**
-     * @var interface_recordupdated_listener
-     */
-    private static $arrRecordUpdatedListener = null;
-
-    /**
      * Triggers all model-classes implementing the interface interface_statuschanged_listener and notifies
      * about a new status set.
      *
@@ -122,26 +117,20 @@ class class_core_eventdispatcher {
         return self::notifyListeners("interface_previdchanged_listener", "handlePrevidChangedEvent", array($strSystemid, $strOldPrevid, $strNewPrevid));
     }
 
+
     /**
      * Triggers all model-classes implementing the interface interface_recordupdated_listener and notifies them about an updated object
      *
-     * @static
-     *
      * @param class_model $objRecord
      *
+     * @static
      * @return bool
+     * @deprecated use class_core_eventdispatcher::notifyListeners() instead
      * @see interface_recordupdated_listener
+     * @see class_core_eventdispatcher::notifyListeners()
      */
     public static function notifyRecordUpdatedListeners(class_model $objRecord) {
-        $bitReturn = true;
-        $arrListener = self::getRecordUpdatedListeners();
-        /** @var interface_recordupdated_listener $objOneListener */
-        foreach($arrListener as $objOneListener) {
-            class_logger::getInstance(class_logger::EVENTS)->addLogRow("propagating recordUpdated to ".get_class($objOneListener)." sysid: ".$objRecord->getSystemid(), class_logger::$levelInfo);
-            $bitReturn = $bitReturn && $objOneListener->handleRecordUpdatedEvent($objRecord);
-        }
-
-        return $bitReturn;
+        return self::notifyListeners("interface_recordupdated_listener", "handleRecordUpdatedEvent", array($objRecord));
     }
 
 
@@ -179,19 +168,6 @@ class class_core_eventdispatcher {
         return self::notifyListeners("interface_userfirstlogin_listener", "handleUserFirstLoginEvent", array($strUserid));
     }
 
-
-    /**
-     * Loads all objects registered to ne notified in case of previd-changes
-     * @static
-     * @return interface_recordupdated_listener[]
-     */
-    private static function getRecordUpdatedListeners() {
-        if(self::$arrRecordUpdatedListener == null) {
-            self::$arrRecordUpdatedListener = self::loadInterfaceImplementers("interface_recordupdated_listener");
-        }
-
-        return self::$arrRecordUpdatedListener;
-    }
 
     /**
      * Loads all business-objects implementing the passed interface
