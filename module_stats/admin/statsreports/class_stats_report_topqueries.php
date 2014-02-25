@@ -34,34 +34,56 @@ class class_stats_report_topqueries implements interface_admin_statsreports {
         $this->objDB = $objDB;
     }
 
-    public function registerPlugin(class_admininterface_pluginmanager $objPluginamanger) {
-        $objPluginamanger->registerPlugin($this);
+    /**
+     * Returns the name of extension/plugin the objects wants to contribute to.
+     *
+     * @return string
+     */
+    public function getExtensionName() {
+        return "core.stats.admin.statsreport";
     }
 
+    /**
+     * @param int $intEndDate
+     * @return void
+     */
     public function setEndDate($intEndDate) {
         $this->intDateEnd = $intEndDate;
     }
 
+    /**
+     * @param int $intStartDate
+     * @return void
+     */
     public function setStartDate($intStartDate) {
         $this->intDateStart = $intStartDate;
     }
 
+    /**
+     * @return string
+     */
     public function getTitle() {
         return $this->objTexts->getLang("topqueries", "stats");
     }
 
-    public function getPluginCommand() {
-        return "statsTopQueries";
-    }
-
+    /**
+     * @return bool
+     */
     public function isIntervalable() {
         return false;
     }
 
+    /**
+     * @param int $intInterval
+     * @return void
+     */
     public function setInterval($intInterval) {
 
     }
 
+    /**
+     * @return string
+     */
     public function getReport() {
         $strReturn = "";
         //Create Data-table
@@ -154,6 +176,9 @@ class class_stats_report_topqueries implements interface_admin_statsreports {
         return $arrHits;
     }
 
+    /**
+     * @return mixed|string
+     */
     public function getReportGraph() {
         //collect data
         $arrPages = $this->getTopQueries();

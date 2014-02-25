@@ -22,7 +22,8 @@ class class_module_stats_admin extends class_admin implements interface_admin {
     public static $STR_SESSION_KEY_DATE_START = "STR_SESSION_KEY_DATE_START";
     public static $STR_SESSION_KEY_DATE_END = "STR_SESSION_KEY_DATE_END";
     public static $STR_SESSION_KEY_INTERVAL = "STR_SESSION_KEY_INTERVAL";
-    public static $STR_PLUGIN_EXTENSION_POINT = "interface_admin_statsreports";
+
+    public static $STR_PLUGIN_EXTENSION_POINT = "core.stats.admin.statsreport";
 
     /**
      * @var class_date
@@ -35,9 +36,11 @@ class class_module_stats_admin extends class_admin implements interface_admin {
     private $intInterval = 2;
 
     /**
-     * @var class_admininterface_pluginmanager
+     * @var class_pluginmanager
      */
     private $objPluginManager;
+
+    static $arrReports = null;
 
     /**
      * Constructor
@@ -85,25 +88,7 @@ class class_module_stats_admin extends class_admin implements interface_admin {
             @ini_set("memory_limit", "60M");
         }
 
-
-        $bitScanPlugins = true;
-        //check on how to update - try to avoid problems with 4.2 -> 4.3 updates
-        $objMediamanager = class_module_system_module::getModuleByName("mediamanager");
-        if($objMediamanager != null && version_compare($objMediamanager->getStrVersion(), "4.3", "<"))
-            $bitScanPlugins = false;
-
-        $objSearch = class_module_system_module::getModuleByName("search");
-        if($objSearch != null && version_compare($objSearch->getStrVersion(), "4.3", "<"))
-            $bitScanPlugins = false;
-
-        $objPackageserver = class_module_system_module::getModuleByName("packageserver");
-        if($objPackageserver != null && version_compare($objPackageserver->getStrVersion(), "4.3", "<"))
-            $bitScanPlugins = false;
-
-        if($bitScanPlugins) {
-            $this->objPluginManager = new class_admininterface_pluginmanager();
-            $this->objPluginManager->loadPluginsFiltered("/admin/statsreports/", self::$STR_PLUGIN_EXTENSION_POINT);
-        }
+        $this->objPluginManager = new class_pluginmanager(self::$STR_PLUGIN_EXTENSION_POINT, "/admin/statsreports");
 
         $this->setAction("list");
     }
@@ -113,10 +98,12 @@ class class_module_stats_admin extends class_admin implements interface_admin {
         $arrReturn = array();
         //Load all plugins available and create the navigation
         if($this->objPluginManager != null) {
-            $arrPlugins = $this->objPluginManager->getMatchingPluginObjects();
 
-            foreach($arrPlugins as $objPlugin) {
-                $arrReturn[] = array("view", getLinkAdmin($this->getArrModule("modul"), $objPlugin->getPluginCommand(), "", $objPlugin->getTitle(), "", "", true, "adminnavi"));
+            /** @var interface_admin_statsreports[] $arrReports */
+            $arrReports = $this->getArrReports();
+
+            foreach($arrReports as $objPlugin) {
+                $arrReturn[] = array("view", getLinkAdmin($this->getArrModule("modul"), $this->getActionForReport($objPlugin), "", $objPlugin->getTitle(), "", "", true, "adminnavi"));
             }
         }
 
@@ -137,7 +124,7 @@ class class_module_stats_admin extends class_admin implements interface_admin {
 
         $strAction = $this->getParam("action");
         if($strAction == "") {
-            $strAction = "statsCommon";
+            $strAction = "common";
             $this->setParam("action", $strAction);
         }
 
@@ -153,9 +140,9 @@ class class_module_stats_admin extends class_admin implements interface_admin {
     protected function getArrOutputNaviEntries() {
         $arrPathLinks = parent::getArrOutputNaviEntries();
 
-        foreach($this->objPluginManager->getMatchingPluginObjects() as $objOneReport) {
-            if($objOneReport->getPluginCommand() == $this->getParam("action")) {
-                $arrPathLinks[] = getLinkAdmin($this->getArrModule("modul"), $objOneReport->getPluginCommand(), "", $objOneReport->getTitle());
+        foreach($this->getArrReports() as $objOneReport) {
+            if($this->getActionForReport($objOneReport) == $this->getParam("action")) {
+                $arrPathLinks[] = getLinkAdmin($this->getArrModule("modul"), $this->getActionForReport($objOneReport), "", $objOneReport->getTitle());
             }
         }
 
@@ -174,7 +161,13 @@ class class_module_stats_admin extends class_admin implements interface_admin {
     private function loadRequestedPlugin($strPlugin) {
         $strReturn = "";
 
-        $objPlugin = $this->objPluginManager->getPluginObject(self::$STR_PLUGIN_EXTENSION_POINT, $strPlugin);
+        $objPlugin = null;
+        foreach($this->getArrReports() as $objOneReport) {
+            if($this->getActionForReport($objOneReport) == $strPlugin) {
+                $objPlugin = $objOneReport;
+                break;
+            }
+        }
 
         if($objPlugin) {
             $strReturn .= $this->getInlineLoadingCode($objPlugin);
@@ -227,7 +220,6 @@ class class_module_stats_admin extends class_admin implements interface_admin {
 
     /**
      * Creates int-values of the passed date-values
-
      */
     private function processDates() {
 
@@ -258,7 +250,7 @@ class class_module_stats_admin extends class_admin implements interface_admin {
     /**
      * Creates the code required to load the report via an ajax request
      *
-     * @param interface_admininterface_plugin $objPlugin
+     * @param interface_admin_statsreports $objPlugin
      * @param string $strPv
      *
      * @return string
@@ -266,7 +258,7 @@ class class_module_stats_admin extends class_admin implements interface_admin {
     private function getInlineLoadingCode($objPlugin, $strPv = "") {
         $strReturn = "<script type=\"text/javascript\">
                             $(document).ready(function() {
-                                  KAJONA.admin.ajax.genericAjaxCall(\"stats\", \"getReport\", \"&plugin=" . $objPlugin->getPluginCommand() . "&pv=" . $strPv . "\", function(data, status, jqXHR) {
+                                  KAJONA.admin.ajax.genericAjaxCall(\"stats\", \"getReport\", \"&plugin=" . $this->getActionForReport($objPlugin) . "&pv=" . $strPv . "\", function(data, status, jqXHR) {
 
                                     if(status == 'success')  {
                                         var intStart = data.indexOf(\"[CDATA[\")+7;
@@ -294,8 +286,8 @@ class class_module_stats_admin extends class_admin implements interface_admin {
     }
 
     protected function getOutputActionTitle() {
-        foreach($this->objPluginManager->getMatchingPluginObjects() as $objOneReport) {
-            if($objOneReport->getPluginCommand() == $this->getParam("action")) {
+        foreach($this->getArrReports() as $objOneReport) {
+            if($this->getActionForReport($objOneReport) == $this->getParam("action")) {
                 return $objOneReport->getTitle();
             }
         }
@@ -311,4 +303,17 @@ class class_module_stats_admin extends class_admin implements interface_admin {
         return $strReturn;
     }
 
+    /**
+     * @return interface_admin_statsreports[]
+     */
+    private function getArrReports() {
+        if(self::$arrReports == null)
+            self::$arrReports = $this->objPluginManager->getPlugins(array(class_carrier::getInstance()->getObjDB(), $this->objToolkit, $this->getObjLang()));
+
+        return self::$arrReports;
+    }
+
+    private function getActionForReport(interface_admin_statsreports $objReport) {
+        return uniStrReplace("class_stats_report_", "", get_class($objReport));
+    }
 }

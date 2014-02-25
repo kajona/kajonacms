@@ -12,10 +12,11 @@
  *
  * @package module_stats
  */
-interface interface_admin_statsreports extends interface_admininterface_plugin {
+interface interface_admin_statsreports extends interface_generic_plugin {
 
     /**
      * Method used to fetch the report.
+     * @return string
      */
     public function getReport();
 
@@ -23,6 +24,7 @@ interface interface_admin_statsreports extends interface_admininterface_plugin {
      * Setter for the startdate of the interval
      *
      * @param int $intStartDate
+     * @return void
      */
     public function setStartDate($intStartDate);
 
@@ -30,6 +32,7 @@ interface interface_admin_statsreports extends interface_admininterface_plugin {
      * Setter for the enddate of the interval
      *
      * @param int $intEndDate
+     * @return void
      */
     public function setEndDate($intEndDate);
 
@@ -45,7 +48,7 @@ interface interface_admin_statsreports extends interface_admininterface_plugin {
     /**
      * This method returns, whether the report is able to report in intervals, or not.
      * If so, a interval-choose is added to the dateSelector
-
+     * @return bool
      */
     public function isIntervalable();
 
@@ -53,7 +56,13 @@ interface interface_admin_statsreports extends interface_admininterface_plugin {
      * Used to set the interval. Just to be used, if isIntervalable() returns true
      *
      * @param int $intInterval
+     * @return void
      */
     public function setInterval($intInterval);
 
+    /**
+     * Returns the name / title of a report
+     * @return string
+     */
+    public function getTitle();
 }

@@ -19,7 +19,7 @@ class class_stats_report_searchqueries implements interface_admin_statsreports {
     private $intDateStart;
     private $intDateEnd;
 
-    private $objTexts;
+    private $objLang;
     private $objToolkit;
 
     /**
@@ -32,40 +32,62 @@ class class_stats_report_searchqueries implements interface_admin_statsreports {
     /**
      * Constructor
      */
-    public function __construct(class_db $objDB, class_toolkit_admin $objToolkit, class_lang $objTexts) {
-        $this->objTexts = $objTexts;
+    public function __construct(class_db $objDB, class_toolkit_admin $objToolkit, class_lang $objLang) {
+        $this->objLang = $objLang;
         $this->objToolkit = $objToolkit;
         $this->objDB = $objDB;
     }
 
-    public function registerPlugin(class_admininterface_pluginmanager $objPluginmanager) {
-        $objPluginmanager->registerPlugin($this);
+    /**
+     * Returns the name of extension/plugin the objects wants to contribute to.
+     *
+     * @return string
+     */
+    public function getExtensionName() {
+        return "core.stats.admin.statsreport";
     }
 
+    /**
+     * @param int $intEndDate
+     * @return void
+     */
     public function setEndDate($intEndDate) {
         $this->intDateEnd = $intEndDate;
     }
 
+    /**
+     * @param int $intStartDate
+     * @return void
+     */
     public function setStartDate($intStartDate) {
         $this->intDateStart = $intStartDate;
     }
 
+    /**
+     * @return string
+     */
     public function getTitle() {
-        return $this->objTexts->getLang("stats_title", "search");
+        return $this->objLang->getLang("stats_title", "search");
     }
 
-    public function getPluginCommand() {
-        return "statsSearchqueries";
-    }
-
+    /**
+     * @return bool
+     */
     public function isIntervalable() {
         return false;
     }
 
+    /**
+     * @param int $intInterval
+     * @return void
+     */
     public function setInterval($intInterval) {
 
     }
 
+    /**
+     * @return string
+     */
     public function getReport() {
         $strReturn = "";
 
@@ -75,16 +97,7 @@ class class_stats_report_searchqueries implements interface_admin_statsreports {
         $objArraySectionIterator->setPageNumber((int)(getGet("pv") != "" ? getGet("pv") : 1));
         $objArraySectionIterator->setArraySection($this->getTopQueries($objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
 
-        $strParams = "&start_day=".(getPost("start_day") != "" ? getPost("start_day") : getGet("start_day"));
-        $strParams .= "&start_month=".(getPost("start_month") != "" ? getPost("start_month") : getGet("start_month"));
-        $strParams .= "&start_year=".(getPost("start_year") != "" ? getPost("start_year") : getGet("start_year"));
-
-        $strParams .= "&end_day=".(getPost("end_day") != "" ? getPost("end_day") : getGet("end_day"));
-        $strParams .= "&end_month=".(getPost("end_month") != "" ? getPost("end_month") : getGet("end_month"));
-        $strParams .= "&end_year=".(getPost("end_year") != "" ? getPost("end_year") : getGet("end_year"));
-
-
-        $arrPageViews = $this->objToolkit->getSimplePageview($objArraySectionIterator, "stats", $this->getPluginCommand(), $strParams."&filter=true");
+        $arrPageViews = $this->objToolkit->getSimplePageview($objArraySectionIterator, "stats", uniStrReplace("class_stats_report_", "", get_class($this)));
 
         $arrLogsRaw = $arrPageViews["elements"];
 
@@ -102,8 +115,8 @@ class class_stats_report_searchqueries implements interface_admin_statsreports {
         //Create a data-table
         $arrHeader = array();
         $arrHeader[0] = "#";
-        $arrHeader[1] = $this->objTexts->getLang("header_query", "search");
-        $arrHeader[2] = $this->objTexts->getLang("header_amount", "search");
+        $arrHeader[1] = $this->objLang->getLang("header_query", "search");
+        $arrHeader[2] = $this->objLang->getLang("header_amount", "search");
         $strReturn .= $this->objToolkit->dataTable($arrHeader, $arrLogs);
 
         $strReturn .= $arrPageViews["pageview"];
@@ -112,6 +125,9 @@ class class_stats_report_searchqueries implements interface_admin_statsreports {
     }
 
 
+    /**
+     * @return array|string
+     */
     public function getReportGraph() {
         $arrReturn = array();
         //collect data
@@ -122,8 +138,8 @@ class class_stats_report_searchqueries implements interface_admin_statsreports {
 
         $intCount = 1;
         foreach($arrQueries as $arrOneQuery) {
-            $arrGraphData[$intCount] = $arrOneQuery["hits"];
-            $arrLabels[$intCount] = $arrOneQuery["search_log_query"];
+            $arrGraphData[] = $arrOneQuery["hits"];
+            $arrLabels[] = $arrOneQuery["search_log_query"];
 
             if($intCount++ >= 9)
                 break;
@@ -134,8 +150,8 @@ class class_stats_report_searchqueries implements interface_admin_statsreports {
             $objGraph = class_graph_factory::getGraphInstance();
             $objGraph->setArrXAxisTickLabels($arrLabels);
             $objGraph->addBarChartSet($arrGraphData, "");
-            $objGraph->setStrXAxisTitle($this->objTexts->getLang("header_query", "search"));
-            $objGraph->setStrYAxisTitle($this->objTexts->getLang("header_amount", "search"));
+            $objGraph->setStrXAxisTitle($this->objLang->getLang("header_query", "search"));
+            $objGraph->setStrYAxisTitle($this->objLang->getLang("header_amount", "search"));
             $objGraph->setBitRenderLegend(false);
             $objGraph->setIntXAxisAngle(20);
             $arrReturn[] = $objGraph->renderGraph();
@@ -147,6 +163,12 @@ class class_stats_report_searchqueries implements interface_admin_statsreports {
     }
 
 
+    /**
+     * @param bool $intStart
+     * @param bool $intEnd
+     *
+     * @return array
+     */
     private function getTopQueries($intStart = false, $intEnd = false) {
         $strQuery = "SELECT search_log_query, COUNT(*) as hits
 					  FROM "._dbprefix_."search_log
@@ -163,6 +185,9 @@ class class_stats_report_searchqueries implements interface_admin_statsreports {
         return $arrReturn;
     }
 
+    /**
+     * @return mixed
+     */
     private function getTopQueriesCount() {
         $strQuery = "SELECT COUNT(DISTINCT(search_log_query)) as total
 					  FROM "._dbprefix_."search_log

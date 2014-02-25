@@ -33,34 +33,56 @@ class class_stats_report_topdownloads implements interface_admin_statsreports {
         $this->objDB = $objDB;
     }
 
-    public function registerPlugin(class_admininterface_pluginmanager $objPluginamanger) {
-        $objPluginamanger->registerPlugin($this);
+    /**
+     * Returns the name of extension/plugin the objects wants to contribute to.
+     *
+     * @return string
+     */
+    public function getExtensionName() {
+        return "core.stats.admin.statsreport";
     }
 
+    /**
+     * @param int $intEndDate
+     * @return void
+     */
     public function setEndDate($intEndDate) {
         $this->intDateEnd = $intEndDate;
     }
 
+    /**
+     * @param int $intStartDate
+     * @return void
+     */
     public function setStartDate($intStartDate) {
         $this->intDateStart = $intStartDate;
     }
 
+    /**
+     * @return string
+     */
     public function getTitle() {
         return $this->objTexts->getLang("stats_toptitle", "mediamanager");
     }
 
-    public function getPluginCommand() {
-        return "statsTopDownloads";
-    }
-
+    /**
+     * @return bool
+     */
     public function isIntervalable() {
         return true;
     }
 
+    /**
+     * @param int $intInterval
+     * @return void
+     */
     public function setInterval($intInterval) {
         $this->intInterval = $intInterval;
     }
 
+    /**
+     * @return string
+     */
     public function getReport() {
         $strReturn = "";
 
@@ -102,6 +124,9 @@ class class_stats_report_topdownloads implements interface_admin_statsreports {
         return $this->objDB->getPArray($strQuery, array($this->intDateStart, $this->intDateEnd), 0, _stats_nrofrecords_ - 1);
     }
 
+    /**
+     * @return array
+     */
     public function getReportGraph() {
         $arrReturn = array();
         //generate a graph showing dls per interval
@@ -111,7 +136,7 @@ class class_stats_report_topdownloads implements interface_admin_statsreports {
         $intCount = 1;
         $arrDownloads = $this->getLogbookData();
         if(count($arrDownloads) > 0) {
-            foreach($arrDownloads as $intKey => $arrOneDownload) {
+            foreach($arrDownloads as $arrOneDownload) {
                 if($intCount++ <= 4) {
                     $arrPlots[$arrOneDownload["downloads_log_file"]] = array();
                 }

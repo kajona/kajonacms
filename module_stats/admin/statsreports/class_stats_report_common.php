@@ -27,7 +27,6 @@ class class_stats_report_common implements interface_admin_statsreports {
 
     /**
      * Constructor
-
      */
     public function __construct(class_db $objDB, class_toolkit_admin $objToolkit, class_lang $objTexts) {
 
@@ -39,34 +38,56 @@ class class_stats_report_common implements interface_admin_statsreports {
             @ini_set("memory_limit", "30M");
     }
 
+    /**
+     * Returns the name of extension/plugin the objects wants to contribute to.
+     *
+     * @return string
+     */
+    public function getExtensionName() {
+        return "core.stats.admin.statsreport";
+    }
+
+    /**
+     * @param int $intEndDate
+     * @return void
+     */
     public function setEndDate($intEndDate) {
         $this->intDateEnd = $intEndDate;
     }
 
+    /**
+     * @param int $intStartDate
+     * @return void
+     */
     public function setStartDate($intStartDate) {
         $this->intDateStart = $intStartDate;
     }
 
+    /**
+     * @return string
+     */
     public function getTitle() {
         return $this->objTexts->getLang("allgemein", "stats");
     }
 
-    public function registerPlugin(class_admininterface_pluginmanager $objPluginamanger) {
-        $objPluginamanger->registerPlugin($this);
-    }
-
-    public function getPluginCommand() {
-        return "statsCommon";
-    }
-
+    /**
+     * @return bool
+     */
     public function isIntervalable() {
         return true;
     }
 
+    /**
+     * @param int $intInterval
+     * @return void
+     */
     public function setInterval($intInterval) {
         $this->intInterval = $intInterval;
     }
 
+    /**
+     * @return string
+     */
     public function getReport() {
         $strReturn = "";
 
@@ -160,8 +181,8 @@ class class_stats_report_common implements interface_admin_statsreports {
     /**
      * Returns the number of visitors
      *
-     * @param $intStart
-     * @param $intEnd
+     * @param int $intStart
+     * @param int $intEnd
      *
      * @return array
      */
@@ -237,6 +258,9 @@ class class_stats_report_common implements interface_admin_statsreports {
             return "0";
     }
 
+    /**
+     * @return array|string
+     */
     public function getReportGraph() {
         //load datasets, reloading after 30 days to limit memory consumption
         $arrHits = array();

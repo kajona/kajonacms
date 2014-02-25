@@ -39,10 +39,18 @@ class class_stats_report_topsystems implements interface_admin_statsreports {
         $this->objDB = $objDB;
     }
 
-    public function registerPlugin(class_admininterface_pluginmanager $objPluginamanger) {
-        $objPluginamanger->registerPlugin($this);
+    /**
+     * Returns the name of extension/plugin the objects wants to contribute to.
+     *
+     * @return string
+     */
+    public function getExtensionName() {
+        return "core.stats.admin.statsreport";
     }
 
+    /**
+     * @return void
+     */
     private function setUpBrowserData() {
         if($this->arrBrowserGiven == null) {
             //parse browser (php_browscap.ini)
@@ -68,30 +76,47 @@ class class_stats_report_topsystems implements interface_admin_statsreports {
         }
     }
 
+    /**
+     * @param int $intEndDate
+     * @return void
+     */
     public function setEndDate($intEndDate) {
         $this->intDateEnd = $intEndDate;
     }
 
+    /**
+     * @param int $intStartDate
+     * @return void
+     */
     public function setStartDate($intStartDate) {
         $this->intDateStart = $intStartDate;
     }
 
+    /**
+     * @return string
+     */
     public function getTitle() {
         return $this->objTexts->getLang("topsystem", "stats");
     }
 
-    public function getPluginCommand() {
-        return "statsTopSystem";
-    }
-
+    /**
+     * @return bool
+     */
     public function isIntervalable() {
         return true;
     }
 
+    /**
+     * @param int $intInterval
+     * @return void
+     */
     public function setInterval($intInterval) {
         $this->intInterval = $intInterval;
     }
 
+    /**
+     * @return string
+     */
     public function getReport() {
         $this->setUpBrowserData();
         $strReturn = "";
@@ -187,6 +212,9 @@ class class_stats_report_topsystems implements interface_admin_statsreports {
         return $arrReturn;
     }
 
+    /**
+     * @return array
+     */
     public function getReportGraph() {
         $this->setUpBrowserData();
         $arrReturn = array();

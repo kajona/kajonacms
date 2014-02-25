@@ -38,34 +38,56 @@ class class_stats_report_topsessions implements interface_admin_statsreports {
         $this->objDB = $objDB;
     }
 
-    public function registerPlugin(class_admininterface_pluginmanager $objPluginmanager) {
-        $objPluginmanager->registerPlugin($this);
+    /**
+     * Returns the name of extension/plugin the objects wants to contribute to.
+     *
+     * @return string
+     */
+    public function getExtensionName() {
+        return "core.stats.admin.statsreport";
     }
 
+    /**
+     * @param int $intEndDate
+     * @return void
+     */
     public function setEndDate($intEndDate) {
         $this->intDateEnd = $intEndDate;
     }
 
+    /**
+     * @param int $intStartDate
+     * @return void
+     */
     public function setStartDate($intStartDate) {
         $this->intDateStart = $intStartDate;
     }
 
+    /**
+     * @return string
+     */
     public function getTitle() {
         return $this->objTexts->getLang("topsessions", "stats");
     }
 
-    public function getPluginCommand() {
-        return "statsTopSessions";
-    }
-
+    /**
+     * @return bool
+     */
     public function isIntervalable() {
         return false;
     }
 
+    /**
+     * @param int $intInterval
+     * @return void
+     */
     public function setInterval($intInterval) {
 
     }
 
+    /**
+     * @return string
+     */
     public function getReport() {
         $strReturn = "";
         //Create Data-table
@@ -160,6 +182,9 @@ class class_stats_report_topsessions implements interface_admin_statsreports {
         return $arrSessions;
     }
 
+    /**
+     * @return string
+     */
     public function getReportGraph() {
         return "";
     }

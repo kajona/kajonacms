@@ -34,34 +34,56 @@ class class_stats_report_packageserverqueries implements interface_admin_statsre
         $this->objDB = $objDB;
     }
 
-    public function registerPlugin(class_admininterface_pluginmanager $objPluginamanger) {
-        $objPluginamanger->registerPlugin($this);
+    /**
+     * Returns the name of extension/plugin the objects wants to contribute to.
+     *
+     * @return string
+     */
+    public function getExtensionName() {
+        return "core.stats.admin.statsreport";
     }
 
+    /**
+     * @param int $intEndDate
+     * @return void
+     */
     public function setEndDate($intEndDate) {
         $this->intDateEnd = $intEndDate;
     }
 
+    /**
+     * @param int $intStartDate
+     * @return void
+     */
     public function setStartDate($intStartDate) {
         $this->intDateStart = $intStartDate;
     }
 
+    /**
+     * @return string
+     */
     public function getTitle() {
         return $this->objLang->getLang("packageservertopqueries", "packageserver");
     }
 
-    public function getPluginCommand() {
-        return "packageserverTopQueries";
-    }
-
+    /**
+     * @return bool
+     */
     public function isIntervalable() {
         return true;
     }
 
+    /**
+     * @param int $intInterval
+     * @return void
+     */
     public function setInterval($intInterval) {
         $this->intInterval = $intInterval;
     }
 
+    /**
+     * @return string
+     */
     public function getReport() {
         $strReturn = "";
 
@@ -106,10 +128,16 @@ class class_stats_report_packageserverqueries implements interface_admin_statsre
         return $arrRow["COUNT(*)"];
     }
 
+    /**
+     * @return int
+     */
     public function getTotalUniqueHitsInInterval() {
         return count($this->getTotalUniqueHostsInInterval());
     }
 
+    /**
+     * @return array
+     */
     public function getTotalUniqueHostsInInterval() {
         $objStart = new class_date($this->intDateStart);
         $objEnd = new class_date($this->intDateEnd);
@@ -125,6 +153,9 @@ class class_stats_report_packageserverqueries implements interface_admin_statsre
         return $arrRow;
     }
 
+    /**
+     * @return array
+     */
     public function getReportGraph() {
         $arrReturn = array();
 
