@@ -35,7 +35,7 @@ class class_stats_report_topcountries implements interface_admin_statsreports {
         $this->objDB = $objDB;
     }
 
-    public function registerPlugin(class_pluginmanager $objPluginamanger) {
+    public function registerPlugin(class_admininterface_pluginmanager $objPluginamanger) {
         $objPluginamanger->registerPlugin($this);
     }
 

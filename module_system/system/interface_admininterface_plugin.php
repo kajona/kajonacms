@@ -10,9 +10,9 @@
 /**
  * Interface for admin-plugins
  *
- * @package module_stats
+ * @package module_system
  */
-interface interface_admin_plugin {
+interface interface_admininterface_plugin {
 
     /**
      * Contructor, used to init the plugin
@@ -30,9 +30,9 @@ interface interface_admin_plugin {
     public function getTitle();
 
     /**
-     * @param \class_pluginmanager
+     * @param \class_admininterface_pluginmanager
      */
-    public function registerPlugin(class_pluginmanager $objPluginmanager);
+    public function registerPlugin(class_admininterface_pluginmanager $objPluginmanager);
 
     public function getPluginCommand();
 

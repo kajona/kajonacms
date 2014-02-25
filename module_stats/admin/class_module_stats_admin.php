@@ -35,7 +35,7 @@ class class_module_stats_admin extends class_admin implements interface_admin {
     private $intInterval = 2;
 
     /**
-     * @var class_pluginmanager
+     * @var class_admininterface_pluginmanager
      */
     private $objPluginManager;
 
@@ -101,7 +101,7 @@ class class_module_stats_admin extends class_admin implements interface_admin {
             $bitScanPlugins = false;
 
         if($bitScanPlugins) {
-            $this->objPluginManager = new class_pluginmanager();
+            $this->objPluginManager = new class_admininterface_pluginmanager();
             $this->objPluginManager->loadPluginsFiltered("/admin/statsreports/", self::$STR_PLUGIN_EXTENSION_POINT);
         }
 
@@ -258,7 +258,7 @@ class class_module_stats_admin extends class_admin implements interface_admin {
     /**
      * Creates the code required to load the report via an ajax request
      *
-     * @param interface_admin_plugin $objPlugin
+     * @param interface_admininterface_plugin $objPlugin
      * @param string $strPv
      *
      * @return string

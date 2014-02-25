@@ -12,7 +12,7 @@
  *
  * @package module_stats
  */
-interface interface_admin_statsreports extends interface_admin_plugin {
+interface interface_admin_statsreports extends interface_admininterface_plugin {
 
     /**
      * Method used to fetch the report.

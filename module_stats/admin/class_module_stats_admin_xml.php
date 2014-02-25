@@ -60,10 +60,10 @@ class class_module_stats_admin_xml extends class_admin implements interface_xml_
         $strPlugin = $this->getParam("plugin");
         $strReturn = "";
 
-        $objPluginManager = new class_pluginmanager();
+        $objPluginManager = new class_admininterface_pluginmanager();
         $objPluginManager->loadPluginsFiltered("/admin/statsreports/", class_module_stats_admin::$STR_PLUGIN_EXTENSION_POINT);
 
-        /** @var $objPlugin interface_admin_statsreports|interface_admin_plugin */
+        /** @var $objPlugin interface_admin_statsreports|interface_admininterface_plugin */
         $objPlugin = $objPluginManager->getPluginObject(class_module_stats_admin::$STR_PLUGIN_EXTENSION_POINT, $strPlugin);
 
         if($objPlugin->getPluginCommand() == $strPlugin && $objPlugin instanceof interface_admin_statsreports) {

@@ -38,7 +38,7 @@ class class_stats_report_topsessions implements interface_admin_statsreports {
         $this->objDB = $objDB;
     }
 
-    public function registerPlugin(class_pluginmanager $objPluginmanager) {
+    public function registerPlugin(class_admininterface_pluginmanager $objPluginmanager) {
         $objPluginmanager->registerPlugin($this);
     }
 

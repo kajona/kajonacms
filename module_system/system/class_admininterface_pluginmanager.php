@@ -7,24 +7,24 @@
 ********************************************************************************************************/
 
 /**
- * Class holding a simple plugin manager for admin plugins implementing interface_admin_plugin.
+ * Class holding a simple plugin manager for admin plugins implementing interface_admininterface_plugin.
  *
  * Usage:
- * $objPluginManager = new class_pluginmanager();
+ * $objPluginManager = new class_admininterface_pluginmanager();
  * $objPluginManager->loadPluginsFiltered("/admin/statsreports/", self::$STR_PLUGIN_EXTENSION_POINT);
  * $arrPlugins = $this->objPluginManager->getMatchingPluginObjects();
  *
  * @package module_system
  * @author tim.kiefer@kojikui.de
  */
-class class_pluginmanager {
+class class_admininterface_pluginmanager {
 
     private $objDB;
     private $objToolkit;
     private $objLang;
 
     /**
-     * @var interface_admin_plugin[]
+     * @var interface_admininterface_plugin[]
      */
     private $arrPlugins = array();
 
@@ -71,14 +71,15 @@ class class_pluginmanager {
 
     /**
      * Register a plugin at the plugin manager
+
      *
-     * @param interface_admin_plugin $objPlugin
+*@param interface_admininterface_plugin $objPlugin
      */
-    public function registerPlugin(interface_admin_plugin $objPlugin) {
+    public function registerPlugin(interface_admininterface_plugin $objPlugin) {
         $objRf = new ReflectionClass($objPlugin);
         $arrInterface = $objRf->getInterfaceNames();
         $arrInterface = array_filter($arrInterface, function ($objFilter) {
-                return strcmp($objFilter, "interface_admin_plugin");
+                return strcmp($objFilter, "interface_admininterface_plugin");
         });
         $this->addPlugin($objPlugin, implode($arrInterface, ","), $objPlugin->getPluginCommand());
     }
@@ -110,10 +111,10 @@ class class_pluginmanager {
 
         foreach($arrPlugins as $strOnePlugin) {
             $strClassName = str_replace(".php", "", $strOnePlugin);
-            /** @var $objPlugin interface_admin_plugin */
+            /** @var $objPlugin interface_admininterface_plugin */
             $objPlugin = new $strClassName($this->objDB, $this->objToolkit, $this->objLang);
 
-            if($objPlugin instanceof interface_admin_plugin && $this->matchFilter($objPlugin)) {
+            if($objPlugin instanceof interface_admininterface_plugin && $this->matchFilter($objPlugin)) {
                 $objPlugin->registerPlugin($this);
             }
         }
@@ -121,8 +122,9 @@ class class_pluginmanager {
 
     /**
      * Returns all loaded Plugins filtered.
+
      *
-     * @return  interface_admin_plugin[]
+*@return  interface_admininterface_plugin[]
      */
     public function getMatchingPluginObjects() {
         return $this->getPluginObjects($this->getFilterExtensionPoints());
@@ -130,13 +132,15 @@ class class_pluginmanager {
 
     /**
      * Returns all loaded Plugins of an ExtensionPoint
+
      *
-     * @param $strExtensionPoint
-     * @return interface_admin_plugin
+*@param $strExtensionPoint
+     *
+*@return interface_admininterface_plugin
      */
     public function getPluginObjects($strExtensionPoint) {
         $arrReturn = $this->arrPlugins[$strExtensionPoint];
-        uasort($this->arrPlugins, function (interface_admin_plugin $objA, interface_admin_plugin $objB) {
+        uasort($this->arrPlugins, function (interface_admininterface_plugin $objA, interface_admininterface_plugin $objB) {
             return strcmp($objA->getTitle(), $objB->getTitle());
         });
 
@@ -145,10 +149,12 @@ class class_pluginmanager {
 
     /**
      * Return a Plugin by its ExtensionPoint and execution command
+
      *
-     * @param $strExtensionPoint
+*@param $strExtensionPoint
      * @param $strName
-     * @return \interface_admin_plugin|null
+     *
+*@return \interface_admininterface_plugin|null
      */
     public function getPluginObject($strExtensionPoint, $strName) {
         $arrObjs = $this->getPluginObjects($strExtensionPoint);
@@ -159,7 +165,7 @@ class class_pluginmanager {
     }
 
 
-    private function matchFilter(interface_admin_plugin $objPlugin) {
+    private function matchFilter(interface_admininterface_plugin $objPlugin) {
         if($this->getFilterExtensionPoints() == "")
             return true;
         else {
