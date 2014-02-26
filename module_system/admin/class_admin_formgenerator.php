@@ -39,6 +39,8 @@ class class_admin_formgenerator {
     const  BIT_BUTTON_DELETE = 32;
     const  BIT_BUTTON_RESET  = 64;
 
+    const FORM_ENCTYPE_MULTIPART = "multipart/form-data";
+    const FORM_ENCTYPE_TEXTPLAIN = "text/plain";
 
     /**
      * The list of form-entries
@@ -64,6 +66,8 @@ class class_admin_formgenerator {
     private $arrHiddenElements = array();
     private $strHiddenGroupTitle = "additional fields";
     private $bitHiddenElementsVisible = false;
+
+    private $strFormEncoding = "";
 
     private $strOnSubmit = "";
 
@@ -150,7 +154,7 @@ class class_admin_formgenerator {
 
         $objToolkit = class_carrier::getInstance()->getObjToolkit("admin");
         if($strTargetURI !== null)
-            $strReturn .= $objToolkit->formHeader($strTargetURI, "", "", $this->strOnSubmit);
+            $strReturn .= $objToolkit->formHeader($strTargetURI, "", $this->strFormEncoding, $this->strOnSubmit);
         $strReturn .= $objToolkit->getValidationErrors($this);
 
         $strHidden = "";
@@ -541,6 +545,22 @@ class class_admin_formgenerator {
     public function getStrOnSubmit() {
         return $this->strOnSubmit;
     }
+
+    /**
+     * @param string $strFormEncoding
+     */
+    public function setStrFormEncoding($strFormEncoding) {
+        $this->strFormEncoding = $strFormEncoding;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStrFormEncoding() {
+        return $this->strFormEncoding;
+    }
+
+
 
 
 
