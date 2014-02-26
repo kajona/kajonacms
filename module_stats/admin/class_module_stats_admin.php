@@ -310,6 +310,10 @@ class class_module_stats_admin extends class_admin implements interface_admin {
         if(self::$arrReports == null)
             self::$arrReports = $this->objPluginManager->getPlugins(array(class_carrier::getInstance()->getObjDB(), $this->objToolkit, $this->getObjLang()));
 
+        uasort(self::$arrReports, function(interface_admin_statsreports $objA, interface_admin_statsreports $objB) {
+            return strcmp($objA->getTitle(), $objB->getTitle());
+        });
+
         return self::$arrReports;
     }
 
