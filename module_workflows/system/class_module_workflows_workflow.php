@@ -306,10 +306,10 @@ class class_module_workflows_workflow extends class_model implements interface_m
                         AND system_id = system_date_id
                         ".$arrTemp[0]."
                         AND  workflows_state = ?
-                        AND ( system_date_start > ? OR system_date_start = 0 ) ";
+                        /*AND ( system_date_start > ? OR system_date_start = 0 )*/ ";
 
         $arrParams[] = (int)self::$INT_STATE_SCHEDULED;
-        $arrParams[] = class_date::getCurrentTimestamp();
+//        $arrParams[] = class_date::getCurrentTimestamp();
 
 
         $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, $arrParams);
