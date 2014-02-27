@@ -43,7 +43,7 @@ class class_adminwidget_workflows extends class_adminwidget implements interface
     public function getWidgetOutput() {
         $strReturn = "";
         $strReturn .= $this->widgetText($this->getLang("workflows_intro"));
-        $strReturn .= $this->widgetText(class_module_workflows_workflow::getPendingWorkflowsForUserCount(class_carrier::getInstance()->getObjSession()->getUserID()));
+        $strReturn .= $this->widgetText(class_module_workflows_workflow::getPendingWorkflowsForUserCount(array_merge(array(class_carrier::getInstance()->getObjSession()->getUserID()), class_carrier::getInstance()->getObjSession()->getGroupIdsAsArray())));
         $strReturn .= $this->widgetText(getLinkAdmin("workflows", "myList", "", $this->getLang("workflows_show")));
         return $strReturn;
     }
