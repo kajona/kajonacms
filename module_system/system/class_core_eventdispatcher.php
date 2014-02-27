@@ -11,7 +11,7 @@
  * The core eventmanager is used to trigger and fire internal events such as status-changed or record-deleted-events.
  * Therefore the corresponding interface-implementers are called and notified.
  *
- * Since version 4.4, the eventdispatcher is totally generic. Hardcoded dependencies are no longer required.
+ * Since version 4.5, the eventdispatcher provides a fully generic approach. Hardcoded-/package based dependencies are no longer required.
  *
  * @package module_system
  * @author sidler@mulchprod.de
@@ -20,16 +20,123 @@
 class class_core_eventdispatcher {
 
     /**
+     * @var  class_core_eventdispatcher
+     */
+    private static $objInstance = null;
+
+    /**
      * @var class_model[]
      */
     private static $arrListeners = array();
 
+    /**
+     * @var interface_genericevent_listener[][]
+     */
+    private $arrRegisteredListeners = array();
+
+    /**
+     * Private for the sake of a singleton
+     */
+    private function __construct() {
+    }
+
+    /**
+     * Returns an instance of system wide event-dispatcher
+     * @return class_core_eventdispatcher
+     */
+    public static function getInstance() {
+        if(self::$objInstance == null)
+            self::$objInstance = new class_core_eventdispatcher();
+
+        return self::$objInstance;
+    }
+
+    /**
+     * Adds a listener to the list of registered listeners.
+     * The event-identifier is returned by getExtensionName.
+     *
+     * @param string $strEventIdentifier
+     * @param interface_genericevent_listener $objListener
+     *
+     * @return void
+     */
+    public function addListener($strEventIdentifier, interface_genericevent_listener $objListener) {
+        if(!isset($this->arrRegisteredListeners[$strEventIdentifier]))
+            $this->arrRegisteredListeners[$strEventIdentifier] = array();
+
+        $this->arrRegisteredListeners[$strEventIdentifier][] = $objListener;
+    }
+
+    /**
+     * Removes ALL registered listeners for the given extension point
+     *
+     * @param string $strEventIdentifier
+     *
+     * @return void
+     */
+    public function removeAllListeners($strEventIdentifier) {
+        $this->arrRegisteredListeners[$strEventIdentifier] = array();
+    }
+
+    /**
+     * Removes a registered listener from a list of given event-listeners.
+     * The listener is identified by a reference-comparison, so only the same instance will be removed.
+     *
+     * @param string $strEventIdentifier
+     * @param interface_genericevent_listener $objListener
+     *
+     * @return bool
+     */
+    public function removeListener($strEventIdentifier, interface_genericevent_listener $objListener) {
+        foreach($this->arrRegisteredListeners[$strEventIdentifier] as $intKey => $objOneListener) {
+            if($objListener === $objOneListener) {
+                unset($this->arrRegisteredListeners[$strEventIdentifier][$intKey]);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Returns the list of listeners currently registered for a given event
+     *
+     * @param string $strEventIdentifier
+     *
+     * @return interface_genericevent_listener[]
+     */
+    public function getRegisteredListeners($strEventIdentifier) {
+        if(!isset($this->arrRegisteredListeners[$strEventIdentifier]))
+            $this->arrRegisteredListeners[$strEventIdentifier] = array();
+
+        return $this->arrRegisteredListeners[$strEventIdentifier];
+    }
+
+    /**
+     * Notifies all listeners implementing the passed extension point.
+     * The list of arguments is passed to all listeners.
+     * Make sure to return a valid boolean value, otherwise the chain of event-handler may be broken.
+     *
+     * @param string $strEventIdentifier
+     * @param array $arrArguments
+     *
+     * @return bool
+     * @since 4.5
+     * @see interface_genericevent_listener
+     */
+    public function notifyGenericListeners($strEventIdentifier, $arrArguments) {
+        $bitReturn = true;
+        /** @var $objOneListener interface_genericevent_listener */
+        foreach($this->arrRegisteredListeners[$strEventIdentifier] as $objOneListener) {
+            $bitReturn = $bitReturn & $objOneListener->handleEvent($strEventIdentifier, $arrArguments);
+        }
+    }
 
     /**
      * Returns all classes (here: instances of the class) implementing a given interface
      * @param string $strInterface
      *
      * @return class_model
+     * @deprecated
      */
     public static function getEventListeners($strInterface) {
         if(!isset(self::$arrListeners[$strInterface]))
@@ -37,7 +144,6 @@ class class_core_eventdispatcher {
 
         return self::$arrListeners[$strInterface];
     }
-
 
     /**
      * Generic function to notify a set of event-listeners.
@@ -48,6 +154,9 @@ class class_core_eventdispatcher {
      * @param string $strMethodname
      * @param array $arrArguments
      *
+     * @deprecated please migrate to generic, decoupled event-listeners
+     * @see class_core_eventdispatcher::notifyGenericListeners
+     *
      * @return bool
      */
     public static function notifyListeners($strInterface, $strMethodname,  $arrArguments) {
@@ -56,7 +165,7 @@ class class_core_eventdispatcher {
 
         $bitReturn = true;
         foreach(self::$arrListeners[$strInterface] as $objOneListener) {
-            $bitReturn = $bitReturn && call_user_func_array(array($objOneListener, $strMethodname), $arrArguments);
+            $bitReturn = $bitReturn & call_user_func_array(array($objOneListener, $strMethodname), $arrArguments);
         }
 
         return $bitReturn;

@@ -4,13 +4,13 @@
         xsi:noNamespaceSchemaLocation="http://apidocs.kajona.de/xsd/package.xsd"
         >
     <title>stats</title>
-    <description>A module analyzing the portal in order to gather statistical data. Renderes charts and other visual reports.</description>
+    <description>A module analyzing the portal in order to gather statistical data. Renders charts and other visual reports.</description>
     <version>4.4</version>
     <author>Kajona Team</author>
     <type>MODULE</type>
     <providesInstaller>TRUE</providesInstaller>
     <requiredModules>
-        <module name="system" version="4.4" />
+        <module name="system" version="4.4.3" />
         <module name="jqplot" version="4.4" />
     </requiredModules>
 </package>

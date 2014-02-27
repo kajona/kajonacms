@@ -14,6 +14,9 @@
  * @author sidler@mulchprod.de
  * @package module_system
  * @since 4.4
+ *
+ * @deprecated migrate to the generic approach
+ * @see interface_genericevent_listener
  */
 interface interface_recordupdated_listener {
 

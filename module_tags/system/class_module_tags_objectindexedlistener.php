@@ -15,22 +15,28 @@
  * @since 4.4
  *
  */
-class class_module_tags_objectindexedlistener  implements interface_objectindexed_listener {
-
+class class_module_tags_objectindexedlistener  implements interface_genericevent_listener {
 
 
     /**
      * Called whenever an object is index and to be added to the search-index.
      * Use this callback to add additional content to the objects search-document.
      *
-     * @param class_root $objObject
-     * @param class_module_search_document $objSearchDocument
+     * @param string $strEventName
+     * @param array $arrArguments
      *
      * @return bool
      */
-    public function handleObjectIndexedEvent($objObject, class_module_search_document $objSearchDocument) {
+    public function handleEvent($strEventName, array $arrArguments) {
+
+        //unwrap arguments
+        /** @var class_model $objObject */
+        $objObject = $arrArguments[0];
+        /** @var class_module_search_document $objSearchDocument */
+        $objSearchDocument = $arrArguments[1];
+
         if(class_module_system_module::getModuleByName("tags") == null)
-            return;
+            return true;
 
         //load tags for the object
         $objTags = class_module_tags_tag::getTagsForSystemid($objObject->getSystemid());
@@ -38,7 +44,27 @@ class class_module_tags_objectindexedlistener  implements interface_objectindexe
         foreach($objTags as $objOneTag)
             $objSearchDocument->addContent("tag", $objOneTag->getStrName());
 
+        return true;
+
     }
 
+    /**
+     * Internal init block, called on file-inclusion, e.g. by the class-loader
+     *
+     * @return void
+     */
+    public static function staticConstruct() {
+        $objDispatcher = class_core_eventdispatcher::getInstance();
+        foreach($objDispatcher->getRegisteredListeners("core.search.objectindexed") as $objOneLister) {
+            if($objOneLister instanceof class_module_tags_objectindexedlistener) {
+                $objDispatcher->removeListener("core.search.objectindexed", $objOneLister);
+            }
+
+        }
+        class_core_eventdispatcher::getInstance()->addListener("core.search.objectindexed", new class_module_tags_objectindexedlistener());
+    }
 
 }
+
+//static init block on include
+class_module_tags_objectindexedlistener::staticConstruct();

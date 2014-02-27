@@ -42,7 +42,10 @@ class class_reflection {
      */
     private $objReflectionClass;
 
-    public static function static_construct() {
+    /**
+     * Internal init block, called on class-inclusion
+     */
+    public static function staticConstruct() {
         self::$strAnnotationsCacheFile = _realpath_."/project/temp/reflection.cache";
 
         self::$arrAnnotationsCache = class_apc_cache::getInstance()->getValue("reflection");
@@ -464,4 +467,4 @@ class class_reflection {
         return $arrReturn;
     }
 }
-class_reflection::static_construct();
+class_reflection::staticConstruct();

@@ -20,6 +20,17 @@ class class_module_search_indexwriter {
 
     private static $isIndexAvailable = null;
 
+    /**
+     * Name of the event thrown as soon as record is indexed.
+     * Use this listener-identifier to add additional content to
+     * a search-document.
+     * The params-array contains two entries:
+     * $objInstance, $objSearchDocument
+     * $objInstance is the record to be indexed, $objSearchDocument the matching search document which may be extended.
+     *
+     */
+    const EVENT_OBJECTINDEXED = "core.search.objectindexed";
+
 
     /**
      * Plain constructor
@@ -124,7 +135,7 @@ class class_module_search_indexwriter {
         }
 
         //trigger event-listeners
-        class_core_eventdispatcher::notifyListeners("interface_objectindexed_listener", "handleObjectIndexedEvent", array($objInstance, $objSearchDocument));
+        class_core_eventdispatcher::getInstance()->notifyGenericListeners(self::EVENT_OBJECTINDEXED, array($objInstance, $objSearchDocument));
 
         $this->updateSearchDocumentToDb($objSearchDocument);
     }

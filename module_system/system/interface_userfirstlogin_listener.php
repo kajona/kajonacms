@@ -13,6 +13,9 @@
  * @author sidler@mulchprod.de
  * @package module_system
  * @since 4.0
+ *
+ * @deprecated migrate to the generic approach
+ * @see interface_genericevent_listener
  */
 interface interface_userfirstlogin_listener {
 
