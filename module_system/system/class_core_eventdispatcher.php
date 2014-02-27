@@ -153,6 +153,8 @@ class class_core_eventdispatcher {
             class_logger::getInstance(class_logger::EVENTS)->addLogRow("propagating event of type ".$strEventIdentifier." to instance of ".get_class($objOneListener), class_logger::$levelInfo);
             $bitReturn = $objOneListener->handleEvent($strEventIdentifier, $arrArguments) && $bitReturn;
         }
+
+        return $bitReturn;
     }
 
     /**
