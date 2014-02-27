@@ -127,7 +127,7 @@ class class_core_eventdispatcher {
         $bitReturn = true;
         /** @var $objOneListener interface_genericevent_listener */
         foreach($this->arrRegisteredListeners[$strEventIdentifier] as $objOneListener) {
-            $bitReturn = $bitReturn & $objOneListener->handleEvent($strEventIdentifier, $arrArguments);
+            $bitReturn = $objOneListener->handleEvent($strEventIdentifier, $arrArguments) && $bitReturn;
         }
     }
 
@@ -165,7 +165,7 @@ class class_core_eventdispatcher {
 
         $bitReturn = true;
         foreach(self::$arrListeners[$strInterface] as $objOneListener) {
-            $bitReturn = $bitReturn & call_user_func_array(array($objOneListener, $strMethodname), $arrArguments);
+            $bitReturn = call_user_func_array(array($objOneListener, $strMethodname), $arrArguments) && $bitReturn;
         }
 
         return $bitReturn;
