@@ -54,14 +54,7 @@ class class_module_tags_objectindexedlistener  implements interface_genericevent
      * @return void
      */
     public static function staticConstruct() {
-        $objDispatcher = class_core_eventdispatcher::getInstance();
-        foreach($objDispatcher->getRegisteredListeners("core.search.objectindexed") as $objOneLister) {
-            if($objOneLister instanceof class_module_tags_objectindexedlistener) {
-                $objDispatcher->removeListener("core.search.objectindexed", $objOneLister);
-            }
-
-        }
-        class_core_eventdispatcher::getInstance()->addListener("core.search.objectindexed", new class_module_tags_objectindexedlistener());
+        class_core_eventdispatcher::getInstance()->removeAndAddListener("core.search.objectindexed", new class_module_tags_objectindexedlistener());
     }
 
 }

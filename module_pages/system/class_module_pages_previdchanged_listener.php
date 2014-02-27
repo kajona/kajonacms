@@ -14,20 +14,21 @@
  * @package module_system
  * @author ph.wolfer@gmail.com
  */
-class class_module_pages_previdchanged_listener implements interface_previdchanged_listener {
-    
+class class_module_pages_previdchanged_listener implements interface_genericevent_listener {
+
     /**
      * Callback-method invoked every time a records previd was changed.
      * Please note that the event is only triggered on changes, not during a records creation.
      *
-     * @param string $strSystemid
-     * @param string $strOldPrevId
-     * @param string $strNewPrevid
+     * @param string $strEventName
+     * @param array $arrArguments
      *
-     * @abstract
-     * @return mixed
+     * @return bool
      */
-    public function handlePrevidChangedEvent($strSystemid, $strOldPrevId, $strNewPrevid) {
+    public function handleEvent($strEventName, array $arrArguments) {
+        //unwrap arguments
+        list($strSystemid, $strOldPrevId, $strNewPrevid) = $arrArguments;
+
         if ($strOldPrevId == $strNewPrevid) {
             return;
         }
@@ -38,6 +39,15 @@ class class_module_pages_previdchanged_listener implements interface_previdchang
             $objInstance->updateObjectToDb();
         }
     }
+
+    /**
+     * Internal init to register the event listener, called on file-inclusion, e.g. by the class-loader
+     * @return void
+     */
+    public static function staticConstruct() {
+        class_core_eventdispatcher::getInstance()->removeAndAddListener(class_system_eventidentifier::EVENT_SYSTEM_PREVIDCHANGED, new class_module_pages_previdchanged_listener());
+    }
 }
 
-
+//register the listener
+class_module_pages_previdchanged_listener::staticConstruct();

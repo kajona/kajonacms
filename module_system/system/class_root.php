@@ -522,7 +522,9 @@ abstract class class_root {
 
 
         //call the recordUpdated-Listeners
+        //TODO: remove legacy call
         class_core_eventdispatcher::notifyRecordUpdatedListeners($this);
+        class_core_eventdispatcher::getInstance()->notifyGenericListeners(class_system_eventidentifier::EVENT_SYSTEM_RECORDUPDATED, array($this));
 
 
         return $bitReturn;
@@ -564,7 +566,9 @@ abstract class class_root {
         $this->unsetSystemid();
         $bitReturn = $this->updateObjectToDb($strNewPrevid);
         //call event listeners
+        //TODO: remove legacy call
         $bitReturn = $bitReturn && class_core_eventdispatcher::notifyRecordCopiedListeners($strOldSysid, $this->getSystemid());
+        $bitReturn = $bitReturn && class_core_eventdispatcher::getInstance()->notifyGenericListeners(class_system_eventidentifier::EVENT_SYSTEM_RECORDCOPIED, array($strOldSysid, $this->getSystemid()));
 
 
         //process subrecords
@@ -698,7 +702,9 @@ abstract class class_root {
             $this->objRights->flushRightsCache();
             $this->objRights->rebuildRightsStructure($this->getSystemid());
             $this->objSortManager->fixSortOnPrevIdChange($this->strOldPrevId, $this->strPrevId);
+            //TODO: remove legacy call
             class_core_eventdispatcher::notifyPrevidChangedListeners($this->getSystemid(), $this->strOldPrevId, $this->strPrevId);
+            class_core_eventdispatcher::getInstance()->notifyGenericListeners(class_system_eventidentifier::EVENT_SYSTEM_PREVIDCHANGED, array($this->getSystemid(), $this->strOldPrevId, $this->strPrevId));
         }
 
         return $bitReturn;
@@ -1133,7 +1139,9 @@ abstract class class_root {
 
         //try to call other modules, maybe wanting to delete anything in addition, if the current record
         //is going to be deleted
+        //TODO: remove legacy call
         $bitResult = class_core_eventdispatcher::notifyRecordDeletedListeners($strSystemid, get_class($this));
+        $bitResult = $bitResult && class_core_eventdispatcher::getInstance()->notifyGenericListeners(class_system_eventidentifier::EVENT_SYSTEM_RECORDDELETED, array($strSystemid, get_class($this)));
 
         //Start a tx before deleting anything
         $this->objDB->transactionBegin();

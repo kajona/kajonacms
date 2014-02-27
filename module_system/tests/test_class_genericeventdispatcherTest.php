@@ -95,6 +95,37 @@ PHP;
         $objDispatcher->removeAllListeners("core.system.test.genericevent");
         $arrListeners = $objDispatcher->getRegisteredListeners("core.system.test.genericevent");
         $this->assertEquals(count($arrListeners), 0);
+    }
+
+    public function testRemoveAndAddListener() {
+        $objListener1 = new class_module_genericeventdispatcher_test();
+        $objListener1->strHandlerName = "handler 1";
+        $objListener1->objCallable = function($strName, $arrArguments) {
+            $this->assertEquals($strName, "handler 1");
+        };
+
+        $objListener2 = new class_module_genericeventdispatcher_test();
+        $objListener2->strHandlerName = "handler 2";
+        $objListener2->objCallable = function($strName, $arrArguments) {
+            $this->assertEquals($strName, "handler 2");
+        };
+
+        $objDispatcher = class_core_eventdispatcher::getInstance();
+        $objDispatcher->addListener("core.system.test.removeandadd", $objListener1);
+        $objDispatcher->addListener("core.system.test.removeandadd", $objListener2);
+
+        $arrListeners = $objDispatcher->getRegisteredListeners("core.system.test.removeandadd");
+        $this->assertEquals(count($arrListeners), 2);
+        $this->assertEquals(array_values($arrListeners)[0]->strHandlerName, "handler 1");
+        $this->assertEquals(array_values($arrListeners)[1]->strHandlerName, "handler 2");
+
+        $objListener3 = new class_module_genericeventdispatcher_test();
+        $objListener3->strHandlerName = "handler 3";
+        $objDispatcher->removeAndAddListener("core.system.test.removeandadd", $objListener3);
+
+        $arrListeners = $objDispatcher->getRegisteredListeners("core.system.test.removeandadd");
+        $this->assertEquals(count($arrListeners), 1);
+        $this->assertEquals(array_values($arrListeners)[0]->strHandlerName, "handler 3");
 
 
     }

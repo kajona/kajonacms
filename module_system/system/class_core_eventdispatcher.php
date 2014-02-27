@@ -53,7 +53,6 @@ class class_core_eventdispatcher {
 
     /**
      * Adds a listener to the list of registered listeners.
-     * The event-identifier is returned by getExtensionName.
      *
      * @param string $strEventIdentifier
      * @param interface_genericevent_listener $objListener
@@ -64,7 +63,30 @@ class class_core_eventdispatcher {
         if(!isset($this->arrRegisteredListeners[$strEventIdentifier]))
             $this->arrRegisteredListeners[$strEventIdentifier] = array();
 
+        class_logger::getInstance(class_logger::EVENTS)->addLogRow("registering listener for type ".$strEventIdentifier.", instance of ".get_class($objListener), class_logger::$levelInfo);
         $this->arrRegisteredListeners[$strEventIdentifier][] = $objListener;
+    }
+
+    /**
+     * Removes all listeners of the same class registered for the given event-identifier
+     * and adds the passed listener afterwards.
+     *
+     * @param string $strEventIdentifier
+     * @param interface_genericevent_listener $objListener
+     *
+     * @return void
+     */
+    public function removeAndAddListener($strEventIdentifier, interface_genericevent_listener $objListener) {
+        if(!isset($this->arrRegisteredListeners[$strEventIdentifier]))
+            $this->arrRegisteredListeners[$strEventIdentifier] = array();
+
+        foreach($this->arrRegisteredListeners[$strEventIdentifier] as $objOneRegistered) {
+            if(get_class($objListener) == get_class($objOneRegistered)) {
+                $this->removeListener($strEventIdentifier, $objOneRegistered);
+            }
+        }
+
+        $this->addListener($strEventIdentifier, $objListener);
     }
 
     /**
@@ -90,6 +112,7 @@ class class_core_eventdispatcher {
     public function removeListener($strEventIdentifier, interface_genericevent_listener $objListener) {
         foreach($this->arrRegisteredListeners[$strEventIdentifier] as $intKey => $objOneListener) {
             if($objListener === $objOneListener) {
+                class_logger::getInstance(class_logger::EVENTS)->addLogRow("removing listener for type ".$strEventIdentifier.", instance of ".get_class($objOneListener), class_logger::$levelInfo);
                 unset($this->arrRegisteredListeners[$strEventIdentifier][$intKey]);
                 return true;
             }
@@ -127,6 +150,7 @@ class class_core_eventdispatcher {
         $bitReturn = true;
         /** @var $objOneListener interface_genericevent_listener */
         foreach($this->arrRegisteredListeners[$strEventIdentifier] as $objOneListener) {
+            class_logger::getInstance(class_logger::EVENTS)->addLogRow("propagating event of type ".$strEventIdentifier." to instance of ".get_class($objOneListener), class_logger::$levelInfo);
             $bitReturn = $objOneListener->handleEvent($strEventIdentifier, $arrArguments) && $bitReturn;
         }
     }

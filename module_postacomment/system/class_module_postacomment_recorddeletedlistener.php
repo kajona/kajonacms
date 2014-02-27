@@ -14,7 +14,7 @@
  * @author sidler@mulchprod.de
  *
  */
-class class_module_postacomment_recorddeletedlistener implements interface_recorddeleted_listener {
+class class_module_postacomment_recorddeletedlistener implements interface_genericevent_listener {
 
 
     /**
@@ -24,12 +24,15 @@ class class_module_postacomment_recorddeletedlistener implements interface_recor
      *
      * Make sure to return a matching boolean-value, otherwise the transaction may be rolled back.
      *
-     * @param string $strSystemid
-     * @param string $strSourceClass
+     * @param string $strEventName
+     * @param array $arrArguments
      *
      * @return bool
      */
-    public function handleRecordDeletedEvent($strSystemid, $strSourceClass) {
+    public function handleEvent($strEventName, array $arrArguments) {
+        //unwrap arguments
+        list($strSystemid, $strSourceClass) = $arrArguments;
+
         $bitReturn = true;
         //module installed?
         if($strSourceClass == "class_module_postacomment_post" || class_module_system_module::getModuleByName("postacomment") == null)
@@ -51,5 +54,14 @@ class class_module_postacomment_recorddeletedlistener implements interface_recor
         return $bitReturn;
     }
 
+    /**
+     * Internal init to register the event listener, called on file-inclusion, e.g. by the class-loader
+     * @return void
+     */
+    public static function staticConstruct() {
+        class_core_eventdispatcher::getInstance()->removeAndAddListener(class_system_eventidentifier::EVENT_SYSTEM_RECORDDELETED, new class_module_postacomment_recorddeletedlistener());
+    }
 
 }
+
+class_module_postacomment_recorddeletedlistener::staticConstruct();

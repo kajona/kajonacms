@@ -8,24 +8,40 @@
 ********************************************************************************************************/
 
 /**
- * Handles record-delete events. If catched, the index-entries assigned to the systemid
+ * Handles record-updated events. If catched, the index-entries assigned to the systemid
  * will be updated.
  *
  * @package module_search
  * @author sidler@mulchprod.de
  */
-class class_module_search_recordupdatedlistener implements interface_recordupdated_listener {
+class class_module_search_recordupdatedlistener implements interface_genericevent_listener {
 
     /**
-     * The event is triggered after the source-object was updated to the database.
+     * Triggered as soon as a record is updated
      *
-     * @param class_model $objRecord
+     * @param string $strEventName
+     * @param array $arrArguments
      *
      * @return bool
      */
-    public function handleRecordUpdatedEvent($objRecord) {
+    public function handleEvent($strEventName, array $arrArguments) {
+
+        $objRecord = $arrArguments[0];
         $objIndex = new class_module_search_indexwriter();
         $objIndex->indexObject($objRecord);
         return true;
     }
+
+    /**
+     * Internal init to register the event listener, called on file-inclusion, e.g. by the class-loader
+     * @return void
+     */
+    public static function staticConstruct() {
+        class_core_eventdispatcher::getInstance()->removeAndAddListener(class_system_eventidentifier::EVENT_SYSTEM_RECORDUPDATED, new class_module_search_recordupdatedlistener());
+    }
+
+
 }
+
+//register the listener
+class_module_search_recordupdatedlistener::staticConstruct();

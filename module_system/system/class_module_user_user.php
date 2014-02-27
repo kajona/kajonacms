@@ -297,7 +297,9 @@ class class_module_user_user extends class_model implements interface_model, int
         //call other models that may be interested
         $this->getObjSourceUser()->deleteUser();
         $bitReturn = $this->objDB->_pQuery($strQuery, array($this->getSystemid()));
+        //TODO: remove legacy listener
         class_core_eventdispatcher::notifyListeners("interface_recorddeleted_listener", "handleRecordDeletedEvent", array($this->getSystemid(), get_class($this)));
+        class_core_eventdispatcher::getInstance()->notifyGenericListeners(class_system_eventidentifier::EVENT_SYSTEM_RECORDDELETED, array($this->getSystemid(), get_class($this)));
 
         return $bitReturn;
     }

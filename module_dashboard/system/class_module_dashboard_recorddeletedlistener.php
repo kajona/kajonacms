@@ -15,7 +15,7 @@
  * @author sidler@mulchprod.de
  *
  */
-class class_module_dashboard_recorddeletedlistener implements interface_recorddeleted_listener {
+class class_module_dashboard_recorddeletedlistener implements interface_genericevent_listener {
 
 
     /**
@@ -27,12 +27,15 @@ class class_module_dashboard_recorddeletedlistener implements interface_recordde
      *
      * Make sure to return a matching boolean-value, otherwise the transaction may be rolled back.
      *
-     * @param string $strSystemid
-     * @param string $strSourceClass
+     * @param string $strEventName
+     * @param array $arrArguments
      *
      * @return bool
      */
-    public function handleRecordDeletedEvent($strSystemid, $strSourceClass) {
+    public function handleEvent($strEventName, array $arrArguments) {
+        //unwrap arguments
+        list($strSystemid, $strSourceClass) = $arrArguments;
+
         if($strSourceClass == "class_module_user_user" && validateSystemid($strSystemid)) {
             $strQuery = "SELECT dashboard_id FROM "._dbprefix_."dashboard WHERE dashboard_user = ?";
             $arrRows = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array($strSystemid), null, null, false);
@@ -45,7 +48,14 @@ class class_module_dashboard_recorddeletedlistener implements interface_recordde
         return true;
     }
 
+    /**
+     * Internal init to register the event listener, called on file-inclusion, e.g. by the class-loader
+     * @return void
+     */
+    public static function staticConstruct() {
+        class_core_eventdispatcher::getInstance()->removeAndAddListener(class_system_eventidentifier::EVENT_SYSTEM_RECORDDELETED, new class_module_dashboard_recorddeletedlistener());
+    }
 
 }
 
-
+class_module_dashboard_recorddeletedlistener::staticConstruct();

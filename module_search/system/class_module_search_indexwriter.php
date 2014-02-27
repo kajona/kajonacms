@@ -21,18 +21,6 @@ class class_module_search_indexwriter {
     private static $isIndexAvailable = null;
 
     /**
-     * Name of the event thrown as soon as record is indexed.
-     * Use this listener-identifier to add additional content to
-     * a search-document.
-     * The params-array contains two entries:
-     * $objInstance, $objSearchDocument
-     * $objInstance is the record to be indexed, $objSearchDocument the matching search document which may be extended.
-     *
-     */
-    const EVENT_OBJECTINDEXED = "core.search.objectindexed";
-
-
-    /**
      * Plain constructor
      */
     public function __construct() {
@@ -135,7 +123,7 @@ class class_module_search_indexwriter {
         }
 
         //trigger event-listeners
-        class_core_eventdispatcher::getInstance()->notifyGenericListeners(self::EVENT_OBJECTINDEXED, array($objInstance, $objSearchDocument));
+        class_core_eventdispatcher::getInstance()->notifyGenericListeners(class_search_eventidentifier::EVENT_SEARCH_OBJECTINDEXED, array($objInstance, $objSearchDocument));
 
         $this->updateSearchDocumentToDb($objSearchDocument);
     }
@@ -243,6 +231,7 @@ class class_module_search_indexwriter {
 
     /**
      * Resets the internal check whether the search module is available with index support or not.
+     * @return void
      */
     public static function resetIndexAvailableCheck() {
         self::$isIndexAvailable = null;

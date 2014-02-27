@@ -14,7 +14,7 @@
  * @author sidler@mulchprod.de
  *
  */
-class class_module_languages_recorddeletedlistener implements interface_recorddeleted_listener {
+class class_module_languages_recorddeletedlistener implements interface_genericevent_listener {
 
 
     /**
@@ -24,12 +24,15 @@ class class_module_languages_recorddeletedlistener implements interface_recordde
      * There's no need to register the listener, this is done automatically.
      * Make sure to return a matching boolean-value, otherwise the transaction may be rolled back.
      *
-     * @param string $strSystemid
-     * @param string $strSourceClass
+     * @param string $strEventName
+     * @param array $arrArguments
      *
      * @return bool
      */
-    public function handleRecordDeletedEvent($strSystemid, $strSourceClass) {
+    public function handleEvent($strEventName, array $arrArguments) {
+        //unwrap arguments
+        list($strSystemid, $strSourceClass) = $arrArguments;
+
         //fire a plain query on the database, much faster then searching for matching records
         $strQuery = "DELETE FROM " . _dbprefix_ . "languages_languageset
                       WHERE languageset_language = ?
@@ -39,4 +42,13 @@ class class_module_languages_recorddeletedlistener implements interface_recordde
     }
 
 
+    /**
+     * Internal init to register the event listener, called on file-inclusion, e.g. by the class-loader
+     * @return void
+     */
+    public static function staticConstruct() {
+        class_core_eventdispatcher::getInstance()->removeAndAddListener(class_system_eventidentifier::EVENT_SYSTEM_RECORDDELETED, new class_module_languages_recorddeletedlistener());
+    }
 }
+
+class_module_languages_recorddeletedlistener::staticConstruct();

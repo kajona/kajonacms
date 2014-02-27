@@ -13,20 +13,22 @@
  * @package module_rating
  * @author sidler@mulchprod.de
  */
-class class_module_rating_recorddeletedlistener implements interface_recorddeleted_listener {
+class class_module_rating_recorddeletedlistener implements interface_genericevent_listener {
 
 
     /**
      * Searches for ratings belonging to the systemid
      * to be deleted.
      *
-     * @param string $strSystemid
-     * @param string $strSourceClass
+     * @param string $strEventName
+     * @param array $arrArguments
      *
      * @return bool
-     * @overwrites
      */
-    public function handleRecordDeletedEvent($strSystemid, $strSourceClass) {
+    public function handleEvent($strEventName, array $arrArguments) {
+        //unwrap arguments
+        list($strSystemid, $strSourceClass) = $arrArguments;
+
         $bitReturn = true;
 
         //ratings installed as a module?
@@ -50,6 +52,14 @@ class class_module_rating_recorddeletedlistener implements interface_recorddelet
         return $bitReturn;
     }
 
-
+    /**
+     * Internal init to register the event listener, called on file-inclusion, e.g. by the class-loader
+     * @return void
+     */
+    public static function staticConstruct() {
+        class_core_eventdispatcher::getInstance()->removeAndAddListener(class_system_eventidentifier::EVENT_SYSTEM_RECORDDELETED, new class_module_rating_recorddeletedlistener());
+    }
 
 }
+
+class_module_rating_recorddeletedlistener::staticConstruct();

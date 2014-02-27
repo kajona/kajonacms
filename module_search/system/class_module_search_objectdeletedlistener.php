@@ -14,22 +14,30 @@
  * @package module_search
  * @author sidler@mulchprod.de
  */
-class class_module_search_objectdeletedlistener implements interface_recorddeleted_listener {
+class class_module_search_objectdeletedlistener implements interface_genericevent_listener {
 
     /**
-     * Called whenever a records was deleted using the common methods.
-     * Implement this method to be notified when a record is deleted, e.g. to to additional cleanups afterwards.
-     * There's no need to register the listener, this is done automatically.
-     * Make sure to return a matching boolean-value, otherwise the transaction may be rolled back.
-     *
-     * @param string $strSystemid
-     * @param string $strSourceClass The class-name of the object deleted
+     * @param string $strEventName
+     * @param array $arrArguments
      *
      * @return bool
      */
-    public function handleRecordDeletedEvent($strSystemid, $strSourceClass) {
+    public function handleEvent($strEventName, array $arrArguments) {
+        //unwrap arguments
+        list($strSystemid, $strSourceClass) = $arrArguments;
+
         $objIndex = new class_module_search_indexwriter();
         return $objIndex->removeRecordFromIndex($strSystemid);
     }
 
+    /**
+     * Internal init to register the event listener, called on file-inclusion, e.g. by the class-loader
+     * @return void
+     */
+    public static function staticConstruct() {
+        class_core_eventdispatcher::getInstance()->removeAndAddListener(class_system_eventidentifier::EVENT_SYSTEM_RECORDDELETED, new class_module_search_objectdeletedlistener());
+    }
+
 }
+
+class_module_search_objectdeletedlistener::staticConstruct();
