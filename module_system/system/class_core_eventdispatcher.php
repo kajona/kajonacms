@@ -110,6 +110,9 @@ class class_core_eventdispatcher {
      * @return bool
      */
     public function removeListener($strEventIdentifier, interface_genericevent_listener $objListener) {
+        if(!isset($this->arrRegisteredListeners[$strEventIdentifier]))
+            $this->arrRegisteredListeners[$strEventIdentifier] = array();
+
         foreach($this->arrRegisteredListeners[$strEventIdentifier] as $intKey => $objOneListener) {
             if($objListener === $objOneListener) {
                 class_logger::getInstance(class_logger::EVENTS)->addLogRow("removing listener for type ".$strEventIdentifier.", instance of ".get_class($objOneListener), class_logger::$levelInfo);
@@ -148,6 +151,10 @@ class class_core_eventdispatcher {
      */
     public function notifyGenericListeners($strEventIdentifier, $arrArguments) {
         $bitReturn = true;
+
+        if(!isset($this->arrRegisteredListeners[$strEventIdentifier]))
+            $this->arrRegisteredListeners[$strEventIdentifier] = array();
+
         /** @var $objOneListener interface_genericevent_listener */
         foreach($this->arrRegisteredListeners[$strEventIdentifier] as $objOneListener) {
             class_logger::getInstance(class_logger::EVENTS)->addLogRow("propagating event of type ".$strEventIdentifier." to instance of ".get_class($objOneListener), class_logger::$levelInfo);
