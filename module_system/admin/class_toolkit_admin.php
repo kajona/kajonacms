@@ -1054,13 +1054,15 @@ class class_toolkit_admin extends class_toolkit {
      *
      * @param mixed $arrHeader the first row to name the columns
      * @param mixed $arrValues every entry is one row
+     * @param string $strTableCssAddon an optional css-class added to the table tag
+     *
      * @return string
      */
-    public function dataTable(array $arrHeader = null, array $arrValues) {
+    public function dataTable(array $arrHeader = null, array $arrValues, $strTableCssAddon = "") {
         $strReturn = "";
         //The Table header & the templates
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "datalist_header");
-        $strReturn .= $this->objTemplate->fillTemplate(array(), $strTemplateID);
+        $strReturn .= $this->objTemplate->fillTemplate(array("cssaddon" => $strTableCssAddon), $strTemplateID);
 
         $strTemplateHeaderHeaderID = $this->objTemplate->readTemplate("/elements.tpl", "datalist_column_head_header");
         $strTemplateHeaderContentID = $this->objTemplate->readTemplate("/elements.tpl", "datalist_column_head");
