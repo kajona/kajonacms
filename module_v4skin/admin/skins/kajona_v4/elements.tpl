@@ -1469,9 +1469,13 @@ The language switch surrounds the buttons
                     document.location.href=data.rslt.obj.attr("link");
                 }
             })
+            .bind("load_node.jstree", function(e, data) {
+                KAJONA.admin.tooltip.addTooltip('#'+this.id+" a span");
+            })
             .bind("rename_node.jstree", function (NODE, REF_NODE) {
                 // Do your operation
-            }).bind("move_node.jstree", function (e, data) {
+            })
+            .bind("move_node.jstree", function (e, data) {
                 data.rslt.o.each(function (i) {
 
                     var prevId = (data.rslt.cr === -1 ? '%%rootNodeSystemid%%' : data.rslt.np.attr("id"));
