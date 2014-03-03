@@ -98,16 +98,27 @@ abstract class class_systemtask_base {
      */
     public final function generateAdminForm($strTargetModule = "system", $strTargetAction = "systemTasks") {
         $strReturn = "";
-        $strFormContent = $this->getAdminForm();
+        $objAdminForm = $this->getAdminForm();
 
-        if($strFormContent != "") {
+        if($objAdminForm instanceof class_admin_formgenerator) {
+            $objAdminForm->addField(new class_formentry_hidden("", "execute"))->setStrValue("true");
+            $objAdminForm->addField(new class_formentry_button("", "systemtask_run"))->setStrLabel($this->objLang->getLang("systemtask_run", "system"))->setStrValue("submit");
+
             if($this->bitMultipartform) {
-                $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($strTargetModule, $strTargetAction, "task=" . $this->getStrInternalTaskName()), "taskParamForm", "multipart/form-data");
+                $objAdminForm->setStrFormEncoding(class_admin_formgenerator::FORM_ENCTYPE_MULTIPART);
+            }
+
+            $strLink = class_link::getLinkAdminHref($strTargetModule, $strTargetAction, "task=" . $this->getStrInternalTaskName());
+            $strReturn = $objAdminForm->renderForm($strLink, 0);
+        }
+        else if($objAdminForm != "") {
+            if($this->bitMultipartform) {
+                $strReturn .= $this->objToolkit->formHeader(class_link::getLinkAdminHref($strTargetModule, $strTargetAction, "task=" . $this->getStrInternalTaskName()), "taskParamForm", class_admin_formgenerator::FORM_ENCTYPE_MULTIPART);
             }
             else {
-                $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($strTargetModule, $strTargetAction, "task=" . $this->getStrInternalTaskName()), "taskParamForm");
+                $strReturn .= $this->objToolkit->formHeader(class_link::getLinkAdminHref($strTargetModule, $strTargetAction, "task=" . $this->getStrInternalTaskName()), "taskParamForm");
             }
-            $strReturn .= $strFormContent;
+            $strReturn .= $objAdminForm;
             $strReturn .= $this->objToolkit->formInputHidden("execute", "true");
             $strReturn .= $this->objToolkit->formInputSubmit($this->objLang->getLang("systemtask_run", "system"));
             $strReturn .= $this->objToolkit->formClose();
