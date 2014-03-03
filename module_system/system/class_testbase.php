@@ -39,6 +39,7 @@ abstract class class_testbase extends PHPUnit_Framework_TestCase {
 
         $objCarrier->getObjDB()->_query($strSQL);
         $objCarrier->getObjDB()->flushQueryCache();
+
         class_apc_cache::getInstance()->flushCache();
 
         class_config::getInstance()->loadConfigsDatabase(class_db::getInstance());
@@ -66,69 +67,84 @@ abstract class class_testbase extends PHPUnit_Framework_TestCase {
 
     /**
      * Crreates an object of type '$strClassType'.
-
+     * Only properties which are annotated with @var will be considered
      *
-*@param $strClassType - the name of the class as a string
+     * @param $strClassType - the name of the class as a string
      * @param $strParentId - the parent id of the object to be created
      * @param $arrExcludeFillProperty - array of popertynames which will not be set
-
+     * @param $arrPropertyValues - assoziative array which has as key the property name and as value the to be set for the property
+     * @param $bitAutofillProperties - if true all properties which have annotation @tablecolumn will be filled with random values
      *
-*@return object
+     * @return object
      */
-    protected function createObject($strClassType, $strParentId, $arrExcludeFillProperty = array()) {
+    protected function createObject($strClassType, $strParentId, $arrExcludeFillProperty = array(),  array $arrPropertyValues = array(), $bitAutofillProperties = true) {
         //create the object
         $objReflector = new ReflectionClass($strClassType);
         $obj = $objReflector->newInstance();
         $obj->updateObjectToDb($strParentId);
 
-        $arrReflectionProperties = $objReflector->getProperties();
         $objReflectorAnnotated = new class_reflection($strClassType);
 
-        //set properties which are annotated with @var and have a setter method
+        //get properties which are annotated with @var and have a setter method
+        $arrReflectionProperties = $objReflector->getProperties();
         foreach($arrReflectionProperties as $objReflectionProperty) {
             $strPropName = $objReflectionProperty->getName();
 
+            //Exclude properties to be set
             if(in_array($strPropName, $arrExcludeFillProperty)) {
                 continue;
             }
 
-            //check if the property is annotated with @tablecolumn
-            if($objReflectorAnnotated->hasPropertyAnnotation($strPropName, class_orm_mapper::STR_ANNOTATION_TABLECOLUMN)) {
+            //Set properties from array $arrPropertyValues
+            if(array_key_exists($strPropName, $arrPropertyValues)) {
                 $strSetterMethod = $objReflectorAnnotated->getSetter($strPropName);
-
                 if($objReflector->hasMethod($strSetterMethod)) {
+                    $objValue = $arrPropertyValues[$strPropName];
                     $objReflectionMethod = $objReflector->getMethod($strSetterMethod);
+                    $objReflectionMethod->invoke($obj, $objValue);
+                    continue;
+                }
+            }
 
-                    //determine the field type
-                    $strDataType = $objReflectorAnnotated->getAnnotationValueForProperty($strPropName, "@var");
-                    $strFieldType = $objReflectorAnnotated->getAnnotationValueForProperty($strPropName, "@fieldType");
-                    $objMethodValue = null;
+            //check if the property is annotated with @tablecolumn
+            if($bitAutofillProperties) {
+                if($objReflectorAnnotated->hasPropertyAnnotation($strPropName, class_orm_mapper::STR_ANNOTATION_TABLECOLUMN)) {
+                    $strSetterMethod = $objReflectorAnnotated->getSetter($strPropName);
 
-                    if($strDataType == "string") {
-                        if($strFieldType == "text" || $strFieldType == "textarea") {
-                            $objMethodValue = $strPropName."_".$obj->getStrSystemid();
+                    if($objReflector->hasMethod($strSetterMethod)) {
+                        $objReflectionMethod = $objReflector->getMethod($strSetterMethod);
 
-                            if(uniStrlen($objMethodValue) > 10) {
-                                $objMethodValue = uniStrTrim($objMethodValue, 10, "");
+                        //determine the field type
+                        $strDataType = $objReflectorAnnotated->getAnnotationValueForProperty($strPropName, "@var");
+                        $strFieldType = $objReflectorAnnotated->getAnnotationValueForProperty($strPropName, "@fieldType");
+                        $objMethodValue = null;
+
+                        if($strDataType == "string") {
+                            if($strFieldType == "text" || $strFieldType == "textarea") {
+                                $objMethodValue = $strPropName."_".$obj->getStrSystemid();
+
+                                if(uniStrlen($objMethodValue) > 10) {
+                                    $objMethodValue = uniStrTrim($objMethodValue, 10, "");
+                                }
                             }
                         }
-                    }
-                    else if($strDataType == "int" || $strDataType == "numeric") {
-                        if($strFieldType != "dropdown") {
-                            $objMethodValue = 1;
+                        else if($strDataType == "int" || $strDataType == "numeric") {
+                            if($strFieldType != "dropdown") {
+                                $objMethodValue = 1;
+                            }
                         }
-                    }
-                    else if($strDataType == "class_date") {
-                            $objMethodValue = new class_date();
-                    }
-                    else if($strDataType == "bool") {
-                            $objMethodValue = false;
-                    }
-                    else {
-                        continue;//continue with foreach
-                    }
+                        else if($strDataType == "class_date") {
+                                $objMethodValue = new class_date();
+                        }
+                        else if($strDataType == "bool") {
+                                $objMethodValue = false;
+                        }
+                        else {
+                            continue;//continue with foreach
+                        }
 
-                    $objReflectionMethod->invoke($obj, $objMethodValue);
+                        $objReflectionMethod->invoke($obj, $objMethodValue);
+                    }
                 }
             }
         }
