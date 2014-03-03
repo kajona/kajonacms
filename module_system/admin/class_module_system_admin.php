@@ -389,7 +389,7 @@ class class_module_system_admin extends class_admin_simple implements interface_
             /** @var $objTask interface_admin_systemtask */
             foreach($arrFiles as $objTask) {
                 if($objTask->getStrInternalTaskname() == $this->getParam("task")) {
-                    $strTaskOutput .= self::getTaskDialogExecuteCode($this->getParam("execute") == "true", $objTask, "system", "systemTasks");
+                    $strTaskOutput .= self::getTaskDialogExecuteCode($this->getParam("execute") == "true", $objTask, "system", "systemTasks", $this->getParam("executedirectly") == "true");
                     break;
                 }
             }
@@ -446,20 +446,25 @@ class class_module_system_admin extends class_admin_simple implements interface_
     }
 
 
-    public static function getTaskDialogExecuteCode($bitExecute, class_systemtask_base $objTask, $strModule = "", $strAction = "") {
+    public static function getTaskDialogExecuteCode($bitExecute, class_systemtask_base $objTask, $strModule = "", $strAction = "", $bitExecuteDirectly = false) {
         $objLang = class_carrier::getInstance()->getObjLang();
         $strTaskOutput = "";
         //execute the task or show the form?
         if($bitExecute) {
-            $strTaskOutput .= "
-            <script type=\"text/javascript\">
-            $(function() {
-               setTimeout(function() {
-                    KAJONA.admin.systemtask.executeTask('".$objTask->getStrInternalTaskname()."', '".$objTask->getSubmitParams()."');
-                    KAJONA.admin.systemtask.setName('".$objLang->getLang("systemtask_runningtask", "system")." ".$objTask->getStrTaskName()."');
-               }, 500);
-             });
-            </script>";
+            if($bitExecuteDirectly) {
+                $strTaskOutput .= $objTask->executeTask();
+            }
+            else {
+                $strTaskOutput .= "
+                <script type=\"text/javascript\">
+                $(function() {
+                   setTimeout(function() {
+                        KAJONA.admin.systemtask.executeTask('".$objTask->getStrInternalTaskname()."', '".$objTask->getSubmitParams()."');
+                        KAJONA.admin.systemtask.setName('".$objLang->getLang("systemtask_runningtask", "system")." ".$objTask->getStrTaskName()."');
+                   }, 500);
+                 });
+                </script>";
+            }
         }
         else {
             $strForm = $objTask->generateAdminForm($strModule, $strAction);
