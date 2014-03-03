@@ -7,7 +7,7 @@
 ********************************************************************************************************/
 
 /**
- * A simple headline-element
+ * A fieldset may be used to group content
  *
  * @author sidler@mulchprod.de
  * @since 4.0
