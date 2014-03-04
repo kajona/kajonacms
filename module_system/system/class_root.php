@@ -564,6 +564,7 @@ abstract class class_root {
 
         //prepare the current object
         $this->unsetSystemid();
+        $this->arrInitRow = null;
         $bitReturn = $this->updateObjectToDb($strNewPrevid);
         //call event listeners
         //TODO: remove legacy call
