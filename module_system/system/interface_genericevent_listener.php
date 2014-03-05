@@ -26,11 +26,11 @@ interface interface_genericevent_listener {
      * Make sure to return a matching boolean value, indicating if the event-process was successful or not. The event source may
      * depend on a valid return value.
      *
-     * @param string $strEventName
+     * @param string $strEventIdentifier
      * @param array $arrArguments
      *
      * @return bool
      */
-    public function handleEvent($strEventName, array $arrArguments);
+    public function handleEvent($strEventIdentifier, array $arrArguments);
 
 }

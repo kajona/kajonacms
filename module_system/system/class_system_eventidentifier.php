@@ -64,4 +64,15 @@ interface class_system_eventidentifier {
      * @since 4.5
      */
     const EVENT_SYSTEM_RECORDDELETED = "core.system.recorddeleted";
+
+    /**
+     * Callback method, triggered each time a user logs into the system for the very first time.
+     * May be used to trigger actions or initial setups for the user.
+     *
+     * @param string $strUserid
+     *
+     * @return bool
+     * @since 4.5
+     */
+    const EVENT_SYSTEM_USERFIRSTLOGIN = "core.system.userfirstlogin";
 }

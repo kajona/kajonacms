@@ -15,19 +15,18 @@
  * @author sidler@mulchprod.de
  *
  */
-class class_module_dashboard_firstloginlistener implements interface_userfirstlogin_listener {
-
-
+class class_module_dashboard_firstloginlistener implements interface_genericevent_listener {
 
     /**
-     * Callback method, triggered each time a user logs into the system for the very first time.
-     * May be used to trigger actions or initial setups for the user.
-     *
-     * @param string $strUserid
+     * handles the event
+     * @param string $strEventName
+     * @param array $arrArguments
      *
      * @return bool
      */
-    public function handleUserFirstLoginEvent($strUserid) {
+    public function handleEvent($strEventName, array $arrArguments) {
+        list($strUserid) = $arrArguments;
+
         $bitReturn = true;
 
         //get all widgets and call them in order
@@ -37,14 +36,22 @@ class class_module_dashboard_firstloginlistener implements interface_userfirstlo
             $objInstance = new $strOneWidgetClass();
 
             $bitReturn = $bitReturn && $objInstance->onFistLogin($strUserid);
-
         }
 
         return $bitReturn;
     }
 
 
+    /**
+     * Internal init to register the event listener, called on file-inclusion, e.g. by the class-loader
+     * @return void
+     */
+    public static function staticConstruct() {
+        class_core_eventdispatcher::getInstance()->removeAndAddListener(class_system_eventidentifier::EVENT_SYSTEM_USERFIRSTLOGIN, new class_module_dashboard_firstloginlistener());
+    }
 
 }
+
+class_module_dashboard_firstloginlistener::staticConstruct();
 
 
