@@ -139,5 +139,14 @@ class class_zip {
         return $this->objArchive->close();
     }
 
+    /**
+     * Checks if the given file is a zip-File
+     *
+     * @param string $strFilename
+     * @return bool, true if the file is a zip-File, an error code if it is not a zip-file (see ZipArchive)
+     */
+    public function isZipFile($strFilename) {
+        return $this->objArchive->open(_realpath_.$strFilename, ZipArchive::CHECKCONS);
+    }
 }
 
