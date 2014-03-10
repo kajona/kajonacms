@@ -35,6 +35,10 @@ class class_exception extends Exception {
 
     private $intErrorlevel;
 
+    /**
+     * @param string $strError
+     * @param int $intErrorlevel
+     */
     public function __construct($strError, $intErrorlevel) {
         parent::__construct($strError);
         $this->intErrorlevel = $intErrorlevel;
@@ -46,6 +50,7 @@ class class_exception extends Exception {
      * Decides, if the execution should be stopped, or continued.
      * Therefore the errorlevel defines the "weight" of the exception
      *
+     * @return void
      */
     public function processException() {
         //decide, what to print --> get config-value
@@ -55,6 +60,8 @@ class class_exception extends Exception {
 
         //set which POST parameters should read out
         $arrPostParams = array("module", "action", "page", "systemid");
+
+        $objHistory = new class_history();
 
         //send an email to the admin?
         if(defined("_system_admin_email_") && _system_admin_email_ != "") {
@@ -86,12 +93,12 @@ class class_exception extends Exception {
             $strMailtext .= "\n\n";
             $strMailtext .= "Last actions called:\n";
             $strMailtext .= "Admin:\n";
-            $arrHistory = class_carrier::getInstance()->getObjSession()->getSession("adminHistory");
+            $arrHistory = $objHistory->getAdminHistory();
             if(is_array($arrHistory))
                 foreach($arrHistory as $intIndex => $strOneUrl)
                     $strMailtext .= " #".$intIndex.": ".$strOneUrl."\n";
             $strMailtext .= "Portal:\n";
-            $arrHistory = class_carrier::getInstance()->getObjSession()->getSession("portalHistory");
+            $arrHistory = $objHistory->getPortalHistory();
             if(is_array($arrHistory))
                 foreach($arrHistory as $intIndex => $strOneUrl)
                     $strMailtext .= " #".$intIndex.": ".$strOneUrl."\n";
@@ -175,6 +182,7 @@ class class_exception extends Exception {
      * by an try-catch block.
      *
      * @param class_exception $objException
+     * @return void
      */
     public static function globalExceptionHandler($objException) {
         if (!($objException instanceof class_exception))
@@ -183,10 +191,17 @@ class class_exception extends Exception {
         class_response_object::getInstance()->sendHeaders();
     }
 
+    /**
+     * @return int
+     */
     public function getErrorlevel() {
         return $this->intErrorlevel;
     }
 
+    /**
+     * @param int $intErrorlevel
+     * @return void
+     */
     public function setErrorlevel($intErrorlevel) {
         $this->intErrorlevel = $intErrorlevel;
     }
@@ -194,10 +209,17 @@ class class_exception extends Exception {
 
 
 //bad coding-style, but define a few more specific exceptions for special cases
+
+/**
+ * Class class_authentication_exception
+ */
 class class_authentication_exception extends class_exception {
 
 }
 
+/**
+ * Class class_io_exception
+ */
 class class_io_exception extends class_exception {
 
 }
