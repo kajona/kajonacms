@@ -162,11 +162,9 @@ class class_lockmanager {
      */
     public function getLockId() {
 
-        $objObject = class_objectfactory::getInstance()->getObject($this->strSystemid);
-
         $arrRow = class_carrier::getInstance()->getObjDB()->getPRow("SELECT system_lock_id FROM "._dbprefix_."system WHERE system_id = ?", array($this->strSystemid), 0, true);
         if(isset($arrRow["system_lock_id"]) && validateSystemid($arrRow["system_lock_id"])) {
-            return $objObject->getStrLockId();
+            return $arrRow["system_lock_id"];
         }
         else {
             return "0";
