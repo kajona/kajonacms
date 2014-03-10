@@ -56,7 +56,8 @@ class class_workflows_controller   {
             $objOneWorkflow->updateObjectToDb();
 
             //unlock
-            $objLockmanager->unlockRecord();
+            $objLockmanager->unlockRecord(true);
+            $objOneWorkflow->getLockManager()->unlockRecord(true);
 
 
         }
@@ -105,7 +106,7 @@ class class_workflows_controller   {
             $objOneWorkflow->setIntRuns($objOneWorkflow->getIntRuns()+1);
             $objOneWorkflow->updateObjectToDb();
 
-            $objLockmanager->unlockRecord();
+            $objLockmanager->unlockRecord(true);
 
         }
     }
