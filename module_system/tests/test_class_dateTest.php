@@ -2,7 +2,48 @@
 
 require_once (__DIR__."/../../module_system/system/class_testbase.php");
 
-class class_test_class_date extends class_testbase  {
+class test_class_dateTest extends class_testbase  {
+
+
+    public function testDateParams() {
+        $objDate = new class_date(0);
+        $this->assertEquals($objDate->getLongTimestamp(), 00000000000000);
+
+        $objDate = new class_date("0");
+        $this->assertEquals($objDate->getLongTimestamp(), 00000000000000);
+
+        $objDate = new class_date("");
+        $this->assertTrue($objDate->getLongTimestamp() > 0);
+
+        $objDate = new class_date(null);
+        $this->assertTrue($objDate->getLongTimestamp() > 0);
+
+        $objDate = new class_date(1);
+        $this->assertEquals($objDate->getLongTimestamp(), 19700101010001);
+
+        $objDate = new class_date("1");
+        $this->assertEquals($objDate->getLongTimestamp(), 19700101010001);
+
+        $objDate = new class_date(20140310123627);
+        $this->assertEquals($objDate->getLongTimestamp(), 20140310123627);
+
+        $objDate = new class_date("20140310123627");
+        $this->assertEquals($objDate->getLongTimestamp(), 20140310123627);
+
+        $objDate = new class_date("");
+        $objDate2 = new class_date($objDate);
+        $this->assertEquals($objDate2->getLongTimestamp(), $objDate->getLongTimestamp());
+
+        $objDate = new class_date(12345678);
+        $this->assertEquals($objDate->getLongTimestamp(), 19700523222118);
+
+        $objDate = new class_date("12345678");
+        $this->assertEquals($objDate->getLongTimestamp(), 19700523222118);
+
+        $objDate = new class_date("12345678");
+        $objDate2 = new class_date($objDate);
+        $this->assertEquals($objDate2->getLongTimestamp(), $objDate->getLongTimestamp());
+    }
 
 
     public function testNextMonth() {

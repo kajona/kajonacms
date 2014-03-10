@@ -38,11 +38,11 @@ class class_date {
         if(is_object($longInitValue) && $longInitValue instanceof class_date)
             $longInitValue = $longInitValue->getLongTimestamp();
 
-        if($longInitValue == "") {
-            $this->setTimeInOldStyle(time());
-        }
-        else if($longInitValue == "0") {
+        if($longInitValue == "0") {
             $this->setLongTimestamp("00000000000000");
+        }
+        else if($longInitValue == "") {
+            $this->setTimeInOldStyle(time());
         }
         else {
             if(strlen($longInitValue) == 14) {
