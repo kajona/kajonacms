@@ -215,6 +215,9 @@ class class_admin_formgenerator {
             if($this->getField("mode") != null && $this->getField("mode")->getStrValue() == "new")
                 $bitSkip = true;
 
+            if(!$bitSkip && !validateSystemid($this->objSourceobject->getSystemid()))
+                $bitSkip = true;
+
             if(!$bitSkip) {
                 if($this->objSourceobject->getLockManager()->isAccessibleForCurrentUser())
                     $this->objSourceobject->getLockManager()->lockRecord();
