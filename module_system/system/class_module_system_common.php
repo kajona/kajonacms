@@ -248,6 +248,37 @@ class class_module_system_common extends class_model implements interface_model 
     }
 
     /**
+     * Fetches a list of records currently locked in the database
+     *
+     * @param null|int $intStart
+     * @param null|int $intEnd
+     *
+     * @return class_model[]
+     */
+    public function getLockedRecords($intStart = null, $intEnd = null) {
+        $strQuery = "SELECT system_id FROM "._dbprefix_."system WHERE system_lock_id != '0' AND system_lock_id IS NOT NULL ORDER BY system_id DESC";
+        $arrRows = $this->objDB->getPArray($strQuery, array(), $intStart, $intEnd);
+
+        $arrReturn = array();
+        foreach($arrRows as $arrOneRow) {
+            $arrReturn[] = class_objectfactory::getInstance()->getObject($arrOneRow["system_id"]);
+        }
+
+        return $arrReturn;
+    }
+
+    /**
+     * Counts the number of records currently locked in the database
+     *
+     * @return int
+     */
+    public function getLockedRecordsCount() {
+        $strQuery = "SELECT COUNT(*) FROM "._dbprefix_."system WHERE system_lock_id != '0' AND system_lock_id IS NOT NULL ORDER BY system_id DESC";
+        $arrRow = $this->objDB->getPRow($strQuery, array());
+        return $arrRow["COUNT(*)"];
+    }
+
+    /**
      * Creates infos about the current php version
      *
      * @return mixed

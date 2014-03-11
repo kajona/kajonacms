@@ -30,6 +30,7 @@ class class_module_system_admin extends class_admin_simple implements interface_
             $arrReturn[] = array("right3", getLinkAdmin($this->arrModule["modul"], "genericChangelog", "&bitBlockFolderview=true", $this->getLang("action_changelog"), "", "", true, "adminnavi"));
         $arrReturn[] = array("right5", getLinkAdmin($this->arrModule["modul"], "aspects", "", $this->getLang("action_aspects"), "", "", true, "adminnavi"));
         $arrReturn[] = array("right1", getLinkAdmin($this->arrModule["modul"], "systemSessions", "", $this->getLang("action_system_sessions"), "", "", true, "adminnavi"));
+        $arrReturn[] = array("right1", getLinkAdmin($this->arrModule["modul"], "lockedRecords", "", $this->getLang("action_locked_records"), "", "", true, "adminnavi"));
         $arrReturn[] = array("", "");
         $arrReturn[] = array("", getLinkAdmin($this->arrModule["modul"], "about", "", $this->getLang("action_about"), "", "", true, "adminnavi"));
         $arrReturn[] = array("", "");
@@ -500,6 +501,52 @@ JS;
             </script>";
     }
 
+    /**
+     * Renders a list of records currently locked
+     *
+     * @permissions right1
+     * @return string
+     * @autoTestable
+     */
+    protected function actionLockedRecords() {
+        $objCommon = new class_module_system_common();
+        $objArraySectionIterator = new class_array_section_iterator($objCommon->getLockedRecordsCount());
+        $objArraySectionIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
+        $objArraySectionIterator->setArraySection($objCommon->getLockedRecords($objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
+
+        $arrPageViews = $this->objToolkit->getSimplePageview($objArraySectionIterator, "system", "systemSessions");
+        /** @var class_model[]|interface_model[] $arrRecords */
+        $arrRecords = $arrPageViews["elements"];
+
+        $strReturn = $this->objToolkit->listHeader();
+
+        foreach($arrRecords as $objOneRecord) {
+
+            $strImage = $objOneRecord->getStrIcon();
+            if(is_array($strImage))
+                $strImage = class_adminskin_helper::getAdminImage($strImage[0], $strImage[1]);
+            else
+                $strImage = class_adminskin_helper::getAdminImage($strImage);
+
+            $strActions = $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "lockedRecords", "&unlockid=".$objOneRecord->getSystemid(), $this->getLang("action_unlock_record"), $this->getLang("action_unlock_record"), "icon_lockerOpen"));
+            $objLockUser = new class_module_user_user($objOneRecord->getLockManager()->getLockId());
+
+            $strReturn .= $this->objToolkit->genericAdminList(
+                $objOneRecord->getSystemid(),
+                $objOneRecord instanceof interface_model ? $objOneRecord->getStrDisplayName() : get_class($objOneRecord),
+                $strImage,
+                $strActions,
+                0,
+                "",
+                $this->getLang("locked_record_info", array(dateToString(new class_date($objOneRecord->getIntLockTime())), $objLockUser->getStrDisplayName()))
+            );
+        }
+
+        $strReturn .= $this->objToolkit->listFooter();
+        $strReturn .= $arrPageViews["pageview"];
+
+        return $strReturn;
+    }
 
 
     /**
