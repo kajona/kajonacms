@@ -87,6 +87,7 @@ class class_adminskin_imageresolver implements interface_adminskin_imageresolver
         "icon_editLocked"                  => "<span class='fa-stack fa-lg'><i class='fa fa-pencil'></i><i class='fa fa-lock fa-stack-1x' style='color: red'></i></span>",
         "icon_enabled"                     => "<i class='fa fa-eye'></i>",
         "icon_event"                       => "<i class='fa fa-calendar-o'></i>",
+        "icon_eventLocked"                 => "<span class='fa-stack fa-lg'><i class='fa fa-calendar-o'></i><i class='fa fa-lock fa-stack-1x' style='color: red'></i></span>",
         "icon_excel"                       => "<i class='fa fa-ms-excel'></i>",
         "icon_externalBrowser"             => "<i class='fa fa-search'></i>",
         "icon_favorite"                    => "<i class='fa fa-bookmark'></i>",
