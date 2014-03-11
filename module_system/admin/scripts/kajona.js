@@ -690,9 +690,23 @@ KAJONA.admin.forms.renderMandatoryFields = function(arrFields) {
 };
 
 KAJONA.admin.forms.renderMissingMandatoryFields = function(arrFields) {
-    $(arrFields).each(function() {
-        if($("#"+this))
-            $("#"+this).closest(".control-group").addClass("error");
+    $(arrFields).each(function(intIndex, arrField) {
+        var objElement = null;
+
+        //Handle fields which end with '_empty'.
+        //Fields which end with "_empty" are mandatory fields which are not filled
+        if(typeof arrField[0] == "string" && arrField[0].match("_empty$")) {
+            var strElementId = arrField[0].replace("_empty", "");
+            objElement = $("#"+strElementId)
+        }
+        else {
+            objElement = $("#"+this)
+        }
+
+        if(objElement) {
+            objElement.closest(".control-group").addClass("error");
+        }
+
     });
 };
 
