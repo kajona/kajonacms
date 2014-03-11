@@ -566,9 +566,10 @@ class class_admin_formgenerator {
         return $this->strFormEncoding;
     }
 
-
-
-
-
-
+    /**
+     * @return string
+     */
+    public function getStrFormname() {
+        return $this->strFormname;
+    }
 }
