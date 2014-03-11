@@ -219,10 +219,13 @@ class class_admin_formgenerator {
                 $bitSkip = true;
 
             if(!$bitSkip) {
-                if($this->objSourceobject->getLockManager()->isAccessibleForCurrentUser())
+                if($this->objSourceobject->getLockManager()->isAccessibleForCurrentUser()) {
                     $this->objSourceobject->getLockManager()->lockRecord();
-                else
-                    throw new class_exception("current record is already locked, cannot be locked for the current user", class_exception::$level_ERROR);
+                }
+                else {
+                    $objUser = new class_module_user_user($this->objSourceobject->getLockManager()->getLockId());
+                    throw new class_exception("Current record is already locked by user '".$objUser->getStrDisplayName()."'.\nCannot be locked for the current user", class_exception::$level_ERROR);
+                }
             }
         }
 
