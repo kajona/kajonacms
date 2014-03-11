@@ -537,7 +537,7 @@ JS;
                 $strImage,
                 $strActions,
                 0,
-                "",
+                get_class($objOneRecord),
                 $this->getLang("locked_record_info", array(dateToString(new class_date($objOneRecord->getIntLockTime())), $objLockUser->getStrDisplayName()))
             );
         }
