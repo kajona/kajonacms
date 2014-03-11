@@ -434,7 +434,8 @@ abstract class class_root {
             throw new class_exception("current object must implemented interface_model", class_exception::$level_FATALERROR);
 
         if(!$this->getLockManager()->isAccessibleForCurrentUser()) {
-            throw new class_exception("current object is locked", class_exception::$level_ERROR);
+            $objUser  = new class_module_user_user($this->getLockManager()->getLockId());
+            throw new class_exception("current object is locked by user ".$objUser->getStrDisplayName(), class_exception::$level_ERROR);
         }
 
         if(is_object($strPrevId) && $strPrevId instanceof class_root)
