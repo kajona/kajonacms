@@ -1,5 +1,8 @@
 Module System
 
+V4.4.3 --------------------------------------------------------------------------------------------------
+BUG: portal link generation could skip the systemid if passed as an additional param instead of passing it as the named systemid param
+
 V4.4.2 --------------------------------------------------------------------------------------------------
 BUG: the image text-plugin used a wrong font-path, therefore text-operations failed (e.g. when rendering a captcha image)
 

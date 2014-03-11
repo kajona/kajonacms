@@ -132,7 +132,7 @@ class class_link {
     /**
      * Generates an admin-url to trigger xml-requests. Takes care of url-rewriting
      *
-     * @param $strModule
+     * @param string $strModule
      * @param string $strAction
      * @param string $strParams
      * @param bool $bitEncodedAmpersand
@@ -346,9 +346,11 @@ class class_link {
             $bitInternal = false;
 
 
-
-        $arrParams = self::parseParamsString($strParams);
         //create an array out of the params
+        $strParsedSystemid = "";
+        $arrParams = self::parseParamsString($strParams, $strParsedSystemid);
+        if($strSystemid == "" && validateSystemid($strParsedSystemid))
+            $strSystemid = $strParsedSystemid;
 
         // any anchors set to the page?
         $strAnchor = "";
@@ -478,8 +480,8 @@ class class_link {
      * Extracts the systemid out of the string and updates the passed reference with the
      * systemid.
      *
-     * @param $strParams
-     * @param $strSystemid
+     * @param string $strParams
+     * @param string &$strSystemid
      * @return array
      */
     private static function parseParamsString($strParams, &$strSystemid = "") {
