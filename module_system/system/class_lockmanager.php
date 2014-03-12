@@ -161,14 +161,46 @@ class class_lockmanager {
      * @return string
      */
     public function getLockId() {
-
-        $arrRow = class_carrier::getInstance()->getObjDB()->getPRow("SELECT system_lock_id FROM "._dbprefix_."system WHERE system_id = ?", array($this->strSystemid), 0, true);
-        if(isset($arrRow["system_lock_id"]) && validateSystemid($arrRow["system_lock_id"])) {
-            return $arrRow["system_lock_id"];
+        $objObject = class_objectfactory::getInstance()->getObject($this->strSystemid);
+        if(validateSystemid($this->strSystemid) && $objObject != null && $objObject->getStrLockId() != "") {
+            return $objObject->getStrLockId();
         }
         else {
             return "0";
         }
+    }
+
+
+
+    /**
+     * Fetches a list of records currently locked in the database
+     *
+     * @param null|int $intStart
+     * @param null|int $intEnd
+     *
+     * @return class_model[]
+     */
+    public static function getLockedRecords($intStart = null, $intEnd = null) {
+        $strQuery = "SELECT system_id FROM "._dbprefix_."system WHERE system_lock_id != '0' AND system_lock_id IS NOT NULL ORDER BY system_id DESC";
+        $arrRows = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array(), $intStart, $intEnd);
+
+        $arrReturn = array();
+        foreach($arrRows as $arrOneRow) {
+            $arrReturn[] = class_objectfactory::getInstance()->getObject($arrOneRow["system_id"]);
+        }
+
+        return $arrReturn;
+    }
+
+    /**
+     * Counts the number of records currently locked in the database
+     *
+     * @return int
+     */
+    public static function getLockedRecordsCount() {
+        $strQuery = "SELECT COUNT(*) FROM "._dbprefix_."system WHERE system_lock_id != '0' AND system_lock_id IS NOT NULL";
+        $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array());
+        return $arrRow["COUNT(*)"];
     }
 
 }
