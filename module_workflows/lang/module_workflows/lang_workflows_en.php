@@ -7,14 +7,15 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 395
+//Kajona Language Editor Core Build 398
 
 //non-editable entries
 $lang["permissions_header"]              = array(0 => "View", 1 => "Edit", 2 => "Delete", 3 => "Permissions", 4 => "Handlers", 5 => "", 6 => "", 7 => "", 8 => "");
 
+
 //editable entries
 $lang["_workflows_trigger_authkey_"]     = "Auth-Key";
-$lang["_workflows_trigger_authkey_hint"] = "Use the auth-key as a secret when triggering the workflow-engine. Only if the passed auth-key matches the saved auth-key, the workflows will be triggered. This avoids that third-party clients could trigger the workflows (DOS-attack).<br />Use the following URL to trigger the workflow engine, e.g. using a cron-job: <br />"._xmlpath_."?module=workflows&action=trigger&authkey=".(defined("_workflows_trigger_authkey_") ? _workflows_trigger_authkey_ : "");
+$lang["_workflows_trigger_authkey_hint"] = "Use the auth-key as a secret when triggering the workflow-engine. Only if the passed auth-key matches the saved auth-key, the workflows will be triggered. This avoids that third-party clients could trigger the workflows (DOS-attack).<br />Use the following URL to trigger the workflow engine, e.g. using a cron-job: <br />"._xmlpath_."?module=workflows&action=trigger&authkey=".(defined("_workflows_trigger_authkey_") ? _workflows_trigger_authkey_ : "";
 $lang["action_edit_handler"]             = "Edit default values";
 $lang["action_instantiate_handler"]      = "Create a new workflow instance";
 $lang["action_list_handlers"]            = "Workflow handlers";
@@ -27,12 +28,9 @@ $lang["instance_responsible_hint"]       = "If the workflow requires the interac
 $lang["instance_systemid"]               = "Relevant systemid";
 $lang["instance_systemid_hint"]          = "If the workflow should be connected with a real object, the objects system-id may be set up here.";
 $lang["list_empty"]                      = "No workflows available";
-
 $lang["message_messagesummary_body_indicator"] = "Message {0} of {1}";
 $lang["message_messagesummary_intro"]    = "You have {0} unread messages. Following is a summary of all unread messages.";
 $lang["message_messagesummary_subject"]  = "You have {0} unread messages";
-
-
 $lang["messageprovider_workflows_summary"] = "Summary of new messages";
 $lang["modul_titel"]                     = "Workflows";
 $lang["module_list_handlers"]            = "Workflow-Handlers";
@@ -40,6 +38,7 @@ $lang["module_mylist"]                   = "My workflows";
 $lang["module_trigger"]                  = "Trigger workflows";
 $lang["myList_empty"]                    = "No workflows to process available.";
 $lang["quickhelp_list"]                  = "On the page \"all workflows\" all workflows known by the system are listed, so open, scheduled or finished ones.<br /> The workflows are listed by its due-date.";
+$lang["quickhelp_list_handlers"]         = "Workflow-Handlers represent the technical part of a single workflow. Handlers are used to set up common parameters of a running instance. In most cases, handlers are available for system-administrators, only.";
 $lang["quickhelp_my_list"]               = "The list \"my workflows\" shows all workflows relevant for the user currently being logged in.";
 $lang["systemtask_runworkflows_name"]    = "Run workflows";
 $lang["workflow_char1"]                  = "Char 1";
@@ -71,4 +70,3 @@ $lang["workflow_text"]                   = "Text";
 $lang["workflow_text2"]                  = "Text 2";
 $lang["workflow_trigger"]                = "Next execution";
 $lang["workflow_ui"]                     = "Show edit-form for the current step";
-$lang["quickhelp_list_handlers"]                  = "Workflow-Handlers represent the technical part of a single workflow. Handlers are used to set up common parameters of a running instance. In most cases, handlers are available for system-administrators, only.";
