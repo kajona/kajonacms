@@ -7,7 +7,8 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 395
+//Kajona Language Editor Core Build 398
+
 
 //editable entries
 $lang["commons_all_categories"]          = "Всички категории";
@@ -23,6 +24,7 @@ $lang["commons_date"]                    = "Дата";
 $lang["commons_delete"]                  = "Изтрий";
 $lang["commons_delete_category_question"] = "Наистина ли искате да изтрийте категорията &quot;<b>%%element_name%%</b>&quot;?";
 $lang["commons_description"]             = "Описание";
+$lang["commons_dropdown_dataplaceholder"] = "Моля, изберете...";
 $lang["commons_edit_permissions"]        = "Промени права";
 $lang["commons_error_permissions"]       = "Нямате достатъчно права за тези действия";
 $lang["commons_hits_header"]             = "Посещения";
@@ -43,4 +45,3 @@ $lang["commons_result_page"]             = "Страница с резултат
 $lang["commons_save"]                    = "Запази";
 $lang["commons_title"]                   = "Име";
 $lang["commons_yes"]                     = "Да";
-$lang["commons_dropdown_dataplaceholder"]= "Моля, изберете...";

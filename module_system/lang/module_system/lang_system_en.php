@@ -7,12 +7,13 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 395
+//Kajona Language Editor Core Build 398
 
 //non-editable entries
 $lang["permissions_default_header"]      = array(0 => "View", 1 => "Edit", 2 => "Delete", 3 => "Permissions", 4 => "", 5 => "", 6 => "", 7 => "", 8 => "", 9 => "Changelog");
 $lang["permissions_header"]              = array(0 => "View", 1 => "Edit", 2 => "Delete", 3 => "Permissions", 4 => "Settings", 5 => "Systemtasks", 6 => "Systemlog", 7 => "", 8 => "Aspects");
 $lang["permissions_root_header"]         = array(0 => "View", 1 => "Edit", 2 => "Delete", 3 => "Permissions", 4 => "Universal 1", 5 => "Universal 2", 6 => "Universal 3", 7 => "Universal 4", 8 => "Universal 5", 9 => "Changelog");
+
 
 //editable entries
 $lang["_admin_nr_of_rows_"]              = "Number of records per page";
@@ -232,8 +233,8 @@ $lang["systemtask_group_database"]       = "Database";
 $lang["systemtask_group_default"]        = "Miscellaneous";
 $lang["systemtask_group_ldap"]           = "Ldap";
 $lang["systemtask_group_pages"]          = "Pages";
-$lang["systemtask_group_stats"]          = "Stats";
 $lang["systemtask_group_search"]         = "Search";
+$lang["systemtask_group_stats"]          = "Stats";
 $lang["systemtask_progress"]             = "Progress";
 $lang["systemtask_run"]                  = "Execute";
 $lang["systemtask_runningtask"]          = "Task";

@@ -7,7 +7,8 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 395
+//Kajona Language Editor Core Build 398
+
 
 //editable entries
 $lang["commons_all_categories"]          = "Alla kategorier";
@@ -21,6 +22,7 @@ $lang["commons_date"]                    = "Datum";
 $lang["commons_delete"]                  = "Radera";
 $lang["commons_delete_category_question"] = "Vill du verkligen rader denna kategori &quot;<b>%%element_name%%</b>&quot;?";
 $lang["commons_description"]             = "Beskrivning";
+$lang["commons_dropdown_dataplaceholder"] = "Välj...";
 $lang["commons_edit_permissions"]        = "Bearbeta rättigheter";
 $lang["commons_error_permissions"]       = "Inte tillräckliga rättigheter för att utföra denna handling";
 $lang["commons_hits_header"]             = "Träffar";
@@ -39,4 +41,3 @@ $lang["commons_result_page"]             = "Träffsida";
 $lang["commons_save"]                    = "Spara";
 $lang["commons_title"]                   = "Titel";
 $lang["commons_yes"]                     = "Ja";
-$lang["commons_dropdown_dataplaceholder"]= "Välj...";

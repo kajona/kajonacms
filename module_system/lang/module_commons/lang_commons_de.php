@@ -7,7 +7,8 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 395
+//Kajona Language Editor Core Build 398
+
 
 //editable entries
 $lang["aspect_content"]                  = "Inhalte";
@@ -34,6 +35,7 @@ $lang["commons_delete_error"]            = "Fehler beim Löschen des Datensatzes
 $lang["commons_delete_ok"]               = "Datensatz erfolgreich gelöscht";
 $lang["commons_delete_record_question"]  = "Möchten Sie den Datensatz &quot;<b>%%element_name%%</b>&quot; wirklich löschen?";
 $lang["commons_description"]             = "Beschreibung";
+$lang["commons_dropdown_dataplaceholder"] = "Bitte wählen...";
 $lang["commons_edit_copy"]               = "Kopie erstellen";
 $lang["commons_edit_history"]            = "Änderungshistorie anzeigen";
 $lang["commons_edit_permissions"]        = "Rechte bearbeiten";
@@ -47,6 +49,8 @@ $lang["commons_list"]                    = "Liste";
 $lang["commons_list_edit"]               = "Bearbeiten";
 $lang["commons_list_empty"]              = "Kein Datensatz vorhanden";
 $lang["commons_list_new"]                = "Neuen Datensatz anlegen";
+$lang["commons_list_sort_next"]          = "Auf nächste Seite verschieben";
+$lang["commons_list_sort_prev"]          = "Auf vorherige Seite verschieben";
 $lang["commons_locked"]                  = "Datensatz ist gesperrt";
 $lang["commons_module_permissions"]      = "Modul-Rechte";
 $lang["commons_name"]                    = "Name";
@@ -57,6 +61,7 @@ $lang["commons_one_level_up"]            = "Eine Ebene nach oben";
 $lang["commons_open_browser"]            = "Browser öffnen";
 $lang["commons_page_success"]            = "Seite im Erfolgsfall (optional)";
 $lang["commons_path"]                    = "Pfad";
+$lang["commons_reset"]                   = "Zurücksetzen";
 $lang["commons_result_page"]             = "Treffer-Seite";
 $lang["commons_save"]                    = "Speichern";
 $lang["commons_select_all"]              = "Alle auswählen";
@@ -66,14 +71,9 @@ $lang["commons_start"]                   = "Starten";
 $lang["commons_submit"]                  = "Absenden";
 $lang["commons_title"]                   = "Titel";
 $lang["commons_unlock"]                  = "Datensatz entsperren";
+$lang["commons_validator_date_validationmessage"] = "Das Feld muss ein Datumsformat im Format '{0}' enthalten";
+$lang["commons_validator_field_empty"]   = "'{0}' ist leer";
+$lang["commons_validator_int_validationmessage"] = "Das Feld muss Ganzzahlen enthalten";
+$lang["commons_validator_numeric_validationmessage"] = "Das Feld muss numerische Werte enthalten";
+$lang["commons_validator_posint_validationmessage"] = "Das Feld muss positive Ganzzahlen enthalten";
 $lang["commons_yes"]                     = "Ja";
-$lang["commons_reset"]                     = "Zurücksetzen";
-$lang["commons_dropdown_dataplaceholder"]= "Bitte wählen...";
-$lang["commons_list_sort_next"]          = "Auf nächste Seite verschieben";
-$lang["commons_list_sort_prev"]          = "Auf vorherige Seite verschieben";
-
-$lang["commons_validator_field_empty"]= "'{0}' ist leer";
-$lang["commons_validator_numeric_validationmessage"]= "Das Feld muss numerische Werte enthalten";
-$lang["commons_validator_int_validationmessage"]= "Das Feld muss Ganzzahlen enthalten";
-$lang["commons_validator_posint_validationmessage"]= "Das Feld muss positive Ganzzahlen enthalten";
-$lang["commons_validator_date_validationmessage"]= "Das Feld muss ein Datumsformat im Format '{0}' enthalten";

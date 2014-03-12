@@ -7,7 +7,8 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 395
+//Kajona Language Editor Core Build 398
+
 
 //editable entries
 $lang["aspect_content"]                  = "Contents";
@@ -34,6 +35,7 @@ $lang["commons_delete_error"]            = "Error deleting the record";
 $lang["commons_delete_ok"]               = "Record deleted successfully";
 $lang["commons_delete_record_question"]  = "Do you really want to delete the record &quot;<b>%%element_name%%</b>&quot;?";
 $lang["commons_description"]             = "Description";
+$lang["commons_dropdown_dataplaceholder"] = "Please select...";
 $lang["commons_edit_copy"]               = "Create copy";
 $lang["commons_edit_history"]            = "Show change-history";
 $lang["commons_edit_permissions"]        = "Change permissions";
@@ -47,6 +49,8 @@ $lang["commons_list"]                    = "List";
 $lang["commons_list_edit"]               = "Edit";
 $lang["commons_list_empty"]              = "No record created";
 $lang["commons_list_new"]                = "Create new record";
+$lang["commons_list_sort_next"]          = "Move to next page";
+$lang["commons_list_sort_prev"]          = "Move to previous page";
 $lang["commons_locked"]                  = "Record is locked";
 $lang["commons_module_permissions"]      = "Module permissions";
 $lang["commons_name"]                    = "Name";
@@ -57,6 +61,7 @@ $lang["commons_one_level_up"]            = "One level up";
 $lang["commons_open_browser"]            = "Open browser";
 $lang["commons_page_success"]            = "Page in case of success (optional)";
 $lang["commons_path"]                    = "Path";
+$lang["commons_reset"]                   = "Reset";
 $lang["commons_result_page"]             = "Result page";
 $lang["commons_save"]                    = "Save";
 $lang["commons_select_all"]              = "Select all";
@@ -66,14 +71,9 @@ $lang["commons_start"]                   = "Start";
 $lang["commons_submit"]                  = "Submit";
 $lang["commons_title"]                   = "Title";
 $lang["commons_unlock"]                  = "Unlock record";
+$lang["commons_validator_date_validationmessage"] = "The field must contain a date format '{0}'";
+$lang["commons_validator_field_empty"]   = "'{0}' is empty";
+$lang["commons_validator_int_validationmessage"] = "The field must contain integer values";
+$lang["commons_validator_numeric_validationmessage"] = "The field must contain numeric values";
+$lang["commons_validator_posint_validationmessage"] = "The field must contain positive integer values";
 $lang["commons_yes"]                     = "Yes";
-$lang["commons_reset"]                     = "Reset";
-$lang["commons_dropdown_dataplaceholder"]= "Please select...";
-$lang["commons_list_sort_next"]          = "Move to next page";
-$lang["commons_list_sort_prev"]          = "Move to previous page";
-
-$lang["commons_validator_field_empty"]= "'{0}' is empty";
-$lang["commons_validator_numeric_validationmessage"]= "The field must contain numeric values";
-$lang["commons_validator_int_validationmessage"]= "The field must contain integer values";
-$lang["commons_validator_posint_validationmessage"]= "The field must contain positive integer values";
-$lang["commons_validator_date_validationmessage"]= "The field must contain a date format '{0}'";
