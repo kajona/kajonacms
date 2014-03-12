@@ -7,10 +7,8 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 395
+//Kajona Language Editor Core Build 398
 
-//non-editable entries
-$lang["quickhelp_copyPack"]              = "Die hier gewählten Templates werden als Basis für das neu zu erstellende Template-Pack verwendet. Sollten einige der gewählten Templates nicht angepasst werden, dann können diese aus dem Template-Pack gelöscht werden.<br /><br/>Es ist nicht notwendig bereits bei Anlage des Packs alle Module auszuwählen - auch später können anzupassende Templates durch manuelles Kopieren der Dateien vom Verzeichnis /core nach /templates dem Pack hinzugefügt werden.<br /><br />Weitere Informationen hierzu finden Sie auf www.kajona.de.";
 
 //editable entries
 $lang["_packagemanager_defaulttemplate_"] = "Aktiviertes Template-Pack";
@@ -48,6 +46,7 @@ $lang["package_install"]                 = "Paket herunterladen und installieren
 $lang["package_install_success"]         = "Paket wurde installiert";
 $lang["package_installocally"]           = "Paket installieren/aktualisieren";
 $lang["package_minversion"]              = "Minimale System-Version";
+$lang["package_missing"]                 = "Paket nicht installiert";
 $lang["package_modules"]                 = "Erforderliche Module";
 $lang["package_noinstall_installed"]     = "Paket ist bereits lokal installiert";
 $lang["package_notinstallable"]          = "Paket kann nicht installiert werden.";
@@ -61,7 +60,9 @@ $lang["package_target_writable"]         = "Für die Installation werden Schreib
 $lang["package_type"]                    = "Typ";
 $lang["package_updatefound"]             = "Update des Pakets auf die neuste Version ";
 $lang["package_version"]                 = "Version";
+$lang["package_version_available"]       = "O.K.";
 $lang["package_version_installed"]       = "Installierte Version";
+$lang["package_version_low"]             = "Installierte Version ist zu alt";
 $lang["packagelist_filter"]              = "Filter-Text";
 $lang["provider_error_package"]          = "Das geladene Paket stellt kein gültiges Archiv dar.";
 $lang["provider_error_transfer"]         = "Fehler beim Transfer des Paketes.";
@@ -71,6 +72,7 @@ $lang["provider_local"]                  = "Upload auf das System";
 $lang["provider_local_file"]             = "Datei";
 $lang["provider_local_uploadhint"]       = "Upload von ZIP-Paketen auf das System. Pakete können sowohl Templates, Module als auch Elemente sein. Pakete müssen eine Datei metadata.xml beinhalten.";
 $lang["provider_select"]                 = "Provider auswählen";
+$lang["quickhelp_copyPack"]              = "Die hier gewählten Templates werden als Basis für das neu zu erstellende Template-Pack verwendet. Sollten einige der gewählten Templates nicht angepasst werden, dann können diese aus dem Template-Pack gelöscht werden.<br /><br/>Es ist nicht notwendig bereits bei Anlage des Packs alle Module auszuwählen - auch später können anzupassende Templates durch manuelles Kopieren der Dateien vom Verzeichnis /core nach /templates dem Pack hinzugefügt werden.<br /><br />Weitere Informationen hierzu finden Sie auf www.kajona.de.";
 $lang["quickhelp_new"]                   = "Die hier gewählten Templates werden als Basis für das neu zu erstellende Template-Pack verwendet. Sollten einige der gewählten Templates nicht angepasst werden, dann können diese aus dem Template-Pack gelöscht werden.<br /><br/>Es ist nicht notwendig bereits bei Anlage des Packs alle Module auszuwählen - auch später können anzupassende Templates durch manuelles Kopieren der Dateien vom Verzeichnis /core nach /templates dem Pack hinzugefügt werden.<br /><br />Weitere Informationen hierzu finden Sie auf www.kajona.de.";
 $lang["systemtask_templatepackimport_name"] = "Template-Pack importieren";
 $lang["template"]                        = "Template";
@@ -83,6 +85,3 @@ $lang["update_notification_intro"]       = "Für ein installiertes Paket ist ein
 $lang["update_notification_package"]     = "Betreffendes Paket";
 $lang["update_notification_verav"]       = "Verfügbare Version";
 $lang["update_notification_verinst"]     = "Installierte Version";
-$lang["package_version_low"] = "Installierte Version ist zu alt";
-$lang["package_version_available"] = "O.K.";
-$lang["package_missing"] = "Paket nicht installiert";

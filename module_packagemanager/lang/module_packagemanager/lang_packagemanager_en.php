@@ -7,10 +7,8 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 395
+//Kajona Language Editor Core Build 398
 
-//non-editable entries
-$lang["quickhelp_copyPack"]              = "The selected Templates are used to create the new template-pack. If you don't modify some of the selected templates, you are safe to delete them from your pack manually.<br /><br/>It's not necessary to add all modules while creating the new pack. You may add them afterwards just by copying the required template-files from /core to /templates.<br /><br />See www.kajona.de for more information.";
 
 //editable entries
 $lang["_packagemanager_defaulttemplate_"] = "Active template-pack";
@@ -48,6 +46,7 @@ $lang["package_install"]                 = "Download and install package";
 $lang["package_install_success"]         = "Package installed";
 $lang["package_installocally"]           = "Install package";
 $lang["package_minversion"]              = "Minimal system-version";
+$lang["package_missing"]                 = "Package is not installed";
 $lang["package_modules"]                 = "Required modules";
 $lang["package_noinstall_installed"]     = "Package is already installed locally";
 $lang["package_notinstallable"]          = "Package can't be installed.";
@@ -61,7 +60,9 @@ $lang["package_target_writable"]         = "To install the package, write permis
 $lang["package_type"]                    = "Type";
 $lang["package_updatefound"]             = "Update the package to the latest version ";
 $lang["package_version"]                 = "Version";
+$lang["package_version_available"]       = "O.K.";
 $lang["package_version_installed"]       = "Version installed";
+$lang["package_version_low"]             = "Installed version is too old";
 $lang["packagelist_filter"]              = "Filter-Text";
 $lang["provider_error_package"]          = "The packages is no valid archive.";
 $lang["provider_error_transfer"]         = "Error while transferring the package.";
@@ -71,6 +72,7 @@ $lang["provider_local"]                  = "Upload to the system";
 $lang["provider_local_file"]             = "File";
 $lang["provider_local_uploadhint"]       = "Upload ZIP-Packages to the system. Packages may be templates, modules or elements. Packages have to contain a file metadata.xml.";
 $lang["provider_select"]                 = "Select provider";
+$lang["quickhelp_copyPack"]              = "The selected Templates are used to create the new template-pack. If you don't modify some of the selected templates, you are safe to delete them from your pack manually.<br /><br/>It's not necessary to add all modules while creating the new pack. You may add them afterwards just by copying the required template-files from /core to /templates.<br /><br />See www.kajona.de for more information.";
 $lang["quickhelp_new"]                   = "The selected Templates are used to create the new template-pack. If you don't modify some of the selected templates, you are safe to delete them from your pack manually.<br /><br/>It's not necessary to add all modules while creating the new pack. You may add them afterwards just by copying the required template-files from /core to /templates.<br /><br />See www.kajona.de for more information.";
 $lang["systemtask_templatepackimport_name"] = "Import Template-Pack";
 $lang["template"]                        = "Template";
@@ -83,6 +85,3 @@ $lang["update_notification_intro"]       = "A new version is available for an in
 $lang["update_notification_package"]     = "Respective package";
 $lang["update_notification_verav"]       = "Available version";
 $lang["update_notification_verinst"]     = "Installed version";
-$lang["package_version_low"] = "Installed version is too old";
-$lang["package_version_available"] = "O.K.";
-$lang["package_missing"] = "Package is not installed";
