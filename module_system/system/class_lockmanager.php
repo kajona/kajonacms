@@ -18,6 +18,10 @@
 class class_lockmanager {
 
     private $strSystemid = "";
+    /**
+     * @var class_root
+     */
+    private $objSourceObject = null;
 
     private static $bitUnlockTriggered = false;
 
@@ -25,9 +29,11 @@ class class_lockmanager {
      * Constructor
      *
      * @param string $strSystemid
+     * @param \class_root|null $objSourceObject
      */
-    public function __construct($strSystemid = "") {
+    public function __construct($strSystemid = "", class_root $objSourceObject = null) {
         $this->strSystemid = $strSystemid;
+        $this->objSourceObject = $objSourceObject;
 
         $this->unlockOldRecords();
     }
@@ -74,6 +80,9 @@ class class_lockmanager {
                             SET system_lock_id='0'
                             WHERE system_id=? ";
             if(class_carrier::getInstance()->getObjDB()->_pQuery($strQuery, array($this->strSystemid))) {
+                if($this->objSourceObject !== null)
+                    $this->objSourceObject->setStrLockId("");
+
                 class_carrier::getInstance()->getObjDB()->flushQueryCache();
                 return true;
             }

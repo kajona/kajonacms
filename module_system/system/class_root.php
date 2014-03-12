@@ -1782,7 +1782,7 @@ abstract class class_root {
      * @return class_lockmanager
      */
     public function getLockManager() {
-        return new class_lockmanager($this->getSystemid());
+        return new class_lockmanager($this->getSystemid(), $this);
     }
 
 
