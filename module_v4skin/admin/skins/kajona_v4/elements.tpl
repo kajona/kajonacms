@@ -80,7 +80,7 @@ Optional Element to start a list
 
 Header to use when creating drag n dropable lists. places an id an loads the needed js-scripts in the
 background using the ajaxHelper.
-Loads the yui-script-helper and adds the table to the drag-n-dropable tables getting parsed later
+Loads the script-helper and adds the table to the drag-n-dropable tables getting parsed later
 <dragable_list_header>
 <script type="text/javascript">
     $(function() {
@@ -89,18 +89,78 @@ Loads the yui-script-helper and adds the table to the drag-n-dropable tables get
         %%jsInject%%
 
         var oldPos = null;
-        $('#%%listid%%').sortable( {
+
+        $('#%%listid%%_prev').sortable({
+            over: function(event, ui) {
+                $(ui.placeholder).hide();
+            },
+            receive: function(event, ui) {
+                $(ui.placeholder).hide();
+                var intCurPage = $("#%%listid%%").attr("data-kajona-pagenum");
+                var intElementsPerPage = $("#%%listid%%").attr("data-kajona-elementsperpage");
+
+                if(intCurPage > 1) {
+                    KAJONA.admin.ajax.setAbsolutePosition(ui.item.find('tr').data('systemid'), (intElementsPerPage*(intCurPage-1)), null, function(data, status, jqXHR) {
+                        if(status == 'success') {
+                            location.reload();
+                        }
+                        else {
+                            KAJONA.admin.statusDisplay.messageError("<b>Request failed!</b>")
+                        }
+                    }, '%%targetModule%%');
+                }
+                else {
+                    ui.sender.sortable("cancel");
+                }
+            }
+        });
+
+        $('#%%listid%%_next').sortable({
+            over: function(event, ui) {
+                $(ui.placeholder).hide();
+            },
+            receive: function(event, ui) {
+                $(ui.placeholder).hide();
+                var intCurPage = $("#%%listid%%").attr("data-kajona-pagenum");
+                var intElementsPerPage = $("#%%listid%%").attr("data-kajona-elementsperpage");
+                var intOnPage = $('#%%listid%% tbody:has(tr[data-systemid!=""])').length + 1;
+
+                if(intOnPage == intElementsPerPage) {
+                    KAJONA.admin.ajax.setAbsolutePosition(ui.item.find('tr').data('systemid'), (intElementsPerPage*intCurPage+1), null, function(data, status, jqXHR) {
+                        if(status == 'success') {
+                            location.reload();
+                        }
+                        else {
+                            KAJONA.admin.statusDisplay.messageError("<b>Request failed!</b>")
+                        }
+                    }, '%%targetModule%%');
+                }
+                else {
+                    ui.sender.sortable("cancel");
+                }
+            }
+        });
+
+        $('#%%listid%%').sortable({
             items: 'tbody:has(tr[data-systemid!=""])',
             handle: 'td.listsorthandle',
             cursor: 'move',
             forcePlaceholderSize: true,
             forceHelperSize: true,
             placeholder: 'group_move_placeholder',
+            connectWith: '.divPageTarget',
             start: function(event, ui) {
-                oldPos = ui.item.index()
+
+                if($("#%%listid%%").attr("data-kajona-pagenum") > 1)
+                    $('#%%listid%%_prev').css("display", "block");
+
+                if($('#%%listid%% tbody:has(tr[data-systemid!=""])').length == $("#%%listid%%").attr("data-kajona-elementsperpage"))
+                    $('#%%listid%%_next').css("display", "block");
+
+                oldPos = ui.item.index();
             },
             stop: function(event, ui) {
-                if(oldPos != ui.item.index()) {
+                if(oldPos != ui.item.index() && !ui.item.parent().is('div') ) {
                     var intOffset = 1;
                     //see, if there are nodes not being sortable - would lead to another offset
                     $('#%%listid%% > tbody').each(function(index) {
@@ -121,9 +181,11 @@ Loads the yui-script-helper and adds the table to the drag-n-dropable tables get
                     KAJONA.admin.ajax.setAbsolutePosition(ui.item.find('tr').data('systemid'), ui.item.index()+intOffset+intPagingOffset, null, null, '%%targetModule%%');
                 }
                 oldPos = 0;
+                $('div.divPageTarget').css("display", "none");
             },
             delay: KAJONA.util.isTouchDevice() ? 2000 : 0
         });
+
         $('#%%listid%% > tbody:has(tr[data-systemid!=""]) > tr').each(function(index) {
             $(this).find("td.listsorthandle").css('cursor', 'move').append("<i class='fa fa-arrows-v'></i>");
             KAJONA.admin.tooltip.addTooltip($(this).find("td.listsorthandle"), "[lang,commons_sort_vertical,system]");
@@ -136,6 +198,8 @@ Loads the yui-script-helper and adds the table to the drag-n-dropable tables get
     });
 </script>
 <style>.group_move_placeholder { display: table-row; } </style>
+
+<div id='%%listid%%_prev' class='alert alert-info divPageTarget'>[lang,commons_list_sort_prev,system]</div>
 <table id="%%listid%%" class="table admintable table-striped-tbody" data-kajona-pagenum="%%curPage%%" data-kajona-elementsperpage="%%elementsPerPage%%">
 
 </dragable_list_header>
@@ -147,6 +211,7 @@ Optional Element to close a list
 
 <dragable_list_footer>
 </table>
+<div id='%%listid%%_next' class='alert alert-info divPageTarget'>[lang,commons_list_sort_next,system]</div>
 </dragable_list_footer>
 
 
@@ -686,11 +751,7 @@ A fieldset to structure logical sections
 
                     if($(this).height() < intHeight) {
                         $(this).height(intHeight);
-
-                        console.warn('updated height');
                     }
-                    else
-                        console.warn('no height update');
                 });
             });
 
@@ -1249,13 +1310,13 @@ The language switch surrounds the buttons
 </pageview_page_list>
 
 <pageview_list_item>
-    <li>
+    <li data-kajona-pagenum="%%pageNr%%">
         <a href="%%href%%">%%pageNr%%</a>
     </li>
 </pageview_list_item>
 
 <pageview_list_item_active>
-    <li>
+    <li data-kajona-pagenum="%%pageNr%%" >
         <a href="%%href%%" class="active">%%pageNr%%</a>
     </li>
 </pageview_list_item_active>

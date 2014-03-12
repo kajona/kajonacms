@@ -69,6 +69,8 @@ $lang["commons_unlock"]                  = "Datensatz entsperren";
 $lang["commons_yes"]                     = "Ja";
 $lang["commons_reset"]                     = "Zurücksetzen";
 $lang["commons_dropdown_dataplaceholder"]= "Bitte wählen...";
+$lang["commons_list_sort_next"]          = "Auf nächste Seite verschieben";
+$lang["commons_list_sort_prev"]          = "Auf vorherige Seite verschieben";
 
 $lang["commons_validator_field_empty"]= "'{0}' ist leer";
 $lang["commons_validator_numeric_validationmessage"]= "Das Feld muss numerische Werte enthalten";
