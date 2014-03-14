@@ -771,7 +771,6 @@ KAJONA.admin.lists = {
     },
 
     executeActions : function() {
-        console.log("starting execution");
         KAJONA.admin.lists.intTotal = KAJONA.admin.lists.arrSystemids.length;
 
         $('.batchActionsProgress > .progresstitle').text(KAJONA.admin.lists.strCurrentTitle);

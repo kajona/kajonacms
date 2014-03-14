@@ -36,7 +36,6 @@ KAJONA.util.Loader = function () {
                 var bitCallback = true;
                 for (var j = 0; j < arrCallbacks[i].requiredModules.length; j++) {
                     if ($.inArray(arrCallbacks[i].requiredModules[j], arrFilesLoaded) == -1) {
-                        //console.log('requirement '+arrCallbacks[i].requiredModules[j]+' not given, no callback');
                         bitCallback = false;
                         break;
                     }
@@ -44,7 +43,6 @@ KAJONA.util.Loader = function () {
 
                 //execute callback and delete it so it won't get called again
                 if (bitCallback) {
-                    //console.log('requirements all given, triggering callback. loaded: '+arrCallbacks[i].requiredModules);
                     arrCallbacks[i].callback();
                     delete arrCallbacks[i];
                 }
@@ -66,7 +64,6 @@ KAJONA.util.Loader = function () {
         });
 
         if(arrFilesToLoad.length == 0) {
-            //console.log("skipped loading files, all already loaded");
             //all files already loaded, call callback
             if($.isFunction(objCallback))
                 objCallback();
@@ -114,7 +111,6 @@ KAJONA.util.Loader = function () {
 
 
     function loadCss(strPath, strOriginalPath) {
-        //console.log("loading css: "+strPath);
 
         if (document.createStyleSheet) {
             document.createStyleSheet(strPath);
@@ -128,7 +124,6 @@ KAJONA.util.Loader = function () {
     }
 
     function loadJs(strPath, strOriginalPath) {
-        //console.log("start loading js: "+strPath);
 
         //enable caching, cache flushing is done by the cachebuster
         var options =  {
@@ -141,13 +136,12 @@ KAJONA.util.Loader = function () {
         // Return the jqXHR object so we can chain callbacks
         $.ajax(options)
             .done(function(script, textStatus) {
-                //console.warn('finished loading '+strOriginalPath)
                 arrFilesLoaded.push(strOriginalPath);
                 checkCallbacks();
 
             })
             .fail(function(jqxhr, settings, exception) {
-                console.error('loading file '+strPath+' failed: '+exception);
+                //console. error('loading file '+strPath+' failed: '+exception);
             });
     }
 
