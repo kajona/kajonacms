@@ -40,7 +40,6 @@ KAJONA.admin.portaleditor = {
         KAJONA.admin.loader.loadFile([
             "/core/module_system/admin/scripts/ckeditor/ckeditor.js"
         ], function() {
-            //console.debug('ckeditor js loaded');
             //span and other tags are officially not support, nevertheless working...
             CKEDITOR.dtd.$editable.span = 1;
             CKEDITOR.dtd.$editable.a = 1;
@@ -102,7 +101,7 @@ KAJONA.admin.portaleditor.RTE.modifiedFields = {};
 
 KAJONA.admin.portaleditor.RTE.savePage = function () {
 
-    //console.group('savePage');
+    //console. group('savePage');
     $.each(KAJONA.admin.portaleditor.RTE.modifiedFields, function (key, value) {
         var keySplitted = key.split('#');
 
@@ -113,11 +112,11 @@ KAJONA.admin.portaleditor.RTE.savePage = function () {
         };
 
         $.post(KAJONA_WEBPATH + '/xml.php?admin=1&module=pages_content&action=updateObjectProperty', data, function () {
-            //console.warn('server response');
-            //console.log(this.responseText);
+            //console. warn('server response');
+            //console. log(this.responseText);
         });
     });
-    //console.groupEnd('savePage');
+    //console. groupEnd('savePage');
 
     KAJONA.admin.portaleditor.RTE.modifiedFields = {};
 };
@@ -137,7 +136,6 @@ KAJONA.admin.portaleditor.RTE.savePage = function () {
 KAJONA.admin.portaleditor.RTE.init = function () {
 
     $('*[data-kajona-editable]').each(function () {
-        //console.debug('editor init');
 
         var editable = $(this);
         var keySplitted = editable.attr('data-kajona-editable').split('#');
@@ -161,7 +159,6 @@ KAJONA.admin.portaleditor.RTE.init = function () {
                 }
 
                 KAJONA.admin.portaleditor.RTE.modifiedFields[attr] = data;
-                //console.log('modified field', attr, data);
 
 
                 // save field on blur
