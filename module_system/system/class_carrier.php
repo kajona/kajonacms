@@ -192,7 +192,8 @@ class class_carrier {
         }
         elseif($strArea == "portal") {
             if($this->objToolkitPortal == null) {
-                include_once _corepath_ . "/module_system/portal/class_toolkit_portal.php";
+				$strPath = class_resourceloader::getInstance()->getPathForFile("/portal/class_toolkit_portal.php");
+				include_once _realpath_.$strPath;
                 $this->objToolkitPortal = new class_toolkit_portal();
             }
             return $this->objToolkitPortal;
