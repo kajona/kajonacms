@@ -273,7 +273,7 @@ class class_resourceloader {
      *
      * @param string $strFolder
      * @param array $arrExtensionFilter
-     * @param bool $bitWithSubfolders
+     * @param bool $bitWithSubfolders includes folders into the return set, otherwise only files will be returned
      * @param callable $objFilterFunction
      *
      * @return array (path => filename)

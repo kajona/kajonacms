@@ -33,12 +33,11 @@ class class_filesystem {
      *
      * @param string $strFolder
      * @param array $arrSuffix
+     * @param bool $bitRecursive
      *
-     * @return mixed
+     * @return string[]
      */
-    public function getFilelist($strFolder, $arrSuffix = array()) {
-        $arrReturn = array();
-        $intCounter = 0;
+    public function getFilelist($strFolder, $arrSuffix = array(), $bitRecursive = false) {
 
         if(!is_array($arrSuffix)) {
             $arrSuffix = array($arrSuffix);
@@ -48,35 +47,50 @@ class class_filesystem {
         if(uniStrpos($strFolder, _realpath_) !== false)
             $strFolder = str_replace(_realpath_, "", $strFolder);
 
-        //Read files
-        if(is_dir(_realpath_.$strFolder)) {
-            $handle = opendir(_realpath_.$strFolder);
-            if($handle !== false) {
-                while(false !== ($strFilename = readdir($handle))) {
-                    if(($strFilename != "." && $strFilename != "..") && is_file(_realpath_.$strFolder."/".$strFilename)) {
-                        //Wanted Type?
-                        if(count($arrSuffix) == 0) {
-                            $arrReturn[$intCounter++] = $strFilename;
-                        }
-                        else {
-                            //check, if suffix is in allowed list
-                            $strFileSuffix = uniSubstr($strFilename, uniStrrpos($strFilename, "."));
-                            if(in_array($strFileSuffix, $arrSuffix)) {
-                                $arrReturn[$intCounter++] = $strFilename;
-                            }
-                        }
-                    }
-                }
-                closedir($handle);
-            }
-        }
-        else {
-            return false;
-        }
+        $arrReturn = array();
+        $this->getFilelistHelper($strFolder, $arrSuffix, $bitRecursive, $arrReturn);
 
         //sorting
         asort($arrReturn);
         return $arrReturn;
+    }
+
+    /**
+     * Internal helper to load folder contents recursively
+     *
+     * @param string $strFolder
+     * @param string[] $arrSuffix
+     * @param bool $bitRecursive
+     * @param array &$arrReturn
+     * @return void
+     */
+    private function getFilelistHelper($strFolder, $arrSuffix, $bitRecursive, &$arrReturn) {
+        if(!is_dir(_realpath_.$strFolder))
+            return;
+
+        $arrFiles = scandir(_realpath_.$strFolder);
+        foreach($arrFiles as $strFilename) {
+            if($strFilename == "." || $strFilename == "..")
+                continue;
+
+            if(is_file(_realpath_.$strFolder."/".$strFilename)) {
+                //Wanted Type?
+                if(count($arrSuffix) == 0) {
+                    $arrReturn[$strFolder."/".$strFilename] = $strFilename;
+                }
+                else {
+                    //check, if suffix is in allowed list
+                    $strFileSuffix = uniSubstr($strFilename, uniStrrpos($strFilename, "."));
+                    if(in_array($strFileSuffix, $arrSuffix)) {
+                        $arrReturn[$strFolder."/".$strFilename] = $strFilename;
+                    }
+                }
+            }
+            else if(is_dir(_realpath_.$strFolder."/".$strFilename) && $bitRecursive) {
+                $this->getFilelistHelper($strFolder."/".$strFilename, $arrSuffix, $bitRecursive, $arrReturn);
+            }
+        }
+
     }
 
 
