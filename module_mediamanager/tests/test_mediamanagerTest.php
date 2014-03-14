@@ -38,7 +38,7 @@ class class_mediamanagerTest extends class_testbase  {
         $arrFiles = $objFilesystem->getFilelist(_filespath_."/images/autotest");
 
         $this->assertEquals(1, count($arrFiles));
-        $this->assertEquals("test.txt", $arrFiles[0]);
+        $this->assertEquals("test.txt", array_values($arrFiles)[0]);
 
     }
 
