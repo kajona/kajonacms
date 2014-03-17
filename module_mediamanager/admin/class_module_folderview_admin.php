@@ -33,6 +33,9 @@ class class_module_folderview_admin extends class_admin implements interface_adm
     }
 
 
+    /**
+     * @return string
+     */
     protected function getOutputModuleTitle() {
         return $this->getLang("moduleFolderviewTitle");
     }
@@ -54,7 +57,7 @@ class class_module_folderview_admin extends class_admin implements interface_adm
 
         if(class_module_system_module::getModuleByName("pages") !== null) {
             $strAction = $this->objToolkit->listButton(
-                getLinkAdmin(
+                class_link::getLinkAdmin(
                     "pages",
                     "pagesFolderBrowser",
                     "&pages=1&form_element=" . $this->getParam("form_element") . "&bit_link=1",
@@ -66,9 +69,9 @@ class class_module_folderview_admin extends class_admin implements interface_adm
             $strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), $this->getLang("wysiwygPagesBrowser"), "", $strAction, $intCounter++);
         }
 
-        if(validateSystemid(_mediamanager_default_filesrepoid_) && class_module_system_module::getModuleByName("mediamanager") !== null) {
+        if(validateSystemid(_mediamanager_default_filesrepoid_) && class_module_system_module::getModuleByName("mediamanager") !== null && class_objectfactory::getInstance()->getObject(_mediamanager_default_filesrepoid_) !== null) {
             $strAction = $this->objToolkit->listButton(
-                getLinkAdmin(
+                class_link::getLinkAdmin(
                     "mediamanager",
                     "folderContentFolderviewMode",
                     "&systemid=" . _mediamanager_default_filesrepoid_ . "&form_element=" . $this->getParam("form_element") . "&bit_link=1",
@@ -80,9 +83,9 @@ class class_module_folderview_admin extends class_admin implements interface_adm
             $strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), $this->getLang("wysiwygFilesBrowser"), "", $strAction, $intCounter++);
         }
 
-        if(validateSystemid(_mediamanager_default_imagesrepoid_) && class_module_system_module::getModuleByName("mediamanager") !== null) {
+        if(validateSystemid(_mediamanager_default_imagesrepoid_) && class_module_system_module::getModuleByName("mediamanager") !== null && class_objectfactory::getInstance()->getObject(_mediamanager_default_imagesrepoid_) !== null) {
             $strAction = $this->objToolkit->listButton(
-                getLinkAdmin(
+                class_link::getLinkAdmin(
                     "mediamanager",
                     "folderContentFolderviewMode",
                     "&systemid=" . _mediamanager_default_imagesrepoid_ . "&form_element=" . $this->getParam("form_element") . "&bit_link=1",
@@ -96,7 +99,7 @@ class class_module_folderview_admin extends class_admin implements interface_adm
 
         if(class_module_system_module::getModuleByName("mediamanager") !== null) {
             $strAction = $this->objToolkit->listButton(
-                getLinkAdmin(
+                class_link::getLinkAdmin(
                     "mediamanager",
                     "folderContentFolderviewMode",
                     "&form_element=" . $this->getParam("form_element") . "&bit_link=1",
