@@ -69,7 +69,7 @@ class class_v3_v4_postupdate {
 
         echo "\n\n<b>Set default chart-engine to flot</b>";
         $objSetting = class_module_system_setting::getConfigByName("_system_graph_type_");
-        $objSetting->setStrValue("flot");
+        $objSetting->setStrValue("jqplot");
         $objSetting->updateObjectToDb();
 
         echo "\n\n<b>Update succeeded. \nPlease remove the file ".__FILE__." from the filesystem.</b>\n";
