@@ -55,15 +55,14 @@ class class_module_system_changelog extends class_model implements interface_mod
 
     /**
      * Initialises the current object, if a systemid was given
+     * @return void
      */
     protected function initObjectInternal() {
     }
 
 
     /**
-     * Reads all properties marked with the annotation
-     *
-     * @versionable.
+     * Reads all properties marked with the annotation @versionable.
      * The state is cached in a static array mapped to the objects systemid.
      * In consequence, this means that only objects with a valid systemid are scanned for properties under versioning.
      *
@@ -126,6 +125,11 @@ class class_module_system_changelog extends class_model implements interface_mod
         return null;
     }
 
+    /**
+     * @param string $strSystemid
+     *
+     * @return null
+     */
     public function getOldValuesForSystemid($strSystemid) {
         if(isset(self::$arrOldValueCache[$strSystemid]))
             return self::$arrOldValueCache[$strSystemid];
@@ -135,7 +139,7 @@ class class_module_system_changelog extends class_model implements interface_mod
 
     /**
      * Builds the change-array based on the old- and new values
-     * @param $objSourceModel
+     * @param interface_versionable $objSourceModel
      *
      * @return array
      */
@@ -170,8 +174,8 @@ class class_module_system_changelog extends class_model implements interface_mod
      * )
      *
      * @param interface_versionable $objSourceModel
-     * @param $strAction
-     * @param $arrEntries
+     * @param string $strAction
+     * @param array $arrEntries
      * @param bool $bitForceEntry if set to true, an entry will be created even if the values didn't change
      *
      * @throws class_exception
@@ -241,8 +245,8 @@ class class_module_system_changelog extends class_model implements interface_mod
      * Processes the internal change-array and creates all related records.
      *
      * @param array $arrChanges
-     * @param interface_versionable $objSourceModel
-     * @param $strAction
+     * @param interface_versionable|class_model $objSourceModel
+     * @param string $strAction
      * @param bool $bitForceEntry
      * @param bool $bitDeleteAction
      *
@@ -507,11 +511,10 @@ class class_module_system_changelog extends class_model implements interface_mod
      * Shifts the entries for a given system-id to a new date.
      * Please be aware of the consequences when shifting change-records!
      *
-     * @static
-     *
-     * @param $strSystemid
+     * @param string $strSystemid
      * @param class_date $objNewDate
      *
+     * @static
      * @return bool
      */
     public static function shiftLogEntries($strSystemid, $objNewDate) {
@@ -533,13 +536,13 @@ class class_module_system_changelog extends class_model implements interface_mod
      * New:  x  w           w   z   u
      * --> w was injected from 1 to 4, including.
      *
-     * @param $strSystemid
-     * @param $strAction
-     * @param $strProperty
-     * @param null $strPrevid
-     * @param $strClass
-     * @param null $strUser
-     * @param $strNewValue
+     * @param string $strSystemid
+     * @param string $strAction
+     * @param string $strProperty
+     * @param null|string $strPrevid
+     * @param string $strClass
+     * @param null|string $strUser
+     * @param string $strNewValue
      * @param class_date $objStartDate
      * @param class_date $objEndDate
      *
@@ -644,12 +647,11 @@ class class_module_system_changelog extends class_model implements interface_mod
     /**
      * Fetches a single value from the change-sets, if not unique the latest value for the specified date is returned.
      *
-     * @static
-     *
-     * @param $strSystemid
-     * @param $strProperty
+     * @param string $strSystemid
+     * @param string $strProperty
      * @param class_date $objDate
      *
+     * @static
      * @return string
      */
     public static function getValueForDate($strSystemid, $strProperty, class_date $objDate) {
@@ -670,12 +672,12 @@ class class_module_system_changelog extends class_model implements interface_mod
     /**
      * Fetches all change-sets within the specified period for the given property.
      *
-     * @static
-     * @param $strSystemid
-     * @param $strProperty
+     * @param string $strSystemid
+     * @param string $strProperty
      * @param class_date $objDateFrom
      * @param class_date $objDateTo
      *
+     * @static
      * @return array
      */
     public static function getValuesForDateRange($strSystemid, $strProperty, class_date $objDateFrom, class_date $objDateTo) {
@@ -759,7 +761,7 @@ class class_module_system_changelog extends class_model implements interface_mod
      * Returns the target-table for a single class
      * or the default table if not found.
      *
-     * @param $strClass
+     * @param string $strClass
      *
      * @return string
      */
@@ -788,6 +790,16 @@ final class class_changelog_container {
     private $strOldValue;
     private $strNewValue;
 
+    /**
+     * @param int $intDate
+     * @param string $strSystemid
+     * @param string $strUserId
+     * @param string $strClass
+     * @param string $strAction
+     * @param string $strProperty
+     * @param string $strOldValue
+     * @param string $strNewValue
+     */
     function __construct($intDate, $strSystemid, $strUserId, $strClass, $strAction, $strProperty, $strOldValue, $strNewValue) {
         $this->objDate = new class_date($intDate);
         $this->strSystemid = $strSystemid;
@@ -816,35 +828,59 @@ final class class_changelog_container {
         return $this->objDate;
     }
 
+    /**
+     * @return mixed
+     */
     public function getStrSystemid() {
         return $this->strSystemid;
     }
 
+    /**
+     * @return mixed
+     */
     public function getStrUserId() {
         return $this->strUserId;
     }
 
+    /**
+     * @return string
+     */
     public function getStrUsername() {
         $objUser = new class_module_user_user($this->getStrUserId());
         return $objUser->getStrUsername();
     }
 
+    /**
+     * @return mixed
+     */
     public function getStrClass() {
         return $this->strClass;
     }
 
+    /**
+     * @return mixed
+     */
     public function getStrAction() {
         return $this->strAction;
     }
 
+    /**
+     * @return mixed
+     */
     public function getStrOldValue() {
         return $this->strOldValue;
     }
 
+    /**
+     * @return mixed
+     */
     public function getStrNewValue() {
         return $this->strNewValue;
     }
 
+    /**
+     * @return mixed
+     */
     public function getStrProperty() {
         return $this->strProperty;
     }
