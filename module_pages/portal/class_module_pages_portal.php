@@ -28,6 +28,9 @@ class class_module_pages_portal extends class_portal implements interface_portal
      */
     private static $strAdditionalTitle = "";
 
+    /**
+     * @param array|mixed $arrElementData
+     */
     public function __construct($arrElementData) {
         parent::__construct($arrElementData);
         $this->setAction("generatePage");
@@ -55,7 +58,7 @@ class class_module_pages_portal extends class_portal implements interface_portal
         }
 
         //if using the pe, the cache shouldn't be used, otherwise strange things might happen.
-        //the system could frighten your cat or eat up all your cheese with marshmellows...
+        //the system could frighten your cat or eat up all your cheese with marshmallows...
         //get the current state of the portal editor
         $bitPeRequested = false;
         if(_pages_portaleditor_ == "true" && $this->objSession->getSession("pe_disable") != "true" && $this->objSession->isAdmin() && $objPageData->rightEdit()) {
@@ -233,10 +236,14 @@ class class_module_pages_portal extends class_portal implements interface_portal
                     if(!isset($arrPeNewButtons[$strPeNewPlaceholder]))
                         $arrPeNewButtons[$strPeNewPlaceholder] = "";
 
-                    if(uniStripos($strArrayKey, "master") !== false)
-                        $strLink = class_element_portal::getPortaleditorNewCode($objMasterData->getSystemid(), $strPeNewPlaceholder, $objPeNewElement);
-                    else
+                    if(uniStripos($strArrayKey, "master") !== false) {
+                        $strLink = "";
+                        if($objMasterData !== null)
+                            $strLink = class_element_portal::getPortaleditorNewCode($objMasterData->getSystemid(), $strPeNewPlaceholder, $objPeNewElement);
+                    }
+                    else {
                         $strLink = class_element_portal::getPortaleditorNewCode($objPageData->getSystemid(), $strPeNewPlaceholder, $objPeNewElement);
+                    }
 
                     $arrPeNewButtons[$strPeNewPlaceholder] .= $strLink;
 
@@ -276,7 +283,7 @@ class class_module_pages_portal extends class_portal implements interface_portal
         $arrTemplate["keywords"] = $objPageData->getStrKeywords();
         $arrTemplate["title"] = $objPageData->getStrBrowsername();
         $arrTemplate["additionalTitle"] = self::$strAdditionalTitle;
-        $arrTemplate["canonicalUrl"] = getLinkPortalHref($objPageData->getStrName(), "", $this->getParam("action"), "", $this->getParam("systemid"));
+        $arrTemplate["canonicalUrl"] = class_link::getLinkPortalHref($objPageData->getStrName(), "", $this->getParam("action"), "", $this->getParam("systemid"));
         
         //Include the $arrGlobal Elements
         $arrGlobal = array();
@@ -407,8 +414,8 @@ class class_module_pages_portal extends class_portal implements interface_portal
      * Adds the portal-editor code to the current page-output - if all requirements are given
      *
      * @param class_module_pages_page $objPageData
-     * @param $bitEditPermissionOnMasterPage
-     * @param $strPageContent
+     * @param bool $bitEditPermissionOnMasterPage
+     * @param string $strPageContent
      *
      * @return string
      */
@@ -440,19 +447,19 @@ class class_module_pages_portal extends class_portal implements interface_portal
 
             //Add an iconbar
             $arrPeContents["pe_iconbar"] = "";
-            $arrPeContents["pe_iconbar"] .= getLinkAdmin(
+            $arrPeContents["pe_iconbar"] .= class_link::getLinkAdmin(
                 "pages_content", "list", "&systemid=".$objPageData->getSystemid()."&language=".$strPortalLanguage, $this->getLang("pe_icon_edit"),
                 $this->getLang("pe_icon_edit", "pages"),
                 "icon_page"
             );
             $arrPeContents["pe_iconbar"] .= "&nbsp;";
 
-            $strEditUrl = getLinkAdminHref("pages", "editPage", "&systemid=".$objPageData->getSystemid()."&language=".$strPortalLanguage."&pe=1");
+            $strEditUrl = class_link::getLinkAdminHref("pages", "editPage", "&systemid=".$objPageData->getSystemid()."&language=".$strPortalLanguage."&pe=1");
             $arrPeContents["pe_iconbar"] .= "<a href=\"#\" onclick=\"KAJONA.admin.portaleditor.openDialog('".$strEditUrl."'); return false;\">"
                 .class_adminskin_helper::getAdminImage("icon_edit", $this->getLang("pe_icon_page", "pages"))."</a>";
 
             $arrPeContents["pe_iconbar"] .= "&nbsp;";
-            $strEditUrl = getLinkAdminHref("pages", "newPage", "&systemid=".$objPageData->getSystemid()."&language=".$strPortalLanguage."&pe=1");
+            $strEditUrl = class_link::getLinkAdminHref("pages", "newPage", "&systemid=".$objPageData->getSystemid()."&language=".$strPortalLanguage."&pe=1");
             $arrPeContents["pe_iconbar"] .= "<a href=\"#\" onclick=\"KAJONA.admin.portaleditor.openDialog('".$strEditUrl."'); return false;\">"
                 .class_adminskin_helper::getAdminImage("icon_new", $this->getLang("pe_icon_new", "pages"))."</a>";
 
@@ -475,8 +482,8 @@ class class_module_pages_portal extends class_portal implements interface_portal
                     ], function() {
                         KAJONA.admin.portaleditor.RTE.config = {
                             language : '".(class_session::getInstance()->getAdminLanguage() != "" ? class_session::getInstance()->getAdminLanguage() : "en")."',
-                            filebrowserBrowseUrl : '".uniStrReplace("&amp;", "&", getLinkAdminHref("folderview", "browserChooser", "&form_element=ckeditor"))."',
-                            filebrowserImageBrowseUrl : '".uniStrReplace("&amp;", "&", getLinkAdminHref("mediamanager", "folderContentFolderviewMode", "systemid="._mediamanager_default_imagesrepoid_."&form_element=ckeditor&bit_link=1"))."',
+                            filebrowserBrowseUrl : '".uniStrReplace("&amp;", "&", class_link::getLinkAdminHref("folderview", "browserChooser", "&form_element=ckeditor"))."',
+                            filebrowserImageBrowseUrl : '".uniStrReplace("&amp;", "&", class_link::getLinkAdminHref("mediamanager", "folderContentFolderviewMode", "systemid="._mediamanager_default_imagesrepoid_."&form_element=ckeditor&bit_link=1"))."',
                             ".$strSkinInit."
                         }
                         $(KAJONA.admin.portaleditor.initPortaleditor);
@@ -491,8 +498,8 @@ class class_module_pages_portal extends class_portal implements interface_portal
                     ], function() {
                         KAJONA.admin.portaleditor.RTE.config = {
                             language : '".(class_session::getInstance()->getAdminLanguage() != "" ? class_session::getInstance()->getAdminLanguage() : "en")."',
-                            filebrowserBrowseUrl : '".uniStrReplace("&amp;", "&", getLinkAdminHref("folderview", "browserChooser", "&form_element=ckeditor"))."',
-                            filebrowserImageBrowseUrl : '".uniStrReplace("&amp;", "&", getLinkAdminHref("mediamanager", "folderContentFolderviewMode", "systemid="._mediamanager_default_imagesrepoid_."&form_element=ckeditor&bit_link=1"))."',
+                            filebrowserBrowseUrl : '".uniStrReplace("&amp;", "&", class_link::getLinkAdminHref("folderview", "browserChooser", "&form_element=ckeditor"))."',
+                            filebrowserImageBrowseUrl : '".uniStrReplace("&amp;", "&", class_link::getLinkAdminHref("mediamanager", "folderContentFolderviewMode", "systemid="._mediamanager_default_imagesrepoid_."&form_element=ckeditor&bit_link=1"))."',
                             ".$strSkinInit."
                         }
                         $(KAJONA.admin.portaleditor.initPortaleditor);
@@ -553,6 +560,9 @@ class class_module_pages_portal extends class_portal implements interface_portal
         self::$strAdditionalTitle = $strTitle."%%kajonaTitleSeparator%%";
     }
 
+    /**
+     * @return string
+     */
     private function generateHash2Sum() {
         $strGuestId = "";
         //when browsing the site as a guest, drop the userid
