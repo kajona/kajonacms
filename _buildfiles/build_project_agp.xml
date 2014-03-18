@@ -86,6 +86,8 @@
         <copy todir="${basedir}${tempPath}" overwrite="true"  includeEmptyDirs="true" >
             <fileset id="sources.dirs" dir="${basedir}${sourcesPath}/../">
                 <exclude name="*/**/.svn"/>
+                <exclude name="*/**/icons_svg/**" />
+                <exclude name="*/**/icon_svg_SOURCE/**" />
             </fileset>
         </copy>
 
