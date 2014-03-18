@@ -117,8 +117,8 @@ class class_module_pages_pageelement extends class_model implements interface_mo
 
 
     /**
-     * Initalises the current object, if a systemid was given
-
+     * Initialises the current object, if a systemid was given
+     * @return void
      */
     protected function initObjectInternal() {
 
@@ -141,8 +141,8 @@ class class_module_pages_pageelement extends class_model implements interface_mo
                              ORDER BY page_element_ph_placeholder ASC,
                                     system_sort ASC";
             $arrRow = $this->objDB->getPRow($strQuery, array($this->getSystemid()));
-
         }
+
         $this->setArrInitRow($arrRow);
         if(count($arrRow) > 1) {
             $this->setStrPlaceholder($arrRow["page_element_ph_placeholder"]);
@@ -157,7 +157,6 @@ class class_module_pages_pageelement extends class_model implements interface_mo
             $this->setStrConfigVal1($arrRow["element_config1"]);
             $this->setStrConfigVal2($arrRow["element_config2"]);
             $this->setStrConfigVal3($arrRow["element_config3"]);
-
 
             if($arrRow["system_date_start"] > 0)
                 $this->intStartDate = $arrRow["system_date_start"];
@@ -174,7 +173,6 @@ class class_module_pages_pageelement extends class_model implements interface_mo
      * @return bool
      */
     protected function onInsertToDb() {
-
 
         $objElementdefinitionToCreate = class_module_pages_element::getElement($this->getStrElement());
         if($objElementdefinitionToCreate == null)
@@ -299,7 +297,6 @@ class class_module_pages_pageelement extends class_model implements interface_mo
         $this->objDB->transactionCommit();
 
         return $this;
-
     }
 
 
@@ -331,12 +328,12 @@ class class_module_pages_pageelement extends class_model implements interface_mo
      * Returns an array of plain data, not the corresponding objects.
      * In most cases getElementsOnPage is the right way to go.
      *
-     * @see class_module_pages_pageeelemtn::getElementsOnPage()
      *
-     * @param $strPageId
+     * @param string $strPageId
      * @param bool $bitJustActive
      * @param string $strLanguage
      *
+     * @see class_module_pages_pageeelemtn::getElementsOnPage()
      * @return array
      */
     public static function getPlainElementsOnPage($strPageId, $bitJustActive = false, $strLanguage = "") {
@@ -608,14 +605,23 @@ class class_module_pages_pageelement extends class_model implements interface_mo
     }
 
 
+    /**
+     * @return string
+     */
     public function getStrPlaceholder() {
         return $this->strPlaceholder;
     }
 
+    /**
+     * @return string
+     */
     public function getStrName() {
         return $this->strName;
     }
 
+    /**
+     * @return string
+     */
     public function getStrElement() {
         return $this->strElement;
     }
@@ -650,90 +656,168 @@ class class_module_pages_pageelement extends class_model implements interface_mo
         return $objElement->getContentTitle();
     }
 
+    /**
+     * @return string
+     */
     public function getStrClassPortal() {
         return $this->strClassPortal;
     }
 
+    /**
+     * @return string
+     */
     public function getStrClassAdmin() {
         return $this->strClassAdmin;
     }
 
+    /**
+     * @return int
+     */
     public function getIntCachetime() {
         return $this->intCachetime;
     }
 
+    /**
+     * @return int
+     */
     public function getIntRepeat() {
         return $this->intRepeat;
     }
 
+    /**
+     * @return string
+     */
     public function getStrLanguage() {
         return $this->strLanguage;
     }
 
+    /**
+     * @return int
+     */
     public function getStartDate() {
         return $this->intStartDate;
     }
 
+    /**
+     * @return int
+     */
     public function getEndDate() {
         return $this->intEndDate;
     }
 
+    /**
+     * @param string $strPlaceholder
+     * @return void
+     */
     public function setStrPlaceholder($strPlaceholder) {
         $this->strPlaceholder = $strPlaceholder;
     }
 
+    /**
+     * @param string $strName
+     * @return void
+     */
     public function setStrName($strName) {
         $this->strName = $strName;
     }
 
+    /**
+     * @param string $strElement
+     * @return void
+     */
     public function setStrElement($strElement) {
         $this->strElement = $strElement;
     }
 
+    /**
+     * @param string $strTitle
+     * @return void
+     */
     public function setStrTitle($strTitle) {
         $this->strTitle = $strTitle;
     }
 
+    /**
+     * @param string $strClassPortal
+     * @return void
+     */
     private function setStrClassPortal($strClassPortal) {
         $this->strClassPortal = $strClassPortal;
     }
 
+    /**
+     * @param string $strClassAdmin
+     * @return void
+     */
     private function setStrClassAdmin($strClassAdmin) {
         $this->strClassAdmin = $strClassAdmin;
     }
 
+    /**
+     * @param int $intCachtime
+     * @return void
+     */
     private function setIntCachetime($intCachtime) {
         $this->intCachetime = $intCachtime;
     }
 
+    /**
+     * @param int $intRepeat
+     * @return void
+     */
     private function setIntRepeat($intRepeat) {
         $this->intRepeat = $intRepeat;
     }
 
+    /**
+     * @param string $strLanguage
+     * @return void
+     */
     public function setStrLanguage($strLanguage) {
         $this->strLanguage = $strLanguage;
     }
 
+    /**
+     * @param int $intConfigVal1
+     * @return void
+     */
     public function setStrConfigVal1($intConfigVal1) {
         $this->strConfigVal1 = $intConfigVal1;
     }
 
+    /**
+     * @return string
+     */
     public function getStrConfigVal1() {
         return $this->strConfigVal1;
     }
 
+    /**
+     * @param string $intConfigVal2
+     * @return void
+     */
     public function setStrConfigVal2($intConfigVal2) {
         $this->strConfigVal2 = $intConfigVal2;
     }
 
+    /**
+     * @return string
+     */
     public function getStrConfigVal2() {
         return $this->strConfigVal2;
     }
 
+    /**
+     * @param string $intConfigVal3
+     * @return void
+     */
     public function setStrConfigVal3($intConfigVal3) {
         $this->strConfigVal3 = $intConfigVal3;
     }
 
+    /**
+     * @return string
+     */
     public function getStrConfigVal3() {
         return $this->strConfigVal3;
     }
