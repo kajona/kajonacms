@@ -243,64 +243,14 @@ class class_module_system_admin extends class_admin_simple implements interface_
      */
     protected function actionSystemInfo() {
         $strReturn = "";
-        $objCommon = new class_module_system_common();
 
-        //Phpinfo
-        $arrPHP = $objCommon->getPHPInfo();
-        $intI = 0;
-        $strPHP = $this->objToolkit->listHeader();
-        foreach($arrPHP as $strKey => $strValue) {
-            $strPHP .= $this->objToolkit->genericAdminList(generateSystemid(), $this->getLang($strKey), "", "", $intI++, $strValue);
+        $objPluginmanager = new class_pluginmanager(interface_systeminfo::STR_EXTENSION_POINT);
+        $arrPlugins = $objPluginmanager->getPlugins();
+
+        foreach($arrPlugins as $objOnePlugin) {
+            $strReturn .= $this->objToolkit->getFieldset($objOnePlugin->getStrTitle(), $objOnePlugin->getStrContent());
         }
-        $strPHP .= $this->objToolkit->listFooter();
-        //And put it into a fieldset
-        $strPHP = $this->objToolkit->getFieldset($this->getLang("php"), $strPHP);
 
-        //Webserver
-        $arrWebserver = $objCommon->getWebserverInfos();
-        $intI = 0;
-        $strServer = $this->objToolkit->listHeader();
-        foreach($arrWebserver as $strKey => $strValue) {
-            $strServer .= $this->objToolkit->genericAdminList(generateSystemid(), $this->getLang($strKey), "", "", $intI++, $strValue);
-        }
-        $strServer .= $this->objToolkit->listFooter();
-        //And put it into a fieldset
-        $strServer = $this->objToolkit->getFieldset($this->getLang("server"), $strServer);
-
-        //Time info
-        $arrTimeinfo = $objCommon->getTimeInfo();
-        $intI = 0;
-        $strTimeinfo = $this->objToolkit->listHeader();
-        foreach($arrTimeinfo as $strKey => $strValue) {
-            $strTimeinfo .= $this->objToolkit->genericAdminList(generateSystemid(), $this->getLang($strKey), "", "", $intI++, $strValue);
-        }
-        $strTimeinfo .= $this->objToolkit->listFooter();
-        //And put it into a fieldset
-        $strTimeinfo = $this->objToolkit->getFieldset($this->getLang("timeinfo"), $strTimeinfo);
-
-        //database
-        $arrDatabase = $objCommon->getDatabaseInfos();
-        $intI = 0;
-        $strDB = $this->objToolkit->listHeader();
-        foreach($arrDatabase as $strKey => $strValue) {
-            $strDB .= $this->objToolkit->genericAdminList(generateSystemid(), $this->getLang($strKey), "", "", $intI++, $strValue);
-        }
-        $strDB .= $this->objToolkit->listFooter();
-        //And put it into a fieldset
-        $strDB = $this->objToolkit->getFieldset($this->getLang("db"), $strDB);
-
-        //GD-Lib info
-        $arrGd = $objCommon->getGDInfos();
-        $intI = 0;
-        $strGD = $this->objToolkit->listHeader();
-        foreach($arrGd as $strKey => $strValue) {
-            $strGD .= $this->objToolkit->genericAdminList(generateSystemid(), $this->getLang($strKey), "", "", $intI++, $strValue);
-        }
-        $strGD .= $this->objToolkit->listFooter();
-        //And put it into a fieldset
-        $strGD = $this->objToolkit->getFieldset($this->getLang("gd"), $strGD);
-
-        $strReturn .= $strPHP.$strServer.$strTimeinfo.$strDB.$strGD;
         return $strReturn;
     }
 

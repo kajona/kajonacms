@@ -32,6 +32,7 @@ interface interface_packagemanager_packagemanager {
      * In most cases, this is either located at /core or at /templates.
      *
      * @abstract
+     * @return void
      */
     public function move2Filesystem();
 
@@ -40,6 +41,7 @@ interface interface_packagemanager_packagemanager {
      * The installer itself is capable of detecting whether an update or a plain installation is required.
      *
      * @abstract
+     * @return string
      */
     public function installOrUpdate();
 

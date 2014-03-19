@@ -38,8 +38,6 @@ class class_module_system_common extends class_model implements interface_model 
      */
     public function setSpecialDate($objSpecialDate) {
         //check, if an insert or an update is needed
-        $strQuery = "";
-
         $intSpecialDate = $objSpecialDate->getLongTimestamp();
         $arrRow = $this->objDB->getPRow("SELECT COUNT(*) FROM " . _dbprefix_ . "system_date WHERE system_date_id = ?", array($this->getSystemid()), 0, false);
         if((int)$arrRow["COUNT(*)"] == 0) {
@@ -126,6 +124,8 @@ class class_module_system_common extends class_model implements interface_model 
      * @param string $strNewSystemPrevId
      *
      * @return bool
+     *
+     * @deprecated
      */
     public function copyCurrentSystemrecord($strNewSystemid, $strNewSystemPrevId = "") {
         class_logger::getInstance()->addLogRow("copy systemrecord " . $this->getSystemid(), class_logger::$levelInfo);
@@ -171,8 +171,8 @@ class class_module_system_common extends class_model implements interface_model 
 
             if(count($arrRightsRow) > 0) {
                 $strQueryRights = "INSERT INTO " . _dbprefix_ . "system_right
-                (right_id, right_inherit, right_view, right_edit, right_delete, right_right, right_right1, right_right2, right_right3, right_right4, right_right5) VALUES
-                (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                (right_id, right_inherit, right_view, right_edit, right_delete, right_right, right_right1, right_right2, right_right3, right_right4, right_right5, right_changelog) VALUES
+                (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
                 if(!$this->objDB->_pQuery(
                     $strQueryRights,
@@ -187,7 +187,8 @@ class class_module_system_common extends class_model implements interface_model 
                         $arrRightsRow["right_right2"],
                         $arrRightsRow["right_right3"],
                         $arrRightsRow["right_right4"],
-                        $arrRightsRow["right_right5"]
+                        $arrRightsRow["right_right5"],
+                        $arrRightsRow["right_changelog"]
                     )
                 )
                 ) {
@@ -218,93 +219,37 @@ class class_module_system_common extends class_model implements interface_model 
 
     /**
      * Getter to return the records ordered by the last modified date.
-     * Can be filtered via a given module-id
+     * Can be filtered via a given module-id or a class-based filter
      *
      * @param int $intMaxNrOfRecords
      * @param bool|int $intModuleFilter
+     * @param bool $strClassFilter
      *
-     * @return array class_module_system_common
+     * @return array class_model[]
      * @since 3.3.0
      */
-    public static function getLastModifiedRecords($intMaxNrOfRecords, $intModuleFilter = false) {
+    public static function getLastModifiedRecords($intMaxNrOfRecords, $intModuleFilter = false, $strClassFilter = false) {
         $arrReturn = array();
 
         $strQuery = "SELECT system_id
                        FROM " . _dbprefix_ . "system
                    " . ($intModuleFilter !== false ? "WHERE system_module_nr = ? " : "") . "
+                   " . ($strClassFilter !== false ? "WHERE system_class = ? " : "") . "
                    ORDER BY system_lm_time DESC";
 
         $arrParams = array();
         if($intModuleFilter !== false) {
             $arrParams[] = (int)$intModuleFilter;
         }
+        if($strClassFilter !== false) {
+            $arrParams[] = $strClassFilter;
+        }
 
         $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, $arrParams, 0, $intMaxNrOfRecords - 1);
         foreach($arrIds as $arrSingleRow) {
-            $arrReturn[] = new class_module_system_common($arrSingleRow["system_id"]);
+            $arrReturn[] = class_objectfactory::getInstance()->getObject($arrSingleRow["system_id"]);
         }
 
-        return $arrReturn;
-    }
-
-    /**
-     * Creates infos about the current php version
-     *
-     * @return mixed
-     */
-    public function getPHPInfo() {
-        $arrReturn = array();
-        $arrReturn["version"] = phpversion();
-        $arrReturn["geladeneerweiterungen"] = implode(", ", get_loaded_extensions());
-        $arrReturn["executiontimeout"] = class_carrier::getInstance()->getObjConfig()->getPhpIni("max_execution_time") . "s";
-        $arrReturn["inputtimeout"] = class_carrier::getInstance()->getObjConfig()->getPhpIni("max_input_time") . "s";
-        $arrReturn["memorylimit"] = bytesToString(ini_get("memory_limit"), true);
-        $arrReturn["errorlevel"] = class_carrier::getInstance()->getObjConfig()->getPhpIni("error_reporting");
-        $arrReturn["systeminfo_php_safemode"] = (ini_get("safe_mode") ? $this->getLang("commons_yes", "system") : $this->getLang("commons_no", "system"));
-        $arrReturn["systeminfo_php_urlfopen"] = (ini_get("allow_url_fopen") ? $this->getLang("commons_yes", "system") : $this->getLang("commons_no", "system"));
-        $arrReturn["systeminfo_php_regglobal"] = (ini_get("register_globals") ? $this->getLang("commons_yes", "system") : $this->getLang("commons_no", "system"));
-        $arrReturn["postmaxsize"] = bytesToString(ini_get("post_max_size"), true);
-        $arrReturn["uploadmaxsize"] = bytesToString(ini_get("upload_max_filesize"), true);
-        $arrReturn["uploads"] = (class_carrier::getInstance()->getObjConfig()->getPhpIni("file_uploads") == 1 ? $this->getLang("commons_yes", "system") : $this->getLang("commons_no", "system"));
-        $arrReturn["timezone"] = date_default_timezone_get();
-        $arrReturn["datekajona"] = dateToString(new class_date());
-        return $arrReturn;
-    }
-
-    /**
-     * Creates time info
-     *
-     * @return mixed
-     */
-    public function getTimeInfo() {
-        $arrReturn = array();
-        $arrReturn["time_phptimestamp"] = time();
-        $arrReturn["time_systemtimezone"] = date_default_timezone_get();
-        $arrReturn["time_localsystemtime"] = timeToString(time());
-        date_default_timezone_set("UTC");
-        $arrReturn["time_systemtime_UTC"] = date('Y-m-d H:i:s');
-        $arrReturn["time_systemzone_manual_setting"] = _system_timezone_;
-        return $arrReturn;
-
-    }
-
-    /**
-     * Creates information about the webserver
-     *
-     * @return mixed
-     */
-    public function getWebserverInfos() {
-        $arrReturn = array();
-        $arrReturn["operatingsystem"] = php_uname();
-        $arrReturn["systeminfo_webserver_version"] = $_SERVER["SERVER_SOFTWARE"];
-        if(function_exists("apache_get_modules")) {
-            $arrReturn["systeminfo_webserver_modules"] = implode(", ", @apache_get_modules());
-        }
-        if(@disk_total_space(_realpath_)) {
-            $arrReturn["speicherplatz"] = bytesToString(@disk_free_space(_realpath_)) . "/" . bytesToString(@disk_total_space(_realpath_)) . $this->getLang("diskspace_free", "system");
-        }
-        $arrReturn["system_realpath"] = _realpath_;
-        $arrReturn["system_webpath"] = _webpath_;
         return $arrReturn;
     }
 
@@ -330,60 +275,7 @@ class class_module_system_common extends class_model implements interface_model 
         return $arrReturn;
     }
 
-    /**
-     * Creates Infos about the database
-     *
-     * @return mixed
-     */
-    public function getDatabaseInfos() {
-        $arrReturn = array();
-        $arrTables = $this->objDB->getTables(true);
-        $intSizeData = 0;
-        $intSizeIndex = 0;
 
-        switch($this->objConfig->getConfig("dbdriver")) {
-        case "mysqli":
-        case "mysql":
-            foreach($arrTables as $arrTable) {
-                if(isset($arrTable["Data_length"])) {
-                    $intSizeData += $arrTable["Data_length"];
-                }
-                if(isset($arrTable["Index_length"])) {
-                    $intSizeIndex += $arrTable["Index_length"];
-                }
-            }
-            $arrInfo = $this->objDB->getDbInfo();
-            $arrReturn["datenbanktreiber"] = $arrInfo["dbdriver"];
-            $arrReturn["datenbankserver"] = $arrInfo["dbserver"];
-            $arrReturn["datenbankclient"] = $arrInfo["dbclient"];
-            $arrReturn["datenbankverbindung"] = $arrInfo["dbconnection"];
-            $arrReturn["anzahltabellen"] = count($arrTables);
-            $arrReturn["groessegesamt"] = bytesToString($intSizeData + $intSizeIndex);
-            $arrReturn["groessedaten"] = bytesToString($intSizeData);
-            break;
-
-        case "postgres":
-            $arrInfo = $this->objDB->getDbInfo();
-            $arrReturn["datenbanktreiber"] = $arrInfo["dbdriver"];
-            $arrReturn["datenbankserver"] = $arrInfo["dbserver"];
-            $arrReturn["datenbankclient"] = $arrInfo["dbclient"];
-            $arrReturn["datenbankverbindung"] = $arrInfo["dbconnection"];
-            $arrReturn["anzahltabellen"] = count($arrTables);
-            $arrReturn["groessegesamt"] = bytesToString($intSizeData + $intSizeIndex);
-            $arrReturn["groessedaten"] = bytesToString($intSizeData);
-            break;
-
-        default:
-            $arrInfo = $this->objDB->getDbInfo();
-            $arrReturn["datenbanktreiber"] = $arrInfo["dbdriver"];
-            $arrReturn["datenbankserver"] = $arrInfo["dbserver"];
-            $arrReturn["anzahltabellen"] = count($arrTables);
-            break;
-        }
-
-
-        return $arrReturn;
-    }
 
     /**
      * Returns the name to be used when rendering the current object, e.g. in admin-lists.

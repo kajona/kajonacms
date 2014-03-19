@@ -154,7 +154,7 @@ class class_module_pages_page extends class_model implements interface_model, in
      * @return mixed
      */
     public function getSearchAdminLinkForObject() {
-        return getLinkAdminHref("pages_content", "list", "&systemid=".$this->getSystemid());
+        return class_link::getLinkAdminHref("pages_content", "list", "&systemid=".$this->getSystemid());
     }
 
 
@@ -214,7 +214,7 @@ class class_module_pages_page extends class_model implements interface_model, in
 
     /**
      * Initialises the current object, if a systemid was given
-
+     * @return void
      */
     protected function initObjectInternal() {
 
@@ -402,6 +402,7 @@ class class_module_pages_page extends class_model implements interface_model, in
 
     /**
      * Updates the navigation path of this page based on the parent's name.
+     * @return void
      */
     public function updatePath() {
         $arrPathIds = $this->getPathArray("", _pages_modul_id_);
@@ -704,6 +705,11 @@ class class_module_pages_page extends class_model implements interface_model, in
     }
 
 
+    /**
+     * @param string $strAction
+     *
+     * @return string
+     */
     public function getVersionActionName($strAction) {
         if($strAction == class_module_system_changelog::$STR_ACTION_EDIT) {
             return $this->getLang("seite_bearbeiten", "pages");
@@ -715,46 +721,85 @@ class class_module_pages_page extends class_model implements interface_model, in
         return $strAction;
     }
 
+    /**
+     * @param string $strProperty
+     * @param string $strValue
+     *
+     * @return string
+     */
     public function renderVersionValue($strProperty, $strValue) {
         return $strValue;
     }
 
+    /**
+     * @param string $strProperty
+     *
+     * @return string
+     */
     public function getVersionPropertyName($strProperty) {
         return $strProperty;
     }
 
+    /**
+     * @return string
+     */
     public function getVersionRecordName() {
         return class_carrier::getInstance()->getObjLang()->getLang("change_object_page", "pages");
     }
 
+    /**
+     * @return string
+     */
     public function getStrName() {
         return $this->strName;
     }
 
+    /**
+     * @return string
+     */
     public function getStrKeywords() {
         return $this->strKeywords;
     }
 
+    /**
+     * @return string
+     */
     public function getStrDesc() {
         return $this->strDescription;
     }
 
+    /**
+     * @return string
+     */
     public function getStrTemplate() {
         return $this->strTemplate;
     }
 
+    /**
+     * @return string
+     */
     public function getStrBrowsername() {
         return $this->strBrowsername;
     }
 
+    /**
+     * @return string
+     */
     public function getStrSeostring() {
         return $this->strSeostring;
     }
 
+    /**
+     * @return string
+     */
     public function getStrLanguage() {
         return $this->strLanguage;
     }
 
+    /**
+     * @param string $strName
+     * @return void
+     */
     public function setStrName($strName) {
         //make a valid pagename
         $strName = uniStrtolower(urlSafeString($strName));
@@ -762,53 +807,96 @@ class class_module_pages_page extends class_model implements interface_model, in
         $this->strName = $strName;
     }
 
+    /**
+     * @param string $strKeywords
+     * @return void
+     */
     public function setStrKeywords($strKeywords) {
         $this->strKeywords = $strKeywords;
     }
 
+    /**
+     * @param string $strDesc
+     * @return void
+     */
     public function setStrDesc($strDesc) {
         $this->strDescription = $strDesc;
     }
 
+    /**
+     * @param string $strTemplate
+     * @return void
+     */
     public function setStrTemplate($strTemplate) {
         $this->strTemplate = $strTemplate;
     }
 
+    /**
+     * @param string $strBrowsername
+     * @return void
+     */
     public function setStrBrowsername($strBrowsername) {
         $this->strBrowsername = $strBrowsername;
     }
 
+    /**
+     * @param string $strSeostring
+     * @return void
+     */
     public function setStrSeostring($strSeostring) {
         //Remove permitted characters
         $this->strSeostring = urlSafeString($strSeostring);
     }
 
+    /**
+     * @param string $strLanguage
+     * @return void
+     */
     public function setStrLanguage($strLanguage) {
         $this->strLanguage = $strLanguage;
     }
 
+    /**
+     * @param string $strPath
+     * @return void
+     */
     public function setStrPath($strPath) {
         $this->strPath = $strPath;
     }
 
+    /**
+     * @return int
+     */
     public function getIntType() {
         return $this->intType;
     }
 
+    /**
+     * @param int $intType
+     * @return void
+     */
     public function setIntType($intType) {
         $this->intType = $intType;
     }
 
+    /**
+     * @return string
+     */
     public function getStrAlias() {
         return $this->strAlias;
     }
 
+    /**
+     * @param string $strAlias
+     * @return void
+     */
     public function setStrAlias($strAlias) {
         $this->strAlias = $strAlias;
     }
 
     /**
      * @param string $strDescription
+     * @return void
      */
     public function setStrDescription($strDescription) {
         $this->strDescription = $strDescription;
@@ -830,6 +918,7 @@ class class_module_pages_page extends class_model implements interface_model, in
 
     /**
      * @param string $strTarget
+     * @return void
      */
     public function setStrTarget($strTarget) {
         $this->strTarget = $strTarget;

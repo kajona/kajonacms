@@ -9,8 +9,9 @@
 
 
 /**
- * @package module_dashboard
+ * A widget rendering the pages last modified
  *
+ * @package module_dashboard
  */
 class class_adminwidget_lastmodifiedpages extends class_adminwidget implements interface_adminwidget {
 
@@ -54,14 +55,14 @@ class class_adminwidget_lastmodifiedpages extends class_adminwidget implements i
         if($intMax < 0)
             $intMax = 1;
 
-        $arrRecords = class_module_system_common::getLastModifiedRecords($intMax, _pages_modul_id_);
+        /** @var class_module_pages_page[] $arrRecords */
+        $arrRecords = class_module_system_common::getLastModifiedRecords($intMax, false, "class_module_pages_page");
 
-        foreach($arrRecords as $objSingleRecord) {
-            $objPage = new class_module_pages_page($objSingleRecord->getSystemid());
+        foreach($arrRecords as $objPage) {
             if($objPage->rightEdit())
-                $strReturn .= $this->widgetText(getLinkAdmin("pages_content", "list", "&systemid=".$objPage->getSystemid(), $objPage->getStrName()));
+                $strReturn .= $this->widgetText(class_link::getLinkAdmin("pages_content", "list", "&systemid=".$objPage->getSystemid(), $objPage->getStrDisplayName()));
             else
-                $strReturn .= $this->widgetText($objPage->getStrName());
+                $strReturn .= $this->widgetText($objPage->getStrDisplayName());
 
             $strReturn .= $this->widgetText("&nbsp; &nbsp; ".timeToString($objPage->getIntLmTime())."");
         }
@@ -74,7 +75,7 @@ class class_adminwidget_lastmodifiedpages extends class_adminwidget implements i
      * You may use this method to install a widget as a default widget to
      * a users dashboard.
      *
-     * @param $strUserid
+     * @param string $strUserid
      *
      * @return bool
      */

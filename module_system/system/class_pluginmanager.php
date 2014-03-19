@@ -53,7 +53,7 @@ class class_pluginmanager {
             $arrClasses = class_resourceloader::getInstance()->getFolderContent($this->strSearchPath, array(".php"), false, function(&$strOneFile) {
                 $strOneFile = uniSubstr($strOneFile, 0, -4);
 
-                if(uniStripos($strOneFile, "class_") === false)
+                if(uniStripos($strOneFile, "class_") === false || uniStrpos($strOneFile, "class_testbase") !== false)
                     return false;
 
                 $objReflection = new ReflectionClass($strOneFile);
