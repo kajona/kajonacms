@@ -354,7 +354,7 @@
         <apply executable="java" parallel="false" dest="${basedir}${tempPath}" verbose="true" force="true">
             <fileset dir="${basedir}${tempPath}" includes="**/*-full.css"/>
             <arg line="-jar"/>
-            <arg path="yuicompressor-2.4.6.jar"/>
+            <arg path="yuicompressor-2.4.8.jar"/>
             <arg line="--charset utf-8"/>
             <arg line="-o"/>
             <mapper type="glob" from="*-full.css" to="*.css"/>
@@ -382,7 +382,7 @@
         <apply executable="java" parallel="false" dest="${basedir}${tempPath}" verbose="true" force="true">
             <fileset dir="${basedir}${tempPath}" includes="**/*-full.js"/>
             <arg line="-jar"/>
-            <arg path="yuicompressor-2.4.6.jar"/>
+            <arg path="yuicompressor-2.4.8.jar"/>
             <arg line="--charset utf-8"/>
             <arg line="-o"/>
             <mapper type="glob" from="*-full.js" to="*.js"/>
