@@ -5,7 +5,7 @@
         >
     <title>mediamanager</title>
     <description>
-        The mediamangaer is a central place to handle all kind of files. This includes images for galleries or even a download-manager.
+        The mediamanager is a central place to handle all kind of files. This includes images for galleries or even a download-manager.
         If you have the package "qr-code" installed, the download links may be illustrated using a qrcode-image, too.
         The mediamanager replaces the old (v3) download- and gallery-modules.
     </description>

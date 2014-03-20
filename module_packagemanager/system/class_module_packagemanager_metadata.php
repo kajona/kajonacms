@@ -30,8 +30,6 @@ class class_module_packagemanager_metadata implements interface_admin_listable {
     private $strPath;
 
 
-
-
     /**
      * Returns the icon the be used in lists.
      * Please be aware, that only the filename should be returned, the wrapping by getImageAdmin() is
@@ -48,6 +46,9 @@ class class_module_packagemanager_metadata implements interface_admin_listable {
 
     }
 
+    /**
+     * @return mixed
+     */
     public function getStrDisplayName() {
         return $this->getStrTitle();
     }
@@ -69,17 +70,24 @@ class class_module_packagemanager_metadata implements interface_admin_listable {
         return $this->getStrDescription();
     }
 
+    /**
+     * @return mixed
+     */
     public function getSystemid() {
         return $this->getStrTitle();
     }
 
 
+    /**
+     * @return string
+     */
     public function __toString() {
         return "Title: ".$this->getStrTitle()." Version: ".$this->getStrVersion()." Type: ".$this->getStrType()." Target: ".$this->getStrTarget()." Dependencies: ".print_r($this->getArrRequiredModules(), true);
     }
 
     /**
-     * @param $strPath
+     * @param string $strPath
+     * @return void
      */
     public function autoInit($strPath) {
         if(uniSubstr($strPath, -4) == ".zip")
@@ -93,8 +101,9 @@ class class_module_packagemanager_metadata implements interface_admin_listable {
     /**
      * Reads the metadata-file saved with along with a packages located at the filesystem.
      *
-     * @param $strPackage
+     * @param string $strPackage
      * @throws class_exception
+     * @return void
      */
     private function initFromFilesystem($strPackage) {
 
@@ -108,8 +117,9 @@ class class_module_packagemanager_metadata implements interface_admin_listable {
     /**
      * Reads the metadata-file from a zipped package.
      *
-     * @param $strPackagePath
+     * @param string $strPackagePath
      * @throws class_exception
+     * @return void
      */
     private function initFromPackage($strPackagePath) {
         if(!is_file(_realpath_.$strPackagePath))
@@ -127,7 +137,8 @@ class class_module_packagemanager_metadata implements interface_admin_listable {
     /**
      * Parses the xml-document and sets the internal properties.
      *
-     * @param $strXmlDocument
+     * @param string $strXmlDocument
+     * @return void
      */
     private function parseXMLDocument($strXmlDocument) {
         $objXml = new class_xml_parser();
@@ -147,35 +158,46 @@ class class_module_packagemanager_metadata implements interface_admin_listable {
 
         if(is_array($arrXml["package"]["0"]["requiredModules"])) {
             foreach($arrXml["package"]["0"]["requiredModules"] as $arrModules) {
-                if(is_array($arrModules)) {
-                    foreach($arrModules as $arrTempModule) {
-                        if(is_array($arrTempModule)) {
-                            foreach($arrTempModule as $arrOneModule) {
-                                if(isset($arrOneModule["attributes"]["name"])) {
-                                    $strModule = $arrOneModule["attributes"]["name"];
-                                    $strVersion = $arrOneModule["attributes"]["version"];
-                                    $this->arrRequiredModules[$strModule] = $strVersion;
-                                }
-                            }
+
+                if(!is_array($arrModules)) {
+                    continue;
+                }
+
+                foreach($arrModules as $arrTempModule) {
+                    if(!is_array($arrTempModule)) {
+                        continue;
+                    }
+
+
+                    foreach($arrTempModule as $arrOneModule) {
+                        if(isset($arrOneModule["attributes"]["name"])) {
+                            $strModule = $arrOneModule["attributes"]["name"];
+                            $strVersion = $arrOneModule["attributes"]["version"];
+                            $this->arrRequiredModules[$strModule] = $strVersion;
                         }
                     }
                 }
+
             }
         }
 
         if(isset($arrXml["package"]["0"]["screenshots"]) && is_array($arrXml["package"]["0"]["screenshots"])) {
             foreach($arrXml["package"]["0"]["screenshots"] as $arrScreenshots) {
-                if(is_array($arrScreenshots)) {
-                    foreach($arrScreenshots as $arrTempImage) {
-                        if(is_array($arrTempImage)) {
-                            foreach($arrTempImage as $arrOneImage) {
-                                if(isset($arrOneImage["attributes"]["path"])) {
-                                    $strImage = $arrOneImage["attributes"]["path"];
+                if(!is_array($arrScreenshots)) {
+                    continue;
+                }
 
-                                    if(in_array(uniStrtolower(uniSubstr($strImage, -4)), array(".jpg", ".jpg", ".gif", ".png")))
-                                        $this->arrScreenshots[] = $strImage;
-                                }
-                            }
+                foreach($arrScreenshots as $arrTempImage) {
+                    if(!is_array($arrTempImage)) {
+                        continue;
+                    }
+
+                    foreach($arrTempImage as $arrOneImage) {
+                        if(isset($arrOneImage["attributes"]["path"])) {
+                            $strImage = $arrOneImage["attributes"]["path"];
+
+                            if(in_array(uniStrtolower(uniSubstr($strImage, -4)), array(".jpg", ".jpeg", ".gif", ".png")))
+                                $this->arrScreenshots[] = $strImage;
                         }
                     }
                 }
@@ -185,87 +207,159 @@ class class_module_packagemanager_metadata implements interface_admin_listable {
     }
 
 
-
+    /**
+     * @param string $strAuthor
+     * @return void
+     */
     public function setStrAuthor($strAuthor) {
         $this->strAuthor = $strAuthor;
     }
 
+    /**
+     * @return mixed
+     */
     public function getStrAuthor() {
         return $this->strAuthor;
     }
 
+    /**
+     * @param string $strContentprovider
+     * @return void
+     */
     public function setStrContentprovider($strContentprovider) {
         $this->strContentprovider = $strContentprovider;
     }
 
+    /**
+     * @return mixed
+     */
     public function getStrContentprovider() {
         return $this->strContentprovider;
     }
 
+    /**
+     * @param string $strDescription
+     * @return void
+     */
     public function setStrDescription($strDescription) {
         $this->strDescription = $strDescription;
     }
 
+    /**
+     * @return mixed
+     */
     public function getStrDescription() {
         return $this->strDescription;
     }
 
+    /**
+     * @param string $strPath
+     * @return void
+     */
     public function setStrPath($strPath) {
         $this->strPath = $strPath;
     }
 
+    /**
+     * @return mixed
+     */
     public function getStrPath() {
         return $this->strPath;
     }
 
+    /**
+     * @param string $strTitle
+     * @return void
+     */
     public function setStrTitle($strTitle) {
         $this->strTitle = $strTitle;
     }
 
+    /**
+     * @return mixed
+     */
     public function getStrTitle() {
         return $this->strTitle;
     }
 
+    /**
+     * @param string $strVersion
+     * @return void
+     */
     public function setStrVersion($strVersion) {
         $this->strVersion = $strVersion;
     }
 
+    /**
+     * @return mixed
+     */
     public function getStrVersion() {
         return $this->strVersion;
     }
 
+    /**
+     * @param string $strType
+     * @return void
+     */
     public function setStrType($strType) {
         $this->strType = $strType;
     }
 
+    /**
+     * @return mixed
+     */
     public function getStrType() {
         return $this->strType;
     }
 
+    /**
+     * @param string $strTarget
+     * @return void
+     */
     public function setStrTarget($strTarget) {
         $this->strTarget = $strTarget;
     }
 
+    /**
+     * @return mixed
+     */
     public function getStrTarget() {
         return $this->strTarget;
     }
 
+    /**
+     * @param bool $bitProvidesInstaller
+     * @return void
+     */
     public function setBitProvidesInstaller($bitProvidesInstaller) {
         $this->bitProvidesInstaller = $bitProvidesInstaller;
     }
 
+    /**
+     * @return mixed
+     */
     public function getBitProvidesInstaller() {
         return $this->bitProvidesInstaller;
     }
 
+    /**
+     * @param array $arrRequiredModules
+     * @return void
+     */
     public function setArrRequiredModules($arrRequiredModules) {
         $this->arrRequiredModules = $arrRequiredModules;
     }
 
+    /**
+     * @return array
+     */
     public function getArrRequiredModules() {
         return $this->arrRequiredModules;
     }
 
+    /**
+     * @return array
+     */
     public function getArrScreenshots() {
         return $this->arrScreenshots;
     }

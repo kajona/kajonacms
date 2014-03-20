@@ -102,6 +102,10 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
                 );
             }
 
+            $strActions .= $this->objToolkit->listButton(
+                class_link::getLinkAdminDialog($this->getArrModule("modul"), "showInfo", "&package=".$objOneMetadata->getStrTitle(), $this->getLang("package_info"), $this->getLang("package_info"), "icon_lens", $objOneMetadata->getStrTitle())
+            );
+
 
             $strActions .= $this->objToolkit->listButton(
                 "<span id=\"updateWrapper".createFilename($objOneMetadata->getStrTitle(), true)."\">".class_adminskin_helper::getAdminImage("loadingSmall", $this->getLang("package_searchupdate"))."</span>"
@@ -140,6 +144,23 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
         $strReturn .= $arrPageViews["pageview"];
 
         return $strReturn;
+    }
+
+
+    /**
+     * Renders the summary of a single package
+     * @permissions view
+     * @return string
+     */
+    protected function actionShowInfo() {
+        $this->setArrModuleEntry("template", "/folderview.tpl");
+        $objManager = new class_module_packagemanager_manager();
+        $objHandler = $objManager->getPackage($this->getParam("package"));
+        if($objHandler !== null) {
+            return $this->renderPackageDetails($objManager->getPackageManagerForPath($objHandler->getStrPath()), true);
+        }
+
+        return "";
     }
 
 
@@ -218,57 +239,7 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
         $objHandler = $objManager->getPackageManagerForPath($strFile);
 
         if($objManager->validatePackage($strFile)) {
-
-            $strReturn .= $this->objToolkit->formHeadline($objHandler->getObjMetadata()->getStrTitle());
-            $strReturn .= $this->objToolkit->getTextRow($objHandler->getObjMetadata()->getStrDescription());
-
-            $arrRows = array();
-            $arrRows[] = array($this->getLang("package_type"), $this->getLang("type_".$objHandler->getObjMetadata()->getStrType()));
-            $arrRows[] = array($this->getLang("package_version"), $objHandler->getObjMetadata()->getStrVersion());
-
-
-            if($objHandler->getVersionInstalled() != null) {
-                $arrRows[] = array($this->getLang("package_version_installed"), $objHandler->getVersionInstalled());
-            }
-
-
-            $arrRows[] = array($this->getLang("package_author"), $objHandler->getObjMetadata()->getStrAuthor());
-
-            $arrRequiredRows = array();
-            foreach($objHandler->getObjMetadata()->getArrRequiredModules() as $strOneModule => $strVersion) {
-
-                $strStatus = "";
-
-                //validate the status
-                $objRequired = $objManager->getPackage($strOneModule);
-                if($objRequired == null) {
-                    $strStatus = "<span class=\"label label-important\">".$this->getLang("package_missing")."</span>";
-                }
-                else {
-                    if(version_compare($objRequired->getStrVersion(), $strVersion, ">="))
-                        $strStatus = "<span class=\"label label-success\">".$this->getLang("package_version_available")."</span>";
-                    else
-                        $strStatus = "<span class=\"label label-important\">".$this->getLang("package_version_low")."</span>";
-                }
-
-
-                $arrRequiredRows[] = array($strOneModule, " >= ".$strVersion, $strStatus);
-            }
-            $arrRows[] = array($this->getLang("package_modules"), $this->objToolkit->dataTable(null, $arrRequiredRows));
-
-            $strReturn .= $this->objToolkit->dataTable(null, $arrRows);
-
-            $strReturn .= $this->objToolkit->getTextRow($this->getLang("package_screenshots"));
-            foreach($objHandler->getObjMetadata()->getArrScreenshots() as $strOneScreenshot) {
-                $objZip = new class_zip();
-                $objImage = $objZip->getFileFromArchive($strFile, $strOneScreenshot);
-                if($objImage !== false) {
-                    $strImage = _images_cachepath_."/".generateSystemid().uniSubstr($strOneScreenshot, -4);
-                    file_put_contents(_realpath_.$strImage, $objImage);
-                    $strReturn .= "<img src='"._webpath_."/image.php?image=".urlencode($strImage)."&maxWidth=300&maxHeight=200' alt='".$strOneScreenshot."' />&nbsp;";
-                }
-            }
-
+            $strReturn .= $this->renderPackageDetails($objHandler);
 
             if(!$objHandler->getObjMetadata()->getBitProvidesInstaller() || $objHandler->isInstallable()) {
 
@@ -321,6 +292,76 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
     }
 
     /**
+     * Renders the summary of a single package
+     *
+     * @param interface_packagemanager_packagemanager $objHandler
+     * @param bool $bitIncludeRequiredBy
+     *
+     * @return string
+     */
+    public function renderPackageDetails(interface_packagemanager_packagemanager $objHandler, $bitIncludeRequiredBy = false) {
+        $objManager = new class_module_packagemanager_manager();
+
+        $strReturn = $this->objToolkit->formHeadline($objHandler->getObjMetadata()->getStrTitle());
+        $strReturn .= $this->objToolkit->getTextRow($objHandler->getObjMetadata()->getStrDescription());
+
+        $arrRows = array();
+        $arrRows[] = array($this->getLang("package_type"), $this->getLang("type_".$objHandler->getObjMetadata()->getStrType()));
+        $arrRows[] = array($this->getLang("package_version"), $objHandler->getObjMetadata()->getStrVersion());
+
+        if($objHandler->getVersionInstalled() != null) {
+            $arrRows[] = array($this->getLang("package_version_installed"), $objHandler->getVersionInstalled());
+        }
+        $arrRows[] = array($this->getLang("package_author"), $objHandler->getObjMetadata()->getStrAuthor());
+
+        $arrRequiredRows = array();
+        foreach($objHandler->getObjMetadata()->getArrRequiredModules() as $strOneModule => $strVersion) {
+            $strStatus = "";
+
+            //validate the status
+            $objRequired = $objManager->getPackage($strOneModule);
+            if($objRequired == null) {
+                $strStatus = "<span class=\"label label-important\">".$this->getLang("package_missing")."</span>";
+            }
+            else {
+                if(version_compare($objRequired->getStrVersion(), $strVersion, ">="))
+                    $strStatus = "<span class=\"label label-success\">".$this->getLang("package_version_available")."</span>";
+                else
+                    $strStatus = "<span class=\"label label-important\">".$this->getLang("package_version_low")."</span>";
+            }
+
+            $arrRequiredRows[] = array($strOneModule, " >= ".$strVersion, $strStatus);
+        }
+        $arrRows[] = array($this->getLang("package_modules"), $this->objToolkit->dataTable(null, $arrRequiredRows));
+
+
+        if($bitIncludeRequiredBy) {
+            $arrRequiredBy = $objManager->getArrRequiredBy($objHandler->getObjMetadata());
+            array_walk($arrRequiredBy, function(&$strOneModule){
+                $strOneModule = array($strOneModule);
+            });
+
+            $arrRows[] = array($this->getLang("package_required_by"), $this->objToolkit->dataTable(null, $arrRequiredBy));
+        }
+
+        $strImages = "";
+        foreach($objHandler->getObjMetadata()->getArrScreenshots() as $strOneScreenshot) {
+            $objZip = new class_zip();
+            $objImage = $objZip->getFileFromArchive($objHandler->getObjMetadata()->getStrPath(), $strOneScreenshot);
+            if($objImage !== false) {
+                $strImage = _images_cachepath_."/".generateSystemid().uniSubstr($strOneScreenshot, -4);
+                file_put_contents(_realpath_.$strImage, $objImage);
+                $strImages .= "<img src='"._webpath_."/image.php?image=".urlencode($strImage)."&maxWidth=300&maxHeight=200' alt='".$strOneScreenshot."' />&nbsp;";
+            }
+        }
+        $arrRows[] = array($this->getLang("package_screenshots"), $strImages);
+
+        $strReturn .= $this->objToolkit->dataTable(null, $arrRows);
+        return $strReturn;
+    }
+
+
+    /**
      * @permissions edit
      * @return string
      */
@@ -340,7 +381,7 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
                 $objFilesystem = new class_filesystem();
                 $objFilesystem->fileDelete($strFile);
 
-                $strReturn .= $objHandler->move2Filesystem();
+                $objHandler->move2Filesystem();
 
                 class_classloader::getInstance()->flushCache();
                 class_reflection::flushCache();

@@ -139,6 +139,9 @@ class class_module_packagemanager_packagemanager_module implements interface_pac
     }
 
 
+    /**
+     * @return bool
+     */
     public function updateDefaultTemplate() {
         $objFilesystem = new class_filesystem();
         class_logger::getInstance(class_logger::PACKAGEMANAGEMENT)->addLogRow("updating default template from /core/".$this->objMetadata->getStrPath(), class_logger::$levelInfo);
@@ -154,10 +157,17 @@ class class_module_packagemanager_packagemanager_module implements interface_pac
         return true;
     }
 
+    /**
+     * @param class_module_packagemanager_metadata $objMetadata
+     * @return void
+     */
     public function setObjMetadata($objMetadata) {
         $this->objMetadata = $objMetadata;
     }
 
+    /**
+     * @return class_module_packagemanager_metadata
+     */
     public function getObjMetadata() {
         return $this->objMetadata;
     }
@@ -185,7 +195,6 @@ class class_module_packagemanager_packagemanager_module implements interface_pac
                     $objMetadata = null;
                     foreach($arrModules as $strOneFolder) {
                         if(uniStrpos($strOneFolder, $strOneModule) !== false) {
-                            //TODO: ugly hack to get the list of packages available, only to avoid array-modified warnings when sorting the list of packages
                             $objMetadata = new class_module_packagemanager_metadata();
                             $objMetadata->autoInit("/core/".$strOneFolder);
 

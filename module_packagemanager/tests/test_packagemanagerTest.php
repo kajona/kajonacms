@@ -92,8 +92,6 @@ class class_test_packagemanager extends class_testbase  {
         $objManager = new class_module_packagemanager_manager();
         $arrProviders = $objManager->getContentproviders();
         $this->assertEquals(3, count($arrProviders));
-
-
         $this->assertEquals("class_module_packagemanager_contentprovider_local", get_class($arrProviders[2]));
     }
 
@@ -102,6 +100,15 @@ class class_test_packagemanager extends class_testbase  {
         $objManager = new class_module_packagemanager_manager();
         $objHandler = $objManager->getPackageManagerForPath("/core/module_packagemanager");
         $this->assertTrue(!$objHandler->isInstallable());
+    }
+
+    public function testRequiredBy() {
+        $objManager = new class_module_packagemanager_manager();
+        $objSystem = $objManager->getPackage("system");
+
+        $arrRequiredBy = $objManager->getArrRequiredBy($objSystem);
+        $this->assertTrue(in_array("packagemanager", $arrRequiredBy));
+        $this->assertFalse(in_array("system", $arrRequiredBy));
     }
 
 

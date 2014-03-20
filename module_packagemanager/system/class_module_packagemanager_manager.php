@@ -41,9 +41,8 @@ class class_module_packagemanager_manager {
         $arrReturn = array_merge($objPackageProvider->getInstalledPackages(), $arrReturn);
 
         if($strFilterText != "") {
-            $arrCopy = $arrReturn;
             $arrReturn = array();
-            foreach($arrCopy as $objOneMetadata) {
+            foreach($arrReturn as $objOneMetadata) {
                 if(uniStrpos($objOneMetadata->getStrTitle(), $strFilterText) !== false)
                     $arrReturn[] = $objOneMetadata;
             }
@@ -61,18 +60,15 @@ class class_module_packagemanager_manager {
      * @return class_module_packagemanager_metadata[]
      */
     public function sortPackages(array $arrPackages, $bitByNameOnly = false) {
-        usort($arrPackages, function(class_module_packagemanager_metadata $objA, class_module_packagemanager_metadata $objB) use ($bitByNameOnly) {
-
-            $objManager = new class_module_packagemanager_manager();
+        $objManager = new class_module_packagemanager_manager();
+        usort($arrPackages, function(class_module_packagemanager_metadata $objA, class_module_packagemanager_metadata $objB) use ($bitByNameOnly, $objManager) {
 
             $objHandlerA = $objManager->getPackageManagerForPath($objA->getStrPath());
             $objHandlerB = $objManager->getPackageManagerForPath($objB->getStrPath());
 
-
             if($bitByNameOnly) {
                 return strcmp($objA->getStrTitle(), $objB->getStrTitle());
             }
-
 
             if($objA->getStrType() == class_module_packagemanager_manager::STR_TYPE_TEMPLATE && $objB->getStrType() != class_module_packagemanager_manager::STR_TYPE_TEMPLATE)
                 return -1;
@@ -82,7 +78,6 @@ class class_module_packagemanager_manager {
             if($objHandlerA->isInstallable() && $objHandlerB->isInstallable()) {
                 return strcmp($objA->getStrTitle(), $objB->getStrTitle());
             }
-
 
             if($objHandlerA->isInstallable() && !$objHandlerB->isInstallable()) {
                 return -1;
@@ -102,7 +97,7 @@ class class_module_packagemanager_manager {
      * Searches the current local packages for a single, given package.
      * If not found, null is returned.
      *
-     * @param $strName
+     * @param string $strName
      *
      * @return class_module_packagemanager_metadata|null
      */
@@ -119,7 +114,7 @@ class class_module_packagemanager_manager {
     /**
      * Loads the matching packagemanager for a given path.
      *
-     * @param $strPath
+     * @param string $strPath
      *
      * @return interface_packagemanager_packagemanager|null
      */
@@ -152,7 +147,7 @@ class class_module_packagemanager_manager {
      * Extracts the zip-archive into a temp-folder.
      * The matching packagemanager is returned.
      *
-     * @param $strPackagePath
+     * @param string $strPackagePath
      *
      * @return interface_packagemanager_packagemanager
      */
@@ -192,7 +187,7 @@ class class_module_packagemanager_manager {
     /**
      * Validates, if a given path represents a valid package
      *
-     * @param $strPath
+     * @param string $strPath
      *
      * @return bool
      */
@@ -264,6 +259,27 @@ class class_module_packagemanager_manager {
         }
 
         return $arrResult;
+    }
+
+    /**
+     * Does an inverse-search for the package-requirements. This means that not the packages required to install the
+     * passed package are returned, but the packages depending on the passed package.
+     * Useful for consistency checks, e.g. before deleting a package.
+     *
+     * @param class_module_packagemanager_metadata $objMetadata
+     *
+     * @return string[]
+     */
+    public function getArrRequiredBy(class_module_packagemanager_metadata $objMetadata) {
+        $arrReturn = array();
+        foreach($this->getAvailablePackages() as $objOnePackage) {
+            foreach($objOnePackage->getArrRequiredModules() as $strModule => $strVersion) {
+                if($strModule == $objMetadata->getStrTitle())
+                    $arrReturn[] = $objOnePackage->getStrTitle();
+            }
+        }
+
+        return $arrReturn;
     }
 
 

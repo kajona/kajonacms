@@ -12,6 +12,6 @@
     <requiredModules>
         <module name="system" version="4.4" />
         <module name="mediamanager" version="4.4" />
-        <module name="packagemanager" version="4.4" />
+        <module name="packagemanager" version="4.4.1" />
     </requiredModules>
 </package>
