@@ -32,6 +32,9 @@ class class_apc_cache  {
 
     private $strSystemKey = "";
 
+    /**
+     * singleton, use getInstance instead
+     */
     private function __construct() {
         $this->bitAPCInstalled = function_exists("apc_store") && function_exists("apc_cache_info") && @apc_cache_info() !== false;
         $this->strSystemKey = md5(__FILE__);
@@ -52,8 +55,8 @@ class class_apc_cache  {
 
     /**
      * Adds a value to the cache. The third param is the time to live in seconds, defaulted to 180
-     * @param $strKey
-     * @param $objValue
+     * @param string $strKey
+     * @param mixed $objValue
      * @param int $intTtl
      * @return array|bool
      */
@@ -72,8 +75,8 @@ class class_apc_cache  {
     /**
      * Fetches a value from the cache
      *
-     * @param $strKey
-     * @param bool|mixed $objDefaultValue The value to be returned in case the key is not found in the store.
+     * @param string $strKey
+     * @param bool|mixed &$objDefaultValue The value to be returned in case the key is not found in the store.
      *
      * @return bool|mixed false if the entry is not existing
      */
@@ -95,6 +98,10 @@ class class_apc_cache  {
             return $mixedValue;
     }
 
+    /**
+     * Clears the apc cache
+     * @return void
+     */
     public function flushCache() {
         if(!$this->bitAPCInstalled)
             self::$arrFallbackCache = array();
@@ -105,6 +112,9 @@ class class_apc_cache  {
 
     }
 
+    /**
+     * @return bool
+     */
     public function getBitAPCInstalled() {
         return $this->bitAPCInstalled;
     }
