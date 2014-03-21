@@ -61,9 +61,9 @@ interface interface_packagemanager_contentprovider {
      * array("title", "version", "description", "systemid")
      * has to be returned.
      *
-     * @abstract
-     * @param $strTitle
+     * @param string $strTitle
      * @return array
+     * @abstract
      */
     public function searchPackage($strTitle);
 
@@ -72,9 +72,9 @@ interface interface_packagemanager_contentprovider {
      * Therefore, the built-in method processPackgeUpload
      * should be used.
      *
-     * @abstract
-     * @param $strTitle
+     * @param string $strTitle
      * @return mixed
+     * @abstract
      */
     public function initPackageUpdate($strTitle);
 }
