@@ -44,6 +44,7 @@ class class_module_workflows_portal extends class_portal implements interface_po
             return "<message>Execution successful</message>";
         }
 
+
         class_response_object::getInstance()->setStrStatusCode(class_http_statuscodes::SC_UNAUTHORIZED);
         return "<message><error>Not authorized</error></message>";
     }
