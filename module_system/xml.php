@@ -26,16 +26,25 @@ define("_autotesting_", false);
  */
 class class_xml {
 
+    private static $bitRenderXmlHeader = true;
+
     /**
      * @var class_response_object
      */
     public $objResponse;
 
 
+    /**
+     * Default constructor
+     */
     public function __construct() {
         class_carrier::getInstance();
     }
 
+    /**
+     * Starts the processing of the requests, fetches params and passes control to the request dispatcher
+     * @return void
+     */
     public function processRequest() {
 
         $strModule = getGet("module");
@@ -67,7 +76,7 @@ class class_xml {
             $this->objResponse->setStrContent("<error>An error occurred, malformed request</error>");
         }
 
-        if($this->objResponse->getStResponseType() == class_http_responsetypes::STR_TYPE_XML) {
+        if($this->objResponse->getStResponseType() == class_http_responsetypes::STR_TYPE_XML && self::$bitRenderXmlHeader) {
             $this->objResponse->setStrContent("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n" . $this->objResponse->getStrContent());
         }
     }
@@ -76,22 +85,13 @@ class class_xml {
      * If set to true, the output will be sent without the mandatory xml-head-element
      *
      * @param bool $bitSuppressXmlHeader
+     * @return void
      */
     public static function setBitSuppressXmlHeader($bitSuppressXmlHeader) {
+        self::$bitRenderXmlHeader = !$bitSuppressXmlHeader;
     }
 
-    /**
-     * Use this method to set a new response type, e.g. json
-     *
-     * @static
-     *
-     * @param $strReturnContentType
-     */
-    public static function setStrReturnContentType($strReturnContentType) {
-    }
 
-    public static function getStrReturnContentType() {
-    }
 
 }
 

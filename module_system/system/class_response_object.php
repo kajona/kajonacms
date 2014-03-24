@@ -10,7 +10,7 @@
 class class_response_object {
 
     private $strStatusCode = "";
-    private $stResponseType = "";
+    private $strResponseType = "";
     private $strRedirectUrl = "";
     private $strContent = "";
     private $arrAdditionalHeaders = array();
@@ -20,11 +20,17 @@ class class_response_object {
      */
     private static $objInstance = null;
 
+    /**
+     *
+     */
     private function __construct() {
         $this->strStatusCode = class_http_statuscodes::SC_OK;
-        $this->stResponseType = class_http_responsetypes::STR_TYPE_HTML;
+        $this->strResponseType = class_http_responsetypes::STR_TYPE_HTML;
     }
 
+    /**
+     * @return class_response_object
+     */
     public static function getInstance() {
         if(self::$objInstance == null) {
             self::$objInstance = new class_response_object();
@@ -34,6 +40,9 @@ class class_response_object {
     }
 
 
+    /**
+     *
+     */
     public function sendHeaders() {
         if($this->strRedirectUrl != "") {
             $this->strStatusCode = class_http_statuscodes::SC_REDIRECT;
@@ -49,38 +58,81 @@ class class_response_object {
     }
 
 
+    /**
+     * @param $strHeader
+     */
     public function addHeader($strHeader) {
         $this->arrAdditionalHeaders[] = $strHeader;
     }
 
+    /**
+     * @param $strStatusCode
+     */
     public function setStrStatusCode($strStatusCode) {
         $this->strStatusCode = $strStatusCode;
     }
 
+    /**
+     * @return string
+     */
     public function getStrStatusCode() {
         return $this->strStatusCode;
     }
 
+    /**
+     * @param $stResponseType
+     * @deprecated use setStrResponseType instead
+     */
     public function setStResponseType($stResponseType) {
-        $this->stResponseType = $stResponseType;
+        $this->strResponseType = $stResponseType;
     }
 
+    /**
+     * @return string
+     * @deprecated use getStrResponseType instead
+     */
     public function getStResponseType() {
-        return $this->stResponseType;
+        return $this->strResponseType;
     }
 
+    /**
+     * @param $stResponseType
+     */
+    public function setStrResponseType($stResponseType) {
+        $this->strResponseType = $stResponseType;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStrResponseType() {
+        return $this->strResponseType;
+    }
+
+    /**
+     * @param $strContent
+     */
     public function setStrContent($strContent) {
         $this->strContent = $strContent;
     }
 
+    /**
+     * @return string
+     */
     public function getStrContent() {
         return $this->strContent;
     }
 
+    /**
+     * @param $strRedirectUrl
+     */
     public function setStrRedirectUrl($strRedirectUrl) {
         $this->strRedirectUrl = $strRedirectUrl;
     }
 
+    /**
+     * @return string
+     */
     public function getStrRedirectUrl() {
         return $this->strRedirectUrl;
     }

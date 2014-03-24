@@ -46,6 +46,9 @@ final class class_session {
     const STR_SESSION_ADMIN_LANG_KEY = "STR_SESSION_ADMIN_LANG_KEY";
 
 
+    /**
+     * Singleton, use getInstance() instead
+     */
     private function __construct() {
 
         //Loading the needed Objects
@@ -139,6 +142,7 @@ final class class_session {
      * Setter for captcha-codes. use ONLY this method to set the code.
      *
      * @param string $strCode
+     * @return void
      */
     public function setCaptchaCode($strCode) {
         $this->setSession("kajonaCaptchaCode", $strCode);
@@ -202,7 +206,7 @@ final class class_session {
      * Deletes a value from the session
      *
      * @param string $strKey
-
+     * @return void
      */
     public function sessionUnset($strKey) {
         if($this->sessionIsset($strKey))
@@ -480,7 +484,7 @@ final class class_session {
 
     /**
      * Logs a user off from the system
-
+     * @return void
      */
     public function logout() {
         class_logger::getInstance()->addLogRow("User: ".$this->getUsername()." successfully logged out", class_logger::$levelInfo);
@@ -553,6 +557,7 @@ final class class_session {
 
     /**
      * Resets the internal reference to the current user, e.g. to load new values from the database
+     * @return void
      */
     public function resetUser() {
         if($this->getUserID() != "") {
@@ -613,7 +618,7 @@ final class class_session {
 
     /**
      * Initializes the internal kajona session
-
+     * @return void
      */
     public function initInternalSession() {
 
@@ -652,13 +657,19 @@ final class class_session {
         $objSession->setStrGroupids($strGroups);
         $objSession->setIntReleasetime(time() + _system_release_time_);
         $objSession->setStrLasturl(getServer("QUERY_STRING"));
-        $objSession->updateObjectToDb();
+        $objSession->setSystemid(generateSystemid());
+
+        //this update is removed. the internal session validates on destruct, if an update or an insert is required
+        //$objSession->updateObjectToDb();
 
         $this->setSession("KAJONA_INTERNAL_SESSID", $objSession->getSystemid());
         $this->objInternalSession = $objSession;
 
     }
 
+    /**
+     * @return class_module_system_session
+     */
     private function getObjInternalSession() {
 
         //lazy loading
@@ -668,14 +679,24 @@ final class class_session {
         return $this->objInternalSession;
     }
 
+    /**
+     * @return bool
+     */
     public function getBitLazyLoaded() {
         return $this->bitLazyLoaded;
     }
 
+    /**
+     * @return bool
+     */
     public function getBitClosed() {
         return $this->bitClosed;
     }
 
+    /**
+     * @param bool $bitBlockDbUpdate
+     * @return void
+     */
     public function setBitBlockDbUpdate($bitBlockDbUpdate) {
         $this->bitBlockDbUpdate = $bitBlockDbUpdate;
     }

@@ -26,6 +26,10 @@ class class_wadlgenerator {
 
     private $arrGrammars = array();
 
+    /**
+     * @param string $strArea
+     * @param string $strModule
+     */
     public function __construct($strArea, $strModule) {
         $this->bitRewrite = _system_mod_rewrite_ == "true";
 
@@ -37,6 +41,7 @@ class class_wadlgenerator {
      * Adds an entry to the list of linked grammar-section
      *
      * @param string $strGrammar
+     * @return void
      */
     public function addIncludeGrammars($strGrammar) {
         $this->arrGrammars[] = $strGrammar;
@@ -53,6 +58,7 @@ class class_wadlgenerator {
      * @param array $arrParams array( [strName, strType, bitRequired, $strFixed] )
      * @param array $arrRepresentations array( [strMediaType, strElement] )
      * @param array $arrResponseRepresentations array( [strMediaType, strElement] )
+     * @return void
      */
     public function addMethod($bitGet, $strName, $arrParams = array(), $arrRepresentations = array(), $arrResponseRepresentations = array()) {
 

@@ -10,7 +10,7 @@
 /**
  * Model for a single session. Session are managed by class_session, so there should be no need
  * to create instances directly.
- * Session-Entries have are not reflected by a systemrecord
+ * Session-Entries are not reflected by a systemrecord
  *
  * @package module_system
  * @author sidler@mulchprod.de
@@ -19,6 +19,12 @@
  * @moduleId _system_modul_id_
  */
 class class_module_system_session extends class_model implements interface_model {
+
+    /**
+     * Internal session id. used to validate if the current session was already persisted to the database.
+     * @var string
+     */
+    private $strDbSystemid = "";
 
     public static $LOGINSTATUS_LOGGEDIN = "loggedin";
     public static $LOGINSTATUS_LOGGEDOUT = "loggedout";
@@ -59,7 +65,7 @@ class class_module_system_session extends class_model implements interface_model
 
     /**
      * Initalises the current object, if a systemid was given
-
+     * @return void
      */
     protected function initObjectInternal() {
 
@@ -79,6 +85,8 @@ class class_module_system_session extends class_model implements interface_model
             $this->setStrLoginprovider($arrRow["session_loginprovider"]);
             $this->setStrLasturl($arrRow["session_lasturl"]);
 
+            $this->strDbSystemid = $this->getSystemid();
+
             $this->bitValid = true;
         }
     }
@@ -95,9 +103,14 @@ class class_module_system_session extends class_model implements interface_model
 
         $this->bitValid = true;
 
-        if($this->getSystemid() == "") {
-            $strInternalSessionId = generateSystemid();
-            $this->setSystemid($strInternalSessionId);
+        if($this->strDbSystemid == "") {
+            $this->strDbSystemid = $this->getSystemid();
+
+            //only relevant for special conditions, no usage in real world scenarios since handled by class_session
+            if(!validateSystemid($this->strDbSystemid)) {
+                $this->strDbSystemid = generateSystemid();
+                $this->setSystemid($this->strDbSystemid);
+            }
 
             class_logger::getInstance()->addLogRow("new session ".$this->getSystemid(), class_logger::$levelInfo);
 
@@ -116,7 +129,7 @@ class class_module_system_session extends class_model implements interface_model
             return $this->objDB->_pQuery(
                 $strQuery,
                 array(
-                    $strInternalSessionId,
+                    $this->strDbSystemid,
                     $this->getStrPHPSessionId(),
                     $this->getStrUserid(),
                     $this->getStrGroupids(),
@@ -253,64 +266,116 @@ class class_module_system_session extends class_model implements interface_model
         return class_carrier::getInstance()->getObjDB()->_pQuery($strSql, array(time()));
     }
 
+    /**
+     * @return bool
+     */
     public function isSessionValid() {
         return $this->bitValid && $this->getIntReleasetime() > time();
     }
 
 
+    /**
+     * @param string $strPHPSessId
+     * @return void
+     */
     public function setStrPHPSessionId($strPHPSessId) {
         $this->strPHPSessionId = $strPHPSessId;
     }
 
+    /**
+     * @param string $strUserid
+     * @return void
+     */
     public function setStrUserid($strUserid) {
         $this->strUserid = $strUserid;
     }
 
+    /**
+     * @param string $strGroupids
+     * @return void
+     */
     public function setStrGroupids($strGroupids) {
         $this->strGroupids = $strGroupids;
     }
 
+    /**
+     * @param int $intReleasetime
+     * @return void
+     */
     public function setIntReleasetime($intReleasetime) {
         $this->intReleasetime = $intReleasetime;
     }
 
+    /**
+     * @param string $strLoginprovider
+     * @return void
+     */
     public function setStrLoginprovider($strLoginprovider) {
         $this->strLoginprovider = $strLoginprovider;
     }
 
+    /**
+     * @param string $strLasturl
+     * @return void
+     */
     public function setStrLasturl($strLasturl) {
         //limit to 255 chars
         $this->strLasturl = uniStrTrim($strLasturl, 450, "");
     }
 
+    /**
+     * @param string $strLoginstatus
+     * @return void
+     */
     public function setStrLoginstatus($strLoginstatus) {
         $this->strLoginstatus = $strLoginstatus;
     }
 
+    /**
+     * @return string
+     */
     public function getStrPHPSessionId() {
         return $this->strPHPSessionId;
     }
 
+    /**
+     * @return string
+     */
     public function getStrUserid() {
         return $this->strUserid;
     }
 
+    /**
+     * @return string
+     */
     public function getStrGroupids() {
         return $this->strGroupids;
     }
 
+    /**
+     * @return int
+     */
     public function getIntReleasetime() {
         return $this->intReleasetime;
     }
 
+    /**
+     * @return string
+     */
     public function getStrLoginprovider() {
         return $this->strLoginprovider;
     }
 
+    /**
+     * @return string
+     */
     public function getStrLasturl() {
         return $this->strLasturl;
     }
 
+    /**
+     * @return string
+     */
     public function getStrLoginstatus() {
         return $this->strLoginstatus;
     }
