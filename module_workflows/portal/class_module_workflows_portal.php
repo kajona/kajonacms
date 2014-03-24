@@ -20,6 +20,7 @@ class class_module_workflows_portal extends class_portal implements interface_po
 
     /**
      * Default implementation to avoid mail-spamming.
+     * @return void
      */
     protected function actionList() {
 
@@ -28,10 +29,14 @@ class class_module_workflows_portal extends class_portal implements interface_po
 
 
     /**
+     * Triggers the workflow engine
+     *
      * @permissions view
      * @xml
+     * @return string
      */
     protected function actionTrigger() {
+        class_carrier::getInstance()->getObjSession()->setBitBlockDbUpdate(true);
         if($this->getParam("authkey") == _workflows_trigger_authkey_) {
             $objSystemtask = new class_systemtask_workflows();
             $objSystemtask->executeTask();
