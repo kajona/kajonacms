@@ -21,8 +21,6 @@ KAJONA.admin.dashboard = {
                 KAJONA.admin.statusDisplay.messageError('<b>Request failed!</b><br />' + data);
             }
         });
-
-        return false;
     },
 
     init : function() {
