@@ -254,27 +254,6 @@ class class_module_system_common extends class_model implements interface_model 
     }
 
 
-    /**
-     * Creates Infos about the GDLib
-     *
-     * @return string[]
-     */
-    public function getGDInfos() {
-        $arrReturn = array();
-        if(function_exists("gd_info")) {
-            $arrGd = gd_info();
-            $arrReturn["version"] = $arrGd["GD Version"];
-            $arrReturn["gifread"] = (isset($arrGd["GIF Read Support"]) && $arrGd["GIF Read Support"] ? $this->getLang("commons_yes", "system") : $this->getLang("commons_no", "system"));
-            $arrReturn["gifwrite"] = (isset($arrGd["GIF Create Support"]) && $arrGd["GIF Create Support"] ? $this->getLang("commons_yes", "system") : $this->getLang("commons_no", "system"));
-            $arrReturn["jpg"] = (((isset($arrGd["JPG Support"]) && $arrGd["JPG Support"]) || (isset($arrGd["JPEG Support"]) && $arrGd["JPEG Support"])) ? $this->getLang("commons_yes", "system") : $this->getLang("commons_no", "system"));
-            $arrReturn["png"] = (isset($arrGd["PNG Support"]) && $arrGd["PNG Support"] ? $this->getLang("commons_yes", "system") : $this->getLang("commons_no", "system"));
-        }
-        else {
-            $arrReturn[""] = $this->getLang("keinegd");
-        }
-        return $arrReturn;
-    }
-
 
 
     /**

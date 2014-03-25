@@ -28,7 +28,7 @@ class class_systeminfo_php implements interface_systeminfo {
      *
      * @return mixed
      */
-    public function getStrContent() {
+    public function getArrContent() {
 
         $objLang = class_carrier::getInstance()->getObjLang();
 
@@ -48,7 +48,7 @@ class class_systeminfo_php implements interface_systeminfo {
         $arrReturn[] = array($objLang->getLang("timezone", "system"),  date_default_timezone_get());
         $arrReturn[] = array($objLang->getLang("datekajona", "system"),  dateToString(new class_date()));
 
-        return class_carrier::getInstance()->getObjToolkit("admin")->dataTable(null, $arrReturn);
+        return $arrReturn;
 
     }
 

@@ -66,6 +66,9 @@ abstract class class_systemtask_base {
      */
     private $bitMultipartform = false;
 
+    /**
+     * Default constructor
+     */
     public function __construct() {
 
         //load the external objects
@@ -134,6 +137,7 @@ abstract class class_systemtask_base {
      * to enable a proper text-loading.
      *
      * @param string $strModulename
+     * @return void
      */
     protected function setStrTextBase($strModulename) {
         $this->strTextbase = $strModulename;
@@ -141,14 +145,14 @@ abstract class class_systemtask_base {
 
     /**
      * Empty implementation, override in subclass!
-
+     * @return class_admin_formgenerator
      */
     public function getAdminForm() {
     }
 
     /**
      * Empty implementation, override in subclass!
-
+     * @return string[]
      */
     public function getSubmitParams() {
         return "";
@@ -156,7 +160,7 @@ abstract class class_systemtask_base {
 
     /**
      * Empty implementation, oveerride in subclass!
-
+     * @return string
      */
     public function getStrInternalTaskName() {
     }
@@ -189,6 +193,7 @@ abstract class class_systemtask_base {
 
     /**
      * @param string $strProgressInformation
+     * @return void
      */
     public function setStrProgressInformation($strProgressInformation) {
         $this->strProgressInformation = $strProgressInformation;
@@ -229,7 +234,7 @@ abstract class class_systemtask_base {
      * Indicates, wether the form to set up the task is a multipart-form or not (e.g.
      * for fileuploads)
      *
-     * @param $bitMultipartform bool
+     * @param bool $bitMultipartform
      */
     public function setBitMultipartform($bitMultipartform) {
         $this->bitMultipartform = $bitMultipartform;

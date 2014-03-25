@@ -28,7 +28,7 @@ class class_systeminfo_db implements interface_systeminfo {
      *
      * @return mixed
      */
-    public function getStrContent() {
+    public function getArrContent() {
         $objLang = class_carrier::getInstance()->getObjLang();
         $arrReturn = array();
         
@@ -75,8 +75,7 @@ class class_systeminfo_db implements interface_systeminfo {
             $arrReturn[] = array($objLang->getLang("anzahltabellen", "system"),  count($arrTables));
             break;
         }
-
-        return class_carrier::getInstance()->getObjToolkit("admin")->dataTable(null, $arrReturn);
+        return $arrReturn;
     }
 
     /**

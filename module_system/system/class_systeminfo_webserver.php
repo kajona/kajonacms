@@ -28,7 +28,7 @@ class class_systeminfo_webserver implements interface_systeminfo {
      *
      * @return mixed
      */
-    public function getStrContent() {
+    public function getArrContent() {
         $objLang = class_carrier::getInstance()->getObjLang();
         
 
@@ -44,7 +44,7 @@ class class_systeminfo_webserver implements interface_systeminfo {
         $arrReturn[] = array($objLang->getLang("system_realpath", "system"),  _realpath_);
         $arrReturn[] = array($objLang->getLang("system_webpath", "system"),  _webpath_);
 
-        return class_carrier::getInstance()->getObjToolkit("admin")->dataTable(null, $arrReturn);
+        return $arrReturn;
     }
 
     /**

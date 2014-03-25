@@ -245,10 +245,12 @@ class class_module_system_admin extends class_admin_simple implements interface_
         $strReturn = "";
 
         $objPluginmanager = new class_pluginmanager(interface_systeminfo::STR_EXTENSION_POINT);
+        /** @var interface_systeminfo[] $arrPlugins */
         $arrPlugins = $objPluginmanager->getPlugins();
 
         foreach($arrPlugins as $objOnePlugin) {
-            $strReturn .= $this->objToolkit->getFieldset($objOnePlugin->getStrTitle(), $objOnePlugin->getStrContent());
+            $strContent = $this->objToolkit->dataTable(null, $objOnePlugin->getArrContent());
+            $strReturn .= $this->objToolkit->getFieldset($objOnePlugin->getStrTitle(), $strContent);
         }
 
         return $strReturn;

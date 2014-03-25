@@ -26,7 +26,7 @@ interface interface_systeminfo extends interface_generic_plugin {
 
     /**
      * Returns the contents of the info-block
-     * @return mixed
+     * @return array
      */
-    public function getStrContent();
+    public function getArrContent();
 }

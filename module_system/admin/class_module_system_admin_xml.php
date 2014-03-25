@@ -175,6 +175,7 @@ class class_module_system_admin_xml extends class_admin implements interface_xml
             });
 
             //search for the matching task
+            /** @var interface_admin_systemtask|class_systemtask_base $objTask */
             foreach($arrFiles as $objTask) {
 
                 //instantiate the current task
@@ -321,50 +322,24 @@ class class_module_system_admin_xml extends class_admin implements interface_xml
      * @permissions edit
      */
     protected function actionSystemInfo() {
-        $strReturn = "";
-        $objCommon = new class_module_system_common();
+        $strReturn = "<info>";
 
-        $strReturn .= "<info>";
+        $objPluginmanager = new class_pluginmanager(interface_systeminfo::STR_EXTENSION_POINT);
+        /** @var interface_systeminfo[] $arrPlugins */
+        $arrPlugins = $objPluginmanager->getPlugins();
 
-        $arrInfos = $objCommon->getPHPInfo();
-        $strReturn .= "<infoset name=\"PHP\">";
-        foreach($arrInfos as $strKey => $strValue) {
-            $strReturn .= "<entry>";
-            $strReturn .= "<key>".xmlSafeString($strKey)."</key>";
-            $strReturn .= "<value>".xmlSafeString($strValue)."</value>";
-            $strReturn .= "</entry>";
+        foreach($arrPlugins as $objOnePlugin) {
+            $strReturn .= "<infoset name=\"".$objOnePlugin->getStrTitle()."\">";
+
+            foreach($objOnePlugin->getArrContent() as $arrValue) {
+                $strReturn .= "<entry>";
+                $strReturn .= "<key>".xmlSafeString($arrValue[0])."</key>";
+                $strReturn .= "<value>".xmlSafeString($arrValue[1])."</value>";
+                $strReturn .= "</entry>";
+            }
+
+            $strReturn .= "</infoset>";
         }
-        $strReturn .= "</infoset>";
-
-        $arrInfos = $objCommon->getWebserverInfos();
-        $strReturn .= "<infoset name=\"Webserver\">";
-        foreach($arrInfos as $strKey => $strValue) {
-            $strReturn .= "<entry>";
-            $strReturn .= "<key>".xmlSafeString($strKey)."</key>";
-            $strReturn .= "<value>".xmlSafeString($strValue)."</value>";
-            $strReturn .= "</entry>";
-        }
-        $strReturn .= "</infoset>";
-
-        $arrInfos = $objCommon->getDatabaseInfos();
-        $strReturn .= "<infoset name=\"Database\">";
-        foreach($arrInfos as $strKey => $strValue) {
-            $strReturn .= "<entry>";
-            $strReturn .= "<key>".xmlSafeString($strKey)."</key>";
-            $strReturn .= "<value>".xmlSafeString($strValue)."</value>";
-            $strReturn .= "</entry>";
-        }
-        $strReturn .= "</infoset>";
-
-        $arrInfos = $objCommon->getGDInfos();
-        $strReturn .= "<infoset name=\"GD Lib\">";
-        foreach($arrInfos as $strKey => $strValue) {
-            $strReturn .= "<entry>";
-            $strReturn .= "<key>".xmlSafeString($strKey)."</key>";
-            $strReturn .= "<value>".xmlSafeString($strValue)."</value>";
-            $strReturn .= "</entry>";
-        }
-        $strReturn .= "</infoset>";
 
         $strReturn .= "</info>";
 

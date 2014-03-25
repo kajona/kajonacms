@@ -217,7 +217,7 @@ class class_module_system_session extends class_model implements interface_model
      * @param int $intStart
      * @param int $intEnd
      *
-     * @return array
+     * @return class_module_system_session[]
      */
     public static function getAllActiveSessions($intStart = null, $intEnd = null) {
 

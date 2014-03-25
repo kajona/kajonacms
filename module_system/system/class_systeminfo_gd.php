@@ -28,7 +28,7 @@ class class_systeminfo_gd implements interface_systeminfo {
      *
      * @return mixed
      */
-    public function getStrContent() {
+    public function getArrContent() {
         $objLang = class_carrier::getInstance()->getObjLang();
         $arrReturn = array();
 
@@ -43,9 +43,8 @@ class class_systeminfo_gd implements interface_systeminfo {
         else {
             $arrReturn[] = array("", class_carrier::getInstance()->getObjLang()->getLang("keinegd", "system"));
         }
-        
-        
-        return class_carrier::getInstance()->getObjToolkit("admin")->dataTable(null, $arrReturn);
+
+        return $arrReturn;
     }
 
     /**
