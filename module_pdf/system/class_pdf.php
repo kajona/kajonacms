@@ -283,6 +283,7 @@ class class_pdf {
      */
     public function sendPdfToBrowser($strFilename = "kajonaPdf.pdf") {
         $this->objPdf->Output($strFilename, 'I');
+        die();
     }
 
     /**
