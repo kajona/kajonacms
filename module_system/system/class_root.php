@@ -216,6 +216,7 @@ abstract class class_root {
     /**
      * Method to invoke object initialization.
      * In nearly all cases, this is triggered by the framework itself.
+     * @return void
      */
     public final function initObject() {
         $this->initObjectInternal();
@@ -237,6 +238,7 @@ abstract class class_root {
      * If you have a different column-property mapping or additional
      * setters to call, overwrite this method.
      * The row loaded from the database is available by calling $this->getArrInitRow().
+     * @return void
      */
     protected function initObjectInternal() {
         $objORM = new class_orm_mapper($this);
@@ -245,6 +247,7 @@ abstract class class_root {
 
     /**
      * Init the current record with the system-fields
+     * @return void
      */
     private final function internalInit() {
 
@@ -329,15 +332,13 @@ abstract class class_root {
         return $objORM->getObjectList(get_called_class(), $strPrevid, $intStart, $intEnd);
     }
 
-
-   /**
-    * Deletes the current object from the system.
-    * By default, all entries are delete from  all tables indicated by the class-doccomment.
-    * If you want to trigger additional deletes, overwrite this method.
-    * The system-record itself is being deleted automatically, too.
-    *
-    * @return bool
-    */
+    /**
+     * Deletes the current object from the system.
+     * By default, all entries are delete from  all tables indicated by the class-doccomment.
+     * If you want to trigger additional deletes, overwrite this method.
+     * The system-record itself is being deleted automatically, too.
+     * @return bool
+     */
     protected function deleteObjectInternal() {
         $bitReturn = true;
 
@@ -380,6 +381,7 @@ abstract class class_root {
             $objChanges->createLogEntry($this, class_module_system_changelog::$STR_ACTION_DELETE);
         }
 
+        /** @var $this class_root|interface_model */
         $this->objDB->transactionBegin();
 
         //validate, if there are subrecords, so child nodes to be deleted
@@ -449,12 +451,16 @@ abstract class class_root {
             if($strPrevId === false || $strPrevId === "" || $strPrevId === null) {
                 //try to find the current modules-one
                 if(isset($this->arrModule["modul"])) {
-                    $strPrevId = class_module_system_module::getModuleByName($this->arrModule["modul"], true)->getSystemid();
+                    $strPrevId = class_module_system_module::getModuleByName($this->getArrModule("modul"), true)->getSystemid();
                     if(!validateSystemid($strPrevId))
                         throw new class_exception("automatic determination of module-id failed ", class_exception::$level_FATALERROR);
                 }
                 else
                     throw new class_exception("insert with no previd ", class_exception::$level_FATALERROR);
+            }
+
+            if(!validateSystemid($strPrevId) && $strPrevId !== "0") {
+                throw new class_exception("insert with erroneous prev-id ", class_exception::$level_FATALERROR);
             }
 
             //create the new systemrecord
@@ -1411,7 +1417,9 @@ abstract class class_root {
      * @return void
      */
     public function setStrPrevId($strPrevId) {
-        $this->strPrevId = $strPrevId;
+        if(validateSystemid($strPrevId) || $strPrevId === "0") {
+            $this->strPrevId = $strPrevId;
+        }
     }
 
     /**

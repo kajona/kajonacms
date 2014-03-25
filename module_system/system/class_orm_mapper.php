@@ -22,8 +22,12 @@ class class_orm_mapper {
     const STR_ANNOTATION_BLOCKESCAPING = "@blockEscaping";
     const STR_ANNOTATION_LISTORDER = "@listOrder";
 
+    /** @var class_root */
     private $objObject = null;
 
+    /**
+     * @param null $objObject
+     */
     function __construct($objObject = null) {
         $this->objObject = $objObject;
     }
@@ -34,7 +38,7 @@ class class_orm_mapper {
      * database, if you need more specific counts, overwrite this method or add your own
      * implementation to the derived class.
      *
-     * @param $strTargetClass
+     * @param string $strTargetClass
      * @param string $strPrevid
      *
      * @return int
@@ -70,7 +74,7 @@ class class_orm_mapper {
      * database, if you need more specific loaders, overwrite this method or add your own
      * implementation to the derived class.
      *
-     * @param $strTargetClass
+     * @param string $strTargetClass
      * @param string $strPrevid
      * @param null|int $intStart
      * @param null|int $intEnd
@@ -139,6 +143,8 @@ class class_orm_mapper {
     /**
      * Initializes the object from the database.
      * Loads all mapped columns to the properties
+     *
+     * @return void
      */
     public function initObjectFromDb() {
         //try to do a default init
@@ -285,10 +291,10 @@ class class_orm_mapper {
     /**
      * Called internally to update a single target-table
      *
-     * @param $arrColValues
-     * @param $arrEscapes
-     * @param $strTargetTable
-     * @param $strPrimaryCol
+     * @param array $arrColValues
+     * @param bool[] $arrEscapes
+     * @param string $strTargetTable
+     * @param string $strPrimaryCol
      *
      * @return bool
      */

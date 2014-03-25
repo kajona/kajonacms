@@ -256,5 +256,29 @@ class class_test_system extends class_testbase  {
 
         $this->assertEquals(0, count($objCommon->getChildNodesAsIdArray($strSub1Node1Id)));
     }
+
+    public function testPrevIdHandling() {
+
+        $objAspect = new class_module_system_aspect();
+        $objAspect->setStrName("autotest");
+
+        $bitThrown = false;
+        try {
+            $objAspect->updateObjectToDb("invalid");
+        }
+        catch(class_exception $objEx) {
+            $bitThrown = true;
+        }
+        $this->assertTrue($bitThrown);
+        $this->assertTrue($objAspect->getSystemid() == "");
+        $this->assertTrue(!validateSystemid($objAspect->getSystemid()));
+        $this->assertTrue(!validateSystemid($objAspect->getStrPrevId()));
+
+        $this->assertTrue($objAspect->updateObjectToDb());
+        $this->assertTrue($objAspect->getSystemid() != "");
+        $this->assertTrue(validateSystemid($objAspect->getSystemid()));
+        $this->assertTrue(validateSystemid($objAspect->getStrPrevId()));
+
+    }
 }
 
