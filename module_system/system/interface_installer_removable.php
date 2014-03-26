@@ -8,32 +8,30 @@
 ********************************************************************************************************/
 
 /**
- * Interface for all module installers.
+ * Extension to the basic interface, add support for remove-operations to
+ * the current installer.
  *
  * @package module_system
  */
-interface interface_installer {
-
-
-    /**
-     * Does the hard work: installs the module and registers needed constants
-     *
-     */
-    public function install();
+interface interface_installer_removable extends interface_installer {
 
     /**
-     * Does the hard work: updates the module to the current version
+     * Validates whether the current module/element is removable or not.
+     * This is the place to trigger special validations and consistency checks going
+     * beyond the common metadata-dependencies.
      *
+     * @return bool
      */
-    public function update();
+    public function isRemovable();
 
     /**
-     * Method to switch between the update or the install mode.
-     * Called either by the installer or the packagemanager.
-     * The default implementation is handled by the base-class.
+     * Removes the elements / modules handled by the current installer.
+     * Use the reference param to add a human readable logging.
      *
-     * @return string a log about the actions taken.
+     * @param string &$strReturn
+     *
+     * @return bool
      */
-    public function installOrUpdate();
+    public function remove(&$strReturn);
 
 }
