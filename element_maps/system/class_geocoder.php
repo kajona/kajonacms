@@ -123,6 +123,7 @@ class class_geocoder {
             if($strResponse != false) {
                 $this->strResponseRaw = $strResponse;
 
+                /** @var SimpleXMLElement $xml */
                 $xml = simplexml_load_string($strResponse);
                 $status = $xml->Response->Status->code;
 
