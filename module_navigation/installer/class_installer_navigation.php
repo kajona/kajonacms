@@ -33,7 +33,7 @@ class class_installer_navigation extends class_installer_base implements interfa
 		$arrFields["navigation_image"] 		= array("char254", true);
 
 		if(!$this->objDB->createTable("navigation", $arrFields, array("navigation_id")))
-			$strReturn .= "An error occured! ...\n";
+			$strReturn .= "An error occurred! ...\n";
 
 
 		//register the module
@@ -51,7 +51,7 @@ class class_installer_navigation extends class_installer_base implements interfa
         $arrFields["navigation_foreign"] 	= array("int", true);
 
         if(!$this->objDB->createTable("element_navigation", $arrFields, array("content_id")))
-            $strReturn .= "An error occured! ...\n";
+            $strReturn .= "An error occurred! ...\n";
 
         //Register the element
         $strReturn .= "Registering navigation-element...\n";

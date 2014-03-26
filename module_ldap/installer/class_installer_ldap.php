@@ -25,7 +25,7 @@ class class_installer_ldap extends class_installer_base implements interface_ins
 		$arrFields["group_ldap_dn"]                                     = array("text", true);
 
 		if(!$this->objDB->createTable("user_group_ldap", $arrFields, array("group_ldap_id")))
-			$strReturn .= "An error occured! ...\n";
+			$strReturn .= "An error occurred! ...\n";
         
         $strReturn .= "Installing table user_ldap...\n";
 		$arrFields = array();
@@ -36,7 +36,7 @@ class class_installer_ldap extends class_installer_base implements interface_ins
 		$arrFields["user_ldap_dn"]                                     = array("text", true);
 
 		if(!$this->objDB->createTable("user_ldap", $arrFields, array("user_ldap_id")))
-			$strReturn .= "An error occured! ...\n";
+			$strReturn .= "An error occurred! ...\n";
 
 
 		//register the module

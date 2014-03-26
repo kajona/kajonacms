@@ -27,7 +27,7 @@ class class_installer_news extends class_installer_base implements interface_ins
 		$arrFields["news_cat_title"] 	= array("char254", true);
 
 		if(!$this->objDB->createTable("news_category", $arrFields, array("news_cat_id")))
-			$strReturn .= "An error occured! ...\n";
+			$strReturn .= "An error occurred! ...\n";
 
 		//news----------------------------------------------------------------------------------
 		$strReturn .= "Installing table news...\n";
@@ -41,7 +41,7 @@ class class_installer_news extends class_installer_base implements interface_ins
 		$arrFields["news_image"] 	= array("char254", true);
 
 		if(!$this->objDB->createTable("news", $arrFields, array("news_id")))
-			$strReturn .= "An error occured! ...\n";
+			$strReturn .= "An error occurred! ...\n";
 
 		//news_member----------------------------------------------------------------------------------
 		$strReturn .= "Installing table news_member...\n";
@@ -52,7 +52,7 @@ class class_installer_news extends class_installer_base implements interface_ins
 		$arrFields["newsmem_category"]  = array("char20", true);
 
 		if(!$this->objDB->createTable("news_member", $arrFields, array("newsmem_id")))
-			$strReturn .= "An error occured! ...\n";
+			$strReturn .= "An error occurred! ...\n";
 
 		//news_feed--------------------------------------------------------------------------------------
 		$strReturn .= "Installing table news_feed...\n";
@@ -69,7 +69,7 @@ class class_installer_news extends class_installer_base implements interface_ins
 		$arrFields["news_feed_amount"] 	= array("int", true);
 
 		if(!$this->objDB->createTable("news_feed", $arrFields, array("news_feed_id")))
-			$strReturn .= "An error occured! ...\n";
+			$strReturn .= "An error occurred! ...\n";
 
 
 		//register the module
@@ -96,7 +96,7 @@ class class_installer_news extends class_installer_base implements interface_ins
         $arrFields["news_template"] 	= array("char254", true);
 
         if(!$this->objDB->createTable("element_news", $arrFields, array("content_id")))
-            $strReturn .= "An error occured! ...\n";
+            $strReturn .= "An error occurred! ...\n";
 
         //Register the element
         $strReturn .= "Registering news-element...\n";

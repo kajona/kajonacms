@@ -28,7 +28,7 @@ class class_installer_pages extends class_installer_base implements interface_in
 		$arrFields["page_type"] 	= array("int", true, "0");
 
 		if(!$this->objDB->createTable("page", $arrFields, array("page_id")))
-			$strReturn .= "An error occured! ...\n";
+			$strReturn .= "An error occurred! ...\n";
 
 		//folder ----------------------------------------------------------------------------------------
 		$strReturn .= "Installing table page_folder...\n";
@@ -38,7 +38,7 @@ class class_installer_pages extends class_installer_base implements interface_in
 		$arrFields["folder_name"]         = array("char254", true);
 
 		if(!$this->objDB->createTable("page_folder", $arrFields, array("folder_id")))
-			$strReturn .= "An error occured! ...\n";
+			$strReturn .= "An error occurred! ...\n";
 
         //folder_properties
         $strReturn .= "Installing table page_properties...\n";
@@ -56,7 +56,7 @@ class class_installer_pages extends class_installer_base implements interface_in
         $arrFields["pageproperties_target"] 	= array("char254", true);
 
 		if(!$this->objDB->createTable("page_properties", $arrFields, array("pageproperties_id", "pageproperties_language"), array("pageproperties_language")))
-			$strReturn .= "An error occured! ...\n";
+			$strReturn .= "An error occurred! ...\n";
 
 		//elementtable-----------------------------------------------------------------------------------
 		$strReturn .= "Installing table element...\n";
@@ -74,7 +74,7 @@ class class_installer_pages extends class_installer_base implements interface_in
 		$arrFields["element_config3"] 	    = array("text", true);
 
 		if(!$this->objDB->createTable("element", $arrFields, array("element_id"), array("element_name")))
-			$strReturn .= "An error occured! ...\n";
+			$strReturn .= "An error occurred! ...\n";
 
 
 		//pageelementtable-------------------------------------------------------------------------------
@@ -89,7 +89,7 @@ class class_installer_pages extends class_installer_base implements interface_in
 		$arrFields["page_element_ph_language"]          = array("char20", true);
 
 		if(!$this->objDB->createTable("page_element", $arrFields, array("page_element_id"), array("page_element_ph_language", "page_element_ph_element")))
-			$strReturn .= "An error occured! ...\n";
+			$strReturn .= "An error occurred! ...\n";
 
 
 		//Now we have to register module by module
@@ -131,7 +131,7 @@ class class_installer_pages extends class_installer_base implements interface_in
         $arrFields["paragraph_template"]= array("char254", true);
 
         if(!$this->objDB->createTable("element_paragraph", $arrFields, array("content_id")))
-            $strReturn .= "An error occured! ...\n";
+            $strReturn .= "An error occurred! ...\n";
 
         //Register the element
         $strReturn .= "Registering paragraph...\n";
@@ -193,7 +193,7 @@ class class_installer_pages extends class_installer_base implements interface_in
         $arrFields["image_template"] = array("char254", true);
 
         if(!$this->objDB->createTable("element_image", $arrFields, array("content_id")))
-            $strReturn .= "An error occured! ...\n";
+            $strReturn .= "An error occurred! ...\n";
 
         //Register the element
         $strReturn .= "Registering image...\n";
@@ -232,7 +232,7 @@ class class_installer_pages extends class_installer_base implements interface_in
         $arrFields["text"]		= array("text", true);
 
         if(!$this->objDB->createTable("element_universal", $arrFields, array("content_id")))
-            $strReturn .= "An error occured! ...\n";
+            $strReturn .= "An error occurred! ...\n";
 
 
         $strReturn .= "Setting aspect assignments...\n";
@@ -329,7 +329,7 @@ class class_installer_pages extends class_installer_base implements interface_in
                     ADD ".$this->objDB->encloseColumnName("element_config2")." ".$this->objDB->getDatatype("char254")." NULL,
                     ADD ".$this->objDB->encloseColumnName("element_config3")." ".$this->objDB->getDatatype("text")." NULL";
         if(!$this->objDB->_query($strQuery))
-            $strReturn .= "An error occured! ...\n";
+            $strReturn .= "An error occurred! ...\n";
 
         $strReturn .= "Setting new element-classes...\n";
         $strQuery = "SELECT * FROM "._dbprefix_."element";
@@ -440,7 +440,7 @@ class class_installer_pages extends class_installer_base implements interface_in
         $strQuery = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."page_properties")."
                     ADD ".$this->objDB->encloseColumnName("pageproperties_path")." ".$this->objDB->getDatatype("char254")." NULL";
         if(!$this->objDB->_query($strQuery))
-            $strReturn .= "An error occured! ...\n";
+            $strReturn .= "An error occurred! ...\n";
         
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion("", "3.4.9.2");
@@ -501,7 +501,7 @@ class class_installer_pages extends class_installer_base implements interface_in
         $arrFields["folder_name"]         = array("char254", true);
 
         if(!$this->objDB->createTable("page_folder", $arrFields, array("folder_id")))
-            $strReturn .= "An error occured! ...\n";
+            $strReturn .= "An error occurred! ...\n";
 
         $arrInserted = array();
         $strQuery = "SELECT * FROM "._dbprefix_."page_folderproperties";
@@ -537,7 +537,7 @@ class class_installer_pages extends class_installer_base implements interface_in
         $strQuery = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."page_properties")."
                              ADD ".$this->objDB->encloseColumnName("pageproperties_target")." ".$this->objDB->getDatatype("char254")." NULL";
         if(!$this->objDB->_query($strQuery))
-            $strReturn .= "An error occured! ...\n";
+            $strReturn .= "An error occurred! ...\n";
 
         $strReturn .= "Deleting legacy js-scripts...\n";
         $objFilesystem = new class_filesystem();
@@ -586,7 +586,7 @@ class class_installer_pages extends class_installer_base implements interface_in
         $arrFields["page_element_ph_language"]          = array("char20", true);
 
         if(!$this->objDB->createTable("page_element_temp", $arrFields, array("page_element_id"), array("page_element_ph_language", "page_element_ph_element")))
-            $strReturn .= "An error occured! ...\n";
+            $strReturn .= "An error occurred! ...\n";
 
 
         $strReturn .= "Copying table content...\n";
@@ -595,19 +595,19 @@ class class_installer_pages extends class_installer_base implements interface_in
                        SELECT page_element_id, page_element_ph_placeholder, page_element_ph_name, page_element_ph_element, page_element_ph_title, page_element_ph_language FROM "._dbprefix_."page_element";
 
         if(!$this->objDB->_query($strQuery))
-            $strReturn .= "An error occured! ...\n";
+            $strReturn .= "An error occurred! ...\n";
 
 
         $strReturn .= "Dropping old table...\n";
         $strQuery = "DROP TABLE ".$this->objDB->encloseTableName(_dbprefix_."page_element")."";
 
         if(!$this->objDB->_query($strQuery))
-            $strReturn .= "An error occured! ...\n";
+            $strReturn .= "An error occurred! ...\n";
 
         $strReturn .= "Renaming new table...\n";
         $strQuery = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."page_element_temp")." RENAME TO ".$this->objDB->encloseTableName(_dbprefix_."page_element")."";
         if(!$this->objDB->_query($strQuery))
-            $strReturn .= "An error occured! ...\n";
+            $strReturn .= "An error occurred! ...\n";
 
 
 

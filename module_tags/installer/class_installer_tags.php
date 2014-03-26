@@ -28,7 +28,7 @@ class class_installer_tags extends class_installer_base implements interface_ins
 		$arrFields["tags_tag_private"] 	= array("int", true);
 
 		if(!$this->objDB->createTable("tags_tag", $arrFields, array("tags_tag_id")))
-			$strReturn .= "An error occured! ...\n";
+			$strReturn .= "An error occurred! ...\n";
 
         //tags_member --------------------------------------------------------------------------------------
 		$strReturn .= "Installing table tags_member...\n";
@@ -41,7 +41,7 @@ class class_installer_tags extends class_installer_base implements interface_ins
 		$arrFields["tags_owner"]        = array("char20", true);
 
 		if(!$this->objDB->createTable("tags_member", $arrFields, array("tags_memberid"), array("tags_systemid", "tags_tagid", "tags_attribute", "tags_owner")))
-			$strReturn .= "An error occured! ...\n";
+			$strReturn .= "An error occurred! ...\n";
 
 
 
@@ -54,7 +54,7 @@ class class_installer_tags extends class_installer_base implements interface_ins
         $arrFields["tags_fav_userid"]       = array("char20", true);
 
         if(!$this->objDB->createTable("tags_favorite", $arrFields, array("tags_fav_id")))
-            $strReturn .= "An error occured! ...\n";
+            $strReturn .= "An error occurred! ...\n";
 
 		//register the module
 		$this->registerModule(

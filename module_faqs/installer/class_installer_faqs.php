@@ -26,7 +26,7 @@ class class_installer_faqs extends class_installer_base implements interface_ins
 		$arrFields["faqs_cat_title"]	= array("char254", true);
 
 		if(!$this->objDB->createTable("faqs_category", $arrFields, array("faqs_cat_id")))
-			$strReturn .= "An error occured! ...\n";
+			$strReturn .= "An error occurred! ...\n";
 
 		//faqs----------------------------------------------------------------------------------
 		$strReturn .= "Installing table faqs...\n";
@@ -37,7 +37,7 @@ class class_installer_faqs extends class_installer_base implements interface_ins
 		$arrFields["faqs_answer"]	= array("text", true);
 
 		if(!$this->objDB->createTable("faqs", $arrFields, array("faqs_id")))
-			$strReturn .= "An error occured! ...\n";
+			$strReturn .= "An error occurred! ...\n";
 
 		//faqs_member----------------------------------------------------------------------------------
 		$strReturn .= "Installing table faqs_member...\n";
@@ -48,7 +48,7 @@ class class_installer_faqs extends class_installer_base implements interface_ins
 		$arrFields["faqsmem_category"]	= array("char20", false);
 
 		if(!$this->objDB->createTable("faqs_member", $arrFields, array("faqsmem_id")))
-			$strReturn .= "An error occured! ...\n";
+			$strReturn .= "An error occurred! ...\n";
 
 
 		//register the module
@@ -63,7 +63,7 @@ class class_installer_faqs extends class_installer_base implements interface_ins
        $arrFields["faqs_template"]	= array("char254", true);
 
        if(!$this->objDB->createTable("element_faqs", $arrFields, array("content_id")))
-           $strReturn .= "An error occured! ...\n";
+           $strReturn .= "An error occurred! ...\n";
 
        //Register the element
        $strReturn .= "Registering faqs-element...\n";

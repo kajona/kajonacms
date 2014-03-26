@@ -41,7 +41,7 @@ class class_installer_stats extends class_installer_base implements interface_in
             false
         )
         ) {
-            $strReturn .= "An error occured! ...\n";
+            $strReturn .= "An error occurred! ...\n";
         }
 
         $strReturn .= "Installing table ip2country...\n";
@@ -51,7 +51,7 @@ class class_installer_stats extends class_installer_base implements interface_in
 		$arrFields["ip2c_name"] 	= array("char100", false);
 
 		if(!$this->objDB->createTable("stats_ip2country", $arrFields, array("ip2c_ip"), array(), false))
-			$strReturn .= "An error occured! ...\n";
+			$strReturn .= "An error occurred! ...\n";
 
 
 		//register module

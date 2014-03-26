@@ -43,7 +43,7 @@ class class_installer_element_gallery extends class_installer_base implements in
 		$arrFields["gallery_text_y"] 		= array("int", true);
 
 		if(!$this->objDB->createTable("element_gallery", $arrFields, array("content_id")))
-			$strReturn .= "An error occured! ...\n";
+			$strReturn .= "An error occurred! ...\n";
 
 		//Register the element
 		$strReturn .= "Registering gallery-element...\n";
@@ -145,7 +145,7 @@ class class_installer_element_gallery extends class_installer_base implements in
                             DROP ".$this->objDB->encloseColumnName("gallery_maxh_m").",
                             DROP ".$this->objDB->encloseColumnName("gallery_maxw_m")."";
         if(!$this->objDB->_pQuery($strQuery, array()))
-            $strReturn .= "An error occured! ...\n";
+            $strReturn .= "An error occurred! ...\n";
 
         $this->updateElementVersion("gallery", "3.4.9");
         $this->updateElementVersion("galleryRandom", "3.4.9");

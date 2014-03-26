@@ -33,7 +33,7 @@ class class_installer_element_portallogin extends class_installer_base implement
         $arrFields["portallogin_editmode"]      = array("int", true);
 
 		if(!$this->objDB->createTable("element_plogin", $arrFields, array("content_id")))
-			$strReturn .= "An error occured! ...\n";
+			$strReturn .= "An error occurred! ...\n";
 
 		//Register the element
 		$strReturn .= "Registering portallogin-element...\n";

@@ -34,7 +34,7 @@ class class_installer_eventmanager extends class_installer_base implements inter
 		$arrFields["em_ev_eventstatus"]               = array("int", true);
 
 		if(!$this->objDB->createTable("em_event", $arrFields, array("em_ev_id")))
-			$strReturn .= "An error occured! ...\n";
+			$strReturn .= "An error occurred! ...\n";
 
         $strReturn .= "Installing table em_participant...\n";
 
@@ -49,7 +49,7 @@ class class_installer_eventmanager extends class_installer_base implements inter
 		$arrFields["em_pt_comment"]      = array("text", true);
 
 		if(!$this->objDB->createTable("em_participant", $arrFields, array("em_pt_id")))
-			$strReturn .= "An error occured! ...\n";
+			$strReturn .= "An error occurred! ...\n";
 
 		//register the module
 		$strSystemID = $this->registerModule(
@@ -212,7 +212,7 @@ class class_installer_eventmanager extends class_installer_base implements inter
         $strQuery = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."em_event")."
                             ADD ".$this->objDB->encloseColumnName("em_ev_eventstatus")." ".$this->objDB->getDatatype("int")." NULL";
         if(!$this->objDB->_pQuery($strQuery, array()))
-            $strReturn .= "An error occured! ...\n";
+            $strReturn .= "An error occurred! ...\n";
 
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion("eventmanager", "4.2.1");
@@ -228,12 +228,12 @@ class class_installer_eventmanager extends class_installer_base implements inter
         $strQuery = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."em_participant")."
                             ADD ".$this->objDB->encloseColumnName("em_pt_userid")." ".$this->objDB->getDatatype("char20")." NULL";
         if(!$this->objDB->_pQuery($strQuery, array()))
-            $strReturn .= "An error occured! ...\n";
+            $strReturn .= "An error occurred! ...\n";
 
         $strQuery = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."em_participant")."
                             ADD ".$this->objDB->encloseColumnName("em_pt_status")." ".$this->objDB->getDatatype("int")." NULL";
         if(!$this->objDB->_pQuery($strQuery, array()))
-            $strReturn .= "An error occured! ...\n";
+            $strReturn .= "An error occurred! ...\n";
 
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion("eventmanager", "4.2.2");

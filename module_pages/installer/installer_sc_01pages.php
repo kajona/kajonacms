@@ -329,7 +329,7 @@ class class_installer_sc_01pages implements interface_sc_installer  {
                 $arrParams[] = $strElementId;
             }
             else {
-                $arrParams[] = "An error occured";
+                $arrParams[] = "An error occurred";
                 $arrParams[] = "Maybe the requested page doesn\'t exist anymore.<br />Please try it again later.";
                 $arrParams[] = $strElementId;
             }

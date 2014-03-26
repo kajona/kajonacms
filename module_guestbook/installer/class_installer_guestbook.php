@@ -29,7 +29,7 @@ class class_installer_guestbook extends class_installer_base  {
 		$arrFields["guestbook_moderated"] = array("int", true);
 
 		if(!$this->objDB->createTable("guestbook_book", $arrFields, array("guestbook_id")))
-			$strReturn .= "An error occured! ...\n";
+			$strReturn .= "An error occurred! ...\n";
 
 		//guestbook_post----------------------------------------------------------------------------------
 		$strReturn .= "Installing table guestbook_post...\n";
@@ -43,7 +43,7 @@ class class_installer_guestbook extends class_installer_base  {
 		$arrFields["guestbook_post_date"] = array("int", true);
 
 		if(!$this->objDB->createTable("guestbook_post", $arrFields, array("guestbook_post_id")))
-			$strReturn .= "An error occured! ...\n";
+			$strReturn .= "An error occurred! ...\n";
 
 
 		//register the module
@@ -59,7 +59,7 @@ class class_installer_guestbook extends class_installer_base  {
         $arrFields["guestbook_amount"] 	= array("int", true);
 
         if(!$this->objDB->createTable("element_guestbook", $arrFields, array("content_id")))
-            $strReturn .= "An error occured! ...\n";
+            $strReturn .= "An error occurred! ...\n";
 
         //Register the element
         $strReturn .= "Registering guestbook-element...\n";

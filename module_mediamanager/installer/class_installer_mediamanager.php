@@ -29,7 +29,7 @@ class class_installer_mediamanager extends class_installer_base implements inter
 		$arrFields["repo_view_filter"]      = array("char254", true);
 
 		if(!$this->objDB->createTable("mediamanager_repo", $arrFields, array("repo_id")))
-			$strReturn .= "An error occured! ...\n";
+			$strReturn .= "An error occurred! ...\n";
 
 		$strReturn .= "Installing table mediamanager_file...\n";
 
@@ -48,7 +48,7 @@ class class_installer_mediamanager extends class_installer_base implements inter
 		$arrFields["file_ispackage"]    	= array("int", true);
 
 		if(!$this->objDB->createTable("mediamanager_file", $arrFields, array("file_id")))
-			$strReturn .= "An error occured! ...\n";
+			$strReturn .= "An error occurred! ...\n";
 
 
         $strReturn .= "Installing table mediamanager_dllog...\n";
@@ -61,7 +61,7 @@ class class_installer_mediamanager extends class_installer_base implements inter
         $arrFields["downloads_log_ip"] 		= array("char20", true);
 
         if(!$this->objDB->createTable("mediamanager_dllog", $arrFields, array("downloads_log_id")))
-            $strReturn .= "An error occured! ...\n";
+            $strReturn .= "An error occurred! ...\n";
 
 
 		//register the module
@@ -165,7 +165,7 @@ class class_installer_mediamanager extends class_installer_base implements inter
         $strQuery = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."mediamanager_file")."
                     ADD ".$this->objDB->encloseColumnName("file_ispackage")." ".$this->objDB->getDatatype("int")." NULL";
         if(!$this->objDB->_query($strQuery))
-            $strReturn .= "An error occured! ...\n";
+            $strReturn .= "An error occurred! ...\n";
 
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion($this->objMetadata->getStrTitle(), "3.4.9.1");
@@ -183,7 +183,7 @@ class class_installer_mediamanager extends class_installer_base implements inter
                     ADD ".$this->objDB->encloseColumnName("file_screen2")." ".$this->objDB->getDatatype("char254")." NULL,
                     ADD ".$this->objDB->encloseColumnName("file_screen3")." ".$this->objDB->getDatatype("char254")." NULL";
         if(!$this->objDB->_query($strQuery))
-            $strReturn .= "An error occured! ...\n";
+            $strReturn .= "An error occurred! ...\n";
 
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion($this->objMetadata->getStrTitle(), "3.4.9.2");
@@ -199,7 +199,7 @@ class class_installer_mediamanager extends class_installer_base implements inter
         $strQuery = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."mediamanager_file")."
                     CHANGE ".$this->objDB->encloseColumnName("file_cat")." ".$this->objDB->encloseColumnName("file_cat")." ".$this->objDB->getDatatype("char254")." NULL";
         if(!$this->objDB->_query($strQuery))
-            $strReturn .= "An error occured! ...\n";
+            $strReturn .= "An error occurred! ...\n";
 
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion($this->objMetadata->getStrTitle(), "3.4.9.3");

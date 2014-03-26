@@ -30,7 +30,7 @@ class class_installer_rating extends class_installer_base implements interface_i
 		$arrFields["rating_hits"]       = array("int", true);
 
 		if(!$this->objDB->createTable("rating", $arrFields, array("rating_id")))
-			$strReturn .= "An error occured! ...\n";
+			$strReturn .= "An error occurred! ...\n";
 
 
 		$strReturn .= "Installing table rating_history...\n";
@@ -43,7 +43,7 @@ class class_installer_rating extends class_installer_base implements interface_i
         $arrFields["rating_history_value"]  = array("double", true);
 
         if(!$this->objDB->createTable("rating_history", $arrFields, array("rating_history_id")))
-            $strReturn .= "An error occured! ...\n";
+            $strReturn .= "An error occurred! ...\n";
 
 
 		//register the module

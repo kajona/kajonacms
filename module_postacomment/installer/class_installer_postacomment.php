@@ -31,7 +31,7 @@ class class_installer_postacomment extends class_installer_base implements inter
 		$arrFields["postacomment_comment"] 	= array("text", true);
 
 		if(!$this->objDB->createTable("postacomment", $arrFields, array("postacomment_id")))
-			$strReturn .= "An error occured! ...\n";
+			$strReturn .= "An error occurred! ...\n";
 
 
 		//register the module

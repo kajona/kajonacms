@@ -27,7 +27,7 @@ class class_installer_votings extends class_installer_base implements interface_
 		$arrFields["votings_voting_title"]      = array("char254", true);
 
 		if(!$this->objDB->createTable("votings_voting", $arrFields, array("votings_voting_id")))
-			$strReturn .= "An error occured! ...\n";
+			$strReturn .= "An error occurred! ...\n";
 
 		//votings----------------------------------------------------------------------------------
 		$strReturn .= "Installing table votings_answer...\n";
@@ -38,7 +38,7 @@ class class_installer_votings extends class_installer_base implements interface_
 		$arrFields["votings_answer_hits"]       = array("int", true);
 
 		if(!$this->objDB->createTable("votings_answer", $arrFields, array("votings_answer_id")))
-			$strReturn .= "An error occured! ...\n";
+			$strReturn .= "An error occurred! ...\n";
 
 		//register the module
 		$strSystemID = $this->registerModule(

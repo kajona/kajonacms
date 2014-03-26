@@ -29,7 +29,7 @@ class class_installer_element_portalregistration extends class_installer_base im
 		$arrFields["portalregistration_success"]   = array("char254", true);
 
 		if(!$this->objDB->createTable("element_preg", $arrFields, array("content_id")))
-			$strReturn .= "An error occured! ...\n";
+			$strReturn .= "An error occurred! ...\n";
 
 		//Register the element
 		$strReturn .= "Registering portalregistration-element...\n";

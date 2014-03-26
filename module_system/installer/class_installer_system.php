@@ -47,7 +47,7 @@ class class_installer_system extends class_installer_base implements interface_i
         $arrFields["system_comment"] = array("char254", true);
 
         if(!$this->objDB->createTable("system", $arrFields, array("system_id"), array("system_prev_id", "system_module_nr", "system_sort", "system_owner", "system_create_date", "system_status", "system_lm_time", "system_lock_time")))
-            $strReturn .= "An error occured! ...\n";
+            $strReturn .= "An error occurred! ...\n";
 
         //Rights table ----------------------------------------------------------------------------------
         $strReturn .= "Installing table system_right...\n";
@@ -67,7 +67,7 @@ class class_installer_system extends class_installer_base implements interface_i
         $arrFields["right_changelog"] = array("text", true);
 
         if(!$this->objDB->createTable("system_right", $arrFields, array("right_id")))
-            $strReturn .= "An error occured! ...\n";
+            $strReturn .= "An error occurred! ...\n";
 
         // Modul table ----------------------------------------------------------------------------------
         $strReturn .= "Installing table system_module...\n";
@@ -86,7 +86,7 @@ class class_installer_system extends class_installer_base implements interface_i
         $arrFields["module_aspect"] = array("char254", true);
 
         if(!$this->objDB->createTable("system_module", $arrFields, array("module_id")))
-            $strReturn .= "An error occured! ...\n";
+            $strReturn .= "An error occurred! ...\n";
 
         // Date table -----------------------------------------------------------------------------------
         $strReturn .= "Installing table system_date...\n";
@@ -98,7 +98,7 @@ class class_installer_system extends class_installer_base implements interface_i
         $arrFields["system_date_special"] = array("long", true);
 
         if(!$this->objDB->createTable("system_date", $arrFields, array("system_date_id"), array("system_date_start", "system_date_end", "system_date_special")))
-            $strReturn .= "An error occured! ...\n";
+            $strReturn .= "An error occurred! ...\n";
 
         // Config table ---------------------------------------------------------------------------------
         $strReturn .= "Installing table system_config...\n";
@@ -111,7 +111,7 @@ class class_installer_system extends class_installer_base implements interface_i
         $arrFields["system_config_module"] = array("int", true);
 
         if(!$this->objDB->createTable("system_config", $arrFields, array("system_config_id")))
-            $strReturn .= "An error occured! ...\n";
+            $strReturn .= "An error occurred! ...\n";
 
 
         // User table -----------------------------------------------------------------------------------
@@ -132,7 +132,7 @@ class class_installer_system extends class_installer_base implements interface_i
         $arrFields["user_authcode"] = array("char20", true);
 
         if(!$this->objDB->createTable("user", $arrFields, array("user_id")))
-            $strReturn .= "An error occured! ...\n";
+            $strReturn .= "An error occurred! ...\n";
 
         // User table kajona subsystem  -----------------------------------------------------------------
         $strReturn .= "Installing table user_kajona...\n";
@@ -152,7 +152,7 @@ class class_installer_system extends class_installer_base implements interface_i
         $arrFields["user_date"] = array("long", true);
 
         if(!$this->objDB->createTable("user_kajona", $arrFields, array("user_id")))
-            $strReturn .= "An error occured! ...\n";
+            $strReturn .= "An error occurred! ...\n";
 
         // User group table -----------------------------------------------------------------------------
         $strReturn .= "Installing table user_group...\n";
@@ -163,7 +163,7 @@ class class_installer_system extends class_installer_base implements interface_i
         $arrFields["group_subsystem"] = array("char254", true);
 
         if(!$this->objDB->createTable("user_group", $arrFields, array("group_id")))
-            $strReturn .= "An error occured! ...\n";
+            $strReturn .= "An error occurred! ...\n";
 
 
         $strReturn .= "Installing table user_group_kajona...\n";
@@ -174,7 +174,7 @@ class class_installer_system extends class_installer_base implements interface_i
 
 
         if(!$this->objDB->createTable("user_group_kajona", $arrFields, array("group_id")))
-            $strReturn .= "An error occured! ...\n";
+            $strReturn .= "An error occurred! ...\n";
 
 
         // User group_members table ---------------------------------------------------------------------
@@ -185,7 +185,7 @@ class class_installer_system extends class_installer_base implements interface_i
         $arrFields["group_member_user_kajona_id"] = array("char20", false);
 
         if(!$this->objDB->createTable("user_kajona_members", $arrFields, array("group_member_group_kajona_id", "group_member_user_kajona_id")))
-            $strReturn .= "An error occured! ...\n";
+            $strReturn .= "An error occurred! ...\n";
 
 
         // User log table -------------------------------------------------------------------------------
@@ -201,7 +201,7 @@ class class_installer_system extends class_installer_base implements interface_i
         $arrFields["user_log_enddate"] = array("long", true);
 
         if(!$this->objDB->createTable("user_log", $arrFields, array("user_log_id"), array("user_log_sessid")))
-            $strReturn .= "An error occured! ...\n";
+            $strReturn .= "An error occurred! ...\n";
 
         // Sessionmgtm ----------------------------------------------------------------------------------
         $strReturn .= "Installing table session...\n";
@@ -217,7 +217,7 @@ class class_installer_system extends class_installer_base implements interface_i
         $arrFields["session_lasturl"] = array("char500", true);
 
         if(!$this->objDB->createTable("session", $arrFields, array("session_id"), array("session_phpid", "session_releasetime", "session_userid")))
-            $strReturn .= "An error occured! ...\n";
+            $strReturn .= "An error occurred! ...\n";
 
         // caching --------------------------------------------------------------------------------------
         $strReturn .= "Installing table cache...\n";
@@ -233,7 +233,7 @@ class class_installer_system extends class_installer_base implements interface_i
         $arrFields["cache_hits"] = array("int", true);
 
         if(!$this->objDB->createTable("cache", $arrFields, array("cache_id"), array("cache_source", "cache_hash1", "cache_leasetime", "cache_language"), false))
-            $strReturn .= "An error occured! ...\n";
+            $strReturn .= "An error occurred! ...\n";
 
         //languages -------------------------------------------------------------------------------------
         $strReturn .= "Installing table languages...\n";
@@ -244,7 +244,7 @@ class class_installer_system extends class_installer_base implements interface_i
         $arrFields["language_default"] = array("int", true);
 
         if(!$this->objDB->createTable("languages", $arrFields, array("language_id")))
-            $strReturn .= "An error occured! ...\n";
+            $strReturn .= "An error occurred! ...\n";
 
         $strReturn .= "Installing table languages_languageset...\n";
 
@@ -254,7 +254,7 @@ class class_installer_system extends class_installer_base implements interface_i
         $arrFields["languageset_systemid"] = array("char20", true);
 
         if(!$this->objDB->createTable("languages_languageset", $arrFields, array("languageset_id", "languageset_systemid")))
-            $strReturn .= "An error occured! ...\n";
+            $strReturn .= "An error occurred! ...\n";
 
         //aspects --------------------------------------------------------------------------------------
         $strReturn .= "Installing table aspects...\n";
@@ -265,7 +265,7 @@ class class_installer_system extends class_installer_base implements interface_i
         $arrFields["aspect_default"] = array("int", true);
 
         if(!$this->objDB->createTable("aspects", $arrFields, array("aspect_id")))
-            $strReturn .= "An error occured! ...\n";
+            $strReturn .= "An error occurred! ...\n";
 
         //changelog -------------------------------------------------------------------------------------
         $strReturn .= "Installing table changelog...\n";
@@ -286,7 +286,7 @@ class class_installer_system extends class_installer_base implements interface_i
         $arrFields["message_messageref"] = array("char20", true);
 
         if(!$this->objDB->createTable("messages", $arrFields, array("message_id"), array("message_user", "message_read")))
-            $strReturn .= "An error occured! ...\n";
+            $strReturn .= "An error occurred! ...\n";
 
         $arrFields = array();
         $arrFields["config_id"] = array("char20", false);
@@ -296,7 +296,7 @@ class class_installer_system extends class_installer_base implements interface_i
         $arrFields["config_bymail"] = array("int", true);
 
         if(!$this->objDB->createTable("messages_cfg", $arrFields, array("config_id")))
-            $strReturn .= "An error occured! ...\n";
+            $strReturn .= "An error occurred! ...\n";
 
 
         //Now we have to register module by module
@@ -520,7 +520,7 @@ class class_installer_system extends class_installer_base implements interface_i
         foreach($arrTables as $strOneTable) {
             if(!in_array(_dbprefix_.$strOneTable, $arrDbTables)) {
                 if(!$this->objDB->createTable($strOneTable, $arrFields, array("change_id"), array("change_date", "change_user", "change_systemid", "change_property"), false))
-                    $strReturn .= "An error occured! ...\n";
+                    $strReturn .= "An error occurred! ...\n";
             }
         }
 
@@ -679,7 +679,7 @@ class class_installer_system extends class_installer_base implements interface_i
         $strQuery = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."system")."
                             ADD ".$this->objDB->encloseColumnName("system_class")." ".$this->objDB->getDatatype("char254")." NULL";
         if(!$this->objDB->_pQuery($strQuery, array()))
-            $strReturn .= "An error occured! ...\n";
+            $strReturn .= "An error occurred! ...\n";
 
 
         $strReturn .= "Adding classes for existing records...\n";
@@ -795,7 +795,7 @@ class class_installer_system extends class_installer_base implements interface_i
         $arrFields["message_internalidentifier"] = array("char254", true);
 
         if(!$this->objDB->createTable("messages", $arrFields, array("message_id"), array("message_user", "message_read")))
-            $strReturn .= "An error occured! ...\n";
+            $strReturn .= "An error occurred! ...\n";
 
         $arrFields = array();
         $arrFields["config_id"] = array("char20", false);
@@ -805,7 +805,7 @@ class class_installer_system extends class_installer_base implements interface_i
         $arrFields["config_bymail"] = array("int", true);
 
         if(!$this->objDB->createTable("messages_cfg", $arrFields, array("config_id")))
-            $strReturn .= "An error occured! ...\n";
+            $strReturn .= "An error occurred! ...\n";
 
         $strReturn .= "Registering module...\n";
         $this->registerModule("messaging", _messaging_module_id_, "", "class_module_messaging_admin.php", $this->objMetadata->getStrVersion(), true);
@@ -823,7 +823,7 @@ class class_installer_system extends class_installer_base implements interface_i
         $strQuery = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."user_kajona")."
                             ADD ".$this->objDB->encloseColumnName("user_salt")." ".$this->objDB->getDatatype("char20")." NULL";
         if(!$this->objDB->_pQuery($strQuery, array()))
-            $strReturn .= "An error occured! ...\n";
+            $strReturn .= "An error occurred! ...\n";
 
 
         $strReturn .= "Updating module-versions...\n";
@@ -843,7 +843,7 @@ class class_installer_system extends class_installer_base implements interface_i
                             ADD ".$this->objDB->encloseColumnName("user_log_enddate")." ".$this->objDB->getDatatype("long")." NULL,
                             CHANGE ".$this->objDB->encloseColumnName("user_log_date")." ".$this->objDB->encloseColumnName("user_log_date")." ".$this->objDB->getDatatype("long")." NULL";
         if(!$this->objDB->_pQuery($strQuery, array()))
-            $strReturn .= "An error occured! ...\n";
+            $strReturn .= "An error occurred! ...\n";
 
         $this->objDB->_pQuery("ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."user_log")." ADD INDEX ( ".$this->objDB->encloseColumnName("user_log_sessid")." ) ", array());
 
@@ -1063,12 +1063,12 @@ class class_installer_system extends class_installer_base implements interface_i
         $strQuery = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."messages")."
                             ADD ".$this->objDB->encloseColumnName("message_sender")." ".$this->objDB->getDatatype("char20")." NULL";
         if(!$this->objDB->_pQuery($strQuery, array()))
-            $strReturn .= "An error occured! ...\n";
+            $strReturn .= "An error occurred! ...\n";
 
         $strQuery = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."messages")."
                             ADD ".$this->objDB->encloseColumnName("message_messageref")." ".$this->objDB->getDatatype("char20")." NULL";
         if(!$this->objDB->_pQuery($strQuery, array()))
-            $strReturn .= "An error occured! ...\n";
+            $strReturn .= "An error occurred! ...\n";
 
         $strReturn .= "Adding indices to tables..\n";
         $this->objDB->_pQuery("ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."session")." ADD INDEX ( ".$this->objDB->encloseColumnName("session_releasetime")." ) ", array());
@@ -1102,7 +1102,7 @@ class class_installer_system extends class_installer_base implements interface_i
         $strQuery = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."user")."
                             ADD ".$this->objDB->encloseColumnName("user_admin_module")." ".$this->objDB->getDatatype("char254")." NULL";
         if(!$this->objDB->_pQuery($strQuery, array()))
-            $strReturn .= "An error occured! ...\n";
+            $strReturn .= "An error occurred! ...\n";
 
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion("", "4.4");

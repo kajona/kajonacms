@@ -29,7 +29,7 @@ class class_installer_element_tellafriend extends class_installer_base implement
 		$arrFields["tellafriend_success"] 	= array("char254", true);
 
 		if(!$this->objDB->createTable("element_tellafriend", $arrFields, array("content_id")))
-			$strReturn .= "An error occured! ...\n";
+			$strReturn .= "An error occurred! ...\n";
 
 		//Register the element
 		$strReturn .= "Registering tellafriend-element...\n";

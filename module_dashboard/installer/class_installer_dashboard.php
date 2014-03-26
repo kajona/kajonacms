@@ -33,7 +33,7 @@ class class_installer_dashboard extends class_installer_base implements interfac
 		$arrFields["dashboard_content"] 	= array("text", true);
 
 		if(!$this->objDB->createTable("dashboard", $arrFields, array("dashboard_id")))
-			$strReturn .= "An error occured! ...\n";
+			$strReturn .= "An error occurred! ...\n";
         //the dashboard
         $this->registerModule("dashboard", _dashboard_module_id_, "", "class_module_dashboard_admin.php", $this->objMetadata->getStrVersion(), true, "", "class_module_dashboard_admin_xml.php");
 
@@ -121,7 +121,7 @@ class class_installer_dashboard extends class_installer_base implements interfac
                             ADD ".$this->objDB->encloseColumnName("dashboard_class")." ".$this->objDB->getDatatype("char254")." NULL,
                             ADD ".$this->objDB->encloseColumnName("dashboard_content")." ".$this->objDB->getDatatype("text")." NULL";
         if(!$this->objDB->_pQuery($strQuery, array()))
-            $strReturn .= "An error occured! ...\n";
+            $strReturn .= "An error occurred! ...\n";
 
         $strReturn .= "Migrating existing records...\n";
         $arrWidgetContent = $this->objDB->getPArray("SELECT * FROM "._dbprefix_."adminwidget", array());
@@ -146,11 +146,11 @@ class class_installer_dashboard extends class_installer_base implements interfac
         $strQuery = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."dashboard")."
                             DROP ".$this->objDB->encloseColumnName("dashboard_widgetid")." ";
         if(!$this->objDB->_pQuery($strQuery, array()))
-            $strReturn .= "An error occured! ...\n";
+            $strReturn .= "An error occurred! ...\n";
 
         $strQuery = "DROP TABLE ".$this->objDB->encloseTableName(_dbprefix_."adminwidget")."";
         if(!$this->objDB->_pQuery($strQuery, array()))
-            $strReturn .= "An error occured! ...\n";
+            $strReturn .= "An error occurred! ...\n";
 
         $this->objDB->flushQueryCache();
 

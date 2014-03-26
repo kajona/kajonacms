@@ -31,7 +31,7 @@ class class_installer_element_formular extends class_installer_base implements i
 		$arrFields["formular_error"] 	= array("text", true);
 
 		if(!$this->objDB->createTable("element_formular", $arrFields, array("content_id")))
-			$strReturn .= "An error occured! ...\n";
+			$strReturn .= "An error occurred! ...\n";
 
 		//Register the element
 		$strReturn .= "Registering formular-element...\n";

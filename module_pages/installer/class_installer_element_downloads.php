@@ -38,7 +38,7 @@ class class_installer_element_downloads extends class_installer_base implements 
 		$arrFields["download_amount"]   = array("int", true);
 
 		if(!$this->objDB->createTable("element_downloads", $arrFields, array("content_id")))
-			$strReturn .= "An error occured! ...\n";
+			$strReturn .= "An error occurred! ...\n";
 
 		//Register the element
 		$strReturn .= "Registering downloads-element...\n";

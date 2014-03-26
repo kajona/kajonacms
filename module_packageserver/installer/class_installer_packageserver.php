@@ -28,7 +28,7 @@ class class_installer_packageserver extends class_installer_base {
         $arrFields["log_date"] = array("long", true);
 
         if(!$this->objDB->createTable("packageserver_log", $arrFields, array("log_id"), array("log_date"), false))
-            $strReturn .= "An error occured! ...\n";
+            $strReturn .= "An error occurred! ...\n";
 
 
         //register the module

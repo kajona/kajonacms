@@ -30,7 +30,7 @@ class class_installer_demo extends class_installer_base implements interface_ins
         $arrFields["demo_int"] = array("int", true);
 
         if(!$this->objDB->createTable("demo_demo", $arrFields, array("demo_id"))) {
-            $strReturn .= "An error occured! ...\n";
+            $strReturn .= "An error occurred! ...\n";
         }
 
         //other demo obj-------------------------------------------------------------------------------------
@@ -43,7 +43,7 @@ class class_installer_demo extends class_installer_base implements interface_ins
         $arrFields["other_object_float"] = array("double", true);
 
         if(!$this->objDB->createTable("demo_other_object", $arrFields, array("other_object_id"))) {
-            $strReturn .= "An error occured! ...\n";
+            $strReturn .= "An error occurred! ...\n";
         }
 
         //sub demo obj-------------------------------------------------------------------------------------
@@ -55,7 +55,7 @@ class class_installer_demo extends class_installer_base implements interface_ins
         $arrFields["sub_object_int"] = array("int", true);
 
         if(!$this->objDB->createTable("demo_sub_object", $arrFields, array("sub_object_id"))) {
-            $strReturn .= "An error occured! ...\n";
+            $strReturn .= "An error occurred! ...\n";
         }
 
 

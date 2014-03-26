@@ -25,7 +25,7 @@ class class_installer_packagemanager extends class_installer_base implements int
         $arrFields["templatepack_name"] 	    = array("char254", true);
 
         if(!$this->objDB->createTable("templatepacks", $arrFields, array("templatepack_id")))
-            $strReturn .= "An error occured! ...\n";
+            $strReturn .= "An error occurred! ...\n";
 
 		//register the module
 		$this->registerModule(

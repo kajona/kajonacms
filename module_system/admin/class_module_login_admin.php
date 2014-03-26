@@ -103,7 +103,7 @@ class class_module_login_admin extends class_admin implements interface_admin {
                 $arrTemplate["loginTitle"] = $this->getLang("login_loginTitle", "user");
                 $arrTemplate["loginJsInfo"] = $this->getLang("login_loginJsInfo", "user");
                 $arrTemplate["loginCookiesInfo"] = $this->getLang("login_loginCookiesInfo", "user");
-                //An error occured?
+                //An error occurred?
                 if($this->getParam("loginerror") == 1)
                     $arrTemplate["error"] = $this->getLang("login_loginError", "user");
 

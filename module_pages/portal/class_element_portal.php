@@ -127,7 +127,7 @@ abstract class class_element_portal extends class_portal {
             }
         }
         catch(class_exception $objEx) {
-            //an error occured during content generation. redirect to error page
+            //An error occurred during content generation. redirect to error page
             $objEx->processException();
             //if available, show the error-page. on debugging-environments, the exception processing already die()d the process.
             if($this->getPagename() != _pages_errorpage_)

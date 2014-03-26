@@ -32,7 +32,7 @@ class class_installer_search extends class_installer_base implements interface_i
         $arrFields["search_search_private"] = array("int", true);
 
         if(!$this->objDB->createTable("search_search", $arrFields, array("search_search_id")))
-            $strReturn .= "An error occured! ...\n";
+            $strReturn .= "An error occurred! ...\n";
 
         //Table for search log entry
         $strReturn .= "Installing search-log table...\n";
@@ -44,7 +44,7 @@ class class_installer_search extends class_installer_base implements interface_i
 		$arrFields["search_log_language"] = array("char10", true);
 
 		if(!$this->objDB->createTable("search_log", $arrFields, array("search_log_id")))
-			$strReturn .= "An error occured! ...\n";
+			$strReturn .= "An error occurred! ...\n";
 
 
         //Table for page-element
@@ -57,7 +57,7 @@ class class_installer_search extends class_installer_base implements interface_i
         $arrFields["search_page"] 		= array("char254", true);
 
         if(!$this->objDB->createTable("element_search", $arrFields, array("content_id")))
-            $strReturn .= "An error occured! ...\n";
+            $strReturn .= "An error occurred! ...\n";
 
 		$strReturn .= "Registering module...\n";
 		//register the module
@@ -180,7 +180,7 @@ class class_installer_search extends class_installer_base implements interface_i
         $arrFields["search_search_private"] = array("int", true);
 
         if(!$this->objDB->createTable("search_search", $arrFields, array("search_search_id")))
-            $strReturn .= "An error occured! ...\n";
+            $strReturn .= "An error occurred! ...\n";
 
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion("search", "3.4.9.1");
@@ -227,7 +227,7 @@ class class_installer_search extends class_installer_base implements interface_i
         $arrFields["search_ix_system_id"] 	        = array("char20", true);
 
         if(!$this->objDB->createTable("search_ix_document", $arrFields, array("search_ix_document_id"), array("search_ix_system_id"), false))
-            $strReturn .= "An error occured! ...\n";
+            $strReturn .= "An error occurred! ...\n";
 
         $strReturn .= "Installing table search_ix_content...\n";
 
@@ -239,7 +239,7 @@ class class_installer_search extends class_installer_base implements interface_i
         $arrFields["search_ix_content_document_id"] = array("char20", true);
 
         if(!$this->objDB->createTable("search_ix_content", $arrFields, array("search_ix_content_id"), array("search_ix_content_field_name", "search_ix_content_content", "search_ix_content_document_id"), false))
-           $strReturn .= "An error occured! ...\n";
+           $strReturn .= "An error occurred! ...\n";
 
         return $strReturn;
     }

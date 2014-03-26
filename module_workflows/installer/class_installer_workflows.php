@@ -40,7 +40,7 @@ class class_installer_workflows extends class_installer_base implements interfac
 		$arrFields["workflows_text2"]          = array("text", true);
 
 		if(!$this->objDB->createTable("workflows", $arrFields, array("workflows_id"), array("workflows_state", "workflows_systemid")))
-			$strReturn .= "An error occured! ...\n";
+			$strReturn .= "An error occurred! ...\n";
 
         $strReturn .= "Installing table workflows_handler...\n";
 
@@ -52,7 +52,7 @@ class class_installer_workflows extends class_installer_base implements interfac
         $arrFields["workflows_handler_val3"]   = array("text", true);
 
 		if(!$this->objDB->createTable("workflows_handler", $arrFields, array("workflows_handler_id")))
-			$strReturn .= "An error occured! ...\n";
+			$strReturn .= "An error occurred! ...\n";
 
 		//register the module
 		$this->registerModule(
@@ -174,7 +174,7 @@ class class_installer_workflows extends class_installer_base implements interfac
             $strQuery = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."workflows")."
                               ADD ".$this->objDB->encloseColumnName("workflows_text2")." ".$this->objDB->getDatatype("text")." NULL DEFAULT NULL ";
             if(!$this->objDB->_query($strQuery))
-                $strReturn .= "An error occured! ...\n";
+                $strReturn .= "An error occurred! ...\n";
         }
 
 
