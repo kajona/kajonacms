@@ -163,7 +163,6 @@ class class_element_maps_admin extends class_element_admin implements interface_
         return $objForm;
     }
 
-
     /**
      * @param $strText
      *
