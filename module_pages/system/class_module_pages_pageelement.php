@@ -183,6 +183,7 @@ class class_module_pages_pageelement extends class_model implements interface_mo
         //and finally create the object
         if($strElementClass != "") {
             $objElement = new $strElementClass();
+            /** @var class_element_admin $objElement */
             $strForeignTable = $objElement->getTable();
 
 
@@ -587,6 +588,7 @@ class class_module_pages_pageelement extends class_model implements interface_mo
 						 		system_sort ASC";
 
                 $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array($objOnePage->getSystemid()));
+                /** @var class_module_pages_pageelement[] $arrPageElements */
                 $arrPageElements = array();
                 foreach($arrIds as $arrOneRow) {
                     $arrPageElements[] = new class_module_pages_pageelement($arrOneRow["system_id"]);

@@ -94,6 +94,9 @@ class class_module_pages_element extends class_model implements interface_model,
      */
     private $strConfigVal3 = "";
 
+    /**
+     * @return bool
+     */
     protected function deleteObjectInternal() {
 
         //delete elements in the database
@@ -107,10 +110,16 @@ class class_module_pages_element extends class_model implements interface_model,
     }
 
 
+    /**
+     * @return bool
+     */
     public function rightView() {
         return true;
     }
 
+    /**
+     * @return bool
+     */
     public function rightEdit() {
         return true;
     }
@@ -198,22 +207,37 @@ class class_module_pages_element extends class_model implements interface_model,
     }
 
 
+    /**
+     * @return string
+     */
     public function getStrName() {
         return $this->strName;
     }
 
+    /**
+     * @return string
+     */
     public function getStrClassPortal() {
         return $this->strClassPortal;
     }
 
+    /**
+     * @return string
+     */
     public function getStrClassAdmin() {
         return $this->strClassAdmin;
     }
 
+    /**
+     * @return int
+     */
     public function getIntRepeat() {
         return (int)$this->intRepeat;
     }
 
+    /**
+     * @return int
+     */
     public function getIntCachetime() {
         return $this->intCachetime;
     }
@@ -234,36 +258,64 @@ class class_module_pages_element extends class_model implements interface_model,
     }
 
 
+    /**
+     * @param string $strName
+     * @return void
+     */
     public function setStrName($strName) {
         $this->strName = $strName;
     }
 
+    /**
+     * @param string $strClassPortal
+     * @return void
+     */
     public function setStrClassPortal($strClassPortal) {
         $this->strClassPortal = $strClassPortal;
     }
 
+    /**
+     * @param string $strClassAdmin
+     * @return void
+     */
     public function setStrClassAdmin($strClassAdmin) {
         $this->strClassAdmin = $strClassAdmin;
     }
 
+    /**
+     * @param int $intRepeat
+     * @return void
+     */
     public function setIntRepeat($intRepeat) {
         $this->intRepeat = $intRepeat;
     }
 
+    /**
+     * @param int $intCachetime
+     * @return void
+     */
     public function setIntCachetime($intCachetime) {
         $this->intCachetime = $intCachetime;
     }
 
+    /**
+     * @return string
+     */
     public function getStrVersion() {
         return $this->strVersion;
     }
 
+    /**
+     * @param string $strVersion
+     * @return void
+     */
     public function setStrVersion($strVersion) {
         $this->strVersion = $strVersion;
     }
 
     /**
      * @param string $strConfigVal1
+     * @return void
      */
     public function setStrConfigVal1($strConfigVal1) {
         $this->strConfigVal1 = $strConfigVal1;
@@ -278,6 +330,7 @@ class class_module_pages_element extends class_model implements interface_model,
 
     /**
      * @param string $strConfigVal2
+     * @return void
      */
     public function setStrConfigVal2($strConfigVal2) {
         $this->strConfigVal2 = $strConfigVal2;
@@ -292,6 +345,7 @@ class class_module_pages_element extends class_model implements interface_model,
 
     /**
      * @param string $strConfigVal3
+     * @return void
      */
     public function setStrConfigVal3($strConfigVal3) {
         $this->strConfigVal3 = $strConfigVal3;
