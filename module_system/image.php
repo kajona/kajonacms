@@ -141,7 +141,7 @@ class class_flyimage {
      */
     private function resizeImage() {
         //Load the image-dimensions
-        if(is_file(_realpath_ . $this->strFilename) && uniStrpos($this->strFilename, "/files") !== false) {
+        if(is_file(_realpath_ . $this->strFilename) && (uniStrpos($this->strFilename, "/files") !== false || uniStrpos($this->strFilename, "/templates") !== false)) {
 
             //check headers, maybe execution could be terminated right here
             if(checkConditionalGetHeaders(md5(md5_file(_realpath_ . $this->strFilename) . $this->intMaxWidth . $this->intMaxHeight . $this->intFixedWidth . $this->intFixedHeight))) {
