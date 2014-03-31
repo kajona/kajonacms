@@ -29,6 +29,7 @@ class class_systeminfo_time implements interface_systeminfo {
      * @return mixed
      */
     public function getArrContent() {
+        $strOldTimezone = date_default_timezone_get();
         $objLang = class_carrier::getInstance()->getObjLang();
         $arrReturn = array();
         $arrReturn[] = array($objLang->getLang("time_phptimestamp", "system"), time());
@@ -38,6 +39,7 @@ class class_systeminfo_time implements interface_systeminfo {
         $arrReturn[] = array($objLang->getLang("time_systemtime_UTC", "system"),  date('Y-m-d H:i:s'));
         $arrReturn[] = array($objLang->getLang("time_systemzone_manual_setting", "system"),  _system_timezone_);
 
+        date_default_timezone_set($strOldTimezone);
         return $arrReturn;
     }
 
