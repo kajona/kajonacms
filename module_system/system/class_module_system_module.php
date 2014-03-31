@@ -105,11 +105,10 @@ class class_module_system_module extends class_model implements interface_model,
      * Loads all module-data into a single array.
      * Avoids multiple queries against the module-table.
      *
-     * @static
-     *
      * @param bool $bitCache
      *
      * @return array
+     * @static
      */
     private static function loadModuleData($bitCache = true) {
         $strQuery = "SELECT *
@@ -128,6 +127,7 @@ class class_module_system_module extends class_model implements interface_model,
 
     /**
      * Overwrites the base-method in order to provide a better caching-mechanism.
+     * @return void
      */
     protected function initObjectInternal() {
 
@@ -151,6 +151,16 @@ class class_module_system_module extends class_model implements interface_model,
             }
         }
     }
+
+    /**
+     * Overwritten in order to flush the cached module-data
+     * @return bool
+     */
+    protected function deleteObjectInternal() {
+        self::flushCache();
+        return parent::deleteObjectInternal();
+    }
+
 
     /**
      * Returns the name to be used when rendering the current object, e.g. in admin-lists.
@@ -231,11 +241,9 @@ class class_module_system_module extends class_model implements interface_model,
     /**
      * Counts the number of modules available
      *
-     * @static
-     *
      * @param string $strPrevid
-     *
      * @return int
+     * @static
      */
     public static function getObjectCount($strPrevid = "") {
         return count(self::loadModuleData());
@@ -296,7 +304,7 @@ class class_module_system_module extends class_model implements interface_model,
      * Creates a new instance of a module or returns an already instantiated one.
      * For modules, this is the preferred way of generating instances.
      *
-     * @param $strSystemid
+     * @param string $strSystemid
      *
      * @return class_module_system_module
      * @static
@@ -313,7 +321,7 @@ class class_module_system_module extends class_model implements interface_model,
     /**
      * Looks up the id of a module using the passed module-number
      *
-     * @param $strNr
+     * @param int $strNr
      *
      * @return string $strNr
      * @static
@@ -436,86 +444,160 @@ class class_module_system_module extends class_model implements interface_model,
         return array();
     }
 
+    /**
+     * Flushes the internal module-cache, so the rows queried from the database
+     * @return void
+     */
     public static function flushCache() {
         self::$arrModules = array();
     }
 
+    /**
+     * @return string
+     */
     public function getStrName() {
         return $this->strName;
     }
 
+    /**
+     * @return string
+     */
     public function getStrNamePortal() {
         return $this->strNamePortal;
     }
 
+    /**
+     * @return string
+     */
     public function getStrXmlNamePortal() {
         return $this->strXmlNamePortal;
     }
 
+    /**
+     * @return string
+     */
     public function getStrNameAdmin() {
         return $this->strNameAdmin;
     }
 
+    /**
+     * @return string
+     */
     public function getStrXmlNameAdmin() {
         return $this->strXmlNameAdmin;
     }
 
+    /**
+     * @return string
+     */
     public function getStrVersion() {
         return $this->strVersion;
     }
 
+    /**
+     * @return int
+     */
     public function getIntDate() {
         return $this->intDate;
     }
 
+    /**
+     * @return int
+     */
     public function getIntNavigation() {
         return $this->intNavigation;
     }
 
+    /**
+     * @return int
+     */
     public function getIntNr() {
         return $this->intNr;
     }
 
+    /**
+     * @param string $strName
+     * @return void
+     */
     public function setStrName($strName) {
         $this->strName = $strName;
     }
 
+    /**
+     * @param string $strPortal
+     * @return void
+     */
     public function setStrNamePortal($strPortal) {
         $this->strNamePortal = $strPortal;
     }
 
+    /**
+     * @param string $strXmlPortal
+     * @return void
+     */
     public function setStrXmlNamePortal($strXmlPortal) {
         $this->strXmlNamePortal = $strXmlPortal;
     }
 
+    /**
+     * @param string $strAdmin
+     * @return void
+     */
     public function setStrNameAdmin($strAdmin) {
         $this->strNameAdmin = $strAdmin;
     }
 
+    /**
+     * @param string $strXmlAdmin
+     * @return void
+     */
     public function setStrXmlNameAdmin($strXmlAdmin) {
         $this->strXmlNameAdmin = $strXmlAdmin;
     }
 
+    /**
+     * @param string $strVersion
+     * @return void
+     */
     public function setStrVersion($strVersion) {
         $this->strVersion = $strVersion;
     }
 
+    /**
+     * @param int $intDate
+     * @return void
+     */
     public function setIntDate($intDate) {
         $this->intDate = $intDate;
     }
 
+    /**
+     * @param int $intNavigation
+     * @return void
+     */
     public function setIntNavigation($intNavigation) {
         $this->intNavigation = $intNavigation;
     }
 
+    /**
+     * @param int $intNr
+     * @return void
+     */
     public function setIntNr($intNr) {
         $this->intNr = $intNr;
     }
 
+    /**
+     * @return string
+     */
     public function getStrAspect() {
         return $this->strAspect;
     }
 
+    /**
+     * @param string $strAspect
+     * @return void
+     */
     public function setStrAspect($strAspect) {
         $this->strAspect = $strAspect;
     }

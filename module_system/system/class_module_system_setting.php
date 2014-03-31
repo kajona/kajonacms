@@ -73,7 +73,7 @@ class class_module_system_setting extends class_model implements interface_model
 
     /**
      * Initalises the current object, if a systemid was given
-
+     * @return void
      */
     protected function initObjectInternal() {
         $strQuery = "SELECT * FROM " . _dbprefix_ . "system_config WHERE system_config_id = ?";
@@ -93,7 +93,8 @@ class class_module_system_setting extends class_model implements interface_model
      * @return bool
      */
     public function deleteObject() {
-        return true;
+        $strQuery = "DELETE FROM " . _dbprefix_ . "system_config WHERE system_config_id = ?";
+        return class_carrier::getInstance()->getObjDB()->_pQuery($strQuery, array($this->getSystemid()));
     }
 
 
