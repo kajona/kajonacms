@@ -78,6 +78,7 @@ class class_flyimage {
 
     /**
      * Here happens the magic: creating the image and sending it to the browser
+     * @return void
      */
     public function generateImage() {
 
@@ -94,6 +95,7 @@ class class_flyimage {
 
     /**
      * Wrapper to load a single element and generate the image
+     * @return void
      */
     private function generateMediamanagerImage() {
         if(class_module_system_module::getModuleByName("mediamanager") !== null) {
@@ -138,6 +140,7 @@ class class_flyimage {
 
     /**
      * Wrapper to the real, fast resizing
+     * @return void
      */
     private function resizeImage() {
         //Load the image-dimensions
@@ -182,7 +185,8 @@ class class_flyimage {
      * when calling image.php
      * Up to now, the size-params are ignored during the creation of a
      * captcha image
-
+     *
+     * @return void
      */
     public function generateCaptchaImage() {
         if($this->intMaxWidth == 0 || $this->intMaxWidth > 500)

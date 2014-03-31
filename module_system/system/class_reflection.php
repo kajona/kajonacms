@@ -44,6 +44,7 @@ class class_reflection {
 
     /**
      * Internal init block, called on class-inclusion
+     * @return void
      */
     public static function staticConstruct() {
         self::$strAnnotationsCacheFile = _realpath_."/project/temp/reflection.cache";
@@ -89,6 +90,9 @@ class class_reflection {
         $this->objReflectionClass = new ReflectionClass($this->strSourceClass);
     }
 
+    /**
+     * internal destructor
+     */
     function __destruct() {
         if(self::$bitCacheSaveRequired && class_config::getInstance()->getConfig('resourcecaching') == true) {
             class_apc_cache::getInstance()->addValue("reflection", self::$arrAnnotationsCache);
@@ -100,6 +104,7 @@ class class_reflection {
     /**
      * Flushes the cache-files.
      * Use this method if you added new modules / classes.
+     * @return void
      */
     public static function flushCache() {
         $objFilesystem = new class_filesystem();
@@ -111,8 +116,8 @@ class class_reflection {
      * Please be aware that this method returns an array and not only a single line.
      * Parent classes are evaluated, too.
      *
-     * @param $strAnnotation
-     * @return array
+     * @param string $strAnnotation
+     * @return string[]
      */
     public function getAnnotationValuesFromClass($strAnnotation) {
         if(isset($this->arrCurrentCache[self::$STR_CLASS_PROPERTIES_CACHE][$strAnnotation]))
@@ -254,8 +259,8 @@ class class_reflection {
      * If found, the name of the property plus the (optional) value of the property is returned.
      * The base classes are queried, too.
      *
-     * @param $strAnnotation
-     * @return array ["propertyname" => "annotationvalue"]
+     * @param string $strAnnotation
+     * @return string[] ["propertyname" => "annotationvalue"]
      */
     public function getPropertiesWithAnnotation($strAnnotation) {
 
@@ -288,8 +293,8 @@ class class_reflection {
     /**
      * Searches a given annotation for a specified property. If given, the value is returned, otherwise (when not found) null is returned.
      *
-     * @param $strProperty
-     * @param $strAnnotation
+     * @param string $strProperty
+     * @param string $strAnnotation
      *
      * @return null|string
      */
@@ -318,9 +323,9 @@ class class_reflection {
     /**
      * Searches an object for a given properties' setter method.
      * If not found, null is returned instead.
-     * @static
      * @param string $strPropertyName
      * @return null|string
+     * @static
      */
     public function getSetter($strPropertyName) {
 
@@ -359,9 +364,9 @@ class class_reflection {
     /**
      * Searches an object for a given properties' getter method.
      * If not found, null is returned instead.
-     * @static
      * @param string $strPropertyName
      * @return null|string
+     * @static
      */
     public function getGetter($strPropertyName) {
 
@@ -420,7 +425,7 @@ class class_reflection {
      *
      * @param string $strDoc
      * @param string $strAnnotation
-     * @return array
+     * @return string[]
      */
     private function searchAnnotationInDoc($strDoc, $strAnnotation) { 
         $arrAllAnnotations = $this->searchAllAnnotationsInDoc($strDoc);

@@ -19,7 +19,7 @@ class class_adminskin_imageresolver implements interface_adminskin_imageresolver
      * Converts the passed image-name into a real, resolvable code-fragment (such as an image-tag or an
      * i-tag with css-code).
      *
-     * @param $strName
+     * @param string $strName
      * @param string $strAlt
      * @param bool $bitBlockTooltip
      * @param string $strEntryId
@@ -39,6 +39,12 @@ class class_adminskin_imageresolver implements interface_adminskin_imageresolver
     }
 
 
+    /**
+     * @param string $strImage
+     * @param string $strTooltip
+     *
+     * @return null|string
+     */
     private function getFASomeImage($strImage, $strTooltip) {
 
         $strName = uniStrReplace(array(".png", ".gif"), "", $strImage);
