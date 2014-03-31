@@ -87,3 +87,6 @@ $lang["update_notification_intro"]       = "Für ein installiertes Paket ist ein
 $lang["update_notification_package"]     = "Betreffendes Paket";
 $lang["update_notification_verav"]       = "Verfügbare Version";
 $lang["update_notification_verinst"]     = "Installierte Version";
+$lang["package_delete_locked"]           = "Paket kann nicht gelöscht werden";
+$lang["package_delete_question"]         = "Möchten Sie das Paket &quot;<b>%%element_name%%</b>&quot; wirklich entfernen? Alle angelegten Inhalte gehen dabei verloren!";
+$lang["package_removal_header"]          = "Paket löschen";

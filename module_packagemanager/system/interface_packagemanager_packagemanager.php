@@ -88,4 +88,19 @@ interface interface_packagemanager_packagemanager {
      */
     public function updateDefaultTemplate();
 
+    /**
+     * Validates if the current package is removable or not.
+     * @return bool
+     */
+    public function isRemovable();
+
+    /**
+     * Removes the current package, if possible, from the system
+     *
+     * @param string &$strLog
+     *
+     * @return bool
+     */
+    public function remove(&$strLog);
+
 }

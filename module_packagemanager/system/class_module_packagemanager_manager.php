@@ -375,6 +375,28 @@ class class_module_packagemanager_manager {
         }
 
         return "Error loading metainformation for package ".$objPackage->getObjMetadata()->getStrTitle();
-
     }
+
+
+
+
+    /**
+     * @param class_module_packagemanager_metadata $objMetadata
+     *
+     * @throws class_exception
+     * @return string
+     */
+    public function removePackage(class_module_packagemanager_metadata $objMetadata) {
+
+        $strLog = "";
+
+        $objHandler = $this->getPackageManagerForPath($objMetadata->getStrPath());
+        if($objHandler->isRemovable())
+            $objHandler->remove($strLog);
+
+        return $strLog;
+    }
+
+
+
 }

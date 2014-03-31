@@ -56,6 +56,7 @@ class class_module_packagemanager_packagemanager_module implements interface_pac
      * The original should be deleted afterwards.
      *
      * @throws class_exception
+     * @return void
      */
     public function move2Filesystem() {
         $strSource = $this->objMetadata->getStrPath();
@@ -268,6 +269,106 @@ class class_module_packagemanager_packagemanager_module implements interface_pac
         }
 
         return "/core/".$strTarget;
+    }
+
+    /**
+     * Validates if the current package is removable or not.
+     *
+     * @return bool
+     */
+    public function isRemovable() {
+        $objManager = new class_module_packagemanager_manager();
+
+        if(count($objManager->getArrRequiredBy($this->getObjMetadata())) > 0)
+            return false;
+
+        if(!$this->getObjMetadata()->getBitProvidesInstaller())
+            return true;
+
+        //scan installers in order to query them on their removable status
+        $bitIsRemovable = true;
+        foreach($this->getInstaller($this->getObjMetadata()) as $objOneInstaller) {
+            if(!$objOneInstaller instanceof interface_installer_removable) {
+                $bitIsRemovable = false;
+                break;
+            }
+
+            if(!$objOneInstaller->isRemovable()) {
+                $bitIsRemovable = false;
+                break;
+            }
+        }
+
+        return $bitIsRemovable;
+    }
+
+    /**
+     * Removes the current package, if possible, from the system
+     *
+     * @param string &$strLog
+     *
+     * @return bool
+     */
+    public function remove(&$strLog) {
+
+        if(!$this->isRemovable()) {
+            return false;
+        }
+
+        $bitReturn = true;
+
+        //if we reach up until here, each installer should be an instance of interface_installer_removable
+        foreach($this->getInstaller($this->getObjMetadata()) as $objOneInstaller) {
+            if($objOneInstaller instanceof interface_installer_removable) {
+                $bitReturn = $bitReturn && $objOneInstaller->remove($strLog);
+            }
+        }
+
+        //finally: delete the the module on file-system level
+        if($bitReturn) {
+            $strLog .= "Deleting file-system parts...\n";
+            $objFilesystem = new class_filesystem();
+            $bitReturn = $objFilesystem->folderDeleteRecursive($this->getObjMetadata()->getStrPath());
+
+            if(!$bitReturn) {
+                $strLog .= "Error deleting file-system parts!. Please remove manually: ".$this->getObjMetadata()->getStrPath()."";
+            }
+        }
+
+        $strLog.= "\n\nRemoval finished ".($bitReturn ? "successfully" : " with errors")."\n";
+
+        return $bitReturn;
+    }
+
+
+    /**
+     * Internal helper, fetches all installers located within the passed package
+     *
+     * @param class_module_packagemanager_metadata $objMetadata
+     *
+     * @return interface_installer[]
+     */
+    private function getInstaller(class_module_packagemanager_metadata $objMetadata) {
+        $objFilesystem = new class_filesystem();
+        $arrInstaller = $objFilesystem->getFilelist($objMetadata->getStrPath()."/installer/", array(".php"));
+
+        if($arrInstaller === false)
+            return array();
+
+        $arrReturn = array();
+        //start with modules
+        foreach($arrInstaller as $strOneInstaller) {
+            //skip samplecontent files
+            if(uniStrpos($strOneInstaller, "class_") === false || uniStrpos($strOneInstaller, "installer") === false || uniStrpos($strOneInstaller, "_sc_") !== false)
+                continue;
+
+            $strName = uniSubstr($strOneInstaller, 0, -4);
+            /** @var $objInstaller interface_installer */
+            $objInstaller = new $strName();
+            $arrReturn[] = $objInstaller;
+        }
+
+        return $arrReturn;
     }
 
 }

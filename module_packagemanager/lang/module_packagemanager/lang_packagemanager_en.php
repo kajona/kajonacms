@@ -87,3 +87,6 @@ $lang["update_notification_intro"]       = "A new version is available for an in
 $lang["update_notification_package"]     = "Respective package";
 $lang["update_notification_verav"]       = "Available version";
 $lang["update_notification_verinst"]     = "Installed version";
+$lang["package_delete_locked"]           = "Package can't be deleted";
+$lang["package_delete_question"]         = "Do you really want to remove the package &quot;<b>%%element_name%%</b>&quot;? All contents created will get lost!";
+$lang["package_removal_header"]          = "Delete package";

@@ -69,7 +69,7 @@ interface interface_packagemanager_contentprovider {
 
     /**
      * Inits the update of the passed package, if given.
-     * Therefore, the built-in method processPackgeUpload
+     * Therefore, the built-in method processPackageUpload
      * should be used.
      *
      * @param string $strTitle

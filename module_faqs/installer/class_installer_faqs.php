@@ -13,7 +13,7 @@
  * @package module_faqs
  * @moduleId _faqs_module_id_
  */
-class class_installer_faqs extends class_installer_base implements interface_installer {
+class class_installer_faqs extends class_installer_base implements interface_installer_removable {
 
     public function install() {
 		$strReturn = "";
@@ -96,6 +96,78 @@ class class_installer_faqs extends class_installer_base implements interface_ins
 		return $strReturn;
 
 	}
+
+    /**
+     * Validates whether the current module/element is removable or not.
+     * This is the place to trigger special validations and consistency checks going
+     * beyond the common metadata-dependencies.
+     *
+     * @return bool
+     */
+    public function isRemovable() {
+        return true;
+    }
+
+    /**
+     * Removes the elements / modules handled by the current installer.
+     * Use the reference param to add a human readable logging.
+     *
+     * @param string &$strReturn
+     *
+     * @return bool
+     */
+    public function remove(&$strReturn) {
+        //delete the page-element
+        $objElement = class_module_pages_element::getElement("faqs");
+        if($objElement != null) {
+            $strReturn .= "Deleting page-element 'faqs'...\n";
+            $objElement->deleteObject();
+        }
+        else {
+            $strReturn .= "Error finding page-element 'faqs', aborting.\n";
+            return false;
+        }
+
+        //delete all faqs and categories
+        /** @var class_module_faqs_category $objOneCategory */
+        foreach(class_module_faqs_category::getObjectList() as $objOneCategory) {
+            $strReturn .= "Deleting category '".$objOneCategory->getStrDisplayName()."' ...\n";
+            if(!$objOneCategory->deleteObject()) {
+                $strReturn .= "Error deleting category, aborting.\n";
+                return false;
+            }
+        }
+
+        /** @var class_module_faqs_faq $objOneFaq*/
+        foreach(class_module_faqs_faq::getObjectList() as $objOneFaq) {
+            $strReturn .= "Deleting faq '".$objOneFaq->getStrDisplayName()."' ...\n";
+            if(!$objOneFaq->deleteObject()) {
+                $strReturn .= "Error deleting faq, aborting.\n";
+                return false;
+            }
+        }
+
+
+        //delete the module-node
+        $strReturn .= "Deleting the module-registration...\n";
+        $objModule = class_module_system_module::getModuleByName($this->objMetadata->getStrTitle(), true);
+        if(!$objModule->deleteObject()) {
+            $strReturn .= "Error deleting module, aborting.\n";
+            return false;
+        }
+
+        //delete the tables
+        foreach(array("faqs_category", "faqs", "faqs_member", "element_faqs") as $strOneTable) {
+            $strReturn .= "Dropping table ".$strOneTable."...\n";
+            if(!$this->objDB->_pQuery("DROP TABLE ".$this->objDB->encloseTableName(_dbprefix_.$strOneTable)."", array())) {
+                $strReturn .= "Error deleting table, aborting.\n";
+                return false;
+            }
+
+        }
+
+        return true;
+    }
 
 
 	public function update() {

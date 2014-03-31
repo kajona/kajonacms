@@ -58,6 +58,7 @@ class class_module_packagemanager_packagemanager_template implements interface_p
      * The original should be deleted afterwards.
      *
      * @throws class_exception
+     * @return void
      */
     public function move2Filesystem() {
         $strSource = $this->objMetadata->getStrPath();
@@ -90,10 +91,17 @@ class class_module_packagemanager_packagemanager_template implements interface_p
     }
 
 
+    /**
+     * @param class_module_packagemanager_metadata $objMetadata
+     * @return void
+     */
     public function setObjMetadata($objMetadata) {
         $this->objMetadata = $objMetadata;
     }
 
+    /**
+     * @return class_module_packagemanager_metadata
+     */
     public function getObjMetadata() {
         return $this->objMetadata;
     }
@@ -149,6 +157,40 @@ class class_module_packagemanager_packagemanager_template implements interface_p
      */
     public function updateDefaultTemplate() {
         return true;
+    }
+
+    /**
+     * Validates if the current package is removable or not.
+     *
+     * @return bool
+     */
+    public function isRemovable() {
+        return _packagemanager_defaulttemplate_ != $this->getObjMetadata()->getStrTitle();
+    }
+
+    /**
+     * Removes the current package, if possible, from the system
+     *
+     * @param string &$strLog
+     *
+     * @return bool
+     */
+    public function remove(&$strLog) {
+
+        if(!$this->isRemovable()) {
+            return false;
+        }
+
+        /** @var class_module_packagemanager_template[] $arrTemplates */
+        $arrTemplates = class_module_packagemanager_template::getObjectList();
+
+        foreach($arrTemplates as $objOneTemplate) {
+            if($objOneTemplate->getStrName() == $this->getObjMetadata()->getStrTitle()) {
+                return $objOneTemplate->deleteObject();
+            }
+        }
+
+        return false;
     }
 
 }

@@ -33,10 +33,12 @@ class class_module_packagemanager_template extends class_model implements interf
      */
     private $objMetadata = null;
 
+    /**
+     * @return string
+     */
     public function getStrDisplayName() {
         return $this->getStrName();
     }
-
 
     /**
      * Returns the icon the be used in lists.
@@ -81,7 +83,7 @@ class class_module_packagemanager_template extends class_model implements interf
 
     /**
      * Initialises the current object, if a systemid was given
-
+     * @return void
      */
     protected function initObjectInternal() {
         parent::initObjectInternal();
@@ -106,6 +108,7 @@ class class_module_packagemanager_template extends class_model implements interf
      * Synchronized the list of template-packs available in the filesystem
      * with the list of packs stored at the database.
      *
+     * @return void
      * @static
      */
     public static function syncTemplatepacks() {
@@ -114,6 +117,7 @@ class class_module_packagemanager_template extends class_model implements interf
         $arrFolders = $objFilesystem->getCompleteList("/templates");
 
         //scan packs installed
+        /** @var class_module_packagemanager_template[] $arrPacksInstalled */
         $arrPacksInstalled = self::getObjectList();
 
         foreach($arrFolders["folders"] as $strOneFolder) {
@@ -140,6 +144,12 @@ class class_module_packagemanager_template extends class_model implements interf
         }
     }
 
+    /**
+     * @param int $intRecordStatus
+     * @param bool $bitFireStatusChangeEvent
+     *
+     * @return bool
+     */
     public function setIntRecordStatus($intRecordStatus, $bitFireStatusChangeEvent = true) {
         if($intRecordStatus == 1) {
             //if set to active, mark all other packs as invalid
@@ -165,6 +175,9 @@ class class_module_packagemanager_template extends class_model implements interf
     }
 
 
+    /**
+     * @return class_module_packagemanager_metadata|null
+     */
     private function getMetadata() {
 
         $objMetadata = new class_module_packagemanager_metadata();
@@ -179,10 +192,17 @@ class class_module_packagemanager_template extends class_model implements interf
         return null;
     }
 
+    /**
+     * @param string $strName
+     * @return void
+     */
     public function setStrName($strName) {
         $this->strName = $strName;
     }
 
+    /**
+     * @return string
+     */
     public function getStrName() {
         return $this->strName;
     }

@@ -12,6 +12,7 @@
  * the current installer.
  *
  * @package module_system
+ * @since 4.5
  */
 interface interface_installer_removable extends interface_installer {
 

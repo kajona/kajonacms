@@ -27,10 +27,10 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
      */
     public function getOutputModuleNavi() {
         $arrReturn = array();
-        $arrReturn[] = array("view", class_link::getLinkAdmin($this->arrModule["modul"], "list", "", $this->getLang("action_list"), "", "", true, "adminnavi"));
-        $arrReturn[] = array("view", class_link::getLinkAdmin($this->arrModule["modul"], "listTemplates", "", $this->getLang("action_list_templates"), "", "", true, "adminnavi"));
+        $arrReturn[] = array("view", class_link::getLinkAdmin($this->getArrModule("modul"), "list", "", $this->getLang("action_list"), "", "", true, "adminnavi"));
+        $arrReturn[] = array("view", class_link::getLinkAdmin($this->getArrModule("modul"), "listTemplates", "", $this->getLang("action_list_templates"), "", "", true, "adminnavi"));
         $arrReturn[] = array("", "");
-        $arrReturn[] = array("right", class_link::getLinkAdmin("right", "change", "&changemodule=".$this->arrModule["modul"],  $this->getLang("commons_module_permissions"), "", "", true, "adminnavi"));
+        $arrReturn[] = array("right", class_link::getLinkAdmin("right", "change", "&changemodule=".$this->getArrModule("modul"),  $this->getLang("commons_module_permissions"), "", "", true, "adminnavi"));
 
         return $arrReturn;
     }
@@ -55,8 +55,7 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
         class_module_packagemanager_template::syncTemplatepacks();
 
         $strReturn = "";
-
-        $strReturn .= $this->objToolkit->formHeader(class_link::getLinkAdminHref($this->arrModule["modul"]), "list");
+        $strReturn .= $this->objToolkit->formHeader(class_link::getLinkAdminHref($this->getArrModule("modul")), "list");
         $strReturn .= $this->objToolkit->formInputText("packagelist_filter", $this->getLang("packagelist_filter"), $this->objSession->getSession($this->STR_FILTER_SESSION_KEY));
         $strReturn .= $this->objToolkit->formInputSubmit();
         $strReturn .= $this->objToolkit->formInputHidden("doFilter", "1");
@@ -105,6 +104,13 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
             $strActions .= $this->objToolkit->listButton(
                 class_link::getLinkAdminDialog($this->getArrModule("modul"), "showInfo", "&package=".$objOneMetadata->getStrTitle(), $this->getLang("package_info"), $this->getLang("package_info"), "icon_lens", $objOneMetadata->getStrTitle())
             );
+
+            if($objHandler->isRemovable($objOneMetadata)) {
+                $strActions .= $this->objToolkit->listDeleteButton($objOneMetadata->getStrTitle(), $this->getLang("package_delete_question"), class_link::getLinkAdminHref($this->getArrModule("modul"), "deletePackage", "&package=".$objOneMetadata->getStrTitle()));
+            }
+            else {
+                $strActions .= $this->objToolkit->listButton(class_adminskin_helper::getAdminImage("icon_deleteLocked", $this->getLang("package_delete_locked")));
+            }
 
 
             $strActions .= $this->objToolkit->listButton(
@@ -346,13 +352,22 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
 
         $strImages = "";
         foreach($objHandler->getObjMetadata()->getArrScreenshots() as $strOneScreenshot) {
-            $objZip = new class_zip();
-            $objImage = $objZip->getFileFromArchive($objHandler->getObjMetadata()->getStrPath(), $strOneScreenshot);
-            if($objImage !== false) {
-                $strImage = _images_cachepath_."/".generateSystemid().uniSubstr($strOneScreenshot, -4);
-                file_put_contents(_realpath_.$strImage, $objImage);
-                $strImages .= "<img src='"._webpath_."/image.php?image=".urlencode($strImage)."&maxWidth=300&maxHeight=200' alt='".$strOneScreenshot."' />&nbsp;";
+
+            $strImage = "";
+            if(uniSubstr($objHandler->getObjMetadata()->getStrPath(), 0, -4) == ".zip") {
+                $objZip = new class_zip();
+                $objImage = $objZip->getFileFromArchive($objHandler->getObjMetadata()->getStrPath(), $strOneScreenshot);
+                if($objImage !== false) {
+                    $strImage = _images_cachepath_."/".generateSystemid().uniSubstr($strOneScreenshot, -4);
+                    file_put_contents(_realpath_.$strImage, $objImage);
+                }
             }
+            else {
+                $strImage = $objHandler->getObjMetadata()->getStrPath()."/".$strOneScreenshot;
+            }
+
+            if($strImage != "")
+                $strImages .= "<img src='"._webpath_."/image.php?image=".urlencode($strImage)."&maxWidth=300&maxHeight=200' alt='".$strOneScreenshot."' />&nbsp;";
         }
         $arrRows[] = array($this->getLang("package_screenshots"), $strImages);
 
@@ -360,8 +375,43 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
         return $strReturn;
     }
 
+    /**
+     * Triggers the removal of a single package
+     *
+     * @permissions edit,delete
+     * @throws class_exception
+     * @return string
+     */
+    protected function actionDeletePackage() {
+        $strReturn = "";
+
+        //fetch the package
+        $objManager = new class_module_packagemanager_manager();
+        $objPackage = $objManager->getPackage($this->getParam("package"));
+
+        if($objPackage == null)
+            throw new class_exception("package not found", class_exception::$level_ERROR);
+
+        $strLog = $objManager->removePackage($objPackage);
+
+        if($strLog == "") {
+            $this->adminReload(class_link::getLinkAdminHref($this->getArrModule("modul"), "list"));
+            return "";
+        }
+
+        $strReturn .= $this->objToolkit->formHeadline($this->getLang("package_removal_header"));
+        $strReturn .= $this->objToolkit->getPreformatted(array($strLog));
+
+        $strReturn .= $this->objToolkit->formHeader(class_link::getLinkAdminHref($this->getArrModule("modul"), "list"), "", "");
+        $strReturn .= $this->objToolkit->formInputSubmit($this->getLang("commons_ok"));
+        $strReturn .= $this->objToolkit->formClose();
+
+        return $strReturn;
+    }
+
 
     /**
+     * Triggers the installation of a package
      * @permissions edit
      * @return string
      */
