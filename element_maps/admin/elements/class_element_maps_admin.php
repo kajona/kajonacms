@@ -66,6 +66,10 @@ class class_element_maps_admin extends class_element_admin implements interface_
      */
     private $strText;
 
+    /**
+     * Creates the backend form to enter a new map configuration
+     * @return class_admin_formgenerator|null
+     */
     public function getAdminForm() {
         $objForm = parent::getAdminForm();
 
