@@ -120,7 +120,7 @@ class class_installer_tags extends class_installer_base implements interface_ins
             class_module_system_setting::getConfigByName("_tags_defaultprivate_")->deleteObject();
 
         //delete the page-element
-        if(class_module_system_module::getModuleByName("pages") !== null && class_module_pages_element::getElement("tags") == null) {
+        if(class_module_system_module::getModuleByName("pages") !== null && class_module_pages_element::getElement("tags") != null) {
             $objElement = class_module_pages_element::getElement("tags");
             if($objElement != null) {
                 $strReturn .= "Deleting page-element 'tags'...\n";

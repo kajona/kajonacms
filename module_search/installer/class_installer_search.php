@@ -111,7 +111,7 @@ class class_installer_search extends class_installer_base implements interface_i
      */
     public function remove(&$strReturn) {
         //delete the page-element
-        if(class_module_system_module::getModuleByName("pages") !== null && class_module_pages_element::getElement("search") == null) {
+        if(class_module_system_module::getModuleByName("pages") !== null && class_module_pages_element::getElement("search") != null) {
             $objElement = class_module_pages_element::getElement("search");
             if($objElement != null) {
                 $strReturn .= "Deleting page-element 'search'...\n";
