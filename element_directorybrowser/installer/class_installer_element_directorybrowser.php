@@ -13,7 +13,7 @@
  * @package element_directorybrowser
  * @moduleId _pages_content_modul_id_
  */
-class class_installer_element_directorybrowser extends class_installer_base implements interface_installer {
+class class_installer_element_directorybrowser extends class_elementinstaller_base implements interface_installer_removable {
 
 	public function install() {
         $strReturn = "";

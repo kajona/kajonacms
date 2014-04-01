@@ -14,7 +14,7 @@
  * @author sidler@mulchprod.de
  * @moduleId _pages_content_modul_id_
  */
-class class_installer_element_tellafriend extends class_installer_base implements interface_installer {
+class class_installer_element_tellafriend extends class_elementinstaller_base implements interface_installer {
 
 	public function install() {
 		$strReturn = "";
@@ -51,6 +51,20 @@ class class_installer_element_tellafriend extends class_installer_base implement
 		return $strReturn;
 	}
 
+    public function remove(&$strReturn) {
+        $bitReturn = parent::remove($strReturn);
+
+        //delete the tables
+        foreach(array("element_tellafriend") as $strOneTable) {
+            $strReturn .= "Dropping table ".$strOneTable."...\n";
+            if(!$this->objDB->_pQuery("DROP TABLE ".$this->objDB->encloseTableName(_dbprefix_.$strOneTable)."", array())) {
+                $strReturn .= "Error deleting table, aborting.\n";
+                return false;
+            }
+        }
+
+        return $bitReturn;
+    }
 
 	public function update() {
         $strReturn = "";

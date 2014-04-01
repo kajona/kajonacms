@@ -15,7 +15,7 @@
  *
  * @moduleId _demo_module_id_
  */
-class class_installer_demo extends class_installer_base implements interface_installer {
+class class_installer_demo extends class_installer_base implements interface_installer_removable {
 
     public function install() {
         $strReturn = "";
@@ -81,6 +81,66 @@ class class_installer_demo extends class_installer_base implements interface_ins
         }
 
         return $strReturn;
+    }
+
+    /**
+     * Validates whether the current module/element is removable or not.
+     * This is the place to trigger special validations and consistency checks going
+     * beyond the common metadata-dependencies.
+     *
+     * @return bool
+     */
+    public function isRemovable() {
+        return true;
+    }
+
+    /**
+     * Removes the elements / modules handled by the current installer.
+     * Use the reference param to add a human readable logging.
+     *
+     * @param string &$strReturn
+     *
+     * @return bool
+     */
+    public function remove(&$strReturn) {
+        /** @var class_module_demo_demo $objOneObject*/
+        foreach(class_module_demo_demo::getObjectList() as $objOneObject) {
+            $strReturn .= "Deleting object '".$objOneObject->getStrDisplayName()."' ...\n";
+            if(!$objOneObject->deleteObject()) {
+                $strReturn .= "Error deleting object, aborting.\n";
+                return false;
+            }
+        }
+
+        /** @var class_module_demo_other_object $objOneObject*/
+        foreach(class_module_demo_other_object::getObjectList() as $objOneObject) {
+            $strReturn .= "Deleting object '".$objOneObject->getStrDisplayName()."' ...\n";
+            if(!$objOneObject->deleteObject()) {
+                $strReturn .= "Error deleting object, aborting.\n";
+                return false;
+            }
+        }
+
+        //delete the module-node
+        $strReturn .= "Deleting the module-registration...\n";
+        $objModule = class_module_system_module::getModuleByName($this->objMetadata->getStrTitle(), true);
+        if(!$objModule->deleteObject()) {
+            $strReturn .= "Error deleting module, aborting.\n";
+            return false;
+        }
+
+        //delete the tables
+        foreach(array("demo_demo", "demo_other_object", "demo_sub_object") as $strOneTable) {
+            $strReturn .= "Dropping table ".$strOneTable."...\n";
+            if(!$this->objDB->_pQuery("DROP TABLE ".$this->objDB->encloseTableName(_dbprefix_.$strOneTable)."", array())) {
+                $strReturn .= "Error deleting table, aborting.\n";
+                return false;
+            }
+
+        }
+
+        return true;
+
     }
 
 

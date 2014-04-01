@@ -14,7 +14,7 @@
  * @author sidler@mulchprod.de
  * @moduleId _pages_content_modul_id_
  */
-class class_installer_element_lastmodified extends class_installer_base implements interface_installer {
+class class_installer_element_lastmodified extends class_elementinstaller_base implements interface_installer {
 
 	public function install() {
 		$strReturn = "";
