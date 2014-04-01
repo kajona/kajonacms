@@ -141,7 +141,7 @@ class class_installer_search extends class_installer_base implements interface_i
         }
 
         //delete the tables
-        foreach(array("search_search", "search_log", "element_search") as $strOneTable) {
+        foreach(array("search_search", "search_log", "element_search", "search_ix_document", "search_ix_content") as $strOneTable) {
             $strReturn .= "Dropping table ".$strOneTable."...\n";
             if(!$this->objDB->_pQuery("DROP TABLE ".$this->objDB->encloseTableName(_dbprefix_.$strOneTable)."", array())) {
                 $strReturn .= "Error deleting table, aborting.\n";
