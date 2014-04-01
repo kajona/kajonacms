@@ -14,7 +14,7 @@
  * @author sidler@mulchprod.de
  * @moduleId _votings_module_id_
  */
-class class_installer_votings extends class_installer_base implements interface_installer {
+class class_installer_votings extends class_installer_base implements interface_installer_removable {
 
     public function install() {
 		$strReturn = "";
@@ -42,7 +42,7 @@ class class_installer_votings extends class_installer_base implements interface_
 
 		//register the module
 		$strSystemID = $this->registerModule(
-            "votings",
+            $this->objMetadata->getStrTitle(),
             _votings_module_id_,
             "class_module_votings_portal.php",
             "class_module_votings_admin.php",
@@ -80,9 +80,69 @@ class class_installer_votings extends class_installer_base implements interface_
 		return $strReturn;
 	}
 
+    /**
+     * Validates whether the current module/element is removable or not.
+     * This is the place to trigger special validations and consistency checks going
+     * beyond the common metadata-dependencies.
+     *
+     * @return bool
+     */
+    public function isRemovable() {
+        return true;
+    }
+
+    /**
+     * Removes the elements / modules handled by the current installer.
+     * Use the reference param to add a human readable logging.
+     *
+     * @param string &$strReturn
+     *
+     * @return bool
+     */
+    public function remove(&$strReturn) {
+        //delete the page-element
+        $objElement = class_module_pages_element::getElement("votings");
+        if($objElement != null) {
+            $strReturn .= "Deleting page-element 'votings'...\n";
+            $objElement->deleteObject();
+        }
+        else {
+            $strReturn .= "Error finding page-element 'votings', aborting.\n";
+            return false;
+        }
+
+        /** @var class_module_votings_voting $objOneObject */
+        foreach(class_module_votings_voting::getObjectList() as $objOneObject) {
+            $strReturn .= "Deleting object '".$objOneObject->getStrDisplayName()."' ...\n";
+            if(!$objOneObject->deleteObject()) {
+                $strReturn .= "Error deleting object, aborting.\n";
+                return false;
+            }
+        }
+
+        //delete the module-node
+        $strReturn .= "Deleting the module-registration...\n";
+        $objModule = class_module_system_module::getModuleByName($this->objMetadata->getStrTitle(), true);
+        if(!$objModule->deleteObject()) {
+            $strReturn .= "Error deleting module, aborting.\n";
+            return false;
+        }
+
+        //delete the tables
+        foreach(array("votings_voting", "votings_answer") as $strOneTable) {
+            $strReturn .= "Dropping table ".$strOneTable."...\n";
+            if(!$this->objDB->_pQuery("DROP TABLE ".$this->objDB->encloseTableName(_dbprefix_.$strOneTable)."", array())) {
+                $strReturn .= "Error deleting table, aborting.\n";
+                return false;
+            }
+
+        }
+
+        return true;
+    }
 
 
-	public function update() {
+    public function update() {
 	    $strReturn = "";
         //check installed version and to which version we can update
         $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);

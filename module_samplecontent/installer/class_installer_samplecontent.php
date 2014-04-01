@@ -15,7 +15,7 @@
  * @package module_samplecontent
  * @moduleId _samplecontent_modul_id_
  */
-class class_installer_samplecontent extends class_installer_base implements interface_installer {
+class class_installer_samplecontent extends class_installer_base implements interface_installer_removable {
 
 
     private $strContentLanguage;
@@ -77,7 +77,44 @@ class class_installer_samplecontent extends class_installer_base implements inte
 		return $strReturn;
 	}
 
-	public function update() {
+    /**
+     * Validates whether the current module/element is removable or not.
+     * This is the place to trigger special validations and consistency checks going
+     * beyond the common metadata-dependencies.
+     *
+     * @return bool
+     */
+    public function isRemovable() {
+        return true;
+    }
+
+    /**
+     * Removes the elements / modules handled by the current installer.
+     * Use the reference param to add a human readable logging.
+     *
+     * @param string &$strReturn
+     *
+     * @return bool
+     */
+    public function remove(&$strReturn) {
+
+        $strReturn .= "Removing the samplecontent module will NOT removed the contents created during installation! Only the module itself will be removed!\n";
+
+        //delete the module-node
+        $strReturn .= "Deleting the module-registration...\n";
+        $objModule = class_module_system_module::getModuleByName($this->objMetadata->getStrTitle(), true);
+        if(!$objModule->deleteObject()) {
+            $strReturn .= "Error deleting module, aborting.\n";
+            return false;
+        }
+
+
+
+        return true;
+    }
+
+
+    public function update() {
 	    $strReturn = "";
         //check installed version and to which version we can update
         $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);

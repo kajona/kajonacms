@@ -14,7 +14,7 @@
  * @author sidler@mulchprod.de
  * @moduleId _ldap_module_id_
  */
-class class_installer_ldap extends class_installer_base implements interface_installer {
+class class_installer_ldap extends class_installer_base implements interface_installer_removable {
 
     public function install() {
 		$strReturn = "";
@@ -45,11 +45,80 @@ class class_installer_ldap extends class_installer_base implements interface_ins
 
 	}
 
-	public function postInstall() {
-		return "";
-	}
+    /**
+     * Validates whether the current module/element is removable or not.
+     * This is the place to trigger special validations and consistency checks going
+     * beyond the common metadata-dependencies.
+     *
+     * @return bool
+     */
+    public function isRemovable() {
+        return uniStrpos(class_config::getInstance()->getConfig("loginproviders"), "ldap") === false;
+    }
 
-	public function update() {
+    /**
+     * Removes the elements / modules handled by the current installer.
+     * Use the reference param to add a human readable logging.
+     *
+     * @param string &$strReturn
+     *
+     * @return bool
+     */
+    public function remove(&$strReturn) {
+
+        //remove the workflow
+        if(class_module_system_module::getModuleByName("workflows") !== null) {
+            foreach(class_module_workflows_workflow::getWorkflowsForClass("class_workflow_ldap_sync") as $objOneWorkflow) {
+                if(!$objOneWorkflow->deleteObject()) {
+                    $strReturn .= "Error deleting workflow, aborting.\n";
+                    return false;
+                }
+            }
+
+            $objHandler = class_module_workflows_handler::getHandlerByClass("class_workflow_ldap_sync");
+            if(!$objHandler->deleteObject()) {
+                $strReturn .= "Error deleting workflow handler, aborting.\n";
+                return false;
+            }
+        }
+
+        //fetch associated users
+        foreach($this->objDB->getPArray("SELECT * FROM "._dbprefix_."user_ldap", array()) as $arrOneRow) {
+            $objOneUser = new class_module_user_user($arrOneRow["user_ldap_id"]);
+            echo "Deleting ldap user ".$objOneUser->getStrDisplayName()."...\n";
+            $objOneUser->deleteObject();
+        }
+
+        //fetch associated groups
+        foreach($this->objDB->getPArray("SELECT * FROM "._dbprefix_."user_group_ldap", array()) as $arrOneRow) {
+            $objOneUser = new class_module_user_group($arrOneRow["group_ldap_id"]);
+            echo "Deleting ldap group ".$objOneUser->getStrDisplayName()."...\n";
+            $objOneUser->deleteObject();
+        }
+
+        //delete the module-node
+        $strReturn .= "Deleting the module-registration...\n";
+        $objModule = class_module_system_module::getModuleByName($this->objMetadata->getStrTitle(), true);
+        if(!$objModule->deleteObject()) {
+            $strReturn .= "Error deleting module, aborting.\n";
+            return false;
+        }
+
+        //delete the tables
+        foreach(array("user_group_ldap", "user_ldap") as $strOneTable) {
+            $strReturn .= "Dropping table ".$strOneTable."...\n";
+            if(!$this->objDB->_pQuery("DROP TABLE ".$this->objDB->encloseTableName(_dbprefix_.$strOneTable)."", array())) {
+                $strReturn .= "Error deleting table, aborting.\n";
+                return false;
+            }
+
+        }
+
+        return true;
+    }
+
+
+    public function update() {
 	    $strReturn = "";
         //check installed version and to which version we can update
         $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);

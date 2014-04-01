@@ -394,6 +394,8 @@ class class_module_packagemanager_manager {
         if($objHandler->isRemovable())
             $objHandler->remove($strLog);
 
+        class_resourceloader::getInstance()->flushCache();
+
         return $strLog;
     }
 

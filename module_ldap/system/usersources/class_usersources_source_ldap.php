@@ -10,17 +10,20 @@
 /**
  * Global entry into the ldap-subsystem.
  * Mappes all calls and redirects them to the directory-services.
- * 
+ *
  * @author sidler@mulchprod.de
  * @since 3.4.1
  * @package module_ldap
  */
-class class_usersources_source_ldap  implements interface_usersources_usersource {
-    
+class class_usersources_source_ldap implements interface_usersources_usersource {
+
     private $objDB;
-    
+
     private $objLdap;
-    
+
+    /**
+     * Default constructor
+     */
     public function __construct() {
         $this->objDB = class_carrier::getInstance()->getObjDB();
         $this->objLdap = class_ldap::getInstance();
@@ -31,18 +34,18 @@ class class_usersources_source_ldap  implements interface_usersources_usersource
      * The password is unencrypted, each source should take care of its own encryption.
      *
      * @param interface_usersources_user|class_usersources_user_ldap $objUser
-     * @param $strPassword
+     * @param string $strPassword
      *
      * @return bool
      */
-	public function authenticateUser(interface_usersources_user $objUser, $strPassword) {
+    public function authenticateUser(interface_usersources_user $objUser, $strPassword) {
         if($objUser instanceof class_usersources_user_ldap) {
             $bitReturn = $this->objLdap->authenticateUser($objUser->getStrDN(), $strPassword);
-            
+
             //synchronize the local data with the ldap-data
             if($bitReturn === true) {
                 $arrSingleUser = $this->objLdap->getUserDetailsByDN($objUser->getStrDN());
-                
+
                 if($arrSingleUser !== false) {
                     if($objUser instanceof class_usersources_user_ldap) {
                         $objUser->setStrFamilyname($arrSingleUser["familyname"]);
@@ -54,45 +57,56 @@ class class_usersources_source_ldap  implements interface_usersources_usersource
 
                 }
             }
-            
+
             return $bitReturn;
         }
-        
-        return false;
-    }
 
-    public function getCreationOfGroupsAllowed() {
-        return true;
-    }
-
-    public function getCreationOfUsersAllowed() {
-        return false;
-    }
-    
-	public function getMembersEditable() {
         return false;
     }
 
     /**
-	 * Loads the group identified by the passed id
-     * 
-	 * @param string $strId
+     * @return bool
+     */
+    public function getCreationOfGroupsAllowed() {
+        return true;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getCreationOfUsersAllowed() {
+        return false;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getMembersEditable() {
+        return false;
+    }
+
+    /**
+     * Loads the group identified by the passed id
+     *
+     * @param string $strId
+     *
      * @return interface_usersources_group or null
-	 */
+     */
     public function getGroupById($strId) {
         $strQuery = "SELECT group_id FROM "._dbprefix_."user_group WHERE group_id = ?";
-        
-        $arrIds = $this->objDB->getPRow($strQuery, array($strId));
-		if(isset($arrIds["group_id"]) && validateSystemid($arrIds["group_id"]))
-            return new class_usersources_group_ldap($arrIds["group_id"]);
 
-		return null;
+        $arrIds = $this->objDB->getPRow($strQuery, array($strId));
+        if(isset($arrIds["group_id"]) && validateSystemid($arrIds["group_id"])) {
+            return new class_usersources_group_ldap($arrIds["group_id"]);
+        }
+
+        return null;
     }
 
     /**
      * Returns an empty group, e.g. to fetch the fields available and
      * in order to fill a new one.
-     * 
+     *
      * @return interface_usersources_group
      */
     public function getNewGroup() {
@@ -102,7 +116,7 @@ class class_usersources_source_ldap  implements interface_usersources_usersource
     /**
      * Returns an empty user, e.g. to fetch the fields available and
      * in order to fill a new one.
-     * 
+     *
      * @return interface_usersources_user
      */
     public function getNewUser() {
@@ -110,53 +124,59 @@ class class_usersources_source_ldap  implements interface_usersources_usersource
     }
 
     /**
-	 * Loads the iser identified by the passed id
-     * 
-	 * @param string $strId
+     * Loads the iser identified by the passed id
+     *
+     * @param string $strId
+     *
      * @return interface_usersources_user or null
-	 */
+     */
     public function getUserById($strId) {
         $strQuery = "SELECT user_id FROM "._dbprefix_."user WHERE user_id = ? AND user_subsystem = 'ldap'";
 
         $arrIds = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array($strId));
-        if(isset($arrIds["user_id"]) && validateSystemid($arrIds["user_id"]))
+        if(isset($arrIds["user_id"]) && validateSystemid($arrIds["user_id"])) {
             return new class_usersources_user_ldap($arrIds["user_id"]);
+        }
 
-		return null;
+        return null;
     }
-    
+
     /**
-	 * Loads the user identified by the passed dn
-     * 
-	 * @param string $strUserDn
+     * Loads the user identified by the passed dn
+     *
+     * @param string $strUserDn
+     *
      * @return interface_usersources_user or null
-	 */
+     */
     public function getUserByDn($strUserDn) {
         $strQuery = "SELECT user_ldap_id FROM "._dbprefix_."user_ldap WHERE user_ldap_dn = ?";
 
         $arrIds = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array($strUserDn));
-        if(isset($arrIds["user_ldap_id"]) && validateSystemid($arrIds["user_ldap_id"]))
+        if(isset($arrIds["user_ldap_id"]) && validateSystemid($arrIds["user_ldap_id"])) {
             return new class_usersources_user_ldap($arrIds["user_ldap_id"]);
+        }
 
-		return null;
+        return null;
     }
-    
-    
+
+
     /**
-	 * Loads the user identified by the passed name.
+     * Loads the user identified by the passed name.
      * This method may be called during the authentication of users and may be used as a hook
      * in order to create new users in the central database not yet existing.
-     * 
-	 * @param string $strUsername
+     *
+     * @param string $strUsername
+     *
      * @return interface_usersources_user or null
-	 */
-	public function getUserByUsername($strUsername) {
+     */
+    public function getUserByUsername($strUsername) {
         $strQuery = "SELECT user_id FROM "._dbprefix_."user WHERE user_username = ? AND user_subsystem = 'ldap'";
 
         $arrIds = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array($strUsername));
-        if(isset($arrIds["user_id"]) && validateSystemid($arrIds["user_id"]))
+        if(isset($arrIds["user_id"]) && validateSystemid($arrIds["user_id"])) {
             return new class_usersources_user_ldap($arrIds["user_id"]);
-        
+        }
+
         //user not found. search for a matching user in the ldap and add a possible match to the system
         $arrDetails = $this->objLdap->getUserdetailsByName($strUsername);
         if($arrDetails !== false && count($arrDetails) == 1) {
@@ -176,17 +196,19 @@ class class_usersources_source_ldap  implements interface_usersources_usersource
                 $objSourceUser->setStrGivenname($arrSingleUser["givenname"]);
                 $objSourceUser->setStrEmail($arrSingleUser["mail"]);
                 $objSourceUser->updateObjectToDb();
-                
+
                 $this->objDB->flushQueryCache();
             }
-            
+
             return $objUser;
         }
-        
+
+        return null;
     }
-    
+
     /**
      * Returns an array of group-ids provided by the current source.
+     *
      * @return string[]
      */
     public function getAllGroupIds() {
@@ -200,12 +222,13 @@ class class_usersources_source_ldap  implements interface_usersources_usersource
         foreach($arrRows as $arrOneRow) {
             $arrReturn[] = $arrOneRow["group_id"];
         }
-        
+
         return $arrReturn;
     }
-    
+
     /**
      * Returns an array of user-ids provided by the current source.
+     *
      * @return string[]
      */
     public function getAllUserIds() {
@@ -219,35 +242,36 @@ class class_usersources_source_ldap  implements interface_usersources_usersource
         foreach($arrRows as $arrOneRow) {
             $arrReturn[] = $arrOneRow["user_id"];
         }
-        
+
         return $arrReturn;
     }
-    
-    
+
+
     /**
-     * Updates all user-data stored in the system. 
+     * Updates all user-data stored in the system.
      * This may be a long-running task, so execute this only explicitly
      * and not during common requests!
-     * 
+     *
      * @return bool
      */
     public function updateUserData() {
         //sync may take time -> increase the time available
-        if(@ini_get("max_execution_time") < 500 && @ini_get("max_execution_time") > 0)
+        if(@ini_get("max_execution_time") < 500 && @ini_get("max_execution_time") > 0) {
             @ini_set("max_execution_time", "500");
-        
+        }
+
         $objLdap = class_ldap::getInstance();
-        
+
         //fill all groups - loads new members
         $arrGroups = $this->getAllGroupIds();
         foreach($arrGroups as $strSingleGroupId) {
             $objGroup = new class_usersources_group_ldap($strSingleGroupId);
             $objGroup->getUserIdsForGroup();
         }
-        
+
         //parse all users
         $arrUsers = $this->getAllUserIds();
-        foreach ($arrUsers as $strOneUserId) {
+        foreach($arrUsers as $strOneUserId) {
             $objUser = new class_module_user_user($strOneUserId);
             /** @var $objSourceUser class_usersources_user_ldap */
             $objSourceUser = $objUser->getObjSourceUser();
@@ -255,7 +279,7 @@ class class_usersources_source_ldap  implements interface_usersources_usersource
             try {
                 $arrUserDetails = $objLdap->getUserDetailsByDN($objSourceUser->getStrDN());
             }
-            catch (class_exception $objEx) {
+            catch(class_exception $objEx) {
             }
             if($arrUserDetails !== false) {
                 $objSourceUser->setStrDN($arrUserDetails["identifier"]);
@@ -271,10 +295,9 @@ class class_usersources_source_ldap  implements interface_usersources_usersource
                 $objUser->deleteObject();
             }
         }
-        
-        return true;
-        
-    }
 
+        return true;
+
+    }
 
 }

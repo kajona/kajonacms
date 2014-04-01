@@ -12,7 +12,7 @@
  * @package module_packageserver
  * @moduleId _packageserver_module_id_
  */
-class class_installer_packageserver extends class_installer_base {
+class class_installer_packageserver extends class_installer_base implements interface_installer_removable {
 
     public function install() {
 
@@ -61,6 +61,51 @@ class class_installer_packageserver extends class_installer_base {
 
         return $strReturn;
 
+    }
+
+    /**
+     * Validates whether the current module/element is removable or not.
+     * This is the place to trigger special validations and consistency checks going
+     * beyond the common metadata-dependencies.
+     *
+     * @return bool
+     */
+    public function isRemovable() {
+        return true;
+    }
+
+    /**
+     * Removes the elements / modules handled by the current installer.
+     * Use the reference param to add a human readable logging.
+     *
+     * @param string &$strReturn
+     *
+     * @return bool
+     */
+    public function remove(&$strReturn) {
+
+        $strReturn .= "Deleting config-entries..\n";
+        class_module_system_setting::getConfigByName("_packageserver_repo_id_")->deleteObject();
+
+        //delete the module-node
+        $strReturn .= "Deleting the module-registration...\n";
+        $objModule = class_module_system_module::getModuleByName($this->objMetadata->getStrTitle(), true);
+        if(!$objModule->deleteObject()) {
+            $strReturn .= "Error deleting module, aborting.\n";
+            return false;
+        }
+
+        //delete the tables
+        foreach(array("packageserver_log") as $strOneTable) {
+            $strReturn .= "Dropping table ".$strOneTable."...\n";
+            if(!$this->objDB->_pQuery("DROP TABLE ".$this->objDB->encloseTableName(_dbprefix_.$strOneTable)."", array())) {
+                $strReturn .= "Error deleting table, aborting.\n";
+                return false;
+            }
+
+        }
+
+        return true;
     }
 
 

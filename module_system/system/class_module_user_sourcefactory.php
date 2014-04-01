@@ -21,6 +21,9 @@ class class_module_user_sourcefactory {
 
     private $arrSubsystemsAvailable = array("kajona");
 
+    /**
+     * Default constructor
+     */
     public function __construct() {
 
         //try to load the list of subsystems available
@@ -110,7 +113,7 @@ class class_module_user_sourcefactory {
      * Creates a list of all users matching the current query.
      * Only active users may be returned!
      *
-     * @param $strParam
+     * @param string $strParam
      *
      * @internal param string $strQuery
      * @return class_module_user_user

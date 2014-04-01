@@ -14,7 +14,7 @@
  * @package module_stats
  * @moduleId _stats_modul_id_
  */
-class class_installer_stats extends class_installer_base implements interface_installer {
+class class_installer_stats extends class_installer_base implements interface_installer_removable {
 
 	public function install() {
         $strReturn = "";
@@ -33,14 +33,7 @@ class class_installer_stats extends class_installer_base implements interface_in
 		$arrFields["stats_browser"] = array("char254", true);
 		$arrFields["stats_session"] = array("char100", true);
 
-        if(!$this->objDB->createTable(
-            "stats_data",
-            $arrFields,
-            array("stats_id"),
-            array("stats_date", "stats_hostname", "stats_page", "stats_referer", "stats_browser"),
-            false
-        )
-        ) {
+        if(!$this->objDB->createTable("stats_data", $arrFields, array("stats_id"), array("stats_date", "stats_hostname", "stats_page", "stats_referer", "stats_browser"), false)) {
             $strReturn .= "An error occurred! ...\n";
         }
 
@@ -83,8 +76,55 @@ class class_installer_stats extends class_installer_base implements interface_in
 		return $strReturn;
 	}
 
+    /**
+     * Validates whether the current module/element is removable or not.
+     * This is the place to trigger special validations and consistency checks going
+     * beyond the common metadata-dependencies.
+     *
+     * @return bool
+     */
+    public function isRemovable() {
+        return true;
+    }
 
-	public function update() {
+    /**
+     * Removes the elements / modules handled by the current installer.
+     * Use the reference param to add a human readable logging.
+     *
+     * @param string &$strReturn
+     *
+     * @return bool
+     */
+    public function remove(&$strReturn) {
+
+        $strReturn .= "Deleting settings...\n";
+        foreach(array("_stats_nrofrecords_", "_stats_duration_online_", "_stats_exclusionlist_") as $strOneSetting) {
+            if(class_module_system_setting::getConfigByName($strOneSetting) !== null)
+                class_module_system_setting::getConfigByName($strOneSetting)->deleteObject();
+        }
+
+        //delete the module-node
+        $strReturn .= "Deleting the module-registration...\n";
+        $objModule = class_module_system_module::getModuleByName($this->objMetadata->getStrTitle(), true);
+        if(!$objModule->deleteObject()) {
+            $strReturn .= "Error deleting module, aborting.\n";
+            return false;
+        }
+
+        //delete the tables
+        foreach(array("stats_data", "stats_ip2country") as $strOneTable) {
+            $strReturn .= "Dropping table ".$strOneTable."...\n";
+            if(!$this->objDB->_pQuery("DROP TABLE ".$this->objDB->encloseTableName(_dbprefix_.$strOneTable)."", array())) {
+                $strReturn .= "Error deleting table, aborting.\n";
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+
+    public function update() {
 	    $strReturn = "";
         //check installed version and to which version we can update
         $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
