@@ -59,7 +59,7 @@ class class_pluginmanager {
 
                 $objReflection = new ReflectionClass($strOneFile);
                 if(!$objReflection->isAbstract() && $objReflection->implementsInterface("interface_generic_plugin")) {
-                    $objMethod = $objReflection->getMethod("interface_generic_plugin");
+                    $objMethod = $objReflection->getMethod("getExtensionName");
                     if($objMethod->invoke(null) == $strPluginPoint)
                         return true;
                 }
