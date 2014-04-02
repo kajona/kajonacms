@@ -50,7 +50,8 @@ class class_pluginmanager {
         //load classes in passed-folders
         $strKey = md5($this->strSearchPath.$this->strPluginPoint);
         if(!array_key_exists($strKey, self::$arrPluginClasses)) {
-            $arrClasses = class_resourceloader::getInstance()->getFolderContent($this->strSearchPath, array(".php"), false, function(&$strOneFile) {
+            $strPluginPoint = $this->strPluginPoint;
+            $arrClasses = class_resourceloader::getInstance()->getFolderContent($this->strSearchPath, array(".php"), false, function(&$strOneFile) use ($strPluginPoint) {
                 $strOneFile = uniSubstr($strOneFile, 0, -4);
 
                 if(uniStripos($strOneFile, "class_") === false || uniStrpos($strOneFile, "class_testbase") !== false)
@@ -59,8 +60,8 @@ class class_pluginmanager {
                 $objReflection = new ReflectionClass($strOneFile);
                 if(!$objReflection->isAbstract() && $objReflection->implementsInterface("interface_generic_plugin")) {
                     /** @var interface_generic_plugin $objInstance */
-                    $objInstance = $objReflection->newInstanceWithoutConstructor();
-                    if($objInstance->getExtensionName() == $this->strPluginPoint)
+                    $objInstance = $objReflection->newInstance();
+                    if($objInstance->getExtensionName() == $strPluginPoint)
                         return true;
                 }
 
