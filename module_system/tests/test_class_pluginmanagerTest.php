@@ -11,7 +11,7 @@ class class_test_pluginmanager extends class_testbase  {
 <?php
             class class_module_pluginmanager_test implements interface_generic_plugin  {
 
-                public function getExtensionName() {
+                public static function getExtensionName() {
                     return "core.pluginmanager.test";
                 }
 
@@ -28,7 +28,7 @@ PHP;
                 public \$arg1;
                 public \$arg2;
 
-                public function getExtensionName() {
+                public static function getExtensionName() {
                     return "core.pluginmanager2.test";
                 }
 
@@ -47,7 +47,7 @@ PHP;
                 public \$arg1;
                 public \$arg2;
 
-                public function getExtensionName() {
+                public static function getExtensionName() {
                     return "core.pluginmanager2.test";
                 }
 
