@@ -83,7 +83,7 @@ class class_systeminfo_db implements interface_systeminfo {
      *
      * @return string
      */
-    public function getExtensionName() {
+    public static function getExtensionName() {
         return interface_systeminfo::STR_EXTENSION_POINT;
     }
 

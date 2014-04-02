@@ -22,6 +22,6 @@ interface interface_generic_plugin {
      * Returns the name of extension/plugin the objects wants to contribute to.
      * @return string
      */
-    public function getExtensionName();
+    public static function getExtensionName();
 
 }

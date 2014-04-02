@@ -57,7 +57,7 @@ class class_systeminfo_php implements interface_systeminfo {
      *
      * @return string
      */
-    public function getExtensionName() {
+    public static function getExtensionName() {
         return interface_systeminfo::STR_EXTENSION_POINT;
     }
 

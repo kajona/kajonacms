@@ -41,7 +41,7 @@ class class_stats_report_topvisitors implements interface_admin_statsreports {
      *
      * @return string
      */
-    public function getExtensionName() {
+    public static function getExtensionName() {
         return "core.stats.admin.statsreport";
     }
 

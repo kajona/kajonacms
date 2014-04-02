@@ -39,7 +39,7 @@ class class_stats_report_packageserverqueries implements interface_admin_statsre
      *
      * @return string
      */
-    public function getExtensionName() {
+    public static function getExtensionName() {
         return "core.stats.admin.statsreport";
     }
 

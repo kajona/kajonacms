@@ -52,7 +52,7 @@ class class_systeminfo_webserver implements interface_systeminfo {
      *
      * @return string
      */
-    public function getExtensionName() {
+    public static function getExtensionName() {
         return interface_systeminfo::STR_EXTENSION_POINT;
     }
 
