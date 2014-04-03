@@ -14,10 +14,13 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
 #-----------------------------------------------------------------------
 # setup OS software for Kajona
-config.vm.provision :shell, :path => "setup_vm.sh"
+config.vm.provision :shell, :path => "1_setup_vm_software.sh"
+config.vm.provision :shell, :path => "2_setup_vm_environment.sh"
+
 # config to access Kajona via port forwarding on localhost
 config.vm.network :forwarded_port, host: 8008, guest: 80
-# additional settings for networking in ~/.vagrant.d => see README.txt
+
+# give additional settings for networking in ~/.vagrant.d => see README.txt
 #-----------------------------------------------------------------------
 
   # The url from where the 'config.vm.box' box will be fetched if it
