@@ -121,6 +121,20 @@ class class_classloader {
         $this->arrModules = $arrModules;
     }
 
+    public static function getCoreDirectories() {
+        $arrCores = array();
+        foreach(scandir(_realpath_) as $strRootFolder) {
+
+            if(uniStrpos($strRootFolder, "core") === false)
+                continue;
+
+            $arrCores[] = $strRootFolder;
+        }
+
+        return $arrCores;
+    }
+
+
     /**
      * Flushes the cache-files.
      * Use this method if you added new modules / classes.

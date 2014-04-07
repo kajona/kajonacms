@@ -17,37 +17,33 @@ echo "| The formatter is based on the Kajona language editor, so you need Java >
 echo "+-------------------------------------------------------------------------------+\n";
 
 
-
-
-//example for full path
-//$strJavaCommand = "/opt/jdk1.6.0_22/jre/bin/java -jar '"._realpath_."/debug/KajonaLanguageEditorCore.jar' --formatLangfiles --projectFolder '"._realpath_."' ";
-
-
-$strJavaCommand = "java -jar '"._realpath_."/core/_debugging/debug/KajonaLanguageEditorCore.jar' --formatLangfiles --projectFolder '"._realpath_."' ";
-
-
-
-
-
 if(issetPost("format")) {
-    echo "starting formatting...\n";
-    echo "\rcalling ".$strJavaCommand."\n";
-    $intTemp = "";
-    $arrOuput = array();
-    exec($strJavaCommand, $arrOuput, $intTemp);
 
-    echo  "\n\texit code: ".$intTemp."\n\n";
-    foreach($arrOuput as $strOneLine)
-        echo "\t".$strOneLine."\n";
+    foreach(class_classloader::getInstance()->getCoreDirectories() as $strOneCore) {
 
-    echo "\n...finished\n";
+        $strJavaCommand = "java -jar '"._realpath_."/".$strOneCore."/_debugging/debug/KajonaLanguageEditorCore.jar' --formatLangfiles --projectFolder '"._realpath_."' ";
 
-    echo "\nIf you encounter an exit code of 127, provide the full path to java in the header of the file.\n";
+        echo "starting formatting...\n";
+        echo "\rcalling ".$strJavaCommand."\n";
+        $intTemp = "";
+        $arrOuput = array();
+
+
+        exec($strJavaCommand, $arrOuput, $intTemp);
+
+        echo  "\n\texit code: ".$intTemp."\n\n";
+        foreach($arrOuput as $strOneLine)
+            echo "\t".$strOneLine."\n";
+
+        echo "\n...finished\n";
+
+        echo "\nIf you encounter an exit code of 127, provide the full path to java in the header of the file.\n";
+
+    }
 }
 else {
     echo "<form method=\"post\">";
-	echo "\n\nCurrent config:\n";
-	echo $strJavaCommand."\n\n\n";
+	echo "\n\nFormat all lang-files\n\n\n";
 	echo "<input type=\"hidden\" name=\"format\" value=\"1\" />";
 	echo "<input type=\"submit\" value=\"format\" />";
 	echo "</form>";

@@ -120,7 +120,7 @@ class class_toolkit_admin extends class_toolkit {
 
         //to add role-based editors, you could load a different toolbar or also a different CKEditor config file
         //the editor code
-        $strReturn .= " <script type=\"text/javascript\" src=\""._webpath_."/core/module_system/admin/scripts/ckeditor/ckeditor.js\"></script>\n";
+        $strReturn .= " <script type=\"text/javascript\" src=\""._webpath_.class_resourceloader::getInstance()->getCorePathForModule("module_system")."/module_system/admin/scripts/ckeditor/ckeditor.js\"></script>\n";
         $strReturn .= " <script type=\"text/javascript\">\n";
         $strReturn .= "
             var ckeditorConfig = {
@@ -2104,7 +2104,7 @@ class class_toolkit_admin extends class_toolkit {
         $strFavorite = "";
         if($objTag->rightRight1()) {
 
-            $strJs = "<script type='text/javascript'>KAJONA.admin.loader.loadFile('/core/module_tags/admin/scripts/tags.js', function() {
+            $strJs = "<script type='text/javascript'>KAJONA.admin.loader.loadFile('".class_resourceloader::getInstance()->getCorePathForModule("module_tags")."/module_tags/admin/scripts/tags.js', function() {
                     KAJONA.admin.tags.createFavoriteEnabledIcon = '".addslashes(class_adminskin_helper::getAdminImage("icon_favorite", class_carrier::getInstance()->getObjLang()->getLang("tag_favorite_remove", "tags")))."';
                     KAJONA.admin.tags.createFavoriteDisabledIcon = '".addslashes(class_adminskin_helper::getAdminImage("icon_favoriteDisabled", class_carrier::getInstance()->getObjLang()->getLang("tag_favorite_add", "tags")))."';
                 });</script>";

@@ -399,8 +399,9 @@ class class_module_search_admin extends class_admin_simple implements interface_
 
 
         //add js-code for enabling and disabling multiselect box for modules
+        $strCore = class_resourceloader::getInstance()->getCorePathForModule("module_search");
         $strJS = <<<JS
-            KAJONA.admin.loader.loadFile('/core/module_search/admin/scripts/search.js', function() {
+            KAJONA.admin.loader.loadFile('{$strCore}/module_search/admin/scripts/search.js', function() {
                     KAJONA.admin.search.switchFilterAllModules();
                     $('#search_filter_all').click(function() {KAJONA.admin.search.switchFilterAllModules()});
 

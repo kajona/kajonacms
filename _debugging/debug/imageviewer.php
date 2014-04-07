@@ -4,7 +4,6 @@ echo "+-------------------------------------------------------------------------
 echo "| Kajona Debug Subsystem                                                        |\n";
 echo "|                                                                               |\n";
 echo "| Image Viewer for Admin Skin                                                   |\n";
-echo "|                                                                               |\n";
 echo "+-------------------------------------------------------------------------------+\n";
 
 $strIconPath = "/module_v4skin/admin/skins/kajona_v4/pics/";
@@ -16,7 +15,7 @@ echo "Found ".count($arrFiles)."\n";
 
 echo "<table border=0 cellpadding=2>";
 foreach ($arrFiles as $strOneFile) {
-    echo "<tr><td><img src=\""._webpath_."/core/".$strIconPath.$strOneFile."\"></td>";
+    echo "<tr><td><img src=\""._webpath_.class_resourceloader::getInstance()->getCorePathForModule("module_v4skin")."/".$strIconPath.$strOneFile."\"></td>";
     echo "<td>".$strOneFile."</td></tr>";
 }
 echo "</table>";

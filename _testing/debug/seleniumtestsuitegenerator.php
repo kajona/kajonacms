@@ -108,11 +108,11 @@ HTML;
                 
                 if($_POST["databasehelper"] == "mysql") {
                     echo "\n\n  Adding database helper for MYSQL.\n";
-                    $strContentTestsuiteFile .= "\n  <tr><td><a href=\"../../core/module_installer/tests/selhelper_kaj4x_allInOneInstallerMYSQL.html\">selhelper_MySQL-Installer.html</a></td></tr>";                    
+                    $strContentTestsuiteFile .= "\n  <tr><td><a href=\"../..".class_resourceloader::getInstance()->getCorePathForModule("module_installer")."/module_installer/tests/selhelper_kaj4x_allInOneInstallerMYSQL.html\">selhelper_MySQL-Installer.html</a></td></tr>";
                 }
                 elseif ($_POST["databasehelper"] == "sqlite") {
                     echo "\n\n  Adding database helper for SQLITE.\n";
-                     $strContentTestsuiteFile .= "\n  <tr><td><a href=\"../../core/module_installer/tests/selhelper_kaj4x_allInOneInstallerSQLITE.html\">selhelper_SQLITE-Installer.html</a></td></tr>"; 
+                     $strContentTestsuiteFile .= "\n  <tr><td><a href=\"../..".class_resourceloader::getInstance()->getCorePathForModule("module_installer")."/module_installer/tests/selhelper_kaj4x_allInOneInstallerSQLITE.html\">selhelper_SQLITE-Installer.html</a></td></tr>";
                 }
                 
                 

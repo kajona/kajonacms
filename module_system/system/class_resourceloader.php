@@ -436,6 +436,9 @@ class class_resourceloader {
     public function getCorePathForModule($strModule, $bitPrependRealpath = false) {
         $arrFlipped = array_flip($this->arrModules);
 
+        if(!array_key_exists($strModule, $arrFlipped))
+            return null;
+
         $strPath = uniSubstr(uniStrReplace($strModule, "", $arrFlipped[$strModule]), 0, -1);
 
         return ($bitPrependRealpath ? _realpath_ : "")."/".$strPath;

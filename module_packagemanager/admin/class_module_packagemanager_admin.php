@@ -118,7 +118,7 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
             );
             $strActions .= "<script type='text/javascript'>
             $(function() {
-                KAJONA.admin.loader.loadFile('/core/module_packagemanager/admin/scripts/packagemanager.js', function() {
+                KAJONA.admin.loader.loadFile('".class_resourceloader::getInstance()->getCorePathForModule("module_packagemanager")."/module_packagemanager/admin/scripts/packagemanager.js', function() {
                     KAJONA.admin.packagemanager.addPackageToTest('".$objOneMetadata->getStrTitle()."', '".createFilename($objOneMetadata->getStrTitle(), true)."');
                 }); });
             </script>";

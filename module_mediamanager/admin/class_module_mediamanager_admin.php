@@ -314,9 +314,12 @@ class class_module_mediamanager_admin extends class_admin_evensimpler implements
 
         $strJsCode = "";
         if($this->getParam("sync") == "true" && class_objectfactory::getInstance()->getObject($this->getSystemid())->rightRight1()) {
+
+            $strCore = class_resourceloader::getInstance()->getCorePathForModule("module_mediamanager");
+
             $strJsCode = <<<HTML
             <script type="text/javascript">
-                KAJONA.admin.loader.loadFile('/core/module_mediamanager/admin/scripts/mediamanager.js', function() {
+                KAJONA.admin.loader.loadFile('{$strCore}/module_mediamanager/admin/scripts/mediamanager.js', function() {
                     KAJONA.admin.ajax.genericAjaxCall("mediamanager", "syncRepo", "{$this->getSystemid()}", function(data, status, jqXHR) {
                         if(status == 'success') {
                             console.log("sync response: "+data);

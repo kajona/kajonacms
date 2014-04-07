@@ -8,7 +8,7 @@ class class_test_packagemanager extends class_testbase  {
     public function testMetadataReader() {
 
         $objReader = new class_module_packagemanager_metadata();
-        $objReader->autoInit("/core/module_packagemanager");
+        $objReader->autoInit(class_resourceloader::getInstance()->getCorePathForModule("module_packagemanager")."/module_packagemanager");
 
         echo $objReader."\n\n";
     }

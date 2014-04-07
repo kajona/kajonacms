@@ -305,26 +305,27 @@ class class_graph_jqplot implements interface_graph {
         $strChartCode .="});";
 
 
+        $strCoreDirectory = class_resourceloader::getInstance()->getCorePathForModule("module_jqplot");
 
         $strReturn .= "<script type='text/javascript'>
-                KAJONA.admin.loader.loadFile(['/core/module_jqplot/admin/scripts/js/jqplot/jquery.jqplot.min.js', '/core/module_jqplot/admin/scripts/js/jqplot/jquery.jqplot.min.css'], function() {
+                KAJONA.admin.loader.loadFile(['{$strCoreDirectory}/module_jqplot/admin/scripts/js/jqplot/jquery.jqplot.min.js', '{$strCoreDirectory}/module_jqplot/admin/scripts/js/jqplot/jquery.jqplot.min.css'], function() {
                     KAJONA.admin.loader.loadFile([
-                        '/core/module_jqplot/admin/scripts/js/jqplot/plugins/jqplot.logAxisRenderer.min.js',
-                        '/core/module_jqplot/admin/scripts/js/jqplot/plugins/jqplot.barRenderer.min.js',
-                        '/core/module_jqplot/admin/scripts/js/jqplot/plugins/jqplot.categoryAxisRenderer.min.js',
-                        '/core/module_jqplot/admin/scripts/js/jqplot/plugins/jqplot.canvasTextRenderer.min.js',
-                        '/core/module_jqplot/admin/scripts/js/jqplot/plugins/jqplot.canvasAxisTickRenderer.min.js',
-                        '/core/module_jqplot/admin/scripts/js/jqplot/plugins/jqplot.canvasAxisLabelRenderer.min.js',
-                        '/core/module_jqplot/admin/scripts/js/jqplot/plugins/jqplot.pointLabels.min.js',
-                        '/core/module_jqplot/admin/scripts/js/jqplot/plugins/jqplot.cursor.min.js',
-                        '/core/module_jqplot/admin/scripts/js/jqplot/plugins/jqplot.dateAxisRenderer.min.js',
-                        '/core/module_jqplot/admin/scripts/js/jqplot/plugins/jqplot.enhancedLegendRenderer.min.js',
-                        '/core/module_jqplot/admin/scripts/js/jqplot/plugins/jqplot.pieRenderer.min.js',
-                        '/core/module_jqplot/admin/scripts/js/jqplot/plugins/jqplot.highlighter.min.js',
-                        '/core/module_jqplot/admin/scripts/js/jqplot/plugins/jqplot.canvasOverlay.min.js',
+                        '{$strCoreDirectory}/module_jqplot/admin/scripts/js/jqplot/plugins/jqplot.logAxisRenderer.min.js',
+                        '{$strCoreDirectory}/module_jqplot/admin/scripts/js/jqplot/plugins/jqplot.barRenderer.min.js',
+                        '{$strCoreDirectory}/module_jqplot/admin/scripts/js/jqplot/plugins/jqplot.categoryAxisRenderer.min.js',
+                        '{$strCoreDirectory}/module_jqplot/admin/scripts/js/jqplot/plugins/jqplot.canvasTextRenderer.min.js',
+                        '{$strCoreDirectory}/module_jqplot/admin/scripts/js/jqplot/plugins/jqplot.canvasAxisTickRenderer.min.js',
+                        '{$strCoreDirectory}/module_jqplot/admin/scripts/js/jqplot/plugins/jqplot.canvasAxisLabelRenderer.min.js',
+                        '{$strCoreDirectory}/module_jqplot/admin/scripts/js/jqplot/plugins/jqplot.pointLabels.min.js',
+                        '{$strCoreDirectory}/module_jqplot/admin/scripts/js/jqplot/plugins/jqplot.cursor.min.js',
+                        '{$strCoreDirectory}/module_jqplot/admin/scripts/js/jqplot/plugins/jqplot.dateAxisRenderer.min.js',
+                        '{$strCoreDirectory}/module_jqplot/admin/scripts/js/jqplot/plugins/jqplot.enhancedLegendRenderer.min.js',
+                        '{$strCoreDirectory}/module_jqplot/admin/scripts/js/jqplot/plugins/jqplot.pieRenderer.min.js',
+                        '{$strCoreDirectory}/module_jqplot/admin/scripts/js/jqplot/plugins/jqplot.highlighter.min.js',
+                        '{$strCoreDirectory}/module_jqplot/admin/scripts/js/jqplot/plugins/jqplot.canvasOverlay.min.js',
 
-                        '/core/module_jqplot/admin/scripts/js/custom/jquery.jqplot.custom_helper.js',
-                        '/core/module_jqplot/admin/scripts/js/custom/jquery.jqplot.custom.css'
+                        '{$strCoreDirectory}/module_jqplot/admin/scripts/js/custom/jquery.jqplot.custom_helper.js',
+                        '{$strCoreDirectory}/module_jqplot/admin/scripts/js/custom/jquery.jqplot.custom.css'
                     ], function() {
                         ".$strChartCode."
                     });

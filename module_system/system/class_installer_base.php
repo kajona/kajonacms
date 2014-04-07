@@ -139,7 +139,7 @@ abstract class class_installer_base extends class_root implements interface_inst
      * @param string $strVersion
      */
     protected function updateElementVersion($strElementName, $strVersion) {
-        if(class_module_system_module::getModuleByName("pages") !== null && is_dir(_realpath_."/core/module_pages")) {
+        if(class_module_system_module::getModuleByName("pages", true) !== null && class_resourceloader::getInstance()->getCorePathForModule("module_pages") !== null) {
             $this->objDB->flushQueryCache();
             $objElement = class_module_pages_element::getElement($strElementName);
             if($objElement != null) {
