@@ -26,7 +26,7 @@ TXT;
         $this->assertEquals("testval2", $objConfig->getConfig("testkey2"));
 
         $objFilesystem = new class_filesystem();
-        $objFilesystem->fileDelete("/core/module_system/system/config/test1.php");
+        $objFilesystem->fileDelete(class_resourceloader::getInstance()->getCorePathForModule("module_system")."/module_system/system/config/test1.php");
 
         $this->assertFileNotExists(class_resourceloader::getInstance()->getCorePathForModule("module_system", true)."/module_system/system/config/test1.php");
 
@@ -62,7 +62,7 @@ TXT;
         $this->assertEquals("otherval", $objConfig->getConfig("testkey2"));
 
         $objFilesystem = new class_filesystem();
-        $objFilesystem->fileDelete(class_resourceloader::getInstance()->getCorePathForModule("module_system"), "/module_system/system/config/test2.php");
+        $objFilesystem->fileDelete(class_resourceloader::getInstance()->getCorePathForModule("module_system")."/module_system/system/config/test2.php");
         $objFilesystem->fileDelete(_projectpath_."/system/config/test2.php");
 
         $this->assertFileNotExists(class_resourceloader::getInstance()->getCorePathForModule("module_system", true)."/module_system/system/config/test2.php");
