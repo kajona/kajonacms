@@ -89,7 +89,7 @@
 
         <antcall target="buildPackageHelper" />
 
-        <zip destfile="${basedir}${packagesPath}/agp_v4_full_rev${svn.Revision}_${DSTAMP}-${TSTAMP}.zip">
+        <zip destfile="${basedir}${packagesPath}/agp_v5_full_${DSTAMP}-${TSTAMP}.zip">
             <fileset dir="${basedir}${tempPath}/../" />
         </zip>
     </target>

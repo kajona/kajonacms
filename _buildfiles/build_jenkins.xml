@@ -68,13 +68,6 @@
     <!-- internal initialization -->
     <target name="init" depends="cleanFilesystem">
         <tstamp />
-
-        <exec executable="svn" output="${basedir}${buildPath}/svn.properties">
-            <arg line="info '${basedir}${sourcesPath}'" />
-        </exec>
-        <property prefix="svn" file="${basedir}${buildPath}/svn.properties"/>
-        <echo>Revision found: ${svn.Revision}</echo>
-
     </target>
 
 
@@ -174,7 +167,7 @@
 
         <antcall target="buildPackageHelper" />
 
-        <zip destfile="${basedir}${packagesPath}/kajona_v4_full_rev${svn.Revision}_${DSTAMP}-${TSTAMP}.zip">
+        <zip destfile="${basedir}${packagesPath}/kajona_v4_full_${DSTAMP}-${TSTAMP}.zip">
             <fileset dir="${basedir}${tempPath}/../" />
         </zip>
     </target>
@@ -208,7 +201,7 @@
 
         <antcall target="buildPackageHelper" />
 
-        <zip destfile="${basedir}${packagesPath}/kajona_v4_allinone_rev${svn.Revision}_${DSTAMP}-${TSTAMP}.zip">
+        <zip destfile="${basedir}${packagesPath}/kajona_v4_allinone_${DSTAMP}-${TSTAMP}.zip">
             <fileset dir="${basedir}${tempPath}/../" />
         </zip>
     </target>
@@ -237,7 +230,7 @@
 
         <antcall target="buildPackageHelper" />
 
-        <zip destfile="${basedir}${packagesPath}/kajona_v4_light_rev${svn.Revision}_${DSTAMP}-${TSTAMP}.zip">
+        <zip destfile="${basedir}${packagesPath}/kajona_v4_light_${DSTAMP}-${TSTAMP}.zip">
             <fileset dir="${basedir}${tempPath}/../" />
         </zip>
     </target>

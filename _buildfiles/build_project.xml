@@ -93,7 +93,7 @@
 
         <antcall target="buildPackageHelper" />
 
-        <zip destfile="${basedir}${packagesPath}/${projectName}_full_rev${svn.Revision}_${DSTAMP}-${TSTAMP}.zip">
+        <zip destfile="${basedir}${packagesPath}/${projectName}_full_${DSTAMP}-${TSTAMP}.zip">
             <fileset dir="${basedir}${tempPath}/../" />
         </zip>
     </target>

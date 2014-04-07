@@ -49,20 +49,6 @@
 
 
 
-    <!-- internal initialization -->
-    <target name="init" depends="cleanFilesystem">
-        <tstamp />
-        <exec executable="svn" output="${basedir}${buildPath}/svn.properties">
-            <arg line="info '${basedir}/../../'" />
-        </exec>
-        <property prefix="svn" file="${basedir}${buildPath}/svn.properties"/>
-        <echo>Revision found: ${svn.Revision}</echo>
-
-    </target>
-
-
-
-
     <target name="buildProject">
         <copy todir="${basedir}${projectPath}" overwrite="true"  includeEmptyDirs="true" >
             <fileset id="sources.dirs" dir="${basedir}${sourcesPath}/../">
@@ -98,7 +84,7 @@
 
         <antcall target="buildPackageHelper" />
 
-        <zip destfile="${basedir}${packagesPath}/${projectName}_full_rev${svn.Revision}_${DSTAMP}-${TSTAMP}.zip">
+        <zip destfile="${basedir}${packagesPath}/${projectName}_full_${DSTAMP}-${TSTAMP}.zip">
             <fileset dir="${basedir}${tempPath}/../" />
         </zip>
     </target>
