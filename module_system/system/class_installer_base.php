@@ -44,7 +44,7 @@ abstract class class_installer_base extends class_root implements interface_inst
 
         $objModule = null;
         if($this->objMetadata->getStrType() == class_module_packagemanager_manager::STR_TYPE_ELEMENT) {
-            if(class_module_system_module::getModuleByName("pages") !== null && is_dir(_realpath_."/core/module_pages"))
+            if(class_module_system_module::getModuleByName("pages") !== null && is_dir(class_resourceloader::getInstance()->getCorePathForModule("module_pages", true)))
                 $objModule = class_module_pages_element::getElement(uniStrReplace("element_", "", $this->objMetadata->getStrTitle()));
         }
         else

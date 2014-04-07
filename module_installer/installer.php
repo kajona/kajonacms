@@ -76,7 +76,7 @@ class class_installer {
             $this->objLang->setStrTextLanguage($this->objSession->getAdminLanguage(true));
         }
 
-        $this->STR_ORIG_CONFIG_FILE = _corepath_."/module_system/system/config/config.php";
+        $this->STR_ORIG_CONFIG_FILE = class_resourceloader::getInstance()->getCorePathForModule("module_system")."/module_system/system/config/config.php";
         $this->STR_PROJECT_CONFIG_FILE = _realpath_."/project/system/config/config.php";
     }
 

@@ -34,10 +34,10 @@ class class_module_packagemanager_packagemanager_module implements interface_pac
         //loop all modules
         $arrModules = class_resourceloader::getInstance()->getArrModules();
 
-        foreach($arrModules as $strOneModule) {
+        foreach($arrModules as $strPath => $strOneModule) {
             try {
                 $objMetadata = new class_module_packagemanager_metadata();
-                $objMetadata->autoInit("/core/".$strOneModule);
+                $objMetadata->autoInit("/".$strPath);
                 $arrReturn[] = $objMetadata;
             }
             catch(class_exception $objEx) {
@@ -91,7 +91,7 @@ class class_module_packagemanager_packagemanager_module implements interface_pac
         $strReturn = "";
 
         if(uniStrpos($this->getObjMetadata()->getStrPath(), "core") === false)
-            throw new class_exception("Current module not located at /core.", class_exception::$level_ERROR);
+            throw new class_exception("Current module not located in a  core directory.", class_exception::$level_ERROR);
 
         if(!$this->isInstallable())
             throw new class_exception("Current module isn't installable, not all requirements are given", class_exception::$level_ERROR);
@@ -194,10 +194,10 @@ class class_module_packagemanager_packagemanager_module implements interface_pac
 
                     $arrModules = class_resourceloader::getInstance()->getArrModules();
                     $objMetadata = null;
-                    foreach($arrModules as $strOneFolder) {
+                    foreach($arrModules as $strPath => $strOneFolder) {
                         if(uniStrpos($strOneFolder, $strOneModule) !== false) {
                             $objMetadata = new class_module_packagemanager_metadata();
-                            $objMetadata->autoInit("/core/".$strOneFolder);
+                            $objMetadata->autoInit("/".$strPath);
 
                             //but: if the package provides an installer and was not resolved by the previous calls,
                             //we shouldn't include it here
@@ -267,6 +267,11 @@ class class_module_packagemanager_packagemanager_module implements interface_pac
         if($strTarget == "") {
             $strTarget = uniStrtolower($this->objMetadata->getStrType()."_".createFilename($this->objMetadata->getStrTitle(), true));
         }
+
+        $arrModules = array_flip(class_resourceloader::getInstance()->getArrModules());
+
+        if(isset($arrModules[$strTarget]))
+            return "/".$arrModules[$strTarget];
 
         return "/core/".$strTarget;
     }

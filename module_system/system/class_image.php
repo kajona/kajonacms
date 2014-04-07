@@ -949,8 +949,8 @@ class class_image {
      * @return array or false in case of errors
      */
     public function getBoundingTextbox($intFontSize, $floatAngle, $strFont, $strText) {
-        if(is_file(_corepath_ . "/module_system/system/fonts/" . $strFont)) {
-            return @ImageTTFBBox($intFontSize, $floatAngle, _corepath_ . "/module_system/system/fonts/" . $strFont, $strText);
+        if(is_file(class_resourceloader::getInstance()->getCorePathForModule("module_system", true) . "/module_system/system/fonts/" . $strFont)) {
+            return @ImageTTFBBox($intFontSize, $floatAngle, class_resourceloader::getInstance()->getCorePathForModule("module_system", true) . "/module_system/system/fonts/" . $strFont, $strText);
         }
         return false;
     }

@@ -101,14 +101,24 @@ class class_classloader {
      * @return void
      */
     private function scanModules() {
-        $this->arrModules = scandir(_corepath_);
 
-        $this->arrModules = array_filter(
-            $this->arrModules,
-            function ($strValue) {
-                return preg_match("/(module|element|_)+(.*)/i", $strValue) && is_dir(_corepath_."/".$strValue);
+        //Module-Constants
+        $arrModules = array();
+        foreach(scandir(_realpath_) as $strRootFolder) {
+
+            if(uniStrpos($strRootFolder, "core") === false)
+                continue;
+
+            foreach(scandir(_realpath_."/".$strRootFolder) as $strOneModule) {
+
+                if(preg_match("/^(module|element|_)+.*/i", $strOneModule) && !is_file(_realpath_."/".$strRootFolder."/".$strOneModule."/.kajonaignore")) {
+                    $arrModules[$strRootFolder."/".$strOneModule] = $strOneModule;
+                }
+
             }
-        );
+        }
+
+        $this->arrModules = $arrModules;
     }
 
     /**
@@ -168,12 +178,12 @@ class class_classloader {
 
         $arrFiles = array();
 
-        foreach($this->arrModules as $strSingleModule) {
-            if(is_dir(_corepath_."/".$strSingleModule.$strFolder)) {
-                $arrTempFiles = scandir(_corepath_."/".$strSingleModule.$strFolder);
+        foreach($this->arrModules as $strPath => $strSingleModule) {
+            if(is_dir(_realpath_."/".$strPath.$strFolder)) {
+                $arrTempFiles = scandir(_realpath_."/".$strPath.$strFolder);
                 foreach($arrTempFiles as $strSingleFile) {
                     if(preg_match("/(class|interface)(.*)\.php/i", $strSingleFile)) {
-                        $arrFiles[substr($strSingleFile, 0, -4)] = _corepath_."/".$strSingleModule.$strFolder.$strSingleFile;
+                        $arrFiles[substr($strSingleFile, 0, -4)] = _realpath_."/".$strPath.$strFolder.$strSingleFile;
                     }
                 }
             }

@@ -11,7 +11,7 @@ $strIconPath = "/module_v4skin/admin/skins/kajona_v4/pics/";
 echo "\nIcon-Path = ". $strIconPath."\n";
 
 $objFilesystem = new class_filesystem();
-$arrFiles = $objFilesystem->getFilelist(_corepath_.$strIconPath, array(".png"));
+$arrFiles = $objFilesystem->getFilelist(class_resourceloader::getInstance()->getCorePathForModule("module_v4skin").$strIconPath, array(".png"));
 echo "Found ".count($arrFiles)."\n";
 
 echo "<table border=0 cellpadding=2>";

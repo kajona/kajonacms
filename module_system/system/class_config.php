@@ -52,7 +52,7 @@ class class_config {
             @include(_realpath_ . $strPath);
         }
         else {
-            if(!@include _corepath_ . "/module_system/system/config/" . $strConfigFile) {
+            if(!@include class_resourceloader::getInstance()->getCorePathForModule("module_system", true) . "/module_system/system/config/" . $strConfigFile) {
                 die("Error reading config-file from core folder: ".$strConfigFile);
             }
         }

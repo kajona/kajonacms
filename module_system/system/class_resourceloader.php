@@ -148,9 +148,9 @@ class class_resourceloader {
         }
 
         //third try: try to load the file from a given module
-        foreach($this->arrModules as $strOneModule) {
-            if(is_file(_corepath_."/".$strOneModule."/templates/default/tpl".$strTemplateName)) {
-                $strFilename = "/core/".$strOneModule."/templates/default/tpl".$strTemplateName;
+        foreach($this->arrModules as $strCorePath => $strOneModule) {
+            if(is_file(_realpath_."/".$strCorePath."/templates/default/tpl".$strTemplateName)) {
+                $strFilename = "/".$strCorePath."/templates/default/tpl".$strTemplateName;
                 break;
             }
         }
@@ -197,9 +197,9 @@ class class_resourceloader {
         }
 
         //third try: try to load the file from given modules
-        foreach($this->arrModules as $strOneModule) {
-            if(is_dir(_corepath_."/".$strOneModule."/templates/default/tpl".$strFolder)) {
-                $arrFiles = scandir(_corepath_."/".$strOneModule."/templates/default/tpl".$strFolder);
+        foreach($this->arrModules as $strCorePath => $strOneModule) {
+            if(is_dir(_realpath_."/".$strCorePath."/templates/default/tpl".$strFolder)) {
+                $arrFiles = scandir(_realpath_."/".$strCorePath."/templates/default/tpl".$strFolder);
                 foreach($arrFiles as $strOneFile)
                     if(substr($strOneFile, -4) == ".tpl")
                         $arrReturn[] = $strOneFile;
@@ -229,13 +229,13 @@ class class_resourceloader {
         $this->bitCacheSaveRequired = true;
 
         //loop all given modules
-        foreach($this->arrModules as $strSingleModule) {
-            if(is_dir(_corepath_."/".$strSingleModule._langpath_."/".$strFolder)) {
-                $arrContent = scandir(_corepath_."/".$strSingleModule._langpath_."/".$strFolder);
+        foreach($this->arrModules as $strCorePath => $strSingleModule) {
+            if(is_dir(_realpath_."/".$strCorePath._langpath_."/".$strFolder)) {
+                $arrContent = scandir(_realpath_."/".$strCorePath._langpath_."/".$strFolder);
                 foreach($arrContent as $strSingleEntry) {
 
                     if(substr($strSingleEntry, -4) == ".php") {
-                        $arrReturn["/core/".$strSingleModule._langpath_."/".$strFolder."/".$strSingleEntry] = $strSingleEntry;
+                        $arrReturn["/".$strCorePath._langpath_."/".$strFolder."/".$strSingleEntry] = $strSingleEntry;
                     }
                 }
             }
@@ -291,21 +291,21 @@ class class_resourceloader {
         $this->bitCacheSaveRequired = true;
 
         //loop all given modules
-        foreach($this->arrModules as $strSingleModule) {
-            if(is_dir(_corepath_."/".$strSingleModule.$strFolder)) {
-                $arrContent = scandir(_corepath_."/".$strSingleModule.$strFolder);
+        foreach($this->arrModules as $strCorePath => $strSingleModule) {
+            if(is_dir(_realpath_."/".$strCorePath.$strFolder)) {
+                $arrContent = scandir(_realpath_."/".$strCorePath.$strFolder);
                 foreach($arrContent as $strSingleEntry) {
 
-                    if(($strSingleEntry != "." && $strSingleEntry != "..") && ($bitWithSubfolders || is_file(_corepath_."/".$strSingleModule.$strFolder."/".$strSingleEntry))) {
+                    if(($strSingleEntry != "." && $strSingleEntry != "..") && ($bitWithSubfolders || is_file(_realpath_."/".$strCorePath.$strFolder."/".$strSingleEntry))) {
                         //Wanted Type?
                         if(count($arrExtensionFilter)==0) {
-                            $arrReturn["/core/".$strSingleModule.$strFolder."/".$strSingleEntry] = $strSingleEntry;
+                            $arrReturn["/".$strCorePath.$strFolder."/".$strSingleEntry] = $strSingleEntry;
                         }
                         else {
                             //check, if suffix is in allowed list
                             $strFileSuffix = uniSubstr($strSingleEntry, uniStrrpos($strSingleEntry, "."));
                             if(in_array($strFileSuffix, $arrExtensionFilter)) {
-                                $arrReturn["/core/".$strSingleModule.$strFolder."/".$strSingleEntry] = $strSingleEntry;
+                                $arrReturn["/".$strCorePath.$strFolder."/".$strSingleEntry] = $strSingleEntry;
                             }
                         }
                     }
@@ -385,9 +385,9 @@ class class_resourceloader {
         }
 
         //loop all given modules
-        foreach($this->arrModules as $strSingleModule) {
-            if(is_file(_corepath_."/".$strSingleModule."/".$strFile)) {
-                return str_replace("//", "/", "/core/".$strSingleModule."/".$strFile);
+        foreach($this->arrModules as $strPath => $strSingleModule) {
+            if(is_file(_realpath_."/".$strPath."/".$strFile)) {
+                return str_replace("//", "/", "/".$strPath."/".$strFile);
             }
         }
 
@@ -413,9 +413,9 @@ class class_resourceloader {
         }
 
         //loop all given modules
-        foreach($this->arrModules as $strSingleModule) {
-            if(is_dir(_corepath_."/".$strSingleModule."/".$strFolder)) {
-                return str_replace("//", "/", "/core/".$strSingleModule."/".$strFolder);
+        foreach($this->arrModules as $strPath => $strSingleModule) {
+            if(is_dir(_realpath_."/".$strPath."/".$strFolder)) {
+                return str_replace("//", "/", "/".$strPath."/".$strFolder);
 
             }
         }
@@ -424,8 +424,43 @@ class class_resourceloader {
     }
 
     /**
+     * Returns the folder the passed module is located in.
+     * E.g., when passing module_system, the matching "/core" will be returned.
+     *
+     * @param string $strModule
+     * @param bool $bitPrependRealpath
+     *
+     * @internal param bool $bitIncludeRealpath
+     * @return string
+     */
+    public function getCorePathForModule($strModule, $bitPrependRealpath = false) {
+        $arrFlipped = array_flip($this->arrModules);
+
+        $strPath = uniSubstr(uniStrReplace($strModule, "", $arrFlipped[$strModule]), 0, -1);
+
+        return ($bitPrependRealpath ? _realpath_ : "")."/".$strPath;
+    }
+
+    /**
+     * Returns the core-folder the passed file is located in, e.g. core or core2.
+     * Pass a full file-path, so the absolute path and filename.
+     *
+     * @param string $strPath
+     * @param bool $bitPrependRealpath
+     *
+     * @return string
+     */
+    public function getCorePathForPath($strPath, $bitPrependRealpath = false) {
+        $strPath = uniStrReplace(_realpath_."/", "", $strPath);
+        $strPath = uniSubstr($strPath, 0, uniStrpos($strPath, "/"));
+
+        return ($bitPrependRealpath ? _realpath_ : "")."/".$strPath;
+    }
+
+
+    /**
      * Returns the list of modules and elements under the /core folder
-     * @return array
+     * @return array [folder/module] => [module]
      */
     public function getArrModules() {
         return $this->arrModules;

@@ -25,14 +25,21 @@ class class_project_setup {
         echo "loading core...\n\n";
         include __DIR__."/bootstrap.php";
 
-        $arrModules = scandir(_corepath_);
+        //Module-Constants
+        $arrModules = array();
+        foreach(scandir(_realpath_) as $strRootFolder) {
 
-        $arrModules = array_filter(
-            $arrModules,
-            function($strValue) {
-                return preg_match("/(module|element|_)+.*/i", $strValue);
+            if(uniStrpos($strRootFolder, "core") === false)
+                continue;
+
+            foreach(scandir(_realpath_."/".$strRootFolder) as $strOneModule) {
+
+                if(preg_match("/^(module|element|_)+.*/i", $strOneModule) && !is_file(_realpath_."/".$strRootFolder."/".$strOneModule."/.kajonaignore")) {
+                    $arrModules[] = $strRootFolder."/".$strOneModule;
+                }
+
             }
-        );
+        }
 
 
         self::checkDir("/admin");
@@ -66,14 +73,14 @@ class class_project_setup {
 
         echo "searching for files on root-path...\n";
         foreach($arrModules as $strSingleModule) {
-            if(!is_dir(_corepath_."/".$strSingleModule))
+            if(!is_dir(_realpath_."/".$strSingleModule))
                 continue;
 
-            $arrContent = scandir(_corepath_."/".$strSingleModule);
+            $arrContent = scandir(_realpath_."/".$strSingleModule);
             foreach($arrContent as $strSingleEntry) {
                 if(substr($strSingleEntry, -5) == ".root") {
                     echo "copy ".$strSingleEntry." to "._realpath_."/".substr($strSingleEntry, 0, -5)."\n";
-                    copy(_corepath_."/".$strSingleModule."/".$strSingleEntry, _realpath_."/".substr($strSingleEntry, 0, -5));
+                    copy(_realpath_."/".$strSingleModule."/".$strSingleEntry, _realpath_."/".substr($strSingleEntry, 0, -5));
                 }
             }
         }
@@ -84,20 +91,20 @@ class class_project_setup {
 
 
         foreach($arrModules as $strSingleModule) {
-            if(is_dir(_corepath_."/".$strSingleModule."/templates")) {
-                $arrEntries = scandir(_corepath_."/".$strSingleModule."/templates");
+            if(is_dir(_realpath_."/".$strSingleModule."/templates")) {
+                $arrEntries = scandir(_realpath_."/".$strSingleModule."/templates");
                 foreach($arrEntries as $strOneFolder) {
-                    if($strOneFolder != "." && $strOneFolder != ".." && is_dir(_corepath_."/".$strSingleModule."/templates/".$strOneFolder)) {
+                    if($strOneFolder != "." && $strOneFolder != ".." && is_dir(_realpath_."/".$strSingleModule."/templates/".$strOneFolder)) {
                         if($strOneFolder == "default")
-                            self::copyFolder(_corepath_."/".$strSingleModule."/templates", _realpath_."/templates", array(".tpl"));
+                            self::copyFolder(_realpath_."/".$strSingleModule."/templates", _realpath_."/templates", array(".tpl"));
                         else
-                            self::copyFolder(_corepath_."/".$strSingleModule."/templates", _realpath_."/templates");
+                            self::copyFolder(_realpath_."/".$strSingleModule."/templates", _realpath_."/templates");
                     }
                 }
             }
 
-            if(is_dir(_corepath_."/".$strSingleModule."/files"))
-                self::copyFolder(_corepath_."/".$strSingleModule."/files", _realpath_."/files");
+            if(is_dir(_realpath_."/".$strSingleModule."/files"))
+                self::copyFolder(_realpath_."/".$strSingleModule."/files", _realpath_."/files");
         }
 
 

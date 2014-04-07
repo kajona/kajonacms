@@ -735,7 +735,7 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
         $arrModules = class_resourceloader::getInstance()->getArrModules();
         foreach($arrModules as $strOneModule) {
             //validate if there's a template-folder existing
-            if(is_dir(_corepath_."/".$strOneModule."/templates"))
+            if(is_dir(class_resourceloader::getInstance()->getCorePathForModule($strOneModule, true)."/".$strOneModule."/templates"))
                 $objFormgenerator->addField(new class_formentry_checkbox("pack", "modules[".$strOneModule."]"))->setStrLabel($strOneModule)->setStrValue($strOneModule == "module_pages");
         }
         return $objFormgenerator;
