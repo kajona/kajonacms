@@ -11,6 +11,5 @@
     <providesInstaller>TRUE</providesInstaller>
     <requiredModules>
         <module name="system" version="4.4" />
-        <module name="pages" version="4.4" />
     </requiredModules>
 </package>
