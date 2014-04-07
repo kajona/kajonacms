@@ -59,12 +59,12 @@ PHP;
 
 PHP;
 
-        echo "Saving testfiles to "._realpath_."/core/module_system/system/class_module_pluginmanager_test.php\n";
-        echo "Saving testfiles to "._realpath_."/core/module_system/system/class_module_pluginmanager2_test.php\n";
-        echo "Saving testfiles to "._realpath_."/core/module_system/system/class_module_pluginmanager3_test.php\n";
-        file_put_contents(_realpath_."/core/module_system/system/class_module_pluginmanager_test.php", $strClass);
-        file_put_contents(_realpath_."/core/module_system/system/class_module_pluginmanager2_test.php", $strClass2);
-        file_put_contents(_realpath_."/core/module_system/system/class_module_pluginmanager3_test.php", $strClass3);
+        echo "Saving testfiles to ".class_resourceloader::getInstance()->getCorePathForModule("module_system", true)."/module_system/system/class_module_pluginmanager_test.php\n";
+        echo "Saving testfiles to ".class_resourceloader::getInstance()->getCorePathForModule("module_system", true)."/module_system/system/class_module_pluginmanager2_test.php\n";
+        echo "Saving testfiles to ".class_resourceloader::getInstance()->getCorePathForModule("module_system", true)."/module_system/system/class_module_pluginmanager3_test.php\n";
+        file_put_contents(class_resourceloader::getInstance()->getCorePathForModule("module_system", true)."/module_system/system/class_module_pluginmanager_test.php", $strClass);
+        file_put_contents(class_resourceloader::getInstance()->getCorePathForModule("module_system", true)."/module_system/system/class_module_pluginmanager2_test.php", $strClass2);
+        file_put_contents(class_resourceloader::getInstance()->getCorePathForModule("module_system", true)."/module_system/system/class_module_pluginmanager3_test.php", $strClass3);
 
         class_resourceloader::getInstance()->flushCache();
         class_classloader::getInstance()->flushCache();
@@ -110,9 +110,9 @@ PHP;
 
     protected function tearDown() {
 
-        unlink(_realpath_."/core/module_system/system/class_module_pluginmanager_test.php");
-        unlink(_realpath_."/core/module_system/system/class_module_pluginmanager2_test.php");
-        unlink(_realpath_."/core/module_system/system/class_module_pluginmanager3_test.php");
+        unlink(class_resourceloader::getInstance()->getCorePathForModule("module_system", true)."/module_system/system/class_module_pluginmanager_test.php");
+        unlink(class_resourceloader::getInstance()->getCorePathForModule("module_system", true)."/module_system/system/class_module_pluginmanager2_test.php");
+        unlink(class_resourceloader::getInstance()->getCorePathForModule("module_system", true)."/module_system/system/class_module_pluginmanager3_test.php");
 
         class_resourceloader::getInstance()->flushCache();
         class_classloader::getInstance()->flushCache();

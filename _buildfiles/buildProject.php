@@ -103,7 +103,7 @@ class BuildHelper {
 
         echo "Installing samplecontent...\n\n";
         try {
-            $objHandler = $objManager->getPackageManagerForPath("/core/module_samplecontent");
+            $objHandler = $objManager->getPackageManagerForPath(class_resourceloader::getInstance()->getCorePathForModule("module_samplecontent")."/module_samplecontent");
         }
         catch (class_exception $objEx) {
             $objHandler = null;

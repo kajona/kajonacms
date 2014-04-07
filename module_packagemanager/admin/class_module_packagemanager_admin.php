@@ -136,9 +136,10 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
 
         $strReturn .= $this->objToolkit->listFooter();
 
+        $strCore = class_resourceloader::getInstance()->getCorePathForModule("module_packagemanager");
         $strReturn .= "<script type='text/javascript'>
             $(function() {
-                KAJONA.admin.loader.loadFile('/core/module_packagemanager/admin/scripts/packagemanager.js', function() {
+                KAJONA.admin.loader.loadFile('{$strCore}/module_packagemanager/admin/scripts/packagemanager.js', function() {
 
                     $(window.setTimeout(function() {
                         KAJONA.admin.packagemanager.triggerUpdateCheck();
@@ -767,7 +768,7 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
         $arrModules = $this->getParam("pack_modules");
         foreach($arrModules as $strName => $strValue) {
             if($strValue != "") {
-                $objFilesystem->folderCopyRecursive("/core/".$strName."/templates/default", _templatepath_."/".$strPackName);
+                $objFilesystem->folderCopyRecursive(class_resourceloader::getInstance()->getCorePathForModule($strName)."/".$strName."/templates/default", _templatepath_."/".$strPackName);
             }
         }
 

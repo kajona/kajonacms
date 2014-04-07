@@ -18,25 +18,25 @@ class class_test_charts_jqPlotTest extends class_testbase  {
         echo "<script language=\"javascript\" type=\"text/javascript\" src=\""._webpath_.class_resourceloader::getInstance()->getCorePathForModule("module_system")."/module_system/admin/scripts/kajona.js\"></script>";
 
         //jqPlot
-//        echo "<script language=\"javascript\" type=\"text/javascript\" src=\""._webpath_."/core/module_jqplot/admin/scripts/js/jqplot/jquery.jqplot.js\"></script>";
-//        echo "<script language=\"javascript\" type=\"text/javascript\" src=\""._webpath_."/core/module_jqplot/admin/scripts/js/jqplot/plugins/jqplot.logAxisRenderer.js\"></script>";
-//        echo "<script language=\"javascript\" type=\"text/javascript\" src=\""._webpath_."/core/module_jqplot/admin/scripts/js/jqplot/plugins/jqplot.barRenderer.js\"></script>";
-//        echo "<script language=\"javascript\" type=\"text/javascript\" src=\""._webpath_."/core/module_jqplot/admin/scripts/js/jqplot/plugins/jqplot.categoryAxisRenderer.js\"></script>";
-//        echo "<script language=\"javascript\" type=\"text/javascript\" src=\""._webpath_."/core/module_jqplot/admin/scripts/js/jqplot/plugins/jqplot.canvasTextRenderer.js\"></script>";
-//        echo "<script language=\"javascript\" type=\"text/javascript\" src=\""._webpath_."/core/module_jqplot/admin/scripts/js/jqplot/plugins/jqplot.canvasAxisTickRenderer.js\"></script>";
-//        echo "<script language=\"javascript\" type=\"text/javascript\" src=\""._webpath_."/core/module_jqplot/admin/scripts/js/jqplot/plugins/jqplot.canvasAxisLabelRenderer.js\"></script>";
-//        echo "<script language=\"javascript\" type=\"text/javascript\" src=\""._webpath_."/core/module_jqplot/admin/scripts/js/jqplot/plugins/jqplot.pointLabels.js\"></script>";
-//        echo "<script language=\"javascript\" type=\"text/javascript\" src=\""._webpath_."/core/module_jqplot/admin/scripts/js/jqplot/plugins/jqplot.highlighter.js\"></script>";
-//        echo "<script language=\"javascript\" type=\"text/javascript\" src=\""._webpath_."/core/module_jqplot/admin/scripts/js/jqplot/plugins/jqplot.cursor.js\"></script>";
-//        echo "<script language=\"javascript\" type=\"text/javascript\" src=\""._webpath_."/core/module_jqplot/admin/scripts/js/jqplot/plugins/jqplot.enhancedLegendRenderer.js\"></script>";
-//        echo "<script language=\"javascript\" type=\"text/javascript\" src=\""._webpath_."/core/module_jqplot/admin/scripts/js/jqplot/plugins/jqplot.dateAxisRenderer.js\"></script>";
-//        echo "<script language=\"javascript\" type=\"text/javascript\" src=\""._webpath_."/core/module_jqplot/admin/scripts/js/jqplot/plugins/jqplot.pieRenderer.js\"></script>";
-//        echo "<script language=\"javascript\" type=\"text/javascript\" src=\""._webpath_."/core/module_jqplot/admin/scripts/js/jqplot/plugins/jqplot.canvasOverlay.js\"></script>";
-//        echo "<link rel=\"stylesheet\" type=\"text/css\" href=\""._webpath_."/core/module_jqplot/admin/scripts/js/jqplot/jquery.jqplot.css\"></link>";
+//        echo "<script language=\"javascript\" type=\"text/javascript\" src=\""._webpath_.class_resourceloader::getInstance()->getCorePathForModule("module_jqplot")."/module_jqplot/admin/scripts/js/jqplot/jquery.jqplot.js\"></script>";
+//        echo "<script language=\"javascript\" type=\"text/javascript\" src=\""._webpath_.class_resourceloader::getInstance()->getCorePathForModule("module_jqplot")."/module_jqplot/admin/scripts/js/jqplot/plugins/jqplot.logAxisRenderer.js\"></script>";
+//        echo "<script language=\"javascript\" type=\"text/javascript\" src=\""._webpath_.class_resourceloader::getInstance()->getCorePathForModule("module_jqplot")."/module_jqplot/admin/scripts/js/jqplot/plugins/jqplot.barRenderer.js\"></script>";
+//        echo "<script language=\"javascript\" type=\"text/javascript\" src=\""._webpath_.class_resourceloader::getInstance()->getCorePathForModule("module_jqplot")."/module_jqplot/admin/scripts/js/jqplot/plugins/jqplot.categoryAxisRenderer.js\"></script>";
+//        echo "<script language=\"javascript\" type=\"text/javascript\" src=\""._webpath_.class_resourceloader::getInstance()->getCorePathForModule("module_jqplot")."/module_jqplot/admin/scripts/js/jqplot/plugins/jqplot.canvasTextRenderer.js\"></script>";
+//        echo "<script language=\"javascript\" type=\"text/javascript\" src=\""._webpath_.class_resourceloader::getInstance()->getCorePathForModule("module_jqplot")."/module_jqplot/admin/scripts/js/jqplot/plugins/jqplot.canvasAxisTickRenderer.js\"></script>";
+//        echo "<script language=\"javascript\" type=\"text/javascript\" src=\""._webpath_.class_resourceloader::getInstance()->getCorePathForModule("module_jqplot")."/module_jqplot/admin/scripts/js/jqplot/plugins/jqplot.canvasAxisLabelRenderer.js\"></script>";
+//        echo "<script language=\"javascript\" type=\"text/javascript\" src=\""._webpath_.class_resourceloader::getInstance()->getCorePathForModule("module_jqplot")."/module_jqplot/admin/scripts/js/jqplot/plugins/jqplot.pointLabels.js\"></script>";
+//        echo "<script language=\"javascript\" type=\"text/javascript\" src=\""._webpath_.class_resourceloader::getInstance()->getCorePathForModule("module_jqplot")."/module_jqplot/admin/scripts/js/jqplot/plugins/jqplot.highlighter.js\"></script>";
+//        echo "<script language=\"javascript\" type=\"text/javascript\" src=\""._webpath_.class_resourceloader::getInstance()->getCorePathForModule("module_jqplot")."/module_jqplot/admin/scripts/js/jqplot/plugins/jqplot.cursor.js\"></script>";
+//        echo "<script language=\"javascript\" type=\"text/javascript\" src=\""._webpath_.class_resourceloader::getInstance()->getCorePathForModule("module_jqplot")."/module_jqplot/admin/scripts/js/jqplot/plugins/jqplot.enhancedLegendRenderer.js\"></script>";
+//        echo "<script language=\"javascript\" type=\"text/javascript\" src=\""._webpath_.class_resourceloader::getInstance()->getCorePathForModule("module_jqplot")."/module_jqplot/admin/scripts/js/jqplot/plugins/jqplot.dateAxisRenderer.js\"></script>";
+//        echo "<script language=\"javascript\" type=\"text/javascript\" src=\""._webpath_.class_resourceloader::getInstance()->getCorePathForModule("module_jqplot")."/module_jqplot/admin/scripts/js/jqplot/plugins/jqplot.pieRenderer.js\"></script>";
+//        echo "<script language=\"javascript\" type=\"text/javascript\" src=\""._webpath_.class_resourceloader::getInstance()->getCorePathForModule("module_jqplot")."/module_jqplot/admin/scripts/js/jqplot/plugins/jqplot.canvasOverlay.js\"></script>";
+//        echo "<link rel=\"stylesheet\" type=\"text/css\" href=\""._webpath_.class_resourceloader::getInstance()->getCorePathForModule("module_jqplot")."/module_jqplot/admin/scripts/js/jqplot/jquery.jqplot.css\"></link>";
         //custom
-//        echo "<script language=\"javascript\" type=\"text/javascript\" src=\""._webpath_."/core/module_jqplot/admin/scripts/js/custom/jquery.jqplot.custom_helper.js\"></script>";
-//        echo "<script language=\"javascript\" type=\"text/javascript\" src=\""._webpath_."/core/module_jqplot/admin/scripts/js/custom/jqPlotTest.js\"></script>";
-//        echo "<link rel=\"stylesheet\" type=\"text/css\" href=\""._webpath_."/core/module_jqplot/admin/scripts/js/custom/jquery.jqplot.custom.css\"></link>";
+//        echo "<script language=\"javascript\" type=\"text/javascript\" src=\""._webpath_.class_resourceloader::getInstance()->getCorePathForModule("module_jqplot")."/module_jqplot/admin/scripts/js/custom/jquery.jqplot.custom_helper.js\"></script>";
+//        echo "<script language=\"javascript\" type=\"text/javascript\" src=\""._webpath_.class_resourceloader::getInstance()->getCorePathForModule("module_jqplot")."/module_jqplot/admin/scripts/js/custom/jqPlotTest.js\"></script>";
+//        echo "<link rel=\"stylesheet\" type=\"text/css\" href=\""._webpath_.class_resourceloader::getInstance()->getCorePathForModule("module_jqplot")."/module_jqplot/admin/scripts/js/custom/jquery.jqplot.custom.css\"></link>";
         //test-Divs
 //        echo "<div id=\"ChartDIV\"></div>";
 //        echo "<div id=\"ChartDIV2\"></div>";

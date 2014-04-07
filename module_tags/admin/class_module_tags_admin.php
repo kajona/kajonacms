@@ -57,7 +57,7 @@ class class_module_tags_admin extends class_admin_evensimpler implements interfa
 
             if($objListEntry->rightRight1()) {
 
-                $strJs = "<script type='text/javascript'>KAJONA.admin.loader.loadFile('/core/module_tags/admin/scripts/tags.js', function() {
+                $strJs = "<script type='text/javascript'>KAJONA.admin.loader.loadFile('".class_resourceloader::getInstance()->getCorePathForModule("module_tags")."/module_tags/admin/scripts/tags.js', function() {
                     KAJONA.admin.tags.createFavoriteEnabledIcon = '".addslashes(class_adminskin_helper::getAdminImage("icon_favorite", $this->getLang("tag_favorite_remove")))."';
                     KAJONA.admin.tags.createFavoriteDisabledIcon = '".addslashes(class_adminskin_helper::getAdminImage("icon_favoriteDisabled", $this->getLang("tag_favorite_add")))."';
                 });</script>";

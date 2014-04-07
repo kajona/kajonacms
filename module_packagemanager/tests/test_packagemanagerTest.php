@@ -98,7 +98,7 @@ class class_test_packagemanager extends class_testbase  {
 
     public function testUpdateOrInstall() {
         $objManager = new class_module_packagemanager_manager();
-        $objHandler = $objManager->getPackageManagerForPath("/core/module_packagemanager");
+        $objHandler = $objManager->getPackageManagerForPath(class_resourceloader::getInstance()->getCorePathForModule("module_packagemanager")."/module_packagemanager");
         $this->assertTrue(!$objHandler->isInstallable());
     }
 

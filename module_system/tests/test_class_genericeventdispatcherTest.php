@@ -35,8 +35,8 @@ class class_test_genericeventdispatcher extends class_testbase  {
 PHP;
 
 
-        echo "Saving testfiles to "._realpath_."/core/module_system/system/class_module_genericeventdispatcher_test.php\n";
-        file_put_contents(_realpath_."/core/module_system/system/class_module_genericeventdispatcher_test.php", $strClass);
+        echo "Saving testfiles to ".class_resourceloader::getInstance()->getCorePathForModule("module_system", true)."/module_system/system/class_module_genericeventdispatcher_test.php\n";
+        file_put_contents(class_resourceloader::getInstance()->getCorePathForModule("module_system", true)."/module_system/system/class_module_genericeventdispatcher_test.php", $strClass);
 
         class_resourceloader::getInstance()->flushCache();
         class_classloader::getInstance()->flushCache();
@@ -132,7 +132,7 @@ PHP;
 
     protected function tearDown() {
 
-        unlink(_realpath_."/core/module_system/system/class_module_genericeventdispatcher_test.php");
+        unlink(class_resourceloader::getInstance()->getCorePathForModule("module_system", true)."/module_system/system/class_module_genericeventdispatcher_test.php");
 
         class_resourceloader::getInstance()->flushCache();
         class_classloader::getInstance()->flushCache();
