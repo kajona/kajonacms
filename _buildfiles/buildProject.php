@@ -62,7 +62,7 @@ class BuildHelper {
 
         echo "creating modified config.php...\n";
         echo "using db-driver ".DB_DRIVER."...\n";
-        $strConfigfile = file_get_contents(_realpath_."/core/module_system/system/config/config.php");
+        $strConfigfile = file_get_contents(__DIR__."/".$this->strProjectPath."/core/module_system/system/config/config.php");
         $strConfigfile = str_replace(
             array("%%defaulthost%%", "%%defaultusername%%", "%%defaultpassword%%", "%%defaultdbname%%", "%%defaultprefix%%", "%%defaultdriver%%", "%%defaultport%%"),
             array(DB_HOST, DB_USER, DB_PASS, DB_DB, "autotest_", DB_DRIVER, ""),
@@ -75,7 +75,7 @@ class BuildHelper {
         $strSearch = "/\[\'debuglogging\'\]\s* = 1/";
         $strReplace = "['debuglogging'] = 2";
         $strConfigfile = preg_replace($strSearch, $strReplace, $strConfigfile);
-        file_put_contents(_realpath_."/project/system/config/config.php", $strConfigfile);
+        file_put_contents(__DIR__."/".$this->strProjectPath."/project/system/config/config.php", $strConfigfile);
 
         echo "starting up system-kernel...\n";
         $objCarrier = class_carrier::getInstance();
