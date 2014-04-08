@@ -135,12 +135,12 @@
         <copy todir="${basedir}${projectPath}" overwrite="true"  includeEmptyDirs="true" >
             <fileset id="sources.dirs" dir="${basedir}${sourcesPath}">
                 <exclude name=".svn"/>
-                <include name="core*/element_*/**"/>
-                <include name="core*/module_*/*/**"/>
-                <include name="core*/template_*/*/**"/>
-                <include name="core*/_debugging/*/**"/>
-                <include name="core*/*.php"/>
-                <include name="core*/*.htaccess"/>
+                <include name="core**/element_*/**"/>
+                <include name="core**/module_*/*/**"/>
+                <include name="core**/template_*/*/**"/>
+                <include name="core**/_debugging/*/**"/>
+                <include name="core**/*.php"/>
+                <include name="core**/*.htaccess"/>
             </fileset>
         </copy>
     </target>
@@ -151,15 +151,15 @@
         <copy todir="${basedir}${tempPath}" overwrite="true"  includeEmptyDirs="true" >
             <fileset id="sources.dirs" dir="${basedir}${sourcesPath}">
                 <exclude name=".svn"/>
-                <exclude name="core*/module_pchart/" />
-                <exclude name="core*/module_flotchart/" />
+                <exclude name="core**/module_pchart/" />
+                <exclude name="core**/module_flotchart/" />
 
-                <include name="core*/element_*/**"/>
-                <include name="core*/module_*/*/**"/>
-                <include name="core*/template_*/*/**"/>
+                <include name="core**/element_*/**"/>
+                <include name="core**/module_*/*/**"/>
+                <include name="core**/template_*/*/**"/>
                 <!--<include name="_debugging/*/**"/>-->
-                <include name="core*/*.php"/>
-                <include name="core*/*.htaccess"/>
+                <include name="core**/*.php"/>
+                <include name="core**/*.htaccess"/>
             </fileset>
         </copy>
 
@@ -176,24 +176,24 @@
         <copy todir="${basedir}${tempPath}" overwrite="true"  includeEmptyDirs="true" >
             <fileset id="sources.dirs" dir="${basedir}${sourcesPath}">
                 <exclude name=".svn"/>
-                <exclude name="core*/element_flash/" />
-                <exclude name="core*/element_maps/" />
-                <exclude name="core*/element_userlist/" />
-                <exclude name="core*/element_mediaplayer/" />
-                <exclude name="core*/module_ldap/" />
-                <exclude name="core*/module_packageserver/" />
-                <exclude name="core*/module_pchart/" />
-                <exclude name="core*/module_flotchart/" />
-                <exclude name="core*/module_workflows/" />
-                <exclude name="core*/module_pdf/" />
-                <exclude name="core*/module_pageimportexport/" />
-                <exclude name="core*/module_demo/" />
+                <exclude name="core**/element_flash/" />
+                <exclude name="core**/element_maps/" />
+                <exclude name="core**/element_userlist/" />
+                <exclude name="core**/element_mediaplayer/" />
+                <exclude name="core**/module_ldap/" />
+                <exclude name="core**/module_packageserver/" />
+                <exclude name="core**/module_pchart/" />
+                <exclude name="core**/module_flotchart/" />
+                <exclude name="core**/module_workflows/" />
+                <exclude name="core**/module_pdf/" />
+                <exclude name="core**/module_pageimportexport/" />
+                <exclude name="core**/module_demo/" />
 
-                <include name="core*/element_*/**"/>
-                <include name="core*/module_*/**"/>
-                <include name="core*/template_*/**"/>
-                <include name="core*/*.php"/>
-                <include name="core*/*.htaccess"/>
+                <include name="core**/element_*/**"/>
+                <include name="core**/module_*/**"/>
+                <include name="core**/template_*/**"/>
+                <include name="core**/*.php"/>
+                <include name="core**/*.htaccess"/>
             </fileset>
         </copy>
 
@@ -210,19 +210,19 @@
         <copy todir="${basedir}${tempPath}" overwrite="true"  includeEmptyDirs="true"  >
             <fileset id="sources.dirs" dir="${basedir}${sourcesPath}">
                 <exclude name=".svn"/>
-                <include name="core*/module_navigation/**"/>
-                <include name="core*/module_pages/**"/>
-                <include name="core*/module_samplecontent/**"/>
-                <include name="core*/module_packagemanager/**"/>
-                <include name="core*/module_mediamanager/**"/>
-                <include name="core*/module_system/**"/>
-                <include name="core*/module_search/**"/>
-                <include name="core*/module_tags/**"/>
-                <include name="core*/module_dashboard/**"/>
-                <include name="core*/module_installer/**"/>
-                <include name="core*/module_v4skin/**"/>
-                <include name="core*/*.php"/>
-                <include name="core*/*.htaccess"/>
+                <include name="core**/module_navigation/**"/>
+                <include name="core**/module_pages/**"/>
+                <include name="core**/module_samplecontent/**"/>
+                <include name="core**/module_packagemanager/**"/>
+                <include name="core**/module_mediamanager/**"/>
+                <include name="core**/module_system/**"/>
+                <include name="core**/module_search/**"/>
+                <include name="core**/module_tags/**"/>
+                <include name="core**/module_dashboard/**"/>
+                <include name="core**/module_installer/**"/>
+                <include name="core**/module_v4skin/**"/>
+                <include name="core**/*.php"/>
+                <include name="core**/*.htaccess"/>
             </fileset>
         </copy>
 
@@ -237,11 +237,11 @@
         <copy todir="${basedir}${tempPath}" overwrite="true"  includeEmptyDirs="true"  >
             <fileset id="sources.dirs" dir="${basedir}${sourcesPath}">
                 <exclude name=".svn"/>
-                <include name="core*/element_*/**"/>
-                <include name="core*/module_*/**"/>
-                <include name="core*/template_*/**"/>
-                <include name="core*/_debugging/**"/>
-                <include name="core*/*.php"/>
+                <include name="core**/element_*/**"/>
+                <include name="core**/module_*/**"/>
+                <include name="core**/template_*/**"/>
+                <include name="core**/_debugging/**"/>
+                <include name="core**/*.php"/>
             </fileset>
         </copy>
 
@@ -316,7 +316,7 @@
             <fileset dir="${basedir}${tempPath}" includes="**/less.js"/>
             <fileset dir="${basedir}${tempPath}" includes="**/less-full.js"/>
             <fileset dir="${basedir}${tempPath}" includes="**/*.odt"/>
-            <fileset dir="${basedir}${tempPath}" includes="**/core*/*/tests/**"/>
+            <fileset dir="${basedir}${tempPath}" includes="**/core**/*/tests/**"/>
             <fileset dir="${basedir}${tempPath}" includes="**/setupproject.php"/>
         </delete>
     </target>
