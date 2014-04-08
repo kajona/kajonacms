@@ -11,8 +11,45 @@ class BuildHelper {
 
     public function main() {
 
-        //trigger the setup script
-        require(__DIR__."/".$this->strProjectPath."/core/setupproject.php");
+
+        echo "\n\n";
+        echo "Kajona Build Project Helper\n";
+        echo " Params:\n";
+        echo "   projectPath: ".$this->strProjectPath."\n";
+        echo "   configFile: ".$this->strConfigFile."\n";
+        echo "   onlySetup: ".$this->bitOnlyProjectsetup."\n";
+        echo "\n\n";
+
+        $arrCores = array();
+        foreach(scandir(__DIR__."/".$this->strProjectPath) as $strRootFolder) {
+            if(strpos($strRootFolder, "core") === false)
+                continue;
+            $arrCores[] = $strRootFolder;
+        }
+
+        //trigger the setup script, try to get the matching one
+        foreach(array_reverse($arrCores) as $strOneCore) {
+            if(file_exists(__DIR__."/".$this->strProjectPath."/".$strOneCore."/setupproject.php")) {
+                require(__DIR__."/".$this->strProjectPath."/".$strOneCore."/setupproject.php");
+                break;
+            }
+
+        }
+
+        //trigger cleanups if required, e.g. since a module is excluded
+        echo "\n\nSearching for excluded modules at ".__DIR__."/".$this->strProjectPath."/project/system/config/excludedmodules.php"."\n\n";
+        if(file_exists(__DIR__."/".$this->strProjectPath."/project/system/config/excludedmodules.php")) {
+            $arrExcludedModules = array();
+            include(__DIR__."/".$this->strProjectPath."/project/system/config/excludedmodules.php");
+            foreach($arrExcludedModules as $strCore => $arrIgnoredModules) {
+                foreach($arrIgnoredModules as $strOneIgnoredModule) {
+                    if(file_exists(__DIR__."/".$this->strProjectPath."/".$strCore."/".$strOneIgnoredModule)) {
+                        echo " Deleting ".__DIR__."/".$this->strProjectPath."/".$strCore."/".$strOneIgnoredModule."\n";
+                        $this->rrmdir(__DIR__."/".$this->strProjectPath."/".$strCore."/".$strOneIgnoredModule);
+                    }
+                }
+            }
+        }
 
         if($this->bitOnlyProjectsetup) {
             return;
@@ -111,6 +148,23 @@ class BuildHelper {
         if($objHandler !== null)
             echo $objHandler->installOrUpdate();
 
+    }
+
+    /**
+     * @param $dir
+     * @see http://www.php.net/manual/de/function.rmdir.php#98622
+     */
+    private function rrmdir($dir) {
+        if (is_dir($dir)) {
+            $objects = scandir($dir);
+            foreach ($objects as $object) {
+                if ($object != "." && $object != "..") {
+                    if (filetype($dir."/".$object) == "dir") $this->rrmdir($dir."/".$object); else unlink($dir."/".$object);
+                }
+            }
+            reset($objects);
+            rmdir($dir);
+        }
     }
 }
 

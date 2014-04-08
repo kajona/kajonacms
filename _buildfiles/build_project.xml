@@ -49,20 +49,13 @@
     <!-- internal initialization -->
     <target name="init" depends="cleanFilesystem">
         <tstamp />
-        <exec executable="svn" output="${basedir}${buildPath}/svn.properties">
-            <arg line="info '${basedir}/../../'" />
-        </exec>
-        <property prefix="svn" file="${basedir}${buildPath}/svn.properties"/>
-        <echo>Revision found: ${svn.Revision}</echo>
-
     </target>
 
 
 
-
     <target name="buildProject">
-        <copy todir="${basedir}${projectPath}" overwrite="true"  includeEmptyDirs="true" >
-            <fileset id="sources.dirs" dir="${basedir}${sourcesPath}/../">
+        <copy todir="${basedir}${projectPath}" overwrite="true" includeEmptyDirs="true" >
+            <fileset id="sources.dirs" dir="${basedir}${sourcesPath}">
                 <exclude name="*/**/.idea"/>
                 <exclude name="*/**/.svn"/>
                 <exclude name="*/**/_buildfiles"/>
@@ -73,15 +66,13 @@
     </target>
 
 
-
-
     <!-- creates the full-zip including all modules and elements -->
     <target name="buildFullZip" depends="init" >
         <delete dir="${basedir}${projectPath}"/>
 
         <antcall target="setupPackageFolders" />
         <copy todir="${basedir}${tempPath}" overwrite="true"  includeEmptyDirs="true" >
-            <fileset id="sources.dirs" dir="${basedir}${sourcesPath}/../">
+            <fileset id="sources.dirs" dir="${basedir}${sourcesPath}">
                 <exclude name="*/**/.svn"/>
             </fileset>
         </copy>

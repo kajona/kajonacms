@@ -27,7 +27,7 @@
 
 
     <!-- target dir for the sources from the svn repo -->
-    <property name="sourcesPath"  value="/../" />
+    <property name="sourcesPath"  value="/../../" />
     <!-- target dir to install the system to. this folder is also referenced in the phpunit config file! -->
     <property name="projectPath"  value="/buildproject" />
     <!-- artifacts such as logs and reports will be stored here -->
@@ -114,11 +114,9 @@
         <delete dir="${basedir}${tempPath}"/>
         <delete dir="${basedir}${tempPath}/../" />
         <mkdir  dir="${basedir}${tempPath}"/>
-        <mkdir  dir="${basedir}${tempPath}/core"/>
 
         <delete dir="${basedir}${projectPath}"/>
         <mkdir  dir="${basedir}${projectPath}"/>
-        <mkdir  dir="${basedir}${projectPath}/core"/>
 
         <delete dir="${basedir}${buildPath}"/>
         <mkdir  dir="${basedir}${buildPath}"/>
@@ -134,15 +132,15 @@
 
     <!-- builds the project, aka creates a project out of the sources -->
     <target name="buildProject">
-        <copy todir="${basedir}${projectPath}/core" overwrite="true"  includeEmptyDirs="true" >
+        <copy todir="${basedir}${projectPath}" overwrite="true"  includeEmptyDirs="true" >
             <fileset id="sources.dirs" dir="${basedir}${sourcesPath}">
                 <exclude name=".svn"/>
-                <include name="element_*/**"/>
-                <include name="module_*/*/**"/>
-                <include name="template_*/*/**"/>
-                <include name="_debugging/*/**"/>
-                <include name="*.php"/>
-                <include name="*.htaccess"/>
+                <include name="core*/element_*/**"/>
+                <include name="core*/module_*/*/**"/>
+                <include name="core*/template_*/*/**"/>
+                <include name="core*/_debugging/*/**"/>
+                <include name="core*/*.php"/>
+                <include name="core*/*.htaccess"/>
             </fileset>
         </copy>
     </target>
@@ -150,18 +148,18 @@
     <!-- creates the full-zip including all modules and elements -->
     <target name="buildFullZip" depends="init" >
         <antcall target="setupPackageFolders" />
-        <copy todir="${basedir}${tempPath}/core" overwrite="true"  includeEmptyDirs="true" >
+        <copy todir="${basedir}${tempPath}" overwrite="true"  includeEmptyDirs="true" >
             <fileset id="sources.dirs" dir="${basedir}${sourcesPath}">
                 <exclude name=".svn"/>
-                <exclude name="module_pchart/" />
-                <exclude name="module_flotchart/" />
+                <exclude name="core*/module_pchart/" />
+                <exclude name="core*/module_flotchart/" />
 
-                <include name="element_*/**"/>
-                <include name="module_*/*/**"/>
-                <include name="template_*/*/**"/>
+                <include name="core*/element_*/**"/>
+                <include name="core*/module_*/*/**"/>
+                <include name="core*/template_*/*/**"/>
                 <!--<include name="_debugging/*/**"/>-->
-                <include name="*.php"/>
-                <include name="*.htaccess"/>
+                <include name="core*/*.php"/>
+                <include name="core*/*.htaccess"/>
             </fileset>
         </copy>
 
@@ -175,27 +173,27 @@
     <!-- creates the full-zip including all modules and elements -->
     <target name="buildAllInOneZip" depends="init" >
         <antcall target="setupPackageFolders" />
-        <copy todir="${basedir}${tempPath}/core" overwrite="true"  includeEmptyDirs="true" >
+        <copy todir="${basedir}${tempPath}" overwrite="true"  includeEmptyDirs="true" >
             <fileset id="sources.dirs" dir="${basedir}${sourcesPath}">
                 <exclude name=".svn"/>
-                <exclude name="element_flash/" />
-                <exclude name="element_maps/" />
-                <exclude name="element_userlist/" />
-                <exclude name="element_mediaplayer/" />
-                <exclude name="module_ldap/" />
-                <exclude name="module_packageserver/" />
-                <exclude name="module_pchart/" />
-                <exclude name="module_flotchart/" />
-                <exclude name="module_workflows/" />
-                <exclude name="module_pdf/" />
-                <exclude name="module_pageimportexport/" />
-                <exclude name="module_demo/" />
+                <exclude name="core*/element_flash/" />
+                <exclude name="core*/element_maps/" />
+                <exclude name="core*/element_userlist/" />
+                <exclude name="core*/element_mediaplayer/" />
+                <exclude name="core*/module_ldap/" />
+                <exclude name="core*/module_packageserver/" />
+                <exclude name="core*/module_pchart/" />
+                <exclude name="core*/module_flotchart/" />
+                <exclude name="core*/module_workflows/" />
+                <exclude name="core*/module_pdf/" />
+                <exclude name="core*/module_pageimportexport/" />
+                <exclude name="core*/module_demo/" />
 
-                <include name="element_*/**"/>
-                <include name="module_*/**"/>
-                <include name="template_*/**"/>
-                <include name="*.php"/>
-                <include name="*.htaccess"/>
+                <include name="core*/element_*/**"/>
+                <include name="core*/module_*/**"/>
+                <include name="core*/template_*/**"/>
+                <include name="core*/*.php"/>
+                <include name="core*/*.htaccess"/>
             </fileset>
         </copy>
 
@@ -209,22 +207,22 @@
     <!-- creates the light-zip, only a limited set of modules included -->
     <target name="buildLightZip" depends="init">
         <antcall target="setupPackageFolders" />
-        <copy todir="${basedir}${tempPath}/core" overwrite="true"  includeEmptyDirs="true"  >
+        <copy todir="${basedir}${tempPath}" overwrite="true"  includeEmptyDirs="true"  >
             <fileset id="sources.dirs" dir="${basedir}${sourcesPath}">
                 <exclude name=".svn"/>
-                <include name="module_navigation/**"/>
-                <include name="module_pages/**"/>
-                <include name="module_samplecontent/**"/>
-                <include name="module_packagemanager/**"/>
-                <include name="module_mediamanager/**"/>
-                <include name="module_system/**"/>
-                <include name="module_search/**"/>
-                <include name="module_tags/**"/>
-                <include name="module_dashboard/**"/>
-                <include name="module_installer/**"/>
-                <include name="module_v4skin/**"/>
-                <include name="*.php"/>
-                <include name="*.htaccess"/>
+                <include name="core*/module_navigation/**"/>
+                <include name="core*/module_pages/**"/>
+                <include name="core*/module_samplecontent/**"/>
+                <include name="core*/module_packagemanager/**"/>
+                <include name="core*/module_mediamanager/**"/>
+                <include name="core*/module_system/**"/>
+                <include name="core*/module_search/**"/>
+                <include name="core*/module_tags/**"/>
+                <include name="core*/module_dashboard/**"/>
+                <include name="core*/module_installer/**"/>
+                <include name="core*/module_v4skin/**"/>
+                <include name="core*/*.php"/>
+                <include name="core*/*.htaccess"/>
             </fileset>
         </copy>
 
@@ -236,14 +234,14 @@
     </target>
 
     <target name="modulePackagesZipHelper" depends="init" description="call this task before using the shellscript in order to generate module-zips">
-        <copy todir="${basedir}${tempPath}/core" overwrite="true"  includeEmptyDirs="true"  >
+        <copy todir="${basedir}${tempPath}" overwrite="true"  includeEmptyDirs="true"  >
             <fileset id="sources.dirs" dir="${basedir}${sourcesPath}">
                 <exclude name=".svn"/>
-                <include name="element_*/**"/>
-                <include name="module_*/**"/>
-                <include name="template_*/**"/>
-                <include name="_debugging/**"/>
-                <include name="*.php"/>
+                <include name="core*/element_*/**"/>
+                <include name="core*/module_*/**"/>
+                <include name="core*/template_*/**"/>
+                <include name="core*/_debugging/**"/>
+                <include name="core*/*.php"/>
             </fileset>
         </copy>
 
@@ -273,7 +271,6 @@
     <target name="setupPackageFolders" description="deletes the temp-folders and creates the initial structure">
         <delete dir="${basedir}${tempPath}"/>
         <mkdir  dir="${basedir}${tempPath}"/>
-        <mkdir  dir="${basedir}${tempPath}/core"/>
     </target>
 
     <!-- triggers the installation of the project aka. creating the db-structure -->
@@ -319,7 +316,7 @@
             <fileset dir="${basedir}${tempPath}" includes="**/less.js"/>
             <fileset dir="${basedir}${tempPath}" includes="**/less-full.js"/>
             <fileset dir="${basedir}${tempPath}" includes="**/*.odt"/>
-            <fileset dir="${basedir}${tempPath}" includes="**/core/*/tests/**"/>
+            <fileset dir="${basedir}${tempPath}" includes="**/core*/*/tests/**"/>
             <fileset dir="${basedir}${tempPath}" includes="**/setupproject.php"/>
         </delete>
     </target>
@@ -461,7 +458,7 @@
     <!-- requires phpDocumentor, binary phpdoc -->
     <target name="generatePhpDocs">
         <echo>Generating PHP API Docs</echo>
-        <exec executable="${path.phpdoc}" dir="${basedir}${projectPath}/core">
+        <exec executable="${path.phpdoc}" dir="${basedir}${projectPath}">
             <arg line="--config ${basedir}/phpdoc.xml"/>
         </exec>
     </target>
@@ -487,7 +484,7 @@
             <arg value="--log" />
             <arg path="${basedir}${buildPath}/logs" />
             <arg value="--source" />
-            <arg path="${basedir}${projectPath}/core" />
+            <arg path="${basedir}${projectPath}" />
             <arg value="--output" />
             <arg path="${basedir}${buildPath}/code-browser" />
         </exec>

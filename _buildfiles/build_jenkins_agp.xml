@@ -72,18 +72,18 @@
     <!-- redefined for adopted filenames and include / exclusion lists -->
     <target name="buildFullZip" depends="init" >
         <antcall target="setupPackageFolders" />
-        <copy todir="${basedir}${tempPath}/core" overwrite="true"  includeEmptyDirs="true" >
+        <copy todir="${basedir}${tempPath}" overwrite="true"  includeEmptyDirs="true" >
             <fileset id="sources.dirs" dir="${basedir}${sourcesPath}">
                 <exclude name=".svn"/>
                 <exclude name="*/**/icons_svg/**" />
                 <exclude name="*/**/icon_svg_SOURCE/**" />
 
-                <include name="element_*/**"/>
-                <include name="module_*/*/**"/>
-                <include name="template_*/*/**"/>
+                <include name="core*/element_*/**"/>
+                <include name="core*/module_*/*/**"/>
+                <include name="core*/template_*/*/**"/>
                 <!--<include name="_debugging/*/**"/>-->
-                <include name="*.php"/>
-                <include name="*.htaccess"/>
+                <include name="core*/*.php"/>
+                <include name="core*/*.htaccess"/>
             </fileset>
         </copy>
 
