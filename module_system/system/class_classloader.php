@@ -102,6 +102,11 @@ class class_classloader {
      */
     private function scanModules() {
 
+        $arrExcludedModules = array();
+        if(is_file(_realpath_."/project/system/config/excludedmodules.php")) {
+            include(_realpath_."/project/system/config/excludedmodules.php");
+        }
+
         //Module-Constants
         $arrModules = array();
         foreach(scandir(_realpath_) as $strRootFolder) {
@@ -111,7 +116,7 @@ class class_classloader {
 
             foreach(scandir(_realpath_."/".$strRootFolder) as $strOneModule) {
 
-                if(preg_match("/^(module|element|_)+.*/i", $strOneModule) && !is_file(_realpath_."/".$strRootFolder."/".$strOneModule."/.kajonaignore")) {
+                if(preg_match("/^(module|element|_)+.*/i", $strOneModule) && !in_array($strOneModule, $arrExcludedModules)) {
                     $arrModules[$strRootFolder."/".$strOneModule] = $strOneModule;
                 }
 
