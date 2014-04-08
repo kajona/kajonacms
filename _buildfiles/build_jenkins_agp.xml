@@ -78,12 +78,12 @@
                 <exclude name="*/**/icons_svg/**" />
                 <exclude name="*/**/icon_svg_SOURCE/**" />
 
-                <include name="core**/element_*/**"/>
-                <include name="core**/module_*/*/**"/>
-                <include name="core**/template_*/*/**"/>
+                <include name="cor*/element_*/**"/>
+                <include name="cor*/module_*/*/**"/>
+                <include name="cor*/template_*/*/**"/>
                 <!--<include name="_debugging/*/**"/>-->
-                <include name="core**/*.php"/>
-                <include name="core**/*.htaccess"/>
+                <include name="cor*/*.php"/>
+                <include name="cor*/*.htaccess"/>
             </fileset>
         </copy>
 
