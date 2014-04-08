@@ -116,7 +116,7 @@ class class_classloader {
 
             foreach(scandir(_realpath_."/".$strRootFolder) as $strOneModule) {
 
-                if(preg_match("/^(module|element|_)+.*/i", $strOneModule) && !in_array($strOneModule, $arrExcludedModules)) {
+                if(preg_match("/^(module|element|_)+.*/i", $strOneModule) && (!isset($arrExcludedModules[$strRootFolder]) || !in_array($strOneModule, $arrExcludedModules[$strRootFolder]))) {
                     $arrModules[$strRootFolder."/".$strOneModule] = $strOneModule;
                 }
 
