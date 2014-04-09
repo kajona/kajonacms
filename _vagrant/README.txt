@@ -6,7 +6,7 @@
 
     - install vagrant
     - get at least one 'box', the ubuntu precise (12.04)
-      (if you don't do that first vagrant will create this when you run 'vagrabt up' the first time in a preconfigured vagrant VM, e.g. under core/_vagrant/<VMNAME>
+      (if you don't do that first vagrant will create this when you run 'vagrant up' the first time in a preconfigured vagrant VM, e.g. under core/_vagrant/<VMNAME>
       # vagrant box add hashicorp/precise32
       -> this will create the folder .vagrant.d your HOME!!
 	  
@@ -86,7 +86,7 @@
    - call vagrant and bring the machine up
      # vagrant up
      
-     When you run it the first time all the needes software (apache, php, ...) will be installed! :-)
+     When you run it the first time all the needed software (apache, php, ...) will be installed! :-)
    
    - the webserver of the VM is available on the host on
      http://localhost:8008  (this is via port forwarding)

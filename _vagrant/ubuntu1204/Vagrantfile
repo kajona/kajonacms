@@ -52,7 +52,7 @@ config.vm.network :forwarded_port, host: 8008, guest: 80
   # config.vm.synced_folder "../data", "/vagrant_data"
 
 #-----------------------------------------------------------------------
-# mount the Kajona root dir to apache's DocuemtnRoot
+# mount the Kajona root dir to apache's DocumentRoot
 config.vm.synced_folder "../../..", "/var/www"
 #-----------------------------------------------------------------------
 
