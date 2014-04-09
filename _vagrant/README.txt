@@ -63,16 +63,16 @@
 	      # Network settings for all my vagrant machines
 	      VAGRANTFILE_API_VERSION = "2"
 	      Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
-		### use this for a static address
-		config.vm.network "public_network", ip: "192.168.2.4"
-		### or use DHCP (switch to the VM with 'vagrant ssh' to get the current ip address)
-		# config.vm.network "public_network"
+            ### use this for a static address
+            config.vm.network "public_network", ip: "192.168.2.4"
+            ### or use DHCP (switch to the VM with 'vagrant ssh' to get the current ip address)
+            # config.vm.network "public_network"
 	      end
 
 	      -----------
+        During startup you will be asked which network interface you want to bridge to the given vm network (depending on you OS!)
 
-
-        You can add further parameter in your personal Vagrantfile
+        You can add further parameter in your personal Vagrantfile.
 
 
 ************************************************************************************
@@ -98,4 +98,5 @@
 
    Hint:
    Your VM files are located in your virtualizers (e.g. virtualbox) VM dir. When open virtualbox you can see your new running machine.
+   If you like to change the location of the VMs do that in the virtualizer's settings!
    

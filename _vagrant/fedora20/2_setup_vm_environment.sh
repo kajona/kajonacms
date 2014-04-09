@@ -2,13 +2,13 @@
 # vagrant startup config script
 # STB 04/2014
 ###############################
-# Ubuntu #
+# Fedora #
 #
 ## Set variables
-PHPINI = /etc/php5/apache2/php.ini
-PHPINI2 = /etc/php5/apache2/php.ini_
-HTTPCONF = /etc/apache2/httpd.conf
-HTTPCONF2 = /etc/apache2/httpd.conf_
+PHPINI=/etc/php.ini
+PHPINI2=/etc/php.ini_
+HTTPCONF=/etc/httpd/conf/httpd.conf
+HTTPCONF2=/etc/httpd/conf/httpd.conf_
 ###############################
 
 
@@ -34,17 +34,15 @@ echo "; STB-CONTROL: php.ini was modified " >> $PHPINI
 ## Fancy again! Enable mod_rewrite by setting AllowOverride to ALL
 sed 's/AllowOverride None/AllowOverride All/g'  $HTTPCONF >$HTTPCONF2
 cp $HTTPCONF2 $HTTPCONF
+echo "ServerName KajonaVagrantVM" >> $HTTPCONF
 
 
+## make Fedora's bash handy
+echo "alias vi='vim'" >>/etc/bashrc
+echo "alias la='ls -la'" >>/etc/bashrc
+echo "alias ..='cd ..'" >>/etc/bashrc
 
-## make Ubuntu's bash handy
-echo "\"\e[5~\"": beginning-of-history >>/etc/inputrc
-echo "\"\e[6~\"": end-of-history >>/etc/inputrc
-
-echo "alias la='ls -la'" >>/etc/bash.bashrc
-echo "alias ..='cd ..'" >>/etc/bash.bashrc
-echo "alias la='ls -la'" >>/root/.bashrc
-echo "alias la='ls -la'" >>/home/vagrant/.bashrc
+echo "PS1=\"\[\033[0;36m\]\u@\h:\w$\[\033[0m\] \"" >>/etc/bashrc
 
 
 echo
@@ -52,6 +50,8 @@ echo
 echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
 echo "Now you can 'vagrant ssh' into the new machine!"
 echo "For Kajona: Please remember to change your database settings in project/system/config.php !!"
+echo
+echo "SSL/https is activated but only available vi IP-Address of the machine! NOT via port forwarding on localhost"
 echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
 echo
 echo
