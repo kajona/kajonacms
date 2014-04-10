@@ -15,11 +15,20 @@ class class_image_scale_and_crop extends class_image_abstract_operation {
     private $intFixedWidth;
     private $intFixedHeight;
 
+    /**
+     * @param int $intFixedWidth
+     * @param int $intFixedHeight
+     */
     public function __construct($intFixedWidth, $intFixedHeight) {
         $this->intFixedWidth = $intFixedWidth;
         $this->intFixedHeight = $intFixedHeight;
     }
 
+    /**
+     * @param resource &$objResource
+     *
+     * @return bool
+     */
     public function render(&$objResource) {
         $intCurrentWidth = imagesx($objResource);
         $intCurrentHeight = imagesy($objResource);
@@ -32,8 +41,7 @@ class class_image_scale_and_crop extends class_image_abstract_operation {
             $this->intFixedHeight = $intCurrentHeight;
         }
 
-        if ($this->intFixedWidth == $intCurrentWidth
-            && $this->intFixedHeight == $intCurrentHeight) {
+        if ($this->intFixedWidth == $intCurrentWidth && $this->intFixedHeight == $intCurrentHeight) {
             return true;
         }
 
@@ -70,6 +78,9 @@ class class_image_scale_and_crop extends class_image_abstract_operation {
         return true;
     }
 
+    /**
+     * @return array
+     */
     public function getCacheIdValues() {
         return array($this->intFixedWidth, $this->intFixedHeight);
     }

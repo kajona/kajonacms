@@ -17,6 +17,12 @@ class class_image_overlay extends class_image_abstract_operation {
     private $intY;
     private $bitAlphaBlending;
 
+    /**
+     * @param class_image2 $objImage
+     * @param int $intX
+     * @param int $intY
+     * @param bool $bitAlphaBlending
+     */
     public function __construct(class_image2 $objImage, $intX, $intY, $bitAlphaBlending = true) {
         $this->objImage = $objImage;
         $this->intX = $intX;
@@ -24,6 +30,11 @@ class class_image_overlay extends class_image_abstract_operation {
         $this->bitAlphaBlending = $bitAlphaBlending;
     }
 
+    /**
+     * @param resource &$objResource
+     *
+     * @return bool
+     */
     public function render(&$objResource) {
         $objOverlayResource = $this->objImage->createGdResource();
         $intOverlayWidth = imagesx($objOverlayResource);
@@ -40,6 +51,9 @@ class class_image_overlay extends class_image_abstract_operation {
         return $bitSuccess;
     }
 
+    /**
+     * @return array
+     */
     public function getCacheIdValues() {
         $arrValues = array(
             $this->objImage->getCacheId(),

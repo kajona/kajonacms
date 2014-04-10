@@ -14,11 +14,20 @@ class class_image_scale extends class_image_abstract_operation {
     private $intMaxWidth;
     private $intMaxHeight;
 
+    /**
+     * @param int $intMaxWidth
+     * @param int $intMaxHeight
+     */
     public function __construct($intMaxWidth, $intMaxHeight) {
         $this->intMaxWidth = $intMaxWidth;
         $this->intMaxHeight = $intMaxHeight;
     }
 
+    /**
+     * @param resource &$objResource
+     *
+     * @return bool
+     */
     public function render(&$objResource) {
         if ($this->intMaxWidth == null && $this->intMaxHeight == null) {
             return true;
@@ -72,6 +81,9 @@ class class_image_scale extends class_image_abstract_operation {
         return true;
     }
 
+    /**
+     * @return array
+     */
     public function getCacheIdValues() {
         return array($this->intMaxWidth, $this->intMaxHeight);
     }

@@ -16,6 +16,12 @@ class class_image_crop extends class_image_abstract_operation {
     private $intWidth;
     private $intHeight;
 
+    /**
+     * @param int $intX
+     * @param int $intY
+     * @param int $intWidth
+     * @param int $intHeight
+     */
     public function __construct($intX, $intY, $intWidth, $intHeight) {
         $this->intX = $intX < 0 ? 0 : (int)$intX;
         $this->intY = $intY < 0 ? 0 : (int)$intY;
@@ -23,6 +29,11 @@ class class_image_crop extends class_image_abstract_operation {
         $this->intHeight = (int)$intHeight;
     }
 
+    /**
+     * @param resource &$objResource
+     *
+     * @return bool
+     */
     public function render(&$objResource) {
         // Crop the image
         $objCroppedResource = $this->createImageResource($this->intWidth, $this->intHeight);
@@ -40,6 +51,9 @@ class class_image_crop extends class_image_abstract_operation {
         return true;
     }
 
+    /**
+     * @return array
+     */
     public function getCacheIdValues() {
         return array($this->intX, $this->intY, $this->intWidth, $this->intHeight);
     }

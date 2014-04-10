@@ -17,6 +17,13 @@ class class_image_line extends class_image_abstract_operation {
     private $arrColor;
 
     //$intStartX, $intStartY, $intEndX, $intEndY, $intColor
+    /**
+     * @param int $intStartX
+     * @param int $intStartY
+     * @param int $intEndX
+     * @param int $intEndY
+     * @param string $strColor
+     */
     public function __construct($intStartX, $intStartY, $intEndX, $intEndY, $strColor = "#FFFFFF") {
         $this->intStartX = $intStartX;
         $this->intStartY = $intStartY;
@@ -25,11 +32,19 @@ class class_image_line extends class_image_abstract_operation {
         $this->intEndY = $intEndY;
     }
 
+    /**
+     * @param resource &$objResource
+     *
+     * @return bool
+     */
     public function render(&$objResource) {
         $intColor = $this->allocateColor($objResource, $this->arrColor);
         return imageline($objResource, $this->intStartX, $this->intStartY, $this->intEndX, $this->intEndY, $intColor);
     }
 
+    /**
+     * @return array
+     */
     public function getCacheIdValues() {
         $arrValues = array(
             $this->intStartX,

@@ -8,13 +8,22 @@
 
 abstract class class_image_abstract_operation implements interface_image_operation {
 
+    /**
+     * @param int $intWidth
+     * @param int $intHeight
+     *
+     * @return resource
+     */
     protected static function createImageResource($intWidth, $intHeight) {
-        return imagecreatetruecolor($intWidth, $intHeight);
+        $objResource = imagecreatetruecolor($intWidth, $intHeight);
+        imagealphablending($objResource, false); //crashes font-rendering, so set true before rendering fonts
+        imagesavealpha($objResource, true);
+        return $objResource;
     }
 
     /**
-     * @param $objResource
-     * @param $arrColor
+     * @param resource $objResource
+     * @param array $arrColor
      * @return int
      */
     protected function allocateColor($objResource, $arrColor)

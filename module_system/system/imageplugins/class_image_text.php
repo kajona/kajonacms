@@ -18,6 +18,15 @@ class class_image_text extends class_image_abstract_operation {
     private $strFont;
     private $floatAngle;
 
+    /**
+     * @param string $strText
+     * @param int $intX
+     * @param int $intY
+     * @param double $floatSize
+     * @param string $strColor
+     * @param string $strFont
+     * @param float $floatAngle
+     */
     public function __construct($strText, $intX, $intY, $floatSize, $strColor = "#000000", $strFont = "dejavusans.ttf", $floatAngle = 0.0) {
         $this->strText = $strText;
         $this->intX = $intX;
@@ -28,6 +37,11 @@ class class_image_text extends class_image_abstract_operation {
         $this->floatAngle = $floatAngle;
     }
 
+    /**
+     * @param resource &$objResource
+     *
+     * @return bool
+     */
     public function render(&$objResource) {
         $strFontPath = class_resourceloader::getInstance()->getPathForFile("/system/fonts/" . $this->strFont);
         if ($strFontPath !== false && is_file(_realpath_.$strFontPath)) {
@@ -43,6 +57,9 @@ class class_image_text extends class_image_abstract_operation {
         return false;
     }
 
+    /**
+     * @return array
+     */
     public function getCacheIdValues() {
         $arrValues = array(
             md5($this->strText),

@@ -128,6 +128,7 @@ class class_image2 {
      * Set whether caching is enabled (default) or disabled.
      *
      * @param bool $bitUseCache
+     * @return void
      */
     public function setUseCache($bitUseCache) {
         $this->bitUseCache = $bitUseCache;
@@ -140,6 +141,7 @@ class class_image2 {
      * and does not affect all other image processing.
      *
      * @param int $intJpegQuality
+     * @return void
      */
     public function setJpegQuality($intJpegQuality) {
         $this->intJpegQuality = $intJpegQuality;
@@ -148,8 +150,9 @@ class class_image2 {
     /**
      * Create a new image with the given width and height.
      *
-     * @param $intWidth
-     * @param $intHeight
+     * @param int $intWidth
+     * @param int $intHeight
+     * @return void
      */
     public function create($intWidth, $intHeight) {
         $this->strOriginalPath = null;
@@ -164,7 +167,7 @@ class class_image2 {
      *
      * Returns false if the file does not exist.
      *
-     * @param $strPath
+     * @param string $strPath
      * @return bool
      */
     public function load($strPath) {
@@ -186,6 +189,7 @@ class class_image2 {
      * Image operations must implement interface_image_operation.
      *
      * @param interface_image_operation $objOperation
+     * @return void
      */
     public function addOperation(interface_image_operation $objOperation) {
         $this->arrOperations[] = $objOperation;
@@ -219,8 +223,7 @@ class class_image2 {
         }
         else {
             $strCacheFile = $this->getCachePath($strFormat);
-            if (!file_exists(_realpath_ . $strPath)
-                || filemtime(_realpath_ . $strCacheFile) > filemtime(_realpath_ . $strPath)) {
+            if (!file_exists(_realpath_ . $strPath) || filemtime(_realpath_ . $strCacheFile) > filemtime(_realpath_ . $strPath)) {
                 return copy(_realpath_ . $strCacheFile, _realpath_ . $strPath);
             }
 
@@ -319,7 +322,7 @@ class class_image2 {
     }
 
     /**
-     * @param $strFormat
+     * @param string $strFormat
      *
      * @return bool
      */
@@ -402,7 +405,7 @@ class class_image2 {
     }
 
     /**
-     * @param $strFormat
+     * @param string $strFormat
      * @param null $strPath
      *
      * @return bool
@@ -428,7 +431,7 @@ class class_image2 {
     }
 
     /**
-     * @param $strFormat
+     * @param string $strFormat
      *
      * @return bool
      */
@@ -450,7 +453,8 @@ class class_image2 {
     }
 
     /**
-     * @param $strFormat
+     * @param string $strFormat
+     * @return void
      */
     private function saveCache($strFormat) {
         if ($this->bitUseCache) {
@@ -462,7 +466,7 @@ class class_image2 {
     }
 
     /**
-     * @param $strFormat
+     * @param string $strFormat
      *
      * @return string
      */
@@ -471,7 +475,8 @@ class class_image2 {
     }
 
     /**
-     * @param $strFormat
+     * @param string $strFormat
+     * @return void
      */
     private function initCacheId($strFormat) {
         $arrayValues = array($this->intWidth, $this->intHeight, $strFormat);
@@ -494,10 +499,9 @@ class class_image2 {
     }
 
     /**
-     *
+     * @return void
      */
-    private function updateImageResource()
-    {
+    private function updateImageResource() {
         $this->intWidth = imagesx($this->objResource);
         $this->intHeight = imagesy($this->objResource);
         imagealphablending($this->objResource, false);
@@ -505,8 +509,8 @@ class class_image2 {
     }
 
     /**
-     * @param $strName
-     * @param $arrValues
+     * @param string $strName
+     * @param string $arrValues
      *
      * @return string
      */
@@ -516,7 +520,7 @@ class class_image2 {
     }
 
     /**
-     * @param $strPath
+     * @param string $strPath
      *
      * @return string
      */
