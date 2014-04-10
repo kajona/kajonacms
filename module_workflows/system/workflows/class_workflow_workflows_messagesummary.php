@@ -81,6 +81,10 @@ class class_workflow_workflows_messagesummary implements interface_workflows_han
         //loop all messages by user
         foreach(class_module_user_user::getObjectList() as $objOneUser) {
 
+            //skip inactive users
+            if($objOneUser->getIntActive() == 0)
+                continue;
+
             if(class_module_messaging_message::getNumberOfMessagesForUser($objOneUser->getSystemid(), true) == 0)
                 continue;
 
