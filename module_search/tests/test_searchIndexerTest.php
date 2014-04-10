@@ -22,6 +22,49 @@ class class_test_searchIndexerTest extends class_testbase {
         $this->assertEquals($arrResults[6], "wald");
     }
 
+
+    public function testNumericIndexer() {
+        $strText = "Hänsel und 2 Gretel verirrten sich schließlich 23 mal im 1000 Wald";
+
+        $objAnalyzer = new class_module_search_standard_analyzer();
+        $arrResults = $objAnalyzer->analyze($strText);
+
+        $arrResults = array_keys($arrResults);
+        $this->assertEquals(count($arrResults), 11);
+        $this->assertEquals($arrResults[0], "hänsel");
+        $this->assertEquals($arrResults[1], "und");
+        $this->assertEquals($arrResults[2], "2");
+        $this->assertEquals($arrResults[3], "gretel");
+        $this->assertEquals($arrResults[4], "verirrten");
+        $this->assertEquals($arrResults[5], "sich");
+        $this->assertEquals($arrResults[6], "schließlich");
+        $this->assertEquals($arrResults[7], "23");
+        $this->assertEquals($arrResults[8], "mal");
+        $this->assertEquals($arrResults[9], "1000");
+    }
+
+
+
+    public function testIndexCounter() {
+        $strText = "aaa aaa aaa bbb aaa ccc ccc ddd";
+
+        $objAnalyzer = new class_module_search_standard_analyzer();
+        $arrResults = $objAnalyzer->analyze($strText);
+
+        $arrResultValues = array_keys($arrResults);
+        $this->assertEquals(count($arrResultValues), 4);
+        $this->assertEquals($arrResultValues[0], "aaa");
+        $this->assertEquals($arrResultValues[1], "bbb");
+        $this->assertEquals($arrResultValues[2], "ccc");
+        $this->assertEquals($arrResultValues[3], "ddd");
+
+        $this->assertEquals($arrResults["aaa"], 4);
+        $this->assertEquals($arrResults["bbb"], 1);
+        $this->assertEquals($arrResults["ccc"], 2);
+        $this->assertEquals($arrResults["ddd"], 1);
+    }
+
+
     public function testIndexCreate() {
 
         $objSearchDocument = new class_module_search_document();

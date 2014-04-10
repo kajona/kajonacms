@@ -30,8 +30,7 @@ class class_module_search_standard_analyzer {
 
         $this->clearmarks();
         $this->lowerize();
-        $this->clearShortText();
-        $this->tokenize();
+        $this->tokenizeAndClearShortText();
         $this->blacklisting();
         $this->stemming();
 
@@ -79,10 +78,15 @@ class class_module_search_standard_analyzer {
      * Splits the current text into several tokens
      * @return void
      */
-    private function tokenize() {
+    private function tokenizeAndClearShortText() {
         $arrResults = array();
         preg_match_all('/\w{1,}/u', $this->getText(), $arrResults);
-        $this->setResults($arrResults[0]);
+
+        $arrFiltered = array_filter($arrResults[0], function($strOneHit) {
+            return is_numeric($strOneHit) || uniStrlen($strOneHit) > 2;
+        });
+
+        $this->setResults($arrFiltered);
         $this->setResults(array_count_values($this->getResults()));
     }
 
@@ -115,14 +119,6 @@ class class_module_search_standard_analyzer {
     private function clearmarks() {
         $arrMarks = class_config::getInstance("search_blacklist.php")->getConfig("marks_list");
         $this->setText(uniStrReplace($arrMarks, "", html_entity_decode($this->getText())));
-    }
-
-    /**
-     * analyze only text with more than 2 characters
-     * @return void
-     */
-    private function clearShortText() {
-        $this->setText(preg_replace('/\b[\w]{1,2}\b/u', "", $this->getText()));
     }
 
 }
