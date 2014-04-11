@@ -2,7 +2,8 @@
 # vagrant startup config script
 # STB 04/2014
 ###############################
-
+# Ubuntu #
+#
 
 ######  DO NOT TOUCH THE FIRST BLOCK !!!! ##########
 

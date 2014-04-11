@@ -2,13 +2,14 @@
 # vagrant startup config script
 # STB 04/2014
 ###############################
-# Fedora #
+# CentOS #
 #
 
 ######  DO NOT TOUCH THE FIRST BLOCK !!!! ##########
 
 ## yum update and install apache2
-yum install -y httpd php mysql-server mod_ssl phpmyadmin
+# on Centos you need php-pdo: database access abstraction module for PHP applications
+yum install -y httpd php mysql-server php-pdo mod_ssl phpmyadmin
 
 ## prevent annoying warning during apache (re-)start
 echo "ServerName KajonaVagrantVM" >> /etc/httpd/conf/httpd.conf

@@ -34,8 +34,8 @@ echo "; STB-CONTROL: php.ini was modified " >> $PHPINI
 ## Fancy again! Enable mod_rewrite by setting AllowOverride to ALL
 sed 's/AllowOverride None/AllowOverride All/g'  $HTTPCONF >$HTTPCONF2
 cp $HTTPCONF2 $HTTPCONF
-echo "ServerName KajonaVagrantVM" >> $HTTPCONF
 
+service httpd restart
 
 ## make Fedora's bash handy
 echo "alias vi='vim'" >>/etc/bashrc
@@ -51,7 +51,8 @@ echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 echo "Now you can 'vagrant ssh' into the new machine!"
 echo "For Kajona: Please remember to change your database settings in project/system/config.php !!"
 echo
-echo "SSL/https is activated but only available vi IP-Address of the machine! NOT via port forwarding on localhost"
+echo "SSL/https is activated, available via IP-Address of the machine or via port forwarding on port 8443."
+echo "Use https://localhost:8443"
 echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
 echo
 echo

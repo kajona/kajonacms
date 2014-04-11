@@ -2,13 +2,13 @@
 # vagrant startup config script
 # STB 04/2014
 ###############################
-# Ubuntu #
+# CentOS #
 #
 ## Set variables
-PHPINI = /etc/php5/apache2/php.ini
-PHPINI2 = /etc/php5/apache2/php.ini_
-HTTPCONF = /etc/apache2/httpd.conf
-HTTPCONF2 = /etc/apache2/httpd.conf_
+PHPINI=/etc/php.ini
+PHPINI2=/etc/php.ini_
+HTTPCONF=/etc/httpd/conf/httpd.conf
+HTTPCONF2=/etc/httpd/conf/httpd.conf_
 ###############################
 
 
@@ -37,14 +37,12 @@ cp $HTTPCONF2 $HTTPCONF
 
 service httpd restart
 
-## make Ubuntu's bash handy
-echo "\"\e[5~\"": beginning-of-history >>/etc/inputrc
-echo "\"\e[6~\"": end-of-history >>/etc/inputrc
+## make Fedora's bash handy
+echo "alias vi='vim'" >>/etc/bashrc
+echo "alias la='ls -la'" >>/etc/bashrc
+echo "alias ..='cd ..'" >>/etc/bashrc
 
-echo "alias la='ls -la'" >>/etc/bash.bashrc
-echo "alias ..='cd ..'" >>/etc/bash.bashrc
-echo "alias la='ls -la'" >>/root/.bashrc
-echo "alias la='ls -la'" >>/home/vagrant/.bashrc
+echo "PS1=\"\[\033[0;36m\]\u@\h:\w$\[\033[0m\] \"" >>/etc/bashrc
 
 
 echo
@@ -52,6 +50,9 @@ echo
 echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
 echo "Now you can 'vagrant ssh' into the new machine!"
 echo "For Kajona: Please remember to change your database settings in project/system/config.php !!"
+echo
+echo "SSL/https is activated, available via IP-Address of the machine or via port forwarding on port 8443."
+echo "Use https://localhost:8443"
 echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
 echo
 echo
