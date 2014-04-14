@@ -8,7 +8,6 @@ Please refer to our website at http://www.kajona.de for further details and prep
 **For prepared builds see http://www.kajona.de/downloads.html**
 
 
-
 Bugtracker / Issues
 ---
 
