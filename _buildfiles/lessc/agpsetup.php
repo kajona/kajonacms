@@ -6,9 +6,9 @@ echo "compiling skin css files...\n";
 //files to compile
 
 $arrFilesToCompile = array(
-    __DIR__."/../temp/kajona/core/module_agpskin/admin/skins/agp/less/bootstrap.less" => __DIR__."/../temp/kajona/core/module_agpskin/admin/skins/agp/less/styles.css",
-    __DIR__."/../temp/kajona/core/module_agpskin/admin/skins/agp/less/responsive.less" => __DIR__."/../temp/kajona/core/module_agpskin/admin/skins/agp/less/responsive.css",
-    __DIR__."/../temp/kajona/core/module_agpskin/admin/skins/agp/less/bootstrap_pe.less" => __DIR__."/../temp/kajona/core/module_agpskin/admin/skins/agp/less/styles_pe.css",
+    __DIR__."/../temp/kajona/core_agp/module_agpskin/admin/skins/agp/less/bootstrap.less" => __DIR__."/../temp/kajona/core_agp/module_agpskin/admin/skins/agp/less/styles.css",
+    __DIR__."/../temp/kajona/core_agp/module_agpskin/admin/skins/agp/less/responsive.less" => __DIR__."/../temp/kajona/core_agp/module_agpskin/admin/skins/agp/less/responsive.css",
+    __DIR__."/../temp/kajona/core_agp/module_agpskin/admin/skins/agp/less/bootstrap_pe.less" => __DIR__."/../temp/kajona/core_agp/module_agpskin/admin/skins/agp/less/styles_pe.css",
 );
 
 $strSkinReplacement = "";
@@ -24,10 +24,10 @@ $strPeReplacement = <<<TXT
 TXT;
 
 $arrFilesToUpdate = array(
-    __DIR__."/../temp/kajona/core/module_agpskin/admin/skins/agp/main.tpl" => $strSkinReplacement,
-    __DIR__."/../temp/kajona/core/module_agpskin/admin/skins/agp/folderview.tpl" => $strSkinReplacement,
-    __DIR__."/../temp/kajona/core/module_agpskin/admin/skins/agp/login.tpl" => $strSkinReplacement,
-    __DIR__."/../temp/kajona/core/module_agpskin/admin/skins/agp/elements.tpl" => $strPeReplacement
+    __DIR__."/../temp/kajona/core_agp/module_agpskin/admin/skins/agp/main.tpl" => $strSkinReplacement,
+    __DIR__."/../temp/kajona/core_agp/module_agpskin/admin/skins/agp/folderview.tpl" => $strSkinReplacement,
+    __DIR__."/../temp/kajona/core_agp/module_agpskin/admin/skins/agp/login.tpl" => $strSkinReplacement,
+    __DIR__."/../temp/kajona/core_agp/module_agpskin/admin/skins/agp/elements.tpl" => $strPeReplacement
 );
 
 
