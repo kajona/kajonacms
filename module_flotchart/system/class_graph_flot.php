@@ -298,16 +298,17 @@ class class_graph_flot implements interface_graph {
         $strReturn = $strReturn.$strDivTitle.$strDivChart.$strDivLabelXAxis.$strDivLabelYAxis.$strDivLegend."</div>";
         
         //generate the wrapping js-code and all requirements
+        $strCorePath = class_resourceloader::getInstance()->getCorePathForModule("module_flotchart");
         $strReturn .= "<script type='text/javascript'>
             KAJONA.admin.loader.loadFile(['/core/module_flotchart/admin/scripts/js/flot/jquery.flot.min.js'], function() {
                 KAJONA.admin.loader.loadFile([
-                    '/core/module_flotchart/admin/scripts/js/flot/jquery.flot.pie.min.js',
-                    '/core/module_flotchart/admin/scripts/js/flot/jquery.flot.stack.min.js',
-                    '/core/module_flotchart/admin/scripts/js/flot/jquery.flot.resize.min.js',
-                    '/core/module_flotchart/admin/scripts/js/flot/jquery.flot.orderBars.js',
-                    '/core/module_flotchart/admin/scripts/js/flot/excanvas.min.js',
-                    '/core/module_flotchart/admin/scripts/js/flot/flot_helper.js',
-                    '/core/module_flotchart/admin/scripts/flot.css'
+                    '{$strCorePath}/module_flotchart/admin/scripts/js/flot/jquery.flot.pie.min.js',
+                    '{$strCorePath}/module_flotchart/admin/scripts/js/flot/jquery.flot.stack.min.js',
+                    '{$strCorePath}/module_flotchart/admin/scripts/js/flot/jquery.flot.resize.min.js',
+                    '{$strCorePath}/module_flotchart/admin/scripts/js/flot/jquery.flot.orderBars.js',
+                    '{$strCorePath}/module_flotchart/admin/scripts/js/flot/excanvas.min.js',
+                    '{$strCorePath}/module_flotchart/admin/scripts/js/flot/flot_helper.js',
+                    '{$strCorePath}/module_flotchart/admin/scripts/flot.css'
                 ], function() {
                     ".$strChartCode."    
                 });

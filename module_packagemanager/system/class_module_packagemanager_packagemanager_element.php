@@ -28,7 +28,7 @@ class class_module_packagemanager_packagemanager_element extends class_module_pa
         $strReturn = "";
 
         if(uniStrpos($this->getObjMetadata()->getStrPath(), "core") === false)
-            throw new class_exception("Current module not located at /core.", class_exception::$level_ERROR);
+            throw new class_exception("Current module not located at /core*.", class_exception::$level_ERROR);
 
         if(!$this->isInstallable())
             throw new class_exception("Current module isn't installable, not all requirements are given", class_exception::$level_ERROR);
