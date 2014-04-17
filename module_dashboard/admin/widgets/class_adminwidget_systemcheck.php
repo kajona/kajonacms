@@ -110,13 +110,14 @@ class class_adminwidget_systemcheck extends class_adminwidget implements interfa
                         "<span class=\"ok\">".$this->getLang("commons_yes")."</span>" :
                         "<span class=\"nok\">".$this->getLang("commons_no")."</span>")
             );
-            $strReturn .= $this->widgetText(
-                $this->getLang("systemcheck_kajona_writeper")." /core ".( is_writable(_realpath_."/core") ?
-                    "<span class=\"ok\">".$this->getLang("commons_yes")."</span>" :
-                    "<span class=\"nok\">".$this->getLang("commons_no")."</span>")
-            );
 
-
+            foreach(class_classloader::getCoreDirectories() as $strOneCore) {
+                $strReturn .= $this->widgetText(
+                    $this->getLang("systemcheck_kajona_writeper")." /".$strOneCore." ".( is_writable(_realpath_."/".$strOneCore) ?
+                        "<span class=\"ok\">".$this->getLang("commons_yes")."</span>" :
+                        "<span class=\"nok\">".$this->getLang("commons_no")."</span>")
+                );
+            }
 
         }
         return "<div class=\"adminwidget_systemcheck\">".$strReturn."</div>";
