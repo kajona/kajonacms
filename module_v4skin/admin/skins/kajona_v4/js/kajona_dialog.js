@@ -17,6 +17,8 @@ KAJONA.admin.ModalDialog = function(strDialogId, intDialogType, bitDragging, bit
     this.iframeId;
     this.iframeURL;
 
+    this.unbindOnClick = true;
+
     this.setTitle = function (strTitle) {
         if(strTitle == "")
             strTitle = "&nbsp;";
@@ -24,6 +26,7 @@ KAJONA.admin.ModalDialog = function(strDialogId, intDialogType, bitDragging, bit
     };
 
     this.setContent = function (strContent, strConfirmButton, strLinkHref) {
+
         if (intDialogType == 1) {
             this.unbindEvents();
 
@@ -33,11 +36,25 @@ KAJONA.admin.ModalDialog = function(strDialogId, intDialogType, bitDragging, bit
             $confirmButton.html(strConfirmButton);
 
             if(jQuery.isFunction(strLinkHref)) {
-                $confirmButton.click(strLinkHref);
+
+                $confirmButton.click(function() {
+                    strLinkHref();
+                    $confirmButton.unbind();
+
+                    $confirmButton.click(function() {
+                        return false;
+                    });
+                });
             }
             else {
                 $confirmButton.click(function() {
                     window.location = strLinkHref;
+
+                    $confirmButton.unbind();
+                    $confirmButton.click(function() {
+                        return false;
+                    });
+
                     return false;
                 });
             }
