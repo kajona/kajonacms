@@ -23,6 +23,11 @@ apt-get install -y w3m zip vim
 ## enable mod_rewrite
 a2enmod rewrite
 
+## enable mod_ssl
+a2ensite default-ssl
+a2enmod ssl
+
+
 ## IMPORTANT! Restart apache! Otherwise lib-gd is NOT available!
 /etc/init.d/apache2 restart
 #####################################################

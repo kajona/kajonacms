@@ -75,7 +75,6 @@ class class_graph_ezc implements interface_graph {
 
     /**
      * Constructor
-
      */
     public function __construct() {
 
@@ -476,7 +475,7 @@ class class_graph_ezc implements interface_graph {
      * Does the magic. Creates all necessary stuff and finally
      * sends the graph directly (!!!) to the browser.
      * Execution should be terminated afterwards.
-
+     * @return void
      */
     public function showGraph() {
         $this->preGraphCreation();
@@ -487,7 +486,8 @@ class class_graph_ezc implements interface_graph {
      * Does the magic. Creates all necessary stuff and finally
      * saves the graph to the specified filename
      *
-     * @param $strFilename
+     * @param string $strFilename
+     * @return void
      */
     public function saveGraph($strFilename) {
         $this->preGraphCreation();
@@ -531,6 +531,7 @@ class class_graph_ezc implements interface_graph {
      * Set the title of the x-axis
      *
      * @param string $strTitle
+     * @return void
      */
     public function setStrXAxisTitle($strTitle) {
         $this->strXAxisTitle = $strTitle;
@@ -540,6 +541,7 @@ class class_graph_ezc implements interface_graph {
      * Set the title of the y-axis
      *
      * @param string $strTitle
+     * @return void
      */
     public function setStrYAxisTitle($strTitle) {
         $this->strYAxisTitle = $strTitle;
@@ -549,6 +551,7 @@ class class_graph_ezc implements interface_graph {
      * Set the title of the graph
      *
      * @param string $strTitle
+     * @return void
      */
     public function setStrGraphTitle($strTitle) {
         $this->strGraphTitle = $strTitle;
@@ -560,6 +563,7 @@ class class_graph_ezc implements interface_graph {
      * In most cases this is the background.
      *
      * @param string $strColor in hex-values: #ccddee
+     * @return void
      */
     public function setStrBackgroundColor($strColor) {
         $this->strBackgroundColor = $strColor;
@@ -569,6 +573,7 @@ class class_graph_ezc implements interface_graph {
      * Set the total width of the chart
      *
      * @param int $intWidth
+     * @return void
      */
     public function setIntWidth($intWidth) {
         $this->intWidth = $intWidth;
@@ -578,6 +583,7 @@ class class_graph_ezc implements interface_graph {
      * Set the total height of the chart
      *
      * @param int $intHeight
+     * @return void
      */
     public function setIntHeight($intHeight) {
         $this->intHeight = $intHeight;
@@ -589,6 +595,7 @@ class class_graph_ezc implements interface_graph {
      *
      * @param array $arrXAxisTickLabels array of string to be used as labels
      * @param int $intNrOfWrittenLabels the amount of x-axis labels to be printed
+     * @return void
      */
     public function setArrXAxisTickLabels($arrXAxisTickLabels, $intNrOfWrittenLabels = 12) {
 
@@ -623,6 +630,7 @@ class class_graph_ezc implements interface_graph {
      * Sets if to render a legend or not
      *
      * @param bool $bitRenderLegend
+     * @return void
      */
     public function setBitRenderLegend($bitRenderLegend) {
         $this->bitRenderLegend = $bitRenderLegend;
@@ -632,6 +640,7 @@ class class_graph_ezc implements interface_graph {
      * Set the font to be used in the chart
      *
      * @param string $strFont
+     * @return void
      */
     public function setStrFont($strFont) {
         $this->strFont = $strFont;
@@ -641,6 +650,7 @@ class class_graph_ezc implements interface_graph {
      * Set the color of the fonts used in the chart
      *
      * @param string $strFontColor
+     * @return void
      */
     public function setStrFontColor($strFontColor) {
         $this->strFontColor = $strFontColor;
@@ -650,7 +660,8 @@ class class_graph_ezc implements interface_graph {
     /**
      * Sets the angle to be used for rendering the x-axis lables
      *
-     * @param $intXAxisAngle
+     * @param int $intXAxisAngle
+     * @return void
      */
     public function setIntXAxisAngle($intXAxisAngle) {
         $this->intXAxisAngle = $intXAxisAngle;
@@ -660,6 +671,7 @@ class class_graph_ezc implements interface_graph {
      * En- or disables 3d. Otherwise default beaviour.
      *
      * @param boolean $bit3d
+     * @return void
      */
     public function setBit3d($bit3d) {
         $this->bit3d = $bit3d;
@@ -669,6 +681,7 @@ class class_graph_ezc implements interface_graph {
      * Sets the background-color of the title in html-notation
      *
      * @param string $strTitleBackgroundColor
+     * @return void
      */
     public function setStrTitleBackgroundColor($strTitleBackgroundColor) {
         $this->strTitleBackgroundColor = $strTitleBackgroundColor;
@@ -678,6 +691,7 @@ class class_graph_ezc implements interface_graph {
      * Sets the font-color of the title in html-notation
      *
      * @param string $strTitleFontColor
+     * @return void
      */
     public function setStrTitleFontColor($strTitleFontColor) {
         $this->strTitleFontColor = $strTitleFontColor;
@@ -688,6 +702,7 @@ class class_graph_ezc implements interface_graph {
      * Using this setter, the legend may be shifted to the bottom.
      *
      * @param bool $bitLegendPositionBottom
+     * @return void
      */
     public function setBitLegendPositionBottom($bitLegendPositionBottom) {
         $this->bitLegendPositionBottom = $bitLegendPositionBottom;

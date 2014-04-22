@@ -19,6 +19,7 @@ config.vm.provision :shell, :path => "2_setup_vm_environment.sh"
 
 # config to access Kajona via port forwarding on localhost
 config.vm.network :forwarded_port, host: 8008, guest: 80
+config.vm.network :forwarded_port, host: 8443, guest: 443
 
 # give additional settings for networking in ~/.vagrant.d => see README.txt
 #-----------------------------------------------------------------------

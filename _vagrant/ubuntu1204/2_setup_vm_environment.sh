@@ -5,10 +5,10 @@
 # Ubuntu #
 #
 ## Set variables
-PHPINI = /etc/php5/apache2/php.ini
-PHPINI2 = /etc/php5/apache2/php.ini_
-HTTPCONF = /etc/apache2/httpd.conf
-HTTPCONF2 = /etc/apache2/httpd.conf_
+PHPINI=/etc/php5/apache2/php.ini
+PHPINI2=/etc/php5/apache2/php.ini_
+HTTPCONF=/etc/apache2/httpd.conf
+HTTPCONF2=/etc/apache2/httpd.conf_
 ###############################
 
 
@@ -35,7 +35,8 @@ echo "; STB-CONTROL: php.ini was modified " >> $PHPINI
 sed 's/AllowOverride None/AllowOverride All/g'  $HTTPCONF >$HTTPCONF2
 cp $HTTPCONF2 $HTTPCONF
 
-service httpd restart
+## Restart apache again
+service apache2 restart
 
 ## make Ubuntu's bash handy
 echo "\"\e[5~\"": beginning-of-history >>/etc/inputrc

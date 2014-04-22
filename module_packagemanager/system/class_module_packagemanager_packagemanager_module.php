@@ -145,7 +145,7 @@ class class_module_packagemanager_packagemanager_module implements interface_pac
      */
     public function updateDefaultTemplate() {
         $objFilesystem = new class_filesystem();
-        class_logger::getInstance(class_logger::PACKAGEMANAGEMENT)->addLogRow("updating default template from /core/".$this->objMetadata->getStrPath(), class_logger::$levelInfo);
+        class_logger::getInstance(class_logger::PACKAGEMANAGEMENT)->addLogRow("updating default template from /".$this->objMetadata->getStrPath(), class_logger::$levelInfo);
         if(is_dir(_realpath_."/".$this->objMetadata->getStrPath()."/templates/default/js"))
             $objFilesystem->folderCopyRecursive($this->objMetadata->getStrPath()."/templates/default/js", "/templates/default/js", true);
 

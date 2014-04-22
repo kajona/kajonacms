@@ -77,6 +77,10 @@
             </fileset>
         </copy>
 
+        <exec executable="php" dir="${basedir}"  failonerror="on" >
+            <arg line="-f cleanCore.php ${tempPath}"/>
+        </exec>
+
         <delete dir="${basedir}${tempPath}/core/_debugging"/>
         <delete dir="${basedir}${tempPath}/core/_testing"/>
         <delete dir="${basedir}${tempPath}/core/_buildfiles"/>
