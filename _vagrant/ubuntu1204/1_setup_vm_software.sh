@@ -17,6 +17,10 @@ echo "ServerName KajonaVagrantVM" >> /etc/apache2/httpd.conf
 ## get some more software
 apt-get install -y libapache2-mod-gnutls php5 php5-mysql php5-sqlite php5-gd
 
+## we want an up to date xdebug, plz
+apt-get install -y build-essential php-pear
+pecl install xdebug
+
 ## get some handy tools
 apt-get install -y w3m zip vim
 
