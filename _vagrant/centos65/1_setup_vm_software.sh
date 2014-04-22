@@ -11,6 +11,10 @@
 # on Centos you need php-pdo: database access abstraction module for PHP applications
 yum install -y httpd php mysql-server php-pdo mod_ssl phpmyadmin php-mysql php-gd php-xml
 
+# dependency chain for xdebug
+yum install -y  php-pear php-devel gcc
+pecl install xdebug
+
 ## prevent annoying warning during apache (re-)start
 echo "ServerName KajonaVagrantVM" >> /etc/httpd/conf/httpd.conf
 
