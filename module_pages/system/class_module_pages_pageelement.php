@@ -371,7 +371,8 @@ class class_module_pages_pageelement extends class_model implements interface_mo
                         AND page_element_ph_language = ?
                        ".$strAnd."
                   ORDER BY page_element_ph_placeholder ASC,
-                            system_sort ASC";
+                           page_element_ph_language ASC,
+                           system_sort ASC";
 
         $arrReturn = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, $arrParams);
 
@@ -401,8 +402,9 @@ class class_module_pages_pageelement extends class_model implements interface_mo
 						 WHERE system_prev_id=?
 						   AND page_element_ph_element = element_name
 						   AND system_id = page_element_id
-						 ORDER BY page_element_ph_placeholder ASC,
-						 		system_sort ASC";
+				      ORDER BY page_element_ph_placeholder ASC,
+				               page_element_ph_language ASC,
+						 	   system_sort ASC";
 
         $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array($strPageId));
 
