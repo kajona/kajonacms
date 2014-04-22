@@ -17,6 +17,9 @@ KAJONA.admin.ModalDialog = function(strDialogId, intDialogType, bitDragging, bit
     this.iframeId;
     this.iframeURL;
 
+    /** Set this variable to false if you don't want to remove actions on click */
+    this.unbindOnClick = true;
+
     this.setTitle = function (strTitle) {
         if(strTitle == "")
             strTitle = "&nbsp;";
@@ -24,6 +27,7 @@ KAJONA.admin.ModalDialog = function(strDialogId, intDialogType, bitDragging, bit
     };
 
     this.setContent = function (strContent, strConfirmButton, strLinkHref) {
+
         if (intDialogType == 1) {
             this.unbindEvents();
 
@@ -32,12 +36,32 @@ KAJONA.admin.ModalDialog = function(strDialogId, intDialogType, bitDragging, bit
             var $confirmButton = $('#' + this.containerId + '_confirmButton');
             $confirmButton.html(strConfirmButton);
 
+            var bitUnbind = this.unbindOnClick;
+
             if(jQuery.isFunction(strLinkHref)) {
-                $confirmButton.click(strLinkHref);
+
+                $confirmButton.click(function() {
+                    strLinkHref();
+
+                    if(bitUnbind) {
+                        $confirmButton.unbind();
+                        $confirmButton.click(function() {
+                            return false;
+                        });
+                    }
+                });
             }
             else {
                 $confirmButton.click(function() {
                     window.location = strLinkHref;
+
+                    if(bitUnbind) {
+                        $confirmButton.unbind();
+                        $confirmButton.click(function() {
+                            return false;
+                        });
+                    }
+
                     return false;
                 });
             }
@@ -158,6 +182,7 @@ KAJONA.admin.ModalDialog = function(strDialogId, intDialogType, bitDragging, bit
         if(intDialogType == 1) {
             $('#' + this.containerId + '_cancelButton').unbind();
             $('#' + this.containerId + '_confirmButton').unbind();
+            this.unbindOnClick = true;
         }
     };
 };
