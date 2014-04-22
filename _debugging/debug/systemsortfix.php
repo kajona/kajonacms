@@ -68,7 +68,6 @@ function validateSingleLevelSort($strParentId) {
             echo "<div>".$strCurLevel."</div>";
         }
 
-
         $strCurLevel = $objCurNode->getSystemid()." - ".$objCurNode->getIntSort()." - ".$objCurNode->getStrRecordClass()." - ".$objCurNode->getStrRecordComment();
 
         if($intI != $objCurNode->getIntSort()) {
@@ -85,7 +84,42 @@ function validateSingleLevelSort($strParentId) {
 
         echo "<div>".$strCurLevel."</div>";
 
+        if($objCurNode instanceof class_module_pages_page) {
+            validateSinglePage($objCurNode);
+        }
         validateSingleLevelSort($objCurNode->getSystemid());
     }
     echo "</div>";
+}
+
+
+function validateSinglePage(class_module_pages_page $objPage) {
+    $arrElements = class_module_pages_pageelement::getAllElementsOnPage($objPage->getSystemid());
+
+    $intI = 0;
+    $strPrevPlaceholder = "";
+    foreach($arrElements as $objOneElement) {
+
+        $strCurLevel = $objOneElement->getSystemid()." - ".$objOneElement->getIntSort()." - ".$objOneElement->getStrRecordClass()." - ".$objOneElement->getStrDisplayName()." - ".$objOneElement->getStrPlaceholder();
+
+        if($strPrevPlaceholder != $objOneElement->getStrPlaceholder())
+            $intI = 1;
+
+        if($objOneElement->getIntSort() != $intI) {
+            $strCurLevel = "<span style='color: red'>expected: ".$intI.", got ".$objOneElement->getIntSort()." @ ".$strCurLevel."</span>";
+
+            if(getGet("doFix") != "") {
+                $strCurLevel .= "\nSetting new sort-id to ".$intI."\n";
+                $strQuery = "UPDATE "._dbprefix_."system SET system_sort = ? WHERE system_id = ? ";
+                class_carrier::getInstance()->getObjDB()->_pQuery($strQuery, array($intI, $objOneElement->getSystemid()));
+            }
+        }
+        else {
+            $strCurLevel = "<span style='color: green'>".$strCurLevel."</span>";
+        }
+
+        echo "<div style='padding-left: 25px;'>".$strCurLevel."</div>";
+        $strPrevPlaceholder = $objOneElement->getStrPlaceholder();
+        $intI++;
+    }
 }
