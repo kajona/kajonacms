@@ -8,7 +8,7 @@
 
 
 /**
- * The admin-form generator is used to create, validate and mangage forms for the backend.
+ * The admin-form generator is used to create, validate and manage forms for the backend.
  * Those forms are created as automatically as possible, so the setup of the field-types, validators
  * and more is done by reflection and code-inspection. Therefore, especially the annotations on the extending
  * class_model-objects are analyzed.
@@ -80,6 +80,8 @@ class class_admin_formgenerator {
     public function __construct($strFormname,  $objSourceobject) {
         $this->strFormname = $strFormname;
         $this->objSourceobject = $objSourceobject;
+
+        $this->strOnSubmit = "$(this).on('submit', function() { return false; }); return true;";
     }
 
     /**
@@ -554,6 +556,7 @@ class class_admin_formgenerator {
 
     /**
      * @param string $strFormEncoding
+     * @return void
      */
     public function setStrFormEncoding($strFormEncoding) {
         $this->strFormEncoding = $strFormEncoding;
