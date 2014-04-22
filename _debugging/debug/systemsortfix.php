@@ -98,11 +98,12 @@ function validateSinglePage(class_module_pages_page $objPage) {
 
     $intI = 0;
     $strPrevPlaceholder = "";
+    $strPrevLanguage = "";
     foreach($arrElements as $objOneElement) {
 
         $strCurLevel = $objOneElement->getSystemid()." - ".$objOneElement->getIntSort()." - ".$objOneElement->getStrRecordClass()." - ".$objOneElement->getStrDisplayName()." - ".$objOneElement->getStrPlaceholder();
 
-        if($strPrevPlaceholder != $objOneElement->getStrPlaceholder())
+        if($strPrevPlaceholder != $objOneElement->getStrPlaceholder() || $strPrevLanguage != $objOneElement->getStrLanguage())
             $intI = 1;
 
         if($objOneElement->getIntSort() != $intI) {
@@ -120,6 +121,7 @@ function validateSinglePage(class_module_pages_page $objPage) {
 
         echo "<div style='padding-left: 25px;'>".$strCurLevel."</div>";
         $strPrevPlaceholder = $objOneElement->getStrPlaceholder();
+        $strPrevLanguage = $objOneElement->getStrLanguage();
         $intI++;
     }
 }
