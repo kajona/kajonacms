@@ -379,6 +379,7 @@ class class_request_dispatcher {
             //memory
             if(_memory_ === true) {
                 $strDebug .= "<b>Memory/Max Memory:</b> " . bytesToString(memory_get_usage()) . "/" . bytesToString(memory_get_peak_usage()) . " ";
+                $strDebug .= "<b>Classes Loaded:</b> " . class_classloader::getInstance()->getIntNumberOfClassesLoaded() . " ";
             }
 
             //and check the cache-stats
