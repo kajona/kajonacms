@@ -66,6 +66,9 @@ class class_carrier {
             //The session-start is handled by class_session internally to avoid
             //senseless db-updates, e.g. when manipulating images
             //self::$objCarrier->getObjSession()->initInternalSession();
+
+            //include relevant classes for possible static init blocks
+            class_classloader::getInstance()->includeClasses();
         }
 
         return self::$objCarrier;
@@ -215,8 +218,8 @@ class class_carrier {
     /**
      * Writes a param to the current set of params sent with the current requests.
      *
-     * @param $strKey
-     * @param $strValue
+     * @param string $strKey
+     * @param mixed $strValue
      *
      * @return void
      */
@@ -228,9 +231,9 @@ class class_carrier {
     /**
      * Returns the value of a param sent with the current request.
      *
-     * @param $strKey
+     * @param string $strKey
      *
-     * @return string
+     * @return mixed
      */
     public function getParam($strKey) {
         self::initParamsArray();
@@ -241,6 +244,7 @@ class class_carrier {
      * Internal helper, loads and merges all params passed with the current request.
      *
      * @static
+     * @return void
      */
     private static function initParamsArray() {
         if(self::$arrParams === null) {
@@ -249,3 +253,6 @@ class class_carrier {
     }
 
 }
+
+//startup the system....
+class_carrier::getInstance();
