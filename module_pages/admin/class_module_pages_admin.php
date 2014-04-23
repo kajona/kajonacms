@@ -180,7 +180,12 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
         if($this->getParam("pe") != "")
             return "";
 
-        if($objListEntry instanceof class_module_pages_page && $objListEntry->rightDelete()) {
+        $objLockmanager = $objListEntry->getLockManager();
+        if(!$objLockmanager->isAccessibleForCurrentUser()) {
+            return $this->objToolkit->listButton(class_adminskin_helper::getAdminImage("icon_deleteLocked", $this->getLang("commons_locked")));
+        }
+        else if($objListEntry instanceof class_module_pages_page && $objListEntry->rightDelete()) {
+
             return $this->objToolkit->listDeleteButton(
                 $objListEntry->getStrDisplayName(), $this->getLang("seite_loeschen_frage"), class_link::getLinkAdminHref($this->getArrModule("modul"), "deletePageFinal", "&systemid=".$objListEntry->getSystemid())
             );
