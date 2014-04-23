@@ -17,7 +17,6 @@ echo "+-------------------------------------------------------------------------
 
 
 $arrStart = gettimeofday();
-$objCarrier = class_carrier::getInstance();
 $arrEnd = gettimeofday();
 $intTimeUsed = (($arrEnd['sec'] * 1000000 + $arrEnd['usec']) -($arrStart['sec'] * 1000000 + $arrStart['usec']))/1000000;
 echo "init took              ".$intTimeUsed." sec\n";

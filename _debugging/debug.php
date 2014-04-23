@@ -8,10 +8,6 @@
 
 class class_debug_helper {
 
-    function __construct() {
-        class_carrier::getInstance();
-    }
-
     public function debugHelper() {
         echo "<pre>";
         echo "<b>Kajona V4 Debug Subsystem</b>\n\n";

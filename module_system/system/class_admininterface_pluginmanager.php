@@ -59,10 +59,9 @@ class class_admininterface_pluginmanager {
     }
 
     public function __construct() {
-        $objCarrier = class_carrier::getInstance();
-        $this->objDB = $objCarrier->getObjDB();
-        $this->objToolkit = $objCarrier->getObjToolkit("admin");
-        $this->objLang = $objCarrier->getObjLang();
+        $this->objDB = class_carrier::getInstance()->getObjDB();
+        $this->objToolkit = class_carrier::getInstance()->getObjToolkit("admin");
+        $this->objLang = class_carrier::getInstance()->getObjLang();
     }
 
     private function addPlugin($objPlugin, $strType, $strName) {

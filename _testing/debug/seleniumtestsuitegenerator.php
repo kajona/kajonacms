@@ -18,7 +18,6 @@ if(@ini_get("max_execution_time") < 2000 && @ini_get("max_execution_time") > 0)
 class class_seleniumsuite {
     
     function __construct() {
-        class_carrier::getInstance();
         $this->strProjectFolder  = "/project";
         $this->strSeleniumFolder = $this->strProjectFolder."/seleniumtesting";
     }

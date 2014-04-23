@@ -43,8 +43,6 @@ class class_flyimage {
      * constructor, init the parent-class
      */
     public function __construct() {
-        //Loading all configs...
-        class_carrier::getInstance();
         //find the params to use
         $this->strFilename = urldecode(getGet("image"));
         //avoid directory traversing
