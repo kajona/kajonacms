@@ -17,7 +17,7 @@ echo "ServerName KajonaVagrantVM" >> /etc/apache2/httpd.conf
 ## get some more software
 apt-get install -y libapache2-mod-gnutls php5 php5-mysql php5-sqlite php5-gd
 
-## we want an up to date xdebug, plz
+## dependency chain for an up-to-date xdebug. xdebug > 2.1 is required to have remote_connect_back
 apt-get install -y build-essential php-pear
 pecl install xdebug
 

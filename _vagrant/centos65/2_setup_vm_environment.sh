@@ -30,7 +30,7 @@ cp $PHPINI2 $PHPINI
 
 
 #xdebug stuff
-echo "zend_extension=xdebug.so " >> $PHPINI
+echo "zend_extension=/usr/lib64/php/modules/xdebug.so " >> $PHPINI
 echo "xdebug.remote_enable=On " >> $PHPINI
 echo "xdebug.remote_connect_back=1 " >> $PHPINI
 echo "xdebug.remote_host=localhost " >> $PHPINI
