@@ -164,11 +164,12 @@ class class_module_search_commons extends class_model implements interface_model
         $objSearchQuery->getListQuery($strQuery, $arrParameters);
         $arrSearchResult = $this->objDB->getPArray($strQuery, $arrParameters, $intStart, $intEnd);
 
-        // check view right
+        // check view permissions on both, record and matching module
         foreach($arrSearchResult as $arrOneRow) {
             $objInstance = class_objectfactory::getInstance()->getObject($arrOneRow["search_ix_system_id"]);
 
-            if($objInstance != null && $objInstance->rightView()) {
+            $objModule = class_module_system_module::getModuleByName($objInstance->getArrModule("modul"));
+            if($objInstance != null && $objModule != null && $objInstance->rightView() && $objModule->rightView()) {
                 $objResult = new class_search_result();
                 $objResult->setObjObject($objInstance);
                 $objResult->setIntScore($arrOneRow["score"]);
