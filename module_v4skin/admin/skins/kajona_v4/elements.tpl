@@ -506,17 +506,11 @@ Upload-Field
 
 Upload-Field for multiple files with progress bar
 <input_upload_multiple>
-    <!--<div id="showUploaderBtn" class="btn">[lang,upload_multiple_dialogHeader,mediamanager]</div>-->
-
-    <!--<div id="kajonaUploadDialog" style="display: none;">-->
-
 
     <div id="kajonaUploadDialog">
 
-            <!-- The file upload form used as target for the file upload widget -->
             <div id="fileupload">
 
-                <!--<div class="row-fluid fileupload-buttonbar">-->
                     <div class="fileupload-buttonbar">
 
                         <span class="btn fileinput-button">
@@ -535,27 +529,21 @@ Upload-Field for multiple files with progress bar
                             <span>[lang,upload_multiple_cancel,mediamanager]</span>
                         </button>
 
-
-                        <!-- The global file processing state -->
                         <span class="fileupload-process"></span>
                         <div class="alert alert-info">
                             [lang,upload_dropArea,mediamanager]<br />
                              %%allowedExtensions%%
                         </div>
-
                     </div>
 
-                    <!-- The global progress state -->
                     <div class=" fileupload-progress " style="display: none;">
 
-                        <!-- The global progress bar -->
                         <div class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100">
                             <div class="bar" style="width:0%;"></div>
                         </div>
 
                         <div class="progress-extended">&nbsp;</div>
                     </div>
-                <!--</div>-->
 
                 <table class="table admintable table-striped-tbody files"><tbody class="files"></tbody></table>
             </div>
@@ -573,65 +561,63 @@ Upload-Field for multiple files with progress bar
             "/core/module_mediamanager/admin/scripts/jquery-fileupload/css/jquery.fileupload-ui.css"
         ], function() {
 
-                    console.log('init');
-
-                    $('#fileupload').fileupload({
-                        url: '_webpath_/xml.php?admin=1&module=mediamanager&action=fileUpload',
-                        dataType: 'json',
-                        autoUpload: false,
-                        paramName : '%%name%%',
-                        filesContainer: $('table.files'),
-                        formData: [
-                            {name: 'systemid', value: document.getElementById("mutliuploadSystemid").value},
-                            {name: 'inputElement', value : '%%name%%'},
-                            {name: 'jsonResponse', value : 'true'}
-                        ],
-                        messages: {
-                            maxNumberOfFiles: 'Maximum number of files exceeded',
-                            acceptFileTypes: "[lang,upload_fehler_filter,mediamanager]",
-                            maxFileSize: "[lang,upload_multiple_errorFilesize,mediamanager]",
-                            minFileSize: 'File is too small'
-                        },
-                        maxFileSize: %%maxFileSize%%,
-                        acceptFileTypes: %%acceptFileTypes%%,
-                        uploadTemplateId: null,
-                        downloadTemplateId: null,
-                        uploadTemplate: function (o) {
-                            var rows = $();
-                            $.each(o.files, function (index, file) {
-                                var row = $('<tr class="template-upload ">' +
-                                        '<td><p class="name"></p>' +
-                                        '<div class="error"></div>' +
-                                        '</td>' +
-                                        '<td><p class="size"></p>' +
-                                        '<div class="progress progress-striped active"><div class="bar"></div></div>' +
-                                        '</td>' +
-                                        '<td>' +
-                                        (!index && !o.options.autoUpload ?
-                                                '<button class="btn start " disabled>Start</button>' : '') +
-                                        (!index ? '<button class="btn cancel ">Cancel</button>' : '') +
-                                        '</td>' +
-                                        '</tr>');
-                                row.find('.name').text(file.name);
-                                row.find('.size').text(o.formatFileSize(file.size));
-                                if (file.error) {
-                                    row.find('.error').text(file.error);
-                                }
-                                rows = rows.add(row);
-                            });
-                            return rows;
+            $('#fileupload').fileupload({
+                url: '_webpath_/xml.php?admin=1&module=mediamanager&action=fileUpload',
+                dataType: 'json',
+                autoUpload: false,
+                paramName : '%%name%%',
+                filesContainer: $('table.files'),
+                formData: [
+                    {name: 'systemid', value: document.getElementById("mutliuploadSystemid").value},
+                    {name: 'inputElement', value : '%%name%%'},
+                    {name: 'jsonResponse', value : 'true'}
+                ],
+                messages: {
+                    maxNumberOfFiles: 'Maximum number of files exceeded',
+                    acceptFileTypes: "[lang,upload_fehler_filter,mediamanager]",
+                    maxFileSize: "[lang,upload_multiple_errorFilesize,mediamanager]",
+                    minFileSize: 'File is too small'
+                },
+                maxFileSize: %%maxFileSize%%,
+                acceptFileTypes: %%acceptFileTypes%%,
+                uploadTemplateId: null,
+                downloadTemplateId: null,
+                uploadTemplate: function (o) {
+                    var rows = $();
+                    $.each(o.files, function (index, file) {
+                        var row = $('<tr class="template-upload ">' +
+                                '<td><p class="name"></p>' +
+                                '<div class="error"></div>' +
+                                '</td>' +
+                                '<td><p class="size"></p>' +
+                                '<div class="progress progress-striped active"><div class="bar"></div></div>' +
+                                '</td>' +
+                                '<td>' +
+                                (!index && !o.options.autoUpload ?
+                                        '<button class="btn start " disabled style="display: none;">Start</button>' : '') +
+                                (!index ? '<button class="btn cancel ">[lang,upload_multiple_cancel,mediamanager]</button>' : '') +
+                                '</td>' +
+                                '</tr>');
+                        row.find('.name').text(file.name);
+                        row.find('.size').text(o.formatFileSize(file.size));
+                        if (file.error) {
+                            row.find('.error').text(file.error);
                         }
-                    })
-                    .bind('fileuploadadded', function (e, data) {
-                        $('#fileupload .fileupload-buttonbar button.start').css('display', '');
-                        $('#fileupload .fileupload-buttonbar button.cancel').css('display', '');
-                        $('#fileupload .fileupload-progress').css('display', '');
-                    })
-                    .bind('fileuploadstop', function (e) {
-                        document.location.reload();
+                        rows = rows.add(row);
                     });
+                    return rows;
+                }
+            })
+            .bind('fileuploadadded', function (e, data) {
+                $('#fileupload .fileupload-buttonbar button.start').css('display', '');
+                $('#fileupload .fileupload-buttonbar button.cancel').css('display', '');
+                $('#fileupload .fileupload-progress').css('display', '');
+            })
+            .bind('fileuploadstop', function (e) {
+                document.location.reload();
+            });
 
-                });
+        });
 
         </script>
 
