@@ -506,89 +506,135 @@ Upload-Field
 
 Upload-Field for multiple files with progress bar
 <input_upload_multiple>
-    %%modalDialog%%
-    <div id="showUploaderBtn" class="btn">[lang,upload_multiple_dialogHeader,mediamanager]</div>
+    <!--<div id="showUploaderBtn" class="btn">[lang,upload_multiple_dialogHeader,mediamanager]</div>-->
 
-    <div id="kajonaUploadDialog" style="display: none;">
+    <!--<div id="kajonaUploadDialog" style="display: none;">-->
 
-        <div id="uploadContainerWrapper" class="well well-small">
-            <div id="uploadContainer"></div>
-            <div class="alert alert-info">
-                [lang,upload_dropArea,mediamanager]<br />
-                [lang,upload_allowed_extensions,mediamanager] %%allowedExtensions%%
+
+    <div id="kajonaUploadDialog">
+
+            <!-- The file upload form used as target for the file upload widget -->
+            <div id="fileupload">
+
+                <!--<div class="row-fluid fileupload-buttonbar">-->
+                    <div class="fileupload-buttonbar">
+
+                        <span class="btn fileinput-button">
+                            <i class="fa fa-plus-square"></i>
+                            <span>[lang,file_select,mediamanager]</span>
+                            <input type="file" name="%%name%%" multiple>
+                        </span>
+
+                        <button type="submit" class="btn start" style="display: none;">
+                            <i class="fa fa-upload"></i>
+                            <span>[lang,upload_multiple_uploadFiles,mediamanager]</span>
+                        </button>
+
+                        <button type="reset" class="btn  cancel" style="display: none;">
+                            <i class="fa fa-ban"></i>
+                            <span>[lang,upload_multiple_cancel,mediamanager]</span>
+                        </button>
+
+
+                        <!-- The global file processing state -->
+                        <span class="fileupload-process"></span>
+                        <div class="alert alert-info">
+                            [lang,upload_dropArea,mediamanager]<br />
+                             %%allowedExtensions%%
+                        </div>
+
+                    </div>
+
+                    <!-- The global progress state -->
+                    <div class=" fileupload-progress " style="display: none;">
+
+                        <!-- The global progress bar -->
+                        <div class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100">
+                            <div class="bar" style="width:0%;"></div>
+                        </div>
+
+                        <div class="progress-extended">&nbsp;</div>
+                    </div>
+                <!--</div>-->
+
+                <table class="table admintable table-striped-tbody files"><tbody class="files"></tbody></table>
             </div>
-            <div id="startUploadBtn" class="btn">[lang,upload_multiple_uploadFiles,mediamanager]</div>
-        </div>
+
+
+        <script src="_webpath_/core/module_mediamanager/admin/scripts/jquery-fileupload/js/jquery.iframe-transport.js"></script>
+        <script src="_webpath_/core/module_mediamanager/admin/scripts/jquery-fileupload/js/jquery.fileupload.js"></script>
+        <script src="_webpath_/core/module_mediamanager/admin/scripts/jquery-fileupload/js/jquery.fileupload-process.js"></script>
+        <script src="_webpath_/core/module_mediamanager/admin/scripts/jquery-fileupload/js/jquery.fileupload-validate.js"></script>
+        <script src="_webpath_/core/module_mediamanager/admin/scripts/jquery-fileupload/js/jquery.fileupload-ui.js"></script>
 
         <script type="text/javascript">
-            KAJONA.admin.loader.loadFile([
-                "/core/module_mediamanager/admin/scripts/qqfileuploader/fileuploader.min.js",
-                "/core/module_mediamanager/admin/scripts/qqfileuploader/fileuploader.css"
-            ], function() {
+        KAJONA.admin.loader.loadFile([
+            "/core/module_mediamanager/admin/scripts/jquery-fileupload/css/jquery.fileupload.css",
+            "/core/module_mediamanager/admin/scripts/jquery-fileupload/css/jquery.fileupload-ui.css"
+        ], function() {
 
+                    console.log('init');
 
-                $('#showUploaderBtn').click(function() {
-                    jsDialog_0.setContentRaw($('#kajonaUploadDialog').html());
-                    jsDialog_0.init();
+                    $('#fileupload').fileupload({
+                        url: '_webpath_/xml.php?admin=1&module=mediamanager&action=fileUpload',
+                        dataType: 'json',
+                        autoUpload: false,
+                        paramName : '%%name%%',
+                        filesContainer: $('table.files'),
+                        formData: [
+                            {name: 'systemid', value: document.getElementById("mutliuploadSystemid").value},
+                            {name: 'inputElement', value : '%%name%%'},
+                            {name: 'jsonResponse', value : 'true'}
+                        ],
+                        messages: {
+                            maxNumberOfFiles: 'Maximum number of files exceeded',
+                            acceptFileTypes: "[lang,upload_fehler_filter,mediamanager]",
+                            maxFileSize: "[lang,upload_multiple_errorFilesize,mediamanager]",
+                            minFileSize: 'File is too small'
+                        },
+                        maxFileSize: %%maxFileSize%%,
+                        acceptFileTypes: %%acceptFileTypes%%,
+                        uploadTemplateId: null,
+                        downloadTemplateId: null,
+                        uploadTemplate: function (o) {
+                            var rows = $();
+                            $.each(o.files, function (index, file) {
+                                var row = $('<tr class="template-upload ">' +
+                                        '<td><p class="name"></p>' +
+                                        '<div class="error"></div>' +
+                                        '</td>' +
+                                        '<td><p class="size"></p>' +
+                                        '<div class="progress progress-striped active"><div class="bar"></div></div>' +
+                                        '</td>' +
+                                        '<td>' +
+                                        (!index && !o.options.autoUpload ?
+                                                '<button class="btn start " disabled>Start</button>' : '') +
+                                        (!index ? '<button class="btn cancel ">Cancel</button>' : '') +
+                                        '</td>' +
+                                        '</tr>');
+                                row.find('.name').text(file.name);
+                                row.find('.size').text(o.formatFileSize(file.size));
+                                if (file.error) {
+                                    row.find('.error').text(file.error);
+                                }
+                                rows = rows.add(row);
+                            });
+                            return rows;
+                        }
+                    })
+                    .bind('fileuploadadded', function (e, data) {
+                        $('#fileupload .fileupload-buttonbar button.start').css('display', '');
+                        $('#fileupload .fileupload-buttonbar button.cancel').css('display', '');
+                        $('#fileupload .fileupload-progress').css('display', '');
+                    })
+                    .bind('fileuploadstop', function (e) {
+                        document.location.reload();
+                    });
+
                 });
 
-                var uploader = new qq.FileUploader({
-                    element: document.getElementById('uploadContainer'),
-                    action: '_webpath_/xml.php?admin=1&module=mediamanager&action=fileUpload',
-                    debug: false,
-                    inputName : '%%name%%',
-                    autoUpload: false,
-                    allowedExtensions: [%%allowedExtensions%%],
-                    params : {
-                        systemid: document.getElementById("mutliuploadSystemid").value,
-                        inputElement : '%%name%%',
-                        jsonResponse : 'true'
-                    },
-                    messages : {
-                        typeError: "[lang,upload_fehler_filter,mediamanager]",
-                        sizeError: "%%upload_multiple_errorFilesize%%"
-                    },
-                    onComplete: function(id, fileName, responseJSON){
-                        if(uploader.getInProgress() == 0)
-                            document.location.reload();
-                    },
-                    uploadButtonText : '[lang,file_select,mediamanager]',
-                    classes: {
-                        // used to get elements from templates
-                        button: 'qq-upload-button',
-                        drop: 'qq-upload-drop-area ',
-                        dropActive: 'qq-upload-drop-area-active ',
-                        dropDisabled: 'qq-upload-drop-area-disabled',
-                        list: 'qq-upload-list',
-                        progressBar: 'qq-progress-bar',
-                        file: 'qq-upload-file',
-                        spinner: 'qq-upload-spinner',
-                        size: 'qq-upload-size',
-                        cancel: 'qq-upload-cancel',
-                        success: 'active',
-                        fail: 'error'
-                    },
-                    dragText : "[lang,upload_dropArea,mediamanager]"
-
-                });
-
-                $('table.admintable').bind("dragenter", function(e) {
-                    jsDialog_0.setContentRaw($('#kajonaUploadDialog').html());
-                    jsDialog_0.init();
-                });
-
-                $('div.grid').bind("dragenter", function(e) {
-                    jsDialog_0.setContentRaw($('#kajonaUploadDialog').html());
-                    jsDialog_0.init();
-                });
-
-                $('#startUploadBtn').click(function() {
-                    uploader.uploadStoredFiles();
-                });
-
-                jsDialog_0.setTitle('[lang,upload_multiple_dialogHeader,mediamanager]');
-            });
         </script>
+
     </div>
 
 </input_upload_multiple>

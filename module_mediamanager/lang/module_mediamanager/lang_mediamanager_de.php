@@ -81,7 +81,7 @@ $lang["upload_fehler"]                   = "Dateiupload fehlerhaft";
 $lang["upload_fehler_filter"]            = "Der hochgeladene Dateityp ist nicht erlaubt";
 $lang["upload_multiple_cancel"]          = "Abbrechen";
 $lang["upload_multiple_dialogHeader"]    = "Dateien hochladen";
-$lang["upload_multiple_errorFilesize"]   = "Die markierten Dateien können auf Grund ihrer Dateigröße nicht hochgeladen werden.<br />Die maximale Dateigröße beträgt";
+$lang["upload_multiple_errorFilesize"]   = "Datei ist zu groß.";
 $lang["upload_multiple_errorFlash"]      = "Bitte installieren Sie sich den <a href=\"http://get.adobe.com/de/flashplayer/\" target=\"_blank\">Adobe Flash Player</a> ab Version 9 um Dateien komfortabel hochladen zu können.";
 $lang["upload_multiple_pleaseWait"]      = "Bitte warten...";
 $lang["upload_multiple_totalFilesAndSize"] = "Datei(en) mit insgesamt";

@@ -591,20 +591,21 @@ class class_toolkit_admin extends class_toolkit {
      */
     public function formInputUploadMultiple($strName, $strTitle, $strAllowedFileTypes) {
 
+        $objConfig = class_carrier::getInstance()->getObjConfig();
+        $objText = class_carrier::getInstance()->getObjLang();
 
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "input_upload_multiple");
         $arrTemplate = array();
         $arrTemplate["title"] = $strTitle;
         $arrTemplate["name"] = $strName;
-        $arrTemplate["modalDialog"] = $this->jsDialog(0);
+//        $arrTemplate["modalDialog"] = $this->jsDialog(0);
 
+        $strAllowedFileRegex = uniStrReplace(array(".", ","), array("", "|"), $strAllowedFileTypes);
         $strAllowedFileTypes = uniStrReplace(array(".", ","), array("", "','"), $strAllowedFileTypes);
 
-        $arrTemplate["allowedExtensions"] = $strAllowedFileTypes != "" ? "'".$strAllowedFileTypes."'" : $strAllowedFileTypes;
-
-
-        $objConfig = class_carrier::getInstance()->getObjConfig();
-        $objText = class_carrier::getInstance()->getObjLang();
+        $arrTemplate["allowedExtensions"] = $strAllowedFileTypes != "" ? $objText->getLang("upload_allowed_extensions", "mediamanager").": '".$strAllowedFileTypes."'" : $strAllowedFileTypes;
+        $arrTemplate["maxFileSize"] = $objConfig->getPhpMaxUploadSize();
+        $arrTemplate["acceptFileTypes"] = $strAllowedFileRegex != "" ? "/(\.|\/)(".$strAllowedFileRegex.")$/i" : "''";
 
         $arrTemplate["upload_multiple_errorFilesize"] = $objText->getLang("upload_multiple_errorFilesize", "mediamanager")." ".bytesToString($objConfig->getPhpMaxUploadSize());
 
