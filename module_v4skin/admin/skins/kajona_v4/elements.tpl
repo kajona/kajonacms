@@ -515,7 +515,7 @@ Upload-Field for multiple files with progress bar
 
                         <span class="btn fileinput-button">
                             <i class="fa fa-plus-square"></i>
-                            <span>[lang,file_select,mediamanager]</span>
+                            <span>[lang,mediamanager_upload,mediamanager]</span>
                             <input type="file" name="%%name%%" multiple>
                         </span>
 
