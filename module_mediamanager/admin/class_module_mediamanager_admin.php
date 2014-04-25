@@ -507,7 +507,7 @@ HTML;
             //Round
             $intWidth = number_format($intWidth, 0);
             $intHeight = number_format($intHeight, 0);
-            $arrTemplate["file_image"] = "<img src=\""._webpath_."/image.php?image=".urlencode($strFile)."&amp;maxWidth=".$intWidth."&amp;maxHeight=".$intHeight."\" id=\"fm_mediamanagerPic\" />";
+            $arrTemplate["file_image"] = "<img src=\""._webpath_."/image.php?image=".urlencode($strFile)."&amp;maxWidth=".$intWidth."&amp;maxHeight=".$intHeight."\" id=\"fm_mediamanagerPic\" style=\"max-width: none;\" />";
 
             $arrTemplate["file_actions"] = "";
             $arrTemplate["file_actions"] .= $this->objToolkit->listButton(
