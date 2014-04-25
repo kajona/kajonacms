@@ -85,6 +85,7 @@ KAJONA.util.Loader = function () {
 
                 if( $.inArray(strOneFileToLoad, arrFilesInProgress) == -1 ) {
                     arrFilesInProgress.push(strOneFileToLoad);
+//                    console. debug('in progress '+strOneFileToLoad);
 
                     //start loading process
                     if(fileType == 'css') {
@@ -125,6 +126,8 @@ KAJONA.util.Loader = function () {
 
     function loadJs(strPath, strOriginalPath) {
 
+//        console. debug('loading '+strOriginalPath);
+
         //enable caching, cache flushing is done by the cachebuster
         var options =  {
             dataType: "script",
@@ -136,12 +139,13 @@ KAJONA.util.Loader = function () {
         // Return the jqXHR object so we can chain callbacks
         $.ajax(options)
             .done(function(script, textStatus) {
+//                console. debug('loaded '+strOriginalPath);
                 arrFilesLoaded.push(strOriginalPath);
                 checkCallbacks();
 
             })
             .fail(function(jqxhr, settings, exception) {
-                //console. error('loading file '+strPath+' failed: '+exception);
+//                console. error('loading file '+strPath+' failed: '+exception);
             });
     }
 

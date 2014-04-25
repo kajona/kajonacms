@@ -408,39 +408,11 @@ HTML;
         while(!$objCurFile instanceof class_module_mediamanager_repo && validateSystemid($this->getSystemid()))
             $objCurFile = class_objectfactory::getInstance()->getObject($objCurFile->getPrevId());
 
-        $strReturn .= $this->objToolkit->formHeader(class_link::getLinkAdminHref($this->getArrModule("modul"), $this->getAction(), "datei_upload_final=1"), "formUpload", "multipart/form-data");
+//        $strReturn .= $this->objToolkit->formHeader(class_link::getLinkAdminHref($this->getArrModule("modul"), $this->getAction(), "datei_upload_final=1"), "formUpload", "multipart/form-data");
         $strReturn .= $this->objToolkit->formInputHidden("systemid", $this->getSystemid());
         $strReturn .= $this->objToolkit->formInputHidden("mutliuploadSystemid", $this->getSystemid());
-
         $strReturn .= $this->objToolkit->formInputUploadMultiple("mediamanager_upload", $this->getLang("mediamanager_upload"), $objCurFile->getStrUploadFilter());
-        $strReturn .= $this->objToolkit->formClose();
-
-        if($this->getParam("datei_upload_final") != "") {
-            //Handle the fileupload
-            $arrSource = $this->getParam("mediamanager_upload");
-
-            $strTarget = $strPath."/".createFilename($arrSource["name"]);
-            $objFilesystem = new class_filesystem();
-
-            //Check file for correct filters
-            $arrAllowed = explode(",", $objCurFile->getStrUploadFilter());
-            $strSuffix = uniStrtolower(uniSubstr($arrSource["name"], uniStrrpos($arrSource["name"], ".")));
-            if($objCurFile->getStrUploadFilter() == "" || in_array($strSuffix, $arrAllowed)) {
-                if($objFilesystem->copyUpload($strTarget, $arrSource["tmp_name"])) {
-                    $strReturn .= $this->getLang("upload_erfolg");
-
-                    $objCurFile->syncRepo();
-
-                    class_logger::getInstance()->addLogRow("uploaded file ".$strTarget, class_logger::$levelInfo);
-                }
-                else
-                    $strReturn .= $this->getLang("upload_fehler");
-            }
-            else {
-                @unlink($arrSource["tmp_name"]);
-                $strReturn .= $this->getLang("upload_fehler_filter");
-            }
-        }
+//        $strReturn .= $this->objToolkit->formClose();
 
         return $strReturn;
     }

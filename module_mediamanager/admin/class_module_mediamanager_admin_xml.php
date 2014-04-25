@@ -205,7 +205,6 @@ class class_module_mediamanager_admin_xml extends class_admin implements interfa
             class_response_object::getInstance()->setStrResponseType(class_http_responsetypes::STR_TYPE_HTML);
             //class_response_object::getInstance()->setStResponseType(class_http_responsetypes::STR_TYPE_JSON);
         }
-        sleep(10);
         @unlink($arrSource["tmp_name"]);
         return $strReturn;
     }

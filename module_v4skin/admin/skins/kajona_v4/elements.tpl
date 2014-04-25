@@ -509,7 +509,7 @@ Upload-Field for multiple files with progress bar
 
     <div id="kajonaUploadDialog">
 
-            <div id="fileupload">
+            <div id="%%name%%">
 
                     <div class="fileupload-buttonbar">
 
@@ -545,103 +545,110 @@ Upload-Field for multiple files with progress bar
                         <div class="progress-extended">&nbsp;</div>
                     </div>
 
-                <table class="table admintable table-striped-tbody files"><tbody class="files"></tbody></table>
+                <table class="table admintable table-striped-tbody files"></table>
             </div>
 
-
-        <script src="_webpath_/core/module_mediamanager/admin/scripts/jquery-fileupload/js/load-image.min.js"></script>
-        <script src="_webpath_/core/module_mediamanager/admin/scripts/jquery-fileupload/js/canvas-to-blob.min.js"></script>
-        <script src="_webpath_/core/module_mediamanager/admin/scripts/jquery-fileupload/js/jquery.iframe-transport.js"></script>
-        <script src="_webpath_/core/module_mediamanager/admin/scripts/jquery-fileupload/js/jquery.fileupload.js"></script>
-        <script src="_webpath_/core/module_mediamanager/admin/scripts/jquery-fileupload/js/jquery.fileupload-process.js"></script>
-        <script src="_webpath_/core/module_mediamanager/admin/scripts/jquery-fileupload/js/jquery.fileupload-image.js"></script>
-        <script src="_webpath_/core/module_mediamanager/admin/scripts/jquery-fileupload/js/jquery.fileupload-audio.js"></script>
-        <script src="_webpath_/core/module_mediamanager/admin/scripts/jquery-fileupload/js/jquery.fileupload-video.js"></script>
-        <script src="_webpath_/core/module_mediamanager/admin/scripts/jquery-fileupload/js/jquery.fileupload-validate.js"></script>
-        <script src="_webpath_/core/module_mediamanager/admin/scripts/jquery-fileupload/js/jquery.fileupload-ui.js"></script>
-
         <script type="text/javascript">
+
+    KAJONA.admin.loader.loadFile([
+        "/core/module_mediamanager/admin/scripts/jquery-fileupload/css/jquery.fileupload.css",
+        "/core/module_mediamanager/admin/scripts/jquery-fileupload/css/jquery.fileupload-ui.css",
+        "/core/module_mediamanager/admin/scripts/jquery-fileupload/js/load-image.min.js",
+        "/core/module_mediamanager/admin/scripts/jquery-fileupload/js/canvas-to-blob.min.js",
+        "/core/module_mediamanager/admin/scripts/jquery-fileupload/js/jquery.iframe-transport.js",
+        "/core/module_mediamanager/admin/scripts/jquery-fileupload/js/jquery.fileupload.js"
+    ], function() {
         KAJONA.admin.loader.loadFile([
-            "/core/module_mediamanager/admin/scripts/jquery-fileupload/css/jquery.fileupload.css",
-            "/core/module_mediamanager/admin/scripts/jquery-fileupload/css/jquery.fileupload-ui.css"
+            "/core/module_mediamanager/admin/scripts/jquery-fileupload/js/jquery.fileupload-process.js"
         ], function() {
+            KAJONA.admin.loader.loadFile([
+                "/core/module_mediamanager/admin/scripts/jquery-fileupload/js/jquery.fileupload-image.js",
+                "/core/module_mediamanager/admin/scripts/jquery-fileupload/js/jquery.fileupload-audio.js",
+                "/core/module_mediamanager/admin/scripts/jquery-fileupload/js/jquery.fileupload-video.js",
+                "/core/module_mediamanager/admin/scripts/jquery-fileupload/js/jquery.fileupload-validate.js"
+            ], function() {
+                KAJONA.admin.loader.loadFile([
+                    "/core/module_mediamanager/admin/scripts/jquery-fileupload/js/jquery.fileupload-ui.js"
+                ], function() {
 
-            var filesToUpload = 0;
-            $('#fileupload').fileupload({
-                url: '_webpath_/xml.php?admin=1&module=mediamanager&action=fileUpload',
-                dataType: 'json',
-                autoUpload: false,
-                paramName : '%%name%%',
-                filesContainer: $('table.files'),
-                formData: [
-                    {name: 'systemid', value: document.getElementById("mutliuploadSystemid").value},
-                    {name: 'inputElement', value : '%%name%%'},
-                    {name: 'jsonResponse', value : 'true'}
-                ],
-                messages: {
-                    maxNumberOfFiles: 'Maximum number of files exceeded',
-                    acceptFileTypes: "[lang,upload_fehler_filter,mediamanager]",
-                    maxFileSize: "[lang,upload_multiple_errorFilesize,mediamanager]",
-                    minFileSize: 'File is too small'
-                },
-                maxFileSize: %%maxFileSize%%,
-                acceptFileTypes: %%acceptFileTypes%%,
-                uploadTemplateId: null,
-                downloadTemplateId: null,
-                uploadTemplate: function (o) {
-                    var rows = $();
-                    $.each(o.files, function (index, file) {
-                        var row = $('<tr class="template-upload ">' +
-                                '<td><span class="preview"></span></td>' +
-                                '<td><p class="name"></p>' +
-                                '<div class="error"></div>' +
-                                '</td>' +
-                                '<td><p class="size"></p>' +
-                                '<div class="progress progress-striped active"><div class="bar"></div></div>' +
-                                '</td>' +
-                                '<td>' +
-                                (!index && !o.options.autoUpload ?
-                                        '<button class="btn start " disabled style="display: none;">Start</button>' : '') +
-                                (!index ? '<button class="btn cancel ">[lang,upload_multiple_cancel,mediamanager]</button>' : '') +
-                                '</td>' +
-                                '</tr>');
-                        row.find('.name').text(file.name);
-                        row.find('.size').text(o.formatFileSize(file.size));
-                        if (file.error) {
-                            row.find('.error').text(file.error);
+                    var filesToUpload = 0;
+                    $('#%%name%%').fileupload({
+                        url: '_webpath_/xml.php?admin=1&module=mediamanager&action=fileUpload',
+                        dataType: 'json',
+                        autoUpload: false,
+                        paramName : '%%name%%',
+                        filesContainer: $('table.files'),
+                        formData: [
+                            {name: 'systemid', value: document.getElementById("mutliuploadSystemid").value},
+                            {name: 'inputElement', value : '%%name%%'},
+                            {name: 'jsonResponse', value : 'true'}
+                        ],
+                        messages: {
+                            maxNumberOfFiles: 'Maximum number of files exceeded',
+                            acceptFileTypes: "[lang,upload_fehler_filter,mediamanager]",
+                            maxFileSize: "[lang,upload_multiple_errorFilesize,mediamanager]",
+                            minFileSize: 'File is too small'
+                        },
+                        maxFileSize: %%maxFileSize%%,
+                        acceptFileTypes: %%acceptFileTypes%%,
+                        uploadTemplateId: null,
+                        downloadTemplateId: null,
+                        uploadTemplate: function (o) {
+                            var rows = $();
+                            $.each(o.files, function (index, file) {
+                                var row = $('<tbody class="template-upload fade"><tr>' +
+                                        '<td><span class="preview"></span></td>' +
+                                        '<td><p class="name"></p>' +
+                                        '<div class="error"></div>' +
+                                        '</td>' +
+                                        '<td><p class="size"></p>' +
+                                        '<div class="progress progress-striped active"><div class="bar"></div></div>' +
+                                        '</td>' +
+                                        '<td>' +
+                                        (!index && !o.options.autoUpload ?
+                                                '<button class="btn start " disabled style="display: none;">Start</button>' : '') +
+                                        (!index ? '<button class="btn cancel ">[lang,upload_multiple_cancel,mediamanager]</button>' : '') +
+                                        '</td>' +
+                                        '</tr></tbody>');
+                                row.find('.name').text(file.name);
+                                row.find('.size').text(o.formatFileSize(file.size));
+                                if (file.error) {
+                                    row.find('.error').text(file.error);
+                                }
+                                rows = rows.add(row);
+                            });
+                            return rows;
                         }
-                        rows = rows.add(row);
+                    })
+                    .bind('fileuploadadded', function (e, data) {
+                        $(this).find('.fileupload-buttonbar button.start').css('display', '');
+                        $(this).find('.fileupload-buttonbar button.cancel').css('display', '');
+                        $(this).find('.fileupload-progress').css('display', '');
+                        filesToUpload++;
+                    })
+                    .bind('fileuploadfail', function (e, data) {
+                        filesToUpload--;
+                        $(this).trigger('kajonahideelements');
+                    })
+                    .bind('fileuploaddone', function (e, data) {
+                        filesToUpload--;
+                        $(this).trigger('kajonahideelements');
+                    })
+                    .bind('fileuploadstop', function (e) {
+                        $(this).trigger('kajonahideelements');
+                        document.location.reload();
+                    })
+                    .bind('kajonahideelements', function() {
+                        if(filesToUpload == 0) {
+                            $(this).find('.fileupload-buttonbar button.start').css('display', 'none');
+                            $(this).find('.fileupload-buttonbar button.cancel').css('display', 'none');
+                            $(this).find('.fileupload-progress').css('display', 'none');
+                        }
                     });
-                    return rows;
-                }
-            })
-            .bind('fileuploadadded', function (e, data) {
-                $('#fileupload .fileupload-buttonbar button.start').css('display', '');
-                $('#fileupload .fileupload-buttonbar button.cancel').css('display', '');
-                $('#fileupload .fileupload-progress').css('display', '');
-                filesToUpload++;
-            })
-            .bind('fileuploadfail', function (e, data) {
-                filesToUpload--;
-                $('#fileupload').trigger('kajonahideelements');
-            })
-            .bind('fileuploaddone', function (e, data) {
-                filesToUpload--;
-                $('#fileupload').trigger('kajonahideelements');
-            })
-            .bind('fileuploadstop', function (e) {
-                $('#fileupload').trigger('kajonahideelements');
-                document.location.reload();
-            })
-            .bind('kajonahideelements', function() {
-                if(filesToUpload == 0) {
-                    $('#fileupload .fileupload-buttonbar button.start').css('display', 'none');
-                    $('#fileupload .fileupload-buttonbar button.cancel').css('display', 'none');
-                    $('#fileupload .fileupload-progress').css('display', 'none');
-                }
+                });
             });
-
         });
+    });
 
         </script>
 
