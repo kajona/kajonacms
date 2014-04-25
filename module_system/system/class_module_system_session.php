@@ -69,7 +69,6 @@ class class_module_system_session extends class_model implements interface_model
      */
     protected function initObjectInternal() {
 
-        class_logger::getInstance()->addLogRow("init session ".$this->getSystemid(), class_logger::$levelInfo);
         $strQuery = "SELECT * FROM "._dbprefix_."session WHERE session_id = ?";
         $arrRow = $this->objDB->getPRow($strQuery, array($this->getSystemid()));
 
