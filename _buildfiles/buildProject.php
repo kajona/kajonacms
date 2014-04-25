@@ -17,7 +17,7 @@ class BuildHelper {
         echo " Params:\n";
         echo "   projectPath: ".$this->strProjectPath."\n";
         echo "   configFile: ".$this->strConfigFile."\n";
-        echo "   onlySetup: ".$this->bitOnlyProjectsetup."\n";
+        echo "   onlySetup: ".($this->bitOnlyProjectsetup ? "true" : "false")."\n";
         echo "\n\n";
 
 
@@ -71,6 +71,7 @@ class BuildHelper {
         file_put_contents(__DIR__."/".$this->strProjectPath."/project/system/config/config.php", $strConfigfile);
 
         echo "starting up system-kernel...\n";
+        include __DIR__."/../bootstrap.php";
         $objCarrier = class_carrier::getInstance();
 
         echo "dropping old tables...\n";

@@ -8,7 +8,12 @@
 
 
 class class_project_setup {
+    
+    private static $strRealPath = "";
+    
     public static function setUp() {
+        
+        self::$strRealPath = __DIR__."/../";
 
         echo "<b>Kajona V4 project setup.</b>\nCreates the folder-structure required to build a new project.\n\n";
 
@@ -22,19 +27,16 @@ class class_project_setup {
         }
 
 
-        echo "loading core...\n\n";
-        include __DIR__."/bootstrap.php";
-
         //Module-Constants
         $arrModules = array();
-        foreach(scandir(_realpath_) as $strRootFolder) {
+        foreach(scandir(self::$strRealPath) as $strRootFolder) {
 
-            if(uniStrpos($strRootFolder, "core") === false)
+            if(strpos($strRootFolder, "core") === false)
                 continue;
 
-            foreach(scandir(_realpath_."/".$strRootFolder) as $strOneModule) {
+            foreach(scandir(self::$strRealPath."/".$strRootFolder) as $strOneModule) {
 
-                if(preg_match("/^(module|element|_)+.*/i", $strOneModule) && !is_file(_realpath_."/".$strRootFolder."/".$strOneModule."/.kajonaignore")) {
+                if(preg_match("/^(module|element|_)+.*/i", $strOneModule) && !is_file(self::$strRealPath."/".$strRootFolder."/".$strOneModule."/.kajonaignore")) {
                     $arrModules[] = $strRootFolder."/".$strOneModule;
                 }
 
@@ -73,14 +75,14 @@ class class_project_setup {
 
         echo "searching for files on root-path...\n";
         foreach($arrModules as $strSingleModule) {
-            if(!is_dir(_realpath_."/".$strSingleModule))
+            if(!is_dir(self::$strRealPath."/".$strSingleModule))
                 continue;
 
-            $arrContent = scandir(_realpath_."/".$strSingleModule);
+            $arrContent = scandir(self::$strRealPath."/".$strSingleModule);
             foreach($arrContent as $strSingleEntry) {
                 if(substr($strSingleEntry, -5) == ".root") {
-                    echo "copy ".$strSingleEntry." to "._realpath_."/".substr($strSingleEntry, 0, -5)."\n";
-                    copy(_realpath_."/".$strSingleModule."/".$strSingleEntry, _realpath_."/".substr($strSingleEntry, 0, -5));
+                    echo "copy ".$strSingleEntry." to ".self::$strRealPath."/".substr($strSingleEntry, 0, -5)."\n";
+                    copy(self::$strRealPath."/".$strSingleModule."/".$strSingleEntry, self::$strRealPath."/".substr($strSingleEntry, 0, -5));
                 }
             }
         }
@@ -91,20 +93,20 @@ class class_project_setup {
 
 
         foreach($arrModules as $strSingleModule) {
-            if(is_dir(_realpath_."/".$strSingleModule."/templates")) {
-                $arrEntries = scandir(_realpath_."/".$strSingleModule."/templates");
+            if(is_dir(self::$strRealPath."/".$strSingleModule."/templates")) {
+                $arrEntries = scandir(self::$strRealPath."/".$strSingleModule."/templates");
                 foreach($arrEntries as $strOneFolder) {
-                    if($strOneFolder != "." && $strOneFolder != ".." && is_dir(_realpath_."/".$strSingleModule."/templates/".$strOneFolder)) {
+                    if($strOneFolder != "." && $strOneFolder != ".." && is_dir(self::$strRealPath."/".$strSingleModule."/templates/".$strOneFolder)) {
                         if($strOneFolder == "default")
-                            self::copyFolder(_realpath_."/".$strSingleModule."/templates", _realpath_."/templates", array(".tpl"));
+                            self::copyFolder(self::$strRealPath."/".$strSingleModule."/templates", self::$strRealPath."/templates", array(".tpl"));
                         else
-                            self::copyFolder(_realpath_."/".$strSingleModule."/templates", _realpath_."/templates");
+                            self::copyFolder(self::$strRealPath."/".$strSingleModule."/templates", self::$strRealPath."/templates");
                     }
                 }
             }
 
-            if(is_dir(_realpath_."/".$strSingleModule."/files"))
-                self::copyFolder(_realpath_."/".$strSingleModule."/files", _realpath_."/files");
+            if(is_dir(self::$strRealPath."/".$strSingleModule."/files"))
+                self::copyFolder(self::$strRealPath."/".$strSingleModule."/files", self::$strRealPath."/files");
         }
 
 
@@ -147,7 +149,7 @@ Kajona V4 lang subsystem.
 
 
 TXT;
-        file_put_contents(_realpath_."/project/lang/readme.txt", $strContent);
+        file_put_contents(self::$strRealPath."/project/lang/readme.txt", $strContent);
     }
 
     private static function createDefaultTemplateEntry() {
@@ -180,7 +182,7 @@ Have fun!
 
 
 TXT;
-        file_put_contents(_realpath_."/templates/default/readme.txt", $strContent);
+        file_put_contents(self::$strRealPath."/templates/default/readme.txt", $strContent);
     }
 
 
@@ -193,13 +195,13 @@ TXT;
         $strContent .= " <body>Loading...</body>\n";
         $strContent .= "</html>\n";
 
-        file_put_contents(_realpath_."/admin/index.html", $strContent);
+        file_put_contents(self::$strRealPath."/admin/index.html", $strContent);
     }
 
     private static function checkDir($strFolder) {
-        echo "checking dir "._realpath_.$strFolder."\n";
-        if(!is_dir(_realpath_.$strFolder)) {
-            mkdir(_realpath_.$strFolder, 0777);
+        echo "checking dir ".self::$strRealPath.$strFolder."\n";
+        if(!is_dir(self::$strRealPath.$strFolder)) {
+            mkdir(self::$strRealPath.$strFolder, 0777);
             echo " \t\t... directory created\n";
         }
         else {
@@ -211,7 +213,7 @@ TXT;
     private static function copyFolder($strSourceFolder, $strTargetFolder, $arrExcludeSuffix = array()) {
         $arrEntries = scandir($strSourceFolder);
         foreach($arrEntries as $strOneEntry) {
-            if($strOneEntry == "." || $strOneEntry == ".." || $strOneEntry == ".svn" || in_array(uniSubstr($strOneEntry, uniStrrpos($strOneEntry, ".")), $arrExcludeSuffix))
+            if($strOneEntry == "." || $strOneEntry == ".." || $strOneEntry == ".svn" || in_array(substr($strOneEntry, strrpos($strOneEntry, ".")), $arrExcludeSuffix))
                 continue;
 
             if(is_file($strSourceFolder."/".$strOneEntry) && !is_file($strTargetFolder."/".$strOneEntry)) {
@@ -231,13 +233,13 @@ TXT;
     private static function createDenyHtaccess($strPath) {
         echo "placing deny htaccess in ".$strPath."\n";
         $strContent = "\n\nDeny from all\n\n";
-        file_put_contents(_realpath_.$strPath, $strContent);
+        file_put_contents(self::$strRealPath.$strPath, $strContent);
     }
 
     private static function createAllowHtaccess($strPath) {
         echo "placing allow htaccess in ".$strPath."\n";
         $strContent = "\n\nAllow from all\n\n";
-        file_put_contents(_realpath_.$strPath, $strContent);
+        file_put_contents(self::$strRealPath.$strPath, $strContent);
     }
 }
 
