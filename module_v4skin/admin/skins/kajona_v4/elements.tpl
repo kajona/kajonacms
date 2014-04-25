@@ -549,9 +549,14 @@ Upload-Field for multiple files with progress bar
             </div>
 
 
+        <script src="_webpath_/core/module_mediamanager/admin/scripts/jquery-fileupload/js/load-image.min.js"></script>
+        <script src="_webpath_/core/module_mediamanager/admin/scripts/jquery-fileupload/js/canvas-to-blob.min.js"></script>
         <script src="_webpath_/core/module_mediamanager/admin/scripts/jquery-fileupload/js/jquery.iframe-transport.js"></script>
         <script src="_webpath_/core/module_mediamanager/admin/scripts/jquery-fileupload/js/jquery.fileupload.js"></script>
         <script src="_webpath_/core/module_mediamanager/admin/scripts/jquery-fileupload/js/jquery.fileupload-process.js"></script>
+        <script src="_webpath_/core/module_mediamanager/admin/scripts/jquery-fileupload/js/jquery.fileupload-image.js"></script>
+        <script src="_webpath_/core/module_mediamanager/admin/scripts/jquery-fileupload/js/jquery.fileupload-audio.js"></script>
+        <script src="_webpath_/core/module_mediamanager/admin/scripts/jquery-fileupload/js/jquery.fileupload-video.js"></script>
         <script src="_webpath_/core/module_mediamanager/admin/scripts/jquery-fileupload/js/jquery.fileupload-validate.js"></script>
         <script src="_webpath_/core/module_mediamanager/admin/scripts/jquery-fileupload/js/jquery.fileupload-ui.js"></script>
 
@@ -561,6 +566,7 @@ Upload-Field for multiple files with progress bar
             "/core/module_mediamanager/admin/scripts/jquery-fileupload/css/jquery.fileupload-ui.css"
         ], function() {
 
+            var filesToUpload = 0;
             $('#fileupload').fileupload({
                 url: '_webpath_/xml.php?admin=1&module=mediamanager&action=fileUpload',
                 dataType: 'json',
@@ -586,6 +592,7 @@ Upload-Field for multiple files with progress bar
                     var rows = $();
                     $.each(o.files, function (index, file) {
                         var row = $('<tr class="template-upload ">' +
+                                '<td><span class="preview"></span></td>' +
                                 '<td><p class="name"></p>' +
                                 '<div class="error"></div>' +
                                 '</td>' +
@@ -612,9 +619,26 @@ Upload-Field for multiple files with progress bar
                 $('#fileupload .fileupload-buttonbar button.start').css('display', '');
                 $('#fileupload .fileupload-buttonbar button.cancel').css('display', '');
                 $('#fileupload .fileupload-progress').css('display', '');
+                filesToUpload++;
+            })
+            .bind('fileuploadfail', function (e, data) {
+                filesToUpload--;
+                $('#fileupload').trigger('kajonahideelements');
+            })
+            .bind('fileuploaddone', function (e, data) {
+                filesToUpload--;
+                $('#fileupload').trigger('kajonahideelements');
             })
             .bind('fileuploadstop', function (e) {
+                $('#fileupload').trigger('kajonahideelements');
                 document.location.reload();
+            })
+            .bind('kajonahideelements', function() {
+                if(filesToUpload == 0) {
+                    $('#fileupload .fileupload-buttonbar button.start').css('display', 'none');
+                    $('#fileupload .fileupload-buttonbar button.cancel').css('display', 'none');
+                    $('#fileupload .fileupload-progress').css('display', 'none');
+                }
             });
 
         });

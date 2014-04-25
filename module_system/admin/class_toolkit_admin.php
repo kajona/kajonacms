@@ -601,7 +601,7 @@ class class_toolkit_admin extends class_toolkit {
 //        $arrTemplate["modalDialog"] = $this->jsDialog(0);
 
         $strAllowedFileRegex = uniStrReplace(array(".", ","), array("", "|"), $strAllowedFileTypes);
-        $strAllowedFileTypes = uniStrReplace(array(".", ","), array("", "','"), $strAllowedFileTypes);
+        $strAllowedFileTypes = uniStrReplace(array(".", ","), array("", "', '"), $strAllowedFileTypes);
 
         $arrTemplate["allowedExtensions"] = $strAllowedFileTypes != "" ? $objText->getLang("upload_allowed_extensions", "mediamanager").": '".$strAllowedFileTypes."'" : $strAllowedFileTypes;
         $arrTemplate["maxFileSize"] = $objConfig->getPhpMaxUploadSize();
