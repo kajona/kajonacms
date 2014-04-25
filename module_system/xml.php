@@ -35,13 +35,6 @@ class class_xml {
 
 
     /**
-     * Default constructor
-     */
-    public function __construct() {
-        class_carrier::getInstance();
-    }
-
-    /**
      * Starts the processing of the requests, fetches params and passes control to the request dispatcher
      * @return void
      */

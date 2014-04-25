@@ -55,7 +55,6 @@ class class_installer {
 
     public function __construct() {
         //start up system
-        class_carrier::getInstance();
         $this->objTemplates = class_carrier::getInstance()->getObjTemplate();
         $this->objLang = class_carrier::getInstance()->getObjLang();
         //init session-support

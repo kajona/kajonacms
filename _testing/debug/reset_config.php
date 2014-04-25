@@ -15,7 +15,6 @@ echo "+-------------------------------------------------------------------------
 class class_testing_helper {
 
     function __construct() {
-        class_carrier::getInstance();
         $this->strTimestamp = date('Ymd-His');
     }
 

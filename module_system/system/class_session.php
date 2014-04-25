@@ -471,7 +471,10 @@ final class class_session {
             //right now we have the time to do a few cleanups...
             class_module_system_session::deleteInvalidSessions();
 
-            //Login successfull, quit
+            //call listeners
+            class_core_eventdispatcher::getInstance()->notifyGenericListeners(class_system_eventidentifier::EVENT_SYSTEM_USERLOGIN, array($objUser->getSystemid()));
+
+            //Login successful, quit
             $bitReturn = true;
         }
         else {
@@ -489,6 +492,8 @@ final class class_session {
     public function logout() {
         class_logger::getInstance()->addLogRow("User: ".$this->getUsername()." successfully logged out", class_logger::$levelInfo);
         class_module_user_log::registerLogout();
+
+        class_core_eventdispatcher::getInstance()->notifyGenericListeners(class_system_eventidentifier::EVENT_SYSTEM_USERLOGOUT, array($this->getUserID()));
 
         $this->getObjInternalSession()->setStrLoginstatus(class_module_system_session::$LOGINSTATUS_LOGGEDOUT);
         $this->getObjInternalSession()->updateObjectToDb();

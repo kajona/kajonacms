@@ -33,13 +33,6 @@ class class_index {
     public $objResponse;
 
     /**
-     * Default Constructor
-     */
-    public function __construct() {
-        class_carrier::getInstance();
-    }
-
-    /**
      * Triggers the processing of the current request
      * @return void
      */

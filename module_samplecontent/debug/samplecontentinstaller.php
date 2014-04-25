@@ -13,12 +13,6 @@ echo "|                                                                         
 echo "| Samplecontent installer                                                       |\n";
 echo "|                                                                               |\n";
 echo "+-------------------------------------------------------------------------------+\n";
-echo "|loading system kernel...                                                       |\n";
-
-$objCarrier = class_carrier::getInstance();
-
-echo "|loaded.                                                                        |\n";
-echo "+-------------------------------------------------------------------------------+\n\n";
 
 if(function_exists("apache_setenv"))
     @apache_setenv('no-gzip', 1);

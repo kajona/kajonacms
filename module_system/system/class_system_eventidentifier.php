@@ -75,4 +75,26 @@ interface class_system_eventidentifier {
      * @since 4.5
      */
     const EVENT_SYSTEM_USERFIRSTLOGIN = "core.system.userfirstlogin";
+
+    /**
+     * Callback method, triggered each time a user logs into the system.
+     * May be used to trigger individual actions for the user.
+     *
+     * @param string $strUserid
+     *
+     * @return bool
+     * @since 4.5
+     */
+    const EVENT_SYSTEM_USERLOGIN = "core.system.userlogin";
+
+    /**
+     * Callback method, triggered each time a user logs out of the system.
+     * May be used to trigger actions like cleanup actions for the user.
+     *
+     * @param string $strUserid
+     *
+     * @return bool
+     * @since 4.5
+     */
+    const EVENT_SYSTEM_USERLOGOUT = "core.system.userlogout";
 }

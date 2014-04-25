@@ -51,9 +51,8 @@ class class_rights {
      * Constructor doing the usual setup things
      */
     private function __construct() {
-        $objCarrier = class_carrier::getInstance();
-        $this->objDb = $objCarrier->getObjDb();
-        $this->objSession = $objCarrier->getObjSession();
+        $this->objDb = class_carrier::getInstance()->getObjDb();
+        $this->objSession = class_carrier::getInstance()->getObjSession();
 
         if(count($this->objDb->getTables()) > 0) {
             $arrModule = class_module_system_module::getPlainModuleData("system");

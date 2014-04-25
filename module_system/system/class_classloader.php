@@ -15,6 +15,7 @@
  */
 class class_classloader {
 
+    private $intNumberOfClassesLoaded = 0;
 
     private $strModulesCacheFile = "";
     private $strClassesCacheFile = "";
@@ -94,6 +95,21 @@ class class_classloader {
 
             file_put_contents($this->strModulesCacheFile, serialize($this->arrModules));
             file_put_contents($this->strClassesCacheFile, serialize($this->arrFiles));
+        }
+    }
+
+    /**
+     * Internal helper, triggers the loading/inclusion of all classes.
+     * This is required since otherwise static init blocks would be skipped.
+     * Currently enabled for classes matching the pattern "class_module_" only.
+     *
+     * @return void
+     */
+    public function includeClasses() {
+        foreach($this->arrFiles as $strClass => $strOneFile) {
+            if(uniStrpos($strClass, "class_module_") !== false /*$strClass != "class_testbase"*/) {
+                $this->loadClass($strClass);
+            }
         }
     }
 
@@ -232,7 +248,8 @@ class class_classloader {
     public function loadClass($strClassName) {
 
         if(isset($this->arrFiles[$strClassName])) {
-            include $this->arrFiles[$strClassName];
+            $this->intNumberOfClassesLoaded++;
+            include_once $this->arrFiles[$strClassName];
             return true;
         }
 
@@ -256,5 +273,14 @@ class class_classloader {
     public function addClassFolder($strPath){
         $this->arrFiles = array_merge($this->arrFiles, $this->getClassesInFolder($strPath));
     }
+
+    /**
+     * Returns the number of classes loaded internally
+     * @return int
+     */
+    public function getIntNumberOfClassesLoaded() {
+        return $this->intNumberOfClassesLoaded;
+    }
+
 
 }

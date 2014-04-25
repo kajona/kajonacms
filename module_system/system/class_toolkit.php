@@ -29,9 +29,7 @@ class class_toolkit {
      * Constructor
      */
     public function __construct() {
-
-        $objCarrier = class_carrier::getInstance();
-        $this->objTemplate = $objCarrier->getObjTemplate();
+        $this->objTemplate = class_carrier::getInstance()->getObjTemplate();
     }
 
 

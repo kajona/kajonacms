@@ -180,7 +180,6 @@ class class_lockmanager {
     }
 
 
-
     /**
      * Fetches a list of records currently locked in the database
      *
@@ -192,6 +191,25 @@ class class_lockmanager {
     public static function getLockedRecords($intStart = null, $intEnd = null) {
         $strQuery = "SELECT system_id FROM "._dbprefix_."system WHERE system_lock_id != '0' AND system_lock_id IS NOT NULL ORDER BY system_id DESC";
         $arrRows = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array(), $intStart, $intEnd);
+
+        $arrReturn = array();
+        foreach($arrRows as $arrOneRow) {
+            $arrReturn[] = class_objectfactory::getInstance()->getObject($arrOneRow["system_id"]);
+        }
+
+        return $arrReturn;
+    }
+
+    /**
+     * Fetches a list of records currently locked in the database
+     *
+     * @param string $strUserId
+     *
+     * @return class_model[]
+     */
+    public static function getLockedRecordsForUser($strUserId) {
+        $strQuery = "SELECT system_id FROM "._dbprefix_."system WHERE system_lock_id = ? ORDER BY system_id DESC";
+        $arrRows = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array($strUserId));
 
         $arrReturn = array();
         foreach($arrRows as $arrOneRow) {
