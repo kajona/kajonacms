@@ -600,7 +600,6 @@ class class_toolkit_admin extends class_toolkit {
 
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "input_upload_multiple");
         $arrTemplate = array();
-        $arrTemplate["title"] = $strTitle;
         $arrTemplate["name"] = $strName;
         $arrTemplate["mediamanagerRepoId"] = $strMediamangerRepoSystemId;
 
