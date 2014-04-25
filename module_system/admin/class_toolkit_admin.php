@@ -581,15 +581,19 @@ class class_toolkit_admin extends class_toolkit {
     }
 
     /**
-     * Returns a input-file element for uploading multiple files with progress bar.
-     * Expects a hidden form-element "mutliuploadSystemid" to be available on the page, referencing the current mediamanagers' file-id
+     * Returns a input-file element for uploading multiple files with progress bar. Only functionable in combination with
+     * the mediamanager module
      *
      * @param string $strName
-     * @param string $strTitle
      * @param string $strAllowedFileTypes
+     * @param string $strMediamangerRepoSystemId
+     *
      * @return string
      */
-    public function formInputUploadMultiple($strName, $strTitle, $strAllowedFileTypes) {
+    public function formInputUploadMultiple($strName, $strAllowedFileTypes, $strMediamangerRepoSystemId) {
+
+        if(class_module_system_module::getModuleByName("mediamanager") === null)
+            return ($this->warningBox("Module mediamanger is required for this multiple uploads"));
 
         $objConfig = class_carrier::getInstance()->getObjConfig();
         $objText = class_carrier::getInstance()->getObjLang();
@@ -598,6 +602,7 @@ class class_toolkit_admin extends class_toolkit {
         $arrTemplate = array();
         $arrTemplate["title"] = $strTitle;
         $arrTemplate["name"] = $strName;
+        $arrTemplate["mediamanagerRepoId"] = $strMediamangerRepoSystemId;
 
         $strAllowedFileRegex = uniStrReplace(array(".", ","), array("", "|"), $strAllowedFileTypes);
         $strAllowedFileTypes = uniStrReplace(array(".", ","), array("", "', '"), $strAllowedFileTypes);

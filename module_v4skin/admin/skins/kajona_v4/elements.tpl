@@ -507,10 +507,7 @@ Upload-Field
 Upload-Field for multiple files with progress bar
 <input_upload_multiple>
 
-    <div id="kajonaUploadDialog">
-
             <div id="%%name%%">
-
                     <div class="fileupload-buttonbar">
 
                         <span class="btn fileinput-button">
@@ -579,7 +576,7 @@ Upload-Field for multiple files with progress bar
                         paramName : '%%name%%',
                         filesContainer: $('table.files'),
                         formData: [
-                            {name: 'systemid', value: document.getElementById("mutliuploadSystemid").value},
+                            {name: 'systemid', value: '%%mediamanagerRepoId%%'},
                             {name: 'inputElement', value : '%%name%%'},
                             {name: 'jsonResponse', value : 'true'}
                         ],
@@ -652,7 +649,6 @@ Upload-Field for multiple files with progress bar
 
         </script>
 
-    </div>
 
 </input_upload_multiple>
 
