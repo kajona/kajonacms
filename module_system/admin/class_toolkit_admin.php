@@ -581,30 +581,34 @@ class class_toolkit_admin extends class_toolkit {
     }
 
     /**
-     * Returns a input-file element for uploading multiple files with progress bar.
-     * Expects a hidden form-element "mutliuploadSystemid" to be available on the page, referencing the current mediamanagers' file-id
+     * Returns a input-file element for uploading multiple files with progress bar. Only functionable in combination with
+     * the mediamanager module
      *
      * @param string $strName
-     * @param string $strTitle
      * @param string $strAllowedFileTypes
+     * @param string $strMediamangerRepoSystemId
+     *
      * @return string
      */
-    public function formInputUploadMultiple($strName, $strTitle, $strAllowedFileTypes) {
+    public function formInputUploadMultiple($strName, $strAllowedFileTypes, $strMediamangerRepoSystemId) {
 
-
-        $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "input_upload_multiple");
-        $arrTemplate = array();
-        $arrTemplate["title"] = $strTitle;
-        $arrTemplate["name"] = $strName;
-        $arrTemplate["modalDialog"] = $this->jsDialog(0);
-
-        $strAllowedFileTypes = uniStrReplace(array(".", ","), array("", "','"), $strAllowedFileTypes);
-
-        $arrTemplate["allowedExtensions"] = $strAllowedFileTypes != "" ? "'".$strAllowedFileTypes."'" : $strAllowedFileTypes;
-
+        if(class_module_system_module::getModuleByName("mediamanager") === null)
+            return ($this->warningBox("Module mediamanger is required for this multiple uploads"));
 
         $objConfig = class_carrier::getInstance()->getObjConfig();
         $objText = class_carrier::getInstance()->getObjLang();
+
+        $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "input_upload_multiple");
+        $arrTemplate = array();
+        $arrTemplate["name"] = $strName;
+        $arrTemplate["mediamanagerRepoId"] = $strMediamangerRepoSystemId;
+
+        $strAllowedFileRegex = uniStrReplace(array(".", ","), array("", "|"), $strAllowedFileTypes);
+        $strAllowedFileTypes = uniStrReplace(array(".", ","), array("", "', '"), $strAllowedFileTypes);
+
+        $arrTemplate["allowedExtensions"] = $strAllowedFileTypes != "" ? $objText->getLang("upload_allowed_extensions", "mediamanager").": '".$strAllowedFileTypes."'" : $strAllowedFileTypes;
+        $arrTemplate["maxFileSize"] = $objConfig->getPhpMaxUploadSize();
+        $arrTemplate["acceptFileTypes"] = $strAllowedFileRegex != "" ? "/(\.|\/)(".$strAllowedFileRegex.")$/i" : "''";
 
         $arrTemplate["upload_multiple_errorFilesize"] = $objText->getLang("upload_multiple_errorFilesize", "mediamanager")." ".bytesToString($objConfig->getPhpMaxUploadSize());
 
