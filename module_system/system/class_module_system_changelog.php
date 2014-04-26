@@ -27,13 +27,12 @@ class class_module_system_changelog extends class_model implements interface_mod
     const ANNOTATION_PROPERTY_VERSIONABLE = "@versionable";
 
     /**
-     * A flag to disable the reading of old values for the current execution.
-     * If set to true, the current value of an objects' property are not loaded into the cache.
-     * In consequence, the changelog-generation is disabled, too.
+     * A flag to enable / disable the changehistory programatically.
+     * If not set to null, the value overwrites the global changelog constant.
      *
      * @var bool
      */
-    public static $bitDisableChangelog = false;
+    public static $bitChangelogEnabled = null;
 
     private static $arrOldValueCache = array();
     private static $arrCachedProviders = null;
@@ -222,11 +221,12 @@ class class_module_system_changelog extends class_model implements interface_mod
      */
     private function isVersioningAvailable(interface_versionable $objSourceModel) {
 
-        if(self::$bitDisableChangelog)
-            return false;
+        if(self::$bitChangelogEnabled !== null)
+            return self::$bitChangelogEnabled;
 
-        if(!defined("_system_changehistory_enabled_") || _system_changehistory_enabled_ == "false")
+        if(!defined("_system_changehistory_enabled_") || _system_changehistory_enabled_ == "false") {
             return false;
+        }
 
         if(!$objSourceModel instanceof interface_versionable) {
             throw new class_exception("object passed to create changelog not implementing interface_versionable", class_logger::$levelWarning);
@@ -235,8 +235,9 @@ class class_module_system_changelog extends class_model implements interface_mod
 
         //changes require at least kajona 3.4.9
         $arrModul = class_module_system_module::getPlainModuleData("system");
-        if(version_compare($arrModul["module_version"], "3.4.9") < 0)
+        if(version_compare($arrModul["module_version"], "3.4.9") < 0) {
             return false;
+        }
 
         return true;
     }

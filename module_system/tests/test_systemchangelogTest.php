@@ -10,6 +10,16 @@ require_once (__DIR__."/../../module_system/system/interface_versionable.php");
  * @package module_system
  */
 class test_systemchangelogTest extends class_testbase {
+    protected function setUp() {
+        parent::setUp();
+        class_module_system_changelog::$bitChangelogEnabled = true;
+    }
+
+    protected function tearDown() {
+        parent::tearDown();
+        class_module_system_changelog::$bitChangelogEnabled = null;
+    }
+
 
     public function testChangelogArrayHandling() {
 
