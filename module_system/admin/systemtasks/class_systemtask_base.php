@@ -96,12 +96,13 @@ abstract class class_systemtask_base {
      *
      * @param string $strTargetModule
      * @param string $strTargetAction
+     * @param string|class_admin_formgenerator $objAdminForm
      *
      * @return string
      */
-    public final function generateAdminForm($strTargetModule = "system", $strTargetAction = "systemTasks") {
+    public final function generateAdminForm($strTargetModule = "system", $strTargetAction = "systemTasks", $objAdminForm = null) {
         $strReturn = "";
-        $objAdminForm = $this->getAdminForm();
+        $objAdminForm = $objAdminForm == null ? $this->getAdminForm() : $objAdminForm;
 
         if($objAdminForm instanceof class_admin_formgenerator) {
             $objAdminForm->addField(new class_formentry_hidden("", "execute"))->setStrValue("true");
