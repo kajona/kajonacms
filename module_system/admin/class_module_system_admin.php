@@ -445,6 +445,19 @@ class class_module_system_admin extends class_admin_simple implements interface_
     public static function getTaskDialogExecuteCode($bitExecute, class_systemtask_base $objTask, $strModule = "", $strAction = "", $bitExecuteDirectly = false) {
         $objLang = class_carrier::getInstance()->getObjLang();
         $strTaskOutput = "";
+
+
+        //If the task is going to be executed, validate the form first (if form is of type class_admin_formgenerator)
+        $objAdminForm = null;
+        if($bitExecute) {
+            $objAdminForm = $objTask->getAdminForm();
+            if($objAdminForm !== null && $objAdminForm instanceof class_admin_formgenerator) {
+                if(!$objAdminForm->validateForm()) {
+                    $bitExecute = false;
+                }
+            }
+        }
+
         //execute the task or show the form?
         if($bitExecute) {
             if($bitExecuteDirectly) {
@@ -463,7 +476,7 @@ class class_module_system_admin extends class_admin_simple implements interface_
             }
         }
         else {
-            $strForm = $objTask->generateAdminForm($strModule, $strAction);
+            $strForm = $objTask->generateAdminForm($strModule, $strAction, $objAdminForm);
             if($strForm != "") {
                 $strTaskOutput .= $strForm;
             }

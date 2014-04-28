@@ -17,7 +17,7 @@ class class_formentry_upload extends class_formentry_base implements interface_f
         parent::__construct($strFormName, $strSourceProperty, $objSourceObject);
 
         //set the default validator
-        $this->setObjValidator(new class_text_validator());
+        $this->setObjValidator(new class_uploadfile_validator());
     }
 
     /**
