@@ -49,6 +49,6 @@ class class_uploadfile_validator implements interface_validator {
      * @return string
      */
     public function getStrName() {
-        return "text";
+        return "uploadfile";
     }
 }
