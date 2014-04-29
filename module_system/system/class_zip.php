@@ -18,7 +18,6 @@
 class class_zip {
 
     /**
-     *
      * @var ZipArchive ZipArchive
      */
     private $objArchive = null;
@@ -28,21 +27,23 @@ class class_zip {
      *
      * @throws class_exception
      */
-	public function __construct() {
-        if(!class_exists("ZipArchive"))
+    public function __construct() {
+        if(!class_exists("ZipArchive")) {
             throw new class_exception("current installation has no support for ZipArchive", class_exception::$level_ERROR);
+        }
 
         $this->objArchive = new ZipArchive();
-	}
+    }
 
-	/**
+    /**
      * Sets and opens the filename of the zip-archive to be used
      *
      * @param string $strFilename
+     *
      * @return bool
      */
     public function openArchiveForWriting($strFilename) {
-        return $this->objArchive->open(_realpath_.$strFilename, ZipArchive::OVERWRITE);
+        return $this->objArchive->open(_realpath_.$strFilename, ZIPARCHIVE::CREATE | ZIPARCHIVE::OVERWRITE);
     }
 
     /**
@@ -58,17 +59,19 @@ class class_zip {
 
         $strSourceFile = uniStrReplace(_realpath_, "", $strSourceFile);
 
-        if($strTargetFile == "")
+        if($strTargetFile == "") {
             $strTargetFile = $strSourceFile;
+        }
 
         $strTargetFile = ltrim($strTargetFile, "/");
 
 
-
-        if(file_exists(_realpath_.$strSourceFile))
+        if(file_exists(_realpath_.$strSourceFile)) {
             return $this->objArchive->addFile(_realpath_.$strSourceFile, $strTargetFile);
-        else
+        }
+        else {
             return false;
+        }
 
     }
 
@@ -76,6 +79,7 @@ class class_zip {
      * Traverses the folder and adds the folder recursively.
      *
      * @param string $strFolder
+     *
      * @return bool
      */
     public function addFolder($strFolder) {
@@ -103,6 +107,7 @@ class class_zip {
      *
      * @param string $strSourceArchive
      * @param string $strTarget
+     *
      * @return bool
      */
     public function extractArchive($strSourceArchive, $strTarget) {
@@ -116,14 +121,16 @@ class class_zip {
      * Loads a single file from the passed archive.
      * If not found, false is returned instead.
      *
-     * @param $strSourceArchive
-     * @param $strFilename
+     * @param string $strSourceArchive
+     * @param string $strFilename
+     *
      * @return mixed|bool
      */
     public function getFileFromArchive($strSourceArchive, $strFilename) {
 
-        if($strFilename[0] == "/")
+        if($strFilename[0] == "/") {
             $strFilename = uniSubstr($strFilename, 1);
+        }
 
         $this->objArchive->open(_realpath_.$strSourceArchive);
         $strReturn = $this->objArchive->getFromName($strFilename);
@@ -133,6 +140,7 @@ class class_zip {
 
     /**
      * Finalizes the current archive and closes all file-handles
+     *
      * @return bool
      */
     public function closeArchive() {
@@ -143,6 +151,7 @@ class class_zip {
      * Checks if the given file is a zip-File
      *
      * @param string $strFilename
+     *
      * @return bool, true if the file is a zip-File, an error code if it is not a zip-file (see ZipArchive)
      */
     public function isZipFile($strFilename) {
