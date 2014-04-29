@@ -118,16 +118,21 @@ class class_admin_formgenerator {
 
         foreach($this->arrFields as $objOneField) {
 
+            $bitFieldIsEmpty =
+                (!is_array($objOneField->getStrValue()) && trim($objOneField->getStrValue()) === "")
+                || is_null($objOneField->getStrValue())
+                || (is_array($objOneField->getStrValue() && count($objOneField->getStrValue()) == 0)); //if it is an array with no entries
+
             //mandatory field
             if($objOneField->getBitMandatory()) {
-                //if field is empty
-                if(trim($objOneField->getStrValue()) === "" || is_null($objOneField->getStrValue())) {
+                //if field is mandatory and empty -> validation error
+                if($bitFieldIsEmpty) {
                     $this->addValidationError($objOneField->getStrEntryName()."_empty", $objLang->getLang("commons_validator_field_empty", "system", array($objOneField->getStrLabel())));
                 }
             }
 
             //if field is not empty -> validate
-            if(!(trim($objOneField->getStrValue()) === "" || is_null($objOneField->getStrValue()))) {
+            if(!$bitFieldIsEmpty) {
                 if(!$objOneField->validateValue()) {
                     $this->addValidationError($objOneField->getStrEntryName(), $objOneField->getStrValidationErrorMsg());
                 }
