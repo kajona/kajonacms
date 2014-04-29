@@ -69,52 +69,64 @@ abstract class class_root {
     /**
      * The records current systemid
      * @var string
+     * @templateExport
      */
     private $strSystemid;
+
     /**
      * The records internal parent-id
      * @var string
      * @versionable
      */
     private $strPrevId = -1;
+
     /**
      * The old prev-id, used to track hierarchical changes -> requires a rebuild of the rights-table
      * @var string
      */
     private $strOldPrevId = -1;
+
     /**
      * The records module-number
      * @var int
      */
     private $intModuleNr;
+
     /**
      * The records sort-position relative to the parent record
      * @var int
      */
     private $intSort;
+
     /**
      * The id of the user who created the record initially
      * @var string
      * @versionable
      */
     private $strOwner;
+
     /**
      * The id of the user last who did the last changes to the current record
      * @var string
      */
     private $strLmUser;
+
     /**
      * Timestamp of the last modification
      * ATTENTION: time() based, so 32 bit integer
      * @todo migrate to long-timestamp
      * @var int
+     * @templateExport
+     * @templateMapper date
      */
     private $intLmTime;
+
     /**
      * The id of the user locking the current record, emtpy otherwise
      * @var string
      */
     private $strLockId;
+
     /**
      * Time the current locking was triggered
      * ATTENTION: time() based, so 32 bit integer
@@ -122,25 +134,31 @@ abstract class class_root {
      * @var int
      */
     private $intLockTime;
+
     /**
      * The records status
      * @var int
      * @versionable
      */
     private $intRecordStatus;
+
     /**
      * Human readable comment describing the current record
      * @var string
      */
     private $strRecordComment;
+
     /**
      * Holds the current objects' class
      * @var string
      */
     private $strRecordClass;
+
     /**
      * Long-based representation of the timestamp the record was created initially
      * @var int
+     * @templateExport
+     * @templateMapper date
      */
     private $longCreateDate;
 
@@ -148,6 +166,8 @@ abstract class class_root {
      * The start-date of the date-table
      * @var class_date
      * @versionable
+     * @templateExport
+     * @templateMapper date
      */
     private $objStartDate = null;
 
@@ -155,6 +175,8 @@ abstract class class_root {
      * The end date of the date-table
      * @var class_date
      * @versionable
+     * @templateExport
+     * @templateMapper date
      */
     private $objEndDate = null;
 
@@ -162,6 +184,8 @@ abstract class class_root {
      * The special-date of the date-table
      * @var class_date
      * @versionable
+     * @templateExport
+     * @templateMapper date
      */
     private $objSpecialDate = null;
 
