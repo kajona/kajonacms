@@ -22,12 +22,12 @@ class class_test_charts_flotTest extends class_testbase  {
 
         //create bar charts
         for ($i = 1; $i < 6; $i++) {
-            class_test_charts_flotTest::createBarChart(class_graph_flot_seriesdatatypes::BAR, $i,$i);
+            //class_test_charts_flotTest::createBarChart(class_graph_flot_seriesdatatypes::BAR, $i,$i);
         }
         
         //create stacked bar charts
         for ($i = 1; $i < 6; $i++) {
-            class_test_charts_flotTest::createBarChart(class_graph_flot_seriesdatatypes::STACKEDBAR, $i,$i);
+            //class_test_charts_flotTest::createBarChart(class_graph_flot_seriesdatatypes::STACKEDBAR, $i,$i);
         }
 
         //create line chart
@@ -78,7 +78,7 @@ class class_test_charts_flotTest extends class_testbase  {
         
         for ($i = 400; $i < 1000; $i+=100) {
             $objGraph->setIntWidth($i);
-            echo $objGraph->renderGraph();
+            //echo $objGraph->renderGraph();
         }
         
         //create a stacked bar chart
