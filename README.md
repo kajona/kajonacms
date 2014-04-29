@@ -3,7 +3,7 @@ Kajona Content Management Framework
 
 Welcome to the sources of Kajona, an open source content management system.
 
-Please refer to our website at http://www.kajona.de for further details and prepared build ready for use.
+Please refer to our website at http://www.kajona.de for further details and prepared builds ready for use.
 
 **For prepared builds see http://www.kajona.de/downloads.html**
 
