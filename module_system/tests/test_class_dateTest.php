@@ -18,11 +18,6 @@ class test_class_dateTest extends class_testbase  {
         $objDate = new class_date(null);
         $this->assertTrue($objDate->getLongTimestamp() > 0);
 
-        $objDate = new class_date(1);
-        $this->assertEquals($objDate->getLongTimestamp(), 19700101010001);
-
-        $objDate = new class_date("1");
-        $this->assertEquals($objDate->getLongTimestamp(), 19700101010001);
 
         $objDate = new class_date(20140310123627);
         $this->assertEquals($objDate->getLongTimestamp(), 20140310123627);
