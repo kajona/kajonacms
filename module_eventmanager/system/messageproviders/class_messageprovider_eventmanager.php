@@ -20,6 +20,7 @@ class class_messageprovider_eventmanager implements interface_messageprovider {
      * Called whenever a message is being deleted
      *
      * @param class_module_messaging_message $objMessage
+     * @return void
      */
     public function onDelete(class_module_messaging_message $objMessage) {
 
@@ -29,6 +30,7 @@ class class_messageprovider_eventmanager implements interface_messageprovider {
      * Called whenever a message is set as read
      *
      * @param class_module_messaging_message $objMessage
+     * @return void
      */
     public function onSetRead(class_module_messaging_message $objMessage) {
 

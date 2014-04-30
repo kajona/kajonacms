@@ -75,44 +75,44 @@
     </div>
 </event_list>
 
-<!-- available placeholders: title, description, location, dateTimeFrom, dateFrom, dateTimeUntil, dateUntil, detailsLinkHref, registerLinkHref, systemid, eventStatus -->
+<!-- available placeholders: strTitle, strDescription, strLocation, dateTimeFrom, dateFrom, dateTimeUntil, dateUntil, detailsLinkHref, registerLinkHref, strSystemid, intEventStatus -->
 <event_list_entry>
     <tr>
         <td>%%dateFrom%%</td>
-        <td width="50%" data-kajona-editable="%%systemid%%#strTitle#plain">%%title%%</td>
+        <td width="50%" data-kajona-editable="%%strSystemid%%#strTitle#plain">%%strTitle%%</td>
         <td width="20%"><a href="%%detailsLinkHref%%">[lang,detailslink,eventmanager]</a></td>
         <td width="15%"><a href="%%registerLinkHref%%">[lang,registerlink,eventmanager]</a></td>
     </tr>
 </event_list_entry>
 
-<!-- available placeholders: title, description, location, dateTimeFrom, dateFrom, dateTimeUntil, dateUntil, registerLink, registerLinkHref, maximumParticipants, systemid, eventStatus -->
+<!-- available placeholders: strTitle, strDescription, intLocation, dateTimeFrom, dateFrom, dateTimeUntil, dateUntil, registerLink, registerLinkHref, intMaximumParticipants, strSystemid, intEventStatus -->
 <event_details>
     <div class="eventmanagerDetails">
-        <h2 data-kajona-editable="%%systemid%%#strTitle#plain">%%title%%</h2>
-        <p data-kajona-editable="%%systemid%%#strDescription">%%description%%</p>
+        <h2 data-kajona-editable="%%strSystemid%%#strTitle#plain">%%strTitle%%</h2>
+        <p data-kajona-editable="%%strSystemid%%#strDescription">%%strDescription%%</p>
         <table>
-            <tr><td>[lang,location,eventmanager]</td><td data-kajona-editable="%%systemid%%#strLocation#plain">%%location%%</td></tr>
+            <tr><td>[lang,location,eventmanager]</td><td data-kajona-editable="%%strSystemid%%#strLocation#plain">%%strLocation%%</td></tr>
             <tr><td>[lang,dateTimeFrom,eventmanager]</td><td>%%dateTimeFrom%%</td></tr>
             <tr><td>[lang,dateTimeUntil,eventmanager]</td><td>%%dateTimeUntil%%</td></tr>
-            <tr><td>[lang,maximumParticipants,eventmanager]</td><td data-kajona-editable="%%systemid%%#intParticipantsLimit#plain">%%maximumParticipants%%</td></tr>
+            <tr><td>[lang,maximumParticipants,eventmanager]</td><td data-kajona-editable="%%strSystemid%%#intParticipantsLimit#plain">%%intParticipantsLimit%%</td></tr>
             <tr><td>[lang,currentParticipants,eventmanager]</td><td>%%currentParticipants%%</td></tr>
-            <tr><td>[lang,form_eventmanager_eventstatus,eventmanager]</td><td>[lang,event_status_%%eventStatus%%,eventmanager]</td></tr>
+            <tr><td>[lang,form_eventmanager_eventstatus,eventmanager]</td><td>[lang,event_status_%%intEventStatus%%,eventmanager]</td></tr>
         </table>
         %%registerLink%%
     </div>
 </event_details>
 
-<!-- available placeholders: title, description, location, dateTimeFrom, dateFrom, dateTimeUntil, dateUntil, registerLinkHref, maximumParticipants -->
+<!-- available placeholders: strTitle, strDescription, intLocation, dateTimeFrom, dateFrom, dateTimeUntil, dateUntil, registerLinkHref, intMaximumParticipants -->
 <event_details_registerlink>
     <a href="%%registerLinkHref%%">[lang,registerlink,eventmanager]</a>
 </event_details_registerlink>
 
-<!-- available placeholders: title, description, location, dateTimeFrom, dateFrom, dateTimeUntil, dateUntil, registerLinkHref, maximumParticipants -->
+<!-- available placeholders: strTitle, strDescription, strLocation, dateTimeFrom, dateFrom, dateTimeUntil, dateUntil, registerLinkHref, intMaximumParticipants -->
 <event_details_updatelink>
 <a href="%%registerLinkHref%%">[lang,updatelink,eventmanager]</a>
 </event_details_updatelink>
 
-<!-- available placeholders: title, location, dateTimeFrom, dateFrom, dateTimeUntil, dateUntil, formaction -->
+<!-- available placeholders: strTitle, strLocation, dateTimeFrom, dateFrom, dateTimeUntil, dateUntil, formaction -->
 <!-- expected form-fields: forename, lastname, email, phone, comment, form_captcha -->
 <event_register>
     <div>
@@ -140,7 +140,7 @@
 
 
 <!-- the current user is logged in, so known to the system, a slightly different form may be shown instead -->
-<!-- available placeholders: title, location, dateTimeFrom, dateFrom, dateTimeUntil, dateUntil, formaction, username -->
+<!-- available placeholders: strTitle, strLocation, dateTimeFrom, dateFrom, dateTimeUntil, dateUntil, formaction, username -->
 <!-- expected form-fields: comment, participant_status (please note, that 1 (accepted) and 2 (declined) are reserved -->
 <event_register_loggedin>
 <div>
