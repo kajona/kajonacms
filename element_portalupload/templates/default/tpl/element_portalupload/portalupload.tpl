@@ -5,10 +5,10 @@
     <div id="%%elementId%%">
         <div class="fileupload-buttonbar">
 
-            <span class="btn fileinput-button">
+            <button type="submit" class="btn fileinput-button">
                 <span>[lang,mediamanager_upload,mediamanager]</span>
                 <input type="file" name="%%name%%" multiple>
-            </span>
+            </button>
 
             <button type="submit" class="btn start" style="display: none;">
                 <span>[lang,upload_multiple_uploadFiles,mediamanager]</span>
