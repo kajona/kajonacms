@@ -1,23 +1,20 @@
 <portalupload_uploadform>
-<div id="portalUploadWrapper">
+<div class="portalUploadWrapper">
 
 
     <div id="%%elementId%%">
         <div class="fileupload-buttonbar">
 
             <span class="btn fileinput-button">
-                <i class="fa fa-plus-square"></i>
                 <span>[lang,mediamanager_upload,mediamanager]</span>
                 <input type="file" name="%%name%%" multiple>
             </span>
 
             <button type="submit" class="btn start" style="display: none;">
-                <i class="fa fa-upload"></i>
                 <span>[lang,upload_multiple_uploadFiles,mediamanager]</span>
             </button>
 
             <button type="reset" class="btn  cancel" style="display: none;">
-                <i class="fa fa-ban"></i>
                 <span>[lang,upload_multiple_cancel,mediamanager]</span>
             </button>
 
@@ -31,7 +28,7 @@
         <div class=" fileupload-progress " style="display: none;">
 
             <div class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100">
-                <div class="bar" style="width:0%;"></div>
+                <div class="progress-bar" style="width:0%;"></div>
             </div>
 
             <div class="progress-extended">&nbsp;</div>
@@ -43,8 +40,10 @@
     <script type="text/javascript">
 
         KAJONA.portal.loader.loadFile([
+            "/templates/default/css/element_portalupload.css",
             "/templates/default/js/jquery-fileupload/css/jquery.fileupload.css",
             "/templates/default/js/jquery-fileupload/css/jquery.fileupload.css",
+            "/templates/default/js/jquery-fileupload/css/jquery.fileupload-ui.css",
             "/templates/default/js/jquery-fileupload/js/jquery.ui.widget.js",
             "/templates/default/js/jquery-fileupload/js/load-image.min.js",
             "/templates/default/js/jquery-fileupload/js/canvas-to-blob.min.js",
@@ -95,7 +94,7 @@
                                         '<div class="error"></div>' +
                                         '</td>' +
                                         '<td><p class="size"></p>' +
-                                        '<div class="progress progress-striped active"><div class="bar"></div></div>' +
+                                        '<div class="progress progress-striped active"><div class="progress-bar"></div></div>' +
                                         '</td>' +
                                         '<td>' +
                                         (!index && !o.options.autoUpload ?
