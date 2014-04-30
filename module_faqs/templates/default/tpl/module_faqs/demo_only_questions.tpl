@@ -7,7 +7,7 @@
     </div>
 </faqs_list>
 
-<!-- available placeholders: strTitle, faq_cat_title, faq_faqs -->
+<!-- available placeholders: strTitle, faq_faqs -->
 <faq_category>
     <div class="faqCategory">
         <div class="faqCategoryTitle"><h3 data-kajona-editable="%%strSystemid%%#strTitle#plain">%%strTitle%%</h3></div>
@@ -15,7 +15,7 @@
     </div>
 </faq_category>
 
-<!-- available placeholders: strQuestion, strAnswer, strSystemid, faq_question, faq_answer, faq_systemid, faq_rating (if module rating installed) -->
+<!-- available placeholders: strQuestion, strAnswer, strSystemid, faq_rating (if module rating installed) -->
 <faq_faq>
     <div class="faqFaq">
         <div class="faqFaqQuestion">
