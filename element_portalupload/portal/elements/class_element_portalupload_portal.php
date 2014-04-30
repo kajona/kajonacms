@@ -3,8 +3,6 @@
 *   (c) 2004-2006 by MulchProductions, www.mulchprod.de                                                 *
 *   (c) 2007-2014 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
-*-------------------------------------------------------------------------------------------------------*
-*	$Id$                              *
 ********************************************************************************************************/
 
 /**
@@ -17,11 +15,17 @@
  */
 class class_element_portalupload_portal extends class_element_portal implements interface_portal_element {
 
+    /**
+     * @return string
+     */
     public function loadData() {
         $strReturn = "";
 
         if($this->getParam("submitPortaluploadForm") == "1") {
             $strReturn .= $this->doUpload();
+        }
+        else if($this->getParam("submitAjaxUpload") == "1") {
+            $strReturn .= $this->doAjaxUpload();
         }
         else {
             $strReturn .= $this->uploadForm();
@@ -32,6 +36,11 @@ class class_element_portalupload_portal extends class_element_portal implements 
     }
 
 
+    /**
+     * @param string $formErrors
+     *
+     * @return string
+     */
     private function uploadForm($formErrors = "") {
         $strReturn = "";
         //validate the rights
@@ -58,7 +67,13 @@ class class_element_portalupload_portal extends class_element_portal implements 
 
             $arrTemplate["formErrors"] = $formErrors;
 
-            $arrTemplate["formAction"] = getLinkPortalHref($this->getPagename(), "", $this->getAction(), "", $strDlFolderId);
+            $strAllowedFileRegex = uniStrReplace(array(".", ","), array("", "|"), $objFilemanagerRepo->getStrUploadFilter());
+
+            $arrTemplate["formAction"] = class_link::getLinkPortalHref($this->getPagename(), "", $this->getAction(), "", $strDlFolderId);
+            $arrTemplate["maxFileSize"] = class_carrier::getInstance()->getObjConfig()->getPhpMaxUploadSize();
+            $arrTemplate["acceptFileTypes"] = $strAllowedFileRegex != "" ? "/(\.|\/)(".$strAllowedFileRegex.")$/i" : "''";
+            $arrTemplate["elementId"] = $this->arrElementData["content_id"];
+            $arrTemplate["mediamanagerRepoId"] = $objFilemanagerRepo->getSystemid();
 
             $strReturn .= $this->fillTemplate($arrTemplate, $strTemplateID);
 
@@ -70,8 +85,37 @@ class class_element_portalupload_portal extends class_element_portal implements 
         return $strReturn;
     }
 
+    /**
+     * Internal upload handler to handle xml uploads.
+     * Used as a backend by the jquery upload plugin.
+     * Terminates the request.
+     * @return string
+     */
+    private function doAjaxUpload() {
+        class_response_object::getInstance()->setStrResponseType(class_http_responsetypes::STR_TYPE_JSON);
 
-    private function doUpload() {
+        $strUpload = $this->doUpload(true);
+
+        if($strUpload === true)
+            $strUpload = $this->getLang("portaluploadSuccess");
+        else
+            class_response_object::getInstance()->setStrStatusCode(class_http_statuscodes::SC_FORBIDDEN);
+
+        $this->flushCompletePagesCache();
+        class_response_object::getInstance()->sendHeaders();
+        echo json_encode($strUpload);
+        die();
+    }
+
+
+    /**
+     * Will be kept for legacy compatibility
+     *
+     * @param bool $bitJsonResponse
+     *
+     * @return string
+     */
+    private function doUpload($bitJsonResponse = false) {
         $strReturn = "";
 
         //prepare the folder to be used as a target-folder for the upload
@@ -122,11 +166,14 @@ class class_element_portalupload_portal extends class_element_portal implements 
 
                         $this->flushCompletePagesCache();
 
+                        if($bitJsonResponse)
+                            return true;
+
                         //reload the site to display the new file
                         if(validateSystemid($this->getParam("portaluploadDlfolder")))
-                            $this->portalReload(getLinkPortalHref($this->getPagename(), "", "mediaFolder", "uploadSuccess=1", $this->getParam("portaluploadDlfolder")));
+                            $this->portalReload(class_link::getLinkPortalHref($this->getPagename(), "", "mediaFolder", "uploadSuccess=1", $this->getParam("portaluploadDlfolder")));
                         else
-                            $this->portalReload(getLinkPortalHref($this->getPagename(), "", "", $this->getAction(), "uploadSuccess=1", $this->getSystemid()));
+                            $this->portalReload(class_link::getLinkPortalHref($this->getPagename(), "", "", $this->getAction(), "uploadSuccess=1", $this->getSystemid()));
                     }
                     else {
                         $strReturn .= $this->uploadForm($this->getLang("portaluploadCopyUploadError"));
