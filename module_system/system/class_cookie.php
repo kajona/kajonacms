@@ -3,8 +3,6 @@
 *   (c) 2004-2006 by MulchProductions, www.mulchprod.de                                                 *
 *   (c) 2007-2014 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
-*-------------------------------------------------------------------------------------------------------*
-*	$Id$                                            *
 ********************************************************************************************************/
 
 /**
@@ -17,11 +15,6 @@
 class class_cookie {
 
 
-    /**
-     * Constructor
-     */
-    public function __construct() {
-    }
 
     /**
      * Sends a cookie to the browser
@@ -38,9 +31,7 @@ class class_cookie {
             $intTime = time() + 60 * 60 * 24 * 30;
         }
 
-        $strPath = _webpath_;
-
-        return setcookie($strName, $strValue, $intTime);
+        $strPath = preg_replace('#http(s?)://'.getServer("HTTP_HOST").'#i', '', _webpath_);
         return setcookie($strName, $strValue, $intTime, $strPath);
     }
 

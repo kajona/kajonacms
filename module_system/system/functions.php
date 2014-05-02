@@ -195,7 +195,7 @@ function issetCookie($strKey) {
 }
 
 /**
- * Provides acces to the $_COOKIE Array.
+ * Provides access to the $_COOKIE Array.
  * NOTE: Use the cookie-class to get data from cookies!
  *
  * @param string $strKey
