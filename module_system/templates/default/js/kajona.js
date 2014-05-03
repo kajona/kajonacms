@@ -95,12 +95,12 @@ KAJONA.portal.loadCaptcha = function (strCaptchaId, intWidth) {
     }
 
     var timeCode = new Date().getTime();
-    if (document.getElementById(imgID) == undefined) {
+    if (document.getElementById(imgID) == undefined && document.getElementById(containerName) != null) {
         var objImg=document.createElement("img");
         objImg.setAttribute("id", imgID);
         objImg.setAttribute("src", KAJONA_WEBPATH+"/image.php?image=kajonaCaptcha&maxWidth="+intWidth+"&reload="+timeCode);
         document.getElementById(containerName).appendChild(objImg);
-    } else {
+    } else if(document.getElementById(imgID) != undefined) {
         var objImg = document.getElementById(imgID);
         objImg.src = objImg.src + "&reload="+timeCode;
     }
