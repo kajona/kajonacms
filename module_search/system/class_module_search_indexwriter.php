@@ -92,10 +92,16 @@ class class_module_search_indexwriter {
     }
 
     /**
+     * Triggers the indexing of a single object.
+     * Normally, the indexer makes use of the change-history in order to track if an object changed.
+     * Use the second boolean param in order to force the re-indexing.
+     *
      * @param class_model $objInstance
+     * @param bool $bitForce
+     *
      * @return void
      */
-    public function indexObject(class_model $objInstance) {
+    public function indexObject(class_model $objInstance, $bitForce = false) {
 
         if(!self::isIndexAvailable())
             return;
@@ -129,8 +135,7 @@ class class_module_search_indexwriter {
     }
 
     /**
-     * Triggers a full rebuild of the index. The index is not flused before!
-     * @see clearIndex()
+     * Triggers a full rebuild of the index.
      *
      * @return void
      */
@@ -145,7 +150,7 @@ class class_module_search_indexwriter {
         foreach($arrObj as $objObj) {
             $objInstance = class_objectfactory::getInstance()->getObject($objObj["system_id"]);
             if($objInstance != null)
-                $this->indexObject($objInstance);
+                $this->indexObject($objInstance, true);
         }
     }
 
