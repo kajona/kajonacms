@@ -262,20 +262,34 @@ class class_module_search_indexwriter {
                         (?, ?)";
         $this->objDB->_pQuery($strQuery, array($objSearchDocument->getDocumentId(), $objSearchDocument->getStrSystemId()));
 
-        foreach($objSearchDocument->getContent() as $objSearchContent)
-            $this->updateSearchContentToDb($objSearchContent);
+        $this->updateSearchContentsToDb($objSearchDocument->getContent());
     }
 
     /**
-     * @param class_module_search_content $objSearchContent
+     * @param class_module_search_content[] $arrSearchContent
+     *
      * @return void
      */
-    private function updateSearchContentToDb($objSearchContent) {
-        //insert search document
+    private function updateSearchContentsToDb(array $arrSearchContent) {
+
+        $arrParams = array();
+        $arrValues = array();
+
+        foreach($arrSearchContent as $objOneContent) {
+            $arrParams[] = "(?, ?, ?, ?, ?)";
+            $arrValues[] = $objOneContent->getStrId();
+            $arrValues[] = $objOneContent->getFieldName();
+            $arrValues[] = $objOneContent->getContent();
+            $arrValues[] = $objOneContent->getScore();
+            $arrValues[] = $objOneContent->getDocumentId();
+        }
+
+        //insert search document in a single query - much faster than single updates
         $strQuery = "INSERT INTO " . _dbprefix_ . "search_ix_content
                         (search_ix_content_id, search_ix_content_field_name, search_ix_content_content, search_ix_content_score, search_ix_content_document_id) VALUES
-                        (?, ?, ?, ?, ?)";
-        $this->objDB->_pQuery($strQuery, array($objSearchContent->getStrId(), $objSearchContent->getFieldName(), $objSearchContent->getContent(), $objSearchContent->getScore(), $objSearchContent->getDocumentId()));
+                        ".implode(",", $arrValues);
+
+        $this->objDB->_pQuery($strQuery, $arrValues);
     }
 
     /**
