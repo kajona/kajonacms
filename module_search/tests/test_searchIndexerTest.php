@@ -172,6 +172,42 @@ class class_test_searchIndexerTest extends class_testbase {
 
         class_objectfactory::getInstance()->getObject($strNewsId)->deleteObject();
     }
+
+    public function testObjectIndexerPerformance() {
+        $objNews = new class_module_news_news();
+        $objNews->setStrTitle("demo 1");
+        $objNews->setStrIntro("intro demo news");
+        $objNews->setStrText("text demo news");
+        $objNews->updateObjectToDb();
+        $strNewsId = $objNews->getSystemid();
+
+        echo "Status changes with disabled changelog indexer integration...\n";
+        class_module_system_changelog::$bitChangelogEnabled = false;
+        $intTimeStart = microtime(true);
+
+        for($intI = 0; $intI < 150; $intI++)
+            $objNews->setIntRecordStatus($intI % 2);
+
+        $intTimeEnd = microtime(true);
+        $time = $intTimeEnd - $intTimeStart;
+        echo "Object updates: ", sprintf('%f', $time), " sec.\n";
+
+
+        echo "Status changes with enabled changelog indexer integration...\n";
+        class_module_system_changelog::$bitChangelogEnabled = true;
+        $intTimeStart = microtime(true);
+
+        for($intI = 0; $intI < 150; $intI++)
+            $objNews->setIntRecordStatus($intI % 2);
+
+        $intTimeEnd = microtime(true);
+        $time = $intTimeEnd - $intTimeStart;
+        echo "Object updates: ", sprintf('%f', $time), " sec.\n";
+
+
+        class_objectfactory::getInstance()->getObject($strNewsId)->deleteObject();
+
+    }
 }
 
 
