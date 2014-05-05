@@ -245,30 +245,13 @@ class class_module_search_indexwriter {
      * @param class_module_search_document $objSearchDocument
      * @return void
      */
-    public function updateSearchDocumentToDb($objSearchDocument) {
+    public function updateSearchDocumentToDb(class_module_search_document $objSearchDocument) {
 
         if(!self::isIndexAvailable())
             return;
 
-        //Load possible existing document if exists
-        $strQuery = "SELECT * FROM " . _dbprefix_ . "search_ix_document " .
-            "WHERE search_ix_system_id = ?";
-
-        $arrSearchDocument = $this->objDB->getPRow($strQuery, array($objSearchDocument->getStrSystemId()));
-
         // Delete existing entries
-        if(count($arrSearchDocument) > 0) {
-            $strDocumentId = $arrSearchDocument["search_ix_document_id"];
-
-
-            $strQuery = "DELETE FROM " . _dbprefix_ . "search_ix_document
-            WHERE search_ix_system_id = ?";
-            $this->objDB->_pQuery($strQuery, array($objSearchDocument->getStrSystemId()));
-
-            $strQuery = "DELETE FROM " . _dbprefix_ . "search_ix_content
-            WHERE search_ix_content_document_id = ?";
-            $this->objDB->_pQuery($strQuery, array($strDocumentId));
-        }
+        $this->removeRecordFromIndex($objSearchDocument->getStrSystemId());
 
         if(count($objSearchDocument->getContent()) == 0)
             return;
