@@ -119,10 +119,10 @@ class class_module_search_indexwriter {
             return;
 
         if(!$this->objectChanged($objInstance)) {
-            class_logger::getInstance("search.log")->addLogRow("indexer: object ".$objInstance->getSystemid()."@".get_class($objInstance)." has no changes, skipping", class_logger::$levelWarning);
+            class_logger::getInstance("search.log")->addLogRow("indexer: object ".$objInstance->getSystemid()."@".get_class($objInstance)." has no changes, skipping", class_logger::$levelInfo);
             return;
         }
-        class_logger::getInstance("search.log")->addLogRow("indexer: object ".$objInstance->getSystemid()."@".get_class($objInstance)." has changes, re-indexing", class_logger::$levelWarning);
+        class_logger::getInstance("search.log")->addLogRow("indexer: object ".$objInstance->getSystemid()."@".get_class($objInstance)." has changes, re-indexing", class_logger::$levelInfo);
 
         $objSearchDocument = new class_module_search_document();
         $objSearchDocument->setDocumentId(generateSystemid());
@@ -133,7 +133,6 @@ class class_module_search_indexwriter {
         foreach($arrProperties as $strPropertyName => $strAnnotationValue) {
             $getter = $objReflection->getGetter($strPropertyName);
             $strContent = $objInstance->$getter();
-            //TODO sir: changed first param from db-field to property name since there may be indexable fields not stored directly to the database
             $objSearchDocument->addContent($strPropertyName, $strContent);
         }
 
@@ -161,7 +160,7 @@ class class_module_search_indexwriter {
         $arrIndexProperties = array_keys($objReflection->getPropertiesWithAnnotation(self::STR_ANNOTATION_ADDSEARCHINDEX));
         foreach($arrIndexProperties as $strIndexPropertyName) {
             if(!$objReflection->hasPropertyAnnotation($strIndexPropertyName, class_module_system_changelog::ANNOTATION_PROPERTY_VERSIONABLE)) {
-                class_logger::getInstance("search.log")->addLogRow("property ".$strIndexPropertyName." is not marked as versionable. could make sense, huh?", class_logger::$levelWarning);
+                class_logger::getInstance("search.log")->addLogRow("property ".$strIndexPropertyName." is not marked as versionable. could make sense, huh?", class_logger::$levelInfo);
                 //force reindex
                 return true;
             }
@@ -171,7 +170,7 @@ class class_module_search_indexwriter {
         $objChangelog = new class_module_system_changelog();
         $arrChanges = array();
         try {
-            $objChangelog->isObjectChanged($objInstance, $arrChanges);
+            $objChangelog->isObjectChanged($objInstance, $arrChanges, true);
         }
         catch(class_exception $objEx) {
             //s.th. bad happened. reindex.
