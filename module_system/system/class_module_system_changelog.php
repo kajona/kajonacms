@@ -35,6 +35,7 @@ class class_module_system_changelog extends class_model implements interface_mod
     public static $bitChangelogEnabled = null;
 
     private static $arrOldValueCache = array();
+    private static $arrInitValueCache = array();
     private static $arrCachedProviders = null;
 
 
@@ -65,27 +66,19 @@ class class_module_system_changelog extends class_model implements interface_mod
      *
      * @param interface_versionable $objObject
      * @param array &$arrReducedSet
+     * @param bool $bitUseInitValues if set to true, the initial values of the object will be used for comparison, not the ones of the last update
      *
      * @throws class_exception
      * @return array
      */
-    public function isObjectChanged(interface_versionable $objObject, &$arrReducedSet = array()) {
+    public function isObjectChanged(interface_versionable $objObject, &$arrReducedSet = array(), $bitUseInitValues = false) {
         if(!$this->isVersioningAvailable($objObject))
             throw new class_exception("versioning not available", class_exception::$level_ERROR);
 
-        $arrOldValues = $this->getOldValuesForSystemid($objObject->getSystemid());
-        if($arrOldValues == null)
-            throw new class_exception("no old values found for the passed object", class_exception::$level_ERROR);
-
         //read the new values
-        $arrChangeset = $this->createChangeArray($objObject);
+        $arrChangeset = $this->createChangeArray($objObject, $bitUseInitValues);
 
         $this->createReducedChangeSet($arrReducedSet, $arrChangeset, "");
-
-
-        //reset the old values for later operations
-        self::$arrOldValueCache[$objObject->getSystemid()] = $arrOldValues;
-
         return count($arrReducedSet) > 0;
     }
 
@@ -105,7 +98,7 @@ class class_module_system_changelog extends class_model implements interface_mod
 
         if(validateSystemid($objCurrentObject->getSystemid())) {
             $arrOldValues = $this->readVersionableProperties($objCurrentObject);
-            self::$arrOldValueCache[$objCurrentObject->getSystemid()] = $arrOldValues;
+            $this->setOldValuesForSystemid($objCurrentObject->getSystemid(), $arrOldValues);
             return $arrOldValues;
         }
         return null;
@@ -113,6 +106,7 @@ class class_module_system_changelog extends class_model implements interface_mod
 
     /**
      * Scans the passed object and tries to find all properties marked with the annotation @versionable.
+     * Updates the internal "oldvalues" cache.
      * @param interface_versionable $objCurrentObject
      *
      * @return array|null
@@ -147,8 +141,6 @@ class class_module_system_changelog extends class_model implements interface_mod
                 $arrOldValues[$strProperty] = $strValue;
             }
 
-            self::$arrOldValueCache[$objCurrentObject->getSystemid()] = $arrOldValues;
-
             return $arrOldValues;
         }
         return null;
@@ -167,13 +159,44 @@ class class_module_system_changelog extends class_model implements interface_mod
     }
 
     /**
+     * @param string $strSystemid
+     *
+     * @return null
+     */
+    public function getInitValuesForSystemid($strSystemid) {
+        if(isset(self::$arrInitValueCache[$strSystemid]))
+            return self::$arrInitValueCache[$strSystemid];
+        else
+            return null;
+    }
+
+    /**
+     * Sets the passed entry to the set of old values
+     *
+     * @param string $strSystemid
+     * @param array $arrOldValues
+     *
+     * @return void
+     */
+    private function setOldValuesForSystemid($strSystemid, $arrOldValues) {
+        self::$arrOldValueCache[$strSystemid] = $arrOldValues;
+        if(!array_key_exists($strSystemid, self::$arrInitValueCache))
+            self::$arrInitValueCache[$strSystemid] = $arrOldValues;
+    }
+
+    /**
      * Builds the change-array based on the old- and new values
-     * @param interface_versionable $objSourceModel
+     *
+     * @param interface_versionable|class_root $objSourceModel
+     * @param bool $bitUseInitValues
      *
      * @return array
      */
-    private function createChangeArray($objSourceModel) {
+    private function createChangeArray($objSourceModel, $bitUseInitValues = false) {
+
         $arrOldValues = $this->getOldValuesForSystemid($objSourceModel->getSystemid());
+        if($bitUseInitValues)
+            $arrOldValues = $this->getInitValuesForSystemid($objSourceModel->getSystemid());
 
         //this are now the new ones
         $arrNewValues = $this->readVersionableProperties($objSourceModel);
@@ -238,7 +261,11 @@ class class_module_system_changelog extends class_model implements interface_mod
         if(!$this->isVersioningAvailable($objSourceModel))
             return true;
 
-        return $this->processChangeArray($this->createChangeArray($objSourceModel), $objSourceModel, $strAction, $bitForceEntry, $bitDeleteAction);
+
+        $arrChanges = $this->createChangeArray($objSourceModel);
+        $bitReturn = $this->processChangeArray($arrChanges, $objSourceModel, $strAction, $bitForceEntry, $bitDeleteAction);
+        $this->readOldValues($objSourceModel);
+        return $bitReturn;
     }
 
     /**
