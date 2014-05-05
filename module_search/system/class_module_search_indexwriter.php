@@ -15,6 +15,9 @@
  * @author tim.kiefer@kojikui.de
  */
 class class_module_search_indexwriter {
+
+    const STR_ANNOTATION_ADDSEARCHINDEX = "@addSearchIndex";
+
     private $objConfig = null;
     private $objDB = null;
 
@@ -115,12 +118,18 @@ class class_module_search_indexwriter {
         if($objInstance == null)
             return;
 
+        if(!$this->objectChanged($objInstance)) {
+            class_logger::getInstance("search.log")->addLogRow("indexer: object ".$objInstance->getSystemid()."@".get_class($objInstance)." has no changes, skipping", class_logger::$levelWarning);
+            return;
+        }
+        class_logger::getInstance("search.log")->addLogRow("indexer: object ".$objInstance->getSystemid()."@".get_class($objInstance)." has changes, re-indexing", class_logger::$levelWarning);
+
         $objSearchDocument = new class_module_search_document();
         $objSearchDocument->setDocumentId(generateSystemid());
         $objSearchDocument->setStrSystemId($objInstance->getSystemid());
 
         $objReflection = new class_reflection($objInstance);
-        $arrProperties = $objReflection->getPropertiesWithAnnotation("@addSearchIndex");
+        $arrProperties = $objReflection->getPropertiesWithAnnotation(self::STR_ANNOTATION_ADDSEARCHINDEX);
         foreach($arrProperties as $strPropertyName => $strAnnotationValue) {
             $getter = $objReflection->getGetter($strPropertyName);
             $strContent = $objInstance->$getter();
@@ -133,6 +142,59 @@ class class_module_search_indexwriter {
 
         $this->updateSearchDocumentToDb($objSearchDocument);
     }
+
+    /**
+     * Internal helper, used to check if an objects' properties changed based on the internal changelog
+     *
+     * @param class_model $objInstance
+     *
+     * @return bool
+     */
+    public function objectChanged(class_model $objInstance) {
+
+        //force reindex if not versionable,
+        if(!$objInstance instanceof interface_versionable)
+            return true;
+
+        //get the record of changed entries / compare the indexable properties with the versionable ones
+        $objReflection = new class_reflection($objInstance);
+        $arrIndexProperties = array_keys($objReflection->getPropertiesWithAnnotation(self::STR_ANNOTATION_ADDSEARCHINDEX));
+        foreach($arrIndexProperties as $strIndexPropertyName) {
+            if(!$objReflection->hasPropertyAnnotation($strIndexPropertyName, class_module_system_changelog::ANNOTATION_PROPERTY_VERSIONABLE)) {
+                class_logger::getInstance("search.log")->addLogRow("property ".$strIndexPropertyName." is not marked as versionable. could make sense, huh?", class_logger::$levelWarning);
+                //force reindex
+                return true;
+            }
+        }
+
+        //seem as all index-properties are versionable. compare against changes
+        $objChangelog = new class_module_system_changelog();
+        $arrChanges = array();
+        try {
+            $objChangelog->isObjectChanged($objInstance, $arrChanges);
+        }
+        catch(class_exception $objEx) {
+            //s.th. bad happened. reindex.
+            return true;
+        }
+
+        //no changes available, no reindex required
+        if(count($arrChanges) == 0)
+            return false;
+
+        //loop through the remaining changes in order to get those relevant for the indexer
+        foreach($arrChanges as $arrOneChange) {
+            if(in_array($arrOneChange["property"], $arrIndexProperties)) {
+                //seems as the changed property is relevant for the index
+                return true;
+            }
+        }
+
+        //if we reached up here, all other checks where skipped. this means, there's no need to reindex the object.
+        return false;
+
+    }
+
 
     /**
      * Triggers a full rebuild of the index.
