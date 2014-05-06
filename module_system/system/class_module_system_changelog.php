@@ -318,6 +318,10 @@ class class_module_system_changelog extends class_model implements interface_mod
             $arrReducedChanges = array();
             $this->createReducedChangeSet($arrReducedChanges, $arrChanges, $strAction, $bitForceEntry, $bitDeleteAction);
 
+            //collect all values in order to create a batch query
+            $arrParams = array();
+            $arrValues = array();
+
             foreach($arrReducedChanges as $arrChangeSet) {
                 $strOldvalue = $arrChangeSet["oldvalue"];
                 $strNewvalue = $arrChangeSet["newvalue"];
@@ -330,35 +334,32 @@ class class_module_system_changelog extends class_model implements interface_mod
                     class_logger::$levelInfo
                 );
 
-                $strQuery = "INSERT INTO "._dbprefix_.self::getTableForClass(get_class($objSourceModel))."
-                     (change_id,
-                      change_date,
-                      change_systemid,
-                      change_system_previd,
-                      change_user,
-                      change_class,
-                      change_action,
-                      change_property,
-                      change_oldvalue,
-                      change_newvalue) VALUES
-                     (?,?,?,?,?,?,?,?,?,?)";
 
-                $bitReturn = $bitReturn && $this->objDB->_pQuery(
-                    $strQuery,
-                    array(
-                        generateSystemid(),
-                        class_date::getCurrentTimestamp(),
-                        $objSourceModel->getSystemid(),
-                        $objSourceModel->getPrevid(),
-                        $this->objSession->getUserID(),
-                        get_class($objSourceModel),
-                        $strAction,
-                        $strProperty,
-                        $strOldvalue,
-                        $strNewvalue
-                    )
-                );
+                $arrParams[] = "(?,?,?,?,?,?,?,?,?,?)";
+
+                $arrValues[] = generateSystemid();
+                $arrValues[] = class_date::getCurrentTimestamp();
+                $arrValues[] = $objSourceModel->getSystemid();
+                $arrValues[] = $objSourceModel->getPrevid();
+                $arrValues[] = $this->objSession->getUserID();
+                $arrValues[] = get_class($objSourceModel);
+                $arrValues[] = $strAction;
+                $arrValues[] = $strProperty;
+                $arrValues[] = $strOldvalue;
+                $arrValues[] = $strNewvalue;
+
+
             }
+
+            //fire a single query
+            if(count($arrParams) > 0) {
+                $strQuery = "INSERT INTO "._dbprefix_.self::getTableForClass(get_class($objSourceModel))."
+                         (change_id, change_date, change_systemid, change_system_previd, change_user, change_class, change_action, change_property, change_oldvalue, change_newvalue)
+                         VALUES ".implode(",", $arrParams);
+
+                $bitReturn = $this->objDB->_pQuery($strQuery, $arrValues);
+            }
+
         }
         return $bitReturn;
     }
@@ -369,9 +370,10 @@ class class_module_system_changelog extends class_model implements interface_mod
      *
      * @param array &$arrReturn
      * @param array $arrChanges
-     * @param $strAction
+     * @param string $strAction
      * @param bool $bitForceEntry
      * @param null $bitDeleteAction
+     * @return void
      */
     private function createReducedChangeSet(array &$arrReturn, array $arrChanges, $strAction, $bitForceEntry = false, $bitDeleteAction = null) {
 
