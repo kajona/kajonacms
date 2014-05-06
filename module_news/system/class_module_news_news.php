@@ -174,13 +174,23 @@ class class_module_news_news extends class_model implements interface_model, int
 
             class_module_news_category::deleteNewsMemberships($this->getSystemid());
             //insert all memberships
+            $arrParams = array();
+            $arrValues = array();
             foreach($this->arrCats as $strCatID => $strValue) {
-                $strQuery = "INSERT INTO " . _dbprefix_ . "news_member
-                            (newsmem_id, newsmem_news, newsmem_category) VALUES
-                            (?, ?, ?)";
-                if(!$this->objDB->_pQuery($strQuery, array(generateSystemid(), $this->getSystemid(), $strCatID))) {
-                    return false;
-                }
+                $arrParams[] = "(?, ?, ?)";
+
+                $arrValues[] = generateSystemid();
+                $arrValues[] = $this->getSystemid();
+                $arrValues[] = $strCatID;
+
+            }
+
+            $strQuery = "INSERT INTO " . _dbprefix_ . "news_member
+                        (newsmem_id, newsmem_news, newsmem_category) VALUES
+                        ".implode(",", $arrParams);
+
+            if(!$this->objDB->_pQuery($strQuery, $arrValues)) {
+                return false;
             }
         }
 

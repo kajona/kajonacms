@@ -76,16 +76,20 @@ class class_module_languages_languageset extends class_model implements interfac
 
         class_logger::getInstance()->addLogRow("updating languageset " . $this->getSystemid(), class_logger::$levelInfo);
 
-        $bitReturn = true;
+        $arrValues = array();
+        $arrParams = array();
         foreach($this->arrLanguageSet as $strLanguage => $strSystemid) {
-            $strQuery = "INSERT INTO " . _dbprefix_ . "languages_languageset
-                           (languageset_id, languageset_language, languageset_systemid) VALUES
-                           (?, ?, ?)";
-
-            $bitReturn = $bitReturn && $this->objDB->_pQuery($strQuery, array($this->getSystemid(), $strLanguage, $strSystemid));
+            $arrParams[] = "(?, ?, ?)";
+            $arrValues[] = $this->getSystemid();
+            $arrValues[] = $strLanguage;
+            $arrValues[] = $strSystemid;
         }
 
-        return $bitReturn;
+        $strQuery = "INSERT INTO " . _dbprefix_ . "languages_languageset
+                       (languageset_id, languageset_language, languageset_systemid) VALUES
+                       ".implode(",", $arrParams);
+
+        return $this->objDB->_pQuery($strQuery, $arrValues);
     }
 
     /**
