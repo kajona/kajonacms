@@ -145,11 +145,11 @@ class class_module_search_indexwriter {
     /**
      * Internal helper, used to check if an objects' properties changed based on the internal changelog
      *
-     * @param class_model $objInstance
+     * @param class_model|interface_versionable $objInstance
      *
      * @return bool
      */
-    public function objectChanged(class_model $objInstance) {
+    public function objectChanged(interface_versionable $objInstance) {
 
         //force reindex if not versionable,
         if(!$objInstance instanceof interface_versionable)
