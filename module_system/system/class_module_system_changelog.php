@@ -350,7 +350,7 @@ class class_module_system_changelog extends class_model implements interface_mod
             if(count($arrValues) > 0) {
                 $bitReturn = $this->objDB->multiInsert(
                     self::getTableForClass(get_class($objSourceModel)),
-                    array("change_id", "change_date", "change_systemid", "change_system_previd", "change_user", "change_class", " hange_action", "change_property", "change_oldvalue", "change_newvalue"),
+                    array("change_id", "change_date", "change_systemid", "change_system_previd", "change_user", "change_class", "change_action", "change_property", "change_oldvalue", "change_newvalue"),
                     $arrValues
                 );
             }
