@@ -274,25 +274,23 @@ class class_module_search_indexwriter {
      * @return void
      */
     private function updateSearchContentsToDb(array $arrSearchContent) {
-
-        $arrParams = array();
         $arrValues = array();
 
         foreach($arrSearchContent as $objOneContent) {
-            $arrParams[] = "(?, ?, ?, ?, ?)";
-            $arrValues[] = $objOneContent->getStrId();
-            $arrValues[] = $objOneContent->getFieldName();
-            $arrValues[] = $objOneContent->getContent();
-            $arrValues[] = $objOneContent->getScore();
-            $arrValues[] = $objOneContent->getDocumentId();
+            $arrValues[] = array(
+                $objOneContent->getStrId(),
+                $objOneContent->getFieldName(),
+                $objOneContent->getContent(),
+                $objOneContent->getScore(),
+                $objOneContent->getDocumentId()
+            );
         }
 
         //insert search document in a single query - much faster than single updates
-        $strQuery = "INSERT INTO " . _dbprefix_ . "search_ix_content
-                        (search_ix_content_id, search_ix_content_field_name, search_ix_content_content, search_ix_content_score, search_ix_content_document_id) VALUES
-                        ".implode(",", $arrParams);
-
-        $this->objDB->_pQuery($strQuery, $arrValues);
+        $this->objDB->multiInsert(
+            "search_ix_content",
+            array("search_ix_content_id", "search_ix_content_field_name", "search_ix_content_content", "search_ix_content_score", "search_ix_content_document_id"),
+            $arrValues);
     }
 
     /**

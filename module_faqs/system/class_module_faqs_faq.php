@@ -140,22 +140,16 @@ class class_module_faqs_faq extends class_model implements interface_model, inte
         if($this->updateBitMemberships) {
             class_module_faqs_category::deleteFaqsMemberships($this->getSystemid());
             //insert all memberships
-            $arrParams = array();
             $arrValues = array();
             foreach(array_keys($this->arrCats) as $strCatID) {
-                $arrParams[] = "(?, ?, ?)";
-
-                $arrValues[] = generateSystemid();
-                $arrValues[] = $this->getSystemid();
-                $arrValues[] = $strCatID;
-
+                $arrValues[] = array(generateSystemid(), $this->getSystemid(), $strCatID);
             }
 
-            $strQuery = "INSERT INTO " . _dbprefix_ . "faqs_member
-                        (faqsmem_id, faqsmem_faq, faqsmem_category) VALUES
-                        ".implode(",", $arrParams);
-
-            $this->objDB->_pQuery($strQuery, $arrValues);
+            $this->objDB->multiInsert(
+                "faqs_member",
+                array("faqsmem_id", "faqsmem_faq", "faqsmem_category"),
+                $arrValues
+            );
         }
         return parent::updateStateToDb();
 

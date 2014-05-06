@@ -319,9 +319,7 @@ class class_module_system_changelog extends class_model implements interface_mod
             $this->createReducedChangeSet($arrReducedChanges, $arrChanges, $strAction, $bitForceEntry, $bitDeleteAction);
 
             //collect all values in order to create a batch query
-            $arrParams = array();
             $arrValues = array();
-
             foreach($arrReducedChanges as $arrChangeSet) {
                 $strOldvalue = $arrChangeSet["oldvalue"];
                 $strNewvalue = $arrChangeSet["newvalue"];
@@ -334,30 +332,27 @@ class class_module_system_changelog extends class_model implements interface_mod
                     class_logger::$levelInfo
                 );
 
-
-                $arrParams[] = "(?,?,?,?,?,?,?,?,?,?)";
-
-                $arrValues[] = generateSystemid();
-                $arrValues[] = class_date::getCurrentTimestamp();
-                $arrValues[] = $objSourceModel->getSystemid();
-                $arrValues[] = $objSourceModel->getPrevid();
-                $arrValues[] = $this->objSession->getUserID();
-                $arrValues[] = get_class($objSourceModel);
-                $arrValues[] = $strAction;
-                $arrValues[] = $strProperty;
-                $arrValues[] = $strOldvalue;
-                $arrValues[] = $strNewvalue;
-
-
+                $arrValues[] = array(
+                    generateSystemid(),
+                    class_date::getCurrentTimestamp(),
+                    $objSourceModel->getSystemid(),
+                    $objSourceModel->getPrevid(),
+                    $this->objSession->getUserID(),
+                    get_class($objSourceModel),
+                    $strAction,
+                    $strProperty,
+                    $strOldvalue,
+                    $strNewvalue
+                );
             }
 
             //fire a single query
-            if(count($arrParams) > 0) {
-                $strQuery = "INSERT INTO "._dbprefix_.self::getTableForClass(get_class($objSourceModel))."
-                         (change_id, change_date, change_systemid, change_system_previd, change_user, change_class, change_action, change_property, change_oldvalue, change_newvalue)
-                         VALUES ".implode(",", $arrParams);
-
-                $bitReturn = $this->objDB->_pQuery($strQuery, $arrValues);
+            if(count($arrValues) > 0) {
+                $bitReturn = $this->objDB->multiInsert(
+                    self::getTableForClass(get_class($objSourceModel)),
+                    array("change_id", "change_date", "change_systemid", "change_system_previd", "change_user", "change_class", " hange_action", "change_property", "change_oldvalue", "change_newvalue"),
+                    $arrValues
+                );
             }
 
         }
