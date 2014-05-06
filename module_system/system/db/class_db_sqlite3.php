@@ -98,32 +98,57 @@ class class_db_sqlite3 implements interface_db_driver {
      */
     public function convertMultiInsert($strTable, $arrColumns, $arrValueSets, &$strQuery, &$arrParams) {
 
-        $arrParams = array();
+        $arrVersion = SQLite3::version();
+        if(version_compare("3.7.11", $arrVersion["versionString"], "<=")) {
+            $arrPlaceholder = array();
+            $arrSafeColumns = array();
 
-        $strQuery = "INSERT INTO ".$this->encloseTableName($strTable)." ";
-
-        for($intI = 0; $intI < count($arrValueSets); $intI++) {
-
-            if($intI == 0) {
-
-                $arrTemp = array();
-                for($intK = 0; $intK < count($arrColumns); $intK++) {
-                    $arrTemp[] = " ? AS ".$this->encloseColumnName($arrColumns[$intK]);
-                }
-
-                $strQuery .= " SELECT ".implode(", ", $arrTemp);
+            foreach($arrColumns as $strOneColumn) {
+                $arrSafeColumns[] = $this->encloseColumnName($strOneColumn);
+                $arrPlaceholder[] = "?";
             }
-            else {
+            $strPlaceholder = "(".implode(",", $arrPlaceholder).")";
 
-                $arrTemp = array();
-                for($intK = 0; $intK < count($arrColumns); $intK++) {
-                    $arrTemp[] = " ? ";
-                }
+            $arrPlaceholderSets = array();
+            $arrParams = array();
 
-                $strQuery .= " UNION SELECT ".implode(", ", $arrTemp);
+            foreach($arrValueSets as $arrOneSet) {
+                $arrPlaceholderSets[] = $strPlaceholder;
+                $arrParams = array_merge($arrParams, $arrOneSet);
             }
 
-            $arrParams = array_merge($arrParams, $arrValueSets[$intI]);
+            $strQuery = "INSERT INTO ".$this->encloseTableName($strTable)." (".implode(",", $arrSafeColumns).") VALUES ".implode(",", $arrPlaceholderSets);
+
+        }
+        //legacy code
+        else {
+            $arrParams = array();
+
+            $strQuery = "INSERT INTO ".$this->encloseTableName($strTable)." ";
+
+            for($intI = 0; $intI < count($arrValueSets); $intI++) {
+
+                if($intI == 0) {
+
+                    $arrTemp = array();
+                    for($intK = 0; $intK < count($arrColumns); $intK++) {
+                        $arrTemp[] = " ? AS ".$this->encloseColumnName($arrColumns[$intK]);
+                    }
+
+                    $strQuery .= " SELECT ".implode(", ", $arrTemp);
+                }
+                else {
+
+                    $arrTemp = array();
+                    for($intK = 0; $intK < count($arrColumns); $intK++) {
+                        $arrTemp[] = " ? ";
+                    }
+
+                    $strQuery .= " UNION SELECT ".implode(", ", $arrTemp);
+                }
+
+                $arrParams = array_merge($arrParams, $arrValueSets[$intI]);
+            }
         }
     }
 
