@@ -287,7 +287,7 @@ class class_module_search_indexwriter {
         //insert search document in a single query - much faster than single updates
         $strQuery = "INSERT INTO " . _dbprefix_ . "search_ix_content
                         (search_ix_content_id, search_ix_content_field_name, search_ix_content_content, search_ix_content_score, search_ix_content_document_id) VALUES
-                        ".implode(",", $arrValues);
+                        ".implode(",", $arrParams);
 
         $this->objDB->_pQuery($strQuery, $arrValues);
     }
