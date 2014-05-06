@@ -81,6 +81,53 @@ class class_db_sqlite3 implements interface_db_driver {
     }
 
     /**
+     * Creates a single query in order to insert multiple rows at one time.
+     * For most databases, this will create s.th. like
+     * INSERT INTO $strTable ($arrColumns) VALUES (?, ?), (?, ?)...
+     *
+     * Please note that this method is used to create the query itself, based on the Kajona-internal syntax.
+     * The query is fired to the database by class_db
+     *
+     * @param string $strTable
+     * @param string[] $arrColumns
+     * @param array $arrValueSets
+     * @param string &$strQuery
+     * @param array &$arrParams
+     *
+     * @return void
+     */
+    public function convertMultiInsert($strTable, $arrColumns, $arrValueSets, &$strQuery, &$arrParams) {
+
+        $arrParams = array();
+
+        $strQuery = "INSERT INTO ".$this->encloseTableName($strTable)." ";
+
+        for($intI = 0; $intI < count($arrValueSets); $intI++) {
+
+            if($intI == 0) {
+
+                $arrTemp = array();
+                for($intK = 0; $intK < count($arrColumns); $intK++) {
+                    $arrTemp[] = " ? AS ".$this->encloseColumnName($arrColumns[$intK]);
+                }
+
+                $strQuery .= " SELECT ".implode(", ", $arrTemp);
+            }
+            else {
+
+                $arrTemp = array();
+                for($intK = 0; $intK < count($arrColumns); $intK++) {
+                    $arrTemp[] = " ? ";
+                }
+
+                $strQuery .= " UNION SELECT ".implode(", ", $arrTemp);
+            }
+
+            $arrParams = array_merge($arrParams, $arrValueSets[$intI]);
+        }
+    }
+
+    /**
      * Sends a prepared statement to the database. All params must be represented by the ? char.
      * The params themself are stored using the second params using the matching order.
      *

@@ -143,6 +143,24 @@ class class_db {
     }
 
     /**
+     * Creates a single query in order to insert multiple rows at one time.
+     * For most databases, this will create s.th. like
+     * INSER INTO $strTable ($arrColumns) VALUES (?, ?), (?, ?)...
+     *
+     * @param string $strTable
+     * @param string[] $arrColumns
+     * @param array $arrValueSets
+     *
+     * @return bool
+     */
+    public function multiInsert($strTable, $arrColumns, $arrValueSets) {
+        $strQuery = "";
+        $arrParams = array();
+        $this->objDbDriver->convertMultiInsert(_dbprefix_.$strTable, $arrColumns, $arrValueSets, $strQuery, $arrParams);
+        return $this->_pQuery($strQuery, $arrParams);
+    }
+
+    /**
      * Sending a query to the database
      *
      * @param string $strQuery

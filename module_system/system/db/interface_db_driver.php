@@ -34,6 +34,24 @@ interface interface_db_driver {
     public function dbclose();
 
     /**
+     * Creates a single query in order to insert multiple rows at one time.
+     * For most databases, this will create s.th. like
+     * INSERT INTO $strTable ($arrColumns) VALUES (?, ?), (?, ?)...
+     *
+     * Please note that this method is used to create the query itself, based on the Kajona-internal syntax.
+     * The query is fired to the database by class_db
+     *
+     * @param string $strTable
+     * @param string[] $arrColumns
+     * @param array $arrValueSets
+     * @param string &$strQuery
+     * @param array &$arrParams
+     *
+     * @return void
+     */
+    public function convertMultiInsert($strTable, $arrColumns, $arrValueSets, &$strQuery, &$arrParams);
+
+    /**
      * Sends a query (e.g. an update) to the database
      *
      * @param string $strQuery
