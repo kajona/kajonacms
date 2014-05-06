@@ -15,6 +15,9 @@
  * @author tim.kiefer@kojikui.de
  */
 class class_module_search_indexwriter {
+
+    const STR_ANNOTATION_ADDSEARCHINDEX = "@addSearchIndex";
+
     private $objConfig = null;
     private $objDB = null;
 
@@ -92,10 +95,16 @@ class class_module_search_indexwriter {
     }
 
     /**
+     * Triggers the indexing of a single object.
+     * Normally, the indexer makes use of the change-history in order to track if an object changed.
+     * Use the second boolean param in order to force the re-indexing.
+     *
      * @param class_model $objInstance
+     * @param bool $bitForce
+     *
      * @return void
      */
-    public function indexObject(class_model $objInstance) {
+    public function indexObject(class_model $objInstance, $bitForce = false) {
 
         if(!self::isIndexAvailable())
             return;
@@ -109,16 +118,21 @@ class class_module_search_indexwriter {
         if($objInstance == null)
             return;
 
+        if(!$this->objectChanged($objInstance)) {
+            class_logger::getInstance("search.log")->addLogRow("indexer: object ".$objInstance->getSystemid()."@".get_class($objInstance)." has no changes, skipping", class_logger::$levelInfo);
+            return;
+        }
+        class_logger::getInstance("search.log")->addLogRow("indexer: object ".$objInstance->getSystemid()."@".get_class($objInstance)." has changes, re-indexing", class_logger::$levelInfo);
+
         $objSearchDocument = new class_module_search_document();
         $objSearchDocument->setDocumentId(generateSystemid());
         $objSearchDocument->setStrSystemId($objInstance->getSystemid());
 
         $objReflection = new class_reflection($objInstance);
-        $arrProperties = $objReflection->getPropertiesWithAnnotation("@addSearchIndex");
+        $arrProperties = $objReflection->getPropertiesWithAnnotation(self::STR_ANNOTATION_ADDSEARCHINDEX);
         foreach($arrProperties as $strPropertyName => $strAnnotationValue) {
             $getter = $objReflection->getGetter($strPropertyName);
             $strContent = $objInstance->$getter();
-            //TODO sir: changed first param from db-field to property name since there may be indexable fields not stored directly to the database
             $objSearchDocument->addContent($strPropertyName, $strContent);
         }
 
@@ -129,8 +143,60 @@ class class_module_search_indexwriter {
     }
 
     /**
-     * Triggers a full rebuild of the index. The index is not flused before!
-     * @see clearIndex()
+     * Internal helper, used to check if an objects' properties changed based on the internal changelog
+     *
+     * @param class_model $objInstance
+     *
+     * @return bool
+     */
+    public function objectChanged(class_model $objInstance) {
+
+        //force reindex if not versionable,
+        if(!$objInstance instanceof interface_versionable)
+            return true;
+
+        //get the record of changed entries / compare the indexable properties with the versionable ones
+        $objReflection = new class_reflection($objInstance);
+        $arrIndexProperties = array_keys($objReflection->getPropertiesWithAnnotation(self::STR_ANNOTATION_ADDSEARCHINDEX));
+        foreach($arrIndexProperties as $strIndexPropertyName) {
+            if(!$objReflection->hasPropertyAnnotation($strIndexPropertyName, class_module_system_changelog::ANNOTATION_PROPERTY_VERSIONABLE)) {
+                class_logger::getInstance("search.log")->addLogRow("property ".$strIndexPropertyName." is not marked as versionable. could make sense, huh?", class_logger::$levelInfo);
+                //force reindex
+                return true;
+            }
+        }
+
+        //seem as all index-properties are versionable. compare against changes
+        $objChangelog = new class_module_system_changelog();
+        $arrChanges = array();
+        try {
+            $objChangelog->isObjectChanged($objInstance, $arrChanges, true);
+        }
+        catch(class_exception $objEx) {
+            //s.th. bad happened. reindex.
+            return true;
+        }
+
+        //no changes available, no reindex required
+        if(count($arrChanges) == 0)
+            return false;
+
+        //loop through the remaining changes in order to get those relevant for the indexer
+        foreach($arrChanges as $arrOneChange) {
+            if(in_array($arrOneChange["property"], $arrIndexProperties)) {
+                //seems as the changed property is relevant for the index
+                return true;
+            }
+        }
+
+        //if we reached up here, all other checks where skipped. this means, there's no need to reindex the object.
+        return false;
+
+    }
+
+
+    /**
+     * Triggers a full rebuild of the index.
      *
      * @return void
      */
@@ -145,7 +211,7 @@ class class_module_search_indexwriter {
         foreach($arrObj as $objObj) {
             $objInstance = class_objectfactory::getInstance()->getObject($objObj["system_id"]);
             if($objInstance != null)
-                $this->indexObject($objInstance);
+                $this->indexObject($objInstance, true);
         }
     }
 
@@ -179,30 +245,13 @@ class class_module_search_indexwriter {
      * @param class_module_search_document $objSearchDocument
      * @return void
      */
-    public function updateSearchDocumentToDb($objSearchDocument) {
+    public function updateSearchDocumentToDb(class_module_search_document $objSearchDocument) {
 
         if(!self::isIndexAvailable())
             return;
 
-        //Load possible existing document if exists
-        $strQuery = "SELECT * FROM " . _dbprefix_ . "search_ix_document " .
-            "WHERE search_ix_system_id = ?";
-
-        $arrSearchDocument = $this->objDB->getPRow($strQuery, array($objSearchDocument->getStrSystemId()));
-
         // Delete existing entries
-        if(count($arrSearchDocument) > 0) {
-            $strDocumentId = $arrSearchDocument["search_ix_document_id"];
-
-
-            $strQuery = "DELETE FROM " . _dbprefix_ . "search_ix_document
-            WHERE search_ix_system_id = ?";
-            $this->objDB->_pQuery($strQuery, array($objSearchDocument->getStrSystemId()));
-
-            $strQuery = "DELETE FROM " . _dbprefix_ . "search_ix_content
-            WHERE search_ix_content_document_id = ?";
-            $this->objDB->_pQuery($strQuery, array($strDocumentId));
-        }
+        $this->removeRecordFromIndex($objSearchDocument->getStrSystemId());
 
         if(count($objSearchDocument->getContent()) == 0)
             return;
@@ -213,20 +262,34 @@ class class_module_search_indexwriter {
                         (?, ?)";
         $this->objDB->_pQuery($strQuery, array($objSearchDocument->getDocumentId(), $objSearchDocument->getStrSystemId()));
 
-        foreach($objSearchDocument->getContent() as $objSearchContent)
-            $this->updateSearchContentToDb($objSearchContent);
+        $this->updateSearchContentsToDb($objSearchDocument->getContent());
     }
 
     /**
-     * @param class_module_search_content $objSearchContent
+     * @param class_module_search_content[] $arrSearchContent
+     *
      * @return void
      */
-    private function updateSearchContentToDb($objSearchContent) {
-        //insert search document
+    private function updateSearchContentsToDb(array $arrSearchContent) {
+
+        $arrParams = array();
+        $arrValues = array();
+
+        foreach($arrSearchContent as $objOneContent) {
+            $arrParams[] = "(?, ?, ?, ?, ?)";
+            $arrValues[] = $objOneContent->getStrId();
+            $arrValues[] = $objOneContent->getFieldName();
+            $arrValues[] = $objOneContent->getContent();
+            $arrValues[] = $objOneContent->getScore();
+            $arrValues[] = $objOneContent->getDocumentId();
+        }
+
+        //insert search document in a single query - much faster than single updates
         $strQuery = "INSERT INTO " . _dbprefix_ . "search_ix_content
                         (search_ix_content_id, search_ix_content_field_name, search_ix_content_content, search_ix_content_score, search_ix_content_document_id) VALUES
-                        (?, ?, ?, ?, ?)";
-        $this->objDB->_pQuery($strQuery, array($objSearchContent->getStrId(), $objSearchContent->getFieldName(), $objSearchContent->getContent(), $objSearchContent->getScore(), $objSearchContent->getDocumentId()));
+                        ".implode(",", $arrValues);
+
+        $this->objDB->_pQuery($strQuery, $arrValues);
     }
 
     /**

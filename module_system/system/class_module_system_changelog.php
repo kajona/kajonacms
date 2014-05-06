@@ -35,6 +35,7 @@ class class_module_system_changelog extends class_model implements interface_mod
     public static $bitChangelogEnabled = null;
 
     private static $arrOldValueCache = array();
+    private static $arrInitValueCache = array();
     private static $arrCachedProviders = null;
 
 
@@ -59,6 +60,28 @@ class class_module_system_changelog extends class_model implements interface_mod
     protected function initObjectInternal() {
     }
 
+    /**
+     * Checks if an objects properties changed.
+     * If the second params is passed, the set of changed properties is returned, too.
+     *
+     * @param interface_versionable $objObject
+     * @param array &$arrReducedSet
+     * @param bool $bitUseInitValues if set to true, the initial values of the object will be used for comparison, not the ones of the last update
+     *
+     * @throws class_exception
+     * @return array
+     */
+    public function isObjectChanged(interface_versionable $objObject, &$arrReducedSet = array(), $bitUseInitValues = false) {
+        if(!$this->isVersioningAvailable($objObject))
+            throw new class_exception("versioning not available", class_exception::$level_ERROR);
+
+        //read the new values
+        $arrChangeset = $this->createChangeArray($objObject, $bitUseInitValues);
+
+        $this->createReducedChangeSet($arrReducedSet, $arrChangeset, "");
+        return count($arrReducedSet) > 0;
+    }
+
 
     /**
      * Reads all properties marked with the annotation @versionable.
@@ -75,7 +98,7 @@ class class_module_system_changelog extends class_model implements interface_mod
 
         if(validateSystemid($objCurrentObject->getSystemid())) {
             $arrOldValues = $this->readVersionableProperties($objCurrentObject);
-            self::$arrOldValueCache[$objCurrentObject->getSystemid()] = $arrOldValues;
+            $this->setOldValuesForSystemid($objCurrentObject->getSystemid(), $arrOldValues);
             return $arrOldValues;
         }
         return null;
@@ -83,6 +106,7 @@ class class_module_system_changelog extends class_model implements interface_mod
 
     /**
      * Scans the passed object and tries to find all properties marked with the annotation @versionable.
+     * Updates the internal "oldvalues" cache.
      * @param interface_versionable $objCurrentObject
      *
      * @return array|null
@@ -117,8 +141,6 @@ class class_module_system_changelog extends class_model implements interface_mod
                 $arrOldValues[$strProperty] = $strValue;
             }
 
-            self::$arrOldValueCache[$objCurrentObject->getSystemid()] = $arrOldValues;
-
             return $arrOldValues;
         }
         return null;
@@ -137,13 +159,44 @@ class class_module_system_changelog extends class_model implements interface_mod
     }
 
     /**
+     * @param string $strSystemid
+     *
+     * @return null
+     */
+    public function getInitValuesForSystemid($strSystemid) {
+        if(isset(self::$arrInitValueCache[$strSystemid]))
+            return self::$arrInitValueCache[$strSystemid];
+        else
+            return null;
+    }
+
+    /**
+     * Sets the passed entry to the set of old values
+     *
+     * @param string $strSystemid
+     * @param array $arrOldValues
+     *
+     * @return void
+     */
+    private function setOldValuesForSystemid($strSystemid, $arrOldValues) {
+        self::$arrOldValueCache[$strSystemid] = $arrOldValues;
+        if(!array_key_exists($strSystemid, self::$arrInitValueCache))
+            self::$arrInitValueCache[$strSystemid] = $arrOldValues;
+    }
+
+    /**
      * Builds the change-array based on the old- and new values
-     * @param interface_versionable $objSourceModel
+     *
+     * @param interface_versionable|class_root $objSourceModel
+     * @param bool $bitUseInitValues
      *
      * @return array
      */
-    private function createChangeArray($objSourceModel) {
+    private function createChangeArray($objSourceModel, $bitUseInitValues = false) {
+
         $arrOldValues = $this->getOldValuesForSystemid($objSourceModel->getSystemid());
+        if($bitUseInitValues)
+            $arrOldValues = $this->getInitValuesForSystemid($objSourceModel->getSystemid());
 
         //this are now the new ones
         $arrNewValues = $this->readVersionableProperties($objSourceModel);
@@ -208,7 +261,11 @@ class class_module_system_changelog extends class_model implements interface_mod
         if(!$this->isVersioningAvailable($objSourceModel))
             return true;
 
-        return $this->processChangeArray($this->createChangeArray($objSourceModel), $objSourceModel, $strAction, $bitForceEntry, $bitDeleteAction);
+
+        $arrChanges = $this->createChangeArray($objSourceModel);
+        $bitReturn = $this->processChangeArray($arrChanges, $objSourceModel, $strAction, $bitForceEntry, $bitDeleteAction);
+        $this->readOldValues($objSourceModel);
+        return $bitReturn;
     }
 
     /**
@@ -257,55 +314,15 @@ class class_module_system_changelog extends class_model implements interface_mod
         $bitReturn = true;
 
         if(is_array($arrChanges) && in_array(_dbprefix_."changelog", $this->objDB->getTables())) {
-            foreach($arrChanges as $arrChangeSet) {
 
+            $arrReducedChanges = array();
+            $this->createReducedChangeSet($arrReducedChanges, $arrChanges, $strAction, $bitForceEntry, $bitDeleteAction);
 
-                $strOldvalue = "";
-                if(isset($arrChangeSet["oldvalue"]))
-                    $strOldvalue = $arrChangeSet["oldvalue"];
-
-                $strNewvalue = "";
-                if(isset($arrChangeSet["newvalue"]))
-                    $strNewvalue = $arrChangeSet["newvalue"];
-
+            foreach($arrReducedChanges as $arrChangeSet) {
+                $strOldvalue = $arrChangeSet["oldvalue"];
+                $strNewvalue = $arrChangeSet["newvalue"];
                 $strProperty = $arrChangeSet["property"];
 
-
-                //array may be processed automatically, too
-                if(is_array($strOldvalue) && is_array($strNewvalue)) {
-
-                    $arrArrayChanges = array();
-                    foreach($strNewvalue as $strOneId) {
-                        if(!in_array($strOneId, $strOldvalue))
-                            $arrArrayChanges[] = array("property" => $strProperty, "oldvalue" => "", "newvalue" => $strOneId);
-                    }
-
-                    foreach($strOldvalue as $strOneId) {
-                        if(!in_array($strOneId, $strNewvalue))
-                            $arrArrayChanges[] = array("property" => $strProperty, "oldvalue" => $strOneId, "newvalue" => "");
-                    }
-
-                    $this->processChangeArray($arrArrayChanges, $objSourceModel, $strAction, $bitForceEntry, $bitDeleteAction);
-                    continue;
-                }
-
-
-                if($strOldvalue instanceof class_date)
-                    $strOldvalue = $strOldvalue->getLongTimestamp();
-
-                if($strNewvalue instanceof class_date)
-                    $strNewvalue = $strNewvalue->getLongTimestamp();
-
-                if($bitDeleteAction || ($bitDeleteAction === null && $strAction == self::$STR_ACTION_DELETE))
-                    $strNewvalue = "";
-
-                if(is_numeric($strOldvalue) || is_numeric($strNewvalue)) {
-                    $strOldvalue .= "";
-                    $strNewvalue .= "";
-                }
-
-                if(!$bitForceEntry && ($strOldvalue === $strNewvalue))
-                    continue;
 
                 class_logger::getInstance()->addLogRow(
                     "change in class ".get_class($objSourceModel)."@".$strAction." systemid: ".$objSourceModel->getSystemid()." property: ".$strProperty." old value: "
@@ -344,6 +361,79 @@ class class_module_system_changelog extends class_model implements interface_mod
             }
         }
         return $bitReturn;
+    }
+
+
+    /**
+     * Reduces the passed change-array to only the entries which really changed.
+     *
+     * @param array &$arrReturn
+     * @param array $arrChanges
+     * @param $strAction
+     * @param bool $bitForceEntry
+     * @param null $bitDeleteAction
+     */
+    private function createReducedChangeSet(array &$arrReturn, array $arrChanges, $strAction, $bitForceEntry = false, $bitDeleteAction = null) {
+
+        foreach($arrChanges as $arrChangeSet) {
+
+
+            $strOldvalue = "";
+            if(isset($arrChangeSet["oldvalue"]))
+                $strOldvalue = $arrChangeSet["oldvalue"];
+
+            $strNewvalue = "";
+            if(isset($arrChangeSet["newvalue"]))
+                $strNewvalue = $arrChangeSet["newvalue"];
+
+            $strProperty = $arrChangeSet["property"];
+
+
+            //array may be processed automatically, too
+            if(is_array($strOldvalue) && is_array($strNewvalue)) {
+
+                $arrArrayChanges = array();
+                foreach($strNewvalue as $strOneId) {
+                    if(!in_array($strOneId, $strOldvalue))
+                        $arrArrayChanges[] = array("property" => $strProperty, "oldvalue" => "", "newvalue" => $strOneId);
+                }
+
+                foreach($strOldvalue as $strOneId) {
+                    if(!in_array($strOneId, $strNewvalue))
+                        $arrArrayChanges[] = array("property" => $strProperty, "oldvalue" => $strOneId, "newvalue" => "");
+                }
+
+                $this->createReducedChangeSet($arrReturn, $arrArrayChanges,  $strAction, $bitForceEntry, $bitDeleteAction);
+                continue;
+            }
+
+
+            if($strOldvalue instanceof class_date)
+                $strOldvalue = $strOldvalue->getLongTimestamp();
+
+            if($strNewvalue instanceof class_date)
+                $strNewvalue = $strNewvalue->getLongTimestamp();
+
+            if($bitDeleteAction || ($bitDeleteAction === null && $strAction == self::$STR_ACTION_DELETE))
+                $strNewvalue = "";
+
+            if(is_numeric($strOldvalue) || is_numeric($strNewvalue)) {
+                $strOldvalue .= "";
+                $strNewvalue .= "";
+            }
+
+            if(!$bitForceEntry && ($strOldvalue === $strNewvalue))
+                continue;
+
+            //update the values
+            $arrChangeSet["oldvalue"] = $strOldvalue;
+            $arrChangeSet["newvalue"] = $strNewvalue;
+
+
+            //add entry right here
+            $arrReturn[] = $arrChangeSet;
+        }
+
     }
 
 

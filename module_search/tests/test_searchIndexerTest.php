@@ -146,5 +146,72 @@ class class_test_searchIndexerTest extends class_testbase {
     }
 
 
+    public function testObjectIndexer() {
+        //use a news-record, if available
+        if(class_module_system_module::getModuleByName("news") === null)
+            return;
+
+        class_module_system_changelog::$bitChangelogEnabled = true;
+
+        $objNews = new class_module_news_news();
+        $objNews->setStrTitle("demo 1");
+        $objNews->setStrIntro("intro demo news");
+        $objNews->setStrText("text demo news");
+        $objNews->updateObjectToDb();
+        $strNewsId = $objNews->getSystemid();
+
+        $objNews = new class_module_news_news($strNewsId);
+        $objIndexer = new class_module_search_indexwriter();
+
+        $this->assertTrue(!$objIndexer->objectChanged($objNews));
+
+        $objNews->setStrIntro("intro demo news 2");
+        $objNews->updateObjectToDb();
+        $this->assertTrue($objIndexer->objectChanged($objNews));
+
+
+        class_objectfactory::getInstance()->getObject($strNewsId)->deleteObject();
+    }
+
+    public function testObjectIndexerPerformance() {
+        $objNews = new class_module_news_news();
+        $objNews->setStrTitle("demo 1");
+        $objNews->setStrIntro("intro demo news");
+        $objNews->setStrText("text demo news");
+        $objNews->updateObjectToDb();
+        $strNewsId = $objNews->getSystemid();
+
+        echo "Status changes with disabled changelog indexer integration...\n";
+        class_module_system_changelog::$bitChangelogEnabled = false;
+        $intTimeStart = microtime(true);
+        $intQueriesStart = class_db::getInstance()->getNumber();
+
+        for($intI = 0; $intI < 150; $intI++)
+            $objNews->setIntRecordStatus($intI % 2);
+
+        $intTimeEnd = microtime(true);
+        $time = $intTimeEnd - $intTimeStart;
+        echo "Object updates: ", sprintf('%f', $time), " sec.\n";
+        echo "Queries: ", class_db::getInstance()->getNumber() - $intQueriesStart. " \n";
+
+
+        echo "Status changes with enabled changelog indexer integration...\n";
+        class_module_system_changelog::$bitChangelogEnabled = true;
+        $intTimeStart = microtime(true);
+        $intQueriesStart = class_db::getInstance()->getNumber();
+
+        for($intI = 0; $intI < 150; $intI++)
+            $objNews->setIntRecordStatus($intI % 2);
+
+        $intTimeEnd = microtime(true);
+        $time = $intTimeEnd - $intTimeStart;
+        echo "Object updates: ", sprintf('%f', $time), " sec.\n";
+        echo "Queries: ", class_db::getInstance()->getNumber() - $intQueriesStart. " \n";
+
+
+        class_objectfactory::getInstance()->getObject($strNewsId)->deleteObject();
+
+    }
 }
+
 

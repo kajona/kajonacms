@@ -182,6 +182,29 @@ class test_systemchangelogTest extends class_testbase {
         $objEndDate->setIntHour(11);
         $this->assertEquals("3", $objChanges->getValueForDate($strSystemid, "test2", $objEndDate));
     }
+
+
+    public function testChangeDetection() {
+        $objChangelog = new class_module_system_changelog();
+
+        $objOne = new dummyObject(generateSystemid());
+        $objChangelog->readOldValues($objOne);
+
+        $arrChanges = array();
+        $this->assertTrue(!$objChangelog->isObjectChanged($objOne, $arrChanges));
+        $this->assertTrue(count($arrChanges) == 0);
+
+        $objOne->setStrTest("changed");
+        $arrChanges = array();
+        $this->assertTrue($objChangelog->isObjectChanged($objOne, $arrChanges));
+        $this->assertTrue(count($arrChanges) == 1);
+        $this->assertEquals($arrChanges[0]["property"], "strTest");
+
+        $objOne->setStrTest("old");
+        $arrChanges = array();
+        $this->assertTrue(!$objChangelog->isObjectChanged($objOne, $arrChanges));
+        $this->assertTrue(count($arrChanges) == 0);
+    }
 }
 
 
