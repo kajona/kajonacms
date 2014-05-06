@@ -184,6 +184,7 @@ class class_test_searchIndexerTest extends class_testbase {
         echo "Status changes with disabled changelog indexer integration...\n";
         class_module_system_changelog::$bitChangelogEnabled = false;
         $intTimeStart = microtime(true);
+        $intQueriesStart = class_db::getInstance()->getNumber();
 
         for($intI = 0; $intI < 150; $intI++)
             $objNews->setIntRecordStatus($intI % 2);
@@ -191,11 +192,13 @@ class class_test_searchIndexerTest extends class_testbase {
         $intTimeEnd = microtime(true);
         $time = $intTimeEnd - $intTimeStart;
         echo "Object updates: ", sprintf('%f', $time), " sec.\n";
+        echo "Queries: ", class_db::getInstance()->getNumber() - $intQueriesStart. " \n";
 
 
         echo "Status changes with enabled changelog indexer integration...\n";
         class_module_system_changelog::$bitChangelogEnabled = true;
         $intTimeStart = microtime(true);
+        $intQueriesStart = class_db::getInstance()->getNumber();
 
         for($intI = 0; $intI < 150; $intI++)
             $objNews->setIntRecordStatus($intI % 2);
@@ -203,6 +206,7 @@ class class_test_searchIndexerTest extends class_testbase {
         $intTimeEnd = microtime(true);
         $time = $intTimeEnd - $intTimeStart;
         echo "Object updates: ", sprintf('%f', $time), " sec.\n";
+        echo "Queries: ", class_db::getInstance()->getNumber() - $intQueriesStart. " \n";
 
 
         class_objectfactory::getInstance()->getObject($strNewsId)->deleteObject();
