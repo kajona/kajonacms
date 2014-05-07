@@ -174,6 +174,9 @@ class class_test_searchIndexerTest extends class_testbase {
     }
 
     public function testObjectIndexerPerformance() {
+        if(class_module_system_module::getModuleByName("news") === null)
+            return;
+        
         $objNews = new class_module_news_news();
         $objNews->setStrTitle("demo 1");
         $objNews->setStrIntro("intro demo news");
