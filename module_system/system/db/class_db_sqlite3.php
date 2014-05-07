@@ -98,15 +98,16 @@ class class_db_sqlite3 implements interface_db_driver {
      */
     public function convertMultiInsert($strTable, $arrColumns, $arrValueSets, &$strQuery, &$arrParams) {
 
+        $arrSafeColumns = array();
+        $arrPlaceholder = array();
+        foreach($arrColumns as $strOneColumn) {
+            $arrSafeColumns[] = $this->encloseColumnName($strOneColumn);
+            $arrPlaceholder[] = "?";
+        }
+
         $arrVersion = SQLite3::version();
         if(version_compare("3.7.11", $arrVersion["versionString"], "<=")) {
-            $arrPlaceholder = array();
-            $arrSafeColumns = array();
 
-            foreach($arrColumns as $strOneColumn) {
-                $arrSafeColumns[] = $this->encloseColumnName($strOneColumn);
-                $arrPlaceholder[] = "?";
-            }
             $strPlaceholder = "(".implode(",", $arrPlaceholder).")";
 
             $arrPlaceholderSets = array();
@@ -124,28 +125,18 @@ class class_db_sqlite3 implements interface_db_driver {
         else {
             $arrParams = array();
 
-            $strQuery = "INSERT INTO ".$this->encloseTableName($strTable)." ";
-
+            $strQuery = "INSERT INTO ".$this->encloseTableName($strTable)."  (".implode(",", $arrSafeColumns).") ";
             for($intI = 0; $intI < count($arrValueSets); $intI++) {
 
-                if($intI == 0) {
+                $arrTemp = array();
+                for($intK = 0; $intK < count($arrColumns); $intK++) {
+                    $arrTemp[] = " ? AS ".$this->encloseColumnName($arrColumns[$intK]);
+                }
 
-                    $arrTemp = array();
-                    for($intK = 0; $intK < count($arrColumns); $intK++) {
-                        $arrTemp[] = " ? AS ".$this->encloseColumnName($arrColumns[$intK]);
-                    }
-
+                if($intI == 0)
                     $strQuery .= " SELECT ".implode(", ", $arrTemp);
-                }
-                else {
-
-                    $arrTemp = array();
-                    for($intK = 0; $intK < count($arrColumns); $intK++) {
-                        $arrTemp[] = " ? ";
-                    }
-
+                else
                     $strQuery .= " UNION SELECT ".implode(", ", $arrTemp);
-                }
 
                 $arrParams = array_merge($arrParams, $arrValueSets[$intI]);
             }

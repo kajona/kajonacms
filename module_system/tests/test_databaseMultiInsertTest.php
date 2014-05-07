@@ -28,6 +28,7 @@ class class_test_databaseMultiInsert extends class_testbase {
         $arrFields = array();
         $arrFields["temp_id"]       = array("char20", false);
         $arrFields["temp_char100"]  = array("char100", true);
+        $arrFields["temp_char254"]  = array("char254", true);
 
         $this->assertTrue($objDB->createTable("temp_autotest", $arrFields, array("temp_id")), "testDataBase createTable");
 
@@ -35,13 +36,21 @@ class class_test_databaseMultiInsert extends class_testbase {
 
         $arrValues = array();
         for($intI = 1; $intI <= 50; $intI++) {
-            $arrValues[] = array(generateSystemid(), "text ".$intI);
+            $arrValues[] = array(generateSystemid(), "text long ".$intI, "text ".$intI);
         }
 
-        $this->assertTrue($objDB->multiInsert("temp_autotest", array("temp_id", "temp_char100"), $arrValues));
+        $this->assertTrue($objDB->multiInsert("temp_autotest", array("temp_id", "temp_char254", "temp_char100"), $arrValues));
 
         $arrRow = $objDB->getPRow("SELECT COUNT(*) FROM "._dbprefix_."temp_autotest", array());
         $this->assertEquals($arrRow["COUNT(*)"], 50);
+
+        for($intI = 1; $intI <= 50; $intI++) {
+            $arrRow = $objDB->getPRow("SELECT COUNT(*) FROM "._dbprefix_."temp_autotest WHERE temp_char100 = ?", array("text ".$intI));
+            $this->assertEquals($arrRow["COUNT(*)"], 1);
+
+            $arrRow = $objDB->getPRow("SELECT * FROM "._dbprefix_."temp_autotest WHERE temp_char100 = ?", array("text ".$intI));
+            $this->assertEquals($arrRow["temp_char254"], "text long ".$intI);
+        }
 
 
         $strQuery = "DROP TABLE "._dbprefix_."temp_autotest";
