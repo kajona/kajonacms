@@ -109,8 +109,7 @@ class class_module_search_indexwriter {
         if(!self::isIndexAvailable())
             return;
 
-        if(!$objInstance instanceof interface_versionable)
-            return;
+
 
         if($objInstance instanceof class_module_pages_pageelement) {
             $objInstance = $objInstance->getConcreteAdminInstance();
@@ -154,7 +153,7 @@ class class_module_search_indexwriter {
      */
     public function objectChanged($objInstance) {
 
-        //force reindex if not versionable,
+        //force reindex if not versionable
         if(!$objInstance instanceof interface_versionable)
             return true;
 
