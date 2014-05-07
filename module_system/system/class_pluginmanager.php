@@ -73,7 +73,10 @@ class class_pluginmanager {
         $arrReturn = array();
         foreach(self::$arrPluginClasses[$strKey] as $strOneClass) {
             $objReflection = new ReflectionClass($strOneClass);
-            $arrReturn[] = $objReflection->newInstanceArgs($arrConstructorArguments);
+            if(count($arrConstructorArguments) > 0)
+                $arrReturn[] = $objReflection->newInstanceArgs($arrConstructorArguments);
+            else
+                $arrReturn[] = $objReflection->newInstance();
         }
 
         return $arrReturn;
