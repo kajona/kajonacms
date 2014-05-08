@@ -109,8 +109,6 @@ class class_module_search_indexwriter {
         if(!self::isIndexAvailable())
             return;
 
-
-
         if($objInstance instanceof class_module_pages_pageelement) {
             $objInstance = $objInstance->getConcreteAdminInstance();
             if($objInstance != null)
@@ -120,7 +118,7 @@ class class_module_search_indexwriter {
         if($objInstance == null)
             return;
 
-        if(!$this->objectChanged($objInstance)) {
+        if(!$bitForce && !$this->objectChanged($objInstance)) {
             class_logger::getInstance("search.log")->addLogRow("indexer: object ".$objInstance->getSystemid()."@".get_class($objInstance)." has no changes, skipping", class_logger::$levelInfo);
             return;
         }
@@ -289,7 +287,8 @@ class class_module_search_indexwriter {
         $this->objDB->multiInsert(
             "search_ix_content",
             array("search_ix_content_id", "search_ix_content_field_name", "search_ix_content_content", "search_ix_content_score", "search_ix_content_document_id"),
-            $arrValues);
+            $arrValues
+        );
     }
 
     /**
