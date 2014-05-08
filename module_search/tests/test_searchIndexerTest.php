@@ -137,11 +137,13 @@ class class_test_searchIndexerTest extends class_testbase {
 
         $indexWriter = new class_module_search_indexwriter();
 
-        $time_start = microtime(true);
+        $intQueriesStart = class_db::getInstance()->getNumber();
+        $intTimeStart = microtime(true);
         $indexWriter->indexRebuild();
-        $time_end = microtime(true);
-        $time = $time_end - $time_start;
-        echo "Index erstellt: ", sprintf('%f', $time), " sec.\n";
+        $intTimeEnd = microtime(true);
+        $time = $intTimeEnd - $intTimeStart;
+        echo "Index erstellt in ". sprintf('%f', $time). " sec.\n";
+        echo "Index erstellt mit ".(class_db::getInstance()->getNumber()-$intQueriesStart). " queries.\n";
 
     }
 
