@@ -99,17 +99,19 @@ class class_db_oci8 implements interface_db_driver {
             $arrSafeColumns[] = $this->encloseColumnName($strOneColumn);
             $arrPlaceholder[] = "?";
         }
-        $strPlaceholder = "(".implode(",", $arrPlaceholder).")";
+        $strPlaceholder = " (".implode(",", $arrPlaceholder).") ";
+        $strColumnNames = " (".implode(",", $arrSafeColumns).") ";
 
-        $arrPlaceholderSets = array();
         $arrParams = array();
 
+        $strQuery = "INSERT ALL ";
         foreach($arrValueSets as $arrOneSet) {
-            $arrPlaceholderSets[] = $strPlaceholder;
             $arrParams = array_merge($arrParams, $arrOneSet);
-        }
 
-        $strQuery = "INSERT INTO ".$this->encloseTableName($strTable)." (".implode(",", $arrSafeColumns).") VALUES ".implode(",", $arrPlaceholderSets);
+            $strQuery .= " INTO ".$this->encloseTableName($strTable)." ".$strColumnNames." VALUES ".$strPlaceholder." ";
+        }
+        $strQuery .= " SELECT * FROM dual";
+
     }
 
     /**
