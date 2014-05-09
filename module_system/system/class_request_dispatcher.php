@@ -165,10 +165,13 @@ class class_request_dispatcher {
                             $objHistory->setAdminHistory();
                         }
 
-                        $objConcreteModule = $objModuleRequested->getAdminInstanceOfConcreteModule();
-                        //$objConcreteModule->action($strAction);
-                        $objConcreteModule->action();
-                        $strReturn = $objConcreteModule->getModuleOutput();
+                        //execute the action only if peClose is not set
+                        if(class_carrier::getInstance()->getParam("peClose") != "1") {
+                            $objConcreteModule = $objModuleRequested->getAdminInstanceOfConcreteModule();
+                            //$objConcreteModule->action($strAction);
+                            $objConcreteModule->action();
+                            $strReturn = $objConcreteModule->getModuleOutput();
+                        }
 
                         //React, if admin was opened by the portaleditor
                         if(class_carrier::getInstance()->getParam("peClose") == "1") {
