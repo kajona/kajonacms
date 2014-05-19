@@ -54,11 +54,15 @@ class class_systemtask_search_indexrebuild extends class_systemtask_base impleme
     public function executeTask() {
         $strReturn = "";
         $objWorker = new class_module_search_indexwriter();
+        $intTimeStart = microtime(true);
 
         $objWorker->clearIndex();
         $objWorker->indexRebuild();
 
-        $strReturn .= $this->objToolkit->getTextRow($this->getLang("worker_indexrebuild_end", array($objWorker->getNumberOfDocuments(), $objWorker->getNumberOfContentEntries())));
+        $intTimeEnd = microtime(true);
+        $intTime = $intTimeEnd - $intTimeStart;
+
+        $strReturn .= $this->objToolkit->getTextRow($this->getLang("worker_indexrebuild_end", array($objWorker->getNumberOfDocuments(), $objWorker->getNumberOfContentEntries(), sprintf('%f', $intTime))));
         return $strReturn;
     }
 

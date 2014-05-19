@@ -24,6 +24,13 @@ class class_module_search_indexwriter {
     private static $isIndexAvailable = null;
 
     /**
+     * Internal flag to avoid explicit delete statements on a full index rebuild. since
+     * the index is flushed before, the delete statements are useless and only time-consuming.
+     * @var bool
+     */
+    private $bitSkipDeletes = false;
+
+    /**
      * Plain constructor
      */
     public function __construct() {
@@ -119,10 +126,10 @@ class class_module_search_indexwriter {
             return;
 
         if(!$bitForce && !$this->objectChanged($objInstance)) {
-            class_logger::getInstance("search.log")->addLogRow("indexer: object ".$objInstance->getSystemid()."@".get_class($objInstance)." has no changes, skipping", class_logger::$levelInfo);
+            //class_logger::getInstance("search.log")->addLogRow("indexer: object ".$objInstance->getSystemid()."@".get_class($objInstance)." has no changes, skipping", class_logger::$levelInfo);
             return;
         }
-        class_logger::getInstance("search.log")->addLogRow("indexer: object ".$objInstance->getSystemid()."@".get_class($objInstance)." has changes, re-indexing", class_logger::$levelInfo);
+        //class_logger::getInstance("search.log")->addLogRow("indexer: object ".$objInstance->getSystemid()."@".get_class($objInstance)." has changes, re-indexing", class_logger::$levelInfo);
 
         $objSearchDocument = new class_module_search_document();
         $objSearchDocument->setDocumentId(generateSystemid());
@@ -208,11 +215,23 @@ class class_module_search_indexwriter {
         $this->clearIndex();
         $arrObj = $this->getIndexableEntries();
 
+        $this->bitSkipDeletes = true;
+
+        $intI = 0;
         foreach($arrObj as $objObj) {
             $objInstance = class_objectfactory::getInstance()->getObject($objObj["system_id"]);
             if($objInstance != null)
                 $this->indexObject($objInstance, true);
+
+            //flush the caches each 4.000 objects in order to keep memory usage low
+            if(++$intI > 4000) {
+                $this->objDB->flushQueryCache();
+                class_objectfactory::getInstance()->flushCache();
+                $intI = 0;
+            }
         }
+
+        $this->bitSkipDeletes = false;
     }
 
     /**
@@ -251,7 +270,8 @@ class class_module_search_indexwriter {
             return;
 
         // Delete existing entries
-        $this->removeRecordFromIndex($objSearchDocument->getStrSystemId());
+        if(!$this->bitSkipDeletes)
+            $this->removeRecordFromIndex($objSearchDocument->getStrSystemId());
 
         if(count($objSearchDocument->getContent()) == 0)
             return;
