@@ -30,6 +30,8 @@ class class_reflection {
 
     private static $STR_PROPERTIES_CACHE = "properties";
     private static $STR_HASPROPERTY_CACHE = "hasproperty";
+    private static $STR_GETTER_CACHE = "getters";
+    private static $STR_SETTER_CACHE = "setters";
 
     private static $STR_DOC_COMMENT_PROPERTIES_CACHE = "doccomment";
     
@@ -83,7 +85,9 @@ class class_reflection {
                 self::$STR_HASMETHOD_CACHE,
                 self::$STR_PROPERTIES_CACHE,
                 self::$STR_HASPROPERTY_CACHE,
-                self::$STR_DOC_COMMENT_PROPERTIES_CACHE
+                self::$STR_DOC_COMMENT_PROPERTIES_CACHE,
+                self::$STR_GETTER_CACHE,
+                self::$STR_SETTER_CACHE
             );
 
         $this->arrCurrentCache = &self::$arrAnnotationsCache[$this->strSourceClass];
@@ -329,33 +333,26 @@ class class_reflection {
      */
     public function getSetter($strPropertyName) {
 
-        $strSetter = "setStr".$strPropertyName;
-        if(method_exists($this->strSourceClass, $strSetter))
-            return $strSetter;
+        if(isset($this->arrCurrentCache[self::$STR_SETTER_CACHE][$strPropertyName]))
+            return $this->arrCurrentCache[self::$STR_SETTER_CACHE][$strPropertyName];
 
-        $strSetter = "setInt".$strPropertyName;
-        if(method_exists($this->strSourceClass, $strSetter))
-            return $strSetter;
+        $arrSetters = array(
+            "setStr".$strPropertyName,
+            "setInt".$strPropertyName,
+            "setFloat".$strPropertyName,
+            "setBit".$strPropertyName,
+            "setLong".$strPropertyName,
+            "setArr".$strPropertyName,
+            "set".$strPropertyName
+        );
 
-        $strSetter = "setFloat".$strPropertyName;
-        if(method_exists($this->strSourceClass, $strSetter))
-            return $strSetter;
-
-        $strSetter = "setBit".$strPropertyName;
-        if(method_exists($this->strSourceClass, $strSetter))
-            return $strSetter;
-
-        $strSetter = "setLong".$strPropertyName;
-        if(method_exists($this->strSourceClass, $strSetter))
-            return $strSetter;
-
-        $strSetter = "setArr".$strPropertyName;
-        if(method_exists($this->strSourceClass, $strSetter))
-            return $strSetter;
-
-        $strSetter = "set".$strPropertyName;
-        if(method_exists($this->strSourceClass, $strSetter))
-            return $strSetter;
+        foreach($arrSetters as $strOneSetter) {
+            if(method_exists($this->strSourceClass, $strOneSetter)) {
+                $this->arrCurrentCache[self::$STR_SETTER_CACHE][$strPropertyName] = $strOneSetter;
+                self::$bitCacheSaveRequired = true;
+                return $strOneSetter;
+            }
+        }
 
         return null;
     }
@@ -370,33 +367,27 @@ class class_reflection {
      */
     public function getGetter($strPropertyName) {
 
-        $strSetter = "getStr".$strPropertyName;
-        if(method_exists($this->strSourceClass, $strSetter))
-            return $strSetter;
+        if(isset($this->arrCurrentCache[self::$STR_GETTER_CACHE][$strPropertyName]))
+            return $this->arrCurrentCache[self::$STR_GETTER_CACHE][$strPropertyName];
 
-        $strSetter = "getInt".$strPropertyName;
-        if(method_exists($this->strSourceClass, $strSetter))
-            return $strSetter;
+        $arrGetters = array(
+            "getStr".$strPropertyName,
+            "getInt".$strPropertyName,
+            "getFloat".$strPropertyName,
+            "getBit".$strPropertyName,
+            "getLong".$strPropertyName,
+            "getArr".$strPropertyName,
+            "get".$strPropertyName
+        );
 
-        $strSetter = "getFloat".$strPropertyName;
-        if(method_exists($this->strSourceClass, $strSetter))
-            return $strSetter;
 
-        $strSetter = "getBit".$strPropertyName;
-        if(method_exists($this->strSourceClass, $strSetter))
-            return $strSetter;
-
-        $strSetter = "getLong".$strPropertyName;
-        if(method_exists($this->strSourceClass, $strSetter))
-            return $strSetter;
-
-        $strSetter = "getArr".$strPropertyName;
-        if(method_exists($this->strSourceClass, $strSetter))
-            return $strSetter;
-
-        $strSetter = "get".$strPropertyName;
-        if(method_exists($this->strSourceClass, $strSetter))
-            return $strSetter;
+        foreach($arrGetters as $strOneGetter) {
+            if(method_exists($this->strSourceClass, $strOneGetter)) {
+                $this->arrCurrentCache[self::$STR_GETTER_CACHE][$strPropertyName] = $strOneGetter;
+                self::$bitCacheSaveRequired = true;
+                return $strOneGetter;
+            }
+        }
 
         return null;
     }
