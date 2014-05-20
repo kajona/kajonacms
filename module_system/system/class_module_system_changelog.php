@@ -132,12 +132,6 @@ class class_module_system_changelog extends class_model implements interface_mod
                     $strValue = call_user_func(array($objCurrentObject, $strGetter));
                 }
 
-                $strNamedEntry = trim(uniSubstr($strAnnotation, uniStrpos($strAnnotation, self::ANNOTATION_PROPERTY_VERSIONABLE)));
-                //try to read the old value and see, if it should be mapped to a new name
-                //this is deprecated and an undocumented feature
-                if($strNamedEntry != "")
-                    $strProperty = $strNamedEntry;
-
                 $arrOldValues[$strProperty] = $strValue;
             }
 
@@ -282,6 +276,7 @@ class class_module_system_changelog extends class_model implements interface_mod
             return self::$bitChangelogEnabled;
 
         if(!defined("_system_changehistory_enabled_") || _system_changehistory_enabled_ == "false") {
+            self::$bitChangelogEnabled = false;
             return false;
         }
 
@@ -293,9 +288,11 @@ class class_module_system_changelog extends class_model implements interface_mod
         //changes require at least kajona 3.4.9
         $arrModul = class_module_system_module::getPlainModuleData("system");
         if(version_compare($arrModul["module_version"], "3.4.9") < 0) {
+            self::$bitChangelogEnabled = false;
             return false;
         }
 
+        self::$bitChangelogEnabled = true;
         return true;
     }
 

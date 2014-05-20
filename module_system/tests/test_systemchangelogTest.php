@@ -64,11 +64,11 @@ class test_systemchangelogTest extends class_testbase {
         $arrOldValues = $objChanges->readOldValues(new dummyObject($strSystemid));
 
         $this->assertEquals($arrOldValues["strTest"], "old");
-        $this->assertEquals($arrOldValues["second"], "second old");
+        $this->assertEquals($arrOldValues["strSecondTest"], "second old");
 
         $arrOldValues = $objChanges->getOldValuesForSystemid($strSystemid);
         $this->assertEquals($arrOldValues["strTest"], "old");
-        $this->assertEquals($arrOldValues["second"], "second old");
+        $this->assertEquals($arrOldValues["strSecondTest"], "second old");
 
 
         $objChanges->createLogEntry(new dummyObject($strSystemid), "1");
@@ -91,7 +91,7 @@ class test_systemchangelogTest extends class_testbase {
                 $this->assertEquals($objOneChangelog->getStrNewValue(), "new test 1");
             }
 
-            if($objOneChangelog->getStrProperty() == "second") {
+            if($objOneChangelog->getStrProperty() == "strSecondTest") {
                 $this->assertEquals($objOneChangelog->getStrOldValue(), "second old");
                 $this->assertEquals($objOneChangelog->getStrNewValue(), "new val 2");
             }
@@ -218,7 +218,7 @@ class dummyObject implements interface_versionable {
 
     /**
      * @var
-     * @versionable second
+     * @versionable
      */
     private $strSecondTest = "second old";
 
