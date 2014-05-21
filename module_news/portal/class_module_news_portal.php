@@ -86,7 +86,7 @@ class class_module_news_portal extends class_portal implements interface_portal 
                     $arrOneNews["news_text"] = $objOneNews->getStrText();
 
                     //reset more link?
-                    if(uniStrlen(htmlStripTags($arrOneNews["news_text"])) == 0) {
+                    if(uniStrlen(htmlStripTags($arrOneNews["news_text"])) == 0 && ($objOneNews->getIntRedirectEnabled() == "0" || $objOneNews->getStrRedirectPage() == "")) {
                         $arrOneNews["news_more_link"] = "";
                     }
 
@@ -142,6 +142,13 @@ class class_module_news_portal extends class_portal implements interface_portal 
         /** @var $objNews class_module_news_news */
         $objNews = class_objectfactory::getInstance()->getObject($this->getSystemid());
         if($objNews != null && $objNews instanceof class_module_news_news && $objNews->rightView() && $objNews->getStatus() == "1") {
+
+            //see if we should generate a redirect instead
+            if($objNews->getIntRedirectEnabled() == "1" && $objNews->getStrRedirectPage() != "") {
+                $this->portalReload(class_link::getLinkPortalHref($objNews->getStrRedirectPage()));
+                return "";
+            }
+
             //Load record
 
             $arrNews = array();

@@ -406,7 +406,7 @@ class class_module_news_admin extends class_admin_evensimpler implements interfa
         
         $arrCats = class_module_news_category::getObjectList();
         if(count($arrCats) > 0) {
-            $objForm->addField(new class_formentry_headline())->setStrValue($this->getLang("commons_categories"));
+            $objForm->addField(new class_formentry_headline("commons_categories"))->setStrValue($this->getLang("commons_categories"));
         }
 
         $arrFaqsMember = class_module_news_category::getNewsMember($this->getSystemid());

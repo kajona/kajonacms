@@ -72,6 +72,25 @@ class class_module_news_news extends class_model implements interface_model, int
     private $strText = "";
 
     /**
+     * @var int
+     * @fieldType toggleonoff
+     * @tableColumn news.news_redirect_enabled
+     *
+     * @versionable
+     */
+    private $intRedirectEnabled = 0;
+
+    /**
+     * @var string
+     * @fieldType page
+     * @tableColumn news.news_redirect_page
+     *
+     * @versionable
+     */
+    private $strRedirectPage = "";
+
+
+    /**
      * For form-rendering and versioning only
      *
      * @var int
@@ -104,6 +123,9 @@ class class_module_news_news extends class_model implements interface_model, int
      * @versionable
      */
     private $objDateSpecial = 0;
+
+
+
 
     private $arrCats = null;
 
@@ -179,7 +201,8 @@ class class_module_news_news extends class_model implements interface_model, int
                 $arrValues[] = array(generateSystemid(), $this->getSystemid(), $strCatID);
             }
 
-            if(!$this->objDB->multiInsert("news_member", array("newsmem_id", "newsmem_news", "newsmem_category"), $arrValues))
+
+            if(count($arrValues) > 0 && !$this->objDB->multiInsert("news_member", array("newsmem_id", "newsmem_news", "newsmem_category"), $arrValues))
                 return false;
         }
 
@@ -544,6 +567,34 @@ class class_module_news_news extends class_model implements interface_model, int
 
     public function setBitUpdateMemberships($bitUpdateMemberships) {
         $this->bitUpdateMemberships = $bitUpdateMemberships;
+    }
+
+    /**
+     * @param int $intRedirectEnabled
+     */
+    public function setIntRedirectEnabled($intRedirectEnabled) {
+        $this->intRedirectEnabled = $intRedirectEnabled;
+    }
+
+    /**
+     * @return int
+     */
+    public function getIntRedirectEnabled() {
+        return $this->intRedirectEnabled;
+    }
+
+    /**
+     * @param string $strRedirectPage
+     */
+    public function setStrRedirectPage($strRedirectPage) {
+        $this->strRedirectPage = $strRedirectPage;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStrRedirectPage() {
+        return $this->strRedirectPage;
     }
 
 }

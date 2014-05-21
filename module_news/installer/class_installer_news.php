@@ -32,12 +32,14 @@ class class_installer_news extends class_installer_base implements interface_ins
 		$strReturn .= "Installing table news...\n";
 
 		$arrFields = array();
-		$arrFields["news_id"] 		= array("char20", false);
-		$arrFields["news_title"] 	= array("char254", true);
-		$arrFields["news_hits"] 	= array("int", true, "0");
-		$arrFields["news_intro"] 	= array("text", true);
-		$arrFields["news_text"] 	= array("text", true);
-		$arrFields["news_image"] 	= array("char254", true);
+		$arrFields["news_id"] 		        = array("char20", false);
+		$arrFields["news_title"] 	        = array("char254", true);
+		$arrFields["news_hits"] 	        = array("int", true, "0");
+		$arrFields["news_intro"] 	        = array("text", true);
+		$arrFields["news_text"] 	        = array("text", true);
+		$arrFields["news_image"] 	        = array("char254", true);
+		$arrFields["news_redirect_page"] 	= array("char254", true);
+		$arrFields["news_redirect_enabled"] = array("int", true);
 
 		if(!$this->objDB->createTable("news", $arrFields, array("news_id")))
 			$strReturn .= "An error occurred! ...\n";
@@ -209,26 +211,26 @@ class class_installer_news extends class_installer_base implements interface_ins
     public function update() {
 	    $strReturn = "";
         //check installed version and to which version we can update
-        $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        $strReturn .= "Version found:\n\t Module: ".$arrModul["module_name"].", Version: ".$arrModul["module_version"]."\n\n";
+        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        $strReturn .= "Version found:\n\t Module: ".$arrModule["module_name"].", Version: ".$arrModule["module_version"]."\n\n";
 
-        $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModul["module_version"] == "3.4.2") {
+        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "3.4.2") {
             $strReturn .= $this->update_342_349();
         }
 
-        $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModul["module_version"] == "3.4.9") {
+        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "3.4.9") {
             $strReturn .= $this->update_349_40();
         }
 
-        $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModul["module_version"] == "4.0") {
+        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "4.0") {
             $strReturn .= $this->update_40_41();
         }
 
-        $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModul["module_version"] == "4.1") {
+        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "4.1") {
             $strReturn .= "Updating 4.1 to 4.2...\n";
             $strReturn .= "Updating module-versions...\n";
             $this->updateModuleVersion("news", "4.2");
@@ -236,8 +238,8 @@ class class_installer_news extends class_installer_base implements interface_ins
             $this->updateElementVersion("news", "4.2");
         }
 
-        $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModul["module_version"] == "4.2") {
+        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "4.2") {
             $strReturn .= "Updating 4.2 to 4.3...\n";
             $strReturn .= "Updating module-versions...\n";
             $this->updateModuleVersion("news", "4.3");
@@ -245,11 +247,16 @@ class class_installer_news extends class_installer_base implements interface_ins
             $this->updateElementVersion("news", "4.3");
         }
 
-        $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModul["module_version"] == "4.3") {
+        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "4.3") {
             $strReturn .= "Updating 4.3 to 4.4...\n";
             $this->updateModuleVersion("news", "4.4");
             $this->updateElementVersion("news", "4.4");
+        }
+
+        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "4.4") {
+            $strReturn .= $this->update_44_45();
         }
 
         return $strReturn."\n\n";
@@ -318,6 +325,27 @@ class class_installer_news extends class_installer_base implements interface_ins
         $this->updateModuleVersion("news", "4.1");
         $strReturn .= "Updating element-versions...\n";
         $this->updateElementVersion("news", "4.1");
+        return $strReturn;
+    }
+
+    private function update_44_45() {
+        $strReturn = "Updating 4.4 to 4.5...\n";
+
+        $strReturn .= "Updating news table...\n";
+
+        $strQuery = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."news")."
+                            ADD ".$this->objDB->encloseColumnName("news_redirect_page")." ".$this->objDB->getDatatype("char254")." NULL,
+                            ADD ".$this->objDB->encloseColumnName("news_redirect_enabled")." ".$this->objDB->getDatatype("int")." NULL";
+
+        if(!$this->objDB->_pQuery($strQuery, array()))
+            $strReturn .= "An error occurred! ...\n";
+
+
+
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion("news", "4.5");
+        $strReturn .= "Updating element-versions...\n";
+        $this->updateElementVersion("news", "4.5");
         return $strReturn;
     }
 }
