@@ -7,22 +7,22 @@
     </div>
 </faqs_list>
 
-<!-- available placeholders: faq_cat_title, faq_faqs -->
+<!-- available placeholders: strTitle, faq_faqs -->
 <faq_category>
     <div class="faqCategory">
-        <div class="faqCategoryTitle"><h3 data-kajona-editable="%%faq_cat_systemid%%#strTitle#plain">%%faq_cat_title%%</h3></div>
+        <div class="faqCategoryTitle"><h3 data-kajona-editable="%%strSystemid%%#strTitle#plain">%%strTitle%%</h3></div>
         %%faq_faqs%%
     </div>
 </faq_category>
 
-<!-- available placeholders: faq_question, faq_answer, faq_systemid, faq_rating (if module rating installed) -->
+<!-- available placeholders: strQuestion, strAnswer, strSystemid, faq_rating (if module rating installed) -->
 <faq_faq>
     <div class="faqFaq">
         <div class="faqFaqQuestion">
             <table cellpadding="0" cellspacing="0">
                 <tr>
                     <td><img src="_webpath_/templates/default/pics/default/icon_question.gif" /></td>
-                    <td style="padding-left: 2px;"><a href="#%%faq_systemid%%"><span data-kajona-editable="%%faq_systemid%%#strQuestion#plain">%%faq_question%%</span></a></td>
+                    <td style="padding-left: 2px;"><a href="#%%strSystemid%%"><span data-kajona-editable="%%strSystemid%%#strQuestion#plain">%%strQuestion%%</span></a></td>
                 </tr>
             </table>
         </div>

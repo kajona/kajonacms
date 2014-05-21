@@ -238,7 +238,7 @@ abstract class class_portal extends class_ui_base {
      * @see class_template::fill_template
      * @since 3.2.0
      *
-     *
+     * @deprecated use class:template::fill_template directly
      * @return string
      */
     public final function fillTemplate($arrContent, $strIdentifier) {

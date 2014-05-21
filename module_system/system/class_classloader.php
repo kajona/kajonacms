@@ -190,6 +190,7 @@ class class_classloader {
         $this->arrFiles = array_merge($this->arrFiles, $this->getClassesInFolder("/admin/"));
         $this->arrFiles = array_merge($this->arrFiles, $this->getClassesInFolder("/portal/elements/"));
         $this->arrFiles = array_merge($this->arrFiles, $this->getClassesInFolder("/portal/searchplugins/"));
+        $this->arrFiles = array_merge($this->arrFiles, $this->getClassesInFolder("/portal/templatemapper/"));
         $this->arrFiles = array_merge($this->arrFiles, $this->getClassesInFolder("/portal/"));
         $this->arrFiles = array_merge($this->arrFiles, $this->getClassesInFolder("/system/db/"));
         $this->arrFiles = array_merge($this->arrFiles, $this->getClassesInFolder("/system/usersources/"));

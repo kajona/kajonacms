@@ -3,8 +3,6 @@
 *   (c) 2004-2006 by MulchProductions, www.mulchprod.de                                                 *
 *   (c) 2007-2014 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
-*-------------------------------------------------------------------------------------------------------*
-*	$Id$                         *
 ********************************************************************************************************/
 
 /**
@@ -211,8 +209,8 @@ class class_module_eventmanager_participant extends class_model implements inter
     }
 
     /**
-     * @param $strUserid
-     * @param $strEventId
+     * @param string $strUserid
+     * @param string $strEventId
      *
      * @return class_module_eventmanager_participant
      */
@@ -233,7 +231,7 @@ class class_module_eventmanager_participant extends class_model implements inter
 
 
     /**
-     * @param $strEventId
+     * @param string $strEventId
      *
      * @return int
      */
@@ -250,6 +248,9 @@ class class_module_eventmanager_participant extends class_model implements inter
     }
 
 
+    /**
+     * @return bool
+     */
     protected function onInsertToDb() {
 
         //send a message to all registered editors
@@ -258,7 +259,7 @@ class class_module_eventmanager_participant extends class_model implements inter
         $strMailtext = $this->getLang("new_participant_mail")."\n\n";
         $strMailtext .= $this->getLang("new_participant_participant")." ".$this->getStrDisplayName()."\n";
         $strMailtext .= $this->getLang("new_participant_event")." ".$objEvent->getStrDisplayName()."\n";
-        $strMailtext .= $this->getLang("new_participant_details")." ".getLinkAdminHref("eventmanager", "listParticipant", "&systemid=".$this->getStrPrevId(), false);
+        $strMailtext .= $this->getLang("new_participant_details")." ".class_link::getLinkAdminHref("eventmanager", "listParticipant", "&systemid=".$this->getStrPrevId(), false);
         $objMessageHandler = new class_module_messaging_messagehandler();
 
         $arrGroups = array();
@@ -268,28 +269,48 @@ class class_module_eventmanager_participant extends class_model implements inter
                 $arrGroups[] = $objOneGroup;
         }
 
-        $objMessageHandler->sendMessage($strMailtext, $arrGroups, new class_messageprovider_eventmanager());
+        $objMessage = new class_module_messaging_message();
+        $objMessage->setStrBody(strip_tags($strMailtext));
+        $objMessage->setObjMessageProvider(new class_messageprovider_eventmanager());
+        $objMessageHandler->sendMessageObject($objMessage, $arrGroups);
 
         return true;
     }
 
 
+    /**
+     * @return string
+     */
     public function getStrForename() {
         return $this->strForename;
     }
 
+    /**
+     * @param string $strForename
+     * @return void
+     */
     public function setStrForename($strForename) {
         $this->strForename = $strForename;
     }
 
+    /**
+     * @return string
+     */
     public function getStrLastname() {
         return $this->strLastname;
     }
 
+    /**
+     * @param string $strLastname
+     * @return void
+     */
     public function setStrLastname($strLastname) {
         $this->strLastname = $strLastname;
     }
 
+    /**
+     * @return string
+     */
     public function getStrEmail() {
         if(validateSystemid($this->getStrUserId())) {
             $objUser = new class_module_user_user($this->getStrUserId());
@@ -298,38 +319,70 @@ class class_module_eventmanager_participant extends class_model implements inter
         return $this->strEmail;
     }
 
+    /**
+     * @param string $strEmail
+     * @return void
+     */
     public function setStrEmail($strEmail) {
         $this->strEmail = $strEmail;
     }
 
+    /**
+     * @return string
+     */
     public function getStrPhone() {
         return $this->strPhone;
     }
 
+    /**
+     * @param string $strPhone
+     * @return void
+     */
     public function setStrPhone($strPhone) {
         $this->strPhone = $strPhone;
     }
 
+    /**
+     * @return string
+     */
     public function getStrComment() {
         return $this->strComment;
     }
 
+    /**
+     * @param string $strComment
+     * @return void
+     */
     public function setStrComment($strComment) {
         $this->strComment = $strComment;
     }
 
+    /**
+     * @param string $strUserId
+     * @return void
+     */
     public function setStrUserId($strUserId) {
         $this->strUserId = $strUserId;
     }
 
+    /**
+     * @return string
+     */
     public function getStrUserId() {
         return $this->strUserId;
     }
 
+    /**
+     * @param int $intParticipationStatus
+     * @return void
+     */
     public function setIntParticipationStatus($intParticipationStatus) {
         $this->intParticipationStatus = $intParticipationStatus;
     }
 
+    /**
+     * @return int
+     */
     public function getIntParticipationStatus() {
         return $this->intParticipationStatus;
     }

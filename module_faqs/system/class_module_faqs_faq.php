@@ -27,6 +27,7 @@ class class_module_faqs_faq extends class_model implements interface_model, inte
      *
      * @fieldType text
      * @fieldMandatory
+     * @templateExport
      */
     private $strQuestion = "";
 
@@ -39,6 +40,7 @@ class class_module_faqs_faq extends class_model implements interface_model, inte
      *
      * @fieldType wysiwygsmall
      * @fieldMandatory
+     * @templateExport
      */
     private $strAnswer = "";
 

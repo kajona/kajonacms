@@ -58,27 +58,25 @@ class class_module_faqs_portal extends class_portal implements interface_portal 
                 $arrFaqs = class_module_faqs_faq::loadListFaqsPortal($objCategory->getSystemid());
             }
 
-            $strFaqTemplateID = $this->objTemplate->readTemplate("/module_faqs/".$this->arrElementData["faqs_template"], "faq_faq");
             $strFaqs = "";
             //Check rights
             foreach($arrFaqs as $objOneFaq) {
                 if($objOneFaq->rightView()) {
-                    $strOneFaq = "";
-                    $arrOneFaq = array();
-                    $arrOneFaq["faq_question"] = $objOneFaq->getStrQuestion();
-                    $arrOneFaq["faq_answer"] = $objOneFaq->getStrAnswer();
-                    $arrOneFaq["faq_systemid"] = $objOneFaq->getSystemid();
 
+                    $objMapper = new class_template_mapper($objOneFaq);
+                    //legacy support
+                    $objMapper->addPlaceholder("faq_question", $objOneFaq->getStrQuestion());
+                    $objMapper->addPlaceholder("faq_answer", $objOneFaq->getStrAnswer());
+                    $objMapper->addPlaceholder("faq_systemid", $objOneFaq->getSystemid());
 
                     //ratings available?
                     if($objOneFaq->getFloatRating() !== null && class_module_system_module::getModuleByName("rating") != null) {
                         /** @var $objRating class_module_rating_portal */
                         $objRating = class_module_system_module::getModuleByName("rating")->getPortalInstanceOfConcreteModule();
-                        $arrOneFaq["faq_rating"] = $objRating->buildRatingBar($objOneFaq->getFloatRating(), $objOneFaq->getIntRatingHits(), $objOneFaq->getSystemid(), $objOneFaq->isRateableByUser(), $objOneFaq->rightRight1());
-
+                        $objMapper->addPlaceholder("faq_rating", $objRating->buildRatingBar($objOneFaq->getFloatRating(), $objOneFaq->getIntRatingHits(), $objOneFaq->getSystemid(), $objOneFaq->isRateableByUser(), $objOneFaq->rightRight1()));
                     }
 
-                    $strOneFaq .= $this->objTemplate->fillTemplate($arrOneFaq, $strFaqTemplateID, false);
+                    $strOneFaq = $objMapper->writeToTemplate("/module_faqs/".$this->arrElementData["faqs_template"], "faq_faq", false);
 
                     //Add pe code
                     $arrPeConfig = array(
@@ -95,13 +93,14 @@ class class_module_faqs_portal extends class_portal implements interface_portal 
             }
 
             //wrap category around
-            $strCatTemplateID = $this->objTemplate->readTemplate("/module_faqs/".$this->arrElementData["faqs_template"], "faq_category");
-            $arrTemplate = array();
-            $arrTemplate["faq_cat_title"] = $objCategory->getStrTitle();
-            $arrTemplate["faq_faqs"] = $strFaqs;
-            $arrTemplate["faq_cat_systemid"] = $objCategory->getSystemid();
+            $objMapper = new class_template_mapper($objCategory);
 
-            $strCats .= $this->fillTemplate($arrTemplate, $strCatTemplateID);
+            //legacy support
+            $objMapper->addPlaceholder("faq_cat_title",  $objCategory->getStrTitle());
+            $objMapper->addPlaceholder("faq_faqs", $strFaqs);
+            $objMapper->addPlaceholder("faq_cat_systemid", $objCategory->getSystemid());
+
+            $strCats .= $objMapper->writeToTemplate("/module_faqs/".$this->arrElementData["faqs_template"], "faq_category");
         }
 
         //wrap list container around
@@ -110,7 +109,7 @@ class class_module_faqs_portal extends class_portal implements interface_portal 
         $arrTemplate = array();
         $arrTemplate["faq_categories"] = $strCats;
 
-        $strReturn .= $this->fillTemplate($arrTemplate, $strListTemplateID);
+        $strReturn .= $this->objTemplate->fillTemplate($arrTemplate, $strListTemplateID);
 
         return $strReturn;
     }
