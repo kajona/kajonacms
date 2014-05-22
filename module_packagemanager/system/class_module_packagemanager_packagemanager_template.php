@@ -77,6 +77,13 @@ class class_module_packagemanager_packagemanager_template implements interface_p
         $objFilesystem->chmod($this->getStrTargetPath());
 
         $objFilesystem->folderDeleteRecursive($strSource);
+
+        //shift the cache buster
+        $objSetting = class_module_system_setting::getConfigByName("_system_browser_cachebuster_");
+        if($objSetting != null) {
+            $objSetting->setStrValue((int)$objSetting->getStrValue()+1);
+            $objSetting->updateObjectToDb();
+        }
     }
 
     /**

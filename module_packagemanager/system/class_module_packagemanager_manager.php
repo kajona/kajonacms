@@ -41,11 +41,7 @@ class class_module_packagemanager_manager {
         $arrReturn = array_merge($objPackageProvider->getInstalledPackages(), $arrReturn);
 
         if($strFilterText != "") {
-            $arrReturn = array();
-            foreach($arrReturn as $objOneMetadata) {
-                if(uniStrpos($objOneMetadata->getStrTitle(), $strFilterText) !== false)
-                    $arrReturn[] = $objOneMetadata;
-            }
+            $arrReturn = array_filter($arrReturn, function($objOneMetadata) use ($strFilterText) {return uniStrpos($objOneMetadata->getStrTitle(), $strFilterText) !== false; });
         }
 
         return $arrReturn;
