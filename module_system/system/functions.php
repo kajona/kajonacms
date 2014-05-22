@@ -898,7 +898,7 @@ function generateSystemid() {
 function validateSystemid($strID) {
 
     //Check against wrong characters
-    if(preg_match("/([a-z|A-a|0-9]){20}/", $strID)) {
+    if(strlen($strID) == 20 && preg_match("/([a-z|A-a|0-9]){20}/", $strID)) {
         return true;
     }
     else
