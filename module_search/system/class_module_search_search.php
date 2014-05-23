@@ -58,6 +58,16 @@ class class_module_search_search extends class_model implements interface_model,
      */
     private $objChangeEnddate= null;
 
+    /**
+     * @var null
+     */
+    private $bitPortalObjectFilter = null;
+
+    /**
+     * @var null
+     */
+    private $strPortalLangFilter = null;
+
 
     public function getStrDisplayName() {
         return $this->getStrQuery();
@@ -242,6 +252,35 @@ class class_module_search_search extends class_model implements interface_model,
     public function getObjChangeStartdate() {
         return $this->getObjStartDate();
     }
+
+    /**
+     * @param null $bitPortalObjectFilter
+     */
+    public function setBitPortalObjectFilter($bitPortalObjectFilter) {
+        $this->bitPortalObjectFilter = $bitPortalObjectFilter;
+    }
+
+    /**
+     * @return null
+     */
+    public function getBitPortalObjectFilter() {
+        return $this->bitPortalObjectFilter;
+    }
+
+    /**
+     * @param null $strPortalLangFilter
+     */
+    public function setStrPortalLangFilter($strPortalLangFilter) {
+        $this->strPortalLangFilter = $strPortalLangFilter;
+    }
+
+    /**
+     * @return null
+     */
+    public function getStrPortalLangFilter() {
+        return $this->strPortalLangFilter;
+    }
+
 
 
 

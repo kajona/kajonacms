@@ -33,13 +33,22 @@ class class_module_search_commons extends class_model implements interface_model
      * Method for portal-searches.
      *
      * @param string $strSearchterm
+     * @param $strPortalLang
      *
      * @return class_search_result[]
      */
-    public function doPortalSearch($strSearchterm) {
+    public function doPortalSearch($strSearchterm, $strPortalLang = null) {
         $strSearchterm = trim(uniStrReplace("%", "", $strSearchterm));
         if(uniStrlen($strSearchterm) == 0)
             return array();
+
+        //create a search object
+        $objSearch = new class_module_search_search();
+        $objSearch->setStrQuery($strSearchterm);
+        $objSearch->setBitPortalObjectFilter(true);
+        $objSearch->setStrPortalLangFilter($strPortalLang);
+
+        $arrHits = $this->doIndexedSearch($objSearch);
 
         $objSearch = new class_module_search_search();
         $objSearch->setStrQuery($strSearchterm);

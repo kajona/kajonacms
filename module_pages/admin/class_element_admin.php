@@ -18,7 +18,7 @@
  * @module elements
  * @moduleId _pages_elemente_modul_id_
  */
-abstract class class_element_admin extends class_admin {
+abstract class class_element_admin extends class_admin implements interface_search_portalobject {
 
     const STR_ANNOTATION_ELEMENTCONTENTTITLE = "@elementContentTitle";
 
@@ -619,6 +619,65 @@ abstract class class_element_admin extends class_admin {
      */
     public function setArrParamData($arrParamData) {
         $this->arrParamData = $arrParamData;
+    }
+
+
+    /**
+     * Return an on-lick link for the passed object.
+     * This link is rendered by the portal search result generator, so
+     * make sure the link is a valid portal page.
+     * If you want to suppress the entry from the result, return an empty string instead.
+     *
+     * @see getLinkPortalHref()
+     * @return mixed
+     */
+    public function getSearchPortalLinkForObject() {
+
+        //load the matching site of the current page-element
+        $strQuery = "SELECT page_name, page_id, pageproperties_browsername
+						 FROM "._dbprefix_."page_element,
+						      "._dbprefix_."page_properties,
+						      "._dbprefix_."page,
+						      "._dbprefix_."system
+						 WHERE system_prev_id = page_id
+						   AND pageproperties_id = page_id
+						   AND system_id = page_element_id
+						   AND page_element_id = ?
+						   AND system_status = 1";
+
+        $arrPage = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array($this->getSystemid()));
+
+        if(isset($arrPage["page_name"])) {
+            return getLinkPortal($arrPage["page_name"], "", "_self", $arrPage["pageproperties_browsername"], "", "&highlight=".urlencode(html_entity_decode("todo", ENT_QUOTES, "UTF-8")));
+        }
+
+        return "error loading matching page";
+    }
+
+
+    /**
+     * Since the portal may be split in different languages,
+     * return the content lang of the current record using the common
+     * abbreviation such as "de" or "en".
+     * If the content is not assigned to any language, return "" instead (e.g. a single image).
+     *
+     * @return mixed
+     */
+    public function getContentLang() {
+        $this->loadElementData();
+        return $this->arrElementData["page_element_ph_language"];
+    }
+
+    /**
+     * Return an on-lick link for the passed object.
+     * This link is used by the backend-search for the autocomplete-field
+     *
+     * @see getLinkAdminHref()
+     * @return mixed
+     */
+    public function getSearchAdminLinkForObject() {
+        //the default, plz
+        return "";
     }
 
 }
