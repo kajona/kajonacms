@@ -49,12 +49,26 @@ class class_module_search_commons extends class_model implements interface_model
         $objSearch->setStrPortalLangFilter($strPortalLang);
 
         $arrHits = $this->doIndexedSearch($objSearch);
+        foreach($arrHits as $objOneResult) {
+            $objInstance = $objOneResult->getObjObject();
+
+            if($objInstance instanceof class_module_pages_pageelement)
+                $objInstance = $objInstance->getConcreteAdminInstance();
+
+            if($objInstance != null)
+                $objInstance->loadElementData();
+
+            $objInstance->updateSearchResult($objOneResult);
+        }
+
+        //log the query
+        class_module_search_log::generateLogEntry($strSearchterm);
+
+        return $arrHits;
 
         $objSearch = new class_module_search_search();
         $objSearch->setStrQuery($strSearchterm);
 
-        //log the query
-        class_module_search_log::generateLogEntry($strSearchterm);
 
         //Search for search-plugins
         $arrSearchPlugins = class_resourceloader::getInstance()->getFolderContent("/portal/searchplugins", array(".php"));
@@ -223,6 +237,8 @@ class class_module_search_commons extends class_model implements interface_model
         $objMetadataFilter->setFilterModules($objSearch->getFilterModules());
         $objMetadataFilter->setFilterChangeStartDate($objSearch->getObjChangeStartdate());
         $objMetadataFilter->setFilterChangeEndDate($objSearch->getObjChangeEnddate());
+        $objMetadataFilter->setBitPortalSearch($objSearch->getBitPortalObjectFilter());
+        $objMetadataFilter->setStrPortalLang($objSearch->getStrPortalLangFilter());
         return $objMetadataFilter;
     }
 }

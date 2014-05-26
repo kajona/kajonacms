@@ -628,10 +628,12 @@ abstract class class_element_admin extends class_admin implements interface_sear
      * make sure the link is a valid portal page.
      * If you want to suppress the entry from the result, return an empty string instead.
      *
+     * @param class_search_result $objResult
+     *
      * @see getLinkPortalHref()
      * @return mixed
      */
-    public function getSearchPortalLinkForObject() {
+    public function updateSearchResult(class_search_result $objResult) {
 
         //load the matching site of the current page-element
         $strQuery = "SELECT page_name, page_id, pageproperties_browsername
@@ -648,10 +650,10 @@ abstract class class_element_admin extends class_admin implements interface_sear
         $arrPage = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array($this->getSystemid()));
 
         if(isset($arrPage["page_name"])) {
-            return getLinkPortal($arrPage["page_name"], "", "_self", $arrPage["pageproperties_browsername"], "", "&highlight=".urlencode(html_entity_decode("todo", ENT_QUOTES, "UTF-8")));
+            $objResult->setStrPagelink(getLinkPortal($arrPage["page_name"], "", "_self", $arrPage["pageproperties_browsername"], "", "&highlight=".urlencode(html_entity_decode("todo", ENT_QUOTES, "UTF-8"))));
+            $objResult->setStrPagename($arrPage["page_name"]);
         }
 
-        return "error loading matching page";
     }
 
 

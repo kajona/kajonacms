@@ -101,7 +101,7 @@ class class_search_result {
     }
 
     /**
-     * @return class_model|interface_model|interface_search_resultobject
+     * @return class_model|interface_model|interface_search_resultobject|interface_search_portalobject
      */
     public function getObjObject() {
         return $this->objObject;

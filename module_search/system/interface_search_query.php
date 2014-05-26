@@ -16,12 +16,6 @@
  */
 interface interface_search_query {
 
-    /**
-     * @param $objTerm
-     *
-     * @return mixed
-     */
-    public function setObjTerm($objTerm);
 
     /**
      * @param class_module_search_metadata_filter $objMetadataFilter

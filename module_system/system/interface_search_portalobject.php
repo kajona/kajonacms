@@ -24,9 +24,12 @@ interface interface_search_portalobject extends interface_search_resultobject {
      * If you want to suppress the entry from the result, return an empty string instead.
      *
      * @see getLinkPortalHref()
+     *
+     * @param class_search_result $objResult
+     *
      * @return mixed
      */
-    public function getSearchPortalLinkForObject();
+    public function updateSearchResult(class_search_result $objResult);
 
     /**
      * Since the portal may be split in different languages,
