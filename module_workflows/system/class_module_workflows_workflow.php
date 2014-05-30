@@ -246,6 +246,26 @@ class class_module_workflows_workflow extends class_model implements interface_m
         return $arrReturn;
     }
 
+
+    /**
+     * Loads all workflows for a given systemid
+     * By default limited to those with a exceeded trigger-date, so valid to be run
+     *
+     * @param $strAffectedSystemid
+     * @param bool $bitOnlyScheduled
+     * @param array $arrWorkflowClasses - the workflow clases to be determined
+     *
+     * @return array
+     */
+    public static function getWorkflowsForSystemidAndClasses($strAffectedSystemid, $bitOnlyScheduled = true, array $arrWorkflowClasses) {
+        $arrReturn = array();
+        foreach($arrWorkflowClasses as $strClass) {
+            $arrReturn = array_merge($arrReturn, class_module_workflows_workflow::getWorkflowsForSystemid($strAffectedSystemid, $bitOnlyScheduled, $strClass));
+        }
+
+        return $arrReturn;
+    }
+
     /**
      * Loads all workflows related with a given class.
      * By default limited to those with a exceeded trigger-date, so valid to be run
