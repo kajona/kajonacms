@@ -228,7 +228,7 @@ class class_module_guestbook_post extends class_model implements interface_model
             $objNewResult->setStrPagename($arrOnePage["page_name"]);
             $objNewResult->setStrDescription($this->getStrGuestbookPostText());
 
-            $arrReturn[] = $objResult;
+            $arrReturn[] = $objNewResult;
         }
 
         return $arrReturn;

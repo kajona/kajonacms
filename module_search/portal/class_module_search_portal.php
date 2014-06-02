@@ -71,7 +71,7 @@ class class_module_search_portal extends class_portal implements interface_porta
         $objSearchCommons = new class_module_search_commons();
 
         /** @var $arrHitsSorted class_search_result[] */
-        $arrHitsSorted = $objSearchCommons->doPortalSearch($this->strSearchterm);
+        $arrHitsSorted = $objSearchCommons->doPortalSearch($this->strSearchterm, $this->getStrPortalLanguage());
 
         //Resize Array to wanted size
         $arrHitsFilter = $this->objToolkit->pager(

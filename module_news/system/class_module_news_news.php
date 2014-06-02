@@ -550,7 +550,7 @@ class class_module_news_news extends class_model implements interface_model, int
             $objOneResult->setStrPagename($arrOnePage["news_detailspage"]);
             $objOneResult->setStrDescription($this->getStrTitle());
 
-            $arrReturn[] = $objResult;
+            $arrReturn[] = $objOneResult;
         }
         return $arrReturn;
     }
