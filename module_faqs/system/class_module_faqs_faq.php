@@ -17,7 +17,7 @@
  * @module faqs
  * @moduleId _faqs_module_id_
  */
-class class_module_faqs_faq extends class_model implements interface_model, interface_sortable_rating, interface_admin_listable, interface_versionable {
+class class_module_faqs_faq extends class_model implements interface_model, interface_sortable_rating, interface_admin_listable, interface_versionable, interface_search_portalobject {
 
     /**
      * @var string
@@ -289,6 +289,91 @@ class class_module_faqs_faq extends class_model implements interface_model, inte
 
         return $arrReturn;
     }
+
+    /**
+     * Return an on-lick link for the passed object.
+     * This link is rendered by the portal search result generator, so
+     * make sure the link is a valid portal page.
+     * If you want to suppress the entry from the result, return an empty string instead.
+     *
+     * @param class_search_result $objResult
+     *
+     * @see getLinkPortalHref()
+     * @return mixed
+     */
+    public function updateSearchResult(class_search_result $objResult) {
+        //search for matching pages
+        $arrDetails = $this->getSearchElementData();
+        $arrReturn = array();
+
+        foreach($arrDetails as $arrOnePage) {
+
+            //check, if the post is available on a page using the current language
+            if(!isset($arrOnePage["page_name"]) || $arrOnePage["page_name"] == "") {
+                continue;
+            }
+
+            $objCurResult = clone($objResult);
+            $objCurResult->setStrPagelink(class_link::getLinkPortal($arrOnePage["page_name"], "", "_self", $arrOnePage["page_name"], "", "&highlight=" . urlencode(html_entity_decode($objResult->getStrQuery(), ENT_QUOTES, "UTF-8"))));
+            $objCurResult->setStrPagename($arrOnePage["page_name"]);
+            $objCurResult->setStrDescription($this->getStrQuestion());
+            $arrReturn[] = $objCurResult;
+        }
+
+        return $arrReturn;
+    }
+
+    private function getSearchElementData() {
+        $strQuery = "SELECT page_name,  page_id
+                       FROM " . _dbprefix_ . "element_faqs,
+                            " . _dbprefix_ . "faqs
+                  LEFT JOIN " . _dbprefix_ . "faqs_member
+                         ON (faqsmem_faq = faqs_id),
+                            " . _dbprefix_ . "page_element,
+                            " . _dbprefix_ . "page,
+                            " . _dbprefix_ . "system
+                      WHERE faqs_id = ?
+                        AND content_id = page_element_id
+                        AND content_id = system_id
+                        AND (
+                            faqs_category IS NULL OR (
+                                faqs_category = '0' OR faqs_category = faqsmem_category
+                            )
+                        )
+                        AND system_prev_id = page_id
+                        AND system_status = 1
+                        AND page_element_ph_language = ? ";
+
+        $objLanguages = new class_module_languages_language();
+        $arrRows = $this->objDB->getPArray($strQuery, array($this->getSystemid(), $objLanguages->getStrPortalLanguage()));
+        return $arrRows;
+    }
+
+
+    /**
+     * Since the portal may be split in different languages,
+     * return the content lang of the current record using the common
+     * abbreviation such as "de" or "en".
+     * If the content is not assigned to any language, return "" instead (e.g. a single image).
+     *
+     * @return mixed
+     */
+    public function getContentLang() {
+        return "";
+    }
+
+    /**
+     * Return an on-lick link for the passed object.
+     * This link is used by the backend-search for the autocomplete-field
+     *
+     * @see getLinkAdminHref()
+     * @return mixed
+     */
+    public function getSearchAdminLinkForObject() {
+        //the default, plz
+        return "";
+    }
+
 
     public function getStrQuestion() {
         return $this->strQuestion;
