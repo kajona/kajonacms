@@ -25,6 +25,7 @@ class class_search_result {
     private $strPagename;
     private $strDescription;
     private $objObject = null;
+    private $strQuery = "";
 
 
     public function getStrSortHash() {
@@ -106,5 +107,21 @@ class class_search_result {
     public function getObjObject() {
         return $this->objObject;
     }
+
+    /**
+     * @param string $strQuery
+     */
+    public function setStrQuery($strQuery) {
+        $this->strQuery = $strQuery;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStrQuery() {
+        return $this->strQuery;
+    }
+
+
 
 }
