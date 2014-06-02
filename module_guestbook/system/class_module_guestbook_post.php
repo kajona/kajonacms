@@ -201,9 +201,7 @@ class class_module_guestbook_post extends class_model implements interface_model
                         AND system_status = 1
                         AND page_element_ph_language = ? " ;
 
-        $objLanguages = new class_module_languages_language();
-
-        $arrRows = $this->objDB->getPArray($strQuery, array($this->getPrevId(), $objLanguages->getStrPortalLanguage()));
+        $arrRows = $this->objDB->getPArray($strQuery, array($this->getPrevId(), $objResult->getObjSearch()->getStrPortalLangFilter()));
         $arrReturn = array();
         foreach($arrRows as $arrOnePage) {
 
@@ -224,7 +222,7 @@ class class_module_guestbook_post extends class_model implements interface_model
             $intPvPos = ceil($intCounter/$intAmount);
 
             $objNewResult = clone $objResult;
-            $objNewResult->setStrPagelink(class_link::getLinkPortal($arrOnePage["page_name"], "", "_self", $arrOnePage["page_name"], "", "&highlight=".urlencode(html_entity_decode($objResult->getStrQuery(), ENT_QUOTES, "UTF-8"))."&pv=".$intPvPos));
+            $objNewResult->setStrPagelink(class_link::getLinkPortal($arrOnePage["page_name"], "", "_self", $arrOnePage["page_name"], "", "&highlight=".urlencode(html_entity_decode($objResult->getObjSearch()->getStrQuery(), ENT_QUOTES, "UTF-8"))."&pv=".$intPvPos));
             $objNewResult->setStrPagename($arrOnePage["page_name"]);
             $objNewResult->setStrDescription($this->getStrGuestbookPostText());
 

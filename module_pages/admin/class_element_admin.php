@@ -650,7 +650,7 @@ abstract class class_element_admin extends class_admin implements interface_sear
         $arrPage = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array($this->getSystemid()));
 
         if(isset($arrPage["page_name"])) {
-            $objResult->setStrPagelink(getLinkPortal($arrPage["page_name"], "", "_self", $arrPage["pageproperties_browsername"], "", "&highlight=".urlencode(html_entity_decode($objResult->getStrQuery(), ENT_QUOTES, "UTF-8"))));
+            $objResult->setStrPagelink(class_link::getLinkPortal($arrPage["page_name"], "", "_self", $arrPage["pageproperties_browsername"], "", "&highlight=".urlencode(html_entity_decode($objResult->getObjSearch()->getStrQuery(), ENT_QUOTES, "UTF-8"))));
             $objResult->setStrPagename($arrPage["page_name"]);
         }
 

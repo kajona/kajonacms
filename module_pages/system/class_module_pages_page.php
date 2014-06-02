@@ -169,7 +169,7 @@ class class_module_pages_page extends class_model implements interface_model, in
      * @return mixed
      */
     public function updateSearchResult(class_search_result $objResult) {
-        $objResult->setStrPagelink(getLinkPortal($this->getStrName(), "", "_self", $this->getStrBrowsername(), "", "&highlight=".urlencode(html_entity_decode($objResult->getStrQuery(), ENT_QUOTES, "UTF-8"))));
+        $objResult->setStrPagelink(class_link::getLinkPortal($this->getStrName(), "", "_self", $this->getStrBrowsername(), "", "&highlight=".urlencode(html_entity_decode($objResult->getObjSearch()->getStrQuery(), ENT_QUOTES, "UTF-8"))));
         $objResult->setStrPagename($this->getStrName());
     }
 

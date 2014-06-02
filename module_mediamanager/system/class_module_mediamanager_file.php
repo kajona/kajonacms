@@ -146,7 +146,7 @@ class class_module_mediamanager_file extends class_model implements interface_mo
                         AND system_status = 1
                         AND page_element_ph_language = ? " ;
 
-        $arrRows = $this->objDB->getPArray($strQuery, array($this->getRepositoryId(), $objLanguages->getStrPortalLanguage()));
+        $arrRows = $this->objDB->getPArray($strQuery, array($this->getRepositoryId(), $objResult->getObjSearch()->getStrPortalLangFilter()));
 
         $strQuery =  "SELECT page_name, page_id
                        FROM "._dbprefix_."element_gallery,
@@ -169,7 +169,7 @@ class class_module_mediamanager_file extends class_model implements interface_mo
                 continue;
 
             $objOneResult = clone $objResult;
-            $objOneResult->setStrPagelink(class_link::getLinkPortal($arrOnePage["page_name"], "", "_self", $this->getStrDisplayName(), "mediaFolder", "&highlight=".urlencode(html_entity_decode($objResult->getStrQuery(), ENT_QUOTES, "UTF-8")), $this->getPrevId(), "", "", $this->getStrDisplayName()));
+            $objOneResult->setStrPagelink(class_link::getLinkPortal($arrOnePage["page_name"], "", "_self", $this->getStrDisplayName(), "mediaFolder", "&highlight=".urlencode(html_entity_decode($objResult->getObjSearch()->getStrQuery(), ENT_QUOTES, "UTF-8")), $this->getPrevId(), "", "", $this->getStrDisplayName()));
             $objOneResult->setStrPagename($arrOnePage["page_name"]);
             $objOneResult->setStrDescription($this->getStrDescription());
 

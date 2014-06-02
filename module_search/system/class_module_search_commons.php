@@ -36,6 +36,7 @@ class class_module_search_commons extends class_model implements interface_model
      * @param string $strPortalLang
      *
      * @return class_search_result[]
+     * @todo language processing
      */
     public function doPortalSearch($strSearchterm, $strPortalLang = null) {
         $strSearchterm = trim(uniStrReplace("%", "", $strSearchterm));
@@ -194,7 +195,7 @@ class class_module_search_commons extends class_model implements interface_model
             $objModule = class_module_system_module::getModuleByName($objInstance->getArrModule("modul"));
             if($objInstance != null && $objModule != null && $objInstance->rightView() && $objModule->rightView()) {
                 $objResult = new class_search_result();
-                $objResult->setStrQuery($objSearch->getStrQuery());
+                $objResult->setObjSearch($objSearch);
                 $objResult->setObjObject($objInstance);
                 $objResult->setIntScore($arrOneRow["score"]);
                 $arrHits[] = $objResult;

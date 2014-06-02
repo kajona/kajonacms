@@ -303,27 +303,6 @@ class class_module_faqs_faq extends class_model implements interface_model, inte
      */
     public function updateSearchResult(class_search_result $objResult) {
         //search for matching pages
-        $arrDetails = $this->getSearchElementData();
-        $arrReturn = array();
-
-        foreach($arrDetails as $arrOnePage) {
-
-            //check, if the post is available on a page using the current language
-            if(!isset($arrOnePage["page_name"]) || $arrOnePage["page_name"] == "") {
-                continue;
-            }
-
-            $objCurResult = clone($objResult);
-            $objCurResult->setStrPagelink(class_link::getLinkPortal($arrOnePage["page_name"], "", "_self", $arrOnePage["page_name"], "", "&highlight=" . urlencode(html_entity_decode($objResult->getStrQuery(), ENT_QUOTES, "UTF-8"))));
-            $objCurResult->setStrPagename($arrOnePage["page_name"]);
-            $objCurResult->setStrDescription($this->getStrQuestion());
-            $arrReturn[] = $objCurResult;
-        }
-
-        return $arrReturn;
-    }
-
-    private function getSearchElementData() {
         $strQuery = "SELECT page_name,  page_id
                        FROM " . _dbprefix_ . "element_faqs,
                             " . _dbprefix_ . "faqs
@@ -344,9 +323,25 @@ class class_module_faqs_faq extends class_model implements interface_model, inte
                         AND system_status = 1
                         AND page_element_ph_language = ? ";
 
-        $objLanguages = new class_module_languages_language();
-        $arrRows = $this->objDB->getPArray($strQuery, array($this->getSystemid(), $objLanguages->getStrPortalLanguage()));
-        return $arrRows;
+        $arrRows = $this->objDB->getPArray($strQuery, array($this->getSystemid(), $objResult->getObjSearch()->getStrPortalLangFilter()));
+
+        $arrReturn = array();
+
+        foreach($arrRows as $arrOnePage) {
+
+            //check, if the post is available on a page using the current language
+            if(!isset($arrOnePage["page_name"]) || $arrOnePage["page_name"] == "") {
+                continue;
+            }
+
+            $objCurResult = clone($objResult);
+            $objCurResult->setStrPagelink(class_link::getLinkPortal($arrOnePage["page_name"], "", "_self", $arrOnePage["page_name"], "", "&highlight=" . urlencode(html_entity_decode($objResult->getObjSearch()->getStrQuery(), ENT_QUOTES, "UTF-8"))));
+            $objCurResult->setStrPagename($arrOnePage["page_name"]);
+            $objCurResult->setStrDescription($this->getStrQuestion());
+            $arrReturn[] = $objCurResult;
+        }
+
+        return $arrReturn;
     }
 
 
