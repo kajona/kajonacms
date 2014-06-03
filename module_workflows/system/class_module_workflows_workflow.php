@@ -208,11 +208,22 @@ class class_module_workflows_workflow extends class_model implements interface_m
      *
      * @param $strAffectedSystemid
      * @param bool $bitOnlyScheduled
-     * @param string $strClass
+     * @param string|array $objClass
      *
      * @return class_module_workflows_workflow[]
      */
-    public static function getWorkflowsForSystemid($strAffectedSystemid, $bitOnlyScheduled = true, $strClass = null) {
+    public static function getWorkflowsForSystemid($strAffectedSystemid, $bitOnlyScheduled = true, $objClass = null) {
+        //1. handle param $objClass
+        $strINClasses = "";
+        if($objClass != null) {
+            if(is_string($objClass)) {
+                $objClass = array($objClass);
+            }
+            $arrClasses = array_map(function($strId) {return "?";}, $objClass);
+            $strINClasses = implode(",", $arrClasses);
+        }
+
+        //2. Create SQL
         $strQuery = "SELECT system_id FROM
                             "._dbprefix_."system,
                             "._dbprefix_."workflows,
@@ -222,9 +233,10 @@ class class_module_workflows_workflow extends class_model implements interface_m
                         AND workflows_systemid = ?
                      ".($bitOnlyScheduled ? " AND ( workflows_state = ? OR workflows_state = ? )" : "" )  ."
                      ".($bitOnlyScheduled ? " AND ( system_date_start > ? OR system_date_start = 0 )" : "")."
-                     ".($strClass != null ? " AND workflows_class = ? " : "")."
+                     ".($objClass != null ? " AND workflows_class IN (".$strINClasses.") " : "")."
                    ORDER BY system_date_start DESC";
 
+        //3. Set params
         $arrParams = array();
         $arrParams[] = $strAffectedSystemid;
 
@@ -234,9 +246,13 @@ class class_module_workflows_workflow extends class_model implements interface_m
             $arrParams[] = class_date::getCurrentTimestamp();
         }
 
-        if($strClass != null)
-            $arrParams[] = $strClass;
+        if($objClass != null) {
+            foreach($objClass as $strClass) {
+                $arrParams[] = $strClass;
+            }
+        }
 
+        //4. Execute SQL
         $arrRows = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, $arrParams);
         $arrReturn = array();
         foreach($arrRows as $arrSingleRow) {
@@ -246,25 +262,6 @@ class class_module_workflows_workflow extends class_model implements interface_m
         return $arrReturn;
     }
 
-
-    /**
-     * Loads all workflows for a given systemid
-     * By default limited to those with a exceeded trigger-date, so valid to be run
-     *
-     * @param $strAffectedSystemid
-     * @param bool $bitOnlyScheduled
-     * @param array $arrWorkflowClasses - the workflow clases to be determined
-     *
-     * @return array
-     */
-    public static function getWorkflowsForSystemidAndClasses($strAffectedSystemid, $bitOnlyScheduled = true, array $arrWorkflowClasses) {
-        $arrReturn = array();
-        foreach($arrWorkflowClasses as $strClass) {
-            $arrReturn = array_merge($arrReturn, class_module_workflows_workflow::getWorkflowsForSystemid($strAffectedSystemid, $bitOnlyScheduled, $strClass));
-        }
-
-        return $arrReturn;
-    }
 
     /**
      * Loads all workflows related with a given class.

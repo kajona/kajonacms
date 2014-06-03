@@ -202,9 +202,11 @@ class class_module_system_setting extends class_model implements interface_model
     public static function getConfigByName($strName) {
 
         $arrConfigs = self::getAllConfigValues();
-        foreach($arrConfigs as $objOneConfig)
-            if($objOneConfig->getStrName() == $strName)
+        foreach($arrConfigs as $objOneConfig) {
+            if($objOneConfig->getStrName() == $strName) {
                 return $objOneConfig;
+            }
+        }
 
         return null;
 
@@ -221,6 +223,24 @@ class class_module_system_setting extends class_model implements interface_model
         $strQuery = "SELECT COUNT(*) FROM " . _dbprefix_ . "system_config WHERE system_config_name = ?";
         $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array($strName));
         return $arrRow["COUNT(*)"] == 1;
+    }
+
+
+    /**
+     * Returns the value of a config or null if the config does not exist.
+     *
+     * @param $strName - the name of the config
+     *
+     * @return string or null
+     */
+    public static function getConfigValue($strName) {
+        $objConfig = self::getConfigByName($strName);
+
+        if($objConfig != null) {
+            return $objConfig->getStrValue();
+        }
+
+        return null;
     }
 
     public function getVersionActionName($strAction) {
