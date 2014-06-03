@@ -77,3 +77,5 @@ $lang["commons_validator_int_validationmessage"] = "Das Feld muss Ganzzahlen ent
 $lang["commons_validator_numeric_validationmessage"] = "Das Feld muss numerische Werte enthalten";
 $lang["commons_validator_posint_validationmessage"] = "Das Feld muss positive Ganzzahlen enthalten";
 $lang["commons_yes"]                     = "Ja";
+
+$lang["commons_remove_assignment"]                     = "Zuordnung löschen";

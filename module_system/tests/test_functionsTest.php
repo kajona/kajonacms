@@ -73,5 +73,50 @@ class class_test_functions extends class_testbase  {
         $this->assertEquals("05/15/2013", dateToString("20130515122324", false));
         $this->assertEquals("05/15/2013 12:23:24", dateToString("20130515122324", true));
     }
+
+
+    public function testValidateSystemid() {
+        $this->assertTrue(validateSystemid("12345678901234567890"));
+        $this->assertTrue(validateSystemid("abcdefghijklmnopqrst"));
+
+        $this->assertTrue(!validateSystemid("123456789012345678901"));
+        $this->assertTrue(!validateSystemid("abcdefghijklmnopqrstu"));
+
+        $this->assertTrue(!validateSystemid("1234567890123456789"));
+        $this->assertTrue(!validateSystemid("abcdefghijklmnopqrs"));
+
+        $this->assertTrue(!validateSystemid("12345678901234567890 123"));
+        $this->assertTrue(!validateSystemid("abcdefghijklmnopqrst abc"));
+
+        $this->assertTrue(!validateSystemid("abc 12345678901234567890 123"));
+        $this->assertTrue(!validateSystemid("123 abcdefghijklmnopqrst abc"));
+
+        $this->assertTrue(!validateSystemid("1234567890!234567890"));
+        $this->assertTrue(!validateSystemid("abcdefghij!lmnopqrst"));
+
+        $this->assertTrue(!validateSystemid("1234567890 234567890"));
+        $this->assertTrue(!validateSystemid("abcdefghij lmnopqrst"));
+    }
+
+    public function testSysIdValidationPerformanceTest() {
+
+        $strTest = "1234567890AbCdEfghij";
+
+
+        $intStart = microtime(true);
+        for($intI = 0; $intI < 10000; $intI++) {
+            $this->assertTrue(strlen($strTest) == 20 && preg_match("/([a-z|A-a|0-9]){20}/", $strTest));
+        }
+        $intEnd = microtime(true);
+        echo "preg based : ".($intEnd-$intStart)." sec\n";
+
+        $intStart = microtime(true);
+
+        for($intI = 0; $intI < 10000; $intI++) {
+            $this->assertTrue(strlen($strTest) == 20 && ctype_alnum($strTest));
+        }
+        $intEnd = microtime(true);
+        echo "ctype based : ".($intEnd-$intStart)." sec\n";
+    }
 }
 
