@@ -299,6 +299,18 @@ class class_installer_search extends class_installer_base implements interface_i
         $this->objDB->_pQuery("ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."search_ix_document")." ADD INDEX ( ".$this->objDB->encloseColumnName("search_ix_portal_object")." ) ", array());
 
 
+        $strReturn .= "Removing old searchplugins...\n";
+        $objFilesystem = new class_filesystem();
+        foreach(class_resourceloader::getInstance()->getFolderContent("/admin/searchplugins/") as $strPath => $strFilename) {
+            $strReturn .= "Deleting ".$strPath."\n";
+            $objFilesystem->fileDelete($strPath);
+        }
+        foreach(class_resourceloader::getInstance()->getFolderContent("/portal/searchplugins/") as $strPath => $strFilename) {
+            $strReturn .= "Deleting ".$strPath."\n";
+            $objFilesystem->fileDelete($strPath);
+        }
+
+
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion("search", "4.5");
         $this->updateElementVersion("search", "4.5");
