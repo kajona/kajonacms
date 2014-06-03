@@ -36,7 +36,6 @@ class class_module_search_commons extends class_model implements interface_model
      * @param string $strPortalLang
      *
      * @return class_search_result[]
-     * @todo language processing
      */
     public function doPortalSearch($strSearchterm, $strPortalLang = null) {
         $strSearchterm = trim(uniStrReplace("%", "", $strSearchterm));
@@ -60,6 +59,8 @@ class class_module_search_commons extends class_model implements interface_model
 
                 if($objInstance != null)
                     $objInstance->loadElementData();
+                else
+                    continue;
             }
 
             $arrUpdatedResults = $objInstance->updateSearchResult($objOneResult);
@@ -71,8 +72,9 @@ class class_module_search_commons extends class_model implements interface_model
         }
 
         //log the query
-        //TODO: duplicate merging
         class_module_search_log::generateLogEntry($strSearchterm);
+
+        $arrReturn = $this->mergeDuplicates($arrReturn);
 
         return $arrReturn;
     }
@@ -100,45 +102,6 @@ class class_module_search_commons extends class_model implements interface_model
         return $arrHits;
     }
 
-    /**
-     * Internal wrapper, triggers the final search based on search-plugins (currently portal only)
-     *
-     * @param class_module_search_search $objSearch
-     * @param interface_search_plugin[] $arrSearchPlugins
-     * @param null|callable $objSortFunc
-     *
-     * @return array|class_search_result[]
-     */
-    private function doSearch($objSearch, $arrSearchPlugins, $objSortFunc = null) {
-        $arrHits = array();
-
-        foreach($arrSearchPlugins as $strOnePlugin) {
-            //Check, if not the interface
-            if(uniStrpos($strOnePlugin, "searchdef_pages_") === false) {
-                $strClassname = str_replace(".php", "", $strOnePlugin);
-                /** @var $objPlugin interface_search_plugin */
-                $objPlugin = new $strClassname($objSearch);
-                if($objPlugin instanceof interface_search_plugin) {
-                    $arrHits = array_merge($arrHits, $objPlugin->doSearch());
-                }
-            }
-        }
-
-
-        $arrHits = $this->mergeDuplicates($arrHits);
-
-        if($objSortFunc == null) {
-            $objSortFunc = function (class_search_result $objA, class_search_result $objB) {
-                return $objA->getIntHits() < $objB->getIntHits();
-            };
-        }
-
-        //sort by hits
-        uasort($arrHits, $objSortFunc);
-
-
-        return $arrHits;
-    }
 
     /**
      * Merges duplicates in the passed array.

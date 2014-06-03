@@ -528,8 +528,6 @@ class class_module_news_news extends class_model implements interface_model, int
                         AND news_view = 0
                         AND page_element_ph_language = ? ";
 
-        $objLanguages = new class_module_languages_language();
-
         $arrRows = $this->objDB->getPArray($strQuery, array($this->getSystemid(), $objResult->getObjSearch()->getStrPortalLangFilter()));
 
         $arrReturn = array();
@@ -546,9 +544,9 @@ class class_module_news_news extends class_model implements interface_model, int
 
             //TODO: PV position
             $objOneResult = clone $objResult;
-            $objOneResult->setStrPagelink(class_link::getLinkPortal($arrOnePage["news_detailspage"], "", "_self", $arrOnePage["news_detailspage"], "newsDetail", "&highlight=".urlencode(html_entity_decode($objResult->getObjSearch()->getStrQuery(), ENT_QUOTES, "UTF-8")), $this->getSystemid()));
+            $objOneResult->setStrPagelink(class_link::getLinkPortal($arrOnePage["news_detailspage"], "", "_self", $this->getStrTitle(), "newsDetail", "&highlight=".urlencode(html_entity_decode($objResult->getObjSearch()->getStrQuery(), ENT_QUOTES, "UTF-8")), $this->getSystemid()));
             $objOneResult->setStrPagename($arrOnePage["news_detailspage"]);
-            $objOneResult->setStrDescription($this->getStrTitle());
+            $objOneResult->setStrDescription($this->getStrIntro());
 
             $arrReturn[] = $objOneResult;
         }
