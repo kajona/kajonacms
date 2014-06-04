@@ -721,6 +721,23 @@ class class_rights {
         if(isset($arrRow["right_id"]))
             $this->arrRightRowsCache[$arrRow["right_id"]] = $arrRow;
     }
+
+
+    /**
+     * Filters the given array of objects by the given permissions.
+     *
+     * @param array $arrObjects
+     * @param string $strPermissions
+     *
+     * @return array
+     */
+    public static function filterObjectsByRight(array $arrObjects, $strPermissions) {
+        $objRight = new class_rights();
+
+        return array_filter($arrObjects, function($objObject) use ($strPermissions, $objRight) {
+            return $objRight->validatePermissionString($strPermissions, $objObject);
+        });
+    }
 }
 
 
