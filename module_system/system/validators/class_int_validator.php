@@ -29,17 +29,6 @@ class class_int_validator implements interface_validator_extended {
 
 
     /**
-     * Returns a string-based name of the current validator.
-     * Used to pass the type of validator to the js-engine rendering the
-     * form in the browser.
-     *
-     * @return string
-     */
-    public function getStrName() {
-        return "int";
-    }
-
-    /**
      * Gets the validation message of the validator.
      *
      * @return string

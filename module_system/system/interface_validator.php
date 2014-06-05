@@ -27,13 +27,4 @@ interface interface_validator {
      */
     public function validate($objValue);
 
-    /**
-     * Returns a string-based name of the current validator.
-     * Used to pass the type of validator to the js-engine rendering the
-     * form in the browser.
-     *
-     * @abstract
-     * @return string
-     */
-    public function getStrName();
 }

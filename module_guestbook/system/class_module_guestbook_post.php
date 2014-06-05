@@ -34,7 +34,7 @@ class class_module_guestbook_post extends class_model implements interface_model
      * @tableColumn guestbook_post.guestbook_post_email
      *
      * @fieldType text
-     * @fieldValidator email
+     * @fieldValidator class_email_validator
      *
      * @addSearchIndex
      */
