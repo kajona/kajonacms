@@ -21,9 +21,9 @@ interface interface_validator {
      * Validates the passed chunk of data.
      * In most cases, this'll be a string-object.
      *
-     * @abstract
      * @param string $objValue
      * @return bool
+     * @abstract
      */
     public function validate($objValue);
 
