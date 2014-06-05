@@ -3,8 +3,6 @@
 *   (c) 2004-2006 by MulchProductions, www.mulchprod.de                                                 *
 *   (c) 2007-2014 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
-*-------------------------------------------------------------------------------------------------------*
-*	$Id$	                                        *
 ********************************************************************************************************/
 
 /**
@@ -12,7 +10,7 @@
  *
  * @package module_system
  */
-class class_db_mysqli implements interface_db_driver {
+class class_db_mysqli extends class_db_base {
 
     /**
      * @var mysqli
@@ -25,7 +23,6 @@ class class_db_mysqli implements interface_db_driver {
     private $intPort = "";
     private $strDumpBin = "mysqldump"; //Binary to dump db (if not in path, add the path here)
     private $strRestoreBin = "mysql"; //Binary to dump db (if not in path, add the path here)
-    private $arrStatementsCache = array();
 
     private $strErrorMessage = "";
 
@@ -76,47 +73,10 @@ class class_db_mysqli implements interface_db_driver {
 
     /**
      * Closes the connection to the database
+     * @return void
      */
     public function dbclose() {
         $this->linkDB->close();
-    }
-
-    /**
-     * Creates a single query in order to insert multiple rows at one time.
-     * For most databases, this will create s.th. like
-     * INSERT INTO $strTable ($arrColumns) VALUES (?, ?), (?, ?)...
-     *
-     * Please note that this method is used to create the query itself, based on the Kajona-internal syntax.
-     * The query is fired to the database by class_db
-     *
-     * @param string $strTable
-     * @param string[] $arrColumns
-     * @param array $arrValueSets
-     * @param string &$strQuery
-     * @param array &$arrParams
-     *
-     * @return void
-     */
-    public function convertMultiInsert($strTable, $arrColumns, $arrValueSets, &$strQuery, &$arrParams) {
-
-        $arrPlaceholder = array();
-        $arrSafeColumns = array();
-
-        foreach($arrColumns as $strOneColumn) {
-            $arrSafeColumns[] = $this->encloseColumnName($strOneColumn);
-            $arrPlaceholder[] = "?";
-        }
-        $strPlaceholder = "(".implode(",", $arrPlaceholder).")";
-
-        $arrPlaceholderSets = array();
-        $arrParams = array();
-
-        foreach($arrValueSets as $arrOneSet) {
-            $arrPlaceholderSets[] = $strPlaceholder;
-            $arrParams = array_merge($arrParams, $arrOneSet);
-        }
-
-        $strQuery = "INSERT INTO ".$this->encloseTableName($strTable)." (".implode(",", $arrSafeColumns).") VALUES ".implode(",", $arrPlaceholderSets);
     }
 
 
@@ -148,9 +108,7 @@ class class_db_mysqli implements interface_db_driver {
         if($objStatement !== false) {
             $strTypes = "";
             foreach($arrParams as $strOneParam) {
-                $strType = "s";
-
-                $strTypes .= $strType;
+                $strTypes .= "s";
             }
 
             if(count($arrParams) > 0) {
@@ -200,8 +158,7 @@ class class_db_mysqli implements interface_db_driver {
         if($objStatement !== false) {
             $strTypes = "";
             foreach($arrParams as $strOneParam) {
-                $strType = "s";
-                $strTypes .= $strType;
+                $strTypes .= "s";
             }
 
             if(count($arrParams) > 0) {
@@ -241,47 +198,6 @@ class class_db_mysqli implements interface_db_driver {
         return $arrReturn;
     }
 
-    /**
-     * Returns just a part of a recodset, defined by the start- and the end-rows,
-     * defined by the params
-     *
-     * @param string $strQuery
-     * @param int $intStart
-     * @param int $intEnd
-     *
-     * @return array
-     */
-    public function getArraySection($strQuery, $intStart, $intEnd) {
-        //calculate the end-value: mysql limit: start, nr of records, so:
-        $intEnd = $intEnd - $intStart + 1;
-        //add the limits to the query
-        $strQuery .= " LIMIT " . $intStart . ", " . $intEnd;
-        //and load the array
-        return $this->getArray($strQuery);
-    }
-
-    /**
-     * Returns just a part of a recodset, defined by the start- and the end-rows,
-     * defined by the params. Makes use of prepared statements.
-     * <b>Note:</b> Use array-like counters, so the first row is startRow 0 whereas
-     * the n-th row is the (n-1)th key!!!
-     *
-     * @param string $strQuery
-     * @param array $arrParams
-     * @param int $intStart
-     * @param int $intEnd
-     *
-     * @return array
-     * @since 3.4
-     */
-    public function getPArraySection($strQuery, $arrParams, $intStart, $intEnd) {
-        //calculate the end-value: mysql limit: start, nr of records, so:
-        $intEnd = $intEnd - $intStart + 1;
-        //add the limits to the query
-        $strQuery .= " LIMIT " . $intStart . ", " . $intEnd;
-        //and load the array
-        return $this->getPArray($strQuery, $arrParams);
-    }
 
     /**
      * Returns the last error reported by the database.
@@ -465,7 +381,7 @@ class class_db_mysqli implements interface_db_driver {
 
     /**
      * Starts a transaction
-
+     * @return void
      */
     public function transactionBegin() {
         //Autocommit 0 setzten
@@ -476,8 +392,8 @@ class class_db_mysqli implements interface_db_driver {
     }
 
     /**
-     * Ends a successfull operation by Commiting the transaction
-
+     * Ends a successful operation by Commiting the transaction
+     * @return void
      */
     public function transactionCommit() {
         $str_query = "COMMIT";
@@ -487,8 +403,8 @@ class class_db_mysqli implements interface_db_driver {
     }
 
     /**
-     * Ends a non-successfull transaction by using a rollback
-
+     * Ends a non-successful transaction by using a rollback
+     * @return void
      */
     public function transactionRollback() {
         $strQuery = "ROLLBACK";
@@ -497,6 +413,9 @@ class class_db_mysqli implements interface_db_driver {
         $this->_query($strQuery2);
     }
 
+    /**
+     * @return array|mixed
+     */
     public function getDbInfo() {
         $arrReturn = array();
         $arrReturn["dbdriver"] = "mysqli-extension";
@@ -631,16 +550,6 @@ class class_db_mysqli implements interface_db_driver {
         return $objStatement;
     }
 
-    /**
-     * A method triggered in special cases in order to
-     * have even the caches stored at the db-driver being flushed.
-     * This could get important in case of schema updates since precompiled queries may get invalid due
-     * to updated table definitions.
-     *
-     * @return void
-     */
-    public function flushQueryCache() {
-        $this->arrStatementsCache = array();
-    }
+
 }
 

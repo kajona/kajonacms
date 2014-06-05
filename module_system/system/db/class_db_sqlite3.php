@@ -3,8 +3,6 @@
 *   (c) 2004-2006 by MulchProductions, www.mulchprod.de                                                 *
 *   (c) 2007-2014 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
-*-------------------------------------------------------------------------------------------------------*
-*	$Id$	                                        *
 ********************************************************************************************************/
 
 /**
@@ -15,15 +13,13 @@
  * @author sidler@mulchprod.de
  * @package module_system
  */
-class class_db_sqlite3 implements interface_db_driver {
+class class_db_sqlite3 extends class_db_base  {
 
     /**
      * @var SQLite3
      */
     private $linkDB;
     private $strDbFile;
-
-    private $arrStatementsCache = array();
 
     /**
      * This method makes sure to connect to the database properly
@@ -61,6 +57,7 @@ class class_db_sqlite3 implements interface_db_driver {
 
     /**
      * Closes the connection to the database
+     * @return void
      */
     public function dbclose() {
         $this->linkDB->close();
@@ -98,31 +95,20 @@ class class_db_sqlite3 implements interface_db_driver {
      */
     public function convertMultiInsert($strTable, $arrColumns, $arrValueSets, &$strQuery, &$arrParams) {
 
-        $arrSafeColumns = array();
-        $arrPlaceholder = array();
-        foreach($arrColumns as $strOneColumn) {
-            $arrSafeColumns[] = $this->encloseColumnName($strOneColumn);
-            $arrPlaceholder[] = "?";
-        }
-
         $arrVersion = SQLite3::version();
         if(version_compare("3.7.11", $arrVersion["versionString"], "<=")) {
-
-            $strPlaceholder = "(".implode(",", $arrPlaceholder).")";
-
-            $arrPlaceholderSets = array();
-            $arrParams = array();
-
-            foreach($arrValueSets as $arrOneSet) {
-                $arrPlaceholderSets[] = $strPlaceholder;
-                $arrParams = array_merge($arrParams, $arrOneSet);
-            }
-
-            $strQuery = "INSERT INTO ".$this->encloseTableName($strTable)." (".implode(",", $arrSafeColumns).") VALUES ".implode(",", $arrPlaceholderSets);
-
+            parent::convertMultiInsert($strTable, $arrColumns, $arrValueSets, $strQuery, $arrParams);
         }
         //legacy code
         else {
+
+            $arrSafeColumns = array();
+            $arrPlaceholder = array();
+            foreach($arrColumns as $strOneColumn) {
+                $arrSafeColumns[] = $this->encloseColumnName($strOneColumn);
+                $arrPlaceholder[] = "?";
+            }
+
             $arrParams = array();
 
             $strQuery = "INSERT INTO ".$this->encloseTableName($strTable)."  (".implode(",", $arrSafeColumns).") ";
@@ -145,7 +131,7 @@ class class_db_sqlite3 implements interface_db_driver {
 
     /**
      * Sends a prepared statement to the database. All params must be represented by the ? char.
-     * The params themself are stored using the second params using the matching order.
+     * The params themselves are stored using the second params using the matching order.
      *
      * @param string $strQuery
      * @param array $arrParams
@@ -240,49 +226,6 @@ class class_db_sqlite3 implements interface_db_driver {
         return $arrResult;
     }
 
-    /**
-     * Returns just a part of a recodset, defined by the start- and the end-rows,
-     * defined by the params
-     * <b>Note:</b> Use array-like counters, so the first row is startRow 0 whereas
-     * the n-th row is the (n-1)th key!!!
-     *
-     * @param string $strQuery
-     * @param int $intStart
-     * @param int $intEnd
-     *
-     * @return array
-     */
-    public function getArraySection($strQuery, $intStart, $intEnd) {
-        //calculate the end-value: mysql limit: start, nr of records, so:
-        $intEnd = $intEnd - $intStart + 1;
-        //add the limits to the query
-        $strQuery .= " LIMIT ".$intStart.", ".$intEnd;
-        //and load the array
-        return $this->getArray($strQuery);
-    }
-
-    /**
-     * Returns just a part of a recodset, defined by the start- and the end-rows,
-     * defined by the params. Makes use of prepared statements.
-     * <b>Note:</b> Use array-like counters, so the first row is startRow 0 whereas
-     * the n-th row is the (n-1)th key!!!
-     *
-     * @param string $strQuery
-     * @param array $arrParams
-     * @param int $intStart
-     * @param int $intEnd
-     *
-     * @return array
-     * @since 3.4
-     */
-    public function getPArraySection($strQuery, $arrParams, $intStart, $intEnd) {
-        //calculate the end-value: mysql limit: start, nr of records, so:
-        $intEnd = $intEnd - $intStart + 1;
-        //add the limits to the query
-        $strQuery .= " LIMIT ".$intStart.", ".$intEnd;
-        //and load the array
-        return $this->getPArray($strQuery, $arrParams);
-    }
 
 
     /**
@@ -420,15 +363,15 @@ class class_db_sqlite3 implements interface_db_driver {
 
     /**
      * Starts a transaction
-
+     * @return void
      */
     public function transactionBegin() {
         $this->_query("BEGIN TRANSACTION");
     }
 
     /**
-     * Ends a successfull operation by Commiting the transaction
-
+     * Ends a successful operation by Committing the transaction
+     * @return void
      */
     public function transactionCommit() {
         $this->_query("COMMIT TRANSACTION");
@@ -436,7 +379,7 @@ class class_db_sqlite3 implements interface_db_driver {
 
     /**
      * Ends a non-successfull transaction by using a rollback
-
+     * @return void
      */
     public function transactionRollback() {
         $this->_query("ROLLBACK TRANSACTION");
@@ -488,29 +431,7 @@ class class_db_sqlite3 implements interface_db_driver {
         return $objFilesystem->fileCopy($strFilename, $this->strDbFile, true);
     }
 
-    /**
-     * Allows the db-driver to add database-specific surroundings to column-names.
-     * E.g. needed by the mysql-drivers
-     *
-     * @param string $strColumn
-     *
-     * @return string
-     */
-    public function encloseColumnName($strColumn) {
-        return $strColumn;
-    }
 
-    /**
-     * Allows the db-driver to add database-specific surroundings to table-names.
-     * E.g. needed by the mysql-drivers
-     *
-     * @param string $strTable
-     *
-     * @return string
-     */
-    public function encloseTableName($strTable) {
-        return $strTable;
-    }
 
     /**
      * Returns the db-specific datatype for the kajona internal datatype.
@@ -609,17 +530,6 @@ class class_db_sqlite3 implements interface_db_driver {
         return $objStmt;
     }
 
-    /**
-     * A method triggered in special cases in order to
-     * have even the caches stored at the db-driver being flushed.
-     * This could get important in case of schema updates since precompiled queries may get invalid due
-     * to updated table definitions.
-     *
-     * @return void
-     */
-    public function flushQueryCache() {
-        $this->arrStatementsCache = array();
-    }
 
 }
 

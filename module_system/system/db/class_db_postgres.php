@@ -3,8 +3,6 @@
 *   (c) 2004-2006 by MulchProductions, www.mulchprod.de                                                 *
 *   (c) 2007-2014 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
-*-------------------------------------------------------------------------------------------------------*
-*	$Id$	                                    *
 ********************************************************************************************************/
 
 /**
@@ -13,7 +11,7 @@
  * @package module_system
  * @author sidler@mulchprod.de
  */
-class class_db_postgres implements interface_db_driver {
+class class_db_postgres extends class_db_base {
 
     private $linkDB; //DB-Link
     private $strHost = "";
@@ -23,8 +21,6 @@ class class_db_postgres implements interface_db_driver {
     private $intPort = "";
     private $strDumpBin = "pg_dump"; //Binary to dump db (if not in path, add the path here)
     private $strRestoreBin = "psql"; //Binary to restore db (if not in path, add the path here)
-
-    private $arrStatementsCache = array();
 
     /**
      * This method makes sure to connect to the database properly
@@ -60,51 +56,16 @@ class class_db_postgres implements interface_db_driver {
         }
     }
 
-    /*
+    /**
      * Closes the connection to the database
+     * @return void
      */
     public function dbclose() {
         @pg_close($this->linkDB);
     }
 
 
-    /**
-     * Creates a single query in order to insert multiple rows at one time.
-     * For most databases, this will create s.th. like
-     * INSERT INTO $strTable ($arrColumns) VALUES (?, ?), (?, ?)...
-     *
-     * Please note that this method is used to create the query itself, based on the Kajona-internal syntax.
-     * The query is fired to the database by class_db
-     *
-     * @param string $strTable
-     * @param string[] $arrColumns
-     * @param array $arrValueSets
-     * @param string &$strQuery
-     * @param array &$arrParams
-     *
-     * @return void
-     */
-    public function convertMultiInsert($strTable, $arrColumns, $arrValueSets, &$strQuery, &$arrParams) {
 
-        $arrPlaceholder = array();
-        $arrSafeColumns = array();
-
-        foreach($arrColumns as $strOneColumn) {
-            $arrSafeColumns[] = $this->encloseColumnName($strOneColumn);
-            $arrPlaceholder[] = "?";
-        }
-        $strPlaceholder = "(".implode(",", $arrPlaceholder).")";
-
-        $arrPlaceholderSets = array();
-        $arrParams = array();
-
-        foreach($arrValueSets as $arrOneSet) {
-            $arrPlaceholderSets[] = $strPlaceholder;
-            $arrParams = array_merge($arrParams, $arrOneSet);
-        }
-
-        $strQuery = "INSERT INTO ".$this->encloseTableName($strTable)." (".implode(",", $arrSafeColumns).") VALUES ".implode(",", $arrPlaceholderSets);
-    }
 
     /**
      * Sends a query (e.g. an update) to the database
@@ -277,7 +238,7 @@ class class_db_postgres implements interface_db_driver {
         $arrTemp = $this->getArray(
             "SELECT *
             FROM information_schema.columns
-            WHERE table_name = '".dbsafeString($strTableName)."'"
+            WHERE table_name = '".class_carrier::getInstance()->getObjDB()->dbsafeString($strTableName)."'"
         );
 
         foreach($arrTemp as $arrOneColumn) {
@@ -416,7 +377,7 @@ class class_db_postgres implements interface_db_driver {
 
     /**
      * Starts a transaction
-
+     * @return void
      */
     public function transactionBegin() {
         //Autocommit 0 setzten
@@ -425,8 +386,8 @@ class class_db_postgres implements interface_db_driver {
     }
 
     /**
-     * Ends a successfull operation by Commiting the transaction
-
+     * Ends a successful operation by Committing the transaction
+     * @return void
      */
     public function transactionCommit() {
         $str_query = "COMMIT";
@@ -434,14 +395,17 @@ class class_db_postgres implements interface_db_driver {
     }
 
     /**
-     * Ends a non-successfull transaction by using a rollback
-
+     * Ends a non-successful transaction by using a rollback
+     * @return void
      */
     public function transactionRollback() {
         $strQuery = "ROLLBACK";
         $this->_query($strQuery);
     }
 
+    /**
+     * @return array|mixed
+     */
     public function getDbInfo() {
         $arrInfo = @pg_version($this->linkDB);
         $arrReturn = array();
@@ -452,28 +416,6 @@ class class_db_postgres implements interface_db_driver {
         return $arrReturn;
     }
 
-    /**
-     * Allows the db-driver to add database-specific surrounding to column-names.
-     * E.g. needed by the mysql-drivers
-     *
-     * @param string $strColumn
-     *
-     * @return string
-     */
-    public function encloseColumnName($strColumn) {
-        return $strColumn;
-    }
-
-    /**
-     * Allows the db-driver to add database-specific surrounding to table-names.
-     *
-     * @param string $strTable
-     *
-     * @return string
-     */
-    public function encloseTableName($strTable) {
-        return $strTable;
-    }
 
 
     //--- DUMP & RESTORE ------------------------------------------------------------------------------------
@@ -547,11 +489,11 @@ class class_db_postgres implements interface_db_driver {
 
     /**
      * Does as cache-lookup for prepared statements.
-     * Reduces the number of recompiles at the db-side.
+     * Reduces the number of pre-compiles at the db-side.
      *
      * @param string $strQuery
      *
-     * @return ressource
+     * @return resource
      * @since 3.4
      */
     private function getPreparedStatementName($strQuery) {
@@ -567,17 +509,6 @@ class class_db_postgres implements interface_db_driver {
         return $strSum;
     }
 
-    /**
-     * A method triggered in special cases in order to
-     * have even the caches stored at the db-driver being flushed.
-     * This could get important in case of schema updates since precompiled queries may get invalid due
-     * to updated table definitions.
-     *
-     * @return void
-     */
-    public function flushQueryCache() {
-        $this->arrStatementsCache = array();
-    }
 
 }
 

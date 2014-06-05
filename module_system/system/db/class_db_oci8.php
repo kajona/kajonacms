@@ -3,8 +3,6 @@
 *   (c) 2004-2006 by MulchProductions, www.mulchprod.de                                                 *
 *   (c) 2007-2014 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
-*-------------------------------------------------------------------------------------------------------*
-*	$Id$	                                        *
 ********************************************************************************************************/
 
 /**
@@ -14,7 +12,7 @@
  * @author sidler@mulchprod.de
  * @since 3.4.1
  */
-class class_db_oci8 implements interface_db_driver {
+class class_db_oci8 extends class_db_base {
 
     private $linkDB; //DB-Link
     private $strHost = "";
@@ -67,8 +65,9 @@ class class_db_oci8 implements interface_db_driver {
         }
     }
 
-    /*
+    /**
      * Closes the connection to the database
+     * @return void
      */
     public function dbclose() {
         @oci_close($this->linkDB);
@@ -458,15 +457,16 @@ class class_db_oci8 implements interface_db_driver {
 
     /**
      * Starts a transaction
-
+     *
+     * @return void
      */
     public function transactionBegin() {
         $this->bitTxOpen = true;
     }
 
     /**
-     * Ends a successfull operation by Commiting the transaction
-
+     * Ends a successful operation by committing the transaction
+     * @return void
      */
     public function transactionCommit() {
         oci_commit($this->linkDB);
@@ -474,43 +474,23 @@ class class_db_oci8 implements interface_db_driver {
     }
 
     /**
-     * Ends a non-successfull transaction by using a rollback
-
+     * Ends a non-successful transaction by using a rollback
+     * @return void
      */
     public function transactionRollback() {
         oci_rollback($this->linkDB);
         $this->bitTxOpen = false;
     }
 
+    /**
+     * @return array|mixed
+     */
     public function getDbInfo() {
         $arrReturn = array();
         $arrReturn["dbdriver"] = "oci8-oracle-extension";
         $arrReturn["dbserver"] = oci_server_version($this->linkDB);
         $arrReturn["dbclient"] = function_exists("oci_client_version") ? oci_client_version($this->linkDB) : "";
         return $arrReturn;
-    }
-
-    /**
-     * Allows the db-driver to add database-specific surrounding to column-names.
-     * E.g. needed by the mysql-drivers
-     *
-     * @param string $strColumn
-     *
-     * @return string
-     */
-    public function encloseColumnName($strColumn) {
-        return $strColumn;
-    }
-
-    /**
-     * Allows the db-driver to add database-specific surrounding to table-names.
-     *
-     * @param string $strTable
-     *
-     * @return string
-     */
-    public function encloseTableName($strTable) {
-        return $strTable;
     }
 
 
@@ -621,7 +601,7 @@ class class_db_oci8 implements interface_db_driver {
     /**
      * A method triggered in special cases in order to
      * have even the caches stored at the db-driver being flushed.
-     * This could get important in case of schema updates since precompiled queries may get invalid due
+     * This could get important in case of schema updates since pre-compiled queries may get invalid due
      * to updated table definitions.
      *
      * @return void
