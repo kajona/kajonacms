@@ -104,15 +104,13 @@ class class_admin_formgenerator {
         $arrReturn = array();
         foreach($this->arrFields as $objOneField)
             if($objOneField->getBitMandatory())
-                $arrReturn[$objOneField->getStrEntryName()] = get_class($objOneField->getObjValidator());
+                $arrReturn[$objOneField->getStrEntryName()] = $objOneField->getObjValidator()->getStrName();
 
         return $arrReturn;
     }
 
     /**
      * Validates the current form.
-     *
-     * @throws class_exception
      * @return bool
      */
     public function validateForm() {
@@ -143,17 +141,14 @@ class class_admin_formgenerator {
         }
 
         //2. Validate complete form
-        $strRecordClass = get_class($this->getObjSourceobject());
-        $objReflection = new class_reflection($strRecordClass);
+        $objReflection = new class_reflection($this->getObjSourceobject());
         $arrObjectValidator = $objReflection->getAnnotationValuesFromClass("@objectValidator");
-        if(count($arrObjectValidator) ==1) {
+        if(count($arrObjectValidator) == 1) {
             $strObjectValidator = $arrObjectValidator[0];
             if(class_exists($strObjectValidator)) {
                 /** @var interface_object_validator $objValidator */
                 $objValidator = new $strObjectValidator();
-                $objValidator->validateObject($this, $this->getObjSourceobject());
-
-                $arrValidationErrorsObject = $objValidator->getValidationMessages();
+                $arrValidationErrorsObject = $objValidator->validateObject($this, $this->getObjSourceobject());
                 foreach($arrValidationErrorsObject as $strKey => $strMessage) {
                     $this->addValidationError($strKey, $strMessage);
                 }
@@ -426,15 +421,12 @@ class class_admin_formgenerator {
     /**
      * Loads the validator identified by the passed name.
      *
-     * @param string $strClassname
-     *
-     * @throws class_exception
+     * @param string $strName
      * @return interface_validator
+     * @throws class_exception
      */
-    private function getValidatorInstance($strClassname) {
-        if(uniStrpos($strClassname, "class_") === false)
-            $strClassname = "class_".$strClassname."_validator";
-
+    private function getValidatorInstance($strName) {
+        $strClassname = "class_".$strName."_validator";
         if(class_resourceloader::getInstance()->getPathForFile("/system/validators/".$strClassname.".php")) {
             return new $strClassname();
         }

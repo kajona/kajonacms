@@ -19,27 +19,17 @@ interface interface_object_validator {
 
     /**
      * Validates the passed chunk of data.
-     * In most cases, this'll be a string-object.
+     *
+     * The returning array contains the given error messages. Each key in the array contains an array of error messages.
+     * Format of the returned array is:
+     *      array("<messageKey>" => array())
+     *
      *
      * @abstract
-     * @param class_admin_formgenerator $objForm
-     * @param class_model $objObject
-     * @return bool
+     * @param class_admin_formgenerator $objForm - the form object
+     * @param class_model $objObject - the model object to the given form
+     * @return array
      */
     public function validateObject(class_admin_formgenerator $objForm, class_model $objObject);
 
-    /**
-     * Returns a string-based name of the current object validator.
-     *
-     * @abstract
-     * @return string
-     */
-    public function getStrName();
-
-    /**
-     * Gets the validation message of the validator.
-     *
-     * @return array
-     */
-    public function getValidationMessages();
 }

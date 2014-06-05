@@ -8,7 +8,8 @@
 ********************************************************************************************************/
 
 /**
- * The scriptlet helper is the central place to trigger scriptlets or read meta-infos about the scriptlets currently installed.
+ * Helper class for object validators.
+ * Contains general validations methods and other.
  *
  * @package module_system
  * @author stefan.meyer1@yahoo.de
@@ -27,7 +28,7 @@ class class_objectvalidator_helper {
                 $objDate12 = new class_date($strEndDateValue);
 
                 if($objDate1->getLongTimestamp() < $objDate12->getLongTimestamp()) {
-                     return -1;//less;
+                    return -1;//less;
                 }
                 if($objDate1->getLongTimestamp() > $objDate12->getLongTimestamp()) {
                     return 1;//greater
