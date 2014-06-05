@@ -9,30 +9,6 @@ class class_validatorTest extends class_testbase  {
         parent::setUp();
     }
 
-
-    public function testValidatorNames() {
-        $strInterfaceName = "interface_validator";
-        //load classes
-        $arrFiles = class_resourceloader::getInstance()->getFolderContent("/system/validators", array(".php"));
-        $arrValidatorClasses = array();
-        foreach($arrFiles as $strOneFile) {
-            $strClassname = uniStrReplace(".php", "", $strOneFile);
-            //create instance
-            $objClass = new ReflectionClass($strClassname);
-            if($objClass->implementsInterface("interface_validator")) {
-                $arrValidatorClasses[$strClassname] = $objClass->newInstance();
-            }
-        }
-
-        foreach($arrValidatorClasses as $strValidatorClassName => $objValidator) {
-            $arrMatches = array();
-            preg_match("/class_([a-z_]*)_validator/", $strValidatorClassName, $arrMatches);
-            $strName = $objValidator->getStrName();
-            $this->assertEquals($arrMatches[1], $strName);
-        }
-
-    }
-
     public function testIntValidator() {
         $objValidator = new class_int_validator();
         $this->assertEquals($objValidator->validate("-1"), true);
