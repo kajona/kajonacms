@@ -140,10 +140,26 @@ class class_admin_formgenerator {
             }
         }
 
-        //Validate complete form
-        $strRecordClass = $this->getObjSourceobject()->getStrRecordClass();
+        //2. Validate complete form
+        $strRecordClass = get_class($this->getObjSourceobject());
         $objReflection = new class_reflection($strRecordClass);
-        $strObjectValidator = $objReflection->getAnnotationValuesFromClass("@objectValidator");
+        $arrObjectValidator = $objReflection->getAnnotationValuesFromClass("@objectValidator");
+        if(count($arrObjectValidator) ==1) {
+            $strObjectValidator = $arrObjectValidator[0];
+            if(class_exists($strObjectValidator)) {
+                /** @var interface_object_validator $objValidator */
+                $objValidator = new $strObjectValidator();
+                $objValidator->validateObject($this, $this->getObjSourceobject());
+
+                $arrValidationErrorsObject = $objValidator->getValidationMessages();
+                foreach($arrValidationErrorsObject as $strKey => $strMessage) {
+                    $this->addValidationError($strKey, $strMessage);
+                }
+            }
+            else {
+                throw new class_exception("object validator ".$strObjectValidator." not exisiting", class_exception::$level_ERROR);
+            }
+        }
 
         return count($this->arrValidationErrors) == 0;
     }

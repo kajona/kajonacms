@@ -23,9 +23,10 @@ interface interface_object_validator {
      *
      * @abstract
      * @param class_admin_formgenerator $objForm
+     * @param class_model $objObject
      * @return bool
      */
-    public function validateObject(class_admin_formgenerator $objForm);
+    public function validateObject(class_admin_formgenerator $objForm, class_model $objObject);
 
     /**
      * Returns a string-based name of the current object validator.
@@ -34,4 +35,11 @@ interface interface_object_validator {
      * @return string
      */
     public function getStrName();
+
+    /**
+     * Gets the validation message of the validator.
+     *
+     * @return array
+     */
+    public function getValidationMessages();
 }
