@@ -116,6 +116,7 @@ class class_admin_formgenerator {
     public function validateForm() {
         $objLang = class_carrier::getInstance()->getObjLang();
 
+        //1. Validate fields
         foreach($this->arrFields as $objOneField) {
 
             $bitFieldIsEmpty =
@@ -137,8 +138,12 @@ class class_admin_formgenerator {
                     $this->addValidationError($objOneField->getStrEntryName(), $objOneField->getStrValidationErrorMsg());
                 }
             }
-
         }
+
+        //Validate complete form
+        $strRecordClass = $this->getObjSourceobject()->getStrRecordClass();
+        $objReflection = new class_reflection($strRecordClass);
+        $strObjectValidator = $objReflection->getAnnotationValuesFromClass("@objectValidator");
 
         return count($this->arrValidationErrors) == 0;
     }
