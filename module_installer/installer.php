@@ -142,9 +142,7 @@ class class_installer {
             "/files/downloads",
             "/templates/default"
         );
-
-        $arrFilesAndFolders = array_merge($arrFilesAndFolders, class_classloader::getInstance()->getCoreDirectories());
-
+        $arrFilesAndFolders = array_merge($arrFilesAndFolders, array_map(function($strValue) { return "/".$strValue; }, class_classloader::getInstance()->getCoreDirectories()));
 
         $arrModules = array(
             "mbstring",

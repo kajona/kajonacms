@@ -528,7 +528,15 @@ abstract class class_admin_simple extends class_admin {
      * @return string|array
      */
     protected function getNewEntryAction($strListIdentifier, $bitDialog = false) {
-        if($this->getObjModule()->rightEdit()) {
+        $objObject = null;
+        if(validateSystemid($this->getSystemid())) {
+            $objObject = class_objectfactory::getInstance()->getObject($this->getSystemid());
+        }
+        if($objObject == null) {
+            $objObject = $this->getObjModule();
+        }
+
+        if($objObject->rightEdit()) {
             if($bitDialog)
                 return $this->objToolkit->listButton(
                     getLinkAdminDialog(
