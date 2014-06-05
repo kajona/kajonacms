@@ -732,10 +732,8 @@ class class_rights {
      * @return array
      */
     public function filterObjectsByRight(array $arrObjects, $strPermissions) {
-        $objRight = new class_rights();
-
-        return array_filter($arrObjects, function($objObject) use ($strPermissions, $objRight) {
-            return $objRight->validatePermissionString($strPermissions, $objObject);
+        return array_filter($arrObjects, function($objObject) use ($strPermissions) {
+            return $this->validatePermissionString($strPermissions, $objObject);
         });
     }
 }
