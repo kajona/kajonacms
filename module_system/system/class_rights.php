@@ -731,7 +731,7 @@ class class_rights {
      *
      * @return array
      */
-    public static function filterObjectsByRight(array $arrObjects, $strPermissions) {
+    public function filterObjectsByRight(array $arrObjects, $strPermissions) {
         $objRight = new class_rights();
 
         return array_filter($arrObjects, function($objObject) use ($strPermissions, $objRight) {
