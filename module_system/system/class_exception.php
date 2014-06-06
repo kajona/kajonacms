@@ -133,7 +133,7 @@ class class_exception extends Exception {
             }
             else {
                 $strErrormessage = "<html><head></head><body><div style=\"border: 1px solid red; padding: 5px; margin: 20px; font-family: arial,verdana,sans-serif; font-size: 12px;  \">\n";
-                $strErrormessage .= "<div style=\"background-color: #cccccc; color: #000000; font-weight: bold; \">A fatal error occured:</div>\n";
+                $strErrormessage .= "<div style=\"background-color: #cccccc; color: #000000; font-weight: bold; \">A fatal error occurred:</div>\n";
                 $strErrormessage .= "<pre>".(htmlspecialchars($this->getMessage(), ENT_QUOTES, "UTF-8", false))."</pre><br />";
 
                 $strErrormessage .= "Please inform the administration about the error above.";

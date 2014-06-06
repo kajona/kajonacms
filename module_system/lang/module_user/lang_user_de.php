@@ -128,6 +128,7 @@ $lang["user_aktiv"]                      = "Aktiv";
 $lang["user_browser"]                    = "Benutzer suchen";
 $lang["user_browser_reset"]              = "Benutzer entfernen";
 $lang["user_browser_show"]               = "Benutzer anzeigen";
+$lang["user_deleted"]                    = "Benutzer nicht mehr vorhanden";
 $lang["user_erfolg"]                     = "Benutzer erfolgreich gespeichert";
 $lang["user_fehler"]                     = "Fehler beim Speichern des Benutzers";
 $lang["user_fehler_mail"]                = "E-Mail Adresse angeben <a href=\"javascript:history.back(-1)\">zurück</a>";

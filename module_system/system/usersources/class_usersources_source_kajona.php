@@ -21,6 +21,9 @@ class class_usersources_source_kajona implements interface_usersources_usersourc
 
     private $objDB;
 
+    /**
+     * Default constructor
+     */
     public function __construct() {
         $this->objDB = class_carrier::getInstance()->getObjDB();
     }
@@ -30,7 +33,7 @@ class class_usersources_source_kajona implements interface_usersources_usersourc
      * The password is unencrypted, each source should take care of its own encryption.
      *
      * @param interface_usersources_user|class_usersources_user_kajona $objUser
-     * @param $strPassword
+     * @param string $strPassword
      *
      * @return bool
      */
@@ -48,14 +51,23 @@ class class_usersources_source_kajona implements interface_usersources_usersourc
         return false;
     }
 
+    /**
+     * @return bool
+     */
     public function getCreationOfGroupsAllowed() {
         return true;
     }
 
+    /**
+     * @return bool
+     */
     public function getCreationOfUsersAllowed() {
         return true;
     }
 
+    /**
+     * @return bool
+     */
     public function getMembersEditable() {
         return true;
     }
@@ -99,7 +111,7 @@ class class_usersources_source_kajona implements interface_usersources_usersourc
     }
 
     /**
-     * Loads the iser identified by the passed id
+     * Loads the user identified by the passed id
      *
      * @param string $strId
      *
@@ -132,7 +144,7 @@ class class_usersources_source_kajona implements interface_usersources_usersourc
      * @return interface_usersources_user or null
      */
     public function getUserByUsername($strUsername) {
-        $strQuery = "SELECT user_id FROM " . _dbprefix_ . "user  WHERE user_username = ? AND user_subsystem = 'kajona'";
+        $strQuery = "SELECT user_id FROM " . _dbprefix_ . "user  WHERE user_username = ? AND user_subsystem = 'kajona' AND (user_deleted = 0 OR user_deleted IS NULL)";
 
         $arrIds = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array($strUsername));
         if(isset($arrIds["user_id"]) && validateSystemid($arrIds["user_id"])) {

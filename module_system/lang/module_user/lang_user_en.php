@@ -127,6 +127,7 @@ $lang["user_aktiv"]                      = "Active";
 $lang["user_browser"]                    = "Search user";
 $lang["user_browser_reset"]              = "Remove user";
 $lang["user_browser_show"]               = "Show users";
+$lang["user_deleted"]                    = "User no longer existing";
 $lang["user_erfolg"]                     = "User was saved successfully";
 $lang["user_fehler"]                     = "An error occurred while saving the user";
 $lang["user_fehler_mail"]                = "Pleae enter a valid mail-address <a href=\"javascript:history.back(-1)\">back</a>";

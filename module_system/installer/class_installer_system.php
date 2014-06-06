@@ -126,6 +126,7 @@ class class_installer_system extends class_installer_base implements interface_i
         $arrFields["user_active"] = array("int", true);
         $arrFields["user_admin"] = array("int", true);
         $arrFields["user_portal"] = array("int", true);
+        $arrFields["user_deleted"] = array("int", true);
         $arrFields["user_admin_skin"] = array("char254", true);
         $arrFields["user_admin_language"] = array("char254", true);
         $arrFields["user_admin_module"] = array("char254", true);
@@ -647,6 +648,12 @@ class class_installer_system extends class_installer_base implements interface_i
             $this->objDB->flushQueryCache();
         }
 
+        $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModul["module_version"] == "4.4.3") {
+            $strReturn .= $this->update_443_45();
+            $this->objDB->flushQueryCache();
+        }
+
         return $strReturn."\n\n";
     }
 
@@ -1106,6 +1113,21 @@ class class_installer_system extends class_installer_base implements interface_i
 
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion("", "4.4");
+        return $strReturn;
+    }
+
+    private function update_443_45() {
+        $strReturn = "Updating 4.4.3 to 4.5...\n";
+
+        $strReturn .= "Updating user table...\n";
+        $strQuery = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."user")."
+                            ADD ".$this->objDB->encloseColumnName("user_deleted")." ".$this->objDB->getDatatype("int")." NULL";
+        if(!$this->objDB->_pQuery($strQuery, array()))
+            $strReturn .= "An error occurred! ...\n";
+
+
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion("", "4.5");
         return $strReturn;
     }
 

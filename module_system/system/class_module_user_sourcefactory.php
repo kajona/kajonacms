@@ -81,7 +81,7 @@ class class_module_user_sourcefactory {
     /**
      * Tries to find an user identified by its name in the configured subsystems.
      * If given, the first match is returned.
-     * Please note that the leightweight object is returned!
+     * Please note that the lightweight object is returned!
      *
      * @param string $strName
      *
@@ -90,7 +90,12 @@ class class_module_user_sourcefactory {
     public function getUserByUsername($strName) {
 
         //validate if a group with the given name is available
-        $strQuery = "SELECT user_id FROM " . _dbprefix_ . "user where user_username = ?";
+
+        if(version_compare(class_module_system_module::getModuleByName("user")->getStrVersion(), "4.5", ">="))
+            $strQuery = "SELECT user_id FROM " . _dbprefix_ . "user where user_username = ? AND (user_deleted = 0 OR user_deleted IS NULL)";
+        else
+            $strQuery = "SELECT user_id FROM " . _dbprefix_ . "user where user_username = ?";
+
         $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array($strName));
 
         if(isset($arrRow["user_id"]) && validateSystemid($arrRow["user_id"])) {
@@ -121,7 +126,11 @@ class class_module_user_sourcefactory {
     public function getUserlistByUserquery($strParam) {
 
         //validate if a group with the given name is available
-        $strQuery = "SELECT user_id, user_subsystem FROM " . _dbprefix_ . "user where user_username LIKE ? AND user_active = 1";
+        if(version_compare(class_module_system_module::getModuleByName("user")->getStrVersion(), "4.5", ">="))
+            $strQuery = "SELECT user_id, user_subsystem FROM " . _dbprefix_ . "user where user_username LIKE ? AND user_active = 1 AND (user_deleted = 0 OR user_deleted IS NULL)";
+        else
+            $strQuery = "SELECT user_id, user_subsystem FROM " . _dbprefix_ . "user where user_username LIKE ? AND user_active = 1";
+
         $arrRows = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array("%" . $strParam . "%"));
 
         $arrReturn = array();
@@ -179,9 +188,13 @@ class class_module_user_sourcefactory {
      *
      * @param class_module_user_user $objLeightweightUser
      *
+     * @throws class_exception
      * @return interface_usersources_user
      */
     public function getSourceUser(class_module_user_user $objLeightweightUser) {
+        if($objLeightweightUser->getIntDeleted() == 1)
+            throw new class_exception("User was deleted, source user no longer available", class_exception::$level_ERROR);
+
         $objSubsystem = $this->getUsersource($objLeightweightUser->getStrSubsystem());
         $objPlainUser = $objSubsystem->getUserById($objLeightweightUser->getSystemid());
         return $objPlainUser;

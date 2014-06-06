@@ -38,6 +38,7 @@ class class_module_user_user extends class_model implements interface_model, int
     private $strAdminlanguage = "";
     private $strAdminModule = "";
     private $strAuthcode = "";
+    private $intDeleted = 0;
 
 
     /**
@@ -48,6 +49,9 @@ class class_module_user_user extends class_model implements interface_model, int
         $strReturn =  $this->getStrUsername();
         if($this->getStrName() != "")
             $strReturn .= " (".$this->getStrName().", ".$this->getStrForename().")";
+
+        if($this->intDeleted == 1)
+            $strReturn = $this->getStrUsername()." (".$this->getLang("user_deleted").")";
 
         return $strReturn;
     }
@@ -136,6 +140,9 @@ class class_module_user_user extends class_model implements interface_model, int
             $this->setStrAdminlanguage($arrRow["user_admin_language"]);
             $this->setSystemid($arrRow["user_id"]);
             $this->setStrAuthcode($arrRow["user_authcode"]);
+            if(isset($arrRow["user_deleted"]))
+                $this->intDeleted = $arrRow["user_deleted"];
+
             if(isset($arrRow["user_admin_module"]))
                 $this->setStrAdminModule($arrRow["user_admin_module"]);
 
@@ -158,9 +165,9 @@ class class_module_user_user extends class_model implements interface_model, int
                         user_id, user_active,
                         user_admin, user_portal,
                         user_admin_skin, user_admin_language,
-                        user_logins, user_lastlogin, user_authcode, user_subsystem, user_username, user_admin_module
+                        user_logins, user_lastlogin, user_authcode, user_subsystem, user_username, user_admin_module, user_deleted
 
-                        ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)";
+                        ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
             class_logger::getInstance(class_logger::USERSOURCES)->addLogRow("new user for subsystem ".$this->getStrSubsystem()." / ".$this->getStrUsername(), class_logger::$levelInfo);
 
@@ -178,7 +185,8 @@ class class_module_user_user extends class_model implements interface_model, int
                     $this->getStrAuthcode(),
                     $this->getStrSubsystem(),
                     $this->getStrUsername(),
-                    $this->getStrAdminModule()
+                    $this->getStrAdminModule(),
+                    0
                 )
             );
 
@@ -246,7 +254,10 @@ class class_module_user_user extends class_model implements interface_model, int
      * @return class_module_user_user[]
      */
     public static function getObjectList($strUsernameFilter = "", $intStart = null, $intEnd = null) {
-        $strQuery = "SELECT user_id FROM " . _dbprefix_ . "user WHERE user_username LIKE ? ORDER BY user_username, user_subsystem ASC";
+        if(version_compare(class_module_system_module::getModuleByName("user")->getStrVersion(), "4.5", ">="))
+            $strQuery = "SELECT user_id FROM " . _dbprefix_ . "user WHERE user_username LIKE ? AND (user_deleted = 0 OR user_deleted IS NULL) ORDER BY user_username, user_subsystem ASC";
+        else
+            $strQuery = "SELECT user_id FROM " . _dbprefix_ . "user WHERE user_username LIKE ? ORDER BY user_username, user_subsystem ASC";
 
         $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array("%" . $strUsernameFilter . "%"), $intStart, $intEnd);
 
@@ -265,7 +276,11 @@ class class_module_user_user extends class_model implements interface_model, int
      * @return int
      */
     public static function getObjectCount($strUsernameFilter = "") {
-        $strQuery = "SELECT COUNT(*) FROM "._dbprefix_."user WHERE user_username LIKE ? ";
+        if(version_compare(class_module_system_module::getModuleByName("user")->getStrVersion(), "4.5", ">="))
+            $strQuery = "SELECT COUNT(*) FROM "._dbprefix_."user WHERE user_username LIKE ? AND (user_deleted = 0 OR user_deleted IS NULL) ";
+        else
+            $strQuery = "SELECT COUNT(*) FROM "._dbprefix_."user WHERE user_username LIKE ? ";
+
         $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array($strUsernameFilter."%"));
         return $arrRow["COUNT(*)"];
     }
@@ -289,14 +304,19 @@ class class_module_user_user extends class_model implements interface_model, int
     /**
      * Deletes a user from the systems
      *
+     * @throws class_exception
      * @return bool
      */
     public function deleteObject() {
+
+        if($this->objSession->getUserID() == $this->getSystemid())
+            throw new class_exception("You can't delete yourself", class_exception::$level_FATALERROR);
+
         class_logger::getInstance(class_logger::USERSOURCES)->addLogRow("deleted user with id ".$this->getSystemid() ." (".$this->getStrUsername()." / ".$this->getStrName().",".$this->getStrForename().")", class_logger::$levelWarning);
-        $strQuery = "DELETE FROM "._dbprefix_."user WHERE user_id=?";
-        //call other models that may be interested
         $this->getObjSourceUser()->deleteUser();
+        $strQuery = "UPDATE "._dbprefix_."user SET user_deleted = 1, user_active = 0 WHERE user_id = ?";
         $bitReturn = $this->objDB->_pQuery($strQuery, array($this->getSystemid()));
+        //call other models that may be interested
         //TODO: remove legacy listener
         class_core_eventdispatcher::notifyListeners("interface_recorddeleted_listener", "handleRecordDeletedEvent", array($this->getSystemid(), get_class($this)));
         class_core_eventdispatcher::getInstance()->notifyGenericListeners(class_system_eventidentifier::EVENT_SYSTEM_RECORDDELETED, array($this->getSystemid(), get_class($this)));
@@ -351,7 +371,7 @@ class class_module_user_user extends class_model implements interface_model, int
      * @return void
      */
     private function loadSourceObject() {
-        if($this->objSourceUser == null) {
+        if($this->objSourceUser == null && $this->intDeleted != 1) {
             $objUsersources = new class_module_user_sourcefactory();
             $this->setObjSourceUser($objUsersources->getSourceUser($this));
         }
@@ -559,6 +579,14 @@ class class_module_user_user extends class_model implements interface_model, int
     public function getStrAdminModule() {
         return $this->strAdminModule;
     }
+
+    /**
+     * @return int
+     */
+    public function getIntDeleted() {
+        return $this->intDeleted;
+    }
+
 
 
 }

@@ -932,7 +932,7 @@ final class class_changelog_container {
      */
     public function getStrUsername() {
         $objUser = new class_module_user_user($this->getStrUserId());
-        return $objUser->getStrUsername();
+        return $objUser->getStrDisplayName();
     }
 
     /**
