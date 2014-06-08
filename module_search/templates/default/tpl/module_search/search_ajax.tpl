@@ -36,8 +36,8 @@
 
                 $.post(post_target, post_data, function(data, textStatus) {
                     $('#searchResult').html("<ul></ul>");
-                    $("#spanSearchterm").html($(data).find("searchterm").text());
-                    $("#spanSearchamount").html($(data).find("nrofresults").text());
+                    $("#spanSearchterm").html($(data).find("searchterm").html());
+                    $("#spanSearchamount").html($(data).find("nrofresults").html());
                     $('#resultSetHeader').css("display", "block");
 
                     $(data).find("item").each(function() {
