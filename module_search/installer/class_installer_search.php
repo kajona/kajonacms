@@ -206,6 +206,14 @@ class class_installer_search extends class_installer_base implements interface_i
             $strReturn .= $this->update_43_44();
         }
 
+        if($arrModule["module_version"] == "4.4") {
+            $strReturn .= "Updating 4.4 to 4.4.1...\n";
+            $strReturn .= "Updating module-versions...\n";
+            $this->updateModuleVersion("search", "4.4.1");
+            $this->updateElementVersion("search", "4.4.1");
+
+        }
+
         return $strReturn."\n\n";
 	}
 

@@ -1,5 +1,8 @@
 Module System
 
+V4.4.4 --------------------------------------------------------------------------------------------------
+BUG / SECURITY: class_link -> fixed some rare conditions where a possible xss injection was possible for the systemid-param
+
 V4.4.3 --------------------------------------------------------------------------------------------------
 BUG: portal link generation could skip the systemid if passed as an additional param instead of passing it as the named systemid param
 
