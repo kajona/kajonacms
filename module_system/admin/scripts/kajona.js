@@ -690,9 +690,11 @@ KAJONA.admin.forms.renderMandatoryFields = function(arrFields) {
 };
 
 KAJONA.admin.forms.renderMissingMandatoryFields = function(arrFields) {
-    $(arrFields).each(function() {
-        if($("#"+this))
-            $("#"+this).closest(".control-group").addClass("error");
+    $(arrFields).each(function(intIndex, strField) {
+        var strFieldName = strField[0];
+        if($("#"+strFieldName)) {
+            $("#"+strFieldName).closest(".control-group").addClass("error");
+        }
     });
 };
 
