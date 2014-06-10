@@ -104,13 +104,15 @@ class class_admin_formgenerator {
         $arrReturn = array();
         foreach($this->arrFields as $objOneField)
             if($objOneField->getBitMandatory())
-                $arrReturn[$objOneField->getStrEntryName()] = $objOneField->getObjValidator()->getStrName();
+                $arrReturn[$objOneField->getStrEntryName()] = get_class($objOneField->getObjValidator());
 
         return $arrReturn;
     }
 
     /**
      * Validates the current form.
+     *
+     * @throws class_exception
      * @return bool
      */
     public function validateForm() {
@@ -128,7 +130,7 @@ class class_admin_formgenerator {
             if($objOneField->getBitMandatory()) {
                 //if field is mandatory and empty -> validation error
                 if($bitFieldIsEmpty) {
-                    $this->addValidationError($objOneField->getStrEntryName()."_empty", $objLang->getLang("commons_validator_field_empty", "system", array($objOneField->getStrLabel())));
+                    $this->addValidationError($objOneField->getStrEntryName(), $objLang->getLang("commons_validator_field_empty", "system", array($objOneField->getStrLabel())));
                 }
             }
 
@@ -421,12 +423,15 @@ class class_admin_formgenerator {
     /**
      * Loads the validator identified by the passed name.
      *
-     * @param string $strName
-     * @return interface_validator
+     * @param string $strClassname
+     *
      * @throws class_exception
+     * @return interface_validator
      */
-    private function getValidatorInstance($strName) {
-        $strClassname = "class_".$strName."_validator";
+    private function getValidatorInstance($strClassname) {
+        if(uniStrpos($strClassname, "class_") === false)
+            $strClassname = "class_".$strClassname."_validator";
+
         if(class_resourceloader::getInstance()->getPathForFile("/system/validators/".$strClassname.".php")) {
             return new $strClassname();
         }
@@ -460,7 +465,10 @@ class class_admin_formgenerator {
      * @return void
      */
     public function addValidationError($strEntry, $strMessage) {
-        $this->arrValidationErrors[$strEntry] = $strMessage;
+        if(!array_key_exists($strEntry, $this->arrValidationErrors)) {
+            $this->arrValidationErrors[$strEntry] = array();
+        }
+        $this->arrValidationErrors[$strEntry][] = $strMessage;
     }
 
     /**

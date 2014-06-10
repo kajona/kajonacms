@@ -17,6 +17,18 @@
  */
 class class_objectvalidator_helper {
 
+
+    /**
+     * Compares two dates of type class_formentry_date
+     *
+     * @param class_formentry_date $objDateLeft
+     * @param class_formentry_date $objDateRight
+     *
+     * @return int
+     *         0, if the dates are equal
+     *         1, if $objDateLeft is greater $objDateRight
+     *         -1, if $objDateLeft is less than $objDateRight
+     */
     public static function compareDates(class_formentry_date $objDateLeft, class_formentry_date $objDateRight) {
         if($objDateLeft != null && $objDateRight != null) {
 
