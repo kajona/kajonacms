@@ -28,6 +28,7 @@ class class_installer_search extends class_installer_base implements interface_i
         $arrFields["search_search_id"] 		= array("char20", false);
         $arrFields["search_search_query"] 	= array("char254", true);
         $arrFields["search_search_filter_modules"] 	= array("char254", true);
+
         $arrFields["search_search_private"] = array("int", true);
 
         if(!$this->objDB->createTable("search_search", $arrFields, array("search_search_id")))
@@ -205,10 +206,19 @@ class class_installer_search extends class_installer_base implements interface_i
             $strReturn .= $this->update_43_44();
         }
 
-        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
         if($arrModule["module_version"] == "4.4") {
-            $strReturn .= $this->update_44_45();
+            $strReturn .= "Updating 4.4 to 4.4.1...\n";
+            $strReturn .= "Updating module-versions...\n";
+            $this->updateModuleVersion("search", "4.4.1");
+            $this->updateElementVersion("search", "4.4.1");
+
         }
+
+        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "4.4.1") {
+            $strReturn .= $this->update_441_45();
+        }
+
 
         return $strReturn."\n\n";
 	}
@@ -284,8 +294,8 @@ class class_installer_search extends class_installer_base implements interface_i
         return $strReturn;
     }
 
-    private function update_44_45() {
-        $strReturn = "Updating 4.4 to 4.5...\n";
+    private function update_441_45() {
+        $strReturn = "Updating 4.4.1 to 4.5...\n";
         // Install Index
         $strReturn .= "Updating index tables...\n";
         $strQuery = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."search_ix_document")."
