@@ -1,6 +1,9 @@
 Module Search
 
 
+V4.4.1 --------------------------------------------------------------------------------------------------
+BUG / SECURITY: portal-js -> fixed a possible xss injection, the search param is now included htmlencoded an no longer as plaintext
+
 V4.4 ----------------------------------------------------------------------------------------------------
 NEW: in order to be included into a (backend) search result, the view-permission of the record and the view-permission of the matching module are required
 NEW: reintegrated the fastsearch branch. contains a new, index-based search for the backend. therefore each object is indexed during updates. each property to index is marked with @addSearchIndex. #825 all credits go to tkiefer!

@@ -26,6 +26,16 @@ class class_module_search_document {
     private $strDocumentId;
 
     /**
+     * @var string
+     */
+    private $strContentLanguage = "";
+
+    /**
+     * @var bool
+     */
+    private $bitPortalObject = false;
+
+    /**
      * @var class_module_search_content[]
      */
     private $arrContent = array();
@@ -54,6 +64,7 @@ class class_module_search_document {
 
     /**
      * @param string $strDocumentId
+     * @return void
      */
     public function setDocumentId($strDocumentId) {
         $this->strDocumentId = $strDocumentId;
@@ -68,17 +79,58 @@ class class_module_search_document {
     }
 
     /**
+     * @param boolean $bitPortalObject
+     * @return void
+     */
+    public function setBitPortalObject($bitPortalObject) {
+        $this->bitPortalObject = $bitPortalObject;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function getBitPortalObject() {
+        return $this->bitPortalObject;
+    }
+
+    /**
+     * @param string $strLanguage
+     * @return void
+     */
+    public function setStrContentLanguage($strLanguage) {
+        $this->strContentLanguage = $strLanguage;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStrContentLanguage() {
+        return $this->strContentLanguage;
+    }
+
+
+
+    /**
      * Id of the target object
      * @param string $strId
+     * @return void
      */
     public function setStrSystemId($strId) {
         $this->strSystemId = $strId;
     }
 
+    /**
+     * @param class_module_search_content $objContent
+     * @return void
+     */
     public function addContentObj(class_module_search_content $objContent) {
         $this->arrContent[] = $objContent;
     }
 
+    /**
+     * @param string $strField
+     * @param string $strContent
+     */
     public function addContent($strField, $strContent) {
         $objAnalyzer = new class_module_search_standard_analyzer();
         $objAnalyzer->analyze($strContent);

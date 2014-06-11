@@ -37,6 +37,15 @@ class class_module_search_metadata_filter {
      */
     private $arrFilterClasses = array();
 
+    /**
+     * @var bool
+     */
+    private $bitPortalSearch = false;
+
+    /**
+     * @var string
+     */
+    private $strPortalLang = null;
 
     /**
      * Adds metadata-query parts to the statement to be generated
@@ -81,6 +90,16 @@ class class_module_search_metadata_filter {
         if($this->objFilterChangeEndDate !== null) {
             $strQuery .= "AND system_lm_time <= ? ";
             $arrParams[] = $this->objFilterChangeEndDate->getTimeInOldStyle();
+        }
+
+        if($this->getBitPortalSearch()) {
+            $strQuery .= " AND D.search_ix_portal_object = 1 ";
+            $strQuery .= " AND system_status = 1 ";
+        }
+
+        if($this->getStrPortalLang() != "") {
+            $strQuery .= " AND ( D.search_ix_content_lang IS NULL OR D.search_ix_content_lang ='' OR D.search_ix_content_lang = ? )";
+            $arrParams[] = $this->getStrPortalLang();
         }
     }
 
@@ -153,6 +172,34 @@ class class_module_search_metadata_filter {
      */
     public function resetFilterChangeEndDate() {
         $this->objFilterChangeEndDate = null;
+    }
+
+    /**
+     * @param string $strPortalLang
+     */
+    public function setStrPortalLang($strPortalLang) {
+        $this->strPortalLang = $strPortalLang;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStrPortalLang() {
+        return $this->strPortalLang;
+    }
+
+    /**
+     * @param boolean $bitPortalSearch
+     */
+    public function setBitPortalSearch($bitPortalSearch) {
+        $this->bitPortalSearch = $bitPortalSearch;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function getBitPortalSearch() {
+        return $this->bitPortalSearch;
     }
 
 }

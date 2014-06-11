@@ -301,6 +301,8 @@ abstract class class_portal extends class_ui_base {
 
     /**
      * @return string
+     * @deprecated use class_module_languages_language directly
+     * @see class_module_languages_language::getPortalLanguage()
      */
     protected function getStrPortalLanguage() {
         $objLanguage = new class_module_languages_language();

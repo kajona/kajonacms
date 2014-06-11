@@ -18,7 +18,7 @@
  * @module postacomment
  * @moduleId _postacomment_modul_id_
  */
-class class_module_postacomment_post extends class_model implements interface_model, interface_sortable_rating, interface_admin_listable {
+class class_module_postacomment_post extends class_model implements interface_model, interface_sortable_rating, interface_admin_listable, interface_search_portalobject {
 
     /**
      * @var string
@@ -205,6 +205,51 @@ class class_module_postacomment_post extends class_model implements interface_mo
 
         $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, $arrParams);
         return $arrRow["COUNT(*)"];
+    }
+
+    /**
+     * Return an on-lick link for the passed object.
+     * This link is rendered by the portal search result generator, so
+     * make sure the link is a valid portal page.
+     * If you want to suppress the entry from the result, return an empty string instead.
+     * If you want to add additional entries to the result set, clone the result and modify
+     * the new instance to your needs. Pack them in an array and they'll be merged
+     * into the result set afterwards.
+     * Make sure to return the passed result-object in this array, too.
+     *
+     * @param class_search_result $objResult
+     *
+     * @see getLinkPortalHref()
+     * @return mixed
+     */
+    public function updateSearchResult(class_search_result $objResult) {
+        $objPage = new class_module_pages_page($this->getStrAssignedPage());
+        $objResult->setStrPagelink(class_link::getLinkPortal($objPage->getStrName(), "", "_self", $this->getStrTitle() != "" ? $this->getStrTitle() : $objPage->getStrName(), "", "&highlight=".urlencode(html_entity_decode($objResult->getObjSearch()->getStrQuery(), ENT_QUOTES, "UTF-8"))));
+        $objResult->setStrPagename($objPage->getStrName());
+        $objResult->setStrDescription($this->getStrComment());
+    }
+
+    /**
+     * Since the portal may be split in different languages,
+     * return the content lang of the current record using the common
+     * abbreviation such as "de" or "en".
+     * If the content is not assigned to any language, return "" instead (e.g. a single image).
+     *
+     * @return mixed
+     */
+    public function getContentLang() {
+        return $this->getStrAssignedLanguage();
+    }
+
+    /**
+     * Return an on-lick link for the passed object.
+     * This link is used by the backend-search for the autocomplete-field
+     *
+     * @see getLinkAdminHref()
+     * @return mixed
+     */
+    public function getSearchAdminLinkForObject() {
+        return "";
     }
 
 

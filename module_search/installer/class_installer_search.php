@@ -206,6 +206,20 @@ class class_installer_search extends class_installer_base implements interface_i
             $strReturn .= $this->update_43_44();
         }
 
+        if($arrModule["module_version"] == "4.4") {
+            $strReturn .= "Updating 4.4 to 4.4.1...\n";
+            $strReturn .= "Updating module-versions...\n";
+            $this->updateModuleVersion("search", "4.4.1");
+            $this->updateElementVersion("search", "4.4.1");
+
+        }
+
+        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "4.4.1") {
+            $strReturn .= $this->update_441_45();
+        }
+
+
         return $strReturn."\n\n";
 	}
 
@@ -280,6 +294,47 @@ class class_installer_search extends class_installer_base implements interface_i
         return $strReturn;
     }
 
+    private function update_441_45() {
+        $strReturn = "Updating 4.4.1 to 4.5...\n";
+        // Install Index
+        $strReturn .= "Updating index tables...\n";
+        $strQuery = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."search_ix_document")."
+                            ADD ".$this->objDB->encloseColumnName("search_ix_content_lang")." ".$this->objDB->getDatatype("char20")." NULL,
+                            ADD ".$this->objDB->encloseColumnName("search_ix_portal_object")." ".$this->objDB->getDatatype("int")." NULL";
+
+        if(!$this->objDB->_pQuery($strQuery, array()))
+            $strReturn .= "An error occurred! ...\n";
+
+        $this->objDB->_pQuery("ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."search_ix_document")." ADD INDEX ( ".$this->objDB->encloseColumnName("search_ix_content_lang")." ) ", array());
+        $this->objDB->_pQuery("ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."search_ix_document")." ADD INDEX ( ".$this->objDB->encloseColumnName("search_ix_portal_object")." ) ", array());
+
+
+        $strReturn .= "Removing old searchplugins...\n";
+        $objFilesystem = new class_filesystem();
+        foreach(class_resourceloader::getInstance()->getFolderContent("/admin/searchplugins/") as $strPath => $strFilename) {
+            $strReturn .= "Deleting ".$strPath."\n";
+            $objFilesystem->fileDelete($strPath);
+        }
+        foreach(class_resourceloader::getInstance()->getFolderContent("/portal/searchplugins/") as $strPath => $strFilename) {
+            $strReturn .= "Deleting ".$strPath."\n";
+            $objFilesystem->fileDelete($strPath);
+        }
+
+
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion("search", "4.5");
+        $this->updateElementVersion("search", "4.5");
+
+        $strReturn .= "Updating index...\n";
+        class_module_system_module::flushCache();
+        class_module_search_indexwriter::resetIndexAvailableCheck();
+        $objWorker = new class_module_search_indexwriter();
+        $objWorker->indexRebuild();
+
+
+        return $strReturn;
+    }
+
     private function install_index_tables() {
 
         //Tables for search documents
@@ -288,8 +343,10 @@ class class_installer_search extends class_installer_base implements interface_i
         $arrFields = array();
         $arrFields["search_ix_document_id"] 		= array("char20", false);
         $arrFields["search_ix_system_id"] 	        = array("char20", true);
+        $arrFields["search_ix_content_lang"] 	    = array("char20", true);
+        $arrFields["search_ix_portal_object"] 	    = array("int", true);
 
-        if(!$this->objDB->createTable("search_ix_document", $arrFields, array("search_ix_document_id"), array("search_ix_system_id"), false))
+        if(!$this->objDB->createTable("search_ix_document", $arrFields, array("search_ix_document_id"), array("search_ix_system_id", "search_ix_content_lang", "search_ix_portal_object"), false))
             $strReturn .= "An error occurred! ...\n";
 
         $strReturn .= "Installing table search_ix_content...\n";

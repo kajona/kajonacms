@@ -38,7 +38,7 @@ class class_module_search_portal_xml extends class_portal implements interface_x
         $arrResult = array();
         $objSearchCommons = new class_module_search_commons();
         if($strSearchterm != "") {
-            $arrResult = $objSearchCommons->doPortalSearch($strSearchterm);
+            $arrResult = $objSearchCommons->doPortalSearch($strSearchterm, $this->getStrPortalLanguage());
         }
 
         $strReturn .= $this->createSearchXML($strSearchterm, $arrResult);

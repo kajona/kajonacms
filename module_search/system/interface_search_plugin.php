@@ -12,23 +12,11 @@
  *
  * @package module_search
  * @author sidler@mulchprod.de
+ *
+ * @deprecated the index based search replaced the plugin based one
  */
 interface interface_search_plugin {
 
-    /**
-     * Constructor, receiving the term to search for
-     *
-     * @param class_module_search_search $objSearch as db-query
-     */
-    public function __construct(class_module_search_search $objSearch);
 
-
-    /**
-     * This method is invoked from outside, starts to search for the passed term
-     * and returns the results
-     *
-     * @return class_search_result[]
-     */
-    public function doSearch();
 
 }

@@ -16,6 +16,7 @@
  */
 interface interface_search_query {
 
+
     /**
      * @param class_module_search_metadata_filter $objMetadataFilter
      * @return mixed
@@ -26,8 +27,8 @@ interface interface_search_query {
      * This method builds the query and the matching parameters-array in order to load the list
      * of results.
      *
-     * @param string $strQuery
-     * @param string[] $arrParameters
+     * @param string &$strQuery
+     * @param string[] &$arrParameters
      *
      * @return void
      */
@@ -36,8 +37,8 @@ interface interface_search_query {
     /**
      * Generates a query to count the results matching the current terms.
      *
-     * @param string $strQuery
-     * @param string[] $arrParameters
+     * @param string &$strQuery
+     * @param string[] &$arrParameters
      *
      * @return void
      */

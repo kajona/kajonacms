@@ -650,7 +650,14 @@ class class_installer_system extends class_installer_base implements interface_i
 
         $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
         if($arrModul["module_version"] == "4.4.3") {
-            $strReturn .= $this->update_443_45();
+            $strReturn .= "Updating 4.4.3 to 4.4.4...\n";
+            $this->updateModuleVersion("", "4.4.4");
+            $this->objDB->flushQueryCache();
+        }
+
+        $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModul["module_version"] == "4.4.4") {
+            $strReturn .= $this->update_444_45();
             $this->objDB->flushQueryCache();
         }
 
@@ -1116,8 +1123,8 @@ class class_installer_system extends class_installer_base implements interface_i
         return $strReturn;
     }
 
-    private function update_443_45() {
-        $strReturn = "Updating 4.4.3 to 4.5...\n";
+    private function update_444_45() {
+        $strReturn = "Updating 4.4.4 to 4.5...\n";
 
         $strReturn .= "Updating user table...\n";
         $strQuery = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."user")."

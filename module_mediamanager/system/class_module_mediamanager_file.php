@@ -16,7 +16,7 @@
  * @module mediamanager
  * @moduleId _mediamanager_module_id_
  */
-class class_module_mediamanager_file extends class_model implements interface_model, interface_admin_gridable, interface_search_resultobject {
+class class_module_mediamanager_file extends class_model implements interface_model, interface_admin_gridable, interface_search_portalobject {
 
 
     public static $INT_TYPE_FILE = 0;
@@ -113,7 +113,82 @@ class class_module_mediamanager_file extends class_model implements interface_mo
      * @return mixed
      */
     public function getSearchAdminLinkForObject() {
-        return getLinkAdminHref("mediamanager", "edit", "&systemid=".$this->getSystemid()."&source=search");
+        return class_link::getLinkAdminHref("mediamanager", "edit", "&systemid=".$this->getSystemid()."&source=search");
+    }
+
+    /**
+     * Return an on-lick link for the passed object.
+     * This link is rendered by the portal search result generator, so
+     * make sure the link is a valid portal page.
+     * If you want to suppress the entry from the result, return an empty string instead.
+     * If you want to add additional entries to the result set, clone the result and modify
+     * the new instance to your needs. Pack them in an array and they'll be merged
+     * into the result set afterwards.
+     * Make sure to return the passed result-object in this array, too.
+     *
+     * @param class_search_result $objResult
+     *
+     * @see getLinkPortalHref()
+     * @return mixed
+     */
+    public function updateSearchResult(class_search_result $objResult) {
+        $objLanguages = new class_module_languages_language();
+
+        $strQuery =  "SELECT page_name, page_id
+                       FROM "._dbprefix_."element_downloads,
+                            "._dbprefix_."page_element,
+                            "._dbprefix_."page,
+                            "._dbprefix_."system
+                      WHERE download_id = ?
+                        AND content_id = page_element_id
+                        AND content_id = system_id
+                        AND system_prev_id = page_id
+                        AND system_status = 1
+                        AND page_element_ph_language = ? " ;
+
+        $arrRows = $this->objDB->getPArray($strQuery, array($this->getRepositoryId(), $objResult->getObjSearch()->getStrPortalLangFilter()));
+
+        $strQuery =  "SELECT page_name, page_id
+                       FROM "._dbprefix_."element_gallery,
+                            "._dbprefix_."page_element,
+                            "._dbprefix_."page,
+                            "._dbprefix_."system
+                      WHERE gallery_id = ?
+                        AND content_id = page_element_id
+                        AND content_id = system_id
+                        AND system_prev_id = page_id
+                        AND system_status = 1
+                        AND page_element_ph_language = ? " ;
+
+        $arrRows = array_merge($arrRows, $this->objDB->getPArray($strQuery, array($this->getRepositoryId(), $objLanguages->getStrPortalLanguage())));
+        $arrReturn = array();
+
+        foreach($arrRows as $arrOnePage) {
+
+            if(!isset($arrOnePage["page_name"]) || $arrOnePage["page_name"] == "" )
+                continue;
+
+            $objOneResult = clone $objResult;
+            $objOneResult->setStrPagelink(class_link::getLinkPortal($arrOnePage["page_name"], "", "_self", $this->getStrDisplayName(), "mediaFolder", "&highlight=".urlencode(html_entity_decode($objResult->getObjSearch()->getStrQuery(), ENT_QUOTES, "UTF-8")), $this->getPrevId(), "", "", $this->getStrDisplayName()));
+            $objOneResult->setStrPagename($arrOnePage["page_name"]);
+            $objOneResult->setStrDescription($this->getStrDescription());
+
+            $arrReturn[] = $objOneResult;
+        }
+
+        return $arrReturn;
+    }
+
+    /**
+     * Since the portal may be split in different languages,
+     * return the content lang of the current record using the common
+     * abbreviation such as "de" or "en".
+     * If the content is not assigned to any language, return "" instead (e.g. a single image).
+     *
+     * @return mixed
+     */
+    public function getContentLang() {
+        return "";
     }
 
 

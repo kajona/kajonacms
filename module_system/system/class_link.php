@@ -347,10 +347,12 @@ class class_link {
 
 
         //create an array out of the params
-        $strParsedSystemid = "";
-        $arrParams = self::parseParamsString($strParams, $strParsedSystemid);
-        if($strSystemid == "" && validateSystemid($strParsedSystemid))
-            $strSystemid = $strParsedSystemid;
+        if($strSystemid != "") {
+            $strParams .= "&systemid=".$strSystemid;
+            $strSystemid = "";
+        }
+
+        $arrParams = self::parseParamsString($strParams, $strSystemid);
 
         // any anchors set to the page?
         $strAnchor = "";
@@ -496,7 +498,11 @@ class class_link {
             $arrEntry = explode("=", $strValue);
 
             if(count($arrEntry) == 2 && $arrEntry[0] == "systemid") {
-                $strSystemid = $arrEntry[1];
+                //encoded and sanitized systemid param TODO: add cve number or other identifier
+                $strSystemid = urlencode($arrEntry[1]);
+                if(!validateSystemid($strSystemid))
+                    $strSystemid = "";
+
                 unset($arrParams[$strKey]);
             }
             else if($strValue == "")
