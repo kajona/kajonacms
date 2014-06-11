@@ -34,6 +34,9 @@ class class_user_validator extends class_systemid_validator {
             return false;
         }
 
+        if($objUser->getIntDeleted() == 1)
+            return false;
+
         return true;
     }
 
