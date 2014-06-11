@@ -80,7 +80,7 @@ class class_graph_flot implements interface_graph {
         
     }
 
-    public function addStackedBarChartSet($arrValues, $strLegend) {
+    public function addStackedBarChartSet($arrValues, $strLegend, $bitIsHorizontal = false) {
         if($this->objChartData == null) 
             $this->objChartData = new class_graph_flot_chartdata_base_impl();
         
@@ -317,6 +317,26 @@ class class_graph_flot implements interface_graph {
         //<!--[if lte IE 8]><script language="javascript" type="text/javascript" src="excanvas.min.js"></script><![endif]-->
         //enable tooltips
         return $strReturn;
+    }
+
+    /**
+     * Set the labels to be used for the y-axis.
+     * Make sure to set them before adding datasets!
+     *
+     * @param array $arrYAxisTickLabels array of string to be used as labels
+     * @param int $intNrOfWrittenLabels the amount of y-axis labels to be printed
+     */
+    public function setArrYAxisTickLabels($arrYAxisTickLabels, $intNrOfWrittenLabels = 12) {
+        // TODO: Implement setArrYAxisTickLabels() method.
+    }
+
+    /**
+     * @param $arrSeriesColors
+     *
+     * @return mixed
+     */
+    public function setArrSeriesColors($arrSeriesColors) {
+        // TODO: Implement setArrSeriesColors() method.
     }
 
 }

@@ -50,8 +50,9 @@ interface interface_graph {
      *
      * @param array $arrValues see the example above for the internal array-structure
      * @param string $strLegend
+     * @param bool $bitIsHorizontal
      */
-    public function addStackedBarChartSet($arrValues, $strLegend);
+    public function addStackedBarChartSet($arrValues, $strLegend, $bitIsHorizontal = false);
 
     /**
      * Registers a new plot to the current graph. Works in line-plot-mode only.
@@ -171,6 +172,15 @@ interface interface_graph {
     public function setArrXAxisTickLabels($arrXAxisTickLabels, $intNrOfWrittenLabels = 12);
 
     /**
+     * Set the labels to be used for the y-axis.
+     * Make sure to set them before adding datasets!
+     *
+     * @param array $arrYAxisTickLabels array of string to be used as labels
+     * @param int $intNrOfWrittenLabels the amount of y-axis labels to be printed
+     */
+    public function setArrYAxisTickLabels($arrYAxisTickLabels, $intNrOfWrittenLabels = 12);
+
+    /**
      * Sets if to render a legend or not
      *
      * @param bool $bitRenderLegend
@@ -198,5 +208,14 @@ interface interface_graph {
      * @param int $intXAxisAngle
      */
     public function setIntXAxisAngle($intXAxisAngle);
+
+
+    /**
+     * @param $arrSeriesColors
+     *
+     * @return mixed
+     */
+    public function setArrSeriesColors($arrSeriesColors);
+
 
 }

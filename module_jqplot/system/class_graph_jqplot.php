@@ -20,7 +20,10 @@ class class_graph_jqplot implements interface_graph {
     private $intHeight = 350;
 
     private $arrXAxisTickLabels = null;
+    private $arrYAxisTickLabels = null;
     private $intNrOfWrittenLabels = null;
+    private $arrSeriesColors =  null;
+
 
     /**
      * contains all series data per added chart
@@ -85,7 +88,9 @@ class class_graph_jqplot implements interface_graph {
                 )
             ),
             "yaxis"=> array(
+                "renderer" => null,
                 "label" => null,
+                "ticks" => null
             )
         ),
         "series" => array()
@@ -125,7 +130,7 @@ class class_graph_jqplot implements interface_graph {
             throw new class_exception("Chart already contains a stacked bar chart. Combinations of bar charts and stacked bar charts are not allowed", class_exception::$level_ERROR);
         }
 
-        $objSeriesData = new class_graph_jqplot_seriesdata(class_graph_jqplot_charttype::BAR, count($this->arrSeriesData));
+        $objSeriesData = new class_graph_jqplot_seriesdata(class_graph_jqplot_charttype::BAR, count($this->arrSeriesData), $this->arrOptions);
         $objSeriesData->setArrDataArray($arrValues);
         $objSeriesData->setStrSeriesLabel($strLegend);
         $objSeriesData->setBitWriteValues($bitWriteValues);
@@ -149,10 +154,17 @@ class class_graph_jqplot implements interface_graph {
      *
      * @param array $arrValues see the example above for the internal array-structure
      * @param string $strLegend
+     * @param string $strLegend
+     * @param bool $bitIsHorizontal
      *
      * @throws class_exception
      */
-    public function addStackedBarChartSet($arrValues, $strLegend) {
+    public function addStackedBarChartSet($arrValues, $strLegend, $bitIsHorizontal = false) {
+        $barChartType =  class_graph_jqplot_charttype::STACKEDBAR;
+        if($bitIsHorizontal) {
+            $barChartType =  class_graph_jqplot_charttype::STACKEDBAR_HORIZONTAL;
+        }
+
         if($this->containsChartType(class_graph_jqplot_charttype::PIE)) {
             throw new class_exception("Chart already contains a Pie chart. Combinations of pie charts and stacked bar charts are not allowed", class_exception::$level_ERROR);
         }
@@ -162,12 +174,27 @@ class class_graph_jqplot implements interface_graph {
         if($this->containsChartType(class_graph_jqplot_charttype::BAR)) {
             throw new class_exception("Chart already contains a bar chart. Combinations of bar charts and stacked bar charts are not allowed", class_exception::$level_ERROR);
         }
+        if($bitIsHorizontal && $this->containsChartType(class_graph_jqplot_charttype::STACKEDBAR)) {
+            throw new class_exception("Chart already contains a horizontal bar chart. Combinations of stacked bar charts and horizontal stacked bar charts are not allowed", class_exception::$level_ERROR);
+        }
+        if(!$bitIsHorizontal && $this->containsChartType(class_graph_jqplot_charttype::STACKEDBAR_HORIZONTAL)) {
+            throw new class_exception("Chart already contains a bar chart. Combinations of stacked bar charts and horizontal stacked bar charts are not allowed", class_exception::$level_ERROR);
+        }
 
-        $objSeriesData = new class_graph_jqplot_seriesdata(class_graph_jqplot_charttype::STACKEDBAR, count($this->arrSeriesData));
+        $objSeriesData = new class_graph_jqplot_seriesdata($barChartType, count($this->arrSeriesData), $this->arrOptions);
         $objSeriesData->setArrDataArray($arrValues);
         $objSeriesData->setStrSeriesLabel($strLegend);
 
-        $this->arrOptions["axes"]["xaxis"]["renderer"] = "$.jqplot.CategoryAxisRenderer";
+        if($objSeriesData->getIntChartType() == class_graph_jqplot_charttype::STACKEDBAR) {
+            $this->arrOptions["axes"]["xaxis"]["renderer"] = "$.jqplot.CategoryAxisRenderer";
+        }
+        else if($objSeriesData->getIntChartType() == class_graph_jqplot_charttype::STACKEDBAR_HORIZONTAL) {
+            $arrSeriesOptions = $objSeriesData->getArrSeriesOptions();
+            $arrSeriesOptions["pointLabels"]["show"] = true;
+            $arrSeriesOptions["pointLabels"]["labels"] = $arrValues;
+            $objSeriesData->setArrSeriesOptions($arrSeriesOptions);
+        }
+
         $this->arrOptions["stackSeries"] = true;
         $this->arrSeriesData[]=$objSeriesData;
     }
@@ -198,7 +225,7 @@ class class_graph_jqplot implements interface_graph {
             throw new class_exception("Chart already contains a stacked bar chart. Combinations of stacked bar charts and line charts are not allowed", class_exception::$level_ERROR);
         }
 
-        $objSeriesData = new class_graph_jqplot_seriesdata(class_graph_jqplot_charttype::LINE, count($this->arrSeriesData));
+        $objSeriesData = new class_graph_jqplot_seriesdata(class_graph_jqplot_charttype::LINE, count($this->arrSeriesData), $this->arrOptions);
         $objSeriesData->setArrDataArray($arrValues);
         $objSeriesData->setStrSeriesLabel($strLegend);
 
@@ -231,7 +258,7 @@ class class_graph_jqplot implements interface_graph {
             throw new class_exception("Chart already contains either a pie chart.Only one pie chart per chart is allowed", class_exception::$level_ERROR);
         }
 
-        $objSeriesData = new class_graph_jqplot_seriesdata(class_graph_jqplot_charttype::PIE, count($this->arrSeriesData));
+        $objSeriesData = new class_graph_jqplot_seriesdata(class_graph_jqplot_charttype::PIE, count($this->arrSeriesData), $this->arrOptions);
         $objSeriesData->setArrDataArray($arrValues);
 
         $this->arrXAxisTickLabels = $arrLegends;//set to this array, as the data array is built up similar
@@ -503,6 +530,21 @@ class class_graph_jqplot implements interface_graph {
     }
 
     /**
+     * Set the labels to be used for the y-axis.
+     * Make sure to set them before adding datasets!
+     *
+     * @param array $arrYAxisTickLabels array of string to be used as labels
+     * @param int $intNrOfWrittenLabels the amount of y-axis labels to be printed
+     */
+    public function setArrYAxisTickLabels($arrYAxisTickLabels, $intNrOfWrittenLabels = 12) {
+        $this->arrYAxisTickLabels = $arrYAxisTickLabels;
+        $this->intNrOfWrittenLabels = $intNrOfWrittenLabels;
+
+        $this->arrOptions["axes"]["yaxis"]["renderer"] = "$.jqplot.CategoryAxisRenderer";
+        $this->arrOptions["axes"]["yaxis"]["ticks"] = $arrYAxisTickLabels;
+    }
+
+    /**
      * Sets if to render a legend or not
      *
      * @param bool $bitRenderLegend
@@ -569,5 +611,14 @@ class class_graph_jqplot implements interface_graph {
         return $this->arrSeriesData;
     }
 
+    /**
+     * @param $arrSeriesColors
+     *
+     * @return mixed
+     */
+    public function setArrSeriesColors($arrSeriesColors) {
+        $this->arrSeriesColors = $arrSeriesColors;
+        $this->arrOptions["seriesColors"] = $arrSeriesColors;
+    }
 
 }
