@@ -17,7 +17,7 @@
  * @module pages
  * @moduleId _pages_modul_id_
  */
-class class_module_pages_page extends class_model implements interface_model, interface_versionable, interface_admin_listable, interface_search_resultobject {
+class class_module_pages_page extends class_model implements interface_model, interface_versionable, interface_admin_listable, interface_search_resultobject, interface_search_portalobject {
 
     public static $INT_TYPE_PAGE = 0;
     public static $INT_TYPE_ALIAS = 1;
@@ -155,6 +155,34 @@ class class_module_pages_page extends class_model implements interface_model, in
      */
     public function getSearchAdminLinkForObject() {
         return class_link::getLinkAdminHref("pages_content", "list", "&systemid=".$this->getSystemid());
+    }
+
+    /**
+     * Return an on-lick link for the passed object.
+     * This link is rendered by the portal search result generator, so
+     * make sure the link is a valid portal page.
+     * If you want to suppress the entry from the result, return an empty string instead.
+     *
+     * @param class_search_result $objResult
+     *
+     * @see getLinkPortalHref()
+     * @return mixed
+     */
+    public function updateSearchResult(class_search_result $objResult) {
+        $objResult->setStrPagelink(class_link::getLinkPortal($this->getStrName(), "", "_self", $this->getStrBrowsername(), "", "&highlight=".urlencode(html_entity_decode($objResult->getObjSearch()->getStrQuery(), ENT_QUOTES, "UTF-8"))));
+        $objResult->setStrPagename($this->getStrName());
+    }
+
+    /**
+     * Since the portal may be split in different languages,
+     * return the content lang of the current record using the common
+     * abbreviation such as "de" or "en".
+     * If the content is not assigned to any language, return "" instead (e.g. a single image).
+     *
+     * @return mixed
+     */
+    public function getContentLang() {
+        return $this->getStrLanguage();
     }
 
 

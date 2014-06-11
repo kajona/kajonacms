@@ -33,24 +33,50 @@ class class_module_search_commons extends class_model implements interface_model
      * Method for portal-searches.
      *
      * @param string $strSearchterm
+     * @param string $strPortalLang
      *
      * @return class_search_result[]
      */
-    public function doPortalSearch($strSearchterm) {
+    public function doPortalSearch($strSearchterm, $strPortalLang = null) {
         $strSearchterm = trim(uniStrReplace("%", "", $strSearchterm));
         if(uniStrlen($strSearchterm) == 0)
             return array();
 
+        //create a search object
         $objSearch = new class_module_search_search();
         $objSearch->setStrQuery($strSearchterm);
+        $objSearch->setBitPortalObjectFilter(true);
+        $objSearch->setStrPortalLangFilter($strPortalLang);
+
+        $arrHits = $this->doIndexedSearch($objSearch);
+
+        $arrReturn = array();
+        foreach($arrHits as $objOneResult) {
+            $objInstance = $objOneResult->getObjObject();
+
+            if($objInstance instanceof class_module_pages_pageelement) {
+                $objInstance = $objInstance->getConcreteAdminInstance();
+
+                if($objInstance != null)
+                    $objInstance->loadElementData();
+                else
+                    continue;
+            }
+
+            $arrUpdatedResults = $objInstance->updateSearchResult($objOneResult);
+            if(is_array($arrUpdatedResults)) {
+                $arrReturn = array_merge($arrReturn, $arrUpdatedResults);
+            }
+            else if($objOneResult != null && $objOneResult instanceof class_search_result)
+                $arrReturn[] = $objOneResult;
+        }
 
         //log the query
         class_module_search_log::generateLogEntry($strSearchterm);
 
-        //Search for search-plugins
-        $arrSearchPlugins = class_resourceloader::getInstance()->getFolderContent("/portal/searchplugins", array(".php"));
-        return $this->doSearch($objSearch, $arrSearchPlugins);
+        $arrReturn = $this->mergeDuplicates($arrReturn);
 
+        return $arrReturn;
     }
 
     /**
@@ -76,45 +102,6 @@ class class_module_search_commons extends class_model implements interface_model
         return $arrHits;
     }
 
-    /**
-     * Internal wrapper, triggers the final search based on search-plugins (currently portal only)
-     *
-     * @param class_module_search_search $objSearch
-     * @param interface_search_plugin[] $arrSearchPlugins
-     * @param null|callable $objSortFunc
-     *
-     * @return array|class_search_result[]
-     */
-    private function doSearch($objSearch, $arrSearchPlugins, $objSortFunc = null) {
-        $arrHits = array();
-
-        foreach($arrSearchPlugins as $strOnePlugin) {
-            //Check, if not the interface
-            if(uniStrpos($strOnePlugin, "searchdef_pages_") === false) {
-                $strClassname = str_replace(".php", "", $strOnePlugin);
-                /** @var $objPlugin interface_search_plugin */
-                $objPlugin = new $strClassname($objSearch);
-                if($objPlugin instanceof interface_search_plugin) {
-                    $arrHits = array_merge($arrHits, $objPlugin->doSearch());
-                }
-            }
-        }
-
-
-        $arrHits = $this->mergeDuplicates($arrHits);
-
-        if($objSortFunc == null) {
-            $objSortFunc = function (class_search_result $objA, class_search_result $objB) {
-                return $objA->getIntHits() < $objB->getIntHits();
-            };
-        }
-
-        //sort by hits
-        uasort($arrHits, $objSortFunc);
-
-
-        return $arrHits;
-    }
 
     /**
      * Merges duplicates in the passed array.
@@ -171,6 +158,7 @@ class class_module_search_commons extends class_model implements interface_model
             $objModule = class_module_system_module::getModuleByName($objInstance->getArrModule("modul"));
             if($objInstance != null && $objModule != null && $objInstance->rightView() && $objModule->rightView()) {
                 $objResult = new class_search_result();
+                $objResult->setObjSearch($objSearch);
                 $objResult->setObjObject($objInstance);
                 $objResult->setIntScore($arrOneRow["score"]);
                 $arrHits[] = $objResult;
@@ -214,6 +202,8 @@ class class_module_search_commons extends class_model implements interface_model
         $objMetadataFilter->setFilterModules($objSearch->getFilterModules());
         $objMetadataFilter->setFilterChangeStartDate($objSearch->getObjChangeStartdate());
         $objMetadataFilter->setFilterChangeEndDate($objSearch->getObjChangeEnddate());
+        $objMetadataFilter->setBitPortalSearch($objSearch->getBitPortalObjectFilter());
+        $objMetadataFilter->setStrPortalLang($objSearch->getStrPortalLangFilter());
         return $objMetadataFilter;
     }
 }

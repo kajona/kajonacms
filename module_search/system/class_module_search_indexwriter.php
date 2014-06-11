@@ -134,6 +134,10 @@ class class_module_search_indexwriter {
         $objSearchDocument = new class_module_search_document();
         $objSearchDocument->setDocumentId(generateSystemid());
         $objSearchDocument->setStrSystemId($objInstance->getSystemid());
+        if($objInstance instanceof interface_search_portalobject) {
+            $objSearchDocument->setBitPortalObject(true);
+            $objSearchDocument->setStrContentLanguage($objInstance->getContentLang());
+        }
 
         $objReflection = new class_reflection($objInstance);
         $arrProperties = $objReflection->getPropertiesWithAnnotation(self::STR_ANNOTATION_ADDSEARCHINDEX);
@@ -261,28 +265,28 @@ class class_module_search_indexwriter {
     }
 
     /**
-     * @param class_module_search_document $objSearchDocument
+     * @param class_module_search_document $objSearchDoc
      * @return void
      */
-    public function updateSearchDocumentToDb(class_module_search_document $objSearchDocument) {
+    public function updateSearchDocumentToDb(class_module_search_document $objSearchDoc) {
 
         if(!self::isIndexAvailable())
             return;
 
         // Delete existing entries
         if(!$this->bitSkipDeletes)
-            $this->removeRecordFromIndex($objSearchDocument->getStrSystemId());
+            $this->removeRecordFromIndex($objSearchDoc->getStrSystemId());
 
-        if(count($objSearchDocument->getContent()) == 0)
+        if(count($objSearchDoc->getContent()) == 0)
             return;
 
         //insert search document
         $strQuery = "INSERT INTO " . _dbprefix_ . "search_ix_document
-                        (search_ix_document_id, search_ix_system_id) VALUES
-                        (?, ?)";
-        $this->objDB->_pQuery($strQuery, array($objSearchDocument->getDocumentId(), $objSearchDocument->getStrSystemId()));
+                        (search_ix_document_id, search_ix_system_id, search_ix_content_lang, search_ix_portal_object) VALUES
+                        (?, ?, ?, ?)";
+        $this->objDB->_pQuery($strQuery, array($objSearchDoc->getDocumentId(), $objSearchDoc->getStrSystemId(), $objSearchDoc->getStrContentLanguage(), $objSearchDoc->getBitPortalObject()));
 
-        $this->updateSearchContentsToDb($objSearchDocument->getContent());
+        $this->updateSearchContentsToDb($objSearchDoc->getContent());
     }
 
     /**

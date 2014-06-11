@@ -17,7 +17,7 @@
  * @module news
  * @moduleId _news_module_id_
  */
-class class_module_news_news extends class_model implements interface_model, interface_admin_listable, interface_versionable {
+class class_module_news_news extends class_model implements interface_model, interface_admin_listable, interface_versionable, interface_search_portalobject {
 
     /**
      * @var string
@@ -175,6 +175,9 @@ class class_module_news_news extends class_model implements interface_model, int
     }
 
 
+    /**
+     * @return bool
+     */
     protected function updateStateToDb() {
 
         if($this->bitUpdateMemberships) {
@@ -211,6 +214,11 @@ class class_module_news_news extends class_model implements interface_model, int
         return parent::updateStateToDb();
     }
 
+    /**
+     * @param string $strNewPrevid
+     *
+     * @return bool
+     */
     public function copyObject($strNewPrevid = "") {
         $arrMemberCats = class_module_news_category::getNewsMember($this->getSystemid());
         $this->arrCats = array();
@@ -484,93 +492,252 @@ class class_module_news_news extends class_model implements interface_model, int
         return $strValue;
     }
 
+    /**
+     * Return an on-lick link for the passed object.
+     * This link is rendered by the portal search result generator, so
+     * make sure the link is a valid portal page.
+     * If you want to suppress the entry from the result, return an empty string instead.
+     * If you want to add additional entries to the result set, clone the result and modify
+     * the new instance to your needs. Pack them in an array and they'll be merged
+     * into the result set afterwards.
+     * Make sure to return the passed result-object in this array, too.
+     *
+     * @param class_search_result $objResult
+     *
+     * @see getLinkPortalHref()
+     * @return mixed
+     */
+    public function updateSearchResult(class_search_result $objResult) {
+        $strQuery = "SELECT news_detailspage
+                       FROM "._dbprefix_."element_news,
+                            "._dbprefix_."news_member,
+                            "._dbprefix_."news,
+                            "._dbprefix_."page_element,
+                            "._dbprefix_."page,
+                            "._dbprefix_."system
+                      WHERE news_id = ?
+                        AND content_id = page_element_id
+                        AND content_id = system_id
+                        AND ( news_category = '0' OR (
+                                news_category = newsmem_category
+                                AND newsmem_news = news_id
+                           )
+                        )
+                        AND system_prev_id = page_id
+                        AND system_status = 1
+                        AND news_view = 0
+                        AND page_element_ph_language = ? ";
 
+        $arrRows = $this->objDB->getPArray($strQuery, array($this->getSystemid(), $objResult->getObjSearch()->getStrPortalLangFilter()));
+
+        $arrReturn = array();
+        foreach($arrRows as $arrOnePage) {
+
+            //check, if the post is available on a page using the current language
+            if(!isset($arrOnePage["news_detailspage"]) || $arrOnePage["news_detailspage"] == "")
+                continue;
+
+            $objDetails = class_module_pages_page::getPageByName($arrOnePage["news_detailspage"]);
+
+            if($objDetails == null)
+                continue;
+
+            //TODO: PV position
+            $objOneResult = clone $objResult;
+            $objOneResult->setStrPagelink(class_link::getLinkPortal($arrOnePage["news_detailspage"], "", "_self", $this->getStrTitle(), "newsDetail", "&highlight=".urlencode(html_entity_decode($objResult->getObjSearch()->getStrQuery(), ENT_QUOTES, "UTF-8")), $this->getSystemid()));
+            $objOneResult->setStrPagename($arrOnePage["news_detailspage"]);
+            $objOneResult->setStrDescription($this->getStrIntro());
+
+            $arrReturn[] = $objOneResult;
+        }
+        return $arrReturn;
+    }
+
+    /**
+     * Since the portal may be split in different languages,
+     * return the content lang of the current record using the common
+     * abbreviation such as "de" or "en".
+     * If the content is not assigned to any language, return "" instead (e.g. a single image).
+     *
+     * @return mixed
+     */
+    public function getContentLang() {
+        //see if the entry is assigned to a language
+        $objSet = class_module_languages_languageset::getLanguagesetForSystemid($this->getSystemid());
+        if($objSet != null && $objSet->getLanguageidForSystemid($this->getSystemid()) !== null) {
+            $objLang = new class_module_languages_language($objSet->getLanguageidForSystemid($this->getSystemid()));
+            return $objLang->getStrName();
+        }
+
+        return "";
+    }
+
+    /**
+     * Return an on-lick link for the passed object.
+     * This link is used by the backend-search for the autocomplete-field
+     *
+     * @see getLinkAdminHref()
+     * @return mixed
+     */
+    public function getSearchAdminLinkForObject() {
+        return "";
+    }
+
+
+    /**
+     * @return string
+     */
     public function getStrTitle() {
         return $this->strTitle;
     }
 
+    /**
+     * @return string
+     */
     public function getStrIntro() {
         return $this->strIntro;
     }
 
+    /**
+     * @return string
+     */
     public function getStrText() {
         return $this->strText;
     }
 
+    /**
+     * @return string
+     */
     public function getStrImage() {
         return $this->strImage;
     }
 
+    /**
+     * @return int
+     */
     public function getIntHits() {
         return $this->intHits;
     }
 
 
+    /**
+     * @param class_date $objEndDate
+     * @return void
+     */
     public function setObjDateEnd($objEndDate) {
         if($objEndDate == "")
             $objEndDate = null;
         $this->setObjEndDate($objEndDate);
     }
 
+    /**
+     * @return class_date
+     */
     public function getObjDateEnd() {
         return $this->getObjEndDate();
     }
 
+    /**
+     * @param class_date $objDateSpecial
+     * @return void
+     */
     public function setObjDateSpecial($objDateSpecial) {
         if($objDateSpecial == "")
             $objDateSpecial = null;
         $this->setObjSpecialDate($objDateSpecial);
     }
 
+    /**
+     * @return class_date
+     */
     public function getObjDateSpecial() {
         return $this->getObjSpecialDate();
     }
 
+    /**
+     * @param class_date $objStartDate
+     * @return void
+     */
     public function setObjDateStart($objStartDate) {
         if($objStartDate == "")
             $objStartDate = null;
         $this->setObjStartDate($objStartDate);
     }
 
+    /**
+     * @return class_date
+     */
     public function getObjDateStart() {
         return $this->getObjStartDate();
     }
 
+    /**
+     * @return null
+     */
     public function getArrCats() {
         return $this->arrCats;
     }
 
+    /**
+     * @param string $strTitle
+     * @return void
+     */
     public function setStrTitle($strTitle) {
         $this->strTitle = $strTitle;
         $this->bitTitleChanged = true;
     }
 
+    /**
+     * @param string $strIntro
+     * @return void
+     */
     public function setStrIntro($strIntro) {
         $this->strIntro = $strIntro;
     }
 
+    /**
+     * @param string $strText
+     * @return void
+     */
     public function setStrText($strText) {
         $this->strText = $strText;
     }
 
+    /**
+     * @param string $strImage
+     * @return void
+     */
     public function setStrImage($strImage) {
         $this->strImage = $strImage;
     }
 
+    /**
+     * @param int $intHits
+     * @return void
+     */
     public function setIntHits($intHits) {
         $this->intHits = $intHits;
     }
 
+    /**
+     * @param string[] $arrCats
+     * @return void
+     */
     public function setArrCats($arrCats) {
         $this->arrCats = $arrCats;
     }
 
+    /**
+     * @param bool $bitUpdateMemberships
+     * @return void
+     */
     public function setBitUpdateMemberships($bitUpdateMemberships) {
         $this->bitUpdateMemberships = $bitUpdateMemberships;
     }
 
     /**
      * @param int $intRedirectEnabled
+     * @return void
      */
     public function setIntRedirectEnabled($intRedirectEnabled) {
         $this->intRedirectEnabled = $intRedirectEnabled;
@@ -585,6 +752,7 @@ class class_module_news_news extends class_model implements interface_model, int
 
     /**
      * @param string $strRedirectPage
+     * @return void
      */
     public function setStrRedirectPage($strRedirectPage) {
         $this->strRedirectPage = $strRedirectPage;
