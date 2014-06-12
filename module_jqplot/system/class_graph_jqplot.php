@@ -82,6 +82,8 @@ class class_graph_jqplot implements interface_graph {
             "xaxis"=> array(
                 "renderer" => null,
                 "label" => null,
+                "max" => null,
+                "min" => null,
                 "ticks" => null,
                 "tickOptions" => array(
                     "angle" => null
@@ -90,6 +92,8 @@ class class_graph_jqplot implements interface_graph {
             "yaxis"=> array(
                 "renderer" => null,
                 "label" => null,
+                "max" => null,
+                "min" => null,
                 "ticks" => null
             )
         ),
@@ -192,6 +196,7 @@ class class_graph_jqplot implements interface_graph {
             $arrSeriesOptions = $objSeriesData->getArrSeriesOptions();
             $arrSeriesOptions["pointLabels"]["show"] = true;
             $arrSeriesOptions["pointLabels"]["hideZeros"] = true;
+            $arrSeriesOptions["pointLabels"]["formatString"] = '%s';
             $objSeriesData->setArrSeriesOptions($arrSeriesOptions);
         }
 
@@ -525,13 +530,14 @@ class class_graph_jqplot implements interface_graph {
      * @param int $intNrOfWrittenLabels the amount of x-axis labels to be printed
      */
     public function setArrXAxisTickLabels($arrXAxisTickLabels, $intNrOfWrittenLabels = 12) {
-        $this->arrXAxisTickLabels = $arrXAxisTickLabels;
+        if($arrXAxisTickLabels != null && is_array($arrXAxisTickLabels)) {
+            $this->arrXAxisTickLabels = $arrXAxisTickLabels;
+            $this->arrOptions["axes"]["xaxis"]["renderer"] = "$.jqplot.CategoryAxisRenderer";
+            $this->arrOptions["axes"]["xaxis"]["ticks"] = $arrXAxisTickLabels;
+        }
+
         $this->intNrOfWrittenLabelsXAxis = $intNrOfWrittenLabels;
-
-        $this->arrOptions["axes"]["xaxis"]["renderer"] = "$.jqplot.CategoryAxisRenderer";
-        $this->arrOptions["axes"]["xaxis"]["ticks"] = $arrXAxisTickLabels;
-
-        if($intNrOfWrittenLabels == 123) {
+        if($intNrOfWrittenLabels == 0) {
             $this->arrOptions["axes"]["xaxis"]["showTicks"] = false;
         }
     }
@@ -544,12 +550,13 @@ class class_graph_jqplot implements interface_graph {
      * @param int $intNrOfWrittenLabels the amount of y-axis labels to be printed
      */
     public function setArrYAxisTickLabels($arrYAxisTickLabels, $intNrOfWrittenLabels = 12) {
-        $this->arrYAxisTickLabels = $arrYAxisTickLabels;
+        if($arrYAxisTickLabels != null && is_array($arrYAxisTickLabels)) {
+            $this->arrYAxisTickLabels = $arrYAxisTickLabels;
+            $this->arrOptions["axes"]["yaxis"]["renderer"] = "$.jqplot.CategoryAxisRenderer";
+            $this->arrOptions["axes"]["yaxis"]["ticks"] = $arrYAxisTickLabels;
+        }
+
         $this->intNrOfWrittenLabelsYAxis = $intNrOfWrittenLabels;
-
-        $this->arrOptions["axes"]["yaxis"]["renderer"] = "$.jqplot.CategoryAxisRenderer";
-        $this->arrOptions["axes"]["yaxis"]["ticks"] = $arrYAxisTickLabels;
-
         if($intNrOfWrittenLabels == 0) {
             $this->arrOptions["axes"]["yaxis"]["showTicks"] = false;
         }
@@ -630,6 +637,17 @@ class class_graph_jqplot implements interface_graph {
     public function setArrSeriesColors($arrSeriesColors) {
         $this->arrSeriesColors = $arrSeriesColors;
         $this->arrOptions["seriesColors"] = $arrSeriesColors;
+    }
+
+
+    public function setXAxisRange($intMin, $intMax) {
+        $this->arrOptions["axes"]["xaxis"]["min"] = $intMin;
+        $this->arrOptions["axes"]["xaxis"]["max"] = $intMax;
+    }
+
+    public function setYAxisRange($intMin, $intMax) {
+        $this->arrOptions["axes"]["yaxis"]["min"] = $intMin;
+        $this->arrOptions["axes"]["yaxis"]["max"] = $intMax;
     }
 
 }
