@@ -146,7 +146,7 @@ class class_test_charts_jqPlotTest extends class_testbase  {
         $objGraph->addStackedBarChartSet(array(8, -5, 7, 8, 4, 12, 1, 1, 1, 3, 4, 5, 6), "serie 1", true);
         $objGraph->addStackedBarChartSet(array(3, -4, 6, 2, 5, 2, 2, 2, 2, 3, 4, 5, 6), "serie 2", true);
         $objGraph->addStackedBarChartSet(array(3, -4, 6, 2, 5, 2, 2, 2, 2, 3, 4, 5, 6), "serie 3", true);
-        $objGraph->setArrYAxisTickLabels(array("v1", "v2", "v3", "v4", "v5", "v6", "v7", "v8", "v9", "v10", "v11", "v12", "v13"));
+        $objGraph->setArrYAxisTickLabels(array("v1", "v2", "v3", "v4", "v5", "v6", "v7", "v8", "v9", "v10", "v11", "v12", "v13"), 5);
         $objGraph->setIntXAxisAngle(-20);
         $objGraph->setStrFont("open sans");
         echo $objGraph->renderGraph();

@@ -16,21 +16,35 @@ KAJONA.admin.jqplotHelper = {
      * @param strChartId
      * @param intNoOfWrittenLabels
      */
-    setLabelsInvisible : function(strChartId, intNoOfWrittenLabels) {
-        if(intNoOfWrittenLabels<=2) intNoOfWrittenLabels = 3;
-
-        //get the xaxis canvas ticks
-        var tickArray = $('#'+strChartId+' div.jqplot-xaxis canvas.jqplot-xaxis-tick');
+    setLabelsInvisible : function(strChartId, intNoOfWrittenLabels, strAxis) {
+        //get the axis canvas ticks
+        var tickArray = $('#'+strChartId+' div.jqplot-'+strAxis+' canvas.jqplot-'+strAxis+'-tick');
         var noOfTicks = tickArray.length;
 
         if(noOfTicks > intNoOfWrittenLabels) {
-            var modulo = Math.ceil(noOfTicks/(intNoOfWrittenLabels-2));//-2 because first and last will always be rendered
+            var modulo = Math.ceil(noOfTicks/(intNoOfWrittenLabels));
 
-            //first and last tick will never be set invsible, that's we start from i=1 and end at tickArray.length-1
-            for(var i = 1; i<tickArray.length-1; i++ ) {
+            var startFor = 0;
+            var endFor = noOfTicks
+            var numberTicksNotInvisible = 0;
+
+            //always keep first an last visible
+            if(intNoOfWrittenLabels >=2) {
+                startFor = 1;
+                endFor = noOfTicks-1;
+                numberTicksNotInvisible = 2;
+            }
+
+            for(var i = startFor; i<endFor; i++ ) {
+                if(numberTicksNotInvisible == intNoOfWrittenLabels) {
+                    $(tickArray[i]).css('display', 'none')
+                    continue;
+                }
                 if((i%modulo)!=0) {
                     $(tickArray[i]).css('display', 'none')
+                    continue;
                 }
+                numberTicksNotInvisible++;
             }
         }
     },

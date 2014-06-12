@@ -21,7 +21,8 @@ class class_graph_jqplot implements interface_graph {
 
     private $arrXAxisTickLabels = null;
     private $arrYAxisTickLabels = null;
-    private $intNrOfWrittenLabels = null;
+    private $intNrOfWrittenLabelsXAxis = null;
+    private $intNrOfWrittenLabelsYAxis = null;
     private $arrSeriesColors =  null;
 
 
@@ -82,7 +83,6 @@ class class_graph_jqplot implements interface_graph {
                 "renderer" => null,
                 "label" => null,
                 "ticks" => null,
-                "numberTicks" => null,
                 "tickOptions" => array(
                     "angle" => null
                 )
@@ -191,7 +191,7 @@ class class_graph_jqplot implements interface_graph {
         else if($objSeriesData->getIntChartType() == class_graph_jqplot_charttype::STACKEDBAR_HORIZONTAL) {
             $arrSeriesOptions = $objSeriesData->getArrSeriesOptions();
             $arrSeriesOptions["pointLabels"]["show"] = true;
-            $arrSeriesOptions["pointLabels"]["labels"] = $arrValues;
+            $arrSeriesOptions["pointLabels"]["hideZeros"] = true;
             $objSeriesData->setArrSeriesOptions($arrSeriesOptions);
         }
 
@@ -322,8 +322,11 @@ class class_graph_jqplot implements interface_graph {
         $strChartCode .= "$.jqplot('".$strChartId."',".$strData.",".$strOptions.");";
 
         //if this variable is set ticks may be set invisible
-        if($this->intNrOfWrittenLabels != null) {
-            $strChartCode .= "KAJONA.admin.jqplotHelper.setLabelsInvisible('".$strChartId."',".$this->intNrOfWrittenLabels.");";
+        if($this->intNrOfWrittenLabelsXAxis != null) {
+            $strChartCode .= "KAJONA.admin.jqplotHelper.setLabelsInvisible('".$strChartId."',".$this->intNrOfWrittenLabelsXAxis.", 'xaxis');";
+        }
+        if($this->intNrOfWrittenLabelsYAxis != null) {
+            $strChartCode .= "KAJONA.admin.jqplotHelper.setLabelsInvisible('".$strChartId."',".$this->intNrOfWrittenLabelsYAxis.", 'yaxis');";
         }
 
         $strChartCode .= "$('#".$strChartId."').bind('jqplotMouseMove', function (ev, gridpos, datapos, neighbor, plot) {KAJONA.admin.jqplotHelper.mouseMove(ev, gridpos, datapos, neighbor, plot, '".$strTooltipId."')});";
@@ -523,10 +526,14 @@ class class_graph_jqplot implements interface_graph {
      */
     public function setArrXAxisTickLabels($arrXAxisTickLabels, $intNrOfWrittenLabels = 12) {
         $this->arrXAxisTickLabels = $arrXAxisTickLabels;
-        $this->intNrOfWrittenLabels = $intNrOfWrittenLabels;
+        $this->intNrOfWrittenLabelsXAxis = $intNrOfWrittenLabels;
 
         $this->arrOptions["axes"]["xaxis"]["renderer"] = "$.jqplot.CategoryAxisRenderer";
         $this->arrOptions["axes"]["xaxis"]["ticks"] = $arrXAxisTickLabels;
+
+        if($intNrOfWrittenLabels == 123) {
+            $this->arrOptions["axes"]["xaxis"]["showTicks"] = false;
+        }
     }
 
     /**
@@ -538,10 +545,14 @@ class class_graph_jqplot implements interface_graph {
      */
     public function setArrYAxisTickLabels($arrYAxisTickLabels, $intNrOfWrittenLabels = 12) {
         $this->arrYAxisTickLabels = $arrYAxisTickLabels;
-        $this->intNrOfWrittenLabels = $intNrOfWrittenLabels;
+        $this->intNrOfWrittenLabelsYAxis = $intNrOfWrittenLabels;
 
         $this->arrOptions["axes"]["yaxis"]["renderer"] = "$.jqplot.CategoryAxisRenderer";
         $this->arrOptions["axes"]["yaxis"]["ticks"] = $arrYAxisTickLabels;
+
+        if($intNrOfWrittenLabels == 0) {
+            $this->arrOptions["axes"]["yaxis"]["showTicks"] = false;
+        }
     }
 
     /**
