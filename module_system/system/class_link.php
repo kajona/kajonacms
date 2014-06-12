@@ -499,8 +499,8 @@ class class_link {
 
             if(count($arrEntry) == 2 && $arrEntry[0] == "systemid") {
                 //encoded and sanitized systemid param TODO: add cve number or other identifier
-                $strSystemid = urlencode($arrEntry[1]);
-                if(!validateSystemid($strSystemid))
+                $strSystemid = $arrEntry[1];
+                if(!validateSystemid($strSystemid) && $strSystemid != "%systemid%")
                     $strSystemid = "";
 
                 unset($arrParams[$strKey]);
