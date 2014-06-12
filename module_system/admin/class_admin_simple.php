@@ -123,7 +123,7 @@ abstract class class_admin_simple extends class_admin {
 
             }
 
-            $this->adminReload(_indexpath_."?".$strTargetUrl.($this->getParam("pe") != "" ? "&peClose=1" : ""));
+            $this->adminReload(_indexpath_."?".$strTargetUrl.($this->getParam("pe") != "" ? "&peClose=1&blockAction=1" : ""));
         }
         else
             throw new class_exception("error loading object ".$this->getSystemid(), class_exception::$level_ERROR);

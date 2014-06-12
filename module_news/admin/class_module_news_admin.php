@@ -347,7 +347,7 @@ class class_module_news_admin extends class_admin_evensimpler implements interfa
             $objNews->setBitUpdateMemberships(true);
             $objNews->updateObjectToDb();
 
-            $this->adminReload(getLinkAdminHref($this->arrModule["modul"], $this->getActionNameForClass("list", $objNews), ($this->getParam("pe") != "" ? "&peClose=1" : "")));
+            $this->adminReload(getLinkAdminHref($this->arrModule["modul"], $this->getActionNameForClass("list", $objNews), ($this->getParam("pe") != "" ? "&peClose=1&blockAction=1" : "")));
             return "";
         }
 

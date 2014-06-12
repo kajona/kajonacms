@@ -170,7 +170,7 @@ class class_module_faqs_admin extends class_admin_evensimpler implements interfa
             $objFaq->setUpdateBitMemberships(true);
             $objFaq->updateObjectToDb();
 
-            $this->adminReload(getLinkAdminHref($this->getArrModule("modul"), "", ($this->getParam("pe") != "" ? "&peClose=1" : "")));
+            $this->adminReload(getLinkAdminHref($this->getArrModule("modul"), "", ($this->getParam("pe") != "" ? "&peClose=1&blockAction=1" : "")));
             return "";
         }
 

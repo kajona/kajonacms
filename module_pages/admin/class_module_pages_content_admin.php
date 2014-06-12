@@ -658,7 +658,7 @@ class class_module_pages_content_admin extends class_admin_simple implements int
                     $this->setSystemid($objNewElement->getSystemid());
                     $strReturn = "";
 
-                    $this->adminReload(getLinkAdminHref("pages_content", "list", "systemid=".$objNewElement->getPrevId()."&peClose=1"));
+                    $this->adminReload(getLinkAdminHref("pages_content", "list", "systemid=".$objNewElement->getPrevId()."&blockAction=1&peClose=1"));
                 }
                 else
                     throw new class_exception("Error copying the pageelement ".$objSourceElement->getSystemid(), class_exception::$level_ERROR);

@@ -106,7 +106,7 @@ class class_module_search_admin extends class_admin_simple implements interface_
 
             $objSearch->updateObjectToDb();
 
-            $this->adminReload(class_link::getLinkAdminHref($this->getArrModule("modul"), "", ($this->getParam("pe") != "" ? "&peClose=1" : "")));
+            $this->adminReload(class_link::getLinkAdminHref($this->getArrModule("modul"), "", ($this->getParam("pe") != "" ? "&peClose=1&blockAction=1" : "")));
             return "";
         }
 

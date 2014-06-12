@@ -231,7 +231,7 @@ class class_module_system_admin extends class_admin_simple implements interface_
         $objModule->setStrAspect(implode(",", $arrParams));
 
         $objModule->updateObjectToDb();
-        $this->adminReload(class_link::getLinkAdminHref($this->getArrModule("modul"), "list", "peClose=1"));
+        $this->adminReload(class_link::getLinkAdminHref($this->getArrModule("modul"), "list", "peClose=1&blockAction=1"));
     }
 
 

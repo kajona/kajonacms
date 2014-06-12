@@ -558,7 +558,7 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
             throw new class_exception("Error saving new page to db", class_exception::$level_ERROR);
 
         if($this->getParam("pe") != "")
-            $this->adminReload(class_link::getLinkAdminHref($this->getArrModule("modul"), "list", "&peClose=1&peRefreshPage=".urlencode(class_link::getLinkPortalHref($objPage->getStrName()))));
+            $this->adminReload(class_link::getLinkAdminHref($this->getArrModule("modul"), "list", "&peClose=1&blockAction=1&peRefreshPage=".urlencode(class_link::getLinkPortalHref($objPage->getStrName()))));
         else
             $this->adminReload(class_link::getLinkAdminHref($this->getArrModule("modul"), "list", "systemid=".$objPage->getPrevId()));
 
@@ -677,7 +677,7 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
         $objForm->updateSourceObject();
 
         $objFolder->updateObjectToDb();
-        $this->adminReload(class_link::getLinkAdminHref($this->getArrModule("modul"), "list", "&peClose=1"));
+        $this->adminReload(class_link::getLinkAdminHref($this->getArrModule("modul"), "list", "&blockAction=1&peClose=1"));
 
         return "";
     }

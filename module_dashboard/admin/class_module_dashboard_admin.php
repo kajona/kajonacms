@@ -369,7 +369,7 @@ JS;
             if(!$objDashboardwidget->updateObjectToDb())
                 throw new class_exception("Error updating widget to db!", class_exception::$level_ERROR);
 
-            $this->adminReload(getLinkAdminHref($this->getArrModule("modul"), "", "&peClose=1"));
+            $this->adminReload(getLinkAdminHref($this->getArrModule("modul"), "", "&peClose=1&blockAction=1"));
         }
 
         return $strReturn;

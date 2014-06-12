@@ -454,7 +454,7 @@ HTML;
         if($this->getParam("source") != "")
             $this->adminReload(class_link::getLinkAdminHref($this->getArrModule("modul"), "openFolder", "&systemid=".$objFile->getPrevId()));
         else
-            $this->adminReload(class_link::getLinkAdminHref($this->getArrModule("modul"), "openFolder", "&peClose=1&systemid=".$objFile->getPrevId()));
+            $this->adminReload(class_link::getLinkAdminHref($this->getArrModule("modul"), "openFolder", "&peClose=1&blockAction=1&systemid=".$objFile->getPrevId()));
         return "";
 
 

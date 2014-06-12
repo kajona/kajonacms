@@ -1145,7 +1145,7 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
             }
         }
 
-        $this->adminReload(class_link::getLinkAdminHref($this->getArrModule("modul"), "list", "&peClose=1"));
+        $this->adminReload(class_link::getLinkAdminHref($this->getArrModule("modul"), "list", "&peClose=1&blockAction=1"));
     }
 
 
