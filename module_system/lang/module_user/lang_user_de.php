@@ -144,6 +144,7 @@ $lang["user_liste"]                      = "Alle Benutzer";
 $lang["user_loeschen_erfolg"]            = "Benutzer erfolgreich gelöscht";
 $lang["user_loeschen_fehler"]            = "Fehler beim Löschen des Benutzers";
 $lang["user_loeschen_frage"]             = "Möchten Sie den Benutzer &quot;<b>%%element_name%%</b>&quot; wirklich löschen?";
+$lang["user_loeschen_x"]                 = "Der eigene Benutzer kann nicht gelöscht werden";
 $lang["user_logins"]                     = "Logins";
 $lang["user_memberships"]                = "Gruppenzugehörigkeit des Benutzers ";
 $lang["user_password_resend"]            = "Neues Passwort zusenden";

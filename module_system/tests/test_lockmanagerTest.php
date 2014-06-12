@@ -39,6 +39,7 @@ class class_test_lockmanagerTest extends class_testbase  {
         $this->assertTrue(!$objAspect->getLockManager()->isLockedByCurrentUser());
 
 
+        class_carrier::getInstance()->getObjSession()->logout();
         $objAspect = new class_module_system_aspect($strAspectId);
         $objAspect->deleteObject();
         $objUser->deleteObject();
@@ -130,6 +131,7 @@ class class_test_lockmanagerTest extends class_testbase  {
         $this->assertTrue(!$objAspect->getLockManager()->isLockedByCurrentUser());
 
 
+        class_carrier::getInstance()->getObjSession()->logout();
         $objAspect = new class_module_system_aspect($strAspectId);
         $objAspect->deleteObject();
         $objUser1->deleteObject();
@@ -173,7 +175,7 @@ class class_test_lockmanagerTest extends class_testbase  {
         $this->assertNotNull($objException);
         $this->assertEquals($intSort, $objAspect->getIntSort());
 
-
+        class_carrier::getInstance()->getObjSession()->logout();
         $objAspect = new class_module_system_aspect($strAspectId);
         $objAspect->deleteObject();
         $objUser1->deleteObject();

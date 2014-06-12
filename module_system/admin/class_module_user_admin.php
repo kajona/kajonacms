@@ -139,7 +139,14 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
      */
     protected function renderDeleteAction(interface_model $objListEntry) {
         if($objListEntry instanceof class_module_user_user && $objListEntry->rightDelete()) {
-            return $this->objToolkit->listDeleteButton($objListEntry->getStrDisplayName(), $this->getLang("user_loeschen_frage"), class_link::getLinkAdminHref($this->getArrModule("modul"), "deleteUser", "&systemid=" . $objListEntry->getSystemid()));
+
+            if($objListEntry->getSystemid() == class_carrier::getInstance()->getObjSession()->getUserID()) {
+                return $this->objToolkit->listButton(class_adminskin_helper::getAdminImage("icon_deleteDisabled", $this->getLang("user_loeschen_x")));
+            }
+            else {
+                return $this->objToolkit->listDeleteButton($objListEntry->getStrDisplayName(), $this->getLang("user_loeschen_frage"), class_link::getLinkAdminHref($this->getArrModule("modul"), "deleteUser", "&systemid=" . $objListEntry->getSystemid()));
+            }
+
         }
 
         if($objListEntry instanceof class_module_user_group) {

@@ -508,7 +508,7 @@ final class class_session {
         //start a new one
         $this->sessionStart();
         //and create a new sessid
-        session_regenerate_id();
+        @session_regenerate_id();
         $this->initInternalSession();
         return;
     }

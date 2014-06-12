@@ -143,6 +143,7 @@ $lang["user_liste"]                      = "All users";
 $lang["user_loeschen_erfolg"]            = "User was deleted successfully";
 $lang["user_loeschen_fehler"]            = "An error occurred while deleting user";
 $lang["user_loeschen_frage"]             = "Do you really want to delete the user &quot;<b>%%element_name%%</b>&quot;?";
+$lang["user_loeschen_x"]                 = "You can't delete yourself";
 $lang["user_logins"]                     = "Logins";
 $lang["user_memberships"]                = "Group assignments of user ";
 $lang["user_password_resend"]            = "Send a new password";
