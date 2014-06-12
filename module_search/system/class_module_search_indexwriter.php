@@ -284,7 +284,7 @@ class class_module_search_indexwriter {
         $strQuery = "INSERT INTO " . _dbprefix_ . "search_ix_document
                         (search_ix_document_id, search_ix_system_id, search_ix_content_lang, search_ix_portal_object) VALUES
                         (?, ?, ?, ?)";
-        $this->objDB->_pQuery($strQuery, array($objSearchDoc->getDocumentId(), $objSearchDoc->getStrSystemId(), $objSearchDoc->getStrContentLanguage(), $objSearchDoc->getBitPortalObject()));
+        $this->objDB->_pQuery($strQuery, array($objSearchDoc->getDocumentId(), $objSearchDoc->getStrSystemId(), $objSearchDoc->getStrContentLanguage(), $objSearchDoc->getBitPortalObject() ? 1 : 0));
 
         $this->updateSearchContentsToDb($objSearchDoc->getContent());
     }
