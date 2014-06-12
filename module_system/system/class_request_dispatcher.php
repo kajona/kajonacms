@@ -166,18 +166,24 @@ class class_request_dispatcher {
                         }
 
                         $objConcreteModule = $objModuleRequested->getAdminInstanceOfConcreteModule();
-                        //$objConcreteModule->action($strAction);
-                        $objConcreteModule->action();
-                        $strReturn = $objConcreteModule->getModuleOutput();
+
 
                         //React, if admin was opened by the portaleditor
                         if(class_carrier::getInstance()->getParam("peClose") == "1") {
+
+                            if(class_carrier::getInstance()->getParam("blockAction") != "1")
+                                $objConcreteModule->action();
+
                             if(getGet("peRefreshPage") != "") {
                                 $strReturn = "<html><head></head><body onload=\"parent.location = '" . urldecode(getGet("peRefreshPage")) . "';\"></body></html>";
                             }
                             else {
                                 $strReturn = "<html><head></head><body onload=\"parent.location.reload();\"></body></html>";
                             }
+                        }
+                        else {
+                            $objConcreteModule->action();
+                            $strReturn = $objConcreteModule->getModuleOutput();
                         }
 
                     }
