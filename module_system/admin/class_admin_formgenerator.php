@@ -176,19 +176,19 @@ class class_admin_formgenerator {
             $strReturn .= $objToolkit->formOptionalElementsWrapper($strHidden, $this->strHiddenGroupTitle, $this->bitHiddenElementsVisible);
 
         if($intButtonConfig & self::BIT_BUTTON_SUBMIT)
-            $strReturn .= $objToolkit->formInputSubmit(class_lang::getInstance()->getLang("commons_submit", "system"), "submit");
+            $strReturn .= $objToolkit->formInputSubmit(class_lang::getInstance()->getLang("commons_submit", "system"), "submitbtn");
 
         if($intButtonConfig & self::BIT_BUTTON_SAVE)
-            $strReturn .= $objToolkit->formInputSubmit(class_lang::getInstance()->getLang("commons_save", "system"), "submit");
+            $strReturn .= $objToolkit->formInputSubmit(class_lang::getInstance()->getLang("commons_save", "system"), "submitbtn");
 
         if($intButtonConfig & self::BIT_BUTTON_CANCEL)
-            $strReturn .= $objToolkit->formInputSubmit(class_lang::getInstance()->getLang("commons_cancel", "system"), "cancel");
+            $strReturn .= $objToolkit->formInputSubmit(class_lang::getInstance()->getLang("commons_cancel", "system"), "cancelbtn");
 
         if($intButtonConfig & self::BIT_BUTTON_CLOSE)
-            $strReturn .= $objToolkit->formInputSubmit(class_lang::getInstance()->getLang("commons_close", "system"), "submit");
+            $strReturn .= $objToolkit->formInputSubmit(class_lang::getInstance()->getLang("commons_close", "system"), "submitbtn");
 
         if($intButtonConfig & self::BIT_BUTTON_DELETE)
-            $strReturn .= $objToolkit->formInputSubmit(class_lang::getInstance()->getLang("commons_delete", "system"), "submit");
+            $strReturn .= $objToolkit->formInputSubmit(class_lang::getInstance()->getLang("commons_delete", "system"), "submitbtn");
 
         if($intButtonConfig & self::BIT_BUTTON_RESET)
             $strReturn .= $objToolkit->formInputSubmit(class_lang::getInstance()->getLang("commons_reset", "system"), "reset", "", "cancelbutton");
