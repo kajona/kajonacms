@@ -358,7 +358,7 @@ Dropdown
         var id = id.replace("]", "\\]");
         $(id).chosen();
         if($(id).hasClass("mandatoryFormElement"))
-            $(id+'_chzn').addClass("mandatoryFormElement");
+            $(id+'_chosen').addClass("mandatoryFormElement");
     }, true);
     </script>
 </input_dropdown>
