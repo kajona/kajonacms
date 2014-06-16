@@ -454,25 +454,25 @@ class class_db_sqlite3 extends class_db_base  {
     public function getDatatype($strType) {
         $strReturn = "";
 
-        if($strType == "int")
+        if($strType == class_db_datatypes::STR_TYPE_INT)
             $strReturn .= " INTEGER ";
-        elseif($strType == "long")
+        elseif($strType == class_db_datatypes::STR_TYPE_LONG)
             $strReturn .= " INTEGER ";
-        elseif($strType == "double")
+        elseif($strType == class_db_datatypes::STR_TYPE_DOUBLE)
             $strReturn .= " REAL ";
-        elseif($strType == "char10")
+        elseif($strType == class_db_datatypes::STR_TYPE_CHAR10)
             $strReturn .= " TEXT ";
-        elseif($strType == "char20")
+        elseif($strType == class_db_datatypes::STR_TYPE_CHAR20)
             $strReturn .= " TEXT ";
-        elseif($strType == "char100")
+        elseif($strType == class_db_datatypes::STR_TYPE_CHAR100)
             $strReturn .= " TEXT ";
-        elseif($strType == "char254")
+        elseif($strType == class_db_datatypes::STR_TYPE_CHAR254)
             $strReturn .= " TEXT ";
-        elseif($strType == "char500")
+        elseif($strType == class_db_datatypes::STR_TYPE_CHAR500)
             $strReturn .= " TEXT ";
-        elseif($strType == "text")
+        elseif($strType == class_db_datatypes::STR_TYPE_TEXT)
             $strReturn .= " TEXT ";
-        elseif($strType == "longtext")
+        elseif($strType == class_db_datatypes::STR_TYPE_LONGTEXT)
             $strReturn .= " TEXT ";
         else
             $strReturn .= " TEXT ";

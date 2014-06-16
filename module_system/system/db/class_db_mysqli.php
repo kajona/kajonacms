@@ -248,17 +248,6 @@ class class_db_mysqli extends class_db_base {
 
     /**
      * Returns the db-specific datatype for the kajona internal datatype.
-     * Currently, this are
-     *      int
-     *      long
-     *      double
-     *      char10
-     *      char20
-     *      char100
-     *      char254
-     *      char500
-     *      text
-     *      longtext
      *
      * @param string $strType
      *
@@ -267,34 +256,34 @@ class class_db_mysqli extends class_db_base {
     public function getDatatype($strType) {
         $strReturn = "";
 
-        if($strType == "int") {
+        if($strType == class_db_datatypes::STR_TYPE_INT) {
             $strReturn .= " INT ";
         }
-        elseif($strType == "long") {
+        elseif($strType == class_db_datatypes::STR_TYPE_LONG) {
             $strReturn .= " BIGINT ";
         }
-        elseif($strType == "double") {
+        elseif($strType == class_db_datatypes::STR_TYPE_DOUBLE) {
             $strReturn .= " DOUBLE ";
         }
-        elseif($strType == "char10") {
+        elseif($strType == class_db_datatypes::STR_TYPE_CHAR10) {
             $strReturn .= " VARCHAR( 10 ) ";
         }
-        elseif($strType == "char20") {
+        elseif($strType == class_db_datatypes::STR_TYPE_CHAR20) {
             $strReturn .= " VARCHAR( 20 ) ";
         }
-        elseif($strType == "char100") {
+        elseif($strType == class_db_datatypes::STR_TYPE_CHAR100) {
             $strReturn .= " VARCHAR( 100 ) ";
         }
-        elseif($strType == "char254") {
+        elseif($strType == class_db_datatypes::STR_TYPE_CHAR254) {
             $strReturn .= " VARCHAR( 254 ) ";
         }
-        elseif($strType == "char500") {
+        elseif($strType == class_db_datatypes::STR_TYPE_CHAR500) {
             $strReturn .= " VARCHAR( 500 ) ";
         }
-        elseif($strType == "text") {
+        elseif($strType == class_db_datatypes::STR_TYPE_TEXT) {
             $strReturn .= " TEXT ";
         }
-        elseif($strType == "longtext") {
+        elseif($strType == class_db_datatypes::STR_TYPE_LONGTEXT) {
             $strReturn .= " LONGTEXT ";
         }
         else {

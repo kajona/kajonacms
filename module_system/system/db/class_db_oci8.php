@@ -354,25 +354,25 @@ class class_db_oci8 extends class_db_base {
     public function getDatatype($strType) {
         $strReturn = "";
 
-        if($strType == "int")
+        if($strType == class_db_datatypes::STR_TYPE_INT)
             $strReturn .= " NUMBER(19,0) ";
-        elseif($strType == "long")
+        elseif($strType == class_db_datatypes::STR_TYPE_LONG)
             $strReturn .= " NUMBER(19, 0) ";
-        elseif($strType == "double")
+        elseif($strType == class_db_datatypes::STR_TYPE_DOUBLE)
             $strReturn .= " FLOAT (24) ";
-        elseif($strType == "char10")
+        elseif($strType == class_db_datatypes::STR_TYPE_CHAR10)
             $strReturn .= " VARCHAR2( 10 ) ";
-        elseif($strType == "char20")
+        elseif($strType == class_db_datatypes::STR_TYPE_CHAR20)
             $strReturn .= " VARCHAR2( 20 ) ";
-        elseif($strType == "char100")
+        elseif($strType == class_db_datatypes::STR_TYPE_CHAR100)
             $strReturn .= " VARCHAR2( 100 ) ";
-        elseif($strType == "char254")
+        elseif($strType == class_db_datatypes::STR_TYPE_CHAR254)
             $strReturn .= " VARCHAR2( 280 ) ";
-        elseif($strType == "char500")
+        elseif($strType == class_db_datatypes::STR_TYPE_CHAR500)
             $strReturn .= " VARCHAR2( 500 ) ";
-        elseif($strType == "text")
+        elseif($strType == class_db_datatypes::STR_TYPE_TEXT)
             $strReturn .= " VARCHAR2( 4000 ) ";
-        elseif($strType == "longtext")
+        elseif($strType == class_db_datatypes::STR_TYPE_LONGTEXT)
             $strReturn .= " CLOB ";
         else
             $strReturn .= " VARCHAR( 254 ) ";

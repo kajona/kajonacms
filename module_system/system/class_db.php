@@ -120,7 +120,8 @@ class class_db {
 
 
     /**
-     * This method connects with the databse
+     * This method connects with the database
+     * @return void
      */
     public function dbconnect() {
         if($this->objDbDriver !== null) {
@@ -145,7 +146,7 @@ class class_db {
     /**
      * Creates a single query in order to insert multiple rows at one time.
      * For most databases, this will create s.th. like
-     * INSER INTO $strTable ($arrColumns) VALUES (?, ?), (?, ?)...
+     * INSERT INTO $strTable ($arrColumns) VALUES (?, ?), (?, ?)...
      *
      * @param string $strTable
      * @param string[] $arrColumns
@@ -166,6 +167,7 @@ class class_db {
      * @param string $strQuery
      *
      * @return bool
+     * @deprecated
      */
     public function _query($strQuery) {
         if(!$this->bitConnected)
@@ -476,6 +478,7 @@ class class_db {
      * @param string $strQuery
      *
      * @throws class_exception
+     * @return void
      */
     private function getError($strQuery) {
         if(!$this->bitConnected)
@@ -521,8 +524,8 @@ class class_db {
 
 
     /**
-     * Starts a trancaction
-
+     * Starts a transaction
+     * @return void
      */
     public function transactionBegin() {
         if(!$this->bitConnected)
@@ -541,7 +544,7 @@ class class_db {
 
     /**
      * Ends a tx successfully
-
+     * @return void
      */
     public function transactionCommit() {
         if(!$this->bitConnected)
@@ -572,7 +575,7 @@ class class_db {
 
     /**
      * Rollback of the current tx
-
+     * @return void
      */
     public function transactionRollback() {
         if(!$this->bitConnected)
@@ -601,7 +604,7 @@ class class_db {
     /**
      * Returns all tables used by the project
      *
-     * @param bool $bitAll just the name or with additional informations?
+     * @param bool $bitAll just the name or with additional information
      *
      * @return array
      */
@@ -700,18 +703,9 @@ class class_db {
     /**
      * Returns the db-specific datatype for the kajona internal datatype.
      * Currently, this are
-     *      int
-     *      long
-     *      double
-     *      char10
-     *      char20
-     *      char100
-     *      char254
-     *      char500
-     *      text
-     *      longtext
-     *
+
      * @param string $strType
+     * @see class_db_datatypes
      *
      * @return string
      */
@@ -742,6 +736,8 @@ class class_db {
      * @param array $arrKeys array of primary keys
      * @param array $arrIndices array of additional indices
      * @param bool $bitTxSafe Should the table support transactions?
+     *
+     * @see class_db_datatypes
      *
      * @return bool
      */
@@ -891,6 +887,10 @@ class class_db {
         return $strQuery;
     }
 
+    /**
+     * Queries the current db-driver about common information
+     * @return mixed|string
+     */
     public function getDbInfo() {
         if(!$this->bitConnected)
             $this->dbconnect();
@@ -986,6 +986,7 @@ class class_db {
 
     /**
      * Method to flush the query-cache
+     * @return void
      */
     public function flushQueryCache() {
         //class_logger::getInstance(class_logger::DBLOG)->addLogRow("Flushing query cache", class_logger::$levelInfo);
@@ -997,6 +998,8 @@ class class_db {
     /**
      * Helper to flush the precompiled queries stored at the db-driver.
      * Use this method with great care!
+     *
+     * @return void
      */
     public function flushPreparedStatementsCache() {
         $this->objDbDriver->flushQueryCache();
@@ -1033,12 +1036,12 @@ class class_db {
      * e.g. the installer.
      * The connection established will be closed directly and is not usable by other modules.
      *
-     * @param $strDriver
-     * @param $strDbHost
-     * @param $strDbUser
-     * @param $strDbPass
-     * @param $strDbName
-     * @param $intDbPort
+     * @param string $strDriver
+     * @param string $strDbHost
+     * @param string $strDbUser
+     * @param string $strDbPass
+     * @param string $strDbName
+     * @param int $intDbPort
      *
      * @return bool
      */

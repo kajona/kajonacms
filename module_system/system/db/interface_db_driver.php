@@ -30,6 +30,7 @@ interface interface_db_driver {
 
     /**
      * Closes the connection to the database
+     * @return void
      */
     public function dbclose();
 
@@ -175,19 +176,19 @@ interface interface_db_driver {
 
     /**
      * Starts a transaction
-     *
+     * @return void
      */
     public function transactionBegin();
 
     /**
      * Ends a successfull operation by Commiting the transaction
-     *
+     * @return void
      */
     public function transactionCommit();
 
     /**
      * Ends a non-successfull transaction by using a rollback
-     *
+     * @return void
      */
     public function transactionRollback();
 
@@ -206,7 +207,7 @@ interface interface_db_driver {
      * Creates an db-dump usind the given filename. the filename is relative to _realpath_
      * The dump must include, and ONLY include the pass tables
      *
-     * @param $strFilename
+     * @param string $strFilename
      * @param array $arrTables
      *
      * @return bool Indicates, if the dump worked or not
@@ -225,7 +226,7 @@ interface interface_db_driver {
      * Allows the db-driver to add database-specific surroundings to column-names.
      * E.g. needed by the mysql-drivers
      *
-     * @param $strColumn
+     * @param string $strColumn
      * @return string
      */
     public function encloseColumnName($strColumn);
@@ -241,19 +242,10 @@ interface interface_db_driver {
 
     /**
      * Returns the db-specific datatype for the kajona internal datatype.
-     * Currently, this are
-     *      int
-     *      long
-     *      double
-     *      char10
-     *      char20
-     *      char100
-     *      char254
-     *      char500
-     *      text
      *
      * @param string $strType
      * @return string
+     * @see class_db_datatypes
      */
     public function getDatatype($strType);
 
