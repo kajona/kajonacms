@@ -29,7 +29,7 @@ class class_objectvalidator_helper {
      *         1, if $objDateLeft is greater $objDateRight
      *         -1, if $objDateLeft is less than $objDateRight
      */
-    public static function compareDates(class_formentry_date $objDateLeft, class_formentry_date $objDateRight) {
+    public static function compareFormDates(class_formentry_date $objDateLeft, class_formentry_date $objDateRight) {
         if($objDateLeft != null && $objDateRight != null) {
 
             $strStartDateValue = $objDateLeft->getStrValue();
@@ -39,17 +39,34 @@ class class_objectvalidator_helper {
                 $objDate1 = new class_date($strStartDateValue);
                 $objDate12 = new class_date($strEndDateValue);
 
-                if($objDate1->getLongTimestamp() < $objDate12->getLongTimestamp()) {
-                    return -1;//less;
-                }
-                if($objDate1->getLongTimestamp() > $objDate12->getLongTimestamp()) {
-                    return 1;//greater
-                }
-                else {
-                    return 0;//equals
-                }
+                return self::compareDates($objDate1, $objDate12);
             }
         }
+
+        return null;
+    }
+
+
+    /**
+     * @param class_date $objDateLeft
+     * @param class_date $objDateRight
+     *
+     * @return int
+     */
+    public static function compareDates(class_date $objDateLeft = null, class_date $objDateRight = null) {
+        if($objDateLeft != null && $objDateRight != null) {
+            if($objDateLeft->getLongTimestamp() < $objDateRight->getLongTimestamp()) {
+                return -1;//less;
+            }
+            if($objDateLeft->getLongTimestamp() > $objDateRight->getLongTimestamp()) {
+                return 1;//greater
+            }
+            else {
+                return 0;//equals
+            }
+        }
+
+        return null;
     }
 }
 
