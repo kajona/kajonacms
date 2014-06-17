@@ -8,6 +8,13 @@
 
 class class_debug_helper {
 
+    private $arrTimestampStart = null;
+
+    function __construct() {
+        $this->arrTimestampStart = gettimeofday();
+    }
+
+
     public function debugHelper() {
         echo "<pre>";
         echo "<b>Kajona V4 Debug Subsystem</b>\n\n";
@@ -36,9 +43,29 @@ class class_debug_helper {
             echo "</ul>";
         }
 
+
+        $arrTimestampEnde = gettimeofday();
+        $intTimeUsed = (($arrTimestampEnde['sec'] * 1000000 + $arrTimestampEnde['usec'])
+                - ($this->arrTimestampStart['sec'] * 1000000 + $this->arrTimestampStart['usec'])) / 1000000;
+
+
+        echo  "\n\n<b>PHP-Time:</b>                              " . number_format($intTimeUsed, 6) . " sec \n";
+        echo  "<b>Queries db/cachesize/cached/fired:</b>     " . class_carrier::getInstance()->getObjDB()->getNumber() . "/" .
+            class_carrier::getInstance()->getObjDB()->getCacheSize() . "/" .
+            class_carrier::getInstance()->getObjDB()->getNumberCache() . "/" .
+            (class_carrier::getInstance()->getObjDB()->getNumber() - class_carrier::getInstance()->getObjDB()->getNumberCache()) . "\n";
+
+        echo "<b>Templates cached:</b>                      " . class_carrier::getInstance()->getObjTemplate()->getNumberCacheSize() . " \n";
+
+        echo "<b>Memory/Max Memory:</b>                     " . bytesToString(memory_get_usage()) . "/" . bytesToString(memory_get_peak_usage()) . " \n";
+        echo "<b>Classes Loaded:</b>                        " . class_classloader::getInstance()->getIntNumberOfClassesLoaded() . " \n";
+
+        echo "<b>Cache requests/hits/saves/cachesize:</b>   " .
+        class_cache::getIntRequests() . "/" . class_cache::getIntHits() . "/" . class_cache::getIntSaves() . "/" . class_cache::getIntCachesize() . " \n";
         echo "</pre>";
 
     }
+
 }
 
 header("Content-Type: text/html; charset=utf-8");
