@@ -310,7 +310,7 @@ class class_module_system_changelog extends class_model implements interface_mod
     private function processChangeArray(array $arrChanges, interface_versionable $objSourceModel, $strAction, $bitForceEntry = false, $bitDeleteAction = null) {
         $bitReturn = true;
 
-        if(is_array($arrChanges) && in_array(_dbprefix_."changelog", $this->objDB->getTables())) {
+        if(is_array($arrChanges)) {
 
             $arrReducedChanges = array();
             $this->createReducedChangeSet($arrReducedChanges, $arrChanges, $strAction, $bitForceEntry, $bitDeleteAction);
