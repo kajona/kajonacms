@@ -315,7 +315,7 @@ class class_graph_jqplot implements interface_graph {
         $strTooltipId =  "tooltip_".$strSystemId;
 
         //create div where the chart is being put
-        $strReturn = "<div id=\"" . $strChartId . "\" style=\"width:".$this->intWidth."px; height:".$this->intHeight."px;\"></div>";
+        $strReturn = "<div id=\"$strChartId\" style=\"width:".$this->intWidth."px; height:".$this->intHeight."px;\"></div>";
 
         //create the data array and options object for the jqPlot method
         $strData = $this->strCreateJSDataArray();
@@ -323,20 +323,19 @@ class class_graph_jqplot implements interface_graph {
 
         //create the js-Code
         $strChartCode = "$(function() {";
-        //plots the graph
-        $strChartCode .= "$.jqplot('".$strChartId."',".$strData.",".$strOptions.");";
+            //plots the graph
+            $strChartCode .= "var plot_$strChartId = $.jqplot('".$strChartId."',".$strData.",".$strOptions.");\n";
 
-        //if this variable is set ticks may be set invisible
-        if($this->intNrOfWrittenLabelsXAxis != null) {
-            $strChartCode .= "KAJONA.admin.jqplotHelper.setLabelsInvisible('".$strChartId."',".$this->intNrOfWrittenLabelsXAxis.", 'xaxis');";
-        }
-        if($this->intNrOfWrittenLabelsYAxis != null) {
-            $strChartCode .= "KAJONA.admin.jqplotHelper.setLabelsInvisible('".$strChartId."',".$this->intNrOfWrittenLabelsYAxis.", 'yaxis');";
-        }
+            //if this variable is set ticks may be set invisible
+            if($this->intNrOfWrittenLabelsXAxis != null) {
+                $strChartCode .= "KAJONA.admin.jqplotHelper.setLabelsInvisible('".$strChartId."',".$this->intNrOfWrittenLabelsXAxis.", 'xaxis');\n";
+            }
+            if($this->intNrOfWrittenLabelsYAxis != null) {
+                $strChartCode .= "KAJONA.admin.jqplotHelper.setLabelsInvisible('".$strChartId."',".$this->intNrOfWrittenLabelsYAxis.", 'yaxis');\n";
+            }
 
-        $strChartCode .= "$('#".$strChartId."').bind('jqplotMouseMove', function (ev, gridpos, datapos, neighbor, plot) {KAJONA.admin.jqplotHelper.mouseMove(ev, gridpos, datapos, neighbor, plot, '".$strTooltipId."')});";
-        $strChartCode .= "$('#".$strChartId."').bind('jqplotMouseLeave', function (ev, gridpos, datapos, neighbor, plot) {KAJONA.admin.jqplotHelper.mouseLeave(ev, gridpos, datapos, neighbor, plot, '".$strTooltipId."')});";
-
+            $strChartCode .= "$('#$strChartId').bind('jqplotMouseMove', function (ev, gridpos, datapos, neighbor, plot) {KAJONA.admin.jqplotHelper.mouseMove(ev, gridpos, datapos, neighbor, plot, '".$strTooltipId."')});\n";
+            $strChartCode .= "$('#$strChartId').bind('jqplotMouseLeave', function (ev, gridpos, datapos, neighbor, plot) {KAJONA.admin.jqplotHelper.mouseLeave(ev, gridpos, datapos, neighbor, plot, '".$strTooltipId."')});\n";
         $strChartCode .="});";
 
 
