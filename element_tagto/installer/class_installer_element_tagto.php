@@ -78,6 +78,12 @@ class class_installer_element_tagto extends class_elementinstaller_base implemen
             $this->objDB->flushQueryCache();
         }
 
+        if(class_module_pages_element::getElement("tagto")->getStrVersion() == "4.4") {
+            $strReturn .= "Updating element tagto to 4.5...\n";
+            $this->updateElementVersion("tagto", "4.5");
+            $this->objDB->flushQueryCache();
+        }
+
         return $strReturn;
     }
 

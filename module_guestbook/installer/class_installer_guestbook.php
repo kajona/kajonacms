@@ -202,6 +202,13 @@ class class_installer_guestbook extends class_installer_base implements interfac
             $this->updateElementVersion("guestbook", "4.4");
         }
 
+        $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModul["module_version"] == "4.4") {
+            $strReturn = "Updating 4.4 to 4.5...\n";
+            $this->updateModuleVersion("guestbook", "4.5");
+            $this->updateElementVersion("guestbook", "4.5");
+        }
+
         return $strReturn."\n\n";
 	}
 

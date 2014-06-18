@@ -5,11 +5,11 @@
         >
     <title>v4skin</title>
     <description>The basic v4 admin-skin.</description>
-    <version>4.4</version>
+    <version>4.5</version>
     <author>Kajona Team</author>
     <type>MODULE</type>
     <providesInstaller>FALSE</providesInstaller>
     <requiredModules>
-        <module name="system" version="4.4" />
+        <module name="system" version="4.5" />
     </requiredModules>
 </package>

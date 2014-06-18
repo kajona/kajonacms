@@ -79,6 +79,12 @@ class class_installer_element_lastmodified extends class_elementinstaller_base i
             $this->objDB->flushQueryCache();
         }
 
+        if(class_module_pages_element::getElement("lastmodified")->getStrVersion() == "4.4") {
+            $strReturn .= "Updating element lastmodified to 4.5...\n";
+            $this->updateElementVersion("lastmodified", "4.5");
+            $this->objDB->flushQueryCache();
+        }
+
         return $strReturn;
     }
 

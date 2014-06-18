@@ -157,6 +157,12 @@ class class_installer_samplecontent extends class_installer_base implements inte
             $this->updateModuleVersion("samplecontent", "4.4");
         }
 
+        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "4.4") {
+            $strReturn .= "Updating 4.4 to 4.5...\n";
+            $this->updateModuleVersion("samplecontent", "4.5");
+        }
+
         return $strReturn;
 	}
 

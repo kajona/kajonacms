@@ -49,9 +49,16 @@ class class_installer_element_directorybrowser extends class_elementinstaller_ba
             $this->updateElementVersion($this->objMetadata->getStrTitle(), "1.1");
             $this->objDB->flushQueryCache();
         }
+
         if(class_module_pages_element::getElement($this->objMetadata->getStrTitle())->getStrVersion() == "1.1") {
             $strReturn = "Updating 1.1 to 1.2...\n";
             $this->updateElementVersion($this->objMetadata->getStrTitle(), "1.2");
+            $this->objDB->flushQueryCache();
+        }
+
+        if(class_module_pages_element::getElement($this->objMetadata->getStrTitle())->getStrVersion() == "1.2") {
+            $strReturn = "Updating 1.2 to 1.3...\n";
+            $this->updateElementVersion($this->objMetadata->getStrTitle(), "1.3");
             $this->objDB->flushQueryCache();
         }
 
