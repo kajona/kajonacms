@@ -1,5 +1,11 @@
-
 Module Packagemanager
+
+V4.5 ----------------------------------------------------------------------------------------------------
+NEW: module_packagemanager | admin -> added a info-view per package
+NEW: module_packagemanager | packagemanagers -> Increase cache buster on package update [ticket #898]
+NEW: module_packagemanager | manager -> added a method to get the required-by list of a single package, so the list of packages depending on the queried on
+NEW: module_packagemanager | commons -> Added remove-operations for packages. This allows to remove installed packages from a kajona installation. In order to be removed a package is not allowed to be required by another package. If the package provides an installer, the installer has to implement the new interface interface_installer_removable. This interface is queried in order to find the removal-status and to trigger the removal. [ticket #835]
+
 
 V4.4 ----------------------------------------------------------------------------------------------------
 NEW: styled the package-overview window, e.g. during the installation of a package

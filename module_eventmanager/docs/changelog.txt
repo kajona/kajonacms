@@ -1,5 +1,7 @@
 Module Eventmanager
 
+V4.5 ----------------------------------------------------------------------------------------------------
+NEW: module_eventmanager | portal view -> updated the eventmanager to make use of the new templatemapper
 
 V4.3 ----------------------------------------------------------------------------------------------------
 NEW: events got a status, currently tentative, scheduled, canceled and postponed. The status' index is available in the portal using the placeholder %%eventStatus%%. The placeholder may be used to load lang-entries or to create css-class names.  #814

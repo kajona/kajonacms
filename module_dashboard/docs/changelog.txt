@@ -1,5 +1,10 @@
 Module Dashboard
 
+V4.5 ----------------------------------------------------------------------------------------------------
+NEW: module_dashboard | updatecheck-widget -> If an update is available, the list-entry links to the package management including a filtering on the current package
+BUG: module_dashboard | updatecheck-widget -> the version number of the system-package was rendered for each possible package update
+BUG: module_dashboard | dashboard.js -> removed "return false" since it caused problems in IE [ticket #888]
+
 
 V4.4 ----------------------------------------------------------------------------------------------------
 NEW: removing a widget from the dashboard no longer reloads the whole page #838

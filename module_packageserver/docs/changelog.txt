@@ -1,0 +1,4 @@
+Module Packageserver
+
+V4.5 ----------------------------------------------------------------------------------------------------
+NEW: module_packageserver | admin -> merged the package info pane with the one from the general packagemanagement

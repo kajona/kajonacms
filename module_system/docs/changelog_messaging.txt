@@ -1,5 +1,8 @@
 Module Messaging
 
+V4.5 ----------------------------------------------------------------------------------------------------
+NEW: module_messaging | messageprovider -> extended the interface_messageprovider_extended by a method isVisibleInConfigView. Allows provides to decide if the provider is visible on on the config pane or hidden.
+NEW: module_messaging | admin view -> if a message no longer existing is opened (e.g. out of an old mail), a error-dialog instead of an exception is shown
 
 V4.4 ----------------------------------------------------------------------------------------------------
 NEW: integrated local Notifications into messaging #824

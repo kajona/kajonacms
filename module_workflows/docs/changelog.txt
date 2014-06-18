@@ -1,13 +1,19 @@
 Module Workflows
 
+V4.5 ----------------------------------------------------------------------------------------------------
+NEW: module_workflows | triggerworkflows -> avoid session init for triggerworkflows [ticket #887]
+NEW: module_workflows | messagesummary -> old, unread message summaries are deleted in case a new summary is created
+NEW: module_workflows | admin view -> the trigger-date of a workflow is only rendered if the user has edit permissions (so for admins in most cases)
+BUG: module_workflows | SQL-Statement worfklowsusercount -> commented out date filter (analog method getPendingWorkflowsForUser)
+BUG: module_workflows | workflow widget -> added group ids as parameter
+BUG: module_workflows | scheduler: the scheduler forces an unlock of the workflow instance
+
 V4.4 ----------------------------------------------------------------------------------------------------
 NEW: the workflow-engine is now callable / may be triggered using the url-schema host/xml.php?module=workflows&action=trigger&authkey=SECRET. The secret is stored as a system-setting, avoiding third parties to call the script. Added an initial version of a en-documentation. #834
 BUG: fixed a possible null pointer exception when synchronizing the list of workflows-handlers available
 
-
 V4.3 ----------------------------------------------------------------------------------------------------
 NEW: workflow details are now rendered using the dataTable instead of a plain list
-
 
 V4.2 ----------------------------------------------------------------------------------------------------
 NEW: a workflow-handler may return an instance of class_admin_formgenerator or string containing the generated form NEW: the workflow-backend-view adds the current id to the path-navigation

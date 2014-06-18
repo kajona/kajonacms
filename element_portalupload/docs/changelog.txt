@@ -1,0 +1,6 @@
+Element Portalupload
+
+V4.5 ----------------------------------------------------------------------------------------------------
+NEW: element_portalupload -> upgraded the element to make use of a modern uploader, jquery upload plugin, supporting drag n drop and upload progress indications. the old upload handler is still supported. [ticket #886]
+
+

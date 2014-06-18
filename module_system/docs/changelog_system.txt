@@ -1,5 +1,61 @@
 Module System
 
+V4.5 ----------------------------------------------------------------------------------------------------
+NEW: module_system | request-dispatcher -> added a new param blockAction. if set (in combination with peClose=1), the current request skips the action() call and sends the location.reload directive directly
+NEW: module_system | class_rights -> added method filterObjectsByRight
+NEW: module_system | class_module_system_setting-> added method which returns a value of a given config
+NEW: module_system | functions.php -> changed validateSytemid() to a non-regex implementation based on ctype_alnum(). slightly faster than using a regex.
+NEW: module_system | dblayer -> added a base class for db drivers [ticket #899]
+NEW: module_system | db-layer -> moved the column data-types to a list of constants in the namespace class_db_datatypes
+NEW: module_system | class_db -> added a new method / interface method multiInsert, used to add mutliple rows within a singe query. special mehod required since some databases require a special syntax
+NEW: module_system | templatemapper -> added a new class_template_mapper. Will be used to map objects to portal-templates automatically. Therefore all properties marked with @templateExport will be available in the template. If @templateMapper [name] is given, the named mapper will be used to format / transform the value before writing it into the template. [ticket #684]
+NEW: module_system | changelog -> fixed the usage of self::$bitChangelogEnabled in order to have the determination cached. removed a legacy support for named versionable properties since not used anywhere but causing a massive slowdown
+NEW: module_system | changelog -> added a static flag to enable / disable the changehistory manually.
+NEW: module_system | lockmanager -> if an user logs out, all locks for the current user are released [ticket #896]
+NEW: module_system | class_classloader -> The classloader got a new method includeClasses(), used by the kernel to include classes matching the pattern "class_module_" at system startup. This ensures that static init blocks are processed. class_carrier triggers the inclusion on getInstance(). In addition, class_carrier triggers the kernel startup automatically, calling it manually is no longer necessary.
+NEW: module_system | filesystem layout -> A new config-file located at /project/system/config/excludedmodules.php, containing an array $arrExcludedModules may be used to exclude certain modules from the class- / resourceloader (so acting the same as deleting the listed modules from the filesystem). the excludemodules.php config file uses different arrays per core-folder
+NEW: module_system | filesystem layout -> The kernel is now aware of multiple core directories. Therefore the class- and resource-loaders have been updated in order to search and index each core directory. The resource loader got two new methods getCorePathForPath() and getCorePathForModule(), used to query the core-location of the passed file / module. The packagemanager is capable of handling multiple core directories, too.
+NEW: module_system | installer -> Added a new base-class class_elementinstaller_base, to be used by packages only cotnaining an element. Implements all relevant methods in order to add remove-support to element-packages. [ticket #835]
+NEW: module_system | image.php -> on-the-fly resizing is allowed for images placed in /templates, too
+NEW: module_system | class_root -> setting an invalid value as a prev-id (e.g. "abc") is no longer possible. when passed to updateObjectToDb, an excpetion is thrown. [ticket #889]
+NEW: module_system | class_session -> added two new events: "core.system.userlogout" and "core.system.userlogin". fired when a user logs into the system or if the user logs out of the system. listen on those events if you want to trigger additional actions.
+NEW: module_system | class_session -> changed the way how internal sessions are inserted initially into the database. the insert is triggered on destruct, so the latest possible point is used. this allows methods to skip the session update for special cases and avoids senseless insert-queries
+NEW: module_system | systeminfo -> extracted the systeminfo-contents from class_module_system_common to its own plugins, making it maintainable again
+NEW: module_system | toolkit -> allow overwriting class_toolkit_portal via project folder
+NEW: module_system | class_filesystem -> getFileList supports an optional recursive mode
+NEW: module_system | kajona.js-> method renderMissingMandatoryFields now additionally handles fields which are mandatory and empty
+NEW: module_system | admin view -> Added a new action "lockedRecords", listing all records currently locked by a user. Each record may be unlocked.
+NEW: module_system | class_zip -> added a method which checks if the given file is a zip-File
+NEW: module_system | class_zip -> added an additional flag to create an archive when opening a zip-file for writing
+NEW: module_system | systemtask admin view -> a task can now be exectued directly without popup dialogue
+NEW / APICHANGE: module_system | eventhandling -> added a complete new way of event-handling to the Kajona core. The old implementation was based on real listener-interface, making a real decoupling of modules impossible. If the tags-module wanted to provide an optional listener for search-events, the tag modul either required the search module as a hard dependency or the listener-interface had to be located at module system (and therefore was available at any time). The new implementation is based on a generic listener-interface interface_genericevent_listener in combination with a event-identifier. Listeners are registered at class_core_eventdispatcher for given event-ids. As soon as an object triggers a notify identified by the event-id, all registered listeners will be updated using a generic callback-method. The callback-method takes the event-id and an array of optional values as params. The identifier-based implementation now provides a fully decoupled event-mechanism. #876
+NEW: module_system | pluginmanager -> added a new, lightweight plugin-mechanism. plugins implementing interface_generic_plugin return the string-based named of an "extension point". in combination, class_pluginmanager may load and instantiate all objects implementing the interface and matching a queried extension point. Could replace the more complex admin-plugin manager for cases where the full functionality is not necessary.
+NEW: module_system | db backup task -> added search index tables to list of excluded tables when dumping tables
+NEW: module_system | formgenerator -> it is now possible to set the enctype on the formObject
+NEW: module_system | formgenerator -> an optional on-submit handler may be added to a form generated by the form-manager
+NEW: module_system | formgenerator -> if null is passed as the target action to the formgenerator, no form-tags will be rendered. useful if the form-tags are generated later or earlier
+NEW: module_system | formgenerator -> pressing "save/submit" multiple times no longer triggers the new / save action multiple times [ticket #895]. implemented using the forms onSubmit handler.
+NEW: module_system | formgenerator -> added method getting the formname
+NEW: module_system | formgenerator -> if a record is locked it is now displayed which user has locked that record
+NEW: module_system | formentries -> added a new formentry "autoheadline", generated based on a properties' value. old entry "headline" remains due to
+NEW: module_system | formentries -> added a new formentry for uploading documents backwards compatibility and different use-cases
+NEW: module_system | base class test -> added new param for method createObject with which it is possible to set attributes manually
+BUG: module_system | kajona.js -> the captcha is only reloaded / added if the container is present
+BUG: module_system | formgenerator -> the formgenerator skips locks for objects with no systemid
+BUG: module_system | formgenerator -> the buttons generated by the form-generator are named with a suffix btn, avoiding conflicts with form-properties such as form.submit
+BUG: module_system | lang-files -> language files found in the project folder are merged into the lang array, even if there's no identically named file in the /core folder
+BUG: module_system | class_link -> popup links could be rendered with tooltips even for cases where the link text and the tooltip text were identical
+BUG: module_system | array iterator -> fixed a possible indexOutOfBounds exception in class_array_section_iterator. could occur if the current pages has less elements as expected during initialization of the iterator
+BUG: module_system | image-plugins -> the image text-plugin used a wrong font-path, therefore text-operations failed (e.g. when rendering a captcha image)
+BUG: module_system | image-plugins -> Background of transparent PNG is set to black on image operations [ticket #893]
+BUG: module_system | class_csv -> when streaming csv files directly to the browser, the headers were sent after the content
+BUG: module_system | class_root -> when copying a record, the internal init-row is reset, too. otherwise some meta-info (e.g. the create date) was not updated correctly
+BUG: module_system | class_exception -> The history stacks (portal and admin) were loaded using a wrong session access code, resulting in empty histories
+BUG: module_system | class_date -> changed order of if statemens so that int params with value 0 are handled correctly. Added new method to class test_class_dateTest for checking class_date
+BUG: module_system | class_module_system_common -> copySystemrecord() missed a column for the rights-table
+BUG: module_system | class_cookie -> Fixed a cookies' path to avoid problems with different paths if mod_rewrite is enabled
+BUG / SECURITY: module_system | class_link -> fixed some rare conditions where a possible xss injection was possible for the systemid-param
+
 V4.4.4 --------------------------------------------------------------------------------------------------
 BUG / SECURITY: class_link -> fixed some rare conditions where a possible xss injection was possible for the systemid-param
 

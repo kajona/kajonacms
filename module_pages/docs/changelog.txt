@@ -1,11 +1,16 @@
 Module Pages
 
+V4.5 ----------------------------------------------------------------------------------------------------
+NEW: module_pages | pageelement -> loading a list of placeholders processes the language as a order-by criteria
+BUG: module_pages | pages_portal -> portal crashes when there's no master-page #882
+BUG: module_pages | lastmodified widget -> removed erroneous, non-clickable rows
+BUG: module_pages | pages_admin -> the delete-button missed to check for locks of the record
+
 
 V4.4 ----------------------------------------------------------------------------------------------------
 NEW: the wysiwyg adds <br/> on enter
 NEW: in textarea mode, the <br /> tags entered are removed before saving them to the backend. #777
 BUG: copying a page-element lost some properties for annotation based properties
-
 
 
 V4.3 ----------------------------------------------------------------------------------------------------

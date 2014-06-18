@@ -1,5 +1,16 @@
 Module Search
 
+V4.5 ----------------------------------------------------------------------------------------------------
+NEW: module_search | search_result -> the result contains the query itself, too [ticket #900]
+NEW: module_search | interface_search_portalobject -> changed the semantic of the updateSearchResult method. If necessary, the method may return an array of results instead of only updating the passed result object. This makes sure linked contents (such as media-files or faqs) are found on all sites [ticket #900]
+NEW: module_search | portal search -> added a new interface interface_search_portalobject, used to fetch the content lang and to set the index-entry as valid for portal-searches [ticket #900]
+NEW: module_search | indexer -> a full index rebuild avoids useless delete queries
+NEW: module_search | indexer -> the contents of a single document are added with a single insert, no longer separate ones
+NEW: module_search | indexer -> started implementing a conditional object indexer, only usable in combination with the change-history. validates if an object changed and triggers the search-index update only on changed objects
+NEW: module_search | indexer -> indexObject got a new param "bitForce", used to force the indexing of an object (e.g. when updating the complete index)
+BUG: module_search | indexer -> The indexer keeps numerical values even if shorter then the minimal word length (currently two). otherwise numbers (e.g. an event-number) won't be indexed if lower then 100. The removeShortText logic is located directly in tokenize() [ticket #892]
+BUG: module_search | indexedsearch -> the view permissions of a results' module are validated, too
+BUG / SECURITY: module_search | portal-js -> fixed a possible xss injection, the search param is now included htmlencoded an no longer as plaintext
 
 V4.4.1 --------------------------------------------------------------------------------------------------
 BUG / SECURITY: portal-js -> fixed a possible xss injection, the search param is now included htmlencoded an no longer as plaintext

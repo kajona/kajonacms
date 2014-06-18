@@ -1,5 +1,12 @@
-
 Module V4 Skin
+
+V4.5 ----------------------------------------------------------------------------------------------------
+NEW: module_v4skin | chosen -> updated chosen plugin to 1.1
+NEW: module_v4skin | dialog.js -> the click-action (url or callback) is removed onclick and therefore triggered only once [ticket #894]
+NEW: module_v4skin | treeview -> on treenode-loadings, the tooltip-handler is activated. if a treenode uses a tooltip text, the tooltip is rendered as expected.
+BUG: module_v4skin | lists -> sortable list in combination with paging made it impossible to sort a record to the next / previous page. therefore two drop-zones are rendered on top and below the sortable list in order to move records to the next / previous page. #880
+BUG: module_v4skin | js -> the keypress-listener to reset a hidden value is not attached to readonly autocomplete fields
+
 
 
 V4.4 ----------------------------------------------------------------------------------------------------

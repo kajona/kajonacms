@@ -1,5 +1,10 @@
 Module Mediamanager
 
+V4.5 ----------------------------------------------------------------------------------------------------
+NEW: module_mediamanager | mutliupload -> changed the js-library used for multi-uploads to jquery fileupload
+BUG: module_mediamanager | class_module_mediamanager_admin -> The file-selector could crash if the default repository was deleted internally. thx to c. ernst.
+BUG: module_mediamanager | class_module_folderview_admin -> fixed possible NpE in combination with delete default repositories
+
 V4.3.1 --------------------------------------------------------------------------------------------------
 BUG: fixed the loading of admin-list sections from elements.tpl to avoid errors during system-upgrades
 BUG:The image-cropper used a wrong js-replace to switch action icons

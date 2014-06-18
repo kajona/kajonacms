@@ -1,5 +1,8 @@
 Module Tags
 
+V4.5 ----------------------------------------------------------------------------------------------------
+BUG: module_tags | objectindexed event -> the tags objectindexed listener is only active if module tags was installed before
+
 V4.4 ----------------------------------------------------------------------------------------------------
 NEW: tag-favorites may be created / removed inline via an ajax call. #859
 NEW: tagging a record only requires view-permissions, no longer edit permissions since tags are only declarative additions.

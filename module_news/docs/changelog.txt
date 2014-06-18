@@ -1,5 +1,7 @@
 Module News
 
+V4.5 ----------------------------------------------------------------------------------------------------
+NEW: module_news | news -> Added an option to link pages to news-entries. If a target page is given and the redirect is enabled, the "read more" link of a news-teaser redirects to the linked page instead of the news' detail view. may be used to create teaser-based news-entries for pages. [ticket #897]
 
 V4.4-----------------------------------------------------------------------------------------------------
 BUG: refactored some parts of class_module_news_admin to be more v4-consistent. the language-switch is shown again when editing linked news-content
