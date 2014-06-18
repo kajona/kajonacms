@@ -9,8 +9,9 @@
 
 
 /**
- * @package module_dashboard
+ * A widget to check the availability of possible updates
  *
+ * @package module_dashboard
  */
 class class_adminwidget_updatecheck extends class_adminwidget implements interface_adminwidget {
 
@@ -69,7 +70,7 @@ class class_adminwidget_updatecheck extends class_adminwidget implements interfa
         if(count($arrUpdates) > 0)
             $strReturn .= $this->widgetText($this->getLang("updatecheck_versionAvail"));
         foreach($arrUpdates as $strPackage => $intVersion) {
-            $strReturn .= $this->widgetText($strPackage." (".$strSystemVersion.")");
+            $strReturn .= $this->widgetText(class_link::getLinkAdmin("packagemanager", "list", "&packagelist_filter=".$strPackage."&doFilter=1", $strPackage." (".$intVersion.")"));
         }
 
 
@@ -81,7 +82,7 @@ class class_adminwidget_updatecheck extends class_adminwidget implements interfa
      * You may use this method to install a widget as a default widget to
      * a users dashboard.
      *
-     * @param $strUserid
+     * @param string $strUserid
      *
      * @return bool
      */
