@@ -51,7 +51,6 @@ class class_graph_pchart implements interface_graph {
     private $arrValueSeriesToRender = array();
 
 
-
 	//---------------------------------------------------------------------------------------------------
 	//   The following values are used to seperate the graph-modes, because not all
 	//   methods are allowed with every chart-type
@@ -702,7 +701,7 @@ class class_graph_pchart implements interface_graph {
      * @return mixed
      */
     public function setArrSeriesColors($arrSeriesColors) {
-        // TODO: Implement setArrSeriesColors() method.
+        $this->arrDefaultColorPalette  = $arrSeriesColors;
     }
 
 }
