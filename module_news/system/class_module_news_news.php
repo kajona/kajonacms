@@ -16,6 +16,7 @@
  *
  * @module news
  * @moduleId _news_module_id_
+ * @objectValidator class_news_news_objectvalidator
  */
 class class_module_news_news extends class_model implements interface_model, interface_admin_listable, interface_versionable {
 
