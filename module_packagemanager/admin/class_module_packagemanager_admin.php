@@ -440,6 +440,11 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
 
                 //reload the module-ids
                 bootstrapIncludeModuleIds();
+
+                //reload the current request in order to flush the class-loader
+                $this->adminReload(class_link::getLinkAdminHref("packagemanager", "installPackage", "&package=".$objHandler->getStrTargetPath()));
+                return;
+
             }
             else
                 $objHandler = $objManager->getPackageManagerForPath($strFile);
