@@ -79,4 +79,4 @@ $lang["commons_validator_posint_validationmessage"] = "Das Feld muss positive Ga
 $lang["commons_yes"]                     = "Ja";
 
 $lang["commons_remove_assignment"]                     = "Zuordnung löschen";
-$lang["commons_object_validator_datecompare_validationmessage_before"] = "Das Datum in Feld '{0}' darf nicht nach dem Datum in Feld '{1}' sein.";
+$lang["commons_object_validator_datecompare_validationmessage_before"] = "Das Datum in Feld '{0}' darf nicht nach dem Datum in Feld '{1}' liegen.";

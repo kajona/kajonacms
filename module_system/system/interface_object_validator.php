@@ -26,10 +26,9 @@ interface interface_object_validator {
      *
      *
      * @abstract
-     * @param class_admin_formgenerator $objForm - the form object
      * @param class_model $objObject - the model object to the given form
      * @return array
      */
-    public function validateObject(class_admin_formgenerator $objForm, class_model $objObject);
+    public function validateObject(class_model $objObject);
 
 }

@@ -142,7 +142,7 @@ class class_admin_formgenerator {
             }
         }
 
-        //2. Validate complete form
+        //2. Validate complete object
         $objReflection = new class_reflection($this->getObjSourceobject());
         $arrObjectValidator = $objReflection->getAnnotationValuesFromClass("@objectValidator");
         if(count($arrObjectValidator) == 1) {
@@ -150,9 +150,28 @@ class class_admin_formgenerator {
             if(class_exists($strObjectValidator)) {
                 /** @var interface_object_validator $objValidator */
                 $objValidator = new $strObjectValidator();
-                $arrValidationErrorsObject = $objValidator->validateObject($this, $this->getObjSourceobject());
+
+                //Keep the reference of the current object
+                $objSourceObjectTemp = $this->getObjSourceobject();
+
+                 //Create a new instance ans set it as sourceobject in the formgeneraotr and all it's fields
+                $strClassName = get_class($this->objSourceobject);
+                $this->objSourceobject = new $strClassName($this->objSourceobject->getStrSystemid());
+                foreach($this->arrFields as $objOneField) {
+                    $objOneField->setObjSourceObject($this->objSourceobject);
+                }
+
+                //Update sourceobject values from the fields and validate the object
+                $this->updateSourceObject();
+                $arrValidationErrorsObject = $objValidator->validateObject($this->getObjSourceobject());
                 foreach($arrValidationErrorsObject as $strKey => $strMessage) {
                     $this->addValidationError($strKey, $strMessage);
+                }
+
+                //Set back keeped reference to the formgenrator and all it's fields
+                $this->objSourceobject = $objSourceObjectTemp;
+                foreach($this->arrFields as $objOneField) {
+                    $objOneField->setObjSourceObject($objSourceObjectTemp);
                 }
             }
             else {
@@ -606,4 +625,6 @@ class class_admin_formgenerator {
     public function getStrFormname() {
         return $this->strFormname;
     }
+
+
 }
