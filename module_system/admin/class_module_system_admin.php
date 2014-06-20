@@ -922,6 +922,8 @@ JS;
         $strReturn .= $this->objToolkit->getTextRow($this->getLang("about_part2a"));
         $strReturn .= $this->objToolkit->getTextRow($this->getLang("about_part2b_header"));
         $strReturn .= $this->objToolkit->getTextRow($this->getLang("about_part2b"));
+        $strReturn .= $this->objToolkit->getTextRow($this->getLang("about_part5_header"));
+        $strReturn .= $this->objToolkit->getTextRow($this->getLang("about_part5"));
         $strReturn .= $this->objToolkit->getTextRow($this->getLang("about_part3_header"));
         $strReturn .= $this->objToolkit->getTextRow($this->getLang("about_part3"));
         $strReturn .= $this->objToolkit->getTextRow($this->getLang("about_part4"));
