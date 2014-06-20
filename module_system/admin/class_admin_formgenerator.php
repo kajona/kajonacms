@@ -158,7 +158,9 @@ class class_admin_formgenerator {
                 $strClassName = get_class($this->objSourceobject);
                 $this->objSourceobject = new $strClassName($this->objSourceobject->getStrSystemid());
                 foreach($this->arrFields as $objOneField) {
-                    $objOneField->setObjSourceObject($this->objSourceobject);
+                    if($objOneField->getObjSourceObject() != null) {
+                        $objOneField->setObjSourceObject($this->objSourceobject);
+                    }
                 }
 
                 //Update sourceobject values from the fields and validate the object
@@ -171,7 +173,9 @@ class class_admin_formgenerator {
                 //Set back keeped reference to the formgenrator and all it's fields
                 $this->objSourceobject = $objSourceObjectTemp;
                 foreach($this->arrFields as $objOneField) {
-                    $objOneField->setObjSourceObject($objSourceObjectTemp);
+                    if($objOneField->getObjSourceObject() != null) {
+                        $objOneField->setObjSourceObject($objSourceObjectTemp);
+                    }
                 }
             }
             else {
