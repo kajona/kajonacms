@@ -7,8 +7,8 @@
 *	$Id$                                             *
 ********************************************************************************************************/
 
-require_once(class_resourceloader::getInstance()->getCorePathForPath(__FILE__, true)."/module_pchart/system/pChart/pChart.class");
-require_once(class_resourceloader::getInstance()->getCorePathForPath(__FILE__, true)."/module_pchart/system/pChart/pData.class");
+require_once(__DIR__."/pChart/pChart.class");
+require_once(__DIR__."/pChart/pData.class");
 
 
 /**
