@@ -11,5 +11,6 @@
     <providesInstaller>TRUE</providesInstaller>
     <requiredModules>
         <module name="system" version="4.5" />
+        <module name="packagemanager" version="4.5" />
     </requiredModules>
 </package>

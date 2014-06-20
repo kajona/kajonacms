@@ -206,16 +206,9 @@ class class_installer_search extends class_installer_base implements interface_i
             $strReturn .= $this->update_43_44();
         }
 
-        if($arrModule["module_version"] == "4.4") {
-            $strReturn .= "Updating 4.4 to 4.4.1...\n";
-            $strReturn .= "Updating module-versions...\n";
-            $this->updateModuleVersion("search", "4.4.1");
-            $this->updateElementVersion("search", "4.4.1");
-
-        }
 
         $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModule["module_version"] == "4.4.1") {
+        if($arrModule["module_version"] == "4.4" || $arrModule["module_version"] == "4.4.1") {
             $strReturn .= $this->update_441_45();
         }
 
@@ -295,7 +288,7 @@ class class_installer_search extends class_installer_base implements interface_i
     }
 
     private function update_441_45() {
-        $strReturn = "Updating 4.4.1 to 4.5...\n";
+        $strReturn = "Updating 4.4[.1] to 4.5...\n";
         // Install Index
         $strReturn .= "Updating index tables...\n";
         $strQuery = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."search_ix_document")."
@@ -332,9 +325,15 @@ class class_installer_search extends class_installer_base implements interface_i
 
         $strReturn .= "Updating index...\n";
         class_module_system_module::flushCache();
+        class_db::getInstance()->flushQueryCache();
+        class_db::getInstance()->flushPreparedStatementsCache();
+        class_module_system_module::flushCache();
         class_module_search_indexwriter::resetIndexAvailableCheck();
         $objWorker = new class_module_search_indexwriter();
         $objWorker->indexRebuild();
+
+        $strReturn .= "Please make sure to update your searchindex manually as soon as all other packages have been updated.\n";
+        $strReturn .= "An index-rebuild can be started using module system, action systemtasks, task 'Rebuild search index'.";
 
 
         return $strReturn;
