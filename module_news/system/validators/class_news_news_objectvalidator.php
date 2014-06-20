@@ -33,14 +33,14 @@ class class_news_news_objectvalidator implements interface_object_validator{
         $objLang = class_carrier::getInstance()->getObjLang();
         $strModuleName = $objObject->getArrModule("modul");
 
-        if($objObject instanceof class_module_projecttracker_project) {
+        if($objObject instanceof class_module_news_news) {
             $objStartDate = $objObject->getObjStartDate();
             $objEndDate = $objObject->getObjEndDate();
             $objSpecialDate = $objObject->getObjSpecialDate();
 
-            $strLabelStartDate = $objLang->getLang("form_".$objObject->getArrModule("modul")."_objStartDate", $strModuleName);
-            $strLabelEndDate = $objLang->getLang("form_".$objObject->getArrModule("modul")."_objEndDate", $strModuleName);
-            $strLabelSpecialDate = $objLang->getLang("form_".$objObject->getArrModule("modul")."_objSpecialDate", $strModuleName);
+            $strLabelStartDate = $objLang->getLang("form_".$objObject->getArrModule("modul")."_datestart", $strModuleName);
+            $strLabelEndDate = $objLang->getLang("form_".$objObject->getArrModule("modul")."_dateend", $strModuleName);
+            $strLabelSpecialDate = $objLang->getLang("form_".$objObject->getArrModule("modul")."_datespecial", $strModuleName);
 
 
             if($objStartDate!= null && $objEndDate != null) {
@@ -48,11 +48,10 @@ class class_news_news_objectvalidator implements interface_object_validator{
                     $this->arrValidationMessages["objStartDate"] = $objLang->getLang("commons_object_validator_datecompare_validationmessage_before", $strModuleName, array($strLabelStartDate, $strLabelEndDate));
                 }
             }
-            if($objEndDate!= null && $objSpecialDate != null) {
-                if(class_objectvalidator_helper::compareDates($objEndDate, $objSpecialDate) === 1) {
-                    $this->arrValidationMessages["objEndDate"] = $objLang->getLang("commons_object_validator_datecompare_validationmessage_before", $strModuleName, array($strLabelEndDate, $strLabelSpecialDate));
+            if($objSpecialDate!= null && $objEndDate != null) {
+                if(class_objectvalidator_helper::compareDates($objSpecialDate, $objEndDate) === 1) {
+                    $this->arrValidationMessages["objEndDate"] = $objLang->getLang("commons_object_validator_datecompare_validationmessage_before", $strModuleName, array($strLabelSpecialDate, $strLabelEndDate));
                 }
-
             }
             if($objStartDate!= null && $objSpecialDate != null) {
                 if(class_objectvalidator_helper::compareDates($objStartDate, $objSpecialDate) === 1) {
@@ -60,6 +59,7 @@ class class_news_news_objectvalidator implements interface_object_validator{
                 }
             }
         }
+
         return $this->arrValidationMessages;
     }
 }
