@@ -38,8 +38,6 @@ class class_element_paragraph_admin extends class_element_admin implements inter
      * @fieldType wysiwyg
      * @fieldLabel paragraph_content
      *
-     * @elementContentTitle
-     *
      * @addSearchIndex
      */
     private $strTextContent = "";
@@ -50,8 +48,6 @@ class class_element_paragraph_admin extends class_element_admin implements inter
      *
      * @fieldType page
      * @fieldLabel paragraph_link
-     *
-     * @elementContentTitle
      *
      * @addSearchIndex
      */
@@ -64,8 +60,6 @@ class class_element_paragraph_admin extends class_element_admin implements inter
      * @fieldType image
      * @fieldLabel commons_image
      *
-     * @elementContentTitle
-     *
      * @addSearchIndex
      */
     private $strImage = "";
@@ -77,8 +71,6 @@ class class_element_paragraph_admin extends class_element_admin implements inter
      * @fieldType template
      * @fieldLabel template
      * @fieldTemplateDir /element_paragraph
-     *
-     * @elementContentTitle
      */
     private $strTemplate = "";
 
