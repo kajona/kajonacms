@@ -334,7 +334,13 @@ class class_installer_news extends class_installer_base implements interface_ins
         $strReturn .= "Updating news table...\n";
 
         $strQuery = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."news")."
-                            ADD ".$this->objDB->encloseColumnName("news_redirect_page")." ".$this->objDB->getDatatype("char254")." NULL,
+                            ADD ".$this->objDB->encloseColumnName("news_redirect_page")." ".$this->objDB->getDatatype("char254")." NULL";
+
+        if(!$this->objDB->_pQuery($strQuery, array()))
+            $strReturn .= "An error occurred! ...\n";
+
+
+        $strQuery = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."news")."
                             ADD ".$this->objDB->encloseColumnName("news_redirect_enabled")." ".$this->objDB->getDatatype("int")." NULL";
 
         if(!$this->objDB->_pQuery($strQuery, array()))

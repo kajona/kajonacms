@@ -299,14 +299,19 @@ class class_installer_search extends class_installer_base implements interface_i
         // Install Index
         $strReturn .= "Updating index tables...\n";
         $strQuery = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."search_ix_document")."
-                            ADD ".$this->objDB->encloseColumnName("search_ix_content_lang")." ".$this->objDB->getDatatype("char20")." NULL,
+                            ADD ".$this->objDB->encloseColumnName("search_ix_content_lang")." ".$this->objDB->getDatatype("char20")." NULL";
+
+        if(!$this->objDB->_pQuery($strQuery, array()))
+            $strReturn .= "An error occurred! ...\n";
+
+        $strQuery = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."search_ix_document")."
                             ADD ".$this->objDB->encloseColumnName("search_ix_portal_object")." ".$this->objDB->getDatatype("int")." NULL";
 
         if(!$this->objDB->_pQuery($strQuery, array()))
             $strReturn .= "An error occurred! ...\n";
 
-        $this->objDB->_pQuery("ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."search_ix_document")." ADD INDEX ( ".$this->objDB->encloseColumnName("search_ix_content_lang")." ) ", array());
-        $this->objDB->_pQuery("ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."search_ix_document")." ADD INDEX ( ".$this->objDB->encloseColumnName("search_ix_portal_object")." ) ", array());
+        $this->objDB->_pQuery("CREATE INDEX ix_search_ix_content_lang ON ".$this->objDB->encloseTableName(_dbprefix_."search_ix_document")."  ( ".$this->objDB->encloseColumnName("search_ix_content_lang")." ) ", array());
+        $this->objDB->_pQuery("CREATE INDEX ix_search_ix_portal_object ON ".$this->objDB->encloseTableName(_dbprefix_."search_ix_document")."  ( ".$this->objDB->encloseColumnName("search_ix_portal_object")." ) ", array());
 
 
         $strReturn .= "Removing old searchplugins...\n";
