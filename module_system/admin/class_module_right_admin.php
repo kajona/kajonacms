@@ -47,10 +47,13 @@ class class_module_right_admin extends class_admin implements interface_admin {
         $strReturn = "";
         $strSystemID = $this->getParam("systemid");
         $objTargetRecord = null;
+        
+        if($strSystemID == "")
+        	$strSystemID = "0";
 
         //Determine the systemid
-        if($this->getParam("systemid") != "") {
-            $objTargetRecord = class_objectfactory::getInstance()->getObject($this->getParam("systemid"));
+        if($strSystemID != "") {
+            $objTargetRecord = class_objectfactory::getInstance()->getObject($strSystemID);
         }
         //Edit a module?
         if($this->getParam("changemodule") != "") {
