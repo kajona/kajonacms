@@ -74,6 +74,7 @@ $lang["login_loginCookiesInfo"]          = "Please allow Cookies for this site a
 $lang["login_loginError"]                = "Unfortunately, the provided login data was invalid. Please check your username and password.<br /><br />If you still can't log in, contact your system-administrator.";
 $lang["login_loginJsInfo"]               = "Please allow JavaScript for this site and reload the current page to be able to use all functionalities.";
 $lang["login_loginPass"]                 = "Password";
+$lang["login_loginPass2"]                = "Confirm password";
 $lang["login_loginTitle"]                = "Login";
 $lang["login_loginUser"]                 = "Username";
 $lang["login_logindate"]                 = "Start";
