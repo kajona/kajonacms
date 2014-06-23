@@ -65,11 +65,9 @@ class class_module_pages_content_admin extends class_admin_simple implements int
         $objPage = new class_module_pages_page($this->getSystemid());
         //get infos about the page
         $arrToolbarEntries = array();
-        $arrToolbarEntries[0] = "<a href=\"".getLinkAdminHref("pages", "editPage", "&systemid=".$this->getSystemid())."\">".class_adminskin_helper::getAdminImage("icon_edit").$this->getLang("contentToolbar_pageproperties")."</a>";
-        $arrToolbarEntries[1] = "<a href=\"".getLinkAdminHref("pages_content", "list", "&systemid=".$this->getSystemid())."\">".class_adminskin_helper::getAdminImage("icon_page").$this->getLang("contentToolbar_content")."</a>";
-        $arrToolbarEntries[2] = "<a href=\"".getLinkPortalHref(
-            $objPage->getStrName(), "", "", "&preview=1", "", $this->getLanguageToWorkOn())."\" target=\"_blank\">".class_adminskin_helper::getAdminImage("icon_lens").$this->getLang("contentToolbar_preview"
-        )."</a>";
+        $arrToolbarEntries[0] = "<a href=\"".class_link::getLinkAdminHref("pages", "editPage", "&systemid=".$this->getSystemid())."\">".class_adminskin_helper::getAdminImage("icon_edit").$this->getLang("contentToolbar_pageproperties")."</a>";
+        $arrToolbarEntries[1] = "<a href=\"".class_link::getLinkAdminHref("pages_content", "list", "&systemid=".$this->getSystemid())."\">".class_adminskin_helper::getAdminImage("icon_page").$this->getLang("contentToolbar_content")."</a>";
+        $arrToolbarEntries[2] = "<a href=\"".class_link::getLinkPortalHref($objPage->getStrName(), "", "", "&preview=1", "", $this->getLanguageToWorkOn())."\" target=\"_blank\">".class_adminskin_helper::getAdminImage("icon_lens").$this->getLang("contentToolbar_preview")."</a>";
 
         if($objPage->getIntType() != class_module_pages_page::$INT_TYPE_ALIAS)
             $strReturn .= $this->objToolkit->getContentToolbar($arrToolbarEntries, 1);
@@ -113,7 +111,7 @@ class class_module_pages_content_admin extends class_admin_simple implements int
         $intI = 0;
         if(is_array($arrElementsOnTemplate) && count($arrElementsOnTemplate) > 0) {
             //Iterate over every single placeholder provided by the template
-            foreach($arrElementsOnTemplate as $intKeyElementOnTemplate => $arrOneElementOnTemplate) {
+            foreach($arrElementsOnTemplate as $arrOneElementOnTemplate) {
 
                 $strOutputAtPlaceholder = "";
                 //Do we have one or more elements already in db at this placeholder?
@@ -149,7 +147,7 @@ class class_module_pages_content_admin extends class_admin_simple implements int
                         if($objOneElementInSystem->getStrName() == $arrSingleElementOnTemplateplaceholder["element"]) {
                             if($objOneElementInSystem->getIntRepeat() == 1 || $bitHit === false) {
                                 //So, the Row for a new element: element is repeatable or not yet created
-                                $strActions = $this->objToolkit->listButton(getLinkAdmin("pages_content", "new", "&placeholder=".$arrOneElementOnTemplate["placeholder"]."&element=".$arrSingleElementOnTemplateplaceholder["element"]."&systemid=".$this->getSystemid(), "", $this->getLang("element_anlegen"), "icon_new"));
+                                $strActions = $this->objToolkit->listButton(class_link::getLinkAdmin("pages_content", "new", "&placeholder=".$arrOneElementOnTemplate["placeholder"]."&element=".$arrSingleElementOnTemplateplaceholder["element"]."&systemid=".$this->getSystemid(), "", $this->getLang("element_anlegen"), "icon_new"));
                                 $strOutputAtPlaceholder .= $this->objToolkit->genericAdminList("", $objOneElementInSystem->getStrDisplayName(), "", $strActions, $intI++);
                             }
                             else {
@@ -162,7 +160,7 @@ class class_module_pages_content_admin extends class_admin_simple implements int
                                 }
                                 if(!$bitOneInstalled) {
                                     //So, the Row for a new element
-                                    $strActions = $this->objToolkit->listButton(getLinkAdmin("pages_content", "new", "&placeholder=".$arrOneElementOnTemplate["placeholder"]."&element=".$arrSingleElementOnTemplateplaceholder["element"]."&systemid=".$this->getSystemid(), "", $this->getLang("element_anlegen"), "icon_new"));
+                                    $strActions = $this->objToolkit->listButton(class_link::getLinkAdmin("pages_content", "new", "&placeholder=".$arrOneElementOnTemplate["placeholder"]."&element=".$arrSingleElementOnTemplateplaceholder["element"]."&systemid=".$this->getSystemid(), "", $this->getLang("element_anlegen"), "icon_new"));
                                     $strOutputAtPlaceholder .= $this->objToolkit->genericAdminList("", $objOneElementInSystem->getStrDisplayName(), "", $strActions, $intI++);
                                 }
                             }
@@ -172,7 +170,7 @@ class class_module_pages_content_admin extends class_admin_simple implements int
 
                 if((int)uniStrlen($strOutputAtPlaceholder) > 0) {
                     $arrSinglePlaceholder = explode("_", $arrOneElementOnTemplate["placeholder"]);
-                    if(count($arrSinglePlaceholder == 2))
+                    if(count($arrSinglePlaceholder) == 2)
                         $strOutputAtPlaceholder .= $this->objToolkit->formHeadline($arrSinglePlaceholder[0]);
 
                     $strListId = generateSystemid();
@@ -197,7 +195,7 @@ class class_module_pages_content_admin extends class_admin_simple implements int
             //minimized actions now, plz. this ain't being a real element anymore!
             foreach($arrElementsOnPage as $objOneElement) {
                 $strActions = "";
-                $strActions .= $this->objToolkit->listDeleteButton($objOneElement->getStrDisplayName(), $this->getLang("element_loeschen_frage"), getLinkAdminHref("pages_content", "deleteElementFinal", "&systemid=".$objOneElement->getSystemid().($this->getParam("pe") == "" ? "" : "&peClose=".$this->getParam("pe"))));
+                $strActions .= $this->objToolkit->listDeleteButton($objOneElement->getStrDisplayName(), $this->getLang("element_loeschen_frage"), class_link::getLinkAdminHref("pages_content", "deleteElementFinal", "&systemid=".$objOneElement->getSystemid().($this->getParam("pe") == "" ? "" : "&peClose=".$this->getParam("pe"))));
 
                 //Put all Output together
                 $strReturn .= $this->objToolkit->genericAdminList("", $objOneElement->getStrDisplayName().$this->getLang("placeholder").$objOneElement->getStrPlaceholder(), "", $strActions, $intI++);
@@ -228,20 +226,24 @@ class class_module_pages_content_admin extends class_admin_simple implements int
             if(!$objLockmanager->isAccessibleForCurrentUser()) {
                 //So, return a button, if we have an admin in front of us
                 if($objLockmanager->isUnlockableForCurrentUser()) {
-                    $strActions .= $this->objToolkit->listButton(getLinkAdmin("pages_content", "list", "&systemid=".$this->getSystemid()."&adminunlockid=".$objOneIterable->getSystemid(), "", $this->getLang("ds_entsperren"), "icon_lockerOpen"));
+                    $strActions .= $this->objToolkit->listButton(class_link::getLinkAdmin("pages_content", "list", "&systemid=".$this->getSystemid()."&adminunlockid=".$objOneIterable->getSystemid(), "", $this->getLang("ds_entsperren"), "icon_lockerOpen"));
                 }
                 //If the Element is locked, then its not allowed to edit or delete the record, so disable the icons
-                $strActions .= $this->objToolkit->listButton(getImageAdmin("icon_editLocked", $this->getLang("ds_gesperrt")));
-                $strActions .= $this->objToolkit->listButton(getImageAdmin("icon_deleteLocked", $this->getLang("ds_gesperrt")));
+                if($objOneIterable->rightEdit())
+                    $strActions .= $this->objToolkit->listButton(class_adminskin_helper::getAdminImage("icon_editLocked", $this->getLang("ds_gesperrt")));
+                if($objOneIterable->rightDelete())
+                    $strActions .= $this->objToolkit->listButton(class_adminskin_helper::getAdminImage("icon_deleteLocked", $this->getLang("ds_gesperrt")));
             }
             else {
 
-                $strActions .= $this->objToolkit->listButton(getLinkAdmin("pages_content", "edit", "&systemid=".$objOneIterable->getSystemid(), "", $this->getLang("element_bearbeiten"), "icon_edit"));
-                $strActions .= $this->objToolkit->listDeleteButton($objOneIterable->getStrName().($objOneIterable->getConcreteAdminInstance()->getContentTitle() != "" ? " - ".$objOneIterable->getConcreteAdminInstance()->getContentTitle() : "").($objOneIterable->getStrTitle() != "" ? " - ".$objOneIterable->getStrTitle() : ""), $this->getLang("element_loeschen_frage"), getLinkAdminHref("pages_content", "deleteElementFinal", "&systemid=".$objOneIterable->getSystemid().($this->getParam("pe") == "" ? "" : "&peClose=".$this->getParam("pe"))));
+                if($objOneIterable->rightEdit())
+                    $strActions .= $this->objToolkit->listButton(class_link::getLinkAdmin("pages_content", "edit", "&systemid=".$objOneIterable->getSystemid(), "", $this->getLang("element_bearbeiten"), "icon_edit"));
+                if($objOneIterable->rightDelete())
+                    $strActions .= $this->objToolkit->listDeleteButton($objOneIterable->getStrName().($objOneIterable->getConcreteAdminInstance()->getContentTitle() != "" ? " - ".$objOneIterable->getConcreteAdminInstance()->getContentTitle() : "").($objOneIterable->getStrTitle() != "" ? " - ".$objOneIterable->getStrTitle() : ""), $this->getLang("element_loeschen_frage"), class_link::getLinkAdminHref("pages_content", "deleteElementFinal", "&systemid=".$objOneIterable->getSystemid().($this->getParam("pe") == "" ? "" : "&peClose=".$this->getParam("pe"))));
             }
 
             //The Icons to sort the list and to copy the element
-            $strActions .= $this->objToolkit->listButton(getLinkAdminDialog("pages_content", "copyElement", "&systemid=".$objOneIterable->getSystemid(), "", $this->getLang("element_copy"), "icon_copy"));
+            $strActions .= $this->objToolkit->listButton(class_link::getLinkAdminDialog("pages_content", "copyElement", "&systemid=".$objOneIterable->getSystemid(), "", $this->getLang("element_copy"), "icon_copy"));
 
             //The status-icons
             $strActions .= $this->objToolkit->listStatusButton($objOneIterable->getSystemid());
@@ -306,7 +308,7 @@ class class_module_pages_content_admin extends class_admin_simple implements int
         $objElement = class_objectfactory::getInstance()->getObject($this->getSystemid());
 
         if($objElement instanceof class_module_pages_element) {
-            $this->adminReload(getLinkAdminHref("pages", "edit", "&systemid=".$objElement->getSystemid()));
+            $this->adminReload(class_link::getLinkAdminHref("pages", "edit", "&systemid=".$objElement->getSystemid()));
             return "";
         }
 
@@ -474,7 +476,7 @@ class class_module_pages_content_admin extends class_admin_simple implements int
             $objPage = new class_module_pages_page($strPageSystemid);
             $this->flushCompletePagesCache();
 
-            $this->adminReload(getLinkAdminHref("pages_content", "list", "systemid=".$objPage->getSystemid()));
+            $this->adminReload(class_link::getLinkAdminHref("pages_content", "list", "systemid=".$objPage->getSystemid()));
 
         }
         else {
@@ -503,7 +505,7 @@ class class_module_pages_content_admin extends class_admin_simple implements int
                 if(!$objPageElement->deleteObject())
                     throw new class_exception("Error deleting element from db", class_exception::$level_ERROR);
 
-                $this->adminReload(getLinkAdminHref("pages_content", "list", "systemid=".$strPrevId.($this->getParam("pe") == "" ? "" : "&peClose=".$this->getParam("pe"))));
+                $this->adminReload(class_link::getLinkAdminHref("pages_content", "list", "systemid=".$strPrevId.($this->getParam("pe") == "" ? "" : "&peClose=".$this->getParam("pe"))));
             }
             else {
                 $strReturn .= $this->objToolkit->warningBox($this->getLang("ds_gesperrt"));
@@ -553,7 +555,7 @@ class class_module_pages_content_admin extends class_admin_simple implements int
             }
 
             //form header
-            $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref("pages_content", "copyElement"), "formCopyElement");
+            $strReturn .= $this->objToolkit->formHeader(class_link::getLinkAdminHref("pages_content", "copyElement"), "formCopyElement");
             $strReturn .= $this->objToolkit->formInputHidden("copyElement_doCopy", 1);
             $strReturn .= $this->objToolkit->formInputHidden("systemid", $this->getSystemid());
 
@@ -658,7 +660,7 @@ class class_module_pages_content_admin extends class_admin_simple implements int
                     $this->setSystemid($objNewElement->getSystemid());
                     $strReturn = "";
 
-                    $this->adminReload(getLinkAdminHref("pages_content", "list", "systemid=".$objNewElement->getPrevId()."&blockAction=1&peClose=1"));
+                    $this->adminReload(class_link::getLinkAdminHref("pages_content", "list", "systemid=".$objNewElement->getPrevId()."&blockAction=1&peClose=1"));
                 }
                 else
                     throw new class_exception("Error copying the pageelement ".$objSourceElement->getSystemid(), class_exception::$level_ERROR);
@@ -682,7 +684,7 @@ class class_module_pages_content_admin extends class_admin_simple implements int
 
         $arrPathLinks = parent::getArrOutputNaviEntries();
         array_pop($arrPathLinks);
-        $arrPathLinks[] = getLinkAdmin("pages", "list", "&unlockid=".$this->getSystemid(), $this->getLang("modul_titel", "pages"));
+        $arrPathLinks[] = class_link::getLinkAdmin("pages", "list", "&unlockid=".$this->getSystemid(), $this->getLang("modul_titel", "pages"));
 
         foreach($arrPath as $strOneSystemid) {
             /** @var $objObject class_module_pages_folder|class_module_pages_page */
@@ -692,10 +694,10 @@ class class_module_pages_content_admin extends class_admin_simple implements int
                 continue;
 
             if($objObject instanceof class_module_pages_folder) {
-                $arrPathLinks[] = getLinkAdmin("pages", "list", "&systemid=".$strOneSystemid."&unlockid=".$this->getSystemid(), $objObject->getStrName());
+                $arrPathLinks[] = class_link::getLinkAdmin("pages", "list", "&systemid=".$strOneSystemid."&unlockid=".$this->getSystemid(), $objObject->getStrName());
             }
             if($objObject instanceof class_module_pages_page) {
-                $arrPathLinks[] = getLinkAdmin("pages", "list", "&systemid=".$strOneSystemid."&unlockid=".$this->getSystemid(), $objObject->getStrBrowsername());
+                $arrPathLinks[] = class_link::getLinkAdmin("pages", "list", "&systemid=".$strOneSystemid."&unlockid=".$this->getSystemid(), $objObject->getStrBrowsername());
             }
 
         }
@@ -704,12 +706,13 @@ class class_module_pages_content_admin extends class_admin_simple implements int
 
     /**
      * Sorts the current element upwards
+     * @return void
      */
     protected function actionElementStatus() {
         //Create the object
         $objElement = new class_module_pages_pageelement($this->getSystemid());
         $objElement->setIntRecordStatus($objElement->getIntRecordStatus() == 0 ? 1 : 0);
-        $this->adminReload(getLinkAdminHref("pages_content", "list", "systemid=".$objElement->getPrevId().($this->getParam("pe") == "" ? "" : "&peClose=".$this->getParam("pe"))));
+        $this->adminReload(class_link::etLinkAdminHref("pages_content", "list", "systemid=".$objElement->getPrevId().($this->getParam("pe") == "" ? "" : "&peClose=".$this->getParam("pe"))));
     }
 
 
@@ -721,6 +724,7 @@ class class_module_pages_content_admin extends class_admin_simple implements int
      *
      * @permissions edit
      * @xml
+     * @return string
      */
     protected function actionMoveElement() {
         $strReturn = "";
@@ -779,6 +783,7 @@ class class_module_pages_content_admin extends class_admin_simple implements int
     /**
      * @xml
      * @permissions edit
+     * @return string
      */
     protected function actionUpdateObjectProperty() {
         $strReturn = "";
@@ -858,7 +863,6 @@ class class_module_pages_content_admin extends class_admin_simple implements int
                     $objElement->doAfterSaveToDb();
 
                     //Loading the data of the corresp site
-                    $objPage = new class_module_pages_page($strPageSystemid);
                     $this->flushCompletePagesCache();
 
                     $strReturn = "<message><success>element update succeeded</success></message>";
