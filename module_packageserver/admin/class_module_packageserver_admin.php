@@ -26,7 +26,7 @@ class class_module_packageserver_admin extends class_module_mediamanager_admin i
     public function getOutputModuleNavi() {
         $arrReturn = array();
         $arrReturn[] = array("view", class_link::getLinkAdmin($this->getArrModule("modul"), "list", "", $this->getLang("action_list"), "", "", true, "adminnavi"));
-        $arrReturn[] = array("view", class_link::getLinkAdmin($this->getArrModule("modul"), "logs", "", $this->getLang("action_logs"), "", "", true, "adminnavi"));
+        $arrReturn[] = array("edit", class_link::getLinkAdmin($this->getArrModule("modul"), "logs", "", $this->getLang("action_logs"), "", "", true, "adminnavi"));
         $arrReturn[] = array("", "");
         $arrReturn[] = array("right", class_link::getLinkAdmin("right", "change", "&changemodule=".$this->getArrModule("modul"),  $this->getLang("commons_module_permissions"), "", "", true, "adminnavi"));
 
