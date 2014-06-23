@@ -139,10 +139,14 @@ function issetPost($strKey) {
  * @since 3.4.0
  */
 function getPostRawData($bitMultipart = false) {
+    /*
+      sidler, 06/2014: removed, since no longer supported and deprecated up from php 5.6
+
     if($bitMultipart)
         return $HTTP_RAW_POST_DATA;
     else
-        return file_get_contents("php://input");
+    */
+    return file_get_contents("php://input");
 }
 
 /**
