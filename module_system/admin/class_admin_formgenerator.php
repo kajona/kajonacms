@@ -130,7 +130,7 @@ class class_admin_formgenerator {
             if($objOneField->getBitMandatory()) {
                 //if field is mandatory and empty -> validation error
                 if($bitFieldIsEmpty) {
-                    $this->addValidationError($objOneField->getStrEntryName()."_empty", $objLang->getLang("commons_validator_field_empty", "system", array($objOneField->getStrLabel())));
+                    $this->addValidationError($objOneField->getStrEntryName(), $objLang->getLang("commons_validator_field_empty", "system", array($objOneField->getStrLabel())));
                 }
             }
 
@@ -448,7 +448,10 @@ class class_admin_formgenerator {
      * @return void
      */
     public function addValidationError($strEntry, $strMessage) {
-        $this->arrValidationErrors[$strEntry] = $strMessage;
+        if(!array_key_exists($strEntry, $this->arrValidationErrors)) {
+            $this->arrValidationErrors[$strEntry] = array();
+        }
+        $this->arrValidationErrors[$strEntry][] = $strMessage;
     }
 
     /**
