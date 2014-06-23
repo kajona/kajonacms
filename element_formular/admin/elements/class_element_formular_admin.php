@@ -35,7 +35,7 @@ class class_element_formular_admin extends class_element_admin implements interf
      *
      * @fieldType text
      * @fieldLabel formular_email
-     * @fieldValidator email
+     * @fieldValidator class_email_validator
      * @fieldMandatory
      */
     private $strEmail;

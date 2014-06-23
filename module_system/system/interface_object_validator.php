@@ -7,24 +7,28 @@
 ********************************************************************************************************/
 
 /**
- * A validator is used to validate a chunk of data.
+ * A validator is used to validate an object.
  * In most cases, validators are used to ensure submitted data
  * matches the backends' requirements.
  *
- * @author sidler@mulchprod.de
+ * @author stefan.meyer1@yahoo.de
  * @package module_system
- * @since 4.0
+ * @since 4.5
  */
-interface interface_validator {
+interface interface_object_validator {
 
     /**
      * Validates the passed chunk of data.
-     * In most cases, this'll be a string-object.
      *
-     * @param string $objValue
-     * @return bool
+     * The returning array contains the given error messages. Each key in the array contains an array of error messages.
+     * Format of the returned array is:
+     *      array("<messageKey>" => array())
+     *
+     *
      * @abstract
+     * @param class_model $objObject - the model object to the given form
+     * @return array
      */
-    public function validate($objValue);
+    public function validateObject(class_model $objObject);
 
 }

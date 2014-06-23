@@ -267,6 +267,14 @@ class class_formentry_base {
         return $this->objSourceObject;
     }
 
+    /**
+     * @param \class_model $objSourceObject
+     */
+    public function setObjSourceObject($objSourceObject) {
+        $this->objSourceObject = $objSourceObject;
+    }
+
+
     public function setStrValidationErrorMsg($strValidationErrorMsg) {
         $this->strValidationErrorMsg = $strValidationErrorMsg;
         return $this;

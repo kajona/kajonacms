@@ -105,7 +105,7 @@ class class_module_eventmanager_event extends class_model implements interface_m
      * @versionable
      *
      * @fieldType text
-     * @fieldValidator numeric
+     * @fieldValidator class_posint_validator
      * @fieldLabel event_maxparticipants
      * @templateExport
      */

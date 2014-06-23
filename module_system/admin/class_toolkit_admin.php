@@ -1587,9 +1587,11 @@ class class_toolkit_admin extends class_toolkit {
         $strRendercode .= "<script type=\"text/javascript\">$(document).ready(function () {
             KAJONA.admin.forms.renderMissingMandatoryFields([";
 
-        foreach ($arrErrors as $strKey => $strOneError) {
-            $strRows .= $this->objTemplate->fillTemplate(array("field_errortext" => $strOneError), $strTemplateRowID);
-            $strRendercode .= "[ '".$strKey."' ], ";
+        foreach ($arrErrors as $strKey => $arrOneErrors) {
+            foreach ($arrOneErrors as $strOneError) {
+                $strRows .= $this->objTemplate->fillTemplate(array("field_errortext" => $strOneError), $strTemplateRowID);
+                $strRendercode .= "[ '".$strKey."' ], ";
+            }
         }
         $strRendercode .= " [] ]); });</script>";
         $arrTemplate = array();

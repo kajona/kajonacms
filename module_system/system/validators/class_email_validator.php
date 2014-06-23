@@ -36,15 +36,4 @@ class class_email_validator implements interface_validator {
             return true;
     }
 
-
-    /**
-     * Returns a string-based name of the current validator.
-     * Used to pass the type of validator to the js-engine rendering the
-     * form in the browser.
-     *
-     * @return string
-     */
-    public function getStrName() {
-        return "email";
-    }
 }

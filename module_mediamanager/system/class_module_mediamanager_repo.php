@@ -22,7 +22,7 @@ class class_module_mediamanager_repo extends class_model implements interface_mo
      * @var string
      * @tableColumn mediamanager_repo.repo_path
      * @fieldMandatory
-     * @fieldValidator folder
+     * @fieldValidator class_folder_validator
      * @fieldLabel commons_path
      *
      * @addSearchIndex

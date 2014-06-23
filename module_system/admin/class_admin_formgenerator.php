@@ -104,18 +104,21 @@ class class_admin_formgenerator {
         $arrReturn = array();
         foreach($this->arrFields as $objOneField)
             if($objOneField->getBitMandatory())
-                $arrReturn[$objOneField->getStrEntryName()] = $objOneField->getObjValidator()->getStrName();
+                $arrReturn[$objOneField->getStrEntryName()] = get_class($objOneField->getObjValidator());
 
         return $arrReturn;
     }
 
     /**
      * Validates the current form.
+     *
+     * @throws class_exception
      * @return bool
      */
     public function validateForm() {
         $objLang = class_carrier::getInstance()->getObjLang();
 
+        //1. Validate fields
         foreach($this->arrFields as $objOneField) {
 
             $bitFieldIsEmpty =
@@ -127,7 +130,7 @@ class class_admin_formgenerator {
             if($objOneField->getBitMandatory()) {
                 //if field is mandatory and empty -> validation error
                 if($bitFieldIsEmpty) {
-                    $this->addValidationError($objOneField->getStrEntryName()."_empty", $objLang->getLang("commons_validator_field_empty", "system", array($objOneField->getStrLabel())));
+                    $this->addValidationError($objOneField->getStrEntryName(), $objLang->getLang("commons_validator_field_empty", "system", array($objOneField->getStrLabel())));
                 }
             }
 
@@ -137,7 +140,56 @@ class class_admin_formgenerator {
                     $this->addValidationError($objOneField->getStrEntryName(), $objOneField->getStrValidationErrorMsg());
                 }
             }
+        }
 
+        //2. Validate complete object
+        if($this->getObjSourceobject() != null) {
+            $objReflection = new class_reflection($this->getObjSourceobject());
+            $arrObjectValidator = $objReflection->getAnnotationValuesFromClass("@objectValidator");
+            if(count($arrObjectValidator) == 1) {
+                $strObjectValidator = $arrObjectValidator[0];
+                if(class_exists($strObjectValidator)) {
+                    /** @var interface_object_validator $objValidator */
+                    $objValidator = new $strObjectValidator();
+
+                    //Keep the reference of the current object
+                    $objSourceObjectTemp = $this->getObjSourceobject();
+
+                    //Create a new instance ans set it as sourceobject in the formgeneraotr and all it's fields
+                    $strClassName = get_class($this->objSourceobject);
+                    $this->objSourceobject = new $strClassName($this->objSourceobject->getStrSystemid());
+                    foreach($this->arrFields as $objOneField) {
+                        if($objOneField->getObjSourceObject() != null) {
+                            $objOneField->setObjSourceObject($this->objSourceobject);
+                        }
+                    }
+
+                    //Update sourceobject values from the fields and validate the object
+                    $this->updateSourceObject();
+                    $arrValidationErrorsObject = $objValidator->validateObject($this->getObjSourceobject());
+
+                    foreach($arrValidationErrorsObject as $strKey => $arrMessages) {
+                        if(!is_array($arrMessages)) {
+                            throw new class_exception("method validateObject must return an array of format array(\"<messageKey>\" => array())", class_exception::$level_ERROR);
+                        }
+
+                        foreach($arrMessages as $strMessage) {
+                            $this->addValidationError($strKey, $strMessage);
+                        }
+                    }
+
+                    //Set back keeped reference to the formgenrator and all it's fields
+                    $this->objSourceobject = $objSourceObjectTemp;
+                    foreach($this->arrFields as $objOneField) {
+                        if($objOneField->getObjSourceObject() != null) {
+                            $objOneField->setObjSourceObject($objSourceObjectTemp);
+                        }
+                    }
+                }
+                else {
+                    throw new class_exception("object validator ".$strObjectValidator." not exisiting", class_exception::$level_ERROR);
+                }
+            }
         }
 
         return count($this->arrValidationErrors) == 0;
@@ -403,12 +455,15 @@ class class_admin_formgenerator {
     /**
      * Loads the validator identified by the passed name.
      *
-     * @param string $strName
-     * @return interface_validator
+     * @param string $strClassname
+     *
      * @throws class_exception
+     * @return interface_validator
      */
-    private function getValidatorInstance($strName) {
-        $strClassname = "class_".$strName."_validator";
+    private function getValidatorInstance($strClassname) {
+        if(uniStrpos($strClassname, "class_") === false)
+            $strClassname = "class_".$strClassname."_validator";
+
         if(class_resourceloader::getInstance()->getPathForFile("/system/validators/".$strClassname.".php")) {
             return new $strClassname();
         }
@@ -442,7 +497,10 @@ class class_admin_formgenerator {
      * @return void
      */
     public function addValidationError($strEntry, $strMessage) {
-        $this->arrValidationErrors[$strEntry] = $strMessage;
+        if(!array_key_exists($strEntry, $this->arrValidationErrors)) {
+            $this->arrValidationErrors[$strEntry] = array();
+        }
+        $this->arrValidationErrors[$strEntry][] = $strMessage;
     }
 
     /**
@@ -580,4 +638,6 @@ class class_admin_formgenerator {
     public function getStrFormname() {
         return $this->strFormname;
     }
+
+
 }

@@ -65,7 +65,7 @@ class class_module_pages_element extends class_model implements interface_model,
      * @tableColumn element_cachetime
      *
      * @fieldMandatory
-     * @fieldValidator numeric
+     * @fieldValidator class_numeric_validator
      * @fieldType text
      */
     private $intCachetime = "";
