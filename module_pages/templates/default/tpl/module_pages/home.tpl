@@ -75,6 +75,10 @@
                     </div>
                 </div>
 
+                <div>
+                    %%column3_paragraph|image%%
+                </div>
+
 
                 <div align="right">
                     <div id="fb-root"></div>
