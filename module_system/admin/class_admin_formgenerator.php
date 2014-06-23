@@ -167,8 +167,15 @@ class class_admin_formgenerator {
                     //Update sourceobject values from the fields and validate the object
                     $this->updateSourceObject();
                     $arrValidationErrorsObject = $objValidator->validateObject($this->getObjSourceobject());
-                    foreach($arrValidationErrorsObject as $strKey => $strMessage) {
-                        $this->addValidationError($strKey, $strMessage);
+
+                    foreach($arrValidationErrorsObject as $strKey => $arrMessages) {
+                        if(!is_array($arrMessages)) {
+                            throw new class_exception("method validateObject must return an array of format array(\"<messageKey>\" => array())", class_exception::$level_ERROR);
+                        }
+
+                        foreach($arrMessages as $strMessage) {
+                            $this->addValidationError($strKey, $strMessage);
+                        }
                     }
 
                     //Set back keeped reference to the formgenrator and all it's fields

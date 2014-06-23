@@ -46,19 +46,22 @@ class class_news_news_objectvalidator implements interface_object_validator{
             $strLabelSpecialDate = $objLang->getLang("form_".$objObject->getArrModule("modul")."_datespecial", $strModuleName);
 
 
+            $this->arrValidationMessages["objStartDate"] = array();
+            $this->arrValidationMessages["objEndDate"] = array();
+
             if($objStartDate!= null && $objEndDate != null) {
                 if(class_objectvalidator_helper::compareDates($objStartDate, $objEndDate) === 1) {
-                    $this->arrValidationMessages["objStartDate"] = $objLang->getLang("commons_object_validator_datecompare_validationmessage_before", $strModuleName, array($strLabelStartDate, $strLabelEndDate));
+                    $this->arrValidationMessages["objStartDate"][] = $objLang->getLang("commons_object_validator_datecompare_validationmessage_before", $strModuleName, array($strLabelStartDate, $strLabelEndDate));
                 }
             }
             if($objSpecialDate!= null && $objEndDate != null) {
                 if(class_objectvalidator_helper::compareDates($objSpecialDate, $objEndDate) === 1) {
-                    $this->arrValidationMessages["objEndDate"] = $objLang->getLang("commons_object_validator_datecompare_validationmessage_before", $strModuleName, array($strLabelSpecialDate, $strLabelEndDate));
+                    $this->arrValidationMessages["objEndDate"][] = $objLang->getLang("commons_object_validator_datecompare_validationmessage_before", $strModuleName, array($strLabelSpecialDate, $strLabelEndDate));
                 }
             }
             if($objStartDate!= null && $objSpecialDate != null) {
                 if(class_objectvalidator_helper::compareDates($objStartDate, $objSpecialDate) === 1) {
-                    $this->arrValidationMessages["objStartDate"] = $objLang->getLang("commons_object_validator_datecompare_validationmessage_before", $strModuleName, array($strLabelStartDate, $strLabelSpecialDate));
+                    $this->arrValidationMessages["objStartDate"][] = $objLang->getLang("commons_object_validator_datecompare_validationmessage_before", $strModuleName, array($strLabelStartDate, $strLabelSpecialDate));
                 }
             }
         }
