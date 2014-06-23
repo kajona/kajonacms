@@ -355,7 +355,7 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
         foreach($objHandler->getObjMetadata()->getArrScreenshots() as $strOneScreenshot) {
 
             $strImage = "";
-            if(uniSubstr($objHandler->getObjMetadata()->getStrPath(), 0, -4) == ".zip") {
+            if(uniSubstr($objHandler->getObjMetadata()->getStrPath(), -4) == ".zip") {
                 $objZip = new class_zip();
                 $objImage = $objZip->getFileFromArchive($objHandler->getObjMetadata()->getStrPath(), $strOneScreenshot);
                 if($objImage !== false) {
