@@ -40,7 +40,7 @@ class BuildHelper {
 
         echo "calling cleanCore script: php -f '".__DIR__."/cleanCore.php' '".$this->strProjectPath."'\n";
         $arrReturn = array();
-        exec("php -f '".__DIR__."/cleanCore.php' '".$this->strProjectPath."'", $arrReturn);
+        exec("php -f \"".__DIR__."/cleanCore.php\" \"".$this->strProjectPath."\"", $arrReturn);
         echo implode("\n", $arrReturn)."\n";
 
 
