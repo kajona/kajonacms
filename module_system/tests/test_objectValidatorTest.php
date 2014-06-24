@@ -13,6 +13,11 @@ class class_objectValidatorTest extends class_testbase  {
      * Checks if the references of the source object is correctly set after validation
      */
     public function testObjectValidator() {
+        $objModule = class_module_system_module::getModuleByName("news");
+        if($objModule == null) {
+            return;
+        }
+
         $objNews = new class_module_news_news();
         $objForm = new class_admin_formgenerator("news", $objNews);
         $objForm->generateFieldsFromObject();

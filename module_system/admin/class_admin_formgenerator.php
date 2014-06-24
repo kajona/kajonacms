@@ -31,6 +31,7 @@ class class_admin_formgenerator {
     const  STR_LABEL_ANNOTATION     = "@fieldLabel";
     const  STR_HIDDEN_ANNOTATION    = "@fieldHidden";
     const  STR_READONLY_ANNOTATION  = "@fieldReadonly";
+    const  STR_OBJECTVALIDATOR_ANNOTATION  = "@objectValidator";
 
     const  BIT_BUTTON_SAVE   = 2;
     const  BIT_BUTTON_CLOSE  = 4;
@@ -145,7 +146,7 @@ class class_admin_formgenerator {
         //2. Validate complete object
         if($this->getObjSourceobject() != null) {
             $objReflection = new class_reflection($this->getObjSourceobject());
-            $arrObjectValidator = $objReflection->getAnnotationValuesFromClass("@objectValidator");
+            $arrObjectValidator = $objReflection->getAnnotationValuesFromClass(self::STR_OBJECTVALIDATOR_ANNOTATION);
             if(count($arrObjectValidator) == 1) {
                 $strObjectValidator = $arrObjectValidator[0];
                 if(class_exists($strObjectValidator)) {
@@ -155,7 +156,7 @@ class class_admin_formgenerator {
                     //Keep the reference of the current object
                     $objSourceObjectTemp = $this->getObjSourceobject();
 
-                    //Create a new instance ans set it as sourceobject in the formgeneraotr and all it's fields
+                    //Create a new instance ans set it as sourceobject in the formgenerator and all it's fields
                     $strClassName = get_class($this->objSourceobject);
                     $this->objSourceobject = new $strClassName($this->objSourceobject->getStrSystemid());
                     foreach($this->arrFields as $objOneField) {
@@ -178,7 +179,7 @@ class class_admin_formgenerator {
                         }
                     }
 
-                    //Set back keeped reference to the formgenrator and all it's fields
+                    //Set back kept reference to the formgenerator and all it's fields
                     $this->objSourceobject = $objSourceObjectTemp;
                     foreach($this->arrFields as $objOneField) {
                         if($objOneField->getObjSourceObject() != null) {
@@ -187,7 +188,7 @@ class class_admin_formgenerator {
                     }
                 }
                 else {
-                    throw new class_exception("object validator ".$strObjectValidator." not exisiting", class_exception::$level_ERROR);
+                    throw new class_exception("object validator ".$strObjectValidator." not existing", class_exception::$level_ERROR);
                 }
             }
         }
