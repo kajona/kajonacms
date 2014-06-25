@@ -25,6 +25,8 @@ class class_graph_jqplot implements interface_graph {
     private $intNrOfWrittenLabelsYAxis = null;
     private $arrSeriesColors =  null;
 
+    private $bitIsHorizontalBar = false;
+
 
     /**
      * contains all series data per added chart
@@ -159,16 +161,10 @@ class class_graph_jqplot implements interface_graph {
      * @param array $arrValues see the example above for the internal array-structure
      * @param string $strLegend
      * @param string $strLegend
-     * @param bool $bitIsHorizontal
      *
      * @throws class_exception
      */
-    public function addStackedBarChartSet($arrValues, $strLegend, $bitIsHorizontal = false) {
-        $barChartType =  class_graph_jqplot_charttype::STACKEDBAR;
-        if($bitIsHorizontal) {
-            $barChartType =  class_graph_jqplot_charttype::STACKEDBAR_HORIZONTAL;
-        }
-
+    public function addStackedBarChartSet($arrValues, $strLegend) {
         if($this->containsChartType(class_graph_jqplot_charttype::PIE)) {
             throw new class_exception("Chart already contains a Pie chart. Combinations of pie charts and stacked bar charts are not allowed", class_exception::$level_ERROR);
         }
@@ -178,21 +174,15 @@ class class_graph_jqplot implements interface_graph {
         if($this->containsChartType(class_graph_jqplot_charttype::BAR)) {
             throw new class_exception("Chart already contains a bar chart. Combinations of bar charts and stacked bar charts are not allowed", class_exception::$level_ERROR);
         }
-        if($bitIsHorizontal && $this->containsChartType(class_graph_jqplot_charttype::STACKEDBAR)) {
-            throw new class_exception("Chart already contains a horizontal bar chart. Combinations of stacked bar charts and horizontal stacked bar charts are not allowed", class_exception::$level_ERROR);
-        }
-        if(!$bitIsHorizontal && $this->containsChartType(class_graph_jqplot_charttype::STACKEDBAR_HORIZONTAL)) {
-            throw new class_exception("Chart already contains a bar chart. Combinations of stacked bar charts and horizontal stacked bar charts are not allowed", class_exception::$level_ERROR);
-        }
 
-        $objSeriesData = new class_graph_jqplot_seriesdata($barChartType, count($this->arrSeriesData), $this->arrOptions);
+        $objSeriesData = new class_graph_jqplot_seriesdata(class_graph_jqplot_charttype::STACKEDBAR, count($this->arrSeriesData), $this->arrOptions);
         $objSeriesData->setArrDataArray($arrValues);
         $objSeriesData->setStrSeriesLabel($strLegend);
 
         $this->arrOptions["axes"]["xaxis"]["renderer"] = "$.jqplot.CategoryAxisRenderer";
 
         $this->arrOptions["stackSeries"] = true;
-        $this->arrSeriesData[]=$objSeriesData;
+        $this->arrSeriesData[] = $objSeriesData;
     }
 
     /**
@@ -364,16 +354,43 @@ class class_graph_jqplot implements interface_graph {
 
 
     private function preGraphGeneration() {
+        if($this->bitIsHorizontalBar &&
+            ($this->containsChartType(class_graph_jqplot_charttype::LINE) || $this->containsChartType(class_graph_jqplot_charttype::PIE)))
+        {
+            throw new class_exception("When option horizontal is set, chart cannot contain line or pie charts", class_exception::$level_ERROR);
+        }
 
-        //Special handling if horizontal stacked is contained
-        if($this->containsChartType(class_graph_jqplot_charttype::STACKEDBAR_HORIZONTAL)) {
-            //if horizonal bar chart should be plotted -> swap xAxis to yAxis
+        //Special handling if horizontal flag for bar charts is set
+        if($this->bitIsHorizontalBar) {
+
+            //Swap X and Y Axis
             if(count($this->arrXAxisTickLabels) > 0 || $this->intNrOfWrittenLabelsXAxis == 0) {
                 $this->arrOptions["axes"]["xaxis"]["renderer"] = null;
                 $this->arrOptions["axes"]["xaxis"]["ticks"] = null;
                 $this->arrOptions["axes"]["xaxis"]["showTicks"] = null;
                 $this->setArrYAxisTickLabels($this->arrXAxisTickLabels, $this->intNrOfWrittenLabelsXAxis);
             }
+
+            //add series options of each series to $arrOptions
+            foreach($this->arrSeriesData as $objSeriesData) {
+                if($objSeriesData->getIntChartType() == class_graph_jqplot_charttype::STACKEDBAR) {
+                    $arrSeriesOptions = $objSeriesData->getArrSeriesOptions();
+                    $arrSeriesOptions["pointLabels"]["hideZeros"] = true;
+                    $arrSeriesOptions["pointLabels"]["formatString"] = '%s';
+                    $arrSeriesOptions["pointLabels"]["show"] = true;
+                    $objSeriesData->setArrSeriesOptions($arrSeriesOptions);
+                }
+                if($objSeriesData->getIntChartType() == class_graph_jqplot_charttype::BAR) {
+                    $arrSeriesOptions = $objSeriesData->getArrSeriesOptions();
+                    $arrSeriesOptions["pointLabels"]["hideZeros"] = true;
+                    $arrSeriesOptions["pointLabels"]["formatString"] = '%s';
+                    $objSeriesData->setArrSeriesOptions($arrSeriesOptions);
+                }
+            }
+
+            //additionally set required global options
+            $this->arrOptions["seriesDefaults"]["renderer"] = "$.jqplot.BarRenderer";
+            $this->arrOptions["seriesDefaults"]["rendererOptions"]["barDirection"] = "horizontal";
         }
     }
 
@@ -656,4 +673,9 @@ class class_graph_jqplot implements interface_graph {
         $this->arrOptions["axes"]["yaxis"]["min"] = $intMin;
         $this->arrOptions["axes"]["yaxis"]["max"] = $intMax;
     }
+
+    public function setBarHorizontal($bitIsHorizontalBar = false) {
+        $this->bitIsHorizontalBar = $bitIsHorizontalBar;
+    }
+
 }

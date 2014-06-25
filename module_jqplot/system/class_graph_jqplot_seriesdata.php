@@ -52,9 +52,17 @@ class class_graph_jqplot_seriesdata {
             $this->arrSeriesOptions["rendererOptions"]["fillToZero"] = true;
             $this->arrSeriesOptions["rendererOptions"]["shadow"] = false;
         }
+        elseif($strChartType == class_graph_jqplot_charttype::BAR_HORIZONTAL) {
+            $this->arrSeriesOptions["renderer"] = "$.jqplot.BarRenderer";
+            $this->arrSeriesOptions["rendererOptions"]["barDirection"] = "horizontal";
+            $this->arrSeriesOptions["rendererOptions"]["fillToZero"] = true;
+            $this->arrSeriesOptions["rendererOptions"]["shadow"] = false;
+
+            //additionally set required global options
+            $arrGlobalOptions["seriesDefaults"]["renderer"] = "$.jqplot.BarRenderer";
+            $arrGlobalOptions["seriesDefaults"]["rendererOptions"]["barDirection"] = "horizontal";
+        }
         elseif($strChartType == class_graph_jqplot_charttype::STACKEDBAR) {
-
-
             $this->arrSeriesOptions["renderer"] = "$.jqplot.BarRenderer";
             $this->arrSeriesOptions["rendererOptions"]["fillToZero"] = true;
             $this->arrSeriesOptions["rendererOptions"]["shadow"] = false;
@@ -63,9 +71,9 @@ class class_graph_jqplot_seriesdata {
         }
         elseif($strChartType == class_graph_jqplot_charttype::STACKEDBAR_HORIZONTAL) {
             $this->arrSeriesOptions["renderer"] = "$.jqplot.BarRenderer";
+            $this->arrSeriesOptions["rendererOptions"]["barDirection"] = "horizontal";
             $this->arrSeriesOptions["rendererOptions"]["fillToZero"] = true;
             $this->arrSeriesOptions["rendererOptions"]["shadow"] = false;
-            $this->arrSeriesOptions["rendererOptions"]["barDirection"] = "horizontal";
 
             $this->arrSeriesOptions["pointLabels"]["hideZeros"] = true;
             $this->arrSeriesOptions["pointLabels"]["formatString"] = '%s';
