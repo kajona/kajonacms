@@ -154,6 +154,10 @@ class class_graph_ezc implements interface_graph {
      * @return void
      */
     public function addStackedBarChartSet($arrValues, $strLegend, $bitIsHorizontal = false) {
+        if($bitIsHorizontal) {
+            throw new class_exception("Horizontal stacked bar charts are not supported by ezchart", class_exception::$level_ERROR);
+        }
+
         if($this->intCurrentGraphMode > 0) {
             //only allow this method to be called again if in stackedbar-mode
             if($this->intCurrentGraphMode != $this->GRAPH_TYPE_STACKEDBAR) {
@@ -712,17 +716,6 @@ class class_graph_ezc implements interface_graph {
      */
     public function setBitLegendPositionBottom($bitLegendPositionBottom) {
         $this->bitLegendPositionBottom = $bitLegendPositionBottom;
-    }
-
-    /**
-     * Set the labels to be used for the y-axis.
-     * Make sure to set them before adding datasets!
-     *
-     * @param array $arrYAxisTickLabels array of string to be used as labels
-     * @param int $intNrOfWrittenLabels the amount of y-axis labels to be printed
-     */
-    public function setArrYAxisTickLabels($arrYAxisTickLabels, $intNrOfWrittenLabels = 12) {
-        // TODO: Implement setArrYAxisTickLabels() method.
     }
 
     /**

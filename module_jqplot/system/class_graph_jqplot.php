@@ -189,16 +189,7 @@ class class_graph_jqplot implements interface_graph {
         $objSeriesData->setArrDataArray($arrValues);
         $objSeriesData->setStrSeriesLabel($strLegend);
 
-        if($objSeriesData->getIntChartType() == class_graph_jqplot_charttype::STACKEDBAR) {
-            $this->arrOptions["axes"]["xaxis"]["renderer"] = "$.jqplot.CategoryAxisRenderer";
-        }
-        else if($objSeriesData->getIntChartType() == class_graph_jqplot_charttype::STACKEDBAR_HORIZONTAL) {
-            $arrSeriesOptions = $objSeriesData->getArrSeriesOptions();
-            $arrSeriesOptions["pointLabels"]["show"] = true;
-            $arrSeriesOptions["pointLabels"]["hideZeros"] = true;
-            $arrSeriesOptions["pointLabels"]["formatString"] = '%s';
-            $objSeriesData->setArrSeriesOptions($arrSeriesOptions);
-        }
+        $this->arrOptions["axes"]["xaxis"]["renderer"] = "$.jqplot.CategoryAxisRenderer";
 
         $this->arrOptions["stackSeries"] = true;
         $this->arrSeriesData[]=$objSeriesData;
@@ -309,6 +300,8 @@ class class_graph_jqplot implements interface_graph {
             throw new class_exception("Chart not initialized yet", class_exception::$level_ERROR);
         }
 
+        $this->preGraphGeneration();
+
         //create id's
         $strSystemId = generateSystemid();
         $strChartId =  "chart_".$strSystemId;
@@ -367,6 +360,21 @@ class class_graph_jqplot implements interface_graph {
         </script>";
 
         return $strReturn;
+    }
+
+
+    private function preGraphGeneration() {
+
+        //Special handling if horizontal stacked is contained
+        if($this->containsChartType(class_graph_jqplot_charttype::STACKEDBAR_HORIZONTAL)) {
+            //if horizonal bar chart should be plotted -> swap xAxis to yAxis
+            if(count($this->arrXAxisTickLabels) > 0 || $this->intNrOfWrittenLabelsXAxis == 0) {
+                $this->arrOptions["axes"]["xaxis"]["renderer"] = null;
+                $this->arrOptions["axes"]["xaxis"]["ticks"] = null;
+                $this->arrOptions["axes"]["xaxis"]["showTicks"] = null;
+                $this->setArrYAxisTickLabels($this->arrXAxisTickLabels, $this->intNrOfWrittenLabelsXAxis);
+            }
+        }
     }
 
 
@@ -548,7 +556,7 @@ class class_graph_jqplot implements interface_graph {
      * @param array $arrYAxisTickLabels array of string to be used as labels
      * @param int $intNrOfWrittenLabels the amount of y-axis labels to be printed
      */
-    public function setArrYAxisTickLabels($arrYAxisTickLabels, $intNrOfWrittenLabels = 12) {
+    private function setArrYAxisTickLabels($arrYAxisTickLabels, $intNrOfWrittenLabels = 12) {
         if($arrYAxisTickLabels != null && is_array($arrYAxisTickLabels)) {
             $this->arrYAxisTickLabels = $arrYAxisTickLabels;
             $this->arrOptions["axes"]["yaxis"]["renderer"] = "$.jqplot.CategoryAxisRenderer";
@@ -611,7 +619,7 @@ class class_graph_jqplot implements interface_graph {
      * @param int $intXAxisAngle
      */
     public function setIntXAxisAngle($intXAxisAngle) {
-        $this->arrOptions["axes"]["xaxis"]["tickOptions"]["angle"] = $intXAxisAngle;
+        $this->arrOptions["xAxis"]["xaxis"]["tickOptions"]["angle"] = $intXAxisAngle;
     }
 
     /**
@@ -648,5 +656,4 @@ class class_graph_jqplot implements interface_graph {
         $this->arrOptions["axes"]["yaxis"]["min"] = $intMin;
         $this->arrOptions["axes"]["yaxis"]["max"] = $intMax;
     }
-
 }

@@ -34,7 +34,7 @@ class class_graph_jqplot_seriesdata {
         ),
         "label" => null,
         "pointLabels" => array(
-            "show" =>false,
+            "show" => false,
             "labels" =>null
         )
     );
@@ -53,9 +53,13 @@ class class_graph_jqplot_seriesdata {
             $this->arrSeriesOptions["rendererOptions"]["shadow"] = false;
         }
         elseif($strChartType == class_graph_jqplot_charttype::STACKEDBAR) {
+
+
             $this->arrSeriesOptions["renderer"] = "$.jqplot.BarRenderer";
             $this->arrSeriesOptions["rendererOptions"]["fillToZero"] = true;
             $this->arrSeriesOptions["rendererOptions"]["shadow"] = false;
+
+            $this->arrSeriesOptions["pointLabels"]["show"] = true;
         }
         elseif($strChartType == class_graph_jqplot_charttype::STACKEDBAR_HORIZONTAL) {
             $this->arrSeriesOptions["renderer"] = "$.jqplot.BarRenderer";
@@ -63,6 +67,9 @@ class class_graph_jqplot_seriesdata {
             $this->arrSeriesOptions["rendererOptions"]["shadow"] = false;
             $this->arrSeriesOptions["rendererOptions"]["barDirection"] = "horizontal";
 
+            $this->arrSeriesOptions["pointLabels"]["hideZeros"] = true;
+            $this->arrSeriesOptions["pointLabels"]["formatString"] = '%s';
+            $this->arrSeriesOptions["pointLabels"]["show"] = true;
 
             //additionally set required global options
             $arrGlobalOptions["seriesDefaults"]["renderer"] = "$.jqplot.BarRenderer";

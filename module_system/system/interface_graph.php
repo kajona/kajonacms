@@ -171,14 +171,6 @@ interface interface_graph {
      */
     public function setArrXAxisTickLabels($arrXAxisTickLabels, $intNrOfWrittenLabels = 12);
 
-    /**
-     * Set the labels to be used for the y-axis.
-     * Make sure to set them before adding datasets!
-     *
-     * @param array $arrYAxisTickLabels array of string to be used as labels
-     * @param int $intNrOfWrittenLabels the amount of y-axis labels to be printed
-     */
-    public function setArrYAxisTickLabels($arrYAxisTickLabels, $intNrOfWrittenLabels = 12);
 
     /**
      * Sets if to render a legend or not
