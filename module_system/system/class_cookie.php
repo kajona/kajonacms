@@ -32,6 +32,9 @@ class class_cookie {
         }
 
         $strPath = preg_replace('#http(s?)://'.getServer("HTTP_HOST").'#i', '', _webpath_);
+        if($strPath == "" || $strPath[0] != "/")
+            $strPath = "/".$strPath;
+
         return setcookie($strName, $strValue, $intTime, $strPath);
     }
 
