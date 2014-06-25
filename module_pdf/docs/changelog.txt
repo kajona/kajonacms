@@ -1,9 +1,12 @@
 Module PDF
 
+V4.5.1 --------------------------------------------------------------------------------------------------
+NEW: module_pdf | class_pdf -> MultiCell content may optionally be rendered as interpreted html
+
 V4.5 ----------------------------------------------------------------------------------------------------
 NEW: module_pdf | sending pdf to browser -> script is now stopped via die() if pdf is sent to browser
 
-V4.4-----------------------------------------------------------------------------------------------------
+V4.4 ----------------------------------------------------------------------------------------------------
 NEW: added static variables to setup the margin of pdf-pages manually
 NEW: the default pdf footer got an optional param to add custom text to the footer-bar
 NEW: updated TCPDF to 6.0.047
