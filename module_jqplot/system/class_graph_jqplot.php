@@ -365,13 +365,19 @@ class class_graph_jqplot implements interface_graph {
 
             //Swap X and Y Axis
             if(count($this->arrXAxisTickLabels) > 0 || $this->intNrOfWrittenLabelsXAxis == 0) {
+                //reset xAxis options
                 $this->arrOptions["axes"]["xaxis"]["renderer"] = null;
                 $this->arrOptions["axes"]["xaxis"]["ticks"] = null;
                 $this->arrOptions["axes"]["xaxis"]["showTicks"] = null;
+
+                //set y-Axis options
                 $this->setArrYAxisTickLabels($this->arrXAxisTickLabels, $this->intNrOfWrittenLabelsXAxis);
+
+                //since it is a bar chart, use CategoryAxisRenderer
+                $this->arrOptions["axes"]["yaxis"]["renderer"] = "$.jqplot.CategoryAxisRenderer";
             }
 
-            //add series options of each series to $arrOptions
+            //add to each series options which are required for horizontal bar chart rendering
             foreach($this->arrSeriesData as $objSeriesData) {
                 if($objSeriesData->getIntChartType() == class_graph_jqplot_charttype::STACKEDBAR) {
                     $arrSeriesOptions = $objSeriesData->getArrSeriesOptions();
@@ -561,7 +567,7 @@ class class_graph_jqplot implements interface_graph {
         }
 
         $this->intNrOfWrittenLabelsXAxis = $intNrOfWrittenLabels;
-        if($intNrOfWrittenLabels == 0) {
+        if($intNrOfWrittenLabels === 0) {
             $this->arrOptions["axes"]["xaxis"]["showTicks"] = false;
         }
     }
@@ -581,7 +587,7 @@ class class_graph_jqplot implements interface_graph {
         }
 
         $this->intNrOfWrittenLabelsYAxis = $intNrOfWrittenLabels;
-        if($intNrOfWrittenLabels == 0) {
+        if($intNrOfWrittenLabels === 0) {
             $this->arrOptions["axes"]["yaxis"]["showTicks"] = false;
         }
     }
