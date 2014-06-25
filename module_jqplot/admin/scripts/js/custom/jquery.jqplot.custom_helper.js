@@ -48,6 +48,15 @@ KAJONA.admin.jqplotHelper = {
             }
         }
     },
+    /**
+     * Sets the created canvasLabels invisible depending on the intNoOfWrittenLabels
+     *
+     * @param strChartId
+     * @param intNoOfWrittenLabels
+     */
+    setAxisInvisible : function(strChartId, strAxis) {
+        var tickArray = $('#'+strChartId+' div.jqplot-'+strAxis).hide();
+    },
     mouseLeave : function(ev, gridpos, datapos, neighbor, plot, tooltipId) {
         $('#jqplot_tooltip').remove();
         this.previousNeighbor = null;

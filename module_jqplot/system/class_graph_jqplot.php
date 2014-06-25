@@ -26,6 +26,8 @@ class class_graph_jqplot implements interface_graph {
     private $arrSeriesColors =  null;
 
     private $bitIsHorizontalBar = false;
+    private $bitXAxisLabelsInvisible = false;
+    private $bitYAxisLabelsInvisible = false;
 
 
     /**
@@ -87,6 +89,7 @@ class class_graph_jqplot implements interface_graph {
                 "max" => null,
                 "min" => null,
                 "ticks" => null,
+                "showTicks" => null,
                 "tickOptions" => array(
                     "angle" => null
                 )
@@ -96,7 +99,8 @@ class class_graph_jqplot implements interface_graph {
                 "label" => null,
                 "max" => null,
                 "min" => null,
-                "ticks" => null
+                "ticks" => null,
+                "showTicks" => null
             )
         ),
         "series" => array()
@@ -316,6 +320,12 @@ class class_graph_jqplot implements interface_graph {
             if($this->intNrOfWrittenLabelsYAxis != null) {
                 $strChartCode .= "KAJONA.admin.jqplotHelper.setLabelsInvisible('".$strChartId."',".$this->intNrOfWrittenLabelsYAxis.", 'yaxis');\n";
             }
+            if($this->bitXAxisLabelsInvisible) {
+                $strChartCode .= "KAJONA.admin.jqplotHelper.setAxisInvisible('".$strChartId."', 'xaxis');\n";
+            }
+            if($this->bitYAxisLabelsInvisible) {
+                $strChartCode .= "KAJONA.admin.jqplotHelper.setAxisInvisible('".$strChartId."', 'yaxis');\n";
+            }
 
             $strChartCode .= "$('#$strChartId').bind('jqplotMouseMove', function (ev, gridpos, datapos, neighbor, plot) {KAJONA.admin.jqplotHelper.mouseMove(ev, gridpos, datapos, neighbor, plot, '".$strTooltipId."')});\n";
             $strChartCode .= "$('#$strChartId').bind('jqplotMouseLeave', function (ev, gridpos, datapos, neighbor, plot) {KAJONA.admin.jqplotHelper.mouseLeave(ev, gridpos, datapos, neighbor, plot, '".$strTooltipId."')});\n";
@@ -368,7 +378,6 @@ class class_graph_jqplot implements interface_graph {
                 //reset xAxis options
                 $this->arrOptions["axes"]["xaxis"]["renderer"] = null;
                 $this->arrOptions["axes"]["xaxis"]["ticks"] = null;
-                $this->arrOptions["axes"]["xaxis"]["showTicks"] = null;
 
                 //set y-Axis options
                 $this->setArrYAxisTickLabels($this->arrXAxisTickLabels, $this->intNrOfWrittenLabelsXAxis);
@@ -669,7 +678,6 @@ class class_graph_jqplot implements interface_graph {
         $this->arrOptions["seriesColors"] = $arrSeriesColors;
     }
 
-
     public function setXAxisRange($intMin, $intMax) {
         $this->arrOptions["axes"]["xaxis"]["min"] = $intMin;
         $this->arrOptions["axes"]["xaxis"]["max"] = $intMax;
@@ -680,8 +688,17 @@ class class_graph_jqplot implements interface_graph {
         $this->arrOptions["axes"]["yaxis"]["max"] = $intMax;
     }
 
-    public function setBarHorizontal($bitIsHorizontalBar = false) {
+    public function setBarHorizontal($bitIsHorizontalBar) {
         $this->bitIsHorizontalBar = $bitIsHorizontalBar;
     }
 
+    public function setHideXAxis($bitHideXAxis) {
+        $this->arrOptions["axes"]["xaxis"]["showTicks"] = false;
+        $this->bitXAxisLabelsInvisible = $bitHideXAxis;
+    }
+
+    public function setHideYAxis($bitHideYAxis) {
+        $this->arrOptions["axes"]["yaxis"]["showTicks"] = false;
+        $this->bitYAxisLabelsInvisible = $bitHideYAxis;
+    }
 }

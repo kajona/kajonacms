@@ -114,13 +114,31 @@ class class_test_charts_jqPlotTest extends class_testbase  {
         echo $objGraph->renderGraph();
 
         $objGraph = class_graph_factory::getGraphInstance(class_graph_factory::$STR_TYPE_JQPLOT);
-        $objGraph->setStrGraphTitle("A Horizontal Bar Chart");
+        $objGraph->setStrGraphTitle("A Bar Chart");
         $objGraph->setStrXAxisTitle("My new X-Axis");
         $objGraph->setStrYAxisTitle("My new Y-Axis");
         $objGraph->addBarChartSet(array(1, 2, 3, 4), "serie 9");
         $objGraph->addBarChartSet(array(1, 2, 3, 4), "serie 10");
         $objGraph->setBitRenderLegend(true);
         $objGraph->setStrFont("open sans");
+        echo $objGraph->renderGraph();
+
+
+        $objGraph = class_graph_factory::getGraphInstance(class_graph_factory::$STR_TYPE_JQPLOT);
+        $objGraph->setStrGraphTitle("A Horizontal Bar Chart");
+        $objGraph->setStrXAxisTitle("My new X-Axis");
+        $objGraph->setStrYAxisTitle("My new Y-Axis");
+        $objGraph->addBarChartSet(array(1, 2, 3, 4), "serie 9");
+        $objGraph->addBarChartSet(array(1, 2, 3, 4), "serie 10");
+        $objGraph->setBarHorizontal(true);
+        $objGraph->setBitRenderLegend(true);
+        $objGraph->setStrFont("open sans");
+        if(method_exists($objGraph, "setHideXAxis")) {
+            $objGraph->setHideXAxis(true);
+        }
+        if(method_exists($objGraph, "setHideYAxis")) {
+            $objGraph->setHideYAxis(true);
+        }
         echo $objGraph->renderGraph();
 
         $objGraph = class_graph_factory::getGraphInstance(class_graph_factory::$STR_TYPE_JQPLOT);
