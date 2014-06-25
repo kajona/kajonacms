@@ -50,9 +50,8 @@ interface interface_graph {
      *
      * @param array $arrValues see the example above for the internal array-structure
      * @param string $strLegend
-     * @param bool $bitIsHorizontal
      */
-    public function addStackedBarChartSet($arrValues, $strLegend, $bitIsHorizontal = false);
+    public function addStackedBarChartSet($arrValues, $strLegend);
 
     /**
      * Registers a new plot to the current graph. Works in line-plot-mode only.

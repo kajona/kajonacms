@@ -148,16 +148,11 @@ class class_graph_ezc implements interface_graph {
      *
      * @param array $arrValues see the example above for the internal array-structure
      * @param string $strLegend
-     * @param bool $bitIsHorizontal
      *
      * @throws class_exception
      * @return void
      */
-    public function addStackedBarChartSet($arrValues, $strLegend, $bitIsHorizontal = false) {
-        if($bitIsHorizontal) {
-            throw new class_exception("Horizontal stacked bar charts are not supported by ezchart", class_exception::$level_ERROR);
-        }
-
+    public function addStackedBarChartSet($arrValues, $strLegend) {
         if($this->intCurrentGraphMode > 0) {
             //only allow this method to be called again if in stackedbar-mode
             if($this->intCurrentGraphMode != $this->GRAPH_TYPE_STACKEDBAR) {
