@@ -22,7 +22,6 @@ class class_graph_factory {
     public static $STR_TYPE_PCHART = "pchart";
     public static $STR_TYPE_FLOT = "flot";
     public static $STR_TYPE_JQPLOT = "jqplot";
-    public static $STR_TYPE_HIGHCHARTS = "highcharts";
 
 
     /**
