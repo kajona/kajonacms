@@ -383,6 +383,16 @@ class class_graph_jqplot implements interface_graph {
                 });
         </script>";
 
+
+        //Styles for pointLabels
+        $strReturn .= "<style type=\"text/css\">
+                #$strChartId .jqplot-point-label {
+                  color: #ffffff;
+                  text-shadow: 0 0 3px black, 0 0 3px black;
+                }
+                </style>
+        ";
+
         return $strReturn;
     }
 
