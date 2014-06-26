@@ -309,32 +309,56 @@ class class_graph_jqplot implements interface_graph {
         $strOptions = $this->strCreateJSOptions();
 
         //create the js-Code
-        $strChartCode = "$(function() {";
-            //plots the graph
-            $strChartCode .= "var plot_$strChartId = $.jqplot('".$strChartId."',".$strData.",".$strOptions.");\n";
 
-            //if this variable is set ticks may be set invisible
-            if($this->intNrOfWrittenLabelsXAxis != null) {
-                $strChartCode .= "KAJONA.admin.jqplotHelper.setLabelsInvisible('".$strChartId."',".$this->intNrOfWrittenLabelsXAxis.", 'xaxis');\n";
-            }
-            if($this->intNrOfWrittenLabelsYAxis != null) {
-                $strChartCode .= "KAJONA.admin.jqplotHelper.setLabelsInvisible('".$strChartId."',".$this->intNrOfWrittenLabelsYAxis.", 'yaxis');\n";
-            }
-            if($this->bitXAxisLabelsInvisible) {
-                $strChartCode .= "KAJONA.admin.jqplotHelper.setAxisInvisible('".$strChartId."', 'xaxis');\n";
-            }
-            if($this->bitYAxisLabelsInvisible) {
-                $strChartCode .= "KAJONA.admin.jqplotHelper.setAxisInvisible('".$strChartId."', 'yaxis');\n";
-            }
+        //JS-Code for plotting
+        $strChartCode = "object_$strChartId = $.jqplot('".$strChartId."',".$strData.",".$strOptions.");\n";
+        //event when mouse over over graph
+        $strChartCode .= "$('#$strChartId').bind('jqplotMouseMove', function (ev, gridpos, datapos, neighbor, plot) {KAJONA.admin.jqplotHelper.mouseMove(ev, gridpos, datapos, neighbor, plot, '".$strTooltipId."')});\n";
+        $strChartCode .= "$('#$strChartId').bind('jqplotMouseLeave', function (ev, gridpos, datapos, neighbor, plot) {KAJONA.admin.jqplotHelper.mouseLeave(ev, gridpos, datapos, neighbor, plot, '".$strTooltipId."')});\n";
 
-            $strChartCode .= "$('#$strChartId').bind('jqplotMouseMove', function (ev, gridpos, datapos, neighbor, plot) {KAJONA.admin.jqplotHelper.mouseMove(ev, gridpos, datapos, neighbor, plot, '".$strTooltipId."')});\n";
-            $strChartCode .= "$('#$strChartId').bind('jqplotMouseLeave', function (ev, gridpos, datapos, neighbor, plot) {KAJONA.admin.jqplotHelper.mouseLeave(ev, gridpos, datapos, neighbor, plot, '".$strTooltipId."')});\n";
-        $strChartCode .="});";
+
+        //JS-code being executed after the plot
+        $strPostPlotCode = "";
+        //if this variable is set ticks may be set invisible
+        if($this->intNrOfWrittenLabelsXAxis != null) {
+            $strPostPlotCode .= "KAJONA.admin.jqplotHelper.setLabelsInvisible('".$strChartId."',".$this->intNrOfWrittenLabelsXAxis.", 'xaxis');\n";
+        }
+        if($this->intNrOfWrittenLabelsYAxis != null) {
+            $strPostPlotCode .= "KAJONA.admin.jqplotHelper.setLabelsInvisible('".$strChartId."',".$this->intNrOfWrittenLabelsYAxis.", 'yaxis');\n";
+        }
+        if($this->bitXAxisLabelsInvisible) {
+            $strPostPlotCode .= "KAJONA.admin.jqplotHelper.setAxisInvisible('".$strChartId."', 'xaxis');\n";
+        }
+        if($this->bitYAxisLabelsInvisible) {
+            $strPostPlotCode .= "KAJONA.admin.jqplotHelper.setAxisInvisible('".$strChartId."', 'yaxis');\n";
+        }
 
 
         $strCoreDirectory = class_resourceloader::getInstance()->getCorePathForModule("module_jqplot");
 
         $strReturn .= "<script type='text/javascript'>
+                var object_$strChartId = null;
+                var isRendered_$strChartId = false;
+
+                function postPlot_$strChartId() {
+                    ".$strPostPlotCode."
+                }
+
+                function plot_$strChartId() {
+                    ".$strChartCode."
+                }
+
+                function render_$strChartId() {
+                    if(isRendered_$strChartId ) {
+                        object_$strChartId.replot();
+                        postPlot_$strChartId();
+                        return;
+                    }
+                    plot_$strChartId();
+                    postPlot_$strChartId();
+                    isRendered_$strChartId = true
+                }
+
                 KAJONA.admin.loader.loadFile(['{$strCoreDirectory}/module_jqplot/admin/scripts/js/jqplot/jquery.jqplot.min.js', '{$strCoreDirectory}/module_jqplot/admin/scripts/js/jqplot/jquery.jqplot.min.css'], function() {
                     KAJONA.admin.loader.loadFile([
                         '{$strCoreDirectory}/module_jqplot/admin/scripts/js/jqplot/plugins/jqplot.logAxisRenderer.min.js',
@@ -354,7 +378,7 @@ class class_graph_jqplot implements interface_graph {
                         '{$strCoreDirectory}/module_jqplot/admin/scripts/js/custom/jquery.jqplot.custom_helper.js',
                         '{$strCoreDirectory}/module_jqplot/admin/scripts/js/custom/jquery.jqplot.custom.css'
                     ], function() {
-                        ".$strChartCode."
+                        $(function() {render_$strChartId();});
                     });
                 });
         </script>";
@@ -651,7 +675,7 @@ class class_graph_jqplot implements interface_graph {
      * @param int $intXAxisAngle
      */
     public function setIntXAxisAngle($intXAxisAngle) {
-        $this->arrOptions["xAxis"]["xaxis"]["tickOptions"]["angle"] = $intXAxisAngle;
+        $this->arrOptions["axes"]["xaxis"]["tickOptions"]["angle"] = $intXAxisAngle;
     }
 
     /**
