@@ -1557,6 +1557,12 @@ label {
     &.mandatoryFormElement {
         .box-shadow(0 0 6px @orange+20);
     }
+
+}
+
+//fix for bug #904, since the element is hidden on load the calculation of the dds' width failed
+.tab-pane .chosen-container {
+    width: 280px !important;
 }
 
 .control-group.error .chosen-container a {
