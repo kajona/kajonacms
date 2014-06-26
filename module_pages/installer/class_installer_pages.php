@@ -250,7 +250,6 @@ class class_installer_pages extends class_installer_base implements interface_in
 	protected function updateModuleVersion($strModuleName, $strVersion) {
 		parent::updateModuleVersion("pages", $strVersion);
         parent::updateModuleVersion("pages_content", $strVersion);
-        parent::updateModuleVersion("folderview", $strVersion);
 	}
 
 

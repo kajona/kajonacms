@@ -158,6 +158,7 @@ class class_installer_mediamanager extends class_installer_base implements inter
             $strReturn = "Updating 4.4 to 4.5...\n";
             $strReturn .= "Updating module-versions...\n";
             $this->updateModuleVersion($this->objMetadata->getStrTitle(), "4.5");
+            $this->updateModuleVersion("folderview", "4.5");
         }
 
         return $strReturn."\n\n";
