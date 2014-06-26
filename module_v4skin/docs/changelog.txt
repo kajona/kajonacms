@@ -1,5 +1,8 @@
 Module V4 Skin
 
+V4.5.1 --------------------------------------------------------------------------------------------------
+BUG: module_v4skin | elements -> Dropdown with width 0 when in tabbed content [ticket #904]
+
 V4.5 ----------------------------------------------------------------------------------------------------
 NEW: module_v4skin | chosen -> updated chosen plugin to 1.1
 NEW: module_v4skin | dialog.js -> the click-action (url or callback) is removed onclick and therefore triggered only once [ticket #894]
