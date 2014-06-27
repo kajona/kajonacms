@@ -28,6 +28,8 @@ class class_module_votings_voting extends class_model implements interface_model
      * @fieldType textarea
      * @fieldMandatory
      * @fieldLabel commons_title
+     *
+     * @listOrder
      */
     private $strTitle = "";
 
@@ -109,47 +111,11 @@ class class_module_votings_voting extends class_model implements interface_model
      * @static
      */
     public static function getObjectList($bitOnlyActive = false, $intStart = false, $intEnd = false) {
-        $strQuery = "SELECT system_id FROM " . _dbprefix_ . "votings_voting,
-						" . _dbprefix_ . "system
-						WHERE system_id = votings_voting_id
-						" . ($bitOnlyActive ? " AND system_status = 1 " : "") . "
-						ORDER BY votings_voting_title";
-
-        $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array(), $intStart, $intEnd);
-        $arrReturn = array();
-        foreach($arrIds as $arrOneId) {
-            $arrReturn[] = new class_module_votings_voting($arrOneId["system_id"]);
+        $objOrm = new class_orm_objectlist();
+        if($bitOnlyActive) {
+            $objOrm->addWhereRestriction(new class_orm_objectlist_restriction("AND system_status != 0"));
         }
-
-        return $arrReturn;
-    }
-
-
-    /**
-     * Loads the answers related to the current question
-     *
-     * @param bool $bitOnlyActive
-     * @param null $intStart
-     * @param null $intEnd
-     *
-     * @return class_module_votings_answer[]
-     */
-    public function getAllAnswers($bitOnlyActive = false, $intStart = null, $intEnd = null) {
-
-        $strQuery = "SELECT system_id
-                       FROM " . _dbprefix_ . "votings_answer,  " . _dbprefix_ . "system
-                      WHERE system_prev_id=?
-                        AND system_id = votings_answer_id
-                        " . ($bitOnlyActive ? " AND system_status = 1 " : "") . "
-                      ORDER BY system_sort ASC, votings_answer_text ASC";
-        $arrQuery = $this->objDB->getPArray($strQuery, array($this->getSystemid()), $intStart, $intEnd);
-
-        $arrReturn = array();
-        foreach($arrQuery as $arrSingleRow) {
-            $arrReturn[] = new class_module_votings_answer($arrSingleRow["system_id"]);
-        }
-
-        return $arrReturn;
+        return $objOrm->getObjectList(__CLASS__, "", $intStart, $intEnd);
     }
 
     /**
@@ -160,13 +126,12 @@ class class_module_votings_voting extends class_model implements interface_model
      * @return int
      */
     public function getAllAnswersCount($bitOnlyActive = false) {
-        $strQuery = "SELECT COUNT(*)
-                       FROM " . _dbprefix_ . "votings_answer,  " . _dbprefix_ . "system
-                      WHERE system_prev_id=?
-                        AND system_id = votings_answer_id
-                        " . ($bitOnlyActive ? " AND system_status = 1 " : "") . "";
-        $arrRow = $this->objDB->getPRow($strQuery, array($this->getSystemid()));
-        return $arrRow["COUNT(*)"];
+
+        $objOrm = new class_orm_objectlist();
+        if($bitOnlyActive) {
+            $objOrm->addWhereRestriction(new class_orm_objectlist_restriction("AND system_status != 0"));
+        }
+        return $objOrm->getObjectCount(__CLASS__);
     }
 
     public function getStrTitle() {
