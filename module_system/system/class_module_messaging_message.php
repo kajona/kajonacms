@@ -188,7 +188,7 @@ class class_module_messaging_message extends class_model implements interface_mo
         $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array($strUserid), $intStart, $intEnd);
         $arrReturn = array();
         foreach($arrIds as $arrOneId)
-            $arrReturn[] = new class_module_messaging_message($arrOneId["system_id"]);
+            $arrReturn[] = class_objectfactory::getInstance()->getObject($arrOneId["system_id"]);
 
         return $arrReturn;
     }
@@ -214,7 +214,7 @@ class class_module_messaging_message extends class_model implements interface_mo
         $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array($strIdentifier), $intStart, $intEnd);
         $arrReturn = array();
         foreach($arrIds as $arrOneId)
-            $arrReturn[] = new class_module_messaging_message($arrOneId["system_id"]);
+            $arrReturn[] = class_objectfactory::getInstance()->getObject($arrOneId["system_id"]);
 
         return $arrReturn;
     }
@@ -230,16 +230,13 @@ class class_module_messaging_message extends class_model implements interface_mo
      * @return int
      */
     public static function getNumberOfMessagesForUser($strUserid, $bitOnlyUnread = false) {
-
-        $arrParams = array($strUserid);
-
         $strQuery = "SELECT COUNT(*)
                      FROM "._dbprefix_."messages, "._dbprefix_."system
 		            WHERE system_id = message_id
 		              AND message_user = ?
 		              ".($bitOnlyUnread ? " AND (message_read IS NULL OR message_read = 0 )" : "")."";
 
-        $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, $arrParams);
+        $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array($strUserid));
         return $arrRow["COUNT(*)"];
     }
 

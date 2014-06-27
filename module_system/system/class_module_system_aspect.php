@@ -121,17 +121,11 @@ class class_module_system_aspect extends class_model implements interface_model,
      * @static
      */
     public static function getObjectList($bitJustActive = false, $intStart = null, $intEnd = null) {
-        $strQuery = "SELECT system_id
-                     FROM "._dbprefix_."aspects, "._dbprefix_."system
-		             WHERE system_id = aspect_id
-		             ".($bitJustActive ? "AND system_status != 0 " : "")."
-		             ORDER BY system_sort ASC, aspect_name ASC";
-        $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array(), $intStart, $intEnd);
-        $arrReturn = array();
-        foreach($arrIds as $arrOneId)
-            $arrReturn[] = new class_module_system_aspect($arrOneId["system_id"]);
-
-        return $arrReturn;
+        $objOrm = new class_orm_objectlist();
+        if($bitJustActive) {
+            $objOrm->addWhereRestriction(new class_orm_objectlist_restriction("AND system_status != 0"));
+        }
+        return $objOrm->getObjectList(__CLASS__, "", $intStart, $intEnd);
     }
 
 
@@ -143,14 +137,11 @@ class class_module_system_aspect extends class_model implements interface_model,
      * @return int
      */
     public static function getObjectCount($bitJustActive = false) {
-        $strQuery = "SELECT COUNT(*)
-                     FROM "._dbprefix_."aspects, "._dbprefix_."system
-                     WHERE system_id = aspect_id
-                     ".($bitJustActive ? "AND system_status != 0 " : "")."";
-        $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array());
-
-        return (int)$arrRow["COUNT(*)"];
-
+        $objOrm = new class_orm_objectlist();
+        if($bitJustActive) {
+            $objOrm->addWhereRestriction(new class_orm_objectlist_restriction("AND system_status != 0"));
+        }
+        return $objOrm->getObjectCount(__CLASS__);
     }
 
 

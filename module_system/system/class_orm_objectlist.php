@@ -21,6 +21,13 @@ class class_orm_objectlist extends class_orm_base {
     private $arrWhereRestrictions = array();
 
 
+    /**
+     * Internal helper, adds the where restrictions
+     *
+     * @param string &$strQuery
+     * @param array &$arrParams
+     * @return void
+     */
     private function processWhereRestrictions(&$strQuery, &$arrParams) {
         foreach($this->arrWhereRestrictions as $objOneRestriction) {
             $strQuery .= $objOneRestriction->getStrWhere();
@@ -133,8 +140,10 @@ class class_orm_objectlist extends class_orm_base {
     }
 
     /**
+     * Add a where restriction to the current queries
      *
      * @param class_orm_objectlist_restriction $objRestriction
+     * @return void
      */
     public function addWhereRestriction(class_orm_objectlist_restriction $objRestriction) {
         $this->arrWhereRestrictions[] = $objRestriction;

@@ -283,7 +283,7 @@ class class_module_news_news extends class_model implements interface_model, int
 
         $arrReturn = array();
         foreach($arrIds as $arrOneId) {
-            $arrReturn[] = new class_module_news_news($arrOneId["system_id"]);
+            $arrReturn[] = class_objectfactory::getInstance()->getObject($arrOneId["system_id"]);
         }
 
         return $arrReturn;
