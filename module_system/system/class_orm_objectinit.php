@@ -27,11 +27,11 @@ class class_orm_objectinit extends class_orm_base {
         //try to do a default init
         $objReflection = new class_reflection($this->getObjObject());
 
-        if(validateSystemid($this->getObjObject()->getSystemid())) {
+        if(validateSystemid($this->getObjObject()->getSystemid()) && $this->hasTargetTable()) {
 
 
             $strQuery = "SELECT *
-                          ".$this->getQueryBase($this->getObjObject())."
+                          ".$this->getQueryBase()."
                            AND system_id = ? ";
 
             $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array($this->getObjObject()->getSystemid()));

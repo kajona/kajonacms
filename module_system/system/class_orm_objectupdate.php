@@ -28,7 +28,7 @@ class class_orm_objectupdate extends class_orm_base {
      */
     public function updateStateToDb() {
 
-        if(!validateSystemid($this->getObjObject()->getSystemid())) {
+        if(!validateSystemid($this->getObjObject()->getSystemid()) || !$this->hasTargetTable()) {
             return true;
         }
 

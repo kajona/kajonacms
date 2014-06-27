@@ -94,7 +94,6 @@ class class_orm_objectlist extends class_orm_base {
             $strOrderBy = "ORDER BY ".implode(", ", $arrOrderByCriteria);
 
 
-
         $strQuery = "SELECT system_id
                            ".$this->getQueryBase($strTargetClass)."
                        ".($strPrevid != "" ? " AND system_prev_id = ? " : "")."

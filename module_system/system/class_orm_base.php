@@ -35,6 +35,17 @@ abstract class class_orm_base {
         return $this->objObject;
     }
 
+    /**
+     * Validates if the current object has at least a single target-table set up
+     * @return bool
+     */
+    protected function hasTargetTable() {
+        $objAnnotations = new class_reflection($this->getObjObject());
+        $arrTargetTables = $objAnnotations->getAnnotationValuesFromClass(class_orm_base::STR_ANNOTATION_TARGETTABLE);
+
+        return count($arrTargetTables) > 0;
+    }
+
 
     /**
      * Internal helper, generated the query part without the select- and the real where- parts.
@@ -44,12 +55,15 @@ abstract class class_orm_base {
      * @return string
      * @throws class_orm_exception
      */
-    protected function getQueryBase($strTargetClass) {
+    protected function getQueryBase($strTargetClass = "") {
+        if($strTargetClass == "")
+            $strTargetClass = $this->getObjObject();
+
         $objAnnotations = new class_reflection($strTargetClass);
         $arrTargetTables = $objAnnotations->getAnnotationValuesFromClass(class_orm_base::STR_ANNOTATION_TARGETTABLE);
 
         if(count($arrTargetTables) == 0) {
-            throw new class_orm_exception("Class ".$strTargetClass." has no target table", class_exception::$level_ERROR);
+            throw new class_orm_exception("Class ".(is_object($strTargetClass) ? get_class($strTargetClass) : $strTargetClass)." has no target table", class_exception::$level_ERROR);
         }
 
         $strWhere = "";
