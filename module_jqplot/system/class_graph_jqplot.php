@@ -79,8 +79,13 @@ class class_graph_jqplot implements interface_graph {
             )
         ),
         "seriesDefaults" => array(
-            "useNegativeColors" => false
-
+            "useNegativeColors" => false,
+            "rendererOptions" => array(
+                "animation" => array(
+                    "show"=> true,
+                    "speed" => 1000
+                )
+            )
         ),
         "axes" => array(
             "xaxis"=> array(
