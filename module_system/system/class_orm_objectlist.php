@@ -15,6 +15,20 @@
  */
 class class_orm_objectlist extends class_orm_base {
 
+    /**
+     * @var class_orm_objectlist_restriction[]
+     */
+    private $arrWhereRestrictions = array();
+
+
+    private function processWhereRestrictions(&$strQuery, &$arrParams) {
+        foreach($this->arrWhereRestrictions as $objOneRestriction) {
+            $strQuery .= $objOneRestriction->getStrWhere();
+            foreach($objOneRestriction->getArrParams() as $strOneParam) {
+                $arrParams[] = $strOneParam;
+            }
+        }
+    }
 
 
     /**
@@ -38,6 +52,8 @@ class class_orm_objectlist extends class_orm_base {
         $arrParams = array();
         if($strPrevid != "")
             $arrParams[] = $strPrevid;
+
+        $this->processWhereRestrictions($strQuery, $arrParams);
 
         $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, $arrParams);
         return $arrRow["COUNT(*)"];
@@ -96,12 +112,15 @@ class class_orm_objectlist extends class_orm_base {
 
         $strQuery = "SELECT system_id
                            ".$this->getQueryBase($strTargetClass)."
-                       ".($strPrevid != "" ? " AND system_prev_id = ? " : "")."
-                       ".$strOrderBy;
+                       ".($strPrevid != "" ? " AND system_prev_id = ? " : "");
 
         $arrParams = array();
         if($strPrevid != "")
             $arrParams[] = $strPrevid;
+
+        $this->processWhereRestrictions($strQuery, $arrParams);
+
+        $strQuery .= $strOrderBy;
 
         $arrRows = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, $arrParams, $intStart, $intEnd);
 
@@ -113,6 +132,13 @@ class class_orm_objectlist extends class_orm_base {
         return $arrReturn;
     }
 
+    /**
+     *
+     * @param class_orm_objectlist_restriction $objRestriction
+     */
+    public function addWhereRestriction(class_orm_objectlist_restriction $objRestriction) {
+        $this->arrWhereRestrictions[] = $objRestriction;
+    }
 
 
 
