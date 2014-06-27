@@ -277,7 +277,7 @@ class class_module_pages_pageelement extends class_model implements interface_mo
 
         //try to find setters to inject the values
         $objAnnotation = new class_reflection($objElement);
-        $arrMappedProperties = $objAnnotation->getPropertiesWithAnnotation(class_orm_mapper::STR_ANNOTATION_TABLECOLUMN);
+        $arrMappedProperties = $objAnnotation->getPropertiesWithAnnotation(class_orm_base::STR_ANNOTATION_TABLECOLUMN);
 
         foreach($arrElementData as $strColumn => $strValue) {
             foreach($arrMappedProperties as $strPropertyname => $strAnnotation) {

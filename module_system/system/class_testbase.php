@@ -108,7 +108,7 @@ abstract class class_testbase extends PHPUnit_Framework_TestCase {
 
             //check if the property is annotated with @tablecolumn
             if($bitAutofillProperties) {
-                if($objReflectorAnnotated->hasPropertyAnnotation($strPropName, class_orm_mapper::STR_ANNOTATION_TABLECOLUMN)) {
+                if($objReflectorAnnotated->hasPropertyAnnotation($strPropName, class_orm_base::STR_ANNOTATION_TABLECOLUMN)) {
                     $strSetterMethod = $objReflectorAnnotated->getSetter($strPropName);
 
                     if($objReflector->hasMethod($strSetterMethod)) {

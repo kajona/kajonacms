@@ -62,7 +62,7 @@ abstract class class_element_admin extends class_admin implements interface_sear
     public function getAdminForm() {
         if($this->objAdminForm == null) {
             $objAnnotations = new class_reflection($this);
-            $arrTargetTables = $objAnnotations->getAnnotationValuesFromClass(class_orm_mapper::STR_ANNOTATION_TARGETTABLE);
+            $arrTargetTables = $objAnnotations->getAnnotationValuesFromClass(class_orm_base::STR_ANNOTATION_TARGETTABLE);
             if(count($arrTargetTables) == 0) {
                 return null;
             }
@@ -110,13 +110,13 @@ abstract class class_element_admin extends class_admin implements interface_sear
 
         //split modes - legacy definitions or coooooool declarative processing
         $objAnnotations = new class_reflection($this);
-        $arrTargetTables = $objAnnotations->getAnnotationValuesFromClass(class_orm_mapper::STR_ANNOTATION_TARGETTABLE);
+        $arrTargetTables = $objAnnotations->getAnnotationValuesFromClass(class_orm_base::STR_ANNOTATION_TARGETTABLE);
         if(count($arrTargetTables) == 0) {
             return $this->generateLegacyEdit($strMode);
         }
 
 
-        $objORM = new class_orm_mapper($this);
+        $objORM = new class_orm_objectinit($this);
         $objORM->initObjectFromDb();
         $objForm = $this->getAdminForm();
 
@@ -354,10 +354,10 @@ abstract class class_element_admin extends class_admin implements interface_sear
     public final function loadElementData() {
 
         $objAnnotations = new class_reflection($this);
-        $arrTargetTables = $objAnnotations->getAnnotationValuesFromClass(class_orm_mapper::STR_ANNOTATION_TARGETTABLE);
+        $arrTargetTables = $objAnnotations->getAnnotationValuesFromClass(class_orm_base::STR_ANNOTATION_TARGETTABLE);
         $strTargetTable = "";
         if(count($arrTargetTables) != 0) {
-            $objORM = new class_orm_mapper($this);
+            $objORM = new class_orm_objectinit($this);
             $objORM->initObjectFromDb();
             $arrTables = explode(".", $arrTargetTables[0]);
             $strTargetTable = _dbprefix_.$arrTables[0];
@@ -403,9 +403,9 @@ abstract class class_element_admin extends class_admin implements interface_sear
      */
     public function updateForeignElement() {
         $objAnnotations = new class_reflection($this);
-        $arrTargetTables = $objAnnotations->getAnnotationValuesFromClass(class_orm_mapper::STR_ANNOTATION_TARGETTABLE);
+        $arrTargetTables = $objAnnotations->getAnnotationValuesFromClass(class_orm_base::STR_ANNOTATION_TARGETTABLE);
         if(count($arrTargetTables) != 0) {
-            $objORM = new class_orm_mapper($this);
+            $objORM = new class_orm_objectupdate($this);
             $objORM->updateStateToDb();
         }
 
@@ -468,7 +468,7 @@ abstract class class_element_admin extends class_admin implements interface_sear
      */
     public function getTable() {
         $objAnnotations = new class_reflection($this);
-        $arrTargetTables = $objAnnotations->getAnnotationValuesFromClass(class_orm_mapper::STR_ANNOTATION_TARGETTABLE);
+        $arrTargetTables = $objAnnotations->getAnnotationValuesFromClass(class_orm_base::STR_ANNOTATION_TARGETTABLE);
         if(count($arrTargetTables) != 0) {
             $arrTable = explode(".", $arrTargetTables[0]);
             return _dbprefix_.$arrTable[0];

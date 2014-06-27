@@ -44,27 +44,19 @@ class class_orm_mapper {
      * @return int
      */
     public function getObjectCount($strTargetClass, $strPrevid = "") {
-        $objAnnotations = new class_reflection($strTargetClass);
-        $arrTargetTables = $objAnnotations->getAnnotationValuesFromClass(class_orm_mapper::STR_ANNOTATION_TARGETTABLE);
 
-        if(count($arrTargetTables) == 1) {
-            $arrSingleTable = explode(".", $arrTargetTables[0]);
-            //build the query
-            $arrParams = array();
-            $strQuery = "SELECT COUNT(*)
-                           FROM ".class_carrier::getInstance()->getObjDB()->encloseTableName(_dbprefix_.$arrSingleTable[0]).",
-                                "._dbprefix_."system
-                          WHERE system_id = ".class_carrier::getInstance()->getObjDB()->encloseColumnName($arrSingleTable[1])."
-                           ".($strPrevid != "" ? " AND system_prev_id = ? " : "")."";
+        //build the query
+        $strQuery = "SELECT COUNT(*)
+                       ".$this->getQueryBase($strTargetClass)."
+                       ".($strPrevid != "" ? " AND system_prev_id = ? " : "")."";
 
-            if($strPrevid != "")
-                $arrParams[] = $strPrevid;
+        $arrParams = array();
+        if($strPrevid != "")
+            $arrParams[] = $strPrevid;
 
-            $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, $arrParams);
-            return $arrRow["COUNT(*)"];
-        }
+        $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, $arrParams);
+        return $arrRow["COUNT(*)"];
 
-        return 0;
     }
 
 
@@ -83,61 +75,98 @@ class class_orm_mapper {
      */
     public function getObjectList($strTargetClass, $strPrevid = "", $intStart = null, $intEnd = null) {
         $objAnnotations = new class_reflection($strTargetClass);
-        $arrTargetTables = $objAnnotations->getAnnotationValuesFromClass(class_orm_mapper::STR_ANNOTATION_TARGETTABLE);
 
-        $arrReturn = array();
+        //try to load the sort criteria
+        $arrPropertiesOrder = $objAnnotations->getPropertiesWithAnnotation(class_orm_mapper::STR_ANNOTATION_LISTORDER);
 
-        if(count($arrTargetTables) == 1) {
-            //try to load the sort criteria
-            $arrPropertiesOrder = $objAnnotations->getPropertiesWithAnnotation(class_orm_mapper::STR_ANNOTATION_LISTORDER);
+        $arrOrderByCriteria = array();
+        $arrOrderByCriteria[] = " system_sort ASC ";
+        if(count($arrPropertiesOrder) > 0) {
+            $arrPropertiesORM = $objAnnotations->getPropertiesWithAnnotation(class_orm_mapper::STR_ANNOTATION_TABLECOLUMN);
 
-            $strOrderBy = " ORDER BY system_sort ASC ";
-            if(count($arrPropertiesOrder) > 0) {
-                $arrPropertiesORM = $objAnnotations->getPropertiesWithAnnotation(class_orm_mapper::STR_ANNOTATION_TABLECOLUMN);
+            foreach($arrPropertiesOrder as $strProperty => $strAnnotation) {
+                if(isset($arrPropertiesORM[$strProperty])) {
 
-                foreach($arrPropertiesOrder as $strProperty => $strAnnotation) {
-                    if(isset($arrPropertiesORM[$strProperty])) {
+                    $arrColumn = explode(".", $arrPropertiesORM[$strProperty]);
+                    if(count($arrColumn) == 2)
+                        $strColumn = $arrColumn[1];
+                    else
+                        $strColumn = $arrColumn[0];
 
-                        $arrColumn = explode(".", $arrPropertiesORM[$strProperty]);
-                        if(count($arrColumn) == 2)
-                            $strColumn = $arrColumn[1];
-                        else
-                            $strColumn = $arrColumn[0];
+                    //get order
+                    $strOrder = (uniStrtoupper($strAnnotation) == "DESC" ? "DESC" : "ASC");
 
-                        //get order
-                        $strOrder = (uniStrtoupper($strAnnotation) == "DESC" ? "DESC" : "ASC");
-
-                        //get column
-                        if($strColumn != "") {
-                            $strOrderBy = " ORDER BY ".$strColumn." ".$strOrder;
-                            break;
-                        }
+                    //get column
+                    if($strColumn != "") {
+                        $arrOrderByCriteria[] = " ".$strColumn." ".$strOrder." ";
                     }
                 }
             }
+        }
+
+        $strOrderBy = "";
+        if(count($arrOrderByCriteria) > 0)
+            $strOrderBy = "ORDER BY ".implode(", ", $arrOrderByCriteria);
 
 
-            $arrSingleTable = explode(".", $arrTargetTables[0]);
-            //build the query
-            $arrParams = array();
-            $strQuery = "SELECT system_id
-                           FROM ".class_carrier::getInstance()->getObjDB()->encloseTableName(_dbprefix_.$arrSingleTable[0]).",
-                                "._dbprefix_."system
-                          WHERE system_id = ".class_carrier::getInstance()->getObjDB()->encloseColumnName($arrSingleTable[1])."
-                           ".($strPrevid != "" ? " AND system_prev_id = ? " : "")."
-                           ".$strOrderBy;
 
-            if($strPrevid != "")
-                $arrParams[] = $strPrevid;
+        $strQuery = "SELECT system_id
+                           ".$this->getQueryBase($strTargetClass)."
+                       ".($strPrevid != "" ? " AND system_prev_id = ? " : "")."
+                       ".$strOrderBy;
 
-            $arrRows = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, $arrParams, $intStart, $intEnd);
+        $arrParams = array();
+        if($strPrevid != "")
+            $arrParams[] = $strPrevid;
 
-            foreach($arrRows as $arrOneRow) {
-                $arrReturn[] = class_objectfactory::getInstance()->getObject($arrOneRow["system_id"]);
-            }
+        $arrRows = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, $arrParams, $intStart, $intEnd);
+
+        $arrReturn = array();
+        foreach($arrRows as $arrOneRow) {
+            $arrReturn[] = class_objectfactory::getInstance()->getObject($arrOneRow["system_id"]);
         }
 
         return $arrReturn;
+    }
+
+    /**
+     * Internal helper, generated the query part without the select- and the real where- parts.
+     *
+     * @param string $strTargetClass
+     *
+     * @return string
+     * @throws class_orm_exception
+     */
+    private function getQueryBase($strTargetClass) {
+        $objAnnotations = new class_reflection($strTargetClass);
+        $arrTargetTables = $objAnnotations->getAnnotationValuesFromClass(class_orm_mapper::STR_ANNOTATION_TARGETTABLE);
+
+
+        if(count($arrTargetTables) == 0) {
+            throw new class_orm_exception("Class ".$strTargetClass." has no target table", class_exception::$level_ERROR);
+        }
+
+
+        $strWhere = "";
+        $arrTables = array();
+        foreach($arrTargetTables as $strOneTable) {
+            $arrOneTable = explode(".", $strOneTable);
+            $strWhere .= "AND system_id=".$arrOneTable[1]." ";
+            $arrTables[] = class_carrier::getInstance()->getObjDB()->encloseTableName(_dbprefix_.$arrOneTable[0]);
+        }
+
+
+        //build the query
+        $strQuery = "FROM ".class_carrier::getInstance()->getObjDB()->encloseTableName(_dbprefix_."system_right").",
+                            ".implode(", ", $arrTables)." ,
+                            ".class_carrier::getInstance()->getObjDB()->encloseTableName(_dbprefix_."system")."
+                  LEFT JOIN "._dbprefix_."system_date
+                         ON system_id = system_date_id
+                      WHERE system_id = right_id
+                            ".$strWhere."";
+
+
+        return $strQuery;
     }
 
     /**
@@ -149,25 +178,12 @@ class class_orm_mapper {
     public function initObjectFromDb() {
         //try to do a default init
         $objReflection = new class_reflection($this->objObject);
-        $arrTargetTables = $objReflection->getAnnotationValuesFromClass(class_orm_mapper::STR_ANNOTATION_TARGETTABLE);
 
-        if(validateSystemid($this->objObject->getSystemid()) && count($arrTargetTables) > 0 ) {
-            $strWhere = "";
-            $arrTables = array();
-            foreach($arrTargetTables as $strOneTable) {
-                $arrOneTable = explode(".", $strOneTable);
-                $strWhere .= "AND system_id=".$arrOneTable[1]." ";
-                $arrTables[] = _dbprefix_.$arrOneTable[0];
-            }
+        if(validateSystemid($this->objObject->getSystemid())) {
+
 
             $strQuery = "SELECT *
-                          FROM "._dbprefix_."system_right,
-                               ".implode(", ", $arrTables)." ,
-                               ".class_carrier::getInstance()->getObjDB()->encloseTableName(_dbprefix_."system")."
-                     LEFT JOIN "._dbprefix_."system_date
-                            ON system_id = system_date_id
-                         WHERE system_id = right_id
-                            ".$strWhere."
+                          ".$this->getQueryBase($this->objObject)."
                            AND system_id = ? ";
 
             $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array($this->objObject->getSystemid()));
@@ -323,5 +339,9 @@ class class_orm_mapper {
     }
 
 
+
+}
+
+class class_orm_exception extends class_exception {
 
 }
