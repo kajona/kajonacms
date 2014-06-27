@@ -51,7 +51,6 @@ class class_graph_pchart implements interface_graph {
     private $arrValueSeriesToRender = array();
 
 
-
 	//---------------------------------------------------------------------------------------------------
 	//   The following values are used to seperate the graph-modes, because not all
 	//   methods are allowed with every chart-type
@@ -144,7 +143,7 @@ class class_graph_pchart implements interface_graph {
 	 *
 	 * @param array $arrValues see the example above for the internal array-structure
      * @param string $strLegend
-	 */
+     */
     public function addStackedBarChartSet($arrValues, $strLegend) {
         if($this->intCurrentGraphMode > 0) {
             //only allow this method to be called again if in stackedbar-mode
@@ -684,8 +683,14 @@ class class_graph_pchart implements interface_graph {
         $this->bitScaleFromAdditionalDataset = $bitScaleFromAdditionalDataset;
     }
 
-
-
+    /**
+     * @param $arrSeriesColors
+     *
+     * @return mixed
+     */
+    public function setArrSeriesColors($arrSeriesColors) {
+        $this->arrDefaultColorPalette  = $arrSeriesColors;
+    }
 
 }
 

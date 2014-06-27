@@ -18,5 +18,7 @@ class class_graph_jqplot_charttype {
     const STACKEDBAR = 2;
     const LINE = 4;
     const PIE = 8;
-}  
+    const STACKEDBAR_HORIZONTAL = 16;
+    const BAR_HORIZONTAL = 32;
+}
 

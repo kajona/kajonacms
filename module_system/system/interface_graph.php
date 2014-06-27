@@ -170,6 +170,7 @@ interface interface_graph {
      */
     public function setArrXAxisTickLabels($arrXAxisTickLabels, $intNrOfWrittenLabels = 12);
 
+
     /**
      * Sets if to render a legend or not
      *
@@ -198,5 +199,14 @@ interface interface_graph {
      * @param int $intXAxisAngle
      */
     public function setIntXAxisAngle($intXAxisAngle);
+
+
+    /**
+     * @param $arrSeriesColors
+     *
+     * @return mixed
+     */
+    public function setArrSeriesColors($arrSeriesColors);
+
 
 }

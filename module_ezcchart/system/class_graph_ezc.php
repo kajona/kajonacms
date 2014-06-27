@@ -48,6 +48,8 @@ class class_graph_ezc implements interface_graph {
     private $intMaxValue = 0;
     private $intMinValue = 0;
 
+    private $arrSeriesColors =  null;
+
 
     //---------------------------------------------------------------------------------------------------
     //   The following values are used to separate the graph-modes, because not all
@@ -290,6 +292,9 @@ class class_graph_ezc implements interface_graph {
     private function preGraphCreation() {
 
         $objPalette = new ezcGraphPaletteKajona();
+        if(count($this->arrSeriesColors) > 0) {
+            $objPalette->dataSetColor = $this->arrSeriesColors;
+        }
 
         //Initialize the graph-object depending on the type
         if($this->intCurrentGraphMode == $this->GRAPH_TYPE_PIE) {
@@ -706,6 +711,15 @@ class class_graph_ezc implements interface_graph {
      */
     public function setBitLegendPositionBottom($bitLegendPositionBottom) {
         $this->bitLegendPositionBottom = $bitLegendPositionBottom;
+    }
+
+    /**
+     * @param $arrSeriesColors
+     *
+     * @return mixed
+     */
+    public function setArrSeriesColors($arrSeriesColors) {
+        $this->arrSeriesColors = $arrSeriesColors;
     }
 
 }

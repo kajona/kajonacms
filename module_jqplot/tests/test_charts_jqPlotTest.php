@@ -62,6 +62,24 @@ class class_test_charts_jqPlotTest extends class_testbase  {
         echo $objGraph->renderGraph();
 
         $objGraph = class_graph_factory::getGraphInstance(class_graph_factory::$STR_TYPE_JQPLOT);
+        $objGraph->addLinePlot(array(8.112, 1, 2, 4), null);
+        $objGraph->addLinePlot(array(1, 2, 3, 4), null);
+        $objGraph->addLinePlot(array(4, 7, 1, 2), null);
+        $objGraph->addLinePlot(array(4, 3, 2, 1), null);
+        $objGraph->addLinePlot(array(-5, 3, -2, 1), null);
+        $objGraph->setBitRenderLegend(true);
+        $objGraph->setIntXAxisAngle(-20);
+        $objGraph->setStrXAxisTitle("XXX");
+        $objGraph->setStrYAxisTitle("YYY");
+        $objGraph->setStrBackgroundColor("#F0F0F0");
+        $objGraph->setStrGraphTitle("My First Line Chart 2");
+        $objGraph->setIntHeight(500);
+        $objGraph->setIntWidth(700);
+        $objGraph->setStrFontColor("#FF0000");
+        $objGraph->setStrFont("Open Sans");
+        echo $objGraph->renderGraph();
+
+        $objGraph = class_graph_factory::getGraphInstance(class_graph_factory::$STR_TYPE_JQPLOT);
         $objGraph->setStrGraphTitle("A Bar Chart");
         $objGraph->addBarChartSet(array(1, 4, 3, 6), "serie 111111111111111");
         $objGraph->addBarChartSet(array(3, 3, 6, 2), "serie 2");
@@ -96,6 +114,46 @@ class class_test_charts_jqPlotTest extends class_testbase  {
         echo $objGraph->renderGraph();
 
         $objGraph = class_graph_factory::getGraphInstance(class_graph_factory::$STR_TYPE_JQPLOT);
+        $objGraph->setStrGraphTitle("A Bar Chart");
+        $objGraph->setStrXAxisTitle("My new X-Axis");
+        $objGraph->setStrYAxisTitle("My new Y-Axis");
+        $objGraph->addBarChartSet(array(1, 2, 3, 4), "serie 9");
+        $objGraph->addBarChartSet(array(1, 2, 3, 4), "serie 10");
+        $objGraph->setBitRenderLegend(true);
+        $objGraph->setStrFont("open sans");
+        echo $objGraph->renderGraph();
+
+
+        $objGraph = class_graph_factory::getGraphInstance(class_graph_factory::$STR_TYPE_JQPLOT);
+        $objGraph->setStrGraphTitle("A Horizontal Bar Chart");
+        $objGraph->setStrXAxisTitle("My new X-Axis");
+        $objGraph->setStrYAxisTitle("My new Y-Axis");
+        $objGraph->addBarChartSet(array(1, 2, 3, 4), "serie 9");
+        $objGraph->addBarChartSet(array(1, 2, 3, 4), "serie 10");
+        $objGraph->setBarHorizontal(true);
+        $objGraph->setBitRenderLegend(true);
+        $objGraph->setStrFont("open sans");
+        if(method_exists($objGraph, "setHideXAxis")) {
+            $objGraph->setHideXAxis(true);
+        }
+        if(method_exists($objGraph, "setHideYAxis")) {
+            $objGraph->setHideYAxis(true);
+        }
+        echo $objGraph->renderGraph();
+
+        $objGraph = class_graph_factory::getGraphInstance(class_graph_factory::$STR_TYPE_JQPLOT);
+        $objGraph->setStrGraphTitle("A Horizontal Bar Chart with labels");
+        $objGraph->setStrXAxisTitle("My new X-Axis");
+        $objGraph->setStrYAxisTitle("My new Y-Axis");
+        $objGraph->addBarChartSet(array(1, 2, 3, 4), "serie 9");
+        $objGraph->addBarChartSet(array(1, 2, 3, 4), "serie 10");
+        $objGraph->setArrXAxisTickLabels(array("v1", "v2", "v3", "v4"));
+        $objGraph->setBarHorizontal(true);
+        $objGraph->setBitRenderLegend(true);
+        $objGraph->setStrFont("open sans");
+        echo $objGraph->renderGraph();
+
+        $objGraph = class_graph_factory::getGraphInstance(class_graph_factory::$STR_TYPE_JQPLOT);
         $objGraph->addLinePlot(array(1, 2, 7, 0, 0, 0, 2, 0, 0, 0, 5, 0, 0, 0, 0, 6, 0, 0, 0, 20, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1), "serie 1");
         $objGraph->addLinePlot(array(1, 2, 7, 0, 0, 0, 2, 0, 0, 0, 5, 0, 3, 0, 0, 5, 0, 0, 0, 18, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1), "serie 2");
         $objGraph->setArrXAxisTickLabels(array("v1", "v2", "v3", "v4", "v5", "v6", "v7", "v8", "v9", "v10", "v11", "v12", "v13", "v14", "v15", "v16", "v17", "v18", "v19", "v20", "v21", "v22", "v23", "v24", "v25", "v26", "v27", "v28", "v29", "v30", "v31", "v32", "v33", "v34", "v35", "v36", "v37", "v38", "v39", "v40"));
@@ -118,6 +176,20 @@ class class_test_charts_jqPlotTest extends class_testbase  {
         $objGraph->setArrXAxisTickLabels(array("v1", "v2", "v3", "v4", "v5", "v6", "v7", "v8", "v9", "v10", "v11", "v12", "v13"));
         $objGraph->setIntXAxisAngle(-20);
         $objGraph->setStrFont("open sans");
+        echo $objGraph->renderGraph();
+
+        //create a stacked bar chart
+        $objGraph = class_graph_factory::getGraphInstance(class_graph_factory::$STR_TYPE_JQPLOT);
+        $objGraph->setStrXAxisTitle("x-axis");
+        $objGraph->setStrYAxisTitle("y-axis");
+        $objGraph->setStrGraphTitle("Test Stacked Horizontal Bar Chart");
+        $objGraph->addStackedBarChartSet(array(8, -5, 7, 8, 4, 12, 1, 1, 1, 3, 4, 5, 6), "serie 1", true);
+        $objGraph->addStackedBarChartSet(array(3, -4, 6, 2, 5, 2, 2, 2, 2, 3, 4, 5, 6), "serie 2", true);
+        $objGraph->addStackedBarChartSet(array(3, -4, 6, 2, 5, 2, 2, 2, 2, 3, 4, 5, 6), "serie 3", true);
+        $objGraph->setArrXAxisTickLabels(array("v1", "v2", "v3", "v4", "v5", "v6", "v7", "v8", "v9", "v10", "v11", "v12", "v13"), 5);
+        $objGraph->setIntXAxisAngle(-20);
+        $objGraph->setStrFont("open sans");
+        $objGraph->setBarHorizontal(true);
         echo $objGraph->renderGraph();
 
         //create pie chart
