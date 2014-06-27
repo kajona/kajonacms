@@ -160,15 +160,22 @@ class class_module_navigation_point extends class_model implements interface_mod
      * @static
      */
     public static function getNaviLayer($strSystemid, $bitJustActive = false, $intStart = null, $intEnd = null) {
-        $strQuery = "SELECT system_id FROM "._dbprefix_."navigation, "._dbprefix_."system
-    			             WHERE system_id = navigation_id
-    			             AND system_prev_id = ?
+        $strQuery = "SELECT *
+                          FROM "._dbprefix_."navigation,
+                               "._dbprefix_."system_right,
+                               "._dbprefix_."system
+                     LEFT JOIN "._dbprefix_."system_date
+                            ON system_id = system_date_id
+    			         WHERE system_id = navigation_id
+    			           AND system_prev_id = ?
+    			           AND system_id = right_id
     			             ".($bitJustActive ? " AND system_status = 1 " : "")."
-    			             ORDER BY system_sort ASC, system_comment ASC";
+    			      ORDER BY system_sort ASC, system_comment ASC";
         $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array($strSystemid), $intStart, $intEnd);
         $arrReturn = array();
         foreach($arrIds as $arrOneId) {
-            $objNavigationPoint = new class_module_navigation_point($arrOneId["system_id"]);
+            class_orm_rowcache::addSingleInitRow($arrOneId);
+            $objNavigationPoint = class_objectfactory::getInstance()->getObject($arrOneId["system_id"]);
             $arrReturn[] = $objNavigationPoint;
         }
 

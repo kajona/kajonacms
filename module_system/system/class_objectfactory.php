@@ -120,10 +120,20 @@ class class_objectfactory {
             $strClass = $this->arrClassCache[$strSystemid];
         }
         else {
-            $strQuery = "SELECT * FROM "._dbprefix_."system where system_id = ?";
-            $arrRow = $this->objDB->getPRow($strQuery, array($strSystemid));
-            if(isset($arrRow["system_class"])) {
-                $strClass = $arrRow["system_class"];
+            //maybe the orm handler has already fetched this row
+            $arrCacheRow = class_orm_rowcache::getCachedInitRow($strSystemid);
+            if($arrCacheRow != null && isset($arrCacheRow["system_class"])) {
+                $strClass = $arrCacheRow["system_class"];
+            }
+            else {
+                $strQuery = "SELECT * FROM "._dbprefix_."system where system_id = ?";
+                $arrRow = $this->objDB->getPRow($strQuery, array($strSystemid));
+                if(isset($arrRow["system_class"])) {
+                    $strClass = $arrRow["system_class"];
+                }
+            }
+
+            if($strClass != "") {
                 $this->arrClassCache[$strSystemid] = $strClass;
                 $this->bitCacheSaveRequired = true;
             }

@@ -117,7 +117,7 @@ class class_orm_objectlist extends class_orm_base {
             $strOrderBy = "ORDER BY ".implode(", ", $arrOrderByCriteria);
 
 
-        $strQuery = "SELECT system_id
+        $strQuery = "SELECT *
                            ".$this->getQueryBase($strTargetClass)."
                        ".($strPrevid != "" ? " AND system_prev_id = ? " : "");
 
@@ -133,6 +133,7 @@ class class_orm_objectlist extends class_orm_base {
 
         $arrReturn = array();
         foreach($arrRows as $arrOneRow) {
+            class_orm_rowcache::addSingleInitRow($arrOneRow);
             $arrReturn[] = class_objectfactory::getInstance()->getObject($arrOneRow["system_id"]);
         }
 

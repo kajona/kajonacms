@@ -16,7 +16,6 @@
 class class_orm_objectinit extends class_orm_base {
 
 
-
     /**
      * Initializes the object from the database.
      * Loads all mapped columns to the properties
@@ -29,12 +28,16 @@ class class_orm_objectinit extends class_orm_base {
 
         if(validateSystemid($this->getObjObject()->getSystemid()) && $this->hasTargetTable()) {
 
-
-            $strQuery = "SELECT *
+            if(class_orm_rowcache::getCachedInitRow($this->getObjObject()->getSystemid()) !== null) {
+                $arrRow = class_orm_rowcache::getCachedInitRow($this->getObjObject()->getSystemid());
+            }
+            else {
+                $strQuery = "SELECT *
                           ".$this->getQueryBase()."
                            AND system_id = ? ";
 
-            $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array($this->getObjObject()->getSystemid()));
+                $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array($this->getObjObject()->getSystemid()));
+            }
 
             if(method_exists($this->getObjObject(), "setArrInitRow"))
                 $this->getObjObject()->setArrInitRow($arrRow);
@@ -60,7 +63,6 @@ class class_orm_objectinit extends class_orm_base {
 
         }
     }
-
 
 
 }
