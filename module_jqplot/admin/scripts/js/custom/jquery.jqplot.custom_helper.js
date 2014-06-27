@@ -150,6 +150,9 @@ KAJONA.admin.jqplotHelper = {
                 + '<div id=\"jqplot_tooltip_content\"  class=\"jqplot-chart-tooltip-content\"></div>'
                 + '</div>').appendTo("body");
 
+
+            console.log(valuePrimaryAxis);
+
             $('#jqplot_tooltip_series').html("<span>"+valuePrimaryAxis+"</span>");
             $('#jqplot_tooltip_content').html("<span>"+objTooltip.seriesLabel+" : <b>"+valueSecondaryAxis+"</b></span>");
 

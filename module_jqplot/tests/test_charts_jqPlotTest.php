@@ -200,6 +200,14 @@ class class_test_charts_jqPlotTest extends class_testbase  {
         $objGraph->setStrFont("open sans");
         echo $objGraph->renderGraph();
 
+        //create pie chart
+        $objGraph = class_graph_factory::getGraphInstance(class_graph_factory::$STR_TYPE_JQPLOT);
+        $objGraph->setStrGraphTitle("A Pie Chart");
+        $objGraph->createPieChart(array(231, 20, 30, 40, 2, 3, 4, 5), array("val 1", "val 2", "val 3", "val 4", "v5", "v6", "v7", "v8"));
+        $objGraph->setBitRenderLegend(true);
+        $objGraph->setStrFont("open sans");
+        echo $objGraph->renderGraph();
+
 
         //create pie chart
         $objGraph = class_graph_factory::getGraphInstance(class_graph_factory::$STR_TYPE_JQPLOT);

@@ -86,6 +86,9 @@ class class_graph_jqplot_seriesdata {
         elseif($strChartType == class_graph_jqplot_charttype::PIE) {
             $this->arrSeriesOptions["renderer"] = "$.jqplot.PieRenderer";
             $this->arrSeriesOptions["rendererOptions"]["showDataLabels"] = true;
+            $this->arrSeriesOptions["rendererOptions"]["sliceMargin"] = 2;
+            $this->arrSeriesOptions["rendererOptions"]["shadowOffset"] = 0;
+            $this->arrSeriesOptions["rendererOptions"]["highlightMouseOver"] = true;
         }
         else {
             throw new class_exception("Not a valid chart type", class_exception::$level_ERROR);
