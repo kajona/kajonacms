@@ -176,10 +176,19 @@ class class_module_pages_element extends class_model implements interface_model,
      * @return class_module_pages_element
      */
     public static function getElement($strName) {
-        $strQuery = "SELECT element_id FROM "._dbprefix_."element WHERE element_name=?";
+        $strQuery = "SELECT *
+                       FROM "._dbprefix_."element
+                       "._dbprefix_."system_right,
+                       "._dbprefix_."system,
+                       LEFT JOIN "._dbprefix_."system_date
+                            ON system_id = system_date_id
+                       WHERE element_name=?
+                       AND system_id = right_id
+                       AND element_id = system_id";
         $arrId = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array($strName));
+        class_orm_rowcache::addSingleInitRow($arrId);
         if(isset($arrId["element_id"]))
-            return new class_module_pages_element($arrId["element_id"]);
+            return class_objectfactory::getInstance()->getObject($arrId["element_id"]);
         else
             return null;
     }
