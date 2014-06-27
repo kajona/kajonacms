@@ -18,7 +18,6 @@ class class_orm_rowcache extends class_orm_base {
 
     private static $arrInitRows = array();
 
-
     /**
      * Returns a single row from the currently cached init-rows
      *
@@ -71,6 +70,13 @@ class class_orm_rowcache extends class_orm_base {
         return self::$arrInitRows;
     }
 
+    /**
+     * Resets the cached rows
+     * @return void
+     */
+    public static function resetCache() {
+        self::$arrInitRows = array();
+    }
 
 
 

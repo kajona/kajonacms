@@ -12,6 +12,8 @@
  *
  * @package module_system
  * @author sidler@mulchprod.de
+ *
+ * @todo remove the internal $arrRightRowsCache and make use of the caching by the or-mapper
  */
 class class_rights {
 
@@ -140,11 +142,10 @@ class class_rights {
      * Writes rights to the database.
      * Wrapper to the recursive function class_rights::setRightsRecursive($arrRights, $strSystemid)
      *
-     * @see setRightsRecursive($arrRights, $strSystemid)
-     *
      * @param mixed $arrRights
      * @param string $strSystemid
      *
+     * @see setRightsRecursive($arrRights, $strSystemid)
      * @throws class_exception
      * @return bool
      */
@@ -225,7 +226,7 @@ class class_rights {
      * If not, false is being returned, if the record inherits the rights from another
      * record, true is returned instead.
      *
-     * @param $strSystemid
+     * @param string $strSystemid
      *
      * @return bool
      */
@@ -259,6 +260,10 @@ class class_rights {
 
         if(validateSystemid($strSystemid) && isset($this->arrRightRowsCache[$strSystemid])) {
             $arrRow = $this->arrRightRowsCache[$strSystemid];
+        }
+        else if(class_orm_rowcache::getCachedInitRow($strSystemid) != null && array_key_exists("right_id", class_orm_rowcache::getCachedInitRow($strSystemid))) {
+            $arrRow = class_orm_rowcache::getCachedInitRow($strSystemid);
+            $this->arrRightRowsCache[$strSystemid] = $arrRow;
         }
         else {
             $strQuery = "SELECT *

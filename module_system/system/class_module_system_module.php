@@ -83,8 +83,10 @@ class class_module_system_module extends class_model implements interface_model,
      */
     private static $arrModules = array();
 
-
-    //private static $arrModuleData = null;
+    /**
+     * @var string[][]
+     */
+    private static $arrModuleData = null;
 
     /**
      * Constructor to create a valid object
@@ -101,6 +103,14 @@ class class_module_system_module extends class_model implements interface_model,
     }
 
     /**
+     * Loads all module data from the database
+     */
+    public static function staticConstruct() {
+        self::loadModuleData();
+    }
+
+
+    /**
      * Initialises the internal modules-cache.
      * Loads all module-data into a single array.
      * Avoids multiple queries against the module-table.
@@ -111,46 +121,25 @@ class class_module_system_module extends class_model implements interface_model,
      * @static
      */
     private static function loadModuleData($bitCache = true) {
-        $strQuery = "SELECT *
-                       FROM " . _dbprefix_ . "system_right,
-                            " . _dbprefix_ . "system_module,
-                            " . _dbprefix_ . "system
-                  LEFT JOIN " . _dbprefix_ . "system_date
-                         ON system_id = system_date_id
-                      WHERE system_id = right_id
-                        AND system_id=module_id
-                   ORDER BY system_sort ASC, system_comment ASC   ";
 
-        return class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array(), null, null, $bitCache);
-    }
+        if(self::$arrModuleData == null || !$bitCache) {
+            $strQuery = "SELECT *
+                           FROM " . _dbprefix_ . "system_right,
+                                " . _dbprefix_ . "system_module,
+                                " . _dbprefix_ . "system
+                      LEFT JOIN " . _dbprefix_ . "system_date
+                             ON system_id = system_date_id
+                          WHERE system_id = right_id
+                            AND system_id=module_id
+                       ORDER BY system_sort ASC, system_comment ASC   ";
 
-
-    /**
-     * Overwrites the base-method in order to provide a better caching-mechanism.
-     * @return void
-     */
-    protected function initObjectInternal() {
-
-        $arrRows = self::loadModuleData();
-
-        foreach($arrRows as $arrOneRow) {
-            if($arrOneRow["system_id"] == $this->getSystemid()) {
-                $this->setStrName($arrOneRow["module_name"]);
-                $this->setStrNamePortal($arrOneRow["module_filenameportal"]);
-                $this->setStrXmlNamePortal($arrOneRow["module_xmlfilenameportal"]);
-                $this->setStrNameAdmin($arrOneRow["module_filenameadmin"]);
-                $this->setStrXmlNameAdmin($arrOneRow["module_xmlfilenameadmin"]);
-                $this->setStrVersion($arrOneRow["module_version"]);
-                $this->setIntDate($arrOneRow["module_date"]);
-                $this->setIntNavigation($arrOneRow["module_navigation"]);
-                $this->setIntNr($arrOneRow["module_nr"]);
-                $this->setStrAspect($arrOneRow["module_aspect"]);
-
-                $this->setArrInitRow($arrOneRow);
-                break;
-            }
+            $arrRows = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array(), null, null, $bitCache);
+            class_orm_rowcache::addArrayOfInitRows($arrRows);
+            self::$arrModuleData = $arrRows;
         }
+        return self::$arrModuleData;
     }
+
 
     /**
      * Overwritten in order to flush the cached module-data
@@ -603,3 +592,6 @@ class class_module_system_module extends class_model implements interface_model,
     }
 
 }
+
+//init the caches
+class_module_system_module::staticConstruct();

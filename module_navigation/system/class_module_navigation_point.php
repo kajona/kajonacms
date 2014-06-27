@@ -171,11 +171,11 @@ class class_module_navigation_point extends class_model implements interface_mod
     			           AND system_id = right_id
     			             ".($bitJustActive ? " AND system_status = 1 " : "")."
     			      ORDER BY system_sort ASC, system_comment ASC";
-        $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array($strSystemid), $intStart, $intEnd);
+        $arrRows = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array($strSystemid), $intStart, $intEnd);
         $arrReturn = array();
-        foreach($arrIds as $arrOneId) {
-            class_orm_rowcache::addSingleInitRow($arrOneId);
-            $objNavigationPoint = class_objectfactory::getInstance()->getObject($arrOneId["system_id"]);
+        foreach($arrRows as $arrOneRow) {
+            class_orm_rowcache::addSingleInitRow($arrOneRow);
+            $objNavigationPoint = class_objectfactory::getInstance()->getObject($arrOneRow["system_id"]);
             $arrReturn[] = $objNavigationPoint;
         }
 
@@ -235,14 +235,20 @@ class class_module_navigation_point extends class_model implements interface_mod
     public static function loadPagePoint($strPagename) {
         $objDB = class_carrier::getInstance()->getObjDB();
         $arrReturn = array();
-        $strQuery = "SELECT system_id FROM "._dbprefix_."navigation, "._dbprefix_."system
-    			             WHERE system_id = navigation_id
-    			             AND navigation_page_i = ?
-    			             AND system_status = 1";
-        $arrIds = $objDB->getPArray($strQuery, array( $strPagename));
-
-        foreach($arrIds as $arrOneId)
-            $arrReturn[] = new class_module_navigation_point($arrOneId["system_id"]);
+        $strQuery = "SELECT *
+                       FROM "._dbprefix_."navigation,
+                            "._dbprefix_."system_right,
+                            "._dbprefix_."system
+                  LEFT JOIN "._dbprefix_."system_date
+                         ON system_id = system_date_id
+    			      WHERE system_id = navigation_id
+                        AND navigation_page_i = ?
+                        AND system_id = right_id
+        	            AND system_status = 1";
+        $arrRows = $objDB->getPArray($strQuery, array($strPagename));
+        class_orm_rowcache::addArrayOfInitRows($arrRows);
+        foreach($arrRows as $arrOneId)
+            $arrReturn[] = class_objectfactory::getInstance()->getObject($arrOneId["system_id"]);
 
         return $arrReturn;
     }
