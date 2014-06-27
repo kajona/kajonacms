@@ -24,6 +24,7 @@ class class_module_faqs_faq extends class_model implements interface_model, inte
      * @tableColumn faqs.faqs_question
      * @versionable
      * @addSearchIndex
+     * @listOrder
      *
      * @fieldType text
      * @fieldMandatory
@@ -180,7 +181,6 @@ class class_module_faqs_faq extends class_model implements interface_model, inte
      * @static
      */
     public static function getObjectList($strFilter = "", $intStart = null, $intEnd = null) {
-        $arrParams = array();
         if($strFilter != "") {
             $strQuery = "SELECT system_id
 							FROM " . _dbprefix_ . "faqs,
@@ -190,23 +190,20 @@ class class_module_faqs_faq extends class_model implements interface_model, inte
 							  AND faqs_id = faqsmem_faq
 							  AND faqsmem_category = ?
 							ORDER BY faqs_question ASC";
-            $arrParams[] = $strFilter;
+
+            $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array($strFilter), $intStart, $intEnd);
+
+            $arrReturn = array();
+            foreach($arrIds as $arrOneId) {
+                $arrReturn[] = class_objectfactory::getInstance()->getObject($arrOneId["system_id"]);
+            }
+
+            return $arrReturn;
         }
         else {
-            $strQuery = "SELECT system_id
-							FROM " . _dbprefix_ . "faqs,
-							     " . _dbprefix_ . "system
-							WHERE system_id = faqs_id
-							ORDER BY faqs_question ASC";
+            return parent::getObjectList("", $intStart, $intEnd);
         }
 
-        $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, $arrParams, $intStart, $intEnd);
-        $arrReturn = array();
-        foreach($arrIds as $arrOneId) {
-            $arrReturn[] = new class_module_faqs_faq($arrOneId["system_id"]);
-        }
-
-        return $arrReturn;
     }
 
     /**
@@ -219,7 +216,6 @@ class class_module_faqs_faq extends class_model implements interface_model, inte
      * @static
      */
     public static function getObjectCount($strFilter = "") {
-        $arrParams = array();
         if($strFilter != "") {
             $strQuery = "SELECT COUNT(*)
 							FROM " . _dbprefix_ . "faqs,
@@ -228,17 +224,13 @@ class class_module_faqs_faq extends class_model implements interface_model, inte
 							WHERE system_id = faqs_id
 							  AND faqs_id = faqsmem_faq
 							  AND faqsmem_category = ?";
-            $arrParams[] = $strFilter;
+            $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array($strFilter));
+            return $arrRow["COUNT(*)"];
         }
         else {
-            $strQuery = "SELECT COUNT(*)
-							FROM " . _dbprefix_ . "faqs,
-							     " . _dbprefix_ . "system
-							WHERE system_id = faqs_id";
+            return parent::getObjectCount();
         }
 
-        $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, $arrParams);
-        return $arrRow["COUNT(*)"];
     }
 
 
