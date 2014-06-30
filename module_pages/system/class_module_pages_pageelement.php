@@ -354,15 +354,15 @@ class class_module_pages_pageelement extends class_model implements interface_mo
 
         $strQuery = "SELECT *
                        FROM "._dbprefix_."page_element,
-                            "._dbprefix_."element as element,
+                            "._dbprefix_."element,
                             "._dbprefix_."system_right,
                             "._dbprefix_."system as system
                   LEFT JOIN "._dbprefix_."system_date
-                         ON (system.system_id = system_date_id)
-                      WHERE system.system_prev_id= ?
-                        AND page_element_ph_element = element.element_name
-                        AND system.system_id = page_element_id
-                        AND system.system_id = right_id
+                         ON (system_id = system_date_id)
+                      WHERE system_prev_id= ?
+                        AND page_element_ph_element = element_name
+                        AND system_id = page_element_id
+                        AND system_id = right_id
                         AND page_element_ph_language = ?
                        ".$strAnd."
                   ORDER BY page_element_ph_placeholder ASC,

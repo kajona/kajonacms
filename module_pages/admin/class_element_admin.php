@@ -357,6 +357,12 @@ abstract class class_element_admin extends class_admin implements interface_sear
         $arrTargetTables = $objAnnotations->getAnnotationValuesFromClass(class_orm_base::STR_ANNOTATION_TARGETTABLE);
         $strTargetTable = "";
         if(count($arrTargetTables) != 0) {
+
+            $arrCachedRow = class_orm_rowcache::getCachedInitRow($this->getSystemid());
+            if($arrCachedRow !== null && !isset($arrCachedRow["content_id"])) {
+                class_orm_rowcache::removeSingleRow($this->getSystemid());
+            }
+
             $objORM = new class_orm_objectinit($this);
             $objORM->initObjectFromDb();
             $arrTables = explode(".", $arrTargetTables[0]);
@@ -372,11 +378,13 @@ abstract class class_element_admin extends class_admin implements interface_sear
     					 FROM " . $strTargetTable . ",
     					 	  " . _dbprefix_ . "element,
     					 	  " . _dbprefix_ . "page_element,
+    					 	  " . _dbprefix_ . "system_right,
     					 	  " . _dbprefix_ . "system
     					 LEFT JOIN " . _dbprefix_ . "system_date
     					    ON (system_id = system_date_id)
     					 WHERE element_name = page_element_ph_element
     					   AND page_element_id = content_id
+    					   AND system_id = right_id
     					   AND system_id = content_id
     					   AND system_id = ? ";
         }
@@ -384,15 +392,18 @@ abstract class class_element_admin extends class_admin implements interface_sear
             $strQuery = "SELECT *
     					 FROM " . _dbprefix_ . "element,
     					 	  " . _dbprefix_ . "page_element,
+    					 	  " . _dbprefix_ . "system_right,
     					 	  " . _dbprefix_ . "system
     					 LEFT JOIN " . _dbprefix_ . "system_date
     					    ON (system_id = system_date_id)
     					 WHERE element_name = page_element_ph_element
     					   AND page_element_id = system_id
+    					   AND system_id = right_id
     					   AND system_id = ? ";
 
         }
         $this->arrElementData = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array($this->getSystemid()));
+        class_orm_rowcache::addSingleInitRow($this->arrElementData);
         return $this->arrElementData;
     }
 
