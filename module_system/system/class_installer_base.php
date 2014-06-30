@@ -64,6 +64,7 @@ abstract class class_installer_base extends class_root implements interface_inst
             }
         }
 
+        $this->objDB->flushTablesCache();
         return $strReturn;
     }
 
@@ -107,6 +108,7 @@ abstract class class_installer_base extends class_root implements interface_inst
 
 		//flush db-cache afterwards
 		$this->objDB->flushQueryCache();
+        $this->objDB->flushTablesCache();
 
 		return $objModule->getSystemid();
 	}

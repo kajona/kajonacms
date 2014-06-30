@@ -991,8 +991,17 @@ class class_db {
     public function flushQueryCache() {
         //class_logger::getInstance(class_logger::DBLOG)->addLogRow("Flushing query cache", class_logger::$levelInfo);
         $this->arrQueryCache = array();
-        $this->arrTablesCache = array();
         class_objectfactory::getInstance()->flushCache();
+    }
+
+    /**
+     * Method to flush the table-cache.
+     * Since the tables won't change during regular operations,
+     * flushing the tables cache is only rewquired during package updates / installations
+     * @return void
+     */
+    public function flushTablesCache() {
+        $this->arrTablesCache = array();
     }
 
     /**
