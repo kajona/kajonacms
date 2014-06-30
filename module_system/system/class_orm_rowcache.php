@@ -45,7 +45,8 @@ class class_orm_rowcache extends class_orm_base {
      * @return void
      */
     public static function addSingleInitRow($arrInitRow) {
-        self::$arrInitRows[$arrInitRow["system_id"]] = $arrInitRow;
+        if(isset($arrInitRow["system_id"]))
+            self::$arrInitRows[$arrInitRow["system_id"]] = $arrInitRow;
     }
 
     /**

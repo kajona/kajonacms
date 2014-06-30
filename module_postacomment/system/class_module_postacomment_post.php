@@ -150,20 +150,24 @@ class class_module_postacomment_post extends class_model implements interface_mo
             $strFilter .= " AND system_status = 1 ";
         }
 
-        $strQuery = "SELECT system_id
+        $strQuery = "SELECT *
 					 FROM "._dbprefix_."postacomment,
+						  "._dbprefix_."system_right,
 						  "._dbprefix_."system
-					 WHERE system_id = postacomment_id "
+				LEFT JOIN "._dbprefix_."system_date
+                            ON system_id = system_date_id
+					 WHERE system_id = postacomment_id
+					   AND system_id = right_id "
                      . $strFilter ."
 					 ORDER BY postacomment_page ASC,
 						      postacomment_language ASC,
 							  postacomment_date DESC";
 
         $arrComments = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, $arrParams, $intStart, $intEnd);
-
+        class_orm_rowcache::addArrayOfInitRows($arrComments);
         if(count($arrComments) > 0) {
             foreach($arrComments as $arrOneComment) {
-                $arrReturn[] = new class_module_postacomment_post($arrOneComment["system_id"]);
+                $arrReturn[] = class_objectfactory::getInstance()->getObject($arrOneComment["system_id"]);
             }
         }
 
