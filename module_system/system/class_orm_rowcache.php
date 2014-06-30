@@ -72,6 +72,17 @@ class class_orm_rowcache extends class_orm_base {
     }
 
     /**
+     * Removes a single row from the cache
+     *
+     * @param string $strSystemid
+     *
+     * @return void
+     */
+    public static function removeSingleRow($strSystemid) {
+        if(isset(self::$arrInitRows[$strSystemid]))
+            unset(self::$arrInitRows[$strSystemid]);
+    }
+    /**
      * Resets the cached rows
      * @return void
      */
