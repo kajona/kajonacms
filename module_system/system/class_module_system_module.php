@@ -86,7 +86,7 @@ class class_module_system_module extends class_model implements interface_model,
     /**
      * @var string[][]
      */
-    private static $arrModuleData = null;
+    private static $arrModuleData = array();
 
     /**
      * Constructor to create a valid object
@@ -122,7 +122,7 @@ class class_module_system_module extends class_model implements interface_model,
      */
     private static function loadModuleData($bitCache = true) {
 
-        if(self::$arrModuleData == null || !$bitCache) {
+        if((count(self::$arrModuleData) == 0 || !$bitCache) && count(class_carrier::getInstance()->getObjDB()->getTables()) > 0) {
             $strQuery = "SELECT *
                            FROM " . _dbprefix_ . "system_right,
                                 " . _dbprefix_ . "system_module,
@@ -249,9 +249,6 @@ class class_module_system_module extends class_model implements interface_model,
      * @static
      */
     public static function getModuleByName($strName, $bitIgnoreStatus = false) {
-        if(count(class_carrier::getInstance()->getObjDB()->getTables()) == 0) {
-            return null;
-        }
 
         //check if the module is already cached
         foreach(self::$arrModules as $objOneModule) {
@@ -439,6 +436,7 @@ class class_module_system_module extends class_model implements interface_model,
      */
     public static function flushCache() {
         self::$arrModules = array();
+        self::$arrModuleData = array();
     }
 
     /**
