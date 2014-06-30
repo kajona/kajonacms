@@ -215,16 +215,21 @@ class class_module_eventmanager_participant extends class_model implements inter
      * @return class_module_eventmanager_participant
      */
     public static function getParticipantByUserid($strUserid, $strEventId) {
-        $strQuery = "SELECT system_id
-                       FROM "._dbprefix_."system,
-                            "._dbprefix_."em_participant
+        $strQuery = "SELECT *
+                       FROM "._dbprefix_."system_right,
+                            "._dbprefix_."em_participant,
+                            "._dbprefix_."system
+                  LEFT JOIN "._dbprefix_."system_date
+                            ON system_id = system_date_id
                       WHERE system_id = em_pt_id
+                        AND system_id = right_id
                         AND system_prev_id = ?
                         AND em_pt_userid = ?";
 
         $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array($strEventId, $strUserid));
+        class_orm_rowcache::addSingleInitRow($arrRow);
         if(isset($arrRow["system_id"]))
-            return new class_module_eventmanager_participant($arrRow["system_id"]);
+            return class_objectfactory::getInstance()->getObject($arrRow["system_id"]);
         else
             return null;
     }

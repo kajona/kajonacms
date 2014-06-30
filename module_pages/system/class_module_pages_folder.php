@@ -122,22 +122,6 @@ class class_module_pages_folder extends class_model implements interface_model, 
         }
 
         return self::getObjectList($strSystemid);
-
-//
-//        //Get all folders
-//        $strQuery = "SELECT system_id FROM
-//                          " . _dbprefix_ . "system
-//		              WHERE system_module_nr=?
-//		                AND system_prev_id=?
-//		             ORDER BY system_sort ASC";
-//
-//        $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array(_pages_folder_id_, $strSystemid));
-//        $arrReturn = array();
-//        foreach($arrIds as $arrOneId) {
-//            $arrReturn[] = new class_module_pages_folder($arrOneId["system_id"]);
-//        }
-//
-//        return $arrReturn;
     }
 
     /**

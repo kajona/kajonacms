@@ -175,12 +175,14 @@ class class_module_workflows_workflow extends class_model implements interface_m
      * @return class_module_workflows_workflow[]
      */
     public static function getWorkflowsByType($intType, $bitOnlyWithValidTriggerDate = true) {
-        $strQuery = "SELECT system_id FROM
+        $strQuery = "SELECT * FROM
                             "._dbprefix_."system,
+                            "._dbprefix_."system_right,
                             "._dbprefix_."workflows,
                             "._dbprefix_."system_date
                       WHERE system_id = workflows_id
                         AND system_id = system_date_id
+                        AND system_id = right_id
                         AND workflows_state = ?
                      ".($bitOnlyWithValidTriggerDate ? " AND system_date_start < ? " : "")."
                    ORDER BY system_date_start DESC";
@@ -193,10 +195,10 @@ class class_module_workflows_workflow extends class_model implements interface_m
 
 
         $arrRows = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, $arrParams);
-
+        class_orm_rowcache::addArrayOfInitRows($arrRows);
         $arrReturn = array();
         foreach($arrRows as $arrSingleRow) {
-            $arrReturn[] = new class_module_workflows_workflow($arrSingleRow["system_id"]);
+            $arrReturn[] = class_objectfactory::getInstance()->getObject($arrSingleRow["system_id"]);
         }
 
         return $arrReturn;
@@ -206,7 +208,7 @@ class class_module_workflows_workflow extends class_model implements interface_m
      * Loads all workflows for a given systemid
      * By default limited to those with a exceeded trigger-date, so valid to be run
      *
-     * @param $strAffectedSystemid
+     * @param string $strAffectedSystemid
      * @param bool $bitOnlyScheduled
      * @param string|array $objClass
      *
@@ -224,12 +226,14 @@ class class_module_workflows_workflow extends class_model implements interface_m
         }
 
         //2. Create SQL
-        $strQuery = "SELECT system_id FROM
+        $strQuery = "SELECT * FROM
                             "._dbprefix_."system,
+                            "._dbprefix_."system_right,
                             "._dbprefix_."workflows,
                             "._dbprefix_."system_date
                       WHERE system_id = workflows_id
                         AND system_id = system_date_id
+                        AND system_id = right_id
                         AND workflows_systemid = ?
                      ".($bitOnlyScheduled ? " AND ( workflows_state = ? OR workflows_state = ? )" : "" )  ."
                      ".($bitOnlyScheduled ? " AND ( system_date_start > ? OR system_date_start = 0 )" : "")."
@@ -254,9 +258,10 @@ class class_module_workflows_workflow extends class_model implements interface_m
 
         //4. Execute SQL
         $arrRows = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, $arrParams);
+        class_orm_rowcache::addArrayOfInitRows($arrRows);
         $arrReturn = array();
         foreach($arrRows as $arrSingleRow) {
-            $arrReturn[] = new class_module_workflows_workflow($arrSingleRow["system_id"]);
+            $arrReturn[] = class_objectfactory::getInstance()->getObject($arrSingleRow["system_id"]);
         }
 
         return $arrReturn;
@@ -272,12 +277,14 @@ class class_module_workflows_workflow extends class_model implements interface_m
      * @return class_module_workflows_workflow[]
      */
     public static function getWorkflowsForClass($strClass, $bitOnlyScheduled = true) {
-        $strQuery = "SELECT system_id FROM
+        $strQuery = "SELECT * FROM
                             "._dbprefix_."system,
+                            "._dbprefix_."system_right,
                             "._dbprefix_."workflows,
                             "._dbprefix_."system_date
                       WHERE system_id = workflows_id
                         AND system_id = system_date_id
+                        AND system_id = right_id
                         AND workflows_class = ?
                      ".($bitOnlyScheduled ? " AND ( workflows_state = ? OR workflows_state = ? )" : "" )  ."
                      ".($bitOnlyScheduled ? " AND ( system_date_start > ? OR system_date_start = 0 )" : "")."
@@ -293,10 +300,10 @@ class class_module_workflows_workflow extends class_model implements interface_m
         }
 
         $arrRows = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, $arrParams);
-
+        class_orm_rowcache::addArrayOfInitRows($arrRows);
         $arrReturn = array();
         foreach($arrRows as $arrSingleRow) {
-            $arrReturn[] = new class_module_workflows_workflow($arrSingleRow["system_id"]);
+            $arrReturn[] = class_objectfactory::getInstance()->getObject($arrSingleRow["system_id"]);
         }
 
         return $arrReturn;
@@ -347,12 +354,14 @@ class class_module_workflows_workflow extends class_model implements interface_m
         $arrTemp = self::getUserWhereStatement($arrUserids);
         $arrParams = $arrTemp[1];
 
-        $strQuery = "SELECT system_id FROM
+        $strQuery = "SELECT * FROM
                             "._dbprefix_."system,
+                            "._dbprefix_."system_right,
                             "._dbprefix_."workflows,
                             "._dbprefix_."system_date
                       WHERE system_id = workflows_id
                         AND system_id = system_date_id
+                        AND system_id = right_id
                         ".$arrTemp[0]."
                         AND ( workflows_state = ?  )
                         /*AND ( system_date_start > ? OR system_date_start = 0 )*/
@@ -361,10 +370,10 @@ class class_module_workflows_workflow extends class_model implements interface_m
         $arrParams[] = (int)self::$INT_STATE_SCHEDULED;
         //$arrParams[] = class_date::getCurrentTimestamp();
         $arrRows = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, $arrParams, $intStart, $intEnd);
-
+        class_orm_rowcache::addArrayOfInitRows($arrRows);
         $arrReturn = array();
         foreach($arrRows as $arrSingleRow) {
-            $arrReturn[] = new class_module_workflows_workflow($arrSingleRow["system_id"]);
+            $arrReturn[] = class_objectfactory::getInstance()->getObject($arrSingleRow["system_id"]);
         }
 
         return $arrReturn;
@@ -380,11 +389,13 @@ class class_module_workflows_workflow extends class_model implements interface_m
      * @return class_module_workflows_workflow[]
      */
     public static function getAllworkflows($intStart = false, $intEnd = false) {
-        $strQuery = "SELECT system_id FROM
+        $strQuery = "SELECT * FROM
                             "._dbprefix_."system,
+                            "._dbprefix_."system_right,
                             "._dbprefix_."workflows,
                             "._dbprefix_."system_date
                       WHERE system_id = workflows_id
+                        AND system_id = right_id
                         AND system_id = system_date_id
                    ORDER BY workflows_state ASC, system_date_start DESC";
 
@@ -393,7 +404,7 @@ class class_module_workflows_workflow extends class_model implements interface_m
 
         $arrReturn = array();
         foreach($arrRows as $arrSingleRow) {
-            $arrReturn[] = new class_module_workflows_workflow($arrSingleRow["system_id"]);
+            $arrReturn[] = class_objectfactory::getInstance()->getObject($arrSingleRow["system_id"]);
         }
 
         return $arrReturn;

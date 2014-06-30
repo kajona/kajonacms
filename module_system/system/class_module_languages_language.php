@@ -363,15 +363,21 @@ class class_module_languages_language extends class_model implements interface_m
      */
     public static function getDefaultLanguage() {
         //try to load the default language
-        $strQuery = "SELECT system_id
-                 FROM " . _dbprefix_ . "languages, " . _dbprefix_ . "system
+        $strQuery = "SELECT *
+                 FROM " . _dbprefix_ . "languages,
+                      " . _dbprefix_ . "system_right,
+                      " . _dbprefix_ . "system
+                LEFT JOIN "._dbprefix_."system_date
+                    ON system_id = system_date_id
 	             WHERE system_id = language_id
+	             AND system_id = right_id
 	             AND language_default = 1
 	             AND system_status = 1
 	             ORDER BY system_sort ASC, system_comment ASC";
         $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array());
         if(count($arrRow) > 0) {
-            return new class_module_languages_language($arrRow["system_id"]);
+            class_orm_rowcache::addSingleInitRow($arrRow);
+            return class_objectfactory::getInstance()->getObject($arrRow["system_id"]);
         }
         else {
             if(count(class_module_languages_language::getObjectList(true)) > 0) {

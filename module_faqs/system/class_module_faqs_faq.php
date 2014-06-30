@@ -182,11 +182,15 @@ class class_module_faqs_faq extends class_model implements interface_model, inte
      */
     public static function getObjectList($strFilter = "", $intStart = null, $intEnd = null) {
         if($strFilter != "") {
-            $strQuery = "SELECT system_id
+            $strQuery = "SELECT *
 							FROM " . _dbprefix_ . "faqs,
-							     " . _dbprefix_ . "system,
-							     " . _dbprefix_ . "faqs_member
+							     " . _dbprefix_ . "faqs_member,
+							     " . _dbprefix_ . "system_right,
+							     " . _dbprefix_ . "system
+					   LEFT JOIN "._dbprefix_."system_date
+                               ON system_id = system_date_id
 							WHERE system_id = faqs_id
+							  AND system_id = right_id
 							  AND faqs_id = faqsmem_faq
 							  AND faqsmem_category = ?
 							ORDER BY faqs_question ASC";
@@ -195,6 +199,7 @@ class class_module_faqs_faq extends class_model implements interface_model, inte
 
             $arrReturn = array();
             foreach($arrIds as $arrOneId) {
+                class_orm_rowcache::addSingleInitRow($arrOneId);
                 $arrReturn[] = class_objectfactory::getInstance()->getObject($arrOneId["system_id"]);
             }
 
@@ -254,20 +259,28 @@ class class_module_faqs_faq extends class_model implements interface_model, inte
     public static function loadListFaqsPortal($strCat) {
         $arrParams = array();
         if($strCat == 1) {
-            $strQuery = "SELECT system_id
+            $strQuery = "SELECT *
     						FROM " . _dbprefix_ . "faqs,
+    		                     " . _dbprefix_ . "system_right,
     		                     " . _dbprefix_ . "system
+    		             LEFT JOIN "._dbprefix_."system_date
+                               ON system_id = system_date_id
     		                WHERE system_id = faqs_id
     		                  AND system_status = 1
+    		                  AND system_id = right_id
     						ORDER BY faqs_question ASC";
         }
         else {
-            $strQuery = "SELECT system_id
+            $strQuery = "SELECT *
     						FROM " . _dbprefix_ . "faqs,
     						     " . _dbprefix_ . "faqs_member,
+    		                     " . _dbprefix_ . "system_right,
     		                     " . _dbprefix_ . "system
+    		           LEFT JOIN "._dbprefix_."system_date
+                               ON system_id = system_date_id
     		                WHERE system_id = faqs_id
     		                  AND faqs_id = faqsmem_faq
+    		                  AND system_id = right_id
     		                  AND faqsmem_category = ?
     		                  AND system_status = 1
     						ORDER BY faqs_question ASC";
@@ -276,7 +289,8 @@ class class_module_faqs_faq extends class_model implements interface_model, inte
         $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, $arrParams);
         $arrReturn = array();
         foreach($arrIds as $arrOneId) {
-            $arrReturn[] = new class_module_faqs_faq($arrOneId["system_id"]);
+            class_orm_rowcache::addSingleInitRow($arrOneId);
+            $arrReturn[] = class_objectfactory::getInstance()->getObject($arrOneId["system_id"]);
         }
 
         return $arrReturn;

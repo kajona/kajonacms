@@ -347,10 +347,14 @@ class class_module_mediamanager_file extends class_model implements interface_mo
         if($bitOnlyPackages)
             $arrParams[] = self::$INT_TYPE_FOLDER;
 
-        $strQuery = "SELECT system_id
-                       FROM " . _dbprefix_ . "system,
-                            " . _dbprefix_ . "mediamanager_file
+        $strQuery = "SELECT *
+                       FROM " . _dbprefix_ . "system_right,
+                            " . _dbprefix_ . "mediamanager_file,
+                            " . _dbprefix_ . "system
+                   LEFT JOIN "._dbprefix_."system_date
+                            ON system_id = system_date_id
                     WHERE system_id = file_id
+                      AND system_id = right_id
                       AND system_prev_id = ?
                         " . ($intTypeFilter !== false ? " AND file_type = ? " : "") . "
                         " . (!$bitActiveOnly ? "" : " AND system_status = 1 ") . "
@@ -360,7 +364,8 @@ class class_module_mediamanager_file extends class_model implements interface_mo
 
         $arrReturn = array();
         foreach($arrIds as $arrOneId) {
-            $arrReturn[] = new class_module_mediamanager_file($arrOneId["system_id"]);
+            class_orm_rowcache::addSingleInitRow($arrOneId);
+            $arrReturn[] = class_objectfactory::getInstance()->getObject($arrOneId["system_id"]);
         }
 
         return $arrReturn;
@@ -402,10 +407,14 @@ class class_module_mediamanager_file extends class_model implements interface_mo
             }
         }
 
-        $strQuery = "SELECT system_id
-                       FROM " . _dbprefix_ . "system,
-                            " . _dbprefix_ . "mediamanager_file
+        $strQuery = "SELECT *
+                       FROM " . _dbprefix_ . "system_right,
+                            " . _dbprefix_ . "mediamanager_file,
+                            " . _dbprefix_ . "system
+                 LEFT JOIN "._dbprefix_."system_date
+                            ON system_id = system_date_id
                     WHERE system_id = file_id
+                      AND system_id = right_id
                       AND file_ispackage = 1
                         " . (!$bitActiveOnly ? "" : " AND system_status = 1 ") . "
                         " . ($strCategoryFilter === false ? "" : " AND file_cat = ?  ") . "
@@ -415,7 +424,8 @@ class class_module_mediamanager_file extends class_model implements interface_mo
 
         $arrReturn = array();
         foreach($arrIds as $arrOneId) {
-            $arrReturn[] = new class_module_mediamanager_file($arrOneId["system_id"]);
+            class_orm_rowcache::addSingleInitRow($arrOneId);
+            $arrReturn[] = class_objectfactory::getInstance()->getObject($arrOneId["system_id"]);
         }
 
         return $arrReturn;
@@ -475,6 +485,8 @@ class class_module_mediamanager_file extends class_model implements interface_mo
      * @param $strPath
      *
      * @return class_module_mediamanager_file
+     * @deprecated
+     * @todo is this still used?
      */
     public static function getFolderForPath($strPrevId, $strPath) {
 

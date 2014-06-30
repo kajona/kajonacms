@@ -383,14 +383,16 @@ class class_module_news_news extends class_model implements interface_model, int
         }
 
         if($strCat != "0") {
-            $strQuery = "SELECT system_id
+            $strQuery = "SELECT *
                             FROM " . _dbprefix_ . "news,
                                  " . _dbprefix_ . "news_member,
+                                 " . _dbprefix_ . "system_right,
                                  " . _dbprefix_ . "system
                        LEFT JOIN " . _dbprefix_ . "system_date
                               ON system_id = system_date_id
                             WHERE system_id = news_id
                               AND news_id = newsmem_news
+                              AND system_id = right_id
                               AND newsmem_category = ?
                               AND system_status = 1
                               AND (system_date_start IS NULL or(system_date_start < ? OR system_date_start = 0))
@@ -406,12 +408,14 @@ class class_module_news_news extends class_model implements interface_model, int
 
         }
         else {
-            $strQuery = "SELECT system_id
+            $strQuery = "SELECT *
                             FROM " . _dbprefix_ . "news,
+                                 " . _dbprefix_ . "system_right,
                                  " . _dbprefix_ . "system
                         LEFT JOIN " . _dbprefix_ . "system_date
                                ON system_id = system_date_id
                             WHERE system_id = news_id
+                              AND system_id = right_id
                               AND system_status = 1
                               AND (system_date_start IS NULL or(system_date_start < ? OR system_date_start = 0))
                                 " . $strTime . "
@@ -426,10 +430,10 @@ class class_module_news_news extends class_model implements interface_model, int
         }
 
         $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, $arrParams, $intStart, $intEnd);
-
+        class_orm_rowcache::addArrayOfInitRows($arrIds);
         $arrReturn = array();
         foreach($arrIds as $arrOneId) {
-            $arrReturn[] = new class_module_news_news($arrOneId["system_id"]);
+            $arrReturn[] = class_objectfactory::getInstance()->getObject($arrOneId["system_id"]);
         }
 
         return $arrReturn;

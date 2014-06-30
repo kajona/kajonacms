@@ -217,20 +217,22 @@ class class_module_eventmanager_event extends class_model implements interface_m
             $arrParams[] = $intStatusFilter;
         }
 
-        $strQuery = "SELECT system_id
+        $strQuery = "SELECT *
                        FROM "._dbprefix_."em_event,
                             "._dbprefix_."system,
+                            "._dbprefix_."system_right,
                             "._dbprefix_."system_date
                       WHERE system_id = em_ev_id
+                        AND system_id = right_id
                         AND system_id = system_date_id
                         ".$strAddon."
                         ".($bitOnlyActive ? " AND system_status = 1 " : "")."    
                       ORDER BY system_date_start ".($intOrder == "1" ? " ASC " : " DESC ").", em_ev_title ASC";
         $arrQuery = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, $arrParams, $intStart, $intEnd);
-
+        class_orm_rowcache::addArrayOfInitRows($arrQuery);
         $arrReturn = array();
         foreach($arrQuery as $arrSingleRow)
-            $arrReturn[] = new class_module_eventmanager_event($arrSingleRow["system_id"]);
+            $arrReturn[] = class_objectfactory::getInstance()->getObject($arrSingleRow["system_id"]);
 
         return $arrReturn;
     }

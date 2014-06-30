@@ -179,13 +179,19 @@ class class_module_messaging_message extends class_model implements interface_mo
         if($strUserid == "")
             $strUserid = class_carrier::getInstance()->getObjSession()->getUserID();
 
-        $strQuery = "SELECT system_id
-                     FROM "._dbprefix_."messages, "._dbprefix_."system
+        $strQuery = "SELECT *
+                     FROM "._dbprefix_."messages,
+                          "._dbprefix_."system_right,
+                          "._dbprefix_."system
+                 LEFT JOIN "._dbprefix_."system_date
+                        ON system_id = system_date_id
 		            WHERE system_id = message_id
 		              AND message_user = ?
+		              AND system_id = right_id
 		         ORDER BY message_read ASC, system_create_date DESC";
 
         $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array($strUserid), $intStart, $intEnd);
+        class_orm_rowcache::addArrayOfInitRows($arrIds);
         $arrReturn = array();
         foreach($arrIds as $arrOneId)
             $arrReturn[] = class_objectfactory::getInstance()->getObject($arrOneId["system_id"]);
@@ -205,13 +211,19 @@ class class_module_messaging_message extends class_model implements interface_mo
      * @static
      */
     public static function getMessagesByIdentifier($strIdentifier, $intStart = null, $intEnd = null) {
-        $strQuery = "SELECT system_id
-                     FROM "._dbprefix_."messages, "._dbprefix_."system
+        $strQuery = "SELECT *
+                     FROM "._dbprefix_."messages,
+                          "._dbprefix_."system_right,
+                          "._dbprefix_."system
+                LEFT JOIN "._dbprefix_."system_date
+                       ON system_id = system_date_id
 		            WHERE system_id = message_id
+		              AND system_id = right_id
 		              AND message_internalidentifier = ?
 		         ORDER BY message_read ASC, system_create_date DESC";
 
         $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array($strIdentifier), $intStart, $intEnd);
+        class_orm_rowcache::addArrayOfInitRows($arrIds);
         $arrReturn = array();
         foreach($arrIds as $arrOneId)
             $arrReturn[] = class_objectfactory::getInstance()->getObject($arrOneId["system_id"]);

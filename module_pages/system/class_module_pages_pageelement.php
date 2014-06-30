@@ -389,11 +389,15 @@ class class_module_pages_pageelement extends class_model implements interface_mo
      */
     public static function getAllElementsOnPage($strPageId) {
 
-        $strQuery = "SELECT system_id
+        $strQuery = "SELECT *
 						 FROM "._dbprefix_."page_element,
 						      "._dbprefix_."element,
+						      "._dbprefix_."system_right,
 						      "._dbprefix_."system
+					 LEFT JOIN "._dbprefix_."system_date
+                            ON system_id = system_date_id
 						 WHERE system_prev_id=?
+						   AND system_id = right_id
 						   AND page_element_ph_element = element_name
 						   AND system_id = page_element_id
 				      ORDER BY page_element_ph_placeholder ASC,
@@ -401,10 +405,10 @@ class class_module_pages_pageelement extends class_model implements interface_mo
 						 	   system_sort ASC";
 
         $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array($strPageId));
-
+        class_orm_rowcache::addArrayOfInitRows($arrIds);
         $arrReturn = array();
         foreach($arrIds as $arrOneId)
-            $arrReturn[] = new class_module_pages_pageelement($arrOneId["system_id"]);
+            $arrReturn[] = class_objectfactory::getInstance()->getObject($arrOneId["system_id"]);
 
         return $arrReturn;
     }
@@ -434,14 +438,16 @@ class class_module_pages_pageelement extends class_model implements interface_mo
             $arrParams[] = time();
         }
 
-        $strQuery = "SELECT system_id
+        $strQuery = "SELECT *
                          FROM "._dbprefix_."page_element,
                               "._dbprefix_."element,
+                              "._dbprefix_."system_right,
                               "._dbprefix_."system
-                              LEFT JOIN "._dbprefix_."system_date
-                                ON (system_id = system_date_id)
+                     LEFT JOIN "._dbprefix_."system_date
+                            ON (system_id = system_date_id)
                          WHERE system_prev_id= ?
                            AND page_element_ph_element = element_name
+                           AND system_id = right_id
                            AND system_id = page_element_id
                            AND page_element_ph_language = ?
                            AND page_element_ph_placeholder = ?
@@ -449,10 +455,10 @@ class class_module_pages_pageelement extends class_model implements interface_mo
                          ORDER BY system_sort ASC";
 
         $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, $arrParams);
-
+        class_orm_rowcache::addArrayOfInitRows($arrIds);
         $arrReturn = array();
         foreach($arrIds as $arrOneRow) {
-            $arrReturn[] = new class_module_pages_pageelement($arrOneRow["system_id"]);
+            $arrReturn[] = class_objectfactory::getInstance()->getObject($arrOneRow["system_id"]);
         }
 
         return $arrReturn;

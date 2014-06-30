@@ -142,14 +142,19 @@ class class_module_news_feed extends class_model implements interface_model, int
      * @static
      */
     public static function getFeedByUrlName($strFeedTitle) {
-        $strQuery = "SELECT system_id
+        $strQuery = "SELECT *
 	                   FROM " . _dbprefix_ . "news_feed,
+	                        " . _dbprefix_ . "system_right,
 	                        " . _dbprefix_ . "system
+	                LEFT JOIN "._dbprefix_."system_date
+                          ON system_id = system_date_id
 	                   WHERE news_feed_id = system_id
+	                     AND system_id = right_id
 	                     AND news_feed_urltitle = ? ";
         $arrOneId = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array($strFeedTitle));
+        class_orm_rowcache::addSingleInitRow($arrOneId);
         if(isset($arrOneId["system_id"])) {
-            return new class_module_news_feed($arrOneId["system_id"]);
+            return class_objectfactory::getInstance()->getObject($arrOneId["system_id"]);
         }
         else {
             return null;
@@ -184,11 +189,13 @@ class class_module_news_feed extends class_model implements interface_model, int
             $strQuery = "SELECT *
 							FROM  " . _dbprefix_ . "news,
 							      " . _dbprefix_ . "news_member,
+							      " . _dbprefix_ . "system_right,
 							      " . _dbprefix_ . "system
 					    LEFT JOIN " . _dbprefix_ . "system_date
 					           ON system_id = system_date_id
 							WHERE system_id = news_id
 							  AND news_id = newsmem_news
+							  AND system_id = right_id
 							  AND system_status = 1
 							  AND (system_date_special IS NULL OR (system_date_special > ? OR system_date_special = 0))
 							  AND (system_date_start IS NULL or(system_date_start < ? OR system_date_start = 0))
@@ -200,11 +207,13 @@ class class_module_news_feed extends class_model implements interface_model, int
         else {
             $strQuery = "SELECT *
 							FROM " . _dbprefix_ . "news,
+							      " . _dbprefix_ . "system_right,
 							      " . _dbprefix_ . "system
 						LEFT JOIN " . _dbprefix_ . "system_date
 					           ON system_id = system_date_id
 							WHERE system_id = news_id
 							  AND system_status = 1
+							  AND system_id = right_id
 							  AND (system_date_special IS NULL OR (system_date_special > ? OR system_date_special = 0))
 							  AND (system_date_start IS NULL or(system_date_start < ? OR system_date_start = 0))
 							  AND (system_date_end IS NULL or (system_date_end > ? OR system_date_end = 0))
@@ -219,10 +228,10 @@ class class_module_news_feed extends class_model implements interface_model, int
         }
 
         $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, $arrParams, $intStart, $intEnd);
-
+        class_orm_rowcache::addArrayOfInitRows($arrIds);
         $arrReturn = array();
         foreach($arrIds as $arrOneId) {
-            $arrReturn[] = new class_module_news_news($arrOneId["system_id"]);
+            $arrReturn[] = class_objectfactory::getInstance()->getObject($arrOneId["system_id"]);
         }
 
         return $arrReturn;
