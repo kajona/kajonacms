@@ -155,21 +155,6 @@ class class_module_pages_folder extends class_model implements interface_model, 
 
         return class_module_pages_page::getObjectList($strFolderid);
 
-//        $strQuery = "SELECT system_id
-//						FROM " . _dbprefix_ . "page as page,
-//							 " . _dbprefix_ . "system as system
-//						WHERE system.system_prev_id=?
-//							AND system.system_module_nr=?
-//							AND system.system_id = page.page_id
-//						ORDER BY system.system_sort ASC ";
-//
-//        $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array($strFolderid, _pages_modul_id_));
-//        $arrReturn = array();
-//        foreach($arrIds as $arrOneId) {
-//            $arrReturn[] = class_objectfactory::getInstance()->getObject($arrOneId["system_id"]);
-//        }
-//
-//        return $arrReturn;
     }
 
     /**

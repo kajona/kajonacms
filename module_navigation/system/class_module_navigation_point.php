@@ -266,13 +266,13 @@ class class_module_navigation_point extends class_model implements interface_mod
      */
     private static function loadPageLevelToNavigationNodes($strSourceId) {
 
-        $arrPages = class_module_pages_folder::getPagesAndFolderList($strSourceId, true);
+        $arrPages = class_module_pages_page::getObjectList($strSourceId);
         $arrReturn = array();
 
         //transform the sublevel
         foreach($arrPages as $objOneEntry) {
             //validate status
-            if($objOneEntry->getIntRecordStatus() == 0)
+            if($objOneEntry->getIntRecordStatus() == 0 || !$objOneEntry->rightView())
                 continue;
 
             $objLanguage = new class_module_languages_language();

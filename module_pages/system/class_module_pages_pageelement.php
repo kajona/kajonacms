@@ -20,9 +20,6 @@
 class class_module_pages_pageelement extends class_model implements interface_model, interface_admin_listable {
 
 
-    private static $arrInitRowCache = array();
-
-
     /**
      * @var string
      * @tableColumn page_element_ph_placeholder
@@ -123,10 +120,8 @@ class class_module_pages_pageelement extends class_model implements interface_mo
     protected function initObjectInternal() {
 
         //maybe
-        if(isset(self::$arrInitRowCache[$this->getSystemid()])) {
-            $arrRow = self::$arrInitRowCache[$this->getSystemid()];
-        }
-        else {
+        $arrRow = class_orm_rowcache::getCachedInitRow($this->getSystemid());
+        if($arrRow === null) {
             $strQuery = "SELECT *
                              FROM "._dbprefix_."page_element,
                                   "._dbprefix_."element,
@@ -334,7 +329,7 @@ class class_module_pages_pageelement extends class_model implements interface_mo
      * @param bool $bitJustActive
      * @param string $strLanguage
      *
-     * @see class_module_pages_pageeelemtn::getElementsOnPage()
+     * @see class_module_pages_pageelement::getElementsOnPage()
      * @return array
      */
     public static function getPlainElementsOnPage($strPageId, $bitJustActive = false, $strLanguage = "") {
@@ -377,8 +372,7 @@ class class_module_pages_pageelement extends class_model implements interface_mo
         $arrReturn = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, $arrParams);
 
         foreach($arrReturn as $arrOneRow) {
-            if(!isset(self::$arrInitRowCache[$arrOneRow["system_id"]]))
-                self::$arrInitRowCache[$arrOneRow["system_id"]] = $arrOneRow;
+            class_orm_rowcache::addSingleInitRow($arrOneRow);
         }
 
         return $arrReturn;
