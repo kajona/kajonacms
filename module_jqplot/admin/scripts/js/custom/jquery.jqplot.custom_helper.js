@@ -16,23 +16,46 @@ KAJONA.admin.jqplotHelper = {
      * @param strChartId
      * @param intNoOfWrittenLabels
      */
-    setLabelsInvisible : function(strChartId, intNoOfWrittenLabels) {
-        if(intNoOfWrittenLabels<=2) intNoOfWrittenLabels = 3;
-
-        //get the xaxis canvas ticks
-        var tickArray = $('#'+strChartId+' div.jqplot-xaxis canvas.jqplot-xaxis-tick');
+    setLabelsInvisible : function(strChartId, intNoOfWrittenLabels, strAxis) {
+        //get the axis canvas ticks
+        var tickArray = $('#'+strChartId+' div.jqplot-'+strAxis+' canvas.jqplot-'+strAxis+'-tick');
         var noOfTicks = tickArray.length;
 
         if(noOfTicks > intNoOfWrittenLabels) {
-            var modulo = Math.ceil(noOfTicks/(intNoOfWrittenLabels-2));//-2 because first and last will always be rendered
+            var modulo = Math.ceil(noOfTicks/(intNoOfWrittenLabels));
 
-            //first and last tick will never be set invsible, that's we start from i=1 and end at tickArray.length-1
-            for(var i = 1; i<tickArray.length-1; i++ ) {
+            var startFor = 0;
+            var endFor = noOfTicks
+            var numberTicksNotInvisible = 0;
+
+            //always keep first an last visible
+            if(intNoOfWrittenLabels >=2) {
+                startFor = 1;
+                endFor = noOfTicks-1;
+                numberTicksNotInvisible = 2;
+            }
+
+            for(var i = startFor; i<endFor; i++ ) {
+                if(numberTicksNotInvisible == intNoOfWrittenLabels) {
+                    $(tickArray[i]).css('display', 'none')
+                    continue;
+                }
                 if((i%modulo)!=0) {
                     $(tickArray[i]).css('display', 'none')
+                    continue;
                 }
+                numberTicksNotInvisible++;
             }
         }
+    },
+    /**
+     * Sets the created canvasLabels invisible depending on the intNoOfWrittenLabels
+     *
+     * @param strChartId
+     * @param intNoOfWrittenLabels
+     */
+    setAxisInvisible : function(strChartId, strAxis) {
+        var tickArray = $('#'+strChartId+' div.jqplot-'+strAxis).hide();
     },
     mouseLeave : function(ev, gridpos, datapos, neighbor, plot, tooltipId) {
         $('#jqplot_tooltip').remove();
@@ -48,25 +71,40 @@ KAJONA.admin.jqplotHelper = {
         else {
             var series = plot.series[neighbor.seriesIndex];
             var arrXAxisTicks = plot.axes.xaxis.ticks;
+            var arrYAxisTicks = plot.axes.yaxis.ticks;
 
-            var objTooltip = {
-                seriesLabel: series.label,
-
-                //get the series colors
-                seriesColor :series.highlightColorGenerator ?
-                             series.highlightColorGenerator.get(neighbor.pointIndex) : //for pieChart
-                             series.color, //all other charts
+            var seriesColor = null;
+            var xValue = null;
+            var yValue = null;
+            if(series._type == "pie") {
+                seriesColor = series.highlightColorGenerator.get(neighbor.pointIndex);
+                xValue = isNaN(neighbor.data[0]) ? neighbor.data[0] : Math.round(neighbor.data[0] * 1000) / 1000;
+                yValue = isNaN(neighbor.data[1]) ? neighbor.data[1] : Math.round(neighbor.data[1] * 1000) / 1000;
+            }
+            else {
+                seriesColor = series.color;
 
                 //Either set label value for this datapoint or value (if no x-axis labels were set)
-                xValue: arrXAxisTicks.length > 0 ?
+                xValue = arrXAxisTicks.length > 0 && series._primaryAxis == "_xaxis"?//only if xaxis is primary axis use the tick labels
                         arrXAxisTicks[neighbor.pointIndex] :
-                        neighbor.data[0],
+                        Math.round(neighbor.data[0] * 1000) / 1000;
 
-                yValue: isNaN(neighbor.data[1]) ? neighbor.data[1] : Math.round(neighbor.data[1] * 1000) / 1000,
+                //Either set label value for this datapoint or value (if no y-axis labels were set)
+                yValue = arrYAxisTicks.length > 0 && series._primaryAxis == "_yaxis"?//only if yaxis is primary axis use the tick labels
+                        arrYAxisTicks[neighbor.pointIndex] :
+                        Math.round(neighbor.data[1] * 1000) / 1000;
+
+            }
+
+            var objTooltip = {
+                seriesObject: series,
+                seriesLabel: series.label,
+                seriesColor :seriesColor,
+                xValue: xValue,
+                yValue: yValue,
                 seriesIndex: neighbor.seriesIndex,
                 plot: plot
             };
-
 
             //new data point
             if( this.previousNeighbor == null //new data point --> create new point
@@ -88,6 +126,22 @@ KAJONA.admin.jqplotHelper = {
         var left = x+5;
 
         if(!move) {
+            //set value for primary and secondary xaxis
+            var valuePrimaryAxis = null;
+            var valueSecondaryAxis = null;
+            if(objTooltip.seriesObject._primaryAxis == "_xaxis") {
+                valuePrimaryAxis = objTooltip.xValue;
+                valueSecondaryAxis = objTooltip.yValue;
+            }
+            else {
+                valuePrimaryAxis = objTooltip.yValue;
+                valueSecondaryAxis = objTooltip.xValue;
+            }
+
+            if(objTooltip.seriesObject._primaryAxis == "_xaxis") {
+
+            }
+
             //create the toolTip
             $('#jqplot_tooltip').remove();
 
@@ -96,19 +150,22 @@ KAJONA.admin.jqplotHelper = {
                 + '<div id=\"jqplot_tooltip_content\"  class=\"jqplot-chart-tooltip-content\"></div>'
                 + '</div>').appendTo("body");
 
-            $('#jqplot_tooltip_series').html("<span>"+objTooltip.xValue+"</span>");
-            $('#jqplot_tooltip_content').html("<span>"+objTooltip.seriesLabel+" : <b>"+objTooltip.yValue+"</b></span>");
+
+            console.log(valuePrimaryAxis);
+
+            $('#jqplot_tooltip_series').html("<span>"+valuePrimaryAxis+"</span>");
+            $('#jqplot_tooltip_content').html("<span>"+objTooltip.seriesLabel+" : <b>"+valueSecondaryAxis+"</b></span>");
 
 
             toolTipDiv.css("border-color", objTooltip.seriesColor)
-                      .css("top", top)
-                      .css("left", left)
-                      .show();
+                .css("top", top)
+                .css("left", left)
+                .show();
         }
         else {
             //only move the tooltip
             $('#jqplot_tooltip').css("top", top)
-                                .css("left", left);
+                .css("left", left);
         }
     }
 

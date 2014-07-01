@@ -3337,8 +3337,16 @@
                                 theta -= 2*Math.PI;
                             }
                         }
-            
-                        sm = s.sliceMargin/180*Math.PI;
+
+                        //sm = s.sliceMargin/180*Math.PI;
+                        /*
+                        Fix check https://bitbucket.org/cleonello/jqplot/issue/560/pierenderer-with-slicemargin-and
+                         // There is a bug here; if the ratio of the sliceMargin to the slice size is too big
+                         // this function fails to return an object
+                         // Also, if sliceMargin is too big (say 100) the pieRenderer throws a runtime DOM exception on click
+                         // Just setting sm=0 fixes both issues (but allows clicking on the margins which isn't necessarily a bad thing)
+                        */
+                        sm = 0;
                         if (r < s._radius) {
                             for (j=0; j<s.gridData.length; j++) {
                                 minang = (j>0) ? s.gridData[j-1][1]+sm : sm;
