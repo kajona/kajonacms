@@ -401,7 +401,7 @@ class class_module_workflows_workflow extends class_model implements interface_m
 
 
         $arrRows = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array(), $intStart, $intEnd);
-
+        class_orm_rowcache::addArrayOfInitRows($arrRows);
         $arrReturn = array();
         foreach($arrRows as $arrSingleRow) {
             $arrReturn[] = class_objectfactory::getInstance()->getObject($arrSingleRow["system_id"]);
