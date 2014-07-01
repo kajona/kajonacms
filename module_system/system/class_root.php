@@ -731,7 +731,7 @@ abstract class class_root {
 
         if($this->strOldPrevId != $this->strPrevId) {
             $this->objDB->flushQueryCache();
-            class_orm_rowcache::resetCache();
+            class_orm_rowcache::flushCache();
             $this->objRights->rebuildRightsStructure($this->getSystemid());
             $this->objSortManager->fixSortOnPrevIdChange($this->strOldPrevId, $this->strPrevId);
             //TODO: remove legacy call

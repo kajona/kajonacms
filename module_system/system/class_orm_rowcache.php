@@ -86,7 +86,7 @@ class class_orm_rowcache extends class_orm_base {
      * Resets the cached rows
      * @return void
      */
-    public static function resetCache() {
+    public static function flushCache() {
         self::$arrInitRows = array();
     }
 

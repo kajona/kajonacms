@@ -50,6 +50,7 @@ class class_lockmanager {
 						WHERE system_id =?";
 
         if(class_carrier::getInstance()->getObjDB()->_pQuery($strQuery, array(class_carrier::getInstance()->getObjSession()->getUserID(), time(), $this->strSystemid))) {
+            class_orm_rowcache::flushCache();
             class_carrier::getInstance()->getObjDB()->flushQueryCache();
             return true;
         }
@@ -84,6 +85,7 @@ class class_lockmanager {
                     $this->objSourceObject->setStrLockId("");
 
                 class_carrier::getInstance()->getObjDB()->flushQueryCache();
+                class_orm_rowcache::flushCache();
                 return true;
             }
         }
