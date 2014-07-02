@@ -92,6 +92,7 @@ class class_module_system_setting extends class_model implements interface_model
             $arrRow = class_orm_rowcache::getCachedInitRow($this->getSystemid());
         }
 
+        $this->setArrInitRow(array("system_id" => ""));
 
         $this->setStrName($arrRow["system_config_name"]);
         $this->setStrValue($arrRow["system_config_value"]);
