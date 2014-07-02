@@ -20,6 +20,11 @@ class class_orm_objectlist extends class_orm_base {
      */
     private $arrWhereRestrictions = array();
 
+    /**
+     * @var class_orm_objectlist_orderby[]
+     */
+    private $arrOrderBy = array();
+
 
     /**
      * Internal helper, adds the where restrictions
@@ -88,6 +93,9 @@ class class_orm_objectlist extends class_orm_base {
         $arrPropertiesOrder = $objAnnotations->getPropertiesWithAnnotation(class_orm_base::STR_ANNOTATION_LISTORDER);
 
         $arrOrderByCriteria = array();
+        foreach($this->arrOrderBy as $objOneOrder)
+            $arrOrderByCriteria[] = $objOneOrder->getStrOrderBy();
+
         $arrOrderByCriteria[] = " system_sort ASC ";
         if(count($arrPropertiesOrder) > 0) {
             $arrPropertiesORM = $objAnnotations->getPropertiesWithAnnotation(class_orm_base::STR_ANNOTATION_TABLECOLUMN);
@@ -114,7 +122,7 @@ class class_orm_objectlist extends class_orm_base {
 
         $strOrderBy = "";
         if(count($arrOrderByCriteria) > 0)
-            $strOrderBy = "ORDER BY ".implode(", ", $arrOrderByCriteria);
+            $strOrderBy = "ORDER BY ".implode(" , ", $arrOrderByCriteria)." ";
 
 
         $strQuery = "SELECT *
@@ -148,6 +156,17 @@ class class_orm_objectlist extends class_orm_base {
      */
     public function addWhereRestriction(class_orm_objectlist_restriction $objRestriction) {
         $this->arrWhereRestrictions[] = $objRestriction;
+    }
+
+    /**
+     * Add a order by restriction to the current queries
+     *
+     * @param class_orm_objectlist_orderby $objOrder
+     *
+     * @return void
+     */
+    public function addOrderBy(class_orm_objectlist_orderby $objOrder) {
+        $this->arrOrderBy[] = $objOrder;
     }
 
 
