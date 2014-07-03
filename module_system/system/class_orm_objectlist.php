@@ -56,7 +56,7 @@ class class_orm_objectlist extends class_orm_base {
         //build the query
         $strQuery = "SELECT COUNT(*)
                        ".$this->getQueryBase($strTargetClass)."
-                       ".($strPrevid != "" ? " AND system_prev_id = ? " : "")."";
+                       ".($strPrevid != "" && $strPrevid !== null ? " AND system_prev_id = ? " : "")."";
 
         $arrParams = array();
         if($strPrevid != "")
@@ -87,7 +87,7 @@ class class_orm_objectlist extends class_orm_base {
 
         $strQuery = "SELECT *
                            ".$this->getQueryBase($strTargetClass)."
-                       ".($strPrevid != "" ? " AND system_prev_id = ? " : "");
+                       ".($strPrevid != "" && $strPrevid !== null ? " AND system_prev_id = ? " : "");
 
         $arrParams = array();
         if($strPrevid != "")
@@ -121,7 +121,7 @@ class class_orm_objectlist extends class_orm_base {
 
         $strQuery = "SELECT *
                            ".$this->getQueryBase($strTargetClass)."
-                       ".($strPrevid != "" ? " AND system_prev_id = ? " : "");
+                       ".($strPrevid != "" && $strPrevid !== null ? " AND system_prev_id = ? " : "");
 
         $arrParams = array();
         if($strPrevid != "")
