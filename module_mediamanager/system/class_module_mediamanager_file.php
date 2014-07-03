@@ -481,27 +481,16 @@ class class_module_mediamanager_file extends class_model implements interface_mo
     /**
      * Loads a single folder for a given path. Please be aware that you have to pass the previd, too
      *
-     * @param $strPrevId
-     * @param $strPath
+     * @param string $strPrevId
+     * @param string $strPath
      *
      * @return class_module_mediamanager_file
-     * @deprecated
-     * @todo is this still used?
      */
     public static function getFolderForPath($strPrevId, $strPath) {
-
-        $strQuery = "SELECT system_id
-                       FROM " . _dbprefix_ . "system,
-                            " . _dbprefix_ . "mediamanager_file
-                    WHERE system_id = file_id
-                      AND file_type = ?
-                      AND system_prev_id = ?
-                      AND file_filename = ?";
-        $arrId = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array(self::$INT_TYPE_FOLDER, $strPrevId, $strPath));
-        if(isset($arrId["system_id"]) && validateSystemid($arrId["system_id"]))
-            return new class_module_mediamanager_file($arrId["system_id"]);
-        else
-            return null;
+        $objOrm = new class_orm_objectlist();
+        $objOrm->addWhereRestriction(new class_orm_objectlist_restriction("AND file_type = ?", array(self::$INT_TYPE_FOLDER)));
+        $objOrm->addWhereRestriction(new class_orm_objectlist_restriction("AND file_filename = ?", array($strPath)));
+        return $objOrm->getSingleObject(__CLASS__, $strPrevId);
     }
 
     /**
