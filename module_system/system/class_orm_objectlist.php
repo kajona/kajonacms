@@ -44,10 +44,7 @@ class class_orm_objectlist extends class_orm_base {
 
 
     /**
-     * A generic approach to count the number of object currently available.
-     * This method is only a simple approach to determine the number of instances in the
-     * database, if you need more specific counts, overwrite this method or add your own
-     * implementation to the derived class.
+     * Counts the objects found by the currently setup query.
      *
      * @param string $strTargetClass
      * @param string $strPrevid
@@ -74,23 +71,84 @@ class class_orm_objectlist extends class_orm_base {
 
 
     /**
-     * A generic approach to load a list of objects currently available.
-     * This method is only a simple approach to determine the instances in the
-     * database, if you need more specific loaders, overwrite this method or add your own
-     * implementation to the derived class.
+     * Returns the list of objects matching the current query. The target-tables
+     * are set up by analyzing the classes' annotations, the initial sort-order, too.
+     * You may influence the ordering and restrictions by adding the relevant restriction / order
+     * objects before calling this method.
      *
      * @param string $strTargetClass
      * @param string $strPrevid
      * @param null|int $intStart
      * @param null|int $intEnd
      *
-     * @return self[]
+     * @return class_model[]|interface_model[]
      */
     public function getObjectList($strTargetClass, $strPrevid = "", $intStart = null, $intEnd = null) {
-        $objAnnotations = new class_reflection($strTargetClass);
 
+        $strQuery = "SELECT *
+                           ".$this->getQueryBase($strTargetClass)."
+                       ".($strPrevid != "" ? " AND system_prev_id = ? " : "");
+
+        $arrParams = array();
+        if($strPrevid != "")
+            $arrParams[] = $strPrevid;
+
+        $this->processWhereRestrictions($strQuery, $arrParams);
+        $strQuery .= $this->getOrderBy(new class_reflection($strTargetClass));
+        $arrRows = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, $arrParams, $intStart, $intEnd);
+
+        $arrReturn = array();
+        foreach($arrRows as $arrOneRow) {
+            class_orm_rowcache::addSingleInitRow($arrOneRow);
+            $arrReturn[] = class_objectfactory::getInstance()->getObject($arrOneRow["system_id"]);
+        }
+
+        return $arrReturn;
+    }
+
+    /**
+     * Returns a single object matching the current query. The matching object is either
+     * limited by the where statements set up in advance or the first record of the matching
+     * result-set is returned.
+     * If the query results in an empty result set, null is returned instead.
+     *
+     * @param string $strTargetClass
+     * @param string $strPrevid
+     *
+     * @return class_model|interface_model|null
+     */
+    public function getSingleObject($strTargetClass, $strPrevid = "") {
+
+        $strQuery = "SELECT *
+                           ".$this->getQueryBase($strTargetClass)."
+                       ".($strPrevid != "" ? " AND system_prev_id = ? " : "");
+
+        $arrParams = array();
+        if($strPrevid != "")
+            $arrParams[] = $strPrevid;
+
+        $this->processWhereRestrictions($strQuery, $arrParams);
+        $strQuery .= $this->getOrderBy(new class_reflection($strTargetClass));
+        $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, $arrParams);
+
+        if(isset($arrRow["system_id"])) {
+            class_orm_rowcache::addSingleInitRow($arrRow);
+            return class_objectfactory::getInstance()->getObject($arrRow["system_id"]);
+        }
+
+        return null;
+    }
+
+    /**
+     * Generates the order by statement
+     *
+     * @param class_reflection $objReflection
+     *
+     * @return string
+     */
+    private function getOrderBy(class_reflection $objReflection) {
         //try to load the sort criteria
-        $arrPropertiesOrder = $objAnnotations->getPropertiesWithAnnotation(class_orm_base::STR_ANNOTATION_LISTORDER);
+        $arrPropertiesOrder = $objReflection->getPropertiesWithAnnotation(class_orm_base::STR_ANNOTATION_LISTORDER);
 
         $arrOrderByCriteria = array();
         foreach($this->arrOrderBy as $objOneOrder)
@@ -98,7 +156,7 @@ class class_orm_objectlist extends class_orm_base {
 
         $arrOrderByCriteria[] = " system_sort ASC ";
         if(count($arrPropertiesOrder) > 0) {
-            $arrPropertiesORM = $objAnnotations->getPropertiesWithAnnotation(class_orm_base::STR_ANNOTATION_TABLECOLUMN);
+            $arrPropertiesORM = $objReflection->getPropertiesWithAnnotation(class_orm_base::STR_ANNOTATION_TABLECOLUMN);
 
             foreach($arrPropertiesOrder as $strProperty => $strAnnotation) {
                 if(isset($arrPropertiesORM[$strProperty])) {
@@ -124,29 +182,9 @@ class class_orm_objectlist extends class_orm_base {
         if(count($arrOrderByCriteria) > 0)
             $strOrderBy = "ORDER BY ".implode(" , ", $arrOrderByCriteria)." ";
 
-
-        $strQuery = "SELECT *
-                           ".$this->getQueryBase($strTargetClass)."
-                       ".($strPrevid != "" ? " AND system_prev_id = ? " : "");
-
-        $arrParams = array();
-        if($strPrevid != "")
-            $arrParams[] = $strPrevid;
-
-        $this->processWhereRestrictions($strQuery, $arrParams);
-
-        $strQuery .= $strOrderBy;
-
-        $arrRows = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, $arrParams, $intStart, $intEnd);
-
-        $arrReturn = array();
-        foreach($arrRows as $arrOneRow) {
-            class_orm_rowcache::addSingleInitRow($arrOneRow);
-            $arrReturn[] = class_objectfactory::getInstance()->getObject($arrOneRow["system_id"]);
-        }
-
-        return $arrReturn;
+        return $strOrderBy;
     }
+
 
     /**
      * Add a where restriction to the current queries
@@ -168,7 +206,6 @@ class class_orm_objectlist extends class_orm_base {
     public function addOrderBy(class_orm_objectlist_orderby $objOrder) {
         $this->arrOrderBy[] = $objOrder;
     }
-
 
 
 }
