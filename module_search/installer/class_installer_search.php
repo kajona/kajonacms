@@ -324,6 +324,11 @@ class class_installer_search extends class_installer_base implements interface_i
         $this->updateElementVersion("search", "4.5");
 
         $strReturn .= "Updating index...\n";
+
+        if(@ini_get("max_execution_time") < 3600 && @ini_get("max_execution_time") > 0)
+            @ini_set("max_execution_time", "3600");
+
+
         class_module_system_module::flushCache();
         class_db::getInstance()->flushQueryCache();
         class_db::getInstance()->flushPreparedStatementsCache();
