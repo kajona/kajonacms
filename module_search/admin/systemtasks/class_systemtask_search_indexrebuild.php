@@ -15,6 +15,9 @@
 class class_systemtask_search_indexrebuild extends class_systemtask_base implements interface_admin_systemtask {
 
 
+    private $STR_SESSION_KEY = "class_systemtask_search_indexrebuild";
+
+
     /**
      * constructor to call the base constructor
      */
@@ -52,25 +55,72 @@ class class_systemtask_search_indexrebuild extends class_systemtask_base impleme
      * @return string
      */
     public function executeTask() {
-        $strReturn = "";
+
         $objWorker = new class_module_search_indexwriter();
-        $intTimeStart = microtime(true);
 
-        $objWorker->clearIndex();
-        $objWorker->indexRebuild();
+        if(!class_carrier::getInstance()->getObjSession()->sessionIsset($this->STR_SESSION_KEY)) {
 
-        $intTimeEnd = microtime(true);
-        $intTime = $intTimeEnd - $intTimeStart;
+            //fetch all records to be indexed
+            $strQuery = "SELECT system_id FROM " . _dbprefix_ . "system ";
+            $arrRows = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array());
 
-        $strReturn .= $this->objToolkit->getTextRow($this->getLang("worker_indexrebuild_end", array($objWorker->getNumberOfDocuments(), $objWorker->getNumberOfContentEntries(), sprintf('%f', $intTime))));
-        return $strReturn;
+            $arrIds = array();
+            foreach($arrRows as $arrOneRow)
+                $arrIds[] = $arrOneRow["system_id"];
+
+
+            $objWorker->clearIndex();
+            class_carrier::getInstance()->getObjSession()->setSession($this->STR_SESSION_KEY, $arrIds);
+            $this->setParam("totalCount", count($arrIds));
+        }
+
+
+        $arrIds = class_carrier::getInstance()->getObjSession()->getSession($this->STR_SESSION_KEY);
+
+        if(count($arrIds) == 0) {
+            class_carrier::getInstance()->getObjSession()->sessionUnset($this->STR_SESSION_KEY);
+            return $this->objToolkit->getTextRow($this->getLang("worker_indexrebuild_end", array($objWorker->getNumberOfDocuments(), $objWorker->getNumberOfContentEntries())));
+        }
+
+        $intMax = 0;
+        foreach($arrIds as $intKey => $strOneValue) {
+
+            $objObject = class_objectfactory::getInstance()->getObject($strOneValue);
+
+            if($objObject != null)
+                $objWorker->indexObject($objObject, true);
+
+            unset($arrIds[$intKey]);
+
+            if($intMax++ > 500)
+                break;
+        }
+
+        class_carrier::getInstance()->getObjSession()->setSession($this->STR_SESSION_KEY, $arrIds);
+
+
+        //and create a small progress-info
+        $intTotal = $this->getParam("totalCount");
+        $floatOnePercent = 100 / $intTotal;
+        //and multiply it with the already processed records
+        $intLookupsDone = ((int)$intTotal - count($arrIds)) * $floatOnePercent;
+        $intLookupsDone = round($intLookupsDone, 2);
+        if($intLookupsDone < 0) {
+            $intLookupsDone = 0;
+        }
+
+        $this->setStrProgressInformation($this->getLang("worker_indexrebuild", array($objWorker->getNumberOfDocuments(), $objWorker->getNumberOfContentEntries())));
+        $this->setStrReloadParam("&totalCount=" . $this->getParam("totalCount"));
+
+        return $intLookupsDone;
     }
 
     /**
-     * @see interface_admin_systemtast::getAdminForm()
+     * @see interface_admin_systemtask::getAdminForm()
      * @return string
      */
     public function getAdminForm() {
+        class_carrier::getInstance()->getObjSession()->sessionUnset($this->STR_SESSION_KEY);
         return "";
     }
 
