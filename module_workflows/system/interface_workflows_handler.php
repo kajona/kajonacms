@@ -3,8 +3,6 @@
 *   (c) 2004-2006 by MulchProductions, www.mulchprod.de                                                 *
 *   (c) 2007-2014 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
-*-------------------------------------------------------------------------------------------------------*
-*	$Id$                               *
 ********************************************************************************************************/
 
 /**
@@ -25,14 +23,13 @@
  *     - true: handler is marked as EXECUTED and
  *     - false:
  *          - schedule() is called
- *          - handler remaines marked as SCHEDULED
+ *          - handler remains marked as SCHEDULED
  *          - number of executions is increased
  *
  * Please note:
  *   Do NOT call updateObjectToDb on the workflow-instance.
  *   This call is done at the end of every transition. Otherwise the data saved in the objects may get
  *   invalid!
- *
  *
  * @package module_workflows
  */
@@ -52,6 +49,8 @@ interface interface_workflows_handler {
     /**
      * Being called when the current workflow is removed from the database.
      * Provides the possibility to perform e.g. cleanups required to remain consistent.
+     *
+     * @return void
      */
     public function onDelete();
 
@@ -60,7 +59,8 @@ interface interface_workflows_handler {
      * Holds all params relevant for the current object
      * and stores object-defined params and values.
      *
-     * @param class_module_workflows_workflow
+     * @param class_module_workflows_workflow $objWorkflow
+     * @return void
      */
     public function setObjWorkflow($objWorkflow);
     
@@ -72,7 +72,7 @@ interface interface_workflows_handler {
      * The workflow-object itself is updated automatically, so no need to be done right here.
      * 
      * @see class_module_workflows_workflow::setObjTriggerDate
-     * 
+     * @return void
      */
     public function schedule();
 
@@ -138,6 +138,8 @@ interface interface_workflows_handler {
      * @param string $strVal1
      * @param string $strVal2
      * @param string $strVal3
+     *
+     * @return void
      */
     public function setConfigValues($strVal1, $strVal2, $strVal3);
 

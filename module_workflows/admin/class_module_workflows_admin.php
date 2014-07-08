@@ -34,23 +34,32 @@ class class_module_workflows_admin extends class_admin_simple implements interfa
     }
 
 
+    /**
+     * @return array
+     */
     public function getOutputModuleNavi() {
         $arrReturn = array();
-        $arrReturn[] = array("view", getLinkAdmin($this->getArrModule("modul"), "myList", "", $this->getLang("module_mylist"), "", "", true, "adminnavi"));
-        $arrReturn[] = array("edit", getLinkAdmin($this->getArrModule("modul"), "list", "", $this->getLang("commons_list"), "", "", true, "adminnavi"));
+        $arrReturn[] = array("view", class_link::getLinkAdmin($this->getArrModule("modul"), "myList", "", $this->getLang("module_mylist"), "", "", true, "adminnavi"));
+        $arrReturn[] = array("edit", class_link::getLinkAdmin($this->getArrModule("modul"), "list", "", $this->getLang("commons_list"), "", "", true, "adminnavi"));
         $arrReturn[] = array("", "");
-        $arrReturn[] = array("right1", getLinkAdmin($this->getArrModule("modul"), "listHandlers", "", $this->getLang("action_list_handlers"), "", "", true, "adminnavi"));
+        $arrReturn[] = array("right1", class_link::getLinkAdmin($this->getArrModule("modul"), "listHandlers", "", $this->getLang("action_list_handlers"), "", "", true, "adminnavi"));
         $arrReturn[] = array("", "");
-        $arrReturn[] = array("right", getLinkAdmin("right", "change", "&changemodule=" . $this->arrModule["modul"], $this->getLang("commons_module_permissions"), "", "", true, "adminnavi"));
-        //$arrReturn[] = array("edit", getLinkAdmin($this->arrModule["modul"], "triggerWorkflows", "", $this->getLang("module_trigger"), "", "", true, "adminnavi"));
+        $arrReturn[] = array("right", class_link::getLinkAdmin("right", "change", "&changemodule=" . $this->getArrModule("modul"), $this->getLang("commons_module_permissions"), "", "", true, "adminnavi"));
+        //$arrReturn[] = array("edit", getLinkAdmin($this->getArrModule("modul"), "triggerWorkflows", "", $this->getLang("module_trigger"), "", "", true, "adminnavi"));
         return $arrReturn;
     }
 
+    /**
+     * @param string $strSystemid
+     * @param string $strStopSystemid
+     *
+     * @return array
+     */
     public function getArrOutputNaviEntries($strSystemid = "", $strStopSystemid = "") {
         $arrPath = parent::getArrOutputNaviEntries($strSystemid, $strStopSystemid);
 
         if(validateSystemid($this->getSystemid()) && class_objectfactory::getInstance()->getObject($this->getSystemid()) != null)
-            $arrPath[] = getLinkAdmin("workflows", $this->getAction(), "&systemid=".$this->getSystemid(), class_objectfactory::getInstance()->getObject($this->getSystemid())->getStrDisplayName());
+            $arrPath[] = class_link::getLinkAdmin("workflows", $this->getAction(), "&systemid=".$this->getSystemid(), class_objectfactory::getInstance()->getObject($this->getSystemid())->getStrDisplayName());
 
         return $arrPath;
     }
@@ -180,7 +189,7 @@ class class_module_workflows_admin extends class_admin_simple implements interfa
         $arrRows[] = array($this->getLang("workflow_text2"), $objWorkflow->getStrText2());
         $strReturn .= $this->objToolkit->dataTable(null, $arrRows);
 
-        $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "list"));
+        $strReturn .= $this->objToolkit->formHeader(class_link::getLinkAdminHref($this->getArrModule("modul"), "list"));
         $strReturn .= $this->objToolkit->formInputSubmit($this->getLang("commons_back"));
         $strReturn .= $this->objToolkit->formClose();
 
@@ -199,7 +208,7 @@ class class_module_workflows_admin extends class_admin_simple implements interfa
         $objWorkflowController->scheduleWorkflows();
         $objWorkflowController->runWorkflows();
 
-        $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "list"));
+        $this->adminReload(getLinkAdminHref($this->getArrModule("modul"), "list"));
 
         return $strReturn;
     }
@@ -253,15 +262,15 @@ class class_module_workflows_admin extends class_admin_simple implements interfa
             $strInfo .= $this->objToolkit->getTextRow($this->getLang("workflow_responsible") . " " . $strResponsible);
             $strReturn .= $this->objToolkit->getFieldset($this->getLang("workflow_general"), $strInfo);
 
-            $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "saveUI"));
+            $strReturn .= $this->objToolkit->formHeader(class_link::getLinkAdminHref($this->getArrModule("modul"), "saveUI"));
             $strForm = $objWorkflow->getObjWorkflowHandler()->getUserInterface();
 
             if($strForm instanceof class_admin_formgenerator) {
                 $strForm->addField(new class_formentry_hidden(null, null), "workflowid")->setStrValue($objWorkflow->getSystemid());
-                $strReturn .= $strForm->renderForm(getLinkAdminHref($this->arrModule["modul"], "saveUI"));
+                $strReturn .= $strForm->renderForm(class_link::getLinkAdminHref($this->getArrModule("modul"), "saveUI"));
             }
             else {
-                $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "saveUI"));
+                $strReturn .= $this->objToolkit->formHeader(class_link::getLinkAdminHref($this->getArrModule("modul"), "saveUI"));
                 $strReturn .= $strForm;
                 $strReturn .= $this->objToolkit->formInputHidden("systemid", $objWorkflow->getSystemid());
                 $strReturn .= $this->objToolkit->formInputSubmit($this->getLang("commons_save"));
@@ -306,7 +315,7 @@ class class_module_workflows_admin extends class_admin_simple implements interfa
 
             $objWorkflow->updateObjectToDb();
 
-            $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "myList"));
+            $this->adminReload(class_link::getLinkAdminHref($this->getArrModule("modul"), "myList"));
         }
         else {
             $strReturn .= $this->getLang("commons_error_permissions");
@@ -315,15 +324,26 @@ class class_module_workflows_admin extends class_admin_simple implements interfa
         return $strReturn;
     }
 
+    /**
+     * @param class_model $objListEntry
+     * @param bool $bitDialog
+     *
+     * @return string
+     */
     protected function renderEditAction(class_model $objListEntry, $bitDialog = false) {
         if($objListEntry instanceof class_module_workflows_handler) {
-            return $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "editHandler", "&systemid=" . $objListEntry->getSystemid(), "", $this->getLang("action_edit_handler"), "icon_edit"));
+            return $this->objToolkit->listButton(class_link::getLinkAdmin($this->getArrModule("modul"), "editHandler", "&systemid=" . $objListEntry->getSystemid(), "", $this->getLang("action_edit_handler"), "icon_edit"));
         }
         else
             return "";
     }
 
 
+    /**
+     * @param interface_model $objListEntry
+     *
+     * @return string
+     */
     protected function renderUnlockAction(interface_model $objListEntry) {
         if($objListEntry instanceof class_module_workflows_handler) {
             return "";
@@ -331,6 +351,11 @@ class class_module_workflows_admin extends class_admin_simple implements interfa
         return parent::renderUnlockAction($objListEntry);
     }
 
+    /**
+     * @param interface_model $objListEntry
+     *
+     * @return string
+     */
     protected function renderDeleteAction(interface_model $objListEntry) {
         if($objListEntry instanceof class_module_workflows_handler) {
             return "";
@@ -338,6 +363,11 @@ class class_module_workflows_admin extends class_admin_simple implements interfa
         return parent::renderDeleteAction($objListEntry);
     }
 
+    /**
+     * @param class_model $objListEntry
+     *
+     * @return string
+     */
     protected function renderStatusAction(class_model $objListEntry) {
         if($objListEntry instanceof class_module_workflows_handler) {
             return "";
@@ -361,6 +391,11 @@ class class_module_workflows_admin extends class_admin_simple implements interfa
         return parent::renderStatusAction($objListEntry);
     }
 
+    /**
+     * @param class_model $objListEntry
+     *
+     * @return string
+     */
     protected function renderPermissionsAction(class_model $objListEntry) {
         if($objListEntry instanceof class_module_workflows_handler) {
             return "";
@@ -368,6 +403,11 @@ class class_module_workflows_admin extends class_admin_simple implements interfa
         return parent::renderPermissionsAction($objListEntry);
     }
 
+    /**
+     * @param class_model $objListEntry
+     *
+     * @return string
+     */
     protected function renderTagAction(class_model $objListEntry) {
         if($objListEntry instanceof class_module_workflows_handler) {
             return "";
@@ -375,24 +415,34 @@ class class_module_workflows_admin extends class_admin_simple implements interfa
         return parent::renderTagAction($objListEntry);
     }
 
+    /**
+     * @param class_model $objListEntry
+     *
+     * @return string
+     */
     protected function renderCopyAction(class_model $objListEntry) {
         return "";
     }
 
+    /**
+     * @param class_model $objListEntry
+     *
+     * @return array
+     */
     protected function renderAdditionalActions(class_model $objListEntry) {
         if($objListEntry instanceof class_module_workflows_handler) {
             return array(
-                $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "instantiateHandler", "&systemid=" . $objListEntry->getSystemid(), "", $this->getLang("action_instantiate_handler"), "icon_workflowTrigger"))
+                $this->objToolkit->listButton(class_link::getLinkAdmin($this->getArrModule("modul"), "instantiateHandler", "&systemid=" . $objListEntry->getSystemid(), "", $this->getLang("action_instantiate_handler"), "icon_workflowTrigger"))
             );
         }
         if($objListEntry instanceof class_module_workflows_workflow) {
             $arrReturn = array();
             if($objListEntry->getIntState() == class_module_workflows_workflow::$INT_STATE_SCHEDULED && $objListEntry->getObjWorkflowHandler()->providesUserInterface()) {
-                $arrReturn[] = $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "showUI", "&systemid=" . $objListEntry->getSystemid(), "", $this->getLang("workflow_ui"), "icon_workflow_ui"));
+                $arrReturn[] = $this->objToolkit->listButton(class_link::getLinkAdmin($this->getArrModule("modul"), "showUI", "&systemid=" . $objListEntry->getSystemid(), "", $this->getLang("workflow_ui"), "icon_workflow_ui"));
             }
 
             if($objListEntry->rightEdit()) {
-                $arrReturn[] = $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "showDetails", "&systemid=" . $objListEntry->getSystemid(), "", $this->getLang("action_show_details"), "icon_lens"));
+                $arrReturn[] = $this->objToolkit->listButton(class_link::getLinkAdmin($this->getArrModule("modul"), "showDetails", "&systemid=" . $objListEntry->getSystemid(), "", $this->getLang("action_show_details"), "icon_lens"));
             }
 
             return $arrReturn;
@@ -400,10 +450,21 @@ class class_module_workflows_admin extends class_admin_simple implements interfa
         return parent::renderAdditionalActions($objListEntry);
     }
 
+    /**
+     * @param string $strListIdentifier
+     * @param bool $bitDialog
+     *
+     * @return string
+     */
     protected function getNewEntryAction($strListIdentifier, $bitDialog = false) {
         return "";
     }
 
+    /**
+     * @param class_model $objListEntry
+     *
+     * @return string
+     */
     protected function renderChangeHistoryAction(class_model $objListEntry) {
         if($objListEntry instanceof class_module_workflows_handler) {
             return "";
@@ -463,6 +524,11 @@ class class_module_workflows_admin extends class_admin_simple implements interfa
     }
 
 
+    /**
+     * @param class_module_workflows_handler $objHandler
+     *
+     * @return class_admin_formgenerator
+     */
     private function getHandlerForm(class_module_workflows_handler $objHandler) {
         $objForm = new class_admin_formgenerator("handler", $objHandler);
         $objForm->generateFieldsFromObject();

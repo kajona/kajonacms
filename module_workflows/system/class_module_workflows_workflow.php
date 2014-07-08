@@ -141,6 +141,9 @@ class class_module_workflows_workflow extends class_model implements interface_m
      * @return string
      */
     public function getStrLongDescription() {
+        if($this->getObjWorkflowHandler() instanceof interface_workflows_handler_extendedinfo)
+            return $this->getObjWorkflowHandler()->getInstanceInfo();
+
         return "";
     }
 
