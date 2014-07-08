@@ -34,6 +34,7 @@ class class_exception extends Exception {
     public static $level_FATALERROR = 2;
 
     private $intErrorlevel;
+    private $intDebuglevel;
 
     /**
      * @param string $strError
@@ -42,6 +43,11 @@ class class_exception extends Exception {
     public function __construct($strError, $intErrorlevel) {
         parent::__construct($strError);
         $this->intErrorlevel = $intErrorlevel;
+
+        //decide, what to print --> get config-value
+        // 0: fatal errors will be displayed
+        // 1: fatal and regular errors will be displayed
+        $this->intDebuglevel = class_carrier::getInstance()->getObjConfig()->getDebug("debuglevel");
     }
 
 
@@ -53,10 +59,7 @@ class class_exception extends Exception {
      * @return void
      */
     public function processException() {
-        //decide, what to print --> get config-value
-        $intConfigDebuglevel = class_carrier::getInstance()->getObjConfig()->getDebug("debuglevel");
-        // 0: fatal errors will be displayed
-        // 1: fatal and regular errors will be displayed
+
 
         //set which POST parameters should read out
         $arrPostParams = array("module", "action", "page", "systemid");
@@ -154,7 +157,7 @@ class class_exception extends Exception {
             class_logger::getInstance()->addLogRow($strLogMessage, class_logger::$levelWarning);
 
             //check, if regular errors should be displayed:
-            if($intConfigDebuglevel >= 1) {
+            if($this->intDebuglevel >= 1) {
                 if(_xmlLoader_ === true) {
                     $strErrormessage = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
                     $strErrormessage .= "<error>".xmlSafeString($this->getMessage())."</error>";
@@ -205,6 +208,23 @@ class class_exception extends Exception {
     public function setErrorlevel($intErrorlevel) {
         $this->intErrorlevel = $intErrorlevel;
     }
+
+    /**
+     * @param string $intDebuglevel
+     * @return void
+     */
+    public function setIntDebuglevel($intDebuglevel) {
+        $this->intDebuglevel = $intDebuglevel;
+    }
+
+    /**
+     * @return string
+     */
+    public function getIntDebuglevel() {
+        return $this->intDebuglevel;
+    }
+
+
 }
 
 

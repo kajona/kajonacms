@@ -375,8 +375,11 @@ abstract class class_admin extends class_ui_base {
 
                 if(!class_carrier::getInstance()->getObjRights()->validatePermissionString($strPermissions, $objObjectToCheck)) {
                     class_response_object::getInstance()->setStrStatusCode(class_http_statuscodes::SC_UNAUTHORIZED);
-                    $this->strOutput = $this->getLang("commons_error_permissions");
-                    throw new class_exception("you are not authorized/authenticated to call this action", class_exception::$level_ERROR);
+                    $this->strOutput = $this->objToolkit->warningBox($this->getLang("commons_error_permissions"));
+                    $objException = new class_exception("you are not authorized/authenticated to call this action", class_exception::$level_ERROR);
+                    $objException->setIntDebuglevel(0);
+                    $objException->processException();
+                    return $this->strOutput;
                 }
             }
 
@@ -409,7 +412,10 @@ abstract class class_admin extends class_ui_base {
                 throw new class_exception("you are not authorized/authenticated to call this action", class_exception::$level_FATALERROR);
             }
 
-            throw new class_exception("called method " . $strMethodName . " not existing for class " . $objReflection->getName(), class_exception::$level_FATALERROR);
+            $this->strOutput = $this->objToolkit->warningBox("called method " . $strMethodName . " not existing for class " . $objReflection->getName());
+            $objException = new class_exception("called method " . $strMethodName . " not existing for class " . $objReflection->getName(), class_exception::$level_ERROR);
+            $objException->setIntDebuglevel(0);
+            $objException->processException();
         }
 
         return $this->strOutput;
