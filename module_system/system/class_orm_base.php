@@ -5,7 +5,8 @@
 ********************************************************************************************************/
 
 /**
- * Abstract base class for all other orm related handler classes
+ * Abstract base class for all other orm related handler classes. Provides common methods and general logic shared by
+ * all subclasses.
  *
  * @package module_system
  * @author sidler@mulchprod.de
@@ -15,6 +16,7 @@ abstract class class_orm_base {
 
     const STR_ANNOTATION_TARGETTABLE = "@targetTable";
     const STR_ANNOTATION_TABLECOLUMN = "@tableColumn";
+    const STR_ANNOTATION_TABLECOLUMNDATATYPE = "@tableColumnDatatype";
     const STR_ANNOTATION_BLOCKESCAPING = "@blockEscaping";
     const STR_ANNOTATION_LISTORDER = "@listOrder";
 
@@ -22,7 +24,7 @@ abstract class class_orm_base {
     private $objObject = null;
 
     /**
-     * @param null $objObject
+     * @param class_root|interface_versionable|null $objObject
      */
     function __construct($objObject = null) {
         $this->objObject = $objObject;
@@ -33,6 +35,14 @@ abstract class class_orm_base {
      */
     protected function getObjObject() {
         return $this->objObject;
+    }
+
+    /**
+     * @param \class_root $objObject
+     * @return void
+     */
+    public function setObjObject($objObject) {
+        $this->objObject = $objObject;
     }
 
     /**
@@ -89,6 +99,10 @@ abstract class class_orm_base {
 
 }
 
+/**
+ * Most exceptions thrown by the orm system will use the class_orm_exception type in order
+ * to react with special catch-blocks
+ */
 class class_orm_exception extends class_exception {
 
 }

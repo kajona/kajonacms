@@ -7,7 +7,8 @@
 ********************************************************************************************************/
 
 /**
- * A objectlist restriction may be used to create where restrictions for the objectList and objectCount queries
+ * A objectlist restriction may be used to create where restrictions for the objectList and objectCount queries.
+ * Pass them using a syntax like "AND x = ?", don't add "WHERE", this is done by the mapper.
  *
  * @package module_system
  * @author sidler@mulchprod.de
@@ -33,6 +34,7 @@ class class_orm_objectlist_restriction {
 
     /**
      * @param array $arrParams
+     * @return void
      */
     public function setArrParams($arrParams) {
         $this->arrParams = $arrParams;
@@ -47,6 +49,7 @@ class class_orm_objectlist_restriction {
 
     /**
      * @param string $strWhere
+     * @return void
      */
     public function setStrWhere($strWhere) {
         $this->strWhere = $strWhere;

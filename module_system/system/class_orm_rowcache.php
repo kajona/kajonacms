@@ -9,6 +9,9 @@
 /**
  * Caches rows fetched by the database layer. You may add additional rows in order to
  * have them accessible for other classes and the orm init handler.
+ * If you pass them on your own, make sure to include all relevant tables and fields,
+ * the orm mapper performs no consistency checks. If there are some fields missing (e.g. due to
+ * a missing table), the object will muss those values when being initialized.
  *
  * @package module_system
  * @author sidler@mulchprod.de
@@ -89,8 +92,6 @@ class class_orm_rowcache extends class_orm_base {
     public static function flushCache() {
         self::$arrInitRows = array();
     }
-
-
 
 
 }

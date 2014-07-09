@@ -7,7 +7,12 @@
 ********************************************************************************************************/
 
 /**
- * The objectupdate class is used to save an objects' state back to the database
+ * The objectupdate class is used to save an objects' state back to the database.
+ * Therefore the passed object is analyzed, all properties with a matching target-column
+ * are synced back to the database.
+ * Therefor it is essential to have getters and setters for those properties (java bean standard).
+ * If the current object is unknown to the database (no systemid), a new record is created.
+ * The new records' systemid is assigned to the object afterwards.
  *
  * @package module_system
  * @author sidler@mulchprod.de

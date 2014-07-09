@@ -7,7 +7,10 @@
 ********************************************************************************************************/
 
 /**
- * A single order-by statement
+ * A single order-by statement.
+ * Pass them to the objectlist-instance before loading the resultset.
+ * Pass values using the syntax "columnmame ORDER". Don't add "ORDER BY" or commas since this
+ * will be done by the mapper.
  *
  * @package module_system
  * @author sidler@mulchprod.de
@@ -26,6 +29,7 @@ class class_orm_objectlist_orderby {
 
     /**
      * @param string $strWhere
+     * @return void
      */
     public function setStrOrderBy($strWhere) {
         $this->strOrderBy = $strWhere;

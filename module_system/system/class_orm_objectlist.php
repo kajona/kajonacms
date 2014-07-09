@@ -7,11 +7,26 @@
 ********************************************************************************************************/
 
 /**
- * The objectlist class is used to load a list of objects or to count a list of objects
+ * The objectlist class is used to load a list of objects or to count a list of objects.
+ * Therefore it's not necessary to pass an object instance when creating an instance of class_orm_objectlist.
+ *
+ * Pass the class-name of the queried object-type to either
+ *   - getObjectCount()
+ *   - getObjectList()
+ *   - getSingleObject()
+ *
+ * By default the generated query has no additional where-restrictions and processes
+ * the property marked with @listOrder to sort the result. Nevertheless, the api
+ * provides methods to add additional restrictions and sort-orders before calling the
+ * getter-methods:
+ *   - addOrderBy
+ *   - addWhereRestriction
  *
  * @package module_system
  * @author sidler@mulchprod.de
  * @since 4.6
+ * @see class_orm_objectlist_restriction
+ * @see class_orm_objectlist_orderby
  */
 class class_orm_objectlist extends class_orm_base {
 
@@ -27,29 +42,15 @@ class class_orm_objectlist extends class_orm_base {
 
 
     /**
-     * Internal helper, adds the where restrictions
-     *
-     * @param string &$strQuery
-     * @param array &$arrParams
-     * @return void
-     */
-    private function processWhereRestrictions(&$strQuery, &$arrParams) {
-        foreach($this->arrWhereRestrictions as $objOneRestriction) {
-            $strQuery .= $objOneRestriction->getStrWhere();
-            foreach($objOneRestriction->getArrParams() as $strOneParam) {
-                $arrParams[] = $strOneParam;
-            }
-        }
-    }
-
-
-    /**
      * Counts the objects found by the currently setup query.
      *
      * @param string $strTargetClass
      * @param string $strPrevid
      *
      * @return int
+     *
+     * @see class_orm_objectlist_restriction
+     * @see class_orm_objectlist_orderby
      */
     public function getObjectCount($strTargetClass, $strPrevid = "") {
 
@@ -82,6 +83,9 @@ class class_orm_objectlist extends class_orm_base {
      * @param null|int $intEnd
      *
      * @return class_model[]|interface_model[]
+     *
+     * @see class_orm_objectlist_restriction
+     * @see class_orm_objectlist_orderby
      */
     public function getObjectList($strTargetClass, $strPrevid = "", $intStart = null, $intEnd = null) {
 
@@ -116,6 +120,9 @@ class class_orm_objectlist extends class_orm_base {
      * @param string $strPrevid
      *
      * @return class_model|interface_model|null
+     *
+     * @see class_orm_objectlist_restriction
+     * @see class_orm_objectlist_orderby
      */
     public function getSingleObject($strTargetClass, $strPrevid = "") {
 
@@ -183,6 +190,24 @@ class class_orm_objectlist extends class_orm_base {
             $strOrderBy = "ORDER BY ".implode(" , ", $arrOrderByCriteria)." ";
 
         return $strOrderBy;
+    }
+
+
+
+    /**
+     * Internal helper, adds the where restrictions
+     *
+     * @param string &$strQuery
+     * @param array &$arrParams
+     * @return void
+     */
+    private function processWhereRestrictions(&$strQuery, &$arrParams) {
+        foreach($this->arrWhereRestrictions as $objOneRestriction) {
+            $strQuery .= $objOneRestriction->getStrWhere();
+            foreach($objOneRestriction->getArrParams() as $strOneParam) {
+                $arrParams[] = $strOneParam;
+            }
+        }
     }
 
 

@@ -8,6 +8,12 @@
 
 /**
  * The orm object init class is used to init an object from the database.
+ * Pass an object with a given systemid using the constructor and call
+ * initObjectFromDb() afterwards.
+ * The mapper will take care to fill all properties with the matching values
+ * from the database.
+ * Therefore it is essential to have getters and setters for each mapped
+ * property (java bean syntax).
  *
  * @package module_system
  * @author sidler@mulchprod.de
@@ -18,7 +24,8 @@ class class_orm_objectinit extends class_orm_base {
 
     /**
      * Initializes the object from the database.
-     * Loads all mapped columns to the properties
+     * Loads all mapped columns to the properties.
+     * Requires that the object is identified by its systemid.
      *
      * @return void
      */
