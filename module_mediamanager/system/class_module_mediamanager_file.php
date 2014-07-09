@@ -471,25 +471,49 @@ class class_module_mediamanager_file extends class_model implements interface_mo
     /**
      * Loads a single folder for a given path. Please be aware that you have to pass the previd, too
      *
-     * @param $strPrevId
-     * @param $strPath
+     * @param string $strPrevId
+     * @param string $strPath
      *
      * @return class_module_mediamanager_file
+     * @deprecated use self::getFileForPath() instead
      */
     public static function getFolderForPath($strPrevId, $strPath) {
+        return self::getFileForPath($strPrevId, $strPath);
+    }
+
+    /**
+     * Tries to find a single mediamanager file identified by its path.
+     * Pass the systemid of the matching repo/parent-id in order to find the correct file (e.g. if the file
+     * is saved in multiple repos).
+     *
+     * @param string $strRepoId
+     * @param string $strPath
+     *
+     * @return class_module_mediamanager_file|null
+     */
+    public static function getFileForPath($strRepoId, $strPath) {
 
         $strQuery = "SELECT system_id
                        FROM " . _dbprefix_ . "system,
                             " . _dbprefix_ . "mediamanager_file
                     WHERE system_id = file_id
-                      AND file_type = ?
-                      AND system_prev_id = ?
                       AND file_filename = ?";
-        $arrId = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array(self::$INT_TYPE_FOLDER, $strPrevId, $strPath));
-        if(isset($arrId["system_id"]) && validateSystemid($arrId["system_id"]))
-            return new class_module_mediamanager_file($arrId["system_id"]);
-        else
-            return null;
+
+
+        $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array($strPath));
+        foreach($arrIds as $arrOneRow) {
+            $objFile = new class_module_mediamanager_file($arrOneRow["system_id"]);
+
+            $objTemp = class_objectfactory::getInstance()->getObject($objFile->getStrPrevId());
+            while(validateSystemid($objTemp->getSystemid())) {
+                if($objTemp->getSystemid() == $strRepoId)
+                    return $objFile;
+
+                $objTemp = class_objectfactory::getInstance()->getObject($objTemp->getStrPrevId());
+            }
+        }
+
+        return null;
     }
 
     /**
