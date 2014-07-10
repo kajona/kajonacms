@@ -97,6 +97,18 @@ class class_test_charts_jqPlotTest extends class_testbase  {
         echo $objGraph->renderGraph();
 
         $objGraph = class_graph_factory::getGraphInstance(class_graph_factory::$STR_TYPE_JQPLOT);
+        $objGraph->setStrGraphTitle("One Bar Chart (In this case each bar has a differetn color)");
+        $objGraph->addBarChartSet(array(9, 2, 3, 40), "serie 9");
+        $objGraph->setArrXAxisTickLabels(array("v1", "v2", "v3", "v4"));
+        $objGraph->setIntXAxisAngle(-20);
+        $objGraph->setIntHeight(350);
+        $objGraph->setIntWidth(300);
+        $objGraph->setBitRenderLegend(true);
+        $objGraph->setStrFontColor("#FF0000");
+        $objGraph->setStrFont("open sans");
+        echo $objGraph->renderGraph();
+
+        $objGraph = class_graph_factory::getGraphInstance(class_graph_factory::$STR_TYPE_JQPLOT);
         $objGraph->setStrGraphTitle("A Mixed Chart");
         $objGraph->setStrXAxisTitle("My new X-Axis");
         $objGraph->setStrYAxisTitle("My new Y-Axis");

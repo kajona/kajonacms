@@ -446,6 +446,14 @@ class class_graph_jqplot implements interface_graph {
             $this->arrOptions["seriesDefaults"]["renderer"] = "$.jqplot.BarRenderer";
             $this->arrOptions["seriesDefaults"]["rendererOptions"]["barDirection"] = "horizontal";
         }
+
+
+        //special handling if only one series exists which is a bar chart
+        if(count($this->arrSeriesData) == 1 && $this->containsChartType(class_graph_jqplot_charttype::BAR)) {
+            $arrSeriesOptions = $this->arrSeriesData[0]->getArrSeriesOptions();
+            $arrSeriesOptions["rendererOptions"]["varyBarColor"] = true;
+            $this->arrSeriesData[0]->setArrSeriesOptions($arrSeriesOptions);
+        }
     }
 
 
