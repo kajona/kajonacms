@@ -20,70 +20,70 @@ class class_module_system_module extends class_model implements interface_model,
 
     /**
      * @var string
-     * @tableColumn module_name
+     * @tableColumn system_module.module_name
      * @tableColumnDatatype char254
      */
     private $strName = "";
 
     /**
      * @var string
-     * @tableColumn module_filenameportal
+     * @tableColumn system_module.module_filenameportal
      * @tableColumnDatatype char254
      */
     private $strNamePortal = "";
 
     /**
      * @var string
-     * @tableColumn module_xmlfilenameportal
+     * @tableColumn system_module.module_xmlfilenameportal
      * @tableColumnDatatype char254
      */
     private $strXmlNamePortal = "";
 
     /**
      * @var string
-     * @tableColumn module_filenameadmin
+     * @tableColumn system_module.module_filenameadmin
      * @tableColumnDatatype char254
      */
     private $strNameAdmin = "";
 
     /**
      * @var string
-     * @tableColumn module_xmlfilenameadmin
+     * @tableColumn system_module.module_xmlfilenameadmin
      * @tableColumnDatatype char254
      */
     private $strXmlNameAdmin = "";
 
     /**
      * @var string
-     * @tableColumn module_version
+     * @tableColumn system_module.module_version
      * @tableColumnDatatype char254
      */
     private $strVersion = "";
 
     /**
      * @var int
-     * @tableColumn module_date
+     * @tableColumn system_module.module_date
      * @tableColumnDatatype int
      */
     private $intDate = "";
 
     /**
      * @var int
-     * @tableColumn module_navigation
+     * @tableColumn system_module.module_navigation
      * @tableColumnDatatype int
      */
     private $intNavigation = "";
 
     /**
      * @var int
-     * @tableColumn module_nr
+     * @tableColumn system_module.module_nr
      * @tableColumnDatatype int
      */
     private $intNr = "";
 
     /**
      * @var string
-     * @tableColumn module_aspect
+     * @tableColumn system_module.module_aspect
      * @tableColumnDatatype char254
      */
     private $strAspect = "";
