@@ -68,14 +68,14 @@ class class_module_workflows_workflow extends class_model implements interface_m
     /**
      * @var int
      * @tableColumn workflows.workflows_int1
-     * @tableColumnDatatype int1
+     * @tableColumnDatatype int
      */
     private $intInt1 = null;
 
     /**
      * @var int
      * @tableColumn workflows.workflows_int2
-     * @tableColumnDatatype int2
+     * @tableColumnDatatype int
      */
     private $intInt2 = null;
 

@@ -26,7 +26,7 @@ class class_module_demo_sub_object extends class_model implements interface_mode
 
     /**
      * @var int
-     * @tableColumn demo_demo.demo_int
+     * @tableColumn demo_sub_object.demo_int
      * @tableColumnDatatype int
      *
      * @fieldType text

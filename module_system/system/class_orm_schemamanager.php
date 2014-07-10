@@ -113,8 +113,16 @@ class class_orm_schemamanager extends class_orm_base {
 
             $arrColumn = explode(".", $strTableColumn);
 
-            if(count($arrColumn) != 2)
+            if(count($arrColumn) != 2 && count($arrTargetTables) > 1) {
                 throw new class_orm_exception("Syntax for tableColumn annotation at property ".$strProperty."@".$strClass." not in format table.columnName", class_exception::$level_ERROR);
+            }
+            if(count($arrColumn) == 1 && count($arrTargetTables) == 1) {
+                //copy the column name, table is the current one
+                $arrTable = explode(".", $arrTargetTables[0]);
+                $arrColumn[1] = $arrColumn[0];
+                $arrColumn[0] = $arrTable[0];
+            }
+
 
             $objRow = new class_orm_schemamanager_row($arrColumn[1], $strTargetDataType);
 

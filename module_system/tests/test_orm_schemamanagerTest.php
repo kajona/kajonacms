@@ -11,7 +11,7 @@ class class_test_orm_schemamanagerTest extends class_testbase {
         $objManager = new class_orm_schemamanager();
 
         $arrTables = $objDb->getTables();
-//        $this->assertTrue(!in_array(_dbprefix_."ormtest", $arrTables));
+        $this->assertTrue(!in_array(_dbprefix_."ormtest", $arrTables));
 
         $objManager->createTable("orm_schematest_testclass");
         $objDb->flushTablesCache();
@@ -154,6 +154,7 @@ class orm_schematest_testclass_datatype {
  * Class orm_schematest_testclass
  *
  * @targetTable ormtest.content_id
+ * @targetTable ormtest2.content_id
  */
 class orm_schematest_testclass_tablecolumn {
 
