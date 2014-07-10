@@ -22,14 +22,25 @@ class class_test_orm_schemamanagerTest extends class_testbase {
         //fetch table informations
         $arrTable = $objDb->getColumnsOfTable(_dbprefix_."ormtest");
 
+        $arrColumnNamesToDatatype = array();
+        array_walk($arrTable, function($arrValue) use (&$arrColumnNamesToDatatype) {
+            $arrColumnNamesToDatatype[$arrValue["columnName"]] = $arrValue["columnType"];
+        });
+
         $arrColumnNames = array_map(function($arrValue) {
             return $arrValue["columnName"];
         }, $arrTable);
 
 
+        $this->assertTrue(in_array("content_id", $arrColumnNames));
         $this->assertTrue(in_array("col1", $arrColumnNames));
         $this->assertTrue(in_array("col2", $arrColumnNames));
         $this->assertTrue(in_array("col3", $arrColumnNames));
+
+        $this->assertEquals($arrColumnNamesToDatatype["content_id"], trim($objDb->getDatatype(class_db_datatypes::STR_TYPE_CHAR20)));
+        $this->assertEquals($arrColumnNamesToDatatype["col1"], trim($objDb->getDatatype(class_db_datatypes::STR_TYPE_CHAR254)));
+        $this->assertEquals($arrColumnNamesToDatatype["col2"], trim($objDb->getDatatype(class_db_datatypes::STR_TYPE_TEXT)));
+        $this->assertEquals($arrColumnNamesToDatatype["col3"], trim($objDb->getDatatype(class_db_datatypes::STR_TYPE_LONG)));
 
         $objDb->_pQuery("DROP TABLE "._dbprefix_."ormtest", array());
     }

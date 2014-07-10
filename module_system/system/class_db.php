@@ -230,7 +230,7 @@ class class_db {
 
 
     /**
-     * Returns one row from a resultset
+     * Returns one row from a result-set
      *
      * @param string $strQuery
      * @param int $intNr
@@ -249,8 +249,8 @@ class class_db {
 
 
     /**
-     * Returns one row from a resultset.
-     * Makes use of preprared statements.
+     * Returns one row from a result-set.
+     * Makes use of prepared statements.
      *
      * @param string $strQuery
      * @param array $arrParams
@@ -997,7 +997,7 @@ class class_db {
     /**
      * Method to flush the table-cache.
      * Since the tables won't change during regular operations,
-     * flushing the tables cache is only rewquired during package updates / installations
+     * flushing the tables cache is only required during package updates / installations
      * @return void
      */
     public function flushTablesCache() {
