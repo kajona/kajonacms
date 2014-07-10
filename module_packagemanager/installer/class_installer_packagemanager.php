@@ -16,16 +16,10 @@ class class_installer_packagemanager extends class_installer_base implements int
 
     public function install() {
 		$strReturn = "";
-
+        $objManager = new class_orm_schemamanager();
 
         $strReturn .= "Installing table templatepacks...\n";
-
-        $arrFields = array();
-        $arrFields["templatepack_id"] 		    = array("char20", false);
-        $arrFields["templatepack_name"] 	    = array("char254", true);
-
-        if(!$this->objDB->createTable("templatepacks", $arrFields, array("templatepack_id")))
-            $strReturn .= "An error occurred! ...\n";
+        $objManager->createTable("class_module_packagemanager_template");
 
 		//register the module
 		$this->registerModule(

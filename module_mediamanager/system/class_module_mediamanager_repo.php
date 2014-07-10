@@ -21,6 +21,7 @@ class class_module_mediamanager_repo extends class_model implements interface_mo
     /**
      * @var string
      * @tableColumn mediamanager_repo.repo_path
+     * @tableColumnDatatype char254
      * @fieldMandatory
      * @fieldValidator class_folder_validator
      * @fieldLabel commons_path
@@ -32,6 +33,7 @@ class class_module_mediamanager_repo extends class_model implements interface_mo
     /**
      * @var string
      * @tableColumn mediamanager_repo.repo_title
+     * @tableColumnDatatype char254
      * @listOrder
      * @fieldLabel commons_title
      * @fieldType text
@@ -43,6 +45,7 @@ class class_module_mediamanager_repo extends class_model implements interface_mo
     /**
      * @var string
      * @tableColumn mediamanager_repo.repo_upload_filter
+     * @tableColumnDatatype char254
      * @fieldType text
      */
     private $strUploadFilter = "";
@@ -50,6 +53,7 @@ class class_module_mediamanager_repo extends class_model implements interface_mo
     /**
      * @var string
      * @tableColumn mediamanager_repo.repo_view_filter
+     * @tableColumnDatatype char254
      * @fieldType text
      */
     private $strViewFilter = "";

@@ -22,6 +22,7 @@ class class_module_eventmanager_participant extends class_model implements inter
     /**
      * @var string
      * @tableColumn em_participant.em_pt_forename
+     * @tableColumnDatatype char254
      * @versionable
      * @addSearchIndex
      *
@@ -36,6 +37,7 @@ class class_module_eventmanager_participant extends class_model implements inter
     /**
      * @var string
      * @tableColumn em_participant.em_pt_lastname
+     * @tableColumnDatatype char254
      * @versionable
      * @addSearchIndex
      *
@@ -50,6 +52,7 @@ class class_module_eventmanager_participant extends class_model implements inter
     /**
      * @var string
      * @tableColumn em_participant.em_pt_email
+     * @tableColumnDatatype char254
      * @versionable
      * @listOrder
      *
@@ -65,6 +68,7 @@ class class_module_eventmanager_participant extends class_model implements inter
     /**
      * @var string
      * @tableColumn em_participant.em_pt_phone
+     * @tableColumnDatatype char254
      * @versionable
      *
      * @fieldType text
@@ -77,6 +81,7 @@ class class_module_eventmanager_participant extends class_model implements inter
     /**
      * @var string
      * @tableColumn em_participant.em_pt_userid
+     * @tableColumnDatatype char20
      * @versionable
      *
      * @fieldType user
@@ -88,6 +93,7 @@ class class_module_eventmanager_participant extends class_model implements inter
      * @var int
      *
      * @tableColumn em_pt_status
+     * @tableColumnDatatype int
      * @versionable
      *
      * @fieldType dropdown
@@ -100,6 +106,7 @@ class class_module_eventmanager_participant extends class_model implements inter
     /**
      * @var string
      * @tableColumn em_participant.em_pt_comment
+     * @tableColumnDatatype text
      * @versionable
      *
      * @fieldType textarea

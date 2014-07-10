@@ -26,6 +26,7 @@ class class_module_tags_tag extends class_model implements interface_model, inte
     /**
      * @var string
      * @tableColumn tags_tag_name
+     * @tableColumnDatatype char254
      * @listOrder
      *
      * @addSearchIndex
@@ -38,6 +39,7 @@ class class_module_tags_tag extends class_model implements interface_model, inte
     /**
      * @var int
      * @tableColumn tags_tag_private
+     * @tableColumnDatatype int
      *
      * @fieldType yesno
      * @fieldMandatory

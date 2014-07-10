@@ -25,24 +25,28 @@ class class_module_messaging_config extends class_model implements interface_mod
     /**
      * @var string
      * @tableColumn config_provider
+     * @tableColumnDatatype char254
      */
     private $strMessageprovider = "";
 
     /**
      * @var string
      * @tableColumn config_user
+     * @tableColumnDatatype char20
      */
     private $strUser = "";
 
     /**
      * @var bool
      * @tableColumn config_enabled
+     * @tableColumnDatatype int
      */
     private $bitEnabled = true;
 
     /**
      * @var bool
      * @tableColumn config_bymail
+     * @tableColumnDatatype int
      */
     private $bitBymail = false;
 

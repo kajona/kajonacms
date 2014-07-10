@@ -22,6 +22,7 @@ class class_module_languages_language extends class_model implements interface_m
     /**
      * @var string
      * @tableColumn language_name
+     * @tableColumnDatatype char254
      *
      * @fieldType dropdown
      * @fieldLabel commons_title
@@ -35,6 +36,7 @@ class class_module_languages_language extends class_model implements interface_m
     /**
      * @var bool
      * @tableColumn language_default
+     * @tableColumnDatatype int
      *
      * @fieldType yesno
      * @fieldMandatory

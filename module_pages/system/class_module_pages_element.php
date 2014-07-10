@@ -22,6 +22,8 @@ class class_module_pages_element extends class_model implements interface_model,
     /**
      * @var string
      * @tableColumn element_name
+     * @tableColumnDatatype char254
+     * @tableColumnIndex
      * @listOrder
      *
      * @fieldMandatory
@@ -35,7 +37,7 @@ class class_module_pages_element extends class_model implements interface_model,
     /**
      * @var string
      * @tableColumn element_class_portal
-     *
+     * @tableColumnDatatype char254
      * @fieldType dropdown
      *
      * @addSearchIndex
@@ -45,7 +47,7 @@ class class_module_pages_element extends class_model implements interface_model,
     /**
      * @var string
      * @tableColumn element_class_admin
-     *
+     * @tableColumnDatatype char254
      * @fieldType dropdown
      *
      * @addSearchIndex
@@ -55,7 +57,7 @@ class class_module_pages_element extends class_model implements interface_model,
     /**
      * @var int
      * @tableColumn element_repeat
-     *
+     * @tableColumnDatatype int
      * @fieldType yesno
      */
     private $intRepeat = "";
@@ -63,34 +65,38 @@ class class_module_pages_element extends class_model implements interface_model,
     /**
      * @var int
      * @tableColumn element_cachetime
-     *
+     * @tableColumnDatatype int
      * @fieldMandatory
      * @fieldValidator class_numeric_validator
      * @fieldType text
      */
-    private $intCachetime = "";
+    private $intCachetime = "-1";
 
     /**
      * @var string
      * @tableColumn element_version
+     * @tableColumnDatatype char20
      */
     private $strVersion = "";
 
     /**
      * @var string
      * @tableColumn element_config1
+     * @tableColumnDatatype char254
      */
     private $strConfigVal1 = "";
 
     /**
      * @var string
      * @tableColumn element_config2
+     * @tableColumnDatatype char254
      */
     private $strConfigVal2 = "";
 
     /**
      * @var string
      * @tableColumn element_config3
+     * @tableColumnDatatype char254
      */
     private $strConfigVal3 = "";
 

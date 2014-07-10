@@ -27,6 +27,7 @@ class class_module_workflows_handler extends class_model implements interface_mo
     /**
      * @var string
      * @tableColumn workflows_handler.workflows_handler_class
+     * @tableColumnDatatype char254
      * @listOrder
      */
     private $strHandlerClass = "";
@@ -34,6 +35,7 @@ class class_module_workflows_handler extends class_model implements interface_mo
     /**
      * @var string
      * @tableColumn workflows_handler.workflows_handler_val1
+     * @tableColumnDatatype char254
      *
      * @fieldType text
      */
@@ -42,6 +44,7 @@ class class_module_workflows_handler extends class_model implements interface_mo
     /**
      * @var string
      * @tableColumn workflows_handler.workflows_handler_val2
+     * @tableColumnDatatype char254
      *
      * @fieldType text
      */
@@ -50,6 +53,7 @@ class class_module_workflows_handler extends class_model implements interface_mo
     /**
      * @var string
      * @tableColumn workflows_handler.workflows_handler_val3
+     * @tableColumnDatatype text
      *
      * @fieldType text
      */

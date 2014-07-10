@@ -20,43 +20,15 @@ class class_installer_demo extends class_installer_base implements interface_ins
     public function install() {
         $strReturn = "";
 
-        //demo obj-------------------------------------------------------------------------------------
+        $objManager = new class_orm_schemamanager();
         $strReturn .= "Installing table demo_demo...\n";
+        $objManager->createTable("class_module_demo_demo");
 
-        $arrFields = array();
-        $arrFields["demo_id"] = array("char20", false);
-        $arrFields["demo_title"] = array("char254", true);
-        $arrFields["demo_float"] = array("double", true);
-        $arrFields["demo_int"] = array("int", true);
-
-        if(!$this->objDB->createTable("demo_demo", $arrFields, array("demo_id"))) {
-            $strReturn .= "An error occurred! ...\n";
-        }
-
-        //other demo obj-------------------------------------------------------------------------------------
         $strReturn .= "Installing table demo_other_object...\n";
+        $objManager->createTable("class_module_demo_other_object");
 
-        $arrFields = array();
-        $arrFields["other_object_id"] = array("char20", false);
-        $arrFields["other_object_title"] = array("char254", true);
-        $arrFields["other_object_date"] = array("date", true);
-        $arrFields["other_object_float"] = array("double", true);
-
-        if(!$this->objDB->createTable("demo_other_object", $arrFields, array("other_object_id"))) {
-            $strReturn .= "An error occurred! ...\n";
-        }
-
-        //sub demo obj-------------------------------------------------------------------------------------
         $strReturn .= "Installing table demo_sub_object...\n";
-
-        $arrFields = array();
-        $arrFields["sub_object_id"] = array("char20", false);
-        $arrFields["sub_object_title"] = array("char254", true);
-        $arrFields["sub_object_int"] = array("int", true);
-
-        if(!$this->objDB->createTable("demo_sub_object", $arrFields, array("sub_object_id"))) {
-            $strReturn .= "An error occurred! ...\n";
-        }
+        $objManager->createTable("class_module_demo_sub_object");
 
 
         //register the module

@@ -23,6 +23,7 @@ class class_module_postacomment_post extends class_model implements interface_mo
     /**
      * @var string
      * @tableColumn postacomment_title
+     * @tableColumnDatatype char254
      *
      * @fieldType text
      * @fieldLabel form_comment_title
@@ -34,6 +35,7 @@ class class_module_postacomment_post extends class_model implements interface_mo
     /**
      * @var string
      * @tableColumn postacomment_comment
+     * @tableColumnDatatype text
      *
      * @fieldMandatory
      * @fieldType textarea
@@ -46,6 +48,7 @@ class class_module_postacomment_post extends class_model implements interface_mo
     /**
      * @var string
      * @tableColumn postacomment_username
+     * @tableColumnDatatype char254
      *
      * @fieldMandatory
      * @fieldType text
@@ -56,24 +59,28 @@ class class_module_postacomment_post extends class_model implements interface_mo
     /**
      * @var int
      * @tableColumn postacomment_date
+     * @tableColumnDatatype int
      */
     private $intDate;
 
     /**
      * @var string
      * @tableColumn postacomment_page
+     * @tableColumnDatatype char254
      */
     private $strAssignedPage;
 
     /**
      * @var string
      * @tableColumn postacomment_systemid
+     * @tableColumnDatatype char20
      */
     private $strAssignedSystemid;
 
     /**
      * @var string
      * @tableColumn postacomment_language
+     * @tableColumnDatatype char20
      */
     private $strAssignedLanguage;
 

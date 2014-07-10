@@ -24,6 +24,8 @@ class class_module_messaging_message extends class_model implements interface_mo
     /**
      * @var string
      * @tableColumn message_user
+     * @tableColumnDatatype char20
+     * @tableColumnIndex
      * @fieldType user
      * @fieldLabel message_to
      * @fieldMandatory
@@ -33,6 +35,7 @@ class class_module_messaging_message extends class_model implements interface_mo
     /**
      * @var string
      * @tableColumn message_title
+     * @tableColumnDatatype char254
      * @fieldType text
      * @fieldLabel message_subject
      * @fieldMandatory
@@ -44,6 +47,7 @@ class class_module_messaging_message extends class_model implements interface_mo
     /**
      * @var string
      * @tableColumn message_body
+     * @tableColumnDatatype text
      * @fieldType textarea
      * @fieldLabel message_body
      * @fieldMandatory
@@ -56,6 +60,8 @@ class class_module_messaging_message extends class_model implements interface_mo
     /**
      * @var bool
      * @tableColumn message_read
+     * @tableColumnDatatype int
+     * @tableColumnIndex
      */
     private $bitRead = 0;
 
@@ -64,24 +70,28 @@ class class_module_messaging_message extends class_model implements interface_mo
     /**
      * @var string
      * @tableColumn message_internalidentifier
+     * @tableColumnDatatype char254
      */
     private $strInternalIdentifier = "";
 
     /**
      * @var string
      * @tableColumn message_provider
+     * @tableColumnDatatype char254
      */
     private $strMessageProvider = "";
 
     /**
      * @var string
      * @tableColumn message_sender
+     * @tableColumnDatatype char20
      */
     private $strSenderId = "";
 
     /**
      * @var string
      * @tableColumn message_messageref
+     * @tableColumnDatatype char20
      * @fieldType hidden
      */
     private $strMessageRefId = "";

@@ -21,15 +21,8 @@ class class_installer_element_tellafriend extends class_elementinstaller_base im
 
 		//Table for page-element
 		$strReturn .= "Installing tellafriend-element table...\n";
-
-		$arrFields = array();
-		$arrFields["content_id"] 			= array("char20", false);
-		$arrFields["tellafriend_template"] 	= array("char254", true);
-		$arrFields["tellafriend_error"] 	= array("char254", true);
-		$arrFields["tellafriend_success"] 	= array("char254", true);
-
-		if(!$this->objDB->createTable("element_tellafriend", $arrFields, array("content_id")))
-			$strReturn .= "An error occurred! ...\n";
+        $objManager = new class_orm_schemamanager();
+        $objManager->createTable("class_element_tellafriend_admin");
 
 		//Register the element
 		$strReturn .= "Registering tellafriend-element...\n";

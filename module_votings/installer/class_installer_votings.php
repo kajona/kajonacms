@@ -18,27 +18,12 @@ class class_installer_votings extends class_installer_base implements interface_
 
     public function install() {
 		$strReturn = "";
-
-		//votings cat-------------------------------------------------------------------------------------
+        $objManager = new class_orm_schemamanager();
 		$strReturn .= "Installing table votings_voting...\n";
+        $objManager->createTable("class_module_votings_voting");
 
-		$arrFields = array();
-		$arrFields["votings_voting_id"] 		= array("char20", false);
-		$arrFields["votings_voting_title"]      = array("char254", true);
-
-		if(!$this->objDB->createTable("votings_voting", $arrFields, array("votings_voting_id")))
-			$strReturn .= "An error occurred! ...\n";
-
-		//votings----------------------------------------------------------------------------------
-		$strReturn .= "Installing table votings_answer...\n";
-
-		$arrFields = array();
-		$arrFields["votings_answer_id"]         = array("char20", false);
-		$arrFields["votings_answer_text"]       = array("text", true);
-		$arrFields["votings_answer_hits"]       = array("int", true);
-
-		if(!$this->objDB->createTable("votings_answer", $arrFields, array("votings_answer_id")))
-			$strReturn .= "An error occurred! ...\n";
+        $strReturn .= "Installing table votings_answer...\n";
+        $objManager->createTable("class_module_votings_answer");
 
 		//register the module
 		$strSystemID = $this->registerModule(

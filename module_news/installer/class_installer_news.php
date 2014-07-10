@@ -17,34 +17,14 @@ class class_installer_news extends class_installer_base implements interface_ins
 
     public function install() {
 		$strReturn = "";
+        $objManager = new class_orm_schemamanager();
 
-		//news cat-------------------------------------------------------------------------------------
 		$strReturn .= "Installing table news_category...\n";
+        $objManager->createTable("class_module_news_category");
 
-		$arrFields = array();
-		$arrFields["news_cat_id"] 		= array("char20", false);
-		$arrFields["news_cat_title"] 	= array("char254", true);
-
-		if(!$this->objDB->createTable("news_category", $arrFields, array("news_cat_id")))
-			$strReturn .= "An error occurred! ...\n";
-
-		//news----------------------------------------------------------------------------------
 		$strReturn .= "Installing table news...\n";
+        $objManager->createTable("class_module_news_news");
 
-		$arrFields = array();
-		$arrFields["news_id"] 		        = array("char20", false);
-		$arrFields["news_title"] 	        = array("char254", true);
-		$arrFields["news_hits"] 	        = array("int", true, "0");
-		$arrFields["news_intro"] 	        = array("text", true);
-		$arrFields["news_text"] 	        = array("text", true);
-		$arrFields["news_image"] 	        = array("char254", true);
-		$arrFields["news_redirect_page"] 	= array("char254", true);
-		$arrFields["news_redirect_enabled"] = array("int", true);
-
-		if(!$this->objDB->createTable("news", $arrFields, array("news_id")))
-			$strReturn .= "An error occurred! ...\n";
-
-		//news_member----------------------------------------------------------------------------------
 		$strReturn .= "Installing table news_member...\n";
 
 		$arrFields = array();
@@ -55,23 +35,8 @@ class class_installer_news extends class_installer_base implements interface_ins
 		if(!$this->objDB->createTable("news_member", $arrFields, array("newsmem_id")))
 			$strReturn .= "An error occurred! ...\n";
 
-		//news_feed--------------------------------------------------------------------------------------
 		$strReturn .= "Installing table news_feed...\n";
-
-		$arrFields = array();
-		$arrFields["news_feed_id"] 		= array("char20", false);
-		$arrFields["news_feed_title"] 	= array("char254", true);
-		$arrFields["news_feed_urltitle"]= array("char254", true);
-		$arrFields["news_feed_link"] 	= array("char254", true);
-		$arrFields["news_feed_desc"] 	= array("char254", true);
-		$arrFields["news_feed_page"] 	= array("char254", true);
-		$arrFields["news_feed_cat"] 	= array("char20", true);
-		$arrFields["news_feed_hits"] 	= array("int", true);
-		$arrFields["news_feed_amount"] 	= array("int", true);
-
-		if(!$this->objDB->createTable("news_feed", $arrFields, array("news_feed_id")))
-			$strReturn .= "An error occurred! ...\n";
-
+        $objManager->createTable("class_module_news_feed");
 
 		//register the module
 		$this->registerModule(
@@ -85,19 +50,8 @@ class class_installer_news extends class_installer_base implements interface_ins
         );
 
         $strReturn .= "Installing news-element table...\n";
+        $objManager->createTable("class_element_news_admin");
 
-        $arrFields = array();
-        $arrFields["content_id"] 		= array("char20", false);
-        $arrFields["news_category"] 	= array("char20", true);
-        $arrFields["news_view"] 		= array("int", true);
-        $arrFields["news_mode"] 		= array("int", true);
-        $arrFields["news_order"] 		= array("int", true);
-        $arrFields["news_amount"] 		= array("int", true);
-        $arrFields["news_detailspage"] 	= array("char254", true);
-        $arrFields["news_template"] 	= array("char254", true);
-
-        if(!$this->objDB->createTable("element_news", $arrFields, array("content_id")))
-            $strReturn .= "An error occurred! ...\n";
 
         //Register the element
         $strReturn .= "Registering news-element...\n";

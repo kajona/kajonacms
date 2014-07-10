@@ -18,33 +18,13 @@ class class_installer_guestbook extends class_installer_base implements interfac
     public function install() {
 
 		$strReturn = "";
-		//Tabellen anlegen
+        $objManager = new class_orm_schemamanager();
 
-		//guestbook-------------------------------------------------------------------------------------
 		$strReturn .= "Installing table guestbook_book...\n";
+        $objManager->createTable("class_module_guestbook_guestbook");
 
-		$arrFields = array();
-		$arrFields["guestbook_id"] 		  = array("char20", false);
-		$arrFields["guestbook_title"] 	  = array("char254", true);
-		$arrFields["guestbook_moderated"] = array("int", true);
-
-		if(!$this->objDB->createTable("guestbook_book", $arrFields, array("guestbook_id")))
-			$strReturn .= "An error occurred! ...\n";
-
-		//guestbook_post----------------------------------------------------------------------------------
 		$strReturn .= "Installing table guestbook_post...\n";
-
-		$arrFields = array();
-		$arrFields["guestbook_post_id"]   = array("char20", false);
-		$arrFields["guestbook_post_name"] = array("char254", true);
-		$arrFields["guestbook_post_email"]= array("char254", true);
-		$arrFields["guestbook_post_page"] = array("char254", true);
-		$arrFields["guestbook_post_text"] = array("text", true);
-		$arrFields["guestbook_post_date"] = array("int", true);
-
-		if(!$this->objDB->createTable("guestbook_post", $arrFields, array("guestbook_post_id")))
-			$strReturn .= "An error occurred! ...\n";
-
+        $objManager->createTable("class_module_guestbook_post");
 
 		//register the module
 		$this->registerModule("guestbook", _guestbook_module_id_, "class_module_guestbook_portal.php", "class_module_guestbook_admin.php", $this->objMetadata->getStrVersion() , true);

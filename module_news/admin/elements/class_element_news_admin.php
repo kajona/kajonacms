@@ -20,6 +20,7 @@ class class_element_news_admin extends class_element_admin implements interface_
     /**
      * @var string
      * @tableColumn element_news.news_category
+     * @tableColumnDatatype char20
      *
      * @fieldType dropdown
      * @fieldLabel commons_category
@@ -29,6 +30,7 @@ class class_element_news_admin extends class_element_admin implements interface_
     /**
      * @var string
      * @tableColumn element_news.news_detailspage
+     * @tableColumnDatatype char254
      *
      * @fieldType page
      * @fieldLabel news_detailspage
@@ -38,6 +40,7 @@ class class_element_news_admin extends class_element_admin implements interface_
     /**
      * @var string
      * @tableColumn element_news.news_view
+     * @tableColumnDatatype int
      *
      * @fieldType dropdown
      * @fieldLabel news_view
@@ -48,6 +51,7 @@ class class_element_news_admin extends class_element_admin implements interface_
     /**
      * @var string
      * @tableColumn element_news.news_mode
+     * @tableColumnDatatype int
      *
      * @fieldType dropdown
      * @fieldLabel news_mode
@@ -58,6 +62,7 @@ class class_element_news_admin extends class_element_admin implements interface_
     /**
      * @var string
      * @tableColumn element_news.news_order
+     * @tableColumnDatatype int
      *
      * @fieldType dropdown
      * @fieldLabel news_order
@@ -65,10 +70,10 @@ class class_element_news_admin extends class_element_admin implements interface_
      */
     private $intOrder;
 
-
     /**
      * @var string
      * @tableColumn element_news.news_template
+     * @tableColumnDatatype char254
      *
      * @fieldType template
      * @fieldLabel template
@@ -80,6 +85,7 @@ class class_element_news_admin extends class_element_admin implements interface_
     /**
      * @var string
      * @tableColumn element_news.news_amount
+     * @tableColumnDatatype int
      *
      * @fieldType text
      * @fieldLabel news_amount

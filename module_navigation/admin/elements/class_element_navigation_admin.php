@@ -17,10 +17,20 @@
  */
 class class_element_navigation_admin extends class_element_admin implements interface_admin_element {
 
+    /**
+     * Legacy support
+     *
+     * @var string
+     * @tableColumn element_navigation.navigation_mode
+     * @tableColumnDatatype char254
+     * @deprecated
+     */
+    private $intMode;
 
     /**
      * @var string
      * @tableColumn element_navigation.navigation_id
+     * @tableColumnDatatype char20
      * @fieldType dropdown
      * @fieldLabel commons_name
      */
@@ -29,6 +39,7 @@ class class_element_navigation_admin extends class_element_admin implements inte
     /**
      * @var string
      * @tableColumn element_navigation.navigation_template
+     * @tableColumnDatatype char254
      * @fieldType template
      * @fieldLabel template
      * @fieldTemplateDir /module_navigation
@@ -38,6 +49,7 @@ class class_element_navigation_admin extends class_element_admin implements inte
     /**
      * @var int
      * @tableColumn element_navigation.navigation_foreign
+     * @tableColumnDatatype int
      * @fieldType yesno
      * @fieldLabel navigation_foreign
      */
@@ -103,6 +115,20 @@ class class_element_navigation_admin extends class_element_admin implements inte
         if($this->intForeign === null)
             $this->intForeign = 1;
         return $this->intForeign;
+    }
+
+    /**
+     * @param string $intMode
+     */
+    public function setIntMode($intMode) {
+        $this->intMode = $intMode;
+    }
+
+    /**
+     * @return string
+     */
+    public function getIntMode() {
+        return $this->intMode;
     }
 
 

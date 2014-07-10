@@ -22,30 +22,35 @@ class class_module_dashboard_widget extends class_model implements interface_mod
     /**
      * @var string
      * @tableColumn dashboard_column
+     * @tableColumnDatatype char254
      */
     private $strColumn = "";
 
     /**
      * @var string
      * @tableColumn dashboard_user
+     * @tableColumnDatatype char20
      */
     private $strUser = "";
 
     /**
      * @var string
      * @tableColumn dashboard_aspect
+     * @tableColumnDatatype char254
      */
     private $strAspect = "";
 
     /**
      * @var string
      * @tableColumn dashboard_class
+     * @tableColumnDatatype char254
      */
     private $strClass = "";
 
     /**
      * @var string
      * @tableColumn dashboard_content
+     * @tableColumnDatatype text
      * @blockEscaping
      */
     private $strContent = "";

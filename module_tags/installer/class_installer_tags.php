@@ -18,21 +18,13 @@ class class_installer_tags extends class_installer_base implements interface_ins
 
     public function install() {
 		$strReturn = "";
+        $objManager = new class_orm_schemamanager();
 
 		//tags_tag --------------------------------------------------------------------------------------
 		$strReturn .= "Installing table tags_tag...\n";
+        $objManager->createTable("class_module_tags_tag");
 
-		$arrFields = array();
-		$arrFields["tags_tag_id"] 		= array("char20", false);
-		$arrFields["tags_tag_name"] 	= array("char254", true);
-		$arrFields["tags_tag_private"] 	= array("int", true);
-
-		if(!$this->objDB->createTable("tags_tag", $arrFields, array("tags_tag_id")))
-			$strReturn .= "An error occurred! ...\n";
-
-        //tags_member --------------------------------------------------------------------------------------
 		$strReturn .= "Installing table tags_member...\n";
-
         $arrFields = array();
 		$arrFields["tags_memberid"]     = array("char20", false);
 		$arrFields["tags_systemid"] 	= array("char20", false);
@@ -43,18 +35,8 @@ class class_installer_tags extends class_installer_base implements interface_ins
 		if(!$this->objDB->createTable("tags_member", $arrFields, array("tags_memberid"), array("tags_systemid", "tags_tagid", "tags_attribute", "tags_owner")))
 			$strReturn .= "An error occurred! ...\n";
 
-
-
-        //tags_favorite ---------------------------------------------------------------------------------
         $strReturn .= "Installing table tags_favorite...\n";
-
-        $arrFields = array();
-        $arrFields["tags_fav_id"] 	        = array("char20", false);
-        $arrFields["tags_fav_tagid"]        = array("char20", true);
-        $arrFields["tags_fav_userid"]       = array("char20", true);
-
-        if(!$this->objDB->createTable("tags_favorite", $arrFields, array("tags_fav_id")))
-            $strReturn .= "An error occurred! ...\n";
+        $objManager->createTable("class_module_tags_favorite");
 
 		//register the module
 		$this->registerModule(

@@ -24,12 +24,14 @@ class class_module_tags_favorite extends class_model implements interface_model,
     /**
      * @var string
      * @tableColumn tags_fav_tagid
+     * @tableColumnDatatype char20
      */
     private $strTagId;
 
     /**
      * @var string
      * @tableColumn tags_fav_userid
+     * @tableColumnDatatype char20
      */
     private $strUserId;
 

@@ -18,37 +18,16 @@ class class_installer_navigation extends class_installer_base implements interfa
     public function install() {
 
 		$strReturn = "Installing ".$this->objMetadata->getStrTitle()."...\n";
+        $objManager = new class_orm_schemamanager();
 
-		//navigation-------------------------------------------------------------------------------------
 		$strReturn .= "Installing table navigation...\n";
-
-		$arrFields = array();
-		$arrFields["navigation_id"] 		= array("char20", false);
-		$arrFields["navigation_name"] 		= array("char254", true);
-		$arrFields["navigation_page_e"] 	= array("char254", true);
-		$arrFields["navigation_page_i"] 	= array("char254", true);
-		$arrFields["navigation_folder_i"] 	= array("char20", true);
-		$arrFields["navigation_target"] 	= array("char254", true);
-		$arrFields["navigation_image"] 		= array("char254", true);
-
-		if(!$this->objDB->createTable("navigation", $arrFields, array("navigation_id")))
-			$strReturn .= "An error occurred! ...\n";
-
+        $objManager->createTable("class_module_navigation_point");
 
 		//register the module
 		$this->registerModule("navigation", _navigation_modul_id_, "class_module_navigation_portal.php", "class_module_navigation_admin.php", $this->objMetadata->getStrVersion() , true);
 
         $strReturn .= "Installing navigation-element table...\n";
-
-        $arrFields = array();
-        $arrFields["content_id"] 			= array("char20", false);
-        $arrFields["navigation_id"] 		= array("char20", true);
-        $arrFields["navigation_template"] 	= array("char254", true);
-        $arrFields["navigation_mode"] 		= array("char254", true);
-        $arrFields["navigation_foreign"] 	= array("int", true);
-
-        if(!$this->objDB->createTable("element_navigation", $arrFields, array("content_id")))
-            $strReturn .= "An error occurred! ...\n";
+        $objManager->createTable("class_element_navigation_admin");
 
         //Register the element
         $strReturn .= "Registering navigation-element...\n";

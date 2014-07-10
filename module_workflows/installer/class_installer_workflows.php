@@ -19,40 +19,13 @@ class class_installer_workflows extends class_installer_base implements interfac
 
     public function install() {
 		$strReturn = "";
-
+        $objManager = new class_orm_schemamanager();
 		//workflows workflow ---------------------------------------------------------------------
 		$strReturn .= "Installing table workflows...\n";
-
-		$arrFields = array();
-		$arrFields["workflows_id"]             = array("char20", false);
-		$arrFields["workflows_state"]          = array("int", true);
-        $arrFields["workflows_runs"]           = array("int", true);
-		$arrFields["workflows_class"]          = array("char254", true);
-		$arrFields["workflows_systemid"]       = array("char20", true);
-		$arrFields["workflows_responsible"]    = array("char254", true);
-		$arrFields["workflows_int1"]           = array("int1", true);
-		$arrFields["workflows_int2"]           = array("int2", true);
-		$arrFields["workflows_char1"]          = array("char254", true);
-		$arrFields["workflows_char2"]          = array("char254", true);
-		$arrFields["workflows_date1"]          = array("long", true);
-		$arrFields["workflows_date2"]          = array("long", true);
-		$arrFields["workflows_text"]           = array("text", true);
-		$arrFields["workflows_text2"]          = array("text", true);
-
-		if(!$this->objDB->createTable("workflows", $arrFields, array("workflows_id"), array("workflows_state", "workflows_systemid")))
-			$strReturn .= "An error occurred! ...\n";
+        $objManager->createTable("class_module_workflows_workflow");
 
         $strReturn .= "Installing table workflows_handler...\n";
-
-		$arrFields = array();
-		$arrFields["workflows_handler_id"]     = array("char20", false);
-		$arrFields["workflows_handler_class"]  = array("char254", true);
-        $arrFields["workflows_handler_val1"]   = array("char254", true);
-        $arrFields["workflows_handler_val2"]   = array("char254", true);
-        $arrFields["workflows_handler_val3"]   = array("text", true);
-
-		if(!$this->objDB->createTable("workflows_handler", $arrFields, array("workflows_handler_id")))
-			$strReturn .= "An error occurred! ...\n";
+        $objManager->createTable("class_module_workflows_handler");
 
 		//register the module
 		$this->registerModule(

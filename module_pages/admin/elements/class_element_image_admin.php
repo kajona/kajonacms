@@ -20,6 +20,7 @@ class class_element_image_admin extends class_element_admin implements interface
     /**
      * @var string
      * @tableColumn element_image.image_title
+     * @tableColumnDatatype char254
      *
      * @fieldType text
      * @fieldLabel commons_title
@@ -31,6 +32,7 @@ class class_element_image_admin extends class_element_admin implements interface
     /**
      * @var string
      * @tableColumn element_image.image_link
+     * @tableColumnDatatype char254
      *
      * @fieldType page
      * @fieldLabel image_link
@@ -42,6 +44,7 @@ class class_element_image_admin extends class_element_admin implements interface
     /**
      * @var string
      * @tableColumn element_image.image_image
+     * @tableColumnDatatype char254
      *
      * @fieldType image
      * @fieldLabel commons_image
@@ -55,6 +58,7 @@ class class_element_image_admin extends class_element_admin implements interface
     /**
      * @var string
      * @tableColumn element_image.image_x
+     * @tableColumnDatatype int
      *
      * @fieldType text
      * @fieldLabel image_x
@@ -65,6 +69,7 @@ class class_element_image_admin extends class_element_admin implements interface
     /**
      * @var string
      * @tableColumn element_image.image_y
+     * @tableColumnDatatype int
      *
      * @fieldType text
      * @fieldLabel image_y
@@ -75,6 +80,7 @@ class class_element_image_admin extends class_element_admin implements interface
     /**
      * @var string
      * @tableColumn element_image.image_template
+     * @tableColumnDatatype char254
      *
      * @fieldType template
      * @fieldLabel template

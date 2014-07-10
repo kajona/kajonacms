@@ -24,6 +24,7 @@ class class_module_guestbook_guestbook extends class_model implements interface_
     /**
      * @var string
      * @tableColumn guestbook_book.guestbook_title
+     * @tableColumnDatatype char254
      * @listOrder
      *
      * @fieldMandatory
@@ -37,6 +38,7 @@ class class_module_guestbook_guestbook extends class_model implements interface_
     /**
      * @var int
      * @tableColumn guestbook_book.guestbook_moderated
+     * @tableColumnDatatype int
      *
      * @fieldMandatory
      * @fieldType yesno

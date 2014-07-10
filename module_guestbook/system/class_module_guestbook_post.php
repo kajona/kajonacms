@@ -22,6 +22,7 @@ class class_module_guestbook_post extends class_model implements interface_model
     /**
      * @var string
      * @tableColumn guestbook_post.guestbook_post_name
+     * @tableColumnDatatype char254
      *
      * @fieldType text
      *
@@ -32,6 +33,7 @@ class class_module_guestbook_post extends class_model implements interface_model
     /**
      * @var string
      * @tableColumn guestbook_post.guestbook_post_email
+     * @tableColumnDatatype char254
      *
      * @fieldType text
      * @fieldValidator class_email_validator
@@ -43,6 +45,7 @@ class class_module_guestbook_post extends class_model implements interface_model
     /**
      * @var string
      * @tableColumn guestbook_post.guestbook_post_page
+     * @tableColumnDatatype char254
      *
      * @fieldType text
      *
@@ -53,6 +56,7 @@ class class_module_guestbook_post extends class_model implements interface_model
     /**
      * @var string
      * @tableColumn guestbook_post.guestbook_post_text
+     * @tableColumnDatatype text
      *
      * @fieldType textarea
      *
@@ -63,6 +67,7 @@ class class_module_guestbook_post extends class_model implements interface_model
     /**
      * @var int
      * @tableColumn guestbook_post.guestbook_post_date
+     * @tableColumnDatatype int
      */
     private $intGuestbookPostDate = 0;
 

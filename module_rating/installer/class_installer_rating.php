@@ -17,21 +17,10 @@ class class_installer_rating extends class_installer_base implements interface_i
 
     public function install() {
 		$strReturn = "";
-		//Tabellen anlegen
+        $objManager = new class_orm_schemamanager();
 
-		//rating ----------------------------------------------------------------------------------
 		$strReturn .= "Installing table rating...\n";
-
-		$arrFields = array();
-		$arrFields["rating_id"] 		= array("char20", false);
-		$arrFields["rating_systemid"] 	= array("char20", true);
-		$arrFields["rating_checksum"] 	= array("char254", true);
-		$arrFields["rating_rate"]       = array("double", true);
-		$arrFields["rating_hits"]       = array("int", true);
-
-		if(!$this->objDB->createTable("rating", $arrFields, array("rating_id")))
-			$strReturn .= "An error occurred! ...\n";
-
+        $objManager->createTable("class_module_rating_rate");
 
 		$strReturn .= "Installing table rating_history...\n";
 

@@ -25,6 +25,7 @@ class class_module_mediamanager_file extends class_model implements interface_mo
     /**
      * @var string
      * @tableColumn file_name
+     * @tableColumnDatatype char254
      *
      * @fieldType text
      *
@@ -35,6 +36,7 @@ class class_module_mediamanager_file extends class_model implements interface_mo
     /**
      * @var string
      * @tableColumn file_filename
+     * @tableColumnDatatype char254
      *
      * @addSearchIndex
      */
@@ -43,6 +45,7 @@ class class_module_mediamanager_file extends class_model implements interface_mo
     /**
      * @var string
      * @tableColumn file_description
+     * @tableColumnDatatype text
      * @blockEscaping
      *
      * @fieldType wysiwygsmall
@@ -54,6 +57,7 @@ class class_module_mediamanager_file extends class_model implements interface_mo
     /**
      * @var string
      * @tableColumn file_subtitle
+     * @tableColumnDatatype char254
      *
      * @fieldType text
      *
@@ -64,6 +68,7 @@ class class_module_mediamanager_file extends class_model implements interface_mo
     /**
      * @var int
      * @tableColumn file_hits
+     * @tableColumnDatatype int
      */
     private $intHits = 0;
 
@@ -72,36 +77,42 @@ class class_module_mediamanager_file extends class_model implements interface_mo
      *
      * @var int
      * @tableColumn file_type
+     * @tableColumnDatatype int
      */
     private $intType = 0;
 
     /**
      * @var int
      * @tableColumn file_ispackage
+     * @tableColumnDatatype int
      */
     private $bitIspackage = 0;
 
     /**
      * @var int
      * @tableColumn file_cat
+     * @tableColumnDatatype char254
      */
     private $strCat = "";
 
     /**
      * @var string
      * @tableColumn file_screen1
+     * @tableColumnDatatype char254
      */
     private $strScreen1 = "";
 
     /**
      * @var string
      * @tableColumn file_screen2
+     * @tableColumnDatatype char254
      */
     private $strScreen2 = "";
 
     /**
      * @var string
      * @tableColumn file_screen3
+     * @tableColumnDatatype char254
      */
     private $strScreen3 = "";
 

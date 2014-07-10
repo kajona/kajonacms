@@ -20,6 +20,7 @@ class class_element_portalregistration_admin extends class_element_admin impleme
     /**
      * @var string
      * @tableColumn element_preg.portalregistration_template
+     * @tableColumnDatatype char254
      *
      * @fieldType template
      * @fieldLabel template
@@ -31,6 +32,7 @@ class class_element_portalregistration_admin extends class_element_admin impleme
     /**
      * @var string
      * @tableColumn element_preg.portalregistration_group
+     * @tableColumnDatatype char254
      *
      * @fieldType dropdown
      * @fieldLabel portalregistration_group
@@ -40,6 +42,7 @@ class class_element_portalregistration_admin extends class_element_admin impleme
     /**
      * @var string
      * @tableColumn element_preg.portalregistration_success
+     * @tableColumnDatatype char254
      *
      * @fieldType page
      * @fieldLabel commons_page_success

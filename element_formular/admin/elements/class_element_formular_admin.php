@@ -20,7 +20,7 @@ class class_element_formular_admin extends class_element_admin implements interf
     /**
      * @var string
      * @tableColumn element_formular.formular_class
-     *
+     * @tableColumnDatatype char254
      * @fieldType dropdown
      * @fieldLabel formular_class
      * @fieldMandatory
@@ -32,7 +32,7 @@ class class_element_formular_admin extends class_element_admin implements interf
     /**
      * @var string
      * @tableColumn element_formular.formular_email
-     *
+     * @tableColumnDatatype char254
      * @fieldType text
      * @fieldLabel formular_email
      * @fieldValidator class_email_validator
@@ -43,6 +43,7 @@ class class_element_formular_admin extends class_element_admin implements interf
     /**
      * @var string
      * @tableColumn element_formular.formular_success
+     * @tableColumnDatatype text
      *
      * @fieldType text
      * @fieldLabel formular_success
@@ -52,6 +53,7 @@ class class_element_formular_admin extends class_element_admin implements interf
     /**
      * @var string
      * @tableColumn element_formular.formular_error
+     * @tableColumnDatatype text
      *
      * @fieldType text
      * @fieldLabel formular_error
@@ -61,6 +63,7 @@ class class_element_formular_admin extends class_element_admin implements interf
     /**
      * @var string
      * @tableColumn element_formular.formular_template
+     * @tableColumnDatatype char254
      *
      * @fieldType template
      * @fieldLabel template

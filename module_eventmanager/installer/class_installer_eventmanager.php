@@ -18,38 +18,13 @@ class class_installer_eventmanager extends class_installer_base implements inter
 
     public function install() {
 		$strReturn = "";
-		//Tabellen anlegen
+        $objManager = new class_orm_schemamanager();
 
-		//eventmanager cat-------------------------------------------------------------------------------------
 		$strReturn .= "Installing table em_event...\n";
-
-		$arrFields = array();
-		$arrFields["em_ev_id"]                        = array("char20", false);
-		$arrFields["em_ev_title"]                     = array("char254", true);
-		$arrFields["em_ev_description"]               = array("text", true);
-		$arrFields["em_ev_location"]                  = array("char254", true);
-		$arrFields["em_ev_participant_registration"]  = array("int", true);
-		$arrFields["em_ev_participant_limit"]         = array("int", true);
-		$arrFields["em_ev_participant_max"]           = array("int", true);
-		$arrFields["em_ev_eventstatus"]               = array("int", true);
-
-		if(!$this->objDB->createTable("em_event", $arrFields, array("em_ev_id")))
-			$strReturn .= "An error occurred! ...\n";
+        $objManager->createTable("class_module_eventmanager_event");
 
         $strReturn .= "Installing table em_participant...\n";
-
-		$arrFields = array();
-		$arrFields["em_pt_id"]           = array("char20", false);
-		$arrFields["em_pt_forename"]     = array("char254", true);
-		$arrFields["em_pt_lastname"]     = array("char254", true);
-		$arrFields["em_pt_userid"]       = array("char20", true);
-		$arrFields["em_pt_status"]       = array("int", true);
-		$arrFields["em_pt_email"]        = array("char254", true);
-		$arrFields["em_pt_phone"]        = array("char254", true);
-		$arrFields["em_pt_comment"]      = array("text", true);
-
-		if(!$this->objDB->createTable("em_participant", $arrFields, array("em_pt_id")))
-			$strReturn .= "An error occurred! ...\n";
+        $objManager->createTable("class_module_eventmanager_participant");
 
 		//register the module
 		$strSystemID = $this->registerModule(

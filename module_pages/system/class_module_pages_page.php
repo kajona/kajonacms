@@ -25,6 +25,7 @@ class class_module_pages_page extends class_model implements interface_model, in
     /**
      * @var string
      * @tableColumn page_name
+     * @tableColumnDatatype char254
      * @versionable
      * @addSearchIndex
      *
@@ -36,6 +37,7 @@ class class_module_pages_page extends class_model implements interface_model, in
     /**
      * @var int
      * @tableColumn page_type
+     * @tableColumnDatatype int
      * @versionable
      */
     private $intType = 0;

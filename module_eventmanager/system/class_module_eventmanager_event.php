@@ -24,6 +24,7 @@ class class_module_eventmanager_event extends class_model implements interface_m
     /**
      * @var string
      * @tableColumn em_event.em_ev_title
+     * @tableColumnDatatype char254
      * @versionable
      * @addSearchIndex
      *
@@ -39,6 +40,7 @@ class class_module_eventmanager_event extends class_model implements interface_m
     /**
      * @var string
      * @tableColumn em_event.em_ev_description
+     * @tableColumnDatatype text
      * @versionable
      * @blockEscaping
      * @addSearchIndex
@@ -54,6 +56,7 @@ class class_module_eventmanager_event extends class_model implements interface_m
     /**
      * @var string
      * @tableColumn em_event.em_ev_location
+     * @tableColumnDatatype char254
      * @versionable
      * @addSearchIndex
      *
@@ -68,6 +71,7 @@ class class_module_eventmanager_event extends class_model implements interface_m
     /**
      * @var int
      * @tableColumn em_event.em_ev_eventstatus
+     * @tableColumnDatatype int
      * @versionable
      *
      * @fieldType dropdown
@@ -79,6 +83,7 @@ class class_module_eventmanager_event extends class_model implements interface_m
     /**
      * @var int
      * @tableColumn em_event.em_ev_participant_registration
+     * @tableColumnDatatype int
      * @versionable
      *
      * @fieldType yesno
@@ -91,6 +96,7 @@ class class_module_eventmanager_event extends class_model implements interface_m
     /**
      * @var int
      * @tableColumn em_event.em_ev_participant_limit
+     * @tableColumnDatatype int
      * @versionable
      *
      * @fieldType yesno
@@ -102,6 +108,7 @@ class class_module_eventmanager_event extends class_model implements interface_m
     /**
      * @var int
      * @tableColumn em_event.em_ev_participant_max
+     * @tableColumnDatatype int
      * @versionable
      *
      * @fieldType text

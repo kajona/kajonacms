@@ -31,48 +31,58 @@ class class_module_workflows_workflow extends class_model implements interface_m
     /**
      * @var string
      * @tableColumn workflows.workflows_class
+     * @tableColumnDatatype char254
      */
     private $strClass = "";
 
     /**
      * @var string
      * @tableColumn workflows.workflows_systemid
+     * @tableColumnDatatype char20
+     * @tableColumnIndex
      */
     private $strAffectedSystemid = "";
 
     /**
      * @var int
      * @tableColumn workflows.workflows_state
+     * @tableColumnDatatype int
+     * @tableColumnIndex
      */
     private $intState = "1";
 
     /**
      * @var int
      * @tableColumn workflows.workflows_runs
+     * @tableColumnDatatype int
      */
     private $intRuns = "0";
 
     /**
      * @var string
      * @tableColumn workflows.workflows_responsible
+     * @tableColumnDatatype char254
      */
     private $strResponsible = "";
 
     /**
      * @var int
      * @tableColumn workflows.workflows_int1
+     * @tableColumnDatatype int1
      */
     private $intInt1 = null;
 
     /**
      * @var int
      * @tableColumn workflows.workflows_int2
+     * @tableColumnDatatype int2
      */
     private $intInt2 = null;
 
     /**
      * @var string
      * @tableColumn workflows.workflows_char1
+     * @tableColumnDatatype char254
      * @blockEscaping
      */
     private $strChar1 = "";
@@ -80,6 +90,7 @@ class class_module_workflows_workflow extends class_model implements interface_m
     /**
      * @var string
      * @tableColumn workflows.workflows_char2
+     * @tableColumnDatatype char254
      * @blockEscaping
      */
     private $strChar2 = "";
@@ -87,18 +98,21 @@ class class_module_workflows_workflow extends class_model implements interface_m
     /**
      * @var int
      * @tableColumn workflows.workflows_date1
+     * @tableColumnDatatype long
      */
     private $longDate1 = 0;
 
     /**
      * @var int
      * @tableColumn workflows.workflows_date2
+     * @tableColumnDatatype long
      */
     private $longDate2 = 0;
 
     /**
      * @var string
      * @tableColumn workflows.workflows_text
+     * @tableColumnDatatype text
      * @blockEscaping
      */
     private $strText = "";
@@ -106,6 +120,7 @@ class class_module_workflows_workflow extends class_model implements interface_m
     /**
      * @var string
      * @tableColumn workflows.workflows_text2
+     * @tableColumnDatatype text
      * @blockEscaping
      */
     private $strText2 = "";

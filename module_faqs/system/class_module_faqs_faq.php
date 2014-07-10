@@ -22,6 +22,7 @@ class class_module_faqs_faq extends class_model implements interface_model, inte
     /**
      * @var string
      * @tableColumn faqs.faqs_question
+     * @tableColumnDatatype text
      * @versionable
      * @addSearchIndex
      * @listOrder
@@ -35,6 +36,7 @@ class class_module_faqs_faq extends class_model implements interface_model, inte
     /**
      * @var string
      * @tableColumn faqs.faqs_answer
+     * @tableColumnDatatype text
      * @blockEscaping
      * @versionable
      * @addSearchIndex

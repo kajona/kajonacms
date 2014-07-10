@@ -23,6 +23,7 @@ class class_module_news_news extends class_model implements interface_model, int
     /**
      * @var string
      * @tableColumn news.news_title
+     * @tableColumnDatatype char254
      * @addSearchIndex
      *
      * @fieldType text
@@ -36,7 +37,7 @@ class class_module_news_news extends class_model implements interface_model, int
     /**
      * @var string
      * @tableColumn news.news_image
-     *
+     * @tableColumnDatatype char254
      * @fieldType image
      *
      * @addSearchIndex
@@ -47,12 +48,14 @@ class class_module_news_news extends class_model implements interface_model, int
     /**
      * @var int
      * @tableColumn news.news_hits
+     * @tableColumnDatatype int
      */
     private $intHits = 0;
 
     /**
      * @var string
      * @tableColumn news.news_intro
+     * @tableColumnDatatype text
      * @fieldType textarea
      * @addSearchIndex
      *
@@ -63,6 +66,7 @@ class class_module_news_news extends class_model implements interface_model, int
     /**
      * @var string
      * @tableColumn news.news_text
+     * @tableColumnDatatype text
      * @blockEscaping
      * @addSearchIndex
      *
@@ -76,6 +80,7 @@ class class_module_news_news extends class_model implements interface_model, int
      * @var int
      * @fieldType toggleonoff
      * @tableColumn news.news_redirect_enabled
+     * @tableColumnDatatype int
      *
      * @versionable
      */
@@ -85,6 +90,7 @@ class class_module_news_news extends class_model implements interface_model, int
      * @var string
      * @fieldType page
      * @tableColumn news.news_redirect_page
+     * @tableColumnDatatype char254
      *
      * @versionable
      */

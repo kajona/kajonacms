@@ -22,6 +22,7 @@ class class_module_faqs_category extends class_model implements interface_model,
     /**
      * @var string
      * @tableColumn faqs_category.faqs_cat_title
+     * @tableColumnDatatype char254
      * @listOrder asc
      *
      * @fieldType text

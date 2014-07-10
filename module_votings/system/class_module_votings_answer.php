@@ -23,6 +23,7 @@ class class_module_votings_answer extends class_model implements interface_model
     /**
      * @var string
      * @tableColumn votings_answer.votings_answer_text
+     * @tableColumnDatatype text
      * @addSearchIndex
      *
      * @fieldType textarea
@@ -34,6 +35,7 @@ class class_module_votings_answer extends class_model implements interface_model
     /**
      * @var int
      * @tableColumn votings_answer.votings_answer_hits
+     * @tableColumnDatatype int
      */
     private $intHits = 0;
 

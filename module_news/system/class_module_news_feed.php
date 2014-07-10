@@ -22,6 +22,7 @@ class class_module_news_feed extends class_model implements interface_model, int
     /**
      * @var string
      * @tableColumn news_feed.news_feed_title
+     * @tableColumnDatatype char254
      * @listOrder
      *
      * @fieldType text
@@ -33,6 +34,7 @@ class class_module_news_feed extends class_model implements interface_model, int
     /**
      * @var string
      * @tableColumn news_feed.news_feed_urltitle
+     * @tableColumnDatatype char254
      *
      * @fieldType text
      * @fieldMandatory
@@ -43,6 +45,7 @@ class class_module_news_feed extends class_model implements interface_model, int
     /**
      * @var string
      * @tableColumn news_feed.news_feed_link
+     * @tableColumnDatatype char254
      *
      * @fieldType text
      * @fieldLabel form_feed_link
@@ -52,6 +55,7 @@ class class_module_news_feed extends class_model implements interface_model, int
     /**
      * @var string
      * @tableColumn news_feed.news_feed_desc
+     * @tableColumnDatatype char254
      *
      * @fieldType textarea
      * @fieldLabel form_feed_desc
@@ -61,6 +65,7 @@ class class_module_news_feed extends class_model implements interface_model, int
     /**
      * @var string
      * @tableColumn news_feed.news_feed_page
+     * @tableColumnDatatype char254
      * @fieldType page
      * @fieldMandatory
      * @fieldLabel form_feed_page
@@ -70,6 +75,7 @@ class class_module_news_feed extends class_model implements interface_model, int
     /**
      * @var string
      * @tableColumn news_feed.news_feed_cat
+     * @tableColumnDatatype char20
      *
      * @fieldType dropdown
      * @fieldLabel form_feed_cat
@@ -79,12 +85,14 @@ class class_module_news_feed extends class_model implements interface_model, int
     /**
      * @var int
      * @tableColumn news_feed.news_feed_hits
+     * @tableColumnDatatype int
      */
     private $intHits = 0;
 
     /**
      * @var int
      * @tableColumn news_feed.news_feed_amount
+     * @tableColumnDatatype int
      */
     private $intAmount = 0;
 

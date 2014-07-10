@@ -23,6 +23,7 @@ class class_module_demo_demo extends class_model implements interface_model, int
     /**
      * @var string
      * @tableColumn demo_demo.demo_title
+     * @tableColumnDatatype char254
      * @fieldType textarea
      * @fieldMandatory
      * @fieldLabel commons_title
@@ -35,6 +36,7 @@ class class_module_demo_demo extends class_model implements interface_model, int
      *
      * @var float
      * @tableColumn demo_demo.demo_float
+     * @tableColumnDatatype double
      * @fieldType float
      */
     private $floatFloat = 0.0;
@@ -42,6 +44,7 @@ class class_module_demo_demo extends class_model implements interface_model, int
     /**
      * @var int
      * @tableColumn demo_demo.demo_int
+     * @tableColumnDatatype int
      * @fieldType text
      */
     private $intInt;

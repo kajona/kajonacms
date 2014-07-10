@@ -15,6 +15,7 @@ class class_module_demo_sub_object extends class_model implements interface_mode
     /**
      * @var string
      * @tableColumn demo_sub_object.sub_object_title
+     * @tableColumnDatatype char254
      *
      * @fieldType textarea
      * @fieldMandatory
@@ -26,6 +27,7 @@ class class_module_demo_sub_object extends class_model implements interface_mode
     /**
      * @var int
      * @tableColumn demo_demo.demo_int
+     * @tableColumnDatatype int
      *
      * @fieldType text
      */
