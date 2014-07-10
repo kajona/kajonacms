@@ -17,6 +17,8 @@ abstract class class_orm_base {
     const STR_ANNOTATION_TARGETTABLE = "@targetTable";
     const STR_ANNOTATION_TABLECOLUMN = "@tableColumn";
     const STR_ANNOTATION_TABLECOLUMNDATATYPE = "@tableColumnDatatype";
+    const STR_ANNOTATION_TABLECOLUMNPRIMARYKEY = "@tableColumnPrimaryKey";
+    const STR_ANNOTATION_TABLECOLUMNINDEX = "@tableColumnIndex";
     const STR_ANNOTATION_BLOCKESCAPING = "@blockEscaping";
     const STR_ANNOTATION_LISTORDER = "@listOrder";
 

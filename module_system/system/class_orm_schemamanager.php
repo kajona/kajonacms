@@ -19,6 +19,19 @@
  */
 class class_orm_schemamanager extends class_orm_base {
 
+    static $arrColumnDataTypes = array(
+        class_db_datatypes::STR_TYPE_INT,
+        class_db_datatypes::STR_TYPE_LONG,
+        class_db_datatypes::STR_TYPE_DOUBLE,
+        class_db_datatypes::STR_TYPE_CHAR10,
+        class_db_datatypes::STR_TYPE_CHAR20,
+        class_db_datatypes::STR_TYPE_CHAR100,
+        class_db_datatypes::STR_TYPE_CHAR254,
+        class_db_datatypes::STR_TYPE_CHAR500,
+        class_db_datatypes::STR_TYPE_TEXT,
+        class_db_datatypes::STR_TYPE_LONGTEXT
+    );
+
 
     public function createTable($strClass) {
         $this->setObjObject($strClass);
@@ -95,12 +108,23 @@ class class_orm_schemamanager extends class_orm_base {
             if($strTargetDataType == null)
                 $strTargetDataType = class_db_datatypes::STR_TYPE_CHAR254;
 
+            if(!in_array($strTargetDataType, self::$arrColumnDataTypes))
+                throw new class_orm_exception("Datatype ".$strTargetDataType." is unknown (".$strProperty."@".$strClass.")", class_orm_exception::$level_ERROR);
+
             $arrColumn = explode(".", $strTableColumn);
 
             if(count($arrColumn) != 2)
-                throw new class_exception("Syntax for tableColumn annotation at property ".$strProperty."@".$strClass." not in format table.columnName", class_exception::$level_ERROR);
+                throw new class_orm_exception("Syntax for tableColumn annotation at property ".$strProperty."@".$strClass." not in format table.columnName", class_exception::$level_ERROR);
 
-            $arrCreateTables[$arrColumn[0]][] = new class_orm_schemamanager_row($arrColumn[1], $strTargetDataType);
+            $objRow = new class_orm_schemamanager_row($arrColumn[1], $strTargetDataType);
+
+            if($objReflection->hasPropertyAnnotation($strProperty, class_orm_base::STR_ANNOTATION_TABLECOLUMNINDEX))
+                $objRow->setBitIndex(true);
+
+            if($objReflection->hasPropertyAnnotation($strProperty, class_orm_base::STR_ANNOTATION_TABLECOLUMNPRIMARYKEY))
+                $objRow->setBitPrimaryKey(true);
+
+            $arrCreateTables[$arrColumn[0]][] = $objRow;
         }
 
         return $arrCreateTables;
