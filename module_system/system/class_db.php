@@ -686,7 +686,7 @@ class class_db {
 
     /**
      * Looks up the columns of the given table.
-     * Should return an array for each row consting of:
+     * Should return an array for each row consisting of:
      * array ("columnName", "columnType")
      *
      * @param string $strTableName

@@ -22,7 +22,7 @@ class class_orm_schemamanager extends class_orm_base {
 
     public function createTable($strClass) {
         $this->setObjObject($strClass);
-        if($this->hasTargetTable()) {
+        if(!$this->hasTargetTable()) {
             throw new class_orm_exception("Class ".$strClass." provides no target-table!", class_orm_exception::$level_ERROR);
         }
 
@@ -100,7 +100,7 @@ class class_orm_schemamanager extends class_orm_base {
             if(count($arrColumn) != 2)
                 throw new class_exception("Syntax for tableColumn annotation at property ".$strProperty."@".$strClass." not in format table.columnName", class_exception::$level_ERROR);
 
-            $arrTargetTables[$arrColumn[0]] = new class_orm_schemamanager_row($arrColumn[1], $strTargetDataType);
+            $arrCreateTables[$arrColumn[0]][] = new class_orm_schemamanager_row($arrColumn[1], $strTargetDataType);
         }
 
         return $arrCreateTables;
