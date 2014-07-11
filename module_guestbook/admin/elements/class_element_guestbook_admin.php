@@ -20,6 +20,7 @@ class class_element_guestbook_admin extends class_element_admin implements inter
     /**
      * @var string
      * @tableColumn element_guestbook.guestbook_id
+     * @tableColumnDatatype char20
      *
      * @fieldType dropdown
      * @fieldLabel guestbook_id
@@ -29,6 +30,7 @@ class class_element_guestbook_admin extends class_element_admin implements inter
     /**
      * @var string
      * @tableColumn element_guestbook.guestbook_template
+     * @tableColumnDatatype char254
      *
      * @fieldType template
      * @fieldLabel template
@@ -40,6 +42,7 @@ class class_element_guestbook_admin extends class_element_admin implements inter
     /**
      * @var int
      * @tableColumn element_guestbook.guestbook_amount
+     * @tableColumnDatatype int
      *
      * @fieldType text
      * @fieldLabel guestbook_amount

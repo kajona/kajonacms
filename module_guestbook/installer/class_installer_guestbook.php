@@ -31,15 +31,7 @@ class class_installer_guestbook extends class_installer_base implements interfac
 
         //Table for page-element
         $strReturn .= "Installing guestbook-element table...\n";
-
-        $arrFields = array();
-        $arrFields["content_id"]   		= array("char20", false);
-        $arrFields["guestbook_id"] 		= array("char20", true);
-        $arrFields["guestbook_template"]= array("char254", true);
-        $arrFields["guestbook_amount"] 	= array("int", true);
-
-        if(!$this->objDB->createTable("element_guestbook", $arrFields, array("content_id")))
-            $strReturn .= "An error occurred! ...\n";
+        $objManager->createTable("class_element_guestbook_admin");
 
         //Register the element
         $strReturn .= "Registering guestbook-element...\n";
