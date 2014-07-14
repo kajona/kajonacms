@@ -55,6 +55,7 @@
                 <exclude name="*/**/.idea"/>
                 <exclude name="*/**/.svn"/>
                 <exclude name="*/**/_buildfiles"/>
+                <exclude name="*/**/_vagrant"/>
                 <include name="*/**"/>
                 <include name="*/*"/>
             </fileset>
@@ -84,6 +85,7 @@
         <delete dir="${basedir}${tempPath}/core/_debugging"/>
         <delete dir="${basedir}${tempPath}/core/_testing"/>
         <delete dir="${basedir}${tempPath}/core/_buildfiles"/>
+        <delete dir="${basedir}${tempPath}/core/_vagrant"/>
         <delete dir="${basedir}${tempPath}/.idea"/>
 
         <antcall target="buildPackageHelper" />
