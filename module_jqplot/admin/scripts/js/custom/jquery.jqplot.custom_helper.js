@@ -9,6 +9,12 @@ if (!KAJONA) {
 
 KAJONA.admin.jqplotHelper = {
 
+
+    bindMouseEvents : function(strChartId, strTooltipId) {
+        $('#'+strChartId).bind('jqplotMouseMove', function (ev, gridpos, datapos, neighbor, plot) {KAJONA.admin.jqplotHelper.mouseMove(ev, gridpos, datapos, neighbor, plot, strTooltipId)});
+        $('#'+strChartId).bind('jqplotMouseLeave', function (ev, gridpos, datapos, neighbor, plot) {KAJONA.admin.jqplotHelper.mouseLeave(ev, gridpos, datapos, neighbor, plot, strTooltipId)});
+    },
+
     previousNeighbor : null,
     /**
      * Sets the created canvasLabels invisible depending on the intNoOfWrittenLabels

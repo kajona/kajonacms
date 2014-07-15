@@ -53,3 +53,9 @@ div.jqplot-chart-tooltip-content {
 canvas.jqplot-series-canvas {
     opacity: 0.8;
 }
+
+div.jqplot-point-label {
+    color: #ffffff;
+    text-shadow: 0 0 3px black, 0 0 3px black;
+    z-index: 0;
+}

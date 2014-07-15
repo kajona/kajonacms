@@ -318,8 +318,7 @@ class class_graph_jqplot implements interface_graph {
         //JS-Code for plotting
         $strChartCode = "object_$strChartId = $.jqplot('".$strChartId."',".$strData.",".$strOptions.");\n";
         //event when mouse over over graph
-        $strChartCode .= "$('#$strChartId').bind('jqplotMouseMove', function (ev, gridpos, datapos, neighbor, plot) {KAJONA.admin.jqplotHelper.mouseMove(ev, gridpos, datapos, neighbor, plot, '".$strTooltipId."')});\n";
-        $strChartCode .= "$('#$strChartId').bind('jqplotMouseLeave', function (ev, gridpos, datapos, neighbor, plot) {KAJONA.admin.jqplotHelper.mouseLeave(ev, gridpos, datapos, neighbor, plot, '".$strTooltipId."')});\n";
+        $strChartCode .= "KAJONA.admin.jqplotHelper.bindMouseEvents('".$strChartId."', '".$strTooltipId."');\n";
 
 
         //JS-code being executed after the plot
@@ -341,6 +340,17 @@ class class_graph_jqplot implements interface_graph {
 
         $strCoreDirectory = class_resourceloader::getInstance()->getCorePathForModule("module_jqplot");
 
+
+        /* TODO: das sollte alles inden jqplot helper verschoben werden. es sollte später also die folgenden methoden geben:
+            KAJONA.admin.jqplotHelper.postPlot(strChartId);
+            KAJONA.admin.jqplotHelper.plot(strChartId);
+            KAJONA.admin.jqplotHelper.render(strChartId);
+
+            die infos isRendered_sss und object_sss werden dann direkt im Helper vorgehalten (z.b. Array)
+
+                var objChart = new KAJONA.admin.jqplotHelper.jqPlot(strChartId);
+                objChart->
+        */
         $strReturn .= "<script type='text/javascript'>
                 var object_$strChartId = null;
                 var isRendered_$strChartId = false;
@@ -383,21 +393,10 @@ class class_graph_jqplot implements interface_graph {
                         '{$strCoreDirectory}/module_jqplot/admin/scripts/js/custom/jquery.jqplot.custom_helper.js',
                         '{$strCoreDirectory}/module_jqplot/admin/scripts/js/custom/jquery.jqplot.custom.css'
                     ], function() {
-                        $(function() {render_$strChartId();});
+                        render_$strChartId();
                     });
                 });
         </script>";
-
-
-        //Styles for pointLabels
-        $strReturn .= "<style type=\"text/css\">
-                #$strChartId .jqplot-point-label {
-                  color: #ffffff;
-                  text-shadow: 0 0 3px black, 0 0 3px black;
-                  z-index: 0;
-                }
-                </style>
-        ";
 
         return $strReturn;
     }
