@@ -394,6 +394,7 @@ class class_graph_jqplot implements interface_graph {
                 #$strChartId .jqplot-point-label {
                   color: #ffffff;
                   text-shadow: 0 0 3px black, 0 0 3px black;
+                  z-index: 0;
                 }
                 </style>
         ";
