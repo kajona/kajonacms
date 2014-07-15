@@ -44,21 +44,21 @@ class class_orm_schemamanager extends class_orm_base {
     }
 
     /**
-     * @param array $arrTableDefinitions
+     * @param class_orm_schemamanager_table[] $arrTableDefinitions
      *
      * @throws class_orm_exception
      * @return void
      */
     private function processTableDefinitions($arrTableDefinitions) {
 
-        foreach($arrTableDefinitions as $strOneTable => $arrObjColumns) {
+        foreach($arrTableDefinitions as $objOneTable) {
 
             $arrIndex = array();
             $arrPrimary = array();
 
             $arrFields = array();
             /** @var class_orm_schemamanager_row $objOneColumn */
-            foreach($arrObjColumns as $objOneColumn) {
+            foreach($objOneTable->getArrRows() as $objOneColumn) {
                 $arrFields[$objOneColumn->getStrName()] = array($objOneColumn->getStrDatatype(), $objOneColumn->getBitNull());
 
                 if($objOneColumn->getBitPrimaryKey())
@@ -69,8 +69,8 @@ class class_orm_schemamanager extends class_orm_base {
             }
 
 
-            if(!class_carrier::getInstance()->getObjDB()->createTable($strOneTable, $arrFields, $arrPrimary, $arrIndex))
-                throw new class_orm_exception("error creating table ".$strOneTable, class_orm_exception::$level_ERROR);
+            if(!class_carrier::getInstance()->getObjDB()->createTable($objOneTable->getStrName(), $arrFields, $arrPrimary, $arrIndex, $objOneTable->getBitTxSafe()))
+                throw new class_orm_exception("error creating table ".$objOneTable->getStrName(), class_orm_exception::$level_ERROR);
 
         }
 
@@ -89,6 +89,9 @@ class class_orm_schemamanager extends class_orm_base {
 
         $arrTargetTables = $objReflection->getAnnotationValuesFromClass(self::STR_ANNOTATION_TARGETTABLE);
 
+        $arrTxSafe = $objReflection->getAnnotationValuesFromClass(self::STR_ANNOTATION_TARGETTABLETXSAFE);
+
+        /** @var class_orm_schemamanager_table[] $arrCreateTables */
         $arrCreateTables = array();
 
         foreach($arrTargetTables as $strValue) {
@@ -97,7 +100,12 @@ class class_orm_schemamanager extends class_orm_base {
             if(count($arrTable) != 2)
                 throw new class_orm_exception("Target table for ".$strClass." is not in table.primaryColumn format", class_orm_exception::$level_ERROR);
 
-            $arrCreateTables[$arrTable[0]] = array(new class_orm_schemamanager_row($arrTable[1], class_db_datatypes::STR_TYPE_CHAR20, false, true));
+            $objTable = new class_orm_schemamanager_table($arrTable[0]);
+            if(count($arrTxSafe) == 1)
+                $objTable->setBitTxSafe($arrTxSafe[0] == "false" ? false : true);
+
+            $objTable->addRow(new class_orm_schemamanager_row($arrTable[1], class_db_datatypes::STR_TYPE_CHAR20, false, true));
+            $arrCreateTables[$arrTable[0]] = $objTable;
         }
 
         //merge them with the list of mapped columns
@@ -132,7 +140,8 @@ class class_orm_schemamanager extends class_orm_base {
             if($objReflection->hasPropertyAnnotation($strProperty, class_orm_base::STR_ANNOTATION_TABLECOLUMNPRIMARYKEY))
                 $objRow->setBitPrimaryKey(true);
 
-            $arrCreateTables[$arrColumn[0]][] = $objRow;
+            $objTable = $arrCreateTables[$arrColumn[0]];
+            $objTable->addRow($objRow);
         }
 
         return $arrCreateTables;
