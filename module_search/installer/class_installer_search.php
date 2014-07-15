@@ -41,8 +41,8 @@ class class_installer_search extends class_installer_base implements interface_i
 
         //Table for page-element
         $strReturn .= "Installing search-element table...\n";
-        $objManager = new class_module_packagemanager_manager();
-        if($objManager->getPackage("pages") !== null)
+        $objPackageManager = new class_module_packagemanager_manager();
+        if($objPackageManager->getPackage("pages") !== null)
             $objManager->createTable("class_element_search_admin");
 
 		$strReturn .= "Registering module...\n";
