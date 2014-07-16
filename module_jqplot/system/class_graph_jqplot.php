@@ -310,70 +310,18 @@ class class_graph_jqplot implements interface_graph {
         $strReturn = "<div id=\"$strChartId\" style=\"width:".$this->intWidth."px; height:".$this->intHeight."px;\"></div>";
 
         //create the data array and options object for the jqPlot method
-        $strData = $this->strCreateJSDataArray();
-        $strOptions = $this->strCreateJSOptions();
-
-        //create the js-Code
-
-        //JS-Code for plotting
-        $strChartCode = "object_$strChartId = $.jqplot('".$strChartId."',".$strData.",".$strOptions.");\n";
-        //event when mouse over over graph
-        $strChartCode .= "KAJONA.admin.jqplotHelper.bindMouseEvents('".$strChartId."', '".$strTooltipId."');\n";
-
-
-        //JS-code being executed after the plot
-        $strPostPlotCode = "";
-        //if this variable is set ticks may be set invisible
-        if($this->intNrOfWrittenLabelsXAxis != null) {
-            $strPostPlotCode .= "KAJONA.admin.jqplotHelper.setLabelsInvisible('".$strChartId."',".$this->intNrOfWrittenLabelsXAxis.", 'xaxis');\n";
-        }
-        if($this->intNrOfWrittenLabelsYAxis != null) {
-            $strPostPlotCode .= "KAJONA.admin.jqplotHelper.setLabelsInvisible('".$strChartId."',".$this->intNrOfWrittenLabelsYAxis.", 'yaxis');\n";
-        }
-        if($this->bitXAxisLabelsInvisible) {
-            $strPostPlotCode .= "KAJONA.admin.jqplotHelper.setAxisInvisible('".$strChartId."', 'xaxis');\n";
-        }
-        if($this->bitYAxisLabelsInvisible) {
-            $strPostPlotCode .= "KAJONA.admin.jqplotHelper.setAxisInvisible('".$strChartId."', 'yaxis');\n";
-        }
-
+        $strChartData = $this->strCreateJSDataArray();
+        $strChartOptions = $this->strCreateJSOptions();
+        $arrPostPlotOptions = array(
+            "intNrOfWrittenLabelsXAxis" => $this->intNrOfWrittenLabelsXAxis,
+            "intNrOfWrittenLabelsYAxis" => $this->intNrOfWrittenLabelsYAxis,
+            "bitXAxisLabelsInvisible" => $this->bitXAxisLabelsInvisible,
+            "bitYAxisLabelsInvisible" => $this->bitYAxisLabelsInvisible
+        );
+        $strPostPlotOptions = json_encode($arrPostPlotOptions);
 
         $strCoreDirectory = class_resourceloader::getInstance()->getCorePathForModule("module_jqplot");
-
-
-        /* TODO: das sollte alles inden jqplot helper verschoben werden. es sollte später also die folgenden methoden geben:
-            KAJONA.admin.jqplotHelper.postPlot(strChartId);
-            KAJONA.admin.jqplotHelper.plot(strChartId);
-            KAJONA.admin.jqplotHelper.render(strChartId);
-
-            die infos isRendered_sss und object_sss werden dann direkt im Helper vorgehalten (z.b. Array)
-
-                var objChart = new KAJONA.admin.jqplotHelper.jqPlot(strChartId);
-                objChart->
-        */
         $strReturn .= "<script type='text/javascript'>
-                var object_$strChartId = null;
-                var isRendered_$strChartId = false;
-
-                function postPlot_$strChartId() {
-                    ".$strPostPlotCode."
-                }
-
-                function plot_$strChartId() {
-                    ".$strChartCode."
-                }
-
-                function render_$strChartId() {
-                    if(isRendered_$strChartId ) {
-                        object_$strChartId.replot();
-                        postPlot_$strChartId();
-                        return;
-                    }
-                    plot_$strChartId();
-                    postPlot_$strChartId();
-                    isRendered_$strChartId = true
-                }
-
                 KAJONA.admin.loader.loadFile(['{$strCoreDirectory}/module_jqplot/admin/scripts/js/jqplot/jquery.jqplot.js', '{$strCoreDirectory}/module_jqplot/admin/scripts/js/jqplot/jquery.jqplot.css'], function() {
                     KAJONA.admin.loader.loadFile([
                         '{$strCoreDirectory}/module_jqplot/admin/scripts/js/jqplot/plugins/jqplot.logAxisRenderer.js',
@@ -393,7 +341,8 @@ class class_graph_jqplot implements interface_graph {
                         '{$strCoreDirectory}/module_jqplot/admin/scripts/js/custom/jquery.jqplot.custom_helper.js',
                         '{$strCoreDirectory}/module_jqplot/admin/scripts/js/custom/jquery.jqplot.custom.css'
                     ], function() {
-                        render_$strChartId();
+                        var objChart_$strChartId = new KAJONA.admin.jqplotHelper.jqPlotChart('$strChartId', '$strTooltipId', $strChartData, $strChartOptions, $strPostPlotOptions);
+                        objChart_$strChartId.render();
                     });
                 });
         </script>";

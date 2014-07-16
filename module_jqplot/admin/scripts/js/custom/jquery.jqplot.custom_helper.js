@@ -9,13 +9,61 @@ if (!KAJONA) {
 
 KAJONA.admin.jqplotHelper = {
 
+    previousNeighbor : null,//used in methods mouseLeave and mouseMove
+    arrChartObjects : [],
+
+    jqPlotChart : function (strChartId, strTooltipId, arrChartData, objChartOptions, objPostPlotOptions) {
+        this.strTooltipId = strTooltipId;
+        this.strChartId = strChartId;
+        this.arrChartData = arrChartData;
+        this.objChartOptions = objChartOptions;
+        this.objPostPlotOptions = objPostPlotOptions;
+
+        this.objJqplotChart = null;
+        this.bitIsRendered = false;
+
+
+        this.postPlot = function() {
+            if(this.objPostPlotOptions.hasOwnProperty("intNrOfWrittenLabelsXAxis") && this.objPostPlotOptions["intNrOfWrittenLabelsXAxis"] != null) {
+                KAJONA.admin.jqplotHelper.setLabelsInvisible(this.strChartId, this.objPostPlotOptions["intNrOfWrittenLabelsXAxis"], "xaxis");
+            }
+            if(this.objPostPlotOptions.hasOwnProperty("intNrOfWrittenLabelsYAxis") && this.objPostPlotOptions["intNrOfWrittenLabelsYAxis"] != null) {
+                KAJONA.admin.jqplotHelper.setLabelsInvisible(this.strChartId, this.objPostPlotOptions["intNrOfWrittenLabelsYAxis"], "yaxis");
+            }
+            if(this.objPostPlotOptions.hasOwnProperty("bitXAxisLabelsInvisible") && this.objPostPlotOptions["bitXAxisLabelsInvisible"]) {
+                KAJONA.admin.jqplotHelper.setAxisInvisible(this.strChartId, "xaxis");
+            }
+            if(this.objPostPlotOptions.hasOwnProperty("bitXAxisLabelsInvisible") && this.objPostPlotOptions["bitXAxisLabelsInvisible"]) {
+                KAJONA.admin.jqplotHelper.setAxisInvisible(this.strChartId, "yaxis");
+            }
+        };
+
+        this.plot = function() {
+            this.objJqplotChart = $.jqplot(this.strChartId, this.arrChartData, this.objChartOptions);
+            KAJONA.admin.jqplotHelper.bindMouseEvents(this.strChartId, this.strTooltipId);
+        };
+
+        this.render = function() {
+            if(this.bitIsRendered) {
+                this.objJqplotChart.replot();
+                this.postPlot();
+                return;
+            }
+            this.plot();
+            this.postPlot();
+            this.bitIsRendered = true
+        };
+
+
+        KAJONA.admin.jqplotHelper.arrChartObjects[this.strChartId] = this;
+    },
 
     bindMouseEvents : function(strChartId, strTooltipId) {
         $('#'+strChartId).bind('jqplotMouseMove', function (ev, gridpos, datapos, neighbor, plot) {KAJONA.admin.jqplotHelper.mouseMove(ev, gridpos, datapos, neighbor, plot, strTooltipId)});
         $('#'+strChartId).bind('jqplotMouseLeave', function (ev, gridpos, datapos, neighbor, plot) {KAJONA.admin.jqplotHelper.mouseLeave(ev, gridpos, datapos, neighbor, plot, strTooltipId)});
     },
 
-    previousNeighbor : null,
+
     /**
      * Sets the created canvasLabels invisible depending on the intNoOfWrittenLabels
      *
@@ -127,6 +175,15 @@ KAJONA.admin.jqplotHelper = {
         }
     },
 
+    /**
+     * Displays the tooltip
+     *
+     * @param x
+     * @param y
+     * @param objTooltip
+     * @param tooltipId
+     * @param move
+     */
     showTooltip : function(x, y, objTooltip, tooltipId, move) {
         var top = y-60;
         var left = x+5;
