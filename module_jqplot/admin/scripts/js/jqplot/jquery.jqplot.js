@@ -295,6 +295,28 @@
             if ($.jqplot.use_excanvas) {
                 return window.G_vmlCanvasManager.initElement(canvas);
             }
+
+
+            //see http://stackoverflow.com/questions/20221461/hidpi-retina-plot-drawing
+            var cctx = canvas.getContext('2d');
+
+            var canvasBackingScale = 1;
+            if (window.devicePixelRatio > 1 && (cctx.webkitBackingStorePixelRatio === undefined ||
+                cctx.webkitBackingStorePixelRatio < 2)) {
+                canvasBackingScale = window.devicePixelRatio;
+            }
+            var oldWidth = canvas.width;
+            var oldHeight = canvas.height;
+
+            canvas.width = canvasBackingScale * canvas.width;
+            canvas.height = canvasBackingScale * canvas.height;
+            canvas.style.width = oldWidth + 'px';
+            canvas.style.height = oldHeight + 'px';
+            cctx.save();
+
+            cctx.scale(canvasBackingScale, canvasBackingScale);
+            //
+
             return canvas;
         };
 
