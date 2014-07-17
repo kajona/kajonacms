@@ -125,8 +125,7 @@ class class_toolkit_portal extends class_toolkit {
      * @param string $strPvParam the param used to create the pagenumber-entries
      *
      * @return mixed array containing the created data:
-     *                         return => [arrData] = array containing the shortened data
-     *                                   [strForward] = link to the next page
+     *                         return => [strForward] = link to the next page
      *                                   [strBack]    = link to the previous page
      *                                   [strPages] = Pager ( [0][1] ...)
      */
