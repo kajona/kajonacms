@@ -39,10 +39,21 @@ class class_history {
      * @return void
      */
     public function setAdminHistory() {
-        //Loading the current history from session
-        $arrHistory = $this->objSession->getSession(self::STR_ADMIN_SESSION_KEY);
+        $this->writeToHistoryArray(self::STR_ADMIN_SESSION_KEY);
+    }
 
+    /**
+     * Adds the current call to the list of portal urls
+     *
+     * @return void
+     */
+    public function setPortalHistory() {
+        $this->writeToHistoryArray(self::STR_PORTAL_SESSION_KEY);
+    }
+
+    private function writeToHistoryArray($strSessionKey) {
         $strQueryString = getServer("QUERY_STRING");
+
         //Clean querystring of empty actions
         if(uniSubstr($strQueryString, -8) == "&action=") {
             $strQueryString = substr_replace($strQueryString, "", -8);
@@ -53,24 +64,43 @@ class class_history {
             return;
         }
 
+        $arrHistory = $this->objSession->getSession($strSessionKey);
+
         //And insert just, if different to last entry
-        if($strQueryString == $this->getAdminHistory()) {
+        if($strQueryString == $this->getHistoryEntry(0, $strSessionKey)) {
             return;
         }
         //If we reach up here, we can enter the current query
         if($arrHistory !== false) {
             array_unshift($arrHistory, $strQueryString);
-            while(count($arrHistory) > 5) {
+            while(count($arrHistory) > 10) {
                 array_pop($arrHistory);
             }
         }
         else {
-            $arrHistory[] = $strQueryString;
+            $arrHistory = array($strQueryString);
         }
         //saving the new array to session
-        $this->objSession->setSession(self::STR_ADMIN_SESSION_KEY, $arrHistory);
+        $this->objSession->setSession($strSessionKey, $arrHistory);
     }
 
+
+    /**
+     * Internal helper to access the session based arrays
+     * @param int $intPosition
+     * @param string $strSessionKey
+     *
+     * @return null
+     */
+    private function getHistoryEntry($intPosition, $strSessionKey) {
+        $arrHistory = $this->objSession->getSession($strSessionKey);
+        if(isset($arrHistory[$intPosition])) {
+            return $arrHistory[$intPosition];
+        }
+        else {
+            return null;
+        }
+    }
 
     /**
      * Fetches an admin-url the current user loaded before
@@ -80,48 +110,26 @@ class class_history {
      * @return string
      */
     public function getAdminHistory($intPosition = 0) {
-        $arrHistory = $this->objSession->getSession(self::STR_ADMIN_SESSION_KEY);
-        if(isset($arrHistory[$intPosition])) {
-            return $arrHistory[$intPosition];
-        }
-        else {
-            return null;
-        }
+        return $this->getHistoryEntry($intPosition, self::STR_ADMIN_SESSION_KEY);
     }
 
 
     /**
-     * Adds the current call to the list of portal urls
+     * returns the full admin history array
      *
-     * @return void
+     * @return string[]
      */
-    public function setPortalHistory() {
-        //Loading the current history from session
-        $arrHistory = $this->objSession->getSession(self::STR_PORTAL_SESSION_KEY);
+    public function getArrAdminHistory() {
+        return $this->objSession->getSession(self::STR_ADMIN_SESSION_KEY);
+    }
 
-        $strQueryString = getServer("QUERY_STRING");
-        //Clean Querystring of empty actions
-        if(uniSubstr($strQueryString, -8) == "&action=") {
-            $strQueryString = substr_replace($strQueryString, "", -8);
-        }
-        //And insert just, if different to last entry
-        if($strQueryString == $this->getPortalHistory()) {
-            return;
-        }
-        //If we reach up here, we can enter the current query
-        if($arrHistory !== false) {
-            array_unshift($arrHistory, $strQueryString);
-            while(count($arrHistory) > 5) {
-                array_pop($arrHistory);
-            }
-        }
-        else {
-            $arrHistory[] = $strQueryString;
-        }
-        //saving the new array to session
-        $this->objSession->setSession(self::STR_PORTAL_SESSION_KEY, $arrHistory);
-
-        return;
+    /**
+     * returns the full portal history array
+     *
+     * @return string[]
+     */
+    public function getArrPortalHistory() {
+        return $this->objSession->getSession(self::STR_PORTAL_SESSION_KEY);
     }
 
     /**
@@ -131,13 +139,7 @@ class class_history {
      * @return string
      */
     public function getPortalHistory($intPosition = 0) {
-        $arrHistory = $this->objSession->getSession(self::STR_PORTAL_SESSION_KEY);
-        if(isset($arrHistory[$intPosition])) {
-            return $arrHistory[$intPosition];
-        }
-        else {
-            return null;
-        }
+        return $this->getHistoryEntry($intPosition, self::STR_PORTAL_SESSION_KEY);
     }
 
 }

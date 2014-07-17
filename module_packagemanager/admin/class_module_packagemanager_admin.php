@@ -598,7 +598,8 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
      */
     protected function renderError($strLangName, $strLangModule = null) {
         $strError = $this->getLang($strLangName, $strLangModule);
-        $arrHistory = explode("&", $this->getHistory(0));
+        $objHistory = new class_history();
+        $arrHistory = explode("&", $objHistory->getAdminHistory(0));
 
         if($this->getArrModule("template") == "/folderview.tpl")
             $strError .= ' ' . class_link::getLinkAdminManual('href="javascript:window.parent.location.reload();"', $this->getLang('commons_back'));

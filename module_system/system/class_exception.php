@@ -96,12 +96,12 @@ class class_exception extends Exception {
             $strMailtext .= "\n\n";
             $strMailtext .= "Last actions called:\n";
             $strMailtext .= "Admin:\n";
-            $arrHistory = $objHistory->getAdminHistory();
+            $arrHistory = $objHistory->getArrAdminHistory();
             if(is_array($arrHistory))
                 foreach($arrHistory as $intIndex => $strOneUrl)
                     $strMailtext .= " #".$intIndex.": ".$strOneUrl."\n";
             $strMailtext .= "Portal:\n";
-            $arrHistory = $objHistory->getPortalHistory();
+            $arrHistory = $objHistory->getArrPortalHistory();
             if(is_array($arrHistory))
                 foreach($arrHistory as $intIndex => $strOneUrl)
                     $strMailtext .= " #".$intIndex.": ".$strOneUrl."\n";
