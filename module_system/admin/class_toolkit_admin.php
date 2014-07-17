@@ -1759,7 +1759,8 @@ class class_toolkit_admin extends class_toolkit {
      * @param string $strModule
      * @param string $strAction
      * @param string $strLinkAdd
-     * @return mixed a two-dimensional array: ["elements"] and ["pageview"]
+     *
+     * @return string the pageview code
      * @since 3.3.0
      */
     public function getSimplePageview($objArraySectionIterator, $strModule, $strAction, $strLinkAdd = "") {
@@ -1769,8 +1770,7 @@ class class_toolkit_admin extends class_toolkit {
         $intNrOfPages = $objArraySectionIterator->getNrOfPages();
         $intNrOfElements = $objArraySectionIterator->getNumberOfElements();
 
-
-        $arrReturn["elements"] = $objArraySectionIterator->getArrayExtended(true);
+        $arrReturn["elements"] = array();
 
         //read templates
         $strTemplateBodyID = $this->objTemplate->readTemplate("/elements.tpl", "pageview_body");
@@ -1832,8 +1832,7 @@ class class_toolkit_admin extends class_toolkit {
             );
 
 
-        $arrReturn["pageview"] = $this->objTemplate->fillTemplate($arrTemplate, $strTemplateBodyID);
-        return $arrReturn;
+        return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateBodyID);
     }
 
 
