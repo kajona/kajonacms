@@ -269,7 +269,8 @@ JS;
      * @return array
      */
     protected function getBatchActionHandlers($strListIdentifier) {
-        $arrDefault = $this->getDefaultActionHandlers();
+        $arrDefault = array();
+        $arrDefault[] = new class_admin_batchaction(class_adminskin_helper::getAdminImage("icon_delete"), class_link::getLinkAdminXml("system", "delete", "&systemid=%systemid%"), $this->getLang("commons_batchaction_delete"));
         $arrDefault[] = new class_admin_batchaction(class_adminskin_helper::getAdminImage("icon_mail"), class_link::getLinkAdminXml("messaging", "setRead", "&systemid=%systemid%"), $this->getLang("batchaction_read"));
         $arrDefault[] = new class_admin_batchaction(class_adminskin_helper::getAdminImage("icon_mailNew"), class_link::getLinkAdminXml("messaging", "setUnread", "&systemid=%systemid%"), $this->getLang("batchaction_unread"));
         return $arrDefault;
