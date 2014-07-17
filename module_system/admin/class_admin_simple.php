@@ -609,11 +609,15 @@ abstract class class_admin_simple extends class_admin {
      * @return array
      */
     protected function getDefaultActionHandlers() {
-        return array(
-            new class_admin_batchaction(class_adminskin_helper::getAdminImage("icon_delete"), class_link::getLinkAdminXml("system", "delete", "&systemid=%systemid%"), $this->getLang("commons_batchaction_delete")),
-            new class_admin_batchaction(class_adminskin_helper::getAdminImage("icon_enabled"), class_link::getLinkAdminXml("system", "setStatus", "&systemid=%systemid%&status=1"), $this->getLang("commons_batchaction_enable")),
-            new class_admin_batchaction(class_adminskin_helper::getAdminImage("icon_disabled"), class_link::getLinkAdminXml("system", "setStatus", "&systemid=%systemid%&status=0"), $this->getLang("commons_batchaction_disable")),
-        );
+        $arrReturn = array();
+        if($this->getObjModule()->rightDelete())
+            $arrReturn[] = new class_admin_batchaction(class_adminskin_helper::getAdminImage("icon_delete"), class_link::getLinkAdminXml("system", "delete", "&systemid=%systemid%"), $this->getLang("commons_batchaction_delete"));
+
+        if($this->getObjModule()->rightEdit()) {
+            $arrReturn[] = new class_admin_batchaction(class_adminskin_helper::getAdminImage("icon_enabled"), class_link::getLinkAdminXml("system", "setStatus", "&systemid=%systemid%&status=1"), $this->getLang("commons_batchaction_enable"));
+            $arrReturn[] = new class_admin_batchaction(class_adminskin_helper::getAdminImage("icon_disabled"), class_link::getLinkAdminXml("system", "setStatus", "&systemid=%systemid%&status=0"), $this->getLang("commons_batchaction_disable"));
+        }
+        return $arrReturn;
     }
 
     /**
