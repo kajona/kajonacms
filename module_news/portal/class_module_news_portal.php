@@ -70,65 +70,65 @@ class class_module_news_portal extends class_portal implements interface_portal 
         $strTemplateImageID = $this->objTemplate->readTemplate("/module_news/" . $this->arrElementData["news_template"], "news_list_image");
         $strWrapperTemplateID = $this->objTemplate->readTemplate("/module_news/" . $this->arrElementData["news_template"], "news_list_wrapper");
         //Check rights
-        if(count($arrNews["arrData"]) > 0) {
-            foreach($arrNews["arrData"] as $objOneNews) {
-                /** @var $objOneNews class_module_news_news */
-                if($objOneNews instanceof class_module_news_news && $objOneNews->rightView()) {
-                    $strOneNews = "";
-                    $arrOneNews = array();
-                    //generate a link to the details
-                    $arrOneNews["news_more_link"] = getLinkPortal($this->arrElementData["news_detailspage"], "", "", $this->getLang("news_mehr"), "newsDetail", "", $objOneNews->getSystemid(), "", "", $objOneNews->getStrTitle());
-                    $arrOneNews["news_more_link_href"] = getLinkPortalHref($this->arrElementData["news_detailspage"], "", "newsDetail", "", $objOneNews->getSystemid(), "", $objOneNews->getStrTitle());
-                    $arrOneNews["news_start_date"] = dateToString($objOneNews->getObjStartDate(), false);
-                    $arrOneNews["news_id"] = $objOneNews->getSystemid();
-                    $arrOneNews["news_title"] = $objOneNews->getStrTitle();
-                    $arrOneNews["news_intro"] = $objOneNews->getStrIntro();
-                    $arrOneNews["news_text"] = $objOneNews->getStrText();
 
-                    //reset more link?
-                    if(uniStrlen(htmlStripTags($arrOneNews["news_text"])) == 0 && ($objOneNews->getIntRedirectEnabled() == "0" || $objOneNews->getStrRedirectPage() == "")) {
-                        $arrOneNews["news_more_link"] = "";
-                    }
-
-
-                    $arrPAC = $this->loadPostacomments($objOneNews->getSystemid());
-                    if($arrPAC != null) {
-                        $arrOneNews["news_nrofcomments"] = $arrPAC["nrOfComments"];
-                        $arrOneNews["news_commentlist"] = $arrPAC["commentList"];
-                    }
-
-                    //load template section with or without image?
-                    if($objOneNews->getStrImage() != "") {
-                        $arrOneNews["news_image"] = urlencode($objOneNews->getStrImage());
-                        $strOneNews .= $this->objTemplate->fillTemplate($arrOneNews, $strTemplateImageID);
-                    }
-                    else {
-                        $strOneNews .= $this->objTemplate->fillTemplate($arrOneNews, $strTemplateID);
-                    }
-
-                    //Add pe code
-                    $arrPeConfig = array(
-                        "pe_module"               => "news",
-                        "pe_action_edit"          => "editNews",
-                        "pe_action_edit_params"   => "&systemid=" . $objOneNews->getSystemid(),
-                        "pe_action_new"           => "newNews",
-                        "pe_action_new_params"    => "",
-                        "pe_action_delete"        => "delete",
-                        "pe_action_delete_params" => "&systemid=" . $objOneNews->getSystemid()
-                    );
-                    $strReturn .= class_element_portal::addPortalEditorCode($strOneNews, $objOneNews->getSystemid(), $arrPeConfig);
-                }
-            }
-            $arrWrapperTemplate = array();
-            $arrWrapperTemplate["news"] = $strReturn;
-            $arrWrapperTemplate["link_forward"] = $arrNews["strForward"];
-            $arrWrapperTemplate["link_pages"] = $arrNews["strPages"];
-            $arrWrapperTemplate["link_back"] = $arrNews["strBack"];
-            $strReturn = $this->fillTemplate($arrWrapperTemplate, $strWrapperTemplateID);
-        }
-        else {
+        if(!$objArraySectionIterator->valid())
             $strReturn .= $this->getLang("news_list_empty");
+
+        foreach($objArraySectionIterator as $objOneNews) {
+            /** @var $objOneNews class_module_news_news */
+            if($objOneNews instanceof class_module_news_news && $objOneNews->rightView()) {
+                $strOneNews = "";
+                $arrOneNews = array();
+                //generate a link to the details
+                $arrOneNews["news_more_link"] = getLinkPortal($this->arrElementData["news_detailspage"], "", "", $this->getLang("news_mehr"), "newsDetail", "", $objOneNews->getSystemid(), "", "", $objOneNews->getStrTitle());
+                $arrOneNews["news_more_link_href"] = getLinkPortalHref($this->arrElementData["news_detailspage"], "", "newsDetail", "", $objOneNews->getSystemid(), "", $objOneNews->getStrTitle());
+                $arrOneNews["news_start_date"] = dateToString($objOneNews->getObjStartDate(), false);
+                $arrOneNews["news_id"] = $objOneNews->getSystemid();
+                $arrOneNews["news_title"] = $objOneNews->getStrTitle();
+                $arrOneNews["news_intro"] = $objOneNews->getStrIntro();
+                $arrOneNews["news_text"] = $objOneNews->getStrText();
+
+                //reset more link?
+                if(uniStrlen(htmlStripTags($arrOneNews["news_text"])) == 0 && ($objOneNews->getIntRedirectEnabled() == "0" || $objOneNews->getStrRedirectPage() == "")) {
+                    $arrOneNews["news_more_link"] = "";
+                }
+
+
+                $arrPAC = $this->loadPostacomments($objOneNews->getSystemid());
+                if($arrPAC != null) {
+                    $arrOneNews["news_nrofcomments"] = $arrPAC["nrOfComments"];
+                    $arrOneNews["news_commentlist"] = $arrPAC["commentList"];
+                }
+
+                //load template section with or without image?
+                if($objOneNews->getStrImage() != "") {
+                    $arrOneNews["news_image"] = urlencode($objOneNews->getStrImage());
+                    $strOneNews .= $this->objTemplate->fillTemplate($arrOneNews, $strTemplateImageID);
+                }
+                else {
+                    $strOneNews .= $this->objTemplate->fillTemplate($arrOneNews, $strTemplateID);
+                }
+
+                //Add pe code
+                $arrPeConfig = array(
+                    "pe_module"               => "news",
+                    "pe_action_edit"          => "editNews",
+                    "pe_action_edit_params"   => "&systemid=" . $objOneNews->getSystemid(),
+                    "pe_action_new"           => "newNews",
+                    "pe_action_new_params"    => "",
+                    "pe_action_delete"        => "delete",
+                    "pe_action_delete_params" => "&systemid=" . $objOneNews->getSystemid()
+                );
+                $strReturn .= class_element_portal::addPortalEditorCode($strOneNews, $objOneNews->getSystemid(), $arrPeConfig);
+            }
         }
+        $arrWrapperTemplate = array();
+        $arrWrapperTemplate["news"] = $strReturn;
+        $arrWrapperTemplate["link_forward"] = $arrNews["strForward"];
+        $arrWrapperTemplate["link_pages"] = $arrNews["strPages"];
+        $arrWrapperTemplate["link_back"] = $arrNews["strBack"];
+        $strReturn = $this->fillTemplate($arrWrapperTemplate, $strWrapperTemplateID);
+
         return $strReturn;
     }
 

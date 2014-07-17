@@ -103,30 +103,29 @@ class class_module_mediamanager_portal extends class_portal implements interface
             $this->setSystemid($this->arrElementData["repo_id"]);
         }
 
-        $bitPageview = false;
-        //load using the pageview?
-        $arrPagerContent = array();
-        if($this->arrElementData["repo_elementsperpage"] > 0) {
-            $bitPageview = true;
-            $objArraySectionIterator = new class_array_section_iterator($this->getNumberOfEntriesOnLevel());
-            $objArraySectionIterator->setIntElementsPerPage($this->arrElementData["repo_elementsperpage"]);
-            $objArraySectionIterator->setPageNumber($this->getParam("pv"));
-            $objArraySectionIterator->setArraySection($this->getArrFiles($objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
+        $bitPageview = true;
+        if($this->arrElementData["repo_elementsperpage"] <= 0) {
+            $this->arrElementData["repo_elementsperpage"] = $this->getNumberOfEntriesOnLevel();
+            $bitPageview = false;
+        }
 
-            $arrPagerContent = $this->objToolkit->simplePager(
-                $objArraySectionIterator,
-                $this->getLang("commons_next"),
-                $this->getLang("commons_back"),
-                $this->getParam("action"),
-                $this->getPagename(),
-                "&systemid=".$this->getSystemid()
-            );
-            $arrFiles = $arrPagerContent["arrData"];
-        }
-        else {
-            //Load all Images & Folder
-            $arrFiles = $this->getArrFiles(null, null);
-        }
+        $objArraySectionIterator = new class_array_section_iterator($this->getNumberOfEntriesOnLevel());
+        $objArraySectionIterator->setIntElementsPerPage($this->arrElementData["repo_elementsperpage"]);
+        $objArraySectionIterator->setPageNumber($this->getParam("pv"));
+        $objArraySectionIterator->setArraySection($this->getArrFiles($objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
+
+        $arrPagerContent = $this->objToolkit->simplePager(
+            $objArraySectionIterator,
+            $this->getLang("commons_next"),
+            $this->getLang("commons_back"),
+            $this->getParam("action"),
+            $this->getPagename(),
+            "&systemid=".$this->getSystemid()
+        );
+        $arrFiles = array();
+        foreach($objArraySectionIterator as $objOneFile)
+            $arrFiles[]= $objOneFile;
+
 
         //Loop over every item and collect them
         $arrWrappingTemplate = array();

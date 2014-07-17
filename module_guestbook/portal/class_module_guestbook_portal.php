@@ -42,7 +42,7 @@ class class_module_guestbook_portal extends class_portal implements interface_po
 
         //and put posts into a template
         /** @var class_module_guestbook_post $objOnePost */
-        foreach($arrObjPosts["arrData"] as $objOnePost) {
+        foreach($objArraySectionIterator as $objOnePost) {
             if($objOnePost->rightView()) {
                 $strTemplatePostID = $this->objTemplate->readTemplate("/module_guestbook/".$this->arrElementData["guestbook_template"], "post");
                 $arrTemplatePost = array();
