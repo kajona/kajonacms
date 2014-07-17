@@ -87,7 +87,7 @@ class class_adminskin_imageresolver implements interface_adminskin_imageresolver
         "icon_dot"                         => "<i class='fa fa-star'></i>",
         "icon_downloads"                   => "<i class='fa fa-download'></i>",
         "icon_earth"                       => "<i class='fa fa-globe '></i>",
-        "icon_earthDisabled"               => "<span class='fa-stack fa-lg'><i class='fa fa-globe'></i><i class='fa fa-ban fa-stack-base' style='color: red'></i></span>",
+        "icon_earthDisabled"               => "<span class='fa-stack fa-lg'><i class='fa fa-globe'></i><i class='fa fa-ban fa-stack-1x' style='color: red'></i></span>",
         "icon_edit"                        => "<i class='fa fa-pencil'></i>",
         "icon_editDisabled"                => "<span class='fa-stack fa-lg'><i class='fa fa-pencil'></i><i class='fa fa-ban fa-stack-1x' style='color: red'></i></span>",
         "icon_editLocked"                  => "<span class='fa-stack fa-lg'><i class='fa fa-pencil'></i><i class='fa fa-lock fa-stack-1x' style='color: red'></i></span>",
