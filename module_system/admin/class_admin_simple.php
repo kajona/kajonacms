@@ -178,11 +178,6 @@ abstract class class_admin_simple extends class_admin {
     protected function renderFloatingGrid(class_array_section_iterator $objArraySectionIterator, $strListIdentifier = "", $strPagerAddon = "", $bitSortable = true) {
         $strReturn = "";
 
-        $arrPageViews = $this->objToolkit->getSimplePageview($objArraySectionIterator, $this->getArrModule("modul"), $this->getAction(), "&systemid=".$this->getSystemid().$this->strPeAddon.$strPagerAddon);
-        $arrIterables = $arrPageViews["elements"];
-
-
-
         $strListActions = "";
         if($this->renderLevelUpAction($strListIdentifier) != "") {
             $strListActions .= $this->objToolkit->listButton($this->renderLevelUpAction($strListIdentifier));
@@ -197,16 +192,16 @@ abstract class class_admin_simple extends class_admin {
         }
 
 
-        if(count($arrIterables) == 0)
+        if(!$objArraySectionIterator->valid())
             $strReturn .= $this->objToolkit->getTextRow($this->getLang("commons_list_empty"));
 
 
-        if(count($arrIterables) > 0) {
+        if($objArraySectionIterator->valid()) {
 
             $strReturn .= $this->objToolkit->gridHeader($bitSortable, $objArraySectionIterator->getIntElementsPerPage(), $objArraySectionIterator->getPageNumber());
 
             /** @var $objOneIterable class_model|interface_model|interface_admin_gridable */
-            foreach($arrIterables as $objOneIterable) {
+            foreach($objArraySectionIterator as $objOneIterable) {
 
                 if(!$objOneIterable->rightView() || !$objOneIterable instanceof interface_admin_gridable)
                     continue;
@@ -218,7 +213,7 @@ abstract class class_admin_simple extends class_admin {
             $strReturn .= $this->objToolkit->gridFooter();
         }
 
-        $strReturn .= $arrPageViews["pageview"];
+        $strReturn .= $this->objToolkit->getSimplePageview($objArraySectionIterator, $this->getArrModule("modul"), $this->getAction(), "&systemid=".$this->getSystemid().$this->strPeAddon.$strPagerAddon);
 
         return $strReturn;
     }
@@ -244,10 +239,7 @@ abstract class class_admin_simple extends class_admin {
 
         $strListId = generateSystemid();
 
-        $arrPageViews = $this->objToolkit->getSimplePageview($objArraySectionIterator, $this->getArrModule("modul"), $this->getAction(), "&systemid=" . $this->getSystemid() . $this->strPeAddon . $strPagerAddon);
-        $arrIterables = $arrPageViews["elements"];
-
-        if(count($arrIterables) == 0)
+        if(!$objArraySectionIterator->valid())
             $strReturn .= $this->objToolkit->getTextRow($this->getLang("commons_list_empty"));
 
         if($bitSortable)
@@ -261,19 +253,15 @@ abstract class class_admin_simple extends class_admin {
 
         $arrMassActions = $this->getBatchActionHandlers($strListIdentifier);
 
-        if(count($arrIterables) > 0) {
+        /** @var $objOneIterable class_model|interface_model|interface_admin_listable */
+        foreach($objArraySectionIterator as $objOneIterable) {
 
-            /** @var $objOneIterable class_model|interface_model|interface_admin_listable */
-            foreach($arrIterables as $objOneIterable) {
+            if(!$objOneIterable->rightView())
+                continue;
 
-                if(!$objOneIterable->rightView())
-                    continue;
-
-                $strActions = $this->getActionIcons($objOneIterable, $strListIdentifier);
-                $strReturn .= $this->objToolkit->simpleAdminList($objOneIterable, $strActions, $intI++, count($arrMassActions) > 0);
-            }
+            $strActions = $this->getActionIcons($objOneIterable, $strListIdentifier);
+            $strReturn .= $this->objToolkit->simpleAdminList($objOneIterable, $strActions, $intI++, count($arrMassActions) > 0);
         }
-
 
         $strNewActions = $this->mergeNewEntryActions($this->getNewEntryAction($strListIdentifier));
         $strBatchActions = "";
@@ -290,9 +278,7 @@ abstract class class_admin_simple extends class_admin {
             $strReturn .= $this->objToolkit->listFooter();
 
 
-
-
-        $strReturn .= $arrPageViews["pageview"];
+        $strReturn .= $this->objToolkit->getSimplePageview($objArraySectionIterator, $this->getArrModule("modul"), $this->getAction(), "&systemid=" . $this->getSystemid() . $this->strPeAddon . $strPagerAddon);
 
         return $strReturn;
     }

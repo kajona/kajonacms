@@ -12,6 +12,7 @@
  * An iterator is used to walk over a collection of elements
  *
  * @package module_system
+ * @deprecated replaced by phps' Iterator
  */
 interface interface_iterator {
 

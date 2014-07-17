@@ -15,7 +15,7 @@
  */
 class class_module_packagemanager_remoteparser_v4 implements interface_packagemanager_remoteparser {
 
-    private $arrPageViews;
+    private $arrPageViews = array();
 
     function __construct($arrRemoteResponse, $intPageNumber, $intStart, $intEnd, $strProviderName, $strPagerAddon) {
         $intNumberOfTotalItems = (int) $arrRemoteResponse['numberOfTotalItems'];
@@ -27,12 +27,16 @@ class class_module_packagemanager_remoteparser_v4 implements interface_packagema
 
         $objToolkit = class_carrier::getInstance()->getObjToolkit("admin");
 
-        $this->arrPageViews = $objToolkit->getSimplePageview(
+        $this->arrPageViews["pageview"] = $objToolkit->getSimplePageview(
             $objIterator,
             "packagemanager",
             "addPackage",
             "&provider=".$strProviderName.$strPagerAddon
         );
+
+        $this->arrPageViews["elements"] = array();
+        foreach($objIterator as $objOneEntry)
+            $this->arrPageViews["elements"][] = $objOneEntry;
     }
 
     public function getArrPackages() {

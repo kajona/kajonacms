@@ -201,11 +201,8 @@ class class_module_packageserver_admin extends class_module_mediamanager_admin i
         $objArraySectionIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
         $objArraySectionIterator->setArraySection($objLog->getLogData($objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
 
-        $arrPageViews = $this->objToolkit->getSimplePageview($objArraySectionIterator, $this->getArrModule("modul"), "logs");
-
-        $arrLogsRaw = $arrPageViews["elements"];
         $arrLogs = array();
-        foreach($arrLogsRaw as $intKey => $arrOneLog) {
+        foreach($objArraySectionIterator as $intKey => $arrOneLog) {
             $arrLogs[$intKey][0] = dateToString(new class_date($arrOneLog["log_date"]));
             $arrLogs[$intKey][1] = $arrOneLog["log_ip"];
             $arrLogs[$intKey][2] = $arrOneLog["log_hostname"];
@@ -218,7 +215,7 @@ class class_module_packageserver_admin extends class_module_mediamanager_admin i
         $arrHeader[2] = $this->getLang("header_hostname");
         $arrHeader[3] = $this->getLang("header_query");
         $strReturn .= $this->objToolkit->dataTable($arrHeader, $arrLogs);
-        $strReturn .= $arrPageViews["pageview"];
+        $strReturn .= $this->objToolkit->getSimplePageview($objArraySectionIterator, $this->getArrModule("modul"), "logs");
 
         return $strReturn;
     }

@@ -97,13 +97,9 @@ class class_stats_report_searchqueries implements interface_admin_statsreports {
         $objArraySectionIterator->setPageNumber((int)(getGet("pv") != "" ? getGet("pv") : 1));
         $objArraySectionIterator->setArraySection($this->getTopQueries($objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
 
-        $arrPageViews = $this->objToolkit->getSimplePageview($objArraySectionIterator, "stats", uniStrReplace("class_stats_report_", "", get_class($this)));
-
-        $arrLogsRaw = $arrPageViews["elements"];
-
         $intI = 0;
         $arrLogs = array();
-        foreach($arrLogsRaw as $intKey => $arrOneLog) {
+        foreach($objArraySectionIterator as $intKey => $arrOneLog) {
             if($intI++ >= _stats_nrofrecords_)
                 break;
 
@@ -119,7 +115,7 @@ class class_stats_report_searchqueries implements interface_admin_statsreports {
         $arrHeader[2] = $this->objLang->getLang("header_amount", "search");
         $strReturn .= $this->objToolkit->dataTable($arrHeader, $arrLogs);
 
-        $strReturn .= $arrPageViews["pageview"];
+        $strReturn .= $this->objToolkit->getSimplePageview($objArraySectionIterator, "stats", uniStrReplace("class_stats_report_", "", get_class($this)));
 
         return $strReturn;
     }

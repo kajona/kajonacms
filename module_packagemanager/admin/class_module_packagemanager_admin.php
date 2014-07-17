@@ -74,15 +74,10 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
         $objArraySectionIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
         $objArraySectionIterator->setArraySection($objArrayIterator->getElementsOnPage((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1)));
 
-        $arrPageViews = $this->objToolkit->getSimplePageview($objArraySectionIterator, $this->getArrModule("modul"), $this->getAction());
-        $arrIterables = $arrPageViews["elements"];
-
-
-
         $strReturn .= $this->objToolkit->listHeader();
         $intI = 0;
         /** @var class_module_packagemanager_metadata $objOneMetadata */
-        foreach($arrIterables as $objOneMetadata) {
+        foreach($objArraySectionIterator as $objOneMetadata) {
 
             $strActions = "";
             $objHandler = $objManager->getPackageManagerForPath($objOneMetadata->getStrPath());
@@ -148,7 +143,7 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
             });
             </script>";
 
-        $strReturn .= $arrPageViews["pageview"];
+        $strReturn .= $this->objToolkit->getSimplePageview($objArraySectionIterator, $this->getArrModule("modul"), $this->getAction());
 
         return $strReturn;
     }
