@@ -96,7 +96,8 @@ class class_graph_jqplot implements interface_graph {
                 "ticks" => null,
                 "showTicks" => null,
                 "tickOptions" => array(
-                    "angle" => null
+                    "angle" => null,
+                    "showGridline" => true
                 )
             ),
             "yaxis"=> array(
@@ -105,7 +106,10 @@ class class_graph_jqplot implements interface_graph {
                 "max" => null,
                 "min" => null,
                 "ticks" => null,
-                "showTicks" => null
+                "showTicks" => null,
+                "tickOptions" => array(
+                    "showGridline" => true
+                )
             )
         ),
         "series" => array()
@@ -690,11 +694,13 @@ class class_graph_jqplot implements interface_graph {
 
     public function setHideXAxis($bitHideXAxis) {
         $this->arrOptions["axes"]["xaxis"]["showTicks"] = false;
+        $this->arrOptions["axes"]["xaxis"]["tickOptions"]["showGridline"] = false;
         $this->bitXAxisLabelsInvisible = $bitHideXAxis;
     }
 
     public function setHideYAxis($bitHideYAxis) {
         $this->arrOptions["axes"]["yaxis"]["showTicks"] = false;
+        $this->arrOptions["axes"]["yaxis"]["tickOptions"]["showGridline"] = false;
         $this->bitYAxisLabelsInvisible = $bitHideYAxis;
     }
 }
