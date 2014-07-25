@@ -27,16 +27,24 @@ class class_project_setup {
         }
 
 
+        $arrExcludedModules = array();
+        if(is_file(self::$strRealPath."project/system/config/excludedmodules.php")) {
+            include self::$strRealPath."project/system/config/excludedmodules.php";
+        }
+
         //Module-Constants
         $arrModules = array();
         foreach(scandir(self::$strRealPath) as $strRootFolder) {
+
+            if(!isset($arrExcludedModules[$strRootFolder]))
+                $arrExcludedModules[$strRootFolder] = array();
 
             if(strpos($strRootFolder, "core") === false)
                 continue;
 
             foreach(scandir(self::$strRealPath."/".$strRootFolder) as $strOneModule) {
 
-                if(preg_match("/^(module|element|_)+.*/i", $strOneModule) && !is_file(self::$strRealPath."/".$strRootFolder."/".$strOneModule."/.kajonaignore")) {
+                if(preg_match("/^(module|element|_)+.*/i", $strOneModule) && !in_array($strOneModule, $arrExcludedModules[$strRootFolder])) {
                     $arrModules[] = $strRootFolder."/".$strOneModule;
                 }
 
@@ -94,6 +102,8 @@ class class_project_setup {
 
         foreach($arrModules as $strSingleModule) {
             if(is_dir(self::$strRealPath."/".$strSingleModule."/templates")) {
+                //TODO: check against excluded modules
+
                 $arrEntries = scandir(self::$strRealPath."/".$strSingleModule."/templates");
                 foreach($arrEntries as $strOneFolder) {
                     if($strOneFolder != "." && $strOneFolder != ".." && is_dir(self::$strRealPath."/".$strSingleModule."/templates/".$strOneFolder)) {
