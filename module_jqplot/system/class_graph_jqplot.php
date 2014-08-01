@@ -399,14 +399,6 @@ class class_graph_jqplot implements interface_graph {
             $this->arrOptions["seriesDefaults"]["renderer"] = "$.jqplot.BarRenderer";
             $this->arrOptions["seriesDefaults"]["rendererOptions"]["barDirection"] = "horizontal";
         }
-
-
-        //special handling if only one series exists which is a bar chart
-        if(count($this->arrSeriesData) == 1 && $this->containsChartType(class_graph_jqplot_charttype::BAR)) {
-            $arrSeriesOptions = $this->arrSeriesData[0]->getArrSeriesOptions();
-            $arrSeriesOptions["rendererOptions"]["varyBarColor"] = true;
-            $this->arrSeriesData[0]->setArrSeriesOptions($arrSeriesOptions);
-        }
     }
 
 
@@ -669,6 +661,8 @@ class class_graph_jqplot implements interface_graph {
     }
 
     /**
+     * Setter for setting custom series colors.
+     *
      * @param $arrSeriesColors
      *
      * @return mixed
@@ -678,29 +672,81 @@ class class_graph_jqplot implements interface_graph {
         $this->arrOptions["seriesColors"] = $arrSeriesColors;
     }
 
+
+    /**
+     * Sets the range for the xAxis.
+     *
+     * @param int $intMin
+     * @param int $intMax
+     */
     public function setXAxisRange($intMin, $intMax) {
         $this->arrOptions["axes"]["xaxis"]["min"] = $intMin;
         $this->arrOptions["axes"]["xaxis"]["max"] = $intMax;
     }
 
+
+    /**
+     * Sets the range for the yAxis.
+     *
+     * @param int $intMin
+     * @param int $intMax
+     */
     public function setYAxisRange($intMin, $intMax) {
         $this->arrOptions["axes"]["yaxis"]["min"] = $intMin;
         $this->arrOptions["axes"]["yaxis"]["max"] = $intMax;
     }
 
+
+    /**
+     * Method to render a horizontal bar chart
+     *
+     * @param bool $bitIsHorizontalBar
+     */
     public function setBarHorizontal($bitIsHorizontalBar) {
         $this->bitIsHorizontalBar = $bitIsHorizontalBar;
     }
 
+
+    /**
+     * Hides the xAxis labels.
+     * Also hide the grid line for the xAxis.
+     *
+     * @param bool $bitHideXAxis
+     */
     public function setHideXAxis($bitHideXAxis) {
         $this->arrOptions["axes"]["xaxis"]["showTicks"] = false;
         $this->arrOptions["axes"]["xaxis"]["tickOptions"]["showGridline"] = false;
         $this->bitXAxisLabelsInvisible = $bitHideXAxis;
     }
 
+
+    /**
+     * Hides the xAxis labels.
+     * Also hide the grid line for the xAxis.
+     *
+     * @param bool $bitHideYAxis
+     */
     public function setHideYAxis($bitHideYAxis) {
         $this->arrOptions["axes"]["yaxis"]["showTicks"] = false;
         $this->arrOptions["axes"]["yaxis"]["tickOptions"]["showGridline"] = false;
         $this->bitYAxisLabelsInvisible = $bitHideYAxis;
+    }
+
+    /**
+     * For each series the bar colors will vary
+     *
+     * @param $bitVaryBarColors
+     */
+    public function setVaryBarColorsForAllSeries($bitVaryBarColors) {
+        if($this->containsChartType(class_graph_jqplot_charttype::BAR)) {
+            /** $arrData class_graph_jqplot_seriesdata */
+            foreach($this->arrSeriesData as $arrData) {
+                if($arrData->getIntChartType() == class_graph_jqplot_charttype::BAR) {
+                    $arrSeriesOptions = $arrData->getArrSeriesOptions();
+                    $arrSeriesOptions["rendererOptions"]["varyBarColor"] = $bitVaryBarColors;
+                    $arrData->setArrSeriesOptions($arrSeriesOptions);
+                }
+            }
+        }
     }
 }

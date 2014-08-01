@@ -202,7 +202,9 @@ interface interface_graph {
 
 
     /**
-     * @param $arrSeriesColors
+     * Setter for setting custom series colors.
+     *
+     * @param array $arrSeriesColors
      *
      * @return mixed
      */
