@@ -24,16 +24,16 @@ KAJONA.admin.jqplotHelper = {
 
 
         this.postPlot = function() {
-            if(this.objPostPlotOptions.hasOwnProperty("intNrOfWrittenLabelsXAxis") && this.objPostPlotOptions["intNrOfWrittenLabelsXAxis"] != null) {
+            if (this.objPostPlotOptions.hasOwnProperty("intNrOfWrittenLabelsXAxis") && this.objPostPlotOptions["intNrOfWrittenLabelsXAxis"] != null) {
                 KAJONA.admin.jqplotHelper.setLabelsInvisible(this.strChartId, this.objPostPlotOptions["intNrOfWrittenLabelsXAxis"], "xaxis");
             }
-            if(this.objPostPlotOptions.hasOwnProperty("intNrOfWrittenLabelsYAxis") && this.objPostPlotOptions["intNrOfWrittenLabelsYAxis"] != null) {
+            if (this.objPostPlotOptions.hasOwnProperty("intNrOfWrittenLabelsYAxis") && this.objPostPlotOptions["intNrOfWrittenLabelsYAxis"] != null) {
                 KAJONA.admin.jqplotHelper.setLabelsInvisible(this.strChartId, this.objPostPlotOptions["intNrOfWrittenLabelsYAxis"], "yaxis");
             }
-            if(this.objPostPlotOptions.hasOwnProperty("bitXAxisLabelsInvisible") && this.objPostPlotOptions["bitXAxisLabelsInvisible"]) {
+            if (this.objPostPlotOptions.hasOwnProperty("bitXAxisLabelsInvisible") && this.objPostPlotOptions["bitXAxisLabelsInvisible"]) {
                 KAJONA.admin.jqplotHelper.setAxisInvisible(this.strChartId, "xaxis");
             }
-            if(this.objPostPlotOptions.hasOwnProperty("bitXAxisLabelsInvisible") && this.objPostPlotOptions["bitXAxisLabelsInvisible"]) {
+            if (this.objPostPlotOptions.hasOwnProperty("bitXAxisLabelsInvisible") && this.objPostPlotOptions["bitXAxisLabelsInvisible"]) {
                 KAJONA.admin.jqplotHelper.setAxisInvisible(this.strChartId, "yaxis");
             }
         };
@@ -69,33 +69,34 @@ KAJONA.admin.jqplotHelper = {
      *
      * @param strChartId
      * @param intNoOfWrittenLabels
+     * @param strAxis
      */
-    setLabelsInvisible : function(strChartId, intNoOfWrittenLabels, strAxis) {
+    setLabelsInvisible : function (strChartId, intNoOfWrittenLabels, strAxis) {
         //get the axis canvas ticks
-        var tickArray = $('#'+strChartId+' div.jqplot-'+strAxis+' canvas.jqplot-'+strAxis+'-tick');
+        var tickArray = $('#' + strChartId + ' div.jqplot-' + strAxis + ' canvas.jqplot-' + strAxis + '-tick');
         var noOfTicks = tickArray.length;
 
         if(noOfTicks > intNoOfWrittenLabels) {
-            var modulo = Math.ceil(noOfTicks/(intNoOfWrittenLabels));
+            var modulo = Math.ceil(noOfTicks / intNoOfWrittenLabels);
 
             var startFor = 0;
-            var endFor = noOfTicks
+            var endFor = noOfTicks;
             var numberTicksNotInvisible = 0;
 
             //always keep first an last visible
-            if(intNoOfWrittenLabels >=2) {
+            if(intNoOfWrittenLabels >= 2) {
                 startFor = 1;
-                endFor = noOfTicks-1;
+                endFor = noOfTicks - 1;
                 numberTicksNotInvisible = 2;
             }
 
             for(var i = startFor; i<endFor; i++ ) {
                 if(numberTicksNotInvisible == intNoOfWrittenLabels) {
-                    $(tickArray[i]).css('display', 'none')
+                    $(tickArray[i]).css('display', 'none');
                     continue;
                 }
                 if((i%modulo)!=0) {
-                    $(tickArray[i]).css('display', 'none')
+                    $(tickArray[i]).css('display', 'none');
                     continue;
                 }
                 numberTicksNotInvisible++;
@@ -106,16 +107,16 @@ KAJONA.admin.jqplotHelper = {
      * Sets the created canvasLabels invisible depending on the intNoOfWrittenLabels
      *
      * @param strChartId
-     * @param intNoOfWrittenLabels
+     * @param strAxis
      */
-    setAxisInvisible : function(strChartId, strAxis) {
+    setAxisInvisible : function (strChartId, strAxis) {
         var tickArray = $('#'+strChartId+' div.jqplot-'+strAxis).hide();
     },
-    mouseLeave : function(ev, gridpos, datapos, neighbor, plot, tooltipId) {
+    mouseLeave : function (ev, gridpos, datapos, neighbor, plot, tooltipId) {
         $('#jqplot_tooltip').remove();
         this.previousNeighbor = null;
     },
-    mouseMove : function(ev, gridpos, datapos, neighbor, plot, tooltipId) {
+    mouseMove : function (ev, gridpos, datapos, neighbor, plot, tooltipId) {
         //Check if a datapoint(neighbor) is selected
         if(neighbor==null) {
             //no datapoint selected
@@ -165,7 +166,7 @@ KAJONA.admin.jqplotHelper = {
                 || (this.previousNeighbor.seriesIndex != neighbor.seriesIndex) //different series --> create new point
                 || ((this.previousNeighbor.seriesIndex == neighbor.seriesIndex) && (this.previousNeighbor.pointIndex != neighbor.pointIndex)))//same series but different point --> create new point
             {
-                this.showTooltip(ev.pageX, ev.pageY, objTooltip , tooltipId);
+                this.showTooltip(ev.pageX, ev.pageY, objTooltip, tooltipId, false);
                 this.previousNeighbor = neighbor;
             }
             //same series and point -> only move tooltip
@@ -231,7 +232,4 @@ KAJONA.admin.jqplotHelper = {
                 .css("left", left);
         }
     }
-
-
-
 };
