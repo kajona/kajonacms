@@ -20,6 +20,7 @@ class class_element_tellafriend_admin extends class_element_admin implements int
     /**
      * @var string
      * @tableColumn element_tellafriend.tellafriend_template
+     * @tableColumnDatatype char254
      *
      * @fieldType template
      * @fieldLabel template
@@ -31,6 +32,7 @@ class class_element_tellafriend_admin extends class_element_admin implements int
     /**
      * @var string
      * @tableColumn element_tellafriend.tellafriend_error
+     * @tableColumnDatatype char254
      *
      * @fieldType page
      * @fieldLabel tellafriend_error
@@ -40,6 +42,7 @@ class class_element_tellafriend_admin extends class_element_admin implements int
     /**
      * @var string
      * @tableColumn element_tellafriend.tellafriend_success
+     * @tableColumnDatatype char254
      *
      * @fieldType page
      * @fieldLabel tellafriend_success

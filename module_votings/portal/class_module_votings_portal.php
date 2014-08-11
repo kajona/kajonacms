@@ -90,9 +90,11 @@ class class_module_votings_portal extends class_portal implements interface_port
                         $strAnswers = "";
                         $strAnswerTemplateID = $strListTemplateID = $this->objTemplate->readTemplate("/module_votings/" . $this->arrElementData["char2"], "voting_voting_option");
                         //load the list of answers
-                        $arrAnswers = $objVoting->getAllAnswers(true);
-                        foreach($arrAnswers as /** @var class_module_votings_answer */
-                                $objOneAnswer) {
+                        /** @var class_module_votings_answer $objOneAnswer */
+                        foreach(class_module_votings_answer::getObjectList() as $objOneAnswer) {
+                            if($objOneAnswer->getIntRecordStatus() == 0)
+                                continue;
+
                             $arrTemplate = array();
                             $arrTemplate["voting_systemid"] = $objVoting->getSystemid();
                             $arrTemplate["answer_systemid"] = $objOneAnswer->getSystemid();
@@ -107,7 +109,7 @@ class class_module_votings_portal extends class_portal implements interface_port
                         $arrTemplate = array();
                         $arrTemplate["voting_answers"] = $strAnswers;
                         $arrTemplate["voting_systemid"] = $objVoting->getSystemid();
-                        $arrTemplate["voting_action"] = getLinkPortalHref($this->getPagename(), "", "submitVoting");
+                        $arrTemplate["voting_action"] = class_link::getLinkPortalHref($this->getPagename(), "", "submitVoting");
 
                         $strVotingContent .= $this->fillTemplate($arrTemplate, $strFormTemplateID);
                     }
@@ -124,17 +126,19 @@ class class_module_votings_portal extends class_portal implements interface_port
                 $strAnswers = "";
                 $intTotalVotes = 0;
                 $strAnswerTemplateID = $this->objTemplate->readTemplate("/module_votings/" . $this->arrElementData["char2"], "voting_result_answer");
-                //load the list of answers
-                $arrAnswers = $objVoting->getAllAnswers(true);
 
                 //first run to sum up
-                foreach($arrAnswers as /** @var class_module_votings_answer */
-                        $objOneAnswer) {
+                /** @var class_module_votings_answer $objOneAnswer */
+                foreach(class_module_votings_answer::getObjectList() as $objOneAnswer) {
+                    if($objOneAnswer->getIntRecordStatus() == 0)
+                        continue;
                     $intTotalVotes += $objOneAnswer->getIntHits();
                 }
 
-                foreach($arrAnswers as /** @var class_module_votings_answer */
-                        $objOneAnswer) {
+                /** @var class_module_votings_answer $objOneAnswer */
+                foreach(class_module_votings_answer::getObjectList() as $objOneAnswer) {
+                    if($objOneAnswer->getIntRecordStatus() == 0)
+                        continue;
                     $arrTemplate = array();
                     $arrTemplate["answer_text"] = $objOneAnswer->getStrText();
                     $arrTemplate["answer_hits"] = $objOneAnswer->getIntHits();

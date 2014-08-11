@@ -24,6 +24,7 @@ class class_module_eventmanager_event extends class_model implements interface_m
     /**
      * @var string
      * @tableColumn em_event.em_ev_title
+     * @tableColumnDatatype char254
      * @versionable
      * @addSearchIndex
      *
@@ -39,6 +40,7 @@ class class_module_eventmanager_event extends class_model implements interface_m
     /**
      * @var string
      * @tableColumn em_event.em_ev_description
+     * @tableColumnDatatype text
      * @versionable
      * @blockEscaping
      * @addSearchIndex
@@ -54,6 +56,7 @@ class class_module_eventmanager_event extends class_model implements interface_m
     /**
      * @var string
      * @tableColumn em_event.em_ev_location
+     * @tableColumnDatatype char254
      * @versionable
      * @addSearchIndex
      *
@@ -68,6 +71,7 @@ class class_module_eventmanager_event extends class_model implements interface_m
     /**
      * @var int
      * @tableColumn em_event.em_ev_eventstatus
+     * @tableColumnDatatype int
      * @versionable
      *
      * @fieldType dropdown
@@ -79,6 +83,7 @@ class class_module_eventmanager_event extends class_model implements interface_m
     /**
      * @var int
      * @tableColumn em_event.em_ev_participant_registration
+     * @tableColumnDatatype int
      * @versionable
      *
      * @fieldType yesno
@@ -91,6 +96,7 @@ class class_module_eventmanager_event extends class_model implements interface_m
     /**
      * @var int
      * @tableColumn em_event.em_ev_participant_limit
+     * @tableColumnDatatype int
      * @versionable
      *
      * @fieldType yesno
@@ -102,6 +108,7 @@ class class_module_eventmanager_event extends class_model implements interface_m
     /**
      * @var int
      * @tableColumn em_event.em_ev_participant_max
+     * @tableColumnDatatype int
      * @versionable
      *
      * @fieldType text
@@ -217,20 +224,22 @@ class class_module_eventmanager_event extends class_model implements interface_m
             $arrParams[] = $intStatusFilter;
         }
 
-        $strQuery = "SELECT system_id
+        $strQuery = "SELECT *
                        FROM "._dbprefix_."em_event,
                             "._dbprefix_."system,
+                            "._dbprefix_."system_right,
                             "._dbprefix_."system_date
                       WHERE system_id = em_ev_id
+                        AND system_id = right_id
                         AND system_id = system_date_id
                         ".$strAddon."
                         ".($bitOnlyActive ? " AND system_status = 1 " : "")."    
                       ORDER BY system_date_start ".($intOrder == "1" ? " ASC " : " DESC ").", em_ev_title ASC";
         $arrQuery = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, $arrParams, $intStart, $intEnd);
-
+        class_orm_rowcache::addArrayOfInitRows($arrQuery);
         $arrReturn = array();
         foreach($arrQuery as $arrSingleRow)
-            $arrReturn[] = new class_module_eventmanager_event($arrSingleRow["system_id"]);
+            $arrReturn[] = class_objectfactory::getInstance()->getObject($arrSingleRow["system_id"]);
 
         return $arrReturn;
     }

@@ -27,6 +27,7 @@ class class_module_system_aspect extends class_model implements interface_model,
     /**
      * @var string
      * @tableColumn aspect_name
+     * @tableColumnDatatype char254
      * @fieldType text
      * @fieldMandatory
      *
@@ -37,6 +38,7 @@ class class_module_system_aspect extends class_model implements interface_model,
     /**
      * @var bool
      * @tableColumn aspect_default
+     * @tableColumnDatatype int
      * @fieldType yesno
      * @fieldMandatory
      */
@@ -121,17 +123,11 @@ class class_module_system_aspect extends class_model implements interface_model,
      * @static
      */
     public static function getObjectList($bitJustActive = false, $intStart = null, $intEnd = null) {
-        $strQuery = "SELECT system_id
-                     FROM "._dbprefix_."aspects, "._dbprefix_."system
-		             WHERE system_id = aspect_id
-		             ".($bitJustActive ? "AND system_status != 0 " : "")."
-		             ORDER BY system_sort ASC, aspect_name ASC";
-        $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array(), $intStart, $intEnd);
-        $arrReturn = array();
-        foreach($arrIds as $arrOneId)
-            $arrReturn[] = new class_module_system_aspect($arrOneId["system_id"]);
-
-        return $arrReturn;
+        $objOrm = new class_orm_objectlist();
+        if($bitJustActive) {
+            $objOrm->addWhereRestriction(new class_orm_objectlist_restriction("AND system_status != 0"));
+        }
+        return $objOrm->getObjectList(__CLASS__, "", $intStart, $intEnd);
     }
 
 
@@ -143,14 +139,11 @@ class class_module_system_aspect extends class_model implements interface_model,
      * @return int
      */
     public static function getObjectCount($bitJustActive = false) {
-        $strQuery = "SELECT COUNT(*)
-                     FROM "._dbprefix_."aspects, "._dbprefix_."system
-                     WHERE system_id = aspect_id
-                     ".($bitJustActive ? "AND system_status != 0 " : "")."";
-        $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array());
-
-        return (int)$arrRow["COUNT(*)"];
-
+        $objOrm = new class_orm_objectlist();
+        if($bitJustActive) {
+            $objOrm->addWhereRestriction(new class_orm_objectlist_restriction("AND system_status != 0"));
+        }
+        return $objOrm->getObjectCount(__CLASS__);
     }
 
 
@@ -197,15 +190,21 @@ class class_module_system_aspect extends class_model implements interface_model,
      */
     public static function getDefaultAspect($bitIgnorePermissions = false) {
         //try to load the default language
-        $strQuery = "SELECT system_id
+        $strQuery = "SELECT *
                  FROM "._dbprefix_."aspects,
+                      "._dbprefix_."system_right,
                       "._dbprefix_."system
+            LEFT JOIN "._dbprefix_."system_date
+                   ON system_id = system_date_id
 	             WHERE system_id = aspect_id
+	             AND system_id = right_id
 	             AND aspect_default = 1
 	             AND system_status = 1";
+
         $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array());
         if(count($arrRow) > 0  && ($bitIgnorePermissions || class_carrier::getInstance()->getObjRights()->rightView($arrRow["system_id"]))) {
-            return new class_module_system_aspect($arrRow["system_id"]);
+            class_orm_rowcache::addSingleInitRow($arrRow);
+            return class_objectfactory::getInstance()->getObject($arrRow["system_id"]);
         }
         else {
             if(count(class_module_system_aspect::getObjectList(true)) > 0) {
@@ -227,14 +226,20 @@ class class_module_system_aspect extends class_model implements interface_model,
      * @return class_module_system_aspect or null if not found
      */
     public static function getAspectByName($strName) {
-        $strQuery = "SELECT system_id
-                 FROM "._dbprefix_."aspects, "._dbprefix_."system
+        $strQuery = "SELECT *
+                 FROM "._dbprefix_."aspects,
+                      "._dbprefix_."system_right,
+                      "._dbprefix_."system
+            LEFT JOIN "._dbprefix_."system_date
+                   ON system_id = system_date_id
 	             WHERE system_id = aspect_id
+	             AND system_id = right_id
 	             AND aspect_name = ?
 	             ORDER BY system_sort ASC, system_comment ASC";
         $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array($strName));
         if(count($arrRow) > 0) {
-            return new class_module_system_aspect($arrRow["system_id"]);
+            class_orm_rowcache::addSingleInitRow($arrRow);
+            return class_objectfactory::getInstance()->getObject($arrRow["system_id"]);
         }
         else {
             return null;

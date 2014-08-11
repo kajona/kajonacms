@@ -230,7 +230,7 @@ class class_db {
 
 
     /**
-     * Returns one row from a resultset
+     * Returns one row from a result-set
      *
      * @param string $strQuery
      * @param int $intNr
@@ -249,8 +249,8 @@ class class_db {
 
 
     /**
-     * Returns one row from a resultset.
-     * Makes use of preprared statements.
+     * Returns one row from a result-set.
+     * Makes use of prepared statements.
      *
      * @param string $strQuery
      * @param array $arrParams
@@ -686,7 +686,7 @@ class class_db {
 
     /**
      * Looks up the columns of the given table.
-     * Should return an array for each row consting of:
+     * Should return an array for each row consisting of:
      * array ("columnName", "columnType")
      *
      * @param string $strTableName
@@ -991,8 +991,17 @@ class class_db {
     public function flushQueryCache() {
         //class_logger::getInstance(class_logger::DBLOG)->addLogRow("Flushing query cache", class_logger::$levelInfo);
         $this->arrQueryCache = array();
-        $this->arrTablesCache = array();
         class_objectfactory::getInstance()->flushCache();
+    }
+
+    /**
+     * Method to flush the table-cache.
+     * Since the tables won't change during regular operations,
+     * flushing the tables cache is only required during package updates / installations
+     * @return void
+     */
+    public function flushTablesCache() {
+        $this->arrTablesCache = array();
     }
 
     /**

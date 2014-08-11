@@ -24,6 +24,8 @@ class class_module_messaging_message extends class_model implements interface_mo
     /**
      * @var string
      * @tableColumn message_user
+     * @tableColumnDatatype char20
+     * @tableColumnIndex
      * @fieldType user
      * @fieldLabel message_to
      * @fieldMandatory
@@ -33,6 +35,7 @@ class class_module_messaging_message extends class_model implements interface_mo
     /**
      * @var string
      * @tableColumn message_title
+     * @tableColumnDatatype char254
      * @fieldType text
      * @fieldLabel message_subject
      * @fieldMandatory
@@ -44,6 +47,7 @@ class class_module_messaging_message extends class_model implements interface_mo
     /**
      * @var string
      * @tableColumn message_body
+     * @tableColumnDatatype text
      * @fieldType textarea
      * @fieldLabel message_body
      * @fieldMandatory
@@ -56,6 +60,8 @@ class class_module_messaging_message extends class_model implements interface_mo
     /**
      * @var bool
      * @tableColumn message_read
+     * @tableColumnDatatype int
+     * @tableColumnIndex
      */
     private $bitRead = 0;
 
@@ -64,24 +70,28 @@ class class_module_messaging_message extends class_model implements interface_mo
     /**
      * @var string
      * @tableColumn message_internalidentifier
+     * @tableColumnDatatype char254
      */
     private $strInternalIdentifier = "";
 
     /**
      * @var string
      * @tableColumn message_provider
+     * @tableColumnDatatype char254
      */
     private $strMessageProvider = "";
 
     /**
      * @var string
      * @tableColumn message_sender
+     * @tableColumnDatatype char20
      */
     private $strSenderId = "";
 
     /**
      * @var string
      * @tableColumn message_messageref
+     * @tableColumnDatatype char20
      * @fieldType hidden
      */
     private $strMessageRefId = "";
@@ -179,16 +189,22 @@ class class_module_messaging_message extends class_model implements interface_mo
         if($strUserid == "")
             $strUserid = class_carrier::getInstance()->getObjSession()->getUserID();
 
-        $strQuery = "SELECT system_id
-                     FROM "._dbprefix_."messages, "._dbprefix_."system
+        $strQuery = "SELECT *
+                     FROM "._dbprefix_."messages,
+                          "._dbprefix_."system_right,
+                          "._dbprefix_."system
+                 LEFT JOIN "._dbprefix_."system_date
+                        ON system_id = system_date_id
 		            WHERE system_id = message_id
 		              AND message_user = ?
+		              AND system_id = right_id
 		         ORDER BY message_read ASC, system_create_date DESC";
 
         $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array($strUserid), $intStart, $intEnd);
+        class_orm_rowcache::addArrayOfInitRows($arrIds);
         $arrReturn = array();
         foreach($arrIds as $arrOneId)
-            $arrReturn[] = new class_module_messaging_message($arrOneId["system_id"]);
+            $arrReturn[] = class_objectfactory::getInstance()->getObject($arrOneId["system_id"]);
 
         return $arrReturn;
     }
@@ -205,16 +221,22 @@ class class_module_messaging_message extends class_model implements interface_mo
      * @static
      */
     public static function getMessagesByIdentifier($strIdentifier, $intStart = null, $intEnd = null) {
-        $strQuery = "SELECT system_id
-                     FROM "._dbprefix_."messages, "._dbprefix_."system
+        $strQuery = "SELECT *
+                     FROM "._dbprefix_."messages,
+                          "._dbprefix_."system_right,
+                          "._dbprefix_."system
+                LEFT JOIN "._dbprefix_."system_date
+                       ON system_id = system_date_id
 		            WHERE system_id = message_id
+		              AND system_id = right_id
 		              AND message_internalidentifier = ?
 		         ORDER BY message_read ASC, system_create_date DESC";
 
         $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array($strIdentifier), $intStart, $intEnd);
+        class_orm_rowcache::addArrayOfInitRows($arrIds);
         $arrReturn = array();
         foreach($arrIds as $arrOneId)
-            $arrReturn[] = new class_module_messaging_message($arrOneId["system_id"]);
+            $arrReturn[] = class_objectfactory::getInstance()->getObject($arrOneId["system_id"]);
 
         return $arrReturn;
     }
@@ -230,16 +252,13 @@ class class_module_messaging_message extends class_model implements interface_mo
      * @return int
      */
     public static function getNumberOfMessagesForUser($strUserid, $bitOnlyUnread = false) {
-
-        $arrParams = array($strUserid);
-
         $strQuery = "SELECT COUNT(*)
                      FROM "._dbprefix_."messages, "._dbprefix_."system
 		            WHERE system_id = message_id
 		              AND message_user = ?
 		              ".($bitOnlyUnread ? " AND (message_read IS NULL OR message_read = 0 )" : "")."";
 
-        $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, $arrParams);
+        $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array($strUserid));
         return $arrRow["COUNT(*)"];
     }
 

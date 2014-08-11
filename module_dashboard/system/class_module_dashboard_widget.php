@@ -22,30 +22,35 @@ class class_module_dashboard_widget extends class_model implements interface_mod
     /**
      * @var string
      * @tableColumn dashboard_column
+     * @tableColumnDatatype char254
      */
     private $strColumn = "";
 
     /**
      * @var string
      * @tableColumn dashboard_user
+     * @tableColumnDatatype char20
      */
     private $strUser = "";
 
     /**
      * @var string
      * @tableColumn dashboard_aspect
+     * @tableColumnDatatype char254
      */
     private $strAspect = "";
 
     /**
      * @var string
      * @tableColumn dashboard_class
+     * @tableColumnDatatype char254
      */
     private $strClass = "";
 
     /**
      * @var string
      * @tableColumn dashboard_content
+     * @tableColumnDatatype text
      * @blockEscaping
      */
     private $strContent = "";
@@ -116,10 +121,14 @@ class class_module_dashboard_widget extends class_model implements interface_mod
         $arrParams[] = $strColumn;
         $arrParams[] = self::getWidgetsRootNodeForUser($strUserId, $strAspectFilter);
 
-        $strQuery = "SELECT system_id
+        $strQuery = "SELECT *
         			  FROM "._dbprefix_."dashboard,
+        			  	   "._dbprefix_."system_right,
         			  	   "._dbprefix_."system
+                 LEFT JOIN "._dbprefix_."system_date
+                        ON system_id = system_date_id
         			 WHERE dashboard_user = ?
+        			   AND system_id = right_id
         			   AND dashboard_column = ?
         			   AND dashboard_id = system_id
         			   AND system_prev_id = ?
@@ -130,7 +139,8 @@ class class_module_dashboard_widget extends class_model implements interface_mod
         $arrReturn = array();
         if(count($arrRows) > 0) {
             foreach ($arrRows as $arrOneRow) {
-                $arrReturn[] = new class_module_dashboard_widget($arrOneRow["system_id"]);
+                class_orm_rowcache::addSingleInitRow($arrOneRow);
+                $arrReturn[] = class_objectfactory::getInstance()->getObject($arrOneRow["system_id"]);
             }
 
         }
@@ -192,6 +202,7 @@ class class_module_dashboard_widget extends class_model implements interface_mod
      * Use with care!
      *
      * @return class_module_dashboard_widget[]
+     * @deprecated will be removed as soon as the v3->v4 update sequences will be removed
      */
     public static function getAllWidgets() {
 

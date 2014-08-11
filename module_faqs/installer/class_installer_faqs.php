@@ -17,27 +17,15 @@ class class_installer_faqs extends class_installer_base implements interface_ins
 
     public function install() {
 		$strReturn = "";
+        $objSchemamanager = new class_orm_schemamanager();
 
 		//faqs cat-------------------------------------------------------------------------------------
 		$strReturn .= "Installing table faqs_category...\n";
-
-		$arrFields = array();
-		$arrFields["faqs_cat_id"] 		= array("char20", false);
-		$arrFields["faqs_cat_title"]	= array("char254", true);
-
-		if(!$this->objDB->createTable("faqs_category", $arrFields, array("faqs_cat_id")))
-			$strReturn .= "An error occurred! ...\n";
+        $objSchemamanager->createTable("class_module_faqs_category");
 
 		//faqs----------------------------------------------------------------------------------
 		$strReturn .= "Installing table faqs...\n";
-
-		$arrFields = array();
-		$arrFields["faqs_id"] 		= array("char20", false);
-		$arrFields["faqs_question"]	= array("text", true);
-		$arrFields["faqs_answer"]	= array("text", true);
-
-		if(!$this->objDB->createTable("faqs", $arrFields, array("faqs_id")))
-			$strReturn .= "An error occurred! ...\n";
+        $objSchemamanager->createTable("class_module_faqs_faq");
 
 		//faqs_member----------------------------------------------------------------------------------
 		$strReturn .= "Installing table faqs_member...\n";

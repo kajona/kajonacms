@@ -29,6 +29,7 @@ class class_module_pages_folder extends class_model implements interface_model, 
      * @fieldType text
      * @fieldLabel ordner_name
      * @tableColumn folder_name
+     * @tableColumnDatatype char254
      */
     private $strName = "";
 
@@ -52,7 +53,7 @@ class class_module_pages_folder extends class_model implements interface_model, 
      * @return mixed
      */
     public function getSearchAdminLinkForObject() {
-        return getLinkAdminHref("pages", "list", "&systemid=".$this->getSystemid());
+        return class_link::getLinkAdminHref("pages", "list", "&systemid=".$this->getSystemid());
     }
 
 
@@ -121,19 +122,7 @@ class class_module_pages_folder extends class_model implements interface_model, 
             $strSystemid = class_module_system_module::getModuleByName("pages")->getSystemid();
         }
 
-        //Get all folders
-        $strQuery = "SELECT system_id FROM " . _dbprefix_ . "system
-		              WHERE system_module_nr=?
-		                AND system_prev_id=?
-		             ORDER BY system_sort ASC";
-
-        $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array(_pages_folder_id_, $strSystemid));
-        $arrReturn = array();
-        foreach($arrIds as $arrOneId) {
-            $arrReturn[] = new class_module_pages_folder($arrOneId["system_id"]);
-        }
-
-        return $arrReturn;
+        return self::getObjectList($strSystemid);
     }
 
     /**
@@ -149,21 +138,8 @@ class class_module_pages_folder extends class_model implements interface_model, 
             $strFolderid = class_module_system_module::getModuleByName("pages")->getSystemid();
         }
 
-        $strQuery = "SELECT system_id
-						FROM " . _dbprefix_ . "page as page,
-							 " . _dbprefix_ . "system as system
-						WHERE system.system_prev_id=?
-							AND system.system_module_nr=?
-							AND system.system_id = page.page_id
-						ORDER BY system.system_sort ASC ";
+        return class_module_pages_page::getObjectList($strFolderid);
 
-        $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array($strFolderid, _pages_modul_id_));
-        $arrReturn = array();
-        foreach($arrIds as $arrOneId) {
-            $arrReturn[] = new class_module_pages_page($arrOneId["system_id"]);
-        }
-
-        return $arrReturn;
     }
 
     /**

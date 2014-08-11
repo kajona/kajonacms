@@ -27,6 +27,7 @@ class class_installer_system extends class_installer_base implements interface_i
 
     public function install() {
         $strReturn = "";
+        $objManager = new class_orm_schemamanager();
 
         // System table ---------------------------------------------------------------------------------
         $strReturn .= "Installing table system...\n";
@@ -71,22 +72,8 @@ class class_installer_system extends class_installer_base implements interface_i
 
         // Modul table ----------------------------------------------------------------------------------
         $strReturn .= "Installing table system_module...\n";
+        $objManager->createTable("class_module_system_module");
 
-        $arrFields = array();
-        $arrFields["module_id"] = array("char20", false);
-        $arrFields["module_nr"] = array("int", true);
-        $arrFields["module_name"] = array("char254", true);
-        $arrFields["module_filenameportal"] = array("char254", true);
-        $arrFields["module_xmlfilenameportal"] = array("char254", true);
-        $arrFields["module_filenameadmin"] = array("char254", true);
-        $arrFields["module_xmlfilenameadmin"] = array("char254", true);
-        $arrFields["module_version"] = array("char254", true);
-        $arrFields["module_date"] = array("int", true);
-        $arrFields["module_navigation"] = array("int", true);
-        $arrFields["module_aspect"] = array("char254", true);
-
-        if(!$this->objDB->createTable("system_module", $arrFields, array("module_id")))
-            $strReturn .= "An error occurred! ...\n";
 
         // Date table -----------------------------------------------------------------------------------
         $strReturn .= "Installing table system_date...\n";
@@ -238,17 +225,9 @@ class class_installer_system extends class_installer_base implements interface_i
 
         //languages -------------------------------------------------------------------------------------
         $strReturn .= "Installing table languages...\n";
-
-        $arrFields = array();
-        $arrFields["language_id"] = array("char20", false);
-        $arrFields["language_name"] = array("char254", true);
-        $arrFields["language_default"] = array("int", true);
-
-        if(!$this->objDB->createTable("languages", $arrFields, array("language_id")))
-            $strReturn .= "An error occurred! ...\n";
+        $objManager->createTable("class_module_languages_language");
 
         $strReturn .= "Installing table languages_languageset...\n";
-
         $arrFields = array();
         $arrFields["languageset_id"] = array("char20", false);
         $arrFields["languageset_language"] = array("char20", true);
@@ -259,14 +238,7 @@ class class_installer_system extends class_installer_base implements interface_i
 
         //aspects --------------------------------------------------------------------------------------
         $strReturn .= "Installing table aspects...\n";
-
-        $arrFields = array();
-        $arrFields["aspect_id"] = array("char20", false);
-        $arrFields["aspect_name"] = array("char254", true);
-        $arrFields["aspect_default"] = array("int", true);
-
-        if(!$this->objDB->createTable("aspects", $arrFields, array("aspect_id")))
-            $strReturn .= "An error occurred! ...\n";
+        $objManager->createTable("class_module_system_aspect");
 
         //changelog -------------------------------------------------------------------------------------
         $strReturn .= "Installing table changelog...\n";
@@ -274,30 +246,9 @@ class class_installer_system extends class_installer_base implements interface_i
 
         //messages
         $strReturn .= "Installing table messages...\n";
+        $objManager->createTable("class_module_messaging_message");
+        $objManager->createTable("class_module_messaging_config");
 
-        $arrFields = array();
-        $arrFields["message_id"] = array("char20", false);
-        $arrFields["message_title"] = array("char254", true);
-        $arrFields["message_body"] = array("text", true);
-        $arrFields["message_read"] = array("int", true);
-        $arrFields["message_user"] = array("char20", true);
-        $arrFields["message_provider"] = array("char254", true);
-        $arrFields["message_internalidentifier"] = array("char254", true);
-        $arrFields["message_sender"] = array("char20", true);
-        $arrFields["message_messageref"] = array("char20", true);
-
-        if(!$this->objDB->createTable("messages", $arrFields, array("message_id"), array("message_user", "message_read")))
-            $strReturn .= "An error occurred! ...\n";
-
-        $arrFields = array();
-        $arrFields["config_id"] = array("char20", false);
-        $arrFields["config_provider"] = array("char254", true);
-        $arrFields["config_user"] = array("char20", true);
-        $arrFields["config_enabled"] = array("int", true);
-        $arrFields["config_bymail"] = array("int", true);
-
-        if(!$this->objDB->createTable("messages_cfg", $arrFields, array("config_id")))
-            $strReturn .= "An error occurred! ...\n";
 
 
         //Now we have to register module by module

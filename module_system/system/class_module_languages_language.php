@@ -22,6 +22,7 @@ class class_module_languages_language extends class_model implements interface_m
     /**
      * @var string
      * @tableColumn language_name
+     * @tableColumnDatatype char254
      *
      * @fieldType dropdown
      * @fieldLabel commons_title
@@ -35,6 +36,7 @@ class class_module_languages_language extends class_model implements interface_m
     /**
      * @var bool
      * @tableColumn language_default
+     * @tableColumnDatatype int
      *
      * @fieldType yesno
      * @fieldMandatory
@@ -113,19 +115,12 @@ class class_module_languages_language extends class_model implements interface_m
      * @static
      */
     public static function getObjectList($bitJustActive = false, $intStart = null, $intEnd = null) {
-        $strQuery = "SELECT system_id
-                     FROM " . _dbprefix_ . "languages, " . _dbprefix_ . "system
-		             WHERE system_id = language_id
-		             " . ($bitJustActive ? "AND system_status != 0 " : "") . "
-		             ORDER BY system_sort ASC, system_comment ASC";
 
-        $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array(), $intStart, $intEnd);
-        $arrReturn = array();
-        foreach($arrIds as $arrOneId) {
-            $arrReturn[] = new class_module_languages_language($arrOneId["system_id"]);
-        }
+        $objOrmList = new class_orm_objectlist();
+        if($bitJustActive)
+            $objOrmList->addWhereRestriction(new class_orm_objectlist_restriction(" AND system_status != 0 "));
 
-        return $arrReturn;
+        return $objOrmList->getObjectList(__CLASS__, "", $intStart, $intEnd);
     }
 
     /**
@@ -136,14 +131,12 @@ class class_module_languages_language extends class_model implements interface_m
      * @return int
      */
     public static function getNumberOfLanguagesAvailable($bitJustActive = false) {
-        $strQuery = "SELECT COUNT(*)
-                     FROM " . _dbprefix_ . "languages, " . _dbprefix_ . "system
-                     WHERE system_id = language_id
-                     " . ($bitJustActive ? "AND system_status != 0 " : "") . "";
-        $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array());
 
-        return (int)$arrRow["COUNT(*)"];
+        $objOrmList = new class_orm_objectlist();
+        if($bitJustActive)
+            $objOrmList->addWhereRestriction(new class_orm_objectlist_restriction(" AND system_status != 0 "));
 
+        return $objOrmList->getObjectCount(__CLASS__);
     }
 
     /**
@@ -156,14 +149,12 @@ class class_module_languages_language extends class_model implements interface_m
      * @return  class_module_languages_language or false
      */
     public static function getLanguageByName($strName) {
-        $strQuery = "SELECT system_id
-                     FROM " . _dbprefix_ . "languages, " . _dbprefix_ . "system
-		             WHERE system_id = language_id
-		             AND language_name = ?
-		             ORDER BY system_sort ASC, system_comment ASC";
-        $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array($strName));
-        if(count($arrRow) > 0) {
-            return new class_module_languages_language($arrRow["system_id"]);
+
+        $objOrmList = new class_orm_objectlist();
+        $objOrmList->addWhereRestriction(new class_orm_objectlist_restriction("AND language_name = ?", $strName));
+        $arrReturn = $objOrmList->getObjectList(__CLASS__);
+        if(count($arrReturn) > 0) {
+            return new $arrReturn[0];
         }
         else {
             return false;
@@ -374,15 +365,21 @@ class class_module_languages_language extends class_model implements interface_m
      */
     public static function getDefaultLanguage() {
         //try to load the default language
-        $strQuery = "SELECT system_id
-                 FROM " . _dbprefix_ . "languages, " . _dbprefix_ . "system
+        $strQuery = "SELECT *
+                 FROM " . _dbprefix_ . "languages,
+                      " . _dbprefix_ . "system_right,
+                      " . _dbprefix_ . "system
+                LEFT JOIN "._dbprefix_."system_date
+                    ON system_id = system_date_id
 	             WHERE system_id = language_id
+	             AND system_id = right_id
 	             AND language_default = 1
 	             AND system_status = 1
 	             ORDER BY system_sort ASC, system_comment ASC";
         $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array());
         if(count($arrRow) > 0) {
-            return new class_module_languages_language($arrRow["system_id"]);
+            class_orm_rowcache::addSingleInitRow($arrRow);
+            return class_objectfactory::getInstance()->getObject($arrRow["system_id"]);
         }
         else {
             if(count(class_module_languages_language::getObjectList(true)) > 0) {

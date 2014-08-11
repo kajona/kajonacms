@@ -20,6 +20,7 @@ class class_element_paragraph_admin extends class_element_admin implements inter
     /**
      * @var string
      * @tableColumn element_paragraph.paragraph_title
+     * @tableColumnDatatype char254
      *
      * @fieldType text
      * @fieldLabel commons_title
@@ -33,6 +34,7 @@ class class_element_paragraph_admin extends class_element_admin implements inter
     /**
      * @var string
      * @tableColumn element_paragraph.paragraph_content
+     * @tableColumnDatatype text
      * @blockEscaping
      *
      * @fieldType wysiwyg
@@ -45,6 +47,7 @@ class class_element_paragraph_admin extends class_element_admin implements inter
     /**
      * @var string
      * @tableColumn element_paragraph.paragraph_link
+     * @tableColumnDatatype char254
      *
      * @fieldType page
      * @fieldLabel paragraph_link
@@ -56,6 +59,7 @@ class class_element_paragraph_admin extends class_element_admin implements inter
     /**
      * @var string
      * @tableColumn element_paragraph.paragraph_image
+     * @tableColumnDatatype char254
      *
      * @fieldType image
      * @fieldLabel commons_image
@@ -67,6 +71,7 @@ class class_element_paragraph_admin extends class_element_admin implements inter
     /**
      * @var string
      * @tableColumn element_paragraph.paragraph_template
+     * @tableColumnDatatype char254
      *
      * @fieldType template
      * @fieldLabel template

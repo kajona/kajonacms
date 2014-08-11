@@ -19,6 +19,7 @@ class class_element_downloads_admin extends class_element_admin implements inter
     /**
      * @var string
      * @tableColumn element_downloads.download_id
+     * @tableColumnDatatype char20
      * @fieldType dropdown
      * @fieldLabel download_id
      */
@@ -27,6 +28,7 @@ class class_element_downloads_admin extends class_element_admin implements inter
     /**
      * @var string
      * @tableColumn element_downloads.download_template
+     * @tableColumnDatatype char254
      * @fieldType template
      * @fieldLabel template
      * @fieldTemplateDir /module_mediamanager
@@ -36,6 +38,7 @@ class class_element_downloads_admin extends class_element_admin implements inter
     /**
      * @var int
      * @tableColumn element_downloads.download_amount
+     * @tableColumnDatatype int
      * @fieldType text
      * @fieldLabel download_amount
      */

@@ -38,17 +38,28 @@ class class_module_postacomment_recorddeletedlistener implements interface_gener
         if($strSourceClass == "class_module_postacomment_post" || class_module_system_module::getModuleByName("postacomment") == null)
             return true;
 
-        //ok, so search for a records matching
-        $arrPosts1 = class_module_postacomment_post::loadPostList(false, $strSystemid);
-        $arrPosts2 = class_module_postacomment_post::loadPostList(false, "", $strSystemid);
 
-        //and delete
-        foreach($arrPosts1 as $objOnePost) {
-            $bitReturn = $bitReturn && $objOnePost->deleteObject();
-        }
+        $strQuery = "SELECT *
+					 FROM "._dbprefix_."postacomment,
+						  "._dbprefix_."system_right,
+						  "._dbprefix_."system
+                 LEFT JOIN "._dbprefix_."system_date
+                        ON system_id = system_date_id
+					 WHERE system_id = postacomment_id
+					      AND system_id = right_id
+                          AND (postacomment_page = ? OR  postacomment_systemid = ? )
+					 ORDER BY postacomment_page ASC,
+						      postacomment_language ASC,
+							  postacomment_date DESC";
 
-        foreach($arrPosts2 as $objOnePost) {
-            $bitReturn = $bitReturn && $objOnePost->deleteObject();
+        $arrComments = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array($strSystemid, $strSystemid));
+
+        if(count($arrComments) > 0) {
+            foreach($arrComments as $arrOneComment) {
+                class_orm_rowcache::addSingleInitRow($arrOneComment);
+                $objPost = class_objectfactory::getInstance()->getObject($arrOneComment["system_id"]);
+                $objPost->deleteObject();
+            }
         }
 
         return $bitReturn;

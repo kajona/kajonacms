@@ -25,6 +25,7 @@ class class_module_pages_page extends class_model implements interface_model, in
     /**
      * @var string
      * @tableColumn page_name
+     * @tableColumnDatatype char254
      * @versionable
      * @addSearchIndex
      *
@@ -36,6 +37,7 @@ class class_module_pages_page extends class_model implements interface_model, in
     /**
      * @var int
      * @tableColumn page_type
+     * @tableColumnDatatype int
      * @versionable
      */
     private $intType = 0;
@@ -471,18 +473,22 @@ class class_module_pages_page extends class_model implements interface_model, in
             $arrParams[] = $strFilter . "%";
         }
 
-        $strQuery = "SELECT system_id
+        $strQuery = "SELECT *
 					FROM " . _dbprefix_ . "page,
-					" . _dbprefix_ . "system
+					     " . _dbprefix_ . "system_right,
+					     " . _dbprefix_ . "system
+				LEFT JOIN "._dbprefix_."system_date
+                        ON system_id = system_date_id
 					WHERE system_id = page_id
+					  AND system_id = right_id
 					" . ($strFilter != "" ? " AND page_name like ? " : "") . "
 					ORDER BY page_name ASC";
 
         $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, $arrParams, $intStart, $intEnd);
-
+        class_orm_rowcache::addArrayOfInitRows($arrIds);
         $arrReturn = array();
         foreach($arrIds as $arrOneId) {
-            $arrReturn[] = new class_module_pages_page($arrOneId["system_id"]);
+            $arrReturn[] = class_objectfactory::getInstance()->getObject($arrOneId["system_id"]);
         }
 
         return $arrReturn;

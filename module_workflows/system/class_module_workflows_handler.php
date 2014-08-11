@@ -27,6 +27,7 @@ class class_module_workflows_handler extends class_model implements interface_mo
     /**
      * @var string
      * @tableColumn workflows_handler.workflows_handler_class
+     * @tableColumnDatatype char254
      * @listOrder
      */
     private $strHandlerClass = "";
@@ -34,6 +35,7 @@ class class_module_workflows_handler extends class_model implements interface_mo
     /**
      * @var string
      * @tableColumn workflows_handler.workflows_handler_val1
+     * @tableColumnDatatype char254
      *
      * @fieldType text
      */
@@ -42,6 +44,7 @@ class class_module_workflows_handler extends class_model implements interface_mo
     /**
      * @var string
      * @tableColumn workflows_handler.workflows_handler_val2
+     * @tableColumnDatatype char254
      *
      * @fieldType text
      */
@@ -50,6 +53,7 @@ class class_module_workflows_handler extends class_model implements interface_mo
     /**
      * @var string
      * @tableColumn workflows_handler.workflows_handler_val3
+     * @tableColumnDatatype text
      *
      * @fieldType text
      */
@@ -106,15 +110,20 @@ class class_module_workflows_handler extends class_model implements interface_mo
      * @return class_module_workflows_handler
      */
     public static function getHandlerByClass($strClass) {
-        $strQuery = "SELECT system_id FROM
-                            "._dbprefix_."system,
-                            "._dbprefix_."workflows_handler
+        $strQuery = "SELECT * FROM
+                            "._dbprefix_."workflows_handler,
+                            "._dbprefix_."system_right,
+                            "._dbprefix_."system
+                   LEFT JOIN "._dbprefix_."system_date
+                            ON system_id = system_date_id
                       WHERE system_id = workflows_handler_id
-                        AND workflows_handler_class = ?";
+                        AND workflows_handler_class = ?
+                        AND system_id = right_id";
 
         $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array($strClass));
+        class_orm_rowcache::addSingleInitRow($arrRow);
         if(count($arrRow) > 0)
-            return new class_module_workflows_handler($arrRow["system_id"]);
+            return class_objectfactory::getInstance()->getObject($arrRow["system_id"]);
         else
             return null;
     }

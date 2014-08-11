@@ -21,17 +21,8 @@ class class_installer_element_formular extends class_elementinstaller_base imple
 
 		//Table for page-element
 		$strReturn .= "Installing formular-element table...\n";
-
-		$arrFields = array();
-		$arrFields["content_id"] 		= array("char20", false);
-		$arrFields["formular_class"] 	= array("char254", true);
-		$arrFields["formular_email"] 	= array("char254", true);
-		$arrFields["formular_template"] = array("char254", true);
-		$arrFields["formular_success"] 	= array("text", true);
-		$arrFields["formular_error"] 	= array("text", true);
-
-		if(!$this->objDB->createTable("element_formular", $arrFields, array("content_id")))
-			$strReturn .= "An error occurred! ...\n";
+        $objManager = new class_orm_schemamanager();
+        $objManager->createTable("class_element_formular_admin");
 
 		//Register the element
 		$strReturn .= "Registering formular-element...\n";

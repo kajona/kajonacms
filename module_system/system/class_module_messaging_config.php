@@ -25,24 +25,28 @@ class class_module_messaging_config extends class_model implements interface_mod
     /**
      * @var string
      * @tableColumn config_provider
+     * @tableColumnDatatype char254
      */
     private $strMessageprovider = "";
 
     /**
      * @var string
      * @tableColumn config_user
+     * @tableColumnDatatype char20
      */
     private $strUser = "";
 
     /**
      * @var bool
      * @tableColumn config_enabled
+     * @tableColumnDatatype int
      */
     private $bitEnabled = true;
 
     /**
      * @var bool
      * @tableColumn config_bymail
+     * @tableColumnDatatype int
      */
     private $bitBymail = false;
 
@@ -93,15 +97,21 @@ class class_module_messaging_config extends class_model implements interface_mod
      * @static
      */
     public static function getConfigForUserAndProvider($strUserid, interface_messageprovider $objProvider) {
-        $strQuery = "SELECT system_id
-                     FROM "._dbprefix_."messages_cfg, "._dbprefix_."system
+        $strQuery = "SELECT *
+                     FROM "._dbprefix_."messages_cfg,
+                          "._dbprefix_."system_right,
+                          "._dbprefix_."system
+                  LEFT JOIN "._dbprefix_."system_date
+                        ON system_id = system_date_id
 		            WHERE system_id = config_id
+		              AND system_id = right_id
 		              AND config_user = ?
 		              AND config_provider = ? ";
 
         $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array($strUserid, get_class($objProvider)));
 
         if(isset($arrRow["system_id"])) {
+            class_orm_rowcache::addSingleInitRow($arrRow);
             return new class_module_messaging_config($arrRow["system_id"]);
         }
         else {

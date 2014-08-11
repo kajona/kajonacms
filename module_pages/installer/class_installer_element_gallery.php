@@ -28,22 +28,8 @@ class class_installer_element_gallery extends class_installer_base implements in
 
 		//Table for page-element
 		$strReturn .= "Installing gallery-element table...\n";
-
-		$arrFields = array();
-		$arrFields["content_id"] 			= array("char20", false);
-		$arrFields["gallery_id"] 			= array("char20", true);
-		$arrFields["gallery_mode"] 			= array("int", true);
-		$arrFields["gallery_template"] 		= array("char254", true);
-		$arrFields["gallery_maxh_d"] 		= array("int", true);
-		$arrFields["gallery_maxw_d"] 		= array("int", true);
-		$arrFields["gallery_imagesperpage"] = array("int", true);
-		$arrFields["gallery_text"] 			= array("char254", true);
-		$arrFields["gallery_overlay"]    	= array("char254", true);
-		$arrFields["gallery_text_x"] 		= array("int", true);
-		$arrFields["gallery_text_y"] 		= array("int", true);
-
-		if(!$this->objDB->createTable("element_gallery", $arrFields, array("content_id")))
-			$strReturn .= "An error occurred! ...\n";
+        $objManager = new class_orm_schemamanager();
+        $objManager->createTable("class_element_gallery_admin");
 
 		//Register the element
 		$strReturn .= "Registering gallery-element...\n";

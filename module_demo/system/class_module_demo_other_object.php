@@ -15,6 +15,7 @@ class class_module_demo_other_object extends class_model implements interface_mo
     /**
      * @var string
      * @tableColumn demo_other_object.other_object_title
+     * @tableColumnDatatype char254
      *
      * @fieldType textarea
      * @fieldMandatory
@@ -26,6 +27,7 @@ class class_module_demo_other_object extends class_model implements interface_mo
      * The date of the measurement
      * @var class_date
      * @tableColumn demo_other_object.other_object_date
+     * @tableColumnDatatype long
      *
      * @fieldType date
      */
@@ -35,6 +37,7 @@ class class_module_demo_other_object extends class_model implements interface_mo
      * The weight of the user
      * @var float
      * @tableColumn demo_other_object.other_object_float
+     * @tableColumnDatatype double
      *
      * @fieldType float
      */

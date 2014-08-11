@@ -18,21 +18,13 @@ class class_installer_search extends class_installer_base implements interface_i
 
     public function install() {
 
+        $objManager = new class_orm_schemamanager();
         //Install Index Tables
         $strReturn = $this->install_index_tables();
 
         //Table for search
         $strReturn .= "Installing table search_search...\n";
-
-        $arrFields = array();
-        $arrFields["search_search_id"] 		= array("char20", false);
-        $arrFields["search_search_query"] 	= array("char254", true);
-        $arrFields["search_search_filter_modules"] 	= array("char254", true);
-
-        $arrFields["search_search_private"] = array("int", true);
-
-        if(!$this->objDB->createTable("search_search", $arrFields, array("search_search_id")))
-            $strReturn .= "An error occurred! ...\n";
+        $objManager->createTable("class_module_search_search");
 
         //Table for search log entry
         $strReturn .= "Installing search-log table...\n";
@@ -49,15 +41,9 @@ class class_installer_search extends class_installer_base implements interface_i
 
         //Table for page-element
         $strReturn .= "Installing search-element table...\n";
-
-        $arrFields = array();
-        $arrFields["content_id"] 		= array("char20", false);
-        $arrFields["search_template"] 	= array("char254", true);
-        $arrFields["search_amount"] 	= array("int", true);
-        $arrFields["search_page"] 		= array("char254", true);
-
-        if(!$this->objDB->createTable("element_search", $arrFields, array("content_id")))
-            $strReturn .= "An error occurred! ...\n";
+        $objPackageManager = new class_module_packagemanager_manager();
+        if($objPackageManager->getPackage("pages") !== null)
+            $objManager->createTable("class_element_search_admin");
 
 		$strReturn .= "Registering module...\n";
 		//register the module

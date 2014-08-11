@@ -819,7 +819,7 @@ class class_module_pages_content_admin extends class_admin_simple implements int
                         $objReflection = new class_reflection($objElement);
 
                         //try to fetch the property based on the orm annotations
-                        $strTargetTable = $objReflection->getAnnotationValuesFromClass(class_orm_mapper::STR_ANNOTATION_TARGETTABLE);
+                        $strTargetTable = $objReflection->getAnnotationValuesFromClass(class_orm_base::STR_ANNOTATION_TARGETTABLE);
                         if(count($strTargetTable) > 0)
                             $strTargetTable = $strTargetTable[0];
 
@@ -827,7 +827,7 @@ class class_module_pages_content_admin extends class_admin_simple implements int
                         if(count($arrTable) == 2)
                             $strTargetTable = $arrTable[0];
 
-                        $arrOrmProperty = $objReflection->getPropertiesWithAnnotation(class_orm_mapper::STR_ANNOTATION_TABLECOLUMN);
+                        $arrOrmProperty = $objReflection->getPropertiesWithAnnotation(class_orm_base::STR_ANNOTATION_TABLECOLUMN);
                         foreach($arrOrmProperty as $strCurProperty => $strValue) {
                             if($strValue == $strTargetTable.".".$this->getParam("property"))
                                 $strProperty = $strCurProperty;

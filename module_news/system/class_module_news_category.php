@@ -22,6 +22,7 @@ class class_module_news_category extends class_model implements interface_model,
     /**
      * @var string
      * @tableColumn news_category.news_cat_title
+     * @tableColumnDatatype char254
      * @listOrder
      * @fieldType text
      * @fieldMandatory

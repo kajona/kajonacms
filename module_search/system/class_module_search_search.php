@@ -24,6 +24,7 @@ class class_module_search_search extends class_model implements interface_model,
     /**
      * @var string
      * @tableColumn search_search_query
+     * @tableColumnDatatype char254
      * @listOrder
      * @fieldMandatory
      * @fieldType text
@@ -33,9 +34,16 @@ class class_module_search_search extends class_model implements interface_model,
     /**
      * @var string
      * @tableColumn search_search_filter_modules
-     * @listOrder
+     * @tableColumnDatatype char254
      */
     private $strInternalFilterModules = "-1";
+
+    /**
+     * @var string
+     * @tableColumn search_search_private
+     * @tableColumnDatatype int
+     */
+    private $intPrivate = 0;
 
     /**
      * For form-generation only
@@ -280,6 +288,21 @@ class class_module_search_search extends class_model implements interface_model,
     public function getStrPortalLangFilter() {
         return $this->strPortalLangFilter;
     }
+
+    /**
+     * @param string $intPrivate
+     */
+    public function setIntPrivate($intPrivate) {
+        $this->intPrivate = $intPrivate;
+    }
+
+    /**
+     * @return string
+     */
+    public function getIntPrivate() {
+        return $this->intPrivate;
+    }
+
 
 
 

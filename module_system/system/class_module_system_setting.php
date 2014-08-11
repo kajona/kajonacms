@@ -71,13 +71,28 @@ class class_module_system_setting extends class_model implements interface_model
     private $strOldValue = "";
 
 
+    private function initRowCache() {
+        $strQuery = "SELECT * FROM " . _dbprefix_ . "system_config";
+        $arrRows = $this->objDB->getPArray($strQuery, array());
+        foreach($arrRows as $arrSingleRow) {
+            $arrSingleRow["system_id"] = $arrSingleRow["system_config_id"];
+            class_orm_rowcache::addSingleInitRow($arrSingleRow);
+        }
+    }
+
+
     /**
      * Initalises the current object, if a systemid was given
      * @return void
      */
     protected function initObjectInternal() {
-        $strQuery = "SELECT * FROM " . _dbprefix_ . "system_config WHERE system_config_id = ?";
-        $arrRow = $this->objDB->getPRow($strQuery, array($this->getSystemid()));
+        $arrRow = class_orm_rowcache::getCachedInitRow($this->getSystemid());
+        if($arrRow === null) {
+            $this->initRowCache();
+            $arrRow = class_orm_rowcache::getCachedInitRow($this->getSystemid());
+        }
+
+        $this->setArrInitRow(array("system_id" => ""));
 
         $this->setStrName($arrRow["system_config_name"]);
         $this->setStrValue($arrRow["system_config_value"]);
@@ -181,9 +196,11 @@ class class_module_system_setting extends class_model implements interface_model
      */
     public static function getAllConfigValues() {
         if(self::$arrInstanceCache == null) {
-            $strQuery = "SELECT system_config_id FROM " . _dbprefix_ . "system_config ORDER BY system_config_module ASC";
+            $strQuery = "SELECT * FROM " . _dbprefix_ . "system_config ORDER BY system_config_module ASC";
             $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array(), null, null, false);
             foreach($arrIds as $arrOneId) {
+                $arrOneId["system_id"] = $arrOneId["system_config_id"];
+                class_orm_rowcache::addSingleInitRow($arrOneId);
                 self::$arrInstanceCache[$arrOneId["system_config_id"]] = new class_module_system_setting($arrOneId["system_config_id"]);
             }
         }

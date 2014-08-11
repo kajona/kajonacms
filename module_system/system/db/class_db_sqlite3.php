@@ -255,7 +255,7 @@ class class_db_sqlite3 extends class_db_base  {
 
     /**
      * Looks up the columns of the given table.
-     * Should return an array for each row consting of:
+     * Should return an array for each row consisting of:
      * array ("columnName", "columnType")
      *
      * @param string $strTableName
@@ -277,7 +277,7 @@ class class_db_sqlite3 extends class_db_base  {
             $intPrimaryKeyPos = strripos($strColumnDef, "PRIMARY KEY");
             if($intPrimaryKeyPos !== false)
                 $strColumnDef = substr($strColumnDef, 0, $intPrimaryKeyPos);
-            preg_match_all("/\s*([a-z_]+)\s+([a-z]+)[^,]+/ism", trim($strColumnDef), $arrMatch, PREG_SET_ORDER);
+            preg_match_all("/\s*([a-z_0-9]+)\s+([a-z]+)[^,]+/ism", trim($strColumnDef), $arrMatch, PREG_SET_ORDER);
 
             foreach($arrMatch as $arrColumnInfo)
                 $arrColumns[] = array(
@@ -317,7 +317,7 @@ class class_db_sqlite3 extends class_db_base  {
     public function createTable($strName, $arrFields, $arrKeys, $arrIndices = array(), $bitTxSafe = true) {
         $arrTables = $this->getTables();
         foreach($arrTables as $arrTable)
-            if($arrTable["name"] == $strName)
+            if($arrTable["name"] == _dbprefix_.$strName)
                 return true;
 
         $strQuery = "";

@@ -17,22 +17,9 @@ class class_installer_postacomment extends class_installer_base implements inter
 
     public function install() {
 		$strReturn = "";
-
+        $objManager = new class_orm_schemamanager();
 		$strReturn .= "Installing table postacomment...\n";
-
-		$arrFields = array();
-		$arrFields["postacomment_id"] 		= array("char20", false);
-		$arrFields["postacomment_date"] 	= array("int", true);
-		$arrFields["postacomment_page"] 	= array("char254", true);
-		$arrFields["postacomment_language"] = array("char20", true);
-		$arrFields["postacomment_systemid"] = array("char20", true);
-		$arrFields["postacomment_username"] = array("char254", true);
-		$arrFields["postacomment_title"] 	= array("char254", true);
-		$arrFields["postacomment_comment"] 	= array("text", true);
-
-		if(!$this->objDB->createTable("postacomment", $arrFields, array("postacomment_id")))
-			$strReturn .= "An error occurred! ...\n";
-
+        $objManager->createTable("class_module_postacomment_post");
 
 		//register the module
 		$strSystemID = $this->registerModule(

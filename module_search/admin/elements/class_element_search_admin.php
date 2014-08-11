@@ -20,6 +20,7 @@ class class_element_search_admin extends class_element_admin implements interfac
     /**
      * @var string
      * @tableColumn element_search.search_template
+     * @tableColumnDatatype char254
      *
      * @fieldType template
      * @fieldLabel template
@@ -31,6 +32,7 @@ class class_element_search_admin extends class_element_admin implements interfac
     /**
      * @var int
      * @tableColumn element_search.search_amount
+     * @tableColumnDatatype int
      *
      * @fieldType text
      * @fieldLabel search_amount
@@ -40,6 +42,7 @@ class class_element_search_admin extends class_element_admin implements interfac
     /**
      * @var string
      * @tableColumn element_search.search_page
+     * @tableColumnDatatype char254
      *
      * @fieldType page
      * @fieldLabel commons_result_page

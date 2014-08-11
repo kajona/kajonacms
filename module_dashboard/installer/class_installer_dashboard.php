@@ -20,20 +20,10 @@ class class_installer_dashboard extends class_installer_base implements interfac
 	public function install() {
 	    $strReturn = "";
 
-
-		//dashboard & widgets ---------------------------------------------------------------------------
+        $objManager = new class_orm_schemamanager();
 		$strReturn .= "Installing table dashboard...\n";
+        $objManager->createTable("class_module_dashboard_widget");
 
-		$arrFields = array();
-		$arrFields["dashboard_id"] 			= array("char20", false);
-		$arrFields["dashboard_column"]		= array("char254", true);
-		$arrFields["dashboard_user"] 		= array("char20", true);
-		$arrFields["dashboard_aspect"] 	    = array("char254", true);
-		$arrFields["dashboard_class"] 	    = array("char254", true);
-		$arrFields["dashboard_content"] 	= array("text", true);
-
-		if(!$this->objDB->createTable("dashboard", $arrFields, array("dashboard_id")))
-			$strReturn .= "An error occurred! ...\n";
         //the dashboard
         $this->registerModule("dashboard", _dashboard_module_id_, "", "class_module_dashboard_admin.php", $this->objMetadata->getStrVersion(), true, "", "class_module_dashboard_admin_xml.php");
 

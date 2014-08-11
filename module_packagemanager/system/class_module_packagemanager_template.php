@@ -22,6 +22,7 @@ class class_module_packagemanager_template extends class_model implements interf
     /**
      * @var string
      * @tableColumn templatepack_name
+     * @tableColumnDatatype char254
      * @listOrder
      *
      * @addSearchIndex

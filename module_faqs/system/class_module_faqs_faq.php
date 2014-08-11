@@ -22,8 +22,10 @@ class class_module_faqs_faq extends class_model implements interface_model, inte
     /**
      * @var string
      * @tableColumn faqs.faqs_question
+     * @tableColumnDatatype text
      * @versionable
      * @addSearchIndex
+     * @listOrder
      *
      * @fieldType text
      * @fieldMandatory
@@ -34,6 +36,7 @@ class class_module_faqs_faq extends class_model implements interface_model, inte
     /**
      * @var string
      * @tableColumn faqs.faqs_answer
+     * @tableColumnDatatype text
      * @blockEscaping
      * @versionable
      * @addSearchIndex
@@ -180,33 +183,34 @@ class class_module_faqs_faq extends class_model implements interface_model, inte
      * @static
      */
     public static function getObjectList($strFilter = "", $intStart = null, $intEnd = null) {
-        $arrParams = array();
         if($strFilter != "") {
-            $strQuery = "SELECT system_id
+            $strQuery = "SELECT *
 							FROM " . _dbprefix_ . "faqs,
-							     " . _dbprefix_ . "system,
-							     " . _dbprefix_ . "faqs_member
+							     " . _dbprefix_ . "faqs_member,
+							     " . _dbprefix_ . "system_right,
+							     " . _dbprefix_ . "system
+					   LEFT JOIN "._dbprefix_."system_date
+                               ON system_id = system_date_id
 							WHERE system_id = faqs_id
+							  AND system_id = right_id
 							  AND faqs_id = faqsmem_faq
 							  AND faqsmem_category = ?
 							ORDER BY faqs_question ASC";
-            $arrParams[] = $strFilter;
+
+            $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array($strFilter), $intStart, $intEnd);
+
+            $arrReturn = array();
+            foreach($arrIds as $arrOneId) {
+                class_orm_rowcache::addSingleInitRow($arrOneId);
+                $arrReturn[] = class_objectfactory::getInstance()->getObject($arrOneId["system_id"]);
+            }
+
+            return $arrReturn;
         }
         else {
-            $strQuery = "SELECT system_id
-							FROM " . _dbprefix_ . "faqs,
-							     " . _dbprefix_ . "system
-							WHERE system_id = faqs_id
-							ORDER BY faqs_question ASC";
+            return parent::getObjectList("", $intStart, $intEnd);
         }
 
-        $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, $arrParams, $intStart, $intEnd);
-        $arrReturn = array();
-        foreach($arrIds as $arrOneId) {
-            $arrReturn[] = new class_module_faqs_faq($arrOneId["system_id"]);
-        }
-
-        return $arrReturn;
     }
 
     /**
@@ -219,7 +223,6 @@ class class_module_faqs_faq extends class_model implements interface_model, inte
      * @static
      */
     public static function getObjectCount($strFilter = "") {
-        $arrParams = array();
         if($strFilter != "") {
             $strQuery = "SELECT COUNT(*)
 							FROM " . _dbprefix_ . "faqs,
@@ -228,17 +231,13 @@ class class_module_faqs_faq extends class_model implements interface_model, inte
 							WHERE system_id = faqs_id
 							  AND faqs_id = faqsmem_faq
 							  AND faqsmem_category = ?";
-            $arrParams[] = $strFilter;
+            $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array($strFilter));
+            return $arrRow["COUNT(*)"];
         }
         else {
-            $strQuery = "SELECT COUNT(*)
-							FROM " . _dbprefix_ . "faqs,
-							     " . _dbprefix_ . "system
-							WHERE system_id = faqs_id";
+            return parent::getObjectCount();
         }
 
-        $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, $arrParams);
-        return $arrRow["COUNT(*)"];
     }
 
 
@@ -262,20 +261,28 @@ class class_module_faqs_faq extends class_model implements interface_model, inte
     public static function loadListFaqsPortal($strCat) {
         $arrParams = array();
         if($strCat == 1) {
-            $strQuery = "SELECT system_id
+            $strQuery = "SELECT *
     						FROM " . _dbprefix_ . "faqs,
+    		                     " . _dbprefix_ . "system_right,
     		                     " . _dbprefix_ . "system
+    		             LEFT JOIN "._dbprefix_."system_date
+                               ON system_id = system_date_id
     		                WHERE system_id = faqs_id
     		                  AND system_status = 1
+    		                  AND system_id = right_id
     						ORDER BY faqs_question ASC";
         }
         else {
-            $strQuery = "SELECT system_id
+            $strQuery = "SELECT *
     						FROM " . _dbprefix_ . "faqs,
     						     " . _dbprefix_ . "faqs_member,
+    		                     " . _dbprefix_ . "system_right,
     		                     " . _dbprefix_ . "system
+    		           LEFT JOIN "._dbprefix_."system_date
+                               ON system_id = system_date_id
     		                WHERE system_id = faqs_id
     		                  AND faqs_id = faqsmem_faq
+    		                  AND system_id = right_id
     		                  AND faqsmem_category = ?
     		                  AND system_status = 1
     						ORDER BY faqs_question ASC";
@@ -284,7 +291,8 @@ class class_module_faqs_faq extends class_model implements interface_model, inte
         $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, $arrParams);
         $arrReturn = array();
         foreach($arrIds as $arrOneId) {
-            $arrReturn[] = new class_module_faqs_faq($arrOneId["system_id"]);
+            class_orm_rowcache::addSingleInitRow($arrOneId);
+            $arrReturn[] = class_objectfactory::getInstance()->getObject($arrOneId["system_id"]);
         }
 
         return $arrReturn;

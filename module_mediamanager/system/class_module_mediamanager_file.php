@@ -25,6 +25,7 @@ class class_module_mediamanager_file extends class_model implements interface_mo
     /**
      * @var string
      * @tableColumn file_name
+     * @tableColumnDatatype char254
      *
      * @fieldType text
      *
@@ -35,6 +36,7 @@ class class_module_mediamanager_file extends class_model implements interface_mo
     /**
      * @var string
      * @tableColumn file_filename
+     * @tableColumnDatatype char254
      *
      * @addSearchIndex
      */
@@ -43,6 +45,7 @@ class class_module_mediamanager_file extends class_model implements interface_mo
     /**
      * @var string
      * @tableColumn file_description
+     * @tableColumnDatatype text
      * @blockEscaping
      *
      * @fieldType wysiwygsmall
@@ -54,6 +57,7 @@ class class_module_mediamanager_file extends class_model implements interface_mo
     /**
      * @var string
      * @tableColumn file_subtitle
+     * @tableColumnDatatype char254
      *
      * @fieldType text
      *
@@ -64,6 +68,7 @@ class class_module_mediamanager_file extends class_model implements interface_mo
     /**
      * @var int
      * @tableColumn file_hits
+     * @tableColumnDatatype int
      */
     private $intHits = 0;
 
@@ -72,36 +77,42 @@ class class_module_mediamanager_file extends class_model implements interface_mo
      *
      * @var int
      * @tableColumn file_type
+     * @tableColumnDatatype int
      */
     private $intType = 0;
 
     /**
      * @var int
      * @tableColumn file_ispackage
+     * @tableColumnDatatype int
      */
     private $bitIspackage = 0;
 
     /**
      * @var int
      * @tableColumn file_cat
+     * @tableColumnDatatype char254
      */
     private $strCat = "";
 
     /**
      * @var string
      * @tableColumn file_screen1
+     * @tableColumnDatatype char254
      */
     private $strScreen1 = "";
 
     /**
      * @var string
      * @tableColumn file_screen2
+     * @tableColumnDatatype char254
      */
     private $strScreen2 = "";
 
     /**
      * @var string
      * @tableColumn file_screen3
+     * @tableColumnDatatype char254
      */
     private $strScreen3 = "";
 
@@ -347,10 +358,14 @@ class class_module_mediamanager_file extends class_model implements interface_mo
         if($bitOnlyPackages)
             $arrParams[] = self::$INT_TYPE_FOLDER;
 
-        $strQuery = "SELECT system_id
-                       FROM " . _dbprefix_ . "system,
-                            " . _dbprefix_ . "mediamanager_file
+        $strQuery = "SELECT *
+                       FROM " . _dbprefix_ . "system_right,
+                            " . _dbprefix_ . "mediamanager_file,
+                            " . _dbprefix_ . "system
+                   LEFT JOIN "._dbprefix_."system_date
+                            ON system_id = system_date_id
                     WHERE system_id = file_id
+                      AND system_id = right_id
                       AND system_prev_id = ?
                         " . ($intTypeFilter !== false ? " AND file_type = ? " : "") . "
                         " . (!$bitActiveOnly ? "" : " AND system_status = 1 ") . "
@@ -360,7 +375,8 @@ class class_module_mediamanager_file extends class_model implements interface_mo
 
         $arrReturn = array();
         foreach($arrIds as $arrOneId) {
-            $arrReturn[] = new class_module_mediamanager_file($arrOneId["system_id"]);
+            class_orm_rowcache::addSingleInitRow($arrOneId);
+            $arrReturn[] = class_objectfactory::getInstance()->getObject($arrOneId["system_id"]);
         }
 
         return $arrReturn;
@@ -402,10 +418,14 @@ class class_module_mediamanager_file extends class_model implements interface_mo
             }
         }
 
-        $strQuery = "SELECT system_id
-                       FROM " . _dbprefix_ . "system,
-                            " . _dbprefix_ . "mediamanager_file
+        $strQuery = "SELECT *
+                       FROM " . _dbprefix_ . "system_right,
+                            " . _dbprefix_ . "mediamanager_file,
+                            " . _dbprefix_ . "system
+                 LEFT JOIN "._dbprefix_."system_date
+                            ON system_id = system_date_id
                     WHERE system_id = file_id
+                      AND system_id = right_id
                       AND file_ispackage = 1
                         " . (!$bitActiveOnly ? "" : " AND system_status = 1 ") . "
                         " . ($strCategoryFilter === false ? "" : " AND file_cat = ?  ") . "
@@ -415,7 +435,8 @@ class class_module_mediamanager_file extends class_model implements interface_mo
 
         $arrReturn = array();
         foreach($arrIds as $arrOneId) {
-            $arrReturn[] = new class_module_mediamanager_file($arrOneId["system_id"]);
+            class_orm_rowcache::addSingleInitRow($arrOneId);
+            $arrReturn[] = class_objectfactory::getInstance()->getObject($arrOneId["system_id"]);
         }
 
         return $arrReturn;

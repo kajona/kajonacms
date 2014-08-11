@@ -20,36 +20,40 @@
 class class_module_pages_pageelement extends class_model implements interface_model, interface_admin_listable {
 
 
-    private static $arrInitRowCache = array();
-
-
     /**
      * @var string
      * @tableColumn page_element_ph_placeholder
+     * @tableColumnDatatype text
      */
     private $strPlaceholder = "";
 
     /**
      * @var string
      * @tableColumn page_element_ph_name
+     * @tableColumnDatatype char254
      */
     private $strName = "";
 
     /**
      * @var string
      * @tableColumn page_element_ph_element
+     * @tableColumnIndex
+     * @tableColumnDatatype char254
      */
     private $strElement = "";
 
     /**
      * @var string
      * @tableColumn page_element_ph_title
+     * @tableColumnDatatype char254
      */
     private $strTitle = "";
 
     /**
      * @var string
      * @tableColumn page_element_ph_language
+     * @tableColumnIndex
+     * @tableColumnDatatype char20
      */
     private $strLanguage = "";
 
@@ -123,10 +127,8 @@ class class_module_pages_pageelement extends class_model implements interface_mo
     protected function initObjectInternal() {
 
         //maybe
-        if(isset(self::$arrInitRowCache[$this->getSystemid()])) {
-            $arrRow = self::$arrInitRowCache[$this->getSystemid()];
-        }
-        else {
+        $arrRow = class_orm_rowcache::getCachedInitRow($this->getSystemid());
+        if($arrRow === null) {
             $strQuery = "SELECT *
                              FROM "._dbprefix_."page_element,
                                   "._dbprefix_."element,
@@ -277,7 +279,7 @@ class class_module_pages_pageelement extends class_model implements interface_mo
 
         //try to find setters to inject the values
         $objAnnotation = new class_reflection($objElement);
-        $arrMappedProperties = $objAnnotation->getPropertiesWithAnnotation(class_orm_mapper::STR_ANNOTATION_TABLECOLUMN);
+        $arrMappedProperties = $objAnnotation->getPropertiesWithAnnotation(class_orm_base::STR_ANNOTATION_TABLECOLUMN);
 
         foreach($arrElementData as $strColumn => $strValue) {
             foreach($arrMappedProperties as $strPropertyname => $strAnnotation) {
@@ -334,7 +336,7 @@ class class_module_pages_pageelement extends class_model implements interface_mo
      * @param bool $bitJustActive
      * @param string $strLanguage
      *
-     * @see class_module_pages_pageeelemtn::getElementsOnPage()
+     * @see class_module_pages_pageelement::getElementsOnPage()
      * @return array
      */
     public static function getPlainElementsOnPage($strPageId, $bitJustActive = false, $strLanguage = "") {
@@ -359,15 +361,15 @@ class class_module_pages_pageelement extends class_model implements interface_mo
 
         $strQuery = "SELECT *
                        FROM "._dbprefix_."page_element,
-                            "._dbprefix_."element as element,
+                            "._dbprefix_."element,
                             "._dbprefix_."system_right,
                             "._dbprefix_."system as system
                   LEFT JOIN "._dbprefix_."system_date
-                         ON (system.system_id = system_date_id)
-                      WHERE system.system_prev_id= ?
-                        AND page_element_ph_element = element.element_name
-                        AND system.system_id = page_element_id
-                        AND system.system_id = right_id
+                         ON (system_id = system_date_id)
+                      WHERE system_prev_id= ?
+                        AND page_element_ph_element = element_name
+                        AND system_id = page_element_id
+                        AND system_id = right_id
                         AND page_element_ph_language = ?
                        ".$strAnd."
                   ORDER BY page_element_ph_placeholder ASC,
@@ -377,8 +379,7 @@ class class_module_pages_pageelement extends class_model implements interface_mo
         $arrReturn = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, $arrParams);
 
         foreach($arrReturn as $arrOneRow) {
-            if(!isset(self::$arrInitRowCache[$arrOneRow["system_id"]]))
-                self::$arrInitRowCache[$arrOneRow["system_id"]] = $arrOneRow;
+            class_orm_rowcache::addSingleInitRow($arrOneRow);
         }
 
         return $arrReturn;
@@ -395,11 +396,15 @@ class class_module_pages_pageelement extends class_model implements interface_mo
      */
     public static function getAllElementsOnPage($strPageId) {
 
-        $strQuery = "SELECT system_id
+        $strQuery = "SELECT *
 						 FROM "._dbprefix_."page_element,
 						      "._dbprefix_."element,
+						      "._dbprefix_."system_right,
 						      "._dbprefix_."system
+					 LEFT JOIN "._dbprefix_."system_date
+                            ON system_id = system_date_id
 						 WHERE system_prev_id=?
+						   AND system_id = right_id
 						   AND page_element_ph_element = element_name
 						   AND system_id = page_element_id
 				      ORDER BY page_element_ph_placeholder ASC,
@@ -407,10 +412,10 @@ class class_module_pages_pageelement extends class_model implements interface_mo
 						 	   system_sort ASC";
 
         $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array($strPageId));
-
+        class_orm_rowcache::addArrayOfInitRows($arrIds);
         $arrReturn = array();
         foreach($arrIds as $arrOneId)
-            $arrReturn[] = new class_module_pages_pageelement($arrOneId["system_id"]);
+            $arrReturn[] = class_objectfactory::getInstance()->getObject($arrOneId["system_id"]);
 
         return $arrReturn;
     }
@@ -440,14 +445,16 @@ class class_module_pages_pageelement extends class_model implements interface_mo
             $arrParams[] = time();
         }
 
-        $strQuery = "SELECT system_id
+        $strQuery = "SELECT *
                          FROM "._dbprefix_."page_element,
                               "._dbprefix_."element,
+                              "._dbprefix_."system_right,
                               "._dbprefix_."system
-                              LEFT JOIN "._dbprefix_."system_date
-                                ON (system_id = system_date_id)
+                     LEFT JOIN "._dbprefix_."system_date
+                            ON (system_id = system_date_id)
                          WHERE system_prev_id= ?
                            AND page_element_ph_element = element_name
+                           AND system_id = right_id
                            AND system_id = page_element_id
                            AND page_element_ph_language = ?
                            AND page_element_ph_placeholder = ?
@@ -455,10 +462,10 @@ class class_module_pages_pageelement extends class_model implements interface_mo
                          ORDER BY system_sort ASC";
 
         $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, $arrParams);
-
+        class_orm_rowcache::addArrayOfInitRows($arrIds);
         $arrReturn = array();
         foreach($arrIds as $arrOneRow) {
-            $arrReturn[] = new class_module_pages_pageelement($arrOneRow["system_id"]);
+            $arrReturn[] = class_objectfactory::getInstance()->getObject($arrOneRow["system_id"]);
         }
 
         return $arrReturn;

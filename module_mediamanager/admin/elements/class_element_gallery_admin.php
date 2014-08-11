@@ -17,6 +17,7 @@ class class_element_gallery_admin extends class_element_admin implements interfa
     /**
      * @var string
      * @tableColumn element_gallery.gallery_id
+     * @tableColumnDatatype char20
      * @fieldType dropdown
      * @fieldLabel gallery_id
      */
@@ -26,6 +27,7 @@ class class_element_gallery_admin extends class_element_admin implements interfa
     /**
      * @var string
      * @tableColumn element_gallery.gallery_template
+     * @tableColumnDatatype char254
      * @fieldType template
      * @fieldLabel template
      * @fieldTemplateDir /module_mediamanager
@@ -35,6 +37,7 @@ class class_element_gallery_admin extends class_element_admin implements interfa
     /**
      * @var int
      * @tableColumn element_gallery.gallery_imagesperpage
+     * @tableColumnDatatype int
      * @fieldType text
      * @fieldLabel gallery_imagesperpage
      */
@@ -44,6 +47,7 @@ class class_element_gallery_admin extends class_element_admin implements interfa
     /**
      * @var int
      * @tableColumn element_gallery.gallery_maxh_d
+     * @tableColumnDatatype int
      * @fieldType text
      * @fieldLabel gallery_maxh_d
      */
@@ -52,6 +56,7 @@ class class_element_gallery_admin extends class_element_admin implements interfa
     /**
      * @var int
      * @tableColumn element_gallery.gallery_maxw_d
+     * @tableColumnDatatype int
      * @fieldType text
      * @fieldLabel gallery_maxw_d
      */
@@ -60,6 +65,7 @@ class class_element_gallery_admin extends class_element_admin implements interfa
     /**
      * @var int
      * @tableColumn element_gallery.gallery_text
+     * @tableColumnDatatype char254
      * @fieldType text
      * @fieldLabel gallery_text
      */
@@ -68,6 +74,7 @@ class class_element_gallery_admin extends class_element_admin implements interfa
     /**
      * @var int
      * @tableColumn element_gallery.gallery_text_x
+     * @tableColumnDatatype int
      * @fieldType text
      * @fieldLabel gallery_text_x
      */
@@ -76,6 +83,7 @@ class class_element_gallery_admin extends class_element_admin implements interfa
     /**
      * @var int
      * @tableColumn element_gallery.gallery_text_y
+     * @tableColumnDatatype int
      * @fieldType text
      * @fieldLabel gallery_text_y
      */
@@ -84,6 +92,7 @@ class class_element_gallery_admin extends class_element_admin implements interfa
     /**
      * @var int
      * @tableColumn element_gallery.gallery_mode
+     * @tableColumnDatatype int
      * @fieldType hidden
      */
     private $intGalleryMode = 0;
@@ -92,6 +101,7 @@ class class_element_gallery_admin extends class_element_admin implements interfa
     /**
      * @var int
      * @tableColumn element_gallery.gallery_overlay
+     * @tableColumnDatatype char254
      * @fieldType image
      * @fieldLabel gallery_overlay
      */

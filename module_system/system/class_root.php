@@ -265,7 +265,7 @@ abstract class class_root {
      * @return void
      */
     protected function initObjectInternal() {
-        $objORM = new class_orm_mapper($this);
+        $objORM = new class_orm_objectinit($this);
         $objORM->initObjectFromDb();
     }
 
@@ -335,7 +335,7 @@ abstract class class_root {
      * @return int
      */
     public static function getObjectCount($strPrevid = "") {
-        $objORM = new class_orm_mapper();
+        $objORM = new class_orm_objectlist();
         return $objORM->getObjectCount(get_called_class(), $strPrevid);
     }
 
@@ -352,7 +352,7 @@ abstract class class_root {
      * @return self[]
      */
     public static function getObjectList($strPrevid = "", $intStart = null, $intEnd = null) {
-        $objORM = new class_orm_mapper();
+        $objORM = new class_orm_objectlist();
         return $objORM->getObjectList(get_called_class(), $strPrevid, $intStart, $intEnd);
     }
 
@@ -659,7 +659,7 @@ abstract class class_root {
      * @return bool
      */
     protected function updateStateToDb() {
-        $objORMMapper = new class_orm_mapper($this);
+        $objORMMapper = new class_orm_objectupdate($this);
         return $objORMMapper->updateStateToDb();
     }
 
@@ -731,7 +731,7 @@ abstract class class_root {
 
         if($this->strOldPrevId != $this->strPrevId) {
             $this->objDB->flushQueryCache();
-            $this->objRights->flushRightsCache();
+            class_orm_rowcache::flushCache();
             $this->objRights->rebuildRightsStructure($this->getSystemid());
             $this->objSortManager->fixSortOnPrevIdChange($this->strOldPrevId, $this->strPrevId);
             //TODO: remove legacy call

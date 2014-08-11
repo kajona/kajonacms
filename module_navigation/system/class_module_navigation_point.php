@@ -22,6 +22,7 @@ class class_module_navigation_point extends class_model implements interface_mod
     /**
      * @var string
      * @tableColumn navigation_name
+     * @tableColumnDatatype char254
      * @fieldMandatory
      * @fieldType text
      * @fieldLabel commons_name
@@ -33,6 +34,7 @@ class class_module_navigation_point extends class_model implements interface_mod
     /**
      * @var string
      * @tableColumn navigation_page_e
+     * @tableColumnDatatype char254
      * @fieldType file
      * @fieldLabel navigation_page_e
      *
@@ -43,6 +45,7 @@ class class_module_navigation_point extends class_model implements interface_mod
     /**
      * @var string
      * @tableColumn navigation_page_i
+     * @tableColumnDatatype char254
      * @fieldType page
      * @fieldLabel navigation_page_i
      *
@@ -53,7 +56,7 @@ class class_module_navigation_point extends class_model implements interface_mod
     /**
      * @var string
      * @tableColumn navigation_folder_i
-     *
+     * @tableColumnDatatype char20
      * @addSearchIndex
      */
     private $strFolderI = "";
@@ -61,6 +64,7 @@ class class_module_navigation_point extends class_model implements interface_mod
     /**
      * @var string
      * @tableColumn navigation_target
+     * @tableColumnDatatype char254
      * @fieldType dropdown
      * @fieldDDValues [_self => navigation_tagetself],[_blank => navigation_tagetblank]
      * @fieldLabel navigation_target
@@ -70,6 +74,7 @@ class class_module_navigation_point extends class_model implements interface_mod
     /**
      * @var string
      * @tableColumn navigation_image
+     * @tableColumnDatatype char254
      * @fieldType image
      * @fieldLabel commons_image
      */
@@ -160,15 +165,22 @@ class class_module_navigation_point extends class_model implements interface_mod
      * @static
      */
     public static function getNaviLayer($strSystemid, $bitJustActive = false, $intStart = null, $intEnd = null) {
-        $strQuery = "SELECT system_id FROM "._dbprefix_."navigation, "._dbprefix_."system
-    			             WHERE system_id = navigation_id
-    			             AND system_prev_id = ?
+        $strQuery = "SELECT *
+                          FROM "._dbprefix_."navigation,
+                               "._dbprefix_."system_right,
+                               "._dbprefix_."system
+                     LEFT JOIN "._dbprefix_."system_date
+                            ON system_id = system_date_id
+    			         WHERE system_id = navigation_id
+    			           AND system_prev_id = ?
+    			           AND system_id = right_id
     			             ".($bitJustActive ? " AND system_status = 1 " : "")."
-    			             ORDER BY system_sort ASC, system_comment ASC";
-        $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array($strSystemid), $intStart, $intEnd);
+    			      ORDER BY system_sort ASC, system_comment ASC";
+        $arrRows = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array($strSystemid), $intStart, $intEnd);
         $arrReturn = array();
-        foreach($arrIds as $arrOneId) {
-            $objNavigationPoint = new class_module_navigation_point($arrOneId["system_id"]);
+        foreach($arrRows as $arrOneRow) {
+            class_orm_rowcache::addSingleInitRow($arrOneRow);
+            $objNavigationPoint = class_objectfactory::getInstance()->getObject($arrOneRow["system_id"]);
             $arrReturn[] = $objNavigationPoint;
         }
 
@@ -228,14 +240,20 @@ class class_module_navigation_point extends class_model implements interface_mod
     public static function loadPagePoint($strPagename) {
         $objDB = class_carrier::getInstance()->getObjDB();
         $arrReturn = array();
-        $strQuery = "SELECT system_id FROM "._dbprefix_."navigation, "._dbprefix_."system
-    			             WHERE system_id = navigation_id
-    			             AND navigation_page_i = ?
-    			             AND system_status = 1";
-        $arrIds = $objDB->getPArray($strQuery, array( $strPagename));
-
-        foreach($arrIds as $arrOneId)
-            $arrReturn[] = new class_module_navigation_point($arrOneId["system_id"]);
+        $strQuery = "SELECT *
+                       FROM "._dbprefix_."navigation,
+                            "._dbprefix_."system_right,
+                            "._dbprefix_."system
+                  LEFT JOIN "._dbprefix_."system_date
+                         ON system_id = system_date_id
+    			      WHERE system_id = navigation_id
+                        AND navigation_page_i = ?
+                        AND system_id = right_id
+        	            AND system_status = 1";
+        $arrRows = $objDB->getPArray($strQuery, array($strPagename));
+        class_orm_rowcache::addArrayOfInitRows($arrRows);
+        foreach($arrRows as $arrOneId)
+            $arrReturn[] = class_objectfactory::getInstance()->getObject($arrOneId["system_id"]);
 
         return $arrReturn;
     }
@@ -253,13 +271,13 @@ class class_module_navigation_point extends class_model implements interface_mod
      */
     private static function loadPageLevelToNavigationNodes($strSourceId) {
 
-        $arrPages = class_module_pages_folder::getPagesAndFolderList($strSourceId, true);
+        $arrPages = class_module_pages_page::getObjectList($strSourceId);
         $arrReturn = array();
 
         //transform the sublevel
         foreach($arrPages as $objOneEntry) {
             //validate status
-            if($objOneEntry->getIntRecordStatus() == 0)
+            if($objOneEntry->getIntRecordStatus() == 0 || !$objOneEntry->rightView())
                 continue;
 
             $objLanguage = new class_module_languages_language();

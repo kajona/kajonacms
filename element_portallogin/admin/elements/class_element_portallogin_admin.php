@@ -20,6 +20,7 @@ class class_element_portallogin_admin extends class_element_admin implements int
     /**
      * @var string
      * @tableColumn element_plogin.portallogin_template
+     * @tableColumnDatatype char254
      *
      * @fieldType template
      * @fieldLabel template
@@ -31,6 +32,7 @@ class class_element_portallogin_admin extends class_element_admin implements int
     /**
      * @var string
      * @tableColumn element_plogin.portallogin_error
+     * @tableColumnDatatype char254
      *
      * @fieldType page
      * @fieldLabel portallogin_error
@@ -40,6 +42,7 @@ class class_element_portallogin_admin extends class_element_admin implements int
     /**
      * @var string
      * @tableColumn element_plogin.portallogin_success
+     * @tableColumnDatatype char254
      *
      * @fieldType page
      * @fieldLabel commons_page_success
@@ -49,6 +52,7 @@ class class_element_portallogin_admin extends class_element_admin implements int
     /**
      * @var string
      * @tableColumn element_plogin.portallogin_logout_success
+     * @tableColumnDatatype char254
      *
      * @fieldType page
      * @fieldLabel portallogin_logout_success
@@ -58,6 +62,7 @@ class class_element_portallogin_admin extends class_element_admin implements int
     /**
      * @var string
      * @tableColumn element_plogin.portallogin_profile
+     * @tableColumnDatatype char254
      *
      * @fieldType page
      * @fieldLabel portallogin_profile
@@ -67,6 +72,7 @@ class class_element_portallogin_admin extends class_element_admin implements int
     /**
      * @var string
      * @tableColumn element_plogin.portallogin_pwdforgot
+     * @tableColumnDatatype char254
      *
      * @fieldType page
      * @fieldLabel portallogin_pwdforgot
@@ -77,6 +83,7 @@ class class_element_portallogin_admin extends class_element_admin implements int
     /**
      * @var string
      * @tableColumn element_plogin.portallogin_editmode
+     * @tableColumnDatatype int
      *
      * @fieldType dropdown
      * @fieldLabel portallogin_editmode

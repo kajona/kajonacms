@@ -18,27 +18,13 @@ class class_installer_pages extends class_installer_base implements interface_in
 	public function install() {
 
 		$strReturn = "Installing ".$this->objMetadata->getStrTitle()."...\n";
+        $objManager = new class_orm_schemamanager();
 
-		//Pages -----------------------------------------------------------------------------------------
 		$strReturn .= "Installing table pages...\n";
+        $objManager->createTable("class_module_pages_page");
 
-		$arrFields = array();
-		$arrFields["page_id"] 		= array("char20", false);
-		$arrFields["page_name"] 	= array("char254", true);
-		$arrFields["page_type"] 	= array("int", true, "0");
-
-		if(!$this->objDB->createTable("page", $arrFields, array("page_id")))
-			$strReturn .= "An error occurred! ...\n";
-
-		//folder ----------------------------------------------------------------------------------------
 		$strReturn .= "Installing table page_folder...\n";
-
-		$arrFields = array();
-		$arrFields["folder_id"]           = array("char20", false);
-		$arrFields["folder_name"]         = array("char254", true);
-
-		if(!$this->objDB->createTable("page_folder", $arrFields, array("folder_id")))
-			$strReturn .= "An error occurred! ...\n";
+        $objManager->createTable("class_module_pages_folder");
 
         //folder_properties
         $strReturn .= "Installing table page_properties...\n";
@@ -58,38 +44,11 @@ class class_installer_pages extends class_installer_base implements interface_in
 		if(!$this->objDB->createTable("page_properties", $arrFields, array("pageproperties_id", "pageproperties_language"), array("pageproperties_language")))
 			$strReturn .= "An error occurred! ...\n";
 
-		//elementtable-----------------------------------------------------------------------------------
 		$strReturn .= "Installing table element...\n";
+        $objManager->createTable("class_module_pages_element");
 
-		$arrFields = array();
-		$arrFields["element_id"] 			= array("char20", false);
-		$arrFields["element_name"]			= array("char254", true);
-		$arrFields["element_class_portal"] 	= array("char254", true);
-		$arrFields["element_class_admin"]	= array("char254", true);
-		$arrFields["element_repeat"] 		= array("int", true);
-		$arrFields["element_cachetime"] 	= array("int", false, "-1");
-		$arrFields["element_version"] 	    = array("char20", true);
-		$arrFields["element_config1"] 	    = array("char254", true);
-		$arrFields["element_config2"] 	    = array("char254", true);
-		$arrFields["element_config3"] 	    = array("text", true);
-
-		if(!$this->objDB->createTable("element", $arrFields, array("element_id"), array("element_name")))
-			$strReturn .= "An error occurred! ...\n";
-
-
-		//pageelementtable-------------------------------------------------------------------------------
 		$strReturn .= "Installing table page_element...\n";
-
-		$arrFields = array();
-		$arrFields["page_element_id"] 					= array("char20", false);
-		$arrFields["page_element_ph_placeholder"]       = array("text", true);
-		$arrFields["page_element_ph_name"]              = array("char254", true);
-		$arrFields["page_element_ph_element"]           = array("char254", true);
-		$arrFields["page_element_ph_title"]             = array("char254", true);
-		$arrFields["page_element_ph_language"]          = array("char20", true);
-
-		if(!$this->objDB->createTable("page_element", $arrFields, array("page_element_id"), array("page_element_ph_language", "page_element_ph_element")))
-			$strReturn .= "An error occurred! ...\n";
+        $objManager->createTable("class_module_pages_pageelement");
 
 
 		//Now we have to register module by module
@@ -121,17 +80,7 @@ class class_installer_pages extends class_installer_base implements interface_in
 
         //Table for paragraphes
         $strReturn .= "Installing paragraph table...\n";
-
-        $arrFields = array();
-        $arrFields["content_id"]        = array("char20", false);
-        $arrFields["paragraph_title"]	= array("char254", true);
-        $arrFields["paragraph_content"] = array("text", true);
-        $arrFields["paragraph_link"]	= array("char254", true);
-        $arrFields["paragraph_image"]	= array("char254", true);
-        $arrFields["paragraph_template"]= array("char254", true);
-
-        if(!$this->objDB->createTable("element_paragraph", $arrFields, array("content_id")))
-            $strReturn .= "An error occurred! ...\n";
+        $objManager->createTable("class_element_paragraph_admin");
 
         //Register the element
         $strReturn .= "Registering paragraph...\n";
@@ -182,18 +131,7 @@ class class_installer_pages extends class_installer_base implements interface_in
 
         //Table for images
         $strReturn .= "Installing image table...\n";
-
-        $arrFields = array();
-        $arrFields["content_id"] 	 = array("char20", false);
-        $arrFields["image_title"]	 = array("char254", true);
-        $arrFields["image_link"] 	 = array("char254", true);
-        $arrFields["image_image"]	 = array("char254", true);
-        $arrFields["image_x"]        = array("int", true);
-        $arrFields["image_y"]        = array("int", true);
-        $arrFields["image_template"] = array("char254", true);
-
-        if(!$this->objDB->createTable("element_image", $arrFields, array("content_id")))
-            $strReturn .= "An error occurred! ...\n";
+        $objManager->createTable("class_element_image_admin");
 
         //Register the element
         $strReturn .= "Registering image...\n";

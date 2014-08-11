@@ -30,15 +30,8 @@ class class_installer_element_downloads extends class_installer_base implements 
 
 		//Table for page-element
 		$strReturn .= "Installing downloads-element table...\n";
-
-		$arrFields = array();
-		$arrFields["content_id"] 		= array("char20", false);
-		$arrFields["download_id"] 		= array("char20", true);
-		$arrFields["download_template"] = array("char254", true);
-		$arrFields["download_amount"]   = array("int", true);
-
-		if(!$this->objDB->createTable("element_downloads", $arrFields, array("content_id")))
-			$strReturn .= "An error occurred! ...\n";
+        $objManager = new class_orm_schemamanager();
+        $objManager->createTable("class_element_downloads_admin");
 
 		//Register the element
 		$strReturn .= "Registering downloads-element...\n";

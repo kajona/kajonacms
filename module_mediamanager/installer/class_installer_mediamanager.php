@@ -17,38 +17,13 @@ class class_installer_mediamanager extends class_installer_base implements inter
     public function install() {
 
 		$strReturn = "Installing ".$this->objMetadata->getStrTitle()."...\n";
-		//Tabellen anlegen
+        $objManager = new class_orm_schemamanager();
 
 		$strReturn .= "Installing table mediamanager_repo...\n";
-
-		$arrFields = array();
-		$arrFields["repo_id"] 	            = array("char20", false);
-		$arrFields["repo_path"]             = array("char254", true);
-		$arrFields["repo_title"]            = array("char254", true);
-		$arrFields["repo_upload_filter"]    = array("char254", true);
-		$arrFields["repo_view_filter"]      = array("char254", true);
-
-		if(!$this->objDB->createTable("mediamanager_repo", $arrFields, array("repo_id")))
-			$strReturn .= "An error occurred! ...\n";
+        $objManager->createTable("class_module_mediamanager_repo");
 
 		$strReturn .= "Installing table mediamanager_file...\n";
-
-		$arrFields = array();
-		$arrFields["file_id"] 			    = array("char20", false);
-		$arrFields["file_name"] 			= array("char254", true);
-		$arrFields["file_filename"] 		= array("char254", true);
-		$arrFields["file_description"] 	    = array("text", true);
-		$arrFields["file_subtitle"] 		= array("char254", true);
-		$arrFields["file_hits"] 			= array("int", true);
-		$arrFields["file_type"] 			= array("int", true);
-		$arrFields["file_cat"]  			= array("char254", true);
-		$arrFields["file_screen1"]      	= array("char254", true);
-		$arrFields["file_screen2"]      	= array("char254", true);
-		$arrFields["file_screen3"]      	= array("char254", true);
-		$arrFields["file_ispackage"]    	= array("int", true);
-
-		if(!$this->objDB->createTable("mediamanager_file", $arrFields, array("file_id")))
-			$strReturn .= "An error occurred! ...\n";
+        $objManager->createTable("class_module_mediamanager_file");
 
 
         $strReturn .= "Installing table mediamanager_dllog...\n";

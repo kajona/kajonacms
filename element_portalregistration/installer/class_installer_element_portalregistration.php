@@ -21,15 +21,8 @@ class class_installer_element_portalregistration extends class_elementinstaller_
 
        	//Table for page-element
 		$strReturn .= "Installing formular-element table...\n";
-
-		$arrFields = array();
-		$arrFields["content_id"] 				   = array("char20", false);
-		$arrFields["portalregistration_template"]  = array("char254", true);
-		$arrFields["portalregistration_group"] 	   = array("char254", true);
-		$arrFields["portalregistration_success"]   = array("char254", true);
-
-		if(!$this->objDB->createTable("element_preg", $arrFields, array("content_id")))
-			$strReturn .= "An error occurred! ...\n";
+        $objManager = new class_orm_schemamanager();
+        $objManager->createTable("class_element_portalregistration_admin");
 
 		//Register the element
 		$strReturn .= "Registering portalregistration-element...\n";

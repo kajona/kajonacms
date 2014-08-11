@@ -58,7 +58,8 @@ class class_module_navigation_portal extends class_portal implements interface_p
         if(isset($this->arrElementData["navigation_id"])) {
 
             if(!isset(self::$arrStaticNodes[$this->arrElementData["navigation_id"]])) {
-                $objNavigation = new class_module_navigation_tree($this->arrElementData["navigation_id"]);
+                /** @var class_module_navigation_tree $objNavigation */
+                $objNavigation = class_objectfactory::getInstance()->getObject($this->arrElementData["navigation_id"]);
                 self::$arrStaticNodes[$this->arrElementData["navigation_id"]] = $objNavigation->getCompleteNaviStructure();
             }
 

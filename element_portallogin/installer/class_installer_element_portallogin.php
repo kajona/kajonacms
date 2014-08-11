@@ -21,19 +21,8 @@ class class_installer_element_portallogin extends class_elementinstaller_base im
 
        	//Table for page-element
 		$strReturn .= "Installing element_plogin-element table...\n";
-
-		$arrFields = array();
-		$arrFields["content_id"] 				= array("char20", false);
-		$arrFields["portallogin_template"] 		= array("char254", true);
-		$arrFields["portallogin_error"] 		= array("char254", true);
-		$arrFields["portallogin_success"] 		= array("char254", true);
-		$arrFields["portallogin_logout_success"]= array("char254", true);
-        $arrFields["portallogin_profile"]       = array("char254", true);
-        $arrFields["portallogin_pwdforgot"]     = array("char254", true);
-        $arrFields["portallogin_editmode"]      = array("int", true);
-
-		if(!$this->objDB->createTable("element_plogin", $arrFields, array("content_id")))
-			$strReturn .= "An error occurred! ...\n";
+        $objManager = new class_orm_schemamanager();
+        $objManager->createTable("class_element_portallogin_admin");
 
 		//Register the element
 		$strReturn .= "Registering portallogin-element...\n";

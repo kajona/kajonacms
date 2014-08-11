@@ -22,6 +22,7 @@ class class_module_guestbook_post extends class_model implements interface_model
     /**
      * @var string
      * @tableColumn guestbook_post.guestbook_post_name
+     * @tableColumnDatatype char254
      *
      * @fieldType text
      *
@@ -32,6 +33,7 @@ class class_module_guestbook_post extends class_model implements interface_model
     /**
      * @var string
      * @tableColumn guestbook_post.guestbook_post_email
+     * @tableColumnDatatype char254
      *
      * @fieldType text
      * @fieldValidator class_email_validator
@@ -43,6 +45,7 @@ class class_module_guestbook_post extends class_model implements interface_model
     /**
      * @var string
      * @tableColumn guestbook_post.guestbook_post_page
+     * @tableColumnDatatype char254
      *
      * @fieldType text
      *
@@ -53,6 +56,7 @@ class class_module_guestbook_post extends class_model implements interface_model
     /**
      * @var string
      * @tableColumn guestbook_post.guestbook_post_text
+     * @tableColumnDatatype text
      *
      * @fieldType textarea
      *
@@ -63,6 +67,7 @@ class class_module_guestbook_post extends class_model implements interface_model
     /**
      * @var int
      * @tableColumn guestbook_post.guestbook_post_date
+     * @tableColumnDatatype int
      */
     private $intGuestbookPostDate = 0;
 
@@ -134,20 +139,25 @@ class class_module_guestbook_post extends class_model implements interface_model
      * @static
      */
     public static function getPosts($strPrevId = "", $bitJustActive = false, $intStart = null, $intEnd = null) {
-        $strQuery = "SELECT system_id
-						FROM " . _dbprefix_ . "guestbook_post, " . _dbprefix_ . "system
+        $strQuery = "SELECT *
+						FROM " . _dbprefix_ . "guestbook_post,
+						     " . _dbprefix_ . "system_right,
+						     " . _dbprefix_ . "system
+				   LEFT JOIN "._dbprefix_."system_date
+                            ON system_id = system_date_id
 						WHERE system_id = guestbook_post_id
-						  AND system_prev_id=?
+						  AND system_prev_id = ?
+						  AND system_id = right_id
 						  " . ($bitJustActive ? " AND system_status = 1" : "") . "
 						ORDER BY guestbook_post_date DESC";
 
         $objDB = class_carrier::getInstance()->getObjDB();
         $arrPosts = $objDB->getPArray($strQuery, array($strPrevId), $intStart, $intEnd);
-
+        class_orm_rowcache::addArrayOfInitRows($arrPosts);
         $arrReturn = array();
         //load all posts as objects
         foreach($arrPosts as $arrOnePostID) {
-            $arrReturn[] = new class_module_guestbook_post($arrOnePostID["system_id"]);
+            $arrReturn[] = class_objectfactory::getInstance()->getObject($arrOnePostID["system_id"]);
         }
         return $arrReturn;
     }
