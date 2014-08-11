@@ -795,11 +795,8 @@ HTML;
         $objArraySectionIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
         $objArraySectionIterator->setArraySection($objLogbook->getLogbookData($objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
 
-        $arrPageViews = $this->objToolkit->getSimplePageview($objArraySectionIterator, $this->getArrModule("modul"), "logbook");
-
-        $arrLogsRaw = $arrPageViews["elements"];
         $arrLogs = array();
-        foreach($arrLogsRaw as $intKey => $arrOneLog) {
+        foreach($objArraySectionIterator as $intKey => $arrOneLog) {
             $arrLogs[$intKey][0] = $arrOneLog["downloads_log_id"];
             $arrLogs[$intKey][1] = timeToString($arrOneLog["downloads_log_date"]);
             $arrLogs[$intKey][2] = $arrOneLog["downloads_log_file"];
@@ -825,7 +822,7 @@ HTML;
         $arrHeader[4] = $this->getLang("header_ip");
         $arrHeader[5] = $this->getLang("login_utrace", "user");
         $strReturn .= $this->objToolkit->dataTable($arrHeader, $arrLogs);
-        $strReturn .= $arrPageViews["pageview"];
+        $strReturn .= $this->objToolkit->getSimplePageview($objArraySectionIterator, $this->getArrModule("modul"), "logbook");
 
         return $strReturn;
     }

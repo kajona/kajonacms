@@ -908,12 +908,9 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
             $objIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
             $objIterator->setArraySection($objSourceGroup->getUserIdsForGroup($objIterator->calculateStartPos(), $objIterator->calculateEndPos()));
 
-            $arrPageViews = $this->objToolkit->getSimplePageview($objIterator, "user", "groupMember", "systemid=" . $this->getSystemid());
-            $arrMembers = $arrPageViews["elements"];
-
             $strReturn .= $this->objToolkit->listHeader();
             $intI = 0;
-            foreach($arrMembers as $strSingleMemberId) {
+            foreach($objIterator as $strSingleMemberId) {
                 $objSingleMember = new class_module_user_user($strSingleMemberId);
 
                 $strAction = "";
@@ -926,7 +923,7 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
                 }
                 $strReturn .= $this->objToolkit->genericAdminList($objSingleMember->getSystemid(), $objSingleMember->getStrDisplayName(), getImageAdmin("icon_user"), $strAction, $intI++);
             }
-            $strReturn .= $this->objToolkit->listFooter() . $arrPageViews["pageview"];
+            $strReturn .= $this->objToolkit->listFooter() . $this->objToolkit->getSimplePageview($objIterator, "user", "groupMember", "systemid=" . $this->getSystemid());
         }
         return $strReturn;
     }
@@ -1165,36 +1162,33 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
         $objIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
         $objIterator->setArraySection(class_module_user_log::getLoginLogs($objIterator->calculateStartPos(), $objIterator->calculateEndPos()));
 
-        $arrPageViews = $this->objToolkit->getSimplePageview($objIterator, "user", "loginlog");
-        $arrLogs = $arrPageViews["elements"];
-
         $arrRows = array();
-        foreach(array_keys($arrLogs) as $intI) {
-            $arrRows[$intI] = array();
-            //$arrRows[$intI][]	= $arrLogs[$intI]["user_log_id"];
-            $arrRows[$intI][] = $arrLogs[$intI]["user_log_sessid"];
-            $arrRows[$intI][] = ($arrLogs[$intI]["user_username"] != "" ? $arrLogs[$intI]["user_username"] : $arrLogs[$intI]["user_log_userid"]);
-            $arrRows[$intI][] = dateToString(new class_date($arrLogs[$intI]["user_log_date"]));
-            $arrRows[$intI][] = $arrLogs[$intI]["user_log_enddate"] != "" ? dateToString(new class_date($arrLogs[$intI]["user_log_enddate"])) : "";
-            $arrRows[$intI][] = ($arrLogs[$intI]["user_log_status"] == 0 ? $this->getLang("login_status_0") : $this->getLang("login_status_1"));
-            $arrRows[$intI][] = $arrLogs[$intI]["user_log_ip"];
+        foreach($objIterator as $arrLogRow) {
+            $arrSingleRow = array();
+            $arrSingleRow[] = $arrLogRow["user_log_sessid"];
+            $arrSingleRow[] = ($arrLogRow["user_username"] != "" ? $arrLogRow["user_username"] : $arrLogRow["user_log_userid"]);
+            $arrSingleRow[] = dateToString(new class_date($arrLogRow["user_log_date"]));
+            $arrSingleRow[] = $arrLogRow["user_log_enddate"] != "" ? dateToString(new class_date($arrLogRow["user_log_enddate"])) : "";
+            $arrSingleRow[] = ($arrLogRow["user_log_status"] == 0 ? $this->getLang("login_status_0") : $this->getLang("login_status_1"));
+            $arrSingleRow[] = $arrLogRow["user_log_ip"];
 
-            $strUtraceLinkMap = "href=\"http://www.utrace.de/ip-adresse/".$arrLogs[$intI]["user_log_ip"]."\" target=\"_blank\"";
-            $strUtraceLinkText = "href=\"http://www.utrace.de/whois/".$arrLogs[$intI]["user_log_ip"]."\" target=\"_blank\"";
+            $strUtraceLinkMap = "href=\"http://www.utrace.de/ip-adresse/".$arrLogRow["user_log_ip"]."\" target=\"_blank\"";
+            $strUtraceLinkText = "href=\"http://www.utrace.de/whois/".$arrLogRow["user_log_ip"]."\" target=\"_blank\"";
 
-            if(true || $arrLogs[$intI]["user_log_ip"] != "127.0.0.1" && $arrLogs[$intI]["user_log_ip"] != "::1") {
-                $arrRows[$intI][] = $this->objToolkit->listButton(class_link::getLinkAdminManual($strUtraceLinkMap, "", $this->getLang("login_utrace_showmap"), "icon_earth"))
+            if($arrLogRow["user_log_ip"] != "127.0.0.1" && $arrLogRow["user_log_ip"] != "::1") {
+                $arrSingleRow[] = $this->objToolkit->listButton(class_link::getLinkAdminManual($strUtraceLinkMap, "", $this->getLang("login_utrace_showmap"), "icon_earth"))
                     ." ".$this->objToolkit->listButton(class_link::getLinkAdminManual($strUtraceLinkText, "", $this->getLang("login_utrace_showtext"), "icon_text"));
             }
             else {
-                $arrRows[$intI][] = $this->objToolkit->listButton(class_adminskin_helper::getAdminImage("icon_earthDisabled", $this->getLang("login_utrace_noinfo")))." ".
+                $arrSingleRow[] = $this->objToolkit->listButton(class_adminskin_helper::getAdminImage("icon_earthDisabled", $this->getLang("login_utrace_noinfo")))." ".
                     $this->objToolkit->listButton(class_adminskin_helper::getAdminImage("icon_textDisabled", $this->getLang("login_utrace_noinfo")));
             }
+
+            $arrRows[] = $arrSingleRow;
         }
 
         //Building the surrounding table
         $arrHeader = array();
-        //$arrHeader[]	= $this->getLang("login_nr");
         $arrHeader[] = $this->getLang("login_sessid");
         $arrHeader[] = $this->getLang("login_user");
         $arrHeader[] = $this->getLang("login_logindate");
@@ -1204,7 +1198,7 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
         $arrHeader[] = $this->getLang("login_utrace");
         //and fetch the table
         $strReturn .= $this->objToolkit->dataTable($arrHeader, $arrRows);
-        $strReturn .= $arrPageViews["pageview"];
+        $strReturn .= $this->objToolkit->getSimplePageview($objIterator, "user", "loginlog");
 
         return $strReturn;
     }

@@ -67,47 +67,47 @@ class class_module_postacomment_portal extends class_portal implements interface
 
 
         $strTemplateID = $this->objTemplate->readTemplate("/module_postacomment/".$this->arrElementData["char1"], "postacomment_post");
-        //Check rights
-        if(count($arrComments) > 0) {
-            /** @var class_module_postacomment_post $objOnePost */
-            foreach($arrComments["arrData"] as $objOnePost) {
-                if($objOnePost->rightView()) {
-                    $strOnePost = "";
-                    $arrOnePost = array();
-                    $arrOnePost["postacomment_post_name"] = $objOnePost->getStrUsername();
-                    $arrOnePost["postacomment_post_subject"] = $objOnePost->getStrTitle();
-                    $arrOnePost["postacomment_post_message"] = $objOnePost->getStrComment();
-                    $arrOnePost["postacomment_post_systemid"] = $objOnePost->getSystemid();
-                    $arrOnePost["postacomment_post_date"] = timeToString($objOnePost->getIntDate(), true);
-                    //ratings available?
-                    if($objOnePost->getFloatRating() !== null) {
-                        /** @var $objRating class_module_rating_portal */
-                        $objRating = class_module_system_module::getModuleByName("rating")->getPortalInstanceOfConcreteModule();
-                        $arrOnePost["postacomment_post_rating"] = $objRating->buildRatingBar(
-                            $objOnePost->getFloatRating(), $objOnePost->getIntRatingHits(), $objOnePost->getSystemid(), $objOnePost->isRateableByUser(), $objOnePost->rightRight2()
-                        );
-                    }
 
 
-                    $strOnePost .= $this->objTemplate->fillTemplate($arrOnePost, $strTemplateID, false);
-
-                    //Add pe code
-                    $arrPeConfig = array(
-                        "pe_module"               => "postacomment",
-                        "pe_action_edit"          => "editPost",
-                        "pe_action_edit_params"   => "&systemid=".$objOnePost->getSystemid(),
-                        "pe_action_new"           => "",
-                        "pe_action_new_params"    => "",
-                        "pe_action_delete"        => "deletePost",
-                        "pe_action_delete_params" => "&systemid=".$objOnePost->getSystemid()
-                    );
-                    $strPosts .= class_element_portal::addPortalEditorCode($strOnePost, $objOnePost->getSystemid(), $arrPeConfig);
-                }
-            }
-
-        }
-        else
+        if(!$objArraySectionIterator->valid())
             $strPosts .= $this->getLang("postacomment_empty");
+
+        //Check rights
+        /** @var class_module_postacomment_post $objOnePost */
+        foreach($objArraySectionIterator as $objOnePost) {
+            if($objOnePost->rightView()) {
+                $strOnePost = "";
+                $arrOnePost = array();
+                $arrOnePost["postacomment_post_name"] = $objOnePost->getStrUsername();
+                $arrOnePost["postacomment_post_subject"] = $objOnePost->getStrTitle();
+                $arrOnePost["postacomment_post_message"] = $objOnePost->getStrComment();
+                $arrOnePost["postacomment_post_systemid"] = $objOnePost->getSystemid();
+                $arrOnePost["postacomment_post_date"] = timeToString($objOnePost->getIntDate(), true);
+                //ratings available?
+                if($objOnePost->getFloatRating() !== null) {
+                    /** @var $objRating class_module_rating_portal */
+                    $objRating = class_module_system_module::getModuleByName("rating")->getPortalInstanceOfConcreteModule();
+                    $arrOnePost["postacomment_post_rating"] = $objRating->buildRatingBar(
+                        $objOnePost->getFloatRating(), $objOnePost->getIntRatingHits(), $objOnePost->getSystemid(), $objOnePost->isRateableByUser(), $objOnePost->rightRight2()
+                    );
+                }
+
+
+                $strOnePost .= $this->objTemplate->fillTemplate($arrOnePost, $strTemplateID, false);
+
+                //Add pe code
+                $arrPeConfig = array(
+                    "pe_module"               => "postacomment",
+                    "pe_action_edit"          => "editPost",
+                    "pe_action_edit_params"   => "&systemid=".$objOnePost->getSystemid(),
+                    "pe_action_new"           => "",
+                    "pe_action_new_params"    => "",
+                    "pe_action_delete"        => "deletePost",
+                    "pe_action_delete_params" => "&systemid=".$objOnePost->getSystemid()
+                );
+                $strPosts .= class_element_portal::addPortalEditorCode($strOnePost, $objOnePost->getSystemid(), $arrPeConfig);
+            }
+        }
 
         //Create form
         if($this->getObjModule()->rightRight1()) {

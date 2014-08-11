@@ -110,6 +110,19 @@ class class_array_section_iterator extends class_array_iterator {
         return $arrReturn;
     }
 
+    public function valid() {
+        return $this->intArrCursor < count($this->arrSection);
+    }
+
+    public function rewind() {
+        $this->intArrCursor = 0;
+    }
+
+    public function current() {
+        return $this->arrSection[$this->intArrCursor];
+    }
+
+
     /**
      * Returns the elements placed on the given page
      *

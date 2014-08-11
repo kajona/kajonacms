@@ -524,13 +524,14 @@ JS;
         $objArraySectionIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
         $objArraySectionIterator->setArraySection(class_lockmanager::getLockedRecords($objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
 
-        $arrPageViews = $this->objToolkit->getSimplePageview($objArraySectionIterator, "system", "systemSessions");
-        /** @var class_model[]|interface_model[]|interface_admin_listable[] $arrRecords */
-        $arrRecords = $arrPageViews["elements"];
+        $strReturn = "";
+        if(!$objArraySectionIterator->valid()) {
+            $strReturn .= $this->getLang("commons_list_empty");
+        }
 
-        $strReturn = $this->objToolkit->listHeader();
+        $strReturn .= $this->objToolkit->listHeader();
 
-        foreach($arrRecords as $objOneRecord) {
+        foreach($objArraySectionIterator as $objOneRecord) {
 
             $strImage = "";
             if($objOneRecord instanceof interface_admin_listable) {
@@ -557,11 +558,7 @@ JS;
 
         $strReturn .= $this->objToolkit->listFooter();
 
-        if(count($arrRecords) == 0) {
-            $strReturn .= $this->getLang("commons_list_empty");
-        }
-
-        $strReturn .= $arrPageViews["pageview"];
+        $strReturn .= $this->objToolkit->getSimplePageview($objArraySectionIterator, "system", "systemSessions");
 
         return $strReturn;
     }
@@ -590,11 +587,6 @@ JS;
         $objArraySectionIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
         $objArraySectionIterator->setArraySection(class_module_system_session::getAllActiveSessions($objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
 
-        $arrPageViews = $this->objToolkit->getSimplePageview($objArraySectionIterator, "system", "systemSessions");
-        $arrSessions = $arrPageViews["elements"];
-
-
-        //$arrSessions = class_module_system_session::getAllActiveSessions();
         $arrData = array();
         $arrHeader = array();
         $arrHeader[0] = "";
@@ -604,7 +596,7 @@ JS;
         $arrHeader[4] = $this->getLang("session_activity");
         $arrHeader[5] = "";
         /** @var $objOneSession class_module_system_session */
-        foreach($arrSessions as $objOneSession) {
+        foreach($objArraySectionIterator as $objOneSession) {
             $arrRowData = array();
             $strUsername = "";
             if($objOneSession->getStrUserid() != "") {
@@ -658,9 +650,7 @@ JS;
             $arrData[] = $arrRowData;
         }
         $strReturn .= $this->objToolkit->dataTable($arrHeader, $arrData);
-
-        if(count($arrSessions) > 0)
-            $strReturn .= $arrPageViews["pageview"];
+        $strReturn .= $this->objToolkit->getSimplePageview($objArraySectionIterator, "system", "systemSessions");
 
         return $strReturn;
     }
@@ -728,9 +718,6 @@ JS;
         $objArraySectionIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
         $objArraySectionIterator->setArraySection(class_module_system_changelog::getLogEntries($strSystemid, $objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
 
-        $arrPageViews = $this->objToolkit->getSimplePageview($objArraySectionIterator, $strSourceModule, $strSourceAction, "&systemid=".$strSystemid."&bitBlockFolderview=".$this->getParam("bitBlockFolderview"));
-        $arrLogs = $arrPageViews["elements"];
-
         $arrData = array();
         $arrHeader = array();
         $arrHeader[] = $this->getLang("commons_date");
@@ -745,7 +732,7 @@ JS;
         $arrHeader[] = $this->getLang("change_newvalue");
 
         /** @var $objOneEntry class_changelog_container */
-        foreach($arrLogs as $objOneEntry) {
+        foreach($objArraySectionIterator as $objOneEntry) {
             $arrRowData = array();
 
             /** @var interface_versionable|class_model $objTarget */
@@ -774,8 +761,7 @@ JS;
         }
         $strReturn .= $this->objToolkit->dataTable($arrHeader, $arrData);
 
-        if(count($arrLogs) > 0)
-            $strReturn .= $arrPageViews["pageview"];
+        $strReturn .= $this->objToolkit->getSimplePageview($objArraySectionIterator, $strSourceModule, $strSourceAction, "&systemid=".$strSystemid."&bitBlockFolderview=".$this->getParam("bitBlockFolderview"));
 
         return $strReturn;
     }
