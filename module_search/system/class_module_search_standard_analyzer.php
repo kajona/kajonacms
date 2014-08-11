@@ -50,7 +50,7 @@ class class_module_search_standard_analyzer {
      * @return void
      */
     private function lowerize() {
-        $this->setText(strtolower($this->getText()));
+        $this->setText(uniStrtolower($this->getText()));
     }
 
     /**
