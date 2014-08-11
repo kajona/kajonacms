@@ -40,10 +40,13 @@
 
 
 
+    <condition property="script-suffix" value=".bat" else="">
+        <os family="windows" />
+    </condition>
     <!-- path to phpdoc, phpdocumentor 2 is required -->
     <property name="path.phpdoc"    value="phpdoc" />
     <!-- path to phpunit -->
-    <property name="path.phpunit"   value="phpunit" />
+    <property name="path.phpunit"   value="phpunit${script-suffix}" />
     <!-- path to phpcs -->
     <property name="path.phpcs"     value="phpcs" />
     <!-- path to phpmd -->
@@ -55,7 +58,7 @@
     <!-- path to php -->
     <property name="path.php"       value="php" />
     <!-- path to phploc -->
-    <property name="path.phploc"    value="phploc" />
+    <property name="path.phploc"    value="phploc${script-suffix}" />
     <!-- path to phpcb -->
     <property name="path.phpcb"     value="phpcb" />
 
