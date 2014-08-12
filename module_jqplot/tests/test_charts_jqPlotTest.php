@@ -230,6 +230,21 @@ class class_test_charts_jqPlotTest extends class_testbase  {
         echo $objGraph->renderGraph();
 
 
+        $objGraph = class_graph_factory::getGraphInstance();
+        $objGraph->setArrXAxisTickLabels(array("28.04.", "26.05.", "30.06.", "11.08.", "11.08."), 5);
+        $objGraph->addStackedBarChartSet(array(1899, 1929, 1944, null, null), "graph_header_eur");
+        $objGraph->addStackedBarChartSet(array(1358, 1409, 1421, null, null), "graph_header_usd");
+        $objGraph->addStackedBarChartSet(array(150, 170, 193.5, "34", null), "graph_header_other");
+        $objGraph->addStackedBarChartSet(array(43, 170, 193.5, 0, null), "graph_header_yeah");
+
+        $objGraph->setIntHeight(330);
+        $objGraph->setIntWidth(850);
+        $objGraph->setStrYAxisTitle("graph_header_tsd");
+        echo $objGraph->renderGraph();
+        //$objGraph->setStrGraphTitle($this->getLang("zinssensitivitaeten_header"));
+
+
+
     }
 }
 

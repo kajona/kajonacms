@@ -124,6 +124,16 @@ class class_graph_jqplot_seriesdata {
      */
     public function setArrDataArray($arrDataArray) {
         $this->arrDataArray = $arrDataArray;
+
+        //now process array -> all values which are not numeric will be converted to a 0
+        $this->arrDataArray = array_map(function($objElement) {
+                if(!is_numeric($objElement)) {
+                    return 0;
+                }
+                return $objElement;
+            }
+        ,$this->arrDataArray);
+
     }
 
     /**
