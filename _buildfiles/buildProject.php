@@ -80,10 +80,11 @@ class BuildHelper {
 
         foreach($arrTables as $strOneTable) {
             echo " ... drop table ".$strOneTable."\n";
-            $objDB->_query("DROP TABLE ".$strOneTable);
+            $objDB->_pQuery("DROP TABLE ".$strOneTable, array());
         }
 
         $objDB->flushQueryCache();
+        $objDB->flushTablesCache();
 
 
         echo "\n\n\n";
