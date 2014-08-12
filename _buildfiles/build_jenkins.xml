@@ -25,6 +25,14 @@
          CONFIG VALUES BELOW
      -->
 
+    <!-- setting windows specific properties-->
+    <condition property="yuicompressor" value="yuicompressor-2.4.7.jar" else="yuicompressor-2.4.8.jar"> <!--using 2.4.7 for windows beacuase of a bug 2.4.8 for windows-->
+        <os family="windows" />
+    </condition>
+    <condition property="script-suffix" value=".bat" else="">
+        <os family="windows" />
+    </condition>
+
 
     <!-- target dir for the sources from the svn repo -->
     <property name="sourcesPath"  value="/../../" />
@@ -40,9 +48,7 @@
 
 
 
-    <condition property="script-suffix" value=".bat" else="">
-        <os family="windows" />
-    </condition>
+
     <!-- path to phpdoc, phpdocumentor 2 is required -->
     <property name="path.phpdoc"    value="phpdoc" />
     <!-- path to phpunit -->
@@ -347,7 +353,7 @@
         <apply executable="java" parallel="false" dest="${basedir}${tempPath}" verbose="true" force="true">
             <fileset dir="${basedir}${tempPath}" includes="**/*-full.css"/>
             <arg line="-jar"/>
-            <arg path="yuicompressor-2.4.8.jar"/>
+            <arg path="${yuicompressor}"/>
             <arg line="--charset utf-8"/>
             <arg line="-o"/>
             <mapper type="glob" from="*-full.css" to="*.css"/>
@@ -375,7 +381,7 @@
         <apply executable="java" parallel="false" dest="${basedir}${tempPath}" verbose="true" force="true">
             <fileset dir="${basedir}${tempPath}" includes="**/*-full.js"/>
             <arg line="-jar"/>
-            <arg path="yuicompressor-2.4.8.jar"/>
+            <arg path="${yuicompressor}"/>
             <arg line="--charset utf-8"/>
             <arg line="-o"/>
             <mapper type="glob" from="*-full.js" to="*.js"/>
