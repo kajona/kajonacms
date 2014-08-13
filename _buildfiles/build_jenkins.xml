@@ -2,7 +2,7 @@
 <!-- ======================================================================
 
      Kajona Head Build
-     Buildfile to perform additional actions such as phpunit-tests, phpdoc generation, ...
+     Buildfile to perform additional actions such as phpunit-tests generation, ...
      Called by the buildserver, so change with care :)
      This file is created for Jenkins but may be called from the CLI, too.
 
@@ -26,7 +26,7 @@
      -->
 
     <!-- setting windows specific properties-->
-    <condition property="yuicompressor" value="yuicompressor-2.4.7.jar" else="yuicompressor-2.4.8.jar"> <!--using 2.4.7 for windows beacuase of a bug 2.4.8 for windows-->
+    <condition property="yuicompressor" value="yuicompressor-2.4.7.jar" else="yuicompressor-2.4.8.jar"> <!--using 2.4.7 for windows because of a bug 2.4.8 for windows-->
         <os family="windows" />
     </condition>
     <condition property="script-suffix" value=".bat" else="">
@@ -44,29 +44,31 @@
     <property name="packagesPath" value="/packages" />
     <!-- temp-folder, required to build the packages -->
     <property name="tempPath"     value="/temp/kajona" />
+    <!-- composer-folder, required for composer dependcy management -->
+    <property name="composerPath"     value="/composer" />
+    <!-- path to the composer binaries -->
+    <property name="composerBinariesPath"     value="${basedir}${composerPath}/vendor/bin" />
 
 
 
-
-
-    <!-- path to phpdoc, phpdocumentor 2 is required -->
-    <property name="path.phpdoc"    value="phpdoc" />
+    <!-- path to composer -->
+    <property name="path.composer"   value="composer${script-suffix}" />
     <!-- path to phpunit -->
-    <property name="path.phpunit"   value="phpunit${script-suffix}" />
+    <property name="path.phpunit"   value="${composerBinariesPath}/phpunit${script-suffix}" />
     <!-- path to phpcs -->
-    <property name="path.phpcs"     value="phpcs" />
+    <property name="path.phpcs"     value="${composerBinariesPath}/phpcs${script-suffix}" />
     <!-- path to phpmd -->
-    <property name="path.phpmd"     value="phpmd" />
+    <property name="path.phpmd"     value="${composerBinariesPath}/phpmd${script-suffix}" />
     <!-- path to phpcpd -->
-    <property name="path.phpcpd"    value="phpcpd" />
+    <property name="path.phpcpd"    value="${composerBinariesPath}/phpcpd${script-suffix}" />
     <!-- path to pdepend -->
-    <property name="path.pdepend"   value="pdepend" />
+    <property name="path.pdepend"   value="${composerBinariesPath}/pdepend${script-suffix}" />
     <!-- path to php -->
     <property name="path.php"       value="php" />
     <!-- path to phploc -->
-    <property name="path.phploc"    value="phploc${script-suffix}" />
+    <property name="path.phploc"    value="${composerBinariesPath}/phploc${script-suffix}" />
     <!-- path to phpcb -->
-    <property name="path.phpcb"     value="phpcb" />
+    <property name="path.phpcb"     value="${composerBinariesPath}/phpcb${script-suffix}" />
 
 
     <!--
@@ -75,10 +77,9 @@
 
 
     <!-- internal initialization -->
-    <target name="init" depends="cleanFilesystem">
+    <target name="init" depends="cleanFilesystem,installComposerDependencies">
         <tstamp />
     </target>
-
 
     <target name="buildSqliteFast" depends="
 		    								cleanFilesystem, init,
@@ -114,6 +115,13 @@
 
 
 
+    <!-- installs all composer dependencies-->
+    <target name="installComposerDependencies" >
+        <echo>${basedir}${projectPath}/composer</echo>
+        <exec executable="${path.composer}" dir="${basedir}${composerPath}" failonerror="on">
+            <arg line=" install"/>
+        </exec>
+    </target>
 
     <!-- removes existing folders and creates them again -->
     <target name="cleanFilesystem">
@@ -464,16 +472,6 @@
             <arg line="' ( cat ${basedir}/doxygen.cfg ; echo \'INPUT=${basedir}${projectPath}\' ; echo \'INPUT_FILTER=${basedir}/doxygenfilter.php\' ; echo \'OUTPUT_DIRECTORY=${basedir}/build/api\' ) | doxygen - '"/>
         </exec>
     </target>
-
-    <!-- requires phpDocumentor, binary phpdoc -->
-    <target name="generatePhpDocs">
-        <echo>Generating PHP API Docs</echo>
-        <exec executable="${path.phpdoc}" dir="${basedir}${projectPath}">
-            <arg line="--config ${basedir}/phpdoc.xml"/>
-        </exec>
-    </target>
-
-
 
     <target name="phpunit" description="Run unit tests with PHPUnit">
         <exec executable="${path.phpunit}" failonerror="true">
