@@ -176,6 +176,9 @@ class class_installer_dashboard extends class_installer_base implements interfac
         $objModule->setIntNavigation(1);
         $objModule->updateObjectToDb();
 
+        if(@ini_get("max_execution_time") < 3600 && @ini_get("max_execution_time") > 0)
+            @ini_set("max_execution_time", "3600");
+
 
         foreach($arrUsers as $objOneUser) {
             $strReturn .= "  user: ".$objOneUser->getStrUsername()."\n";
