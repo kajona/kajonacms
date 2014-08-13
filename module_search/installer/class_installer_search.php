@@ -16,6 +16,9 @@
  */
 class class_installer_search extends class_installer_base implements interface_installer_removable {
 
+    private $bitIndexRebuild = false;
+    private $bitIndexTablesUpToDate = false;
+
     public function install() {
 
         $objManager = new class_orm_schemamanager();
@@ -64,12 +67,8 @@ class class_installer_search extends class_installer_base implements interface_i
             $strReturn .= "Element already installed!...\n";
         }
 
-        $strReturn .= "Updating index...\n";
-        class_module_system_module::flushCache();
-        class_module_search_indexwriter::resetIndexAvailableCheck();
-        $objWorker = new class_module_search_indexwriter();
-        $objWorker->clearIndex();
-        $objWorker->indexRebuild();
+        $strReturn .= "Rebuilding search index...\n";
+        $this->updateIndex();
 
 
 		return $strReturn;
@@ -198,6 +197,11 @@ class class_installer_search extends class_installer_base implements interface_i
             $strReturn .= $this->update_441_45();
         }
 
+        if($this->bitIndexRebuild) {
+            $strReturn .= "Rebuilding search index...\n";
+            $this->updateIndex();
+        }
+
 
         return $strReturn."\n\n";
 	}
@@ -262,12 +266,7 @@ class class_installer_search extends class_installer_base implements interface_i
         $this->updateModuleVersion("search", "4.4");
         $this->updateElementVersion("search", "4.4");
 
-        $strReturn .= "Updating index...\n";
-        class_module_system_module::flushCache();
-        class_module_search_indexwriter::resetIndexAvailableCheck();
-        $objWorker = new class_module_search_indexwriter();
-        $objWorker->clearIndex();
-        $objWorker->indexRebuild();
+        $this->bitIndexRebuild = true;
 
 
         return $strReturn;
@@ -276,22 +275,23 @@ class class_installer_search extends class_installer_base implements interface_i
     private function update_441_45() {
         $strReturn = "Updating 4.4[.1] to 4.5...\n";
         // Install Index
-        $strReturn .= "Updating index tables...\n";
-        $strQuery = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."search_ix_document")."
-                            ADD ".$this->objDB->encloseColumnName("search_ix_content_lang")." ".$this->objDB->getDatatype("char20")." NULL";
+        if(!$this->bitIndexTablesUpToDate) {
+            $strReturn .= "Updating index tables...\n";
+            $strQuery = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."search_ix_document")."
+                                ADD ".$this->objDB->encloseColumnName("search_ix_content_lang")." ".$this->objDB->getDatatype("char20")." NULL";
 
-        if(!$this->objDB->_pQuery($strQuery, array()))
-            $strReturn .= "An error occurred! ...\n";
+            if(!$this->objDB->_pQuery($strQuery, array()))
+                $strReturn .= "An error occurred! ...\n";
 
-        $strQuery = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."search_ix_document")."
-                            ADD ".$this->objDB->encloseColumnName("search_ix_portal_object")." ".$this->objDB->getDatatype("int")." NULL";
+            $strQuery = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."search_ix_document")."
+                                ADD ".$this->objDB->encloseColumnName("search_ix_portal_object")." ".$this->objDB->getDatatype("int")." NULL";
 
-        if(!$this->objDB->_pQuery($strQuery, array()))
-            $strReturn .= "An error occurred! ...\n";
+            if(!$this->objDB->_pQuery($strQuery, array()))
+                $strReturn .= "An error occurred! ...\n";
 
-        $this->objDB->_pQuery("CREATE INDEX ix_search_ix_content_lang ON ".$this->objDB->encloseTableName(_dbprefix_."search_ix_document")."  ( ".$this->objDB->encloseColumnName("search_ix_content_lang")." ) ", array());
-        $this->objDB->_pQuery("CREATE INDEX ix_search_ix_portal_object ON ".$this->objDB->encloseTableName(_dbprefix_."search_ix_document")."  ( ".$this->objDB->encloseColumnName("search_ix_portal_object")." ) ", array());
-
+            $this->objDB->_pQuery("CREATE INDEX ix_search_ix_content_lang ON ".$this->objDB->encloseTableName(_dbprefix_."search_ix_document")."  ( ".$this->objDB->encloseColumnName("search_ix_content_lang")." ) ", array());
+            $this->objDB->_pQuery("CREATE INDEX ix_search_ix_portal_object ON ".$this->objDB->encloseTableName(_dbprefix_."search_ix_document")."  ( ".$this->objDB->encloseColumnName("search_ix_portal_object")." ) ", array());
+        }
 
         $strReturn .= "Removing old searchplugins...\n";
         $objFilesystem = new class_filesystem();
@@ -315,13 +315,7 @@ class class_installer_search extends class_installer_base implements interface_i
             @ini_set("max_execution_time", "3600");
 
 
-        class_module_system_module::flushCache();
-        class_db::getInstance()->flushQueryCache();
-        class_db::getInstance()->flushPreparedStatementsCache();
-        class_module_system_module::flushCache();
-        class_module_search_indexwriter::resetIndexAvailableCheck();
-        $objWorker = new class_module_search_indexwriter();
-        $objWorker->indexRebuild();
+        $this->bitIndexRebuild = true;
 
         $strReturn .= "Please make sure to update your searchindex manually as soon as all other packages have been updated.\n";
         $strReturn .= "An index-rebuild can be started using module system, action systemtasks, task 'Rebuild search index'.";
@@ -330,8 +324,18 @@ class class_installer_search extends class_installer_base implements interface_i
         return $strReturn;
     }
 
-    private function install_index_tables() {
+    private function updateIndex() {
+        class_module_system_module::flushCache();
+        class_db::getInstance()->flushQueryCache();
+        class_db::getInstance()->flushPreparedStatementsCache();
+        class_module_system_module::flushCache();
+        class_module_search_indexwriter::resetIndexAvailableCheck();
+        $objWorker = new class_module_search_indexwriter();
+        $objWorker->indexRebuild();
+    }
 
+    private function install_index_tables() {
+        $this->bitIndexTablesUpToDate = true;
         //Tables for search documents
         $strReturn = "Installing table search_ix_document...\n";
 
