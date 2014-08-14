@@ -1,0 +1,11 @@
+{
+    "require": {
+		"phpunit/phpunit": "4.2.0",
+		"squizlabs/php_codesniffer": "1.5.4",
+        "pdepend/pdepend" : "2.0.*",
+        "phpmd/phpmd" : "2.0.*",
+        "phploc/phploc": "*",
+        "mayflower/php-codebrowser": "~1.1",
+        "sebastian/phpcpd": "*"
+    }
+}
