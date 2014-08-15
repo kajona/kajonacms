@@ -32,6 +32,9 @@
     <condition property="script-suffix" value=".bat" else="">
         <os family="windows" />
     </condition>
+    <condition property="composerHome" value="${user.home}/AppData/Roaming/Composer" else="${user.home}/.composer">
+        <os family="windows" />
+    </condition>
 
 
     <!-- target dir for the sources from the svn repo -->
@@ -47,7 +50,7 @@
     <!-- composer-folder, required for composer dependcy management -->
     <property name="composerPath"     value="/composer" />
     <!-- path to the composer binaries -->
-    <property name="composerBinariesPath"     value="${basedir}${composerPath}/vendor/bin" />
+    <property name="composerBinariesPath" value="${composerHome}/vendor/bin" />
 
 
 
@@ -117,8 +120,17 @@
 
     <!-- installs all composer dependencies-->
     <target name="installComposerDependencies" >
-        <echo>${basedir}${projectPath}/composer</echo>
-        <exec executable="${path.composer}" dir="${basedir}${composerPath}" failonerror="on">
+        <echo>Copy composer.json and compor.lock to ${composerHome}</echo>
+        <copy todir="${composerHome}" overwrite="true"  includeEmptyDirs="true" >
+            <fileset id="composer.dirs" dir="${basedir}${composerPath}">
+                <include name="composer.json"/>
+                <include name="composer.lock"/>
+            </fileset>
+        </copy>
+
+        <echo>Execute composer</echo>
+        <exec executable="${path.composer}" failonerror="on">
+            <arg line=" global"/>
             <arg line=" install"/>
         </exec>
     </target>
