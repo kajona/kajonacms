@@ -86,7 +86,6 @@ class BuildHelper {
         class_module_system_module::flushCache();
         class_db::getInstance()->flushTablesCache();
         class_db::getInstance()->flushQueryCache();
-        class_db::getInstance()->flushPreparedStatementsCache();
 
 
         echo "\n\n\n";
