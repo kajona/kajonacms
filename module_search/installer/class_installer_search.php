@@ -327,7 +327,6 @@ class class_installer_search extends class_installer_base implements interface_i
     private function updateIndex() {
         class_module_system_module::flushCache();
         class_db::getInstance()->flushQueryCache();
-        class_db::getInstance()->flushPreparedStatementsCache();
         class_module_system_module::flushCache();
         class_module_search_indexwriter::resetIndexAvailableCheck();
         $objWorker = new class_module_search_indexwriter();
