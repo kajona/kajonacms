@@ -120,7 +120,7 @@
 
     <!-- installs all composer dependencies-->
     <target name="installComposerDependencies" >
-        <echo>Copy composer.json and compor.lock to ${composerHome}</echo>
+        <echo>Copy composer.json and composer.lock to ${composerHome}</echo>
         <copy todir="${composerHome}" overwrite="true"  includeEmptyDirs="true" >
             <fileset id="composer.dirs" dir="${basedir}${composerPath}">
                 <include name="composer.json"/>
