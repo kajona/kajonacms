@@ -90,21 +90,27 @@ class class_common_sortmanager implements interface_sortmanager {
                      ORDER BY system_sort ASC";
         $arrSiblings = $this->objDB->getPArray($strQuery, $arrParams);
 
+        $arrIds = array();
+
         $bitHit = false;
         foreach($arrSiblings as $arrOneSibling) {
 
             if($bitHit) {
-                $strQuery = "UPDATE "._dbprefix_."system SET system_sort = system_sort-1 where system_id = ?";
-                $this->objDB->_pQuery($strQuery, array($arrOneSibling["system_id"]));
+                $arrIds[] = $arrOneSibling["system_id"];
             }
 
             if($arrOneSibling["system_id"] == $this->objSource->getSystemid())
                 $bitHit = true;
         }
+
+        if(count($arrIds) > 0) {
+            $strQuery = "UPDATE "._dbprefix_."system SET system_sort = system_sort-1 where system_id IN (".implode(",", array_map(function($strVal) {return "?";}, $arrIds)).")";
+            $this->objDB->_pQuery($strQuery, $arrIds);
+        }
     }
 
     /**
-     * Sets the Position of a SystemRecord in the currect level one position upwards or downwards
+     * Sets the Position of a SystemRecord in the current level one position upwards or downwards
      *
      * @param string $strDirection upwards || downwards
      * @return void
