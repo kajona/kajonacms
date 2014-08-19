@@ -143,8 +143,8 @@ abstract class class_admin extends class_ui_base {
             $this->arrOutput["moduleSitemap"] = $this->objToolkit->getAdminSitemap($this->getArrModule("modul"));
             $this->arrOutput["moduletitle"] = $this->getOutputModuleTitle();
             $this->arrOutput["actionTitle"] = $this->getOutputActionTitle();
-            if(class_module_system_aspect::getObjectCount(true) > 1) {
-                $this->arrOutput["aspectChooser"] = $this->objToolkit->getAspectChooser($this->arrModule["modul"], $this->getAction(), $this->getSystemid());
+            if(class_module_system_aspect::getActiveObjectCount() > 1) {
+                $this->arrOutput["aspectChooser"] = $this->objToolkit->getAspectChooser($this->getArrModule("modul"), $this->getAction(), $this->getSystemid());
             }
             $this->arrOutput["login"] = $this->getOutputLogin();
             $this->arrOutput["quickhelp"] = $this->getQuickHelp();

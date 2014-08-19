@@ -100,8 +100,7 @@ class class_module_system_aspect extends class_model implements interface_model,
     protected function updateStateToDb() {
 
         //if no other aspect exists, we have a new default aspect
-        $arrObjAspects = class_module_system_aspect::getObjectList();
-        if(count($arrObjAspects) == 0) {
+        if(class_module_system_aspect::getObjectCount() == 0) {
             $this->setBitDefault(1);
         }
 
@@ -115,34 +114,24 @@ class class_module_system_aspect extends class_model implements interface_model,
     /**
      * Returns an array of all aspects available
      *
-     * @param bool $bitJustActive
-     * @param bool|int $intStart
-     * @param bool|int $intEnd
-     *
      * @return class_module_system_aspect[]
      * @static
      */
-    public static function getObjectList($bitJustActive = false, $intStart = null, $intEnd = null) {
+    public static function getActiveObjectList() {
         $objOrm = new class_orm_objectlist();
-        if($bitJustActive) {
-            $objOrm->addWhereRestriction(new class_orm_objectlist_restriction("AND system_status != 0"));
-        }
-        return $objOrm->getObjectList(__CLASS__, "", $intStart, $intEnd);
+        $objOrm->addWhereRestriction(new class_orm_objectlist_restriction("AND system_status != 0"));
+        return $objOrm->getObjectList(__CLASS__, "");
     }
 
 
     /**
-     * Returns the number of aspectss installed in the system
-     *
-     * @param bool $bitJustActive
+     * Returns the number of aspects installed in the system
      *
      * @return int
      */
-    public static function getObjectCount($bitJustActive = false) {
+    public static function getActiveObjectCount() {
         $objOrm = new class_orm_objectlist();
-        if($bitJustActive) {
-            $objOrm->addWhereRestriction(new class_orm_objectlist_restriction("AND system_status != 0"));
-        }
+        $objOrm->addWhereRestriction(new class_orm_objectlist_restriction("AND system_status != 0"));
         return $objOrm->getObjectCount(__CLASS__);
     }
 
@@ -169,11 +158,12 @@ class class_module_system_aspect extends class_model implements interface_model,
         parent::deleteObjectInternal();
 
         //if we have just one aspect remaining, set this one as default
-        $arrObjAspects = class_module_system_aspect::getObjectList();
-        if(count($arrObjAspects) == 1) {
-            $objOneLanguage = $arrObjAspects[0];
-            $objOneLanguage->setBitDefault(1);
-            $objOneLanguage->updateObjectToDb();
+        if(class_module_system_aspect::getObjectCount() == 1) {
+            /** @var class_module_system_aspect[] $arrObjAspects */
+            $arrObjAspects = class_module_system_aspect::getObjectList();
+            $objOneAspect = $arrObjAspects[0];
+            $objOneAspect->setBitDefault(1);
+            $objOneAspect->updateObjectToDb();
         }
 
         return true;
@@ -207,8 +197,8 @@ class class_module_system_aspect extends class_model implements interface_model,
             return class_objectfactory::getInstance()->getObject($arrRow["system_id"]);
         }
         else {
-            if(count(class_module_system_aspect::getObjectList(true)) > 0) {
-                $arrAspects = class_module_system_aspect::getObjectList(true);
+            $arrAspects = class_module_system_aspect::getActiveObjectList();
+            if(count($arrAspects) > 0) {
                 foreach($arrAspects as $objOneAspect)
                     if($objOneAspect->rightView())
                         return $objOneAspect;
@@ -258,8 +248,8 @@ class class_module_system_aspect extends class_model implements interface_model,
     public static function getCurrentAspect() {
 
         //process params maybe existing
-        if(defined("_admin_") && _admin_ && getGet("aspect") != "" && validateSystemid(getGet("aspect"))) {
-            self::setCurrentAspectId(getGet("aspect"));
+        if(defined("_admin_") && _admin_ && class_carrier::getInstance()->getParam("aspect") != "" && validateSystemid(class_carrier::getInstance()->getParam("aspect"))) {
+            self::setCurrentAspectId(class_carrier::getInstance()->getParam("aspect"));
         }
 
         //aspect registered in session?
@@ -299,6 +289,7 @@ class class_module_system_aspect extends class_model implements interface_model,
      * Saves an aspect id as the current active one - but only if the previous one was changed
      *
      * @param string $strAspectId
+     * @return void
      */
     public static function setCurrentAspectId($strAspectId) {
         if(validateSystemid($strAspectId) && $strAspectId != class_carrier::getInstance()->getObjSession()->getSession(class_module_system_aspect::$STR_SESSION_ASPECT_KEY)) {
@@ -309,20 +300,31 @@ class class_module_system_aspect extends class_model implements interface_model,
 
 
     /**
-     * @param $strName
+     * @param string $strName
+     * @return void
      */
     public function setStrName($strName) {
         $this->strName = $strName;
     }
 
+    /**
+     * @param string $bitDefault
+     * @return void
+     */
     public function setBitDefault($bitDefault) {
         $this->bitDefault = $bitDefault;
     }
 
+    /**
+     * @return string
+     */
     public function getStrName() {
         return $this->strName;
     }
 
+    /**
+     * @return bool
+     */
     public function getBitDefault() {
         return $this->bitDefault;
     }

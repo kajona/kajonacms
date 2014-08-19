@@ -774,11 +774,9 @@ JS;
      * @permissions right5
      */
     protected function actionAspects() {
-
         $objIterator = new class_array_section_iterator(class_module_system_aspect::getObjectCount());
         $objIterator->setPageNumber($this->getParam("pv"));
-        $objIterator->setArraySection(class_module_system_aspect::getObjectList(false, $objIterator->calculateStartPos(), $objIterator->calculateEndPos()));
-
+        $objIterator->setArraySection(class_module_system_aspect::getObjectList("", $objIterator->calculateStartPos(), $objIterator->calculateEndPos()));
         return $this->renderList($objIterator, false, "aspectList");
     }
 
