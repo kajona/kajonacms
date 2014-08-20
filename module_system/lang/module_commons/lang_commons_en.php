@@ -81,3 +81,8 @@ $lang["commons_yes"]                     = "Yes";
 $lang["commons_remove_assignment"]                     = "Remove assignment";
 $lang["commons_object_validator_datecompare_validationmessage_after"] = "'{0}' must be after '{1}'.";
 $lang["commons_object_validator_datecompare_validationmessage_before"] = "'{0}' must be before '{1}'.";
+$lang["commons_object_validator_number_range"] = "Number must be between '{0}' and '{1}'.";
+$lang["commons_object_validator_number_greater_than"] = "Number must be > '{0}'.";
+$lang["commons_object_validator_number_greaterequals_than"] = "Number must be >= '{0}'.";
+$lang["commons_object_validator_number_less_than"] = "Number must be < '{0}'.";
+$lang["commons_object_validator_number_lessequals_than"] = "Number must be <= '{0}'.";

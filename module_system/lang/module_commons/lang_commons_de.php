@@ -81,3 +81,8 @@ $lang["commons_yes"]                     = "Ja";
 $lang["commons_remove_assignment"]                     = "Zuordnung löschen";
 $lang["commons_object_validator_datecompare_validationmessage_after"] = "'{0}' darf nicht nach '{1}' liegen.";
 $lang["commons_object_validator_datecompare_validationmessage_before"] = "'{0}' muss vor '{1}' liegen.";
+$lang["commons_object_validator_number_range"] = "Die Zahl muss zwischen '{0}' und '{1}' liegen.";
+$lang["commons_object_validator_number_greater_than"] = "Die Zahl muss > '{0}' sein";
+$lang["commons_object_validator_number_greaterequals_than"] = "Die Zahl muss >= '{0}' sein";
+$lang["commons_object_validator_number_less_than"] = "Die Zahl muss < '{0}' sein";
+$lang["commons_object_validator_number_lessequals_than"] = "Die Zahl muss <= '{0}' sein";
