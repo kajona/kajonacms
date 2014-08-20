@@ -507,16 +507,21 @@ class class_module_pages_pageelement extends class_model implements interface_mo
         //fix the internal sorting
         $arrElements = $this->getSortedElementsAtPlaceholder();
 
+        $arrIds = array();
         $bitHit = false;
         foreach($arrElements as $arrOneSibling) {
 
             if($bitHit) {
-                $strQuery = "UPDATE "._dbprefix_."system SET system_sort = system_sort-1 where system_id = ?";
-                $this->objDB->_pQuery($strQuery, array($arrOneSibling["system_id"]));
+                $arrIds[] = $arrOneSibling["system_id"];
             }
 
             if($arrOneSibling["system_id"] == $this->getSystemid())
                 $bitHit = true;
+        }
+
+        if(count($arrIds) > 0) {
+            $strQuery = "UPDATE "._dbprefix_."system SET system_sort = system_sort-1 where system_id IN (".implode(",", array_map(function($strVal) {return "?";}, $arrIds)).")";
+            $this->objDB->_pQuery($strQuery, $arrIds);
         }
 
 
