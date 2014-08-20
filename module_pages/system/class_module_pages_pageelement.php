@@ -473,8 +473,8 @@ class class_module_pages_pageelement extends class_model implements interface_mo
     }
 
     /**
-     * Helper, loads all elements registered at a single placeholder,
-     * By default this method ignors the db-cache.
+     * Helper, loads all elements registered at a single placeholder for the same language,
+     * By default this method ignores the db-cache.
      *
      * @return array
      */
@@ -497,7 +497,8 @@ class class_module_pages_pageelement extends class_model implements interface_mo
 
 
     /**
-     * Deletes the element from the system-tables, also from the foreign-element-tables
+     * Deletes the element from the system-tables, also from the foreign-element-tables.
+     * This takes care of reordering the internal sort-ids.
      *
      * @return bool
      */

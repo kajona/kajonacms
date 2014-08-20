@@ -10,7 +10,14 @@
 class class_pageelement_sortmanager extends class_common_sortmanager {
 
 
-
+    /**
+     * Overwritten with no functionality, this is handled by the pageelement directly.
+     *
+     * @param bool $arrRestrictionModules
+     *
+     * @see class_module_pages_pageelement::deleteObjectInternal()
+     * @return mixed|void
+     */
     function fixSortOnDelete($arrRestrictionModules = false) {
         return ;
     }

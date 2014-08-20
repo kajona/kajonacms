@@ -193,6 +193,276 @@ class class_test_pagesSortTest extends class_testbase {
 
         $objPage->deleteObject();
     }
+
+
+    public function testSortAtPlaceholderMultiLanguage() {
+
+        $objPage = new class_module_pages_page();
+        $objPage->setStrName("sortTest");
+        $objPage->updateObjectToDb();
+
+        $objPagelementb1 = new class_module_pages_pageelement();
+        $objPagelementb1->setStrPlaceholder("b_test");
+        $objPagelementb1->setStrName("b");
+        $objPagelementb1->setStrElement("row");
+        $objPagelementb1->setStrLanguage("a1");
+        $objPagelementb1->updateObjectToDb($objPage->getSystemid());
+
+        $objPagelementb2 = new class_module_pages_pageelement();
+        $objPagelementb2->setStrPlaceholder("b_test");
+        $objPagelementb2->setStrName("b");
+        $objPagelementb2->setStrElement("row");
+        $objPagelementb2->setStrLanguage("a1");
+        $objPagelementb2->updateObjectToDb($objPage->getSystemid());
+
+        $objPagelementbA2 = new class_module_pages_pageelement();
+        $objPagelementbA2->setStrPlaceholder("b_test");
+        $objPagelementbA2->setStrName("b");
+        $objPagelementbA2->setStrElement("row");
+        $objPagelementbA2->setStrLanguage("a2");
+        $objPagelementbA2->updateObjectToDb($objPage->getSystemid());
+
+        $objPagelementa1 = new class_module_pages_pageelement();
+        $objPagelementa1->setStrPlaceholder("a_test");
+        $objPagelementa1->setStrName("a");
+        $objPagelementa1->setStrElement("row");
+        $objPagelementa1->setStrLanguage("a1");
+        $objPagelementa1->updateObjectToDb($objPage->getSystemid());
+
+        $objPagelementd1 = new class_module_pages_pageelement();
+        $objPagelementd1->setStrPlaceholder("d_test");
+        $objPagelementd1->setStrName("d");
+        $objPagelementd1->setStrElement("row");
+        $objPagelementd1->setStrLanguage("a1");
+        $objPagelementd1->updateObjectToDb($objPage->getSystemid());
+
+        $objPagelementd2 = new class_module_pages_pageelement();
+        $objPagelementd2->setStrPlaceholder("d_test");
+        $objPagelementd2->setStrName("d");
+        $objPagelementd2->setStrElement("row");
+        $objPagelementd2->setStrLanguage("a1");
+        $objPagelementd2->updateObjectToDb($objPage->getSystemid());
+
+        $objPagelementdA2 = new class_module_pages_pageelement();
+        $objPagelementdA2->setStrPlaceholder("d_test");
+        $objPagelementdA2->setStrName("d");
+        $objPagelementdA2->setStrElement("row");
+        $objPagelementdA2->setStrLanguage("a2");
+        $objPagelementdA2->updateObjectToDb($objPage->getSystemid());
+
+        $objPagelementdA3 = new class_module_pages_pageelement();
+        $objPagelementdA3->setStrPlaceholder("d_test");
+        $objPagelementdA3->setStrName("d");
+        $objPagelementdA3->setStrElement("row");
+        $objPagelementdA3->setStrLanguage("a2");
+        $objPagelementdA3->updateObjectToDb($objPage->getSystemid());
+
+        $objPagelementd3 = new class_module_pages_pageelement();
+        $objPagelementd3->setStrPlaceholder("d_test");
+        $objPagelementd3->setStrName("d");
+        $objPagelementd3->setStrElement("row");
+        $objPagelementd3->setStrLanguage("a1");
+        $objPagelementd3->updateObjectToDb($objPage->getSystemid());
+
+        $this->flushDBCache();
+
+        $arrElements = class_module_pages_pageelement::getElementsByPlaceholderAndPage($objPage->getSystemid(), "b_test", "a1", false);
+        $this->assertEquals(2, count($arrElements));
+        $this->assertEquals(1, $arrElements[0]->getIntSort()); $this->assertEquals($objPagelementb1->getSystemid(), $arrElements[0]->getSystemid());
+        $this->assertEquals(2, $arrElements[1]->getIntSort()); $this->assertEquals($objPagelementb2->getSystemid(), $arrElements[1]->getSystemid());
+
+        $arrElements = class_module_pages_pageelement::getElementsByPlaceholderAndPage($objPage->getSystemid(), "b_test", "a2", false);
+        $this->assertEquals(1, count($arrElements));
+        $this->assertEquals(1, $arrElements[0]->getIntSort()); $this->assertEquals($objPagelementbA2->getSystemid(), $arrElements[0]->getSystemid());
+
+
+        $arrElements = class_module_pages_pageelement::getElementsByPlaceholderAndPage($objPage->getSystemid(), "a_test", "a1", false);
+        $this->assertEquals(1, count($arrElements));
+        $this->assertEquals(1, $arrElements[0]->getIntSort()); $this->assertEquals($objPagelementa1->getSystemid(), $arrElements[0]->getSystemid());
+
+        $arrElements = class_module_pages_pageelement::getElementsByPlaceholderAndPage($objPage->getSystemid(), "d_test", "a1", false);
+        $this->assertEquals(3, count($arrElements));
+        $this->assertEquals(1, $arrElements[0]->getIntSort()); $this->assertEquals($objPagelementd1->getSystemid(), $arrElements[0]->getSystemid());
+        $this->assertEquals(2, $arrElements[1]->getIntSort()); $this->assertEquals($objPagelementd2->getSystemid(), $arrElements[1]->getSystemid());
+        $this->assertEquals(3, $arrElements[2]->getIntSort()); $this->assertEquals($objPagelementd3->getSystemid(), $arrElements[2]->getSystemid());
+
+        $arrElements = class_module_pages_pageelement::getElementsByPlaceholderAndPage($objPage->getSystemid(), "d_test", "a2", false);
+        $this->assertEquals(2, count($arrElements));
+        $this->assertEquals(1, $arrElements[0]->getIntSort()); $this->assertEquals($objPagelementdA2->getSystemid(), $arrElements[0]->getSystemid());
+        $this->assertEquals(2, $arrElements[1]->getIntSort()); $this->assertEquals($objPagelementdA3->getSystemid(), $arrElements[1]->getSystemid());
+
+
+        $objPagelementb2 = new class_module_pages_pageelement($objPagelementb2->getSystemid());
+        $objPagelementb2->setAbsolutePosition(1);
+
+        $this->flushDBCache();
+
+        $arrElements = class_module_pages_pageelement::getElementsByPlaceholderAndPage($objPage->getSystemid(), "b_test", "a1", false);
+        $this->assertEquals(2, count($arrElements));
+        $this->assertEquals(1, $arrElements[0]->getIntSort()); $this->assertEquals($objPagelementb2->getSystemid(), $arrElements[0]->getSystemid());
+        $this->assertEquals(2, $arrElements[1]->getIntSort()); $this->assertEquals($objPagelementb1->getSystemid(), $arrElements[1]->getSystemid());
+
+        $objPagelementd1 = new class_module_pages_pageelement($objPagelementd1->getSystemid());
+        $objPagelementd1->setPosition("down");
+
+        $this->flushDBCache();
+
+        $arrElements = class_module_pages_pageelement::getElementsByPlaceholderAndPage($objPage->getSystemid(), "d_test", "a1", false);
+        $this->assertEquals(3, count($arrElements));
+        $this->assertEquals(1, $arrElements[0]->getIntSort()); $this->assertEquals($objPagelementd2->getSystemid(), $arrElements[0]->getSystemid());
+        $this->assertEquals(2, $arrElements[1]->getIntSort()); $this->assertEquals($objPagelementd1->getSystemid(), $arrElements[1]->getSystemid());
+        $this->assertEquals(3, $arrElements[2]->getIntSort()); $this->assertEquals($objPagelementd3->getSystemid(), $arrElements[2]->getSystemid());
+
+        $arrElements = class_module_pages_pageelement::getElementsByPlaceholderAndPage($objPage->getSystemid(), "b_test", "a2", false);
+        $this->assertEquals(1, count($arrElements));
+        $this->assertEquals(1, $arrElements[0]->getIntSort()); $this->assertEquals($objPagelementbA2->getSystemid(), $arrElements[0]->getSystemid());
+
+        $arrElements = class_module_pages_pageelement::getElementsByPlaceholderAndPage($objPage->getSystemid(), "d_test", "a2", false);
+        $this->assertEquals(2, count($arrElements));
+        $this->assertEquals(1, $arrElements[0]->getIntSort()); $this->assertEquals($objPagelementdA2->getSystemid(), $arrElements[0]->getSystemid());
+        $this->assertEquals(2, $arrElements[1]->getIntSort()); $this->assertEquals($objPagelementdA3->getSystemid(), $arrElements[1]->getSystemid());
+
+
+        $objPage->deleteObject();
+    }
+
+
+
+    public function testPageElementDeleteSorting() {
+
+        $objPage = new class_module_pages_page();
+        $objPage->setStrName("sortTest");
+        $objPage->updateObjectToDb();
+
+        $objLangugage = new class_module_languages_language();
+
+        $objPagelementb1 = new class_module_pages_pageelement();
+        $objPagelementb1->setStrPlaceholder("b_test");
+        $objPagelementb1->setStrName("b");
+        $objPagelementb1->setStrElement("row");
+        $objPagelementb1->setStrLanguage($objLangugage->getStrAdminLanguageToWorkOn());
+        $objPagelementb1->updateObjectToDb($objPage->getSystemid());
+
+        $objPagelementb2 = new class_module_pages_pageelement();
+        $objPagelementb2->setStrPlaceholder("b_test");
+        $objPagelementb2->setStrName("b");
+        $objPagelementb2->setStrElement("row");
+        $objPagelementb2->setStrLanguage($objLangugage->getStrAdminLanguageToWorkOn());
+        $objPagelementb2->updateObjectToDb($objPage->getSystemid());
+
+        $objPagelementb3 = new class_module_pages_pageelement();
+        $objPagelementb3->setStrPlaceholder("b_test");
+        $objPagelementb3->setStrName("b");
+        $objPagelementb3->setStrElement("row");
+        $objPagelementb3->setStrLanguage($objLangugage->getStrAdminLanguageToWorkOn());
+        $objPagelementb3->updateObjectToDb($objPage->getSystemid());
+
+
+        $arrElements = class_module_pages_pageelement::getElementsByPlaceholderAndPage($objPage->getSystemid(), "b_test", $objLangugage->getStrAdminLanguageToWorkOn(), false);
+        $this->assertEquals(3, count($arrElements));
+        $this->assertEquals(1, $arrElements[0]->getIntSort()); $this->assertEquals($objPagelementb1->getSystemid(), $arrElements[0]->getSystemid());
+        $this->assertEquals(2, $arrElements[1]->getIntSort()); $this->assertEquals($objPagelementb2->getSystemid(), $arrElements[1]->getSystemid());
+        $this->assertEquals(3, $arrElements[2]->getIntSort()); $this->assertEquals($objPagelementb3->getSystemid(), $arrElements[2]->getSystemid());
+
+
+        $objPagelementb2->deleteObject();
+        $this->flushDBCache();
+
+        $arrElements = class_module_pages_pageelement::getElementsByPlaceholderAndPage($objPage->getSystemid(), "b_test", $objLangugage->getStrAdminLanguageToWorkOn(), false);
+        $this->assertEquals(2, count($arrElements));
+        $this->assertEquals(1, $arrElements[0]->getIntSort()); $this->assertEquals($objPagelementb1->getSystemid(), $arrElements[0]->getSystemid());
+        $this->assertEquals(2, $arrElements[1]->getIntSort()); $this->assertEquals($objPagelementb3->getSystemid(), $arrElements[1]->getSystemid());
+
+
+        $objPage->deleteObject();
+
+    }
+
+
+    public function testPageElementDeleteSortingMultiLanguage() {
+
+        $objPage = new class_module_pages_page();
+        $objPage->setStrName("sortTest");
+        $objPage->updateObjectToDb();
+
+
+
+        $objPagelementb1 = new class_module_pages_pageelement();
+        $objPagelementb1->setStrPlaceholder("b_test");
+        $objPagelementb1->setStrName("b");
+        $objPagelementb1->setStrElement("row");
+        $objPagelementb1->setStrLanguage("a1");
+        $objPagelementb1->updateObjectToDb($objPage->getSystemid());
+
+        $objPagelementc1 = new class_module_pages_pageelement();
+        $objPagelementc1->setStrPlaceholder("b_test");
+        $objPagelementc1->setStrName("b");
+        $objPagelementc1->setStrElement("row");
+        $objPagelementc1->setStrLanguage("a2");
+        $objPagelementc1->updateObjectToDb($objPage->getSystemid());
+
+        $objPagelementb2 = new class_module_pages_pageelement();
+        $objPagelementb2->setStrPlaceholder("b_test");
+        $objPagelementb2->setStrName("b");
+        $objPagelementb2->setStrElement("row");
+        $objPagelementb2->setStrLanguage("a1");
+        $objPagelementb2->updateObjectToDb($objPage->getSystemid());
+
+        $objPagelementb3 = new class_module_pages_pageelement();
+        $objPagelementb3->setStrPlaceholder("b_test");
+        $objPagelementb3->setStrName("b");
+        $objPagelementb3->setStrElement("row");
+        $objPagelementb3->setStrLanguage("a1");
+        $objPagelementb3->updateObjectToDb($objPage->getSystemid());
+
+        $objPagelementc2 = new class_module_pages_pageelement();
+        $objPagelementc2->setStrPlaceholder("b_test");
+        $objPagelementc2->setStrName("b");
+        $objPagelementc2->setStrElement("row");
+        $objPagelementc2->setStrLanguage("a2");
+        $objPagelementc2->updateObjectToDb($objPage->getSystemid());
+
+        $objPagelementc3 = new class_module_pages_pageelement();
+        $objPagelementc3->setStrPlaceholder("b_test");
+        $objPagelementc3->setStrName("b");
+        $objPagelementc3->setStrElement("row");
+        $objPagelementc3->setStrLanguage("a2");
+        $objPagelementc3->updateObjectToDb($objPage->getSystemid());
+
+
+        $arrElements = class_module_pages_pageelement::getElementsByPlaceholderAndPage($objPage->getSystemid(), "b_test", "a1", false);
+        $this->assertEquals(3, count($arrElements));
+        $this->assertEquals(1, $arrElements[0]->getIntSort()); $this->assertEquals($objPagelementb1->getSystemid(), $arrElements[0]->getSystemid());
+        $this->assertEquals(2, $arrElements[1]->getIntSort()); $this->assertEquals($objPagelementb2->getSystemid(), $arrElements[1]->getSystemid());
+        $this->assertEquals(3, $arrElements[2]->getIntSort()); $this->assertEquals($objPagelementb3->getSystemid(), $arrElements[2]->getSystemid());
+
+
+        $arrElements = class_module_pages_pageelement::getElementsByPlaceholderAndPage($objPage->getSystemid(), "b_test", "a2", false);
+        $this->assertEquals(3, count($arrElements));
+        $this->assertEquals(1, $arrElements[0]->getIntSort()); $this->assertEquals($objPagelementc1->getSystemid(), $arrElements[0]->getSystemid());
+        $this->assertEquals(2, $arrElements[1]->getIntSort()); $this->assertEquals($objPagelementc2->getSystemid(), $arrElements[1]->getSystemid());
+        $this->assertEquals(3, $arrElements[2]->getIntSort()); $this->assertEquals($objPagelementc3->getSystemid(), $arrElements[2]->getSystemid());
+
+
+        $objPagelementb2->deleteObject();
+        $this->flushDBCache();
+
+        $arrElements = class_module_pages_pageelement::getElementsByPlaceholderAndPage($objPage->getSystemid(), "b_test", "a1", false);
+        $this->assertEquals(2, count($arrElements));
+        $this->assertEquals(1, $arrElements[0]->getIntSort()); $this->assertEquals($objPagelementb1->getSystemid(), $arrElements[0]->getSystemid());
+        $this->assertEquals(2, $arrElements[1]->getIntSort()); $this->assertEquals($objPagelementb3->getSystemid(), $arrElements[1]->getSystemid());
+
+
+        $arrElements = class_module_pages_pageelement::getElementsByPlaceholderAndPage($objPage->getSystemid(), "b_test", "a2", false);
+        $this->assertEquals(3, count($arrElements));
+        $this->assertEquals(1, $arrElements[0]->getIntSort()); $this->assertEquals($objPagelementc1->getSystemid(), $arrElements[0]->getSystemid());
+        $this->assertEquals(2, $arrElements[1]->getIntSort()); $this->assertEquals($objPagelementc2->getSystemid(), $arrElements[1]->getSystemid());
+        $this->assertEquals(3, $arrElements[2]->getIntSort()); $this->assertEquals($objPagelementc3->getSystemid(), $arrElements[2]->getSystemid());
+
+
+        $objPage->deleteObject();
+
+    }
 }
 
 
