@@ -75,7 +75,7 @@ abstract class class_admin_evensimpler extends class_admin_simple {
      * Example: Converts list to listOtherObject for the object class_module_demo_demo if the annotation
      *          @ objectListOtherObject class_module_demo_demo is declared
      *
-     * @param $strAction
+     * @param string $strAction
      * @param $objInstance
      *
      * @return string
@@ -107,9 +107,9 @@ abstract class class_admin_evensimpler extends class_admin_simple {
      * Helper method to resolve the declared action to a real action, so to make list out of listOtherObject.
      * If possible, the current object-type class (based on the annotation is stored, too.
      *
-     * @param $strAutoMatchAction
-     * @param $strAnnotation
-     * @param $strActionName
+     * @param string $strAutoMatchAction
+     * @param string $strAnnotation
+     * @param string $strActionName
      *
      * @return void
      */
@@ -132,7 +132,7 @@ abstract class class_admin_evensimpler extends class_admin_simple {
     /**
      * Check if method exists in concrete class and not only in class_admin_simple
      *
-     * @param $strMethod
+     * @param string $strMethod
      *
      * @internal param $strActionName
      * @return bool
@@ -170,7 +170,7 @@ abstract class class_admin_evensimpler extends class_admin_simple {
             $objForm->getObjSourceobject()->setSystemid($this->getParam("systemid"));
             $objForm->addField(new class_formentry_hidden("", "mode"))->setStrValue("new");
 
-            return $objForm->renderForm(getLinkAdminHref($this->getArrModule("modul"), "save" . $this->getStrCurObjectTypeName()));
+            return $objForm->renderForm(class_link::getLinkAdminHref($this->getArrModule("modul"), "save" . $this->getStrCurObjectTypeName()));
         }
         else
             throw new class_exception("error creating new entry current object type not known ", class_exception::$level_ERROR);
@@ -206,7 +206,7 @@ abstract class class_admin_evensimpler extends class_admin_simple {
             $objForm = $this->getAdminForm($objEdit);
             $objForm->addField(new class_formentry_hidden("", "mode"))->setStrValue("edit");
 
-            return $objForm->renderForm(getLinkAdminHref($this->getArrModule("modul"), "save".$this->getStrCurObjectTypeName()));
+            return $objForm->renderForm(class_link::getLinkAdminHref($this->getArrModule("modul"), "save".$this->getStrCurObjectTypeName()));
         }
         else
             throw new class_exception("error editing current object type not known ", class_exception::$level_ERROR);
@@ -297,7 +297,7 @@ abstract class class_admin_evensimpler extends class_admin_simple {
                 $objRecord = $objForm->getObjSourceobject();
                 $objRecord->updateObjectToDb($strSystemId);
 
-                $this->adminReload(getLinkAdminHref($this->getArrModule("modul"), $this->getActionNameForClass("list", $objRecord), "&systemid=".$objRecord->getStrPrevId().($this->getParam("pe") != "" ? "&peClose=1&blockAction=1" : "")));
+                $this->adminReload(class_link::getLinkAdminHref($this->getArrModule("modul"), $this->getActionNameForClass("list", $objRecord), "&systemid=".$objRecord->getStrPrevId().($this->getParam("pe") != "" ? "&peClose=1&blockAction=1" : "")));
                 return "";
             }
         }
