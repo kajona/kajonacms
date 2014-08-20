@@ -122,8 +122,8 @@ class class_admin_formgenerator {
         //1. Validate fields
         foreach($this->arrFields as $objOneField) {
 
-            $bitFieldIsEmpty =
-                (!is_array($objOneField->getStrValue()) && trim($objOneField->getStrValue()) === "")
+            $bitFieldIsEmpty
+                = (!is_array($objOneField->getStrValue()) && trim($objOneField->getStrValue()) === "")
                 || is_null($objOneField->getStrValue())
                 || (is_array($objOneField->getStrValue() && count($objOneField->getStrValue()) == 0)); //if it is an array with no entries
 
@@ -156,7 +156,8 @@ class class_admin_formgenerator {
                     //Keep the reference of the current object
                     $objSourceObjectTemp = $this->getObjSourceobject();
 
-                    //Create a new instance ans set it as sourceobject in the formgenerator and all it's fields
+                    //Create a new instance of the source object and set it as source object in the formgenerator
+                    //Each existing filed will also refenrce the new created soiurce object
                     $strClassName = get_class($this->objSourceobject);
                     $this->objSourceobject = new $strClassName($this->objSourceobject->getStrSystemid());
                     foreach($this->arrFields as $objOneField) {
@@ -165,7 +166,7 @@ class class_admin_formgenerator {
                         }
                     }
 
-                    //Update sourceobject values from the fields and validate the object
+                    //Update the new source object values from the fields and validate the object
                     $this->updateSourceObject();
                     $arrValidationErrorsObject = $objValidator->validateObject($this->getObjSourceobject());
 
@@ -580,6 +581,7 @@ class class_admin_formgenerator {
 
     /**
      * Makes the group of hidden elements visible or hides the content on page-load
+     *
      * @param bool $bitHiddenElementsVisible
      * @return void
      */
@@ -602,7 +604,7 @@ class class_admin_formgenerator {
     }
 
     /**
-     * Allows to inject an onsbumit handler
+     * Allows to inject an onsubmit handler
      *
      * @param string $strOnSubmit
      * @return void
