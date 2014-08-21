@@ -15,7 +15,7 @@
 </news_list_wrapper>
 
 
-<!-- available placeholders: news_id, news_start_date, news_title, news_intro, news_text, news_more_link, news_more_link_href -->
+<!-- available placeholders: news_id, news_start_date, news_title, news_intro, news_text, news_more_link, news_more_link_href, news_nrofcomments, news_commentlist -->
 <news_list>
 <div class="newsList">
     <div class="newsListHeader">
@@ -32,7 +32,7 @@
 </news_list>
 
 
-<!-- available placeholders: news_id, news_start_date, news_title, news_intro, news_text, news_image, news_more_link, news_more_link_href -->
+<!-- available placeholders: news_id, news_start_date, news_title, news_intro, news_text, news_image, news_more_link, news_more_link_href, news_nrofcomments, news_commentlist -->
 <news_list_image>
 <div class="newsList">
     <div class="newsListHeader">
@@ -44,7 +44,7 @@
     </div>
     <div class="newsListTeaser">
         <div>
-	        <img src="_webpath_/image.php?image=%%news_image%%&amp;maxWidth=150&amp;maxHeight=150" alt="%%news_title%%" />
+	        <img src="[img,%%news_image%%,150,150]" alt="%%news_title%%" />
 	        <span data-kajona-editable="%%news_id%%#strIntro#plain">%%news_intro%%</span> %%news_more_link%%
         </div>
     </div>
@@ -52,7 +52,7 @@
 </news_list_image>
 
 
-<!-- available placeholders: news_id, news_start_date, news_title, news_intro, news_text, news_back_link -->
+<!-- available placeholders: news_id, news_start_date, news_title, news_intro, news_text, news_back_link, news_nrofcomments, news_commentlist -->
 <news_detail>
 <div class="newsDetail">
     <h2 data-kajona-editable="%%news_id%%#strTitle#plain">%%news_title%%</h2> %%news_start_date%%
@@ -63,12 +63,12 @@
 </news_detail>
 
 
-<!-- available placeholders: news_id, news_start_date, news_title, news_intro, news_text, news_image, news_back_link -->
+<!-- available placeholders: news_id, news_start_date, news_title, news_intro, news_text, news_image, news_back_link, news_nrofcomments, news_commentlist -->
 <news_detail_image>
 <div class="newsDetail">
     <h2>%%news_title%%</h2> %%news_start_date%%
     <p class="newsTeaser">%%news_intro%%</p>
-    <img src="_webpath_/image.php?image=%%news_image%%&amp;maxWidth=400&amp;maxHeight=600" alt="%%news_title%%" />
+    <img src="[img,%%news_image%%,300,500]" alt="%%news_title%%" />
     %%news_text%%
     <p>%%news_back_link%%</p>
 </div>

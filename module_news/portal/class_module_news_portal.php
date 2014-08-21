@@ -37,6 +37,8 @@ class class_module_news_portal extends class_portal implements interface_portal 
 
     /**
      * Default implementation to avoid mail-spamming.
+     *
+     * @return void
      */
     protected function actionList() {
 
@@ -62,7 +64,9 @@ class class_module_news_portal extends class_portal implements interface_portal 
         $objArraySectionIterator = new class_array_section_iterator(class_module_news_news::getNewsCountPortal($this->arrElementData["news_mode"], $strFilterId));
         $objArraySectionIterator->setIntElementsPerPage($this->arrElementData["news_amount"]);
         $objArraySectionIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
-        $objArraySectionIterator->setArraySection(class_module_news_news::loadListNewsPortal($this->arrElementData["news_mode"], $strFilterId, $this->arrElementData["news_order"], $objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
+        $objArraySectionIterator->setArraySection(
+            class_module_news_news::loadListNewsPortal($this->arrElementData["news_mode"], $strFilterId, $this->arrElementData["news_order"], $objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos())
+        );
 
         $arrNews = $this->objToolkit->simplePager($objArraySectionIterator, $this->getLang("commons_next"), $this->getLang("backward"), "", $this->getPagename());
 
@@ -80,8 +84,8 @@ class class_module_news_portal extends class_portal implements interface_portal 
                 $strOneNews = "";
                 $arrOneNews = array();
                 //generate a link to the details
-                $arrOneNews["news_more_link"] = getLinkPortal($this->arrElementData["news_detailspage"], "", "", $this->getLang("news_mehr"), "newsDetail", "", $objOneNews->getSystemid(), "", "", $objOneNews->getStrTitle());
-                $arrOneNews["news_more_link_href"] = getLinkPortalHref($this->arrElementData["news_detailspage"], "", "newsDetail", "", $objOneNews->getSystemid(), "", $objOneNews->getStrTitle());
+                $arrOneNews["news_more_link"] = class_link::getLinkPortal($this->arrElementData["news_detailspage"], "", "", $this->getLang("news_mehr"), "newsDetail", "", $objOneNews->getSystemid(), "", "", $objOneNews->getStrTitle());
+                $arrOneNews["news_more_link_href"] = class_link::getLinkPortalHref($this->arrElementData["news_detailspage"], "", "newsDetail", "", $objOneNews->getSystemid(), "", $objOneNews->getStrTitle());
                 $arrOneNews["news_start_date"] = dateToString($objOneNews->getObjStartDate(), false);
                 $arrOneNews["news_id"] = $objOneNews->getSystemid();
                 $arrOneNews["news_title"] = $objOneNews->getStrTitle();
@@ -159,8 +163,13 @@ class class_module_news_portal extends class_portal implements interface_portal 
             $arrNews["news_intro"] = $objNews->getStrIntro();
             $arrNews["news_text"] = $objNews->getStrText();
 
+            $arrPAC = $this->loadPostacomments($objNews->getSystemid());
+            if($arrPAC != null) {
+                $arrNews["news_nrofcomments"] = $arrPAC["nrOfComments"];
+                $arrNews["news_commentlist"] = $arrPAC["commentList"];
+            }
+
             //load template section with or without image?
-            $strTemplateID = "";
             if($objNews->getStrImage() != "") {
                 $strTemplateID = $this->objTemplate->readTemplate("/module_news/" . $this->arrElementData["news_template"], "news_detail_image");
                 $arrNews["news_image"] = urlencode($objNews->getStrImage());
@@ -191,7 +200,11 @@ class class_module_news_portal extends class_portal implements interface_portal 
     }
 
     /**
-     * Loads and renders the list of comments provdided by the current news-entry
+     * Loads and renders the list of comments provided by the current news-entry
+     *
+     * @param string $strNewsSystemid
+     *
+     * @return array
      */
     private function loadPostacomments($strNewsSystemid) {
         if($this->isPostacommentOnTemplate($this->arrElementData["news_template"])) {
@@ -200,7 +213,7 @@ class class_module_news_portal extends class_portal implements interface_portal 
 
             $arrReturn = array();
             if($objPacModule != null) {
-                $arrPosts = class_module_postacomment_post::loadPostList(false, "", $strNewsSystemid, $this->getStrPortalLanguage());
+                $arrComments = class_module_postacomment_post::loadPostList(false, "", $strNewsSystemid, $this->getStrPortalLanguage());
 
                 //the rendered list
                 $objPacPortal = new class_module_postacomment_portal(array("char1" => "postacomment_ajax.tpl"));
@@ -208,7 +221,7 @@ class class_module_news_portal extends class_portal implements interface_portal 
                 $objPacPortal->setStrPagefilter("");
                 $strListCode = $objPacPortal->action();
 
-                $arrReturn["nrOfComments"] = count($arrPosts);
+                $arrReturn["nrOfComments"] = count($arrComments);
                 $arrReturn["commentList"] = $strListCode;
             }
             else {
@@ -224,7 +237,7 @@ class class_module_news_portal extends class_portal implements interface_portal 
 
     /**
      * Checks, if the current template provides placeholders needed to show comments.
-     * Ohterwise, the postacomment-module won't be even called.
+     * Otherwise, the postacomment-module won't be even called.
      *
      * @param string $strTemplate
      *
@@ -232,7 +245,6 @@ class class_module_news_portal extends class_portal implements interface_portal 
      */
     private function isPostacommentOnTemplate($strTemplate) {
         $strTemplateID = $this->objTemplate->readTemplate("/module_news/" . $strTemplate, "news_list");
-
         return $this->objTemplate->containsPlaceholder($strTemplateID, "news_commentlist") || $this->objTemplate->containsPlaceholder($strTemplateID, "news_nrofcomments");
     }
 }
