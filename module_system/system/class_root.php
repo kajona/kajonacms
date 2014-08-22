@@ -117,7 +117,7 @@ abstract class class_root {
      * @todo migrate to long-timestamp
      * @var int
      * @templateExport
-     * @templateMapper date
+     * @templateMapper datetime
      */
     private $intLmTime;
 
@@ -158,7 +158,7 @@ abstract class class_root {
      * Long-based representation of the timestamp the record was created initially
      * @var int
      * @templateExport
-     * @templateMapper date
+     * @templateMapper datetime
      */
     private $longCreateDate;
 
@@ -167,7 +167,7 @@ abstract class class_root {
      * @var class_date
      * @versionable
      * @templateExport
-     * @templateMapper date
+     * @templateMapper datetime
      */
     private $objStartDate = null;
 
@@ -176,7 +176,7 @@ abstract class class_root {
      * @var class_date
      * @versionable
      * @templateExport
-     * @templateMapper date
+     * @templateMapper datetime
      */
     private $objEndDate = null;
 
@@ -185,7 +185,7 @@ abstract class class_root {
      * @var class_date
      * @versionable
      * @templateExport
-     * @templateMapper date
+     * @templateMapper datetime
      */
     private $objSpecialDate = null;
 

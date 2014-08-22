@@ -126,7 +126,7 @@ class class_module_eventmanager_event extends class_model implements interface_m
      * @fieldLabel event_start
      * @fieldMandatory
      * @templateExport
-     * @templateMapper date
+     * @templateMapper datetime
      */
     private $objStartDate;
 
@@ -137,7 +137,7 @@ class class_module_eventmanager_event extends class_model implements interface_m
      * @fieldType datetime
      * @fieldLabel event_end
      * @templateExport
-     * @templateMapper date
+     * @templateMapper datetime
      */
     private $objEndDate;
 

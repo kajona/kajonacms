@@ -5,13 +5,13 @@
 ********************************************************************************************************/
 
 /**
- * A templatemapper rendering a formatted date
+ * A templatemapper passing the value through urlencode
  *
  * @package module_system
  * @author sidler@mulchpropd.de
- * @since 4.5
+ * @since 4.6
  */
-class class_date_templatemapper implements interface_templatemapper {
+class class_urlencode_templatemapper implements interface_templatemapper {
 
     /**
      * Converts the passed value to a formatted value.
@@ -22,7 +22,7 @@ class class_date_templatemapper implements interface_templatemapper {
      * @return string
      */
     public function format($strValue) {
-        return dateToString(new class_date($strValue), false);
+        return urlencode($strValue);
     }
 
 } 

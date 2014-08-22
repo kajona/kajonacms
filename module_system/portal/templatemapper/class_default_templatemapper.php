@@ -7,6 +7,10 @@
 /**
  * A dummy mapper, rendering the value as is back to the template.
  * This is the default mapper, used of no other mapper is specified.
+ *
+ * @package module_system
+ * @author sidler@mulchpropd.de
+ * @since 4.5
  */
 class class_default_templatemapper implements interface_templatemapper {
     /**
