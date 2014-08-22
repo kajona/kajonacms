@@ -31,6 +31,7 @@ class class_module_news_news extends class_model implements interface_model, int
      * @fieldLabel commons_title
      *
      * @versionable
+     * @templateExport
      */
     private $strTitle = "";
 
@@ -42,6 +43,8 @@ class class_module_news_news extends class_model implements interface_model, int
      *
      * @addSearchIndex
      * @versionable
+     * @templateExport
+     * @templateMapper urlencode
      */
     private $strImage = "";
 
@@ -49,6 +52,7 @@ class class_module_news_news extends class_model implements interface_model, int
      * @var int
      * @tableColumn news.news_hits
      * @tableColumnDatatype int
+     * @templateExport
      */
     private $intHits = 0;
 
@@ -60,6 +64,7 @@ class class_module_news_news extends class_model implements interface_model, int
      * @addSearchIndex
      *
      * @versionable
+     * @templateExport
      */
     private $strIntro = "";
 
@@ -73,6 +78,7 @@ class class_module_news_news extends class_model implements interface_model, int
      * @fieldType wysiwygsmall
      *
      * @versionable
+     * @templateExport
      */
     private $strText = "";
 
@@ -106,6 +112,8 @@ class class_module_news_news extends class_model implements interface_model, int
      * @fieldMandatory
      *
      * @versionable
+     * @templateExport
+     * @templateMapper date
      */
     private $objDateStart = 0;
 
@@ -117,6 +125,8 @@ class class_module_news_news extends class_model implements interface_model, int
      * @fieldLabel form_news_dateend
      *
      * @versionable
+     * @templateExport
+     * @templateMapper date
      */
     private $objDateEnd = 0;
 
@@ -128,6 +138,8 @@ class class_module_news_news extends class_model implements interface_model, int
      * @fieldLabel form_news_datespecial
      *
      * @versionable
+     * @templateExport
+     * @templateMapper date
      */
     private $objDateSpecial = 0;
 

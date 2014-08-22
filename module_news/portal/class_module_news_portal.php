@@ -70,9 +70,7 @@ class class_module_news_portal extends class_portal implements interface_portal 
 
         $arrNews = $this->objToolkit->simplePager($objArraySectionIterator, $this->getLang("commons_next"), $this->getLang("backward"), "", $this->getPagename());
 
-        $strTemplateID = $this->objTemplate->readTemplate("/module_news/" . $this->arrElementData["news_template"], "news_list");
-        $strTemplateImageID = $this->objTemplate->readTemplate("/module_news/" . $this->arrElementData["news_template"], "news_list_image");
-        $strWrapperTemplateID = $this->objTemplate->readTemplate("/module_news/" . $this->arrElementData["news_template"], "news_list_wrapper");
+
         //Check rights
 
         if(!$objArraySectionIterator->valid())
@@ -81,36 +79,35 @@ class class_module_news_portal extends class_portal implements interface_portal 
         foreach($objArraySectionIterator as $objOneNews) {
             /** @var $objOneNews class_module_news_news */
             if($objOneNews instanceof class_module_news_news && $objOneNews->rightView()) {
-                $strOneNews = "";
-                $arrOneNews = array();
+                $objMapper = new class_template_mapper($objOneNews);
+
                 //generate a link to the details
-                $arrOneNews["news_more_link"] = class_link::getLinkPortal($this->arrElementData["news_detailspage"], "", "", $this->getLang("news_mehr"), "newsDetail", "", $objOneNews->getSystemid(), "", "", $objOneNews->getStrTitle());
-                $arrOneNews["news_more_link_href"] = class_link::getLinkPortalHref($this->arrElementData["news_detailspage"], "", "newsDetail", "", $objOneNews->getSystemid(), "", $objOneNews->getStrTitle());
-                $arrOneNews["news_start_date"] = dateToString($objOneNews->getObjStartDate(), false);
-                $arrOneNews["news_id"] = $objOneNews->getSystemid();
-                $arrOneNews["news_title"] = $objOneNews->getStrTitle();
-                $arrOneNews["news_intro"] = $objOneNews->getStrIntro();
-                $arrOneNews["news_text"] = $objOneNews->getStrText();
+                $objMapper->addPlaceholder("news_more_link", class_link::getLinkPortal($this->arrElementData["news_detailspage"], "", "", $this->getLang("news_mehr"), "newsDetail", "", $objOneNews->getSystemid(), "", "", $objOneNews->getStrTitle()));
+                $objMapper->addPlaceholder("news_more_link_href", class_link::getLinkPortalHref($this->arrElementData["news_detailspage"], "", "newsDetail", "", $objOneNews->getSystemid(), "", $objOneNews->getStrTitle()));
+                $objMapper->addPlaceholder("news_start_date", dateToString($objOneNews->getObjStartDate(), false));
+                $objMapper->addPlaceholder("news_id", $objOneNews->getSystemid());
+                $objMapper->addPlaceholder("news_title", $objOneNews->getStrTitle());
+                $objMapper->addPlaceholder("news_intro", $objOneNews->getStrIntro());
+                $objMapper->addPlaceholder("news_text", $objOneNews->getStrText());
 
                 //reset more link?
-                if(uniStrlen(htmlStripTags($arrOneNews["news_text"])) == 0 && ($objOneNews->getIntRedirectEnabled() == "0" || $objOneNews->getStrRedirectPage() == "")) {
-                    $arrOneNews["news_more_link"] = "";
+                if(uniStrlen(htmlStripTags($objOneNews->getStrText())) == 0 && ($objOneNews->getIntRedirectEnabled() == "0" || $objOneNews->getStrRedirectPage() == "")) {
+                    $objMapper->addPlaceholder("news_more_link", "");
                 }
 
-
-                $arrPAC = $this->loadPostacomments($objOneNews->getSystemid());
+                $arrPAC = $this->loadPostacomments($objOneNews->getSystemid(), ($objOneNews->getStrImage() != "" ? "news_list_image" : "news_list"));
                 if($arrPAC != null) {
-                    $arrOneNews["news_nrofcomments"] = $arrPAC["nrOfComments"];
-                    $arrOneNews["news_commentlist"] = $arrPAC["commentList"];
+                    $objMapper->addPlaceholder("news_nrofcomments", $arrPAC["nrOfComments"]);
+                    $objMapper->addPlaceholder("news_commentlist", $arrPAC["commentList"]);
                 }
 
                 //load template section with or without image?
                 if($objOneNews->getStrImage() != "") {
-                    $arrOneNews["news_image"] = urlencode($objOneNews->getStrImage());
-                    $strOneNews .= $this->objTemplate->fillTemplate($arrOneNews, $strTemplateImageID);
+                    $objMapper->addPlaceholder("news_image", urlencode($objOneNews->getStrImage()));
+                    $strOneNews = $objMapper->writeToTemplate("/module_news/".$this->arrElementData["news_template"], "news_list_image");
                 }
                 else {
-                    $strOneNews .= $this->objTemplate->fillTemplate($arrOneNews, $strTemplateID);
+                    $strOneNews = $objMapper->writeToTemplate("/module_news/".$this->arrElementData["news_template"], "news_list");
                 }
 
                 //Add pe code
@@ -131,7 +128,7 @@ class class_module_news_portal extends class_portal implements interface_portal 
         $arrWrapperTemplate["link_forward"] = $arrNews["strForward"];
         $arrWrapperTemplate["link_pages"] = $arrNews["strPages"];
         $arrWrapperTemplate["link_back"] = $arrNews["strBack"];
-        $strReturn = $this->fillTemplate($arrWrapperTemplate, $strWrapperTemplateID);
+        $strReturn = $this->fillTemplate($arrWrapperTemplate, $this->objTemplate->readTemplate("/module_news/" . $this->arrElementData["news_template"], "news_list_wrapper"));
 
         return $strReturn;
     }
@@ -145,7 +142,7 @@ class class_module_news_portal extends class_portal implements interface_portal 
         $strReturn = "";
         /** @var $objNews class_module_news_news */
         $objNews = class_objectfactory::getInstance()->getObject($this->getSystemid());
-        if($objNews != null && $objNews instanceof class_module_news_news && $objNews->rightView() && $objNews->getStatus() == "1") {
+        if($objNews != null && $objNews instanceof class_module_news_news && $objNews->rightView() && $objNews->getIntRecordStatus() == "1") {
 
             //see if we should generate a redirect instead
             if($objNews->getIntRedirectEnabled() == "1" && $objNews->getStrRedirectPage() != "") {
@@ -154,30 +151,29 @@ class class_module_news_portal extends class_portal implements interface_portal 
             }
 
             //Load record
+            $objMapper = new class_template_mapper($objNews);
 
-            $arrNews = array();
-            $arrNews["news_back_link"] = "<a href=\"javascript:history.back();\">" . $this->getLang("news_zurueck") . "</a>";
-            $arrNews["news_start_date"] = dateToString($objNews->getObjStartDate(), false);
-            $arrNews["news_id"] = $objNews->getSystemid();
-            $arrNews["news_title"] = $objNews->getStrTitle();
-            $arrNews["news_intro"] = $objNews->getStrIntro();
-            $arrNews["news_text"] = $objNews->getStrText();
+            $objMapper->addPlaceholder("news_back_link", "<a href=\"javascript:history.back();\">" . $this->getLang("news_zurueck") . "</a>");
+            $objMapper->addPlaceholder("news_start_date", dateToString($objNews->getObjStartDate(), false));
+            $objMapper->addPlaceholder("news_id", $objNews->getSystemid());
+            $objMapper->addPlaceholder("news_title", $objNews->getStrTitle());
+            $objMapper->addPlaceholder("news_intro", $objNews->getStrIntro());
+            $objMapper->addPlaceholder("news_text", $objNews->getStrText());
 
-            $arrPAC = $this->loadPostacomments($objNews->getSystemid());
+            $arrPAC = $this->loadPostacomments($objNews->getSystemid(), ($objNews->getStrImage() != "" ? "news_detail_image" : "news_detail"));
             if($arrPAC != null) {
-                $arrNews["news_nrofcomments"] = $arrPAC["nrOfComments"];
-                $arrNews["news_commentlist"] = $arrPAC["commentList"];
+                $objMapper->addPlaceholder("news_nrofcomments", $arrPAC["nrOfComments"]);
+                $objMapper->addPlaceholder("news_commentlist", $arrPAC["commentList"]);
             }
 
             //load template section with or without image?
             if($objNews->getStrImage() != "") {
-                $strTemplateID = $this->objTemplate->readTemplate("/module_news/" . $this->arrElementData["news_template"], "news_detail_image");
-                $arrNews["news_image"] = urlencode($objNews->getStrImage());
+                $objMapper->addPlaceholder("news_image", urlencode($objNews->getStrImage()));
+                $strReturn .= $objMapper->writeToTemplate("/module_news/".$this->arrElementData["news_template"], "news_detail_image");
             }
             else {
-                $strTemplateID = $this->objTemplate->readTemplate("/module_news/" . $this->arrElementData["news_template"], "news_detail");
+                $strReturn .= $objMapper->writeToTemplate("/module_news/".$this->arrElementData["news_template"], "news_detail");
             }
-            $strReturn .= $this->fillTemplate($arrNews, $strTemplateID);
 
             //Add pe code
             $arrPeConfig = array(
@@ -203,11 +199,12 @@ class class_module_news_portal extends class_portal implements interface_portal 
      * Loads and renders the list of comments provided by the current news-entry
      *
      * @param string $strNewsSystemid
+     * @param string $strTemplateSection
      *
      * @return array
      */
-    private function loadPostacomments($strNewsSystemid) {
-        if($this->isPostacommentOnTemplate($this->arrElementData["news_template"])) {
+    private function loadPostacomments($strNewsSystemid, $strTemplateSection) {
+        if($this->isPostacommentOnTemplate($this->arrElementData["news_template"], $strTemplateSection)) {
 
             $objPacModule = class_module_system_module::getModuleByName("postacomment");
 
@@ -240,11 +237,12 @@ class class_module_news_portal extends class_portal implements interface_portal 
      * Otherwise, the postacomment-module won't be even called.
      *
      * @param string $strTemplate
+     * @param string $strSection
      *
      * @return bool
      */
-    private function isPostacommentOnTemplate($strTemplate) {
-        $strTemplateID = $this->objTemplate->readTemplate("/module_news/" . $strTemplate, "news_list");
+    private function isPostacommentOnTemplate($strTemplate, $strSection) {
+        $strTemplateID = $this->objTemplate->readTemplate("/module_news/" . $strTemplate, $strSection);
         return $this->objTemplate->containsPlaceholder($strTemplateID, "news_commentlist") || $this->objTemplate->containsPlaceholder($strTemplateID, "news_nrofcomments");
     }
 }
