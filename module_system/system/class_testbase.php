@@ -69,15 +69,15 @@ abstract class class_testbase extends PHPUnit_Framework_TestCase {
      * Crreates an object of type '$strClassType'.
      * Only properties which are annotated with @var will be considered
      *
-     * @param $strClassType - the name of the class as a string
-     * @param $strParentId - the parent id of the object to be created
-     * @param $arrExcludeFillProperty - array of popertynames which will not be set
-     * @param $arrPropertyValues - assoziative array which has as key the property name and as value the to be set for the property
-     * @param $bitAutofillProperties - if true all properties which have annotation @tablecolumn will be filled with random values
+     * @param string $strClassType - the name of the class as a string
+     * @param string $strParentId - the parent id of the object to be created
+     * @param array $arrExcludeFillProperty - array of poperty names which will not be set
+     * @param array $arrPropertyValues - assoziative array which has as key the property name and as value the to be set for the property
+     * @param boolean $bitAutofillProperties - if true all properties which have annotation @tablecolumn will be filled with random values
      *
-     * @return object
+     * @return class_model
      */
-    protected function createObject($strClassType, $strParentId, $arrExcludeFillProperty = array(),  array $arrPropertyValues = array(), $bitAutofillProperties = true) {
+    protected function createObject($strClassType, $strParentId, array $arrExcludeFillProperty = array(),  array $arrPropertyValues = array(), $bitAutofillProperties = true) {
         //create the object
         $objReflector = new ReflectionClass($strClassType);
         $obj = $objReflector->newInstance();
