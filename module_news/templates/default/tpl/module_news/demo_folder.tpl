@@ -16,7 +16,7 @@
 
 
 <!-- available placeholders: news_more_link, news_more_link_href, news_nrofcomments, news_commentlist
-    strSystemid, intLmTime, longCreateDate, strTitle, strImage, intHits, strIntro, strText, objDateStart, objDateEnd, objDateSpecial
+    strSystemid, intLmTime, longCreateDate, strTitle, strImage, intHits, strIntro, strText, objDateStart, objDateEnd, objDateSpecial, objDateTimeStart, objDateTimeEnd, objDateTimeSpecial
  -->
 <news_list>
 <div class="newsList">
@@ -37,7 +37,7 @@
 
 
 <!-- available placeholders: news_more_link, news_more_link_href, news_nrofcomments, news_commentlist,
-    strSystemid, intLmTime, longCreateDate, strTitle, strImage, intHits, strIntro, strText, objDateStart, objDateEnd, objDateSpecial
+    strSystemid, intLmTime, longCreateDate, strTitle, strImage, intHits, strIntro, strText, objDateStart, objDateEnd, objDateSpecial, objDateTimeStart, objDateTimeEnd, objDateTimeSpecial
  -->
 <news_list_image>
 <div class="newsList">
@@ -61,7 +61,7 @@
 
 
 <!-- available placeholders: news_back_link, news_nrofcomments, news_commentlist,
-    strSystemid, intLmTime, longCreateDate, strTitle, strImage, intHits, strIntro, strText, objDateStart, objDateEnd, objDateSpecial
+    strSystemid, intLmTime, longCreateDate, strTitle, strImage, intHits, strIntro, strText, objDateStart, objDateEnd, objDateSpecial, objDateTimeStart, objDateTimeEnd, objDateTimeSpecial
  -->
 <news_detail>
 <div class="newsDetail">
@@ -74,7 +74,7 @@
 
 
 <!-- available placeholders: news_back_link, news_nrofcomments, news_commentlist,
-    strSystemid, intLmTime, longCreateDate, strTitle, strImage, intHits, strIntro, strText, objDateStart, objDateEnd, objDateSpecial
+    strSystemid, intLmTime, longCreateDate, strTitle, strImage, intHits, strIntro, strText, objDateStart, objDateEnd, objDateSpecial, objDateTimeStart, objDateTimeEnd, objDateTimeSpecial
  -->
 <news_detail_image>
 <div class="newsDetail">

@@ -19,7 +19,7 @@
 
 
 <!-- available placeholders: news_more_link, news_more_link_href, news_nrofcomments, news_commentlist 
-    strSystemid, intLmTime, longCreateDate, strTitle, strImage, intHits, strIntro, strText, objDateStart, objDateEnd, objDateSpecial
+    strSystemid, intLmTime, longCreateDate, strTitle, strImage, intHits, strIntro, strText, objDateStart, objDateEnd, objDateSpecial, objDateTimeStart, objDateTimeEnd, objDateTimeSpecial
 -->
 <news_list>
 <div class="newsListBlog">
@@ -45,7 +45,7 @@
 
 
 <!-- available placeholders: news_more_link, news_more_link_href, news_nrofcomments, news_commentlist 
-    strSystemid, intLmTime, longCreateDate, strTitle, strImage, intHits, strIntro, strText, objDateStart, objDateEnd, objDateSpecial
+    strSystemid, intLmTime, longCreateDate, strTitle, strImage, intHits, strIntro, strText, objDateStart, objDateEnd, objDateSpecial, objDateTimeStart, objDateTimeEnd, objDateTimeSpecial
 -->
 <news_list_image>
 <div class="newsListBlog">

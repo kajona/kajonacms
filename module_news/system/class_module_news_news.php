@@ -144,6 +144,30 @@ class class_module_news_news extends class_model implements interface_model, int
     private $objDateSpecial = 0;
 
 
+    /**
+     * For rendering only
+     * @var int
+     * @templateExport
+     * @templateMapper datetime
+     */
+    private $objDateTimeStart = 0;
+
+    /**
+     * For rendering only
+     * @var int
+     * @templateExport
+     * @templateMapper datetime
+     */
+    private $objDateTimeEnd = 0;
+
+    /**
+     * For rendering only
+     * @var int
+     * @templateExport
+     * @templateMapper datetime
+     */
+    private $objDateTimeSpecial = 0;
+
 
 
     private $arrCats = null;
@@ -663,6 +687,12 @@ class class_module_news_news extends class_model implements interface_model, int
     public function getObjDateEnd() {
         return $this->getObjEndDate();
     }
+    /**
+     * @return class_date
+     */
+    public function getObjDateTimeEnd() {
+        return $this->getObjEndDate();
+    }
 
     /**
      * @param class_date $objDateSpecial
@@ -680,6 +710,12 @@ class class_module_news_news extends class_model implements interface_model, int
     public function getObjDateSpecial() {
         return $this->getObjSpecialDate();
     }
+    /**
+     * @return class_date
+     */
+    public function getObjDateTimeSpecial() {
+        return $this->getObjSpecialDate();
+    }
 
     /**
      * @param class_date $objStartDate
@@ -695,6 +731,12 @@ class class_module_news_news extends class_model implements interface_model, int
      * @return class_date
      */
     public function getObjDateStart() {
+        return $this->getObjStartDate();
+    }
+    /**
+     * @return class_date
+     */
+    public function getObjDateTimeStart() {
         return $this->getObjStartDate();
     }
 
