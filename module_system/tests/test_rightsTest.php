@@ -261,16 +261,50 @@ class class_test_rights extends class_testbase {
 
 
 
-    private function checkNodeRights($strNodeId,
-                                     $bitView = false,
-                                     $bitEdit = false,
-                                     $bitDelete = false,
-                                     $bitRights = false,
-                                     $bitRight1 = false,
-                                     $bitRight2 = false,
-                                     $bitRight3 = false,
-                                     $bitRight4 = false,
-                                     $bitRight5 = false) {
+
+    public function testAddGroupToPermission() {
+        $objAspect = new class_module_system_aspect();
+        $objAspect->setStrName("democase");
+        $objAspect->updateObjectToDb();
+
+        $strGroupId = generateSystemid();
+
+        //fill caches
+        class_module_system_aspect::getObjectList();
+
+        $arrRow = class_carrier::getInstance()->getObjDB()->getPRow("SELECT * FROM "._dbprefix_."system_right WHERE right_id = ?", array($objAspect->getSystemid()), 0, false);
+        $this->assertTrue(!in_array($strGroupId, explode(",", $arrRow["right_view"])));
+        $this->assertTrue(!class_carrier::getInstance()->getObjRights()->checkPermissionForGroup($strGroupId, class_rights::$STR_RIGHT_VIEW, $objAspect->getSystemid()));
+
+        class_carrier::getInstance()->getObjRights()->addGroupToRight($strGroupId, $objAspect->getSystemid(), class_rights::$STR_RIGHT_VIEW);
+
+        $arrRow = class_carrier::getInstance()->getObjDB()->getPRow("SELECT * FROM "._dbprefix_."system_right WHERE right_id = ?", array($objAspect->getSystemid()), 0, false);
+        $this->assertTrue(in_array($strGroupId, explode(",", $arrRow["right_view"])));
+        $this->assertTrue(class_carrier::getInstance()->getObjRights()->checkPermissionForGroup($strGroupId, class_rights::$STR_RIGHT_VIEW, $objAspect->getSystemid()));
+
+        class_module_system_aspect::getObjectList();
+
+        $arrRow = class_carrier::getInstance()->getObjDB()->getPRow("SELECT * FROM "._dbprefix_."system_right WHERE right_id = ?", array($objAspect->getSystemid()), 0, false);
+        $this->assertTrue(in_array($strGroupId, explode(",", $arrRow["right_view"])));
+        $this->assertTrue(class_carrier::getInstance()->getObjRights()->checkPermissionForGroup($strGroupId, class_rights::$STR_RIGHT_VIEW, $objAspect->getSystemid()));
+
+
+        $objAspect->deleteObject();
+    }
+
+
+    private function checkNodeRights(
+        $strNodeId,
+        $bitView = false,
+        $bitEdit = false,
+        $bitDelete = false,
+        $bitRights = false,
+        $bitRight1 = false,
+        $bitRight2 = false,
+        $bitRight3 = false,
+        $bitRight4 = false,
+        $bitRight5 = false
+    ) {
 
         $this->assertEquals($bitView, $this->objRights->rightView($strNodeId, $this->strUserId), __FILE__." checkNodeRights View ".$strNodeId);
         $this->assertEquals($bitEdit, $this->objRights->rightEdit($strNodeId, $this->strUserId), __FILE__." checkNodeRights Edit ".$strNodeId);

@@ -538,6 +538,7 @@ class class_rights {
     public function addGroupToRight($strGroupId, $strSystemid, $strRight) {
 
         $this->objDb->flushQueryCache();
+        class_orm_rowcache::flushCache();
         $this->arrRightRowsCache = array();
 
         //Load the current rights
@@ -582,6 +583,7 @@ class class_rights {
     public function removeGroupFromRight($strGroupId, $strSystemid, $strRight) {
 
         $this->objDb->flushQueryCache();
+        class_orm_rowcache::flushCache();
         $this->arrRightRowsCache = array();
 
         //Load the current rights
