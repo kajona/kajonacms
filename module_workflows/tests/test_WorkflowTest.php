@@ -10,26 +10,6 @@ require_once (__DIR__."/../../../core/module_system/system/class_testbase.php");
 
 class test_Workflow  extends class_testbase {
 
-
-    /**
-     * @before
-     */
-    public function before() {
-        class_apc_cache::getInstance()->flushCache();
-        class_module_prozessverwaltung_dimension::resetCache();
-        class_carrier::getInstance()->getObjDB()->flushQueryCache();
-    }
-
-    /**
-     * @after
-     */
-    public function after() {
-        class_apc_cache::getInstance()->flushCache();
-        class_module_prozessverwaltung_dimension::resetCache();
-        class_carrier::getInstance()->getObjDB()->flushQueryCache();
-    }
-
-
     /**
      * Tests method getWorkflowsForSystemid with existing workflow objects
      */
