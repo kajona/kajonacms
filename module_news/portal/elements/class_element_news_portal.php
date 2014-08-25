@@ -16,6 +16,19 @@
  */
 class class_element_news_portal extends class_element_portal implements interface_portal_element {
 
+    /**
+     * Redefined in order to register cache busters
+     *
+     * @param class_module_pages_pageelement $objElementData
+     */
+    public function __construct($objElementData) {
+        parent::__construct($objElementData);
+
+        //we support ratings, so add cache-busters
+        if(class_module_system_module::getModuleByName("rating") !== null)
+            $this->setStrCacheAddon(getCookie(class_module_rating_rate::RATING_COOKIE));
+    }
+
 
     /**
      * Loads the news-class and passes control

@@ -226,9 +226,6 @@ class class_installer_sc_news implements interface_sc_installer  {
 
 
 
-
-
-
         $strReturn .= "Creating news-feed\n";
         $objNewsFeed = new class_module_news_feed();
         $objNewsFeed->setStrTitle("kajona news");
@@ -247,7 +244,9 @@ class class_installer_sc_news implements interface_sc_installer  {
         $strNewsFeedId = $objNewsFeed->getSystemid();
         $strReturn .= "ID of new news-feed: ".$strNewsFeedId."\n";
 
-        $strReturn .= "Creating navigation entries...\n";
+
+        $strReturn .= "Adding rating permissions...\n";
+        class_carrier::getInstance()->getObjRights()->addGroupToRight(_guests_group_id_, class_module_system_module::getModuleByName("news")->getSystemid(), class_rights::$STR_RIGHT_RIGHT3);
 
         return $strReturn;
     }
