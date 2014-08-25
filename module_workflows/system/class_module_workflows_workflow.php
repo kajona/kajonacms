@@ -231,8 +231,13 @@ class class_module_workflows_workflow extends class_model implements interface_m
      * @param string|array $objClass
      *
      * @return class_module_workflows_workflow[]
+     * @throws exception
      */
     public static function getWorkflowsForSystemid($strAffectedSystemid, $bitOnlyScheduled = true, $objClass = null) {
+        if(!validateSystemid($strAffectedSystemid)) {
+            throw new class_exception($strAffectedSystemid. " is not a vlaif system id", class_exception::$level_ERROR);;
+        }
+
         //1. handle param $objClass
         $strINClasses = "";
         if($objClass != null) {
