@@ -110,11 +110,9 @@ class test_Workflow  extends class_testbase {
     }
 
 
-    /**
-     * @expectedException     class_exception
-     */
     public function test_getWorkflowsForSystemid() {
         //execute test case with invlaid systemid
-        class_module_workflows_workflow::getWorkflowsForSystemid("ddd", false, array("clas_workflow_workflows_messagesummary"));
+        $arrReturn = class_module_workflows_workflow::getWorkflowsForSystemid("ddd", false, array("clas_workflow_workflows_messagesummary"));
+        $this->assertEquals(0, count($arrReturn));
     }
 }
