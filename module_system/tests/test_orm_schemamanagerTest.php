@@ -43,6 +43,7 @@ class class_test_orm_schemamanagerTest extends class_testbase {
         //$this->assertEquals(uniStrtolower($arrColumnNamesToDatatype["col3"]), uniStrtolower(uniStrReplace(" ", "", $objDb->getDatatype(class_db_datatypes::STR_TYPE_LONG))));
 
         $objDb->_pQuery("DROP TABLE "._dbprefix_."ormtest", array());
+        $objDb->flushTablesCache();
     }
 
     public function testTargetTableException1() {
