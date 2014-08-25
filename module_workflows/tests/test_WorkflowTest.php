@@ -12,6 +12,25 @@ class test_Workflow  extends class_testbase {
 
 
     /**
+     * @before
+     */
+    public function before() {
+        class_apc_cache::getInstance()->flushCache();
+        class_module_prozessverwaltung_dimension::resetCache();
+        class_carrier::getInstance()->getObjDB()->flushQueryCache();
+    }
+
+    /**
+     * @after
+     */
+    public function after() {
+        class_apc_cache::getInstance()->flushCache();
+        class_module_prozessverwaltung_dimension::resetCache();
+        class_carrier::getInstance()->getObjDB()->flushQueryCache();
+    }
+
+
+    /**
      * Tests method getWorkflowsForSystemid with existing workflow objects
      */
     public function test_getWorkflowsForSystemid_1() {
