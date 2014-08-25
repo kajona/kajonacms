@@ -18,7 +18,7 @@
 </news_list_wrapper>
 
 
-<!-- available placeholders: news_more_link, news_more_link_href, news_nrofcomments, news_commentlist 
+<!-- available placeholders: news_more_link, news_more_link_href, news_nrofcomments, news_commentlist, news_rating
     strSystemid, intLmTime, longCreateDate, strTitle, strImage, intHits, strIntro, strText, objDateStart, objDateEnd, objDateSpecial, objDateTimeStart, objDateTimeEnd, objDateTimeSpecial
 -->
 <news_list>
@@ -44,7 +44,7 @@
 </news_list>
 
 
-<!-- available placeholders: news_more_link, news_more_link_href, news_nrofcomments, news_commentlist 
+<!-- available placeholders: news_more_link, news_more_link_href, news_nrofcomments, news_commentlist, news_rating
     strSystemid, intLmTime, longCreateDate, strTitle, strImage, intHits, strIntro, strText, objDateStart, objDateEnd, objDateSpecial, objDateTimeStart, objDateTimeEnd, objDateTimeSpecial
 -->
 <news_list_image>

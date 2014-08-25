@@ -14,3 +14,5 @@ $lang["backward"]                        = "Retroceder";
 $lang["news_list_empty"]                 = "Não existem notícias disponíveis.";
 $lang["news_mehr"]                       = "[ler mais]";
 $lang["news_zurueck"]                    = "Voltar";
+
+$lang["permissions_header"]              = array(0 => "View", 1 => "Edit", 2 => "Delete", 3 => "Permissions", 4 => "", 5 => "Feeds", 6 => "Rating", 7 => "", 8 => "");

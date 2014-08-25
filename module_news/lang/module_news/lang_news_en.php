@@ -79,4 +79,4 @@ $lang["required_feed_urltitle"]          = "URL feed title";
 $lang["required_news_title"]             = "News title";
 
 //non-editable entries
-$lang["permissions_header"]              = array(0 => "View", 1 => "Edit", 2 => "Delete", 3 => "Permissions", 4 => "", 5 => "Feeds", 6 => "", 7 => "", 8 => "");
+$lang["permissions_header"]              = array(0 => "View", 1 => "Edit", 2 => "Delete", 3 => "Permissions", 4 => "", 5 => "Feeds", 6 => "Rating", 7 => "", 8 => "");

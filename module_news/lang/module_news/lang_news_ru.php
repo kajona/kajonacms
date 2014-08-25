@@ -52,3 +52,5 @@ $lang["required_feed_page"]              = "Страница с деталями
 $lang["required_feed_title"]             = "Имя ленты";
 $lang["required_feed_urltitle"]          = "Имя URL ленты";
 $lang["required_news_title"]             = "Имя новостей";
+
+$lang["permissions_header"]              = array(0 => "View", 1 => "Edit", 2 => "Delete", 3 => "Permissions", 4 => "", 5 => "Feeds", 6 => "Rating", 7 => "", 8 => "");

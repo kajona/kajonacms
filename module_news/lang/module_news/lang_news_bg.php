@@ -55,3 +55,5 @@ $lang["required_feed_page"]              = "Страница с детайли";
 $lang["required_feed_title"]             = "Feed Име";
 $lang["required_feed_urltitle"]          = "URL Feed Име";
 $lang["required_news_title"]             = "Име на новина";
+
+$lang["permissions_header"]              = array(0 => "View", 1 => "Edit", 2 => "Delete", 3 => "Permissions", 4 => "", 5 => "Feeds", 6 => "Rating", 7 => "", 8 => "");

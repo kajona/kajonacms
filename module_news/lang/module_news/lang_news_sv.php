@@ -86,3 +86,5 @@ $lang["required_feed_urltitle"]          = "URL-feedtitel";
 $lang["required_news_cat_title"]         = "Kategorititel";
 $lang["required_news_title"]             = "Nyhetstitel";
 $lang["speichern"]                       = "Spara";
+
+$lang["permissions_header"]              = array(0 => "View", 1 => "Edit", 2 => "Delete", 3 => "Permissions", 4 => "", 5 => "Feeds", 6 => "Rating", 7 => "", 8 => "");

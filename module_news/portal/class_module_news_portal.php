@@ -82,7 +82,9 @@ class class_module_news_portal extends class_portal implements interface_portal 
                 $objMapper = new class_template_mapper($objOneNews);
 
                 //generate a link to the details
-                $objMapper->addPlaceholder("news_more_link", class_link::getLinkPortal($this->arrElementData["news_detailspage"], "", "", $this->getLang("news_mehr"), "newsDetail", "", $objOneNews->getSystemid(), "", "", $objOneNews->getStrTitle()));
+                $objMapper->addPlaceholder(
+                    "news_more_link", class_link::getLinkPortal($this->arrElementData["news_detailspage"], "", "", $this->getLang("news_mehr"), "newsDetail", "", $objOneNews->getSystemid(), "", "", $objOneNews->getStrTitle())
+                );
                 $objMapper->addPlaceholder("news_more_link_href", class_link::getLinkPortalHref($this->arrElementData["news_detailspage"], "", "newsDetail", "", $objOneNews->getSystemid(), "", $objOneNews->getStrTitle()));
                 $objMapper->addPlaceholder("news_start_date", dateToString($objOneNews->getObjStartDate(), false));
                 $objMapper->addPlaceholder("news_id", $objOneNews->getSystemid());
@@ -95,10 +97,27 @@ class class_module_news_portal extends class_portal implements interface_portal 
                     $objMapper->addPlaceholder("news_more_link", "");
                 }
 
+                //postacomment
                 $arrPAC = $this->loadPostacomments($objOneNews->getSystemid(), ($objOneNews->getStrImage() != "" ? "news_list_image" : "news_list"));
                 if($arrPAC != null) {
                     $objMapper->addPlaceholder("news_nrofcomments", $arrPAC["nrOfComments"]);
                     $objMapper->addPlaceholder("news_commentlist", $arrPAC["commentList"]);
+                }
+
+                //ratings
+                if($objOneNews->getFloatRating() !== null) {
+                    /** @var $objRating class_module_rating_portal */
+                    $objRating = class_module_system_module::getModuleByName("rating")->getPortalInstanceOfConcreteModule();
+                    $objMapper->addPlaceholder(
+                        "news_rating",
+                        $objRating->buildRatingBar(
+                            $objOneNews->getFloatRating(),
+                            $objOneNews->getIntRatingHits(),
+                            $objOneNews->getSystemid(),
+                            $objOneNews->isRateableByUser(),
+                            $objOneNews->rightRight3()
+                        )
+                    );
                 }
 
                 //load template section with or without image?
@@ -160,10 +179,27 @@ class class_module_news_portal extends class_portal implements interface_portal 
             $objMapper->addPlaceholder("news_intro", $objNews->getStrIntro());
             $objMapper->addPlaceholder("news_text", $objNews->getStrText());
 
+            //postacomment
             $arrPAC = $this->loadPostacomments($objNews->getSystemid(), ($objNews->getStrImage() != "" ? "news_detail_image" : "news_detail"));
             if($arrPAC != null) {
                 $objMapper->addPlaceholder("news_nrofcomments", $arrPAC["nrOfComments"]);
                 $objMapper->addPlaceholder("news_commentlist", $arrPAC["commentList"]);
+            }
+
+            //ratings
+            if($objNews->getFloatRating() !== null) {
+                /** @var $objRating class_module_rating_portal */
+                $objRating = class_module_system_module::getModuleByName("rating")->getPortalInstanceOfConcreteModule();
+                $objMapper->addPlaceholder(
+                    "news_rating",
+                    $objRating->buildRatingBar(
+                        $objNews->getFloatRating(),
+                        $objNews->getIntRatingHits(),
+                        $objNews->getSystemid(),
+                        $objNews->isRateableByUser(),
+                        $objNews->rightRight3()
+                    )
+                );
             }
 
             //load template section with or without image?
