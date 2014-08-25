@@ -21,6 +21,10 @@ class test_Workflow  extends class_testbase {
         /** @var  class_module_workflows_workflow */
         foreach($arrWorkflows as $objWorkflow) {
             $strAffectedSystemId = $objWorkflow->getStrAffectedSystemid();
+            if(!validateSystemid($strAffectedSystemId)) {
+                continue;
+            }
+
             $strWorkflowClass = $objWorkflow->getStrClass();
 
             if(!array_key_exists($strAffectedSystemId, $arrMap)) {
@@ -103,5 +107,14 @@ class test_Workflow  extends class_testbase {
         foreach($arrCreatedWorkflows as $objWorkflow) {
             $objWorkflow->deleteObject();
         }
+    }
+
+
+    /**
+     * @expectedException     class_exception
+     */
+    public function test_getWorkflowsForSystemid() {
+        //execute test case with invlaid systemid
+        class_module_workflows_workflow::getWorkflowsForSystemid("ddd", false, array("clas_workflow_workflows_messagesummary"));
     }
 }
