@@ -551,9 +551,9 @@ class class_module_pages_page extends class_model implements interface_model, in
         $strQuery = "SELECT COUNT(*)
 						 FROM " . _dbprefix_ . "system as system
 						  WHERE system_prev_id=?
-							AND system_lock_id != 0
+							AND system_lock_id != ?
 							AND system_lock_id != ? ";
-        $arrRow = $this->objDB->getPRow($strQuery, array($this->getSystemid(), $this->objSession->getUserID()));
+        $arrRow = $this->objDB->getPRow($strQuery, array( $this->getSystemid(), $this->objSession->getUserID(), "0"));
         return $arrRow["COUNT(*)"];
     }
 
