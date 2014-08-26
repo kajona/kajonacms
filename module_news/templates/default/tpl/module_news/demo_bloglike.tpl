@@ -18,7 +18,7 @@
 </news_list_wrapper>
 
 
-<!-- available placeholders: news_more_link, news_more_link_href, news_nrofcomments, news_commentlist, news_rating
+<!-- available placeholders: news_more_link, news_more_link_href, news_nrofcomments, news_commentlist, news_rating, news_categories
     strSystemid, intLmTime, longCreateDate, strTitle, strImage, intHits, strIntro, strText, objDateStart, objDateEnd, objDateSpecial, objDateTimeStart, objDateTimeEnd, objDateTimeSpecial
 -->
 <news_list>
@@ -44,7 +44,7 @@
 </news_list>
 
 
-<!-- available placeholders: news_more_link, news_more_link_href, news_nrofcomments, news_commentlist, news_rating
+<!-- available placeholders: news_more_link, news_more_link_href, news_nrofcomments, news_commentlist, news_rating, news_categories
     strSystemid, intLmTime, longCreateDate, strTitle, strImage, intHits, strIntro, strText, objDateStart, objDateEnd, objDateSpecial, objDateTimeStart, objDateTimeEnd, objDateTimeSpecial
 -->
 <news_list_image>
@@ -69,3 +69,14 @@
     </div>
 </div>
 </news_list_image>
+
+
+<!-- available placeholders: strTitle -->
+<categories_category>
+    <li>%%strTitle%%</li>
+</categories_category>
+
+<!-- available placeholders: categories -->
+<categories_wrapper>
+    [lang,news_categories,news]<ul class="newsCategories">%%categories%%</ul>
+</categories_wrapper>

@@ -15,7 +15,7 @@
 </news_list_wrapper>
 
 
-<!-- available placeholders: news_more_link, news_more_link_href, news_nrofcomments, news_commentlist, news_rating
+<!-- available placeholders: news_more_link, news_more_link_href, news_nrofcomments, news_commentlist, news_rating, news_categories
      strSystemid, intLmTime, longCreateDate, strTitle, strImage, intHits, strIntro, strText, objDateStart, objDateEnd, objDateSpecial, objDateTimeStart, objDateTimeEnd, objDateTimeSpecial
 -->
 <news_list>
@@ -34,7 +34,7 @@
 </news_list>
 
 
-<!-- available placeholders: news_more_link, news_more_link_href, news_nrofcomments, news_commentlist, news_rating
+<!-- available placeholders: news_more_link, news_more_link_href, news_nrofcomments, news_commentlist, news_rating, news_categories
     strSystemid, intLmTime, longCreateDate, strTitle, strImage, intHits, strIntro, strText, objDateStart, objDateEnd, objDateSpecial, objDateTimeStart, objDateTimeEnd, objDateTimeSpecial
 -->
 <news_list_image>
@@ -56,7 +56,7 @@
 </news_list_image>
 
 
-<!-- available placeholders: news_back_link, news_nrofcomments, news_commentlist, news_rating
+<!-- available placeholders: news_back_link, news_nrofcomments, news_commentlist, news_rating, news_categories
     strSystemid, intLmTime, longCreateDate, strTitle, strImage, intHits, strIntro, strText, objDateStart, objDateEnd, objDateSpecial, objDateTimeStart, objDateTimeEnd, objDateTimeSpecial
  -->
 <news_detail>
@@ -70,12 +70,13 @@
     <p class="newsTeaser" data-kajona-editable="%%strSystemid%%#strIntro#plain">%%strIntro%%</p>
     <p data-kajona-editable="%%strSystemid%%#strText">%%strText%%</p>
     <p>%%news_back_link%%</p>
+    <div>%%news_categories%%</div>
     <div>%%news_commentlist%%</div>
 </div>
 </news_detail>
 
 
-<!-- available placeholders: news_back_link, news_nrofcomments, news_commentlist, news_rating
+<!-- available placeholders: news_back_link, news_nrofcomments, news_commentlist, news_rating, news_categories
     strSystemid, intLmTime, longCreateDate, strTitle, strImage, intHits, strIntro, strText, objDateStart, objDateEnd, objDateSpecial, objDateTimeStart, objDateTimeEnd, objDateTimeSpecial
 -->
 <news_detail_image>
@@ -85,6 +86,18 @@
     <img src="[img,%%strImage%%,300,500]" alt="%%strTitle%%" />
     %%strText%%
     <p>%%news_back_link%%</p>
+    <div>%%news_categories%%</div>
     <div>%%news_commentlist%%</div>
 </div>
 </news_detail_image>
+
+
+<!-- available placeholders: strTitle -->
+<categories_category>
+    <li>%%strTitle%%</li>
+</categories_category>
+
+<!-- available placeholders: categories -->
+<categories_wrapper>
+    [lang,news_categories,news]<ul class="newsCategories">%%categories%%</ul>
+</categories_wrapper>
