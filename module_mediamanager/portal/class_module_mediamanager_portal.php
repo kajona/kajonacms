@@ -120,7 +120,9 @@ class class_module_mediamanager_portal extends class_portal implements interface
             $this->getLang("commons_back"),
             $this->getParam("action"),
             $this->getPagename(),
-            "&systemid=".$this->getSystemid()
+            "&systemid=".$this->getSystemid(),
+            "pv",
+            "/module_mediamanager/".$this->arrElementData["repo_template"]
         );
 
         //Loop over every item and collect them

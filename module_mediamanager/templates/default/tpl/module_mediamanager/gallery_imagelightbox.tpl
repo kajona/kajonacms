@@ -109,3 +109,24 @@
 
 
 
+
+<!-- available placeholders: pageHref -->
+<pager_fwd>
+    <a href="%%pageHref%%">[lang,commons_next,system]</a>
+</pager_fwd>
+
+<!-- available placeholders: pageHref -->
+<pager_back>
+    <a href="%%pageHref%%">[lang,commons_back,system]</a>
+</pager_back>
+
+<!-- available placeholders: pageHref, pageNumber -->
+<pager_entry>
+    <a href="%%pageHref%%">[%%pageNumber%%]</a>
+</pager_entry>
+
+<!-- available placeholders: pageHref, pageNumber -->
+<pager_entry_active>
+    <span style="font-weight: bold"><a href="%%pageHref%%">[%%pageNumber%%]</a></span>
+</pager_entry_active>
+
