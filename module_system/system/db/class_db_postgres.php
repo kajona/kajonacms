@@ -421,7 +421,14 @@ class class_db_postgres extends class_db_base {
         $strFilename = _realpath_.$strFilename;
         $strTables = "-t ".implode(" -t ", $arrTables);
 
-        $strCommand = "PGPASSWORD=\"".$this->strPass."\" ".$this->strDumpBin." --clean -h".$this->strHost." -U".$this->strUsername." -p".$this->intPort." ".$strTables." ".$this->strDbName." > \"".$strFilename."\"";
+        if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
+            $strCommand = "SET \"PGPASSWORD=$this->strPass\" && ";
+        }
+        else {
+            $strCommand = "PGPASSWORD=\"".$this->strPass."\" ";
+        }
+
+        $strCommand .= $this->strDumpBin." --clean -h".$this->strHost." -U".$this->strUsername." -p".$this->intPort." ".$strTables." ".$this->strDbName." > \"".$strFilename."\"";
         //Now do a systemfork
         $intTemp = "";
         $strResult = system($strCommand, $intTemp);
@@ -439,7 +446,14 @@ class class_db_postgres extends class_db_base {
     public function dbImport($strFilename) {
         $strFilename = _realpath_.$strFilename;
 
-        $strCommand = "PGPASSWORD=\"".$this->strPass."\" ".$this->strRestoreBin." -q -h".$this->strHost." -U".$this->strUsername." -p".$this->intPort." ".$this->strDbName." < \"".$strFilename."\"";
+        if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
+            $strCommand = "SET \"PGPASSWORD=$this->strPass\" && ";
+        }
+        else {
+            $strCommand = "PGPASSWORD=\"".$this->strPass."\" ";
+        }
+
+        $strCommand .= $this->strRestoreBin." -q -h".$this->strHost." -U".$this->strUsername." -p".$this->intPort." ".$this->strDbName." < \"".$strFilename."\"";
         $intTemp = "";
         $strResult = system($strCommand, $intTemp);
         class_logger::getInstance(class_logger::DBLOG)->addLogRow($this->strRestoreBin." exited with code ".$intTemp, class_logger::$levelInfo);
