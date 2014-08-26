@@ -123,13 +123,14 @@ class class_toolkit_portal extends class_toolkit {
      * @param string $strPage title of the targetpage
      * @param string $strAdd additional params
      * @param string $strPvParam the param used to create the pagenumber-entries
+     * @param string $strTemplate if passed, the pager will render all links using the passed template (if the sections are present). Expected sections: pager_fwd, pager_back, pager_entry, pager_entry_active
      *
      * @return mixed array containing the created data:
      *                         return => [strForward] = link to the next page
      *                                   [strBack]    = link to the previous page
      *                                   [strPages] = Pager ( [0][1] ...)
      */
-    public function simplePager($objArraySectionIterator, $strForward = "next", $strBack = "back", $strAction = "list", $strPage = "", $strAdd = "", $strPvParam = "pv") {
+    public function simplePager($objArraySectionIterator, $strForward = "next", $strBack = "back", $strAction = "list", $strPage = "", $strAdd = "", $strPvParam = "pv", $strTemplate = "") {
 
         $arrReturn = array(
             "arrData"        => array(),
@@ -138,6 +139,25 @@ class class_toolkit_portal extends class_toolkit {
             "strPages"       => ""
         );
 
+
+        //read the template-sections, of given
+        $bitTemplate = false;
+        $strFwdId = "";
+        $strBackId = "";
+        $strEntryId = "";
+        $strEntryActiveId = "";
+        if($strTemplate != "") {
+            $strTemplateIdentifier = $this->objTemplate->readTemplate($strTemplate);
+            $bitTemplate = $this->objTemplate->containsSection($strTemplateIdentifier, "pager_fwd") &&
+                $this->objTemplate->containsSection($strTemplateIdentifier, "pager_back") &&
+                $this->objTemplate->containsSection($strTemplateIdentifier, "pager_entry") &&
+                $this->objTemplate->containsSection($strTemplateIdentifier, "pager_entry_active");
+
+            $strFwdId = $this->objTemplate->readTemplate($strTemplate, "pager_fwd");
+            $strBackId = $this->objTemplate->readTemplate($strTemplate, "pager_back");
+            $strEntryId = $this->objTemplate->readTemplate($strTemplate, "pager_entry");
+            $strEntryActiveId = $this->objTemplate->readTemplate($strTemplate, "pager_entry_active");
+        }
 
         $strLinkPages = "";
         $strLinkForward = "";
@@ -148,11 +168,21 @@ class class_toolkit_portal extends class_toolkit {
         $intPage = $objArraySectionIterator->getPageNumber();
 
         //FowardLink
-        if($intPage < $objArraySectionIterator->getNrOfPages())
-            $strLinkForward = class_link::getLinkPortal($strPage, "", null, $strForward, $strAction, "&".$strPvParam."=".($intPage + 1).$strAdd);
+        if($intPage < $objArraySectionIterator->getNrOfPages()) {
+            if($bitTemplate)
+                $strLinkForward = $this->objTemplate->fillTemplate(array("pageHref" => class_link::getLinkPortalHref($strPage, "", $strAction, "&".$strPvParam."=".($intPage + 1).$strAdd)), $strFwdId);
+            else
+                $strLinkForward = class_link::getLinkPortal($strPage, "", null, $strForward, $strAction, "&".$strPvParam."=".($intPage + 1).$strAdd);
+
+        }
         //BackLink
-        if($intPage > 1)
-            $strLinkBack = class_link::getLinkPortal($strPage, "", null, $strBack, $strAction, "&".$strPvParam."=".($intPage - 1).$strAdd);
+        if($intPage > 1) {
+            if($bitTemplate)
+                $strLinkBack = $this->objTemplate->fillTemplate(array("pageHref" => class_link::getLinkPortalHref($strPage, "", $strAction, "&".$strPvParam."=".($intPage - 1).$strAdd)), $strBackId);
+            else
+                $strLinkBack = class_link::getLinkPortal($strPage, "", null, $strBack, $strAction, "&".$strPvParam."=".($intPage - 1).$strAdd);
+
+        }
 
 
         //just load the current +-6 pages and the first/last +-3
@@ -171,10 +201,19 @@ class class_toolkit_portal extends class_toolkit {
 
 
             if($bitDisplay) {
-                if($intI == $intPage)
-                    $strLinkPages .= "  <strong>".class_link::getLinkPortal($strPage, "", null, "[".$intI."]", $strAction, "&".$strPvParam."=".$intI.$strAdd)."</strong>";
-                else
-                    $strLinkPages .= "  ".class_link::getLinkPortal($strPage, "", null, "[".$intI."]", $strAction, "&".$strPvParam."=".$intI.$strAdd);
+
+                if($bitTemplate) {
+                    if($intI == $intPage)
+                        $strLinkPages .= $this->objTemplate->fillTemplate(array("pageHref" => class_link::getLinkPortalHref($strPage, "", $strAction, "&".$strPvParam."=".$intI.$strAdd), "pageNumber" => $intI), $strEntryActiveId);
+                    else
+                        $strLinkPages .= $this->objTemplate->fillTemplate(array("pageHref" => class_link::getLinkPortalHref($strPage, "", $strAction, "&".$strPvParam."=".$intI.$strAdd), "pageNumber" => $intI), $strEntryId);
+                }
+                else {
+                    if($intI == $intPage)
+                        $strLinkPages .= "  <strong>".class_link::getLinkPortal($strPage, "", null, "[".$intI."]", $strAction, "&".$strPvParam."=".$intI.$strAdd)."</strong>";
+                    else
+                        $strLinkPages .= "  ".class_link::getLinkPortal($strPage, "", null, "[".$intI."]", $strAction, "&".$strPvParam."=".$intI.$strAdd);
+                }
             }
             $intCounter2++;
         }

@@ -68,7 +68,16 @@ class class_module_news_portal extends class_portal implements interface_portal 
             class_module_news_news::loadListNewsPortal($this->arrElementData["news_mode"], $strFilterId, $this->arrElementData["news_order"], $objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos())
         );
 
-        $arrNews = $this->objToolkit->simplePager($objArraySectionIterator, $this->getLang("commons_next"), $this->getLang("backward"), "", $this->getPagename());
+        $arrNews = $this->objToolkit->simplePager(
+            $objArraySectionIterator,
+            $this->getLang("commons_next"),
+            $this->getLang("commons_back"),
+            "",
+            $this->getPagename(),
+            "",
+            "pv",
+            "/module_news/".$this->arrElementData["news_template"]
+        );
 
 
         //Check rights
