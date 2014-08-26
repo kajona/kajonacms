@@ -163,6 +163,20 @@ div.newsRating {
     float: right;
 }
 
+ul.newsCategories {
+    display: inline;
+    padding: 0px;
+}
+
+ul.newsCategories li {
+    display: inline-block;
+    border: 1px solid #b1b1b1;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+    padding: 0 2px;
+}
+
 table.portalList {
     width: 100%;
 }

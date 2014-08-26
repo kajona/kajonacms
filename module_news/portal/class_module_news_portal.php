@@ -120,6 +120,9 @@ class class_module_news_portal extends class_portal implements interface_portal 
                     );
                 }
 
+                //categories
+                $objMapper->addPlaceholder("news_categories", $this->renderCategoryTitles($objOneNews));
+
                 //load template section with or without image?
                 if($objOneNews->getStrImage() != "") {
                     $objMapper->addPlaceholder("news_image", urlencode($objOneNews->getStrImage()));
@@ -202,6 +205,9 @@ class class_module_news_portal extends class_portal implements interface_portal 
                 );
             }
 
+            //categories
+            $objMapper->addPlaceholder("news_categories", $this->renderCategoryTitles($objNews));
+
             //load template section with or without image?
             if($objNews->getStrImage() != "") {
                 $objMapper->addPlaceholder("news_image", urlencode($objNews->getStrImage()));
@@ -229,6 +235,26 @@ class class_module_news_portal extends class_portal implements interface_portal 
             $strReturn = $this->getLang("commons_error_permissions");
         }
         return $strReturn;
+    }
+
+    /**
+     * Renders the news category titles
+     * @param class_module_news_news $objNews
+     *
+     * @return string
+     */
+    private function renderCategoryTitles(class_module_news_news $objNews) {
+        if(count(class_module_news_category::getNewsMember($objNews->getSystemid())) == 0)
+            return "";
+
+        $strCategories = "";
+        foreach(class_module_news_category::getNewsMember($objNews->getSystemid()) as $objCat) {
+            $objMapper = new class_template_mapper($objCat);
+            $strCategories .= $objMapper->writeToTemplate("/module_news/".$this->arrElementData["news_template"], "categories_category");
+        }
+
+        $strWrapper = $this->objTemplate->readTemplate("/module_news/".$this->arrElementData["news_template"], "categories_wrapper");
+        return $this->objTemplate->fillTemplate(array("categories" => $strCategories), $strWrapper);
     }
 
     /**

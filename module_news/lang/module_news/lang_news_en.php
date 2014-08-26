@@ -57,6 +57,7 @@ $lang["modul_titel_category"]            = "News management - category ";
 $lang["modul_titel_feed"]                = "RSS-feeds";
 $lang["modul_titel_news"]                = "News";
 $lang["news_basicdata"]                  = "News basic data";
+$lang["news_categories"]                 = "Filed under:";
 $lang["news_edit"]                       = "Edit news";
 $lang["news_languageset"]                = "Edit language assignments";
 $lang["news_list_empty"]                 = "No news available.";

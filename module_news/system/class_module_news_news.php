@@ -741,7 +741,7 @@ class class_module_news_news extends class_model implements interface_model, int
     }
 
     /**
-     * @return null
+     * @return string[]|null
      */
     public function getArrCats() {
         return $this->arrCats;
