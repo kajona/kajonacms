@@ -440,7 +440,7 @@ class class_module_news_news extends class_model implements interface_model, int
                               AND (system_date_start IS NULL or(system_date_start < ? OR system_date_start = 0))
                                 " . $strTime . "
                               AND (system_date_end IS NULL or (system_date_end > ? OR system_date_end = 0))
-                            ORDER BY system_date_start " . $strOrder;
+                            ORDER BY system_date_start " . $strOrder.", system_create_date DESC";
             $arrParams[] = $strCat;
             $arrParams[] = $longNow;
             if($strTime != "") {
@@ -462,7 +462,7 @@ class class_module_news_news extends class_model implements interface_model, int
                               AND (system_date_start IS NULL or(system_date_start < ? OR system_date_start = 0))
                                 " . $strTime . "
                               AND (system_date_end IS NULL or (system_date_end > ? OR system_date_end = 0))
-                            ORDER BY system_date_start " . $strOrder;
+                            ORDER BY system_date_start " . $strOrder.", system_create_date DESC";
 
             $arrParams[] = $longNow;
             if($strTime != "") {
