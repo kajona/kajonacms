@@ -40,7 +40,8 @@ class class_config {
     /**
      * Resolves, reads and merges the config-files
      *
-     * @param $strConfigFile
+     * @param string $strConfigFile
+     * @return void
      */
     private function readConfigFile($strConfigFile) {
         $config = array();
@@ -72,6 +73,8 @@ class class_config {
     /**
      * Internal helper, sets up a few system-wide constants.
      * Being called on instantiation mapped to config.pgp automatically.
+     *
+     * @return void
      */
     private function setUpConstants() {
         define("_dbprefix_", $this->getConfig("dbprefix"));
@@ -165,6 +168,7 @@ class class_config {
      *
      * @param string $strName
      * @param string $strValue
+     * @return void
      */
     public function setConfig($strName, $strValue) {
         $this->arrConfig[$strName] = $strValue;
@@ -217,6 +221,7 @@ class class_config {
      * @deprecated This Method may be removed from future releases. If you need filesystem-based configs,
      *             invoke this method on your own. This method is no longer called at system startup!
      * @throws class_exception
+     * @return void
      */
     public function loadConfigsFilesystem() {
         throw new class_exception("no longer supported", class_exception::$level_FATALERROR);
@@ -226,6 +231,7 @@ class class_config {
      * Loads all configs from the db and initializations the constants
      *
      * @param class_db $objDB
+     * @return void
      */
     public function loadConfigsDatabase(class_db $objDB) {
         if(count($objDB->getTables()) > 0) {

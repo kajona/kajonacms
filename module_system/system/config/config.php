@@ -13,7 +13,7 @@
     There's no need to change anything in this file.
     All values and settings may be overridden by placing them in the projects' config-file at
 
-    /project/system/config.php
+    /project/system/config/config.php
 
     A minimal config-file will be created during the installation of the system.
 
