@@ -173,7 +173,7 @@ class class_module_postacomment_portal extends class_portal implements interface
         if($this->getSystemid() != "")
             $strSystemidfilter = $this->getSystemid();
 
-        if(class_module_pages_page::getPageByName($this->getPagename() !== null))
+        if(class_module_pages_page::getPageByName($this->getPagename()) !== null)
             $strPagefilter = class_module_pages_page::getPageByName($this->getPagename())->getSystemid();
         else
             $strPagefilter = "";
