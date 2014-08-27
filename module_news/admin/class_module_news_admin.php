@@ -55,11 +55,11 @@ class class_module_news_admin extends class_admin_evensimpler implements interfa
      */
     public function getOutputModuleNavi() {
         $arrReturn = array();
-        $arrReturn[] = array("view", getLinkAdmin($this->arrModule["modul"], "listNewsAndCategories", "", $this->getLang("commons_list"), "", "", true, "adminnavi"));
+        $arrReturn[] = array("view", class_link::getLinkAdmin($this->getArrModule("modul"), "listNewsAndCategories", "", $this->getLang("commons_list"), "", "", true, "adminnavi"));
         $arrReturn[] = array("", "");
-        $arrReturn[] = array("right2", getLinkAdmin($this->arrModule["modul"], "listFeed", "", $this->getLang("modul_titel_feed"), "", "", true, "adminnavi"));
+        $arrReturn[] = array("right2", class_link::getLinkAdmin($this->getArrModule("modul"), "listFeed", "", $this->getLang("modul_titel_feed"), "", "", true, "adminnavi"));
         $arrReturn[] = array("", "");
-        $arrReturn[] = array("right", getLinkAdmin("right", "change", "&changemodule=" . $this->arrModule["modul"], $this->getLang("commons_module_permissions"), "", "", true, "adminnavi"));
+        $arrReturn[] = array("right", class_link::getLinkAdmin("right", "change", "&changemodule=" . $this->getArrModule("modul"), $this->getLang("commons_module_permissions"), "", "", true, "adminnavi"));
         return $arrReturn;
     }
 
@@ -71,7 +71,7 @@ class class_module_news_admin extends class_admin_evensimpler implements interfa
     protected function renderAdditionalActions(class_model $objListEntry) {
         if($objListEntry instanceof class_module_news_category) {
             return array(
-                $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "listNewsAndCategories", "&filterId=" . $objListEntry->getSystemid(), "", $this->getLang("kat_anzeigen"), "icon_lens"))
+                $this->objToolkit->listButton(class_link::getLinkAdmin($this->getArrModule("modul"), "listNewsAndCategories", "&filterId=" . $objListEntry->getSystemid(), "", $this->getLang("kat_anzeigen"), "icon_lens"))
             );
         }
 
@@ -79,7 +79,7 @@ class class_module_news_admin extends class_admin_evensimpler implements interfa
             if(class_module_languages_language::getNumberOfLanguagesAvailable() > 1) {
                 return array(
                     $this->objToolkit->listButton(
-                        getLinkAdminDialog($this->arrModule["modul"], "editLanguageset", "&systemid=" . $objListEntry->getSystemid(), "", $this->getLang("news_languageset"), "icon_language")
+                        class_link::getLinkAdminDialog($this->getArrModule("modul"), "editLanguageset", "&systemid=" . $objListEntry->getSystemid(), "", $this->getLang("news_languageset"), "icon_language")
                     )
                 );
             }
@@ -110,10 +110,10 @@ class class_module_news_admin extends class_admin_evensimpler implements interfa
      */
     protected function getNewEntryAction($strListIdentifier, $bitDialog = false) {
         if($strListIdentifier == class_module_news_admin::STR_CAT_LIST) {
-            return $this->objToolkit->listButton(getLinkAdmin($this->getArrModule("modul"), "newCategory", "", $this->getLang("commons_create_category"), $this->getLang("commons_create_category"), "icon_new"));
+            return $this->objToolkit->listButton(class_link::getLinkAdmin($this->getArrModule("modul"), "newCategory", "", $this->getLang("commons_create_category"), $this->getLang("commons_create_category"), "icon_new"));
         }
         else if($strListIdentifier == class_module_news_admin::STR_NEWS_LIST) {
-            return $this->objToolkit->listButton(getLinkAdmin($this->getArrModule("modul"), "newNews", "", $this->getLang("action_new_news"), $this->getLang("action_new_news"), "icon_new"));
+            return $this->objToolkit->listButton(class_link::getLinkAdmin($this->getArrModule("modul"), "newNews", "", $this->getLang("action_new_news"), $this->getLang("action_new_news"), "icon_new"));
         }
 
         return parent::getNewEntryAction($strListIdentifier, $bitDialog);
@@ -162,7 +162,7 @@ class class_module_news_admin extends class_admin_evensimpler implements interfa
                 $strReturn .= $this->objToolkit->formTextRow($this->getLang("languageset_notmaintained"));
                 $strReturn .= $this->objToolkit->formHeadline($this->getLang("languageset_addtolanguage"));
 
-                $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "assignToLanguageset"));
+                $strReturn .= $this->objToolkit->formHeader(class_link::getLinkAdminHref($this->getArrModule("modul"), "assignToLanguageset"));
                 $arrLanguages = class_module_languages_language::getObjectList();
                 $arrDropdown = array();
                 foreach($arrLanguages as $objOneLanguage) {
@@ -197,7 +197,7 @@ class class_module_news_admin extends class_admin_evensimpler implements interfa
                         $arrMaintainedLanguages[] = $objOneLanguage->getSystemid();
                         $objNews = new class_module_news_news($strNewsid);
                         $strNewsName = $objNews->getStrTitle();
-                        $strActions .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "removeFromLanguageset", "&systemid=" . $objNews->getSystemid(), "", $this->getLang("languageset_remove"), "icon_delete"));
+                        $strActions .= $this->objToolkit->listButton(class_link::getLinkAdmin($this->getArrModule("modul"), "removeFromLanguageset", "&systemid=" . $objNews->getSystemid(), "", $this->getLang("languageset_remove"), "icon_delete"));
                         $strReturn .= $this->objToolkit->genericAdminList(
                             $objOneLanguage->getSystemid(), $this->getLang("lang_" . $objOneLanguage->getStrName(), "languages") . ": " . $strNewsName, getImageAdmin("icon_language"), $strActions, $intI++
                         );
@@ -217,7 +217,7 @@ class class_module_news_admin extends class_admin_evensimpler implements interfa
                 if($intNrOfUnassigned > 0) {
                     $strReturn .= $this->objToolkit->formHeadline($this->getLang("languageset_addnewstolanguage"));
 
-                    $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "addNewsToLanguageset"));
+                    $strReturn .= $this->objToolkit->formHeader(class_link::getLinkAdminHref($this->getArrModule("modul"), "addNewsToLanguageset"));
                     $arrLanguages = class_module_languages_language::getObjectList();
                     $arrDropdown = array();
                     foreach($arrLanguages as $objOneLanguage) {
@@ -266,7 +266,7 @@ class class_module_news_admin extends class_admin_evensimpler implements interfa
                 $objLanguageset->setSystemidForLanguageid($this->getParam("languageset_news"), $objTargetLanguage->getSystemid());
             }
 
-            $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "editLanguageset", "&systemid=" . $this->getSystemid()));
+            $this->adminReload(class_link::getLinkAdminHref($this->getArrModule("modul"), "editLanguageset", "&systemid=" . $this->getSystemid()));
         }
     }
 
@@ -283,7 +283,7 @@ class class_module_news_admin extends class_admin_evensimpler implements interfa
                 $objLanguageset->setSystemidForLanguageid($this->getSystemid(), $objTargetLanguage->getSystemid());
             }
 
-            $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "editLanguageset", "&systemid=" . $this->getSystemid()));
+            $this->adminReload(class_link::getLinkAdminHref($this->getArrModule("modul"), "editLanguageset", "&systemid=" . $this->getSystemid()));
         }
     }
 
@@ -298,7 +298,7 @@ class class_module_news_admin extends class_admin_evensimpler implements interfa
                 $objLanguageset->removeSystemidFromLanguageeset($this->getSystemid());
             }
 
-            $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "editLanguageset", "&systemid=" . $this->getSystemid()));
+            $this->adminReload(class_link::getLinkAdminHref($this->getArrModule("modul"), "editLanguageset", "&systemid=" . $this->getSystemid()));
         }
     }
     
@@ -347,7 +347,7 @@ class class_module_news_admin extends class_admin_evensimpler implements interfa
             $objNews->setBitUpdateMemberships(true);
             $objNews->updateObjectToDb();
 
-            $this->adminReload(getLinkAdminHref($this->arrModule["modul"], $this->getActionNameForClass("list", $objNews), ($this->getParam("pe") != "" ? "&peClose=1&blockAction=1" : "")));
+            $this->adminReload(class_link::getLinkAdminHref($this->getArrModule("modul"), $this->getActionNameForClass("list", $objNews), ($this->getParam("pe") != "" ? "&peClose=1&blockAction=1" : "")));
             return "";
         }
 
@@ -398,7 +398,7 @@ class class_module_news_admin extends class_admin_evensimpler implements interfa
 
                 class_module_languages_admin::enableLanguageSwitch();
                 class_module_languages_admin::setArrLanguageSwitchEntries($arrDD);
-                class_module_languages_admin::setStrOnChangeHandler("window.location='" . getLinkAdminHref("news", "editNews") . (_system_mod_rewrite_ == "true" ? "?" : "&") . "systemid='+this.value+'&pe=" . $this->getParam("pe") . "';");
+                class_module_languages_admin::setStrOnChangeHandler("window.location='" . class_link::getLinkAdminHref("news", "editNews") . (_system_mod_rewrite_ == "true" ? "?" : "&") . "systemid='+this.value+'&pe=" . $this->getParam("pe") . "';");
                 class_module_languages_admin::setStrActiveKey($this->getSystemid());
             }
         }
@@ -423,6 +423,12 @@ class class_module_news_admin extends class_admin_evensimpler implements interfa
 
         }
 
+        if(_news_news_datetime_ == "true") {
+            $objForm->addField(new class_formentry_datetime($objForm->getStrFormname(), "objDateStart", $objNews), "objDateStart")->setBitMandatory(true)->setStrLabel($this->getLang("form_news_datestart"));
+            $objForm->addField(new class_formentry_datetime($objForm->getStrFormname(), "objDateEnd", $objNews), "objDateEnd")->setStrLabel($this->getLang("form_news_dateend"));
+            $objForm->addField(new class_formentry_datetime($objForm->getStrFormname(), "objDateSpecial", $objNews), "objDateSpecial")->setStrLabel($this->getLang("form_news_datespecial"));
+        }
+
         return $objForm;
     }
 
@@ -434,7 +440,7 @@ class class_module_news_admin extends class_admin_evensimpler implements interfa
      * @return class_admin_formgenerator
      */
     private function getFeedAdminForm(class_module_news_feed $objFeed, class_admin_formgenerator $objForm) {
-
+        /** @var class_module_news_category[] $arrNewsCats */
         $arrNewsCats = class_module_news_category::getObjectList();
         $arrCatsDD = array();
         foreach($arrNewsCats as $objOneCat) {
@@ -462,6 +468,7 @@ class class_module_news_admin extends class_admin_evensimpler implements interfa
     protected function actionListCategories() {
         $strReturn = "";
         if($this->getObjModule()->rightView()) {
+            /** @var class_module_news_category[] $arrCategories */
             $arrCategories = class_module_news_category::getObjectList();
             $strReturn .= "<categories>\n";
             foreach($arrCategories as $objOneCategory) {
@@ -541,7 +548,7 @@ class class_module_news_admin extends class_admin_evensimpler implements interfa
         $objNews = new class_module_news_news($this->getSystemid());
         $arrCats = class_module_news_category::getNewsMember($objNews->getSystemid());
 
-        array_walk($arrCats, function (&$objValue) {
+        array_walk($arrCats, function (class_module_news_category &$objValue) {
             $objValue = $objValue->getSystemid();
         });
 
@@ -574,7 +581,6 @@ class class_module_news_admin extends class_admin_evensimpler implements interfa
      * @xml
      */
     protected function actionUpdateNewsXml() {
-        $strReturn = "";
         $objNews = new class_module_news_news($this->getSystemid());
         if($objNews->rightEdit() || $this->getSystemid() == "") {
 
@@ -642,7 +648,7 @@ class class_module_news_admin extends class_admin_evensimpler implements interfa
                     $strTitle = uniStrTrim($strTitle, 14);
                 }
 
-                $strName = getLinkAdmin($this->arrModule["modul"], "edit", "&systemid=" . $objOneNews->getSystemid(), $strTitle, $strAlt);
+                $strName = class_link::getLinkAdmin($this->getArrModule("modul"), "edit", "&systemid=" . $objOneNews->getSystemid(), $strTitle, $strAlt);
                 $objEntry->setStrName($strName);
                 $arrEntries[] = $objEntry;
             }

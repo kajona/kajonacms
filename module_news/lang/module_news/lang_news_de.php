@@ -10,8 +10,8 @@
 //Kajona Language Editor Core Build 385
 
 //editable entries
-$lang["_news_search_resultpage_"]        = "Treffer-Seite";
-$lang["_news_search_resultpage_hint"]    = "Auf dieser Seite erfolgt die Detailansicht der News, die in der Suche gefunden wurden.";
+$lang["_news_news_datetime_"]            = "Uhrzeiten für News";
+$lang["_news_news_datetime_hint"]        = "Im Standardfall werden News für ein Datum angelegt. Sofern zusätzlich eine Uhrzeit eingestellt werden soll, so kann dies hier aktiviert werden.";
 $lang["action_new_feed"]                 = "Neuer RSS-Feed";
 $lang["action_new_news"]                 = "News anlegen";
 $lang["backward"]                        = "Zurück";

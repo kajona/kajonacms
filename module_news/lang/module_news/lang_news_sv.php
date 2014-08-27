@@ -10,8 +10,6 @@
 //Kajona Language Editor Core Build 385
 
 //editable entries
-$lang["_news_search_resultpage_"]        = "Träffsida";
-$lang["_news_search_resultpage_hint"]    = "Denna sida visar detaljerna av de nyheter som har hittats vid sökningen.";
 $lang["action_new_feed"]                 = "Ny RSS-feed";
 $lang["action_new_news"]                 = "Skapa nyhet";
 $lang["backward"]                        = "Tillbaka";

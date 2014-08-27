@@ -11,6 +11,8 @@ die("calling this script is not allowed");
 define("_mediamanager_default_filesrepoid_", "");
 define("_mediamanager_default_imagesrepoid_", "");
 
+define("_news_news_datetime_", false);
+
 define("_pages_cacheenabled_", "true");
 define("_pages_defaulttemplate_", "");
 define("_pages_errorpage_", "");

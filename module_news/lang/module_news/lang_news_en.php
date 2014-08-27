@@ -10,8 +10,8 @@
 //Kajona Language Editor Core Build 385
 
 //editable entries
-$lang["_news_search_resultpage_"]        = "Result page";
-$lang["_news_search_resultpage_hint"]    = "This page shows the details of the news which where found by the search.";
+$lang["_news_news_datetime_"]            = "Time for news";
+$lang["_news_news_datetime_hint"]        = "By default news are created for a single date. If a time-stamp should be specified, too, enable this setting.";
 $lang["action_new_feed"]                 = "New RSS-feed";
 $lang["action_new_news"]                 = "Create news";
 $lang["backward"]                        = "Backward";

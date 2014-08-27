@@ -10,8 +10,6 @@
 //Kajona Language Editor Core Build 385
 
 //editable entries
-$lang["_news_search_resultpage_"]        = "Страницата с резултати";
-$lang["_news_search_resultpage_hint"]    = "Тази страница показва детайли около новините, които бяха намерене чрез 'търсене'.";
 $lang["action_new_feed"]                 = "Нова RSS-Feed";
 $lang["action_new_news"]                 = "Създай новини";
 $lang["backward"]                        = "Назад";

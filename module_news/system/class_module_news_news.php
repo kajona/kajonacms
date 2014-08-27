@@ -203,9 +203,9 @@ class class_module_news_news extends class_model implements interface_model, int
      * @return string
      */
     public function getStrLongDescription() {
-        return "S: " . dateToString($this->getObjStartDate(), false)
-            . ($this->getObjEndDate() != null ? " E: " . dateToString($this->getObjEndDate(), false) : "")
-            . ($this->getObjSpecialDate() != null ? " A: " . dateToString($this->getObjSpecialDate(), false) : "");
+        return "S: " . dateToString($this->getObjStartDate(), _news_news_datetime_ == "true")
+            . ($this->getObjEndDate() != null ? " E: " . dateToString($this->getObjEndDate(), _news_news_datetime_ == "true") : "")
+            . ($this->getObjSpecialDate() != null ? " A: " . dateToString($this->getObjSpecialDate(), _news_news_datetime_ == "true") : "");
     }
 
     /**

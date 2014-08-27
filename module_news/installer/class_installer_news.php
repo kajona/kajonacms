@@ -78,6 +78,9 @@ class class_installer_news extends class_installer_base implements interface_ins
             $objModule->updateObjectToDb();
         }
 
+        $strReturn .= "Registering config settings...\n";
+        $this->registerConstant("_news_news_datetime_", "false", class_module_system_setting::$int_TYPE_BOOL, _news_module_id_);
+
 		return $strReturn;
 
 	}
@@ -213,6 +216,11 @@ class class_installer_news extends class_installer_base implements interface_ins
             $strReturn .= $this->update_44_45();
         }
 
+        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "4.5") {
+            $strReturn .= $this->update_45_451();
+        }
+
         return $strReturn."\n\n";
 	}
 
@@ -306,6 +314,20 @@ class class_installer_news extends class_installer_base implements interface_ins
         $this->updateModuleVersion("news", "4.5");
         $strReturn .= "Updating element-versions...\n";
         $this->updateElementVersion("news", "4.5");
+        return $strReturn;
+    }
+
+    private function update_45_451() {
+        $strReturn = "Updating 4.5 to 4.5.1...\n";
+
+        $strReturn .= "Registering config settings...\n";
+        $this->registerConstant("_news_news_datetime_", "false", class_module_system_setting::$int_TYPE_BOOL, _news_module_id_);
+
+
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion("news", "4.5.1");
+        $strReturn .= "Updating element-versions...\n";
+        $this->updateElementVersion("news", "4.5.1");
         return $strReturn;
     }
 }
