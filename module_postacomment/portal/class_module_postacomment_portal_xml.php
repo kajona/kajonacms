@@ -37,7 +37,7 @@ class class_module_postacomment_portal_xml extends class_portal implements inter
             //Create form to reenter values
             $strTemplateID = $this->objTemplate->readTemplate("/module_postacomment/".$this->getParam("comment_template"), "postacomment_form");
             $arrForm = array();
-            $arrForm["formaction"] = getLinkPortalHref($this->getPagename(), "", "postComment", "", $this->getSystemid());
+            $arrForm["formaction"] = class_link::getLinkPortalHref($this->getPagename(), "", "postComment", "", $this->getSystemid());
             $arrForm["comment_name"] = $this->getParam("comment_name");
             $arrForm["comment_subject"] = $this->getParam("comment_subject");
             $arrForm["comment_message"] = $this->getParam("comment_message");
@@ -85,7 +85,7 @@ class class_module_postacomment_portal_xml extends class_portal implements inter
             $this->flushPageFromPagesCache($this->getPagename());
 
             $strMailtext = $this->getLang("new_comment_mail")."\r\n\r\n".$objPost->getStrComment()."\r\n";
-            $strMailtext .= getLinkAdminHref("postacomment", "edit", "&systemid=".$objPost->getSystemid(), false);
+            $strMailtext .= class_link::getLinkAdminHref("postacomment", "edit", "&systemid=".$objPost->getSystemid(), false);
             $objMessageHandler = new class_module_messaging_messagehandler();
             $arrGroups = array();
             $allGroups = class_module_user_group::getObjectList();
@@ -109,10 +109,10 @@ class class_module_postacomment_portal_xml extends class_portal implements inter
             $arrOnePost["postacomment_post_date"] = timeToString($objPost->getIntDate(), true);
 
             $strTemplateID = $this->objTemplate->readTemplate("/module_postacomment/".$this->getParam("comment_template"), "postacomment_post");
-            $strXMLContent .= $this->fillTemplate($arrOnePost, $strTemplateID);
+            $strXMLContent .= $this->objTemplate->fillTemplate($arrOnePost, $strTemplateID);
         }
 
-        class_response_object::getInstance()->setStResponseType(class_http_responsetypes::STR_TYPE_JSON);
+        class_response_object::getInstance()->setStrResponseType(class_http_responsetypes::STR_TYPE_JSON);
         return $strXMLContent;
     }
 
@@ -128,15 +128,15 @@ class class_module_postacomment_portal_xml extends class_portal implements inter
         $strTemplateId = $this->objTemplate->readTemplate("/module_postacomment/".$this->getParam("comment_template"), "validation_error_row");
         if(uniStrlen($this->getParam("comment_name")) < 2) {
             $bitReturn = false;
-            $this->strErrors .= $this->fillTemplate(array("error" => $this->getLang("validation_name")), $strTemplateId);
+            $this->strErrors .= $this->objTemplate->fillTemplate(array("error" => $this->getLang("validation_name")), $strTemplateId);
         }
         if(uniStrlen($this->getParam("comment_message")) < 2) {
             $bitReturn = false;
-            $this->strErrors .= $this->fillTemplate(array("error" => $this->getLang("validation_message")), $strTemplateId);
+            $this->strErrors .= $this->objTemplate->fillTemplate(array("error" => $this->getLang("validation_message")), $strTemplateId);
         }
         if($this->objSession->getCaptchaCode() != $this->getParam("form_captcha") || $this->getParam("form_captcha") == "") {
             $bitReturn = false;
-            $this->strErrors .= $this->fillTemplate(array("error" => $this->getLang("validation_code")), $strTemplateId);
+            $this->strErrors .= $this->objTemplate->fillTemplate(array("error" => $this->getLang("validation_code")), $strTemplateId);
         }
         return $bitReturn;
     }

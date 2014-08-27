@@ -223,15 +223,15 @@ class class_module_postacomment_portal extends class_portal implements interface
         $strTemplateId = $this->objTemplate->readTemplate("/module_postacomment/".$this->arrElementData["char1"], "validation_error_row");
         if(uniStrlen($this->getParam("comment_name")) < 2) {
             $bitReturn = false;
-            $this->strErrors .= $this->fillTemplate(array("error" => $this->getLang("validation_name")), $strTemplateId);
+            $this->strErrors .= $this->objTemplate->fillTemplate(array("error" => $this->getLang("validation_name")), $strTemplateId);
         }
         if(uniStrlen($this->getParam("comment_message")) < 2) {
             $bitReturn = false;
-            $this->strErrors .= $this->fillTemplate(array("error" => $this->getLang("validation_message")), $strTemplateId);
+            $this->strErrors .= $this->objTemplate->fillTemplate(array("error" => $this->getLang("validation_message")), $strTemplateId);
         }
         if($this->objSession->getCaptchaCode() != $this->getParam("form_captcha") || $this->getParam("form_captcha") == "") {
             $bitReturn = false;
-            $this->strErrors .= $this->fillTemplate(array("error" => $this->getLang("validation_code")), $strTemplateId);
+            $this->strErrors .= $this->objTemplate->fillTemplate(array("error" => $this->getLang("validation_code")), $strTemplateId);
         }
         return $bitReturn;
     }
