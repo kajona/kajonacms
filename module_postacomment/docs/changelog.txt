@@ -1,0 +1,4 @@
+Module Postacomment
+
+V4.5.1---------------------------------------------------------------------------------------------------
+BUG: fixed an erroneous if-statement, wrong order of braces [ticket #916]. Credits go to AnRo.
