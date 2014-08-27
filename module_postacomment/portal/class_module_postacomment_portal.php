@@ -208,7 +208,7 @@ class class_module_postacomment_portal extends class_portal implements interface
         $objMessage->setStrMessageProvider(new class_messageprovider_postacomment());
         $objMessageHandler->sendMessageObject($objMessage, $arrGroups);
 
-        $this->portalReload(_indexpath_."?".$this->getHistory(0));
+        $this->portalReload(_indexpath_."?".$this->getHistory(1)/*."#comments"*/);
         return "";
     }
 
