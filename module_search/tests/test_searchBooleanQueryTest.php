@@ -7,7 +7,7 @@ class class_test_searchBooleanQueryTest extends class_testbase {
     private static $arrObjectIds = array();
 
     protected function setUp() {
-        $this->$this->markTestSkipped("skip test");
+        $this->markTestSkipped("skip test");
 
 
         $objObject = $this->createObject("class_module_system_aspect", "");

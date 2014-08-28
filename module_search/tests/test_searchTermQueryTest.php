@@ -8,7 +8,7 @@ class class_test_searchTermQueryTest extends class_testbase {
 
     protected function setUp() {
 
-        $this->$this->markTestSkipped("skip test");
+        $this->markTestSkipped("skip test");
 
         $objObject = $this->createObject("class_module_system_aspect", "");
         self::$arrObjectIds[] = $objObject->getSystemid();

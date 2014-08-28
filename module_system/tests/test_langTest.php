@@ -6,7 +6,7 @@ class class_test_lang extends class_testbase  {
 
 
     public function setUp() {
-        $this->$this->markTestSkipped("skip test");
+        $this->markTestSkipped("skip test");
     }
 
 
