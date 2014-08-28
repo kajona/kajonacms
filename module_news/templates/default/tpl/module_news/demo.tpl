@@ -15,7 +15,7 @@
 </news_list_wrapper>
 
 
-<!-- available placeholders: news_more_link, news_more_link_href, news_nrofcomments, news_commentlist, news_rating, news_categories
+<!-- available placeholders: news_more_link, news_more_link_href, news_nrofcomments, news_commentlist, news_rating, news_categories, strOwner
      strSystemid, intLmTime, longCreateDate, strTitle, strImage, intHits, strIntro, strText, objDateStart, objDateEnd, objDateSpecial, objDateTimeStart, objDateTimeEnd, objDateTimeSpecial
 -->
 <news_list>
@@ -34,7 +34,7 @@
 </news_list>
 
 
-<!-- available placeholders: news_more_link, news_more_link_href, news_nrofcomments, news_commentlist, news_rating, news_categories
+<!-- available placeholders: news_more_link, news_more_link_href, news_nrofcomments, news_commentlist, news_rating, news_categories, strOwner
     strSystemid, intLmTime, longCreateDate, strTitle, strImage, intHits, strIntro, strText, objDateStart, objDateEnd, objDateSpecial, objDateTimeStart, objDateTimeEnd, objDateTimeSpecial
 -->
 <news_list_image>
@@ -56,7 +56,7 @@
 </news_list_image>
 
 
-<!-- available placeholders: news_back_link, news_nrofcomments, news_commentlist, news_rating, news_categories
+<!-- available placeholders: news_back_link, news_nrofcomments, news_commentlist, news_rating, news_categories, strOwner
     strSystemid, intLmTime, longCreateDate, strTitle, strImage, intHits, strIntro, strText, objDateStart, objDateEnd, objDateSpecial, objDateTimeStart, objDateTimeEnd, objDateTimeSpecial
  -->
 <news_detail>
@@ -76,7 +76,7 @@
 </news_detail>
 
 
-<!-- available placeholders: news_back_link, news_nrofcomments, news_commentlist, news_rating, news_categories
+<!-- available placeholders: news_back_link, news_nrofcomments, news_commentlist, news_rating, news_categories, strOwner
     strSystemid, intLmTime, longCreateDate, strTitle, strImage, intHits, strIntro, strText, objDateStart, objDateEnd, objDateSpecial, objDateTimeStart, objDateTimeEnd, objDateTimeSpecial
 -->
 <news_detail_image>

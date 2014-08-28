@@ -102,6 +102,8 @@ abstract class class_root {
      * The id of the user who created the record initially
      * @var string
      * @versionable
+     * @templateExport
+     * @templateMapper user
      */
     private $strOwner;
 
