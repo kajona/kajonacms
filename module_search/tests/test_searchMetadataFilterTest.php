@@ -13,8 +13,6 @@ class class_test_searchMetadataFilterTest extends class_testbase {
 
     protected function setUp() {
 
-        $this->markTestSkipped("skip test");
-
         self::$objTimestamp1 = new class_date();
         $objObject = $this->createObject("class_module_system_aspect", "");
         self::$arrObjectIds[] = $objObject->getSystemid();
