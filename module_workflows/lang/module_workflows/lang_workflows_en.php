@@ -21,6 +21,7 @@ $lang["action_instantiate_handler"]      = "Create a new workflow instance";
 $lang["action_list_handlers"]            = "Workflow handlers";
 $lang["action_show_details"]             = "Show details";
 $lang["delete_question"]                 = "Do you really want to delete the workflow &quot;<b>%%element_name%%</b>&quot;?";
+$lang["handler_instances"]               = "{0} instances";
 $lang["header_list_all"]                 = "All workflows";
 $lang["header_list_my"]                  = "My workflows";
 $lang["instance_responsible"]            = "Responsible person";

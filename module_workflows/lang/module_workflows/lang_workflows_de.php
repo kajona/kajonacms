@@ -21,6 +21,7 @@ $lang["action_instantiate_handler"]      = "Neue Instanz des Workflows erstellen
 $lang["action_list_handlers"]            = "Workflow-Handlers";
 $lang["action_show_details"]             = "Details anzeigen";
 $lang["delete_question"]                 = "Möchten Sie den Workflow &quot;<b>%%element_name%%</b>&quot; wirklich löschen?";
+$lang["handler_instances"]               = "{0} Instanzen";
 $lang["header_list_all"]                 = "Alle Workflows";
 $lang["header_list_my"]                  = "Meine Workflows";
 $lang["instance_responsible"]            = "Verantwortlicher";

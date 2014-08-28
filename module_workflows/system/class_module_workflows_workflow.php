@@ -331,6 +331,36 @@ class class_module_workflows_workflow extends class_model implements interface_m
 
         return $arrReturn;
     }
+    /**
+     * Counts all workflows related with a given class.
+     * By default limited to those with a exceeded trigger-date, so valid to be run
+     *
+     * @param $strClass
+     * @param bool $bitOnlyScheduled
+     * @return class_module_workflows_workflow[]
+     */
+    public static function getWorkflowsForClassCount($strClass, $bitOnlyScheduled = true) {
+        $strQuery = "SELECT COUNT(*) FROM
+                            "._dbprefix_."system,
+                            "._dbprefix_."workflows
+                      WHERE system_id = workflows_id
+                        AND workflows_class = ?
+                     ".($bitOnlyScheduled ? " AND ( workflows_state = ? OR workflows_state = ? )" : "" )  ."
+                     ".($bitOnlyScheduled ? " AND ( system_date_start > ? OR system_date_start = 0 )" : "")."
+                   ";
+
+        $arrParams = array();
+        $arrParams[] = $strClass;
+
+        if($bitOnlyScheduled) {
+            $arrParams[] = (int)self::$INT_STATE_SCHEDULED;
+            $arrParams[] = (int)self::$INT_STATE_NEW;
+            $arrParams[] = class_date::getCurrentTimestamp();
+        }
+
+        $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, $arrParams);
+        return $arrRow["COUNT(*)"];
+    }
 
 
     /**

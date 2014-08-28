@@ -78,7 +78,12 @@ class class_module_workflows_handler extends class_model implements interface_mo
      * @return string
      */
     public function getStrAdditionalInfo() {
-        return "";
+        //count the number of instances
+        $intCount = 0;
+        if($this->getObjInstanceOfHandler() != null) {
+            $intCount = class_module_workflows_workflow::getWorkflowsForClassCount(get_class($this->getObjInstanceOfHandler()), false);
+        }
+        return $this->getLang("handler_instances", "workflows", array($intCount));
     }
 
     /**
