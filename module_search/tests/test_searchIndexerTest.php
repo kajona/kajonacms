@@ -5,6 +5,10 @@ require_once(__DIR__ . "/../../module_system/system/class_testbase.php");
 class class_test_searchIndexerTest extends class_testbase {
 
 
+    public function setUp() {
+        $this->$this->markTestSkipped("skip test");
+    }
+
     public function testUnicodeIndexer() {
         $strText = "Hänsel und Gretel verirrten sich schließlich im Wald";
 
