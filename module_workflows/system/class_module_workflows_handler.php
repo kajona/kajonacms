@@ -144,17 +144,21 @@ class class_module_workflows_handler extends class_model implements interface_mo
         $arrFiles = class_resourceloader::getInstance()->getFolderContent("/system/workflows", array(".php"));
         foreach($arrFiles as $strOneFile) {
             $strClassname = uniStrReplace(".php", "", $strOneFile);
-            $objWorkflow = class_module_workflows_handler::getHandlerByClass($strClassname);
-            if($objWorkflow == null) {
-                $objWorkflow = new class_module_workflows_handler();
-                $objWorkflow->setStrHandlerClass($strClassname);
+            $objReflection = new ReflectionClass($strClassname);
 
-                $arrDefault = $objWorkflow->getObjInstanceOfHandler()->getDefaultValues();
-                if(isset($arrDefault[0]))   $objWorkflow->setStrConfigVal1($arrDefault[0]);
-                if(isset($arrDefault[1]))   $objWorkflow->setStrConfigVal2($arrDefault[1]);
-                if(isset($arrDefault[2]))   $objWorkflow->setStrConfigVal3($arrDefault[2]);
+            if(!$objReflection->isAbstract()) {
+                $objWorkflow = class_module_workflows_handler::getHandlerByClass($strClassname);
+                if($objWorkflow == null) {
+                    $objWorkflow = new class_module_workflows_handler();
+                    $objWorkflow->setStrHandlerClass($strClassname);
 
-                $objWorkflow->updateObjectToDb();
+                    $arrDefault = $objWorkflow->getObjInstanceOfHandler()->getDefaultValues();
+                    if(isset($arrDefault[0]))   $objWorkflow->setStrConfigVal1($arrDefault[0]);
+                    if(isset($arrDefault[1]))   $objWorkflow->setStrConfigVal2($arrDefault[1]);
+                    if(isset($arrDefault[2]))   $objWorkflow->setStrConfigVal3($arrDefault[2]);
+
+                    $objWorkflow->updateObjectToDb();
+                }
             }
         }
 
@@ -172,12 +176,17 @@ class class_module_workflows_handler extends class_model implements interface_mo
      * @return interface_workflows_handler
      */
     public function getObjInstanceOfHandler() {
+
         if($this->getStrHandlerClass() != "" && class_resourceloader::getInstance()->getPathForFile("/system/workflows/".$this->getStrHandlerClass().".php") !== false) {
             $strClassname = uniStrReplace(".php", "", $this->getStrHandlerClass());
-            return new $strClassname();
+            $objReflection = new ReflectionClass($strClassname);
+
+            if(!$objReflection->isAbstract()) {
+                return new $strClassname();
+            }
         }
-        else
-            return null;
+
+        return null;
     }
 
 
