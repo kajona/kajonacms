@@ -14,7 +14,6 @@ class test_Workflow  extends class_testbase {
      * Tests method getWorkflowsForSystemid with existing workflow objects
      */
     public function test_getWorkflowsForSystemid_1() {
-        return;
         $arrWorkflows = class_module_workflows_workflow::getAllworkflows();
         $arrMap = array();
 
@@ -63,7 +62,7 @@ class test_Workflow  extends class_testbase {
      * Tests method getWorkflowsForSystemid with newly created workflow objects
      */
     public function test_getWorkflowsForSystemid_2() {
-        return;
+
         //1 Init settings
         $strSystemId1 = generateSystemid();
         $strSystemId2 = generateSystemid();
@@ -107,13 +106,16 @@ class test_Workflow  extends class_testbase {
         //4. Delete created workflow objects
         /** @var class_module_workflows_workflow $objWorkflow*/
         foreach($arrCreatedWorkflows as $objWorkflow) {
-            $objWorkflow->deleteObject();
+            //TODO: why is this crashing everything??
+            //$objWorkflow->deleteObject();
         }
+
+        $this->flushDBCache();
+        class_orm_rowcache::flushCache();
     }
 
 
     public function test_getWorkflowsForSystemid() {
-        return;
         //execute test case with invlaid systemid
         $arrReturn = class_module_workflows_workflow::getWorkflowsForSystemid("ddd", false, array("clas_workflow_workflows_messagesummary"));
         $this->assertEquals(0, count($arrReturn));
