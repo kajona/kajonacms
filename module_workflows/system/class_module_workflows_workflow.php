@@ -125,6 +125,14 @@ class class_module_workflows_workflow extends class_model implements interface_m
      */
     private $strText2 = "";
 
+    /**
+     * @var string
+     * @tableColumn workflows.workflows_text3
+     * @tableColumnDatatype text
+     * @blockEscaping
+     */
+    private $strText3 = "";
+
 
     /**
      * Returns the icon the be used in lists.
@@ -636,7 +644,7 @@ class class_module_workflows_workflow extends class_model implements interface_m
         return $this->bitSaved;
     }
 
-    function setStrText2($strText2) {
+    public function setStrText2($strText2) {
         $this->strText2 = $strText2;
     }
 
@@ -644,7 +652,19 @@ class class_module_workflows_workflow extends class_model implements interface_m
         return $this->strText2;
     }
 
+    /**
+     * @return string
+     */
+    public function getStrText3() {
+        return $this->strText3;
+    }
 
+    /**
+     * @param string $strText3
+     */
+    public function setStrText3($strText3) {
+        $this->strText3 = $strText3;
+    }
 
 
 }
