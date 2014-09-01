@@ -259,8 +259,11 @@ class class_module_workflows_admin extends class_admin_simple implements interfa
                     }
                 }
             }
-            $strInfo .= $this->objToolkit->getTextRow($this->getLang("workflow_responsible") . " " . $strResponsible);
-            $strReturn .= $this->objToolkit->getFieldset($this->getLang("workflow_general"), $strInfo);
+
+            $arrHeader = array($this->getLang("workflow_general"), "");
+            $arrRow1 = array($this->getLang("workflow_owner"), $strCreator);
+            $arrRow2 = array($this->getLang("workflow_responsible"), $strResponsible);
+            $strReturn.= $this->objToolkit->dataTable($arrHeader, array($arrRow1, $arrRow2));
 
             $strReturn .= $this->objToolkit->formHeader(class_link::getLinkAdminHref($this->getArrModule("modul"), "saveUI"));
             $strForm = $objWorkflow->getObjWorkflowHandler()->getUserInterface();
