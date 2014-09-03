@@ -186,10 +186,12 @@ KAJONA.admin.ModalDialog = function (strDialogId, intDialogType, bitDragging, bi
         }
     };
 
-    //register event to reset the dialog with default settings
-    $('#' + this.containerId).on('hidden', function (e) {
-        KAJONA.admin.ModalDialog.resetDialog.call(this);
-    })
+    //register event to reset the dialog with default settings (only if the dialog has template dialog)
+    if($("#template_" +this.containerId).length > 0) {
+        $('#' + this.containerId).on('hidden', function (e) {
+            KAJONA.admin.ModalDialog.resetDialog.call(this);
+        })
+    }
 };
 
 /**
