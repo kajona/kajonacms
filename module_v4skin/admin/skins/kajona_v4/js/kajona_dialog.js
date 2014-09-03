@@ -11,7 +11,7 @@ if (typeof KAJONA == "undefined") {
 /**
  * Object to show a modal dialog
  */
-KAJONA.admin.ModalDialog = function(strDialogId, intDialogType, bitDragging, bitResizing) {
+KAJONA.admin.ModalDialog = function (strDialogId, intDialogType, bitDragging, bitResizing) {
     this.dialog;
     this.containerId = strDialogId;
     this.iframeId;
@@ -185,6 +185,38 @@ KAJONA.admin.ModalDialog = function(strDialogId, intDialogType, bitDragging, bit
             this.unbindOnClick = true;
         }
     };
+
+    //register event to reset the dialog with default settings
+    $('#' + this.containerId).on('hidden', function (e) {
+        KAJONA.admin.ModalDialog.resetDialog.call(this);
+    })
 };
+
+/**
+ * Creates a clone of the dialog template and replaces it with the current used dialog.
+ * The template of the dialog is being created in the toolkit class in method jsDialog().
+ */
+KAJONA.admin.ModalDialog.resetDialog = function () {
+
+    //clone the template
+    var clone = $("#template_" +this.id).clone();
+
+    //remove "template_" from all id's of the clone
+    clone.find("*[id]").andSelf().each(function() {
+        $(this).attr("id", $(this).attr("id").substring(9));
+    });
+
+    //replace the current dialog with the clone
+    $('#' + this.id).replaceWith(clone);
+
+
+    //set hidden event again (needed as when replacing the events are not set anymore)
+    $('#' + this.id).on('hidden', function (e) {
+        KAJONA.admin.ModalDialog.resetDialog.call(this);
+    })
+};
+
+
+
 
 

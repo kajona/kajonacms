@@ -1938,6 +1938,7 @@ class class_toolkit_admin extends class_toolkit {
      */
     public function jsDialog($intDialogType) {
         $strContent = "";
+        $strContentTemplate = "";
         //create the html-part
         $arrTemplate = array();
         $strContainerId = generateSystemid();
@@ -1974,9 +1975,14 @@ class class_toolkit_admin extends class_toolkit {
                     jsDialog_".$intDialogType." = new KAJONA.admin.ModalDialog('".$strContainerId."', ".$intDialogType.");
                 }, true);
             </script>";
+
+            //Create a template dialog
+            $strContainerIdTemplate = "template_".$strContainerId;
+            $arrTemplate["dialog_id"] = $strContainerIdTemplate;
+            $strContentTemplate .= $this->objTemplate->fillTemplate($arrTemplate, $strTemplateId);
         }
 
-        return $strContent;
+        return $strContent.$strContentTemplate;
     }
 
 
