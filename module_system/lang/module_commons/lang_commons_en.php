@@ -18,6 +18,7 @@ $lang["commons_all_categories"]          = "All categories";
 $lang["commons_back"]                    = "back";
 $lang["commons_batchaction_confirm"]     = "Do you really want to execute the action <b>%title%</b> for the selected %amount% records?";
 $lang["commons_batchaction_delete"]      = "Delete selected records";
+$lang["commons_batchaction_delete_assignment"]      = "Remove assignments of selected records";
 $lang["commons_batchaction_disable"]     = "Set selected records inactive";
 $lang["commons_batchaction_enable"]      = "Set selected records active";
 $lang["commons_batchaction_title"]       = "Trigger multiple actions";

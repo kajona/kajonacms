@@ -18,6 +18,7 @@ $lang["commons_all_categories"]          = "Alle Kategorien";
 $lang["commons_back"]                    = "zurück";
 $lang["commons_batchaction_confirm"]     = "Möchten Sie die Aktion <b>%title%</b> wirklich für die gewählten %amount% Datensätze ausführen?";
 $lang["commons_batchaction_delete"]      = "Ausgewählte Datensätze löschen";
+$lang["commons_batchaction_delete_assignment"]      = "Zuordnungen löschen";
 $lang["commons_batchaction_disable"]     = "Ausgewählte Datensätze inaktiv setzen";
 $lang["commons_batchaction_enable"]      = "Ausgewählte Datensätze aktiv setzen";
 $lang["commons_batchaction_title"]       = "Sammelaktion ausführen";
