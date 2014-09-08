@@ -731,14 +731,7 @@ KAJONA.admin.lists = {
         KAJONA.admin.lists.strCurrentTitle = strTitle;
 
         //get the selected elements
-        $("table.admintable  input:checked").each(function() {
-            if($(this).attr('id').substr(0, 6) == "kj_cb_" && $(this).attr('id') != 'kj_cb_batchActionSwitch') {
-                var sysid = $(this).closest("tr").data('systemid');
-                if(sysid != "")
-                    KAJONA.admin.lists.arrSystemids.push(sysid);
-            }
-        });
-
+        KAJONA.admin.lists.arrSystemids = KAJONA.admin.lists.getSelectedElements();
 
         if(KAJONA.admin.lists.arrSystemids.length == 0)
             return;
@@ -792,9 +785,26 @@ KAJONA.admin.lists = {
 
             document.location.reload();
         }
+    },
 
+    /**
+     * Creates an array which contains the selected system id's.
+     *
+     * @returns {Array}
+     */
+    getSelectedElements : function () {
+        var selectedElements = [];
 
+        //get the selected elements
+        $("table.admintable  input:checked").each(function() {
+            if($(this).attr('id').substr(0, 6) == "kj_cb_" && $(this).attr('id') != 'kj_cb_batchActionSwitch') {
+                var sysid = $(this).closest("tr").data('systemid');
+                if(sysid != "")
+                    selectedElements.push(sysid);
+            }
+        });
 
+        return selectedElements;
     }
 };
 
