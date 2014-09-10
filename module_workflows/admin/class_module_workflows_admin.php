@@ -85,7 +85,7 @@ class class_module_workflows_admin extends class_admin_simple implements interfa
         $objInstance = class_objectfactory::getInstance()->getObject($this->getSystemid());
 
         if($objInstance instanceof class_module_workflows_handler && $objInstance->rightRight1()) {
-            $this->adminReload(getLinkAdminHref($this->getArrModule("modul"), "editHandler", "&systemid=" . $objInstance->getSystemid()));
+            $this->adminReload(class_link::getLinkAdminHref($this->getArrModule("modul"), "editHandler", "&systemid=" . $objInstance->getSystemid()));
         }
 
         return "";
@@ -187,6 +187,7 @@ class class_module_workflows_admin extends class_admin_simple implements interfa
         $arrRows[] = array($this->getLang("workflow_date2"), $objWorkflow->getLongDate2());
         $arrRows[] = array($this->getLang("workflow_text"), $objWorkflow->getStrText());
         $arrRows[] = array($this->getLang("workflow_text2"), $objWorkflow->getStrText2());
+        $arrRows[] = array($this->getLang("workflow_text3"), $objWorkflow->getStrText3());
         $strReturn .= $this->objToolkit->dataTable(null, $arrRows);
 
         $strReturn .= $this->objToolkit->formHeader(class_link::getLinkAdminHref($this->getArrModule("modul"), "list"));
@@ -208,7 +209,7 @@ class class_module_workflows_admin extends class_admin_simple implements interfa
         $objWorkflowController->scheduleWorkflows();
         $objWorkflowController->runWorkflows();
 
-        $this->adminReload(getLinkAdminHref($this->getArrModule("modul"), "list"));
+        $this->adminReload(class_link::getLinkAdminHref($this->getArrModule("modul"), "list"));
 
         return $strReturn;
     }
@@ -265,7 +266,6 @@ class class_module_workflows_admin extends class_admin_simple implements interfa
             $arrRow2 = array($this->getLang("workflow_responsible"), $strResponsible);
             $strReturn.= $this->objToolkit->dataTable($arrHeader, array($arrRow1, $arrRow2));
 
-            $strReturn .= $this->objToolkit->formHeader(class_link::getLinkAdminHref($this->getArrModule("modul"), "saveUI"));
             $strForm = $objWorkflow->getObjWorkflowHandler()->getUserInterface();
 
             if($strForm instanceof class_admin_formgenerator) {
@@ -279,10 +279,6 @@ class class_module_workflows_admin extends class_admin_simple implements interfa
                 $strReturn .= $this->objToolkit->formInputSubmit($this->getLang("commons_save"));
                 $strReturn .= $this->objToolkit->formClose();
             }
-
-
-
-
         }
         else {
             $strReturn .= $this->getLang("commons_error_permissions");

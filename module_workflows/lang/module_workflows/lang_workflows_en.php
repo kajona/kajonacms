@@ -69,5 +69,6 @@ $lang["workflow_status_3"]               = "Finished";
 $lang["workflow_systemid"]               = "Relevant systemid";
 $lang["workflow_text"]                   = "Text";
 $lang["workflow_text2"]                  = "Text 2";
+$lang["workflow_text3"]                  = "Text 3";
 $lang["workflow_trigger"]                = "Next execution";
 $lang["workflow_ui"]                     = "Show edit-form for the current step";
