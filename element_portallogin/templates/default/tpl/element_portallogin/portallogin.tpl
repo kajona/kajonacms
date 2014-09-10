@@ -1,3 +1,6 @@
+
+<!-- available placeholders: action, portallogin_username, portallogin_action, portallogin_elsystemid, portallogin_forgotpwdlink -->
+<!-- expected form-elements: portallogin_username, portallogin_password, action, pl_systemid -->
 <portallogin_loginform>
 <form name="formPortallogin" method="post" action="%%action%%" accept-charset="UTF-8">
 	<div><label for="portallogin_username">[lang,username,elements]</label><input type="text" name="portallogin_username" id="portallogin_username" value="%%portallogin_username%%" class="inputText" /></div>
@@ -9,12 +12,14 @@
 </form>
 </portallogin_loginform>
 
+<!-- available placeholders: loggedin_label, logoutlink, logoutlinksimple, username, editprofilelink, editprofilelinksimple -->
 <portallogin_status>
 <p>%%loggedin_label%%: %%username%%</p>
 <p>%%logoutlink%% &nbsp; %%editprofilelink%%</p>
 </portallogin_status>
 
-
+<!-- available placeholders: formaction, portallogin_elsystemid, username, email, forename, name -->
+<!-- expected form-elements: username, password, password2, email, forename, name, submitUserForm, pl_systemid -->
 <portallogin_userdataform_minimal>
 <form name="formUserdata" method="post" action="%%formaction%%" accept-charset="UTF-8">
     %%formErrors%%
@@ -30,6 +35,8 @@
 </form>
 </portallogin_userdataform_minimal>
 
+<!-- available placeholders: formaction, portallogin_elsystemid, username, email, forename, name, street, postal, city, phone, mobile, date_day, date_month, date_year -->
+<!-- expected form-elements: username, password, password2, email, forename, name, street, postal, city, phone, mobile, date_day, date_month, date_year, submitUserForm, pl_systemid -->
 <portallogin_userdataform_complete>
 <form name="formUserdata" method="post" action="%%formaction%%" accept-charset="UTF-8">
     %%formErrors%%
@@ -55,12 +62,13 @@
 </form>
 </portallogin_userdataform_complete>
 
-
+<!-- available placeholders: error -->
 <errorRow>
 &middot; %%error%%<br />
 </errorRow>
 
-
+<!-- available placeholders: action, portallogin_username, portallogin_action, portallogin_elsystemid  -->
+<!-- expected form-elements: pl_systemid, portallogin_username, action  -->
 <portallogin_resetform>
     [lang,resetHint,elements]
 <form name="portalFormResetPwd" method="post" action="%%action%%" accept-charset="UTF-8">
@@ -72,7 +80,8 @@
 </form>
 </portallogin_resetform>
 
-
+<!-- available placeholders: action, portallogin_action, portallogin_systemid, portallogin_authcode, portallogin_elsystemid  -->
+<!-- expected form-elements: portallogin_password1, portallogin_password2, action, systemid, authcode, reset, pl_systemid -->
 <portallogin_newpwdform>
     [lang,pwdHint,elements]
 <form name="portalFormNewPwd" method="post" action="%%action%%" accept-charset="UTF-8">

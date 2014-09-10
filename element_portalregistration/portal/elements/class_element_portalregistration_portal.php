@@ -59,7 +59,7 @@ class class_element_portalregistration_portal extends class_element_portal imple
                     if($objUser->updateObjectToDb()) {
                         $strReturn .= $this->getLang("pr_completionSuccess");
                         if($this->arrElementData["portalregistration_success"] != "") {
-                            $this->portalReload(getLinkPortalHref($this->arrElementData["portalregistration_success"]));
+                            $this->portalReload(class_link::getLinkPortalHref($this->arrElementData["portalregistration_success"]));
                         }
                     }
                 }
@@ -126,7 +126,7 @@ class class_element_portalregistration_portal extends class_element_portal imple
             $arrTemplate["email"] = $this->getParam("email");
             $arrTemplate["forename"] = $this->getParam("forename");
             $arrTemplate["name"] = $this->getParam("name");
-            $arrTemplate["formaction"] = getLinkPortalHref($this->getPagename(), "", "portalCreateAccount");
+            $arrTemplate["formaction"] = class_link::getLinkPortalHref($this->getPagename(), "", "portalCreateAccount");
 
             $arrTemplate["formErrors"] = "";
             if(count($arrErrors) > 0) {
