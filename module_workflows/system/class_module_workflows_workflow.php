@@ -426,7 +426,7 @@ class class_module_workflows_workflow extends class_model implements interface_m
                         ".$arrTemp[0]."
                         AND ( workflows_state = ?  )
                         /*AND ( system_date_start > ? OR system_date_start = 0 )*/
-                   ORDER BY system_date_start DESC";
+                   ORDER BY system_date_start DESC, system_sort DESC";
 
         $arrParams[] = (int)self::$INT_STATE_SCHEDULED;
         //$arrParams[] = class_date::getCurrentTimestamp();
