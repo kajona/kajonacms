@@ -154,6 +154,17 @@ abstract class class_testbase extends PHPUnit_Framework_TestCase {
         return $obj;
     }
 
+
+    /**
+     * Resets all relevant caches
+     */
+    protected function resetCaches() {
+        class_apc_cache::getInstance()->flushCache();
+        class_carrier::getInstance()->getObjDB()->flushQueryCache();
+        class_orm_rowcache::flushCache();
+        class_objectfactory::getInstance()->flushCache();
+    }
+
 }
 
 
