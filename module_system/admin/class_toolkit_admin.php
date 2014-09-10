@@ -944,8 +944,8 @@ class class_toolkit_admin extends class_toolkit {
      * Renders a simple admin-object, implementing interface_model
      *
      * @param interface_admin_listable|interface_model|class_model $objEntry
-     * @param $strActions
-     * @param $intCount
+     * @param string $strActions
+     * @param int $intCount
      * @param bool $bitCheckbox
      *
      * @return string
@@ -977,11 +977,11 @@ class class_toolkit_admin extends class_toolkit {
     /**
      * Renders a single admin-row, takes care of selecting the matching template-sections.
      *
-     * @param $strId
-     * @param $strName
-     * @param $strIcon
-     * @param $strActions
-     * @param $intCount
+     * @param string $strId
+     * @param string $strName
+     * @param string $strIcon
+     * @param string $strActions
+     * @param int $intCount
      * @param string $strAdditionalInfo
      * @param string $strDescription
      * @param bool $bitCheckbox
