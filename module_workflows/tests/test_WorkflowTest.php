@@ -106,8 +106,7 @@ class test_Workflow  extends class_testbase {
         //4. Delete created workflow objects
         /** @var class_module_workflows_workflow $objWorkflow*/
         foreach($arrCreatedWorkflows as $objWorkflow) {
-            //TODO: why is this crashing everything??
-            //$objWorkflow->deleteObject();
+            $objWorkflow->deleteObject();
         }
 
         $this->flushDBCache();
