@@ -103,7 +103,10 @@ class class_orm_objectlist extends class_orm_base {
 
         $arrReturn = array();
         foreach($arrRows as $arrOneRow) {
-            class_orm_rowcache::addSingleInitRow($arrOneRow);
+            //Caching is only allowed if the fetched and required classes match. Otherwise there could be missing queried tables.
+            if($arrOneRow["system_class"] == $strTargetClass)
+                class_orm_rowcache::addSingleInitRow($arrOneRow);
+
             $arrReturn[] = class_objectfactory::getInstance()->getObject($arrOneRow["system_id"]);
         }
 
