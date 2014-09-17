@@ -42,14 +42,19 @@ class class_orm_rowcache extends class_orm_base {
      * This avoids additional queries to init a single object afterwards.
      * On high-performance systems or large object-nets, this could reduce the amount of database-queries
      * fired drastically.
-     * For best performance, include the matching row of the tables system, system_date and system_rights
+     * For best performance, include the matching row of the tables system, system_date and system_rights.
+     * Use the class-filter if you want to make sure the cached row matches a single target-class. This makes sense
+     * if you query tables of an inheritance-structure (and not all tables may be in the cache-row resultset).
      *
      * @param array $arrInitRow
+     * @param string $strClassFilter
+     *
      * @return void
      */
-    public static function addSingleInitRow($arrInitRow) {
-        if(isset($arrInitRow["system_id"]))
+    public static function addSingleInitRow($arrInitRow, $strClassFilter = "") {
+        if(isset($arrInitRow["system_id"]) && ($strClassFilter == "" || $strClassFilter == $arrInitRow["system_class"])) {
             self::$arrInitRows[$arrInitRow["system_id"]] = $arrInitRow;
+        }
     }
 
     /**
@@ -57,14 +62,18 @@ class class_orm_rowcache extends class_orm_base {
      * This avoids additional queries to init a single object afterwards.
      * On high-performance systems or large object-nets, this could reduce the amount of database-queries
      * fired drastically.
-     * For best performance, include the matching row of the tables system, system_date and system_rights
+     * For best performance, include the matching row of the tables system, system_date and system_rights.
+     * Use the class-filter if you want to make sure the cached row matches a single target-class. This makes sense
+     * if you query tables of an inheritance-structure (and not all tables may be in the cache-row resultset).
      *
      * @param array $arrInitRows
+     * @param string $strClassFilter
+     *
      * @return void
      */
-    public static function addArrayOfInitRows($arrInitRows) {
+    public static function addArrayOfInitRows($arrInitRows, $strClassFilter = "") {
         foreach($arrInitRows as $arrOneRow)
-            self::addSingleInitRow($arrOneRow);
+            self::addSingleInitRow($arrOneRow, $strClassFilter);
     }
 
     /**
