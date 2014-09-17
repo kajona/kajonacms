@@ -66,7 +66,7 @@ class BuildHelper {
         $strReplace = "['debuglevel'] = 1";
         $strConfigfile = preg_replace($strSearch, $strReplace, $strConfigfile);
         $strSearch = "/\[\'debuglogging\'\]\s* = 1/";
-        $strReplace = "['debuglogging'] = 2";
+        $strReplace = "['debuglogging'] = 3";
         $strConfigfile = preg_replace($strSearch, $strReplace, $strConfigfile);
         file_put_contents(__DIR__."/".$this->strProjectPath."/project/system/config/config.php", $strConfigfile);
 
