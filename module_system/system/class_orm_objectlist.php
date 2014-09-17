@@ -206,7 +206,7 @@ class class_orm_objectlist extends class_orm_base {
      */
     private function processWhereRestrictions(&$strQuery, &$arrParams) {
         foreach($this->arrWhereRestrictions as $objOneRestriction) {
-            $strQuery .= $objOneRestriction->getStrWhere();
+            $strQuery .= " ".$objOneRestriction->getStrWhere()." ";
             foreach($objOneRestriction->getArrParams() as $strOneParam) {
                 $arrParams[] = $strOneParam;
             }
