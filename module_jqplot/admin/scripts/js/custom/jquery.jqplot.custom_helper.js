@@ -12,9 +12,10 @@ KAJONA.admin.jqplotHelper = {
     previousNeighbor : null,//used in methods mouseLeave and mouseMove
     arrChartObjects : [],
 
-    jqPlotChart : function (strChartId, strTooltipId, arrChartData, objChartOptions, objPostPlotOptions) {
+    jqPlotChart : function (strChartId, strTooltipId, strResizeableId, arrChartData, objChartOptions, objPostPlotOptions) {
         this.strTooltipId = strTooltipId;
         this.strChartId = strChartId;
+        this.strResizeableId = strResizeableId;
         this.arrChartData = arrChartData;
         this.objChartOptions = objChartOptions;
         this.objPostPlotOptions = objPostPlotOptions;
@@ -40,12 +41,13 @@ KAJONA.admin.jqplotHelper = {
 
         this.plot = function() {
             this.objJqplotChart = $.jqplot(this.strChartId, this.arrChartData, this.objChartOptions);
-            KAJONA.admin.jqplotHelper.bindMouseEvents(this.strChartId, this.strTooltipId);
+            KAJONA.admin.jqplotHelper.bindMouseEvents(this.strChartId, this.strTooltipId, this.strResizeableId);
         };
 
         this.render = function() {
             if(this.bitIsRendered) {
-                this.objJqplotChart.replot();
+                this.objJqplotChart.destroy();
+                this.objJqplotChart.replot({resetAxes:true});
                 this.postPlot();
                 return;
             }
@@ -58,9 +60,14 @@ KAJONA.admin.jqplotHelper = {
         KAJONA.admin.jqplotHelper.arrChartObjects[this.strChartId] = this;
     },
 
-    bindMouseEvents : function(strChartId, strTooltipId) {
+    bindMouseEvents : function(strChartId, strTooltipId, strResizeableId) {
         $('#'+strChartId).bind('jqplotMouseMove', function (ev, gridpos, datapos, neighbor, plot) {KAJONA.admin.jqplotHelper.mouseMove(ev, gridpos, datapos, neighbor, plot, strTooltipId)});
         $('#'+strChartId).bind('jqplotMouseLeave', function (ev, gridpos, datapos, neighbor, plot) {KAJONA.admin.jqplotHelper.mouseLeave(ev, gridpos, datapos, neighbor, plot, strTooltipId)});
+
+        $('#'+strResizeableId).resizable({delay:20});
+        $('#'+strResizeableId).bind('resize', function(event, ui) {
+            KAJONA.admin.jqplotHelper.arrChartObjects[strChartId].render();
+        });
     },
 
 

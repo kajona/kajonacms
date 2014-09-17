@@ -307,11 +307,14 @@ class class_graph_jqplot implements interface_graph {
 
         //create id's
         $strSystemId = generateSystemid();
+        $strResizeableId =  "resize_".$strSystemId;
         $strChartId =  "chart_".$strSystemId;
         $strTooltipId =  "tooltip_".$strSystemId;
 
         //create div where the chart is being put
-        $strReturn = "<div id=\"$strChartId\" style=\"width:".$this->intWidth."px; height:".$this->intHeight."px;\"></div>";
+        $strReturn = "<div id=\"$strResizeableId\" style=\"width:".$this->intWidth."px; height:".$this->intHeight."px;\">";
+            $strReturn .= "<div id=\"$strChartId\" style=\"width:96%; height:96%;\"></div>";
+        $strReturn .= "</div>";
 
         //create the data array and options object for the jqPlot method
         $strChartData = $this->strCreateJSDataArray();
@@ -343,9 +346,11 @@ class class_graph_jqplot implements interface_graph {
                         '{$strCoreDirectory}/module_jqplot/admin/scripts/js/jqplot/plugins/jqplot.canvasOverlay.js',
 
                         '{$strCoreDirectory}/module_jqplot/admin/scripts/js/custom/jquery.jqplot.custom_helper.js',
-                        '{$strCoreDirectory}/module_jqplot/admin/scripts/js/custom/jquery.jqplot.custom.css'
+                        '{$strCoreDirectory}/module_jqplot/admin/scripts/js/custom/jquery.jqplot.custom.css',
+                        '{$strCoreDirectory}/module_system/admin/scripts/jqueryui/css/smoothness/jquery-ui.custom.css',
+                        '{$strCoreDirectory}/module_system/admin/scripts/jqueryui/jquery-ui.custom.min.js'
                     ], function() {
-                        var objChart_$strChartId = new KAJONA.admin.jqplotHelper.jqPlotChart('$strChartId', '$strTooltipId', $strChartData, $strChartOptions, $strPostPlotOptions);
+                        var objChart_$strChartId = new KAJONA.admin.jqplotHelper.jqPlotChart('$strChartId', '$strTooltipId', '$strResizeableId', $strChartData, $strChartOptions, $strPostPlotOptions);
                         objChart_$strChartId.render();
                     });
                 });
