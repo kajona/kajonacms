@@ -39,30 +39,29 @@ KAJONA.admin.jqplotHelper = {
             }
         };
 
-        this.plot = function() {
+        this.plot = function () {
             this.objJqplotChart = $.jqplot(this.strChartId, this.arrChartData, this.objChartOptions);
             KAJONA.admin.jqplotHelper.bindMouseEvents(this.strChartId, this.strTooltipId, this.strResizeableId);
         };
 
-        this.render = function() {
-            if(this.bitIsRendered) {
-                this.objJqplotChart.destroy();
-                this.objJqplotChart.replot({resetAxes:true});
+        this.render = function () {
+            if (this.bitIsRendered) {
+                this.objJqplotChart.replot();
                 this.postPlot();
                 return;
             }
             this.plot();
             this.postPlot();
-            this.bitIsRendered = true
+            this.bitIsRendered = true;
         };
 
 
         KAJONA.admin.jqplotHelper.arrChartObjects[this.strChartId] = this;
     },
 
-    bindMouseEvents : function(strChartId, strTooltipId, strResizeableId) {
-        $('#'+strChartId).bind('jqplotMouseMove', function (ev, gridpos, datapos, neighbor, plot) {KAJONA.admin.jqplotHelper.mouseMove(ev, gridpos, datapos, neighbor, plot, strTooltipId)});
-        $('#'+strChartId).bind('jqplotMouseLeave', function (ev, gridpos, datapos, neighbor, plot) {KAJONA.admin.jqplotHelper.mouseLeave(ev, gridpos, datapos, neighbor, plot, strTooltipId)});
+    bindMouseEvents : function (strChartId, strTooltipId, strResizeableId) {
+        $('#' + strChartId).bind('jqplotMouseMove', function (ev, gridpos, datapos, neighbor, plot) {KAJONA.admin.jqplotHelper.mouseMove(ev, gridpos, datapos, neighbor, plot, strTooltipId)});
+        $('#' + strChartId).bind('jqplotMouseLeave', function (ev, gridpos, datapos, neighbor, plot) {KAJONA.admin.jqplotHelper.mouseLeave(ev, gridpos, datapos, neighbor, plot, strTooltipId)});
 
         $('#'+strResizeableId).resizable({delay:20});
         $('#'+strResizeableId).bind('resize', function(event, ui) {
@@ -221,8 +220,6 @@ KAJONA.admin.jqplotHelper = {
                 + '<div id=\"jqplot_tooltip_content\"  class=\"jqplot-chart-tooltip-content\"></div>'
                 + '</div>').appendTo("body");
 
-
-            console.log(valuePrimaryAxis);
 
             $('#jqplot_tooltip_series').html("<span>"+valuePrimaryAxis+"</span>");
             $('#jqplot_tooltip_content').html("<span>"+objTooltip.seriesLabel+" : <b>"+valueSecondaryAxis+"</b></span>");
