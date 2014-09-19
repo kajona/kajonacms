@@ -286,7 +286,7 @@ class class_formentry_base {
         }
         else {
             if($this->getObjValidator() instanceof interface_validator_extended) {
-                return "'".$this->getStrLabel()."' :".$this->getObjValidator()->getValidationMessage();
+                return "'".$this->getStrLabel()."': ".$this->getObjValidator()->getValidationMessage();
             }
             else {
                 return "'".$this->getStrLabel()."'";
