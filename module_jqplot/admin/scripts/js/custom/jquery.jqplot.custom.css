@@ -59,3 +59,8 @@ div.jqplot-point-label {
     text-shadow: 0 0 3px black, 0 0 3px black;
     z-index: 0;
 }
+
+div.ui-resizable-helper-jqplot {
+    border: 2px dotted gray;
+    z-index: 1000 !important;
+}

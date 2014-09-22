@@ -63,10 +63,14 @@ KAJONA.admin.jqplotHelper = {
         $('#' + strChartId).bind('jqplotMouseMove', function (ev, gridpos, datapos, neighbor, plot) {KAJONA.admin.jqplotHelper.mouseMove(ev, gridpos, datapos, neighbor, plot, strTooltipId)});
         $('#' + strChartId).bind('jqplotMouseLeave', function (ev, gridpos, datapos, neighbor, plot) {KAJONA.admin.jqplotHelper.mouseLeave(ev, gridpos, datapos, neighbor, plot, strTooltipId)});
 
-        $('#'+strResizeableId).resizable({delay:20});
-        $('#'+strResizeableId).bind('resize', function(event, ui) {
-            KAJONA.admin.jqplotHelper.arrChartObjects[strChartId].render();
+        $('#'+strResizeableId).resizable({
+            delay:20,
+            helper: "ui-resizable-helper-jqplot",
+            stop: function(event, ui) {
+                KAJONA.admin.jqplotHelper.arrChartObjects[strChartId].render();
+            }
         });
+
     },
 
 
