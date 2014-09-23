@@ -1890,15 +1890,18 @@ class class_toolkit_admin extends class_toolkit {
      *
      * @param string $strSystemid
      * @param string $strName
+     * @param string $strWidgetNameAdditionalContent
      * @param string $strEditLink
      * @param string $strDeleteLink
      * @param string $strLayoutSection
+     *
      * @return string
      */
-    public function getAdminwidget($strSystemid, $strName, $strEditLink = "", $strDeleteLink = "", $strLayoutSection = "adminwidget_widget") {
+    public function getAdminwidget($strSystemid, $strName, $strWidgetNameAdditionalContent, $strEditLink = "", $strDeleteLink = "", $strLayoutSection = "adminwidget_widget") {
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", $strLayoutSection);
         $arrTemplate = array();
         $arrTemplate["widget_name"] = $strName;
+        $arrTemplate["widget_name_additional_content"] = $strWidgetNameAdditionalContent;
         $arrTemplate["widget_id"] = $strSystemid;
         $arrTemplate["widget_edit"] = $strEditLink;
         $arrTemplate["widget_delete"] = $strDeleteLink;

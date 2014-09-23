@@ -227,6 +227,9 @@ abstract class class_adminwidget {
         return $this->bitBlockSessionClose;
     }
 
+    public function getWidgetNameAdditionalContent() {
+        return "";
+    }
 }
 
 
