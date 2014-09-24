@@ -76,10 +76,13 @@ class class_module_dashboard_widget extends class_model implements interface_mod
         return class_resourceloader::getInstance()->getFolderContent("/admin/widgets/", array(".php"), false, function(&$strFilename) {
             if($strFilename != "interface_adminwidget.php" && $strFilename != "class_adminwidget.php") {
                 $strFilename = uniSubstr($strFilename, 0, -4);
-                return true;
+
+                $objReflection = new ReflectionClass($strFilename);
+                if(!$objReflection->isAbstract() && $objReflection->implementsInterface("interface_adminwidget"))
+                    return true;
             }
-            else
-                return false;
+
+            return false;
         });
     }
 
