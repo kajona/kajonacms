@@ -18,7 +18,7 @@
  * @module login
  * @moduleId _user_modul_id_
  */
-class class_module_login_admin_xml extends class_admin implements interface_xml_admin {
+class class_module_login_admin_xml extends class_admin_controller implements interface_xml_admin {
 
     public function __construct() {
         parent::__construct();

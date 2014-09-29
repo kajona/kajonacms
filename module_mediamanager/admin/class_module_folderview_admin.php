@@ -20,7 +20,7 @@
  * @module mediamanager
  * @moduleId _mediamanager_module_id_
  */
-class class_module_folderview_admin extends class_admin implements interface_admin {
+class class_module_folderview_admin extends class_admin_controller implements interface_admin {
 
     /**
      * Constructor, doing nothing but a few inits

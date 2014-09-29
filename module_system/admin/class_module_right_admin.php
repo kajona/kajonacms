@@ -17,7 +17,7 @@
  * @module right
  * @moduleId _system_modul_id_
  */
-class class_module_right_admin extends class_admin implements interface_admin {
+class class_module_right_admin extends class_admin_controller implements interface_admin {
 
     /**
      * Constructor

@@ -13,7 +13,7 @@
  * @package module_system
  * @since 4.0
  */
-abstract class class_admin_simple extends class_admin {
+abstract class class_admin_simple extends class_admin_controller {
 
     private  $strPeAddon = "";
 

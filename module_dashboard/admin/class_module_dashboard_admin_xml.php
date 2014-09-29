@@ -19,7 +19,7 @@
  * @moduleId _dashboard_module_id_
  *
  */
-class class_module_dashboard_admin_xml extends class_admin implements interface_xml_admin {
+class class_module_dashboard_admin_xml extends class_admin_controller implements interface_xml_admin {
 
     private $strStartMonthKey = "DASHBOARD_CALENDAR_START_MONTH";
     private $strStartYearKey = "DASHBOARD_CALENDAR_START_YEAR";

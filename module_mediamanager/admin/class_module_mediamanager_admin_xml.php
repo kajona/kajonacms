@@ -17,7 +17,7 @@
  * @module mediamanager
  * @moduleId _mediamanager_module_id_
  */
-class class_module_mediamanager_admin_xml extends class_admin implements interface_xml_admin {
+class class_module_mediamanager_admin_xml extends class_admin_controller implements interface_xml_admin {
 
     /**
      * Create a new folder using the combination of passed folder & systemid

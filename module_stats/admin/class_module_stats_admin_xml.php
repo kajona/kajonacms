@@ -17,7 +17,7 @@
  * @module stats
  * @moduleId _stats_modul_id_
  */
-class class_module_stats_admin_xml extends class_admin implements interface_xml_admin {
+class class_module_stats_admin_xml extends class_admin_controller implements interface_xml_admin {
 
     /**
      * @var class_date

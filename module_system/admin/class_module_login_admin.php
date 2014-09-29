@@ -16,7 +16,7 @@
  * @module login
  * @moduleId _user_modul_id_
  */
-class class_module_login_admin extends class_admin implements interface_admin {
+class class_module_login_admin extends class_admin_controller implements interface_admin {
 
     const SESSION_REFERER = "LOGIN_SESSION_REFERER";
     const SESSION_PARAMS = "LOGIN_SESSION_PARAMS";

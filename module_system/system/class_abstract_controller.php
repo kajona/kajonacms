@@ -7,7 +7,7 @@
 ********************************************************************************************************/
 
 /**
- * A common base class for class_admin and class_portal.
+ * A common base class for class_admin_controller and class_portal.
  * Use one of both to create admin-/portal-views.
  * Do NOT extend this class directly.
  *

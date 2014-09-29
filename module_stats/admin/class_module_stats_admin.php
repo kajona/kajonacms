@@ -16,7 +16,7 @@
  * @module stats
  * @moduleId _stats_modul_id_
  */
-class class_module_stats_admin extends class_admin implements interface_admin {
+class class_module_stats_admin extends class_admin_controller implements interface_admin {
 
 
     public static $STR_SESSION_KEY_DATE_START = "STR_SESSION_KEY_DATE_START";

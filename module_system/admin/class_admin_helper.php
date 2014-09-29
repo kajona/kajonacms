@@ -8,7 +8,7 @@
 
 /**
  * A class holding common helper-methods for the backend.
- * The main purpose is to reduce the code stored at class_admin
+ * The main purpose is to reduce the code stored at class_admin_controller
  *
  * @package module_system
  * @author  sidler@mulchprod.de

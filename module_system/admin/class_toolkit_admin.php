@@ -1547,7 +1547,7 @@ class class_toolkit_admin extends class_toolkit {
     /**
      * Generates a list of errors found by the form-validation
      *
-     * @param class_admin|class_admin_formgenerator $objCalling
+     * @param class_admin_controller|class_admin_formgenerator $objCalling
      * @param string $strTargetAction
      * @return string
      */

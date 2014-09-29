@@ -18,7 +18,7 @@
  * @module system
  * @moduleId _system_modul_id_
  */
-class class_module_system_admin_xml extends class_admin implements interface_xml_admin {
+class class_module_system_admin_xml extends class_admin_controller implements interface_xml_admin {
 
 
     /**

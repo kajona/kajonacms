@@ -18,7 +18,7 @@
  * @module elements
  * @moduleId _pages_elemente_modul_id_
  */
-abstract class class_element_admin extends class_admin implements interface_search_portalobject {
+abstract class class_element_admin extends class_admin_controller implements interface_search_portalobject {
 
     const STR_ANNOTATION_ELEMENTCONTENTTITLE = "@elementContentTitle";
 

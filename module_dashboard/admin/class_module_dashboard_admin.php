@@ -17,7 +17,7 @@
  * @module dashboard
  * @moduleId _dashboard_module_id_
  */
-class class_module_dashboard_admin extends class_admin implements interface_admin {
+class class_module_dashboard_admin extends class_admin_controller implements interface_admin {
 
     protected $arrColumnsOnDashboard = array("column1", "column2", "column3");
 

@@ -238,7 +238,7 @@ class class_module_packageserver_admin extends class_module_mediamanager_admin i
      * @return array
      */
     protected function getArrOutputNaviEntries() {
-        $arrEntries = class_admin::getArrOutputNaviEntries();
+        $arrEntries = class_admin_controller::getArrOutputNaviEntries();
 
         $arrPath = $this->getPathArray();
         array_shift($arrPath);
