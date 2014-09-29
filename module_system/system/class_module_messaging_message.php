@@ -169,6 +169,9 @@ class class_module_messaging_message extends class_model implements interface_mo
      */
     public function getStrLongDescription() {
         $strHandlerName = $this->getStrMessageProvider();
+        if($strHandlerName == "")
+            return "";
+
         /** @var $objHandler interface_messageprovider */
         $objHandler = new $strHandlerName();
         return $objHandler->getStrName();
