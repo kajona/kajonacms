@@ -51,6 +51,7 @@ class class_graph_jqplot_seriesdata {
             $this->arrSeriesOptions["renderer"] = "$.jqplot.BarRenderer";
             $this->arrSeriesOptions["rendererOptions"]["fillToZero"] = true;
             $this->arrSeriesOptions["rendererOptions"]["shadow"] = false;
+            $this->arrSeriesOptions["pointLabels"]["hideZeros"] = true;
 
             //additionally set required global options
             $arrGlobalOptions["axes"]["xaxis"]["tickOptions"]["showGridline"] = false;
@@ -60,6 +61,7 @@ class class_graph_jqplot_seriesdata {
             $this->arrSeriesOptions["rendererOptions"]["barDirection"] = "horizontal";
             $this->arrSeriesOptions["rendererOptions"]["fillToZero"] = true;
             $this->arrSeriesOptions["rendererOptions"]["shadow"] = false;
+            $this->arrSeriesOptions["pointLabels"]["hideZeros"] = true;
 
             //additionally set required global options
             $arrGlobalOptions["seriesDefaults"]["renderer"] = "$.jqplot.BarRenderer";

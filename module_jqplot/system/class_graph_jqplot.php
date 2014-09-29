@@ -29,6 +29,7 @@ class class_graph_jqplot implements interface_graph {
     private $bitXAxisLabelsInvisible = false;
     private $bitYAxisLabelsInvisible = false;
 
+    const STRING_FORMAT = "%'g";
 
     /**
      * contains all series data per added chart
@@ -75,7 +76,8 @@ class class_graph_jqplot implements interface_graph {
             "tickOptions" => array(
                 "textColor" => null,
                 "fontFamily" => "'Open Sans', Helvetica, Arial, sans-serif",
-                "fontSize" => null
+                "fontSize" => null,
+                "formatString" => self::STRING_FORMAT
             )
         ),
         "seriesDefaults" => array(
@@ -316,9 +318,10 @@ class class_graph_jqplot implements interface_graph {
             $strReturn .= "<div id=\"$strChartId\" style=\"width:100%; height:100%;\"></div>";
         $strReturn .= "</div>";
 
+        $this->sortBySeriesType();
         //create the data array and options object for the jqPlot method
-        $strChartData = $this->strCreateJSDataArray();
         $strChartOptions = $this->strCreateJSOptions();
+        $strChartData = $this->strCreateJSDataArray();
         $arrPostPlotOptions = array(
             "intNrOfWrittenLabelsXAxis" => $this->intNrOfWrittenLabelsXAxis,
             "intNrOfWrittenLabelsYAxis" => $this->intNrOfWrittenLabelsYAxis,
@@ -326,6 +329,9 @@ class class_graph_jqplot implements interface_graph {
             "bitYAxisLabelsInvisible" => $this->bitYAxisLabelsInvisible
         );
         $strPostPlotOptions = json_encode($arrPostPlotOptions);
+
+        $strDecChar = class_carrier::getInstance()->getObjLang()->getLang("numberStyleDecimal", "system");
+        $strThousandsChar = class_carrier::getInstance()->getObjLang()->getLang("numberStyleThousands", "system");
 
         $strCoreDirectory = class_resourceloader::getInstance()->getCorePathForModule("module_jqplot");
         $strReturn .= "<script type='text/javascript'>
@@ -350,6 +356,9 @@ class class_graph_jqplot implements interface_graph {
 
                         '{$strCoreDirectory}/module_system/admin/scripts/jqueryui/css/smoothness/jquery-ui.custom.css'
                     ], function() {
+                        $.jqplot.sprintf.thousandsSeparator = '$strThousandsChar';
+                        $.jqplot.sprintf.decimalMark = '$strDecChar';
+
                         var objChart_$strChartId = new KAJONA.admin.jqplotHelper.jqPlotChart('$strChartId', '$strTooltipId', '$strResizeableId', $strChartData, $strChartOptions, $strPostPlotOptions);
                         objChart_$strChartId.render();
                     });
@@ -372,15 +381,17 @@ class class_graph_jqplot implements interface_graph {
 
             //Swap X and Y Axis
             if(count($this->arrXAxisTickLabels) > 0 || $this->intNrOfWrittenLabelsXAxis == 0) {
+                //set y-Axis options
+                $this->setArrYAxisTickLabels($this->arrXAxisTickLabels, $this->intNrOfWrittenLabelsXAxis);
+                $this->arrOptions["axes"]["yaxis"]["renderer"] = "$.jqplot.CategoryAxisRenderer";//since it is a bar chart, use CategoryAxisRenderer
+
                 //reset xAxis options
                 $this->arrOptions["axes"]["xaxis"]["renderer"] = null;
                 $this->arrOptions["axes"]["xaxis"]["ticks"] = null;
+                $this->arrXAxisTickLabels = null;
+                $this->intNrOfWrittenLabelsXAxis = null;
 
-                //set y-Axis options
-                $this->setArrYAxisTickLabels($this->arrXAxisTickLabels, $this->intNrOfWrittenLabelsXAxis);
 
-                //since it is a bar chart, use CategoryAxisRenderer
-                $this->arrOptions["axes"]["yaxis"]["renderer"] = "$.jqplot.CategoryAxisRenderer";
             }
 
             //add to each series options which are required for horizontal bar chart rendering
@@ -388,14 +399,12 @@ class class_graph_jqplot implements interface_graph {
                 if($objSeriesData->getIntChartType() == class_graph_jqplot_charttype::STACKEDBAR) {
                     $arrSeriesOptions = $objSeriesData->getArrSeriesOptions();
                     $arrSeriesOptions["pointLabels"]["hideZeros"] = true;
-                    $arrSeriesOptions["pointLabels"]["formatString"] = '%s';
                     $arrSeriesOptions["pointLabels"]["show"] = true;
                     $objSeriesData->setArrSeriesOptions($arrSeriesOptions);
                 }
                 if($objSeriesData->getIntChartType() == class_graph_jqplot_charttype::BAR) {
                     $arrSeriesOptions = $objSeriesData->getArrSeriesOptions();
                     $arrSeriesOptions["pointLabels"]["hideZeros"] = true;
-                    $arrSeriesOptions["pointLabels"]["formatString"] = '%s';
                     $objSeriesData->setArrSeriesOptions($arrSeriesOptions);
                 }
             }
@@ -439,7 +448,7 @@ class class_graph_jqplot implements interface_graph {
             return null;
     }
 
-    private function strCreateJSOptions() {
+    private function sortBySeriesType() {
         /*
         Sort the series data array
         Bar charts must be plotted before line charts
@@ -461,9 +470,9 @@ class class_graph_jqplot implements interface_graph {
             if($intLeft < $intRight)  return -1;
             if($intLeft > $intRight)  return 1;
         });
+    }
 
-
-
+    private function strCreateJSOptions() {
         //add series options of each series to $arrOptions
         foreach($this->arrSeriesData as $arrSeriesData) {
             $this->arrOptions["series"][] = $arrSeriesData->getArrSeriesOptions();

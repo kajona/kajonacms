@@ -24,6 +24,9 @@ KAJONA.admin.jqplotHelper = {
         this.bitIsRendered = false;
 
 
+        /**
+         * Called after the chart was plotted
+         */
         this.postPlot = function() {
             if (this.objPostPlotOptions.hasOwnProperty("intNrOfWrittenLabelsXAxis") && this.objPostPlotOptions["intNrOfWrittenLabelsXAxis"] != null) {
                 KAJONA.admin.jqplotHelper.setLabelsInvisible(this.strChartId, this.objPostPlotOptions["intNrOfWrittenLabelsXAxis"], "xaxis");
@@ -39,11 +42,17 @@ KAJONA.admin.jqplotHelper = {
             }
         };
 
+        /**
+         * Plots the chart
+         */
         this.plot = function () {
             this.objJqplotChart = $.jqplot(this.strChartId, this.arrChartData, this.objChartOptions);
             KAJONA.admin.jqplotHelper.bindMouseEvents(this.strChartId, this.strTooltipId, this.strResizeableId);
         };
 
+        /**
+         * Renders and plot the charts
+         */
         this.render = function () {
             if (this.bitIsRendered) {
                 this.objJqplotChart.replot();
@@ -55,7 +64,6 @@ KAJONA.admin.jqplotHelper = {
             this.bitIsRendered = true;
         };
 
-
         KAJONA.admin.jqplotHelper.arrChartObjects[this.strChartId] = this;
     },
 
@@ -63,6 +71,7 @@ KAJONA.admin.jqplotHelper = {
         $('#' + strChartId).bind('jqplotMouseMove', function (ev, gridpos, datapos, neighbor, plot) {KAJONA.admin.jqplotHelper.mouseMove(ev, gridpos, datapos, neighbor, plot, strTooltipId)});
         $('#' + strChartId).bind('jqplotMouseLeave', function (ev, gridpos, datapos, neighbor, plot) {KAJONA.admin.jqplotHelper.mouseLeave(ev, gridpos, datapos, neighbor, plot, strTooltipId)});
 
+        //make it resizable
         $('#'+strResizeableId).resizable({
             delay:20,
             helper: "ui-resizable-helper-jqplot",
@@ -212,8 +221,12 @@ KAJONA.admin.jqplotHelper = {
                 valueSecondaryAxis = objTooltip.xValue;
             }
 
-            if(objTooltip.seriesObject._primaryAxis == "_xaxis") {
 
+            if($.isNumeric(valuePrimaryAxis)) {
+                valuePrimaryAxis = $.jqplot.DefaultTickFormatter("%'g", valuePrimaryAxis);
+            }
+            if($.isNumeric(valueSecondaryAxis)) {
+                valueSecondaryAxis = $.jqplot.DefaultTickFormatter("%'g", valueSecondaryAxis);
             }
 
             //create the toolTip
