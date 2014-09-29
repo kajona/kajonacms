@@ -34,13 +34,18 @@ class class_test_charts_jqPlotTest extends class_testbase  {
 //        echo "<script language=\"javascript\" type=\"text/javascript\" src=\""._webpath_.class_resourceloader::getInstance()->getCorePathForModule("module_jqplot")."/module_jqplot/admin/scripts/js/jqplot/plugins/jqplot.pieRenderer.js\"></script>";
 //        echo "<script language=\"javascript\" type=\"text/javascript\" src=\""._webpath_.class_resourceloader::getInstance()->getCorePathForModule("module_jqplot")."/module_jqplot/admin/scripts/js/jqplot/plugins/jqplot.canvasOverlay.js\"></script>";
 //        echo "<link rel=\"stylesheet\" type=\"text/css\" href=\""._webpath_.class_resourceloader::getInstance()->getCorePathForModule("module_jqplot")."/module_jqplot/admin/scripts/js/jqplot/jquery.jqplot.css\"></link>";
+//        echo "<link rel=\"stylesheet\" type=\"text/css\" href=\""._webpath_.class_resourceloader::getInstance()->getCorePathForModule("module_system")."/module_system/admin/scripts/jqueryui/css/smoothness/jquery-ui.custom.css\"></link>";
         //custom
 //        echo "<script language=\"javascript\" type=\"text/javascript\" src=\""._webpath_.class_resourceloader::getInstance()->getCorePathForModule("module_jqplot")."/module_jqplot/admin/scripts/js/custom/jquery.jqplot.custom_helper.js\"></script>";
 //        echo "<script language=\"javascript\" type=\"text/javascript\" src=\""._webpath_.class_resourceloader::getInstance()->getCorePathForModule("module_jqplot")."/module_jqplot/admin/scripts/js/custom/jqPlotTest.js\"></script>";
 //        echo "<link rel=\"stylesheet\" type=\"text/css\" href=\""._webpath_.class_resourceloader::getInstance()->getCorePathForModule("module_jqplot")."/module_jqplot/admin/scripts/js/custom/jquery.jqplot.custom.css\"></link>";
         //test-Divs
-//        echo "<div id=\"ChartDIV\"></div>";
-//        echo "<div id=\"ChartDIV2\"></div>";
+
+
+        //create div where the chart is being put
+//        echo "<div id=\"ResizeDIV\" style=\"width:700px; height:500px;\">
+//                <div id=\"ChartDIV\" style=\"width:100%; height:100%;\"></div>
+//            </div>";
 
 
         $objGraph = class_graph_factory::getGraphInstance(class_graph_factory::$STR_TYPE_JQPLOT);
@@ -230,19 +235,18 @@ class class_test_charts_jqPlotTest extends class_testbase  {
         $objGraph->setStrFont("open sans");
         echo $objGraph->renderGraph();
 
-
-        $objGraph = class_graph_factory::getGraphInstance();
-        $objGraph->setArrXAxisTickLabels(array("28.04.", "26.05.", "30.06.", "11.08.", "11.08."), 5);
-        $objGraph->addStackedBarChartSet(array(1899, 1929, 1944, null, null), "graph_header_eur");
-        $objGraph->addStackedBarChartSet(array(1358, 1409, 1421, null, null), "graph_header_usd");
-        $objGraph->addStackedBarChartSet(array(150, 170, 193.5, "34", null), "graph_header_other");
-        $objGraph->addStackedBarChartSet(array(43, 170, 193.5, 0, null), "graph_header_yeah");
-
-        $objGraph->setIntHeight(330);
-        $objGraph->setIntWidth(850);
-        $objGraph->setStrYAxisTitle("graph_header_tsd");
+        $objGraph = class_graph_factory::getGraphInstance(class_graph_factory::$STR_TYPE_JQPLOT);
+        $objGraph->setStrGraphTitle("A Horizontal Bar Chart with labels");
+        $objGraph->setStrXAxisTitle("My new X-Axis");
+        $objGraph->setStrYAxisTitle("My new Y-Axis");
+        $objGraph->addBarChartSet(array(2,4,6,3.3), "serie 9", true);
+        $objGraph->addBarChartSet(array(5,1,3,4), "serie 10", true);
+        $objGraph->addBarChartSet(array(4,7,1,2), "serie 11", true);
+        $objGraph->setArrXAxisTickLabels(array("v1", "v2", "v3", "v4"));
+        $objGraph->setBarHorizontal(true);
+        $objGraph->setBitRenderLegend(true);
+        $objGraph->setStrFont("open sans");
         echo $objGraph->renderGraph();
-        //$objGraph->setStrGraphTitle($this->getLang("zinssensitivitaeten_header"));
 
 
 
