@@ -23,6 +23,8 @@ KAJONA.admin.jqplotHelper = {
         this.objJqplotChart = null;
         this.bitIsRendered = false;
 
+        this.objChartOptions.axesDefaults.tickOptions.formatter = KAJONA.admin.jqplotHelper.customJqPlotNumberFormatter;
+
 
         /**
          * Called after the chart was plotted
@@ -252,5 +254,15 @@ KAJONA.admin.jqplotHelper = {
             $('#jqplot_tooltip').css("top", top)
                 .css("left", left);
         }
+    },
+
+    customJqPlotNumberFormatter: function (format, value) {
+        if(typeof value == "number") {
+            if(value % 1 !== 0) {
+                value = value.toFixed(2);
+            }
+        }
+        var formattedValue =  $.jqplot.sprintf(format, value);
+        return formattedValue;
     }
 };

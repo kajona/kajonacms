@@ -33,8 +33,8 @@ class class_test_charts_jqPlotTest extends class_testbase  {
 //        echo "<script language=\"javascript\" type=\"text/javascript\" src=\""._webpath_.class_resourceloader::getInstance()->getCorePathForModule("module_jqplot")."/module_jqplot/admin/scripts/js/jqplot/plugins/jqplot.dateAxisRenderer.js\"></script>";
 //        echo "<script language=\"javascript\" type=\"text/javascript\" src=\""._webpath_.class_resourceloader::getInstance()->getCorePathForModule("module_jqplot")."/module_jqplot/admin/scripts/js/jqplot/plugins/jqplot.pieRenderer.js\"></script>";
 //        echo "<script language=\"javascript\" type=\"text/javascript\" src=\""._webpath_.class_resourceloader::getInstance()->getCorePathForModule("module_jqplot")."/module_jqplot/admin/scripts/js/jqplot/plugins/jqplot.canvasOverlay.js\"></script>";
-//        echo "<link rel=\"stylesheet\" type=\"text/css\" href=\""._webpath_.class_resourceloader::getInstance()->getCorePathForModule("module_jqplot")."/module_jqplot/admin/scripts/js/jqplot/jquery.jqplot.css\"></link>";
-//        echo "<link rel=\"stylesheet\" type=\"text/css\" href=\""._webpath_.class_resourceloader::getInstance()->getCorePathForModule("module_system")."/module_system/admin/scripts/jqueryui/css/smoothness/jquery-ui.custom.css\"></link>";
+        echo "<link rel=\"stylesheet\" type=\"text/css\" href=\""._webpath_.class_resourceloader::getInstance()->getCorePathForModule("module_jqplot")."/module_jqplot/admin/scripts/js/jqplot/jquery.jqplot.css\"></link>";
+        echo "<link rel=\"stylesheet\" type=\"text/css\" href=\""._webpath_.class_resourceloader::getInstance()->getCorePathForModule("module_system")."/module_system/admin/scripts/jqueryui/css/smoothness/jquery-ui.custom.css\"></link>";
         //custom
 //        echo "<script language=\"javascript\" type=\"text/javascript\" src=\""._webpath_.class_resourceloader::getInstance()->getCorePathForModule("module_jqplot")."/module_jqplot/admin/scripts/js/custom/jquery.jqplot.custom_helper.js\"></script>";
 //        echo "<script language=\"javascript\" type=\"text/javascript\" src=\""._webpath_.class_resourceloader::getInstance()->getCorePathForModule("module_jqplot")."/module_jqplot/admin/scripts/js/custom/jqPlotTest.js\"></script>";
@@ -246,6 +246,13 @@ class class_test_charts_jqPlotTest extends class_testbase  {
         $objGraph->setBarHorizontal(true);
         $objGraph->setBitRenderLegend(true);
         $objGraph->setStrFont("open sans");
+        echo $objGraph->renderGraph();
+
+        $objGraph = class_graph_factory::getGraphInstance(class_graph_factory::$STR_TYPE_JQPLOT);
+        $objGraph->addLinePlot(array(0,0,0,0,0,0,0.5), null);
+        $objGraph->setIntHeight(500);
+        $objGraph->setIntWidth(700);
+        $objGraph->setArrXAxisTickLabels(array("23", "24", "25", "26", "27", "28", "29"));
         echo $objGraph->renderGraph();
 
 
