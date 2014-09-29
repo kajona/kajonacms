@@ -21,7 +21,7 @@
  * @author sidler@mulchprod.de
  * @see class_admin::action()
  */
-abstract class class_admin extends class_ui_base {
+abstract class class_admin extends class_abstract_controller {
 
     /**
      * String containing the current module to be used to load texts

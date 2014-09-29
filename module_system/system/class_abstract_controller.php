@@ -15,7 +15,7 @@
  * @author sidler@mulchprod.de
  * @since 4.4
  */
-abstract class class_ui_base {
+abstract class class_abstract_controller {
 
     const STR_MODULE_ANNOTATION = "@module";
     const STR_MODULEID_ANNOTATION = "@moduleId";
