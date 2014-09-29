@@ -19,7 +19,7 @@
  *
  * @package module_system
  * @author sidler@mulchprod.de
- * @see class_admin::action()
+ * @see class_admin_controller::action()
  */
 abstract class class_admin_controller extends class_abstract_controller {
 
