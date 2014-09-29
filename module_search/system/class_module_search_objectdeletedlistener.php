@@ -16,6 +16,9 @@
  */
 class class_module_search_objectdeletedlistener implements interface_genericevent_listener {
 
+    public static $BIT_UPDATE_INDEX_ON_END_OF_REQUEST = true;
+
+
     /**
      * @param string $strEventName
      * @param array $arrArguments
@@ -26,8 +29,15 @@ class class_module_search_objectdeletedlistener implements interface_genericeven
         //unwrap arguments
         list($strSystemid, $strSourceClass) = $arrArguments;
 
-        $objIndex = new class_module_search_indexwriter();
-        return $objIndex->removeRecordFromIndex($strSystemid);
+        if(self::$BIT_UPDATE_INDEX_ON_END_OF_REQUEST) {
+            class_module_search_request_endprocessinglistener::addIdToDelete($strSystemid);
+            return true;
+        }
+        else {
+            $objIndex = new class_module_search_indexwriter();
+            return $objIndex->removeRecordFromIndex($strSystemid);
+        }
+
     }
 
     /**

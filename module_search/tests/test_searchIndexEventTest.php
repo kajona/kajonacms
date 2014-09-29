@@ -4,6 +4,19 @@ require_once(__DIR__ . "/../../module_system/system/class_testbase.php");
 
 class class_test_searchIndexEventTest extends class_testbase {
 
+    protected function setUp() {
+        parent::setUp();
+        class_module_search_objectdeletedlistener::$BIT_UPDATE_INDEX_ON_END_OF_REQUEST = false;
+        class_module_search_recordupdatedlistener::$BIT_UPDATE_INDEX_ON_END_OF_REQUEST = false;
+    }
+
+    protected function tearDown() {
+        parent::tearDown();
+        class_module_search_objectdeletedlistener::$BIT_UPDATE_INDEX_ON_END_OF_REQUEST = true;
+        class_module_search_recordupdatedlistener::$BIT_UPDATE_INDEX_ON_END_OF_REQUEST = true;
+    }
+
+
     public function testIndexEvent() {
 
         if(class_module_system_module::getModuleByName("tags") == null || class_module_system_module::getModuleByName("system") == null)

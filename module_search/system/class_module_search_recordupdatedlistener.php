@@ -16,6 +16,8 @@
  */
 class class_module_search_recordupdatedlistener implements interface_genericevent_listener {
 
+    public static $BIT_UPDATE_INDEX_ON_END_OF_REQUEST = true;
+
     /**
      * Triggered as soon as a record is updated
      *
@@ -27,8 +29,16 @@ class class_module_search_recordupdatedlistener implements interface_genericeven
     public function handleEvent($strEventName, array $arrArguments) {
 
         $objRecord = $arrArguments[0];
-        $objIndex = new class_module_search_indexwriter();
-        $objIndex->indexObject($objRecord);
+
+        if(self::$BIT_UPDATE_INDEX_ON_END_OF_REQUEST) {
+            class_module_search_request_endprocessinglistener::addIdToIndex($objRecord);
+        }
+        else {
+            $objIndex = new class_module_search_indexwriter();
+            $objIndex->indexObject($objRecord);
+
+        }
+
         return true;
     }
 
