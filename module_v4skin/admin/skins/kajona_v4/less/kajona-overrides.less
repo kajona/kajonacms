@@ -408,14 +408,17 @@ footer {
     border: 1px solid @menuBorder !important;
     .box-shadow(0 5px 10px rgba(0,0,0,.2));
 
-    li {
+    li, li.ui-menu-item {
         a {
             cursor: pointer;
             padding: 3px;
             display: block;
+            font-size: @baseFontSize - 1;
+            .border-radius(0px);
 
             &:hover {
                 text-decoration: none;
+                .border-radius(0px);
             }
 
         }
@@ -430,16 +433,21 @@ footer {
     .ui-state-focus {
         color: @white;
         text-decoration: none;
-        background-color: @linkColor;
+        background-color: @dropdownLinkBackgroundHover;
+        background-image: none;
+        .border-radius(0px);
+        border-color: @dropdownLinkBackgroundHover;
     }
 
     .ui-state-focus h4 {
         color: @white;
+        .border-radius(0px);
     }
 
     .ui-autocomplete-category h3 {
         padding-left: 5px;
         clear: both;
+        .border-radius(0px);
     }
 
 

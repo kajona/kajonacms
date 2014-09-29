@@ -7,6 +7,8 @@
     <meta name="robots" content="noindex, nofollow" />
     <meta name="generator" content="Kajona, www.kajona.de" />
 
+    <link rel="stylesheet" href="_webpath_/core/module_system/admin/scripts/jqueryui/css/smoothness/jquery-ui.custom.css?_system_browser_cachebuster_" type="text/css" />
+
     <!-- KAJONA_BUILD_LESS_START -->
     <link href="_skinwebpath_/less/bootstrap.less?_system_browser_cachebuster_" rel="stylesheet/less">
     <link href="_skinwebpath_/less/responsive.less?_system_browser_cachebuster_" rel="stylesheet/less">
