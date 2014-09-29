@@ -16,10 +16,40 @@
  */
 interface class_system_eventidentifier {
 
+
+    /**
+     * Invoked right before starting to process the current request. The event is triggered
+     * by the request-dispatcher right before the request is given over to the controller.
+     *
+     * The params-array contains four entries:
+     * @param bool $bitAdmin
+     * @param string $strModule
+     * @param string $strAction
+     * @param string $strLanguageParam
+     *
+     * @since 4.6
+     */
+    const EVENT_SYSTEM_REQUEST_STARTPROCESSING = "core.system.request.startprocessing";
+
+    /**
+     * Invoked right before finishing to process the current request. The event is triggered
+     * by the request-dispatcher right before closing the session and passing back the response object.
+     * You may modify the request by accessing the response-object.
+     *
+     * The params-array contains four entries:
+     * @param bool $bitAdmin
+     * @param string $strModule
+     * @param string $strAction
+     * @param string $strLanguageParam
+     *
+     * @since 4.6
+     */
+    const EVENT_SYSTEM_REQUEST_ENDPROCESSING = "core.system.request.endprocessing";
+
     /**
      * The event is triggered after the source-object was updated to the database.
      *
-     * The params-array contains two entries:
+     * The params-array contains a single entry:
      * @param class_model $objRecord
      *
      * @since 4.5

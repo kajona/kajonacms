@@ -54,6 +54,8 @@ class class_request_dispatcher {
      */
     public function processRequest($bitAdmin, $strModule, $strAction, $strLanguageParam) {
 
+        class_core_eventdispatcher::getInstance()->notifyGenericListeners(class_system_eventidentifier::EVENT_SYSTEM_REQUEST_STARTPROCESSING, array($bitAdmin, $strModule, $strAction, $strLanguageParam));
+
         if($bitAdmin) {
             $strReturn = $this->processAdminRequest($strModule, $strAction, $strLanguageParam);
             $strReturn = $this->callScriptlets($strReturn, interface_scriptlet::BIT_CONTEXT_ADMIN);
@@ -69,6 +71,9 @@ class class_request_dispatcher {
         $this->sendConditionalGetHeaders($strReturn);
 
         $this->objResponse->setStrContent($strReturn);
+
+        class_core_eventdispatcher::getInstance()->notifyGenericListeners(class_system_eventidentifier::EVENT_SYSTEM_REQUEST_ENDPROCESSING, array($bitAdmin, $strModule, $strAction, $strLanguageParam));
+
         $this->objSession->sessionClose();
     }
 
