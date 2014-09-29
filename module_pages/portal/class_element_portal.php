@@ -17,7 +17,7 @@
  * @module elements
  * @moduleId _pages_elemente_modul_id_
  */
-abstract class class_element_portal extends class_portal {
+abstract class class_element_portal extends class_portal_controller {
 
     private $strCacheAddon = "";
 

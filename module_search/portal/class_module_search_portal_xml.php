@@ -17,7 +17,7 @@
  * @module search
  * @moduleId _search_module_id_
  */
-class class_module_search_portal_xml extends class_portal implements interface_xml_portal {
+class class_module_search_portal_xml extends class_portal_controller implements interface_xml_portal {
 
     private static $INT_MAX_NR_OF_RESULTS = 30;
 

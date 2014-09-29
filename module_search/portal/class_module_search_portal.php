@@ -16,7 +16,7 @@
  * @module search
  * @moduleId _search_module_id_
  */
-class class_module_search_portal extends class_portal implements interface_portal {
+class class_module_search_portal extends class_portal_controller implements interface_portal {
     private $strSearchterm = "";
 
     /**

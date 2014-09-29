@@ -16,7 +16,7 @@
  * @module elements
  * @moduleId _pages_elemente_modul_id_
  */
-class class_formular_contact extends class_portal implements interface_portal {
+class class_formular_contact extends class_portal_controller implements interface_portal {
     private $arrError = array();
 
 

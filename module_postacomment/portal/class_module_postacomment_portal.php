@@ -16,7 +16,7 @@
  * @module postacomment
  * @moduleId _postacomment_modul_id_
  */
-class class_module_postacomment_portal extends class_portal implements interface_portal {
+class class_module_postacomment_portal extends class_portal_controller implements interface_portal {
 
     private $strErrors = "";
     private $strPagefilter = null;
