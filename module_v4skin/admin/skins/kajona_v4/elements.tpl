@@ -1384,8 +1384,8 @@ The language switch surrounds the buttons
 <adminwidget_widget>
     <div class="well well-small">
     <h2 class="">%%widget_name%%</h2>
-    <div class="additionalNameContent">%%widget_name_additional_content%%</div>
     <div class="adminwidgetactions pull-right">%%widget_edit%% %%widget_delete%%</div>
+    <div class="additionalNameContent">%%widget_name_additional_content%%</div>
     <div class="content loadingContainer">
         %%widget_content%%
     </div>
