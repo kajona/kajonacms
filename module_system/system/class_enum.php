@@ -24,11 +24,9 @@
  * @author sidler@mulchprod.de
  * @since 4.6
  */
-abstract class class_enum {
+abstract class class_enum implements interface_enum {
 
     private $strValue = null;
-
-    protected static $arrAllowedValues = array();
 
     private function __construct($strCurValue) {
         $this->strValue = $strCurValue;
@@ -43,7 +41,7 @@ abstract class class_enum {
      * @return class_enum
      */
     public static function __callStatic($strName, $arrArguments) {
-        if(in_array($strName, static::$arrAllowedValues)) {
+        if(in_array($strName, static::getArrValues())) {
             return new static($strName);
         }
         throw new class_exception($strName ." is not allowed for enum ".get_called_class(), class_exception::$level_FATALERROR);

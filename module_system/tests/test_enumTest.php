@@ -39,6 +39,8 @@ class class_enumTest extends class_testbase  {
 }
 
 class class_test_enum extends class_enum {
-    protected static $arrAllowedValues = array("a", "b", "c");
+    static function getArrValues() {
+        return array("a", "b", "c");
+    }
 }
 
