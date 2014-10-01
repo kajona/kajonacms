@@ -111,12 +111,12 @@ class class_module_search_indexwriter {
      *
      * @return void
      */
-    public function indexObject(class_model $objInstance, $bitForce = false) {
+    public function indexObject(class_model $objInstance = null, $bitForce = false) {
 
         if(!self::isIndexAvailable())
             return;
 
-        if($objInstance instanceof class_module_pages_pageelement) {
+        if($objInstance != null && $objInstance instanceof class_module_pages_pageelement) {
             $objInstance = $objInstance->getConcreteAdminInstance();
             if($objInstance != null)
                 $objInstance->loadElementData();

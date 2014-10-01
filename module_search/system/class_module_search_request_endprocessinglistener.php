@@ -28,25 +28,68 @@ class class_module_search_request_endprocessinglistener implements interface_gen
      */
     public function handleEvent($strEventName, array $arrArguments) {
 
+
+        if(count(self::$arrToDelete) == 0 && count(self::$arrToIndex) == 0)
+            return true;
+
+        //clean and reduce arrays to avoid logical duplicates
+        foreach(self::$arrToDelete as $strOneId => $strObject) {
+            if(isset(self::$arrToIndex[$strOneId]))
+                unset(self::$arrToIndex[$strOneId]);
+        }
+
+
+        $strConfigValue = class_module_system_setting::getConfigValue("_search_deferred_indexer_");
+        if($strConfigValue !== null && $strConfigValue == "true") {
+            $this->processDeferred();
+        }
+        else {
+            $this->processDirectly();
+        }
+
+        self::$arrToDelete = array();
+        self::$arrToIndex = array();
+
+        return true;
+    }
+
+    /**
+     * Creates a new workflow-instance in order to index changed objects in a decoupled process
+     */
+    private function processDeferred() {
+
+        $arrRows = array();
+        foreach(array_keys(self::$arrToIndex) as $strOneId) {
+            $arrRows[] = array(generateSystemid(), $strOneId, class_search_enum_indexaction::INDEX()."");
+        }
+
+        foreach(array_keys(self::$arrToDelete) as $strOneId) {
+            $arrRows[] = array(generateSystemid(), $strOneId, class_search_enum_indexaction::DELETE()."");
+        }
+
+        class_carrier::getInstance()->getObjDB()->multiInsert("search_queue", array("search_queue_id", "search_queue_systemid", "search_queue_action"), $arrRows);
+    }
+
+
+    /**
+     * Handles the processing of objects directly
+     */
+    private function processDirectly() {
         $objIndex = new class_module_search_indexwriter();
 
         //start by processing the records to be deleted
         foreach(self::$arrToDelete as $strOneId => $strObject) {
             $objIndex->removeRecordFromIndex($strOneId);
-
-            if(isset(self::$arrToIndex[$strOneId]))
-                unset(self::$arrToIndex[$strOneId]);
         }
 
         //add new records
         foreach(self::$arrToIndex as $strOneId => $objInstance) {
             if(!is_object($objIndex) && validateSystemid($objInstance))
-                $objInstance = class_objectfactory::getInstance()->getInstance($objInstance);
+                $objInstance = class_objectfactory::getInstance()->getObject($objInstance);
 
             $objIndex->indexObject($objInstance);
         }
 
-        return true;
     }
 
     /**
@@ -62,10 +105,15 @@ class class_module_search_request_endprocessinglistener implements interface_gen
      * @param string $strSystemid
      */
     public static function addIdToIndex($strSystemid) {
-        if(is_object($strSystemid) && $strSystemid instanceof class_model)
+        if(is_object($strSystemid) && $strSystemid instanceof class_model) {
+            if($strSystemid instanceof class_module_workflows_workflow && $strSystemid->getStrClass() == "class_workflow_search_deferredindexer")
+                return;
+
             self::$arrToIndex[$strSystemid->getSystemid()] = $strSystemid;
-        else if(is_string($strSystemid) && !isset(self::$arrToIndex))
+        }
+        else if(is_string($strSystemid) && !isset(self::$arrToIndex)) {
             self::$arrToIndex[$strSystemid] = $strSystemid;
+        }
 
     }
 
