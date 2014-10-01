@@ -29,9 +29,25 @@ interface interface_graph {
      *  $objGraph->setStrXAxisTitle("x-axis");
      *  $objGraph->setStrYAxisTitle("y-axis");
      *  $objGraph->setStrGraphTitle("Test Graph");
-     *  $objGraph->addBarChartSet(array(1,2,4,5) "serie 1");
      *
-     * @param array $arrValues see the example above for the internal array-structure
+     *  //simple array
+     *      $objGraph->addBarChartSet(array(1,2,4,5) "serie 1");
+     *
+     * //datapoints array
+     *      $objDataPoint1 = new class_graph_datapoint(1);
+     *      $objDataPoint2 = new class_graph_datapoint(2);
+     *      $objDataPoint3 = new class_graph_datapoint(4);
+     *      $objDataPoint4 = new class_graph_datapoint(5);
+     *
+     *      //set action handler example
+     *      $objDataPoint1->setObjActionHandler("<javascript code here>");
+     *      $objDataPoint1->getObjActionHandlerValue("<value_object> e.g. some json");
+     *
+     *      $objGraph->addBarChartSet(array($objDataPoint1, $objDataPoint2, $objDataPoint3, $objDataPoint4) "serie 1");
+     *
+     *
+     * @param array $arrValues - an array with simple values or an array of data points (class_graph_datapoint).
+     *                           The advantage of a data points are that action handlers can be defined for each data point which will be executed when clicking on the data point in the chart.
      * @param string $strLegend
      * @param bool $bitWriteValues Enables the rendering of values on top of the graphs
      */
@@ -45,10 +61,27 @@ interface interface_graph {
      *  $objGraph->setStrXAxisTitle("x-axis");
      *  $objGraph->setStrYAxisTitle("y-axis");
      *  $objGraph->setStrGraphTitle("Test Graph");
-     *  $objGraph->addStackedBarChartSet(array(1,2,4,5) "serie 1");
-     *  $objGraph->addStackedBarChartSet(array(1,2,4,5) "serie 2");
      *
-     * @param array $arrValues see the example above for the internal array-structure
+     *
+     *  //simple array
+     *      $objGraph->addStackedBarChartSet(array(1,2,4,5) "serie 1");
+     *      $objGraph->addStackedBarChartSet(array(1,2,4,5) "serie 2");
+     *
+     * //datapoints array
+     *      $objDataPoint1 = new class_graph_datapoint(1);
+     *      $objDataPoint2 = new class_graph_datapoint(2);
+     *      $objDataPoint3 = new class_graph_datapoint(4);
+     *      $objDataPoint4 = new class_graph_datapoint(5);
+     *
+     *      //set action handler example
+     *      $objDataPoint1->setObjActionHandler("<javascript code here>");
+     *      $objDataPoint1->getObjActionHandlerValue("<value_object> e.g. some json");
+     *
+     *      $objGraph->addStackedBarChartSet(array($objDataPoint1, $objDataPoint2, $objDataPoint3, $objDataPoint4) "serie 1");
+     *
+     *
+     * @param array $arrValues - an array with simple values or an array of data points (class_graph_datapoint).
+     *                           The advantage of a data points are that action handlers can be defined for each data point which will be executed when clicking on the data point in the chart.
      * @param string $strLegend
      */
     public function addStackedBarChartSet($arrValues, $strLegend);
@@ -64,9 +97,25 @@ interface interface_graph {
      *  $objGraph->setStrXAxisTitle("x-axis");
      *  $objGraph->setStrYAxisTitle("y-axis");
      *  $objGraph->setStrGraphTitle("Test Graph");
-     *  $objGraph->addLinePlot(array(1,4,6,7,4), "serie 1");
      *
-     * @param array $arrValues e.g. array(1,3,4,5,6)
+     *  //simple array
+     *      $objGraph->addLinePlot(array(1,4,6,7,4), "serie 1");
+     *
+     * //datapoints array
+     *      $objDataPoint1 = new class_graph_datapoint(1);
+     *      $objDataPoint2 = new class_graph_datapoint(2);
+     *      $objDataPoint3 = new class_graph_datapoint(4);
+     *      $objDataPoint4 = new class_graph_datapoint(5);
+     *
+     *      //set action handler example
+     *      $objDataPoint1->setObjActionHandler("<javascript code here>");
+     *      $objDataPoint1->getObjActionHandlerValue("<value_object> e.g. some json");
+     *
+     *      $objGraph->addLinePlot(array($objDataPoint1, $objDataPoint2, $objDataPoint3, $objDataPoint4) "serie 1");
+     *
+     *
+     * @param array $arrValues - an array with simple values or an array of data points (class_graph_datapoint).
+     *                           The advantage of a data points are that action handlers can be defined for each data point which will be executed when clicking on the data point in the chart.
      * @param string $strLegend the name of the single plot
      */
     public function addLinePlot($arrValues, $strLegend);
@@ -79,9 +128,25 @@ interface interface_graph {
      * A sample-code could be:
      *  $objChart = new class_graph();
      *  $objChart->setStrGraphTitle("Test Pie Chart");
-     *  $objChart->createPieChart(array(2,6,7,3), array("val 1", "val 2", "val 3", "val 4"));
      *
-     * @param array $arrValues
+     * //simple array
+     *      $objChart->createPieChart(array(2,6,7,3), array("val 1", "val 2", "val 3", "val 4"));
+     *
+     * //datapoints array
+     *      $objDataPoint1 = new class_graph_datapoint(1);
+     *      $objDataPoint2 = new class_graph_datapoint(2);
+     *      $objDataPoint3 = new class_graph_datapoint(4);
+     *      $objDataPoint4 = new class_graph_datapoint(5);
+     *
+     *      //set action handler example
+     *      $objDataPoint1->setObjActionHandler("<javascript code here>");
+     *      $objDataPoint1->getObjActionHandlerValue("<value_object> e.g. some json");
+     *
+     *      $objGraph->createPieChart(array($objDataPoint1, $objDataPoint2, $objDataPoint3, $objDataPoint4) , array("val 1", "val 2", "val 3", "val 4"), "serie 1");
+     *
+     *
+     * @param array $arrValues - an array with simple values or an array of data points (class_graph_datapoint).
+     *                           The advantage of a data points are that action handlers can be defined for each data point which will be executed when clicking on the data point in the chart.
      * @param array $arrLegends
      */
     public function createPieChart($arrValues, $arrLegends);

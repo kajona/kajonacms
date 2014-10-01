@@ -31,6 +31,8 @@ class class_graph_jqplot implements interface_graph {
 
     const STRING_FORMAT = "%'g";
 
+
+
     /**
      * contains all series data per added chart
      * @var class_graph_jqplot_seriesdata[]
@@ -135,15 +137,33 @@ class class_graph_jqplot implements interface_graph {
      *  $objGraph->setStrXAxisTitle("x-axis");
      *  $objGraph->setStrYAxisTitle("y-axis");
      *  $objGraph->setStrGraphTitle("Test Graph");
-     *  $objGraph->addBarChartSet(array(1,2,4,5) "serie 1");
      *
-     * @param array $arrValues see the example above for the internal array-structure
+     *  //simple array
+     *      $objGraph->addBarChartSet(array(1,2,4,5) "serie 1");
+     *
+     * //datapoints array
+     *      $objDataPoint1 = new class_graph_datapoint(1);
+     *      $objDataPoint2 = new class_graph_datapoint(2);
+     *      $objDataPoint3 = new class_graph_datapoint(4);
+     *      $objDataPoint4 = new class_graph_datapoint(5);
+     *
+     *      //set action handler example
+     *      $objDataPoint1->setObjActionHandler("<javascript code here>");
+     *      $objDataPoint1->getObjActionHandlerValue("<value_object> e.g. some json");
+     *
+     *      $objGraph->addBarChartSet(array($objDataPoint1, $objDataPoint2, $objDataPoint3, $objDataPoint4) "serie 1");
+     *
+     *
+     * @param array $arrValues - an array with simple values or an array of data points (class_graph_datapoint).
+     *                           The advantage of a data points are that action handlers can be defined for each data point which will be executed when clicking on the data point in the chart.
      * @param string $strLegend
      * @param bool $bitWriteValues Enables the rendering of values on top of the graphs
      *
      * @throws class_exception
      */
     public function addBarChartSet($arrValues, $strLegend, $bitWriteValues = false) {
+        $arrDataPoints = class_graph_commons::convertArrValuesToDataPointArray($arrValues);
+
         if($this->containsChartType(class_graph_jqplot_charttype::PIE)) {
             throw new class_exception("Chart already contains a Pie chart. Combinations of pie charts and bar charts are not allowed", class_exception::$level_ERROR);
         }
@@ -152,13 +172,13 @@ class class_graph_jqplot implements interface_graph {
         }
 
         $objSeriesData = new class_graph_jqplot_seriesdata(class_graph_jqplot_charttype::BAR, count($this->arrSeriesData), $this->arrOptions);
-        $objSeriesData->setArrDataArray($arrValues);
+        $objSeriesData->setArrDataPoints($arrDataPoints);
         $objSeriesData->setStrSeriesLabel($strLegend);
         $objSeriesData->setBitWriteValues($bitWriteValues);
 
         $this->arrOptions["axes"]["xaxis"]["renderer"] = "$.jqplot.CategoryAxisRenderer";
 
-        $this->arrSeriesData[]=$objSeriesData;
+        $this->arrSeriesData[] = $objSeriesData;
     }
 
 
@@ -170,16 +190,34 @@ class class_graph_jqplot implements interface_graph {
      *  $objGraph->setStrXAxisTitle("x-axis");
      *  $objGraph->setStrYAxisTitle("y-axis");
      *  $objGraph->setStrGraphTitle("Test Graph");
-     *  $objGraph->addStackedBarChartSet(array(1,2,4,5) "serie 1");
-     *  $objGraph->addStackedBarChartSet(array(1,2,4,5) "serie 2");
      *
-     * @param array $arrValues see the example above for the internal array-structure
-     * @param string $strLegend
+     *
+     *  //simple array
+     *      $objGraph->addStackedBarChartSet(array(1,2,4,5) "serie 1");
+     *      $objGraph->addStackedBarChartSet(array(1,2,4,5) "serie 2");
+     *
+     * //datapoints array
+     *      $objDataPoint1 = new class_graph_datapoint(1);
+     *      $objDataPoint2 = new class_graph_datapoint(2);
+     *      $objDataPoint3 = new class_graph_datapoint(4);
+     *      $objDataPoint4 = new class_graph_datapoint(5);
+     *
+     *      //set action handler example
+     *      $objDataPoint1->setObjActionHandler("<javascript code here>");
+     *      $objDataPoint1->getObjActionHandlerValue("<value_object> e.g. some json");
+     *
+     *      $objGraph->addStackedBarChartSet(array($objDataPoint1, $objDataPoint2, $objDataPoint3, $objDataPoint4) "serie 1");
+     *
+     *
+     * @param array $arrValues - an array with simple values or an array of data points (class_graph_datapoint).
+     *                           The advantage of a data points are that action handlers can be defined for each data point which will be executed when clicking on the data point in the chart.
      * @param string $strLegend
      *
      * @throws class_exception
      */
     public function addStackedBarChartSet($arrValues, $strLegend) {
+        $arrDataPoints = class_graph_commons::convertArrValuesToDataPointArray($arrValues);
+
         if($this->containsChartType(class_graph_jqplot_charttype::PIE)) {
             throw new class_exception("Chart already contains a Pie chart. Combinations of pie charts and stacked bar charts are not allowed", class_exception::$level_ERROR);
         }
@@ -191,7 +229,7 @@ class class_graph_jqplot implements interface_graph {
         }
 
         $objSeriesData = new class_graph_jqplot_seriesdata(class_graph_jqplot_charttype::STACKEDBAR, count($this->arrSeriesData), $this->arrOptions);
-        $objSeriesData->setArrDataArray($arrValues);
+        $objSeriesData->setArrDataPoints($arrDataPoints);
         $objSeriesData->setStrSeriesLabel($strLegend);
 
         $this->arrOptions["axes"]["xaxis"]["renderer"] = "$.jqplot.CategoryAxisRenderer";
@@ -211,14 +249,32 @@ class class_graph_jqplot implements interface_graph {
      *  $objGraph->setStrXAxisTitle("x-axis");
      *  $objGraph->setStrYAxisTitle("y-axis");
      *  $objGraph->setStrGraphTitle("Test Graph");
-     *  $objGraph->addLinePlot(array(1,4,6,7,4), "serie 1");
      *
-     * @param array $arrValues e.g. array(1,3,4,5,6)
+     *  //simple array
+     *      $objGraph->addLinePlot(array(1,4,6,7,4), "serie 1");
+     *
+     * //datapoints array
+     *      $objDataPoint1 = new class_graph_datapoint(1);
+     *      $objDataPoint2 = new class_graph_datapoint(2);
+     *      $objDataPoint3 = new class_graph_datapoint(4);
+     *      $objDataPoint4 = new class_graph_datapoint(5);
+     *
+     *      //set action handler example
+     *      $objDataPoint1->setObjActionHandler("<javascript code here>");
+     *      $objDataPoint1->getObjActionHandlerValue("<value_object> e.g. some json");
+     *
+     *      $objGraph->addLinePlot(array($objDataPoint1, $objDataPoint2, $objDataPoint3, $objDataPoint4) "serie 1");
+     *
+     *
+     * @param array $arrValues - an array with simple values or an array of data points (class_graph_datapoint).
+     *                           The advantage of a data points are that action handlers can be defined for each data point which will be executed when clicking on the data point in the chart.
      * @param string $strLegend the name of the single plot
      *
      * @throws class_exception
      */
     public function addLinePlot($arrValues, $strLegend) {
+        $arrDataPoints = class_graph_commons::convertArrValuesToDataPointArray($arrValues);
+
         if($this->containsChartType(class_graph_jqplot_charttype::PIE)) {
             throw new class_exception("Chart already contains a pie chart. Combinations of pie charts and line charts are not allowed", class_exception::$level_ERROR);
         }
@@ -227,10 +283,10 @@ class class_graph_jqplot implements interface_graph {
         }
 
         $objSeriesData = new class_graph_jqplot_seriesdata(class_graph_jqplot_charttype::LINE, count($this->arrSeriesData), $this->arrOptions);
-        $objSeriesData->setArrDataArray($arrValues);
+        $objSeriesData->setArrDataPoints($arrDataPoints);
         $objSeriesData->setStrSeriesLabel($strLegend);
 
-        $this->arrSeriesData[]=$objSeriesData;
+        $this->arrSeriesData[] = $objSeriesData;
     }
 
     /**
@@ -241,14 +297,32 @@ class class_graph_jqplot implements interface_graph {
      * A sample-code could be:
      *  $objChart = new class_graph();
      *  $objChart->setStrGraphTitle("Test Pie Chart");
-     *  $objChart->createPieChart(array(2,6,7,3), array("val 1", "val 2", "val 3", "val 4"));
      *
-     * @param array $arrValues
+     * //simple array
+     *      $objChart->createPieChart(array(2,6,7,3), array("val 1", "val 2", "val 3", "val 4"));
+     *
+     * //datapoints array
+     *      $objDataPoint1 = new class_graph_datapoint(1);
+     *      $objDataPoint2 = new class_graph_datapoint(2);
+     *      $objDataPoint3 = new class_graph_datapoint(4);
+     *      $objDataPoint4 = new class_graph_datapoint(5);
+     *
+     *      //set action handler example
+     *      $objDataPoint1->setObjActionHandler("<javascript code here>");
+     *      $objDataPoint1->getObjActionHandlerValue("<value_object> e.g. some json");
+     *
+     *      $objGraph->createPieChart(array($objDataPoint1, $objDataPoint2, $objDataPoint3, $objDataPoint4) , array("val 1", "val 2", "val 3", "val 4"), "serie 1");
+     *
+     *
+     * @param array $arrValues - an array with simple values or an array of data points (class_graph_datapoint).
+     *                           The advantage of a data points are that action handlers can be defined for each data point which will be executed when clicking on the data point in the chart.
      * @param array $arrLegends
      *
      * @throws class_exception
      */
     public function createPieChart($arrValues, $arrLegends) {
+        $arrDataPoints = class_graph_commons::convertArrValuesToDataPointArray($arrValues);
+
         if($this->containsChartType(class_graph_jqplot_charttype::LINE)
             || $this->containsChartType(class_graph_jqplot_charttype::BAR)
             || $this->containsChartType(class_graph_jqplot_charttype::STACKEDBAR)
@@ -260,10 +334,10 @@ class class_graph_jqplot implements interface_graph {
         }
 
         $objSeriesData = new class_graph_jqplot_seriesdata(class_graph_jqplot_charttype::PIE, count($this->arrSeriesData), $this->arrOptions);
-        $objSeriesData->setArrDataArray($arrValues);
+        $objSeriesData->setArrDataPoints($arrDataPoints);
 
         $this->arrXAxisTickLabels = $arrLegends;//set to this array, as the data array is built up similar
-        $this->arrSeriesData[]=$objSeriesData;
+        $this->arrSeriesData[] = $objSeriesData;
     }
 
     /**
@@ -322,6 +396,7 @@ class class_graph_jqplot implements interface_graph {
         //create the data array and options object for the jqPlot method
         $strChartOptions = $this->strCreateJSOptions();
         $strChartData = $this->strCreateJSDataArray();
+        $strDataPointObjects = $this->strCreateDataPointObjects();
         $arrPostPlotOptions = array(
             "intNrOfWrittenLabelsXAxis" => $this->intNrOfWrittenLabelsXAxis,
             "intNrOfWrittenLabelsYAxis" => $this->intNrOfWrittenLabelsYAxis,
@@ -358,7 +433,7 @@ class class_graph_jqplot implements interface_graph {
                         $.jqplot.sprintf.thousandsSeparator = '$strThousandsChar';
                         $.jqplot.sprintf.decimalMark = '$strDecChar';
 
-                        var objChart_$strChartId = new KAJONA.admin.jqplotHelper.jqPlotChart('$strChartId', '$strTooltipId', '$strResizeableId', $strChartData, $strChartOptions, $strPostPlotOptions);
+                        var objChart_$strChartId = new KAJONA.admin.jqplotHelper.jqPlotChart('$strChartId', '$strTooltipId', '$strResizeableId', $strChartData, $strChartOptions, $strPostPlotOptions, $strDataPointObjects);
                         objChart_$strChartId.render();
                     });
                 });
@@ -380,8 +455,12 @@ class class_graph_jqplot implements interface_graph {
 
             //Swap X and Y Axis
             if(count($this->arrXAxisTickLabels) > 0 || $this->intNrOfWrittenLabelsXAxis == 0) {
-                //set y-Axis options
-                $this->setArrYAxisTickLabels($this->arrXAxisTickLabels, $this->intNrOfWrittenLabelsXAxis);
+                //set y-Axis options - reverse the array
+                $arrLabels = $this->arrXAxisTickLabels;
+                if(count($arrLabels) > 0) {
+                    $arrLabels = array_reverse($arrLabels);
+                }
+                $this->setArrYAxisTickLabels($arrLabels, $this->intNrOfWrittenLabelsXAxis);
                 $this->arrOptions["axes"]["yaxis"]["renderer"] = "$.jqplot.CategoryAxisRenderer";//since it is a bar chart, use CategoryAxisRenderer
 
                 //reset xAxis options
@@ -395,6 +474,13 @@ class class_graph_jqplot implements interface_graph {
 
             //add to each series options which are required for horizontal bar chart rendering
             foreach($this->arrSeriesData as $objSeriesData) {
+                //reverse the arrays
+                $arrData = $objSeriesData->getArrDataPoints();
+                if(count($arrData) > 0) {
+                    $arrData = array_reverse($arrData);
+                }
+
+                $objSeriesData->setArrDataPoints($arrData);
                 if($objSeriesData->getIntChartType() == class_graph_jqplot_charttype::STACKEDBAR) {
                     $arrSeriesOptions = $objSeriesData->getArrSeriesOptions();
                     $arrSeriesOptions["pointLabels"]["hideZeros"] = true;
@@ -471,10 +557,29 @@ class class_graph_jqplot implements interface_graph {
         });
     }
 
+    private function strCreateDataPointObjects() {
+        //add series options of each series to $arrOptions
+        $arrSeries2DataPoints = array();
+        foreach($this->arrSeriesData as $objSeriesData) {
+            $arrDataPoints = array();
+            foreach($objSeriesData->getArrDataPoints() as $objDataPoint) {
+                $arrDataPoints[] = array(
+                    "floatvalue" => $objDataPoint->getFloatValue(),
+                    "actionhandlervalue" => $objDataPoint->getObjActionHandlerValue(),
+                    "actionhandler" => $objDataPoint->getObjActionHandler()
+                );
+            }
+            $arrSeries2DataPoints[] = $arrDataPoints;
+        }
+
+        $strEncode =  json_encode($arrSeries2DataPoints);
+        return $strEncode;
+    }
+
     private function strCreateJSOptions() {
         //add series options of each series to $arrOptions
-        foreach($this->arrSeriesData as $arrSeriesData) {
-            $this->arrOptions["series"][] = $arrSeriesData->getArrSeriesOptions();
+        foreach($this->arrSeriesData as $objSeriesData) {
+            $this->arrOptions["series"][] = $objSeriesData->getArrSeriesOptions();
         }
 
         //remove all values which are null
@@ -491,18 +596,18 @@ class class_graph_jqplot implements interface_graph {
         $arrData = array();
 
         if($this->containsChartType(class_graph_jqplot_charttype::PIE) && $this->arrXAxisTickLabels != null) {
-            foreach($this->arrSeriesData as $keySeries => $arrSeriesData) {
+            foreach($this->arrSeriesData as $keySeries => $objSeriesData) {
                 $arrSeries = array();
-                $arrDataTemp = $this->arrSeriesData[$keySeries]->getArrDataArray();
+                $arrDataPointsTemp = $objSeriesData->getArrDataPoints();
                 foreach($this->arrXAxisTickLabels as $keyLabel => $strLabelData) {
-                    $arrSeries[]= array($strLabelData, $arrDataTemp[$keyLabel]);
+                    $arrSeries[]= array($strLabelData, $arrDataPointsTemp[$keyLabel]->getFloatValue());
                 }
                 $arrData[] = $arrSeries;
             }
         }
         else {
-            foreach($this->arrSeriesData as $arrSeriesData) {
-                $arrData[] = $arrSeriesData->getArrDataArray();
+            foreach($this->arrSeriesData as $objSeriesData) {
+                $arrData[] = class_graph_commons::getDataPointFloatValues($objSeriesData->getArrDataPoints());
             }
         }
 

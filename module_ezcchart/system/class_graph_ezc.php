@@ -92,9 +92,25 @@ class class_graph_ezc implements interface_graph {
      *  $objGraph->setStrXAxisTitle("x-axis");
      *  $objGraph->setStrYAxisTitle("y-axis");
      *  $objGraph->setStrGraphTitle("Test Graph");
-     *  $objGraph->addBarChartSet(array(1,2,4,5) "serie 1");
      *
-     * @param array $arrValues see the example above for the internal array-structure
+     *  //simple array
+     *      $objGraph->addBarChartSet(array(1,2,4,5) "serie 1");
+     *
+     * //datapoints array
+     *      $objDataPoint1 = new class_graph_datapoint(1);
+     *      $objDataPoint2 = new class_graph_datapoint(2);
+     *      $objDataPoint3 = new class_graph_datapoint(4);
+     *      $objDataPoint4 = new class_graph_datapoint(5);
+     *
+     *      //set action handler example
+     *      $objDataPoint1->setObjActionHandler("<javascript code here>");
+     *      $objDataPoint1->getObjActionHandlerValue("<value_object> e.g. some json");
+     *
+     *      $objGraph->addBarChartSet(array($objDataPoint1, $objDataPoint2, $objDataPoint3, $objDataPoint4) "serie 1");
+     *
+     *
+     * @param array $arrValues - an array with simple values or an array of data points (class_graph_datapoint).
+     *                           The advantage of a data points are that action handlers can be defined for each data point which will be executed when clicking on the data point in the chart.
      * @param string $strLegend
      * @param bool $bitWriteValues Enables the rendering of values on top of the graphs
      *
@@ -102,6 +118,8 @@ class class_graph_ezc implements interface_graph {
      * @return void
      */
     public function addBarChartSet($arrValues, $strLegend, $bitWriteValues = false) {
+        $arrDataPoints = class_graph_commons::convertArrValuesToDataPointArray($arrValues);
+
         if($this->intCurrentGraphMode > 0) {
             //only allow this method to be called again if in bar-mode
             if($this->intCurrentGraphMode != $this->GRAPH_TYPE_BAR && $this->intCurrentGraphMode != $this->GRAPH_TYPE_STACKEDBAR) {
@@ -113,15 +131,16 @@ class class_graph_ezc implements interface_graph {
 
         $arrEntries = array();
         $intCounter = 0;
-        foreach($arrValues as $strValue) {
-            $arrEntries[$this->getArrXAxisEntry($intCounter)] = $strValue;
+        foreach($arrDataPoints as $objDataPoint) {
+            $floatValue = $objDataPoint->getFloatValue();
+            $arrEntries[$this->getArrXAxisEntry($intCounter)] = $floatValue;
 
-            if($strValue > $this->intMaxValue && $this->intCurrentGraphMode != $this->GRAPH_TYPE_STACKEDBAR) {
-                $this->intMaxValue = $strValue;
+            if($floatValue > $this->intMaxValue && $this->intCurrentGraphMode != $this->GRAPH_TYPE_STACKEDBAR) {
+                $this->intMaxValue = $floatValue;
             }
 
-            if($strValue < $this->intMinValue && $this->intCurrentGraphMode != $this->GRAPH_TYPE_STACKEDBAR) {
-                $this->intMinValue = $strValue;
+            if($floatValue < $this->intMinValue && $this->intCurrentGraphMode != $this->GRAPH_TYPE_STACKEDBAR) {
+                $this->intMinValue = $floatValue;
             }
 
             $intCounter++;
@@ -143,16 +162,36 @@ class class_graph_ezc implements interface_graph {
      *  $objGraph->setStrXAxisTitle("x-axis");
      *  $objGraph->setStrYAxisTitle("y-axis");
      *  $objGraph->setStrGraphTitle("Test Graph");
-     *  $objGraph->addStackedBarChartSet(array(1,2,4,5) "serie 1");
-     *  $objGraph->addStackedBarChartSet(array(1,2,4,5) "serie 2");
      *
-     * @param array $arrValues see the example above for the internal array-structure
+     *
+     *  //simple array
+     *      $objGraph->addStackedBarChartSet(array(1,2,4,5) "serie 1");
+     *      $objGraph->addStackedBarChartSet(array(1,2,4,5) "serie 2");
+     *
+     * //datapoints array
+     *      $objDataPoint1 = new class_graph_datapoint(1);
+     *      $objDataPoint2 = new class_graph_datapoint(2);
+     *      $objDataPoint3 = new class_graph_datapoint(4);
+     *      $objDataPoint4 = new class_graph_datapoint(5);
+     *
+     *      //set action handler example
+     *      $objDataPoint1->setObjActionHandler("<javascript code here>");
+     *      $objDataPoint1->getObjActionHandlerValue("<value_object> e.g. some json");
+     *
+     *      $objGraph->addStackedBarChartSet(array($objDataPoint1, $objDataPoint2, $objDataPoint3, $objDataPoint4) "serie 1");
+     *
+     *
+     * @param array $arrValues - an array with simple values or an array of data points (class_graph_datapoint).
+     *                           The advantage of a data points are that action handlers can be defined for each data point which will be executed when clicking on the data point in the chart.
      * @param string $strLegend
      *
      * @throws class_exception
      * @return void
      */
     public function addStackedBarChartSet($arrValues, $strLegend) {
+        $arrDataPoints = class_graph_commons::convertArrValuesToDataPointArray($arrValues);
+
+
         if($this->intCurrentGraphMode > 0) {
             //only allow this method to be called again if in stackedbar-mode
             if($this->intCurrentGraphMode != $this->GRAPH_TYPE_STACKEDBAR) {
@@ -163,13 +202,14 @@ class class_graph_ezc implements interface_graph {
         //add max value from each set to max value
         $intMax = 0;
         $intMin = 0;
-        foreach($arrValues as $strValue) {
-            if($strValue > $intMax) {
-                $intMax = $strValue;
+        foreach($arrDataPoints as $objDataPoint) {
+            $floatValue = $objDataPoint->getFloatValue();
+            if($floatValue > $intMax) {
+                $intMax = $floatValue;
             }
 
-            if($strValue < $intMin) {
-                $intMin = $strValue;
+            if($floatValue < $intMin) {
+                $intMin = $floatValue;
             }
         }
 
@@ -177,7 +217,7 @@ class class_graph_ezc implements interface_graph {
         $this->intMinValue -= $intMin;
 
         $this->intCurrentGraphMode = $this->GRAPH_TYPE_STACKEDBAR;
-        $this->addBarChartSet($arrValues, $strLegend);
+        $this->addBarChartSet(class_graph_commons::getDataPointFloatValues($arrDataPoints), $strLegend);
         $this->intCurrentGraphMode = $this->GRAPH_TYPE_STACKEDBAR;
 
     }
@@ -194,15 +234,33 @@ class class_graph_ezc implements interface_graph {
      *  $objGraph->setStrXAxisTitle("x-axis");
      *  $objGraph->setStrYAxisTitle("y-axis");
      *  $objGraph->setStrGraphTitle("Test Graph");
-     *  $objGraph->addLinePlot(array(1,4,6,7,4), "serie 1");
      *
-     * @param array $arrValues e.g. array(1,3,4,5,6)
+     *  //simple array
+     *      $objGraph->addLinePlot(array(1,4,6,7,4), "serie 1");
+     *
+     * //datapoints array
+     *      $objDataPoint1 = new class_graph_datapoint(1);
+     *      $objDataPoint2 = new class_graph_datapoint(2);
+     *      $objDataPoint3 = new class_graph_datapoint(4);
+     *      $objDataPoint4 = new class_graph_datapoint(5);
+     *
+     *      //set action handler example
+     *      $objDataPoint1->setObjActionHandler("<javascript code here>");
+     *      $objDataPoint1->getObjActionHandlerValue("<value_object> e.g. some json");
+     *
+     *      $objGraph->addLinePlot(array($objDataPoint1, $objDataPoint2, $objDataPoint3, $objDataPoint4) "serie 1");
+     *
+     *
+     * @param array $arrValues - an array with simple values or an array of data points (class_graph_datapoint).
+     *                           The advantage of a data points are that action handlers can be defined for each data point which will be executed when clicking on the data point in the chart.
      * @param string $strLegend the name of the single plot
      *
      * @throws class_exception
      * @return void
      */
     public function addLinePlot($arrValues, $strLegend) {
+        $arrDataPoints = class_graph_commons::convertArrValuesToDataPointArray($arrValues);
+
         if($this->intCurrentGraphMode > 0) {
             //in bar mode, its ok. just place on top
             if($this->intCurrentGraphMode != $this->GRAPH_TYPE_LINE && $this->intCurrentGraphMode != $this->GRAPH_TYPE_BAR) {
@@ -217,25 +275,26 @@ class class_graph_ezc implements interface_graph {
 
         $arrEntries = array();
         $intCounter = 0;
-        foreach($arrValues as $strValue) {
+        foreach($arrDataPoints as $objDataPoint) {
+            $floatValue = $objDataPoint->getFloatValue();
             $strAxisLabel = $this->getArrXAxisEntry($intCounter);
             if($strAxisLabel != "") {
-                $arrEntries[$strAxisLabel] = $strValue;
+                $arrEntries[$strAxisLabel] = $floatValue;
             }
             else {
-                $arrEntries[$intCounter + 1] = $strValue;
+                $arrEntries[$intCounter + 1] = $floatValue;
             }
 
-            if($strValue < 0) {
-                $strValue *= -2;
+            if($floatValue < 0) {
+                $floatValue *= -2;
             }
 
-            if($strValue > $this->intMaxValue) {
-                $this->intMaxValue = $strValue;
+            if($floatValue > $this->intMaxValue) {
+                $this->intMaxValue = $floatValue;
             }
 
-            if($strValue < $this->intMinValue) {
-                $this->intMinValue = $strValue;
+            if($floatValue < $this->intMinValue) {
+                $this->intMinValue = $floatValue;
             }
 
             $intCounter++;
@@ -255,15 +314,33 @@ class class_graph_ezc implements interface_graph {
      * A sample-code could be:
      *  $objChart = new class_graph();
      *  $objChart->setStrGraphTitle("Test Pie Chart");
-     *  $objChart->createPieChart(array(2,6,7,3), array("val 1", "val 2", "val 3", "val 4"));
      *
-     * @param array $arrValues
+     * //simple array
+     *      $objChart->createPieChart(array(2,6,7,3), array("val 1", "val 2", "val 3", "val 4"));
+     *
+     * //datapoints array
+     *      $objDataPoint1 = new class_graph_datapoint(1);
+     *      $objDataPoint2 = new class_graph_datapoint(2);
+     *      $objDataPoint3 = new class_graph_datapoint(4);
+     *      $objDataPoint4 = new class_graph_datapoint(5);
+     *
+     *      //set action handler example
+     *      $objDataPoint1->setObjActionHandler("<javascript code here>");
+     *      $objDataPoint1->getObjActionHandlerValue("<value_object> e.g. some json");
+     *
+     *      $objGraph->createPieChart(array($objDataPoint1, $objDataPoint2, $objDataPoint3, $objDataPoint4) , array("val 1", "val 2", "val 3", "val 4"), "serie 1");
+     *
+     *
+     * @param array $arrValues - an array with simple values or an array of data points (class_graph_datapoint).
+     *                           The advantage of a data points are that action handlers can be defined for each data point which will be executed when clicking on the data point in the chart.
      * @param array $arrLegends
      *
      * @throws class_exception
      * @return void
      */
     public function createPieChart($arrValues, $arrLegends) {
+        $arrDataPoints = class_graph_commons::convertArrValuesToDataPointArray($arrValues);
+
         if($this->intCurrentGraphMode > 0) {
             throw new class_exception("Chart already initialized", class_exception::$level_ERROR);
         }
@@ -271,8 +348,9 @@ class class_graph_ezc implements interface_graph {
         $this->intCurrentGraphMode = $this->GRAPH_TYPE_PIE;
 
         $arrEntries = array();
-        foreach($arrValues as $intKey => $strValue) {
-            $arrEntries[$arrLegends[$intKey]] = $strValue;
+        foreach($arrDataPoints as $intKey => $objDataPoint) {
+            $floatValue = $objDataPoint->getFloatValue();
+            $arrEntries[$arrLegends[$intKey]] = $floatValue;
         }
 
         $objData = new ezcGraphArrayDataSet($arrEntries);

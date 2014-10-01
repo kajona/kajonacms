@@ -10,18 +10,29 @@ if (!KAJONA) {
 KAJONA.admin.jqplotHelper = {
 
     previousNeighbor : null,//used in methods mouseLeave and mouseMove
-    arrChartObjects : [],
+    arrChartObjects : [],//container for all chart objects
 
-    jqPlotChart : function (strChartId, strTooltipId, strResizeableId, arrChartData, objChartOptions, objPostPlotOptions) {
+    /**
+     *
+     * @param strChartId - id of the chart
+     * @param strTooltipId - id of the tooltip of the chart
+     * @param strResizeableId - id of the resizable container
+     * @param arrChartData - data array for the chart
+     * @param objChartOptions - chart rendering options
+     * @param objPostPlotOptions - options set for pos plotting
+     * @param arrSeriesToDataPoints - two dimensional array which may contains urls for each data point of a series. format: array[seriesIndex][dataPointIndex] => strURL
+     */
+    jqPlotChart : function (strChartId, strTooltipId, strResizeableId, arrChartData, objChartOptions, objPostPlotOptions, arrSeriesToDataPoints) {
         this.strTooltipId = strTooltipId;
         this.strChartId = strChartId;
         this.strResizeableId = strResizeableId;
         this.arrChartData = arrChartData;
         this.objChartOptions = objChartOptions;
         this.objPostPlotOptions = objPostPlotOptions;
+        this.arrSeriesToDataPoints = arrSeriesToDataPoints;
 
-        this.objJqplotChart = null;
-        this.bitIsRendered = false;
+        this.objJqplotChart = null;//the actual jqPlot object
+        this.bitIsRendered = false;//flag to tell if the chart was already rendered or not (needed in case the chart should replotted)
 
         this.objChartOptions.axesDefaults.tickOptions.formatter = KAJONA.admin.jqplotHelper.customJqPlotNumberFormatter;
 
@@ -49,7 +60,9 @@ KAJONA.admin.jqplotHelper = {
          */
         this.plot = function () {
             this.objJqplotChart = $.jqplot(this.strChartId, this.arrChartData, this.objChartOptions);
-            KAJONA.admin.jqplotHelper.bindMouseEvents(this.strChartId, this.strTooltipId, this.strResizeableId);
+            KAJONA.admin.jqplotHelper.bindMouseEvents(this.strChartId, this.strTooltipId);
+            KAJONA.admin.jqplotHelper.bindDataClickEvents(this.strChartId);
+            KAJONA.admin.jqplotHelper.enableChartResizing(this.strChartId, this.strResizeableId);
         };
 
         /**
@@ -69,10 +82,7 @@ KAJONA.admin.jqplotHelper = {
         KAJONA.admin.jqplotHelper.arrChartObjects[this.strChartId] = this;
     },
 
-    bindMouseEvents : function (strChartId, strTooltipId, strResizeableId) {
-        $('#' + strChartId).bind('jqplotMouseMove', function (ev, gridpos, datapos, neighbor, plot) {KAJONA.admin.jqplotHelper.mouseMove(ev, gridpos, datapos, neighbor, plot, strTooltipId)});
-        $('#' + strChartId).bind('jqplotMouseLeave', function (ev, gridpos, datapos, neighbor, plot) {KAJONA.admin.jqplotHelper.mouseLeave(ev, gridpos, datapos, neighbor, plot, strTooltipId)});
-
+    enableChartResizing: function(strChartId, strResizeableId) {
         //make it resizable
         $('#'+strResizeableId).resizable({
             delay:20,
@@ -81,7 +91,35 @@ KAJONA.admin.jqplotHelper = {
                 KAJONA.admin.jqplotHelper.arrChartObjects[strChartId].render();
             }
         });
+    },
 
+    bindDataClickEvents : function (strChartId) {
+        $('#' + strChartId).bind('jqplotDataClick',
+        function (ev, seriesIndex, pointIndex, data) {
+            var objChart = KAJONA.admin.jqplotHelper.arrChartObjects[this.id];
+
+            //check if a url and call it in a dialogue
+            if(objChart.arrSeriesToDataPoints && objChart.arrSeriesToDataPoints[seriesIndex]) {
+                if(objChart.arrSeriesToDataPoints[seriesIndex][pointIndex]) {
+                    var objDataPoint = objChart.arrSeriesToDataPoints[seriesIndex][pointIndex];
+
+                    if(objDataPoint.actionhandler != null) {
+                        var objFunction = eval("("+objDataPoint.actionhandler+")");
+                        if ($.isFunction(objFunction)) {
+                            objFunction.call(this, ev, seriesIndex, pointIndex, data, objDataPoint);
+                        }
+                    }
+                    else {
+                        KAJONA.admin.jqplotHelper.dataPointOnClickURLHandler(ev, seriesIndex, pointIndex, data, objDataPoint);
+                    }
+                }
+            }
+        });
+    },
+
+    bindMouseEvents : function (strChartId, strTooltipId) {
+        $('#' + strChartId).bind('jqplotMouseMove', function (ev, gridpos, datapos, neighbor, plot) {KAJONA.admin.jqplotHelper.mouseMove(ev, gridpos, datapos, neighbor, plot, strTooltipId)});
+        $('#' + strChartId).bind('jqplotMouseLeave', function (ev, gridpos, datapos, neighbor, plot) {KAJONA.admin.jqplotHelper.mouseLeave(ev, gridpos, datapos, neighbor, plot, strTooltipId)});
     },
 
 
@@ -125,13 +163,13 @@ KAJONA.admin.jqplotHelper = {
         }
     },
     /**
-     * Sets the created canvasLabels invisible depending on the intNoOfWrittenLabels
+     * Sets all canvasLabels invisible for the given axis (xaxis, yaxis)
      *
-     * @param strChartId
+     * @param strChartId - xaxis or yaxis
      * @param strAxis
      */
     setAxisInvisible : function (strChartId, strAxis) {
-        var tickArray = $('#'+strChartId+' div.jqplot-'+strAxis).hide();
+        $('#'+strChartId+' div.jqplot-'+strAxis).hide();
     },
     mouseLeave : function (ev, gridpos, datapos, neighbor, plot, tooltipId) {
         $('#jqplot_tooltip').remove();
@@ -264,5 +302,13 @@ KAJONA.admin.jqplotHelper = {
         }
         var formattedValue =  $.jqplot.sprintf(format, value);
         return formattedValue;
+    },
+
+    dataPointOnClickURLHandler: function(ev, seriesIndex, pointIndex, data, objDataPoint) {
+        if(objDataPoint.actionhandlervalue != null && objDataPoint.actionhandlervalue != "") {
+            KAJONA.admin.folderview.dialog.setContentIFrame(objDataPoint.actionhandlervalue);
+            KAJONA.admin.folderview.dialog.setTitle('');
+            KAJONA.admin.folderview.dialog.init();
+        }
     }
 };
