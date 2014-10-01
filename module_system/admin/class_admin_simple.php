@@ -143,7 +143,7 @@ abstract class class_admin_simple extends class_admin_controller {
             if(!$objRecord->copyObject())
                 throw new class_exception("error creating a copy of object ".strip_tags($objRecord->getStrDisplayName()), class_exception::$level_ERROR);
 
-            $this->adminReload(getLinkAdminHref($this->getArrModule("modul"), $this->getActionNameForClass("list", $objRecord), "&systemid=".$objRecord->getPrevId()));
+            $this->adminReload(class_link::getLinkAdminHref($this->getArrModule("modul"), $this->getActionNameForClass("list", $objRecord), "&systemid=".$objRecord->getPrevId()));
         }
         else
             throw new class_exception("error loading object ".$this->getSystemid(), class_exception::$level_ERROR);
@@ -354,7 +354,7 @@ abstract class class_admin_simple extends class_admin_controller {
 
             if($bitDialog)
                 return $this->objToolkit->listButton(
-                    getLinkAdminDialog(
+                    class_link::getLinkAdminDialog(
                         $objListEntry->getArrModule("modul"),
                         $this->getActionNameForClass("edit", $objListEntry),
                         "folderview=1&systemid=".$objListEntry->getSystemid().$this->strPeAddon,
@@ -365,7 +365,7 @@ abstract class class_admin_simple extends class_admin_controller {
                 );
             else
                 return $this->objToolkit->listButton(
-                    getLinkAdmin(
+                    class_link::getLinkAdmin(
                         $objListEntry->getArrModule("modul"),
                         $this->getActionNameForClass("edit", $objListEntry),
                         "&systemid=".$objListEntry->getSystemid().$this->strPeAddon,
@@ -390,7 +390,7 @@ abstract class class_admin_simple extends class_admin_controller {
         if(!$objLockmanager->isAccessibleForCurrentUser()) {
             if($objLockmanager->isUnlockableForCurrentUser() ) {
                 return $this->objToolkit->listButton(
-                    getLinkAdmin($objListEntry->getArrModule("modul"), $this->getActionNameForClass("list", $objListEntry), "&unlockid=".$objListEntry->getSystemid(), "", $this->getLang("commons_unlock"), "icon_lockerOpen")
+                    class_link::getLinkAdmin($objListEntry->getArrModule("modul"), $this->getActionNameForClass("list", $objListEntry), "&unlockid=".$objListEntry->getSystemid(), "", $this->getLang("commons_unlock"), "icon_lockerOpen")
                 );
             }
         }
@@ -414,7 +414,7 @@ abstract class class_admin_simple extends class_admin_controller {
             return $this->objToolkit->listDeleteButton(
                 strip_tags($objListEntry->getStrDisplayName()),
                 $this->getLang($this->getObjLang()->stringToPlaceholder($this->getActionNameForClass("delete", $objListEntry)."_question"), $objListEntry->getArrModule("modul")),
-                getLinkAdminHref($objListEntry->getArrModule("modul"), $this->getActionNameForClass("delete", $objListEntry), "&systemid=".$objListEntry->getSystemid().$this->strPeAddon)
+                class_link::getLinkAdminHref($objListEntry->getArrModule("modul"), $this->getActionNameForClass("delete", $objListEntry), "&systemid=".$objListEntry->getSystemid().$this->strPeAddon)
             );
         }
         return "";
@@ -467,7 +467,7 @@ abstract class class_admin_simple extends class_admin_controller {
             //the tag list is more complex and wrapped by a js-logic to load the tags by ajax afterwards
 
             // @codingStandardsIgnoreStart
-            $strOnClick = "KAJONA.admin.folderview.dialog.setContentIFrame('".getLinkAdminHref("tags", "genericTagForm", "&systemid=".$objListEntry->getSystemid())."'); KAJONA.admin.folderview.dialog.setTitle('".uniStrReplace(array("\r", "\n"), "", strip_tags(nl2br($objListEntry->getStrDisplayName())))."'); KAJONA.admin.folderview.dialog.init(); return false;";
+            $strOnClick = "KAJONA.admin.folderview.dialog.setContentIFrame('".class_link::getLinkAdminHref("tags", "genericTagForm", "&systemid=".$objListEntry->getSystemid())."'); KAJONA.admin.folderview.dialog.setTitle('".uniStrReplace(array("\r", "\n"), "", strip_tags(nl2br($objListEntry->getStrDisplayName())))."'); KAJONA.admin.folderview.dialog.init(); return false;";
             $strLink = "<a href=\"#\" onclick=\"".$strOnClick."\" title=\"".$this->getLang("commons_edit_tags")."\" rel=\"tagtooltip\" data-systemid=\"".$objListEntry->getSystemid()."\">".class_adminskin_helper::getAdminImage("icon_tag", $this->getLang("commons_edit_tags"), true)."</a>";
             // @codingStandardsIgnoreEnd
             return $this->objToolkit->listButton($strLink);
@@ -525,13 +525,13 @@ abstract class class_admin_simple extends class_admin_controller {
         if($objObject->rightEdit()) {
             if($bitDialog)
                 return $this->objToolkit->listButton(
-                    getLinkAdminDialog(
+                    class_link::getLinkAdminDialog(
                         $this->getArrModule("modul"), $this->getActionNameForClass("new", null), "&systemid=".$this->getSystemid().$this->strPeAddon, $this->getLang("commons_list_new"), $this->getLang("commons_list_new"), "icon_new"
                     )
                 );
             else
                 return $this->objToolkit->listButton(
-                    getLinkAdmin(
+                    class_link::getLinkAdmin(
                         $this->getArrModule("modul"), $this->getActionNameForClass("new", null), "&systemid=".$this->getSystemid().$this->strPeAddon, $this->getLang("commons_list_new"), $this->getLang("commons_list_new"), "icon_new"
                     )
                 );
@@ -617,7 +617,7 @@ abstract class class_admin_simple extends class_admin_controller {
     protected function renderChangeHistoryAction(class_model $objListEntry) {
         if(_system_changehistory_enabled_ == "true" && $objListEntry instanceof interface_versionable && $objListEntry->rightChangelog()) {
             return $this->objToolkit->listButton(
-                getLinkAdminDialog(
+                class_link::getLinkAdminDialog(
                     "system",
                     "genericChangelog",
                     "&systemid=".$objListEntry->getSystemid()."&folderview=1",
