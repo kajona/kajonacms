@@ -75,31 +75,27 @@ class class_workflow_search_deferredindexer implements interface_workflows_handl
      * @return bool
      */
     public function execute() {
-
         $objIndex = new class_module_search_indexwriter();
 
         //start with deletions
-        $strQuery = "SELECT search_queue_systemid FROM "._dbprefix_."search_queue WHERE search_queue_action = ? GROUP BY search_queue_systemid";
+        $objQueue = new class_search_indexqueue();
 
-        foreach(class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array(class_search_enum_indexaction::DELETE()."")) as $arrRow) {
+        foreach($objQueue->getRows(class_search_enum_indexaction::DELETE()) as $arrRow) {
             $objIndex->removeRecordFromIndex($arrRow["search_queue_systemid"]);
-
-            $strRemove = "DELETE FROM "._dbprefix_."search_queue WHERE search_queue_systemid = ?";
-            class_carrier::getInstance()->getObjDB()->_pQuery($strRemove, array($arrRow["search_queue_systemid"]));
+            $objQueue->deleteBySystemid($arrRow["search_queue_systemid"]);
         }
 
         //index objects
-        foreach(class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array(class_search_enum_indexaction::INDEX().""), 0, $this->intMaxObjectsPerRun) as $arrRow) {
+        foreach($objQueue->getRows(class_search_enum_indexaction::INDEX(), 0, $this->intMaxObjectsPerRun) as $arrRow) {
             $objIndex->indexObject(class_objectfactory::getInstance()->getObject($arrRow["search_queue_systemid"]));
-
-            $strRemove = "DELETE FROM "._dbprefix_."search_queue WHERE search_queue_systemid = ? AND search_queue_action = ?";
-            class_carrier::getInstance()->getObjDB()->_pQuery($strRemove, array($arrRow["search_queue_systemid"], class_search_enum_indexaction::INDEX().""));
-
+            $objQueue->deleteBySystemidAndAction($arrRow["search_queue_systemid"], class_search_enum_indexaction::INDEX());
         }
 
         //reschedule for the next run
         return false;
     }
+
+
 
 
     /**

@@ -67,7 +67,8 @@ class class_module_search_request_endprocessinglistener implements interface_gen
             $arrRows[] = array(generateSystemid(), $strOneId, class_search_enum_indexaction::DELETE()."");
         }
 
-        class_carrier::getInstance()->getObjDB()->multiInsert("search_queue", array("search_queue_id", "search_queue_systemid", "search_queue_action"), $arrRows);
+        $objQueue = new class_search_indexqueue();
+        $objQueue->addRowsToQueue($arrRows);
     }
 
 
