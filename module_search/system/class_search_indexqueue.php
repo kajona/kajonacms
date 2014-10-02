@@ -30,6 +30,19 @@ class class_search_indexqueue {
     }
 
     /**
+     * Helper to wrap the queue content loader action
+     *
+     * @param class_search_enum_indexaction $objAction
+     * @param $strSystemid
+     *
+     * @return array
+     */
+    public function getRowsBySystemid(class_search_enum_indexaction $objAction, $strSystemid) {
+        $strQuery = "SELECT search_queue_systemid FROM "._dbprefix_."search_queue WHERE search_queue_action = ? AND search_queue_systemid = ? GROUP BY search_queue_systemid";
+        return class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array($objAction."",$strSystemid));
+    }
+
+    /**
      * Deletes all entries for the given systemid from the queue
      * @param $strSystemid
      *

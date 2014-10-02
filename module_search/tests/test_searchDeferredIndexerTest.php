@@ -33,7 +33,7 @@ class class_test_searchDeferredIndexerTest extends class_testbase {
 
         //query queue table
         $objQueue = new class_search_indexqueue();
-        $arrRows = $objQueue->getRows(class_search_enum_indexaction::INDEX());
+        $arrRows = $objQueue->getRowsBySystemid(class_search_enum_indexaction::INDEX(), $strNewsId);
         $this->assertTrue(count($arrRows) == 1);
         $this->assertTrue($arrRows[0]["search_queue_systemid"] == $objNews->getSystemid());
 
@@ -42,7 +42,7 @@ class class_test_searchDeferredIndexerTest extends class_testbase {
         $objHandler->handleEvent(class_system_eventidentifier::EVENT_SYSTEM_REQUEST_ENDPROCESSING, array());
 
 
-        $arrRows = $objQueue->getRows(class_search_enum_indexaction::DELETE());
+        $arrRows = $objQueue->getRowsBySystemid(class_search_enum_indexaction::DELETE(), $strNewsId);
         $this->assertTrue(count($arrRows) == 1);
         $this->assertTrue($arrRows[0]["search_queue_systemid"] == $objNews->getSystemid());
 
