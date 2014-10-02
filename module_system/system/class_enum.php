@@ -8,17 +8,23 @@
  * The enum base class may be used to create php-based enum approaches.
  * Use it as following:
  *
- * To define a new enum extend this class, defining all possible values in protected static $arrValues
+ * To define a new enum extend this class, defining all possible values in static function getArrValues().
+ * Use @ method annotations to get full autocomplete support in your IDE
  *
+ * /**
+ *  *
+ *  * @ method static class_test_enum A()
+ *  * @ method static class_test_enum B()
+ *  *
  * class_test_enum extends class_enum {
- *   protected static $arrValues("a", "b", "c")
+ *   static function getArrValues() { return array("A", "B"); }
  * }
  *
- * Later on you may access all possible enums using magical static methods, returning a
- * $objEnum = class_test_enum::a()
+ * Later on you may access all possible enums using magical static methods, returning A
+ * $objEnum = class_test_enum::A()
  *
  * Compare it using the internal equals:
- * $objEnum->equals(class_test_enum::a())
+ * $objEnum->equals(class_test_enum::A())
  *
  * @package module_system
  * @author sidler@mulchprod.de
@@ -57,6 +63,10 @@ abstract class class_enum implements interface_enum {
         return $this->strValue == $objB->strValue && get_class($this) == get_class($objB);
     }
 
+    /**
+     * Prints the enums current value
+     * @return string
+     */
     public function __toString() {
         return $this->strValue."";
     }
