@@ -35,7 +35,7 @@ class class_test_lang extends class_testbase  {
         $strPropertyRaw = "lorem {0} ipsum {1} dolor {2} sit {3} amet {4} {0}";
 
         $intStart = microtime(true);
-        for($intI = 0; $intI <= 10000; $intI++) {
+        for($intI = 0; $intI <= 100; $intI++) {
             $strProperty = $strPropertyRaw;
             foreach($arrParameters as $intKey => $strParameter) {
                 $strProperty = uniStrReplace("{".$intKey."}", $strParameter, $strProperty);
@@ -48,7 +48,7 @@ class class_test_lang extends class_testbase  {
 
 
         $intStart = microtime(true);
-        for($intI = 0; $intI <= 10000; $intI++) {
+        for($intI = 0; $intI <= 100; $intI++) {
             $strProperty = uniStrReplace(array_map(function($i) {return "{".$i."}";}, array_keys($arrParameters)), $arrParameters, $strPropertyRaw);
             $this->assertEquals($strProperty, "lorem lorem ipsum ipsum dolor dolor sit sit amet amet lorem");
         }
@@ -58,7 +58,7 @@ class class_test_lang extends class_testbase  {
 
 
         $intStart = microtime(true);
-        for($intI = 0; $intI <= 10000; $intI++) {
+        for($intI = 0; $intI <= 100; $intI++) {
             $strProperty = preg_replace_callback("/{(\d)}/", function($hit) use ($arrParameters) { return $arrParameters[$hit[1]]; } , $strPropertyRaw);
             $this->assertEquals($strProperty, "lorem lorem ipsum ipsum dolor dolor sit sit amet amet lorem");
         }
@@ -68,7 +68,7 @@ class class_test_lang extends class_testbase  {
 
 
         $intStart = microtime(true);
-        for($intI = 0; $intI <= 10000; $intI++) {
+        for($intI = 0; $intI <= 100; $intI++) {
             $strProperty = $objLang->replaceParams($strPropertyRaw, $arrParameters);
             $this->assertEquals($strProperty, "lorem lorem ipsum ipsum dolor dolor sit sit amet amet lorem");
         }
