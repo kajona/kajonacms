@@ -638,7 +638,7 @@ final class class_session {
             $this->objInternalSession = class_module_system_session::getSessionById($this->getSession("KAJONA_INTERNAL_SESSID"));
 
             if($this->objInternalSession != null && $this->objInternalSession->isSessionValid()) {
-                $this->objInternalSession->setIntReleasetime(time() + _system_release_time_);
+                $this->objInternalSession->setIntReleasetime(time() + (int)class_module_system_setting::getConfigValue("_system_release_time_"));
                 $this->objInternalSession->setStrLasturl(getServer("QUERY_STRING"));
             }
             else
@@ -660,7 +660,7 @@ final class class_session {
         $objSession->setStrPHPSessionId($this->getSessionId());
         $objSession->setStrUserid($this->getUserID());
         $objSession->setStrGroupids($strGroups);
-        $objSession->setIntReleasetime(time() + _system_release_time_);
+        $objSession->setIntReleasetime(time() + (int)class_module_system_setting::getConfigValue("_system_release_time_"));
         $objSession->setStrLasturl(getServer("QUERY_STRING"));
         $objSession->setSystemid(generateSystemid());
 
