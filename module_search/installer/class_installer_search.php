@@ -23,7 +23,7 @@ class class_installer_search extends class_installer_base implements interface_i
 
         $objManager = new class_orm_schemamanager();
         //Install Index Tables
-        $strReturn = $this->install_index_tables();
+        $strReturn = $this->installIndexTables();
 
         //Table for search
         $strReturn .= "Installing table search_search...\n";
@@ -41,6 +41,17 @@ class class_installer_search extends class_installer_base implements interface_i
 		if(!$this->objDB->createTable("search_log", $arrFields, array("search_log_id")))
 			$strReturn .= "An error occurred! ...\n";
 
+        //Table for the index queue
+        $strReturn .= "Installing search-queue table...\n";
+
+        $arrFields = array();
+		$arrFields["search_queue_id"] 	    = array("char20", false);
+		$arrFields["search_queue_systemid"] 	= array("char20", true);
+		$arrFields["search_queue_action"] 	= array("char20", true);
+
+		if(!$this->objDB->createTable("search_queue", $arrFields, array("search_queue_id")))
+			$strReturn .= "An error occurred! ...\n";
+
 
         //Table for page-element
         $strReturn .= "Installing search-element table...\n";
@@ -51,6 +62,10 @@ class class_installer_search extends class_installer_base implements interface_i
 		$strReturn .= "Registering module...\n";
 		//register the module
 		$this->registerModule("search", _search_module_id_, "class_module_search_portal.php", "class_module_search_admin.php", $this->objMetadata->getStrVersion() , true, "class_module_search_portal_xml.php");
+
+        $strReturn .= "Registering config-values...\n";
+        $this->registerConstant("_search_deferred_indexer_", "false", class_module_system_setting::$int_TYPE_BOOL, _search_module_id_);
+
 
         if(class_module_system_module::getModuleByName("pages") !== null && class_module_pages_element::getElement("search") == null) {
             $objElement = new class_module_pages_element();
@@ -71,7 +86,7 @@ class class_installer_search extends class_installer_base implements interface_i
         $this->updateIndex();
 
 
-		return $strReturn;
+        return $strReturn;
 
 	}
 
@@ -183,18 +198,21 @@ class class_installer_search extends class_installer_base implements interface_i
             $strReturn .= "Updating module-versions...\n";
             $this->updateModuleVersion("search", "4.3");
             $this->updateElementVersion("search", "4.3");
-
-       }
+        }
 
         $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
         if($arrModule["module_version"] == "4.3") {
             $strReturn .= $this->update_43_44();
         }
 
-
         $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
         if($arrModule["module_version"] == "4.4" || $arrModule["module_version"] == "4.4.1") {
             $strReturn .= $this->update_441_45();
+        }
+
+        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "4.5") {
+            $strReturn .= $this->update_45_451();
         }
 
         if($this->bitIndexRebuild) {
@@ -260,7 +278,7 @@ class class_installer_search extends class_installer_base implements interface_i
         $strReturn = "Updating 4.3 to 4.4...\n";
         // Install Index
         $strReturn .= "Adding index tables...\n";
-        $this->install_index_tables();
+        $this->installIndexTables();
 
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion("search", "4.4");
@@ -324,6 +342,31 @@ class class_installer_search extends class_installer_base implements interface_i
         return $strReturn;
     }
 
+    private function update_45_451() {
+        $strReturn = "Updating 4.5 to 4.5.1...\n";
+
+        $strReturn .= "Registering config-values...\n";
+//        $this->registerConstant("_search_deferred_indexer_", "false", class_module_system_setting::$int_TYPE_BOOL, _search_module_id_);
+
+
+        //Table for the index queue
+        $strReturn .= "Installing search-queue table...\n";
+
+        $arrFields = array();
+        $arrFields["search_queue_id"] 	    = array("char20", false);
+        $arrFields["search_queue_systemid"] 	= array("char20", true);
+        $arrFields["search_queue_action"] 	= array("char20", true);
+
+        if(!$this->objDB->createTable("search_queue", $arrFields, array("search_queue_id")))
+            $strReturn .= "An error occurred! ...\n";
+
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion("search", "4.5.1");
+        $this->updateElementVersion("search", "4.5.1");
+
+        return $strReturn;
+    }
+
     private function updateIndex() {
         class_module_system_module::flushCache();
         class_db::getInstance()->flushQueryCache();
@@ -333,7 +376,7 @@ class class_installer_search extends class_installer_base implements interface_i
         $objWorker->indexRebuild();
     }
 
-    private function install_index_tables() {
+    private function installIndexTables() {
         $this->bitIndexTablesUpToDate = true;
         //Tables for search documents
         $strReturn = "Installing table search_ix_document...\n";

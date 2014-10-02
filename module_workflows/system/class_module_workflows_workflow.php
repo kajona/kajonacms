@@ -201,33 +201,17 @@ class class_module_workflows_workflow extends class_model implements interface_m
      * @return class_module_workflows_workflow[]
      */
     public static function getWorkflowsByType($intType, $bitOnlyWithValidTriggerDate = true) {
-        $strQuery = "SELECT * FROM
-                            "._dbprefix_."system,
-                            "._dbprefix_."system_right,
-                            "._dbprefix_."workflows,
-                            "._dbprefix_."system_date
-                      WHERE system_id = workflows_id
-                        AND system_id = system_date_id
-                        AND system_id = right_id
-                        AND workflows_state = ?
-                     ".($bitOnlyWithValidTriggerDate ? " AND system_date_start < ? " : "")."
-                   ORDER BY system_date_start DESC";
 
-        $arrParams = array();
-        $arrParams[] = (int)$intType;
+        $objOrmMapper = new class_orm_objectlist();
 
-        if($bitOnlyWithValidTriggerDate)
-            $arrParams[] = class_date::getCurrentTimestamp();
-
-
-        $arrRows = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, $arrParams);
-        class_orm_rowcache::addArrayOfInitRows($arrRows);
-        $arrReturn = array();
-        foreach($arrRows as $arrSingleRow) {
-            $arrReturn[] = class_objectfactory::getInstance()->getObject($arrSingleRow["system_id"]);
+        if($bitOnlyWithValidTriggerDate) {
+            $objOrmMapper->addWhereRestriction(new class_orm_objectlist_restriction("AND system_date_start < ?", array(class_date::getCurrentTimestamp())));
         }
 
-        return $arrReturn;
+        $objOrmMapper->addWhereRestriction(new class_orm_objectlist_restriction("AND workflows_state = ?", array((int)$intType)));
+        $objOrmMapper->addOrderBy(new class_orm_objectlist_orderby("system_date_start DESC"));
+
+        return $objOrmMapper->getObjectList("class_module_workflows_workflow");
     }
 
     /**
@@ -308,36 +292,17 @@ class class_module_workflows_workflow extends class_model implements interface_m
      * @return class_module_workflows_workflow[]
      */
     public static function getWorkflowsForClass($strClass, $bitOnlyScheduled = true) {
-        $strQuery = "SELECT * FROM
-                            "._dbprefix_."system,
-                            "._dbprefix_."system_right,
-                            "._dbprefix_."workflows,
-                            "._dbprefix_."system_date
-                      WHERE system_id = workflows_id
-                        AND system_id = system_date_id
-                        AND system_id = right_id
-                        AND workflows_class = ?
-                     ".($bitOnlyScheduled ? " AND ( workflows_state = ? OR workflows_state = ? )" : "" )  ."
-                     ".($bitOnlyScheduled ? " AND ( system_date_start > ? OR system_date_start = 0 )" : "")."
-                   ORDER BY system_date_start DESC";
-
-        $arrParams = array();
-        $arrParams[] = $strClass;
+        $objOrmMapper = new class_orm_objectlist();
 
         if($bitOnlyScheduled) {
-            $arrParams[] = (int)self::$INT_STATE_SCHEDULED;
-            $arrParams[] = (int)self::$INT_STATE_NEW;
-            $arrParams[] = class_date::getCurrentTimestamp();
+            $objOrmMapper->addWhereRestriction(new class_orm_objectlist_restriction("AND ( workflows_state = ? OR workflows_state = ? )", array((int)self::$INT_STATE_SCHEDULED, (int)self::$INT_STATE_NEW)));
+            $objOrmMapper->addWhereRestriction(new class_orm_objectlist_restriction("AND ( system_date_start > ? OR system_date_start = 0 )", array(class_date::getCurrentTimestamp())));
         }
 
-        $arrRows = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, $arrParams);
-        class_orm_rowcache::addArrayOfInitRows($arrRows);
-        $arrReturn = array();
-        foreach($arrRows as $arrSingleRow) {
-            $arrReturn[] = class_objectfactory::getInstance()->getObject($arrSingleRow["system_id"]);
-        }
+        $objOrmMapper->addWhereRestriction(new class_orm_objectlist_restriction("AND workflows_class = ?", array($strClass)));
+        $objOrmMapper->addOrderBy(new class_orm_objectlist_orderby("system_date_start DESC"));
 
-        return $arrReturn;
+        return $objOrmMapper->getObjectList("class_module_workflows_workflow");
     }
     /**
      * Counts all workflows related with a given class.
@@ -348,26 +313,17 @@ class class_module_workflows_workflow extends class_model implements interface_m
      * @return class_module_workflows_workflow[]
      */
     public static function getWorkflowsForClassCount($strClass, $bitOnlyScheduled = true) {
-        $strQuery = "SELECT COUNT(*) FROM
-                            "._dbprefix_."system,
-                            "._dbprefix_."workflows
-                      WHERE system_id = workflows_id
-                        AND workflows_class = ?
-                     ".($bitOnlyScheduled ? " AND ( workflows_state = ? OR workflows_state = ? )" : "" )  ."
-                     ".($bitOnlyScheduled ? " AND ( system_date_start > ? OR system_date_start = 0 )" : "")."
-                   ";
-
-        $arrParams = array();
-        $arrParams[] = $strClass;
+        $objOrmMapper = new class_orm_objectlist();
 
         if($bitOnlyScheduled) {
-            $arrParams[] = (int)self::$INT_STATE_SCHEDULED;
-            $arrParams[] = (int)self::$INT_STATE_NEW;
-            $arrParams[] = class_date::getCurrentTimestamp();
+            $objOrmMapper->addWhereRestriction(new class_orm_objectlist_restriction("AND ( workflows_state = ? OR workflows_state = ? )", array((int)self::$INT_STATE_SCHEDULED, (int)self::$INT_STATE_NEW)));
+            $objOrmMapper->addWhereRestriction(new class_orm_objectlist_restriction("AND ( system_date_start > ? OR system_date_start = 0 )", array(class_date::getCurrentTimestamp())));
         }
 
-        $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, $arrParams);
-        return $arrRow["COUNT(*)"];
+        $objOrmMapper->addWhereRestriction(new class_orm_objectlist_restriction("AND workflows_class = ?", array($strClass)));
+        $objOrmMapper->addOrderBy(new class_orm_objectlist_orderby("system_date_start DESC"));
+
+        return $objOrmMapper->getObjectCount("class_module_workflows_workflow");
     }
 
 
@@ -379,26 +335,11 @@ class class_module_workflows_workflow extends class_model implements interface_m
      * @return int
      */
     public static function getPendingWorkflowsForUserCount($arrUserids) {
+        $objOrmMapper = new class_orm_objectlist();
+        $objOrmMapper->addWhereRestriction(new class_orm_objectlist_restriction("AND workflows_state = ?", array((int)self::$INT_STATE_SCHEDULED)));
+        $objOrmMapper->addWhereRestriction(self::getUserWhereStatement($arrUserids));
 
-        $arrTemp = self::getUserWhereStatement($arrUserids);
-        $arrParams = $arrTemp[1];
-
-        $strQuery = "SELECT COUNT(*) FROM
-                            "._dbprefix_."system,
-                            "._dbprefix_."workflows,
-                            "._dbprefix_."system_date
-                      WHERE system_id = workflows_id
-                        AND system_id = system_date_id
-                        ".$arrTemp[0]."
-                        AND  workflows_state = ?
-                        /*AND ( system_date_start > ? OR system_date_start = 0 )*/ ";
-
-        $arrParams[] = (int)self::$INT_STATE_SCHEDULED;
-//        $arrParams[] = class_date::getCurrentTimestamp();
-
-
-        $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, $arrParams);
-        return $arrRow["COUNT(*)"];
+        return $objOrmMapper->getObjectCount("class_module_workflows_workflow");
     }
 
     /**
@@ -411,33 +352,13 @@ class class_module_workflows_workflow extends class_model implements interface_m
      * @return class_module_workflows_workflow[]
      */
     public static function getPendingWorkflowsForUser($arrUserids, $intStart = false, $intEnd = false) {
+        $objOrmMapper = new class_orm_objectlist();
+        $objOrmMapper->addWhereRestriction(new class_orm_objectlist_restriction("AND workflows_state = ?", array((int)self::$INT_STATE_SCHEDULED)));
+        $objOrmMapper->addWhereRestriction(self::getUserWhereStatement($arrUserids));
+        $objOrmMapper->addOrderBy(new class_orm_objectlist_orderby("system_date_start DESC"));
+        $objOrmMapper->addOrderBy(new class_orm_objectlist_orderby("system_sort DESC"));
 
-        $arrTemp = self::getUserWhereStatement($arrUserids);
-        $arrParams = $arrTemp[1];
-
-        $strQuery = "SELECT * FROM
-                            "._dbprefix_."system,
-                            "._dbprefix_."system_right,
-                            "._dbprefix_."workflows,
-                            "._dbprefix_."system_date
-                      WHERE system_id = workflows_id
-                        AND system_id = system_date_id
-                        AND system_id = right_id
-                        ".$arrTemp[0]."
-                        AND ( workflows_state = ?  )
-                        /*AND ( system_date_start > ? OR system_date_start = 0 )*/
-                   ORDER BY system_date_start DESC, system_sort DESC";
-
-        $arrParams[] = (int)self::$INT_STATE_SCHEDULED;
-        //$arrParams[] = class_date::getCurrentTimestamp();
-        $arrRows = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, $arrParams, $intStart, $intEnd);
-        class_orm_rowcache::addArrayOfInitRows($arrRows);
-        $arrReturn = array();
-        foreach($arrRows as $arrSingleRow) {
-            $arrReturn[] = class_objectfactory::getInstance()->getObject($arrSingleRow["system_id"]);
-        }
-
-        return $arrReturn;
+        return $objOrmMapper->getObjectList("class_module_workflows_workflow", $intStart, $intEnd);
     }
 
 
@@ -450,25 +371,10 @@ class class_module_workflows_workflow extends class_model implements interface_m
      * @return class_module_workflows_workflow[]
      */
     public static function getAllworkflows($intStart = false, $intEnd = false) {
-        $strQuery = "SELECT * FROM
-                            "._dbprefix_."system,
-                            "._dbprefix_."system_right,
-                            "._dbprefix_."workflows,
-                            "._dbprefix_."system_date
-                      WHERE system_id = workflows_id
-                        AND system_id = right_id
-                        AND system_id = system_date_id
-                   ORDER BY workflows_state ASC, system_date_start DESC";
-
-
-        $arrRows = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array(), $intStart, $intEnd);
-        class_orm_rowcache::addArrayOfInitRows($arrRows);
-        $arrReturn = array();
-        foreach($arrRows as $arrSingleRow) {
-            $arrReturn[] = class_objectfactory::getInstance()->getObject($arrSingleRow["system_id"]);
-        }
-
-        return $arrReturn;
+        $objOrmMapper = new class_orm_objectlist();
+        $objOrmMapper->addOrderBy(new class_orm_objectlist_orderby("workflows_state ASC"));
+        $objOrmMapper->addOrderBy(new class_orm_objectlist_orderby("system_date_start DESC"));
+        return $objOrmMapper->getObjectList("class_module_workflows_workflow", $intStart, $intEnd);
     }
 
     /**
@@ -501,7 +407,7 @@ class class_module_workflows_workflow extends class_model implements interface_m
      * Transforms the passed list of user-/group ids into an sql-where restriction
      *
      * @param array $arrUsers
-     * @return array ($strQuery, $arrParams)
+     * @return class_orm_objectlist_restriction
      */
     private static function getUserWhereStatement($arrUsers) {
 
@@ -523,8 +429,8 @@ class class_module_workflows_workflow extends class_model implements interface_m
 
         if($strWhere != "")
             $strWhere = "AND ( ".$strWhere." )";
-        $arrReturn = array($strWhere, $arrParams);
-        return $arrReturn;
+
+        return new class_orm_objectlist_restriction($strWhere, $arrParams);
     }
 
 
