@@ -32,8 +32,17 @@
  */
 abstract class class_enum implements interface_enum {
 
+    /**
+     * @var string
+     */
     private $strValue = null;
 
+    /**
+     * No direct instances, plz.
+     * Create instances using the static magic method call.
+     *
+     * @param $strCurValue
+     */
     private function __construct($strCurValue) {
         $this->strValue = $strCurValue;
     }
@@ -70,8 +79,6 @@ abstract class class_enum implements interface_enum {
     public function __toString() {
         return $this->strValue."";
     }
-
-
 
 }
 

@@ -4,36 +4,24 @@ require_once (__DIR__."/../../module_system/system/class_testbase.php");
 
 class class_enumTest extends class_testbase  {
 
-    public function testEnum() {
+    public function testEnumValid() {
 
-        $objEnum = null;
-        $objException = null;
-        try {
-            $objEnum = class_test_enum::a();
-        } catch(class_exception $objE) {
-            $objException = $objE;
-        }
+        $objEnum = class_test_enum::a();
 
         $this->assertNotNull($objEnum);
-        $this->assertNull($objException);
         $this->assertEquals($objEnum."", "a");
-
 
         $this->assertTrue($objEnum->equals(class_test_enum::a()));
         $this->assertTrue(!$objEnum->equals(class_test_enum::b()));
 
+    }
 
-        $objEnum = null;
-        $objException = null;
-        try {
-            $objEnum = class_test_enum::d();
-        } catch(class_exception $objE) {
-            $objException = $objE;
-        }
-
+    /**
+     * @expectedException class_exception
+     */
+    public function testEnumInvalid() {
+        $objEnum = class_test_enum::d();
         $this->assertNull($objEnum);
-        $this->assertNotNull($objException);
-
     }
 
 }
