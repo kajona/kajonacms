@@ -68,8 +68,7 @@ class test_Workflow  extends class_testbase {
         $strSystemId2 = generateSystemid();
         $arrWorkflowsClasses =
             array("class_workflow_workflows_messagesummary" => array("systemid" => $strSystemId1, "amount" => 5),
-                 "class_workflow_workflows_dbdump" => array("systemid" => $strSystemId2, "amount" => 23),
-                 "class_workflow_ldap_sync" => array("systemid" => $strSystemId2, "amount" => 30)
+                 "class_workflow_workflows_dbdump" => array("systemid" => $strSystemId2, "amount" => 23)
         );
 
 
@@ -99,8 +98,8 @@ class test_Workflow  extends class_testbase {
 
         $arrWorkflows = class_module_workflows_workflow::getWorkflowsForSystemid($strSystemId1, false, array("class_workflow_workflows_messagesummary"));
         $this->assertEquals(count($arrWorkflows), 5);
-        $arrWorkflows = class_module_workflows_workflow::getWorkflowsForSystemid($strSystemId2, false, array("class_workflow_workflows_dbdump", "class_workflow_ldap_sync"));
-        $this->assertEquals(count($arrWorkflows), 53);
+        $arrWorkflows = class_module_workflows_workflow::getWorkflowsForSystemid($strSystemId2, false, array("class_workflow_workflows_dbdump", "class_workflow_workflows_messagesummary"));
+        $this->assertEquals(count($arrWorkflows), 28);
 
 
         //4. Delete created workflow objects
