@@ -42,7 +42,7 @@ class CleanCoreHelper {
                         }
 
                         //skip module if not marked as to be included
-                        if(count($arrIncludedModules) > 0 && (!isset($arrIncludedModules[$strCoreFolder]) || !in_array($strOneModule, $arrIncludedModules[$strCoreFolder]))) {
+                        if(count($arrIncludedModules) > 0 && (isset($arrIncludedModules[$strCoreFolder]) && !in_array($strOneModule, $arrIncludedModules[$strCoreFolder]))) {
                             echo " Deleting ".__DIR__."/".$this->strProjectPath."/".$strCoreFolder."/".$strOneModule."\n";
                             $this->rrmdir(__DIR__."/".$this->strProjectPath."/".$strCoreFolder."/".$strOneModule);
                             continue;

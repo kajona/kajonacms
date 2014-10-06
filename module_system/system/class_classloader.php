@@ -141,7 +141,7 @@ class class_classloader {
                     }
 
                     //skip module if not marked as to be included
-                    if(count($arrIncludedModules) > 0 && (!isset($arrIncludedModules[$strRootFolder]) || !in_array($strOneModule, $arrIncludedModules[$strRootFolder]))) {
+                    if(count($arrIncludedModules) > 0 && (isset($arrIncludedModules[$strRootFolder]) && !in_array($strOneModule, $arrIncludedModules[$strRootFolder]))) {
                         continue;
                     }
 
