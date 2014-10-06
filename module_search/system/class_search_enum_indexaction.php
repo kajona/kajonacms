@@ -20,7 +20,7 @@ class class_search_enum_indexaction extends class_enum {
      *
      * @return string[]
      */
-    static function getArrValues() {
+    protected function getArrValues() {
         return array("INDEX", "DELETE");
     }
 

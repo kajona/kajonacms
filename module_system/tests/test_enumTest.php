@@ -27,7 +27,7 @@ class class_enumTest extends class_testbase  {
 }
 
 class class_test_enum extends class_enum {
-    static function getArrValues() {
+    protected function getArrValues() {
         return array("a", "b", "c");
     }
 }

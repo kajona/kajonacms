@@ -17,7 +17,7 @@
  *  * @ method static class_test_enum B()
  *  *
  * class_test_enum extends class_enum {
- *   static function getArrValues() { return array("A", "B"); }
+ *   protected function getArrValues() { return array("A", "B"); }
  * }
  *
  * Later on you may access all possible enums using magical static methods, returning A
@@ -30,7 +30,15 @@
  * @author sidler@mulchprod.de
  * @since 4.6
  */
-abstract class class_enum implements interface_enum {
+abstract class class_enum {
+
+
+    /**
+     * Return the array of possible, so allowed values for the current enum
+     *
+     * @return string[]
+     */
+    protected abstract function getArrValues();
 
     /**
      * @var string
@@ -50,16 +58,18 @@ abstract class class_enum implements interface_enum {
     /**
      * Helper to generate possible instances of the current enum values.
      *
-     * @param $strName
+     * @param string $strName
      *
      * @throws class_exception
      * @return class_enum
      */
     public static function __callStatic($strName, $arrArguments) {
-        if(in_array($strName, static::getArrValues())) {
-            return new static($strName);
+        $objEnum =  new static($strName);
+        if(!in_array($strName, $objEnum->getArrValues())) {
+            throw new class_exception($strName ." is not allowed for enum ".get_called_class(), class_exception::$level_FATALERROR);
         }
-        throw new class_exception($strName ." is not allowed for enum ".get_called_class(), class_exception::$level_FATALERROR);
+
+        return $objEnum;
     }
 
     /**
