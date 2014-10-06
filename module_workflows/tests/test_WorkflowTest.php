@@ -67,17 +67,19 @@ class test_Workflow  extends class_testbase {
         $strSystemId1 = generateSystemid();
         $strSystemId2 = generateSystemid();
         $arrWorkflowsClasses =
-            array("class_workflow_workflows_messagesummary" => array("systemid" => $strSystemId1, "amount" => 5),
-                 "class_workflow_workflows_dbdump" => array("systemid" => $strSystemId2, "amount" => 23)
+            array(
+                array("class" => "class_workflow_workflows_messagesummary", "systemid" => $strSystemId1, "amount" => 5),
+                array("class" => "class_workflow_workflows_messagesummary","systemid" => $strSystemId2, "amount" => 5),
+                array("class" => "class_workflow_workflows_dbdump","systemid" => $strSystemId2, "amount" => 23)
         );
 
 
         //2. Create the workflow objects
         $arrCreatedWorkflows = array();
-        foreach($arrWorkflowsClasses as $strClass => $arrInfo) {
+        foreach($arrWorkflowsClasses as $arrInfo) {
             for($intI = 0; $intI < $arrInfo["amount"]; $intI++) {
                 $objWorkflow = new class_module_workflows_workflow();
-                $objWorkflow->setStrClass($strClass);
+                $objWorkflow->setStrClass($arrInfo["class"]);
                 $objWorkflow->setStrAffectedSystemid($arrInfo["systemid"]);
                 $objWorkflow->updateObjectToDb();
                 $arrCreatedWorkflows[] = $objWorkflow;
@@ -88,18 +90,18 @@ class test_Workflow  extends class_testbase {
         $this->flushDBCache();
 
         //3. Assert number of workflows
-        foreach($arrWorkflowsClasses as $strClass => $arrInfo) {
-            $arrWorkflows = class_module_workflows_workflow::getWorkflowsForSystemid($arrInfo["systemid"], false, $strClass);
+        foreach($arrWorkflowsClasses as $arrInfo) {
+            $arrWorkflows = class_module_workflows_workflow::getWorkflowsForSystemid($arrInfo["systemid"], false, $arrInfo["class"]);
             $this->assertEquals(count($arrWorkflows), $arrInfo["amount"]);
 
-            $arrWorkflows = class_module_workflows_workflow::getWorkflowsForSystemid($arrInfo["systemid"], false, array($strClass));
+            $arrWorkflows = class_module_workflows_workflow::getWorkflowsForSystemid($arrInfo["systemid"], false, array($arrInfo["class"]));
             $this->assertEquals(count($arrWorkflows), $arrInfo["amount"]);
         }
 
         $arrWorkflows = class_module_workflows_workflow::getWorkflowsForSystemid($strSystemId1, false, array("class_workflow_workflows_messagesummary"));
         $this->assertEquals(count($arrWorkflows), 5);
         $arrWorkflows = class_module_workflows_workflow::getWorkflowsForSystemid($strSystemId2, false, array("class_workflow_workflows_dbdump", "class_workflow_workflows_messagesummary"));
-        $this->assertEquals(count($arrWorkflows), 28);
+        $this->assertEquals(count($arrWorkflows), 23);
 
 
         //4. Delete created workflow objects
