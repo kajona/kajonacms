@@ -66,7 +66,6 @@ class CleanCoreHelper {
      * @see http://www.php.net/manual/de/function.rmdir.php#98622
      */
     private function rrmdir($strDir) {
-        return;
         if (is_dir($strDir)) {
             $arrObjects = scandir($strDir);
             foreach ($arrObjects as $objObject) {
