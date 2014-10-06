@@ -119,6 +119,7 @@ class class_classloader {
     private function scanModules() {
 
         $arrExcludedModules = array();
+        $arrIncludedModules = array();
         if(is_file(_realpath_."/project/system/config/excludedmodules.php")) {
             include(_realpath_."/project/system/config/excludedmodules.php");
         }
@@ -132,7 +133,18 @@ class class_classloader {
 
             foreach(scandir(_realpath_."/".$strRootFolder) as $strOneModule) {
 
-                if(preg_match("/^(module|element|_)+.*/i", $strOneModule) && (!isset($arrExcludedModules[$strRootFolder]) || !in_array($strOneModule, $arrExcludedModules[$strRootFolder]))) {
+                if(preg_match("/^(module|element|_)+.*/i", $strOneModule)) {
+
+                    //skip excluded modules
+                    if(isset($arrExcludedModules[$strRootFolder]) && in_array($strOneModule, $arrExcludedModules[$strRootFolder])) {
+                        continue;
+                    }
+
+                    //skip module if not marked as to be included
+                    if(count($arrIncludedModules) > 0 && (!isset($arrIncludedModules[$strRootFolder]) || !in_array($strOneModule, $arrIncludedModules[$strRootFolder]))) {
+                        continue;
+                    }
+
                     $arrModules[$strRootFolder."/".$strOneModule] = $strOneModule;
                 }
 
