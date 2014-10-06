@@ -120,8 +120,8 @@ class class_classloader {
 
         $arrExcludedModules = array();
         $arrIncludedModules = array();
-        if(is_file(_realpath_."/project/system/config/excludedmodules.php")) {
-            include(_realpath_."/project/system/config/excludedmodules.php");
+        if(is_file(_realpath_."/project/system/config/packageconfig.php")) {
+            include(_realpath_."/project/system/config/packageconfig.php");
         }
 
         //Module-Constants
