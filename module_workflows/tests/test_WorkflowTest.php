@@ -101,7 +101,7 @@ class test_Workflow  extends class_testbase {
         $arrWorkflows = class_module_workflows_workflow::getWorkflowsForSystemid($strSystemId1, false, array("class_workflow_workflows_messagesummary"));
         $this->assertEquals(count($arrWorkflows), 5);
         $arrWorkflows = class_module_workflows_workflow::getWorkflowsForSystemid($strSystemId2, false, array("class_workflow_workflows_dbdump", "class_workflow_workflows_messagesummary"));
-        $this->assertEquals(count($arrWorkflows), 23);
+        $this->assertEquals(count($arrWorkflows), 28);
 
 
         //4. Delete created workflow objects
