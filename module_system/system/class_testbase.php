@@ -34,13 +34,11 @@ abstract class class_testbase extends PHPUnit_Framework_TestCase {
 
         $objCarrier = class_carrier::getInstance();
 
-        $strSQL = "UPDATE "._dbprefix_."system_config SET system_config_value = 'true'
-                    WHERE system_config_name = '_system_changehistory_enabled_'";
+        $strSQL = "UPDATE "._dbprefix_."system_config SET system_config_value = ?
+                    WHERE system_config_name = ?";
 
-        $objCarrier->getObjDB()->_query($strSQL);
-        $objCarrier->getObjDB()->flushQueryCache();
-
-        class_apc_cache::getInstance()->flushCache();
+        $objCarrier->getObjDB()->_pQuery($strSQL, array("true", "_system_changehistory_enabled_"));
+        class_carrier::getInstance()->flushCache(class_carrier::INT_CACHE_TYPE_APC | class_carrier::INT_CACHE_TYPE_DBQUERIES);
 
         class_config::getInstance()->loadConfigsDatabase(class_db::getInstance());
 
@@ -61,7 +59,7 @@ abstract class class_testbase extends PHPUnit_Framework_TestCase {
     }
 
     protected function flushDBCache() {
-        class_carrier::getInstance()->getObjDB()->flushQueryCache();
+        class_carrier::getInstance()->flushCache(class_carrier::INT_CACHE_TYPE_DBQUERIES);
     }
 
 

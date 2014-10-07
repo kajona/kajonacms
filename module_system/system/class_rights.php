@@ -210,8 +210,8 @@ class class_rights {
                 if($arrChildRights[self::$STR_RIGHT_INHERIT] == 1) {
                     $arrChildRights = $arrRights;
                     $arrChildRights[self::$STR_RIGHT_INHERIT] = 1;
+                    $bitReturn &= $this->setRightsRecursive($arrChildRights, $strOneChildId);
                 }
-                $bitReturn &= $this->setRightsRecursive($arrChildRights, $strOneChildId);
             }
         }
 
