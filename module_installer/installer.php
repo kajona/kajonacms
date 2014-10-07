@@ -403,9 +403,7 @@ class class_installer {
 
         }
 
-        class_objectfactory::getInstance()->flushCache();
-        class_carrier::getInstance()->getObjDB()->flushQueryCache();
-        class_module_system_module::flushCache();
+        class_carrier::getInstance()->flushCache(class_carrier::INT_CACHE_TYPE_DBQUERIES | class_carrier::INT_CACHE_TYPE_ORMCACHE | class_carrier::INT_CACHE_TYPE_OBJECTFACTORY | class_carrier::INT_CACHE_TYPE_MODULES);
         $this->loadInstaller();
 
 

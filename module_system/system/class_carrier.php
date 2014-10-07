@@ -15,6 +15,16 @@
  */
 class class_carrier {
 
+    const INT_CACHE_TYPE_DBQUERIES = 2;
+    const INT_CACHE_TYPE_DBSTATEMENTS = 4;
+    const INT_CACHE_TYPE_DBTABLES = 256;
+    const INT_CACHE_TYPE_ORMCACHE = 8;
+    const INT_CACHE_TYPE_OBJECTFACTORY = 16;
+    const INT_CACHE_TYPE_MODULES = 32;
+    const INT_CACHE_TYPE_CLASSLOADER = 64;
+    const INT_CACHE_TYPE_APC = 128;
+
+
     /**
      * Internal array of all params passed globally to the script
      *
@@ -195,8 +205,8 @@ class class_carrier {
         }
         elseif($strArea == "portal") {
             if($this->objToolkitPortal == null) {
-				$strPath = class_resourceloader::getInstance()->getPathForFile("/portal/class_toolkit_portal.php");
-				include_once _realpath_.$strPath;
+                $strPath = class_resourceloader::getInstance()->getPathForFile("/portal/class_toolkit_portal.php");
+                include_once _realpath_.$strPath;
                 $this->objToolkitPortal = new class_toolkit_portal();
             }
             return $this->objToolkitPortal;
@@ -250,6 +260,47 @@ class class_carrier {
         if(self::$arrParams === null) {
             self::$arrParams = array_merge(getArrayGet(), getArrayPost(), getArrayFiles());
         }
+    }
+
+    /**
+     * A general helper to flush the systems various caches.
+     *
+     * @param int $intCacheType A bitmask of caches to be flushed, e.g. class_carrier::INT_CACHE_TYPE_DBQUERIES | class_carrier::INT_CACHE_TYPE_ORMCACHE
+     */
+    public function flushCache($intCacheType = 0) {
+
+        if($intCacheType & self::INT_CACHE_TYPE_DBQUERIES) {
+            $this->getObjDB()->flushQueryCache();
+        }
+
+        if($intCacheType & self::INT_CACHE_TYPE_DBSTATEMENTS) {
+            $this->getObjDB()->flushPreparedStatementsCache();
+        }
+
+        if($intCacheType & self::INT_CACHE_TYPE_DBTABLES) {
+            $this->getObjDB()->flushTablesCache();
+        }
+
+        if($intCacheType & self::INT_CACHE_TYPE_ORMCACHE) {
+            class_orm_rowcache::flushCache();
+        }
+
+        if($intCacheType & self::INT_CACHE_TYPE_OBJECTFACTORY) {
+            class_objectfactory::getInstance()->flushCache();
+        }
+
+        if($intCacheType & self::INT_CACHE_TYPE_MODULES) {
+            class_module_system_module::flushCache();
+        }
+
+        if($intCacheType & self::INT_CACHE_TYPE_CLASSLOADER) {
+            class_classloader::getInstance()->flushCache();
+        }
+
+        if($intCacheType & self::INT_CACHE_TYPE_APC) {
+            class_apc_cache::getInstance()->flushCache();
+        }
+
     }
 
 }

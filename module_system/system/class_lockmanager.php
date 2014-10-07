@@ -50,8 +50,7 @@ class class_lockmanager {
 						WHERE system_id =?";
 
         if(class_carrier::getInstance()->getObjDB()->_pQuery($strQuery, array(class_carrier::getInstance()->getObjSession()->getUserID(), time(), $this->strSystemid))) {
-            class_orm_rowcache::flushCache();
-            class_carrier::getInstance()->getObjDB()->flushQueryCache();
+            class_carrier::getInstance()->flushCache(class_carrier::INT_CACHE_TYPE_DBQUERIES | class_carrier::INT_CACHE_TYPE_ORMCACHE);
             return true;
         }
 
@@ -84,8 +83,7 @@ class class_lockmanager {
                 if($this->objSourceObject !== null)
                     $this->objSourceObject->setStrLockId("");
 
-                class_carrier::getInstance()->getObjDB()->flushQueryCache();
-                class_orm_rowcache::flushCache();
+                class_carrier::getInstance()->flushCache(class_carrier::INT_CACHE_TYPE_DBQUERIES | class_carrier::INT_CACHE_TYPE_ORMCACHE);
                 return true;
             }
         }

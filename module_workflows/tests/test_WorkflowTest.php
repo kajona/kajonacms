@@ -110,8 +110,7 @@ class test_Workflow  extends class_testbase {
             $objWorkflow->deleteObject();
         }
 
-        $this->flushDBCache();
-        class_orm_rowcache::flushCache();
+        $this->resetCaches();
     }
 
 

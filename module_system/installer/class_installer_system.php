@@ -498,8 +498,7 @@ class class_installer_system extends class_installer_base implements interface_i
         $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
         if($arrModul["module_version"] == "3.4.2" || $arrModul["module_version"] == "3.4.2.2") {
             $strReturn .= $this->update_342_349();
-            $this->objDB->flushQueryCache();
-            $this->objDB->flushPreparedStatementsCache();
+            class_carrier::getInstance()->flushCache(class_carrier::INT_CACHE_TYPE_DBQUERIES | class_carrier::INT_CACHE_TYPE_DBSTATEMENTS);
             $strReturn .= "<b>Temporary breaking update, please retrigger update sequence...</b>\n";
             return $strReturn;
         }
@@ -1051,8 +1050,7 @@ class class_installer_system extends class_installer_base implements interface_i
         $this->objDB->_pQuery($strQuery, array(_admins_group_id_));
 
 
-        $this->objDB->flushQueryCache();
-        $this->objDB->flushPreparedStatementsCache();
+        class_carrier::getInstance()->flushCache(class_carrier::INT_CACHE_TYPE_DBQUERIES | class_carrier::INT_CACHE_TYPE_DBSTATEMENTS);
 
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion("", "4.3.2");

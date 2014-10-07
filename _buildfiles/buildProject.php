@@ -83,10 +83,7 @@ class BuildHelper {
             $objDB->_pQuery("DROP TABLE ".$strOneTable, array());
         }
 
-        class_module_system_module::flushCache();
-        class_db::getInstance()->flushTablesCache();
-        class_db::getInstance()->flushQueryCache();
-
+        class_carrier::getInstance()->flushCache(class_carrier::INT_CACHE_TYPE_DBQUERIES | class_carrier::INT_CACHE_TYPE_DBTABLES | class_carrier::INT_CACHE_TYPE_MODULES);
 
         echo "\n\n\n";
         echo "Searching for packages to be installed...";

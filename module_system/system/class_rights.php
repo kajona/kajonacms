@@ -13,7 +13,6 @@
  * @package module_system
  * @author sidler@mulchprod.de
  *
- * @todo remove the internal $arrRightRowsCache and make use of the caching by the or-mapper
  */
 class class_rights {
 
@@ -41,7 +40,6 @@ class class_rights {
      * @var class_session
      */
     private $objSession = null; //Session Object
-    private $arrRightRowsCache = array(); //Array, caching database-rows with permission-entries
 
     private static $objRights = null;
 
@@ -131,7 +129,7 @@ class class_rights {
         if($this->objDb->_pQuery($strQuery, $arrParams)) {
             //Flush the cache so later lookups will match the new rights
             $this->objDb->flushQueryCache();
-            $this->arrRightRowsCache = array();
+            $this->flushRightsCache();
             return true;
         }
         else
@@ -258,12 +256,8 @@ class class_rights {
      */
     private function getPlainRightRow($strSystemid) {
 
-        if(validateSystemid($strSystemid) && isset($this->arrRightRowsCache[$strSystemid])) {
-            $arrRow = $this->arrRightRowsCache[$strSystemid];
-        }
-        else if(class_orm_rowcache::getCachedInitRow($strSystemid) != null && array_key_exists("right_id", class_orm_rowcache::getCachedInitRow($strSystemid))) {
+        if(class_orm_rowcache::getCachedInitRow($strSystemid) != null && array_key_exists("right_id", class_orm_rowcache::getCachedInitRow($strSystemid))) {
             $arrRow = class_orm_rowcache::getCachedInitRow($strSystemid);
-            $this->arrRightRowsCache[$strSystemid] = $arrRow;
         }
         else {
             $strQuery = "SELECT *
@@ -273,7 +267,6 @@ class class_rights {
                                 AND right_id = system_id ";
 
             $arrRow = $this->objDb->getPRow($strQuery, array($strSystemid));
-            $this->arrRightRowsCache[$strSystemid] = $arrRow;
         }
 
         $arrRights = array();
@@ -538,8 +531,7 @@ class class_rights {
     public function addGroupToRight($strGroupId, $strSystemid, $strRight) {
 
         $this->objDb->flushQueryCache();
-        class_orm_rowcache::flushCache();
-        $this->arrRightRowsCache = array();
+        $this->flushRightsCache();
 
         //Load the current rights
         $arrRights = $this->getArrayRights($strSystemid, false);
@@ -582,9 +574,7 @@ class class_rights {
      */
     public function removeGroupFromRight($strGroupId, $strSystemid, $strRight) {
 
-        $this->objDb->flushQueryCache();
-        class_orm_rowcache::flushCache();
-        $this->arrRightRowsCache = array();
+        class_carrier::getInstance()->flushCache(class_carrier::INT_CACHE_TYPE_DBQUERIES | class_carrier::INT_CACHE_TYPE_ORMCACHE);
 
         //Load the current rights
         $arrRights = $this->getArrayRights($strSystemid, false);
@@ -623,8 +613,8 @@ class class_rights {
      *
      * @return void
      */
-    public function flushRightsCache() {
-        $this->arrRightRowsCache = array();
+    private function flushRightsCache() {
+        class_carrier::getInstance()->flushCache(class_carrier::INT_CACHE_TYPE_ORMCACHE);
     }
 
     public function setBitTestMode($bitTestMode) {
@@ -723,10 +713,10 @@ class class_rights {
      * Only to be used in combination with class_roots setArrInitRow.
      *
      * @param $arrRow
+     * @deprecated use the orm-rowcache instead to avoid multiple cache locations
      */
     public function addRowToCache($arrRow) {
-        if(isset($arrRow["right_id"]))
-            $this->arrRightRowsCache[$arrRow["right_id"]] = $arrRow;
+
     }
 
 
@@ -740,7 +730,7 @@ class class_rights {
      */
     public function filterObjectsByRight(array $arrObjects, $strPermissions) {
         return array_filter($arrObjects, function($objObject) use ($strPermissions) {
-            return $this->validatePermissionString($strPermissions, $objObject);
+            return class_rights::getInstance()->getInstance()->validatePermissionString($strPermissions, $objObject);
         });
     }
 }

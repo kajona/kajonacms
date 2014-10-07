@@ -64,7 +64,7 @@ abstract class class_installer_base extends class_root implements interface_inst
             }
         }
 
-        $this->objDB->flushTablesCache();
+        class_carrier::getInstance()->flushCache(class_carrier::INT_CACHE_TYPE_DBTABLES);
         return $strReturn;
     }
 
@@ -107,9 +107,7 @@ abstract class class_installer_base extends class_root implements interface_inst
 		class_logger::getInstance()->addLogRow("New module registered: ".$objModule->getSystemid(). "(".$strName.")", class_logger::$levelInfo);
 
 		//flush db-cache afterwards
-		$this->objDB->flushQueryCache();
-        $this->objDB->flushTablesCache();
-        class_module_system_module::flushCache();
+        class_carrier::getInstance()->flushCache(class_carrier::INT_CACHE_TYPE_DBQUERIES | class_carrier::INT_CACHE_TYPE_DBTABLES | class_carrier::INT_CACHE_TYPE_MODULES);
 
 		return $objModule->getSystemid();
 	}
@@ -131,8 +129,7 @@ abstract class class_installer_base extends class_root implements interface_inst
 	    class_logger::getInstance()->addLogRow("module ".$strModuleName." updated to ".$strVersion, class_logger::$levelInfo);
 
 	    $bitReturn = $this->objDB->_pQuery($strQuery, array($strVersion, time(), $strModuleName ));
-        $this->objDB->flushQueryCache();
-        class_module_system_module::flushCache();
+        class_carrier::getInstance()->flushCache(class_carrier::INT_CACHE_TYPE_DBQUERIES | class_carrier::INT_CACHE_TYPE_MODULES);
         return $bitReturn;
 	}
 

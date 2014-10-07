@@ -13,7 +13,6 @@ class class_test_rights extends class_testbase {
 
     public function testInheritance() {
         echo "\tRIGHTS INHERITANCE...\n";
-        $objDB = class_carrier::getInstance()->getObjDB();
         $objRights = class_carrier::getInstance()->getObjRights();
         $this->objRights = class_carrier::getInstance()->getObjRights();
         $objSystemCommon = new class_module_system_common();
@@ -63,12 +62,15 @@ class class_test_rights extends class_testbase {
         $arrThirdLevelNodes = array($strThird111, $strThird112, $strThird121, $strThird122, $strThird211, $strThird212, $strThird221, $strThird222);
 
 
+        echo "\tchecking leaf nodes for initial rights\n";
+        foreach($arrThirdLevelNodes as $strOneRootNode) {
+            $this->checkNodeRights($strOneRootNode, false, false);
+        }
 
         echo "\tadding group with right view & edit\n";
         $objRights->addGroupToRight($objGroup->getSystemid(), $strRootId, "view");
         $objRights->addGroupToRight($objGroup->getSystemid(), $strRootId, "edit");
 
-        $objDB->flushQueryCache();
 
         echo "\tchecking leaf nodes for inherited rights\n";
         foreach($arrThirdLevelNodes as $strOneRootNode) {

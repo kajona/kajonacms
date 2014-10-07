@@ -368,9 +368,8 @@ class class_installer_search extends class_installer_base implements interface_i
     }
 
     private function updateIndex() {
-        class_module_system_module::flushCache();
-        class_db::getInstance()->flushQueryCache();
-        class_module_system_module::flushCache();
+        class_carrier::getInstance()->flushCache(class_carrier::INT_CACHE_TYPE_DBQUERIES | class_carrier::INT_CACHE_TYPE_MODULES);
+
         class_module_search_indexwriter::resetIndexAvailableCheck();
         $objWorker = new class_module_search_indexwriter();
         $objWorker->indexRebuild();

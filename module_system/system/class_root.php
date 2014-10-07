@@ -732,8 +732,7 @@ abstract class class_root {
         $this->objDB->flushQueryCache();
 
         if($this->strOldPrevId != $this->strPrevId) {
-            $this->objDB->flushQueryCache();
-            class_orm_rowcache::flushCache();
+            class_carrier::getInstance()->flushCache(class_carrier::INT_CACHE_TYPE_DBQUERIES | class_carrier::INT_CACHE_TYPE_ORMCACHE);
             $this->objRights->rebuildRightsStructure($this->getSystemid());
             $this->objSortManager->fixSortOnPrevIdChange($this->strOldPrevId, $this->strPrevId);
             //TODO: remove legacy call

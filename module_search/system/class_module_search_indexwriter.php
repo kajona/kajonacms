@@ -229,8 +229,7 @@ class class_module_search_indexwriter {
 
             //flush the caches each 4.000 objects in order to keep memory usage low
             if(++$intI > 4000) {
-                $this->objDB->flushQueryCache();
-                class_objectfactory::getInstance()->flushCache();
+                class_carrier::getInstance()->flushCache(class_carrier::INT_CACHE_TYPE_DBQUERIES | class_carrier::INT_CACHE_TYPE_ORMCACHE | class_carrier::INT_CACHE_TYPE_OBJECTFACTORY);
                 $intI = 0;
             }
         }

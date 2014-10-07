@@ -14,7 +14,7 @@ class class_test_orm_schemamanagerTest extends class_testbase {
         $this->assertTrue(!in_array(_dbprefix_."ormtest", $arrTables));
 
         $objManager->createTable("orm_schematest_testclass");
-        $objDb->flushTablesCache();
+        class_carrier::getInstance()->flushCache(class_carrier::INT_CACHE_TYPE_DBTABLES);
 
         $arrTables = $objDb->getTables();
         $this->assertTrue(in_array(_dbprefix_."ormtest", $arrTables));
@@ -43,7 +43,7 @@ class class_test_orm_schemamanagerTest extends class_testbase {
         //$this->assertEquals(uniStrtolower($arrColumnNamesToDatatype["col3"]), uniStrtolower(uniStrReplace(" ", "", $objDb->getDatatype(class_db_datatypes::STR_TYPE_LONG))));
 
         $objDb->_pQuery("DROP TABLE "._dbprefix_."ormtest", array());
-        $objDb->flushTablesCache();
+        class_carrier::getInstance()->flushCache(class_carrier::INT_CACHE_TYPE_DBTABLES);
     }
 
     public function testTargetTableException1() {
