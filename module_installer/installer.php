@@ -661,6 +661,9 @@ class class_installer {
      * @return string
      */
     public function getOutput() {
+
+        class_core_eventdispatcher::getInstance()->notifyGenericListeners(class_system_eventidentifier::EVENT_SYSTEM_REQUEST_ENDPROCESSING, array());
+
         if($this->strLogfile != "") {
             $strTemplateID = $this->objTemplates->readTemplate(class_resourceloader::getInstance()->getCorePathForModule("module_installer")."/module_installer/installer.tpl", "installer_log", true);
             $this->strLogfile = $this->objTemplates->fillTemplate(
