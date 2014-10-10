@@ -611,6 +611,12 @@ class class_installer_system extends class_installer_base implements interface_i
             $this->objDB->flushQueryCache();
         }
 
+        $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModul["module_version"] == "4.5") {
+            $strReturn .= $this->update_45_451();
+            $this->objDB->flushQueryCache();
+        }
+
         return $strReturn."\n\n";
     }
 
@@ -1084,6 +1090,21 @@ class class_installer_system extends class_installer_base implements interface_i
 
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion("", "4.5");
+        return $strReturn;
+    }
+
+    private function update_45_451() {
+        $strReturn = "Updating 4.5 to 4.5.1...\n";
+
+        $strReturn .= "Changing datatype of column message_boy text long to longtext\n";
+        $strQuery = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."messages")."
+                            MODIFY ".$this->objDB->encloseColumnName("message_body")." ".$this->objDB->getDatatype("longtext");
+        if(!$this->objDB->_pQuery($strQuery, array()))
+            $strReturn .= "An error occured! ...\n";
+
+
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion($this->objMetadata->getStrTitle(), "4.5.1");
         return $strReturn;
     }
 
