@@ -256,10 +256,10 @@ class class_test_charts_jqPlotTest extends class_testbase  {
         echo $objGraph->renderGraph();
 
         $objGraph = class_graph_factory::getGraphInstance(class_graph_factory::$STR_TYPE_JQPLOT);
+        $objGraph->setStrGraphTitle("An empty chart");
         $objGraph->addBarChartSet(array(), "legend");
         $objGraph->setIntHeight(500);
         $objGraph->setIntWidth(700);
-//        $objGraph->setArrXAxisTickLabels(array("23", "24", "25", "26", "27", "28", "29"));
         echo $objGraph->renderGraph();
     }
 }

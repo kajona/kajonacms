@@ -455,26 +455,27 @@ class class_graph_jqplot implements interface_graph {
 
             //Swap X and Y Axis
             if(count($this->arrXAxisTickLabels) > 0 || $this->intNrOfWrittenLabelsXAxis == 0) {
-                //set y-Axis options - reverse the array
-                $arrLabels = $this->arrXAxisTickLabels;
-                if(count($arrLabels) > 0) {
-                    $arrLabels = array_reverse($arrLabels);
-                }
-                $this->setArrYAxisTickLabels($arrLabels, $this->intNrOfWrittenLabelsXAxis);
-                $this->arrOptions["axes"]["yaxis"]["renderer"] = "$.jqplot.CategoryAxisRenderer";//since it is a bar chart, use CategoryAxisRenderer
+                //keep xaxis and yaxis information
+                $arrXLabelsTemp = $this->arrXAxisTickLabels;
+                $intXNumberLabelsTemp = $this->intNrOfWrittenLabelsXAxis;
 
-                //reset xAxis options
+                //set y-Axis options - reverse the array
+                if(count($arrXLabelsTemp) > 0) {
+                    $arrXLabelsTemp = array_reverse($arrXLabelsTemp);
+                }
+                $this->setArrYAxisTickLabels($arrXLabelsTemp, $intXNumberLabelsTemp);
+                $this->arrOptions["axes"]["yaxis"]["renderer"] = $this->arrOptions["axes"]["xaxis"]["renderer"];
+
+                //reset xAxis
                 $this->arrOptions["axes"]["xaxis"]["renderer"] = null;
                 $this->arrOptions["axes"]["xaxis"]["ticks"] = null;
                 $this->arrXAxisTickLabels = null;
                 $this->intNrOfWrittenLabelsXAxis = null;
-
-
             }
 
             //add to each series options which are required for horizontal bar chart rendering
             foreach($this->arrSeriesData as $objSeriesData) {
-                //reverse the arrays
+                //reverse the arrays as labels are also reversed)
                 $arrData = $objSeriesData->getArrDataPoints();
                 if(count($arrData) > 0) {
                     $arrData = array_reverse($arrData);
