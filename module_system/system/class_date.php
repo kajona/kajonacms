@@ -64,6 +64,17 @@ class class_date {
     }
 
     /**
+     * Compares the current date against another date and evaluates, of both dates reference the same day.
+     *
+     * @param class_date $objDateToCompare
+     *
+     * @return bool
+     */
+    public function isSameDay(class_date $objDateToCompare) {
+        return uniSubstr($objDateToCompare->getLongTimestamp(), 0, 8) == uniSubstr($this->getLongTimestamp(), 0, 8);
+    }
+
+    /**
      * Generates a long-timestamp of the current time
      *
      * @return long

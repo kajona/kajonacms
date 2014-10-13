@@ -4,6 +4,14 @@ require_once (__DIR__."/../../module_system/system/class_testbase.php");
 
 class test_class_dateTest extends class_testbase  {
 
+    public function testSameDay() {
+        $objDate = new class_date();
+
+        $this->assertTrue($objDate->isSameDay(new class_date()));
+
+        $objDate->setNextDay();
+        $this->assertTrue(!$objDate->isSameDay(new class_date()));
+    }
 
     public function testDateParams() {
         $objDate = new class_date(0);
