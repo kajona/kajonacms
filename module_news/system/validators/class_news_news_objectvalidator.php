@@ -47,17 +47,17 @@ class class_news_news_objectvalidator extends class_objectvalidator_base {
 
             if($objStartDate!= null && $objEndDate != null) {
                 if(class_objectvalidator_helper::compareDates($objStartDate, $objEndDate) === 1) {
-                    $this->addValidationError("objStartDate", $objLang->getLang("commons_object_validator_datecompare_validationmessage_before", $strModuleName, array($strLabelStartDate, $strLabelEndDate)));
+                    $this->addValidationError("startdate", $objLang->getLang("commons_object_validator_datecompare_validationmessage_before", $strModuleName, array($strLabelStartDate, $strLabelEndDate)));
                 }
             }
             if($objSpecialDate!= null && $objEndDate != null) {
                 if(class_objectvalidator_helper::compareDates($objSpecialDate, $objEndDate) === 1) {
-                    $this->addValidationError("objStartDate", $objLang->getLang("commons_object_validator_datecompare_validationmessage_before", $strModuleName, array($strLabelSpecialDate, $strLabelEndDate)));
+                    $this->addValidationError("startdate", $objLang->getLang("commons_object_validator_datecompare_validationmessage_before", $strModuleName, array($strLabelSpecialDate, $strLabelEndDate)));
                 }
             }
             if($objStartDate!= null && $objSpecialDate != null) {
                 if(class_objectvalidator_helper::compareDates($objStartDate, $objSpecialDate) === 1) {
-                    $this->addValidationError("objStartDate", $objLang->getLang("commons_object_validator_datecompare_validationmessage_before", $strModuleName, array($strLabelStartDate, $strLabelSpecialDate)));
+                    $this->addValidationError("startdate", $objLang->getLang("commons_object_validator_datecompare_validationmessage_before", $strModuleName, array($strLabelStartDate, $strLabelSpecialDate)));
                 }
             }
         }

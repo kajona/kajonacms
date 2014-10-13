@@ -174,10 +174,10 @@ class class_module_search_admin extends class_admin_simple implements interface_
         $strQueryAppend = "&filtermodules=".$objSearch->getStrInternalFilterModules();
 
         if($objSearch->getObjChangeStartdate() != null)
-            $strQueryAppend .= "&search_objchangestartdate=".$objSearch->getObjChangeStartdate()->getLongTimestamp();
+            $strQueryAppend .= "&search_changestartdate=".$objSearch->getObjChangeStartdate()->getLongTimestamp();
 
         if($objSearch->getObjChangeEnddate() != null)
-            $strQueryAppend .= "&search_objchangeenddate=".$objSearch->getObjChangeEnddate()->getLongTimestamp();
+            $strQueryAppend .= "&search_changeenddate=".$objSearch->getObjChangeEnddate()->getLongTimestamp();
 
         $strReturn .= $this->renderList(
             $objArraySectionIterator,
@@ -393,8 +393,8 @@ class class_module_search_admin extends class_admin_simple implements interface_
         $objForm->setStrHiddenGroupTitle($this->getLang("form_additionalheader"));
         $objForm->addFieldToHiddenGroup($objForm->getField("formfiltermodules"));
         $objForm->addFieldToHiddenGroup($objForm->getField("search_filter_all"));
-        $objForm->addFieldToHiddenGroup($objForm->getField("objChangeStartdate"));
-        $objForm->addFieldToHiddenGroup($objForm->getField("objChangeEnddate"));
+        $objForm->addFieldToHiddenGroup($objForm->getField("changestartdate"));
+        $objForm->addFieldToHiddenGroup($objForm->getField("changeenddate"));
         $objForm->setBitHiddenElementsVisible($bitVisible);
 
 

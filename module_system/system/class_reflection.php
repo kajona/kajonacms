@@ -343,6 +343,7 @@ class class_reflection {
             "setBit".$strPropertyName,
             "setLong".$strPropertyName,
             "setArr".$strPropertyName,
+            "setObj".$strPropertyName,
             "set".$strPropertyName
         );
 
@@ -377,6 +378,7 @@ class class_reflection {
             "getBit".$strPropertyName,
             "getLong".$strPropertyName,
             "getArr".$strPropertyName,
+            "getObj".$strPropertyName,
             "get".$strPropertyName
         );
 

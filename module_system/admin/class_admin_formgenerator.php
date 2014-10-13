@@ -348,7 +348,7 @@ class class_admin_formgenerator {
             $strType = "text";
 
         $strStart = uniSubstr($strPropertyName, 0, 3);
-        if(in_array($strStart, array("int", "bit", "str", "arr")))
+        if(in_array($strStart, array("int", "bit", "str", "arr", "obj")))
             $strPropertyName = uniStrtolower(uniSubstr($strPropertyName, 3));
 
         $strStart = uniSubstr($strPropertyName, 0, 4);
