@@ -23,7 +23,9 @@ class class_module_packagemanager_contentprovider_kajona extends class_module_pa
             "www.kajona.de",
             "/xml.php?module=packageserver&action=list",
             "/download.php",
-            __CLASS__
+            __CLASS__,
+            "https://",
+            443
         );
     }
 }
