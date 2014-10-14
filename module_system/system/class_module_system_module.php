@@ -222,7 +222,7 @@ class class_module_system_module extends class_model implements interface_model,
         $arrReturn = array();
         $intI = 0;
         foreach($arrRows as $arrOneRow) {
-            if($intStart != null && $intEnd != null) {
+            if($intStart !== null && $intEnd !== null) {
                 if($intI >= $intStart && $intI <= $intEnd) {
                     $arrReturn[] = class_module_system_module::getModuleBySystemid($arrOneRow["module_id"]);
                 }
