@@ -27,20 +27,16 @@ abstract class class_module_packagemanager_contentprovider_remote_base implement
     private $STR_BROWSE_HOST = "";
     private $STR_BROWSE_URL = "";
     private $STR_DOWNLOAD_URL = "";
-    private $STR_PROTOCOL_HEADER = "";
-    private $INT_BROWSE_HOST_PORT = "";
     private $STR_PROVIDER_NAME;
     private $CLASS_NAME;
 
 
-    function __construct($strProviderName, $strBrowseHost, $strBrowseUrl, $strDownloadUrl, $strClassName, $strBrowseProtocol = "http://", $intBrowsePort = 80) {
+    function __construct($strProviderName, $strBrowseHost, $strBrowseUrl, $strDownloadUrl, $strClassName) {
         $this->STR_PROVIDER_NAME = $strProviderName;
         $this->STR_BROWSE_HOST = $strBrowseHost;
         $this->STR_BROWSE_URL = $strBrowseUrl;
         $this->STR_DOWNLOAD_URL = $strDownloadUrl;
         $this->CLASS_NAME = $strClassName;
-        $this->STR_PROTOCOL_HEADER = $strBrowseProtocol;
-        $this->INT_BROWSE_HOST_PORT = $intBrowsePort;
     }
 
 
@@ -76,7 +72,8 @@ abstract class class_module_packagemanager_contentprovider_remote_base implement
         $objLang = class_carrier::getInstance()->getObjLang();
         $objManager = new class_module_packagemanager_manager();
 
-        $objRemoteloader = $this->getRemoteloader();
+        $objRemoteloader = new class_remoteloader();
+        $objRemoteloader->setStrHost($this->STR_BROWSE_HOST);
         $objRemoteloader->setStrQueryParams($this->buildQueryParams($intStart, $intEnd));
 
         $strResponse = "";
@@ -225,8 +222,10 @@ abstract class class_module_packagemanager_contentprovider_remote_base implement
         $strFilename = generateSystemid().".zip";
 
         //stream the original package
-        $objRemoteloader = $this->getRemoteloader();
+        $objRemoteloader = new class_remoteloader();
         $objRemoteloader->setBitCacheEnabled(false);
+
+        $objRemoteloader->setStrHost($this->STR_BROWSE_HOST);
         $objRemoteloader->setStrQueryParams($this->STR_DOWNLOAD_URL."?systemid=".$this->getParam("systemid"));
 
         $strResponse = $objRemoteloader->getRemoteContent();
@@ -252,7 +251,8 @@ abstract class class_module_packagemanager_contentprovider_remote_base implement
      */
     public function searchPackage($strTitle) {
 
-        $objRemoteloader = $this->getRemoteloader();
+        $objRemoteloader = new class_remoteloader();
+        $objRemoteloader->setStrHost($this->STR_BROWSE_HOST);
         $objRemoteloader->setStrQueryParams($this->STR_BROWSE_URL."&title=".urlencode($strTitle)."&domain=".urlencode(_webpath_));
 
         try {
@@ -290,17 +290,5 @@ abstract class class_module_packagemanager_contentprovider_remote_base implement
             class_response_object::getInstance()->setStrRedirectUrl($strUrl);
         }
 
-    }
-
-    /**
-     * Returns a fully set up remoteloader to start querying the package repo
-     * @return class_remoteloader
-     */
-    private function getRemoteloader() {
-        $objRemoteloader = new class_remoteloader();
-        $objRemoteloader->setStrHost($this->STR_BROWSE_HOST);
-        $objRemoteloader->setStrProtocolHeader($this->STR_PROTOCOL_HEADER);
-        $objRemoteloader->setIntPort($this->INT_BROWSE_HOST_PORT);
-        return $objRemoteloader;
     }
 }
