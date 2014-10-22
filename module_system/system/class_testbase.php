@@ -79,7 +79,8 @@ abstract class class_testbase extends PHPUnit_Framework_TestCase {
         //create the object
         $objReflector = new ReflectionClass($strClassType);
         $obj = $objReflector->newInstance();
-        $obj->updateObjectToDb($strParentId);
+        //TODO: why is this required here? could lead to wrong onInsertToDb triggers
+//        $obj->updateObjectToDb($strParentId);
 
         $objReflectorAnnotated = new class_reflection($strClassType);
 
