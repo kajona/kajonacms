@@ -125,16 +125,16 @@ class class_module_system_admin_xml extends class_admin_controller implements in
     protected function actionSetPrevid() {
         $strReturn = "";
 
-        $objCommon = class_objectfactory::getInstance()->getObject($this->getSystemid());
+        $objRecord = class_objectfactory::getInstance()->getObject($this->getSystemid());
         $strNewPrevId = $this->getParam("prevId");
         //check permissions
-        if($objCommon != null && $objCommon->rightEdit() && validateSystemid($strNewPrevId)) {
+        if($objRecord != null && $objRecord->rightEdit() && validateSystemid($strNewPrevId)) {
 
-            if($objCommon->getStrPrevId() != $strNewPrevId) {
-                $objCommon->updateObjectToDb($strNewPrevId);
+            if($objRecord->getStrPrevId() != $strNewPrevId) {
+                $objRecord->updateObjectToDb($strNewPrevId);
             }
 
-            $strReturn .= "<message>".$objCommon->getStrDisplayName()." - ".$this->getLang("setPrevIdOk")."</message>";
+            $strReturn .= "<message>".$objRecord->getStrDisplayName()." - ".$this->getLang("setPrevIdOk")."</message>";
             $this->flushCompletePagesCache();
         }
         else {

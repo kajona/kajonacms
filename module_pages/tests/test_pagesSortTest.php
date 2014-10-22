@@ -4,6 +4,46 @@ require_once (__DIR__."/../../module_system/system/class_testbase.php");
 
 class class_test_pagesSortTest extends class_testbase {
 
+    public function testPagesSortOnPrevIdChange() {
+
+        $objRootPage = $this->createObject("class_module_pages_page", "", array(), array("strName" => "pagesSortTest"));
+        $objSubPage1 = $this->createObject("class_module_pages_page", $objRootPage->getSystemid(), array(), array("strName" => "pagesSortTest"));
+        $objSubPage2 = $this->createObject("class_module_pages_page", $objRootPage->getSystemid(), array(), array("strName" => "pagesSortTest"));
+
+        $objLangugage = new class_module_languages_language();
+        $objPagelement1At1 = $this->createObject("class_module_pages_pageelement", $objSubPage1->getSystemid(), array(), array("strPlaceholder" => "headline_row", "strName" => "headline1", "strElement" => "row", "strLanguage" => $objLangugage->getStrAdminLanguageToWorkOn()));
+        $objPagelement2At1 = $this->createObject("class_module_pages_pageelement", $objSubPage1->getSystemid(), array(), array("strPlaceholder" => "headline_row", "strName" => "headline2", "strElement" => "row", "strLanguage" => $objLangugage->getStrAdminLanguageToWorkOn()));
+
+        $objPagelement1At2 = $this->createObject("class_module_pages_pageelement", $objSubPage2->getSystemid(), array(), array("strPlaceholder" => "headline_row", "strName" => "headline1", "strElement" => "row", "strLanguage" => $objLangugage->getStrAdminLanguageToWorkOn()));
+        $objPagelement2At2 = $this->createObject("class_module_pages_pageelement", $objSubPage2->getSystemid(), array(), array("strPlaceholder" => "headline_row", "strName" => "headline2", "strElement" => "row", "strLanguage" => $objLangugage->getStrAdminLanguageToWorkOn()));
+
+
+        //validate sorts pre previd change
+        $this->assertEquals(1, $objSubPage1->getIntSort());
+        $this->assertEquals(2, $objSubPage2->getIntSort());
+
+        $this->assertEquals(1, $objPagelement1At1->getIntSort());
+        $this->assertEquals(2, $objPagelement2At1->getIntSort());
+
+        $this->assertEquals(1, $objPagelement1At2->getIntSort());
+        $this->assertEquals(2, $objPagelement2At2->getIntSort());
+
+        $objSubPage2->updateObjectToDb($objSubPage1->getSystemid());
+
+
+        $this->assertEquals(1, $objSubPage1->getIntSort(), "t1");
+        $this->assertEquals(1, $objSubPage2->getIntSort(), "t2");
+
+        $this->assertEquals(1, $objPagelement1At1->getIntSort(), "t3");
+        $this->assertEquals(2, $objPagelement2At1->getIntSort(), "t4");
+
+        $this->assertEquals(1, $objPagelement1At2->getIntSort(), "t5");
+        $this->assertEquals(2, $objPagelement2At2->getIntSort(), "t6");
+
+
+        $objRootPage->deleteObject();
+    }
+
     public function testPagesSortTest() {
 
         $objRootPage = new class_module_pages_page();

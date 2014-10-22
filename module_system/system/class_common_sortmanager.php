@@ -30,17 +30,32 @@ class class_common_sortmanager implements interface_sortmanager {
      *
      * @param $strOldPrevid
      * @param $strNewPrevid
+     * @param bool|array $arrRestrictionModules
      *
      * @return void
      */
-    function fixSortOnPrevIdChange($strOldPrevid, $strNewPrevid) {
+    public function fixSortOnPrevIdChange($strOldPrevid, $strNewPrevid, $arrRestrictionModules = false) {
         $this->objDB->flushQueryCache();
+
+        $arrParams = array($strOldPrevid);
+
+        $strWhere = "";
+        if($arrRestrictionModules && is_array($arrRestrictionModules)) {
+            $arrMarks = array();
+            foreach($arrRestrictionModules as $strOneId) {
+                $arrMarks[] = "?";
+                $arrParams[] = $strOneId;
+            }
+            $strWhere = "AND system_module_nr IN ( ".implode(", ", $arrMarks)." )";
+
+        }
 
         $strQuery = "SELECT system_id, system_sort
                      FROM "._dbprefix_."system
                      WHERE system_prev_id=?
+                     ".$strWhere."
                      ORDER BY system_sort ASC";
-        $arrSiblings = $this->objDB->getPArray($strQuery, array($strOldPrevid));
+        $arrSiblings = $this->objDB->getPArray($strQuery, $arrParams);
 
         $intI = 1;
         foreach($arrSiblings as $arrOneSibling) {
@@ -51,8 +66,16 @@ class class_common_sortmanager implements interface_sortmanager {
             $intI++;
         }
 
-        //the new sort-id of the new-record may be set up easily
-        $intNewCount = $this->objSource->getNumberOfSiblings($this->objSource->getSystemid(), false);
+        //the new sort-id should fetch the number of siblings on the new prev-id
+        $arrParams[0] = $strNewPrevid;
+        $strQuery = "SELECT system_id, system_sort
+                     FROM "._dbprefix_."system
+                     WHERE system_prev_id=?
+                     ".$strWhere."
+                     ORDER BY system_sort ASC";
+        $arrSiblings = $this->objDB->getPArray($strQuery, $arrParams);
+
+        $intNewCount = count($arrSiblings);//$this->objSource->getNumberOfSiblings($this->objSource->getSystemid(), false);
         $this->objSource->setIntSort($intNewCount);
         $strQuery = "UPDATE "._dbprefix_."system SET system_sort = ? where system_id = ?";
         $this->objDB->_pQuery($strQuery, array($intNewCount, $this->objSource->getSystemid()));
@@ -65,7 +88,7 @@ class class_common_sortmanager implements interface_sortmanager {
      *
      * @return mixed
      */
-    function fixSortOnDelete($arrRestrictionModules = false) {
+    public function fixSortOnDelete($arrRestrictionModules = false) {
 
 
         $arrParams = array();
@@ -116,7 +139,7 @@ class class_common_sortmanager implements interface_sortmanager {
      * @return void
      * @deprecated
      */
-    function setPosition($strDirection = "upwards") {
+    public function setPosition($strDirection = "upwards") {
         //get the old pos
         $intPos = $this->objSource->getIntSort();
         if($strDirection == "upwards")
@@ -137,7 +160,7 @@ class class_common_sortmanager implements interface_sortmanager {
      * @throws class_exception
      * @return void
      */
-    function setAbsolutePosition($intNewPosition, $arrRestrictionModules = false) {
+    public function setAbsolutePosition($intNewPosition, $arrRestrictionModules = false) {
         class_logger::getInstance()->addLogRow("move ".$this->objSource->getSystemid()." to new pos ".$intNewPosition, class_logger::$levelInfo);
         $this->objDB->flushQueryCache();
 

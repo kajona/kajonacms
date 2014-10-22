@@ -177,32 +177,32 @@ class class_module_pages_pageelement extends class_model implements interface_mo
     protected function onInsertToDb() {
 
         $objElementdefinitionToCreate = class_module_pages_element::getElement($this->getStrElement());
-        if($objElementdefinitionToCreate == null)
-            return false;
+        if($objElementdefinitionToCreate != null) {
 
-        //Build the class-name
-        $strElementClass = str_replace(".php", "", $objElementdefinitionToCreate->getStrClassAdmin());
-        //and finally create the object
-        if($strElementClass != "") {
-            $objElement = new $strElementClass();
-            /** @var class_element_admin $objElement */
-            $strForeignTable = $objElement->getTable();
+            //Build the class-name
+            $strElementClass = str_replace(".php", "", $objElementdefinitionToCreate->getStrClassAdmin());
+            //and finally create the object
+            if($strElementClass != "") {
+                $objElement = new $strElementClass();
+                /** @var class_element_admin $objElement */
+                $strForeignTable = $objElement->getTable();
 
 
-            //And create the row in the Element-Table, if given
-            if($strForeignTable != "") {
-                $strQuery = "INSERT INTO ".$strForeignTable." (content_id) VALUES (?)";
-                $this->objDB->_pQuery($strQuery, array($this->getSystemid()));
+                //And create the row in the Element-Table, if given
+                if($strForeignTable != "") {
+                    $strQuery = "INSERT INTO ".$this->objDB->encloseTableName($strForeignTable)." (".$this->objDB->encloseColumnName("content_id").") VALUES (?)";
+                    $this->objDB->_pQuery($strQuery, array($this->getSystemid()));
+                }
+
             }
-
         }
 
         //shift it to the last position by default
         //As a special feature, we set the element as the last
         $strQuery = "UPDATE "._dbprefix_."system SET system_sort = ? WHERE system_id = ?";
-        $this->setIntSort(count($this->getSortedElementsAtPlaceholder()) + 1);
-        $this->objDB->_pQuery($strQuery, array(count($this->getSortedElementsAtPlaceholder()) + 1, $this->getSystemid()));
-        //And shift this element one pos up to get correct order on systemtables
+        $intNewSort = count($this->getSortedElementsAtPlaceholder()) + 1;
+        $this->setIntSort($intNewSort);
+        $this->objDB->_pQuery($strQuery, array($intNewSort, $this->getSystemid()));
 
         $this->objDB->flushQueryCache();
 
