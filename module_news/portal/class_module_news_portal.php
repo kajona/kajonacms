@@ -178,7 +178,7 @@ class class_module_news_portal extends class_portal_controller implements interf
             //see if we should generate a redirect instead
             if($objNews->getIntRedirectEnabled() == "1" && $objNews->getStrRedirectPage() != "") {
                 $this->portalReload(class_link::getLinkPortalHref($objNews->getStrRedirectPage()));
-                return "";
+                return "<script type='text/javascript'>window.location.replace('".class_link::getLinkPortalHref($objNews->getStrRedirectPage())."');</script>";
             }
 
             //Load record
