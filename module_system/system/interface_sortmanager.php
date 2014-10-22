@@ -29,10 +29,11 @@ interface interface_sortmanager {
      *
      * @param $strOldPrevid
      * @param $strNewPrevid
+     * @param bool|array $arrRestrictionModules If an array of module-ids is passed, the determination of siblings will be limited to the module-records matching one of the module-ids
      *
      * @return void
      */
-    function fixSortOnPrevIdChange($strOldPrevid, $strNewPrevid);
+    function fixSortOnPrevIdChange($strOldPrevid, $strNewPrevid, $arrRestrictionModules = false);
 
 
     /**
