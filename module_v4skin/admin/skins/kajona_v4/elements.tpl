@@ -1526,7 +1526,6 @@ The language switch surrounds the buttons
                 },
                 "dnd" : {
                     "drop_finish" : function () {
-                        alert("DROP");
                     },
                     "drag_check" : function (data) {
 
