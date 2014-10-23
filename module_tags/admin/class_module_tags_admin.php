@@ -27,10 +27,10 @@ class class_module_tags_admin extends class_admin_evensimpler implements interfa
 
     public function getOutputModuleNavi() {
         $arrReturn = array();
-        $arrReturn[] = array("view", getLinkAdmin($this->arrModule["modul"], "list", "", $this->getLang("commons_list"), "", "", true, "adminnavi"));
-        $arrReturn[] = array("right1", getLinkAdmin($this->arrModule["modul"], "listFavorites", "", $this->getLang("action_list_favorites"), "", "", true, "adminnavi"));
+        $arrReturn[] = array("view", class_link::getLinkAdmin($this->getArrModule("modul"), "list", "", $this->getLang("commons_list"), "", "", true, "adminnavi"));
+        $arrReturn[] = array("right1", class_link::getLinkAdmin($this->getArrModule("modul"), "listFavorites", "", $this->getLang("action_list_favorites"), "", "", true, "adminnavi"));
         $arrReturn[] = array("", "");
-        $arrReturn[] = array("right", getLinkAdmin("right", "change", "&changemodule=" . $this->arrModule["modul"], $this->getLang("commons_module_permissions"), "", "", true, "adminnavi"));
+        $arrReturn[] = array("right", class_link::getLinkAdmin("right", "change", "&changemodule=" . $this->getArrModule("modul"), $this->getLang("commons_module_permissions"), "", "", true, "adminnavi"));
 
         return $arrReturn;
     }
@@ -45,7 +45,7 @@ class class_module_tags_admin extends class_admin_evensimpler implements interfa
         if($objListEntry instanceof class_module_tags_tag) {
             $arrButtons = array();
             $arrButtons[] = $this->objToolkit->listButton(
-                getLinkAdmin(
+                class_link::getLinkAdmin(
                     $this->getArrModule("modul"),
                     "showAssignedRecords",
                     "&systemid=" . $objListEntry->getSystemid(),
@@ -89,7 +89,7 @@ class class_module_tags_admin extends class_admin_evensimpler implements interfa
                 return $this->objToolkit->listDeleteButton(
                     $objListEntry->getStrDisplayName(),
                     $this->getLang("delete_question_fav", $objListEntry->getArrModule("modul")),
-                    getLinkAdminHref($objListEntry->getArrModule("modul"), "delete", "&systemid=" . $objListEntry->getSystemid())
+                    class_link::getLinkAdminHref($objListEntry->getArrModule("modul"), "delete", "&systemid=" . $objListEntry->getSystemid())
                 );
             }
         }
@@ -102,7 +102,7 @@ class class_module_tags_admin extends class_admin_evensimpler implements interfa
 
 
     /**
-     * @permissions edit
+     * @permissions view
      * @return string
      */
     protected function actionShowAssignedRecords() {
@@ -160,7 +160,7 @@ class class_module_tags_admin extends class_admin_evensimpler implements interfa
         $strTagsWrapperId = generateSystemid();
 
         $strTagContent .= $this->objToolkit->formHeader(
-            getLinkAdminHref($this->arrModule["modul"], "saveTags"), "", "", "KAJONA.admin.tags.saveTag(document.getElementById('tagname').value+'', '" . $strTargetSystemid . "', '" . $strAttribute . "');return false;"
+            class_link::getLinkAdminHref($this->getArrModule("modul"), "saveTags"), "", "", "KAJONA.admin.tags.saveTag(document.getElementById('tagname').value+'', '" . $strTargetSystemid . "', '" . $strAttribute . "');return false;"
         );
         $strTagContent .= $this->objToolkit->formTextRow($this->getLang("tag_name_hint"));
         $strTagContent .= $this->objToolkit->formInputTagSelector("tagname", $this->getLang("form_tags_name"));
@@ -175,7 +175,7 @@ class class_module_tags_admin extends class_admin_evensimpler implements interfa
 
     protected function getOutputNaviEntry(interface_model $objInstance) {
         if($objInstance instanceof class_module_tags_tag)
-            return getLinkAdmin($this->getArrModule("modul"), "showAssignedRecords", "&systemid=" . $objInstance->getSystemid(), $objInstance->getStrName());
+            return class_link::getLinkAdmin($this->getArrModule("modul"), "showAssignedRecords", "&systemid=" . $objInstance->getSystemid(), $objInstance->getStrName());
 
         return null;
     }

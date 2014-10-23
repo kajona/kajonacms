@@ -40,9 +40,6 @@ class class_module_tags_tag extends class_model implements interface_model, inte
      * @var int
      * @tableColumn tags_tag_private
      * @tableColumnDatatype int
-     *
-     * @fieldType yesno
-     * @fieldMandatory
      */
     private $intPrivate = 0;
 
@@ -68,7 +65,7 @@ class class_module_tags_tag extends class_model implements interface_model, inte
      * @return mixed
      */
     public function getSearchAdminLinkForObject() {
-        return getLinkAdminHref($this->getArrModule("modul"), "showAssignedRecords", "&systemid=".$this->getSystemid());
+        return class_link::getLinkAdminHref($this->getArrModule("modul"), "showAssignedRecords", "&systemid=".$this->getSystemid());
     }
 
 
