@@ -12,8 +12,16 @@ echo "+-------------------------------------------------------------------------
 $objStartDate = new class_date();
 $objEndDate = new class_date();
 
-$intOuter = 1;
-for($intYear = 2012; $intYear <= 2013; $intYear++) {
+
+echo str_pad("Month", 15);
+echo str_pad("Hits", 15);
+echo str_pad("Visitors", 15);
+echo str_pad("Downloads", 15);
+echo str_pad("PServer-Requests", 20);
+echo str_pad("PServer-Unique", 20);
+echo "\n";
+
+for($intYear = 2012; $intYear <= 2014; $intYear++) {
     for($intMonth = 1; $intMonth <= 12; $intMonth++) {
 
         $objStartDate->setIntDay(1)->setIntMonth($intMonth)->setIntYear($intYear)->setIntHour(0)->setIntMin(0)->setIntSec(1);
@@ -26,23 +34,21 @@ for($intYear = 2012; $intYear <= 2013; $intYear++) {
 
         $objEndDate->setPreviousDay()->setIntHour(23)->setIntMin(59)->setIntSec(59);
 
-        if($intOuter++ == 1)
-            echo dateToString($objStartDate) ." - ".dateToString($objEndDate).": <br />";
 
-//        echo "Hits:      ";
-//        echo "".getHits($objStartDate->getTimeInOldStyle(), $objEndDate->getTimeInOldStyle())."<br />";
-//        echo "Visitors:      ";
-//        echo "".getVisitors($objStartDate->getTimeInOldStyle(), $objEndDate->getTimeInOldStyle())."<br />";
-//        echo "Downloads: ";
-//        echo "".getDownloads($objStartDate->getTimeInOldStyle(), $objEndDate->getTimeInOldStyle())."<br />";
-//        echo "PServer-Requests: ";
-//        echo "".getPackageserverRequests($objStartDate->getLongTimestamp(), $objEndDate->getLongTimestamp())."<br />";
-//        echo "PServer-Unique Systems: ";
-//        echo "".getUniquePackageserverSystems($objStartDate->getLongTimestamp(), $objEndDate->getLongTimestamp())."<br />";
-//        echo "<br />";
+        echo str_pad($objStartDate->getIntMonth()."/".$objStartDate->getIntYear(), 10);
+        echo str_pad(getHits($objStartDate->getTimeInOldStyle(), $objEndDate->getTimeInOldStyle()), 15, " ", STR_PAD_LEFT);
+        echo str_pad(getVisitors($objStartDate->getTimeInOldStyle(), $objEndDate->getTimeInOldStyle()), 15, " ", STR_PAD_LEFT);
+        echo str_pad(getDownloads($objStartDate->getTimeInOldStyle(), $objEndDate->getTimeInOldStyle()), 15, " ", STR_PAD_LEFT);
+        echo str_pad(getPackageserverRequests($objStartDate->getLongTimestamp(), $objEndDate->getLongTimestamp()), 20, " ", STR_PAD_LEFT);
+        echo str_pad(getUniquePackageserverSystems($objStartDate->getLongTimestamp(), $objEndDate->getLongTimestamp()), 20, " ", STR_PAD_LEFT);
+        echo "\n";
 
+        flush();
+        ob_flush();
     }
 }
+
+echo "Total unique installations: \n";
 getTotalUniquePackagesererSystems();
 
 function getTotalUniquePackagesererSystems() {
@@ -51,6 +57,7 @@ function getTotalUniquePackagesererSystems() {
                 GROUP BY log_hostname
                 ORDER BY ANZ DESC   ";
 
+    $intI = 0;
     foreach(class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array()) as $arrOneRow) {
         if(uniStrpos($arrOneRow["log_hostname"], "localhost/") === false
             && uniStrpos($arrOneRow["log_hostname"], "kajona.de") === false
@@ -58,9 +65,12 @@ function getTotalUniquePackagesererSystems() {
             && uniStrpos($arrOneRow["log_hostname"], "aquarium") === false
             && uniStrpos($arrOneRow["log_hostname"], "stb400s") === false
             && $arrOneRow["log_hostname"] != ""
-        )
-            echo sprintf("%4d", $arrOneRow["ANZ"]) ." => ". $arrOneRow["log_hostname"]."<br />";
+        ) {
+            echo sprintf("%4d", $arrOneRow["ANZ"])." => ".$arrOneRow["log_hostname"]."<br />";
+            $intI++;
+        }
     }
+    echo "Total: ".$intI." systems<br />";
 }
 
 
