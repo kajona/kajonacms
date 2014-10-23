@@ -40,6 +40,11 @@ class class_module_login_admin extends class_admin_controller implements interfa
      */
     protected function actionLogin() {
 
+        if($this->objSession->isLoggedin() && $this->objSession->isAdmin()) {
+            $this->loadPostLoginSite();
+            return;
+        }
+
         //Save the requested URL
         if($this->getParam("loginerror") == "") {
             //Store some of the last requests' data
@@ -51,7 +56,7 @@ class class_module_login_admin extends class_admin_controller implements interfa
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "login_form");
         $arrTemplate = array();
         $strForm = "";
-        $strForm .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "adminLogin"));
+        $strForm .= $this->objToolkit->formHeader(class_link::getLinkAdminHref($this->getArrModule("modul"), "adminLogin"));
         $strForm .= $this->objToolkit->formInputText("name", $this->getLang("login_loginUser", "user"), "", "inputTextShort");
         $strForm .= $this->objToolkit->formInputPassword("passwort", $this->getLang("login_loginPass", "user"), "", "inputTextShort");
         $strForm .= $this->objToolkit->formInputSubmit($this->getLang("login_loginButton", "user"), "", "", "inputSubmitShort");
@@ -90,7 +95,7 @@ class class_module_login_admin extends class_admin_controller implements interfa
                 $arrTemplate = array();
                 $strForm = "";
                 $strForm .= $this->objToolkit->getTextRow($this->getLang("login_password_form_intro", "user"));
-                $strForm .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "pwdReset"));
+                $strForm .= $this->objToolkit->formHeader(class_link::getLinkAdminHref($this->getArrModule("modul"), "pwdReset"));
                 $strForm .= $this->objToolkit->formInputText("username", $this->getLang("login_loginUser", "user"), "", "inputTextShort");
                 $strForm .= $this->objToolkit->formInputPassword("password1", $this->getLang("login_loginPass", "user"), "", "inputTextShort");
                 $strForm .= $this->objToolkit->formInputPassword("password2", $this->getLang("login_loginPass2", "user"), "", "inputTextShort");
@@ -144,16 +149,16 @@ class class_module_login_admin extends class_admin_controller implements interfa
     public function getLoginStatus() {
         $arrTemplate = array();
         $arrTemplate["name"] = $this->objSession->getUsername();
-        $arrTemplate["profile"] = getLinkAdminHref("user", "edit", "userid=".$this->objSession->getUserID());
-        $arrTemplate["logout"] = getLinkAdminHref($this->arrModule["modul"], "adminLogout");
-        $arrTemplate["dashboard"] = getLinkAdminHref("dashboard");
-        $arrTemplate["sitemap"] = getLinkAdminHref("dashboard", "sitemap");
+        $arrTemplate["profile"] = class_link::getLinkAdminHref("user", "edit", "userid=".$this->objSession->getUserID());
+        $arrTemplate["logout"] = class_link::getLinkAdminHref($this->getArrModule("modul"), "adminLogout");
+        $arrTemplate["dashboard"] = class_link::getLinkAdminHref("dashboard");
+        $arrTemplate["sitemap"] = class_link::getLinkAdminHref("dashboard", "sitemap");
         $arrTemplate["statusTitle"] = $this->getLang("login_statusTitle", "user");
         $arrTemplate["profileTitle"] = $this->getLang("login_profileTitle", "user");
         $arrTemplate["logoutTitle"] = $this->getLang("login_logoutTitle", "user");
         $arrTemplate["dashboardTitle"] = $this->getLang("login_dashboard", "user");
         $arrTemplate["sitemapTitle"] = $this->getLang("login_sitemap", "user");
-        $arrTemplate["printLink"] = getLinkAdminManual("href=\"#\" onclick=\"window.print();\"", $this->getLang("login_printview", "user"));
+        $arrTemplate["printLink"] = class_link::getLinkAdminManual("href=\"#\" onclick=\"window.print();\"", $this->getLang("login_printview", "user"));
         $arrTemplate["printTitle"] = $this->getLang("login_print", "user");
 
         return $this->objToolkit->getLoginStatus($arrTemplate);
@@ -176,20 +181,13 @@ class class_module_login_admin extends class_admin_controller implements interfa
             $objCookie = new class_cookie();
             $objCookie->setCookie("adminskin", $this->objSession->getAdminSkin(false, true));
             $objCookie->setCookie("adminlanguage", $this->objSession->getAdminLanguage(false, true));
-            //any url to redirect?
-            if($this->objSession->getSession(self::SESSION_REFERER) != "") {
-                class_response_object::getInstance()->setStrRedirectUrl(_indexpath_."?".$this->objSession->getSession(self::SESSION_REFERER));
-                $this->objSession->sessionUnset(self::SESSION_REFERER);
-                $this->objSession->setSession(self::SESSION_LOAD_FROM_PARAMS, "true");
-            }
-            else
-                class_response_object::getInstance()->setStrRedirectUrl(_indexpath_."?admin=1");
 
+            $this->loadPostLoginSite();
 
             return true;
         }
         else {
-            class_response_object::getInstance()->setStrRedirectUrl(_indexpath_."?admin=1&loginerror=1");
+            class_response_object::getInstance()->setStrRedirectUrl(class_link::getLinkAdminHref("login", "login", "&loginerror=1"));
             return false;
         }
     }
@@ -201,7 +199,26 @@ class class_module_login_admin extends class_admin_controller implements interfa
      */
     protected function actionAdminlogout() {
         $this->objSession->logout();
-        class_response_object::getInstance()->setStrRedirectUrl(_indexpath_."?admin=1");
+        class_response_object::getInstance()->setStrRedirectUrl(class_link::getLinkAdminHref("login"));
     }
 
+
+    private function loadPostLoginSite() {
+        //any url to redirect?
+        if($this->objSession->getSession(self::SESSION_REFERER) != "" && $this->objSession->getSession(self::SESSION_REFERER) != "admin=1") {
+            class_response_object::getInstance()->setStrRedirectUrl(_indexpath_."?".$this->objSession->getSession(self::SESSION_REFERER));
+            $this->objSession->sessionUnset(self::SESSION_REFERER);
+            $this->objSession->setSession(self::SESSION_LOAD_FROM_PARAMS, "true");
+        }
+        else {
+            //route to the default module
+            $strModule = "dashboard";
+            if(class_session::getInstance()->isLoggedin()) {
+                $objUser = new class_module_user_user(class_session::getInstance()->getUserID());
+                if($objUser->getStrAdminModule() != "")
+                    $strModule = $objUser->getStrAdminModule();
+            }
+            class_response_object::getInstance()->setStrRedirectUrl(class_link::getLinkAdminHref($strModule));
+        }
+    }
 }
