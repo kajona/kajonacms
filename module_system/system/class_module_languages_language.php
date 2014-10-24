@@ -151,10 +151,10 @@ class class_module_languages_language extends class_model implements interface_m
     public static function getLanguageByName($strName) {
 
         $objOrmList = new class_orm_objectlist();
-        $objOrmList->addWhereRestriction(new class_orm_objectlist_restriction("AND language_name = ?", $strName));
+        $objOrmList->addWhereRestriction(new class_orm_objectlist_restriction("AND language_name = ?", array($strName)));
         $arrReturn = $objOrmList->getObjectList(__CLASS__);
         if(count($arrReturn) > 0) {
-            return new $arrReturn[0];
+            return $arrReturn[0];
         }
         else {
             return false;
