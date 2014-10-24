@@ -54,6 +54,10 @@
                     });
                 }, "xml");
             }
+
+            if(strCurrentQuery.length < 2) {
+                $('#searchResultSmall').css('display', 'none');
+            }
         }
     };
     </script>
