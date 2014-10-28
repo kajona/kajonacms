@@ -24,6 +24,7 @@ if(issetPost("doimport")) {
         echo "\n<span style='color: red;font-weight:bold;'>import failed!!</span>\n";
 }
 else {
+    echo "Searching for dumps in dbdumps under: "._projectpath_."\n";
 
     $objFilesystem = new class_filesystem();
     if($objFilesystem->isWritable("/project/dbdumps")) {
