@@ -29,6 +29,7 @@ $lang["commons_category"]                = "Category";
 $lang["commons_category_title"]          = "Category title";
 $lang["commons_create_category"]         = "Create category";
 $lang["commons_create_folder"]           = "Create folder";
+$lang["commons_continue"]                = "Continue";
 $lang["commons_date"]                    = "Date";
 $lang["commons_delete"]                  = "Delete";
 $lang["commons_delete_category_question"] = "Do you really want to delete the category &quot;<b>%%element_name%%</b>&quot;?";
