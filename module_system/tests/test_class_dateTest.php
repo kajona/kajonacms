@@ -4,6 +4,20 @@ require_once (__DIR__."/../../module_system/system/class_testbase.php");
 
 class test_class_dateTest extends class_testbase  {
 
+    public function testTimezoneShifts() {
+        $objDate = new class_date("20141026000000");
+
+        $objDate->setNextDay();
+        $this->assertEquals($objDate->getLongTimestamp(), "20141027000000");
+
+        $objDate = new class_date("20141027000000");
+        $objDate->setPreviousDay();
+
+        $this->assertEquals($objDate->getLongTimestamp(), "20141026000000");
+    }
+
+
+
     public function testSameDay() {
         $objDate = new class_date();
 

@@ -22,6 +22,8 @@ class class_date {
 
     private $strStringFormat = "YYYYmmddHHiiss";
 
+    private $strDateTimeFormat = "YYMMDDHHIISS";
+
     private $strParseFormat = "YmdHis";
 
     private $longTimestamp;
@@ -202,7 +204,9 @@ class class_date {
      * @return \class_date
      */
     public function setPreviousDay() {
-        $this->setTimeInOldStyle($this->getTimeInOldStyle() - 24 * 3600);
+        $objDate = DateTime::createFromFormat($this->strParseFormat, $this->getLongTimestamp());
+        $objDate->sub(DateInterval::createFromDateString('1 day'));
+        $this->setTimeInOldStyle($objDate->getTimestamp());
         return $this;
     }
 
@@ -214,7 +218,9 @@ class class_date {
      * @return \class_date
      */
     public function setNextDay() {
-        $this->setTimeInOldStyle($this->getTimeInOldStyle() + 24 * 3600);
+        $objDate = DateTime::createFromFormat($this->strParseFormat, $this->getLongTimestamp());
+        $objDate->add(DateInterval::createFromDateString('1 day'));
+        $this->setTimeInOldStyle($objDate->getTimestamp());
         return $this;
     }
 
