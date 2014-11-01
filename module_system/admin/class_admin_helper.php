@@ -103,7 +103,7 @@ class class_admin_helper {
 
             $objAdminInstance = $objModule->getAdminInstanceOfConcreteModule();
             $arrItems = $objAdminInstance->getOutputModuleNavi();
-            $arrItems[] = $objAdminInstance->getModuleRightNaviEntry();
+            $arrItems = array_merge($arrItems, $objAdminInstance->getModuleRightNaviEntry());
             $arrFinalItems = array();
             //build array of final items
             $intI = 0;
