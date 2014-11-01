@@ -72,7 +72,7 @@ CKEDITOR.editorConfig = function(config) {
 
     config.toolbar_pe_lite =
         [
-            ['Undo','Redo','-','RemoveFormat']
+            ['Undo','Redo']
         ];
 
     //disable the conversion of special chars into html entities
