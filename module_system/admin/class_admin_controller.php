@@ -295,6 +295,19 @@ abstract class class_admin_controller extends class_abstract_controller {
     }
 
     /**
+     * Renders the "always present" module permissions entry for each module (takes the currents' user permissions into
+     * account).
+     * If you don't want this default behaviour, overwrite this method.
+     * @return array
+     */
+    public function getModuleRightNaviEntry() {
+        $arrLinks = array();
+        $arrLinks[] = array("", "");
+        $arrLinks[] = array("right", class_link::getLinkAdmin("right", "change", "&changemodule=".$this->getArrModule("modul"), $this->getLang("commons_module_permissions")));
+        return $arrLinks;
+    }
+
+    /**
      * Writes the ModuleTitle, overwrite if needed
      *
      * @return string

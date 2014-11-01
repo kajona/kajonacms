@@ -101,7 +101,9 @@ class class_admin_helper {
             if($arrFinalItems !== false)
                 return $arrFinalItems;
 
-            $arrItems = $objModule->getAdminInstanceOfConcreteModule()->getOutputModuleNavi();
+            $objAdminInstance = $objModule->getAdminInstanceOfConcreteModule();
+            $arrItems = $objAdminInstance->getOutputModuleNavi();
+            $arrItems[] = $objAdminInstance->getModuleRightNaviEntry();
             $arrFinalItems = array();
             //build array of final items
             $intI = 0;
