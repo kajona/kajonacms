@@ -29,7 +29,6 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
     public function getOutputModuleNavi() {
         $arrReturn = array();
         $arrReturn[] = array("view", class_link::getLinkAdmin($this->getArrModule("modul"), "list", "", $this->getLang("commons_list"), "", "", true, "adminnavi"));
-        $arrReturn[] = array("view", class_link::getLinkAdmin($this->getArrModule("modul"), "listAll", "", $this->getLang("modul_liste_alle"), "", "", true, "adminnavi"));
         $arrReturn[] = array("", "");
         $arrReturn[] = array("right1", class_link::getLinkAdmin($this->getArrModule("modul"), "listElements", "", $this->getLang("modul_elemente"), "", "", true, "adminnavi"));
         $arrReturn[] = array("", "");
@@ -331,28 +330,6 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
 
         return $arrReturn;
     }
-
-
-    /**
-     * Returns a list of all pages in the system, not worrying about the folders -> Flat List
-     *
-     * @return string The complete List
-     * @autoTestable
-     * @permissions view
-     */
-    protected function actionListAll() {
-        $strReturn = "";
-
-        class_module_languages_admin::enableLanguageSwitch();
-
-        $objArraySectionIterator = new class_array_section_iterator(class_module_pages_page::getObjectCount());
-        $objArraySectionIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
-        $objArraySectionIterator->setArraySection(class_module_pages_page::getAllPages($objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
-        $strReturn .= $this->renderList($objArraySectionIterator, false, class_module_pages_admin::STR_LIST_ALLPAGES);
-
-        return $strReturn;
-    }
-
 
     /**
      * @return string
