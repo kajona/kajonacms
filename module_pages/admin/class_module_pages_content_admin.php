@@ -62,7 +62,9 @@ class class_module_pages_content_admin extends class_admin_simple implements int
     protected function actionList() {
         $strReturn = "";
         class_module_languages_admin::enableLanguageSwitch();
-        $objPage = new class_module_pages_page($this->getSystemid());
+        /** @var class_module_pages_page $objPage */
+        $objPage = class_objectfactory::getInstance()->getObject($this->getSystemid());
+
         //get infos about the page
         $arrToolbarEntries = array();
         $arrToolbarEntries[0] = "<a href=\"".class_link::getLinkAdminHref("pages", "editPage", "&systemid=".$this->getSystemid())."\">".class_adminskin_helper::getAdminImage("icon_edit").$this->getLang("contentToolbar_pageproperties")."</a>";
@@ -83,7 +85,7 @@ class class_module_pages_content_admin extends class_admin_simple implements int
         $arrTemplate["lastedit"] = timeToString($objPage->getIntLmTime());
         $strReturn .= $this->objToolkit->getPageInfobox($arrTemplate);
 
-        //try to load template, otherwise abort
+        //try to load the template, otherwise abort
         $strTemplateID = null;
         try {
             $strTemplateID = $this->objTemplate->readTemplate("/module_pages/".$objPage->getStrTemplate(), "", false, true);
@@ -100,15 +102,26 @@ class class_module_pages_content_admin extends class_admin_simple implements int
 
         //Language-dependant loading of elements, if installed
         $arrElementsOnPage = class_module_pages_pageelement::getElementsOnPage($this->getSystemid(), false, $this->getLanguageToWorkOn());
-        //save a copy of the array to be able to check against all values later on
-        $arrElementsOnPageCopy = $arrElementsOnPage;
-
-        //Loading all Elements installed on the system ("RAW"-Elements)
-        $arrElementsInSystem = class_module_pages_element::getObjectList();
 
 
         //So, loop through the placeholders and check, if there's any element already belonging to this one
-        $intI = 0;
+        $strReturn .= $this->renderPlaceholderList($arrElementsOnTemplate, $arrElementsOnPage);
+
+        return $strReturn;
+    }
+
+    /**
+     * @param $arrElementsOnTemplate
+     * @param class_module_pages_pageelement[] $arrElementsInSystem
+     *
+     * @return string
+     */
+    private function renderPlaceholderList($arrElementsOnTemplate, $arrElementsInSystem) {
+        $strReturn = "";
+        //save a copy of the array to be able to check against all values later on
+        $arrElementsOnPageCopy = $arrElementsInSystem;
+
+
         if(is_array($arrElementsOnTemplate) && count($arrElementsOnTemplate) > 0) {
             //Iterate over every single placeholder provided by the template
             foreach($arrElementsOnTemplate as $arrOneElementOnTemplate) {
@@ -118,7 +131,7 @@ class class_module_pages_content_admin extends class_admin_simple implements int
                 $bitHit = false;
 
                 //Iterate over every single element-type provided by the placeholder
-                foreach($arrElementsOnPage as $intArrElementsOnPageKey => $objOneElementOnPage) {
+                foreach($arrElementsInSystem as $intArrElementsOnPageKey => $objOneElementOnPage) {
                     //Check, if its the same placeholder
                     $bitSamePlaceholder = false;
                     if($arrOneElementOnTemplate["placeholder"] == $objOneElementOnPage->getStrPlaceholder()) {
@@ -131,10 +144,10 @@ class class_module_pages_content_admin extends class_admin_simple implements int
                         $objOneElementOnPage->getLockManager()->unlockRecord();
                         $strActions = $this->getActionIcons($objOneElementOnPage);
                         //Put all Output together
-                        $strOutputAtPlaceholder .= $this->objToolkit->simpleAdminList($objOneElementOnPage, $strActions, $intI++);
+                        $strOutputAtPlaceholder .= $this->objToolkit->simpleAdminList($objOneElementOnPage, $strActions, 0);
 
                         //remove the element from the array
-                        unset($arrElementsOnPage[$intArrElementsOnPageKey]);
+                        unset($arrElementsInSystem[$intArrElementsOnPageKey]);
                     }
 
                 }
@@ -142,13 +155,14 @@ class class_module_pages_content_admin extends class_admin_simple implements int
                 //Check, if one of the elements in the placeholder is allowed to be used multiple times
                 foreach($arrOneElementOnTemplate["elementlist"] as $arrSingleElementOnTemplateplaceholder) {
 
-                    /** @var class_module_pages_element $objOneElementInSystem  */
-                    foreach($arrElementsInSystem as $objOneElementInSystem) {
-                        if($objOneElementInSystem->getStrName() == $arrSingleElementOnTemplateplaceholder["element"]) {
-                            if($objOneElementInSystem->getIntRepeat() == 1 || $bitHit === false) {
+                    //Loading all Elements installed on the system ("RAW"-Elements)
+                    /** @var class_module_pages_element $objOnePossibleElementInSystem  */
+                    foreach(class_module_pages_element::getObjectList() as $objOnePossibleElementInSystem) {
+                        if($objOnePossibleElementInSystem->getStrName() == $arrSingleElementOnTemplateplaceholder["element"]) {
+                            if($objOnePossibleElementInSystem->getIntRepeat() == 1 || $bitHit === false) {
                                 //So, the Row for a new element: element is repeatable or not yet created
                                 $strActions = $this->objToolkit->listButton(class_link::getLinkAdmin("pages_content", "new", "&placeholder=".$arrOneElementOnTemplate["placeholder"]."&element=".$arrSingleElementOnTemplateplaceholder["element"]."&systemid=".$this->getSystemid(), "", $this->getLang("element_anlegen"), "icon_new"));
-                                $strOutputAtPlaceholder .= $this->objToolkit->genericAdminList("", $objOneElementInSystem->getStrDisplayName(), "", $strActions, $intI++);
+                                $strOutputAtPlaceholder .= $this->objToolkit->genericAdminList("", $objOnePossibleElementInSystem->getStrDisplayName(), "", $strActions, 0);
                             }
                             else {
                                 //element not repeatable.
@@ -161,7 +175,7 @@ class class_module_pages_content_admin extends class_admin_simple implements int
                                 if(!$bitOneInstalled) {
                                     //So, the Row for a new element
                                     $strActions = $this->objToolkit->listButton(class_link::getLinkAdmin("pages_content", "new", "&placeholder=".$arrOneElementOnTemplate["placeholder"]."&element=".$arrSingleElementOnTemplateplaceholder["element"]."&systemid=".$this->getSystemid(), "", $this->getLang("element_anlegen"), "icon_new"));
-                                    $strOutputAtPlaceholder .= $this->objToolkit->genericAdminList("", $objOneElementInSystem->getStrDisplayName(), "", $strActions, $intI++);
+                                    $strOutputAtPlaceholder .= $this->objToolkit->genericAdminList("", $objOnePossibleElementInSystem->getStrDisplayName(), "", $strActions, 0);
                                 }
                             }
                         }
@@ -186,26 +200,27 @@ class class_module_pages_content_admin extends class_admin_simple implements int
             $strReturn .= $this->getLang("element_liste_leer");
         }
 
+
         //if there are any page-elements remaining, print a warning and print the elements row
-        if(count($arrElementsOnPage) > 0) {
+        if(count($arrElementsInSystem) > 0) {
             $strReturn .= $this->objToolkit->divider();
             $strReturn .= $this->objToolkit->warningBox($this->getLang("warning_elementsremaining"));
             $strReturn .= $this->objToolkit->listHeader();
 
             //minimized actions now, plz. this ain't being a real element anymore!
-            foreach($arrElementsOnPage as $objOneElement) {
+            foreach($arrElementsInSystem as $objOneElement) {
                 $strActions = "";
                 $strActions .= $this->objToolkit->listDeleteButton($objOneElement->getStrDisplayName(), $this->getLang("element_loeschen_frage"), class_link::getLinkAdminHref("pages_content", "deleteElementFinal", "&systemid=".$objOneElement->getSystemid().($this->getParam("pe") == "" ? "" : "&peClose=".$this->getParam("pe"))));
 
                 //Put all Output together
-                $strReturn .= $this->objToolkit->genericAdminList("", $objOneElement->getStrDisplayName().$this->getLang("placeholder").$objOneElement->getStrPlaceholder(), "", $strActions, $intI++);
+                $strReturn .= $this->objToolkit->genericAdminList("", $objOneElement->getStrDisplayName().$this->getLang("placeholder").$objOneElement->getStrPlaceholder(), "", $strActions, 0);
             }
             $strReturn .= $this->objToolkit->listFooter();
         }
 
-
         return $strReturn;
     }
+
 
     /**
      * @param class_model|interface_admin_listable|interface_model|class_module_pages_pageelement $objOneIterable
@@ -229,15 +244,17 @@ class class_module_pages_content_admin extends class_admin_simple implements int
                     $strActions .= $this->objToolkit->listButton(class_link::getLinkAdmin("pages_content", "list", "&systemid=".$this->getSystemid()."&adminunlockid=".$objOneIterable->getSystemid(), "", $this->getLang("ds_entsperren"), "icon_lockerOpen"));
                 }
                 //If the Element is locked, then its not allowed to edit or delete the record, so disable the icons
-                if($objOneIterable->rightEdit())
+                if($objOneIterable->rightEdit()) {
                     $strActions .= $this->objToolkit->listButton(class_adminskin_helper::getAdminImage("icon_editLocked", $this->getLang("ds_gesperrt")));
+                }
                 if($objOneIterable->rightDelete())
                     $strActions .= $this->objToolkit->listButton(class_adminskin_helper::getAdminImage("icon_deleteLocked", $this->getLang("ds_gesperrt")));
             }
             else {
 
-                if($objOneIterable->rightEdit())
+                if($objOneIterable->rightEdit()) {
                     $strActions .= $this->objToolkit->listButton(class_link::getLinkAdmin("pages_content", "edit", "&systemid=".$objOneIterable->getSystemid(), "", $this->getLang("element_bearbeiten"), "icon_edit"));
+                }
                 if($objOneIterable->rightDelete())
                     $strActions .= $this->objToolkit->listDeleteButton($objOneIterable->getStrName().($objOneIterable->getConcreteAdminInstance()->getContentTitle() != "" ? " - ".$objOneIterable->getConcreteAdminInstance()->getContentTitle() : "").($objOneIterable->getStrTitle() != "" ? " - ".$objOneIterable->getStrTitle() : ""), $this->getLang("element_loeschen_frage"), class_link::getLinkAdminHref("pages_content", "deleteElementFinal", "&systemid=".$objOneIterable->getSystemid().($this->getParam("pe") == "" ? "" : "&peClose=".$this->getParam("pe"))));
             }
