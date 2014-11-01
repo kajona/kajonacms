@@ -28,7 +28,7 @@ cp $PHPINI2 $PHPINI
 sed 's/upload_max_filesize = 2M/upload_max_filesize = 32M/g' $PHPINI > $PHPINI2
 cp $PHPINI2 $PHPINI
 
-echo "zend_extension=/usr/lib/php5/20090626+lfs/xdebug.so " >> $PHPINI
+echo "zend_extension=/usr/lib/php5/20121212/xdebug.so " >> $PHPINI
 echo "xdebug.remote_enable=On " >> $PHPINI
 echo "xdebug.remote_connect_back=1 " >> $PHPINI
 echo "xdebug.remote_host=localhost " >> $PHPINI
