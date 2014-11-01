@@ -147,6 +147,7 @@ KAJONA.admin.portaleditor.RTE.init = function () {
         ckeditorConfig.toolbar = strMode == 'wysiwyg' ? 'pe_full' : 'pe_lite';
         ckeditorConfig.forcePasteAsPlainText = true;
         ckeditorConfig.kajona_strMode = strMode;
+        ckeditorConfig.title = false;
         ckeditorConfig.on = {
             blur: function( event ) {
                 var data = event.editor.getData();
