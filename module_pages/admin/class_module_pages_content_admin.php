@@ -53,6 +53,16 @@ class class_module_pages_content_admin extends class_admin_simple implements int
         return $this->getLang("modul_titel")." (".$objPage->getStrName().")";
     }
 
+
+    /**
+     * @permissions edit
+     * @return string
+     */
+    protected function actionListElement() {
+        $objElement = class_objectfactory::getInstance()->getObject($this->getSystemid());
+    }
+
+
     /**
      * Returns a list of available placeholders & elements on this page
      *
@@ -246,6 +256,7 @@ class class_module_pages_content_admin extends class_admin_simple implements int
                 //If the Element is locked, then its not allowed to edit or delete the record, so disable the icons
                 if($objOneIterable->rightEdit()) {
                     $strActions .= $this->objToolkit->listButton(class_adminskin_helper::getAdminImage("icon_editLocked", $this->getLang("ds_gesperrt")));
+                    $strActions .= $this->objToolkit->listButton(class_adminskin_helper::getAdminImage("icon_editLocked", $this->getLang("ds_gesperrt")));
                 }
                 if($objOneIterable->rightDelete())
                     $strActions .= $this->objToolkit->listButton(class_adminskin_helper::getAdminImage("icon_deleteLocked", $this->getLang("ds_gesperrt")));
@@ -254,6 +265,7 @@ class class_module_pages_content_admin extends class_admin_simple implements int
 
                 if($objOneIterable->rightEdit()) {
                     $strActions .= $this->objToolkit->listButton(class_link::getLinkAdmin("pages_content", "edit", "&systemid=".$objOneIterable->getSystemid(), "", $this->getLang("element_bearbeiten"), "icon_edit"));
+                    $strActions .= $this->objToolkit->listButton(class_link::getLinkAdmin("pages_content", "listElement", "&systemid=".$objOneIterable->getSystemid(), "", $this->getLang("element_bearbeiten"), "icon_folderActionOpen"));
                 }
                 if($objOneIterable->rightDelete())
                     $strActions .= $this->objToolkit->listDeleteButton($objOneIterable->getStrName().($objOneIterable->getConcreteAdminInstance()->getContentTitle() != "" ? " - ".$objOneIterable->getConcreteAdminInstance()->getContentTitle() : "").($objOneIterable->getStrTitle() != "" ? " - ".$objOneIterable->getStrTitle() : ""), $this->getLang("element_loeschen_frage"), class_link::getLinkAdminHref("pages_content", "deleteElementFinal", "&systemid=".$objOneIterable->getSystemid().($this->getParam("pe") == "" ? "" : "&peClose=".$this->getParam("pe"))));
