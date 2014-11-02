@@ -301,9 +301,15 @@ body *[data-kajona-editable]:focus {
 
 
 /* TOOLTIPS */
-.qtip-content {
-    font-family: @baseFontFamily !important;
-    padding: 4px !important;
-    color: #FFFFFF !important;
-    font-size: @baseFontSize - 3 !important;
+.qtip {
+    .border-radius(0px) !important;
+    box-shadow: 0  2px 10px rgba(0,0,0,.2) !important;
+  
+    .qtip-content {
+        font-family: @baseFontFamily !important;
+        padding: 4px !important;
+        line-height: 120%;
+        color: #FFFFFF !important;
+        font-size: @baseFontSize - 3 !important;
+    }
 }

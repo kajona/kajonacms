@@ -274,7 +274,7 @@ KAJONA.admin.tooltip = {
                     viewport: $(window)
                 },
                 style: {
-                    classes: 'qtip-youtube qtip-shadow'
+                    classes: 'qtip-bootstrap'
                 }
             });
 
@@ -285,7 +285,7 @@ KAJONA.admin.tooltip = {
                         viewport: $(window)
                     },
                     style: {
-                        classes: 'qtip-youtube qtip-shadow'
+                        classes: 'qtip-bootstrap'
                     },
                     content: {
                         text: $(this).attr("title")+"<div id='tags_"+$(this).data('systemid')+"' data-systemid='"+$(this).data('systemid')+"'></div>"
