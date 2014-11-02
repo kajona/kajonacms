@@ -14,6 +14,9 @@
  */
 class class_template {
 
+    const INT_ELEMENT_MODE_MASTER = 1;
+    const INT_ELEMENT_MODE_REGULAR = 0;
+
     private $arrCacheTemplates = array();
     private $arrCacheTemplateSections = array();
 
@@ -135,17 +138,22 @@ class class_template {
      *
      * @return string|null
      */
-    public function getSectionFromTemplate($strTemplate, $strSection) {
+    public function getSectionFromTemplate($strTemplate, $strSection, $bitKeepSectionTag = false) {
         //find opening tag
         $arrMatches = array();
         $intStart = false;
         if(preg_match("/<".$strSection."([\ a-zA-Z0-9='\"])*>/i", $strTemplate, $arrMatches) > 0) {
             $strPattern = $arrMatches[0];
-            $intStart = uniStrpos($strTemplate, $strPattern)+uniStrlen($strPattern);
+            $intStart = uniStrpos($strTemplate, $strPattern);
+            if(!$bitKeepSectionTag)
+                $intStart += uniStrlen($strPattern);
         }
 
         //find closing tag
         $intEnd = uniStrpos($strTemplate, "</".$strSection.">");
+        if($bitKeepSectionTag)
+            $intEnd += uniStrlen("</".$strSection.">");
+
         $intEnd = $intEnd - $intStart;
 
         if($intStart !== false && $intEnd !== false) {
@@ -290,6 +298,22 @@ class class_template {
     }
 
     /**
+     * Removes a section with all contents from the given (template) string
+     * @param $strTemplate
+     * @param $strSection
+     *
+     * @return string
+     */
+    public function removeSection($strTemplate, $strSection) {
+        do {
+            $strFullSection = $this->getSectionFromTemplate($strTemplate, $strSection, true);
+            $strTemplate = uniStrReplace($strFullSection, "", $strTemplate);
+        } while ($strFullSection != "" && $strFullSection != null);
+
+        return $strTemplate;
+    }
+
+    /**
      * Returns the elements in a given template
      *
      * @param string $strIdentifier
@@ -307,62 +331,40 @@ class class_template {
 
         //search placeholders
         $arrTemp = array();
+
+        $strTemplate = $this->removeSection($strTemplate, class_template_kajona_sections::BLOCKS);
+
         preg_match_all("'(%%([A-Za-z0-9_]+?))+?\_([A-Za-z0-9_\|]+?)%%'i", $strTemplate, $arrTemp);
 
-
         $intCounter = 0;
-        if(count($arrTemp[0]) > 0) {
-            foreach($arrTemp[0] as $strPlacehoder) {
-                //regular page
-                if($intMode != 1) {
-                    if(uniStrpos($strPlacehoder, "master") === false) {
-                        $strTemp = uniSubstr($strPlacehoder, 2, -2);
-                        $arrTemp = explode("_", $strTemp);
-                        //are there any pipes?
-                        if(uniStrpos($arrTemp[1], "|") !== false) {
-                            $arrElementTypes = explode("|", $arrTemp[1]);
-                            $intCount2 = 0;
-                            $arrReturn[$intCounter]["placeholder"] = $strTemp;
+        foreach($arrTemp[0] as $strPlacehoder) {
 
-                            foreach($arrElementTypes as $strOneElementType) {
-                                $arrReturn[$intCounter]["elementlist"][$intCount2]["name"] = $arrTemp[0];
-                                $arrReturn[$intCounter]["elementlist"][$intCount2]["element"] = $strOneElementType;
-                                $intCount2++;
-                            }
-                            $intCounter++;
-                        }
-                        else {
-                            $arrReturn[$intCounter]["placeholder"] = $strTemp;
-                            $arrReturn[$intCounter]["elementlist"][0]["name"] = $arrTemp[0];
-                            $arrReturn[$intCounter]["elementlist"][0]["element"] = $arrTemp[1];
-                            $intCounter++;
-                        }
-                    }
-                }
-                //master page
-                else {
-                    $strTemp = uniSubstr($strPlacehoder, 2, -2);
-                    $arrTemp = explode("_", $strTemp);
-                    //are there any pipes?
-                    if(uniStrpos($arrTemp[1], "|") !== false) {
-                        $arrElementTypes = explode("|", $arrTemp[1]);
-                        $arrReturn[$intCounter]["placeholder"] = $strTemp;
-                        $intCount2 = 0;
-                        foreach($arrElementTypes as $strOneElementType) {
-                            $arrReturn[$intCounter]["elementlist"][$intCount2]["name"] = $arrTemp[0];
-                            $arrReturn[$intCounter]["elementlist"][$intCount2]["element"] = $strOneElementType;
-                            $intCount2++;
-                        }
-                        $intCounter++;
-                    }
-                    else {
-                        $arrReturn[$intCounter]["placeholder"] = $strTemp;
-                        $arrReturn[$intCounter]["elementlist"][0]["name"] = $arrTemp[0];
-                        $arrReturn[$intCounter]["elementlist"][0]["element"] = $arrTemp[1];
-                        $intCounter++;
-                    }
-                }
+            if(uniStrpos($strPlacehoder, "master") !== false && $intMode == class_template::INT_ELEMENT_MODE_REGULAR) {
+                continue;
             }
+
+            $strTemp = uniSubstr($strPlacehoder, 2, -2);
+            $arrTemp = explode("_", $strTemp);
+            //are there any pipes?
+            if(uniStrpos($arrTemp[1], "|") !== false) {
+                $arrElementTypes = explode("|", $arrTemp[1]);
+                $intCount2 = 0;
+                $arrReturn[$intCounter]["placeholder"] = $strTemp;
+
+                foreach($arrElementTypes as $strOneElementType) {
+                    $arrReturn[$intCounter]["elementlist"][$intCount2]["name"] = $arrTemp[0];
+                    $arrReturn[$intCounter]["elementlist"][$intCount2]["element"] = $strOneElementType;
+                    $intCount2++;
+                }
+                $intCounter++;
+            }
+            else {
+                $arrReturn[$intCounter]["placeholder"] = $strTemp;
+                $arrReturn[$intCounter]["elementlist"][0]["name"] = $arrTemp[0];
+                $arrReturn[$intCounter]["elementlist"][0]["element"] = $arrTemp[1];
+                $intCounter++;
+            }
+
         }
 
         return $arrReturn;

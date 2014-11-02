@@ -91,6 +91,23 @@
 
                 </kajona-blocks>
 
+
+                <kajona-blocks name="2ndcontent">
+
+                    <kajona-block kajona-name="Row light" kajona-name-de="Zeile hell">
+                        <div class="row-light">
+                            %%date_date%%
+                        </div>
+                    </kajona-block>
+
+                    <kajona-block kajona-name="Row dark" kajona-name-de="Zeile dunkel">
+                        <div class="row-dark">
+                            %%content_richtext%%
+                        </div>
+                    </kajona-block>
+
+                </kajona-blocks>
+
             </div>
             <div class="clearfix"></div>
         </div>
