@@ -215,6 +215,11 @@ class class_installer_search extends class_installer_base implements interface_i
             $strReturn .= $this->update_45_451();
         }
 
+        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "4.5.1") {
+            $strReturn .= $this->update_451_452();
+        }
+
         if($this->bitIndexRebuild) {
             $strReturn .= "Rebuilding search index...\n";
             $this->updateIndex();
@@ -402,6 +407,23 @@ class class_installer_search extends class_installer_base implements interface_i
            $strReturn .= "An error occurred! ...\n";
 
         return $strReturn;
+    }
+
+    private function update_451_452()
+    {
+        $strReturn = "Updating search_element tables...\n";
+        $strQuery = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."element_search")."
+                                ADD ".$this->objDB->encloseColumnName("search_query_id")." ".$this->objDB->getDatatype("char20")." NULL";
+
+        if(!$this->objDB->_pQuery($strQuery, array()))
+            $strReturn .= "An error occurred! ...\n";
+
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion("search", "4.5.2");
+        $this->updateElementVersion("search", "4.5.2");
+
+        return $strReturn;
+
     }
 
 }

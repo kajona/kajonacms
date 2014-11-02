@@ -13,3 +13,5 @@
 //editable entries
 $lang["element_search_name"]             = "Suche";
 $lang["search_amount"]                   = "Anzahl Treffer pro Seite";
+$lang["search_search"]                   = "Suche";
+
