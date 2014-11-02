@@ -17,7 +17,8 @@
  * @moduleId _search_module_id_
  */
 class class_module_search_portal extends class_portal_controller implements interface_portal {
-    private $strSearchterm = "";
+
+    private $objSearchSearch;
 
     /**
      * Constructor
@@ -25,10 +26,17 @@ class class_module_search_portal extends class_portal_controller implements inte
      * @param mixed $arrElementData
      */
     public function __construct($arrElementData) {
+
         parent::__construct($arrElementData);
 
+        if(isset($arrElementData["search_query_id"]) && $arrElementData["search_query_id"] != "")
+            $this->setAction("search");
+
+        $this->objSearchSearch = new class_module_search_search();
+
+
         if($this->getParam("searchterm") != "") {
-            $this->strSearchterm = htmlToString(urldecode($this->getParam("searchterm")), true);
+            $this->objSearchSearch->setStrQuery(htmlToString(urldecode($this->getParam("searchterm")), true));
         }
     }
 
@@ -39,13 +47,15 @@ class class_module_search_portal extends class_portal_controller implements inte
      * @return string
      * @permissions view
      */
-    protected function actionList() {
-
-        $strTemplateID = $this->objTemplate->readTemplate("/module_search/".$this->arrElementData["search_template"], "search_form");
+    protected function actionList()
+    {
+        $strTemplateID = $this->objTemplate->readTemplate("/module_search/" . $this->arrElementData["search_template"], "search_form");
 
         $arrTemplate = array();
-        if($this->strSearchterm != "")
-            $arrTemplate["search_term"] = $this->strSearchterm;
+
+        if ($this->arrElementData["search_query_id"] != "") {
+            $this->objSearchSearch = new class_module_search_search($this->arrElementData["search_query_id"]);
+        }
 
         $strPage = $this->arrElementData["search_page"];
         if($strPage == "")
@@ -70,8 +80,11 @@ class class_module_search_portal extends class_portal_controller implements inte
         $strReturn .= $this->actionList();
         $objSearchCommons = new class_module_search_commons();
 
+        $this->objSearchSearch->setBitPortalObjectFilter(true);
+        $this->objSearchSearch->setStrPortalLangFilter($this->getStrPortalLanguage());
+
         /** @var $arrHitsSorted class_search_result[] */
-        $arrHitsSorted = $objSearchCommons->doPortalSearch($this->strSearchterm, $this->getStrPortalLanguage());
+        $arrHitsSorted = $objSearchCommons->doPortalSearch($this->objSearchSearch);
 
         //Resize Array to wanted size
         $arrHitsFilter = $this->objToolkit->pager(
@@ -82,7 +95,7 @@ class class_module_search_portal extends class_portal_controller implements inte
             "search",
             ($this->arrElementData["search_page"] != "" ? $this->arrElementData["search_page"] : $this->getPagename()),
             $arrHitsSorted,
-            "&searchterm=".urlencode(html_entity_decode($this->strSearchterm, ENT_COMPAT, "UTF-8"))
+            "&searchterm=".urlencode(html_entity_decode($this->objSearchSearch->getStrQuery(), ENT_COMPAT, "UTF-8"))
         );
 
         $strRowTemplateID = $this->objTemplate->readTemplate("/module_search/".$this->arrElementData["search_template"], "search_hitlist_hit");
@@ -105,7 +118,7 @@ class class_module_search_portal extends class_portal_controller implements inte
                     "_self",
                     $objHit->getStrPagename(),
                     "",
-                    "&highlight=".urlencode(html_entity_decode($this->strSearchterm, ENT_QUOTES, "UTF-8"))."#".uniStrtolower(urlencode(html_entity_decode($this->strSearchterm, ENT_QUOTES, "UTF-8")))
+                    "&highlight=".urlencode(html_entity_decode($this->objSearchSearch->getStrQuery(), ENT_QUOTES, "UTF-8"))."#".uniStrtolower(urlencode(html_entity_decode($this->objSearchSearch->getStrQuery(), ENT_QUOTES, "UTF-8")))
                 );
             else
                 $arrRow["page_link"] = $objHit->getStrPagelink();
@@ -114,7 +127,7 @@ class class_module_search_portal extends class_portal_controller implements inte
         }
 
         //Collect global data
-        $arrTemplate["search_term"] = $this->strSearchterm;
+        $arrTemplate["search_term"] = $this->objSearchSearch->getStrQuery();
         $arrTemplate["search_nrresults"] = count($arrHitsSorted);
         $arrTemplate["link_forward"] = $arrHitsFilter["strForward"];
         $arrTemplate["link_back"] = $arrHitsFilter["strBack"];

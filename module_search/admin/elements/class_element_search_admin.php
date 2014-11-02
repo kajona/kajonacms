@@ -50,6 +50,18 @@ class class_element_search_admin extends class_element_admin implements interfac
     private $strPage;
 
     /**
+     * @var string
+     * @tableColumn element_search.search_query_id
+     * @tableColumnDatatype char20
+     *
+     * @fieldType dropdown
+     * @fieldLabel search_search
+     *
+     */
+    private $strQuery;
+
+
+    /**
      * @param string $strTemplate
      */
     public function setStrTemplate($strTemplate) {
@@ -91,7 +103,33 @@ class class_element_search_admin extends class_element_admin implements interfac
         return $this->intAmount;
     }
 
+    /**
+     * @param string $strQuery
+     */
+    public function setStrQuery($strQuery) {
+        $this->strQuery = $strQuery;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStrQuery(){
+        return $this->strQuery;
+    }
 
 
+    public function getAdminForm() {
+        $objForm = parent::getAdminForm();
+
+        $arrRawQueries = class_module_search_search::getObjectList();
+
+        $arrQueries = array();
+        foreach ($arrRawQueries as $objOneQuery) {
+            $arrQueries[$objOneQuery->getSystemid()] = $objOneQuery->getStrDisplayName();
+        }
+        $objForm->getField("query")->setArrKeyValues($arrQueries);
+
+        return $objForm;
+    }
 
 }

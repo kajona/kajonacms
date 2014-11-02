@@ -144,6 +144,12 @@ abstract class class_element_admin extends class_admin_controller implements int
             $bitShow = true;
         }
 
+        // hide template chooser when there is only one template available
+        foreach($objForm->getArrFields() as $objOneField) {
+            if($objOneField instanceof class_formentry_template && count($objOneField->getArrKeyValues()) <= 1) {
+                $objForm->addFieldToHiddenGroup($objOneField);
+            }
+        }
 
         $objForm->addFieldToHiddenGroup(new class_formentry_text("", "page_element_ph_title"))->setStrLabel($this->getLang("page_element_ph_title", "pages"))->setStrValue($strInternalTitle);
         $objForm->addFieldToHiddenGroup(new class_formentry_date("", "start"))->setStrLabel($this->getLang("page_element_start", "pages"))->setStrValue($objStartDate);
