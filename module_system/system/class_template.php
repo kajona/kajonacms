@@ -52,7 +52,7 @@ class class_template {
     /**
      * Returns one instance of the template object, using a singleton pattern
      *
-     * @return object The template object
+     * @return class_template The template object
      */
     public static function getInstance() {
         if(self::$objTemplate == null) {
@@ -119,22 +119,7 @@ class class_template {
 
         //Now we have to extract the section
         if($strSection != "") {
-            //find opening tag
-            $intStart = uniStrpos($strTemplate, "<".$strSection.">");
-
-            //find closing tag
-            $intEnd = uniStrpos($strTemplate, "</".$strSection.">");
-            $intEnd = $intEnd - $intStart;
-
-            if($intStart !== false && $intEnd !== false) {
-                //delete substring before and after
-                $strTemplate = uniSubstr($strTemplate, $intStart, $intEnd);
-
-                $strTemplate = str_replace("<".$strSection.">", "", $strTemplate);
-                $strTemplate = str_replace("</".$strSection.">", "", $strTemplate);
-            }
-            else
-                $strTemplate = "";
+            $strTemplate = $this->getSectionFromTemplate($strTemplate, $strSection);
         }
 
         //Saving the section to the cache
@@ -142,6 +127,35 @@ class class_template {
 
         return $strCacheSection;
     }
+
+    /**
+     * Helper to parse a single section out of a given template
+     * @param $strTemplate
+     * @param $strSection
+     *
+     * @return string
+     */
+    public function getSectionFromTemplate($strTemplate, $strSection) {
+        //find opening tag
+        $intStart = uniStrpos($strTemplate, "<".$strSection.">");
+
+        //find closing tag
+        $intEnd = uniStrpos($strTemplate, "</".$strSection.">");
+        $intEnd = $intEnd - $intStart;
+
+        if($intStart !== false && $intEnd !== false) {
+            //delete substring before and after
+            $strTemplate = uniSubstr($strTemplate, $intStart, $intEnd);
+
+            $strTemplate = str_replace("<".$strSection.">", "", $strTemplate);
+            $strTemplate = str_replace("</".$strSection.">", "", $strTemplate);
+        }
+        else
+            $strTemplate = "";
+
+        return $strTemplate;
+    }
+
 
     /**
      * Fills a template with values passed in an array.
@@ -188,8 +202,9 @@ class class_template {
                 $strTemplate = str_replace("%%".$strPlaceholder."%%", $strContent."%%".$strPlaceholder."%%", $strTemplate);
             }
         }
-        if($bitRemovePlaceholder)
+        if($bitRemovePlaceholder) {
             $strTemplate = $this->deletePlaceholderRaw($strTemplate);
+        }
         return $strTemplate;
     }
 
@@ -364,9 +379,14 @@ class class_template {
      * Sets the passed template as the current temp-template
      *
      * @param string $strTemplate
+     *
+     * @return string
      */
     public function setTemplate($strTemplate) {
         $this->strTempTemplate = $strTemplate;
+        $strIdentifier = generateSystemid();
+        $this->arrCacheTemplates[$strIdentifier] = $strTemplate;
+        return $strIdentifier;
     }
 
     public function isValidTemplate($strTemplateId) {
