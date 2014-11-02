@@ -172,6 +172,8 @@ class class_installer_pages extends class_installer_base implements interface_in
         if(!$this->objDB->createTable("element_universal", $arrFields, array("content_id")))
             $strReturn .= "An error occurred! ...\n";
 
+        //Register the basic elements
+        $strReturn .= $this->registerBasicElements();
 
         $strReturn .= "Setting aspect assignments...\n";
         if(class_module_system_aspect::getAspectByName("content") != null) {
@@ -184,6 +186,33 @@ class class_installer_pages extends class_installer_base implements interface_in
 
 	}
 
+    private function registerBasicElements() {
+        $strReturn = "Registering basic elements...\n";
+        foreach (array("plaintext", "richtext", "date") as $strElementName) {
+            //check, if not already existing
+            $objElement = null;
+            try {
+                $objElement = class_module_pages_element::getElement($strElementName);
+            }
+            catch (class_exception $objEx)  {
+            }
+            if($objElement == null) {
+                $objElement = new class_module_pages_element();
+                $objElement->setStrName($strElementName);
+                $objElement->setStrClassAdmin("class_element_" . $strElementName . "_admin.php");
+                $objElement->setStrClassPortal("class_element_" . $strElementName . "_portal.php");
+                $objElement->setIntCachetime(3600*24*30);
+                $objElement->setIntRepeat(0);
+                $objElement->setStrVersion($this->objMetadata->getStrVersion());
+                $objElement->updateObjectToDb();
+                $strReturn .= "Element " . $strElementName . " registered...\n";
+            }
+            else {
+                $strReturn .= "Element " . $strElementName . " already installed!...\n";
+            }
+        }
+        return $strReturn;
+    }
 
 	protected function updateModuleVersion($strModuleName, $strVersion) {
 		parent::updateModuleVersion("pages", $strVersion);
@@ -258,6 +287,17 @@ class class_installer_pages extends class_installer_base implements interface_in
             $this->updateElementVersion("row", "4.5");
             $this->updateElementVersion("paragraph", "4.5");
             $this->updateElementVersion("image", "4.5");
+        }
+
+        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "4.5") {
+            $strReturn = "Updating 4.5 to 4.6...\n";
+            $this->updateModuleVersion("", "4.6");
+            $this->updateElementVersion("row", "4.6");
+            $this->updateElementVersion("paragraph", "4.6");
+            $this->updateElementVersion("image", "4.6");
+
+            $strReturn .= $this->registerBasicElements();
         }
 
         return $strReturn."\n\n";

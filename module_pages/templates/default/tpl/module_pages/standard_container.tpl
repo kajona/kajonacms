@@ -70,6 +70,7 @@
                         <div class="row-light">
                             <h1>%%headline_plaintext%%</h1>
                             %%content_richtext%%
+                            %%date_date%%
                         </div>
                     </kajona-block>
 
