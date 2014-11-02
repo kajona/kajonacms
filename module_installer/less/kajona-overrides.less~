@@ -1,0 +1,334 @@
+
+
+
+
+
+
+
+@font-face {
+    font-family: 'Open Sans';
+    font-style: normal;
+    font-weight: 300;
+    src: url('../fonts/opensans/opensans-light-webfont.eot');
+    src: url('../fonts/opensans/opensans-light-webfont.eot?#iefix') format('embedded-opentype'),
+    url('../fonts/opensans/opensans-light-webfont.woff') format('woff'),
+    url('../fonts/opensans/opensans-light-webfont.ttf') format('truetype'),
+    url('../fonts/opensans/opensans-light-webfont.svg#open_sanslight') format('svg');
+}
+@font-face {
+    font-family: 'Open Sans';
+    font-style: normal;
+    font-weight: 400;
+    src: url('../fonts/opensans/opensans-regular-webfont.eot');
+    src: url('../fonts/opensans/opensans-regular-webfont.eot?#iefix') format('embedded-opentype'),
+    url('../fonts/opensans/opensans-regular-webfont.woff') format('woff'),
+    url('../fonts/opensans/opensans-regular-webfont.ttf') format('truetype'),
+    url('../fonts/opensans/opensans-regular-webfont.svg#open_sansregular') format('svg');
+}
+@font-face {
+    font-family: 'Open Sans';
+    font-style: normal;
+    font-weight: 600;
+    src: url('../fonts/opensans/opensans-semibold-webfont.eot');
+    src: url('../fonts/opensans/opensans-semibold-webfont.eot?#iefix') format('embedded-opentype'),
+    url('../fonts/opensans/opensans-semibold-webfont.woff') format('woff'),
+    url('../fonts/opensans/opensans-semibold-webfont.ttf') format('truetype'),
+    url('../fonts/opensans/opensans-semibold-webfont.svg#open_sanssemibold') format('svg');
+}
+@font-face {
+    font-family: 'Open Sans';
+    font-style: normal;
+    font-weight: 700;
+    src: url('../fonts/opensans/opensans-bold-webfont.eot');
+    src: url('../fonts/opensans/opensans-bold-webfont.eot?#iefix') format('embedded-opentype'),
+    url('../fonts/opensans/opensans-bold-webfont.woff') format('woff'),
+    url('../fonts/opensans/opensans-bold-webfont.ttf') format('truetype'),
+    url('../fonts/opensans/opensans-bold-webfont.svg#open_sansbold') format('svg');
+}
+@font-face {
+    font-family: 'Open Sans';
+    font-style: normal;
+    font-weight: 800;
+    src: url('../fonts/opensans/opensans-extrabold-webfont.eot');
+    src: url('../fonts/opensans/opensans-extrabold-webfont.eot?#iefix') format('embedded-opentype'),
+    url('../fonts/opensans/opensans-extrabold-webfont.woff') format('woff'),
+    url('../fonts/opensans/opensans-extrabold-webfont.ttf') format('truetype'),
+    url('../fonts/opensans/opensans-extrabold-webfont.svg#open_sansextrabold') format('svg');
+}
+@font-face {
+    font-family: 'Open Sans';
+    font-style: italic;
+    font-weight: 300;
+    src: url('../fonts/opensans/opensans-lightitalic-webfont.eot');
+    src: url('../fonts/opensans/opensans-lightitalic-webfont.eot?#iefix') format('embedded-opentype'),
+    url('../fonts/opensans/opensans-lightitalic-webfont.woff') format('woff'),
+    url('../fonts/opensans/opensans-lightitalic-webfont.ttf') format('truetype'),
+    url('../fonts/opensans/opensans-lightitalic-webfont.svg#open_sanslight_italic') format('svg');
+}
+@font-face {
+    font-family: 'Open Sans';
+    font-style: italic;
+    font-weight: 400;
+    src: url('../fonts/opensans/opensans-italic-webfont.eot');
+    src: url('../fonts/opensans/opensans-italic-webfont.eot?#iefix') format('embedded-opentype'),
+    url('../fonts/opensans/opensans-italic-webfont.woff') format('woff'),
+    url('../fonts/opensans/opensans-italic-webfont.ttf') format('truetype'),
+    url('../fonts/opensans/opensans-italic-webfont.svg#open_sansitalic') format('svg');
+}
+@font-face {
+    font-family: 'Open Sans';
+    font-style: italic;
+    font-weight: 600;
+    src: url('../fonts/opensans/opensans-semibolditalic-webfont.eot');
+    src: url('../fonts/opensans/opensans-semibolditalic-webfont.eot?#iefix') format('embedded-opentype'),
+    url('../fonts/opensans/opensans-semibolditalic-webfont.woff') format('woff'),
+    url('../fonts/opensans/opensans-semibolditalic-webfont.ttf') format('truetype'),
+    url('../fonts/opensans/opensans-semibolditalic-webfont.svg#open_sanssemibold_italic') format('svg');
+}
+@font-face {
+    font-family: 'Open Sans';
+    font-style: italic;
+    font-weight: 700;
+    src: url('../fonts/opensans/opensans-bolditalic-webfont.eot');
+    src: url('../fonts/opensans/opensans-bolditalic-webfont.eot?#iefix') format('embedded-opentype'),
+    url('../fonts/opensans/opensans-bolditalic-webfont.woff') format('woff'),
+    url('../fonts/opensans/opensans-bolditalic-webfont.ttf') format('truetype'),
+    url('../fonts/opensans/opensans-bolditalic-webfont.svg#open_sansbold_italic') format('svg');
+}
+@font-face {
+    font-family: 'Open Sans';
+    font-style: italic;
+    font-weight: 800;
+    src: url('../fonts/opensans/opensans-extrabolditalic-webfont.eot');
+    src: url('../fonts/opensans/opensans-extrabolditalic-webfont.eot?#iefix') format('embedded-opentype'),
+    url('../fonts/opensans/opensans-extrabolditalic-webfont.woff') format('woff'),
+    url('../fonts/opensans/opensans-extrabolditalic-webfont.ttf') format('truetype'),
+    url('../fonts/opensans/opensans-extrabolditalic-webfont.svg#open_sansextrabold_italic') format('svg');
+}
+
+
+
+
+body {
+
+    padding-top: 60px;
+    .panel {
+    border-radius: 0px;
+    }
+
+    background-color: lighten(@kajonaLightGray, 5%);
+    .panel-header {
+        background:url(../pics/pusteblume.png) right -45px no-repeat @grayDarker;
+        color: @white;
+	padding: 9px 15px;
+	border-bottom: 1px solid #EEE;
+    }
+
+    &.dialogBody,
+    &.portaleditorBody {
+        padding: 0;
+    }
+
+    h2 {
+        font-size: @baseFontSize + 5;
+        line-height: @baseFontSize + 8
+    }
+
+    a {
+      color: @black;
+      text-decoration: underline;
+    }
+
+
+    .navbar {
+        z-index: @zindexModal+5;
+	padding-top: 15px;
+	#gradient > .vertical(@navbarBackgroundHighlight, @navbarBackground);
+	box-shadow: 0px 1px 10px rgba(0, 0, 0, 0.1); 
+
+            li {
+		list-style: none;
+		
+                a {
+		    padding-left: 10px;
+                    padding-right: 30px;
+                    margin-right: 5px;
+                    background: url(../pics/ok_missing.png) right no-repeat;
+                    color: @black;
+                    cursor: progress;
+		    text-decoration:none;
+
+                    &:hover {
+                        color: @black !important;
+                    }
+                }
+
+                &.active a {
+                    color: @black;
+                    background: url(../pics/arrow_down.png) right no-repeat;
+		    box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.125) inset;
+                }
+
+                &.done a {
+                    background: url(../pics/ok.png) right no-repeat;
+                }
+            }
+
+
+
+
+        
+    }
+
+    footer {
+        padding: 40px;
+        text-align: center;
+    }
+
+
+}
+
+
+#content {
+
+float: none !important;
+
+
+    ul {
+       li {
+          margin: 3px 1px;
+       }
+    }
+
+    .pre-scrollable {
+        max-height: 400px;
+    }
+
+    .form-group {
+        .control-label {
+            width: 200px;
+        }
+
+       
+        .control-group {
+            margin-bottom: @baseLineHeight - 12;
+        }
+
+        .savechanges {
+            margin: 20px 0 0 0;
+            border: 4px solid @grayLight;
+            background-color: @kajonaLightGray none;
+            .box-shadow(none);
+            color: #888888;
+            cursor: pointer;
+            font-size: @baseFontSize + 2;
+            vertical-align: middle;
+            font-weight: 700;
+            text-transform: uppercase;
+            text-align: left;
+            padding: 0px 0px 0px 10px;
+            line-height: 30px;   
+	    position: relative;
+            &:hover {
+                color:@black;
+                &:after {
+                    background-color:darken(@green, 10%);
+                }
+            }
+
+            &:after {
+                width:30px;
+                height:30px;
+                display:inline-block;
+		content: "";
+	        position: absolute;
+                right: 0;
+                background: center center no-repeat;
+                background-color:@green;
+		background-image:url(../pics/icon-save.png);
+            }
+        }
+    }
+
+
+
+
+}
+
+
+
+
+
+textarea, input[type="text"], input[type="password"], input[type="datetime"], input[type="datetime-local"], input[type="date"], input[type="month"], input[type="time"], input[type="week"], input[type="number"], input[type="email"], input[type="url"], input[type="search"], input[type="tel"], input[type="color"], .uneditable-input { //  -moz-transition:none;
+    background-color: @grayLighter;
+    border: 1px solid @grayDarker;
+    .box-shadow(none);
+
+    &.mandatoryFormElement {
+        .box-shadow(0 0 6px @orange+20);
+    }
+}
+
+select, textarea, input[type="text"], input[type="password"], input[type="datetime"], input[type="datetime-local"], input[type="date"], input[type="month"], input[type="time"], input[type="week"], input[type="number"], input[type="email"], input[type="url"], input[type="search"], input[type="tel"], input[type="color"], .uneditable-input {
+  color: @gray;
+  display: inline-block;
+  font-size: @baseFontSize;
+  height: 20px;
+  line-height: 20px;
+  margin-bottom: 9px;
+  padding: 4px;
+
+}
+
+textarea:focus, input[type="text"]:focus, input[type="password"]:focus, input[type="datetime"]:focus, input[type="datetime-local"]:focus, input[type="date"]:focus, input[type="month"]:focus, input[type="time"]:focus, input[type="week"]:focus, input[type="number"]:focus, input[type="email"]:focus, input[type="url"]:focus, input[type="search"]:focus, input[type="tel"]:focus, input[type="color"]:focus, .uneditable-input:focus {
+  border-color:@green;
+  .box-shadow(0 0 6px @green+20);
+  outline: 0 none;
+}
+
+textarea {
+    height: auto;
+}
+
+select {
+    height: 30px;
+    padding: 2px 0 2px 8px;
+}
+
+label {
+  color:@gray;
+}
+
+
+
+.container-fluid {
+  padding-left:0px;
+}
+
+.listButton {
+    padding: 0px 2px;
+}
+
+
+:focus {
+  -moz-outline-style:none;
+  outline:medium none;
+}
+
+:-moz-any-link:focus {
+  outline:medium none;
+}
+
+::-moz-selection {
+  background-color:@green;
+  color:@white;
+  text-shadow:none;
+}
+
+::selection {
+  background-color:@green;
+  color:@white;
+  text-shadow:none;
+}
+
+
