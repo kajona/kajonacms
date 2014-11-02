@@ -46,11 +46,11 @@ abstract class class_element_admin extends class_admin_controller implements int
     /**
      * Constructor
      */
-    public function __construct() {
+    public function __construct($strSystemid = "") {
 
         parent::__construct();
 
-        if(validateSystemid($this->getSystemid()))
+        if(validateSystemid($strSystemid))
             $this->loadElementData();
     }
 
@@ -116,10 +116,13 @@ abstract class class_element_admin extends class_admin_controller implements int
         }
 
 
-        $objORM = new class_orm_objectinit($this);
-        $objORM->initObjectFromDb();
-        $objForm = $this->getAdminForm();
+        if($strMode == "edit") {
+            $this->loadElementData();
+            $objORM = new class_orm_objectinit($this);
+            $objORM->initObjectFromDb();
+        }
 
+        $objForm = $this->getAdminForm();
         //validation errors?
         if($this->bitDoValidation) {
             $objForm->validateForm();

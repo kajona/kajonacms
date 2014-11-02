@@ -232,6 +232,14 @@ abstract class class_abstract_controller {
         return $this->strSystemid;
     }
 
+    /**
+     * Resets the internal system id
+     *
+     * @final
+     */
+    public final function unsetSystemid() {
+        $this->strSystemid = "";
+    }
 
 
     /**

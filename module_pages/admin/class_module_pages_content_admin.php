@@ -60,6 +60,16 @@ class class_module_pages_content_admin extends class_admin_simple implements int
      */
     protected function actionListElement() {
         $objElement = class_objectfactory::getInstance()->getObject($this->getSystemid());
+
+        //Language-dependant loading of elements, if installed
+        $arrElementsAtElement = class_module_pages_pageelement::getElementsOnPage($objElement->getSystemid(), false, $this->getLanguageToWorkOn());
+
+        $arrPlaceholder = array(
+            array("placeholder" => "headline_row", "elementlist" => array(array("name" => "headline", "element" => "row"))),
+            array("placeholder" => "content_paragraph", "elementlist" => array(array("name" => "content", "element" => "paragraph")))
+        );
+
+        return $this->renderPlaceholderList($arrPlaceholder, $arrElementsAtElement);
     }
 
 
@@ -74,6 +84,9 @@ class class_module_pages_content_admin extends class_admin_simple implements int
         class_module_languages_admin::enableLanguageSwitch();
         /** @var class_module_pages_page $objPage */
         $objPage = class_objectfactory::getInstance()->getObject($this->getSystemid());
+
+        if($objPage instanceof class_module_pages_pageelement)
+            return $this->actionListElement();
 
         //get infos about the page
         $arrToolbarEntries = array();
@@ -300,8 +313,8 @@ class class_module_pages_content_admin extends class_admin_simple implements int
     protected function actionNew($bitShowErrors = false) {
         $strReturn = "";
         //check rights
-        $objCommon = new class_module_system_common($this->getSystemid());
-        if($objCommon->rightEdit()) {
+        $objParent = class_objectfactory::getInstance()->getObject($this->getSystemid());
+        if($objParent->rightEdit()) {
             //OK, here we go. So, what information do we have?
             $strPlaceholderElement = $this->getParam("element");
             //Now, load all infos about the requested element
@@ -428,8 +441,13 @@ class class_module_pages_content_admin extends class_admin_simple implements int
         // ************************************* Edit the current Element *******************************
 
         //check, if the element isn't locked
-        $objCommons = new class_module_system_common($this->getSystemid());
-        $strPageSystemid = $objCommons->getPrevId();
+        $objTemp = class_objectfactory::getInstance()->getObject($this->getSystemid());
+        $strPageSystemid = $this->getSystemid();
+
+        while(!$objTemp instanceof class_module_pages_page && validateSystemid($objTemp->getStrPrevId())) {
+            $objTemp = class_objectfactory::getInstance()->getObject($objTemp->getStrPrevId());
+            $strPageSystemid = $objTemp->getSystemid();
+        }
 
         $objLockmanager = new class_lockmanager($this->getSystemid());
 
@@ -502,10 +520,9 @@ class class_module_pages_content_admin extends class_admin_simple implements int
 
 
             //Loading the data of the corresponding site
-            $objPage = new class_module_pages_page($strPageSystemid);
             $this->flushCompletePagesCache();
 
-            $this->adminReload(class_link::getLinkAdminHref("pages_content", "list", "systemid=".$objPage->getSystemid()));
+            $this->adminReload(class_link::getLinkAdminHref("pages_content", "list", "systemid=".$objElementData->getStrPrevid()));
 
         }
         else {
