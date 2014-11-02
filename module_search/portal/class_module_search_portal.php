@@ -29,7 +29,7 @@ class class_module_search_portal extends class_portal_controller implements inte
 
         parent::__construct($arrElementData);
 
-        if($arrElementData["search_query_id"] != "")
+        if(isset($arrElementData["search_query_id"]) && $arrElementData["search_query_id"] != "")
             $this->setAction("search");
 
         $this->objSearchSearch = new class_module_search_search();
