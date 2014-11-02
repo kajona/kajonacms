@@ -133,11 +133,16 @@ class class_template {
      * @param $strTemplate
      * @param $strSection
      *
-     * @return string
+     * @return string|null
      */
     public function getSectionFromTemplate($strTemplate, $strSection) {
         //find opening tag
-        $intStart = uniStrpos($strTemplate, "<".$strSection.">");
+        $arrMatches = array();
+        $intStart = false;
+        if(preg_match("/<".$strSection."([\ a-zA-Z0-9='\"])*>/i", $strTemplate, $arrMatches) > 0) {
+            $strPattern = $arrMatches[0];
+            $intStart = uniStrpos($strTemplate, $strPattern)+uniStrlen($strPattern);
+        }
 
         //find closing tag
         $intEnd = uniStrpos($strTemplate, "</".$strSection.">");
@@ -146,12 +151,9 @@ class class_template {
         if($intStart !== false && $intEnd !== false) {
             //delete substring before and after
             $strTemplate = uniSubstr($strTemplate, $intStart, $intEnd);
-
-            $strTemplate = str_replace("<".$strSection.">", "", $strTemplate);
-            $strTemplate = str_replace("</".$strSection.">", "", $strTemplate);
         }
         else
-            $strTemplate = "";
+            $strTemplate = null;
 
         return $strTemplate;
     }
@@ -194,18 +196,11 @@ class class_template {
      * @param bool $bitRemovePlaceholder
      *
      * @return string The filled template
+     * @deprecated use setTemplate() and fillTemplate() instead
      */
     public function fillCurrentTemplate($arrContent, $bitRemovePlaceholder = true) {
-        $strTemplate = $this->strTempTemplate;
-        if(count($arrContent) >= 1) {
-            foreach($arrContent as $strPlaceholder => $strContent) {
-                $strTemplate = str_replace("%%".$strPlaceholder."%%", $strContent."%%".$strPlaceholder."%%", $strTemplate);
-            }
-        }
-        if($bitRemovePlaceholder) {
-            $strTemplate = $this->deletePlaceholderRaw($strTemplate);
-        }
-        return $strTemplate;
+        $strIdentifier = $this->setTemplate($this->strTempTemplate);
+        return $this->fillTemplate($arrContent, $strIdentifier, $bitRemovePlaceholder);
     }
 
 
@@ -291,9 +286,7 @@ class class_template {
      */
     public function containsSection($strIdentifier, $strSection) {
         return (isset($this->arrCacheTemplates[$strIdentifier])
-            && uniStrpos($this->arrCacheTemplates[$strIdentifier], "<".$strSection.">") !== false
-            && uniStrpos($this->arrCacheTemplates[$strIdentifier], "</".$strSection.">") !== false
-        );
+            && $this->getSectionFromTemplate($this->arrCacheTemplates[$strIdentifier], $strSection) !== null);
     }
 
     /**
@@ -386,6 +379,7 @@ class class_template {
         $this->strTempTemplate = $strTemplate;
         $strIdentifier = generateSystemid();
         $this->arrCacheTemplates[$strIdentifier] = $strTemplate;
+        $this->arrCacheTemplateSections[$strIdentifier] = $strTemplate;
         return $strIdentifier;
     }
 
