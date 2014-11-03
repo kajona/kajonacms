@@ -312,7 +312,7 @@ KAJONA.admin.tooltip = {
                         viewport: $(window)
                     },
                     style: {
-                        classes: 'qtip-youtube qtip-shadow'
+                        classes: 'qtip-bootstrap'
                     },
                     content : {
                         text: strText
@@ -325,7 +325,7 @@ KAJONA.admin.tooltip = {
                         viewport: $(window)
                     },
                     style: {
-                        classes: 'qtip-youtube qtip-shadow'
+                        classes: 'qtip-bootstrap'
                     }
                 });
             }

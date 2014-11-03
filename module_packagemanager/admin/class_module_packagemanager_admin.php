@@ -220,7 +220,7 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
             }
         }
 
-        class_response_object::getInstance()->setStResponseType(class_http_responsetypes::STR_TYPE_JSON);
+        class_response_object::getInstance()->setStrResponseType(class_http_responsetypes::STR_TYPE_JSON);
         return json_encode($arrReturn);
     }
 
