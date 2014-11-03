@@ -596,7 +596,7 @@ class class_installer {
     }
 
 
-    private function processAutoInstall() {
+    public function processAutoInstall() {
         $strReturn = "";
 
         $strReturn .= "Searching for packages to be installed...\n";
