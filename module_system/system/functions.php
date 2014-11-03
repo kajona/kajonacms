@@ -39,7 +39,7 @@ function bootstrapIncludeModuleIds() {
         foreach(scandir(_realpath_."/".$strRootFolder) as $strDirEntry ) {
             if(is_dir(_realpath_."/".$strRootFolder."/".$strDirEntry) && is_dir(_realpath_."/".$strRootFolder."/".$strDirEntry."/system/") && is_dir(_realpath_."/".$strRootFolder."/".$strDirEntry."/system/config/")) {
                 foreach(scandir(_realpath_."/".$strRootFolder."/".$strDirEntry."/system/config/") as $strModuleEntry ) {
-                    if(preg_match("/module\_([a-z\_])+\_id\.php/", $strModuleEntry))
+                    if(preg_match("/module\_([a-z0-9\_])+\_id\.php/", $strModuleEntry))
                         @include_once _realpath_."/".$strRootFolder."/".$strDirEntry."/system/config/".$strModuleEntry;
                 }
             }
