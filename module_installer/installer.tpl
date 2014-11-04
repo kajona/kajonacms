@@ -27,7 +27,7 @@
 
 <body>
 
-<div class="navbar navbar-fixed-top">
+<div class="navbar navbar-fixed-top hidden-sm hidden-xs">
       <div class="container">
             <ul class="navbar-nav">
                 %%installer_progress%%

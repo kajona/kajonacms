@@ -107,21 +107,38 @@
 }
 
 
+// KAJONA Addons -----------
+@font-size-base: 13px;
+@menuBorder: #d2d2d2;
+@kajonaLightGray: #E5E5E5;
+@grayDarker: #bfbfbf;
+@white: #fff;
+@black: #000;
+@baseLineHeight: 18px;
+@grayLight: #eeeeee;
+@green: #6cb121;
+@placeholderText: @grayLight;
+@grayLighter: #f6f6f6;
+@orange: #f89406;
+@navbarBackgroundHighlight: #ffffff;
+@navbarBackground: darken(@navbarBackgroundHighlight, 5%);
+@font-family-sans-serif:  "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+@border-radius-base:        0px;
 
 
 body {
 
     padding-top: 60px;
     .panel {
-    border-radius: 0px;
+        border-radius: 0px;
     }
 
     background-color: lighten(@kajonaLightGray, 5%);
     .panel-header {
         background:url(../pics/pusteblume.png) right -45px no-repeat @grayDarker;
         color: @white;
-	padding: 9px 15px;
-	border-bottom: 1px solid #EEE;
+        padding: 9px 15px;
+        border-bottom: 1px solid #EEE;
     }
 
     &.dialogBody,
@@ -130,54 +147,54 @@ body {
     }
 
     h2 {
-        font-size: @baseFontSize + 5;
-        line-height: @baseFontSize + 8
+        font-size: @font-size-base + 5;
+        line-height: @font-size-base + 8
     }
 
     a {
-      color: @black;
-      text-decoration: underline;
+        color: @black;
+        text-decoration: underline;
     }
 
 
     .navbar {
-        z-index: @zindexModal+5;
-	padding-top: 15px;
-	#gradient > .vertical(@navbarBackgroundHighlight, @navbarBackground);
-	box-shadow: 0px 1px 10px rgba(0, 0, 0, 0.1); 
+//        z-index: @zindexModal+5;
+        padding-top: 15px;
+        #gradient > .vertical(@navbarBackgroundHighlight, @navbarBackground);
+        box-shadow: 0px 1px 10px rgba(0, 0, 0, 0.1);
 
-            li {
-		list-style: none;
-		
-                a {
-		    padding-left: 10px;
-                    padding-right: 30px;
-                    margin-right: 5px;
-                    background: url(../pics/ok_missing.png) right no-repeat;
-                    color: @black;
-                    cursor: progress;
-		    text-decoration:none;
+        li {
+            list-style: none;
 
-                    &:hover {
-                        color: @black !important;
-                    }
-                }
+            a {
+                padding-left: 5px;
+                padding-right: 25px;
+                margin-right: 5px;
+                background: url(../pics/ok_missing.png) right no-repeat;
+                color: @black;
+                cursor: progress;
+                text-decoration:none;
 
-                &.active a {
-                    color: @black;
-                    background: url(../pics/arrow_down.png) right no-repeat;
-		    box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.125) inset;
-                }
-
-                &.done a {
-                    background: url(../pics/ok.png) right no-repeat;
+                &:hover {
+                    color: @black !important;
                 }
             }
 
+            &.active a {
+                color: @black;
+                background: url(../pics/arrow_down.png) right no-repeat;
+                box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.125) inset;
+            }
+
+            &.done a {
+                background: url(../pics/ok.png) right no-repeat;
+            }
+        }
 
 
 
-        
+
+
     }
 
     footer {
@@ -191,13 +208,13 @@ body {
 
 #content {
 
-float: none !important;
+    float: none !important;
 
 
     ul {
-       li {
-          margin: 3px 1px;
-       }
+        li {
+            margin: 3px 1px;
+        }
     }
 
     .pre-scrollable {
@@ -209,7 +226,7 @@ float: none !important;
             width: 200px;
         }
 
-       
+
         .control-group {
             margin-bottom: @baseLineHeight - 12;
         }
@@ -221,14 +238,14 @@ float: none !important;
             .box-shadow(none);
             color: #888888;
             cursor: pointer;
-            font-size: @baseFontSize + 2;
+            font-size: @font-size-base + 2;
             vertical-align: middle;
             font-weight: 700;
             text-transform: uppercase;
             text-align: left;
             padding: 0px 0px 0px 10px;
-            line-height: 30px;   
-	    position: relative;
+            line-height: 30px;
+            position: relative;
             width: 100%;
             &:hover {
                 color:@black;
@@ -241,12 +258,12 @@ float: none !important;
                 width:30px;
                 height:30px;
                 display:inline-block;
-		content: "";
-	        position: absolute;
+                content: "";
+                position: absolute;
                 right: 0;
                 background: center center no-repeat;
                 background-color:@green;
-		background-image:url(../pics/icon-save.png);
+                background-image:url(../pics/icon-save.png);
             }
         }
     }
@@ -256,6 +273,11 @@ float: none !important;
 
 }
 
+
+#loginContainer_title {
+    margin-top: 2px;
+    margin-bottom: 2px;
+}
 
 
 
@@ -271,20 +293,20 @@ textarea, input[type="text"], input[type="password"], input[type="datetime"], in
 }
 
 select, textarea, input[type="text"], input[type="password"], input[type="datetime"], input[type="datetime-local"], input[type="date"], input[type="month"], input[type="time"], input[type="week"], input[type="number"], input[type="email"], input[type="url"], input[type="search"], input[type="tel"], input[type="color"], .uneditable-input {
-  color: @gray;
-  display: inline-block;
-  font-size: @baseFontSize;
-  height: 20px;
-  line-height: 20px;
-  margin-bottom: 9px;
-  padding: 4px;
+    color: @gray;
+    display: inline-block;
+    font-size: @font-size-base;
+    height: 20px;
+    line-height: 20px;
+    margin-bottom: 9px;
+    padding: 4px;
 
 }
 
 textarea:focus, input[type="text"]:focus, input[type="password"]:focus, input[type="datetime"]:focus, input[type="datetime-local"]:focus, input[type="date"]:focus, input[type="month"]:focus, input[type="time"]:focus, input[type="week"]:focus, input[type="number"]:focus, input[type="email"]:focus, input[type="url"]:focus, input[type="search"]:focus, input[type="tel"]:focus, input[type="color"]:focus, .uneditable-input:focus {
-  border-color:@green;
-  .box-shadow(0 0 6px @green+20);
-  outline: 0 none;
+    border-color:@green;
+    .box-shadow(0 0 6px @green+20);
+    outline: 0 none;
 }
 
 textarea {
@@ -297,13 +319,13 @@ select {
 }
 
 label {
-  color:@gray;
+    color:@gray;
 }
 
 
 
 .container-fluid {
-  padding-left:0px;
+    padding-left:0px;
 }
 
 .listButton {
@@ -312,24 +334,24 @@ label {
 
 
 :focus {
-  -moz-outline-style:none;
-  outline:medium none;
+    -moz-outline-style:none;
+    outline:medium none;
 }
 
 :-moz-any-link:focus {
-  outline:medium none;
+    outline:medium none;
 }
 
 ::-moz-selection {
-  background-color:@green;
-  color:@white;
-  text-shadow:none;
+    background-color:@green;
+    color:@white;
+    text-shadow:none;
 }
 
 ::selection {
-  background-color:@green;
-  color:@white;
-  text-shadow:none;
+    background-color:@green;
+    color:@white;
+    text-shadow:none;
 }
 
 
