@@ -409,14 +409,20 @@ class class_installer_search extends class_installer_base implements interface_i
         return $strReturn;
     }
 
-    private function update_451_452()
-    {
-        $strReturn = "Updating search_element tables...\n";
-        $strQuery = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."element_search")."
+    private function update_451_452() {
+        $strReturn = "";
+
+        $objPackageManager = new class_module_packagemanager_manager();
+        if($objPackageManager->getPackage("pages") !== null) {
+            $strReturn .= "Updating search_element tables...\n";
+            $strQuery = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."element_search")."
                                 ADD ".$this->objDB->encloseColumnName("search_query_id")." ".$this->objDB->getDatatype("char20")." NULL";
 
-        if(!$this->objDB->_pQuery($strQuery, array()))
-            $strReturn .= "An error occurred! ...\n";
+            if(!$this->objDB->_pQuery($strQuery, array())) {
+                $strReturn .= "An error occurred! ...\n";
+            }
+
+        }
 
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion("search", "4.5.2");
