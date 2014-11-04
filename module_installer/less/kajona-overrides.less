@@ -112,10 +112,16 @@
 body {
 
     padding-top: 60px;
+    .panel {
+    border-radius: 0px;
+    }
+
     background-color: lighten(@kajonaLightGray, 5%);
-    .modal-header {
+    .panel-header {
         background:url(../pics/pusteblume.png) right -45px no-repeat @grayDarker;
         color: @white;
+	padding: 9px 15px;
+	border-bottom: 1px solid #EEE;
     }
 
     &.dialogBody,
@@ -136,16 +142,21 @@ body {
 
     .navbar {
         z-index: @zindexModal+5;
-        .navbar-inner {
-            .border-radius(0px);
+	padding-top: 15px;
+	#gradient > .vertical(@navbarBackgroundHighlight, @navbarBackground);
+	box-shadow: 0px 1px 10px rgba(0, 0, 0, 0.1); 
 
             li {
+		list-style: none;
+		
                 a {
+		    padding-left: 10px;
                     padding-right: 30px;
                     margin-right: 5px;
                     background: url(../pics/ok_missing.png) right no-repeat;
                     color: @black;
                     cursor: progress;
+		    text-decoration:none;
 
                     &:hover {
                         color: @black !important;
@@ -155,6 +166,7 @@ body {
                 &.active a {
                     color: @black;
                     background: url(../pics/arrow_down.png) right no-repeat;
+		    box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.125) inset;
                 }
 
                 &.done a {
@@ -165,7 +177,7 @@ body {
 
 
 
-        }
+        
     }
 
     footer {
@@ -179,6 +191,9 @@ body {
 
 #content {
 
+float: none !important;
+
+
     ul {
        li {
           margin: 3px 1px;
@@ -189,24 +204,20 @@ body {
         max-height: 400px;
     }
 
-    form {
+    .form-group {
         .control-label {
             width: 200px;
         }
 
-        .controls {
-            margin-left: 220px;
-        }
-
+       
         .control-group {
             margin-bottom: @baseLineHeight - 12;
         }
 
         .savechanges {
-            margin: 20px 0 0 220px;
+            margin: 20px 0 0 0;
             border: 4px solid @grayLight;
-            background: @kajonaLightGray none;
-            .border-radius(0px);
+            background-color: @kajonaLightGray none;
             .box-shadow(none);
             color: #888888;
             cursor: pointer;
@@ -215,29 +226,27 @@ body {
             font-weight: 700;
             text-transform: uppercase;
             text-align: left;
-            padding: 0px;
-            width: 268px;
-
+            padding: 0px 0px 0px 10px;
+            line-height: 30px;   
+	    position: relative;
+            width: 100%;
             &:hover {
                 color:@black;
-                span.statusicon {
+                &:after {
                     background-color:darken(@green, 10%);
                 }
             }
 
-            span.btn-text {
-                margin:6px 0 6px 20px;
-                display: inline-block;
-            }
-
-            span.statusicon {
+            &:after {
                 width:30px;
                 height:30px;
                 display:inline-block;
-                float:right;
+		content: "";
+	        position: absolute;
+                right: 0;
                 background: center center no-repeat;
                 background-color:@green;
-				background-image:url(../pics/icon-save.png);
+		background-image:url(../pics/icon-save.png);
             }
         }
     }
@@ -254,7 +263,6 @@ body {
 textarea, input[type="text"], input[type="password"], input[type="datetime"], input[type="datetime-local"], input[type="date"], input[type="month"], input[type="time"], input[type="week"], input[type="number"], input[type="email"], input[type="url"], input[type="search"], input[type="tel"], input[type="color"], .uneditable-input { //  -moz-transition:none;
     background-color: @grayLighter;
     border: 1px solid @grayDarker;
-    .border-radius(0px);
     .box-shadow(none);
 
     &.mandatoryFormElement {
@@ -270,7 +278,7 @@ select, textarea, input[type="text"], input[type="password"], input[type="dateti
   line-height: 20px;
   margin-bottom: 9px;
   padding: 4px;
-.border-radius(0px);
+
 }
 
 textarea:focus, input[type="text"]:focus, input[type="password"]:focus, input[type="datetime"]:focus, input[type="datetime-local"]:focus, input[type="date"]:focus, input[type="month"]:focus, input[type="time"]:focus, input[type="week"]:focus, input[type="number"]:focus, input[type="email"]:focus, input[type="url"]:focus, input[type="search"]:focus, input[type="tel"]:focus, input[type="color"]:focus, .uneditable-input:focus {
@@ -325,14 +333,3 @@ label {
 }
 
 
-.modal {
-    position: relative;
-    margin: 0 0 0 -400px;
-    width: 800px;
-
-    .border-radius(0px);
-
-    .modal-body {
-        max-height: none;
-    }
-}
