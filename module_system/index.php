@@ -77,5 +77,5 @@ class class_index {
 $objIndex = new class_index();
 $objIndex->processRequest();
 $objIndex->objResponse->sendHeaders();
-echo $objIndex->objResponse->getStrContent();
+$objIndex->objResponse->sendContent();
 
