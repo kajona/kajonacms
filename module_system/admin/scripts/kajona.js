@@ -681,8 +681,15 @@ KAJONA.admin.forms.renderMandatoryFields = function(arrFields) {
                $("#"+arrElement[0]+"_year").addClass("mandatoryFormElement");
             }
 
-            if($("#"+arrElement[0]))
-                $("#"+arrElement[0]).addClass("mandatoryFormElement");
+            var $objElement = $("#" + arrElement[0]);
+            if($objElement)
+                $objElement.addClass("mandatoryFormElement");
+
+            if(($objElement[0].tagName).toLowerCase() == "select") {
+                var $objChosen = $("#" + $objElement.attr('id') + "_chosen");
+                if($objChosen)
+                    $objChosen.addClass("mandatoryFormElement");
+            }
         }
 
         //closest(".control-group").addClass("error")
