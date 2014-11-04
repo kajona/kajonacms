@@ -88,7 +88,7 @@ class class_systemtask_search_indexrebuild extends class_systemtask_base impleme
             $objObject = class_objectfactory::getInstance()->getObject($strOneValue);
 
             if($objObject != null)
-                $objWorker->indexObject($objObject, true);
+                $objWorker->indexObject($objObject);
 
             unset($arrIds[$intKey]);
 
