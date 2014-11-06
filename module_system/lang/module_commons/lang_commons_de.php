@@ -30,6 +30,7 @@ $lang["commons_category_title"]          = "Kategorie-Titel";
 $lang["commons_create_category"]         = "Kategorie anlegen";
 $lang["commons_create_folder"]           = "Neuer Ordner";
 $lang["commons_continue"]                = "Weiter";
+$lang["commons_close"]                   = "Schließen";
 $lang["commons_date"]                    = "Datum";
 $lang["commons_delete"]                  = "Löschen";
 $lang["commons_delete_category_question"] = "Möchten Sie die Kategorie &quot;<b>%%element_name%%</b>&quot; wirklich löschen?";
