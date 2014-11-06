@@ -78,4 +78,5 @@ $objIndex = new class_index();
 $objIndex->processRequest();
 $objIndex->objResponse->sendHeaders();
 $objIndex->objResponse->sendContent();
+class_core_eventdispatcher::getInstance()->notifyGenericListeners(class_system_eventidentifier::EVENT_SYSTEM_REQUEST_AFTERCONTENTSEND, array(class_request_entrypoint_enum::INDEX()));
 

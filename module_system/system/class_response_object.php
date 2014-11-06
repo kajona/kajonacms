@@ -78,8 +78,6 @@ class class_response_object {
 
         if(!class_session::getInstance()->getBitClosed())
             class_session::getInstance()->sessionClose();
-
-        class_core_eventdispatcher::getInstance()->notifyGenericListeners(class_system_eventidentifier::EVENT_SYSTEM_REQUEST_AFTERCONTENTSEND, array());
     }
 
 

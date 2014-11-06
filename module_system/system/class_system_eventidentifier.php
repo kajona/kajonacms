@@ -53,7 +53,8 @@ interface class_system_eventidentifier {
      * This means you are not able to change the response anymore, also the session is already closed to
      * keep other threads from waiting. Use this event to perform internal cleanups if required.
      *
-     * The params-array is empty.
+     * The params-array contains a single entry:
+     * @param class_request_entrypoint_enum $objEntrypoint
      *
      * @since 4.6
      */

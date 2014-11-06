@@ -93,4 +93,4 @@ $objXML = new class_xml();
 $objXML->processRequest();
 $objXML->objResponse->sendHeaders();
 $objXML->objResponse->sendContent();
-
+class_core_eventdispatcher::getInstance()->notifyGenericListeners(class_system_eventidentifier::EVENT_SYSTEM_REQUEST_AFTERCONTENTSEND, array(class_request_entrypoint_enum::XML()));

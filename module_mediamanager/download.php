@@ -111,5 +111,5 @@ class class_download_manager extends class_root {
 //Create a object
 $objDownload = new class_download_manager(getGet("systemid"));
 $objDownload->actionDownload();
-class_core_eventdispatcher::getInstance()->notifyGenericListeners(class_system_eventidentifier::EVENT_SYSTEM_REQUEST_AFTERCONTENTSEND, array());
+class_core_eventdispatcher::getInstance()->notifyGenericListeners(class_system_eventidentifier::EVENT_SYSTEM_REQUEST_AFTERCONTENTSEND, array(class_request_entrypoint_enum::DOWNLOAD()));
 
