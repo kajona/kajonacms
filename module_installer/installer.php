@@ -3,8 +3,6 @@
 *   (c) 2004-2006 by MulchProductions, www.mulchprod.de                                                 *
 *   (c) 2007-2014 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
-*-------------------------------------------------------------------------------------------------------*
-*   $Id$                                           *
 ********************************************************************************************************/
 
 /**
@@ -121,6 +119,12 @@ class class_installer {
         elseif($_GET["step"] == "finish") {
             $this->finish();
         }
+
+        $strContent = $this->strOutput;
+        if($this->strOutput != "") {
+            $strContent = $this->renderOutput();
+        }
+        class_response_object::getInstance()->setStrContent($strContent);
     }
 
     /**
@@ -198,8 +202,10 @@ class class_installer {
     public function configWizard() {
         $strReturn = "";
 
-        if($this->checkDefaultValues())
-            header("Location: "._webpath_."/installer.php?step=loginData");
+        if($this->checkDefaultValues()) {
+            class_response_object::getInstance()->setStrRedirectUrl(_webpath_."/installer.php?step=loginData");
+            return;
+        }
 
         $bitCxCheck = true;
 
@@ -233,8 +239,8 @@ class class_installer {
                 //and save to file
                 file_put_contents($this->STR_PROJECT_CONFIG_FILE, $strFileContent);
                 // and reload
-                header("Location: "._webpath_."/installer.php?step=loginData");
-                $this->strOutput = $strReturn;
+                class_response_object::getInstance()->setStrRedirectUrl(_webpath_."/installer.php?step=loginData");
+                $this->strOutput = "";
                 return;
             }
         }
@@ -311,11 +317,12 @@ class class_installer {
             $strEmail = $_POST["email"];
             //save to session
             if($strUsername != "" && $strPassword != "" && checkEmailaddress($strEmail)) {
-                $bitShowForm = false;
                 $this->objSession->setSession("install_username", $strUsername);
                 $this->objSession->setSession("install_password", $strPassword);
                 $this->objSession->setSession("install_email", $strEmail);
-                header("Location: "._webpath_."/installer.php?step=modeSelect");
+                $this->strOutput = "";
+                class_response_object::getInstance()->setStrRedirectUrl(_webpath_."/installer.php?step=modeSelect");
+                return;
             }
         }
 
@@ -553,8 +560,11 @@ class class_installer {
 
         }
 
-        if(!$bitInstallerFound)
-            header("Location: "._webpath_."/installer.php?step=finish");
+        if(!$bitInstallerFound) {
+            $this->strOutput = "";
+            class_response_object::getInstance()->setStrRedirectUrl(_webpath_."/installer.php?step=finish");
+            return;
+        }
 
         //wrap in form
         $strTemplateID = $this->objTemplates->readTemplate(class_resourceloader::getInstance()->getCorePathForModule("module_installer")."/module_installer/installer.tpl", "installer_samplecontent_form", true);
@@ -654,7 +664,7 @@ class class_installer {
      *
      * @return string
      */
-    public function getOutput() {
+    private function renderOutput() {
 
         class_core_eventdispatcher::getInstance()->notifyGenericListeners(class_system_eventidentifier::EVENT_SYSTEM_REQUEST_ENDPROCESSING, array());
 
@@ -800,5 +810,6 @@ define("_admin_", false);
 //Creating the Installer-Object
 $objInstaller = new class_installer();
 $objInstaller->action();
-echo $objInstaller->getOutput();
+class_response_object::getInstance()->sendHeaders();
+class_response_object::getInstance()->sendContent();
 

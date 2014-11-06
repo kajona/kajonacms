@@ -92,5 +92,5 @@ class class_xml {
 $objXML = new class_xml();
 $objXML->processRequest();
 $objXML->objResponse->sendHeaders();
-echo $objXML->objResponse->getStrContent();
+$objXML->objResponse->sendContent();
 
