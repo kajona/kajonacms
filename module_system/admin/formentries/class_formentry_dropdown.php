@@ -24,6 +24,7 @@ class class_formentry_dropdown extends class_formentry_base implements interface
 
     private $arrKeyValues = array();
     private $strAddons = "";
+    private $strDataPlaceholder = "";
 
     public function __construct($strFormName, $strSourceProperty, $objSourceObject = null) {
         parent::__construct($strFormName, $strSourceProperty, $objSourceObject);
@@ -43,7 +44,7 @@ class class_formentry_dropdown extends class_formentry_base implements interface
         $strReturn = "";
         if($this->getStrHint() != null)
             $strReturn .= $objToolkit->formTextRow($this->getStrHint());
-        $strReturn .=  $objToolkit->formInputDropdown($this->getStrEntryName(), $this->arrKeyValues, $this->getStrLabel(), $this->getStrValue(), "", !$this->getBitReadonly(), $this->getStrAddons());
+        $strReturn .=  $objToolkit->formInputDropdown($this->getStrEntryName(), $this->arrKeyValues, $this->getStrLabel(), $this->getStrValue(), "", !$this->getBitReadonly(), $this->getStrAddons(), $this->getStrDataPlaceholder());
         return $strReturn;
     }
 
@@ -130,6 +131,22 @@ class class_formentry_dropdown extends class_formentry_base implements interface
     public function getStrAddons() {
         return $this->strAddons;
     }
+
+    /**
+     * @return string
+     */
+    public function getStrDataPlaceholder() {
+        return $this->strDataPlaceholder;
+    }
+
+    /**
+     * @param string $strDataPlaceholder
+     */
+    public function setStrDataPlaceholder($strDataPlaceholder) {
+        $this->strDataPlaceholder = $strDataPlaceholder;
+    }
+
+
 
 
 
