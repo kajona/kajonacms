@@ -379,7 +379,6 @@ class class_installer {
 
     /**
      * Loads all installers and requests a install / update link, if available
-
      */
     public function createModuleInstalls() {
         $strReturn = "";
@@ -474,7 +473,10 @@ class class_installer {
         $strReturn .= $this->objTemplates->fillTemplate(array("module_rows" => $strRows), $strTemplateID);
 
         $this->strOutput .= $strReturn;
-        $this->strBackwardLink = $this->getBackwardLink(_webpath_."/installer.php?step=modeSelect");
+        if($this->isInstalled())
+            $this->strBackwardLink = $this->getBackwardLink(_webpath_."/installer.php?step=loginData");
+        else
+            $this->strBackwardLink = $this->getBackwardLink(_webpath_."/installer.php?step=modeSelect");
         $this->strForwardLink = $this->getForwardLink(_webpath_."/installer.php?step=samplecontent");
     }
 
