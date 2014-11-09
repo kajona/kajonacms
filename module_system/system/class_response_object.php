@@ -60,6 +60,7 @@ class class_response_object {
 
     public function sendContent() {
 
+        ignore_user_abort(true);
         if(trim($this->strContent) != "") {
             echo $this->strContent;
             ob_flush();
