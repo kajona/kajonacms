@@ -38,11 +38,8 @@
 <div class="container-fluid">
 <div class="row">
 
-
-
-
     <!-- CONTENT CONTAINER -->
-    <div class="col-md-6 center-block" id="content">
+    <div class="col-md-7 center-block" id="content">
 	
        <div class="panel panel-default" id="loginContainer">
             <div class="panel-header">
@@ -149,15 +146,15 @@ function switchDriver() {
 }
 </script>
 <br />
-<form action="_webpath_/installer.php?step=config" method="POST" class="form-horizontal col-sm-10">
-<input type="hidden" name="write" value="true" />
+<div id="cxWarning">%%cxWarning%%</div>
 <div id="dbInfo">
     %%mysqliInfo%%
 </div>
-<div id="cxWarning">%%cxWarning%%</div>
+<form action="_webpath_/installer.php?step=config" method="POST" class="form-horizontal col-sm-10">
+<input type="hidden" name="write" value="true" />
 
     <div class="form-group">
-        <label for="hostname" class="col-sm-5">[lang,installer_config_dbhostname,installer]</label>
+        <label for="hostname" class="col-sm-5 control-label">[lang,installer_config_dbhostname,installer]</label>
      <div class="col-sm-7">
 	<input type="text" id="hostname" name="hostname" value="%%postHostname%%" class="form-control">
      </div>
@@ -165,37 +162,37 @@ function switchDriver() {
 	 
 
      <div class="form-group">
-        <label for="username" class="col-sm-5">[lang,installer_config_dbusername,installer]</label>
+        <label for="username" class="col-sm-5 control-label">[lang,installer_config_dbusername,installer]</label>
         <div class="col-sm-7">
             <input type="text" id="username" name="username" value="%%postUsername%%" class="form-control">
         </div>
     </div>
 
     <div class="form-group">
-        <label for="password" class="col-sm-5">[lang,installer_config_dbpassword,installer]</label>
+        <label for="password" class="col-sm-5 control-label">[lang,installer_config_dbpassword,installer]</label>
         <div class="col-sm-7">
             <input type="password" id="password" name="password" value="" class="form-control">
         </div>
     </div>
 
     <div class="form-group">
-        <label for="dbname" class="col-sm-5">[lang,installer_config_dbname,installer]</label>
+        <label for="dbname" class="col-sm-5 control-label">[lang,installer_config_dbname,installer]</label>
         <div class="col-sm-7">
             <input type="text" id="dbname" name="dbname" value="%%postDbname%%" class="form-control">
         </div>
     </div>
 
     <div class="form-group">
-        <label for="dbprefix" class="col-sm-5">[lang,installer_config_dbprefix,installer]</label>
+        <label for="dbprefix" class="col-sm-5 control-label">[lang,installer_config_dbprefix,installer]</label>
         <div class="col-sm-7">
             <input type="text" id="dbprefix" name="dbprefix" value="%%postPrefix%%" class="form-control">
         </div>
     </div>
 
     <div class="form-group">
-        <label for="driver" class="col-sm-5">[lang,installer_config_dbdriver,installer]</label>
+        <label for="driver" class="col-sm-5 control-label">[lang,installer_config_dbdriver,installer]</label>
         <div class="col-sm-7">
-            <select name="driver" id="driver" class="input-xlarge" onchange="switchDriver();">
+            <select name="driver" id="driver" class="form-control" onchange="switchDriver();">
                 <option value="mysqli" selected="selected">MySQL</option>
                 <option value="mysqli">MariaDB</option>
                 <option value="postgres">PostgreSQL</option>
@@ -208,10 +205,10 @@ function switchDriver() {
 
 
     <div class="form-group">
-	 <label class="col-sm-5"></label>
-	<div class="col-sm-7">
-		<p class="help-block">[lang,installer_config_dbportinfo,installer]</p>
-	</div>
+        <label class="col-sm-5 control-label"></label>
+        <div class="col-sm-7">
+            <span class="help-block">[lang,installer_config_dbportinfo,installer]</span>
+        </div>
         <label for="port" class="col-sm-5">[lang,installer_config_dbport,installer]</label>
         <div class="col-sm-7">
             <input type="text" id="port" name="port" value="%%postDbport%%" class="form-control">
@@ -245,47 +242,50 @@ function switchDriver() {
 
 
 <loginwizard_form>
-<form action="_webpath_/installer.php?step=loginData" method="POST" class="form-horizontal">
+<form action="_webpath_/installer.php?step=loginData" method="POST" class="form-horizontal col-sm-10">
 <input type="hidden" name="write" value="true" />
 
-<div class="control-group">
-    <label for="username" class="control-label">[lang,installer_login_username,installer]</label>
-    <div class="controls">
-        <input type="text" id="username" name="username" value="" class="input-xlarge">
+    <div class="form-group">
+        <label for="username" class="col-sm-4 control-label">[lang,installer_login_username,installer]</label>
+        <div class="col-sm-8">
+            <input type="text" id="username" name="username" value="" class="form-control">
+        </div>
     </div>
-</div>
 
-<div class="control-group">
-    <label for="password" class="control-label">[lang,installer_login_password,installer]</label>
-    <div class="controls">
-        <input type="password" id="password" name="password" value="" class="input-xlarge">
+    <div class="form-group">
+        <label for="password" class="col-sm-4 control-label">[lang,installer_login_password,installer]</label>
+        <div class="col-sm-8">
+            <input type="password" id="password" name="password" value="" class="form-control">
+        </div>
     </div>
-</div>
 
-<div class="control-group">
-    <label for="email" class="control-label">[lang,installer_login_email,installer]</label>
-    <div class="controls">
-        <input type="text" id="email" name="email" value="" class="input-xlarge">
+    <div class="form-group">
+        <label for="email" class="col-sm-4 control-label">[lang,installer_login_email,installer]</label>
+        <div class="col-sm-8">
+            <input type="text" id="email" name="email" value="" class="form-control">
+        </div>
     </div>
-</div>
 
-<div class="control-group">
-    <button type="submit" class="btn savechanges">
-        <span class="btn-text">[lang,installer_login_save,installer]</span>
-        <span class="statusicon"></span>
-    </button>
-</div>
+    <div class="form-group">
+        <label class="col-sm-4 control-label"></label>
+        <div class="col-sm-8">
+            <button type="submit" class="btn savechanges">
+                <span class="btn-text">[lang,installer_login_save,installer]</span>
+                <span class="statusicon"></span>
+            </button>
+        </div>
+    </div>
 
 </form>
 </loginwizard_form>
 
 
 <installer_forward_link>
-<a href="%%href%%" class="btn btn-primary">%%text%%</a>
+<a href="%%href%%" class="btn btn-primary pull-right">%%text%%</a>
 </installer_forward_link>
 
 <installer_backward_link>
-<a href="%%href%%" class="btn">%%text%%</a>
+<a href="%%href%%" class="btn btn-default">%%text%%</a>
 </installer_backward_link>
 
 <installer_modules_form>
@@ -293,11 +293,14 @@ function switchDriver() {
         <table class="table table-striped table-condensed table-hover" cellpadding="0" cellspacing="0">
 	        %%module_rows%%
         </table>
-        <div class="control-group">
-            <button type="submit" class="btn savechanges">
-                <span class="btn-text">[lang,installer_install,installer]</span>
-                <span class="statusicon"></span>
-            </button>
+        <div class="form-group">
+            <label class="col-sm-4 control-label"></label>
+            <div class="col-sm-8">
+                <button type="submit" class="btn savechanges">
+                    <span class="btn-text">[lang,installer_install,installer]</span>
+                    <span class="statusicon"></span>
+                </button>
+            </div>
         </div>
 
 	</form>

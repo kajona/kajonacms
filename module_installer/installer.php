@@ -246,27 +246,27 @@ class class_installer {
         $strPostgresInfo = "";
         $strOci8Info = "";
         if(!in_array("mysqli", get_loaded_extensions())) {
-            $strMysqliInfo = "<div class=\"alert alert-error\">".$this->getLang("installer_dbdriver_na")." mysqli</div>";
+            $strMysqliInfo = "<div class=\"alert alert-danger\">".$this->getLang("installer_dbdriver_na")." mysqli</div>";
         }
         if(!in_array("pgsql", get_loaded_extensions())) {
-            $strPostgresInfo = "<div class=\"alert alert-error\">".$this->getLang("installer_dbdriver_na")." postgres</div>";
+            $strPostgresInfo = "<div class=\"alert alert-danger\">".$this->getLang("installer_dbdriver_na")." postgres</div>";
         }
         if(in_array("sqlite3", get_loaded_extensions())) {
             $strSqlite3Info = "<div class=\"alert alert-info\">".$this->getLang("installer_dbdriver_sqlite3")."</div>";
         }
         else {
-            $strSqlite3Info = "<div class=\"alert alert-error\">".$this->getLang("installer_dbdriver_na")." sqlite3</div>";
+            $strSqlite3Info = "<div class=\"alert alert-danger\">".$this->getLang("installer_dbdriver_na")." sqlite3</div>";
         }
         if(in_array("oci8", get_loaded_extensions())) {
             $strOci8Info = "<div class=\"alert alert-info\">".$this->getLang("installer_dbdriver_oci8")."</div>";
         }
         else {
-            $strOci8Info = "<div class=\"alert alert-error\">".$this->getLang("installer_dbdriver_na")." oci8</div>";
+            $strOci8Info = "<div class=\"alert alert-danger\">".$this->getLang("installer_dbdriver_na")." oci8</div>";
         }
 
         $strCxWarning = "";
         if(!$bitCxCheck) {
-            $strCxWarning = "<div class=\"alert alert-error\">".$this->getLang("installer_dbcx_error")."</div>";
+            $strCxWarning = "<div class=\"alert alert-danger\">".$this->getLang("installer_dbcx_error")."</div>";
         }
 
         //configwizard_form
@@ -314,7 +314,7 @@ class class_installer {
 
         if($bitUserInstalled) {
             $bitShowForm = false;
-            $this->strOutput .= "<span class=\"green\">".$this->getLang("installer_login_installed")."</span>";
+            $this->strOutput .= "<div class=\"alert alert-success\">".$this->getLang("installer_login_installed")."</div>";
         }
         if(isset($_POST["write"]) && $_POST["write"] == "true") {
             $strUsername = $_POST["username"];
