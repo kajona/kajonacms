@@ -297,22 +297,11 @@ class class_installer {
      * Collects the data required to create a valid admin-login
      */
     public function adminLoginData() {
-        $bitUserInstalled = false;
         $bitShowForm = true;
         $this->strOutput .= $this->getLang("installer_login_intro");
 
-        //if user-module is already installed, skip this step
-        try {
-            $objUser = class_module_system_module::getModuleByName("user");
-            if($objUser != null) {
-                $bitUserInstalled = true;
-            }
-        }
-        catch(class_exception $objE) {
-        }
 
-
-        if($bitUserInstalled) {
+        if($this->isInstalled()) {
             $bitShowForm = false;
             $this->strOutput .= "<div class=\"alert alert-success\">".$this->getLang("installer_login_installed")."</div>";
         }
@@ -336,7 +325,7 @@ class class_installer {
         }
 
         $this->strBackwardLink = $this->getBackwardLink(_webpath_."/installer.php");
-        if($bitUserInstalled)
+        if($this->isInstalled())
             $this->strForwardLink = $this->getForwardLink(_webpath_."/installer.php?step=modeSelect");
     }
 
@@ -344,6 +333,11 @@ class class_installer {
      * The form to select the installer mode - everything automatically or a manual selection
      */
     public function modeSelect() {
+
+        if($this->isInstalled()) {
+            class_response_object::getInstance()->setStrRedirectUrl(_webpath_."/installer.php?step=install");
+            return;
+        }
 
         $strTemplateID = $this->objTemplates->readTemplate(class_resourceloader::getInstance()->getCorePathForModule("module_installer")."/module_installer/installer.tpl", "modeselect_content", true);
         $this->strOutput .= $this->objTemplates->fillTemplate(
@@ -745,7 +739,7 @@ class class_installer {
      *
      * @return bool
      */
-    public function checkDefaultValues() {
+    private function checkDefaultValues() {
         return is_file($this->STR_PROJECT_CONFIG_FILE);
     }
 
@@ -756,7 +750,7 @@ class class_installer {
      *
      * @return string
      */
-    public function getForwardLink($strHref) {
+    private function getForwardLink($strHref) {
         $strTemplateID = $this->objTemplates->readTemplate(class_resourceloader::getInstance()->getCorePathForModule("module_installer")."/module_installer/installer.tpl", "installer_forward_link", true);
         return $this->objTemplates->fillTemplate(array("href" => $strHref, "text" => $this->getLang("installer_next")), $strTemplateID);
     }
@@ -768,7 +762,7 @@ class class_installer {
      *
      * @return string
      */
-    public function getBackwardLink($strHref) {
+    private function getBackwardLink($strHref) {
         $strTemplateID = $this->objTemplates->readTemplate(class_resourceloader::getInstance()->getCorePathForModule("module_installer")."/module_installer/installer.tpl", "installer_backward_link", true);
         return $this->objTemplates->fillTemplate(array("href" => $strHref, "text" => $this->getLang("installer_prev")), $strTemplateID);
     }
@@ -781,8 +775,21 @@ class class_installer {
      *
      * @return string
      */
-    public function getLang($strKey, $arrParameters = array()) {
+    private function getLang($strKey, $arrParameters = array()) {
         return $this->objLang->getLang($strKey, "installer", $arrParameters);
+    }
+
+    private function isInstalled() {
+        try {
+            $objUser = class_module_system_module::getModuleByName("user");
+            if($objUser != null) {
+                return true;
+            }
+        }
+        catch(class_exception $objE) {
+        }
+
+        return false;
     }
 }
 
