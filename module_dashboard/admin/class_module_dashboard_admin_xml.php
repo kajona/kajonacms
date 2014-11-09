@@ -82,7 +82,7 @@ class class_module_dashboard_admin_xml extends class_admin_controller implements
             if(!$objConcreteWidget->getBitBlockSessionClose())
                 class_carrier::getInstance()->getObjSession()->sessionClose();
 
-            class_response_object::getInstance()->setStResponseType(class_http_responsetypes::STR_TYPE_JSON);
+            class_response_object::getInstance()->setStrResponseType(class_http_responsetypes::STR_TYPE_JSON);
             $strReturn = json_encode($objConcreteWidget->generateWidgetOutput());
 
         }

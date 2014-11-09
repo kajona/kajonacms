@@ -310,7 +310,7 @@ class class_module_search_admin extends class_admin_simple implements interface_
         }
 
         $objResult = $arrItems;
-        class_response_object::getInstance()->setStResponseType(class_http_responsetypes::STR_TYPE_JSON);
+        class_response_object::getInstance()->setStrResponseType(class_http_responsetypes::STR_TYPE_JSON);
         return json_encode($objResult);
     }
 

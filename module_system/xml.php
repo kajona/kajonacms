@@ -57,7 +57,7 @@ class class_xml {
 
 
         $this->objResponse = class_response_object::getInstance();
-        $this->objResponse->setStResponseType(class_http_responsetypes::STR_TYPE_XML);
+        $this->objResponse->setStrResponseType(class_http_responsetypes::STR_TYPE_XML);
         $this->objResponse->setStrStatusCode(class_http_statuscodes::SC_OK);
 
 
@@ -69,7 +69,7 @@ class class_xml {
             $this->objResponse->setStrContent("<error>An error occurred, malformed request</error>");
         }
 
-        if($this->objResponse->getStResponseType() == class_http_responsetypes::STR_TYPE_XML && self::$bitRenderXmlHeader) {
+        if($this->objResponse->getStrResponseType() == class_http_responsetypes::STR_TYPE_XML && self::$bitRenderXmlHeader) {
             $this->objResponse->setStrContent("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n" . $this->objResponse->getStrContent());
         }
     }

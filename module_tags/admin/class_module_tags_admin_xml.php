@@ -33,7 +33,7 @@ class class_module_tags_admin_xml extends class_admin_controller implements inte
 
         $objTags = class_objectfactory::getInstance()->getObject($this->getSystemid());
 
-        class_response_object::getInstance()->setStResponseType(class_http_responsetypes::STR_TYPE_XML);
+        class_response_object::getInstance()->setStrResponseType(class_http_responsetypes::STR_TYPE_XML);
         $strError = "<message>".$this->getLang("favorite_save_error")."</message>";
         $strSuccess = "<message>".$this->getLang("favorite_save_success").": ".$objTags->getStrDisplayName()."</message>";
         $strExisting = "<message>".$this->getLang("favorite_save_remove").": ".$objTags->getStrDisplayName()."</message>";
@@ -164,7 +164,7 @@ class class_module_tags_admin_xml extends class_admin_controller implements inte
             $arrReturn[] = $objOneTag->getStrName();
         }
 
-        class_response_object::getInstance()->setStResponseType(class_http_responsetypes::STR_TYPE_JSON);
+        class_response_object::getInstance()->setStrResponseType(class_http_responsetypes::STR_TYPE_JSON);
         return json_encode($arrReturn);
     }
 
@@ -189,7 +189,7 @@ class class_module_tags_admin_xml extends class_admin_controller implements inte
             );
         }
 
-        class_response_object::getInstance()->setStResponseType(class_http_responsetypes::STR_TYPE_JSON);
+        class_response_object::getInstance()->setStrResponseType(class_http_responsetypes::STR_TYPE_JSON);
         return json_encode($arrReturn);
     }
 
