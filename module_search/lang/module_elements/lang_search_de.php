@@ -14,4 +14,4 @@
 $lang["element_search_name"]             = "Suche";
 $lang["search_amount"]                   = "Anzahl Treffer pro Seite";
 $lang["search_search"]                   = "Suche";
-
+$lang["search_no_search"]                 = "keine";

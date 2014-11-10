@@ -124,10 +124,11 @@ class class_element_search_admin extends class_element_admin implements interfac
         $arrRawQueries = class_module_search_search::getObjectList();
 
         $arrQueries = array();
+        $arrQueries[""] = $this->getLang("search_no_search", $this->getArrModule("modul"));
         foreach ($arrRawQueries as $objOneQuery) {
             $arrQueries[$objOneQuery->getSystemid()] = $objOneQuery->getStrDisplayName();
         }
-        $arrQueries[""] = "keine";
+
         $objForm->getField("query")->setArrKeyValues($arrQueries);
 
         return $objForm;

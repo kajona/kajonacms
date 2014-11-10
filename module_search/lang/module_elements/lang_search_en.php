@@ -14,3 +14,4 @@
 $lang["element_search_name"]             = "Search";
 $lang["search_amount"]                   = "Number of hits per page";
 $lang["search_search"]                   = "Search";
+$lang["search_no_search"]                = "no search";
