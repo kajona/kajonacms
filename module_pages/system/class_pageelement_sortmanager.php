@@ -22,6 +22,18 @@ class class_pageelement_sortmanager extends class_common_sortmanager {
         return ;
     }
 
+    public function fixSortOnPrevIdChange($strOldPrevid, $strNewPrevid, $arrRestrictionModules = false) {
+        //shift it to the last position by default
+        //As a special feature, we set the element as the last
+        $strQuery = "UPDATE "._dbprefix_."system SET system_sort = ? WHERE system_id = ?";
+        $intNewSort = count($this->objSource->getSortedElementsAtPlaceholder()) + 1;
+        $this->objSource->setIntSort($intNewSort);
+        $this->objDB->_pQuery($strQuery, array($intNewSort, $this->objSource->getSystemid()));
+
+        $this->objDB->flushQueryCache();
+
+    }
+
 
     public function setAbsolutePosition($intNewPosition, $arrRestrictionModules = false) {
         class_logger::getInstance()->addLogRow("move ".$this->objSource->getSystemid()." to new pos ".$intNewPosition, class_logger::$levelInfo);

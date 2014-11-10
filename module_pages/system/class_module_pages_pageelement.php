@@ -197,12 +197,7 @@ class class_module_pages_pageelement extends class_model implements interface_mo
             }
         }
 
-        //shift it to the last position by default
-        //As a special feature, we set the element as the last
-        $strQuery = "UPDATE "._dbprefix_."system SET system_sort = ? WHERE system_id = ?";
-        $intNewSort = count($this->getSortedElementsAtPlaceholder()) + 1;
-        $this->setIntSort($intNewSort);
-        $this->objDB->_pQuery($strQuery, array($intNewSort, $this->getSystemid()));
+
 
         $this->objDB->flushQueryCache();
 
