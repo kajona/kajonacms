@@ -823,6 +823,8 @@ abstract class class_root {
 
         $this->objDB->flushQueryCache();
         $this->internalInit();
+        //reset the old previd since we're having a new record
+        $this->strOldPrevId = -1;
 
         return $strSystemId;
 
