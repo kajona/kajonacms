@@ -50,11 +50,26 @@ class class_response_object {
         }
 
         header($this->getStrStatusCode());
-        header($this->getStResponseType());
+        header($this->getStrResponseType());
 
         foreach($this->arrAdditionalHeaders as $strOneHeader) {
             header($strOneHeader);
         }
+    }
+
+
+    public function sendContent() {
+
+        if($this->strContent != "") {
+            echo $this->strContent;
+            ob_flush();
+            flush();
+        }
+
+        if(!class_session::getInstance()->getBitClosed())
+            class_session::getInstance()->sessionClose();
+
+        class_core_eventdispatcher::getInstance()->notifyGenericListeners(class_system_eventidentifier::EVENT_SYSTEM_REQUEST_AFTERCONTENTSEND, array());
     }
 
 

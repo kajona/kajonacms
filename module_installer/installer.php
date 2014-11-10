@@ -3,8 +3,6 @@
 *   (c) 2004-2006 by MulchProductions, www.mulchprod.de                                                 *
 *   (c) 2007-2014 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
-*-------------------------------------------------------------------------------------------------------*
-*   $Id$                                           *
 ********************************************************************************************************/
 
 /**
@@ -121,6 +119,12 @@ class class_installer {
         elseif($_GET["step"] == "finish") {
             $this->finish();
         }
+
+        $strContent = $this->strOutput;
+        if($this->strOutput != "") {
+            $strContent = $this->renderOutput();
+        }
+        class_response_object::getInstance()->setStrContent($strContent);
     }
 
     /**
@@ -198,8 +202,10 @@ class class_installer {
     public function configWizard() {
         $strReturn = "";
 
-        if($this->checkDefaultValues())
-            header("Location: "._webpath_."/installer.php?step=loginData");
+        if($this->checkDefaultValues()) {
+            class_response_object::getInstance()->setStrRedirectUrl(_webpath_."/installer.php?step=loginData");
+            return;
+        }
 
         $bitCxCheck = true;
 
@@ -233,8 +239,8 @@ class class_installer {
                 //and save to file
                 file_put_contents($this->STR_PROJECT_CONFIG_FILE, $strFileContent);
                 // and reload
-                header("Location: "._webpath_."/installer.php?step=loginData");
-                $this->strOutput = $strReturn;
+                class_response_object::getInstance()->setStrRedirectUrl(_webpath_."/installer.php?step=loginData");
+                $this->strOutput = "";
                 return;
             }
         }
@@ -246,27 +252,27 @@ class class_installer {
         $strPostgresInfo = "";
         $strOci8Info = "";
         if(!in_array("mysqli", get_loaded_extensions())) {
-            $strMysqliInfo = "<div class=\"alert alert-error\">".$this->getLang("installer_dbdriver_na")." mysqli</div>";
+            $strMysqliInfo = "<div class=\"alert alert-danger\">".$this->getLang("installer_dbdriver_na")." mysqli</div>";
         }
         if(!in_array("pgsql", get_loaded_extensions())) {
-            $strPostgresInfo = "<div class=\"alert alert-error\">".$this->getLang("installer_dbdriver_na")." postgres</div>";
+            $strPostgresInfo = "<div class=\"alert alert-danger\">".$this->getLang("installer_dbdriver_na")." postgres</div>";
         }
         if(in_array("sqlite3", get_loaded_extensions())) {
             $strSqlite3Info = "<div class=\"alert alert-info\">".$this->getLang("installer_dbdriver_sqlite3")."</div>";
         }
         else {
-            $strSqlite3Info = "<div class=\"alert alert-error\">".$this->getLang("installer_dbdriver_na")." sqlite3</div>";
+            $strSqlite3Info = "<div class=\"alert alert-danger\">".$this->getLang("installer_dbdriver_na")." sqlite3</div>";
         }
         if(in_array("oci8", get_loaded_extensions())) {
             $strOci8Info = "<div class=\"alert alert-info\">".$this->getLang("installer_dbdriver_oci8")."</div>";
         }
         else {
-            $strOci8Info = "<div class=\"alert alert-error\">".$this->getLang("installer_dbdriver_na")." oci8</div>";
+            $strOci8Info = "<div class=\"alert alert-danger\">".$this->getLang("installer_dbdriver_na")." oci8</div>";
         }
 
         $strCxWarning = "";
         if(!$bitCxCheck) {
-            $strCxWarning = "<div class=\"alert alert-error\">".$this->getLang("installer_dbcx_error")."</div>";
+            $strCxWarning = "<div class=\"alert alert-danger\">".$this->getLang("installer_dbcx_error")."</div>";
         }
 
         //configwizard_form
@@ -297,24 +303,13 @@ class class_installer {
      * Collects the data required to create a valid admin-login
      */
     public function adminLoginData() {
-        $bitUserInstalled = false;
         $bitShowForm = true;
         $this->strOutput .= $this->getLang("installer_login_intro");
 
-        //if user-module is already installed, skip this step
-        try {
-            $objUser = class_module_system_module::getModuleByName("user");
-            if($objUser != null) {
-                $bitUserInstalled = true;
-            }
-        }
-        catch(class_exception $objE) {
-        }
 
-
-        if($bitUserInstalled) {
+        if($this->isInstalled()) {
             $bitShowForm = false;
-            $this->strOutput .= "<span class=\"green\">".$this->getLang("installer_login_installed")."</span>";
+            $this->strOutput .= "<div class=\"alert alert-success\">".$this->getLang("installer_login_installed")."</div>";
         }
         if(isset($_POST["write"]) && $_POST["write"] == "true") {
             $strUsername = $_POST["username"];
@@ -322,11 +317,12 @@ class class_installer {
             $strEmail = $_POST["email"];
             //save to session
             if($strUsername != "" && $strPassword != "" && checkEmailaddress($strEmail)) {
-                $bitShowForm = false;
                 $this->objSession->setSession("install_username", $strUsername);
                 $this->objSession->setSession("install_password", $strPassword);
                 $this->objSession->setSession("install_email", $strEmail);
-                header("Location: "._webpath_."/installer.php?step=modeSelect");
+                $this->strOutput = "";
+                class_response_object::getInstance()->setStrRedirectUrl(_webpath_."/installer.php?step=modeSelect");
+                return;
             }
         }
 
@@ -336,7 +332,7 @@ class class_installer {
         }
 
         $this->strBackwardLink = $this->getBackwardLink(_webpath_."/installer.php");
-        if($bitUserInstalled)
+        if($this->isInstalled())
             $this->strForwardLink = $this->getForwardLink(_webpath_."/installer.php?step=modeSelect");
     }
 
@@ -344,6 +340,11 @@ class class_installer {
      * The form to select the installer mode - everything automatically or a manual selection
      */
     public function modeSelect() {
+
+        if($this->isInstalled()) {
+            class_response_object::getInstance()->setStrRedirectUrl(_webpath_."/installer.php?step=install");
+            return;
+        }
 
         $strTemplateID = $this->objTemplates->readTemplate(class_resourceloader::getInstance()->getCorePathForModule("module_installer")."/module_installer/installer.tpl", "modeselect_content", true);
         $this->strOutput .= $this->objTemplates->fillTemplate(
@@ -378,7 +379,6 @@ class class_installer {
 
     /**
      * Loads all installers and requests a install / update link, if available
-
      */
     public function createModuleInstalls() {
         $strReturn = "";
@@ -473,7 +473,10 @@ class class_installer {
         $strReturn .= $this->objTemplates->fillTemplate(array("module_rows" => $strRows), $strTemplateID);
 
         $this->strOutput .= $strReturn;
-        $this->strBackwardLink = $this->getBackwardLink(_webpath_."/installer.php?step=modeSelect");
+        if($this->isInstalled())
+            $this->strBackwardLink = $this->getBackwardLink(_webpath_."/installer.php?step=loginData");
+        else
+            $this->strBackwardLink = $this->getBackwardLink(_webpath_."/installer.php?step=modeSelect");
         $this->strForwardLink = $this->getForwardLink(_webpath_."/installer.php?step=samplecontent");
     }
 
@@ -559,8 +562,11 @@ class class_installer {
 
         }
 
-        if(!$bitInstallerFound)
-            header("Location: "._webpath_."/installer.php?step=finish");
+        if(!$bitInstallerFound) {
+            $this->strOutput = "";
+            class_response_object::getInstance()->setStrRedirectUrl(_webpath_."/installer.php?step=finish");
+            return;
+        }
 
         //wrap in form
         $strTemplateID = $this->objTemplates->readTemplate(class_resourceloader::getInstance()->getCorePathForModule("module_installer")."/module_installer/installer.tpl", "installer_samplecontent_form", true);
@@ -660,7 +666,7 @@ class class_installer {
      *
      * @return string
      */
-    public function getOutput() {
+    private function renderOutput() {
 
         class_core_eventdispatcher::getInstance()->notifyGenericListeners(class_system_eventidentifier::EVENT_SYSTEM_REQUEST_ENDPROCESSING, array());
 
@@ -745,7 +751,7 @@ class class_installer {
      *
      * @return bool
      */
-    public function checkDefaultValues() {
+    private function checkDefaultValues() {
         return is_file($this->STR_PROJECT_CONFIG_FILE);
     }
 
@@ -756,7 +762,7 @@ class class_installer {
      *
      * @return string
      */
-    public function getForwardLink($strHref) {
+    private function getForwardLink($strHref) {
         $strTemplateID = $this->objTemplates->readTemplate(class_resourceloader::getInstance()->getCorePathForModule("module_installer")."/module_installer/installer.tpl", "installer_forward_link", true);
         return $this->objTemplates->fillTemplate(array("href" => $strHref, "text" => $this->getLang("installer_next")), $strTemplateID);
     }
@@ -768,7 +774,7 @@ class class_installer {
      *
      * @return string
      */
-    public function getBackwardLink($strHref) {
+    private function getBackwardLink($strHref) {
         $strTemplateID = $this->objTemplates->readTemplate(class_resourceloader::getInstance()->getCorePathForModule("module_installer")."/module_installer/installer.tpl", "installer_backward_link", true);
         return $this->objTemplates->fillTemplate(array("href" => $strHref, "text" => $this->getLang("installer_prev")), $strTemplateID);
     }
@@ -781,8 +787,21 @@ class class_installer {
      *
      * @return string
      */
-    public function getLang($strKey, $arrParameters = array()) {
+    private function getLang($strKey, $arrParameters = array()) {
         return $this->objLang->getLang($strKey, "installer", $arrParameters);
+    }
+
+    private function isInstalled() {
+        try {
+            $objUser = class_module_system_module::getModuleByName("user");
+            if($objUser != null) {
+                return true;
+            }
+        }
+        catch(class_exception $objE) {
+        }
+
+        return false;
     }
 }
 
@@ -793,5 +812,6 @@ define("_admin_", false);
 //Creating the Installer-Object
 $objInstaller = new class_installer();
 $objInstaller->action();
-echo $objInstaller->getOutput();
+class_response_object::getInstance()->sendHeaders();
+class_response_object::getInstance()->sendContent();
 

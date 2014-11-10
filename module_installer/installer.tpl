@@ -10,7 +10,7 @@
 
     <!-- KAJONA_BUILD_LESS_START -->
     <link href="_webpath_/core/module_installer/less/bootstrap.less" rel="stylesheet/less">
-    <link href="_webpath_/core/module_installer/less/responsive.less" rel="stylesheet/less">
+    <!--<link href="_webpath_/core/module_installer/less/responsive.less" rel="stylesheet/less"> -->
     <script> less = { env:'development' }; </script>
     <script src="_webpath_/core/module_installer/less/less.js"></script>
     <!-- KAJONA_BUILD_LESS_END -->
@@ -27,30 +27,25 @@
 
 <body>
 
-<div class="navbar navbar-fixed-top">
-    <div class="navbar-inner">
-        <div class="container">
-            <ul class="nav">
+<div class="navbar navbar-fixed-top hidden-sm hidden-xs">
+      <div class="container">
+            <ul class="navbar-nav">
                 %%installer_progress%%
             </ul>
         </div>
-    </div>
-</div>
+ </div>
 
 <div class="container-fluid">
-<div class="row-fluid">
-
-
-
+<div class="row">
 
     <!-- CONTENT CONTAINER -->
-    <div class="span12" id="content">
-
-        <div class="modal" id="loginContainer">
-            <div class="modal-header">
+    <div class="col-md-8 center-block" id="content">
+	
+       <div class="panel panel-default" id="loginContainer">
+            <div class="panel-header">
                 <h3 id="loginContainer_title">Kajona Installer %%installer_version%%</h3>
             </div>
-            <div class="modal-body">
+            <div class="panel-body">
                 <div id="loginContainer_content">
 
                     %%installer_output%%
@@ -59,11 +54,11 @@
 
                 </div>
             </div>
-            <div class="modal-footer">
+            <div class="panel-footer">
                 %%installer_backward%%
                 %%installer_forward%%
             </div>
-        </div>
+	 </div>
 
 
     </div>
@@ -151,52 +146,53 @@ function switchDriver() {
 }
 </script>
 <br />
-<form action="_webpath_/installer.php?step=config" method="POST" class="form-horizontal">
-<input type="hidden" name="write" value="true" />
+<div id="cxWarning">%%cxWarning%%</div>
 <div id="dbInfo">
     %%mysqliInfo%%
 </div>
-<div id="cxWarning">%%cxWarning%%</div>
+<form action="_webpath_/installer.php?step=config" method="POST" class="form-horizontal col-sm-10">
+<input type="hidden" name="write" value="true" />
 
-    <div class="control-group">
-        <label for="hostname" class="control-label">[lang,installer_config_dbhostname,installer]</label>
-        <div class="controls">
-            <input type="text" id="hostname" name="hostname" value="%%postHostname%%" class="input-xlarge">
+    <div class="form-group">
+        <label for="hostname" class="col-sm-5 control-label">[lang,installer_config_dbhostname,installer]</label>
+     <div class="col-sm-7">
+	<input type="text" id="hostname" name="hostname" value="%%postHostname%%" class="form-control">
+     </div>
+    </div>
+	 
+
+     <div class="form-group">
+        <label for="username" class="col-sm-5 control-label">[lang,installer_config_dbusername,installer]</label>
+        <div class="col-sm-7">
+            <input type="text" id="username" name="username" value="%%postUsername%%" class="form-control">
         </div>
     </div>
 
-    <div class="control-group">
-        <label for="username" class="control-label">[lang,installer_config_dbusername,installer]</label>
-        <div class="controls">
-            <input type="text" id="username" name="username" value="%%postUsername%%" class="input-xlarge">
+    <div class="form-group">
+        <label for="password" class="col-sm-5 control-label">[lang,installer_config_dbpassword,installer]</label>
+        <div class="col-sm-7">
+            <input type="password" id="password" name="password" value="" class="form-control">
         </div>
     </div>
 
-    <div class="control-group">
-        <label for="password" class="control-label">[lang,installer_config_dbpassword,installer]</label>
-        <div class="controls">
-            <input type="password" id="password" name="password" value="" class="input-xlarge">
+    <div class="form-group">
+        <label for="dbname" class="col-sm-5 control-label">[lang,installer_config_dbname,installer]</label>
+        <div class="col-sm-7">
+            <input type="text" id="dbname" name="dbname" value="%%postDbname%%" class="form-control">
         </div>
     </div>
 
-    <div class="control-group">
-        <label for="dbname" class="control-label">[lang,installer_config_dbname,installer]</label>
-        <div class="controls">
-            <input type="text" id="dbname" name="dbname" value="%%postDbname%%" class="input-xlarge">
+    <div class="form-group">
+        <label for="dbprefix" class="col-sm-5 control-label">[lang,installer_config_dbprefix,installer]</label>
+        <div class="col-sm-7">
+            <input type="text" id="dbprefix" name="dbprefix" value="%%postPrefix%%" class="form-control">
         </div>
     </div>
 
-    <div class="control-group">
-        <label for="dbprefix" class="control-label">[lang,installer_config_dbprefix,installer]</label>
-        <div class="controls">
-            <input type="text" id="dbprefix" name="dbprefix" value="%%postPrefix%%" class="input-xlarge">
-        </div>
-    </div>
-
-    <div class="control-group">
-        <label for="driver" class="control-label">[lang,installer_config_dbdriver,installer]</label>
-        <div class="controls">
-            <select name="driver" id="driver" class="input-xlarge" onchange="switchDriver();">
+    <div class="form-group">
+        <label for="driver" class="col-sm-5 control-label">[lang,installer_config_dbdriver,installer]</label>
+        <div class="col-sm-7">
+            <select name="driver" id="driver" class="form-control" onchange="switchDriver();">
                 <option value="mysqli" selected="selected">MySQL</option>
                 <option value="mysqli">MariaDB</option>
                 <option value="postgres">PostgreSQL</option>
@@ -207,21 +203,23 @@ function switchDriver() {
         <script type="text/javascript">if('%%postDbdriver%%' != '') $('#driver').val('%%postDbdriver%%');</script>
     </div>
 
-    <div class="controls">
-        <p class="help-block">[lang,installer_config_dbportinfo,installer]</p>
-    </div>
-    <div class="control-group">
-        <label for="port" class="control-label">[lang,installer_config_dbport,installer]</label>
-        <div class="controls">
-            <input type="text" id="port" name="port" value="%%postDbport%%" class="input-xlarge">
+
+    <div class="form-group">
+        <label class="col-sm-5 control-label"></label>
+        <div class="col-sm-7">
+            <span class="help-block">[lang,installer_config_dbportinfo,installer]</span>
+        </div>
+        <label for="port" class="col-sm-5">[lang,installer_config_dbport,installer]</label>
+        <div class="col-sm-7">
+            <input type="text" id="port" name="port" value="%%postDbport%%" class="form-control">
         </div>
     </div>
 
-    <div class="control-group">
-        <button type="submit" class="btn savechanges">
-            <span class="btn-text">[lang,installer_config_write,installer]</span>
-            <span class="statusicon"></span>
-        </button>
+    <div class="form-group">
+	<label class="col-sm-5"></label>
+	<div class="col-sm-7">
+		<button type="submit" class="btn savechanges">[lang,installer_config_write,installer]</button>
+	</div>
     </div>
 
 </form>
@@ -238,53 +236,55 @@ function switchDriver() {
     <div>
         <a href="%%link_manualinstall%%">[lang,installer_mode_manual,installer]</a>
         <p>[lang,installer_mode_manual_hint,installer]</p>
-        <div class="alert alert-info">[lang,installer_mode_hint,installer]</div>
     </div>
 </modeselect_content>
 
 
 <loginwizard_form>
-<form action="_webpath_/installer.php?step=loginData" method="POST" class="form-horizontal">
+<form action="_webpath_/installer.php?step=loginData" method="POST" class="form-horizontal col-sm-10">
 <input type="hidden" name="write" value="true" />
 
-<div class="control-group">
-    <label for="username" class="control-label">[lang,installer_login_username,installer]</label>
-    <div class="controls">
-        <input type="text" id="username" name="username" value="" class="input-xlarge">
+    <div class="form-group">
+        <label for="username" class="col-sm-4 control-label">[lang,installer_login_username,installer]</label>
+        <div class="col-sm-8">
+            <input type="text" id="username" name="username" value="" class="form-control">
+        </div>
     </div>
-</div>
 
-<div class="control-group">
-    <label for="password" class="control-label">[lang,installer_login_password,installer]</label>
-    <div class="controls">
-        <input type="password" id="password" name="password" value="" class="input-xlarge">
+    <div class="form-group">
+        <label for="password" class="col-sm-4 control-label">[lang,installer_login_password,installer]</label>
+        <div class="col-sm-8">
+            <input type="password" id="password" name="password" value="" class="form-control">
+        </div>
     </div>
-</div>
 
-<div class="control-group">
-    <label for="email" class="control-label">[lang,installer_login_email,installer]</label>
-    <div class="controls">
-        <input type="text" id="email" name="email" value="" class="input-xlarge">
+    <div class="form-group">
+        <label for="email" class="col-sm-4 control-label">[lang,installer_login_email,installer]</label>
+        <div class="col-sm-8">
+            <input type="text" id="email" name="email" value="" class="form-control">
+        </div>
     </div>
-</div>
 
-<div class="control-group">
-    <button type="submit" class="btn savechanges">
-        <span class="btn-text">[lang,installer_login_save,installer]</span>
-        <span class="statusicon"></span>
-    </button>
-</div>
+    <div class="form-group">
+        <label class="col-sm-4 control-label"></label>
+        <div class="col-sm-8">
+            <button type="submit" class="btn savechanges">
+                <span class="btn-text">[lang,installer_login_save,installer]</span>
+                <span class="statusicon"></span>
+            </button>
+        </div>
+    </div>
 
 </form>
 </loginwizard_form>
 
 
 <installer_forward_link>
-<a href="%%href%%" class="btn btn-primary">%%text%%</a>
+<a href="%%href%%" class="btn btn-primary pull-right">%%text%%</a>
 </installer_forward_link>
 
 <installer_backward_link>
-<a href="%%href%%" class="btn">%%text%%</a>
+<a href="%%href%%" class="btn btn-default">%%text%%</a>
 </installer_backward_link>
 
 <installer_modules_form>
@@ -292,11 +292,14 @@ function switchDriver() {
         <table class="table table-striped table-condensed table-hover" cellpadding="0" cellspacing="0">
 	        %%module_rows%%
         </table>
-        <div class="control-group">
-            <button type="submit" class="btn savechanges">
-                <span class="btn-text">[lang,installer_install,installer]</span>
-                <span class="statusicon"></span>
-            </button>
+        <div class="form-group">
+            <label class="col-sm-4 control-label"></label>
+            <div class="col-sm-8">
+                <button type="submit" class="btn savechanges">
+                    <span class="btn-text">[lang,installer_install,installer]</span>
+                    <span class="statusicon"></span>
+                </button>
+            </div>
         </div>
 
 	</form>
@@ -307,7 +310,7 @@ function switchDriver() {
         <table class="admintable table table-striped table-condensed table-hover" cellpadding="0" cellspacing="0">
        %%module_rows%%
         </table>
-        <div class="control-group">
+        <div class="form-group">
             <button type="submit" class="btn savechanges">
                 <span class="btn-text">[lang,installer_install,installer]</span>
                 <span class="statusicon"></span>
@@ -334,6 +337,7 @@ function switchDriver() {
 	            <td onclick="document.getElementById('moduleInstallBox[installer_%%module_nameShort%%]').click();">%%module_hint%%</td>
 	        </tr>
 </installer_modules_row_installable>
+
 
 
 
