@@ -520,7 +520,7 @@ abstract class class_root {
                 throw new class_exception("creation of systemrecord failed", class_exception::$level_FATALERROR);
 
             //all updates are done, start the "real" update
-            $this->objDB->flushQueryCache();
+            class_carrier::getInstance()->flushCache(class_carrier::INT_CACHE_TYPE_DBQUERIES);
         }
 
         //new prev-id?
@@ -559,7 +559,7 @@ abstract class class_root {
         class_core_eventdispatcher::notifyRecordUpdatedListeners($this);
         class_core_eventdispatcher::getInstance()->notifyGenericListeners(class_system_eventidentifier::EVENT_SYSTEM_RECORDUPDATED, array($this));
 
-
+        class_carrier::getInstance()->flushCache(class_carrier::INT_CACHE_TYPE_DBQUERIES);
         return $bitReturn;
     }
 
@@ -580,7 +580,7 @@ abstract class class_root {
         $strOldSysid = $this->getSystemid();
 
         if($strNewPrevid == "")
-            $strNewPrevid = $this->strOldPrevId;
+            $strNewPrevid = $this->strPrevId;
 
         //any date-objects to copy?
         if($this->objStartDate != null || $this->objEndDate != null || $this->objSpecialDate != null)
