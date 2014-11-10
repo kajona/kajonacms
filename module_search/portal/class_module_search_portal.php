@@ -56,6 +56,8 @@ class class_module_search_portal extends class_portal_controller implements inte
         if ($this->arrElementData["search_query_id"] != "") {
             $this->objSearchSearch = new class_module_search_search($this->arrElementData["search_query_id"]);
         }
+        else
+            $arrTemplate["search_term"] = $this->objSearchSearch->getStrQuery();
 
         $strPage = $this->arrElementData["search_page"];
         if($strPage == "")
@@ -98,8 +100,6 @@ class class_module_search_portal extends class_portal_controller implements inte
             "&searchterm=".urlencode(html_entity_decode($this->objSearchSearch->getStrQuery(), ENT_COMPAT, "UTF-8"))
         );
 
-        $strRowTemplateID = $this->objTemplate->readTemplate("/module_search/".$this->arrElementData["search_template"], "search_hitlist_hit");
-
         /** @var $objHit class_search_result */
         foreach($arrHitsFilter["arrData"] as $objHit) {
 
@@ -109,21 +109,13 @@ class class_module_search_portal extends class_portal_controller implements inte
             $objPage = class_module_pages_page::getPageByName($objHit->getStrPagename());
             if($objPage === null || !$objPage->rightView() || $objPage->getIntRecordStatus() != 1)
                 continue;
+            //class_module_pages_page
 
-            $arrRow = array();
-            if(($objHit->getStrPagelink() == ""))
-                $arrRow["page_link"] = getLinkPortal(
-                    $objHit->getStrPagename(),
-                    "",
-                    "_self",
-                    $objHit->getStrPagename(),
-                    "",
-                    "&highlight=".urlencode(html_entity_decode($this->objSearchSearch->getStrQuery(), ENT_QUOTES, "UTF-8"))."#".uniStrtolower(urlencode(html_entity_decode($this->objSearchSearch->getStrQuery(), ENT_QUOTES, "UTF-8")))
-                );
+            if ($this->templateContainsObjSection($objHit) && $this->objectExposesTemplateExports($objHit))
+                $arrTemplate["hitlist"] .= $this->generateObjectRow($objHit);
             else
-                $arrRow["page_link"] = $objHit->getStrPagelink();
-            $arrRow["page_description"] = uniStrTrim($objHit->getStrDescription(), 200);
-            $arrTemplate["hitlist"] .= $this->objTemplate->fillTemplate($arrRow, $strRowTemplateID, false);
+                $arrTemplate["hitlist"] .= $this->generateDefaultRow($objHit);
+
         }
 
         //Collect global data
@@ -137,5 +129,79 @@ class class_module_search_portal extends class_portal_controller implements inte
 
         return $strReturn.$this->fillTemplate($arrTemplate, $strTemplateID);
     }
+
+    /**
+     * @param $objHit
+     * @param $arrTemplate
+     * @param $strRowTemplateID
+     */
+    private function generateDefaultRow($objHit)
+    {
+        $strRowTemplateID = $this->objTemplate->readTemplate("/module_search/".$this->arrElementData["search_template"], "search_hitlist_hit");
+
+        $arrRow = array();
+        $arrRow["page_link"] = $this->generatePageLink($objHit);
+        $arrRow["page_description"] = uniStrTrim($objHit->getStrDescription(), 200);
+        return $this->objTemplate->fillTemplate($arrRow, $strRowTemplateID, false);
+    }
+
+    /**
+     * @param class_search_result $objHit
+     * @return string
+     */
+    private function generateObjectRow($objHit)
+    {
+        $objMapper = new class_template_mapper($objHit->getObjObject());
+        $objMapper->addPlaceholder("page_link", $this->generatePageLink($objHit));
+        return $objMapper->writeToTemplate("/module_search/".$this->arrElementData["search_template"], get_class($objHit->getObjObject()));
+    }
+
+    /**
+     * @param class_search_result $objHit
+     * @return bool
+     */
+    private function templateContainsObjSection($objHit) {
+        $strTemplateID = $this->objTemplate->readTemplate("/module_search/".$this->arrElementData["search_template"]);
+
+        return $this->objTemplate->containsSection($strTemplateID, get_class($objHit->getObjObject()));
+    }
+
+    /**
+     * @param class_search_result $objHit
+     * @return bool
+     */
+    private function objectExposesTemplateExports($objHit) {
+
+        $objMapper = new class_template_mapper($objHit->getObjObject());
+
+        if (count($objMapper->getArrMapping()>0))
+            return true;
+
+        return false;
+    }
+
+    /**
+     * @param $objHit
+     * @return string
+     */
+    private function generatePageLink($objHit)
+    {
+        $strPageLink = "";
+
+        if (($objHit->getStrPagelink() == ""))
+            $strPageLink = getLinkPortal(
+                $objHit->getStrPagename(),
+                "",
+                "_self",
+                $objHit->getStrPagename(),
+                "",
+                "&highlight=" . urlencode(html_entity_decode($this->objSearchSearch->getStrQuery(), ENT_QUOTES, "UTF-8")) . "#" . uniStrtolower(urlencode(html_entity_decode($this->objSearchSearch->getStrQuery(), ENT_QUOTES, "UTF-8")))
+            );
+        else
+            $strPageLink = $objHit->getStrPagelink();
+
+        return $strPageLink;
+    }
+
 
 }

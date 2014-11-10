@@ -127,6 +127,7 @@ class class_element_search_admin extends class_element_admin implements interfac
         foreach ($arrRawQueries as $objOneQuery) {
             $arrQueries[$objOneQuery->getSystemid()] = $objOneQuery->getStrDisplayName();
         }
+        $arrQueries[""] = "keine";
         $objForm->getField("query")->setArrKeyValues($arrQueries);
 
         return $objForm;

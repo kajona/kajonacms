@@ -42,4 +42,42 @@ class class_element_search_portal extends class_element_portal implements interf
         return $strReturn;
     }
 
+    public static function providesNavigationEntries() {
+        return true;
+    }
+
+    public function getNavigationEntries() {
+        $arrData = $this->getElementContent($this->getSystemid());
+
+        $objSearchCommons = new class_module_search_commons();
+
+        $objSearchSearch = new class_module_search_search($arrData["search_query_id"]);
+        $objSearchSearch->setBitPortalObjectFilter(true);
+        $objSearchSearch->setStrPortalLangFilter($this->getStrPortalLanguage());
+
+        /** @var $arrHitsSorted class_search_result[] */
+        $arrHitsSorted = $objSearchCommons->doPortalSearch($objSearchSearch);
+
+        $arrEntries = array();
+
+        /** @var $arrHitsSorted class_search_result[] */
+        foreach($arrHitsSorted as $objHit) {
+            $objPoint = new class_module_navigation_point();
+            $objPoint->setIntRecordStatus(1, false);
+            $objPoint->setStrName($objHit->getStrPagename());
+            $objPoint->setStrPageI($objHit->getStrPagename());
+            //$objPoint->setStrName($objRepo->getStrTitle());
+            //$objPoint->setStrPageI($this->getPagename());
+
+            //$objPoint->setStrLinkSystemid($objRepo->getSystemid());
+            //$objPoint->setStrLinkAction("mediaFolder");
+            $objPoint->setBitIsForeignNode(true);
+            $arrEntries[] = $objPoint;
+        }
+
+        $arrReturn["subnodes"] = $arrEntries;
+
+        return $arrReturn;
+    }
+
 }
