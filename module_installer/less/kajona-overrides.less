@@ -147,11 +147,6 @@ body {
 
     background-color: lighten(@kajonaLightGray, 5%);
 
-    &.dialogBody,
-    &.portaleditorBody {
-        padding: 0;
-    }
-
     h2 {
         font-size: @font-size-base + 2;
         line-height: @font-size-base + 8;
@@ -226,10 +221,6 @@ body {
 
     .form-group {
 
-        .control-group {
-            margin-bottom: @line-height-base - 12;
-        }
-
         .savechanges {
             margin: 20px 0 0 0;
             border: 4px solid @grayLight;
@@ -298,10 +289,6 @@ body {
     }
 }
 
-select {
-    height: 30px;
-    padding: 2px 0 2px 8px;
-}
 
 label {
     color:@gray;
@@ -317,6 +304,7 @@ label {
 
 .container-fluid {
     padding-left:0px;
+    padding-right:0px;
 }
 
 :focus {

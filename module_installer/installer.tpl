@@ -39,7 +39,7 @@
 <div class="row">
 
     <!-- CONTENT CONTAINER -->
-    <div class="col-md-7 center-block" id="content">
+    <div class="col-md-8 center-block" id="content">
 	
        <div class="panel panel-default" id="loginContainer">
             <div class="panel-header">
@@ -310,7 +310,7 @@ function switchDriver() {
         <table class="admintable table table-striped table-condensed table-hover" cellpadding="0" cellspacing="0">
        %%module_rows%%
         </table>
-        <div class="control-group">
+        <div class="form-group">
             <button type="submit" class="btn savechanges">
                 <span class="btn-text">[lang,installer_install,installer]</span>
                 <span class="statusicon"></span>
