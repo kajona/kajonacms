@@ -61,6 +61,7 @@ $lang["commons_next"]                    = "next";
 $lang["commons_no"]                      = "No";
 $lang["commons_ok"]                      = "Ok";
 $lang["commons_one_level_up"]            = "One level up";
+$lang["commons_one_level_down"]          = "Show subordinate level";
 $lang["commons_open_browser"]            = "Open browser";
 $lang["commons_page_success"]            = "Page in case of success (optional)";
 $lang["commons_path"]                    = "Path";
