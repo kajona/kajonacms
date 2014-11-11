@@ -739,6 +739,7 @@ abstract class class_root {
             //TODO: remove legacy call
             class_core_eventdispatcher::notifyPrevidChangedListeners($this->getSystemid(), $this->strOldPrevId, $this->strPrevId);
             class_core_eventdispatcher::getInstance()->notifyGenericListeners(class_system_eventidentifier::EVENT_SYSTEM_PREVIDCHANGED, array($this->getSystemid(), $this->strOldPrevId, $this->strPrevId));
+            $this->strOldPrevId = $this->strPrevId;
         }
 
         return $bitReturn;
