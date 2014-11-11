@@ -151,14 +151,14 @@ class class_admin_formgenerator {
             if(count($arrObjectValidator) == 1) {
                 $strObjectValidator = $arrObjectValidator[0];
                 if(class_exists($strObjectValidator)) {
-                    /** @var interface_object_validator $objValidator */
+                    /** @var class_objectvalidator_base $objValidator */
                     $objValidator = new $strObjectValidator();
 
                     //Keep the reference of the current object
                     $objSourceObjectTemp = $this->getObjSourceobject();
 
                     //Create a new instance of the source object and set it as source object in the formgenerator
-                    //Each existing filed will also refenrce the new created soiurce object
+                    //Each existing field will also reference the new created source object
                     $strClassName = get_class($this->objSourceobject);
                     $this->objSourceobject = new $strClassName($this->objSourceobject->getStrSystemid());
                     foreach($this->arrFields as $objOneField) {
@@ -169,9 +169,9 @@ class class_admin_formgenerator {
 
                     //Update the new source object values from the fields and validate the object
                     $this->updateSourceObject();
-                    $arrValidationErrorsObject = $objValidator->validateObject($this->getObjSourceobject());
+                    $objValidator->validateObject($this->getObjSourceobject());
 
-                    foreach($arrValidationErrorsObject as $strKey => $arrMessages) {
+                    foreach($objValidator->getArrValidationMessages() as $strKey => $arrMessages) {
                         if(!is_array($arrMessages)) {
                             throw new class_exception("method validateObject must return an array of format array(\"<messageKey>\" => array())", class_exception::$level_ERROR);
                         }
