@@ -167,6 +167,11 @@ class class_admin_formgenerator {
                         }
                     }
 
+                    //if we are in new-mode, we should fix the prev-id to the lateron matching one
+                    if(($this->getField("mode") != null && $this->getField("mode")->getStrValue() == "new") || class_carrier::getInstance()->getParam("mode") == "new") {
+                        $this->objSourceobject->setStrPrevId(class_carrier::getInstance()->getParam("systemid"));
+                    }
+
                     //Update the new source object values from the fields and validate the object
                     $this->updateSourceObject();
                     $objValidator->validateObject($this->getObjSourceobject());
