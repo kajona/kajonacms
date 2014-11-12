@@ -126,7 +126,7 @@ class class_admin_formgenerator {
             $bitFieldIsEmpty
                 = (!is_array($objOneField->getStrValue()) && trim($objOneField->getStrValue()) === "")
                 || is_null($objOneField->getStrValue())
-                || (is_array($objOneField->getStrValue() && count($objOneField->getStrValue()) == 0)); //if it is an array with no entries
+                || (is_array($objOneField->getStrValue()) && count($objOneField->getStrValue()) == 0); //if it is an array with no entries
 
             //mandatory field
             if($objOneField->getBitMandatory()) {
