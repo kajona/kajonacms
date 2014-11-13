@@ -11,7 +11,7 @@
 
 
 //editable entries
-$lang["_search_deferred_indexer_"]       = "Verzögerter Index-Aufbau";
+$lang["_search_deferred_indexer_"]       = "Verzögerter Indexaufbau";
 $lang["_search_deferred_indexer_hint"]       = "Durch eine Verzögerung beim Indexieren von Objekten wird das Anlegen und Aktualisieren von Objekten schneller. Dies setzt jedoch das Modul Workflows als installiert und korrekt konfiguriert voraus.";
 $lang["action_execute_search"]           = "Suche ausführen";
 $lang["action_new"]                      = "Suche anlegen";
@@ -37,9 +37,9 @@ $lang["submit_label"]                    = "Suchen";
 $lang["systemtask_search_indexrebuild"]              = "Suchindex neu aufbauen";
 $lang["worker_indexrebuild_end"]              = "Index wurde neu aufgebaut.<br /><br />Anzahl Dokumente im Index: {0}<br />Anzahl Einträge im Index: {1}";
 $lang["worker_indexrebuild"]              = "Index wird neu aufgebaut...<br /><br />Anzahl Dokumente im Index: {0}<br />Anzahl Einträge im Index: {1}";
-$lang["quickhelp_search"]                  = "Die Suchfunktion bietet die Möglichkeit die gesamte Datenbank nach jedem beliebigen Suchbegriff zu überprüfen. Hierzu wird der gewünschte Suchbegriff eingegeben und durch Anklicken des entsprechenden Buttons die Suche ausgelöst. Die jeweiligen Ergebnisse werden dann listenförmig angezeigt und können nun entsprechend den jeweiligen Rechten des Benutzers weiter bearbeitet werden. ";
+$lang["quickhelp_search"]                  = "Die Suchfunktion bietet die Möglichkeit das gesamte System nach jedem beliebigen Suchbegriff zu durchsuchen. Hierzu wird der gewünschte Suchbegriff eingegeben und durch Anklicken des entsprechenden Buttons die Suche ausgelöst. Die jeweiligen Ergebnisse werden listenförmig angezeigt und können entsprechend den jeweiligen Rechten des Benutzers weiter bearbeitet werden. ";
 $lang["quickhelp_list"]                  = "In dieser Liste werden bereits vom Benutzer angelegte Suchen (z.B. aufgrund von regelmäßigen Abfragen) angezeigt. Diese können von dieser Stelle aus weiter parametrisiert bzw. gestartet werden.";
-$lang["quickhelp_new"]                  = "Über diese Funktion können routinemäßig bzw. regelmäßig zu überprüfende Suchbegriffe angelegt werden. Durch Anklicken des Buttons werden diese in die Liste der angelegten Suchen übernommen und die Abfrage kann spezifiziert, gestartet bzw. geändert werden.";
+$lang["quickhelp_new"]                  = "Über diese Funktion können routinemäßig bzw. regelmäßig zu überprüfende Suchbegriffe angelegt werden. Durch Anklicken des Buttons werden diese in die Liste der angelegten Suchen übernommen und die Abfrage kann weiter spezifiziert, gestartet bzw. geändert werden.";
 
 $lang["workflow_deferredindexer_cfg_val1"] = "Sekunden zwischen zwei Ausführungen";
 $lang["workflow_deferredindexer_cfg_val2"] = "Zu indexierende Objekte je Durchlauf";
