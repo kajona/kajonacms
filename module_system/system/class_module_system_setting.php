@@ -205,6 +205,9 @@ class class_module_system_setting extends class_model implements interface_model
             }
         }
 
+        if(self::$arrInstanceCache == null)
+            return array();
+
         return self::$arrInstanceCache;
     }
 
