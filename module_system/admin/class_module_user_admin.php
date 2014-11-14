@@ -556,7 +556,7 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
 
         $objForm->addField(new class_formentry_dropdown("user", "startmodule"))
             ->setArrKeyValues($arrModules)
-            ->setStrValue(($this->getParam("user_startmodule") != "" ? $this->getParam("user_startmodule") : ""))
+            ->setStrValue(($this->getParam("user_startmodule") != "" ? $this->getParam("user_startmodule") : "dashboard"))
             ->setStrLabel($this->getLang("user_startmodule"));
 
 
