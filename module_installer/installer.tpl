@@ -12,7 +12,7 @@
     <link href="_webpath_/core/module_installer/less/bootstrap.less" rel="stylesheet/less">
     <!--<link href="_webpath_/core/module_installer/less/responsive.less" rel="stylesheet/less"> -->
     <script> less = { env:'development' }; </script>
-    <script src="_webpath_/core/module_installer/less/less.js"></script>
+    <script src="_webpath_/core/module_installer/less/less.min.js"></script>
     <!-- KAJONA_BUILD_LESS_END -->
 
     <script src="_webpath_/core/module_system/admin/scripts/jquery/jquery.min.js"></script>
