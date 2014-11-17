@@ -53,6 +53,10 @@ class class_adminwidget_weather extends class_adminwidget implements interface_a
     public function getWidgetOutput() {
         $strReturn = "";
 
+        if($this->getFieldValue("location") == "") {
+            return "Please set up a location";
+        }
+
         //request the xml...
         try {
             $objRemoteloader = new class_remoteloader();
