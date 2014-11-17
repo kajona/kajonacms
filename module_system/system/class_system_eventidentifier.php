@@ -71,15 +71,33 @@ interface class_system_eventidentifier {
 
     /**
      * Called whenever a record was copied.
+     * Event will be fired BEFORE child objects are being copied.
      * Useful to perform additional actions, e.g. update / duplicate foreign assignments.
      *
      * The params-array contains two entries:
      * @param string $strOldSystemid
      * @param string $strNewSystemid
+     * @param class_model $objNewObjectCopy
      *
      * @since 4.5
      */
     const EVENT_SYSTEM_RECORDCOPIED = "core.system.recordcopied";
+
+
+    /**
+     * Called whenever a record was copied.
+     * Event will be fired AFTER child objects were copied.
+     * Useful to perform additional actions, e.g. update / duplicate foreign assignments.
+     *
+     * The params-array contains two entries:
+     * @param string $strOldSystemid
+     * @param string $strNewSystemid
+     * @param class_model $objNewObjectCopy
+     *
+     * @since 4.6
+     */
+    const EVENT_SYSTEM_RECORDCOPYFINISHED = "core.system.recordcopyfinished";
+
 
     /**
      * Invoked every time a records previd was changed.

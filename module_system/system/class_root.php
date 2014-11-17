@@ -603,7 +603,7 @@ abstract class class_root {
         //call event listeners
         //TODO: remove legacy call
         $bitReturn = $bitReturn && class_core_eventdispatcher::notifyRecordCopiedListeners($strOldSysid, $this->getSystemid());
-        $bitReturn = $bitReturn && class_core_eventdispatcher::getInstance()->notifyGenericListeners(class_system_eventidentifier::EVENT_SYSTEM_RECORDCOPIED, array($strOldSysid, $this->getSystemid()));
+        $bitReturn = $bitReturn && class_core_eventdispatcher::getInstance()->notifyGenericListeners(class_system_eventidentifier::EVENT_SYSTEM_RECORDCOPIED, array($strOldSysid, $this->getSystemid(), $this));
 
 
         //process subrecords
@@ -624,6 +624,9 @@ abstract class class_root {
             $this->objDB->transactionRollback();
 
         $this->objDB->flushQueryCache();
+
+
+        $bitReturn = $bitReturn && class_core_eventdispatcher::getInstance()->notifyGenericListeners(class_system_eventidentifier::EVENT_SYSTEM_RECORDCOPYFINISHED, array($strOldSysid, $this->getSystemid(), $this));
 
         return $bitReturn;
     }
