@@ -14,16 +14,9 @@
  * @since 4.0
  * @package module_formgenerator
  */
-class class_formentry_multiselect extends class_formentry_base implements interface_formentry {
+class class_formentry_multiselect extends class_formentry_dropdown implements interface_formentry {
 
     private $arrKeyValues = array();
-
-    public function __construct($strFormName, $strSourceProperty, $objSourceObject = null) {
-        parent::__construct($strFormName, $strSourceProperty, $objSourceObject);
-
-        //set the default validator
-        $this->setObjValidator(new class_dummy_validator());
-    }
 
     /**
      * Renders the field itself.
@@ -37,8 +30,25 @@ class class_formentry_multiselect extends class_formentry_base implements interf
         if($this->getStrHint() != null) {
             $strReturn .= $objToolkit->formTextRow($this->getStrHint());
         }
-        $strReturn .= $objToolkit->formInputMultiselect($this->getStrEntryName(), $this->arrKeyValues, $this->getStrLabel(), $this->getStrValue());
+        $strReturn .= $objToolkit->formInputMultiselect($this->getStrEntryName(), $this->arrKeyValues, $this->getStrLabel(), explode(",", $this->getStrValue()));
         return $strReturn;
+    }
+
+    public function setStrValue($strValue) {
+        if(is_array($strValue))
+            $strValue = implode(",", $strValue);
+
+        return parent::setStrValue($strValue);
+    }
+
+
+    public function validateValue() {
+        foreach(explode(",", $this->getStrValue()) as $strOneSelect) {
+            if(!in_array($strOneSelect, array_keys($this->arrKeyValues))) {
+                return false;
+            }
+        }
+        return true;
     }
 
     /**
