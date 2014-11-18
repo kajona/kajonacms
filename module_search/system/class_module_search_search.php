@@ -202,7 +202,9 @@ class class_module_search_search extends class_model implements interface_model,
      * @param array $arrFormFilterModules
      */
     public function setArrFormFilterModules($arrFormFilterModules) {
-        $this->strInternalFilterModules = implode(",", $arrFormFilterModules);
+        if(is_array($arrFormFilterModules))
+            $arrFormFilterModules = implode(",", $arrFormFilterModules);
+        $this->strInternalFilterModules = $arrFormFilterModules;
     }
 
     /**
