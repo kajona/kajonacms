@@ -165,7 +165,10 @@ abstract class class_admin_evensimpler extends class_admin_simple {
             /** @var $objEdit interface_model|class_model */
             $objEdit = new $strType();
 
+            if($this->isFormExistingForInstance($objEdit))
+                $objEdit = $this->objCurAdminForm->getObjSourceobject();
 
+            //reset the current object reference to an object created before (e.g. during actionSave)
             $objForm = $this->getAdminForm($objEdit);
             $objForm->getObjSourceobject()->setSystemid($this->getParam("systemid"));
             $objForm->addField(new class_formentry_hidden("", "mode"))->setStrValue("new");
@@ -203,6 +206,11 @@ abstract class class_admin_evensimpler extends class_admin_simple {
         if(!is_null($strType)) {
 
             $objEdit = new $strType($this->getSystemid());
+
+            //reset the current object reference to an object created before (e.g. during actionSave)
+            if($this->isFormExistingForInstance($objEdit))
+                $objEdit = $this->objCurAdminForm->getObjSourceobject();
+
             $objForm = $this->getAdminForm($objEdit);
             $objForm->addField(new class_formentry_hidden("", "mode"))->setStrValue("edit");
 
@@ -249,15 +257,24 @@ abstract class class_admin_evensimpler extends class_admin_simple {
      * @return class_admin_formgenerator
      */
     protected function getAdminForm(interface_model $objInstance) {
-
         //already generated?
-        if($this->objCurAdminForm != null && get_class($this->objCurAdminForm->getObjSourceobject()) == get_class($objInstance) && $objInstance->getSystemid() == $this->objCurAdminForm->getObjSourceobject()->getSystemid())
+        if($this->isFormExistingForInstance($objInstance))
             return $this->objCurAdminForm;
 
         $objForm = new class_admin_formgenerator($this->getArrModule("modul"), $objInstance);
         $objForm->generateFieldsFromObject();
         $this->objCurAdminForm = $objForm;
         return $objForm;
+    }
+
+    /**
+     * Internal helper to check if a form-object is already existing for the passed instance
+     * @param interface_model $objInstance
+     *
+     * @return bool
+     */
+    private function isFormExistingForInstance(interface_model $objInstance) {
+        return $this->objCurAdminForm != null && get_class($this->objCurAdminForm->getObjSourceobject()) == get_class($objInstance) && $objInstance->getSystemid() == $this->objCurAdminForm->getObjSourceobject()->getSystemid();
     }
 
     /**
