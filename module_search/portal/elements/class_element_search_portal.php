@@ -58,6 +58,16 @@ class class_element_search_portal extends class_element_portal implements interf
         /** @var $arrHitsSorted class_search_result[] */
         $arrHitsSorted = $objSearchCommons->doPortalSearch($objSearchSearch);
 
+        $objPoint = new class_module_navigation_point();
+        $objPoint->setIntRecordStatus(1, false);
+        $objPoint->setStrName("searchresultsmodules");
+        $objPoint->setStrPageI("searchresultsmodules");
+
+        $objPoint->setStrLinkSystemid($this->getSystemid());
+        $objPoint->setSystemid($this->getSystemid());
+        $objPoint->setStrLinkAction("list");
+        $objPoint->setBitIsForeignNode(true);
+
         $arrEntries = array();
 
         /** @var $arrHitsSorted class_search_result[] */
@@ -66,15 +76,20 @@ class class_element_search_portal extends class_element_portal implements interf
             $objPoint->setIntRecordStatus(1, false);
             $objPoint->setStrName($objHit->getStrPagename());
             $objPoint->setStrPageI($objHit->getStrPagename());
-            //$objPoint->setStrName($objRepo->getStrTitle());
-            //$objPoint->setStrPageI($this->getPagename());
-
-            //$objPoint->setStrLinkSystemid($objRepo->getSystemid());
-            //$objPoint->setStrLinkAction("mediaFolder");
+            $objPoint->setStrLinkSystemid($objHit->getObjObject()->getSystemid());
+            $objPoint->setSystemid($objHit->getObjObject()->getSystemid());
             $objPoint->setBitIsForeignNode(true);
-            $arrEntries[] = $objPoint;
+
+            $arrTemp = array(
+                "node" => $objPoint,
+                "subnodes" => array()
+            );
+
+            $arrEntries[] = $arrTemp;
+
         }
 
+        $arrReturn["node"] = $objPoint;
         $arrReturn["subnodes"] = $arrEntries;
 
         return $arrReturn;

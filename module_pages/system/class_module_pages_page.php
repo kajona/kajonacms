@@ -65,6 +65,8 @@ class class_module_pages_page extends class_model implements interface_model, in
      * @versionable
      *
      * @fieldType dropdown
+     *
+     * @addSearchIndex
      */
     private $strTemplate = "";
 

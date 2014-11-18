@@ -132,8 +132,7 @@ class class_module_search_portal extends class_portal_controller implements inte
 
     /**
      * @param $objHit
-     * @param $arrTemplate
-     * @param $strRowTemplateID
+     * @return string
      */
     private function generateDefaultRow($objHit)
     {
