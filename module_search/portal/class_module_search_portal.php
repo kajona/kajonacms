@@ -103,10 +103,10 @@ class class_module_search_portal extends class_portal_controller implements inte
         /** @var $objHit class_search_result */
         foreach($arrHitsFilter["arrData"] as $objHit) {
 
-            if($objHit->getStrPagename() == "master")
+            if($objHit->getStrLinkPagename() == "master")
                 continue;
 
-            $objPage = class_module_pages_page::getPageByName($objHit->getStrPagename());
+            $objPage = class_module_pages_page::getPageByName($objHit->getStrLinkPagename());
             if($objPage === null || !$objPage->rightView() || $objPage->getIntRecordStatus() != 1)
                 continue;
             //class_module_pages_page

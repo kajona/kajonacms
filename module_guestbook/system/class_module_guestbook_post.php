@@ -232,8 +232,10 @@ class class_module_guestbook_post extends class_model implements interface_model
             $intPvPos = ceil($intCounter/$intAmount);
 
             $objNewResult = clone $objResult;
-            $objNewResult->setStrPagelink(class_link::getLinkPortal($arrOnePage["page_name"], "", "_self", $arrOnePage["page_name"], "", "&highlight=".urlencode(html_entity_decode($objResult->getObjSearch()->getStrQuery(), ENT_QUOTES, "UTF-8"))."&pv=".$intPvPos));
-            $objNewResult->setStrPagename($arrOnePage["page_name"]);
+            $objNewResult->setStrLinkPageI($arrOnePage["page_name"]);
+            $objNewResult->setStrLinkText($arrOnePage["page_name"]);
+            $objNewResult->setStrLinkParams("&highlight=" . urlencode(html_entity_decode($objResult->getObjSearch()->getStrQuery(), ENT_QUOTES, "UTF-8")));
+            $objNewResult->setStrLinkPagename($arrOnePage["page_name"]);
             $objNewResult->setStrDescription($this->getStrGuestbookPostText());
 
             $arrReturn[] = $objNewResult;

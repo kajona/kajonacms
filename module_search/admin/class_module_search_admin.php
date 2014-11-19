@@ -294,7 +294,7 @@ class class_module_search_admin extends class_admin_simple implements interface_
                 }
             }
 
-            $strLink = $objOneResult->getStrPagelink();
+            $strLink = $objOneResult->getStrPagelink(true);
             if($strLink == "") {
                 $strLink = class_link::getLinkAdminHref($objOneResult->getObjObject()->getArrModule("modul"), "edit", "&systemid=" . $objOneResult->getStrSystemid());
             }
@@ -347,7 +347,7 @@ class class_module_search_admin extends class_admin_simple implements interface_
                 }
             }
 
-            $strLink = $objOneResult->getStrPagelink();
+            $strLink = $objOneResult->getStrPagelink(true);
             if($strLink == "") {
                 $strLink = class_link::getLinkAdminHref($objOneResult->getObjObject()->getArrModule("modul"), "edit", "&systemid=" . $objOneResult->getStrSystemid());
             }

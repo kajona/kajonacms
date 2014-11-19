@@ -343,8 +343,10 @@ class class_module_faqs_faq extends class_model implements interface_model, inte
             }
 
             $objCurResult = clone($objResult);
-            $objCurResult->setStrPagelink(class_link::getLinkPortal($arrOnePage["page_name"], "", "_self", $arrOnePage["page_name"], "", "&highlight=" . urlencode(html_entity_decode($objResult->getObjSearch()->getStrQuery(), ENT_QUOTES, "UTF-8"))));
-            $objCurResult->setStrPagename($arrOnePage["page_name"]);
+            $objCurResult->setStrLinkPageI($arrOnePage["page_name"]);
+            $objCurResult->setStrLinkText($this->getStrQuestion());
+            $objCurResult->setStrLinkParams("&highlight=" . urlencode(html_entity_decode($objResult->getObjSearch()->getStrQuery(), ENT_QUOTES, "UTF-8")));
+            $objCurResult->setStrLinkPagename($arrOnePage["page_name"]);
             $objCurResult->setStrDescription($this->getStrQuestion());
             $arrReturn[] = $objCurResult;
         }

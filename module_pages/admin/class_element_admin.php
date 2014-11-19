@@ -661,8 +661,11 @@ abstract class class_element_admin extends class_admin_controller implements int
         $arrPage = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array($this->getSystemid()));
 
         if(isset($arrPage["page_name"])) {
-            $objResult->setStrPagelink(class_link::getLinkPortal($arrPage["page_name"], "", "_self", $arrPage["pageproperties_browsername"], "", "&highlight=".urlencode(html_entity_decode($objResult->getObjSearch()->getStrQuery(), ENT_QUOTES, "UTF-8"))));
-            $objResult->setStrPagename($arrPage["page_name"]);
+            $objResult->setStrLinkPageI($arrPage["page_name"]);
+            $objResult->setStrLinkText($arrPage["pageproperties_browsername"]);
+            $objResult->setStrLinkParams("&highlight=" . urlencode(html_entity_decode($objResult->getObjSearch()->getStrQuery(), ENT_QUOTES, "UTF-8")));
+            $objResult->setStrLinkAction($arrPage["page_name"]);
+            $objResult->setStrLinkPagename($arrPage["page_name"]);
         }
 
     }

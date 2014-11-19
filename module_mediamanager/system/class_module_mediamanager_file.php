@@ -180,8 +180,11 @@ class class_module_mediamanager_file extends class_model implements interface_mo
                 continue;
 
             $objOneResult = clone $objResult;
-            $objOneResult->setStrPagelink(class_link::getLinkPortal($arrOnePage["page_name"], "", "_self", $this->getStrDisplayName(), "mediaFolder", "&highlight=".urlencode(html_entity_decode($objResult->getObjSearch()->getStrQuery(), ENT_QUOTES, "UTF-8")), $this->getPrevId(), "", "", $this->getStrDisplayName()));
-            $objOneResult->setStrPagename($arrOnePage["page_name"]);
+            $objOneResult->setStrLinkPageI($arrOnePage["page_name"]);
+            $objOneResult->setStrLinkText($this->getStrDisplayName());
+            $objOneResult->setStrLinkParams("&highlight=" . urlencode(html_entity_decode($objResult->getObjSearch()->getStrQuery(), ENT_QUOTES, "UTF-8")));
+            $objOneResult->setStrLinkAction("mediaFolder");
+            $objOneResult->setStrLinkPagename($arrOnePage["page_name"]);
             $objOneResult->setStrDescription($this->getStrDescription());
 
             $arrReturn[] = $objOneResult;

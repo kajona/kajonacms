@@ -69,7 +69,7 @@ class class_module_search_portal_xml extends class_portal_controller implements 
         $strReturn .= "    <resultset>\n";
         foreach($arrResults as $objOneResult) {
 
-            $objPage = class_module_pages_page::getPageByName($objOneResult->getStrPagename());
+            $objPage = class_module_pages_page::getPageByName($objOneResult->getStrLinkPagename());
             if($objPage === null || !$objPage->rightView() || $objPage->getIntRecordStatus() != 1)
                 continue;
 
@@ -78,12 +78,14 @@ class class_module_search_portal_xml extends class_portal_controller implements 
                 break;
 
             //create a correct link
-            if($objOneResult->getStrPagelink() == "")
-                $objOneResult->setStrPagelink(getLinkPortal($objOneResult->getStrPagename(), "", "_self", $objOneResult->getStrPagename(), "", "&highlight=".$strSearchterm."#".$strSearchterm));
-
+            if($objOneResult->getStrPagelink() == ""){
+                $objOneResult->setStrLinkPageI($objOneResult->getStrLinkPagename());
+                $objOneResult->setStrLinkText($objOneResult->getStrLinkPagename());
+                $objOneResult->setStrLinkParams("&highlight=".$strSearchterm."#".$strSearchterm);
+            }
             $strReturn .=
                 "        <item>\n"
-                    ."            <pagename>".$objOneResult->getStrPagename()."</pagename>\n"
+                    ."            <pagename>".$objOneResult->getStrLinkPagename()."</pagename>\n"
                     ."            <pagelink>".$objOneResult->getStrPagelink()."</pagelink>\n"
                     ."            <score>".$objOneResult->getIntHits()."</score>\n"
                     ."            <description>".xmlSafeString(uniStrTrim($objOneResult->getStrDescription(), 200))."</description>\n"

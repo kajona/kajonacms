@@ -21,20 +21,111 @@ class class_search_result {
     private $intHits = 1;
     private $intScore = 0;
     private $strSystemid;
-    private $strPagelink;
-    private $strPagename;
     private $strDescription;
+
     private $objObject = null;
+
+    private $strAdminlink;
+    // Link Portal Page
+    private $strLinkPagename;
+    private $strLinkPageI;
+    private $strLinkText;
+    private $strLinkAction;
+    private $strLinkParams;
+    private $strLinkSystemid;
+    private $strLinkModul;
+
+    /**
+     * @return mixed
+     */
+    public function getStrLinkModul()
+    {
+        return $this->strLinkModul;
+    }
+
+    /**
+     * @param mixed $strLinkModul
+     */
+    public function setStrLinkModul($strLinkModul)
+    {
+        $this->strLinkModul = $strLinkModul;
+    }
 
     /** @var class_module_search_search */
     private $objSearch = null;
 
 
     /**
+     * @return mixed
+     */
+    public function getStrLinkPageI()
+    {
+        return $this->strLinkPageI;
+    }
+
+    /**
+     * @param mixed $strLinkPageI
+     */
+    public function setStrLinkPageI($strLinkPageI)
+    {
+        $this->strLinkPageI = $strLinkPageI;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getStrLinkParams()
+    {
+        return $this->strLinkParams;
+    }
+
+    /**
+     * @param mixed $strLinkParams
+     */
+    public function setStrLinkParams($strLinkParams)
+    {
+        $this->strLinkParams = $strLinkParams;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getStrLinkSystemid()
+    {
+        return $this->strLinkSystemid;
+    }
+
+    /**
+     * @param mixed $strLinkSystemid
+     */
+    public function setStrLinkSystemid($strLinkSystemid)
+    {
+        $this->strLinkSystemid = $strLinkSystemid;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getStrLinkText()
+    {
+        if ($this->strLinkText !== "")
+            return $this->strLinkText;
+        return $this->strLinkPageI;
+    }
+
+    /**
+     * @param mixed $strLinkText
+     */
+    public function setStrLinkText($strLinkText)
+    {
+        $this->strLinkText = $strLinkText;
+    }
+
+    /**
      * @return string
      */
     public function getStrSortHash() {
-        return sha1($this->strSystemid.$this->strPagename.$this->strPagelink);
+        return sha1($this->strSystemid.$this->strLinkPagename.$this->strAdminlink);
     }
 
     /**
@@ -83,33 +174,46 @@ class class_search_result {
     }
 
     /**
-     * @param string $strPagelink
+     * @param string $strLinkAction
      * @return void
      */
-    public function setStrPagelink($strPagelink) {
-        $this->strPagelink = $strPagelink;
+    public function setStrLinkAction($strLinkAction) {
+        $this->strLinkAction = $strLinkAction;
     }
 
     /**
      * @return mixed
      */
-    public function getStrPagelink() {
-        return $this->strPagelink;
+    public function getStrLinkAction() {
+        return $this->strLinkAction;
+    }
+
+    public function setStrAdminlink($strAdminlink){
+        $this->strAdminlink = $strAdminlink;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getStrPagelink($bitAdminLink = false) {
+        if ($bitAdminLink)
+            return $this->strAdminlink;
+        return class_link::getLinkPortal($this->strLinkPageI, "", "_self", $this->strLinkText, $this->strLinkAction, $this->strLinkParams, $this->strLinkSystemid, "", "&highlight=".urlencode(html_entity_decode($this->getObjSearch()->getStrQuery(), ENT_QUOTES, "UTF-8")));
     }
 
     /**
      * @param string $strPagename
      * @return void
      */
-    public function setStrPagename($strPagename) {
-        $this->strPagename = $strPagename;
+    public function setStrLinkPagename($strPagename) {
+        $this->strLinkPagename = $strPagename;
     }
 
     /**
      * @return mixed
      */
-    public function getStrPagename() {
-        return $this->strPagename;
+    public function getStrLinkPagename() {
+        return $this->strLinkPagename;
     }
 
     /**

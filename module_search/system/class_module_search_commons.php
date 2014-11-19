@@ -92,7 +92,7 @@ class class_module_search_commons extends class_model implements interface_model
         //if the object is an instance of interface_search_resultobject, the target-link may be updated
         foreach($arrHits as $objOneResult) {
             if($objOneResult->getObjObject() instanceof interface_search_resultobject)
-                $objOneResult->setStrPagelink($objOneResult->getObjObject()->getSearchAdminLinkForObject());
+                $objOneResult->setStrAdminlink($objOneResult->getObjObject()->getSearchAdminLinkForObject());
         }
 
         return $arrHits;

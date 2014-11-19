@@ -60,12 +60,13 @@ class class_element_search_portal extends class_element_portal implements interf
 
         $objPoint = new class_module_navigation_point();
         $objPoint->setIntRecordStatus(1, false);
-        $objPoint->setStrName("searchresultsmodules");
-        $objPoint->setStrPageI("searchresultsmodules");
+        $objPoint->setStrName("blubber");
+        //$objPoint->setStrName("searchresultsmodules");
+        //$objPoint->setStrPageI("searchresultsmodules");
 
-        $objPoint->setStrLinkSystemid($this->getSystemid());
-        $objPoint->setSystemid($this->getSystemid());
-        $objPoint->setStrLinkAction("list");
+        //$objPoint->setStrLinkSystemid($this->getSystemid());
+        //$objPoint->setSystemid($this->getSystemid());
+        //$objPoint->setStrLinkAction("list");
         $objPoint->setBitIsForeignNode(true);
 
         $arrEntries = array();
@@ -74,9 +75,11 @@ class class_element_search_portal extends class_element_portal implements interf
         foreach($arrHitsSorted as $objHit) {
             $objPoint = new class_module_navigation_point();
             $objPoint->setIntRecordStatus(1, false);
-            $objPoint->setStrName($objHit->getStrPagename());
-            $objPoint->setStrPageI($objHit->getStrPagename());
+            $objPoint->setStrName($objHit->getStrLinkText());
+            $objPoint->setStrPageI($objHit->getStrLinkPagename());
             $objPoint->setStrLinkSystemid($objHit->getObjObject()->getSystemid());
+            $objPoint->setStrLinkSystemid($objHit->getStrLinkSystemid());
+            $objPoint->setStrLinkAction($objHit->getStrLinkAction());
             $objPoint->setSystemid($objHit->getObjObject()->getSystemid());
             $objPoint->setBitIsForeignNode(true);
 
@@ -84,9 +87,7 @@ class class_element_search_portal extends class_element_portal implements interf
                 "node" => $objPoint,
                 "subnodes" => array()
             );
-
             $arrEntries[] = $arrTemp;
-
         }
 
         $arrReturn["node"] = $objPoint;

@@ -235,8 +235,9 @@ class class_module_postacomment_post extends class_model implements interface_mo
      */
     public function updateSearchResult(class_search_result $objResult) {
         $objPage = new class_module_pages_page($this->getStrAssignedPage());
-        $objResult->setStrPagelink(class_link::getLinkPortal($objPage->getStrName(), "", "_self", $this->getStrTitle() != "" ? $this->getStrTitle() : $objPage->getStrName(), "", "&highlight=".urlencode(html_entity_decode($objResult->getObjSearch()->getStrQuery(), ENT_QUOTES, "UTF-8"))));
-        $objResult->setStrPagename($objPage->getStrName());
+        $objResult->setStrLinkPageI($objPage->getStrName());
+        $objResult->setStrLinkText($this->getStrTitle() != "" ? $this->getStrTitle() : $objPage->getStrName());
+        $objResult->setStrLinkPagename($objPage->getStrName());
         $objResult->setStrDescription($this->getStrComment());
     }
 
