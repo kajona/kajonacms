@@ -16,6 +16,8 @@
  *
  * @module system
  * @moduleId _system_modul_id_
+ *
+ * @blockFromAutosave
  */
 class class_module_system_setting extends class_model implements interface_model, interface_versionable {
 

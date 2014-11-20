@@ -9,28 +9,23 @@ class class_test_generalModelTest extends class_testbase {
 
         echo "preparing object saves...\n";
 
-        $arrBlockedClasses = array(
-            "class_module_pages_element",
-            "class_module_languages_languageset",
-            "class_module_system_session",
-            "class_module_system_setting",
-            "class_module_user_group",
-            "class_module_user_user",
-            "class_module_workflows_workflow",
-            "class_module_pages_pageelement",
-            "class_module_stats_worker"
-        );
-
         class_carrier::getInstance()->getObjRights()->setBitTestMode(true);
 
-        $arrFiles = class_resourceloader::getInstance()->getFolderContent("/system", array(".php"), false, function(&$strOneFile) use ($arrBlockedClasses) {
+        $arrFiles = class_resourceloader::getInstance()->getFolderContent("/system", array(".php"), false, function(&$strOneFile) {
             if(uniStripos($strOneFile, "class_module_") !== false) {
                 $objClass = new ReflectionClass(uniSubstr($strOneFile, 0, -4));
                 if(!$objClass->isAbstract() && $objClass->isSubclassOf("class_model")) {
-                    if(!in_array($objClass->getName(), $arrBlockedClasses)) {
-                        $strOneFile = $objClass->newInstance();
-                        return true;
+
+                    $objAnnotations = new class_reflection(uniSubstr($strOneFile, 0, -4));
+
+                    //block from autotesting?
+                    if($objAnnotations->hasClassAnnotation("@blockFromAutosave")) {
+                        echo "skipping class ".uniSubstr($strOneFile, 0, -4)." due to @blockFromAutosave annoation"."\n";
+                        return false;
                     }
+
+                    $strOneFile = $objClass->newInstance();
+                    return true;
                 }
             }
 

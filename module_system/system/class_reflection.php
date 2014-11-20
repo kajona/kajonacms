@@ -23,8 +23,9 @@ class class_reflection {
     private static $strAnnotationsCacheFile;
     private static $bitCacheSaveRequired = false;
 
+    private static $STR_HASCLASS_CACHE = "hasclass";
     private static $STR_CLASS_PROPERTIES_CACHE = "classproperties";
-    
+
     private static $STR_METHOD_CACHE = "methods";
     private static $STR_HASMETHOD_CACHE = "hasmethods";
 
@@ -190,6 +191,29 @@ class class_reflection {
         }
 
         $this->arrCurrentCache[self::$STR_HASMETHOD_CACHE][$strMethodName."_".$strAnnotation] = $bitReturn;
+        self::$bitCacheSaveRequired = true;
+        return $bitReturn;
+    }
+
+    /**
+     * searches an annotation (e.g. @version) in the doccomment of the current class and validates
+     * the existence of this annotation.
+     *
+     * @param string $strAnnotation
+     * @return bool
+     */
+    public function hasClassAnnotation($strAnnotation) {
+        if(isset($this->arrCurrentCache[self::$STR_HASCLASS_CACHE][$strAnnotation]))
+            return $this->arrCurrentCache[self::$STR_HASCLASS_CACHE][$strAnnotation];
+
+        try {
+            $bitReturn = false !== $this->searchFirstAnnotationInDoc($this->objReflectionClass->getDocComment(), $strAnnotation);
+        }
+        catch(ReflectionException $objEx) {
+            $bitReturn = false;
+        }
+
+        $this->arrCurrentCache[self::$STR_HASCLASS_CACHE][$strAnnotation] = $bitReturn;
         self::$bitCacheSaveRequired = true;
         return $bitReturn;
     }

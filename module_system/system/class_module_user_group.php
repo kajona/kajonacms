@@ -16,6 +16,8 @@
  *
  * @module user
  * @moduleId _user_modul_id_
+ *
+ * @blockFromAutosave
  */
 class class_module_user_group extends class_model implements interface_model, interface_admin_listable {
 

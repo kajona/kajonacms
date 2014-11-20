@@ -23,6 +23,8 @@
  *
  * @module languages
  * @moduleId _languages_modul_id_
+ *
+ * @blockFromAutosave
  */
 class class_module_languages_languageset extends class_model implements interface_model {
 

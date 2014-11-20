@@ -18,6 +18,8 @@
  *
  * @module workflows
  * @moduleId _workflows_module_id_
+ *
+ * @blockFromAutosave
  */
 class class_module_workflows_workflow extends class_model implements interface_model, interface_admin_listable  {
 

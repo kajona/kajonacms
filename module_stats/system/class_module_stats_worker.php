@@ -15,6 +15,8 @@
  *
  * @module stats
  * @moduleId _stats_modul_id_
+ *
+ * @blockFromAutosave
  */
 class class_module_stats_worker extends class_model implements interface_model {
 
