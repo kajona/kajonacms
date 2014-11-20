@@ -46,7 +46,28 @@ class class_formentry_dependentdropdown extends class_formentry_base implements 
      * @return string
      */
     public function getValueAsText() {
-        return "todo";
+
+        //load all matching and possible values based on the prefix
+        if($this->getObjSourceObject() == null || $this->getStrSourceProperty() == "")
+            return $this->getStrValue(). " Error: No target object mapped or missing @fieldValuePrefix annotation!";
+
+
+
+        $objReflection = new class_reflection($this->getObjSourceObject());
+
+        //try to find the matching source property
+        $arrProperties = $objReflection->getPropertiesWithAnnotation(self::STR_VALUE_ANNOTATION);
+        $strSourceProperty = null;
+        foreach($arrProperties as $strPropertyName => $strValue) {
+            if(uniSubstr(uniStrtolower($strPropertyName), (uniStrlen($this->getStrSourceProperty()))*-1) == $this->getStrSourceProperty())
+                $strSourceProperty = $strPropertyName;
+        }
+
+        if($strSourceProperty == null)
+            return $this->getStrValue();
+
+        $strPrefix = trim($objReflection->getAnnotationValueForProperty($strSourceProperty, self::STR_VALUE_ANNOTATION));
+        return $this->getObjSourceObject()->getLang($strPrefix.$this->getStrValue());
     }
 
 

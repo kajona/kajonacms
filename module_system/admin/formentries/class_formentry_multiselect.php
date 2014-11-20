@@ -14,7 +14,7 @@
  * @since 4.0
  * @package module_formgenerator
  */
-class class_formentry_multiselect extends class_formentry_dropdown implements interface_formentry {
+class class_formentry_multiselect extends class_formentry_dropdown {
 
     private $arrKeyValues = array();
 
@@ -49,6 +49,24 @@ class class_formentry_multiselect extends class_formentry_dropdown implements in
             }
         }
         return true;
+    }
+
+    /**
+     * Returns a textual representation of the formentries' value.
+     * May contain html, but should be stripped down to text-only.
+     *
+     * @return string
+     */
+    public function getValueAsText() {
+        $arrSelected = $this->getStrValue();
+        if(!is_array($arrSelected))
+            $arrSelected = explode(",", $this->getStrValue());
+
+        array_walk($arrSelected, function(&$strValue) {
+            $strValue = $this->arrKeyValues[$strValue];
+        });
+
+        return implode(", ", $arrSelected);
     }
 
     /**

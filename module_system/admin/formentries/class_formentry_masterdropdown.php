@@ -148,26 +148,12 @@ JS;
         parent::updateValue();
 
         //load all matching and possible values based on the prefix
-
-
         if($this->getObjSourceObject() != null && $this->getStrSourceProperty() != "") {
-            $objReflection = new class_reflection($this->getObjSourceObject());
 
-            //try to find the matching source property
-            $arrProperties = $objReflection->getPropertiesWithAnnotation(self::STR_VALUE_ANNOTATION);
-            $strSourceProperty = null;
-            foreach($arrProperties as $strPropertyName => $strValue) {
-                if(uniSubstr(uniStrtolower($strPropertyName), (uniStrlen($this->getStrSourceProperty()))*-1) == $this->getStrSourceProperty())
-                    $strSourceProperty = $strPropertyName;
-            }
+            $strPrefix = "";
+            $arrDepends = array();
 
-            if($strSourceProperty == null)
-                return;
-
-            $strPrefix = trim($objReflection->getAnnotationValueForProperty($strSourceProperty, self::STR_VALUE_ANNOTATION));
-            $strDependant = trim($objReflection->getAnnotationValueForProperty($strSourceProperty, self::STR_DEPENDS_ANNOTATION));
-            $arrDepends = explode(" ", $strDependant);
-            array_walk($arrDepends, function(&$strValue) { $strValue = trim($strValue); });
+            $this->getValueForAnnotations($strPrefix, $arrDepends);
 
             if($strPrefix == "" || count($arrDepends) == 0)
                 return;
@@ -194,6 +180,27 @@ JS;
             }
 
         }
+    }
+
+
+    private function getValueForAnnotations(&$strPrefix, &$arrDepends) {
+        $objReflection = new class_reflection($this->getObjSourceObject());
+
+        //try to find the matching source property
+        $arrProperties = $objReflection->getPropertiesWithAnnotation(self::STR_VALUE_ANNOTATION);
+        $strSourceProperty = null;
+        foreach($arrProperties as $strPropertyName => $strValue) {
+            if(uniSubstr(uniStrtolower($strPropertyName), (uniStrlen($this->getStrSourceProperty()))*-1) == $this->getStrSourceProperty())
+                $strSourceProperty = $strPropertyName;
+        }
+
+        if($strSourceProperty == null)
+            return;
+
+        $strPrefix = trim($objReflection->getAnnotationValueForProperty($strSourceProperty, self::STR_VALUE_ANNOTATION));
+        $strDependant = trim($objReflection->getAnnotationValueForProperty($strSourceProperty, self::STR_DEPENDS_ANNOTATION));
+        $arrDepends = explode(" ", $strDependant);
+        array_walk($arrDepends, function(&$strValue) { $strValue = trim($strValue); });
     }
 
     private function getSublevel($strVarLabel, $strPrefix, $intLevel) {
@@ -226,7 +233,22 @@ JS;
      * @return string
      */
     public function getValueAsText() {
-        return "todo";
+        //load all matching and possible values based on the prefix
+        if($this->getObjSourceObject() != null && $this->getStrSourceProperty() != "") {
+
+            $strPrefix = "";
+            $arrDepends = array();
+
+            $this->getValueForAnnotations($strPrefix, $arrDepends);
+
+            $strValue = $this->getStrValue();
+            if($strValue[0] != "_")
+                $strValue = "_".$strValue;
+
+            return $this->getObjSourceObject()->getLang($strPrefix.$strValue);
+
+        }
+        return "Error: No target object mapped or missing @fieldValuePrefix annotation!";
     }
 
 
