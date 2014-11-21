@@ -20,6 +20,14 @@
  */
 class class_date {
 
+    const INT_DAY_SUNDAY = 0;
+    const INT_DAY_MONDAY = 1;
+    const INT_DAY_TUESDAY = 2;
+    const INT_DAY_WEDNESDAY = 3;
+    const INT_DAY_THURSDAY = 4;
+    const INT_DAY_FRIDAY = 5;
+    const INT_DAY_SATURDAY = 6;
+
     private $strStringFormat = "YYYYmmddHHiiss";
 
     private $strDateTimeFormat = "YYMMDDHHIISS";
