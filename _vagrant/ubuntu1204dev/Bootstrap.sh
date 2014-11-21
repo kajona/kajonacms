@@ -8,7 +8,7 @@ apt-get -qy install gnome-session-fallback
 # Install Launcher.
 apt-get -qy install gnome-do
 
-echo "Installing IntelliJ IDEA..."
+echo "Installing PhpStorm..."
 
 # We need root to install
 [ $(id -u) != "0" ] && exec sudo "$0" "$@"
@@ -34,7 +34,7 @@ add-apt-repository ppa:webupd8team/java && apt-get -q update && apt-get -qy inst
 ed=U;
 
 # Fetch the most recent community edition URL
-URL=$(wget "http://www.jetbrains.com/idea/download/download_thanks.jsp?edition=I${ed}&os=linux" -qO- | grep -o -m 1 "http://download.jetbrains.com/idea/.*gz")
+URL=$(wget "http://www.jetbrains.com/phpstorm/download/download_thanks.jsp?os=linux" -qO- | grep -o -m 1 "http://download.jetbrains.com/webide/.*gz")
 echo ${URL};
 
 # Truncate filename
@@ -55,19 +55,19 @@ fi
 BIN="/opt/$DIR/bin"
 
 # Add permissions to install directory
-chmod 755 ${BIN}/idea.sh
+chmod 755 ${BIN}/phpstorm.sh
 
 # Set desktop shortcut path
-DESK="/usr/share/applications/IDEA.desktop"
+DESK="/usr/share/applications/PhpStorm.desktop"
 
 # Add desktop shortcut
-echo -e "[Desktop Entry]\nEncoding=UTF-8\nName=IntelliJ IDEA\nComment=IntelliJ IDEA\nExec=${BIN}/idea.sh\nIcon=${BIN}/idea.png\nTerminal=false\nStartupNotify=true\nType=Application" > ${DESK}
+echo -e "[Desktop Entry]\nEncoding=UTF-8\nName=PhpStorm\nComment=PhpStorm IDEA\nExec=${BIN}/phpstorm.sh\nIcon=${BIN}/webide.png\nTerminal=false\nStartupNotify=true\nType=Application" > ${DESK}
 
 cp ${DESK} /home/vagrant/Desktop/
-chown vagrant /home/vagrant/Desktop/IDEA.desktop
-chmod a+x /home/vagrant/Desktop/IDEA.desktop
+chown vagrant /home/vagrant/Desktop/PhpStorm.desktop
+chmod a+x /home/vagrant/Desktop/PhpStorm.desktop
 
-echo "IntelliJ IDEA installed"
+echo "PhpStorm installed"
 
 echo "Install git"
 
