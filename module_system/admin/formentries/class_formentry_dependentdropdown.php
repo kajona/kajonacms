@@ -67,7 +67,11 @@ class class_formentry_dependentdropdown extends class_formentry_base implements 
             return $this->getStrValue();
 
         $strPrefix = trim($objReflection->getAnnotationValueForProperty($strSourceProperty, self::STR_VALUE_ANNOTATION));
-        return $this->getObjSourceObject()->getLang($strPrefix.$this->getStrValue());
+        if($this->getStrValue() !== null && $this->getStrValue() !== "") {
+            return $this->getObjSourceObject()->getLang($strPrefix.$this->getStrValue());
+        }
+
+        return "";
     }
 
 
