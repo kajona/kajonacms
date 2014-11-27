@@ -1706,8 +1706,10 @@ abstract class class_root {
         $bitReturn = true;
 
         if($intPrevStatus != $intRecordStatus && $intPrevStatus != -1) {
-            if(validateSystemid($this->getSystemid()))
+            if(validateSystemid($this->getSystemid())) {
                 $this->updateObjectToDb();
+                class_carrier::getInstance()->flushCache(class_carrier::INT_CACHE_TYPE_ORMCACHE | class_carrier::INT_CACHE_TYPE_DBQUERIES);
+            }
             if($bitFireStatusChangeEvent && validateSystemid($this->getSystemid())) {
                 $bitReturn = class_core_eventdispatcher::notifyStatusChangedListeners($this->getSystemid(), $intRecordStatus);
             }
