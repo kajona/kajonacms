@@ -69,7 +69,15 @@ class class_formentry_date extends class_formentry_base implements interface_for
 
     public function validateValue() {
         $objDate = new class_date("0");
-        $objDate->generateDateFromParams($this->getStrEntryName(), class_carrier::getAllParams());
+
+        $arrParams = class_carrier::getAllParams();
+        if(array_key_exists($this->getStrEntryName(), $arrParams)) {
+            $objDate->generateDateFromParams($this->getStrEntryName(), $arrParams);
+        }
+        else {
+            $objDate = new class_date($this->getStrValue());
+        }
+
         return $this->getObjValidator()->validate($objDate);
     }
 
