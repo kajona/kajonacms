@@ -78,9 +78,10 @@ KAJONA.admin.portaleditor = {
 		peDialog.init();
 	},
 
-	closeDialog: function () {
-	    var bitClose = confirm(KAJONA.admin.lang["pe_dialog_close_warning"]);
-	    if(bitClose) {
+	closeDialog: function (bitSkipConfirmation) {
+        if(!bitSkipConfirmation)
+	        var bitClose = confirm(KAJONA.admin.lang["pe_dialog_close_warning"]);
+	    if(bitClose || bitSkipConfirmation) {
 	    	peDialog.hide();
 	    	//reset iframe
 	    	peDialog.setContentRaw("");
@@ -92,7 +93,36 @@ KAJONA.admin.portaleditor = {
 			placeholderName: strPlaceholderName,
 			elements: arrElements
 		};
-	}
+	},
+
+    changeElementData : function(strDataPlaceholder, strDataSystemid, objElementData) {
+
+        console.log("updating container "+strDataSystemid+" at placeholder "+strDataPlaceholder);
+        var $objContent = jQuery.parseHTML(objElementData);
+
+        //see if the element is already present, then flip the contents
+        if($("div.peElementWrapper[data-systemid='"+strDataSystemid+"']").length) {
+            $("div.peElementWrapper[data-systemid='"+strDataSystemid+"']").html($($objContent).closest("div.peElementWrapper[data-systemid="+strDataSystemid+"]").html());
+        }
+        else {
+            //add it as the last element to the placeholder itself
+            strDataPlaceholder = strDataPlaceholder.replace(/\|/g, '\\|');
+            $("#menuContainer_"+strDataPlaceholder).before($($objContent).closest("div.peElementWrapper[data-systemid="+strDataSystemid+"]"));
+        }
+
+    },
+
+    deleteElementData : function(strSystemid) {
+        $("div.peElementWrapper[data-systemid='"+strSystemid+"']").remove();
+        //and delete the element on the backend
+        var data = {
+            systemid: strSystemid
+        };
+        $.post(KAJONA_WEBPATH + '/xml.php?admin=1&module=pages_content&action=deleteElementFinalXML', data, function () {
+        }).fail(function() {
+                location.reload();
+        });
+    }
 };
 
 KAJONA.admin.portaleditor.RTE = {};

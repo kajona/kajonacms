@@ -476,6 +476,24 @@ class class_module_pages_content_admin extends class_admin_simple implements int
             $objPage = new class_module_pages_page($strPageSystemid);
             $this->flushCompletePagesCache();
 
+            if($this->getParam("peClose") == "1") {
+
+                //generate the elements' output
+                $objPortalElement = $objElementData->getConcretePortalInstance();
+                $strElementContent = $objPortalElement->getElementOutput();
+
+                $strContent = json_encode($strElementContent, JSON_FORCE_OBJECT); //JSON_HEX_QUOT|JSON_HEX_APOS
+
+                $strReturn = <<<JS
+                    parent.KAJONA.admin.portaleditor.changeElementData('{$objElementData->getStrPlaceholder()}', '{$objElementData->getSystemid()}', {$strContent});
+                    parent.KAJONA.admin.portaleditor.closeDialog(true);
+
+JS;
+                class_carrier::getInstance()->setParam("peClose", null);
+                return "<script type='text/javascript'>{$strReturn}</script>";
+
+            }
+
             $this->adminReload(class_link::getLinkAdminHref("pages_content", "list", "systemid=".$objPage->getSystemid()));
 
         }
@@ -490,6 +508,7 @@ class class_module_pages_content_admin extends class_admin_simple implements int
      *
      * @throws class_exception
      * @return string , "" in case of success
+     * @permissions delete
      */
     protected function actionDeleteElementFinal() {
         $strReturn = "";
@@ -505,6 +524,15 @@ class class_module_pages_content_admin extends class_admin_simple implements int
                 if(!$objPageElement->deleteObject())
                     throw new class_exception("Error deleting element from db", class_exception::$level_ERROR);
 
+                if($this->getParam("pe") == "1") {
+                    $strReturn = <<<JS
+                    parent.KAJONA.admin.portaleditor.deleteElementData('{$objPageElement->getSystemid()}');
+                    parent.KAJONA.admin.portaleditor.closeDialog(true);
+JS;
+                    class_carrier::getInstance()->setParam("peClose", null);
+                    return "<script type='text/javascript'>{$strReturn}</script>";
+                }
+
                 $this->adminReload(class_link::getLinkAdminHref("pages_content", "list", "systemid=".$strPrevId.($this->getParam("pe") == "" ? "" : "&peClose=".$this->getParam("pe"))));
             }
             else {
@@ -515,6 +543,35 @@ class class_module_pages_content_admin extends class_admin_simple implements int
             $strReturn = $this->getLang("commons_error_permissions");
 
         return $strReturn;
+    }
+
+
+    /**
+     * Deletes an Element
+     *
+     * @throws class_exception
+     * @return string , "" in case of success
+     * @permissions delete
+     * @xml
+     */
+    protected function actionDeleteElementFinalXML() {
+
+        $objPageElement = new class_module_pages_pageelement($this->getSystemid());
+        if($objPageElement->rightDelete()) {
+            //Locked?
+            $objLockmanager = new class_lockmanager($this->getSystemid());
+
+            if($objLockmanager->isAccessibleForCurrentUser()) {
+                //delete object
+                if(!$objPageElement->deleteObject())
+                    throw new class_exception("Error deleting element from db", class_exception::$level_ERROR);
+
+
+                return "<message><success></success></message>";
+            }
+        }
+        class_response_object::getInstance()->setStrStatusCode(class_http_statuscodes::SC_FORBIDDEN);
+        return "<message><error>".$this->getLang('commons_error_permissions')."</error></message>";
     }
 
 
