@@ -83,17 +83,27 @@ class class_element_search_portal extends class_element_portal implements interf
             $objPoint->setSystemid($objHit->getObjObject()->getSystemid());
             $objPoint->setBitIsForeignNode(true);
 
+            //The complex structure is only required if you want to make use of a nested structure
+            /*
             $arrTemp = array(
                 "node" => $objPoint,
                 "subnodes" => array()
             );
-            $arrEntries[] = $arrTemp;
+            */
+
+            //since search results are a flat list, we could return a simple array of points
+            $arrEntries[] = $objPoint;
+
         }
 
+        return $arrEntries;
+
+        /*
         $arrReturn["node"] = $objPoint;
         $arrReturn["subnodes"] = $arrEntries;
 
         return $arrReturn;
+        */
     }
 
 }
