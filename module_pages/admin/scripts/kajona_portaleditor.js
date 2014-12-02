@@ -78,9 +78,10 @@ KAJONA.admin.portaleditor = {
 		peDialog.init();
 	},
 
-	closeDialog: function () {
-	    var bitClose = confirm(KAJONA.admin.lang["pe_dialog_close_warning"]);
-	    if(bitClose) {
+	closeDialog: function (bitSkipConfirmation) {
+        if(!bitSkipConfirmation)
+	        var bitClose = confirm(KAJONA.admin.lang["pe_dialog_close_warning"]);
+	    if(bitClose || bitSkipConfirmation) {
 	    	peDialog.hide();
 	    	//reset iframe
 	    	peDialog.setContentRaw("");
@@ -92,7 +93,25 @@ KAJONA.admin.portaleditor = {
 			placeholderName: strPlaceholderName,
 			elements: arrElements
 		};
-	}
+	},
+
+    changeElementData : function(strDataPlaceholder, strDataSystemid, objElementData) {
+
+        console.log("updating container "+strDataSystemid+" at placeholder "+strDataPlaceholder);
+        var $objContent = jQuery.parseHTML(objElementData);
+
+        //see if the element is already present, then flip the contents
+        if($("div.peElementWrapper[data-systemid='"+strDataSystemid+"']").length) {
+            $("div.peElementWrapper[data-systemid='"+strDataSystemid+"']").html($($objContent).closest("div.peElementWrapper[data-systemid="+strDataSystemid+"]").html());
+        }
+        else {
+            //add it as the last element to the placeholder itself
+            strDataPlaceholder = strDataPlaceholder.replace(/\|/g, '\\|');
+            console.log(strDataPlaceholder);
+            $("#menuContainer_"+strDataPlaceholder).before($($objContent).closest("div.peElementWrapper[data-systemid="+strDataSystemid+"]"));
+        }
+
+    }
 };
 
 KAJONA.admin.portaleditor.RTE = {};

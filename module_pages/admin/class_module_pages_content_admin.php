@@ -476,6 +476,24 @@ class class_module_pages_content_admin extends class_admin_simple implements int
             $objPage = new class_module_pages_page($strPageSystemid);
             $this->flushCompletePagesCache();
 
+            if($this->getParam("peClose") == "1") {
+
+                //generate the elements' output
+                $objPortalElement = $objElementData->getConcretePortalInstance();
+                $strElementContent = $objPortalElement->getElementOutput();
+
+                $strContent = json_encode($strElementContent, JSON_FORCE_OBJECT); //JSON_HEX_QUOT|JSON_HEX_APOS
+
+                $strReturn = <<<JS
+                    parent.KAJONA.admin.portaleditor.changeElementData('{$objElementData->getStrPlaceholder()}', '{$objElementData->getSystemid()}', {$strContent});
+                    parent.KAJONA.admin.portaleditor.closeDialog(true);
+
+JS;
+                class_carrier::getInstance()->setParam("peClose", null);
+                return "<script type='text/javascript'>{$strReturn}</script>";
+
+            }
+
             $this->adminReload(class_link::getLinkAdminHref("pages_content", "list", "systemid=".$objPage->getSystemid()));
 
         }
