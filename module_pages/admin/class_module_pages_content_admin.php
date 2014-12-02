@@ -523,6 +523,15 @@ JS;
                 if(!$objPageElement->deleteObject())
                     throw new class_exception("Error deleting element from db", class_exception::$level_ERROR);
 
+                if($this->getParam("pe") == "1") {
+                    $strReturn = <<<JS
+                    parent.KAJONA.admin.portaleditor.deleteElementData('{$objPageElement->getSystemid()}');
+                    parent.KAJONA.admin.portaleditor.closeDialog(true);
+JS;
+                    class_carrier::getInstance()->setParam("peClose", null);
+                    return "<script type='text/javascript'>{$strReturn}</script>";
+                }
+
                 $this->adminReload(class_link::getLinkAdminHref("pages_content", "list", "systemid=".$strPrevId.($this->getParam("pe") == "" ? "" : "&peClose=".$this->getParam("pe"))));
             }
             else {

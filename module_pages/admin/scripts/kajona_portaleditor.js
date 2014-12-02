@@ -107,10 +107,13 @@ KAJONA.admin.portaleditor = {
         else {
             //add it as the last element to the placeholder itself
             strDataPlaceholder = strDataPlaceholder.replace(/\|/g, '\\|');
-            console.log(strDataPlaceholder);
             $("#menuContainer_"+strDataPlaceholder).before($($objContent).closest("div.peElementWrapper[data-systemid="+strDataSystemid+"]"));
         }
 
+    },
+
+    deleteElementData : function(strSystemid) {
+        $("div.peElementWrapper[data-systemid='"+strSystemid+"']").remove();
     }
 };
 
