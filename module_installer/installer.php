@@ -175,7 +175,7 @@ class class_installer {
             if(is_writable(_realpath_.$strOneFile))
                 $strReturn .= "<span class=\"label label-success\">".$this->getLang("installer_given")."</span>.";
             else
-                $strReturn .= "<span class=\"label label-important\">".$this->getLang("installer_missing")."</span>!";
+                $strReturn .= "<span class=\"label label-danger\">".$this->getLang("installer_missing")."</span>!";
             $strReturn .= "</li>";
         }
 
@@ -184,7 +184,7 @@ class class_installer {
             if(in_array($strOneModule, get_loaded_extensions()))
                 $strReturn .= " <span class=\"label label-success\">".$this->getLang("installer_loaded")."</span>.";
             else
-                $strReturn .= " <span class=\"label label-important\">".$this->getLang("installer_nloaded")."</span>!";
+                $strReturn .= " <span class=\"label label-danger\">".$this->getLang("installer_nloaded")."</span>!";
 
             $strReturn .= "</li>";
         }
