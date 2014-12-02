@@ -74,7 +74,7 @@ class class_element_search_portal extends class_element_portal implements interf
         /** @var $arrHitsSorted class_search_result[] */
         foreach($arrHitsSorted as $objHit) {
             $objPoint = new class_module_navigation_point();
-            $objPoint->setIntRecordStatus(1, false);
+            $objPoint->setIntRecordStatus($objHit->getObjObject()->getIntRecordStatus(), false);
             $objPoint->setStrName($objHit->getStrLinkText());
             $objPoint->setStrPageI($objHit->getStrLinkPagename());
             $objPoint->setStrLinkSystemid($objHit->getObjObject()->getSystemid());
