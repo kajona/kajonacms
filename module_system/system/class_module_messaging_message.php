@@ -47,7 +47,7 @@ class class_module_messaging_message extends class_model implements interface_mo
     /**
      * @var string
      * @tableColumn message_body
-     * @tableColumnDatatype text
+     * @tableColumnDatatype longtext
      * @fieldType textarea
      * @fieldLabel message_body
      * @fieldMandatory
