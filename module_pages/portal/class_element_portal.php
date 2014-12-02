@@ -326,14 +326,18 @@ abstract class class_element_portal extends class_portal_controller {
             if($strModule == "pages_content") {
                 $arrConfig["pe_action_delete"] = "deleteElementFinal";
                 $arrConfig["pe_action_edit_params"] = "&systemid=".$strSystemid;
+
+                $strCallback = " function() { delDialog.hide(); KAJONA.admin.portaleditor.deleteElementData('$strSystemid'); return false; } ";
+            }
+            else {
+                $strDeleteUrl = class_link::getLinkAdminHref($strModule, $arrConfig["pe_action_delete"], $arrConfig["pe_action_edit_params"].$strAdminLangParam."&pe=1");
+                $strCallback = " function() { delDialog.hide(); KAJONA.admin.portaleditor.openDialog('$strDeleteUrl'); return false; } ";
             }
 
             if(isset($arrConfig["pe_action_delete"]) && $arrConfig["pe_action_delete"] != "") {
-                $strDeleteUrl = class_link::getLinkAdminHref($strModule, $arrConfig["pe_action_delete"], $arrConfig["pe_action_edit_params"].$strAdminLangParam."&pe=1");
                 $strElementName = uniStrReplace(array('\''), array('\\\''), $objInstance->getStrDisplayName());
                 $strQuestion = uniStrReplace("%%element_name%%", htmlToString($strElementName, true), class_carrier::getInstance()->getObjLang()->getLang("commons_delete_record_question", "system"));
 
-                $strCallback = " function() { delDialog.hide(); KAJONA.admin.portaleditor.openDialog('$strDeleteUrl'); return false; } ";
                 $strDeleteLink = class_link::getLinkAdminManual(
                     "href=\"#\" onclick=\"javascript:delDialog.setTitle('".class_carrier::getInstance()->getObjLang()->getLang("dialog_deleteHeader", "system")."'); delDialog.setContent('".$strQuestion."', '".class_carrier::getInstance()->getObjLang()->getLang("dialog_deleteButton", "system")."',  ".$strCallback."); delDialog.init(); return false;\"",
                     class_carrier::getInstance()->getObjLang()->getLang("commons_delete", "system"),

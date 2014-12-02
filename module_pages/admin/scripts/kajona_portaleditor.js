@@ -114,6 +114,14 @@ KAJONA.admin.portaleditor = {
 
     deleteElementData : function(strSystemid) {
         $("div.peElementWrapper[data-systemid='"+strSystemid+"']").remove();
+        //and delete the element on the backend
+        var data = {
+            systemid: strSystemid
+        };
+        $.post(KAJONA_WEBPATH + '/xml.php?admin=1&module=pages_content&action=deleteElementFinalXML', data, function () {
+        }).fail(function() {
+                location.reload();
+        });
     }
 };
 
