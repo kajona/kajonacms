@@ -223,8 +223,10 @@ abstract class class_root {
         $objReflection = new class_reflection($this);
         if(!isset($this->arrModule["modul"])) {
             $arrAnnotationValues = $objReflection->getAnnotationValuesFromClass(self::STR_MODULE_ANNOTATION);
-            if(count($arrAnnotationValues) > 0)
+            if(count($arrAnnotationValues) > 0) {
                 $this->setArrModuleEntry("modul", trim($arrAnnotationValues[0]));
+                $this->setArrModuleEntry("module", trim($arrAnnotationValues[0]));
+            }
         }
 
         if(!isset($this->arrModule["moduleId"])) {
