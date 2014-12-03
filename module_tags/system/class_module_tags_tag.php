@@ -387,10 +387,11 @@ class class_module_tags_tag extends class_model implements interface_model, inte
 
     /**
      * @param string $strNewPrevid
+     * @param bool $bitChangeTitle
      *
      * @return bool
      */
-    public function copyObject($strNewPrevid = "") {
+    public function copyObject($strNewPrevid = "", $bitChangeTitle = true) {
 
         $strPrefix = $this->getStrName()."_";
         $intCount = 1;
@@ -407,7 +408,7 @@ class class_module_tags_tag extends class_model implements interface_model, inte
         //save assigned records
         $arrRecords = $this->getListOfAssignments();
 
-        parent::copyObject($strNewPrevid);
+        parent::copyObject($strNewPrevid, $bitChangeTitle);
 
         //copy the tag assignments
         foreach($arrRecords as $arrOneRecord) {

@@ -572,10 +572,12 @@ abstract class class_root {
      * Please be aware that you are working on the new object afterwards!
      *
      * @param string $strNewPrevid
+     * @param bool $bitChangeTitle
      *
+     * @throws class_exception
      * @return bool
      */
-    public function copyObject($strNewPrevid = "") {
+    public function copyObject($strNewPrevid = "", $bitChangeTitle = true) {
 
         $this->objDB->transactionBegin();
 
@@ -589,13 +591,16 @@ abstract class class_root {
             $this->bitDatesChanges = true;
 
         //check if there's a title field, in most cases that could be used to change the title
-        $objReflection = new class_reflection($this);
-        $strGetter = $objReflection->getGetter("strTitle");
-        $strSetter = $objReflection->getSetter("strTitle");
-        if($strGetter != null && $strSetter != null) {
-            $strTitle = call_user_func(array($this, $strGetter));
-            if($strTitle != "")
-                call_user_func(array($this, $strSetter), $strTitle."_copy");
+        if($bitChangeTitle) {
+            $objReflection = new class_reflection($this);
+            $strGetter = $objReflection->getGetter("strTitle");
+            $strSetter = $objReflection->getSetter("strTitle");
+            if($strGetter != null && $strSetter != null) {
+                $strTitle = call_user_func(array($this, $strGetter));
+                if($strTitle != "") {
+                    call_user_func(array($this, $strSetter), $strTitle."_copy");
+                }
+            }
         }
 
         //prepare the current object
@@ -615,7 +620,7 @@ abstract class class_root {
             if(validateSystemid($arrOneChild["system_id"])) {
                 $objInstance = class_objectfactory::getInstance()->getObject($arrOneChild["system_id"]);
                 if($objInstance !== null)
-                    $objInstance->copyObject($this->getSystemid());
+                    $objInstance->copyObject($this->getSystemid(), false);
             }
         }
 

@@ -617,10 +617,11 @@ class class_module_pages_page extends class_model implements interface_model, in
      * and all languages.
      *
      * @param string $strNewPrevid
+     * @param bool $bitChangeTitle
      *
      * @return bool
      */
-    public function copyObject($strNewPrevid = "") {
+    public function copyObject($strNewPrevid = "", $bitChangeTitle = true) {
 
 
         $this->objDB->transactionBegin();
@@ -633,7 +634,7 @@ class class_module_pages_page extends class_model implements interface_model, in
         $this->setStrName($this->generateNonexistingPagename($this->getStrName(), false));
 
         //copy the page-instance and all elements on the page
-        parent::copyObject($strNewPrevid);
+        parent::copyObject($strNewPrevid, $bitChangeTitle);
 
         //update the pages' properties in the table - manually
         foreach($arrBasicSourceProperties as $arrOneProperty) {

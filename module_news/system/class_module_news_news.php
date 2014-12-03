@@ -259,17 +259,18 @@ class class_module_news_news extends class_model implements interface_model, int
 
     /**
      * @param string $strNewPrevid
+     * @param bool $bitChangeTitle
      *
      * @return bool
      */
-    public function copyObject($strNewPrevid = "") {
+    public function copyObject($strNewPrevid = "", $bitChangeTitle = true) {
         $arrMemberCats = class_module_news_category::getNewsMember($this->getSystemid());
         $this->arrCats = array();
         foreach($arrMemberCats as $objOneCat) {
             $this->arrCats[$objOneCat->getSystemid()] = "1";
         }
         $this->bitUpdateMemberships = true;
-        return parent::copyObject($strNewPrevid);
+        return parent::copyObject($strNewPrevid, $bitChangeTitle);
     }
 
     /**
