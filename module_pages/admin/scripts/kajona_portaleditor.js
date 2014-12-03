@@ -97,7 +97,6 @@ KAJONA.admin.portaleditor = {
 
     changeElementData : function(strDataPlaceholder, strDataSystemid, objElementData) {
 
-        console.log("updating container "+strDataSystemid+" at placeholder "+strDataPlaceholder);
         var $objContent = jQuery.parseHTML(objElementData);
 
         //see if the element is already present, then flip the contents
