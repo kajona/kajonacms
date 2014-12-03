@@ -43,9 +43,6 @@ class class_module_workflows_admin extends class_admin_simple implements interfa
         $arrReturn[] = array("edit", class_link::getLinkAdmin($this->getArrModule("modul"), "list", "", $this->getLang("commons_list"), "", "", true, "adminnavi"));
         $arrReturn[] = array("", "");
         $arrReturn[] = array("right1", class_link::getLinkAdmin($this->getArrModule("modul"), "listHandlers", "", $this->getLang("action_list_handlers"), "", "", true, "adminnavi"));
-        $arrReturn[] = array("", "");
-        $arrReturn[] = array("right", class_link::getLinkAdmin("right", "change", "&changemodule=" . $this->getArrModule("modul"), $this->getLang("commons_module_permissions"), "", "", true, "adminnavi"));
-        //$arrReturn[] = array("edit", getLinkAdmin($this->getArrModule("modul"), "triggerWorkflows", "", $this->getLang("module_trigger"), "", "", true, "adminnavi"));
         return $arrReturn;
     }
 
@@ -196,24 +193,6 @@ class class_module_workflows_admin extends class_admin_simple implements interfa
 
         return $strReturn;
     }
-
-    /**
-     * Uses the workflow-manager to trigger the scheduling and execution of workflows
-     *
-     * @return string
-     * @permissions edit
-     */
-    protected function actionTriggerWorkflows() {
-        $strReturn = "";
-        $objWorkflowController = new class_workflows_controller();
-        $objWorkflowController->scheduleWorkflows();
-        $objWorkflowController->runWorkflows();
-
-        $this->adminReload(class_link::getLinkAdminHref($this->getArrModule("modul"), "list"));
-
-        return $strReturn;
-    }
-
 
     /**
      * Creates the form to perform the current workflow-step

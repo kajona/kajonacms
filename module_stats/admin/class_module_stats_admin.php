@@ -107,8 +107,6 @@ class class_module_stats_admin extends class_admin_controller implements interfa
             }
         }
 
-        $arrReturn[] = array("", "");
-        $arrReturn[] = array("right", getLinkAdmin("right", "change", "&changemodule=" . $this->getArrModule("modul"), $this->getLang("commons_module_permissions"), "", "", true, "adminnavi"));
         return $arrReturn;
     }
 

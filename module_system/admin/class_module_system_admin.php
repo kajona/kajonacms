@@ -37,7 +37,6 @@ class class_module_system_admin extends class_admin_simple implements interface_
         $arrReturn[] = array("", "");
         $arrReturn[] = array("", class_link::getLinkAdmin($this->getArrModule("modul"), "about", "", $this->getLang("action_about"), "", "", true, "adminnavi"));
         $arrReturn[] = array("", "");
-        $arrReturn[] = array("right", class_link::getLinkAdmin("right", "change", "&changemodule=".$this->getArrModule("modul"), $this->getLang("commons_module_permissions"), "", "", true, "adminnavi"));
         $arrReturn[] = array("right", class_link::getLinkAdmin("right", "change", "&systemid=0", $this->getLang("modul_rechte_root"), "", "", true, "adminnavi"));
         return $arrReturn;
     }
