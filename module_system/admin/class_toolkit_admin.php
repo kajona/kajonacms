@@ -280,24 +280,34 @@ class class_toolkit_admin extends class_toolkit {
      * @param string $strValue
      * @param string $strClass
      * @param bool $bitElements
+     * @param bool $bitRenderOpener
+     * @param string $strAddonAction
+     *
+     * @throws class_exception
      * @return string
      */
-    public function formInputPageSelector($strName, $strTitle = "", $strValue = "", $strClass = "", $bitElements = true) {
+    public function formInputPageSelector($strName, $strTitle = "", $strValue = "", $strClass = "", $bitElements = true, $bitRenderOpener = true, $strAddonAction = "") {
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "input_pageselector");
         $arrTemplate = array();
         $arrTemplate["name"] = $strName;
         $arrTemplate["value"] = htmlspecialchars($strValue, ENT_QUOTES, "UTF-8", false);
         $arrTemplate["title"] = $strTitle;
         $arrTemplate["class"] = $strClass;
-        $arrTemplate["opener"] = getLinkAdminDialog(
-            "pages",
-            "pagesFolderBrowser",
-            "&pages=1&form_element=".$strName.(!$bitElements ? "&elements=false" : ""),
-            class_carrier::getInstance()->getObjLang()->getLang("select_page", "pages"),
-            class_carrier::getInstance()->getObjLang()->getLang("select_page", "pages"),
-            "icon_externalBrowser",
-            class_carrier::getInstance()->getObjLang()->getLang("select_page", "pages")
-        );
+
+        $arrTemplate["opener"] = "";
+        if($bitRenderOpener) {
+            $arrTemplate["opener"] .= getLinkAdminDialog(
+                "pages",
+                "pagesFolderBrowser",
+                "&pages=1&form_element=".$strName.(!$bitElements ? "&elements=false" : ""),
+                class_carrier::getInstance()->getObjLang()->getLang("select_page", "pages"),
+                class_carrier::getInstance()->getObjLang()->getLang("select_page", "pages"),
+                "icon_externalBrowser",
+                class_carrier::getInstance()->getObjLang()->getLang("select_page", "pages")
+            );
+        }
+
+        $arrTemplate["opener"] .= $strAddonAction;
 
         $strJsVarName = uniStrReplace(array("[", "]"), array("", ""), $strName);
 

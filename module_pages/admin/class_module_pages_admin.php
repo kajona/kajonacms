@@ -957,6 +957,15 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
         iF($strPageid != "0")
             $strLevelUp = $strSystemid;
 
+
+        $strReturn .= $this->objToolkit->formHeader("");
+        $strAction = $this->objToolkit->listButton(
+            "<a href=\"#\" title=\"".$this->getLang("select_page")."\" rel=\"tooltip\" onclick=\"KAJONA.admin.folderview.selectCallback([['".$strElement."', '"._indexpath_."?page='+$('#quickselect').val()]]);\">".class_adminskin_helper::getAdminImage("icon_accept")."</a>"
+        );
+        $strReturn .= $this->objToolkit->formInputPageSelector("quickselect", $this->getLang("folderview_quickselect"), "", "", false, false, $strAction);
+        $strReturn .= $this->objToolkit->formClose(false);
+
+
         $strReturn .= $this->objToolkit->listHeader();
         //Folder to jump one level up
         if(!$bitPages || $strLevelUp != "" || $bitFolder) {
