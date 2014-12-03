@@ -71,7 +71,7 @@ abstract class class_root {
      * @var string
      * @templateExport
      */
-    private $strSystemid;
+    private $strSystemid = "";
 
     /**
      * The records internal parent-id
@@ -90,13 +90,13 @@ abstract class class_root {
      * The records module-number
      * @var int
      */
-    private $intModuleNr;
+    private $intModuleNr = 0;
 
     /**
      * The records sort-position relative to the parent record
      * @var int
      */
-    private $intSort;
+    private $intSort = -1;
 
     /**
      * The id of the user who created the record initially
@@ -105,13 +105,13 @@ abstract class class_root {
      * @templateExport
      * @templateMapper user
      */
-    private $strOwner;
+    private $strOwner = "";
 
     /**
      * The id of the user last who did the last changes to the current record
      * @var string
      */
-    private $strLmUser;
+    private $strLmUser = "";
 
     /**
      * Timestamp of the last modification
@@ -121,13 +121,13 @@ abstract class class_root {
      * @templateExport
      * @templateMapper datetime
      */
-    private $intLmTime;
+    private $intLmTime = 0;
 
     /**
      * The id of the user locking the current record, emtpy otherwise
      * @var string
      */
-    private $strLockId;
+    private $strLockId = "";
 
     /**
      * Time the current locking was triggered
@@ -135,26 +135,26 @@ abstract class class_root {
      * @todo migrate to long-timestamp
      * @var int
      */
-    private $intLockTime;
+    private $intLockTime = 0;
 
     /**
      * The records status
      * @var int
      * @versionable
      */
-    private $intRecordStatus;
+    private $intRecordStatus = 1;
 
     /**
      * Human readable comment describing the current record
      * @var string
      */
-    private $strRecordComment;
+    private $strRecordComment = "";
 
     /**
      * Holds the current objects' class
      * @var string
      */
-    private $strRecordClass;
+    private $strRecordClass = "";
 
     /**
      * Long-based representation of the timestamp the record was created initially
@@ -162,7 +162,7 @@ abstract class class_root {
      * @templateExport
      * @templateMapper datetime
      */
-    private $longCreateDate;
+    private $longCreateDate = 0;
 
     /**
      * The start-date of the date-table
@@ -219,6 +219,8 @@ abstract class class_root {
 
         $this->strSystemid = $strSystemid;
 
+        $this->setStrRecordClass(get_class($this));
+
         //try to load the current module-name and the moduleId by reflection
         $objReflection = new class_reflection($this);
         if(!isset($this->arrModule["modul"])) {
@@ -231,8 +233,10 @@ abstract class class_root {
 
         if(!isset($this->arrModule["moduleId"])) {
             $arrAnnotationValues = $objReflection->getAnnotationValuesFromClass(self::STR_MODULEID_ANNOTATION);
-            if(count($arrAnnotationValues) > 0)
+            if(count($arrAnnotationValues) > 0) {
                 $this->setArrModuleEntry("moduleId", constant(trim($arrAnnotationValues[0])));
+                $this->setIntModuleNr(constant(trim($arrAnnotationValues[0])));
+            }
         }
 
         if($strSystemid != "") {
@@ -763,25 +767,14 @@ abstract class class_root {
      * @param string $strPrevId    Previous ID in the tree-structure
      * @param string $strComment Comment to identify the record
      * @param bool $bitRight Should the right-record be generated?
-     * @param int|string $intModuleNr Number of the module this record belongs to
-     * @param string $strSystemId SystemID to be used
-     * @param int $intStatus    Active (1)/Inactive (0)?
-     * @param null|string $strClass
      * @return string The ID used/generated
      */
-    public function createSystemRecord($strPrevId, $strComment, $bitRight = true, $intModuleNr = "", $strSystemId = "", $intStatus = 1, $strClass = null) {
-        //Do we need a new SystemID?
-        if($strSystemId == "")
-            $strSystemId = generateSystemid();
+    public function createSystemRecord($strPrevId, $strComment, $bitRight = true) {
+
+        $strSystemId = generateSystemid();
 
         $this->setStrSystemid($strSystemId);
 
-        if($strClass === null)
-            $strClass = get_class($this);
-
-        //Given a ModuleNr?
-        if($intModuleNr == "")
-            $intModuleNr = $this->arrModule["moduleId"];
         //Correct prevID
         if($strPrevId == "")
             $strPrevId = 0;
@@ -807,23 +800,21 @@ abstract class class_root {
             array(
                 $strSystemId,
                 $strPrevId,
-                (int)$intModuleNr,
+                $this->getIntModuleNr(),
                 $this->objSession->getUserID(),
                 class_date::getCurrentTimestamp(),
                 $this->objSession->getUserID(),
                 time(),
-                (int)$intStatus,
+                (int)$this->getIntRecordStatus(),
                 $strComment,
                 (int)($intSiblings+1),
-                $strClass
+                $this->getStrRecordClass()
             )
         );
 
         //Do we need a Rights-Record?
         if($bitRight) {
-            $strQuery = "INSERT INTO "._dbprefix_."system_right
-                         (right_id, right_inherit) VALUES
-                         (?, 1)";
+            $strQuery = "INSERT INTO "._dbprefix_."system_right (right_id, right_inherit) VALUES (?, 1)";
 
             $this->objDB->_pQuery($strQuery, array($strSystemId));
             //update rights to inherit
