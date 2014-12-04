@@ -73,6 +73,10 @@ class class_installer_stats extends class_installer_base implements interface_in
             $objModule->updateObjectToDb();
         }
 
+        $strReturn .= "Updating browscap informations...\n";
+        $objBrowscap = new class_browscap();
+        $objBrowscap->updateBrowscap();
+
 		return $strReturn;
 	}
 
@@ -170,6 +174,15 @@ class class_installer_stats extends class_installer_base implements interface_in
             $this->updateModuleVersion("stats", "4.5");
         }
 
+        $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModul["module_version"] == "4.5") {
+            $strReturn .= $this->update_45_46();
+        }
+
+        $strReturn .= "Updating browscap informations...\n";
+        $objBrowscap = new class_browscap();
+        $objBrowscap->updateBrowscap();
+
         return $strReturn."\n\n";
 	}
 
@@ -214,6 +227,19 @@ class class_installer_stats extends class_installer_base implements interface_in
 
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion("stats", "4.1");
+        return $strReturn;
+    }
+
+    private function update_45_46() {
+        $strReturn = "Updating 4.5 to 4.6...\n";
+
+        $strReturn .= "Deleting old browscap.ini file...\n";
+        $objFS = new class_filesystem();
+        $objFS->fileDelete("/core/module_stats/system/php_browscap.ini");
+
+
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion("stats", "4.6");
         return $strReturn;
     }
 
