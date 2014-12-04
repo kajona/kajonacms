@@ -1,0 +1,6 @@
+{
+    "name" : "chosen",
+    "version" : "2.0.4",
+    "source" : "https://github.com/browscap/browscap-php",
+    "license" : "MIT License"
+}
