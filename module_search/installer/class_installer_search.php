@@ -220,6 +220,14 @@ class class_installer_search extends class_installer_base implements interface_i
             $strReturn .= $this->update_451_452();
         }
 
+        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "4.5.2") {
+            $strReturn .= "Updating 4.5.2 to 4.6...\n";
+            $strReturn .= "Updating module-versions...\n";
+            $this->updateModuleVersion("search", "4.6");
+            $this->updateElementVersion("search", "4.6");
+        }
+
         if($this->bitIndexRebuild) {
             $strReturn .= "Rebuilding search index...\n";
             $this->updateIndex();

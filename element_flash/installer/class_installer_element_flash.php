@@ -83,6 +83,12 @@ class class_installer_element_flash extends class_elementinstaller_base implemen
             $this->objDB->flushQueryCache();
         }
 
+        if(class_module_pages_element::getElement("flash")->getStrVersion() == "4.5") {
+            $strReturn .= "Updating element flash to 4.6...\n";
+            $this->updateElementVersion("flash", "4.6");
+            $this->objDB->flushQueryCache();
+        }
+
         return $strReturn;
 	}
 

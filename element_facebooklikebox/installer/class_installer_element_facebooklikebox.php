@@ -85,6 +85,12 @@ class class_installer_element_facebooklikebox extends class_elementinstaller_bas
             $this->objDB->flushQueryCache();
         }
 
+        if(class_module_pages_element::getElement("facebooklikebox")->getStrVersion() == "4.5") {
+            $strReturn .= "Updating element facebooklikebox to 4.6...\n";
+            $this->updateElementVersion("facebooklikebox", "4.6");
+            $this->objDB->flushQueryCache();
+        }
+
         return $strReturn;
     }
 

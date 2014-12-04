@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <package
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="http://apidocs.kajona.de/xsd/package.xsd"
+        xsi:noNamespaceSchemaLocation="https://apidocs.kajona.de/xsd/package.xsd"
         >
     <title>guestbook</title>
     <description>A simple module providing a guestbook. New posts may be visible immediately or after an admins' review, depending on the configuration.</description>
-    <version>4.5</version>
+    <version>4.6</version>
     <author>Kajona Team</author>
     <type>MODULE</type>
     <providesInstaller>TRUE</providesInstaller>
     <requiredModules>
-        <module name="system" version="4.5" />
-        <module name="pages" version="4.5" />
+        <module name="system" version="4.6" />
+        <module name="pages" version="4.6" />
     </requiredModules>
 </package>
