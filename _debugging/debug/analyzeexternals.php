@@ -34,8 +34,6 @@ foreach($objRegex as $arrOne) {
         $objContent->path = $strSimplePath;
         $arrExternals[] = $objContent;
     }
-
-
 }
 
 usort($arrExternals, function($objOneEntry, $objSecondEntry) {
@@ -43,25 +41,29 @@ usort($arrExternals, function($objOneEntry, $objSecondEntry) {
 });
 
 
-echo "<b>";
+$arrHeader = array();
+$arrHeader[] = "Component";
+$arrHeader[] = "Version";
+$arrHeader[] = "Source";
+$arrHeader[] = "Path";
+$arrHeader[] = "Licence";
 
-echo str_pad("Component", 20);
-echo str_pad("Version", 20);
-echo str_pad("Source", 60);
-echo str_pad("Path", 60);
-
-echo "</b>\n";
 
 foreach($arrExternals as $objContent) {
-    echo str_pad($objContent->name, 20);
-    echo str_pad($objContent->version, 20);
+    $arrUserRows[$intI]["name"] = $objContent->name;
+    $arrUserRows[$intI]["version"] = $objContent->version;
+
 
     $strSource = $objContent->source;
     if(is_array($strSource))
-        $strSource = implode(", ", $strSource);
+        $strSource = implode("<br />", $strSource);
 
-    echo str_pad($strSource, 60);
+    $arrUserRows[$intI]["sourceurl"] = "<a href=\"$strSource\" target=\"_blank\">".$strSource."</a>";
 
-    echo str_pad($objContent->path, 60);
-    echo "\n";
+    $arrUserRows[$intI]["path"] = $objContent->path;
+    $arrUserRows[$intI]["licence"] = "<a href=\"$objContent->licenseurl\" target=\"_blank\">$objContent->license</a>";
+    $intI++;
 }
+echo "<style>table,td,tr,th { border:1px solid grey;border-spacing: 0px; border-collapse: separate;}</style>";
+
+echo class_carrier::getInstance()->getObjToolkit("admin")->dataTable($arrHeader, $arrUserRows);

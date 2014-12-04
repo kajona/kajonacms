@@ -1,0 +1,7 @@
+{
+    "name" : "jquery",
+    "version" : "1.10.2",
+    "source" : "https://jquery.org",
+    "license" : "MIT license",
+    "licenseurl" : "https://jquery.org/license/"
+}

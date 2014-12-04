@@ -1,6 +1,7 @@
 {
     "name" : "browscap-php",
-    "version" : "2.0.4",
-    "source" : "https://github.com/browscap/browscap-php",
-    "license" : "MIT License"
+    "version" : "??",
+    "source" : ["https://github.com/browscap/browscap-php", "https://github.com/GaretJax/phpbrowscap"],
+    "license" : "same as MIT",
+    "licenseurl" : "https://github.com/GaretJax/phpbrowscap/blob/master/LICENSE"
 }
