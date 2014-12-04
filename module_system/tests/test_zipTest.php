@@ -108,7 +108,7 @@ class class_test_zip extends class_testbase  {
 
         echo "\treading files\n";
         $strContent = $objZip->getFileFromArchive("/files/cache/test.zip", class_resourceloader::getInstance()->getCorePathForModule("module_system")."/module_system/metadata.xml");
-        $this->assertTrue(uniStrpos($strContent, "xsi:noNamespaceSchemaLocation=\"http://apidocs.kajona.de/xsd/package.xsd\"") !== false);
+        $this->assertTrue(uniStrpos($strContent, "xsi:noNamespaceSchemaLocation=\"https://apidocs.kajona.de/xsd/package.xsd\"") !== false);
 
         echo "\tremoving testfile\n";
         $this->assertTrue($objFileSystem->fileDelete("/files/cache/test.zip"), __FILE__." deleteFile");
