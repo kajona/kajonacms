@@ -2,13 +2,13 @@
 //============================================================+
 // File name   : tcpdf_config.php
 // Begin       : 2004-06-11
-// Last Update : 2013-05-16
+// Last Update : 2014-09-02
 //
 // Description : Configuration file for TCPDF.
 // Author      : Nicola Asuni - Tecnick.com LTD - www.tecnick.com - info@tecnick.com
 // License     : GNU-LGPL v3 (http://www.gnu.org/copyleft/lesser.html)
 // -------------------------------------------------------------------
-// Copyright (C) 2004-2013  Nicola Asuni - Tecnick.com LTD
+// Copyright (C) 2004-2014  Nicola Asuni - Tecnick.com LTD
 //
 // This file is part of TCPDF software library.
 //
@@ -36,7 +36,10 @@
  * @since 2004-10-27
  */
 
-// If you define the constant K_TCPDF_EXTERNAL_CONFIG, the following settings will be ignored.
+// IMPORTANT:
+// If you define the constant K_TCPDF_EXTERNAL_CONFIG, all the following settings will be ignored.
+// If you use the tcpdf_autoconfig.php, then you can overwrite some values here.
+
 
 /**
  * Installation path (/var/www/tcpdf/).
@@ -210,9 +213,14 @@ define('K_THAI_TOPCHARS', true);
 define('K_TCPDF_CALLS_IN_HTML', true);
 
 /**
- * If true adn PHP version is greater than 5, then the Error() method throw new exception instead of terminating the execution.
+ * If true and PHP version is greater than 5, then the Error() method throw new exception instead of terminating the execution.
  */
 define('K_TCPDF_THROW_EXCEPTION_ERROR', true);
+
+/**
+ * Default timezone for datetime functions
+ */
+define('K_TIMEZONE', 'UTC');
 
 //============================================================+
 // END OF FILE
