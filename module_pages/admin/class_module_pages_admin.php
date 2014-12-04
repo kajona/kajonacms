@@ -720,7 +720,18 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
         //generate the array of ids to expand initially
         $arrNodes = array_merge(array($this->getObjModule()->getSystemid()), $this->getPathArray($this->getSystemid()));
         $strReturn .= $this->objToolkit->getTreeview(class_link::getLinkAdminXml("pages", "getChildNodes"), "", $arrNodes, $strSideContent);
-        return $strReturn;
+
+        //ticket #931: no hierarchical drag n drop for folders
+        $strJS = <<<JS
+            $(function() {
+                $("table.admintable i.fa-folder-o").closest("tr").find("td.treedrag i").remove();
+                $("table.admintable i.fa-folder-o").closest("tr").find("td.treedrag").css("cursor", "auto");
+                $("table.admintable i.fa-folder-o").closest("tr").find("td.treedrag").removeClass("jstree-draggable");
+            });
+JS;
+
+        $strJS = "<script type='text/javascript'>".$strJS."</script>";
+        return $strReturn.$strJS;
     }
 
 
