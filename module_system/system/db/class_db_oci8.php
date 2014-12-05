@@ -84,12 +84,11 @@ class class_db_oci8 extends class_db_base {
      * @param string $strTable
      * @param string[] $arrColumns
      * @param array $arrValueSets
-     * @param string &$strQuery
-     * @param array &$arrParams
+     * @param class_db $objDb
      *
-     * @return void
+     * @return bool
      */
-    public function convertMultiInsert($strTable, $arrColumns, $arrValueSets, &$strQuery, &$arrParams) {
+    public function triggerMultiInsert($strTable, $arrColumns, $arrValueSets, class_db $objDb) {
 
         $arrPlaceholder = array();
         $arrSafeColumns = array();
@@ -110,6 +109,8 @@ class class_db_oci8 extends class_db_base {
             $strQuery .= " INTO ".$this->encloseTableName($strTable)." ".$strColumnNames." VALUES ".$strPlaceholder." ";
         }
         $strQuery .= " SELECT * FROM dual";
+
+        return $objDb->_pQuery($strQuery, $arrParams);
 
     }
 

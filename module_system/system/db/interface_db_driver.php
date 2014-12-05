@@ -38,19 +38,16 @@ interface interface_db_driver {
      * Creates a single query in order to insert multiple rows at one time.
      * For most databases, this will create s.th. like
      * INSERT INTO $strTable ($arrColumns) VALUES (?, ?), (?, ?)...
-     *
      * Please note that this method is used to create the query itself, based on the Kajona-internal syntax.
      * The query is fired to the database by class_db
      *
      * @param string $strTable
      * @param string[] $arrColumns
      * @param array $arrValueSets
-     * @param string &$strQuery
-     * @param array &$arrParams
-     *
-     * @return void
+     * @param class_db $objDb
+     * @return bool
      */
-    public function convertMultiInsert($strTable, $arrColumns, $arrValueSets, &$strQuery, &$arrParams);
+    public function triggerMultiInsert($strTable, $arrColumns, $arrValueSets, class_db $objDb);
 
     /**
      * Sends a query (e.g. an update) to the database

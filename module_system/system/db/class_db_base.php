@@ -19,19 +19,17 @@ abstract class class_db_base implements interface_db_driver {
      * Creates a single query in order to insert multiple rows at one time.
      * For most databases, this will create s.th. like
      * INSERT INTO $strTable ($arrColumns) VALUES (?, ?), (?, ?)...
-     *
      * Please note that this method is used to create the query itself, based on the Kajona-internal syntax.
      * The query is fired to the database by class_db
      *
      * @param string $strTable
      * @param string[] $arrColumns
      * @param array $arrValueSets
-     * @param string &$strQuery
-     * @param array &$arrParams
+     * @param class_db $objDb
      *
-     * @return void
+     * @return bool
      */
-    public function convertMultiInsert($strTable, $arrColumns, $arrValueSets, &$strQuery, &$arrParams) {
+    public function triggerMultiInsert($strTable, $arrColumns, $arrValueSets, class_db $objDb) {
 
         $arrPlaceholder = array();
         $arrSafeColumns = array();
@@ -51,6 +49,8 @@ abstract class class_db_base implements interface_db_driver {
         }
 
         $strQuery = "INSERT INTO ".$this->encloseTableName($strTable)." (".implode(",", $arrSafeColumns).") VALUES ".implode(",", $arrPlaceholderSets);
+
+        return $objDb->_pQuery($strQuery, $arrParams);
     }
 
     /**
