@@ -134,6 +134,12 @@ abstract class class_admin_controller extends class_abstract_controller {
      */
     public final function getModuleOutput() {
 
+        //skip rendering everything if we just want to redirect...
+        if($this->strOutput == "" && class_response_object::getInstance()->getStrRedirectUrl() != "") {
+            return "";
+        }
+
+
         $this->validateAndUpdateCurrentAspect();
 
         //Calling the content-setter, including a default dialog

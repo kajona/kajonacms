@@ -124,7 +124,7 @@ class class_module_search_request_endprocessinglistener implements interface_gen
      * @return void
      */
     public static function staticConstruct() {
-        class_core_eventdispatcher::getInstance()->removeAndAddListener(class_system_eventidentifier::EVENT_SYSTEM_REQUEST_ENDPROCESSING, new class_module_search_request_endprocessinglistener());
+        class_core_eventdispatcher::getInstance()->removeAndAddListener(class_system_eventidentifier::EVENT_SYSTEM_REQUEST_AFTERCONTENTSEND, new class_module_search_request_endprocessinglistener());
     }
 
 }

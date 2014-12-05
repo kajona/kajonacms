@@ -46,14 +46,13 @@ interface class_system_eventidentifier {
      */
     const EVENT_SYSTEM_REQUEST_ENDPROCESSING = "core.system.request.endprocessing";
 
-
     /**
      * Invoked right after sending the response back to the browser, but before starting to
      * shut down the request.
      * This means you are not able to change the response anymore, also the session is already closed to
      * keep other threads from waiting. Use this event to perform internal cleanups if required.
      *
-     * The params-array is empty.
+     * @param class_request_entrypoint_enum objEntrypoint
      *
      * @since 4.6
      */

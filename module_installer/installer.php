@@ -814,4 +814,5 @@ $objInstaller = new class_installer();
 $objInstaller->action();
 class_response_object::getInstance()->sendHeaders();
 class_response_object::getInstance()->sendContent();
+class_core_eventdispatcher::getInstance()->notifyGenericListeners(class_system_eventidentifier::EVENT_SYSTEM_REQUEST_AFTERCONTENTSEND, array(class_request_entrypoint_enum::INSTALLER()));
 

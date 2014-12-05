@@ -233,6 +233,16 @@ class class_installer_stats extends class_installer_base implements interface_in
     private function update_45_46() {
         $strReturn = "Updating 4.5 to 4.6...\n";
 
+        $strReturn .= "Removing stats-collector scriptlet, now handled by an event-listener\n";
+
+        if(is_file(_realpath_."/core/module_stats/system/scriptlets/class_scriptlet_statscollector.php")) {
+            $objFilesystem = new class_filesystem();
+            if(!$objFilesystem->fileDelete("/core/module_stats/system/scriptlets/class_scriptlet_statscollector.php")) {
+                $strReturn .= "Error deleting file /core/module_stats/system/scriptlets/class_scriptlet_statscollector.php, aborting update!\n";
+                return $strReturn;
+            }
+        }
+
         $strReturn .= "Deleting old browscap.ini file...\n";
         $objFS = new class_filesystem();
         $objFS->fileDelete("/core/module_stats/system/php_browscap.ini");

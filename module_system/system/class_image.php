@@ -297,13 +297,13 @@ class class_image {
 
         switch($strType) {
         case ".jpg":
-            class_response_object::getInstance()->setStResponseType(class_http_responsetypes::STR_TYPE_JPEG);
+            class_response_object::getInstance()->setStrResponseType(class_http_responsetypes::STR_TYPE_JPEG);
             break;
         case ".png":
-            class_response_object::getInstance()->setStResponseType(class_http_responsetypes::STR_TYPE_PNG);
+            class_response_object::getInstance()->setStrResponseType(class_http_responsetypes::STR_TYPE_PNG);
             break;
         case ".gif":
-            class_response_object::getInstance()->setStResponseType(class_http_responsetypes::STR_TYPE_GIF);
+            class_response_object::getInstance()->setStrResponseType(class_http_responsetypes::STR_TYPE_GIF);
             break;
         }
 

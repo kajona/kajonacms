@@ -20,13 +20,6 @@ class class_filesystem {
      */
     private $objFilePointer = null;
 
-    /**
-     * Constructor
-
-     */
-    public function __construct() {
-
-    }
 
     /**
      * Returns all files listed in the passed folder
@@ -251,7 +244,6 @@ class class_filesystem {
      * Deletes a file from the filesystem
      *
      * @param string $strFile
-     *
      * @return bool
      */
     public function fileDelete($strFile) {

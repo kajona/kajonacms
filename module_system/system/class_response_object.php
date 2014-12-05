@@ -60,16 +60,23 @@ class class_response_object {
 
     public function sendContent() {
 
-        if($this->strContent != "") {
+        ignore_user_abort(true);
+        if(trim($this->strContent) != "") {
             echo $this->strContent;
+            ob_flush();
+            flush();
+        }
+        else {
+            header("Content-Length: 0");
+            header("Content-Encoding: none");
+            header("Connection: close");
+            ob_end_flush();
             ob_flush();
             flush();
         }
 
         if(!class_session::getInstance()->getBitClosed())
             class_session::getInstance()->sessionClose();
-
-        class_core_eventdispatcher::getInstance()->notifyGenericListeners(class_system_eventidentifier::EVENT_SYSTEM_REQUEST_AFTERCONTENTSEND, array());
     }
 
 

@@ -28,7 +28,7 @@ class class_test_searchDeferredIndexerTest extends class_testbase {
 
         //trigger the endprocessinglistener
         $objHandler = new class_module_search_request_endprocessinglistener();
-        $objHandler->handleEvent(class_system_eventidentifier::EVENT_SYSTEM_REQUEST_ENDPROCESSING, array());
+        $objHandler->handleEvent(class_system_eventidentifier::EVENT_SYSTEM_REQUEST_AFTERCONTENTSEND, array());
 
 
         //query queue table
@@ -39,7 +39,7 @@ class class_test_searchDeferredIndexerTest extends class_testbase {
 
 
         class_objectfactory::getInstance()->getObject($strNewsId)->deleteObject();
-        $objHandler->handleEvent(class_system_eventidentifier::EVENT_SYSTEM_REQUEST_ENDPROCESSING, array());
+        $objHandler->handleEvent(class_system_eventidentifier::EVENT_SYSTEM_REQUEST_AFTERCONTENTSEND, array());
 
 
         $arrRows = $objQueue->getRowsBySystemid(class_search_enum_indexaction::DELETE(), $strNewsId);
@@ -79,7 +79,7 @@ class class_test_searchDeferredIndexerTest extends class_testbase {
         echo "Queries pre indexing: ", class_db::getInstance()->getNumber() - $intQueriesStart. " \n";
 
         $objHandler = new class_module_search_request_endprocessinglistener();
-        $objHandler->handleEvent(class_system_eventidentifier::EVENT_SYSTEM_REQUEST_ENDPROCESSING, array());
+        $objHandler->handleEvent(class_system_eventidentifier::EVENT_SYSTEM_REQUEST_AFTERCONTENTSEND, array());
 
         $intTimeEnd = microtime(true);
         $time = $intTimeEnd - $intTimeStart;
@@ -108,7 +108,7 @@ class class_test_searchDeferredIndexerTest extends class_testbase {
 
         echo "Triggering queue update event...\n";
         $objHandler = new class_module_search_request_endprocessinglistener();
-        $objHandler->handleEvent(class_system_eventidentifier::EVENT_SYSTEM_REQUEST_ENDPROCESSING, array());
+        $objHandler->handleEvent(class_system_eventidentifier::EVENT_SYSTEM_REQUEST_AFTERCONTENTSEND, array());
 
         $intTimeEnd = microtime(true);
         $time = $intTimeEnd - $intTimeStart;
