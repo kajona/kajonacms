@@ -12,12 +12,9 @@ class class_test_searchDeferredIndexerTest extends class_testbase {
         if(class_module_system_module::getModuleByName("news") === null)
             return;
 
-        class_module_system_changelog::$bitChangelogEnabled = true;
-
         $objConfig = class_module_system_setting::getConfigByName("_search_deferred_indexer_");
         $objConfig->setStrValue("true");
         $objConfig->updateObjectToDb();
-
 
         $objNews = new class_module_news_news();
         $objNews->setStrTitle("demo 1");

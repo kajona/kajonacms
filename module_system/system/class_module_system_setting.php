@@ -146,11 +146,13 @@ class class_module_system_setting extends class_model implements interface_model
      */
     public function updateObjectToDb($strPrevId = false) {
 
+        $objChangelog = new class_module_system_changelog();
+        $objChangelog->createLogEntry($this, class_module_system_changelog::$STR_ACTION_EDIT);
+
         self::$arrInstanceCache = null;
 
         if(!class_module_system_setting::checkConfigExisting($this->getStrName())) {
             class_logger::getInstance()->addLogRow("new constant " . $this->getStrName() . " with value " . $this->getStrValue(), class_logger::$levelInfo);
-
 
             $strQuery = "INSERT INTO " . _dbprefix_ . "system_config
                         (system_config_id, system_config_name, system_config_value, system_config_type, system_config_module) VALUES
@@ -160,9 +162,6 @@ class class_module_system_setting extends class_model implements interface_model
         else {
 
             class_logger::getInstance()->addLogRow("updated constant " . $this->getStrName() . " to value " . $this->getStrValue(), class_logger::$levelInfo);
-
-            $objChangelog = new class_module_system_changelog();
-            $objChangelog->createLogEntry($this, class_module_system_changelog::$STR_ACTION_EDIT);
 
             $strQuery = "UPDATE " . _dbprefix_ . "system_config
                         SET system_config_value = ?

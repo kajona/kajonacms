@@ -103,8 +103,6 @@ class class_module_search_indexwriter {
 
     /**
      * Triggers the indexing of a single object.
-     * Normally, the indexer makes use of the change-history in order to track if an object changed.
-     * Use the second boolean param in order to force the re-indexing.
      *
      * @param class_model $objInstance
      *
