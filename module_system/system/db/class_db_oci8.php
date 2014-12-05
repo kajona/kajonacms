@@ -90,28 +90,37 @@ class class_db_oci8 extends class_db_base {
      */
     public function triggerMultiInsert($strTable, $arrColumns, $arrValueSets, class_db $objDb) {
 
-        $arrPlaceholder = array();
-        $arrSafeColumns = array();
+        $bitReturn = true;
 
-        foreach($arrColumns as $strOneColumn) {
-            $arrSafeColumns[] = $this->encloseColumnName($strOneColumn);
-            $arrPlaceholder[] = "?";
+        //ugly hack for oracle: it only supports 1000 params per query as maximum, so split into several parts
+        //calc the number of max rows per insert. to be sure split it down to 970
+        $intSetsPerInsert = floor(970 / count($arrColumns));
+        foreach(array_chunk($arrValueSets, $intSetsPerInsert) as $arrSingleValueSet) {
+
+            $arrPlaceholder = array();
+            $arrSafeColumns = array();
+
+            foreach($arrColumns as $strOneColumn) {
+                $arrSafeColumns[] = $this->encloseColumnName($strOneColumn);
+                $arrPlaceholder[] = "?";
+            }
+            $strPlaceholder = " (".implode(",", $arrPlaceholder).") ";
+            $strColumnNames = " (".implode(",", $arrSafeColumns).") ";
+
+            $arrParams = array();
+
+            $strQuery = "INSERT ALL ";
+            foreach($arrSingleValueSet as $arrOneSet) {
+                $arrParams = array_merge($arrParams, $arrOneSet);
+
+                $strQuery .= " INTO ".$this->encloseTableName($strTable)." ".$strColumnNames." VALUES ".$strPlaceholder." ";
+            }
+            $strQuery .= " SELECT * FROM dual";
+
+            $bitReturn = $objDb->_pQuery($strQuery, $arrParams) && $bitReturn;
         }
-        $strPlaceholder = " (".implode(",", $arrPlaceholder).") ";
-        $strColumnNames = " (".implode(",", $arrSafeColumns).") ";
 
-        $arrParams = array();
-
-        $strQuery = "INSERT ALL ";
-        foreach($arrValueSets as $arrOneSet) {
-            $arrParams = array_merge($arrParams, $arrOneSet);
-
-            $strQuery .= " INTO ".$this->encloseTableName($strTable)." ".$strColumnNames." VALUES ".$strPlaceholder." ";
-        }
-        $strQuery .= " SELECT * FROM dual";
-
-        return $objDb->_pQuery($strQuery, $arrParams);
-
+        return $bitReturn;
     }
 
     /**
