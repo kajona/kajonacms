@@ -38,6 +38,8 @@ class class_module_system_changelog extends class_model implements interface_mod
     private static $arrInitValueCache = array();
     private static $arrCachedProviders = null;
 
+    private static $arrInsertCache = array();
+
 
     public static $STR_ACTION_EDIT = "actionEdit";
     public static $STR_ACTION_DELETE = "actionDelete";
@@ -88,7 +90,7 @@ class class_module_system_changelog extends class_model implements interface_mod
      * The state is cached in a static array mapped to the objects systemid.
      * In consequence, this means that only objects with a valid systemid are scanned for properties under versioning.
      *
-     * @param interface_versionable $objCurrentObject
+     * @param interface_versionable|class_model $objCurrentObject
      *
      * @return array|null
      */
@@ -107,7 +109,7 @@ class class_module_system_changelog extends class_model implements interface_mod
     /**
      * Scans the passed object and tries to find all properties marked with the annotation @versionable.
      * Updates the internal "oldvalues" cache.
-     * @param interface_versionable $objCurrentObject
+     * @param interface_versionable|class_model $objCurrentObject
      *
      * @return array|null
      */
@@ -316,7 +318,6 @@ class class_module_system_changelog extends class_model implements interface_mod
             $this->createReducedChangeSet($arrReducedChanges, $arrChanges, $strAction, $bitForceEntry, $bitDeleteAction);
 
             //collect all values in order to create a batch query
-            $arrValues = array();
             foreach($arrReducedChanges as $arrChangeSet) {
                 $strOldvalue = $arrChangeSet["oldvalue"];
                 $strNewvalue = $arrChangeSet["newvalue"];
@@ -329,7 +330,9 @@ class class_module_system_changelog extends class_model implements interface_mod
                     class_logger::$levelInfo
                 );
 
-                $arrValues[] = array(
+
+
+                $arrValues = array(
                     generateSystemid(),
                     class_date::getCurrentTimestamp(),
                     $objSourceModel->getSystemid(),
@@ -341,17 +344,27 @@ class class_module_system_changelog extends class_model implements interface_mod
                     $strOldvalue,
                     $strNewvalue
                 );
+
+                self::$arrInsertCache[self::getTableForClass(get_class($objSourceModel))][] = $arrValues;
             }
 
-            //fire a single query
-            if(count($arrValues) > 0) {
+
+        }
+        return $bitReturn;
+    }
+
+    public function processCachedInserts() {
+        $bitReturn = true;
+        foreach(self::$arrInsertCache as $strTable => $arrRows) {
+            if(count($arrRows) > 0) {
                 $bitReturn = $this->objDB->multiInsert(
-                    self::getTableForClass(get_class($objSourceModel)),
+                    $strTable,
                     array("change_id", "change_date", "change_systemid", "change_system_previd", "change_user", "change_class", "change_action", "change_property", "change_oldvalue", "change_newvalue"),
-                    $arrValues
-                );
-            }
+                    $arrRows
+                ) && $bitReturn;
 
+                self::$arrInsertCache[$strTable] = array();
+            }
         }
         return $bitReturn;
     }

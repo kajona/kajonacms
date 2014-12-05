@@ -37,6 +37,7 @@ class test_systemchangelogTest extends class_testbase {
 
         $this->assertEquals(0, class_module_system_changelog::getLogEntriesCount($strSystemid));
         $objChanges->processChanges($objDummy, "arrayTest", $arrChanges);
+        $objChanges->processCachedInserts();
         $this->flushDBCache();
         $this->assertEquals(class_module_system_changelog::getLogEntriesCount($strSystemid), 4);
 
@@ -72,6 +73,7 @@ class test_systemchangelogTest extends class_testbase {
 
 
         $objChanges->createLogEntry(new dummyObject($strSystemid), "1");
+        $objChanges->processCachedInserts();
         $this->assertEquals(0, class_module_system_changelog::getLogEntriesCount($strSystemid));
 
         class_carrier::getInstance()->getObjDB()->flushQueryCache();
@@ -81,6 +83,7 @@ class test_systemchangelogTest extends class_testbase {
         $objDummy->setStrSecondTest("new val 2");
 
         $objChanges->createLogEntry($objDummy, "2");
+        $objChanges->processCachedInserts();
         $this->assertEquals(2, class_module_system_changelog::getLogEntriesCount($strSystemid));
         $this->assertEquals(2, count(class_module_system_changelog::getLogEntries($strSystemid)));
 
@@ -100,6 +103,7 @@ class test_systemchangelogTest extends class_testbase {
         class_carrier::getInstance()->getObjDB()->flushQueryCache();
 
         $objChanges->createLogEntry(new dummyObject($strSystemid), "2", true);
+        $objChanges->processCachedInserts();
         $this->assertEquals(4, class_module_system_changelog::getLogEntriesCount($strSystemid));
         $this->assertEquals(4, count(class_module_system_changelog::getLogEntries($strSystemid)));
 
@@ -118,6 +122,7 @@ class test_systemchangelogTest extends class_testbase {
 
         $objChanges = new class_module_system_changelog();
         $objChanges->createLogEntry(new dummyObject($strSystemid), 1);
+        $objChanges->processCachedInserts();
 
         $strQuery = "INSERT INTO "._dbprefix_."changelog
                      (change_id,
