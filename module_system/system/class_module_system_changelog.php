@@ -330,8 +330,6 @@ class class_module_system_changelog extends class_model implements interface_mod
                     class_logger::$levelInfo
                 );
 
-
-
                 $arrValues = array(
                     generateSystemid(),
                     class_date::getCurrentTimestamp(),

@@ -210,6 +210,41 @@ class test_systemchangelogTest extends class_testbase {
         $this->assertTrue(!$objChangelog->isObjectChanged($objOne, $arrChanges));
         $this->assertTrue(count($arrChanges) == 0);
     }
+
+
+    public function testPerformance() {
+
+        $objChanges = new class_module_system_changelog();
+        $objChanges->processCachedInserts();
+        $intFired = (class_carrier::getInstance()->getObjDB()->getNumber() - class_carrier::getInstance()->getObjDB()->getNumberCache());
+
+        for($intI = 0; $intI < 100; $intI++) {
+            $objChanges->createLogEntry(new dummyObject(generateSystemid()), "1");
+            $objChanges->processCachedInserts();
+        }
+        $intFiredAfter = (class_carrier::getInstance()->getObjDB()->getNumber() - class_carrier::getInstance()->getObjDB()->getNumberCache());
+
+        $this->assertEquals(($intFiredAfter - $intFired), 101);
+
+        echo "Queries: ".($intFiredAfter-$intFired)."\n";
+
+
+
+        $intFired = (class_carrier::getInstance()->getObjDB()->getNumber() - class_carrier::getInstance()->getObjDB()->getNumberCache());
+
+        $objChanges = new class_module_system_changelog();
+        for($intI = 0; $intI < 100; $intI++) {
+            $objChanges->createLogEntry(new dummyObject(generateSystemid()), "1");
+        }
+        $objChanges->processCachedInserts();
+        $intFiredAfter = (class_carrier::getInstance()->getObjDB()->getNumber() - class_carrier::getInstance()->getObjDB()->getNumberCache());
+
+        $this->assertEquals(($intFiredAfter - $intFired), 1);
+
+        echo "Queries: ".($intFiredAfter-$intFired)."\n";
+
+
+    }
 }
 
 
