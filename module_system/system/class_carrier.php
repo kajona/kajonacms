@@ -23,7 +23,7 @@ class class_carrier {
     const INT_CACHE_TYPE_MODULES = 32;
     const INT_CACHE_TYPE_CLASSLOADER = 64;
     const INT_CACHE_TYPE_APC = 128;
-    const INT_CACHE_TYPE_CHANGELOG = 256;
+    const INT_CACHE_TYPE_CHANGELOG = 512;
 
 
     /**
