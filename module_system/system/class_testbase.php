@@ -56,9 +56,7 @@ abstract class class_testbase extends PHPUnit_Framework_TestCase {
         gc_enable();
 
 
-        $objChangelog = new class_module_system_changelog();
-        $objChangelog->processCachedInserts();
-
+        class_carrier::getInstance()->flushCache(class_carrier::INT_CACHE_TYPE_CHANGELOG);
         parent::tearDown();
     }
 

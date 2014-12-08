@@ -351,6 +351,12 @@ class class_module_system_changelog extends class_model implements interface_mod
         return $bitReturn;
     }
 
+    /**
+     * Helper to process outstanding changelog entries.
+     * Use class_carrier::getInstance()->flushCache(class_carrier::INT_CACHE_TYPE_CHANGELOG) in order to trigger this method.
+     * @return bool
+     * @see class_carrier::getInstance()->flushCache(class_carrier::INT_CACHE_TYPE_CHANGELOG)
+     */
     public function processCachedInserts() {
         $bitReturn = true;
         foreach(self::$arrInsertCache as $strTable => $arrRows) {

@@ -23,6 +23,7 @@ class class_carrier {
     const INT_CACHE_TYPE_MODULES = 32;
     const INT_CACHE_TYPE_CLASSLOADER = 64;
     const INT_CACHE_TYPE_APC = 128;
+    const INT_CACHE_TYPE_CHANGELOG = 256;
 
 
     /**
@@ -299,6 +300,11 @@ class class_carrier {
 
         if($intCacheType & self::INT_CACHE_TYPE_APC) {
             class_apc_cache::getInstance()->flushCache();
+        }
+
+        if($intCacheType & self::INT_CACHE_TYPE_CHANGELOG) {
+            $objChangelog = new class_module_system_changelog();
+            $objChangelog->processCachedInserts();
         }
 
     }
