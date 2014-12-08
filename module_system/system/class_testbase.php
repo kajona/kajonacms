@@ -55,6 +55,10 @@ abstract class class_testbase extends PHPUnit_Framework_TestCase {
         //reenable garbage collection
         gc_enable();
 
+
+        $objChangelog = new class_module_system_changelog();
+        $objChangelog->processCachedInserts();
+
         parent::tearDown();
     }
 
