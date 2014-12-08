@@ -112,10 +112,26 @@ class class_date_helper {
 
         $intEasterSundayYearOffset= $intOffset + $intTargetDay + 1 + $intMarch21DayOffset;
 
+        if($this->isLeapYear($intYear)) {
+            $intEasterSundayYearOffset -= 1;
+        }
+
         //offset per year, so calc back to the current year
         $objDateTime = DateTime::createFromFormat('z Y', strval($intEasterSundayYearOffset) . ' ' . strval($intYear));
         $objDate = new class_date($objDateTime->getTimestamp());
         return $objDate->setIntHour(0)->setIntMin(0)->setIntSec(0);
+    }
+
+    /**
+     * Checks if a year is a leap year.
+     *
+     * @param $intYear
+     *
+     * @return bool
+     * @see http://davidwalsh.name/checking-for-leap-year-using-php
+     */
+    public function isLeapYear($intYear) {
+        return ((($intYear % 4) == 0) && ((($intYear % 100) != 0) || (($intYear %400) == 0)));
     }
 
 
