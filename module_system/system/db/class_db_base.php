@@ -16,6 +16,62 @@ abstract class class_db_base implements interface_db_driver {
     protected $arrStatementsCache = array();
 
     /**
+     * Renames a table
+     *
+     * @param $strOldName
+     * @param $strNewName
+     *
+     * @return bool
+     * @since 4.6
+     */
+    public function renameTable($strOldName, $strNewName) {
+        return $this->_pQuery("ALTER TABLE ".($this->encloseTableName(_dbprefix_.$strOldName))." RENAME TO ".($this->encloseTableName(_dbprefix_.$strNewName)), array());
+    }
+
+    /**
+     * Renames a single column of the table
+     *
+     * @param $strTable
+     * @param $strOldColumnName
+     * @param $strNewColumnName
+     * @param $strNewDatatype
+     *
+     * @return bool
+     * @since 4.6
+     */
+    public function changeColumn($strTable, $strOldColumnName, $strNewColumnName, $strNewDatatype) {
+        return $this->_pQuery("ALTER TABLE ".($this->encloseTableName(_dbprefix_.$strTable))." CHANGE COLUMN ".($this->encloseColumnName($strOldColumnName)." ".$this->encloseColumnName($strNewColumnName)." ".$this->getDatatype($strNewDatatype)), array());
+    }
+
+    /**
+     * Adds a column to a table
+     *
+     * @param $strTable
+     * @param $strColumn
+     * @param $strDatatype
+     *
+     * @return bool
+     * @since 4.6
+     */
+    public function addColumn($strTable, $strColumn, $strDatatype) {
+        return $this->_pQuery("ALTER TABLE ".($this->encloseTableName(_dbprefix_.$strTable))." ADD ".($this->encloseColumnName($strColumn)." ".$this->getDatatype($strDatatype)), array());
+    }
+
+    /**
+     * Removes a column from a table
+     *
+     * @param $strTable
+     * @param $strColumn
+     *
+     * @return bool
+     * @since 4.6
+     */
+    public function removeColumn($strTable, $strColumn) {
+        return $this->_pQuery("ALTER TABLE ".($this->encloseTableName(_dbprefix_.$strTable))." DROP COLUMN ".($this->encloseColumnName($strColumn)), array());
+    }
+
+
+    /**
      * Creates a single query in order to insert multiple rows at one time.
      * For most databases, this will create s.th. like
      * INSERT INTO $strTable ($arrColumns) VALUES (?, ?), (?, ?)...

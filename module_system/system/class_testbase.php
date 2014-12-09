@@ -61,7 +61,7 @@ abstract class class_testbase extends PHPUnit_Framework_TestCase {
     }
 
     protected function flushDBCache() {
-        class_carrier::getInstance()->flushCache(class_carrier::INT_CACHE_TYPE_DBQUERIES);
+        class_carrier::getInstance()->flushCache(class_carrier::INT_CACHE_TYPE_DBQUERIES |class_carrier::INT_CACHE_TYPE_DBTABLES);
     }
 
 

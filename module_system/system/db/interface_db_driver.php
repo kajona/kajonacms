@@ -59,7 +59,7 @@ interface interface_db_driver {
 
     /**
      * Sends a prepared statement to the database. All params must be represented by the ? char.
-     * The params themself are stored using the second params using the matching order.
+     * The params themselves are stored using the second params using the matching order.
      *
      * @param string $strQuery
      * @param array $arrParams
@@ -89,7 +89,7 @@ interface interface_db_driver {
     public function getPArray($strQuery, $arrParams);
 
     /**
-     * Returns just a part of a recodset, defined by the start- and the end-rows,
+     * Returns just a part of a recordset, defined by the start- and the end-rows,
      * defined by the params
      * <b>Note:</b> Use array-like counters, so the first row is startRow 0 whereas
      * the n-th row is the (n-1)th key!!!
@@ -170,21 +170,69 @@ interface interface_db_driver {
      */
     public function createTable($strName, $arrFields, $arrKeys, $arrIndices = array(), $bitTxSafe = true);
 
+    /**
+     * Renames a table
+     * @param $strOldName
+     * @param $strNewName
+     *
+     * @return bool
+     * @since 4.6
+     */
+    public function renameTable($strOldName, $strNewName);
+
+
+    /**
+     * Changes a single column, e.g. the datatype
+     *
+     * @param $strTable
+     * @param $strOldColumnName
+     * @param $strNewColumnName
+     * @param $strNewDatatype
+     *
+     * @internal param $strColumn
+     * @return bool
+     * @since 4.6
+     */
+    public function changeColumn($strTable, $strOldColumnName, $strNewColumnName, $strNewDatatype);
+
+    /**
+     * Adds a column to a table
+     *
+     * @param $strTable
+     * @param $strColumn
+     * @param $strDatatype
+     *
+     * @return bool
+     * @since 4.6
+     */
+    public function addColumn($strTable, $strColumn, $strDatatype);
+
+    /**
+     * Removes a column from a table
+     * @param $strTable
+     * @param $strColumn
+     *
+     * @return bool
+     * @since 4.6
+     */
+    public function removeColumn($strTable, $strColumn);
 
     /**
      * Starts a transaction
      * @return void
+     * @since 4.6
      */
     public function transactionBegin();
 
     /**
-     * Ends a successfull operation by Commiting the transaction
+     * Ends a successful operation by committing the transaction
      * @return void
+     * @since 4.6
      */
     public function transactionCommit();
 
     /**
-     * Ends a non-successfull transaction by using a rollback
+     * Ends a non-successful transaction by using a rollback
      * @return void
      */
     public function transactionRollback();
@@ -212,7 +260,7 @@ interface interface_db_driver {
     public function dbExport($strFilename, $arrTables);
 
     /**
-     * Imports the given db-dump file to the database. The filename ist relativ to _realpath_
+     * Imports the given db-dump file to the database. The filename ist relative to _realpath_
      *
      * @param string $strFilename
      * @return bool

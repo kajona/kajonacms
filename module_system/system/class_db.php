@@ -62,7 +62,6 @@ class class_db {
 
     /**
      * Constructor
-
      */
     private function __construct() {
 
@@ -123,7 +122,7 @@ class class_db {
      * This method connects with the database
      * @return void
      */
-    public function dbconnect() {
+    private function dbconnect() {
         if($this->objDbDriver !== null) {
             try {
                 class_logger::getInstance(class_logger::DBLOG)->addLogRow("creating database-connection using driver ".get_class($this->objDbDriver), class_logger::$levelInfo);
@@ -747,6 +746,68 @@ class class_db {
             $this->getError("");
 
         return $bitReturn;
+    }
+
+    /**
+     * Renames a table
+     * @param $strOldName
+     * @param $strNewName
+     *
+     * @return bool
+     */
+    public function renameTable($strOldName, $strNewName) {
+        return $this->objDbDriver->renameTable($strOldName, $strNewName);
+    }
+
+    /**
+     * Renames a single column of the table
+     * @param $strTable
+     * @param $strOldColumnName
+     * @param $strNewColumnName
+     *
+     * @return bool
+     */
+    public function renameColumn($strTable, $strOldColumnName, $strNewColumnName) {
+        return $this->objDbDriver->renameColumn($strTable, $strOldColumnName, $strNewColumnName);
+    }
+
+    /**
+     * Changes a single column, e.g. the datatype
+     *
+     * @param $strTable
+     * @param $strOldColumnName
+     * @param $strNewColumnName
+     * @param $strNewDatatype
+     *
+     * @internal param $strColumn
+     * @return bool
+     */
+    public function changeColumn($strTable, $strOldColumnName, $strNewColumnName, $strNewDatatype) {
+        return $this->objDbDriver->changeColumn($strTable, $strOldColumnName, $strNewColumnName, $strNewDatatype);
+    }
+
+    /**
+     * Adds a column to a table
+     *
+     * @param $strTable
+     * @param $strColumn
+     * @param $strDatatype
+     *
+     * @return bool
+     */
+    public function addColumn($strTable, $strColumn, $strDatatype) {
+        return $this->objDbDriver->addColumn($strTable, $strColumn, $strDatatype);
+    }
+
+    /**
+     * Removes a column from a table
+     * @param $strTable
+     * @param $strColumn
+     *
+     * @return bool
+     */
+    public function removeColumn($strTable, $strColumn) {
+        return $this->objDbDriver->removeColumn($strTable, $strColumn);
     }
 
     /**

@@ -5,24 +5,105 @@ require_once (__DIR__."/../../module_system/system/class_testbase.php");
 class class_test_database extends class_testbase {
 
     public function tearDown() {
+        echo "Dropping tables...\n";
         $this->flushDBCache();
         if(in_array(_dbprefix_."temp_autotest", class_carrier::getInstance()->getObjDB()->getTables())) {
             $strQuery = "DROP TABLE "._dbprefix_."temp_autotest";
-            class_carrier::getInstance()->getObjDB()->_query($strQuery);
+            class_carrier::getInstance()->getObjDB()->_pQuery($strQuery, array());
+        }
+
+        if(in_array(_dbprefix_."temp_autotest_new", class_carrier::getInstance()->getObjDB()->getTables())) {
+            $strQuery = "DROP TABLE "._dbprefix_."temp_autotest_new";
+            class_carrier::getInstance()->getObjDB()->_pQuery($strQuery, array());
         }
 
         parent::tearDown();
     }
 
 
-    public function test() {
+    public function testRenameTable() {
+        $objDb = class_carrier::getInstance()->getObjDB();
+        $this->createTable();
 
-        $objDB = class_carrier::getInstance()->getObjDB();
+        $this->assertTrue(in_array(_dbprefix_."temp_autotest", class_carrier::getInstance()->getObjDB()->getTables()));
+        $this->assertTrue(!in_array(_dbprefix_."temp_autotest_new", class_carrier::getInstance()->getObjDB()->getTables()));
 
-        echo "testing database...\n";
-        echo "current driver: ".class_carrier::getInstance()->getObjConfig()->getConfig("dbdriver")."\n";
+        $this->assertTrue($objDb->renameTable("temp_autotest", "temp_autotest_new"));
+        $this->flushDBCache();
 
+        $this->assertTrue(!in_array(_dbprefix_."temp_autotest", class_carrier::getInstance()->getObjDB()->getTables()));
+        $this->assertTrue(in_array(_dbprefix_."temp_autotest_new", class_carrier::getInstance()->getObjDB()->getTables()));
+    }
+
+    public function testChangeColumn() {
+        $objDb = class_carrier::getInstance()->getObjDB();
+        $this->createTable();
+
+        $arrColumnNames = array_map(function($arrValue) {
+            return $arrValue["columnName"];
+        }, $objDb->getColumnsOfTable(_dbprefix_."temp_autotest"));
+
+        $this->assertTrue(in_array("temp_id", $arrColumnNames));
+        $this->assertTrue(in_array("temp_long", $arrColumnNames));
+
+        $this->assertTrue($objDb->changeColumn("temp_autotest", "temp_long", "temp_long_new", class_db_datatypes::STR_TYPE_INT));
+        $this->flushDBCache();
+
+        $arrColumnNames = array_map(function($arrValue) {
+            return $arrValue["columnName"];
+        }, $objDb->getColumnsOfTable(_dbprefix_."temp_autotest"));
+
+        $this->assertTrue(in_array("temp_id", $arrColumnNames));
+        $this->assertTrue(!in_array("temp_long", $arrColumnNames));
+        $this->assertTrue(in_array("temp_long_new", $arrColumnNames));
+
+    }
+
+    public function testAddColumn() {
+        $objDb = class_carrier::getInstance()->getObjDB();
+        $this->createTable();
+
+        $arrColumnNames = array_map(function($arrValue) {
+            return $arrValue["columnName"];
+        }, $objDb->getColumnsOfTable(_dbprefix_."temp_autotest"));
+
+        $this->assertTrue(!in_array("temp_new_col", $arrColumnNames));
+
+        $this->assertTrue($objDb->addColumn("temp_autotest", "temp_new_col", class_db_datatypes::STR_TYPE_INT));
+        $this->flushDBCache();
+
+        $arrColumnNames = array_map(function($arrValue) {
+            return $arrValue["columnName"];
+        }, $objDb->getColumnsOfTable(_dbprefix_."temp_autotest"));
+
+        $this->assertTrue(in_array("temp_new_col", $arrColumnNames));
+    }
+
+
+    public function testRemoveColumn() {
+        $objDb = class_carrier::getInstance()->getObjDB();
+        $this->createTable();
+
+        $arrColumnNames = array_map(function($arrValue) {
+            return $arrValue["columnName"];
+        }, $objDb->getColumnsOfTable(_dbprefix_."temp_autotest"));
+
+        $this->assertTrue(in_array("temp_long", $arrColumnNames));
+
+        $this->assertTrue($objDb->removeColumn("temp_autotest", "temp_long"));
+        $this->flushDBCache();
+
+        $arrColumnNames = array_map(function($arrValue) {
+            return $arrValue["columnName"];
+        }, $objDb->getColumnsOfTable(_dbprefix_."temp_autotest"));
+
+        $this->assertTrue(!in_array("temp_long", $arrColumnNames));
+    }
+
+
+    private function createTable() {
         echo "\tcreating a new table...\n";
+        $objDB = class_carrier::getInstance()->getObjDB();
 
         $arrFields = array();
         $arrFields["temp_id"] = array("char20", false);
@@ -36,6 +117,20 @@ class class_test_database extends class_testbase {
         $arrFields["temp_text"] = array("text", true);
 
         $this->assertTrue($objDB->createTable("temp_autotest", $arrFields, array("temp_id")), "testDataBase createTable");
+        $this->flushDBCache();
+    }
+
+
+    public function testCreateTable() {
+
+        $objDB = class_carrier::getInstance()->getObjDB();
+
+        echo "testing database...\n";
+        echo "current driver: ".class_carrier::getInstance()->getObjConfig()->getConfig("dbdriver")."\n";
+
+        echo "\tcreating a new table...\n";
+
+        $this->createTable();
 
         echo "\tcreating 50 records...\n";
 
@@ -45,19 +140,19 @@ class class_test_database extends class_testbase {
                 VALUES
                 ('".generateSystemid()."', 123456".$intI.", 23.45".$intI.", '".$intI."', 'char20".$intI."', 'char100".$intI."', 'char254".$intI."', 'char500".$intI."', 'text".$intI."')";
 
-            $this->assertTrue($objDB->_query($strQuery), "testDataBase insert");
+            $this->assertTrue($objDB->_pQuery($strQuery, array()), "testDataBase insert");
         }
 
 
         echo "\tgetRow test\n";
         $strQuery = "SELECT * FROM "._dbprefix_."temp_autotest ORDER BY temp_long ASC";
-        $arrRow = $objDB->getRow($strQuery);
+        $arrRow = $objDB->getPRow($strQuery, array());
         $this->assertTrue(count($arrRow) == 18 || count($arrRow) == 9, "testDataBase getRow count");
         $this->assertEquals($arrRow["temp_char10"], "1", "testDataBase getRow content");
 
         echo "\tgetArray test\n";
         $strQuery = "SELECT * FROM "._dbprefix_."temp_autotest ORDER BY temp_long ASC";
-        $arrRow = $objDB->getArray($strQuery);
+        $arrRow = $objDB->getPArray($strQuery, array());
         $this->assertEquals(count($arrRow), 50, "testDataBase getArray count");
 
         $intI = 1;
@@ -66,7 +161,7 @@ class class_test_database extends class_testbase {
 
         echo "\tgetArraySection test\n";
         $strQuery = "SELECT * FROM "._dbprefix_."temp_autotest ORDER BY temp_long ASC";
-        $arrRow = $objDB->getArraySection($strQuery, 0, 9);
+        $arrRow = $objDB->getPArray($strQuery, array(), 0, 9);
         $this->assertEquals(count($arrRow), 10, "testDataBase getArraySection count");
 
         $intI = 1;
@@ -77,7 +172,7 @@ class class_test_database extends class_testbase {
         echo "\tdeleting table\n";
 
         $strQuery = "DROP TABLE "._dbprefix_."temp_autotest";
-        $this->assertTrue($objDB->_query($strQuery), "testDataBase dropTable");
+        $this->assertTrue($objDB->_pQuery($strQuery, array()), "testDataBase dropTable");
 
     }
 
