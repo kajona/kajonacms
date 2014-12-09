@@ -1174,12 +1174,7 @@ abstract class class_root {
      *
      */
     public final function deleteSystemRecord($strSystemid, $bitRight = true, $bitDate = true) {
-
-        //try to call other modules, maybe wanting to delete anything in addition, if the current record
-        //is going to be deleted
-        //TODO: remove legacy call
-        $bitResult = class_core_eventdispatcher::notifyRecordDeletedListeners($strSystemid, get_class($this));
-        $bitResult = $bitResult && class_core_eventdispatcher::getInstance()->notifyGenericListeners(class_system_eventidentifier::EVENT_SYSTEM_RECORDDELETED, array($strSystemid, get_class($this)));
+        $bitResult = true;
 
         //Start a tx before deleting anything
         $this->objDB->transactionBegin();
@@ -1198,6 +1193,12 @@ abstract class class_root {
             $strQuery = "DELETE FROM "._dbprefix_."system_date WHERE system_date_id = ?";
             $bitResult = $bitResult &&  $this->objDB->_pQuery($strQuery, array($strSystemid));
         }
+
+        //try to call other modules, maybe wanting to delete anything in addition, if the current record
+        //is going to be deleted
+        //TODO: remove legacy call
+        $bitResult = class_core_eventdispatcher::notifyRecordDeletedListeners($strSystemid, get_class($this));
+        $bitResult = $bitResult && class_core_eventdispatcher::getInstance()->notifyGenericListeners(class_system_eventidentifier::EVENT_SYSTEM_RECORDDELETED, array($strSystemid, get_class($this)));
 
         //end tx
         if($bitResult) {
