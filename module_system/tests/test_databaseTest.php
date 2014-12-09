@@ -16,6 +16,10 @@ class class_test_database extends class_testbase {
             $strQuery = "DROP TABLE "._dbprefix_."temp_autotest_new";
             class_carrier::getInstance()->getObjDB()->_pQuery($strQuery, array());
         }
+        if(in_array(_dbprefix_."temp_autotest_temp", class_carrier::getInstance()->getObjDB()->getTables())) {
+            $strQuery = "DROP TABLE "._dbprefix_."temp_autotest_temp";
+            class_carrier::getInstance()->getObjDB()->_pQuery($strQuery, array());
+        }
 
         parent::tearDown();
     }
@@ -37,7 +41,12 @@ class class_test_database extends class_testbase {
 
     public function testChangeColumn() {
         $objDb = class_carrier::getInstance()->getObjDB();
+        $this->tearDown();
         $this->createTable();
+
+        $strQuery = "INSERT INTO "._dbprefix_."temp_autotest (temp_id, temp_long) VALUES (?,?)";
+        $objDb->_pQuery($strQuery, array("aaa", 111));
+        $objDb->_pQuery($strQuery, array("bbb", 222));
 
         $arrColumnNames = array_map(function($arrValue) {
             return $arrValue["columnName"];
@@ -56,6 +65,14 @@ class class_test_database extends class_testbase {
         $this->assertTrue(in_array("temp_id", $arrColumnNames));
         $this->assertTrue(!in_array("temp_long", $arrColumnNames));
         $this->assertTrue(in_array("temp_long_new", $arrColumnNames));
+
+        $arrRows = $objDb->getPArray("SELECT * FROM "._dbprefix_."temp_autotest ORDER BY temp_long_new ASC", array());
+
+        $this->assertTrue(count($arrRows) == 2);
+        $this->assertEquals($arrRows[0]["temp_id"], "aaa");
+        $this->assertEquals($arrRows[0]["temp_long_new"], 111);
+        $this->assertEquals($arrRows[1]["temp_id"], "bbb");
+        $this->assertEquals($arrRows[1]["temp_long_new"], 222);
 
     }
 
@@ -90,6 +107,10 @@ class class_test_database extends class_testbase {
 
         $this->assertTrue(in_array("temp_long", $arrColumnNames));
 
+        $strQuery = "INSERT INTO "._dbprefix_."temp_autotest (temp_id, temp_long) VALUES (?,?)";
+        $objDb->_pQuery($strQuery, array("aaa", 111));
+        $objDb->_pQuery($strQuery, array("bbb", 222));
+
         $this->assertTrue($objDb->removeColumn("temp_autotest", "temp_long"));
         $this->flushDBCache();
 
@@ -98,6 +119,12 @@ class class_test_database extends class_testbase {
         }, $objDb->getColumnsOfTable(_dbprefix_."temp_autotest"));
 
         $this->assertTrue(!in_array("temp_long", $arrColumnNames));
+
+        $arrRows = $objDb->getPArray("SELECT * FROM "._dbprefix_."temp_autotest ORDER BY temp_id ASC", array());
+
+        $this->assertTrue(count($arrRows) == 2);
+        $this->assertEquals($arrRows[0]["temp_id"], "aaa");
+        $this->assertEquals($arrRows[1]["temp_id"], "bbb");
     }
 
 

@@ -77,6 +77,112 @@ class class_db_sqlite3 extends class_db_base  {
         return true;
     }
 
+
+
+    private function buildAndCopyTempTables($strTargetTableName, $arrSourceTableInfo, $arrTargetTableInfo) {
+        $bitReturn = true;
+
+        $arrSourceColumns = array();
+        array_walk($arrSourceTableInfo, function($arrValue) use (&$arrSourceColumns) {
+            $arrSourceColumns[] = $arrValue["columnName"];
+        });
+
+        $arrTargetColumns = array();
+        array_walk($arrTargetTableInfo, function($arrValue) use (&$arrTargetColumns) {
+            $arrTargetColumns[] = $arrValue["columnName"];
+        });
+
+
+        //build the a temp table
+        $strQuery = "CREATE TABLE "._dbprefix_.$strTargetTableName."_temp ( \n";
+        //loop the fields
+        foreach($arrTargetTableInfo as $intI => $arrOneColumn) {
+            $strQuery .= " ".$arrOneColumn["columnName"]." ".$arrOneColumn["columnType"];
+            //nullable?
+            if($intI == 0) {
+                $strQuery .= " NOT NULL, \n";
+            }
+            else {
+                $strQuery .= ", \n";
+            }
+
+        }
+
+        //primary keys
+        $strQuery .= " PRIMARY KEY (".$arrTargetTableInfo[0]["columnName"].") \n";
+        $strQuery .= ") ";
+
+        $bitReturn = $bitReturn && $this->_pQuery($strQuery, array());
+
+        //copy all values
+        $strQuery = "INSERT INTO "._dbprefix_.$strTargetTableName."_temp (".implode(",", $arrTargetColumns).") SELECT ".implode(",", $arrSourceColumns)." FROM "._dbprefix_.$strTargetTableName;
+        $bitReturn = $bitReturn && $this->_pQuery($strQuery, array());
+
+        $strQuery = "DROP TABLE "._dbprefix_.$strTargetTableName;
+        $bitReturn = $bitReturn && $this->_pQuery($strQuery, array());
+
+        return $bitReturn && $this->renameTable($strTargetTableName."_temp", $strTargetTableName);
+    }
+
+
+    /**
+     * Renames a single column of the table
+     *
+     * @param $strTable
+     * @param $strOldColumnName
+     * @param $strNewColumnName
+     * @param $strNewDatatype
+     *
+     * @return bool
+     * @since 4.6
+     */
+    public function changeColumn($strTable, $strOldColumnName, $strNewColumnName, $strNewDatatype) {
+
+        $arrTableInfo = $this->getColumnsOfTable(_dbprefix_.$strTable);
+        $arrTargetTableInfo = array();
+        foreach($arrTableInfo as $arrOneColumn) {
+            if($arrOneColumn["columnName"] == $strOldColumnName) {
+                $arrNewRow = array(
+                    "columnName" => $strNewColumnName,
+                    "columnType" => $this->getDatatype($strNewDatatype)
+                );
+
+                $arrTargetTableInfo[] = $arrNewRow;
+            }
+            else {
+                $arrTargetTableInfo[] = $arrOneColumn;
+            }
+
+        }
+
+        return $this->buildAndCopyTempTables($strTable, $arrTableInfo, $arrTargetTableInfo);
+    }
+
+
+    /**
+     * removes a single column from the table
+     *
+     * @param $strTable
+     * @param $strColumn
+     *
+     * @return bool
+     * @since 4.6
+     */
+    public function removeColumn($strTable, $strColumn) {
+
+        $arrTableInfo = $this->getColumnsOfTable(_dbprefix_.$strTable);
+        $arrTargetTableInfo = array();
+        foreach($arrTableInfo as $arrOneColumn) {
+            if($arrOneColumn["columnName"] != $strColumn) {
+                $arrTargetTableInfo[] = $arrOneColumn;
+            }
+
+        }
+
+        return $this->buildAndCopyTempTables($strTable, $arrTargetTableInfo, $arrTargetTableInfo);
+    }
+
+
     /**
      * Creates a single query in order to insert multiple rows at one time.
      * For most databases, this will create s.th. like
@@ -280,6 +386,7 @@ class class_db_sqlite3 extends class_db_base  {
         $arrTableInfo = $this->getArray("SELECT sql FROM sqlite_master WHERE type='table' and name='".$strTableName."'");
         if(!empty($arrTableInfo)) {
             $strTableDef = $arrTableInfo[0]["sql"];
+            $strTableDef = uniStrReplace("\"", "", $strTableDef);
 
             // Extract the column definitions from the create statement
             $arrMatch = array();
@@ -288,8 +395,9 @@ class class_db_sqlite3 extends class_db_base  {
             // Get all column names and types
             $strColumnDef = $arrMatch[1];
             $intPrimaryKeyPos = strripos($strColumnDef, "PRIMARY KEY");
-            if($intPrimaryKeyPos !== false)
+            if($intPrimaryKeyPos !== false) {
                 $strColumnDef = substr($strColumnDef, 0, $intPrimaryKeyPos);
+            }
             preg_match_all("/\s*([a-z_0-9]+)\s+([a-z]+)[^,]+/ism", trim($strColumnDef), $arrMatch, PREG_SET_ORDER);
 
             foreach($arrMatch as $arrColumnInfo)
