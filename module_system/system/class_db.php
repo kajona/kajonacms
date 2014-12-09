@@ -741,7 +741,7 @@ class class_db {
         if(!$this->bitConnected)
             $this->dbconnect();
 
-        $bitReturn = $this->objDbDriver->createTable($strName, $arrFields, $arrKeys, $arrIndices, $bitTxSafe);
+        $bitReturn = $this->objDbDriver->createTable(_dbprefix_.$strName, $arrFields, $arrKeys, $arrIndices, $bitTxSafe);
         if(!$bitReturn)
             $this->getError("");
 
@@ -756,19 +756,7 @@ class class_db {
      * @return bool
      */
     public function renameTable($strOldName, $strNewName) {
-        return $this->objDbDriver->renameTable($strOldName, $strNewName);
-    }
-
-    /**
-     * Renames a single column of the table
-     * @param $strTable
-     * @param $strOldColumnName
-     * @param $strNewColumnName
-     *
-     * @return bool
-     */
-    public function renameColumn($strTable, $strOldColumnName, $strNewColumnName) {
-        return $this->objDbDriver->renameColumn($strTable, $strOldColumnName, $strNewColumnName);
+        return $this->objDbDriver->renameTable(_dbprefix_.$strOldName, _dbprefix_.$strNewName);
     }
 
     /**
@@ -783,7 +771,7 @@ class class_db {
      * @return bool
      */
     public function changeColumn($strTable, $strOldColumnName, $strNewColumnName, $strNewDatatype) {
-        return $this->objDbDriver->changeColumn($strTable, $strOldColumnName, $strNewColumnName, $strNewDatatype);
+        return $this->objDbDriver->changeColumn(_dbprefix_.$strTable, $strOldColumnName, $strNewColumnName, $strNewDatatype);
     }
 
     /**
@@ -796,7 +784,7 @@ class class_db {
      * @return bool
      */
     public function addColumn($strTable, $strColumn, $strDatatype) {
-        return $this->objDbDriver->addColumn($strTable, $strColumn, $strDatatype);
+        return $this->objDbDriver->addColumn(_dbprefix_.$strTable, $strColumn, $strDatatype);
     }
 
     /**
@@ -807,7 +795,7 @@ class class_db {
      * @return bool
      */
     public function removeColumn($strTable, $strColumn) {
-        return $this->objDbDriver->removeColumn($strTable, $strColumn);
+        return $this->objDbDriver->removeColumn(_dbprefix_.$strTable, $strColumn);
     }
 
     /**

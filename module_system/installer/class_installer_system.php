@@ -1108,11 +1108,9 @@ class class_installer_system extends class_installer_base implements interface_i
         $strReturn = "Updating 4.5 to 4.5.1...\n";
 
         $strReturn .= "Changing datatype of column message_boy text long to longtext\n";
-        $strQuery = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."messages")."
-                            MODIFY ".$this->objDB->encloseColumnName("message_body")." ".$this->objDB->getDatatype("longtext");
-        if(!$this->objDB->_pQuery($strQuery, array()))
-            $strReturn .= "An error occured! ...\n";
 
+        if(!$this->objDB->changeColumn("messages", "message_body", "message_body", class_db_datatypes::STR_TYPE_LONGTEXT))
+            $strReturn .= "An error occured! ...\n";
 
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion($this->objMetadata->getStrTitle(), "4.5.1");

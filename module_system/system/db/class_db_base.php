@@ -25,7 +25,7 @@ abstract class class_db_base implements interface_db_driver {
      * @since 4.6
      */
     public function renameTable($strOldName, $strNewName) {
-        return $this->_pQuery("ALTER TABLE ".($this->encloseTableName(_dbprefix_.$strOldName))." RENAME TO ".($this->encloseTableName(_dbprefix_.$strNewName)), array());
+        return $this->_pQuery("ALTER TABLE ".($this->encloseTableName($strOldName))." RENAME TO ".($this->encloseTableName($strNewName)), array());
     }
 
     /**
@@ -40,7 +40,7 @@ abstract class class_db_base implements interface_db_driver {
      * @since 4.6
      */
     public function changeColumn($strTable, $strOldColumnName, $strNewColumnName, $strNewDatatype) {
-        return $this->_pQuery("ALTER TABLE ".($this->encloseTableName(_dbprefix_.$strTable))." CHANGE COLUMN ".($this->encloseColumnName($strOldColumnName)." ".$this->encloseColumnName($strNewColumnName)." ".$this->getDatatype($strNewDatatype)), array());
+        return $this->_pQuery("ALTER TABLE ".($this->encloseTableName($strTable))." CHANGE COLUMN ".($this->encloseColumnName($strOldColumnName)." ".$this->encloseColumnName($strNewColumnName)." ".$this->getDatatype($strNewDatatype)), array());
     }
 
     /**
@@ -54,7 +54,7 @@ abstract class class_db_base implements interface_db_driver {
      * @since 4.6
      */
     public function addColumn($strTable, $strColumn, $strDatatype) {
-        return $this->_pQuery("ALTER TABLE ".($this->encloseTableName(_dbprefix_.$strTable))." ADD ".($this->encloseColumnName($strColumn)." ".$this->getDatatype($strDatatype)), array());
+        return $this->_pQuery("ALTER TABLE ".($this->encloseTableName($strTable))." ADD ".($this->encloseColumnName($strColumn)." ".$this->getDatatype($strDatatype)), array());
     }
 
     /**
@@ -67,7 +67,7 @@ abstract class class_db_base implements interface_db_driver {
      * @since 4.6
      */
     public function removeColumn($strTable, $strColumn) {
-        return $this->_pQuery("ALTER TABLE ".($this->encloseTableName(_dbprefix_.$strTable))." DROP COLUMN ".($this->encloseColumnName($strColumn)), array());
+        return $this->_pQuery("ALTER TABLE ".($this->encloseTableName($strTable))." DROP COLUMN ".($this->encloseColumnName($strColumn)), array());
     }
 
 

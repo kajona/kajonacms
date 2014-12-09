@@ -94,7 +94,7 @@ class class_db_sqlite3 extends class_db_base  {
 
 
         //build the a temp table
-        $strQuery = "CREATE TABLE "._dbprefix_.$strTargetTableName."_temp ( \n";
+        $strQuery = "CREATE TABLE ".$strTargetTableName."_temp ( \n";
         //loop the fields
         foreach($arrTargetTableInfo as $intI => $arrOneColumn) {
             $strQuery .= " ".$arrOneColumn["columnName"]." ".$arrOneColumn["columnType"];
@@ -115,10 +115,10 @@ class class_db_sqlite3 extends class_db_base  {
         $bitReturn = $bitReturn && $this->_pQuery($strQuery, array());
 
         //copy all values
-        $strQuery = "INSERT INTO "._dbprefix_.$strTargetTableName."_temp (".implode(",", $arrTargetColumns).") SELECT ".implode(",", $arrSourceColumns)." FROM "._dbprefix_.$strTargetTableName;
+        $strQuery = "INSERT INTO ".$strTargetTableName."_temp (".implode(",", $arrTargetColumns).") SELECT ".implode(",", $arrSourceColumns)." FROM ".$strTargetTableName;
         $bitReturn = $bitReturn && $this->_pQuery($strQuery, array());
 
-        $strQuery = "DROP TABLE "._dbprefix_.$strTargetTableName;
+        $strQuery = "DROP TABLE ".$strTargetTableName;
         $bitReturn = $bitReturn && $this->_pQuery($strQuery, array());
 
         return $bitReturn && $this->renameTable($strTargetTableName."_temp", $strTargetTableName);
@@ -138,7 +138,7 @@ class class_db_sqlite3 extends class_db_base  {
      */
     public function changeColumn($strTable, $strOldColumnName, $strNewColumnName, $strNewDatatype) {
 
-        $arrTableInfo = $this->getColumnsOfTable(_dbprefix_.$strTable);
+        $arrTableInfo = $this->getColumnsOfTable($strTable);
         $arrTargetTableInfo = array();
         foreach($arrTableInfo as $arrOneColumn) {
             if($arrOneColumn["columnName"] == $strOldColumnName) {
@@ -170,7 +170,7 @@ class class_db_sqlite3 extends class_db_base  {
      */
     public function removeColumn($strTable, $strColumn) {
 
-        $arrTableInfo = $this->getColumnsOfTable(_dbprefix_.$strTable);
+        $arrTableInfo = $this->getColumnsOfTable($strTable);
         $arrTargetTableInfo = array();
         foreach($arrTableInfo as $arrOneColumn) {
             if($arrOneColumn["columnName"] != $strColumn) {
@@ -438,13 +438,13 @@ class class_db_sqlite3 extends class_db_base  {
     public function createTable($strName, $arrFields, $arrKeys, $arrIndices = array(), $bitTxSafe = true) {
         $arrTables = $this->getTables();
         foreach($arrTables as $arrTable)
-            if($arrTable["name"] == _dbprefix_.$strName)
+            if($arrTable["name"] == $strName)
                 return true;
 
         $strQuery = "";
 
         //build the mysql code
-        $strQuery .= "CREATE TABLE "._dbprefix_.$strName." ( \n";
+        $strQuery .= "CREATE TABLE ".$strName." ( \n";
 
         //loop the fields
         foreach($arrFields as $strFieldName => $arrColumnSettings) {
@@ -474,7 +474,7 @@ class class_db_sqlite3 extends class_db_base  {
         $bitCreate = $this->_query($strQuery);
 
         if($bitCreate && count($arrIndices) > 0) {
-            $strQuery = "CREATE INDEX ix_".generateSystemid()." ON "._dbprefix_.$strName." ( ".implode(", ", $arrIndices).") ";
+            $strQuery = "CREATE INDEX ix_".generateSystemid()." ON ".$strName." ( ".implode(", ", $arrIndices).") ";
             $bitCreate = $bitCreate && $this->_query($strQuery);
         }
 

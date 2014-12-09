@@ -422,12 +422,12 @@ class class_db_oci8 extends class_db_base {
         //loop over existing tables to check, if the table already exists
         $arrTables = $this->getTables();
         foreach($arrTables as $arrOneTable) {
-            if($arrOneTable["name"] == _dbprefix_.$strName)
+            if($arrOneTable["name"] == $strName)
                 return true;
         }
 
         //build the oracle code
-        $strQuery .= "CREATE TABLE "._dbprefix_.$strName." ( \n";
+        $strQuery .= "CREATE TABLE ".$strName." ( \n";
 
         //loop the fields
         foreach($arrFields as $strFieldName => $arrColumnSettings) {
@@ -458,7 +458,7 @@ class class_db_oci8 extends class_db_base {
         $bitCreate = $this->_query($strQuery);
 
         if($bitCreate && count($arrIndices) > 0) {
-            $strQuery = "CREATE INDEX ix_".generateSystemid()." ON "._dbprefix_.$strName." ( ".implode(", ", $arrIndices).") ";
+            $strQuery = "CREATE INDEX ix_".generateSystemid()." ON ".$strName." ( ".implode(", ", $arrIndices).") ";
             $bitCreate = $bitCreate && $this->_query($strQuery);
         }
 

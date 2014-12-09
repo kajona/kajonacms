@@ -323,7 +323,7 @@ class class_db_mysqli extends class_db_base {
         $strQuery = "";
 
         //build the mysql code
-        $strQuery .= "CREATE TABLE IF NOT EXISTS `" . _dbprefix_ . $strName . "` ( \n";
+        $strQuery .= "CREATE TABLE IF NOT EXISTS `" .$strName . "` ( \n";
 
         //loop the fields
         foreach($arrFields as $strFieldName => $arrColumnSettings) {
