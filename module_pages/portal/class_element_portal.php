@@ -329,7 +329,7 @@ abstract class class_element_portal extends class_portal_controller {
 
                 $strCallback = " function() { delDialog.hide(); KAJONA.admin.portaleditor.deleteElementData('$strSystemid'); return false; } ";
             }
-            else {
+            else if(isset($arrConfig["pe_action_delete"]) && $arrConfig["pe_action_delete"] != "") {
                 $strDeleteUrl = class_link::getLinkAdminHref($strModule, $arrConfig["pe_action_delete"], $arrConfig["pe_action_edit_params"].$strAdminLangParam."&pe=1");
                 $strCallback = " function() { delDialog.hide(); KAJONA.admin.portaleditor.openDialog('$strDeleteUrl'); return false; } ";
             }
