@@ -1197,7 +1197,7 @@ abstract class class_root {
         //try to call other modules, maybe wanting to delete anything in addition, if the current record
         //is going to be deleted
         //TODO: remove legacy call
-        $bitResult = class_core_eventdispatcher::notifyRecordDeletedListeners($strSystemid, get_class($this));
+        $bitResult = $bitResult && class_core_eventdispatcher::notifyRecordDeletedListeners($strSystemid, get_class($this));
         $bitResult = $bitResult && class_core_eventdispatcher::getInstance()->notifyGenericListeners(class_system_eventidentifier::EVENT_SYSTEM_RECORDDELETED, array($strSystemid, get_class($this)));
 
         //end tx
