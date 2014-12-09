@@ -1,5 +1,18 @@
 Module Pages
 
+V4.6 ----------------------------------------------------------------------------------------------------
+NEW: module_pages | pages_folderview -> choosing a page from the pages-dialog is now faster by using a autocomplete quickselect in addition to the tree [ticket #934]
+NEW: module_pages | portaleditor -> deleting an element removes the element from the dom instead of reloading the page, cool version (deletion via ajax in the background) [ticket #930]
+NEW: module_pages | portaleditor -> creating / editing elements using the pe-overlay no longer requires a reload of the portal-page. instead the contents are changed by javascript [ticket #930]
+NEW: module_pages | admin -> removed the flat pages list
+NEW: module_pages | page-element -> reduced the number of queries required to rebuild the sort-ids when deleting an element form a large list of siblings
+BUG: module_pages | pages_content admin view -> the delete and edit icons missed to validate some permissions
+BUG: module_pages | page -> fixed an sql error in combination with postgres when deleting a single page
+BUG: module_pages | pages_sortmanager -> fixed the internal reordering of pages when moving a page within the page-hierarchy. before the elements were taken into to count-determination, too
+BUG: module_pages | portaleditor -> removed annoying title for editable elements in portaleditor
+BUG: module_pages | elements -> hide template chooser when there is only one template available
+BUG: module_pages | pages_admin -> disabled hierarchical drag n drop for folders [ticket #931]
+
 V4.5 ----------------------------------------------------------------------------------------------------
 NEW: module_pages | pageelement -> loading a list of placeholders processes the language as a order-by criteria
 BUG: module_pages | pages_portal -> portal crashes when there's no master-page #882

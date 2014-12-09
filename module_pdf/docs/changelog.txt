@@ -1,5 +1,8 @@
 Module PDF
 
+V4.6 ----------------------------------------------------------------------------------------------------
+NEW: module_pdf | tcpdf -> updated tcpdf to 6.0.099
+
 V4.5.1 --------------------------------------------------------------------------------------------------
 NEW: module_pdf | class_pdf -> MultiCell content may optionally be rendered as interpreted html
 

@@ -1,5 +1,10 @@
 Module V4 Skin
 
+V4.6 ----------------------------------------------------------------------------------------------------
+BUG: module_v4skin | chosen selector -> chosen container width is now always set to 280px
+BUG: module_v4skin | imageresolver -> fixed the earthDisabled icon, stacking gone wrong
+NEW: module_v4skin | kajona_dialog -> when the modal dialog is hidden the complete dialog is being reset [ticket #850]
+
 V4.5.1 --------------------------------------------------------------------------------------------------
 BUG: module_v4skin | elements -> Dropdown with width 0 when in tabbed content [ticket #904]
 

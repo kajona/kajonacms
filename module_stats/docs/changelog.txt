@@ -1,5 +1,9 @@
 Module Stats
 
+V4.6 ----------------------------------------------------------------------------------------------------
+NEW: module_stats | browscap -> migrated the old browscap code to make use of the browscap-php library (https://github.com/browscap/browscap-php). The browscap file itself is update during installations and updates [ticket #877]
+
+
 V4.3 ----------------------------------------------------------------------------------------------------
 NEW: Updated browscap.ini to latest release
 NEW: enhanced the dimensions of the stats-widget chart

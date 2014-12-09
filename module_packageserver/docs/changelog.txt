@@ -1,4 +1,9 @@
 Module Packageserver
 
+V4.6 ----------------------------------------------------------------------------------------------------
+BUG: module_packageserver | admin view -> the "show log" link evaluated view permissions instead of edit permissions
+
+
+
 V4.5 ----------------------------------------------------------------------------------------------------
 NEW: module_packageserver | admin -> merged the package info pane with the one from the general packagemanagement

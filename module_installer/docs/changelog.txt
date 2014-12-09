@@ -1,5 +1,9 @@
 Module Installer
 
+V4.6 ----------------------------------------------------------------------------------------------------
+NEW: module_installer -> updated installer to bootstrap v3
+BUG: module_installer | installer.php -> the installer triggers the ENDPROCESSING event, too. otherwise the search index won't be populated.
+
 
 V4.4 ----------------------------------------------------------------------------------------------------
 BUG: the installer validates if the system module is available before accessing the module table

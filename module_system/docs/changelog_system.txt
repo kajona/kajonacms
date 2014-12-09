@@ -1,5 +1,59 @@
 Module System
 
+V4.6 ----------------------------------------------------------------------------------------------------
+NEW: module_system | class_root -> copyObject() got a second optional param $bitChangeTitle. If set to true, _copy is appended to the title, otherwise the title remains as is. By default the appendix is added only on first level, subordinate nodes will keep their original title.
+NEW: module_system | class_root -> when the system status of an object was set, ORMCACHE and DBQUERIES CACHE is being emptied
+NEW: module_system | date_helper -> added a date commons class to calculate and validate special dates, e.g. bank holidays
+NEW: module_system | generalModelTest -> added a new annotations @blockFromAutosave on class-level to skip classes from the automatic updateObjectToDB and deleteObject tests
+NEW: module_system | events -> added new event when a copy process was finished
+NEW: module_system | events -> added a new event "core.system.request.aftercontentsend": Invoked right after sending the response back to the browser, but before starting to shut down the request. This means you are not able to change the response anymore, also the session is already closed to keep other threads from waiting. Use this event to perform internal cleanups if required.
+NEW: module_system | admin_controller -> added a new hook-method getModuleRightNaviEntry, rendering the set-module-permissions link automatically
+NEW: module_system | admin_controller -> removed the module-permission link from all admin controllers since now handled by the base controller itself
+NEW: module_system | class_root -> when copying a record, the _copy extension is only added if the title is not empty
+NEW: module_system | module_login -> moved the routing-logic to load a matching module right after login to module login. in addition, the login-module generates rewrite-urls whenever possible
+NEW: module_system | interface_sortmanager -> updated fixSortOnPrevIdChange in order to take a module-filter as an optional argument
+NEW: module_system | class_date -> added the compare-method isSameDay(class_date) to class_date
+NEW: module_system | class_rights -> when changing permissions recursively, the re-write is skipped for nodes not inheriting the parent nodes' permissions
+NEW: module_system | class_carrier -> added a centralized method public function flushCache($intCacheType = 0). single point to flush the systems various temporary caches
+NEW: module_system | enum -> Added support for php based enums, extend from class_enum
+NEW: module_system | eventhandling -> added two new event-callbacks: core.system.request.startprocessing, called right before the action controller is triggered and core.system.request.endprocessing, called after the action controller and right before passing the response back to the browser
+NEW: module_system | ckeditor -> moved the width and height config-params from elements.tpl to the config-js file. This allows to customize those values for concrete projects
+NEW: module_system | toolkit_portal -> the pageview-entries may be styled using a passed template. integrated into module news and module mediamanager for demo purposes.
+NEW: module_system | ckeditor -> Updated ckeditor to 4.4
+NEW: module_system | datetime templatemapper -> added a new templatemapper "datetime", coming along with "date". datetime renders both, date and time while date only renders the date, only
+NEW: module_system | urlencode templatemapper -> added a new templatemapper "urlencode", e.g. to make image-urls safe
+NEW: module_system | common_sortmanager -> reduced the number of queries required to rebuild the sort-ids when deleting nodes form a large list of siblings
+NEW: module_system | aspects -> removed the method class_module_system_aspect::getObjectList overriding the base class version
+NEW: module_system | array section iterator -> the ArraySectionIterator now implements phps' Iterator-interface. This means that the object may be used within a foreach statement [ticket #905]
+NEW: module_system | class_history -> refactored class_history (internally) and fixed the integration with the exception handler, now printing the history stacks again
+NEW: module_system | admin-exceptions -> changed the way permission- and method-not-found exceptions are handled in the backend. instead of shutting down the application, the backend is rendered including a message of the exception, providing a better user experience. internally all processing will be done as usual.
+NEW: module_system | class_db -> flushing the database-cache no longer flushes the table-cache, too. this may be triggered by a special method of class_db since only relevant for package installations / updates
+NEW / APICHANGE: massive rewrite to the ORM subsystem. It is no possible to create all DDL code using reflection. Tables may be created using the target-objects, the structure is not created manually anymore. Therefore, the following annotations have been introduced @targetTabkeTxSafe, class level, @tableColumnDatatype, property level, @tableColumnPrimaryKey, property level, @tableColumnIndex, property level
+NEW / APICHANGE: rewrite of object loading and list-initialization. The new orm-objectlist helper may be used to load and fetch and count a list of objects using declarative objects instead of plaintext sql. In addition, the results are cached internally, making it possible to load a full list of objects within a single query. The orm-objectlist-orderby and orm-objectlist-restriction objects may be used to order and filter the loaded lists based on internal conditions (so to create WHERE and ORDER BY sql statements)
+NEW: module_system | orm -> added a common cache-handler class_orm_rowcache, holding all rows usable for object inits. will replace some other caches, e.g. at class_rights
+NEW: module_system | orm -> added a new class class_orm_objectlist_orderby to order the resultlist
+NEW: module_system | orm -> list-queries may be enriched with additional where restrictions
+NEW: module_system | orm -> refactored class_orm_mapper, now split into three separate classes (init, list and update)
+NEW: module_system | orm -> added a new annotation "@targetTableTxSafe", value (true / false) indicates if the target table is tx safe or not. if not specified, a tx-safe table will be created
+NEW: module_system | orm_objectlist -> added another method getSingleObject() to load a single object instead of a list of objects
+NEW: module_system | object validator -> added the possibility to create and assign object validators for objects derived from class class_model. The object validator is being used/executed during form validation but can also be used in a different context (e.g. unit tests) by just creating an instance of the validator and executing it's "validateObject" method [ticket #883]
+NEW: module_system | formgenerator, validation errors -> for each key it is now possible to create several error messages
+NEW: module_system | functions.php -> removed the direct access to $HTTP_RAW_POST_DATA, will be removed post php 5.6
+NEW / APICHANGE: module_system | formgenerator -> properties starting with obj (e.g. objStartDate) are now added like regular properties, so as "form_xxx_startdate". Please change your lang-entries and direct field accessor.
+NEW / APICHANGE: module_system | toolkit admin -> changed the semantics of getSimplePageview(). now only returning the pageview-code, no longer a two-dimensional array including the pageview and the elements
+NEW / APICHANGE: module_system | controller -> renamed class_ui_base to class_abstract controller
+NEW / APICHANGE: module_system | controller -> renamed class_admin to class_admin_controller
+NEW / APICHANGE: module_system | controller -> renamed class_portal to class_portal_controller
+NEW / APICHANGE: removed the method interface_validator::getStrName() since no longer used. updated existing validators. NEW: the annotation @fieldValidator may set both, the classname (preferred) of the validator or the name of the validator to be used
+BUG: module_system | admin batchactions -> the default batchactions validate the permissions, at least at module-level
+BUG: module_system | class_rights -> fixed a race condition where changing a modules permission could lead to inconsistent permissions of child nodes (due to cached module nodes)
+BUG: module_system | module admin list -> fixed a weak null comparison, causing the module-list to render some entries twice
+BUG: module_system | class_date -> the setPrev/NextDay methods got confused for days changing the DST offset. Refactored both methods to use PHPs DateTime class internally
+BUG: module_system | bootstrap/functions -> modules may use numbers within the module name (e.g. news2)
+BUG: module_system | kajona.js -> renderMandatoryFields updates a possible chosen element, too. otherwise mandatory dropdowns may not be marked as mandatory for scenarios where the chosen plugin is loaded before rendering the mandatory fields
+BUG: module_system | class_root -> the internally cached old-previd is reset for new system-records. otherwise sort-managers may not be queried for new records, resulting in possible wrong sort-ids
+
+
 V4.5 ----------------------------------------------------------------------------------------------------
 NEW: module_system | request-dispatcher -> added a new param blockAction. if set (in combination with peClose=1), the current request skips the action() call and sends the location.reload directive directly
 NEW: module_system | class_rights -> added method filterObjectsByRight

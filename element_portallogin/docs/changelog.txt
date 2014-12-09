@@ -1,5 +1,9 @@
 Element Portallogin
 
+V4.6 ----------------------------------------------------------------------------------------------------
+NEW: element_portallogin | template -> added missing placeholder documentation [ticket #919]
+
+
 V4.3.1 --------------------------------------------------------------------------------------------------
 BUG: The password-reset link missed to include the users' systemid
 BUG: The confirm-account link missed to include the users' systemid

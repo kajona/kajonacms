@@ -1,4 +1,10 @@
 Module Postacomment
 
+V4.6 ----------------------------------------------------------------------------------------------------
+UPDATE: module_postacomment | recorddeleted listener -> refactored the post-loading in order to generate less queries on object deletions
+BUG: module_postacomment | portal -> wrong redirect when reloading the page right after submitting a comment (was: Falsche Weiterleitung). Credits go to MrBubbleSquare.
+BUG: module_postacomment | portal -> fixed an exception caused by the usage of a wrong setter (string setter instead of object setter)
+
+
 V4.5.1---------------------------------------------------------------------------------------------------
 BUG: fixed an erroneous if-statement, wrong order of braces [ticket #916]. Credits go to AnRo.
