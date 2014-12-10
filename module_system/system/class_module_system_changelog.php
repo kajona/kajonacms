@@ -197,8 +197,11 @@ class class_module_system_changelog extends class_model implements interface_mod
         //this are now the new ones
         $arrNewValues = $this->readVersionableProperties($objSourceModel);
 
-        if($arrOldValues == null || $arrNewValues == null)
+        if($arrOldValues == null)
             $arrOldValues = array();
+
+        if($arrNewValues == null)
+            $arrNewValues = array();
 
         $arrReturn = array();
         foreach($arrNewValues as $strPropertyName => $objValue) {
