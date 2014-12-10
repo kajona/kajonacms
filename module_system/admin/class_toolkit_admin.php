@@ -1682,34 +1682,25 @@ class class_toolkit_admin extends class_toolkit {
     /*"*****************************************************************************************************/
     // --- Pageview mechanism ------------------------------------------------------------------------------
 
+
+
     /**
      * Creates a pageview
      *
-     * @param array $arrData
-     * @param int $intCurrentpage
+     * @param class_array_section_iterator $objArraySectionIterator
      * @param string $strModule
      * @param string $strAction
      * @param string $strLinkAdd
-     * @param int $intElementPerPage
-     * @return mixed a one-dimensional array: ["elements"] and ["pageview"]
      *
-     * @deprecated migrate to getSimplePageview instead!
+     * @return string the pageview code
+     * @since 4.6
      */
-    public function getPageview(array $arrData, $intCurrentpage, $strModule, $strAction, $strLinkAdd = "", $intElementPerPage = 15) {
-        $arrReturn = array();
+    public function getPageview($objArraySectionIterator, $strModule, $strAction, $strLinkAdd = "") {
 
-        if($intCurrentpage <= 0)
-            $intCurrentpage = 1;
+        $intCurrentpage = $objArraySectionIterator->getPageNumber();
+        $intNrOfPages = $objArraySectionIterator->getNrOfPages();
+        $intNrOfElements = $objArraySectionIterator->getNumberOfElements();
 
-        if($intElementPerPage <= 0)
-            $intElementPerPage = 1;
-
-        $objArrayIterator = new class_array_iterator($arrData);
-        $objArrayIterator->setIntElementsPerPage($intElementPerPage);
-        $intNrOfPages = $objArrayIterator->getNrOfPages();
-        $intNrOfElements = $objArrayIterator->getNumberOfElements();
-
-        $arrReturn["elements"] = $objArrayIterator->getElementsOnPage($intCurrentpage);
         //read templates
         $strTemplateBodyID = $this->objTemplate->readTemplate("/elements.tpl", "pageview_body");
         $strTemplateForwardID = $this->objTemplate->readTemplate("/elements.tpl", "pageview_link_forward");
@@ -1739,7 +1730,7 @@ class class_toolkit_admin extends class_toolkit {
 
             if($bitDisplay) {
                 $arrLinkTemplate = array();
-                $arrLinkTemplate["href"] = getLinkAdminHref($strModule, $strAction, $strLinkAdd."&pv=".$intI);
+                $arrLinkTemplate["href"] = class_link::getLinkAdminHref($strModule, $strAction, $strLinkAdd."&pv=".$intI);
                 $arrLinkTemplate["pageNr"] = $intI;
 
                 if($intI == $intCurrentpage)
@@ -1754,17 +1745,25 @@ class class_toolkit_admin extends class_toolkit {
         $arrTemplate["nrOfElements"] = $intNrOfElements;
         if($intCurrentpage < $intNrOfPages)
             $arrTemplate["linkForward"] = $this->objTemplate->fillTemplate(
-                array("linkText" => class_carrier::getInstance()->getObjLang()->getLang("pageview_forward", "system"), "href" => getLinkAdminHref($strModule, $strAction, $strLinkAdd."&pv=".($intCurrentpage+1))), $strTemplateForwardID
+                array(
+                    "linkText" => class_carrier::getInstance()->getObjLang()->getLang("pageview_forward", "system"),
+                    "href" => class_link::getLinkAdminHref($strModule, $strAction, $strLinkAdd."&pv=".($intCurrentpage+1))
+                ),
+                $strTemplateForwardID
             );
         if($intCurrentpage > 1)
             $arrTemplate["linkBackward"] = $this->objTemplate->fillTemplate(
-                array("linkText" => class_carrier::getInstance()->getObjLang()->getLang("commons_back", "commons"), "href" => getLinkAdminHref($strModule, $strAction, $strLinkAdd."&pv=".($intCurrentpage-1))), $strTemplateBackwardID
+                array(
+                    "linkText" => class_carrier::getInstance()->getObjLang()->getLang("commons_back", "commons"),
+                    "href" => class_link::getLinkAdminHref($strModule, $strAction, $strLinkAdd."&pv=".($intCurrentpage-1))
+                ),
+                $strTemplateBackwardID
             );
 
-
-        $arrReturn["pageview"] = $this->objTemplate->fillTemplate($arrTemplate, $strTemplateBodyID);
-        return $arrReturn;
+        return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateBodyID);
     }
+
+
 
     /**
      * Creates a pageview
@@ -1774,8 +1773,10 @@ class class_toolkit_admin extends class_toolkit {
      * @param string $strAction
      * @param string $strLinkAdd
      *
-     * @return string the pageview code
+     * @return mixed a two-dimensional array: ["elements"] and ["pageview"]
      * @since 3.3.0
+     *
+     * @deprecated use getPageview instead
      */
     public function getSimplePageview($objArraySectionIterator, $strModule, $strAction, $strLinkAdd = "") {
         $arrReturn = array();
@@ -1815,7 +1816,7 @@ class class_toolkit_admin extends class_toolkit {
 
             if($bitDisplay) {
                 $arrLinkTemplate = array();
-                $arrLinkTemplate["href"] = getLinkAdminHref($strModule, $strAction, $strLinkAdd."&pv=".$intI);
+                $arrLinkTemplate["href"] = class_link::getLinkAdminHref($strModule, $strAction, $strLinkAdd."&pv=".$intI);
                 $arrLinkTemplate["pageNr"] = $intI;
 
                 if($intI == $intCurrentpage)
@@ -1832,7 +1833,7 @@ class class_toolkit_admin extends class_toolkit {
             $arrTemplate["linkForward"] = $this->objTemplate->fillTemplate(
                 array(
                     "linkText" => class_carrier::getInstance()->getObjLang()->getLang("pageview_forward", "system"),
-                    "href" => getLinkAdminHref($strModule, $strAction, $strLinkAdd."&pv=".($intCurrentpage+1))
+                    "href" => class_link::getLinkAdminHref($strModule, $strAction, $strLinkAdd."&pv=".($intCurrentpage+1))
                 ),
                 $strTemplateForwardID
             );
@@ -1840,13 +1841,15 @@ class class_toolkit_admin extends class_toolkit {
             $arrTemplate["linkBackward"] = $this->objTemplate->fillTemplate(
                 array(
                     "linkText" => class_carrier::getInstance()->getObjLang()->getLang("commons_back", "commons"),
-                    "href" => getLinkAdminHref($strModule, $strAction, $strLinkAdd."&pv=".($intCurrentpage-1))
+                    "href" => class_link::getLinkAdminHref($strModule, $strAction, $strLinkAdd."&pv=".($intCurrentpage-1))
                 ),
                 $strTemplateBackwardID
             );
 
 
-        return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateBodyID);
+        $arrReturn["pageview"] = $this->objTemplate->fillTemplate($arrTemplate, $strTemplateBodyID);
+        $arrReturn["elements"] = $objArraySectionIterator->getArrayExtended(true);
+        return $arrReturn;
     }
 
 

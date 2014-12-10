@@ -115,7 +115,7 @@ class class_stats_report_searchqueries implements interface_admin_statsreports {
         $arrHeader[2] = $this->objLang->getLang("header_amount", "search");
         $strReturn .= $this->objToolkit->dataTable($arrHeader, $arrLogs);
 
-        $strReturn .= $this->objToolkit->getSimplePageview($objArraySectionIterator, "stats", uniStrReplace("class_stats_report_", "", get_class($this)));
+        $strReturn .= $this->objToolkit->getPageview($objArraySectionIterator, "stats", uniStrReplace("class_stats_report_", "", get_class($this)));
 
         return $strReturn;
     }

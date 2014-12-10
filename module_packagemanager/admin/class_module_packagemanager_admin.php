@@ -140,7 +140,7 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
             });
             </script>";
 
-        $strReturn .= $this->objToolkit->getSimplePageview($objArraySectionIterator, $this->getArrModule("modul"), $this->getAction());
+        $strReturn .= $this->objToolkit->getPageview($objArraySectionIterator, $this->getArrModule("modul"), $this->getAction());
 
         return $strReturn;
     }

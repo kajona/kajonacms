@@ -213,7 +213,7 @@ abstract class class_admin_simple extends class_admin_controller {
             $strReturn .= $this->objToolkit->gridFooter();
         }
 
-        $strReturn .= $this->objToolkit->getSimplePageview($objArraySectionIterator, $this->getArrModule("modul"), $this->getAction(), "&systemid=".$this->getSystemid().$this->strPeAddon.$strPagerAddon);
+        $strReturn .= $this->objToolkit->getPageview($objArraySectionIterator, $this->getArrModule("modul"), $this->getAction(), "&systemid=".$this->getSystemid().$this->strPeAddon.$strPagerAddon);
 
         return $strReturn;
     }
@@ -278,7 +278,7 @@ abstract class class_admin_simple extends class_admin_controller {
             $strReturn .= $this->objToolkit->listFooter();
 
 
-        $strReturn .= $this->objToolkit->getSimplePageview($objArraySectionIterator, $this->getArrModule("modul"), $this->getAction(), "&systemid=" . $this->getSystemid() . $this->strPeAddon . $strPagerAddon);
+        $strReturn .= $this->objToolkit->getPageview($objArraySectionIterator, $this->getArrModule("modul"), $this->getAction(), "&systemid=" . $this->getSystemid() . $this->strPeAddon . $strPagerAddon);
 
         return $strReturn;
     }

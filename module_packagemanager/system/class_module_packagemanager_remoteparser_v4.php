@@ -27,7 +27,7 @@ class class_module_packagemanager_remoteparser_v4 implements interface_packagema
 
         $objToolkit = class_carrier::getInstance()->getObjToolkit("admin");
 
-        $this->arrPageViews["pageview"] = $objToolkit->getSimplePageview(
+        $this->arrPageViews["pageview"] = $objToolkit->getPageview(
             $objIterator,
             "packagemanager",
             "addPackage",

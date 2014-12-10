@@ -557,7 +557,7 @@ JS;
 
         $strReturn .= $this->objToolkit->listFooter();
 
-        $strReturn .= $this->objToolkit->getSimplePageview($objArraySectionIterator, "system", "systemSessions");
+        $strReturn .= $this->objToolkit->getPageview($objArraySectionIterator, "system", "systemSessions");
 
         return $strReturn;
     }
@@ -649,7 +649,7 @@ JS;
             $arrData[] = $arrRowData;
         }
         $strReturn .= $this->objToolkit->dataTable($arrHeader, $arrData);
-        $strReturn .= $this->objToolkit->getSimplePageview($objArraySectionIterator, "system", "systemSessions");
+        $strReturn .= $this->objToolkit->getPageview($objArraySectionIterator, "system", "systemSessions");
 
         return $strReturn;
     }
@@ -760,7 +760,7 @@ JS;
         }
         $strReturn .= $this->objToolkit->dataTable($arrHeader, $arrData);
 
-        $strReturn .= $this->objToolkit->getSimplePageview($objArraySectionIterator, $strSourceModule, $strSourceAction, "&systemid=".$strSystemid."&bitBlockFolderview=".$this->getParam("bitBlockFolderview"));
+        $strReturn .= $this->objToolkit->getPageview($objArraySectionIterator, $strSourceModule, $strSourceAction, "&systemid=".$strSystemid."&bitBlockFolderview=".$this->getParam("bitBlockFolderview"));
 
         return $strReturn;
     }

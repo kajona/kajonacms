@@ -820,7 +820,7 @@ HTML;
         $arrHeader[4] = $this->getLang("header_ip");
         $arrHeader[5] = $this->getLang("login_utrace", "user");
         $strReturn .= $this->objToolkit->dataTable($arrHeader, $arrLogs);
-        $strReturn .= $this->objToolkit->getSimplePageview($objArraySectionIterator, $this->getArrModule("modul"), "logbook");
+        $strReturn .= $this->objToolkit->getPageview($objArraySectionIterator, $this->getArrModule("modul"), "logbook");
 
         return $strReturn;
     }

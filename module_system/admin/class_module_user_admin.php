@@ -921,7 +921,7 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
                 }
                 $strReturn .= $this->objToolkit->genericAdminList($objSingleMember->getSystemid(), $objSingleMember->getStrDisplayName(), getImageAdmin("icon_user"), $strAction, $intI++);
             }
-            $strReturn .= $this->objToolkit->listFooter() . $this->objToolkit->getSimplePageview($objIterator, "user", "groupMember", "systemid=" . $this->getSystemid());
+            $strReturn .= $this->objToolkit->listFooter() . $this->objToolkit->getPageview($objIterator, "user", "groupMember", "systemid=" . $this->getSystemid());
         }
         return $strReturn;
     }
@@ -1196,7 +1196,7 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
         $arrHeader[] = $this->getLang("login_utrace");
         //and fetch the table
         $strReturn .= $this->objToolkit->dataTable($arrHeader, $arrRows);
-        $strReturn .= $this->objToolkit->getSimplePageview($objIterator, "user", "loginlog");
+        $strReturn .= $this->objToolkit->getPageview($objIterator, "user", "loginlog");
 
         return $strReturn;
     }

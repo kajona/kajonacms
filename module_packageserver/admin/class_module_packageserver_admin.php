@@ -213,7 +213,7 @@ class class_module_packageserver_admin extends class_module_mediamanager_admin i
         $arrHeader[2] = $this->getLang("header_hostname");
         $arrHeader[3] = $this->getLang("header_query");
         $strReturn .= $this->objToolkit->dataTable($arrHeader, $arrLogs);
-        $strReturn .= $this->objToolkit->getSimplePageview($objArraySectionIterator, $this->getArrModule("modul"), "logs");
+        $strReturn .= $this->objToolkit->getPageview($objArraySectionIterator, $this->getArrModule("modul"), "logs");
 
         return $strReturn;
     }
