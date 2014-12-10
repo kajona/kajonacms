@@ -68,7 +68,11 @@ class class_browscap  {
      * @throws \phpbrowscap\Exception
      */
     public function updateBrowscap() {
-        $this->objBrowscap->updateCache();
+        try {
+            $this->objBrowscap->updateCache();
+        } catch(Exception $objE) {
+
+        }
     }
 
 
