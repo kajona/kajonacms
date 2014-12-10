@@ -1,8 +1,8 @@
 [
     {
         "name" : "bootstrap",
-        "version" : "???",
-        "source" : "???",
+        "version" : "2.3.2",
+        "source" : "http://getbootstrap.com/2.3.2/",
         "license" : "Apache License v2",
         "licenseurl" : "http://www.apache.org/licenses/LICENSE-2.0"
     },
@@ -10,6 +10,13 @@
         "name" : "bootstrap-datepicker",
         "version" : "??",
         "source" : "http://www.eyecon.ro/bootstrap-datepicker/",
+        "license" : "Apache License v2",
+        "licenseurl" : "http://www.apache.org/licenses/LICENSE-2.0"
+    },
+    {
+        "name" : "http://lesscss.org",
+        "version" : "1.3.3",
+        "source" : "http://lesscss.org",
         "license" : "Apache License v2",
         "licenseurl" : "http://www.apache.org/licenses/LICENSE-2.0"
     }

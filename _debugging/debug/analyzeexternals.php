@@ -48,8 +48,8 @@ $arrHeader[] = "Source";
 $arrHeader[] = "Path";
 $arrHeader[] = "Licence";
 
-
-foreach($arrExternals as $objContent) {
+$arrUserRows = array();
+foreach($arrExternals as $intI => $objContent) {
     $arrUserRows[$intI]["name"] = $objContent->name;
     $arrUserRows[$intI]["version"] = $objContent->version;
 
@@ -62,8 +62,7 @@ foreach($arrExternals as $objContent) {
 
     $arrUserRows[$intI]["path"] = $objContent->path;
     $arrUserRows[$intI]["licence"] = "<a href=\"$objContent->licenseurl\" target=\"_blank\">$objContent->license</a>";
-    $intI++;
 }
-echo "<style>table,td,tr,th { border:1px solid grey;border-spacing: 0px; border-collapse: separate;}</style>";
+echo "<style>table,td,tr,th { border:1px solid grey;border-spacing: 0px; border-collapse: collapse;}</style>";
 
 echo class_carrier::getInstance()->getObjToolkit("admin")->dataTable($arrHeader, $arrUserRows);

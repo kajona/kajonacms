@@ -1,0 +1,16 @@
+[
+    {
+        "name" : "bootstrap",
+        "version" : "3.3.1",
+        "source" : "http://getbootstrap.com/",
+        "license" : "MIT",
+        "licenseurl" : "https://github.com/twbs/bootstrap/blob/master/LICENSE"
+    },
+    {
+        "name" : "http://lesscss.org",
+        "version" : "2.0",
+        "source" : "http://lesscss.org",
+        "license" : "Apache License v2",
+        "licenseurl" : "http://www.apache.org/licenses/LICENSE-2.0"
+    }
+]
