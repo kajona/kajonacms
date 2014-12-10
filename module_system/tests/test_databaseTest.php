@@ -129,6 +129,9 @@ class class_test_database extends class_testbase {
 
 
     private function createTable() {
+        echo "testing database...\n";
+        echo "current driver: ".class_carrier::getInstance()->getObjConfig()->getConfig("dbdriver")."\n";
+
         echo "\tcreating a new table...\n";
         $objDB = class_carrier::getInstance()->getObjDB();
 
@@ -152,8 +155,7 @@ class class_test_database extends class_testbase {
 
         $objDB = class_carrier::getInstance()->getObjDB();
 
-        echo "testing database...\n";
-        echo "current driver: ".class_carrier::getInstance()->getObjConfig()->getConfig("dbdriver")."\n";
+
 
         echo "\tcreating a new table...\n";
 
