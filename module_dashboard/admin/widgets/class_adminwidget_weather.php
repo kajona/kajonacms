@@ -70,7 +70,7 @@ class class_adminwidget_weather extends class_adminwidget implements interface_a
 
             $objRemoteloader = new class_remoteloader();
             $objRemoteloader->setStrHost("api.openweathermap.org");
-            $objRemoteloader->setStrQueryParams("/data/2.5/forecast/daily?q=" . $this->getFieldValue("location") . "&units=" . $strFormat."&cnt=4");
+            $objRemoteloader->setStrQueryParams("/data/2.5/forecast/daily?APPID=4bdceecc2927e65c5fb712d1222c5293&q=" . $this->getFieldValue("location") . "&units=" . $strFormat."&cnt=4");
             $strContent = $objRemoteloader->getRemoteContent();
         }
         catch(class_exception $objExeption) {
@@ -89,7 +89,7 @@ class class_adminwidget_weather extends class_adminwidget implements interface_a
                 $objDate = new class_date($arrOneForecast["dt"]);
                 $strReturn .= "<div>";
                 $strReturn .= $this->widgetText("<div style='float: left;'>".dateToString($objDate, false).": ".round($arrOneForecast["temp"]["day"], 1)."°</div>");
-                $strReturn .= $this->widgetText("<img src='//openweathermap.org/img/w/".$arrOneForecast["weather"][0]["icon"].".png' style='float: right;' />");
+                $strReturn .= $this->widgetText("<img src='http://openweathermap.org/img/w/".$arrOneForecast["weather"][0]["icon"].".png' style='float: right;' />");
                 $strReturn .= "</div><div style='clear: both;'></div>";
             }
 
