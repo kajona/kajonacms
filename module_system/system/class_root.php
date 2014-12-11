@@ -1129,7 +1129,6 @@ abstract class class_root {
      */
     public function setAbsolutePosition($intNewPosition, $arrRestrictionModules = false) {
         $this->objSortManager->setAbsolutePosition($intNewPosition, $arrRestrictionModules);
-        $this->internalInit();
     }
 
     /**

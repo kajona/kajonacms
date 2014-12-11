@@ -252,7 +252,7 @@ class class_common_sortmanager implements interface_sortmanager {
 
         //flush the cache
         $this->objSource->flushCompletePagesCache();
-        $this->objDB->flushQueryCache();
+        class_carrier::getInstance()->flushCache(class_carrier::INT_CACHE_TYPE_DBQUERIES | class_carrier::INT_CACHE_TYPE_ORMCACHE);
         $this->objSource->setIntSort($intNewPosition);
     }
 
