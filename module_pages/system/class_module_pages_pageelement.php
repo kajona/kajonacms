@@ -215,8 +215,14 @@ class class_module_pages_pageelement extends class_model implements interface_mo
      * @return class_element_admin
      */
     public function getConcreteAdminInstance() {
-        if($this->getStrClassAdmin() == "")
-            return null;
+        if($this->getStrClassAdmin() == "") {
+            //Build the class-name based on the linked element
+            $objElementdefinitionToCreate = class_module_pages_element::getElement($this->getStrElement());
+            if($objElementdefinitionToCreate == null) {
+                return null;
+            }
+            $this->setStrClassAdmin($objElementdefinitionToCreate->getStrClassAdmin());
+        }
 
         $strElementClass = str_replace(".php", "", $this->getStrClassAdmin());
         //and finally create the object
@@ -234,8 +240,14 @@ class class_module_pages_pageelement extends class_model implements interface_mo
      */
     public function getConcretePortalInstance() {
 
-        if($this->getStrClassPortal() == "")
-            return null;
+        if($this->getStrClassAdmin() == "") {
+            //Build the class-name based on the linked element
+            $objElementdefinitionToCreate = class_module_pages_element::getElement($this->getStrElement());
+            if($objElementdefinitionToCreate == null) {
+                return null;
+            }
+            $this->setStrClassPortal($objElementdefinitionToCreate->getStrClassPortal());
+        }
 
         $strElementClass = str_replace(".php", "", $this->getStrClassPortal());
         //and finally create the object
