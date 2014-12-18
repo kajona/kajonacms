@@ -91,7 +91,6 @@
         </copy>
 
         <antcall target="buildPackageHelper" />
-        <antcall target="encryptCode" />
 
         <zip destfile="${basedir}${packagesPath}/agp_v5_full_${DSTAMP}-${TSTAMP}.zip">
             <fileset dir="${basedir}${tempPath}/../" />
