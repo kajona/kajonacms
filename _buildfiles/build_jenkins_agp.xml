@@ -23,13 +23,16 @@
     <import file="build_jenkins.xml" as="kajonav4"/>
 
 
+    <!-- Path to the ionCube encoder -->
+    <!-- osx demo: /Applications/ionCube PHP Encoder.app/Contents/MacOS/ioncube_encoder55 -->
+    <property name="path.ioncube"   value="ioncube" />
+
 
 
     <!-- redefined, only buildFullZip, no light or all in one -->
     <target name="buildSqliteFast" depends="
 		    								cleanFilesystem, init,
-					    					buildProject, installProjectSqlite,
-					    					lint,phploc,phpunitFast,
+					    					buildProject,
 					    					buildFullZip" />
 
     <!-- redefined, only buildFullZip, no light or all in one -->
@@ -88,6 +91,7 @@
         </copy>
 
         <antcall target="buildPackageHelper" />
+        <antcall target="encryptCode" />
 
         <zip destfile="${basedir}${packagesPath}/agp_v5_full_${DSTAMP}-${TSTAMP}.zip">
             <fileset dir="${basedir}${tempPath}/../" />
@@ -106,6 +110,25 @@
         <exec executable="php" dir="${basedir}"  failonerror="on" >
             <arg line="-f lessc/agpsetup.php "/>
         </exec>
+    </target>
+
+
+
+
+    <target name="encryptCode" description="Encrypts all PHP files using the ionCube encoder">
+        <mkdir dir="${basedir}${tempPath}/../encrypted" />
+
+        <echo>Encrypting php files</echo>
+        <echo>--encode "*.php" --replace-target --copy ${basedir}${tempPath}/project/system/config/ ${basedir}${tempPath}/ --into ${basedir}${tempPath}/../encrypted</echo>
+        <exec executable="${path.ioncube}">
+            <arg line='--encode "*.php" --replace-target --copy ${basedir}${tempPath}/project/system/config/ ${basedir}${tempPath}/ --into ${basedir}${tempPath}/../encrypted' />
+        </exec>
+
+        <delete dir="${basedir}${tempPath}"/>
+        <move todir="${basedir}${tempPath}" >
+            <fileset dir="${basedir}${tempPath}/../encrypted/kajona" />
+        </move>
+        <delete dir="${basedir}${tempPath}/../encrypted"/>
     </target>
 
 

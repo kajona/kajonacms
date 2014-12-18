@@ -45,6 +45,12 @@
 					    					lint,phpunitFast,
 					    					buildFullZip" />
 
+    <target name="buildSqliteEncryptedFast" depends="
+                                            cleanFilesystem, init,
+					    					buildProject, installProjectSqlite,
+					    					lint,phpunitFast,
+					    					buildFullEncryptedZip" />
+
 
 
 
@@ -68,6 +74,28 @@
 
     <!-- creates the full-zip including all modules and elements -->
     <target name="buildFullZip" depends="init" >
+        <antcall target="buildFullZip-folderSetup" />
+        <antcall target="buildPackageHelper" />
+
+        <zip destfile="${basedir}${packagesPath}/${projectName}_full_${DSTAMP}-${TSTAMP}.zip">
+            <fileset dir="${basedir}${tempPath}/../" />
+        </zip>
+    </target>
+
+
+    <!-- creates the full-zip including all modules and elements -->
+    <target name="buildFullEncryptedZip" depends="init" >
+        <antcall target="buildFullZip-folderSetup" />
+        <antcall target="buildPackageHelper" />
+        <antcall target="encryptCode" />
+
+        <zip destfile="${basedir}${packagesPath}/${projectName}_full_${DSTAMP}-${TSTAMP}.zip">
+            <fileset dir="${basedir}${tempPath}/../" />
+        </zip>
+    </target>
+
+    <!-- internal helper, only to reduce the amount of duplicated code -->
+    <target name="buildFullZip-folderSetup">
         <delete dir="${basedir}${projectPath}"/>
 
         <antcall target="setupPackageFolders" />
@@ -89,14 +117,7 @@
         <delete dir="${basedir}${tempPath}/core/_vagrant"/>
         <delete dir="${basedir}${tempPath}/core/_docker"/>
         <delete dir="${basedir}${tempPath}/.idea"/>
-
-        <antcall target="buildPackageHelper" />
-
-        <zip destfile="${basedir}${packagesPath}/${projectName}_full_${DSTAMP}-${TSTAMP}.zip">
-            <fileset dir="${basedir}${tempPath}/../" />
-        </zip>
     </target>
-
 
 
     <target name="buildPackageHelper" description="triggers the project setup and the compilation / compression of css / js files">
