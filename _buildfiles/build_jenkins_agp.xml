@@ -31,8 +31,9 @@
 
     <!-- redefined, only buildFullZip, no light or all in one -->
     <target name="buildSqliteFast" depends="
-		    								cleanFilesystem, init,
-					    					buildProject,
+					    					cleanFilesystem, init,
+					    					buildProject, installProjectSqlite,
+					    					lint,phploc,phpunitFast,
 					    					buildFullZip" />
 
     <!-- redefined, only buildFullZip, no light or all in one -->
