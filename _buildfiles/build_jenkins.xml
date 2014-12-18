@@ -297,6 +297,13 @@
         <antcall target="cleanZipContent" />
     </target>
 
+    <target name="buildPackageHelperProject" description="triggers the project setup and the compilation / compression of css / js files">
+        <antcall target="compileLess" />
+        <antcall target="compressCss" />
+        <antcall target="compressJs" />
+        <antcall target="cleanZipContent" />
+    </target>
+
     <target name="setupPackageFolders" description="deletes the temp-folders and creates the initial structure">
         <delete dir="${basedir}${tempPath}"/>
         <mkdir  dir="${basedir}${tempPath}"/>
