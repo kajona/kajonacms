@@ -14,9 +14,7 @@ echo "| PHPINFO                                                                 
 echo "|                                                                               |\n";
 echo "+-------------------------------------------------------------------------------+\n";
 
-require_once __DIR__.'/../../../core_agp/module_phpexcel/system/phpexcel/PHPExcel.php';
-
-echo PHPExcel_Shared_File::sys_get_temp_dir();
+phpinfo();
 
 echo "\n\n";
 echo "+-------------------------------------------------------------------------------+\n";
