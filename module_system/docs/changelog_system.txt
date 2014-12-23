@@ -1,5 +1,8 @@
 Module System
 
+V4.6.2 --------------------------------------------------------------------------------------------------
+BUG: module_system | portaleditor -> the default portal-editor config includes tables, otherwise they may get lost on page-edits
+
 V4.6.1 --------------------------------------------------------------------------------------------------
 BUG: module_system | commons_sortmanager -> fixed the sorting of nodes directly below the root-record, otherwise the module-sorts could go wrong
 
