@@ -130,6 +130,12 @@ class class_installer_element_gallery extends class_installer_base implements in
             $this->updateElementVersion("galleryRandom", "4.6");
             $this->objDB->flushQueryCache();
         }
+        if(class_module_pages_element::getElement("gallery")->getStrVersion() == "4.6") {
+            $strReturn .= "Updating element gallery to 4.6.1...\n";
+            $this->updateElementVersion("gallery", "4.6.1");
+            $this->updateElementVersion("galleryRandom", "4.6.1");
+            $this->objDB->flushQueryCache();
+        }
 
         return $strReturn;
     }

@@ -1,5 +1,9 @@
 Module Pages
 
+V4.6.1 --------------------------------------------------------------------------------------------------
+BUG: module_pages | portaleditor -> the portal-edtor missed to include a custom ckeditor config
+
+
 V4.6 ----------------------------------------------------------------------------------------------------
 NEW: module_pages | pages_folderview -> choosing a page from the pages-dialog is now faster by using a autocomplete quickselect in addition to the tree [ticket #934]
 NEW: module_pages | portaleditor -> deleting an element removes the element from the dom instead of reloading the page, cool version (deletion via ajax in the background) [ticket #930]
