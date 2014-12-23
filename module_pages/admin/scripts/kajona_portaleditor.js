@@ -4,15 +4,15 @@
 //       $Id$
 
 if (typeof KAJONA == "undefined") {
-	var KAJONA = {
-		util: {},
-		portal: {
-			lang: {}
-		},
-		admin: {
-			lang: {}
-		}
-	};
+    var KAJONA = {
+        util: {},
+        portal: {
+            lang: {}
+        },
+        admin: {
+            lang: {}
+        }
+    };
 }
 
 
@@ -119,7 +119,7 @@ KAJONA.admin.portaleditor = {
         };
         $.post(KAJONA_WEBPATH + '/xml.php?admin=1&module=pages_content&action=deleteElementFinalXML', data, function () {
         }).fail(function() {
-                location.reload();
+            location.reload();
         });
     }
 };
@@ -172,7 +172,6 @@ KAJONA.admin.portaleditor.RTE.init = function () {
         var strMode = keySplitted[2] ? keySplitted[2] : 'wysiwyg';
 
         var ckeditorConfig = KAJONA.admin.portaleditor.RTE.config;
-        ckeditorConfig.customConfig = 'config_kajona_standard.js';
         ckeditorConfig.toolbar = strMode == 'wysiwyg' ? 'pe_full' : 'pe_lite';
         ckeditorConfig.forcePasteAsPlainText = true;
         ckeditorConfig.kajona_strMode = strMode;
