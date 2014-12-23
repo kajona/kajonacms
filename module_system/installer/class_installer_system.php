@@ -634,6 +634,12 @@ class class_installer_system extends class_installer_base implements interface_i
             $this->updateModuleVersion("", "4.6.1");
             $this->objDB->flushQueryCache();
         }
+        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "4.6.1") {
+            $strReturn .= "Updating 4.6.1 to 4.6.2...\n";
+            $this->updateModuleVersion("", "4.6.2");
+            $this->objDB->flushQueryCache();
+        }
 
         return $strReturn."\n\n";
     }
