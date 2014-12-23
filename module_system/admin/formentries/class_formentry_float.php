@@ -52,14 +52,19 @@ class class_formentry_float extends class_formentry_base implements interface_fo
     }
 
     public function setValueToObject() {
-
+        $strOldValue = $this->getStrValue();
         $this->convertValueToFloat();
-        return parent::setValueToObject();
+        $bitReturn = parent::setValueToObject();
+        $this->setStrValue($strOldValue);
+        return $bitReturn;
     }
 
     public function validateValue() {
+        $strOldValue = $this->getStrValue();
         $this->convertValueToFloat();
-        return parent::validateValue();
+        $bitReturn = parent::validateValue();
+        $this->setStrValue($strOldValue);
+        return $bitReturn;
     }
 
 

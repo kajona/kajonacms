@@ -39,8 +39,11 @@ class class_formentry_wysiwyg extends class_formentry_base implements interface_
     }
 
     public function setValueToObject() {
+        $strOldValue = $this->getStrValue();
         $this->setStrValue(processWysiwygHtmlContent($this->getStrValue()));
-        return parent::setValueToObject();
+        $bitReturn = parent::setValueToObject();
+        $this->setStrValue($strOldValue);
+        return $bitReturn;
     }
 
 
