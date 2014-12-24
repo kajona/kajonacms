@@ -111,25 +111,6 @@ abstract class class_db_base implements interface_db_driver {
 
     /**
      * Returns just a part of a recodset, defined by the start- and the end-rows,
-     * defined by the params
-     *
-     * @param string $strQuery
-     * @param int $intStart
-     * @param int $intEnd
-     *
-     * @return array
-     */
-    public function getArraySection($strQuery, $intStart, $intEnd) {
-        //calculate the end-value: mysql limit: start, nr of records, so:
-        $intEnd = $intEnd - $intStart + 1;
-        //add the limits to the query
-        $strQuery .= " LIMIT " . $intStart . ", " . $intEnd;
-        //and load the array
-        return $this->getArray($strQuery);
-    }
-
-    /**
-     * Returns just a part of a recodset, defined by the start- and the end-rows,
      * defined by the params. Makes use of prepared statements.
      * <b>Note:</b> Use array-like counters, so the first row is startRow 0 whereas
      * the n-th row is the (n-1)th key!!!

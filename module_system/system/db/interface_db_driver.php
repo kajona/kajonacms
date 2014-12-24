@@ -50,14 +50,6 @@ interface interface_db_driver {
     public function triggerMultiInsert($strTable, $arrColumns, $arrValueSets, class_db $objDb);
 
     /**
-     * Sends a query (e.g. an update) to the database
-     *
-     * @param string $strQuery
-     * @return bool
-     */
-    public function _query($strQuery);
-
-    /**
      * Sends a prepared statement to the database. All params must be represented by the ? char.
      * The params themselves are stored using the second params using the matching order.
      *
@@ -69,15 +61,6 @@ interface interface_db_driver {
     public function _pQuery($strQuery, $arrParams);
 
     /**
-     * This method is used to retrieve an array of resultsets from the database
-     *
-     * @param string $strQuery
-     * @return array
-     */
-    public function getArray($strQuery);
-
-
-    /**
      * This method is used to retrieve an array of resultsets from the database using
      * a prepared statement
      *
@@ -87,19 +70,6 @@ interface interface_db_driver {
      * @return array
      */
     public function getPArray($strQuery, $arrParams);
-
-    /**
-     * Returns just a part of a recordset, defined by the start- and the end-rows,
-     * defined by the params
-     * <b>Note:</b> Use array-like counters, so the first row is startRow 0 whereas
-     * the n-th row is the (n-1)th key!!!
-     *
-     * @param string $strQuery
-     * @param int $intStart
-     * @param int $intEnd
-     * @return array
-     */
-    public function getArraySection($strQuery, $intStart, $intEnd);
 
     /**
      * Returns just a part of a recodset, defined by the start- and the end-rows,
@@ -189,7 +159,6 @@ interface interface_db_driver {
      * @param $strNewColumnName
      * @param $strNewDatatype
      *
-     * @internal param $strColumn
      * @return bool
      * @since 4.6
      */

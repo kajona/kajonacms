@@ -42,8 +42,8 @@ class class_db_sqlite3 extends class_db_base  {
 
         try {
             $this->linkDB = new SQLite3(_realpath_.$this->strDbFile);
-            $this->_query('PRAGMA encoding = "UTF-8"');
-            $this->_query('PRAGMA short_column_names = ON');
+            $this->_pQuery('PRAGMA encoding = "UTF-8"', array());
+            $this->_pQuery('PRAGMA short_column_names = ON', array());
             if(method_exists($this->linkDB, "busyTimeout"))
                 $this->linkDB->busyTimeout(5000);
 
@@ -62,21 +62,6 @@ class class_db_sqlite3 extends class_db_base  {
     public function dbclose() {
         $this->linkDB->close();
     }
-
-    /**
-     * Sends a query (e.g. an update) to the database
-     *
-     * @param string $strQuery
-     *
-     * @return bool
-     */
-    public function _query($strQuery) {
-        $strQuery = $this->fixQuoting($strQuery);
-        if($this->linkDB->query($strQuery) === false)
-            return false;
-        return true;
-    }
-
 
 
     private function buildAndCopyTempTables($strTargetTableName, $arrSourceTableInfo, $arrTargetTableInfo) {
@@ -284,25 +269,6 @@ class class_db_sqlite3 extends class_db_base  {
     }
 
     /**
-     * This method is used to retrieve an array of resultsets from the database
-     *
-     * @param string $strQuery
-     *
-     * @return array
-     */
-    public function getArray($strQuery) {
-        $strQuery = $this->fixQuoting($strQuery);
-        $arrReturn = array();
-        $resultSet = $this->linkDB->query($strQuery);
-        if(!$resultSet)
-            return false;
-        while($arrRow = $resultSet->fetchArray(SQLITE3_ASSOC))
-            $arrReturn[] = $arrRow;
-        return $arrReturn;
-    }
-
-
-    /**
      * This method is used to retrieve an array of resultsets from the database using
      * a prepared statement
      *
@@ -383,7 +349,7 @@ class class_db_sqlite3 extends class_db_base  {
      */
     public function getColumnsOfTable($strTableName) {
         $arrColumns = array();
-        $arrTableInfo = $this->getArray("SELECT sql FROM sqlite_master WHERE type='table' and name='".$strTableName."'");
+        $arrTableInfo = $this->getPArray("SELECT sql FROM sqlite_master WHERE type='table' and name=?", array($strTableName));
         if(!empty($arrTableInfo)) {
             $strTableDef = $arrTableInfo[0]["sql"];
             $strTableDef = uniStrReplace("\"", "", $strTableDef);
@@ -471,11 +437,11 @@ class class_db_sqlite3 extends class_db_base  {
 
         $strQuery .= ") ";
 
-        $bitCreate = $this->_query($strQuery);
+        $bitCreate = $this->_pQuery($strQuery, array());
 
         if($bitCreate && count($arrIndices) > 0) {
             $strQuery = "CREATE INDEX ix_".generateSystemid()." ON ".$strName." ( ".implode(", ", $arrIndices).") ";
-            $bitCreate = $bitCreate && $this->_query($strQuery);
+            $bitCreate = $bitCreate && $this->_pQuery($strQuery, array());
         }
 
         return $bitCreate;
@@ -487,7 +453,7 @@ class class_db_sqlite3 extends class_db_base  {
      * @return void
      */
     public function transactionBegin() {
-        $this->_query("BEGIN TRANSACTION");
+        $this->_pQuery("BEGIN TRANSACTION", array());
     }
 
     /**
@@ -495,7 +461,7 @@ class class_db_sqlite3 extends class_db_base  {
      * @return void
      */
     public function transactionCommit() {
-        $this->_query("COMMIT TRANSACTION");
+        $this->_pQuery("COMMIT TRANSACTION", array());
     }
 
     /**
@@ -503,7 +469,7 @@ class class_db_sqlite3 extends class_db_base  {
      * @return void
      */
     public function transactionRollback() {
-        $this->_query("ROLLBACK TRANSACTION");
+        $this->_pQuery("ROLLBACK TRANSACTION", array());
     }
 
     /**
@@ -541,7 +507,7 @@ class class_db_sqlite3 extends class_db_base  {
     }
 
     /**
-     * Imports the given db-dump file to the database. The filename ist relativ to _realpath_
+     * Imports the given db-dump file to the database. The filename ist relative to _realpath_
      *
      * @param string $strFilename
      *

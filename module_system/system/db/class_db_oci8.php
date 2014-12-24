@@ -123,23 +123,6 @@ class class_db_oci8 extends class_db_base {
         return $bitReturn;
     }
 
-    /**
-     * Sends a query (e.g. an update) to the database
-     *
-     * @param string $strQuery
-     *
-     * @return bool
-     */
-    public function _query($strQuery) {
-        $objStatement = $this->getParsedStatement($strQuery);
-
-        $bitAddon = OCI_COMMIT_ON_SUCCESS;
-        if($this->bitTxOpen)
-            $bitAddon = OCI_NO_AUTO_COMMIT;
-        $bitResult = oci_execute($objStatement, $bitAddon);
-        @oci_free_statement($objStatement);
-        return $bitResult;
-    }
 
     /**
      * Sends a prepared statement to the database. All params must be represented by the ? char.
@@ -166,35 +149,6 @@ class class_db_oci8 extends class_db_base {
         $bitResult = oci_execute($objStatement, $bitAddon);
         @oci_free_statement($objStatement);
         return $bitResult;
-    }
-
-    /**
-     * This method is used to retrieve an array of resultsets from the database
-     *
-     * @param string $strQuery
-     *
-     * @return mixed
-     */
-    public function getArray($strQuery) {
-        $arrReturn = array();
-        $intCounter = 0;
-        $objStatement = $this->getParsedStatement($strQuery);
-
-        $bitAddon = OCI_COMMIT_ON_SUCCESS;
-        if($this->bitTxOpen)
-            $bitAddon = OCI_NO_AUTO_COMMIT;
-        $resultSet = oci_execute($objStatement, $bitAddon);
-
-        if(!$resultSet)
-            return false;
-
-        while($arrRow = oci_fetch_array($objStatement, OCI_BOTH + OCI_RETURN_NULLS)) {
-            $arrRow = $this->parseResultRow($arrRow);
-            $arrReturn[$intCounter++] = $arrRow;
-        }
-
-        @oci_free_statement($objStatement);
-        return $arrReturn;
     }
 
     /**
@@ -234,33 +188,6 @@ class class_db_oci8 extends class_db_base {
         }
         @oci_free_statement($objStatement);
         return $arrReturn;
-    }
-
-    /**
-     * Returns just a part of a recodset, defined by the start- and the end-rows,
-     * defined by the params
-     *
-     * @param string $strQuery
-     * @param int $intStart
-     * @param int $intEnd
-     *
-     * @return array
-     */
-    public function getArraySection($strQuery, $intStart, $intEnd) {
-        //array-counters to real-counters
-        $intStart++;
-        $intEnd++;
-
-        //modify the query
-        $strQuery = "SELECT * FROM (
-             SELECT a.*, ROWNUM rnum FROM
-                ( ".$strQuery.") a
-             WHERE ROWNUM <= ".$intEnd."
-        )
-        WHERE rnum >= ".$intStart;
-
-        //and load the array
-        return $this->getArray($strQuery);
     }
 
     /**
@@ -312,7 +239,7 @@ class class_db_oci8 extends class_db_base {
      * @return mixed
      */
     public function getTables() {
-        $arrTemp = $this->getArray("SELECT table_name AS name FROM ALL_TABLES");
+        $arrTemp = $this->getPArray("SELECT table_name AS name FROM ALL_TABLES", array());
 
         foreach($arrTemp as $intKey => $strValue)
             $arrTemp[$intKey]["name"] = uniStrtolower($strValue["name"]);
@@ -471,11 +398,11 @@ class class_db_oci8 extends class_db_base {
         $strQuery .= " CONSTRAINT pk_".generateSystemid()." primary key ( ".implode(" , ", $arrKeys)." ) \n";
         $strQuery .= ") ";
 
-        $bitCreate = $this->_query($strQuery);
+        $bitCreate = $this->_pQuery($strQuery, array());
 
         if($bitCreate && count($arrIndices) > 0) {
             $strQuery = "CREATE INDEX ix_".generateSystemid()." ON ".$strName." ( ".implode(", ", $arrIndices).") ";
-            $bitCreate = $bitCreate && $this->_query($strQuery);
+            $bitCreate = $bitCreate && $this->_pQuery($strQuery, array());
         }
 
         return $bitCreate;
@@ -604,7 +531,7 @@ class class_db_oci8 extends class_db_base {
     }
 
     /**
-     * convertes a result-row. changes all keys to lower-case keys again
+     * converts a result-row. changes all keys to lower-case keys again
      *
      * @param array $arrRow
      *

@@ -166,27 +166,7 @@ class class_db {
      * @deprecated
      */
     public function _query($strQuery) {
-        if(!$this->bitConnected)
-            $this->dbconnect();
-
-        $bitReturn = false;
-
-        $strQuery = $this->processQuery($strQuery);
-
-        if(_dblog_)
-            class_logger::getInstance(class_logger::QUERIES)->addLogRow("\r\n".$strQuery, class_logger::$levelInfo, true);
-
-        //Increasing the counter
-        $this->intNumber++;
-
-        if($this->objDbDriver != null) {
-            $bitReturn = $this->objDbDriver->_query($strQuery);
-        }
-
-        if(!$bitReturn)
-            $this->getError($strQuery);
-
-        return $bitReturn;
+        return $this->_pQuery($strQuery, array());
     }
 
     /**
@@ -236,11 +216,7 @@ class class_db {
      * @deprecated use getPRow() instead
      */
     public function getRow($strQuery, $intNr = 0, $bitCache = true) {
-        $arrTemp = $this->getArray($strQuery, $bitCache);
-        if(count($arrTemp) > 0)
-            return $arrTemp[$intNr];
-        else
-            return array();
+        return $this->getPRow($strQuery, array(), $intNr, $bitCache);
     }
 
 
@@ -271,48 +247,11 @@ class class_db {
      * @param bool $bitCache
      *
      * @return array
-     * @deprecated use getPArraySection() instead
+     * @deprecated use getPArray() instead
      */
     public function getArray($strQuery, $bitCache = true) {
-        if(!$this->bitConnected)
-            $this->dbconnect();
-
-        $strQuery = $this->processQuery($strQuery);
-        //Increasing global counter
-        $this->intNumber++;
-
-        if(defined("_system_use_dbcache_")) {
-            if(_system_use_dbcache_ == "false") {
-                $bitCache = false;
-            }
-        }
-
-        $strQueryMd5 = md5($strQuery);
-        if($bitCache) {
-            if(isset($this->arrQueryCache[$strQueryMd5])) {
-                //Increasing Cache counter
-                $this->intNumberCache++;
-                return $this->arrQueryCache[$strQueryMd5];
-            }
-        }
-
-        $arrReturn = array();
-
-        if(_dblog_)
-            class_logger::getInstance(class_logger::QUERIES)->addLogRow("\r\n".$strQuery, class_logger::$levelInfo, true);
-
         class_logger::getInstance(class_logger::DBLOG)->addLogRow("deprecated getArray call: ".$strQuery, class_logger::$levelWarning);
-
-        if($this->objDbDriver != null) {
-            $arrReturn = $this->objDbDriver->getArray($strQuery);
-            if($arrReturn === false) {
-                $this->getError($strQuery);
-                return array();
-            }
-            if($bitCache)
-                $this->arrQueryCache[$strQueryMd5] = $arrReturn;
-        }
-        return $arrReturn;
+        return $this->getPArray($strQuery, array(), null, null, $bitCache);
     }
 
 
@@ -394,57 +333,11 @@ class class_db {
      * @param bool $bitCache
      *
      * @return array
-     * @deprecated use getPArraySection() instead
+     * @deprecated use getPArray() instead
      */
     public function getArraySection($strQuery, $intStart, $intEnd, $bitCache = true) {
-        if(!$this->bitConnected)
-            $this->dbconnect();
-
-        $arrReturn = array();
-        //param validation
-        if((int)$intStart < 0)
-            $intStart = 0;
-
-        if((int)$intEnd < 0)
-            $intEnd = 0;
-        //process query
-        $strQuery = $this->processQuery($strQuery);
-
-        //Increasing global counter
-        $this->intNumber++;
-
-        if(defined("_system_use_dbcache_")) {
-            if(_system_use_dbcache_ == "false") {
-                $bitCache = false;
-            }
-        }
-
-        //generate a hash-value
-        $strQueryMd5 = md5($strQuery.$intStart."-".$intEnd);
-        if($bitCache) {
-            if(isset($this->arrQueryCache[$strQueryMd5])) {
-                //Increasing Cache counter
-                $this->intNumberCache++;
-                return $this->arrQueryCache[$strQueryMd5];
-            }
-        }
-
-        if(_dblog_)
-            class_logger::getInstance(class_logger::QUERIES)->addLogRow("\r\n".$strQuery, class_logger::$levelInfo, true);
-
         class_logger::getInstance(class_logger::DBLOG)->addLogRow("deprecated getArraySection call: ".$strQuery, class_logger::$levelWarning);
-
-        if($this->objDbDriver != null) {
-            $arrReturn = $this->objDbDriver->getArraySection($strQuery, $intStart, $intEnd);
-            if($arrReturn === false) {
-                $this->getError($strQuery);
-                return array();
-            }
-            if($bitCache)
-                $this->arrQueryCache[$strQueryMd5] = $arrReturn;
-        }
-
-        return $arrReturn;
+        return $this->getPArray($strQuery, array(), $intStart, $intEnd, $bitCache);
     }
 
 
@@ -767,7 +660,6 @@ class class_db {
      * @param $strNewColumnName
      * @param $strNewDatatype
      *
-     * @internal param $strColumn
      * @return bool
      */
     public function changeColumn($strTable, $strOldColumnName, $strNewColumnName, $strNewDatatype) {
