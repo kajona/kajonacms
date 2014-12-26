@@ -195,7 +195,7 @@ class class_db_mysqli extends class_db_base {
 
     /**
      * Looks up the columns of the given table.
-     * Should return an array for each row consting of:
+     * Should return an array for each row consisting of:
      * array ("columnName", "columnType")
      *
      * @param string $strTableName
@@ -204,7 +204,7 @@ class class_db_mysqli extends class_db_base {
      */
     public function getColumnsOfTable($strTableName) {
         $arrReturn = array();
-        $arrTemp = $this->getPArray("SHOW COLUMNS FROM ?", array($strTableName));
+        $arrTemp = $this->getPArray("SHOW COLUMNS FROM ".$this->encloseTableName(class_db::getInstance()->dbsafeString($strTableName)), array());
         foreach($arrTemp as $arrOneColumn) {
             $arrReturn[] = array(
                 "columnName" => $arrOneColumn["Field"],
