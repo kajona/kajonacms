@@ -135,5 +135,31 @@ class class_date_helper {
     }
 
 
+    /**
+     * Gets the working days for a given month and year.
+     * Working days are all TAGERT2-Days.
+     *
+     * @param $intMonth
+     * @param $intYear
+     *
+     * @return array of class_date objects
+     */
+    public function getWorkingDays($intMonth, $intYear) {
+        $arrWorkingDays = array();
+
+        $objDate = new class_date();
+        $objDate->setIntYear($intYear)->setIntMonth($intMonth)->setIntDay(1)->setIntHour(0)->setIntMin(0)->setIntSec(0);
+
+        while($objDate->getIntMonth() == $intMonth) {
+            if($this->isValidTarget2Day($objDate)) {
+                $arrWorkingDays[] = clone $objDate;
+            }
+            $objDate->setNextDay();
+        }
+
+        return $arrWorkingDays;
+    }
+
+
 }
 
