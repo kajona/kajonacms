@@ -367,12 +367,11 @@ abstract class class_admin_controller extends class_abstract_controller {
      */
     public function action($strAction = "") {
 
-        if($strAction == "") {
-            $strAction = $this->getAction();
-        }
-        else {
+        if($strAction != "") {
             $this->setAction($strAction);
         }
+
+        $strAction = $this->getAction();
 
         //search for the matching method - build method name
         $strMethodName = "action" . uniStrtoupper($strAction[0]) . uniSubstr($strAction, 1);

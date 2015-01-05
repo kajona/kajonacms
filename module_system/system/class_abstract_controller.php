@@ -120,10 +120,10 @@ abstract class class_abstract_controller {
 
 
         //And keep the action
-        $this->strAction = $this->getParam("action");
+        $this->setAction($this->getParam("action"));
         //in most cases, the list is the default action if no other action was passed
-        if($this->strAction == "") {
-            $this->strAction = "list";
+        if($this->getAction() == "") {
+            $this->setAction("list");
         }
 
         //try to load the current module-name and the moduleId by reflection
@@ -197,7 +197,7 @@ abstract class class_abstract_controller {
      * @return void
      */
     public final function setAction($strAction) {
-        $this->strAction = $strAction;
+        $this->strAction = htmlspecialchars(trim($strAction), ENT_QUOTES, "UTF-8", false);
     }
 
 
