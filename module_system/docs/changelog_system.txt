@@ -1,5 +1,8 @@
 Module System
 
+V4.6.3 --------------------------------------------------------------------------------------------------
+BUG: / SECURITY: module_system | admin_controller -> Fixed a possible xss injection when handling non-existent action-names. fixes SROEADV-2015-01.
+
 V4.6.2 --------------------------------------------------------------------------------------------------
 BUG: module_system | portaleditor -> the default portal-editor config includes tables, otherwise they may get lost on page-edits
 
