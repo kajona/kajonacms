@@ -400,7 +400,7 @@ final class class_session {
 
 
         if($bitReturn === false) {
-            class_logger::getInstance()->addLogRow("Unsuccessfull login attempt by user ".$strName, class_logger::$levelInfo);
+            class_logger::getInstance()->addLogRow("Unsuccessful login attempt by user ".$strName, class_logger::$levelInfo);
             class_module_user_log::generateLog(0, $strName);
         }
 
