@@ -1,0 +1,11 @@
+
+/* Rendering a calender entry, the legend and the item itself */
+#calendar {
+    .event(@eventColor) {
+        background-color: lighten(@eventColor, 30%);
+        border: 1px solid @eventColor;
+        padding: 0px 2px;
+        margin: 2px;
+        #gradient > .vertical(#ffffff, lighten(@eventColor, 30%));
+    }
+}

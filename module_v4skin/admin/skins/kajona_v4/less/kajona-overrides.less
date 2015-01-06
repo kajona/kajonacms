@@ -103,7 +103,23 @@
     url('../fonts/opensans/opensans-extrabolditalic-webfont.svg#open_sansextrabold_italic') format('svg');
 }
 
+/* KAJONA variable redefinitions */
+@font-size-base:            13px;
+@font-family-sans-serif:    "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
 
+@border-radius-base:        0px;
+@btn-primary-bg:            @gray-darker;
+@link-color:                @black;
+
+//to be removed
+@white:                     #fff;
+@black:                     #000;
+@green:                     #6cb121;
+@menuBorder:                #d2d2d2;
+@kajonaLightGray:           #E5E5E5;
+@kajonaBodylinkColor:       #3a3a3a;
+@gray-darker:               #bfbfbf;
+@gray-lighter:              #f6f6f6;
 
 body {
     padding-top: 70px;
@@ -119,18 +135,18 @@ body {
 
 
     h1 {
-        font-size: @baseFontSize + 12;
+        font-size: @font-size-base + 12;
     }
 
     h2 {
-        font-size: @baseFontSize + 4;
-        line-height: @baseFontSize + 7;
+        font-size: @font-size-base + 4;
+        line-height: @font-size-base + 7;
     }
 }
 
 footer {
     text-align: center;
-    border-top: 1px solid @hrBorder;
+    border-top: 1px solid @hr-border;
     margin: 10px 0;
 }
 
@@ -139,7 +155,7 @@ footer {
 
     background-color: @white;
     border:0px;
-    .border-radius(0px);
+    border-radius: 0px;
     .box-shadow(none);
     margin-bottom: 20px;
     min-height: 20px;
@@ -150,7 +166,7 @@ footer {
     top:-10px;
 
     .accordion-group {
-        .border-radius(0px);
+        border-radius: 0px;
         border: 0px;
         margin: 0;
     }
@@ -169,12 +185,12 @@ footer {
             li {
                 text-align: left;
                 padding: 2px 15px 2px 12px;
-                color: @textColor;
+                color: @text-color;
                 font-style: italic;
 
                 a {
                     font-style: normal;
-                    color:@linkColor;
+                    color:@link-color;
                     display: block;
                     text-align:right;
                 }
@@ -196,7 +212,7 @@ footer {
         padding: 6px 15px;
         background-color: @kajonaLightGray;
         margin-bottom:1px;
-        font-size:@baseFontSize + 2;
+        font-size:@font-size-base + 2;
         color:#626262;
         border-color:@green;
         border-style: solid;
@@ -211,9 +227,9 @@ footer {
 
     .nav-header {
         color: @white;
-        background-color:@grayDarker;
+        background-color:@gray-darker;
         display: block;
-        font-size: @baseFontSize + 2;
+        font-size: @font-size-base + 2;
         font-weight: 600;
         line-height: 20px;
         padding: 6px 15px;
@@ -223,19 +239,19 @@ footer {
 }
 
 #userNotificationsCount {
-    font-family: @baseFontFamily;
+    font-family: @font-family-base;
 }
 
 .userNotificationsDropdown {
     margin: 10px 0 0 25px;
 
     a.dropdown-toggle {
-        color: @linkColor;
+        color: @link-color;
         padding: 4px;
 
         &:hover {
             text-decoration: underline;
-            color: @linkColor;
+            color: @link-color;
         }
     }
 
@@ -244,7 +260,7 @@ footer {
     }
 
     .dropdown-menu {
-        .border-radius(0px);
+        border-radius: 0px;
 
         a {
             i {
@@ -274,7 +290,7 @@ footer {
             border-left:   7px solid transparent;
             border-right:  7px solid transparent;
             border-bottom: 7px solid #ccc;
-            border-bottom-color: @dropdownBorder;
+            border-bottom-color: @dropdown-border;
             position: absolute;
             top: -7px;
             left: 9px;
@@ -284,7 +300,7 @@ footer {
             display: inline-block;
             border-left:   6px solid transparent;
             border-right:  6px solid transparent;
-            border-bottom: 6px solid @dropdownBackground;
+            border-bottom: 6px solid @dropdown-bg;
             position: absolute;
             top: -6px;
             left: 10px;
@@ -311,7 +327,7 @@ footer {
 
     .badge-info {
         background-color: @green;
-        font-size: @baseFontSize ;
+        font-size: @font-size-base ;
     }
 
     #userNotificationsCount {
@@ -330,12 +346,12 @@ footer {
 .generalContextMenu {
     background:none @white !important;
     border: 1px solid @menuBorder !important;
-    .border-radius(0px);
+    border-radius: 0px;
     left: auto !important;
     top: auto !important;
 
     .dropdown-menu {
-        .border-radius(0px);
+        border-radius: 0px;
     }
 
 
@@ -355,7 +371,7 @@ footer {
     }
 
     a {
-        color: @linkColor !important;
+        color: @link-color !important;
 
         text-transform: none;
         padding: 3px 15px;
@@ -365,7 +381,7 @@ footer {
 
     a:hover, .dropdown-submenu:hover > a  {
         color: @white !important;
-        background-color: @dropdownLinkBackgroundHover;
+        background-color: @dropdown-link-active-bg;
         text-decoration: none;
     }
 
@@ -413,12 +429,12 @@ footer {
             cursor: pointer;
             padding: 3px;
             display: block;
-            font-size: @baseFontSize - 1;
-            .border-radius(0px);
+            font-size: @font-size-base - 1;
+            border-radius: 0px;
 
             &:hover {
                 text-decoration: none;
-                .border-radius(0px);
+                border-radius: 0px;
             }
 
         }
@@ -433,21 +449,21 @@ footer {
     .ui-state-focus {
         color: @white;
         text-decoration: none;
-        background-color: @dropdownLinkBackgroundHover;
+        background-color: @dropdown-link-active-bg;
         background-image: none;
-        .border-radius(0px);
-        border-color: @dropdownLinkBackgroundHover;
+        border-radius: 0px;
+        border-color: @dropdown-link-active-bg;
     }
 
     .ui-state-focus h4 {
         color: @white;
-        .border-radius(0px);
+        border-radius: 0px;
     }
 
     .ui-autocomplete-category h3 {
         padding-left: 5px;
         clear: both;
-        .border-radius(0px);
+        border-radius: 0px;
     }
 
 
@@ -463,9 +479,9 @@ footer {
 }
 
 .navbar-inner {
-    background-repeat: none;
+    background-repeat: no-repeat;
     background:url(../img/navbar-inner-background.png) 300px 0px no-repeat @kajonaLightGray;
-    .border-radius(0px);
+    border-radius: 0px;
     .box-shadow(none);
     min-height: 50px;
     padding-left: 20px;
@@ -481,11 +497,11 @@ footer {
             background-color:@white;
             border:none;
             box-shadow:none;
-            .border-radius(0px);
+            border-radius: 0px;
             color:#626262;
             text-shadow:none;
             padding: 3px 7px 2px 7px;
-            font-size:@baseFontSize - 1;
+            font-size:@font-size-base - 1;
         }
 
 
@@ -504,14 +520,14 @@ footer {
     background-clip: none;
     background:url(../img/pusteblume-submenu.png) right bottom no-repeat lighten(@kajonaLightGray, 5%);
     border:0px;
-    .border-radius(0px);
+    border-radius: 0px;
     display: none;
     list-style: none outside none;
     margin: 1px 0 0;
     min-width: 160px;
     padding: 4px 0;
     text-align:left;
-    z-index: @zindexFixedNavbar+1;
+    z-index: @zindex-navbar-fixed+1;
 
     a {
         clear: both;
@@ -537,7 +553,7 @@ footer {
     }
 
     .detailedResults {
-        border-top: 1px solid @grayDark;
+        border-top: 1px solid @gray-dark;
         margin-top: 10px;
         padding-bottom: 0;
     }
@@ -548,7 +564,7 @@ footer {
     background: none;
     text-transform: uppercase;
     font-weight: 700;
-    font-size: @baseFontSize + 4;
+    font-size: @font-size-base + 4;
     color: #888;
     height: 16px;
     .box-shadow(none);
@@ -577,9 +593,9 @@ footer {
 
 
 .breadcrumb {
-    background:url(../img/pusteblume.png) right -45px no-repeat @grayDarker;
+    background:url(../img/pusteblume.png) right -45px no-repeat @gray-darker;
     border:0px;
-    .border-radius(0px);
+    border-radius: 0px;
     .box-shadow(none);
     margin:9px 0 0 0;
     padding: 6px 14px 5px 14px;
@@ -590,7 +606,7 @@ footer {
         text-shadow:none;
         color:@white;
         font-weight: 600;
-        font-size:@baseFontSize;
+        font-size:@font-size-base;
         text-transform:uppercase;
         vertical-align: top;
 
@@ -605,7 +621,7 @@ footer {
 
         a.moduleSwitchLink {
             i {
-                font-size: @baseFontSize+4;
+                font-size: @font-size-base+4;
             }
         }
     }
@@ -649,7 +665,7 @@ footer {
     }
 
     .btn {
-        color: @grayDark;
+        color: @gray-dark;
     }
 
     .btn-primary {
@@ -657,8 +673,8 @@ footer {
     }
 
     pre, code {
-        font-size: @baseFontSize - 4;
-        color: @textColor;
+        font-size: @font-size-base - 4;
+        color: @text-color;
     }
 
 	.thumbnails {
@@ -706,7 +722,7 @@ footer {
 
 
 		.thumbnail {
-			.border-radius(0px);
+			border-radius: 0px;
 			display: block;
 			line-height: 1;
 			padding: 4px;
@@ -715,7 +731,7 @@ footer {
 
 			h5 {
 				margin: 0;
-				font-size: @baseFontSize - 4;
+				font-size: @font-size-base - 4;
                 min-width: 120px;
 			}
 
@@ -728,7 +744,7 @@ footer {
 					.opacity(0);
 					background-color: @white;
 					padding: 5px;
-					font-size: @baseFontSize - 4;
+					font-size: @font-size-base - 4;
 				}
 			}
 
@@ -780,7 +796,7 @@ footer {
         }
 
         .control-group {
-            margin-bottom: @baseLineHeight - 12;
+            margin-bottom: @line-height-base - 12;
 
             img {
                 vertical-align: top;
@@ -790,13 +806,13 @@ footer {
 
         .savechanges {
             margin: 10px 0 0 220px;
-            border: 4px solid @grayLight;
+            border: 4px solid @gray-light;
             background: @kajonaLightGray none;
-            .border-radius(0px);
+            border-radius: 0px;
             .box-shadow(none);
             color: #888888;
             cursor: pointer;
-            font-size: @baseFontSize + 2;
+            font-size: @font-size-base + 2;
             vertical-align: middle;
             font-weight: 600;
             text-transform: uppercase;
@@ -842,7 +858,7 @@ footer {
 		margin: 5px 0 20px 0;
 
         ul {
-            .border-radius(0px);
+            border-radius: 0px;
             .box-shadow(none);
             display: inline-block;
             margin-bottom: 0;
@@ -858,9 +874,9 @@ footer {
                     line-height: 30px;
                     padding: 0 10px;
                     text-decoration: none;
-                    color:@grayDark;
+                    color:@gray-dark;
                     margin:0 3px;
-                    background-color:@grayLight;
+                    background-color:@gray-light;
 
                     &.active {
                         color:@green;
@@ -869,7 +885,7 @@ footer {
 
                 &:first-child a, &:last-child a, &:last-child span {
                     border-left-width: 1px;
-                    .border-radius(0px);
+                    border-radius: 0px;
                 }
             }
         }
@@ -1003,7 +1019,7 @@ footer {
     }
 
     fieldset legend {
-        font-size: @baseFontSize+2;
+        font-size: @font-size-base+2;
     }
 
 
@@ -1015,27 +1031,27 @@ footer {
         }
 
         td.border-right, th.border-right {
-            border-right: 1px solid @grayDark;
+            border-right: 1px solid @gray-dark;
         }
 
         td.border-top, th.border-top {
-            border-top: 1px solid @grayDark;
+            border-top: 1px solid @gray-dark;
         }
 
         td.border-bottom, th.border-bottom {
-            border-bottom: 1px solid @grayDark;
+            border-bottom: 1px solid @gray-dark;
         }
 
         td.border-left, th.border-left {
-            border-left: 1px solid @grayDark;
+            border-left: 1px solid @gray-dark;
         }
 
         td.border-top-strong, th.border-top-strong {
-             border-top: 2px solid @grayDark;
+             border-top: 2px solid @gray-dark;
         }
 
         td.border-right-strong, th.border-right-strong {
-            border-right: 2px solid @grayDark;
+            border-right: 2px solid @gray-dark;
         }
 
         td.inlineFormEntry {
@@ -1108,12 +1124,12 @@ footer {
     }
 
     [class^='fa-']:before, [class*=' fa-']:before {
-        font-size: @baseFontSize+4;
-//        color: @textColor;
+        font-size: @font-size-base+4;
+//        color: text-color;
     }
 
     [class*=' fa-stack']:before {
-        font-size: @baseFontSize - 2;
+        font-size: @font-size-base - 2;
         text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
     }
     //Fontawesome configuration end
@@ -1128,27 +1144,27 @@ footer {
 
 
 textarea, input[type="text"], input[type="password"], input[type="datetime"], input[type="datetime-local"], input[type="date"], input[type="month"], input[type="time"], input[type="week"], input[type="number"], input[type="email"], input[type="url"], input[type="search"], input[type="tel"], input[type="color"], .uneditable-input { //  -moz-transition:none;
-    background-color: @grayLighter;
-    border: 1px solid @grayDarker;
-    .border-radius(0px);
+    background-color: @gray-lighter;
+    border: 1px solid @gray-darker;
+    border-radius: 0px;
     .box-shadow(none);
 
     &.mandatoryFormElement {
-        .box-shadow(0 0 6px @orange+20);
+        .box-shadow(0 0 6px @brand-danger+20);
     }
 }
 
 .input-append .add-on, select, textarea, input[type="text"], input[type="password"], input[type="datetime"], input[type="datetime-local"], input[type="date"], input[type="month"], input[type="time"], input[type="week"], input[type="number"], input[type="email"], input[type="url"], input[type="search"], input[type="tel"], input[type="color"], .uneditable-input {
     color: @gray;
     display: inline-block;
-    font-size: @baseFontSize;
+    font-size: @font-size-base;
     line-height: 20px;
     margin-bottom: 7px;
     padding: 4px;
-    .border-radius(0px);
+    border-radius: 0px;
 
     &.mandatoryFormElement {
-        .box-shadow(0 0 6px @orange+20);
+        .box-shadow(0 0 6px @brand-danger+20);
     }
 }
 
@@ -1173,7 +1189,7 @@ select {
 }
 
 label {
-  color: @textColor;
+  color: @text-color;
 }
 
 
@@ -1197,7 +1213,7 @@ label {
 
     // group icon is a little bigger, make it smaller
     .fa-users:before {
-        font-size: @baseFontSize+3 !important;
+        font-size: @font-size-base+3 !important;
     }
 
 }
@@ -1244,8 +1260,8 @@ label {
     ul li {
 
         a {
-            font-family: @sansFontFamily !important;
-            font-size: @baseFontSize;
+            font-family: @font-family-sans-serif !important;
+            font-size: @font-size-base;
             color: @gray !important;
             display: inline-block;
             height: auto;
@@ -1331,9 +1347,9 @@ label {
 
     .adminwidgetColumn {
         .additionalNameContent {
-            font-size: @fontSizeMini;
+            font-size: @font-size-small;
             font-weight: normal;
-            margin-top: -@fontSizeMini;
+            margin-top: -@font-size-small;
 
         }
     }
@@ -1421,24 +1437,24 @@ label {
     &.table-striped-tbody {
 
         tbody:nth-child(odd) {
-            border-top: 1px solid @tableBorder;
+            border-top: 1px solid @table-border-color;
             tr td, tr th {
-                background-color: @tableBackgroundAccent;
+                background-color: @table-bg-accent
 
             }
         }
 
         tbody:nth-child(even) {
-            border-top: 1px solid @tableBorder;
+            border-top: 1px solid @table-border-color;
             tr td, tr th {
-                background-color: @tableBackground;
+                background-color: @table-bg;
             }
         }
 
         tbody:hover {
             tr td,
             tr th {
-                background-color: @tableBackgroundHover;
+                background-color: @table-bg-hover
             }
         }
 
@@ -1470,7 +1486,7 @@ label {
     animation: spin 2s infinite linear;
 
     &:before {
-        font-size: @baseFontSize + 10;
+        font-size: @font-size-base + 10;
         content: @fa-var-spinner;
         color: @green;
         font-family: fontawesome;
@@ -1491,7 +1507,7 @@ label {
 
 .modal {
     text-align: left;
-    .border-radius(0px);
+    border-radius: 0px;
 
     iframe {
         border: none;
@@ -1503,7 +1519,7 @@ label {
     }
 
     .close {
-        font-size: @baseFontSize + 20;
+        font-size: @font-size-base + 20;
     }
 
 
@@ -1539,28 +1555,28 @@ label {
 
 /* TOOLTIPS */
 .qtip {
-    .border-radius(0px) !important;
+    border-radius: 0px !important;
     box-shadow: 0  2px 10px rgba(0,0,0,.2) !important;
 
     .qtip-content {
-        font-family: @baseFontFamily !important;
+        font-family: @font-family-base !important;
         padding: 4px !important;
         line-height: 120%;
-        font-size: @baseFontSize - 3 !important;
+        font-size: @font-size-base - 3 !important;
     }
 }
 
 .popover {
     width: 400px;
-    border: 2px solid @grayDark;
+    border: 2px solid @gray-dark;
     .popover-title {
-        font-size: @baseFontSize;
+        font-size: @font-size-base;
         font-weight: 700;
     }
 }
 
 .tooltip {
-    font-size: @baseFontSize - 3;
+    font-size: @font-size-base - 3;
 }
 
 .tooltip-inner {
@@ -1569,10 +1585,10 @@ label {
 
 /* chosen select replacement */
 .chosen-container {
-	font-size: @baseFontSize !important;
+	font-size: @font-size-base !important;
 
     &.mandatoryFormElement {
-        .box-shadow(0 0 6px @orange+20);
+        .box-shadow(0 0 6px @brand-danger+20);
     }
 
 }
@@ -1583,7 +1599,7 @@ label {
 }
 
 .control-group.error .chosen-container a {
-    border: 1px solid @errorText;
+    border: 1px solid @state-danger-text;
 }
 
 
@@ -1592,11 +1608,11 @@ label {
     margin-bottom: 6px;
 	.chosen-single {
 		color: @gray !important;
-		font-size: @baseFontSize !important;
+		font-size: @font-size-base !important;
 		height: 20px !important;
 		line-height: 20px !important;
 		padding: 4px !important;
-		.border-radius(0px) !important;
+		border-radius: 0px !important;
 		background-image: none !important;
 		-webkit-box-shadow: none !important;
 		-moz-box-shadow: none !important;
@@ -1608,7 +1624,7 @@ label {
 .chosen-container .chosen-results .highlighted {
 	color: @white !important;
 	background-image: none !important;
-	background-color: @linkColor !important;
+	background-color: @link-color !important;
 }
 
 .chosen-container-active {
@@ -1616,7 +1632,7 @@ label {
 	.box-shadow(0 0 6px @green+20);
 
 	.chosen-single {
-		border: 1px solid @grayDarker !important;
+		border: 1px solid @gray-darker !important;
 
 	}
 }
@@ -1625,12 +1641,31 @@ label {
 /* the login page */
 body.login {
     background-color: lighten(@kajonaLightGray, 5%);
-    .modal-header {
-        background:url(../img/pusteblume.png) right -45px no-repeat @grayDarker;
+
+    .panel {
+        border: 1px solid @gray-darker;
+        box-shadow: 0 1px 3px @gray-darker;
+    }
+
+    .panel-header {
+        background:url(../img/pusteblume.png) right -45px no-repeat @gray-darker;
         color: @white;
+        padding: 9px 15px;
+        border-bottom: 1px solid #EEE;
+    }
+
+    .panel-footer {
+        text-align: right;
     }
 
     #content {
+
+        h3 {
+            margin-top: 2px;
+            margin-bottom: 2px;
+        }
+
+        float: none !important;
 
         form {
             .control-label {
@@ -1659,8 +1694,8 @@ body.login {
     body {
         padding-top: 0px;
 
-        font-size: @baseFontSize - 2;
-        line-height: @baseLineHeight - 2;
+        font-size: @font-size-base - 2;
+        line-height: @line-height-base - 2;
 
         #content {
             .contentTopbar {
@@ -1672,16 +1707,16 @@ body.login {
             }
 
             h2 {
-                font-size: @baseFontSize - 1;
-                line-height: @baseFontSize + 1 ;
+                font-size: @font-size-base - 1;
+                line-height: @font-size-base + 1 ;
                 padding: 2px 18px;
                 margin: 2px;
 
             }
 
             h3 {
-                font-size: @baseFontSize - 2;
-                line-height: @baseFontSize - 1;
+                font-size: @font-size-base - 2;
+                line-height: @font-size-base - 1;
                 padding: 2px 18px;
             }
 
@@ -1706,11 +1741,12 @@ body.login {
 
 }
 
+
 /* BOOTSTRAP SWITCH BUTTON see www.bootstrap-switch.org*/
 .has-switch {
     span {
         &.switch-left {
-            .buttonBackground(@green, @green);
+//            .buttonBackground(@green, @green);
         }
     }
 }
