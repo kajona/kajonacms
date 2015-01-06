@@ -54,7 +54,7 @@ $(function() {
 </grid_footer>
 
 <grid_entry>
-<li class="span3 %%cssaddon%%" data-systemid="%%systemid%%" >
+<li class="col-md-3 %%cssaddon%%" data-systemid="%%systemid%%" >
     <div class="thumbnail" %%clickaction%% >
         <h5 >%%title%%</h5>
         <div class="contentWrapper" style="background: url(%%image%%) center no-repeat; background-size: cover;">
@@ -345,7 +345,7 @@ To avoid side-effects, no line-break in this case -> not needed by default, but 
 
 Dropdown
 <input_dropdown>
-    <div class="control-group">
+    <div class="form-group">
         <label for="%%name%%" class="control-label">%%title%%</label>
         <div class="controls">
             <select data-placeholder="%%dataplaceholder%%" name="%%name%%" id="%%name%%" class="input-xlarge %%class%%" %%disabled%% %%addons%%>%%options%%</select>
@@ -374,7 +374,7 @@ Dropdown
 
 Multiselect
 <input_multiselect>
-    <div class="control-group">
+    <div class="form-group">
         <label for="%%name%%[]" class="control-label">%%title%%</label>
         <div class="controls">
             <select size="7" name="%%name%%[]" id="%%name%%" class="input-xlarge %%class%%" multiple="multiple" %%disabled%% %%addons%%>%%options%%</select>
@@ -419,7 +419,7 @@ Radiogroup
 
 Checkbox
 <input_checkbox>
-<div class="control-group">
+<div class="form-group">
     <label for="%%name%%" class="control-label"></label>
     <div class="controls">
         <label class="checkbox">
@@ -445,7 +445,7 @@ Toggle_On_Off (using bootstrap-switch.org)
         });
     </script>
 
-    <div class="control-group">
+    <div class="form-group">
         <label class="control-label" for="%%name%%">%%title%%</label>
         <div class="controls">
             <div id="div_%%name%%" class="make-switch %%class%%" data-on-label="<i class='fa fa-check fa-white' ></i>" data-off-label="<i class='fa fa-times'></i>">
@@ -462,10 +462,10 @@ Regular Hidden-Field
 
 Regular Text-Field
 <input_text>
-    <div class="control-group">
-        <label for="%%name%%" class="control-label">%%title%%</label>
-        <div class="controls">
-            <input type="text" id="%%name%%" name="%%name%%" value="%%value%%" class="input-xlarge %%class%%" %%readonly%%>
+    <div class="form-group">
+        <label for="%%name%%" class="col-sm-4 control-label">%%title%%</label>
+        <div class="col-sm-6">
+            <input type="text" id="%%name%%" name="%%name%%" value="%%value%%" class="form-control %%class%%" %%readonly%%>
             %%opener%%
         </div>
     </div>
@@ -473,7 +473,7 @@ Regular Text-Field
 
 Textarea
 <input_textarea>
-    <div class="control-group">
+    <div class="form-group">
         <label for="%%name%%" class="control-label">%%title%%</label>
         <div class="controls">
             <textarea name="%%name%%" id="%%name%%" class="input-xlarge %%class%%" rows="%%numberOfRows%%" %%readonly%%>%%value%%</textarea>
@@ -483,17 +483,17 @@ Textarea
 
 Regular Password-Field
 <input_password>
-    <div class="control-group">
-        <label for="%%name%%" class="control-label">%%title%%</label>
-        <div class="controls">
-            <input type="password" autocomplete="off" id="%%name%%" name="%%name%%" value="%%value%%" class="input-xlarge %%class%%" %%readonly%%>
+    <div class="form-group">
+        <label for="%%name%%" class="col-sm-4 control-label">%%title%%</label>
+        <div class="col-sm-6">
+            <input type="password" autocomplete="off" id="%%name%%" name="%%name%%" value="%%value%%" class="form-control %%class%%" %%readonly%%>
         </div>
     </div>
 </input_password>
 
 Upload-Field
 <input_upload>
-    <div class="control-group">
+    <div class="form-group">
         <label for="%%name%%" class="control-label">%%title%%</label>
         <div class="controls">
             <input type="file" name="%%name%%" id="%%name%%" class="input-file %%class%%">
@@ -654,11 +654,14 @@ Upload-Field for multiple files with progress bar
 
 Regular Submit-Button
 <input_submit>
-    <div class="control-group">
-        <button type="submit" class="btn savechanges %%class%%" name="%%name%%" value="%%value%%" %%disabled%% %%eventhandler%%>
-            <span class="btn-text">%%value%%</span>
-            <span class="statusicon"></span>
-        </button>
+    <div class="form-group">
+        <label class="col-sm-4 control-label"></label>
+        <div class="col-sm-6">
+            <button type="submit" class="btn savechanges %%class%%" name="%%name%%" value="%%value%%" %%disabled%% %%eventhandler%%>
+                <span class="btn-text">%%value%%</span>
+                <span class="statusicon"></span>
+            </button>
+        </div>
     </div>
 </input_submit>
 
@@ -668,7 +671,7 @@ in addition, a container for the calendar is needed. use %%calendarContainerId%%
 If the calendar is used, you HAVE TO create a js-function named "calClose_%%calendarContainerId%%". This
 function is called after selecting a date, e.g. to hide the calendar
 <input_date_simple>
-    <div class="control-group">
+    <div class="form-group">
         <label for="%%name%%" class="control-label">%%title%%</label>
         <div class="controls">
             <input id="%%calendarId%%" name="%%calendarId%%" class="input-xlarge %%class%%" size="16" type="text" value="%%valuePlain%%">
@@ -702,7 +705,7 @@ function is called after selecting a date, e.g. to hide the calendar
 
 <input_datetime_simple>
 
-    <div class="control-group">
+    <div class="form-group">
         <label for="%%name%%" class="control-label">%%title%%</label>
         <div class="controls">
             <input id="%%calendarId%%" name="%%calendarId%%" class="input-xlarge" size="16" type="text" value="%%valuePlain%%">
@@ -738,7 +741,7 @@ place ajaxScript before the closing input_pageselector-tag and make sure, that y
 have a surrounding div with class "ac_container" and a div with id "%%name%%_container" and class
 "ac_results" inside the "ac_container", to generate a resultlist
 <input_pageselector>
-    <div class="control-group">
+    <div class="form-group">
         <label for="%%name%%" class="control-label">%%title%%</label>
 
         <div class="controls">
@@ -750,7 +753,7 @@ have a surrounding div with class "ac_container" and a div with id "%%name%%_con
 </input_pageselector>
 
 <input_userselector>
-<div class="control-group">
+<div class="form-group">
     <label for="%%name%%" class="control-label">%%title%%</label>
 
     <div class="controls">
@@ -847,7 +850,7 @@ A fieldset to structure logical sections
 The login-Form is being displayed, when the user has to log in.
 Needed Elements: %%error%%, %%form%%
 <login_form>
-<div class="alert alert-error" id="loginError">
+<div class="alert alert-danger" id="loginError">
     <button type="button" class="close" data-dismiss="alert">×</button>
     <p>%%error%%</p>
 </div>
@@ -860,7 +863,7 @@ Needed Elements: %%error%%, %%form%%
         $('#loginError').remove();
 
 </script>
-<noscript><div class="alert alert-error">%%loginJsInfo%%</div></noscript>
+<noscript><div class="alert alert-danger">%%loginJsInfo%%</div></noscript>
 </login_form>
 
 Part to display the login status, user is logged in
@@ -1038,7 +1041,7 @@ The following sections specify the layout of the rights-mgmt
 
 
 <rights_form_inherit>
-<div class="control-group">
+<div class="form-group">
     <label class="control-label" for="%%name%%">%%title%%</label>
     <div class="controls">
         <input name="%%name%%" type="checkbox" id="%%name%%" value="1" onclick="this.blur();" onchange="KAJONA.admin.checkRightMatrix();" %%checked%% />
@@ -1656,7 +1659,7 @@ If you want to use ajax to load a list of proposals on entering a char,
 place ajaxScript before the closing input_tagselector-tag.
 <input_tagselector>
 
-    <div class="control-group">
+    <div class="form-group">
         <label for="%%name%%" class="control-label">%%title%%</label>
         <div class="controls">
             <input type="text" id="%%name%%" name="%%name%%" value="%%value%%" class="input-xlarge %%class%%">
@@ -1802,21 +1805,21 @@ It containes a list of aspects and provides the possibility to switch the differ
 ---------------------------------------------------------------------------------------------------------
 -- BACKEND NAVIGATION -----------------------------------------------------------------------------------
 
+
 <sitemap_wrapper>
     <div class="nav-header">Kajona V4</div>
         %%level%%
-
 </sitemap_wrapper>
 
 <sitemap_module_wrapper>
-    <div class="accordion-group">
-        <div class="accordion-heading">
-            <a class="accordion-toggle" data-toggle="collapse" data-parent="#moduleNavigation" href="#%%systemid%%">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <a data-toggle="collapse" data-parent="#moduleNavigation" href="#%%systemid%%">
                 %%moduleName%%
             </a>
         </div>
-        <div id="%%systemid%%" class="accordion-body collapse">
-            <div class="accordion-inner">
+        <div id="%%systemid%%" class="panel-collapse collapse">
+            <div class="panel-body">
                 <ul>%%actions%%</ul>
             </div>
         </div>
@@ -1824,14 +1827,14 @@ It containes a list of aspects and provides the possibility to switch the differ
 </sitemap_module_wrapper>
 
 <sitemap_module_wrapper_active>
-    <div class="accordion-group">
-        <div class="accordion-heading">
-            <a class="accordion-toggle active" data-toggle="collapse" data-parent="#moduleNavigation" href="#%%systemid%%">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <a class="active" data-toggle="collapse" data-parent="#moduleNavigation" href="#%%systemid%%">
                 %%moduleName%%
             </a>
         </div>
-        <div id="%%systemid%%" class="accordion-body collapse in">
-            <div class="accordion-inner">
+        <div id="%%systemid%%" class="panel-collapse collapse in">
+            <div class="panel-body">
                 <ul>%%actions%%</ul>
             </div>
         </div>

@@ -11,9 +11,8 @@
 
     <!-- KAJONA_BUILD_LESS_START -->
     <link href="_skinwebpath_/less/bootstrap.less?_system_browser_cachebuster_" rel="stylesheet/less">
-    <link href="_skinwebpath_/less/responsive.less?_system_browser_cachebuster_" rel="stylesheet/less">
     <script> less = { env:'development' }; </script>
-    <script src="_skinwebpath_/less/less.js"></script>
+    <script src="_skinwebpath_/less/less.min.js"></script>
     <!-- KAJONA_BUILD_LESS_END -->
 
     <script src="_webpath_/core/module_system/admin/scripts/jquery/jquery.min.js?_system_browser_cachebuster_"></script>
@@ -28,34 +27,35 @@
     <![endif]-->
 
     <link rel="shortcut icon" href="_skinwebpath_/img/favicon.png">
-    <!--
-    <link rel="apple-touch-icon" href="_skinwebpath_/img/apple-touch-icon.png">
-    <link rel="apple-touch-icon" sizes="72x72" href="_skinwebpath_/img/apple-touch-icon-72x72.png">
-    <link rel="apple-touch-icon" sizes="114x114" href="_skinwebpath_/img/apple-touch-icon-114x114.png">
-    -->
 </head>
 
 <body>
 
-<div class="navbar navbar-fixed-top">
-    <div class="navbar-inner">
+<div class="navbar-nav navbar-fixed-top">
+    <div class="navbar-topbar">
         <div class="container-fluid">
-            <div class="row-fluid">
-                <div class="span4" style="padding:5px 0 0 10px;">
+            <div class="row">
+                <div class="col-md-4" style="padding:5px 0 0 10px;">
                     %%login%%
                 </div>
-                <div class="span8" style="text-align: right;">
+                <div class="col-md-4" style="text-align: right;">
                     <form class="navbar-search pull-left" action="_indexpath_">
                         <input type="hidden" name="admin" value="1" >
                         <input type="hidden" name="module" value="search">
                         <input type="hidden" name="action" value="search">
-                        <i id="icon-lupe" class="fa fa-search"></i>
-                        <input type="text" name="search_query" class="search-query" placeholder="[lang,globalSearchPlaceholder,dashboard]" id="globalSearchInput">
-                    </form>
-                    %%languageswitch%%
+                        <!--<i id="icon-lupe" class="fa fa-search"></i>-->
 
+                        <div class="form-group has-feedback">
+                            <i class="fa fa-search form-control-feedback" aria-hidden="true"></i>
+                            <input type="text" name="search_query" class="form-control search-query" placeholder="[lang,globalSearchPlaceholder,dashboard]" id="globalSearchInput">
+                        </div>
+                    </form>
+
+                </div>
+                <div class="col-md-4 navbar-dropdown-section pull-right">
+                    %%languageswitch%%
                     %%aspectChooser%%
-                    <a id="portaleditor" class="btn" href="_webpath_">
+                    <a id="portaleditor" class="btn btn-default" href="_webpath_">
                         Portal
                     </a>
                 </div>
@@ -63,9 +63,9 @@
         </div>
     </div>
     <div class="container-fluid pathNaviContainer">
-        <div class="row-fluid">
-            <div class="span2 hidden-phone hidden-tablet" style="z-index: 0 !important;">&nbsp;</div>
-            <div class="span10">
+        <div class="row">
+            <div class="col-md-2 hidden-xs hidden-sm" style="z-index: 0 !important;">&nbsp;</div>
+            <div class="col-md-10">
                 %%path%%
             </div>
         </div>
@@ -73,19 +73,19 @@
 </div>
 
 <div class="container-fluid">
-    <div class="row-fluid">
+    <div class="row">
 
         <!-- MODULE NAVIGATION -->
-        <div class="span2 ">
-            <div class="sidebar-nav hidden-phone hidden-tablet ">
-                <div class="accordion" id="moduleNavigation">
+        <div class="col-md-2 ">
+            <div class="sidebar-nav hidden-xs hidden-sm">
+                <div class="panel-group" id="moduleNavigation">
                     %%moduleSitemap%%
                 </div>
             </div>
         </div>
 
         <!-- CONTENT CONTAINER -->
-        <div class="span10" id="content">
+        <div class="col-md-10" id="content">
 
             <div class="contentTopbar clearfix">
                 <h1 id="moduleTitle" class="pull-left">%%actionTitle%%</h1>%%quickhelp%%
@@ -103,31 +103,35 @@
 </div>
 
 <script src="_skinwebpath_/js/jquery.ui.touch-punch.min.js?_system_browser_cachebuster_"></script>
-<script src="_skinwebpath_/js/bootstrap-transition.js?_system_browser_cachebuster_"></script>
-<script src="_skinwebpath_/js/bootstrap-alert.js?_system_browser_cachebuster_"></script>
-<script src="_skinwebpath_/js/bootstrap-modal.js?_system_browser_cachebuster_"></script>
-<script src="_skinwebpath_/js/bootstrap-dropdown.js?_system_browser_cachebuster_"></script>
-<script src="_skinwebpath_/js/bootstrap-scrollspy.js?_system_browser_cachebuster_"></script>
-<script src="_skinwebpath_/js/bootstrap-tab.js?_system_browser_cachebuster_"></script>
-<script src="_skinwebpath_/js/bootstrap-tooltip.js?_system_browser_cachebuster_"></script>
-<script src="_skinwebpath_/js/bootstrap-popover.js?_system_browser_cachebuster_"></script>
-<script src="_skinwebpath_/js/bootstrap-button.js?_system_browser_cachebuster_"></script>
-<script src="_skinwebpath_/js/bootstrap-collapse.js?_system_browser_cachebuster_"></script>
-<script src="_skinwebpath_/js/bootstrap-carousel.js?_system_browser_cachebuster_"></script>
-<script src="_skinwebpath_/js/bootstrap-affix.js?_system_browser_cachebuster_"></script>
+<script src="_skinwebpath_/js/transition.js?_system_browser_cachebuster_"></script>
+<script src="_skinwebpath_/js/alert.js?_system_browser_cachebuster_"></script>
+<script src="_skinwebpath_/js/modal.js?_system_browser_cachebuster_"></script>
+<script src="_skinwebpath_/js/dropdown.js?_system_browser_cachebuster_"></script>
+<script src="_skinwebpath_/js/scrollspy.js?_system_browser_cachebuster_"></script>
+<script src="_skinwebpath_/js/tab.js?_system_browser_cachebuster_"></script>
+<script src="_skinwebpath_/js/tooltip.js?_system_browser_cachebuster_"></script>
+<script src="_skinwebpath_/js/popover.js?_system_browser_cachebuster_"></script>
+<script src="_skinwebpath_/js/button.js?_system_browser_cachebuster_"></script>
+<script src="_skinwebpath_/js/collapse.js?_system_browser_cachebuster_"></script>
+<script src="_skinwebpath_/js/carousel.js?_system_browser_cachebuster_"></script>
+<script src="_skinwebpath_/js/affix.js?_system_browser_cachebuster_"></script>
 
 <script type="text/javascript">var searchExtendText = '[lang,search_details,search]';</script>
 <script src="_skinwebpath_/js/v4skin.js?_system_browser_cachebuster_"></script>
 
 
-<div class="modal hide fade fullsize" id="folderviewDialog" role="dialog">
-    <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal">×</button>
-        <h3 id="folderviewDialog_title">BROWSER</h3>
-    </div>
-    <div class="modal-body">
-        <div id="folderviewDialog_loading" class="loadingContainer loadingContainerBackground"></div>
-        <div id="folderviewDialog_content"><!-- filled by js --></div>
+<div class="modal fade fullsize" id="folderviewDialog" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h3 id="folderviewDialog_title" class="modal-title">BROWSER</h3>
+            </div>
+            <div class="modal-body">
+                <div id="folderviewDialog_loading" class="loadingContainer loadingContainerBackground"></div>
+                <div id="folderviewDialog_content"><!-- filled by js --></div>
+            </div>
+        </div>
     </div>
 </div>
 

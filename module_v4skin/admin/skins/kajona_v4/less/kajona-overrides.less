@@ -120,6 +120,7 @@
 @kajonaBodylinkColor:       #3a3a3a;
 @gray-darker:               #bfbfbf;
 @gray-lighter:              #f6f6f6;
+@gray-light:                #eeeeee;
 
 body {
     padding-top: 70px;
@@ -153,87 +154,96 @@ footer {
 
 .sidebar-nav {
 
-    background-color: @white;
-    border:0px;
-    border-radius: 0px;
-    .box-shadow(none);
-    margin-bottom: 20px;
-    min-height: 20px;
-    padding:0px;
+//    background-color: @white;
+//    border:0px;
+//    border-radius: 0px;
+//    .box-shadow(none);
+//    margin-bottom: 20px;
+//    min-height: 20px;
+//    padding:0px;
 
-    text-align:right;
-    position:relative;
-    top:-10px;
+    text-align: right;
+    position: relative;
+    top: -10px;
 
-    .accordion-group {
-        border-radius: 0px;
-        border: 0px;
+    .panel-group .panel {
         margin: 0;
     }
 
-    .accordion-inner {
-        border-top: 0;
-        padding: 0;
-        background:url(../img/navbar-inner-background.png) right bottom no-repeat lighten(@kajonaLightGray, 5%);
-        color: @white;
+    .panel {
+        border-radius: 0;
+        border: 0;
 
-        ul {
-            margin: 0 0 1px 0;
+        .panel-heading {
+            padding: 0;
 
-            list-style: none;
+            a {
+                display: block;
+                padding: 6px 15px;
+                background-color: @kajonaLightGray;
+                margin-bottom:1px;
+                font-size:@font-size-base + 2;
+                color:#626262;
+                border: 0 solid @green;
+                border-left-width: 10px;
 
-            li {
-                text-align: left;
-                padding: 2px 15px 2px 12px;
-                color: @text-color;
-                font-style: italic;
-
-                a {
-                    font-style: normal;
-                    color:@link-color;
-                    display: block;
-                    text-align:right;
-                }
-
-                &.divider {
-                    background-color: @white;
-                    border-bottom: 0px;
-                    height: 1px;
-                    margin: 3px 1px;
-                    overflow: hidden;
-                    padding: 0;
+                &.active {
+                    color:@white;
+                    text-shadow:none;
+                    background:url(../img/pusteblume.png) -110px -35px no-repeat @green;
                 }
             }
         }
 
+        .panel-body {
+            border-top: 0;
+            padding: 0;
+            background: url(../img/navbar-inner-background.png) right bottom no-repeat lighten(@kajonaLightGray, 5%);
+            color: @white;
+
+            ul {
+                margin: 0 0 1px 0;
+                padding: 0;
+                list-style: none;
+
+                li {
+                    text-align: left;
+                    padding: 2px 15px 2px 12px;
+                    color: @text-color;
+                    font-style: italic;
+
+                    a {
+                        font-style: normal;
+                        color: @link-color;
+                        display: block;
+                        text-align: right;
+                    }
+
+                    &.divider {
+                        background-color: @white;
+                        border-bottom: 0px;
+                        height: 1px;
+                        margin: 3px 1px;
+                        overflow: hidden;
+                        padding: 0;
+                    }
+                }
+            }
+
+        }
+
     }
 
-    .accordion-group .accordion-heading a {
-        padding: 6px 15px;
-        background-color: @kajonaLightGray;
-        margin-bottom:1px;
-        font-size:@font-size-base + 2;
-        color:#626262;
-        border-color:@green;
-        border-style: solid;
-        border-width: 0px 0px 0px 10px;
-    }
-
-    .accordion-group .accordion-heading a.accordion-toggle.active  {
-        color:@white;
-        text-shadow:none;
-        background:url(../img/pusteblume.png) -110px -35px no-repeat @green;
-    }
 
     .nav-header {
         color: @white;
         background-color:@gray-darker;
-        display: block;
+//        display: block;
         font-size: @font-size-base + 2;
         font-weight: 600;
         line-height: 20px;
         padding: 6px 15px;
-        text-shadow:none;
+//        text-shadow:none;
         text-transform: uppercase;
     }
 }
@@ -471,14 +481,13 @@ footer {
 
 .autocomplete-hint {
     position: absolute;
-//    left: -20px;
 }
 
 .ui-helper-hidden-accessible {
     display: none;
 }
 
-.navbar-inner {
+.navbar-topbar {
     background-repeat: no-repeat;
     background:url(../img/navbar-inner-background.png) 300px 0px no-repeat @kajonaLightGray;
     border-radius: 0px;
@@ -490,19 +499,31 @@ footer {
     border: 0px;
     border-bottom: 1px solid darken(@kajonaLightGray, 5%);
 
-    .navbar-search {
-        margin-top:12px;
+    .navbar-dropdown-section {
+        text-align: right;
+        padding-right: 0;
+    }
 
-        .search-query, .search-query:focus, .navbar-search .search-query.focused {
-            background-color:@white;
-            border:none;
-            box-shadow:none;
-            border-radius: 0px;
-            color:#626262;
-            text-shadow:none;
-            padding: 3px 7px 2px 7px;
-            font-size:@font-size-base - 1;
+    .navbar-search {
+
+        .form-group {
+            margin: 12px 0 0 0;
+
+            .search-query, .search-query:focus, .navbar-search .search-query.focused {
+                background-color: @white;
+                border: none;
+                box-shadow: none;
+                border-radius: 0px;
+                color: #626262;
+                text-shadow: none;
+            }
+
+            i {
+                font-size: @font-size-base+3;
+                padding-top: 7px;
+            }
         }
+
 
 
     }
@@ -566,10 +587,9 @@ footer {
     font-weight: 700;
     font-size: @font-size-base + 4;
     color: #888;
-    height: 16px;
     .box-shadow(none);
 
-    background:url(../img/portaleditor-arrow.png) right 1px no-repeat;
+    background:url(../img/portaleditor-arrow.png) right 6px no-repeat;
     padding-right: 30px;
 
     &:hover {
@@ -579,17 +599,6 @@ footer {
 }
 
 
-
-
-#icon-lupe {
-    width:21px;
-    height:23px;
-    float:right;
-    margin-left:1px;
-    background-color: @white;
-    font-size: 18px;
-    padding: 2px 2px 0 0;
-}
 
 
 .breadcrumb {
@@ -786,14 +795,14 @@ footer {
     }
 
     form {
-        .control-label {
-            width: 200px;
-            padding-top: 6px;
-        }
+//        .control-label {
+//            width: 200px;
+//            padding-top: 6px;
+//        }
 
-        .controls {
-            margin-left: 220px;
-        }
+//        .controls {
+//            margin-left: 220px;
+//        }
 
         .control-group {
             margin-bottom: @line-height-base - 12;
@@ -804,50 +813,54 @@ footer {
             }
         }
 
-        .savechanges {
-            margin: 10px 0 0 220px;
-            border: 4px solid @gray-light;
-            background: @kajonaLightGray none;
-            border-radius: 0px;
-            .box-shadow(none);
-            color: #888888;
-            cursor: pointer;
-            font-size: @font-size-base + 2;
-            vertical-align: middle;
-            font-weight: 600;
-            text-transform: uppercase;
-            text-align: left;
-            padding: 0px;
-            min-width: 218px;
 
-            &:hover {
-                color:@black;
+        .form-group {
+            .savechanges {
+                border: 4px solid @gray-light;
+                background-color: @kajonaLightGray;
+                .box-shadow(none);
+                color: #888888;
+                cursor: pointer;
+                font-size: @font-size-base + 2;
+                vertical-align: middle;
+                font-weight: 600;
+                text-transform: uppercase;
+                text-align: left;
+                padding: 0px 0px 0px 10px;
+                line-height: 30px;
+                position: relative;
+                width: 65%;
+                min-width: 250px;
+                &:hover {
+                    color:@black;
+                    &:after {
+                        background-color:darken(@green, 10%);
+                    }
+                }
+
+                &:after {
+                    width:30px;
+                    height:30px;
+                    display:inline-block;
+                    content: "";
+                    position: absolute;
+                    right: 0;
+                    background: center center no-repeat;
+                    background-color:@green;
+                    background-image:url(../img/icon-save.png);
+                }
+
+
+
+
+            }
+
+            .cancelbutton {
                 span.statusicon {
-                    background-color:darken(@green, 10%);
+                    background-image: url(../img/icon-cancel.png);
                 }
             }
 
-            span.btn-text {
-                margin:5px 0 5px 10px;
-//                display: inline-block;
-                float: left;
-            }
-
-            span.statusicon {
-                width:28px;
-                height:28px;
-                display:inline-block;
-                float:right;
-                background: center center no-repeat;
-                background-color:@green;
-                background-image:url(../img/icon-save.png);
-            }
-        }
-
-        .cancelbutton {
-            span.statusicon {
-                background-image:url(../img/icon-cancel.png);
-            }
         }
 
     }
@@ -1189,7 +1202,8 @@ select {
 }
 
 label {
-  color: @text-color;
+    color: @text-color;
+    font-weight: normal;
 }
 
 
@@ -1666,20 +1680,6 @@ body.login {
         }
 
         float: none !important;
-
-        form {
-            .control-label {
-                width: 120px;
-            }
-
-            .controls {
-                margin-left: 140px;
-            }
-
-            .savechanges {
-                margin: 20px 0 0 140px;
-            }
-        }
     }
 }
 
