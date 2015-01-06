@@ -228,8 +228,8 @@ Currently, there are two modes: with and without a description.
         <tr data-systemid="%%listitemid%%">
             <td class="treedrag"></td>
             <td class="listsorthandle"></td>
-            <td class="checkbox">%%checkbox%%</td>
-            <td class="image">%%image%%</td>
+            <td class="listcheckbox">%%checkbox%%</td>
+            <td class="listimage">%%image%%</td>
             <td class="title">%%title%%</td>
             <td class="center">%%center%%</td>
             <td class="actions">%%actions%%</td>
@@ -243,8 +243,8 @@ Currently, there are two modes: with and without a description.
         <tr data-systemid="%%listitemid%%">
             <td rowspan="2" class="treedrag"></td>
             <td rowspan="2" class="listsorthandle"></td>
-            <td rowspan="2" class="checkbox">%%checkbox%%</td>
-            <td rowspan="2" class="image">%%image%%</td>
+            <td rowspan="2" class="listcheckbox">%%checkbox%%</td>
+            <td rowspan="2" class="listimage">%%image%%</td>
             <td class="title">%%title%%</td>
             <td class="center">%%center%%</td>
             <td class="actions">%%actions%%</td>
@@ -507,45 +507,45 @@ Upload-Field
 Upload-Field for multiple files with progress bar
 <input_upload_multiple>
 
-            <div id="%%name%%">
-                    <div class="fileupload-buttonbar">
+    <div id="%%name%%">
+            <div class="fileupload-buttonbar">
 
-                        <span class="btn fileinput-button">
-                            <i class="fa fa-plus-square"></i>
-                            <span>[lang,mediamanager_upload,mediamanager]</span>
-                            <input type="file" name="%%name%%" multiple>
-                        </span>
+                <span class="btn btn-default fileinput-button">
+                    <i class="fa fa-plus-square"></i>
+                    <span>[lang,mediamanager_upload,mediamanager]</span>
+                    <input type="file" name="%%name%%" multiple>
+                </span>
 
-                        <button type="submit" class="btn start" style="display: none;">
-                            <i class="fa fa-upload"></i>
-                            <span>[lang,upload_multiple_uploadFiles,mediamanager]</span>
-                        </button>
+                <button type="submit" class="btn btn-default start" style="display: none;">
+                    <i class="fa fa-upload"></i>
+                    <span>[lang,upload_multiple_uploadFiles,mediamanager]</span>
+                </button>
 
-                        <button type="reset" class="btn  cancel" style="display: none;">
-                            <i class="fa fa-ban"></i>
-                            <span>[lang,upload_multiple_cancel,mediamanager]</span>
-                        </button>
+                <button type="reset" class="btn btn-default cancel" style="display: none;">
+                    <i class="fa fa-ban"></i>
+                    <span>[lang,upload_multiple_cancel,mediamanager]</span>
+                </button>
 
-                        <span class="fileupload-process"></span>
-                        <div class="alert alert-info">
-                            [lang,upload_dropArea,mediamanager]<br />
-                             %%allowedExtensions%%
-                        </div>
-                    </div>
-
-                    <div class=" fileupload-progress " style="display: none;">
-
-                        <div class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100">
-                            <div class="bar" style="width:0%;"></div>
-                        </div>
-
-                        <div class="progress-extended">&nbsp;</div>
-                    </div>
-
-                <table class="table admintable table-striped-tbody files"></table>
+                <span class="fileupload-process"></span>
+                <div class="alert alert-info">
+                    [lang,upload_dropArea,mediamanager]<br />
+                     %%allowedExtensions%%
+                </div>
             </div>
 
-        <script type="text/javascript">
+            <div class="fileupload-progress" style="display: none;">
+
+                <div class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100">
+                    <div class="bar" style="width:0%;"></div>
+                </div>
+
+                <div class="progress-extended">&nbsp;</div>
+            </div>
+
+        <table class="table admintable table-striped-tbody files"></table>
+    </div>
+
+<script type="text/javascript">
 
     KAJONA.admin.loader.loadFile([
         "/core/module_mediamanager/admin/scripts/jquery-fileupload/css/jquery.fileupload.css",
@@ -647,7 +647,7 @@ Upload-Field for multiple files with progress bar
         });
     });
 
-        </script>
+</script>
 
 
 </input_upload_multiple>
@@ -1343,8 +1343,8 @@ The language switch surrounds the buttons
 -- PAGEVIEW ---------------------------------------------------------------------------------------------
 
 <pageview_body>
-    <div class="pagination">
-        <ul>
+    <div class="pager">
+        <ul class="pagination">
             %%linkBackward%%
             %%pageList%%
             %%linkForward%%

@@ -122,6 +122,62 @@
 @gray-lighter:              #f6f6f6;
 @gray-light:                #eeeeee;
 
+/* END KAJONA redefinitions */
+
+
+/* Reintroduce the multilevel dropdown */
+.dropdown-submenu {
+    position:relative;
+}
+.dropdown-submenu>.dropdown-menu {
+    top:0;
+    left:100%;
+    margin-top:-6px;
+    margin-left:-1px;
+    -webkit-border-radius:0 6px 6px 6px;
+    -moz-border-radius:0 6px 6px 6px;
+    border-radius:0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+    display:block;
+}
+.dropdown-submenu>a:after {
+    display:block;
+    content:" ";
+    float:right;
+    width:0;
+    height:0;
+    border-color:transparent;
+    border-style:solid;
+    border-width:5px 0 5px 5px;
+    border-left-color:#cccccc;
+    margin-top:5px;
+    margin-right:-10px;
+}
+.dropdown-submenu:hover>a:after {
+    border-left-color:#ffffff;
+}
+.dropdown-submenu.pull-left {
+    float:none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+    left:-100%;
+    margin-left:10px;
+    -webkit-border-radius:6px 0 6px 6px;
+    -moz-border-radius:6px 0 6px 6px;
+    border-radius:6px 0 6px 6px;
+}
+
+/* END multilevel dropdown intro */
+
+
+
+
+
+
+
+
+
 body {
     padding-top: 70px;
     //padding-bottom: 40px;
@@ -154,28 +210,18 @@ footer {
 
 .sidebar-nav {
 
-//    background-color: @white;
-//    border:0px;
-//    border-radius: 0px;
-//    .box-shadow(none);
-//    margin-bottom: 20px;
-//    min-height: 20px;
-//    padding:0px;
-
     text-align: right;
     position: relative;
-    top: -10px;
+    top: -11px;
 
-    .panel-group .panel {
-        margin: 0;
-    }
-
-    .panel {
+    .panel-group .panel, .panel {
         border-radius: 0;
         border: 0;
+        margin: 0;
 
         .panel-heading {
             padding: 0;
+            border: 0;
 
             a {
                 display: block;
@@ -238,12 +284,10 @@ footer {
     .nav-header {
         color: @white;
         background-color:@gray-darker;
-//        display: block;
         font-size: @font-size-base + 2;
         font-weight: 600;
         line-height: 20px;
         padding: 6px 15px;
-//        text-shadow:none;
         text-transform: uppercase;
     }
 }
@@ -253,7 +297,8 @@ footer {
 }
 
 .userNotificationsDropdown {
-    margin: 10px 0 0 25px;
+    margin: 17px 0 0 10px;
+
 
     a.dropdown-toggle {
         color: @link-color;
@@ -330,7 +375,7 @@ footer {
     .badge {
         position: absolute;
         top: -6px;
-        left: -15px;
+        left: -10px;
         font-style: normal;
         font-weight: normal;
     }
@@ -401,6 +446,7 @@ footer {
 
     ul {
         margin: 0px;
+        padding-left: 0px;
     }
 
     .listButton {
@@ -507,7 +553,7 @@ footer {
     .navbar-search {
 
         .form-group {
-            margin: 12px 0 0 0;
+            margin: 10px 0 0 0;
 
             .search-query, .search-query:focus, .navbar-search .search-query.focused {
                 background-color: @white;
@@ -516,10 +562,12 @@ footer {
                 border-radius: 0px;
                 color: #626262;
                 text-shadow: none;
+                margin: 0;
             }
 
             i {
-                font-size: @font-size-base+3;
+                font-size: @font-size-base+4;
+                color: lighten(@text-color, 25%);
                 padding-top: 7px;
             }
         }
@@ -643,6 +691,8 @@ footer {
     li.pathentry:before {
         content: @fa-var-angle-right;
         font-family: fontawesome;
+        color: @white;
+        padding: 0 2px;
     }
 
     li.pathentry:first-child {
@@ -687,6 +737,8 @@ footer {
     }
 
 	.thumbnails {
+        list-style: none;
+        padding: 0;
 
         & > .span3 {
             margin-left: 10px !important;
@@ -865,13 +917,14 @@ footer {
 
     }
 
-    .pagination {
+    .pager {
 
         text-align: center;
-		margin: 5px 0 20px 0;
+		margin: 2px 0 20px 0;
+        clear: both;
 
         ul {
-            border-radius: 0px;
+            border-radius: 0;
             .box-shadow(none);
             display: inline-block;
             margin-bottom: 0;
@@ -880,6 +933,7 @@ footer {
 
             li {
                 a, span {
+                    border-radius: 0;
                     border-color: #dcdcdc;
                     border-style: solid;
                     border-width: 1px;
@@ -1163,7 +1217,7 @@ textarea, input[type="text"], input[type="password"], input[type="datetime"], in
     .box-shadow(none);
 
     &.mandatoryFormElement {
-        .box-shadow(0 0 6px @brand-danger+20);
+        .box-shadow(0 0 6px @brand-warning+20);
     }
 }
 
@@ -1177,7 +1231,7 @@ textarea, input[type="text"], input[type="password"], input[type="datetime"], in
     border-radius: 0px;
 
     &.mandatoryFormElement {
-        .box-shadow(0 0 6px @brand-danger+20);
+        .box-shadow(0 0 6px @brand-warning+20);
     }
 }
 
@@ -1377,7 +1431,7 @@ label {
 /* ADMIN TABLE SETUP */
 
 .table {
-
+    margin-bottom: 4px;
     td, th {
         padding: 6px;
         vertical-align: middle;
@@ -1400,7 +1454,7 @@ label {
             }
         }
 
-        td.checkbox {
+        td.listcheckbox {
             padding: 0;
             vertical-align: middle;
 
@@ -1411,7 +1465,7 @@ label {
 			}
         }
 
-        td.image {
+        td.listimage {
 
             width: 22px;
             vertical-align: middle;

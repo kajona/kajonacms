@@ -35,7 +35,7 @@
     <div class="navbar-topbar">
         <div class="container-fluid">
             <div class="row">
-                <div class="col-md-4" style="padding:5px 0 0 10px;">
+                <div class="col-md-4">
                     %%login%%
                 </div>
                 <div class="col-md-4" style="text-align: right;">
@@ -43,7 +43,6 @@
                         <input type="hidden" name="admin" value="1" >
                         <input type="hidden" name="module" value="search">
                         <input type="hidden" name="action" value="search">
-                        <!--<i id="icon-lupe" class="fa fa-search"></i>-->
 
                         <div class="form-group has-feedback">
                             <i class="fa fa-search form-control-feedback" aria-hidden="true"></i>
@@ -87,9 +86,13 @@
         <!-- CONTENT CONTAINER -->
         <div class="col-md-10" id="content">
 
-            <div class="contentTopbar clearfix">
-                <h1 id="moduleTitle" class="pull-left">%%actionTitle%%</h1>%%quickhelp%%
-                %%actiontoolbar%%
+            <div class="row contentTopbar clearfix">
+                <div class="col-md-6">
+                    <h1 id="moduleTitle" class="pull-left">%%actionTitle%%</h1>%%quickhelp%%
+                </div>
+                <div class="col-md-6">
+                    %%actiontoolbar%%
+                </div>
             </div>
 
             %%content%%
