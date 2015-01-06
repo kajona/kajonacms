@@ -346,9 +346,9 @@ To avoid side-effects, no line-break in this case -> not needed by default, but 
 Dropdown
 <input_dropdown>
     <div class="form-group">
-        <label for="%%name%%" class="control-label">%%title%%</label>
-        <div class="controls">
-            <select data-placeholder="%%dataplaceholder%%" name="%%name%%" id="%%name%%" class="input-xlarge %%class%%" %%disabled%% %%addons%%>%%options%%</select>
+        <label for="%%name%%" class="col-sm-4 control-label">%%title%%</label>
+        <div class="col-sm-6">
+            <select data-placeholder="%%dataplaceholder%%" name="%%name%%" id="%%name%%" class="form-control %%class%%" %%disabled%% %%addons%%>%%options%%</select>
         </div>
     </div>
 
@@ -375,9 +375,9 @@ Dropdown
 Multiselect
 <input_multiselect>
     <div class="form-group">
-        <label for="%%name%%[]" class="control-label">%%title%%</label>
-        <div class="controls">
-            <select size="7" name="%%name%%[]" id="%%name%%" class="input-xlarge %%class%%" multiple="multiple" %%disabled%% %%addons%%>%%options%%</select>
+        <label for="%%name%%[]" class="col-sm-4 control-label">%%title%%</label>
+        <div class="col-sm-6">
+            <select size="7" name="%%name%%[]" id="%%name%%" class="form-control %%class%%" multiple="multiple" %%disabled%% %%addons%%>%%options%%</select>
         </div>
     </div>
 </input_multiselect>
@@ -393,9 +393,9 @@ Multiselect
 
 Radiogroup
 <input_radiogroup>
-    <div class="control-group %%class%%">
-        <label class="control-label">%%title%%</label>
-        <div class="controls">
+    <div class="form-group %%class%%">
+        <label class="col-sm-4 control-label">%%title%%</label>
+        <div class="col-sm-6">
             %%radios%%
         </div>
     </div>
@@ -403,29 +403,35 @@ Radiogroup
 
 
 <input_radiogroup_row>
-    <label class="radio">
-        <input type="radio" name="%%name%%" id="%%name%%_%%key%%" value="%%key%%" class="%%class%%" %%disabled%%>
-        %%value%%
-    </label>
+    <div class="radio">
+        <label>
+            <input type="radio" name="%%name%%" id="%%name%%_%%key%%" value="%%key%%" class="%%class%%" %%disabled%%>
+            %%value%%
+        </label>
+    </div>
 </input_radiogroup_row>
 
 <input_radiogroup_row_selected>
-    <label class="radio">
-        <input type="radio" name="%%name%%" id="%%name%%_%%key%%" value="%%key%%" class="%%class%%" checked %%disabled%%>
-        %%value%%
-    </label>
+    <div class="radio">
+        <label>
+            <input type="radio" name="%%name%%" id="%%name%%_%%key%%" value="%%key%%" class="%%class%%" checked %%disabled%%>
+            %%value%%
+        </label>
+    </div>
 </input_radiogroup_row_selected>
 
 
 Checkbox
 <input_checkbox>
 <div class="form-group">
-    <label for="%%name%%" class="control-label"></label>
-    <div class="controls">
-        <label class="checkbox">
-            <input type="checkbox" name="%%name%%" value="checked" id="%%name%%" class="%%class%%" %%checked%% %%readonly%%>
-            %%title%%
-        </label>
+    <label for="%%name%%" class="col-sm-4 control-label"></label>
+    <div class="col-sm-6">
+        <div class="checkbox">
+            <label>
+                <input type="checkbox" name="%%name%%" value="checked" id="%%name%%" class="%%class%%" %%checked%% %%readonly%%>
+                %%title%%
+            </label>
+        </div>
     </div>
 </div>
 </input_checkbox>
@@ -446,8 +452,8 @@ Toggle_On_Off (using bootstrap-switch.org)
     </script>
 
     <div class="form-group">
-        <label class="control-label" for="%%name%%">%%title%%</label>
-        <div class="controls">
+        <label class="col-sm-4 control-label" for="%%name%%">%%title%%</label>
+        <div class="col-sm-6">
             <div id="div_%%name%%" class="make-switch %%class%%" data-on-label="<i class='fa fa-check fa-white' ></i>" data-off-label="<i class='fa fa-times'></i>">
                 <input type="checkbox" name="%%name%%" value="checked" id="%%name%%" class="%%class%%" %%checked%% %%readonly%%>
             </div>
@@ -466,6 +472,8 @@ Regular Text-Field
         <label for="%%name%%" class="col-sm-4 control-label">%%title%%</label>
         <div class="col-sm-6">
             <input type="text" id="%%name%%" name="%%name%%" value="%%value%%" class="form-control %%class%%" %%readonly%%>
+        </div>
+        <div class="col-sm-2">
             %%opener%%
         </div>
     </div>
@@ -474,9 +482,9 @@ Regular Text-Field
 Textarea
 <input_textarea>
     <div class="form-group">
-        <label for="%%name%%" class="control-label">%%title%%</label>
-        <div class="controls">
-            <textarea name="%%name%%" id="%%name%%" class="input-xlarge %%class%%" rows="%%numberOfRows%%" %%readonly%%>%%value%%</textarea>
+        <label for="%%name%%" class="col-sm-4 control-label">%%title%%</label>
+        <div class="col-sm-6">
+            <textarea name="%%name%%" id="%%name%%" class="form-control %%class%%" rows="%%numberOfRows%%" %%readonly%%>%%value%%</textarea>
         </div>
     </div>
 </input_textarea>
@@ -494,12 +502,12 @@ Regular Password-Field
 Upload-Field
 <input_upload>
     <div class="form-group">
-        <label for="%%name%%" class="control-label">%%title%%</label>
-        <div class="controls">
-            <input type="file" name="%%name%%" id="%%name%%" class="input-file %%class%%">
-            <p class="help-block">
+        <label for="%%name%%" class="colsm-4 control-label">%%title%%</label>
+        <div class="col-sm-6">
+            <input type="file" name="%%name%%" id="%%name%%" class="form-control %%class%%">
+            <span class="help-block">
                 %%maxSize%%
-            </p>
+            </span>
         </div>
     </div>
 </input_upload>
@@ -672,9 +680,9 @@ If the calendar is used, you HAVE TO create a js-function named "calClose_%%cale
 function is called after selecting a date, e.g. to hide the calendar
 <input_date_simple>
     <div class="form-group">
-        <label for="%%name%%" class="control-label">%%title%%</label>
-        <div class="controls">
-            <input id="%%calendarId%%" name="%%calendarId%%" class="input-xlarge %%class%%" size="16" type="text" value="%%valuePlain%%">
+        <label for="%%name%%" class="col-sm-4 control-label">%%title%%</label>
+        <div class="col-sm-6">
+            <input id="%%calendarId%%" name="%%calendarId%%" class="form-control %%class%%" size="16" type="text" value="%%valuePlain%%">
             <script>
                 KAJONA.admin.loader.loadFile(["_webpath_/core/module_v4skin/admin/skins/kajona_v4/js/bootstrap-datepicker.js"], function() {
                     var arrSecondFiles = ["_webpath_/core/module_v4skin/admin/skins/kajona_v4/js/locales/bootstrap-datepicker.%%calendarLang%%.js"];
@@ -706,11 +714,11 @@ function is called after selecting a date, e.g. to hide the calendar
 <input_datetime_simple>
 
     <div class="form-group">
-        <label for="%%name%%" class="control-label">%%title%%</label>
-        <div class="controls">
-            <input id="%%calendarId%%" name="%%calendarId%%" class="input-xlarge" size="16" type="text" value="%%valuePlain%%">
-            <input name="%%titleHour%%" id="%%titleHour%%" type="text" class="input-mini %%class%%" size="2" maxlength="2" value="%%valueHour%%" />
-            <input name="%%titleMin%%" id="%%titleMin%%" type="text" class="input-mini %%class%%" size="2" maxlength="2" value="%%valueMin%%" />
+        <label for="%%name%%" class="col-sm-4 control-label">%%title%%</label>
+        <div class="col-sm-6">
+            <input id="%%calendarId%%" name="%%calendarId%%" class="form-control" size="16" type="text" value="%%valuePlain%%">
+            <input name="%%titleHour%%" id="%%titleHour%%" type="text" class="form-control %%class%%" size="2" maxlength="2" value="%%valueHour%%" />
+            <input name="%%titleMin%%" id="%%titleMin%%" type="text" class="form-control %%class%%" size="2" maxlength="2" value="%%valueMin%%" />
             <script>
                 KAJONA.admin.loader.loadFile(["_webpath_/core/module_v4skin/admin/skins/kajona_v4/js/bootstrap-datepicker.js"], function() {
                     KAJONA.admin.loader.loadFile(["_webpath_/core/module_v4skin/admin/skins/kajona_v4/js/locales/bootstrap-datepicker.%%calendarLang%%.js"], function() {
@@ -742,10 +750,12 @@ have a surrounding div with class "ac_container" and a div with id "%%name%%_con
 "ac_results" inside the "ac_container", to generate a resultlist
 <input_pageselector>
     <div class="form-group">
-        <label for="%%name%%" class="control-label">%%title%%</label>
+        <label for="%%name%%" class="col-sm-4 control-label">%%title%%</label>
 
-        <div class="controls">
-            <input type="text" id="%%name%%" name="%%name%%" value="%%value%%" class="input-xlarge %%class%%" %%readonly%%>
+        <div class="col-sm-6">
+            <input type="text" id="%%name%%" name="%%name%%" value="%%value%%" class="form-control %%class%%" %%readonly%%>
+        </div>
+        <div class="col-sm-2">
             %%opener%%
             %%ajaxScript%%
         </div>
@@ -754,11 +764,13 @@ have a surrounding div with class "ac_container" and a div with id "%%name%%_con
 
 <input_userselector>
 <div class="form-group">
-    <label for="%%name%%" class="control-label">%%title%%</label>
+    <label for="%%name%%" class="col-sm-4 control-label">%%title%%</label>
 
-    <div class="controls">
-        <input type="text" id="%%name%%" name="%%name%%" value="%%value%%" class="input-xlarge %%class%%" %%readonly%% >
+    <div class="col-sm-6">
+        <input type="text" id="%%name%%" name="%%name%%" value="%%value%%" class="form-control %%class%%" %%readonly%% >
         <input type="hidden" id="%%name%%_id" name="%%name%%_id" value="%%value_id%%" />
+    </div>
+    <div class="col-sm-2">
         %%opener%%
         %%ajaxScript%%
     </div>
@@ -970,9 +982,10 @@ Used to print plain text
 
 Used to print plaintext in a form
 <text_row_form>
-<div class="controls">
-    <p class="help-block %%class%%">%%text%%</p>
-</div>
+    <div class="col-sm-4"></div>
+    <div class="col-sm-6">
+        <span class="help-block %%class%%">%%text%%</span>
+    </div>
 </text_row_form>
 
 Used to print headline in a form
@@ -1094,7 +1107,11 @@ NOTE: This section not just defines the layout, it also inits the WYSIWYG editor
 
 The textarea field to replace by the editor. If the editor can't be loaded, a plain textfield is shown instead
 <wysiwyg_ckeditor>
-<div><label for="%%name%%">%%title%%</label><br /><textarea name="%%name%%" id="%%name%%" class="inputWysiwyg" data-kajona-editorid="%%editorid%%">%%content%%</textarea></div><br />
+<div class="form-group">
+    <label for="%%name%%" class="col-sm-4 control-label">%%title%%</label>
+    <div class="col-sm-6">
+        <textarea name="%%name%%" id="%%name%%" class="inputWysiwyg" data-kajona-editorid="%%editorid%%">%%content%%</textarea></div><br />
+    </div>
 </wysiwyg_ckeditor>
 
 A few settings to customize the editor. They are added right into the CKEditor configuration.
