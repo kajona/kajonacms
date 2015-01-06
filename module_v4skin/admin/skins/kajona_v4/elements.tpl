@@ -439,10 +439,11 @@ Checkbox
 Toggle_On_Off (using bootstrap-switch.org)
 <input_on_off_switch>
     <script type="text/javascript">
-        KAJONA.admin.loader.loadFile("/core/module_v4skin/admin/skins/kajona_v4/js/bootstrap-switch.js", function() {
+        KAJONA.admin.loader.loadFile("/core/module_v4skin/admin/skins/kajona_v4/js/bootstrap-switch.min.js", function() {
             window.setTimeout(function() {
-                var divId = 'div_%%name%%';
+                var divId = '%%name%%';
                 divId = '#' + divId.replace( /(:|\.|\[|\])/g, "\\$1" );
+                $(divId).bootstrapSwitch();
                 $(divId).on('switch-change', function (e, data) {
                     %%onSwitchJSCallback%%
                 });
@@ -454,8 +455,8 @@ Toggle_On_Off (using bootstrap-switch.org)
     <div class="form-group">
         <label class="col-sm-4 control-label" for="%%name%%">%%title%%</label>
         <div class="col-sm-6">
-            <div id="div_%%name%%" class="make-switch %%class%%" data-on-label="<i class='fa fa-check fa-white' ></i>" data-off-label="<i class='fa fa-times'></i>">
-                <input type="checkbox" name="%%name%%" value="checked" id="%%name%%" class="%%class%%" %%checked%% %%readonly%%>
+            <div id="div_%%name%%" class="checkbox make-switch %%class%%" >
+                <input type="checkbox" name="%%name%%" value="checked" id="%%name%%" class="%%class%%" %%checked%% %%readonly%% data-on-text="<i class='fa fa-check fa-white' ></i>" data-off-text="<i class='fa fa-times'></i>">
             </div>
         </div>
     </div>

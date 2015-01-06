@@ -1616,12 +1616,6 @@ label {
 }
 
 
-#dialogLoadingDiv {
-//    min-height: 100px;
-//    min-width: 100px;
-
-}
-
 #systemtaskStatusDiv {
     overflow-y: auto;
     max-height: 400px;
@@ -1679,38 +1673,27 @@ label {
 
 }
 
-//fix for bug #904, since the element is hidden on load the calculation of the dds' width failed
-.chosen-container {
-    width: 280px !important;
-}
-
 .control-group.error .chosen-container a {
     border: 1px solid @state-danger-text;
 }
 
 
-
 .chosen-container-single {
-    margin-bottom: 6px;
 	.chosen-single {
 		color: @gray !important;
 		font-size: @font-size-base !important;
-		height: 20px !important;
-		line-height: 20px !important;
+		height: 33px !important;
 		padding: 4px !important;
 		border-radius: 0px !important;
 		background-image: none !important;
-		-webkit-box-shadow: none !important;
-		-moz-box-shadow: none !important;
 		box-shadow: none !important;
-
 	}
 }
 
 .chosen-container .chosen-results .highlighted {
 	color: @white !important;
 	background-image: none !important;
-	background-color: @link-color !important;
+	background-color: @dropdown-link-active-bg !important;
 }
 
 .chosen-container-active {
