@@ -1172,8 +1172,8 @@ Toolbar for the current record, rendered to quick-access the actions of the curr
 -- ERROR HANDLING ---------------------------------------------------------------------------------------
 
 <error_container>
-    <div class="alert alert-block alert-error">
-        <a class="close" data-dismiss="alert" href="#">×</a>
+    <div class="alert alert-danger">
+        <a class="close" data-dismiss="alert" href="#">&times;</a>
         <h4 class="alert-heading">%%errorintro%%</h4>
         <ul>
             %%errorrows%%
