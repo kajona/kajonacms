@@ -44,9 +44,9 @@
                         <input type="hidden" name="module" value="search">
                         <input type="hidden" name="action" value="search">
 
-                        <div class="form-group has-feedback">
-                            <i class="fa fa-search form-control-feedback" aria-hidden="true"></i>
+                        <div class="input-group">
                             <input type="text" name="search_query" class="form-control search-query" placeholder="[lang,globalSearchPlaceholder,dashboard]" id="globalSearchInput">
+                            <span class="input-group-addon"><i class="fa fa-search" aria-hidden="true"></i></span>
                         </div>
                     </form>
 
@@ -123,8 +123,8 @@
 <script src="_skinwebpath_/js/v4skin.js?_system_browser_cachebuster_"></script>
 
 
-<div class="modal fade fullsize" id="folderviewDialog" role="dialog">
-    <div class="modal-dialog">
+<div class="modal fade" id="folderviewDialog" role="dialog">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>

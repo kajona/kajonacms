@@ -12,7 +12,7 @@ $(function () {
 
             $.each(items, function(index, item) {
                 if (item.module != currentCategory) {
-                    ul.append('<li class="ui-autocomplete-category"><h3 class="small">' + item.module + '</h3></li>');
+                    ul.append('<li class="ui-autocomplete-category"><h3>' + item.module + '</h3></li>');
                     currentCategory = item.module;
                 }
                 self._renderItemData(ul, item);

@@ -86,7 +86,7 @@ KAJONA.admin.ModalDialog = function (strDialogId, intDialogType, bitDragging, bi
         });
 
         if(!intHeight) {
-            if($('#' + this.containerId).hasClass("fullsize")) {
+            if($('#' + this.containerId+" .modal-dialog").hasClass("modal-lg")) {
                 intHeight = $(window).height() * 0.6;
             }
             else
@@ -98,22 +98,22 @@ KAJONA.admin.ModalDialog = function (strDialogId, intDialogType, bitDragging, bi
 
         if (!isStackedDialog) {
             if(!intWidth) {
-                if($('#' + this.containerId).hasClass("fullsize")) {
-                    intWidth = $(window).width() * 0.6;
-                }
-                else
-                    intWidth = 400;
+                //if($('#' + this.containerId).hasClass("fullsize")) {
+                //    intWidth = $(window).width() * 0.6;
+                //}
+                //else
+                //    intWidth = 400;
             }
 
             //reposition the dialog, but only if not wrapped by a dialog-body element
-            if(!$("body").hasClass("dialogBody")) {
-                $modal.css({
-                    width: intWidth,
-                    'margin-left': function () {
-                        return -($(this).width() / 2);
-                    }
-                });
-            }
+            //if(!$("body").hasClass("dialogBody")) {
+            //    $modal.css({
+            //        width: intWidth,
+            //        'margin-left': function () {
+            //            return -($(this).width() / 2);
+            //        }
+            //    });
+            //}
         } else {
 
             if(this.iframeURL != null) {

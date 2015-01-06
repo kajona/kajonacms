@@ -106,10 +106,21 @@
 /* KAJONA variable redefinitions */
 @font-size-base:            13px;
 @font-family-sans-serif:    "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+@text-color:                 @kajonaSidebarColor;
 
 @border-radius-base:        0px;
+@border-radius-small:       0px;
+@border-radius-large:       6px;
+
+
 @btn-primary-bg:            @gray-darker;
 @link-color:                @black;
+@dropdown-link-active-bg:   @gray-darker;
+@dropdown-link-hover-bg:    @dropdown-link-active-bg;
+@dropdown-link-hover-color: @white;
+
+
+@popover-border-color:      @text-color;
 
 //to be removed
 @white:                     #fff;
@@ -118,6 +129,7 @@
 @menuBorder:                #d2d2d2;
 @kajonaLightGray:           #E5E5E5;
 @kajonaBodylinkColor:       #3a3a3a;
+@kajonaSidebarColor:        #626262;
 @gray-darker:               #bfbfbf;
 @gray-lighter:              #f6f6f6;
 @gray-light:                #eeeeee;
@@ -134,9 +146,7 @@
     left:100%;
     margin-top:-6px;
     margin-left:-1px;
-    -webkit-border-radius:0 6px 6px 6px;
-    -moz-border-radius:0 6px 6px 6px;
-    border-radius:0 6px 6px 6px;
+    border-radius: 0;
 }
 .dropdown-submenu:hover>.dropdown-menu {
     display:block;
@@ -150,12 +160,12 @@
     border-color:transparent;
     border-style:solid;
     border-width:5px 0 5px 5px;
-    border-left-color:#cccccc;
+    border-left-color:@dropdown-border;
     margin-top:5px;
     margin-right:-10px;
 }
 .dropdown-submenu:hover>a:after {
-    border-left-color:#ffffff;
+    border-left-color:@white;
 }
 .dropdown-submenu.pull-left {
     float:none;
@@ -163,12 +173,10 @@
 .dropdown-submenu.pull-left>.dropdown-menu {
     left:-100%;
     margin-left:10px;
-    -webkit-border-radius:6px 0 6px 6px;
-    -moz-border-radius:6px 0 6px 6px;
-    border-radius:6px 0 6px 6px;
+    border-radius: 0;
 }
 
-/* END multilevel dropdown intro */
+/* END multilevel dropdown reintro */
 
 
 
@@ -185,19 +193,23 @@ body {
     &.dialogBody {
         padding: 5px 0;
 
-        .modal {
-            left: 10px !important;
-        }
+//        .modal {
+//            left: 10px !important;
+//        }
     }
 
 
     h1 {
         font-size: @font-size-base + 12;
+        font-weight: bold;
+        margin: 9px 0;
     }
 
     h2 {
         font-size: @font-size-base + 4;
         line-height: @font-size-base + 7;
+        font-weight: bold;
+        margin: 9px 0;
     }
 }
 
@@ -229,7 +241,7 @@ footer {
                 background-color: @kajonaLightGray;
                 margin-bottom:1px;
                 font-size:@font-size-base + 2;
-                color:#626262;
+                color: @kajonaSidebarColor;
                 border: 0 solid @green;
                 border-left-width: 10px;
 
@@ -552,15 +564,16 @@ footer {
 
     .navbar-search {
 
-        .form-group {
+        .input-group {
             margin: 10px 0 0 0;
+            width: 250px;
 
-            .search-query, .search-query:focus, .navbar-search .search-query.focused {
+            .search-query, .search-query:focus, .navbar-search .search-query.focused, .input-group-addon {
                 background-color: @white;
                 border: none;
                 box-shadow: none;
                 border-radius: 0px;
-                color: #626262;
+                color: @kajonaSidebarColor;
                 text-shadow: none;
                 margin: 0;
             }
@@ -568,7 +581,6 @@ footer {
             i {
                 font-size: @font-size-base+4;
                 color: lighten(@text-color, 25%);
-                padding-top: 7px;
             }
         }
 
@@ -1568,30 +1580,42 @@ label {
 }
 
 /* DIALOGS / MODALS / BACKDROPS */
-.modal-backdrop,
-.modal-backdrop.fade.in {
-    .opacity(60);
-}
 
 .modal {
-    text-align: left;
-    border-radius: 0px;
 
-    iframe {
-        border: none;
-    }
+    .modal-content {
+        text-align: left;
+        border-radius: 0px;
 
-    .modal-body {
-        max-height: none;
-        min-height: 50px;
-    }
+        iframe {
+            border: none;
+        }
 
-    .close {
-        font-size: @font-size-base + 20;
+        .modal-header {
+            h3 {
+                margin: 0;
+            }
+        }
+
+        .modal-body {
+            max-height: none;
+            min-height: 50px;
+        }
+
+        .modal-footer {
+            padding: 10px 15px;
+        }
+
+
+        .close {
+            font-size: @font-size-base + 20;
+        }
+
     }
 
 
 }
+
 
 #dialogLoadingDiv {
 //    min-height: 100px;
@@ -1635,12 +1659,7 @@ label {
 }
 
 .popover {
-    width: 400px;
-    border: 2px solid @gray-dark;
-    .popover-title {
-        font-size: @font-size-base;
-        font-weight: 700;
-    }
+    border-width: 2px;
 }
 
 .tooltip {
