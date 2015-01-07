@@ -1235,7 +1235,7 @@ class class_toolkit_admin extends class_toolkit {
      * @param string $strClass
      * @return string
      */
-    public function warningBox($strContent, $strClass = "warnbox") {
+    public function warningBox($strContent, $strClass = "") {
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "warning_box");
         $arrTemplate = array();
         $arrTemplate["content"] = $strContent;

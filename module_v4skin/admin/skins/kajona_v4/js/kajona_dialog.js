@@ -124,14 +124,14 @@ KAJONA.admin.ModalDialog = function (strDialogId, intDialogType, bitDragging, bi
                 return;
             }
 
-            $modal.css({
-                width: '97%',
-                'margin-left': 0,
-                'padding-top': 5,
-                left: 10
-            });
+            //$modal.css({
+            //    width: '97%',
+            //    'margin-left': 0,
+            //    'padding-top': 5,
+            //    left: 10
+            //});
 
-            intHeight = $(window).height();
+            //intHeight = $(window).height();
         }
 
         if(this.iframeURL != null) {

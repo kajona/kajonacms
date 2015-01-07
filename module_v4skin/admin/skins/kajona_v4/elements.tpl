@@ -263,8 +263,8 @@ Currently, there are two modes: with and without a description.
     <div class="batchActionsProgress" style="display: none;">
         <h5 class="progresstitle"></h5>
         <span class="batch_progressed">0</span> / <span class="total">0</span>
-        <div class="progress progress-striped active" title="">
-            <div class="bar" style="width: 0%;"></div>
+        <div class="progress">
+            <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">0%</div>
         </div>
     </div>
 </div>
@@ -544,8 +544,8 @@ Upload-Field for multiple files with progress bar
 
             <div class="fileupload-progress" style="display: none;">
 
-                <div class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100">
-                    <div class="bar" style="width:0%;"></div>
+                <div class="progress" aria-valuemin="0" aria-valuemax="100">
+                    <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width:0%;"></div>
                 </div>
 
                 <div class="progress-extended">&nbsp;</div>
@@ -608,7 +608,7 @@ Upload-Field for multiple files with progress bar
                                         '<div class="error"></div>' +
                                         '</td>' +
                                         '<td><p class="size"></p>' +
-                                        '<div class="progress progress-striped active"><div class="bar"></div></div>' +
+                                        '<div class="progress"><div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div></div>' +
                                         '</td>' +
                                         '<td>' +
                                         (!index && !o.options.autoUpload ?
@@ -793,8 +793,8 @@ Deprecated!!!
 
 A precent-beam to illustrate proportions
 <percent_beam>
-    <div class="progress progress-striped active"  title="%%percent%%%" rel="tooltip">
-        <div class="bar" style="width: %%percent%%%;"></div>
+    <div class="progress">
+        <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="%%percent%%" aria-valuemin="0" aria-valuemax="100" style="width: %%percent%%%;">%%percent%%%</div>
     </div>
 </percent_beam>
 
@@ -836,7 +836,7 @@ A fieldset to structure logical sections
 
 
 <tabbed_content_wrapper>
-    <ul class="nav nav-tabs" id="myTab">
+    <ul class="nav nav-tabs" id="">
         %%tabheader%%
     </ul>
 
@@ -850,7 +850,7 @@ A fieldset to structure logical sections
 </tabbed_content_tabheader>
 
 <tabbed_content_tabcontent>
-    <div class="tab-pane fade %%classaddon%%" id="%%tabid%%">
+    <div class="tab-pane fade %%classaddon%%" id="%%tabid%%" role="tabpanel">
         %%tabcontent%%
     </div>
 </tabbed_content_tabcontent>
@@ -970,7 +970,7 @@ Part to display the login status, user is logged in
 
 Shown, wherever the attention of the user is needed
 <warning_box>
-    <div class="alert alert-block %%class%%">
+    <div class="alert alert-warning %%class%%">
         <a class="close" data-dismiss="alert" href="#">&times;</a>
         %%content%%
     </div>
