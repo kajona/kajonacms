@@ -1147,9 +1147,9 @@ The following sections are used to display the path-navigations, e.g. used by th
 
 Toolbar, prominent in the layout. Rendered to switch between action.
 <contentToolbar_wrapper>
-<div class="navbar contentToolbar">
+<div class="navbar navbar-default contentToolbar">
     <div class="navbar-inner ">
-        <ul class="nav">%%entries%%</ul>
+        <ul class="nav navbar-nav">%%entries%%</ul>
     </div>
 </div>
 </contentToolbar_wrapper>
