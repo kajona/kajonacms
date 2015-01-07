@@ -1202,7 +1202,7 @@ Used to print pre-formatted text, e.g. log-file contents
     <!-- KAJONA_BUILD_LESS_START -->
     <link href="_skinwebpath_/less/bootstrap_pe.less?_system_browser_cachebuster_" rel="stylesheet/less">
     <script> less = { env:'development' }; </script>
-    <script src="_skinwebpath_/less/less.js"></script>
+    <script src="_skinwebpath_/less/less.min.js"></script>
     <!-- KAJONA_BUILD_LESS_END -->
 </pe_basic_data>
 
@@ -1215,27 +1215,35 @@ pe_iconbar, pe_disable
 
 
 
-    <div class="modal hide fade fullsize" id="peDialog">
-        <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal">×</button>
-        </div>
-        <div id="folderviewDialog_loading" class="peLoadingContainer loadingContainerBackground"></div>
-        <div class="modal-body" id="peDialog_content">
-            <!-- filled by js -->
+    <div class="modal fade" id="peDialog">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div id="folderviewDialog_loading" class="peLoadingContainer loadingContainerBackground"></div>
+                <div class="modal-body" id="peDialog_content">
+                    <!-- filled by js -->
+                </div>
+            </div>
         </div>
     </div>
 
-    <div class="modal hide fade" id="delDialog">
-        <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal">×</button>
-            <h3 id="delDialog_title"><!-- filled by js --></h3>
-        </div>
-        <div class="modal-body" id="delDialog_content">
-            <!-- filled by js -->
-        </div>
-        <div class="modal-footer">
-            <a href="#" class="btn" data-dismiss="modal" id="delDialog_cancelButton">[lang,dialog_cancelButton,system]</a>
-            <a href="#" class="btn btn-primary" id="delDialog_confirmButton">confirm</a>
+    <div class="modal fade" id="delDialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h3 id="delDialog_title"><!-- filled by js --></h3>
+                </div>
+                <div class="modal-body" id="delDialog_content">
+                    <!-- filled by js -->
+                </div>
+                <div class="modal-footer">
+                    <a href="#" class="btn btn-default" data-dismiss="modal" id="delDialog_cancelButton">[lang,dialog_cancelButton,system]</a>
+                    <a href="#" class="btn btn-default btn-primary" id="delDialog_confirmButton">confirm</a>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -1243,9 +1251,9 @@ pe_iconbar, pe_disable
 		var peDialog;
 		KAJONA.admin.lang["pe_dialog_close_warning"] = "[lang,pe_dialog_close_warning,pages]";
         KAJONA.portal.loader.loadFile([
-            "_webpath_/core/module_v4skin/admin/skins/kajona_v4/js/bootstrap-modal.js",
-            "_webpath_/core/module_v4skin/admin/skins/kajona_v4/js/bootstrap-dropdown.js",
-            "_webpath_/core/module_v4skin/admin/skins/kajona_v4/js/bootstrap-button.js",
+            "_webpath_/core/module_v4skin/admin/skins/kajona_v4/js/modal.js",
+            "_webpath_/core/module_v4skin/admin/skins/kajona_v4/js/dropdown.js",
+            "_webpath_/core/module_v4skin/admin/skins/kajona_v4/js/button.js",
             "_webpath_/core/module_v4skin/admin/skins/kajona_v4/js/kajona_dialog.js"
         ], function() {
 		    peDialog = new KAJONA.admin.ModalDialog('peDialog', 0, true, true);
@@ -1680,12 +1688,12 @@ otherwise the JavaScript will fail!
 </tags_wrapper>
 
 <tags_tag>
-    <span class="label label-info">%%tagname%%</span>
+    <span class="label label-default">%%tagname%%</span>
     <script type="text/javascript">KAJONA.admin.tooltip.addTooltip('#icon_%%strTagId%%');</script>
 </tags_tag>
 
 <tags_tag_delete>
-    <span class="label label-info taglabel">%%tagname%% <a href="javascript:KAJONA.admin.tags.removeTag('%%strTagId%%', '%%strTargetSystemid%%', '%%strAttribute%%');"> %%strDelete%%</a> %%strFavorite%%</span>
+    <span class="label label-default taglabel">%%tagname%% <a href="javascript:KAJONA.admin.tags.removeTag('%%strTagId%%', '%%strTargetSystemid%%', '%%strAttribute%%');"> %%strDelete%%</a> %%strFavorite%%</span>
     <script type="text/javascript">KAJONA.admin.tooltip.addTooltip($(".taglabel [rel='tooltip']"));</script>
 </tags_tag_delete>
 
@@ -1696,9 +1704,9 @@ place ajaxScript before the closing input_tagselector-tag.
 <input_tagselector>
 
     <div class="form-group">
-        <label for="%%name%%" class="control-label">%%title%%</label>
-        <div class="controls">
-            <input type="text" id="%%name%%" name="%%name%%" value="%%value%%" class="input-xlarge %%class%%">
+        <label for="%%name%%" class="col-sm-3 control-label">%%title%%</label>
+        <div class="col-sm-6">
+            <input type="text" id="%%name%%" name="%%name%%" value="%%value%%" class="form-control %%class%%">
             %%opener%%
         </div>
     </div>
