@@ -444,7 +444,7 @@ Toggle_On_Off (using bootstrap-switch.org)
                 var divId = '%%name%%';
                 divId = '#' + divId.replace( /(:|\.|\[|\])/g, "\\$1" );
                 $(divId).bootstrapSwitch();
-                $(divId).on('switch-change', function (e, data) {
+                $(divId).on('switchChange.bootstrapSwitch', function (event, state) {
                     %%onSwitchJSCallback%%
                 });
 
@@ -455,8 +455,8 @@ Toggle_On_Off (using bootstrap-switch.org)
     <div class="form-group">
         <label class="col-sm-4 control-label" for="%%name%%">%%title%%</label>
         <div class="col-sm-6">
-            <div id="div_%%name%%" class="checkbox make-switch %%class%%" >
-                <input type="checkbox" name="%%name%%" value="checked" id="%%name%%" class="%%class%%" %%checked%% %%readonly%% data-on-text="<i class='fa fa-check fa-white' ></i>" data-off-text="<i class='fa fa-times'></i>">
+            <div id="div_%%name%%" class="checkbox" >
+                <input type="checkbox" name="%%name%%" value="checked" id="%%name%%" class="%%class%%" %%checked%% %%readonly%% data-size="small" data-on-text="<i class='fa fa-check fa-white' ></i>" data-off-text="<i class='fa fa-times'></i>">
             </div>
         </div>
     </div>

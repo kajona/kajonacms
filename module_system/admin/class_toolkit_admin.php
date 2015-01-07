@@ -221,7 +221,7 @@ class class_toolkit_admin extends class_toolkit {
      *
      * @return string
      */
-    public function formInputOnOff($strName, $strTitle, $bitChecked = false,  $bitReadOnly = false, $strOnSwitchJSCallback = "", $strClass = "switch-small") {
+    public function formInputOnOff($strName, $strTitle, $bitChecked = false,  $bitReadOnly = false, $strOnSwitchJSCallback = "", $strClass = "") {
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "input_on_off_switch");
         $arrTemplate = array();
         $arrTemplate["name"] = $strName;
