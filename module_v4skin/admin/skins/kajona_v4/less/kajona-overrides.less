@@ -882,15 +882,15 @@ footer {
 
 
         .help-block {
-            margin-bottom: 0;
+            margin-bottom: -13px;
         }
-        
+
+        .form-opener {
+            vertical-align: top;
+            padding: 7px 0 0 0;
+        }
         .form-group {
 
-            img {
-                vertical-align: top;
-                padding: 5px 0 0 5px;
-            }
 
             .savechanges {
                 border: 4px solid @gray-light;
@@ -907,6 +907,7 @@ footer {
                 line-height: 30px;
                 position: relative;
                 width: 65%;
+                max-width: 300px;
                 min-width: 250px;
                 &:hover {
                     color:@black;
@@ -1675,6 +1676,7 @@ label {
 /* chosen select replacement */
 .chosen-container {
 	font-size: @font-size-base !important;
+    min-width: 230px ;
 
     &.mandatoryFormElement {
         .box-shadow(0 0 6px @brand-danger+20);
