@@ -700,7 +700,9 @@ KAJONA.admin.forms.renderMissingMandatoryFields = function(arrFields) {
     $(arrFields).each(function(intIndex, strField) {
         var strFieldName = strField[0];
         if($("#"+strFieldName)) {
-            $("#"+strFieldName).closest(".control-group").addClass("error");
+            $("#"+strFieldName).closest(".form-group").addClass("has-error has-feedback");
+			objNode = $('<span class="glyphicon glyphicon-warning-sign form-control-feedback" aria-hidden="true"></span>');
+            $("#"+strFieldName).closest("div").append(objNode);
         }
     });
 };
