@@ -647,7 +647,7 @@ footer {
 
     pre, code {
         font-size: @font-size-base - 3;
-//        color: @text-color;
+        white-space: pre-wrap;
     }
 
 	.thumbnails {
@@ -1112,6 +1112,51 @@ footer {
         padding: 5px;
         font-size: @font-size-base - 2;
     }
+
+
+
+
+    /* DASHBOARD */
+    table.dashBoard {
+        width: 100%;
+        td {
+            width: 33%;
+            max-width: 33%;
+            vertical-align: top;
+
+            ul {
+                padding: 10px 0;
+                margin: 10px 10px;
+            }
+        }
+
+        li {
+            list-style: none;
+        }
+
+        .dbEntry {
+            .adminwidgetactions {
+                display: inline;
+                margin-top: -35px;
+            }
+
+        }
+
+        .dashboardPlaceholder {
+            background-image: repeating-linear-gradient(-45deg, transparent, transparent 8px, rgba(0,0,0,.05) 8px, rgba(0,0,0,.05) 16px);
+            min-height: 100px;
+            border: 3px dotted @gray;
+        }
+
+        .adminwidgetColumn {
+            .additionalNameContent {
+                font-size: @font-size-small;
+                font-weight: normal;
+                margin-top: -@font-size-small;
+
+            }
+        }
+    }
 }
 
 
@@ -1247,64 +1292,18 @@ label {
 
 
 
-
-
-
-/* DASHBOARD */
-.dashBoard {
-    width: 100%;
-    td {
-        width: 33%;
-        max-width: 33%;
-        vertical-align: top;
-
-        ul {
-            padding: 10px 0;
-            margin: 10px 10px;
-        }
-    }
-
-    li {
-        list-style: none;
-    }
-
-    .dbEntry {
-        .adminwidgetactions {
-            display: inline;
-            margin-top: -35px;
-        }
-
-    }
-
-    .dashboardPlaceholder {
-        background-image: repeating-linear-gradient(-45deg, transparent, transparent 8px, rgba(0,0,0,.05) 8px, rgba(0,0,0,.05) 16px);
-        min-height: 100px;
-        border: 3px dotted @gray;
-    }
-
-    .adminwidgetColumn {
-        .additionalNameContent {
-            font-size: @font-size-small;
-            font-weight: normal;
-            margin-top: -@font-size-small;
-
-        }
-    }
-}
-
 /* STATUSBOX */
 #jsStatusBox {
     z-index: 1050;
 }
 
 /* ADMIN TABLE SETUP */
-
 .table {
     margin-bottom: 4px;
-    td, th {
-        padding: 6px;
-        vertical-align: middle;
-    }
+//    td, th {
+//        padding: 6px;
+//        vertical-align: middle;
+//    }
 
     .progress {
         margin: 0;
@@ -1360,7 +1359,7 @@ label {
         }
 
         td.description {
-            padding-top: 0px;
+            padding-top: 0;
         }
 
         tr[data-systemid='batchActionSwitch'] {
@@ -1406,7 +1405,7 @@ label {
 /* L O A D I N G   C O N T A I N E R */
 .loadingContainer {
 
-    padding: 10px 0px;
+    padding: 10px 0;
     text-align: center;
     overflow: hidden;
 
@@ -1441,7 +1440,7 @@ label {
 .modal {
 
     .modal-content {
-        text-align: left;
+//        text-align: left;
         border-radius: 0px;
 
         iframe {
@@ -1461,11 +1460,11 @@ label {
         }
 
         .modal-footer {
-            padding: 10px 15px;
+            padding: 5px 15px;
         }
 
         .close {
-            font-size: @font-size-base + 20;
+            font-size: @font-size-base + 13;
         }
 
     }
@@ -1488,7 +1487,7 @@ label {
 
 /* TOOLTIPS */
 .qtip {
-    border-radius: 0px !important;
+    border-radius: 0 !important;
     box-shadow: 0  2px 10px rgba(0,0,0,.2) !important;
 
     .qtip-content {
@@ -1502,15 +1501,6 @@ label {
 .popover {
     border-width: 2px;
 }
-
-.tooltip {
-    font-size: @font-size-base - 3;
-}
-
-.tooltip-inner {
-    padding: 4px;
-}
-
 
 
 /* chosen select replacement */
@@ -1604,7 +1594,7 @@ body.login {
 @media print {
 
     body {
-        padding-top: 0px;
+        padding-top: 0;
 
         font-size: @font-size-base - 2;
         line-height: @line-height-base - 2;
@@ -1612,7 +1602,7 @@ body.login {
         #content {
             width: 100%;
             .contentTopbar {
-                padding-top: 0px;
+                padding-top: 0;
 
                 .actionToolbar {
                     display: none;

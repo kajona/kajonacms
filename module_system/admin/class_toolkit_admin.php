@@ -1598,7 +1598,7 @@ class class_toolkit_admin extends class_toolkit {
      * @param int $nrRows number of rows to display
      * @return string
      */
-    public function getPreformatted($arrLines, $nrRows = 0) {
+    public function getPreformatted($arrLines, $nrRows = 0, $bitHighlightKeywords = true) {
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "preformatted");
         $strRows = "";
         $intI = 0;
@@ -1606,8 +1606,21 @@ class class_toolkit_admin extends class_toolkit {
             if($nrRows != 0 && $intI++ > $nrRows)
                 break;
             $strOneLine = str_replace(array("<pre>", "</pre>", "\n"), array(" ", " ", "\r\n"), $strOneLine);
-            $strRows .= htmlToString($strOneLine, true);
+
+            $strOneLine = htmlToString($strOneLine, true);
+            $strOneLine = uniStrReplace(
+                array("INFO", "ERROR", "WARNING"),
+                array(
+                    "<span style=\"color: green\">INFO</span>",
+                    "<span style=\"color: red\">ERROR</span>",
+                    "<span style=\"color: orange\">WARNING</span>"
+                ),
+                $strOneLine
+            );
+            $strRows .= $strOneLine;
         }
+
+
         return $this->objTemplate->fillTemplate(array("pretext" => $strRows), $strTemplateID);
     }
 

@@ -544,8 +544,8 @@ HTML;
                 function hide_fm_screenlock_dialog() { jsDialog_3.hide(); }
 
 
-                KAJONA.admin.strCropEnabled= '".addslashes(class_adminskin_helper::getAdminImage("icon_crop_accept", $this->getLang("icon_crop_accept")))."';
-                KAJONA.admin.strCropDisabled = '".addslashes(class_adminskin_helper::getAdminImage("icon_crop_acceptDisabled", $this->getLang("icon_crop_accept")))."';
+                KAJONA.admin.strCropEnabled= '".addslashes(class_adminskin_helper::getAdminImage("icon_crop_accept", $this->getLang("cropImageAccept")))."';
+                KAJONA.admin.strCropDisabled = '".addslashes(class_adminskin_helper::getAdminImage("icon_crop_acceptDisabled", $this->getLang("cropImageAccept")))."';
 
                 </script>";
 
