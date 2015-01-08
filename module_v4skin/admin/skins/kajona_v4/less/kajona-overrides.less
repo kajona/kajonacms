@@ -2,44 +2,39 @@
 
 @import "kajona-fonts.less";
 
-
 /* KAJONA variable redefinitions */
+
+@kajona-brand-color:        #6cb121;
+
 @font-size-base:            13px;
 @font-family-sans-serif:    "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
-@text-color:                 @kajonaSidebarColor;
+@text-color:                #626262;
+@link-color:                @black;
+
+@input-bg:                  @gray-lighter;
+@input-border-focus:        @kajona-brand-color;
+@btn-primary-bg:            @gray-darker;
+
+@label-color:               @text-color;
+@brand-primary:             @kajona-brand-color;
+
+@dropdown-link-active-bg:   @gray-darker;
+@dropdown-link-hover-bg:    @dropdown-link-active-bg;
+@dropdown-link-hover-color: @white;
+
+@gray-darker:               #bfbfbf;
+@gray-lighter:              #f6f6f6;
+@gray-light:                #eeeeee;
+@kajona-gray:               #E5E5E5;
+
+@popover-border-color:      @text-color;
 
 @border-radius-base:        0px;
 @border-radius-small:       0px;
 @border-radius-large:       6px;
 
-@input-bg:                  @gray-lighter;
-@input-border-focus:        @green;
-
-
-@label-color:               @text-color;
-@brand-primary:             @green;
-
-@btn-primary-bg:            @gray-darker;
-@link-color:                @black;
-@dropdown-link-active-bg:   @gray-darker;
-@dropdown-link-hover-bg:    @dropdown-link-active-bg;
-@dropdown-link-hover-color: @white;
-
-
-@popover-border-color:      @text-color;
-
-//to be removed
 @white:                     #fff;
 @black:                     #000;
-@green:                     #6cb121;
-@blue:                      #428BCA;
-@menuBorder:                #d2d2d2;
-@kajonaLightGray:           #E5E5E5;
-@kajonaBodylinkColor:       #3a3a3a;
-@kajonaSidebarColor:        #626262;
-@gray-darker:               #bfbfbf;
-@gray-lighter:              #f6f6f6;
-@gray-light:                #eeeeee;
 
 /* END KAJONA redefinitions */
 
@@ -88,17 +83,8 @@
 
 
 
-
-
-
-
-
-
-
-
 body {
     padding-top: 70px;
-    //padding-bottom: 40px;
 
     &.dialogBody {
         padding: 5px 0;
@@ -155,17 +141,17 @@ footer {
             a {
                 display: block;
                 padding: 6px 15px;
-                background-color: @kajonaLightGray;
+                background-color: @kajona-gray;
                 margin-bottom:1px;
                 font-size:@font-size-base + 2;
-                color: @kajonaSidebarColor;
-                border: 0 solid @green;
+                color: @text-color;
+                border: 0 solid @kajona-brand-color;
                 border-left-width: 10px;
 
                 &.active {
                     color:@white;
                     text-shadow:none;
-                    background:url(../img/pusteblume.png) -110px -35px no-repeat @green;
+                    background:url(../img/pusteblume.png) -110px -35px no-repeat @kajona-brand-color;
                 }
             }
         }
@@ -173,7 +159,7 @@ footer {
         .panel-body {
             border-top: 0;
             padding: 0;
-            background: url(../img/navbar-inner-background.png) right bottom no-repeat lighten(@kajonaLightGray, 5%);
+            background: url(../img/navbar-inner-background.png) right bottom no-repeat lighten(@kajona-gray, 5%);
             color: @white;
 
             ul {
@@ -229,16 +215,7 @@ footer {
 
     .dropdown-menu {
 
-//        a {
-//            i {
-//                vertical-align: baseline;
-//            }
-//        }
-
         .sub-menu {
-//            left: 100%;
-//            position: absolute;
-//            top: 0;
             visibility: hidden;
         }
 
@@ -246,7 +223,6 @@ footer {
             &:hover {
                 .sub-menu {
                     visibility: visible;
-//                    display: block;
                 }
             }
         }
@@ -294,7 +270,7 @@ footer {
     }
 
     .badge-info {
-        background-color: @green;
+        background-color: @kajona-brand-color;
         font-size: @font-size-base ;
     }
 
@@ -313,15 +289,7 @@ footer {
 }
 
 .generalContextMenu {
-//    background:none @white !important;
-    border: 1px solid @menuBorder !important;
-//    border-radius: 0;
-//    left: auto !important;
-//    top: auto !important;
-
-    .dropdown-menu {
-//        border-radius: 0;
-    }
+    border: 1px solid @dropdown-border !important;
 
     span {
         padding: 0;
@@ -355,10 +323,6 @@ footer {
 
         li {
             list-style: none;
-//            display: block;
-//            padding: 0;
-//            text-shadow: none;
-//            text-align: left;
         }
     }
 
@@ -390,7 +354,7 @@ footer {
     overflow-x: hidden;
     position: fixed;
     background-color: @white;
-    border: 1px solid @menuBorder !important;
+    border: 1px solid @dropdown-border !important;
     .box-shadow(0 5px 10px rgba(0,0,0,.2));
 
     li, li.ui-menu-item {
@@ -399,11 +363,11 @@ footer {
             padding: 3px;
             display: block;
             font-size: @font-size-base - 1;
-            border-radius: 0px;
+            border-radius: 0;
 
             &:hover {
                 text-decoration: none;
-                border-radius: 0px;
+                border-radius: 0;
             }
 
         }
@@ -420,19 +384,19 @@ footer {
         text-decoration: none;
         background-color: @dropdown-link-active-bg;
         background-image: none;
-        border-radius: 0px;
+        border-radius: 0;
         border-color: @dropdown-link-active-bg;
     }
 
     .ui-state-focus h4 {
         color: @white;
-        border-radius: 0px;
+        border-radius: 0;
     }
 
     .ui-autocomplete-category h3 {
         padding-left: 5px;
         clear: both;
-        border-radius: 0px;
+        border-radius: 0;
     }
 
 
@@ -447,13 +411,13 @@ footer {
 }
 
 .navbar-topbar {
-    background:url(../img/navbar-inner-background.png) 300px 0px no-repeat @kajonaLightGray;
+    background:url(../img/navbar-inner-background.png) 300px 0 no-repeat @kajona-gray;
     min-height: 50px;
     padding-left: 20px;
     padding-right: 20px;
     filter: none;
     border: 0;
-    border-bottom: 1px solid darken(@kajonaLightGray, 5%);
+    border-bottom: 1px solid darken(@kajona-gray, 5%);
 
     .navbar-dropdown-section {
         text-align: right;
@@ -463,17 +427,22 @@ footer {
     .navbar-search {
 
         .input-group {
-            margin: 10px 0 0 0;
+            margin: 12px 0 0 0;
             width: 250px;
 
             .search-query, .search-query:focus, .navbar-search .search-query.focused, .input-group-addon {
                 background-color: @white;
                 border: none;
                 box-shadow: none;
-                border-radius: 0px;
-                color: @kajonaSidebarColor;
+                border-radius: 0;
+                color: @text-color;
                 text-shadow: none;
                 margin: 0;
+                height: auto;
+            }
+
+            .input-group-addon {
+                padding: 3px 12px;
             }
 
             i {
@@ -481,8 +450,6 @@ footer {
                 color: lighten(@text-color, 25%);
             }
         }
-
-
 
     }
 
@@ -496,7 +463,7 @@ footer {
 }
 
 .search-dropdown-menu {
-    background:url(../img/pusteblume-submenu.png) right bottom no-repeat lighten(@kajonaLightGray, 5%);
+    background:url(../img/pusteblume-submenu.png) right bottom no-repeat lighten(@kajona-gray, 5%);
     border:0;
     border-radius: 0;
     display: none;
@@ -523,7 +490,6 @@ footer {
     i {
         margin: 0 5px 0 0;
     }
-
 
     h3 {
         font-weight: normal;
@@ -557,7 +523,6 @@ footer {
 .breadcrumb {
     background:url(../img/pusteblume.png) right -45px no-repeat @gray-darker;
     border:0;
-//    border-radius: 0px;
     .box-shadow(none);
     margin:9px 0 0 0;
     padding: 6px 14px 5px 14px;
@@ -627,16 +592,6 @@ footer {
         }
     }
 
-    a {
-        color: @kajonaBodylinkColor;
-    }
-
-    p {
-        a {
-            text-decoration: underline;
-        }
-    }
-
     .btn {
         color: @gray-dark;
     }
@@ -664,44 +619,12 @@ footer {
                 }
             }
 
-//            @media (min-width: 768px) and (max-width: 979px) {
-//                display: inline-block;
-//                float: left;
-//                width: inherit;
-//            }
-//
-//            @media (min-width: 320px) and (max-width: 768px) {
-//                display: inline-block;
-//                float: left;
-//                width: inherit;
-//
-//                .thumbnail .contentWrapper {
-//                    height: 100px !important;
-//                }
-//            }
-//
-//
-//            @media (min-width: 400px) and (max-width: 700px) {
-//                width: 30%;
-//            }
-//
-//            @media (min-width: 320px) and (max-width: 400px) {
-//                width: 45%;
-//            }
-//
-//            @media (min-width: 0px) and (max-width: 320px) {
-//                width: 100%;
-//            }
+
         }
 
-
 		.thumbnail {
-//			border-radius: 0;
-//			display: block;
 			line-height: 1;
-//			padding: 4px;
 			cursor: pointer;
-//            background-color: @white;
 
 			h5 {
 				margin: 0;
@@ -751,7 +674,6 @@ footer {
             margin: 9px 0;
             line-height: 36px;
             .opacity(50);
-            //.transition(opacity linear .2s);
 
             &:hover {
                 .opacity(100);
@@ -760,15 +682,22 @@ footer {
     }
 
     form {
-//        .control-label {
-//            width: 200px;
-//            padding-top: 6px;
-//        }
 
-//        .controls {
-//            margin-left: 220px;
-//        }
+        .form-control {
+            border: 1px solid @gray-darker;
+            .box-shadow(none);
+            padding: 4px;
 
+            &.mandatoryFormElement {
+                .box-shadow(0 0 6px @brand-warning+20);
+            }
+        }
+
+
+        label {
+            color: @text-color;
+            font-weight: normal;
+        }
 
         .help-block {
             margin-bottom: -13px;
@@ -783,7 +712,7 @@ footer {
 
             .savechanges {
                 border: 4px solid @gray-light;
-                background-color: @kajonaLightGray;
+                background-color: @kajona-gray;
                 .box-shadow(none);
                 color: #888888;
                 cursor: pointer;
@@ -792,7 +721,7 @@ footer {
                 font-weight: 600;
                 text-transform: uppercase;
                 text-align: left;
-                padding: 0px 0px 0px 10px;
+                padding: 0 0 0 10px;
                 line-height: 30px;
                 position: relative;
                 width: 65%;
@@ -801,7 +730,7 @@ footer {
                 &:hover {
                     color:@black;
                     &:after {
-                        background-color:darken(@green, 10%);
+                        background-color:darken(@kajona-brand-color, 10%);
                     }
                 }
 
@@ -813,8 +742,8 @@ footer {
                     position: absolute;
                     right: 0;
                     background: center center no-repeat;
-                    background-color:@green;
-                    background-image:url(../img/icon-save.png);
+                    background-color: @kajona-brand-color;
+                    background-image: url(../img/icon-save.png);
                 }
 
             }
@@ -846,19 +775,14 @@ footer {
             li {
                 a, span {
                     border-radius: 0;
-//                    border-color: #dcdcdc;
-//                    border-style: solid;
-//                    border-width: 1px;
-//                    float: left;
                     line-height: 30px;
                     padding: 0 10px;
                     text-decoration: none;
-//                    color:@gray-dark;
                     margin:0 3px;
                     background-color:@gray-light;
 
                     &.active {
-                        color:@green;
+                        color: @kajona-brand-color;
                     }
                 }
 
@@ -894,8 +818,8 @@ footer {
 
 		.mouseOver {
 			border: 1px solid #AF0A0A;
-			border-left: 2px solid #AF0A0A;
-			border-right: 2px solid #AF0A0A;
+			border-left-width: 2px;
+			border-right-width: 2px;
 			color: #000000;
 			margin: 2px 0 !important;
 			.box-shadow(3px #888);
@@ -907,7 +831,7 @@ footer {
 			vertical-align: top;
 
 			&.calendarDateToday {
-				background-color: lighten(@blue, 40%);
+				background-color: lighten(@kajona-brand-color, 40%);
 			}
 
 			&.calendarEntry div.calendarHeader,
@@ -935,7 +859,6 @@ footer {
 		width: 100%;
 		margin-bottom: 5px;
 	}
-
 
 	div.calendarLegend {
 		margin: 10px 0 4px 0 ;
@@ -1076,7 +999,6 @@ footer {
 
 
 
-
     //Fontawesome configuration start
     .fa-stack {
         width: 1em;
@@ -1098,7 +1020,6 @@ footer {
 
     [class^='fa-']:before, [class*=' fa-']:before {
         font-size: @font-size-base+4;
-//        color: text-color;
     }
 
     [class*=' fa-stack']:before {
@@ -1113,7 +1034,9 @@ footer {
         font-size: @font-size-base - 2;
     }
 
-
+    .progress-danger.progress-striped .bar, .progress-striped .bar {
+        background-color: @kajona-brand-color;
+    }
 
 
     /* DASHBOARD */
@@ -1160,21 +1083,7 @@ footer {
 }
 
 
-.form-control {
-    border: 1px solid @gray-darker;
-    .box-shadow(none);
-    padding: 4px;
 
-    &.mandatoryFormElement {
-        .box-shadow(0 0 6px @brand-warning+20);
-    }
-}
-
-
-label {
-    color: @text-color;
-    font-weight: normal;
-}
 
 
 
@@ -1203,13 +1112,6 @@ label {
 }
 
 
-
-.progress-danger.progress-striped .bar,
-.progress-striped .bar {
-  background-color: @green;
-}
-
-
 :focus {
   -moz-outline-style:none;
   outline:medium none;
@@ -1220,13 +1122,13 @@ label {
 }
 
 ::-moz-selection {
-  background-color:@green;
+  background-color: @kajona-brand-color;
   color:@white;
   text-shadow:none;
 }
 
 ::selection {
-  background-color:@green;
+  background-color: @kajona-brand-color;
   color:@white;
   text-shadow:none;
 }
@@ -1272,14 +1174,14 @@ label {
 
     .jstree-hovered {
         background: none;
-        border:0px !important;
-        color:@green;
+        border:0 !important;
+        color: @kajona-brand-color;
         padding: 1px 2px;
         text-decoration: underline;
     }
 
     ins {
-        margin:0px 0px;
+        margin: 0;
         height: 20px;
         width: 15px;
         background-image: none;
@@ -1300,10 +1202,6 @@ label {
 /* ADMIN TABLE SETUP */
 .table {
     margin-bottom: 4px;
-//    td, th {
-//        padding: 6px;
-//        vertical-align: middle;
-//    }
 
     .progress {
         margin: 0;
@@ -1411,9 +1309,7 @@ label {
 
     line-height: normal;
     vertical-align: baseline;
-    background-image: none;
-    background-position: 0% 0%;
-    background-repeat: repeat;
+    background: none repeat 0% 0%;
     margin-top: 0;
 
     -moz-animation: spin 2s infinite linear;
@@ -1424,7 +1320,7 @@ label {
     &:before {
         font-size: @font-size-base + 10;
         content: @fa-var-spinner;
-        color: @green;
+        color: @kajona-brand-color;
         font-family: fontawesome;
     }
 }
@@ -1440,8 +1336,7 @@ label {
 .modal {
 
     .modal-content {
-//        text-align: left;
-        border-radius: 0px;
+        border-radius: 0;
 
         iframe {
             border: none;
@@ -1484,7 +1379,6 @@ label {
 
 
 
-
 /* TOOLTIPS */
 .qtip {
     border-radius: 0 !important;
@@ -1518,7 +1412,7 @@ label {
         font-size: @font-size-base !important;
         height: 33px !important;
         padding: 4px !important;
-        border-radius: 0px !important;
+        border-radius: 0 !important;
         background-image: none !important;
         box-shadow: none !important;
     }
@@ -1526,14 +1420,13 @@ label {
 
     .chosen-results .highlighted {
         color: @white !important;
-        background-image: none !important;
-        background-color: @dropdown-link-active-bg !important;
+        background: @dropdown-link-active-bg none !important;
     }
 
 
     &.chosen-container-active {
-        border-color: @green !important;
-        .box-shadow(0 0 6px @green+20);
+        border-color: @kajona-brand-color !important;
+        .box-shadow(0 0 6px @kajona-brand-color+20);
 
         .chosen-single {
             border: 1px solid @gray-darker !important;
@@ -1553,14 +1446,14 @@ label {
     border-radius: 3px;
 
     .bootstrap-switch-handle-on.bootstrap-switch-primary {
-        background: @green;
+        background: @kajona-brand-color;
     }
 }
 
 
 /* the login page */
 body.login {
-    background-color: lighten(@kajonaLightGray, 5%);
+    background-color: lighten(@kajona-gray, 5%);
 
     .panel {
         border: 1px solid @gray-darker;

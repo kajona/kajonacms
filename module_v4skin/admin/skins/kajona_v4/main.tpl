@@ -38,7 +38,7 @@
                 <div class="col-md-4">
                     %%login%%
                 </div>
-                <div class="col-md-4" style="text-align: right;">
+                <div class="col-md-3" style="text-align: right;">
                     <form class="navbar-search pull-left" action="_indexpath_">
                         <input type="hidden" name="admin" value="1" >
                         <input type="hidden" name="module" value="search">
@@ -51,7 +51,7 @@
                     </form>
 
                 </div>
-                <div class="col-md-4 navbar-dropdown-section pull-right">
+                <div class="col-md-5 navbar-dropdown-section pull-right">
                     %%languageswitch%%
                     %%aspectChooser%%
                     <a id="portaleditor" class="btn btn-default" href="_webpath_">
