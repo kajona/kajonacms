@@ -473,26 +473,13 @@ HTML;
         $strFile = $this->getParam("file");
         $strFile = uniStrReplace(_webpath_, "", $strFile);
 
-        $arrTemplate = array();
 
         if(is_file(_realpath_.$strFile)) {
 
             $objFilesystem = new class_filesystem();
             $arrDetails = $objFilesystem->getFileDetails($strFile);
-
-            $arrTemplate["file_name"] = $arrDetails["filename"];
-            $arrTemplate["file_path"] = $strFile;
-            $arrTemplate["file_path_title"] = $this->getLang("commons_path");
-
             $arrSize = getimagesize(_realpath_.$strFile);
-            $arrTemplate["file_dimensions"] = $arrSize[0]." x ".$arrSize[1];
-            $arrTemplate["file_dimensions_title"] = $this->getLang("image_dimensions");
 
-            $arrTemplate["file_size"] = bytesToString($arrDetails["filesize"]);
-            $arrTemplate["file_size_title"] = $this->getLang("file_size");
-
-            $arrTemplate["file_lastedit"] = timeToString($arrDetails["filechange"]);
-            $arrTemplate["file_lastedit_title"] = $this->getLang("file_editdate");
 
             //Generate Dimensions
             $intHeight = $arrSize[1];
@@ -505,13 +492,14 @@ HTML;
             //Round
             $intWidth = number_format($intWidth, 0);
             $intHeight = number_format($intHeight, 0);
-            $arrTemplate["file_image"] = "<img src=\""._webpath_."/image.php?image=".urlencode($strFile)."&amp;maxWidth=".$intWidth."&amp;maxHeight=".$intHeight."\" id=\"fm_mediamanagerPic\" style=\"max-width: none;\" />";
+            $strImage = "<img src=\""._webpath_."/image.php?image=".urlencode($strFile)."&amp;maxWidth=".$intWidth."&amp;maxHeight=".$intHeight."\" id=\"fm_mediamanagerPic\" style=\"max-width: none;\" />";
 
-            $arrTemplate["file_actions"] = "";
-            $arrTemplate["file_actions"] .= $this->objToolkit->listButton(
+
+            $arrActions = array();
+            $arrActions[] = $this->objToolkit->listButton(
                 class_link::getLinkAdminManual("href=\"#\" onclick=\"KAJONA.admin.mediamanager.imageEditor.showRealSize(); return false;\"", "", $this->getLang("showRealsize"), "icon_zoom_in")
             );
-            $arrTemplate["file_actions"] .= $this->objToolkit->listButton(
+            $arrActions[] = $this->objToolkit->listButton(
                 class_link::getLinkAdminManual(
                     "href=\"#\" onclick=\"KAJONA.admin.mediamanager.imageEditor.showPreview(); return false;\"",
                     "",
@@ -519,20 +507,25 @@ HTML;
                     "icon_zoom_out"
                 )
             )." ";
-            $arrTemplate["file_actions"] .= $this->objToolkit->listButton(
+            $arrActions[] = $this->objToolkit->listButton(
                 class_link::getLinkAdminManual("href=\"#\" onclick=\"KAJONA.admin.mediamanager.imageEditor.rotate(90); return false;\"", "", $this->getLang("rotateImageLeft"), "icon_rotate_left")
             );
-            $arrTemplate["file_actions"] .= $this->objToolkit->listButton(
+            $arrActions[] = $this->objToolkit->listButton(
                 class_link::getLinkAdminManual("href=\"#\" onclick=\"KAJONA.admin.mediamanager.imageEditor.rotate(270); return false;\"", "", $this->getLang("rotateImageRight"), "icon_rotate_right")
             )." ";
-            $arrTemplate["file_actions"] .= $this->objToolkit->listButton(
+            $arrActions[] = $this->objToolkit->listButton(
                 class_link::getLinkAdminManual("href=\"#\" onclick=\"KAJONA.admin.mediamanager.imageEditor.showCropping(); return false;\"", "", $this->getLang("cropImage"), "icon_crop")
             );
-            $arrTemplate["file_actions"] .= $this->objToolkit->listButton(
+            $arrActions[] = $this->objToolkit->listButton(
                 class_link::getLinkAdminManual("href=\"#\" id=\"accept_icon\"  onclick=\"KAJONA.admin.mediamanager.imageEditor.saveCropping(); return false;\"", "", $this->getLang("cropImageAccept"), "icon_crop_acceptDisabled")
             )." ";
 
-            $arrTemplate["filemanager_image_js"] = "<script type=\"text/javascript\">
+
+            $strReturn .= $this->objToolkit->getContentToolbar($arrActions);
+
+            $strReturn .= "<div class=\"imageContainer\"><div class=\"image\">".$strImage."</div></div>";
+
+            $strJs = "<script type=\"text/javascript\">
                 KAJONA.admin.loader.loadFile([
                     '".class_resourceloader::getInstance()->getCorePathForModule("module_mediamanager")."/module_mediamanager/admin/scripts/mediamanager.js',
                     '".class_resourceloader::getInstance()->getCorePathForModule("module_mediamanager")."/module_mediamanager/admin/scripts/jcrop/jquery.Jcrop.js',
@@ -556,14 +549,23 @@ HTML;
 
                 </script>";
 
-            $arrTemplate["filemanager_image_js"] .= $this->objToolkit->jsDialog(1);
-            $arrTemplate["filemanager_image_js"] .= $this->objToolkit->jsDialog(3);
+            $strJs .= $this->objToolkit->jsDialog(1);
+            $strJs .= $this->objToolkit->jsDialog(3);
 
-            $arrTemplate["filemanager_internal_code"] = "<input type=\"hidden\" name=\"fm_int_realwidth\" id=\"fm_int_realwidth\" value=\"".$arrSize[0]."\" />";
-            $arrTemplate["filemanager_internal_code"] .= "<input type=\"hidden\" name=\"fm_int_realheight\" id=\"fm_int_realheight\" value=\"".$arrSize[1]."\" />";
+            $strJs .= "<input type=\"hidden\" name=\"fm_int_realwidth\" id=\"fm_int_realwidth\" value=\"".$arrSize[0]."\" />";
+            $strJs .= "<input type=\"hidden\" name=\"fm_int_realheight\" id=\"fm_int_realheight\" value=\"".$arrSize[1]."\" />";
+
+            $strReturn .= $strJs;
+
+            $arrTable = array();
+            $arrTable[] = array($this->getLang("commons_path"), $strFile);
+
+            $arrTable[] = array($this->getLang("image_dimensions"), $arrSize[0]." x ".$arrSize[1]);
+            $arrTable[] = array($this->getLang("file_size"), bytesToString($arrDetails["filesize"]));
+            $arrTable[] = array($this->getLang("file_editdate"), timeToString($arrDetails["filechange"]));
+            $strReturn .= $this->objToolkit->divider().$this->objToolkit->dataTable(null, $arrTable);
 
         }
-        $strReturn .= $this->objToolkit->getMediamanagerImageDetails($arrTemplate);
         return $strReturn;
     }
 
