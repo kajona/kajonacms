@@ -72,16 +72,14 @@ class class_module_pages_content_admin extends class_admin_simple implements int
         if($objPage->getIntType() != class_module_pages_page::$INT_TYPE_ALIAS)
             $strReturn .= $this->objToolkit->getContentToolbar($arrToolbarEntries, 1);
 
-        $arrTemplate = array();
-        $arrTemplate["pagetemplate"] = $objPage->getStrTemplate();
-        $arrTemplate["pagetemplateTitle"] = $this->getLang("template");
+        $arrInfoRows = array(
+            array($this->getLang("template"), $objPage->getStrTemplate()),
+            array($this->getLang("lastuserTitle"), $objPage->getLastEditUser()),
+            array($this->getLang("lasteditTitle"), timeToString($objPage->getIntLmTime()))
+        );
+        $strReturn .= $this->objToolkit->dataTable(null, $arrInfoRows);
+        $strReturn .= $this->objToolkit->divider();
 
-        $arrTemplate["lastuserTitle"] = $this->getLang("lastuserTitle");
-        $arrTemplate["lasteditTitle"] = $this->getLang("lasteditTitle");
-        $arrTemplate["lastuser"] = $objPage->getLastEditUser();
-
-        $arrTemplate["lastedit"] = timeToString($objPage->getIntLmTime());
-        $strReturn .= $this->objToolkit->getPageInfobox($arrTemplate);
 
         //try to load template, otherwise abort
         $strTemplateID = null;
