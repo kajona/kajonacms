@@ -31,7 +31,7 @@
 
 <body>
 
-<div class="navbar-nav navbar-fixed-top">
+<div class="navbar-nav navbar-fixed-top hidden-print">
     <div class="navbar-topbar">
         <div class="container-fluid">
             <div class="row">
@@ -75,7 +75,7 @@
     <div class="row">
 
         <!-- MODULE NAVIGATION -->
-        <div class="col-md-2 ">
+        <div class="col-md-2 hidden-print">
             <div class="sidebar-nav hidden-xs hidden-sm">
                 <div class="panel-group" id="moduleNavigation">
                     <div class="nav-header">Kajona V4</div>

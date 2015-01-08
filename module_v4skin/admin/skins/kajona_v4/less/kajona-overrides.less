@@ -1751,10 +1751,6 @@ body.login {
 /* print redefinitions */
 @media print {
 
-    .hiddenOnPrint {
-        display: none;
-    }
-
     body {
         padding-top: 0px;
 
@@ -1762,6 +1758,7 @@ body.login {
         line-height: @line-height-base - 2;
 
         #content {
+            width: 100%;
             .contentTopbar {
                 padding-top: 0px;
 
@@ -1786,21 +1783,14 @@ body.login {
 
         }
 
-        div.container-fluid div.row-fluid div.span2 {
-            display: none;
-        }
     }
 
     a[href]:after {
         content: none !important;
     }
 
-    div.navbar, div.sidebar-nav, footer, html body div.container-fluid div.row-fluid div.span2 {
+    footer {
         display: none;
-    }
-
-    div.content-topbar {
-        padding-top: 0px;
     }
 
 }

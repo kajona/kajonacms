@@ -1,7 +1,0 @@
-{
-    "name" : "chosen",
-    "version" : "1.1.0",
-    "source" : "https://github.com/harvesthq/chosen",
-    "license" : "MIT License",
-    "licenseurl" : "https://github.com/harvesthq/chosen/blob/master/LICENSE.md"
-}
