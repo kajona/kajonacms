@@ -1671,6 +1671,8 @@ label {
     padding: 4px;
 }
 
+
+
 /* chosen select replacement */
 .chosen-container {
 	font-size: @font-size-base !important;
@@ -1680,39 +1682,49 @@ label {
         .box-shadow(0 0 6px @brand-danger+20);
     }
 
+
+    .chosen-single {
+        color: @gray !important;
+        font-size: @font-size-base !important;
+        height: 33px !important;
+        padding: 4px !important;
+        border-radius: 0px !important;
+        background-image: none !important;
+        box-shadow: none !important;
+    }
+
+
+    .chosen-results .highlighted {
+        color: @white !important;
+        background-image: none !important;
+        background-color: @dropdown-link-active-bg !important;
+    }
+
+
+    &.chosen-container-active {
+        border-color: @green !important;
+        .box-shadow(0 0 6px @green+20);
+
+        .chosen-single {
+            border: 1px solid @gray-darker !important;
+
+        }
+    }
 }
 
-.control-group.error .chosen-container a {
+.form-group.has-error .chosen-container a {
     border: 1px solid @state-danger-text;
 }
 
 
-.chosen-container-single {
-	.chosen-single {
-		color: @gray !important;
-		font-size: @font-size-base !important;
-		height: 33px !important;
-		padding: 4px !important;
-		border-radius: 0px !important;
-		background-image: none !important;
-		box-shadow: none !important;
-	}
-}
 
-.chosen-container .chosen-results .highlighted {
-	color: @white !important;
-	background-image: none !important;
-	background-color: @dropdown-link-active-bg !important;
-}
+/* BOOTSTRAP SWITCH BUTTON see www.bootstrap-switch.org*/
+.bootstrap-switch {
+    border-radius: 3px;
 
-.chosen-container-active {
-	border-color: @green !important;
-	.box-shadow(0 0 6px @green+20);
-
-	.chosen-single {
-		border: 1px solid @gray-darker !important;
-
-	}
+    .bootstrap-switch-handle-on.bootstrap-switch-primary {
+        background: @green;
+    }
 }
 
 
@@ -1796,11 +1808,4 @@ body.login {
 }
 
 
-/* BOOTSTRAP SWITCH BUTTON see www.bootstrap-switch.org*/
-.bootstrap-switch {
-    border-radius: 3px;
 
-    .bootstrap-switch-handle-on.bootstrap-switch-primary {
-        background: @green;
-    }
-}
