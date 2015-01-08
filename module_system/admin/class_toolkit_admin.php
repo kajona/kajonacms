@@ -724,7 +724,6 @@ class class_toolkit_admin extends class_toolkit {
     public function formInputRadiogroup($strName, array $arrKeyValues, $strTitle = "", $strKeySelected = "", $strClass = "", $bitEnabled = true) {
         $strOptions = "";
         $strTemplateRadioID = $this->objTemplate->readTemplate("/elements.tpl", "input_radiogroup_row");
-        $strTemplateRadioSelectedID = $this->objTemplate->readTemplate("/elements.tpl", "input_radiogroup_row_selected");
         //Iterating over the array to create the options
         foreach ($arrKeyValues as $strKey => $strValue) {
             $arrTemplate = array();
@@ -733,10 +732,8 @@ class class_toolkit_admin extends class_toolkit {
             $arrTemplate["name"] = $strName;
             $arrTemplate["class"] = $strClass;
             $arrTemplate["disabled"] = ($bitEnabled ? "" : "disabled=\"disabled\"");
-            if((string)$strKey == (string)$strKeySelected)
-                $strOptions .= $this->objTemplate->fillTemplate($arrTemplate, $strTemplateRadioSelectedID);
-            else
-                $strOptions .= $this->objTemplate->fillTemplate($arrTemplate, $strTemplateRadioID);
+            $arrTemplate["checked"] = ((string)$strKey == (string)$strKeySelected ? " checked " : "");
+            $strOptions .= $this->objTemplate->fillTemplate($arrTemplate, $strTemplateRadioID);
         }
 
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "input_radiogroup");

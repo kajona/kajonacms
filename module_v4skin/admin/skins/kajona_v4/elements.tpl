@@ -405,20 +405,11 @@ Radiogroup
 <input_radiogroup_row>
     <div class="radio">
         <label>
-            <input type="radio" name="%%name%%" id="%%name%%_%%key%%" value="%%key%%" class="%%class%%" %%disabled%%>
+            <input type="radio" name="%%name%%" id="%%name%%_%%key%%" value="%%key%%" class="%%class%%" %%checked%% %%disabled%%>
             %%value%%
         </label>
     </div>
 </input_radiogroup_row>
-
-<input_radiogroup_row_selected>
-    <div class="radio">
-        <label>
-            <input type="radio" name="%%name%%" id="%%name%%_%%key%%" value="%%key%%" class="%%class%%" checked %%disabled%%>
-            %%value%%
-        </label>
-    </div>
-</input_radiogroup_row_selected>
 
 
 Checkbox
@@ -455,7 +446,7 @@ Toggle_On_Off (using bootstrap-switch.org)
     <div class="form-group">
         <label class="col-sm-3 control-label" for="%%name%%">%%title%%</label>
         <div class="col-sm-6">
-            <div id="div_%%name%%" class="checkbox" >
+            <div id="div_%%name%%" class="" >
                 <input type="checkbox" name="%%name%%" value="checked" id="%%name%%" class="%%class%%" %%checked%% %%readonly%% data-size="small" data-on-text="<i class='fa fa-check fa-white' ></i>" data-off-text="<i class='fa fa-times'></i>">
             </div>
         </div>
@@ -666,7 +657,7 @@ Regular Submit-Button
     <div class="form-group">
         <label class="col-sm-3 control-label"></label>
         <div class="col-sm-6">
-            <button type="submit" class="btn savechanges %%class%%" name="%%name%%" value="%%value%%" %%disabled%% %%eventhandler%%>
+            <button type="submit" class="btn btn-default savechanges %%class%%" name="%%name%%" value="%%value%%" %%disabled%% %%eventhandler%%>
                 <span class="btn-text">%%value%%</span>
                 <span class="statusicon"></span>
             </button>
@@ -676,9 +667,7 @@ Regular Submit-Button
 
 An easy date-selector
 If you want to use the js-date-picker, leave %%calendarCommands%% at the end of the section
-in addition, a container for the calendar is needed. use %%calendarContainerId%% as an identifier
-If the calendar is used, you HAVE TO create a js-function named "calClose_%%calendarContainerId%%". This
-function is called after selecting a date, e.g. to hide the calendar
+in addition, a container for the calendar is needed. Use %%calendarContainerId%% as an identifier.
 <input_date_simple>
     <div class="form-group">
         <label for="%%name%%" class="col-sm-3 control-label">%%title%%</label>
@@ -716,31 +705,35 @@ function is called after selecting a date, e.g. to hide the calendar
 
     <div class="form-group">
         <label for="%%name%%" class="col-sm-3 control-label">%%title%%</label>
-        <div class="col-sm-6">
+        <div class="col-sm-3">
             <input id="%%calendarId%%" name="%%calendarId%%" class="form-control" size="16" type="text" value="%%valuePlain%%">
-            <input name="%%titleHour%%" id="%%titleHour%%" type="text" class="form-control %%class%%" size="2" maxlength="2" value="%%valueHour%%" />
-            <input name="%%titleMin%%" id="%%titleMin%%" type="text" class="form-control %%class%%" size="2" maxlength="2" value="%%valueMin%%" />
-            <script>
-                KAJONA.admin.loader.loadFile(["_webpath_/core/module_v4skin/admin/skins/kajona_v4/js/bootstrap-datepicker.js"], function() {
-                    KAJONA.admin.loader.loadFile(["_webpath_/core/module_v4skin/admin/skins/kajona_v4/js/locales/bootstrap-datepicker.%%calendarLang%%.js"], function() {
-                        var format = '%%dateFormat%%';
-                        format = format.replace('d', 'dd').replace('m', 'mm').replace('Y', 'yyyy');
-                        $('#%%calendarId%%').datepicker({
-                            format: format,
-                            weekStart: 1,
-                            autoclose: true,
-                            language: '%%calendarLang%%'
-                        });
-
-                        if($('#%%calendarId%%').is(':focus')) {
-                            $('#%%calendarId%%').blur();
-                            $('#%%calendarId%%').focus();
-                        }
-
-                    }, true);
-                }, true);
-            </script>
         </div>
+        <div class="col-sm-1">
+            <input name="%%titleHour%%" id="%%titleHour%%" type="text" class="form-control %%class%%" size="2" maxlength="2" value="%%valueHour%%" />
+        </div>
+        <div class="col-sm-1">
+            <input name="%%titleMin%%" id="%%titleMin%%" type="text" class="form-control %%class%%" size="2" maxlength="2" value="%%valueMin%%" />
+        </div>
+        <script>
+            KAJONA.admin.loader.loadFile(["_webpath_/core/module_v4skin/admin/skins/kajona_v4/js/bootstrap-datepicker.js"], function() {
+                KAJONA.admin.loader.loadFile(["_webpath_/core/module_v4skin/admin/skins/kajona_v4/js/locales/bootstrap-datepicker.%%calendarLang%%.js"], function() {
+                    var format = '%%dateFormat%%';
+                    format = format.replace('d', 'dd').replace('m', 'mm').replace('Y', 'yyyy');
+                    $('#%%calendarId%%').datepicker({
+                        format: format,
+                        weekStart: 1,
+                        autoclose: true,
+                        language: '%%calendarLang%%'
+                    });
+
+                    if($('#%%calendarId%%').is(':focus')) {
+                        $('#%%calendarId%%').blur();
+                        $('#%%calendarId%%').focus();
+                    }
+
+                }, true);
+            }, true);
+        </script>
     </div>
 </input_datetime_simple>
 
