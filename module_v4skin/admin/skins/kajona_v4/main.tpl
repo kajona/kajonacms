@@ -78,6 +78,7 @@
         <div class="col-md-2 ">
             <div class="sidebar-nav hidden-xs hidden-sm">
                 <div class="panel-group" id="moduleNavigation">
+                    <div class="nav-header">Kajona V4</div>
                     %%moduleSitemap%%
                 </div>
             </div>

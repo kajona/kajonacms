@@ -1304,31 +1304,6 @@ class class_toolkit_admin extends class_toolkit {
         return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
     }
 
-    /**
-     * Returns a infobox about the page being edited
-     *
-     * @param mixed $arrContent
-     * @return string
-     */
-    public function getPageInfobox($arrContent) {
-        $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "page_infobox");
-        return $this->objTemplate->fillTemplate($arrContent, $strTemplateID);
-    }
-
-    /**
-     * Creates the page to view & manipulate image.
-     *
-     * @since 3.2
-     * @replace class_toolkit_admin::getFileDetails()
-     * @param array $arrContent
-     * @return string
-     *
-     */
-    public function getMediamanagerImageDetails(array $arrContent) {
-        $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "mediamanager_image_details");
-        return $this->objTemplate->fillTemplate($arrContent, $strTemplateID);
-    }
-
 
     /**
      * Creates a fieldset to structure elements

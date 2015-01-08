@@ -989,20 +989,6 @@ Used to print headline in a form
 <h2 class="%%class%%">%%text%%</h2>
 </headline_form>
 
-This Section is used to display a few special details about the current page being edited
-<page_infobox>
- <table style="width: 100%;" class="statusPages">
-  <tr>
-    <td style="width: 18%;">%%pagetemplateTitle%%</td>
-    <td style="width: 72%;">%%pagetemplate%%</td>
-  </tr>
-  <tr>
-    <td>%%lasteditTitle%%</td>
-    <td>%%lastedit%% %%lastuserTitle%% %%lastuser%%</td>
-  </tr>
-</table><br /><br />
-</page_infobox>
-
 ---------------------------------------------------------------------------------------------------------
 -- RIGHTS MANAGEMENT ------------------------------------------------------------------------------------
 
@@ -1051,50 +1037,18 @@ The following sections specify the layout of the rights-mgmt
 
 <rights_form_inherit>
 <div class="form-group">
-    <label class="control-label" for="%%name%%">%%title%%</label>
-    <div class="controls">
-        <input name="%%name%%" type="checkbox" id="%%name%%" value="1" onclick="this.blur();" onchange="KAJONA.admin.checkRightMatrix();" %%checked%% />
+    <label class="col-sm-3 control-label" for="%%name%%"></label>
+    <div class="col-sm-6">
+        <div class="checkbox">
+            <label>
+                <input name="%%name%%" type="checkbox" id="%%name%%" value="1" onclick="this.blur();" onchange="KAJONA.admin.checkRightMatrix();" %%checked%% />
+                %%title%%
+            </label>
+        </div>
     </div>
 </div>
-
 </rights_form_inherit>
 
----------------------------------------------------------------------------------------------------------
--- FOLDERVIEW -------------------------------------------------------------------------------------------
-
-
-
-<mediamanager_image_details>
-<div class="folderview_image_details">
-    %%file_pathnavi%% %%file_name%%
-    <div class="imageContainer">
-        <div class="image">%%file_image%%</div>
-    </div>
-    <div class="imageActions">
-        %%file_actions%%
-    </div>
-    <table>
-        <tr>
-            <td class="first">%%file_path_title%%</td>
-            <td>%%file_path%%</td>
-        </tr>
-        <tr>
-            <td class="first">%%file_size_title%%</td>
-            <td id="fm_image_size">%%file_size%%</td>
-        </tr>
-        <tr>
-            <td class="first">%%file_dimensions_title%%</td>
-            <td id="fm_image_dimensions">%%file_dimensions%%</td>
-        </tr>
-        <tr>
-            <td class="first">%%file_lastedit_title%%</td>
-            <td>%%file_lastedit%%</td>
-        </tr>
-    </table>
-</div>
-%%filemanager_internal_code%%
-%%filemanager_image_js%%
-</mediamanager_image_details>
 
 ---------------------------------------------------------------------------------------------------------
 -- WYSIWYG EDITOR ---------------------------------------------------------------------------------------
@@ -1106,7 +1060,7 @@ The textarea field to replace by the editor. If the editor can't be loaded, a pl
 <div class="form-group">
     <label for="%%name%%" class="col-sm-3 control-label">%%title%%</label>
     <div class="col-sm-6">
-        <textarea name="%%name%%" id="%%name%%" class="inputWysiwyg" data-kajona-editorid="%%editorid%%">%%content%%</textarea></div><br />
+        <textarea name="%%name%%" id="%%name%%" class="form-control inputWysiwyg" data-kajona-editorid="%%editorid%%">%%content%%</textarea></div><br />
     </div>
 </wysiwyg_ckeditor>
 
@@ -1337,7 +1291,7 @@ A button for the active language
 
 The language switch surrounds the buttons
 <language_switch>
-    <select id="languageChooser" class="input-small" onchange="%%onchangehandler%%">%%languagebuttons%%</select>
+    <select id="languageChooser" onchange="%%onchangehandler%%">%%languagebuttons%%</select>
 </language_switch>
 
 ---------------------------------------------------------------------------------------------------------
@@ -1404,7 +1358,6 @@ The language switch surrounds the buttons
 
 ---------------------------------------------------------------------------------------------------------
 -- WIDGETS / DASHBOAORD  --------------------------------------------------------------------------------
-//TODO %%widget_id%% is not needed anymore
 <adminwidget_widget>
     <div class="well well-sm">
     <h2 class="">%%widget_name%%</h2>
@@ -1479,8 +1432,8 @@ The language switch surrounds the buttons
     </div>
 </div></dialogConfirmationContainer>
 
-<dialogLoadingContainer><div class="modal fade" id="%%dialog_id%%" style="width: 100px;">
-    <div class="modal-dialog">
+<dialogLoadingContainer><div class="modal fade" id="%%dialog_id%%">
+    <div class="modal-dialog modal-sm">
         <div class="modal-content">
             <div class="modal-header">
                 <h3 id="%%dialog_id%%_title">%%dialog_title%%</h3>
@@ -1710,7 +1663,7 @@ place ajaxScript before the closing input_tagselector-tag.
 The aspect chooser is shown in cases more than one aspect is defined in the system-module.
 It containes a list of aspects and provides the possibility to switch the different aspects.
 <aspect_chooser>
-    <select class="input-medium" onchange="window.location.replace(this.value);">
+    <select onchange="window.location.replace(this.value);">
         %%options%%
     </select>
 </aspect_chooser>
@@ -1842,9 +1795,7 @@ It containes a list of aspects and provides the possibility to switch the differ
 ---------------------------------------------------------------------------------------------------------
 -- BACKEND NAVIGATION -----------------------------------------------------------------------------------
 
-
 <sitemap_wrapper>
-    <div class="nav-header">Kajona V4</div>
         %%level%%
 </sitemap_wrapper>
 
