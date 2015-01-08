@@ -422,9 +422,9 @@ class class_module_news_admin extends class_admin_evensimpler implements interfa
         }
 
         if(_news_news_datetime_ == "true") {
-            $objForm->addField(new class_formentry_datetime($objForm->getStrFormname(), "objDateStart", $objNews), "objDateStart")->setBitMandatory(true)->setStrLabel($this->getLang("form_news_datestart"));
-            $objForm->addField(new class_formentry_datetime($objForm->getStrFormname(), "objDateEnd", $objNews), "objDateEnd")->setStrLabel($this->getLang("form_news_dateend"));
-            $objForm->addField(new class_formentry_datetime($objForm->getStrFormname(), "objDateSpecial", $objNews), "objDateSpecial")->setStrLabel($this->getLang("form_news_datespecial"));
+            $objForm->addField(new class_formentry_datetime($objForm->getStrFormname(), "objDateStart", $objNews), "datestart")->setBitMandatory(true)->setStrLabel($this->getLang("form_news_datestart"));
+            $objForm->addField(new class_formentry_datetime($objForm->getStrFormname(), "objDateEnd", $objNews), "dateend")->setStrLabel($this->getLang("form_news_dateend"));
+            $objForm->addField(new class_formentry_datetime($objForm->getStrFormname(), "objDateSpecial", $objNews), "datespecial")->setStrLabel($this->getLang("form_news_datespecial"));
         }
 
         return $objForm;
