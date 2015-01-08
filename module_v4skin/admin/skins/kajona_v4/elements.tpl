@@ -54,7 +54,7 @@ $(function() {
 </grid_footer>
 
 <grid_entry>
-<li class="col-md-3 %%cssaddon%%" data-systemid="%%systemid%%" >
+<li class="col-md-3 col-xs-3 %%cssaddon%%" data-systemid="%%systemid%%" >
     <div class="thumbnail" %%clickaction%% >
         <h5 >%%title%%</h5>
         <div class="contentWrapper" style="background: url(%%image%%) center no-repeat; background-size: cover;">

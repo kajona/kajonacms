@@ -1,107 +1,7 @@
 
 
-@fa-font-path:    "../fonts/fontawesome/font";
+@import "kajona-fonts.less";
 
-@font-face {
-    font-family: 'Open Sans';
-    font-style: normal;
-    font-weight: 300;
-    src: url('../fonts/opensans/opensans-light-webfont.eot');
-    src: url('../fonts/opensans/opensans-light-webfont.eot?#iefix') format('embedded-opentype'),
-    url('../fonts/opensans/opensans-light-webfont.woff') format('woff'),
-    url('../fonts/opensans/opensans-light-webfont.ttf') format('truetype'),
-    url('../fonts/opensans/opensans-light-webfont.svg#open_sanslight') format('svg');
-}
-@font-face {
-    font-family: 'Open Sans';
-    font-style: normal;
-    font-weight: 400;
-    src: url('../fonts/opensans/opensans-regular-webfont.eot');
-    src: url('../fonts/opensans/opensans-regular-webfont.eot?#iefix') format('embedded-opentype'),
-    url('../fonts/opensans/opensans-regular-webfont.woff') format('woff'),
-    url('../fonts/opensans/opensans-regular-webfont.ttf') format('truetype'),
-    url('../fonts/opensans/opensans-regular-webfont.svg#open_sansregular') format('svg');
-}
-@font-face {
-    font-family: 'Open Sans';
-    font-style: normal;
-    font-weight: 600;
-    src: url('../fonts/opensans/opensans-semibold-webfont.eot');
-    src: url('../fonts/opensans/opensans-semibold-webfont.eot?#iefix') format('embedded-opentype'),
-    url('../fonts/opensans/opensans-semibold-webfont.woff') format('woff'),
-    url('../fonts/opensans/opensans-semibold-webfont.ttf') format('truetype'),
-    url('../fonts/opensans/opensans-semibold-webfont.svg#open_sanssemibold') format('svg');
-}
-@font-face {
-    font-family: 'Open Sans';
-    font-style: normal;
-    font-weight: 700;
-    src: url('../fonts/opensans/opensans-bold-webfont.eot');
-    src: url('../fonts/opensans/opensans-bold-webfont.eot?#iefix') format('embedded-opentype'),
-    url('../fonts/opensans/opensans-bold-webfont.woff') format('woff'),
-    url('../fonts/opensans/opensans-bold-webfont.ttf') format('truetype'),
-    url('../fonts/opensans/opensans-bold-webfont.svg#open_sansbold') format('svg');
-}
-@font-face {
-    font-family: 'Open Sans';
-    font-style: normal;
-    font-weight: 800;
-    src: url('../fonts/opensans/opensans-extrabold-webfont.eot');
-    src: url('../fonts/opensans/opensans-extrabold-webfont.eot?#iefix') format('embedded-opentype'),
-    url('../fonts/opensans/opensans-extrabold-webfont.woff') format('woff'),
-    url('../fonts/opensans/opensans-extrabold-webfont.ttf') format('truetype'),
-    url('../fonts/opensans/opensans-extrabold-webfont.svg#open_sansextrabold') format('svg');
-}
-@font-face {
-    font-family: 'Open Sans';
-    font-style: italic;
-    font-weight: 300;
-    src: url('../fonts/opensans/opensans-lightitalic-webfont.eot');
-    src: url('../fonts/opensans/opensans-lightitalic-webfont.eot?#iefix') format('embedded-opentype'),
-    url('../fonts/opensans/opensans-lightitalic-webfont.woff') format('woff'),
-    url('../fonts/opensans/opensans-lightitalic-webfont.ttf') format('truetype'),
-    url('../fonts/opensans/opensans-lightitalic-webfont.svg#open_sanslight_italic') format('svg');
-}
-@font-face {
-    font-family: 'Open Sans';
-    font-style: italic;
-    font-weight: 400;
-    src: url('../fonts/opensans/opensans-italic-webfont.eot');
-    src: url('../fonts/opensans/opensans-italic-webfont.eot?#iefix') format('embedded-opentype'),
-    url('../fonts/opensans/opensans-italic-webfont.woff') format('woff'),
-    url('../fonts/opensans/opensans-italic-webfont.ttf') format('truetype'),
-    url('../fonts/opensans/opensans-italic-webfont.svg#open_sansitalic') format('svg');
-}
-@font-face {
-    font-family: 'Open Sans';
-    font-style: italic;
-    font-weight: 600;
-    src: url('../fonts/opensans/opensans-semibolditalic-webfont.eot');
-    src: url('../fonts/opensans/opensans-semibolditalic-webfont.eot?#iefix') format('embedded-opentype'),
-    url('../fonts/opensans/opensans-semibolditalic-webfont.woff') format('woff'),
-    url('../fonts/opensans/opensans-semibolditalic-webfont.ttf') format('truetype'),
-    url('../fonts/opensans/opensans-semibolditalic-webfont.svg#open_sanssemibold_italic') format('svg');
-}
-@font-face {
-    font-family: 'Open Sans';
-    font-style: italic;
-    font-weight: 700;
-    src: url('../fonts/opensans/opensans-bolditalic-webfont.eot');
-    src: url('../fonts/opensans/opensans-bolditalic-webfont.eot?#iefix') format('embedded-opentype'),
-    url('../fonts/opensans/opensans-bolditalic-webfont.woff') format('woff'),
-    url('../fonts/opensans/opensans-bolditalic-webfont.ttf') format('truetype'),
-    url('../fonts/opensans/opensans-bolditalic-webfont.svg#open_sansbold_italic') format('svg');
-}
-@font-face {
-    font-family: 'Open Sans';
-    font-style: italic;
-    font-weight: 800;
-    src: url('../fonts/opensans/opensans-extrabolditalic-webfont.eot');
-    src: url('../fonts/opensans/opensans-extrabolditalic-webfont.eot?#iefix') format('embedded-opentype'),
-    url('../fonts/opensans/opensans-extrabolditalic-webfont.woff') format('woff'),
-    url('../fonts/opensans/opensans-extrabolditalic-webfont.ttf') format('truetype'),
-    url('../fonts/opensans/opensans-extrabolditalic-webfont.svg#open_sansextrabold_italic') format('svg');
-}
 
 /* KAJONA variable redefinitions */
 @font-size-base:            13px;
@@ -132,6 +32,7 @@
 @white:                     #fff;
 @black:                     #000;
 @green:                     #6cb121;
+@blue:                      #428BCA;
 @menuBorder:                #d2d2d2;
 @kajonaLightGray:           #E5E5E5;
 @kajonaBodylinkColor:       #3a3a3a;
@@ -192,6 +93,9 @@
 
 
 
+
+
+
 body {
     padding-top: 70px;
     //padding-bottom: 40px;
@@ -222,11 +126,22 @@ footer {
 }
 
 
+//sidebarnav, aka main navigation
 .sidebar-nav {
 
     text-align: right;
     position: relative;
     top: -11px;
+
+    .nav-header {
+        color: @white;
+        background-color:@gray-darker;
+        font-size: @font-size-base + 2;
+        font-weight: 600;
+        line-height: 20px;
+        padding: 6px 15px;
+        text-transform: uppercase;
+    }
 
     .panel-group .panel, .panel {
         border-radius: 0;
@@ -267,10 +182,7 @@ footer {
                 list-style: none;
 
                 li {
-                    text-align: left;
                     padding: 2px 15px 2px 12px;
-                    color: @text-color;
-                    font-style: italic;
 
                     a {
                         font-style: normal;
@@ -281,7 +193,7 @@ footer {
 
                     &.divider {
                         background-color: @white;
-                        border-bottom: 0px;
+                        border-bottom: 0;
                         height: 1px;
                         margin: 3px 1px;
                         overflow: hidden;
@@ -294,24 +206,11 @@ footer {
 
     }
 
-
-    .nav-header {
-        color: @white;
-        background-color:@gray-darker;
-        font-size: @font-size-base + 2;
-        font-weight: 600;
-        line-height: 20px;
-        padding: 6px 15px;
-        text-transform: uppercase;
-    }
 }
 
-#userNotificationsCount {
-    font-family: @font-family-base;
-}
 
 .userNotificationsDropdown {
-    margin: 17px 0 0 10px;
+    margin: 17px 0 0 0;
 
 
     a.dropdown-toggle {
@@ -329,18 +228,17 @@ footer {
     }
 
     .dropdown-menu {
-        border-radius: 0px;
 
-        a {
-            i {
-                vertical-align: baseline;
-            }
-        }
+//        a {
+//            i {
+//                vertical-align: baseline;
+//            }
+//        }
 
         .sub-menu {
-            left: 100%;
-            position: absolute;
-            top: 0;
+//            left: 100%;
+//            position: absolute;
+//            top: 0;
             visibility: hidden;
         }
 
@@ -348,11 +246,12 @@ footer {
             &:hover {
                 .sub-menu {
                     visibility: visible;
-                    display: block;
+//                    display: block;
                 }
             }
         }
 
+        //caret
         &:before {
             content: '';
             display: inline-block;
@@ -401,6 +300,7 @@ footer {
 
     #userNotificationsCount {
         display: none;
+        font-family: @font-family-base;
     }
 
     #icon-user {
@@ -413,26 +313,14 @@ footer {
 }
 
 .generalContextMenu {
-    background:none @white !important;
+//    background:none @white !important;
     border: 1px solid @menuBorder !important;
-    border-radius: 0px;
-    left: auto !important;
-    top: auto !important;
+//    border-radius: 0;
+//    left: auto !important;
+//    top: auto !important;
 
     .dropdown-menu {
-        border-radius: 0px;
-    }
-
-
-    li::before {
-        background: none !important;
-    }
-
-    li {
-        display: block;
-        padding: 0px;
-        text-shadow: none;
-        text-align: left;
+//        border-radius: 0;
     }
 
     span {
@@ -441,7 +329,6 @@ footer {
 
     a {
         color: @link-color !important;
-
         text-transform: none;
         padding: 3px 15px;
         display: block;
@@ -459,8 +346,20 @@ footer {
     }
 
     ul {
-        margin: 0px;
-        padding-left: 0px;
+        margin: 0;
+        padding-left: 0;
+
+        li::before {
+            background: none !important;
+        }
+
+        li {
+            list-style: none;
+//            display: block;
+//            padding: 0;
+//            text-shadow: none;
+//            text-align: left;
+        }
     }
 
     .listButton {
@@ -473,7 +372,7 @@ footer {
 
         .fa-stack {
             i {
-                padding-left: 0px;
+                padding-left: 0;
             }
         }
     }
@@ -548,15 +447,12 @@ footer {
 }
 
 .navbar-topbar {
-    background-repeat: no-repeat;
     background:url(../img/navbar-inner-background.png) 300px 0px no-repeat @kajonaLightGray;
-    border-radius: 0px;
-    .box-shadow(none);
     min-height: 50px;
     padding-left: 20px;
     padding-right: 20px;
     filter: none;
-    border: 0px;
+    border: 0;
     border-bottom: 1px solid darken(@kajonaLightGray, 5%);
 
     .navbar-dropdown-section {
@@ -600,10 +496,9 @@ footer {
 }
 
 .search-dropdown-menu {
-    background-clip: none;
     background:url(../img/pusteblume-submenu.png) right bottom no-repeat lighten(@kajonaLightGray, 5%);
-    border:0px;
-    border-radius: 0px;
+    border:0;
+    border-radius: 0;
     display: none;
     list-style: none outside none;
     margin: 1px 0 0;
@@ -643,15 +538,13 @@ footer {
 }
 
 #portaleditor {
-    border: 0px;
-    background: none;
+    border: 0;
     text-transform: uppercase;
     font-weight: 700;
     font-size: @font-size-base + 4;
     color: #888;
     .box-shadow(none);
-
-    background:url(../img/portaleditor-arrow.png) right 6px no-repeat;
+    background:url(../img/portaleditor-arrow.png) right 6px no-repeat transparent;
     padding-right: 30px;
 
     &:hover {
@@ -661,26 +554,21 @@ footer {
 }
 
 
-
-
 .breadcrumb {
     background:url(../img/pusteblume.png) right -45px no-repeat @gray-darker;
-    border:0px;
-    border-radius: 0px;
+    border:0;
+//    border-radius: 0px;
     .box-shadow(none);
     margin:9px 0 0 0;
     padding: 6px 14px 5px 14px;
-
     white-space: nowrap;
 
     li.pathentry {
-        text-shadow:none;
         color:@white;
         font-weight: 600;
         font-size:@font-size-base;
         text-transform:uppercase;
         vertical-align: top;
-
         .text-overflow();
         max-width: 250px;
 
@@ -711,22 +599,26 @@ footer {
 
     li.pathentry:first-child {
         overflow: visible;
-
-
         &:before {
             display: none;
         }
     }
+
+    &.breadcrumbTop {
+        margin: 0;
+        padding: 2px 14px 0 14px;
+    }
 }
 
-.breadcrumbTop {
-    margin: 0px;
-    padding: 2px 14px 0px 14px;
-}
+
 
 
 #content {
 
+    /* TABS */
+    .tab-content {
+        padding: 4px;
+    }
 
     .alert {
         h4 {
@@ -754,16 +646,15 @@ footer {
     }
 
     pre, code {
-        font-size: @font-size-base - 4;
-        color: @text-color;
+        font-size: @font-size-base - 3;
+//        color: @text-color;
     }
 
 	.thumbnails {
         list-style: none;
         padding: 0;
 
-        & > .span3 {
-            margin-left: 10px !important;
+        & > .col-md-3 {
 
             &.disabled {
                 opacity: .5;
@@ -773,44 +664,44 @@ footer {
                 }
             }
 
-            @media (min-width: 768px) and (max-width: 979px) {
-                display: inline-block;
-                float: left;
-                width: inherit;
-            }
-
-            @media (min-width: 320px) and (max-width: 768px) {
-                display: inline-block;
-                float: left;
-                width: inherit;
-
-                .thumbnail .contentWrapper {
-                    height: 100px !important;
-                }
-            }
-
-
-            @media (min-width: 400px) and (max-width: 700px) {
-                width: 30%;
-            }
-
-            @media (min-width: 320px) and (max-width: 400px) {
-                width: 45%;
-            }
-
-            @media (min-width: 0px) and (max-width: 320px) {
-                width: 100%;
-            }
+//            @media (min-width: 768px) and (max-width: 979px) {
+//                display: inline-block;
+//                float: left;
+//                width: inherit;
+//            }
+//
+//            @media (min-width: 320px) and (max-width: 768px) {
+//                display: inline-block;
+//                float: left;
+//                width: inherit;
+//
+//                .thumbnail .contentWrapper {
+//                    height: 100px !important;
+//                }
+//            }
+//
+//
+//            @media (min-width: 400px) and (max-width: 700px) {
+//                width: 30%;
+//            }
+//
+//            @media (min-width: 320px) and (max-width: 400px) {
+//                width: 45%;
+//            }
+//
+//            @media (min-width: 0px) and (max-width: 320px) {
+//                width: 100%;
+//            }
         }
 
 
 		.thumbnail {
-			border-radius: 0px;
-			display: block;
+//			border-radius: 0;
+//			display: block;
 			line-height: 1;
-			padding: 4px;
+//			padding: 4px;
 			cursor: pointer;
-            background-color: @white;
+//            background-color: @white;
 
 			h5 {
 				margin: 0;
@@ -955,14 +846,14 @@ footer {
             li {
                 a, span {
                     border-radius: 0;
-                    border-color: #dcdcdc;
-                    border-style: solid;
-                    border-width: 1px;
-                    float: left;
+//                    border-color: #dcdcdc;
+//                    border-style: solid;
+//                    border-width: 1px;
+//                    float: left;
                     line-height: 30px;
                     padding: 0 10px;
                     text-decoration: none;
-                    color:@gray-dark;
+//                    color:@gray-dark;
                     margin:0 3px;
                     background-color:@gray-light;
 
@@ -973,7 +864,7 @@ footer {
 
                 &:first-child a, &:last-child a, &:last-child span {
                     border-left-width: 1px;
-                    border-radius: 0px;
+                    border-radius: 0;
                 }
             }
         }
@@ -1006,17 +897,17 @@ footer {
 			border-left: 2px solid #AF0A0A;
 			border-right: 2px solid #AF0A0A;
 			color: #000000;
-			margin: 2px 0px !important;
+			margin: 2px 0 !important;
 			.box-shadow(3px #888);
 		}
 
 
 		td {
-			border: 1px solid #cdcdcd;
+			border: 1px solid @gray-light;
 			vertical-align: top;
 
 			&.calendarDateToday {
-				background-color: #EFFBFF;
+				background-color: lighten(@blue, 40%);
 			}
 
 			&.calendarEntry div.calendarHeader,
@@ -1024,20 +915,17 @@ footer {
 			&.calendarEntryBlocked div.calendarHeader {
 				background-color: #efefef;
 				text-align: right;
-				padding: 0px 2px;
+				padding: 0 2px;
 				margin: 2px;
 			}
 
 			&.calendarEntryOutOfRange div.calendarHeader {
-				color: #cccccc;
+                color: lighten(@text-color, 20%);
 			}
 
 			&.calendarEntryBlocked div.calendarHeader {
-				background-color: #cccccc;
+                background-color: darken(@gray-light, 10%);
 			}
-
-
-
 		}
 
 	}
@@ -1045,7 +933,6 @@ footer {
 	table.calendarPager {
 		border-collapse: collapse;
 		width: 100%;
-
 		margin-bottom: 5px;
 	}
 
@@ -1090,19 +977,14 @@ footer {
         min-height: 0;
 
         .navbar-inner {
-            background-image: none;
 
             .nav li a {
-                padding: 7px 15px 7px 7px;
-                background-repeat: no-repeat;
-                background-position: left center;
+                padding: 5px 15px 5px 7px;
 
                 img, i {
-                    padding: 0px 2px;
+                    padding: 0 2px;
                     margin: 0 4px 0 0;
                 }
-
-
             }
         }
     }
@@ -1113,7 +995,6 @@ footer {
             font-size: @font-size-base+2;
         }
     }
-
 
 
     .kajona-data-table {
@@ -1148,7 +1029,7 @@ footer {
 
         td.inlineFormEntry {
             .form-group {
-                margin-bottom: 0px;
+                margin-bottom: 0;
                 .control-label {
                     display: none;
                 }
@@ -1182,7 +1063,7 @@ footer {
 
         &.folderHidden {
             .opacity(0);
-            height: 0px;
+            height: 0;
             overflow: hidden;
         }
 
@@ -1244,42 +1125,6 @@ footer {
     }
 }
 
-//textarea, input[type="text"], input[type="password"], input[type="datetime"], input[type="datetime-local"], input[type="date"], input[type="month"], input[type="time"], input[type="week"], input[type="number"], input[type="email"], input[type="url"], input[type="search"], input[type="tel"], input[type="color"], .uneditable-input { //  -moz-transition:none;
-//
-//}
-//
-//.input-append .add-on, select, textarea, input[type="text"], input[type="password"], input[type="datetime"], input[type="datetime-local"], input[type="date"], input[type="month"], input[type="time"], input[type="week"], input[type="number"], input[type="email"], input[type="url"], input[type="search"], input[type="tel"], input[type="color"], .uneditable-input {
-//    color: @gray;
-//    display: inline-block;
-//    font-size: @font-size-base;
-//    line-height: 20px;
-//    margin-bottom: 7px;
-//    padding: 4px;
-//    border-radius: 0px;
-//
-//    &.mandatoryFormElement {
-//        .box-shadow(0 0 6px @brand-warning+20);
-//    }
-//}
-
-//textarea:focus, input[type="text"]:focus, input[type="password"]:focus, input[type="datetime"]:focus, input[type="datetime-local"]:focus, input[type="date"]:focus, input[type="month"]:focus, input[type="time"]:focus, input[type="week"]:focus, input[type="number"]:focus, input[type="email"]:focus, input[type="url"]:focus, input[type="search"]:focus, input[type="tel"]:focus, input[type="color"]:focus, .uneditable-input:focus {
-//  .box-shadow(0 0 6px @green+20);
-//  outline: 0 none;
-//}
-
-//textarea {
-//    height: auto;
-//    margin-bottom: 7px !important;
-//}
-
-//select {
-//    height: 30px;
-//    padding: 2px 0 2px 8px;
-//
-//    &.input-xlarge {
-//        width: 280px;
-//    }
-//}
 
 label {
     color: @text-color;
@@ -1288,8 +1133,8 @@ label {
 
 
 
-.container-fluid {
-  padding-left:0px;
+.mainnavi-container {
+  padding-left:0;
 }
 
 .listButton {
@@ -1311,8 +1156,6 @@ label {
     }
 
 }
-
-
 
 
 
@@ -1640,10 +1483,7 @@ label {
     z-index: -1;
 }
 
-/* TABS */
-.tab-content {
-    padding: 4px;
-}
+
 
 
 /* TOOLTIPS */

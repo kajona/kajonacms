@@ -71,11 +71,11 @@
     </div>
 </div>
 
-<div class="container-fluid">
+<div class="container-fluid main-container">
     <div class="row">
 
         <!-- MODULE NAVIGATION -->
-        <div class="col-md-2 hidden-print">
+        <div class="col-md-2 hidden-print mainnavi-container">
             <div class="sidebar-nav hidden-xs hidden-sm">
                 <div class="panel-group" id="moduleNavigation">
                     <div class="nav-header">Kajona V4</div>
