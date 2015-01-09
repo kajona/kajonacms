@@ -773,7 +773,7 @@ class class_toolkit_admin extends class_toolkit {
      * @return string
      */
     public function formOptionalElementsWrapper($strContent, $strTitle = "", $bitVisible = false) {
-        $arrFolder = $this->getLayoutFolder($strContent, class_adminskin_helper::getAdminImage("icon_folderClosed")." ".$strTitle, $bitVisible);
+        $arrFolder = $this->getLayoutFolderPic($strContent, $strTitle, "icon_folderOpen", "icon_folderClosed",  $bitVisible);
         return $this->getFieldset($arrFolder[1], $arrFolder[0]);
     }
 
@@ -1282,7 +1282,8 @@ class class_toolkit_admin extends class_toolkit {
     }
 
     /**
-     * Creates the mechanism to fold parts of the site / make them vivsible or invisible
+     * Creates the mechanism to fold parts of the site / make them vivsible or invisible.
+     * The image is prepended to the passed link-text.
      *
      * @param string $strContent
      * @param string $strLinkText Mouseovertext
@@ -1291,17 +1292,27 @@ class class_toolkit_admin extends class_toolkit {
      * @param bool $bitVisible
      * @return string
      *
-     * @deprecated use getLayoutFolder() instead
      */
     public function getLayoutFolderPic($strContent, $strLinkText = "", $strImageVisible = "icon_folderOpen", $strImageInvisible = "icon_folderClosed", $bitVisible = true) {
-        $strID = str_replace(array(" ", "."), array("", ""), microtime());
-        $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "layout_folder_pic");
-        $arrTemplate = array();
-        $arrTemplate["id"] = $strID;
-        $arrTemplate["content"] = $strContent;
-        $arrTemplate["display"] = ($bitVisible ? "block" : "none");
-        $arrTemplate["link"] = "<a href=\"javascript:KAJONA.util.foldImage('".$strID."', '".$strID."_img', '"._skinwebpath_."/pics/".$strImageVisible."', '"._skinwebpath_."/pics/".$strImageInvisible."')\" title=\"".$strLinkText."\">".getImageAdmin(($bitVisible ? $strImageVisible : $strImageInvisible), $strLinkText, false, $strID."_img")."</a>";
-        return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
+
+        $strImageVisible = class_adminskin_helper::getAdminImage($strImageVisible);
+        $strImageInvisible = class_adminskin_helper::getAdminImage($strImageInvisible);
+
+        $strID = generateSystemid();
+        $strLinkText = "<span id='{$strID}'>".($bitVisible ? $strImageVisible : $strImageInvisible)."</span> ".$strLinkText;
+
+        $strImageVisible = addslashes($strImageVisible);
+        $strImageInvisible = addslashes($strImageInvisible);
+
+        $strVisibleCallback = <<<JS
+            function() {  $('#{$strID}').html('{$strImageVisible}'); }
+JS;
+
+        $strInvisibleCallback = <<<JS
+            function() {  $('#{$strID}').html('{$strImageInvisible}'); }
+JS;
+
+        return $this->getLayoutFolder($strContent, $strLinkText, $bitVisible, trim($strVisibleCallback), trim($strInvisibleCallback));
     }
 
 

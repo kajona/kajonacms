@@ -778,12 +778,6 @@ Used to fold elements / hide/unhide elements
 <div id="%%id%%" class="contentFolder %%display%%">%%content%%</div>
 </layout_folder>
 
-Same as above, but using an image to fold / unfold the content
-Deprecated!!!
-<layout_folder_pic>
-%%link%%<br /><br /><div id="%%id%%" class="contentFolder %%display%%">%%content%%</div>
-</layout_folder_pic>
-
 A precent-beam to illustrate proportions
 <percent_beam>
     <div class="progress">
