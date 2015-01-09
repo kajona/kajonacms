@@ -35,10 +35,10 @@
     <div class="navbar-topbar">
         <div class="container-fluid">
             <div class="row">
-                <div class="col-md-4">
+                <div class="col-md-4 col-sm-2 col-xs-2">
                     %%login%%
                 </div>
-                <div class="col-md-3" style="text-align: right;">
+                <div class="col-md-3 hidden-xs" style="text-align: right;">
                     <form class="navbar-search pull-left" action="_indexpath_">
                         <input type="hidden" name="admin" value="1" >
                         <input type="hidden" name="module" value="search">
@@ -52,9 +52,9 @@
 
                 </div>
                 <div class="col-md-5 navbar-dropdown-section pull-right">
-                    %%languageswitch%%
-                    %%aspectChooser%%
-                    <a id="portaleditor" class="btn btn-default" href="_webpath_">
+                    <span>%%languageswitch%%</span>
+                    <span class="">%%aspectChooser%%</span>
+                    <a id="portaleditor" class="btn btn-default hidden-xs" href="_webpath_">
                         Portal
                     </a>
                 </div>

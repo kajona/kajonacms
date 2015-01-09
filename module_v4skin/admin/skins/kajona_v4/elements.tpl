@@ -878,7 +878,7 @@ Part to display the login status, user is logged in
     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
         <i class="fa fa-user" id="icon-user"><span class="badge badge-info" id="userNotificationsCount">-</span></i> <span class="username">%%name%%</span>
     </a>
-    <ul class="dropdown-menu" role="menu">
+    <ul class="dropdown-menu generalContextMenu" role="menu">
         <li class="dropdown-submenu">
             <a tabindex="-1" href="#"><i class='fa fa-envelope'></i> [lang,modul_titel,messaging]</a>
             <ul class="dropdown-menu sub-menu" id="messagingShortlist"></ul>
