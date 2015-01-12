@@ -87,7 +87,7 @@
         <!-- CONTENT CONTAINER -->
         <div class="col-md-10" id="content">
 
-            <div class="row contentTopbar clearfix">
+            <div class="row contentTopbar clearfix hidden-print">
                 <div class="col-md-6">
                     <h1 id="moduleTitle" class="pull-left">%%actionTitle%%</h1>%%quickhelp%%
                 </div>
