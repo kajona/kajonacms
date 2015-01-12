@@ -334,7 +334,6 @@ class class_module_mediamanager_admin extends class_admin_evensimpler implements
 
             </script>
 HTML;
-            $strJsCode .= $this->objToolkit->jsDialog(1);
         }
 
         $strActions = "";
@@ -376,7 +375,6 @@ HTML;
                       ";
 
         $strReturn .= "</script>";
-        $strReturn .= $this->objToolkit->jsDialog(1);
         return $strReturn;
     }
 
@@ -548,9 +546,6 @@ HTML;
                 KAJONA.admin.strCropDisabled = '".addslashes(class_adminskin_helper::getAdminImage("icon_crop_acceptDisabled", $this->getLang("cropImageAccept")))."';
 
                 </script>";
-
-            $strJs .= $this->objToolkit->jsDialog(1);
-            $strJs .= $this->objToolkit->jsDialog(3);
 
             $strJs .= "<input type=\"hidden\" name=\"fm_int_realwidth\" id=\"fm_int_realwidth\" value=\"".$arrSize[0]."\" />";
             $strJs .= "<input type=\"hidden\" name=\"fm_int_realheight\" id=\"fm_int_realheight\" value=\"".$arrSize[1]."\" />";

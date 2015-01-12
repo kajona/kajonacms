@@ -902,7 +902,7 @@ class class_toolkit_admin extends class_toolkit {
      */
     public function listHeader() {
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "list_header");
-        return trim($this->jsDialog(1)).$this->objTemplate->fillTemplate(array(), $strTemplateID);
+        return $this->objTemplate->fillTemplate(array(), $strTemplateID);
     }
 
     /**
@@ -1060,9 +1060,7 @@ class class_toolkit_admin extends class_toolkit {
         }
 
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "batchactions_wrapper");
-        $strReturn = $this->objTemplate->fillTemplate(array("entries" => $strEntries), $strTemplateID);
-        $strReturn .= $this->jsDialog(1);
-        return $strReturn;
+        return $this->objTemplate->fillTemplate(array("entries" => $strEntries), $strTemplateID);
     }
 
     /**
@@ -1145,11 +1143,7 @@ class class_toolkit_admin extends class_toolkit {
      * @return string
      */
     public function listDeleteButton($strElementName, $strQuestion, $strLinkHref) {
-        //place it into a standard-js-dialog
-        $strDialog = $this->jsDialog(1);
-
         $strElementName = uniStrReplace(array('\''), array('\\\''), $strElementName);
-
         $strQuestion = uniStrReplace("%%element_name%%", htmlToString($strElementName, true), $strQuestion);
 
         //get the reload-url
@@ -1171,7 +1165,7 @@ class class_toolkit_admin extends class_toolkit {
             "icon_delete"
         );
 
-        return $this->listButton($strButton).trim($strDialog);
+        return $this->listButton($strButton);
     }
 
     /**
@@ -1954,54 +1948,11 @@ JS;
      *
      * @param int $intDialogType (0 = regular modal dialog, 1 = confirmation dialog, 2 = rawDialog, 3 = loadingDialog)
      * @return string
+     *
+     * @deprecated no longer required, available by the skin by default
      */
     public function jsDialog($intDialogType) {
-        $strContent = "";
-        $strContentTemplate = "";
-        //create the html-part
-        $arrTemplate = array();
-        $strContainerId = generateSystemid();
-        $arrTemplate["dialog_id"] = $strContainerId;
-
-        $strTemplateId = null;
-        if($intDialogType == 0 && class_carrier::getInstance()->getObjSession()->getSession("jsDialog_".$intDialogType, class_session::$intScopeRequest) === false) {
-            $strTemplateId = $this->objTemplate->readTemplate("/elements.tpl", "dialogContainer");
-            class_carrier::getInstance()->getObjSession()->setSession("jsDialog_".$intDialogType, "true",  class_session::$intScopeRequest);
-        }
-        else if($intDialogType == 1 && class_carrier::getInstance()->getObjSession()->getSession("jsDialog_".$intDialogType, class_session::$intScopeRequest) === false) {
-            $arrTemplate["dialog_cancelButton"] = class_carrier::getInstance()->getObjLang()->getLang("dialog_cancelButton", "system");
-
-            $strTemplateId = $this->objTemplate->readTemplate("/elements.tpl", "dialogConfirmationContainer");
-            class_carrier::getInstance()->getObjSession()->setSession("jsDialog_".$intDialogType, "true",  class_session::$intScopeRequest);
-        }
-        else if($intDialogType == 2 && class_carrier::getInstance()->getObjSession()->getSession("jsDialog_".$intDialogType, class_session::$intScopeRequest) === false) {
-            $strTemplateId = $this->objTemplate->readTemplate("/elements.tpl", "dialogRawContainer");
-            class_carrier::getInstance()->getObjSession()->setSession("jsDialog_".$intDialogType, "true",  class_session::$intScopeRequest);
-        }
-        else if($intDialogType == 3 && class_carrier::getInstance()->getObjSession()->getSession("jsDialog_".$intDialogType, class_session::$intScopeRequest) === false) {
-            $arrTemplate["dialog_title"] = class_carrier::getInstance()->getObjLang()->getLang("dialog_loadingHeader", "system");
-            $strTemplateId = $this->objTemplate->readTemplate("/elements.tpl", "dialogLoadingContainer");
-            class_carrier::getInstance()->getObjSession()->setSession("jsDialog_".$intDialogType, "true",  class_session::$intScopeRequest);
-        }
-
-        if($strTemplateId != null) {
-            $strContent .= $this->objTemplate->fillTemplate($arrTemplate, $strTemplateId);
-
-            //and create the java-script
-            $strContent .="<script type=\"text/javascript\">
-                var jsDialog_".$intDialogType." = null;
-                KAJONA.admin.loader.loadFile('_skinwebpath_/js/kajona_dialog.js', function() {
-                    jsDialog_".$intDialogType." = new KAJONA.admin.ModalDialog('".$strContainerId."', ".$intDialogType.");
-                }, true);
-            </script>";
-
-            //Create a template dialog
-            $strContainerIdTemplate = "template_".$strContainerId;
-            $arrTemplate["dialog_id"] = $strContainerIdTemplate;
-            $strContentTemplate .= $this->objTemplate->fillTemplate($arrTemplate, $strTemplateId);
-        }
-
-        return $strContent.$strContentTemplate;
+        return "";
     }
 
 
