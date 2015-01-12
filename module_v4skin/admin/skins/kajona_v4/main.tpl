@@ -189,7 +189,7 @@
 </div>
 
 <!-- raw dialog container -->
-<dialogRawContainer><div class="modal" id="jsDialog_2">
+><div class="modal" id="jsDialog_2">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-body">
@@ -197,7 +197,7 @@
             </div>
         </div>
     </div>
-</div></dialogRawContainer>
+</div>
 
 <script type="text/javascript">
     KAJONA.admin.loader.loadFile("_skinwebpath_/js/kajona_dialog.js", function() {
