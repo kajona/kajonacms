@@ -786,6 +786,9 @@ class class_toolkit_admin extends class_toolkit {
      * @return string
      */
     public function formTextRow($strText, $strClass = "") {
+        if($strText == "")
+            return "";
+
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "text_row_form");
         $arrTemplate = array();
         $arrTemplate["text"] = $strText;
