@@ -896,57 +896,24 @@ Part to display the login status, user is logged in
 </div>
 <script type="text/javascript">
 
-    KAJONA.admin.messaging.pollMessages = function() {
-
-        KAJONA.admin.messaging.getRecentMessages(function(objResponse) {
-            var $userNotificationsCount = $('#userNotificationsCount');
-            var oldCount = $userNotificationsCount.text();
-            $userNotificationsCount.text(objResponse.messageCount);
-            if (objResponse.messageCount > 0) {
-                $userNotificationsCount.show();
-                if(oldCount != objResponse.messageCount) {
-                    var strTitle = document.title.replace("("+oldCount+")", "");
-                    document.title = "("+objResponse.messageCount+") "+strTitle;
-
-                    if(!KAJONA.admin.messaging.bitFirstLoad && oldCount < objResponse.messageCount) {
-                        KAJONA.util.desktopNotification.showMessage('[lang,messaging_notification_title,messaging]', '[lang,messaging_notification_body,messaging]', function() {
-                            document.location.href = '_indexpath_?admin=1&module=messaging';
-                        });
-                    }
-                }
-
-            } else {
-                $userNotificationsCount.hide();
-            }
-
-            $('#messagingShortlist').empty();
-            $.each(objResponse.messages, function(index, item) {
-                if(item.unread == 0)
-                    $('#messagingShortlist').append("<li><a href='"+item.details+"'><i class='fa fa-envelope'></i> <b>"+item.title+"</b></a></li>");
-                else
-                    $('#messagingShortlist').append("<li><a href='"+item.details+"'><i class='fa fa-envelope'></i> "+item.title+"</a></li>");
-            });
-            $('#messagingShortlist').append("<li class='divider'></li><li><a href='_indexpath_?admin=1&module=messaging'><i class='fa fa-envelope'></i> [lang,action_show_all,messaging]</a></li>");
-
-            window.setTimeout("KAJONA.admin.messaging.pollMessages()", 20000);
-            KAJONA.admin.messaging.bitFirstLoad = false;
-        });
-    };
     if(%%renderMessages%%) {
-        $(function() { KAJONA.admin.messaging.pollMessages() });
+        $(function() {
+            KAJONA.v4skin.properties.messaging = {
+                notification_title : '[lang,messaging_notification_title,messaging]',
+                notification_body : '[lang,messaging_notification_body,messaging]',
+                show_all : '[lang,action_show_all,messaging]'
+            };
+            KAJONA.v4skin.messaging.pollMessages()
+        });
     }
     else {
         $('#messagingShortlist').closest("li").hide();
     }
 
     if(%%renderTags%%) {
-        KAJONA.admin.ajax.genericAjaxCall("tags", "getFavoriteTags", "", function(data, status, jqXHR) {
-            if(status == 'success') {
-                $.each($.parseJSON(data), function(index, item) {
-                    $('#tagsSubemenu').append("<li><a href='"+item.url+"'><i class='fa fa-tag'></i> "+item.name+"</a></li>");
-                });
-                $('#tagsSubemenu').append("<li class='divider'></li><li><a href='_indexpath_?admin=1&module=tags'><i class='fa fa-tag'></i> [lang,action_show_all,tags]</a></li>")
-            }
+        $(function() {
+            KAJONA.v4skin.properties.tags.show_all = '[lang,action_show_all,tags]';
+            KAJONA.v4skin.initTagMenu();
         });
     }
     else {

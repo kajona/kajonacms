@@ -111,6 +111,11 @@ if (typeof KAJONA == "undefined") {
 
 KAJONA.v4skin = {
 
+    properties : {
+        messaging : {},
+        tags : {}
+    },
+
 
 
     defaultAutoComplete : function() {
@@ -157,6 +162,47 @@ KAJONA.v4skin = {
             var $objCur = $(this);
             $objCur.css('background-image', 'url('+KAJONA_WEBPATH+'/core/module_v4skin/admin/skins/kajona_v4/img/loading-small-still.gif)').css('background-repeat', 'no-repeat').css('background-position', 'right center');
         }
+    },
+
+    messaging : {
+
+        bitFirstLoad : true,
+
+        pollMessages : function() {
+            KAJONA.admin.messaging.getRecentMessages(function (objResponse) {
+                var $userNotificationsCount = $('#userNotificationsCount');
+                var oldCount = $userNotificationsCount.text();
+                $userNotificationsCount.text(objResponse.messageCount);
+                if (objResponse.messageCount > 0) {
+                    $userNotificationsCount.show();
+                    if (oldCount != objResponse.messageCount) {
+                        var strTitle = document.title.replace("(" + oldCount + ")", "");
+                        document.title = "(" + objResponse.messageCount + ") " + strTitle;
+
+                        if (!KAJONA.v4skin.messaging.bitFirstLoad && oldCount < objResponse.messageCount) {
+                            KAJONA.util.desktopNotification.showMessage(KAJONA.v4skin.properties.messaging.notification_title, KAJONA.v4skin.properties.messaging.notification_body, function () {
+                                document.location.href = '_indexpath_?admin=1&module=messaging';
+                            });
+                        }
+                    }
+
+                } else {
+                    $userNotificationsCount.hide();
+                }
+
+                $('#messagingShortlist').empty();
+                $.each(objResponse.messages, function (index, item) {
+                    if (item.unread == 0)
+                        $('#messagingShortlist').append("<li><a href='" + item.details + "'><i class='fa fa-envelope'></i> <b>" + item.title + "</b></a></li>");
+                    else
+                        $('#messagingShortlist').append("<li><a href='" + item.details + "'><i class='fa fa-envelope'></i> " + item.title + "</a></li>");
+                });
+                $('#messagingShortlist').append("<li class='divider'></li><li><a href='_indexpath_?admin=1&module=messaging'><i class='fa fa-envelope'></i> " + KAJONA.v4skin.properties.messaging.show_all + "</a></li>");
+
+                window.setTimeout("KAJONA.v4skin.messaging.pollMessages()", 20000);
+                KAJONA.v4skin.messaging.bitFirstLoad = false;
+            });
+        }
     }
 };
 
@@ -201,5 +247,16 @@ KAJONA.v4skin.breadcrumb = {
         KAJONA.v4skin.breadcrumb.updatePathNavigationEllipsis();
     }
 
+};
+
+KAJONA.v4skin.initTagMenu = function() {
+    KAJONA.admin.ajax.genericAjaxCall("tags", "getFavoriteTags", "", function(data, status, jqXHR) {
+        if(status == 'success') {
+            $.each($.parseJSON(data), function(index, item) {
+                $('#tagsSubemenu').append("<li><a href='"+item.url+"'><i class='fa fa-tag'></i> "+item.name+"</a></li>");
+            });
+            $('#tagsSubemenu').append("<li class='divider'></li><li><a href='_indexpath_?admin=1&module=tags'><i class='fa fa-tag'></i> "+KAJONA.v4skin.properties.tags.show_all+"</a></li>")
+        }
+    });
 };
 
