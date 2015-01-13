@@ -172,7 +172,7 @@
 </div>
 
 <!-- raw dialog container -->
-><div class="modal" id="jsDialog_2">
+<div class="modal" id="jsDialog_2">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-body">
