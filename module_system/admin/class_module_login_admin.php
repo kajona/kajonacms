@@ -57,9 +57,9 @@ class class_module_login_admin extends class_admin_controller implements interfa
         $arrTemplate = array();
         $strForm = "";
         $strForm .= $this->objToolkit->formHeader(class_link::getLinkAdminHref($this->getArrModule("modul"), "adminLogin"));
-        $strForm .= $this->objToolkit->formInputText("name", $this->getLang("login_loginUser", "user"), "", "inputTextShort");
-        $strForm .= $this->objToolkit->formInputPassword("passwort", $this->getLang("login_loginPass", "user"), "", "inputTextShort");
-        $strForm .= $this->objToolkit->formInputSubmit($this->getLang("login_loginButton", "user"), "", "", "inputSubmitShort");
+        $strForm .= $this->objToolkit->formInputText("name", $this->getLang("login_loginUser", "user"), "", "input-large");
+        $strForm .= $this->objToolkit->formInputPassword("passwort", $this->getLang("login_loginPass", "user"), "", "input-large");
+        $strForm .= $this->objToolkit->formInputSubmit($this->getLang("login_loginButton", "user"));
         $strForm .= $this->objToolkit->formClose();
         $arrTemplate["form"] = $strForm;
         $arrTemplate["loginTitle"] = $this->getLang("login_loginTitle", "user");

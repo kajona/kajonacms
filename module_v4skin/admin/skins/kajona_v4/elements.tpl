@@ -462,8 +462,8 @@ Regular Text-Field
 <input_text>
     <div class="form-group">
         <label for="%%name%%" class="col-sm-3 control-label">%%title%%</label>
-        <div class="col-sm-6">
-            <input type="text" id="%%name%%" name="%%name%%" value="%%value%%" class="form-control %%class%%" %%readonly%%>
+        <div class="col-sm-6 %%class%%">
+            <input type="text" id="%%name%%" name="%%name%%" value="%%value%%" class="form-control" %%readonly%%>
         </div>
         <div class="col-sm-2 form-opener">
             %%opener%%
@@ -475,8 +475,8 @@ Textarea
 <input_textarea>
     <div class="form-group">
         <label for="%%name%%" class="col-sm-3 control-label">%%title%%</label>
-        <div class="col-sm-6">
-            <textarea name="%%name%%" id="%%name%%" class="form-control %%class%%" rows="%%numberOfRows%%" %%readonly%%>%%value%%</textarea>
+        <div class="col-sm-6 %%class%%">
+            <textarea name="%%name%%" id="%%name%%" class="form-control" rows="%%numberOfRows%%" %%readonly%%>%%value%%</textarea>
         </div>
     </div>
 </input_textarea>
@@ -485,8 +485,8 @@ Regular Password-Field
 <input_password>
     <div class="form-group">
         <label for="%%name%%" class="col-sm-3 control-label">%%title%%</label>
-        <div class="col-sm-6">
-            <input type="password" autocomplete="off" id="%%name%%" name="%%name%%" value="%%value%%" class="form-control %%class%%" %%readonly%%>
+        <div class="col-sm-6 %%class%%">
+            <input type="password" autocomplete="off" id="%%name%%" name="%%name%%" value="%%value%%" class="form-control" %%readonly%%>
         </div>
     </div>
 </input_password>
