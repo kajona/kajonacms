@@ -79,7 +79,7 @@
 
         <!-- MODULE NAVIGATION -->
         <div class="col-md-2 hidden-print mainnavi-container sidebar-offcanvas" id="sidebar">
-            <div class="sidebar-nav ">
+            <div class="sidebar-nav">
                 <div class="panel-group" id="moduleNavigation">
                     <div class="nav-header">Kajona V4</div>
                     %%moduleSitemap%%
@@ -211,12 +211,6 @@
         jsDialog_2 = new KAJONA.admin.ModalDialog('jsDialog_2', 2);
         jsDialog_3 = new KAJONA.admin.ModalDialog('jsDialog_3', 3);
     }, true);
-
-    $(document).ready(function () {
-        $('[data-toggle="offcanvas"]').click(function () {
-            $('.row-offcanvas').toggleClass('active')
-        });
-    });
 </script>
 
 <div id="jsStatusBox" class="" style="display: none; position: absolute;"><div class="jsStatusBoxHeader">Status-Info</div><div id="jsStatusBoxContent" class="jsStatusBoxContent"></div></div>

@@ -103,6 +103,11 @@ $(function () {
     //register desktop notifications for messaging
     KAJONA.util.desktopNotification.grantPermissions();
 
+    //init offacnvas menu
+    $('[data-toggle="offcanvas"]').click(function () {
+        $('.row-offcanvas').toggleClass('active')
+    });
+
 });
 
 if (typeof KAJONA == "undefined") {
@@ -181,7 +186,7 @@ KAJONA.v4skin = {
 
                         if (!KAJONA.v4skin.messaging.bitFirstLoad && oldCount < objResponse.messageCount) {
                             KAJONA.util.desktopNotification.showMessage(KAJONA.v4skin.properties.messaging.notification_title, KAJONA.v4skin.properties.messaging.notification_body, function () {
-                                document.location.href = '_indexpath_?admin=1&module=messaging';
+                                document.location.href = KAJONA_WEBPATH+'/index.php?admin=1&module=messaging';
                             });
                         }
                     }
@@ -197,7 +202,7 @@ KAJONA.v4skin = {
                     else
                         $('#messagingShortlist').append("<li><a href='" + item.details + "'><i class='fa fa-envelope'></i> " + item.title + "</a></li>");
                 });
-                $('#messagingShortlist').append("<li class='divider'></li><li><a href='_indexpath_?admin=1&module=messaging'><i class='fa fa-envelope'></i> " + KAJONA.v4skin.properties.messaging.show_all + "</a></li>");
+                $('#messagingShortlist').append("<li class='divider'></li><li><a href='"+KAJONA_WEBPATH+"/index.php?admin=1&module=messaging'><i class='fa fa-envelope'></i> " + KAJONA.v4skin.properties.messaging.show_all + "</a></li>");
 
                 window.setTimeout("KAJONA.v4skin.messaging.pollMessages()", 20000);
                 KAJONA.v4skin.messaging.bitFirstLoad = false;
@@ -255,7 +260,7 @@ KAJONA.v4skin.initTagMenu = function() {
             $.each($.parseJSON(data), function(index, item) {
                 $('#tagsSubemenu').append("<li><a href='"+item.url+"'><i class='fa fa-tag'></i> "+item.name+"</a></li>");
             });
-            $('#tagsSubemenu').append("<li class='divider'></li><li><a href='_indexpath_?admin=1&module=tags'><i class='fa fa-tag'></i> "+KAJONA.v4skin.properties.tags.show_all+"</a></li>")
+            $('#tagsSubemenu').append("<li class='divider'></li><li><a href='"+KAJONA_WEBPATH+"/index.php?admin=1&module=tags'><i class='fa fa-tag'></i> "+KAJONA.v4skin.properties.tags.show_all+"</a></li>")
         }
     });
 };
