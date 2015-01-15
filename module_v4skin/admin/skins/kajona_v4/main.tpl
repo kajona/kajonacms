@@ -35,10 +35,13 @@
     <div class="navbar-topbar">
         <div class="container-fluid">
             <div class="row">
-                <div class="col-md-4 col-sm-2 col-xs-2">
+                <div class="sidebar-menu col-xs-1 col-sm-1 hidden-md hidden-lg">
+                    <button type="button" class="" data-toggle="offcanvas"><i class="fa fa-bars"></i></button>
+                </div>
+                <div class="col-md-4 col-sm-2 col-xs-4">
                     %%login%%
                 </div>
-                <div class="col-md-3 hidden-xs" style="text-align: right;">
+                <div class="col-md-3 col-sm-3 hidden-xs" style="text-align: right;">
                     <form class="navbar-search pull-left" action="_indexpath_">
                         <input type="hidden" name="admin" value="1" >
                         <input type="hidden" name="module" value="search">
@@ -51,7 +54,7 @@
                     </form>
 
                 </div>
-                <div class="col-md-5 navbar-dropdown-section pull-right">
+                <div class="col-md-5 col-sm-6 col-xs-6 navbar-dropdown-section pull-right">
                     <span>%%languageswitch%%</span>
                     <span class="">%%aspectChooser%%</span>
                     <a id="portaleditor" class="btn btn-default hidden-xs" href="_webpath_">
@@ -72,11 +75,11 @@
 </div>
 
 <div class="container-fluid main-container">
-    <div class="row">
+    <div class="row row-offcanvas row-offcanvas-left">
 
         <!-- MODULE NAVIGATION -->
-        <div class="col-md-2 hidden-print mainnavi-container">
-            <div class="sidebar-nav hidden-xs hidden-sm">
+        <div class="col-md-2 hidden-print mainnavi-container sidebar-offcanvas" id="sidebar">
+            <div class="sidebar-nav ">
                 <div class="panel-group" id="moduleNavigation">
                     <div class="nav-header">Kajona V4</div>
                     %%moduleSitemap%%
@@ -208,6 +211,12 @@
         jsDialog_2 = new KAJONA.admin.ModalDialog('jsDialog_2', 2);
         jsDialog_3 = new KAJONA.admin.ModalDialog('jsDialog_3', 3);
     }, true);
+
+    $(document).ready(function () {
+        $('[data-toggle="offcanvas"]').click(function () {
+            $('.row-offcanvas').toggleClass('active')
+        });
+    });
 </script>
 
 <div id="jsStatusBox" class="" style="display: none; position: absolute;"><div class="jsStatusBoxHeader">Status-Info</div><div id="jsStatusBoxContent" class="jsStatusBoxContent"></div></div>
