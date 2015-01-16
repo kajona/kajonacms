@@ -176,6 +176,16 @@ class class_installer_votings extends class_installer_base implements interface_
             $this->objDB->flushQueryCache();
         }
 
+        $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModul["module_version"] == "1.5") {
+            $strReturn .= "Updating 1.5 to 1.6...\n";
+            $strReturn .= "Updating module-versions...\n";
+            $this->updateModuleVersion("votings", "1.6");
+            $strReturn .= "Updating element-versions...\n";
+            $this->updateElementVersion("votings", "1.6");
+            $this->objDB->flushQueryCache();
+        }
+
         return $strReturn."\n\n";
 	}
     
