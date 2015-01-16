@@ -672,7 +672,10 @@ in addition, a container for the calendar is needed. Use %%calendarContainerId%%
     <div class="form-group">
         <label for="%%name%%" class="col-sm-3 control-label">%%title%%</label>
         <div class="col-sm-6">
-            <input id="%%calendarId%%" name="%%calendarId%%" class="form-control %%class%%" size="16" type="text" value="%%valuePlain%%">
+            <div class="input-group">
+                <div class="input-group-addon"><i class="fa fa-calendar-o"></i></div>
+                <input id="%%calendarId%%" name="%%calendarId%%" class="form-control %%class%%" size="16" type="text" value="%%valuePlain%%">
+            </div>
             <script>
                 KAJONA.admin.loader.loadFile(["_webpath_/core/module_v4skin/admin/skins/kajona_v4/js/bootstrap-datepicker.js"], function() {
                     var arrSecondFiles = ["_webpath_/core/module_v4skin/admin/skins/kajona_v4/js/locales/bootstrap-datepicker.%%calendarLang%%.js"];
@@ -705,14 +708,24 @@ in addition, a container for the calendar is needed. Use %%calendarContainerId%%
 
     <div class="form-group">
         <label for="%%name%%" class="col-sm-3 control-label">%%title%%</label>
-        <div class="col-sm-3">
-            <input id="%%calendarId%%" name="%%calendarId%%" class="form-control" size="16" type="text" value="%%valuePlain%%">
+        <div class="col-sm-2">
+            <div class="input-group">
+                <div class="input-group-addon"><i class="fa fa-calendar-o"></i></div>
+                <input id="%%calendarId%%" name="%%calendarId%%" class="form-control" size="16" type="text" value="%%valuePlain%%">
+            </div>
+        </div>
+
+        <div class="col-sm-2 form-inline">
+            <div class="form-group">
+
+                <div class="input-group">
+                    <div class="input-group-addon"><i class="fa fa-clock-o"></i></div>
+                    <input name="%%titleHour%%" id="%%titleHour%%" type="text" class="form-control %%class%%" size="2" maxlength="2" value="%%valueHour%%" />
+                </div>
+                <input name="%%titleMin%%" id="%%titleMin%%" type="text" class="form-control %%class%%" size="2" maxlength="2" value="%%valueMin%%" />
+            </div>
         </div>
         <div class="col-sm-1">
-            <input name="%%titleHour%%" id="%%titleHour%%" type="text" class="form-control %%class%%" size="2" maxlength="2" value="%%valueHour%%" />
-        </div>
-        <div class="col-sm-1">
-            <input name="%%titleMin%%" id="%%titleMin%%" type="text" class="form-control %%class%%" size="2" maxlength="2" value="%%valueMin%%" />
         </div>
         <script>
             KAJONA.admin.loader.loadFile(["_webpath_/core/module_v4skin/admin/skins/kajona_v4/js/bootstrap-datepicker.js"], function() {
