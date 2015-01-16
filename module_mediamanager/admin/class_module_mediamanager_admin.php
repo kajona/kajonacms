@@ -239,22 +239,27 @@ class class_module_mediamanager_admin extends class_admin_evensimpler implements
      */
     protected function getAdminForm(interface_model $objInstance) {
         if($objInstance instanceof class_module_mediamanager_repo) {
-            $objForm = new class_admin_formgenerator("repo", $objInstance);
-            $objForm->addDynamicField("strTitle");
-            $objField = $objForm->addDynamicField("strPath")->setStrHint($this->getLang("mediamanager_path_h"));
-            $objField->setStrOpener(
+            $objForm = parent::getAdminForm($objInstance);
+
+            $objForm->getField("path")->setStrOpener(
                 class_link::getLinkAdminDialog(
                     "mediamanager",
                     "folderListFolderview",
-                    "&form_element=".$objField->getStrEntryName(),
+                    "&form_element=".$objForm->getField("path")->getStrEntryName(),
                     $this->getLang("commons_open_browser"),
                     $this->getLang("commons_open_browser"),
                     "icon_externalBrowser",
                     $this->getLang("commons_open_browser")
                 )
-            );
+            )->setStrHint($this->getLang("mediamanager_path_h"));
+
+            $objForm->getField("uploadfilter")->setStrHint($this->getLang("mediamanager_upload_filter_h"));
+            $objForm->getField("viewfilter")->setStrHint($this->getLang("mediamanager_view_filter_h"));
+
+            return $objForm;
+
             $objForm->addDynamicField("uploadFilter")->setStrHint($this->getLang("mediamanager_upload_filter_h"));
-            $objForm->addDynamicField("viewFilter")->setStrHint($this->getLang("mediamanager_view_filter_h"));
+            $objForm->addDynamicField("viewFilter")  ->setStrHint($this->getLang("mediamanager_view_filter_h"));
 
             return $objForm;
         }
