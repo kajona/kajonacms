@@ -65,7 +65,7 @@
         </div>
     </div>
     <div class="container-fluid pathNaviContainer">
-        <div class="row">
+        <div class="row row row-offcanvas row-offcanvas-left">
             <div class="col-md-2 hidden-xs hidden-sm" style="z-index: 0 !important;">&nbsp;</div>
             <div class="col-md-10">
                 %%path%%
