@@ -5,7 +5,7 @@
         >
     <title>votings</title>
     <description>Let your users vote on different polls.</description>
-    <version>1.5</version>
+    <version>1.6</version>
     <author>Kajona Team</author>
     <type>MODULE</type>
     <providesInstaller>TRUE</providesInstaller>
