@@ -257,11 +257,6 @@ class class_module_mediamanager_admin extends class_admin_evensimpler implements
             $objForm->getField("viewfilter")->setStrHint($this->getLang("mediamanager_view_filter_h"));
 
             return $objForm;
-
-            $objForm->addDynamicField("uploadFilter")->setStrHint($this->getLang("mediamanager_upload_filter_h"));
-            $objForm->addDynamicField("viewFilter")  ->setStrHint($this->getLang("mediamanager_view_filter_h"));
-
-            return $objForm;
         }
         else if($objInstance instanceof class_module_mediamanager_file) {
             if($this->getStrPeAddon() == "" && $this->getParam("source") != "search")
