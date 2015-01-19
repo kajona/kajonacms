@@ -54,7 +54,7 @@ $(function() {
 </grid_footer>
 
 <grid_entry>
-<li class="span3 %%cssaddon%%" data-systemid="%%systemid%%" >
+<li class="col-md-3 col-xs-3 %%cssaddon%%" data-systemid="%%systemid%%" >
     <div class="thumbnail" %%clickaction%% >
         <h5 >%%title%%</h5>
         <div class="contentWrapper" style="background: url(%%image%%) center no-repeat; background-size: cover;">
@@ -228,8 +228,8 @@ Currently, there are two modes: with and without a description.
         <tr data-systemid="%%listitemid%%">
             <td class="treedrag"></td>
             <td class="listsorthandle"></td>
-            <td class="checkbox">%%checkbox%%</td>
-            <td class="image">%%image%%</td>
+            <td class="listcheckbox">%%checkbox%%</td>
+            <td class="listimage">%%image%%</td>
             <td class="title">%%title%%</td>
             <td class="center">%%center%%</td>
             <td class="actions">%%actions%%</td>
@@ -243,8 +243,8 @@ Currently, there are two modes: with and without a description.
         <tr data-systemid="%%listitemid%%">
             <td rowspan="2" class="treedrag"></td>
             <td rowspan="2" class="listsorthandle"></td>
-            <td rowspan="2" class="checkbox">%%checkbox%%</td>
-            <td rowspan="2" class="image">%%image%%</td>
+            <td rowspan="2" class="listcheckbox">%%checkbox%%</td>
+            <td rowspan="2" class="listimage">%%image%%</td>
             <td class="title">%%title%%</td>
             <td class="center">%%center%%</td>
             <td class="actions">%%actions%%</td>
@@ -263,8 +263,8 @@ Currently, there are two modes: with and without a description.
     <div class="batchActionsProgress" style="display: none;">
         <h5 class="progresstitle"></h5>
         <span class="batch_progressed">0</span> / <span class="total">0</span>
-        <div class="progress progress-striped active" title="">
-            <div class="bar" style="width: 0%;"></div>
+        <div class="progress">
+            <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">0%</div>
         </div>
     </div>
 </div>
@@ -345,10 +345,10 @@ To avoid side-effects, no line-break in this case -> not needed by default, but 
 
 Dropdown
 <input_dropdown>
-    <div class="control-group">
-        <label for="%%name%%" class="control-label">%%title%%</label>
-        <div class="controls">
-            <select data-placeholder="%%dataplaceholder%%" name="%%name%%" id="%%name%%" class="input-xlarge %%class%%" %%disabled%% %%addons%%>%%options%%</select>
+    <div class="form-group">
+        <label for="%%name%%" class="col-sm-3 control-label">%%title%%</label>
+        <div class="col-sm-6">
+            <select data-placeholder="%%dataplaceholder%%" name="%%name%%" id="%%name%%" class="form-control %%class%%" %%disabled%% %%addons%%>%%options%%</select>
         </div>
     </div>
 
@@ -374,10 +374,10 @@ Dropdown
 
 Multiselect
 <input_multiselect>
-    <div class="control-group">
-        <label for="%%name%%[]" class="control-label">%%title%%</label>
-        <div class="controls">
-            <select size="7" name="%%name%%[]" id="%%name%%" class="input-xlarge %%class%%" multiple="multiple" %%disabled%% %%addons%%>%%options%%</select>
+    <div class="form-group">
+        <label for="%%name%%[]" class="col-sm-3 control-label">%%title%%</label>
+        <div class="col-sm-6">
+            <select size="7" name="%%name%%[]" id="%%name%%" class="form-control %%class%%" multiple="multiple" %%disabled%% %%addons%%>%%options%%</select>
         </div>
     </div>
 </input_multiselect>
@@ -393,9 +393,9 @@ Multiselect
 
 Radiogroup
 <input_radiogroup>
-    <div class="control-group %%class%%">
-        <label class="control-label">%%title%%</label>
-        <div class="controls">
+    <div class="form-group %%class%%">
+        <label class="col-sm-3 control-label">%%title%%</label>
+        <div class="col-sm-6">
             %%radios%%
         </div>
     </div>
@@ -403,29 +403,26 @@ Radiogroup
 
 
 <input_radiogroup_row>
-    <label class="radio">
-        <input type="radio" name="%%name%%" id="%%name%%_%%key%%" value="%%key%%" class="%%class%%" %%disabled%%>
-        %%value%%
-    </label>
+    <div class="radio">
+        <label>
+            <input type="radio" name="%%name%%" id="%%name%%_%%key%%" value="%%key%%" class="%%class%%" %%checked%% %%disabled%%>
+            %%value%%
+        </label>
+    </div>
 </input_radiogroup_row>
-
-<input_radiogroup_row_selected>
-    <label class="radio">
-        <input type="radio" name="%%name%%" id="%%name%%_%%key%%" value="%%key%%" class="%%class%%" checked %%disabled%%>
-        %%value%%
-    </label>
-</input_radiogroup_row_selected>
 
 
 Checkbox
 <input_checkbox>
-<div class="control-group">
-    <label for="%%name%%" class="control-label"></label>
-    <div class="controls">
-        <label class="checkbox">
-            <input type="checkbox" name="%%name%%" value="checked" id="%%name%%" class="%%class%%" %%checked%% %%readonly%%>
-            %%title%%
-        </label>
+<div class="form-group">
+    <label for="%%name%%" class="col-sm-3 control-label"></label>
+    <div class="col-sm-6">
+        <div class="checkbox">
+            <label>
+                <input type="checkbox" name="%%name%%" value="checked" id="%%name%%" class="%%class%%" %%checked%% %%readonly%%>
+                %%title%%
+            </label>
+        </div>
     </div>
 </div>
 </input_checkbox>
@@ -433,11 +430,12 @@ Checkbox
 Toggle_On_Off (using bootstrap-switch.org)
 <input_on_off_switch>
     <script type="text/javascript">
-        KAJONA.admin.loader.loadFile("/core/module_v4skin/admin/skins/kajona_v4/js/bootstrap-switch.js", function() {
+        KAJONA.admin.loader.loadFile("/core/module_v4skin/admin/skins/kajona_v4/js/bootstrap-switch.min.js", function() {
             window.setTimeout(function() {
-                var divId = 'div_%%name%%';
+                var divId = '%%name%%';
                 divId = '#' + divId.replace( /(:|\.|\[|\])/g, "\\$1" );
-                $(divId).on('switch-change', function (e, data) {
+                $(divId).bootstrapSwitch();
+                $(divId).on('switchChange.bootstrapSwitch', function (event, state) {
                     %%onSwitchJSCallback%%
                 });
 
@@ -445,11 +443,11 @@ Toggle_On_Off (using bootstrap-switch.org)
         });
     </script>
 
-    <div class="control-group">
-        <label class="control-label" for="%%name%%">%%title%%</label>
-        <div class="controls">
-            <div id="div_%%name%%" class="make-switch %%class%%" data-on-label="<i class='fa fa-check fa-white' ></i>" data-off-label="<i class='fa fa-times'></i>">
-                <input type="checkbox" name="%%name%%" value="checked" id="%%name%%" class="%%class%%" %%checked%% %%readonly%%>
+    <div class="form-group">
+        <label class="col-sm-3 control-label" for="%%name%%">%%title%%</label>
+        <div class="col-sm-6">
+            <div id="div_%%name%%" class="" >
+                <input type="checkbox" name="%%name%%" value="checked" id="%%name%%" class="%%class%%" %%checked%% %%readonly%% data-size="small" data-on-text="<i class='fa fa-check fa-white' ></i>" data-off-text="<i class='fa fa-times'></i>">
             </div>
         </div>
     </div>
@@ -462,10 +460,12 @@ Regular Hidden-Field
 
 Regular Text-Field
 <input_text>
-    <div class="control-group">
-        <label for="%%name%%" class="control-label">%%title%%</label>
-        <div class="controls">
-            <input type="text" id="%%name%%" name="%%name%%" value="%%value%%" class="input-xlarge %%class%%" %%readonly%%>
+    <div class="form-group">
+        <label for="%%name%%" class="col-sm-3 control-label">%%title%%</label>
+        <div class="col-sm-6 %%class%%">
+            <input type="text" id="%%name%%" name="%%name%%" value="%%value%%" class="form-control" %%readonly%%>
+        </div>
+        <div class="col-sm-2 form-opener">
             %%opener%%
         </div>
     </div>
@@ -473,33 +473,33 @@ Regular Text-Field
 
 Textarea
 <input_textarea>
-    <div class="control-group">
-        <label for="%%name%%" class="control-label">%%title%%</label>
-        <div class="controls">
-            <textarea name="%%name%%" id="%%name%%" class="input-xlarge %%class%%" rows="%%numberOfRows%%" %%readonly%%>%%value%%</textarea>
+    <div class="form-group">
+        <label for="%%name%%" class="col-sm-3 control-label">%%title%%</label>
+        <div class="col-sm-6 %%class%%">
+            <textarea name="%%name%%" id="%%name%%" class="form-control" rows="%%numberOfRows%%" %%readonly%%>%%value%%</textarea>
         </div>
     </div>
 </input_textarea>
 
 Regular Password-Field
 <input_password>
-    <div class="control-group">
-        <label for="%%name%%" class="control-label">%%title%%</label>
-        <div class="controls">
-            <input type="password" autocomplete="off" id="%%name%%" name="%%name%%" value="%%value%%" class="input-xlarge %%class%%" %%readonly%%>
+    <div class="form-group">
+        <label for="%%name%%" class="col-sm-3 control-label">%%title%%</label>
+        <div class="col-sm-6 %%class%%">
+            <input type="password" autocomplete="off" id="%%name%%" name="%%name%%" value="%%value%%" class="form-control" %%readonly%%>
         </div>
     </div>
 </input_password>
 
 Upload-Field
 <input_upload>
-    <div class="control-group">
-        <label for="%%name%%" class="control-label">%%title%%</label>
-        <div class="controls">
-            <input type="file" name="%%name%%" id="%%name%%" class="input-file %%class%%">
-            <p class="help-block">
+    <div class="form-group">
+        <label for="%%name%%" class="col-sm-3 control-label">%%title%%</label>
+        <div class="col-sm-6">
+            <input type="file" name="%%name%%" id="%%name%%" class="form-control %%class%%">
+            <span class="help-block">
                 %%maxSize%%
-            </p>
+            </span>
         </div>
     </div>
 </input_upload>
@@ -507,45 +507,45 @@ Upload-Field
 Upload-Field for multiple files with progress bar
 <input_upload_multiple>
 
-            <div id="%%name%%">
-                    <div class="fileupload-buttonbar">
+    <div id="%%name%%">
+            <div class="fileupload-buttonbar">
 
-                        <span class="btn fileinput-button">
-                            <i class="fa fa-plus-square"></i>
-                            <span>[lang,mediamanager_upload,mediamanager]</span>
-                            <input type="file" name="%%name%%" multiple>
-                        </span>
+                <span class="btn btn-default fileinput-button">
+                    <i class="fa fa-plus-square"></i>
+                    <span>[lang,mediamanager_upload,mediamanager]</span>
+                    <input type="file" name="%%name%%" multiple>
+                </span>
 
-                        <button type="submit" class="btn start" style="display: none;">
-                            <i class="fa fa-upload"></i>
-                            <span>[lang,upload_multiple_uploadFiles,mediamanager]</span>
-                        </button>
+                <button type="submit" class="btn btn-default start" style="display: none;">
+                    <i class="fa fa-upload"></i>
+                    <span>[lang,upload_multiple_uploadFiles,mediamanager]</span>
+                </button>
 
-                        <button type="reset" class="btn  cancel" style="display: none;">
-                            <i class="fa fa-ban"></i>
-                            <span>[lang,upload_multiple_cancel,mediamanager]</span>
-                        </button>
+                <button type="reset" class="btn btn-default cancel" style="display: none;">
+                    <i class="fa fa-ban"></i>
+                    <span>[lang,upload_multiple_cancel,mediamanager]</span>
+                </button>
 
-                        <span class="fileupload-process"></span>
-                        <div class="alert alert-info">
-                            [lang,upload_dropArea,mediamanager]<br />
-                             %%allowedExtensions%%
-                        </div>
-                    </div>
-
-                    <div class=" fileupload-progress " style="display: none;">
-
-                        <div class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100">
-                            <div class="bar" style="width:0%;"></div>
-                        </div>
-
-                        <div class="progress-extended">&nbsp;</div>
-                    </div>
-
-                <table class="table admintable table-striped-tbody files"></table>
+                <span class="fileupload-process"></span>
+                <div class="alert alert-info">
+                    [lang,upload_dropArea,mediamanager]<br />
+                     %%allowedExtensions%%
+                </div>
             </div>
 
-        <script type="text/javascript">
+            <div class="fileupload-progress" style="display: none;">
+
+                <div class="progress" aria-valuemin="0" aria-valuemax="100">
+                    <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width:0%;"></div>
+                </div>
+
+                <div class="progress-extended">&nbsp;</div>
+            </div>
+
+        <table class="table admintable table-striped-tbody files"></table>
+    </div>
+
+<script type="text/javascript">
 
     KAJONA.admin.loader.loadFile([
         "/core/module_mediamanager/admin/scripts/jquery-fileupload/css/jquery.fileupload.css",
@@ -599,7 +599,7 @@ Upload-Field for multiple files with progress bar
                                         '<div class="error"></div>' +
                                         '</td>' +
                                         '<td><p class="size"></p>' +
-                                        '<div class="progress progress-striped active"><div class="bar"></div></div>' +
+                                        '<div class="progress"><div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div></div>' +
                                         '</td>' +
                                         '<td>' +
                                         (!index && !o.options.autoUpload ?
@@ -647,31 +647,35 @@ Upload-Field for multiple files with progress bar
         });
     });
 
-        </script>
+</script>
 
 
 </input_upload_multiple>
 
 Regular Submit-Button
 <input_submit>
-    <div class="control-group">
-        <button type="submit" class="btn savechanges %%class%%" name="%%name%%" value="%%value%%" %%disabled%% %%eventhandler%%>
-            <span class="btn-text">%%value%%</span>
-            <span class="statusicon"></span>
-        </button>
+    <div class="form-group">
+        <label class="col-sm-3 control-label"></label>
+        <div class="col-sm-6">
+            <button type="submit" class="btn btn-default savechanges %%class%%" name="%%name%%" value="%%value%%" %%disabled%% %%eventhandler%%>
+                <span class="btn-text">%%value%%</span>
+                <span class="statusicon"></span>
+            </button>
+        </div>
     </div>
 </input_submit>
 
 An easy date-selector
 If you want to use the js-date-picker, leave %%calendarCommands%% at the end of the section
-in addition, a container for the calendar is needed. use %%calendarContainerId%% as an identifier
-If the calendar is used, you HAVE TO create a js-function named "calClose_%%calendarContainerId%%". This
-function is called after selecting a date, e.g. to hide the calendar
+in addition, a container for the calendar is needed. Use %%calendarContainerId%% as an identifier.
 <input_date_simple>
-    <div class="control-group">
-        <label for="%%name%%" class="control-label">%%title%%</label>
-        <div class="controls">
-            <input id="%%calendarId%%" name="%%calendarId%%" class="input-xlarge %%class%%" size="16" type="text" value="%%valuePlain%%">
+    <div class="form-group">
+        <label for="%%name%%" class="col-sm-3 control-label">%%title%%</label>
+        <div class="col-sm-6">
+            <div class="input-group">
+                <div class="input-group-addon"><i class="fa fa-calendar-o"></i></div>
+                <input id="%%calendarId%%" name="%%calendarId%%" class="form-control %%class%%" size="16" type="text" value="%%valuePlain%%">
+            </div>
             <script>
                 KAJONA.admin.loader.loadFile(["_webpath_/core/module_v4skin/admin/skins/kajona_v4/js/bootstrap-datepicker.js"], function() {
                     var arrSecondFiles = ["_webpath_/core/module_v4skin/admin/skins/kajona_v4/js/locales/bootstrap-datepicker.%%calendarLang%%.js"];
@@ -702,33 +706,47 @@ function is called after selecting a date, e.g. to hide the calendar
 
 <input_datetime_simple>
 
-    <div class="control-group">
-        <label for="%%name%%" class="control-label">%%title%%</label>
-        <div class="controls">
-            <input id="%%calendarId%%" name="%%calendarId%%" class="input-xlarge" size="16" type="text" value="%%valuePlain%%">
-            <input name="%%titleHour%%" id="%%titleHour%%" type="text" class="input-mini %%class%%" size="2" maxlength="2" value="%%valueHour%%" />
-            <input name="%%titleMin%%" id="%%titleMin%%" type="text" class="input-mini %%class%%" size="2" maxlength="2" value="%%valueMin%%" />
-            <script>
-                KAJONA.admin.loader.loadFile(["_webpath_/core/module_v4skin/admin/skins/kajona_v4/js/bootstrap-datepicker.js"], function() {
-                    KAJONA.admin.loader.loadFile(["_webpath_/core/module_v4skin/admin/skins/kajona_v4/js/locales/bootstrap-datepicker.%%calendarLang%%.js"], function() {
-                        var format = '%%dateFormat%%';
-                        format = format.replace('d', 'dd').replace('m', 'mm').replace('Y', 'yyyy');
-                        $('#%%calendarId%%').datepicker({
-                            format: format,
-                            weekStart: 1,
-                            autoclose: true,
-                            language: '%%calendarLang%%'
-                        });
-
-                        if($('#%%calendarId%%').is(':focus')) {
-                            $('#%%calendarId%%').blur();
-                            $('#%%calendarId%%').focus();
-                        }
-
-                    }, true);
-                }, true);
-            </script>
+    <div class="form-group">
+        <label for="%%name%%" class="col-sm-3 control-label">%%title%%</label>
+        <div class="col-sm-2">
+            <div class="input-group">
+                <div class="input-group-addon"><i class="fa fa-calendar-o"></i></div>
+                <input id="%%calendarId%%" name="%%calendarId%%" class="form-control" size="16" type="text" value="%%valuePlain%%">
+            </div>
         </div>
+
+        <div class="col-sm-2 form-inline">
+            <div class="form-group">
+
+                <div class="input-group">
+                    <div class="input-group-addon"><i class="fa fa-clock-o"></i></div>
+                    <input name="%%titleHour%%" id="%%titleHour%%" type="text" class="form-control %%class%%" size="2" maxlength="2" value="%%valueHour%%" />
+                </div>
+                <input name="%%titleMin%%" id="%%titleMin%%" type="text" class="form-control %%class%%" size="2" maxlength="2" value="%%valueMin%%" />
+            </div>
+        </div>
+        <div class="col-sm-1">
+        </div>
+        <script>
+            KAJONA.admin.loader.loadFile(["_webpath_/core/module_v4skin/admin/skins/kajona_v4/js/bootstrap-datepicker.js"], function() {
+                KAJONA.admin.loader.loadFile(["_webpath_/core/module_v4skin/admin/skins/kajona_v4/js/locales/bootstrap-datepicker.%%calendarLang%%.js"], function() {
+                    var format = '%%dateFormat%%';
+                    format = format.replace('d', 'dd').replace('m', 'mm').replace('Y', 'yyyy');
+                    $('#%%calendarId%%').datepicker({
+                        format: format,
+                        weekStart: 1,
+                        autoclose: true,
+                        language: '%%calendarLang%%'
+                    });
+
+                    if($('#%%calendarId%%').is(':focus')) {
+                        $('#%%calendarId%%').blur();
+                        $('#%%calendarId%%').focus();
+                    }
+
+                }, true);
+            }, true);
+        </script>
     </div>
 </input_datetime_simple>
 
@@ -738,11 +756,13 @@ place ajaxScript before the closing input_pageselector-tag and make sure, that y
 have a surrounding div with class "ac_container" and a div with id "%%name%%_container" and class
 "ac_results" inside the "ac_container", to generate a resultlist
 <input_pageselector>
-    <div class="control-group">
-        <label for="%%name%%" class="control-label">%%title%%</label>
+    <div class="form-group">
+        <label for="%%name%%" class="col-sm-3 control-label">%%title%%</label>
 
-        <div class="controls">
-            <input type="text" id="%%name%%" name="%%name%%" value="%%value%%" class="input-xlarge %%class%%" %%readonly%%>
+        <div class="col-sm-6">
+            <input type="text" id="%%name%%" name="%%name%%" value="%%value%%" class="form-control %%class%%" %%readonly%%>
+        </div>
+        <div class="col-sm-2 form-opener">
             %%opener%%
             %%ajaxScript%%
         </div>
@@ -750,12 +770,14 @@ have a surrounding div with class "ac_container" and a div with id "%%name%%_con
 </input_pageselector>
 
 <input_userselector>
-<div class="control-group">
-    <label for="%%name%%" class="control-label">%%title%%</label>
+<div class="form-group">
+    <label for="%%name%%" class="col-sm-3 control-label">%%title%%</label>
 
-    <div class="controls">
-        <input type="text" id="%%name%%" name="%%name%%" value="%%value%%" class="input-xlarge %%class%%" %%readonly%% >
+    <div class="col-sm-6">
+        <input type="text" id="%%name%%" name="%%name%%" value="%%value%%" class="form-control %%class%%" %%readonly%% >
         <input type="hidden" id="%%name%%_id" name="%%name%%_id" value="%%value_id%%" />
+    </div>
+    <div class="col-sm-2 form-opener">
         %%opener%%
         %%ajaxScript%%
     </div>
@@ -769,16 +791,10 @@ Used to fold elements / hide/unhide elements
 <div id="%%id%%" class="contentFolder %%display%%">%%content%%</div>
 </layout_folder>
 
-Same as above, but using an image to fold / unfold the content
-Deprecated!!!
-<layout_folder_pic>
-%%link%%<br /><br /><div id="%%id%%" class="contentFolder %%display%%">%%content%%</div>
-</layout_folder_pic>
-
 A precent-beam to illustrate proportions
 <percent_beam>
-    <div class="progress progress-striped active"  title="%%percent%%%" rel="tooltip">
-        <div class="bar" style="width: %%percent%%%;"></div>
+    <div class="progress">
+        <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="%%percent%%" aria-valuemin="0" aria-valuemax="100" style="width: %%percent%%%;">%%percent%%%</div>
     </div>
 </percent_beam>
 
@@ -820,7 +836,7 @@ A fieldset to structure logical sections
 
 
 <tabbed_content_wrapper>
-    <ul class="nav nav-tabs" id="myTab">
+    <ul class="nav nav-tabs" id="">
         %%tabheader%%
     </ul>
 
@@ -834,7 +850,7 @@ A fieldset to structure logical sections
 </tabbed_content_tabheader>
 
 <tabbed_content_tabcontent>
-    <div class="tab-pane fade %%classaddon%%" id="%%tabid%%">
+    <div class="tab-pane fade %%classaddon%%" id="%%tabid%%" role="tabpanel">
         %%tabcontent%%
     </div>
 </tabbed_content_tabcontent>
@@ -847,8 +863,8 @@ A fieldset to structure logical sections
 The login-Form is being displayed, when the user has to log in.
 Needed Elements: %%error%%, %%form%%
 <login_form>
-<div class="alert alert-error" id="loginError">
-    <button type="button" class="close" data-dismiss="alert">×</button>
+<div class="alert alert-danger" id="loginError">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
     <p>%%error%%</p>
 </div>
 %%form%%
@@ -860,16 +876,16 @@ Needed Elements: %%error%%, %%form%%
         $('#loginError').remove();
 
 </script>
-<noscript><div class="alert alert-error">%%loginJsInfo%%</div></noscript>
+<noscript><div class="alert alert-danger">%%loginJsInfo%%</div></noscript>
 </login_form>
 
 Part to display the login status, user is logged in
 <logout_form>
 <div class="dropdown userNotificationsDropdown">
     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-        <i class="icon-blank-kajona" id="icon-user"><span class="badge badge-info" id="userNotificationsCount">-</span></i> %%name%%
+        <i class="fa fa-user" id="icon-user"><span class="badge badge-info" id="userNotificationsCount">-</span></i> <span class="username">%%name%%</span>
     </a>
-    <ul class="dropdown-menu" role="menu">
+    <ul class="dropdown-menu generalContextMenu" role="menu">
         <li class="dropdown-submenu">
             <a tabindex="-1" href="#"><i class='fa fa-envelope'></i> [lang,modul_titel,messaging]</a>
             <ul class="dropdown-menu sub-menu" id="messagingShortlist"></ul>
@@ -893,57 +909,24 @@ Part to display the login status, user is logged in
 </div>
 <script type="text/javascript">
 
-    KAJONA.admin.messaging.pollMessages = function() {
-
-        KAJONA.admin.messaging.getRecentMessages(function(objResponse) {
-            var $userNotificationsCount = $('#userNotificationsCount');
-            var oldCount = $userNotificationsCount.text();
-            $userNotificationsCount.text(objResponse.messageCount);
-            if (objResponse.messageCount > 0) {
-                $userNotificationsCount.show();
-                if(oldCount != objResponse.messageCount) {
-                    var strTitle = document.title.replace("("+oldCount+")", "");
-                    document.title = "("+objResponse.messageCount+") "+strTitle;
-
-                    if(!KAJONA.admin.messaging.bitFirstLoad && oldCount < objResponse.messageCount) {
-                        KAJONA.util.desktopNotification.showMessage('[lang,messaging_notification_title,messaging]', '[lang,messaging_notification_body,messaging]', function() {
-                            document.location.href = '_indexpath_?admin=1&module=messaging';
-                        });
-                    }
-                }
-
-            } else {
-                $userNotificationsCount.hide();
-            }
-
-            $('#messagingShortlist').empty();
-            $.each(objResponse.messages, function(index, item) {
-                if(item.unread == 0)
-                    $('#messagingShortlist').append("<li><a href='"+item.details+"'><i class='fa fa-envelope'></i> <b>"+item.title+"</b></a></li>");
-                else
-                    $('#messagingShortlist').append("<li><a href='"+item.details+"'><i class='fa fa-envelope'></i> "+item.title+"</a></li>");
-            });
-            $('#messagingShortlist').append("<li class='divider'></li><li><a href='_indexpath_?admin=1&module=messaging'><i class='fa fa-envelope'></i> [lang,action_show_all,messaging]</a></li>");
-
-            window.setTimeout("KAJONA.admin.messaging.pollMessages()", 20000);
-            KAJONA.admin.messaging.bitFirstLoad = false;
-        });
-    };
     if(%%renderMessages%%) {
-        $(function() { KAJONA.admin.messaging.pollMessages() });
+        $(function() {
+            KAJONA.v4skin.properties.messaging = {
+                notification_title : '[lang,messaging_notification_title,messaging]',
+                notification_body : '[lang,messaging_notification_body,messaging]',
+                show_all : '[lang,action_show_all,messaging]'
+            };
+            KAJONA.v4skin.messaging.pollMessages()
+        });
     }
     else {
         $('#messagingShortlist').closest("li").hide();
     }
 
     if(%%renderTags%%) {
-        KAJONA.admin.ajax.genericAjaxCall("tags", "getFavoriteTags", "", function(data, status, jqXHR) {
-            if(status == 'success') {
-                $.each($.parseJSON(data), function(index, item) {
-                    $('#tagsSubemenu').append("<li><a href='"+item.url+"'><i class='fa fa-tag'></i> "+item.name+"</a></li>");
-                });
-                $('#tagsSubemenu').append("<li class='divider'></li><li><a href='_indexpath_?admin=1&module=tags'><i class='fa fa-tag'></i> [lang,action_show_all,tags]</a></li>")
-            }
+        $(function() {
+            KAJONA.v4skin.properties.tags.show_all = '[lang,action_show_all,tags]';
+            KAJONA.v4skin.initTagMenu();
         });
     }
     else {
@@ -954,7 +937,7 @@ Part to display the login status, user is logged in
 
 Shown, wherever the attention of the user is needed
 <warning_box>
-    <div class="alert alert-block %%class%%">
+    <div class="alert alert-warning %%class%%">
         <a class="close" data-dismiss="alert" href="#">&times;</a>
         %%content%%
     </div>
@@ -967,29 +950,18 @@ Used to print plain text
 
 Used to print plaintext in a form
 <text_row_form>
-<div class="controls">
-    <p class="help-block %%class%%">%%text%%</p>
-</div>
+    <div class="form-group">
+        <div class="col-sm-3"></div>
+        <div class="col-sm-6">
+            <span class="help-block %%class%%">%%text%%</span>
+        </div>
+    </div>
 </text_row_form>
 
 Used to print headline in a form
 <headline_form>
 <h2 class="%%class%%">%%text%%</h2>
 </headline_form>
-
-This Section is used to display a few special details about the current page being edited
-<page_infobox>
- <table style="width: 100%;" class="statusPages">
-  <tr>
-    <td style="width: 18%;">%%pagetemplateTitle%%</td>
-    <td style="width: 72%;">%%pagetemplate%%</td>
-  </tr>
-  <tr>
-    <td>%%lasteditTitle%%</td>
-    <td>%%lastedit%% %%lastuserTitle%% %%lastuser%%</td>
-  </tr>
-</table><br /><br />
-</page_infobox>
 
 ---------------------------------------------------------------------------------------------------------
 -- RIGHTS MANAGEMENT ------------------------------------------------------------------------------------
@@ -1038,51 +1010,19 @@ The following sections specify the layout of the rights-mgmt
 
 
 <rights_form_inherit>
-<div class="control-group">
-    <label class="control-label" for="%%name%%">%%title%%</label>
-    <div class="controls">
-        <input name="%%name%%" type="checkbox" id="%%name%%" value="1" onclick="this.blur();" onchange="KAJONA.admin.checkRightMatrix();" %%checked%% />
+<div class="form-group">
+    <label class="col-sm-3 control-label" for="%%name%%"></label>
+    <div class="col-sm-6">
+        <div class="checkbox">
+            <label>
+                <input name="%%name%%" type="checkbox" id="%%name%%" value="1" onclick="this.blur();" onchange="KAJONA.admin.checkRightMatrix();" %%checked%% />
+                %%title%%
+            </label>
+        </div>
     </div>
 </div>
-
 </rights_form_inherit>
 
----------------------------------------------------------------------------------------------------------
--- FOLDERVIEW -------------------------------------------------------------------------------------------
-
-
-
-<mediamanager_image_details>
-<div class="folderview_image_details">
-    %%file_pathnavi%% %%file_name%%
-    <div class="imageContainer">
-        <div class="image">%%file_image%%</div>
-    </div>
-    <div class="imageActions">
-        %%file_actions%%
-    </div>
-    <table>
-        <tr>
-            <td class="first">%%file_path_title%%</td>
-            <td>%%file_path%%</td>
-        </tr>
-        <tr>
-            <td class="first">%%file_size_title%%</td>
-            <td id="fm_image_size">%%file_size%%</td>
-        </tr>
-        <tr>
-            <td class="first">%%file_dimensions_title%%</td>
-            <td id="fm_image_dimensions">%%file_dimensions%%</td>
-        </tr>
-        <tr>
-            <td class="first">%%file_lastedit_title%%</td>
-            <td>%%file_lastedit%%</td>
-        </tr>
-    </table>
-</div>
-%%filemanager_internal_code%%
-%%filemanager_image_js%%
-</mediamanager_image_details>
 
 ---------------------------------------------------------------------------------------------------------
 -- WYSIWYG EDITOR ---------------------------------------------------------------------------------------
@@ -1091,7 +1031,11 @@ NOTE: This section not just defines the layout, it also inits the WYSIWYG editor
 
 The textarea field to replace by the editor. If the editor can't be loaded, a plain textfield is shown instead
 <wysiwyg_ckeditor>
-<div><label for="%%name%%">%%title%%</label><br /><textarea name="%%name%%" id="%%name%%" class="inputWysiwyg" data-kajona-editorid="%%editorid%%">%%content%%</textarea></div><br />
+<div class="form-group">
+    <label for="%%name%%" class="col-sm-3 control-label">%%title%%</label>
+    <div class="col-sm-6">
+        <textarea name="%%name%%" id="%%name%%" class="form-control inputWysiwyg" data-kajona-editorid="%%editorid%%">%%content%%</textarea></div><br />
+    </div>
 </wysiwyg_ckeditor>
 
 A few settings to customize the editor. They are added right into the CKEditor configuration.
@@ -1126,9 +1070,9 @@ The following sections are used to display the path-navigations, e.g. used by th
 
 Toolbar, prominent in the layout. Rendered to switch between action.
 <contentToolbar_wrapper>
-<div class="navbar contentToolbar">
+<div class="navbar navbar-default contentToolbar">
     <div class="navbar-inner ">
-        <ul class="nav">%%entries%%</ul>
+        <ul class="nav navbar-nav">%%entries%%</ul>
     </div>
 </div>
 </contentToolbar_wrapper>
@@ -1151,8 +1095,8 @@ Toolbar for the current record, rendered to quick-access the actions of the curr
 -- ERROR HANDLING ---------------------------------------------------------------------------------------
 
 <error_container>
-    <div class="alert alert-block alert-error">
-        <a class="close" data-dismiss="alert" href="#">×</a>
+    <div class="alert alert-danger">
+        <a class="close" data-dismiss="alert" href="#">&times;</a>
         <h4 class="alert-heading">%%errorintro%%</h4>
         <ul>
             %%errorrows%%
@@ -1179,7 +1123,7 @@ Used to print pre-formatted text, e.g. log-file contents
     <!-- KAJONA_BUILD_LESS_START -->
     <link href="_skinwebpath_/less/bootstrap_pe.less?_system_browser_cachebuster_" rel="stylesheet/less">
     <script> less = { env:'development' }; </script>
-    <script src="_skinwebpath_/less/less.js"></script>
+    <script src="_skinwebpath_/less/less.min.js"></script>
     <!-- KAJONA_BUILD_LESS_END -->
 </pe_basic_data>
 
@@ -1192,27 +1136,35 @@ pe_iconbar, pe_disable
 
 
 
-    <div class="modal hide fade fullsize" id="peDialog">
-        <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal">×</button>
-        </div>
-        <div id="folderviewDialog_loading" class="peLoadingContainer loadingContainerBackground"></div>
-        <div class="modal-body" id="peDialog_content">
-            <!-- filled by js -->
+    <div class="modal fade" id="peDialog">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div id="folderviewDialog_loading" class="peLoadingContainer loadingContainerBackground"></div>
+                <div class="modal-body" id="peDialog_content">
+                    <!-- filled by js -->
+                </div>
+            </div>
         </div>
     </div>
 
-    <div class="modal hide fade" id="delDialog">
-        <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal">×</button>
-            <h3 id="delDialog_title"><!-- filled by js --></h3>
-        </div>
-        <div class="modal-body" id="delDialog_content">
-            <!-- filled by js -->
-        </div>
-        <div class="modal-footer">
-            <a href="#" class="btn" data-dismiss="modal" id="delDialog_cancelButton">[lang,dialog_cancelButton,system]</a>
-            <a href="#" class="btn btn-primary" id="delDialog_confirmButton">confirm</a>
+    <div class="modal fade" id="delDialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h3 id="delDialog_title"><!-- filled by js --></h3>
+                </div>
+                <div class="modal-body" id="delDialog_content">
+                    <!-- filled by js -->
+                </div>
+                <div class="modal-footer">
+                    <a href="#" class="btn btn-default" data-dismiss="modal" id="delDialog_cancelButton">[lang,dialog_cancelButton,system]</a>
+                    <a href="#" class="btn btn-default btn-primary" id="delDialog_confirmButton">confirm</a>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -1220,9 +1172,9 @@ pe_iconbar, pe_disable
 		var peDialog;
 		KAJONA.admin.lang["pe_dialog_close_warning"] = "[lang,pe_dialog_close_warning,pages]";
         KAJONA.portal.loader.loadFile([
-            "_webpath_/core/module_v4skin/admin/skins/kajona_v4/js/bootstrap-modal.js",
-            "_webpath_/core/module_v4skin/admin/skins/kajona_v4/js/bootstrap-dropdown.js",
-            "_webpath_/core/module_v4skin/admin/skins/kajona_v4/js/bootstrap-button.js",
+            "_webpath_/core/module_v4skin/admin/skins/kajona_v4/js/modal.js",
+            "_webpath_/core/module_v4skin/admin/skins/kajona_v4/js/dropdown.js",
+            "_webpath_/core/module_v4skin/admin/skins/kajona_v4/js/button.js",
             "_webpath_/core/module_v4skin/admin/skins/kajona_v4/js/kajona_dialog.js"
         ], function() {
 		    peDialog = new KAJONA.admin.ModalDialog('peDialog', 0, true, true);
@@ -1313,7 +1265,7 @@ A button for the active language
 
 The language switch surrounds the buttons
 <language_switch>
-    <select id="languageChooser" class="input-small" onchange="%%onchangehandler%%">%%languagebuttons%%</select>
+    <select id="languageChooser" onchange="%%onchangehandler%%">%%languagebuttons%%</select>
 </language_switch>
 
 ---------------------------------------------------------------------------------------------------------
@@ -1340,8 +1292,8 @@ The language switch surrounds the buttons
 -- PAGEVIEW ---------------------------------------------------------------------------------------------
 
 <pageview_body>
-    <div class="pagination">
-        <ul>
+    <div class="pager">
+        <ul class="pagination">
             %%linkBackward%%
             %%pageList%%
             %%linkForward%%
@@ -1380,9 +1332,8 @@ The language switch surrounds the buttons
 
 ---------------------------------------------------------------------------------------------------------
 -- WIDGETS / DASHBOAORD  --------------------------------------------------------------------------------
-//TODO %%widget_id%% is not needed anymore
 <adminwidget_widget>
-    <div class="well well-small">
+    <div class="well well-sm">
     <h2 class="">%%widget_name%%</h2>
     <div class="adminwidgetactions pull-right">%%widget_edit%% %%widget_delete%%</div>
     <div class="additionalNameContent">%%widget_name_additional_content%%</div>
@@ -1420,50 +1371,6 @@ The language switch surrounds the buttons
         });
     </script>
 </dashboard_wrapper>
-
----------------------------------------------------------------------------------------------------------
--- DIALOG -----------------------------------------------------------------------------------------------
-<dialogContainer><div class="modal hide fade fullsize" id="%%dialog_id%%">
-        <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal">×</button>
-            <h3 id="%%dialog_id%%_title"><!-- filled by js --></h3>
-        </div>
-        <div class="modal-body" id="%%dialog_id%%_content">
-            <!-- filled by js -->
-        </div>
-</div></dialogContainer>
-
-<dialogConfirmationContainer><div class="modal hide fade" id="%%dialog_id%%">
-        <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal">×</button>
-            <h3 id="%%dialog_id%%_title"><!-- filled by js --></h3>
-        </div>
-        <div class="modal-body" id="%%dialog_id%%_content">
-            <!-- filled by js -->
-        </div>
-        <div class="modal-footer">
-            <a href="#" class="btn" data-dismiss="modal" id="%%dialog_id%%_cancelButton">%%dialog_cancelButton%%</a>
-            <a href="#" class="btn btn-primary" id="%%dialog_id%%_confirmButton">confirm</a>
-        </div>
-</div></dialogConfirmationContainer>
-
-<dialogLoadingContainer><div class="modal hide fade" id="%%dialog_id%%" style="width: 100px;">
-        <div class="modal-header">
-            <h3 id="%%dialog_id%%_title">%%dialog_title%%</h3>
-        </div>
-        <div class="modal-body">
-            <div id="dialogLoadingDiv" class="loadingContainer loadingContainerBackground"></div>
-            <div id="%%dialog_id%%_content"><!-- filled by js --></div>
-        </div>
-</div></dialogLoadingContainer>
-
-<dialogRawContainer><div class="modal hide" id="%%dialog_id%%">
-        <div class="modal-body">
-            <div id="%%dialog_id%%_content"><!-- filled by js --></div>
-        </div>
-</div></dialogRawContainer>
-
-
 
 ---------------------------------------------------------------------------------------------------------
 -- TREE VIEW --------------------------------------------------------------------------------------------
@@ -1641,12 +1548,12 @@ otherwise the JavaScript will fail!
 </tags_wrapper>
 
 <tags_tag>
-    <span class="label label-info">%%tagname%%</span>
+    <span class="label label-default">%%tagname%%</span>
     <script type="text/javascript">KAJONA.admin.tooltip.addTooltip('#icon_%%strTagId%%');</script>
 </tags_tag>
 
 <tags_tag_delete>
-    <span class="label label-info taglabel">%%tagname%% <a href="javascript:KAJONA.admin.tags.removeTag('%%strTagId%%', '%%strTargetSystemid%%', '%%strAttribute%%');"> %%strDelete%%</a> %%strFavorite%%</span>
+    <span class="label label-default taglabel">%%tagname%% <a href="javascript:KAJONA.admin.tags.removeTag('%%strTagId%%', '%%strTargetSystemid%%', '%%strAttribute%%');"> %%strDelete%%</a> %%strFavorite%%</span>
     <script type="text/javascript">KAJONA.admin.tooltip.addTooltip($(".taglabel [rel='tooltip']"));</script>
 </tags_tag_delete>
 
@@ -1656,10 +1563,10 @@ If you want to use ajax to load a list of proposals on entering a char,
 place ajaxScript before the closing input_tagselector-tag.
 <input_tagselector>
 
-    <div class="control-group">
-        <label for="%%name%%" class="control-label">%%title%%</label>
-        <div class="controls">
-            <input type="text" id="%%name%%" name="%%name%%" value="%%value%%" class="input-xlarge %%class%%">
+    <div class="form-group">
+        <label for="%%name%%" class="col-sm-3 control-label">%%title%%</label>
+        <div class="col-sm-6">
+            <input type="text" id="%%name%%" name="%%name%%" value="%%value%%" class="form-control %%class%%">
             %%opener%%
         </div>
     </div>
@@ -1670,7 +1577,7 @@ place ajaxScript before the closing input_tagselector-tag.
 The aspect chooser is shown in cases more than one aspect is defined in the system-module.
 It containes a list of aspects and provides the possibility to switch the different aspects.
 <aspect_chooser>
-    <select class="input-medium" onchange="window.location.replace(this.value);">
+    <select onchange="window.location.replace(this.value);">
         %%options%%
     </select>
 </aspect_chooser>
@@ -1803,20 +1710,18 @@ It containes a list of aspects and provides the possibility to switch the differ
 -- BACKEND NAVIGATION -----------------------------------------------------------------------------------
 
 <sitemap_wrapper>
-    <div class="nav-header">Kajona V4</div>
         %%level%%
-
 </sitemap_wrapper>
 
 <sitemap_module_wrapper>
-    <div class="accordion-group">
-        <div class="accordion-heading">
-            <a class="accordion-toggle" data-toggle="collapse" data-parent="#moduleNavigation" href="#%%systemid%%">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <a data-toggle="collapse" data-parent="#moduleNavigation" href="#%%systemid%%">
                 %%moduleName%%
             </a>
         </div>
-        <div id="%%systemid%%" class="accordion-body collapse">
-            <div class="accordion-inner">
+        <div id="%%systemid%%" class="panel-collapse collapse">
+            <div class="panel-body">
                 <ul>%%actions%%</ul>
             </div>
         </div>
@@ -1824,14 +1729,14 @@ It containes a list of aspects and provides the possibility to switch the differ
 </sitemap_module_wrapper>
 
 <sitemap_module_wrapper_active>
-    <div class="accordion-group">
-        <div class="accordion-heading">
-            <a class="accordion-toggle active" data-toggle="collapse" data-parent="#moduleNavigation" href="#%%systemid%%">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <a class="active" data-toggle="collapse" data-parent="#moduleNavigation" href="#%%systemid%%">
                 %%moduleName%%
             </a>
         </div>
-        <div id="%%systemid%%" class="accordion-body collapse in">
-            <div class="accordion-inner">
+        <div id="%%systemid%%" class="panel-collapse collapse in">
+            <div class="panel-body">
                 <ul>%%actions%%</ul>
             </div>
         </div>

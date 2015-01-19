@@ -86,7 +86,7 @@ KAJONA.admin.ModalDialog = function (strDialogId, intDialogType, bitDragging, bi
         });
 
         if(!intHeight) {
-            if($('#' + this.containerId).hasClass("fullsize")) {
+            if($('#' + this.containerId+" .modal-dialog").hasClass("modal-lg")) {
                 intHeight = $(window).height() * 0.6;
             }
             else
@@ -96,26 +96,7 @@ KAJONA.admin.ModalDialog = function (strDialogId, intDialogType, bitDragging, bi
 
         var isStackedDialog = !!(window.frameElement && window.frameElement.nodeName && window.frameElement.nodeName.toLowerCase() == 'iframe');
 
-        if (!isStackedDialog) {
-            if(!intWidth) {
-                if($('#' + this.containerId).hasClass("fullsize")) {
-                    intWidth = $(window).width() * 0.6;
-                }
-                else
-                    intWidth = 400;
-            }
-
-            //reposition the dialog, but only if not wrapped by a dialog-body element
-            if(!$("body").hasClass("dialogBody")) {
-                $modal.css({
-                    width: intWidth,
-                    'margin-left': function () {
-                        return -($(this).width() / 2);
-                    }
-                });
-            }
-        } else {
-
+        if (isStackedDialog) {
             if(this.iframeURL != null) {
                 //open the iframe in a regular popup
                 //workaround for stacked dialogs. if a modal is already opened, the second iframe is loaded in a popup window.
@@ -123,15 +104,6 @@ KAJONA.admin.ModalDialog = function (strDialogId, intDialogType, bitDragging, bi
                 window.open(this.iframeURL, $('#' + this.containerId + '_title').text(), 'scrollbars=yes,resizable=yes,width=500,height=500');
                 return;
             }
-
-            $modal.css({
-                width: '97%',
-                'margin-left': 0,
-                'padding-top': 5,
-                left: 10
-            });
-
-            intHeight = $(window).height();
         }
 
         if(this.iframeURL != null) {
@@ -158,11 +130,7 @@ KAJONA.admin.ModalDialog = function (strDialogId, intDialogType, bitDragging, bi
 
     this.enableResizing = function() {
         //$('#' + this.containerId).resizable();
-        $('#' + this.containerId).resizable().on("resize", function(event, ui) {
-            ui.element.css("margin-left", -ui.size.width/2);
-            ui.element.css("margin-top", -ui.size.height/2);
-            ui.element.css("top", "50%");
-            ui.element.css("left", "50%");
+        $('#' + this.containerId +" .modal-content").resizable().on("resize", function(event, ui) {
             ui.element.css("height", ui.size.height + $('.modal-footer').outerHeight() );
 
             $(ui.element).find(".modal-body").each(function() {

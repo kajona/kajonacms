@@ -430,7 +430,6 @@ class class_resourceloader {
      * @param string $strModule
      * @param bool $bitPrependRealpath
      *
-     * @internal param bool $bitIncludeRealpath
      * @return string
      */
     public function getCorePathForModule($strModule, $bitPrependRealpath = false) {

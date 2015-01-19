@@ -65,17 +65,17 @@ class class_module_messaging_admin extends class_admin_evensimpler implements in
         //create callback for the on-off toogle which is passed to formInputOnOff
         $strCallback = <<<JS
             //data contains the clicked element
-            var inputId = data.el[0].id;
+            var inputId = $(this).attr('id');
             var messageProviderType = inputId.slice(0, inputId.lastIndexOf("_"));
 
-            var param1 =inputId+'='+data.value; //value for clicked toggle element
+            var param1 =inputId+'='+state; //value for clicked toggle element
             var param2 = 'messageprovidertype='+messageProviderType; //messageprovide type
             var postBody = param1+'&'+param2;
 
             KAJONA.admin.ajax.genericAjaxCall("messaging", "saveConfigAjax", "&"+postBody, KAJONA.admin.ajax.regularCallback);
 
             if(inputId.indexOf("_enabled") > 0 ) {
-                $("#"+inputId).closest("tr").find("div.make-switch:not(.blockEnable)").slice(1).bootstrapSwitch("setActive", data.value != 0);
+                $("#"+inputId).closest("tr").find("div.checkbox input:not(.blockEnable)").slice(1).bootstrapSwitch("disabled", state);
             }
 JS;
         $arrRows = array();
@@ -92,7 +92,7 @@ JS;
             $arrRows[] = array(
                 $objOneProvider->getStrName(),
                 "inlineFormEntry 1" => $this->objToolkit->formInputOnOff(get_class($objOneProvider)."_enabled", $this->getLang("provider_enabled"), $objConfig->getBitEnabled() == 1, $bitAlwaysEnabled, $strCallback),
-                "inlineFormEntry 2" => $this->objToolkit->formInputOnOff(get_class($objOneProvider)."_bymail", $this->getLang("provider_bymail"), $objConfig->getBitBymail() == 1, $bitAlwaysMail, $strCallback, "switch-small ".($bitAlwaysMail ? "blockEnable" : ""))
+                "inlineFormEntry 2" => $this->objToolkit->formInputOnOff(get_class($objOneProvider)."_bymail", $this->getLang("provider_bymail"), $objConfig->getBitBymail() == 1, $bitAlwaysMail, $strCallback, ($bitAlwaysMail ? "blockEnable" : ""))
             );
 
         }
@@ -404,13 +404,12 @@ JS;
             return $this->strOutput = $this->getLang("commons_error_permissions");
         }
         else if($objMessage == null) {
-            $strMessage = $this->objToolkit->jsDialog(1);
 
             $strText = $this->getLang("message_not_existing");
             $strOk = $this->getLang("commons_ok");
             $strLink = class_link::getLinkAdminHref($this->getArrModule("modul"), "list");
             $strCore = class_resourceloader::getInstance()->getCorePathForModule("module_v4skin");
-            $strMessage .= "<script type='text/javascript'>
+            $strMessage = "<script type='text/javascript'>
                 KAJONA.admin.loader.loadFile('_webpath_{$strCore}/module_v4skin/admin/skins/kajona_v4/js/kajona_dialog.js', function() {
                     jsDialog_1.setTitle('&nbsp; ');
                     jsDialog_1.setContent('{$strText}', '{$strOk}', '{$strLink}'); jsDialog_1.init();

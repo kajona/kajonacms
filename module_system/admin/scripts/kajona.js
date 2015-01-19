@@ -503,7 +503,7 @@ KAJONA.admin.systemtask = {
 
             jsDialog_0.setTitle(KAJONA_SYSTEMTASK_TITLE);
             jsDialog_0.setContentRaw(kajonaSystemtaskDialogContent);
-            document.getElementById(jsDialog_0.containerId).style.width = "550px";
+            $("#"+jsDialog_0.containerId).find("div.modal-dialog").removeClass("modal-lg");
             document.getElementById('systemtaskCancelButton').onclick = this.cancelExecution;
             jsDialog_0.init();
         }
@@ -699,8 +699,10 @@ KAJONA.admin.forms.renderMandatoryFields = function(arrFields) {
 KAJONA.admin.forms.renderMissingMandatoryFields = function(arrFields) {
     $(arrFields).each(function(intIndex, strField) {
         var strFieldName = strField[0];
-        if($("#"+strFieldName)) {
-            $("#"+strFieldName).closest(".control-group").addClass("error");
+        if($("#"+strFieldName) && !$("#"+strFieldName).hasClass('inputWysiwyg')) {
+            $("#"+strFieldName).closest(".form-group").addClass("has-error has-feedback");
+			objNode = $('<span class="glyphicon glyphicon-warning-sign form-control-feedback" aria-hidden="true"></span>');
+            $("#"+strFieldName).closest("div").append(objNode);
         }
     });
 };
@@ -771,7 +773,9 @@ KAJONA.admin.lists = {
     triggerSingleAction : function() {
         if(KAJONA.admin.lists.arrSystemids.length > 0 && KAJONA.admin.lists.intTotal > 0) {
             $('.batch_progressed').text((KAJONA.admin.lists.intTotal - KAJONA.admin.lists.arrSystemids.length +1));
-            $('.progress > .bar').css('width', ( (KAJONA.admin.lists.intTotal - KAJONA.admin.lists.arrSystemids.length) / KAJONA.admin.lists.intTotal   * 100)+'%');
+			var intPercentage = ( (KAJONA.admin.lists.intTotal - KAJONA.admin.lists.arrSystemids.length) / KAJONA.admin.lists.intTotal * 100);
+            $('.progress > .progress-bar').css('width', intPercentage+'%');
+            $('.progress > .progress-bar').html(Math.round(intPercentage)+'%');
 
             var strUrl = KAJONA.admin.lists.strCurrentUrl.replace("%systemid%", KAJONA.admin.lists.arrSystemids[0]);
             KAJONA.admin.lists.arrSystemids.shift();
@@ -787,9 +791,8 @@ KAJONA.admin.lists = {
         }
         else {
             $('.batch_progressed').text((KAJONA.admin.lists.intTotal));
-            $('.progress > .bar').css('width', 100+'%');
-
-
+            $('.progress > .progess-bar').css('width', 100+'%');
+			$('.progress > .progress-bar').html('100%');
             document.location.reload();
         }
     },

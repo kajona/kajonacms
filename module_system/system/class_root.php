@@ -1511,7 +1511,7 @@ abstract class class_root {
 
         if(validateSystemid($this->getStrLmUser())) {
             $objUser = new class_module_user_user($this->getStrLmUser());
-            return $objUser->getStrUsername();
+            return $objUser->getStrDisplayName();
         }
         else
             return "System";

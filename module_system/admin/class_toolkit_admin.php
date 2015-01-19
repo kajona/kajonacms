@@ -61,10 +61,10 @@ class class_toolkit_admin extends class_toolkit {
         $arrTemplate["valueHour"] = $objDateToShow != null ? $objDateToShow->getIntHour() : "";
         $arrTemplate["valueMin"] = $objDateToShow != null ? $objDateToShow->getIntMin() : "";
         $arrTemplate["valuePlain"] = dateToString($objDateToShow, false);
-        if($bitWithTime)
+//        if($bitWithTime)
             $arrTemplate["dateFormat"] = class_carrier::getInstance()->getObjLang()->getLang("dateStyleShort", "system");
-        else
-            $arrTemplate["dateFormat"] = class_carrier::getInstance()->getObjLang()->getLang("dateStyleLong", "system");
+//        else
+//            $arrTemplate["dateFormat"] = class_carrier::getInstance()->getObjLang()->getLang("dateStyleLong", "system");
         $arrTemplate["calendarLang"] = class_carrier::getInstance()->getObjSession()->getAdminLanguage();
 
         $arrTemplate["titleTime"] = class_carrier::getInstance()->getObjLang()->getLang("titleTime", "system");
@@ -221,7 +221,7 @@ class class_toolkit_admin extends class_toolkit {
      *
      * @return string
      */
-    public function formInputOnOff($strName, $strTitle, $bitChecked = false,  $bitReadOnly = false, $strOnSwitchJSCallback = "", $strClass = "switch-small") {
+    public function formInputOnOff($strName, $strTitle, $bitChecked = false,  $bitReadOnly = false, $strOnSwitchJSCallback = "", $strClass = "") {
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "input_on_off_switch");
         $arrTemplate = array();
         $arrTemplate["name"] = $strName;
@@ -724,7 +724,6 @@ class class_toolkit_admin extends class_toolkit {
     public function formInputRadiogroup($strName, array $arrKeyValues, $strTitle = "", $strKeySelected = "", $strClass = "", $bitEnabled = true) {
         $strOptions = "";
         $strTemplateRadioID = $this->objTemplate->readTemplate("/elements.tpl", "input_radiogroup_row");
-        $strTemplateRadioSelectedID = $this->objTemplate->readTemplate("/elements.tpl", "input_radiogroup_row_selected");
         //Iterating over the array to create the options
         foreach ($arrKeyValues as $strKey => $strValue) {
             $arrTemplate = array();
@@ -733,10 +732,8 @@ class class_toolkit_admin extends class_toolkit {
             $arrTemplate["name"] = $strName;
             $arrTemplate["class"] = $strClass;
             $arrTemplate["disabled"] = ($bitEnabled ? "" : "disabled=\"disabled\"");
-            if((string)$strKey == (string)$strKeySelected)
-                $strOptions .= $this->objTemplate->fillTemplate($arrTemplate, $strTemplateRadioSelectedID);
-            else
-                $strOptions .= $this->objTemplate->fillTemplate($arrTemplate, $strTemplateRadioID);
+            $arrTemplate["checked"] = ((string)$strKey == (string)$strKeySelected ? " checked " : "");
+            $strOptions .= $this->objTemplate->fillTemplate($arrTemplate, $strTemplateRadioID);
         }
 
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "input_radiogroup");
@@ -776,7 +773,7 @@ class class_toolkit_admin extends class_toolkit {
      * @return string
      */
     public function formOptionalElementsWrapper($strContent, $strTitle = "", $bitVisible = false) {
-        $arrFolder = $this->getLayoutFolder($strContent, class_adminskin_helper::getAdminImage("icon_folderClosed")." ".$strTitle, $bitVisible);
+        $arrFolder = $this->getLayoutFolderPic($strContent, $strTitle, "icon_folderOpen", "icon_folderClosed",  $bitVisible);
         return $this->getFieldset($arrFolder[1], $arrFolder[0]);
     }
 
@@ -789,6 +786,9 @@ class class_toolkit_admin extends class_toolkit {
      * @return string
      */
     public function formTextRow($strText, $strClass = "") {
+        if($strText == "")
+            return "";
+
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "text_row_form");
         $arrTemplate = array();
         $arrTemplate["text"] = $strText;
@@ -902,7 +902,7 @@ class class_toolkit_admin extends class_toolkit {
      */
     public function listHeader() {
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "list_header");
-        return trim($this->jsDialog(1)).$this->objTemplate->fillTemplate(array(), $strTemplateID);
+        return $this->objTemplate->fillTemplate(array(), $strTemplateID);
     }
 
     /**
@@ -1060,9 +1060,7 @@ class class_toolkit_admin extends class_toolkit {
         }
 
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "batchactions_wrapper");
-        $strReturn = $this->objTemplate->fillTemplate(array("entries" => $strEntries), $strTemplateID);
-        $strReturn .= $this->jsDialog(1);
-        return $strReturn;
+        return $this->objTemplate->fillTemplate(array("entries" => $strEntries), $strTemplateID);
     }
 
     /**
@@ -1145,11 +1143,7 @@ class class_toolkit_admin extends class_toolkit {
      * @return string
      */
     public function listDeleteButton($strElementName, $strQuestion, $strLinkHref) {
-        //place it into a standard-js-dialog
-        $strDialog = $this->jsDialog(1);
-
         $strElementName = uniStrReplace(array('\''), array('\\\''), $strElementName);
-
         $strQuestion = uniStrReplace("%%element_name%%", htmlToString($strElementName, true), $strQuestion);
 
         //get the reload-url
@@ -1171,7 +1165,7 @@ class class_toolkit_admin extends class_toolkit {
             "icon_delete"
         );
 
-        return $this->listButton($strButton).trim($strDialog);
+        return $this->listButton($strButton);
     }
 
     /**
@@ -1235,7 +1229,7 @@ class class_toolkit_admin extends class_toolkit {
      * @param string $strClass
      * @return string
      */
-    public function warningBox($strContent, $strClass = "warnbox") {
+    public function warningBox($strContent, $strClass = "") {
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "warning_box");
         $arrTemplate = array();
         $arrTemplate["content"] = $strContent;
@@ -1285,7 +1279,8 @@ class class_toolkit_admin extends class_toolkit {
     }
 
     /**
-     * Creates the mechanism to fold parts of the site / make them vivsible or invisible
+     * Creates the mechanism to fold parts of the site / make them vivsible or invisible.
+     * The image is prepended to the passed link-text.
      *
      * @param string $strContent
      * @param string $strLinkText Mouseovertext
@@ -1294,42 +1289,27 @@ class class_toolkit_admin extends class_toolkit {
      * @param bool $bitVisible
      * @return string
      *
-     * @deprecated use getLayoutFolder() instead
      */
     public function getLayoutFolderPic($strContent, $strLinkText = "", $strImageVisible = "icon_folderOpen", $strImageInvisible = "icon_folderClosed", $bitVisible = true) {
-        $strID = str_replace(array(" ", "."), array("", ""), microtime());
-        $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "layout_folder_pic");
-        $arrTemplate = array();
-        $arrTemplate["id"] = $strID;
-        $arrTemplate["content"] = $strContent;
-        $arrTemplate["display"] = ($bitVisible ? "block" : "none");
-        $arrTemplate["link"] = "<a href=\"javascript:KAJONA.util.foldImage('".$strID."', '".$strID."_img', '"._skinwebpath_."/pics/".$strImageVisible."', '"._skinwebpath_."/pics/".$strImageInvisible."')\" title=\"".$strLinkText."\">".getImageAdmin(($bitVisible ? $strImageVisible : $strImageInvisible), $strLinkText, false, $strID."_img")."</a>";
-        return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
-    }
 
-    /**
-     * Returns a infobox about the page being edited
-     *
-     * @param mixed $arrContent
-     * @return string
-     */
-    public function getPageInfobox($arrContent) {
-        $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "page_infobox");
-        return $this->objTemplate->fillTemplate($arrContent, $strTemplateID);
-    }
+        $strImageVisible = class_adminskin_helper::getAdminImage($strImageVisible);
+        $strImageInvisible = class_adminskin_helper::getAdminImage($strImageInvisible);
 
-    /**
-     * Creates the page to view & manipulate image.
-     *
-     * @since 3.2
-     * @replace class_toolkit_admin::getFileDetails()
-     * @param array $arrContent
-     * @return string
-     *
-     */
-    public function getMediamanagerImageDetails(array $arrContent) {
-        $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "mediamanager_image_details");
-        return $this->objTemplate->fillTemplate($arrContent, $strTemplateID);
+        $strID = generateSystemid();
+        $strLinkText = "<span id='{$strID}'>".($bitVisible ? $strImageVisible : $strImageInvisible)."</span> ".$strLinkText;
+
+        $strImageVisible = addslashes(htmlentities($strImageVisible));
+        $strImageInvisible = addslashes(htmlentities($strImageInvisible));
+
+        $strVisibleCallback = <<<JS
+            function() {  $('#{$strID}').html('{$strImageVisible}'); }
+JS;
+
+        $strInvisibleCallback = <<<JS
+            function() {  $('#{$strID}').html('{$strImageInvisible}'); }
+JS;
+
+        return $this->getLayoutFolder($strContent, $strLinkText, $bitVisible, trim($strVisibleCallback), trim($strInvisibleCallback));
     }
 
 
@@ -1626,7 +1606,7 @@ class class_toolkit_admin extends class_toolkit {
      * @param int $nrRows number of rows to display
      * @return string
      */
-    public function getPreformatted($arrLines, $nrRows = 0) {
+    public function getPreformatted($arrLines, $nrRows = 0, $bitHighlightKeywords = true) {
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "preformatted");
         $strRows = "";
         $intI = 0;
@@ -1634,8 +1614,21 @@ class class_toolkit_admin extends class_toolkit {
             if($nrRows != 0 && $intI++ > $nrRows)
                 break;
             $strOneLine = str_replace(array("<pre>", "</pre>", "\n"), array(" ", " ", "\r\n"), $strOneLine);
-            $strRows .= htmlToString($strOneLine, true);
+
+            $strOneLine = htmlToString($strOneLine, true);
+            $strOneLine = uniStrReplace(
+                array("INFO", "ERROR", "WARNING"),
+                array(
+                    "<span style=\"color: green\">INFO</span>",
+                    "<span style=\"color: red\">ERROR</span>",
+                    "<span style=\"color: orange\">WARNING</span>"
+                ),
+                $strOneLine
+            );
+            $strRows .= $strOneLine;
         }
+
+
         return $this->objTemplate->fillTemplate(array("pretext" => $strRows), $strTemplateID);
     }
 
@@ -1955,54 +1948,11 @@ class class_toolkit_admin extends class_toolkit {
      *
      * @param int $intDialogType (0 = regular modal dialog, 1 = confirmation dialog, 2 = rawDialog, 3 = loadingDialog)
      * @return string
+     *
+     * @deprecated no longer required, available by the skin by default
      */
     public function jsDialog($intDialogType) {
-        $strContent = "";
-        $strContentTemplate = "";
-        //create the html-part
-        $arrTemplate = array();
-        $strContainerId = generateSystemid();
-        $arrTemplate["dialog_id"] = $strContainerId;
-
-        $strTemplateId = null;
-        if($intDialogType == 0 && class_carrier::getInstance()->getObjSession()->getSession("jsDialog_".$intDialogType, class_session::$intScopeRequest) === false) {
-            $strTemplateId = $this->objTemplate->readTemplate("/elements.tpl", "dialogContainer");
-            class_carrier::getInstance()->getObjSession()->setSession("jsDialog_".$intDialogType, "true",  class_session::$intScopeRequest);
-        }
-        else if($intDialogType == 1 && class_carrier::getInstance()->getObjSession()->getSession("jsDialog_".$intDialogType, class_session::$intScopeRequest) === false) {
-            $arrTemplate["dialog_cancelButton"] = class_carrier::getInstance()->getObjLang()->getLang("dialog_cancelButton", "system");
-
-            $strTemplateId = $this->objTemplate->readTemplate("/elements.tpl", "dialogConfirmationContainer");
-            class_carrier::getInstance()->getObjSession()->setSession("jsDialog_".$intDialogType, "true",  class_session::$intScopeRequest);
-        }
-        else if($intDialogType == 2 && class_carrier::getInstance()->getObjSession()->getSession("jsDialog_".$intDialogType, class_session::$intScopeRequest) === false) {
-            $strTemplateId = $this->objTemplate->readTemplate("/elements.tpl", "dialogRawContainer");
-            class_carrier::getInstance()->getObjSession()->setSession("jsDialog_".$intDialogType, "true",  class_session::$intScopeRequest);
-        }
-        else if($intDialogType == 3 && class_carrier::getInstance()->getObjSession()->getSession("jsDialog_".$intDialogType, class_session::$intScopeRequest) === false) {
-            $arrTemplate["dialog_title"] = class_carrier::getInstance()->getObjLang()->getLang("dialog_loadingHeader", "system");
-            $strTemplateId = $this->objTemplate->readTemplate("/elements.tpl", "dialogLoadingContainer");
-            class_carrier::getInstance()->getObjSession()->setSession("jsDialog_".$intDialogType, "true",  class_session::$intScopeRequest);
-        }
-
-        if($strTemplateId != null) {
-            $strContent .= $this->objTemplate->fillTemplate($arrTemplate, $strTemplateId);
-
-            //and create the java-script
-            $strContent .="<script type=\"text/javascript\">
-                var jsDialog_".$intDialogType." = null;
-                KAJONA.admin.loader.loadFile('_skinwebpath_/js/kajona_dialog.js', function() {
-                    jsDialog_".$intDialogType." = new KAJONA.admin.ModalDialog('".$strContainerId."', ".$intDialogType.");
-                }, true);
-            </script>";
-
-            //Create a template dialog
-            $strContainerIdTemplate = "template_".$strContainerId;
-            $arrTemplate["dialog_id"] = $strContainerIdTemplate;
-            $strContentTemplate .= $this->objTemplate->fillTemplate($arrTemplate, $strTemplateId);
-        }
-
-        return $strContent.$strContentTemplate;
+        return "";
     }
 
 

@@ -11,9 +11,8 @@
 
     <!-- KAJONA_BUILD_LESS_START -->
     <link href="_skinwebpath_/less/bootstrap.less?_system_browser_cachebuster_" rel="stylesheet/less">
-    <link href="_skinwebpath_/less/responsive.less?_system_browser_cachebuster_" rel="stylesheet/less">
     <script> less = { env:'development' }; </script>
-    <script src="_skinwebpath_/less/less.js"></script>
+    <script src="_skinwebpath_/less/less.min.js"></script>
     <!-- KAJONA_BUILD_LESS_END -->
 
     <script src="_webpath_/core/module_system/admin/scripts/jquery/jquery.min.js?_system_browser_cachebuster_"></script>
@@ -28,30 +27,28 @@
     <![endif]-->
 
     <link rel="shortcut icon" href="_skinwebpath_/img/favicon.png">
-    <!--
-    <link rel="apple-touch-icon" href="_skinwebpath_/img/apple-touch-icon.png">
-    <link rel="apple-touch-icon" sizes="72x72" href="_skinwebpath_/img/apple-touch-icon-72x72.png">
-    <link rel="apple-touch-icon" sizes="114x114" href="_skinwebpath_/img/apple-touch-icon-114x114.png">
-    -->
 </head>
 
 <body class="login">
 
 <div class="container-fluid">
-    <div class="row-fluid">
-        <div class="span12" id="content">
-            <div class="modal" id="loginContainer">
-                <div class="modal-header">
-                    <h3 id="loginContainer_title">Kajona v4</h3>
+    <div class="row">
+
+        <div class="col-md-5 center-block" id="content">
+
+            <div class="panel panelDefault" id="loginContainer">
+                <div class="panel-header">
+                    <h3>Kajona v4</h3>
                 </div>
-                <div class="modal-body">
+                <div class="panel-body">
                     <div id="loginContainer_content">%%content%%</div>
                 </div>
-                <div class="modal-footer">
+                <div class="panel-footer">
                     <a href="http://www.kajona.de" target="_blank">Kajona - empowering your content</a>
                 </div>
             </div>
         </div>
+
     </div>
 </div>
 
@@ -60,18 +57,18 @@
 </script>
 
 <script src="_skinwebpath_/js/jquery.ui.touch-punch.min.js?_system_browser_cachebuster_"></script>
-<script src="_skinwebpath_/js/bootstrap-transition.js?_system_browser_cachebuster_"></script>
-<script src="_skinwebpath_/js/bootstrap-alert.js?_system_browser_cachebuster_"></script>
-<script src="_skinwebpath_/js/bootstrap-modal.js?_system_browser_cachebuster_"></script>
-<script src="_skinwebpath_/js/bootstrap-dropdown.js?_system_browser_cachebuster_"></script>
-<script src="_skinwebpath_/js/bootstrap-scrollspy.js?_system_browser_cachebuster_"></script>
-<script src="_skinwebpath_/js/bootstrap-tab.js?_system_browser_cachebuster_"></script>
-<script src="_skinwebpath_/js/bootstrap-tooltip.js?_system_browser_cachebuster_"></script>
-<script src="_skinwebpath_/js/bootstrap-popover.js?_system_browser_cachebuster_"></script>
-<script src="_skinwebpath_/js/bootstrap-button.js?_system_browser_cachebuster_"></script>
-<script src="_skinwebpath_/js/bootstrap-collapse.js?_system_browser_cachebuster_"></script>
-<script src="_skinwebpath_/js/bootstrap-carousel.js?_system_browser_cachebuster_"></script>
-<script src="_skinwebpath_/js/bootstrap-affix.js?_system_browser_cachebuster_"></script>
+<script src="_skinwebpath_/js/transition.js?_system_browser_cachebuster_"></script>
+<script src="_skinwebpath_/js/alert.js?_system_browser_cachebuster_"></script>
+<script src="_skinwebpath_/js/modal.js?_system_browser_cachebuster_"></script>
+<script src="_skinwebpath_/js/dropdown.js?_system_browser_cachebuster_"></script>
+<script src="_skinwebpath_/js/scrollspy.js?_system_browser_cachebuster_"></script>
+<script src="_skinwebpath_/js/tab.js?_system_browser_cachebuster_"></script>
+<script src="_skinwebpath_/js/tooltip.js?_system_browser_cachebuster_"></script>
+<script src="_skinwebpath_/js/popover.js?_system_browser_cachebuster_"></script>
+<script src="_skinwebpath_/js/button.js?_system_browser_cachebuster_"></script>
+<script src="_skinwebpath_/js/collapse.js?_system_browser_cachebuster_"></script>
+<script src="_skinwebpath_/js/carousel.js?_system_browser_cachebuster_"></script>
+<script src="_skinwebpath_/js/affix.js?_system_browser_cachebuster_"></script>
 <script src="_skinwebpath_/js/v4skin.js?_system_browser_cachebuster_"></script>
 </body>
 </html>
