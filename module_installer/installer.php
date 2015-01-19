@@ -152,7 +152,8 @@ class class_installer {
             "mbstring",
             "gd",
             "xml",
-            "zip"
+            "zip",
+            "openssl"
         );
 
         $strReturn .= $this->getLang("installer_phpcheck_intro");
