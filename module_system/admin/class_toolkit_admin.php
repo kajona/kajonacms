@@ -1298,8 +1298,8 @@ class class_toolkit_admin extends class_toolkit {
         $strID = generateSystemid();
         $strLinkText = "<span id='{$strID}'>".($bitVisible ? $strImageVisible : $strImageInvisible)."</span> ".$strLinkText;
 
-        $strImageVisible = addslashes($strImageVisible);
-        $strImageInvisible = addslashes($strImageInvisible);
+        $strImageVisible = addslashes(htmlentities($strImageVisible));
+        $strImageInvisible = addslashes(htmlentities($strImageInvisible));
 
         $strVisibleCallback = <<<JS
             function() {  $('#{$strID}').html('{$strImageVisible}'); }
