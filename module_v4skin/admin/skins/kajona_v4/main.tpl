@@ -54,7 +54,7 @@
                     </form>
 
                 </div>
-                <div class="col-md-5 col-sm-6 col-xs-6 navbar-dropdown-section pull-right">
+                <div class="col-md-5 col-sm-6 col-xs-7 navbar-dropdown-section pull-right">
                     <span>%%languageswitch%%</span>
                     <span class="">%%aspectChooser%%</span>
                     <a id="portaleditor" class="btn btn-default hidden-xs" href="_webpath_">
