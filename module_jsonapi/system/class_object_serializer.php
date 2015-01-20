@@ -16,6 +16,8 @@
  * @author sidler@mulchprod.de
  * @author christoph.kappestein@gmail.com
  * @since 4.5
+ *
+ * @todo this class requires some cleanup, e.g. the removal of unused methods
  */
 class class_object_serializer {
 

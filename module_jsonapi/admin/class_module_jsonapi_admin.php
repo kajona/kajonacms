@@ -16,6 +16,8 @@
  */
 class class_module_jsonapi_admin extends class_admin_controller implements interface_admin {
 
+
+
     /**
      * Handles the incomming request. Catches all exceptions so that we return
      * an clean json response with an fitting status code if an error occured
@@ -28,6 +30,10 @@ class class_module_jsonapi_admin extends class_admin_controller implements inter
 
         try {
             class_response_object::getInstance()->setStrStatusCode(class_http_statuscodes::SC_OK);
+
+            //per coding convention, we use prefixes to indicate what data-type a variable is handling, e.g. int, str, obj, long, bit.
+            //this is a little bit of overhead when coding, but makes the code much more readable, at least in our opinion
+            //so $response would become $objResponse
             $response = $this->doHandle();
 
         } catch (class_invalid_request_exception $e) {
@@ -66,16 +72,16 @@ class class_module_jsonapi_admin extends class_admin_controller implements inter
      *
      * @return array
      */
-    protected function doHandle()
-    {
+    protected function doHandle() {
         $className = $this->getParam('class');
-        $systemId = $this->getParam('systemId');
+        //direct access to a validated systemid is best achieved by getSystemid()
+        $systemId = $this->getSystemid();
         $requestMethod = isset($_SERVER['REQUEST_METHOD']) ? $_SERVER['REQUEST_METHOD'] : 'GET';
 
         if (!empty($className) && class_exists($className)) {
             $obj = new $className($systemId);
             if (!$obj instanceof interface_model) {
-                throw new class_invalid_request_exception('Selected class must be an model', class_exception::$level_ERROR);
+                throw new class_invalid_request_exception('Selected class must be a model', class_exception::$level_ERROR);
             }
         } else {
             throw new class_invalid_request_exception('Invalid class name', class_exception::$level_ERROR);
@@ -84,7 +90,12 @@ class class_module_jsonapi_admin extends class_admin_controller implements inter
         switch ($requestMethod) {
 
             case 'GET':
-                $response = $this->doGet($obj, $systemId);
+                //call the internal action dispatcher to trigger the permission management. Call it by the name of the method,
+                // so a call to "list" would be mapped to the method-name "actionList".
+                //permissions are checked in two separate ways:
+                // 1.) a given systemid -> the object itself is instantiated, the permission is validated against the object
+                // 2.) no systemid given -> the permissions are validated against the current module, so here module jsonapi - what is nonsense in this scenario
+                $response = $this->action("get");
                 break;
 
             case 'POST':
@@ -92,11 +103,11 @@ class class_module_jsonapi_admin extends class_admin_controller implements inter
                     throw new class_invalid_request_exception('Systemid must be empty when creating an entry', class_exception::$level_ERROR);
                 }
 
-                $response = $this->doPost($obj);
+                $response = $this->action("post");
                 break;
 
             case 'PUT':
-                if (empty($systemId)) {
+                if (!validateSystemid($systemId)) {
                     throw new class_invalid_request_exception('Systemid must be given when updating an entry', class_exception::$level_ERROR);
                 }
 
@@ -104,11 +115,11 @@ class class_module_jsonapi_admin extends class_admin_controller implements inter
                 break;
 
             case 'DELETE':
-                if (empty($systemId)) {
+                if (!validateSystemid($systemId)) {
                     throw new class_invalid_request_exception('Systemid must be given when deleting an entry', class_exception::$level_ERROR);
                 }
 
-                $response = $this->doDelete($obj);
+                $response = $this->action("delete");
                 break;
 
             default:
@@ -125,11 +136,14 @@ class class_module_jsonapi_admin extends class_admin_controller implements inter
      * specific entry gets returned else an complete list
      *
      * @return array
+     * @permissions view
      */
-    protected function doGet(interface_model $obj, $systemId)
-    {
+    protected function actionGet() {
         // if we have no systemId we return an list else only an specific entry
-        if (empty($systemId)) {
+        if (!validateSystemid($this->getSystemid())) {
+
+            $strClass = $this->getParam('class');
+
             // filter parameters
             $filter = $this->getParam('filter');
             $startIndex = (int) $this->getParam('startIndex');
@@ -153,10 +167,17 @@ class class_module_jsonapi_admin extends class_admin_controller implements inter
                 $endDate = null;
             }
 
-            $entries = $obj->getObjectList($filter, $startIndex, $count, $startDate, $endDate);
+            //getObjectList is static, so call it against the class-definition, plz
+            /** @var interface_model[]|class_root[] $entries */
+            $entries = $strClass::getObjectList($filter, $startIndex, $count, $startDate, $endDate);
             $result = array();
 
             foreach ($entries as $entry) {
+
+                //internal permission handling right here
+                if(!$entry->rightView())
+                    continue;
+
                 $row = $this->serializeObject($entry);
                 if (!empty($row)) {
                     $result[] = $row;
@@ -165,23 +186,40 @@ class class_module_jsonapi_admin extends class_admin_controller implements inter
 
             return $result;
         } else {
+            //get the object from the global object-factory, taking care of caching and everything else
+            $obj = class_objectfactory::getInstance()->getObject($this->getSystemid());
             return $this->serializeObject($obj);
         }
     }
 
     /**
-     * Inserts the request data into the model and creates the entry in the 
+     * Inserts the request data into the model and creates the entry in the
      * database
      *
      * @return array
+     * @throws class_authentication_exception
+     * @permissions edit
      */
-    protected function doPost(interface_model $obj)
+    protected function actionPost()
     {
-        $this->injectData($obj);
+        //since we don't have a final object, the permission-handling evaluates the edit-permissions against module jsonapi.
+        //in addition, we should validate the edit-permissions of the target-class' module, e.g.:
 
-        // @TODO validate the model data which can contain any data from the json request 
+        $strClass = $this->getParam('class');
+        /** @var class_model $objObject */
+        $objObject = new $strClass();
 
-        $obj->updateObjectToDb();
+        if(!class_module_system_module::getModuleByName($objObject->getArrModule("module"))->rightEdit()) {
+            throw new class_authentication_exception("You are not allowed to create new records", class_exception::$level_ERROR);
+        }
+
+        $this->injectData($objObject);
+
+        // @TODO validate the model data which can contain any data from the json request
+        // we could use the form-validators, so field- and object validators right here. currently this is all rather fixed inside class_admin_formgenerator,
+        // but we should refactor it from there into separate classes, so in order to reuse it here -> filing a ticket?
+
+        $objObject->updateObjectToDb();
 
         return array(
             'success' => true,
@@ -194,6 +232,7 @@ class class_module_jsonapi_admin extends class_admin_controller implements inter
      * database
      *
      * @return array
+     * @permissions edit
      */
     protected function doPut(interface_model $obj)
     {
@@ -215,11 +254,17 @@ class class_module_jsonapi_admin extends class_admin_controller implements inter
      * Deletes the model from the database
      *
      * @return array
+     * @permissions delete
      */
-    protected function doDelete(interface_model $obj)
+    protected function actionDelete()
     {
         // @TODO check whether the model actual exists in the database
 
+        $obj = class_objectfactory::getInstance()->getObject($this->getSystemid());
+
+        if($obj == null) {
+            throw new class_invalid_request_exception('Object not exisiting', class_exception::$level_ERROR);
+        }
         $obj->deleteObject();
 
         return array(
