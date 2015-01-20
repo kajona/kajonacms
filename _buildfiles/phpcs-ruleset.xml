@@ -23,6 +23,7 @@
     <exclude-pattern>*phpqrcode*</exclude-pattern>
     <exclude-pattern>*/lang/*</exclude-pattern>
     <exclude-pattern>*browscap.cache*</exclude-pattern>
+    <exclude-pattern>*Browscap.php*</exclude-pattern>
 
 
     <rule ref="PEAR">
