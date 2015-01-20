@@ -119,7 +119,7 @@ class class_module_system_aspect extends class_model implements interface_model,
      */
     public static function getActiveObjectList() {
         $objOrm = new class_orm_objectlist();
-        $objOrm->addWhereRestriction(new class_orm_objectlist_restriction("AND system_status != 0"));
+        $objOrm->addWhereRestriction(new class_orm_objectlist_systemstatus_restriction(class_orm_comparator_enum::NotEqual(), 0));
         return $objOrm->getObjectList(__CLASS__, "");
     }
 
@@ -131,7 +131,7 @@ class class_module_system_aspect extends class_model implements interface_model,
      */
     public static function getActiveObjectCount() {
         $objOrm = new class_orm_objectlist();
-        $objOrm->addWhereRestriction(new class_orm_objectlist_restriction("AND system_status != 0"));
+        $objOrm->addWhereRestriction(new class_orm_objectlist_systemstatus_restriction(class_orm_comparator_enum::NotEqual(), 0));
         return $objOrm->getObjectCount(__CLASS__);
     }
 

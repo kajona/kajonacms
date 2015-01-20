@@ -70,6 +70,8 @@ abstract class class_root {
      * The records current systemid
      * @var string
      * @templateExport
+     *
+     * @tableColumn system.system_id
      */
     private $strSystemid = "";
 
@@ -77,6 +79,8 @@ abstract class class_root {
      * The records internal parent-id
      * @var string
      * @versionable
+     *
+     * @tableColumn system.system_prev_id
      */
     private $strPrevId = -1;
 
@@ -89,12 +93,14 @@ abstract class class_root {
     /**
      * The records module-number
      * @var int
+     * @tableColumn system.system_module_nr
      */
     private $intModuleNr = 0;
 
     /**
      * The records sort-position relative to the parent record
      * @var int
+     * @tableColumn system.system_sort
      */
     private $intSort = -1;
 
@@ -104,12 +110,14 @@ abstract class class_root {
      * @versionable
      * @templateExport
      * @templateMapper user
+     * @tableColumn system.system_owner
      */
     private $strOwner = "";
 
     /**
      * The id of the user last who did the last changes to the current record
      * @var string
+     * @tableColumn system.system_lm_user
      */
     private $strLmUser = "";
 
@@ -120,12 +128,14 @@ abstract class class_root {
      * @var int
      * @templateExport
      * @templateMapper datetime
+     * @tableColumn system.system_lm_time
      */
     private $intLmTime = 0;
 
     /**
      * The id of the user locking the current record, emtpy otherwise
      * @var string
+     * @tableColumn system.system_lock_id
      */
     private $strLockId = "";
 
@@ -134,6 +144,7 @@ abstract class class_root {
      * ATTENTION: time() based, so 32 bit integer
      * @todo migrate to long-timestamp
      * @var int
+     * @tableColumn system.system_lock_time
      */
     private $intLockTime = 0;
 
@@ -141,18 +152,21 @@ abstract class class_root {
      * The records status
      * @var int
      * @versionable
+     * @tableColumn system.system_status
      */
     private $intRecordStatus = 1;
 
     /**
      * Human readable comment describing the current record
      * @var string
+     * @tableColumn system.system_comment
      */
     private $strRecordComment = "";
 
     /**
      * Holds the current objects' class
      * @var string
+     * @tableColumn system.system_class
      */
     private $strRecordClass = "";
 
@@ -161,6 +175,7 @@ abstract class class_root {
      * @var int
      * @templateExport
      * @templateMapper datetime
+     * @tableColumn system.system_create_date
      */
     private $longCreateDate = 0;
 
@@ -170,6 +185,8 @@ abstract class class_root {
      * @versionable
      * @templateExport
      * @templateMapper datetime
+     *
+     * @tableColumn system_date.system_date_start
      */
     private $objStartDate = null;
 
@@ -179,6 +196,8 @@ abstract class class_root {
      * @versionable
      * @templateExport
      * @templateMapper datetime
+     *
+     * @tableColumn system_date.system_date_end
      */
     private $objEndDate = null;
 
@@ -188,6 +207,8 @@ abstract class class_root {
      * @versionable
      * @templateExport
      * @templateMapper datetime
+     *
+     * @tableColumn system_date.system_date_special
      */
     private $objSpecialDate = null;
 

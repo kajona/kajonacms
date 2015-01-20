@@ -19,6 +19,8 @@ class class_orm_objectlist_restriction {
     private $strWhere = "";
     private $arrParams = array();
 
+    private $strTargetClass = "";
+
     /**
      * @param string $strWhere
      * @param string|string[] $arrParams either a single value or an array of params
@@ -60,6 +62,20 @@ class class_orm_objectlist_restriction {
      */
     public function getStrWhere() {
         return $this->strWhere;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStrTargetClass() {
+        return $this->strTargetClass;
+    }
+
+    /**
+     * @param string $strTargetClass
+     */
+    public function setStrTargetClass($strTargetClass) {
+        $this->strTargetClass = $strTargetClass;
     }
 
 

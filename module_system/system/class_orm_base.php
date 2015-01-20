@@ -84,14 +84,14 @@ abstract class class_orm_base {
         foreach($arrTargetTables as $strOneTable) {
             $arrOneTable = explode(".", $strOneTable);
             $strWhere .= "AND system_id=".$arrOneTable[1]." ";
-            $arrTables[] = class_carrier::getInstance()->getObjDB()->encloseTableName(_dbprefix_.$arrOneTable[0]);
+            $arrTables[] = class_carrier::getInstance()->getObjDB()->encloseTableName(_dbprefix_.$arrOneTable[0])." AS ".$arrOneTable[0];
         }
 
         //build the query
         $strQuery = "FROM ".class_carrier::getInstance()->getObjDB()->encloseTableName(_dbprefix_."system_right").",
                             ".implode(", ", $arrTables)." ,
-                            ".class_carrier::getInstance()->getObjDB()->encloseTableName(_dbprefix_."system")."
-                  LEFT JOIN "._dbprefix_."system_date
+                            ".class_carrier::getInstance()->getObjDB()->encloseTableName(_dbprefix_."system")." AS system
+                  LEFT JOIN "._dbprefix_."system_date AS system_date
                          ON system_id = system_date_id
                       WHERE system_id = right_id
                             ".$strWhere."";
