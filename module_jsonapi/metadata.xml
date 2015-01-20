@@ -10,6 +10,7 @@
     <type>MODULE</type>
     <providesInstaller>TRUE</providesInstaller>
     <requiredModules>
-        <module name="system" version="4.5" />
+        <module name="system" version="4.6" />
+        <module name="basicauthentication" version="4.6" />
     </requiredModules>
 </package>
