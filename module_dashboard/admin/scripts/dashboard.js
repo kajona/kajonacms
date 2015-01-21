@@ -64,7 +64,6 @@ KAJONA.admin.dashboard = {
                     $(".dbEntry").each(function(index) {
                         intPos++;
                         if($(this).data("systemid") == ui.item.data("systemid")) {
-                            //console.log("dashboard setDashboardPosition "+ ui.item.data("systemid") + "&listPos=" + intPos+"&listId="+ui.item.closest('div.adminwidgetColumn').attr('id'));
                             KAJONA.admin.ajax.genericAjaxCall("dashboard", "setDashboardPosition", ui.item.data("systemid") + "&listPos=" + intPos+"&listId="+ui.item.closest('div.adminwidgetColumn').attr('id'), KAJONA.admin.ajax.regularCallback)
                             return false;
                         }
