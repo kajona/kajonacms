@@ -78,14 +78,16 @@ class class_test_reflection extends class_testbase  {
         
         $arrKeys = array_keys($arrProps);
         $arrValues = array_values($arrProps);
-        $this->assertEquals("valB1", $arrValues[0]);
-        $this->assertEquals("propertyB1", $arrKeys[0]);
 
-        $this->assertEquals("valB2", $arrValues[1]);
-        $this->assertEquals("propertyB2", $arrKeys[1]);
+        $this->assertEquals("valA1", $arrValues[0]);
+        $this->assertEquals("propertyA1", $arrKeys[0]);
 
-        $this->assertEquals("valA1", $arrValues[2]);
-        $this->assertEquals("propertyA1", $arrKeys[2]);
+        $this->assertEquals("valB1", $arrValues[1]);
+        $this->assertEquals("propertyB1", $arrKeys[1]);
+
+        $this->assertEquals("valB2", $arrValues[2]);
+        $this->assertEquals("propertyB2", $arrKeys[2]);
+
 
 
         $this->assertEquals("valB1", $objAnnotations->getAnnotationValueForProperty("propertyB1", "@propertyTest"));
@@ -113,6 +115,16 @@ class class_test_reflection extends class_testbase  {
         $this->assertEquals(strtolower("setIntPropertyB1"), strtolower($objReflection->getSetter("propertyB1")));
     }
 
+
+    public function testPropertyAnnotationInheritance() {
+        $objReflection = new class_reflection(new A());
+        $this->assertEquals("val CA", $objReflection->getAnnotationValueForProperty("propertyC", "@propertyTestInheritance"));
+
+        $objReflection = new class_reflection(new B());
+        $this->assertEquals("val CB", $objReflection->getAnnotationValueForProperty("propertyC", "@propertyTestInheritance"));
+    }
+
+
 }
 
 //set up test-structures
@@ -122,6 +134,7 @@ class class_test_reflection extends class_testbase  {
  * @emptyAnnotation
  * @classTest val1
  * @classTest2 val2
+ *
  */
 class A {
 
@@ -131,6 +144,11 @@ class A {
     private $propertyA1;
 
     private $propertyA2;
+
+    /**
+     * @propertyTestInheritance val CA
+     */
+    private $propertyC;
 
     public function setStrPropertyA1($propertyA1) {
         $this->propertyA1 = $propertyA1;
@@ -145,6 +163,7 @@ class A {
  *
  * @classTest val2
  * @classTest val3
+ *
  */
 class B extends A {
 
@@ -157,6 +176,12 @@ class B extends A {
      * @propertyTest valB2
      */
     private $propertyB2;
+
+
+    /**
+     * @propertyTestInheritance val CB
+     */
+    private $propertyC;
 
     /**
      * @methodTest val1
