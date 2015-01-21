@@ -211,8 +211,12 @@ footer {
 
 
 .userNotificationsDropdown {
-    margin: 17px 0 0 0;
+    margin: 15px 0 0 -15px;
     white-space: nowrap;
+
+    @media (max-width: @screen-sm-max) {
+        left: -10px;
+    }
 
     a.dropdown-toggle {
         color: @link-color;
@@ -759,7 +763,7 @@ footer {
         .form-group {
             margin-bottom: 10px;
 
-            @media (min-width: 768px) {
+            @media (min-width: @screen-sm-min) {
                 .input-large {
                     width: 58.33333333%;
                 }
@@ -1103,47 +1107,39 @@ footer {
 
 
     /* DASHBOARD */
-    table.dashBoard {
-        width: 100%;
-        td {
-            width: 33%;
-            max-width: 33%;
-            vertical-align: top;
-
-            ul {
-                padding: 10px 0;
-                margin: 10px 10px;
-            }
-        }
-
-        li {
-            list-style: none;
-        }
-
-        .dbEntry {
-            .adminwidgetactions {
-                display: inline;
-                margin-top: -35px;
-            }
-
-
-            .listButton {
-                display: inline;
-            }
-        }
-
-        .dashboardPlaceholder {
-            background-image: repeating-linear-gradient(-45deg, transparent, transparent 8px, rgba(0,0,0,.05) 8px, rgba(0,0,0,.05) 16px);
-            min-height: 100px;
-            border: 3px dotted @gray;
-        }
-
+    .dashBoard {
         .adminwidgetColumn {
-            .additionalNameContent {
-                font-size: @font-size-small - 1;
-                margin-top: -@font-size-small;
 
+            @media (min-width: @screen-md-min) {
+                min-height: 150px;
             }
+
+            .dbEntry {
+                .adminwidgetactions {
+                    display: inline;
+                    margin-top: -35px;
+                }
+
+                .additionalNameContent {
+                    font-size: @font-size-small - 1;
+                    margin-top: -@font-size-small;
+                }
+
+                .content {
+                    padding-top: 5px;
+                }
+
+                &.sortActive {
+                    .opacity(0.8);
+                }
+            }
+
+            .dashboardPlaceholder {
+                background-image: repeating-linear-gradient(-45deg, transparent, transparent 8px, rgba(0,0,0,.05) 8px, rgba(0,0,0,.05) 16px);
+                min-height: 100px;
+                border: 3px dotted @gray;
+            }
+
         }
     }
 }

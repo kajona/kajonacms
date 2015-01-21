@@ -319,7 +319,7 @@ KAJONA.admin.portaleditor.dragndrop.init = function () {
             var $placeholderWrapper = $(this);
             $placeholderWrapper.removeClass('pePlaceholderWrapperDropTarget');
         },
-        delay: KAJONA.util.isTouchDevice() ? 2000 : 0
+        delay: KAJONA.util.isTouchDevice() ? 500 : 0
     });
 };
 

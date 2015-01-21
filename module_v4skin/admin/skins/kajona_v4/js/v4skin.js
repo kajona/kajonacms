@@ -127,7 +127,7 @@ KAJONA.v4skin = {
 
         this.minLength = 2;
 
-        this.delay = KAJONA.util.isTouchDevice() ? 2000 : 0;
+        this.delay = KAJONA.util.isTouchDevice() ? 500 : 0;
 
         this.messages = {
             noResults: '',
