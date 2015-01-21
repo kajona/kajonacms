@@ -21,7 +21,7 @@ class class_module_navigation_point extends class_model implements interface_mod
 
     /**
      * @var string
-     * @tableColumn navigation_name
+     * @tableColumn navigation.navigation_name
      * @tableColumnDatatype char254
      * @fieldMandatory
      * @fieldType text
@@ -33,7 +33,7 @@ class class_module_navigation_point extends class_model implements interface_mod
 
     /**
      * @var string
-     * @tableColumn navigation_page_e
+     * @tableColumn navigation.navigation_page_e
      * @tableColumnDatatype char254
      * @fieldType file
      * @fieldLabel navigation_page_e
@@ -44,7 +44,7 @@ class class_module_navigation_point extends class_model implements interface_mod
 
     /**
      * @var string
-     * @tableColumn navigation_page_i
+     * @tableColumn navigation.navigation_page_i
      * @tableColumnDatatype char254
      * @fieldType page
      * @fieldLabel navigation_page_i
@@ -55,7 +55,7 @@ class class_module_navigation_point extends class_model implements interface_mod
 
     /**
      * @var string
-     * @tableColumn navigation_folder_i
+     * @tableColumn navigation.navigation_folder_i
      * @tableColumnDatatype char20
      * @addSearchIndex
      */
@@ -63,7 +63,7 @@ class class_module_navigation_point extends class_model implements interface_mod
 
     /**
      * @var string
-     * @tableColumn navigation_target
+     * @tableColumn navigation.navigation_target
      * @tableColumnDatatype char254
      * @fieldType dropdown
      * @fieldDDValues [_self => navigation_tagetself],[_blank => navigation_tagetblank]
@@ -73,7 +73,7 @@ class class_module_navigation_point extends class_model implements interface_mod
 
     /**
      * @var string
-     * @tableColumn navigation_image
+     * @tableColumn navigation.navigation_image
      * @tableColumnDatatype char254
      * @fieldType image
      * @fieldLabel commons_image

@@ -26,7 +26,7 @@ class class_module_system_aspect extends class_model implements interface_model,
 
     /**
      * @var string
-     * @tableColumn aspect_name
+     * @tableColumn aspects.aspect_name
      * @tableColumnDatatype char254
      * @fieldType text
      * @fieldMandatory
@@ -37,7 +37,7 @@ class class_module_system_aspect extends class_model implements interface_model,
 
     /**
      * @var bool
-     * @tableColumn aspect_default
+     * @tableColumn aspects.aspect_default
      * @tableColumnDatatype int
      * @fieldType yesno
      * @fieldMandatory
