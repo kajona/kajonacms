@@ -617,6 +617,9 @@ class class_db_sqlite3 extends class_db_base  {
         return $objStmt;
     }
 
+    public function encloseTableName($strTable) {
+        return "'".$strTable."'";
+    }
 
 }
 
