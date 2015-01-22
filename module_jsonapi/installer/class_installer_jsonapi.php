@@ -17,16 +17,7 @@ class class_installer_jsonapi extends class_installer_base implements interface_
         $strReturn = "";
 
         //register the module
-        $this->registerModule("jsonapi", _jsonapi_module_id_, "", "class_module_jsonapi_admin.php", $this->objMetadata->getStrVersion(), true);
-
-
-        $strReturn .= "Setting aspect assignments...\n";
-        if(class_module_system_aspect::getAspectByName("content") != null) {
-            $objModule = class_module_system_module::getModuleByName($this->objMetadata->getStrTitle());
-            $objModule->setStrAspect(class_module_system_aspect::getAspectByName("content")->getSystemid());
-            $objModule->updateObjectToDb();
-        }
-
+        $this->registerModule("jsonapi", _jsonapi_module_id_, "", "class_module_jsonapi_admin.php", $this->objMetadata->getStrVersion(), false);
 
         return $strReturn;
 
