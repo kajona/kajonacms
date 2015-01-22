@@ -18,7 +18,6 @@ Build-System
 We currently provide various build-scripts in order to test, clean, build and package a project out of the sources.
 Please have a look at the ant-scripts located at ```_buildfiles```: ```build_jenkins.xml```, ```build_project.xml```
 
-[![Build Status](https://build.kajona.de:7456/buildStatus/icon?job=Kajona_V4_Head_AdHocBuild&.png)](https://build.kajona.de:7456/job/Kajona_V4_Head_AdHocBuild/)
 
 Quickstart
 ---
