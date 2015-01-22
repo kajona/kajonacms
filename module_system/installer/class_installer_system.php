@@ -286,6 +286,9 @@ class class_installer_system extends class_installer_base implements interface_i
         //Email to send error-reports
         $this->registerConstant("_system_admin_email_", $this->objSession->getSession("install_email"), class_module_system_setting::$int_TYPE_STRING, _system_modul_id_);
 
+        $this->registerConstant("_system_email_defaultsender_", $this->objSession->getSession("install_email"), class_module_system_setting::$int_TYPE_STRING, _system_modul_id_);
+        $this->registerConstant("_system_email_forcesender_", "false", class_module_system_setting::$int_TYPE_BOOL, _system_modul_id_);
+
         //3.0.2: user are allowed to change their settings?
         $this->registerConstant("_user_selfedit_", "true", class_module_system_setting::$int_TYPE_BOOL, _user_modul_id_);
 
@@ -647,6 +650,11 @@ class class_installer_system extends class_installer_base implements interface_i
             $strReturn .= "Updating 4.6.2 to 4.6.3...\n";
             $this->updateModuleVersion("", "4.6.3");
             $this->objDB->flushQueryCache();
+        }
+
+        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "4.6.3") {
+            $strReturn .= $this->update_463_464();
         }
 
         return $strReturn."\n\n";
@@ -1135,6 +1143,20 @@ class class_installer_system extends class_installer_base implements interface_i
 
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion($this->objMetadata->getStrTitle(), "4.5.1");
+        return $strReturn;
+    }
+
+    private function update_463_464() {
+        $strReturn = "Updating 4.6.3 to 4.6.4...\n";
+
+        $strReturn .= "Adding mail-config settings...\n";
+
+        $this->registerConstant("_system_email_defaultsender_", _system_admin_email_, class_module_system_setting::$int_TYPE_STRING, _system_modul_id_);
+        $this->registerConstant("_system_email_forcesender_", "false", class_module_system_setting::$int_TYPE_BOOL, _system_modul_id_);
+
+
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion($this->objMetadata->getStrTitle(), "4.6.4");
         return $strReturn;
     }
 

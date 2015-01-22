@@ -211,8 +211,8 @@ class class_mail {
 
             }
 
-            if($this->strSender == "") {
-                $this->strSender = _system_admin_email_;
+            if($this->strSender == "" || class_module_system_setting::getConfigValue("_system_email_forcesender_") == "true") {
+                $this->strSender = class_module_system_setting::getConfigValue("_system_email_defaultsender_");
             }
 
             if($this->strSender != "") {
