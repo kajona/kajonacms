@@ -197,7 +197,7 @@ class class_remoteloader {
             )
         );
 
-        $strReturn = file_get_contents(
+        $strReturn = @file_get_contents(
             $this->strProtocolHeader.
             $this->strHost .
             ($this->intPort > 0 ? ":" . $this->intPort : "") .
