@@ -95,18 +95,17 @@ class class_remoteloader {
             class_logger::getInstance(class_logger::REMOTELOADER)->addLogRow("loaded via filegetcontents: ".$strReturn, class_logger::$levelInfo);
         }
 
-        //fourth: curl
+        //third try: curl
         if($strReturn === false) {
             $strReturn = $this->connectViaCurl();
             class_logger::getInstance(class_logger::REMOTELOADER)->addLogRow("loaded via curl: ".$strReturn, class_logger::$levelInfo);
         }
 
-        //third: fsockopen
+        //fourth try: fsockopen
         if($strReturn === false) {
             $strReturn = $this->connectFSockOpen();
             class_logger::getInstance(class_logger::REMOTELOADER)->addLogRow("loaded via fsockopen: ".$strReturn, class_logger::$levelInfo);
         }
-
 
         //fifth try: sockets
         if($strReturn === false) {
@@ -188,12 +187,17 @@ class class_remoteloader {
         $objCtx = stream_context_create(
             array(
                 'http' => array(
-                    'timeout' => 1
+                    'timeout' => 1,
+                    'max_redirects' => 5
+                ),
+                'https' => array(
+                    'timeout' => 1,
+                    'max_redirects' => 5
                 )
             )
         );
 
-        $strReturn = @file_get_contents(
+        $strReturn = file_get_contents(
             $this->strProtocolHeader.
             $this->strHost .
             ($this->intPort > 0 ? ":" . $this->intPort : "") .

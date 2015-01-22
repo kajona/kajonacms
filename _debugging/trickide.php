@@ -48,6 +48,8 @@ define("_stats_nrofrecords_", "");
 
 define("_tags_defaultprivate_", "");
 
+define("_remoteloader_max_cachetime_", 0);
+
 define("_packagemanager_defaulttemplate_", "");
 define("_packageserver_repo_id_", "");
 
