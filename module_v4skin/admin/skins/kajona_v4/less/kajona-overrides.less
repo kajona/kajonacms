@@ -747,10 +747,7 @@ footer {
             border-bottom: 1px solid @kajona-gray;
         }
 
-        label {
-            color: @text-color;
-            font-weight: normal;
-        }
+
 
         .help-block {
             margin-bottom: -7px;
@@ -760,62 +757,83 @@ footer {
             vertical-align: top;
             padding: 7px 0 0 0;
         }
-        .form-group {
-            margin-bottom: 10px;
 
-            @media (min-width: @screen-sm-min) {
-                .input-large {
-                    width: 58.33333333%;
-                }
+    }
 
+
+    .form-group {
+        margin-bottom: 10px;
+
+        @media (min-width: @screen-sm-min) {
+            .input-large {
+                width: 58.33333333%;
             }
 
-            .savechanges {
-                border: 4px solid @gray-light;
-                background-color: @kajona-gray;
-                .box-shadow(none);
-                color: #888888;
-                cursor: pointer;
-                font-size: @font-size-base + 2;
-                vertical-align: middle;
-                font-weight: 600;
-                text-transform: uppercase;
-                text-align: left;
-                padding: 0 0 0 10px;
-                line-height: 30px;
-                position: relative;
-                width: 65%;
-                max-width: 300px;
-                min-width: 250px;
-                &:hover {
-                    color:@black;
-                    &:after {
-                        background-color:darken(@kajona-brand-color, 10%);
-                    }
-                }
+        }
 
+        label {
+            color: @text-color;
+            font-weight: normal;
+        }
+
+        .form-control {
+            border: 1px solid @gray-darker;
+            .box-shadow(none);
+            padding: 4px;
+
+            &.mandatoryFormElement {
+                .box-shadow(0 0 6px @brand-warning+20);
+            }
+        }
+
+        .form-control-static {
+            padding: 4px;
+        }
+
+        .savechanges {
+            border: 4px solid @gray-light;
+            background-color: @kajona-gray;
+            .box-shadow(none);
+            color: #888888;
+            cursor: pointer;
+            font-size: @font-size-base + 2;
+            vertical-align: middle;
+            font-weight: 600;
+            text-transform: uppercase;
+            text-align: left;
+            padding: 0 0 0 10px;
+            line-height: 30px;
+            position: relative;
+            width: 65%;
+            max-width: 300px;
+            min-width: 250px;
+            &:hover {
+                color:@black;
                 &:after {
-                    width:30px;
-                    height:30px;
-                    display:inline-block;
-                    content: @fa-var-check;
-                    font-family: fontawesome;
-                    color: @white;
-                    font-size: @font-size-base + 4;
-                    text-align: center;
-                    position: absolute;
-                    right: 0;
-                    background-color: @kajona-brand-color;
-                }
-
-            }
-
-            .cancelbutton {
-                &:after {
-                    content: @fa-var-times;
+                    background-color:darken(@kajona-brand-color, 10%);
                 }
             }
 
+            &:after {
+                width:30px;
+                height:30px;
+                display:inline-block;
+                content: @fa-var-check;
+                font-family: fontawesome;
+                color: @white;
+                font-size: @font-size-base + 4;
+                text-align: center;
+                position: absolute;
+                right: 0;
+                background-color: @kajona-brand-color;
+            }
+
+        }
+
+        .cancelbutton {
+            &:after {
+                content: @fa-var-times;
+            }
         }
 
     }
@@ -1145,15 +1163,7 @@ footer {
 }
 
 
-.form-control {
-    border: 1px solid @gray-darker;
-    .box-shadow(none);
-    padding: 4px;
 
-    &.mandatoryFormElement {
-        .box-shadow(0 0 6px @brand-warning+20);
-    }
-}
 
 
 
