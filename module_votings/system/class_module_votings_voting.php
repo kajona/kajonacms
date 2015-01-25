@@ -114,7 +114,7 @@ class class_module_votings_voting extends class_model implements interface_model
     public static function getObjectList($bitOnlyActive = false, $intStart = false, $intEnd = false) {
         $objOrm = new class_orm_objectlist();
         if($bitOnlyActive) {
-            $objOrm->addWhereRestriction(new class_orm_objectlist_restriction("AND system_status != 0"));
+            $objOrm->addWhereRestriction(new class_orm_objectlist_systemstatus_restriction(class_orm_comparator_enum::NotEqual(), 0));
         }
         return $objOrm->getObjectList(__CLASS__, "", $intStart, $intEnd);
     }
@@ -130,7 +130,7 @@ class class_module_votings_voting extends class_model implements interface_model
 
         $objOrm = new class_orm_objectlist();
         if($bitOnlyActive) {
-            $objOrm->addWhereRestriction(new class_orm_objectlist_restriction("AND system_status != 0"));
+            $objOrm->addWhereRestriction(new class_orm_objectlist_systemstatus_restriction(class_orm_comparator_enum::NotEqual(), 0));
         }
         return $objOrm->getObjectCount(__CLASS__);
     }

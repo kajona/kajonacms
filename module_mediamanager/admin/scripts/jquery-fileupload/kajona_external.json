@@ -1,0 +1,7 @@
+{
+    "name" : "jQuery File Upload",
+    "version" : "5.40.1",
+    "source" : "https://github.com/blueimp/jQuery-File-Upload",
+    "license" : "MIT license",
+    "licenseurl" : "http://www.opensource.org/licenses/MIT"
+}

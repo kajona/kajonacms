@@ -41,7 +41,7 @@ class class_orm_objectinit extends class_orm_base {
             else {
                 $strQuery = "SELECT *
                           ".$this->getQueryBase()."
-                           AND system_id = ? ";
+                           AND system.system_id = ? ";
 
                 $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array($this->getObjObject()->getSystemid()));
             }
@@ -63,6 +63,11 @@ class class_orm_objectinit extends class_orm_base {
                     continue;
                 }
 
+                //skip columns from the system-table, they are set later on
+                if(count($arrColumn) == 2 && $arrColumn[0] == "system") {
+                    continue;
+                }
+
                 $strSetter = $objReflection->getSetter($strPropertyName);
                 if($strSetter !== null)
                     call_user_func(array($this->getObjObject(), $strSetter), $arrRow[$strColumn]);
@@ -70,6 +75,5 @@ class class_orm_objectinit extends class_orm_base {
 
         }
     }
-
 
 }

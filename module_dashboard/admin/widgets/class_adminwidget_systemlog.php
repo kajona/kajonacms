@@ -57,19 +57,8 @@ class class_adminwidget_systemlog extends class_adminwidget implements interface
             $objFilesystem->closeFilePointer();
 
             $strLogContent = str_replace(array("INFO", "ERROR"), array("INFO   ", "ERROR  "), $strLogContent);
-            //$arrLogEntries = explode("\r", $strLogContent);
-
-            $strLog = htmlToString($strLogContent, true);
-            $strLog = uniStrReplace(
-                array("INFO", "ERROR", "WARNING"),
-                array(
-                    "<span style=\"color: green\">INFO</span>",
-                    "<span style=\"color: red\">ERROR</span>",
-                    "<span style=\"color: orange\">WARNING</span>"
-                ),
-                $strLog
-            );
-            $strReturn .= $this->widgetText(("<pre>".$strLog."</pre>"));
+            $arrLogEntries = explode("\r", $strLogContent);
+            $strReturn .= $this->objToolkit->getPreformatted($arrLogEntries);
 
         }
 

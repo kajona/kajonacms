@@ -24,21 +24,21 @@ class class_module_pages_pageelement extends class_model implements interface_mo
 
     /**
      * @var string
-     * @tableColumn page_element_ph_placeholder
+     * @tableColumn page_element.page_element_ph_placeholder
      * @tableColumnDatatype text
      */
     private $strPlaceholder = "";
 
     /**
      * @var string
-     * @tableColumn page_element_ph_name
+     * @tableColumn page_element.page_element_ph_name
      * @tableColumnDatatype char254
      */
     private $strName = "";
 
     /**
      * @var string
-     * @tableColumn page_element_ph_element
+     * @tableColumn page_element.page_element_ph_element
      * @tableColumnIndex
      * @tableColumnDatatype char254
      */
@@ -46,14 +46,14 @@ class class_module_pages_pageelement extends class_model implements interface_mo
 
     /**
      * @var string
-     * @tableColumn page_element_ph_title
+     * @tableColumn page_element.page_element_ph_title
      * @tableColumnDatatype char254
      */
     private $strTitle = "";
 
     /**
      * @var string
-     * @tableColumn page_element_ph_language
+     * @tableColumn page_element.page_element_ph_language
      * @tableColumnIndex
      * @tableColumnDatatype char20
      */

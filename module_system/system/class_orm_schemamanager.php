@@ -140,8 +140,10 @@ class class_orm_schemamanager extends class_orm_base {
             if($objReflection->hasPropertyAnnotation($strProperty, class_orm_base::STR_ANNOTATION_TABLECOLUMNPRIMARYKEY))
                 $objRow->setBitPrimaryKey(true);
 
-            $objTable = $arrCreateTables[$arrColumn[0]];
-            $objTable->addRow($objRow);
+            if(isset($arrCreateTables[$arrColumn[0]])) {
+                $objTable = $arrCreateTables[$arrColumn[0]];
+                $objTable->addRow($objRow);
+            }
         }
 
         return $arrCreateTables;

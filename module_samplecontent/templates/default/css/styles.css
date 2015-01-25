@@ -389,6 +389,7 @@ ul.mainnavul ul ul ul li:hover ul ul,ul.mainnavul ul ul ul li:focus ul ul,ul.mai
     display: -moz-inline-box;
     display: inline-block;
     vertical-align: middle;
+    text-align: left;
 }
 
 .rating-icon,

@@ -1,23 +1,37 @@
 [
     {
         "name" : "bootstrap",
-        "version" : "2.3.2",
-        "source" : "http://getbootstrap.com/2.3.2/",
-        "license" : "Apache License v2",
-        "licenseurl" : "http://www.apache.org/licenses/LICENSE-2.0"
+        "version" : "3.3.1",
+        "source" : "http://getbootstrap.com/",
+        "license" : "MIT",
+        "licenseurl" : "https://github.com/twbs/bootstrap/blob/master/LICENSE"
     },
     {
         "name" : "bootstrap-datepicker",
-        "version" : "??",
-        "source" : "http://www.eyecon.ro/bootstrap-datepicker/",
+        "version" : "1.3.1",
+        "source" : "https://github.com/eternicode/bootstrap-datepicker/",
         "license" : "Apache License v2",
         "licenseurl" : "http://www.apache.org/licenses/LICENSE-2.0"
     },
     {
         "name" : "http://lesscss.org",
-        "version" : "1.3.3",
+        "version" : "2.0",
         "source" : "http://lesscss.org",
         "license" : "Apache License v2",
+        "licenseurl" : "http://www.apache.org/licenses/LICENSE-2.0"
+    },
+    {
+        "name" : "Fontawesome",
+        "version" : "4.0.3",
+        "source" : "http://fortawesome.github.io/Font-Awesome/",
+        "license" : "OFL 1.1, MIT",
+        "licenseurl" : "http://fortawesome.github.io/Font-Awesome/license/"
+    },
+    {
+        "name" : "Opensans",
+        "version" : "-",
+        "source" : "http://opensans.com/",
+        "license" : "Apache Licence v2",
         "licenseurl" : "http://www.apache.org/licenses/LICENSE-2.0"
     }
 ]

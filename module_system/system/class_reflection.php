@@ -151,22 +151,22 @@ class class_reflection {
      */
     public function getAnnotationsWithValueFromClass($strValue) {
         $arrReturn = array();
-        
+
         $strClassDoc = $this->objReflectionClass->getDocComment();
         $arrProperties = $this->searchAllAnnotationsInDoc($strClassDoc);
-        
+
         foreach ($arrProperties as $strName => $arrValues) {
             if (in_array($strValue, $arrValues))
                 $arrReturn[] = $strName;
         }
-        
+
         //check if there's a base-class -> inheritance
         $objBaseClass = $this->objReflectionClass->getParentClass();
         if($objBaseClass !== false) {
             $objBaseAnnotations = new class_reflection($objBaseClass->getName());
             $arrReturn = array_merge($arrReturn, $objBaseAnnotations->getAnnotationsWithValueFromClass($strValue));
         }
-        
+
         return $arrReturn;
     }
 
@@ -295,22 +295,23 @@ class class_reflection {
         if(isset($this->arrCurrentCache[self::$STR_PROPERTIES_CACHE][$strAnnotation]))
             return $this->arrCurrentCache[self::$STR_PROPERTIES_CACHE][$strAnnotation];
 
-        $arrProperties = $this->objReflectionClass->getProperties();
-
         $arrReturn = array();
 
-        foreach($arrProperties as $objOneProperty) {
-            $strFirstAnnotation = $this->searchFirstAnnotationInDoc($objOneProperty->getDocComment(), $strAnnotation);
-            if ($strFirstAnnotation !== false)
-                $arrReturn[$objOneProperty->getName()] = $strFirstAnnotation;
-        }
+        $arrProperties = $this->objReflectionClass->getProperties();
 
-
-        //check if there's a base-class -> inheritance
+        //check if there's a base-class -> inheritance, so base class before extending class
         $objBaseClass = $this->objReflectionClass->getParentClass();
         if($objBaseClass !== false) {
             $objBaseAnnotations = new class_reflection($objBaseClass->getName());
             $arrReturn = array_merge($arrReturn, $objBaseAnnotations->getPropertiesWithAnnotation($strAnnotation));
+        }
+
+
+        foreach($arrProperties as $objOneProperty) {
+            $strFirstAnnotation = $this->searchFirstAnnotationInDoc($objOneProperty->getDocComment(), $strAnnotation);
+            if ($strFirstAnnotation !== false) {
+                $arrReturn[$objOneProperty->getName()] = $strFirstAnnotation;
+            }
         }
 
         $this->arrCurrentCache[self::$STR_PROPERTIES_CACHE][$strAnnotation] = $arrReturn;

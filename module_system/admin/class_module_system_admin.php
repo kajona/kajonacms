@@ -493,7 +493,7 @@ JS;
             }
         }
 
-        return $strTaskOutput.class_carrier::getInstance()->getObjToolkit("admin")->jsDialog(0);
+        return $strTaskOutput;
     }
 
     /**

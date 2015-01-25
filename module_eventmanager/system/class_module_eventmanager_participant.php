@@ -92,7 +92,7 @@ class class_module_eventmanager_participant extends class_model implements inter
     /**
      * @var int
      *
-     * @tableColumn em_pt_status
+     * @tableColumn em_participant.em_pt_status
      * @tableColumnDatatype int
      * @versionable
      *

@@ -895,10 +895,12 @@ JS;
      */
     protected function actionUpdatePlaceholder() {
         $strReturn = "";
+        $strReturn .= $this->objToolkit->warningBox($this->getLang("quickhelp_update_placeholder"));
+        $strReturn .= $this->objToolkit->getTextRow($this->getLang("plUpdateHelp"));
+        $strReturn .= $this->objToolkit->divider();
+
         if($this->getParam("plToUpdate") == "") {
-            $strReturn .= $this->objToolkit->getTextRow($this->getLang("plUpdateHelp"));
-            $strReturn .= $this->objToolkit->divider();
-            $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->getArrModule("modul"), "updatePlaceholder"));
+            $strReturn .= $this->objToolkit->formHeader(class_link::getLinkAdminHref($this->getArrModule("modul"), "updatePlaceholder"));
             //Load the available templates
             $arrTemplates = class_resourceloader::getInstance()->getTemplatesInFolder("/module_pages");
             $arrTemplatesDD = array();
@@ -915,8 +917,6 @@ JS;
             $strReturn .= $this->objToolkit->formClose();
         }
         else {
-            $strReturn .= $this->objToolkit->getTextRow($this->getLang("plUpdateHelp"));
-            $strReturn .= $this->objToolkit->divider();
             if(class_module_pages_pageelement::updatePlaceholders($this->getParam("template"), $this->getParam("plToUpdate"), $this->getParam("plNew")))
                 $strReturn .= $this->objToolkit->getTextRow($this->getLang("plUpdateTrue"));
             else

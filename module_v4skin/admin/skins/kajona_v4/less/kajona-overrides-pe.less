@@ -4,7 +4,12 @@
 @peColorHover: #9a9a9a;
 @wysiwygOutlineColor: #afafaf;
 @wysiwygOutlineColorHover: #7b7b7b;
-
+@green:                     #6cb121;
+@btn-primary-bg:            @gray-darker;
+@gray-darker:               #bfbfbf;
+@border-radius-base:        0px;
+@border-radius-small:       0px;
+@border-radius-large:       6px;
 
 /* P O R T A L E D I T O R   T O O L B A R */
 #peToolbar {
@@ -70,28 +75,22 @@
 
     //Fontawesome configuration start
     .fa-stack {
-//        width: 1em;
-//        height: 1em;
-//        line-height: 2em;
         vertical-align: -20%;
 
         .fa-stack-1x {
-//            left: 2px; top: -3px;
             text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
         }
 
         .fa-stack-base-full {
-//            left: auto;
-//            top: auto;
         }
     }
 
     [class^='fa-']:before, [class*=' fa-']:before, [class^='fa-stack']:before, [class*=' fa-stack']:before  {
-        font-size: @baseFontSize+4;
+        font-size: @font-size-base+4;
     }
 
     [class*=' fa-stack-1x']:before {
-        font-size: @baseFontSize - 2;
+        font-size: @font-size-base - 2;
     }
     //Fontawesome configuration end
 }
@@ -100,8 +99,6 @@
     clear: both;
     height: 36px;
 }
-
-
 
 .peInactiveElement {
     border: 1px solid #333;
@@ -204,7 +201,7 @@
 .peContextMenu {
     margin: -10px 10px 0;
     background-color: #fff !important;
-    .border-radius(0px);
+    border-radius: 0px;
     ul {
         padding: 0;
         list-style: none;
@@ -249,7 +246,7 @@ body *[data-kajona-editable]:focus {
     animation: spin 2s infinite linear;
 
     &:before {
-        font-size: @baseFontSize + 10;
+        font-size: @font-size-base + 10;
         content: @fa-var-spinner;
         color: @green;
         font-family: fontawesome;
@@ -264,14 +261,12 @@ body *[data-kajona-editable]:focus {
 }
 
 /* DIALOGS / MODALS / BACKDROPS */
-.modal-backdrop,
-.modal-backdrop.fade.in {
-    .opacity(60);
-}
-
 .modal {
     text-align: left;
-    .border-radius(0px);
+
+    .modal-content {
+        border-radius: 0px;
+    }
 
     iframe {
         border: none;
@@ -285,31 +280,22 @@ body *[data-kajona-editable]:focus {
         max-height: none;
     }
 
-    .btn {
-        color: @grayDark;
-        background-color: #000;
-
-        &:focus, &:hover {
-            background-position: 0px 0px;
-        }
-    }
-
     .btn-primary {
-        color: @white;
+        color: #fff;
     }
 }
 
 
 /* TOOLTIPS */
 .qtip {
-    .border-radius(0px) !important;
+    border-radius: 0px !important;
     box-shadow: 0  2px 10px rgba(0,0,0,.2) !important;
   
     .qtip-content {
-        font-family: @baseFontFamily !important;
+        font-family: @font-family-base !important;
         padding: 4px !important;
         line-height: 120%;
         color: #FFFFFF !important;
-        font-size: @baseFontSize - 3 !important;
+        font-size: @font-size-base - 3 !important;
     }
 }

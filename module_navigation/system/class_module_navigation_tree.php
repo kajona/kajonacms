@@ -21,7 +21,7 @@ class class_module_navigation_tree extends class_model implements interface_mode
 
     /**
      * @var string
-     * @tableColumn navigation_name
+     * @tableColumn navigation.navigation_name
      * @listOrder
      * @fieldMandatory
      * @fieldLabel commons_title
@@ -32,7 +32,7 @@ class class_module_navigation_tree extends class_model implements interface_mode
 
     /**
      * @var string
-     * @tableColumn navigation_folder_i
+     * @tableColumn navigation.navigation_folder_i
      */
     private $strFolderId = "";
 

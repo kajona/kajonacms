@@ -58,7 +58,6 @@ class class_module_dashboard_admin extends class_admin_controller implements int
      */
     protected function actionList() {
         $strReturn = "";
-        $strReturn .= $this->objToolkit->jsDialog(1);
         //load the widgets for each column. currently supporting 3 columns on the dashboard.
         $objDashboardmodel = new class_module_dashboard_widget();
         $arrColumns = array();
@@ -93,10 +92,6 @@ class class_module_dashboard_admin extends class_admin_controller implements int
         $strWidgetId = $objConcreteWidget->getSystemid();
         $strWidgetName = $objConcreteWidget->getWidgetName();
         $strWidgetNameAdditionalContent = $objConcreteWidget->getWidgetNameAdditionalContent();
-
-        if($objDashboardWidget->rightDelete()) {
-            $strWidgetContent .= $this->objToolkit->jsDialog(1);
-        }
 
         $strWidgetContent .= $this->objToolkit->getDashboardWidgetEncloser(
             $objDashboardWidget->getSystemid(),

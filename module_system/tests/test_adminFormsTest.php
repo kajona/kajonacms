@@ -20,10 +20,10 @@ class class_test_adminFormsTest extends class_testbase  {
         $arrFields = $objFormManager->getArrFields();
         $arrKey = array_keys($arrFields);
 
-        $this->assertEquals($arrKey[0], "fieldb1");
-        $this->assertEquals($arrKey[1], "fieldb2");
-        $this->assertEquals($arrKey[2], "fielda1");
-        $this->assertEquals($arrKey[3], "fielda2");
+        $this->assertEquals($arrKey[0], "fielda1");
+        $this->assertEquals($arrKey[1], "fielda2");
+        $this->assertEquals($arrKey[2], "fieldb1");
+        $this->assertEquals($arrKey[3], "fieldb2");
 
         $objFormManager->setFieldToPosition("fielda2", 1);
         $objFormManager->setFieldToPosition("fieldb2", 4);
@@ -32,8 +32,8 @@ class class_test_adminFormsTest extends class_testbase  {
         $arrKey = array_keys($arrFields);
 
         $this->assertEquals($arrKey[0], "fielda2");
-        $this->assertEquals($arrKey[1], "fieldb1");
-        $this->assertEquals($arrKey[2], "fielda1");
+        $this->assertEquals($arrKey[1], "fielda1");
+        $this->assertEquals($arrKey[2], "fieldb1");
         $this->assertEquals($arrKey[3], "fieldb2");
     }
 

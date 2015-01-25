@@ -23,7 +23,7 @@ class class_module_search_search extends class_model implements interface_model,
 
     /**
      * @var string
-     * @tableColumn search_search_query
+     * @tableColumn search_search.search_search_query
      * @tableColumnDatatype char254
      * @listOrder
      * @fieldMandatory
@@ -33,14 +33,14 @@ class class_module_search_search extends class_model implements interface_model,
 
     /**
      * @var string
-     * @tableColumn search_search_filter_modules
+     * @tableColumn search_search.search_search_filter_modules
      * @tableColumnDatatype char254
      */
     private $strInternalFilterModules = "-1";
 
     /**
      * @var string
-     * @tableColumn search_search_private
+     * @tableColumn search_search.search_search_private
      * @tableColumnDatatype int
      */
     private $intPrivate = 0;

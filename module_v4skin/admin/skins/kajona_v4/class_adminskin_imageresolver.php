@@ -78,7 +78,7 @@ class class_adminskin_imageresolver implements interface_adminskin_imageresolver
         "icon_comment"                     => "<i class='fa fa-comment'></i>",
         "icon_copy"                        => "<i class='fa fa-files-o'></i>",
         "icon_crop"                        => "<i class='fa fa-crop'></i>",
-        "icon_crop_accept"                 => "<span class='fa-stack fa-lg'><i class='fa fa-crop'></i><i class='fa fa-ok fa-stack-1x' style='color: green'></i></span>",
+        "icon_crop_accept"                 => "<span class='fa-stack fa-lg'><i class='fa fa-crop'></i><i class='fa fa-check fa-stack-1x' style='color: green'></i></span>",
         "icon_crop_acceptDisabled"         => "<span class='fa-stack fa-lg'><i class='fa fa-crop'></i><i class='fa fa-ban fa-stack-1x' style='color: red'></i></span>",
         "icon_delete"                      => "<i class='fa fa-trash-o'></i>",
         "icon_deleteDisabled"              => "<span class='fa-stack fa-lg'><i class='fa fa-trash-o'></i><i class='fa fa-ban fa-stack-1x' style='color: red'></i></span>",

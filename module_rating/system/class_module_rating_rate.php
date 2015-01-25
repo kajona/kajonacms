@@ -23,28 +23,28 @@ class class_module_rating_rate extends class_model implements interface_model {
 
     /**
      * @var string
-     * @tableColumn rating_systemid
+     * @tableColumn rating.rating_systemid
      * @tableColumnDatatype char20
      */
     private $strRatingSystemid = "";
 
     /**
      * @var string
-     * @tableColumn rating_checksum
+     * @tableColumn rating.rating_checksum
      * @tableColumnDatatype char254
      */
     private $strRatingChecksum = "";
 
     /**
      * @var float
-     * @tableColumn rating_rate
+     * @tableColumn rating.rating_rate
      * @tableColumnDatatype double
      */
     private $floatRating = 0.0;
 
     /**
      * @var int
-     * @tableColumn rating_hits
+     * @tableColumn rating.rating_hits
      * @tableColumnDatatype int
      */
     private $intHits = 0;
