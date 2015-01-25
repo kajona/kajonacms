@@ -31,39 +31,39 @@ class class_module_jsonapi_admin extends class_admin_controller implements inter
         try {
             class_response_object::getInstance()->setStrStatusCode(class_http_statuscodes::SC_OK);
 
-            //per coding convention, we use prefixes to indicate what data-type a variable is handling, e.g. int, str, obj, long, bit.
-            //this is a little bit of overhead when coding, but makes the code much more readable, at least in our opinion
-            //so $response would become $objResponse
-            $response = $this->doHandle();
+            $objResponse = $this->doHandle();
 
         } catch (class_invalid_request_exception $e) {
             class_response_object::getInstance()->setStrStatusCode(class_http_statuscodes::SC_BADREQUEST);
 
             $e->processException();
 
-            $response = array(
+            $objResponse = array(
                 'success' => false,
                 'message' => $e->getMessage(),
             );
+
         } catch (class_exception $e) {
             class_response_object::getInstance()->setStrStatusCode(class_http_statuscodes::SC_INTERNAL_SERVER_ERROR);
 
             $e->processException();
 
-            $response = array(
+            $objResponse = array(
                 'success' => false,
                 'message' => $e->getMessage(),
             );
+
         } catch (Exception $e) {
             class_response_object::getInstance()->setStrStatusCode(class_http_statuscodes::SC_INTERNAL_SERVER_ERROR);
 
-            $response = array(
+            $objResponse = array(
                 'success' => false,
                 'message' => 'An unknown error occured',
             );
+
         }
 
-        return json_encode($response, JSON_PRETTY_PRINT);
+        return json_encode($objResponse, JSON_PRETTY_PRINT);
     }
 
     /**
@@ -73,21 +73,20 @@ class class_module_jsonapi_admin extends class_admin_controller implements inter
      * @return array
      */
     protected function doHandle() {
-        $className = $this->getParam('class');
-        //direct access to a validated systemid is best achieved by getSystemid()
-        $systemId = $this->getSystemid();
-        $requestMethod = isset($_SERVER['REQUEST_METHOD']) ? $_SERVER['REQUEST_METHOD'] : 'GET';
+        $strClassName = $this->getParam('class');
+        $strSystemId = $this->getSystemid();
+        $strRequestMethod = isset($_SERVER['REQUEST_METHOD']) ? $_SERVER['REQUEST_METHOD'] : 'GET';
 
-        if (!empty($className) && class_exists($className)) {
-            $obj = new $className($systemId);
-            if (!$obj instanceof interface_model) {
+        if (!empty($strClassName) && class_exists($strClassName)) {
+            $objObject = new $strClassName($strSystemId);
+            if (!$objObject instanceof interface_model) {
                 throw new class_invalid_request_exception('Selected class must be a model', class_exception::$level_ERROR);
             }
         } else {
             throw new class_invalid_request_exception('Invalid class name', class_exception::$level_ERROR);
         }
 
-        switch ($requestMethod) {
+        switch ($strRequestMethod) {
 
             case 'GET':
                 //call the internal action dispatcher to trigger the permission management. Call it by the name of the method,
@@ -95,31 +94,31 @@ class class_module_jsonapi_admin extends class_admin_controller implements inter
                 //permissions are checked in two separate ways:
                 // 1.) a given systemid -> the object itself is instantiated, the permission is validated against the object
                 // 2.) no systemid given -> the permissions are validated against the current module, so here module jsonapi - what is nonsense in this scenario
-                $response = $this->action("get");
+                $arrResponse = $this->action("get");
                 break;
 
             case 'POST':
-                if (!empty($systemId)) {
+                if (!empty($strSystemId)) {
                     throw new class_invalid_request_exception('Systemid must be empty when creating an entry', class_exception::$level_ERROR);
                 }
 
-                $response = $this->action("post");
+                $arrResponse = $this->action("post");
                 break;
 
             case 'PUT':
-                if (!validateSystemid($systemId)) {
+                if (!validateSystemid($strSystemId)) {
                     throw new class_invalid_request_exception('Systemid must be given when updating an entry', class_exception::$level_ERROR);
                 }
 
-                $response = $this->doPut($obj);
+                $arrResponse = $this->doPut($objObject);
                 break;
 
             case 'DELETE':
-                if (!validateSystemid($systemId)) {
+                if (!validateSystemid($strSystemId)) {
                     throw new class_invalid_request_exception('Systemid must be given when deleting an entry', class_exception::$level_ERROR);
                 }
 
-                $response = $this->action("delete");
+                $arrResponse = $this->action("delete");
                 break;
 
             default:
@@ -128,7 +127,18 @@ class class_module_jsonapi_admin extends class_admin_controller implements inter
 
         }
 
-        return $response;
+        // in case of permission errors the response contains an string from the
+        // "action" method. In this case we extract the message and return an 
+        // clean json response
+        // @TODO find a better way to handle this case
+        if (is_string($arrResponse)) {
+            $arrResponse = array(
+                'success' => false,
+                'message' => trim(strip_tags($arrResponse)),
+            );
+        }
+
+        return $arrResponse;
     }
 
     /**
@@ -137,6 +147,7 @@ class class_module_jsonapi_admin extends class_admin_controller implements inter
      *
      * @return array
      * @permissions view
+     * @xml
      */
     protected function actionGet() {
         // if we have no systemId we return an list else only an specific entry
@@ -145,50 +156,49 @@ class class_module_jsonapi_admin extends class_admin_controller implements inter
             $strClass = $this->getParam('class');
 
             // filter parameters
-            $filter = $this->getParam('filter');
-            $startIndex = (int) $this->getParam('startIndex');
+            $strFilter = $this->getParam('filter');
+            $intStartIndex = (int) $this->getParam('startIndex');
 
-            $count = (int) $this->getParam('count');
-            if ($count <= 0) {
-                $count = 8;
+            $intCount = (int) $this->getParam('count');
+            if ($intCount <= 0) {
+                $intCount = 8;
             }
 
-            $startDate = $this->getParam('startDate');
-            if (!empty($startDate)) {
-                $startDate = new class_date(strtotime($startDate));
+            $strStartDate = $this->getParam('startDate');
+            if (!empty($strStartDate)) {
+                $objStartDate = new class_date(strtotime($strStartDate));
             } else {
-                $startDate = null;
+                $objStartDate = null;
             }
 
-            $endDate = $this->getParam('endDate');
+            $strEndDate = $this->getParam('endDate');
             if (!empty($endDate)) {
-                $endDate = new class_date(strtotime($endDate));
+                $objEndDate = new class_date(strtotime($strEndDate));
             } else {
-                $endDate = null;
+                $objEndDate = null;
             }
 
-            //getObjectList is static, so call it against the class-definition, plz
             /** @var interface_model[]|class_root[] $entries */
-            $entries = $strClass::getObjectList($filter, $startIndex, $count, $startDate, $endDate);
-            $result = array();
+            $arrEntries = $strClass::getObjectList($strFilter, $intStartIndex, $intCount, $objStartDate, $objEndDate);
+            $arrResult = array();
 
-            foreach ($entries as $entry) {
-
-                //internal permission handling right here
-                if(!$entry->rightView())
+            foreach ($arrEntries as $objEntry) {
+                // internal permission handling right here
+                if (!$objEntry->rightView()) {
                     continue;
+                }
 
-                $row = $this->serializeObject($entry);
-                if (!empty($row)) {
-                    $result[] = $row;
+                $arrRow = $this->serializeObject($objEntry);
+                if (!empty($arrRow)) {
+                    $arrResult[] = $arrRow;
                 }
             }
 
-            return $result;
+            return $arrResult;
         } else {
             //get the object from the global object-factory, taking care of caching and everything else
-            $obj = class_objectfactory::getInstance()->getObject($this->getSystemid());
-            return $this->serializeObject($obj);
+            $objObject = class_objectfactory::getInstance()->getObject($this->getSystemid());
+            return $this->serializeObject($objObject);
         }
     }
 
@@ -199,6 +209,7 @@ class class_module_jsonapi_admin extends class_admin_controller implements inter
      * @return array
      * @throws class_authentication_exception
      * @permissions edit
+     * @xml
      */
     protected function actionPost()
     {
@@ -233,16 +244,17 @@ class class_module_jsonapi_admin extends class_admin_controller implements inter
      *
      * @return array
      * @permissions edit
+     * @xml
      */
-    protected function doPut(interface_model $obj)
+    protected function doPut(interface_model $objModel)
     {
         // @TODO check whether the model actual exists in the database
 
-        $this->injectData($obj);
+        $this->injectData($objModel);
 
         // @TODO validate the model data which can contain any data from the json request 
 
-        $obj->updateObjectToDb();
+        $objModel->updateObjectToDb();
 
         return array(
             'success' => true,
@@ -255,17 +267,21 @@ class class_module_jsonapi_admin extends class_admin_controller implements inter
      *
      * @return array
      * @permissions delete
+     * @xml
      */
     protected function actionDelete()
     {
-        // @TODO check whether the model actual exists in the database
+        $objObject = class_objectfactory::getInstance()->getObject($this->getSystemid());
 
-        $obj = class_objectfactory::getInstance()->getObject($this->getSystemid());
-
-        if($obj == null) {
+        if($objObject == null) {
             throw new class_invalid_request_exception('Object not exisiting', class_exception::$level_ERROR);
         }
-        $obj->deleteObject();
+
+        if(!class_module_system_module::getModuleByName($objObject->getArrModule("module"))->rightDelete()) {
+            throw new class_authentication_exception("You are not allowed to delete new records", class_exception::$level_ERROR);
+        }
+
+        $objObject->deleteObject();
 
         return array(
             'success' => true,
@@ -280,13 +296,13 @@ class class_module_jsonapi_admin extends class_admin_controller implements inter
      *
      * @return array
      */
-    protected function serializeObject(interface_model $obj)
+    protected function serializeObject(interface_model $objModel)
     {
-        $serializer = new class_object_serializer($obj);
+        $objSerializer = new class_object_serializer($objModel);
 
         return array_merge(
-            array('_id' => $obj->getSystemid()), 
-            $serializer->getArrMapping()
+            array('_id' => $objModel->getSystemid()), 
+            $objSerializer->getArrMapping()
         );
     }
 
@@ -295,16 +311,16 @@ class class_module_jsonapi_admin extends class_admin_controller implements inter
      *
      * @return interface_model
      */
-    protected function injectData(interface_model $obj)
+    protected function injectData(interface_model $objModel)
     {
-        $data = $this->getRequestBody();
-        $serializer = new class_object_serializer($obj);
-        $properties = $serializer->getPropertyNames();
+        $arrData = $this->getRequestBody();
+        $objSerializer = new class_object_serializer($objModel);
+        $arrProperties = $objSerializer->getPropertyNames();
 
-        foreach ($properties as $property) {
-            $setterMethod = 'set' . ucfirst($property);
-            if (isset($data[$property]) && method_exists($obj, $setterMethod)) {
-                $obj->$setterMethod($data[$property]);
+        foreach ($arrProperties as $strProperty) {
+            $strSetterMethod = 'set' . ucfirst($strProperty);
+            if (isset($arrData[$strProperty]) && method_exists($objModel, $strSetterMethod)) {
+                $objModel->$strSetterMethod($arrData[$strProperty]);
             }
         }
     }
@@ -316,13 +332,13 @@ class class_module_jsonapi_admin extends class_admin_controller implements inter
      */
     protected function getRequestBody()
     {
-        $rawBody = file_get_contents('php://input');
-        if (!empty($rawBody)) {
-            $body = json_decode($rawBody, true);
-            $lastError = json_last_error();
+        $strRawBody = file_get_contents('php://input');
+        if (!empty($strRawBody)) {
+            $arrBody = json_decode($strRawBody, true);
+            $strLastError = json_last_error();
 
-            if ($lastError == JSON_ERROR_NONE) {
-                return $body;
+            if ($strLastError == JSON_ERROR_NONE) {
+                return $arrBody;
             } else {
                 throw new class_invalid_request_exception('Invalid JSON request', class_exception::$level_ERROR);
             }
