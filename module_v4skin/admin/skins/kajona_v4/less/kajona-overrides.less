@@ -776,20 +776,6 @@ footer {
             font-weight: normal;
         }
 
-        .form-control {
-            border: 1px solid @gray-darker;
-            .box-shadow(none);
-            padding: 4px;
-
-            &.mandatoryFormElement {
-                .box-shadow(0 0 6px @brand-warning+20);
-            }
-        }
-
-        .form-control-static {
-            padding: 4px;
-        }
-
         .savechanges {
             border: 4px solid @gray-light;
             background-color: @kajona-gray;
@@ -1163,6 +1149,22 @@ footer {
 }
 
 
+//must be outside of #content to ensure a proper rendering due to bootstraps'
+//styles
+.form-control {
+    border: 1px solid @gray-darker;
+
+    .box-shadow(none);
+    padding: 4px;
+
+                &.mandatoryFormElement {
+                    .box-shadow(0 0 6px @brand-warning+20);
+                }
+}
+
+.form-control-static {
+    padding: 4px;
+}
 
 
 
