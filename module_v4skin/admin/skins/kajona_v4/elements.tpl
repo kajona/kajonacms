@@ -937,7 +937,7 @@ Part to display the login status, user is logged in
 
 Shown, wherever the attention of the user is needed
 <warning_box>
-    <div class="alert alert-warning %%class%%">
+    <div class="alert %%class%%">
         <a class="close" data-dismiss="alert" href="#">&times;</a>
         %%content%%
     </div>
