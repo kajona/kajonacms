@@ -31,7 +31,7 @@ class class_pdf {
     public static $FONT_STYLE_LINE_TROUGH = "D";
 
     public static $PDF_MARGIN_LEFT = 10;
-    public static $PDF_MARGIN_TOP = 10;
+    public static $PDF_MARGIN_TOP = 15;
     public static $PDF_MARGIN_RIGHT = 10;
 
     /**
@@ -262,7 +262,7 @@ class class_pdf {
             $strBorders = 0;
         }
 
-        $this->objPdf->MultiCell($intWidth, $intHeight, $strContent, $strBorders, $strAlign, $bitFill, $bitCursorPos, $intX, $intY, true, 0, $bitIsHtml);
+        return $this->objPdf->MultiCell($intWidth, $intHeight, $strContent, $strBorders, $strAlign, $bitFill, $bitCursorPos, $intX, $intY, true, 0, $bitIsHtml);
     }
 
     /**
