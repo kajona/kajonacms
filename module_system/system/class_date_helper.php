@@ -161,5 +161,83 @@ class class_date_helper {
     }
 
 
+    /**
+     * Calculates the beginning of the next week depending on the given date.
+     * Beginning day of week is monday.
+     *
+     * @param class_date $objDate
+     *
+     * @return class_date
+     */
+    public function calcBeginningNextWeek(class_date $objDate) {
+        $objNewDate = clone $objDate;
+
+        while($objNewDate->getIntDayOfWeek() != 0) {
+            $objNewDate->setNextDay();
+        }
+        $objNewDate->setNextDay();
+
+        return $objNewDate;
+    }
+
+
+    /**
+     * Calculates the beginning of the next quarter depending on the given date.
+     *
+     * @param class_date $objDate
+     *
+     * @return class_date
+     */
+    public function calcBeginningNextQuarter(class_date $objDate) {
+        $objNewDate = clone $objDate;
+
+        while(($objNewDate->getIntMonth() % 3) != 0) {
+            $objNewDate->setNextMonth();
+        }
+        $objNewDate->setNextMonth();
+        $objNewDate->setIntDay(1);
+
+        return $objNewDate;
+    }
+
+    /**
+     * Calculates the beginning of the next half year depending on the given date.
+     *
+     * @param class_date $objDate
+     *
+     * @return class_date
+     */
+    public function calcBeginningNextHalfYear(class_date $objDate) {
+        $objNewDate = clone $objDate;
+
+        while(($objNewDate->getIntMonth() % 6) != 0) {
+            $objNewDate->setNextMonth();
+        }
+        $objNewDate->setNextMonth();
+        $objNewDate->setIntDay(1);
+
+        return $objNewDate;
+    }
+
+    /**
+     * Calculates the beginning of the next year depending on the given date.
+     *
+     * @param class_date $objDate
+     *
+     * @return class_date
+     */
+    public function calcBeginningNextYear(class_date $objDate) {
+        $objNewDate = clone $objDate;
+
+        while(($objNewDate->getIntMonth() % 12) != 0) {
+            $objNewDate->setNextMonth();
+        }
+        $objNewDate->setNextMonth();
+        $objNewDate->setIntDay(1)->setIntMonth(1);
+
+        return $objNewDate;
+    }
+
+
 }
 
