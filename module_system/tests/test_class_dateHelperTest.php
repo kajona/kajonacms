@@ -87,5 +87,60 @@ class test_class_dateHelperTest extends class_testbase  {
     }
 
 
+    public function testCalculateNextIntervals() {
+        $objHelper = new class_date_helper();
+
+
+        //Next Week1
+        $objDate = new class_date(20150201000000);
+        $objCalcDate = $objHelper->calcBeginningNextWeek($objDate);
+        $this->assertEquals($objCalcDate->getIntYear(), 2015);
+        $this->assertEquals($objCalcDate->getIntMonth(), 2);
+        $this->assertEquals($objCalcDate->getIntDay(), 2);
+
+        //Next Week2
+        $objDate = new class_date(20150202000000);
+        $objCalcDate = $objHelper->calcBeginningNextWeek($objDate);
+        $this->assertEquals($objCalcDate->getIntYear(), 2015);
+        $this->assertEquals($objCalcDate->getIntMonth(), 2);
+        $this->assertEquals($objCalcDate->getIntDay(), 9);
+
+        //Quarter1
+        $objDate = new class_date(20150201000000);
+        $objCalcDate = $objHelper->calcBeginningNextQuarter($objDate);
+        $this->assertEquals($objCalcDate->getIntYear(), 2015);
+        $this->assertEquals($objCalcDate->getIntMonth(), 4);
+        $this->assertEquals($objCalcDate->getIntDay(), 1);
+
+        //Quarter2
+        $objDate = new class_date(20150401000000);
+        $objCalcDate = $objHelper->calcBeginningNextQuarter($objDate);
+        $this->assertEquals($objCalcDate->getIntYear(), 2015);
+        $this->assertEquals($objCalcDate->getIntMonth(), 7);
+        $this->assertEquals($objCalcDate->getIntDay(), 1);
+
+        //Half Year1
+        $objDate = new class_date(20150201000000);
+        $objCalcDate = $objHelper->calcBeginningNextHalfYear($objDate);
+        $this->assertEquals($objCalcDate->getIntYear(), 2015);
+        $this->assertEquals($objCalcDate->getIntMonth(), 7);
+        $this->assertEquals($objCalcDate->getIntDay(), 1);
+
+        //Half Year2
+        $objDate = new class_date(20150701000000);
+        $objCalcDate = $objHelper->calcBeginningNextHalfYear($objDate);
+        $this->assertEquals($objCalcDate->getIntYear(), 2016);
+        $this->assertEquals($objCalcDate->getIntMonth(), 1);
+        $this->assertEquals($objCalcDate->getIntDay(), 1);
+
+        //Year1
+        $objDate = new class_date(20151231000000);
+        $objCalcDate = $objHelper->calcBeginningNextYear($objDate);
+        $this->assertEquals($objCalcDate->getIntYear(), 2016);
+        $this->assertEquals($objCalcDate->getIntMonth(), 1);
+        $this->assertEquals($objCalcDate->getIntDay(), 1);
+    }
+
+
 }
 
