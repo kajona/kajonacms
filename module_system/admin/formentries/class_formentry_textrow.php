@@ -33,7 +33,11 @@ class class_formentry_textrow extends class_formentry_base implements interface_
      */
     public function renderField() {
         $objToolkit = class_carrier::getInstance()->getObjToolkit("admin");
-        return $objToolkit->formTextRow($this->getStrValue());
+        $strReturn = "";
+        if($this->getStrHint() != null)
+            $strReturn .= $objToolkit->formTextRow($this->getStrHint());
+        $strReturn .= $objToolkit->formTextRow($this->getStrValue());
+        return $strReturn;
     }
 
     public function updateLabel($strKey = "") {
