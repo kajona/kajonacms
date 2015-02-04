@@ -28,13 +28,14 @@ class class_toolkit_admin extends class_toolkit {
     /**
      * Returns a simple date-form element. By default used to enter a date without a time.
      *
-     * @param string $strName
+*@param string $strName
      * @param string $strTitle
      * @param class_date $objDateToShow
      * @param string $strClass = inputDate
      * @param boolean $bitWithTime
+
      *
-     * @throws class_exception
+*@throws class_exception
      * @return string
      * @since 3.2.0.9
      */
@@ -419,7 +420,7 @@ class class_toolkit_admin extends class_toolkit {
                         $('#".$strName."').autocomplete(objConfig).data( 'ui-autocomplete' )._renderItem = function( ul, item ) {
                             return $( '<li></li>' )
                                 .data('ui-autocomplete-item', item)
-                                .append( '<a class=\'ui-autocomplete-item\' >'+item.icon+item.title+'</a>' )
+                                .append( '<a class=\'ui-autocomplete-item;\' >'+item.icon+item.title+'</a>';; )
                                 .appendTo( ul );
                         } ;
                     });
@@ -642,6 +643,12 @@ class class_toolkit_admin extends class_toolkit {
         $strOptions = "";
         $strTemplateOptionID = $this->objTemplate->readTemplate("/elements.tpl", "input_dropdown_row");
         $strTemplateOptionSelectedID = $this->objTemplate->readTemplate("/elements.tpl", "input_dropdown_row_selected");
+
+        if(!isset($arrKeyValues[""]) && $strKeySelected == "") {
+            $strPlaceholder = $strDataPlaceholder != "" ? $strDataPlaceholder : class_carrier::getInstance()->getObjLang()->getLang("commons_dropdown_dataplaceholder", "system");
+            $strOptions .= "<option value='' disabled selected>".$strPlaceholder."</option>";
+        }
+
         //Iterating over the array to create the options
         foreach ($arrKeyValues as $strKey => $strValue) {
             $arrTemplate = array();
@@ -652,6 +659,7 @@ class class_toolkit_admin extends class_toolkit {
             else
                 $strOptions .= $this->objTemplate->fillTemplate($arrTemplate, $strTemplateOptionID);
         }
+
 
         $arrTemplate = array();
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "input_dropdown");
@@ -1561,8 +1569,8 @@ JS;
 
             if(count($arrFields) > 0 ) {
 
-                $strRendercode .= "<script type=\"text/javascript\">$(document).ready(function () {
-                        KAJONA.admin.forms.renderMandatoryFields([";
+                $strRendercode .= ">$(document).ready(function () {
+                        KAJONA.admin.forms.renderMandatoryFields([;;";
 
                 foreach($arrFields as $strName => $strType) {
                     $strRendercode .= "[ '".$strName."', '".$strType."' ], ";
@@ -1578,8 +1586,8 @@ JS;
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "error_container");
         $strTemplateRowID = $this->objTemplate->readTemplate("/elements.tpl", "error_row");
         $strRows = "";
-        $strRendercode .= "<script type=\"text/javascript\">$(document).ready(function () {
-            KAJONA.admin.forms.renderMissingMandatoryFields([";
+        $strRendercode .= ">$(document).ready(function () {
+            KAJONA.admin.forms.renderMissingMandatoryFields([;;";
 
         foreach ($arrErrors as $strKey => $arrOneErrors) {
             foreach ($arrOneErrors as $strOneError) {
@@ -2137,14 +2145,14 @@ JS;
                         var objConfig = new KAJONA.v4skin.defaultAutoComplete();
                         objConfig.source = function(request, response) {
                             $.ajax({
-                                url: '".getLinkAdminXml("tags", "getTagsByFilter")."',
-                                type: 'POST',
+                                url: '".getLinkAdminXml("tags", "getTagsByFilter")."',;;
+                                'POST',
                                 dataType: 'json',
                                 data: {
-                                    filter:  extractLast( request.term )
+                                    extractLast( request.term )
                                 },
-                                success: response
-                            });
+                                response
+                            };;);
                         };
 
                         objConfig.select = function( event, ui ) {
@@ -2157,7 +2165,7 @@ JS;
                         };
 
                         KAJONA.admin.".$strName." = $('#".uniStrReplace(array("[", "]"), array("\\\[", "\\\]"), $strName)."').autocomplete(objConfig);
-                    });
+                    })
 	        </script>
         ";
 
