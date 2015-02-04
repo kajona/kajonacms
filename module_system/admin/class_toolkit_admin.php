@@ -421,7 +421,7 @@ class class_toolkit_admin extends class_toolkit {
                         $('#".$strName."').autocomplete(objConfig).data( 'ui-autocomplete' )._renderItem = function( ul, item ) {
                             return $( '<li></li>' )
                                 .data('ui-autocomplete-item', item)
-                                .append( '<a class=\'ui-autocomplete-item;\' >'+item.icon+item.title+'</a>';; )
+                                .append( '<a class=\'ui-autocomplete-item\' >'+item.icon+item.title+'</a>' )
                                 .appendTo( ul );
                         } ;
                     });
@@ -1575,8 +1575,8 @@ JS;
 
             if(count($arrFields) > 0 ) {
 
-                $strRendercode .= ">$(document).ready(function () {
-                        KAJONA.admin.forms.renderMandatoryFields([;;";
+                $strRendercode .= "<script type=\"text/javascript\">$(document).ready(function () {
+                        KAJONA.admin.forms.renderMandatoryFields([";
 
                 foreach($arrFields as $strName => $strType) {
                     $strRendercode .= "[ '".$strName."', '".$strType."' ], ";
@@ -1592,8 +1592,8 @@ JS;
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "error_container");
         $strTemplateRowID = $this->objTemplate->readTemplate("/elements.tpl", "error_row");
         $strRows = "";
-        $strRendercode .= ">$(document).ready(function () {
-            KAJONA.admin.forms.renderMissingMandatoryFields([;;";
+        $strRendercode .= "<script type=\"text/javascript\">$(document).ready(function () {
+            KAJONA.admin.forms.renderMissingMandatoryFields([";
 
         foreach ($arrErrors as $strKey => $arrOneErrors) {
             foreach ($arrOneErrors as $strOneError) {
@@ -2152,12 +2152,12 @@ JS;
                         objConfig.source = function(request, response) {
                             $.ajax({
                                 url: '".getLinkAdminXml("tags", "getTagsByFilter")."',
-                                'POST',
+                                type: 'POST',
                                 dataType: 'json',
                                 data: {
-                                    extractLast( request.term )
+                                    filter:  extractLast( request.term )
                                 },
-                                response
+                                success: response
                             });
                         };
 
@@ -2171,7 +2171,7 @@ JS;
                         };
 
                         KAJONA.admin.".$strName." = $('#".uniStrReplace(array("[", "]"), array("\\\[", "\\\]"), $strName)."').autocomplete(objConfig);
-                    })
+                    });
 	        </script>
         ";
 
