@@ -34,7 +34,8 @@ class class_toolkit_admin extends class_toolkit {
      * @param string $strClass = inputDate
      * @param boolean $bitWithTime
 
-     *
+
+*
 *@throws class_exception
      * @return string
      * @since 3.2.0.9
@@ -643,6 +644,11 @@ class class_toolkit_admin extends class_toolkit {
         $strOptions = "";
         $strTemplateOptionID = $this->objTemplate->readTemplate("/elements.tpl", "input_dropdown_row");
         $strTemplateOptionSelectedID = $this->objTemplate->readTemplate("/elements.tpl", "input_dropdown_row_selected");
+
+
+        if(isset($arrKeyValues[""]) && trim($arrKeyValues[""]) == "") {
+            unset($arrKeyValues[""]);
+        }
 
         if(!isset($arrKeyValues[""]) && $strKeySelected == "") {
             $strPlaceholder = $strDataPlaceholder != "" ? $strDataPlaceholder : class_carrier::getInstance()->getObjLang()->getLang("commons_dropdown_dataplaceholder", "system");
@@ -2145,14 +2151,14 @@ JS;
                         var objConfig = new KAJONA.v4skin.defaultAutoComplete();
                         objConfig.source = function(request, response) {
                             $.ajax({
-                                url: '".getLinkAdminXml("tags", "getTagsByFilter")."',;;
+                                url: '".getLinkAdminXml("tags", "getTagsByFilter")."',
                                 'POST',
                                 dataType: 'json',
                                 data: {
                                     extractLast( request.term )
                                 },
                                 response
-                            };;);
+                            });
                         };
 
                         objConfig.select = function( event, ui ) {

@@ -103,7 +103,7 @@ class class_formentry_masterdropdown extends class_formentry_base implements int
                         arrValues = (this.objValues[strTargetElement][strPrefix]);
                     }
 
-                    objTargetElement.empty().trigger('chosen:updated');
+                    objTargetElement.empty();
 
                     if(!arrValues)
                         return;
@@ -116,7 +116,6 @@ class class_formentry_masterdropdown extends class_formentry_base implements int
                         objTargetElement.val(objTargetElement.attr("data-kajona-selected"));
                     }
 
-                    objTargetElement.trigger('chosen:updated');
                     strSelected = objTargetElement.val();
                     if(strPrefix == "")
                         strSelected = "_"+strSelected;

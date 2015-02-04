@@ -458,7 +458,7 @@ KAJONA.admin.statusDisplay = {
 		statusBox.css("display", "").css("opacity", 0.0);
 
 		//place the element at the top of the page
-		var screenWidth = $(window).width()
+		var screenWidth = $(window).width();
 		var divWidth = statusBox.width();
 		var newX = screenWidth/2 - divWidth/2;
 		var newY = $(window).scrollTop() -2;
@@ -684,12 +684,6 @@ KAJONA.admin.forms.renderMandatoryFields = function(arrFields) {
             var $objElement = $("#" + arrElement[0]);
             if($objElement)
                 $objElement.addClass("mandatoryFormElement");
-
-            if(($objElement[0].tagName).toLowerCase() == "select") {
-                var $objChosen = $("#" + $objElement.attr('id') + "_chosen");
-                if($objChosen)
-                    $objChosen.addClass("mandatoryFormElement");
-            }
         }
 
         //closest(".control-group").addClass("error")
