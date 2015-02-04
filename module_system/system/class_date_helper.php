@@ -12,6 +12,8 @@
  */
 class class_date_helper {
 
+    private $strParseFormat = "YmdHis";
+
     /**
      * Validates if the passed day is a easter bank holiday.
      * This includes: friday before easter, easter saturday and sunday, easter monday
@@ -162,6 +164,44 @@ class class_date_helper {
 
 
     /**
+     * Calculates a date depending on the given date which is used as a base for the calculation of relative dates.
+     *
+     * @param class_date $objDate - The date which is used as a base for the calculation of relative dates.
+     * @param string $strRelativeFormatString - Relative date format @see http://php.net/manual/en/datetime.formats.relative.php
+     *
+     * @return class_date
+     */
+    public function calcDateRelativeFormatString(class_date $objDate, $strRelativeFormatString) {
+        $objNewDate = clone $objDate;
+        $strNextMonday = date($this->strParseFormat, strtotime($strRelativeFormatString, $objNewDate->getTimeInOldStyle()));
+        $objNewDate->setLongTimestamp($strNextMonday);
+
+        return $objNewDate;
+    }
+
+
+    public function calcNextWorkingDay(class_date $objDate) {
+        $objNewDate = clone $objDate;
+
+        $objNewDate->setNextDay();
+        while(!$this->isValidTarget2Day($objNewDate)){
+            $objNewDate->setNextDay();
+        }
+        return $objNewDate;
+    }
+
+    public function calcLastWorkingDay(class_date $objDate) {
+        $objNewDate = clone $objDate;
+
+        //find last working day
+        $objNewDate->setPreviousDay();
+        while(!$this->isValidTarget2Day($objNewDate)) {
+            $objNewDate->setPreviousDay();
+        }
+        return $objNewDate;
+    }
+
+    /**
      * Calculates the beginning of the next week depending on the given date.
      * Beginning day of week is monday.
      *
@@ -170,16 +210,13 @@ class class_date_helper {
      * @return class_date
      */
     public function calcBeginningNextWeek(class_date $objDate) {
-        $objNewDate = clone $objDate;
-
-        while($objNewDate->getIntDayOfWeek() != 0) {
-            $objNewDate->setNextDay();
-        }
-        $objNewDate->setNextDay();
+        $objNewDate =  $this->calcDateRelativeFormatString($objDate, "next monday");
+        $objNewDate->setIntHour($objDate->getIntHour());
+        $objNewDate->setIntMin($objDate->getIntMin());
+        $objNewDate->setIntSec($objDate->getIntSec());
 
         return $objNewDate;
     }
-
 
     /**
      * Calculates the beginning of the next quarter depending on the given date.
@@ -227,13 +264,10 @@ class class_date_helper {
      * @return class_date
      */
     public function calcBeginningNextYear(class_date $objDate) {
-        $objNewDate = clone $objDate;
-
-        while(($objNewDate->getIntMonth() % 12) != 0) {
-            $objNewDate->setNextMonth();
-        }
-        $objNewDate->setNextMonth();
-        $objNewDate->setIntDay(1)->setIntMonth(1);
+        $objNewDate = $this->calcDateRelativeFormatString($objDate, "next year first day of january");
+        $objNewDate->setIntHour($objDate->getIntHour());
+        $objNewDate->setIntMin($objDate->getIntMin());
+        $objNewDate->setIntSec($objDate->getIntSec());
 
         return $objNewDate;
     }
