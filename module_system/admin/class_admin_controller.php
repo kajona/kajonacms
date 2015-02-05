@@ -395,9 +395,15 @@ abstract class class_admin_controller extends class_abstract_controller {
                     class_response_object::getInstance()->setStrStatusCode(class_http_statuscodes::SC_UNAUTHORIZED);
                     $this->strOutput = $this->objToolkit->warningBox($this->getLang("commons_error_permissions"));
                     $objException = new class_exception("you are not authorized/authenticated to call this action", class_exception::$level_ERROR);
-                    $objException->setIntDebuglevel(0);
-                    $objException->processException();
-                    return $this->strOutput;
+
+                    if(_xmlLoader_) {
+                        throw $objException;
+                    }
+                    else {
+                        $objException->setIntDebuglevel(0);
+                        $objException->processException();
+                        return $this->strOutput;
+                    }
                 }
             }
 
