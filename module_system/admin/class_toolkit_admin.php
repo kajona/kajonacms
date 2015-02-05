@@ -653,7 +653,7 @@ class class_toolkit_admin extends class_toolkit {
 
         if(!isset($arrKeyValues[""])) {
             $strPlaceholder = $strDataPlaceholder != "" ? $strDataPlaceholder : class_carrier::getInstance()->getObjLang()->getLang("commons_dropdown_dataplaceholder", "system");
-            $strOptions .= "<option value='' disabled selected>".$strPlaceholder."</option>";
+            $strOptions .= "<option value='' disabled ".($strKeySelected == "" ? " selected " : "").">".$strPlaceholder."</option>";
         }
 
         //Iterating over the array to create the options
