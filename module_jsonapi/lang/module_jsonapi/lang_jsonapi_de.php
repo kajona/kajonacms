@@ -10,4 +10,4 @@
 //Kajona Language Editor Core Build 385
 
 //editable entries
-$lang["modul_titel"]                     = "jsonapi";
+$lang["modul_titel"]                     = "JSON-Api";
