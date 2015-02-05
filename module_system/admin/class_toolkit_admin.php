@@ -645,12 +645,13 @@ class class_toolkit_admin extends class_toolkit {
         $strTemplateOptionID = $this->objTemplate->readTemplate("/elements.tpl", "input_dropdown_row");
         $strTemplateOptionSelectedID = $this->objTemplate->readTemplate("/elements.tpl", "input_dropdown_row_selected");
 
-
-        if(isset($arrKeyValues[""]) && trim($arrKeyValues[""]) == "") {
-            unset($arrKeyValues[""]);
+        foreach(array("", 0, "\"\"") as $strOneKeyToCheck) {
+            if(array_key_exists($strOneKeyToCheck, $arrKeyValues) && trim($arrKeyValues[$strOneKeyToCheck]) == "") {
+                unset($arrKeyValues[$strOneKeyToCheck]);
+            }
         }
 
-        if(!isset($arrKeyValues[""]) && $strKeySelected == "") {
+        if(!isset($arrKeyValues[""])) {
             $strPlaceholder = $strDataPlaceholder != "" ? $strDataPlaceholder : class_carrier::getInstance()->getObjLang()->getLang("commons_dropdown_dataplaceholder", "system");
             $strOptions .= "<option value='' disabled selected>".$strPlaceholder."</option>";
         }
