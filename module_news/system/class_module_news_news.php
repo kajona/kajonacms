@@ -47,7 +47,6 @@ class class_module_news_news extends class_model implements interface_model, int
      * @templateExport
      * @templateMapper urlencode
      * @jsonExport
-     * @jsonMapper urlencode
      */
     private $strImage = "";
 
@@ -121,7 +120,6 @@ class class_module_news_news extends class_model implements interface_model, int
      * @templateExport
      * @templateMapper date
      * @jsonExport
-     * @jsonMapper date
      */
     private $objDateStart = 0;
 
@@ -136,7 +134,6 @@ class class_module_news_news extends class_model implements interface_model, int
      * @templateExport
      * @templateMapper date
      * @jsonExport
-     * @jsonMapper date
      */
     private $objDateEnd = 0;
 
