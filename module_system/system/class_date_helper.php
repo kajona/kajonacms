@@ -96,7 +96,6 @@ class class_date_helper {
      */
     private function calcEasterSunday($intYear) {
 
-
         $intMarch21DayOffset = date('z', mktime(0, 0, 0, 3, 21, $intYear));
 
         $intDaysAfterMarch = ((15 + $intYear/100 - $intYear/400 - (8 * $intYear/100 + 13) / 25)%30 + 19 * ($intYear%19))%30;
@@ -173,8 +172,8 @@ class class_date_helper {
      */
     public function calcDateRelativeFormatString(class_date $objDate, $strRelativeFormatString) {
         $objNewDate = clone $objDate;
-        $strNextMonday = date($this->strParseFormat, strtotime($strRelativeFormatString, $objNewDate->getTimeInOldStyle()));
-        $objNewDate->setLongTimestamp($strNextMonday);
+        $strNewDate = date($this->strParseFormat, strtotime($strRelativeFormatString, $objNewDate->getTimeInOldStyle()));
+        $objNewDate->setLongTimestamp($strNewDate);
 
         return $objNewDate;
     }
