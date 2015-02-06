@@ -19,11 +19,11 @@ class class_test_functions extends class_testbase  {
         $this->assertEquals("hello world", replaceTextLinks("hello world"));
 
         //simple link
-        $this->assertEquals("hello<a href=\" http://www.kajona.de\"> http://www.kajona.de</a> world", replaceTextLinks("hello http://www.kajona.de world"));
-        $this->assertEquals("hello<a href=\" https://www.kajona.de\"> https://www.kajona.de</a> world", replaceTextLinks("hello https://www.kajona.de world"));
-        $this->assertEquals("hello<a href=\" ftp://www.kajona.de\"> ftp://www.kajona.de</a> world", replaceTextLinks("hello ftp://www.kajona.de world"));
+        $this->assertEquals("hello<a href=\"http://www.kajona.de\"> http://www.kajona.de</a> world", replaceTextLinks("hello http://www.kajona.de world"));
+        $this->assertEquals("hello<a href=\"https://www.kajona.de\"> https://www.kajona.de</a> world", replaceTextLinks("hello https://www.kajona.de world"));
+        $this->assertEquals("hello<a href=\"ftp://www.kajona.de\"> ftp://www.kajona.de</a> world", replaceTextLinks("hello ftp://www.kajona.de world"));
 
-        $this->assertEquals("hello<a href=\" ftp://www.kajona.de\"> ftp://www.kajona.de</a> world hello<a href=\" ftp://www.kajona.de\"> ftp://www.kajona.de</a> world", replaceTextLinks("hello ftp://www.kajona.de world hello ftp://www.kajona.de world"));
+        $this->assertEquals("hello<a href=\"ftp://www.kajona.de\"> ftp://www.kajona.de</a> world hello<a href=\"ftp://www.kajona.de\"> ftp://www.kajona.de</a> world", replaceTextLinks("hello ftp://www.kajona.de world hello ftp://www.kajona.de world"));
 
         //no replacement if protocol is missing
         $this->assertEquals("hello www.kajona.de world", replaceTextLinks("hello www.kajona.de world"));
