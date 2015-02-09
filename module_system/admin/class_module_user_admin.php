@@ -549,7 +549,8 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
         $objForm->addField(new class_formentry_dropdown("user", "language"))
             ->setArrKeyValues($arrLang)
             ->setStrValue(($this->getParam("user_language") != "" ? $this->getParam("user_language") : ""))
-            ->setStrLabel($this->getLang("user_language"));
+            ->setStrLabel($this->getLang("user_language"))
+            ->setBitMandatory(true);
 
 
         $objForm->addField(new class_formentry_dropdown("user", "startmodule"))
