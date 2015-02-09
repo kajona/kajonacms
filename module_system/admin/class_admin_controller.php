@@ -33,8 +33,6 @@ abstract class class_admin_controller extends class_abstract_controller {
      * Constructor
      *
      * @param string $strSystemid
-     *
-     * @internal param array $arrModul
      */
     public function __construct($strSystemid = "") {
 
