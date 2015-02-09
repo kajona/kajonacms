@@ -18,13 +18,6 @@ class class_systemtask_systemstatus extends class_systemtask_base implements int
 
 
     /**
-     * contructor to call the base constructor
-     */
-    public function __construct() {
-        parent::__construct();
-    }
-
-    /**
      * @see interface_admin_systemtask::getGroupIdenitfier()
      * @return string
      */
