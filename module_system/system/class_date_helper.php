@@ -179,6 +179,13 @@ class class_date_helper {
     }
 
 
+    /**
+     * Calculates the next TARGET2 working day.
+     *
+     * @param class_date $objDate
+     *
+     * @return class_date
+     */
     public function calcNextWorkingDay(class_date $objDate) {
         $objNewDate = clone $objDate;
 
@@ -189,6 +196,13 @@ class class_date_helper {
         return $objNewDate;
     }
 
+    /**
+     * Calculates the last TARGET2 working day.
+     *
+     * @param class_date $objDate
+     *
+     * @return class_date
+     */
     public function calcLastWorkingDay(class_date $objDate) {
         $objNewDate = clone $objDate;
 
