@@ -31,7 +31,6 @@ class class_module_workflows_portal extends class_portal_controller implements i
     /**
      * Triggers the workflow engine
      *
-     * @permissions view
      * @xml
      * @return string
      */
