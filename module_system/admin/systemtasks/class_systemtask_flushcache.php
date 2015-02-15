@@ -16,13 +16,6 @@ class class_systemtask_flushcache extends class_systemtask_base implements inter
 
 
     /**
-     * constructor to call the base constructor
-     */
-    public function __construct() {
-        parent::__construct();
-    }
-
-    /**
      * @see interface_admin_systemtask::getGroupIdenitfier()
      * @return string
      */

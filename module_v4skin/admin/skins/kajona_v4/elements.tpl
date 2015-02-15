@@ -351,16 +351,6 @@ Dropdown
             <select data-placeholder="%%dataplaceholder%%" name="%%name%%" id="%%name%%" class="form-control %%class%%" %%disabled%% %%addons%%>%%options%%</select>
         </div>
     </div>
-
-    <script type="text/javascript">
-    KAJONA.admin.loader.loadFile(["_webpath_/core/module_v4skin/admin/skins/kajona_v4/js/chosen/chosen.jquery.min.js", "_webpath_/core/module_v4skin/admin/skins/kajona_v4/js/chosen/chosen.css"], function() {
-        var id = '#%%name%%'.replace("[", "\\[");
-        var id = id.replace("]", "\\]");
-        $(id).chosen();
-        if($(id).hasClass("mandatoryFormElement"))
-            $(id+'_chosen').addClass("mandatoryFormElement");
-    }, true);
-    </script>
 </input_dropdown>
 
 <input_dropdown_row>
@@ -937,7 +927,7 @@ Part to display the login status, user is logged in
 
 Shown, wherever the attention of the user is needed
 <warning_box>
-    <div class="alert alert-warning %%class%%">
+    <div class="alert %%class%%">
         <a class="close" data-dismiss="alert" href="#">&times;</a>
         %%content%%
     </div>

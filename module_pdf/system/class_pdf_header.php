@@ -31,7 +31,7 @@ class class_pdf_header implements interface_pdf_header {
         $objPdf->SetFont('helvetica', '', 8);
 
         // Title
-        $objPdf->Cell(0, 0, "\n".$objPdf->getTitle(), 'B', 0, 'C');
+        $objPdf->MultiCell(0, 0, $objPdf->getTitle(), "B", "C");
 
 
         // Line break

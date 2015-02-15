@@ -16,13 +16,6 @@
 class class_systemtask_flushpiccache extends class_systemtask_base implements interface_admin_systemtask {
 
 
-	/**
-	 * contructor to call the base constructor
-	 */
-	public function __construct() {
-		parent::__construct();
-    }
-
     /**
      * @see interface_admin_systemtask::getGroupIdenitfier()
      * @return string

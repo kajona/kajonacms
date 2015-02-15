@@ -87,5 +87,60 @@ class test_class_dateHelperTest extends class_testbase  {
     }
 
 
+    public function testCalculateNextIntervals() {
+        $objHelper = new class_date_helper();
+
+        //NextWorking day
+        $objDate = new class_date(20150201000001);
+        $objCalcDate = $objHelper->calcNextWorkingDay($objDate);
+        $this->assertEquals($objCalcDate->getLongTimestamp(), 20150202000001);
+
+        //NextWorking day
+        $objDate = new class_date(20150207000001);
+        $objCalcDate = $objHelper->calcNextWorkingDay($objDate);
+        $this->assertEquals($objCalcDate->getLongTimestamp(), 20150209000001);
+
+        //LastWorking day
+        $objDate = new class_date(20150207000001);
+        $objCalcDate = $objHelper->calcLastWorkingDay($objDate);
+        $this->assertEquals($objCalcDate->getLongTimestamp(), 20150206000001);
+
+        //Next Week1
+        $objDate = new class_date(20150201000001);
+        $objCalcDate = $objHelper->calcBeginningNextWeek($objDate);
+        $this->assertEquals($objCalcDate->getLongTimestamp(), 20150202000001);
+
+        //Next Week2
+        $objDate = new class_date(20150202000001);
+        $objCalcDate = $objHelper->calcBeginningNextWeek($objDate);
+        $this->assertEquals($objCalcDate->getLongTimestamp(), 20150209000001);
+
+        //Quarter1
+        $objDate = new class_date(20150201000001);
+        $objCalcDate = $objHelper->calcBeginningNextQuarter($objDate);
+        $this->assertEquals($objCalcDate->getLongTimestamp(), 20150401000001);
+
+        //Quarter2
+        $objDate = new class_date(20150401000001);
+        $objCalcDate = $objHelper->calcBeginningNextQuarter($objDate);
+        $this->assertEquals($objCalcDate->getLongTimestamp(), 20150701000001);
+
+        //Half Year1
+        $objDate = new class_date(20150201000001);
+        $objCalcDate = $objHelper->calcBeginningNextHalfYear($objDate);
+        $this->assertEquals($objCalcDate->getLongTimestamp(), 20150701000001);
+
+        //Half Year2
+        $objDate = new class_date(20150701000001);
+        $objCalcDate = $objHelper->calcBeginningNextHalfYear($objDate);
+        $this->assertEquals($objCalcDate->getLongTimestamp(), 20160101000001);
+
+        //Year1
+        $objDate = new class_date(20151231000001);
+        $objCalcDate = $objHelper->calcBeginningNextYear($objDate);
+        $this->assertEquals($objCalcDate->getLongTimestamp(), 20160101000001);
+    }
+
+
 }
 

@@ -103,20 +103,28 @@ class class_formentry_masterdropdown extends class_formentry_base implements int
                         arrValues = (this.objValues[strTargetElement][strPrefix]);
                     }
 
-                    objTargetElement.empty().trigger('chosen:updated');
+                    objTargetElement.empty();
 
                     if(!arrValues)
                         return;
 
                     $.each(arrValues, function(key, value) {
-                         objTargetElement.append($("<option></option>").attr("value", key).text(value));
+                        if(key == '') {
+                            var objDefault = $("<option></option>").attr("value", "").attr("disabled", true).text(value);
+                            //if(this.bitInitial)
+                                objDefault.attr("selected", true);
+
+                            objTargetElement.append(objDefault);
+                        }
+                        else {
+                            objTargetElement.append($("<option></option>").attr("value", key).text(value));
+                        }
                     });
 
                     if(this.bitInitial) {
                         objTargetElement.val(objTargetElement.attr("data-kajona-selected"));
                     }
 
-                    objTargetElement.trigger('chosen:updated');
                     strSelected = objTargetElement.val();
                     if(strPrefix == "")
                         strSelected = "_"+strSelected;
@@ -162,9 +170,9 @@ JS;
 
 
             //load all language entries
-            $this->arrLabels = array($this->getStrSourceProperty() => array());
+            $this->arrLabels = array($this->getStrSourceProperty() => array("" => class_carrier::getInstance()->getObjLang()->getLang("commons_dropdown_dataplaceholder", "system")));
             foreach($this->arrDepends as $strOneDepend)
-                $this->arrLabels[$strOneDepend] = array();
+                $this->arrLabels[$strOneDepend] = array("" => class_carrier::getInstance()->getObjLang()->getLang("commons_dropdown_dataplaceholder", "system"));
 
 
             $intI = 1;
@@ -210,6 +218,8 @@ JS;
         $intI = 1;
         $strText = $this->getObjSourceObject()->getLang($strVarLabel.$strPrefix."_".$intI);
 
+        $this->arrLabels[$this->arrDepends[$intLevel]][$strPrefix] = array("" => class_carrier::getInstance()->getObjLang()->getLang("commons_dropdown_dataplaceholder", "system"));
+
         while($strText != "!".$strVarLabel.$strPrefix."_".$intI."!") {
             $this->arrLabels[$this->arrDepends[$intLevel]][$strPrefix][$strPrefix."_".$intI] = $this->getObjSourceObject()->getLang($strVarLabel.$strPrefix."_".$intI);
 
@@ -219,11 +229,6 @@ JS;
             $strText = $this->getObjSourceObject()->getLang($strVarLabel.$strPrefix."_".++$intI);
         }
     }
-
-
-
-
-
 
 
     /**
@@ -250,12 +255,5 @@ JS;
         }
         return "Error: No target object mapped or missing @fieldValuePrefix annotation!";
     }
-
-
-
-
-
-
-
 
 }

@@ -28,13 +28,15 @@ class class_toolkit_admin extends class_toolkit {
     /**
      * Returns a simple date-form element. By default used to enter a date without a time.
      *
-     * @param string $strName
+*@param string $strName
      * @param string $strTitle
      * @param class_date $objDateToShow
      * @param string $strClass = inputDate
      * @param boolean $bitWithTime
-     *
-     * @throws class_exception
+
+
+*
+*@throws class_exception
      * @return string
      * @since 3.2.0.9
      */
@@ -642,6 +644,18 @@ class class_toolkit_admin extends class_toolkit {
         $strOptions = "";
         $strTemplateOptionID = $this->objTemplate->readTemplate("/elements.tpl", "input_dropdown_row");
         $strTemplateOptionSelectedID = $this->objTemplate->readTemplate("/elements.tpl", "input_dropdown_row_selected");
+
+        foreach(array("", 0, "\"\"") as $strOneKeyToCheck) {
+            if(array_key_exists($strOneKeyToCheck, $arrKeyValues) && trim($arrKeyValues[$strOneKeyToCheck]) == "") {
+                unset($arrKeyValues[$strOneKeyToCheck]);
+            }
+        }
+
+        if(!isset($arrKeyValues[""])) {
+            $strPlaceholder = $strDataPlaceholder != "" ? $strDataPlaceholder : class_carrier::getInstance()->getObjLang()->getLang("commons_dropdown_dataplaceholder", "system");
+            $strOptions .= "<option value='' disabled ".($strKeySelected == "" ? " selected " : "").">".$strPlaceholder."</option>";
+        }
+
         //Iterating over the array to create the options
         foreach ($arrKeyValues as $strKey => $strValue) {
             $arrTemplate = array();
@@ -652,6 +666,7 @@ class class_toolkit_admin extends class_toolkit {
             else
                 $strOptions .= $this->objTemplate->fillTemplate($arrTemplate, $strTemplateOptionID);
         }
+
 
         $arrTemplate = array();
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "input_dropdown");
@@ -1229,7 +1244,7 @@ class class_toolkit_admin extends class_toolkit {
      * @param string $strClass
      * @return string
      */
-    public function warningBox($strContent, $strClass = "") {
+    public function warningBox($strContent, $strClass = "alert-warning") {
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "warning_box");
         $arrTemplate = array();
         $arrTemplate["content"] = $strContent;
