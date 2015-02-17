@@ -249,7 +249,7 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
         if($objListEntry instanceof class_module_user_group) {
             if($objListEntry->getSystemid() != _guests_group_id_ && $objListEntry->getSystemid() != _admins_group_id_ && $this->isGroupEditable($objListEntry)) {
                 if($objListEntry->rightEdit()) {
-                    return $this->objToolkit->listButton(class_link::getLinkAdmin("user", "groupEdit", "&systemid=" . $objListEntry->getSystemid(), "", $this->getLang("action_group_edit"), "icon_edit"));
+                    return $this->objToolkit->listButton(class_link::getLinkAdminDialog("user", "groupEdit", "&systemid=" . $objListEntry->getSystemid(), "", $this->getLang("action_group_edit"), "icon_edit"));
                 }
             }
             else {
@@ -666,7 +666,11 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
 
         //flush the navigation cache in order to get new items for a possible updated list
         class_admin_helper::flushActionNavigationCache();
-        $this->adminReload(class_link::getLinkAdminHref($this->getArrModule("modul"), "list"));
+
+        if($this->getObjModule()->rightView())
+            $this->adminReload(class_link::getLinkAdminHref($this->getArrModule("modul"), "list"));
+        else
+            $this->adminReload(class_link::getLinkAdminHref($objUser->getStrAdminModule()));
 
 
         return $strReturn;
