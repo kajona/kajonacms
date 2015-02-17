@@ -191,13 +191,16 @@ abstract class class_admin_evensimpler extends class_admin_simple {
 
         //try 1: get the object type and names based on the current object
         $objInstance = class_objectfactory::getInstance()->getObject($this->getSystemid());
-        if($objInstance != null) {
-            $strObjectTypeName = uniSubstr($this->getActionNameForClass("edit", $objInstance), 4);
-            if($strObjectTypeName != "") {
-                $strType = get_class($objInstance);
-                $this->setCurObjectClassName($strType);
-                $this->setStrCurObjectTypeName($strObjectTypeName);
-            }
+
+        if($objInstance == null) {
+            throw new class_exception("given object with system id {$this->getSystemid()} does not exist", class_exception::$level_ERROR);
+        }
+
+        $strObjectTypeName = uniSubstr($this->getActionNameForClass("edit", $objInstance), 4);
+        if($strObjectTypeName != "") {
+            $strType = get_class($objInstance);
+            $this->setCurObjectClassName($strType);
+            $this->setStrCurObjectTypeName($strObjectTypeName);
         }
 
         //try 2: regular, oldschool resolving based on the current action-params
@@ -205,13 +208,11 @@ abstract class class_admin_evensimpler extends class_admin_simple {
 
         if(!is_null($strType)) {
 
-            $objEdit = new $strType($this->getSystemid());
-
             //reset the current object reference to an object created before (e.g. during actionSave)
-            if($this->isFormExistingForInstance($objEdit))
-                $objEdit = $this->objCurAdminForm->getObjSourceobject();
+            if($this->isFormExistingForInstance($objInstance))
+                $objInstance = $this->objCurAdminForm->getObjSourceobject();
 
-            $objForm = $this->getAdminForm($objEdit);
+            $objForm = $this->getAdminForm($objInstance);
             $objForm->addField(new class_formentry_hidden("", "mode"))->setStrValue("edit");
 
             return $objForm->renderForm(class_link::getLinkAdminHref($this->getArrModule("modul"), "save".$this->getStrCurObjectTypeName()));
