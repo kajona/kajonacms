@@ -416,9 +416,9 @@ final class class_session {
      *
      * @return bool
      */
-    public function switchSessionToUser(class_module_user_user $objTargetUser) {
+    public function switchSessionToUser(class_module_user_user $objTargetUser, $bitForce = false) {
         if($this->isLoggedin()) {
-            if(in_array(_admins_group_id_, $this->getGroupIdsAsArray())) {
+            if(in_array(_admins_group_id_, $this->getGroupIdsAsArray()) || $bitForce) {
                 $this->getObjInternalSession()->setStrLoginstatus(class_module_system_session::$LOGINSTATUS_LOGGEDIN);
                 $this->getObjInternalSession()->setStrUserid($objTargetUser->getSystemid());
 
