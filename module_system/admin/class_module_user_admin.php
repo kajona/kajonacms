@@ -1469,6 +1469,7 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
                 if($objInstance != null) {
                     class_session::getInstance()->switchSessionToUser($objOneElement, true);
                     if(!$objInstance->rightView()) {
+                        class_session::getInstance()->switchSessionToUser($objCurUser, true);
                         continue;
                     }
                     class_session::getInstance()->switchSessionToUser($objCurUser, true);
