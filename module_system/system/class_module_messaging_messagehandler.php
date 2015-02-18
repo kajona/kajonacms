@@ -74,6 +74,10 @@ class class_module_messaging_messagehandler {
 
         foreach($arrRecipients as $objOneUser) {
 
+            //skip inactive users
+            if($objOneUser->getIntActive() != 1)
+                continue;
+
             $objConfig = class_module_messaging_config::getConfigForUserAndProvider($objOneUser->getSystemid(), $objMessage->getObjMessageProvider());
 
             if($objConfig->getBitEnabled()) {
