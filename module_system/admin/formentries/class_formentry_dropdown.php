@@ -139,9 +139,11 @@ class class_formentry_dropdown extends class_formentry_base implements interface
 
     /**
      * @param string $strDataPlaceholder
+     * @return $this
      */
     public function setStrDataPlaceholder($strDataPlaceholder) {
         $this->strDataPlaceholder = $strDataPlaceholder;
+            return $this;
     }
 
 
