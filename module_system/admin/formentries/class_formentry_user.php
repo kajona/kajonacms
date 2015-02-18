@@ -18,6 +18,7 @@ class class_formentry_user extends class_formentry_base implements interface_for
     private $bitUser = true;
     private $bitGroups = false;
     private $bitBlockCurrentUser = false;
+    private $strValidateId = null;
 
     public function __construct($strFormName, $strSourceProperty, $objSourceObject = null) {
         parent::__construct($strFormName, $strSourceProperty, $objSourceObject);
@@ -55,7 +56,7 @@ class class_formentry_user extends class_formentry_base implements interface_for
 
         }
         else {
-            $strReturn .= $objToolkit->formInputUserSelector($this->getStrEntryName(), $this->getStrLabel(), $this->getStrValue(), "", $this->bitUser, $this->bitGroups, $this->bitBlockCurrentUser);
+            $strReturn .= $objToolkit->formInputUserSelector($this->getStrEntryName(), $this->getStrLabel(), $this->getStrValue(), "", $this->bitUser, $this->bitGroups, $this->bitBlockCurrentUser, $this->strValidateId);
         }
 
         return $strReturn;
@@ -122,6 +123,13 @@ class class_formentry_user extends class_formentry_base implements interface_for
     public function setBitUser($bitUser) {
         $this->bitUser = $bitUser;
         return $this;
+    }
+
+    /**
+     * @param null $strValidateId
+     */
+    public function setStrValidateId($strValidateId) {
+        $this->strValidateId = $strValidateId;
     }
 
 

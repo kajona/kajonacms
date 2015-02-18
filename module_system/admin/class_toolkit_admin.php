@@ -341,10 +341,11 @@ class class_toolkit_admin extends class_toolkit {
     /**
      * Returns a regular text-input field.
      * The param $strValue expects a system-id.
-     *
      * The element creates two fields:
      * a text-field, and a hidden field for the selected systemid.
      * The hidden field is names as $strName, appended by "_id".
+     *
+     * If you want to filter the list for users having at least view-permissions on a given systemid, you may pass the id as an optional param.
      *
      * @param string $strName
      * @param string $strTitle
@@ -353,10 +354,12 @@ class class_toolkit_admin extends class_toolkit {
      * @param bool $bitUser
      * @param bool $bitGroups
      * @param bool $bitBlockCurrentUser
+     * @param string $strValidateSystemid If you want to check the view-permissions for a given systemid, pass the id here
      *
      * @return string
+     * @throws class_exception
      */
-    public function formInputUserSelector($strName, $strTitle = "", $strValue = "", $strClass = "", $bitUser = true, $bitGroups = false, $bitBlockCurrentUser = false) {
+    public function formInputUserSelector($strName, $strTitle = "", $strValue = "", $strClass = "", $bitUser = true, $bitGroups = false, $bitBlockCurrentUser = false, $strValidateSystemid = null) {
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "input_userselector");
 
         $strUserName = "";
@@ -375,17 +378,17 @@ class class_toolkit_admin extends class_toolkit {
         $arrTemplate["value_id"] = htmlspecialchars($strUserId, ENT_QUOTES, "UTF-8", false);
         $arrTemplate["title"] = $strTitle;
         $arrTemplate["class"] = $strClass;
-        $arrTemplate["opener"] = getLinkAdminDialog(
+        $arrTemplate["opener"] = class_link::getLinkAdminDialog(
             "user",
             "userBrowser",
-            "&form_element=".$strName.($bitGroups ? "&allowGroup=1" : "").($bitBlockCurrentUser ? "&filter=current" : ""),
+            "&form_element={$strName}&checkid={$strValidateSystemid}".($bitGroups ? "&allowGroup=1" : "").($bitBlockCurrentUser ? "&filter=current" : ""),
             class_carrier::getInstance()->getObjLang()->getLang("user_browser", "user"),
             class_carrier::getInstance()->getObjLang()->getLang("user_browser", "user"),
             "icon_externalBrowser",
             class_carrier::getInstance()->getObjLang()->getLang("user_browser", "user")
         );
 
-        $strResetIcon = getLinkAdminManual(
+        $strResetIcon = class_link::getLinkAdminManual(
             "href=\"#\" onclick=\"document.getElementById('".$strName."').value='';document.getElementById('".$strName."_id').value='';return false;\"",
             "",
             class_carrier::getInstance()->getObjLang()->getLang("user_browser_reset", "user"),
@@ -411,7 +414,8 @@ class class_toolkit_admin extends class_toolkit {
                                     filter: request.term,
                                     user: ".($bitUser ? "'true'" : "'false'").",
                                     group: ".($bitGroups ? "'true'" : "'false'").",
-                                    block: ".($bitBlockCurrentUser ? "'current'" : "''")."
+                                    block: ".($bitBlockCurrentUser ? "'current'" : "''").",
+                                    checkid: '".$strValidateSystemid."'
                                 },
                                 success: response
                             });

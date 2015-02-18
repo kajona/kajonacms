@@ -1209,7 +1209,6 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
      * Creates a browser-like view of the users available
      *
      * @return string
-     * @permissions view
      */
     protected function actionUserBrowser() {
         $this->setArrModuleEntry("template", "/folderview.tpl");
@@ -1226,7 +1225,7 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
                     class_link::getLinkAdmin(
                         "user",
                         "userBrowser",
-                        "&form_element=".$this->getParam("form_element")."&systemid=".$objSingleGroup->getSystemid()."&filter=".$this->getParam("filter"),
+                        "&form_element=".$this->getParam("form_element")."&systemid=".$objSingleGroup->getSystemid()."&filter=".$this->getParam("filter")."&checkid=".$this->getParam("checkid"),
                         $this->getLang("user_browser_show"),
                         $this->getLang("user_browser_show"),
                         "icon_folderActionOpen"
@@ -1258,7 +1257,7 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
                     class_link::getLinkAdmin(
                         $this->getArrModule("modul"),
                         "userBrowser",
-                        "&form_element=" . $this->getParam("form_element") . "&filter=" . $this->getParam("filter") . "&allowGroup=" . $this->getParam("allowGroup"),
+                        "&form_element=" . $this->getParam("form_element") . "&filter=" . $this->getParam("filter") . "&allowGroup=" . $this->getParam("allowGroup")."&checkid=".$this->getParam("checkid"),
                         $this->getLang("user_list_parent"),
                         $this->getLang("user_list_parent"),
                         "icon_folderActionLevelup"
@@ -1266,11 +1265,29 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
                 ),
                 $intI++
             );
+
+            $objCurUser = new class_module_user_user($this->objSession->getUserID());
+
             foreach($arrUsers as $strSingleUser) {
                 $objSingleUser = new class_module_user_user($strSingleUser);
 
+                $bitRenderAcceptLink = true;
+                if(validateSystemid($this->getParam("checkid"))) {
+                    $objInstance = class_objectfactory::getInstance()->getObject($this->getParam("checkid"));
+                    if($objInstance != null) {
+                        class_session::getInstance()->switchSessionToUser($objSingleUser, true);
+                        if(!$objInstance->rightView()) {
+                            $bitRenderAcceptLink = false;
+                        }
+                        class_session::getInstance()->switchSessionToUser($objCurUser, true);
+                    }
+                    else {
+                        $bitRenderAcceptLink = false;
+                    }
+                }
+
                 $strAction = "";
-                if($objSingleUser->getIntActive() == 0 || ($this->getParam("filter") == "current" && $objSingleUser->getSystemid() == $this->objSession->getUserID())) {
+                if(!$bitRenderAcceptLink || $objSingleUser->getIntActive() == 0 || ($this->getParam("filter") == "current" && $objSingleUser->getSystemid() == $this->objSession->getUserID())) {
                     $strAction .= $this->objToolkit->listButton(getImageAdmin("icon_acceptDisabled"));
                 }
                 else {
@@ -1404,10 +1421,10 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
      *
      * @return string
      * @xml
-     * @permissions view
      */
     protected function actionGetUserByFilter() {
         $strFilter = $this->getParam("filter");
+        $strCheckId = $this->getParam("checkid");
 
         $arrElements = array();
         $objSource = new class_module_user_sourcefactory();
@@ -1438,6 +1455,7 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
             return strcmp(strtolower($strA), strtolower($strB));
         });
 
+        $objCurUser = new class_module_user_user($this->objSession->getUserID());
 
         $arrReturn = array();
         foreach($arrElements as $objOneElement) {
@@ -1445,6 +1463,21 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
             if($this->getParam("block") == "current" && $objOneElement->getSystemid() == $this->objSession->getUserID()) {
                 continue;
             }
+
+            if(validateSystemid($strCheckId) && $objOneElement instanceof class_module_user_user) {
+                $objInstance = class_objectfactory::getInstance()->getObject($strCheckId);
+                if($objInstance != null) {
+                    class_session::getInstance()->switchSessionToUser($objOneElement, true);
+                    if(!$objInstance->rightView()) {
+                        continue;
+                    }
+                    class_session::getInstance()->switchSessionToUser($objCurUser, true);
+                }
+                else {
+                    continue;
+                }
+            }
+
 
             $arrEntry = array();
 
