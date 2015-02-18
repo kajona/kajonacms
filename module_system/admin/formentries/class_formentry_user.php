@@ -127,9 +127,12 @@ class class_formentry_user extends class_formentry_base implements interface_for
 
     /**
      * @param null $strValidateId
+     *
+     * @return $this
      */
     public function setStrValidateId($strValidateId) {
         $this->strValidateId = $strValidateId;
+        return $this;
     }
 
 
