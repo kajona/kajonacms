@@ -1,6 +1,6 @@
 <?php
 /*"******************************************************************************************************
-*   (c) 2007-2014 by Kajona, www.kajona.de                                                              *
+*   (c) 2015 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 ********************************************************************************************************/
 
@@ -24,8 +24,8 @@ class class_module_jsonapi_admin extends class_admin_controller implements inter
      *
      * @xml
      */
-    protected function actionDispatch()
-    {
+    protected function actionDispatch() {
+
         class_response_object::getInstance()->setStrResponseType(class_http_responsetypes::STR_TYPE_JSON);
 
         try {
@@ -63,8 +63,6 @@ class class_module_jsonapi_admin extends class_admin_controller implements inter
         } catch (Exception $e) {
             class_response_object::getInstance()->setStrStatusCode(class_http_statuscodes::SC_INTERNAL_SERVER_ERROR);
 
-            $e->processException();
-
             $arrResponse = array(
                 'success' => false,
                 'message' => 'An unknown error occured',
@@ -76,10 +74,11 @@ class class_module_jsonapi_admin extends class_admin_controller implements inter
     }
 
     /**
-     * Is called on an GET request. If an systemId is available only the 
+     * Is called on an GET request. If an systemId is available only the
      * specific entry gets returned else an complete list
      *
      * @return array
+     * @throws class_invalid_request_exception
      * @permissions view
      * @xml
      */
@@ -120,7 +119,7 @@ class class_module_jsonapi_admin extends class_admin_controller implements inter
                 $objEndDate = null;
             }
 
-            /** @var interface_model[]|class_root[] $entries */
+            /** @var interface_model[]|class_root[] $arrEntries */
             $arrEntries = $strClass::getObjectList($strFilter, $intStartIndex, $intCount, $objStartDate, $objEndDate);
             $arrResult = array();
 
@@ -152,8 +151,7 @@ class class_module_jsonapi_admin extends class_admin_controller implements inter
      * @permissions edit
      * @xml
      */
-    protected function actionPost()
-    {
+    protected function actionPost() {
         /** @var class_model $objObject */
         $objObject = $this->getCurrentObject();
 
@@ -184,12 +182,11 @@ class class_module_jsonapi_admin extends class_admin_controller implements inter
      * @permissions edit
      * @xml
      */
-    protected function actionPut()
-    {
+    protected function actionPut() {
         /** @var class_model $objObject */
         $objObject = $this->getCurrentObject($this->getSystemid());
 
-        if(!class_module_system_module::getModuleByName($objObject->getArrModule("module"))->rightEdit()) {
+        if(!$objObject->rightEdit()) {
             throw new class_authentication_exception("You are not allowed to update records", class_exception::$level_ERROR);
         }
 
@@ -213,12 +210,11 @@ class class_module_jsonapi_admin extends class_admin_controller implements inter
      * @permissions delete
      * @xml
      */
-    protected function actionDelete()
-    {
+    protected function actionDelete() {
         /** @var class_model $objObject */
         $objObject = $this->getCurrentObject($this->getSystemid());
 
-        if(!class_module_system_module::getModuleByName($objObject->getArrModule("module"))->rightDelete()) {
+        if(!$objObject->rightDelete()) {
             throw new class_authentication_exception("You are not allowed to delete new records", class_exception::$level_ERROR);
         }
 
@@ -238,8 +234,7 @@ class class_module_jsonapi_admin extends class_admin_controller implements inter
      * @param interface_model $objModel
      * @return array
      */
-    protected function serializeObject(interface_model $objModel)
-    {
+    protected function serializeObject(interface_model $objModel) {
         $objSerializer = new class_object_serializer($objModel);
 
         return array_merge(
@@ -253,8 +248,7 @@ class class_module_jsonapi_admin extends class_admin_controller implements inter
      *
      * @param interface_model $objModel
      */
-    protected function injectData(interface_model $objModel)
-    {
+    protected function injectData(interface_model $objModel) {
         $arrData = $this->getRequestBody();
         $objSerializer = new class_object_serializer($objModel);
         $arrProperties = $objSerializer->getPropertyNames();
@@ -273,8 +267,7 @@ class class_module_jsonapi_admin extends class_admin_controller implements inter
      * @return array
      * @throws class_invalid_request_exception
      */
-    protected function getRequestBody()
-    {
+    protected function getRequestBody() {
         $strRawBody = file_get_contents('php://input');
         if(!empty($strRawBody)) {
             $arrBody = json_decode($strRawBody, true);
@@ -299,8 +292,7 @@ class class_module_jsonapi_admin extends class_admin_controller implements inter
      * @return interface_model
      * @throws class_invalid_request_exception
      */
-    protected function getCurrentObject($strSystemId = null)
-    {
+    protected function getCurrentObject($strSystemId = null) {
         $strClassName = $this->getParam('class');
 
         if(empty($strClassName) || !class_exists($strClassName)) {

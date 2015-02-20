@@ -1,6 +1,6 @@
 <?php
 /*"******************************************************************************************************
-*   (c) 2007-2014 by Kajona, www.kajona.de                                                              *
+*   (c) 2015 by Kajona, www.kajona.de                                                                   *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 ********************************************************************************************************/
 
@@ -13,12 +13,9 @@
 class class_installer_jsonapi extends class_installer_base implements interface_installer_removable {
 
     public function install() {
-
-        $strReturn = "";
-
+        $strReturn = "Registering module...\n";
         //register the module
         $this->registerModule("jsonapi", _jsonapi_module_id_, "", "class_module_jsonapi_admin.php", $this->objMetadata->getStrVersion(), false);
-
         return $strReturn;
 
     }
