@@ -410,7 +410,7 @@ class class_graph_jqplot implements interface_graph {
 
         $strCoreDirectory = class_resourceloader::getInstance()->getCorePathForModule("module_jqplot");
         $strReturn .= "<script type='text/javascript'>
-                KAJONA.admin.loader.loadFile(['{$strCoreDirectory}/module_jqplot/admin/scripts/js/jqplot/jquery.jqplot.js', '{$strCoreDirectory}/module_jqplot/admin/scripts/js/jqplot/jquery.jqplot.css'], function() {
+                KAJONA.admin.loader.loadFile(['{$strCoreDirectory}/module_jqplot/admin/scripts/js/jqplot/excanvas.js','{$strCoreDirectory}/module_jqplot/admin/scripts/js/jqplot/jquery.jqplot.js', '{$strCoreDirectory}/module_jqplot/admin/scripts/js/jqplot/jquery.jqplot.css'], function() {
                     KAJONA.admin.loader.loadFile([
                         '{$strCoreDirectory}/module_jqplot/admin/scripts/js/jqplot/plugins/jqplot.logAxisRenderer.js',
                         '{$strCoreDirectory}/module_jqplot/admin/scripts/js/jqplot/plugins/jqplot.barRenderer.js',
