@@ -172,7 +172,7 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
         }
 
         if($strListIdentifier == "groupList" && $this->getObjModule()->rightEdit()) {
-            return $this->objToolkit->listButton(class_link::getLinkAdmin($this->getArrModule("modul"), "groupNew", "", $this->getLang("action_group_new"), $this->getLang("action_group_new"), "icon_new"));
+            return $this->objToolkit->listButton(class_link::getLinkAdminDialog($this->getArrModule("modul"), "groupNew", "", $this->getLang("action_group_new"), $this->getLang("action_group_new"), "icon_new"));
         }
 
         return "";
@@ -725,6 +725,7 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
      */
     protected function actionGroupNew($strMode = "new", class_admin_formgenerator $objForm = null) {
 
+        $this->setArrModuleEntry("template", "/folderview.tpl");
         $objUsersources = new class_module_user_sourcefactory();
 
         if($strMode == "new") {
@@ -855,7 +856,7 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
 
         $objSourceGroup->updateObjectToDb();
 
-        $this->adminReload(class_link::getLinkAdminHref($this->getArrModule("modul"), "groupList"));
+        $this->adminReload(class_link::getLinkAdminHref($this->getArrModule("modul"), "groupList", "&peClose=1&blockAction=1"));
         return "";
 
     }
