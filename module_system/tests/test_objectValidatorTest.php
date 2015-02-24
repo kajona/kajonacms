@@ -48,9 +48,6 @@ class class_objectValidatorTest extends class_testbase  {
         $this->assertTrue($objSourceObjectAfter === $objSourceObjectBefore);
     }
 
-    public function testValidator() {
-    }
-
 
     protected function tearDown() {
         parent::tearDown();

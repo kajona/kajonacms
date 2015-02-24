@@ -1,7 +1,7 @@
 <?php
 /*"******************************************************************************************************
 *   (c) 2004-2006 by MulchProductions, www.mulchprod.de                                                 *
-*   (c) 2007-2014 by Kajona, www.kajona.de                                                              *
+*   (c) 2007-2015 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
 *	$Id$                                              *
@@ -297,13 +297,13 @@ class class_image {
 
         switch($strType) {
         case ".jpg":
-            class_response_object::getInstance()->setStResponseType(class_http_responsetypes::STR_TYPE_JPEG);
+            class_response_object::getInstance()->setStrResponseType(class_http_responsetypes::STR_TYPE_JPEG);
             break;
         case ".png":
-            class_response_object::getInstance()->setStResponseType(class_http_responsetypes::STR_TYPE_PNG);
+            class_response_object::getInstance()->setStrResponseType(class_http_responsetypes::STR_TYPE_PNG);
             break;
         case ".gif":
-            class_response_object::getInstance()->setStResponseType(class_http_responsetypes::STR_TYPE_GIF);
+            class_response_object::getInstance()->setStrResponseType(class_http_responsetypes::STR_TYPE_GIF);
             break;
         }
 

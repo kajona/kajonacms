@@ -1,7 +1,7 @@
 <?php
 /*"******************************************************************************************************
 *   (c) 2004-2006 by MulchProductions, www.mulchprod.de                                                 *
-*   (c) 2007-2014 by Kajona, www.kajona.de                                                              *
+*   (c) 2007-2015 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
 *	$Id$					    *
@@ -15,8 +15,7 @@ $lang["weather_celsius"]                 = "Celsius";
 $lang["weather_errorloading"]            = "Fel vid uppladdning av väderdata.";
 $lang["weather_fahrenheit"]              = "Fahrenheit";
 $lang["weather_forecast"]                = "Prognos";
-$lang["weather_location"]                = "Orts-Id";
-$lang["weather_location_finder"]         = "ID för en ort från <a href=\"http://weather.yahoo.com\" target=\"_blank\">http://weather.yahoo.com</a> (t.ex. i URL:en från en visad väderprognos)";
+$lang["weather_location"]                = "Ort";
 $lang["weather_location_string"]         = "Ort: ";
 $lang["weather_name"]                    = "Väder";
 $lang["weather_temp_string"]             = "Temperatur: ";

@@ -40,11 +40,15 @@ define("_system_mod_rewrite_", "");
 define("_system_portal_disablepage_", "");
 define("_system_release_time_", 3600);
 define("_system_portal_disable_", false);
+define("_system_email_defaultsender_", "");
+define("_system_email_forcesender_", false);
 
 define("_stats_duration_online_", 10);
 define("_stats_nrofrecords_", "");
 
 define("_tags_defaultprivate_", "");
+
+define("_remoteloader_max_cachetime_", 0);
 
 define("_packagemanager_defaulttemplate_", "");
 define("_packageserver_repo_id_", "");

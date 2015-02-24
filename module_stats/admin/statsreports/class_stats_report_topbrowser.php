@@ -1,10 +1,8 @@
 <?php
 /*"******************************************************************************************************
 *   (c) 2004-2006 by MulchProductions, www.mulchprod.de                                                 *
-*   (c) 2007-2014 by Kajona, www.kajona.de                                                              *
+*   (c) 2007-2015 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
-*-------------------------------------------------------------------------------------------------------*
-*	$Id$                            *
 ********************************************************************************************************/
 
 /**
@@ -24,12 +22,6 @@ class class_stats_report_topbrowser implements interface_admin_statsreports {
     private $objToolkit;
     private $objDB;
 
-
-    private $arrParentCache = array();
-    private $arrBrowserCache = array();
-    private $arrBrowserGiven = null;
-    private $arrBrowserGiven2 = null;
-
     /**
      * Constructor
      */
@@ -46,34 +38,6 @@ class class_stats_report_topbrowser implements interface_admin_statsreports {
      */
     public static function getExtensionName() {
         return "core.stats.admin.statsreport";
-    }
-
-    /**
-     * @return void
-     */
-    private function setUpBrowserData() {
-        if($this->arrBrowserGiven == null) {
-            //parse browser (php_browscap.ini)
-            if(version_compare(PHP_VERSION, '5.3.0') >= 0) {
-                $arrBrowserGiven = parse_ini_file(_realpath_."/".class_resourceloader::getInstance()->getPathForFile("/system/php_browscap.ini"), true, INI_SCANNER_RAW);
-            }
-            else {
-                $arrBrowserGiven = parse_ini_file(_realpath_."/".class_resourceloader::getInstance()->getPathForFile("/system/php_browscap.ini"), true);
-            }
-
-
-            //Update Array once to handle regex
-            $arrSearch = array(".", "+", "^", "$", "!", "{", "}", "(", ")", "]", "[", "*", "?", "#");
-            $arrReplace = array("\.", "\+", "\^", "\$", "\!", "\{", "\}", "\(", "\)", "\]", "\[", ".*", ".", "\#");
-
-            $arrBrowserGiven2 = array();
-            foreach($arrBrowserGiven as $strSignatureGiven => $arrBrowserData) {
-                $strSignature = str_replace($arrSearch, $arrReplace, $strSignatureGiven);
-                $arrBrowserGiven2[$strSignature] = $arrBrowserData;
-            }
-            $this->arrBrowserGiven = $arrBrowserGiven;
-            $this->arrBrowserGiven2 = $arrBrowserGiven2;
-        }
     }
 
     /**
@@ -118,7 +82,6 @@ class class_stats_report_topbrowser implements interface_admin_statsreports {
      * @return string
      */
     public function getReport() {
-        $this->setUpBrowserData();
         $strReturn = "";
 
         //Create Data-table
@@ -175,66 +138,16 @@ class class_stats_report_topbrowser implements interface_admin_statsreports {
 						GROUP BY stats_browser";
         $arrBrowser = $this->objDB->getPArray($strQuery, array($this->intDateStart, $this->intDateEnd));
 
-        $arrBrowserGiven = &$this->arrBrowserGiven;
-        $arrBrowserGiven2 = &$this->arrBrowserGiven2;
-
-        //way of doing: search the longest match. in 99% this is the most specific match
+        $objBrowscap = new class_browscap();
 
         //Search the best matching pattern
         foreach($arrBrowser as $arrRow) {
-            $strPrevMatchingSignature = "";
-            //Browser already found before?
-            $strBrowserSign = $arrRow["stats_browser"];
-            if(!isset($this->arrBrowserCache[$arrRow["stats_browser"]])) {
-                //Lookup in browsers
-                foreach($arrBrowserGiven2 as $strSignature => $arrBrowserData) {
-                    //Current browser matching the browscap signature?
+            $strInfo = $objBrowscap->getBrowserForUseragent($arrRow["stats_browser"]);
 
-                    if(preg_match("#".$strSignature."#", $arrRow["stats_browser"])) {
-
-                        //better match then the one before?
-                        if(uniStrlen($strPrevMatchingSignature) <= uniStrlen($strSignature)) {
-                            //yes, save for next run
-                            $strPrevMatchingSignature = $strSignature;
-                        }
-                    }
-                }
-
-                $arrCurrentBrowser = $arrBrowserGiven2[$strPrevMatchingSignature];
-                //parent browser already looked up?
-                $arrParentBrowser = array();
-                //search the parent of the current browser
-                if(isset($arrCurrentBrowser["Parent"])) {
-                    if(!isset($this->arrParentCache[$arrCurrentBrowser["Parent"]])) {
-                        if(isset($arrBrowserGiven[$arrCurrentBrowser["Parent"]])) {
-                            $arrParentBrowser = $arrBrowserGiven[$arrCurrentBrowser["Parent"]];
-                            $this->arrParentCache[$arrCurrentBrowser["Parent"]] = $arrParentBrowser;
-                        }
-                    }
-                    else {
-                        $arrParentBrowser = $this->arrParentCache[$arrCurrentBrowser["Parent"]];
-                    }
-                }
-
-
-                //create the hit-entry
-                //search the version and the browsername
-                $strVersion = (isset($arrParentBrowser["Version"]) ? $arrParentBrowser["Version"] : (isset($arrCurrentBrowser["Version"]) ? $arrCurrentBrowser["Version"] : ""));
-                $strBrower = (isset($arrParentBrowser["Browser"]) ? $arrParentBrowser["Browser"] : (isset($arrCurrentBrowser["Browser"]) ? $arrCurrentBrowser["Browser"] : ""));
-
-                $strMatchingBrowser = $strBrower." ".$strVersion;
-
-                //cache browser
-                $this->arrBrowserCache[$strBrowserSign] = $strMatchingBrowser;
-            }
+            if(!isset($arrReturn[$strInfo]))
+                $arrReturn[$strInfo] = $arrRow["anzahl"];
             else
-                $strMatchingBrowser = $this->arrBrowserCache[$strBrowserSign];
-
-            if(!isset($arrReturn[$strMatchingBrowser]))
-                $arrReturn[$strMatchingBrowser] = $arrRow["anzahl"];
-            else
-                $arrReturn[$strMatchingBrowser] += $arrRow["anzahl"];
-
+                $arrReturn[$strInfo] += $arrRow["anzahl"];
         }
 
         arsort($arrReturn);
@@ -245,7 +158,6 @@ class class_stats_report_topbrowser implements interface_admin_statsreports {
      * @return array
      */
     public function getReportGraph() {
-        $this->setUpBrowserData();
         $arrReturn = array();
 
         //--- PIE-GRAPH ---------------------------------------------------------------------------------

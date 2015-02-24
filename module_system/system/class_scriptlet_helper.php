@@ -1,7 +1,7 @@
 <?php
 /*"******************************************************************************************************
 *   (c) 2004-2006 by MulchProductions, www.mulchprod.de                                                 *
-*   (c) 2007-2014 by Kajona, www.kajona.de                                                              *
+*   (c) 2007-2015 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
 *   $Id$                                         *
@@ -31,10 +31,6 @@ class class_scriptlet_helper {
 
         foreach($arrScriptletFiles as $strPath => $strOneScriptlet) {
             $strOneScriptlet = uniSubstr($strOneScriptlet, 0, -4);
-
-            //analyze the scriptlet regarding the functionality - hardcoded string analysis
-            if(uniStrpos(file_get_contents(_realpath_.$strPath), "getProcessingContext(") === false)
-                continue;
 
             /** @var $objScriptlet interface_scriptlet */
             $objScriptlet = new $strOneScriptlet();

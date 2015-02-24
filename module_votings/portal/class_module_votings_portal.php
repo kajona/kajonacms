@@ -1,7 +1,7 @@
 <?php
 /*"******************************************************************************************************
 *   (c) 2004-2006 by MulchProductions, www.mulchprod.de                                                 *
-*   (c) 2007-2014 by Kajona, www.kajona.de                                                              *
+*   (c) 2007-2015 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
 *	$Id$									*
@@ -91,7 +91,7 @@ class class_module_votings_portal extends class_portal_controller implements int
                         $strAnswerTemplateID = $strListTemplateID = $this->objTemplate->readTemplate("/module_votings/" . $this->arrElementData["char2"], "voting_voting_option");
                         //load the list of answers
                         /** @var class_module_votings_answer $objOneAnswer */
-                        foreach(class_module_votings_answer::getObjectList() as $objOneAnswer) {
+                        foreach(class_module_votings_answer::getObjectList($objVoting->getSystemid()) as $objOneAnswer) {
                             if($objOneAnswer->getIntRecordStatus() == 0)
                                 continue;
 
@@ -129,14 +129,14 @@ class class_module_votings_portal extends class_portal_controller implements int
 
                 //first run to sum up
                 /** @var class_module_votings_answer $objOneAnswer */
-                foreach(class_module_votings_answer::getObjectList() as $objOneAnswer) {
+                foreach(class_module_votings_answer::getObjectList($objVoting->getSystemid()) as $objOneAnswer) {
                     if($objOneAnswer->getIntRecordStatus() == 0)
                         continue;
                     $intTotalVotes += $objOneAnswer->getIntHits();
                 }
 
                 /** @var class_module_votings_answer $objOneAnswer */
-                foreach(class_module_votings_answer::getObjectList() as $objOneAnswer) {
+                foreach(class_module_votings_answer::getObjectList($objVoting->getSystemid()) as $objOneAnswer) {
                     if($objOneAnswer->getIntRecordStatus() == 0)
                         continue;
                     $arrTemplate = array();

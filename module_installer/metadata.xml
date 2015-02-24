@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <package
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="http://apidocs.kajona.de/xsd/package.xsd"
+        xsi:noNamespaceSchemaLocation="https://apidocs.kajona.de/xsd/package.xsd"
         >
     <title>installer</title>
     <description>The basic installer gui, required to install a system from scratch.</description>
-    <version>4.5</version>
+    <version>4.6</version>
     <author>Kajona Team</author>
     <type>MODULE</type>
     <providesInstaller>FALSE</providesInstaller>

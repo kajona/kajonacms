@@ -1,6 +1,6 @@
 <?php
 /*"******************************************************************************************************
-*   (c) 2007-2014 by Kajona, www.kajona.de                                                              *
+*   (c) 2007-2015 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
 *   $Id$                                        *
@@ -63,7 +63,7 @@ class class_orm_objectlist extends class_orm_base {
         if($strPrevid != "")
             $arrParams[] = $strPrevid;
 
-        $this->processWhereRestrictions($strQuery, $arrParams);
+        $this->processWhereRestrictions($strQuery, $arrParams, $strTargetClass);
 
         $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, $arrParams);
         return $arrRow["COUNT(*)"];
@@ -97,7 +97,7 @@ class class_orm_objectlist extends class_orm_base {
         if($strPrevid != "")
             $arrParams[] = $strPrevid;
 
-        $this->processWhereRestrictions($strQuery, $arrParams);
+        $this->processWhereRestrictions($strQuery, $arrParams, $strTargetClass);
         $strQuery .= $this->getOrderBy(new class_reflection($strTargetClass));
         $arrRows = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, $arrParams, $intStart, $intEnd);
 
@@ -137,7 +137,7 @@ class class_orm_objectlist extends class_orm_base {
         if($strPrevid != "")
             $arrParams[] = $strPrevid;
 
-        $this->processWhereRestrictions($strQuery, $arrParams);
+        $this->processWhereRestrictions($strQuery, $arrParams, $strTargetClass);
         $strQuery .= $this->getOrderBy(new class_reflection($strTargetClass));
         $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, $arrParams);
 
@@ -204,8 +204,9 @@ class class_orm_objectlist extends class_orm_base {
      * @param array &$arrParams
      * @return void
      */
-    private function processWhereRestrictions(&$strQuery, &$arrParams) {
+    private function processWhereRestrictions(&$strQuery, &$arrParams, $strTargetClass) {
         foreach($this->arrWhereRestrictions as $objOneRestriction) {
+            $objOneRestriction->setStrTargetClass($strTargetClass);
             $strQuery .= " ".$objOneRestriction->getStrWhere()." ";
             foreach($objOneRestriction->getArrParams() as $strOneParam) {
                 $arrParams[] = $strOneParam;

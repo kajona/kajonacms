@@ -1,9 +1,7 @@
 <?php
 /*"******************************************************************************************************
-*   (c) 2007-2014 by Kajona, www.kajona.de                                                              *
+*   (c) 2007-2015 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
-*-------------------------------------------------------------------------------------------------------*
-*	$Id$                          *
 ********************************************************************************************************/
 
 /**
@@ -26,7 +24,7 @@ class class_module_system_aspect extends class_model implements interface_model,
 
     /**
      * @var string
-     * @tableColumn aspect_name
+     * @tableColumn aspects.aspect_name
      * @tableColumnDatatype char254
      * @fieldType text
      * @fieldMandatory
@@ -37,7 +35,7 @@ class class_module_system_aspect extends class_model implements interface_model,
 
     /**
      * @var bool
-     * @tableColumn aspect_default
+     * @tableColumn aspects.aspect_default
      * @tableColumnDatatype int
      * @fieldType yesno
      * @fieldMandatory
@@ -119,7 +117,7 @@ class class_module_system_aspect extends class_model implements interface_model,
      */
     public static function getActiveObjectList() {
         $objOrm = new class_orm_objectlist();
-        $objOrm->addWhereRestriction(new class_orm_objectlist_restriction("AND system_status != 0"));
+        $objOrm->addWhereRestriction(new class_orm_objectlist_systemstatus_restriction(class_orm_comparator_enum::NotEqual(), 0));
         return $objOrm->getObjectList(__CLASS__, "");
     }
 
@@ -131,7 +129,7 @@ class class_module_system_aspect extends class_model implements interface_model,
      */
     public static function getActiveObjectCount() {
         $objOrm = new class_orm_objectlist();
-        $objOrm->addWhereRestriction(new class_orm_objectlist_restriction("AND system_status != 0"));
+        $objOrm->addWhereRestriction(new class_orm_objectlist_systemstatus_restriction(class_orm_comparator_enum::NotEqual(), 0));
         return $objOrm->getObjectCount(__CLASS__);
     }
 

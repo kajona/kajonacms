@@ -1,10 +1,8 @@
 <?php
 /*"******************************************************************************************************
 *   (c) 2004-2006 by MulchProductions, www.mulchprod.de                                                 *
-*   (c) 2007-2014 by Kajona, www.kajona.de                                                              *
+*   (c) 2007-2015 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
-*-------------------------------------------------------------------------------------------------------*
-*	$Id$                              *
 ********************************************************************************************************/
 
 /**
@@ -17,6 +15,8 @@
  *
  * @module system
  * @moduleId _system_modul_id_
+ *
+ * @blockFromAutosave
  */
 class class_module_system_session extends class_model implements interface_model {
 

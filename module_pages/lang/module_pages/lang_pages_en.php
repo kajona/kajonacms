@@ -1,7 +1,7 @@
 <?php
 /*"******************************************************************************************************
 *   (c) 2004-2006 by MulchProductions, www.mulchprod.de                                                 *
-*   (c) 2007-2014 by Kajona, www.kajona.de                                                              *
+*   (c) 2007-2015 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
 *	$Id$					    *
@@ -72,7 +72,7 @@ $lang["inhalte_titel"]                   = "Page management - ";
 $lang["keywords"]                        = "Keywords";
 $lang["klapper"]                         = "Show/hide folders";
 $lang["lasteditTitle"]                   = "Last modification";
-$lang["lastuserTitle"]                   = "von";
+$lang["lastuserTitle"]                   = "Last modification by";
 $lang["liste_seiten_leer"]               = "No pages available";
 $lang["action_new_element"]               = "Create page element";
 $lang["modul_elemente"]                  = "Page elements";
@@ -170,6 +170,7 @@ $lang["template"]                        = "Template";
 $lang["templateNotLoaded"]               = "ATTENTION: No template was selected for this page or it couldn't be loaded!";
 $lang["templateNotSelectedBefore"]       = "ATTENTION: No template was selected for this page!";
 $lang["warning_elementsremaining"]       = "ATTENTION<br />There are pageelements in the system which can't be assigned to any placeholder provided by the template. This can happen, if a placeholder was renamed or removed from the template. To rename a placeholder in the system, you can use the function \"Update placeholder\". A list of the elements follows after this warning.";
+$lang["folderview_quickselect"]          = "Quick select";
 
 //non-editable entries
 $lang["permissions_header"]              = array(0 => "View", 1 => "Edit", 2 => "Delete", 3 => "Permissions", 4 => "Elements",  5 => "Folder", 6 => "Placeholders", 7 => "", 8 => "");

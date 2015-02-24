@@ -1,6 +1,6 @@
 <?php
 /*"******************************************************************************************************
-*   (c) 2007-2014 by Kajona, www.kajona.de                                                              *
+*   (c) 2007-2015 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
 *	$Id$                                  *
@@ -29,9 +29,6 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
         $arrReturn = array();
         $arrReturn[] = array("view", class_link::getLinkAdmin($this->getArrModule("modul"), "list", "", $this->getLang("action_list"), "", "", true, "adminnavi"));
         $arrReturn[] = array("view", class_link::getLinkAdmin($this->getArrModule("modul"), "listTemplates", "", $this->getLang("action_list_templates"), "", "", true, "adminnavi"));
-        $arrReturn[] = array("", "");
-        $arrReturn[] = array("right", class_link::getLinkAdmin("right", "change", "&changemodule=".$this->getArrModule("modul"),  $this->getLang("commons_module_permissions"), "", "", true, "adminnavi"));
-
         return $arrReturn;
     }
 
@@ -143,7 +140,7 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
             });
             </script>";
 
-        $strReturn .= $this->objToolkit->getSimplePageview($objArraySectionIterator, $this->getArrModule("modul"), $this->getAction());
+        $strReturn .= $this->objToolkit->getPageview($objArraySectionIterator, $this->getArrModule("modul"), $this->getAction());
 
         return $strReturn;
     }
@@ -220,7 +217,7 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
             }
         }
 
-        class_response_object::getInstance()->setStResponseType(class_http_responsetypes::STR_TYPE_JSON);
+        class_response_object::getInstance()->setStrResponseType(class_http_responsetypes::STR_TYPE_JSON);
         return json_encode($arrReturn);
     }
 

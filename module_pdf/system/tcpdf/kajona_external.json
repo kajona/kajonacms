@@ -1,0 +1,7 @@
+{
+    "name" : "tcpdf",
+    "version" : "6.0.099",
+    "source" : ["http://www.tcpdf.org/", "http://sourceforge.net/projects/tcpdf/files/"],
+    "license" : "LGPL v3",
+    "licenseurl" : "http://www.tcpdf.org/license.php"
+}

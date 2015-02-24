@@ -1,6 +1,6 @@
 <?php
 /*"******************************************************************************************************
-*   (c) 2007-2014 by Kajona, www.kajona.de                                                              *
+*   (c) 2007-2015 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
 *    $Id$                                            *
@@ -430,7 +430,6 @@ class class_resourceloader {
      * @param string $strModule
      * @param bool $bitPrependRealpath
      *
-     * @internal param bool $bitIncludeRealpath
      * @return string
      */
     public function getCorePathForModule($strModule, $bitPrependRealpath = false) {

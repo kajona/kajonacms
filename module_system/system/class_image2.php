@@ -1,6 +1,6 @@
 <?php
 /*"******************************************************************************************************
-*   (c) 2013-2014 by Kajona, www.kajona.de                                                              *
+*   (c) 2013-2015 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
 *	$Id$	                                            *
@@ -260,7 +260,7 @@ class class_image2 {
                 return false;
         }
 
-        class_response_object::getInstance()->setStResponseType($strResponseType);
+        class_response_object::getInstance()->setStrResponseType($strResponseType);
         class_response_object::getInstance()->sendHeaders();
 
         if (!$this->isCached($strFormat)) {

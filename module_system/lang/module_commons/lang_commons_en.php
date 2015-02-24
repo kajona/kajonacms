@@ -1,7 +1,7 @@
 <?php
 /*"******************************************************************************************************
 *   (c) 2004-2006 by MulchProductions, www.mulchprod.de                                                 *
-*   (c) 2007-2014 by Kajona, www.kajona.de                                                              *
+*   (c) 2007-2015 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
 *	$Id$					    *
@@ -15,7 +15,7 @@ $lang["aspect_content"]                  = "Contents";
 $lang["aspect_management"]               = "Administration";
 $lang["commons_accept"]                  = "Accept";
 $lang["commons_all_categories"]          = "All categories";
-$lang["commons_back"]                    = "back";
+$lang["commons_back"]                    = "Back";
 $lang["commons_batchaction_confirm"]     = "Do you really want to execute the action <b>%title%</b> for the selected %amount% records?";
 $lang["commons_batchaction_delete"]      = "Delete selected records";
 $lang["commons_batchaction_delete_assignment"]      = "Remove assignments of selected records";
@@ -30,6 +30,7 @@ $lang["commons_category_title"]          = "Category title";
 $lang["commons_create_category"]         = "Create category";
 $lang["commons_create_folder"]           = "Create folder";
 $lang["commons_continue"]                = "Continue";
+$lang["commons_close"]                   = "Close";
 $lang["commons_date"]                    = "Date";
 $lang["commons_delete"]                  = "Delete";
 $lang["commons_delete_category_question"] = "Do you really want to delete the category &quot;<b>%%element_name%%</b>&quot;?";
@@ -60,6 +61,7 @@ $lang["commons_next"]                    = "next";
 $lang["commons_no"]                      = "No";
 $lang["commons_ok"]                      = "Ok";
 $lang["commons_one_level_up"]            = "One level up";
+$lang["commons_one_level_down"]          = "Show subordinate level";
 $lang["commons_open_browser"]            = "Open browser";
 $lang["commons_page_success"]            = "Page in case of success (optional)";
 $lang["commons_path"]                    = "Path";
@@ -82,8 +84,8 @@ $lang["commons_validator_posint_validationmessage"] = "The field must contain po
 $lang["commons_yes"]                     = "Yes";
 
 $lang["commons_remove_assignment"]                     = "Remove assignment";
-$lang["commons_object_validator_datecompare_validationmessage_after"] = "'{0}' must be after '{1}'.";
-$lang["commons_object_validator_datecompare_validationmessage_before"] = "'{0}' must be before '{1}'.";
+$lang["commons_object_validator_datecompare_validationmessage_after"] = "'{0}' must not be greater than '{1}'.";
+$lang["commons_object_validator_datecompare_validationmessage_before"] = "'{0}' must not be less than '{1}'.";
 $lang["commons_object_validator_number_range"] = "Number must be between '{0}' and '{1}'.";
 $lang["commons_object_validator_number_greater_than"] = "Number must be > '{0}'.";
 $lang["commons_object_validator_number_greaterequals_than"] = "Number must be >= '{0}'.";

@@ -1,5 +1,10 @@
 Module Messaging
 
+V4.6 ----------------------------------------------------------------------------------------------------
+NEW: module_messaging | messages-> migrated column message_body from text to longtext
+BUG: module_messaging | messaging -> rendering of a message without a linked message-provider crashed the message-list view
+BUG: module_messaging | admin view -> the status-batch action handlers (set active, set inactive) where shown for the list of messages
+
 V4.5 ----------------------------------------------------------------------------------------------------
 NEW: module_messaging | messageprovider -> extended the interface_messageprovider_extended by a method isVisibleInConfigView. Allows provides to decide if the provider is visible on on the config pane or hidden.
 NEW: module_messaging | admin view -> if a message no longer existing is opened (e.g. out of an old mail), a error-dialog instead of an exception is shown

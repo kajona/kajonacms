@@ -1,10 +1,8 @@
 <?php
 /*"******************************************************************************************************
 *   (c) 2004-2006 by MulchProductions, www.mulchprod.de                                                 *
-*   (c) 2007-2014 by Kajona, www.kajona.de                                                              *
+*   (c) 2007-2015 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
-*-------------------------------------------------------------------------------------------------------*
-*	$Id$                               *
 ********************************************************************************************************/
 
 /**
@@ -81,6 +79,11 @@ class class_installer_element_rssfeed extends class_elementinstaller_base implem
         if(class_module_pages_element::getElement("rssfeed")->getStrVersion() == "4.4") {
             $strReturn .= "Updating element rssfeed to 4.5...\n";
             $this->updateElementVersion("rssfeed", "4.5");
+            $this->objDB->flushQueryCache();
+        }
+        if(class_module_pages_element::getElement("rssfeed")->getStrVersion() == "4.5") {
+            $strReturn .= "Updating element rssfeed to 4.6...\n";
+            $this->updateElementVersion("rssfeed", "4.6");
             $this->objDB->flushQueryCache();
         }
 

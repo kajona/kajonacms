@@ -1,7 +1,7 @@
 <?php
 /*"******************************************************************************************************
 *   (c) 2004-2006 by MulchProductions, www.mulchprod.de                                                 *
-*   (c) 2007-2014 by Kajona, www.kajona.de                                                              *
+*   (c) 2007-2015 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
 *   $Id$                                  *
@@ -33,8 +33,6 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
         $arrReturn[] = array("right1", class_link::getLinkAdmin($this->getArrModule("modul"), "listElements", "", $this->getLang("modul_elemente"), "", "", true, "adminnavi"));
         $arrReturn[] = array("", "");
         $arrReturn[] = array("right3", class_link::getLinkAdmin($this->getArrModule("modul"), "updatePlaceholder", "", $this->getLang("action_update_placeholder"), "", "", true, "adminnavi"));
-        $arrReturn[] = array("", "");
-        $arrReturn[] = array("right", class_link::getLinkAdmin("right", "change", "&changemodule=".$this->getArrModule("modul"), $this->getLang("commons_module_permissions"), "", "", true, "adminnavi"));
         return $arrReturn;
     }
 
@@ -722,7 +720,18 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
         //generate the array of ids to expand initially
         $arrNodes = array_merge(array($this->getObjModule()->getSystemid()), $this->getPathArray($this->getSystemid()));
         $strReturn .= $this->objToolkit->getTreeview(class_link::getLinkAdminXml("pages", "getChildNodes"), "", $arrNodes, $strSideContent);
-        return $strReturn;
+
+        //ticket #931: no hierarchical drag n drop for folders
+        $strJS = <<<JS
+            $(function() {
+                $("table.admintable i.fa-folder-o").closest("tr").find("td.treedrag i").remove();
+                $("table.admintable i.fa-folder-o").closest("tr").find("td.treedrag").css("cursor", "auto");
+                $("table.admintable i.fa-folder-o").closest("tr").find("td.treedrag").removeClass("jstree-draggable");
+            });
+JS;
+
+        $strJS = "<script type='text/javascript'>".$strJS."</script>";
+        return $strReturn.$strJS;
     }
 
 
@@ -886,10 +895,12 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
      */
     protected function actionUpdatePlaceholder() {
         $strReturn = "";
+        $strReturn .= $this->objToolkit->warningBox($this->getLang("quickhelp_update_placeholder"));
+        $strReturn .= $this->objToolkit->getTextRow($this->getLang("plUpdateHelp"));
+        $strReturn .= $this->objToolkit->divider();
+
         if($this->getParam("plToUpdate") == "") {
-            $strReturn .= $this->objToolkit->getTextRow($this->getLang("plUpdateHelp"));
-            $strReturn .= $this->objToolkit->divider();
-            $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->getArrModule("modul"), "updatePlaceholder"));
+            $strReturn .= $this->objToolkit->formHeader(class_link::getLinkAdminHref($this->getArrModule("modul"), "updatePlaceholder"));
             //Load the available templates
             $arrTemplates = class_resourceloader::getInstance()->getTemplatesInFolder("/module_pages");
             $arrTemplatesDD = array();
@@ -906,8 +917,6 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
             $strReturn .= $this->objToolkit->formClose();
         }
         else {
-            $strReturn .= $this->objToolkit->getTextRow($this->getLang("plUpdateHelp"));
-            $strReturn .= $this->objToolkit->divider();
             if(class_module_pages_pageelement::updatePlaceholders($this->getParam("template"), $this->getParam("plToUpdate"), $this->getParam("plNew")))
                 $strReturn .= $this->objToolkit->getTextRow($this->getLang("plUpdateTrue"));
             else
@@ -958,6 +967,15 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
         //but: when browsing pages the current level should be kept
         iF($strPageid != "0")
             $strLevelUp = $strSystemid;
+
+
+        $strReturn .= $this->objToolkit->formHeader("");
+        $strAction = $this->objToolkit->listButton(
+            "<a href=\"#\" title=\"".$this->getLang("select_page")."\" rel=\"tooltip\" onclick=\"KAJONA.admin.folderview.selectCallback([['".$strElement."', '"._indexpath_."?page='+$('#quickselect').val()]]);\">".class_adminskin_helper::getAdminImage("icon_accept")."</a>"
+        );
+        $strReturn .= $this->objToolkit->formInputPageSelector("quickselect", $this->getLang("folderview_quickselect"), "", "", false, false, $strAction);
+        $strReturn .= $this->objToolkit->formClose(false);
+
 
         $strReturn .= $this->objToolkit->listHeader();
         //Folder to jump one level up

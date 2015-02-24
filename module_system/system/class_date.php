@@ -1,7 +1,7 @@
 <?php
 /*"******************************************************************************************************
 *   (c) 2004-2006 by MulchProductions, www.mulchprod.de                                                 *
-*   (c) 2007-2014 by Kajona, www.kajona.de                                                              *
+*   (c) 2007-2015 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
 *	$Id$                                            *
@@ -19,6 +19,14 @@
  * @author sidler@mulchprod.de
  */
 class class_date {
+
+    const INT_DAY_SUNDAY = 0;
+    const INT_DAY_MONDAY = 1;
+    const INT_DAY_TUESDAY = 2;
+    const INT_DAY_WEDNESDAY = 3;
+    const INT_DAY_THURSDAY = 4;
+    const INT_DAY_FRIDAY = 5;
+    const INT_DAY_SATURDAY = 6;
 
     private $strStringFormat = "YYYYmmddHHiiss";
 

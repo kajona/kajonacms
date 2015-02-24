@@ -1,7 +1,7 @@
 <?php
 /*"******************************************************************************************************
 *   (c) 2004-2006 by MulchProductions, www.mulchprod.de                                                 *
-*   (c) 2007-2014 by Kajona, www.kajona.de                                                              *
+*   (c) 2007-2015 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
 *	$Id$	                        *
@@ -21,35 +21,35 @@ class class_module_dashboard_widget extends class_model implements interface_mod
 
     /**
      * @var string
-     * @tableColumn dashboard_column
+     * @tableColumn dashboard.dashboard_column
      * @tableColumnDatatype char254
      */
     private $strColumn = "";
 
     /**
      * @var string
-     * @tableColumn dashboard_user
+     * @tableColumn dashboard.dashboard_user
      * @tableColumnDatatype char20
      */
     private $strUser = "";
 
     /**
      * @var string
-     * @tableColumn dashboard_aspect
+     * @tableColumn dashboard.dashboard_aspect
      * @tableColumnDatatype char254
      */
     private $strAspect = "";
 
     /**
      * @var string
-     * @tableColumn dashboard_class
+     * @tableColumn dashboard.dashboard_class
      * @tableColumnDatatype char254
      */
     private $strClass = "";
 
     /**
      * @var string
-     * @tableColumn dashboard_content
+     * @tableColumn dashboard.dashboard_content
      * @tableColumnDatatype text
      * @blockEscaping
      */

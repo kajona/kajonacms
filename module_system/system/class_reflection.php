@@ -1,7 +1,7 @@
 <?php
 /*"******************************************************************************************************
 *   (c) 2004-2006 by MulchProductions, www.mulchprod.de                                                 *
-*   (c) 2007-2014 by Kajona, www.kajona.de                                                              *
+*   (c) 2007-2015 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
 *	$Id$                                            *
@@ -23,8 +23,9 @@ class class_reflection {
     private static $strAnnotationsCacheFile;
     private static $bitCacheSaveRequired = false;
 
+    private static $STR_HASCLASS_CACHE = "hasclass";
     private static $STR_CLASS_PROPERTIES_CACHE = "classproperties";
-    
+
     private static $STR_METHOD_CACHE = "methods";
     private static $STR_HASMETHOD_CACHE = "hasmethods";
 
@@ -150,22 +151,22 @@ class class_reflection {
      */
     public function getAnnotationsWithValueFromClass($strValue) {
         $arrReturn = array();
-        
+
         $strClassDoc = $this->objReflectionClass->getDocComment();
         $arrProperties = $this->searchAllAnnotationsInDoc($strClassDoc);
-        
+
         foreach ($arrProperties as $strName => $arrValues) {
             if (in_array($strValue, $arrValues))
                 $arrReturn[] = $strName;
         }
-        
+
         //check if there's a base-class -> inheritance
         $objBaseClass = $this->objReflectionClass->getParentClass();
         if($objBaseClass !== false) {
             $objBaseAnnotations = new class_reflection($objBaseClass->getName());
             $arrReturn = array_merge($arrReturn, $objBaseAnnotations->getAnnotationsWithValueFromClass($strValue));
         }
-        
+
         return $arrReturn;
     }
 
@@ -190,6 +191,29 @@ class class_reflection {
         }
 
         $this->arrCurrentCache[self::$STR_HASMETHOD_CACHE][$strMethodName."_".$strAnnotation] = $bitReturn;
+        self::$bitCacheSaveRequired = true;
+        return $bitReturn;
+    }
+
+    /**
+     * searches an annotation (e.g. @version) in the doccomment of the current class and validates
+     * the existence of this annotation.
+     *
+     * @param string $strAnnotation
+     * @return bool
+     */
+    public function hasClassAnnotation($strAnnotation) {
+        if(isset($this->arrCurrentCache[self::$STR_HASCLASS_CACHE][$strAnnotation]))
+            return $this->arrCurrentCache[self::$STR_HASCLASS_CACHE][$strAnnotation];
+
+        try {
+            $bitReturn = false !== $this->searchFirstAnnotationInDoc($this->objReflectionClass->getDocComment(), $strAnnotation);
+        }
+        catch(ReflectionException $objEx) {
+            $bitReturn = false;
+        }
+
+        $this->arrCurrentCache[self::$STR_HASCLASS_CACHE][$strAnnotation] = $bitReturn;
         self::$bitCacheSaveRequired = true;
         return $bitReturn;
     }
@@ -271,22 +295,23 @@ class class_reflection {
         if(isset($this->arrCurrentCache[self::$STR_PROPERTIES_CACHE][$strAnnotation]))
             return $this->arrCurrentCache[self::$STR_PROPERTIES_CACHE][$strAnnotation];
 
-        $arrProperties = $this->objReflectionClass->getProperties();
-
         $arrReturn = array();
 
-        foreach($arrProperties as $objOneProperty) {
-            $strFirstAnnotation = $this->searchFirstAnnotationInDoc($objOneProperty->getDocComment(), $strAnnotation);
-            if ($strFirstAnnotation !== false)
-                $arrReturn[$objOneProperty->getName()] = $strFirstAnnotation;
-        }
+        $arrProperties = $this->objReflectionClass->getProperties();
 
-
-        //check if there's a base-class -> inheritance
+        //check if there's a base-class -> inheritance, so base class before extending class
         $objBaseClass = $this->objReflectionClass->getParentClass();
         if($objBaseClass !== false) {
             $objBaseAnnotations = new class_reflection($objBaseClass->getName());
             $arrReturn = array_merge($arrReturn, $objBaseAnnotations->getPropertiesWithAnnotation($strAnnotation));
+        }
+
+
+        foreach($arrProperties as $objOneProperty) {
+            $strFirstAnnotation = $this->searchFirstAnnotationInDoc($objOneProperty->getDocComment(), $strAnnotation);
+            if ($strFirstAnnotation !== false) {
+                $arrReturn[$objOneProperty->getName()] = $strFirstAnnotation;
+            }
         }
 
         $this->arrCurrentCache[self::$STR_PROPERTIES_CACHE][$strAnnotation] = $arrReturn;

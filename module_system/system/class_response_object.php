@@ -1,6 +1,6 @@
 <?php
 /*"******************************************************************************************************
-*   (c) 2007-2014 by Kajona, www.kajona.de                                                              *
+*   (c) 2007-2015 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
 *	$Id$                                            *
@@ -50,11 +50,33 @@ class class_response_object {
         }
 
         header($this->getStrStatusCode());
-        header($this->getStResponseType());
+        header($this->getStrResponseType());
 
         foreach($this->arrAdditionalHeaders as $strOneHeader) {
             header($strOneHeader);
         }
+    }
+
+
+    public function sendContent() {
+
+        ignore_user_abort(true);
+        if(trim($this->strContent) != "") {
+            echo $this->strContent;
+            @ob_flush();
+            @flush();
+        }
+        else {
+            header("Content-Length: 0");
+            header("Content-Encoding: none");
+            header("Connection: close");
+            @ob_end_flush();
+            @ob_flush();
+            @flush();
+        }
+
+        if(!class_session::getInstance()->getBitClosed())
+            class_session::getInstance()->sessionClose();
     }
 
 

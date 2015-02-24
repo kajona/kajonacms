@@ -1,10 +1,8 @@
 <?php
 /*"******************************************************************************************************
 *   (c) 2004-2006 by MulchProductions, www.mulchprod.de                                                 *
-*   (c) 2007-2014 by Kajona, www.kajona.de                                                              *
+*   (c) 2007-2015 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
-*-------------------------------------------------------------------------------------------------------*
-*	$Id$                               *
 ********************************************************************************************************/
 
 /**
@@ -16,6 +14,8 @@
  *
  * @module system
  * @moduleId _system_modul_id_
+ *
+ * @blockFromAutosave
  */
 class class_module_system_setting extends class_model implements interface_model, interface_versionable {
 
@@ -144,11 +144,13 @@ class class_module_system_setting extends class_model implements interface_model
      */
     public function updateObjectToDb($strPrevId = false) {
 
+        $objChangelog = new class_module_system_changelog();
+        $objChangelog->createLogEntry($this, class_module_system_changelog::$STR_ACTION_EDIT);
+
         self::$arrInstanceCache = null;
 
         if(!class_module_system_setting::checkConfigExisting($this->getStrName())) {
             class_logger::getInstance()->addLogRow("new constant " . $this->getStrName() . " with value " . $this->getStrValue(), class_logger::$levelInfo);
-
 
             $strQuery = "INSERT INTO " . _dbprefix_ . "system_config
                         (system_config_id, system_config_name, system_config_value, system_config_type, system_config_module) VALUES
@@ -158,9 +160,6 @@ class class_module_system_setting extends class_model implements interface_model
         else {
 
             class_logger::getInstance()->addLogRow("updated constant " . $this->getStrName() . " to value " . $this->getStrValue(), class_logger::$levelInfo);
-
-            $objChangelog = new class_module_system_changelog();
-            $objChangelog->createLogEntry($this, class_module_system_changelog::$STR_ACTION_EDIT);
 
             $strQuery = "UPDATE " . _dbprefix_ . "system_config
                         SET system_config_value = ?
@@ -196,7 +195,7 @@ class class_module_system_setting extends class_model implements interface_model
      */
     public static function getAllConfigValues() {
         if(self::$arrInstanceCache == null) {
-            $strQuery = "SELECT * FROM " . _dbprefix_ . "system_config ORDER BY system_config_module ASC";
+            $strQuery = "SELECT * FROM " . _dbprefix_ . "system_config ORDER BY system_config_module ASC, system_config_name DESC";
             $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array(), null, null, false);
             foreach($arrIds as $arrOneId) {
                 $arrOneId["system_id"] = $arrOneId["system_config_id"];
@@ -204,6 +203,9 @@ class class_module_system_setting extends class_model implements interface_model
                 self::$arrInstanceCache[$arrOneId["system_config_id"]] = new class_module_system_setting($arrOneId["system_config_id"]);
             }
         }
+
+        if(self::$arrInstanceCache == null)
+            return array();
 
         return self::$arrInstanceCache;
     }

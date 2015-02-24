@@ -1,7 +1,7 @@
 <?php
 /*"******************************************************************************************************
 *   (c) 2004-2006 by MulchProductions, www.mulchprod.de                                                 *
-*   (c) 2007-2014 by Kajona, www.kajona.de                                                              *
+*   (c) 2007-2015 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 ********************************************************************************************************/
 
@@ -42,8 +42,8 @@ class class_db_sqlite3 extends class_db_base  {
 
         try {
             $this->linkDB = new SQLite3(_realpath_.$this->strDbFile);
-            $this->_query('PRAGMA encoding = "UTF-8"');
-            $this->_query('PRAGMA short_column_names = ON');
+            $this->_pQuery('PRAGMA encoding = "UTF-8"', array());
+            $this->_pQuery('PRAGMA short_column_names = ON', array());
             if(method_exists($this->linkDB, "busyTimeout"))
                 $this->linkDB->busyTimeout(5000);
 
@@ -63,70 +63,174 @@ class class_db_sqlite3 extends class_db_base  {
         $this->linkDB->close();
     }
 
+
+    private function buildAndCopyTempTables($strTargetTableName, $arrSourceTableInfo, $arrTargetTableInfo) {
+        $bitReturn = true;
+
+        $arrSourceColumns = array();
+        array_walk($arrSourceTableInfo, function($arrValue) use (&$arrSourceColumns) {
+            $arrSourceColumns[] = $arrValue["columnName"];
+        });
+
+        $arrTargetColumns = array();
+        array_walk($arrTargetTableInfo, function($arrValue) use (&$arrTargetColumns) {
+            $arrTargetColumns[] = $arrValue["columnName"];
+        });
+
+
+        //build the a temp table
+        $strQuery = "CREATE TABLE ".$strTargetTableName."_temp ( \n";
+        //loop the fields
+        foreach($arrTargetTableInfo as $intI => $arrOneColumn) {
+            $strQuery .= " ".$arrOneColumn["columnName"]." ".$arrOneColumn["columnType"];
+            //nullable?
+            if($intI == 0) {
+                $strQuery .= " NOT NULL, \n";
+            }
+            else {
+                $strQuery .= ", \n";
+            }
+
+        }
+
+        //primary keys
+        $strQuery .= " PRIMARY KEY (".$arrTargetTableInfo[0]["columnName"].") \n";
+        $strQuery .= ") ";
+
+        $bitReturn = $bitReturn && $this->_pQuery($strQuery, array());
+
+        //copy all values
+        $strQuery = "INSERT INTO ".$strTargetTableName."_temp (".implode(",", $arrTargetColumns).") SELECT ".implode(",", $arrSourceColumns)." FROM ".$strTargetTableName;
+        $bitReturn = $bitReturn && $this->_pQuery($strQuery, array());
+
+        $strQuery = "DROP TABLE ".$strTargetTableName;
+        $bitReturn = $bitReturn && $this->_pQuery($strQuery, array());
+
+        return $bitReturn && $this->renameTable($strTargetTableName."_temp", $strTargetTableName);
+    }
+
+
     /**
-     * Sends a query (e.g. an update) to the database
+     * Renames a single column of the table
      *
-     * @param string $strQuery
+     * @param $strTable
+     * @param $strOldColumnName
+     * @param $strNewColumnName
+     * @param $strNewDatatype
      *
      * @return bool
+     * @since 4.6
      */
-    public function _query($strQuery) {
-        $strQuery = $this->fixQuoting($strQuery);
-        if($this->linkDB->query($strQuery) === false)
-            return false;
-        return true;
+    public function changeColumn($strTable, $strOldColumnName, $strNewColumnName, $strNewDatatype) {
+
+        $arrTableInfo = $this->getColumnsOfTable($strTable);
+        $arrTargetTableInfo = array();
+        foreach($arrTableInfo as $arrOneColumn) {
+            if($arrOneColumn["columnName"] == $strOldColumnName) {
+                $arrNewRow = array(
+                    "columnName" => $strNewColumnName,
+                    "columnType" => $this->getDatatype($strNewDatatype)
+                );
+
+                $arrTargetTableInfo[] = $arrNewRow;
+            }
+            else {
+                $arrTargetTableInfo[] = $arrOneColumn;
+            }
+
+        }
+
+        return $this->buildAndCopyTempTables($strTable, $arrTableInfo, $arrTargetTableInfo);
     }
+
+
+    /**
+     * removes a single column from the table
+     *
+     * @param $strTable
+     * @param $strColumn
+     *
+     * @return bool
+     * @since 4.6
+     */
+    public function removeColumn($strTable, $strColumn) {
+
+        $arrTableInfo = $this->getColumnsOfTable($strTable);
+        $arrTargetTableInfo = array();
+        foreach($arrTableInfo as $arrOneColumn) {
+            if($arrOneColumn["columnName"] != $strColumn) {
+                $arrTargetTableInfo[] = $arrOneColumn;
+            }
+
+        }
+
+        return $this->buildAndCopyTempTables($strTable, $arrTargetTableInfo, $arrTargetTableInfo);
+    }
+
 
     /**
      * Creates a single query in order to insert multiple rows at one time.
      * For most databases, this will create s.th. like
      * INSERT INTO $strTable ($arrColumns) VALUES (?, ?), (?, ?)...
-     *
      * Please note that this method is used to create the query itself, based on the Kajona-internal syntax.
      * The query is fired to the database by class_db
      *
      * @param string $strTable
      * @param string[] $arrColumns
      * @param array $arrValueSets
-     * @param string &$strQuery
-     * @param array &$arrParams
+     * @param class_db $objDb
      *
-     * @return void
+     * @return bool
      */
-    public function convertMultiInsert($strTable, $arrColumns, $arrValueSets, &$strQuery, &$arrParams) {
+    public function triggerMultiInsert($strTable, $arrColumns, $arrValueSets, class_db $objDb) {
+        $bitReturn = true;
 
-        $arrVersion = SQLite3::version();
-        if(version_compare("3.7.11", $arrVersion["versionString"], "<=")) {
-            parent::convertMultiInsert($strTable, $arrColumns, $arrValueSets, $strQuery, $arrParams);
-        }
-        //legacy code
-        else {
+        //ugly hack for sqlite 3: it only supports 999 params per query as maximum, so split into several parts
+        //calc the number of max rows per insert. to be sure split it down to 950
+        $intSetsPerInsert = floor(950 / count($arrColumns));
+        foreach(array_chunk($arrValueSets, $intSetsPerInsert) as $arrSingleValueSet) {
 
-            $arrSafeColumns = array();
-            $arrPlaceholder = array();
-            foreach($arrColumns as $strOneColumn) {
-                $arrSafeColumns[] = $this->encloseColumnName($strOneColumn);
-                $arrPlaceholder[] = "?";
+
+            $arrVersion = SQLite3::version();
+            if(version_compare("3.7.11", $arrVersion["versionString"], "<=")) {
+                $bitReturn = parent::triggerMultiInsert($strTable, $arrColumns, $arrSingleValueSet, $objDb) && $bitReturn;
             }
+            //legacy code
+            else {
 
-            $arrParams = array();
-
-            $strQuery = "INSERT INTO ".$this->encloseTableName($strTable)."  (".implode(",", $arrSafeColumns).") ";
-            for($intI = 0; $intI < count($arrValueSets); $intI++) {
-
-                $arrTemp = array();
-                for($intK = 0; $intK < count($arrColumns); $intK++) {
-                    $arrTemp[] = " ? AS ".$this->encloseColumnName($arrColumns[$intK]);
+                $arrSafeColumns = array();
+                $arrPlaceholder = array();
+                foreach($arrColumns as $strOneColumn) {
+                    $arrSafeColumns[] = $this->encloseColumnName($strOneColumn);
+                    $arrPlaceholder[] = "?";
                 }
 
-                if($intI == 0)
-                    $strQuery .= " SELECT ".implode(", ", $arrTemp);
-                else
-                    $strQuery .= " UNION SELECT ".implode(", ", $arrTemp);
+                $arrParams = array();
 
-                $arrParams = array_merge($arrParams, $arrValueSets[$intI]);
+                $strQuery = "INSERT INTO ".$this->encloseTableName($strTable)."  (".implode(",", $arrSafeColumns).") ";
+                for($intI = 0; $intI < count($arrSingleValueSet); $intI++) {
+
+                    $arrTemp = array();
+                    for($intK = 0; $intK < count($arrColumns); $intK++) {
+                        $arrTemp[] = " ? AS ".$this->encloseColumnName($arrColumns[$intK]);
+                    }
+
+                    if($intI == 0) {
+                        $strQuery .= " SELECT ".implode(", ", $arrTemp);
+                    }
+                    else {
+                        $strQuery .= " UNION SELECT ".implode(", ", $arrTemp);
+                    }
+
+                    $arrParams = array_merge($arrParams, $arrSingleValueSet[$intI]);
+                }
+
+                $objDb->_pQuery($strQuery, $arrParams);
             }
+
         }
+
+        return $bitReturn;
     }
 
     /**
@@ -163,25 +267,6 @@ class class_db_sqlite3 extends class_db_base  {
 
         return true;
     }
-
-    /**
-     * This method is used to retrieve an array of resultsets from the database
-     *
-     * @param string $strQuery
-     *
-     * @return array
-     */
-    public function getArray($strQuery) {
-        $strQuery = $this->fixQuoting($strQuery);
-        $arrReturn = array();
-        $resultSet = $this->linkDB->query($strQuery);
-        if(!$resultSet)
-            return false;
-        while($arrRow = $resultSet->fetchArray(SQLITE3_ASSOC))
-            $arrReturn[] = $arrRow;
-        return $arrReturn;
-    }
-
 
     /**
      * This method is used to retrieve an array of resultsets from the database using
@@ -264,9 +349,10 @@ class class_db_sqlite3 extends class_db_base  {
      */
     public function getColumnsOfTable($strTableName) {
         $arrColumns = array();
-        $arrTableInfo = $this->getArray("SELECT sql FROM sqlite_master WHERE type='table' and name='".$strTableName."'");
+        $arrTableInfo = $this->getPArray("SELECT sql FROM sqlite_master WHERE type='table' and name=?", array($strTableName));
         if(!empty($arrTableInfo)) {
             $strTableDef = $arrTableInfo[0]["sql"];
+            $strTableDef = uniStrReplace("\"", "", $strTableDef);
 
             // Extract the column definitions from the create statement
             $arrMatch = array();
@@ -275,8 +361,9 @@ class class_db_sqlite3 extends class_db_base  {
             // Get all column names and types
             $strColumnDef = $arrMatch[1];
             $intPrimaryKeyPos = strripos($strColumnDef, "PRIMARY KEY");
-            if($intPrimaryKeyPos !== false)
+            if($intPrimaryKeyPos !== false) {
                 $strColumnDef = substr($strColumnDef, 0, $intPrimaryKeyPos);
+            }
             preg_match_all("/\s*([a-z_0-9]+)\s+([a-z]+)[^,]+/ism", trim($strColumnDef), $arrMatch, PREG_SET_ORDER);
 
             foreach($arrMatch as $arrColumnInfo)
@@ -317,13 +404,13 @@ class class_db_sqlite3 extends class_db_base  {
     public function createTable($strName, $arrFields, $arrKeys, $arrIndices = array(), $bitTxSafe = true) {
         $arrTables = $this->getTables();
         foreach($arrTables as $arrTable)
-            if($arrTable["name"] == _dbprefix_.$strName)
+            if($arrTable["name"] == $strName)
                 return true;
 
         $strQuery = "";
 
         //build the mysql code
-        $strQuery .= "CREATE TABLE "._dbprefix_.$strName." ( \n";
+        $strQuery .= "CREATE TABLE ".$strName." ( \n";
 
         //loop the fields
         foreach($arrFields as $strFieldName => $arrColumnSettings) {
@@ -350,11 +437,11 @@ class class_db_sqlite3 extends class_db_base  {
 
         $strQuery .= ") ";
 
-        $bitCreate = $this->_query($strQuery);
+        $bitCreate = $this->_pQuery($strQuery, array());
 
         if($bitCreate && count($arrIndices) > 0) {
-            $strQuery = "CREATE INDEX ix_".generateSystemid()." ON "._dbprefix_.$strName." ( ".implode(", ", $arrIndices).") ";
-            $bitCreate = $bitCreate && $this->_query($strQuery);
+            $strQuery = "CREATE INDEX ix_".generateSystemid()." ON ".$strName." ( ".implode(", ", $arrIndices).") ";
+            $bitCreate = $bitCreate && $this->_pQuery($strQuery, array());
         }
 
         return $bitCreate;
@@ -366,7 +453,7 @@ class class_db_sqlite3 extends class_db_base  {
      * @return void
      */
     public function transactionBegin() {
-        $this->_query("BEGIN TRANSACTION");
+        $this->_pQuery("BEGIN TRANSACTION", array());
     }
 
     /**
@@ -374,7 +461,7 @@ class class_db_sqlite3 extends class_db_base  {
      * @return void
      */
     public function transactionCommit() {
-        $this->_query("COMMIT TRANSACTION");
+        $this->_pQuery("COMMIT TRANSACTION", array());
     }
 
     /**
@@ -382,7 +469,7 @@ class class_db_sqlite3 extends class_db_base  {
      * @return void
      */
     public function transactionRollback() {
-        $this->_query("ROLLBACK TRANSACTION");
+        $this->_pQuery("ROLLBACK TRANSACTION", array());
     }
 
     /**
@@ -420,7 +507,7 @@ class class_db_sqlite3 extends class_db_base  {
     }
 
     /**
-     * Imports the given db-dump file to the database. The filename ist relativ to _realpath_
+     * Imports the given db-dump file to the database. The filename ist relative to _realpath_
      *
      * @param string $strFilename
      *
@@ -530,6 +617,9 @@ class class_db_sqlite3 extends class_db_base  {
         return $objStmt;
     }
 
+    public function encloseTableName($strTable) {
+        return "'".$strTable."'";
+    }
 
 }
 

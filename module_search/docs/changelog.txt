@@ -1,5 +1,12 @@
 Module Search
 
+V4.6 ----------------------------------------------------------------------------------------------------
+NEW: module_search | deferred indexer -> added an optional workflow used for a deferred indexing of objects. if the workflow-engine is installed and running, deferred indexing of objects reduces the complexity of direct object updates and deletions, boosting the systems' perfomance
+NEW: module_search | installer -> the index is updated only once for update sequences spanning over more than one version
+NEW: module_search | index rebuild task -> rebuilding the search index shows a progress bar and in-process information
+BUG: module_search | analyzer -> lowerize function now uses uniStrLower (this caused problems in windows system if string contains utf8 characters)
+BUG: module_search | search_ajax_small.tpl -> the result-container was shown for empty results (or to short queries), too. is now hidden completely if there's no content [ticket #909]
+
 V4.5 ----------------------------------------------------------------------------------------------------
 NEW: module_search | search_result -> the result contains the query itself, too [ticket #900]
 NEW: module_search | interface_search_portalobject -> changed the semantic of the updateSearchResult method. If necessary, the method may return an array of results instead of only updating the passed result object. This makes sure linked contents (such as media-files or faqs) are found on all sites [ticket #900]
@@ -34,8 +41,8 @@ NEW: class_module_search_metadata_filter is able to generate the filter-query on
 NEW: the system-table joins are only created if a metadata-filter is set up
 NEW: added a count-method to the query-interface
 NEW: added a real paging to the search result list (reducing the number of object instantiations)
-NEW: only documents with at least one content-entry are added to the document-index, emtpy documents are skipped
-NEW: removed the backend seach plugins. no longer required, search is index-based
+NEW: only documents with at least one content-entry are added to the document-index, empty documents are skipped
+NEW: removed the backend search plugins. no longer required, search is index-based
 
 
 V4.3 ----------------------------------------------------------------------------------------------------

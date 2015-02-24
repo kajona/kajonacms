@@ -1,9 +1,7 @@
 <?php
 /*"******************************************************************************************************
-*   (c) 2007-2014 by Kajona, www.kajona.de                                                              *
+*   (c) 2007-2015 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
-*-------------------------------------------------------------------------------------------------------*
-*	$Id$                          *
 ********************************************************************************************************/
 
 /**
@@ -23,7 +21,7 @@ class class_module_messaging_message extends class_model implements interface_mo
 
     /**
      * @var string
-     * @tableColumn message_user
+     * @tableColumn messages.message_user
      * @tableColumnDatatype char20
      * @tableColumnIndex
      * @fieldType user
@@ -34,7 +32,7 @@ class class_module_messaging_message extends class_model implements interface_mo
 
     /**
      * @var string
-     * @tableColumn message_title
+     * @tableColumn messages.message_title
      * @tableColumnDatatype char254
      * @fieldType text
      * @fieldLabel message_subject
@@ -46,8 +44,8 @@ class class_module_messaging_message extends class_model implements interface_mo
 
     /**
      * @var string
-     * @tableColumn message_body
-     * @tableColumnDatatype text
+     * @tableColumn messages.message_body
+     * @tableColumnDatatype longtext
      * @fieldType textarea
      * @fieldLabel message_body
      * @fieldMandatory
@@ -59,7 +57,7 @@ class class_module_messaging_message extends class_model implements interface_mo
 
     /**
      * @var bool
-     * @tableColumn message_read
+     * @tableColumn messages.message_read
      * @tableColumnDatatype int
      * @tableColumnIndex
      */
@@ -69,28 +67,28 @@ class class_module_messaging_message extends class_model implements interface_mo
 
     /**
      * @var string
-     * @tableColumn message_internalidentifier
+     * @tableColumn messages.message_internalidentifier
      * @tableColumnDatatype char254
      */
     private $strInternalIdentifier = "";
 
     /**
      * @var string
-     * @tableColumn message_provider
+     * @tableColumn messages.message_provider
      * @tableColumnDatatype char254
      */
     private $strMessageProvider = "";
 
     /**
      * @var string
-     * @tableColumn message_sender
+     * @tableColumn messages.message_sender
      * @tableColumnDatatype char20
      */
     private $strSenderId = "";
 
     /**
      * @var string
-     * @tableColumn message_messageref
+     * @tableColumn messages.message_messageref
      * @tableColumnDatatype char20
      * @fieldType hidden
      */

@@ -60,6 +60,7 @@
                 <exclude name="*/**/.svn"/>
                 <exclude name="*/**/_buildfiles"/>
                 <exclude name="*/**/_vagrant"/>
+                <exclude name="*/**/_docker"/>
                 <include name="*/**"/>
                 <include name="*/*"/>
             </fileset>
@@ -86,25 +87,14 @@
         <delete dir="${basedir}${tempPath}/core/_testing"/>
         <delete dir="${basedir}${tempPath}/core/_buildfiles"/>
         <delete dir="${basedir}${tempPath}/core/_vagrant"/>
+        <delete dir="${basedir}${tempPath}/core/_docker"/>
         <delete dir="${basedir}${tempPath}/.idea"/>
 
-        <antcall target="buildPackageHelper" />
+        <antcall target="buildPackageHelperProject" />
 
         <zip destfile="${basedir}${packagesPath}/${projectName}_full_${DSTAMP}-${TSTAMP}.zip">
             <fileset dir="${basedir}${tempPath}/../" />
         </zip>
-    </target>
-
-
-
-    <target name="buildPackageHelper" description="triggers the project setup and the compilation / compression of css / js files">
-        <!--<exec executable="php" dir="${basedir}"  failonerror="on" >-->
-            <!--<arg line="-f buildProject.php ${tempPath} onlySetup"/>-->
-        <!--</exec>-->
-        <antcall target="compileLess" />
-        <antcall target="compressCss" />
-        <antcall target="compressJs" />
-        <antcall target="cleanZipContent" />
     </target>
 
 </project>

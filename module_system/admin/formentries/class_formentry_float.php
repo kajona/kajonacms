@@ -1,9 +1,7 @@
 <?php
 /*"******************************************************************************************************
-*   (c) 2007-2014 by Kajona, www.kajona.de                                                              *
+*   (c) 2007-2015 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
-*-------------------------------------------------------------------------------------------------------*
-*	$Id$                               *
 ********************************************************************************************************/
 
 /**
@@ -52,14 +50,19 @@ class class_formentry_float extends class_formentry_base implements interface_fo
     }
 
     public function setValueToObject() {
-
+        $strOldValue = $this->getStrValue();
         $this->convertValueToFloat();
-        return parent::setValueToObject();
+        $bitReturn = parent::setValueToObject();
+        $this->setStrValue($strOldValue);
+        return $bitReturn;
     }
 
     public function validateValue() {
+        $strOldValue = $this->getStrValue();
         $this->convertValueToFloat();
-        return parent::validateValue();
+        $bitReturn = parent::validateValue();
+        $this->setStrValue($strOldValue);
+        return $bitReturn;
     }
 
 

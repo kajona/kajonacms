@@ -1,7 +1,7 @@
 <?php
 /*"******************************************************************************************************
 *   (c) 2004-2006 by MulchProductions, www.mulchprod.de                                                 *
-*   (c) 2007-2014 by Kajona, www.kajona.de                                                              *
+*   (c) 2007-2015 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
 *	$Id$                                               *
@@ -153,7 +153,7 @@ class class_csv {
             if($bitStreamToBrowser) {
                 class_response_object::getInstance()->addHeader('Pragma: private');
                 class_response_object::getInstance()->addHeader('Cache-control: private, must-revalidate');
-                class_response_object::getInstance()->setStResponseType(class_http_responsetypes::STR_TYPE_CSV);
+                class_response_object::getInstance()->setStrResponseType(class_http_responsetypes::STR_TYPE_CSV);
                 class_response_object::getInstance()->addHeader("Content-Disposition: attachment; filename=" . saveUrlEncode(trim(basename($this->strFilename))));
 
                 class_response_object::getInstance()->sendHeaders();

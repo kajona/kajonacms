@@ -1,7 +1,7 @@
 <?php
 /*"******************************************************************************************************
 *   (c) 2004-2006 by MulchProductions, www.mulchprod.de                                                 *
-*   (c) 2007-2014 by Kajona, www.kajona.de                                                              *
+*   (c) 2007-2015 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
 *	$Id$					    *
@@ -38,9 +38,9 @@ $lang["module_list_handlers"]            = "Workflow-Handlers";
 $lang["module_mylist"]                   = "My workflows";
 $lang["module_trigger"]                  = "Trigger workflows";
 $lang["myList_empty"]                    = "No workflows to process available.";
-$lang["quickhelp_list"]                  = "On the page \"all workflows\" all workflows known by the system are listed, so open, scheduled or finished ones.<br /> The workflows are listed by its due-date.";
+$lang["quickhelp_list"]                  = "This page shows all workflows currently exiting in the system.<br /> The workflows can be edited and they are listed by its due-date.";
 $lang["quickhelp_list_handlers"]         = "Workflow-Handlers represent the technical part of a single workflow. Handlers are used to set up common parameters of a running instance. In most cases, handlers are available for system-administrators, only.";
-$lang["quickhelp_my_list"]               = "The list \"my workflows\" shows all workflows relevant for the user currently being logged in.";
+$lang["quickhelp_my_list"]               = "This page shows all own workflows.<br /> The workflows can be edited and they are listed by its due-date.";
 $lang["systemtask_runworkflows_name"]    = "Run workflows";
 $lang["workflow_char1"]                  = "Char 1";
 $lang["workflow_char2"]                  = "Char 2";

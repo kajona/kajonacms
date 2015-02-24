@@ -1,7 +1,7 @@
 <?php
 /*"******************************************************************************************************
 *   (c) 2004-2006 by MulchProductions, www.mulchprod.de                                                 *
-*   (c) 2007-2014 by Kajona, www.kajona.de                                                              *
+*   (c) 2007-2015 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
 *	$Id$                                            *
@@ -23,6 +23,7 @@ class class_carrier {
     const INT_CACHE_TYPE_MODULES = 32;
     const INT_CACHE_TYPE_CLASSLOADER = 64;
     const INT_CACHE_TYPE_APC = 128;
+    const INT_CACHE_TYPE_CHANGELOG = 512;
 
 
     /**
@@ -299,6 +300,11 @@ class class_carrier {
 
         if($intCacheType & self::INT_CACHE_TYPE_APC) {
             class_apc_cache::getInstance()->flushCache();
+        }
+
+        if($intCacheType & self::INT_CACHE_TYPE_CHANGELOG) {
+            $objChangelog = new class_module_system_changelog();
+            $objChangelog->processCachedInserts();
         }
 
     }

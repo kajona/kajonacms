@@ -1,6 +1,6 @@
 <?php
 /*"******************************************************************************************************
-*   (c) 2007-2014 by Kajona, www.kajona.de                                                              *
+*   (c) 2007-2015 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
 *	$Id$             *
@@ -27,7 +27,7 @@ class class_module_packagemanager_remoteparser_v4 implements interface_packagema
 
         $objToolkit = class_carrier::getInstance()->getObjToolkit("admin");
 
-        $this->arrPageViews["pageview"] = $objToolkit->getSimplePageview(
+        $this->arrPageViews["pageview"] = $objToolkit->getPageview(
             $objIterator,
             "packagemanager",
             "addPackage",

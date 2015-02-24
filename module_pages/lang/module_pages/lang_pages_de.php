@@ -1,7 +1,7 @@
 <?php
 /*"******************************************************************************************************
 *   (c) 2004-2006 by MulchProductions, www.mulchprod.de                                                 *
-*   (c) 2007-2014 by Kajona, www.kajona.de                                                              *
+*   (c) 2007-2015 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
 *	$Id$					    *
@@ -72,7 +72,7 @@ $lang["inhalte_titel"]                   = "Seitenverwaltung - ";
 $lang["keywords"]                        = "Keywords";
 $lang["klapper"]                         = "Ordner ein-/ausblenden";
 $lang["lasteditTitle"]                   = "Letzte Änderung";
-$lang["lastuserTitle"]                   = "von";
+$lang["lastuserTitle"]                   = "Letzte Änderung von";
 $lang["liste_seiten_leer"]               = "Keine Seiten angelegt";
 $lang["action_new_element"]               = "Neues Element";
 $lang["modul_elemente"]                  = "Elemente";
@@ -170,6 +170,7 @@ $lang["template"]                        = "Template";
 $lang["templateNotLoaded"]               = "ACHTUNG: Für diese Seite wurde noch kein Template gewählt oder es konnte nicht geladen werden!";
 $lang["templateNotSelectedBefore"]       = "ACHTUNG: Für diese Seite wurde noch kein Template gewählt!";
 $lang["warning_elementsremaining"]       = "ACHTUNG<br />Im System befinden sich Seitenelemente, die keinem Platzhalter zugeordnet werden können. Dies kann der Fall sein, wenn ein Platzhalter im Template umbenannt oder gelöscht wurde. Um Platzhalter auch im System umzubenennen, können Sie die Funktion \"Platzhalter anpassen\" verwenden. Eine Liste der betroffenen Elemente befindet sich unter dieser Warnung.";
+$lang["folderview_quickselect"]          = "Schnell-Auswahl";
 
 //non-editable entries
 $lang["permissions_header"]              = array(0 => "Anzeigen", 1 => "Bearbeiten", 2 => "Löschen", 3 => "Rechte", 4 => "Elemente", 5 => "Ordner", 6 => "Platzhalter", 7 => "", 8 => "");

@@ -1,5 +1,10 @@
 Module Packagemanager
 
+V4.6 ----------------------------------------------------------------------------------------------------
+NEW: module_packagemanager | remoteloader_kajona -> changed the access from http to https
+BUG: module_packagemanager | package details view -> fixed the rendering of screenshots while processing a zipped package
+
+
 V4.5 ----------------------------------------------------------------------------------------------------
 NEW: module_packagemanager | admin -> added a info-view per package
 NEW: module_packagemanager | admin-view -> When updating a zip-based package, the request is restarted right after extracting the package. This causes the class-loader to load the new classes when installing the update

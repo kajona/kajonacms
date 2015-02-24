@@ -1,9 +1,7 @@
 <?php
 /*"******************************************************************************************************
-*   (c) 2007-2014 by Kajona, www.kajona.de                                                              *
+*   (c) 2007-2015 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
-*-------------------------------------------------------------------------------------------------------*
-*	$Id$                                   *
 ********************************************************************************************************/
 
 /**
@@ -13,8 +11,23 @@
  * @since 4.6
  * @package module_system
  */
-abstract class class_objectvalidator_base implements interface_object_validator {
-    protected $arrValidationMessages = array();
+abstract class class_objectvalidator_base  {
+
+    private $arrValidationMessages = array();
+
+    /**
+     * Validates the passed object.
+     *
+     * Return a boolean value to indicate whether the obejct is valid or not.
+     * If you want to provide additional error-messages (e.g. for a form), add them via
+     * $this->addValidationError(key, error)
+     * while key could be the name of the formentry.
+     *
+     * @abstract
+     * @param class_model $objObject - the model object to the given form
+     * @return bool
+     */
+    public abstract function validateObject(class_model $objObject);
 
 
     /**
@@ -30,4 +43,13 @@ abstract class class_objectvalidator_base implements interface_object_validator 
         }
         $this->arrValidationMessages[$strEntry][] = $strMessage;
     }
+
+    /**
+     * @return array
+     */
+    public function getArrValidationMessages() {
+        return $this->arrValidationMessages;
+    }
+
+
 }

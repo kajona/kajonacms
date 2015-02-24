@@ -1,5 +1,13 @@
 Module JQPlot
 
+V4.6 ----------------------------------------------------------------------------------------------------
+NEW: module_jqplot | resizable charts -> charts are now resizable by default
+NEW: module_jqplot | js-code -> extracted generated js-Code to several methods
+NEW: module_jqplot | animated charts-> charts are now animated when being rendered
+NEW: module_jqplot | renderer -> added support for highdpi displays (e.g. retina). this fix is not officially released by the jqplot team, so only a temporary solution
+UPDATE: module_jqplot | bar chart -> added new method setHorizontalBar to enable horizontal bar chart rendering
+BUG: module_jqplot | invisible Axis -> added methods with which it is possible to set xAxis labels invisible
+BUG: module_jqplot | point labels -> point labels are now rendered in white color
 
 V4.4 ----------------------------------------------------------------------------------------------------
 NEW: plugin canvasOverlay is now included, added setter and getter for the series options

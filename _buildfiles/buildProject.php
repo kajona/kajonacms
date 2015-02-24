@@ -85,6 +85,10 @@ class BuildHelper {
 
         class_carrier::getInstance()->flushCache(class_carrier::INT_CACHE_TYPE_DBQUERIES | class_carrier::INT_CACHE_TYPE_DBTABLES | class_carrier::INT_CACHE_TYPE_MODULES);
 
+        echo "\n\n";
+        echo "Blocking browscap update\n";
+        touch(__DIR__."/".$this->strProjectPath."/project/temp/cache.lock");
+
         echo "\n\n\n";
         echo "Searching for packages to be installed...";
         $objManager = new class_module_packagemanager_manager();

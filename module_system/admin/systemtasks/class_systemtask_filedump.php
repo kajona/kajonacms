@@ -1,7 +1,7 @@
 <?php
 /*"******************************************************************************************************
 *   (c) 2004-2006 by MulchProductions, www.mulchprod.de                                                 *
-*   (c) 2007-2014 by Kajona, www.kajona.de                                                              *
+*   (c) 2007-2015 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
 *   $Id$                                        *
@@ -26,12 +26,6 @@ class class_systemtask_filedump extends class_systemtask_base implements interfa
         "/.htaccess"
     );
 
-    /**
-     * contructor to call the base constructor
-     */
-    public function __construct() {
-        parent::__construct();
-    }
 
     /**
      * @see interface_admin_systemtask::getGroupIdenitfier()

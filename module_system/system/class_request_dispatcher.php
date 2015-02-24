@@ -1,7 +1,7 @@
 <?php
 /*"******************************************************************************************************
 *   (c) 2004-2006 by MulchProductions, www.mulchprod.de                                                 *
-*   (c) 2007-2014 by Kajona, www.kajona.de                                                              *
+*   (c) 2007-2015 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
 *	$Id$                                               *
@@ -172,12 +172,13 @@ class class_request_dispatcher {
 
                         $objConcreteModule = $objModuleRequested->getAdminInstanceOfConcreteModule();
 
+                        if(class_carrier::getInstance()->getParam("blockAction") != "1") {
+                            $objConcreteModule->action();
+                            $strReturn = $objConcreteModule->getModuleOutput();
+                        }
 
                         //React, if admin was opened by the portaleditor
                         if(class_carrier::getInstance()->getParam("peClose") == "1") {
-
-                            if(class_carrier::getInstance()->getParam("blockAction") != "1")
-                                $objConcreteModule->action();
 
                             if(getGet("peRefreshPage") != "") {
                                 $strReturn = "<html><head></head><body onload=\"parent.location = '" . urldecode(getGet("peRefreshPage")) . "';\"></body></html>";
@@ -185,10 +186,6 @@ class class_request_dispatcher {
                             else {
                                 $strReturn = "<html><head></head><body onload=\"parent.location.reload();\"></body></html>";
                             }
-                        }
-                        else {
-                            $objConcreteModule->action();
-                            $strReturn = $objConcreteModule->getModuleOutput();
                         }
 
                     }

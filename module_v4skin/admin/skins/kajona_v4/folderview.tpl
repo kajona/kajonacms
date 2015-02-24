@@ -11,9 +11,8 @@
 
     <!-- KAJONA_BUILD_LESS_START -->
     <link href="_skinwebpath_/less/bootstrap.less?_system_browser_cachebuster_" rel="stylesheet/less">
-    <link href="_skinwebpath_/less/responsive.less?_system_browser_cachebuster_" rel="stylesheet/less">
     <script> less = { env:'development' }; </script>
-    <script src="_skinwebpath_/less/less.js"></script>
+    <script src="_skinwebpath_/less/less.min.js"></script>
     <!-- KAJONA_BUILD_LESS_END -->
 
     <script src="_webpath_/core/module_system/admin/scripts/jquery/jquery.min.js?_system_browser_cachebuster_"></script>
@@ -28,21 +27,16 @@
     <![endif]-->
 
     <link rel="shortcut icon" href="_skinwebpath_/img/favicon.png">
-    <!--
-    <link rel="apple-touch-icon" href="_skinwebpath_/img/apple-touch-icon.png">
-    <link rel="apple-touch-icon" sizes="72x72" href="_skinwebpath_/img/apple-touch-icon-72x72.png">
-    <link rel="apple-touch-icon" sizes="114x114" href="_skinwebpath_/img/apple-touch-icon-114x114.png">
-    -->
 </head>
 
 <body class="dialogBody">
 
 
 <div class="container-fluid">
-    <div class="row-fluid">
+    <div class="row">
 
         <!-- CONTENT CONTAINER -->
-        <div id="content">
+        <div id="content" class="col-md-12">
             %%content%%
         </div>
     </div>
@@ -51,35 +45,106 @@
 
 
 <script src="_skinwebpath_/js/jquery.ui.touch-punch.min.js?_system_browser_cachebuster_"></script>
-<script src="_skinwebpath_/js/bootstrap-transition.js?_system_browser_cachebuster_"></script>
-<script src="_skinwebpath_/js/bootstrap-alert.js?_system_browser_cachebuster_"></script>
-<script src="_skinwebpath_/js/bootstrap-modal.js?_system_browser_cachebuster_"></script>
-<script src="_skinwebpath_/js/bootstrap-dropdown.js?_system_browser_cachebuster_"></script>
-<script src="_skinwebpath_/js/bootstrap-scrollspy.js?_system_browser_cachebuster_"></script>
-<script src="_skinwebpath_/js/bootstrap-tab.js?_system_browser_cachebuster_"></script>
-<script src="_skinwebpath_/js/bootstrap-tooltip.js?_system_browser_cachebuster_"></script>
-<script src="_skinwebpath_/js/bootstrap-popover.js?_system_browser_cachebuster_"></script>
-<script src="_skinwebpath_/js/bootstrap-button.js?_system_browser_cachebuster_"></script>
-<script src="_skinwebpath_/js/bootstrap-collapse.js?_system_browser_cachebuster_"></script>
-<script src="_skinwebpath_/js/bootstrap-carousel.js?_system_browser_cachebuster_"></script>
+<script src="_skinwebpath_/js/transition.js?_system_browser_cachebuster_"></script>
+<script src="_skinwebpath_/js/alert.js?_system_browser_cachebuster_"></script>
+<script src="_skinwebpath_/js/modal.js?_system_browser_cachebuster_"></script>
+<script src="_skinwebpath_/js/dropdown.js?_system_browser_cachebuster_"></script>
+<script src="_skinwebpath_/js/scrollspy.js?_system_browser_cachebuster_"></script>
+<script src="_skinwebpath_/js/tab.js?_system_browser_cachebuster_"></script>
+<script src="_skinwebpath_/js/tooltip.js?_system_browser_cachebuster_"></script>
+<script src="_skinwebpath_/js/popover.js?_system_browser_cachebuster_"></script>
+<script src="_skinwebpath_/js/button.js?_system_browser_cachebuster_"></script>
+<script src="_skinwebpath_/js/collapse.js?_system_browser_cachebuster_"></script>
+<script src="_skinwebpath_/js/carousel.js?_system_browser_cachebuster_"></script>
+<script src="_skinwebpath_/js/affix.js?_system_browser_cachebuster_"></script>
 
 <script src="_skinwebpath_/js/v4skin.js?_system_browser_cachebuster_"></script>
 
 
-<div class="modal hide fade fullsize" id="folderviewDialog" role="dialog">
-    <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal">×</button>
-        <h3>BROWSER</h3>
-    </div>
-    <div class="modal-body">
-        <div id="folderviewDialog_content"><!-- filled by js --></div>
+
+<!-- folderview container -->
+<div class="modal fade" id="folderviewDialog" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h3 id="folderviewDialog_title" class="modal-title">BROWSER</h3>
+            </div>
+            <div class="modal-body">
+                <div id="folderviewDialog_loading" class="loadingContainer loadingContainerBackground"></div>
+                <div id="folderviewDialog_content"><!-- filled by js --></div>
+            </div>
+        </div>
     </div>
 </div>
 
+<!-- modal dialog container -->
+<div class="modal fade" id="jsDialog_0">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h3 id="jsDialog_0_title"><!-- filled by js --></h3>
+            </div>
+            <div class="modal-body" id="jsDialog_0_content">
+                <!-- filled by js -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- confirmation dialog container -->
+<div class="modal fade" id="jsDialog_1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h3 id="jsDialog_1_title"><!-- filled by js --></h3>
+            </div>
+            <div class="modal-body" id="jsDialog_1_content">
+                <!-- filled by js -->
+            </div>
+            <div class="modal-footer">
+                <a href="#" class="btn btn-default" data-dismiss="modal" id="jsDialog_1_cancelButton">[lang,dialog_cancelButton,system]</a>
+                <a href="#" class="btn btn-default btn-primary" id="jsDialog_1_confirmButton">confirm</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- loading dialog container -->
+<div class="modal fade" id="jsDialog_3">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="jsDialog_3_title">%%dialog_title%%</h3>
+            </div>
+            <div class="modal-body">
+                <div id="dialogLoadingDiv" class="loadingContainer loadingContainerBackground"></div>
+                <div id="jsDialog_3_content"><!-- filled by js --></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- raw dialog container -->
+<div class="modal" id="jsDialog_2">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div id="jsDialog_2_content"><!-- filled by js --></div>
+            </div>
+        </div>
+    </div>
+</div>
 
 <script type="text/javascript">
-    KAJONA.admin.loader.loadFile("_skinwebpath_/js/kajona_dialog.js", function() {
-        KAJONA.admin.folderview.dialog = new KAJONA.admin.ModalDialog('folderviewDialog', 0, true, true);
+    KAJONA.admin.loader.loadFile("_webpath_/core/module_v4skin/admin/skins/kajona_v4/js/kajona_dialog.js", function() {
+        KAJONA.admin.folderview.dialog = new KAJONA.admin.ModalDialog('folderviewDialog', 0);
+        jsDialog_0 = new KAJONA.admin.ModalDialog('jsDialog_0', 0);
+        jsDialog_1 = new KAJONA.admin.ModalDialog('jsDialog_1', 1);
+        jsDialog_2 = new KAJONA.admin.ModalDialog('jsDialog_2', 2);
+        jsDialog_3 = new KAJONA.admin.ModalDialog('jsDialog_3', 3);
     }, true);
 </script>
 

@@ -1,10 +1,8 @@
 <?php
 /*"******************************************************************************************************
 *   (c) 2004-2006 by MulchProductions, www.mulchprod.de                                                 *
-*   (c) 2007-2014 by Kajona, www.kajona.de                                                              *
+*   (c) 2007-2015 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
-*-------------------------------------------------------------------------------------------------------*
-*	$Id$                            *
 ********************************************************************************************************/
 
 /**
@@ -284,7 +282,7 @@ class class_module_pages_portal extends class_portal_controller implements inter
         $arrTemplate["title"] = $objPageData->getStrBrowsername();
         $arrTemplate["additionalTitle"] = self::$strAdditionalTitle;
         $arrTemplate["canonicalUrl"] = class_link::getLinkPortalHref($objPageData->getStrName(), "", $this->getParam("action"), "", $this->getParam("systemid"));
-        
+
         //Include the $arrGlobal Elements
         $arrGlobal = array();
         $strPath = class_resourceloader::getInstance()->getPathForFile("/portal/global_includes.php");
@@ -471,6 +469,10 @@ class class_module_pages_portal extends class_portal_controller implements inter
             $strTemplateInitID = $this->objTemplate->readTemplate("/elements.tpl", "wysiwyg_ckeditor_inits");
             $strSkinInit = $this->objTemplate->fillTemplate(array(), $strTemplateInitID);
 
+            $strConfigFile = "'config_kajona_standard.js'";
+            if(is_file(_realpath_."/project/admin/scripts/ckeditor/config_kajona_standard.js"))
+                $strConfigFile = "KAJONA_WEBPATH+'/project/admin/scripts/ckeditor/config_kajona_standard.js'";
+
             $strPeToolbar .= "<script type='text/javascript'>
                 KAJONA.admin.lang.pe_rte_unsavedChanges = '" . $this->getLang("pe_rte_unsavedChanges", "pages") . "';
 
@@ -484,6 +486,7 @@ class class_module_pages_portal extends class_portal_controller implements inter
                             language : '".(class_session::getInstance()->getAdminLanguage() != "" ? class_session::getInstance()->getAdminLanguage() : "en")."',
                             filebrowserBrowseUrl : '".uniStrReplace("&amp;", "&", class_link::getLinkAdminHref("folderview", "browserChooser", "&form_element=ckeditor"))."',
                             filebrowserImageBrowseUrl : '".uniStrReplace("&amp;", "&", class_link::getLinkAdminHref("mediamanager", "folderContentFolderviewMode", "systemid="._mediamanager_default_imagesrepoid_."&form_element=ckeditor&bit_link=1"))."',
+                            customConfig : {$strConfigFile},
                             ".$strSkinInit."
                         }
                         $(KAJONA.admin.portaleditor.initPortaleditor);

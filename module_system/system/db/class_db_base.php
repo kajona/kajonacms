@@ -1,6 +1,6 @@
 <?php
 /*"******************************************************************************************************
-*   (c) 2014 by Kajona, www.kajona.de                                                                   *
+*   (c) 2014-2015 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 ********************************************************************************************************/
 
@@ -16,22 +16,76 @@ abstract class class_db_base implements interface_db_driver {
     protected $arrStatementsCache = array();
 
     /**
+     * Renames a table
+     *
+     * @param $strOldName
+     * @param $strNewName
+     *
+     * @return bool
+     * @since 4.6
+     */
+    public function renameTable($strOldName, $strNewName) {
+        return $this->_pQuery("ALTER TABLE ".($this->encloseTableName($strOldName))." RENAME TO ".($this->encloseTableName($strNewName)), array());
+    }
+
+    /**
+     * Renames a single column of the table
+     *
+     * @param $strTable
+     * @param $strOldColumnName
+     * @param $strNewColumnName
+     * @param $strNewDatatype
+     *
+     * @return bool
+     * @since 4.6
+     */
+    public function changeColumn($strTable, $strOldColumnName, $strNewColumnName, $strNewDatatype) {
+        return $this->_pQuery("ALTER TABLE ".($this->encloseTableName($strTable))." CHANGE COLUMN ".($this->encloseColumnName($strOldColumnName)." ".$this->encloseColumnName($strNewColumnName)." ".$this->getDatatype($strNewDatatype)), array());
+    }
+
+    /**
+     * Adds a column to a table
+     *
+     * @param $strTable
+     * @param $strColumn
+     * @param $strDatatype
+     *
+     * @return bool
+     * @since 4.6
+     */
+    public function addColumn($strTable, $strColumn, $strDatatype) {
+        return $this->_pQuery("ALTER TABLE ".($this->encloseTableName($strTable))." ADD ".($this->encloseColumnName($strColumn)." ".$this->getDatatype($strDatatype)), array());
+    }
+
+    /**
+     * Removes a column from a table
+     *
+     * @param $strTable
+     * @param $strColumn
+     *
+     * @return bool
+     * @since 4.6
+     */
+    public function removeColumn($strTable, $strColumn) {
+        return $this->_pQuery("ALTER TABLE ".($this->encloseTableName($strTable))." DROP COLUMN ".($this->encloseColumnName($strColumn)), array());
+    }
+
+
+    /**
      * Creates a single query in order to insert multiple rows at one time.
      * For most databases, this will create s.th. like
      * INSERT INTO $strTable ($arrColumns) VALUES (?, ?), (?, ?)...
-     *
      * Please note that this method is used to create the query itself, based on the Kajona-internal syntax.
      * The query is fired to the database by class_db
      *
      * @param string $strTable
      * @param string[] $arrColumns
      * @param array $arrValueSets
-     * @param string &$strQuery
-     * @param array &$arrParams
+     * @param class_db $objDb
      *
-     * @return void
+     * @return bool
      */
-    public function convertMultiInsert($strTable, $arrColumns, $arrValueSets, &$strQuery, &$arrParams) {
+    public function triggerMultiInsert($strTable, $arrColumns, $arrValueSets, class_db $objDb) {
 
         $arrPlaceholder = array();
         $arrSafeColumns = array();
@@ -51,25 +105,8 @@ abstract class class_db_base implements interface_db_driver {
         }
 
         $strQuery = "INSERT INTO ".$this->encloseTableName($strTable)." (".implode(",", $arrSafeColumns).") VALUES ".implode(",", $arrPlaceholderSets);
-    }
 
-    /**
-     * Returns just a part of a recodset, defined by the start- and the end-rows,
-     * defined by the params
-     *
-     * @param string $strQuery
-     * @param int $intStart
-     * @param int $intEnd
-     *
-     * @return array
-     */
-    public function getArraySection($strQuery, $intStart, $intEnd) {
-        //calculate the end-value: mysql limit: start, nr of records, so:
-        $intEnd = $intEnd - $intStart + 1;
-        //add the limits to the query
-        $strQuery .= " LIMIT " . $intStart . ", " . $intEnd;
-        //and load the array
-        return $this->getArray($strQuery);
+        return $objDb->_pQuery($strQuery, $arrParams);
     }
 
     /**

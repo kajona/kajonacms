@@ -1,6 +1,6 @@
 <?php
 /*"******************************************************************************************************
-*   (c) 2007-2014 by Kajona, www.kajona.de                                                              *
+*   (c) 2007-2015 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
 *	$Id$                                    *
@@ -21,7 +21,7 @@ class class_module_packagemanager_template extends class_model implements interf
 
     /**
      * @var string
-     * @tableColumn templatepack_name
+     * @tableColumn templatepacks.templatepack_name
      * @tableColumnDatatype char254
      * @listOrder
      *

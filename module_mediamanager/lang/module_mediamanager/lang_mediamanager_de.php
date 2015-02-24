@@ -1,7 +1,7 @@
 <?php
 /*"******************************************************************************************************
 *   (c) 2004-2006 by MulchProductions, www.mulchprod.de                                                 *
-*   (c) 2007-2014 by Kajona, www.kajona.de                                                              *
+*   (c) 2007-2015 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
 *	$Id$					    *
@@ -52,7 +52,7 @@ $lang["header_id"]                       = "Download-ID";
 $lang["header_ip"]                       = "IP/Hostname";
 $lang["header_user"]                     = "Benutzer";
 $lang["image_dimensions"]                = "Bildabmessungen";
-$lang["logbook_hint_date"]               = "Löscht alle Eintraege des Logbuchs, die älter als das angegeben Datum sind.";
+$lang["logbook_hint_date"]               = "Löscht alle Einträge des Logbuchs, die älter als das angegeben Datum sind.";
 $lang["max_size"]                        = "Maximale Dateigröße";
 $lang["mediamanager_path_h"]             = "Es können lediglich Pfade unterhalb von /files gewählt werden";
 $lang["mediamanager_upload"]             = "Dateien zum Upload auswählen";

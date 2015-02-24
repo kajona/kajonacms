@@ -1,9 +1,7 @@
 <?php
 /*"******************************************************************************************************
-*   (c) 2007-2014 by Kajona, www.kajona.de                                                              *
+*   (c) 2007-2015 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
-*-------------------------------------------------------------------------------------------------------*
-*	$Id$                               *
 ********************************************************************************************************/
 
 /**
@@ -39,8 +37,11 @@ class class_formentry_wysiwyg extends class_formentry_base implements interface_
     }
 
     public function setValueToObject() {
+        $strOldValue = $this->getStrValue();
         $this->setStrValue(processWysiwygHtmlContent($this->getStrValue()));
-        return parent::setValueToObject();
+        $bitReturn = parent::setValueToObject();
+        $this->setStrValue($strOldValue);
+        return $bitReturn;
     }
 
 

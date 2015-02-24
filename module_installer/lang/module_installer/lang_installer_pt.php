@@ -1,7 +1,7 @@
 <?php
 /*"******************************************************************************************************
 *   (c) 2004-2006 by MulchProductions, www.mulchprod.de                                                 *
-*   (c) 2007-2014 by Kajona, www.kajona.de                                                              *
+*   (c) 2007-2015 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
 *	$Id$					    *
@@ -19,7 +19,7 @@ $lang["installer_config_dbport"]         = "Porta Base de Dados";
 $lang["installer_config_dbportinfo"]     = "Para usar a porta por defeito, deixe em branco.";
 $lang["installer_config_dbprefix"]       = "Prefixo Tabela";
 $lang["installer_config_dbusername"]     = "Utilizador Base de Dados";
-$lang["installer_config_intro"]          = "<b>Configure o acesso à base de dados</b><br /><br />Nota: O servidor de internet precisa de permissões de escrita em /system/config/config.php.<br />No caso de pretender deixar os campos em branco, terá de editar o ficheiro config  /system/config/config.php manualmente utilizando um editor de texto. Para mais informações, consulte o manual.<br />";
+$lang["installer_config_intro"]          = "<b>Configure o acesso à base de dados</b><br />";
 $lang["installer_config_write"]          = "Guardar em config.php";
 $lang["installer_elements_found"]        = "<b>instalação dos elementos da página</b><br /><br />Seleccione qual dos elementos encontrados pretende instalar:<br /><br />";
 $lang["installer_finish_closer"]         = "<br />Divirta-se a utilizar o Kajona!";
@@ -29,7 +29,7 @@ $lang["installer_given"]                 = "dada";
 $lang["installer_install"]               = "Instalar";
 $lang["installer_installpe"]             = "Instalar elementos da página";
 $lang["installer_loaded"]                = "carregado";
-$lang["installer_login_installed"]       = "<br />O sistema já se encontra instalado e a conta de administrador já existe.<br />";
+$lang["installer_login_installed"]       = "O sistema já se encontra instalado e a conta de administrador já existe.";
 $lang["installer_login_intro"]           = "<b>Configurar administrador</b><br /><br />Por favor forneça nome de utilizador e palavra-passe.<br />Esses dados serão utilizados mais tarde para aceder à área administrativa.<br />Por razões de segurança, nomes de utilizador, tais como \"admin\" ou \"administrador\" deveram ser evitados.<br /><br />";
 $lang["installer_login_password"]        = "Palavra-passe";
 $lang["installer_login_save"]            = "Criar conta";
@@ -42,7 +42,7 @@ $lang["installer_next"]                  = "Próximo passo >";
 $lang["installer_nloaded"]               = "a faltar";
 $lang["installer_phpcheck_folder"]       = "Permissões de escrita em";
 $lang["installer_phpcheck_intro"]        = "<b>Bemvindo</b><br /><br />";
-$lang["installer_phpcheck_intro2"]       = "<br />A instalação do sistema é dividida em diferentes passos: <br />Verificação de permissões, configuração de Base de Dados, credênciais para aceder à administração, instalação de módulos, instalação de elementos e instalação de conteúdos de exemplo.<br /><br />Dependendo dos módulos escolhidos, o número de passos pode variar.<br /><br /> <b>Antes de correr o sistema de actualização, por favor leia as <br /><a href=\"http://www.kajona.de/update_342_to_40.html\" target=\"_blank\">instruções de actualização de  3.4.2 para 4.0</a><br /></b><br /><br /><br />As permissões nos mesmos ficheiros e a disponibilidade <br />dos módulos-php necessários está sendo verificada:<br />";
+$lang["installer_phpcheck_intro2"]       = "<br />A instalação do sistema é dividida em diferentes passos: <br />Verificação de permissões, configuração de Base de Dados, credênciais para aceder à administração, instalação de módulos, instalação de elementos e instalação de conteúdos de exemplo.<br />Dependendo dos módulos escolhidos, o número de passos pode variar.<br /><br />As permissões nos mesmos ficheiros e a disponibilidade <br />dos módulos-php necessários está sendo verificada:<br />";
 $lang["installer_phpcheck_lang"]         = "Para carregar o sistema de instalação usando uma língua diferente, use uma das seguintes ligações:<br /><br />";
 $lang["installer_phpcheck_module"]       = "Módulo PHP";
 $lang["installer_prev"]                  = "< Passo Anterior";

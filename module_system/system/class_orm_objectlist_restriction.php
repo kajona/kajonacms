@@ -1,6 +1,6 @@
 <?php
 /*"******************************************************************************************************
-*   (c) 2007-2014 by Kajona, www.kajona.de                                                              *
+*   (c) 2007-2015 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
 *   $Id$                                        *
@@ -18,6 +18,8 @@ class class_orm_objectlist_restriction {
 
     private $strWhere = "";
     private $arrParams = array();
+
+    private $strTargetClass = "";
 
     /**
      * @param string $strWhere
@@ -60,6 +62,20 @@ class class_orm_objectlist_restriction {
      */
     public function getStrWhere() {
         return $this->strWhere;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStrTargetClass() {
+        return $this->strTargetClass;
+    }
+
+    /**
+     * @param string $strTargetClass
+     */
+    public function setStrTargetClass($strTargetClass) {
+        $this->strTargetClass = $strTargetClass;
     }
 
 

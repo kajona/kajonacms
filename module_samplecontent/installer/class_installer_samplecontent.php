@@ -1,7 +1,7 @@
 <?php
 /*"******************************************************************************************************
 *   (c) 2004-2006 by MulchProductions, www.mulchprod.de                                                 *
-*   (c) 2007-2014 by Kajona, www.kajona.de                                                              *
+*   (c) 2007-2015 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
 *	$Id$                                  *
@@ -161,6 +161,12 @@ class class_installer_samplecontent extends class_installer_base implements inte
         if($arrModule["module_version"] == "4.4") {
             $strReturn .= "Updating 4.4 to 4.5...\n";
             $this->updateModuleVersion("samplecontent", "4.5");
+        }
+
+        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "4.5") {
+            $strReturn .= "Updating 4.5 to 4.6...\n";
+            $this->updateModuleVersion("samplecontent", "4.6");
         }
 
         return $strReturn;

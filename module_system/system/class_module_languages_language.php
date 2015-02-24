@@ -1,7 +1,7 @@
 <?php
 /*"******************************************************************************************************
 *   (c) 2004-2006 by MulchProductions, www.mulchprod.de                                                 *
-*   (c) 2007-2014 by Kajona, www.kajona.de                                                              *
+*   (c) 2007-2015 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
 *	$Id$                           *
@@ -21,7 +21,7 @@ class class_module_languages_language extends class_model implements interface_m
 
     /**
      * @var string
-     * @tableColumn language_name
+     * @tableColumn languages.language_name
      * @tableColumnDatatype char254
      *
      * @fieldType dropdown
@@ -35,7 +35,7 @@ class class_module_languages_language extends class_model implements interface_m
 
     /**
      * @var bool
-     * @tableColumn language_default
+     * @tableColumn languages.language_default
      * @tableColumnDatatype int
      *
      * @fieldType yesno
@@ -118,7 +118,7 @@ class class_module_languages_language extends class_model implements interface_m
 
         $objOrmList = new class_orm_objectlist();
         if($bitJustActive)
-            $objOrmList->addWhereRestriction(new class_orm_objectlist_restriction(" AND system_status != 0 "));
+            $objOrmList->addWhereRestriction(new class_orm_objectlist_systemstatus_restriction(class_orm_comparator_enum::NotEqual(), 0));
 
         return $objOrmList->getObjectList(__CLASS__, "", $intStart, $intEnd);
     }
@@ -134,7 +134,7 @@ class class_module_languages_language extends class_model implements interface_m
 
         $objOrmList = new class_orm_objectlist();
         if($bitJustActive)
-            $objOrmList->addWhereRestriction(new class_orm_objectlist_restriction(" AND system_status != 0 "));
+            $objOrmList->addWhereRestriction(new class_orm_objectlist_systemstatus_restriction(class_orm_comparator_enum::NotEqual(), 0));
 
         return $objOrmList->getObjectCount(__CLASS__);
     }
@@ -151,7 +151,7 @@ class class_module_languages_language extends class_model implements interface_m
     public static function getLanguageByName($strName) {
 
         $objOrmList = new class_orm_objectlist();
-        $objOrmList->addWhereRestriction(new class_orm_objectlist_restriction("AND language_name = ?", array($strName)));
+        $objOrmList->addWhereRestriction(new class_orm_objectlist_property_restriction("strName", class_orm_comparator_enum::Equal(), $strName));
         $arrReturn = $objOrmList->getObjectList(__CLASS__);
         if(count($arrReturn) > 0) {
             return $arrReturn[0];

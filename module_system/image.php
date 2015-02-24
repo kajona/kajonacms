@@ -1,10 +1,8 @@
 <?php
 /*"******************************************************************************************************
 *   (c) 2004-2006 by MulchProductions, www.mulchprod.de                                                 *
-*   (c) 2007-2014 by Kajona, www.kajona.de                                                              *
+*   (c) 2007-2015 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
-*-------------------------------------------------------------------------------------------------------*
-*	$Id$                                                    *
 ********************************************************************************************************/
 
 
@@ -97,39 +95,37 @@ class class_flyimage {
      */
     private function generateMediamanagerImage() {
         if(class_module_system_module::getModuleByName("mediamanager") !== null) {
+
             $objElement = new class_module_pages_pageelement($this->strElementId);
             $objPortalElement = $objElement->getConcretePortalInstance();
 
             $objFile = new class_module_mediamanager_file($this->strSystemid);
 
-
-            if($objFile->rightView()) {
-
-                $arrElementData = $objPortalElement->getElementContent($objElement->getSystemid());
-
-                class_session::getInstance()->sessionClose();
-                if (is_file(_realpath_.$objFile->getStrFilename())) {
-
-                    $objImage = new class_image2();
-                    $objImage->load($objFile->getStrFilename());
-                    $objImage->addOperation(new class_image_scale($arrElementData["gallery_maxw_d"], $arrElementData["gallery_maxh_d"]));
-                    $objImage->addOperation(new class_image_text($arrElementData["gallery_text"], $arrElementData["gallery_text_x"], $arrElementData["gallery_text_y"], 10, "#ffffff"));
-
-                    if(is_file(_realpath_.$arrElementData["gallery_overlay"])) {
-                        $objImageOverlay = new class_image2();
-                        $objImageOverlay->load($arrElementData["gallery_overlay"]);
-                        $objImage->addOperation(new class_image_overlay($arrElementData["gallery_overlay"], $arrElementData["gallery_text_x"], $arrElementData["gallery_text_y"]));
-                    }
-                    $objImage->setJpegQuality((int)$this->intQuality);
-                    $objImage->sendToBrowser();
-                }
-
-            }
-            else {
+            if(!$objFile->rightView()) {
                 class_response_object::getInstance()->setStrStatusCode(class_http_statuscodes::SC_FORBIDDEN);
                 class_response_object::getInstance()->sendHeaders();
                 return;
             }
+
+            $arrElementData = $objPortalElement->getElementContent($objElement->getSystemid());
+
+            class_session::getInstance()->sessionClose();
+            if (is_file(_realpath_.$objFile->getStrFilename())) {
+                $objImage = new class_image2();
+                $objImage->load($objFile->getStrFilename());
+                $objImage->addOperation(new class_image_scale($arrElementData["gallery_maxw_d"], $arrElementData["gallery_maxh_d"]));
+                $objImage->addOperation(new class_image_text($arrElementData["gallery_text"], $arrElementData["gallery_text_x"], $arrElementData["gallery_text_y"], 10, "#ffffff"));
+
+                if(is_file(_realpath_.$arrElementData["gallery_overlay"])) {
+                    $objImageOverlay = new class_image2();
+                    $objImageOverlay->load($arrElementData["gallery_overlay"]);
+                    $objImage->addOperation(new class_image_overlay($arrElementData["gallery_overlay"], $arrElementData["gallery_text_x"], $arrElementData["gallery_text_y"]));
+                }
+                $objImage->setJpegQuality((int)$this->intQuality);
+                $objImage->sendToBrowser();
+                return;
+            }
+
         }
 
         class_response_object::getInstance()->setStrStatusCode(class_http_statuscodes::SC_NOT_FOUND);
@@ -169,11 +165,12 @@ class class_flyimage {
             //and send it to the browser
             $objImage->setJpegQuality((int)$this->intQuality);
             $objImage->sendToBrowser();
+            return;
         }
-        else {
-            class_response_object::getInstance()->setStrStatusCode(class_http_statuscodes::SC_NOT_FOUND);
-            class_response_object::getInstance()->sendHeaders();
-        }
+
+
+        class_response_object::getInstance()->setStrStatusCode(class_http_statuscodes::SC_NOT_FOUND);
+        class_response_object::getInstance()->sendHeaders();
     }
 
 
@@ -281,7 +278,7 @@ class class_flyimage {
     }
 
     /**
-     * Generates a greyish color and registers the color to the image
+     * Generates a grayish color and registers the color to the image
      *
      * @return int color-id in image
      */
@@ -309,4 +306,6 @@ if($objImage->getImageFilename() == "kajonaCaptcha") {
 else {
     $objImage->generateImage();
 }
+
+class_core_eventdispatcher::getInstance()->notifyGenericListeners(class_system_eventidentifier::EVENT_SYSTEM_REQUEST_AFTERCONTENTSEND, array(class_request_entrypoint_enum::IMAGE()));
 

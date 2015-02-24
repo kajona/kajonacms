@@ -1,7 +1,7 @@
 <?php
 /*"******************************************************************************************************
 *   (c) 2004-2006 by MulchProductions, www.mulchprod.de                                                 *
-*   (c) 2007-2014 by Kajona, www.kajona.de                                                              *
+*   (c) 2007-2015 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
 *   $Id$                                              *
@@ -70,13 +70,17 @@ abstract class class_root {
      * The records current systemid
      * @var string
      * @templateExport
+     *
+     * @tableColumn system.system_id
      */
-    private $strSystemid;
+    private $strSystemid = "";
 
     /**
      * The records internal parent-id
      * @var string
      * @versionable
+     *
+     * @tableColumn system.system_prev_id
      */
     private $strPrevId = -1;
 
@@ -89,14 +93,16 @@ abstract class class_root {
     /**
      * The records module-number
      * @var int
+     * @tableColumn system.system_module_nr
      */
-    private $intModuleNr;
+    private $intModuleNr = 0;
 
     /**
      * The records sort-position relative to the parent record
      * @var int
+     * @tableColumn system.system_sort
      */
-    private $intSort;
+    private $intSort = -1;
 
     /**
      * The id of the user who created the record initially
@@ -104,14 +110,16 @@ abstract class class_root {
      * @versionable
      * @templateExport
      * @templateMapper user
+     * @tableColumn system.system_owner
      */
-    private $strOwner;
+    private $strOwner = "";
 
     /**
      * The id of the user last who did the last changes to the current record
      * @var string
+     * @tableColumn system.system_lm_user
      */
-    private $strLmUser;
+    private $strLmUser = "";
 
     /**
      * Timestamp of the last modification
@@ -120,49 +128,56 @@ abstract class class_root {
      * @var int
      * @templateExport
      * @templateMapper datetime
+     * @tableColumn system.system_lm_time
      */
-    private $intLmTime;
+    private $intLmTime = 0;
 
     /**
      * The id of the user locking the current record, emtpy otherwise
      * @var string
+     * @tableColumn system.system_lock_id
      */
-    private $strLockId;
+    private $strLockId = "";
 
     /**
      * Time the current locking was triggered
      * ATTENTION: time() based, so 32 bit integer
      * @todo migrate to long-timestamp
      * @var int
+     * @tableColumn system.system_lock_time
      */
-    private $intLockTime;
+    private $intLockTime = 0;
 
     /**
      * The records status
      * @var int
      * @versionable
+     * @tableColumn system.system_status
      */
-    private $intRecordStatus;
+    private $intRecordStatus = 1;
 
     /**
      * Human readable comment describing the current record
      * @var string
+     * @tableColumn system.system_comment
      */
-    private $strRecordComment;
+    private $strRecordComment = "";
 
     /**
      * Holds the current objects' class
      * @var string
+     * @tableColumn system.system_class
      */
-    private $strRecordClass;
+    private $strRecordClass = "";
 
     /**
      * Long-based representation of the timestamp the record was created initially
      * @var int
      * @templateExport
      * @templateMapper datetime
+     * @tableColumn system.system_create_date
      */
-    private $longCreateDate;
+    private $longCreateDate = 0;
 
     /**
      * The start-date of the date-table
@@ -170,6 +185,8 @@ abstract class class_root {
      * @versionable
      * @templateExport
      * @templateMapper datetime
+     *
+     * @tableColumn system_date.system_date_start
      */
     private $objStartDate = null;
 
@@ -179,6 +196,8 @@ abstract class class_root {
      * @versionable
      * @templateExport
      * @templateMapper datetime
+     *
+     * @tableColumn system_date.system_date_end
      */
     private $objEndDate = null;
 
@@ -188,6 +207,8 @@ abstract class class_root {
      * @versionable
      * @templateExport
      * @templateMapper datetime
+     *
+     * @tableColumn system_date.system_date_special
      */
     private $objSpecialDate = null;
 
@@ -219,18 +240,24 @@ abstract class class_root {
 
         $this->strSystemid = $strSystemid;
 
+        $this->setStrRecordClass(get_class($this));
+
         //try to load the current module-name and the moduleId by reflection
         $objReflection = new class_reflection($this);
         if(!isset($this->arrModule["modul"])) {
             $arrAnnotationValues = $objReflection->getAnnotationValuesFromClass(self::STR_MODULE_ANNOTATION);
-            if(count($arrAnnotationValues) > 0)
+            if(count($arrAnnotationValues) > 0) {
                 $this->setArrModuleEntry("modul", trim($arrAnnotationValues[0]));
+                $this->setArrModuleEntry("module", trim($arrAnnotationValues[0]));
+            }
         }
 
         if(!isset($this->arrModule["moduleId"])) {
             $arrAnnotationValues = $objReflection->getAnnotationValuesFromClass(self::STR_MODULEID_ANNOTATION);
-            if(count($arrAnnotationValues) > 0)
+            if(count($arrAnnotationValues) > 0) {
                 $this->setArrModuleEntry("moduleId", constant(trim($arrAnnotationValues[0])));
+                $this->setIntModuleNr(constant(trim($arrAnnotationValues[0])));
+            }
         }
 
         if($strSystemid != "") {
@@ -520,7 +547,7 @@ abstract class class_root {
                 throw new class_exception("creation of systemrecord failed", class_exception::$level_FATALERROR);
 
             //all updates are done, start the "real" update
-            $this->objDB->flushQueryCache();
+            class_carrier::getInstance()->flushCache(class_carrier::INT_CACHE_TYPE_DBQUERIES);
         }
 
         //new prev-id?
@@ -559,7 +586,7 @@ abstract class class_root {
         class_core_eventdispatcher::notifyRecordUpdatedListeners($this);
         class_core_eventdispatcher::getInstance()->notifyGenericListeners(class_system_eventidentifier::EVENT_SYSTEM_RECORDUPDATED, array($this));
 
-
+        class_carrier::getInstance()->flushCache(class_carrier::INT_CACHE_TYPE_DBQUERIES);
         return $bitReturn;
     }
 
@@ -570,30 +597,35 @@ abstract class class_root {
      * Please be aware that you are working on the new object afterwards!
      *
      * @param string $strNewPrevid
+     * @param bool $bitChangeTitle
      *
+     * @throws class_exception
      * @return bool
      */
-    public function copyObject($strNewPrevid = "") {
+    public function copyObject($strNewPrevid = "", $bitChangeTitle = true) {
 
         $this->objDB->transactionBegin();
 
         $strOldSysid = $this->getSystemid();
 
         if($strNewPrevid == "")
-            $strNewPrevid = $this->strOldPrevId;
+            $strNewPrevid = $this->strPrevId;
 
         //any date-objects to copy?
         if($this->objStartDate != null || $this->objEndDate != null || $this->objSpecialDate != null)
             $this->bitDatesChanges = true;
 
         //check if there's a title field, in most cases that could be used to change the title
-        $objReflection = new class_reflection($this);
-        $strGetter = $objReflection->getGetter("strTitle");
-        $strSetter = $objReflection->getSetter("strTitle");
-        if($strGetter != null && $strSetter != null) {
-            $strTitle = call_user_func(array($this, $strGetter));
-            if($strTitle != "")
-                call_user_func(array($this, $strSetter), $strTitle."_copy");
+        if($bitChangeTitle) {
+            $objReflection = new class_reflection($this);
+            $strGetter = $objReflection->getGetter("strTitle");
+            $strSetter = $objReflection->getSetter("strTitle");
+            if($strGetter != null && $strSetter != null) {
+                $strTitle = call_user_func(array($this, $strGetter));
+                if($strTitle != "") {
+                    call_user_func(array($this, $strSetter), $strTitle."_copy");
+                }
+            }
         }
 
         //prepare the current object
@@ -603,7 +635,7 @@ abstract class class_root {
         //call event listeners
         //TODO: remove legacy call
         $bitReturn = $bitReturn && class_core_eventdispatcher::notifyRecordCopiedListeners($strOldSysid, $this->getSystemid());
-        $bitReturn = $bitReturn && class_core_eventdispatcher::getInstance()->notifyGenericListeners(class_system_eventidentifier::EVENT_SYSTEM_RECORDCOPIED, array($strOldSysid, $this->getSystemid()));
+        $bitReturn = $bitReturn && class_core_eventdispatcher::getInstance()->notifyGenericListeners(class_system_eventidentifier::EVENT_SYSTEM_RECORDCOPIED, array($strOldSysid, $this->getSystemid(), $this));
 
 
         //process subrecords
@@ -613,7 +645,7 @@ abstract class class_root {
             if(validateSystemid($arrOneChild["system_id"])) {
                 $objInstance = class_objectfactory::getInstance()->getObject($arrOneChild["system_id"]);
                 if($objInstance !== null)
-                    $objInstance->copyObject($this->getSystemid());
+                    $objInstance->copyObject($this->getSystemid(), false);
             }
         }
 
@@ -624,6 +656,9 @@ abstract class class_root {
             $this->objDB->transactionRollback();
 
         $this->objDB->flushQueryCache();
+
+
+        $bitReturn = $bitReturn && class_core_eventdispatcher::getInstance()->notifyGenericListeners(class_system_eventidentifier::EVENT_SYSTEM_RECORDCOPYFINISHED, array($strOldSysid, $this->getSystemid(), $this));
 
         return $bitReturn;
     }
@@ -739,6 +774,7 @@ abstract class class_root {
             //TODO: remove legacy call
             class_core_eventdispatcher::notifyPrevidChangedListeners($this->getSystemid(), $this->strOldPrevId, $this->strPrevId);
             class_core_eventdispatcher::getInstance()->notifyGenericListeners(class_system_eventidentifier::EVENT_SYSTEM_PREVIDCHANGED, array($this->getSystemid(), $this->strOldPrevId, $this->strPrevId));
+            $this->strOldPrevId = $this->strPrevId;
         }
 
         return $bitReturn;
@@ -752,25 +788,14 @@ abstract class class_root {
      * @param string $strPrevId    Previous ID in the tree-structure
      * @param string $strComment Comment to identify the record
      * @param bool $bitRight Should the right-record be generated?
-     * @param int|string $intModuleNr Number of the module this record belongs to
-     * @param string $strSystemId SystemID to be used
-     * @param int $intStatus    Active (1)/Inactive (0)?
-     * @param null|string $strClass
      * @return string The ID used/generated
      */
-    public function createSystemRecord($strPrevId, $strComment, $bitRight = true, $intModuleNr = "", $strSystemId = "", $intStatus = 1, $strClass = null) {
-        //Do we need a new SystemID?
-        if($strSystemId == "")
-            $strSystemId = generateSystemid();
+    public function createSystemRecord($strPrevId, $strComment, $bitRight = true) {
+
+        $strSystemId = generateSystemid();
 
         $this->setStrSystemid($strSystemId);
 
-        if($strClass === null)
-            $strClass = get_class($this);
-
-        //Given a ModuleNr?
-        if($intModuleNr == "")
-            $intModuleNr = $this->arrModule["moduleId"];
         //Correct prevID
         if($strPrevId == "")
             $strPrevId = 0;
@@ -796,23 +821,21 @@ abstract class class_root {
             array(
                 $strSystemId,
                 $strPrevId,
-                (int)$intModuleNr,
+                $this->getIntModuleNr(),
                 $this->objSession->getUserID(),
                 class_date::getCurrentTimestamp(),
                 $this->objSession->getUserID(),
                 time(),
-                (int)$intStatus,
+                (int)$this->getIntRecordStatus(),
                 $strComment,
                 (int)($intSiblings+1),
-                $strClass
+                $this->getStrRecordClass()
             )
         );
 
         //Do we need a Rights-Record?
         if($bitRight) {
-            $strQuery = "INSERT INTO "._dbprefix_."system_right
-                         (right_id, right_inherit) VALUES
-                         (?, 1)";
+            $strQuery = "INSERT INTO "._dbprefix_."system_right (right_id, right_inherit) VALUES (?, 1)";
 
             $this->objDB->_pQuery($strQuery, array($strSystemId));
             //update rights to inherit
@@ -823,6 +846,8 @@ abstract class class_root {
 
         $this->objDB->flushQueryCache();
         $this->internalInit();
+        //reset the old previd since we're having a new record
+        $this->strOldPrevId = -1;
 
         return $strSystemId;
 
@@ -1125,7 +1150,6 @@ abstract class class_root {
      */
     public function setAbsolutePosition($intNewPosition, $arrRestrictionModules = false) {
         $this->objSortManager->setAbsolutePosition($intNewPosition, $arrRestrictionModules);
-        $this->internalInit();
     }
 
     /**
@@ -1170,12 +1194,7 @@ abstract class class_root {
      *
      */
     public final function deleteSystemRecord($strSystemid, $bitRight = true, $bitDate = true) {
-
-        //try to call other modules, maybe wanting to delete anything in addition, if the current record
-        //is going to be deleted
-        //TODO: remove legacy call
-        $bitResult = class_core_eventdispatcher::notifyRecordDeletedListeners($strSystemid, get_class($this));
-        $bitResult = $bitResult && class_core_eventdispatcher::getInstance()->notifyGenericListeners(class_system_eventidentifier::EVENT_SYSTEM_RECORDDELETED, array($strSystemid, get_class($this)));
+        $bitResult = true;
 
         //Start a tx before deleting anything
         $this->objDB->transactionBegin();
@@ -1194,6 +1213,12 @@ abstract class class_root {
             $strQuery = "DELETE FROM "._dbprefix_."system_date WHERE system_date_id = ?";
             $bitResult = $bitResult &&  $this->objDB->_pQuery($strQuery, array($strSystemid));
         }
+
+        //try to call other modules, maybe wanting to delete anything in addition, if the current record
+        //is going to be deleted
+        //TODO: remove legacy call
+        $bitResult = $bitResult && class_core_eventdispatcher::notifyRecordDeletedListeners($strSystemid, get_class($this));
+        $bitResult = $bitResult && class_core_eventdispatcher::getInstance()->notifyGenericListeners(class_system_eventidentifier::EVENT_SYSTEM_RECORDDELETED, array($strSystemid, get_class($this)));
 
         //end tx
         if($bitResult) {
@@ -1507,7 +1532,7 @@ abstract class class_root {
 
         if(validateSystemid($this->getStrLmUser())) {
             $objUser = new class_module_user_user($this->getStrLmUser());
-            return $objUser->getStrUsername();
+            return $objUser->getStrDisplayName();
         }
         else
             return "System";
@@ -1700,8 +1725,10 @@ abstract class class_root {
         $bitReturn = true;
 
         if($intPrevStatus != $intRecordStatus && $intPrevStatus != -1) {
-            if(validateSystemid($this->getSystemid()))
+            if(validateSystemid($this->getSystemid())) {
                 $this->updateObjectToDb();
+                class_carrier::getInstance()->flushCache(class_carrier::INT_CACHE_TYPE_ORMCACHE | class_carrier::INT_CACHE_TYPE_DBQUERIES);
+            }
             if($bitFireStatusChangeEvent && validateSystemid($this->getSystemid())) {
                 $bitReturn = class_core_eventdispatcher::notifyStatusChangedListeners($this->getSystemid(), $intRecordStatus);
             }

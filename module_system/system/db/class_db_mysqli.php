@@ -1,7 +1,7 @@
 <?php
 /*"******************************************************************************************************
 *   (c) 2004-2006 by MulchProductions, www.mulchprod.de                                                 *
-*   (c) 2007-2014 by Kajona, www.kajona.de                                                              *
+*   (c) 2007-2015 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 ********************************************************************************************************/
 
@@ -55,11 +55,11 @@ class class_db_mysqli extends class_db_base {
             if(@$this->linkDB->select_db($strDbName)) {
                 //erst ab mysql-client-bib > 4
                 //mysqli_set_charset($this->linkDB, "utf8");
-                $this->_query("SET NAMES 'utf8'");
-                $this->_query("SET CHARACTER SET utf8");
-                $this->_query("SET character_set_connection ='utf8'");
-                $this->_query("SET character_set_database ='utf8'");
-                $this->_query("SET character_set_server ='utf8'");
+                $this->_pQuery("SET NAMES 'utf8'", array());
+                $this->_pQuery("SET CHARACTER SET utf8", array());
+                $this->_pQuery("SET character_set_connection ='utf8'", array());
+                $this->_pQuery("SET character_set_database ='utf8'", array());
+                $this->_pQuery("SET character_set_server ='utf8'", array());
                 return true;
             }
             else {
@@ -79,18 +79,6 @@ class class_db_mysqli extends class_db_base {
         $this->linkDB->close();
     }
 
-
-    /**
-     * Sends a query (e.g. an update) to the database
-     *
-     * @param string $strQuery
-     *
-     * @return bool
-     */
-    public function _query($strQuery) {
-        $bitReturn = $this->linkDB->query($strQuery);
-        return $bitReturn;
-    }
 
     /**
      * Sends a prepared statement to the database. All params must be represented by the ? char.
@@ -120,26 +108,6 @@ class class_db_mysqli extends class_db_base {
         }
 
         return $bitReturn;
-    }
-
-    /**
-     * This method is used to retrieve an array of resultsets from the database
-     *
-     * @param string $strQuery
-     *
-     * @return mixed
-     */
-    public function getArray($strQuery) {
-        $arrReturn = array();
-        $intCounter = 0;
-        $resultSet = $this->linkDB->query($strQuery);
-        if(!$resultSet) {
-            return false;
-        }
-        while($arrRow = $resultSet->fetch_array(MYSQLI_BOTH)) {
-            $arrReturn[$intCounter++] = $arrRow;
-        }
-        return $arrReturn;
     }
 
     /**
@@ -218,7 +186,7 @@ class class_db_mysqli extends class_db_base {
      * @return mixed
      */
     public function getTables() {
-        $arrTemp = $this->getArray("SHOW TABLE STATUS");
+        $arrTemp = $this->getPArray("SHOW TABLE STATUS", array());
         foreach($arrTemp as $intKey => $arrOneTemp) {
             $arrTemp[$intKey]["name"] = $arrTemp[$intKey]["Name"];
         }
@@ -227,7 +195,7 @@ class class_db_mysqli extends class_db_base {
 
     /**
      * Looks up the columns of the given table.
-     * Should return an array for each row consting of:
+     * Should return an array for each row consisting of:
      * array ("columnName", "columnType")
      *
      * @param string $strTableName
@@ -236,7 +204,7 @@ class class_db_mysqli extends class_db_base {
      */
     public function getColumnsOfTable($strTableName) {
         $arrReturn = array();
-        $arrTemp = $this->getArray("SHOW COLUMNS FROM " . dbsafeString($strTableName));
+        $arrTemp = $this->getPArray("SHOW COLUMNS FROM ".$this->encloseTableName(class_db::getInstance()->dbsafeString($strTableName)), array());
         foreach($arrTemp as $arrOneColumn) {
             $arrReturn[] = array(
                 "columnName" => $arrOneColumn["Field"],
@@ -323,7 +291,7 @@ class class_db_mysqli extends class_db_base {
         $strQuery = "";
 
         //build the mysql code
-        $strQuery .= "CREATE TABLE IF NOT EXISTS `" . _dbprefix_ . $strName . "` ( \n";
+        $strQuery .= "CREATE TABLE IF NOT EXISTS `" .$strName . "` ( \n";
 
         //loop the fields
         foreach($arrFields as $strFieldName => $arrColumnSettings) {
@@ -365,7 +333,7 @@ class class_db_mysqli extends class_db_base {
             $strQuery .= " ENGINE = innodb CHARACTER SET utf8 COLLATE utf8_unicode_ci;";
         }
 
-        return $this->_query($strQuery);
+        return $this->_pQuery($strQuery, array());
     }
 
     /**
@@ -376,8 +344,8 @@ class class_db_mysqli extends class_db_base {
         //Autocommit 0 setzten
         $strQuery = "SET AUTOCOMMIT = 0";
         $strQuery2 = "BEGIN";
-        $this->_query($strQuery);
-        $this->_query($strQuery2);
+        $this->_pQuery($strQuery, array());
+        $this->_pQuery($strQuery2, array());
     }
 
     /**
@@ -385,10 +353,10 @@ class class_db_mysqli extends class_db_base {
      * @return void
      */
     public function transactionCommit() {
-        $str_query = "COMMIT";
-        $str_query2 = "SET AUTOCOMMIT = 1";
-        $this->_query($str_query);
-        $this->_query($str_query2);
+        $str_pQuery = "COMMIT";
+        $str_pQuery2 = "SET AUTOCOMMIT = 1";
+        $this->_pQuery($str_pQuery, array());
+        $this->_pQuery($str_pQuery2, array());
     }
 
     /**
@@ -398,8 +366,8 @@ class class_db_mysqli extends class_db_base {
     public function transactionRollback() {
         $strQuery = "ROLLBACK";
         $strQuery2 = "SET AUTOCOMMIT = 1";
-        $this->_query($strQuery);
-        $this->_query($strQuery2);
+        $this->_pQuery($strQuery, array());
+        $this->_pQuery($strQuery2, array());
     }
 
     /**

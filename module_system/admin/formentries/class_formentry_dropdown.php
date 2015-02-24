@@ -1,9 +1,7 @@
 <?php
 /*"******************************************************************************************************
-*   (c) 2007-2014 by Kajona, www.kajona.de                                                              *
+*   (c) 2007-2015 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
-*-------------------------------------------------------------------------------------------------------*
-*	$Id$                               *
 ********************************************************************************************************/
 
 /**
@@ -24,6 +22,7 @@ class class_formentry_dropdown extends class_formentry_base implements interface
 
     private $arrKeyValues = array();
     private $strAddons = "";
+    private $strDataPlaceholder = "";
 
     public function __construct($strFormName, $strSourceProperty, $objSourceObject = null) {
         parent::__construct($strFormName, $strSourceProperty, $objSourceObject);
@@ -43,7 +42,7 @@ class class_formentry_dropdown extends class_formentry_base implements interface
         $strReturn = "";
         if($this->getStrHint() != null)
             $strReturn .= $objToolkit->formTextRow($this->getStrHint());
-        $strReturn .=  $objToolkit->formInputDropdown($this->getStrEntryName(), $this->arrKeyValues, $this->getStrLabel(), $this->getStrValue(), "", !$this->getBitReadonly(), $this->getStrAddons());
+        $strReturn .=  $objToolkit->formInputDropdown($this->getStrEntryName(), $this->arrKeyValues, $this->getStrLabel(), $this->getStrValue(), "", !$this->getBitReadonly(), $this->getStrAddons(), $this->getStrDataPlaceholder());
         return $strReturn;
     }
 
@@ -88,7 +87,7 @@ class class_formentry_dropdown extends class_formentry_base implements interface
     }
 
     public function validateValue() {
-        return in_array($this->getStrValue(), array_keys($this->arrKeyValues)) && parent::validateValue();
+        return in_array($this->getStrValue(), array_keys($this->arrKeyValues));
     }
 
 
@@ -130,6 +129,24 @@ class class_formentry_dropdown extends class_formentry_base implements interface
     public function getStrAddons() {
         return $this->strAddons;
     }
+
+    /**
+     * @return string
+     */
+    public function getStrDataPlaceholder() {
+        return $this->strDataPlaceholder;
+    }
+
+    /**
+     * @param string $strDataPlaceholder
+     * @return $this
+     */
+    public function setStrDataPlaceholder($strDataPlaceholder) {
+        $this->strDataPlaceholder = $strDataPlaceholder;
+            return $this;
+    }
+
+
 
 
 

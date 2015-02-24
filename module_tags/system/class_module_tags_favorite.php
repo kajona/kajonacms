@@ -1,7 +1,7 @@
 <?php
 /*"******************************************************************************************************
 *   (c) 2004-2006 by MulchProductions, www.mulchprod.de                                                 *
-*   (c) 2007-2014 by Kajona, www.kajona.de                                                              *
+*   (c) 2007-2015 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
 *	$Id$                                    *
@@ -23,14 +23,14 @@ class class_module_tags_favorite extends class_model implements interface_model,
 
     /**
      * @var string
-     * @tableColumn tags_fav_tagid
+     * @tableColumn tags_favorite.tags_fav_tagid
      * @tableColumnDatatype char20
      */
     private $strTagId;
 
     /**
      * @var string
-     * @tableColumn tags_fav_userid
+     * @tableColumn tags_favorite.tags_fav_userid
      * @tableColumnDatatype char20
      */
     private $strUserId;

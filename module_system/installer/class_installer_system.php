@@ -1,7 +1,7 @@
 <?php
 /*"******************************************************************************************************
 *   (c) 2004-2006 by MulchProductions, www.mulchprod.de                                                 *
-*   (c) 2007-2014 by Kajona, www.kajona.de                                                              *
+*   (c) 2007-2015 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
 *	$Id$                                        *
@@ -286,6 +286,9 @@ class class_installer_system extends class_installer_base implements interface_i
         //Email to send error-reports
         $this->registerConstant("_system_admin_email_", $this->objSession->getSession("install_email"), class_module_system_setting::$int_TYPE_STRING, _system_modul_id_);
 
+        $this->registerConstant("_system_email_defaultsender_", $this->objSession->getSession("install_email"), class_module_system_setting::$int_TYPE_STRING, _system_modul_id_);
+        $this->registerConstant("_system_email_forcesender_", "false", class_module_system_setting::$int_TYPE_BOOL, _system_modul_id_);
+
         //3.0.2: user are allowed to change their settings?
         $this->registerConstant("_user_selfedit_", "true", class_module_system_setting::$int_TYPE_BOOL, _user_modul_id_);
 
@@ -327,31 +330,35 @@ class class_installer_system extends class_installer_base implements interface_i
         $this->registerConstant("_admins_group_id_", $strAdminID, class_module_system_setting::$int_TYPE_STRING, _user_modul_id_);
 
         //Create an root-record for the tree
-        $this->createSystemRecord(0, "System Rights Root", true, _system_modul_id_, "0", "1", "class_module_system_common");
-        //BUT: We have to modify the right-record of the system
-        $strGroupsAll = "'".$strGuestID.",".$strAdminID."'";
-        $strGroupsAdmin = "'".$strAdminID."'";
+        //So, lets generate the record
+        $strQuery = "INSERT INTO "._dbprefix_."system
+                     ( system_id, system_prev_id, system_module_nr, system_create_date, system_lm_time, system_status, system_sort, system_class) VALUES
+                     (?, ?, ?, ?, ?, ?, ?, ?)";
 
-        $strQuery = "UPDATE "._dbprefix_."system_right SET
-						right_inherit	= 0,
-					   	right_view	 	= ".$strGroupsAll.",
-					   	right_edit 		= ".$strGroupsAdmin.",
-					   	right_delete	= ".$strGroupsAdmin.",
-					   	right_right		= ".$strGroupsAdmin.",
-					   	right_right1 	= ".$strGroupsAdmin.",
-					   	right_right2 	= ".$strGroupsAdmin.",
-					   	right_right3  	= ".$strGroupsAdmin.",
-					   	right_right4    = ".$strGroupsAdmin.",
-					   	right_right5  	= ".$strGroupsAdmin.",
-					   	right_changelog = ".$strGroupsAdmin."
-					   	WHERE right_id='0'";
+        //Send the query to the db
+        $this->objDB->_pQuery(
+            $strQuery,
+            array(0, 0, _system_modul_id_, class_date::getCurrentTimestamp(), time(), 1, 1, "class_module_system_common")
+        );
 
-        $this->objDB->_query($strQuery);
+
+        //BUT: We have to modify the right-record of the root node, too
+        $strGroupsAll = $strGuestID.",".$strAdminID;
+        $strGroupsAdmin = $strAdminID;
+
+        $strQuery = "INSERT INTO "._dbprefix_."system_right
+            (right_id, right_inherit, right_view, right_edit, right_delete, right_right, right_right1, right_right2, right_right3, right_right4, right_right5, right_changelog) VALUES
+            (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+        $this->objDB->_pQuery(
+            $strQuery,
+            array(0, 0, $strGroupsAll, $strGroupsAdmin, $strGroupsAdmin, $strGroupsAdmin, $strGroupsAdmin, $strGroupsAdmin, $strGroupsAdmin, $strGroupsAdmin, $strGroupsAdmin, $strGroupsAdmin)
+        );
         $this->objDB->flushQueryCache();
 
         $strReturn .= "Modified root-rights....\n";
         $this->objRights->rebuildRightsStructure();
-        $strReturn .= "Rebuilded rights structures...\n";
+        $strReturn .= "Rebuilt rights structures...\n";
 
         //Creating an admin-user
         $strUsername = "admin";
@@ -432,7 +439,7 @@ class class_installer_system extends class_installer_base implements interface_i
         foreach($arrFiles as $strOneFile) {
             if(!file_exists(_realpath_."/".$strOneFile) && is_file(class_resourceloader::getInstance()->getCorePathForModule("module_system", true)."/module_system/".$strOneFile.".root")) {
                 if(!copy(class_resourceloader::getInstance()->getCorePathForModule("module_system", true)."/module_system/".$strOneFile.".root", _realpath_."/".$strOneFile))
-                    $strReturn .= "<b>Copying the ".$strOneFile.".root to top level failed!!!</b>";
+                    $strReturn .= "<b>Copying ".$strOneFile.".root to top level failed!!!</b>";
             }
         }
 
@@ -491,124 +498,163 @@ class class_installer_system extends class_installer_base implements interface_i
     public function update() {
         $strReturn = "";
         //check installed version and to which version we can update
-        $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        $strReturn .= "Version found:\n\t Module: ".$arrModul["module_name"].", Version: ".$arrModul["module_version"]."\n\n";
+        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        $strReturn .= "Version found:\n\t Module: ".$arrModule["module_name"].", Version: ".$arrModule["module_version"]."\n\n";
 
 
-        $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModul["module_version"] == "3.4.2" || $arrModul["module_version"] == "3.4.2.2") {
+        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "3.4.2" || $arrModule["module_version"] == "3.4.2.2") {
             $strReturn .= $this->update_342_349();
             class_carrier::getInstance()->flushCache(class_carrier::INT_CACHE_TYPE_DBQUERIES | class_carrier::INT_CACHE_TYPE_DBSTATEMENTS);
             $strReturn .= "<b>Temporary breaking update, please retrigger update sequence...</b>\n";
             return $strReturn;
         }
 
-        $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModul["module_version"] == "3.4.9") {
+        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "3.4.9") {
             $strReturn .= $this->update_349_3491();
             $this->objDB->flushQueryCache();
         }
 
-        $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModul["module_version"] == "3.4.9.1") {
+        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "3.4.9.1") {
             $strReturn .= $this->update_3491_3492();
             $this->objDB->flushQueryCache();
         }
 
-        $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModul["module_version"] == "3.4.9.2") {
+        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "3.4.9.2") {
             $strReturn .= $this->update_3492_3493();
             $this->objDB->flushQueryCache();
         }
 
-        $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModul["module_version"] == "3.4.9.3") {
+        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "3.4.9.3") {
             $strReturn .= $this->update_3493_40();
             $this->objDB->flushQueryCache();
         }
 
-        $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModul["module_version"] == "4.0") {
+        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "4.0") {
             $strReturn .= $this->update_40_401();
             $this->objDB->flushQueryCache();
         }
 
-        $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModul["module_version"] == "4.0.1") {
+        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "4.0.1") {
             $strReturn .= $this->update_401_41();
             $this->objDB->flushQueryCache();
         }
 
-        $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModul["module_version"] == "4.1") {
+        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "4.1") {
             $strReturn .= $this->update_41_411();
             $this->objDB->flushQueryCache();
         }
 
-        $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModul["module_version"] == "4.1.1") {
+        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "4.1.1") {
             $strReturn .= $this->update_411_42();
             $this->objDB->flushQueryCache();
         }
 
-        $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModul["module_version"] == "4.2") {
+        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "4.2") {
             $strReturn .= "Updating 4.2 to 4.3...\n";
             $strReturn .= "Updating module-versions...\n";
             $this->updateModuleVersion("", "4.3");
             $this->objDB->flushQueryCache();
         }
 
-        $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModul["module_version"] == "4.3") {
+        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "4.3") {
             $strReturn .= $this->update_43_431();
             $this->objDB->flushQueryCache();
         }
 
-        $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModul["module_version"] == "4.3.1") {
+        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "4.3.1") {
             $strReturn .= $this->update_431_432();
             $this->objDB->flushQueryCache();
         }
 
-        $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModul["module_version"] == "4.3.2") {
+        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "4.3.2") {
             $strReturn .= $this->update_432_44();
             $this->objDB->flushQueryCache();
         }
 
-        $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModul["module_version"] == "4.4") {
+        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "4.4") {
             $strReturn .= "Updating 4.4 to 4.4.1...\n";
             $this->updateModuleVersion("", "4.4.1");
             $this->objDB->flushQueryCache();
         }
 
-        $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModul["module_version"] == "4.4.1") {
+        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "4.4.1") {
             $strReturn .= "Updating 4.4.1 to 4.4.2...\n";
             $this->updateModuleVersion("", "4.4.2");
             $this->objDB->flushQueryCache();
         }
 
-        $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModul["module_version"] == "4.4.2") {
+        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "4.4.2") {
             $strReturn .= "Updating 4.4.2 to 4.4.3...\n";
             $this->updateModuleVersion("", "4.4.3");
             $this->objDB->flushQueryCache();
         }
 
-        $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModul["module_version"] == "4.4.3") {
+        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "4.4.3") {
             $strReturn .= "Updating 4.4.3 to 4.4.4...\n";
             $this->updateModuleVersion("", "4.4.4");
             $this->objDB->flushQueryCache();
         }
 
-        $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModul["module_version"] == "4.4.4") {
+        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "4.4.4") {
             $strReturn .= $this->update_444_45();
             $this->objDB->flushQueryCache();
+        }
+
+        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "4.5") {
+            $strReturn .= $this->update_45_451();
+            $this->objDB->flushQueryCache();
+        }
+
+        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "4.5.1") {
+            $strReturn .= "Updating 4.5.1 to 4.6...\n";
+            $this->updateModuleVersion("", "4.6");
+            $this->objDB->flushQueryCache();
+        }
+
+        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "4.6") {
+            $strReturn .= "Updating 4.6 to 4.6.1...\n";
+            $this->updateModuleVersion("", "4.6.1");
+            $this->objDB->flushQueryCache();
+        }
+
+        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "4.6.1") {
+            $strReturn .= "Updating 4.6.1 to 4.6.2...\n";
+            $this->updateModuleVersion("", "4.6.2");
+            $this->objDB->flushQueryCache();
+        }
+
+        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "4.6.2") {
+            $strReturn .= "Updating 4.6.2 to 4.6.3...\n";
+            $this->updateModuleVersion("", "4.6.3");
+            $this->objDB->flushQueryCache();
+        }
+
+        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "4.6.3") {
+            $strReturn .= $this->update_463_464();
         }
 
         return $strReturn."\n\n";
@@ -1084,6 +1130,33 @@ class class_installer_system extends class_installer_base implements interface_i
 
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion("", "4.5");
+        return $strReturn;
+    }
+
+    private function update_45_451() {
+        $strReturn = "Updating 4.5 to 4.5.1...\n";
+
+        $strReturn .= "Changing datatype of column message_boy text long to longtext\n";
+
+        if(!$this->objDB->changeColumn("messages", "message_body", "message_body", class_db_datatypes::STR_TYPE_LONGTEXT))
+            $strReturn .= "An error occured! ...\n";
+
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion($this->objMetadata->getStrTitle(), "4.5.1");
+        return $strReturn;
+    }
+
+    private function update_463_464() {
+        $strReturn = "Updating 4.6.3 to 4.6.4...\n";
+
+        $strReturn .= "Adding mail-config settings...\n";
+
+        $this->registerConstant("_system_email_defaultsender_", _system_admin_email_, class_module_system_setting::$int_TYPE_STRING, _system_modul_id_);
+        $this->registerConstant("_system_email_forcesender_", "false", class_module_system_setting::$int_TYPE_BOOL, _system_modul_id_);
+
+
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion($this->objMetadata->getStrTitle(), "4.6.4");
         return $strReturn;
     }
 

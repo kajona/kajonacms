@@ -1,10 +1,8 @@
 <?php
 /*"******************************************************************************************************
 *   (c) 2004-2006 by MulchProductions, www.mulchprod.de                                                 *
-*   (c) 2007-2014 by Kajona, www.kajona.de                                                              *
+*   (c) 2007-2015 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
-*-------------------------------------------------------------------------------------------------------*
-*	$Id$                              *
 ********************************************************************************************************/
 
 /**
@@ -23,7 +21,7 @@ class class_module_search_search extends class_model implements interface_model,
 
     /**
      * @var string
-     * @tableColumn search_search_query
+     * @tableColumn search_search.search_search_query
      * @tableColumnDatatype char254
      * @listOrder
      * @fieldMandatory
@@ -33,14 +31,14 @@ class class_module_search_search extends class_model implements interface_model,
 
     /**
      * @var string
-     * @tableColumn search_search_filter_modules
+     * @tableColumn search_search.search_search_filter_modules
      * @tableColumnDatatype char254
      */
     private $strInternalFilterModules = "-1";
 
     /**
      * @var string
-     * @tableColumn search_search_private
+     * @tableColumn search_search.search_search_private
      * @tableColumnDatatype int
      */
     private $intPrivate = 0;
@@ -202,7 +200,9 @@ class class_module_search_search extends class_model implements interface_model,
      * @param array $arrFormFilterModules
      */
     public function setArrFormFilterModules($arrFormFilterModules) {
-        $this->strInternalFilterModules = implode(",", $arrFormFilterModules);
+        if(is_array($arrFormFilterModules))
+            $arrFormFilterModules = implode(",", $arrFormFilterModules);
+        $this->strInternalFilterModules = $arrFormFilterModules;
     }
 
     /**

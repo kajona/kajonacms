@@ -12,12 +12,9 @@ class class_test_searchDeferredIndexerTest extends class_testbase {
         if(class_module_system_module::getModuleByName("news") === null)
             return;
 
-        class_module_system_changelog::$bitChangelogEnabled = true;
-
         $objConfig = class_module_system_setting::getConfigByName("_search_deferred_indexer_");
         $objConfig->setStrValue("true");
         $objConfig->updateObjectToDb();
-
 
         $objNews = new class_module_news_news();
         $objNews->setStrTitle("demo 1");
@@ -28,7 +25,7 @@ class class_test_searchDeferredIndexerTest extends class_testbase {
 
         //trigger the endprocessinglistener
         $objHandler = new class_module_search_request_endprocessinglistener();
-        $objHandler->handleEvent(class_system_eventidentifier::EVENT_SYSTEM_REQUEST_ENDPROCESSING, array());
+        $objHandler->handleEvent(class_system_eventidentifier::EVENT_SYSTEM_REQUEST_AFTERCONTENTSEND, array());
 
 
         //query queue table
@@ -39,7 +36,7 @@ class class_test_searchDeferredIndexerTest extends class_testbase {
 
 
         class_objectfactory::getInstance()->getObject($strNewsId)->deleteObject();
-        $objHandler->handleEvent(class_system_eventidentifier::EVENT_SYSTEM_REQUEST_ENDPROCESSING, array());
+        $objHandler->handleEvent(class_system_eventidentifier::EVENT_SYSTEM_REQUEST_AFTERCONTENTSEND, array());
 
 
         $arrRows = $objQueue->getRowsBySystemid(class_search_enum_indexaction::DELETE(), $strNewsId);
@@ -79,7 +76,7 @@ class class_test_searchDeferredIndexerTest extends class_testbase {
         echo "Queries pre indexing: ", class_db::getInstance()->getNumber() - $intQueriesStart. " \n";
 
         $objHandler = new class_module_search_request_endprocessinglistener();
-        $objHandler->handleEvent(class_system_eventidentifier::EVENT_SYSTEM_REQUEST_ENDPROCESSING, array());
+        $objHandler->handleEvent(class_system_eventidentifier::EVENT_SYSTEM_REQUEST_AFTERCONTENTSEND, array());
 
         $intTimeEnd = microtime(true);
         $time = $intTimeEnd - $intTimeStart;
@@ -108,7 +105,7 @@ class class_test_searchDeferredIndexerTest extends class_testbase {
 
         echo "Triggering queue update event...\n";
         $objHandler = new class_module_search_request_endprocessinglistener();
-        $objHandler->handleEvent(class_system_eventidentifier::EVENT_SYSTEM_REQUEST_ENDPROCESSING, array());
+        $objHandler->handleEvent(class_system_eventidentifier::EVENT_SYSTEM_REQUEST_AFTERCONTENTSEND, array());
 
         $intTimeEnd = microtime(true);
         $time = $intTimeEnd - $intTimeStart;

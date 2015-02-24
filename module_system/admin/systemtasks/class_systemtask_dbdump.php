@@ -1,7 +1,7 @@
 <?php
 /*"******************************************************************************************************
 *   (c) 2004-2006 by MulchProductions, www.mulchprod.de                                                 *
-*   (c) 2007-2014 by Kajona, www.kajona.de                                                              *
+*   (c) 2007-2015 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
 *   $Id$                                        *
@@ -18,13 +18,6 @@ class class_systemtask_dbdump extends class_systemtask_base implements interface
     private $arrTablesToExlucde = array(
         "stats_data", "stats_ip2country", "cache", "search_ix_document", "search_ix_content"
     );
-
-    /**
-     * contructor to call the base constructor
-     */
-    public function __construct() {
-        parent::__construct();
-    }
 
     /**
      * @see interface_admin_systemtask::getGroupIdenitfier()

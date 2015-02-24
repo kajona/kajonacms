@@ -1,9 +1,7 @@
 <?php
 /*"******************************************************************************************************
-*   (c) 2007-2014 by Kajona, www.kajona.de                                                              *
+*   (c) 2007-2015 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
-*-------------------------------------------------------------------------------------------------------*
-*	$Id$                               *
 ********************************************************************************************************/
 
 
@@ -20,6 +18,18 @@ class class_pageelement_sortmanager extends class_common_sortmanager {
      */
     function fixSortOnDelete($arrRestrictionModules = false) {
         return ;
+    }
+
+    public function fixSortOnPrevIdChange($strOldPrevid, $strNewPrevid, $arrRestrictionModules = false) {
+        //shift it to the last position by default
+        //As a special feature, we set the element as the last
+        $strQuery = "UPDATE "._dbprefix_."system SET system_sort = ? WHERE system_id = ?";
+        $intNewSort = count($this->objSource->getSortedElementsAtPlaceholder()) + 1;
+        $this->objSource->setIntSort($intNewSort);
+        $this->objDB->_pQuery($strQuery, array($intNewSort, $this->objSource->getSystemid()));
+
+        $this->objDB->flushQueryCache();
+
     }
 
 

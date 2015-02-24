@@ -1,7 +1,7 @@
 <?php
 /*"******************************************************************************************************
 *   (c) 2004-2006 by MulchProductions, www.mulchprod.de                                                 *
-*   (c) 2007-2014 by Kajona, www.kajona.de                                                              *
+*   (c) 2007-2015 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 ********************************************************************************************************/
 
@@ -84,52 +84,45 @@ class class_db_oci8 extends class_db_base {
      * @param string $strTable
      * @param string[] $arrColumns
      * @param array $arrValueSets
-     * @param string &$strQuery
-     * @param array &$arrParams
-     *
-     * @return void
-     */
-    public function convertMultiInsert($strTable, $arrColumns, $arrValueSets, &$strQuery, &$arrParams) {
-
-        $arrPlaceholder = array();
-        $arrSafeColumns = array();
-
-        foreach($arrColumns as $strOneColumn) {
-            $arrSafeColumns[] = $this->encloseColumnName($strOneColumn);
-            $arrPlaceholder[] = "?";
-        }
-        $strPlaceholder = " (".implode(",", $arrPlaceholder).") ";
-        $strColumnNames = " (".implode(",", $arrSafeColumns).") ";
-
-        $arrParams = array();
-
-        $strQuery = "INSERT ALL ";
-        foreach($arrValueSets as $arrOneSet) {
-            $arrParams = array_merge($arrParams, $arrOneSet);
-
-            $strQuery .= " INTO ".$this->encloseTableName($strTable)." ".$strColumnNames." VALUES ".$strPlaceholder." ";
-        }
-        $strQuery .= " SELECT * FROM dual";
-
-    }
-
-    /**
-     * Sends a query (e.g. an update) to the database
-     *
-     * @param string $strQuery
+     * @param class_db $objDb
      *
      * @return bool
      */
-    public function _query($strQuery) {
-        $objStatement = $this->getParsedStatement($strQuery);
+    public function triggerMultiInsert($strTable, $arrColumns, $arrValueSets, class_db $objDb) {
 
-        $bitAddon = OCI_COMMIT_ON_SUCCESS;
-        if($this->bitTxOpen)
-            $bitAddon = OCI_NO_AUTO_COMMIT;
-        $bitResult = oci_execute($objStatement, $bitAddon);
-        @oci_free_statement($objStatement);
-        return $bitResult;
+        $bitReturn = true;
+
+        //ugly hack for oracle: it only supports 1000 params per query as maximum, so split into several parts
+        //calc the number of max rows per insert. to be sure split it down to 970
+        $intSetsPerInsert = floor(970 / count($arrColumns));
+        foreach(array_chunk($arrValueSets, $intSetsPerInsert) as $arrSingleValueSet) {
+
+            $arrPlaceholder = array();
+            $arrSafeColumns = array();
+
+            foreach($arrColumns as $strOneColumn) {
+                $arrSafeColumns[] = $this->encloseColumnName($strOneColumn);
+                $arrPlaceholder[] = "?";
+            }
+            $strPlaceholder = " (".implode(",", $arrPlaceholder).") ";
+            $strColumnNames = " (".implode(",", $arrSafeColumns).") ";
+
+            $arrParams = array();
+
+            $strQuery = "INSERT ALL ";
+            foreach($arrSingleValueSet as $arrOneSet) {
+                $arrParams = array_merge($arrParams, $arrOneSet);
+
+                $strQuery .= " INTO ".$this->encloseTableName($strTable)." ".$strColumnNames." VALUES ".$strPlaceholder." ";
+            }
+            $strQuery .= " SELECT * FROM dual";
+
+            $bitReturn = $objDb->_pQuery($strQuery, $arrParams) && $bitReturn;
+        }
+
+        return $bitReturn;
     }
+
 
     /**
      * Sends a prepared statement to the database. All params must be represented by the ? char.
@@ -156,35 +149,6 @@ class class_db_oci8 extends class_db_base {
         $bitResult = oci_execute($objStatement, $bitAddon);
         @oci_free_statement($objStatement);
         return $bitResult;
-    }
-
-    /**
-     * This method is used to retrieve an array of resultsets from the database
-     *
-     * @param string $strQuery
-     *
-     * @return mixed
-     */
-    public function getArray($strQuery) {
-        $arrReturn = array();
-        $intCounter = 0;
-        $objStatement = $this->getParsedStatement($strQuery);
-
-        $bitAddon = OCI_COMMIT_ON_SUCCESS;
-        if($this->bitTxOpen)
-            $bitAddon = OCI_NO_AUTO_COMMIT;
-        $resultSet = oci_execute($objStatement, $bitAddon);
-
-        if(!$resultSet)
-            return false;
-
-        while($arrRow = oci_fetch_array($objStatement, OCI_BOTH + OCI_RETURN_NULLS)) {
-            $arrRow = $this->parseResultRow($arrRow);
-            $arrReturn[$intCounter++] = $arrRow;
-        }
-
-        @oci_free_statement($objStatement);
-        return $arrReturn;
     }
 
     /**
@@ -224,33 +188,6 @@ class class_db_oci8 extends class_db_base {
         }
         @oci_free_statement($objStatement);
         return $arrReturn;
-    }
-
-    /**
-     * Returns just a part of a recodset, defined by the start- and the end-rows,
-     * defined by the params
-     *
-     * @param string $strQuery
-     * @param int $intStart
-     * @param int $intEnd
-     *
-     * @return array
-     */
-    public function getArraySection($strQuery, $intStart, $intEnd) {
-        //array-counters to real-counters
-        $intStart++;
-        $intEnd++;
-
-        //modify the query
-        $strQuery = "SELECT * FROM (
-             SELECT a.*, ROWNUM rnum FROM
-                ( ".$strQuery.") a
-             WHERE ROWNUM <= ".$intEnd."
-        )
-        WHERE rnum >= ".$intStart;
-
-        //and load the array
-        return $this->getArray($strQuery);
     }
 
     /**
@@ -302,7 +239,7 @@ class class_db_oci8 extends class_db_base {
      * @return mixed
      */
     public function getTables() {
-        $arrTemp = $this->getArray("SELECT table_name AS name FROM ALL_TABLES");
+        $arrTemp = $this->getPArray("SELECT table_name AS name FROM ALL_TABLES", array());
 
         foreach($arrTemp as $intKey => $strValue)
             $arrTemp[$intKey]["name"] = uniStrtolower($strValue["name"]);
@@ -381,6 +318,22 @@ class class_db_oci8 extends class_db_base {
     }
 
     /**
+     * Renames a single column of the table
+     *
+     * @param $strTable
+     * @param $strOldColumnName
+     * @param $strNewColumnName
+     * @param $strNewDatatype
+     *
+     * @return bool
+     * @since 4.6
+     */
+    public function changeColumn($strTable, $strOldColumnName, $strNewColumnName, $strNewDatatype) {
+        $bitReturn =  $this->_pQuery("ALTER TABLE ".($this->encloseTableName($strTable))." RENAME COLUMN ".($this->encloseColumnName($strOldColumnName)." TO ".$this->encloseColumnName($strNewColumnName)), array());
+        return $bitReturn && $this->_pQuery("ALTER TABLE ".$this->encloseTableName($strTable)." MODIFY ( ".$this->encloseColumnName($strNewColumnName)." ".$this->getDatatype($strNewDatatype)." )", array());
+    }
+
+    /**
      * Used to send a create table statement to the database
      * By passing the query through this method, the driver can
      * add db-specific commands.
@@ -412,12 +365,12 @@ class class_db_oci8 extends class_db_base {
         //loop over existing tables to check, if the table already exists
         $arrTables = $this->getTables();
         foreach($arrTables as $arrOneTable) {
-            if($arrOneTable["name"] == _dbprefix_.$strName)
+            if($arrOneTable["name"] == $strName)
                 return true;
         }
 
         //build the oracle code
-        $strQuery .= "CREATE TABLE "._dbprefix_.$strName." ( \n";
+        $strQuery .= "CREATE TABLE ".$strName." ( \n";
 
         //loop the fields
         foreach($arrFields as $strFieldName => $arrColumnSettings) {
@@ -445,11 +398,11 @@ class class_db_oci8 extends class_db_base {
         $strQuery .= " CONSTRAINT pk_".generateSystemid()." primary key ( ".implode(" , ", $arrKeys)." ) \n";
         $strQuery .= ") ";
 
-        $bitCreate = $this->_query($strQuery);
+        $bitCreate = $this->_pQuery($strQuery, array());
 
         if($bitCreate && count($arrIndices) > 0) {
-            $strQuery = "CREATE INDEX ix_".generateSystemid()." ON "._dbprefix_.$strName." ( ".implode(", ", $arrIndices).") ";
-            $bitCreate = $bitCreate && $this->_query($strQuery);
+            $strQuery = "CREATE INDEX ix_".generateSystemid()." ON ".$strName." ( ".implode(", ", $arrIndices).") ";
+            $bitCreate = $bitCreate && $this->_pQuery($strQuery, array());
         }
 
         return $bitCreate;
@@ -578,7 +531,7 @@ class class_db_oci8 extends class_db_base {
     }
 
     /**
-     * convertes a result-row. changes all keys to lower-case keys again
+     * converts a result-row. changes all keys to lower-case keys again
      *
      * @param array $arrRow
      *

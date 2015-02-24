@@ -1,7 +1,7 @@
 <?php
 /*"******************************************************************************************************
 *   (c) 2004-2006 by MulchProductions, www.mulchprod.de                                                 *
-*   (c) 2007-2014 by Kajona, www.kajona.de                                                              *
+*   (c) 2007-2015 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
 *	$Id$					    *
@@ -115,69 +115,75 @@ class class_installer_workflows extends class_installer_base implements interfac
     public function update() {
 	    $strReturn = "";
         //check installed version and to which version we can update
-        $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        $strReturn .= "Version found:\n\t Module: ".$arrModul["module_name"].", Version: ".$arrModul["module_version"]."\n\n";
+        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        $strReturn .= "Version found:\n\t Module: ".$arrModule["module_name"].", Version: ".$arrModule["module_version"]."\n\n";
 
-        $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModul["module_version"] == "3.4.2" || $arrModul["module_version"] == "3.4.2.1") {
+        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "3.4.2" || $arrModule["module_version"] == "3.4.2.1") {
 
-            if($arrModul["module_version"] == "3.4.2.1")
+            if($arrModule["module_version"] == "3.4.2.1")
                 $this->bitUpdatingFrom3421 = true;
 
             $strReturn .= $this->update_342_349();
         }
 
-        $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModul["module_version"] == "3.4.9") {
+        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "3.4.9") {
             $strReturn .= $this->update_349_40();
         }
 
-        $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModul["module_version"] == "4.0") {
+        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "4.0") {
             $strReturn .= $this->update_40_401();
         }
 
-        $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModul["module_version"] == "4.0.1") {
+        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "4.0.1") {
             $strReturn .= "Updating 4.0.1 to 4.1...\n";
             $strReturn .= "Updating module-versions...\n";
             $this->updateModuleVersion($this->objMetadata->getStrTitle(), "4.1");
         }
 
-        $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModul["module_version"] == "4.1") {
+        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "4.1") {
             $strReturn .= "Updating 4.1 to 4.2...\n";
             $strReturn .= "Updating module-versions...\n";
             $this->updateModuleVersion($this->objMetadata->getStrTitle(), "4.2");
         }
 
-        $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModul["module_version"] == "4.2") {
+        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "4.2") {
             $strReturn .= "Updating 4.2 to 4.3...\n";
             $strReturn .= "Updating module-versions...\n";
             $this->updateModuleVersion($this->objMetadata->getStrTitle(), "4.3");
         }
 
-        $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModul["module_version"] == "4.3") {
+        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "4.3") {
             $strReturn .= $this->update_43_431();
         }
 
-        $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModul["module_version"] == "4.3.1") {
+        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "4.3.1") {
             $strReturn .= "Updating 4.3 to 4.4...\n";
             $this->updateModuleVersion($this->objMetadata->getStrTitle(), "4.4");
         }
 
-        $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModul["module_version"] == "4.4") {
+        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "4.4") {
             $strReturn .= "Updating 4.4 to 4.5...\n";
             $this->updateModuleVersion($this->objMetadata->getStrTitle(), "4.5");
         }
 
-        $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModul["module_version"] == "4.5") {
+        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "4.5") {
             $strReturn .= $this->update_45_451();
+        }
+
+        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "4.5.1") {
+            $strReturn .= "Updating 4.5.1 to 4.6...\n";
+            $this->updateModuleVersion($this->objMetadata->getStrTitle(), "4.6");
         }
 
         return $strReturn."\n\n";

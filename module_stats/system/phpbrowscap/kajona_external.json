@@ -1,0 +1,7 @@
+{
+    "name" : "browscap-php",
+    "version" : "??",
+    "source" : ["https://github.com/browscap/browscap-php", "https://github.com/GaretJax/phpbrowscap"],
+    "license" : "same as MIT",
+    "licenseurl" : "https://github.com/GaretJax/phpbrowscap/blob/master/LICENSE"
+}

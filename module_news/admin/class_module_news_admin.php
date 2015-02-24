@@ -1,7 +1,7 @@
 <?php
 /*"******************************************************************************************************
 *   (c) 2004-2006 by MulchProductions, www.mulchprod.de                                                 *
-*   (c) 2007-2014 by Kajona, www.kajona.de                                                              *
+*   (c) 2007-2015 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
 *	$Id$                                   *
@@ -58,8 +58,6 @@ class class_module_news_admin extends class_admin_evensimpler implements interfa
         $arrReturn[] = array("view", class_link::getLinkAdmin($this->getArrModule("modul"), "listNewsAndCategories", "", $this->getLang("commons_list"), "", "", true, "adminnavi"));
         $arrReturn[] = array("", "");
         $arrReturn[] = array("right2", class_link::getLinkAdmin($this->getArrModule("modul"), "listFeed", "", $this->getLang("modul_titel_feed"), "", "", true, "adminnavi"));
-        $arrReturn[] = array("", "");
-        $arrReturn[] = array("right", class_link::getLinkAdmin("right", "change", "&changemodule=" . $this->getArrModule("modul"), $this->getLang("commons_module_permissions"), "", "", true, "adminnavi"));
         return $arrReturn;
     }
 
@@ -424,9 +422,9 @@ class class_module_news_admin extends class_admin_evensimpler implements interfa
         }
 
         if(_news_news_datetime_ == "true") {
-            $objForm->addField(new class_formentry_datetime($objForm->getStrFormname(), "objDateStart", $objNews), "objDateStart")->setBitMandatory(true)->setStrLabel($this->getLang("form_news_datestart"));
-            $objForm->addField(new class_formentry_datetime($objForm->getStrFormname(), "objDateEnd", $objNews), "objDateEnd")->setStrLabel($this->getLang("form_news_dateend"));
-            $objForm->addField(new class_formentry_datetime($objForm->getStrFormname(), "objDateSpecial", $objNews), "objDateSpecial")->setStrLabel($this->getLang("form_news_datespecial"));
+            $objForm->addField(new class_formentry_datetime($objForm->getStrFormname(), "objDateStart", $objNews), "datestart")->setBitMandatory(true)->setStrLabel($this->getLang("form_news_datestart"));
+            $objForm->addField(new class_formentry_datetime($objForm->getStrFormname(), "objDateEnd", $objNews), "dateend")->setStrLabel($this->getLang("form_news_dateend"));
+            $objForm->addField(new class_formentry_datetime($objForm->getStrFormname(), "objDateSpecial", $objNews), "datespecial")->setStrLabel($this->getLang("form_news_datespecial"));
         }
 
         return $objForm;

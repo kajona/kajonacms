@@ -1,7 +1,7 @@
 <?php
 /*"******************************************************************************************************
 *   (c) 2004-2006 by MulchProductions, www.mulchprod.de                                                 *
-*   (c) 2007-2014 by Kajona, www.kajona.de                                                              *
+*   (c) 2007-2015 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
 *	$Id$                                         *
@@ -47,6 +47,18 @@ interface class_system_eventidentifier {
     const EVENT_SYSTEM_REQUEST_ENDPROCESSING = "core.system.request.endprocessing";
 
     /**
+     * Invoked right after sending the response back to the browser, but before starting to
+     * shut down the request.
+     * This means you are not able to change the response anymore, also the session is already closed to
+     * keep other threads from waiting. Use this event to perform internal cleanups if required.
+     *
+     * @param class_request_entrypoint_enum objEntrypoint
+     *
+     * @since 4.6
+     */
+    const EVENT_SYSTEM_REQUEST_AFTERCONTENTSEND = "core.system.request.aftercontentsend";
+
+    /**
      * The event is triggered after the source-object was updated to the database.
      *
      * The params-array contains a single entry:
@@ -58,15 +70,33 @@ interface class_system_eventidentifier {
 
     /**
      * Called whenever a record was copied.
+     * Event will be fired BEFORE child objects are being copied.
      * Useful to perform additional actions, e.g. update / duplicate foreign assignments.
      *
      * The params-array contains two entries:
      * @param string $strOldSystemid
      * @param string $strNewSystemid
+     * @param class_model $objNewObjectCopy
      *
      * @since 4.5
      */
     const EVENT_SYSTEM_RECORDCOPIED = "core.system.recordcopied";
+
+
+    /**
+     * Called whenever a record was copied.
+     * Event will be fired AFTER child objects were copied.
+     * Useful to perform additional actions, e.g. update / duplicate foreign assignments.
+     *
+     * The params-array contains two entries:
+     * @param string $strOldSystemid
+     * @param string $strNewSystemid
+     * @param class_model $objNewObjectCopy
+     *
+     * @since 4.6
+     */
+    const EVENT_SYSTEM_RECORDCOPYFINISHED = "core.system.recordcopyfinished";
+
 
     /**
      * Invoked every time a records previd was changed.

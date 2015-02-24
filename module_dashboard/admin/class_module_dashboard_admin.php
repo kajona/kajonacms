@@ -1,7 +1,7 @@
 <?php
 /*"******************************************************************************************************
 *   (c) 2004-2006 by MulchProductions, www.mulchprod.de                                                 *
-*   (c) 2007-2014 by Kajona, www.kajona.de                                                              *
+*   (c) 2007-2015 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
 *	$Id$	                            *
@@ -34,8 +34,6 @@ class class_module_dashboard_admin extends class_admin_controller implements int
         $arrReturn[] = array("view", getLinkAdmin($this->arrModule["modul"], "calendar", "", $this->getLang("action_calendar"), "", "", true, "adminnavi"));
         $arrReturn[] = array("", "");
         $arrReturn[] = array("edit", getLinkAdmin($this->arrModule["modul"], "addWidgetToDashboard", "", $this->getLang("action_add_widget_to_dashboard"), "", "", true, "adminnavi"));
-        $arrReturn[] = array("", "");
-        $arrReturn[] = array("right", getLinkAdmin("right", "change", "&changemodule=".$this->arrModule["modul"], $this->getLang("commons_module_permissions"), "", "", true, "adminnavi"));
         return $arrReturn;
     }
 
@@ -60,7 +58,6 @@ class class_module_dashboard_admin extends class_admin_controller implements int
      */
     protected function actionList() {
         $strReturn = "";
-        $strReturn .= $this->objToolkit->jsDialog(1);
         //load the widgets for each column. currently supporting 3 columns on the dashboard.
         $objDashboardmodel = new class_module_dashboard_widget();
         $arrColumns = array();
@@ -95,10 +92,6 @@ class class_module_dashboard_admin extends class_admin_controller implements int
         $strWidgetId = $objConcreteWidget->getSystemid();
         $strWidgetName = $objConcreteWidget->getWidgetName();
         $strWidgetNameAdditionalContent = $objConcreteWidget->getWidgetNameAdditionalContent();
-
-        if($objDashboardWidget->rightDelete()) {
-            $strWidgetContent .= $this->objToolkit->jsDialog(1);
-        }
 
         $strWidgetContent .= $this->objToolkit->getDashboardWidgetEncloser(
             $objDashboardWidget->getSystemid(),

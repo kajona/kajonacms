@@ -1,7 +1,7 @@
 <?php
 /*"******************************************************************************************************
 *   (c) 2004-2006 by MulchProductions, www.mulchprod.de                                                 *
-*   (c) 2007-2014 by Kajona, www.kajona.de                                                              *
+*   (c) 2007-2015 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 ********************************************************************************************************/
 
@@ -48,7 +48,7 @@ class class_db_postgres extends class_db_base {
         $this->linkDB = @pg_connect("host='".$strHost."' port='".$intPort."' dbname='".$strDbName."' user='".$strUsername."' password='".$strPass."'");
 
         if($this->linkDB !== false) {
-            $this->_query("SET client_encoding='UTF8'");
+            $this->_pQuery("SET client_encoding='UTF8'", array());
             return true;
         }
         else {
@@ -64,20 +64,6 @@ class class_db_postgres extends class_db_base {
         @pg_close($this->linkDB);
     }
 
-
-
-
-    /**
-     * Sends a query (e.g. an update) to the database
-     *
-     * @param string $strQuery
-     *
-     * @return bool
-     */
-    public function _query($strQuery) {
-        $bitReturn = @pg_query($this->linkDB, $strQuery);
-        return $bitReturn !== false;
-    }
 
     /**
      * Sends a prepared statement to the database. All params must be represented by the ? char.
@@ -96,30 +82,6 @@ class class_db_postgres extends class_db_base {
             return false;
 
         return @pg_execute($this->linkDB, $strName, $arrParams) !== false;
-    }
-
-    /**
-     * This method is used to retrieve an array of resultsets from the database
-     *
-     * @param string $strQuery
-     *
-     * @return mixed
-     */
-    public function getArray($strQuery) {
-        $arrReturn = array();
-        $intCounter = 0;
-        $resultSet = @pg_query($this->linkDB, $strQuery);
-        if(!$resultSet)
-            return false;
-        while($arrRow = @pg_fetch_array($resultSet)) {
-            //conversions to remain compatible:
-            //   count --> COUNT(*)
-            if(isset($arrRow["count"]))
-                $arrRow["COUNT(*)"] = $arrRow["count"];
-
-            $arrReturn[$intCounter++] = $arrRow;
-        }
-        return $arrReturn;
     }
 
     /**
@@ -152,25 +114,6 @@ class class_db_postgres extends class_db_base {
             $arrReturn[$intCounter++] = $arrRow;
         }
         return $arrReturn;
-    }
-
-    /**
-     * Returns just a part of a recordset, defined by the start- and the end-rows,
-     * defined by the params
-     *
-     * @param string $strQuery
-     * @param int $intStart
-     * @param int $intEnd
-     *
-     * @return array
-     */
-    public function getArraySection($strQuery, $intStart, $intEnd) {
-        //calculate the end-value:
-        $intEnd = $intEnd - $intStart + 1;
-        //add the limits to the query
-        $strQuery .= " LIMIT  ".$intEnd." OFFSET ".$intStart;
-        //and load the array
-        return $this->getArray($strQuery);
     }
 
     /**
@@ -213,7 +156,7 @@ class class_db_postgres extends class_db_base {
      * @return mixed
      */
     public function getTables() {
-        $arrTemp = $this->getArray("SELECT *, table_name as name FROM information_schema.tables");
+        $arrTemp = $this->getPArray("SELECT *, table_name as name FROM information_schema.tables", array());
 
         $arrReturn = array();
         foreach($arrTemp as $arrOneRow) {
@@ -235,10 +178,11 @@ class class_db_postgres extends class_db_base {
      */
     public function getColumnsOfTable($strTableName) {
         $arrReturn = array();
-        $arrTemp = $this->getArray(
+        $arrTemp = $this->getPArray(
             "SELECT *
             FROM information_schema.columns
             WHERE table_name = '".class_carrier::getInstance()->getObjDB()->dbsafeString($strTableName)."'"
+            , array()
         );
 
         foreach($arrTemp as $arrOneColumn) {
@@ -289,6 +233,23 @@ class class_db_postgres extends class_db_base {
     }
 
     /**
+     * Renames a single column of the table
+     *
+     * @param $strTable
+     * @param $strOldColumnName
+     * @param $strNewColumnName
+     * @param $strNewDatatype
+     *
+     * @return bool
+     * @since 4.6
+     */
+    public function changeColumn($strTable, $strOldColumnName, $strNewColumnName, $strNewDatatype) {
+        $bitReturn =  $this->_pQuery("ALTER TABLE ".($this->encloseTableName($strTable))." RENAME COLUMN ".($this->encloseColumnName($strOldColumnName)." TO ".$this->encloseColumnName($strNewColumnName)), array());
+        return $bitReturn && $this->_pQuery("ALTER TABLE ".$this->encloseTableName($strTable)." ALTER COLUMN ".$this->encloseColumnName($strNewColumnName)." TYPE ".$this->getDatatype($strNewDatatype), array());
+    }
+
+
+    /**
      * Used to send a create table statement to the database
      * By passing the query through this method, the driver can
      * add db-specific commands.
@@ -320,12 +281,12 @@ class class_db_postgres extends class_db_base {
         //loop over existing tables to check, if the table already exists
         $arrTables = $this->getTables();
         foreach($arrTables as $arrOneTable) {
-            if($arrOneTable["name"] == _dbprefix_.$strName)
+            if($arrOneTable["name"] == $strName)
                 return true;
         }
 
         //build the mysql code
-        $strQuery .= "CREATE TABLE "._dbprefix_.$strName." ( \n";
+        $strQuery .= "CREATE TABLE ".$strName." ( \n";
 
         //loop the fields
         foreach($arrFields as $strFieldName => $arrColumnSettings) {
@@ -354,11 +315,11 @@ class class_db_postgres extends class_db_base {
 
 
         $strQuery .= ") ";
-        $bitCreate = $this->_query($strQuery);
+        $bitCreate = $this->_pQuery($strQuery, array());
 
         if($bitCreate && count($arrIndices) > 0) {
-            $strQuery = "CREATE INDEX ix_".generateSystemid()." ON "._dbprefix_.$strName." ( ".implode(", ", $arrIndices).") ";
-            $bitCreate = $bitCreate && $this->_query($strQuery);
+            $strQuery = "CREATE INDEX ix_".generateSystemid()." ON ".$strName." ( ".implode(", ", $arrIndices).") ";
+            $bitCreate = $bitCreate && $this->_pQuery($strQuery, array());
         }
 
         return $bitCreate;
@@ -371,7 +332,7 @@ class class_db_postgres extends class_db_base {
     public function transactionBegin() {
         //Autocommit 0 setzten
         $strQuery = "BEGIN";
-        $this->_query($strQuery);
+        $this->_pQuery($strQuery, array());
     }
 
     /**
@@ -379,8 +340,8 @@ class class_db_postgres extends class_db_base {
      * @return void
      */
     public function transactionCommit() {
-        $str_query = "COMMIT";
-        $this->_query($str_query);
+        $str_pQuery = "COMMIT";
+        $this->_pQuery($str_pQuery, array());
     }
 
     /**
@@ -389,7 +350,7 @@ class class_db_postgres extends class_db_base {
      */
     public function transactionRollback() {
         $strQuery = "ROLLBACK";
-        $this->_query($strQuery);
+        $this->_pQuery($strQuery, array());
     }
 
     /**

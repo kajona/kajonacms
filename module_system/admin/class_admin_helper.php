@@ -1,6 +1,6 @@
 <?php
 /*"******************************************************************************************************
-*   (c) 2007-2014 by Kajona, www.kajona.de                                                              *
+*   (c) 2007-2015 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
 *	$Id$	                                            *
@@ -101,7 +101,9 @@ class class_admin_helper {
             if($arrFinalItems !== false)
                 return $arrFinalItems;
 
-            $arrItems = $objModule->getAdminInstanceOfConcreteModule()->getOutputModuleNavi();
+            $objAdminInstance = $objModule->getAdminInstanceOfConcreteModule();
+            $arrItems = $objAdminInstance->getOutputModuleNavi();
+            $arrItems = array_merge($arrItems, $objAdminInstance->getModuleRightNaviEntry());
             $arrFinalItems = array();
             //build array of final items
             $intI = 0;

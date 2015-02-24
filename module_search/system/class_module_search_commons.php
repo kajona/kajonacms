@@ -1,10 +1,8 @@
 <?php
 /*"******************************************************************************************************
 *   (c) 2004-2006 by MulchProductions, www.mulchprod.de                                                 *
-*   (c) 2007-2014 by Kajona, www.kajona.de                                                              *
+*   (c) 2007-2015 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
-*-------------------------------------------------------------------------------------------------------*
-*	$Id$                               *
 ********************************************************************************************************/
 
 /**
@@ -32,21 +30,17 @@ class class_module_search_commons extends class_model implements interface_model
      * Calls the single search-functions, sorts the results and creates the output.
      * Method for portal-searches.
      *
-     * @param string $strSearchterm
-     * @param string $strPortalLang
+     * @param class_module_search_search $objSearch
      *
      * @return class_search_result[]
      */
-    public function doPortalSearch($strSearchterm, $strPortalLang = null) {
-        $strSearchterm = trim(uniStrReplace("%", "", $strSearchterm));
-        if(uniStrlen($strSearchterm) == 0)
+    public function doPortalSearch($objSearch) {
+        $objSearch->setStrQuery(trim(uniStrReplace("%", "", $objSearch->getStrQuery())));
+        if(uniStrlen($objSearch->getStrQuery()) == 0)
             return array();
 
         //create a search object
-        $objSearch = new class_module_search_search();
-        $objSearch->setStrQuery($strSearchterm);
         $objSearch->setBitPortalObjectFilter(true);
-        $objSearch->setStrPortalLangFilter($strPortalLang);
 
         $arrHits = $this->doIndexedSearch($objSearch);
 
@@ -72,7 +66,7 @@ class class_module_search_commons extends class_model implements interface_model
         }
 
         //log the query
-        class_module_search_log::generateLogEntry($strSearchterm);
+        class_module_search_log::generateLogEntry($objSearch->getStrQuery());
 
         $arrReturn = $this->mergeDuplicates($arrReturn);
 

@@ -1,7 +1,7 @@
 <?php
 /*"******************************************************************************************************
 *   (c) 2004-2006 by MulchProductions, www.mulchprod.de                                                 *
-*   (c) 2007-2014 by Kajona, www.kajona.de                                                              *
+*   (c) 2007-2015 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
 *	$Id$                                         *
@@ -46,7 +46,7 @@ class class_installer_search extends class_installer_base implements interface_i
 
         $arrFields = array();
 		$arrFields["search_queue_id"] 	    = array("char20", false);
-		$arrFields["search_queue_systemid"] 	= array("char20", true);
+		$arrFields["search_queue_systemid"] = array("char20", true);
 		$arrFields["search_queue_action"] 	= array("char20", true);
 
 		if(!$this->objDB->createTable("search_queue", $arrFields, array("search_queue_id")))
@@ -213,6 +213,24 @@ class class_installer_search extends class_installer_base implements interface_i
         $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
         if($arrModule["module_version"] == "4.5") {
             $strReturn .= $this->update_45_451();
+        }
+
+        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "4.5.1") {
+            $strReturn .= $this->update_451_452();
+        }
+
+        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "4.5.2") {
+            $strReturn .= "Updating 4.5.2 to 4.6...\n";
+            $strReturn .= "Updating module-versions...\n";
+            $this->updateModuleVersion("search", "4.6");
+            $this->updateElementVersion("search", "4.6");
+        }
+
+        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "4.6") {
+            $strReturn .= $this->update_46_461();
         }
 
         if($this->bitIndexRebuild) {
@@ -402,6 +420,55 @@ class class_installer_search extends class_installer_base implements interface_i
            $strReturn .= "An error occurred! ...\n";
 
         return $strReturn;
+    }
+
+    private function update_451_452() {
+        $strReturn = "";
+
+        $objPackageManager = new class_module_packagemanager_manager();
+        if($objPackageManager->getPackage("pages") !== null) {
+            $strReturn .= "Updating search_element tables...\n";
+            $strQuery = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."element_search")."
+                                ADD ".$this->objDB->encloseColumnName("search_query_id")." ".$this->objDB->getDatatype("char20")." NULL";
+
+            if(!$this->objDB->_pQuery($strQuery, array())) {
+                $strReturn .= "An error occurred! ...\n";
+            }
+
+        }
+
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion("search", "4.5.2");
+        $this->updateElementVersion("search", "4.5.2");
+
+        return $strReturn;
+
+    }
+
+    private function update_46_461() {
+        $strReturn = "Adding index queue functionality...\n";
+
+
+        //Table for the index queue
+        $strReturn .= "Installing search-queue table...\n";
+
+        $arrFields = array();
+        $arrFields["search_queue_id"] 	    = array("char20", false);
+        $arrFields["search_queue_systemid"] = array("char20", true);
+        $arrFields["search_queue_action"] 	= array("char20", true);
+
+        if(!$this->objDB->createTable("search_queue", $arrFields, array("search_queue_id")))
+            $strReturn .= "An error occurred! ...\n";
+
+        $strReturn .= "Registering config-values...\n";
+        $this->registerConstant("_search_deferred_indexer_", "false", class_module_system_setting::$int_TYPE_BOOL, _search_module_id_);
+
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion("search", "4.6.1");
+        $this->updateElementVersion("search", "4.6.1");
+
+        return $strReturn;
+
     }
 
 }

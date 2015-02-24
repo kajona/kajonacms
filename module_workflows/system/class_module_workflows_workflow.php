@@ -1,7 +1,7 @@
 <?php
 /*"******************************************************************************************************
 *   (c) 2004-2006 by MulchProductions, www.mulchprod.de                                                 *
-*   (c) 2007-2014 by Kajona, www.kajona.de                                                              *
+*   (c) 2007-2015 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
 *	$Id$					    *
@@ -18,6 +18,8 @@
  *
  * @module workflows
  * @moduleId _workflows_module_id_
+ *
+ * @blockFromAutosave
  */
 class class_module_workflows_workflow extends class_model implements interface_model, interface_admin_listable  {
 
@@ -205,10 +207,10 @@ class class_module_workflows_workflow extends class_model implements interface_m
         $objOrmMapper = new class_orm_objectlist();
 
         if($bitOnlyWithValidTriggerDate) {
-            $objOrmMapper->addWhereRestriction(new class_orm_objectlist_restriction("AND system_date_start < ?", array(class_date::getCurrentTimestamp())));
+            $objOrmMapper->addWhereRestriction(new class_orm_objectlist_property_restriction("objStartDate", class_orm_comparator_enum::LessThen(), class_date::getCurrentTimestamp()));
         }
 
-        $objOrmMapper->addWhereRestriction(new class_orm_objectlist_restriction("AND workflows_state = ?", array((int)$intType)));
+        $objOrmMapper->addWhereRestriction(new class_orm_objectlist_property_restriction("intState", class_orm_comparator_enum::Equal(), (int)$intType));
         $objOrmMapper->addOrderBy(new class_orm_objectlist_orderby("system_date_start DESC"));
 
         return $objOrmMapper->getObjectList("class_module_workflows_workflow");
@@ -299,7 +301,7 @@ class class_module_workflows_workflow extends class_model implements interface_m
             $objOrmMapper->addWhereRestriction(new class_orm_objectlist_restriction("AND ( system_date_start > ? OR system_date_start = 0 )", array(class_date::getCurrentTimestamp())));
         }
 
-        $objOrmMapper->addWhereRestriction(new class_orm_objectlist_restriction("AND workflows_class = ?", array($strClass)));
+        $objOrmMapper->addWhereRestriction(new class_orm_objectlist_property_restriction("strClass", class_orm_comparator_enum::Equal(), $strClass));
         $objOrmMapper->addOrderBy(new class_orm_objectlist_orderby("system_date_start DESC"));
 
         return $objOrmMapper->getObjectList("class_module_workflows_workflow");
@@ -320,7 +322,7 @@ class class_module_workflows_workflow extends class_model implements interface_m
             $objOrmMapper->addWhereRestriction(new class_orm_objectlist_restriction("AND ( system_date_start > ? OR system_date_start = 0 )", array(class_date::getCurrentTimestamp())));
         }
 
-        $objOrmMapper->addWhereRestriction(new class_orm_objectlist_restriction("AND workflows_class = ?", array($strClass)));
+        $objOrmMapper->addWhereRestriction(new class_orm_objectlist_property_restriction("strClass", class_orm_comparator_enum::Equal(), $strClass));
         $objOrmMapper->addOrderBy(new class_orm_objectlist_orderby("system_date_start DESC"));
 
         return $objOrmMapper->getObjectCount("class_module_workflows_workflow");
@@ -336,7 +338,7 @@ class class_module_workflows_workflow extends class_model implements interface_m
      */
     public static function getPendingWorkflowsForUserCount($arrUserids) {
         $objOrmMapper = new class_orm_objectlist();
-        $objOrmMapper->addWhereRestriction(new class_orm_objectlist_restriction("AND workflows_state = ?", array((int)self::$INT_STATE_SCHEDULED)));
+        $objOrmMapper->addWhereRestriction(new class_orm_objectlist_property_restriction("intState", class_orm_comparator_enum::Equal(), (int)self::$INT_STATE_SCHEDULED));
         $objOrmMapper->addWhereRestriction(self::getUserWhereStatement($arrUserids));
 
         return $objOrmMapper->getObjectCount("class_module_workflows_workflow");
@@ -353,7 +355,7 @@ class class_module_workflows_workflow extends class_model implements interface_m
      */
     public static function getPendingWorkflowsForUser($arrUserids, $intStart = false, $intEnd = false) {
         $objOrmMapper = new class_orm_objectlist();
-        $objOrmMapper->addWhereRestriction(new class_orm_objectlist_restriction("AND workflows_state = ?", array((int)self::$INT_STATE_SCHEDULED)));
+        $objOrmMapper->addWhereRestriction(new class_orm_objectlist_property_restriction("intState", class_orm_comparator_enum::Equal(), (int)self::$INT_STATE_SCHEDULED));
         $objOrmMapper->addWhereRestriction(self::getUserWhereStatement($arrUserids));
         $objOrmMapper->addOrderBy(new class_orm_objectlist_orderby("system_date_start DESC"));
         $objOrmMapper->addOrderBy(new class_orm_objectlist_orderby("system_sort DESC"));
@@ -370,11 +372,11 @@ class class_module_workflows_workflow extends class_model implements interface_m
      *
      * @return class_module_workflows_workflow[]
      */
-    public static function getAllworkflows($intStart = false, $intEnd = false) {
+    public static function getAllworkflows($intStart = null, $intEnd = null) {
         $objOrmMapper = new class_orm_objectlist();
         $objOrmMapper->addOrderBy(new class_orm_objectlist_orderby("workflows_state ASC"));
         $objOrmMapper->addOrderBy(new class_orm_objectlist_orderby("system_date_start DESC"));
-        return $objOrmMapper->getObjectList("class_module_workflows_workflow", $intStart, $intEnd);
+        return $objOrmMapper->getObjectList("class_module_workflows_workflow", "", $intStart, $intEnd);
     }
 
     /**

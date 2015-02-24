@@ -1,7 +1,7 @@
 <?php
 /*"******************************************************************************************************
 *   (c) 2004-2006 by MulchProductions, www.mulchprod.de                                                 *
-*   (c) 2007-2014 by Kajona, www.kajona.de                                                              *
+*   (c) 2007-2015 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
 *	$Id$					    *
@@ -15,7 +15,7 @@ $lang["_news_news_datetime_hint"]        = "By default news are created for a si
 $lang["action_new_feed"]                 = "New RSS-feed";
 $lang["action_new_news"]                 = "Create news";
 $lang["backward"]                        = "Backward";
-$lang["calendar_filter_news"]            = "News Beiträge";
+$lang["calendar_filter_news"]            = "News entries";
 $lang["calendar_type_news"]              = "News";
 $lang["delete_category_question"]        = "Do you really want to delete the category &quot;<b>%%element_name%%</b>&quot;?";
 $lang["delete_feed_question"]            = "Do you really want to delete the feed &quot;<b>%%element_name%%</b>&quot;?";

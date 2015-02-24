@@ -1,7 +1,7 @@
 <?php
 /*"******************************************************************************************************
 *   (c) 2004-2006 by MulchProductions, www.mulchprod.de                                                 *
-*   (c) 2007-2014 by Kajona, www.kajona.de                                                              *
+*   (c) 2007-2015 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
 *   $Id$                                                   *
@@ -9,7 +9,7 @@
 
 
 //Determing the area to load
-if(issetGet("admin") && getGet("admin") == 1) {
+if(class_carrier::getInstance()->getParam("admin") == 1) {
     define("_admin_", true);
 }
 else {
@@ -18,7 +18,6 @@ else {
 
 define("_autotesting_", false);
 
-// --- The Index Class ----------------------------------------------------------------------------------
 
 /**
  * Wrapper class to centralize a method within its namespace
@@ -38,29 +37,13 @@ class class_index {
      */
     public function processRequest() {
 
-        $strModule = getGet("module");
+        $strModule = class_carrier::getInstance()->getParam("module");
         if($strModule == "") {
-            $strModule = getPost("module");
+            $strModule = _admin_ ?  "dashboard" : "pages";
         }
 
-        if($strModule == "" && _admin_) {
-            $strModule = "dashboard";
-        }
-
-        if($strModule == "" && !_admin_) {
-            $strModule = "pages";
-        }
-
-        $strAction = getGet("action");
-        if($strAction == "") {
-            $strAction = getPost("action");
-        }
-
-        $strLanguageParam = getGet("language");
-        if($strLanguageParam == "") {
-            $strLanguageParam = getPost("language");
-        }
-
+        $strAction = class_carrier::getInstance()->getParam("action");
+        $strLanguageParam = class_carrier::getInstance()->getParam("language");
 
         $this->objResponse = class_response_object::getInstance();
         $this->objResponse->setStrResponseType(class_http_responsetypes::STR_TYPE_HTML);
@@ -77,5 +60,6 @@ class class_index {
 $objIndex = new class_index();
 $objIndex->processRequest();
 $objIndex->objResponse->sendHeaders();
-echo $objIndex->objResponse->getStrContent();
+$objIndex->objResponse->sendContent();
+class_core_eventdispatcher::getInstance()->notifyGenericListeners(class_system_eventidentifier::EVENT_SYSTEM_REQUEST_AFTERCONTENTSEND, array(class_request_entrypoint_enum::INDEX()));
 

@@ -1,7 +1,7 @@
 <?php
 /*"******************************************************************************************************
 *   (c) 2004-2006 by MulchProductions, www.mulchprod.de                                                 *
-*   (c) 2007-2014 by Kajona, www.kajona.de                                                              *
+*   (c) 2007-2015 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
 *	$Id$					    *
@@ -38,9 +38,9 @@ $lang["module_list_handlers"]            = "Workflow-Handler";
 $lang["module_mylist"]                   = "Meine Workflows";
 $lang["module_trigger"]                  = "Workflows triggern";
 $lang["myList_empty"]                    = "Keine zu bearbeitenden Workflows vorhanden.";
-$lang["quickhelp_list"]                  = "Auf der Seite \"Alle Workflows\" werden alle aktuell im System befindlichen Workflows, erledigt oder offen, dargestellt.<br />Noch offene Workflows beginnen mit den Symbolen   (Bearbeitungsmaske für den aktuellen Schritt anzeigen) und  (Geplant).<br />Bereits erledigte Workflows beginnen mit dem Symbol  (Beendet).<br /><br />Die Workflows werden  absteigend der Fälligkeit dargestellt.<br />Werden Workflows nicht bis zu Ihrer Fälligkeit bearbeitet, so erfolgt automatisch ein E-Mail-Benachrichtigungen bzw. Erinnerung. <br />Über die Seite \"Cockpit\" erhält man ebenfalls Informationen über die zugeordneten Workflows.<br />Die Funktion \"Schnellhilfe\" bietet einen kurzen Überblick über die dargestellte Seite mit Ihren Kernfunktionen.";
+$lang["quickhelp_list"]                  = "Auf dieser Seite werden alle im System angelegten Workflows mit dem Hinweis der Fälligkeit dargestellt. Workflows können hier bearbeitet werden und werden absteigend der Fälligkeit dargestellt.<br />Werden Workflows nicht bis zu Ihrer Fälligkeit bearbeitet, so erfolgt i.d.R. ein E-Mail-Benachrichtigungen bzw. Erinnerung.";
 $lang["quickhelp_list_handlers"]         = "Workflow-Handler stellen die technische Einheit eines Workflows dar. Handler werden zur Parametrisierung der laufenden Instanzen benötigt. In der Regel stehen Handler nur System-Administratoren zur Verfügung.";
-$lang["quickhelp_my_list"]               = "Auf der Seite \"Meine Workflows\" werden User-bezogene Workflows mit dem Hinweis der Fälligkeit dargestellt. Es besteht die Möglichkeit den Workflow hier zu bearbeiten.<br />Die Workflows werden  absteigend der Fälligkeit dargestellt.<br /><br />Die Funktion \"Schnellhilfe\" bietet einen kurzen Überblick über die dargestellte Seite mit Ihren Kernfunktionen.<br /><br />Workflows, die aus Aufgaben resultieren, können sowohl in der Ansicht Workflows als auch von ihrer ursprünglichen Seite in ihrem Status verändert werden. Eine Änderung sowohl in der einen oder in der anderen Ansicht führt zur automatischen Übernahme in der jeweils anderen Ansicht.<br /><br />Werden Workflows nicht bis zu Ihrer Fälligkeit bearbeitet, so erfolgt automatisch ein E-Mail-Benachrichtigungen bzw. Erinnerung. <br />Über die Seite \"Cockpit\" erhält man ebenfalls Informationen über die zugeordneten Workflows. Durch Anklicken des Symbols \"Zu Workflows\" gelangt man auf die Seite \"Meine Workflows\".";
+$lang["quickhelp_my_list"]               = "Auf dieser Seite werden die eigenen Workflows mit dem Hinweis der Fälligkeit dargestellt. Workflows können hier bearbeitet werden und werden absteigend der Fälligkeit dargestellt.<br />Werden Workflows nicht bis zu Ihrer Fälligkeit bearbeitet, so erfolgt i.d.R. ein E-Mail-Benachrichtigungen bzw. Erinnerung.";
 $lang["systemtask_runworkflows_name"]    = "Workflows starten";
 $lang["workflow_char1"]                  = "Char 1";
 $lang["workflow_char2"]                  = "Char 2";

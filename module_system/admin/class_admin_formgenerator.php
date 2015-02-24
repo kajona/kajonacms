@@ -1,6 +1,6 @@
 <?php
 /*"******************************************************************************************************
-*   (c) 2007-2014 by Kajona, www.kajona.de                                                              *
+*   (c) 2007-2015 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
 *	$Id$                                   *
@@ -126,7 +126,7 @@ class class_admin_formgenerator {
             $bitFieldIsEmpty
                 = (!is_array($objOneField->getStrValue()) && trim($objOneField->getStrValue()) === "")
                 || is_null($objOneField->getStrValue())
-                || (is_array($objOneField->getStrValue() && count($objOneField->getStrValue()) == 0)); //if it is an array with no entries
+                || (is_array($objOneField->getStrValue()) && count($objOneField->getStrValue()) == 0); //if it is an array with no entries
 
             //mandatory field
             if($objOneField->getBitMandatory()) {
@@ -149,48 +149,53 @@ class class_admin_formgenerator {
             $objReflection = new class_reflection($this->getObjSourceobject());
             $arrObjectValidator = $objReflection->getAnnotationValuesFromClass(self::STR_OBJECTVALIDATOR_ANNOTATION);
             if(count($arrObjectValidator) == 1) {
+
                 $strObjectValidator = $arrObjectValidator[0];
-                if(class_exists($strObjectValidator)) {
-                    /** @var interface_object_validator $objValidator */
-                    $objValidator = new $strObjectValidator();
+                if(!class_exists($strObjectValidator)) {
+                    throw new class_exception("object validator ".$strObjectValidator." not existing", class_exception::$level_ERROR);
+                }
 
-                    //Keep the reference of the current object
-                    $objSourceObjectTemp = $this->getObjSourceobject();
+                /** @var class_objectvalidator_base $objValidator */
+                $objValidator = new $strObjectValidator();
 
-                    //Create a new instance of the source object and set it as source object in the formgenerator
-                    //Each existing filed will also refenrce the new created soiurce object
-                    $strClassName = get_class($this->objSourceobject);
-                    $this->objSourceobject = new $strClassName($this->objSourceobject->getStrSystemid());
-                    foreach($this->arrFields as $objOneField) {
-                        if($objOneField->getObjSourceObject() != null) {
-                            $objOneField->setObjSourceObject($this->objSourceobject);
-                        }
-                    }
+                //Keep the reference of the current object
+                $objSourceObjectTemp = $this->getObjSourceobject();
 
-                    //Update the new source object values from the fields and validate the object
-                    $this->updateSourceObject();
-                    $arrValidationErrorsObject = $objValidator->validateObject($this->getObjSourceobject());
-
-                    foreach($arrValidationErrorsObject as $strKey => $arrMessages) {
-                        if(!is_array($arrMessages)) {
-                            throw new class_exception("method validateObject must return an array of format array(\"<messageKey>\" => array())", class_exception::$level_ERROR);
-                        }
-
-                        foreach($arrMessages as $strMessage) {
-                            $this->addValidationError($strKey, $strMessage);
-                        }
-                    }
-
-                    //Set back kept reference to the formgenerator and all it's fields
-                    $this->objSourceobject = $objSourceObjectTemp;
-                    foreach($this->arrFields as $objOneField) {
-                        if($objOneField->getObjSourceObject() != null) {
-                            $objOneField->setObjSourceObject($objSourceObjectTemp);
-                        }
+                //Create a new instance of the source object and set it as source object in the formgenerator
+                //Each existing field will also reference the new created source object
+                $strClassName = get_class($this->objSourceobject);
+                $this->objSourceobject = new $strClassName($this->objSourceobject->getStrSystemid());
+                foreach($this->arrFields as $objOneField) {
+                    if($objOneField->getObjSourceObject() != null) {
+                        $objOneField->setObjSourceObject($this->objSourceobject);
                     }
                 }
-                else {
-                    throw new class_exception("object validator ".$strObjectValidator." not existing", class_exception::$level_ERROR);
+
+                //if we are in new-mode, we should fix the prev-id to the lateron matching one
+                if(($this->getField("mode") != null && $this->getField("mode")->getStrValue() == "new") || class_carrier::getInstance()->getParam("mode") == "new") {
+                    $this->objSourceobject->setStrPrevId(class_carrier::getInstance()->getParam("systemid"));
+                }
+
+                //Update the new source object values from the fields and validate the object
+                $this->updateSourceObject();
+                $objValidator->validateObject($this->getObjSourceobject());
+
+                foreach($objValidator->getArrValidationMessages() as $strKey => $arrMessages) {
+                    if(!is_array($arrMessages)) {
+                        throw new class_exception("method validateObject must return an array of format array(\"<messageKey>\" => array())", class_exception::$level_ERROR);
+                    }
+
+                    foreach($arrMessages as $strMessage) {
+                        $this->addValidationError($strKey, $strMessage);
+                    }
+                }
+
+                //Set back kept reference to the formgenerator and all it's fields
+                $this->objSourceobject = $objSourceObjectTemp;
+                foreach($this->arrFields as $objOneField) {
+                    if($objOneField->getObjSourceObject() != null) {
+                        $objOneField->setObjSourceObject($objSourceObjectTemp);
+                    }
                 }
             }
         }

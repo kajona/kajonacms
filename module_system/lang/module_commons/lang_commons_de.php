@@ -1,7 +1,7 @@
 <?php
 /*"******************************************************************************************************
 *   (c) 2004-2006 by MulchProductions, www.mulchprod.de                                                 *
-*   (c) 2007-2014 by Kajona, www.kajona.de                                                              *
+*   (c) 2007-2015 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
 *	$Id$					    *
@@ -30,6 +30,7 @@ $lang["commons_category_title"]          = "Kategorie-Titel";
 $lang["commons_create_category"]         = "Kategorie anlegen";
 $lang["commons_create_folder"]           = "Neuer Ordner";
 $lang["commons_continue"]                = "Weiter";
+$lang["commons_close"]                   = "Schließen";
 $lang["commons_date"]                    = "Datum";
 $lang["commons_delete"]                  = "Löschen";
 $lang["commons_delete_category_question"] = "Möchten Sie die Kategorie &quot;<b>%%element_name%%</b>&quot; wirklich löschen?";
@@ -60,6 +61,7 @@ $lang["commons_next"]                    = "weiter";
 $lang["commons_no"]                      = "Nein";
 $lang["commons_ok"]                      = "Ok";
 $lang["commons_one_level_up"]            = "Eine Ebene nach oben";
+$lang["commons_one_level_down"]          = "Untergeordnete Ebene anzeigen";
 $lang["commons_open_browser"]            = "Browser öffnen";
 $lang["commons_page_success"]            = "Seite im Erfolgsfall (optional)";
 $lang["commons_path"]                    = "Pfad";
@@ -82,8 +84,8 @@ $lang["commons_validator_posint_validationmessage"] = "Das Feld muss positive Ga
 $lang["commons_yes"]                     = "Ja";
 
 $lang["commons_remove_assignment"]                     = "Zuordnung löschen";
-$lang["commons_object_validator_datecompare_validationmessage_after"] = "'{0}' darf nicht nach '{1}' liegen.";
-$lang["commons_object_validator_datecompare_validationmessage_before"] = "'{0}' muss vor '{1}' liegen.";
+$lang["commons_object_validator_datecompare_validationmessage_after"] = "'{0}' darf nicht größer sein als '{1}'.";
+$lang["commons_object_validator_datecompare_validationmessage_before"] = "'{0}' darf nicht kleiner sein als '{1}'    .";
 $lang["commons_object_validator_number_range"] = "Die Zahl muss zwischen '{0}' und '{1}' liegen.";
 $lang["commons_object_validator_number_greater_than"] = "Die Zahl muss > '{0}' sein";
 $lang["commons_object_validator_number_greaterequals_than"] = "Die Zahl muss >= '{0}' sein";

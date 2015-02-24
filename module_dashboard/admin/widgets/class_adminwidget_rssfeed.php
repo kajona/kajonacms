@@ -1,7 +1,7 @@
 <?php
 /*"******************************************************************************************************
 *   (c) 2004-2006 by MulchProductions, www.mulchprod.de                                                 *
-*   (c) 2007-2014 by Kajona, www.kajona.de                                                              *
+*   (c) 2007-2015 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
 *	$Id$	                            *
@@ -48,12 +48,21 @@ class class_adminwidget_rssfeed extends class_adminwidget implements interface_a
         $strReturn = "";
 
         //request the xml...
-        $strContent = @file_get_contents($this->getFieldValue("feedurl"));
 
         try {
+
+            $arrUrl = parse_url($this->getFieldValue("feedurl"));
             $objRemoteloader = new class_remoteloader();
-            $objRemoteloader->setStrHost(str_ireplace("http://", "", $this->getFieldValue("feedurl")));
-            $objRemoteloader->setIntPort(0);
+
+            $intPort = isset($arrUrl["port"]) ? $arrUrl["port"] : "";
+            if($intPort == "") {
+                if($arrUrl["scheme"] == "https" ? 443 : 80);
+            }
+
+            $objRemoteloader->setStrHost($arrUrl["host"]);
+            $objRemoteloader->setStrQueryParams($arrUrl["path"].(isset($arrUrl["query"]) ? $arrUrl["query"] : ""));
+            $objRemoteloader->setIntPort($intPort);
+            $objRemoteloader->setStrProtocolHeader($arrUrl["scheme"]."://");
             $strContent = $objRemoteloader->getRemoteContent();
         }
         catch (class_exception $objExeption) {

@@ -1,7 +1,7 @@
 <?php
 /*"******************************************************************************************************
 *   (c) 2004-2006 by MulchProductions, www.mulchprod.de                                                 *
-*   (c) 2007-2014 by Kajona, www.kajona.de                                                              *
+*   (c) 2007-2015 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
 *	$Id$                                    *
@@ -160,14 +160,14 @@ class class_module_faqs_faq extends class_model implements interface_model, inte
 
     }
 
-    public function copyObject($strNewPrevid = "") {
+    public function copyObject($strNewPrevid = "", $bitChangeTitle = true) {
         $arrMemberCats = class_module_faqs_category::getFaqsMember($this->getSystemid());
         $this->arrCats = array();
         foreach($arrMemberCats as $objOneCat) {
             $this->arrCats[$objOneCat->getSystemid()] = "1";
         }
         $this->updateBitMemberships = true;
-        return parent::copyObject($strNewPrevid);
+        return parent::copyObject($strNewPrevid, $bitChangeTitle);
     }
 
 

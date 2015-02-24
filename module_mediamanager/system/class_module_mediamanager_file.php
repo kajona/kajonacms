@@ -1,9 +1,7 @@
 <?php
 /*"******************************************************************************************************
-*   (c) 2007-2014 by Kajona, www.kajona.de                                                              *
+*   (c) 2007-2015 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
-*-------------------------------------------------------------------------------------------------------*
-*	$Id$                          *
 ********************************************************************************************************/
 
 /**
@@ -24,7 +22,7 @@ class class_module_mediamanager_file extends class_model implements interface_mo
 
     /**
      * @var string
-     * @tableColumn file_name
+     * @tableColumn mediamanager_file.file_name
      * @tableColumnDatatype char254
      *
      * @fieldType text
@@ -35,7 +33,7 @@ class class_module_mediamanager_file extends class_model implements interface_mo
 
     /**
      * @var string
-     * @tableColumn file_filename
+     * @tableColumn mediamanager_file.file_filename
      * @tableColumnDatatype char254
      *
      * @addSearchIndex
@@ -44,7 +42,7 @@ class class_module_mediamanager_file extends class_model implements interface_mo
 
     /**
      * @var string
-     * @tableColumn file_description
+     * @tableColumn mediamanager_file.file_description
      * @tableColumnDatatype text
      * @blockEscaping
      *
@@ -56,7 +54,7 @@ class class_module_mediamanager_file extends class_model implements interface_mo
 
     /**
      * @var string
-     * @tableColumn file_subtitle
+     * @tableColumn mediamanager_file.file_subtitle
      * @tableColumnDatatype char254
      *
      * @fieldType text
@@ -67,7 +65,7 @@ class class_module_mediamanager_file extends class_model implements interface_mo
 
     /**
      * @var int
-     * @tableColumn file_hits
+     * @tableColumn mediamanager_file.file_hits
      * @tableColumnDatatype int
      */
     private $intHits = 0;
@@ -76,42 +74,42 @@ class class_module_mediamanager_file extends class_model implements interface_mo
      * 0 = file, 1 = folder
      *
      * @var int
-     * @tableColumn file_type
+     * @tableColumn mediamanager_file.file_type
      * @tableColumnDatatype int
      */
     private $intType = 0;
 
     /**
      * @var int
-     * @tableColumn file_ispackage
+     * @tableColumn mediamanager_file.file_ispackage
      * @tableColumnDatatype int
      */
     private $bitIspackage = 0;
 
     /**
      * @var int
-     * @tableColumn file_cat
+     * @tableColumn mediamanager_file.file_cat
      * @tableColumnDatatype char254
      */
     private $strCat = "";
 
     /**
      * @var string
-     * @tableColumn file_screen1
+     * @tableColumn mediamanager_file.file_screen1
      * @tableColumnDatatype char254
      */
     private $strScreen1 = "";
 
     /**
      * @var string
-     * @tableColumn file_screen2
+     * @tableColumn mediamanager_file.file_screen2
      * @tableColumnDatatype char254
      */
     private $strScreen2 = "";
 
     /**
      * @var string
-     * @tableColumn file_screen3
+     * @tableColumn mediamanager_file.file_screen3
      * @tableColumnDatatype char254
      */
     private $strScreen3 = "";

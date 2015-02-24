@@ -1,10 +1,8 @@
 <?php
 /*"******************************************************************************************************
 *   (c) 2004-2006 by MulchProductions, www.mulchprod.de                                                 *
-*   (c) 2007-2014 by Kajona, www.kajona.de                                                              *
+*   (c) 2007-2015 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
-*-------------------------------------------------------------------------------------------------------*
-*	$Id$                            *
 ********************************************************************************************************/
 
 /**
@@ -16,27 +14,29 @@
  *
  * @module pages_content
  * @moduleId _pages_content_modul_id_
+ *
+ * @blockFromAutosave
  */
 class class_module_pages_pageelement extends class_model implements interface_model, interface_admin_listable {
 
 
     /**
      * @var string
-     * @tableColumn page_element_ph_placeholder
+     * @tableColumn page_element.page_element_ph_placeholder
      * @tableColumnDatatype text
      */
     private $strPlaceholder = "";
 
     /**
      * @var string
-     * @tableColumn page_element_ph_name
+     * @tableColumn page_element.page_element_ph_name
      * @tableColumnDatatype char254
      */
     private $strName = "";
 
     /**
      * @var string
-     * @tableColumn page_element_ph_element
+     * @tableColumn page_element.page_element_ph_element
      * @tableColumnIndex
      * @tableColumnDatatype char254
      */
@@ -44,14 +44,14 @@ class class_module_pages_pageelement extends class_model implements interface_mo
 
     /**
      * @var string
-     * @tableColumn page_element_ph_title
+     * @tableColumn page_element.page_element_ph_title
      * @tableColumnDatatype char254
      */
     private $strTitle = "";
 
     /**
      * @var string
-     * @tableColumn page_element_ph_language
+     * @tableColumn page_element.page_element_ph_language
      * @tableColumnIndex
      * @tableColumnDatatype char20
      */
@@ -197,12 +197,7 @@ class class_module_pages_pageelement extends class_model implements interface_mo
             }
         }
 
-        //shift it to the last position by default
-        //As a special feature, we set the element as the last
-        $strQuery = "UPDATE "._dbprefix_."system SET system_sort = ? WHERE system_id = ?";
-        $intNewSort = count($this->getSortedElementsAtPlaceholder()) + 1;
-        $this->setIntSort($intNewSort);
-        $this->objDB->_pQuery($strQuery, array($intNewSort, $this->getSystemid()));
+
 
         $this->objDB->flushQueryCache();
 
@@ -218,8 +213,14 @@ class class_module_pages_pageelement extends class_model implements interface_mo
      * @return class_element_admin
      */
     public function getConcreteAdminInstance() {
-        if($this->getStrClassAdmin() == "")
-            return null;
+        if($this->getStrClassAdmin() == "") {
+            //Build the class-name based on the linked element
+            $objElementdefinitionToCreate = class_module_pages_element::getElement($this->getStrElement());
+            if($objElementdefinitionToCreate == null) {
+                return null;
+            }
+            $this->setStrClassAdmin($objElementdefinitionToCreate->getStrClassAdmin());
+        }
 
         $strElementClass = str_replace(".php", "", $this->getStrClassAdmin());
         //and finally create the object
@@ -237,8 +238,14 @@ class class_module_pages_pageelement extends class_model implements interface_mo
      */
     public function getConcretePortalInstance() {
 
-        if($this->getStrClassPortal() == "")
-            return null;
+        if($this->getStrClassAdmin() == "") {
+            //Build the class-name based on the linked element
+            $objElementdefinitionToCreate = class_module_pages_element::getElement($this->getStrElement());
+            if($objElementdefinitionToCreate == null) {
+                return null;
+            }
+            $this->setStrClassPortal($objElementdefinitionToCreate->getStrClassPortal());
+        }
 
         $strElementClass = str_replace(".php", "", $this->getStrClassPortal());
         //and finally create the object
@@ -254,10 +261,12 @@ class class_module_pages_pageelement extends class_model implements interface_mo
      * This copy includes the records in the elements' foreign tables
      *
      * @param string $strNewPage
+     * @param bool $bitChangeTitle
      *
+     * @throws class_exception
      * @return class_module_pages_pageelement the new element or null in case of an error
      */
-    public function copyObject($strNewPage = "") {
+    public function copyObject($strNewPage = "", $bitChangeTitle = true) {
 
         class_logger::getInstance()->addLogRow("copy pageelement ".$this->getSystemid(), class_logger::$levelInfo);
         $this->objDB->transactionBegin();
@@ -267,7 +276,7 @@ class class_module_pages_pageelement extends class_model implements interface_mo
         $arrElementData = $objElement->loadElementData();
 
         //duplicate the current elements - afterwards $this is the new element
-        parent::copyObject($strNewPage);
+        parent::copyObject($strNewPage, $bitChangeTitle);
 
         //copy the old contents into the new elements
         $objElement = $this->getConcreteAdminInstance();

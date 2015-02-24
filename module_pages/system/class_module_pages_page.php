@@ -1,7 +1,7 @@
 <?php
 /*"******************************************************************************************************
 *   (c) 2004-2006 by MulchProductions, www.mulchprod.de                                                 *
-*   (c) 2007-2014 by Kajona, www.kajona.de                                                              *
+*   (c) 2007-2015 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
 *	$Id$                                   *
@@ -24,7 +24,7 @@ class class_module_pages_page extends class_model implements interface_model, in
 
     /**
      * @var string
-     * @tableColumn page_name
+     * @tableColumn page.page_name
      * @tableColumnDatatype char254
      * @versionable
      * @addSearchIndex
@@ -36,7 +36,7 @@ class class_module_pages_page extends class_model implements interface_model, in
 
     /**
      * @var int
-     * @tableColumn page_type
+     * @tableColumn page.page_type
      * @tableColumnDatatype int
      * @versionable
      */
@@ -617,10 +617,11 @@ class class_module_pages_page extends class_model implements interface_model, in
      * and all languages.
      *
      * @param string $strNewPrevid
+     * @param bool $bitChangeTitle
      *
      * @return bool
      */
-    public function copyObject($strNewPrevid = "") {
+    public function copyObject($strNewPrevid = "", $bitChangeTitle = true) {
 
 
         $this->objDB->transactionBegin();
@@ -633,7 +634,7 @@ class class_module_pages_page extends class_model implements interface_model, in
         $this->setStrName($this->generateNonexistingPagename($this->getStrName(), false));
 
         //copy the page-instance and all elements on the page
-        parent::copyObject($strNewPrevid);
+        parent::copyObject($strNewPrevid, $bitChangeTitle);
 
         //update the pages' properties in the table - manually
         foreach($arrBasicSourceProperties as $arrOneProperty) {

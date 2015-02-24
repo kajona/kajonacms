@@ -1,7 +1,7 @@
 <?php
 /*"******************************************************************************************************
 *   (c) 2004-2006 by MulchProductions, www.mulchprod.de                                                 *
-*   (c) 2007-2014 by Kajona, www.kajona.de                                                              *
+*   (c) 2007-2015 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
 *	$Id$					    *
@@ -57,7 +57,7 @@ $lang["lang_sv"]                         = "Svenska";
 $lang["log"]                             = "Logg";
 $lang["login_changeButton"]              = "Ändra lösenord";
 $lang["login_change_error"]              = "Ett fel uppstod vid förfrågan";
-$lang["login_change_success"]            = "Ändring av lösenord har lyckats. Du ka nu  <a href=\"_webpath_/admin\">logga in</a>på systemet.";
+$lang["login_change_success"]            = "Ändring av lösenord har lyckats. Du ka nu  <a style=\"text-decoration: underline\" href=\"_webpath_/admin\">logga in</a>på systemet.";
 $lang["login_dashboard"]                 = "Startsida";
 $lang["login_ip"]                        = "IP-adress";
 $lang["login_loginButton"]               = "Logga in";

@@ -1,7 +1,7 @@
 <?php
 /*"******************************************************************************************************
 *   (c) 2004-2006 by MulchProductions, www.mulchprod.de                                                 *
-*   (c) 2007-2014 by Kajona, www.kajona.de                                                              *
+*   (c) 2007-2015 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
 *	$Id$                                    *
@@ -25,7 +25,7 @@ class class_module_tags_tag extends class_model implements interface_model, inte
 
     /**
      * @var string
-     * @tableColumn tags_tag_name
+     * @tableColumn tags_tag.tags_tag_name
      * @tableColumnDatatype char254
      * @listOrder
      *
@@ -38,7 +38,7 @@ class class_module_tags_tag extends class_model implements interface_model, inte
 
     /**
      * @var int
-     * @tableColumn tags_tag_private
+     * @tableColumn tags_tag.tags_tag_private
      * @tableColumnDatatype int
      */
     private $intPrivate = 0;
@@ -387,10 +387,11 @@ class class_module_tags_tag extends class_model implements interface_model, inte
 
     /**
      * @param string $strNewPrevid
+     * @param bool $bitChangeTitle
      *
      * @return bool
      */
-    public function copyObject($strNewPrevid = "") {
+    public function copyObject($strNewPrevid = "", $bitChangeTitle = true) {
 
         $strPrefix = $this->getStrName()."_";
         $intCount = 1;
@@ -407,7 +408,7 @@ class class_module_tags_tag extends class_model implements interface_model, inte
         //save assigned records
         $arrRecords = $this->getListOfAssignments();
 
-        parent::copyObject($strNewPrevid);
+        parent::copyObject($strNewPrevid, $bitChangeTitle);
 
         //copy the tag assignments
         foreach($arrRecords as $arrOneRecord) {

@@ -1,7 +1,7 @@
 <?php
 /*"******************************************************************************************************
 *   (c) 2004-2006 by MulchProductions, www.mulchprod.de                                                 *
-*   (c) 2007-2014 by Kajona, www.kajona.de                                                              *
+*   (c) 2007-2015 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
 *	$Id$                           *
@@ -22,7 +22,7 @@ class class_module_postacomment_post extends class_model implements interface_mo
 
     /**
      * @var string
-     * @tableColumn postacomment_title
+     * @tableColumn postacomment.postacomment_title
      * @tableColumnDatatype char254
      *
      * @fieldType text
@@ -34,7 +34,7 @@ class class_module_postacomment_post extends class_model implements interface_mo
 
     /**
      * @var string
-     * @tableColumn postacomment_comment
+     * @tableColumn postacomment.postacomment_comment
      * @tableColumnDatatype text
      *
      * @fieldMandatory
@@ -47,7 +47,7 @@ class class_module_postacomment_post extends class_model implements interface_mo
 
     /**
      * @var string
-     * @tableColumn postacomment_username
+     * @tableColumn postacomment.postacomment_username
      * @tableColumnDatatype char254
      *
      * @fieldMandatory
@@ -58,28 +58,28 @@ class class_module_postacomment_post extends class_model implements interface_mo
 
     /**
      * @var int
-     * @tableColumn postacomment_date
+     * @tableColumn postacomment.postacomment_date
      * @tableColumnDatatype int
      */
     private $intDate;
 
     /**
      * @var string
-     * @tableColumn postacomment_page
+     * @tableColumn postacomment.postacomment_page
      * @tableColumnDatatype char254
      */
     private $strAssignedPage;
 
     /**
      * @var string
-     * @tableColumn postacomment_systemid
+     * @tableColumn postacomment.postacomment_systemid
      * @tableColumnDatatype char20
      */
     private $strAssignedSystemid;
 
     /**
      * @var string
-     * @tableColumn postacomment_language
+     * @tableColumn postacomment.postacomment_language
      * @tableColumnDatatype char20
      */
     private $strAssignedLanguage;

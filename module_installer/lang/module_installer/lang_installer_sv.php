@@ -1,7 +1,7 @@
 <?php
 /*"******************************************************************************************************
 *   (c) 2004-2006 by MulchProductions, www.mulchprod.de                                                 *
-*   (c) 2007-2014 by Kajona, www.kajona.de                                                              *
+*   (c) 2007-2015 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
 *	$Id$					    *
@@ -19,7 +19,7 @@ $lang["installer_config_dbport"]         = "Databasport";
 $lang["installer_config_dbportinfo"]     = "För att använda en standardport lämna tom";
 $lang["installer_config_dbprefix"]       = "Tabellprefix";
 $lang["installer_config_dbusername"]     = "Databasanvändare";
-$lang["installer_config_intro"]          = "<b>Inställningar av databasen</b><br /><br />Observer: Webservern behöver skrivrättigheter i filen /system/config/config.php.<br />Tomma värden för databasserver, -användare, -lösenord och -namn är inte tillåtna.<br /><br />Om du vill lämna något av dessa värden tomt, configurera datafilen  /system/config/config.php manuellt i en textredigerare. Mer om detta hittar du i Handbuch (ännu ej på svenska).<br /><br />";
+$lang["installer_config_intro"]          = "<b>Inställningar av databasen</b><br />";
 $lang["installer_config_write"]          = "Spara till config.php";
 $lang["installer_elements_found"]        = "<b>Installation av sidoelement</b><br />Vänligen välj det sidoelement som du vill installera:<br /><br />";
 $lang["installer_finish_closer"]         = "<br />Ha så roligt med Kajona!";
@@ -30,7 +30,7 @@ $lang["installer_install"]               = "installlera";
 $lang["installer_installpe"]             = "Installera sidoelement";
 $lang["installer_loaded"]                = "uppladdad";
 $lang["installer_login_email"]           = "e-mail";
-$lang["installer_login_installed"]       = "<br />Systemet är installerat och ett administratörskonto finns redan<br />";
+$lang["installer_login_installed"]       = "Systemet är installerat och ett administratörskonto finns redan";
 $lang["installer_login_intro"]           = "<b>Konfigurera administratör</b><br /><br />Vänligen ange här ett användarnman och ett lösenord.<br />Dessa behövs senare för att logga in som administratör.<br />Av säkerhetsskäl bör namn som \"admin\" eller \"administratör\ undvikas.<br /><br />";
 $lang["installer_login_password"]        = "Lösenord";
 $lang["installer_login_save"]            = "Skapa användare";
@@ -43,7 +43,7 @@ $lang["installer_next"]                  = "Nästa steg >";
 $lang["installer_nloaded"]               = "saknas";
 $lang["installer_phpcheck_folder"]       = "Skrivrättigheter på";
 $lang["installer_phpcheck_intro"]        = "<b>Hjärtligt välkommen</b><br /><br />";
-$lang["installer_phpcheck_intro2"]       = "<br />Installationen går i flera steg: <br />Kontroll av rättigheter, konfigurering av databas, referensere för att ha tillgång till administrationen, modulinstallation, elementinstallation och installation av exempel.<br /><br />Beroende på val av moduler kan antalet steg variera.<br /><br /> <b>Före en uppdatering av system vänligen läs<br /><a href=\"http://www.kajona.de/update_342_to_40.html\" target=\"_blank\">Updatehinweise von 3.4.2 auf 4.0</a></b><br /><br /><br />Skrivrättigheter till enskilda filer och kataloger liksom<br />tillgänglighet av nödvändiga PHP-moduler  kontrolleras:<br />";
+$lang["installer_phpcheck_intro2"]       = "<br />Installationen går i flera steg: <br />Kontroll av rättigheter, konfigurering av databas, referensere för att ha tillgång till administrationen, modulinstallation, elementinstallation och installation av exempel.<br />Beroende på val av moduler kan antalet steg variera.<br /><br />Skrivrättigheter till enskilda filer och kataloger liksom<br />tillgänglighet av nödvändiga PHP-moduler  kontrolleras:<br />";
 $lang["installer_phpcheck_lang"]         = "För att ladda upp installer i ett annat språk, använd en av följande länkar:<br /><br />";
 $lang["installer_phpcheck_module"]       = "PHP-Modul ";
 $lang["installer_prev"]                  = "< Föregående steg";

@@ -1,0 +1,7 @@
+{
+    "name" : "phpqrcode",
+    "version" : "1.1.4",
+    "source" : "http://phpqrcode.sourceforge.net",
+    "license" : "LGPL v3",
+    "licenseurl" : "http://sourceforge.net/projects/phpqrcode/?source=navbar"
+}

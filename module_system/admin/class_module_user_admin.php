@@ -1,10 +1,8 @@
 <?php
 /*"******************************************************************************************************
 *   (c) 2004-2006 by MulchProductions, www.mulchprod.de                                                 *
-*   (c) 2007-2014 by Kajona, www.kajona.de                                                              *
+*   (c) 2007-2015 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
-*-------------------------------------------------------------------------------------------------------*
-*	$Id$                              *
 ********************************************************************************************************/
 
 
@@ -50,8 +48,6 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
         $arrReturn[] = array("edit", class_link::getLinkAdmin($this->getArrModule("modul"), "groupList", "", $this->getLang("gruppen_liste"), "", "", true, "adminnavi"));
         $arrReturn[] = array("", "");
         $arrReturn[] = array("right1", class_link::getLinkAdmin($this->getArrModule("modul"), "loginLog", "", $this->getLang("loginlog"), "", "", true, "adminnavi"));
-        $arrReturn[] = array("", "");
-        $arrReturn[] = array("right", class_link::getLinkAdmin("right", "change", "&changemodule=" . $this->getArrModule("modul"), $this->getLang("commons_module_permissions"), "", "", true, "adminnavi"));
         return $arrReturn;
     }
 
@@ -176,7 +172,7 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
         }
 
         if($strListIdentifier == "groupList" && $this->getObjModule()->rightEdit()) {
-            return $this->objToolkit->listButton(class_link::getLinkAdmin($this->getArrModule("modul"), "groupNew", "", $this->getLang("action_group_new"), $this->getLang("action_group_new"), "icon_new"));
+            return $this->objToolkit->listButton(class_link::getLinkAdminDialog($this->getArrModule("modul"), "groupNew", "", $this->getLang("action_group_new"), $this->getLang("action_group_new"), "icon_new"));
         }
 
         return "";
@@ -253,7 +249,7 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
         if($objListEntry instanceof class_module_user_group) {
             if($objListEntry->getSystemid() != _guests_group_id_ && $objListEntry->getSystemid() != _admins_group_id_ && $this->isGroupEditable($objListEntry)) {
                 if($objListEntry->rightEdit()) {
-                    return $this->objToolkit->listButton(class_link::getLinkAdmin("user", "groupEdit", "&systemid=" . $objListEntry->getSystemid(), "", $this->getLang("action_group_edit"), "icon_edit"));
+                    return $this->objToolkit->listButton(class_link::getLinkAdminDialog("user", "groupEdit", "&systemid=" . $objListEntry->getSystemid(), "", $this->getLang("action_group_edit"), "icon_edit"));
                 }
             }
             else {
@@ -551,12 +547,13 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
         $objForm->addField(new class_formentry_dropdown("user", "language"))
             ->setArrKeyValues($arrLang)
             ->setStrValue(($this->getParam("user_language") != "" ? $this->getParam("user_language") : ""))
-            ->setStrLabel($this->getLang("user_language"));
+            ->setStrLabel($this->getLang("user_language"))
+            ->setBitMandatory(true);
 
 
         $objForm->addField(new class_formentry_dropdown("user", "startmodule"))
             ->setArrKeyValues($arrModules)
-            ->setStrValue(($this->getParam("user_startmodule") != "" ? $this->getParam("user_startmodule") : ""))
+            ->setStrValue(($this->getParam("user_startmodule") != "" ? $this->getParam("user_startmodule") : "dashboard"))
             ->setStrLabel($this->getLang("user_startmodule"));
 
 
@@ -669,7 +666,11 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
 
         //flush the navigation cache in order to get new items for a possible updated list
         class_admin_helper::flushActionNavigationCache();
-        $this->adminReload(class_link::getLinkAdminHref($this->getArrModule("modul"), "list"));
+
+        if($this->getObjModule()->rightView())
+            $this->adminReload(class_link::getLinkAdminHref($this->getArrModule("modul"), "list"));
+        else
+            $this->adminReload(class_link::getLinkAdminHref($objUser->getStrAdminModule()));
 
 
         return $strReturn;
@@ -724,6 +725,7 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
      */
     protected function actionGroupNew($strMode = "new", class_admin_formgenerator $objForm = null) {
 
+        $this->setArrModuleEntry("template", "/folderview.tpl");
         $objUsersources = new class_module_user_sourcefactory();
 
         if($strMode == "new") {
@@ -854,7 +856,7 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
 
         $objSourceGroup->updateObjectToDb();
 
-        $this->adminReload(class_link::getLinkAdminHref($this->getArrModule("modul"), "groupList"));
+        $this->adminReload(class_link::getLinkAdminHref($this->getArrModule("modul"), "groupList", "&peClose=1&blockAction=1"));
         return "";
 
     }
@@ -923,7 +925,7 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
                 }
                 $strReturn .= $this->objToolkit->genericAdminList($objSingleMember->getSystemid(), $objSingleMember->getStrDisplayName(), getImageAdmin("icon_user"), $strAction, $intI++);
             }
-            $strReturn .= $this->objToolkit->listFooter() . $this->objToolkit->getSimplePageview($objIterator, "user", "groupMember", "systemid=" . $this->getSystemid());
+            $strReturn .= $this->objToolkit->listFooter() . $this->objToolkit->getPageview($objIterator, "user", "groupMember", "systemid=" . $this->getSystemid());
         }
         return $strReturn;
     }
@@ -1198,7 +1200,7 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
         $arrHeader[] = $this->getLang("login_utrace");
         //and fetch the table
         $strReturn .= $this->objToolkit->dataTable($arrHeader, $arrRows);
-        $strReturn .= $this->objToolkit->getSimplePageview($objIterator, "user", "loginlog");
+        $strReturn .= $this->objToolkit->getPageview($objIterator, "user", "loginlog");
 
         return $strReturn;
     }
@@ -1208,7 +1210,6 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
      * Creates a browser-like view of the users available
      *
      * @return string
-     * @permissions view
      */
     protected function actionUserBrowser() {
         $this->setArrModuleEntry("template", "/folderview.tpl");
@@ -1225,7 +1226,7 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
                     class_link::getLinkAdmin(
                         "user",
                         "userBrowser",
-                        "&form_element=".$this->getParam("form_element")."&systemid=".$objSingleGroup->getSystemid()."&filter=".$this->getParam("filter"),
+                        "&form_element=".$this->getParam("form_element")."&systemid=".$objSingleGroup->getSystemid()."&filter=".$this->getParam("filter")."&checkid=".$this->getParam("checkid"),
                         $this->getLang("user_browser_show"),
                         $this->getLang("user_browser_show"),
                         "icon_folderActionOpen"
@@ -1257,7 +1258,7 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
                     class_link::getLinkAdmin(
                         $this->getArrModule("modul"),
                         "userBrowser",
-                        "&form_element=" . $this->getParam("form_element") . "&filter=" . $this->getParam("filter") . "&allowGroup=" . $this->getParam("allowGroup"),
+                        "&form_element=" . $this->getParam("form_element") . "&filter=" . $this->getParam("filter") . "&allowGroup=" . $this->getParam("allowGroup")."&checkid=".$this->getParam("checkid"),
                         $this->getLang("user_list_parent"),
                         $this->getLang("user_list_parent"),
                         "icon_folderActionLevelup"
@@ -1265,11 +1266,29 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
                 ),
                 $intI++
             );
+
+            $objCurUser = new class_module_user_user($this->objSession->getUserID());
+
             foreach($arrUsers as $strSingleUser) {
                 $objSingleUser = new class_module_user_user($strSingleUser);
 
+                $bitRenderAcceptLink = true;
+                if(validateSystemid($this->getParam("checkid"))) {
+                    $objInstance = class_objectfactory::getInstance()->getObject($this->getParam("checkid"));
+                    if($objInstance != null) {
+                        class_session::getInstance()->switchSessionToUser($objSingleUser, true);
+                        if(!$objInstance->rightView()) {
+                            $bitRenderAcceptLink = false;
+                        }
+                        class_session::getInstance()->switchSessionToUser($objCurUser, true);
+                    }
+                    else {
+                        $bitRenderAcceptLink = false;
+                    }
+                }
+
                 $strAction = "";
-                if($objSingleUser->getIntActive() == 0 || ($this->getParam("filter") == "current" && $objSingleUser->getSystemid() == $this->objSession->getUserID())) {
+                if(!$bitRenderAcceptLink || $objSingleUser->getIntActive() == 0 || ($this->getParam("filter") == "current" && $objSingleUser->getSystemid() == $this->objSession->getUserID())) {
                     $strAction .= $this->objToolkit->listButton(getImageAdmin("icon_acceptDisabled"));
                 }
                 else {
@@ -1403,10 +1422,10 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
      *
      * @return string
      * @xml
-     * @permissions view
      */
     protected function actionGetUserByFilter() {
         $strFilter = $this->getParam("filter");
+        $strCheckId = $this->getParam("checkid");
 
         $arrElements = array();
         $objSource = new class_module_user_sourcefactory();
@@ -1437,6 +1456,7 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
             return strcmp(strtolower($strA), strtolower($strB));
         });
 
+        $objCurUser = new class_module_user_user($this->objSession->getUserID());
 
         $arrReturn = array();
         foreach($arrElements as $objOneElement) {
@@ -1444,6 +1464,22 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
             if($this->getParam("block") == "current" && $objOneElement->getSystemid() == $this->objSession->getUserID()) {
                 continue;
             }
+
+            if(validateSystemid($strCheckId) && $objOneElement instanceof class_module_user_user) {
+                $objInstance = class_objectfactory::getInstance()->getObject($strCheckId);
+                if($objInstance != null) {
+                    class_session::getInstance()->switchSessionToUser($objOneElement, true);
+                    if(!$objInstance->rightView()) {
+                        class_session::getInstance()->switchSessionToUser($objCurUser, true);
+                        continue;
+                    }
+                    class_session::getInstance()->switchSessionToUser($objCurUser, true);
+                }
+                else {
+                    continue;
+                }
+            }
+
 
             $arrEntry = array();
 
@@ -1465,7 +1501,7 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
             $arrReturn[] = $arrEntry;
         }
 
-        class_response_object::getInstance()->setStResponseType(class_http_responsetypes::STR_TYPE_JSON);
+        class_response_object::getInstance()->setStrResponseType(class_http_responsetypes::STR_TYPE_JSON);
         return json_encode($arrReturn);
     }
 

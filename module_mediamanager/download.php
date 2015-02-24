@@ -1,10 +1,8 @@
 <?php
 /*"******************************************************************************************************
 *   (c) 2004-2006 by MulchProductions, www.mulchprod.de                                                 *
-*   (c) 2007-2014 by Kajona, www.kajona.de                                                              *
+*   (c) 2007-2015 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
-*-------------------------------------------------------------------------------------------------------*
-*	$Id$                                                 *
 ********************************************************************************************************/
 
 
@@ -78,9 +76,11 @@ class class_download_manager extends class_root {
                     class_response_object::getInstance()->sendHeaders();
 
                     //Loop the file
-                    $ptrFile = @fopen(_realpath_ . $objFile->getStrFilename(), 'rb');
+                    $ptrFile = @fopen(_realpath_.$objFile->getStrFilename(), 'rb');
                     fpassthru($ptrFile);
                     @fclose($ptrFile);
+                    ob_flush();
+                    flush();
 
                     return "";
 
@@ -100,9 +100,9 @@ class class_download_manager extends class_root {
         }
 
         //if we reach up here, something gone wrong :/
+        class_response_object::getInstance()->setStrRedirectUrl(str_replace(array("_indexpath_", "&amp;"), array(_indexpath_, "&"), class_link::getLinkPortalHref(_pages_errorpage_)));
         class_response_object::getInstance()->sendHeaders();
-        class_response_object::getInstance()->setStrRedirectUrl(str_replace(array("_indexpath_", "&amp;"), array(_indexpath_, "&"), getLinkPortalHref(_pages_errorpage_)));
-
+        class_response_object::getInstance()->sendContent();
         return "";
     }
 }
@@ -111,5 +111,5 @@ class class_download_manager extends class_root {
 //Create a object
 $objDownload = new class_download_manager(getGet("systemid"));
 $objDownload->actionDownload();
-
+class_core_eventdispatcher::getInstance()->notifyGenericListeners(class_system_eventidentifier::EVENT_SYSTEM_REQUEST_AFTERCONTENTSEND, array(class_request_entrypoint_enum::DOWNLOAD()));
 

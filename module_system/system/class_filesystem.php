@@ -1,7 +1,7 @@
 <?php
 /*"******************************************************************************************************
 *   (c) 2004-2006 by MulchProductions, www.mulchprod.de                                                 *
-*   (c) 2007-2014 by Kajona, www.kajona.de                                                              *
+*   (c) 2007-2015 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
 *   $Id$                                         *
@@ -20,13 +20,6 @@ class class_filesystem {
      */
     private $objFilePointer = null;
 
-    /**
-     * Constructor
-
-     */
-    public function __construct() {
-
-    }
 
     /**
      * Returns all files listed in the passed folder
@@ -251,7 +244,6 @@ class class_filesystem {
      * Deletes a file from the filesystem
      *
      * @param string $strFile
-     *
      * @return bool
      */
     public function fileDelete($strFile) {

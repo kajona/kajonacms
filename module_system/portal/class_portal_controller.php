@@ -1,7 +1,7 @@
 <?php
 /*"******************************************************************************************************
 *   (c) 2004-2006 by MulchProductions, www.mulchprod.de                                                 *
-*   (c) 2007-2014 by Kajona, www.kajona.de                                                              *
+*   (c) 2007-2015 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
 *	$Id$                                        *
@@ -77,12 +77,11 @@ abstract class class_portal_controller extends class_abstract_controller {
      */
     public function action($strAction = "") {
 
-        if($strAction == "") {
-            $strAction = $this->getAction();
-        }
-        else {
+        if($strAction != "") {
             $this->setAction($strAction);
         }
+
+        $strAction = $this->getAction();
 
         //search for the matching method - build method name
         $strMethodName = "action" . uniStrtoupper($strAction[0]) . uniSubstr($strAction, 1);

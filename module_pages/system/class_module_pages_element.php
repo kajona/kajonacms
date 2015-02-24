@@ -1,7 +1,7 @@
 <?php
 /*"******************************************************************************************************
 *   (c) 2004-2006 by MulchProductions, www.mulchprod.de                                                 *
-*   (c) 2007-2014 by Kajona, www.kajona.de                                                              *
+*   (c) 2007-2015 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
 *	$Id$                                *
@@ -16,12 +16,14 @@
  *
  * @module pages_content
  * @moduleId _pages_content_modul_id_
+ *
+ * @blockFromAutosave
  */
 class class_module_pages_element extends class_model implements interface_model, interface_admin_listable {
 
     /**
      * @var string
-     * @tableColumn element_name
+     * @tableColumn element.element_name
      * @tableColumnDatatype char254
      * @tableColumnIndex
      * @listOrder
@@ -36,7 +38,7 @@ class class_module_pages_element extends class_model implements interface_model,
 
     /**
      * @var string
-     * @tableColumn element_class_portal
+     * @tableColumn element.element_class_portal
      * @tableColumnDatatype char254
      * @fieldType dropdown
      *
@@ -46,7 +48,7 @@ class class_module_pages_element extends class_model implements interface_model,
 
     /**
      * @var string
-     * @tableColumn element_class_admin
+     * @tableColumn element.element_class_admin
      * @tableColumnDatatype char254
      * @fieldType dropdown
      *
@@ -56,7 +58,7 @@ class class_module_pages_element extends class_model implements interface_model,
 
     /**
      * @var int
-     * @tableColumn element_repeat
+     * @tableColumn element.element_repeat
      * @tableColumnDatatype int
      * @fieldType yesno
      */
@@ -64,7 +66,7 @@ class class_module_pages_element extends class_model implements interface_model,
 
     /**
      * @var int
-     * @tableColumn element_cachetime
+     * @tableColumn element.element_cachetime
      * @tableColumnDatatype int
      * @fieldMandatory
      * @fieldValidator class_numeric_validator
@@ -74,28 +76,28 @@ class class_module_pages_element extends class_model implements interface_model,
 
     /**
      * @var string
-     * @tableColumn element_version
+     * @tableColumn element.element_version
      * @tableColumnDatatype char20
      */
     private $strVersion = "";
 
     /**
      * @var string
-     * @tableColumn element_config1
+     * @tableColumn element.element_config1
      * @tableColumnDatatype char254
      */
     private $strConfigVal1 = "";
 
     /**
      * @var string
-     * @tableColumn element_config2
+     * @tableColumn element.element_config2
      * @tableColumnDatatype char254
      */
     private $strConfigVal2 = "";
 
     /**
      * @var string
-     * @tableColumn element_config3
+     * @tableColumn element.element_config3
      * @tableColumnDatatype char254
      */
     private $strConfigVal3 = "";

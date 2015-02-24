@@ -1,7 +1,7 @@
 <?php
 /*"******************************************************************************************************
 *   (c) 2004-2006 by MulchProductions, www.mulchprod.de                                                 *
-*   (c) 2007-2014 by Kajona, www.kajona.de                                                              *
+*   (c) 2007-2015 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
 *	$Id$					    *
@@ -19,7 +19,7 @@ $lang["installer_config_dbport"]         = "Datenbankport";
 $lang["installer_config_dbportinfo"]     = "Für den Standardport bitte leer lassen";
 $lang["installer_config_dbprefix"]       = "Tabellenpräfix";
 $lang["installer_config_dbusername"]     = "Datenbankbenutzer";
-$lang["installer_config_intro"]          = "<b>Datenbankeinstellungen erfassen</b><br /><br />Anmerkung: Der Webserver benötigt Schreibrechte auf die Datei /system/config/config.php.<br />Für den Fall, dass Sie einen dieser Werte leer lassen möchten, bearbeiten Sie bitte die Datei /system/config/config.php manuell mit einem Texteditor, Näheres hierzu finden Sie im Handbuch.<br />";
+$lang["installer_config_intro"]          = "<b>Datenbankeinstellungen erfassen</b><br />";
 $lang["installer_config_write"]          = "In config.php speichern";
 $lang["installer_dbcx_error"]            = "Verbindung zur Datenbank konnte nicht aufgebaut werden. Bitte prüfen Sie die angegebenen Zugangsdaten.";
 $lang["installer_dbdriver_na"]           = "Es tut uns leid, aber der gewählte Datenbanktreiber ist auf dem System nicht verfügbar. Bitte installieren Sie die nachstehende PHP-Erweiterung um den Treiber zu verwenden";
@@ -35,7 +35,7 @@ $lang["installer_install"]               = "Installieren";
 $lang["installer_installpe"]             = "Seitenelemente installieren";
 $lang["installer_loaded"]                = "geladen";
 $lang["installer_login_email"]           = "E-Mail";
-$lang["installer_login_installed"]       = "<br />Das System wurde bereits mit einem Admin-Benutzer installiert.<br />";
+$lang["installer_login_installed"]       = "Das System wurde bereits mit einem Admin-Benutzer installiert.";
 $lang["installer_login_intro"]           = "<b>Admin-Benutzer einrichten</b><br /><br />Bitte geben Sie hier einen Benutzernamen und ein Passwort an.<br />Diese Daten werden später als Zugang zur Administration verwendet.<br />Aus Sicherheitsgründen sollten Sie Benutzernamen wie \"admin\" oder \"administrator\" vermeiden.<br /><br />";
 $lang["installer_login_password"]        = "Passwort";
 $lang["installer_login_save"]            = "Benutzer anlegen";
@@ -43,7 +43,6 @@ $lang["installer_login_username"]        = "Benutzername";
 $lang["installer_missing"]               = "fehlen";
 $lang["installer_mode_auto"]             = "Automatische Installation";
 $lang["installer_mode_auto_hint"]        = "Alle verfügbaren Module und Beispielinhalte werden installiert.";
-$lang["installer_mode_hint"]             = "Achtung: Beim Update eines System sollte der manuelle Modus gewählt werden.";
 $lang["installer_mode_manual"]           = "Manuelle Installation";
 $lang["installer_mode_manual_hint"]      = "Die zu installierende Module können manuell ausgewählt werden, die Installation der Beispielinhalte kann übersprungen werden.";
 $lang["installer_module_notinstalled"]   = "Modul ist nicht installiert";
@@ -53,7 +52,7 @@ $lang["installer_next"]                  = "Nächster Schritt >";
 $lang["installer_nloaded"]               = "fehlt";
 $lang["installer_phpcheck_folder"]       = "Schreibrechte auf ";
 $lang["installer_phpcheck_intro"]        = "<b>Herzlich Willkommen</b><br /><br />";
-$lang["installer_phpcheck_intro2"]       = "<br />Die Installation des Systems erfolgt in mehreren Schritten: <br />Rechtepüfung, DB-Konfiguration, Zugangsdaten zur Administration, Modulinstallation, Elementinstallation und Installation der Beispielinhalte.<br /><br />Je nach Modulauswahl kann die Anzahl dieser Schritte abweichen.<br /><br /> <b>Vor einem Systemupdate lesen Sie bitte die<br /><a href=\"http://www.kajona.de/update_342_to_40.html\" target=\"_blank\">Updatehinweise von 3.4.2 auf 4.0</a></b><br /><br /><br />Es werden die Schreibrechte einzelner Dateien und Verzeichnisse sowie<br />die Verfügbarkeit benötigter PHP-Module überprüft:<br />";
+$lang["installer_phpcheck_intro2"]       = "<br />Die Installation des Systems erfolgt in mehreren Schritten: <br />Rechtepüfung, DB-Konfiguration, Zugangsdaten zur Administration, Modulinstallation, Elementinstallation und Installation der Beispielinhalte.<br />Je nach Modulauswahl kann die Anzahl dieser Schritte abweichen.<br /><br />Es werden die Schreibrechte einzelner Dateien und Verzeichnisse sowie<br />die Verfügbarkeit benötigter PHP-Module überprüft:<br />";
 $lang["installer_phpcheck_lang"]         = "Um den Installer in einer anderen Sprache zu laden, bitte einen der folgenden Links verwenden:<br /><br />";
 $lang["installer_phpcheck_module"]       = "PHP-Modul ";
 $lang["installer_prev"]                  = "< Vorheriger Schritt";

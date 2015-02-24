@@ -7,24 +7,19 @@ echo "compiling skin css files...\n";
 
 $arrFilesToCompile = array(
     __DIR__."/../temp/kajona/core/module_v4skin/admin/skins/kajona_v4/less/bootstrap.less" => __DIR__."/../temp/kajona/core/module_v4skin/admin/skins/kajona_v4/less/styles.css",
-    __DIR__."/../temp/kajona/core/module_v4skin/admin/skins/kajona_v4/less/responsive.less" => __DIR__."/../temp/kajona/core/module_v4skin/admin/skins/kajona_v4/less/responsive.css",
     __DIR__."/../temp/kajona/core/module_v4skin/admin/skins/kajona_v4/less/bootstrap_pe.less" => __DIR__."/../temp/kajona/core/module_v4skin/admin/skins/kajona_v4/less/styles_pe.css",
 
-
-    __DIR__."/../temp/kajona/core/module_installer/less/bootstrap.less" => __DIR__."/../temp/kajona/core/module_installer/less/styles.css",
-    __DIR__."/../temp/kajona/core/module_installer/less/responsive.less" => __DIR__."/../temp/kajona/core/module_installer/less/responsive.css"
+    __DIR__."/../temp/kajona/core/module_installer/less/bootstrap.less" => __DIR__."/../temp/kajona/core/module_installer/less/styles.css"
 );
 
 $strSkinReplacement = "";
 $strSkinReplacement = <<<TXT
     <link rel="stylesheet" href="_skinwebpath_/less/styles.css?_system_browser_cachebuster_" type="text/css" />
-    <link rel="stylesheet" href="_skinwebpath_/less/responsive.css?_system_browser_cachebuster_" type="text/css" />
 TXT;
 
 $strInstallerReplacement = "";
 $strInstallerReplacement = <<<TXT
     <link rel="stylesheet" href="_webpath_/core/module_installer/less/styles.css?_system_browser_cachebuster_" type="text/css" />
-    <link rel="stylesheet" href="_webpath_/core/module_installer/less/responsive.css?_system_browser_cachebuster_" type="text/css" />
 TXT;
 
 

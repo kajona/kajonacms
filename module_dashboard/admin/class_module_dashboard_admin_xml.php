@@ -1,7 +1,7 @@
 <?php
 /*"******************************************************************************************************
 *   (c) 2004-2006 by MulchProductions, www.mulchprod.de                                                 *
-*   (c) 2007-2014 by Kajona, www.kajona.de                                                              *
+*   (c) 2007-2015 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
 *	$Id$							*
@@ -82,7 +82,7 @@ class class_module_dashboard_admin_xml extends class_admin_controller implements
             if(!$objConcreteWidget->getBitBlockSessionClose())
                 class_carrier::getInstance()->getObjSession()->sessionClose();
 
-            class_response_object::getInstance()->setStResponseType(class_http_responsetypes::STR_TYPE_JSON);
+            class_response_object::getInstance()->setStrResponseType(class_http_responsetypes::STR_TYPE_JSON);
             $strReturn = json_encode($objConcreteWidget->generateWidgetOutput());
 
         }

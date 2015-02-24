@@ -1,7 +1,7 @@
 <?php
 /*"******************************************************************************************************
 *   (c) 2004-2006 by MulchProductions, www.mulchprod.de                                                 *
-*   (c) 2007-2014 by Kajona, www.kajona.de                                                              *
+*   (c) 2007-2015 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
 *	$Id$                                *
@@ -37,7 +37,6 @@ class class_module_system_admin extends class_admin_simple implements interface_
         $arrReturn[] = array("", "");
         $arrReturn[] = array("", class_link::getLinkAdmin($this->getArrModule("modul"), "about", "", $this->getLang("action_about"), "", "", true, "adminnavi"));
         $arrReturn[] = array("", "");
-        $arrReturn[] = array("right", class_link::getLinkAdmin("right", "change", "&changemodule=".$this->getArrModule("modul"), $this->getLang("commons_module_permissions"), "", "", true, "adminnavi"));
         $arrReturn[] = array("right", class_link::getLinkAdmin("right", "change", "&systemid=0", $this->getLang("modul_rechte_root"), "", "", true, "adminnavi"));
         return $arrReturn;
     }
@@ -494,7 +493,7 @@ JS;
             }
         }
 
-        return $strTaskOutput.class_carrier::getInstance()->getObjToolkit("admin")->jsDialog(0);
+        return $strTaskOutput;
     }
 
     /**
@@ -558,7 +557,7 @@ JS;
 
         $strReturn .= $this->objToolkit->listFooter();
 
-        $strReturn .= $this->objToolkit->getSimplePageview($objArraySectionIterator, "system", "systemSessions");
+        $strReturn .= $this->objToolkit->getPageview($objArraySectionIterator, "system", "systemSessions");
 
         return $strReturn;
     }
@@ -650,7 +649,7 @@ JS;
             $arrData[] = $arrRowData;
         }
         $strReturn .= $this->objToolkit->dataTable($arrHeader, $arrData);
-        $strReturn .= $this->objToolkit->getSimplePageview($objArraySectionIterator, "system", "systemSessions");
+        $strReturn .= $this->objToolkit->getPageview($objArraySectionIterator, "system", "systemSessions");
 
         return $strReturn;
     }
@@ -761,7 +760,7 @@ JS;
         }
         $strReturn .= $this->objToolkit->dataTable($arrHeader, $arrData);
 
-        $strReturn .= $this->objToolkit->getSimplePageview($objArraySectionIterator, $strSourceModule, $strSourceAction, "&systemid=".$strSystemid."&bitBlockFolderview=".$this->getParam("bitBlockFolderview"));
+        $strReturn .= $this->objToolkit->getPageview($objArraySectionIterator, $strSourceModule, $strSourceAction, "&systemid=".$strSystemid."&bitBlockFolderview=".$this->getParam("bitBlockFolderview"));
 
         return $strReturn;
     }

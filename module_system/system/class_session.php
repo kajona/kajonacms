@@ -1,7 +1,7 @@
 <?php
 /*"******************************************************************************************************
 *   (c) 2004-2006 by MulchProductions, www.mulchprod.de                                                 *
-*   (c) 2007-2014 by Kajona, www.kajona.de                                                              *
+*   (c) 2007-2015 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
 *	$Id$                                            *
@@ -400,7 +400,7 @@ final class class_session {
 
 
         if($bitReturn === false) {
-            class_logger::getInstance()->addLogRow("Unsuccessfull login attempt by user ".$strName, class_logger::$levelInfo);
+            class_logger::getInstance()->addLogRow("Unsuccessful login attempt by user ".$strName, class_logger::$levelInfo);
             class_module_user_log::generateLog(0, $strName);
         }
 
@@ -416,9 +416,9 @@ final class class_session {
      *
      * @return bool
      */
-    public function switchSessionToUser(class_module_user_user $objTargetUser) {
+    public function switchSessionToUser(class_module_user_user $objTargetUser, $bitForce = false) {
         if($this->isLoggedin()) {
-            if(in_array(_admins_group_id_, $this->getGroupIdsAsArray())) {
+            if(in_array(_admins_group_id_, $this->getGroupIdsAsArray()) || $bitForce) {
                 $this->getObjInternalSession()->setStrLoginstatus(class_module_system_session::$LOGINSTATUS_LOGGEDIN);
                 $this->getObjInternalSession()->setStrUserid($objTargetUser->getSystemid());
 

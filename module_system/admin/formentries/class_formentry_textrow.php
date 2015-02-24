@@ -1,9 +1,7 @@
 <?php
 /*"******************************************************************************************************
-*   (c) 2007-2014 by Kajona, www.kajona.de                                                              *
+*   (c) 2007-2015 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
-*-------------------------------------------------------------------------------------------------------*
-*	$Id$                               *
 ********************************************************************************************************/
 
 /**
@@ -33,7 +31,11 @@ class class_formentry_textrow extends class_formentry_base implements interface_
      */
     public function renderField() {
         $objToolkit = class_carrier::getInstance()->getObjToolkit("admin");
-        return $objToolkit->formTextRow($this->getStrValue());
+        $strReturn = "";
+        if($this->getStrHint() != null)
+            $strReturn .= $objToolkit->formTextRow($this->getStrHint());
+        $strReturn .= $objToolkit->formTextRow($this->getStrValue());
+        return $strReturn;
     }
 
     public function updateLabel($strKey = "") {

@@ -1,7 +1,7 @@
 <?php
 /*"******************************************************************************************************
 *   (c) 2004-2006 by MulchProductions, www.mulchprod.de                                                 *
-*   (c) 2007-2014 by Kajona, www.kajona.de                                                              *
+*   (c) 2007-2015 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
 *	$Id$					    *
@@ -28,8 +28,8 @@ $lang["favorite_save_success"]           = "Favorite has been saved successfully
 $lang["form_tags_name"]                  = "Tag-Name";
 $lang["form_tags_private"]               = "Private assignments";
 $lang["modul_titel"]                     = "Tags";
-$lang["quickhelp_list"]                  = "Tags provide the ability for users to find frequently used facts efficiently. Tags can be created on different levels of the software (e.g. individual evaluations, specific to-dos), which are displayed in the module ‘Tag’. Within this list all tags of a user are displayed. These tags can be displayed and edited here. Records assigned to a tag are listable through the tag. In consequence, tags may be used to add keywords to a record or to create groups of logically connected records.";
-$lang["quickhelp_list_favorites"]        = "Important tags may be marked as favorite tag. Those tags will be included in the user-menu at the upper left corner, providing a fast access to the tagged objects.";
+$lang["quickhelp_list"]                  = "Tags provide the ability for users to find frequently used facts efficiently. Tags can be created on different levels of the software (e.g. individual evaluations, specific to-dos), which are displayed in the module ‘Tags’. Within this list all tags of a user are displayed. These tags can be displayed and edited here. Records assigned to a tag are listable through the tag. In consequence, tags may be used to add keywords to a record or to create groups of logically connected records.";
+$lang["quickhelp_list_favorites"]        = "Important tags may be marked as a favorite. Those tags will be included in the user menu at the upper left corner, providing a fast access to the tagged objects.";
 $lang["required_tag_name"]               = "Tag-Name";
 $lang["tag_assignments"]                 = "Assignments";
 $lang["tag_edit"]                        = "Edit";

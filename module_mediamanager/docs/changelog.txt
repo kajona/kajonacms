@@ -1,5 +1,10 @@
 Module Mediamanager
 
+V4.6 ----------------------------------------------------------------------------------------------------
+NEW: module_mediamanager | mediamanager_file -> added a new static helper method getFileForPath(), used to find the matching mediamanager-file for a given filesystem-path and a given mediamanager-repository
+BUG: module_mediamanager | installer -> fixed the folderview modules' update sequence, no longer at module pages, now at module mediamanager
+
+
 V4.5 ----------------------------------------------------------------------------------------------------
 NEW: module_mediamanager | mutliupload -> changed the js-library used for multi-uploads to jquery fileupload
 BUG: module_mediamanager | class_module_mediamanager_admin -> The file-selector could crash if the default repository was deleted internally. thx to c. ernst.

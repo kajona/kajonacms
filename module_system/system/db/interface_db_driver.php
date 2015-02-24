@@ -1,10 +1,8 @@
 <?php
 /*"******************************************************************************************************
 *   (c) 2004-2006 by MulchProductions, www.mulchprod.de                                                 *
-*   (c) 2007-2014 by Kajona, www.kajona.de                                                              *
+*   (c) 2007-2015 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
-*-------------------------------------------------------------------------------------------------------*
-*	$Id$                                     *
 ********************************************************************************************************/
 
 /**
@@ -38,31 +36,20 @@ interface interface_db_driver {
      * Creates a single query in order to insert multiple rows at one time.
      * For most databases, this will create s.th. like
      * INSERT INTO $strTable ($arrColumns) VALUES (?, ?), (?, ?)...
-     *
      * Please note that this method is used to create the query itself, based on the Kajona-internal syntax.
      * The query is fired to the database by class_db
      *
      * @param string $strTable
      * @param string[] $arrColumns
      * @param array $arrValueSets
-     * @param string &$strQuery
-     * @param array &$arrParams
-     *
-     * @return void
-     */
-    public function convertMultiInsert($strTable, $arrColumns, $arrValueSets, &$strQuery, &$arrParams);
-
-    /**
-     * Sends a query (e.g. an update) to the database
-     *
-     * @param string $strQuery
+     * @param class_db $objDb
      * @return bool
      */
-    public function _query($strQuery);
+    public function triggerMultiInsert($strTable, $arrColumns, $arrValueSets, class_db $objDb);
 
     /**
      * Sends a prepared statement to the database. All params must be represented by the ? char.
-     * The params themself are stored using the second params using the matching order.
+     * The params themselves are stored using the second params using the matching order.
      *
      * @param string $strQuery
      * @param array $arrParams
@@ -70,15 +57,6 @@ interface interface_db_driver {
      * @since 3.4
      */
     public function _pQuery($strQuery, $arrParams);
-
-    /**
-     * This method is used to retrieve an array of resultsets from the database
-     *
-     * @param string $strQuery
-     * @return array
-     */
-    public function getArray($strQuery);
-
 
     /**
      * This method is used to retrieve an array of resultsets from the database using
@@ -90,19 +68,6 @@ interface interface_db_driver {
      * @return array
      */
     public function getPArray($strQuery, $arrParams);
-
-    /**
-     * Returns just a part of a recodset, defined by the start- and the end-rows,
-     * defined by the params
-     * <b>Note:</b> Use array-like counters, so the first row is startRow 0 whereas
-     * the n-th row is the (n-1)th key!!!
-     *
-     * @param string $strQuery
-     * @param int $intStart
-     * @param int $intEnd
-     * @return array
-     */
-    public function getArraySection($strQuery, $intStart, $intEnd);
 
     /**
      * Returns just a part of a recodset, defined by the start- and the end-rows,
@@ -173,21 +138,68 @@ interface interface_db_driver {
      */
     public function createTable($strName, $arrFields, $arrKeys, $arrIndices = array(), $bitTxSafe = true);
 
+    /**
+     * Renames a table
+     * @param $strOldName
+     * @param $strNewName
+     *
+     * @return bool
+     * @since 4.6
+     */
+    public function renameTable($strOldName, $strNewName);
+
+
+    /**
+     * Changes a single column, e.g. the datatype
+     *
+     * @param $strTable
+     * @param $strOldColumnName
+     * @param $strNewColumnName
+     * @param $strNewDatatype
+     *
+     * @return bool
+     * @since 4.6
+     */
+    public function changeColumn($strTable, $strOldColumnName, $strNewColumnName, $strNewDatatype);
+
+    /**
+     * Adds a column to a table
+     *
+     * @param $strTable
+     * @param $strColumn
+     * @param $strDatatype
+     *
+     * @return bool
+     * @since 4.6
+     */
+    public function addColumn($strTable, $strColumn, $strDatatype);
+
+    /**
+     * Removes a column from a table
+     * @param $strTable
+     * @param $strColumn
+     *
+     * @return bool
+     * @since 4.6
+     */
+    public function removeColumn($strTable, $strColumn);
 
     /**
      * Starts a transaction
      * @return void
+     * @since 4.6
      */
     public function transactionBegin();
 
     /**
-     * Ends a successfull operation by Commiting the transaction
+     * Ends a successful operation by committing the transaction
      * @return void
+     * @since 4.6
      */
     public function transactionCommit();
 
     /**
-     * Ends a non-successfull transaction by using a rollback
+     * Ends a non-successful transaction by using a rollback
      * @return void
      */
     public function transactionRollback();
@@ -215,7 +227,7 @@ interface interface_db_driver {
     public function dbExport($strFilename, $arrTables);
 
     /**
-     * Imports the given db-dump file to the database. The filename ist relativ to _realpath_
+     * Imports the given db-dump file to the database. The filename ist relative to _realpath_
      *
      * @param string $strFilename
      * @return bool

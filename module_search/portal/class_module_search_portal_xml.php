@@ -1,7 +1,7 @@
 <?php
 /*"******************************************************************************************************
 *   (c) 2004-2006 by MulchProductions, www.mulchprod.de                                                 *
-*   (c) 2007-2014 by Kajona, www.kajona.de                                                              *
+*   (c) 2007-2015 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
 *	$Id$						    *
@@ -30,18 +30,20 @@ class class_module_search_portal_xml extends class_portal_controller implements 
     protected function actionDoSearch() {
         $strReturn = "";
 
-        $strSearchterm = "";
+        $objSearch = new class_module_search_search();
+        $objSearch->setStrPortalLangFilter($this->getStrPortalLanguage());
+
         if($this->getParam("searchterm") != "") {
-            $strSearchterm = htmlToString(urldecode($this->getParam("searchterm")), true);
+            $objSearch->setStrQuery(htmlToString(urldecode($this->getParam("searchterm")), true));
         }
 
         $arrResult = array();
         $objSearchCommons = new class_module_search_commons();
-        if($strSearchterm != "") {
-            $arrResult = $objSearchCommons->doPortalSearch($strSearchterm, $this->getStrPortalLanguage());
+        if($objSearch->getStrQuery() != "") {
+            $arrResult = $objSearchCommons->doPortalSearch($objSearch);
         }
 
-        $strReturn .= $this->createSearchXML($strSearchterm, $arrResult);
+        $strReturn .= $this->createSearchXML($objSearch->getStrQuery(), $arrResult);
 
         return $strReturn;
     }

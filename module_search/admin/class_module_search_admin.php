@@ -1,7 +1,7 @@
 <?php
 /*"******************************************************************************************************
 *   (c) 2004-2006 by MulchProductions, www.mulchprod.de                                                 *
-*   (c) 2007-2014 by Kajona, www.kajona.de                                                              *
+*   (c) 2007-2015 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
 *	$Id$						    *
@@ -32,9 +32,6 @@ class class_module_search_admin extends class_admin_simple implements interface_
         $arrReturn[] = array("view", class_link::getLinkAdmin($this->getArrModule("modul"), "search", "", $this->getLang("search_search"), "", "", true, "adminnavi"));
         $arrReturn[] = array("", "");
         $arrReturn[] = array("view", class_link::getLinkAdmin($this->getArrModule("modul"), "list", "", $this->getLang("commons_list"), "", "", true, "adminnavi"));
-        $arrReturn[] = array("", "");
-        $arrReturn[] = array("right", class_link::getLinkAdmin("right", "change", "&changemodule=" . $this->getArrModule("modul"), $this->getLang("commons_module_permissions"), "", "", true, "adminnavi"));
-
         return $arrReturn;
     }
 
@@ -310,7 +307,7 @@ class class_module_search_admin extends class_admin_simple implements interface_
         }
 
         $objResult = $arrItems;
-        class_response_object::getInstance()->setStResponseType(class_http_responsetypes::STR_TYPE_JSON);
+        class_response_object::getInstance()->setStrResponseType(class_http_responsetypes::STR_TYPE_JSON);
         return json_encode($objResult);
     }
 

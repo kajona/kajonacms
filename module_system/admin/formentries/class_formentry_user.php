@@ -1,9 +1,7 @@
 <?php
 /*"******************************************************************************************************
-*   (c) 2007-2014 by Kajona, www.kajona.de                                                              *
+*   (c) 2007-2015 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
-*-------------------------------------------------------------------------------------------------------*
-*	$Id$                               *
 ********************************************************************************************************/
 
 /**
@@ -20,6 +18,7 @@ class class_formentry_user extends class_formentry_base implements interface_for
     private $bitUser = true;
     private $bitGroups = false;
     private $bitBlockCurrentUser = false;
+    private $strValidateId = null;
 
     public function __construct($strFormName, $strSourceProperty, $objSourceObject = null) {
         parent::__construct($strFormName, $strSourceProperty, $objSourceObject);
@@ -57,7 +56,7 @@ class class_formentry_user extends class_formentry_base implements interface_for
 
         }
         else {
-            $strReturn .= $objToolkit->formInputUserSelector($this->getStrEntryName(), $this->getStrLabel(), $this->getStrValue(), "", $this->bitUser, $this->bitGroups, $this->bitBlockCurrentUser);
+            $strReturn .= $objToolkit->formInputUserSelector($this->getStrEntryName(), $this->getStrLabel(), $this->getStrValue(), "", $this->bitUser, $this->bitGroups, $this->bitBlockCurrentUser, $this->strValidateId);
         }
 
         return $strReturn;
@@ -123,6 +122,16 @@ class class_formentry_user extends class_formentry_base implements interface_for
      */
     public function setBitUser($bitUser) {
         $this->bitUser = $bitUser;
+        return $this;
+    }
+
+    /**
+     * @param null $strValidateId
+     *
+     * @return $this
+     */
+    public function setStrValidateId($strValidateId) {
+        $this->strValidateId = $strValidateId;
         return $this;
     }
 

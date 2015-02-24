@@ -1,7 +1,7 @@
 <?php
 /*"******************************************************************************************************
 *   (c) 2004-2006 by MulchProductions, www.mulchprod.de                                                 *
-*   (c) 2007-2014 by Kajona, www.kajona.de                                                              *
+*   (c) 2007-2015 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
 *   $Id$                                                *
@@ -39,7 +39,7 @@ function bootstrapIncludeModuleIds() {
         foreach(scandir(_realpath_."/".$strRootFolder) as $strDirEntry ) {
             if(is_dir(_realpath_."/".$strRootFolder."/".$strDirEntry) && is_dir(_realpath_."/".$strRootFolder."/".$strDirEntry."/system/") && is_dir(_realpath_."/".$strRootFolder."/".$strDirEntry."/system/config/")) {
                 foreach(scandir(_realpath_."/".$strRootFolder."/".$strDirEntry."/system/config/") as $strModuleEntry ) {
-                    if(preg_match("/module\_([a-z\_])+\_id\.php/", $strModuleEntry))
+                    if(preg_match("/module\_([a-z0-9\_])+\_id\.php/", $strModuleEntry))
                         @include_once _realpath_."/".$strRootFolder."/".$strDirEntry."/system/config/".$strModuleEntry;
                 }
             }
@@ -621,7 +621,8 @@ function splitUpLink($strLink) {
  * @todo: white-space handling is still messed up
  */
 function replaceTextLinks($strText) {
-    return preg_replace('#([^href=("|\')|^>]((http|https|ftp)://)[^ |^<|^>]+)#', '<a href="\1">\1</a>', $strText);
+    $strReplace = preg_replace('#([^href=("|\')|^>]((http|https|ftp|file)://)[^ |^<|^>]+)#', '<a href="\1">\1</a>', $strText);
+    return str_replace("a href=\" ", "a href=\"", $strReplace);
 }
 
 /**

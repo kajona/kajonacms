@@ -1,7 +1,7 @@
 <?php
 /*"******************************************************************************************************
 *   (c) 2004-2006 by MulchProductions, www.mulchprod.de                                                 *
-*   (c) 2007-2014 by Kajona, www.kajona.de                                                              *
+*   (c) 2007-2015 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
 *	$Id$                                        *
@@ -93,6 +93,12 @@ class class_installer_dashboard extends class_installer_base implements interfac
             $strReturn .= "Updating 4.4 to 4.5...\n";
             $strReturn .= "Updating module-versions...\n";
             $this->updateModuleVersion("dashboard", "4.5");
+        }
+        $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModul["module_version"] == "4.5") {
+            $strReturn .= "Updating 4.5 to 4.6...\n";
+            $strReturn .= "Updating module-versions...\n";
+            $this->updateModuleVersion("dashboard", "4.6");
         }
 
         return $strReturn."\n\n";

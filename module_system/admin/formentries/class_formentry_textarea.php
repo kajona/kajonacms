@@ -1,9 +1,7 @@
 <?php
 /*"******************************************************************************************************
-*   (c) 2007-2014 by Kajona, www.kajona.de                                                              *
+*   (c) 2007-2015 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
-*-------------------------------------------------------------------------------------------------------*
-*	$Id$                               *
 ********************************************************************************************************/
 
 /**
@@ -36,7 +34,7 @@ class class_formentry_textarea extends class_formentry_base implements interface
         if($this->getStrHint() != null)
             $strReturn .= $objToolkit->formTextRow($this->getStrHint());
 
-        $strReturn .= $objToolkit->formInputTextArea($this->getStrEntryName(), $this->getStrLabel(), $this->getStrValue(), $this->bitLarge ? "input-xxlarge" : "", $this->getBitReadonly(), $this->getIntNumberOfRows());
+        $strReturn .= $objToolkit->formInputTextArea($this->getStrEntryName(), $this->getStrLabel(), $this->getStrValue(), $this->bitLarge ? "input-large" : "", $this->getBitReadonly(), $this->getIntNumberOfRows());
 
         return $strReturn;
     }

@@ -1,7 +1,7 @@
 <?php
 /*"******************************************************************************************************
 *   (c) 2004-2006 by MulchProductions, www.mulchprod.de                                                 *
-*   (c) 2007-2014 by Kajona, www.kajona.de                                                              *
+*   (c) 2007-2015 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
 *	$Id$					    *
@@ -66,7 +66,7 @@ $lang["lang_sv"]                         = "Swedish";
 $lang["log"]                             = "Logs: ";
 $lang["login_changeButton"]              = "Change password";
 $lang["login_change_error"]              = "Error processing your request.";
-$lang["login_change_success"]            = "Password changed successfully. You can now proceed to <a href=\"_webpath_/admin\">login</a>.";
+$lang["login_change_success"]            = "Password changed successfully. You can now proceed to <a style=\"text-decoration: underline\" href=\"_webpath_/admin\">login</a>.";
 $lang["login_dashboard"]                 = "Welcome page";
 $lang["login_ip"]                        = "IP-Address";
 $lang["login_loginButton"]               = "Login";

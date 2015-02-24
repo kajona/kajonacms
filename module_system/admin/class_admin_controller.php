@@ -1,7 +1,7 @@
 <?php
 /*"******************************************************************************************************
 *   (c) 2004-2006 by MulchProductions, www.mulchprod.de                                                 *
-*   (c) 2007-2014 by Kajona, www.kajona.de                                                              *
+*   (c) 2007-2015 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
 *	$Id$	                                            *
@@ -33,8 +33,6 @@ abstract class class_admin_controller extends class_abstract_controller {
      * Constructor
      *
      * @param string $strSystemid
-     *
-     * @internal param array $arrModul
      */
     public function __construct($strSystemid = "") {
 
@@ -133,6 +131,12 @@ abstract class class_admin_controller extends class_abstract_controller {
      * @todo could be moved to a general admin-skin helper
      */
     public final function getModuleOutput() {
+
+        //skip rendering everything if we just want to redirect...
+        if($this->strOutput == "" && class_response_object::getInstance()->getStrRedirectUrl() != "") {
+            return "";
+        }
+
 
         $this->validateAndUpdateCurrentAspect();
 
@@ -295,6 +299,19 @@ abstract class class_admin_controller extends class_abstract_controller {
     }
 
     /**
+     * Renders the "always present" module permissions entry for each module (takes the currents' user permissions into
+     * account).
+     * If you don't want this default behaviour, overwrite this method.
+     * @return array
+     */
+    public function getModuleRightNaviEntry() {
+        $arrLinks = array();
+        $arrLinks[] = array("", "");
+        $arrLinks[] = array("right", class_link::getLinkAdmin("right", "change", "&changemodule=".$this->getArrModule("modul"), $this->getLang("commons_module_permissions")));
+        return $arrLinks;
+    }
+
+    /**
      * Writes the ModuleTitle, overwrite if needed
      *
      * @return string
@@ -348,12 +365,11 @@ abstract class class_admin_controller extends class_abstract_controller {
      */
     public function action($strAction = "") {
 
-        if($strAction == "") {
-            $strAction = $this->getAction();
-        }
-        else {
+        if($strAction != "") {
             $this->setAction($strAction);
         }
+
+        $strAction = $this->getAction();
 
         //search for the matching method - build method name
         $strMethodName = "action" . uniStrtoupper($strAction[0]) . uniSubstr($strAction, 1);
@@ -377,9 +393,15 @@ abstract class class_admin_controller extends class_abstract_controller {
                     class_response_object::getInstance()->setStrStatusCode(class_http_statuscodes::SC_UNAUTHORIZED);
                     $this->strOutput = $this->objToolkit->warningBox($this->getLang("commons_error_permissions"));
                     $objException = new class_exception("you are not authorized/authenticated to call this action", class_exception::$level_ERROR);
-                    $objException->setIntDebuglevel(0);
-                    $objException->processException();
-                    return $this->strOutput;
+
+                    if(_xmlLoader_) {
+                        throw $objException;
+                    }
+                    else {
+                        $objException->setIntDebuglevel(0);
+                        $objException->processException();
+                        return $this->strOutput;
+                    }
                 }
             }
 

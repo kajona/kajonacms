@@ -1,18 +1,18 @@
 //   (c) 2004-2006 by MulchProductions, www.mulchprod.de
-//   (c) 2007-2014 by Kajona, www.kajona.de
+//   (c) 2007-2015 by Kajona, www.kajona.de
 //       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt
 //       $Id$
 
 if (typeof KAJONA == "undefined") {
-	var KAJONA = {
-		util: {},
-		portal: {
-			lang: {}
-		},
-		admin: {
-			lang: {}
-		}
-	};
+    var KAJONA = {
+        util: {},
+        portal: {
+            lang: {}
+        },
+        admin: {
+            lang: {}
+        }
+    };
 }
 
 
@@ -78,9 +78,10 @@ KAJONA.admin.portaleditor = {
 		peDialog.init();
 	},
 
-	closeDialog: function () {
-	    var bitClose = confirm(KAJONA.admin.lang["pe_dialog_close_warning"]);
-	    if(bitClose) {
+	closeDialog: function (bitSkipConfirmation) {
+        if(!bitSkipConfirmation)
+	        var bitClose = confirm(KAJONA.admin.lang["pe_dialog_close_warning"]);
+	    if(bitClose || bitSkipConfirmation) {
 	    	peDialog.hide();
 	    	//reset iframe
 	    	peDialog.setContentRaw("");
@@ -92,7 +93,35 @@ KAJONA.admin.portaleditor = {
 			placeholderName: strPlaceholderName,
 			elements: arrElements
 		};
-	}
+	},
+
+    changeElementData : function(strDataPlaceholder, strDataSystemid, objElementData) {
+
+        var $objContent = jQuery.parseHTML(objElementData);
+
+        //see if the element is already present, then flip the contents
+        if($("div.peElementWrapper[data-systemid='"+strDataSystemid+"']").length) {
+            $("div.peElementWrapper[data-systemid='"+strDataSystemid+"']").html($($objContent).closest("div.peElementWrapper[data-systemid="+strDataSystemid+"]").html());
+        }
+        else {
+            //add it as the last element to the placeholder itself
+            strDataPlaceholder = strDataPlaceholder.replace(/\|/g, '\\|');
+            $("#menuContainer_"+strDataPlaceholder).before($($objContent).closest("div.peElementWrapper[data-systemid="+strDataSystemid+"]"));
+        }
+
+    },
+
+    deleteElementData : function(strSystemid) {
+        $("div.peElementWrapper[data-systemid='"+strSystemid+"']").remove();
+        //and delete the element on the backend
+        var data = {
+            systemid: strSystemid
+        };
+        $.post(KAJONA_WEBPATH + '/xml.php?admin=1&module=pages_content&action=deleteElementFinalXML', data, function () {
+        }).fail(function() {
+            location.reload();
+        });
+    }
 };
 
 KAJONA.admin.portaleditor.RTE = {};
@@ -143,7 +172,6 @@ KAJONA.admin.portaleditor.RTE.init = function () {
         var strMode = keySplitted[2] ? keySplitted[2] : 'wysiwyg';
 
         var ckeditorConfig = KAJONA.admin.portaleditor.RTE.config;
-        ckeditorConfig.customConfig = 'config_kajona_standard.js';
         ckeditorConfig.toolbar = strMode == 'wysiwyg' ? 'pe_full' : 'pe_lite';
         ckeditorConfig.forcePasteAsPlainText = true;
         ckeditorConfig.kajona_strMode = strMode;
@@ -291,7 +319,7 @@ KAJONA.admin.portaleditor.dragndrop.init = function () {
             var $placeholderWrapper = $(this);
             $placeholderWrapper.removeClass('pePlaceholderWrapperDropTarget');
         },
-        delay: KAJONA.util.isTouchDevice() ? 2000 : 0
+        delay: KAJONA.util.isTouchDevice() ? 500 : 0
     });
 };
 

@@ -1,38 +1,31 @@
 <?php
 /*"******************************************************************************************************
 *   (c) 2004-2006 by MulchProductions, www.mulchprod.de                                                 *
-*   (c) 2007-2014 by Kajona, www.kajona.de                                                              *
+*   (c) 2007-2015 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
-*-------------------------------------------------------------------------------------------------------*
-*	$Id$                                *
 ********************************************************************************************************/
 
 /**
- * @package module_projecttracker
+ * Validates a news start/end/archive date for a correct logical order.
+ *
+ * @package module_news
+ * @author stefan.meyer1@yahoo.de
+ * @since 4.6
  */
 class class_news_news_objectvalidator extends class_objectvalidator_base {
 
     /**
-     * Validates the passed chunk of data.
-     *
-     * The returning array contains the given error messages. Each key in the array contains an array of error messages.
-     * Format of the returned array is:
-     *      array("<messageKey>" => array())
-     *
-     * e.g. a key could be
-     * array("<formName>_<errorMessageKey>" => array())
+     * Validates a news start/end/archive date for a correct logical order.
      *
      *
-     * @abstract
      * @param class_model $objObject - the model object to the given form
-     * @return array
+     * @return bool
      */
     public function validateObject(class_model $objObject) {
         $objLang = class_carrier::getInstance()->getObjLang();
         $strModuleName = $objObject->getArrModule("modul");
 
         if($objObject instanceof class_module_news_news) {
-
 
             //validate: $objStartDate < $objSpecialDate < $objEndDate
             $objStartDate = $objObject->getObjStartDate();
@@ -61,7 +54,9 @@ class class_news_news_objectvalidator extends class_objectvalidator_base {
                 }
             }
         }
+        else
+            return false;
 
-        return $this->arrValidationMessages;
+        return count($this->getArrValidationMessages()) == 0;
     }
 }

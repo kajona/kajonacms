@@ -1,10 +1,8 @@
 <?php
 /*"******************************************************************************************************
 *   (c) 2004-2006 by MulchProductions, www.mulchprod.de                                                 *
-*   (c) 2007-2014 by Kajona, www.kajona.de                                                              *
+*   (c) 2007-2015 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
-*-------------------------------------------------------------------------------------------------------*
-*	$Id$                            *
 ********************************************************************************************************/
 
 
@@ -26,10 +24,6 @@ class class_stats_report_topsystems implements interface_admin_statsreports {
     private $objDB;
 
 
-    private $arrBrowserGiven = null;
-    private $arrBrowserGiven2 = null;
-    private $arrSystemCache = array();
-
     /**
      * Constructor
      */
@@ -48,33 +42,6 @@ class class_stats_report_topsystems implements interface_admin_statsreports {
         return "core.stats.admin.statsreport";
     }
 
-    /**
-     * @return void
-     */
-    private function setUpBrowserData() {
-        if($this->arrBrowserGiven == null) {
-            //parse browser (php_browscap.ini)
-            if(version_compare(PHP_VERSION, '5.3.0') >= 0) {
-                $arrBrowserGiven = parse_ini_file(_realpath_."/".class_resourceloader::getInstance()->getPathForFile("/system/php_browscap.ini"), true, INI_SCANNER_RAW);
-            }
-            else {
-                $arrBrowserGiven = parse_ini_file(_realpath_."/".class_resourceloader::getInstance()->getPathForFile("/system/php_browscap.ini"), true);
-            }
-
-
-            //Update Array once to handle regex
-            $arrSearch = array(".", "+", "^", "$", "!", "{", "}", "(", ")", "]", "[", "*", "?", "#");
-            $arrReplace = array("\.", "\+", "\^", "\$", "\!", "\{", "\}", "\(", "\)", "\]", "\[", ".*", ".", "\#");
-
-            $arrBrowserGiven2 = array();
-            foreach($arrBrowserGiven as $strSignatureGiven => $arrBrowserData) {
-                $strSignature = str_replace($arrSearch, $arrReplace, $strSignatureGiven);
-                $arrBrowserGiven2[$strSignature] = $arrBrowserData;
-            }
-            $this->arrBrowserGiven = $arrBrowserGiven;
-            $this->arrBrowserGiven2 = $arrBrowserGiven2;
-        }
-    }
 
     /**
      * @param int $intEndDate
@@ -118,7 +85,6 @@ class class_stats_report_topsystems implements interface_admin_statsreports {
      * @return string
      */
     public function getReport() {
-        $this->setUpBrowserData();
         $strReturn = "";
 
         //Create Data-table
@@ -173,39 +139,16 @@ class class_stats_report_topsystems implements interface_admin_statsreports {
 						GROUP BY stats_browser";
         $arrBrowser = $this->objDB->getPArray($strQuery, array($this->intDateStart, $this->intDateEnd));
 
-
-        $arrBrowserGiven2 = &$this->arrBrowserGiven2;
+        $objBrowscap = new class_browscap();
 
         //Search the best matching pattern
         foreach($arrBrowser as $arrRow) {
-            $strPrevMatchingSignature = "";
-            //Browser already found before?
-            $strBrowserSignature = $arrRow["stats_browser"];
-            if(!isset($this->arrSystemCache[$strBrowserSignature])) {
-                //Lookup in browsers
-                foreach($arrBrowserGiven2 as $strSignature => $arrBrowserData) {
-                    //Current browser matching the browscap signature?
-                    if(preg_match("#".$strSignature."#", $arrRow["stats_browser"])) {
-                        //better match then the one before?
-                        if(uniStrlen($strPrevMatchingSignature) <= uniStrlen($strSignature)) {
-                            //yes, save for next run
-                            $strPrevMatchingSignature = $strSignature;
-                        }
-                    }
-                }
+            $strSystem = $objBrowscap->getPlatformForUseragent($arrRow["stats_browser"]);
 
-                $arrCurrentBrowser = $arrBrowserGiven2[$strPrevMatchingSignature];
-                $strPlatform = isset($arrCurrentBrowser["Platform"]) ? $arrCurrentBrowser["Platform"] : "unknown";
-
-                $this->arrSystemCache[$strBrowserSignature] = $strPlatform;
-            }
+            if(!isset($arrReturn[$strSystem]))
+                $arrReturn[$strSystem] = $arrRow["anzahl"];
             else
-                $strPlatform = $this->arrSystemCache[$strBrowserSignature];
-
-            if(!isset($arrReturn[$strPlatform]))
-                $arrReturn[$strPlatform] = $arrRow["anzahl"];
-            else
-                $arrReturn[$strPlatform] += $arrRow["anzahl"];
+                $arrReturn[$strSystem] += $arrRow["anzahl"];
         }
 
         arsort($arrReturn);
@@ -216,7 +159,6 @@ class class_stats_report_topsystems implements interface_admin_statsreports {
      * @return array
      */
     public function getReportGraph() {
-        $this->setUpBrowserData();
         $arrReturn = array();
         $arrData = $this->getTopSystem();
 

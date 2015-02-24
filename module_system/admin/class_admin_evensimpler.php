@@ -165,7 +165,10 @@ abstract class class_admin_evensimpler extends class_admin_simple {
             /** @var $objEdit interface_model|class_model */
             $objEdit = new $strType();
 
+            if($this->isFormExistingForInstance($objEdit))
+                $objEdit = $this->objCurAdminForm->getObjSourceobject();
 
+            //reset the current object reference to an object created before (e.g. during actionSave)
             $objForm = $this->getAdminForm($objEdit);
             $objForm->getObjSourceobject()->setSystemid($this->getParam("systemid"));
             $objForm->addField(new class_formentry_hidden("", "mode"))->setStrValue("new");
@@ -188,13 +191,16 @@ abstract class class_admin_evensimpler extends class_admin_simple {
 
         //try 1: get the object type and names based on the current object
         $objInstance = class_objectfactory::getInstance()->getObject($this->getSystemid());
-        if($objInstance != null) {
-            $strObjectTypeName = uniSubstr($this->getActionNameForClass("edit", $objInstance), 4);
-            if($strObjectTypeName != "") {
-                $strType = get_class($objInstance);
-                $this->setCurObjectClassName($strType);
-                $this->setStrCurObjectTypeName($strObjectTypeName);
-            }
+
+        if($objInstance == null) {
+            throw new class_exception("given object with system id {$this->getSystemid()} does not exist", class_exception::$level_ERROR);
+        }
+
+        $strObjectTypeName = uniSubstr($this->getActionNameForClass("edit", $objInstance), 4);
+        if($strObjectTypeName != "") {
+            $strType = get_class($objInstance);
+            $this->setCurObjectClassName($strType);
+            $this->setStrCurObjectTypeName($strObjectTypeName);
         }
 
         //try 2: regular, oldschool resolving based on the current action-params
@@ -202,8 +208,11 @@ abstract class class_admin_evensimpler extends class_admin_simple {
 
         if(!is_null($strType)) {
 
-            $objEdit = new $strType($this->getSystemid());
-            $objForm = $this->getAdminForm($objEdit);
+            //reset the current object reference to an object created before (e.g. during actionSave)
+            if($this->isFormExistingForInstance($objInstance))
+                $objInstance = $this->objCurAdminForm->getObjSourceobject();
+
+            $objForm = $this->getAdminForm($objInstance);
             $objForm->addField(new class_formentry_hidden("", "mode"))->setStrValue("edit");
 
             return $objForm->renderForm(class_link::getLinkAdminHref($this->getArrModule("modul"), "save".$this->getStrCurObjectTypeName()));
@@ -249,15 +258,24 @@ abstract class class_admin_evensimpler extends class_admin_simple {
      * @return class_admin_formgenerator
      */
     protected function getAdminForm(interface_model $objInstance) {
-
         //already generated?
-        if($this->objCurAdminForm != null && get_class($this->objCurAdminForm->getObjSourceobject()) == get_class($objInstance) && $objInstance->getSystemid() == $this->objCurAdminForm->getObjSourceobject()->getSystemid())
+        if($this->isFormExistingForInstance($objInstance))
             return $this->objCurAdminForm;
 
         $objForm = new class_admin_formgenerator($this->getArrModule("modul"), $objInstance);
         $objForm->generateFieldsFromObject();
         $this->objCurAdminForm = $objForm;
         return $objForm;
+    }
+
+    /**
+     * Internal helper to check if a form-object is already existing for the passed instance
+     * @param interface_model $objInstance
+     *
+     * @return bool
+     */
+    private function isFormExistingForInstance(interface_model $objInstance) {
+        return $this->objCurAdminForm != null && get_class($this->objCurAdminForm->getObjSourceobject()) == get_class($objInstance) && $objInstance->getSystemid() == $this->objCurAdminForm->getObjSourceobject()->getSystemid();
     }
 
     /**

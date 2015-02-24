@@ -1,9 +1,7 @@
 <?php
 /*"******************************************************************************************************
-*   (c) 2007-2014 by Kajona, www.kajona.de                                                              *
+*   (c) 2007-2015 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
-*-------------------------------------------------------------------------------------------------------*
-*	$Id$                               *
 ********************************************************************************************************/
 
 /**
@@ -53,6 +51,7 @@ class class_common_sortmanager implements interface_sortmanager {
         $strQuery = "SELECT system_id, system_sort
                      FROM "._dbprefix_."system
                      WHERE system_prev_id=?
+                     AND system_id != '0'
                      ".$strWhere."
                      ORDER BY system_sort ASC";
         $arrSiblings = $this->objDB->getPArray($strQuery, $arrParams);
@@ -71,6 +70,7 @@ class class_common_sortmanager implements interface_sortmanager {
         $strQuery = "SELECT system_id, system_sort
                      FROM "._dbprefix_."system
                      WHERE system_prev_id=?
+                     AND system_id != '0'
                      ".$strWhere."
                      ORDER BY system_sort ASC";
         $arrSiblings = $this->objDB->getPArray($strQuery, $arrParams);
@@ -252,7 +252,7 @@ class class_common_sortmanager implements interface_sortmanager {
 
         //flush the cache
         $this->objSource->flushCompletePagesCache();
-        $this->objDB->flushQueryCache();
+        class_carrier::getInstance()->flushCache(class_carrier::INT_CACHE_TYPE_DBQUERIES | class_carrier::INT_CACHE_TYPE_ORMCACHE);
         $this->objSource->setIntSort($intNewPosition);
     }
 

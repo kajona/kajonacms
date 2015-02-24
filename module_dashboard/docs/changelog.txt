@@ -1,5 +1,10 @@
 Module Dashboard
 
+V4.6 ----------------------------------------------------------------------------------------------------
+NEW: module_dashboard | dashboard widget -> getListOfWidgetsAvailable() validates if the class is not abstract and implements the interface interface_adminwidget
+NEW: module_dashboard | it is now possible to add additional content below the name of a widget
+NEW: module_dashboard | widget weather -> changed the remote API from Yahoo to openweathermap
+
 V4.5 ----------------------------------------------------------------------------------------------------
 NEW: module_dashboard | updatecheck-widget -> If an update is available, the list-entry links to the package management including a filtering on the current package
 BUG: module_dashboard | updatecheck-widget -> the version number of the system-package was rendered for each possible package update

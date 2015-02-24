@@ -1,9 +1,7 @@
 <?php
 /*"******************************************************************************************************
-*   (c) 2007-2014 by Kajona, www.kajona.de                                                              *
+*   (c) 2007-2015 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
-*-------------------------------------------------------------------------------------------------------*
-*	$Id$                              *
 ********************************************************************************************************/
 /**
  * Portal-class of the packageserver. Processes requests and passes infos / download-links
@@ -70,7 +68,7 @@ class class_module_packageserver_portal extends class_portal_controller implemen
                 }
 
                 class_module_packageserver_log::generateDlLog($strNameFilter !== false ? $strNameFilter : "", isset($_SERVER["REMOTE_ADDR"]) ? $_SERVER["REMOTE_ADDR"] : "::1", urldecode($this->getParam("domain")));
-                class_response_object::getInstance()->setStResponseType(class_http_responsetypes::STR_TYPE_JSON);
+                class_response_object::getInstance()->setStrResponseType(class_http_responsetypes::STR_TYPE_JSON);
             }
         }
 

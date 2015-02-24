@@ -1,6 +1,6 @@
 <?php
 /*"******************************************************************************************************
-*   (c) 2007-2014 by Kajona, www.kajona.de                                                              *
+*   (c) 2007-2015 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
 *	$Id$	                                            *
@@ -38,10 +38,7 @@ abstract class class_admin_simple extends class_admin_controller {
      * @return void
      */
     protected function onRenderOutput(&$arrContent) {
-
-        $strReturn = $this->objToolkit->jsDialog(1);
-
-        $arrContent["actiontoolbar"] = $strReturn.$this->objToolkit->getContentActionToolbar($this->getContentActionToolbar());
+        $arrContent["actiontoolbar"] = $this->objToolkit->getContentActionToolbar($this->getContentActionToolbar());
     }
 
     /**
@@ -213,7 +210,7 @@ abstract class class_admin_simple extends class_admin_controller {
             $strReturn .= $this->objToolkit->gridFooter();
         }
 
-        $strReturn .= $this->objToolkit->getSimplePageview($objArraySectionIterator, $this->getArrModule("modul"), $this->getAction(), "&systemid=".$this->getSystemid().$this->strPeAddon.$strPagerAddon);
+        $strReturn .= $this->objToolkit->getPageview($objArraySectionIterator, $this->getArrModule("modul"), $this->getAction(), "&systemid=".$this->getSystemid().$this->strPeAddon.$strPagerAddon);
 
         return $strReturn;
     }
@@ -278,7 +275,7 @@ abstract class class_admin_simple extends class_admin_controller {
             $strReturn .= $this->objToolkit->listFooter();
 
 
-        $strReturn .= $this->objToolkit->getSimplePageview($objArraySectionIterator, $this->getArrModule("modul"), $this->getAction(), "&systemid=" . $this->getSystemid() . $this->strPeAddon . $strPagerAddon);
+        $strReturn .= $this->objToolkit->getPageview($objArraySectionIterator, $this->getArrModule("modul"), $this->getAction(), "&systemid=" . $this->getSystemid() . $this->strPeAddon . $strPagerAddon);
 
         return $strReturn;
     }
@@ -485,7 +482,7 @@ abstract class class_admin_simple extends class_admin_controller {
     protected function renderCopyAction(class_model $objListEntry) {
         if($objListEntry->rightEdit() && $this->strPeAddon == "") {
             $strHref = class_link::getLinkAdminHref($objListEntry->getArrModule("modul"), $this->getActionNameForClass("copyObject", $objListEntry), "&systemid=".$objListEntry->getSystemid().$this->strPeAddon);
-            return $this->objToolkit->jsDialog(3).$this->objToolkit->listButton(
+            return $this->objToolkit->listButton(
                 class_link::getLinkAdminManual(" onclick='jsDialog_3.init();' href='".$strHref."'", "", $this->getLang("commons_edit_copy"), "icon_copy")
             );
         }

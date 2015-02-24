@@ -1,6 +1,6 @@
 <?php
 /*"******************************************************************************************************
-*   (c) 2007-2014 by Kajona, www.kajona.de                                                              *
+*   (c) 2007-2015 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
 *	$Id$                                            *
@@ -20,10 +20,24 @@ class class_module_mediamanager_repo extends class_model implements interface_mo
 
     /**
      * @var string
+     * @tableColumn mediamanager_repo.repo_title
+     * @tableColumnDatatype char254
+     * @listOrder
+     * @fieldLabel commons_title
+     * @fieldType text
+     * @fieldMandatory
+     *
+     * @addSearchIndex
+     */
+    private $strTitle = "";
+
+    /**
+     * @var string
      * @tableColumn mediamanager_repo.repo_path
      * @tableColumnDatatype char254
      * @fieldMandatory
      * @fieldValidator class_folder_validator
+     * @fieldType text
      * @fieldLabel commons_path
      *
      * @addSearchIndex
@@ -32,21 +46,10 @@ class class_module_mediamanager_repo extends class_model implements interface_mo
 
     /**
      * @var string
-     * @tableColumn mediamanager_repo.repo_title
-     * @tableColumnDatatype char254
-     * @listOrder
-     * @fieldLabel commons_title
-     * @fieldType text
-     *
-     * @addSearchIndex
-     */
-    private $strTitle = "";
-
-    /**
-     * @var string
      * @tableColumn mediamanager_repo.repo_upload_filter
      * @tableColumnDatatype char254
      * @fieldType text
+     * @fieldLabel form_repo_uploadFilter
      */
     private $strUploadFilter = "";
 
@@ -55,6 +58,7 @@ class class_module_mediamanager_repo extends class_model implements interface_mo
      * @tableColumn mediamanager_repo.repo_view_filter
      * @tableColumnDatatype char254
      * @fieldType text
+     * @fieldLabel form_repo_viewFilter
      */
     private $strViewFilter = "";
 

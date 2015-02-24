@@ -1,7 +1,7 @@
 <?php
 /*"******************************************************************************************************
 *   (c) 2004-2006 by MulchProductions, www.mulchprod.de                                                 *
-*   (c) 2007-2014 by Kajona, www.kajona.de                                                              *
+*   (c) 2007-2015 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
 *   $Id$                                *
@@ -113,8 +113,12 @@ class class_module_right_admin extends class_admin_controller implements interfa
             $arrTemplateTotal["title6"] = $arrTitles[6];
             $arrTemplateTotal["title7"] = $arrTitles[7];
             $arrTemplateTotal["title8"] = $arrTitles[8];
-            if(_system_changehistory_enabled_ == "true")
-                $arrTemplateTotal["title9"] = (isset($arrTitles[9]) ? $arrTitles[9] : $arrDefaultHeader[9]); //fallback for pre 4.3.2 systems
+            if(_system_changehistory_enabled_ == "true") {
+                if(!isset($arrTitles[9]))  //fallback for pre 4.3.2 systems
+                    $arrTitles[9] = $arrDefaultHeader[9];
+
+                $arrTemplateTotal["title9"] = $arrTitles[9];
+            }
 
             //Read the template
             $strTemplateRowID = $this->objTemplate->readTemplate("/elements.tpl", "rights_form_row");
@@ -133,114 +137,25 @@ class class_module_right_admin extends class_admin_controller implements interfa
 
 
                 //Building Checkboxes
-                if(in_array($arrSingleGroup["group_id"], $arrRights["view"])) {
-                    $arrTemplateRow["box0"] = "<input type=\"checkbox\" name=\"1," . $arrSingleGroup["group_id"] . "\" id=\"1," . $arrSingleGroup["group_id"] . "\" value=\"1\" checked=\"checked\" />";
-                }
-                else {
-                    $arrTemplateRow["box0"] = "<input type=\"checkbox\" name=\"1," . $arrSingleGroup["group_id"] . "\" id=\"1," . $arrSingleGroup["group_id"] . "\" value=\"1\" />";
-                }
+                $arrTemplateRow["box0"] = "<input title=\"".$arrTitles[0]."\" rel=\"tooltip\" type=\"checkbox\" name=\"1,".$arrSingleGroup["group_id"]."\" id=\"1,".$arrSingleGroup["group_id"]."\" value=\"1\" ".(in_array($arrSingleGroup["group_id"], $arrRights["view"]) ? " checked=\"checked\" " : "")." />";
+                $arrTemplateRow["box1"] = "<input title=\"".$arrTitles[1]."\" rel=\"tooltip\" type=\"checkbox\" name=\"2,".$arrSingleGroup["group_id"]."\" id=\"2,".$arrSingleGroup["group_id"]."\" value=\"1\" ".(in_array($arrSingleGroup["group_id"], $arrRights["edit"]) ? " checked=\"checked\" " : "")." />";
+                $arrTemplateRow["box2"] = "<input title=\"".$arrTitles[2]."\" rel=\"tooltip\" type=\"checkbox\" name=\"3,".$arrSingleGroup["group_id"]."\" id=\"3,".$arrSingleGroup["group_id"]."\" value=\"1\" ".(in_array($arrSingleGroup["group_id"], $arrRights["delete"]) ? " checked=\"checked\" " : "")." />";
+                $arrTemplateRow["box3"] = "<input title=\"".$arrTitles[3]."\" rel=\"tooltip\" type=\"checkbox\" name=\"4,".$arrSingleGroup["group_id"]."\" id=\"4,".$arrSingleGroup["group_id"]."\" value=\"1\" ".(in_array($arrSingleGroup["group_id"], $arrRights["right"]) ? " checked=\"checked\" " : "")." />";
 
-                if(in_array($arrSingleGroup["group_id"], $arrRights["edit"])) {
-                    $arrTemplateRow["box1"] = "<input type=\"checkbox\" name=\"2," . $arrSingleGroup["group_id"] . "\" id=\"2," . $arrSingleGroup["group_id"] . "\" value=\"1\" checked=\"checked\" />";
-                }
-                else {
-                    $arrTemplateRow["box1"] = "<input type=\"checkbox\" name=\"2," . $arrSingleGroup["group_id"] . "\" id=\"2," . $arrSingleGroup["group_id"] . "\" value=\"1\" />";
-                }
-
-                if(in_array($arrSingleGroup["group_id"], $arrRights["delete"])) {
-                    $arrTemplateRow["box2"] = "<input type=\"checkbox\" name=\"3," . $arrSingleGroup["group_id"] . "\" id=\"3," . $arrSingleGroup["group_id"] . "\" value=\"1\" checked=\"checked\" />";
-                }
-                else {
-                    $arrTemplateRow["box2"] = "<input type=\"checkbox\" name=\"3," . $arrSingleGroup["group_id"] . "\" id=\"3," . $arrSingleGroup["group_id"] . "\" value=\"1\" />";
-                }
-
-                if(in_array($arrSingleGroup["group_id"], $arrRights["right"])) {
-                    $arrTemplateRow["box3"] = "<input type=\"checkbox\" name=\"4," . $arrSingleGroup["group_id"] . "\" id=\"4," . $arrSingleGroup["group_id"] . "\" value=\"1\" checked=\"checked\" />";
-                }
-                else {
-                    $arrTemplateRow["box3"] = "<input type=\"checkbox\" name=\"4," . $arrSingleGroup["group_id"] . "\" id=\"4," . $arrSingleGroup["group_id"] . "\" value=\"1\" />";
-                }
-
-                if(in_array($arrSingleGroup["group_id"], $arrRights["right1"])) {
-                    //field editable?
-                    if($arrTemplateTotal["title4"] != "") {
-                        $arrTemplateRow["box4"] = "<input type=\"checkbox\" name=\"5," . $arrSingleGroup["group_id"] . "\" id=\"5," . $arrSingleGroup["group_id"] . "\" value=\"1\" checked=\"checked\" />";
+                //loop the module specific permissions
+                for($intI = 1; $intI <= 5; $intI++) {
+                    if($arrTemplateTotal["title".($intI+3)] != "") {
+                        $arrTemplateRow["box".($intI+3)] = "<input title=\"".$arrTitles[$intI+3]."\" rel=\"tooltip\" type=\"checkbox\" name=\"".($intI+4).",".$arrSingleGroup["group_id"]."\" id=\"".($intI+4).",".$arrSingleGroup["group_id"]."\" value=\"1\" ".(in_array($arrSingleGroup["group_id"], $arrRights["right".$intI]) ? " checked=\"checked\" " : "")." />";
                     }
                     else {
-                        $arrTemplateRow["box4"] = "<input type=\"hidden\" name=\"5," . $arrSingleGroup["group_id"] . "\" id=\"5," . $arrSingleGroup["group_id"] . "\" value=\"1\" />";
+                        $arrTemplateRow["box".($intI+3)] = "<input type=\"hidden\" name=\"".($intI+4).",".$arrSingleGroup["group_id"]."\" id=\"".($intI+4).",".$arrSingleGroup["group_id"]."\" value=\"1\" />";
                     }
-                }
-                elseif($arrTemplateTotal["title4"] != "") {
-                    $arrTemplateRow["box4"] = "<input type=\"checkbox\" name=\"5," . $arrSingleGroup["group_id"] . "\" id=\"5," . $arrSingleGroup["group_id"] . "\" value=\"1\" />";
-                }
-
-                if(in_array($arrSingleGroup["group_id"], $arrRights["right2"])) {
-                    //field editable?
-                    if($arrTemplateTotal["title5"] != "") {
-                        $arrTemplateRow["box5"] = "<input type=\"checkbox\" name=\"6," . $arrSingleGroup["group_id"] . "\" id=\"6," . $arrSingleGroup["group_id"] . "\" value=\"1\" checked=\"checked\" />";
-                    }
-                    else {
-                        $arrTemplateRow["box5"] = "<input type=\"hidden\" name=\"6," . $arrSingleGroup["group_id"] . "\" id=\"6," . $arrSingleGroup["group_id"] . "\" value=\"1\" />";
-                    }
-
-                }
-                elseif($arrTemplateTotal["title5"] != "") {
-                    $arrTemplateRow["box5"] = "<input type=\"checkbox\" name=\"6," . $arrSingleGroup["group_id"] . "\" id=\"6," . $arrSingleGroup["group_id"] . "\" value=\"1\" />";
-                }
-
-                if(in_array($arrSingleGroup["group_id"], $arrRights["right3"])) {
-                    //field editable?
-                    if($arrTemplateTotal["title6"] != "") {
-                        $arrTemplateRow["box6"] = "<input type=\"checkbox\" name=\"7," . $arrSingleGroup["group_id"] . "\" id=\"7," . $arrSingleGroup["group_id"] . "\" value=\"1\" checked=\"checked\" />";
-                    }
-                    else {
-                        $arrTemplateRow["box6"] = "<input type=\"hidden\" name=\"7," . $arrSingleGroup["group_id"] . "\" id=\"7," . $arrSingleGroup["group_id"] . "\" value=\"1\" />";
-                    }
-                }
-                elseif($arrTemplateTotal["title6"] != "") {
-                    $arrTemplateRow["box6"] = "<input type=\"checkbox\" name=\"7," . $arrSingleGroup["group_id"] . "\" id=\"7," . $arrSingleGroup["group_id"] . "\" value=\"1\" />";
-                }
-
-                if(in_array($arrSingleGroup["group_id"], $arrRights["right4"])) {
-                    //field editable?
-                    if($arrTemplateTotal["title7"] != "") {
-                        $arrTemplateRow["box7"] = "<input type=\"checkbox\" name=\"8," . $arrSingleGroup["group_id"] . "\" id=\"8," . $arrSingleGroup["group_id"] . "\" value=\"1\" checked=\"checked\" />";
-                    }
-                    else {
-                        $arrTemplateRow["box7"] = "<input type=\"hidden\" name=\"8," . $arrSingleGroup["group_id"] . "\" id=\"8," . $arrSingleGroup["group_id"] . "\" value=\"1\" />";
-                    }
-                }
-                elseif($arrTemplateTotal["title7"] != "") {
-                    $arrTemplateRow["box7"] = "<input type=\"checkbox\" name=\"8," . $arrSingleGroup["group_id"] . "\" id=\"8," . $arrSingleGroup["group_id"] . "\" value=\"1\" />";
                 }
 
 
-                if(in_array($arrSingleGroup["group_id"], $arrRights["right5"])) {
-                    //field editable?
-                    if($arrTemplateTotal["title8"] != "") {
-                        $arrTemplateRow["box8"] = "<input type=\"checkbox\" name=\"9," . $arrSingleGroup["group_id"] . "\" id=\"9," . $arrSingleGroup["group_id"] . "\" value=\"1\" checked=\"checked\" />";
-                    }
-                    else {
-                        $arrTemplateRow["box8"] = "<input type=\"hidden\" name=\"9," . $arrSingleGroup["group_id"] . "\" id=\"9," . $arrSingleGroup["group_id"] . "\" value=\"1\" />";
-                    }
-                }
-                elseif($arrTemplateTotal["title8"] != "") {
-                    $arrTemplateRow["box8"] = "<input type=\"checkbox\" name=\"9," . $arrSingleGroup["group_id"] . "\" id=\"9," . $arrSingleGroup["group_id"] . "\" value=\"1\" />";
-                }
 
                 if(_system_changehistory_enabled_ == "true") {
-                    if(in_array($arrSingleGroup["group_id"], $arrRights["changelog"])) {
-                        //field editable?
-                        if($arrTemplateTotal["title9"] != "") {
-                            $arrTemplateRow["box9"] = "<input type=\"checkbox\" name=\"10," . $arrSingleGroup["group_id"] . "\" id=\"10," . $arrSingleGroup["group_id"] . "\" value=\"1\" checked=\"checked\" />";
-                        }
-                        else {
-                            $arrTemplateRow["box9"] = "<input type=\"hidden\" name=\"10," . $arrSingleGroup["group_id"] . "\" id=\"10," . $arrSingleGroup["group_id"] . "\" value=\"1\" />";
-                        }
-                    }
-                    elseif($arrTemplateTotal["title9"] != "") {
-                        $arrTemplateRow["box9"] = "<input type=\"checkbox\" name=\"10," . $arrSingleGroup["group_id"] . "\" id=\"10," . $arrSingleGroup["group_id"] . "\" value=\"1\" />";
-                    }
+                        $arrTemplateRow["box9"] = "<input title=\"".$arrTitles[9]."\" rel=\"tooltip\" type=\"checkbox\" name=\"10," . $arrSingleGroup["group_id"] . "\" id=\"10," . $arrSingleGroup["group_id"] . "\" value=\"1\" ".(in_array($arrSingleGroup["group_id"], $arrRights["changelog"]) ? " checked=\"checked\" " : "")." />";
                 }
 
 

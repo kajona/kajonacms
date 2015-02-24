@@ -1,7 +1,7 @@
 <?php
 /*"******************************************************************************************************
 *   (c) 2004-2006 by MulchProductions, www.mulchprod.de                                                 *
-*   (c) 2007-2014 by Kajona, www.kajona.de                                                              *
+*   (c) 2007-2015 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
 *	$Id$					    *
@@ -58,7 +58,7 @@ $lang["mediamanager_path_h"]             = "Only paths starting with /files are 
 $lang["mediamanager_upload"]             = "Select files for upload";
 $lang["mediamanager_upload_filter_h"]    = "A comma-separated list of file types allowed to be uploaded (e.g. &quot;.jpg,.gif,.png&quot;) ";
 $lang["mediamanager_view_filter_h"]      = "A comma-separated list of file types allowed to be shown (e.g. &quot;.jpg,.gif,.png&quot;)";
-$lang["modul_titel"]                     = "Mediamananger";
+$lang["modul_titel"]                     = "Mediamanager";
 $lang["modul_titel_file"]                = "Mediamanager-File";
 $lang["module_action_new"]               = "New repository";
 $lang["overview"]                        = "Overview";

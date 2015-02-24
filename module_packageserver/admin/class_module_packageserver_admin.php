@@ -1,6 +1,6 @@
 <?php
 /*"******************************************************************************************************
-*   (c) 2007-2014 by Kajona, www.kajona.de                                                              *
+*   (c) 2007-2015 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
 *	$Id$                                  *
@@ -27,8 +27,6 @@ class class_module_packageserver_admin extends class_module_mediamanager_admin i
         $arrReturn = array();
         $arrReturn[] = array("view", class_link::getLinkAdmin($this->getArrModule("modul"), "list", "", $this->getLang("action_list"), "", "", true, "adminnavi"));
         $arrReturn[] = array("edit", class_link::getLinkAdmin($this->getArrModule("modul"), "logs", "", $this->getLang("action_logs"), "", "", true, "adminnavi"));
-        $arrReturn[] = array("", "");
-        $arrReturn[] = array("right", class_link::getLinkAdmin("right", "change", "&changemodule=".$this->getArrModule("modul"),  $this->getLang("commons_module_permissions"), "", "", true, "adminnavi"));
 
         return $arrReturn;
     }
@@ -215,7 +213,7 @@ class class_module_packageserver_admin extends class_module_mediamanager_admin i
         $arrHeader[2] = $this->getLang("header_hostname");
         $arrHeader[3] = $this->getLang("header_query");
         $strReturn .= $this->objToolkit->dataTable($arrHeader, $arrLogs);
-        $strReturn .= $this->objToolkit->getSimplePageview($objArraySectionIterator, $this->getArrModule("modul"), "logs");
+        $strReturn .= $this->objToolkit->getPageview($objArraySectionIterator, $this->getArrModule("modul"), "logs");
 
         return $strReturn;
     }

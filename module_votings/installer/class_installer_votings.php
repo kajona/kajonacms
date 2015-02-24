@@ -1,7 +1,7 @@
 <?php
 /*"******************************************************************************************************
 *   (c) 2004-2006 by MulchProductions, www.mulchprod.de                                                 *
-*   (c) 2007-2014 by Kajona, www.kajona.de                                                              *
+*   (c) 2007-2015 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
 *	$Id$                                       *
@@ -162,6 +162,27 @@ class class_installer_votings extends class_installer_base implements interface_
             $this->updateModuleVersion("votings", "1.4");
             $strReturn .= "Updating element-versions...\n";
             $this->updateElementVersion("votings", "1.4");
+            $this->objDB->flushQueryCache();
+        }
+
+
+        $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModul["module_version"] == "1.4") {
+            $strReturn .= "Updating 1.4 to 1.5...\n";
+            $strReturn .= "Updating module-versions...\n";
+            $this->updateModuleVersion("votings", "1.5");
+            $strReturn .= "Updating element-versions...\n";
+            $this->updateElementVersion("votings", "1.5");
+            $this->objDB->flushQueryCache();
+        }
+
+        $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModul["module_version"] == "1.5") {
+            $strReturn .= "Updating 1.5 to 1.6...\n";
+            $strReturn .= "Updating module-versions...\n";
+            $this->updateModuleVersion("votings", "1.6");
+            $strReturn .= "Updating element-versions...\n";
+            $this->updateElementVersion("votings", "1.6");
             $this->objDB->flushQueryCache();
         }
 

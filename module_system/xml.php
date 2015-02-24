@@ -1,7 +1,7 @@
 <?php
 /*"******************************************************************************************************
 *   (c) 2004-2006 by MulchProductions, www.mulchprod.de                                                 *
-*   (c) 2007-2014 by Kajona, www.kajona.de                                                              *
+*   (c) 2007-2015 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
 *	$Id$                                                      *
@@ -40,24 +40,12 @@ class class_xml {
      */
     public function processRequest() {
 
-        $strModule = getGet("module");
-        if($strModule == "") {
-            $strModule = getPost("module");
-        }
-
-        $strAction = getGet("action");
-        if($strAction == "") {
-            $strAction = getPost("action");
-        }
-
-        $strLanguageParam = getGet("language");
-        if($strLanguageParam == "") {
-            $strLanguageParam = getPost("language");
-        }
-
+        $strModule = class_carrier::getInstance()->getParam("module");
+        $strAction = class_carrier::getInstance()->getParam("action");
+        $strLanguageParam = class_carrier::getInstance()->getParam("language");
 
         $this->objResponse = class_response_object::getInstance();
-        $this->objResponse->setStResponseType(class_http_responsetypes::STR_TYPE_XML);
+        $this->objResponse->setStrResponseType(class_http_responsetypes::STR_TYPE_XML);
         $this->objResponse->setStrStatusCode(class_http_statuscodes::SC_OK);
 
 
@@ -69,7 +57,7 @@ class class_xml {
             $this->objResponse->setStrContent("<error>An error occurred, malformed request</error>");
         }
 
-        if($this->objResponse->getStResponseType() == class_http_responsetypes::STR_TYPE_XML && self::$bitRenderXmlHeader) {
+        if($this->objResponse->getStrResponseType() == class_http_responsetypes::STR_TYPE_XML && self::$bitRenderXmlHeader) {
             $this->objResponse->setStrContent("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n" . $this->objResponse->getStrContent());
         }
     }
@@ -92,5 +80,5 @@ class class_xml {
 $objXML = new class_xml();
 $objXML->processRequest();
 $objXML->objResponse->sendHeaders();
-echo $objXML->objResponse->getStrContent();
-
+$objXML->objResponse->sendContent();
+class_core_eventdispatcher::getInstance()->notifyGenericListeners(class_system_eventidentifier::EVENT_SYSTEM_REQUEST_AFTERCONTENTSEND, array(class_request_entrypoint_enum::XML()));

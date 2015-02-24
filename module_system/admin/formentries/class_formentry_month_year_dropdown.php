@@ -1,9 +1,7 @@
 <?php
 /*"******************************************************************************************************
-*   (c) 2013-2014 by Kajona, www.kajona.de                                                              *
+*   (c) 2013-2015 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
-*-------------------------------------------------------------------------------------------------------*
-*	$Id$                               *
 ********************************************************************************************************/
 
 /**
@@ -21,6 +19,8 @@ class class_formentry_month_year_dropdown extends class_formentry_date {
 
     private static $arrDropDownMonth = null;
     private static $arrDropDownYear = null;
+
+    private $bitRenderDay = false;
 
 
     static function classInit() {
@@ -52,9 +52,11 @@ class class_formentry_month_year_dropdown extends class_formentry_date {
         //set selected value
         $intMonth = null;
         $intYear = null;
+        $intDay = 1;
         if($objDate != null) {
             $intMonth = $objDate->getIntMonth();
             $intYear = $objDate->getIntYear();
+            $intDay = $objDate->getIntDay();
         }
 
         //create hint and form elements
@@ -62,8 +64,16 @@ class class_formentry_month_year_dropdown extends class_formentry_date {
         if($this->getStrHint() != null) {
             $strReturn .= $objToolkit->formTextRow($this->getStrHint());
         }
-        $strReturn .=  $objToolkit->formInputHidden($this->getStrEntryName().self::DAY_SUFFIX, "1");
-        $strReturn .=  $objToolkit->formInputDropdown($this->getStrEntryName().self::MONTH_SUFFIX, self::$arrDropDownMonth, $this->getStrLabel(), $intMonth, "", !$this->getBitReadonly());
+
+        if($this->bitRenderDay) {
+
+            $strReturn .= $objToolkit->formInputText($this->getStrEntryName()."ph", $this->getStrLabel(), $intDay, "", "", true);
+            $strReturn .= $objToolkit->formInputHidden($this->getStrEntryName().self::DAY_SUFFIX, $intDay);
+        }
+        else {
+            $strReturn .= $objToolkit->formInputHidden($this->getStrEntryName().self::DAY_SUFFIX, "1");
+        }
+        $strReturn .=  $objToolkit->formInputDropdown($this->getStrEntryName().self::MONTH_SUFFIX, self::$arrDropDownMonth, $this->bitRenderDay ? "" : $this->getStrLabel(), $intMonth, "", !$this->getBitReadonly());
         $strReturn .=  $objToolkit->formInputDropdown($this->getStrEntryName().self::YEAR_SUFFIX,  self::$arrDropDownYear,   "",                  $intYear, "", !$this->getBitReadonly());
 
         return $strReturn;
@@ -109,6 +119,22 @@ class class_formentry_month_year_dropdown extends class_formentry_date {
 
         return $arrDropDownYear;
     }
+
+    /**
+     * @return boolean
+     */
+    public function isBitRenderDay() {
+        return $this->bitRenderDay;
+    }
+
+    /**
+     * @param boolean $bitRenderDay
+     */
+    public function setBitRenderDay($bitRenderDay) {
+        $this->bitRenderDay = $bitRenderDay;
+    }
+
+
 }
 
 class_formentry_month_year_dropdown::classInit();

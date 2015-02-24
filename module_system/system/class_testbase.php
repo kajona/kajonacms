@@ -1,9 +1,7 @@
 <?php
 /*"******************************************************************************************************
-*   (c) 2007-2014 by Kajona, www.kajona.de                                                              *
+*   (c) 2007-2015 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
-*-------------------------------------------------------------------------------------------------------*
-*	$Id$                                             *
 ********************************************************************************************************/
 
 
@@ -55,11 +53,13 @@ abstract class class_testbase extends PHPUnit_Framework_TestCase {
         //reenable garbage collection
         gc_enable();
 
+
+        class_carrier::getInstance()->flushCache(class_carrier::INT_CACHE_TYPE_CHANGELOG);
         parent::tearDown();
     }
 
     protected function flushDBCache() {
-        class_carrier::getInstance()->flushCache(class_carrier::INT_CACHE_TYPE_DBQUERIES);
+        class_carrier::getInstance()->flushCache(class_carrier::INT_CACHE_TYPE_DBQUERIES |class_carrier::INT_CACHE_TYPE_DBTABLES);
     }
 
 
