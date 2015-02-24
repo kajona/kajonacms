@@ -64,7 +64,7 @@ class class_element_image_admin extends class_element_admin implements interface
      * @fieldLabel image_x
      * @fieldHidden
      */
-    private $strImageX = "";
+    private $strImageX = 0;
 
     /**
      * @var string
@@ -75,7 +75,7 @@ class class_element_image_admin extends class_element_admin implements interface
      * @fieldLabel image_y
      * @fieldHidden
      */
-    private $strImageY = "";
+    private $strImageY = 0;
 
     /**
      * @var string
