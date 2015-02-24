@@ -1,5 +1,8 @@
 Module Pages
 
+V4.6.2 --------------------------------------------------------------------------------------------------
+BUG: module_pages | image element -> saving the element could fail in some combinations with special mysql versions
+
 V4.6.1 --------------------------------------------------------------------------------------------------
 BUG: module_pages | portaleditor -> the portal-edtor missed to include a custom ckeditor config
 
