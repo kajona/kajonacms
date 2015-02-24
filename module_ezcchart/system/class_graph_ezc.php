@@ -57,6 +57,7 @@ class class_graph_ezc implements interface_graph {
     private $GRAPH_TYPE_STACKEDBAR = 4;
     private $GRAPH_TYPE_LINE = 2;
     private $GRAPH_TYPE_PIE = 3;
+    private $GRAPH_TYPE_HORIZONTALBAR = 5;
 
     private $intCurrentGraphMode = -1;
 
@@ -120,7 +121,10 @@ class class_graph_ezc implements interface_graph {
 
         if($this->intCurrentGraphMode > 0) {
             //only allow this method to be called again if in bar-mode
-            if($this->intCurrentGraphMode != $this->GRAPH_TYPE_BAR && $this->intCurrentGraphMode != $this->GRAPH_TYPE_STACKEDBAR) {
+            if($this->intCurrentGraphMode != $this->GRAPH_TYPE_BAR
+                && $this->intCurrentGraphMode != $this->GRAPH_TYPE_STACKEDBAR
+                && $this->intCurrentGraphMode != $this->GRAPH_TYPE_HORIZONTALBAR)
+            {
                 throw new class_exception("Chart already initialized", class_exception::$level_ERROR);
             }
         }
@@ -421,6 +425,17 @@ class class_graph_ezc implements interface_graph {
             }
         }
 
+        else if($this->intCurrentGraphMode == $this->GRAPH_TYPE_HORIZONTALBAR) {
+            $this->objGraph = new ezcGraphHorizontalBarChart();
+            $this->objGraph->palette = $objPalette;
+            $this->objGraph->renderer = new ezcGraphHorizontalRenderer();
+
+            //layouting
+            if($this->bit3d === null || $this->bit3d === true) {
+                //no 3d supported for horizontal bar charts
+            }
+        }
+
         else if($this->intCurrentGraphMode == $this->GRAPH_TYPE_LINE) {
             $this->objGraph = new ezcGraphLineChart();
             if($this->bit3d === true) {
@@ -510,8 +525,12 @@ class class_graph_ezc implements interface_graph {
                 $this->objGraph->xAxis->axisSpace = .2;
             }
 
-            if($this->intMaxLabelCount > 1) {
+            if($this->intMaxLabelCount > 1 && $this->intCurrentGraphMode != $this->GRAPH_TYPE_HORIZONTALBAR) {
                 $this->objGraph->xAxis->labelCount = $this->intMaxLabelCount;
+            }
+
+            if($this->intMaxLabelCount > 1 && $this->intCurrentGraphMode == $this->GRAPH_TYPE_HORIZONTALBAR) {
+                $this->objGraph->yAxis->labelCount = $this->intMaxLabelCount;
             }
 
 
@@ -796,6 +815,15 @@ class class_graph_ezc implements interface_graph {
      */
     public function setArrSeriesColors($arrSeriesColors) {
         $this->arrSeriesColors = $arrSeriesColors;
+    }
+
+    /**
+     * Method to render a horizontal bar chart
+     *
+     * @param bool $bitIsHorizontalBar
+     */
+    public function setBarHorizontal($bitIsHorizontalBar) {
+        $this->intCurrentGraphMode = $this->GRAPH_TYPE_HORIZONTALBAR;
     }
 
 }
