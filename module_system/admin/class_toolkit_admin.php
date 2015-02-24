@@ -1193,11 +1193,15 @@ class class_toolkit_admin extends class_toolkit {
      *
      * @param class_model|string $objInstance or a systemid
      * @param bool $bitReload triggers a page-reload afterwards
+     * @param string $strAltActive tooltip text for the icon if record is active
+     * @param string $strAltInactive tooltip text for the icon if record is inactive
      *
      * @throws class_exception
      * @return string
      */
-    public function listStatusButton($objInstance, $bitReload = false) {
+    public function listStatusButton($objInstance, $bitReload = false, $strAltActive = "", $strAltInactive = "") {
+        $strAltActive != "" ? $strAltActive : class_carrier::getInstance()->getObjLang()->getLang("status_active", "system");
+        $strAltInactive != "" ? $strAltInactive : class_carrier::getInstance()->getObjLang()->getLang("status_inactive", "system");
 
         if(is_object($objInstance) && $objInstance instanceof class_model )
             $objRecord = $objInstance;
@@ -1207,10 +1211,10 @@ class class_toolkit_admin extends class_toolkit {
             throw new class_exception("failed loading instance for ".(is_object($objInstance) ? " @ ".get_class($objInstance) : $objInstance), class_exception::$level_ERROR);
 
         if($objRecord->getIntRecordStatus() == 1) {
-            $strLinkContent = class_adminskin_helper::getAdminImage("icon_enabled", class_carrier::getInstance()->getObjLang()->getLang("status_active", "system"));
+            $strLinkContent = class_adminskin_helper::getAdminImage("icon_enabled", $strAltActive);
         }
         else {
-            $strLinkContent = class_adminskin_helper::getAdminImage("icon_disabled", class_carrier::getInstance()->getObjLang()->getLang("status_inactive", "system"));
+            $strLinkContent = class_adminskin_helper::getAdminImage("icon_disabled", $strAltInactive);
         }
 
         $strJavascript = "";
@@ -1218,8 +1222,8 @@ class class_toolkit_admin extends class_toolkit {
         //output texts and image paths only once
         if(class_carrier::getInstance()->getObjSession()->getSession("statusButton", class_session::$intScopeRequest) === false) {
             $strJavascript .= "<script type=\"text/javascript\">
-                KAJONA.admin.ajax.setSystemStatusMessages.strActiveIcon = '".addslashes(class_adminskin_helper::getAdminImage("icon_enabled", class_carrier::getInstance()->getObjLang()->getLang("status_active", "system")))."';
-                KAJONA.admin.ajax.setSystemStatusMessages.strInActiveIcon = '".addslashes(class_adminskin_helper::getAdminImage("icon_disabled", class_carrier::getInstance()->getObjLang()->getLang("status_inactive", "system")))."';
+                KAJONA.admin.ajax.setSystemStatusMessages.strActiveIcon = '".addslashes(class_adminskin_helper::getAdminImage("icon_enabled", $strAltActive))."';
+                KAJONA.admin.ajax.setSystemStatusMessages.strInActiveIcon = '".addslashes(class_adminskin_helper::getAdminImage("icon_disabled", $strAltInactive))."';
 
             </script>";
             class_carrier::getInstance()->getObjSession()->setSession("statusButton", "true", class_session::$intScopeRequest);
