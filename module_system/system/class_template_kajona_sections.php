@@ -11,7 +11,7 @@
  *
  * @package module_system
  * @author sidler@mulchprod.de
- *¡
+ *
  */
 class class_template_kajona_sections  {
 

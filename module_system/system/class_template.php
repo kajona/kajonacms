@@ -11,6 +11,11 @@
  *
  * @package module_system
  * @author sidler@mulchprod.de
+ *
+ * @todo add attribute parsing
+ *
+ * @todo consider refactoring the class to a more object-oriented approach, so once instance per template (section). or split up the class in class_template and class_template_section
+ *
  */
 class class_template {
 
@@ -96,7 +101,7 @@ class class_template {
         $strCacheTemplate = md5($strName);
         $strCacheSection = md5($strName.$strSection);
 
-        if(isset($this->arrCacheTemplateSections[$strCacheSection]))
+        if(array_key_exists($strCacheSection, $this->arrCacheTemplateSections))
             return $strCacheSection;
 
         $this->bitSaveToCacheRequired = true;
@@ -154,11 +159,18 @@ class class_template {
         if($bitKeepSectionTag)
             $intEnd += uniStrlen("</".$strSection.">");
 
-        $intEnd = $intEnd - $intStart;
+
 
         if($intStart !== false && $intEnd !== false) {
-            //delete substring before and after
-            $strTemplate = uniSubstr($strTemplate, $intStart, $intEnd);
+            $intEnd = $intEnd - $intStart;
+
+            if($intEnd == 0) {
+                $strTemplate = "";
+            }
+            else {
+                //delete substring before and after
+                $strTemplate = uniSubstr($strTemplate, $intStart, $intEnd);
+            }
         }
         else
             $strTemplate = null;
@@ -179,10 +191,12 @@ class class_template {
      * @return string The filled template
      */
     public function fillTemplate($arrContent, $strIdentifier, $bitRemovePlaceholder = true) {
-        if(isset($this->arrCacheTemplateSections[$strIdentifier]))
-            $strTemplate = $this->arrCacheTemplateSections[$strIdentifier];
-        else
+        if(array_key_exists($strIdentifier, $this->arrCacheTemplateSections)) {
+            $strTemplate = (string)$this->arrCacheTemplateSections[$strIdentifier];
+        }
+        else {
             $strTemplate = "Load template first!";
+        }
 
         if(count($arrContent) >= 1) {
             foreach($arrContent as $strPlaceholder => $strContent) {

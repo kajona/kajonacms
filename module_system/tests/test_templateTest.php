@@ -2,6 +2,11 @@
 
 require_once (__DIR__."/../../module_system/system/class_testbase.php");
 
+/**
+ * Class class_test_templateTest
+ * @todo add test to parse the attributes themselves
+ *
+ */
 class class_test_templateTest extends class_testbase  {
 
     public function testBasicSectionParser() {
@@ -36,6 +41,37 @@ HTML;
 
         $strFilled = trim($objTemplate->fillTemplate(array(), $strSectionID, true));
         $this->assertEquals("<content>test</content> test", $strFilled);
+    }
+
+    public function testEmptySectionParser() {
+        $strTemplate = <<<HTML
+
+        <list1></list1>
+
+        <list2>content</list2>
+
+        <list3></list3>
+HTML;
+
+
+        $objTemplate = class_template::getInstance();
+        $strTemplateID = $objTemplate->setTemplate($strTemplate);
+
+        $this->assertTrue($objTemplate->containsSection($strTemplateID, "list1"));
+        $this->assertTrue($objTemplate->containsSection($strTemplateID, "list2"));
+        $this->assertTrue($objTemplate->containsSection($strTemplateID, "list3"));
+        $this->assertTrue(!$objTemplate->containsSection($strTemplateID, "lista"));
+
+
+        $this->assertEquals("", trim($objTemplate->getSectionFromTemplate($strTemplate, "list1")));
+        $this->assertEquals("<list1></list1>", trim($objTemplate->getSectionFromTemplate($strTemplate, "list1", true)));
+
+        $this->assertEquals("content", trim($objTemplate->getSectionFromTemplate($strTemplate, "list2")));
+        $this->assertEquals("<list2>content</list2>", trim($objTemplate->getSectionFromTemplate($strTemplate, "list2", true)));
+
+        $this->assertEquals("", trim($objTemplate->getSectionFromTemplate($strTemplate, "list3")));
+        $this->assertEquals("<list3></list3>", trim($objTemplate->getSectionFromTemplate($strTemplate, "list3", true)));
+
     }
 
 
