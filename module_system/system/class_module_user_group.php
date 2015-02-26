@@ -155,17 +155,24 @@ class class_module_user_group extends class_model implements interface_model, in
     /**
      * Returns all groups from database
      *
-     * @param string $strPrevid
+     * @param string $strFilter
      * @param bool|int $intStart
      * @param bool|int $intEnd
      *
      * @return class_module_user_group[]
      * @static
      */
-    public static function getObjectList($strPrevid = "", $intStart = null, $intEnd = null) {
-        $strQuery = "SELECT group_id FROM "._dbprefix_."user_group ORDER BY group_name";
+    public static function getObjectList($strFilter = "", $intStart = null, $intEnd = null) {
+        $strQuery = "SELECT group_id
+                       FROM "._dbprefix_."user_group
+                    ".($strFilter != "" ? " WHERE group_name LIKE ? " : "")."
+                   ORDER BY group_name";
 
-        $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array(), $intStart, $intEnd);
+        $arrFilter = array();
+        if($strFilter != "")
+            $arrFilter[] = "%".$strFilter."%";
+
+        $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, $arrFilter, $intStart, $intEnd);
         $arrReturn = array();
         foreach($arrIds as $arrOneId)
             $arrReturn[] = new class_module_user_group($arrOneId["group_id"]);
@@ -176,13 +183,20 @@ class class_module_user_group extends class_model implements interface_model, in
     /**
      * Fetches the number of groups available
      *
-     * @param string $strPrevid
+     * @param string $strFilter
      *
      * @return int
      */
-    public static function getObjectCount($strPrevid = "") {
-        $strQuery = "SELECT COUNT(*) FROM "._dbprefix_."user_group";
-        $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array());
+    public static function getObjectCount($strFilter = "") {
+        $strQuery = "SELECT COUNT(*)
+                       FROM "._dbprefix_."user_group
+               ".($strFilter != "" ? " WHERE group_name LIKE ? " : "");
+
+        $arrFilter = array();
+        if($strFilter != "")
+            $arrFilter[] = "%".$strFilter."%";
+
+        $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, $arrFilter);
         return $arrRow["COUNT(*)"];
     }
 

@@ -17,7 +17,8 @@
  */
 class class_module_user_admin extends class_admin_simple implements interface_admin {
 
-    private $STR_FILTER_SESSION_KEY = "USERLIST_FILTER_SESSION_KEY";
+    private $STR_USERFILTER_SESSION_KEY = "USERLIST_FILTER_SESSION_KEY";
+    private $STR_GROUPFILTER_SESSION_KEY = "GROUPLIST_FILTER_SESSION_KEY";
 
     //languages, the admin area could display (texts)
     protected $arrLanguages = array();
@@ -82,7 +83,7 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
     protected function actionList() {
 
         if($this->getParam("doFilter") != "") {
-            $this->objSession->setSession($this->STR_FILTER_SESSION_KEY, $this->getParam("userlist_filter"));
+            $this->objSession->setSession($this->STR_USERFILTER_SESSION_KEY, $this->getParam("userlist_filter"));
             $this->setParam("pv", 1);
             $this->adminReload(class_link::getLinkAdminHref($this->getArrModule("modul")));
             return "";
@@ -92,16 +93,16 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
 
         //add a filter-form
         $strReturn .= $this->objToolkit->formHeader(class_link::getLinkAdminHref($this->getArrModule("modul"), "list"));
-        $strReturn .= $this->objToolkit->formInputText("userlist_filter", $this->getLang("user_username"),  $this->objSession->getSession($this->STR_FILTER_SESSION_KEY));
+        $strReturn .= $this->objToolkit->formInputText("userlist_filter", $this->getLang("user_username"),  $this->objSession->getSession($this->STR_USERFILTER_SESSION_KEY));
         $strReturn .= $this->objToolkit->formInputSubmit($this->getLang("userlist_filter"));
         $strReturn .= $this->objToolkit->formInputHidden("doFilter", "1");
         $strReturn .= $this->objToolkit->formClose();
 
-        $objIterator = new class_array_section_iterator(class_module_user_user::getObjectCount($this->objSession->getSession($this->STR_FILTER_SESSION_KEY)));
+        $objIterator = new class_array_section_iterator(class_module_user_user::getObjectCount($this->objSession->getSession($this->STR_USERFILTER_SESSION_KEY)));
         $objIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
         $objIterator->setArraySection(
             class_module_user_user::getObjectList(
-                $this->objSession->getSession($this->STR_FILTER_SESSION_KEY),
+                $this->objSession->getSession($this->STR_USERFILTER_SESSION_KEY),
                 $objIterator->calculateStartPos(),
                 $objIterator->calculateEndPos()
             )
@@ -699,11 +700,29 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
      * @permissions view
      */
     protected function actionGroupList() {
-        $objArraySectionIterator = new class_array_section_iterator(class_module_user_group::getObjectCount());
-        $objArraySectionIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
-        $objArraySectionIterator->setArraySection(class_module_user_group::getObjectList("", $objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
 
-        return $this->renderList($objArraySectionIterator, false, "groupList");
+        if($this->getParam("doFilter") != "") {
+            $this->objSession->setSession($this->STR_GROUPFILTER_SESSION_KEY, $this->getParam("grouplist_filter"));
+            $this->setParam("pv", 1);
+            $this->adminReload(class_link::getLinkAdminHref($this->getArrModule("modul"), "groupList"));
+            return "";
+        }
+
+        $strReturn = "";
+
+        //add a filter-form
+        $strReturn .= $this->objToolkit->formHeader(class_link::getLinkAdminHref($this->getArrModule("modul"), "groupList"));
+        $strReturn .= $this->objToolkit->formInputText("grouplist_filter", $this->getLang("group_name"),  $this->objSession->getSession($this->STR_GROUPFILTER_SESSION_KEY));
+        $strReturn .= $this->objToolkit->formInputSubmit($this->getLang("userlist_filter"));
+        $strReturn .= $this->objToolkit->formInputHidden("doFilter", "1");
+        $strReturn .= $this->objToolkit->formClose();
+
+        $objArraySectionIterator = new class_array_section_iterator(class_module_user_group::getObjectCount($this->objSession->getSession($this->STR_GROUPFILTER_SESSION_KEY)));
+        $objArraySectionIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
+        $objArraySectionIterator->setArraySection(class_module_user_group::getObjectList($this->objSession->getSession($this->STR_GROUPFILTER_SESSION_KEY), $objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
+
+        $strReturn .= $this->renderList($objArraySectionIterator, false, "groupList");
+        return $strReturn;
     }
 
     /**
