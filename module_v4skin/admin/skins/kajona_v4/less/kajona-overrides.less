@@ -1168,6 +1168,12 @@ footer {
     &.mandatoryFormElement {
         .box-shadow(0 0 6px @brand-warning+20);
     }
+
+    &[disabled],
+    &[readonly],
+    fieldset[disabled] & {
+        opacity: 0.5;
+    }
 }
 
 .form-control-static {
