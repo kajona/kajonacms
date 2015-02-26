@@ -1200,8 +1200,8 @@ class class_toolkit_admin extends class_toolkit {
      * @return string
      */
     public function listStatusButton($objInstance, $bitReload = false, $strAltActive = "", $strAltInactive = "") {
-        $strAltActive != "" ? $strAltActive : class_carrier::getInstance()->getObjLang()->getLang("status_active", "system");
-        $strAltInactive != "" ? $strAltInactive : class_carrier::getInstance()->getObjLang()->getLang("status_inactive", "system");
+        $strAltActive = $strAltActive != "" ? $strAltActive : class_carrier::getInstance()->getObjLang()->getLang("status_active", "system");
+        $strAltInactive = $strAltInactive != "" ? $strAltInactive : class_carrier::getInstance()->getObjLang()->getLang("status_inactive", "system");
 
         if(is_object($objInstance) && $objInstance instanceof class_model )
             $objRecord = $objInstance;
