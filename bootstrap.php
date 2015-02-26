@@ -19,6 +19,7 @@ function rawIncludeError($strFileMissed) {
     $strErrorMessage .= "Error including necessary files. Can't proceed.<br />";
     $strErrorMessage .= "Searched for ".$strFileMissed." but failed. Going home now...<br />";
     $strErrorMessage .= "</div></body></html>";
+    header("HTTP/1.0 500 Internal Server Error");
     die($strErrorMessage);
 }
 
