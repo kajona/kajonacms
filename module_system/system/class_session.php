@@ -445,6 +445,16 @@ final class class_session {
 
         if($objUser->getIntActive() == 1) {
 
+
+
+            $this->getObjInternalSession()->setStrLoginstatus(class_module_system_session::$LOGINSTATUS_LOGGEDIN);
+            $this->getObjInternalSession()->setStrUserid($objUser->getSystemid());
+
+            $strGroups = implode(",", $objUser->getArrGroupIds());
+            $this->getObjInternalSession()->setStrGroupids($strGroups);
+            $this->getObjInternalSession()->updateObjectToDb();
+            $this->objUser = $objUser;
+
             //trigger listeners on first login
             if($objUser->getIntLogins() == 0) {
                 //TODO: remove legacy support
@@ -455,14 +465,6 @@ final class class_session {
             $objUser->setIntLogins($objUser->getIntLogins() + 1);
             $objUser->setIntLastLogin(time());
             $objUser->updateObjectToDb();
-
-            $this->getObjInternalSession()->setStrLoginstatus(class_module_system_session::$LOGINSTATUS_LOGGEDIN);
-            $this->getObjInternalSession()->setStrUserid($objUser->getSystemid());
-
-            $strGroups = implode(",", $objUser->getArrGroupIds());
-            $this->getObjInternalSession()->setStrGroupids($strGroups);
-            $this->getObjInternalSession()->updateObjectToDb();
-            $this->objUser = $objUser;
 
             //Drop a line to the logger
             class_logger::getInstance()->addLogRow("User: ".$objUser->getStrUsername()." successfully logged in, login provider: ".$objUser->getStrSubsystem(), class_logger::$levelInfo);
