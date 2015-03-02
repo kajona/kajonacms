@@ -276,6 +276,7 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
         $strReturn .= $this->objToolkit->getTextRow($this->getLang("user_resend_password_hint"));
         $strReturn .= $this->objToolkit->formTextRow($this->getLang("user_username") . " " . $objUser->getStrUsername());
         $strReturn .= $this->objToolkit->formTextRow($this->getLang("form_user_email") . " " . $objUser->getStrEmail());
+        $strReturn .= $this->objToolkit->formInputCheckbox("form_user_sendusername", $this->getLang("form_user_sendusername"));
         $strReturn .= $this->objToolkit->formInputHidden("systemid", $this->getSystemid());
         $strReturn .= $this->objToolkit->formInputSubmit($this->getLang("commons_save"));
         $strReturn .= $this->objToolkit->formClose();
@@ -297,10 +298,16 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
 
         $strActivationLink = class_link::getLinkAdminHref("login", "pwdReset", "&systemid=" . $objUser->getSystemid() . "&authcode=" . $strToken, false);
 
+        class_carrier::getInstance()->getObjLang()->setStrTextLanguage($objUser->getStrAdminlanguage());
+
         $objMail = new class_mail();
         $objMail->addTo($objUser->getStrEmail());
         $objMail->setSubject($this->getLang("user_password_resend_subj"));
-        $objMail->setText($this->getLang("user_password_resend_body") . $strActivationLink);
+        $objMail->setText($this->getLang("user_password_resend_body", array($strActivationLink)));
+
+        if($this->getParam("form_user_sendusername") != "") {
+            $objMail->setText($this->getLang("user_password_resend_body_username", array($objUser->getStrUsername(), $strActivationLink)));
+        }
 
         $objMail->sendMail();
 
