@@ -142,6 +142,13 @@ class class_reflection {
         self::$bitCacheSaveRequired = true;
         return $arrReturn;
     }
+
+
+
+    public function getAnnotationParamsFromClass($strAnnotation) {
+        $arrParams = null;
+        return $arrParams;
+    }
     
     /**
      * Returns a list of all annotation names with a given value.
@@ -282,6 +289,10 @@ class class_reflection {
         return $strReturn;
     }
 
+    public function getMethodAnnotationParams($strMethodName, $strAnnotation) {
+
+    }
+
     /**
      * Searches the current class for properties marked with a given annotation.
      * If found, the name of the property plus the (optional) value of the property is returned.
@@ -346,6 +357,24 @@ class class_reflection {
         }
 
         return null;
+    }
+
+    public function getAnnotationParamsForProperty($strProperty, $strAnnotation) {
+        $arrProperties = $this->objReflectionClass->getProperties();
+
+        foreach($arrProperties as $objOneProperty) {
+            if($objOneProperty->getName() == $strProperty) {
+                $strFirstAnnotation = $this->searchFirstAnnotationInDoc($objOneProperty->getDocComment(), $strAnnotation);
+                if ($strFirstAnnotation !== false)
+                    break;
+            }
+        }
+
+        $arrParams = null;
+        if($strFirstAnnotation !== false) {
+            $arrParams = array();
+        }
+        return $arrParams;
     }
 
 
@@ -419,6 +448,8 @@ class class_reflection {
         return null;
     }
 
+
+
     /**
      * Internal helper, does the parsing of the comment.
      * Returns the first annotation matching the passed name.
@@ -489,5 +520,8 @@ class class_reflection {
         self::$bitCacheSaveRequired = true;
         return $arrReturn;
     }
+
+
+
 }
 class_reflection::staticConstruct();

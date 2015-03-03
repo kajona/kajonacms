@@ -125,6 +125,76 @@ class class_test_reflection extends class_testbase  {
     }
 
 
+
+    public function testAnnotationsParameter() {
+        $objReflection = new class_reflection(new C());
+
+        /*
+         *
+         * @classParamTest1 val1
+         * @classParamTest2 (param1=0, param2="abc", param3={"0", 123, 456}, 999)
+         * @classParamTest3 val3 (param1=0, param2="abc", param3={"0", 123, 456})
+         * @classParamTest4
+         *
+        */
+
+
+        //^(.*)(\(.*\))
+        $this->assertTrue($objReflection->hasClassAnnotation("@classParamTest1"));
+        $this->assertTrue($objReflection->hasClassAnnotation("@classParamTest2"));
+        $this->assertTrue($objReflection->hasClassAnnotation("@classParamTest3"));
+        $this->assertTrue($objReflection->hasClassAnnotation("@classParamTest4"));
+
+        //Values
+        $arrValues = $objReflection->getAnnotationValuesFromClass("@classParamTest1");
+        $this->assertCount(1, $arrValues);
+        $this->assertEquals("val1", $arrValues[0]);
+
+        $arrValues = $objReflection->getAnnotationValuesFromClass("@classParamTest2");
+        $this->assertCount(0, $arrValues);
+
+        $arrValues = $objReflection->getAnnotationValuesFromClass("@classParamTest3");
+        $this->assertCount(1, $arrValues);
+        $this->assertEquals("val3", $arrValues[0]);
+
+        $arrValues = $objReflection->getAnnotationValuesFromClass("@classParamTest4");
+        $this->assertCount(0, $arrValues);
+
+        //Params
+        $arrParams = $objReflection->getAnnotationValuesFromClass("@classParamTest1");
+        $this->assertCount(0, $arrParams);
+
+        $arrParams = $objReflection->getAnnotationParamsFromClass("@classParamTest2");
+        $this->assertCount(4, $arrParams);
+        $this->assertArrayHasKey("param1", $arrParams);
+        $this->assertArrayHasKey("param2", $arrParams);
+        $this->assertArrayHasKey("param3", $arrParams);
+        $this->assertArrayHasKey("param4", $arrParams);
+        $this->assertEquals(0, $arrParams["param1"]);
+        $this->assertEquals("abc", $arrParams["param2"]);
+        $this->assertTrue(is_array($arrParams["param3"]));
+        $this->assertEquals("0", $arrParams["param3"][0]);
+        $this->assertEquals("123", $arrParams["param3"][1]);
+        $this->assertEquals("456", $arrParams["param3"][2]);
+        $this->assertEquals(999, $arrParams["param4"]);
+
+        $arrParams = $objReflection->getAnnotationParamsFromClass("@classParamTest3");
+        $this->assertCount(3, $arrParams);
+        $this->assertArrayHasKey("param1", $arrParams);
+        $this->assertArrayHasKey("param2", $arrParams);
+        $this->assertArrayHasKey("param3", $arrParams);
+        $this->assertEquals(0, $arrParams["param1"]);
+        $this->assertEquals("abc", $arrParams["param2"]);
+        $this->assertTrue(is_array($arrParams["param3"]));
+        $this->assertEquals("0", $arrParams["param3"][0]);
+        $this->assertEquals("123", $arrParams["param3"][1]);
+        $this->assertEquals("456", $arrParams["param3"][2]);
+
+        $arrParams = $objReflection->getAnnotationValuesFromClass("@classParamTest4");
+        $this->assertCount(0, $arrParams);
+    }
+
+
 }
 
 //set up test-structures
@@ -174,6 +244,60 @@ class B extends A {
 
     /**
      * @propertyTest valB2
+     */
+    private $propertyB2;
+
+
+    /**
+     * @propertyTestInheritance val CB
+     */
+    private $propertyC;
+
+    /**
+     * @methodTest val1
+     * @methodTest val2
+     */
+    public function testMethod() {
+
+    }
+
+    public function setIntPropertyB1($propertyB1) {
+        $this->propertyB1 = $propertyB1;
+    }
+
+    public function getBitPropertyB1() {
+        return $this->propertyB1;
+    }
+
+}
+
+
+/**
+ *
+ * @classTest val2
+ * @classTest val3
+ *
+ * @classParamTest1 val1
+ * @classParamTest2 (param1=0, param2="abc", param3={"0", 123, 456}, 999)
+ * @classParamTest3 val3 (param1=0, param2="abc", param3={"0", 123, 456})
+ * @classParamTest4
+ * *
+ */
+class C extends A {
+
+    /**
+     * @propertyTest valB1
+     * @propertyParamTest1 valB1(param1=0)
+     * @propertyParamTest2 valB1
+     * @propertyParamTest3(param1=0)
+     * @propertyParamTest4
+     * @
+     */
+    private $propertyB1;
+
+    /**
+     * @propertyTest valB2
+     *
      */
     private $propertyB2;
 
