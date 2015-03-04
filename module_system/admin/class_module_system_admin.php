@@ -126,14 +126,16 @@ class class_module_system_admin extends class_admin_simple implements interface_
 
     /**
      * @param class_model $objListEntry
+     * @param string $strAltActive tooltip text for the icon if record is active
+     * @param string $strAltInactive tooltip text for the icon if record is inactive
      *
      * @return string
      */
-    protected function renderStatusAction(class_model $objListEntry) {
+    protected function renderStatusAction(class_model $objListEntry, $strAltActive = "", $strAltInactive = "") {
         if($objListEntry instanceof class_module_system_module)
             return "";
 
-        return parent::renderStatusAction($objListEntry);
+        return parent::renderStatusAction($objListEntry, $strAltActive, $strAltInactive);
     }
 
 

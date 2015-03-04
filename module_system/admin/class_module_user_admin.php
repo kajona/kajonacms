@@ -114,10 +114,12 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
 
     /**
      * @param class_model $objListEntry
+     * @param string $strAltActive tooltip text for the icon if record is active
+     * @param string $strAltInactive tooltip text for the icon if record is inactive
      *
      * @return string
      */
-    protected function renderStatusAction(class_model $objListEntry) {
+    protected function renderStatusAction(class_model $objListEntry, $strAltActive = "", $strAltInactive = "") {
         if($objListEntry instanceof class_module_user_user && $objListEntry->rightEdit()) {
             if($objListEntry->getIntActive() == 1) {
                 return $this->objToolkit->listButton(class_link::getLinkAdmin("user", "setUserStatus", "&systemid=" . $objListEntry->getSystemid()."&pv=".$this->getParam("pv"), "", $this->getLang("user_active"), "icon_enabled"));
