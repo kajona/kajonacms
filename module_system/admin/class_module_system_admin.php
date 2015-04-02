@@ -745,6 +745,9 @@ JS;
                 $strNewValue = $objTarget->renderVersionValue($objOneEntry->getStrProperty(), $strNewValue);
             }
 
+            $strOldValue = htmlStripTags($strOldValue);
+            $strNewValue = htmlStripTags($strNewValue);
+
             $arrRowData[] = dateToString($objOneEntry->getObjDate());
             $arrRowData[] = $this->objToolkit->getTooltipText(uniStrTrim($objOneEntry->getStrUsername(), 15), $objOneEntry->getStrUsername());
             if($strSystemid == "")
