@@ -360,7 +360,7 @@ class class_module_workflows_workflow extends class_model implements interface_m
         $objOrmMapper->addOrderBy(new class_orm_objectlist_orderby("system_date_start DESC"));
         $objOrmMapper->addOrderBy(new class_orm_objectlist_orderby("system_sort DESC"));
 
-        return $objOrmMapper->getObjectList("class_module_workflows_workflow", $intStart, $intEnd);
+        return $objOrmMapper->getObjectList("class_module_workflows_workflow", "", $intStart, $intEnd);
     }
 
 
