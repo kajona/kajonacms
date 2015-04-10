@@ -105,7 +105,7 @@ abstract class class_testbase_object extends class_testbase {
 
         $strClassName = $objElement->getAttribute('class');
         if(empty($strClassName)) {
-            throw new RuntimeException('No class name given for oe "' . $strName . '" (' . $objElement->getNodePath() . ')');
+            throw new RuntimeException('No class name given for object "' . $strName . '" (' . $objElement->getNodePath() . ')');
         }
 
         $strParentId = $objParent === null ? $this->getDefaultRootId($strClassName) : $objParent->getStrSystemid();
