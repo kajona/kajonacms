@@ -1,7 +1,5 @@
 <?php
 
-require_once __DIR__."/class_testbase.php";
-
 /**
  * Base class to create object structures which can be used to test against an object tree
  *
