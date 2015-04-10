@@ -19,18 +19,18 @@ abstract class class_testbase_object extends class_testbase {
 
         parent::setUp();
 
-        $file = $this->getFixtureFile();
-        if(!is_file($file)) {
-            throw new RuntimeException('Could not find fixture file ' . $file);
+        $strFile = $this->getFixtureFile();
+        if(!is_file($strFile)) {
+            throw new RuntimeException('Could not find fixture file ' . $strFile);
         }
 
-        $dom = new DOMDocument();
-        $dom->load($file);
+        $objDom = new DOMDocument();
+        $objDom->load($strFile);
 
         $objObject = null;
         $objOe = null;
         $objDimension = null;
-        foreach($dom->documentElement->childNodes as $objChild) {
+        foreach($objDom->documentElement->childNodes as $objChild) {
             if($objChild instanceof DOMElement) {
                 if($objChild->nodeName == 'object') {
                     $objObject = $objChild;
@@ -82,8 +82,8 @@ abstract class class_testbase_object extends class_testbase {
         $strName = $objElement->getAttribute('name');
         $arrAssignments = explode(',', $objElement->getAttribute('assignments'));
 
-        $className = $objElement->getAttribute('class');
-        if(empty($className)) {
+        $strClassName = $objElement->getAttribute('class');
+        if(empty($strClassName)) {
             throw new RuntimeException('No class name given for object "' . $strName . '" (' . $objElement->getNodePath() . ')');
         }
 
@@ -100,7 +100,7 @@ abstract class class_testbase_object extends class_testbase {
             }
         }
 
-        $objObject = $this->createObject($className, $strParentId, array(), $arrParameters, false);
+        $objObject = $this->createObject($strClassName, $strParentId, array(), $arrParameters, false);
 
         if(isset($this->arrObjects[$strName])) {
             throw new RuntimeException('Object name "' . $strName . '" already exists (' . $objElement->getNodePath() . ')');
@@ -144,12 +144,12 @@ abstract class class_testbase_object extends class_testbase {
         $strParentId = $objParent === null ? class_module_prozessverwaltung_oe::getOeRootId() : $objParent->getStrSystemid();
         $strName = $objElement->getAttribute('name');
 
-        $className = $objElement->getAttribute('class');
-        if(empty($className)) {
+        $strClassName = $objElement->getAttribute('class');
+        if(empty($strClassName)) {
             throw new RuntimeException('No class name given for oe "' . $strName . '" (' . $objElement->getNodePath() . ')');
         }
 
-        $objObject = $this->createObject($className, $strParentId, array(), $arrParameters, false);
+        $objObject = $this->createObject($strClassName, $strParentId, array(), $arrParameters, false);
 
         if(isset($this->arrOes[$strName])) {
             throw new RuntimeException('Oe name "' . $strName . '" already exists (' . $objElement->getNodePath() . ')');
@@ -176,12 +176,12 @@ abstract class class_testbase_object extends class_testbase {
         $strParentId = $objParent === null ? class_module_prozessverwaltung_dimension::getDimensionRootId() : $objParent->getStrSystemid();
         $strName = $objElement->getAttribute('name');
 
-        $className = $objElement->getAttribute('class');
-        if(empty($className)) {
+        $strClassName = $objElement->getAttribute('class');
+        if(empty($strClassName)) {
             throw new RuntimeException('No class name given for dimension "' . $strName . '" (' . $objElement->getNodePath() . ')');
         }
 
-        $objObject = $this->createObject($className, $strParentId, array(), $arrParameters, false);
+        $objObject = $this->createObject($strClassName, $strParentId, array(), $arrParameters, false);
 
         if(isset($this->arrDimensions[$strName])) {
             throw new RuntimeException('Dimension name "' . $strName . '" already exists (' . $objElement->getNodePath() . ')');
@@ -217,25 +217,11 @@ abstract class class_testbase_object extends class_testbase {
         }
     }
 
+    /**
+     * Returns an path to an xml fixture file which can be used to create and delete object database structures for
+     * testing
+     *
+     * @return string
+     */
     abstract protected function getFixtureFile();
-
-    protected function assertTreeEqualsTree($expect, array $actual)
-    {
-        $this->assertEquals($expect, $this->getTreeAsStringArray($actual));
-    }
-
-    protected function getTreeAsStringArray(array $data, $deep = 0)
-    {
-        $arrResult = array();
-        $arrResult[] = str_repeat('-', $deep) . ' ' . (isset($data['attributes']['strTitel']) ? $data['attributes']['strTitel'] : '.');
-
-        if(isset($data['children']) && is_array($data['children'])) {
-            foreach($data['children'] as $child) {
-                $arrResult = array_merge($arrResult, $this->getTreeAsStringArray($child, $deep + 1));
-            }
-        }
-
-        return $arrResult;
-    }
-
 }
