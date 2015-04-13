@@ -36,19 +36,28 @@ abstract class class_testbase_object extends class_testbase {
     }
 
     /**
-     * Returns an path to an xml fixture file which can be used to create and delete database structures
-     *
-     * @return string
-     */
-    abstract protected function getFixtureFile();
-
-    /**
      * Creates the database structure like defined in the xml element
      *
      * @param DOMElement $objElement
      * @return void
      */
-    abstract protected function createStructure(DOMElement $objElement);
+    protected function createStructure(DOMElement $objElement)
+    {
+        foreach($objElement->childNodes as $objChild) {
+            if($objChild instanceof DOMElement && $objChild->nodeName == 'object') {
+                $this->createDataStructure($objChild);
+            }
+        }
+
+        $this->flushDBCache();
+    }
+
+    /**
+     * Returns an path to an xml fixture file which can be used to create and delete database structures
+     *
+     * @return string
+     */
+    abstract protected function getFixtureFile();
 
     /**
      * Cleans up the database structure
