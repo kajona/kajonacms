@@ -101,8 +101,8 @@ class class_module_news_portal extends class_portal_controller implements interf
                 $objMapper->addPlaceholder("news_intro", $objOneNews->getStrIntro());
                 $objMapper->addPlaceholder("news_text", $objOneNews->getStrText());
 
-                //reset more link?
-                if(uniStrlen(htmlStripTags($objOneNews->getStrText())) == 0 && ($objOneNews->getIntRedirectEnabled() == "0" || $objOneNews->getStrRedirectPage() == "")) {
+                //reset more link? -> no text, no image and no redirect page
+                if(uniStrlen(htmlStripTags($objOneNews->getStrText())) == 0 && uniStrlen($objOneNews->getStrImage()) == 0 && ($objOneNews->getIntRedirectEnabled() == "0" || $objOneNews->getStrRedirectPage() == "")) {
                     $objMapper->addPlaceholder("news_more_link", "");
                 }
 
