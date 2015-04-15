@@ -253,7 +253,8 @@ abstract class class_admin_simple extends class_admin_controller {
         /** @var $objOneIterable class_model|interface_model|interface_admin_listable */
         foreach($objArraySectionIterator as $objOneIterable) {
 
-            if(!$objOneIterable->rightView())
+            // we check the right only for models with an system id so that manual created objects still get in the list
+            if($objOneIterable->getStrSystemid() != '' && !$objOneIterable->rightView())
                 continue;
 
             $strActions = $this->getActionIcons($objOneIterable, $strListIdentifier);
