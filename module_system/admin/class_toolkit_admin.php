@@ -725,6 +725,43 @@ class class_toolkit_admin extends class_toolkit {
         return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID, true);
     }
 
+    /**
+     * Returns a toggle button bar which can be used in the same way as an multiselect
+     *
+     * @param string $strName
+     * @param mixed $arrKeyValues
+     * @param string $strTitle
+     * @param array $arrKeysSelected
+     * @param string $strClass
+     * @param bool $bitEnabled
+     * @param string $strAddons
+     * @return string
+     */
+    public function formToggleButtonBar($strName, array $arrKeyValues, $strTitle = "", $arrKeysSelected = array(), $strClass = "", $bitEnabled = true, $strAddons = "") {
+        $strOptions = "";
+        $strTemplateOptionID = $this->objTemplate->readTemplate("/elements.tpl", "input_toggle_buttonbar_button");
+        $strTemplateOptionSelectedID = $this->objTemplate->readTemplate("/elements.tpl", "input_toggle_buttonbar_button_selected");
+        //Iterating over the array to create the options
+        foreach ($arrKeyValues as $strKey => $strValue) {
+            $arrTemplate = array();
+            $arrTemplate["name"] = $strName;
+            $arrTemplate["key"] = $strKey;
+            $arrTemplate["value"] = $strValue;
+            $arrTemplate["class"] = $strClass;
+            $arrTemplate["disabled"] = ($bitEnabled ? "" : "disabled=\"disabled\"");
+            $arrTemplate["addons"] = $strAddons;
+            if(in_array($strKey, $arrKeysSelected))
+                $strOptions .= $this->objTemplate->fillTemplate($arrTemplate, $strTemplateOptionSelectedID);
+            else
+                $strOptions .= $this->objTemplate->fillTemplate($arrTemplate, $strTemplateOptionID);
+        }
+
+        $arrTemplate = array();
+        $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "input_toggle_buttonbar");
+        $arrTemplate["title"] = $strTitle;
+        $arrTemplate["options"] = $strOptions;
+        return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID, true);
+    }
 
     /**
      * Creates a list of radio-buttons.

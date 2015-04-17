@@ -381,6 +381,31 @@ Multiselect
 </input_multiselect_row_selected>
 
 
+Toggle Button-Bar
+<input_toggle_buttonbar>
+    <div class="form-group">
+        <label for="%%name%%[]" class="col-sm-3 control-label">%%title%%</label>
+        <div class="col-sm-6">
+            <div class="btn-group" data-toggle="buttons">
+                %%options%%
+            </div>
+        </div>
+    </div>
+</input_toggle_buttonbar>
+
+<input_toggle_buttonbar_button>
+    <label class="btn btn-primary">
+        <input type="checkbox" name="%%name%%[]" value="%%key%%" class="%%class%%" %%disabled%% %%addons%%> %%value%%
+    </label>
+</input_toggle_buttonbar_button>
+
+<input_toggle_buttonbar_button_selected>
+    <label class="btn btn-primary active">
+        <input type="checkbox" name="%%name%%[]" value="%%key%%" class="%%class%%" checked="checked" %%disabled%% %%addons%%> %%value%%
+    </label>
+</input_toggle_buttonbar_button_selected>
+
+
 Radiogroup
 <input_radiogroup>
     <div class="form-group %%class%%">
