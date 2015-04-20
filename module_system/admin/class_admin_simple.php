@@ -219,13 +219,16 @@ abstract class class_admin_simple extends class_admin_controller {
     /**
      * Renders a list of items, target is the common admin-list.
      * Please be aware, that the combination of paging and sortable-lists may result in unpredictable ordering.
-     * As soon as the list is sortable, the page-size should be at least the same as the number of elements
+     * As soon as the list is sortable, the page-size should be at least the same as the number of elements. Optional
+     * it is possible to provide a filter callback which is called for each entry. If the callback returns false the
+     * entry gets skipped.
      *
      * @param class_array_section_iterator $objArraySectionIterator
      * @param bool $bitSortable
      * @param string $strListIdentifier an internal identifier to check the current parent-list
      * @param bool $bitAllowTreeDrop
      * @param string $strPagerAddon
+     * @param Closure $objFilter
      *
      * @throws class_exception
      * @return string
