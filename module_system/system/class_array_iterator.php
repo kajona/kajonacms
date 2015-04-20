@@ -28,7 +28,9 @@ class class_array_iterator implements interface_iterator, Iterator {
      */
     public function __construct($arrElements) {
 
-        $this->intElementsPerPage = _admin_nr_of_rows_;
+        $objUser = new class_module_user_user(class_session::getInstance()->getUserID());
+
+        $this->intElementsPerPage = $objUser->getIntItemsPerPage();
         $this->setArrElements($arrElements);
     }
 

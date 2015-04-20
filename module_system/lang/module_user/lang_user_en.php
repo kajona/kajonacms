@@ -164,4 +164,5 @@ $lang["user_system"]                     = "System settings";
 $lang["user_username"]                   = "Username";
 $lang["user_usersource"]                 = "User-Source";
 $lang["user_zugehoerigkeit"]             = "Group assignments";
+$lang["user_items_per_page"]             = "Number of records per page";
 $lang["userlist_filter"]                 = "Apply filter";
