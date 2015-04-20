@@ -172,7 +172,7 @@ abstract class class_admin_simple extends class_admin_controller {
      * @throws class_exception
      * @return string
      */
-    protected function renderFloatingGrid(class_array_section_iterator $objArraySectionIterator, $strListIdentifier = "", $strPagerAddon = "", $bitSortable = true) {
+    protected final function renderFloatingGrid(class_array_section_iterator $objArraySectionIterator, $strListIdentifier = "", $strPagerAddon = "", $bitSortable = true) {
         $strReturn = "";
 
         $strListActions = "";
@@ -233,7 +233,7 @@ abstract class class_admin_simple extends class_admin_controller {
      * @throws class_exception
      * @return string
      */
-    protected function renderList(class_array_section_iterator $objArraySectionIterator, $bitSortable = false, $strListIdentifier = "", $bitAllowTreeDrop = false, $strPagerAddon = "", Closure $objFilter = null) {
+    protected final function renderList(class_array_section_iterator $objArraySectionIterator, $bitSortable = false, $strListIdentifier = "", $bitAllowTreeDrop = false, $strPagerAddon = "", Closure $objFilter = null) {
         $strReturn = "";
         $intI = 0;
 
