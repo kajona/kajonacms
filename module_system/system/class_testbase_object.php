@@ -13,8 +13,8 @@
  * </code>
  *
  * @package module_system
- * @since 3.4
- * @author sidler@mulchprod.de
+ * @since 4.7
+ * @author christoph.kappestein@gmail.com
  */
 abstract class class_testbase_object extends class_testbase {
 
