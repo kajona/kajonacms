@@ -1,7 +1,16 @@
 <?php
 
 /**
- * Base class to create object structures which can be used to test against an object tree
+ * Base class to test object structures. These structures can be defined in an XML file. The XML fixture file could look
+ * like:
+ * <code>
+ * <?xml version="1.0"?>
+ * <objects>
+ *  <object name="page_1" class="class_module_pages_page" strName="Page 1">
+ *   <object name="page_2" class="class_module_pages_page" strName="Page 2" />
+ *  </object>
+ * </objects>
+ * </code>
  *
  * @package module_system
  * @since 3.4
@@ -60,7 +69,7 @@ abstract class class_testbase_object extends class_testbase {
     abstract protected function getFixtureFile();
 
     /**
-     * Cleans up the database structure
+     * Cleans up the database structure. This method should delete all database entries which were previously created
      *
      * @return void
      */
@@ -78,7 +87,7 @@ abstract class class_testbase_object extends class_testbase {
      * Is called if an object gets created can be used to store the reference which can be used later in the test
      *
      * @param string $strName
-     * @param string $objObject
+     * @param class_model $objObject
      */
     abstract protected function addObject($strName, class_model $objObject);
 
@@ -93,12 +102,18 @@ abstract class class_testbase_object extends class_testbase {
     /**
      * Assigns an reference to an object
      *
-     * @param $objSource
-     * @param $objReference
-     * @return mixed
+     * @param class_model $objSource
+     * @param class_model $objReference
      */
     abstract protected function assignReferenceToObject(class_model $objSource, class_model $objReference);
 
+    /**
+     * Creates recursively the data structure for the given DOMElement. This is the main method which calls essentially
+     * all abstract methods which must be implemented by an test case
+     *
+     * @param DOMElement $objElement
+     * @param class_model $objParent
+     */
     protected function createDataStructure(DOMElement $objElement, $objParent = null)
     {
         $arrParameters = array();
