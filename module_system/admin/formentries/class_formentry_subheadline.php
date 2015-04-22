@@ -7,8 +7,8 @@
 /**
  * A sub headline may be used when nesting multiple headlines
  *
- * @author sidler@mulchprod.de
- * @since 4.0
+ * @author christoph.kappestein@gmail.com
+ * @since 4.7
  * @package module_formgenerator
  */
 class class_formentry_subheadline extends class_formentry_headline {
