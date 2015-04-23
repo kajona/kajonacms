@@ -5,11 +5,10 @@
 ********************************************************************************************************/
 
 /**
- * A yes-no field renders a dropdown containing a list of entries.
- * Make sure to pass the list of possible entries before rendering the form.
+ * Returns a toggle button bar which can be used in the same way as an multiselect
  *
- * @author sidler@mulchprod.de
- * @since 4.0
+ * @author christoph.kappestein@gmail.com
+ * @since 4.7
  * @package module_formgenerator
  */
 class class_formentry_toggle_buttonbar extends class_formentry_multiselect {
@@ -26,7 +25,7 @@ class class_formentry_toggle_buttonbar extends class_formentry_multiselect {
         if($this->getStrHint() != null) {
             $strReturn .= $objToolkit->formTextRow($this->getStrHint());
         }
-        $strReturn .= $objToolkit->formToggleButtonBar($this->getStrEntryName(), $this->arrKeyValues, $this->getStrLabel(), explode(",", $this->getStrValue()));
+        $strReturn .= $objToolkit->formToggleButtonBar($this->getStrEntryName(), $this->arrKeyValues, $this->getStrLabel(), explode(",", $this->getStrValue()), !$this->getBitReadonly());
         return $strReturn;
     }
 

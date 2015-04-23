@@ -380,7 +380,6 @@ Multiselect
     <option value="%%key%%" selected="selected">%%value%%</option>
 </input_multiselect_row_selected>
 
-
 Toggle Button-Bar
 <input_toggle_buttonbar>
     <div class="form-group">
@@ -394,14 +393,14 @@ Toggle Button-Bar
 </input_toggle_buttonbar>
 
 <input_toggle_buttonbar_button>
-    <label class="btn btn-primary">
-        <input type="checkbox" name="%%name%%[]" value="%%key%%" class="%%class%%" %%disabled%% %%addons%%> %%value%%
+    <label class="btn btn-primary %%btnclass%%">
+        <input type="checkbox" name="%%name%%[]" value="%%key%%" %%disabled%% %%addons%%> %%value%%
     </label>
 </input_toggle_buttonbar_button>
 
 <input_toggle_buttonbar_button_selected>
-    <label class="btn btn-primary active">
-        <input type="checkbox" name="%%name%%[]" value="%%key%%" class="%%class%%" checked="checked" %%disabled%% %%addons%%> %%value%%
+    <label class="btn btn-primary active %%btnclass%%">
+        <input type="checkbox" name="%%name%%[]" value="%%key%%" checked="checked" %%disabled%% %%addons%%> %%value%%
     </label>
 </input_toggle_buttonbar_button_selected>
 

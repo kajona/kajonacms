@@ -732,12 +732,10 @@ class class_toolkit_admin extends class_toolkit {
      * @param mixed $arrKeyValues
      * @param string $strTitle
      * @param array $arrKeysSelected
-     * @param string $strClass
      * @param bool $bitEnabled
-     * @param string $strAddons
      * @return string
      */
-    public function formToggleButtonBar($strName, array $arrKeyValues, $strTitle = "", $arrKeysSelected = array(), $strClass = "", $bitEnabled = true, $strAddons = "") {
+    public function formToggleButtonBar($strName, array $arrKeyValues, $strTitle = "", $arrKeysSelected = array(), $bitEnabled = true) {
         $strOptions = "";
         $strTemplateOptionID = $this->objTemplate->readTemplate("/elements.tpl", "input_toggle_buttonbar_button");
         $strTemplateOptionSelectedID = $this->objTemplate->readTemplate("/elements.tpl", "input_toggle_buttonbar_button_selected");
@@ -747,9 +745,8 @@ class class_toolkit_admin extends class_toolkit {
             $arrTemplate["name"] = $strName;
             $arrTemplate["key"] = $strKey;
             $arrTemplate["value"] = $strValue;
-            $arrTemplate["class"] = $strClass;
             $arrTemplate["disabled"] = ($bitEnabled ? "" : "disabled=\"disabled\"");
-            $arrTemplate["addons"] = $strAddons;
+            $arrTemplate["btnclass"] = ($bitEnabled ? "" : "disabled");
             if(in_array($strKey, $arrKeysSelected))
                 $strOptions .= $this->objTemplate->fillTemplate($arrTemplate, $strTemplateOptionSelectedID);
             else
@@ -1621,8 +1618,8 @@ JS;
 
             if(count($arrFields) > 0 ) {
 
-                $strRendercode .= "<script type=\"text/javascript\">$(document).ready(function () {
-                        KAJONA.admin.forms.renderMandatoryFields([";
+                $strRendercode .= ">$(document).ready(function () {
+                        KAJONA.admin.forms.renderMandatoryFields([;;";
 
                 foreach($arrFields as $strName => $strType) {
                     $strRendercode .= "[ '".$strName."', '".$strType."' ], ";
@@ -1638,8 +1635,8 @@ JS;
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "error_container");
         $strTemplateRowID = $this->objTemplate->readTemplate("/elements.tpl", "error_row");
         $strRows = "";
-        $strRendercode .= "<script type=\"text/javascript\">$(document).ready(function () {
-            KAJONA.admin.forms.renderMissingMandatoryFields([";
+        $strRendercode .= ">$(document).ready(function () {
+            KAJONA.admin.forms.renderMissingMandatoryFields([;;";
 
         foreach ($arrErrors as $strKey => $arrOneErrors) {
             foreach ($arrOneErrors as $strOneError) {
