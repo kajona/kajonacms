@@ -1170,14 +1170,10 @@ class class_installer_system extends class_installer_base implements interface_i
         $strReturn = "Updating 4.6.4 to 4.6.5...\n";
 
         $strReturn .= "Updating user table...\n";
-        $strQuery = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."user")."
-                            ADD ".$this->objDB->encloseColumnName("user_items_per_page")." ".$this->objDB->getDatatype("int")." NULL";
-        if(!$this->objDB->_pQuery($strQuery, array()))
-            $strReturn .= "An error occurred! ...\n";
-
+        $this->objDB->addColumn("user", "user_items_per_page", class_db_datatypes::STR_TYPE_INT);
 
         $strReturn .= "Updating module-versions...\n";
-        $this->updateModuleVersion($this->objMetadata->getStrTitle(), "4.6.4");
+        $this->updateModuleVersion($this->objMetadata->getStrTitle(), "4.6.5");
         return $strReturn;
     }
 

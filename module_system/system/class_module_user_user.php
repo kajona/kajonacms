@@ -143,7 +143,10 @@ class class_module_user_user extends class_model implements interface_model, int
             $this->setStrAdminlanguage($arrRow["user_admin_language"]);
             $this->setSystemid($arrRow["user_id"]);
             $this->setStrAuthcode($arrRow["user_authcode"]);
-            $this->setIntItemsPerPage($arrRow["user_items_per_page"]);
+
+            if(isset($arrRow["user_items_per_page"]))
+                $this->setIntItemsPerPage($arrRow["user_items_per_page"]);
+
             if(isset($arrRow["user_deleted"]))
                 $this->intDeleted = $arrRow["user_deleted"];
 
