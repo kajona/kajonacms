@@ -118,6 +118,7 @@ class class_installer_system extends class_installer_base implements interface_i
         $arrFields["user_admin_language"] = array("char254", true);
         $arrFields["user_admin_module"] = array("char254", true);
         $arrFields["user_authcode"] = array("char20", true);
+        $arrFields["user_items_per_page"] = array("int", true);
 
         if(!$this->objDB->createTable("user", $arrFields, array("user_id")))
             $strReturn .= "An error occurred! ...\n";
@@ -657,6 +658,11 @@ class class_installer_system extends class_installer_base implements interface_i
             $strReturn .= $this->update_463_464();
         }
 
+        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "4.6.4") {
+            $strReturn .= $this->update_464_465();
+        }
+
         return $strReturn."\n\n";
     }
 
@@ -1157,6 +1163,17 @@ class class_installer_system extends class_installer_base implements interface_i
 
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion($this->objMetadata->getStrTitle(), "4.6.4");
+        return $strReturn;
+    }
+
+    private function update_464_465() {
+        $strReturn = "Updating 4.6.4 to 4.6.5...\n";
+
+        $strReturn .= "Updating user table...\n";
+        $this->objDB->addColumn("user", "user_items_per_page", class_db_datatypes::STR_TYPE_INT);
+
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion($this->objMetadata->getStrTitle(), "4.6.5");
         return $strReturn;
     }
 
