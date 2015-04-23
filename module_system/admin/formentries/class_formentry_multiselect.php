@@ -14,7 +14,7 @@
  */
 class class_formentry_multiselect extends class_formentry_dropdown {
 
-    private $arrKeyValues = array();
+    protected $arrKeyValues = array();
 
     /**
      * Renders the field itself.

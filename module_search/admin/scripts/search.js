@@ -16,10 +16,10 @@ KAJONA.admin.search = {
     switchFilterAllModules : function() {
         var checkBox = $($('#search_filter_all')[0]);
         if(checkBox.is(':checked')) {
-            $("#search_formfiltermodules").prop("disabled", true)
+            $("input[name=search_formfiltermodules\\[\\]]").closest("label").addClass("disabled");
         }
         else {
-            $("#search_formfiltermodules").prop("disabled", false);
+            $("input[name=search_formfiltermodules\\[\\]]").closest("label").removeClass("disabled");
         }
     }
-}
+};
