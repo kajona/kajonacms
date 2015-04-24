@@ -912,7 +912,7 @@ KAJONA.admin.renderTocNavigation = function (selector) {
     // affix toc navigation
     $('#toc-navigation').affix({
         offset: {
-            top: $('#toc-navigation').position().top + 26
+            top: $('#toc-navigation').position().top + 30
         }
     });
 
