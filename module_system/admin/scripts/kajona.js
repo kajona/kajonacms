@@ -886,14 +886,14 @@ KAJONA.admin.messaging = {
 
 /**
  * Appends an table of contents navigation under the main navigation sidebar. The index contains all elements which
- * have the class "tocNavigationItem" and as child an "h2" element. The text of the h2 element gets used as link in the
- * navigation. Sets also the fitting id to the h2 element.
+ * match the given selector. The text of the element gets used as link in the navigation. Sets also the fitting id to
+ * each element.
  */
-KAJONA.admin.renderTocNavigation = function () {
+KAJONA.admin.renderTocNavigation = function (selector) {
     // create the navigation
     var html = '<div id="toc-navigation" class="toc-navigation-panel" role="navigation">';
     html += '<ul class="nav">';
-    $('.tocNavigationItem > h2').each(function () {
+    $(selector).each(function () {
         var id = $(this).text().replace(/(?!\w)[\x00-\xC0]/g, "-");
         $(this).attr('id', id);
         html += '<li><a href="#' + id + '">' + $(this).text() + '</a></li>';
