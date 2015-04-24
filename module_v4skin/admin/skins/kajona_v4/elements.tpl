@@ -957,6 +957,15 @@ Shown, wherever the attention of the user is needed
     </div>
 </warning_box>
 
+Renders a toc navigation
+<toc_navigation>
+    <script type="text/javascript">
+        $(document).ready(function(){
+            KAJONA.admin.renderTocNavigation("%%selector%%");
+        });
+    </script>
+</toc_navigation>
+
 Used to print plain text
 <text_row>
 <p class="%%class%%">%%text%%</p>

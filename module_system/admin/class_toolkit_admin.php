@@ -1295,6 +1295,20 @@ class class_toolkit_admin extends class_toolkit {
     }
 
     /**
+     * Returns the javascript code which renders a table fo contents for the given selector
+     *
+     * @param string $strSelector
+     * @return string
+     */
+    public function getTableOfContents($strSelector)
+    {
+        $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "toc_navigation");
+        $arrTemplate = array();
+        $arrTemplate["selector"] = $strSelector;
+        return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
+    }
+
+    /**
      * Returns a single TextRow
      *
      * @param string $strText
