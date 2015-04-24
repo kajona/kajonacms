@@ -584,7 +584,6 @@ JS;
 
         //showing a list using the pageview
         $objArraySectionIterator = new class_array_section_iterator(class_module_system_session::getNumberOfActiveSessions());
-        $objArraySectionIterator->setIntElementsPerPage(_admin_nr_of_rows_);
         $objArraySectionIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
         $objArraySectionIterator->setArraySection(class_module_system_session::getAllActiveSessions($objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
 
@@ -715,7 +714,6 @@ JS;
 
         //showing a list using the pageview
         $objArraySectionIterator = new class_array_section_iterator(class_module_system_changelog::getLogEntriesCount($strSystemid));
-        $objArraySectionIterator->setIntElementsPerPage(_admin_nr_of_rows_);
         $objArraySectionIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
         $objArraySectionIterator->setArraySection(class_module_system_changelog::getLogEntries($strSystemid, $objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
 

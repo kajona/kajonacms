@@ -41,6 +41,7 @@ class class_module_user_user extends class_model implements interface_model, int
     private $strAdminModule = "";
     private $strAuthcode = "";
     private $intDeleted = 0;
+    private $intItemsPerPage = 0;
 
 
     /**
@@ -142,6 +143,10 @@ class class_module_user_user extends class_model implements interface_model, int
             $this->setStrAdminlanguage($arrRow["user_admin_language"]);
             $this->setSystemid($arrRow["user_id"]);
             $this->setStrAuthcode($arrRow["user_authcode"]);
+
+            if(isset($arrRow["user_items_per_page"]))
+                $this->setIntItemsPerPage($arrRow["user_items_per_page"]);
+
             if(isset($arrRow["user_deleted"]))
                 $this->intDeleted = $arrRow["user_deleted"];
 
@@ -167,9 +172,9 @@ class class_module_user_user extends class_model implements interface_model, int
                         user_id, user_active,
                         user_admin, user_portal,
                         user_admin_skin, user_admin_language,
-                        user_logins, user_lastlogin, user_authcode, user_subsystem, user_username, user_admin_module, user_deleted
+                        user_logins, user_lastlogin, user_authcode, user_subsystem, user_username, user_admin_module, user_deleted, user_items_per_page
 
-                        ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                        ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
             class_logger::getInstance(class_logger::USERSOURCES)->addLogRow("new user for subsystem ".$this->getStrSubsystem()." / ".$this->getStrUsername(), class_logger::$levelInfo);
 
@@ -188,7 +193,8 @@ class class_module_user_user extends class_model implements interface_model, int
                     $this->getStrSubsystem(),
                     $this->getStrUsername(),
                     $this->getStrAdminModule(),
-                    0
+                    0,
+                    $this->getIntItemsPerPage(),
                 )
             );
 
@@ -204,7 +210,13 @@ class class_module_user_user extends class_model implements interface_model, int
         }
         else {
 
-            if(version_compare(class_module_system_module::getModuleByName("user")->getStrVersion(), "4.4", ">=")) {
+            if(version_compare(class_module_system_module::getModuleByName("user")->getStrVersion(), "4.6.5", ">=")) {
+                $strQuery = "UPDATE "._dbprefix_."user SET
+                        user_active=?, user_admin=?, user_portal=?, user_admin_skin=?, user_admin_language=?, user_logins = ?, user_lastlogin = ?, user_authcode = ?, user_subsystem = ?,
+                        user_username =?, user_admin_module = ?, user_items_per_page = ?
+                        WHERE user_id = ?";
+            }
+            else if(version_compare(class_module_system_module::getModuleByName("user")->getStrVersion(), "4.4", ">=")) {
                 $strQuery = "UPDATE "._dbprefix_."user SET
                         user_active=?, user_admin=?, user_portal=?, user_admin_skin=?, user_admin_language=?, user_logins = ?, user_lastlogin = ?, user_authcode = ?, user_subsystem = ?,
                         user_username =?, user_admin_module = ?
@@ -224,8 +236,13 @@ class class_module_user_user extends class_model implements interface_model, int
                 $this->getStrSubsystem(), $this->getStrUsername()
              );
 
-            if(version_compare(class_module_system_module::getModuleByName("user")->getStrVersion(), "4.4", ">="))
+            if(version_compare(class_module_system_module::getModuleByName("user")->getStrVersion(), "4.4", ">=")) {
                 $arrParams[] = $this->getStrAdminModule();
+            }
+
+            if(version_compare(class_module_system_module::getModuleByName("user")->getStrVersion(), "4.6.5", ">=")) {
+                $arrParams[] = $this->getIntItemsPerPage();
+            }
 
             $arrParams[] = $this->getSystemid();
 
@@ -589,6 +606,23 @@ class class_module_user_user extends class_model implements interface_model, int
         return $this->intDeleted;
     }
 
+    /**
+     * @param integer $intItemsPerPage
+     */
+    public function setIntItemsPerPage($intItemsPerPage) {
+        $this->intItemsPerPage = (int) $intItemsPerPage;
+    }
 
+    /**
+     * @return int
+     */
+    public function getIntItemsPerPage() {
+        if($this->intItemsPerPage > 0) {
+            return $this->intItemsPerPage;
+        }
+        else {
+            return _admin_nr_of_rows_;
+        }
+    }
 
 }

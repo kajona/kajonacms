@@ -466,6 +466,9 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
             if($objUser->getStrAdminModule() != "" && $objForm->getField("user_startmodule") != null)
                 $objForm->getField("user_startmodule")->setStrValue($objUser->getStrAdminModule());
 
+            if($objUser->getIntItemsPerPage() != "" && $objForm->getField("user_items_per_page") != null)
+                $objForm->getField("user_items_per_page")->setStrValue($objUser->getIntItemsPerPage());
+
             $objForm->getField("user_language")->setStrValue($objUser->getStrAdminlanguage());
 
             if(!$bitSelfedit) {
@@ -566,6 +569,10 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
             ->setStrValue(($this->getParam("user_startmodule") != "" ? $this->getParam("user_startmodule") : "dashboard"))
             ->setStrLabel($this->getLang("user_startmodule"));
 
+        $objForm->addField(new class_formentry_dropdown("user", "items_per_page"))
+            ->setArrKeyValues(array(10 => 10, 15 => 15, 25 => 25, 50 => 50))
+            ->setStrValue(($this->getParam("user_items_per_page") != "" ? $this->getParam("user_items_per_page") : null))
+            ->setStrLabel($this->getLang("user_items_per_page"));
 
         if(!$bitSelfedit) {
             $objForm->addField(new class_formentry_checkbox("user", "adminlogin"))->setStrLabel($this->getLang("user_admin"));
@@ -654,6 +661,7 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
         $objUser->setStrAdminskin($this->getParam("user_skin"));
         $objUser->setStrAdminlanguage($this->getParam("user_language"));
         $objUser->setStrAdminModule($this->getParam("user_startmodule"));
+        $objUser->setIntItemsPerPage($this->getParam("user_items_per_page"));
 
         $objUser->updateObjectToDb();
         $objSourceUser = $objUser->getObjSourceUser();

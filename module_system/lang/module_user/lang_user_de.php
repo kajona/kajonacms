@@ -163,4 +163,5 @@ $lang["user_system"]                     = "Systemeinstellungen";
 $lang["user_username"]                   = "Benutzername";
 $lang["user_usersource"]                 = "Benutzerquelle";
 $lang["user_zugehoerigkeit"]             = "Gruppenzugehörigkeiten";
+$lang["user_items_per_page"]             = "Anzahl Datensätze pro Seite";
 $lang["userlist_filter"]                 = "Filter anwenden";
