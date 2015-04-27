@@ -797,7 +797,7 @@ JS;
         $arrLogEntries = class_module_system_changelog::getLogEntries($strSystemid);
 
         // create excel
-        $objPHPExcel->getProperties()->setCreator("AGP v4")
+        $objPHPExcel->getProperties()->setCreator("Kajona")
             ->setLastModifiedBy(class_carrier::getInstance()->getObjSession()->getUsername())
             ->setTitle($this->getLang("change_report_title"))
             ->setSubject($this->getLang("change_report_title"));
