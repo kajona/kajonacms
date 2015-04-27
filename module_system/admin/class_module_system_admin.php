@@ -856,15 +856,15 @@ JS;
             $strNewValue = htmlStripTags($strNewValue);
 
             $arrRowData[] = dateToString($objOneEntry->getObjDate());
-            $arrRowData[] = $this->objToolkit->getTooltipText(uniStrTrim($objOneEntry->getStrUsername(), 15), $objOneEntry->getStrUsername());
+            $arrRowData[] = $objOneEntry->getStrUsername();
             if($strSystemid == "")
                 $arrRowData[] = $objTarget != null ? $objTarget->getArrModule("modul") : "";
             if($strSystemid == "")
-                $arrRowData[] = $objTarget != null ? $this->objToolkit->getTooltipText(uniStrTrim($objTarget->getVersionRecordName(), 20), $objTarget->getVersionRecordName()." ".$objOneEntry->getStrSystemid()) : "";
-            $arrRowData[] = $objTarget != null ? $this->objToolkit->getTooltipText(uniStrTrim($objTarget->getVersionActionName($objOneEntry->getStrAction()), 15), $objTarget->getVersionActionName($objOneEntry->getStrAction())) : "";
-            $arrRowData[] = $objTarget != null ? $this->objToolkit->getTooltipText(uniStrTrim($objTarget->getVersionPropertyName($objOneEntry->getStrProperty()), 20), $objTarget->getVersionPropertyName($objOneEntry->getStrProperty())) : "";
-            $arrRowData[] = $this->objToolkit->getTooltipText(uniStrTrim($strOldValue, 20), $strOldValue);
-            $arrRowData[] = $this->objToolkit->getTooltipText(uniStrTrim($strNewValue, 20), $strNewValue);
+                $arrRowData[] = $objTarget != null ? $objTarget->getVersionRecordName() . " " . $objOneEntry->getStrSystemid() : "";
+            $arrRowData[] = $objTarget != null ? $objTarget->getVersionActionName($objOneEntry->getStrAction()) : "";
+            $arrRowData[] = $objTarget != null ? $objTarget->getVersionPropertyName($objOneEntry->getStrProperty()) : "";
+            $arrRowData[] = $strOldValue;
+            $arrRowData[] = $strNewValue;
 
             $arrData[] = $arrRowData;
         }
@@ -872,7 +872,7 @@ JS;
         foreach($arrData as $arrRow) {
             $intCol = 0;
             foreach($arrRow as $strValue) {
-                $objDataSheet->setCellValueByColumnAndRow($intCol++, $intRow, strip_tags($strValue));
+                $objDataSheet->setCellValueByColumnAndRow($intCol++, $intRow, html_entity_decode(strip_tags($strValue), ENT_COMPAT, "UTF-8"));
             }
 
             $intRow++;
