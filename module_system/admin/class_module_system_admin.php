@@ -780,8 +780,8 @@ JS;
      * Generates an excel sheet based on the changelog entries from the given systemid
      *
      * @param string $strSystemid
-     * @throws PHPExcel_Exception
-     * @throws PHPExcel_Reader_Exception
+     * @since 4.6.6
+     * @permissions changelog
      */
     protected function actionGenericChangelogExportExcel($strSystemid = "")
     {
