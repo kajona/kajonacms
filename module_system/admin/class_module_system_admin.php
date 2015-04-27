@@ -761,11 +761,135 @@ JS;
 
             $arrData[] = $arrRowData;
         }
+
+        $objManager = new class_module_packagemanager_manager();
+        if($objManager->getPackage("phpexcel") != null) {
+            $strReturn .= $this->objToolkit->getContentToolbar(array(
+                class_link::getLinkAdmin($this->getArrModule("modul"), "genericChangelogExportExcel", "&systemid=".$strSystemid, class_adminskin_helper::getAdminImage("icon_excel")." ".$this->getLang("change_export_excel"), "", "", false)
+            ));
+        }
+
         $strReturn .= $this->objToolkit->dataTable($arrHeader, $arrData);
 
         $strReturn .= $this->objToolkit->getPageview($objArraySectionIterator, $strSourceModule, $strSourceAction, "&systemid=".$strSystemid."&bitBlockFolderview=".$this->getParam("bitBlockFolderview"));
 
         return $strReturn;
+    }
+
+    /**
+     * Generates an excel sheet based on the changelog entries from the given systemid
+     *
+     * @param string $strSystemid
+     * @throws PHPExcel_Exception
+     * @throws PHPExcel_Reader_Exception
+     */
+    public function actionGenericChangelogExportExcel($strSystemid = "")
+    {
+        // include phpexcel
+        require_once class_resourceloader::getInstance()->getCorePathForModule("module_phpexcel", true).'/module_phpexcel/system/phpexcel/PHPExcel.php';
+        $objPHPExcel = new PHPExcel();
+
+        // get system id
+        if($strSystemid == "")
+            $strSystemid = $this->getSystemid();
+
+        // create excel
+        $objPHPExcel->getProperties()->setCreator("AGP v4")
+            ->setLastModifiedBy(class_carrier::getInstance()->getObjSession()->getUsername())
+            ->setTitle($this->getLang("change_report_title"))
+            ->setSubject($this->getLang("change_report_title"));
+
+        $objDataSheet = $objPHPExcel->getActiveSheet();
+        $objDataSheet->setTitle($this->getLang("change_report_title"));
+
+        // style
+        $arrStyles = $this->getStylesArray();
+
+        $objDataSheet->getStyle("A1:F1")->applyFromArray($arrStyles["header_1"]);
+        $objDataSheet->getDefaultColumnDimension()->setWidth(24);
+
+        // add header
+        $arrHeader = array();
+        $arrHeader[] = $this->getLang("commons_date");
+        $arrHeader[] = $this->getLang("change_user");
+        if($strSystemid == "")
+            $arrHeader[] = $this->getLang("change_module");
+        if($strSystemid == "")
+            $arrHeader[] = $this->getLang("change_record");
+        $arrHeader[] = $this->getLang("change_action");
+        $arrHeader[] = $this->getLang("change_property");
+        $arrHeader[] = $this->getLang("change_oldvalue");
+        $arrHeader[] = $this->getLang("change_newvalue");
+
+        $intCol = 0;
+        $intRow = 1;
+
+        foreach($arrHeader as $strHeader) {
+            $objDataSheet->setCellValueByColumnAndRow($intCol++, $intRow, $strHeader);
+        }
+
+        $intRow++;
+
+        // add body
+        $objArraySectionIterator = new class_array_section_iterator(class_module_system_changelog::getLogEntriesCount($strSystemid));
+        $objArraySectionIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
+        $objArraySectionIterator->setArraySection(class_module_system_changelog::getLogEntries($strSystemid, $objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
+
+        $arrData = array();
+
+        /** @var $objOneEntry class_changelog_container */
+        foreach($objArraySectionIterator as $objOneEntry) {
+            $arrRowData = array();
+
+            /** @var interface_versionable|class_model $objTarget */
+            $objTarget = $objOneEntry->getObjTarget();
+
+            $strOldValue = $objOneEntry->getStrOldValue();
+            $strNewValue = $objOneEntry->getStrNewValue();
+
+            if($objTarget != null) {
+                $strOldValue = $objTarget->renderVersionValue($objOneEntry->getStrProperty(), $strOldValue);
+                $strNewValue = $objTarget->renderVersionValue($objOneEntry->getStrProperty(), $strNewValue);
+            }
+
+            $strOldValue = htmlStripTags($strOldValue);
+            $strNewValue = htmlStripTags($strNewValue);
+
+            $arrRowData[] = dateToString($objOneEntry->getObjDate());
+            $arrRowData[] = $this->objToolkit->getTooltipText(uniStrTrim($objOneEntry->getStrUsername(), 15), $objOneEntry->getStrUsername());
+            if($strSystemid == "")
+                $arrRowData[] = $objTarget != null ? $objTarget->getArrModule("modul") : "";
+            if($strSystemid == "")
+                $arrRowData[] = $objTarget != null ? $this->objToolkit->getTooltipText(uniStrTrim($objTarget->getVersionRecordName(), 20), $objTarget->getVersionRecordName()." ".$objOneEntry->getStrSystemid()) : "";
+            $arrRowData[] = $objTarget != null ? $this->objToolkit->getTooltipText(uniStrTrim($objTarget->getVersionActionName($objOneEntry->getStrAction()), 15), $objTarget->getVersionActionName($objOneEntry->getStrAction())) : "";
+            $arrRowData[] = $objTarget != null ? $this->objToolkit->getTooltipText(uniStrTrim($objTarget->getVersionPropertyName($objOneEntry->getStrProperty()), 20), $objTarget->getVersionPropertyName($objOneEntry->getStrProperty())) : "";
+            $arrRowData[] = $this->objToolkit->getTooltipText(uniStrTrim($strOldValue, 20), $strOldValue);
+            $arrRowData[] = $this->objToolkit->getTooltipText(uniStrTrim($strNewValue, 20), $strNewValue);
+
+            $arrData[] = $arrRowData;
+        }
+
+        foreach($arrData as $arrRow) {
+            $intCol = 0;
+            foreach($arrRow as $strValue) {
+                $objDataSheet->setCellValueByColumnAndRow($intCol++, $intRow, strip_tags($strValue));
+            }
+
+            $intRow++;
+        }
+
+        // Set active sheet index to the first sheet, so Excel opens this as the first sheet
+        $objPHPExcel->setActiveSheetIndex(0);
+        header('Content-Type: application/vnd.ms-excel');
+        header('Content-Disposition: attachment;filename="'.createFilename($this->getLang("change_report_title").'.xlsx').'"');
+        header('Pragma: private');
+        header('Cache-control: private, must-revalidate');
+        //header('Cache-Control : No Store');
+        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+        //and pass everything back to the browser
+        $objWriter->save('php://output');
+        flush();
+        die();
     }
 
     /**
@@ -1023,5 +1147,37 @@ JS;
         return null;
     }
 
+    /**
+     * Returns the style parameters for the changelog excel export
+     *
+     * @return array
+     */
+    private function getStylesArray() {
+        $arrStlyes  = array();
+
+        $arrStlyes["header_1"] = array(
+            'fill' => array(
+                'type'       => PHPExcel_Style_Fill::FILL_SOLID,
+                'startcolor' => array('rgb' => 'EBF1DE'),
+                'endcolor'   => array('rgb' => 'EBF1DE')
+            ),
+            'borders' => array(
+                'allborders'     => array(
+                    'style' => PHPExcel_Style_Border::BORDER_THIN,
+                    'color' => array(
+                        'rgb' => '000000'
+                    )
+                ),
+            ),
+            'alignment' => array (
+                'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+                'vertical'   => PHPExcel_Style_Alignment::VERTICAL_BOTTOM,
+                'rotation'   => 0,
+                'wrap'	   => true
+            )
+        );
+
+        return $arrStlyes;
+    }
 }
 
