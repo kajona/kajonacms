@@ -783,7 +783,7 @@ JS;
      * @throws PHPExcel_Exception
      * @throws PHPExcel_Reader_Exception
      */
-    public function actionGenericChangelogExportExcel($strSystemid = "")
+    protected function actionGenericChangelogExportExcel($strSystemid = "")
     {
         // include phpexcel
         require_once class_resourceloader::getInstance()->getCorePathForModule("module_phpexcel", true).'/module_phpexcel/system/phpexcel/PHPExcel.php';
