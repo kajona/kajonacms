@@ -1618,8 +1618,8 @@ JS;
 
             if(count($arrFields) > 0 ) {
 
-                $strRendercode .= ">$(document).ready(function () {
-                        KAJONA.admin.forms.renderMandatoryFields([;;";
+                $strRendercode .= "<script type=\"text/javascript\">$(document).ready(function () {
+                        KAJONA.admin.forms.renderMandatoryFields([";
 
                 foreach($arrFields as $strName => $strType) {
                     $strRendercode .= "[ '".$strName."', '".$strType."' ], ";
@@ -1635,8 +1635,8 @@ JS;
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "error_container");
         $strTemplateRowID = $this->objTemplate->readTemplate("/elements.tpl", "error_row");
         $strRows = "";
-        $strRendercode .= ">$(document).ready(function () {
-            KAJONA.admin.forms.renderMissingMandatoryFields([;;";
+        $strRendercode .= "<script type=\"text/javascript\">$(document).ready(function () {
+            KAJONA.admin.forms.renderMissingMandatoryFields([";
 
         foreach ($arrErrors as $strKey => $arrOneErrors) {
             foreach ($arrOneErrors as $strOneError) {
