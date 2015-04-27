@@ -120,12 +120,39 @@ class class_graph_jqplot implements interface_graph {
     );
 
 
-    function containsChartType($intChartType) {
+    /**
+     * Checks if the chart contains the given chart type
+     *
+     * @param $intChartType
+     *
+     * @return bool
+     */
+    private function containsChartType($intChartType) {
         foreach($this->arrSeriesData as $objSeriesData) {
-            if($objSeriesData->getIntChartType() === $intChartType)
+            if($objSeriesData->getIntChartType() === $intChartType) {
                 return true;
+            }
         }
         return false;
+    }
+
+
+    /**
+     * Gets series objects of the given chart type
+     *
+     * @param array $arrChartTypes
+     *
+     * @return class_graph_jqplot_seriesdata[]
+     */
+    private function getSeriesObjectsByChartType(array $arrChartTypes) {
+        $arrSeriesObjects = array();
+
+        foreach($this->arrSeriesData as $objSeriesData) {
+            if(in_array($objSeriesData->getIntChartType(), $arrChartTypes)) {
+                $arrSeriesObjects[] = $objSeriesData;
+            }
+        }
+        return $arrSeriesObjects;
     }
 
     /**
@@ -450,7 +477,7 @@ class class_graph_jqplot implements interface_graph {
             throw new class_exception("When option horizontal is set, chart cannot contain line or pie charts", class_exception::$level_ERROR);
         }
 
-        //Special handling if horizontal flag for bar charts is set
+        //1. Special handling if horizontal flag for bar charts is set
         if($this->bitIsHorizontalBar) {
 
             //Swap X and Y Axis
@@ -498,6 +525,40 @@ class class_graph_jqplot implements interface_graph {
             //additionally set required global options
             $this->arrOptions["seriesDefaults"]["renderer"] = "$.jqplot.BarRenderer";
             $this->arrOptions["seriesDefaults"]["rendererOptions"]["barDirection"] = "horizontal";
+        }
+
+
+        //2. Change padding and margin of bars, if the chart contains only bar chart series
+        $arrSeriesBarCharts = $this->getSeriesObjectsByChartType(array(class_graph_jqplot_charttype::BAR, class_graph_jqplot_charttype::BAR_HORIZONTAL));
+        if(count($arrSeriesBarCharts) == 1) {
+            $objSeriesData = $arrSeriesBarCharts[0];
+            $arrSeriesOptions = $objSeriesData->getArrSeriesOptions();
+            $arrSeriesOptions["rendererOptions"]["barPadding"] = 1;
+            $arrSeriesOptions["rendererOptions"]["barMargin"] = 4;
+            $objSeriesData->setArrSeriesOptions($arrSeriesOptions);
+        }
+
+        //3. Change padding and margin of bars, if the chart contains one or more stackedbar series and each sereis has exactly one series value
+        $arrSeriesStackedBarCharts = $this->getSeriesObjectsByChartType(array(class_graph_jqplot_charttype::STACKEDBAR, class_graph_jqplot_charttype::STACKEDBAR_HORIZONTAL));
+        if(count($arrSeriesStackedBarCharts) > 0) {
+            $bitChangeMarginAndPadding = true;
+
+            //Check if each series has exactly one data point
+            foreach($arrSeriesStackedBarCharts as $objSeriesData) {
+                if(!count($objSeriesData->getArrDataPoints())==1) {
+                    $bitChangeMarginAndPadding = false;
+                }
+            }
+
+            //Only if every bar series has exactly one data point, set padding and margin
+            if($bitChangeMarginAndPadding) {
+                foreach($arrSeriesStackedBarCharts as $objSeriesData) {
+                    $arrSeriesOptions = $objSeriesData->getArrSeriesOptions();
+                    $arrSeriesOptions["rendererOptions"]["barPadding"] = 1;
+                    $arrSeriesOptions["rendererOptions"]["barMargin"] = 4;
+                    $objSeriesData->setArrSeriesOptions($arrSeriesOptions);
+                }
+            }
         }
     }
 

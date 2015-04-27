@@ -49,8 +49,6 @@ class class_graph_jqplot_seriesdata {
             $this->arrSeriesOptions["renderer"] = "$.jqplot.BarRenderer";
             $this->arrSeriesOptions["rendererOptions"]["fillToZero"] = true;
             $this->arrSeriesOptions["rendererOptions"]["shadow"] = false;
-            $this->arrSeriesOptions["rendererOptions"]["barPadding"] = 1;
-            $this->arrSeriesOptions["rendererOptions"]["barMargin"] = 4;
 
             $this->arrSeriesOptions["pointLabels"]["hideZeros"] = true;
 
@@ -62,8 +60,6 @@ class class_graph_jqplot_seriesdata {
             $this->arrSeriesOptions["rendererOptions"]["barDirection"] = "horizontal";
             $this->arrSeriesOptions["rendererOptions"]["shadow"] = false;
             $this->arrSeriesOptions["rendererOptions"]["fillToZero"] = true;
-            $this->arrSeriesOptions["rendererOptions"]["barPadding"] = 1;
-            $this->arrSeriesOptions["rendererOptions"]["barMargin"] = 4;
 
             $this->arrSeriesOptions["pointLabels"]["hideZeros"] = true;
 
@@ -75,8 +71,6 @@ class class_graph_jqplot_seriesdata {
             $this->arrSeriesOptions["renderer"] = "$.jqplot.BarRenderer";
             $this->arrSeriesOptions["rendererOptions"]["shadow"] = false;
             $this->arrSeriesOptions["rendererOptions"]["fillToZero"] = true;
-            $this->arrSeriesOptions["rendererOptions"]["barPadding"] = 1;
-            $this->arrSeriesOptions["rendererOptions"]["barMargin"] = 4;
 
             $this->arrSeriesOptions["pointLabels"]["show"] = true;
 
@@ -88,8 +82,6 @@ class class_graph_jqplot_seriesdata {
             $this->arrSeriesOptions["rendererOptions"]["barDirection"] = "horizontal";
             $this->arrSeriesOptions["rendererOptions"]["shadow"] = false;
             $this->arrSeriesOptions["rendererOptions"]["fillToZero"] = true;
-            $this->arrSeriesOptions["rendererOptions"]["barPadding"] = 1;
-            $this->arrSeriesOptions["rendererOptions"]["barMargin"] = 4;
 
             $this->arrSeriesOptions["pointLabels"]["show"] = true;
             $this->arrSeriesOptions["pointLabels"]["hideZeros"] = true;
