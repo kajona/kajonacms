@@ -1295,7 +1295,8 @@ class class_toolkit_admin extends class_toolkit {
     }
 
     /**
-     * Returns the javascript code which renders a table fo contents for the given selector
+     * Returns the javascript code which renders a table of contents sub navigation under the main navigation. The
+     * navigation contains all points which match the given selector
      *
      * @param string $strSelector
      * @return string
