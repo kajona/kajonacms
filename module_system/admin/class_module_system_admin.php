@@ -794,9 +794,7 @@ JS;
             $strSystemid = $this->getSystemid();
 
         // get data
-        $objArraySectionIterator = new class_array_section_iterator(class_module_system_changelog::getLogEntriesCount($strSystemid));
-        $objArraySectionIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
-        $objArraySectionIterator->setArraySection(class_module_system_changelog::getLogEntries($strSystemid, $objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
+        $arrLogEntries = class_module_system_changelog::getLogEntries($strSystemid);
 
         // create excel
         $objPHPExcel->getProperties()->setCreator("AGP v4")
@@ -806,7 +804,7 @@ JS;
 
         $objDataSheet = $objPHPExcel->getActiveSheet();
         $objDataSheet->setTitle($this->getLang("change_report_title"));
-        $objDataSheet->setAutoFilter('A1:F' . ($objArraySectionIterator->getIntElementsPerPage() + 1));
+        $objDataSheet->setAutoFilter('A1:F' . (count($arrLogEntries) + 1));
 
         // style
         $arrStyles = $this->getStylesArray();
@@ -840,7 +838,7 @@ JS;
         $arrData = array();
 
         /** @var $objOneEntry class_changelog_container */
-        foreach($objArraySectionIterator as $objOneEntry) {
+        foreach($arrLogEntries as $objOneEntry) {
             $arrRowData = array();
 
             /** @var interface_versionable|class_model $objTarget */
