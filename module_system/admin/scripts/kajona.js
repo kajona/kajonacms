@@ -885,6 +885,50 @@ KAJONA.admin.messaging = {
 };
 
 /**
+ * Appends an table of contents navigation under the main navigation sidebar. The index contains all elements which
+ * match the given selector. The text of the element gets used as link in the navigation. Sets also the fitting id to
+ * each element.
+ */
+KAJONA.admin.renderTocNavigation = function (selector) {
+    // create the navigation
+    var html = '<div id="toc-navigation" class="toc-navigation-panel" role="navigation">';
+    html += '<ul class="nav">';
+    $(selector).each(function () {
+        var id = $(this).text().replace(/(?!\w)[\x00-\xC0]/g, "-");
+        $(this).attr('id', id);
+        html += '<li><a href="#' + id + '">' + $(this).text() + '</a></li>';
+    });
+    html += '</ul>';
+    html += '</div>';
+
+    // append the element only if it is not already appended
+    if($('#toc-navigation').length > 0) {
+        $('#toc-navigation').html(html);
+    }
+    else {
+        $('.sidebar-nav').append(html);
+    }
+
+    // affix toc navigation
+    $('#toc-navigation').affix({
+        offset: {
+            top: $('#toc-navigation').position().top + 30
+        }
+    });
+
+    // scroll spy
+    $('body').scrollspy({
+        target: '#toc-navigation',
+        offset: 40
+    });
+
+    // resize toc navigation to main navigation
+    $(window).resize(function() {
+        $('#toc-navigation').css('width', $('#moduleNavigation').width());
+    });
+};
+
+/**
  * Wrapper for desktop notifications.
  *
  * @see https://developer.mozilla.org/en-US/docs/WebAPI/Using_Web_Notifications
