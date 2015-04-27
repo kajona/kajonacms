@@ -793,6 +793,11 @@ JS;
         if($strSystemid == "")
             $strSystemid = $this->getSystemid();
 
+        // get data
+        $objArraySectionIterator = new class_array_section_iterator(class_module_system_changelog::getLogEntriesCount($strSystemid));
+        $objArraySectionIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
+        $objArraySectionIterator->setArraySection(class_module_system_changelog::getLogEntries($strSystemid, $objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
+
         // create excel
         $objPHPExcel->getProperties()->setCreator("AGP v4")
             ->setLastModifiedBy(class_carrier::getInstance()->getObjSession()->getUsername())
@@ -801,6 +806,7 @@ JS;
 
         $objDataSheet = $objPHPExcel->getActiveSheet();
         $objDataSheet->setTitle($this->getLang("change_report_title"));
+        $objDataSheet->setAutoFilter('A1:F' . ($objArraySectionIterator->getIntElementsPerPage() + 1));
 
         // style
         $arrStyles = $this->getStylesArray();
@@ -831,10 +837,6 @@ JS;
         $intRow++;
 
         // add body
-        $objArraySectionIterator = new class_array_section_iterator(class_module_system_changelog::getLogEntriesCount($strSystemid));
-        $objArraySectionIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
-        $objArraySectionIterator->setArraySection(class_module_system_changelog::getLogEntries($strSystemid, $objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
-
         $arrData = array();
 
         /** @var $objOneEntry class_changelog_container */
@@ -855,7 +857,7 @@ JS;
             $strOldValue = htmlStripTags($strOldValue);
             $strNewValue = htmlStripTags($strNewValue);
 
-            $arrRowData[] = dateToString($objOneEntry->getObjDate());
+            $arrRowData[] = PHPExcel_Shared_Date::PHPToExcel($objOneEntry->getObjDate()->getTimeInOldStyle());
             $arrRowData[] = $objOneEntry->getStrUsername();
             if($strSystemid == "")
                 $arrRowData[] = $objTarget != null ? $objTarget->getArrModule("modul") : "";
@@ -874,6 +876,9 @@ JS;
             foreach($arrRow as $strValue) {
                 $objDataSheet->setCellValueByColumnAndRow($intCol++, $intRow, html_entity_decode(strip_tags($strValue), ENT_COMPAT, "UTF-8"));
             }
+
+            // format first column as date
+            $objDataSheet->getStyle('A' . $intRow)->getNumberFormat()->setFormatCode('dd.mm.yyyy hh:mm');
 
             $intRow++;
         }
