@@ -268,8 +268,6 @@ class class_installer_system extends class_installer_base implements interface_i
 
         //Registering a few constants
         $strReturn .= "Registering system-constants...\n";
-        //Number of rows in the login-log
-        $this->registerConstant("_user_log_nrofrecords_", "50", 1, _user_modul_id_);
 
         //And the default skin
         $this->registerConstant("_admin_skin_default_", "kajona_v4", class_module_system_setting::$int_TYPE_STRING, _user_modul_id_);
@@ -1171,6 +1169,9 @@ class class_installer_system extends class_installer_base implements interface_i
 
         $strReturn .= "Updating user table...\n";
         $this->objDB->addColumn("user", "user_items_per_page", class_db_datatypes::STR_TYPE_INT);
+
+        $strReturn .= "Removing setting _user_log_nrofrecords_...\n";
+        class_module_system_setting::getConfigByName("_user_log_nrofrecords_")->deleteObject();
 
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion($this->objMetadata->getStrTitle(), "4.6.5");

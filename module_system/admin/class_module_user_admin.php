@@ -436,7 +436,7 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
             $bitSelfedit = false;
             if(!$this->getObjModule()->rightEdit()) {
 
-                if($this->getSystemid() == $this->objSession->getUserID() && _user_selfedit_ == "true") {
+                if($this->getSystemid() == $this->objSession->getUserID() && class_module_system_setting::getConfigValue("_user_selfedit_") == "true") {
                     $bitSelfedit = true;
                 }
                 else {
@@ -611,7 +611,7 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
         }
         else {
             if(!$this->getObjModule()->rightEdit()) {
-                if($this->getSystemid() == $this->objSession->getUserID() && _user_selfedit_ == "true") {
+                if($this->getSystemid() == $this->objSession->getUserID() && class_module_system_setting::getConfigValue("_user_selfedit_") == "true") {
                     $bitSelfedit = true;
                 }
                 else {
@@ -1184,7 +1184,6 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
         //fetch log-rows
         $objLogbook = new class_module_user_log();
         $objIterator = new class_array_section_iterator($objLogbook->getLoginLogsCount());
-        $objIterator->setIntElementsPerPage(_user_log_nrofrecords_);
         $objIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
         $objIterator->setArraySection(class_module_user_log::getLoginLogs($objIterator->calculateStartPos(), $objIterator->calculateEndPos()));
 

@@ -17,8 +17,6 @@ $lang["permissions_header"]              = array(0 => "Anzeigen", 1 => "Bearbeit
 $lang["_admin_skin_default_"]            = "Standard-Admin-Skin";
 $lang["_admins_group_id_"]               = "ID der Admin-Gruppe";
 $lang["_guests_group_id_"]               = "ID der Gäste-Gruppe";
-$lang["_user_log_nrofrecords_"]          = "Anzahl Zeilen";
-$lang["_user_log_nrofrecords_hint"]      = "Definiert die Anzahl an Zeilen, die im Login-Protokoll ausgegeben werden sollen.";
 $lang["_user_selfedit_"]                 = "Eigene Daten bearbeiten";
 $lang["_user_selfedit_hint"]             = "Legt fest, ob ein Benutzer seine eigenen Daten bearbeiten darf";
 $lang["action_edit_user"]                = "Benutzer bearbeiten";

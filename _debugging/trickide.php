@@ -14,9 +14,6 @@ die("calling this script is not allowed");
 define("_corepath_", __DIR__."/../");
 define("_skinwebpath_", "");
 
-define("_guests_group_id_", "");
-define("_user_selfedit_", "");
-define("_user_log_nrofrecords_", 15);
 
 define("_admin_nr_of_rows_", "");
 define("_admin_skin_default_", "");

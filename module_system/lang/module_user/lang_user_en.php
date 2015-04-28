@@ -17,8 +17,6 @@ $lang["permissions_header"]              = array(0 => "View", 1 => "Edit", 2 => 
 $lang["_admin_skin_default_"]            = "Default admin skin";
 $lang["_admins_group_id_"]               = "ID of the admin group";
 $lang["_guests_group_id_"]               = "ID of the guest group";
-$lang["_user_log_nrofrecords_"]          = "Number of rows";
-$lang["_user_log_nrofrecords_hint"]      = "Defines the number of rows to be shown in the login logfile.";
 $lang["_user_selfedit_"]                 = "Edit own profile";
 $lang["_user_selfedit_hint"]             = "Defines, if the user is allowed to change its own profile.";
 $lang["action_edit_user"]                = "Edit user";
