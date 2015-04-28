@@ -35,7 +35,7 @@ class class_scriptlet_xconstants implements interface_scriptlet {
         $arrValues = array(
             _indexpath_,
             _webpath_,
-            _system_browser_cachebuster_,
+            class_module_system_setting::getConfigValue("_system_browser_cachebuster_"),
             date("d.m.y H:i", time())
         );
 
