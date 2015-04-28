@@ -124,7 +124,7 @@ class class_module_news_feed extends class_model implements interface_model, int
      * @return string
      */
     public function getStrLongDescription() {
-        if(_system_mod_rewrite_ == "true") {
+        if(class_module_system_setting::getConfigValue("_system_mod_rewrite_") == "true") {
             return _webpath_ . "/" . $this->getStrUrlTitle() . ".rss";
         }
         else {

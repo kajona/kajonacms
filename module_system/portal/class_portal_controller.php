@@ -252,8 +252,8 @@ abstract class class_portal_controller extends class_abstract_controller {
      */
     public function getPagename() {
         //check, if the portal is disabled
-        if(_system_portal_disable_ == "true") {
-            $strReturn = _system_portal_disablepage_;
+        if(class_module_system_setting::getConfigValue("_system_portal_disable_") == "true") {
+            $strReturn = class_module_system_setting::getConfigValue("_system_portal_disablepage_");
         }
         else {
             //Standard

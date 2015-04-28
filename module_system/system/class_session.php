@@ -288,8 +288,8 @@ final class class_session {
             }
         }
 
-        $this->setSession(self::STR_SESSION_ADMIN_SKIN_KEY, _admin_skin_default_);
-        return _admin_skin_default_;
+        $this->setSession(self::STR_SESSION_ADMIN_SKIN_KEY, class_module_system_setting::getConfigValue("_admin_skin_default_"));
+        return class_module_system_setting::getConfigValue("_admin_skin_default_");
     }
 
     /**

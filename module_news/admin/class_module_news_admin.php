@@ -396,7 +396,7 @@ class class_module_news_admin extends class_admin_evensimpler implements interfa
 
                 class_module_languages_admin::enableLanguageSwitch();
                 class_module_languages_admin::setArrLanguageSwitchEntries($arrDD);
-                class_module_languages_admin::setStrOnChangeHandler("window.location='" . class_link::getLinkAdminHref("news", "editNews") . (_system_mod_rewrite_ == "true" ? "?" : "&") . "systemid='+this.value+'&pe=" . $this->getParam("pe") . "';");
+                class_module_languages_admin::setStrOnChangeHandler("window.location='" . class_link::getLinkAdminHref("news", "editNews") . (class_module_system_setting::getConfigValue("_system_mod_rewrite_") == "true" ? "?" : "&") . "systemid='+this.value+'&pe=" . $this->getParam("pe") . "';");
                 class_module_languages_admin::setStrActiveKey($this->getSystemid());
             }
         }

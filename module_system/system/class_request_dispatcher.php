@@ -92,7 +92,7 @@ class class_request_dispatcher {
         $bitLogin = false;
 
         //validate https status
-        if(_admin_only_https_ == "true") {
+        if(class_module_system_setting::getConfigValue("_admin_only_https_") == "true") {
             //check which headers to compare
             $strHeaderName = class_carrier::getInstance()->getObjConfig()->getConfig("https_header");
             $strHeaderValue = strtolower(class_carrier::getInstance()->getObjConfig()->getConfig("https_header_value"));

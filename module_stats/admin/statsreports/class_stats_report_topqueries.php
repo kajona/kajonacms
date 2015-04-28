@@ -97,9 +97,10 @@ class class_stats_report_topqueries implements interface_admin_statsreports {
         }
 
         $intI = 0;
+        $objUser = new class_module_user_user(class_session::getInstance()->getUserID());
         foreach($arrStats as $strKey => $intHits) {
             //Escape?
-            if($intI >= _stats_nrofrecords_) {
+            if($intI >= $objUser->getIntItemsPerPage()) {
                 break;
             }
             $arrValues[$intI] = array();

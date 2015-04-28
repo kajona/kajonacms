@@ -554,7 +554,7 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
 
         $objForm->addField(new class_formentry_dropdown("user", "skin"))
             ->setArrKeyValues($arrSkins)
-            ->setStrValue(($this->getParam("user_skin") != "" ? $this->getParam("user_skin") : _admin_skin_default_))
+            ->setStrValue(($this->getParam("user_skin") != "" ? $this->getParam("user_skin") : class_module_system_setting::getConfigValue("_admin_skin_default_")))
             ->setStrLabel($this->getLang("user_skin"));
 
         $objForm->addField(new class_formentry_dropdown("user", "language"))

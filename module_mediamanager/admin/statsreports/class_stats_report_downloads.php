@@ -86,8 +86,10 @@ class class_stats_report_downloads implements interface_admin_statsreports {
         $arrLogsRaw = $this->getLogbookData();
         $arrLogs = array();
         $intI = 0;
+
+        $objUser = new class_module_user_user(class_session::getInstance()->getUserID());
         foreach($arrLogsRaw as $intKey => $arrOneLog) {
-            if($intI++ >= _stats_nrofrecords_)
+            if($intI++ >= $objUser->getIntItemsPerPage())
                 break;
 
             $arrLogs[$intKey][0] = $intI;
@@ -116,13 +118,14 @@ class class_stats_report_downloads implements interface_admin_statsreports {
      * @return mixed
      */
     private function getLogbookData() {
+        $objUser = new class_module_user_user(class_session::getInstance()->getUserID());
         $strQuery = "SELECT *
 					  FROM "._dbprefix_."mediamanager_dllog
 					  WHERE downloads_log_date > ?
 							AND downloads_log_date <= ?
 					  ORDER BY downloads_log_date DESC";
 
-        $arrReturn = $this->objDB->getPArray($strQuery, array($this->intDateStart, $this->intDateEnd), 0, (_stats_nrofrecords_ - 1));
+        $arrReturn = $this->objDB->getPArray($strQuery, array($this->intDateStart, $this->intDateEnd), 0, ($objUser->getIntItemsPerPage() - 1));
 
         foreach($arrReturn as &$arrOneRow) {
             //Load hostname, if available. faster, then mergin per LEFT JOIN

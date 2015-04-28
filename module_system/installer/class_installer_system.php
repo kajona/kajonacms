@@ -1155,7 +1155,7 @@ class class_installer_system extends class_installer_base implements interface_i
 
         $strReturn .= "Adding mail-config settings...\n";
 
-        $this->registerConstant("_system_email_defaultsender_", _system_admin_email_, class_module_system_setting::$int_TYPE_STRING, _system_modul_id_);
+        $this->registerConstant("_system_email_defaultsender_", class_module_system_setting::getConfigValue("_system_admin_email_"), class_module_system_setting::$int_TYPE_STRING, _system_modul_id_);
         $this->registerConstant("_system_email_forcesender_", "false", class_module_system_setting::$int_TYPE_BOOL, _system_modul_id_);
 
 

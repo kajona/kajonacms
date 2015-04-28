@@ -706,7 +706,7 @@ class class_db {
         $objFilesystem = new class_filesystem();
         $arrFiles = $objFilesystem->getFilelist(_projectpath_."/dbdumps/", array(".sql", ".gz"));
 
-        while(count($arrFiles) >= _system_dbdump_amount_) {
+        while(count($arrFiles) >= class_module_system_setting::getConfigValue("_system_dbdump_amount_")) {
             $strFile = array_shift($arrFiles);
             if(!$objFilesystem->fileDelete(_projectpath_."/dbdumps/".$strFile)) {
                 class_logger::getInstance(class_logger::DBLOG)->addLogRow("Error deleting old db-dumps", class_logger::$levelWarning);

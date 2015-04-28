@@ -113,7 +113,7 @@ class class_module_right_admin extends class_admin_controller implements interfa
             $arrTemplateTotal["title6"] = $arrTitles[6];
             $arrTemplateTotal["title7"] = $arrTitles[7];
             $arrTemplateTotal["title8"] = $arrTitles[8];
-            if(_system_changehistory_enabled_ == "true") {
+            if(class_module_system_setting::getConfigValue("_system_changehistory_enabled_") == "true") {
                 if(!isset($arrTitles[9]))  //fallback for pre 4.3.2 systems
                     $arrTitles[9] = $arrDefaultHeader[9];
 
@@ -154,8 +154,8 @@ class class_module_right_admin extends class_admin_controller implements interfa
 
 
 
-                if(_system_changehistory_enabled_ == "true") {
-                        $arrTemplateRow["box9"] = "<input title=\"".$arrTitles[9]."\" rel=\"tooltip\" type=\"checkbox\" name=\"10," . $arrSingleGroup["group_id"] . "\" id=\"10," . $arrSingleGroup["group_id"] . "\" value=\"1\" ".(in_array($arrSingleGroup["group_id"], $arrRights["changelog"]) ? " checked=\"checked\" " : "")." />";
+                if(class_module_system_setting::getConfigValue("_system_changehistory_enabled_") == "true") {
+                    $arrTemplateRow["box9"] = "<input title=\"".$arrTitles[9]."\" rel=\"tooltip\" type=\"checkbox\" name=\"10," . $arrSingleGroup["group_id"] . "\" id=\"10," . $arrSingleGroup["group_id"] . "\" value=\"1\" ".(in_array($arrSingleGroup["group_id"], $arrRights["changelog"]) ? " checked=\"checked\" " : "")." />";
                 }
 
 

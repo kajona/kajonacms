@@ -223,7 +223,7 @@ class class_stats_report_common implements interface_admin_statsreports {
 					  WHERE stats_date > ?
 					  GROUP BY stats_ip, stats_browser";
 
-        $arrRow = $this->objDB->getPArray($strQuery, array(time() - _stats_duration_online_));
+        $arrRow = $this->objDB->getPArray($strQuery, array(time() - class_module_system_setting::getConfigValue("_stats_duration_online_")));
 
         return count($arrRow);
     }

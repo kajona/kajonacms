@@ -280,7 +280,7 @@ class class_module_system_changelog extends class_model implements interface_mod
         if(self::$bitChangelogEnabled !== null)
             return self::$bitChangelogEnabled;
 
-        if(!defined("_system_changehistory_enabled_") || _system_changehistory_enabled_ == "false") {
+        if(class_module_system_setting::getConfigValue("_system_changehistory_enabled_") != "true") {
             self::$bitChangelogEnabled = false;
             return false;
         }

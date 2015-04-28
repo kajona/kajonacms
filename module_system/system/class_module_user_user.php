@@ -621,7 +621,7 @@ class class_module_user_user extends class_model implements interface_model, int
             return $this->intItemsPerPage;
         }
         else {
-            return _admin_nr_of_rows_;
+            return class_module_system_setting::getConfigValue("_admin_nr_of_rows_");
         }
     }
 
