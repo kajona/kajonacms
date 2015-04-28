@@ -17,7 +17,6 @@ define("_skinwebpath_", "");
 
 
 
-define("_stats_nrofrecords_", "");
 
 define("_tags_defaultprivate_", "");
 
