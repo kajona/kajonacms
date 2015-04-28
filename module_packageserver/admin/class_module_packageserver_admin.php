@@ -50,9 +50,9 @@ class class_module_packageserver_admin extends class_module_mediamanager_admin i
      */
     protected function actionOpenFolder() {
 
-        if(validateSystemid(_packageserver_repo_id_)) {
+        if(validateSystemid(class_module_system_setting::getConfigValue("_packageserver_repo_id_"))) {
             if($this->getSystemid() == "")
-                $this->setSystemid(_packageserver_repo_id_);
+                $this->setSystemid(class_module_system_setting::getConfigValue("_packageserver_repo_id_"));
 
             $objIterator = new class_array_section_iterator(class_module_mediamanager_file::getFileCount($this->getSystemid(), false, false, true));
             $objIterator->setPageNumber($this->getParam("pv"));

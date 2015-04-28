@@ -136,9 +136,10 @@ class class_resourceloader {
 
         $strFilename = null;
         //first try: load the file in the current template-pack
-        if(is_file(_realpath_._templatepath_."/"._packagemanager_defaulttemplate_."/tpl".$strTemplateName)) {
-            $this->arrTemplates[$strTemplateName] = _templatepath_."/"._packagemanager_defaulttemplate_."/tpl".$strTemplateName;
-            return _templatepath_."/"._packagemanager_defaulttemplate_."/tpl".$strTemplateName;
+        $strDefaultTemplate = class_module_system_setting::getConfigValue("_packagemanager_defaulttemplate_");
+        if(is_file(_realpath_._templatepath_."/".$strDefaultTemplate."/tpl".$strTemplateName)) {
+            $this->arrTemplates[$strTemplateName] = _templatepath_."/".$strDefaultTemplate."/tpl".$strTemplateName;
+            return _templatepath_."/".$strDefaultTemplate."/tpl".$strTemplateName;
         }
 
         //second try: load the file from the default-pack
@@ -181,8 +182,8 @@ class class_resourceloader {
         $arrReturn = array();
 
         //first try: load the file in the current template-pack
-        if(is_dir(_realpath_._templatepath_."/"._packagemanager_defaulttemplate_."/tpl".$strFolder)) {
-            $arrFiles = scandir(_realpath_._templatepath_."/"._packagemanager_defaulttemplate_."/tpl".$strFolder);
+        if(is_dir(_realpath_._templatepath_."/".class_module_system_setting::getConfigValue("_packagemanager_defaulttemplate_")."/tpl".$strFolder)) {
+            $arrFiles = scandir(_realpath_._templatepath_."/".class_module_system_setting::getConfigValue("_packagemanager_defaulttemplate_")."/tpl".$strFolder);
             foreach($arrFiles as $strOneFile)
                 if(substr($strOneFile, -4) == ".tpl")
                     $arrReturn[] = $strOneFile;

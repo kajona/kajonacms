@@ -57,7 +57,11 @@ class class_remoteloader {
      *
      * @var int
      */
-    private $intMaxCachetime = _remoteloader_max_cachetime_;
+    private $intMaxCachetime = 3600;
+
+    public function __construct() {
+        $this->intMaxCachetime = class_module_system_setting::getConfigValue("_remoteloader_max_cachetime_");
+    }
 
 
     /**

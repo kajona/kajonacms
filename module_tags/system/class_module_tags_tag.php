@@ -50,7 +50,7 @@ class class_module_tags_tag extends class_model implements interface_model, inte
      */
     public function __construct($strSystemid = "") {
 
-        if(_tags_defaultprivate_ == "true")
+        if(class_module_system_setting::getConfigValue("_tags_defaultprivate_") == "true")
             $this->intPrivate = 1;
 
         parent::__construct($strSystemid);

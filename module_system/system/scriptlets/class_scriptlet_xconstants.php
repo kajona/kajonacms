@@ -41,7 +41,7 @@ class class_scriptlet_xconstants implements interface_scriptlet {
 
         if(defined("_packagemanager_defaulttemplate_")) {
             $arrConstants[] = "_packagemanager_defaulttemplate_";
-            $arrValues[] = _packagemanager_defaulttemplate_;
+            $arrValues[] = class_module_system_setting::getConfigValue("_packagemanager_defaulttemplate_");
         }
 
         if(defined("_skinwebpath_")) {

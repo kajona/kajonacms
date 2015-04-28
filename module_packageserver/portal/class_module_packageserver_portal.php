@@ -38,12 +38,12 @@ class class_module_packageserver_portal extends class_portal_controller implemen
         if ($this->isValidPagingParameter($intStart) && $this->isValidPagingParameter($intEnd)) {
 
             if ($intEnd >= $intStart) {
-                $intNrOfFiles = $this->getAllPackagesCount(_packageserver_repo_id_, $strTypeFilter, $strNameFilter);
-                $arrDBFiles = $this->getAllPackages(_packageserver_repo_id_, $strTypeFilter, $intStart, $intEnd, $strNameFilter);
+                $intNrOfFiles = $this->getAllPackagesCount(class_module_system_setting::getConfigValue("_packageserver_repo_id_"), $strTypeFilter, $strNameFilter);
+                $arrDBFiles = $this->getAllPackages(class_module_system_setting::getConfigValue("_packageserver_repo_id_"), $strTypeFilter, $intStart, $intEnd, $strNameFilter);
 
                 //error-handling: a new filter and a offset is passed. but maybe the passed offset is no longer valid for the new filter criteria
                 if(count($arrDBFiles) == 0 && $intNrOfFiles > 0) {
-                    $arrDBFiles = $this->getAllPackages(_packageserver_repo_id_, $strTypeFilter, 0, $intNrOfFiles, $strNameFilter);
+                    $arrDBFiles = $this->getAllPackages(class_module_system_setting::getConfigValue("_packageserver_repo_id_"), $strTypeFilter, 0, $intNrOfFiles, $strNameFilter);
                 }
 
                 $objManager = new class_module_packagemanager_manager();
