@@ -280,10 +280,10 @@ class class_module_system_changelog extends class_model implements interface_mod
         if(self::$bitChangelogEnabled !== null)
             return self::$bitChangelogEnabled;
 
-        if(class_module_system_setting::getConfigValue("_system_changehistory_enabled_") != "true") {
-            self::$bitChangelogEnabled = false;
-            return false;
-        }
+//        if(class_module_system_setting::getConfigValue("_system_changehistory_enabled_") != "true") {
+//            self::$bitChangelogEnabled = false;
+//            return false;
+//        }
 
         if(!$objSourceModel instanceof interface_versionable) {
             throw new class_exception("object passed to create changelog not implementing interface_versionable", class_logger::$levelWarning);
