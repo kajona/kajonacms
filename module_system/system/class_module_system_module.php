@@ -600,6 +600,3 @@ class class_module_system_module extends class_model implements interface_model,
     }
 
 }
-
-//init the caches
-class_module_system_module::staticConstruct();
