@@ -67,12 +67,13 @@ class class_module_folderview_admin extends class_admin_controller implements in
             $strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), $this->getLang("wysiwygPagesBrowser"), "", $strAction, $intCounter++);
         }
 
-        if(validateSystemid(_mediamanager_default_filesrepoid_) && class_module_system_module::getModuleByName("mediamanager") !== null && class_objectfactory::getInstance()->getObject(_mediamanager_default_filesrepoid_) !== null) {
+        $strRepoId = class_module_system_setting::getConfigValue("_mediamanager_default_filesrepoid_");
+        if(validateSystemid($strRepoId) && class_module_system_module::getModuleByName("mediamanager") !== null && class_objectfactory::getInstance()->getObject($strRepoId) !== null) {
             $strAction = $this->objToolkit->listButton(
                 class_link::getLinkAdmin(
                     "mediamanager",
                     "folderContentFolderviewMode",
-                    "&systemid=" . _mediamanager_default_filesrepoid_ . "&form_element=" . $this->getParam("form_element") . "&bit_link=1",
+                    "&systemid=" .$strRepoId. "&form_element=" . $this->getParam("form_element") . "&bit_link=1",
                     $this->getLang("wysiwygFilesBrowser"),
                     $this->getLang("wysiwygFilesBrowser"),
                     "icon_folderActionOpen"
@@ -81,12 +82,13 @@ class class_module_folderview_admin extends class_admin_controller implements in
             $strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), $this->getLang("wysiwygFilesBrowser"), "", $strAction, $intCounter++);
         }
 
-        if(validateSystemid(_mediamanager_default_imagesrepoid_) && class_module_system_module::getModuleByName("mediamanager") !== null && class_objectfactory::getInstance()->getObject(_mediamanager_default_imagesrepoid_) !== null) {
+        $strRepoId = class_module_system_setting::getConfigValue("_mediamanager_default_imagesrepoid_");
+        if(validateSystemid($strRepoId) && class_module_system_module::getModuleByName("mediamanager") !== null && class_objectfactory::getInstance()->getObject($strRepoId) !== null) {
             $strAction = $this->objToolkit->listButton(
                 class_link::getLinkAdmin(
                     "mediamanager",
                     "folderContentFolderviewMode",
-                    "&systemid=" . _mediamanager_default_imagesrepoid_ . "&form_element=" . $this->getParam("form_element") . "&bit_link=1",
+                    "&systemid=" .$strRepoId. "&form_element=" . $this->getParam("form_element") . "&bit_link=1",
                     $this->getLang("wysiwygImagesBrowser"),
                     $this->getLang("wysiwygImagesBrowser"),
                     "icon_folderActionOpen"

@@ -133,7 +133,7 @@ class class_lockmanager {
      */
     public function isUnlockableForCurrentUser() {
 
-        if(in_array(_admins_group_id_, class_carrier::getInstance()->getObjSession()->getGroupIdsAsArray())) {
+        if(class_carrier::getInstance()->getObjSession()->isSuperAdmin()) {
             return true;
         }
 

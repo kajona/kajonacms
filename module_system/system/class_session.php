@@ -227,7 +227,7 @@ final class class_session {
     }
 
     /**
-     * Cheks whether a user is an admin or not
+     * Checks whether a user is an admin or not
      *
      * @return bool
      */
@@ -240,6 +240,22 @@ final class class_session {
         }
         else
             return false;
+    }
+
+
+    /**
+     * Checks whether the current user is member of the global super admin group or not
+     *
+     * @return bool
+     */
+    public function isSuperAdmin() {
+        if($this->isLoggedin()) {
+            if($this->getUser() != null && $this->getUser()->getIntAdmin() == 1 && in_array(class_module_system_setting::getConfigValue("_admins_group_id_"), $this->getGroupIdsAsArray())) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -418,7 +434,7 @@ final class class_session {
      */
     public function switchSessionToUser(class_module_user_user $objTargetUser, $bitForce = false) {
         if($this->isLoggedin()) {
-            if(in_array(_admins_group_id_, $this->getGroupIdsAsArray()) || $bitForce) {
+            if(class_carrier::getInstance()->getObjSession()->isSuperAdmin() || $bitForce) {
                 $this->getObjInternalSession()->setStrLoginstatus(class_module_system_session::$LOGINSTATUS_LOGGEDIN);
                 $this->getObjInternalSession()->setStrUserid($objTargetUser->getSystemid());
 
@@ -582,7 +598,7 @@ final class class_session {
             $strGroupids = $this->getObjInternalSession()->getStrGroupids();
         }
         else {
-            $strGroupids = _guests_group_id_;
+            $strGroupids = class_module_system_setting::getConfigValue("_guests_group_id_");
         }
         return $strGroupids;
     }
@@ -597,7 +613,7 @@ final class class_session {
             $strGroupids = $this->getObjInternalSession()->getStrGroupids();
         }
         else {
-            $strGroupids = _guests_group_id_;
+            $strGroupids = class_module_system_setting::getConfigValue("_guests_group_id_");
         }
         return explode(",", $strGroupids);
     }
@@ -652,7 +668,7 @@ final class class_session {
         }
 
         //try to load the matching groups
-        $strGroups = _guests_group_id_;
+        $strGroups = class_module_system_setting::getConfigValue("_guests_group_id_");
         if(validateSystemid($this->getUserID())) {
             $this->objUser = new class_module_user_user($this->getUserID());
             $strGroups = implode(",", $this->objUser->getArrGroupIds());

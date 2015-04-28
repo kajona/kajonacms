@@ -475,7 +475,7 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
                 $objField->setStrHint($this->getLang("templateNotSelectedBefore"));
 
             $bitReadonly = false;
-            if(_pages_templatechange_ == "false") {
+            if(class_module_system_setting::getConfigValue("_pages_templatechange_") == "false") {
                 if($this->getAction() == "newPage" || $this->getParam("mode") == "new")
                     $bitReadonly = false;
                 else if($objPage->getNumberOfElementsOnPage() != 0)
@@ -484,7 +484,7 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
             $objField->setBitReadonly($bitReadonly);
 
             if($strMode == "new" && $this->getParam("page_template") == "")
-                $objField->setStrValue(_pages_defaulttemplate_);
+                $objField->setStrValue(class_module_system_setting::getConfigValue("_pages_defaulttemplate_"));
 
         }
         else {

@@ -52,7 +52,7 @@ class class_installer_sc_gallery implements interface_sc_installer  {
         $strGalleryID = $objGallery->getSystemid();
 
         $strReturn .= "Modify rights to allow guests to rate images...\n";
-        class_carrier::getInstance()->getObjRights()->addGroupToRight(_guests_group_id_, $objGallery->getSystemid(), "right3");
+        class_carrier::getInstance()->getObjRights()->addGroupToRight(class_module_system_setting::getConfigValue("_guests_group_id_"), $objGallery->getSystemid(), "right3");
 
 
         $strReturn .= "Creating new gallery page...\n";

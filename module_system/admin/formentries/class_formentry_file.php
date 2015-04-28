@@ -30,7 +30,7 @@ class class_formentry_file extends class_formentry_base implements interface_for
         if($this->getStrHint() != null)
             $strReturn .= $objToolkit->formTextRow($this->getStrHint());
 
-        $strReturn .= $objToolkit->formInputFileSelector($this->getStrEntryName(), $this->getStrLabel(), $this->getStrValue(), _mediamanager_default_filesrepoid_);
+        $strReturn .= $objToolkit->formInputFileSelector($this->getStrEntryName(), $this->getStrLabel(), $this->getStrValue(), class_module_system_setting::getConfigValue("_mediamanager_default_filesrepoid_"));
 
         return $strReturn;
     }

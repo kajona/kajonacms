@@ -323,7 +323,7 @@ class class_module_pages_page extends class_model implements interface_model, in
     public function onInsertToDb() {
 
         //Create the system-record
-        if(_pages_newdisabled_ == "true") {
+        if(class_module_system_setting::getConfigValue("_pages_newdisabled_") == "true") {
             $this->setIntRecordStatus(0);
         }
 

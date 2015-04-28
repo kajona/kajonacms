@@ -160,7 +160,7 @@ class class_element_portalregistration_portal extends class_element_portal imple
                 $objGroup = new class_module_user_group($this->arrElementData["portalregistration_group"]);
                 $objGroup->getObjSourceGroup()->addMember($objUser->getObjSourceUser());
                 //and to the guests to avoid conflicts
-                $objGroup = new class_module_user_group(_guests_group_id_);
+                $objGroup = new class_module_user_group(class_module_system_setting::getConfigValue("_guests_group_id_"));
                 $objGroup->getObjSourceGroup()->addMember($objUser->getObjSourceUser());
                 //create a mail to allow the user to activate itself
 

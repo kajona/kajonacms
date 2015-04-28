@@ -1099,7 +1099,7 @@ class class_installer_system extends class_installer_base implements interface_i
 
         $strReturn .= "Updating default changelog permissions for admins...\n";
         $strQuery = "UPDATE "._dbprefix_."system_right SET right_changelog = ?";
-        $this->objDB->_pQuery($strQuery, array(_admins_group_id_));
+        $this->objDB->_pQuery($strQuery, array(class_module_system_setting::getConfigValue("_admins_group_id_")));
 
 
         class_carrier::getInstance()->flushCache(class_carrier::INT_CACHE_TYPE_DBQUERIES | class_carrier::INT_CACHE_TYPE_DBSTATEMENTS);

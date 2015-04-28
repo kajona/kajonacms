@@ -49,10 +49,8 @@ class class_module_system_admin extends class_admin_simple implements interface_
      */
     protected function actionModuleStatus() {
         //status: for setting the status of modules, you have to be member of the admin-group
-        $objUser = new class_module_user_user($this->objSession->getUserID());
-        $arrGroups = $objUser->getObjSourceUser()->getGroupIdsForUser();
         $objModule = new class_module_system_module($this->getSystemid());
-        if($objModule->rightEdit() && in_array(_admins_group_id_, $arrGroups)) {
+        if($objModule->rightEdit() && class_carrier::getInstance()->getObjSession()->isSuperAdmin()) {
             $objModule->setIntRecordStatus($objModule->getIntRecordStatus() == 0 ? 1 : 0);
             $this->adminReload(class_link::getLinkAdminHref($this->getArrModule("modul")));
         }
@@ -110,7 +108,7 @@ class class_module_system_admin extends class_admin_simple implements interface_
             $arrReturn = array();
             $arrReturn[] = $this->objToolkit->listButton(class_link::getLinkAdminDialog("system", "moduleAspect", "&systemid=".$objListEntry->getSystemid(), "", $this->getLang("modul_aspectedit"), "icon_aspect", $this->getLang("modul_aspectedit")));
 
-            if($objListEntry->rightEdit() && in_array(_admins_group_id_, $this->objSession->getGroupIdsAsArray())) {
+            if($objListEntry->rightEdit() && class_carrier::getInstance()->getObjSession()->isSuperAdmin()) {
                 if($objListEntry->getStrName() == "system")
                     $arrReturn[] = $this->objToolkit->listButton(class_link::getLinkAdmin("system", "moduleList", "", "", $this->getLang("modul_status_system"), "icon_enabled"));
                 else if($objListEntry->getIntRecordStatus() == 0)
@@ -628,7 +626,7 @@ JS;
             else {
                 $strActivity .= $this->getLang("session_portal");
                 if($strLastUrl == "")
-                    $strActivity .= defined("_pages_indexpage_") ? _pages_indexpage_ : "";
+                    $strActivity .= class_module_system_setting::getConfigValue("_pages_indexpage_") != "" ? class_module_system_setting::getConfigValue("_pages_indexpage_") : "";
                 else {
                     foreach(explode("&amp;", $strLastUrl) as $strOneParam) {
                         $arrUrlParam = explode("=", $strOneParam);

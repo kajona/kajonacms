@@ -131,7 +131,7 @@ class class_module_right_admin extends class_admin_controller implements interfa
                 $arrSingleGroup["group_id"] = $objSingleGroup->getSystemid();
 
                 //hide the superglobal admin-row from non-members
-                if($objSingleGroup->getSystemid() == _admins_group_id_ && !in_array(_admins_group_id_, $this->objSession->getGroupIdsAsArray())) {
+                if($objSingleGroup->getSystemid() == class_module_system_setting::getConfigValue("_admins_group_id_") && !in_array(class_module_system_setting::getConfigValue("_admins_group_id_"), $this->objSession->getGroupIdsAsArray())) {
                     continue;
                 }
 
@@ -273,20 +273,21 @@ class class_module_right_admin extends class_admin_controller implements interfa
             //Get Groups
             $arrGroups = class_module_user_group::getObjectList();
 
-            $strView = _admins_group_id_;
-            $strEdit = _admins_group_id_;
-            $strDelete = _admins_group_id_;
-            $strRight = _admins_group_id_;
-            $strRight1 = _admins_group_id_;
-            $strRight2 = _admins_group_id_;
-            $strRight3 = _admins_group_id_;
-            $strRight4 = _admins_group_id_;
-            $strRight5 = _admins_group_id_;
-            $strChangelog = _admins_group_id_;
+            $strAdminsGroupId = class_module_system_setting::getConfigValue("_admins_group_id_");
+            $strView = $strAdminsGroupId;
+            $strEdit = $strAdminsGroupId;
+            $strDelete = $strAdminsGroupId;
+            $strRight = $strAdminsGroupId;
+            $strRight1 = $strAdminsGroupId;
+            $strRight2 = $strAdminsGroupId;
+            $strRight3 = $strAdminsGroupId;
+            $strRight4 = $strAdminsGroupId;
+            $strRight5 = $strAdminsGroupId;
+            $strChangelog = $strAdminsGroupId;
 
             foreach($arrGroups as $objSingleGroup) {
                 $strGroupId = $objSingleGroup->getSystemid();
-                if($strGroupId == _admins_group_id_) {
+                if($strGroupId == $strAdminsGroupId) {
                     continue;
                 }
 

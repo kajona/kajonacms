@@ -8,23 +8,12 @@ die("calling this script is not allowed");
  * This should avoid undefined messages in your local IDE.
  */
 
-define("_mediamanager_default_filesrepoid_", "");
-define("_mediamanager_default_imagesrepoid_", "");
 
-define("_news_news_datetime_", false);
 
-define("_pages_cacheenabled_", "true");
-define("_pages_defaulttemplate_", "");
-define("_pages_errorpage_", "");
-define("_pages_indexpage_", "");
-define("_pages_newdisabled_", "");
-define("_pages_portaleditor_", "");
-define("_pages_templatechange_", "");
 
 define("_corepath_", __DIR__."/../");
 define("_skinwebpath_", "");
 
-define("_admins_group_id_", "");
 define("_guests_group_id_", "");
 define("_user_selfedit_", "");
 define("_user_log_nrofrecords_", 15);

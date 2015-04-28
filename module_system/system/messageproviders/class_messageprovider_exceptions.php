@@ -68,7 +68,7 @@ class class_messageprovider_exceptions implements interface_messageprovider_exte
      * @since 4.5
      */
     public function isVisibleInConfigView() {
-        $objAdminGroup = new class_module_user_group(_admins_group_id_);
+        $objAdminGroup = new class_module_user_group(class_module_system_setting::getConfigValue("_admins_group_id_"));
         return in_array(class_carrier::getInstance()->getObjSession()->getUserID(), $objAdminGroup->getObjSourceGroup()->getUserIdsForGroup());
     }
 
