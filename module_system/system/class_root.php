@@ -39,12 +39,6 @@ abstract class class_root {
      * @var class_session
      */
     protected $objSession = null; //Object containing the session-management
-    /**
-     * Instance of class_rights
-     *
-     * @var class_rights
-     */
-    protected $objRights = null; //Object handling the right-stuff
 
     /**
      * Instance of class_lang
@@ -231,7 +225,6 @@ abstract class class_root {
         $this->objDB = $objCarrier->getObjDB();
         $this->objSession = $objCarrier->getObjSession();
         $this->objLang = $objCarrier->getObjLang();
-        $this->objRights = $objCarrier->getObjRights();
 
         $this->objSortManager = new class_common_sortmanager($this);
 
@@ -769,7 +762,7 @@ abstract class class_root {
 
         if($this->strOldPrevId != $this->strPrevId) {
             class_carrier::getInstance()->flushCache(class_carrier::INT_CACHE_TYPE_DBQUERIES | class_carrier::INT_CACHE_TYPE_ORMCACHE);
-            $this->objRights->rebuildRightsStructure($this->getSystemid());
+            class_carrier::getInstance()->getObjRights()->rebuildRightsStructure($this->getSystemid());
             $this->objSortManager->fixSortOnPrevIdChange($this->strOldPrevId, $this->strPrevId);
             //TODO: remove legacy call
             class_core_eventdispatcher::notifyPrevidChangedListeners($this->getSystemid(), $this->strOldPrevId, $this->strPrevId);
@@ -839,7 +832,7 @@ abstract class class_root {
 
             $this->objDB->_pQuery($strQuery, array($strSystemId));
             //update rights to inherit
-            $this->objRights->setInherited(true, $strSystemId);
+            class_carrier::getInstance()->getObjRights()->setInherited(true, $strSystemId);
         }
 
         class_logger::getInstance()->addLogRow("new system-record created: ".$strSystemId ." (".$strComment.")", class_logger::$levelInfo);
@@ -968,7 +961,7 @@ abstract class class_root {
      * @return bool
      */
     public function rightView() {
-        return $this->objRights->rightView($this->getSystemid());
+        return class_carrier::getInstance()->getObjRights()->rightView($this->getSystemid());
     }
 
     /**
@@ -978,7 +971,7 @@ abstract class class_root {
      * @return bool
      */
     public function rightEdit() {
-        return $this->objRights->rightEdit($this->getSystemid());
+        return class_carrier::getInstance()->getObjRights()->rightEdit($this->getSystemid());
     }
 
     /**
@@ -988,7 +981,7 @@ abstract class class_root {
      * @return bool
      */
     public function rightDelete() {
-        return $this->objRights->rightDelete($this->getSystemid());
+        return class_carrier::getInstance()->getObjRights()->rightDelete($this->getSystemid());
     }
 
     /**
@@ -998,7 +991,7 @@ abstract class class_root {
      * @return bool
      */
     public function rightRight() {
-        return $this->objRights->rightRight($this->getSystemid());
+        return class_carrier::getInstance()->getObjRights()->rightRight($this->getSystemid());
     }
 
     /**
@@ -1008,7 +1001,7 @@ abstract class class_root {
      * @return bool
      */
     public function rightRight1() {
-        return $this->objRights->rightRight1($this->getSystemid());
+        return class_carrier::getInstance()->getObjRights()->rightRight1($this->getSystemid());
     }
 
     /**
@@ -1018,7 +1011,7 @@ abstract class class_root {
      * @return bool
      */
     public function rightRight2() {
-        return $this->objRights->rightRight2($this->getSystemid());
+        return class_carrier::getInstance()->getObjRights()->rightRight2($this->getSystemid());
     }
 
     /**
@@ -1028,7 +1021,7 @@ abstract class class_root {
      * @return bool
      */
     public function rightRight3() {
-        return $this->objRights->rightRight3($this->getSystemid());
+        return class_carrier::getInstance()->getObjRights()->rightRight3($this->getSystemid());
     }
 
     /**
@@ -1038,7 +1031,7 @@ abstract class class_root {
      * @return bool
      */
     public function rightRight4() {
-        return $this->objRights->rightRight4($this->getSystemid());
+        return class_carrier::getInstance()->getObjRights()->rightRight4($this->getSystemid());
     }
 
     /**
@@ -1048,17 +1041,17 @@ abstract class class_root {
      * @return bool
      */
     public function rightRight5() {
-        return $this->objRights->rightRight5($this->getSystemid());
+        return class_carrier::getInstance()->getObjRights()->rightRight5($this->getSystemid());
     }
 
     /**
-     * Returns the bool-value for the right5 of this record,
+     * Returns the bool-value for the changelog permissions of this record,
      * Systemid MUST be given, otherwise false
      *
      * @return bool
      */
     public function rightChangelog() {
-        return $this->objRights->rightChangelog($this->getSystemid());
+        return class_carrier::getInstance()->getObjRights()->rightChangelog($this->getSystemid());
     }
 
     // --- SystemID & System-Table Methods ------------------------------------------------------------------
@@ -1828,15 +1821,6 @@ abstract class class_root {
     }
 
     /**
-     * Returns the current instance of the class_rights
-     *
-     * @return object
-     */
-    public function getObjRights() {
-        return $this->objRights;
-    }
-
-    /**
      * Returns an instance of the lockmanager, initialized
      * with the current systemid.
      *
@@ -1872,7 +1856,6 @@ abstract class class_root {
     public function setArrInitRow($arrInitRow) {
         if(isset($arrInitRow["system_id"])) {
             $this->arrInitRow = $arrInitRow;
-            $this->objRights->addRowToCache($arrInitRow);
         }
     }
 

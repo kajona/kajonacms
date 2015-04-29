@@ -69,7 +69,7 @@ abstract class class_testbase extends PHPUnit_Framework_TestCase {
     protected function tearDown() {
         class_carrier::getInstance()->flushCache(class_carrier::INT_CACHE_TYPE_CHANGELOG);
 
-//        $this->printDebugValues();
+        $this->printDebugValues();
 
         parent::tearDown();
     }

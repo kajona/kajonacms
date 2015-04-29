@@ -356,7 +356,7 @@ class class_installer_system extends class_installer_base implements interface_i
         $this->objDB->flushQueryCache();
 
         $strReturn .= "Modified root-rights....\n";
-        $this->objRights->rebuildRightsStructure();
+        class_carrier::getInstance()->getObjRights()->rebuildRightsStructure();
         $strReturn .= "Rebuilt rights structures...\n";
 
         //Creating an admin-user
