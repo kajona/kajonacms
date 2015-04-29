@@ -647,7 +647,7 @@ final class class_session {
 
 
         $arrTables = $this->objDB->getTables();
-        if(!in_array(_dbprefix_."session", $arrTables) || !defined("_guests_group_id_") || !defined("_system_release_time_"))
+        if(!in_array(_dbprefix_."session", $arrTables) || class_module_system_setting::getConfigValue("_guests_group_id_") === null)
             return;
 
         $this->bitLazyLoaded = true;

@@ -43,8 +43,6 @@ $lang["_system_release_time_"]           = "Duration of a session";
 $lang["_system_release_time_hint"]       = "After this amount of seconds a session gets invalid.";
 $lang["_system_timezone_"]               = "System timezone";
 $lang["_system_timezone_hint"]           = "Set the systems timezone in order to get correct dates. See <a href='http://www.php.net/manual/en/timezones.php' target='_blank'>http://www.php.net/manual/en/timezones.php</a> for a list of valid entries.";
-$lang["_system_use_dbcache_"]            = "Database cache";
-$lang["_system_use_dbcache_hint"]        = "Enables/disables the internal database query cache.";
 $lang["_system_email_forcesender_"]      = "Enforce default sender";
 $lang["_system_email_forcesender_hint"]  = "Some mail gateways require a special domain for a mails' from-address. Force all mails to make use of the default-sender by enabling the force-switch.";
 $lang["_system_email_defaultsender_"]    = "Default email from-address";

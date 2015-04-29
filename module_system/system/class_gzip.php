@@ -124,26 +124,7 @@ class class_gzip {
         return false;
     }
 
-    /**
-     * Tries to compress the content passed using a gzip compression.
-     * If the browser supports encoded content, a header is sent and the string is returned being compressed,
-     * otherwise the string is returned "as is"
-     *
-     * @param string $strContent
-     *
-     * @return string
-     */
-    public function compressOutput($strContent) {
 
-        if(defined("_system_output_gzip_") && _system_output_gzip_ == "true" && strpos(getServer("HTTP_ACCEPT_ENCODING"), "gzip") !== false) {
-            //header to browser
-            class_response_object::getInstance()->addHeader("Content-Encoding: gzip");
-            $strContent = gzencode($strContent);
-            return $strContent;
-        }
-        else
-            return $strContent;
-    }
 
 }
 

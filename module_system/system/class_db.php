@@ -284,12 +284,6 @@ class class_db {
         //Increasing global counter
         $this->intNumber++;
 
-        if(defined("_system_use_dbcache_")) {
-            if(_system_use_dbcache_ == "false") {
-                $bitCache = false;
-            }
-        }
-
         $strQueryMd5 = null;
         if($bitCache) {
             $strQueryMd5 = md5($strQuery.implode(",", $arrParams).$intStart.$intEnd);
@@ -515,22 +509,11 @@ class class_db {
             $strFakeQuery = "SELECT ALL TABLES /// KAJONA INTERNAL QUERY";
             $strQueryMd5 = md5($strFakeQuery);
 
-            $bitCache = true;
-            if(defined("_system_use_dbcache_") && _system_use_dbcache_ == "false")
-                $bitCache = false;
-
             $arrTemp = array();
-            if($bitCache) {
-                if(isset($this->arrQueryCache[$strQueryMd5])) {
-                    //Increasing Cache counter
-                    $this->intNumberCache++;
-                    $arrTemp = $this->arrQueryCache[$strQueryMd5];
-                }
-                else {
-                    $arrTemp = $this->objDbDriver->getTables();
-                    if(_dblog_)
-                        class_logger::getInstance(class_logger::QUERIES)->addLogRow("\r\n".$strFakeQuery, class_logger::$levelInfo, true);
-                }
+            if(isset($this->arrQueryCache[$strQueryMd5])) {
+                //Increasing Cache counter
+                $this->intNumberCache++;
+                $arrTemp = $this->arrQueryCache[$strQueryMd5];
             }
             else {
                 $arrTemp = $this->objDbDriver->getTables();
@@ -538,8 +521,8 @@ class class_db {
                     class_logger::getInstance(class_logger::QUERIES)->addLogRow("\r\n".$strFakeQuery, class_logger::$levelInfo, true);
             }
 
-            if($bitCache)
-                $this->arrQueryCache[$strQueryMd5] = $arrTemp;
+
+            $this->arrQueryCache[$strQueryMd5] = $arrTemp;
 
 
             //Filtering tables not used by this project, if dbprefix was given
