@@ -100,6 +100,20 @@ class class_module_system_setting extends class_model implements interface_model
         $this->setIntModule($arrRow["system_config_module"]);
 
         $this->strOldValue = $this->strValue;
+
+        $this->specialConfigInits();
+    }
+
+    /**
+     * Internal helper to trigger special events, e.g. to change phps runtime settings based on some config vars.
+     */
+    private function specialConfigInits() {
+        if($this->strName == "_system_timezone_" && !defined("_system_timezone_")) {
+            if($this->getStrValue() != "") {
+                date_default_timezone_set($this->getStrValue());
+                define("_system_timezone_", $this->getStrValue());
+            }
+        }
     }
 
     /**
