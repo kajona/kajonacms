@@ -114,6 +114,7 @@ class class_classloader {
     }
 
     /**
+     * Scans all core directories for matching modules
      * @return void
      */
     private function scanModules() {
@@ -126,7 +127,7 @@ class class_classloader {
 
         //Module-Constants
         $arrModules = array();
-        foreach(scandir(_realpath_) as $strRootFolder) {
+        foreach($this->getCoreDirectories() as $strRootFolder) {
 
             if(uniStrpos($strRootFolder, "core") === false)
                 continue;
@@ -154,6 +155,10 @@ class class_classloader {
         $this->arrModules = $arrModules;
     }
 
+    /**
+     * Returns a list of all core directories available
+     * @return array
+     */
     public static function getCoreDirectories() {
         $arrCores = array();
         foreach(scandir(_realpath_) as $strRootFolder) {
@@ -193,26 +198,24 @@ class class_classloader {
      * @return void
      */
     private function indexAvailableCodefiles() {
-
-        $this->arrFiles = array_merge($this->arrFiles, $this->getClassesInFolder("/admin/elements/"));
-        $this->arrFiles = array_merge($this->arrFiles, $this->getClassesInFolder("/admin/formentries/"));
-        $this->arrFiles = array_merge($this->arrFiles, $this->getClassesInFolder("/admin/statsreports/"));
-        $this->arrFiles = array_merge($this->arrFiles, $this->getClassesInFolder("/admin/systemtasks/"));
-        $this->arrFiles = array_merge($this->arrFiles, $this->getClassesInFolder("/admin/widgets/"));
-        $this->arrFiles = array_merge($this->arrFiles, $this->getClassesInFolder("/admin/"));
-        $this->arrFiles = array_merge($this->arrFiles, $this->getClassesInFolder("/portal/elements/"));
-        $this->arrFiles = array_merge($this->arrFiles, $this->getClassesInFolder("/portal/templatemapper/"));
-        $this->arrFiles = array_merge($this->arrFiles, $this->getClassesInFolder("/portal/"));
-        $this->arrFiles = array_merge($this->arrFiles, $this->getClassesInFolder("/system/db/"));
-        $this->arrFiles = array_merge($this->arrFiles, $this->getClassesInFolder("/system/usersources/"));
-        $this->arrFiles = array_merge($this->arrFiles, $this->getClassesInFolder("/system/imageplugins/"));
-        $this->arrFiles = array_merge($this->arrFiles, $this->getClassesInFolder("/system/validators/"));
-        $this->arrFiles = array_merge($this->arrFiles, $this->getClassesInFolder("/system/workflows/"));
-        $this->arrFiles = array_merge($this->arrFiles, $this->getClassesInFolder("/system/messageproviders/"));
-        $this->arrFiles = array_merge($this->arrFiles, $this->getClassesInFolder("/system/scriptlets/"));
-        $this->arrFiles = array_merge($this->arrFiles, $this->getClassesInFolder("/system/"));
-        $this->arrFiles = array_merge($this->arrFiles, $this->getClassesInFolder("/installer/"));
-
+        $this->addClassFolder("/admin/elements/");
+        $this->addClassFolder("/admin/formentries/");
+        $this->addClassFolder("/admin/statsreports/");
+        $this->addClassFolder("/admin/systemtasks/");
+        $this->addClassFolder("/admin/widgets/");
+        $this->addClassFolder("/admin/");
+        $this->addClassFolder("/portal/elements/");
+        $this->addClassFolder("/portal/templatemapper/");
+        $this->addClassFolder("/portal/");
+        $this->addClassFolder("/system/db/");
+        $this->addClassFolder("/system/usersources/");
+        $this->addClassFolder("/system/imageplugins/");
+        $this->addClassFolder("/system/validators/");
+        $this->addClassFolder("/system/workflows/");
+        $this->addClassFolder("/system/messageproviders/");
+        $this->addClassFolder("/system/scriptlets/");
+        $this->addClassFolder("/system/");
+        $this->addClassFolder("/installer/");
     }
 
     /**
