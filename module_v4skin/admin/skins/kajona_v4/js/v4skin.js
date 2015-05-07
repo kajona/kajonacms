@@ -265,3 +265,75 @@ KAJONA.v4skin.initTagMenu = function() {
     });
 };
 
+KAJONA.v4skin.removeObjectListItem = function(el){
+    // remove all active tooltips
+    $(el).children().qtip("hide");
+
+    // remove element
+    $(el).parent().parent().fadeOut(400, function(){
+        $(this).remove();
+    });
+};
+
+KAJONA.v4skin.addObjectListItem = function(strSystemId, strDisplayName, strElementName){
+    var table = $('#' + strElementName);
+    var tbody = table.find('tbody');
+    if(tbody.length > 0) {
+        // check whether the item was already added
+        var found = false;
+        $('input[type="hidden"]').each(function(){
+            if($(this).val() == strSystemId) {
+                found = $(this);
+            }
+        });
+
+        if(found) {
+            found.parent().parent().effect("highlight", {}, 3000);
+            return;
+        }
+
+        var strEscapedTitle = $('<div></div>').text(strDisplayName).html();
+        var html = '';
+        html+= '<tr>';
+        html+= '    <td>' + strEscapedTitle + ' <input type="hidden" name="' + strElementName + '[]" value="' + strSystemId + '" /></td>';
+        html+= '    <td>';
+        html+= '        <a href="#" onclick="KAJONA.v4skin.removeObjectListItem(this);return false">';
+        html+= '            <span rel="tooltip" data-hasqtip="true" aria-describedby="qtip-4">';
+        html+= '                <div class="icon_delete" style="display:inline-block;width:20px;height:20px;margin-left:6px;" data-kajona-icon="icon_delete"></div>';
+        html+= '            </span>';
+        html+= '        </a>';
+        html+= '    </td>';
+        html+= '</tr>';
+
+        tbody.append(html);
+    }
+};
+
+KAJONA.v4skin.sendCheckboxTreeSelection = function(el){
+    if($('.jstree').length > 0) {
+        // the query parameter contains the name of the form element where we insert the selected elements
+        var pos = location.search.indexOf("&element_name=");
+        var elementName;
+        if(pos != -1) {
+            var endPos = location.search.indexOf("&", pos + 1);
+            if(endPos == -1) {
+                elementName = location.search.substr(pos + 14);
+            }
+            else {
+                elementName = location.search.substr(pos + 14, endPos - (pos + 14));
+            }
+        }
+
+        var arrEls = $('.jstree').jstree('get_checked');
+        for(var i = 0; i < arrEls.length; i++) {
+            var el = $(arrEls[i]);
+            var strSystemId = el.attr('id');
+            var strDisplayName = el.text().trim();
+
+            parent.KAJONA.v4skin.addObjectListItem(strSystemId, strDisplayName, elementName);
+        }
+
+        parent.$('#folderviewDialog').modal('hide');
+    }
+};
+

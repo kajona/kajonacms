@@ -798,6 +798,44 @@ have a surrounding div with class "ac_container" and a div with id "%%name%%_con
 </div>
 </input_userselector>
 
+
+<input_objectlist>
+    <div class="form-group">
+        <label for="%%name%%" class="col-sm-3 control-label">%%title%%</label>
+
+        <div class="col-sm-6 inputText">
+            <table id="%%name%%" data-name="%%name%%" class="table table-striped" style="border:1px solid #bfbfbf;">
+                <colgroup>
+                    <col width="*" />
+                    <col width="20" />
+                </colgroup>
+                <tfoot>
+                <tr>
+                    <td></td>
+                    <td>%%addLink%%</td>
+                </tr>
+                </tfoot>
+                <tbody>
+                %%table%%
+                </tbody>
+            </table>
+        </div>
+    </div>
+</input_objectlist>
+
+<input_objectlist_row>
+    <tr>
+        <td>%%displayName%% <input type="hidden" name="%%name%%[]" value="%%value%%" /></td>
+        <td>
+            <a href="#" onclick="KAJONA.v4skin.removeObjectListItem(this);return false">
+                <span rel="tooltip" data-hasqtip="true" title="%%tooltip%%" aria-describedby="qtip-4">
+                    <div class="icon_delete" style="display:inline-block;width:20px;height:20px;margin-left:6px;" data-kajona-icon="icon_delete"></div>
+                </span>
+            </a>
+        </td>
+    </tr>
+</input_objectlist_row>
+
 ---------------------------------------------------------------------------------------------------------
 -- MISC ELEMENTS ----------------------------------------------------------------------------------------
 Used to fold elements / hide/unhide elements
@@ -1542,6 +1580,47 @@ The language switch surrounds the buttons
 </tree>
 
 
+Checkbox tree which shows an structure
+<tree_checkbox>
+    <div id="%%treeId%%" class="treeDiv"></div>
+    <script type="text/javascript">
+        KAJONA.admin.loader.loadFile([
+            "/core/module_system/admin/scripts/jstree/jquery.jstree.js",
+            "/core/module_system/admin/scripts/jstree/jquery.hotkeys.js"
+        ], function() {
+
+            $('#%%treeId%%').jstree({
+                json_data: {
+                    ajax: {
+                        url: "%%loadNodeDataUrl%%",
+                        data: function (n) {
+                            return {
+                                "systemid" : n.attr ? n.attr("systemid") : '%%rootNodeSystemid%%',
+                                "rootnode" : '%%rootNodeSystemid%%'
+                            };
+                        }
+                    }
+                },
+                themes: {
+                    url: "_webpath_/core/module_system/admin/scripts/jstree/themes/default/style.css",
+                    icons: false
+                },
+                core: {
+                    //"initially_open" : [ %%treeviewExpanders%% ],
+                    html_titles: true,
+                    checked_parent_open: false
+                },
+                checkbox: {
+                    checked_parent_open: false
+                },
+                plugins: [ "themes","json_data","checkbox" ]
+            });
+
+        });
+    </script>
+</tree_checkbox>
+
+
 <treeview>
     <table width="100%" cellpadding="3">
         <tr>
@@ -1556,6 +1635,20 @@ The language switch surrounds the buttons
         </tr>
     </table>
 </treeview>
+
+
+<treeview_modal>
+    <div class="treeViewWrapper" style="height:600px;overflow:auto;">
+        %%treeContent%%
+    </div>
+    <div class="pull-right">
+        <button type="submit" class="btn btn-default savechanges " onclick="%%onClick%%">
+            <span class="btn-text">%%btnText%%</span>
+            <span class="statusicon"></span>
+        </button>
+    </div>
+</treeview_modal>
+
 
 The tag-wrapper is the section used to surround the list of tag.
 Please make sure that the containers' id is named tagsWrapper_%%targetSystemid%%,

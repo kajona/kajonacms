@@ -436,6 +436,47 @@ class class_toolkit_admin extends class_toolkit {
     }
 
     /**
+     * General form entry which displays an list of objects which can be deleted. It is possible to provide an addlink
+     * where entries can be appended to the list. To add an entry you can use the javascript function
+     * KAJONA.v4skin.addObjectListItem
+     *
+     * @param $strName
+     * @param string $strTitle
+     * @param array $arrObjects
+     * @param string $strAddLink
+     * @return string
+     * @throws class_exception
+     */
+    public function formInputObjectList($strName, $strTitle = "", array $arrObjects, $strAddLink) {
+        $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "input_objectlist");
+        $strTemplateRowID = $this->objTemplate->readTemplate("/elements.tpl", "input_objectlist_row");
+
+        $arrTemplate = array();
+        $arrTemplate["name"] = $strName;
+        $arrTemplate["title"] = $strTitle;
+        $arrTemplate["addLink"] = $strAddLink;
+
+        $strTable = '';
+        foreach($arrObjects as $objObject) {
+            /** @var $objObject class_model */
+            if($objObject instanceof interface_model && $objObject->rightView()) {
+                $arrTemplateRow = array(
+                    'name' => $strName,
+                    'displayName' => $objObject->getStrDisplayName(),
+                    'tooltip' => class_carrier::getInstance()->getObjLang()->getLang("commons_delete", "module_system"),
+                    'value' => $objObject->getSystemid(),
+                );
+
+                $strTable.= $this->objTemplate->fillTemplate($arrTemplateRow, $strTemplateRowID, true);
+            }
+        }
+
+        $arrTemplate["table"] = $strTable;
+
+        return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID, true);
+    }
+
+    /**
      * Returns a regular text-input field with a file browser button.
      * Use $strRepositoryId to set a specific filemanager repository id
      *
@@ -2065,6 +2106,22 @@ JS;
         return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
     }
 
+    /**
+     * @param $strLoadNodeDataUrl
+     * @param string $strRootNodeSystemid
+     * @param array $arrNodesToExpand
+     * @param string $strOnClick
+     * @return string
+     * @throws class_exception
+     */
+    public function getTreeModalCheckbox($strLoadNodeDataUrl, $strRootNodeSystemid = "", $arrNodesToExpand = array(), $strOnClick = "") {
+        $arrTemplate = array();
+        $arrTemplate["onClick"] = $strOnClick;
+        $arrTemplate["btnText"] = class_carrier::getInstance()->getObjLang()->getLang("commons_accept", "module_system");
+        $arrTemplate["treeContent"] = $this->getTreeCheckbox($strLoadNodeDataUrl, $strRootNodeSystemid, $arrNodesToExpand);
+        $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "treeview_modal");
+        return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
+    }
 
     /**
      * Create a tree-view UI-element.
@@ -2095,6 +2152,30 @@ JS;
                 $arrTemplate["treeviewExpanders"] .= ",";
         }
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "tree");
+        return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
+    }
+
+    /**
+     * @param string $strLoadNodeDataUrl
+     * @param string $strRootNodeSystemid
+     * @param array $arrNodesToExpand
+     * @param bool $bitOrderingEnabled
+     * @param bool $bitHierachicalSortEnabled
+     * @return string
+     * @throws class_exception
+     */
+    public function getTreeCheckbox($strLoadNodeDataUrl, $strRootNodeSystemid = "", $arrNodesToExpand = array()) {
+        $arrTemplate = array();
+        $arrTemplate["rootNodeSystemid"] = $strRootNodeSystemid;
+        $arrTemplate["loadNodeDataUrl"] = $strLoadNodeDataUrl;
+        $arrTemplate["treeId"] = generateSystemid();
+        $arrTemplate["treeviewExpanders"] = "";
+        for($intI = 0; $intI < count($arrNodesToExpand); $intI++) {
+            $arrTemplate["treeviewExpanders"] .= "\"".$arrNodesToExpand[$intI]."\"";
+            if($intI < count($arrNodesToExpand)-1)
+                $arrTemplate["treeviewExpanders"] .= ",";
+        }
+        $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "tree_checkbox");
         return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
     }
 
