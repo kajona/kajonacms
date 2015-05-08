@@ -38,6 +38,20 @@ class class_formentry_objectlist extends class_formentry_multiselect {
         return $strReturn;
     }
 
+    public function setValueToObject()
+    {
+        $objSourceObject = $this->getObjSourceObject();
+        if($objSourceObject == null)
+            return "";
+
+        $objReflection = new class_reflection($objSourceObject);
+        $strSetter = $objReflection->getSetter($this->getStrSourceProperty());
+        if($strSetter === null)
+            throw new class_exception("unable to find setter for value-property ".$this->getStrSourceProperty()."@".get_class($objSourceObject), class_exception::$level_ERROR);
+
+        return call_user_func(array($objSourceObject, $strSetter), explode(",", $this->getStrValue()));
+    }
+
     public function validateValue()
     {
         $arrIds = explode(",", $this->getStrValue());
