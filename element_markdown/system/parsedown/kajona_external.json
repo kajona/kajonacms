@@ -1,0 +1,7 @@
+{
+    "name" : "parsedown",
+    "version" : "1.5.3",
+    "source" : "http://parsedown.org/",
+    "license" : "MIT License",
+    "licenseurl" : "https://github.com/erusev/parsedown/blob/master/LICENSE.txt"
+}
