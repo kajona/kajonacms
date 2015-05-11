@@ -275,7 +275,7 @@ KAJONA.v4skin.removeObjectListItem = function(el){
     });
 };
 
-KAJONA.v4skin.addObjectListItem = function(strSystemId, strDisplayName, strElementName){
+KAJONA.v4skin.addObjectListItem = function(strSystemId, strDisplayName, strIcon, strElementName){
     var table = $('#' + strElementName);
     var tbody = table.find('tbody');
     if(tbody.length > 0) {
@@ -295,6 +295,7 @@ KAJONA.v4skin.addObjectListItem = function(strSystemId, strDisplayName, strEleme
         var strEscapedTitle = $('<div></div>').text(strDisplayName).html();
         var html = '';
         html+= '<tr>';
+        html+= '    <td><div class="' + strIcon + '" style="display:inline-block;width:20px;height:20px;"></div></td>';
         html+= '    <td>' + strEscapedTitle + ' <input type="hidden" name="' + strElementName + '[]" value="' + strSystemId + '" /></td>';
         html+= '    <td>';
         html+= '        <a href="#" onclick="KAJONA.v4skin.removeObjectListItem(this);return false">';
@@ -329,8 +330,9 @@ KAJONA.v4skin.sendCheckboxTreeSelection = function(el){
             var el = $(arrEls[i]);
             var strSystemId = el.attr('id');
             var strDisplayName = el.text().trim();
+            var strIcon = el.find('div').data('kajona-icon');
 
-            parent.KAJONA.v4skin.addObjectListItem(strSystemId, strDisplayName, elementName);
+            parent.KAJONA.v4skin.addObjectListItem(strSystemId, strDisplayName, strIcon, elementName);
         }
 
         parent.$('#folderviewDialog').modal('hide');
