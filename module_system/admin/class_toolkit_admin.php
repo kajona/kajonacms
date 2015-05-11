@@ -447,25 +447,31 @@ class class_toolkit_admin extends class_toolkit {
      * @return string
      * @throws class_exception
      */
-    public function formInputObjectList($strName, $strTitle = "", array $arrObjects, $strAddLink) {
+    public function formInputObjectList($strName, $strTitle = "", array $arrObjects, $strAddLink, $bitReadOnly = false) {
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "input_objectlist");
         $strTemplateRowID = $this->objTemplate->readTemplate("/elements.tpl", "input_objectlist_row");
 
         $arrTemplate = array();
         $arrTemplate["name"] = $strName;
         $arrTemplate["title"] = $strTitle;
-        $arrTemplate["addLink"] = $strAddLink;
+        $arrTemplate["addLink"] = $bitReadOnly ? "" : $strAddLink;
 
         $strTable = '';
         foreach($arrObjects as $objObject) {
             /** @var $objObject class_model */
             if($objObject instanceof interface_model && $objObject->rightView()) {
+                $strRemoveLink = "";
+                if(!$bitReadOnly) {
+                    $strDelete = class_carrier::getInstance()->getObjLang()->getLang("commons_delete", "module_system");
+                    $strRemoveLink = class_link::getLinkAdminDialog(null, "", "", $strDelete, $strDelete, "", $strDelete, true, false, "KAJONA.v4skin.removeObjectListItem(this);return false;");
+                }
+
                 $arrTemplateRow = array(
                     'name' => $strName,
                     'displayName' => $objObject->getStrDisplayName(),
                     'icon' => $objObject->getStrIcon(),
-                    'tooltip' => class_carrier::getInstance()->getObjLang()->getLang("commons_delete", "module_system"),
                     'value' => $objObject->getSystemid(),
+                    'removeLink' => $strRemoveLink,
                 );
 
                 $strTable.= $this->objTemplate->fillTemplate($arrTemplateRow, $strTemplateRowID, true);

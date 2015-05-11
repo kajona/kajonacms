@@ -829,13 +829,7 @@ have a surrounding div with class "ac_container" and a div with id "%%name%%_con
     <tr>
         <td><div class="%%icon%%" data-kajona-icon="%%icon%%" style="display:inline-block;width:20px;height:20px;"></div></td>
         <td>%%displayName%% <input type="hidden" name="%%name%%[]" value="%%value%%" /></td>
-        <td>
-            <a href="#" onclick="KAJONA.v4skin.removeObjectListItem(this);return false">
-                <span rel="tooltip" data-hasqtip="true" title="%%tooltip%%" aria-describedby="qtip-4">
-                    <div class="icon_delete" style="display:inline-block;width:20px;height:20px;margin-left:6px;" data-kajona-icon="icon_delete"></div>
-                </span>
-            </a>
-        </td>
+        <td>%%removeLink%%</td>
     </tr>
 </input_objectlist_row>
 
