@@ -463,6 +463,7 @@ class class_toolkit_admin extends class_toolkit {
                 $arrTemplateRow = array(
                     'name' => $strName,
                     'displayName' => $objObject->getStrDisplayName(),
+                    'icon' => $objObject->getStrIcon(),
                     'tooltip' => class_carrier::getInstance()->getObjLang()->getLang("commons_delete", "module_system"),
                     'value' => $objObject->getSystemid(),
                 );
