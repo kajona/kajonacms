@@ -189,6 +189,17 @@ class class_config {
     }
 
     /**
+     * Sets a value to the debug-array
+     *
+     * @param string $strName
+     * @param string $strValue
+     * @return void
+     */
+    public function setDebug($strName, $strValue) {
+        $this->arrDebug[$strName] = $strValue;
+    }
+
+    /**
      * Returns a php.ini value
      *
      * @param string $strKey

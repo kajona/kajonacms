@@ -39,6 +39,9 @@ class class_test_functions extends class_testbase  {
     public function testDateToString() {
 
         class_carrier::getInstance()->getObjLang()->setStrTextLanguage("de");
+        if(class_carrier::getInstance()->getObjLang()->getLang("dateStyleShort", "system") != "d.m.Y") {
+            return;
+        }
 
         $this->assertEquals("15.05.2013", dateToString(new class_date(20130515122324), false));
         $this->assertEquals("15.05.2013 12:23:24", dateToString(new class_date(20130515122324), true));
@@ -60,6 +63,9 @@ class class_test_functions extends class_testbase  {
 
 
         class_carrier::getInstance()->getObjLang()->setStrTextLanguage("en");
+        if(class_carrier::getInstance()->getObjLang()->getLang("dateStyleShort", "system") != "m/d/Y") {
+            return;
+        }
 
         $this->assertEquals("05/15/2013", dateToString(new class_date(20130515122324), false));
         $this->assertEquals("05/15/2013 12:23:24", dateToString(new class_date(20130515122324), true));

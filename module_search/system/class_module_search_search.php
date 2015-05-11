@@ -47,7 +47,7 @@ class class_module_search_search extends class_model implements interface_model,
      * For form-generation only
      *
      * @var array
-     * @fieldType multiselect
+     * @fieldType toggle_buttonbar
      * @fieldLabel search_modules
      */
     private $arrFormFilterModules = array();

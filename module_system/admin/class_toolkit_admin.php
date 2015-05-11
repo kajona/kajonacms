@@ -725,6 +725,40 @@ class class_toolkit_admin extends class_toolkit {
         return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID, true);
     }
 
+    /**
+     * Returns a toggle button bar which can be used in the same way as an multiselect
+     *
+     * @param string $strName
+     * @param mixed $arrKeyValues
+     * @param string $strTitle
+     * @param array $arrKeysSelected
+     * @param bool $bitEnabled
+     * @return string
+     */
+    public function formToggleButtonBar($strName, array $arrKeyValues, $strTitle = "", $arrKeysSelected = array(), $bitEnabled = true) {
+        $strOptions = "";
+        $strTemplateOptionID = $this->objTemplate->readTemplate("/elements.tpl", "input_toggle_buttonbar_button");
+        $strTemplateOptionSelectedID = $this->objTemplate->readTemplate("/elements.tpl", "input_toggle_buttonbar_button_selected");
+        //Iterating over the array to create the options
+        foreach ($arrKeyValues as $strKey => $strValue) {
+            $arrTemplate = array();
+            $arrTemplate["name"] = $strName;
+            $arrTemplate["key"] = $strKey;
+            $arrTemplate["value"] = $strValue;
+            $arrTemplate["disabled"] = ($bitEnabled ? "" : "disabled=\"disabled\"");
+            $arrTemplate["btnclass"] = ($bitEnabled ? "" : "disabled");
+            if(in_array($strKey, $arrKeysSelected))
+                $strOptions .= $this->objTemplate->fillTemplate($arrTemplate, $strTemplateOptionSelectedID);
+            else
+                $strOptions .= $this->objTemplate->fillTemplate($arrTemplate, $strTemplateOptionID);
+        }
+
+        $arrTemplate = array();
+        $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "input_toggle_buttonbar");
+        $arrTemplate["title"] = $strTitle;
+        $arrTemplate["options"] = $strOptions;
+        return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID, true);
+    }
 
     /**
      * Creates a list of radio-buttons.
@@ -1257,6 +1291,21 @@ class class_toolkit_admin extends class_toolkit {
         $arrTemplate = array();
         $arrTemplate["content"] = $strContent;
         $arrTemplate["class"] = $strClass;
+        return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
+    }
+
+    /**
+     * Returns the javascript code which renders a table of contents sub navigation under the main navigation. The
+     * navigation contains all points which match the given selector
+     *
+     * @param string $strSelector
+     * @return string
+     */
+    public function getTableOfContents($strSelector)
+    {
+        $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "toc_navigation");
+        $arrTemplate = array();
+        $arrTemplate["selector"] = $strSelector;
         return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
     }
 

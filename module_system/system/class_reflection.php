@@ -395,9 +395,9 @@ class class_reflection {
             "setInt".$strPropertyName,
             "setFloat".$strPropertyName,
             "setBit".$strPropertyName,
-            "setLong".$strPropertyName,
-            "setArr".$strPropertyName,
             "setObj".$strPropertyName,
+            "setArr".$strPropertyName,
+            "setLong".$strPropertyName,
             "set".$strPropertyName
         );
 
@@ -430,9 +430,9 @@ class class_reflection {
             "getInt".$strPropertyName,
             "getFloat".$strPropertyName,
             "getBit".$strPropertyName,
-            "getLong".$strPropertyName,
-            "getArr".$strPropertyName,
             "getObj".$strPropertyName,
+            "getArr".$strPropertyName,
+            "getLong".$strPropertyName,
             "get".$strPropertyName
         );
 

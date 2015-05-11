@@ -1889,6 +1889,11 @@ abstract class class_root {
      * @return void
      */
     public function setObjEndDate($objEndDate = null) {
+
+        if($objEndDate === 0)
+            $objEndDate = null;
+
+
         if(!$objEndDate instanceof class_date && $objEndDate != "" && $objEndDate != null)
             $objEndDate = new class_date($objEndDate);
 
@@ -1908,6 +1913,10 @@ abstract class class_root {
      * @return void
      */
     public function setObjSpecialDate($objSpecialDate = null) {
+
+        if($objSpecialDate === 0)
+            $objSpecialDate = null;
+
         if(!$objSpecialDate instanceof class_date && $objSpecialDate != "" && $objSpecialDate != null)
             $objSpecialDate = new class_date($objSpecialDate);
 
@@ -1927,6 +1936,10 @@ abstract class class_root {
      * @return void
      */
     public function setObjStartDate($objStartDate = null) {
+
+        if($objStartDate === 0)
+            $objStartDate = null;
+
         if(!$objStartDate instanceof class_date && $objStartDate != "" && $objStartDate != null)
             $objStartDate = new class_date($objStartDate);
 
