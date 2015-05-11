@@ -1607,10 +1607,10 @@ Checkbox tree which shows an structure
                 },
                 core: {
                     //"initially_open" : [ %%treeviewExpanders%% ],
-                    html_titles: true,
-                    checked_parent_open: false
+                    html_titles: true
                 },
                 checkbox: {
+                    two_state: true,
                     checked_parent_open: false
                 },
                 plugins: [ "themes","json_data","checkbox" ]
