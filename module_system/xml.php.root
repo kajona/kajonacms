@@ -9,5 +9,5 @@
 
 define("_xmlLoader_", true);
 
-require_once './core/bootstrap.php';
+require_once './core/module_system/bootstrap.php';
 require_once './core/module_system/xml.php';
