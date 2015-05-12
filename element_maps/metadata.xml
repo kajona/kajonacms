@@ -5,11 +5,11 @@
         >
     <title>maps</title>
     <description>Displays a map, provides a simple api to to geo-lookups (Yahoo, Google).</description>
-    <version>4.6</version>
+    <version>4.7</version>
     <author>Kajona Team</author>
     <type>ELEMENT</type>
     <providesInstaller>TRUE</providesInstaller>
     <requiredModules>
-        <module name="pages" version="4.6" />
+        <module name="pages" version="4.7" />
     </requiredModules>
 </package>

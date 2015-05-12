@@ -228,6 +228,13 @@ class class_installer_news extends class_installer_base implements interface_ins
             $this->updateElementVersion("news", "4.6");
         }
 
+        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "4.6") {
+            $strReturn .= "Updating to 4.7...\n";
+            $this->updateModuleVersion("news", "4.7");
+            $this->updateElementVersion("news", "4.7");
+        }
+
         return $strReturn."\n\n";
 	}
 

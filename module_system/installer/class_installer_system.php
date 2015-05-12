@@ -663,6 +663,13 @@ class class_installer_system extends class_installer_base implements interface_i
             $strReturn .= $this->update_464_465();
         }
 
+        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "4.6.5") {
+            $strReturn .= "Updating to 4.7...\n";
+            $this->updateModuleVersion("", "4.7");
+            $this->objDB->flushQueryCache();
+        }
+
         return $strReturn."\n\n";
     }
 

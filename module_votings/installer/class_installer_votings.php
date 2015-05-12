@@ -130,23 +130,23 @@ class class_installer_votings extends class_installer_base implements interface_
     public function update() {
 	    $strReturn = "";
         //check installed version and to which version we can update
-        $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        $strReturn .= "Version found:\n\t Module: ".$arrModul["module_name"].", Version: ".$arrModul["module_version"]."\n\n";
+        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        $strReturn .= "Version found:\n\t Module: ".$arrModule["module_name"].", Version: ".$arrModule["module_version"]."\n\n";
 
-        $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModul["module_version"] == "1.0") {
+        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "1.0") {
             $strReturn .= $this->update_10_11();
             $this->objDB->flushQueryCache();
         }
 
-        $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModul["module_version"] == "1.1") {
+        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "1.1") {
             $strReturn .= $this->update_11_12();
             $this->objDB->flushQueryCache();
         }
 
-        $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModul["module_version"] == "1.2") {
+        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "1.2") {
             $strReturn .= "Updating 1.2 to 1.3...\n";
             $strReturn .= "Updating module-versions...\n";
             $this->updateModuleVersion("votings", "1.3");
@@ -155,8 +155,8 @@ class class_installer_votings extends class_installer_base implements interface_
             $this->objDB->flushQueryCache();
         }
 
-        $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModul["module_version"] == "1.3") {
+        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "1.3") {
             $strReturn .= "Updating 1.3 to 1.4...\n";
             $strReturn .= "Updating module-versions...\n";
             $this->updateModuleVersion("votings", "1.4");
@@ -166,8 +166,8 @@ class class_installer_votings extends class_installer_base implements interface_
         }
 
 
-        $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModul["module_version"] == "1.4") {
+        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "1.4") {
             $strReturn .= "Updating 1.4 to 1.5...\n";
             $strReturn .= "Updating module-versions...\n";
             $this->updateModuleVersion("votings", "1.5");
@@ -176,13 +176,23 @@ class class_installer_votings extends class_installer_base implements interface_
             $this->objDB->flushQueryCache();
         }
 
-        $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModul["module_version"] == "1.5") {
+        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "1.5") {
             $strReturn .= "Updating 1.5 to 1.6...\n";
             $strReturn .= "Updating module-versions...\n";
             $this->updateModuleVersion("votings", "1.6");
             $strReturn .= "Updating element-versions...\n";
             $this->updateElementVersion("votings", "1.6");
+            $this->objDB->flushQueryCache();
+        }
+
+        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "1.6") {
+            $strReturn .= "Updating to 1.7...\n";
+            $strReturn .= "Updating module-versions...\n";
+            $this->updateModuleVersion("votings", "1.7");
+            $strReturn .= "Updating element-versions...\n";
+            $this->updateElementVersion("votings", "1.7");
             $this->objDB->flushQueryCache();
         }
 
