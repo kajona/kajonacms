@@ -2,8 +2,6 @@
 /*"******************************************************************************************************
 *   (c) 2007-2015 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
-*-------------------------------------------------------------------------------------------------------*
-*	$Id$                           *
 ********************************************************************************************************/
 
 
@@ -38,9 +36,9 @@ class class_qrcode {
             return _images_cachepath_."/".$strFilename;
 
 
-        require_once __DIR__."/phpqrcode/phpqrcode.php";
+        require_once __DIR__."/phpqrcode/vendor/autoload.php";
 
-        QRcode::png($strContent, _realpath_._images_cachepath_."/".$strFilename, $this->strCorrectionLevel, $this->intSize, $this->intPadding);
+        \PHPQRCode\QRcode::png($strContent, _realpath_._images_cachepath_."/".$strFilename, $this->strCorrectionLevel, $this->intSize, $this->intPadding);
 
         return _images_cachepath_."/".$strFilename;
     }
