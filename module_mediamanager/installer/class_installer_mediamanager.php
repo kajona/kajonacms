@@ -143,6 +143,13 @@ class class_installer_mediamanager extends class_installer_base implements inter
             $this->updateModuleVersion("folderview", "4.6");
         }
 
+        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "4.6") {
+            $strReturn = "Updating to 4.7...\n";
+            $this->updateModuleVersion($this->objMetadata->getStrTitle(), "4.7");
+            $this->updateModuleVersion("folderview", "4.7");
+        }
+
         return $strReturn."\n\n";
 	}
 

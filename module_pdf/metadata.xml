@@ -5,11 +5,11 @@
     >
     <title>pdf</title>
     <description>A wrapper to tcpdf, providing a common way to generate pdfs.</description>
-    <version>4.6</version>
+    <version>4.7</version>
     <author>Kajona Team</author>
     <type>MODULE</type>
     <providesInstaller>FALSE</providesInstaller>
     <requiredModules>
-        <module name="system" version="4.6" />
+        <module name="system" version="4.7" />
     </requiredModules>
 </package>

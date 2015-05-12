@@ -60,6 +60,12 @@ class class_installer_element_directorybrowser extends class_elementinstaller_ba
             $this->objDB->flushQueryCache();
         }
 
+        if(class_module_pages_element::getElement($this->objMetadata->getStrTitle())->getStrVersion() == "1.3") {
+            $strReturn = "Updating 1.3 to 1.4...\n";
+            $this->updateElementVersion($this->objMetadata->getStrTitle(), "1.4");
+            $this->objDB->flushQueryCache();
+        }
+
         return $strReturn."\n\n";
 	}
 

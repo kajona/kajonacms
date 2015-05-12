@@ -198,6 +198,13 @@ class class_installer_navigation extends class_installer_base implements interfa
             $this->updateElementVersion("navigation", "4.6");
         }
 
+        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "4.6") {
+            $strReturn = "Updating to 4.7...\n";
+            $this->updateModuleVersion("navigation", "4.7");
+            $this->updateElementVersion("navigation", "4.7");
+        }
+
         return $strReturn."\n\n";
 	}
 

@@ -5,12 +5,12 @@
         >
     <title>postacomment</title>
     <description>Postacomment provides users the possibility to add comments to contents.</description>
-    <version>4.6</version>
+    <version>4.7</version>
     <author>Kajona Team</author>
     <type>MODULE</type>
     <providesInstaller>TRUE</providesInstaller>
     <requiredModules>
-        <module name="system" version="4.6" />
-        <module name="pages" version="4.6" />
+        <module name="system" version="4.7" />
+        <module name="pages" version="4.7" />
     </requiredModules>
 </package>
