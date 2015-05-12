@@ -63,4 +63,32 @@ class class_formentry_objectlist extends class_formentry_multiselect {
 
         return true;
     }
+
+    public function getValueAsText()
+    {
+        $objSourceObject = $this->getObjSourceObject();
+        if($objSourceObject == null)
+            return "-";
+
+        $strMethodName = "getAssigned" . ucfirst($this->getStrSourceProperty());
+        $arrObjects = array();
+        if(method_exists($objSourceObject, $strMethodName)) {
+            $arrObjects = $objSourceObject->$strMethodName();
+        }
+
+        if(!empty($arrObjects) && is_array($arrObjects)) {
+            $strHtml = "<ul>";
+            foreach($arrObjects as $objObject) {
+                if($objObject instanceof interface_model) {
+                    $strHtml.= "<li>" . htmlspecialchars($objObject->getStrDisplayName()) . "</li>";
+                }
+            }
+            $strHtml.= "</ul>";
+
+            return $strHtml;
+        }
+        else {
+            return "-";
+        }
+    }
 }
