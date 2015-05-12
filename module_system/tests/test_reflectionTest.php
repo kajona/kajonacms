@@ -306,6 +306,54 @@ class class_test_reflection extends class_testbase  {
 
         $this->assertTrue(!$objAnnotations->getMethodAnnotationValue("testMethod", "@method2Test", class_reflection_enum::PARAMS()));
     }
+
+    /**
+     * @dataProvider additionProvider
+     */
+    public function testGetAnnotationValueForProperty($a) {
+        $objAnnotations = new class_reflection(new C());
+
+        $strValues = $objAnnotations->getAnnotationValueForProperty("propertyB1", "@propertyTest");
+        $this->assertEquals("valB1", $strValues);
+
+        $strValues = $objAnnotations->getAnnotationValueForProperty("propertyB1", "@propertyParamTest1");
+        $this->assertEquals("valB1", $strValues);
+
+        $strValues = $objAnnotations->getAnnotationValueForProperty("propertyB1", "@propertyParamTest2");
+        $this->assertEquals("valB1", $strValues);
+
+        $strValues = $objAnnotations->getAnnotationValueForProperty("propertyB1", "@propertyParamTest3");
+        $this->assertEquals("", $strValues);
+
+        $strValues = $objAnnotations->getAnnotationValueForProperty("propertyB1", "@propertyParamTest4");
+        $this->assertEquals("", $strValues);
+    }
+
+    /**
+     * @dataProvider additionProvider
+     */
+    public function testGetAnnotationValueForPropertyParameter($a) {
+        $objAnnotations = new class_reflection(new C());
+
+        $arrParams = $objAnnotations->getAnnotationValueForProperty("propertyB1", "@propertyTest", class_reflection_enum::PARAMS());
+        $this->assertCount(0, $arrParams);
+
+
+        $arrParams = $objAnnotations->getAnnotationValueForProperty("propertyB1", "@propertyParamTest1", class_reflection_enum::PARAMS());
+        $this->assertCount(1, $arrParams);
+        $this->assertArrayHasKey("param1", $arrParams);
+
+        $arrParams = $objAnnotations->getAnnotationValueForProperty("propertyB1", "@propertyParamTest2", class_reflection_enum::PARAMS());
+        $this->assertCount(0, $arrParams);
+
+
+        $arrParams = $objAnnotations->getAnnotationValueForProperty("propertyB1", "@propertyParamTest3", class_reflection_enum::PARAMS());
+        $this->assertCount(1, $arrParams);
+        $this->assertArrayHasKey("param1", $arrParams);
+
+        $arrParams = $objAnnotations->getAnnotationValueForProperty("propertyB1", "@propertyParamTest4", class_reflection_enum::PARAMS());
+        $this->assertCount(0, $arrParams);
+    }
 }
 
 //set up test-structures
@@ -403,7 +451,7 @@ class C extends B {
 
     /**
      * @propertyTest valB1
-     * @propertyParamTest1 valB1(param1=0)
+     * @propertyParamTest1 valB1 (param1=0)
      * @propertyParamTest2 valB1
      * @propertyParamTest3 (param1=0)
      * @propertyParamTest4
