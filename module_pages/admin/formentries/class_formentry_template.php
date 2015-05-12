@@ -42,6 +42,12 @@ class class_formentry_template extends class_formentry_base implements interface
         if($this->getStrHint() != null)
             $strReturn .= $objToolkit->formTextRow($this->getStrHint());
 
+        if(count($this->arrKeyValues) == 1 && $this->getStrValue() == "") {
+            $arrKeys = array_keys($this->arrKeyValues);
+            $this->setStrValue($arrKeys[0]);
+        }
+
+
         $strReturn .=  $objToolkit->formInputDropdown($this->getStrEntryName(), $this->arrKeyValues, $this->getStrLabel(), $this->getStrValue(), "", !$this->getBitReadonly(), $this->getStrAddons());
         return $strReturn;
     }
