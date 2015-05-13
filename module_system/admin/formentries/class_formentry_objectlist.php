@@ -15,8 +15,7 @@ class class_formentry_objectlist extends class_formentry_multiselect {
 
     protected $strAddLink;
 
-    public function setStrAddLink($strAddLink)
-    {
+    public function setStrAddLink($strAddLink) {
         $this->strAddLink = $strAddLink;
     }
 
@@ -26,8 +25,7 @@ class class_formentry_objectlist extends class_formentry_multiselect {
      *
      * @return string
      */
-    public function renderField()
-    {
+    public function renderField() {
         $objToolkit = class_carrier::getInstance()->getObjToolkit("admin");
         $strReturn = "";
         if($this->getStrHint() != null) {
@@ -38,8 +36,27 @@ class class_formentry_objectlist extends class_formentry_multiselect {
         return $strReturn;
     }
 
-    public function setValueToObject()
-    {
+    public function setStrValue($strValue) {
+        $arrValuesIds = array();
+        if(is_array($strValue)) {
+            foreach($strValue as $objValue) {
+                if($objValue instanceof class_model) {
+                    $arrValuesIds[] = $objValue->getStrSystemid();
+                }
+                else {
+                    $arrValuesIds[] = $objValue;
+                }
+            }
+        }
+        $strValue = implode(",", $arrValuesIds);
+
+        $objReturn = parent::setStrValue($strValue);
+        $this->setArrKeyValues($this->toObjectArray());
+
+        return $objReturn;
+    }
+
+    public function setValueToObject() {
         $objSourceObject = $this->getObjSourceObject();
         if($objSourceObject == null)
             return "";
@@ -49,11 +66,10 @@ class class_formentry_objectlist extends class_formentry_multiselect {
         if($strSetter === null)
             throw new class_exception("unable to find setter for value-property ".$this->getStrSourceProperty()."@".get_class($objSourceObject), class_exception::$level_ERROR);
 
-        return call_user_func(array($objSourceObject, $strSetter), explode(",", $this->getStrValue()));
+        return call_user_func(array($objSourceObject, $strSetter), $this->toObjectArray());
     }
 
-    public function validateValue()
-    {
+    public function validateValue() {
         $arrIds = explode(",", $this->getStrValue());
         foreach($arrIds as $strId) {
             if(!validateSystemid($strId)) {
@@ -70,25 +86,28 @@ class class_formentry_objectlist extends class_formentry_multiselect {
         if($objSourceObject == null)
             return "-";
 
-        $strMethodName = "getAssigned" . ucfirst($this->getStrSourceProperty());
-        $arrObjects = array();
-        if(method_exists($objSourceObject, $strMethodName)) {
-            $arrObjects = $objSourceObject->$strMethodName();
-        }
-
-        if(!empty($arrObjects) && is_array($arrObjects)) {
+        if(!empty($this->arrKeyValues)) {
             $strHtml = "<ul>";
-            foreach($arrObjects as $objObject) {
+            foreach($this->arrKeyValues as $strKey => $objObject) {
                 if($objObject instanceof interface_model) {
                     $strHtml.= "<li>" . htmlspecialchars($objObject->getStrDisplayName()) . "</li>";
+                }
+                else if(is_string($objObject)) {
+                    $strHtml.= "<li>" . $objObject . "</li>";
                 }
             }
             $strHtml.= "</ul>";
 
             return $strHtml;
         }
-        else {
-            return "-";
-        }
+
+        return "-";
     }
+
+    private function toObjectArray() {
+        $arrIds = explode(",", $this->getStrValue());
+        $arrObjects = array_map(function($strId){return class_objectfactory::getInstance()->getObject($strId);}, $arrIds);
+        return $arrObjects;
+    }
+
 }
