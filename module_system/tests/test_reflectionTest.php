@@ -4,7 +4,11 @@ require_once (__DIR__."/../../module_system/system/class_testbase.php");
 
 class class_test_reflection extends class_testbase  {
 
-
+    /**
+     * Dummy dataprovider which is being used to call each test case twice.
+     *
+     * @return array
+     */
     public function additionProvider()
     {
         return array(
