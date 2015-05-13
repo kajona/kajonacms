@@ -1,0 +1,4 @@
+Module Rights
+
+V4.7 ----------------------------------------------------------------------------------------------------
+UPDATE: module_rights | right-matrix -> refactored the code to generate the permission matrix, changed the markup to include table-row-hovering and mouseover-info for checkboxes
