@@ -36,6 +36,7 @@ BUG: module_system | class_session -> the userfirstlogin event is triggered afte
 BUG: module_system | class_admin_simple -> if the target view should be opened in an overlay, a param folderview=1 is added automatically to render the targer view with a minified template
 BUG: module_system | date_formentry -> a long-based timestamp is converted into a date object if the properties' setter is prefixed with "setobj"
 BUG: module_system | class_formentry_multiselect > return empty string when strValue is empty because otherwise we get an array with one empty element which in the end produces an notice if the key is not available in arrKeyValues
+BUG: module_system | class_classloader -> the classloader indexed files even if there's a suffix to .php (e.g. class_module_faqs_portal.php_OLD).
 
 V4.6.3 --------------------------------------------------------------------------------------------------
 BUG: / SECURITY: module_system | admin_controller -> Fixed a possible xss injection when handling non-existent action-names. fixes SROEADV-2015-01.
