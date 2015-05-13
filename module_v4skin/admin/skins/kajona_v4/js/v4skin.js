@@ -297,10 +297,10 @@ KAJONA.v4skin.addObjectListItem = function(strSystemId, strDisplayName, strIcon,
         html+= '<tr>';
         html+= '    <td><div class="' + strIcon + '" style="display:inline-block;width:20px;height:20px;"></div></td>';
         html+= '    <td>' + strEscapedTitle + ' <input type="hidden" name="' + strElementName + '[]" value="' + strSystemId + '" /></td>';
-        html+= '    <td>';
+        html+= '    <td class="icon-cell">';
         html+= '        <a href="#" onclick="KAJONA.v4skin.removeObjectListItem(this);return false">';
-        html+= '            <span rel="tooltip" data-hasqtip="true" aria-describedby="qtip-4">';
-        html+= '                <div class="icon_delete" style="display:inline-block;width:20px;height:20px;margin-left:6px;" data-kajona-icon="icon_delete"></div>';
+        html+= '            <span>';
+        html+= '                <div class="icon_delete" style="display:inline-block;width:20px;height:20px;" data-kajona-icon="icon_delete"></div>';
         html+= '            </span>';
         html+= '        </a>';
         html+= '    </td>';
