@@ -126,6 +126,28 @@ class class_test_reflection extends class_testbase  {
     /**
      * @dataProvider additionProvider
      */
+    public function testGetAnnotationValueForProperty($a) {
+        $objAnnotations = new class_reflection(new C());
+
+        $strValues = $objAnnotations->getAnnotationValueForProperty("propertyB1", "@propertyTest");
+        $this->assertEquals("valB1", $strValues);
+
+        $strValues = $objAnnotations->getAnnotationValueForProperty("propertyB1", "@propertyParamTest1");
+        $this->assertEquals("valB1", $strValues);
+
+        $strValues = $objAnnotations->getAnnotationValueForProperty("propertyB1", "@propertyParamTest2");
+        $this->assertEquals("valB1", $strValues);
+
+        $strValues = $objAnnotations->getAnnotationValueForProperty("propertyB1", "@propertyParamTest3");
+        $this->assertEquals("", $strValues);
+
+        $strValues = $objAnnotations->getAnnotationValueForProperty("propertyB1", "@propertyParamTest4");
+        $this->assertEquals("", $strValues);
+    }
+
+    /**
+     * @dataProvider additionProvider
+     */
     public function testGetGetters($a) {
         $objReflection = new class_reflection(new A());
         $this->assertEquals(strtolower("getLongPropertyA1"), strtolower($objReflection->getGetter("propertyA1")));
@@ -263,11 +285,6 @@ class class_test_reflection extends class_testbase  {
     public function testGetAnnotationsWithValueFromClassParameter($a) {
         $objAnnotations = new class_reflection(new C());
 
-        $arrClassAnnotations = $objAnnotations->getAnnotationsWithValueFromClass("val2");
-        $this->assertEquals(2, count($arrClassAnnotations));
-        $this->assertTrue(in_array("@classTest", $arrClassAnnotations));
-        $this->assertTrue(in_array("@classTest2", $arrClassAnnotations));
-
         $arrClassAnnotations = $objAnnotations->getAnnotationsWithValueFromClass(54, class_reflection_enum::PARAMS());
         $this->assertEquals(1, count($arrClassAnnotations));
 
@@ -307,27 +324,7 @@ class class_test_reflection extends class_testbase  {
         $this->assertTrue(!$objAnnotations->getMethodAnnotationValue("testMethod", "@method2Test", class_reflection_enum::PARAMS()));
     }
 
-    /**
-     * @dataProvider additionProvider
-     */
-    public function testGetAnnotationValueForProperty($a) {
-        $objAnnotations = new class_reflection(new C());
 
-        $strValues = $objAnnotations->getAnnotationValueForProperty("propertyB1", "@propertyTest");
-        $this->assertEquals("valB1", $strValues);
-
-        $strValues = $objAnnotations->getAnnotationValueForProperty("propertyB1", "@propertyParamTest1");
-        $this->assertEquals("valB1", $strValues);
-
-        $strValues = $objAnnotations->getAnnotationValueForProperty("propertyB1", "@propertyParamTest2");
-        $this->assertEquals("valB1", $strValues);
-
-        $strValues = $objAnnotations->getAnnotationValueForProperty("propertyB1", "@propertyParamTest3");
-        $this->assertEquals("", $strValues);
-
-        $strValues = $objAnnotations->getAnnotationValueForProperty("propertyB1", "@propertyParamTest4");
-        $this->assertEquals("", $strValues);
-    }
 
     /**
      * @dataProvider additionProvider

@@ -304,6 +304,7 @@ class class_reflection {
      * @param string $strMethodName
      * @param string $strAnnotation
      * @param class_reflection_enum $objEnum - whether to return annotation values or parameters, default is values
+     *
      * @return string|bool
      */
     public function getMethodAnnotationValue($strMethodName, $strAnnotation, class_reflection_enum $objEnum = null) {
@@ -361,7 +362,7 @@ class class_reflection {
         $objBaseClass = $this->objReflectionClass->getParentClass();
         if($objBaseClass !== false) {
             $objBaseAnnotations = new class_reflection($objBaseClass->getName());
-            $arrReturn = array_merge($arrReturn, $objBaseAnnotations->getPropertiesWithAnnotation($strAnnotation));
+            $arrReturn = array_merge($arrReturn, $objBaseAnnotations->getPropertiesWithAnnotation($strAnnotation, $objEnum));
         }
 
 
@@ -553,7 +554,7 @@ class class_reflection {
             return $this->arrCurrentCache[self::$STR_DOC_COMMENT_PROPERTIES_CACHE][$strCacheKey];
 
         $arrMatches = array();
-        if (preg_match_all("/(@\w+)(\s+.*)?(\s+\(.*\))?$/Um", $strDoc, $arrMatches, PREG_SET_ORDER) !== false) {
+        if (preg_match_all("/(@[a-zA-Z0-9]+)(\s+.*)?(\s+\(.*\))?$/Um", $strDoc, $arrMatches, PREG_SET_ORDER) !== false) {
             foreach ($arrMatches as $arrOneMatch) {
                 $strName = $arrOneMatch[1];
                 $strValue = isset($arrOneMatch[2]) ? $arrOneMatch[2] : "";
@@ -573,13 +574,28 @@ class class_reflection {
     }
 
     /**
+     * Converts the string of params into an associative array e.g.
+     * the string (param1=0, param2="abc", param3={"0", 123, 456}, param4=999, param5="hans im glück") is converted into an array of
+     *
+     * array(
+     *   "param1" => "0",
+     *   "param2" => "abc",
+     *   "param3" => array("0", "123", "456"),
+     *   "param4" => "999",
+     *   "param5" => "hans im glück",
+     * )
+     *
+     *
      * @param $strParams
      *
-     * @return array
+     * @return array ["paramname" => "value"]
      */
     private function params2Array($strParams) {
-        //todo if empty return array
         $arrParams = array();
+
+        if($strParams == "") {
+            return $arrParams;
+        }
 
         $strPatternParams = "/(\w+)=(\d+?)|(\w+)=\"(.*)\"|(\w+)=(\{.*\})/U";
         if (preg_match_all($strPatternParams, $strParams, $arrMatches, PREG_SET_ORDER) !== false) {
