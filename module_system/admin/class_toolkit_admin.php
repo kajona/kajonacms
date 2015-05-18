@@ -726,6 +726,27 @@ class class_toolkit_admin extends class_toolkit {
     }
 
     /**
+     * Form entry which displays an input text field where you can add or remove tags
+     *
+     * @param $strName
+     * @param string $strTitle
+     * @param array $arrObjects
+     * @return string
+     * @throws class_exception
+     */
+    public function formInputTagEditor($strName, $strTitle = "", array $arrValues = array(), $strOnChange = null) {
+        $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "input_tageditor");
+
+        $arrTemplate = array();
+        $arrTemplate["name"] = $strName;
+        $arrTemplate["title"] = $strTitle;
+        $arrTemplate["values"] = json_encode(array_values($arrValues));
+        $arrTemplate["onChange"] = empty($strOnChange) ? "function(){}" : (string) $strOnChange;
+
+        return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID, true);
+    }
+
+    /**
      * Returns a toggle button bar which can be used in the same way as an multiselect
      *
      * @param string $strName
