@@ -1,8 +1,10 @@
 Module Samplecontent
 
+V4.7 ----------------------------------------------------------------------------------------------------
+BUG: module_samplecontent | default template -> fixed the rating icons to hide a-link contents on right-aligned rating bars (e.g. votings)
+
 V4.4 ----------------------------------------------------------------------------------------------------
 NEW: sample content uses 2 different templates for 'home' and all other sites
-
 
 V4.3 ----------------------------------------------------------------------------------------------------
 NEW: cleaned up placeholders in default template; adjusted sample content installer

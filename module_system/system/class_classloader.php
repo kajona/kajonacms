@@ -229,7 +229,7 @@ class class_classloader {
             if(is_dir(_realpath_."/".$strPath.$strFolder)) {
                 $arrTempFiles = scandir(_realpath_."/".$strPath.$strFolder);
                 foreach($arrTempFiles as $strSingleFile) {
-                    if(preg_match("/(class|interface)(.*)\.php/i", $strSingleFile)) {
+                    if(preg_match("/(class|interface)(.*)\.php$/i", $strSingleFile)) {
                         $arrFiles[substr($strSingleFile, 0, -4)] = _realpath_."/".$strPath.$strFolder.$strSingleFile;
                     }
                 }
@@ -240,7 +240,7 @@ class class_classloader {
         if(is_dir(_realpath_."/project".$strFolder)) {
             $arrTempFiles = scandir(_realpath_."/project".$strFolder);
             foreach($arrTempFiles as $strSingleFile) {
-                if(preg_match("/(class|interface)(.*)\.php/i", $strSingleFile)) {
+                if(preg_match("/(class|interface)(.*)\.php$/i", $strSingleFile)) {
                     $arrFiles[substr($strSingleFile, 0, -4)] = _realpath_."/project".$strFolder.$strSingleFile;
                 }
             }

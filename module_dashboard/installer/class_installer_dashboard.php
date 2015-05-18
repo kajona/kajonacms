@@ -39,66 +39,74 @@ class class_installer_dashboard extends class_installer_base implements interfac
 	public function update() {
 	    $strReturn = "";
         //check installed version and to which version we can update
-        $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
 
-        $strReturn .= "Version found:\n\t Module: ".$arrModul["module_name"].", Version: ".$arrModul["module_version"]."\n\n";
+        $strReturn .= "Version found:\n\t Module: ".$arrModule["module_name"].", Version: ".$arrModule["module_version"]."\n\n";
 
-        $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModul["module_version"] == "3.4.2" || $arrModul["module_version"] == "3.4.2.2") {
+        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "3.4.2" || $arrModule["module_version"] == "3.4.2.2") {
             $strReturn .= $this->update_342_3491();
             $this->objDB->flushQueryCache();
         }
 
-        $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModul["module_version"] == "3.4.9.1") {
+        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "3.4.9.1") {
             $strReturn .= $this->update_3491_3492();
             $this->objDB->flushQueryCache();
         }
 
-        $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModul["module_version"] == "3.4.9.2") {
+        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "3.4.9.2") {
             $strReturn .= $this->update_3492_40();
             $this->objDB->flushQueryCache();
         }
 
-        $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModul["module_version"] == "4.0") {
+        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "4.0") {
             $strReturn .= $this->update_40_41();
             $this->objDB->flushQueryCache();
         }
 
-        $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModul["module_version"] == "4.1") {
+        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "4.1") {
             $strReturn .= "Updating 4.1 to 4.2...\n";
             $strReturn .= "Updating module-versions...\n";
             $this->updateModuleVersion("dashboard", "4.2");
         }
 
-        $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModul["module_version"] == "4.2") {
+        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "4.2") {
             $strReturn .= "Updating 4.2 to 4.3...\n";
             $strReturn .= "Updating module-versions...\n";
             $this->updateModuleVersion("dashboard", "4.3");
         }
 
-        $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModul["module_version"] == "4.3") {
+        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "4.3") {
             $strReturn .= "Updating 4.3 to 4.4...\n";
             $strReturn .= "Updating module-versions...\n";
             $this->updateModuleVersion("dashboard", "4.4");
         }
 
-        $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModul["module_version"] == "4.4") {
+        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "4.4") {
             $strReturn .= "Updating 4.4 to 4.5...\n";
             $strReturn .= "Updating module-versions...\n";
             $this->updateModuleVersion("dashboard", "4.5");
         }
-        $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModul["module_version"] == "4.5") {
+
+        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "4.5") {
             $strReturn .= "Updating 4.5 to 4.6...\n";
             $strReturn .= "Updating module-versions...\n";
             $this->updateModuleVersion("dashboard", "4.6");
+        }
+
+        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "4.6") {
+            $strReturn .= "Updating to 4.7...\n";
+            $strReturn .= "Updating module-versions...\n";
+            $this->updateModuleVersion("dashboard", "4.7");
         }
 
         return $strReturn."\n\n";
