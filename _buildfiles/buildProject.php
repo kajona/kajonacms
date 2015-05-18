@@ -71,7 +71,7 @@ class BuildHelper {
         file_put_contents(__DIR__."/".$this->strProjectPath."/project/system/config/config.php", $strConfigfile);
 
         echo "starting up system-kernel...\n";
-        include __DIR__."/".$this->strProjectPath."/core/bootstrap.php";
+        include __DIR__."/".$this->strProjectPath."/core/module_system/bootstrap.php";
         $objCarrier = class_carrier::getInstance();
 
         echo "dropping old tables...\n";

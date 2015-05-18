@@ -1,20 +1,18 @@
 Module Installer
 
+V4.7 ----------------------------------------------------------------------------------------------------
+NEW: module_installer | class_installer -> a "EVENT_SYSTEM_REQUEST_ENDPROCESSING" event is triggered for the installer, too
+
 V4.6 ----------------------------------------------------------------------------------------------------
 NEW: module_installer -> updated installer to bootstrap v3
 BUG: module_installer | installer.php -> the installer triggers the ENDPROCESSING event, too. otherwise the search index won't be populated.
 
-
 V4.4 ----------------------------------------------------------------------------------------------------
 BUG: the installer validates if the system module is available before accessing the module table
-
-
 
 V4.3 ----------------------------------------------------------------------------------------------------
 NEW: the installer base-class initializes the metadata.xml automatically, the init-call in the installers' constructor is no longer required.
 BUG: changed directory seperator so that always "/" is being used (else it causes problems under windows)
-
-
 
 V4.2 ----------------------------------------------------------------------------------------------------
 NEW: updated the installer, removed rounded borders

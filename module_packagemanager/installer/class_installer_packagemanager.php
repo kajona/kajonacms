@@ -119,6 +119,12 @@ class class_installer_packagemanager extends class_installer_base implements int
             $this->updateModuleVersion($this->objMetadata->getStrTitle(), "4.6");
         }
 
+        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "4.6") {
+            $strReturn .= "Updating 4.6 to 4.7...\n";
+            $this->updateModuleVersion($this->objMetadata->getStrTitle(), "4.7");
+        }
+
         return $strReturn."\n\n";
     }
 

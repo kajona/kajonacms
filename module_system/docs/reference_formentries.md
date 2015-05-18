@@ -22,6 +22,7 @@ Reference: Formentries
 |page           |4.0       |Page-Selctor, text-input with autocomplete and select-popup|
 |password       |4.0       |Password input field|
 |plaintext      |4.3       |Use this formentry to inject plaintext into the html-output. May be used to add js-script tags and code.|
+|subheadline    |4.7       |Headline-Element to nest headlines |
 |template       |4.3       |A dropdown rendering a list of possible templates for a single element / field. May be parametrized by @fieldTemplateDir passing the relevant folder (e.g. /element_rssfeed)|
 |text           |4.0       |Text-input field, single line|
 |textrow        |4.3       |Formentry useable as a graphical element, adds a line or paragaph of text to the current output.|

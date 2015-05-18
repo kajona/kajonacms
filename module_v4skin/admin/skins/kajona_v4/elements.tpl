@@ -764,6 +764,27 @@ in addition, a container for the calendar is needed. Use %%calendarContainerId%%
     </div>
 </input_datetime_simple>
 
+<input_tageditor>
+    <div class="form-group">
+        <label for="%%name%%" class="col-sm-3 control-label">%%title%%</label>
+
+        <div class="col-sm-6 inputText inputTagEditor">
+            <input type="text" id="%%name%%" data-name="%%name%%" style="display:none" />
+        </div>
+    </div>
+    <script type="text/javascript">
+        KAJONA.admin.loader.loadFile(["_webpath_/core/module_system/admin/scripts/jquerytag/jquery.caret.min.js"], function(){
+            KAJONA.admin.loader.loadFile("_webpath_/core/module_system/admin/scripts/jquerytag/jquery.tag-editor.min.js", function(){
+                $("#%%name%%").tagEditor({
+                    initialTags: %%values%%,
+                    forceLowercase: false,
+                    onChange: %%onChange%%
+                });
+            }, true);
+        }, true);
+    </script>
+</input_tageditor>
+
 A page-selector.
 If you want to use ajax to load a list of proposals on entering a char,
 place ajaxScript before the closing input_pageselector-tag and make sure, that you

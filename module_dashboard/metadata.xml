@@ -5,11 +5,11 @@
     >
     <title>dashboard</title>
     <description>The dashboard is the entry-page of the backend. Current information is displayed by simple widgets.</description>
-    <version>4.6</version>
+    <version>4.7</version>
     <author>Kajona Team</author>
     <type>MODULE</type>
     <providesInstaller>TRUE</providesInstaller>
     <requiredModules>
-        <module name="system" version="4.6" />
+        <module name="system" version="4.7" />
     </requiredModules>
 </package>

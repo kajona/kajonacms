@@ -179,6 +179,12 @@ class class_installer_stats extends class_installer_base implements interface_in
             $strReturn .= $this->update_45_46();
         }
 
+        $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModul["module_version"] == "4.6") {
+            $strReturn .= "Updating to 4.7...\n";
+            $this->updateModuleVersion("stats", "4.7");
+        }
+
         $strReturn .= "Updating browscap informations...\n";
         $objBrowscap = new class_browscap();
         $objBrowscap->updateBrowscap();

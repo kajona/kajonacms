@@ -1,8 +1,16 @@
 Module User
 
+V4.7 ----------------------------------------------------------------------------------------------------
+NEW: module_user | class_module_user_admin > option to set the items per page for each user #54
+NEW: module_user | resend password -> the username may be included optionally in the notification mail. Helpful for new users unaware of their username.
+NEW: module_user | grouplist -> added a filter-box to the list of groups
+UPDATE: module_user | user_admin_form -> the language-field is now mandatory
+UPDATE: module_user | user_admin -> editing a users own data is possible without read permissions on module user
+BUG: module_user | getUserList -> the method missed to restore the old session when validating view permissions for a given object
+BUG: module_user | user_admin -> fixed the form-rendering for group edit (now always in dialog)
+
 V4.6 ----------------------------------------------------------------------------------------------------
 NEW: module_user | user-admin -> the dashboard is pre-selected as the start-module for new users
-
 
 V4.5 ----------------------------------------------------------------------------------------------------
 NEW: module_user -> if a user is deleted, the entry in the user-table remains, but is flagged as deleted (logical deletion). Nevertheless, the assigned subsystem is triggered for a real deletion. This avoids "n.a." entries in logfiles and other historical entries. The username itself is appended by "user no longer available" to indicate, that the user was deleted. Using regular methods, deleted users are no longer available or loadable. [ART #1009]
@@ -16,7 +24,6 @@ NEW: the user-formentry accepts active-users / groups only
 NEW: added hint to user form (user needs group assignment) #849
 BUG: some icons from the user-list are hidden in case the user is inactive, e.g. the userswitch or the send new password action
 BUG: if a user edits its own profile (selfedit mode), the username is reset internally to avoid changes by dom-manipulations
-
 
 V4.3 ----------------------------------------------------------------------------------------------------
 NEW: added a remove-icon to the user-selector in order to remove a selected user from the form-field
