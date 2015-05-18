@@ -741,7 +741,7 @@ class class_toolkit_admin extends class_toolkit {
         $arrTemplate["name"] = $strName;
         $arrTemplate["title"] = $strTitle;
         $arrTemplate["values"] = json_encode(array_values($arrValues));
-        $arrTemplate["onChange"] = empty($strOnChange) ? "null" : (string) $strOnChange;
+        $arrTemplate["onChange"] = empty($strOnChange) ? "function(){}" : (string) $strOnChange;
 
         return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID, true);
     }
