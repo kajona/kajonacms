@@ -821,6 +821,7 @@ have a surrounding div with class "ac_container" and a div with id "%%name%%_con
                 %%table%%
                 </tbody>
             </table>
+            <input type="hidden" name="%%name%%_empty" value="true" />
         </div>
     </div>
 </input_objectlist>

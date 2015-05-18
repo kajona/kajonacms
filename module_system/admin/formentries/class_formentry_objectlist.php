@@ -19,6 +19,23 @@ class class_formentry_objectlist extends class_formentry_multiselect {
         $this->strAddLink = $strAddLink;
     }
 
+    protected function updateValue() {
+        $arrParams = class_carrier::getAllParams();
+
+        $strEntryName = $this->getStrEntryName();
+        $strEntryNameEmpty = $strEntryName."_empty";
+
+        if(isset($arrParams[$strEntryName])) {
+            $this->setStrValue($arrParams[$strEntryName]);
+        }
+        else if(isset($arrParams[$strEntryNameEmpty])) {
+            $this->setStrValue("");
+        }
+        else {
+            $this->setStrValue($this->getValueFromObject());
+        }
+    }
+
     /**
      * Renders the field itself.
      * In most cases, based on the current toolkit.
@@ -88,7 +105,7 @@ class class_formentry_objectlist extends class_formentry_multiselect {
 
         if(!empty($this->arrKeyValues)) {
             $strHtml = "<ul>";
-            foreach($this->arrKeyValues as $strKey => $objObject) {
+            foreach($this->arrKeyValues as $objObject) {
                 if($objObject instanceof interface_model) {
                     $strHtml.= "<li>" . htmlspecialchars($objObject->getStrDisplayName()) . "</li>";
                 }

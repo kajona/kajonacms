@@ -466,10 +466,11 @@ class class_toolkit_admin extends class_toolkit {
                     $strRemoveLink = class_link::getLinkAdminDialog(null, "", "", $strDelete, $strDelete, "", $strDelete, true, false, "KAJONA.v4skin.removeObjectListItem(this);return false;");
                 }
 
+                $strIcon = is_array($objObject->getStrIcon()) ? $objObject->getStrIcon()[0]: $objObject->getStrIcon();
                 $arrTemplateRow = array(
                     'name' => $strName,
                     'displayName' => $objObject->getStrDisplayName(),
-                    'icon' => $objObject->getStrIcon(),
+                    'icon' => $strIcon,
                     'value' => $objObject->getSystemid(),
                     'removeLink' => $strRemoveLink,
                 );
