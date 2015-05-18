@@ -103,10 +103,72 @@ class class_orm_objectupdate extends class_orm_base {
 
         }
 
+        //see, if we should process object lists, too
+        if($bitReturn) {
+            $bitReturn = $this->updateAssignments();
+        }
+
         return $bitReturn;
 
 
     }
+
+
+    private function updateAssignments() {
+        $bitReturn = true;
+
+        $objReflection = new class_reflection($this->getObjObject());
+
+
+        //get the mapped properties
+        $arrProperties = $objReflection->getPropertiesWithAnnotation(class_orm_base::STR_ANNOTATION_OBJECTLIST, class_reflection_enum::PARAMS());
+
+        foreach($arrProperties as $strPropertyName => $arrValues) {
+
+            $strTableName = $objReflection->getAnnotationValueForProperty($strPropertyName, class_orm_base::STR_ANNOTATION_OBJECTLIST);
+
+            if(!isset($arrValues["source"]) || !isset($arrValues["target"]) || empty($strTableName)) {
+                return false;
+            }
+
+
+            $arrAssignements = $this->getAssignementValues($strPropertyName);
+            $objDB = class_carrier::getInstance()->getObjDB();
+
+            $arrInserts = array();
+            foreach($arrAssignements as $strOneTargetId)
+                $arrInserts = array($this->getObjObject()->getSystemid(), $strOneTargetId);
+
+            $bitReturn = $bitReturn && $objDB->multiInsert($strTableName, array($arrValues["source"], $arrValues["target"]), $arrInserts);
+        }
+
+        return $bitReturn;
+    }
+
+
+    private function getAssignementValues($strPropertyName) {
+        $objReflection = new class_reflection($this->getObjObject());
+
+        $strGetter = $objReflection->getGetter($strPropertyName);
+        $arrValues = array();
+        if($strGetter !== null) {
+            $arrValues = call_user_func(array($this->getObjObject(), $strGetter));
+
+            if(!is_array($arrValues))
+                $arrValues = array();
+        }
+
+        $arrReturn = array();
+        foreach($arrValues as $objOneValue) {
+            if(is_object($objOneValue) && $objOneValue instanceof class_model)
+                $arrReturn[] = $objOneValue->getSystemid();
+            else if(is_string($objOneValue) && validateSystemid($objOneValue))
+                $arrReturn[] = $objOneValue;
+        }
+
+        return $arrReturn;
+    }
+
 
     /**
      * Called internally to update a single target-table

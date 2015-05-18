@@ -22,6 +22,7 @@ abstract class class_orm_base {
     const STR_ANNOTATION_TABLECOLUMNINDEX = "@tableColumnIndex";
     const STR_ANNOTATION_BLOCKESCAPING = "@blockEscaping";
     const STR_ANNOTATION_LISTORDER = "@listOrder";
+    const STR_ANNOTATION_OBJECTLIST = "@objectList";
 
     /** @var class_root */
     private $objObject = null;

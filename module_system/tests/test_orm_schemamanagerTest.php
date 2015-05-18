@@ -106,6 +106,10 @@ class class_test_orm_schemamanagerTest extends class_testbase {
         $this->assertTrue(uniStrpos($objEx->getMessage(), "Syntax for tableColumn annotation at property") !== false);
     }
 
+
+    public function testAssignmentTableCreation() {
+
+    }
 }
 
 /**
@@ -186,3 +190,17 @@ class orm_schematest_testclass_targettable2 {
 
 }
 
+/**
+ * Class orm_schematest_testclass
+ *
+ * @targetTable testclass.testclass_id
+ */
+class orm_schematest_testclass_assignments  {
+
+    /**
+     * @var array
+     * @objectList testclass_rel (source="testclass_source_id", target="testclass_target_id")
+     */
+    private $arrObject1 = array();
+
+}
