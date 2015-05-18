@@ -49,7 +49,12 @@ class class_formentry_objectlist extends class_formentry_multiselect {
             $strReturn .= $objToolkit->formTextRow($this->getStrHint());
         }
 
-        $strReturn.= $objToolkit->formInputObjectList($this->getStrEntryName(), $this->getStrLabel(), $this->arrKeyValues, $this->strAddLink);
+        // filter objects
+        $arrObjects = array_values(array_filter($this->arrKeyValues, function($objObject){
+            return $objObject->rightView();
+        }));
+
+        $strReturn.= $objToolkit->formInputObjectList($this->getStrEntryName(), $this->getStrLabel(), $arrObjects, $this->strAddLink);
         return $strReturn;
     }
 
@@ -79,11 +84,34 @@ class class_formentry_objectlist extends class_formentry_multiselect {
             return "";
 
         $objReflection = new class_reflection($objSourceObject);
+
+        // get database object which we can not change
+        $strGetter = $objReflection->getGetter($this->getStrSourceProperty());
+        if($strGetter === null)
+            throw new class_exception("unable to find getter for value-property ".$this->getStrSourceProperty()."@".get_class($objSourceObject), class_exception::$level_ERROR);
+
+
+        $arrObjects = call_user_func(array($objSourceObject, $strGetter));
+        $arrNotObjects = array_values(array_filter($arrObjects, function(class_model $objObject){
+            return !$objObject->rightView();
+        }));
+
+        // merge objects
+        $arrNewObjects = array_merge($this->toObjectArray(), $arrNotObjects);
+
+        // filter double object ids
+        $arrObjects = array();
+        foreach($arrNewObjects as $objObject) {
+            $arrObjects[$objObject->getStrSystemid()] = $objObject;
+        }
+        $arrObjects = array_values($arrObjects);
+
+        // set value
         $strSetter = $objReflection->getSetter($this->getStrSourceProperty());
         if($strSetter === null)
             throw new class_exception("unable to find setter for value-property ".$this->getStrSourceProperty()."@".get_class($objSourceObject), class_exception::$level_ERROR);
 
-        return call_user_func(array($objSourceObject, $strSetter), $this->toObjectArray());
+        return call_user_func(array($objSourceObject, $strSetter), $arrObjects);
     }
 
     public function validateValue() {
@@ -107,10 +135,12 @@ class class_formentry_objectlist extends class_formentry_multiselect {
             $strHtml = "<ul>";
             foreach($this->arrKeyValues as $objObject) {
                 if($objObject instanceof interface_model) {
-                    $strHtml.= "<li>" . htmlspecialchars($objObject->getStrDisplayName()) . "</li>";
+                    if($objObject->rightView()) {
+                        $strHtml.= "<li>" . htmlspecialchars($objObject->getStrDisplayName()) . "</li>";
+                    }
                 }
-                else if(is_string($objObject)) {
-                    $strHtml.= "<li>" . $objObject . "</li>";
+                else {
+                    throw new class_exception("Array must contain objects", class_exception::$level_ERROR);
                 }
             }
             $strHtml.= "</ul>";
@@ -122,9 +152,14 @@ class class_formentry_objectlist extends class_formentry_multiselect {
     }
 
     private function toObjectArray() {
-        $arrIds = explode(",", $this->getStrValue());
-        $arrObjects = array_map(function($strId){return class_objectfactory::getInstance()->getObject($strId);}, $arrIds);
-        return $arrObjects;
+        $strValue = $this->getStrValue();
+        if(!empty($strValue)) {
+            $arrIds = explode(",", $strValue);
+            $arrObjects = array_map(function($strId){return class_objectfactory::getInstance()->getObject($strId);}, $arrIds);
+            return $arrObjects;
+        }
+
+        return array();
     }
 
 }
