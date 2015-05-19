@@ -275,67 +275,103 @@ KAJONA.v4skin.removeObjectListItem = function(el){
     });
 };
 
-KAJONA.v4skin.addObjectListItem = function(strSystemId, strDisplayName, strIcon, strElementName){
+KAJONA.v4skin.setObjectListItems = function(strElementName, arrItems, arrAvailableIds){
     var table = $('#' + strElementName);
     var tbody = table.find('tbody');
     if(tbody.length > 0) {
-        // check whether the item was already added
-        var found = false;
-        $('input[type="hidden"]').each(function(){
-            if($(this).val() == strSystemId) {
-                found = $(this);
+        // remove only elements which are in the arrAvailableIds array
+        tbody.children().each(function(){
+            if($.inArray($(this).find('input[type="hidden"]').val(), arrAvailableIds) !== -1) {
+                $(this).remove();
             }
         });
 
-        if(found) {
-            found.parent().parent().effect("highlight", {}, 3000);
-            return;
+        // add new elements
+        for(var i = 0; i < arrItems.length; i++) {
+            var strEscapedTitle = $('<div></div>').text(arrItems[i].strDisplayName).html();
+            var html = '';
+            html+= '<tr>';
+            html+= '    <td><div class="' + arrItems[i].strIcon + '" style="display:inline-block;width:20px;height:20px;"></div></td>';
+            html+= '    <td>' + strEscapedTitle + ' <input type="hidden" name="' + strElementName + '[]" value="' + arrItems[i].strSystemId + '" /></td>';
+            html+= '    <td class="icon-cell">';
+            html+= '        <a href="#" onclick="KAJONA.v4skin.removeObjectListItem(this);return false">';
+            html+= '            <span>';
+            html+= '                <div class="icon_delete" style="display:inline-block;width:20px;height:20px;" data-kajona-icon="icon_delete"></div>';
+            html+= '            </span>';
+            html+= '        </a>';
+            html+= '    </td>';
+            html+= '</tr>';
+
+            tbody.append(html);
         }
-
-        var strEscapedTitle = $('<div></div>').text(strDisplayName).html();
-        var html = '';
-        html+= '<tr>';
-        html+= '    <td><div class="' + strIcon + '" style="display:inline-block;width:20px;height:20px;"></div></td>';
-        html+= '    <td>' + strEscapedTitle + ' <input type="hidden" name="' + strElementName + '[]" value="' + strSystemId + '" /></td>';
-        html+= '    <td class="icon-cell">';
-        html+= '        <a href="#" onclick="KAJONA.v4skin.removeObjectListItem(this);return false">';
-        html+= '            <span>';
-        html+= '                <div class="icon_delete" style="display:inline-block;width:20px;height:20px;" data-kajona-icon="icon_delete"></div>';
-        html+= '            </span>';
-        html+= '        </a>';
-        html+= '    </td>';
-        html+= '</tr>';
-
-        tbody.append(html);
     }
 };
 
 KAJONA.v4skin.sendCheckboxTreeSelection = function(el){
     if($('.jstree').length > 0) {
         // the query parameter contains the name of the form element where we insert the selected elements
-        var pos = location.search.indexOf("&element_name=");
-        var elementName;
-        if(pos != -1) {
-            var endPos = location.search.indexOf("&", pos + 1);
-            if(endPos == -1) {
-                elementName = location.search.substr(pos + 14);
-            }
-            else {
-                elementName = location.search.substr(pos + 14, endPos - (pos + 14));
-            }
-        }
+        var strElementName = KAJONA.v4skin.getQueryParameter("element_name");
+
+        // we modify only the ids which are visible for the user all other ids stay untouched
+        var arrAvailableIds = [];
+        $('.jstree').find('li').each(function(){
+            arrAvailableIds.push($(this).attr('systemid'));
+        });
 
         var arrEls = $('.jstree').jstree('get_checked');
+        var arrItems = [];
         for(var i = 0; i < arrEls.length; i++) {
             var el = $(arrEls[i]);
             var strSystemId = el.attr('id');
             var strDisplayName = el.text().trim();
             var strIcon = el.find('div').data('kajona-icon');
 
-            parent.KAJONA.v4skin.addObjectListItem(strSystemId, strDisplayName, strIcon, elementName);
+            arrItems.push({
+                strSystemId: strSystemId,
+                strDisplayName: strDisplayName,
+                strIcon: strIcon
+            });
         }
+
+        parent.KAJONA.v4skin.setObjectListItems(strElementName, arrItems, arrAvailableIds);
 
         parent.$('#folderviewDialog').modal('hide');
     }
 };
 
+KAJONA.v4skin.getCheckboxTreeSelectionFromParent = function(){
+    if($('.jstree').length > 0) {
+        // the query parameter contains the name of the form element where we insert the selected elements
+        var strElementName = KAJONA.v4skin.getQueryParameter("element_name");
+        var table = parent.$('#' + strElementName);
+        var arrSystemIds = [];
+        if(table.length > 0) {
+            table.find('input[type="hidden"]').each(function(){
+                arrSystemIds.push($(this).val());
+            });
+        }
+
+        return arrSystemIds;
+    }
+};
+
+/**
+ * Extracts an query parameter from the location query string
+ *
+ * @param string name
+ * @returns string
+ */
+KAJONA.v4skin.getQueryParameter = function(name) {
+    var pos = location.search.indexOf("&" + name.length + "=");
+    var elementName;
+    if(pos != -1) {
+        var endPos = location.search.indexOf("&", pos + 1);
+        if(endPos == -1) {
+            return location.search.substr(pos + name.length + 2);
+        }
+        else {
+            return location.search.substr(pos + name.length + 2, endPos - (pos + name.length + 2));
+        }
+    }
+    return null;
+};

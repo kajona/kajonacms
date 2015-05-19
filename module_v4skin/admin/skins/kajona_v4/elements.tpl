@@ -1633,6 +1633,27 @@ Checkbox tree which shows an structure
                     checked_parent_open: false
                 },
                 plugins: [ "themes","json_data","checkbox" ]
+            }).bind("loaded.jstree", function (event, data) {
+                if(typeof KAJONA.v4skin.getCheckboxTreeSelectionFromParent === 'function') {
+                    var arrSystemIds = KAJONA.v4skin.getCheckboxTreeSelectionFromParent();
+                    for(var i = 0; i < arrSystemIds.length; i++) {
+                        if($('#' + arrSystemIds[i]).length > 0) {
+                            $(this).jstree('change_state', [$('#' + arrSystemIds[i]).find('.jstree-checkbox:first').get(0), true]);
+                        }
+                    }
+                }
+            }).bind("open_node.jstree close_node.jstree", function (event, data) {
+                if(typeof KAJONA.v4skin.getCheckboxTreeSelectionFromParent === 'function') {
+                    var arrSystemIds = KAJONA.v4skin.getCheckboxTreeSelectionFromParent();
+                    // go only through the child elements of the loaded node
+                    if(data.rslt.obj.length > 0) {
+                        data.rslt.obj.find('ul > li').each(function() {
+                            if($.inArray($(this).attr('systemid'), arrSystemIds) !== -1) {
+                                $(event.target).jstree('change_state', [$('#' + $(this).attr('systemid')).find('.jstree-checkbox:first').get(0), true]);
+                            }
+                        });
+                    }
+                }
             });
 
         });
