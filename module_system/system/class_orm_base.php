@@ -101,6 +101,30 @@ abstract class class_orm_base {
     }
 
 
+
+    /**
+     * Reads the assignment values currently stored in the database for a given property of the current object.
+     * @param $strPropertyName
+     *
+     * @return string[] array of systemids
+     */
+    protected final function getAssignmentsFromDatabase($strPropertyName) {
+        $objReflection = new class_reflection($this->getObjObject());
+
+        $strTableName = $objReflection->getAnnotationValueForProperty($strPropertyName, class_orm_base::STR_ANNOTATION_OBJECTLIST);
+        $arrMappingColumns = $objReflection->getAnnotationValueForProperty($strPropertyName, class_orm_base::STR_ANNOTATION_OBJECTLIST, class_reflection_enum::PARAMS());
+
+        $objDB = class_carrier::getInstance()->getObjDB();
+        $strQuery = "SELECT * FROM ".$objDB->encloseTableName(_dbprefix_.$strTableName)." WHERE ".$objDB->encloseColumnName($arrMappingColumns["source"])." = ? ";
+        $arrRows = $objDB->getPArray($strQuery, array($this->getObjObject()->getSystemid()), null, null);
+
+        $strTargetCol = $arrMappingColumns["target"];
+        array_walk($arrRows, function(array &$arrSingleRow) use ($strTargetCol) {
+            $arrSingleRow = $arrSingleRow[$strTargetCol];
+        });
+
+        return $arrRows;
+    }
 }
 
 /**
