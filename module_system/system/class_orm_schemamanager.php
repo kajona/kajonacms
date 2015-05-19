@@ -40,6 +40,7 @@ class class_orm_schemamanager extends class_orm_base {
         }
 
         $arrTargetTables = $this->collectTableDefinitions($strClass);
+        $arrTargetTables = array_merge($arrTargetTables, $this->collectAssignmentDefinitions($strClass));
         $this->processTableDefinitions($arrTargetTables);
     }
 
@@ -149,5 +150,38 @@ class class_orm_schemamanager extends class_orm_base {
         return $arrCreateTables;
     }
 
+
+    /**
+     * Processes all object assignments in order to generate the relevant tables
+     *
+     * @param $strClass
+     *
+     * @return array
+     */
+    private function collectAssignmentDefinitions($strClass) {
+
+        $arrAssignmentTables = array();
+        $objReflection = new class_reflection($strClass);
+
+        //get the mapped properties
+        $arrProperties = $objReflection->getPropertiesWithAnnotation(class_orm_base::STR_ANNOTATION_OBJECTLIST, class_reflection_enum::PARAMS());
+
+        foreach($arrProperties as $strPropertyName => $arrValues) {
+
+            $strTableName = $objReflection->getAnnotationValueForProperty($strPropertyName, class_orm_base::STR_ANNOTATION_OBJECTLIST);
+
+            if(!isset($arrValues["source"]) || !isset($arrValues["target"]) || empty($strTableName)) {
+                continue;
+            }
+
+            $objTable = new class_orm_schemamanager_table($strTableName);
+            $objTable->addRow(new class_orm_schemamanager_row($arrValues["source"], class_db_datatypes::STR_TYPE_CHAR20, false, true));
+            $objTable->addRow(new class_orm_schemamanager_row($arrValues["target"], class_db_datatypes::STR_TYPE_CHAR20, false, true));
+
+            $arrAssignmentTables[] = $objTable;
+        }
+
+        return $arrAssignmentTables;
+    }
 
 }
