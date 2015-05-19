@@ -362,8 +362,7 @@ KAJONA.v4skin.getCheckboxTreeSelectionFromParent = function(){
  * @returns string
  */
 KAJONA.v4skin.getQueryParameter = function(name) {
-    var pos = location.search.indexOf("&" + name.length + "=");
-    var elementName;
+    var pos = location.search.indexOf("&" + name + "=");
     if(pos != -1) {
         var endPos = location.search.indexOf("&", pos + 1);
         if(endPos == -1) {
