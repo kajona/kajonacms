@@ -42,6 +42,7 @@ class class_test_orm_schemamanagerTest extends class_testbase_object {
     protected function tearDown() {
         $objDb = class_carrier::getInstance()->getObjDB();
         $objDb->_pQuery("DROP TABLE "._dbprefix_."testclass", array());
+        $objDb->_pQuery("DROP TABLE "._dbprefix_."testclass_rel", array());
         class_carrier::getInstance()->flushCache(class_carrier::INT_CACHE_TYPE_DBTABLES);
         parent::tearDown();
     }
@@ -61,6 +62,40 @@ class class_test_orm_schemamanagerTest extends class_testbase_object {
 
         $arrRow = $objDB->getPRow("SELECT COUNT(*) FROM "._dbprefix_."testclass_rel WHERE testclass_source_id = ?", array($objTestobject->getSystemid()));
         $this->assertEquals(2, $arrRow["COUNT(*)"]);
+
+        $objDB->flushQueryCache();
+
+        //change the assignments
+        $objTestobject = $this->getObject("testobject");
+        $arrAspects = array($this->getObject("aspect2"));
+        $objTestobject->setArrObject1($arrAspects);
+        $objTestobject->updateObjectToDb();
+
+        $arrRow = $objDB->getPRow("SELECT COUNT(*) FROM "._dbprefix_."testclass_rel WHERE testclass_source_id = ?", array($objTestobject->getSystemid()));
+        $this->assertEquals(1, $arrRow["COUNT(*)"]);
+
+        $objDB->flushQueryCache();
+
+        //change the assignments
+        $objTestobject = $this->getObject("testobject");
+        $objTestobject->setArrObject1(array());
+        $objTestobject->updateObjectToDb();
+
+        $arrRow = $objDB->getPRow("SELECT COUNT(*) FROM "._dbprefix_."testclass_rel WHERE testclass_source_id = ?", array($objTestobject->getSystemid()));
+        $this->assertEquals(0, $arrRow["COUNT(*)"]);
+
+
+        $objDB->flushQueryCache();
+
+        //change the assignments
+        $objTestobject = $this->getObject("testobject");
+        $arrAspects = array($this->getObject("aspect2"), $this->getObject("aspect1")->getSystemid());
+        $objTestobject->setArrObject1($arrAspects);
+        $objTestobject->updateObjectToDb();
+
+        $arrRow = $objDB->getPRow("SELECT COUNT(*) FROM "._dbprefix_."testclass_rel WHERE testclass_source_id = ?", array($objTestobject->getSystemid()));
+        $this->assertEquals(2, $arrRow["COUNT(*)"]);
+
 
     }
 

@@ -100,7 +100,6 @@ class class_orm_objectupdate extends class_orm_base {
             if(count($arrColValues) > 0)
                 $bitReturn = $bitReturn && $this->updateSingleTable($arrColValues, $arrEscapes, $arrTableDef[0], $arrTableDef[1]);
 
-
         }
 
         //see, if we should process object lists, too
@@ -113,12 +112,14 @@ class class_orm_objectupdate extends class_orm_base {
 
     }
 
-
+    /**
+     * Triggers the update sequence for assignment properties
+     * @return bool
+     */
     private function updateAssignments() {
         $bitReturn = true;
 
         $objReflection = new class_reflection($this->getObjObject());
-
 
         //get the mapped properties
         $arrProperties = $objReflection->getPropertiesWithAnnotation(class_orm_base::STR_ANNOTATION_OBJECTLIST, class_reflection_enum::PARAMS());
@@ -131,22 +132,60 @@ class class_orm_objectupdate extends class_orm_base {
                 return false;
             }
 
+            $arrAssignmentsFromObject = $this->getAssignmentValuesFromObject($strPropertyName);
+            $arrAssignmentsFromDatabase = $this->getAssignmentsFromDatabase($strPropertyName);
 
-            $arrAssignements = $this->getAssignementValues($strPropertyName);
+            //only do s.th. if the array differs
+            $arrNewAssignments = array_diff($arrAssignmentsFromObject, $arrAssignmentsFromDatabase);
+            $arrDeletedAssignments = array_diff($arrAssignmentsFromDatabase, $arrAssignmentsFromObject);
+
             $objDB = class_carrier::getInstance()->getObjDB();
 
             $arrInserts = array();
-            foreach($arrAssignements as $strOneTargetId)
-                $arrInserts = array($this->getObjObject()->getSystemid(), $strOneTargetId);
+            foreach($arrAssignmentsFromObject as $strOneTargetId)
+                $arrInserts[] = array($this->getObjObject()->getSystemid(), $strOneTargetId);
 
+            $bitReturn = $bitReturn && $objDB->_pQuery("DELETE FROM ".$objDB->encloseTableName(_dbprefix_.$strTableName)." WHERE ".$objDB->encloseColumnName($arrValues["source"])." = ? ", array($this->getObjObject()->getSystemid()));
             $bitReturn = $bitReturn && $objDB->multiInsert($strTableName, array($arrValues["source"], $arrValues["target"]), $arrInserts);
         }
 
         return $bitReturn;
     }
 
+    /**
+     * Reads the assignment values currently stored in the database for a given property of the current object.
+     * @param $strPropertyName
+     *
+     * @return string[] array of systemids
+     * @todo move to common base class
+     */
+    private function getAssignmentsFromDatabase($strPropertyName) {
+        $objReflection = new class_reflection($this->getObjObject());
 
-    private function getAssignementValues($strPropertyName) {
+        $strTableName = $objReflection->getAnnotationValueForProperty($strPropertyName, class_orm_base::STR_ANNOTATION_OBJECTLIST);
+        $arrMappingColumns = $objReflection->getAnnotationValueForProperty($strPropertyName, class_orm_base::STR_ANNOTATION_OBJECTLIST, class_reflection_enum::PARAMS());
+
+        $objDB = class_carrier::getInstance()->getObjDB();
+        $strQuery = "SELECT * FROM ".$objDB->encloseTableName(_dbprefix_.$strTableName)." WHERE ".$objDB->encloseColumnName($arrMappingColumns["source"])." = ? ";
+        $arrRows = $objDB->getPArray($strQuery, array($this->getObjObject()->getSystemid()), null, null);
+
+        $strTargetCol = $arrMappingColumns["target"];
+        array_walk($arrRows, function(array &$arrSingleRow) use ($strTargetCol) {
+            $arrSingleRow = $arrSingleRow[$strTargetCol];
+        });
+
+        return $arrRows;
+    }
+
+    /**
+     * Internal helper to fetch the values of an assignment property.
+     * Capable of handling both, objects and systemids.
+     *
+     * @param $strPropertyName
+     *
+     * @return array
+     */
+    private function getAssignmentValuesFromObject($strPropertyName) {
         $objReflection = new class_reflection($this->getObjObject());
 
         $strGetter = $objReflection->getGetter($strPropertyName);
@@ -160,6 +199,7 @@ class class_orm_objectupdate extends class_orm_base {
 
         $arrReturn = array();
         foreach($arrValues as $objOneValue) {
+
             if(is_object($objOneValue) && $objOneValue instanceof class_model)
                 $arrReturn[] = $objOneValue->getSystemid();
             else if(is_string($objOneValue) && validateSystemid($objOneValue))
