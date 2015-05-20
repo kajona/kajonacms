@@ -139,6 +139,10 @@ class class_orm_objectupdate extends class_orm_base {
             $arrNewAssignments = array_diff($arrAssignmentsFromObject, $arrAssignmentsFromDatabase);
             $arrDeletedAssignments = array_diff($arrAssignmentsFromDatabase, $arrAssignmentsFromObject);
 
+            //skip in case there's nothing to do
+            if(count($arrNewAssignments) == 0 && count($arrDeletedAssignments) == 0)
+                return true;
+
             $objDB = class_carrier::getInstance()->getObjDB();
 
             $arrInserts = array();
