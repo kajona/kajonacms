@@ -2,6 +2,11 @@
 
 require_once (__DIR__."/../../module_system/system/class_testbase.php");
 
+/**
+ * Class class_test_orm_schemamanagerTest
+ *
+ * @todo event handler validation
+ */
 class class_test_orm_schemamanagerTest extends class_testbase_object {
     /**
      * Returns an path to an xml fixture file which can be used to create and delete database structures
@@ -48,7 +53,7 @@ class class_test_orm_schemamanagerTest extends class_testbase_object {
     }
 
 
-    public function testObjectassignments() {
+    public function testObjectassignmentsSaving() {
 
         $objDB = class_carrier::getInstance()->getObjDB();
 
@@ -96,10 +101,32 @@ class class_test_orm_schemamanagerTest extends class_testbase_object {
         $arrRow = $objDB->getPRow("SELECT COUNT(*) FROM "._dbprefix_."testclass_rel WHERE testclass_source_id = ?", array($objTestobject->getSystemid()));
         $this->assertEquals(2, $arrRow["COUNT(*)"]);
 
-
     }
 
 
+    public function testObjectassignmentsLazyLoad() {
+        /** @var orm_objectlist_testclass $objTestobject */
+        $objTestobject = $this->getObject("testobject");
+        $arrAspects = array($this->getObject("aspect1"), $this->getObject("aspect2"));
+
+        $objTestobject->setArrObject1($arrAspects);
+        $objTestobject->updateObjectToDb();
+
+        //reinit
+        $objNewInstance = new orm_objectlist_testclass($objTestobject->getSystemid());
+
+        $this->assertTrue($objNewInstance->getArrObject1() instanceof class_orm_assignment_array);
+        $this->assertTrue(!$objNewInstance->getArrObject1()->getBitInitialized());
+
+        $this->assertEquals(2, count($objNewInstance->getArrObject1()));
+        $this->assertTrue($objNewInstance->getArrObject1()->getBitInitialized());
+
+        foreach($objNewInstance->getArrObject1() as $objOneObject) {
+            $this->assertTrue(in_array($objOneObject->getSystemid(), array($this->getObject("aspect1")->getSystemid(), $this->getObject("aspect2")->getSystemid())));
+        }
+
+        $this->assertTrue($objNewInstance->getArrObject1()->getBitInitialized());
+    }
 }
 
 /**

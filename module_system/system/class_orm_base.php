@@ -108,7 +108,7 @@ abstract class class_orm_base {
      *
      * @return string[] array of systemids
      */
-    protected final function getAssignmentsFromDatabase($strPropertyName) {
+    public final function getAssignmentsFromDatabase($strPropertyName) {
         $objReflection = new class_reflection($this->getObjObject());
 
         $strTableName = $objReflection->getAnnotationValueForProperty($strPropertyName, class_orm_base::STR_ANNOTATION_OBJECTLIST);

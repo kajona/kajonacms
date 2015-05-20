@@ -2,8 +2,6 @@
 /*"******************************************************************************************************
 *   (c) 2007-2015 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
-*-------------------------------------------------------------------------------------------------------*
-*   $Id$                                        *
 ********************************************************************************************************/
 
 /**
@@ -95,7 +93,7 @@ class class_orm_objectinit extends class_orm_base {
                 return;
             }
 
-            $objPropertyLazyLoader = null;
+            $objPropertyLazyLoader = new class_orm_assignment_array($this->getObjObject(), $strPropertyName);
 
             $strSetter = $objReflection->getSetter($strPropertyName);
             if($strSetter !== null)
