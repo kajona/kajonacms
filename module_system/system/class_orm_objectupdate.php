@@ -37,10 +37,7 @@ class class_orm_objectupdate extends class_orm_base {
             return true;
         }
 
-        if($this->getObjObject() instanceof interface_versionable) {
-            $objChanges = new class_module_system_changelog();
-            $objChanges->createLogEntry($this->getObjObject(), class_module_system_changelog::$STR_ACTION_EDIT);
-        }
+
 
         //fetch properties with annotations
         $objReflection = new class_reflection($this->getObjObject());
@@ -107,6 +104,12 @@ class class_orm_objectupdate extends class_orm_base {
             $bitReturn = $this->updateAssignments();
         }
 
+
+        if($this->getObjObject() instanceof interface_versionable) {
+            $objChanges = new class_module_system_changelog();
+            $objChanges->createLogEntry($this->getObjObject(), class_module_system_changelog::$STR_ACTION_EDIT);
+        }
+
         return $bitReturn;
 
 
@@ -135,6 +138,9 @@ class class_orm_objectupdate extends class_orm_base {
             $arrAssignmentsFromObject = $this->getAssignmentValuesFromObject($strPropertyName);
             $arrAssignmentsFromDatabase = $this->getAssignmentsFromDatabase($strPropertyName);
 
+            sort($arrAssignmentsFromObject);
+            sort($arrAssignmentsFromDatabase);
+
             //only do s.th. if the array differs
             $arrNewAssignments = array_diff($arrAssignmentsFromObject, $arrAssignmentsFromDatabase);
             $arrDeletedAssignments = array_diff($arrAssignmentsFromDatabase, $arrAssignmentsFromObject);
@@ -156,6 +162,11 @@ class class_orm_objectupdate extends class_orm_base {
                 class_system_eventidentifier::EVENT_SYSTEM_OBJECTASSIGNMENTSUPDATED,
                 array($arrNewAssignments, $arrDeletedAssignments, $arrAssignmentsFromObject, $this->getObjObject(), $strPropertyName)
             );
+
+            if($objReflection->hasPropertyAnnotation($strPropertyName, class_module_system_changelog::ANNOTATION_PROPERTY_VERSIONABLE)) {
+                $objChanges = new class_module_system_changelog();
+                $objChanges->setOldValueForSystemidAndProperty($this->getObjObject()->getSystemid(), $strPropertyName, implode(",", $arrAssignmentsFromObject));
+            }
         }
 
         return $bitReturn;
