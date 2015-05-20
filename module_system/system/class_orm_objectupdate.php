@@ -147,6 +147,11 @@ class class_orm_objectupdate extends class_orm_base {
 
             $bitReturn = $bitReturn && $objDB->_pQuery("DELETE FROM ".$objDB->encloseTableName(_dbprefix_.$strTableName)." WHERE ".$objDB->encloseColumnName($arrValues["source"])." = ? ", array($this->getObjObject()->getSystemid()));
             $bitReturn = $bitReturn && $objDB->multiInsert($strTableName, array($arrValues["source"], $arrValues["target"]), $arrInserts);
+
+            $bitReturn = $bitReturn && class_core_eventdispatcher::getInstance()->notifyGenericListeners(
+                class_system_eventidentifier::EVENT_SYSTEM_OBJECTASSIGNMENTSUPDATED,
+                array($arrNewAssignments, $arrDeletedAssignments, $arrAssignmentsFromObject, $this->getObjObject(), $strPropertyName)
+            );
         }
 
         return $bitReturn;

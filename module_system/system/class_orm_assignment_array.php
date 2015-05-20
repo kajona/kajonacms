@@ -5,7 +5,8 @@
 ********************************************************************************************************/
 
 /**
- * The orm assignment array is used to create a lazy loading way of handling
+ * The orm assignment array is used to create a lazy loading way of handling object-assignments.
+ * In most cases this is transparent, so there's no real usage of this class directly.
  *
  * @package module_system
  * @author sidler@mulchprod.de
@@ -21,6 +22,11 @@ class class_orm_assignment_array extends ArrayObject {
     private $objTargetObject = null;
     private $strProperty = "";
 
+    /**
+     * Create a new lazy-loaded array for a mapped assignment-property
+     * @param class_root $objTargetObject
+     * @param int $strProperty
+     */
     function __construct(class_root $objTargetObject, $strProperty) {
         $this->objTargetObject = $objTargetObject;
         $this->strProperty = $strProperty;

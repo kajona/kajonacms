@@ -127,7 +127,128 @@ class class_test_orm_schemamanagerTest extends class_testbase_object {
 
         $this->assertTrue($objNewInstance->getArrObject1()->getBitInitialized());
     }
+
+
+    public function testObjectassignmentEventHandling() {
+
+        $objDB = class_carrier::getInstance()->getObjDB();
+
+
+        $objHandler = new orm_objectlist_testhandler();
+        class_core_eventdispatcher::getInstance()->removeAndAddListener(class_system_eventidentifier::EVENT_SYSTEM_OBJECTASSIGNMENTSUPDATED, $objHandler);
+
+        /** @var orm_objectlist_testclass $objTestobject */
+        $objTestobject = $this->getObject("testobject");
+        $arrAspects = array($this->getObject("aspect1"), $this->getObject("aspect2"));
+        $objTestobject->setArrObject1($arrAspects);
+
+        $this->assertTrue($objHandler->arrCurrentAssignments == null);
+        $this->assertTrue($objHandler->arrNewAssignments == null);
+        $this->assertTrue($objHandler->arrRemovedAssignments == null);
+        $this->assertTrue($objHandler->objObject == null);
+        $this->assertTrue($objHandler->strProperty == null);
+        $objTestobject->updateObjectToDb();
+
+        $this->assertEquals(count($objHandler->arrNewAssignments), 2);
+        $this->assertEquals(count($objHandler->arrRemovedAssignments), 0);
+        $this->assertEquals(count($objHandler->arrCurrentAssignments), 2);
+        $this->assertTrue(in_array($objHandler->arrNewAssignments[0], array($this->getObject("aspect1")->getSystemid(), $this->getObject("aspect2")->getSystemid())));
+        $this->assertTrue(in_array($objHandler->arrNewAssignments[1], array($this->getObject("aspect1")->getSystemid(), $this->getObject("aspect2")->getSystemid())));
+        $this->assertTrue(in_array($objHandler->arrCurrentAssignments[0], array($this->getObject("aspect1")->getSystemid(), $this->getObject("aspect2")->getSystemid())));
+        $this->assertTrue(in_array($objHandler->arrCurrentAssignments[1], array($this->getObject("aspect1")->getSystemid(), $this->getObject("aspect2")->getSystemid())));
+
+        $objDB->flushQueryCache();
+
+        //change the assignments
+        $objHandler = new orm_objectlist_testhandler();
+        class_core_eventdispatcher::getInstance()->removeAndAddListener(class_system_eventidentifier::EVENT_SYSTEM_OBJECTASSIGNMENTSUPDATED, $objHandler);
+
+        $objTestobject = $this->getObject("testobject");
+        $arrAspects = array($this->getObject("aspect2"));
+        $objTestobject->setArrObject1($arrAspects);
+
+        $this->assertTrue($objHandler->arrCurrentAssignments == null);
+        $this->assertTrue($objHandler->arrNewAssignments == null);
+        $this->assertTrue($objHandler->arrRemovedAssignments == null);
+        $this->assertTrue($objHandler->objObject == null);
+        $this->assertTrue($objHandler->strProperty == null);
+        $objTestobject->updateObjectToDb();
+
+        $this->assertEquals(count($objHandler->arrNewAssignments), 0);
+        $this->assertEquals(count($objHandler->arrRemovedAssignments), 1);
+        $this->assertEquals(count($objHandler->arrCurrentAssignments), 1);
+        $this->assertTrue(in_array($objHandler->arrRemovedAssignments[0], array($this->getObject("aspect1")->getSystemid())));
+        $this->assertTrue(in_array($objHandler->arrCurrentAssignments[0], array($this->getObject("aspect2")->getSystemid())));
+
+
+        $objDB->flushQueryCache();
+
+        //change the assignments
+        $objHandler = new orm_objectlist_testhandler();
+        class_core_eventdispatcher::getInstance()->removeAndAddListener(class_system_eventidentifier::EVENT_SYSTEM_OBJECTASSIGNMENTSUPDATED, $objHandler);
+
+        $objTestobject = $this->getObject("testobject");
+        $objTestobject->setArrObject1(array());
+
+        $this->assertTrue($objHandler->arrCurrentAssignments == null);
+        $this->assertTrue($objHandler->arrNewAssignments == null);
+        $this->assertTrue($objHandler->arrRemovedAssignments == null);
+        $this->assertTrue($objHandler->objObject == null);
+        $this->assertTrue($objHandler->strProperty == null);
+        $objTestobject->updateObjectToDb();
+
+
+        $this->assertEquals(count($objHandler->arrNewAssignments), 0);
+        $this->assertEquals(count($objHandler->arrRemovedAssignments), 1);
+        $this->assertEquals(count($objHandler->arrCurrentAssignments), 0);
+        $this->assertTrue(in_array($objHandler->arrRemovedAssignments[0], array($this->getObject("aspect2")->getSystemid())));
+
+
+        $objDB->flushQueryCache();
+
+        //change the assignments
+
+        $objHandler = new orm_objectlist_testhandler();
+        class_core_eventdispatcher::getInstance()->removeAndAddListener(class_system_eventidentifier::EVENT_SYSTEM_OBJECTASSIGNMENTSUPDATED, $objHandler);
+
+        $objTestobject = $this->getObject("testobject");
+        $arrAspects = array($this->getObject("aspect2"), $this->getObject("aspect1")->getSystemid());
+        $objTestobject->setArrObject1($arrAspects);
+
+        $this->assertTrue($objHandler->arrCurrentAssignments == null);
+        $this->assertTrue($objHandler->arrNewAssignments == null);
+        $this->assertTrue($objHandler->arrRemovedAssignments == null);
+        $this->assertTrue($objHandler->objObject == null);
+        $this->assertTrue($objHandler->strProperty == null);
+        $objTestobject->updateObjectToDb();
+
+        $this->assertEquals(count($objHandler->arrNewAssignments), 2);
+        $this->assertEquals(count($objHandler->arrRemovedAssignments), 0);
+        $this->assertEquals(count($objHandler->arrCurrentAssignments), 2);
+        $this->assertTrue(in_array($objHandler->arrNewAssignments[0], array($this->getObject("aspect1")->getSystemid(), $this->getObject("aspect2")->getSystemid())));
+        $this->assertTrue(in_array($objHandler->arrNewAssignments[1], array($this->getObject("aspect1")->getSystemid(), $this->getObject("aspect2")->getSystemid())));
+        $this->assertTrue(in_array($objHandler->arrCurrentAssignments[0], array($this->getObject("aspect1")->getSystemid(), $this->getObject("aspect2")->getSystemid())));
+        $this->assertTrue(in_array($objHandler->arrCurrentAssignments[1], array($this->getObject("aspect1")->getSystemid(), $this->getObject("aspect2")->getSystemid())));
+
+
+    }
 }
+
+class orm_objectlist_testhandler implements interface_genericevent_listener {
+
+    public $arrNewAssignments = null;
+    public $arrRemovedAssignments = null;
+    public $arrCurrentAssignments = null;
+    public $objObject = null;
+    public $strProperty = null;
+
+    public function handleEvent($strEventIdentifier, array $arrArguments) {
+        list($this->arrNewAssignments, $this->arrRemovedAssignments, $this->arrCurrentAssignments, $this->objObject, $this->strProperty) = $arrArguments;
+        return true;
+    }
+
+}
+
 
 /**
  * Class orm_schematest_testclass
