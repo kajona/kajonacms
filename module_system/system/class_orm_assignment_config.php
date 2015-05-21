@@ -41,11 +41,11 @@ class class_orm_assignment_config  {
 
         $arrTypeFilter = isset($arrPropertyParams["type"]) ? $arrPropertyParams["type"] : null;
 
-        if(!isset($arrMappingColumns["source"]) || !isset($arrMappingColumns["target"]) || empty($strTableName)) {
+        if(!isset($arrPropertyParams["source"]) || !isset($arrPropertyParams["target"]) || empty($strTable)) {
             throw new class_orm_exception("@objectList annoation for ".$strProperty."@".get_class($objObject)." is malformed", class_orm_exception::$level_FATALERROR);
         }
 
-        return new class_orm_assignment_config($strTable, $arrMappingColumns["source"], $arrMappingColumns["target"], $arrTypeFilter);
+        return new class_orm_assignment_config($strTable, $arrPropertyParams["source"], $arrPropertyParams["target"], $arrTypeFilter);
     }
 
     /**

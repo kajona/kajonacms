@@ -107,6 +107,28 @@ class class_test_orm_schemamanagerTest extends class_testbase_object {
 
     }
 
+    public function testObjectassignmentsOnNonSavedObjects() {
+
+        $objDB = class_carrier::getInstance()->getObjDB();
+
+        /** @var orm_objectlist_testclass $objTestobject */
+        $objTestobject = new orm_objectlist_testclass();
+        $arrAspects = array($this->getObject("aspect1"), $this->getObject("aspect2"));
+
+
+        $objTestobject->setArrObject1($arrAspects);
+        $objTestobject->updateObjectToDb(class_module_system_module::getModuleByName("system")->getSystemid());
+
+        $arrRow = $objDB->getPRow("SELECT COUNT(*) FROM "._dbprefix_."testclass_rel WHERE testclass_source_id = ?", array($objTestobject->getSystemid()));
+        $this->assertEquals(2, $arrRow["COUNT(*)"]);
+
+        $objDB->flushQueryCache();
+        $objTestobject->deleteObject();
+
+
+
+    }
+
 
     public function testObjectassignmentsLazyLoad() {
         /** @var orm_objectlist_testclass $objTestobject */
