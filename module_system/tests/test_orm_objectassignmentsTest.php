@@ -255,6 +255,25 @@ class class_test_orm_schemamanagerTest extends class_testbase_object {
         $this->assertTrue($objHandler->strProperty == null);
 
     }
+
+    public function testAssignmentsDelete() {
+
+        $objDB = class_carrier::getInstance()->getObjDB();
+
+        /** @var orm_objectlist_testclass $objTestobject */
+        $objTestobject = $this->getObject("testobject");
+        $arrAspects = array($this->getObject("aspect2"), $this->getObject("aspect1")->getSystemid());
+        $objTestobject->setArrObject1($arrAspects);
+        $objTestobject->updateObjectToDb();
+
+        $arrRow = $objDB->getPRow("SELECT COUNT(*) FROM "._dbprefix_."testclass_rel WHERE testclass_source_id = ?", array($objTestobject->getSystemid()));
+        $this->assertEquals(2, $arrRow["COUNT(*)"]);
+
+        $objTestobject->deleteObject();
+
+        $arrRow = $objDB->getPRow("SELECT COUNT(*) FROM "._dbprefix_."testclass_rel WHERE testclass_source_id = ?", array($objTestobject->getSystemid()), 0, false);
+        $this->assertEquals(0, $arrRow["COUNT(*)"]);
+    }
 }
 
 class orm_objectlist_testhandler implements interface_genericevent_listener {

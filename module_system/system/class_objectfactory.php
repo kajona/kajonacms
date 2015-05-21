@@ -150,5 +150,13 @@ class class_objectfactory {
         $this->arrObjectCache = array();
         $this->arrClassCache = array();
     }
+
+    /**
+     * Removes a single entry from the instance cache
+     * @param $strSystemid
+     */
+    public function removeFromCache($strSystemid) {
+        unset($this->arrObjectCache[$strSystemid]);
+    }
 }
 

@@ -90,7 +90,7 @@ class class_orm_objectinit extends class_orm_base {
             $strTableName = $objReflection->getAnnotationValueForProperty($strPropertyName, class_orm_base::STR_ANNOTATION_OBJECTLIST);
 
             if(!isset($arrValues["source"]) || !isset($arrValues["target"]) || empty($strTableName)) {
-                return;
+                continue;
             }
 
             $objPropertyLazyLoader = new class_orm_assignment_array($this->getObjObject(), $strPropertyName);
