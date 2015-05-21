@@ -165,7 +165,7 @@ class class_orm_objectupdate extends class_orm_base {
 
             if($objReflection->hasPropertyAnnotation($strPropertyName, class_module_system_changelog::ANNOTATION_PROPERTY_VERSIONABLE)) {
                 $objChanges = new class_module_system_changelog();
-                $objChanges->setOldValueForSystemidAndProperty($this->getObjObject()->getSystemid(), $strPropertyName, implode(",", $arrAssignmentsFromObject));
+                $objChanges->setOldValueForSystemidAndProperty($this->getObjObject()->getSystemid(), $strPropertyName, implode(",", $arrAssignmentsFromDatabase));
             }
         }
 
