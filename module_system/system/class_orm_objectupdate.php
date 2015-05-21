@@ -129,13 +129,10 @@ class class_orm_objectupdate extends class_orm_base {
 
         foreach($arrProperties as $strPropertyName => $arrValues) {
 
-            $strTableName = $objReflection->getAnnotationValueForProperty($strPropertyName, class_orm_base::STR_ANNOTATION_OBJECTLIST);
+            $objCfg = class_orm_assignment_config::getConfigForProperty($this->getObjObject(), $strPropertyName);
 
-            if(!isset($arrValues["source"]) || !isset($arrValues["target"]) || empty($strTableName)) {
-                continue;
-            }
 
-            $arrAssignmentsFromObject = $this->getAssignmentValuesFromObject($strPropertyName, isset($arrValues["type"]) ? $arrValues["type"] : null);
+            $arrAssignmentsFromObject = $this->getAssignmentValuesFromObject($strPropertyName, $objCfg->getArrTypeFilter());
             $arrAssignmentsFromDatabase = $this->getAssignmentsFromDatabase($strPropertyName);
 
             sort($arrAssignmentsFromObject);
@@ -155,8 +152,10 @@ class class_orm_objectupdate extends class_orm_base {
             foreach($arrAssignmentsFromObject as $strOneTargetId)
                 $arrInserts[] = array($this->getObjObject()->getSystemid(), $strOneTargetId);
 
-            $bitReturn = $bitReturn && $objDB->_pQuery("DELETE FROM ".$objDB->encloseTableName(_dbprefix_.$strTableName)." WHERE ".$objDB->encloseColumnName($arrValues["source"])." = ? ", array($this->getObjObject()->getSystemid()));
-            $bitReturn = $bitReturn && $objDB->multiInsert($strTableName, array($arrValues["source"], $arrValues["target"]), $arrInserts);
+            $bitReturn = $bitReturn && $objDB->_pQuery(
+                "DELETE FROM ".$objDB->encloseTableName(_dbprefix_.$objCfg->getStrTableName())." WHERE ".$objDB->encloseColumnName($objCfg->getStrSourceColumn())." = ?", array($this->getObjObject()->getSystemid())
+            );
+            $bitReturn = $bitReturn && $objDB->multiInsert($objCfg->getStrTableName(), array($objCfg->getStrSourceColumn(), $objCfg->getStrTargetColumn()), $arrInserts);
 
             $bitReturn = $bitReturn && class_core_eventdispatcher::getInstance()->notifyGenericListeners(
                 class_system_eventidentifier::EVENT_SYSTEM_OBJECTASSIGNMENTSUPDATED,

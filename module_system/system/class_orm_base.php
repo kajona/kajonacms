@@ -109,16 +109,12 @@ abstract class class_orm_base {
      * @return string[] array of systemids
      */
     public final function getAssignmentsFromDatabase($strPropertyName) {
-        $objReflection = new class_reflection($this->getObjObject());
-
-        $strTableName = $objReflection->getAnnotationValueForProperty($strPropertyName, class_orm_base::STR_ANNOTATION_OBJECTLIST);
-        $arrMappingColumns = $objReflection->getAnnotationValueForProperty($strPropertyName, class_orm_base::STR_ANNOTATION_OBJECTLIST, class_reflection_enum::PARAMS());
-
+        $objCfg = class_orm_assignment_config::getConfigForProperty($this->getObjObject(), $strPropertyName);
         $objDB = class_carrier::getInstance()->getObjDB();
-        $strQuery = "SELECT * FROM ".$objDB->encloseTableName(_dbprefix_.$strTableName)." WHERE ".$objDB->encloseColumnName($arrMappingColumns["source"])." = ? ";
+        $strQuery = "SELECT * FROM ".$objDB->encloseTableName(_dbprefix_.$objCfg->getStrTableName())." WHERE ".$objDB->encloseColumnName($objCfg->getStrSourceColumn())." = ? ";
         $arrRows = $objDB->getPArray($strQuery, array($this->getObjObject()->getSystemid()), null, null);
 
-        $strTargetCol = $arrMappingColumns["target"];
+        $strTargetCol = $objCfg->getStrTargetColumn();
         array_walk($arrRows, function(array &$arrSingleRow) use ($strTargetCol) {
             $arrSingleRow = $arrSingleRow[$strTargetCol];
         });
