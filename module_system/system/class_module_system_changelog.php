@@ -152,7 +152,7 @@ class class_module_system_changelog extends class_model implements interface_mod
                     $strValue = call_user_func(array($objCurrentObject, $strGetter));
                 }
 
-                if(is_array($strValue)) {
+                if(is_array($strValue) || $strValue instanceof ArrayAccess) {
                     $arrNewValues = array();
                     foreach($strValue as $objOneValue) {
                         if(is_object($objOneValue)&& $objOneValue instanceof class_root) {
@@ -436,7 +436,7 @@ class class_module_system_changelog extends class_model implements interface_mod
 
 
             //array may be processed automatically, too
-            if(is_array($strOldvalue) && is_array($strNewvalue)) {
+            if((is_array($strOldvalue) || $strOldvalue instanceof ArrayAccess) && (is_array($strNewvalue) || $strNewvalue instanceof ArrayAccess)) {
 
                 $arrArrayChanges = array();
                 foreach($strNewvalue as $strOneId) {
