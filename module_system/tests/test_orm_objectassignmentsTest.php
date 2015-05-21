@@ -25,6 +25,9 @@ class class_test_orm_schemamanagerTest extends class_testbase_object {
      * @return string
      */
     protected function getDefaultRootId($strClassName) {
+        if($strClassName == "class_module_languages_language")
+            return class_module_system_module::getModuleByName("languages")->getSystemid();
+
         return class_module_system_module::getModuleByName("system")->getSystemid();
     }
 
@@ -48,6 +51,7 @@ class class_test_orm_schemamanagerTest extends class_testbase_object {
         $objDb = class_carrier::getInstance()->getObjDB();
         $objDb->_pQuery("DROP TABLE "._dbprefix_."testclass", array());
         $objDb->_pQuery("DROP TABLE "._dbprefix_."testclass_rel", array());
+        $objDb->_pQuery("DROP TABLE "._dbprefix_."testclass2_rel", array());
         class_carrier::getInstance()->flushCache(class_carrier::INT_CACHE_TYPE_DBTABLES);
         parent::tearDown();
     }
@@ -274,6 +278,35 @@ class class_test_orm_schemamanagerTest extends class_testbase_object {
         $arrRow = $objDB->getPRow("SELECT COUNT(*) FROM "._dbprefix_."testclass_rel WHERE testclass_source_id = ?", array($objTestobject->getSystemid()), 0, false);
         $this->assertEquals(0, $arrRow["COUNT(*)"]);
     }
+
+
+    public function testAssignmentClassTypeCheck() {
+        $objDB = class_carrier::getInstance()->getObjDB();
+
+        /** @var orm_objectlist_testclass $objTestobject */
+        $objTestobject = $this->getObject("testobject");
+        $arrAspects = array($this->getObject("aspect2"), $this->getObject("aspect1")->getSystemid(), $this->getObject("language"));
+        $objTestobject->setArrObject2($arrAspects);
+        $objTestobject->updateObjectToDb();
+
+        $arrRow = $objDB->getPRow("SELECT COUNT(*) FROM "._dbprefix_."testclass2_rel WHERE testclass_source_id = ?", array($objTestobject->getSystemid()));
+        $this->assertEquals(2, $arrRow["COUNT(*)"]);
+
+        $objDB->flushQueryCache();
+
+        $objTestobject = new orm_objectlist_testclass($objTestobject->getSystemid());
+        $this->assertEquals(2, count($objTestobject->getArrObject2()));
+
+        $strQuery = "INSERT INTO "._dbprefix_."testclass2_rel SET testclass_source_id = ?, testclass_target_id = ?";
+        $objDB->_pQuery($strQuery, array($objTestobject->getSystemid(), $this->getObject("language")->getSystemid()));
+
+        $objDB->flushQueryCache();
+
+        $objTestobject = new orm_objectlist_testclass($objTestobject->getSystemid());
+        $this->assertEquals(2, count($objTestobject->getArrObject2()));
+
+
+    }
 }
 
 class orm_objectlist_testhandler implements interface_genericevent_listener {
@@ -304,6 +337,14 @@ class orm_objectlist_testclass extends class_model implements interface_model {
      * @objectList testclass_rel (source="testclass_source_id", target="testclass_target_id")
      */
     private $arrObject1 = array();
+
+
+
+    /**
+     * @var array
+     * @objectList testclass2_rel (source="testclass_source_id", target="testclass_target_id", type={"class_module_system_aspect"})
+     */
+    private $arrObject2 = array();
 
     /**
      * @var string
@@ -349,6 +390,20 @@ class orm_objectlist_testclass extends class_model implements interface_model {
      */
     public function setArrObject1($arrObject1) {
         $this->arrObject1 = $arrObject1;
+    }
+
+    /**
+     * @return array
+     */
+    public function getArrObject2() {
+        return $this->arrObject2;
+    }
+
+    /**
+     * @param array $arrObject2
+     */
+    public function setArrObject2($arrObject2) {
+        $this->arrObject2 = $arrObject2;
     }
 
 

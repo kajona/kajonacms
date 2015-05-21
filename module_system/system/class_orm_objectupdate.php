@@ -132,10 +132,10 @@ class class_orm_objectupdate extends class_orm_base {
             $strTableName = $objReflection->getAnnotationValueForProperty($strPropertyName, class_orm_base::STR_ANNOTATION_OBJECTLIST);
 
             if(!isset($arrValues["source"]) || !isset($arrValues["target"]) || empty($strTableName)) {
-                return false;
+                continue;
             }
 
-            $arrAssignmentsFromObject = $this->getAssignmentValuesFromObject($strPropertyName);
+            $arrAssignmentsFromObject = $this->getAssignmentValuesFromObject($strPropertyName, isset($arrValues["type"]) ? $arrValues["type"] : null);
             $arrAssignmentsFromDatabase = $this->getAssignmentsFromDatabase($strPropertyName);
 
             sort($arrAssignmentsFromObject);
@@ -147,7 +147,7 @@ class class_orm_objectupdate extends class_orm_base {
 
             //skip in case there's nothing to do
             if(count($arrNewAssignments) == 0 && count($arrDeletedAssignments) == 0)
-                return true;
+                continue;
 
             $objDB = class_carrier::getInstance()->getObjDB();
 
@@ -173,16 +173,15 @@ class class_orm_objectupdate extends class_orm_base {
     }
 
 
-
     /**
      * Internal helper to fetch the values of an assignment property.
      * Capable of handling both, objects and systemids.
      *
      * @param $strPropertyName
-     *
+     * @param $arrClassFilter
      * @return array
      */
-    private function getAssignmentValuesFromObject($strPropertyName) {
+    private function getAssignmentValuesFromObject($strPropertyName, $arrClassFilter) {
         $objReflection = new class_reflection($this->getObjObject());
 
         $strGetter = $objReflection->getGetter($strPropertyName);
@@ -197,8 +196,11 @@ class class_orm_objectupdate extends class_orm_base {
         $arrReturn = array();
         foreach($arrValues as $objOneValue) {
 
-            if(is_object($objOneValue) && $objOneValue instanceof class_model)
-                $arrReturn[] = $objOneValue->getSystemid();
+            if(is_object($objOneValue) && $objOneValue instanceof class_model) {
+                if($arrClassFilter == null || in_array(get_class($objOneValue), $arrClassFilter)) {
+                    $arrReturn[] = $objOneValue->getSystemid();
+                }
+            }
             else if(is_string($objOneValue) && validateSystemid($objOneValue))
                 $arrReturn[] = $objOneValue;
         }

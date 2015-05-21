@@ -42,9 +42,16 @@ class class_orm_assignment_array extends ArrayObject {
         $this->bitInitialized = true;
 
         $objInit = new class_orm_objectinit($this->objTargetObject);
+
+        $objReflection = new class_reflection($this->objTargetObject);
+        $arrPropertyParams = $objReflection->getAnnotationValueForProperty($this->strProperty, class_orm_base::STR_ANNOTATION_OBJECTLIST, class_reflection_enum::PARAMS());
+
+        $arrTypeFilter = isset($arrPropertyParams["type"]) ? $arrPropertyParams["type"] : null;
+
         foreach($objInit->getAssignmentsFromDatabase($this->strProperty) as $strOneId) {
+
             $objObject = class_objectfactory::getInstance()->getObject($strOneId);
-            if($objObject !== null)
+            if($objObject !== null && ($arrTypeFilter == null || in_array(get_class($objObject), $arrTypeFilter)))
                 $this->append($objObject);
         }
     }
