@@ -14,13 +14,33 @@
  */
 class class_formentry_checkboxarray extends class_formentry_base implements interface_formentry_printable {
 
+    const TYPE_CHECKBOX = 1;
+    const TYPE_RADIO = 2;
+
+    private $intType = 1;
+    private $bitInline = false;
     private $arrKeyValues = array();
+    private $arrSelected;
 
     public function __construct($strFormName, $strSourceProperty, $objSourceObject = null) {
         parent::__construct($strFormName, $strSourceProperty, $objSourceObject);
 
         //set the default validator
         $this->setObjValidator(new class_dummy_validator());
+    }
+
+    public function setType($intType)
+    {
+        $this->intType = $intType;
+
+        return $this;
+    }
+
+    public function setInline($bitInline)
+    {
+        $this->bitInline = $bitInline;
+
+        return $this;
     }
 
     /**
@@ -35,9 +55,8 @@ class class_formentry_checkboxarray extends class_formentry_base implements inte
         if($this->getStrHint() != null)
             $strReturn .= $objToolkit->formTextRow($this->getStrHint());
 
-        foreach($this->arrKeyValues as $strKey => $strOption) {
-            $strReturn .= $objToolkit->formInputCheckbox($this->getStrEntryName()."[".$strKey."]", $strOption, in_array($strKey, $this->getStrValue()), "", $this->getBitReadonly());
-        }
+        $arrSelected = $this->arrSelected !== null ? $this->arrSelected : $this->getStrValue();
+        $strReturn .= $objToolkit->formInputCheckboxArray($this->getStrEntryName(), $this->getStrLabel(), $this->intType, $this->arrKeyValues, $arrSelected, $this->bitInline, $this->getBitReadonly());
 
         return $strReturn;
     }
@@ -81,8 +100,18 @@ class class_formentry_checkboxarray extends class_formentry_base implements inte
      */
     public function setArrKeyValues($arrKeyValues) {
         $this->arrKeyValues = $arrKeyValues;
+
+        return $this;
     }
 
+    /**
+     * @param array $arrSelected
+     */
+    public function setArrSelected($arrSelected) {
+        $this->arrSelected = $arrSelected;
+
+        return $this;
+    }
 
     /**
      * Returns a textual representation of the formentries' value.

@@ -819,6 +819,25 @@ have a surrounding div with class "ac_container" and a div with id "%%name%%_con
 </div>
 </input_userselector>
 
+A list of checkbox or radio input elements
+<input_checkboxarray>
+    <div class="form-group">
+        <label for="%%name%%" class="col-sm-3 control-label">%%title%%</label>
+
+        <div class="col-sm-6 inputText">
+            <div id="%%name%%" class="inputContainer %%class%%">
+                %%elements%%
+            </div>
+        </div>
+    </div>
+</input_checkboxarray>
+
+<input_checkboxarray_checkbox>
+    <div class="%%type%%%%inline%%">
+        <label><input type="%%type%%" name="%%name%%" value="checked" %%checked%% %%readonly%% /> %%title%%</label>
+    </div>
+</input_checkboxarray_checkbox>
+
 ---------------------------------------------------------------------------------------------------------
 -- MISC ELEMENTS ----------------------------------------------------------------------------------------
 Used to fold elements / hide/unhide elements
