@@ -13,6 +13,11 @@
  * @since 4.8
  */
 class class_orm_assignment_array extends ArrayObject {
+
+    /**
+     * Indicator on whether the assignments have been loaded or not
+     * @var bool
+     */
     private $bitInitialized = false;
 
     /**
@@ -34,7 +39,10 @@ class class_orm_assignment_array extends ArrayObject {
         parent::__construct(array());
     }
 
-
+    /**
+     * Triggers the internal loading of the mapped assignments.
+     * Real work is only done on first access.
+     */
     private function lazyLoadArray() {
         if($this->bitInitialized)
             return;
@@ -51,8 +59,9 @@ class class_orm_assignment_array extends ArrayObject {
         foreach($objInit->getAssignmentsFromDatabase($this->strProperty) as $strOneId) {
 
             $objObject = class_objectfactory::getInstance()->getObject($strOneId);
-            if($objObject !== null && ($arrTypeFilter == null || in_array(get_class($objObject), $arrTypeFilter)))
+            if($objObject !== null && ($arrTypeFilter == null || count(array_filter($arrTypeFilter, function($strSingleClass) use ($objObject) { return $objObject instanceof $strSingleClass; })) > 0)) {
                 $this->append($objObject);
+            }
         }
     }
 

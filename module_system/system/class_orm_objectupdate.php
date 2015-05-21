@@ -197,7 +197,7 @@ class class_orm_objectupdate extends class_orm_base {
         foreach($arrValues as $objOneValue) {
 
             if(is_object($objOneValue) && $objOneValue instanceof class_model) {
-                if($arrClassFilter == null || in_array(get_class($objOneValue), $arrClassFilter)) {
+                if($arrClassFilter == null || count(array_filter($arrClassFilter, function($strSingleClass) use ($objOneValue) { return $objOneValue instanceof $strSingleClass; })) > 0) {
                     $arrReturn[] = $objOneValue->getSystemid();
                 }
             }
