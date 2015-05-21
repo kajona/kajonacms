@@ -96,9 +96,10 @@ class class_stats_report_toppages implements interface_admin_statsreports {
             $intSum += $arrOnePage["anzahl"];
 
         $intI = 0;
+        $objUser = new class_module_user_user(class_session::getInstance()->getUserID());
         foreach($arrPages as $arrOnePage) {
             //Escape?
-            if($intI >= _stats_nrofrecords_)
+            if($intI >= $objUser->getIntItemsPerPage())
                 break;
             $arrValues[$intI] = array();
             $arrValues[$intI][] = $intI + 1;
@@ -127,6 +128,7 @@ class class_stats_report_toppages implements interface_admin_statsreports {
      * @return mixed
      */
     public function getTopPages() {
+        $objUser = new class_module_user_user(class_session::getInstance()->getUserID());
         $strQuery = "SELECT stats_page as name, count(*) as anzahl, stats_language as language
 						FROM "._dbprefix_."stats_data
 						WHERE stats_date > ?
@@ -134,7 +136,7 @@ class class_stats_report_toppages implements interface_admin_statsreports {
 						GROUP BY stats_page, stats_language
 							ORDER BY anzahl desc";
 
-        return $this->objDB->getPArray($strQuery, array($this->intDateStart, $this->intDateEnd), 0, _stats_nrofrecords_ - 1);
+        return $this->objDB->getPArray($strQuery, array($this->intDateStart, $this->intDateEnd), 0, $objUser->getIntItemsPerPage() - 1);
     }
 
     /**

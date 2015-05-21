@@ -1,0 +1,4 @@
+Module Basicauthentication
+
+V4.7 ----------------------------------------------------------------------------------------------------
+NEW: module_basicauth -> added a new module handling http basic authentication headers. If found, the listener tries to login the user. Useful for REST / AJAX based clients.

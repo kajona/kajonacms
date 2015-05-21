@@ -109,14 +109,22 @@ class class_installer_element_downloads extends class_installer_base implements 
             $this->updateElementVersion("downloads", "4.6");
             $this->objDB->flushQueryCache();
         }
+
         if(class_module_pages_element::getElement("downloads")->getStrVersion() == "4.6") {
             $strReturn .= "Updating element downloads to 4.6.1...\n";
             $this->updateElementVersion("downloads", "4.6.1");
             $this->objDB->flushQueryCache();
         }
+
         if(class_module_pages_element::getElement("downloads")->getStrVersion() == "4.6.1") {
             $strReturn .= "Updating element downloads to 4.6.2...\n";
             $this->updateElementVersion("downloads", "4.6.2");
+            $this->objDB->flushQueryCache();
+        }
+
+        if(class_module_pages_element::getElement("downloads")->getStrVersion() == "4.6.2") {
+            $strReturn .= "Updating element downloads to 4.7...\n";
+            $this->updateElementVersion("downloads", "4.7");
             $this->objDB->flushQueryCache();
         }
 

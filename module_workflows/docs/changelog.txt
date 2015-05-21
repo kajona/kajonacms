@@ -1,5 +1,9 @@
 Module Workflows
 
+V4.7 ----------------------------------------------------------------------------------------------------
+BUG: module_workflows | portal_controller -> the trigger-action is callable even without view permissions, otherwise there could be some strange scenarios. mis-use is still avoided due to the authkey.
+BUG: module_workflows | workflow -> fixed a wrong limit param for the list of workflows, causing a full list init
+
 V4.6 ----------------------------------------------------------------------------------------------------
 NEW: module_workflows | handler -> a single handler shows the number of instances currently existing for the handler
 NEW: module_workflows | workflow-info -> added a new interface interface_workflows_handler_extendedinfo, extending the existing interface interface_workflows_handler. Workflow-handlers implementing the new interface may pass additional information about the linked object for the admin-lists. [ART #979]

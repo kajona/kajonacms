@@ -89,6 +89,12 @@ class class_installer_element_maps extends class_elementinstaller_base implement
             $this->objDB->flushQueryCache();
         }
 
+        if(class_module_pages_element::getElement("maps")->getStrVersion() == "4.6") {
+            $strReturn .= "Updating element maps to 4.7...\n";
+            $this->updateElementVersion("maps", "4.7");
+            $this->objDB->flushQueryCache();
+        }
+
         return $strReturn;
     }
 

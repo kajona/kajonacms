@@ -17,8 +17,6 @@ $lang["permissions_header"]              = array(0 => "Просмотр", 1 => "
 $lang["_admin_skin_default_"]            = "Скин админа по умолчанию";
 $lang["_admins_group_id_"]               = "ID группы админа";
 $lang["_guests_group_id_"]               = "ID гостевой группы";
-$lang["_user_log_nrofrecords_"]          = "Количество строк";
-$lang["_user_log_nrofrecords_hint"]      = "Определяет количество строк, которые будут показаны в логин протоколе.";
 $lang["_user_selfedit_"]                 = "Личные данные";
 $lang["_user_selfedit_hint"]             = "Устанавливает, может ли пользователь изменять свои собственные данные.";
 $lang["action_edit_user"]                = "Настройки пользователя";

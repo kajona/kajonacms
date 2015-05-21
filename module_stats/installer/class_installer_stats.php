@@ -61,7 +61,6 @@ class class_installer_stats extends class_installer_base implements interface_in
 
 		$strReturn .= "Registering system-constants...\n";
 		//Number of rows in the login-log
-		$this->registerConstant("_stats_nrofrecords_", "25", class_module_system_setting::$int_TYPE_INT, _stats_modul_id_);
 		$this->registerConstant("_stats_duration_online_", "300", class_module_system_setting::$int_TYPE_INT, _stats_modul_id_);
 		$this->registerConstant("_stats_exclusionlist_", _webpath_, class_module_system_setting::$int_TYPE_STRING, _stats_modul_id_);
 
@@ -102,7 +101,7 @@ class class_installer_stats extends class_installer_base implements interface_in
     public function remove(&$strReturn) {
 
         $strReturn .= "Deleting settings...\n";
-        foreach(array("_stats_nrofrecords_", "_stats_duration_online_", "_stats_exclusionlist_") as $strOneSetting) {
+        foreach(array("_stats_duration_online_", "_stats_exclusionlist_") as $strOneSetting) {
             if(class_module_system_setting::getConfigByName($strOneSetting) !== null)
                 class_module_system_setting::getConfigByName($strOneSetting)->deleteObject();
         }
@@ -131,52 +130,63 @@ class class_installer_stats extends class_installer_base implements interface_in
     public function update() {
 	    $strReturn = "";
         //check installed version and to which version we can update
-        $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
 
-        $strReturn .= "Version found:\n\t Module: ".$arrModul["module_name"].", Version: ".$arrModul["module_version"]."\n\n";
+        $strReturn .= "Version found:\n\t Module: ".$arrModule["module_name"].", Version: ".$arrModule["module_version"]."\n\n";
 
-        $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModul["module_version"] == "3.4.2") {
+        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "3.4.2") {
             $strReturn .= $this->update_342_349();
         }
 
-        $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModul["module_version"] == "3.4.9") {
+        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "3.4.9") {
             $strReturn .= $this->update_349_40();
         }
 
-        $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModul["module_version"] == "4.0") {
+        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "4.0") {
             $strReturn .= $this->update_40_41();
         }
 
-        $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModul["module_version"] == "4.1") {
+        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "4.1") {
             $strReturn .= "Updating 4.1 to 4.2...\n";
             $this->updateModuleVersion("stats", "4.2");
         }
 
-        $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModul["module_version"] == "4.2") {
+        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "4.2") {
             $strReturn .= "Updating 4.2 to 4.3...\n";
             $this->updateModuleVersion("stats", "4.3");
         }
 
-        $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModul["module_version"] == "4.3") {
+        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "4.3") {
             $strReturn .= "Updating 4.3 to 4.4...\n";
             $this->updateModuleVersion("stats", "4.4");
         }
 
-        $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModul["module_version"] == "4.4") {
+        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "4.4") {
             $strReturn .= "Updating 4.4 to 4.5...\n";
             $this->updateModuleVersion("stats", "4.5");
         }
 
-        $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModul["module_version"] == "4.5") {
+        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "4.5") {
             $strReturn .= $this->update_45_46();
+        }
+
+        $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModul["module_version"] == "4.6") {
+            $strReturn .= "Updating to 4.7...\n";
+            $this->updateModuleVersion("stats", "4.7");
+        }
+
+        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "4.7") {
+            $strReturn .= $this->update_47_475();
         }
 
         $strReturn .= "Updating browscap informations...\n";
@@ -250,6 +260,18 @@ class class_installer_stats extends class_installer_base implements interface_in
 
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion("stats", "4.6");
+        return $strReturn;
+    }
+
+
+    private function update_47_475() {
+        $strReturn = "Updating 4.7 to 4.7.5...\n";
+
+        $strReturn .= "Removing setting _stats_nrofrecords_\n";
+        class_module_system_setting::getConfigByName("_stats_nrofrecords_")->deleteObject();
+
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion("stats", "4.6.1");
         return $strReturn;
     }
 

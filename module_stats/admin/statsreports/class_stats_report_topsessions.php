@@ -97,9 +97,10 @@ class class_stats_report_topsessions implements interface_admin_statsreports {
         $arrSessions = $this->getTopSessions();
 
         $intI = 0;
+        $objUser = new class_module_user_user(class_session::getInstance()->getUserID());
         foreach($arrSessions as $arrOneSession) {
             //Escape?
-            if($intI >= _stats_nrofrecords_)
+            if($intI >= $objUser->getIntItemsPerPage())
                 break;
 
             $arrValues[$intI] = array();
@@ -131,6 +132,8 @@ class class_stats_report_topsessions implements interface_admin_statsreports {
      * @return mixed
      */
     public function getTopSessions() {
+        $objUser = new class_module_user_user(class_session::getInstance()->getUserID());
+        $objUser = new class_module_user_user(class_session::getInstance()->getUserID());
 
         $strQuery = "SELECT stats_session,
                             stats_ip,
@@ -147,11 +150,11 @@ class class_stats_report_topsessions implements interface_admin_statsreports {
                      GROUP BY  stats_session, stats_ip, stats_hostname
                       ORDER BY enddate DESC";
 
-        $arrSessions = $this->objDB->getPArray($strQuery, array($this->intDateStart, $this->intDateEnd), 0, _stats_nrofrecords_ - 1);
+        $arrSessions = $this->objDB->getPArray($strQuery, array($this->intDateStart, $this->intDateEnd), 0, $objUser->getIntItemsPerPage() - 1);
 
         $intI = 0;
         foreach($arrSessions as $intKey => $arrOneSession) {
-            if($intI++ >= _stats_nrofrecords_)
+            if($intI++ >= $objUser->getIntItemsPerPage())
                 break;
 
             //Load the details for all sessions

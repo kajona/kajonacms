@@ -43,7 +43,7 @@ class class_installer_packageserver extends class_installer_base implements inte
         $objRepo->setStrTitle("Packageserver packages");
         $objRepo->updateObjectToDb();
 
-        class_carrier::getInstance()->getObjRights()->addGroupToRight(_guests_group_id_, $objRepo->getSystemid(), class_rights::$STR_RIGHT_RIGHT2);
+        class_carrier::getInstance()->getObjRights()->addGroupToRight(class_module_system_setting::getConfigValue("_guests_group_id_"), $objRepo->getSystemid(), class_rights::$STR_RIGHT_RIGHT2);
 
 
         $strReturn .= "Registering system-constants...\n";
@@ -153,6 +153,12 @@ class class_installer_packageserver extends class_installer_base implements inte
         if($arrModule["module_version"] == "4.5") {
             $strReturn .= "Updating 4.5 to 4.6...\n";
             $this->updateModuleVersion($this->objMetadata->getStrTitle(), "4.6");
+        }
+
+        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "4.6") {
+            $strReturn .= "Updating to 4.7...\n";
+            $this->updateModuleVersion($this->objMetadata->getStrTitle(), "4.7");
         }
 
         return $strReturn."\n\n";

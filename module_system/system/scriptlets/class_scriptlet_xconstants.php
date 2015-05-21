@@ -23,9 +23,6 @@ class class_scriptlet_xconstants implements interface_scriptlet {
      */
     public function processContent($strContent) {
 
-        if(!defined("_system_browser_cachebuster_"))
-            define("_system_browser_cachebuster_", 0);
-
         $arrConstants = array(
             "_indexpath_",
             "_webpath_",
@@ -35,14 +32,12 @@ class class_scriptlet_xconstants implements interface_scriptlet {
         $arrValues = array(
             _indexpath_,
             _webpath_,
-            _system_browser_cachebuster_,
+            class_module_system_setting::getConfigValue("_system_browser_cachebuster_"),
             date("d.m.y H:i", time())
         );
 
-        if(defined("_packagemanager_defaulttemplate_")) {
-            $arrConstants[] = "_packagemanager_defaulttemplate_";
-            $arrValues[] = _packagemanager_defaulttemplate_;
-        }
+        $arrConstants[] = "_packagemanager_defaulttemplate_";
+        $arrValues[] = class_module_system_setting::getConfigValue("_packagemanager_defaulttemplate_");
 
         if(defined("_skinwebpath_")) {
             $arrConstants[] = "_skinwebpath_";

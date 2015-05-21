@@ -1,5 +1,10 @@
 Module V4 Skin
 
+V4.7 ----------------------------------------------------------------------------------------------------
+NEW: module_v4skin | kajona js > add a new javascript function to render an toc navigation under the main navigation
+NEW: module_v4skin | bootstrap -> update from bootstrap2 to bootstrap3
+NEW: module_v4skin | dropdowns -> removed the chosen plugin for select input fields
+
 V4.6 ----------------------------------------------------------------------------------------------------
 BUG: module_v4skin | chosen selector -> chosen container width is now always set to 280px
 BUG: module_v4skin | imageresolver -> fixed the earthDisabled icon, stacking gone wrong
@@ -14,8 +19,6 @@ NEW: module_v4skin | dialog.js -> the click-action (url or callback) is removed 
 NEW: module_v4skin | treeview -> on treenode-loadings, the tooltip-handler is activated. if a treenode uses a tooltip text, the tooltip is rendered as expected.
 BUG: module_v4skin | lists -> sortable list in combination with paging made it impossible to sort a record to the next / previous page. therefore two drop-zones are rendered on top and below the sortable list in order to move records to the next / previous page. #880
 BUG: module_v4skin | js -> the keypress-listener to reset a hidden value is not attached to readonly autocomplete fields
-
-
 
 V4.4 ----------------------------------------------------------------------------------------------------
 NEW: the systemtask status div (as shown in dialogs) has a max-height of 400px
@@ -50,8 +53,6 @@ BUG: the user-password field is not populated by the browsers' autocomplete func
 BUG: new-links with a slash were scrambled when adding them to the new-menu
 BUG: changed the style of buttons to avoid line-breaks on long labels
 
-
-
 V4.3 ----------------------------------------------------------------------------------------------------
 NEW: fixed styling of file upload, improved layout for small screens
 NEW: better icon for enabling/disabling records; styling of disabled records in admintable
@@ -72,7 +73,6 @@ BUG: tooltips are only initialized if the title-tag is not empty
 BUG: button-tags include the name, so clicking different button in a single form may trigger separate events on the server-side
 BUG: event propagation is prevented for dropdown submenu clicks, otherwise the menu is not usable on mobile devices
 BUG: fixed the top-bar for tablets / phones
-
 
 V4.2 ----------------------------------------------------------------------------------------------------
 NEW: removed the border-radius of some backend-skin elements, now way more consistent

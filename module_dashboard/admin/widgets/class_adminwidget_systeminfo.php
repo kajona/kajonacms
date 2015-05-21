@@ -48,7 +48,7 @@ class class_adminwidget_systeminfo extends class_adminwidget implements interfac
     public function getWidgetOutput() {
         $strReturn = "";
 
-        if(!class_module_system_module::getModuleByName("system")->rightView() || !in_array(_admins_group_id_, class_carrier::getInstance()->getObjSession()->getGroupIdsAsArray()))
+        if(!class_module_system_module::getModuleByName("system")->rightView() || !class_carrier::getInstance()->getObjSession()->isSuperAdmin())
             return $this->getLang("commons_error_permissions");
 
         //check wich infos to produce

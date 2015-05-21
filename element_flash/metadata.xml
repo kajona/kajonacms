@@ -5,11 +5,11 @@
         >
     <title>flash</title>
     <description>Embed flash movies into the website.</description>
-    <version>4.6</version>
+    <version>4.7</version>
     <author>Kajona Team</author>
     <type>ELEMENT</type>
     <providesInstaller>TRUE</providesInstaller>
     <requiredModules>
-        <module name="pages" version="4.6" />
+        <module name="pages" version="4.7" />
     </requiredModules>
 </package>

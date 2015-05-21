@@ -133,7 +133,7 @@ class class_lockmanager {
      */
     public function isUnlockableForCurrentUser() {
 
-        if(in_array(_admins_group_id_, class_carrier::getInstance()->getObjSession()->getGroupIdsAsArray())) {
+        if(class_carrier::getInstance()->getObjSession()->isSuperAdmin()) {
             return true;
         }
 
@@ -153,11 +153,7 @@ class class_lockmanager {
 
         self::$bitUnlockTriggered = true;
 
-        if(!defined("_system_lock_maxtime_"))
-            define("_system_lock_maxtime_", 0);
-
-
-        $intMinTime = time() - _system_lock_maxtime_;
+        $intMinTime = time() - class_module_system_setting::getConfigValue("_system_lock_maxtime_");
         $strQuery = "UPDATE " . _dbprefix_ . "system
 						SET system_lock_id='0'
 				      WHERE system_lock_time <= ?";

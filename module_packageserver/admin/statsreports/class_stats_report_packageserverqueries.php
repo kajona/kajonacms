@@ -89,8 +89,9 @@ class class_stats_report_packageserverqueries implements interface_admin_statsre
 
         $arrLogs = array();
         $intI = 0;
+        $objUser = new class_module_user_user(class_session::getInstance()->getUserID());
         foreach($arrData as $arrOneLog) {
-            if($intI++ >= _stats_nrofrecords_) {
+            if($intI++ >= $objUser->getIntItemsPerPage()) {
                 break;
             }
 

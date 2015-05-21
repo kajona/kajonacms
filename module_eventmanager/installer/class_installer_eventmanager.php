@@ -38,7 +38,7 @@ class class_installer_eventmanager extends class_installer_base implements inter
 
         //modify default rights to allow guests to participate
 		$strReturn .= "Modifying modules' rights node...\n";
-		$this->objRights->addGroupToRight(_guests_group_id_, $strSystemID, "right1");
+        class_carrier::getInstance()->getObjRights()->addGroupToRight(class_module_system_setting::getConfigValue("_guests_group_id_"), $strSystemID, "right1");
 
         $strReturn .= "Registering eventmanager-element...\n";
         //check, if not already existing
@@ -201,6 +201,13 @@ class class_installer_eventmanager extends class_installer_base implements inter
             $strReturn .= "Updating 4.5 to 4.6...\n";
             $this->updateModuleVersion("eventmanager", "4.6");
             $this->updateElementVersion("eventmanager", "4.6");
+        }
+
+        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "4.6") {
+            $strReturn .= "Updating to 4.7...\n";
+            $this->updateModuleVersion("eventmanager", "4.7");
+            $this->updateElementVersion("eventmanager", "4.7");
         }
 
         return $strReturn."\n\n";

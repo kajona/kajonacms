@@ -131,7 +131,7 @@ class class_toolkit_admin extends class_toolkit {
                 ".$strTemplateInit."
                 language : '".$strLanguage."',
                 filebrowserBrowseUrl : '".uniStrReplace("&amp;", "&", getLinkAdminHref("folderview", "browserChooser", "&form_element=ckeditor"))."',
-                filebrowserImageBrowseUrl : '".uniStrReplace("&amp;", "&", getLinkAdminHref("mediamanager", "folderContentFolderviewMode", "systemid="._mediamanager_default_imagesrepoid_."&form_element=ckeditor&bit_link=1"))."'
+                filebrowserImageBrowseUrl : '".uniStrReplace("&amp;", "&", getLinkAdminHref("mediamanager", "folderContentFolderviewMode", "systemid=".class_module_system_setting::getConfigValue("_mediamanager_default_imagesrepoid_")."&form_element=ckeditor&bit_link=1"))."'
 	        };
             CKEDITOR.replace($(\"textarea[name='".$strName."'][data-kajona-editorid='".$arrTemplate["editorid"]."']\")[0], ckeditorConfig);
         ";
@@ -478,7 +478,7 @@ class class_toolkit_admin extends class_toolkit {
         $strOpener = getLinkAdminDialog(
             "mediamanager",
             "folderContentFolderviewMode",
-            "&form_element=".$strName."&systemid="._mediamanager_default_imagesrepoid_,
+            "&form_element=".$strName."&systemid=".class_module_system_setting::getConfigValue("_mediamanager_default_imagesrepoid_"),
             class_carrier::getInstance()->getObjLang()->getLang("filebrowser", "system"),
             class_carrier::getInstance()->getObjLang()->getLang("filebrowser", "system"),
             "icon_externalBrowser",
@@ -722,6 +722,27 @@ class class_toolkit_admin extends class_toolkit {
         $arrTemplate["disabled"] = ($bitEnabled ? "" : "disabled=\"disabled\"");
         $arrTemplate["options"] = $strOptions;
         $arrTemplate["addons"] = $strAddons;
+        return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID, true);
+    }
+
+    /**
+     * Form entry which displays an input text field where you can add or remove tags
+     *
+     * @param $strName
+     * @param string $strTitle
+     * @param array $arrObjects
+     * @return string
+     * @throws class_exception
+     */
+    public function formInputTagEditor($strName, $strTitle = "", array $arrValues = array(), $strOnChange = null) {
+        $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "input_tageditor");
+
+        $arrTemplate = array();
+        $arrTemplate["name"] = $strName;
+        $arrTemplate["title"] = $strTitle;
+        $arrTemplate["values"] = json_encode(array_values($arrValues));
+        $arrTemplate["onChange"] = empty($strOnChange) ? "function(){}" : (string) $strOnChange;
+
         return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID, true);
     }
 

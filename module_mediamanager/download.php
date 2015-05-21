@@ -100,7 +100,7 @@ class class_download_manager extends class_root {
         }
 
         //if we reach up here, something gone wrong :/
-        class_response_object::getInstance()->setStrRedirectUrl(str_replace(array("_indexpath_", "&amp;"), array(_indexpath_, "&"), class_link::getLinkPortalHref(_pages_errorpage_)));
+        class_response_object::getInstance()->setStrRedirectUrl(str_replace(array("_indexpath_", "&amp;"), array(_indexpath_, "&"), class_link::getLinkPortalHref(class_module_system_setting::getConfigValue("_pages_errorpage_"))));
         class_response_object::getInstance()->sendHeaders();
         class_response_object::getInstance()->sendContent();
         return "";

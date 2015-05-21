@@ -172,7 +172,7 @@ class class_module_packagemanager_packagemanager_template implements interface_p
      * @return bool
      */
     public function isRemovable() {
-        return _packagemanager_defaulttemplate_ != $this->getObjMetadata()->getStrTitle();
+        return class_module_system_setting::getConfigValue("_packagemanager_defaulttemplate_") != $this->getObjMetadata()->getStrTitle();
     }
 
     /**
