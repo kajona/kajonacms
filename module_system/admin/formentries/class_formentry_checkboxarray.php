@@ -29,14 +29,14 @@ class class_formentry_checkboxarray extends class_formentry_base implements inte
         $this->setObjValidator(new class_dummy_validator());
     }
 
-    public function setType($intType)
+    public function setIntType($intType)
     {
         $this->intType = $intType;
 
         return $this;
     }
 
-    public function setInline($bitInline)
+    public function setBitInline($bitInline)
     {
         $this->bitInline = $bitInline;
 
