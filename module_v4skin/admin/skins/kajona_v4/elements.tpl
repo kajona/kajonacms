@@ -825,7 +825,7 @@ have a surrounding div with class "ac_container" and a div with id "%%name%%_con
         <label for="%%name%%" class="col-sm-3 control-label">%%title%%</label>
 
         <div class="col-sm-6 inputText">
-            <table id="%%name%%" data-name="%%name%%" class="table table-striped" style="border:1px solid #bfbfbf;">
+            <table id="%%name%%" data-name="%%name%%" class="table table-striped">
                 <colgroup>
                     <col width="20" />
                     <col width="*" />
