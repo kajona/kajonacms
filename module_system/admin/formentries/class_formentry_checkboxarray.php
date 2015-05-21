@@ -20,7 +20,6 @@ class class_formentry_checkboxarray extends class_formentry_base implements inte
     private $intType = 1;
     private $bitInline = false;
     private $arrKeyValues = array();
-    private $arrSelected;
 
     public function __construct($strFormName, $strSourceProperty, $objSourceObject = null) {
         parent::__construct($strFormName, $strSourceProperty, $objSourceObject);
@@ -55,8 +54,7 @@ class class_formentry_checkboxarray extends class_formentry_base implements inte
         if($this->getStrHint() != null)
             $strReturn .= $objToolkit->formTextRow($this->getStrHint());
 
-        $arrSelected = $this->arrSelected !== null ? $this->arrSelected : $this->getStrValue();
-        $strReturn .= $objToolkit->formInputCheckboxArray($this->getStrEntryName(), $this->getStrLabel(), $this->intType, $this->arrKeyValues, $arrSelected, $this->bitInline, $this->getBitReadonly());
+        $strReturn .= $objToolkit->formInputCheckboxArray($this->getStrEntryName(), $this->getStrLabel(), $this->intType, $this->arrKeyValues, $this->getStrValue(), $this->bitInline, $this->getBitReadonly());
 
         return $strReturn;
     }
@@ -100,15 +98,6 @@ class class_formentry_checkboxarray extends class_formentry_base implements inte
      */
     public function setArrKeyValues($arrKeyValues) {
         $this->arrKeyValues = $arrKeyValues;
-
-        return $this;
-    }
-
-    /**
-     * @param array $arrSelected
-     */
-    public function setArrSelected($arrSelected) {
-        $this->arrSelected = $arrSelected;
 
         return $this;
     }
