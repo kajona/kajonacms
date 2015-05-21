@@ -43,7 +43,9 @@ class class_orm_assignment_array extends ArrayObject {
 
         $objInit = new class_orm_objectinit($this->objTargetObject);
         foreach($objInit->getAssignmentsFromDatabase($this->strProperty) as $strOneId) {
-            $this->append(class_objectfactory::getInstance()->getObject($strOneId));
+            $objObject = class_objectfactory::getInstance()->getObject($strOneId);
+            if($objObject !== null)
+                $this->append($objObject);
         }
     }
 
