@@ -5,12 +5,12 @@
     >
     <title>pageimportexport</title>
     <description>Two systemtask allowing to export and import pages using a xml file.</description>
-    <version>4.6</version>
+    <version>4.7</version>
     <author>Kajona Team</author>
     <type>MODULE</type>
     <providesInstaller>FALSE</providesInstaller>
     <requiredModules>
-        <module name="system" version="4.6" />
-        <module name="pages" version="4.6" />
+        <module name="system" version="4.7" />
+        <module name="pages" version="4.7" />
     </requiredModules>
 </package>

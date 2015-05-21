@@ -1,0 +1,4 @@
+Module JSONApi
+
+V4.7 ----------------------------------------------------------------------------------------------------
+NEW: module_jsonapi -> a new module to provide get/put/post/delete access to all business objects using a rest interface

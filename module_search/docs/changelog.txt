@@ -1,5 +1,8 @@
 Module Search
 
+V4.7 ----------------------------------------------------------------------------------------------------
+NEW: module_search | admin-view -> changed the module-filter from a multiselect to a toggle-buttonbar
+
 V4.6 ----------------------------------------------------------------------------------------------------
 NEW: module_search | deferred indexer -> added an optional workflow used for a deferred indexing of objects. if the workflow-engine is installed and running, deferred indexing of objects reduces the complexity of direct object updates and deletions, boosting the systems' perfomance
 NEW: module_search | installer -> the index is updated only once for update sequences spanning over more than one version

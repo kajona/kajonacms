@@ -1,6 +1,10 @@
 Module News
 
 V4.6 ----------------------------------------------------------------------------------------------------
+BUG: module_news | portal list -> the "show more" link is rendered even if there is only a image for the details-view (and no fulltext). fixes #49.
+BUG: module_news | news_admin -> having datetime mode enabled for news caused the date-fields to be rendered twice
+
+V4.6 ----------------------------------------------------------------------------------------------------
 NEW: module_news | portal -> if a news-entry links to another page, the news-details view renders a js-based redirect in addition to the header sent with the request. This makes sure the browser is redirected, even if the header gets garbled (e.g. by contents before the header, such as php warnings)
 NEW: module_news | news -> added a new config "_news_news_datetime_", enabling the time-fields for news' start-, end- and archive-dates. [ticket #915]
 NEW: module_news | portal -> added a new placeholder (and template-sections) to render the category-titles of a single news entry. therefore the categories may be used as some kind of tags / labeling [ticket #911]
@@ -12,7 +16,6 @@ NEW: module_news | templates -> migrated the portal-parts to the new template-ma
 NEW: module_news | templates -> added dateTime properties, rendering the start-/end-/archive dates with the matching timestamp
 BUG: module_news | templates -> fixed the postacomment integration, now handling the comment list for all sections and modes
 BUG: module_news | news list -> the order of news is now fixed, even if there are multiple news on the same start-date [ticket #915]
-
 
 V4.5 ----------------------------------------------------------------------------------------------------
 NEW: module_news | news -> Added an option to link pages to news-entries. If a target page is given and the redirect is enabled, the "read more" link of a news-teaser redirects to the linked page instead of the news' detail view. may be used to create teaser-based news-entries for pages. [ticket #897]

@@ -660,6 +660,11 @@ class class_installer_system extends class_installer_base implements interface_i
             $strReturn .= $this->update_464_465();
         }
 
+        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "4.6.5") {
+            $strReturn .= $this->update_465_47();
+        }
+
         return $strReturn."\n\n";
     }
 
@@ -971,13 +976,16 @@ class class_installer_system extends class_installer_base implements interface_i
         $strReturn = "Updating 4.1 to 4.1.1...\n";
 
         $strReturn .= "Patching current bootstrap.php\n";
-        $objFileystem = new class_filesystem();
-        if(!$objFileystem->isWritable("/core/bootstrap.php")) {
-            $strReturn .= "Error! /core/bootstrap.php is not writable. Please set up write permissions for the update-procedure.\nAborting update.";
-            return $strReturn;
-        }
 
-        $objFileystem->fileCopy(class_resourceloader::getInstance()->getCorePathForModule("module_system")."/module_system/installer/bootstrap.php_411", "/core/bootstrap.php", true);
+        if(is_file(_realpath_."/core/bootstrap.php")) {
+            $objFileystem = new class_filesystem();
+            if(!$objFileystem->isWritable("/core/bootstrap.php")) {
+                $strReturn .= "Error! /core/bootstrap.php is not writable. Please set up write permissions for the update-procedure.\nAborting update.";
+                return $strReturn;
+            }
+
+            $objFileystem->fileCopy(class_resourceloader::getInstance()->getCorePathForModule("module_system")."/module_system/installer/bootstrap.php_411", "/core/bootstrap.php", true);
+        }
 
 
         $strReturn .= "Updating module-versions...\n";
@@ -1176,6 +1184,26 @@ class class_installer_system extends class_installer_base implements interface_i
 
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion($this->objMetadata->getStrTitle(), "4.6.5");
+        return $strReturn;
+    }
+
+
+    private function update_465_47() {
+
+        $strReturn = "Updating 4.6.5 to 4.7...\n";
+
+        $strReturn .= "Patching bootstrap.php < 4.7\n";
+        if(is_file(_realpath_."/core/bootstrap.php")) {
+            $objFileystem = new class_filesystem();
+            if(!$objFileystem->isWritable("/core/bootstrap.php")) {
+                $strReturn .= "Error! /core/bootstrap.php is not writable. Please set up write permissions for the update-procedure.\nAborting update.";
+                return $strReturn;
+            }
+            $objFileystem->fileCopy(class_resourceloader::getInstance()->getCorePathForModule("module_system")."/module_system/installer/bootstrap.php_47", "/core/bootstrap.php", true);
+        }
+
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion($this->objMetadata->getStrTitle(), "4.7");
         return $strReturn;
     }
 

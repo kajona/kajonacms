@@ -199,6 +199,7 @@ class class_module_pages_content_admin extends class_admin_simple implements int
             $strReturn .= $this->objToolkit->listFooter();
         }
 
+        $strReturn .= $this->objToolkit->getTableOfContents("h2");
 
         return $strReturn;
     }

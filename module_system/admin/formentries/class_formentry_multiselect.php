@@ -57,6 +57,9 @@ class class_formentry_multiselect extends class_formentry_dropdown {
      */
     public function getValueAsText() {
         $arrSelected = $this->getStrValue();
+        if(empty($arrSelected))
+            return "";
+
         if(!is_array($arrSelected))
             $arrSelected = explode(",", $this->getStrValue());
 

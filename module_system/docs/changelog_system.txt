@@ -1,5 +1,43 @@
 Module System
 
+V4.7 ----------------------------------------------------------------------------------------------------
+NEW: module_system | class_module_system_admin > option to export an changelog as excel file
+NEW: module_system | class_toolkit_admin > add toolkit method to render an toc navigation
+NEW: module_system | class_formentry_subheadline > sub headline which can be used when nesting multiple headlines
+NEW: module_system | admin_simple -> marked renderList and renderFloatingGrid as final
+NEW: module_system | class_formentry_toggle_buttonbar > adds a new toggle buttonbar element #53
+NEW: module_system | testbase_object > new test base class to create object tree fixtures
+NEW: module_system | class_logger -> option to configure logging level for specific log types close #45
+NEW: module_system | formentries -> added a new formentry filedropdown to select a file out of a directory listing
+NEW: module_system | admin_simple/admin_toolkit -> it is now possible to give AltText for active and inactive when rendering the status icon
+NEW: module_system | user_formentry -> the user-form-entry and the used user-browser / auto-complete functions may be parametrized with a systemid to validate. if given, the dialogs validate, if the user (to be rendered) has at least view-permissions on the passed systemid (resp. the object). should avoid that a user is selected not able to view a given record.
+NEW: module_system | rightshinerhitcheck -> added a new systemtask to cleanup the inheritance of permission-nodes. this is useful if the inheritance is broken but the permission of the parent node and the current node are the same (and therefore should be inherited)
+NEW: module_system | systemtasks -> added a new systemtask "permissions" to set a single groups' permissions recursively, even if there are nodes breaking the inheritance chain
+NEW: module_system | date helper -> added methods for calculating beginning of next valid day, quarter, half year, year
+NEW: module_system | month year dropdowns -> the day of the selected date may be rendered read only, too (optional)
+NEW: module_system | mail -> Added two configs to setup a default mail-from-address independent from the admin account and a second config to enforce the usage of this sender exclusively. resolves #4
+NEW: module_system | class_reflection -> property annotations follow the rules of inheritance, properties overwriting parent properties (respective their annotations) are preferred ahead of the base-class annotations
+NEW: module_system | orm-mapper -> added restrictions based on property names instead of column names. This allows a more object-oriented approach when creating queries [ticket #942]
+NEW: module_system | orm-mapper -> all tables are joined with an AS statement in order to prefix restrictions [ticket #929]
+NEW: module_system | date helper -> added new method which calculates the number of working days for a given month and year
+NEW: module_system | dblayer -> removed all methods handling non-prepared statements from the db-drivers, no longer supported
+NEW: module_system | formentries -> when validating the value or writing the value back to the object, the original value is kept internally. avoids double en-/decodings.
+UPDATE: module_system | class_root -> setObj[StartDate|EndDate] checks the value more strictly, skipping 0 entries
+UPDATE: module_system | class_reflection -> the getGetter and getSetter methods prefer obj-prefixed methods befre long-prefixed methods
+UPDATE: module_system | bootstrap.php -> in case of an include-error, a 500 status code is returned, too.
+UPDATE: module_system | messaging -> messages are not sent to inactive users anymore
+UPDATE: module_system | class_session -> the internal user-switch may be enforced on API level
+UPDATE: module_system | class_response_object -> prevent notices in ob_flush calls
+BUG: module_system | orm_manager -> the class_root properties are not filled by the orm_objectinit handler, the schemamanager processes only mapped tables definitions
+BUG: module_system | formentry_textrow -> the textrow missed to render an (optional) hint
+BUG: module_system | changelog_restorer -> if no value was found for a certain property then no longer the latest value of that property will be retrieved anymore | closes#940
+BUG: module_system | class_admin_evensimpler actionEdit -> It is now being checked if the objet to be edited does exist. Furthermore an additional instantiation of the object was removed | closes #37
+BUG: module_system | class_session -> the userfirstlogin event is triggered after loading the group-memberships of the current user, otherwise permission checks in event-listeners may fail
+BUG: module_system | class_admin_simple -> if the target view should be opened in an overlay, a param folderview=1 is added automatically to render the targer view with a minified template
+BUG: module_system | date_formentry -> a long-based timestamp is converted into a date object if the properties' setter is prefixed with "setobj"
+BUG: module_system | class_formentry_multiselect > return empty string when strValue is empty because otherwise we get an array with one empty element which in the end produces an notice if the key is not available in arrKeyValues
+BUG: module_system | class_classloader -> the classloader indexed files even if there's a suffix to .php (e.g. class_module_faqs_portal.php_OLD).
+
 V4.6.3 --------------------------------------------------------------------------------------------------
 BUG: / SECURITY: module_system | admin_controller -> Fixed a possible xss injection when handling non-existent action-names. fixes SROEADV-2015-01.
 
@@ -61,7 +99,6 @@ BUG: module_system | class_date -> the setPrev/NextDay methods got confused for 
 BUG: module_system | bootstrap/functions -> modules may use numbers within the module name (e.g. news2)
 BUG: module_system | kajona.js -> renderMandatoryFields updates a possible chosen element, too. otherwise mandatory dropdowns may not be marked as mandatory for scenarios where the chosen plugin is loaded before rendering the mandatory fields
 BUG: module_system | class_root -> the internally cached old-previd is reset for new system-records. otherwise sort-managers may not be queried for new records, resulting in possible wrong sort-ids
-
 
 V4.5 ----------------------------------------------------------------------------------------------------
 NEW: module_system | request-dispatcher -> added a new param blockAction. if set (in combination with peClose=1), the current request skips the action() call and sends the location.reload directive directly
@@ -172,7 +209,6 @@ BUG: the response-code for exception was not set to 500 for some cases
 BUG: the formmanager skips object-locks if a new record is created. when editing existing records, the locks are set as before. locking new objects could lead to locks on the prev-id, resulting in locked module-objects waiting for the lock-timeout.
 BUG: the order of child-records could be mixed up when copying an object. ART#829
 
-
 V4.3 ----------------------------------------------------------------------------------------------------
 NEW: Added annotations @module, @moduleId for module and moduleId declarations. makes constructors obsolete in many cases. #830
 NEW: the wysiwygsmall formentry allows images and links to be placed in the content
@@ -210,8 +246,6 @@ BUG: the core event-dispatcher cached some instances using the wrong static vari
 BUG: null-values could have been replaced with empty strings before passing them to the db-driver. this caused problems on some dbms like postgres
 BUG: changed the way the wysiwyg is initialized. this avoids problems with div-tags named the same as some backend-skin css classes / ids.
 BUG: the automatic aspect-changer is only triggered, if the target aspect is visible
-
-
 
 V4.2 ----------------------------------------------------------------------------------------------------
 NEW: added a new form-entry "user", used to select a user from the user-management, includes autocomplete. Therefore the old toolkit-user selector was updated to the latest jqueryUI changes.

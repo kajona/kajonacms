@@ -178,9 +178,15 @@ class class_installer_stats extends class_installer_base implements interface_in
             $strReturn .= $this->update_45_46();
         }
 
+        $arrModul = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModul["module_version"] == "4.6") {
+            $strReturn .= "Updating to 4.7...\n";
+            $this->updateModuleVersion("stats", "4.7");
+        }
+
         $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModule["module_version"] == "4.6") {
-            $strReturn .= $this->update_46_461();
+        if($arrModule["module_version"] == "4.7") {
+            $strReturn .= $this->update_47_475();
         }
 
         $strReturn .= "Updating browscap informations...\n";
@@ -258,8 +264,8 @@ class class_installer_stats extends class_installer_base implements interface_in
     }
 
 
-    private function update_46_461() {
-        $strReturn = "Updating 4.6 to 4.6.1...\n";
+    private function update_47_475() {
+        $strReturn = "Updating 4.7 to 4.7.5...\n";
 
         $strReturn .= "Removing setting _stats_nrofrecords_\n";
         class_module_system_setting::getConfigByName("_stats_nrofrecords_")->deleteObject();

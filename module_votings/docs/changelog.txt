@@ -3,7 +3,7 @@ Module Votings
 V1.6 ----------------------------------------------------------------------------------------------------
 BUG: module_votings | portal -> when rendering a voting on the portal, all answers including those of other votings were loaded instead of only the assigned answers.
 
-V4.4 ----------------------------------------------------------------------------------------------------
+V1.5 ----------------------------------------------------------------------------------------------------
 NEW: tag-favorites may be created / removed inline via an ajax call. #859
 NEW: tagging a record only requires view-permissions, no longer edit permissions since tags are only declarative additions.
 BUG: the tags-autocomplete reacts on enter-key-press as expected, adding the suggested entry to the end of the list of tags instead of replacing them
@@ -13,8 +13,7 @@ BUG: tags found by the search are linked to the list of assigned records instead
 BUG: the tag-overlay missed to set the correct focus #858
 BUG: copying a record with an assigned tag could failed due to an erroneous query
 
-
-V4.2 ----------------------------------------------------------------------------------------------------
+V1.3 ----------------------------------------------------------------------------------------------------
 NEW: added a config-entry for private tag assignments by default (yes / no)
 BUG: fixed the right1 permission handling (save tag as favorite)
 BUG: fixed the path navigation in module tags
