@@ -2136,6 +2136,8 @@ JS;
     }
 
     /**
+     * Creates a tree-view with an button which can be used inside an mode dialog
+     *
      * @param $strLoadNodeDataUrl
      * @param string $strRootNodeSystemid
      * @param array $arrNodesToExpand
@@ -2185,11 +2187,11 @@ JS;
     }
 
     /**
-     * @param string $strLoadNodeDataUrl
+     * Returns an checkbox tree-view
+     *
+     * @param $strLoadNodeDataUrl
      * @param string $strRootNodeSystemid
      * @param array $arrNodesToExpand
-     * @param bool $bitOrderingEnabled
-     * @param bool $bitHierachicalSortEnabled
      * @return string
      * @throws class_exception
      */
