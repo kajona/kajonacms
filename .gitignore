@@ -1,1 +1,3 @@
 cache.properties
+composer.lock
+vendor/
