@@ -60,7 +60,7 @@ class class_formentry_objectlist extends class_formentry_multiselect {
 
     public function setStrValue($strValue) {
         $arrValuesIds = array();
-        if(is_array($strValue)) {
+        if(is_array($strValue) || $strValue instanceof Traversable) {
             foreach($strValue as $objValue) {
                 if($objValue instanceof class_model) {
                     $arrValuesIds[] = $objValue->getStrSystemid();
