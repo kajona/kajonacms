@@ -5,6 +5,14 @@ require_once (__DIR__."/../../module_system/system/class_testbase.php");
 class class_test_orm_schemamanagerTest extends class_testbase {
 
 
+    protected function tearDown() {
+        $objDb = class_carrier::getInstance()->getObjDB();
+        $objDb->_pQuery("DROP TABLE "._dbprefix_."ormtest", array());
+        class_carrier::getInstance()->flushCache(class_carrier::INT_CACHE_TYPE_DBTABLES);
+        parent::tearDown(); //
+    }
+
+
     public function testSchemamanager() {
         $objDb = class_carrier::getInstance()->getObjDB();
 
@@ -37,13 +45,6 @@ class class_test_orm_schemamanagerTest extends class_testbase {
         $this->assertTrue(in_array("col2", $arrColumnNames));
         $this->assertTrue(in_array("col3", $arrColumnNames));
 
-        //$this->assertEquals(uniStrtolower($arrColumnNamesToDatatype["content_id"]), uniStrtolower(uniStrReplace(" ", "", $objDb->getDatatype(class_db_datatypes::STR_TYPE_CHAR20))));
-        //$this->assertEquals(uniStrtolower($arrColumnNamesToDatatype["col1"]), uniStrtolower(uniStrReplace(" ", "", $objDb->getDatatype(class_db_datatypes::STR_TYPE_CHAR254))));
-        //$this->assertEquals(uniStrtolower($arrColumnNamesToDatatype["col2"]), uniStrtolower(uniStrReplace(" ", "", $objDb->getDatatype(class_db_datatypes::STR_TYPE_TEXT))));
-        //$this->assertEquals(uniStrtolower($arrColumnNamesToDatatype["col3"]), uniStrtolower(uniStrReplace(" ", "", $objDb->getDatatype(class_db_datatypes::STR_TYPE_LONG))));
-
-        $objDb->_pQuery("DROP TABLE "._dbprefix_."ormtest", array());
-        class_carrier::getInstance()->flushCache(class_carrier::INT_CACHE_TYPE_DBTABLES);
     }
 
     public function testTargetTableException1() {
