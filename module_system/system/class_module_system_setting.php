@@ -209,6 +209,10 @@ class class_module_system_setting extends class_model implements interface_model
      */
     public static function getAllConfigValues() {
         if(self::$arrInstanceCache == null) {
+
+            if(count(class_db::getInstance()->getTables()) == 0)
+                return array();
+
             $strQuery = "SELECT * FROM " . _dbprefix_ . "system_config ORDER BY system_config_module ASC, system_config_name DESC";
             $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array(), null, null, false);
             foreach($arrIds as $arrOneId) {
