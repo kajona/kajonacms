@@ -7,9 +7,15 @@ class class_test_orm_schemamanagerTest extends class_testbase {
 
     protected function tearDown() {
         $objDb = class_carrier::getInstance()->getObjDB();
-        $objDb->_pQuery("DROP TABLE "._dbprefix_."ormtest", array());
-        class_carrier::getInstance()->flushCache(class_carrier::INT_CACHE_TYPE_DBTABLES);
-        parent::tearDown(); //
+
+        foreach(array("ormtest", "testclass", "testclass_rel", "testclass2_rel") as $strOneTable) {
+            if(in_array(_dbprefix_.$strOneTable, $objDb->getTables())) {
+                $objDb->_pQuery("DROP TABLE "._dbprefix_.$strOneTable, array());
+                class_carrier::getInstance()->flushCache(class_carrier::INT_CACHE_TYPE_DBTABLES);
+            }
+        }
+
+        parent::tearDown();
     }
 
 
@@ -44,7 +50,6 @@ class class_test_orm_schemamanagerTest extends class_testbase {
         $this->assertTrue(in_array("col1", $arrColumnNames));
         $this->assertTrue(in_array("col2", $arrColumnNames));
         $this->assertTrue(in_array("col3", $arrColumnNames));
-
     }
 
     public function testTargetTableException1() {
@@ -146,13 +151,6 @@ class class_test_orm_schemamanagerTest extends class_testbase {
 
         $this->assertTrue(in_array("testclass_source_id", $arrColumnNames));
         $this->assertTrue(in_array("testclass_target_id", $arrColumnNames));
-
-
-
-        $objDb->_pQuery("DROP TABLE "._dbprefix_."testclass", array());
-        $objDb->_pQuery("DROP TABLE "._dbprefix_."testclass_rel", array());
-        $objDb->_pQuery("DROP TABLE "._dbprefix_."testclass2_rel", array());
-        class_carrier::getInstance()->flushCache(class_carrier::INT_CACHE_TYPE_DBTABLES);
 
     }
 }
