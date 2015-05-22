@@ -849,7 +849,7 @@ have a surrounding div with class "ac_container" and a div with id "%%name%%_con
 
 <input_objectlist_row>
     <tr>
-        <td><div class="%%icon%%" data-kajona-icon="%%icon%%" style="display:inline-block;width:20px;height:20px;"></div></td>
+        <td><div class="%%icon%% iconWrapper" data-kajona-icon="%%icon%%"></div></td>
         <td>%%displayName%% <input type="hidden" name="%%name%%[]" value="%%value%%" /></td>
         <td>%%removeLink%%</td>
     </tr>
