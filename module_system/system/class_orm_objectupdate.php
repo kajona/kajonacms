@@ -159,7 +159,7 @@ class class_orm_objectupdate extends class_orm_base {
 
             $bitReturn = $bitReturn && class_core_eventdispatcher::getInstance()->notifyGenericListeners(
                 class_system_eventidentifier::EVENT_SYSTEM_OBJECTASSIGNMENTSUPDATED,
-                array($arrNewAssignments, $arrDeletedAssignments, $arrAssignmentsFromObject, $this->getObjObject(), $strPropertyName)
+                array(array_values($arrNewAssignments), array_values($arrDeletedAssignments), array_values($arrAssignmentsFromObject), $this->getObjObject(), $strPropertyName)
             );
 
             if($objReflection->hasPropertyAnnotation($strPropertyName, class_module_system_changelog::ANNOTATION_PROPERTY_VERSIONABLE)) {
