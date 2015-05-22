@@ -386,26 +386,8 @@ abstract class class_root {
      * @return bool
      */
     protected function deleteObjectInternal() {
-        $bitReturn = true;
-
-        if($this instanceof interface_versionable) {
-            $objChanges = new class_module_system_changelog();
-            $objChanges->createLogEntry($this, class_module_system_changelog::$STR_ACTION_DELETE);
-        }
-
-        $objAnnotations = new class_reflection($this);
-        $arrTargetTables = $objAnnotations->getAnnotationValuesFromClass("@targetTable");
-
-        if(count($arrTargetTables) > 0) {
-            foreach($arrTargetTables as  $strOneTable) {
-                $arrSingleTable = explode(".", $strOneTable);
-                $strQuery = "DELETE FROM ".$this->objDB->encloseTableName(_dbprefix_.$arrSingleTable[0])."
-                                   WHERE ".$this->objDB->encloseColumnName($arrSingleTable[1])." = ? ";
-
-                $bitReturn = $bitReturn && $this->objDB->_pQuery($strQuery, array($this->getSystemid()));
-            }
-        }
-        return $bitReturn;
+        $objORM = new class_orm_objectdelete($this);
+        return $objORM->deleteObject();
     }
 
     /**
@@ -413,6 +395,9 @@ abstract class class_root {
      *
      * @throws class_exception
      * @return bool
+     * @todo reduce overwrites
+     *
+     * @todo move to class_orm_objectdelete completely
      */
     public function deleteObject() {
 
@@ -420,7 +405,7 @@ abstract class class_root {
             return false;
 
         if(!$this instanceof interface_model)
-            throw new class_exception("delete operation required interface_model to be implemented", class_exception::$level_ERROR);
+            throw new class_exception("delete operation requires interface_model to be implemented", class_exception::$level_ERROR);
 
         if($this instanceof interface_versionable) {
             $objChanges = new class_module_system_changelog();
@@ -442,6 +427,9 @@ abstract class class_root {
 
         $bitReturn = $this->deleteObjectInternal();
         $bitReturn = $bitReturn && $this->deleteSystemRecord($this->getSystemid());
+
+        class_objectfactory::getInstance()->removeFromCache($this->getSystemid());
+        class_orm_rowcache::removeSingleRow($this->getSystemid());
 
         if($bitReturn) {
             class_logger::getInstance()->addLogRow("successfully deleted record ".$this->getSystemid()." / ".$this->getStrDisplayName(), class_logger::$levelInfo);
@@ -474,6 +462,8 @@ abstract class class_root {
      * @since 3.3.0
      * @throws class_exception
      * @see interface_model
+     *
+     * @todo move to class_orm_objectupdate completely
      */
     public function updateObjectToDb($strPrevId = false) {
         $bitCommit = true;

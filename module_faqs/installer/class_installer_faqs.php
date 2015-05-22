@@ -27,17 +27,6 @@ class class_installer_faqs extends class_installer_base implements interface_ins
 		$strReturn .= "Installing table faqs...\n";
         $objSchemamanager->createTable("class_module_faqs_faq");
 
-		//faqs_member----------------------------------------------------------------------------------
-		$strReturn .= "Installing table faqs_member...\n";
-
-		$arrFields = array();
-		$arrFields["faqsmem_id"] 		= array("char20", false);
-		$arrFields["faqsmem_faq"]		= array("char20", false);
-		$arrFields["faqsmem_category"]	= array("char20", false);
-
-		if(!$this->objDB->createTable("faqs_member", $arrFields, array("faqsmem_id")))
-			$strReturn .= "An error occurred! ...\n";
-
 
 		//register the module
 		$this->registerModule("faqs", _faqs_module_id_, "class_module_faqs_portal.php", "class_module_faqs_admin.php", $this->objMetadata->getStrVersion(), true);
@@ -226,6 +215,12 @@ class class_installer_faqs extends class_installer_base implements interface_ins
             $this->updateElementVersion("faqs", "4.7");
         }
 
+
+        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "4.7") {
+            $strReturn .= $this->update_47_475();
+        }
+
         return $strReturn."\n\n";
 	}
 
@@ -283,6 +278,19 @@ class class_installer_faqs extends class_installer_base implements interface_ins
         $this->updateModuleVersion("faqs", "4.1");
         $strReturn .= "Updating element-versions...\n";
         $this->updateElementVersion("faqs", "4.1");
+        return $strReturn;
+    }
+
+    private function update_47_475() {
+        $strReturn = "Updating 4.7 to 4.7.5...\n";
+
+        $strReturn .= "Changing assignment table...\n";
+        class_carrier::getInstance()->getObjDB()->removeColumn("faqs_member", "faqsmem_id");
+
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion("faqs", "4.7.5");
+        $strReturn .= "Updating element-versions...\n";
+        $this->updateElementVersion("faqs", "4.7.5");
         return $strReturn;
     }
 

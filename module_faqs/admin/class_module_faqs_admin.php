@@ -32,16 +32,16 @@ class class_module_faqs_admin extends class_admin_evensimpler implements interfa
     const STR_FAQ_LIST = "STR_FAQ_LIST";
 
     public function getOutputModuleNavi() {
-        $arrReturn = array();
-        $arrReturn[] = array("view", getLinkAdmin($this->arrModule["modul"], "list", "", $this->getLang("commons_list"), "", "", true, "adminnavi"));
-        return $arrReturn;
+        return array(
+            array("view", class_link::getLinkAdmin($this->getArrModule("modul"), "list", "", $this->getLang("commons_list"), "", "", true, "adminnavi"))
+        );
     }
 
 
     protected function renderDeleteAction(interface_model $objListEntry) {
         if($objListEntry instanceof class_module_faqs_category && $objListEntry->rightDelete()) {
             return $this->objToolkit->listDeleteButton(
-                $objListEntry->getStrDisplayName(), $this->getLang("commons_delete_category_question"), getLinkAdminHref($objListEntry->getArrModule("modul"), "delete", "&systemid=" . $objListEntry->getSystemid())
+                $objListEntry->getStrDisplayName(), $this->getLang("commons_delete_category_question"), class_link::getLinkAdminHref($objListEntry->getArrModule("modul"), "delete", "&systemid=" . $objListEntry->getSystemid())
             );
         }
         return parent::renderDeleteAction($objListEntry);
@@ -50,7 +50,7 @@ class class_module_faqs_admin extends class_admin_evensimpler implements interfa
     protected function renderAdditionalActions(class_model $objListEntry) {
         if($objListEntry instanceof class_module_faqs_category) {
             return array(
-                $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "list", "&filterId=" . $objListEntry->getSystemid(), "", $this->getLang("kat_anzeigen"), "icon_lens"))
+                $this->objToolkit->listButton(class_link::getLinkAdmin($this->getArrModule("modul"), "list", "&filterId=" . $objListEntry->getSystemid(), "", $this->getLang("kat_anzeigen"), "icon_lens"))
             );
         }
         return array();
@@ -96,7 +96,6 @@ class class_module_faqs_admin extends class_admin_evensimpler implements interfa
     }
 
 
-
     protected function getAdminForm(interface_model $objInstance) {
 
         $objForm = parent::getAdminForm($objInstance);
@@ -104,19 +103,16 @@ class class_module_faqs_admin extends class_admin_evensimpler implements interfa
         if($objInstance instanceof class_module_faqs_faq) {
 
             $arrCats = class_module_faqs_category::getObjectList();
-            if(count($arrCats) > 0)
-                $objForm->addField(new class_formentry_headline("cat_header"))->setStrValue($this->getLang("commons_categories"));
+            if(count($arrCats) > 0) {
+                $objForm->addField(new class_formentry_headline("cat_header"), "cat_header")->setStrValue($this->getLang("commons_categories"));
+                $objForm->setFieldToPosition("cat_header", 3);
 
-            $arrFaqsMember = class_module_faqs_category::getFaqsMember($this->getSystemid());
-
-            foreach($arrCats as $objOneCat) {
-                $bitChecked = false;
-                foreach($arrFaqsMember as $objOneMember) {
-                    if($objOneMember->getSystemid() == $objOneCat->getSystemid()) {
-                        $bitChecked = true;
-                    }
+                $arrKeyValues = array();
+                foreach($arrCats as $objOneCat) {
+                    $arrKeyValues[$objOneCat->getSystemid()] = $objOneCat->getStrDisplayName();
                 }
-                $objForm->addField(new class_formentry_checkbox("faq", "cat[" . $objOneCat->getSystemid() . "]"))->setStrLabel($objOneCat->getStrTitle())->setStrValue($bitChecked);
+
+                $objForm->getField("cats")->setArrKeyValues($arrKeyValues);
             }
 
             return $objForm;
@@ -125,56 +121,9 @@ class class_module_faqs_admin extends class_admin_evensimpler implements interfa
         return $objForm;
     }
 
-    /**
-     * Saves the passed values as a new entry to the db
-     *
-     * @return string "" in case of success
-     * @permissions edit
-     */
-    protected function actionSaveFaq() {
-        $objFaq = null;
-
-        if($this->getParam("mode") == "new")
-            $objFaq = new class_module_faqs_faq();
-        else if($this->getParam("mode") == "edit")
-            $objFaq = new class_module_faqs_faq($this->getSystemid());
-
-        if($objFaq != null) {
-
-            $this->setStrCurObjectTypeName("Faq");
-            $this->setCurObjectClassName("class_module_faqs_faq");
-
-            $objForm = $this->getAdminForm($objFaq);
-            if(!$objForm->validateForm()) {
-                if($this->getParam("mode") == "new")
-                    return $this->actionNew($this->getParam("mode"));
-                else
-                    return $this->actionEdit($this->getParam("mode"));
-            }
-
-            $objForm->updateSourceObject();
-
-            $arrParams = $this->getAllParams();
-            $arrCats = array();
-            if(isset($arrParams["faq_cat"])) {
-                foreach($arrParams["faq_cat"] as $strCatID => $strValue) {
-                    $arrCats[$strCatID] = $strValue;
-                }
-            }
-            $objFaq->setArrCats($arrCats);
-
-            $objFaq->setUpdateBitMemberships(true);
-            $objFaq->updateObjectToDb();
-
-            $this->adminReload(getLinkAdminHref($this->getArrModule("modul"), "", ($this->getParam("pe") != "" ? "&peClose=1&blockAction=1" : "")));
-            return "";
-        }
-
-        return $this->getLang("commons_error_permissions");
-    }
 
     protected function getOutputNaviEntry(interface_model $objInstance) {
-        return getLinkAdmin($this->getArrModule("modul"), "edit", "&systemid=".$objInstance->getSystemid(), $objInstance->getStrDisplayName());
+        return class_link::getLinkAdmin($this->getArrModule("modul"), "edit", "&systemid=".$objInstance->getSystemid(), $objInstance->getStrDisplayName());
     }
 
 }

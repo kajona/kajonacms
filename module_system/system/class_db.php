@@ -154,6 +154,8 @@ class class_db {
      * @return bool
      */
     public function multiInsert($strTable, $arrColumns, $arrValueSets) {
+        if(count($arrValueSets) == 0)
+            return true;
         return $this->objDbDriver->triggerMultiInsert(_dbprefix_.$strTable, $arrColumns, $arrValueSets, $this);
     }
 

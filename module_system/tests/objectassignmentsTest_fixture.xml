@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<objects>
+  <object name="testobject" class="orm_objectlist_testclass" strName="testclass" />
+
+  <object name="aspect1" class="class_module_system_aspect" strName="aspect 1" />
+  <object name="aspect2" class="class_module_system_aspect" strName="aspect 2" />
+
+  <object name="language" class="class_module_languages_language" strName="xx" />
+</objects>

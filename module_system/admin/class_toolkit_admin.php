@@ -818,6 +818,53 @@ class class_toolkit_admin extends class_toolkit {
         return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID, true);
     }
 
+    /**
+     * @param $strName
+     * @param string $strTitle
+     * @param $intType
+     * @param array $arrValues
+     * @param array $arrSelected
+     * @param bool $bitInline
+     * @return string
+     * @throws class_exception
+     */
+    public function formInputCheckboxArray($strName, $strTitle = "", $intType, array $arrValues, array $arrSelected, $bitInline = false, $bitReadonly = false) {
+        $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "input_checkboxarray");
+        $strTemplateCheckboxID = $this->objTemplate->readTemplate("/elements.tpl", "input_checkboxarray_checkbox");
+
+        $arrTemplate = array();
+        $arrTemplate["name"] = $strName;
+        $arrTemplate["title"] = $strTitle;
+
+        $strElements = '';
+        foreach($arrValues as $strKey => $strValue) {
+            $arrTemplateRow = array(
+                'key' => $strKey,
+                'name' => $strName . '[' . $strKey . ']',
+                'title' => $strValue,
+                'checked' => in_array($strKey, $arrSelected) ? 'checked' : '',
+                'inline' => $bitInline ? '-inline' : '',
+                'readonly' => $bitReadonly ? 'disabled' : '',
+            );
+
+            switch($intType) {
+                case class_formentry_checkboxarray::TYPE_RADIO:
+                    $arrTemplateRow['type'] = 'radio';
+                    $strElements.= $this->objTemplate->fillTemplate($arrTemplateRow, $strTemplateCheckboxID, true);
+                    break;
+
+                default:
+                case class_formentry_checkboxarray::TYPE_CHECKBOX:
+                    $arrTemplateRow['type'] = 'checkbox';
+                    $strElements.= $this->objTemplate->fillTemplate($arrTemplateRow, $strTemplateCheckboxID, true);
+                    break;
+            }
+        }
+
+        $arrTemplate["elements"] = $strElements;
+
+        return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID, true);
+    }
 
     /**
      * Creates the header needed to open a form-element

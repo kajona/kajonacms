@@ -37,10 +37,7 @@ class class_orm_objectupdate extends class_orm_base {
             return true;
         }
 
-        if($this->getObjObject() instanceof interface_versionable) {
-            $objChanges = new class_module_system_changelog();
-            $objChanges->createLogEntry($this->getObjObject(), class_module_system_changelog::$STR_ACTION_EDIT);
-        }
+
 
         //fetch properties with annotations
         $objReflection = new class_reflection($this->getObjObject());
@@ -100,13 +97,116 @@ class class_orm_objectupdate extends class_orm_base {
             if(count($arrColValues) > 0)
                 $bitReturn = $bitReturn && $this->updateSingleTable($arrColValues, $arrEscapes, $arrTableDef[0], $arrTableDef[1]);
 
+        }
 
+        //see, if we should process object lists, too
+        if($bitReturn) {
+            $bitReturn = $this->updateAssignments();
+        }
+
+
+        if($this->getObjObject() instanceof interface_versionable) {
+            $objChanges = new class_module_system_changelog();
+            $objChanges->createLogEntry($this->getObjObject(), class_module_system_changelog::$STR_ACTION_EDIT);
         }
 
         return $bitReturn;
 
 
     }
+
+    /**
+     * Triggers the update sequence for assignment properties
+     * @return bool
+     */
+    private function updateAssignments() {
+        $bitReturn = true;
+
+        $objReflection = new class_reflection($this->getObjObject());
+
+        //get the mapped properties
+        $arrProperties = $objReflection->getPropertiesWithAnnotation(class_orm_base::STR_ANNOTATION_OBJECTLIST, class_reflection_enum::PARAMS());
+
+        foreach($arrProperties as $strPropertyName => $arrValues) {
+
+            $objCfg = class_orm_assignment_config::getConfigForProperty($this->getObjObject(), $strPropertyName);
+
+
+            $arrAssignmentsFromObject = $this->getAssignmentValuesFromObject($strPropertyName, $objCfg->getArrTypeFilter());
+            $arrAssignmentsFromDatabase = $this->getAssignmentsFromDatabase($strPropertyName);
+
+            sort($arrAssignmentsFromObject);
+            sort($arrAssignmentsFromDatabase);
+
+            //only do s.th. if the array differs
+            $arrNewAssignments = array_diff($arrAssignmentsFromObject, $arrAssignmentsFromDatabase);
+            $arrDeletedAssignments = array_diff($arrAssignmentsFromDatabase, $arrAssignmentsFromObject);
+
+            //skip in case there's nothing to do
+            if(count($arrNewAssignments) == 0 && count($arrDeletedAssignments) == 0)
+                continue;
+
+            $objDB = class_carrier::getInstance()->getObjDB();
+
+            $arrInserts = array();
+            foreach($arrAssignmentsFromObject as $strOneTargetId)
+                $arrInserts[] = array($this->getObjObject()->getSystemid(), $strOneTargetId);
+
+            $bitReturn = $bitReturn && $objDB->_pQuery(
+                "DELETE FROM ".$objDB->encloseTableName(_dbprefix_.$objCfg->getStrTableName())." WHERE ".$objDB->encloseColumnName($objCfg->getStrSourceColumn())." = ?", array($this->getObjObject()->getSystemid())
+            );
+            $bitReturn = $bitReturn && $objDB->multiInsert($objCfg->getStrTableName(), array($objCfg->getStrSourceColumn(), $objCfg->getStrTargetColumn()), $arrInserts);
+
+            $bitReturn = $bitReturn && class_core_eventdispatcher::getInstance()->notifyGenericListeners(
+                class_system_eventidentifier::EVENT_SYSTEM_OBJECTASSIGNMENTSUPDATED,
+                array($arrNewAssignments, $arrDeletedAssignments, $arrAssignmentsFromObject, $this->getObjObject(), $strPropertyName)
+            );
+
+            if($objReflection->hasPropertyAnnotation($strPropertyName, class_module_system_changelog::ANNOTATION_PROPERTY_VERSIONABLE)) {
+                $objChanges = new class_module_system_changelog();
+                $objChanges->setOldValueForSystemidAndProperty($this->getObjObject()->getSystemid(), $strPropertyName, implode(",", $arrAssignmentsFromDatabase));
+            }
+        }
+
+        return $bitReturn;
+    }
+
+
+    /**
+     * Internal helper to fetch the values of an assignment property.
+     * Capable of handling both, objects and systemids.
+     *
+     * @param $strPropertyName
+     * @param $arrClassFilter
+     * @return array
+     */
+    private function getAssignmentValuesFromObject($strPropertyName, $arrClassFilter) {
+        $objReflection = new class_reflection($this->getObjObject());
+
+        $strGetter = $objReflection->getGetter($strPropertyName);
+        $arrValues = array();
+        if($strGetter !== null) {
+            $arrValues = call_user_func(array($this->getObjObject(), $strGetter));
+
+            if(!is_array($arrValues))
+                $arrValues = array();
+        }
+
+        $arrReturn = array();
+        foreach($arrValues as $objOneValue) {
+
+            if(is_object($objOneValue) && $objOneValue instanceof class_model) {
+                if($arrClassFilter == null || count(array_filter($arrClassFilter, function($strSingleClass) use ($objOneValue) { return $objOneValue instanceof $strSingleClass; })) > 0) {
+                    $arrReturn[] = $objOneValue->getSystemid();
+                }
+            }
+            else if(is_string($objOneValue) && validateSystemid($objOneValue))
+                $arrReturn[] = $objOneValue;
+        }
+
+        return $arrReturn;
+    }
+
 
     /**
      * Called internally to update a single target-table

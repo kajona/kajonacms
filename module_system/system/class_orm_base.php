@@ -22,6 +22,7 @@ abstract class class_orm_base {
     const STR_ANNOTATION_TABLECOLUMNINDEX = "@tableColumnIndex";
     const STR_ANNOTATION_BLOCKESCAPING = "@blockEscaping";
     const STR_ANNOTATION_LISTORDER = "@listOrder";
+    const STR_ANNOTATION_OBJECTLIST = "@objectList";
 
     /** @var class_root */
     private $objObject = null;
@@ -100,6 +101,26 @@ abstract class class_orm_base {
     }
 
 
+
+    /**
+     * Reads the assignment values currently stored in the database for a given property of the current object.
+     * @param $strPropertyName
+     *
+     * @return string[] array of systemids
+     */
+    public final function getAssignmentsFromDatabase($strPropertyName) {
+        $objCfg = class_orm_assignment_config::getConfigForProperty($this->getObjObject(), $strPropertyName);
+        $objDB = class_carrier::getInstance()->getObjDB();
+        $strQuery = "SELECT * FROM ".$objDB->encloseTableName(_dbprefix_.$objCfg->getStrTableName())." WHERE ".$objDB->encloseColumnName($objCfg->getStrSourceColumn())." = ? ";
+        $arrRows = $objDB->getPArray($strQuery, array($this->getObjObject()->getSystemid()), null, null);
+
+        $strTargetCol = $objCfg->getStrTargetColumn();
+        array_walk($arrRows, function(array &$arrSingleRow) use ($strTargetCol) {
+            $arrSingleRow = $arrSingleRow[$strTargetCol];
+        });
+
+        return $arrRows;
+    }
 }
 
 /**

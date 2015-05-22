@@ -1,24 +1,7 @@
 Reference: Events
 ===
 
-<table>
-	<tr>
-		<th>Identifier</th>
-		<th>Description</th>
-	</tr>
-	<tr>
-		<td>core.system.request.startprocessing</td>
-		<td>
-			<table>
-				<tr><td>Since</td><td>4.6</td></tr>
-				<tr><td>Argument</td><td>bool $bitAdmin<br />
-			string $strModule<br />
-			string $strAction<br />
-			string $strLanguageParam</td></tr>				<tr><td>Description</td><td>Invoked right before starting to process the current request. The event is triggered&nbsp;by the request-dispatcher right before the request is given over to the controller.</td></tr>				
-			</table>
-		</td>
-	</tr>
-</table>
+
 
 
 
@@ -88,6 +71,29 @@ Description</th>
 			<td>Description</td>
 			<td>Thrown whenever a record is updated to the database.</td>
 		</tr>
+		
+		<tr>
+			<td rowspan="3" style="border-top: 1px solid #ccc;border-right: 1px solid #ccc; vertical-align: top;">core.system.objectassignmentsupdated</td>
+			<td style="border-top: 1px solid #ccc;">Since</td>
+			<td style="border-top: 1px solid #ccc;">4.8</td>
+		</tr>
+		<tr>
+			<td>Arguments</td>
+			<td>string[] $arrNewAssignments<br />
+string[] $areRemovedAssignments<br />
+string[] $areCurrentAssignments<br />
+class_root $objObject<br />
+string $strProperty<br /><br />return bool</td>
+		</tr>
+		<tr>
+			<td>Description</td>
+			<td>Triggered as soon as a property mapping to objects is updated. Therefore the event is triggered as soon
+as assignments are added or removed from an object.
+The event gets a list of all three relevant items: assignments added, assignments removed, assignments remaining.
+The relevant object and the name of the changed property are passed, too.<br />Return a valid bool value, otherwise the transaction will be rolled back!</td>
+		</tr>
+		
+		
 		<tr>
 			<td rowspan="3" style="border-top: 1px solid #ccc; border-right: 1px solid #ccc;vertical-align: top;">core.system.recordcopied</td>
 			<td style="border-top: 1px solid #ccc;">Since</td>

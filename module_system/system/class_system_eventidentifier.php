@@ -69,6 +69,26 @@ interface class_system_eventidentifier {
     const EVENT_SYSTEM_RECORDUPDATED = "core.system.recordupdated";
 
     /**
+     * Triggered as soon as a property mapping to objects is updated. Therefore the event is triggered as soon
+     * as assignments are added or removed from an object.
+     * The event gets a list of all three relevant items: assignments added, assignments removed, assignments remaining.
+     * The relevant object and the name of the changed property are passed, too.
+     * Return a valid bool value, otherwise the transaction will be rolled back!
+     *
+     * The params-array contains the following entries:
+     * @param string[] $arrNewAssignments
+     * @param string[] $areRemovedAssignments
+     * @param string[] $areCurrentAssignments
+     * @param class_root $objObject
+     * @param string $strProperty
+     *
+     * @return bool
+     *
+     * @since 4.7
+     */
+    const EVENT_SYSTEM_OBJECTASSIGNMENTSUPDATED = "core.system.objectassignmentsupdated";
+
+    /**
      * Called whenever a record was copied.
      * Event will be fired BEFORE child objects are being copied.
      * Useful to perform additional actions, e.g. update / duplicate foreign assignments.
