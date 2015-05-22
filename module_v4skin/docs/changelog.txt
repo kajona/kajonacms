@@ -1,5 +1,8 @@
 Module V4 Skin
 
+V4.7.1 --------------------------------------------------------------------------------------------------
+NEW: module_v4skin | elements -> the current date is being highlighted in the datepicker
+
 V4.7 ----------------------------------------------------------------------------------------------------
 NEW: module_v4skin | kajona js > add a new javascript function to render an toc navigation under the main navigation
 NEW: module_v4skin | bootstrap -> update from bootstrap2 to bootstrap3
