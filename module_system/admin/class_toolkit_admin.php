@@ -470,7 +470,7 @@ class class_toolkit_admin extends class_toolkit {
                 $arrTemplateRow = array(
                     'name' => $strName,
                     'displayName' => $objObject->getStrDisplayName(),
-                    'icon' => $strIcon,
+                    'icon' => class_adminskin_helper::getAdminImage($strIcon),
                     'value' => $objObject->getSystemid(),
                     'removeLink' => $strRemoveLink,
                 );
