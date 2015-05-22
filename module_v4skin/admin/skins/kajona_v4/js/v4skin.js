@@ -296,7 +296,7 @@ KAJONA.v4skin.setObjectListItems = function(strElementName, arrItems, arrAvailab
             html+= '    <td class="icon-cell">';
             html+= '        <a href="#" onclick="KAJONA.v4skin.removeObjectListItem(this);return false">';
             html+= '            <span>';
-            html+= '                <div class="icon_delete" style="display:inline-block;width:20px;height:20px;" data-kajona-icon="icon_delete"></div>';
+            html+= '                <div class="icon_delete iconWrapper" data-kajona-icon="icon_delete"></div>';
             html+= '            </span>';
             html+= '        </a>';
             html+= '    </td>';
