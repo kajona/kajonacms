@@ -265,6 +265,11 @@ KAJONA.v4skin.initTagMenu = function() {
     });
 };
 
+/**
+ * Removes an object list row from the list
+ *
+ * @param el
+ */
 KAJONA.v4skin.removeObjectListItem = function(el){
     // remove all active tooltips
     $(el).children().qtip("hide");
@@ -275,6 +280,13 @@ KAJONA.v4skin.removeObjectListItem = function(el){
     });
 };
 
+/**
+ * Sets an array of items to an object list. We remove only elements which are available in the arrAvailableIds array
+ *
+ * @param strElementName
+ * @param arrItems
+ * @param arrAvailableIds
+ */
 KAJONA.v4skin.setObjectListItems = function(strElementName, arrItems, arrAvailableIds){
     var table = $('#' + strElementName);
     var tbody = table.find('tbody');
@@ -307,38 +319,50 @@ KAJONA.v4skin.setObjectListItems = function(strElementName, arrItems, arrAvailab
     }
 };
 
-KAJONA.v4skin.sendCheckboxTreeSelection = function(el){
-    if($('.jstree').length > 0) {
-        // the query parameter contains the name of the form element where we insert the selected elements
-        var strElementName = KAJONA.v4skin.getQueryParameter("element_name");
-
-        // we modify only the ids which are visible for the user all other ids stay untouched
-        var arrAvailableIds = [];
-        $('.jstree').find('li').each(function(){
-            arrAvailableIds.push($(this).attr('systemid'));
-        });
-
-        var arrEls = $('.jstree').jstree('get_checked');
-        var arrItems = [];
-        for(var i = 0; i < arrEls.length; i++) {
-            var el = $(arrEls[i]);
-            var strSystemId = el.attr('id');
-            var strDisplayName = el.text().trim();
-            var strIcon = el.find('div').data('kajona-icon');
-
-            arrItems.push({
-                strSystemId: strSystemId,
-                strDisplayName: strDisplayName,
-                strIcon: strIcon
+/**
+ * We get the current tree selection from the iframe element and set the selection in the object list
+ *
+ * @param objIframeEl
+ * @param strElementName
+ */
+KAJONA.v4skin.updateCheckboxTreeSelection = function(objIframeEl, strElementName){
+    if(objIframeEl && objIframeEl.contentWindow) {
+        var jstree = objIframeEl.contentWindow.$('.jstree');
+        if(jstree.length > 0) {
+            // we modify only the ids which are visible for the user all other ids stay untouched
+            var arrAvailableIds = [];
+            jstree.find('li').each(function(){
+                arrAvailableIds.push($(this).attr('systemid'));
             });
+
+            var arrEls = jstree.jstree('get_checked');
+            var arrItems = [];
+            for(var i = 0; i < arrEls.length; i++) {
+                var el = $(arrEls[i]);
+                var strSystemId = el.attr('id');
+                var strDisplayName = el.text().trim();
+                var strIcon = el.find('div').data('kajona-icon');
+
+                arrItems.push({
+                    strSystemId: strSystemId,
+                    strDisplayName: strDisplayName,
+                    strIcon: strIcon
+                });
+            }
+
+            KAJONA.v4skin.setObjectListItems(strElementName, arrItems, arrAvailableIds);
+
+            jsDialog_1.hide();
         }
-
-        parent.KAJONA.v4skin.setObjectListItems(strElementName, arrItems, arrAvailableIds);
-
-        parent.$('#folderviewDialog').modal('hide');
     }
 };
 
+/**
+ * Returns all systemids which are available in the object list. The name of the object list element name must be
+ * available as GET parameter "element_name"
+ *
+ * @returns array
+ */
 KAJONA.v4skin.getCheckboxTreeSelectionFromParent = function(){
     if($('.jstree').length > 0) {
         // the query parameter contains the name of the form element where we insert the selected elements
