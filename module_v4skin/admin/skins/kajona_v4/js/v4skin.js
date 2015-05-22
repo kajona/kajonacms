@@ -287,7 +287,7 @@ KAJONA.v4skin.removeObjectListItem = function(el){
  * @param arrItems
  * @param arrAvailableIds
  */
-KAJONA.v4skin.setObjectListItems = function(strElementName, arrItems, arrAvailableIds){
+KAJONA.v4skin.setObjectListItems = function(strElementName, arrItems, arrAvailableIds, strDeleteButton){
     var table = $('#' + strElementName);
     var tbody = table.find('tbody');
     if(tbody.length > 0) {
@@ -303,14 +303,10 @@ KAJONA.v4skin.setObjectListItems = function(strElementName, arrItems, arrAvailab
             var strEscapedTitle = $('<div></div>').text(arrItems[i].strDisplayName).html();
             var html = '';
             html+= '<tr>';
-            html+= '    <td><div class="' + arrItems[i].strIcon + '" style="display:inline-block;width:20px;height:20px;"></div></td>';
+            html+= '    <td>' + arrItems[i].strIcon + '</td>';
             html+= '    <td>' + strEscapedTitle + ' <input type="hidden" name="' + strElementName + '[]" value="' + arrItems[i].strSystemId + '" /></td>';
             html+= '    <td class="icon-cell">';
-            html+= '        <a href="#" onclick="KAJONA.v4skin.removeObjectListItem(this);return false">';
-            html+= '            <span>';
-            html+= '                <div class="icon_delete iconWrapper" data-kajona-icon="icon_delete"></div>';
-            html+= '            </span>';
-            html+= '        </a>';
+            html+= '        <a href="#" onclick="KAJONA.v4skin.removeObjectListItem(this);return false">' + strDeleteButton + '</a>';
             html+= '    </td>';
             html+= '</tr>';
 
@@ -325,7 +321,7 @@ KAJONA.v4skin.setObjectListItems = function(strElementName, arrItems, arrAvailab
  * @param objIframeEl
  * @param strElementName
  */
-KAJONA.v4skin.updateCheckboxTreeSelection = function(objIframeEl, strElementName){
+KAJONA.v4skin.updateCheckboxTreeSelection = function(objIframeEl, strElementName, strDeleteButton){
     if(objIframeEl && objIframeEl.contentWindow) {
         var jstree = objIframeEl.contentWindow.$('.jstree');
         if(jstree.length > 0) {
@@ -341,7 +337,7 @@ KAJONA.v4skin.updateCheckboxTreeSelection = function(objIframeEl, strElementName
                 var el = $(arrEls[i]);
                 var strSystemId = el.attr('id');
                 var strDisplayName = el.text().trim();
-                var strIcon = el.find('div').data('kajona-icon');
+                var strIcon = el.find('[rel="tooltip"]').html();
 
                 arrItems.push({
                     strSystemId: strSystemId,
@@ -350,7 +346,7 @@ KAJONA.v4skin.updateCheckboxTreeSelection = function(objIframeEl, strElementName
                 });
             }
 
-            KAJONA.v4skin.setObjectListItems(strElementName, arrItems, arrAvailableIds);
+            KAJONA.v4skin.setObjectListItems(strElementName, arrItems, arrAvailableIds, strDeleteButton);
 
             jsDialog_1.hide();
         }
