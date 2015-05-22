@@ -505,25 +505,7 @@ class class_db {
 
             //increase global counter
             $this->intNumber++;
-
-            $strFakeQuery = "SELECT ALL TABLES /// KAJONA INTERNAL QUERY";
-            $strQueryMd5 = md5($strFakeQuery);
-
-            $arrTemp = array();
-            if(isset($this->arrQueryCache[$strQueryMd5])) {
-                //Increasing Cache counter
-                $this->intNumberCache++;
-                $arrTemp = $this->arrQueryCache[$strQueryMd5];
-            }
-            else {
-                $arrTemp = $this->objDbDriver->getTables();
-                if(_dblog_)
-                    class_logger::getInstance(class_logger::QUERIES)->addLogRow("\r\n".$strFakeQuery, class_logger::$levelInfo, true);
-            }
-
-
-            $this->arrQueryCache[$strQueryMd5] = $arrTemp;
-
+            $arrTemp = $this->objDbDriver->getTables();
 
             //Filtering tables not used by this project, if dbprefix was given
             if(_dbprefix_ != "") {
