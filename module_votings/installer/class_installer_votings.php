@@ -37,7 +37,7 @@ class class_installer_votings extends class_installer_base implements interface_
 
         //modify default rights to allow guests to vote
 		$strReturn .= "Modifying modules' rights node...\n";
-		$this->objRights->addGroupToRight(_guests_group_id_, $strSystemID, "right1");
+        class_carrier::getInstance()->getObjRights()->addGroupToRight(class_module_system_setting::getConfigValue("_guests_group_id_"), $strSystemID, "right1");
 
         $strReturn .= "Registering votings-element...\n";
         if(class_module_pages_element::getElement("votings") == null) {

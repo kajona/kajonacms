@@ -35,6 +35,11 @@ class class_module_system_changelog extends class_model implements interface_mod
     public static $bitChangelogEnabled = null;
 
     private static $arrOldValueCache = array();
+
+    /**
+     * @todo: is the init value cache still required?
+     * @var array
+     */
     private static $arrInitValueCache = array();
     private static $arrCachedProviders = null;
 
@@ -107,8 +112,21 @@ class class_module_system_changelog extends class_model implements interface_mod
     }
 
     /**
+     * Sets the passed entry for a concrete objects' property to the set of old values
+     *
+     * @param string $strSystemid
+     * @param $strProperty
+     * @param $strValue
+     */
+    public function setOldValueForSystemidAndProperty($strSystemid, $strProperty, $strValue) {
+        if(!isset(self::$arrOldValueCache[$strSystemid]))
+            self::$arrOldValueCache[$strSystemid] = array();
+
+        self::$arrOldValueCache[$strSystemid][$strProperty] = $strValue;
+    }
+
+    /**
      * Scans the passed object and tries to find all properties marked with the annotation @versionable.
-     * Updates the internal "oldvalues" cache.
      * @param interface_versionable|class_model $objCurrentObject
      *
      * @return array|null
@@ -118,7 +136,7 @@ class class_module_system_changelog extends class_model implements interface_mod
             return null;
 
         if(validateSystemid($objCurrentObject->getSystemid())) {
-            $arrOldValues = array();
+            $arrCurrentValues = array();
 
             $objReflection = new class_reflection($objCurrentObject);
             $arrProperties = $objReflection->getPropertiesWithAnnotation(self::ANNOTATION_PROPERTY_VERSIONABLE);
@@ -134,10 +152,24 @@ class class_module_system_changelog extends class_model implements interface_mod
                     $strValue = call_user_func(array($objCurrentObject, $strGetter));
                 }
 
-                $arrOldValues[$strProperty] = $strValue;
+                if(is_array($strValue) || $strValue instanceof ArrayAccess) {
+                    $arrNewValues = array();
+                    foreach($strValue as $objOneValue) {
+                        if(is_object($objOneValue)&& $objOneValue instanceof class_root) {
+                            $arrNewValues[] = $objOneValue->getSystemid();
+                        }
+                        else {
+                            $arrNewValues[] = $objOneValue."";
+                        }
+                    }
+                    sort($arrNewValues);
+                    $strValue = implode(",", $arrNewValues);
+                }
+
+                $arrCurrentValues[$strProperty] = $strValue;
             }
 
-            return $arrOldValues;
+            return $arrCurrentValues;
         }
         return null;
     }
@@ -280,10 +312,10 @@ class class_module_system_changelog extends class_model implements interface_mod
         if(self::$bitChangelogEnabled !== null)
             return self::$bitChangelogEnabled;
 
-        if(!defined("_system_changehistory_enabled_") || _system_changehistory_enabled_ == "false") {
-            self::$bitChangelogEnabled = false;
-            return false;
-        }
+//        if(class_module_system_setting::getConfigValue("_system_changehistory_enabled_") != "true") {
+//            self::$bitChangelogEnabled = false;
+//            return false;
+//        }
 
         if(!$objSourceModel instanceof interface_versionable) {
             throw new class_exception("object passed to create changelog not implementing interface_versionable", class_logger::$levelWarning);
@@ -404,7 +436,7 @@ class class_module_system_changelog extends class_model implements interface_mod
 
 
             //array may be processed automatically, too
-            if(is_array($strOldvalue) && is_array($strNewvalue)) {
+            if((is_array($strOldvalue) || $strOldvalue instanceof ArrayAccess) && (is_array($strNewvalue) || $strNewvalue instanceof ArrayAccess)) {
 
                 $arrArrayChanges = array();
                 foreach($strNewvalue as $strOneId) {

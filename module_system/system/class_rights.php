@@ -488,7 +488,7 @@ class class_rights {
             $arrGroupIds = $this->objSession->getGroupIdsAsArray();
         }
         else
-            $arrGroupIds[] = _guests_group_id_;
+            $arrGroupIds[] = class_module_system_setting::getConfigValue("_guests_group_id_");
 
         foreach($arrGroupIds as $strOneGroupId)
             if($this->checkPermissionForGroup($strOneGroupId, $strPermission, $strSystemid))

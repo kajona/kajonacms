@@ -5,12 +5,13 @@ Reference: Formentries
 |Name           |Since     |Description               |
 |---------------|----------|--------------------------|
 |autoheadline   |4.5       |Generates a headline out of a properties' value|
-|button	      |4.3       |A simple button element|
-|checkbox	      |4.0       |Simple checkbox element|
+|button	        |4.3       |A simple button element|
+|checkbox	    |4.0       |Simple checkbox element|
+|checkboxarray	|4.8       |Renders a list of objects as an array of checkboxes, e.g. assignments|
 |date           |4.1       |Date-Input with date-picker|
 |datetime       |4.1       |Like Date but with two inputs to set a time (HH:MM), too|
 |divider        |4.0       |Graphical element to separate form-entries from each other|
-|dropdown	      |4.0       |Dropdown of values, one value is selectable|
+|dropdown	    |4.0       |Dropdown of values, one value is selectable|
 |month\_year\_dropdown|4.4 |Renders two dropdown boxes in order to change date, one for the month, the other for the year.|
 |multiselect    |4.2       |List of values, many are selectable|
 |file           |4.0       |File-Input field to upload a file|

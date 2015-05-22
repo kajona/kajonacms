@@ -47,9 +47,13 @@ class class_module_faqs_faq extends class_model implements interface_model, inte
      */
     private $strAnswer = "";
 
+    /**
+     * @var class_module_faqs_category[]
+     * @objectList faqs_member (source="faqsmem_faq", target="faqsmem_category")
+     * @fieldType checkboxarray
+     * @versionable
+     */
     private $arrCats = array();
-
-    private $updateBitMemberships = false;
 
     /**
      * Returns a human readable name of the action stored with the changeset.
@@ -135,41 +139,6 @@ class class_module_faqs_faq extends class_model implements interface_model, inte
     }
 
 
-    /**
-     * saves the current object with all its params back to the database
-     *
-     * @return bool
-     */
-    protected function updateStateToDb() {
-        //delete all relations
-        if($this->updateBitMemberships) {
-            class_module_faqs_category::deleteFaqsMemberships($this->getSystemid());
-            //insert all memberships
-            $arrValues = array();
-            foreach(array_keys($this->arrCats) as $strCatID) {
-                $arrValues[] = array(generateSystemid(), $this->getSystemid(), $strCatID);
-            }
-
-            $this->objDB->multiInsert(
-                "faqs_member",
-                array("faqsmem_id", "faqsmem_faq", "faqsmem_category"),
-                $arrValues
-            );
-        }
-        return parent::updateStateToDb();
-
-    }
-
-    public function copyObject($strNewPrevid = "", $bitChangeTitle = true) {
-        $arrMemberCats = class_module_faqs_category::getFaqsMember($this->getSystemid());
-        $this->arrCats = array();
-        foreach($arrMemberCats as $objOneCat) {
-            $this->arrCats[$objOneCat->getSystemid()] = "1";
-        }
-        $this->updateBitMemberships = true;
-        return parent::copyObject($strNewPrevid, $bitChangeTitle);
-    }
-
 
     /**
      * Loads all faqs from the database
@@ -241,16 +210,7 @@ class class_module_faqs_faq extends class_model implements interface_model, inte
     }
 
 
-    public function deleteObject() {
-        //Delete memberships
-        if(class_module_faqs_category::deleteFaqsMemberships($this->getSystemid())) {
-            return parent::deleteObject();
-        }
-        return false;
-    }
-
-
-    /**
+     /**
      * Loads all faqs from the db assigned to the passed cat
      *
      * @param string $strCat
@@ -400,10 +360,6 @@ class class_module_faqs_faq extends class_model implements interface_model, inte
 
     public function setArrCats($arrCats) {
         $this->arrCats = $arrCats;
-    }
-
-    public function setUpdateBitMemberships($updateBitMemberships) {
-        $this->updateBitMemberships = $updateBitMemberships;
     }
 
 }

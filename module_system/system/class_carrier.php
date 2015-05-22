@@ -52,7 +52,6 @@ class class_carrier {
     /**
      * Constructor for class_carrier, doing nothing important,
      * but being private ;), so use getInstance() instead
-
      */
     private function __construct() {
     }
@@ -66,12 +65,12 @@ class class_carrier {
 
         if(self::$objCarrier == null) {
             self::$objCarrier = new class_carrier();
-            $objConfig = self::$objCarrier->getObjConfig();
-            $objDB = self::$objCarrier->getObjDB();
+//            $objConfig = self::$objCarrier->getObjConfig();
+//            $objDB = self::$objCarrier->getObjDB();
             //so, lets init the constants
-            if(!defined("_block_config_db_loading_")) {
-                $objConfig->loadConfigsDatabase($objDB);
-            }
+//            if(!defined("_block_config_db_loading_")) {
+//                $objConfig->loadConfigsDatabase($objDB);
+//            }
             //and init the internal session
             //SIR 2010/03: deactivated session startup right here.
             //The session-start is handled by class_session internally to avoid

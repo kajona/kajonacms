@@ -246,7 +246,7 @@ class class_installer_sc_news implements interface_sc_installer  {
 
 
         $strReturn .= "Adding rating permissions...\n";
-        class_carrier::getInstance()->getObjRights()->addGroupToRight(_guests_group_id_, class_module_system_module::getModuleByName("news")->getSystemid(), class_rights::$STR_RIGHT_RIGHT3);
+        class_carrier::getInstance()->getObjRights()->addGroupToRight(class_module_system_setting::getConfigValue("_guests_group_id_"), class_module_system_module::getModuleByName("news")->getSystemid(), class_rights::$STR_RIGHT_RIGHT3);
 
         return $strReturn;
     }

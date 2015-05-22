@@ -33,8 +33,8 @@ class class_installer_postacomment extends class_installer_base implements inter
 
 		//modify default rights to allow guests to post
 		$strReturn .= "Modifying modules' rights node...\n";
-		$this->objRights->addGroupToRight(_guests_group_id_, $strSystemID, "right1");
-		$this->objRights->addGroupToRight(_guests_group_id_, $strSystemID, "right2");
+        class_carrier::getInstance()->getObjRights()->addGroupToRight(class_module_system_setting::getConfigValue("_guests_group_id_"), $strSystemID, "right1");
+        class_carrier::getInstance()->getObjRights()->addGroupToRight(class_module_system_setting::getConfigValue("_guests_group_id_"), $strSystemID, "right2");
 
 
         $strReturn .= "Registering postacomment-element...\n";

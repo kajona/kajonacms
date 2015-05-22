@@ -67,7 +67,7 @@ class class_exception extends Exception {
         $objHistory = new class_history();
 
         //send an email to the admin?
-        if(defined("_system_admin_email_") && _system_admin_email_ != "") {
+        if(class_module_system_setting::getConfigValue("_system_admin_email_") != "") {
             $strMailtext = "";
             $strMailtext .= "The system installed at "._webpath_." registered an error!\n\n";
             $strMailtext .= "The error message was:\n";
@@ -111,9 +111,9 @@ class class_exception extends Exception {
 
             $objMail = new class_mail();
             $objMail->setSubject("Error on website "._webpath_." occured!");
-            $objMail->setSender(_system_admin_email_);
+            $objMail->setSender(class_module_system_setting::getConfigValue("_system_admin_email_"));
             $objMail->setText($strMailtext);
-            $objMail->addTo(_system_admin_email_);
+            $objMail->addTo(class_module_system_setting::getConfigValue("_system_admin_email_"));
             $objMail->sendMail();
 
 
@@ -121,7 +121,7 @@ class class_exception extends Exception {
             $objMessage = new class_module_messaging_message();
             $objMessage->setStrBody($strMailtext);
             $objMessage->setObjMessageProvider(new class_messageprovider_exceptions());
-            $objMessageHandler->sendMessageObject($objMessage, new class_module_user_group(_admins_group_id_));
+            $objMessageHandler->sendMessageObject($objMessage, new class_module_user_group(class_module_system_setting::getConfigValue("_admins_group_id_")));
         }
 
         if($this->intErrorlevel == class_exception::$level_FATALERROR) {

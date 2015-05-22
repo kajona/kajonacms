@@ -1,0 +1,5 @@
+{
+    "require": {
+      "garetjax/phpbrowscap": "2.0"
+    }
+}

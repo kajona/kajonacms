@@ -433,7 +433,7 @@ class class_module_system_admin_xml extends class_admin_controller implements in
             else {
                 $strActivity .= $this->getLang("session_portal");
                 if($strLastUrl == "")
-                    $strActivity .= _pages_indexpage_;
+                    $strActivity .= class_module_system_setting::getConfigValue("_pages_indexpage_");
                 else {
                     foreach(explode("&amp;", $strLastUrl) as $strOneParam) {
                         $arrUrlParam = explode("=", $strOneParam);

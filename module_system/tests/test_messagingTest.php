@@ -12,11 +12,11 @@ class class_test_messaging extends class_testbase  {
         $strIdentifier = generateSystemid()." identifier";
 
         $objMessageHandler = new class_module_messaging_messagehandler();
-        $objMessageHandler->sendMessage($strText, new class_module_user_group(_admins_group_id_), new class_messageprovider_exceptions(), $strIdentifier, $strTitle);
+        $objMessageHandler->sendMessage($strText, new class_module_user_group(class_module_system_setting::getConfigValue("_admins_group_id_")), new class_messageprovider_exceptions(), $strIdentifier, $strTitle);
 
         $bitFound = false;
 
-        $objGroup = new class_module_user_group(_admins_group_id_);
+        $objGroup = new class_module_user_group(class_module_system_setting::getConfigValue("_admins_group_id_"));
         $arrUsers = $objGroup->getObjSourceGroup()->getUserIdsForGroup();
 
         $arrMessages = class_module_messaging_message::getObjectList($arrUsers[0]);
@@ -54,10 +54,10 @@ class class_test_messaging extends class_testbase  {
         $objMessage->setStrMessageRefId($strReference);
 
         $objMessageHandler = new class_module_messaging_messagehandler();
-        $objMessageHandler->sendMessageObject($objMessage, new class_module_user_group(_admins_group_id_));
+        $objMessageHandler->sendMessageObject($objMessage, new class_module_user_group(class_module_system_setting::getConfigValue("_admins_group_id_")));
 
 
-        $objGroup = new class_module_user_group(_admins_group_id_);
+        $objGroup = new class_module_user_group(class_module_system_setting::getConfigValue("_admins_group_id_"));
         $arrUsers = $objGroup->getObjSourceGroup()->getUserIdsForGroup();
 
         foreach($arrUsers as $objOneUser) {
@@ -87,11 +87,11 @@ class class_test_messaging extends class_testbase  {
         $strText = generateSystemid()." autotest";
 
         $objMessageHandler = new class_module_messaging_messagehandler();
-        $objMessageHandler->sendMessage($strText, new class_module_user_group(_admins_group_id_), new class_messageprovider_exceptions());
+        $objMessageHandler->sendMessage($strText, new class_module_user_group(class_module_system_setting::getConfigValue("_admins_group_id_")), new class_messageprovider_exceptions());
 
         $bitFound = false;
 
-        $objGroup = new class_module_user_group(_admins_group_id_);
+        $objGroup = new class_module_user_group(class_module_system_setting::getConfigValue("_admins_group_id_"));
         $arrUsers = $objGroup->getObjSourceGroup()->getUserIdsForGroup();
 
         $arrMessages = class_module_messaging_message::getObjectList($arrUsers[0]);

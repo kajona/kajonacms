@@ -88,7 +88,8 @@ class class_stats_report_topdownloads implements interface_admin_statsreports {
         $arrLogs = array();
         $intI = 0;
         foreach($arrLogsRaw as $intKey => $arrOneLog) {
-            if($intI++ >= _stats_nrofrecords_) {
+            $objUser = new class_module_user_user(class_session::getInstance()->getUserID());
+            if($intI++ >= $objUser->getIntItemsPerPage()) {
                 break;
             }
 
@@ -112,6 +113,7 @@ class class_stats_report_topdownloads implements interface_admin_statsreports {
      * @return mixed
      */
     private function getLogbookData() {
+        $objUser = new class_module_user_user(class_session::getInstance()->getUserID());
         $strQuery = "SELECT COUNT(*) as amount, downloads_log_file
 					  FROM " . _dbprefix_ . "mediamanager_dllog
 					  WHERE downloads_log_date > ?
@@ -119,7 +121,7 @@ class class_stats_report_topdownloads implements interface_admin_statsreports {
 					  GROUP BY downloads_log_file
 					  ORDER BY amount DESC";
 
-        return $this->objDB->getPArray($strQuery, array($this->intDateStart, $this->intDateEnd), 0, _stats_nrofrecords_ - 1);
+        return $this->objDB->getPArray($strQuery, array($this->intDateStart, $this->intDateEnd), 0, $objUser->getIntItemsPerPage() - 1);
     }
 
     /**

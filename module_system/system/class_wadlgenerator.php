@@ -31,7 +31,7 @@ class class_wadlgenerator {
      * @param string $strModule
      */
     public function __construct($strArea, $strModule) {
-        $this->bitRewrite = _system_mod_rewrite_ == "true";
+        $this->bitRewrite = class_module_system_setting::getConfigValue("_system_mod_rewrite_") == "true";
 
         $this->strArea = $strArea;
         $this->strModule = $strModule;

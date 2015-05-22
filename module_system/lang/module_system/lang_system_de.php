@@ -43,8 +43,6 @@ $lang["_system_release_time_"]           = "Dauer einer Session";
 $lang["_system_release_time_hint"]       = "Nach dieser Dauer in Sekunden wird eine Session automatisch ungültig.";
 $lang["_system_timezone_"]               = "System Zeitzone";
 $lang["_system_timezone_hint"]           = "Die Zeitzone wird zur Berechnung der korrekten Zeit- und Datumswerte verwendet. Eine Liste möglicher Werte ist unter <a href='http://www.php.net/manual/en/timezones.php' target='_blank'>http://www.php.net/manual/en/timezones.php</a> zu finden.";
-$lang["_system_use_dbcache_"]            = "Datenbankcache aktiv";
-$lang["_system_use_dbcache_hint"]        = "Aktiviert/deaktiviert den systeminternen Cache für Datenbankabfragen.";
 $lang["_system_email_forcesender_"]      = "Default Absender erzwingen";
 $lang["_system_email_forcesender_hint"]  = "Manche E-Mail Gateways stellen nur E-Mails einer bestimmten Abender-Adresse zu. Der Versand aller Mails von der Default-Absender-Adresse kann hiermit erzwungen werden.";
 $lang["_system_email_defaultsender_"]    = "Standard E-Mail Absender";

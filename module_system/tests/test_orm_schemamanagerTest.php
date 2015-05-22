@@ -5,6 +5,14 @@ require_once (__DIR__."/../../module_system/system/class_testbase.php");
 class class_test_orm_schemamanagerTest extends class_testbase {
 
 
+    protected function tearDown() {
+        $objDb = class_carrier::getInstance()->getObjDB();
+        $objDb->_pQuery("DROP TABLE "._dbprefix_."ormtest", array());
+        class_carrier::getInstance()->flushCache(class_carrier::INT_CACHE_TYPE_DBTABLES);
+        parent::tearDown(); //
+    }
+
+
     public function testSchemamanager() {
         $objDb = class_carrier::getInstance()->getObjDB();
 
@@ -37,13 +45,6 @@ class class_test_orm_schemamanagerTest extends class_testbase {
         $this->assertTrue(in_array("col2", $arrColumnNames));
         $this->assertTrue(in_array("col3", $arrColumnNames));
 
-        //$this->assertEquals(uniStrtolower($arrColumnNamesToDatatype["content_id"]), uniStrtolower(uniStrReplace(" ", "", $objDb->getDatatype(class_db_datatypes::STR_TYPE_CHAR20))));
-        //$this->assertEquals(uniStrtolower($arrColumnNamesToDatatype["col1"]), uniStrtolower(uniStrReplace(" ", "", $objDb->getDatatype(class_db_datatypes::STR_TYPE_CHAR254))));
-        //$this->assertEquals(uniStrtolower($arrColumnNamesToDatatype["col2"]), uniStrtolower(uniStrReplace(" ", "", $objDb->getDatatype(class_db_datatypes::STR_TYPE_TEXT))));
-        //$this->assertEquals(uniStrtolower($arrColumnNamesToDatatype["col3"]), uniStrtolower(uniStrReplace(" ", "", $objDb->getDatatype(class_db_datatypes::STR_TYPE_LONG))));
-
-        $objDb->_pQuery("DROP TABLE "._dbprefix_."ormtest", array());
-        class_carrier::getInstance()->flushCache(class_carrier::INT_CACHE_TYPE_DBTABLES);
     }
 
     public function testTargetTableException1() {
@@ -106,6 +107,54 @@ class class_test_orm_schemamanagerTest extends class_testbase {
         $this->assertTrue(uniStrpos($objEx->getMessage(), "Syntax for tableColumn annotation at property") !== false);
     }
 
+
+    public function testAssignmentTableCreation() {
+        $objDb = class_carrier::getInstance()->getObjDB();
+
+        $objManager = new class_orm_schemamanager();
+
+        $arrTables = $objDb->getTables();
+        $this->assertTrue(!in_array(_dbprefix_."testclass", $arrTables));
+        $this->assertTrue(!in_array(_dbprefix_."testclass_rel", $arrTables));
+        $this->assertTrue(!in_array(_dbprefix_."testclass2_rel", $arrTables));
+
+        $objManager->createTable("orm_schematest_testclass_assignments");
+        class_carrier::getInstance()->flushCache(class_carrier::INT_CACHE_TYPE_DBTABLES);
+
+        $arrTables = $objDb->getTables();
+        $this->assertTrue(in_array(_dbprefix_."testclass", $arrTables));
+        $this->assertTrue(in_array(_dbprefix_."testclass_rel", $arrTables));
+        $this->assertTrue(in_array(_dbprefix_."testclass2_rel", $arrTables));
+
+        //fetch table informations
+        $arrTable = $objDb->getColumnsOfTable(_dbprefix_."testclass_rel");
+
+        $arrColumnNames = array_map(function($arrValue) {
+            return $arrValue["columnName"];
+        }, $arrTable);
+
+
+        $this->assertTrue(in_array("testclass_source_id", $arrColumnNames));
+        $this->assertTrue(in_array("testclass_target_id", $arrColumnNames));
+
+        $arrTable = $objDb->getColumnsOfTable(_dbprefix_."testclass2_rel");
+
+        $arrColumnNames = array_map(function($arrValue) {
+            return $arrValue["columnName"];
+        }, $arrTable);
+
+
+        $this->assertTrue(in_array("testclass_source_id", $arrColumnNames));
+        $this->assertTrue(in_array("testclass_target_id", $arrColumnNames));
+
+
+
+        $objDb->_pQuery("DROP TABLE "._dbprefix_."testclass", array());
+        $objDb->_pQuery("DROP TABLE "._dbprefix_."testclass_rel", array());
+        $objDb->_pQuery("DROP TABLE "._dbprefix_."testclass2_rel", array());
+        class_carrier::getInstance()->flushCache(class_carrier::INT_CACHE_TYPE_DBTABLES);
+
+    }
 }
 
 /**
@@ -186,3 +235,24 @@ class orm_schematest_testclass_targettable2 {
 
 }
 
+/**
+ * Class orm_schematest_testclass_assignments
+ *
+ * @targetTable testclass.testclass_id
+ */
+class orm_schematest_testclass_assignments  {
+
+    /**
+     * @var array
+     * @objectList testclass_rel (source="testclass_source_id", target="testclass_target_id")
+     */
+    private $arrObject1 = array();
+
+
+    /**
+     * @var array
+     * @objectList testclass2_rel (source="testclass_source_id", target="testclass_target_id")
+     */
+    private $arrObject2 = array();
+
+}

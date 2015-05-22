@@ -10,10 +10,10 @@
  * This files specified a list of "excluded groups".
  * All group-ids specified are non-editable while editing group assignments.
  * This may be used to block privilege escalations in special scenarios.
- * The groups are removed from the assignemt-table unless you are a super-admin.
+ * The groups are removed from the assignment-table unless you are a super-admin.
  *
  * Provide a comma-separated list of group-ids.
  */
 
 
-$config["blockedgroups"] = ""._admins_group_id_;
+$config["blockedgroups"] = "".class_module_system_setting::getConfigValue("_admins_group_id_");

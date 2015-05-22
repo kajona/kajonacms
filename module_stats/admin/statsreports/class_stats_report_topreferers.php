@@ -99,15 +99,16 @@ class class_stats_report_topreferers implements interface_admin_statsreports {
             $intSum += $arrOneStat["anzahl"];
 
         $intI = 0;
+        $objUser = new class_module_user_user(class_session::getInstance()->getUserID());
         foreach($arrStats as $arrOneStat) {
             //Escape?
-            if($intI >= _stats_nrofrecords_)
+            if($intI >= $objUser->getIntItemsPerPage())
                 break;
 
             if($arrOneStat["refurl"] == "")
                 $arrOneStat["refurl"] = $this->objTexts->getLang("referer_direkt", "stats");
             else
-                $arrOneStat["refurl"] = getLinkPortal("", $arrOneStat["refurl"], "_blank", uniStrTrim($arrOneStat["refurl"], 45));
+                $arrOneStat["refurl"] = class_link::getLinkPortal("", $arrOneStat["refurl"], "_blank", uniStrTrim($arrOneStat["refurl"], 45));
 
             $arrValues[$intI] = array();
             $arrValues[$intI][] = $intI + 1;
@@ -147,6 +148,7 @@ class class_stats_report_topreferers implements interface_admin_statsreports {
             }
         }
 
+        $objUser = new class_module_user_user(class_session::getInstance()->getUserID());
         $strQuery = "SELECT stats_referer as refurl, COUNT(*) as anzahl
 						FROM "._dbprefix_."stats_data
 						WHERE stats_referer NOT LIKE ?
@@ -156,7 +158,7 @@ class class_stats_report_topreferers implements interface_admin_statsreports {
 						GROUP BY stats_referer
 						ORDER BY anzahl desc";
 
-        return $this->objDB->getPArray($strQuery, $arrParams, 0, _stats_nrofrecords_ - 1);
+        return $this->objDB->getPArray($strQuery, $arrParams, 0, $objUser->getIntItemsPerPage() - 1);
     }
 
     /**

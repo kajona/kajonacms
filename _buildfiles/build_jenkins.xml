@@ -80,46 +80,46 @@
 
 
     <!-- internal initialization -->
-    <target name="init" depends="cleanFilesystem,installComposerDependencies">
+    <target name="init" depends="cleanFilesystem,installComposerBuildDependencies">
         <tstamp />
     </target>
 
     <target name="buildSqliteFast" depends="
-		    								cleanFilesystem, init,
+		    								init,
 					    					buildProject, installProjectSqlite,
 					    					lint,phploc,phpunitFast,
 					    					buildFullZip, buildLightZip, buildAllInOneZip" />
 
 
     <target name="buildSqliteFull" depends="
-		    								cleanFilesystem, init,
+		    								init,
 					    					buildProject, installProjectSqlite,
 					    					lint,phpunit,phploc,pdepend,phpmd-ci,phpcs-ci,phpcpd,generateDoxygenDocs,phpcb,
 					    					buildFullZip, buildLightZip, buildAllInOneZip" />
 
     <target name="buildMysql" depends="
-		    								cleanFilesystem, init,
+		    								init,
 					    					buildProject, installProjectMysql,
 					    					phpunitFast" />
 
     <target name="buildOracle" depends="
-		    								cleanFilesystem, init,
+		    								init,
 					    					buildProject, installProjectOracle,
 					    					phpunitFast" />
 
     <target name="buildPostgres" depends="
-		    								cleanFilesystem, init,
+		    								init,
 					    					buildProject, installProjectPostgres,
 					    					phpunitFast" />
 
     <target name="buildFullZipOnly" depends="
-                                            cleanFilesystem, init,
+                                            init,
                                             buildProject, buildFullZip" />
 
 
 
-    <!-- installs all composer dependencies-->
-    <target name="installComposerDependencies" >
+    <!-- installs all composer dependencies required for the build itself, so mainly external tools -->
+    <target name="installComposerBuildDependencies" >
         <echo>Copy composer.json and composer.lock to ${composerHome}</echo>
         <copy todir="${composerHome}" overwrite="true"  includeEmptyDirs="true" >
             <fileset id="composer.dirs" dir="${basedir}${composerPath}">
@@ -158,6 +158,28 @@
 
     </target>
 
+    <!-- helper target to install the compose dependencies within the current clone / project -->
+    <target name="installComposerPackageDependenciesForCurrentProject">
+        <antcall target="installComposerPackageDependencies">
+            <param name="composerTempPath" value="/../"/>
+        </antcall>
+    </target>
+
+    <!-- task to fetch all composer dependencies, use the param "targetPath" to specify the base dir to be scanned -->
+    <target name="installComposerPackageDependencies">
+        <echo>Searching for composer.js files in ${basedir}${composerTempPath}</echo>
+        <apply executable="${path.composer}" parallel="false" verbose="true" force="true" failonerror="true" addsourcefile="false">
+            <fileset dir="${basedir}${composerTempPath}">
+                <include name="**/composer.json"/>
+                <exclude name="**/_buildfiles/*/*.json"/>
+                <exclude name="**/_vagrant/**/*.json"/>
+            </fileset>
+            <arg line="install --working-dir "/>
+            <targetfile/>
+            <mapper type="glob" from="*composer.json" to="${basedir}${composerTempPath}*"/>
+        </apply>
+    </target>
+
 
     <!-- builds the project, aka creates a project out of the sources -->
     <target name="buildProject">
@@ -172,6 +194,10 @@
                 <include name="core*/*.htaccess"/>
             </fileset>
         </copy>
+
+        <antcall target="installComposerPackageDependencies">
+            <param name="composerTempPath" value="${sourcesPath}/"/>
+        </antcall>
     </target>
 
     <!-- creates the full-zip including all modules and elements -->
@@ -288,6 +314,10 @@
     </target>
 
     <target name="buildPackageHelper" description="triggers the project setup and the compilation / compression of css / js files">
+        <antcall target="installComposerPackageDependencies">
+            <param name="composerTempPath" value="${tempPath}/"/>
+        </antcall>
+
         <exec executable="php" dir="${basedir}"  failonerror="on" >
             <arg line="-f buildProject.php ${tempPath} onlySetup"/>
         </exec>

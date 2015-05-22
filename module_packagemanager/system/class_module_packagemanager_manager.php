@@ -338,7 +338,7 @@ class class_module_packagemanager_manager {
             $objMessage->setStrBody($strMailtext);
             $objMessage->setObjMessageProvider(new class_messageprovider_packageupdate());
             $objMessage->setStrInternalIdentifier($strIdentifier);
-            $objMessageHandler->sendMessageObject($objMessage, new class_module_user_group(_admins_group_id_));
+            $objMessageHandler->sendMessageObject($objMessage, new class_module_user_group(class_module_system_setting::getConfigValue("_admins_group_id_")));
         }
     }
 

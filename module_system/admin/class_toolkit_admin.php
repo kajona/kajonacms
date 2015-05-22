@@ -131,7 +131,7 @@ class class_toolkit_admin extends class_toolkit {
                 ".$strTemplateInit."
                 language : '".$strLanguage."',
                 filebrowserBrowseUrl : '".uniStrReplace("&amp;", "&", getLinkAdminHref("folderview", "browserChooser", "&form_element=ckeditor"))."',
-                filebrowserImageBrowseUrl : '".uniStrReplace("&amp;", "&", getLinkAdminHref("mediamanager", "folderContentFolderviewMode", "systemid="._mediamanager_default_imagesrepoid_."&form_element=ckeditor&bit_link=1"))."'
+                filebrowserImageBrowseUrl : '".uniStrReplace("&amp;", "&", getLinkAdminHref("mediamanager", "folderContentFolderviewMode", "systemid=".class_module_system_setting::getConfigValue("_mediamanager_default_imagesrepoid_")."&form_element=ckeditor&bit_link=1"))."'
 	        };
             CKEDITOR.replace($(\"textarea[name='".$strName."'][data-kajona-editorid='".$arrTemplate["editorid"]."']\")[0], ckeditorConfig);
         ";
@@ -527,7 +527,7 @@ class class_toolkit_admin extends class_toolkit {
         $strOpener = getLinkAdminDialog(
             "mediamanager",
             "folderContentFolderviewMode",
-            "&form_element=".$strName."&systemid="._mediamanager_default_imagesrepoid_,
+            "&form_element=".$strName."&systemid=".class_module_system_setting::getConfigValue("_mediamanager_default_imagesrepoid_"),
             class_carrier::getInstance()->getObjLang()->getLang("filebrowser", "system"),
             class_carrier::getInstance()->getObjLang()->getLang("filebrowser", "system"),
             "icon_externalBrowser",
@@ -867,6 +867,53 @@ class class_toolkit_admin extends class_toolkit {
         return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID, true);
     }
 
+    /**
+     * @param $strName
+     * @param string $strTitle
+     * @param $intType
+     * @param array $arrValues
+     * @param array $arrSelected
+     * @param bool $bitInline
+     * @return string
+     * @throws class_exception
+     */
+    public function formInputCheckboxArray($strName, $strTitle = "", $intType, array $arrValues, array $arrSelected, $bitInline = false, $bitReadonly = false) {
+        $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "input_checkboxarray");
+        $strTemplateCheckboxID = $this->objTemplate->readTemplate("/elements.tpl", "input_checkboxarray_checkbox");
+
+        $arrTemplate = array();
+        $arrTemplate["name"] = $strName;
+        $arrTemplate["title"] = $strTitle;
+
+        $strElements = '';
+        foreach($arrValues as $strKey => $strValue) {
+            $arrTemplateRow = array(
+                'key' => $strKey,
+                'name' => $strName . '[' . $strKey . ']',
+                'title' => $strValue,
+                'checked' => in_array($strKey, $arrSelected) ? 'checked' : '',
+                'inline' => $bitInline ? '-inline' : '',
+                'readonly' => $bitReadonly ? 'disabled' : '',
+            );
+
+            switch($intType) {
+                case class_formentry_checkboxarray::TYPE_RADIO:
+                    $arrTemplateRow['type'] = 'radio';
+                    $strElements.= $this->objTemplate->fillTemplate($arrTemplateRow, $strTemplateCheckboxID, true);
+                    break;
+
+                default:
+                case class_formentry_checkboxarray::TYPE_CHECKBOX:
+                    $arrTemplateRow['type'] = 'checkbox';
+                    $strElements.= $this->objTemplate->fillTemplate($arrTemplateRow, $strTemplateCheckboxID, true);
+                    break;
+            }
+        }
+
+        $arrTemplate["elements"] = $strElements;
+
+        return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID, true);
+    }
 
     /**
      * Creates the header needed to open a form-element

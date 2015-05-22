@@ -665,7 +665,7 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
      */
     protected function renderStatusAction(class_model $objListEntry, $strAltActive = "", $strAltInactive = "") {
         if($objListEntry->rightEdit()) {
-            if(_packagemanager_defaulttemplate_ == $objListEntry->getStrName()) {
+            if(class_module_system_setting::getConfigValue("_packagemanager_defaulttemplate_") == $objListEntry->getStrName()) {
                 return $this->objToolkit->listButton(class_adminskin_helper::getAdminImage("icon_enabled", $this->getLang("pack_active_no_status")));
             }
             else
@@ -683,7 +683,7 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
      */
     protected function renderDeleteAction(interface_model $objListEntry) {
         if($objListEntry->rightDelete() && $this->getObjModule()->rightDelete()) {
-            if(_packagemanager_defaulttemplate_ == $objListEntry->getStrName()) {
+            if(class_module_system_setting::getConfigValue("_packagemanager_defaulttemplate_") == $objListEntry->getStrName()) {
                 return $this->objToolkit->listButton(class_adminskin_helper::getAdminImage("icon_deleteDisabled", $this->getLang("pack_active_no_delete")));
             }
             else

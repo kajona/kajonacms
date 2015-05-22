@@ -210,9 +210,10 @@ class class_module_news_news extends class_model implements interface_model, int
      * @return string
      */
     public function getStrLongDescription() {
-        return "S: " . dateToString($this->getObjStartDate(), _news_news_datetime_ == "true")
-            . ($this->getObjEndDate() != null ? " E: " . dateToString($this->getObjEndDate(), _news_news_datetime_ == "true") : "")
-            . ($this->getObjSpecialDate() != null ? " A: " . dateToString($this->getObjSpecialDate(), _news_news_datetime_ == "true") : "");
+        $strConfigValue = class_module_system_setting::getConfigValue("_news_news_datetime_");
+        return "S: " . dateToString($this->getObjStartDate(), $strConfigValue == "true")
+            . ($this->getObjEndDate() != null ? " E: " . dateToString($this->getObjEndDate(), $strConfigValue == "true") : "")
+            . ($this->getObjSpecialDate() != null ? " A: " . dateToString($this->getObjSpecialDate(), $strConfigValue == "true") : "");
     }
 
     /**

@@ -36,8 +36,8 @@ class class_graph_factory {
     public static function getGraphInstance($strType = "") {
 
         if($strType == "") {
-            if(defined("_system_graph_type_"))
-                $strType = _system_graph_type_;
+            if(class_module_system_setting::getConfigValue("_system_graph_type_") != "")
+                $strType = class_module_system_setting::getConfigValue("_system_graph_type_");
             else
                 $strType = "jqplot";
         }

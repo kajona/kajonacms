@@ -595,7 +595,7 @@ class class_installer_pages extends class_installer_base implements interface_in
 
 
         $strReturn .= "Copying default-template, if in use. Placeholders changed in 4.3\n";
-        if(_packagemanager_defaulttemplate_ == "default") {
+        if(class_module_system_setting::getConfigValue("_packagemanager_defaulttemplate_") == "default") {
 
             $objFS = new class_filesystem();
             $objFS->folderCreate("/templates/kajona42/tpl/module_pages", true);
