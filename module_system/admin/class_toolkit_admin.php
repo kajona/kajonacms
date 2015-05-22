@@ -2141,14 +2141,11 @@ JS;
      * @param $strLoadNodeDataUrl
      * @param string $strRootNodeSystemid
      * @param array $arrNodesToExpand
-     * @param string $strOnClick
      * @return string
      * @throws class_exception
      */
-    public function getTreeModalCheckbox($strLoadNodeDataUrl, $strRootNodeSystemid = "", $arrNodesToExpand = array(), $strOnClick = "") {
+    public function getTreeModalCheckbox($strLoadNodeDataUrl, $strRootNodeSystemid = "", $arrNodesToExpand = array()) {
         $arrTemplate = array();
-        $arrTemplate["onClick"] = $strOnClick;
-        $arrTemplate["btnText"] = class_carrier::getInstance()->getObjLang()->getLang("commons_accept", "module_system");
         $arrTemplate["treeContent"] = $this->getTreeCheckbox($strLoadNodeDataUrl, $strRootNodeSystemid, $arrNodesToExpand);
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "treeview_modal");
         return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
