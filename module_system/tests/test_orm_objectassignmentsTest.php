@@ -5,9 +5,8 @@ require_once (__DIR__."/../../module_system/system/class_testbase.php");
 /**
  * Class class_test_orm_schemamanagerTest
  *
- * @todo event handler validation
  */
-class class_test_orm_schemamanagerTest extends class_testbase_object {
+class class_test_orm_objectassignmentsTest extends class_testbase_object {
     /**
      * Returns an path to an xml fixture file which can be used to create and delete database structures
      *
