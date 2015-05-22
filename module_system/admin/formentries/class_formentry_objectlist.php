@@ -136,7 +136,7 @@ class class_formentry_objectlist extends class_formentry_multiselect {
             foreach($this->arrKeyValues as $objObject) {
                 if($objObject instanceof interface_model) {
                     if($objObject->rightView()) {
-                        $strHtml.= "<li>" . htmlspecialchars($objObject->getStrDisplayName()) . "</li>";
+                        $strHtml.= "<li>" . $objObject->getStrDisplayName() . "</li>";
                     }
                 }
                 else {
