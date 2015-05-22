@@ -1678,14 +1678,8 @@ Checkbox tree which shows an structure
 
 
 <treeview_modal>
-    <div class="treeViewWrapper" style="height:600px;overflow:auto;">
+    <div class="treeViewWrapper" style="overflow:auto;">
         %%treeContent%%
-    </div>
-    <div class="pull-right">
-        <button type="submit" class="btn btn-default savechanges " onclick="%%onClick%%">
-            <span class="btn-text">%%btnText%%</span>
-            <span class="statusicon"></span>
-        </button>
     </div>
 </treeview_modal>
 
