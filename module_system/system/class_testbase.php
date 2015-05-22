@@ -46,7 +46,7 @@ abstract class class_testbase extends PHPUnit_Framework_TestCase {
             class_cache::getIntRequests() . "/" . class_cache::getIntHits() . "/" . class_cache::getIntSaves() . "/" . class_cache::getIntCachesize() . " \n";
 
 
-        echo get_called_class()."\n".$strDebug."\n";
+        //echo get_called_class()."\n".$strDebug."\n";
     }
 
     protected function setUp() {
