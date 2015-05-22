@@ -702,7 +702,8 @@ in addition, a container for the calendar is needed. Use %%calendarContainerId%%
                             format: format,
                             weekStart: 1,
                             autoclose: true,
-                            language: '%%calendarLang%%'
+                            language: '%%calendarLang%%',
+                            todayHighlight: true
                         });
 
                         if($('#%%calendarId%%').is(':focus')) {
@@ -750,7 +751,8 @@ in addition, a container for the calendar is needed. Use %%calendarContainerId%%
                         format: format,
                         weekStart: 1,
                         autoclose: true,
-                        language: '%%calendarLang%%'
+                        language: '%%calendarLang%%',
+                        todayHighlight: true
                     });
 
                     if($('#%%calendarId%%').is(':focus')) {
