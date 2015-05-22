@@ -5,7 +5,7 @@
         >
     <title>v4skin</title>
     <description>The basic v4 admin-skin.</description>
-    <version>4.7</version>
+    <version>4.7.1</version>
     <author>Kajona Team</author>
     <type>MODULE</type>
     <providesInstaller>FALSE</providesInstaller>
