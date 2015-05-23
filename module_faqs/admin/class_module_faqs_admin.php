@@ -104,15 +104,12 @@ class class_module_faqs_admin extends class_admin_evensimpler implements interfa
 
             $arrCats = class_module_faqs_category::getObjectList();
             if(count($arrCats) > 0) {
-                $objForm->addField(new class_formentry_headline("cat_header"), "cat_header")->setStrValue($this->getLang("commons_categories"));
-                $objForm->setFieldToPosition("cat_header", 3);
-
                 $arrKeyValues = array();
                 foreach($arrCats as $objOneCat) {
                     $arrKeyValues[$objOneCat->getSystemid()] = $objOneCat->getStrDisplayName();
                 }
 
-                $objForm->getField("cats")->setArrKeyValues($arrKeyValues);
+                $objForm->getField("cats")->setStrLabel($this->getLang("commons_categories"))->setArrKeyValues($arrKeyValues);
             }
 
             return $objForm;

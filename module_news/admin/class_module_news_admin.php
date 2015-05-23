@@ -300,59 +300,6 @@ class class_module_news_admin extends class_admin_evensimpler implements interfa
         }
     }
     
-
-    /**
-     * Saves the passed values as a new category to the db
-     *
-     * @return string "" in case of success
-     * @permissions edit
-     */
-    protected function actionSaveNews() {
-        $objNews = null;
-
-        $this->setStrCurObjectTypeName("News");
-        $this->setCurObjectClassName("class_module_news_news");
-
-        if($this->getParam("mode") == "new") {
-            $objNews = new class_module_news_news();
-        }
-
-        else if($this->getParam("mode") == "edit") {
-            $objNews = new class_module_news_news($this->getSystemid());
-        }
-
-        if($objNews != null) {
-
-            $objForm = $this->getAdminForm($objNews);
-            if(!$objForm->validateForm()) {
-                if($this->getParam("mode") == "new")
-                    return $this->actionNew();
-                else
-                    return $this->actionEdit();
-            }
-
-            $objForm->updateSourceObject();
-
-            $arrParams = $this->getAllParams();
-            $arrCats = array();
-            if(isset($arrParams["news_cat"])) {
-                foreach($arrParams["news_cat"] as $strCatID => $strValue) {
-                    $arrCats[$strCatID] = $strValue;
-                }
-            }
-            $objNews->setArrCats($arrCats);
-
-            $objNews->setBitUpdateMemberships(true);
-            $objNews->updateObjectToDb();
-
-            $this->adminReload(class_link::getLinkAdminHref($this->getArrModule("modul"), $this->getActionNameForClass("list", $objNews), ($this->getParam("pe") != "" ? "&peClose=1&blockAction=1" : "")));
-            return "";
-        }
-
-        return $this->getLang("commons_error_permissions");
-    }
-
-
     /**
      * @param interface_model $objInstance
      *
@@ -401,24 +348,13 @@ class class_module_news_admin extends class_admin_evensimpler implements interfa
             }
         }
 
-        
         $arrCats = class_module_news_category::getObjectList();
         if(count($arrCats) > 0) {
-            $objForm->addField(new class_formentry_headline("commons_categories"))->setStrValue($this->getLang("commons_categories"));
-        }
-
-        $arrFaqsMember = class_module_news_category::getNewsMember($this->getSystemid());
-
-        foreach($arrCats as $objOneCat) {
-            $bitChecked = false;
-            foreach($arrFaqsMember as $objOneMember) {
-                if($objOneMember->getSystemid() == $objOneCat->getSystemid()) {
-                    $bitChecked = true;
-                }
+            $arrKeyValues = array();
+            foreach($arrCats as $objOneCat) {
+                $arrKeyValues[$objOneCat->getSystemid()] = $objOneCat->getStrDisplayName();
             }
-
-            $objForm->addField(new class_formentry_checkbox("news", "cat[" . $objOneCat->getSystemid() . "]"))->setStrLabel($objOneCat->getStrTitle())->setStrValue($bitChecked);
-
+            $objForm->getField("cats")->setStrLabel($this->getLang("commons_categories"))->setArrKeyValues($arrKeyValues);
         }
 
         if(class_module_system_setting::getConfigValue("_news_news_datetime_") == "true") {
