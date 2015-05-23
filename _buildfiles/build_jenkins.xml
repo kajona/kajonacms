@@ -328,6 +328,10 @@
     </target>
 
     <target name="buildPackageHelperProject" description="triggers the project setup and the compilation / compression of css / js files">
+        <antcall target="installComposerPackageDependencies">
+            <param name="composerTempPath" value="${tempPath}/"/>
+        </antcall>
+
         <antcall target="compileLess" />
         <antcall target="compressCss" />
         <antcall target="compressJs" />

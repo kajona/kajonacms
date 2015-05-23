@@ -40,17 +40,10 @@
     <!-- No need to change anything below! -->
 
     <target name="buildSqliteFast" depends="
-                                            cleanFilesystem, init,
+                                            init,
 					    					buildProject, installProjectSqlite,
 					    					lint,phpunitFast,
 					    					buildFullZip" />
-
-
-    <!-- internal initialization -->
-    <target name="init" depends="cleanFilesystem">
-        <tstamp />
-    </target>
-
 
 
     <target name="buildProject">
@@ -65,6 +58,10 @@
                 <include name="*/*"/>
             </fileset>
         </copy>
+
+        <antcall target="installComposerPackageDependencies">
+            <param name="composerTempPath" value="${sourcesPath}/"/>
+        </antcall>
     </target>
 
 
