@@ -151,6 +151,14 @@ abstract class class_root {
     private $intRecordStatus = 1;
 
     /**
+     * Indicates whether the object is deleted, or not
+     * @var int
+     * @versionable
+     * @tableColumn system.system_deleted
+     */
+    private $intRecordDeleted = 0;
+
+    /**
      * Human readable comment describing the current record
      * @var string
      * @tableColumn system.system_comment
@@ -327,6 +335,9 @@ abstract class class_root {
                 $this->longCreateDate = $arrRow["system_create_date"];
                 if(isset($arrRow["system_class"]))
                     $this->strRecordClass = $arrRow["system_class"];
+
+                if(isset($arrRow["system_deleted"]))
+                    $this->intRecordDeleted = $arrRow["system_deleted"];
 
                 $this->strOldPrevId = $this->strPrevId;
 
@@ -717,7 +728,8 @@ abstract class class_root {
                             system_status = ?,
                             system_comment = ?,
                             system_class = ?,
-                            system_create_date = ?
+                            system_create_date = ?,
+                            system_deleted = ?
                       WHERE system_id = ? ";
 
         $bitReturn = $this->objDB->_pQuery(
@@ -735,6 +747,7 @@ abstract class class_root {
                     uniStrTrim($this->getStrRecordComment(), 245),
                     $this->getStrRecordClass(),
                     $this->getLongCreateDate(),
+                    $this->getIntRecordDeleted(),
                     $this->getSystemid()
             )
         );
@@ -766,7 +779,7 @@ abstract class class_root {
      * @param bool $bitRight Should the right-record be generated?
      * @return string The ID used/generated
      */
-    public function createSystemRecord($strPrevId, $strComment, $bitRight = true) {
+    public function createSystemRecord($strPrevId, $strComment) {
 
         $strSystemId = generateSystemid();
 
@@ -788,8 +801,8 @@ abstract class class_root {
         //So, lets generate the record
         $strQuery = "INSERT INTO "._dbprefix_."system
                      ( system_id, system_prev_id, system_module_nr, system_owner, system_create_date, system_lm_user,
-                       system_lm_time, system_status, system_comment, system_sort, system_class) VALUES
-                     (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                       system_lm_time, system_status, system_comment, system_sort, system_class, system_deleted) VALUES
+                     (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         //Send the query to the db
         $this->objDB->_pQuery(
@@ -805,21 +818,17 @@ abstract class class_root {
                 (int)$this->getIntRecordStatus(),
                 $strComment,
                 (int)($intSiblings+1),
-                $this->getStrRecordClass()
+                $this->getStrRecordClass(),
+                $this->getIntRecordDeleted()
             )
         );
 
-        //Do we need a Rights-Record?
-        if($bitRight) {
-            $strQuery = "INSERT INTO "._dbprefix_."system_right (right_id, right_inherit) VALUES (?, 1)";
-
-            $this->objDB->_pQuery($strQuery, array($strSystemId));
-            //update rights to inherit
-            class_carrier::getInstance()->getObjRights()->setInherited(true, $strSystemId);
-        }
+        //we need a Rights-Record
+        $this->objDB->_pQuery("INSERT INTO "._dbprefix_."system_right (right_id, right_inherit) VALUES (?, 1)", array($strSystemId));
+        //update rights to inherit
+        class_carrier::getInstance()->getObjRights()->setInherited(true, $strSystemId);
 
         class_logger::getInstance()->addLogRow("new system-record created: ".$strSystemId ." (".$strComment.")", class_logger::$levelInfo);
-
         $this->objDB->flushQueryCache();
         $this->internalInit();
         //reset the old previd since we're having a new record
@@ -849,8 +858,7 @@ abstract class class_root {
         if($this->objSpecialDate != null && $this->objSpecialDate instanceof class_date)
             $intSpecial = $this->objSpecialDate->getLongTimestamp();
 
-        $strQuery = "SELECT COUNT(*) FROM "._dbprefix_."system_date WHERE system_date_id = ?";
-        $arrRow = $this->objDB->getPRow($strQuery, array($this->getSystemid()));
+        $arrRow = $this->objDB->getPRow("SELECT COUNT(*) FROM "._dbprefix_."system_date WHERE system_date_id = ?", array($this->getSystemid()));
         if($arrRow["COUNT(*)"] == 0) {
             //insert
             $strQuery = "INSERT INTO "._dbprefix_."system_date
@@ -1659,6 +1667,13 @@ abstract class class_root {
      */
     public function getIntRecordStatus() {
         return $this->intRecordStatus;
+    }
+
+    /**
+     * @return int
+     */
+    public function getIntRecordDeleted() {
+        return $this->intRecordDeleted;
     }
 
     /**

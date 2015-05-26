@@ -665,6 +665,11 @@ class class_installer_system extends class_installer_base implements interface_i
             $strReturn .= $this->update_465_47();
         }
 
+        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "4.7") {
+            $strReturn .= $this->update_47_475();
+        }
+
         return $strReturn."\n\n";
     }
 
@@ -1206,5 +1211,18 @@ class class_installer_system extends class_installer_base implements interface_i
         $this->updateModuleVersion($this->objMetadata->getStrTitle(), "4.7");
         return $strReturn;
     }
+
+    private function update_47_475() {
+
+        $strReturn = "Updating 4.7 to 4.7.5...\n";
+
+        $strReturn .= "Updating system table\n";
+        $this->objDB->addColumn("system", "system_deleted", class_db_datatypes::STR_TYPE_INT);
+
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion($this->objMetadata->getStrTitle(), "4.7");
+        return $strReturn;
+    }
+
 
 }

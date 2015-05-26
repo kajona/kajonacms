@@ -145,36 +145,7 @@ class class_test_system extends class_testbase  {
     }
 
 
-    public function testCopySysrecord() {
-        $objDB = class_carrier::getInstance()->getObjDB();
 
-        $objModule = new class_module_system_module();
-        $objModule->setStrName("autotest module");
-        $objModule->setIntNr(99129293);
-
-        $objModule->updateObjectToDb("0");
-
-        $strModuleId = $objModule->getSystemid();
-
-        $arrSourceRow = $objDB->getPRow("SELECT * FROM "._dbprefix_."system WHERE system_id = ?", array($strModuleId));
-
-        $objCommon = new class_module_system_common($strModuleId);
-
-        $strNewId = generateSystemid();
-        $objCommon->copyCurrentSystemrecord($strNewId);
-
-        $arrCopiedRow = $objDB->getPRow("SELECT * FROM "._dbprefix_."system WHERE system_id = ?", array($strNewId));
-
-        foreach($arrSourceRow as $strKey => $strValue) {
-            if(!in_array($strKey, array("system_id", "system_sort")) && !is_numeric($strKey))
-                $this->assertEquals($strValue, $arrCopiedRow[$strKey], __FILE__." key ".$strKey." copy sysrecord");
-        }
-
-        $objModule->deleteObject();
-
-        $objCommon->deleteSystemRecord($strNewId);
-
-    }
 
     public function testTreeDelete() {
         $objCommon = new class_module_system_common("0");
