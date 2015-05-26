@@ -605,8 +605,10 @@ class class_installer_pages extends class_installer_base implements interface_in
 
             /** @var $objOnePack class_module_packagemanager_template */
             foreach(class_module_packagemanager_template::getObjectList() as $objOnePack) {
-                if($objOnePack->getStrName() == "kajona42")
+                if($objOnePack->getStrName() == "kajona42") {
                     $objOnePack->setIntRecordStatus(1);
+                    $objOnePack->updateObjectToDb();
+                }
             }
 
             $objSetting = class_module_system_setting::getConfigByName("_packagemanager_defaulttemplate_");

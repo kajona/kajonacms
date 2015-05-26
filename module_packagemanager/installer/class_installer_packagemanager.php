@@ -41,8 +41,10 @@ class class_installer_packagemanager extends class_installer_base implements int
         if(count($arrPacks) > 0) {
             //search the default package
             foreach($arrPacks as $objOnePack) {
-                if($objOnePack->getStrName() == "default")
+                if($objOnePack->getStrName() == "default") {
                     $objOnePack->setIntRecordStatus(1);
+                    $objOnePack->updateObjectToDb();
+                }
             }
         }
 

@@ -748,10 +748,9 @@ abstract class class_root {
             $this->processDateChanges();
         }
 
-        $this->objDB->flushQueryCache();
+        class_carrier::getInstance()->flushCache(class_carrier::INT_CACHE_TYPE_DBQUERIES | class_carrier::INT_CACHE_TYPE_ORMCACHE);
 
         if($this->strOldPrevId != $this->strPrevId) {
-            class_carrier::getInstance()->flushCache(class_carrier::INT_CACHE_TYPE_DBQUERIES | class_carrier::INT_CACHE_TYPE_ORMCACHE);
             class_carrier::getInstance()->getObjRights()->rebuildRightsStructure($this->getSystemid());
             $this->objSortManager->fixSortOnPrevIdChange($this->strOldPrevId, $this->strPrevId);
             //TODO: remove legacy call
@@ -1439,12 +1438,6 @@ abstract class class_root {
         return $this->strPrevId;
     }
 
-    /**
-     * @return string
-     */
-    public function getStrOldPrevId() {
-        return $this->strOldPrevId;
-    }
 
     /**
      * @param string $strPrevId
@@ -1698,27 +1691,9 @@ abstract class class_root {
      * Sets the internal status. Fires a status-changed event.
      *
      * @param int $intRecordStatus
-     * @param bool $bitFireStatusChangeEvent
-     * @return bool
      */
-    public function setIntRecordStatus($intRecordStatus, $bitFireStatusChangeEvent = true) {
-        $intPrevStatus = $this->intRecordStatus;
+    public function setIntRecordStatus($intRecordStatus) {
         $this->intRecordStatus = $intRecordStatus;
-
-        $bitReturn = true;
-
-        if($intPrevStatus != $intRecordStatus && $intPrevStatus != -1) {
-            if(validateSystemid($this->getSystemid())) {
-                $this->updateObjectToDb();
-                class_carrier::getInstance()->flushCache(class_carrier::INT_CACHE_TYPE_ORMCACHE | class_carrier::INT_CACHE_TYPE_DBQUERIES);
-            }
-            if($bitFireStatusChangeEvent && validateSystemid($this->getSystemid())) {
-                $bitReturn = class_core_eventdispatcher::notifyStatusChangedListeners($this->getSystemid(), $intRecordStatus);
-            }
-        }
-
-        return $bitReturn;
-
     }
 
     /**

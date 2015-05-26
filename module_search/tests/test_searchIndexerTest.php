@@ -163,8 +163,10 @@ class class_test_searchIndexerTest extends class_testbase {
         $intTimeStart = microtime(true);
         $intQueriesStart = class_db::getInstance()->getNumber();
 
-        for($intI = 0; $intI < 150; $intI++)
+        for($intI = 0; $intI < 150; $intI++) {
             $objNews->setIntRecordStatus($intI % 2);
+            $objNews->updateObjectToDb();
+        }
 
         $intTimeEnd = microtime(true);
         $time = $intTimeEnd - $intTimeStart;
@@ -177,8 +179,10 @@ class class_test_searchIndexerTest extends class_testbase {
         $intTimeStart = microtime(true);
         $intQueriesStart = class_db::getInstance()->getNumber();
 
-        for($intI = 0; $intI < 150; $intI++)
+        for($intI = 0; $intI < 150; $intI++) {
             $objNews->setIntRecordStatus($intI % 2);
+            $objNews->updateObjectToDb();
+        }
 
         $intTimeEnd = microtime(true);
         $time = $intTimeEnd - $intTimeStart;

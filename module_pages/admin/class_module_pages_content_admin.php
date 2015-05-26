@@ -766,6 +766,7 @@ JS;
         //Create the object
         $objElement = new class_module_pages_pageelement($this->getSystemid());
         $objElement->setIntRecordStatus($objElement->getIntRecordStatus() == 0 ? 1 : 0);
+        $objElement->updateObjectToDb();
         $this->adminReload(class_link::getLinkAdminHref("pages_content", "list", "systemid=".$objElement->getPrevId().($this->getParam("pe") == "" ? "" : "&peClose=".$this->getParam("pe"))));
     }
 
