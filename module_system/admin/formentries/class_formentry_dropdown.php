@@ -23,6 +23,7 @@ class class_formentry_dropdown extends class_formentry_base implements interface
     private $arrKeyValues = array();
     private $strAddons = "";
     private $strDataPlaceholder = "";
+    private $bitRenderReset = false;
 
     public function __construct($strFormName, $strSourceProperty, $objSourceObject = null) {
         parent::__construct($strFormName, $strSourceProperty, $objSourceObject);
@@ -42,7 +43,18 @@ class class_formentry_dropdown extends class_formentry_base implements interface
         $strReturn = "";
         if($this->getStrHint() != null)
             $strReturn .= $objToolkit->formTextRow($this->getStrHint());
-        $strReturn .=  $objToolkit->formInputDropdown($this->getStrEntryName(), $this->arrKeyValues, $this->getStrLabel(), $this->getStrValue(), "", !$this->getBitReadonly(), $this->getStrAddons(), $this->getStrDataPlaceholder());
+
+        $strOpener = "";
+        if($this->bitRenderReset) {
+            $strOpener = " ".class_link::getLinkAdminManual(
+                "href=\"#\" onclick=\"$('#".$this->getStrEntryName()."').val('');return false;\"",
+                "",
+                class_carrier::getInstance()->getObjLang()->getLang("commons_reset", "prozessverwaltung"),
+                "icon_delete"
+            );
+        }
+
+        $strReturn .=  $objToolkit->formInputDropdown($this->getStrEntryName(), $this->arrKeyValues, $this->getStrLabel(), $this->getStrValue(), "", !$this->getBitReadonly(), $this->getStrAddons(), $this->getStrDataPlaceholder(), $strOpener);
         return $strReturn;
     }
 
@@ -144,6 +156,20 @@ class class_formentry_dropdown extends class_formentry_base implements interface
     public function setStrDataPlaceholder($strDataPlaceholder) {
         $this->strDataPlaceholder = $strDataPlaceholder;
             return $this;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function getBitRenderReset() {
+        return $this->bitRenderReset;
+    }
+
+    /**
+     * @param boolean $bitRenderReset
+     */
+    public function setBitRenderReset($bitRenderReset) {
+        $this->bitRenderReset = $bitRenderReset;
     }
 
 
