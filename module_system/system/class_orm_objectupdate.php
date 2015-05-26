@@ -188,7 +188,7 @@ class class_orm_objectupdate extends class_orm_base {
         if($strGetter !== null) {
             $arrValues = call_user_func(array($this->getObjObject(), $strGetter));
 
-            if(!is_array($arrValues))
+            if(!is_array($arrValues) && !($arrValues instanceof ArrayObject))
                 $arrValues = array();
         }
 
