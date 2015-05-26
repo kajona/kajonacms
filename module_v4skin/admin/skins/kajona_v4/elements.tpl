@@ -350,6 +350,9 @@ Dropdown
         <div class="col-sm-6">
             <select data-placeholder="%%dataplaceholder%%" name="%%name%%" id="%%name%%" class="form-control %%class%%" %%disabled%% %%addons%%>%%options%%</select>
         </div>
+        <div class="col-sm-2 form-opener">
+            %%opener%%
+        </div>
     </div>
 </input_dropdown>
 

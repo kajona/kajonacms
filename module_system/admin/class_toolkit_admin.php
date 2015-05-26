@@ -642,9 +642,12 @@ class class_toolkit_admin extends class_toolkit {
      * @param bool $bitEnabled
      * @param string $strAddons
      * @param string $strDataPlaceholder
+     * @param string $strOpener
+     *
      * @return string
+     * @throws class_exception
      */
-    public function formInputDropdown($strName, array $arrKeyValues, $strTitle = "", $strKeySelected = "", $strClass = "", $bitEnabled = true, $strAddons = "", $strDataPlaceholder = "") {
+    public function formInputDropdown($strName, array $arrKeyValues, $strTitle = "", $strKeySelected = "", $strClass = "", $bitEnabled = true, $strAddons = "", $strDataPlaceholder = "", $strOpener = "") {
         $strOptions = "";
         $strTemplateOptionID = $this->objTemplate->readTemplate("/elements.tpl", "input_dropdown_row");
         $strTemplateOptionSelectedID = $this->objTemplate->readTemplate("/elements.tpl", "input_dropdown_row_selected");
@@ -680,6 +683,7 @@ class class_toolkit_admin extends class_toolkit {
         $arrTemplate["disabled"] = ($bitEnabled ? "" : "disabled=\"disabled\"");
         $arrTemplate["options"] = $strOptions;
         $arrTemplate["addons"] = $strAddons;
+        $arrTemplate["opener"] = $strOpener;
         $arrTemplate["dataplaceholder"] = $strDataPlaceholder != "" ? $strDataPlaceholder : class_carrier::getInstance()->getObjLang()->getLang("commons_dropdown_dataplaceholder", "system");
 
 
