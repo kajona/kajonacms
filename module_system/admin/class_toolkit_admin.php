@@ -889,7 +889,8 @@ class class_toolkit_admin extends class_toolkit {
         foreach($arrValues as $strKey => $strValue) {
             $arrTemplateRow = array(
                 'key' => $strKey,
-                'name' => $strName . '[' . $strKey . ']',
+                'name' => $intType == class_formentry_checkboxarray::TYPE_RADIO ? $strName : $strName . '[' . $strKey . ']',
+                'value' => $intType == class_formentry_checkboxarray::TYPE_RADIO ? $strKey : 'checked',
                 'title' => $strValue,
                 'checked' => in_array($strKey, $arrSelected) ? 'checked' : '',
                 'inline' => $bitInline ? '-inline' : '',

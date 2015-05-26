@@ -836,7 +836,7 @@ A list of checkbox or radio input elements
 
 <input_checkboxarray_checkbox>
     <div class="%%type%%%%inline%%">
-        <label><input type="%%type%%" name="%%name%%" value="checked" %%checked%% %%readonly%% /> %%title%%</label>
+        <label><input type="%%type%%" name="%%name%%" value="%%value%%" %%checked%% %%readonly%% /> %%title%%</label>
     </div>
 </input_checkboxarray_checkbox>
 
