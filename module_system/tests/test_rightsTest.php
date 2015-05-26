@@ -15,8 +15,6 @@ class class_test_rights extends class_testbase {
         echo "\tRIGHTS INHERITANCE...\n";
         $objRights = class_carrier::getInstance()->getObjRights();
         $this->objRights = class_carrier::getInstance()->getObjRights();
-        $objSystemCommon = new class_module_system_common();
-
 
 
         //create a new user & group to be used during testing
@@ -40,39 +38,72 @@ class class_test_rights extends class_testbase {
         $objGroup->getObjSourceGroup()->addMember($objUser->getObjSourceUser());
 
         echo "\tcreating node-tree\n";
-        $strRootId = $objSystemCommon->createSystemRecord(0, "autotest 0");
+        $objAspect = new class_module_system_aspect(); $objAspect->setStrName("autotest 0");
+        $objAspect->updateObjectToDb();
+        $strRootId = $objAspect->getSystemid();
         echo "\tid of root-node: ".$strRootId."\n";
         echo "\tcreating child nodes...\n";
-        $strSecOne = $objSystemCommon->createSystemRecord($strRootId, "autotest 01");
-        $strSecTwo = $objSystemCommon->createSystemRecord($strRootId, "autotest 02");
+        $objAspect = new class_module_system_aspect(); $objAspect->setStrName("autotest 01");
+        $objAspect->updateObjectToDb($strRootId);
+        $strSecOne = $objAspect->getSystemid();
+        $objAspect = new class_module_system_aspect(); $objAspect->setStrName("autotest 02");
+        $objAspect->updateObjectToDb($strRootId);
+        $strSecTwo = $objAspect->getSystemid();
 
-        $strThirdOne1 = $objSystemCommon->createSystemRecord($strSecOne, "autotest 011");
-        $strThirdOne2 = $objSystemCommon->createSystemRecord($strSecOne, "autotest 012");
-        $strThirdTwo1 = $objSystemCommon->createSystemRecord($strSecTwo, "autotest 021");
-        $strThirdTwo2 = $objSystemCommon->createSystemRecord($strSecTwo, "autotest 022");
+        $objAspect = new class_module_system_aspect(); $objAspect->setStrName("autotest 011");
+        $objAspect->updateObjectToDb($strSecOne);
+        $strThirdOne1 = $objAspect->getSystemid();
+        $objAspect = new class_module_system_aspect(); $objAspect->setStrName("autotest 012");
+         $objAspect->updateObjectToDb($strSecOne);
+        $strThirdOne2 = $objAspect->getSystemid();
+        $objAspect = new class_module_system_aspect(); $objAspect->setStrName("autotest 021");
+        $objAspect->updateObjectToDb($strSecTwo);
+        $strThirdTwo1 = $objAspect->getSystemid();
+        $objAspect = new class_module_system_aspect(); $objAspect->setStrName("autotest 022");
+        $objAspect->updateObjectToDb($strSecTwo);
+        $strThirdTwo2 = $objAspect->getSystemid();
 
-        $strThird111 = $objSystemCommon->createSystemRecord($strThirdOne1, "autotest 0111");
-        $strThird112 = $objSystemCommon->createSystemRecord($strThirdOne1, "autotest 0112");
-        $strThird121 = $objSystemCommon->createSystemRecord($strThirdOne2, "autotest 0121");
-        $strThird122 = $objSystemCommon->createSystemRecord($strThirdOne2, "autotest 0122");
-        $strThird211 = $objSystemCommon->createSystemRecord($strThirdTwo1, "autotest 0211");
-        $strThird212 = $objSystemCommon->createSystemRecord($strThirdTwo1, "autotest 0212");
-        $strThird221 = $objSystemCommon->createSystemRecord($strThirdTwo2, "autotest 0221");
-        $strThird222 = $objSystemCommon->createSystemRecord($strThirdTwo2, "autotest 0222");
+        $objAspect = new class_module_system_aspect(); $objAspect->setStrName("autotest 0111");
+        $objAspect->updateObjectToDb($strThirdOne1);
+        $strThird111 = $objAspect->getSystemid();
+        $objAspect = new class_module_system_aspect(); $objAspect->setStrName("autotest 0112");
+        $objAspect->updateObjectToDb($strThirdOne1);
+        $strThird112 = $objAspect->getSystemid();
+        $objAspect = new class_module_system_aspect(); $objAspect->setStrName("autotest 0121");
+        $objAspect->updateObjectToDb($strThirdOne2);
+        $strThird121 = $objAspect->getSystemid();
+        $objAspect = new class_module_system_aspect(); $objAspect->setStrName("autotest 0122");
+        $objAspect->updateObjectToDb($strThirdOne2);
+        $strThird122 = $objAspect->getSystemid();
+        $objAspect = new class_module_system_aspect(); $objAspect->setStrName("autotest 0211");
+        $objAspect->updateObjectToDb($strThirdTwo1);
+        $strThird211 = $objAspect->getSystemid();
+        $objAspect = new class_module_system_aspect(); $objAspect->setStrName("autotest 0212");
+        $objAspect->updateObjectToDb($strThirdTwo1);
+        $strThird212 = $objAspect->getSystemid();
+        $objAspect = new class_module_system_aspect(); $objAspect->setStrName("autotest 0221");
+        $objAspect->updateObjectToDb($strThirdTwo2);
+        $strThird221 = $objAspect->getSystemid();
+        $objAspect = new class_module_system_aspect(); $objAspect->setStrName("autotest 0222");
+        $objAspect->updateObjectToDb($strThirdTwo2);
+        $strThird222 = $objAspect->getSystemid();
         $arrThirdLevelNodes = array($strThird111, $strThird112, $strThird121, $strThird122, $strThird211, $strThird212, $strThird221, $strThird222);
 
 
         echo "\tchecking leaf nodes for initial rights\n";
+//        class_carrier::getInstance()->flushCache(class_carrier::INT_CACHE_TYPE_DBQUERIES | class_carrier::INT_CACHE_TYPE_ORMCACHE);
         foreach($arrThirdLevelNodes as $strOneRootNode) {
             $this->checkNodeRights($strOneRootNode, false, false);
         }
 
         echo "\tadding group with right view & edit\n";
+//        class_carrier::getInstance()->flushCache(class_carrier::INT_CACHE_TYPE_DBQUERIES | class_carrier::INT_CACHE_TYPE_ORMCACHE);
         $objRights->addGroupToRight($objGroup->getSystemid(), $strRootId, "view");
         $objRights->addGroupToRight($objGroup->getSystemid(), $strRootId, "edit");
 
 
         echo "\tchecking leaf nodes for inherited rights\n";
+//        class_carrier::getInstance()->flushCache(class_carrier::INT_CACHE_TYPE_DBQUERIES | class_carrier::INT_CACHE_TYPE_ORMCACHE);
         foreach($arrThirdLevelNodes as $strOneRootNode) {
             $this->checkNodeRights($strOneRootNode, true, true);
         }
@@ -103,7 +134,7 @@ class class_test_rights extends class_testbase {
 
 
         echo "\tmove SecOne as child to 221\n";
-        $objTempCommons = new class_module_system_common($strSecOne);
+        $objTempCommons = new class_module_system_aspect($strSecOne);
         $objTempCommons->setStrPrevId($strThird221);
         $objTempCommons->updateObjectToDb();
         //$objSystemCommon->setPrevId($strThird221, $strSecOne);
@@ -149,7 +180,7 @@ class class_test_rights extends class_testbase {
 
 
         echo "\tsetting 211 as parent node for third11\n";
-        $objTempCommons = new class_module_system_common($strThirdOne1);
+        $objTempCommons = new class_module_system_aspect($strThirdOne1);
         $objTempCommons->setStrPrevId($strThird211);
         $objTempCommons->updateObjectToDb();
         //$objSystemCommon->setPrevId($strThird211, $strThirdOne1);
@@ -176,11 +207,11 @@ class class_test_rights extends class_testbase {
 
 
         echo "\trebuilding initial tree structure\n";
-        $objTempCommons = new class_module_system_common($strSecOne);
+        $objTempCommons = new class_module_system_aspect($strSecOne);
         $objTempCommons->setStrPrevId($strRootId);
         $objTempCommons->updateObjectToDb();
         //$objSystemCommon->setPrevId($strRootId, $strSecOne); //SecOne still inheriting
-        $objTempCommons = new class_module_system_common($strThirdOne1);
+        $objTempCommons = new class_module_system_aspect($strThirdOne1);
         $objTempCommons->setStrPrevId($strSecOne);
         $objTempCommons->updateObjectToDb();
         //$objSystemCommon->setPrevId($strSecOne, $strThirdOne1);
@@ -235,24 +266,24 @@ class class_test_rights extends class_testbase {
 
         echo "\tdeleting systemnodes\n";
 
-        $objSystemCommon->deleteSystemRecord($strThird111);
-        $objSystemCommon->deleteSystemRecord($strThird112);
-        $objSystemCommon->deleteSystemRecord($strThird121);
-        $objSystemCommon->deleteSystemRecord($strThird122);
-        $objSystemCommon->deleteSystemRecord($strThird211);
-        $objSystemCommon->deleteSystemRecord($strThird212);
-        $objSystemCommon->deleteSystemRecord($strThird221);
-        $objSystemCommon->deleteSystemRecord($strThird222);
+        $objAspect->deleteObject($strThird111);
+        $objAspect->deleteObject($strThird112);
+        $objAspect->deleteObject($strThird121);
+        $objAspect->deleteObject($strThird122);
+        $objAspect->deleteObject($strThird211);
+        $objAspect->deleteObject($strThird212);
+        $objAspect->deleteObject($strThird221);
+        $objAspect->deleteObject($strThird222);
 
-        $objSystemCommon->deleteSystemRecord($strThirdOne1);
-        $objSystemCommon->deleteSystemRecord($strThirdOne2);
-        $objSystemCommon->deleteSystemRecord($strThirdTwo1);
-        $objSystemCommon->deleteSystemRecord($strThirdTwo2);
+        $objAspect->deleteObject($strThirdOne1);
+        $objAspect->deleteObject($strThirdOne2);
+        $objAspect->deleteObject($strThirdTwo1);
+        $objAspect->deleteObject($strThirdTwo2);
 
-        $objSystemCommon->deleteSystemRecord($strSecOne);
-        $objSystemCommon->deleteSystemRecord($strSecTwo);
+        $objAspect->deleteObject($strSecOne);
+        $objAspect->deleteObject($strSecTwo);
 
-        $objSystemCommon->deleteSystemRecord($strRootId);
+        $objAspect->deleteObject($strRootId);
 
         echo "\tdeleting the test user\n";
         $objUser->deleteObject();
@@ -324,7 +355,7 @@ class class_test_rights extends class_testbase {
         for($i=0; $i<$intLevel; $i++)
             echo "   ";
 
-        $objCommon = new class_module_system_common($strRootNode);
+        $objCommon = new class_module_system_aspect($strRootNode);
         //var_dump($objCommon->getSystemRecord());
         echo $objCommon->getRecordComment()." / (v: ".$this->objRights->rightView($strRootNode, $this->strUserId)." e: ".$this->objRights->rightEdit($strRootNode, $this->strUserId).") /  ".$objCommon->getSystemid()."\n";
 

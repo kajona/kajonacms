@@ -30,7 +30,7 @@ class class_test_sortTest extends class_testbase  {
 
         $objOrm = new class_orm_objectlist();
         $arrChilds = $objOrm->getObjectList("class_module_system_aspect", $objRootAspect->getSystemid());
-        $this->assertEquals(count($arrChilds), 99);
+        $this->assertEquals(count($arrChilds), 100);
         for($intI = 1; $intI <= 99; $intI++) {
             $this->assertEquals($arrChilds[$intI-1]->getIntSort(), $intI);
         }
@@ -48,26 +48,29 @@ class class_test_sortTest extends class_testbase  {
         //test the setToPos
         echo "\tposition handling...\n";
         //create 10 test records
-        $objSystemCommon = new class_module_system_common();
+        $objAspect = new class_module_system_aspect();
         //new base-node
-        $strBaseNodeId = $objSystemCommon->createSystemRecord(0, "positionShiftTest");
+        $objAspect->updateObjectToDb();
+        $strBaseNodeId = $objAspect->getSystemid();
         $arrNodes = array();
         for($intI = 1; $intI <= 10; $intI++) {
-            $arrNodes[] = $objSystemCommon->createSystemRecord($strBaseNodeId, "positionShiftTest_".$intI);
+            $objAspect = new class_module_system_aspect();
+            $objAspect->updateObjectToDb($strBaseNodeId);
+            $arrNodes[] = $objAspect->getSystemid();
         }
 
         //initial movings
-        $objSystemCommon = new class_module_system_common($arrNodes[1]);
-        $objSystemCommon->setPosition("upwards");
+        $objAspect = new class_module_system_aspect($arrNodes[1]);
+        $objAspect->setPosition("upwards");
         $arrNodes = $objDB->getPArray("SELECT system_id FROM "._dbprefix_."system WHERE system_prev_id = ? ORDER BY system_sort ASC", array($strBaseNodeId));
         echo "\trelative shiftings...\n";
         //move the third to the first pos
-        $objSystemCommon = new class_module_system_common($arrNodes[2]["system_id"]);
-        $objSystemCommon->setPosition("upwards");
-        $objSystemCommon->setPosition("upwards");
-        $objSystemCommon->setPosition("upwards");
+        $objAspect = new class_module_system_aspect($arrNodes[2]["system_id"]);
+        $objAspect->setPosition("upwards");
+        $objAspect->setPosition("upwards");
+        $objAspect->setPosition("upwards");
         //next one should be with no effect
-        $objSystemCommon->setPosition("upwards");
+        $objAspect->setPosition("upwards");
         $objDB->flushQueryCache();
         $arrNodesAfter = $objDB->getPArray("SELECT system_id FROM "._dbprefix_."system WHERE system_prev_id = ? ORDER BY system_sort ASC", array($strBaseNodeId));
 
@@ -80,16 +83,16 @@ class class_test_sortTest extends class_testbase  {
         $objDB->flushQueryCache();
         $arrNodes = $objDB->getPArray("SELECT system_id FROM "._dbprefix_."system WHERE system_prev_id = ? ORDER BY system_sort ASC", array($strBaseNodeId));
         $objDB->flushQueryCache();
-        $objSystemCommon = new class_module_system_common($arrNodes[2]["system_id"]);
-        $objSystemCommon->setAbsolutePosition(1);
+        $objAspect = new class_module_system_aspect($arrNodes[2]["system_id"]);
+        $objAspect->setAbsolutePosition(1);
         $arrNodesAfter = $objDB->getPArray("SELECT system_id FROM "._dbprefix_."system WHERE system_prev_id = ? ORDER BY system_sort ASC", array($strBaseNodeId));
         $this->assertEquals($arrNodesAfter[0]["system_id"], $arrNodes[2]["system_id"], __FILE__." checkPositionShitftingByAbsoluteShift");
         $this->assertEquals($arrNodesAfter[1]["system_id"], $arrNodes[0]["system_id"], __FILE__." checkPositionShitftingByAbsoluteShift");
         $this->assertEquals($arrNodesAfter[2]["system_id"], $arrNodes[1]["system_id"], __FILE__." checkPositionShitftingByAbsoluteShift");
         //and back...
         $objDB->flushQueryCache();
-        $objSystemCommon = new class_module_system_common($arrNodes[2]["system_id"]);
-        $objSystemCommon->setAbsolutePosition(3);
+        $objAspect = new class_module_system_aspect($arrNodes[2]["system_id"]);
+        $objAspect->setAbsolutePosition(3);
         $objDB->flushQueryCache();
         $arrNodesAfter = $objDB->getPArray("SELECT system_id FROM "._dbprefix_."system WHERE system_prev_id = ? ORDER BY system_sort ASC", array($strBaseNodeId));
         $this->assertEquals($arrNodesAfter[0]["system_id"], $arrNodes[0]["system_id"], __FILE__." checkPositionShitftingByAbsoluteShift");
@@ -97,9 +100,12 @@ class class_test_sortTest extends class_testbase  {
         $this->assertEquals($arrNodesAfter[2]["system_id"], $arrNodes[2]["system_id"], __FILE__." checkPositionShitftingByAbsoluteShift");
 
         //deleting all records created
-        foreach ($arrNodes as $arrOneNode)
-            $objSystemCommon->deleteSystemRecord($arrOneNode["system_id"]);
-        $objSystemCommon->deleteSystemRecord($strBaseNodeId);
+        foreach ($arrNodes as $arrOneNode) {
+            $objAspect = new class_module_system_aspect($arrOneNode["system_id"]);
+            $objAspect->deleteObject();
+        }
+        $objAspect = new class_module_system_aspect($strBaseNodeId);
+        $objAspect->deleteObject();
     }
 
 

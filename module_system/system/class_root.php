@@ -391,7 +391,7 @@ abstract class class_root {
 
     /**
      * Deletes the current object from the system.
-     * By default, all entries are delete from  all tables indicated by the class-doccomment.
+     * By default, all entries are deleted from all tables indicated by the class-doccomment.
      * If you want to trigger additional deletes, overwrite this method.
      * The system-record itself is being deleted automatically, too.
      * @return bool
@@ -402,16 +402,60 @@ abstract class class_root {
     }
 
     /**
-     * Removes the current object from the system.
+     * Triggers the logical delete of the current object.
+     * This means the object itself is not deleted, but marked as deleted. Restoring the object is
+     * possible.
      *
      * @throws class_exception
      * @return bool
-     * @todo reduce overwrites
-     *
-     * @todo move to class_orm_objectdelete completely
      */
     public function deleteObject() {
 
+        if(!$this->getLockManager()->isAccessibleForCurrentUser())
+            return false;
+
+        /** @var $this class_root|interface_model */
+        $this->objDB->transactionBegin();
+
+        //validate, if there are subrecords, so child nodes to be deleted
+        $arrChilds = $this->objDB->getPArray("SELECT system_id FROM "._dbprefix_."system where system_prev_id = ?", array($this->getSystemid()));
+        foreach($arrChilds as $arrOneChild) {
+            if(validateSystemid($arrOneChild["system_id"])) {
+                $objInstance = class_objectfactory::getInstance()->getObject($arrOneChild["system_id"]);
+                if($objInstance !== null)
+                    $objInstance->deleteObject();
+            }
+        }
+
+        //$this->intRecordDeleted = 1;
+        //$bitReturn = $this->updateObjectToDb();
+        $bitReturn = $this->deleteObjectInternal();
+        $bitReturn = $bitReturn && $this->deleteSystemRecord($this->getSystemid());
+
+        class_objectfactory::getInstance()->removeFromCache($this->getSystemid());
+        class_orm_rowcache::removeSingleRow($this->getSystemid());
+
+        if($bitReturn) {
+            class_logger::getInstance()->addLogRow("successfully deleted record ".$this->getSystemid()." / ".$this->getStrDisplayName(), class_logger::$levelInfo);
+            $this->objDB->transactionCommit();
+            $this->objDB->flushQueryCache();
+            return true;
+        }
+        else {
+            class_logger::getInstance()->addLogRow("error deleting record ".$this->getSystemid()." / ".$this->getStrDisplayName(), class_logger::$levelInfo);
+            $this->objDB->transactionRollback();
+            $this->objDB->flushQueryCache();
+            return false;
+        }
+    }
+
+    /**
+     * Deletes the object from the database. The record is removed in total, so no restoring will be possible.
+     *
+     * @return bool
+     * @throws class_exception
+     */
+    public function deleteObjectFromDatabase() {
         if(!$this->getLockManager()->isAccessibleForCurrentUser())
             return false;
 
@@ -432,7 +476,7 @@ abstract class class_root {
             if(validateSystemid($arrOneChild["system_id"])) {
                 $objInstance = class_objectfactory::getInstance()->getObject($arrOneChild["system_id"]);
                 if($objInstance !== null)
-                    $objInstance->deleteObject();
+                    $objInstance->deleteObjectFromDatabase();
             }
         }
 
@@ -441,6 +485,10 @@ abstract class class_root {
 
         class_objectfactory::getInstance()->removeFromCache($this->getSystemid());
         class_orm_rowcache::removeSingleRow($this->getSystemid());
+
+        //try to call other modules, maybe wanting to delete anything in addition, if the current record
+        //is going to be deleted
+        $bitReturn = $bitReturn && class_core_eventdispatcher::getInstance()->notifyGenericListeners(class_system_eventidentifier::EVENT_SYSTEM_RECORDDELETED, array($this->getSystemid(), get_class($this)));
 
         if($bitReturn) {
             class_logger::getInstance()->addLogRow("successfully deleted record ".$this->getSystemid()." / ".$this->getStrDisplayName(), class_logger::$levelInfo);
@@ -708,6 +756,8 @@ abstract class class_root {
      * @return bool
      * @final
      * @since 3.4.1
+     *
+     * @todo find ussages and make private
      */
     protected final function updateSystemrecord() {
 
@@ -774,12 +824,13 @@ abstract class class_root {
      * Generates a new SystemRecord and, if needed, the corresponding record in the rights-table (here inheritance is default)
      * Returns the systemID used for this record
      *
-     * @param string $strPrevId    Previous ID in the tree-structure
+     * @param string $strPrevId  Previous ID in the tree-structure
      * @param string $strComment Comment to identify the record
-     * @param bool $bitRight Should the right-record be generated?
      * @return string The ID used/generated
+     *
+     * * @todo find ussages and make private
      */
-    public function createSystemRecord($strPrevId, $strComment) {
+    private function createSystemRecord($strPrevId, $strComment) {
 
         $strSystemId = generateSystemid();
 
@@ -1176,6 +1227,8 @@ abstract class class_root {
      * @return bool
      * @todo: remove first params, is always the current systemid. maybe mark as protected, currently only called by the test-classes
      *
+     * * @todo find ussages and make private
+     *
      */
     public final function deleteSystemRecord($strSystemid, $bitRight = true, $bitDate = true) {
         $bitResult = true;
@@ -1198,9 +1251,7 @@ abstract class class_root {
             $bitResult = $bitResult &&  $this->objDB->_pQuery($strQuery, array($strSystemid));
         }
 
-        //try to call other modules, maybe wanting to delete anything in addition, if the current record
-        //is going to be deleted
-        $bitResult = $bitResult && class_core_eventdispatcher::getInstance()->notifyGenericListeners(class_system_eventidentifier::EVENT_SYSTEM_RECORDDELETED, array($strSystemid, get_class($this)));
+
 
         //end tx
         if($bitResult) {
