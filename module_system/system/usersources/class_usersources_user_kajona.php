@@ -252,8 +252,6 @@ class class_usersources_user_kajona extends class_model implements interface_mod
         $strQuery = "DELETE FROM " . _dbprefix_ . "user_kajona WHERE user_id=?";
         //call other models that may be interested
         $bitDelete = $this->objDB->_pQuery($strQuery, array($this->getSystemid()));
-        //TODO: remove legacy call
-        class_core_eventdispatcher::notifyRecordDeletedListeners($this->getSystemid(), get_class($this));
         class_core_eventdispatcher::getInstance()->notifyGenericListeners(class_system_eventidentifier::EVENT_SYSTEM_RECORDDELETED, array($this->getSystemid(), get_class($this)));
         return $bitDelete;
     }
