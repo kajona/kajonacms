@@ -176,12 +176,13 @@ class class_module_news_news extends class_model implements interface_model, int
     private $objDateTimeSpecial = 0;
 
 
-
+    /**
+     * @var class_module_news_category[]
+     * @objectList news_member (source="newsmem_news", target="newsmem_category")
+     * @fieldType checkboxarray
+     * @versionable
+     */
     private $arrCats = null;
-
-    private $bitTitleChanged = false;
-
-    private $bitUpdateMemberships = false;
 
     /**
      * Returns the icon the be used in lists.
@@ -223,62 +224,6 @@ class class_module_news_news extends class_model implements interface_model, int
      */
     public function getStrDisplayName() {
         return $this->getStrTitle();
-    }
-
-
-    /**
-     * @return bool
-     */
-    protected function updateStateToDb() {
-
-        if($this->bitUpdateMemberships) {
-
-            //add records to the change-history manually
-            $arrOldAssignments = class_module_news_category::getNewsMember($this->getSystemid());
-
-            $arrOldGroupIds = array();
-            foreach($arrOldAssignments as $objOneAssignment)
-                $arrOldGroupIds[] = $objOneAssignment->getSystemid();
-
-            $arrNewGroupIds = array_keys($this->arrCats);
-
-            $arrChanges = array(
-                array("property" => "assignedCategories", "oldvalue" => $arrOldGroupIds, "newvalue" => $arrNewGroupIds)
-            );
-            $objChanges = new class_module_system_changelog();
-            $objChanges->processChanges($this, "editCategoryAssignments", $arrChanges);
-
-            class_module_news_category::deleteNewsMemberships($this->getSystemid());
-            //insert all memberships
-            $arrValues = array();
-            foreach($this->arrCats as $strCatID => $strValue) {
-                $arrValues[] = array(generateSystemid(), $this->getSystemid(), $strCatID);
-            }
-
-
-            if(count($arrValues) > 0 && !$this->objDB->multiInsert("news_member", array("newsmem_id", "newsmem_news", "newsmem_category"), $arrValues))
-                return false;
-        }
-
-        $this->bitTitleChanged = false;
-
-        return parent::updateStateToDb();
-    }
-
-    /**
-     * @param string $strNewPrevid
-     * @param bool $bitChangeTitle
-     *
-     * @return bool
-     */
-    public function copyObject($strNewPrevid = "", $bitChangeTitle = true) {
-        $arrMemberCats = class_module_news_category::getNewsMember($this->getSystemid());
-        $this->arrCats = array();
-        foreach($arrMemberCats as $objOneCat) {
-            $this->arrCats[$objOneCat->getSystemid()] = "1";
-        }
-        $this->bitUpdateMemberships = true;
-        return parent::copyObject($strNewPrevid, $bitChangeTitle);
     }
 
     /**
@@ -369,20 +314,6 @@ class class_module_news_news extends class_model implements interface_model, int
         $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, $arrParams);
         return $arrRow["COUNT(*)"];
     }
-
-    /**
-     * Deletes the given news and all relating memberships
-     *
-     * @return bool
-     */
-    public function deleteObject() {
-        //Delete memberships
-        if(class_module_news_category::deleteNewsMemberships($this->getSystemid())) {
-            return parent::deleteObject();
-        }
-        return false;
-    }
-
 
     /**
      * Counts the number of news displayed for the passed portal-setup
@@ -762,7 +693,6 @@ class class_module_news_news extends class_model implements interface_model, int
      */
     public function setStrTitle($strTitle) {
         $this->strTitle = $strTitle;
-        $this->bitTitleChanged = true;
     }
 
     /**
@@ -803,14 +733,6 @@ class class_module_news_news extends class_model implements interface_model, int
      */
     public function setArrCats($arrCats) {
         $this->arrCats = $arrCats;
-    }
-
-    /**
-     * @param bool $bitUpdateMemberships
-     * @return void
-     */
-    public function setBitUpdateMemberships($bitUpdateMemberships) {
-        $this->bitUpdateMemberships = $bitUpdateMemberships;
     }
 
     /**

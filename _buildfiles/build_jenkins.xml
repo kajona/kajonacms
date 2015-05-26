@@ -328,6 +328,10 @@
     </target>
 
     <target name="buildPackageHelperProject" description="triggers the project setup and the compilation / compression of css / js files">
+        <antcall target="installComposerPackageDependencies">
+            <param name="composerTempPath" value="${tempPath}/"/>
+        </antcall>
+
         <antcall target="compileLess" />
         <antcall target="compressCss" />
         <antcall target="compressJs" />
@@ -429,8 +433,6 @@
                 <exclude name="**/*min.js" />
                 <exclude name="**/jquery*.js" />
                 <exclude name="**/ckeditor/**/*.js" />
-                <exclude name="**/halloeditor/**/*.js" />
-                <exclude name="**/rangy/**/*.js" />
             </fileset>
             <globmapper from="*.js" to="*-full.js"/>
         </copy>
@@ -484,7 +486,7 @@
             <arg path="${basedir}${projectPath}" />
             <arg value="xml" />
             <arg value="--exclude" />
-            <arg value="*yui*,*tcpdf*,*fonts*,*pchart*,*ezcomponents*,*phpexcel*,*phpqrcode*" />
+            <arg value="*yui*,*tcpdf*,*fonts*,*pchart*,*vendor*,*phpexcel*,*phpqrcode*" />
             <arg value="--reportfile" />
             <arg value="${basedir}${buildPath}/logs/pmd.xml" />
             <arg value="${basedir}/phpmd-ruleset.xml" />

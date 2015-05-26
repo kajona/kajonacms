@@ -47,12 +47,12 @@ class class_test_orm_objectassignmentsTest extends class_testbase_object {
     }
 
     protected function tearDown() {
+        parent::tearDown();
         $objDb = class_carrier::getInstance()->getObjDB();
         $objDb->_pQuery("DROP TABLE "._dbprefix_."testclass", array());
         $objDb->_pQuery("DROP TABLE "._dbprefix_."testclass_rel", array());
         $objDb->_pQuery("DROP TABLE "._dbprefix_."testclass2_rel", array());
         class_carrier::getInstance()->flushCache(class_carrier::INT_CACHE_TYPE_DBTABLES);
-        parent::tearDown();
     }
 
 
@@ -318,7 +318,7 @@ class class_test_orm_objectassignmentsTest extends class_testbase_object {
         $objTestobject = new orm_objectlist_testclass($objTestobject->getSystemid());
         $this->assertEquals(2, count($objTestobject->getArrObject2()));
 
-        $strQuery = "INSERT INTO "._dbprefix_."testclass2_rel SET testclass_source_id = ?, testclass_target_id = ?";
+        $strQuery = "INSERT INTO "._dbprefix_."testclass2_rel  (testclass_source_id, testclass_target_id) VALUES (?, ?)";
         $objDB->_pQuery($strQuery, array($objTestobject->getSystemid(), $this->getObject("language")->getSystemid()));
 
         $objDB->flushQueryCache();

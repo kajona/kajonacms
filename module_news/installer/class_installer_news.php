@@ -25,16 +25,6 @@ class class_installer_news extends class_installer_base implements interface_ins
 		$strReturn .= "Installing table news...\n";
         $objManager->createTable("class_module_news_news");
 
-		$strReturn .= "Installing table news_member...\n";
-
-		$arrFields = array();
-		$arrFields["newsmem_id"] 		= array("char20", false);
-		$arrFields["newsmem_news"]	 	= array("char20", true);
-		$arrFields["newsmem_category"]  = array("char20", true);
-
-		if(!$this->objDB->createTable("news_member", $arrFields, array("newsmem_id")))
-			$strReturn .= "An error occurred! ...\n";
-
 		$strReturn .= "Installing table news_feed...\n";
         $objManager->createTable("class_module_news_feed");
 
@@ -235,6 +225,11 @@ class class_installer_news extends class_installer_base implements interface_ins
             $this->updateElementVersion("news", "4.7");
         }
 
+        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "4.7") {
+            $strReturn .= $this->update_47_475();
+        }
+
         return $strReturn."\n\n";
 	}
 
@@ -342,6 +337,19 @@ class class_installer_news extends class_installer_base implements interface_ins
         $this->updateModuleVersion("news", "4.5.1");
         $strReturn .= "Updating element-versions...\n";
         $this->updateElementVersion("news", "4.5.1");
+        return $strReturn;
+    }
+
+    private function update_47_475() {
+        $strReturn = "Updating 4.7 to 4.7.5...\n";
+
+        $strReturn .= "Changing assignment table...\n";
+        class_carrier::getInstance()->getObjDB()->removeColumn("news_member", "newsmem_id");
+
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion("news", "4.7.5");
+        $strReturn .= "Updating element-versions...\n";
+        $this->updateElementVersion("news", "4.7.5");
         return $strReturn;
     }
 }

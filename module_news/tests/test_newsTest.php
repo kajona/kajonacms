@@ -28,8 +28,7 @@ class class_test_news extends class_testbase  {
         
         
         echo "adding news to category..\n";
-        $objNews->setArrCats(array($objCat->getSystemid() => "ss"));
-        $objNews->setBitUpdateMemberships(true);
+        $objNews->setArrCats(array($objCat->getSystemid()));
         $this->assertTrue($objNews->updateObjectToDb(), __FILE__." update news");
         
         $strNewsId = $objNews->getSystemid();
@@ -78,8 +77,7 @@ class class_test_news extends class_testbase  {
         $this->flushDBCache();
         
         echo "adding news to category..\n";
-        $objNews->setArrCats(array($objCat->getSystemid() => "ss"));
-        $objNews->setBitUpdateMemberships(true);
+        $objNews->setArrCats(array($objCat->getSystemid()));
         $this->assertTrue($objNews->updateObjectToDb(), __FILE__." update news");
         $this->flushDBCache();
         
@@ -117,8 +115,7 @@ class class_test_news extends class_testbase  {
         
         
         echo "adding news to category..\n";
-        $objNews2->setArrCats(array($objCat->getSystemid() => "ss2"));
-        $objNews2->setBitUpdateMemberships(true);
+        $objNews2->setArrCats(array($objCat->getSystemid()));
         $this->assertTrue($objNews2->updateObjectToDb(), __FILE__." update news");
         $this->flushDBCache();
         
