@@ -132,6 +132,7 @@
         <exec executable="${path.composer}" failonerror="on">
             <arg line=" global"/>
             <arg line=" install"/>
+            <arg line=" --prefer-source"/>
         </exec>
     </target>
 
@@ -174,7 +175,7 @@
                 <exclude name="**/_buildfiles/*/*.json"/>
                 <exclude name="**/_vagrant/**/*.json"/>
             </fileset>
-            <arg line="install --working-dir "/>
+            <arg line="install --prefer-source --working-dir "/>
             <targetfile/>
             <mapper type="glob" from="*composer.json" to="${basedir}${composerTempPath}*"/>
         </apply>
