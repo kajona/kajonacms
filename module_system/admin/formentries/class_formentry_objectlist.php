@@ -92,7 +92,7 @@ class class_formentry_objectlist extends class_formentry_multiselect {
 
 
         $arrObjects = call_user_func(array($objSourceObject, $strGetter));
-        $arrNotObjects = array_values(array_filter($arrObjects->getArrayCopy(), function(class_model $objObject){
+        $arrNotObjects = array_values(array_filter((array) $arrObjects, function(class_model $objObject){
             return !$objObject->rightView();
         }));
 
