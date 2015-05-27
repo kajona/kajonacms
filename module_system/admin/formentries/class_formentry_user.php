@@ -18,7 +18,7 @@ class class_formentry_user extends class_formentry_base implements interface_for
     private $bitUser = true;
     private $bitGroups = false;
     private $bitBlockCurrentUser = false;
-    private $strValidateId = null;
+    private $arrValidateId = null;
 
     public function __construct($strFormName, $strSourceProperty, $objSourceObject = null) {
         parent::__construct($strFormName, $strSourceProperty, $objSourceObject);
@@ -56,7 +56,7 @@ class class_formentry_user extends class_formentry_base implements interface_for
 
         }
         else {
-            $strReturn .= $objToolkit->formInputUserSelector($this->getStrEntryName(), $this->getStrLabel(), $this->getStrValue(), "", $this->bitUser, $this->bitGroups, $this->bitBlockCurrentUser, $this->strValidateId);
+            $strReturn .= $objToolkit->formInputUserSelector($this->getStrEntryName(), $this->getStrLabel(), $this->getStrValue(), "", $this->bitUser, $this->bitGroups, $this->bitBlockCurrentUser, $this->arrValidateId);
         }
 
         return $strReturn;
@@ -126,12 +126,16 @@ class class_formentry_user extends class_formentry_base implements interface_for
     }
 
     /**
-     * @param null $strValidateId
+     * @param null $arrValidateId
      *
      * @return $this
      */
-    public function setStrValidateId($strValidateId) {
-        $this->strValidateId = $strValidateId;
+    public function setArrValidateId($arrValidateId) {
+        if(!is_array($arrValidateId)) {
+            $arrValidateId = array($arrValidateId);
+        }
+
+        $this->arrValidateId = $arrValidateId;
         return $this;
     }
 
