@@ -280,7 +280,7 @@ class class_module_mediamanager_file extends class_model implements interface_mo
         return $this->getStrName();
     }
 
-    protected function deleteObjectInternal() {
+    public function deleteObjectFromDatabase() {
 
         //delete the current file
         if($this->getParam("deleteMediamanagerRepo") != true) {
@@ -293,7 +293,7 @@ class class_module_mediamanager_file extends class_model implements interface_mo
             }
         }
 
-        return parent::deleteObjectInternal();
+        return parent::deleteObjectFromDatabase();
     }
 
     protected function updateStateToDb() {

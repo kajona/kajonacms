@@ -150,17 +150,6 @@ class class_module_system_module extends class_model implements interface_model,
         return self::$arrModuleData;
     }
 
-
-    /**
-     * Overwritten in order to flush the cached module-data
-     * @return bool
-     */
-    protected function deleteObjectInternal() {
-        self::flushCache();
-        return parent::deleteObjectInternal();
-    }
-
-
     /**
      * Returns the name to be used when rendering the current object, e.g. in admin-lists.
      *

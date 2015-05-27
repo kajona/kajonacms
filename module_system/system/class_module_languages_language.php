@@ -176,26 +176,6 @@ class class_module_languages_language extends class_model implements interface_m
 
 
     /**
-     * Deletes the current object from the database
-     *
-     * @return bool
-     */
-    protected function deleteObjectInternal() {
-        parent::deleteObjectInternal();
-
-        //if we have just one language remaining, set this one as default
-        $arrObjLanguages = class_module_languages_language::getObjectList();
-        if(count($arrObjLanguages) == 1) {
-            $objOneLanguage = $arrObjLanguages[0];
-            $objOneLanguage->setBitDefault(1);
-            $objOneLanguage->updateObjectToDb();
-        }
-
-        return true;
-    }
-
-
-    /**
      * Moves all contents created in a given language to the current langugage
      *
      * @param string $strSourceLanguage

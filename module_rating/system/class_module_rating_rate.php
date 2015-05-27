@@ -173,11 +173,11 @@ class class_module_rating_rate extends class_model implements interface_model {
     /**
      * @return bool
      */
-    protected function deleteObjectInternal() {
+    public function deleteObjectFromDatabase() {
         //delete the corresponding history entries
         $strQuery = "DELETE FROM "._dbprefix_."rating_history"." WHERE rating_history_rating=? ";
         $this->objDB->_pQuery($strQuery, array($this->getSystemid()));
-        return parent::deleteObjectInternal();
+        return parent::deleteObjectFromDatabase();
     }
 
 

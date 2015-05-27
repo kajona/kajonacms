@@ -146,28 +146,6 @@ class class_module_system_aspect extends class_model implements interface_model,
         return class_carrier::getInstance()->getObjDB()->_pQuery($strQuery, array());
     }
 
-
-    /**
-     * Deletes the current object from the database
-     *
-     * @return bool
-     */
-    protected function deleteObjectInternal() {
-        parent::deleteObjectInternal();
-
-        //if we have just one aspect remaining, set this one as default
-        if(class_module_system_aspect::getObjectCount() == 1) {
-            /** @var class_module_system_aspect[] $arrObjAspects */
-            $arrObjAspects = class_module_system_aspect::getObjectList();
-            $objOneAspect = $arrObjAspects[0];
-            $objOneAspect->setBitDefault(1);
-            $objOneAspect->updateObjectToDb();
-        }
-
-        return true;
-    }
-
-
     /**
      * Returns the default aspect, defined in the admin.
      * This takes permissions into account!

@@ -79,13 +79,10 @@ class class_module_faqs_category extends class_model implements interface_model,
      * Overwritten to perform a cleanup of the relation table
      * @return bool
      */
-    protected function deleteObjectInternal() {
+    public function deleteObjectFromDatabase() {
         //start by deleting from members and cat table
-        $strQuery = "DELETE FROM " . _dbprefix_ . "faqs_member WHERE faqsmem_category = ? ";
-        if($this->objDB->_pQuery($strQuery, array($this->getSystemid()))) {
-            return parent::deleteObjectInternal();
-        }
-        return false;
+        $this->objDB->_pQuery("DELETE FROM " . _dbprefix_ . "faqs_member WHERE faqsmem_category = ? ", array($this->getSystemid()));
+        return parent::deleteObjectFromDatabase();
     }
 
     /**

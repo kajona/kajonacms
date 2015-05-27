@@ -33,6 +33,16 @@ class class_module_languages_recorddeletedlistener implements interface_generice
         //unwrap arguments
         list($strSystemid, $strSourceClass) = $arrArguments;
 
+        if($strSourceClass == "class_module_languages_language") {
+            //if we have just one language remaining, set this one as default
+            $arrObjLanguages = class_module_languages_language::getObjectList();
+            if(count($arrObjLanguages) == 1) {
+                $objOneLanguage = $arrObjLanguages[0];
+                $objOneLanguage->setBitDefault(1);
+                $objOneLanguage->updateObjectToDb();
+            }
+        }
+
         //fire a plain query on the database, much faster then searching for matching records
         $strQuery = "DELETE FROM " . _dbprefix_ . "languages_languageset
                       WHERE languageset_language = ?

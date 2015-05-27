@@ -112,21 +112,18 @@ class class_module_tags_tag extends class_model implements interface_model, inte
      *
      * @return bool
      */
-    protected function deleteObjectInternal() {
+    public function deleteObjectFromDatabase() {
 
         //delete matching favorites
         $arrFavorites = class_module_tags_favorite::getAllFavoritesForTag($this->getSystemid());
         foreach($arrFavorites as $objOneFavorite) {
-            $objOneFavorite->deleteObject();
+            $objOneFavorite->deleteObjectFromDatabase();
         }
 
         //delete memberships
-        $strQuery1 = "DELETE FROM "._dbprefix_."tags_member WHERE tags_tagid=?";
-        //delete the record itself
-        if($this->objDB->_pQuery($strQuery1, array($this->getSystemid())))
-            return parent::deleteObjectInternal();
+        $this->objDB->_pQuery("DELETE FROM "._dbprefix_."tags_member WHERE tags_tagid=?", array($this->getSystemid()));
 
-        return false;
+        return parent::deleteObjectFromDatabase();
     }
 
 

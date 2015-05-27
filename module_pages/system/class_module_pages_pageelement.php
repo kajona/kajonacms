@@ -511,7 +511,7 @@ class class_module_pages_pageelement extends class_model implements interface_mo
      *
      * @return bool
      */
-    protected function deleteObjectInternal() {
+    public function deleteObjectFromDatabase() {
 
         //fix the internal sorting
         $arrElements = $this->getSortedElementsAtPlaceholder();
@@ -548,7 +548,7 @@ class class_module_pages_pageelement extends class_model implements interface_mo
         }
 
         //Delete from page_element table
-        parent::deleteObjectInternal();
+        parent::deleteObjectFromDatabase();
 
         //Loading the data of the corresponding site
         $objPage = new class_module_pages_page($this->getPrevId());

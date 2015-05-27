@@ -433,9 +433,6 @@ abstract class class_root {
         if(!$this->getLockManager()->isAccessibleForCurrentUser())
             return false;
 
-        if(!$this instanceof interface_model)
-            throw new class_exception("delete operation requires interface_model to be implemented", class_exception::$level_ERROR);
-
         if($this instanceof interface_versionable) {
             $objChanges = new class_module_system_changelog();
             $objChanges->createLogEntry($this, class_module_system_changelog::$STR_ACTION_DELETE);
@@ -454,7 +451,8 @@ abstract class class_root {
             }
         }
 
-        $bitReturn = $this->deleteObjectInternal();
+        $objORM = new class_orm_objectdelete($this);
+        $bitReturn = $objORM->deleteObject();
         $bitReturn = $bitReturn && $this->deleteSystemRecord($this->getSystemid());
 
         class_objectfactory::getInstance()->removeFromCache($this->getSystemid());
@@ -477,19 +475,6 @@ abstract class class_root {
             return false;
         }
     }
-
-    /**
-     * Deletes the current object from the system.
-     * By default, all entries are deleted from all tables indicated by the class-doccomment.
-     * If you want to trigger additional deletes, overwrite this method.
-     * The system-record itself is being deleted automatically, too.
-     * @return bool
-     */
-    protected function deleteObjectInternal() {
-        $objORM = new class_orm_objectdelete($this);
-        return $objORM->deleteObject();
-    }
-
 
     // --- DATABASE-SYNCHRONIZATION -------------------------------------------------------------------------
 

@@ -563,13 +563,12 @@ class class_module_pages_page extends class_model implements interface_model, in
      *
      * @return bool
      */
-    protected function deleteObjectInternal() {
+    public function deleteObjectFromDatabase() {
 
         //Delete the page and the properties out of the tables
-        $strQuery2 = "DELETE FROM " . _dbprefix_ . "page_properties WHERE pageproperties_id = ?";
-        $this->objDB->_pQuery($strQuery2, array($this->getSystemid()));
+        $this->objDB->_pQuery("DELETE FROM " . _dbprefix_ . "page_properties WHERE pageproperties_id = ?", array($this->getSystemid()));
 
-        return parent::deleteObjectInternal();
+        return parent::deleteObjectFromDatabase();
     }
 
     /**

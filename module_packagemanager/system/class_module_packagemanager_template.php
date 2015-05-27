@@ -96,13 +96,13 @@ class class_module_packagemanager_template extends class_model implements interf
      *
      * @return bool
      */
-    protected function deleteObjectInternal() {
+    public function deleteObjectFromDatabase() {
 
         //delete all files from the filesystem
         $objFilesystem = new class_filesystem();
         $objFilesystem->folderDeleteRecursive(_templatepath_."/".$this->getStrName());
 
-        return parent::deleteObjectInternal();
+        return parent::deleteObjectFromDatabase();
     }
 
     /**

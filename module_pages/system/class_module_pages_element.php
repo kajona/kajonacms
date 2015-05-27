@@ -105,16 +105,16 @@ class class_module_pages_element extends class_model implements interface_model,
     /**
      * @return bool
      */
-    protected function deleteObjectInternal() {
+    public function deleteObjectFromDatabase() {
 
         //delete elements in the database
         $arrElements = $this->objDB->getPArray("SELECT page_element_id FROM "._dbprefix_."page_element WHERE page_element_ph_element = ?", array($this->getStrName()));
         foreach($arrElements as $arrOneRow) {
             $objElement = new class_module_pages_pageelement($arrOneRow["page_element_id"]);
-            $objElement->deleteObject();
+            $objElement->deleteObjectFromDatabase();
         }
 
-        return parent::deleteObjectInternal();
+        parent::deleteObjectFromDatabase();
     }
 
 
