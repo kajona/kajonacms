@@ -427,7 +427,7 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
                 }
 
                 $objForm->addField(new class_formentry_hidden("", "usersource"))->setStrValue($this->getParam("usersource"));
-                
+
                 return $objForm->renderForm(class_link::getLinkAdminHref($this->getArrModule("modul"), "saveUser"));
             }
         }
@@ -483,7 +483,7 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
             }
 
             $objForm->addField(new class_formentry_hidden("", "usersource"))->setStrValue($this->getParam("usersource"));
-            
+
             return $objForm->renderForm(class_link::getLinkAdminHref($this->getArrModule("modul"), "saveUser"));
         }
 
@@ -1449,6 +1449,7 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
     protected function actionGetUserByFilter() {
         $strFilter = $this->getParam("filter");
         $strCheckId = $this->getParam("checkid");
+        $arrCheckIds = json_decode($strCheckId);
 
         $arrElements = array();
         $objSource = new class_module_user_sourcefactory();
@@ -1488,40 +1489,48 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
                 continue;
             }
 
-            if(validateSystemid($strCheckId) && $objOneElement instanceof class_module_user_user) {
-                $objInstance = class_objectfactory::getInstance()->getObject($strCheckId);
-                if($objInstance != null) {
-                    class_session::getInstance()->switchSessionToUser($objOneElement, true);
-                    if(!$objInstance->rightView()) {
-                        class_session::getInstance()->switchSessionToUser($objCurUser, true);
-                        continue;
+            $bitUserHasRightView = true;
+            if(!empty($arrCheckIds) && is_array($arrCheckIds) && $objOneElement instanceof class_module_user_user) {
+
+                foreach($arrCheckIds as $strCheckId) {
+
+                    $objInstance = class_objectfactory::getInstance()->getObject($strCheckId);
+
+                    if($objInstance != null) {
+                        class_session::getInstance()->switchSessionToUser($objOneElement, true);
+                        if(!$objInstance->rightView()) {
+                            class_session::getInstance()->switchSessionToUser($objCurUser, true);
+                            $bitUserHasRightView = false;
+                            break;
+                        }
+                        else {
+                            class_session::getInstance()->switchSessionToUser($objCurUser, true);
+                        }
                     }
-                    class_session::getInstance()->switchSessionToUser($objCurUser, true);
-                }
-                else {
-                    continue;
                 }
             }
 
 
-            $arrEntry = array();
+            if($bitUserHasRightView) {
+                $arrEntry = array();
 
-            if($objOneElement instanceof class_module_user_user) {
-                $arrEntry["title"] = $objOneElement->getStrUsername() . " (" . $objOneElement->getStrName() . ", " . $objOneElement->getStrForename() . " )";
-                $arrEntry["label"] = $objOneElement->getStrUsername() . " (" . $objOneElement->getStrName() . ", " . $objOneElement->getStrForename() . " )";
-                $arrEntry["value"] = $objOneElement->getStrUsername() . " (" . $objOneElement->getStrName() . ", " . $objOneElement->getStrForename() . " )";
-                $arrEntry["systemid"] = $objOneElement->getSystemid();
-                $arrEntry["icon"] = class_adminskin_helper::getAdminImage("icon_user");
-            }
-            else if($objOneElement instanceof class_module_user_group) {
-                $arrEntry["title"] = $objOneElement->getStrName();
-                $arrEntry["value"] = $objOneElement->getStrName();
-                $arrEntry["label"] = $objOneElement->getStrName();
-                $arrEntry["systemid"] = $objOneElement->getSystemid();
-                $arrEntry["icon"] = class_adminskin_helper::getAdminImage("icon_group");
-            }
+                if($objOneElement instanceof class_module_user_user) {
+                    $arrEntry["title"] = $objOneElement->getStrUsername()." (".$objOneElement->getStrName().", ".$objOneElement->getStrForename()." )";
+                    $arrEntry["label"] = $objOneElement->getStrUsername()." (".$objOneElement->getStrName().", ".$objOneElement->getStrForename()." )";
+                    $arrEntry["value"] = $objOneElement->getStrUsername()." (".$objOneElement->getStrName().", ".$objOneElement->getStrForename()." )";
+                    $arrEntry["systemid"] = $objOneElement->getSystemid();
+                    $arrEntry["icon"] = class_adminskin_helper::getAdminImage("icon_user");
+                }
+                else if($objOneElement instanceof class_module_user_group) {
+                    $arrEntry["title"] = $objOneElement->getStrName();
+                    $arrEntry["value"] = $objOneElement->getStrName();
+                    $arrEntry["label"] = $objOneElement->getStrName();
+                    $arrEntry["systemid"] = $objOneElement->getSystemid();
+                    $arrEntry["icon"] = class_adminskin_helper::getAdminImage("icon_group");
+                }
 
-            $arrReturn[] = $arrEntry;
+                $arrReturn[] = $arrEntry;
+            }
         }
 
         class_response_object::getInstance()->setStrResponseType(class_http_responsetypes::STR_TYPE_JSON);
