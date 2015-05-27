@@ -133,8 +133,8 @@ class class_module_packagemanager_template extends class_model implements interf
             if(!$bitFolderFound) {
                 $objPack = new class_module_packagemanager_template();
                 $objPack->setStrName($strOneFolder);
-                $objPack->updateObjectToDb();
                 $objPack->setIntRecordStatus(0);
+                $objPack->updateObjectToDb();
             }
         }
 
@@ -147,11 +147,9 @@ class class_module_packagemanager_template extends class_model implements interf
 
     /**
      * @param int $intRecordStatus
-     * @param bool $bitFireStatusChangeEvent
-     *
-     * @return bool
+     * @todo move this to an eventhandler
      */
-    public function setIntRecordStatus($intRecordStatus, $bitFireStatusChangeEvent = true) {
+    public function setIntRecordStatus($intRecordStatus) {
         if($intRecordStatus == 1) {
             //if set to active, mark all other packs as invalid
             $strQuery = "SELECT templatepack_id
@@ -163,6 +161,7 @@ class class_module_packagemanager_template extends class_model implements interf
             foreach($arrRows as $arrSingleRow) {
                 $objPack = new class_module_packagemanager_template($arrSingleRow["templatepack_id"]);
                 $objPack->setIntRecordStatus(0);
+                $objPack->updateObjectToDb();
             }
 
             //update the active-pack constant
@@ -172,7 +171,7 @@ class class_module_packagemanager_template extends class_model implements interf
             $this->flushCompletePagesCache();
         }
 
-        return parent::setIntRecordStatus($intRecordStatus, $bitFireStatusChangeEvent);
+        parent::setIntRecordStatus($intRecordStatus);
     }
 
 

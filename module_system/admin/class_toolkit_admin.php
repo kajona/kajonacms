@@ -435,6 +435,55 @@ class class_toolkit_admin extends class_toolkit {
     }
 
     /**
+     * General form entry which displays an list of objects which can be deleted. It is possible to provide an addlink
+     * where entries can be appended to the list. To add an entry you can use the javascript function
+     * KAJONA.v4skin.addObjectListItem
+     *
+     * @param $strName
+     * @param string $strTitle
+     * @param array $arrObjects
+     * @param string $strAddLink
+     * @return string
+     * @throws class_exception
+     */
+    public function formInputObjectList($strName, $strTitle = "", array $arrObjects, $strAddLink, $bitReadOnly = false) {
+        $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "input_objectlist");
+        $strTemplateRowID = $this->objTemplate->readTemplate("/elements.tpl", "input_objectlist_row");
+
+        $arrTemplate = array();
+        $arrTemplate["name"] = $strName;
+        $arrTemplate["title"] = $strTitle;
+        $arrTemplate["addLink"] = $bitReadOnly ? "" : $strAddLink;
+
+        $strTable = '';
+        foreach($arrObjects as $objObject) {
+            /** @var $objObject class_model */
+            if($objObject instanceof interface_model && $objObject->rightView()) {
+                $strRemoveLink = "";
+                if(!$bitReadOnly) {
+                    $strDelete = class_carrier::getInstance()->getObjLang()->getLang("commons_delete", "module_system");
+                    $strRemoveLink = class_link::getLinkAdminDialog(null, "", "", $strDelete, $strDelete, "icon_delete", $strDelete, true, false, "KAJONA.v4skin.removeObjectListItem(this);return false;");
+                }
+
+                $strIcon = is_array($objObject->getStrIcon()) ? $objObject->getStrIcon()[0]: $objObject->getStrIcon();
+                $arrTemplateRow = array(
+                    'name' => $strName,
+                    'displayName' => $objObject->getStrDisplayName(),
+                    'icon' => class_adminskin_helper::getAdminImage($strIcon),
+                    'value' => $objObject->getSystemid(),
+                    'removeLink' => $strRemoveLink,
+                );
+
+                $strTable.= $this->objTemplate->fillTemplate($arrTemplateRow, $strTemplateRowID, true);
+            }
+        }
+
+        $arrTemplate["table"] = $strTable;
+
+        return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID, true);
+    }
+
+    /**
      * Returns a regular text-input field with a file browser button.
      * Use $strRepositoryId to set a specific filemanager repository id
      *
@@ -641,9 +690,12 @@ class class_toolkit_admin extends class_toolkit {
      * @param bool $bitEnabled
      * @param string $strAddons
      * @param string $strDataPlaceholder
+     * @param string $strOpener
+     *
      * @return string
+     * @throws class_exception
      */
-    public function formInputDropdown($strName, array $arrKeyValues, $strTitle = "", $strKeySelected = "", $strClass = "", $bitEnabled = true, $strAddons = "", $strDataPlaceholder = "") {
+    public function formInputDropdown($strName, array $arrKeyValues, $strTitle = "", $strKeySelected = "", $strClass = "", $bitEnabled = true, $strAddons = "", $strDataPlaceholder = "", $strOpener = "") {
         $strOptions = "";
         $strTemplateOptionID = $this->objTemplate->readTemplate("/elements.tpl", "input_dropdown_row");
         $strTemplateOptionSelectedID = $this->objTemplate->readTemplate("/elements.tpl", "input_dropdown_row_selected");
@@ -679,6 +731,7 @@ class class_toolkit_admin extends class_toolkit {
         $arrTemplate["disabled"] = ($bitEnabled ? "" : "disabled=\"disabled\"");
         $arrTemplate["options"] = $strOptions;
         $arrTemplate["addons"] = $strAddons;
+        $arrTemplate["opener"] = $strOpener;
         $arrTemplate["dataplaceholder"] = $strDataPlaceholder != "" ? $strDataPlaceholder : class_carrier::getInstance()->getObjLang()->getLang("commons_dropdown_dataplaceholder", "system");
 
 
@@ -839,7 +892,8 @@ class class_toolkit_admin extends class_toolkit {
         foreach($arrValues as $strKey => $strValue) {
             $arrTemplateRow = array(
                 'key' => $strKey,
-                'name' => $strName . '[' . $strKey . ']',
+                'name' => $intType == class_formentry_checkboxarray::TYPE_RADIO ? $strName : $strName . '[' . $strKey . ']',
+                'value' => $intType == class_formentry_checkboxarray::TYPE_RADIO ? $strKey : 'checked',
                 'title' => $strValue,
                 'checked' => in_array($strKey, $arrSelected) ? 'checked' : '',
                 'inline' => $bitInline ? '-inline' : '',
@@ -2132,6 +2186,21 @@ JS;
         return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
     }
 
+    /**
+     * Creates a tree-view with an button which can be used inside an mode dialog
+     *
+     * @param $strLoadNodeDataUrl
+     * @param string $strRootNodeSystemid
+     * @param array $arrNodesToExpand
+     * @return string
+     * @throws class_exception
+     */
+    public function getTreeModalCheckbox($strLoadNodeDataUrl, $strRootNodeSystemid = "", $arrNodesToExpand = array()) {
+        $arrTemplate = array();
+        $arrTemplate["treeContent"] = $this->getTreeCheckbox($strLoadNodeDataUrl, $strRootNodeSystemid, $arrNodesToExpand);
+        $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "treeview_modal");
+        return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
+    }
 
     /**
      * Create a tree-view UI-element.
@@ -2162,6 +2231,30 @@ JS;
                 $arrTemplate["treeviewExpanders"] .= ",";
         }
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "tree");
+        return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
+    }
+
+    /**
+     * Returns an checkbox tree-view
+     *
+     * @param $strLoadNodeDataUrl
+     * @param string $strRootNodeSystemid
+     * @param array $arrNodesToExpand
+     * @return string
+     * @throws class_exception
+     */
+    public function getTreeCheckbox($strLoadNodeDataUrl, $strRootNodeSystemid = "", $arrNodesToExpand = array()) {
+        $arrTemplate = array();
+        $arrTemplate["rootNodeSystemid"] = $strRootNodeSystemid;
+        $arrTemplate["loadNodeDataUrl"] = $strLoadNodeDataUrl;
+        $arrTemplate["treeId"] = generateSystemid();
+        $arrTemplate["treeviewExpanders"] = "";
+        for($intI = 0; $intI < count($arrNodesToExpand); $intI++) {
+            $arrTemplate["treeviewExpanders"] .= "\"".$arrNodesToExpand[$intI]."\"";
+            if($intI < count($arrNodesToExpand)-1)
+                $arrTemplate["treeviewExpanders"] .= ",";
+        }
+        $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "tree_checkbox");
         return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
     }
 

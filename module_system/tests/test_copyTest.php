@@ -35,6 +35,7 @@ class class_test_copyTest extends class_testbase  {
         $objAspect->updateObjectToDb();
         $strSysid = $objAspect->getSystemid();
         $objAspect->setIntRecordStatus(0);
+        $objAspect->updateObjectToDb();
 
         $objAspect->copyObject();
         $strCopyId = $objAspect->getSystemid();

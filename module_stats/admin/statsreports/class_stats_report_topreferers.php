@@ -136,7 +136,7 @@ class class_stats_report_topreferers implements interface_admin_statsreports {
      */
     public function getTopReferer() {
         //Build excluded domains
-        $arrBlocked = explode(",", _stats_exclusionlist_);
+        $arrBlocked = explode(",", class_module_system_setting::getConfigValue("_stats_exclusionlist_"));
 
         $arrParams = array("%".str_replace("%", "\%", _webpath_)."%", $this->intDateStart, $this->intDateEnd);
 

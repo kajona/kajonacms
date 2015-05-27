@@ -118,7 +118,7 @@ class class_module_guestbook_post extends class_model implements interface_model
     protected function onInsertToDb() {
         $objGuestbook = new class_module_guestbook_guestbook($this->getPrevId());
         if($objGuestbook->getIntGuestbookModerated() == "1") {
-            $this->setIntRecordStatus(0, false);
+            $this->setIntRecordStatus(0);
         }
 
         return true;

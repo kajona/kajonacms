@@ -350,6 +350,9 @@ Dropdown
         <div class="col-sm-6">
             <select data-placeholder="%%dataplaceholder%%" name="%%name%%" id="%%name%%" class="form-control %%class%%" %%disabled%% %%addons%%>%%options%%</select>
         </div>
+        <div class="col-sm-2 form-opener">
+            %%opener%%
+        </div>
     </div>
 </input_dropdown>
 
@@ -836,7 +839,7 @@ A list of checkbox or radio input elements
 
 <input_checkboxarray_checkbox>
     <div class="%%type%%%%inline%%">
-        <label><input type="%%type%%" name="%%name%%" value="checked" %%checked%% %%readonly%% /> %%title%%</label>
+        <label><input type="%%type%%" name="%%name%%" value="%%value%%" %%checked%% %%readonly%% /> %%title%%</label>
     </div>
 </input_checkboxarray_checkbox>
 

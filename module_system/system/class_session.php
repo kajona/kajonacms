@@ -473,8 +473,6 @@ final class class_session {
 
             //trigger listeners on first login
             if($objUser->getIntLogins() == 0) {
-                //TODO: remove legacy support
-                class_core_eventdispatcher::notifyUserFirstLoginListeners($objUser->getSystemid());
                 class_core_eventdispatcher::getInstance()->notifyGenericListeners(class_system_eventidentifier::EVENT_SYSTEM_USERFIRSTLOGIN, array($objUser->getSystemid()));
             }
 

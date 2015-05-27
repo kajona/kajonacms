@@ -35,7 +35,7 @@ class class_orm_objectdelete extends class_orm_base {
         $objDB = class_carrier::getInstance()->getObjDB();
         $bitReturn = $this->deleteAssignments();
 
-        $objAnnotations = new class_reflection($this);
+        $objAnnotations = new class_reflection($this->getObjObject());
         $arrTargetTables = $objAnnotations->getAnnotationValuesFromClass("@targetTable");
 
         if(count($arrTargetTables) > 0) {

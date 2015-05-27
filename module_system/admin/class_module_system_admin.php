@@ -52,6 +52,7 @@ class class_module_system_admin extends class_admin_simple implements interface_
         $objModule = new class_module_system_module($this->getSystemid());
         if($objModule->rightEdit() && class_carrier::getInstance()->getObjSession()->isSuperAdmin()) {
             $objModule->setIntRecordStatus($objModule->getIntRecordStatus() == 0 ? 1 : 0);
+            $objModule->updateObjectToDb();
             $this->adminReload(class_link::getLinkAdminHref($this->getArrModule("modul")));
         }
     }

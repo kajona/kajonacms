@@ -565,8 +565,6 @@ abstract class class_root {
 
 
         //call the recordUpdated-Listeners
-        //TODO: remove legacy call
-        class_core_eventdispatcher::notifyRecordUpdatedListeners($this);
         class_core_eventdispatcher::getInstance()->notifyGenericListeners(class_system_eventidentifier::EVENT_SYSTEM_RECORDUPDATED, array($this));
 
         class_carrier::getInstance()->flushCache(class_carrier::INT_CACHE_TYPE_DBQUERIES);
@@ -616,8 +614,6 @@ abstract class class_root {
         $this->arrInitRow = null;
         $bitReturn = $this->updateObjectToDb($strNewPrevid);
         //call event listeners
-        //TODO: remove legacy call
-        $bitReturn = $bitReturn && class_core_eventdispatcher::notifyRecordCopiedListeners($strOldSysid, $this->getSystemid());
         $bitReturn = $bitReturn && class_core_eventdispatcher::getInstance()->notifyGenericListeners(class_system_eventidentifier::EVENT_SYSTEM_RECORDCOPIED, array($strOldSysid, $this->getSystemid(), $this));
 
 
@@ -748,14 +744,11 @@ abstract class class_root {
             $this->processDateChanges();
         }
 
-        $this->objDB->flushQueryCache();
+        class_carrier::getInstance()->flushCache(class_carrier::INT_CACHE_TYPE_DBQUERIES | class_carrier::INT_CACHE_TYPE_ORMCACHE);
 
         if($this->strOldPrevId != $this->strPrevId) {
-            class_carrier::getInstance()->flushCache(class_carrier::INT_CACHE_TYPE_DBQUERIES | class_carrier::INT_CACHE_TYPE_ORMCACHE);
             class_carrier::getInstance()->getObjRights()->rebuildRightsStructure($this->getSystemid());
             $this->objSortManager->fixSortOnPrevIdChange($this->strOldPrevId, $this->strPrevId);
-            //TODO: remove legacy call
-            class_core_eventdispatcher::notifyPrevidChangedListeners($this->getSystemid(), $this->strOldPrevId, $this->strPrevId);
             class_core_eventdispatcher::getInstance()->notifyGenericListeners(class_system_eventidentifier::EVENT_SYSTEM_PREVIDCHANGED, array($this->getSystemid(), $this->strOldPrevId, $this->strPrevId));
             $this->strOldPrevId = $this->strPrevId;
         }
@@ -1199,8 +1192,6 @@ abstract class class_root {
 
         //try to call other modules, maybe wanting to delete anything in addition, if the current record
         //is going to be deleted
-        //TODO: remove legacy call
-        $bitResult = $bitResult && class_core_eventdispatcher::notifyRecordDeletedListeners($strSystemid, get_class($this));
         $bitResult = $bitResult && class_core_eventdispatcher::getInstance()->notifyGenericListeners(class_system_eventidentifier::EVENT_SYSTEM_RECORDDELETED, array($strSystemid, get_class($this)));
 
         //end tx
@@ -1439,12 +1430,6 @@ abstract class class_root {
         return $this->strPrevId;
     }
 
-    /**
-     * @return string
-     */
-    public function getStrOldPrevId() {
-        return $this->strOldPrevId;
-    }
 
     /**
      * @param string $strPrevId
@@ -1698,27 +1683,9 @@ abstract class class_root {
      * Sets the internal status. Fires a status-changed event.
      *
      * @param int $intRecordStatus
-     * @param bool $bitFireStatusChangeEvent
-     * @return bool
      */
-    public function setIntRecordStatus($intRecordStatus, $bitFireStatusChangeEvent = true) {
-        $intPrevStatus = $this->intRecordStatus;
+    public function setIntRecordStatus($intRecordStatus) {
         $this->intRecordStatus = $intRecordStatus;
-
-        $bitReturn = true;
-
-        if($intPrevStatus != $intRecordStatus && $intPrevStatus != -1) {
-            if(validateSystemid($this->getSystemid())) {
-                $this->updateObjectToDb();
-                class_carrier::getInstance()->flushCache(class_carrier::INT_CACHE_TYPE_ORMCACHE | class_carrier::INT_CACHE_TYPE_DBQUERIES);
-            }
-            if($bitFireStatusChangeEvent && validateSystemid($this->getSystemid())) {
-                $bitReturn = class_core_eventdispatcher::notifyStatusChangedListeners($this->getSystemid(), $intRecordStatus);
-            }
-        }
-
-        return $bitReturn;
-
     }
 
     /**
