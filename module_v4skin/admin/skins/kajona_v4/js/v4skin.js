@@ -265,3 +265,132 @@ KAJONA.v4skin.initTagMenu = function() {
     });
 };
 
+/**
+ * Removes an object list row from the list
+ *
+ * @param el
+ */
+KAJONA.v4skin.removeObjectListItem = function(el){
+    // remove all active tooltips
+    $(el).children().qtip("hide");
+
+    // remove element
+    $(el).parent().parent().fadeOut(400, function(){
+        $(this).remove();
+    });
+};
+
+/**
+ * Sets an array of items to an object list. We remove only elements which are available in the arrAvailableIds array
+ *
+ * @param strElementName
+ * @param arrItems
+ * @param arrAvailableIds
+ */
+KAJONA.v4skin.setObjectListItems = function(strElementName, arrItems, arrAvailableIds, strDeleteButton){
+    var table = $('#' + strElementName);
+    var tbody = table.find('tbody');
+    if(tbody.length > 0) {
+        // remove only elements which are in the arrAvailableIds array
+        tbody.children().each(function(){
+            if($.inArray($(this).find('input[type="hidden"]').val(), arrAvailableIds) !== -1) {
+                $(this).remove();
+            }
+        });
+
+        // add new elements
+        for(var i = 0; i < arrItems.length; i++) {
+            var strEscapedTitle = $('<div></div>').text(arrItems[i].strDisplayName).html();
+            var html = '';
+            html+= '<tr>';
+            html+= '    <td>' + arrItems[i].strIcon + '</td>';
+            html+= '    <td>' + strEscapedTitle + ' <input type="hidden" name="' + strElementName + '[]" value="' + arrItems[i].strSystemId + '" /></td>';
+            html+= '    <td class="icon-cell">';
+            html+= '        <a href="#" onclick="KAJONA.v4skin.removeObjectListItem(this);return false">' + strDeleteButton + '</a>';
+            html+= '    </td>';
+            html+= '</tr>';
+
+            tbody.append(html);
+        }
+    }
+};
+
+/**
+ * We get the current tree selection from the iframe element and set the selection in the object list
+ *
+ * @param objIframeEl
+ * @param strElementName
+ */
+KAJONA.v4skin.updateCheckboxTreeSelection = function(objIframeEl, strElementName, strDeleteButton){
+    if(objIframeEl && objIframeEl.contentWindow) {
+        var jstree = objIframeEl.contentWindow.$('.jstree');
+        if(jstree.length > 0) {
+            // we modify only the ids which are visible for the user all other ids stay untouched
+            var arrAvailableIds = [];
+            jstree.find('li').each(function(){
+                arrAvailableIds.push($(this).attr('systemid'));
+            });
+
+            var arrEls = jstree.jstree('get_checked');
+            var arrItems = [];
+            for(var i = 0; i < arrEls.length; i++) {
+                var el = $(arrEls[i]);
+                var strSystemId = el.attr('id');
+                var strDisplayName = el.text().trim();
+                var strIcon = el.find('[rel="tooltip"]').html();
+
+                arrItems.push({
+                    strSystemId: strSystemId,
+                    strDisplayName: strDisplayName,
+                    strIcon: strIcon
+                });
+            }
+
+            KAJONA.v4skin.setObjectListItems(strElementName, arrItems, arrAvailableIds, strDeleteButton);
+
+            jsDialog_1.hide();
+        }
+    }
+};
+
+/**
+ * Returns all systemids which are available in the object list. The name of the object list element name must be
+ * available as GET parameter "element_name"
+ *
+ * @returns array
+ */
+KAJONA.v4skin.getCheckboxTreeSelectionFromParent = function(){
+    if($('.jstree').length > 0) {
+        // the query parameter contains the name of the form element where we insert the selected elements
+        var strElementName = KAJONA.v4skin.getQueryParameter("element_name");
+        var table = parent.$('#' + strElementName);
+        var arrSystemIds = [];
+        if(table.length > 0) {
+            table.find('input[type="hidden"]').each(function(){
+                arrSystemIds.push($(this).val());
+            });
+        }
+
+        return arrSystemIds;
+    }
+};
+
+/**
+ * Extracts an query parameter from the location query string
+ *
+ * @param string name
+ * @returns string
+ */
+KAJONA.v4skin.getQueryParameter = function(name) {
+    var pos = location.search.indexOf("&" + name + "=");
+    if(pos != -1) {
+        var endPos = location.search.indexOf("&", pos + 1);
+        if(endPos == -1) {
+            return location.search.substr(pos + name.length + 2);
+        }
+        else {
+            return location.search.substr(pos + name.length + 2, endPos - (pos + name.length + 2));
+        }
+    }
+    return null;
+};

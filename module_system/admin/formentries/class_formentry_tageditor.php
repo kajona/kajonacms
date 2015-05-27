@@ -65,4 +65,8 @@ class class_formentry_tageditor extends class_formentry_multiselect {
 
         return true;
     }
+
+    public function getValueAsText() {
+        return implode(", ", $this->arrKeyValues);
+    }
 }

@@ -40,6 +40,7 @@
 @kajona-search-bg:          "../img/pusteblume-submenu.png";
 @kajona-breadcrumb-bg:      "../img/pusteblume.png";
 @kajona-portal-bg:          "../img/portaleditor-arrow.png";
+@kajona-tree-sprite:        "../../../../../../core/module_system/admin/scripts/jstree/themes/default/d.png";
 
 //glyphicons
 @icon-font-path:          "../fonts/glyphicons/";
@@ -1268,7 +1269,6 @@ footer {
 
 }
 
-
 :focus {
   -moz-outline-style:none;
   outline:medium none;
@@ -1335,6 +1335,10 @@ footer {
         color: @kajona-brand-color;
         padding: 1px 2px;
         text-decoration: underline;
+    }
+
+    .jstree-checkbox {
+        background-image: url(@kajona-tree-sprite);
     }
 
     ins {
@@ -1468,8 +1472,12 @@ footer {
 
     }
 
-}
+    td.icon-cell {
+        width: 20px;
+        padding: 6px;
+    }
 
+}
 
 /* L O A D I N G   C O N T A I N E R */
 .loadingContainer {
@@ -1573,6 +1581,36 @@ footer {
     .bootstrap-switch-handle-on.bootstrap-switch-primary {
         background: @kajona-brand-color;
     }
+}
+
+
+/* JS TREE */
+.jstree-default.jstree-focused {
+    background:#fff!important;
+}
+
+.jstree-default .jstree-checked > a > .jstree-checkbox {
+    background-position:-38px -18px!important;
+}
+
+.jstree-default .jstree-unchecked > a > .jstree-checkbox {
+    background-position:-2px -18px!important;
+}
+
+.jstree-default .jstree-undetermined > a > .jstree-checkbox {
+    background-position:-20px -18px!important;
+}
+
+.jstree-default .jstree-checked > a > .jstree-checkbox:hover {
+    background-position:-38px -36px!important;
+}
+
+.jstree-default .jstree-unchecked > a > .jstree-checkbox:hover {
+    background-position:-2px -36px!important;
+}
+
+.jstree-default .jstree-undetermined > a > .jstree-checkbox:hover {
+    background-position:-20px -36px!important;
 }
 
 
