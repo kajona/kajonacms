@@ -105,7 +105,7 @@ class class_module_news_category extends class_model implements interface_model,
         return $arrReturn;
     }
 
-    public function deleteObject() {
+    public function deleteObjectFromDatabase() {
         //start by deleting from members an cat table
         $strQuery = "DELETE FROM " . _dbprefix_ . "news_member WHERE newsmem_category = ?";
         if($this->objDB->_pQuery($strQuery, array($this->getSystemid()))) {

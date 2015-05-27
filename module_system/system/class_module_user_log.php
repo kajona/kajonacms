@@ -14,26 +14,8 @@
  * @module user
  * @moduleId _user_modul_id_
  */
-class class_module_user_log extends class_model implements interface_model {
+class class_module_user_log  {
 
-
-    /**
-     * Returns the name to be used when rendering the current object, e.g. in admin-lists.
-     *
-     * @return string
-     */
-    public function getStrDisplayName() {
-        return "";
-    }
-
-    /**
-     * Deletes the current object from the system
-     *
-     * @return bool
-     */
-    public function deleteObject() {
-        return true;
-    }
 
     /**
      * Generates a login-log-entry
@@ -111,7 +93,7 @@ class class_module_user_log extends class_model implements interface_model {
     public function getLoginLogsCount() {
         $strQuery = "SELECT COUNT(*)
 						FROM "._dbprefix_."user_log as log";
-        $arrRow = $this->objDB->getPRow($strQuery, array());
+        $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array());
 
         return $arrRow["COUNT(*)"];
     }

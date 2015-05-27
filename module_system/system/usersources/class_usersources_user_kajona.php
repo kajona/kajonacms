@@ -261,7 +261,7 @@ class class_usersources_user_kajona extends class_model implements interface_mod
      *
      * @return bool
      */
-    public function deleteObject() {
+    public function deleteObjectFromDatabase() {
         return $this->deleteUser();
     }
 

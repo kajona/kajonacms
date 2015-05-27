@@ -111,9 +111,9 @@ class class_module_mediamanager_repo extends class_model implements interface_mo
         return class_module_mediamanager_file::syncRecursive($this->getSystemid(), $this->getStrPath());
     }
 
-    public function deleteObject() {
+    public function deleteObjectFromDatabase() {
         $this->setParam("deleteMediamanagerRepo", true);
-        return parent::deleteObject();
+        return parent::deleteObjectFromDatabase();
     }
 
 

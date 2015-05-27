@@ -389,17 +389,7 @@ abstract class class_root {
         return $objORM->getObjectList(get_called_class(), $strPrevid, $intStart, $intEnd);
     }
 
-    /**
-     * Deletes the current object from the system.
-     * By default, all entries are deleted from all tables indicated by the class-doccomment.
-     * If you want to trigger additional deletes, overwrite this method.
-     * The system-record itself is being deleted automatically, too.
-     * @return bool
-     */
-    protected function deleteObjectInternal() {
-        $objORM = new class_orm_objectdelete($this);
-        return $objORM->deleteObject();
-    }
+
 
     /**
      * Triggers the logical delete of the current object.
@@ -414,9 +404,6 @@ abstract class class_root {
         if(!$this->getLockManager()->isAccessibleForCurrentUser())
             return false;
 
-        /** @var $this class_root|interface_model */
-        $this->objDB->transactionBegin();
-
         //validate, if there are subrecords, so child nodes to be deleted
         $arrChilds = $this->objDB->getPArray("SELECT system_id FROM "._dbprefix_."system where system_prev_id = ?", array($this->getSystemid()));
         foreach($arrChilds as $arrOneChild) {
@@ -427,26 +414,13 @@ abstract class class_root {
             }
         }
 
-        //$this->intRecordDeleted = 1;
-        //$bitReturn = $this->updateObjectToDb();
-        $bitReturn = $this->deleteObjectInternal();
-        $bitReturn = $bitReturn && $this->deleteSystemRecord($this->getSystemid());
+        $this->intRecordDeleted = 1;
+        $bitReturn = $this->updateObjectToDb();
 
         class_objectfactory::getInstance()->removeFromCache($this->getSystemid());
         class_orm_rowcache::removeSingleRow($this->getSystemid());
 
-        if($bitReturn) {
-            class_logger::getInstance()->addLogRow("successfully deleted record ".$this->getSystemid()." / ".$this->getStrDisplayName(), class_logger::$levelInfo);
-            $this->objDB->transactionCommit();
-            $this->objDB->flushQueryCache();
-            return true;
-        }
-        else {
-            class_logger::getInstance()->addLogRow("error deleting record ".$this->getSystemid()." / ".$this->getStrDisplayName(), class_logger::$levelInfo);
-            $this->objDB->transactionRollback();
-            $this->objDB->flushQueryCache();
-            return false;
-        }
+        return $bitReturn;
     }
 
     /**
@@ -503,6 +477,19 @@ abstract class class_root {
             return false;
         }
     }
+
+    /**
+     * Deletes the current object from the system.
+     * By default, all entries are deleted from all tables indicated by the class-doccomment.
+     * If you want to trigger additional deletes, overwrite this method.
+     * The system-record itself is being deleted automatically, too.
+     * @return bool
+     */
+    protected function deleteObjectInternal() {
+        $objORM = new class_orm_objectdelete($this);
+        return $objORM->deleteObject();
+    }
+
 
     // --- DATABASE-SYNCHRONIZATION -------------------------------------------------------------------------
 

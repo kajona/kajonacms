@@ -215,7 +215,7 @@ class class_module_user_group extends class_model implements interface_model, in
      *
      * @return bool
      */
-    public function deleteObject() {
+    public function deleteObjectFromDatabase() {
         class_logger::getInstance(class_logger::USERSOURCES)->addLogRow("deleted group with id ".$this->getSystemid(). " (".$this->getStrName().")", class_logger::$levelWarning);
 
         //Delete related group
