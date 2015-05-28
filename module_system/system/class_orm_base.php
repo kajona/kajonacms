@@ -23,15 +23,16 @@ abstract class class_orm_base {
     /**
      * The result sets will include records deleted logically only.
      */
-    const INT_LOGICAL_DELETED_ONLY = 2;
+    const INT_LOGICAL_DELETED_ONLY = 1;
 
     /**
      * The result sets will include both, regular records and records deleted logically, so a mixture.
      */
-    const INT_LOGICAL_DELETED_IGNORE = 2;
+    const INT_LOGICAL_DELETED_DISABLED = 2;
 
 
     protected static $intHandleLogicalDeleted = 0;
+    protected $bitLogcialDeleteAvailable = true;
 
     const STR_ANNOTATION_TARGETTABLE = "@targetTable";
     const STR_ANNOTATION_TARGETTABLETXSAFE = "@targetTableTxSafe";
@@ -51,6 +52,8 @@ abstract class class_orm_base {
      */
     function __construct($objObject = null) {
         $this->objObject = $objObject;
+        $arrColumns = class_db::getInstance()->getColumnsOfTable(_dbprefix_."system");
+        $this->bitLogcialDeleteAvailable = count(array_filter($arrColumns, function($arrOneTable) { return $arrOneTable["columnName"] == "system_deleted"; } )) > 0;
     }
 
     /**
@@ -155,6 +158,7 @@ abstract class class_orm_base {
      * @param int $intHandleLogicalDeleted
      */
     public static function setIntHandleLogicalDeleted($intHandleLogicalDeleted) {
+        class_carrier::getInstance()->flushCache(class_carrier::INT_CACHE_TYPE_DBQUERIES | class_carrier::INT_CACHE_TYPE_ORMCACHE);
         self::$intHandleLogicalDeleted = $intHandleLogicalDeleted;
     }
 

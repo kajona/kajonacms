@@ -200,6 +200,10 @@ class class_orm_objectlist extends class_orm_base {
 
 
     protected function addLogicalDeleteRestriction() {
+
+        if(!$this->bitLogcialDeleteAvailable)
+            return;
+
         if(self::$intHandleLogicalDeleted == self::INT_LOGICAL_DELETED_EXCLUDED) {
             $this->addWhereRestriction(new class_orm_objectlist_restriction(" AND system_deleted = 0 ", array()));
         }

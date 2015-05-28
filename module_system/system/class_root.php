@@ -759,7 +759,45 @@ abstract class class_root {
 
         class_logger::getInstance()->addLogRow("updated systemrecord ".$this->getStrSystemid()." data", class_logger::$levelInfo);
 
-        $strQuery = "UPDATE "._dbprefix_."system
+        if(class_module_system_module::getModuleByName("system") != null  && version_compare(class_module_system_module::getModuleByName("system")->getStrVersion(), 4.5, "lt")) {
+            $strQuery = "UPDATE "._dbprefix_."system
+                        SET system_prev_id = ?,
+                            system_module_nr = ?,
+                            system_sort = ?,
+                            system_owner = ?,
+                            system_lm_user = ?,
+                            system_lm_time = ?,
+                            system_lock_id = ?,
+                            system_lock_time = ?,
+                            system_status = ?,
+                            system_comment = ?,
+                            system_class = ?,
+                            system_create_date = ?
+                      WHERE system_id = ? ";
+
+            $bitReturn = $this->objDB->_pQuery(
+                $strQuery,
+                array(
+                    $this->getStrPrevId(),
+                    (int)$this->getIntModuleNr(),
+                    (int)$this->getIntSort(),
+                    $this->getStrOwner(),
+                    $this->objSession->getUserID(),
+                    time(),
+                    $this->getStrLockId(),
+                    (int)$this->getIntLockTime(),
+                    (int)$this->getIntRecordStatus(),
+                    uniStrTrim($this->getStrRecordComment(), 245),
+                    $this->getStrRecordClass(),
+                    $this->getLongCreateDate(),
+                    $this->getSystemid()
+                )
+            );
+        }
+        else {
+
+
+            $strQuery = "UPDATE "._dbprefix_."system
                         SET system_prev_id = ?,
                             system_module_nr = ?,
                             system_sort = ?,
@@ -775,9 +813,9 @@ abstract class class_root {
                             system_deleted = ?
                       WHERE system_id = ? ";
 
-        $bitReturn = $this->objDB->_pQuery(
-            $strQuery,
-            array(
+            $bitReturn = $this->objDB->_pQuery(
+                $strQuery,
+                array(
                     $this->getStrPrevId(),
                     (int)$this->getIntModuleNr(),
                     (int)$this->getIntSort(),
@@ -792,9 +830,9 @@ abstract class class_root {
                     $this->getLongCreateDate(),
                     $this->getIntRecordDeleted(),
                     $this->getSystemid()
-            )
-        );
-
+                )
+            );
+        }
 
         if($this->bitDatesChanges) {
             $this->processDateChanges();
@@ -842,30 +880,58 @@ abstract class class_root {
 
         $strComment = uniStrTrim(strip_tags($strComment), 240);
 
-        //So, lets generate the record
-        $strQuery = "INSERT INTO "._dbprefix_."system
+
+        if(class_module_system_module::getModuleByName("system") != null  && version_compare(class_module_system_module::getModuleByName("system")->getStrVersion(), 4.5, "lt")) {
+            //So, lets generate the record
+            $strQuery = "INSERT INTO "._dbprefix_."system
+                     ( system_id, system_prev_id, system_module_nr, system_owner, system_create_date, system_lm_user,
+                       system_lm_time, system_status, system_comment, system_sort, system_class) VALUES
+                     (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+            //Send the query to the db
+            $this->objDB->_pQuery(
+                $strQuery,
+                array(
+                    $strSystemId,
+                    $strPrevId,
+                    $this->getIntModuleNr(),
+                    $this->objSession->getUserID(),
+                    class_date::getCurrentTimestamp(),
+                    $this->objSession->getUserID(),
+                    time(),
+                    (int)$this->getIntRecordStatus(),
+                    $strComment,
+                    (int)($intSiblings+1),
+                    $this->getStrRecordClass()
+                )
+            );
+        }
+        else {
+            //So, lets generate the record
+            $strQuery = "INSERT INTO "._dbprefix_."system
                      ( system_id, system_prev_id, system_module_nr, system_owner, system_create_date, system_lm_user,
                        system_lm_time, system_status, system_comment, system_sort, system_class, system_deleted) VALUES
                      (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
-        //Send the query to the db
-        $this->objDB->_pQuery(
-            $strQuery,
-            array(
-                $strSystemId,
-                $strPrevId,
-                $this->getIntModuleNr(),
-                $this->objSession->getUserID(),
-                class_date::getCurrentTimestamp(),
-                $this->objSession->getUserID(),
-                time(),
-                (int)$this->getIntRecordStatus(),
-                $strComment,
-                (int)($intSiblings+1),
-                $this->getStrRecordClass(),
-                $this->getIntRecordDeleted()
-            )
-        );
+            //Send the query to the db
+            $this->objDB->_pQuery(
+                $strQuery,
+                array(
+                    $strSystemId,
+                    $strPrevId,
+                    $this->getIntModuleNr(),
+                    $this->objSession->getUserID(),
+                    class_date::getCurrentTimestamp(),
+                    $this->objSession->getUserID(),
+                    time(),
+                    (int)$this->getIntRecordStatus(),
+                    $strComment,
+                    (int)($intSiblings + 1),
+                    $this->getStrRecordClass(),
+                    $this->getIntRecordDeleted()
+                )
+            );
+        }
 
         //we need a Rights-Record
         $this->objDB->_pQuery("INSERT INTO "._dbprefix_."system_right (right_id, right_inherit) VALUES (?, 1)", array($strSystemId));
@@ -1429,7 +1495,7 @@ abstract class class_root {
      * Resets the current systemid
      * @return void
      */
-    protected function unsetSystemid() {
+    public function unsetSystemid() {
         $this->strSystemid = "";
     }
 

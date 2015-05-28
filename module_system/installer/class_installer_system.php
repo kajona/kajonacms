@@ -1220,7 +1220,7 @@ class class_installer_system extends class_installer_base implements interface_i
         $this->objDB->addColumn("system", "system_deleted", class_db_datatypes::STR_TYPE_INT);
 
         $strReturn .= "Updating module-versions...\n";
-        $this->updateModuleVersion($this->objMetadata->getStrTitle(), "4.7");
+        $this->updateModuleVersion($this->objMetadata->getStrTitle(), "4.7.5");
         return $strReturn;
     }
 
