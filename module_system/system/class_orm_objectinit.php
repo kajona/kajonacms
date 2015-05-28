@@ -42,10 +42,10 @@ class class_orm_objectinit extends class_orm_base {
                            AND system.system_id = ? ";
 
                 if($this->bitLogcialDeleteAvailable) {
-                    if(self::$intHandleLogicalDeleted == self::INT_LOGICAL_DELETED_EXCLUDED) {
+                    if($this->getIntCombinedLogicalDeletionConfig()->equals(class_orm_deletedhandling_enum::EXCLUDED())) {
                         $strQuery .= " AND system_deleted = 0 ";
                     }
-                    else if(self::$intHandleLogicalDeleted == self::INT_LOGICAL_DELETED_ONLY) {
+                    else if($this->getIntCombinedLogicalDeletionConfig()->equals(class_orm_deletedhandling_enum::EXCLUSIVE())) {
                         $strQuery .= " AND system_deleted = 1 ";
                     }
                 }

@@ -15,23 +15,21 @@
 abstract class class_orm_base {
 
     /**
-     * Records deleted logically will be excluded from result sets.
-     * Default mode.
+     * Static flag to change the handling of deleted objects globally, so for every following
+     * ORM operation
+     * @var int
      */
-    const INT_LOGICAL_DELETED_EXCLUDED = 0;
+    protected static $objHandleLogicalDeletedGlobal = null;
 
     /**
-     * The result sets will include records deleted logically only.
+     * Flag to change the handling of deleted obejcts locally, so only for the current instance of the ORM
+     * mapper.
+     *
+     * @var class_orm_deletedhandling_enum
      */
-    const INT_LOGICAL_DELETED_ONLY = 1;
-
-    /**
-     * The result sets will include both, regular records and records deleted logically, so a mixture.
-     */
-    const INT_LOGICAL_DELETED_DISABLED = 2;
+    private $objHandleLogicalDeleted = null;
 
 
-    protected static $intHandleLogicalDeleted = 0;
     protected $bitLogcialDeleteAvailable = true;
 
     const STR_ANNOTATION_TARGETTABLE = "@targetTable";
@@ -145,22 +143,51 @@ abstract class class_orm_base {
     }
 
 
-
-
     /**
-     * @return int
+     * Returns the current config of the deleted-handling, evaluates both, the current instances' config and the
+     * global config.
+     *
+     * @return class_orm_deletedhandling_enum
      */
-    public static function getIntHandleLogicalDeleted() {
-        return self::$intHandleLogicalDeleted;
+    protected function getIntCombinedLogicalDeletionConfig() {
+        if($this->objHandleLogicalDeleted !== null)
+            return $this->objHandleLogicalDeleted;
+
+        if(self::$objHandleLogicalDeletedGlobal !== null)
+            return self::$objHandleLogicalDeletedGlobal;
+
+        return class_orm_deletedhandling_enum::EXCLUDED();
     }
 
+
     /**
-     * @param int $intHandleLogicalDeleted
+     * Static flag to change the handling of deleted objects globally, so for every following
+     * ORM operation
+     *
+     * @param class_orm_deletedhandling_enum $objHandleLogicalDeleted
      */
-    public static function setIntHandleLogicalDeleted($intHandleLogicalDeleted) {
+    public static function setObjHandleLogicalDeletedGlobal(class_orm_deletedhandling_enum $objHandleLogicalDeleted) {
         class_carrier::getInstance()->flushCache(class_carrier::INT_CACHE_TYPE_DBQUERIES | class_carrier::INT_CACHE_TYPE_ORMCACHE);
-        self::$intHandleLogicalDeleted = $intHandleLogicalDeleted;
+        self::$objHandleLogicalDeletedGlobal = $objHandleLogicalDeleted;
     }
+
+    /**
+     * @return class_orm_deletedhandling_enum
+     */
+    public function getObjHandleLogicalDeleted() {
+        return $this->objHandleLogicalDeleted;
+    }
+
+    /**
+     * Flag to change the handling of deleted obejcts locally, so only for the current instance of the ORM
+     * mapper.
+     *
+     * @param class_orm_deletedhandling_enum $objHandleLogicalDeleted
+     */
+    public function setObjHandleLogicalDeleted(class_orm_deletedhandling_enum $objHandleLogicalDeleted) {
+        $this->objHandleLogicalDeleted = $objHandleLogicalDeleted;
+    }
+
 
 
 }
