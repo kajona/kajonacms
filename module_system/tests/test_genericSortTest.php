@@ -23,7 +23,7 @@ class class_test_sortTest extends class_testbase  {
         //delete the 5th element - massive queries required
         $intQueriesPre = class_db::getInstance()->getNumber();
         echo " Setting new position\n";
-        $arrAspects[5]->deleteObject();
+        $arrAspects[5]->deleteObjectFromDatabase();
 
         $intQueriesPost = class_db::getInstance()->getNumber();
         echo "Queries: ".($intQueriesPost-$intQueriesPre)." \n";
@@ -36,7 +36,7 @@ class class_test_sortTest extends class_testbase  {
         }
 
 
-        $objRootAspect->deleteObject();
+        $objRootAspect->deleteObjectFromDatabase();
     }
 
 
@@ -102,10 +102,10 @@ class class_test_sortTest extends class_testbase  {
         //deleting all records created
         foreach ($arrNodes as $arrOneNode) {
             $objAspect = new class_module_system_aspect($arrOneNode["system_id"]);
-            $objAspect->deleteObject();
+            $objAspect->deleteObjectFromDatabase();
         }
         $objAspect = new class_module_system_aspect($strBaseNodeId);
-        $objAspect->deleteObject();
+        $objAspect->deleteObjectFromDatabase();
     }
 
 

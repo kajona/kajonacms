@@ -266,29 +266,29 @@ class class_test_rights extends class_testbase {
 
         echo "\tdeleting systemnodes\n";
 
-        $objAspect->deleteObject($strThird111);
-        $objAspect->deleteObject($strThird112);
-        $objAspect->deleteObject($strThird121);
-        $objAspect->deleteObject($strThird122);
-        $objAspect->deleteObject($strThird211);
-        $objAspect->deleteObject($strThird212);
-        $objAspect->deleteObject($strThird221);
-        $objAspect->deleteObject($strThird222);
+        $objAspect->deleteObjectFromDatabase($strThird111);
+        $objAspect->deleteObjectFromDatabase($strThird112);
+        $objAspect->deleteObjectFromDatabase($strThird121);
+        $objAspect->deleteObjectFromDatabase($strThird122);
+        $objAspect->deleteObjectFromDatabase($strThird211);
+        $objAspect->deleteObjectFromDatabase($strThird212);
+        $objAspect->deleteObjectFromDatabase($strThird221);
+        $objAspect->deleteObjectFromDatabase($strThird222);
 
-        $objAspect->deleteObject($strThirdOne1);
-        $objAspect->deleteObject($strThirdOne2);
-        $objAspect->deleteObject($strThirdTwo1);
-        $objAspect->deleteObject($strThirdTwo2);
+        $objAspect->deleteObjectFromDatabase($strThirdOne1);
+        $objAspect->deleteObjectFromDatabase($strThirdOne2);
+        $objAspect->deleteObjectFromDatabase($strThirdTwo1);
+        $objAspect->deleteObjectFromDatabase($strThirdTwo2);
 
-        $objAspect->deleteObject($strSecOne);
-        $objAspect->deleteObject($strSecTwo);
+        $objAspect->deleteObjectFromDatabase($strSecOne);
+        $objAspect->deleteObjectFromDatabase($strSecTwo);
 
-        $objAspect->deleteObject($strRootId);
+        $objAspect->deleteObjectFromDatabase($strRootId);
 
         echo "\tdeleting the test user\n";
-        $objUser->deleteObject();
+        $objUser->deleteObjectFromDatabase();
         echo "\tdeleting the test group\n";
-        $objGroup->deleteObject();
+        $objGroup->deleteObjectFromDatabase();
 
     }
 
@@ -322,7 +322,7 @@ class class_test_rights extends class_testbase {
         $this->assertTrue(class_carrier::getInstance()->getObjRights()->checkPermissionForGroup($strGroupId, class_rights::$STR_RIGHT_VIEW, $objAspect->getSystemid()));
 
 
-        $objAspect->deleteObject();
+        $objAspect->deleteObjectFromDatabase();
     }
 
 

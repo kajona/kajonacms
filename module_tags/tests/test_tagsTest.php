@@ -31,9 +31,9 @@ class class_test_tags extends class_testbase  {
 
         $this->assertEquals($objFirstTag->getSystemid(), $objSecondTag->getSystemid());
 
-        $objFirstAspect->deleteObject();
-        $objAspect->deleteObject();
-        $objSecondTag->deleteObject();
+        $objFirstAspect->deleteObjectFromDatabase();
+        $objAspect->deleteObjectFromDatabase();
+        $objSecondTag->deleteObjectFromDatabase();
 
     }
 
@@ -64,8 +64,8 @@ class class_test_tags extends class_testbase  {
         $this->assertEquals(count($objTag->getArrAssignedRecords()), 0);
         $this->assertEquals(count(class_module_tags_tag::getTagsForSystemid($objAspect->getSystemid())), 0);
 
-        $objTag->deleteObject();
-        $objAspect->deleteObject();
+        $objTag->deleteObjectFromDatabase();
+        $objAspect->deleteObjectFromDatabase();
     }
 
 
@@ -126,7 +126,7 @@ class class_test_tags extends class_testbase  {
         $this->assertTrue($arrAssignment[0] instanceof class_module_pages_page || $arrAssignment[0] instanceof class_module_pages_folder);
         $this->assertTrue($arrAssignment[1] instanceof class_module_pages_page || $arrAssignment[1] instanceof class_module_pages_folder);
 
-        $objTag->deleteObject();
+        $objTag->deleteObjectFromDatabase();
     }
 
 

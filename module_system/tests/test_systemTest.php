@@ -34,7 +34,7 @@ class class_test_system extends class_testbase  {
         echo "\tdeleting 100 system-records with right-records...\n";
         foreach($arrSysRecords as $strOneId) {
             $objAspect = new class_module_system_aspect($strOneId);
-            $objAspect->deleteObject();
+            $objAspect->deleteObjectFromDatabase();
         }
         $arrRow = $objDB->getPRow("SELECT COUNT(*) FROM "._dbprefix_."system", array(), 0, false);
         $this->assertEquals($arrRow["COUNT(*)"], $intNrSystemRecords, __FILE__." checkDeleteSysRecordsWithRights");
@@ -70,10 +70,10 @@ class class_test_system extends class_testbase  {
         //deleting all records created
         foreach ($arrNodes as $arrOneNode) {
             $objAspect = new class_module_system_aspect($arrOneNode["system_id"]);
-            $objAspect->deleteObject();
+            $objAspect->deleteObjectFromDatabase();
         }
         $objAspect = new class_module_system_aspect($strBaseNodeId);
-        $objAspect->deleteObject($strBaseNodeId);
+        $objAspect->deleteObjectFromDatabase($strBaseNodeId);
     }
 
 
@@ -174,7 +174,7 @@ class class_test_system extends class_testbase  {
         $this->assertEquals(3, count($objAspect->getChildNodesAsIdArray($strSub1Node1Id)));
 
         $objAspect = new class_module_system_aspect($strRootNodeId);
-        $objAspect->deleteObject();
+        $objAspect->deleteObjectFromDatabase();
         class_db::getInstance()->flushQueryCache();
 
 

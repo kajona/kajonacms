@@ -228,28 +228,28 @@ class class_test_objectRights extends class_testbase {
 
 
 
-        class_objectfactory::getInstance()->getObject($strThird111)->deleteObject();
-        class_objectfactory::getInstance()->getObject($strThird112)->deleteObject();
-        class_objectfactory::getInstance()->getObject($strThird121)->deleteObject();
-        class_objectfactory::getInstance()->getObject($strThird122)->deleteObject();
-        class_objectfactory::getInstance()->getObject($strThird211)->deleteObject();
-        class_objectfactory::getInstance()->getObject($strThird212)->deleteObject();
-        class_objectfactory::getInstance()->getObject($strThird221)->deleteObject();
-        class_objectfactory::getInstance()->getObject($strThird222)->deleteObject();
-        class_objectfactory::getInstance()->getObject($strThirdOne1)->deleteObject();
-        class_objectfactory::getInstance()->getObject($strThirdOne2)->deleteObject();
-        class_objectfactory::getInstance()->getObject($strThirdTwo1)->deleteObject();
-        class_objectfactory::getInstance()->getObject($strThirdTwo2)->deleteObject();
-        class_objectfactory::getInstance()->getObject($strSecOne)->deleteObject();
-        class_objectfactory::getInstance()->getObject($strSecTwo)->deleteObject();
-        class_objectfactory::getInstance()->getObject($strRootId)->deleteObject();
+        class_objectfactory::getInstance()->getObject($strThird111)->deleteObjectFromDatabase();
+        class_objectfactory::getInstance()->getObject($strThird112)->deleteObjectFromDatabase();
+        class_objectfactory::getInstance()->getObject($strThird121)->deleteObjectFromDatabase();
+        class_objectfactory::getInstance()->getObject($strThird122)->deleteObjectFromDatabase();
+        class_objectfactory::getInstance()->getObject($strThird211)->deleteObjectFromDatabase();
+        class_objectfactory::getInstance()->getObject($strThird212)->deleteObjectFromDatabase();
+        class_objectfactory::getInstance()->getObject($strThird221)->deleteObjectFromDatabase();
+        class_objectfactory::getInstance()->getObject($strThird222)->deleteObjectFromDatabase();
+        class_objectfactory::getInstance()->getObject($strThirdOne1)->deleteObjectFromDatabase();
+        class_objectfactory::getInstance()->getObject($strThirdOne2)->deleteObjectFromDatabase();
+        class_objectfactory::getInstance()->getObject($strThirdTwo1)->deleteObjectFromDatabase();
+        class_objectfactory::getInstance()->getObject($strThirdTwo2)->deleteObjectFromDatabase();
+        class_objectfactory::getInstance()->getObject($strSecOne)->deleteObjectFromDatabase();
+        class_objectfactory::getInstance()->getObject($strSecTwo)->deleteObjectFromDatabase();
+        class_objectfactory::getInstance()->getObject($strRootId)->deleteObjectFromDatabase();
 
-        class_objectfactory::getInstance()->getObject($strModuleId)->deleteObject();
+        class_objectfactory::getInstance()->getObject($strModuleId)->deleteObjectFromDatabase();
 
         echo "\tdeleting the test user\n";
-        $objUser->deleteObject();
+        $objUser->deleteObjectFromDatabase();
         echo "\tdeleting the test group\n";
-        $objGroup->deleteObject();
+        $objGroup->deleteObjectFromDatabase();
 
     }
 

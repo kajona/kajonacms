@@ -26,7 +26,7 @@ class class_test_messaging extends class_testbase  {
                 $bitFound = true;
                 $this->assertEquals($objOneMessage->getStrTitle(), $strTitle);
                 $this->assertEquals($objOneMessage->getStrInternalIdentifier(), $strIdentifier);
-                $this->assertTrue($objOneMessage->deleteObject());
+                $this->assertTrue($objOneMessage->deleteObjectFromDatabase());
             }
         }
 
@@ -71,7 +71,7 @@ class class_test_messaging extends class_testbase  {
                     $this->assertEquals($objOneMessage->getStrInternalIdentifier(), $strIdentifier);
                     $this->assertEquals($objOneMessage->getStrSenderId(), $strSender);
                     $this->assertEquals($objOneMessage->getStrMessageRefId(), $strReference);
-                    $this->assertTrue($objOneMessage->deleteObject());
+                    $this->assertTrue($objOneMessage->deleteObjectFromDatabase());
                 }
             }
 
@@ -110,7 +110,7 @@ class class_test_messaging extends class_testbase  {
                 $this->assertEquals($intUnread-1, class_module_messaging_message::getNumberOfMessagesForUser($arrUsers[0], true));
 
 
-                $objOneMessage->deleteObject();
+                $objOneMessage->deleteObjectFromDatabase();
             }
         }
 

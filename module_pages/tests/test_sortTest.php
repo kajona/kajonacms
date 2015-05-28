@@ -146,7 +146,7 @@ class class_test_sort extends class_testbase {
         //new order: 1, 7, 3, 4, 5, 6, 8, 2, 10, 9
 
         $arrPages = class_module_pages_folder::getPagesAndFolderList($objRootPage->getSystemid());
-        $objPage = $arrPages[3]; $objPage->deleteObject();
+        $objPage = $arrPages[3]; $objPage->deleteObjectFromDatabase();
         //logical    1, 2, 3, 4, 5, 6, 7, 8, 9
         //new key:   0, 1, 2, 3, 4, 5, 6, 7, 8
         //new order: 1, 7, 3, 5, 6, 8, 2, 10, 9
@@ -163,7 +163,7 @@ class class_test_sort extends class_testbase {
         $objPage = $arrPages[8]; $this->assertEquals($objPage->getStrName(), "sortsubpage_9"); $this->assertEquals(9, $objPage->getIntSort());
 
 
-        $objRootPage->deleteObject();
+        $objRootPage->deleteObjectFromDatabase();
 
     }
 
@@ -225,7 +225,7 @@ class class_test_sort extends class_testbase {
         $this->assertEquals(2, class_module_pages_page::getPageByName("layer_2_3")->getIntSort());
 
 
-        $objRootPage->deleteObject();
+        $objRootPage->deleteObjectFromDatabase();
     }
 
 
@@ -262,7 +262,7 @@ class class_test_sort extends class_testbase {
         }
 
         $this->validateSingleLevelSort($objRootPage->getSystemid());
-        $objRootPage->deleteObject();
+        $objRootPage->deleteObjectFromDatabase();
     }
 
     private function validateSingleLevelSort($strParentId) {

@@ -190,7 +190,7 @@ class class_test_searchIndexerTest extends class_testbase {
         echo "Queries: ", class_db::getInstance()->getNumber() - $intQueriesStart. " \n";
 
 
-        class_objectfactory::getInstance()->getObject($strNewsId)->deleteObject();
+        class_objectfactory::getInstance()->getObject($strNewsId)->deleteObjectFromDatabase();
 
     }
 }
