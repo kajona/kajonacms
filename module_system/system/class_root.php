@@ -473,6 +473,7 @@ abstract class class_root {
 
         $objORM = new class_orm_objectdelete($this);
         $bitReturn = $objORM->deleteObject();
+
         $bitReturn = $bitReturn && $this->deleteSystemRecord($this->getSystemid());
 
         class_objectfactory::getInstance()->removeFromCache($this->getSystemid());

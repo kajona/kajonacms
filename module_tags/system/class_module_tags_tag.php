@@ -107,25 +107,6 @@ class class_module_tags_tag extends class_model implements interface_model, inte
         return "";
     }
 
-    /**
-     * Deletes the tag with the given systemid from the system
-     *
-     * @return bool
-     */
-    public function deleteObjectFromDatabase() {
-
-        //delete matching favorites
-        $arrFavorites = class_module_tags_favorite::getAllFavoritesForTag($this->getSystemid());
-        foreach($arrFavorites as $objOneFavorite) {
-            $objOneFavorite->deleteObjectFromDatabase();
-        }
-
-        //delete memberships
-        $this->objDB->_pQuery("DELETE FROM "._dbprefix_."tags_member WHERE tags_tagid=?", array($this->getSystemid()));
-
-        return parent::deleteObjectFromDatabase();
-    }
-
 
     /**
      * Returns the list of tags related with the systemid passed.

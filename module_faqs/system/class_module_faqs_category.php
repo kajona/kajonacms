@@ -76,16 +76,6 @@ class class_module_faqs_category extends class_model implements interface_model,
 
 
     /**
-     * Overwritten to perform a cleanup of the relation table
-     * @return bool
-     */
-    public function deleteObjectFromDatabase() {
-        //start by deleting from members and cat table
-        $this->objDB->_pQuery("DELETE FROM " . _dbprefix_ . "faqs_member WHERE faqsmem_category = ? ", array($this->getSystemid()));
-        return parent::deleteObjectFromDatabase();
-    }
-
-    /**
      * Return an on-click link for the passed object.
      * This link is rendered by the portal search result generator, so
      * make sure the link is a valid portal page.

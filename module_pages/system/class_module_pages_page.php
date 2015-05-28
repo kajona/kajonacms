@@ -558,20 +558,6 @@ class class_module_pages_page extends class_model implements interface_model, in
     }
 
     /**
-     * Deletes the given page and all related elements from the system.
-     * Subelements, so pages and/or folders below are delete, too
-     *
-     * @return bool
-     */
-    public function deleteObjectFromDatabase() {
-
-        //Delete the page and the properties out of the tables
-        $this->objDB->_pQuery("DELETE FROM " . _dbprefix_ . "page_properties WHERE pageproperties_id = ?", array($this->getSystemid()));
-
-        return parent::deleteObjectFromDatabase();
-    }
-
-    /**
      * Tries to assign all page-properties not yet assigned to a language.
      * If properties are already existing, the record won't be modified
      *

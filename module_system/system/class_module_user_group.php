@@ -210,6 +210,12 @@ class class_module_user_group extends class_model implements interface_model, in
         return $this->objSourceGroup->getNumberOfMembers();
     }
 
+
+    public function deleteObject() {
+        return $this->deleteObjectFromDatabase();
+    }
+
+
     /**
      * Deletes the given group
      *
