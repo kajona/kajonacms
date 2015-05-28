@@ -14,6 +14,25 @@
  */
 abstract class class_orm_base {
 
+    /**
+     * Records deleted logically will be excluded from result sets.
+     * Default mode.
+     */
+    const INT_LOGICAL_DELETED_EXCLUDED = 0;
+
+    /**
+     * The result sets will include records deleted logically only.
+     */
+    const INT_LOGICAL_DELETED_ONLY = 2;
+
+    /**
+     * The result sets will include both, regular records and records deleted logically, so a mixture.
+     */
+    const INT_LOGICAL_DELETED_IGNORE = 2;
+
+
+    protected static $intHandleLogicalDeleted = 0;
+
     const STR_ANNOTATION_TARGETTABLE = "@targetTable";
     const STR_ANNOTATION_TARGETTABLETXSAFE = "@targetTableTxSafe";
     const STR_ANNOTATION_TABLECOLUMN = "@tableColumn";
@@ -121,6 +140,25 @@ abstract class class_orm_base {
 
         return $arrRows;
     }
+
+
+
+
+    /**
+     * @return int
+     */
+    public static function getIntHandleLogicalDeleted() {
+        return self::$intHandleLogicalDeleted;
+    }
+
+    /**
+     * @param int $intHandleLogicalDeleted
+     */
+    public static function setIntHandleLogicalDeleted($intHandleLogicalDeleted) {
+        self::$intHandleLogicalDeleted = $intHandleLogicalDeleted;
+    }
+
+
 }
 
 /**

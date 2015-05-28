@@ -41,6 +41,13 @@ class class_orm_objectinit extends class_orm_base {
                           ".$this->getQueryBase()."
                            AND system.system_id = ? ";
 
+                if(self::$intHandleLogicalDeleted == self::INT_LOGICAL_DELETED_EXCLUDED) {
+                    $strQuery .= " AND system_deleted = 0 ";
+                }
+                else if(self::$intHandleLogicalDeleted == self::INT_LOGICAL_DELETED_ONLY) {
+                    $strQuery .= " AND system_deleted = 1 ";
+                }
+
                 $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array($this->getObjObject()->getSystemid()));
             }
 

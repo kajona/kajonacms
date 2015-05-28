@@ -63,6 +63,7 @@ class class_orm_objectlist extends class_orm_base {
         if($strPrevid != "")
             $arrParams[] = $strPrevid;
 
+        $this->addLogicalDeleteRestriction();
         $this->processWhereRestrictions($strQuery, $arrParams, $strTargetClass);
 
         $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, $arrParams);
@@ -97,6 +98,7 @@ class class_orm_objectlist extends class_orm_base {
         if($strPrevid != "")
             $arrParams[] = $strPrevid;
 
+        $this->addLogicalDeleteRestriction();
         $this->processWhereRestrictions($strQuery, $arrParams, $strTargetClass);
         $strQuery .= $this->getOrderBy(new class_reflection($strTargetClass));
         $arrRows = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, $arrParams, $intStart, $intEnd);
@@ -195,6 +197,16 @@ class class_orm_objectlist extends class_orm_base {
         return $strOrderBy;
     }
 
+
+
+    protected function addLogicalDeleteRestriction() {
+        if(self::$intHandleLogicalDeleted == self::INT_LOGICAL_DELETED_EXCLUDED) {
+            $this->addWhereRestriction(new class_orm_objectlist_restriction(" AND system_deleted = 0 ", array()));
+        }
+        else if(self::$intHandleLogicalDeleted == self::INT_LOGICAL_DELETED_ONLY) {
+            $this->addWhereRestriction(new class_orm_objectlist_restriction(" AND system_deleted = 1 ", array()));
+        }
+    }
 
 
     /**
