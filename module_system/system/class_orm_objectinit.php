@@ -42,12 +42,7 @@ class class_orm_objectinit extends class_orm_base {
                            AND system.system_id = ? ";
 
                 if($this->bitLogcialDeleteAvailable) {
-                    if($this->getIntCombinedLogicalDeletionConfig()->equals(class_orm_deletedhandling_enum::EXCLUDED())) {
-                        $strQuery .= " AND system_deleted = 0 ";
-                    }
-                    else if($this->getIntCombinedLogicalDeletionConfig()->equals(class_orm_deletedhandling_enum::EXCLUSIVE())) {
-                        $strQuery .= " AND system_deleted = 1 ";
-                    }
+                    $strQuery .= $this->getDeletedWhereRestriction();
                 }
 
                 $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array($this->getObjObject()->getSystemid()));

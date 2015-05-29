@@ -204,12 +204,7 @@ class class_orm_objectlist extends class_orm_base {
         if(!$this->bitLogcialDeleteAvailable)
             return;
 
-        if($this->getIntCombinedLogicalDeletionConfig()->equals(class_orm_deletedhandling_enum::EXCLUDED())) {
-            $this->addWhereRestriction(new class_orm_objectlist_restriction(" AND system_deleted = 0 ", array()));
-        }
-        else if($this->getIntCombinedLogicalDeletionConfig()->equals(class_orm_deletedhandling_enum::EXCLUSIVE())) {
-            $this->addWhereRestriction(new class_orm_objectlist_restriction(" AND system_deleted = 1 ", array()));
-        }
+        $this->addWhereRestriction(new class_orm_objectlist_restriction($this->getDeletedWhereRestriction(), array()));
     }
 
 

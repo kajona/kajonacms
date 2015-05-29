@@ -159,6 +159,25 @@ abstract class class_orm_base {
         return class_orm_deletedhandling_enum::EXCLUDED();
     }
 
+    /**
+     * Generates the where restriction for queries, based on the current config.
+     * Currently the methods returns a string based where restriction.
+     * @return string
+     */
+    public function getDeletedWhereRestriction() {
+        $strQuery = "";
+        if($this->bitLogcialDeleteAvailable) {
+            if($this->getIntCombinedLogicalDeletionConfig()->equals(class_orm_deletedhandling_enum::EXCLUDED())) {
+                $strQuery .= " AND system_deleted = 0 ";
+            }
+            else if($this->getIntCombinedLogicalDeletionConfig()->equals(class_orm_deletedhandling_enum::EXCLUSIVE())) {
+                $strQuery .= " AND system_deleted = 1 ";
+            }
+        }
+
+        return $strQuery;
+    }
+
 
     /**
      * Static flag to change the handling of deleted objects globally, so for every following
