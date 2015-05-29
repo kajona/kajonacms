@@ -221,14 +221,10 @@ class class_date_helper {
      * @param class_date $objDate
      *
      * @return class_date
+     * @deprecated
      */
     public function calcBeginningNextWeek(class_date $objDate) {
-        $objNewDate =  $this->calcDateRelativeFormatString($objDate, "next monday");
-        $objNewDate->setIntHour($objDate->getIntHour());
-        $objNewDate->setIntMin($objDate->getIntMin());
-        $objNewDate->setIntSec($objDate->getIntSec());
-
-        return $objNewDate;
+        return $this->firstDayOfNext(class_date_period_enum::WEEK(), $objDate);
     }
 
     /**
@@ -237,17 +233,10 @@ class class_date_helper {
      * @param class_date $objDate
      *
      * @return class_date
+     * @deprecated
      */
     public function calcBeginningNextQuarter(class_date $objDate) {
-        $objNewDate = clone $objDate;
-
-        while(($objNewDate->getIntMonth() % 3) != 0) {
-            $objNewDate->setNextMonth();
-        }
-        $objNewDate->setNextMonth();
-        $objNewDate->setIntDay(1);
-
-        return $objNewDate;
+        return $this->firstDayOfNext(class_date_period_enum::QUARTER(), $objDate);
     }
 
     /**
@@ -256,17 +245,10 @@ class class_date_helper {
      * @param class_date $objDate
      *
      * @return class_date
+     * @deprecated
      */
     public function calcBeginningNextHalfYear(class_date $objDate) {
-        $objNewDate = clone $objDate;
-
-        while(($objNewDate->getIntMonth() % 6) != 0) {
-            $objNewDate->setNextMonth();
-        }
-        $objNewDate->setNextMonth();
-        $objNewDate->setIntDay(1);
-
-        return $objNewDate;
+        return $this->firstDayOfNext(class_date_period_enum::HALFYEAR(), $objDate);
     }
 
     /**
@@ -275,9 +257,297 @@ class class_date_helper {
      * @param class_date $objDate
      *
      * @return class_date
+     * @deprecated
      */
     public function calcBeginningNextYear(class_date $objDate) {
-        $objNewDate = $this->calcDateRelativeFormatString($objDate, "next year first day of january");
+        return $this->firstDayOfNext(class_date_period_enum::YEAR(), $objDate);
+    }
+
+
+    public function firstDayOfLast(class_date_period_enum $objPeriod, class_date $objDate) {
+        $strRelativeString = "";
+
+        if($objPeriod->equals(class_date_period_enum::YEAR())) {
+            $strRelativeString = "-1 year first day of january";
+        }
+        else if($objPeriod->equals(class_date_period_enum::HALFYEAR())) {
+            $intMonth = $objDate->getIntMonth();
+
+            if ($intMonth < 7) {
+                $strRelativeString =  "-1 year first day of july";
+            } else {
+                $strRelativeString =  "first day of january";
+            }
+        }
+        else if($objPeriod->equals(class_date_period_enum::QUARTER())) {
+            $intMonth = $objDate->getIntMonth();
+
+            if ($intMonth < 4) {
+                $strRelativeString =  "-1 year first day of october";
+            } elseif ($intMonth > 3 && $intMonth < 7) {
+                $strRelativeString =  "first day of january";
+            } elseif ($intMonth > 6 && $intMonth < 10) {
+                $strRelativeString =  "first day of april";
+            } elseif ($intMonth > 9) {
+                $strRelativeString =  "first day of july";
+            }
+        }
+        else if($objPeriod->equals(class_date_period_enum::MONTH())) {
+            $strRelativeString =  "first day of last month";
+        }
+        else if($objPeriod->equals(class_date_period_enum::WEEK())) {
+            if($objDate->getIntDayOfWeek() == 1) {
+                $strRelativeString =  "-1 week";
+            }
+            else {
+                $strRelativeString =  "-1 week last monday";
+            }
+        }
+
+        $objNewDate = self::calcDateRelativeFormatString($objDate, $strRelativeString);
+        $objNewDate->setIntHour($objDate->getIntHour());
+        $objNewDate->setIntMin($objDate->getIntMin());
+        $objNewDate->setIntSec($objDate->getIntSec());
+
+        return $objNewDate;
+
+
+    }
+
+    public function lastDayOfLast(class_date_period_enum $objPeriod, class_date $objDate) {
+        $strRelativeString = "";
+
+        if($objPeriod->equals(class_date_period_enum::YEAR())) {
+            $strRelativeString = "-1 year last day of december";
+        }
+        else if($objPeriod->equals(class_date_period_enum::HALFYEAR())) {
+            $intMonth = $objDate->getIntMonth();
+
+            if ($intMonth < 7) {
+                $strRelativeString =  "-1 year last day of december";
+            } else {
+                $strRelativeString =  "last day of june";
+            }
+        }
+        else if($objPeriod->equals(class_date_period_enum::QUARTER())) {
+            $intMonth = $objDate->getIntMonth();
+
+            if ($intMonth < 4) {
+                $strRelativeString =  "-1 year last day of december";
+            } elseif ($intMonth > 3 && $intMonth < 7) {
+                $strRelativeString =  "last day of march";
+            } elseif ($intMonth > 6 && $intMonth < 10) {
+                $strRelativeString =  "last day of june";
+            } elseif ($intMonth > 9) {
+                $strRelativeString =  "last day of september";
+            }
+        }
+        else if($objPeriod->equals(class_date_period_enum::MONTH())) {
+            $strRelativeString =  "last day of last month";
+        }
+        else if($objPeriod->equals(class_date_period_enum::WEEK())) {
+            if($objDate->getIntDayOfWeek() == 0) {
+                $strRelativeString =  "-1 week";
+            }
+            else {
+                $strRelativeString =  "-1 week next sunday";
+            }
+        }
+
+        $objNewDate = self::calcDateRelativeFormatString($objDate, $strRelativeString);
+        $objNewDate->setIntHour($objDate->getIntHour());
+        $objNewDate->setIntMin($objDate->getIntMin());
+        $objNewDate->setIntSec($objDate->getIntSec());
+
+        return $objNewDate;
+    }
+
+    public function firstDayOfNext(class_date_period_enum $objPeriod, class_date $objDate) {
+        $strRelativeString = "";
+
+        if($objPeriod->equals(class_date_period_enum::YEAR())) {
+            $strRelativeString = "+1 year first day of january";
+        }
+        else if($objPeriod->equals(class_date_period_enum::HALFYEAR())) {
+            $intMonth = $objDate->getIntMonth();
+
+            if ($intMonth < 7) {
+                $strRelativeString =  "first day of july";
+            } else {
+                $strRelativeString =  "+1 year first day of january";
+            }
+        }
+        else if($objPeriod->equals(class_date_period_enum::QUARTER())) {
+            $intMonth = $objDate->getIntMonth();
+
+            if ($intMonth < 4) {
+                $strRelativeString =  "first day of april";
+            } elseif ($intMonth > 3 && $intMonth < 7) {
+                $strRelativeString =  "first day of july";
+            } elseif ($intMonth > 6 && $intMonth < 10) {
+                $strRelativeString =  "first day of october";
+            } elseif ($intMonth > 9) {
+                $strRelativeString =  "+1 year first day of january";
+            }
+        }
+        else if($objPeriod->equals(class_date_period_enum::MONTH())) {
+            $strRelativeString =  "first day of next month";
+        }
+        else if($objPeriod->equals(class_date_period_enum::WEEK())) {
+            if($objDate->getIntDayOfWeek() == 1) {
+                $strRelativeString =  "+1 week";
+            }
+            else {
+                $strRelativeString =  "next monday";
+            }
+        }
+
+        $objNewDate = self::calcDateRelativeFormatString($objDate, $strRelativeString);
+        $objNewDate->setIntHour($objDate->getIntHour());
+        $objNewDate->setIntMin($objDate->getIntMin());
+        $objNewDate->setIntSec($objDate->getIntSec());
+
+        return $objNewDate;
+    }
+
+    public function lastDayOfNext(class_date_period_enum $objPeriod, class_date $objDate) {
+        $strRelativeString = "";
+
+        if($objPeriod->equals(class_date_period_enum::YEAR())) {
+            $strRelativeString = "+1 year last day of december";
+        }
+        else if($objPeriod->equals(class_date_period_enum::HALFYEAR())) {
+            $intMonth = $objDate->getIntMonth();
+
+            if ($intMonth < 7) {
+                $strRelativeString =  "last day of december";
+            } else {
+                $strRelativeString =  "+1 year last day of june";
+            }
+        }
+        else if($objPeriod->equals(class_date_period_enum::QUARTER())) {
+            $intMonth = $objDate->getIntMonth();
+
+            if ($intMonth < 4) {
+                $strRelativeString =  "last day of june";
+            } elseif ($intMonth > 3 && $intMonth < 7) {
+                $strRelativeString =  "last day of september";
+            } elseif ($intMonth > 6 && $intMonth < 10) {
+                $strRelativeString =  "last day of december";
+            } elseif ($intMonth > 9) {
+                $strRelativeString =  "+1 year last day of march";
+            }
+        }
+        else if($objPeriod->equals(class_date_period_enum::MONTH())) {
+            $strRelativeString =  "last day of next month";
+        }
+        else if($objPeriod->equals(class_date_period_enum::WEEK())) {
+            if($objDate->getIntDayOfWeek() == 0) {
+                $strRelativeString =  "+1 week";
+            }
+            else {
+                $strRelativeString =  "+1 week next sunday";
+            }
+        }
+
+        $objNewDate = self::calcDateRelativeFormatString($objDate, $strRelativeString);
+        $objNewDate->setIntHour($objDate->getIntHour());
+        $objNewDate->setIntMin($objDate->getIntMin());
+        $objNewDate->setIntSec($objDate->getIntSec());
+
+        return $objNewDate;
+    }
+
+    public function firstDayOfThis(class_date_period_enum $objPeriod, class_date $objDate) {
+        $strRelativeString = "";
+
+        if($objPeriod->equals(class_date_period_enum::YEAR())) {
+            $strRelativeString = "first day of january";
+        }
+        else if($objPeriod->equals(class_date_period_enum::HALFYEAR())) {
+            $intMonth = $objDate->getIntMonth();
+
+            if ($intMonth < 7) {
+                $strRelativeString =  "first day of january";
+            } else {
+                $strRelativeString =  "first day of july";
+            }
+        }
+        else if($objPeriod->equals(class_date_period_enum::QUARTER())) {
+            $intMonth = $objDate->getIntMonth();
+
+            if ($intMonth < 4) {
+                $strRelativeString =  "first day of january";
+            } elseif ($intMonth > 3 && $intMonth < 7) {
+                $strRelativeString =  "first day of april";
+            } elseif ($intMonth > 6 && $intMonth < 10) {
+                $strRelativeString =  "first day of july";
+            } elseif ($intMonth > 9) {
+                $strRelativeString =  "first day of october";
+            }
+        }
+        else if($objPeriod->equals(class_date_period_enum::MONTH())) {
+            $strRelativeString =  "first day of this month";
+        }
+        else if($objPeriod->equals(class_date_period_enum::WEEK())) {
+            if($objDate->getIntDayOfWeek() == 0) {
+                $strRelativeString =  "monday last week";
+            }
+            else {
+                $strRelativeString =  "monday this week";
+            }
+        }
+
+        $objNewDate = self::calcDateRelativeFormatString($objDate, $strRelativeString);
+        $objNewDate->setIntHour($objDate->getIntHour());
+        $objNewDate->setIntMin($objDate->getIntMin());
+        $objNewDate->setIntSec($objDate->getIntSec());
+
+        return $objNewDate;
+    }
+
+    public function lastDayOfThis(class_date_period_enum $objPeriod, class_date $objDate) {
+        $strRelativeString = "";
+
+        if($objPeriod->equals(class_date_period_enum::YEAR())) {
+            $strRelativeString = "last day of december";
+        }
+        else if($objPeriod->equals(class_date_period_enum::HALFYEAR())) {
+            $intMonth = $objDate->getIntMonth();
+
+            if ($intMonth < 7) {
+                $strRelativeString =  "last day of june";
+            } else {
+                $strRelativeString =  "last day of december";
+            }
+        }
+        else if($objPeriod->equals(class_date_period_enum::QUARTER())) {
+            $intMonth = $objDate->getIntMonth();
+
+            if ($intMonth < 4) {
+                $strRelativeString =  "last day of march";
+            } elseif ($intMonth > 3 && $intMonth < 7) {
+                $strRelativeString =  "last day of june";
+            } elseif ($intMonth > 6 && $intMonth < 10) {
+                $strRelativeString =  "last day of september";
+            } elseif ($intMonth > 9) {
+                $strRelativeString =  "last day of december";
+            }
+        }
+        else if($objPeriod->equals(class_date_period_enum::MONTH())) {
+            $strRelativeString =  "last day of this month";
+        }
+        else if($objPeriod->equals(class_date_period_enum::WEEK())) {
+            if($objDate->getIntDayOfWeek() == 0) {
+                $strRelativeString =  "now";
+            }
+            else {
+                //check if correct?
+                $strRelativeString =  "sunday this week";
+            }
+        }
+
+        $objNewDate = self::calcDateRelativeFormatString($objDate, $strRelativeString);
         $objNewDate->setIntHour($objDate->getIntHour());
         $objNewDate->setIntMin($objDate->getIntMin());
         $objNewDate->setIntSec($objDate->getIntSec());
