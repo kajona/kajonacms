@@ -46,8 +46,9 @@ class class_installer_system extends class_installer_base implements interface_i
         $arrFields["system_status"] = array("int", true);
         $arrFields["system_class"] = array("char254", true);
         $arrFields["system_comment"] = array("char254", true);
+        $arrFields["system_deleted"] = array("int", true);
 
-        if(!$this->objDB->createTable("system", $arrFields, array("system_id"), array("system_prev_id", "system_module_nr", "system_sort", "system_owner", "system_create_date", "system_status", "system_lm_time", "system_lock_time")))
+        if(!$this->objDB->createTable("system", $arrFields, array("system_id"), array("system_prev_id", "system_module_nr", "system_sort", "system_owner", "system_create_date", "system_status", "system_lm_time", "system_lock_time", "system_deleted")))
             $strReturn .= "An error occurred! ...\n";
 
         //Rights table ----------------------------------------------------------------------------------
