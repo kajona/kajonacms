@@ -1184,9 +1184,9 @@ class class_installer_system extends class_installer_base implements interface_i
         $this->objDB->addColumn("user", "user_items_per_page", class_db_datatypes::STR_TYPE_INT);
 
         $strReturn .= "Removing setting _user_log_nrofrecords_...\n";
-        class_module_system_setting::getConfigByName("_user_log_nrofrecords_")->deleteObject();
+        class_module_system_setting::getConfigByName("_user_log_nrofrecords_")->deleteObjectFromDatabase();
         $strReturn .= "Removing setting _system_use_dbcache_...\n";
-        class_module_system_setting::getConfigByName("_system_use_dbcache_")->deleteObject();
+        class_module_system_setting::getConfigByName("_system_use_dbcache_")->deleteObjectFromDatabase();
 
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion($this->objMetadata->getStrTitle(), "4.6.5");

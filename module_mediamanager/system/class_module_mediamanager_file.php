@@ -661,7 +661,7 @@ class class_module_mediamanager_file extends class_model implements interface_mo
         if(count($arrObjDB) > 0) {
 
             foreach($arrObjDB as $objOneFileDB) {
-                $objOneFileDB->deleteObject();
+                $objOneFileDB->deleteObjectFromDatabase();
                 $arrReturn["delete"]++;
             }
         }

@@ -386,9 +386,12 @@ class class_module_packagemanager_manager {
 
         $strLog = "";
 
+        class_orm_base::setObjHandleLogicalDeletedGlobal(class_orm_deletedhandling_enum::INCLUDED());
         $objHandler = $this->getPackageManagerForPath($objMetadata->getStrPath());
         if($objHandler->isRemovable())
             $objHandler->remove($strLog);
+
+        class_orm_base::setObjHandleLogicalDeletedGlobal(class_orm_deletedhandling_enum::EXCLUDED());
 
         class_resourceloader::getInstance()->flushCache();
 

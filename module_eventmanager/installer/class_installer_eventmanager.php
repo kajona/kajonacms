@@ -92,7 +92,7 @@ class class_installer_eventmanager extends class_installer_base implements inter
         $objElement = class_module_pages_element::getElement("eventmanager");
         if($objElement != null) {
             $strReturn .= "Deleting page-element 'eventmanager'...\n";
-            $objElement->deleteObject();
+            $objElement->deleteObjectFromDatabase();
         }
         else {
             $strReturn .= "Error finding page-element 'eventmanager', aborting.\n";
@@ -102,7 +102,7 @@ class class_installer_eventmanager extends class_installer_base implements inter
         /** @var class_module_eventmanager_event $objOneObject */
         foreach(class_module_eventmanager_event::getObjectList() as $objOneObject) {
             $strReturn .= "Deleting object '".$objOneObject->getStrDisplayName()."' ...\n";
-            if(!$objOneObject->deleteObject()) {
+            if(!$objOneObject->deleteObjectFromDatabase()) {
                 $strReturn .= "Error deleting object, aborting.\n";
                 return false;
             }
@@ -111,7 +111,7 @@ class class_installer_eventmanager extends class_installer_base implements inter
         //delete the module-node
         $strReturn .= "Deleting the module-registration...\n";
         $objModule = class_module_system_module::getModuleByName($this->objMetadata->getStrTitle(), true);
-        if(!$objModule->deleteObject()) {
+        if(!$objModule->deleteObjectFromDatabase()) {
             $strReturn .= "Error deleting module, aborting.\n";
             return false;
         }

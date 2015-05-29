@@ -94,11 +94,12 @@ class class_installer_faqs extends class_installer_base implements interface_ins
      * @return bool
      */
     public function remove(&$strReturn) {
+
         //delete the page-element
         $objElement = class_module_pages_element::getElement("faqs");
         if($objElement != null) {
             $strReturn .= "Deleting page-element 'faqs'...\n";
-            $objElement->deleteObject();
+            $objElement->deleteObjectFromDatabase();
         }
         else {
             $strReturn .= "Error finding page-element 'faqs', aborting.\n";
@@ -109,7 +110,7 @@ class class_installer_faqs extends class_installer_base implements interface_ins
         /** @var class_module_faqs_category $objOneCategory */
         foreach(class_module_faqs_category::getObjectList() as $objOneCategory) {
             $strReturn .= "Deleting category '".$objOneCategory->getStrDisplayName()."' ...\n";
-            if(!$objOneCategory->deleteObject()) {
+            if(!$objOneCategory->deleteObjectFromDatabase()) {
                 $strReturn .= "Error deleting category, aborting.\n";
                 return false;
             }
@@ -118,7 +119,7 @@ class class_installer_faqs extends class_installer_base implements interface_ins
         /** @var class_module_faqs_faq $objOneFaq*/
         foreach(class_module_faqs_faq::getObjectList() as $objOneFaq) {
             $strReturn .= "Deleting faq '".$objOneFaq->getStrDisplayName()."' ...\n";
-            if(!$objOneFaq->deleteObject()) {
+            if(!$objOneFaq->deleteObjectFromDatabase()) {
                 $strReturn .= "Error deleting faq, aborting.\n";
                 return false;
             }
@@ -128,7 +129,7 @@ class class_installer_faqs extends class_installer_base implements interface_ins
         //delete the module-node
         $strReturn .= "Deleting the module-registration...\n";
         $objModule = class_module_system_module::getModuleByName($this->objMetadata->getStrTitle(), true);
-        if(!$objModule->deleteObject()) {
+        if(!$objModule->deleteObjectFromDatabase()) {
             $strReturn .= "Error deleting module, aborting.\n";
             return false;
         }

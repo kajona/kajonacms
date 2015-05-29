@@ -44,7 +44,7 @@ class class_module_dashboard_recorddeletedlistener implements interface_generice
             $arrWidgets = $objORM->getObjectList("class_module_dashboard_widget");
 
             foreach($arrWidgets as $objWidget) {
-                $objWidget->deleteObject();
+                $objWidget->deleteObjectFromDatabase();
             }
         }
 

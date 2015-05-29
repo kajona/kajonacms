@@ -80,11 +80,10 @@ class class_installer_rating extends class_installer_base implements interface_i
      */
     public function remove(&$strReturn) {
 
-
         /** @var class_module_rating_rate $objOneObject */
         foreach(class_module_rating_rate::getObjectList() as $objOneObject) {
             $strReturn .= "Deleting object '".$objOneObject->getStrDisplayName()."' ...\n";
-            if(!$objOneObject->deleteObject()) {
+            if(!$objOneObject->deleteObjectFromDatabase()) {
                 $strReturn .= "Error deleting object, aborting.\n";
                 return false;
             }
@@ -93,7 +92,7 @@ class class_installer_rating extends class_installer_base implements interface_i
         //delete the module-node
         $strReturn .= "Deleting the module-registration...\n";
         $objModule = class_module_system_module::getModuleByName($this->objMetadata->getStrTitle(), true);
-        if(!$objModule->deleteObject()) {
+        if(!$objModule->deleteObjectFromDatabase()) {
             $strReturn .= "Error deleting module, aborting.\n";
             return false;
         }

@@ -103,13 +103,13 @@ class class_installer_stats extends class_installer_base implements interface_in
         $strReturn .= "Deleting settings...\n";
         foreach(array("_stats_duration_online_", "_stats_exclusionlist_") as $strOneSetting) {
             if(class_module_system_setting::getConfigByName($strOneSetting) !== null)
-                class_module_system_setting::getConfigByName($strOneSetting)->deleteObject();
+                class_module_system_setting::getConfigByName($strOneSetting)->deleteObjectFromDatabase();
         }
 
         //delete the module-node
         $strReturn .= "Deleting the module-registration...\n";
         $objModule = class_module_system_module::getModuleByName($this->objMetadata->getStrTitle(), true);
-        if(!$objModule->deleteObject()) {
+        if(!$objModule->deleteObjectFromDatabase()) {
             $strReturn .= "Error deleting module, aborting.\n";
             return false;
         }
@@ -268,7 +268,7 @@ class class_installer_stats extends class_installer_base implements interface_in
         $strReturn = "Updating 4.7 to 4.7.5...\n";
 
         $strReturn .= "Removing setting _stats_nrofrecords_\n";
-        class_module_system_setting::getConfigByName("_stats_nrofrecords_")->deleteObject();
+        class_module_system_setting::getConfigByName("_stats_nrofrecords_")->deleteObjectFromDatabase();
 
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion("stats", "4.6.1");

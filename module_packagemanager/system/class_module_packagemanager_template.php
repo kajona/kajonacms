@@ -141,7 +141,7 @@ class class_module_packagemanager_template extends class_model implements interf
         //scan folders not existing any more
         foreach($arrPacksInstalled as $objOnePack) {
             if(!in_array($objOnePack->getStrName(), $arrFolders["folders"]))
-                $objOnePack->deleteObject();
+                $objOnePack->deleteObjectFromDatabase();
         }
     }
 
