@@ -37,10 +37,13 @@ class class_module_dashboard_recorddeletedlistener implements interface_generice
         list($strSystemid, $strSourceClass) = $arrArguments;
 
         if($strSourceClass == "class_module_user_user" && validateSystemid($strSystemid)) {
-            $strQuery = "SELECT dashboard_id FROM "._dbprefix_."dashboard WHERE dashboard_user = ?";
-            $arrRows = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array($strSystemid), null, null, false);
-            foreach($arrRows as $arrOneRow) {
-                $objWidget = new class_module_dashboard_widget($arrOneRow["dashboard_id"]);
+
+            $objORM = new class_orm_objectlist();
+            $objORM->addWhereRestriction(new class_orm_objectlist_property_restriction("strUser", class_orm_comparator_enum::Equal(), $strSystemid));
+            $objORM->setObjHandleLogicalDeleted(class_orm_deletedhandling_enum::INCLUDED());
+            $arrWidgets = $objORM->getObjectList("class_module_dashboard_widget");
+
+            foreach($arrWidgets as $objWidget) {
                 $objWidget->deleteObject();
             }
         }

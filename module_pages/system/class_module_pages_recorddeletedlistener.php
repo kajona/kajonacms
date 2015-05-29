@@ -28,7 +28,6 @@ class class_module_pages_recorddeletedlistener implements interface_genericevent
 
         if($strSourceClass == "class_module_pages_page") {
             return class_carrier::getInstance()->getObjDB()->_pQuery("DELETE FROM " ._dbprefix_. "page_properties WHERE pageproperties_id = ?", array($strSystemid));
-
         }
 
 
