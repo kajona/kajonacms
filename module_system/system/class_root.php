@@ -419,6 +419,7 @@ abstract class class_root {
             }
         }
 
+        //TODO: sort-id auf -1 setzen
         $this->intRecordDeleted = 1;
         $bitReturn = $this->updateObjectToDb();
 

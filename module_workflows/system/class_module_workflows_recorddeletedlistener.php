@@ -31,7 +31,7 @@ class class_module_workflows_recorddeletedlistener implements interface_generice
 
         $bitReturn = true;
 
-
+        class_orm_base::setObjHandleLogicalDeletedGlobal(class_orm_deletedhandling_enum::INCLUDED());
         $arrWorkflows = class_module_workflows_workflow::getWorkflowsForSystemid($strSystemid, false);
         foreach($arrWorkflows as $objOneWorkflow) {
 
@@ -44,8 +44,8 @@ class class_module_workflows_recorddeletedlistener implements interface_generice
 
         }
 
+        class_orm_base::setObjHandleLogicalDeletedGlobal(class_orm_deletedhandling_enum::EXCLUDED());
         return $bitReturn;
-
     }
 
 
