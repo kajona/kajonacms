@@ -41,14 +41,30 @@ class class_module_languages_recorddeletedlistener implements interface_generice
                 $objOneLanguage->setBitDefault(1);
                 $objOneLanguage->updateObjectToDb();
             }
+
+
+
+            //check if the current active one was deleted. if, then reset. #kajona trace id 613
+            $objLanguage = new class_module_languages_language();
+            $arrLangs = class_module_languages_language::getObjectList();
+            $arrFiltered = array_filter($arrLangs, function(class_module_languages_language $objSingleLang) use ($objLanguage) {
+                return $objSingleLang->getStrName() == $objLanguage->getAdminLanguage();
+            });
+
+            if(count($arrFiltered) == 0 && count($arrLangs) > 0) {
+                $objLanguage->setStrAdminLanguageToWorkOn($arrLangs[0]->getStrName());
+            }
         }
 
-        //fire a plain query on the database, much faster then searching for matching records
-        $strQuery = "DELETE FROM " . _dbprefix_ . "languages_languageset
-                      WHERE languageset_language = ?
-                         OR languageset_systemid = ?";
 
-        return class_carrier::getInstance()->getObjDB()->_pQuery($strQuery, array($strSystemid, $strSystemid));
+        //fire a plain query on the database, much faster then searching for matching records
+        $strQuery = "DELETE FROM "._dbprefix_."languages_languageset
+                  WHERE languageset_language = ?
+                     OR languageset_systemid = ?";
+
+        class_carrier::getInstance()->getObjDB()->_pQuery($strQuery, array($strSystemid, $strSystemid));
+
+        return true;
     }
 
 
@@ -57,7 +73,7 @@ class class_module_languages_recorddeletedlistener implements interface_generice
      * @return void
      */
     public static function staticConstruct() {
-        class_core_eventdispatcher::getInstance()->removeAndAddListener(class_system_eventidentifier::EVENT_SYSTEM_RECORDDELETED, new class_module_languages_recorddeletedlistener());
+        class_core_eventdispatcher::getInstance()->removeAndAddListener(class_system_eventidentifier::EVENT_SYSTEM_RECORDDELETED_LOGICALLY, new class_module_languages_recorddeletedlistener());
     }
 }
 

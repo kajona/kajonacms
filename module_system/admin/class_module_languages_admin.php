@@ -176,38 +176,6 @@ class class_module_languages_admin extends class_admin_simple implements interfa
         $this->adminReload(class_link::getLinkAdminHref($this->getArrModule("modul")));
     }
 
-    /**
-     * Deletes the language
-     *
-     * @throws class_exception
-     * @return string
-     * @permissions delete
-     */
-    protected function actionDelete() {
-        $strReturn = "";
-        $objLang = new class_module_languages_language($this->getSystemid());
-        if($objLang->rightDelete()) {
-            if(!$objLang->deleteObject()) {
-                throw new class_exception("Error deleting language", class_exception::$level_ERROR);
-            }
-
-            //check if the current active one was deleted. if, then reset. #kajona trace id 613
-            //TODO move to event handler
-            if($this->getLanguageToWorkOn() == $objLang->getStrName()) {
-                class_carrier::getInstance()->getObjDB()->flushQueryCache();
-                $arrLangs = class_module_languages_language::getObjectList();
-                if(count($arrLangs) > 0) {
-                    $objLang->setStrAdminLanguageToWorkOn($arrLangs[0]->getStrName());
-                }
-            }
-
-            $this->adminReload(class_link::getLinkAdminHref($this->getArrModule("modul")));
-        }
-        else {
-            $strReturn = $this->getLang("commons_error_permissions");
-        }
-        return $strReturn;
-    }
 
     /**
      * Creates a language-switch as ready-to-output html-code
