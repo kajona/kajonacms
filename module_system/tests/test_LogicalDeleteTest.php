@@ -39,7 +39,9 @@ class class_test_logicalDelete extends class_testbase {
         echo "Deleting logically\n";
         $this->assertEquals($objAspect->getIntRecordDeleted(), 0);
         $objAspect->deleteObject();
+
         $this->assertEquals($objAspect->getIntRecordDeleted(), 1);
+        $this->assertEquals($objAspect->getIntSort(), -1);
 
 
         class_orm_base::setObjHandleLogicalDeletedGlobal(class_orm_deletedhandling_enum::EXCLUDED());
@@ -109,5 +111,10 @@ class class_test_logicalDelete extends class_testbase {
 
     }
 
+
+
+    public function testDeleteSortHandling() {
+
+    }
 }
 

@@ -421,24 +421,25 @@ abstract class class_root {
 
         //TODO: sort-id auf -1 setzen
         $this->intRecordDeleted = 1;
+        $this->intSort = -1;
         $bitReturn = $this->updateObjectToDb();
+
+        class_objectfactory::getInstance()->removeFromCache($this->getSystemid());
+        class_orm_rowcache::removeSingleRow($this->getSystemid());
+        $this->objDB->flushQueryCache();
+
+        $this->objSortManager->fixSortOnDelete($this->getSystemid());
 
         $bitReturn = $bitReturn && class_core_eventdispatcher::getInstance()->notifyGenericListeners(class_system_eventidentifier::EVENT_SYSTEM_RECORDDELETED_LOGICALLY, array($this->getSystemid(), get_class($this)));
 
         if($bitReturn) {
             class_logger::getInstance()->addLogRow("successfully deleted record ".$this->getSystemid()." / ".$this->getStrDisplayName(), class_logger::$levelInfo);
             $this->objDB->transactionCommit();
-            $this->objDB->flushQueryCache();
-
-            class_objectfactory::getInstance()->removeFromCache($this->getSystemid());
-            class_orm_rowcache::removeSingleRow($this->getSystemid());
-
             return true;
         }
         else {
             class_logger::getInstance()->addLogRow("error deleting record ".$this->getSystemid()." / ".$this->getStrDisplayName(), class_logger::$levelInfo);
             $this->objDB->transactionRollback();
-            $this->objDB->flushQueryCache();
             return false;
         }
 
@@ -1295,8 +1296,6 @@ abstract class class_root {
 
         //Start a tx before deleting anything
         $this->objDB->transactionBegin();
-
-        $this->objSortManager->fixSortOnDelete($strSystemid);
 
         $strQuery = "DELETE FROM "._dbprefix_."system WHERE system_id = ?";
         $bitResult = $bitResult &&  $this->objDB->_pQuery($strQuery, array($strSystemid));
