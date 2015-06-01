@@ -790,6 +790,10 @@ class class_installer_system extends class_installer_base implements interface_i
             $this->objDB->_pQuery("ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."changelog")." ADD INDEX ( ".$this->objDB->encloseColumnName("change_property")." ) ", array());
 
 
+        $strReturn .= "Altering system_module table...\n";
+        $this->objDB->_pQuery("ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."system_module")." CHANGE ".$this->objDB->encloseColumnName("module_nr")." ".$this->objDB->encloseColumnName("module_nr")." ".$this->objDB->getDatatype("int")." NULL", array());
+        $this->objDB->_pQuery("ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."system_module")." CHANGE ".$this->objDB->encloseColumnName("module_name")." ".$this->objDB->encloseColumnName("module_name")." ".$this->objDB->getDatatype("char254")." NULL", array());
+
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion("", "3.4.9");
         return $strReturn;

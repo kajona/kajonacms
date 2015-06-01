@@ -290,12 +290,6 @@ class class_installer_tags extends class_installer_base implements interface_ins
         if(!$this->objDB->_query($strQuery))
             $strReturn .= "An error occurred! ...\n";
 
-        $strQuery = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."tags_member")."
-                      DROP PRIMARY KEY,
-                      ADD PRIMARY KEY(tags_systemid, tags_tagid, tags_owner)";
-
-        if(!$this->objDB->_query($strQuery))
-            $strReturn .= "An error occurred! ...\n";
 
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion($this->objMetadata->getStrTitle(), "3.4.9.1");
