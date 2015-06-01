@@ -126,7 +126,7 @@ abstract class class_testbase extends PHPUnit_Framework_TestCase {
 
                         if($strDataType == "string") {
                             if($strFieldType == "text" || $strFieldType == "textarea") {
-                                $objMethodValue = $strPropName."_".$obj->getStrSystemid();
+                                $objMethodValue = $strPropName."_".$objObject->getStrSystemid();
 
                                 if(uniStrlen($objMethodValue) > 10) {
                                     $objMethodValue = uniStrTrim($objMethodValue, 10, "");
