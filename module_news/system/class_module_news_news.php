@@ -308,7 +308,7 @@ class class_module_news_news extends class_model implements interface_model, int
         $strWhere = $objOrm->getDeletedWhereRestriction();
 
         if($strFilter != "") {
-            $strQuery = "SELECT *
+            $strQuery = "SELECT COUNT(*)
 							FROM " . _dbprefix_ . "news,
 							      " ._dbprefix_."system_right,
 							      " . _dbprefix_ . "news_member,
@@ -323,7 +323,7 @@ class class_module_news_news extends class_model implements interface_model, int
             $arrParams[] = $strFilter;
         }
         else {
-            $strQuery = "SELECT *
+            $strQuery = "SELECT COUNT(*)
 							FROM " . _dbprefix_ . "news,
 							      " ._dbprefix_."system_right,
 							      " . _dbprefix_ . "system
