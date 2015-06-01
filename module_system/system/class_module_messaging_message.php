@@ -209,8 +209,6 @@ class class_module_messaging_message extends class_model implements interface_mo
      * @static
      */
     public static function getMessagesByIdentifier($strIdentifier, $intStart = null, $intEnd = null) {
-
-
         $objOrm = new class_orm_objectlist();
         $objOrm->addWhereRestriction(new class_orm_objectlist_property_restriction("strInternalIdentifier", class_orm_comparator_enum::Equal(), $strIdentifier));
         $objOrm->addOrderBy(new class_orm_objectlist_orderby("message_read ASC"));

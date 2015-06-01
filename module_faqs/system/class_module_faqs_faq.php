@@ -153,6 +153,9 @@ class class_module_faqs_faq extends class_model implements interface_model, inte
      */
     public static function getObjectList($strFilter = "", $intStart = null, $intEnd = null) {
         if($strFilter != "") {
+
+            $objORM = new class_orm_objectlist();
+
             $strQuery = "SELECT *
 							FROM " . _dbprefix_ . "faqs,
 							     " . _dbprefix_ . "faqs_member,
@@ -164,6 +167,7 @@ class class_module_faqs_faq extends class_model implements interface_model, inte
 							  AND system_id = right_id
 							  AND faqs_id = faqsmem_faq
 							  AND faqsmem_category = ?
+							  ".$objORM->getDeletedWhereRestriction()."
 							ORDER BY faqs_question ASC";
 
             $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array($strFilter), $intStart, $intEnd);
@@ -193,12 +197,15 @@ class class_module_faqs_faq extends class_model implements interface_model, inte
      */
     public static function getObjectCount($strFilter = "") {
         if($strFilter != "") {
+            $objORM = new class_orm_objectlist();
+
             $strQuery = "SELECT COUNT(*)
 							FROM " . _dbprefix_ . "faqs,
 							     " . _dbprefix_ . "system,
 							     " . _dbprefix_ . "faqs_member
 							WHERE system_id = faqs_id
 							  AND faqs_id = faqsmem_faq
+							  ".$objORM->getDeletedWhereRestriction()."
 							  AND faqsmem_category = ?";
             $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array($strFilter));
             return $arrRow["COUNT(*)"];
@@ -220,6 +227,7 @@ class class_module_faqs_faq extends class_model implements interface_model, inte
      */
     public static function loadListFaqsPortal($strCat) {
         $arrParams = array();
+        $objORM = new class_orm_objectlist();
         if($strCat == 1) {
             $strQuery = "SELECT *
     						FROM " . _dbprefix_ . "faqs,
@@ -229,6 +237,7 @@ class class_module_faqs_faq extends class_model implements interface_model, inte
                                ON system_id = system_date_id
     		                WHERE system_id = faqs_id
     		                  AND system_status = 1
+    		                  ".$objORM->getDeletedWhereRestriction()."
     		                  AND system_id = right_id
     						ORDER BY faqs_question ASC";
         }
@@ -245,6 +254,7 @@ class class_module_faqs_faq extends class_model implements interface_model, inte
     		                  AND system_id = right_id
     		                  AND faqsmem_category = ?
     		                  AND system_status = 1
+    		                  ".$objORM->getDeletedWhereRestriction()."
     						ORDER BY faqs_question ASC";
             $arrParams[] = $strCat;
         }
