@@ -135,50 +135,29 @@ class class_module_postacomment_post extends class_model implements interface_mo
      *
      * @return class_module_postacomment_post[]
      */
-    public static function loadPostList($bitJustActive = true, $strPagefilter = "", $strSystemidfilter = "", $strLanguagefilter = "", $intStart = false, $intEnd = false) {
-        $arrReturn = array();
-        $arrParams = array();
-        $strFilter = "";
+    public static function loadPostList($bitJustActive = true, $strPagefilter = "", $strSystemidfilter = "", $strLanguagefilter = "", $intStart = null, $intEnd = null) {
+
+        $objORM = new class_orm_objectlist();
         if($strPagefilter != "") {
-            $strFilter .= " AND postacomment_page = ? ";
-            $arrParams[] = $strPagefilter;
+            $objORM->addWhereRestriction(new class_orm_objectlist_restriction(" AND postacomment_page = ? ", $strPagefilter));
         }
 
         if($strSystemidfilter != "") {
-            $strFilter .= " AND postacomment_systemid = ? ";
-            $arrParams[] = $strSystemidfilter;
+            $objORM->addWhereRestriction(new class_orm_objectlist_restriction(" AND postacomment_systemid = ? ", $strSystemidfilter));
         }
 
         if($strLanguagefilter != "") {//check against '' to remain backwards-compatible
-            $strFilter .= " AND (postacomment_language = ? OR postacomment_language = '')";
-            $arrParams[] = $strLanguagefilter;
+            $objORM->addWhereRestriction(new class_orm_objectlist_restriction(" AND (postacomment_language = ? OR postacomment_language = '')", $strLanguagefilter));
         }
         if($bitJustActive) {
-            $strFilter .= " AND system_status = 1 ";
+            $objORM->addWhereRestriction(new class_orm_objectlist_restriction(" AND system_status = ? ", 1));
         }
 
-        $strQuery = "SELECT *
-					 FROM "._dbprefix_."postacomment,
-						  "._dbprefix_."system_right,
-						  "._dbprefix_."system
-				LEFT JOIN "._dbprefix_."system_date
-                            ON system_id = system_date_id
-					 WHERE system_id = postacomment_id
-					   AND system_id = right_id "
-                     . $strFilter ."
-					 ORDER BY postacomment_page ASC,
-						      postacomment_language ASC,
-							  postacomment_date DESC";
+        $objORM->addOrderBy(new class_orm_objectlist_orderby("postacomment_page ASC"));
+        $objORM->addOrderBy(new class_orm_objectlist_orderby("postacomment_language ASC"));
+        $objORM->addOrderBy(new class_orm_objectlist_orderby("postacomment_date DESC"));
 
-        $arrComments = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, $arrParams, $intStart, $intEnd);
-        class_orm_rowcache::addArrayOfInitRows($arrComments);
-        if(count($arrComments) > 0) {
-            foreach($arrComments as $arrOneComment) {
-                $arrReturn[] = class_objectfactory::getInstance()->getObject($arrOneComment["system_id"]);
-            }
-        }
-
-        return $arrReturn;
+        return $objORM->getObjectList(get_called_class(), "", $intStart, $intEnd);
     }
 
     /**
@@ -192,30 +171,25 @@ class class_module_postacomment_post extends class_model implements interface_mo
      * @return int
      */
     public static function getNumberOfPostsAvailable($bitJustActive = true, $strPageid = "", $strSystemidfilter = "", $strLanguagefilter = "") {
-        $strQuery = "SELECT COUNT(*) FROM "._dbprefix_."postacomment, "._dbprefix_."system WHERE system_id = postacomment_id ";
-        $arrParams = array();
 
+        $objORM = new class_orm_objectlist();
         if($strPageid != "") {
-            $strQuery .= " AND postacomment_page= ?";
-            $arrParams[] = $strPageid;
-        }
-
-        if($bitJustActive) {
-            $strQuery .= " AND system_status = 1 ";
+            $objORM->addWhereRestriction(new class_orm_objectlist_restriction(" AND postacomment_page = ? ", $strPageid));
         }
 
         if($strSystemidfilter != "") {
-            $strQuery .= " AND postacomment_systemid = ? ";
-            $arrParams[] = $strSystemidfilter;
+            $objORM->addWhereRestriction(new class_orm_objectlist_restriction(" AND postacomment_systemid = ? ", $strSystemidfilter));
         }
 
         if($strLanguagefilter != "") {//check against '' to remain backwards-compatible
-            $strQuery .= " AND (postacomment_language = ? OR postacomment_language = '')";
-            $arrParams[] = $strLanguagefilter;
+            $objORM->addWhereRestriction(new class_orm_objectlist_restriction(" AND (postacomment_language = ? OR postacomment_language = '')", $strLanguagefilter));
+        }
+        if($bitJustActive) {
+            $objORM->addWhereRestriction(new class_orm_objectlist_restriction(" AND system_status = ? ", 1));
         }
 
-        $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, $arrParams);
-        return $arrRow["COUNT(*)"];
+
+        return $objORM->getObjectCount(get_called_class());
     }
 
     /**

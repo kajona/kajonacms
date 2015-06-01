@@ -90,6 +90,8 @@ class class_module_faqs_category extends class_model implements interface_model,
         //search for matching pages
         $arrReturn = array();
 
+        $objORM = new class_orm_objectlist();
+
         $strQuery = "SELECT page_name,  page_id
                        FROM " . _dbprefix_ . "element_faqs,
                             " . _dbprefix_ . "page_element,
@@ -104,6 +106,7 @@ class class_module_faqs_category extends class_model implements interface_model,
                         )
                         AND system_prev_id = page_id
                         AND system_status = 1
+                        ".$objORM->getDeletedWhereRestriction()."
                         AND page_element_ph_language = ? ";
 
         $arrRows = $this->objDB->getPArray($strQuery, array($this->getSystemid(), $objResult->getObjSearch()->getStrPortalLangFilter()));

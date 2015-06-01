@@ -357,6 +357,7 @@ class class_module_pages_pageelement extends class_model implements interface_mo
 
         $longToday = $objDate->getLongTimestamp();
         $arrParams = array($strPageId, $strLanguage);
+        $objORM = new class_orm_objectlist();
 
         $strAnd = "";
         if($bitJustActive) {
@@ -381,6 +382,7 @@ class class_module_pages_pageelement extends class_model implements interface_mo
                         AND system_id = right_id
                         AND page_element_ph_language = ?
                        ".$strAnd."
+                       ".$objORM->getDeletedWhereRestriction()."
                   ORDER BY page_element_ph_placeholder ASC,
                            page_element_ph_language ASC,
                            system_sort ASC";
@@ -404,7 +406,7 @@ class class_module_pages_pageelement extends class_model implements interface_mo
      * @static
      */
     public static function getAllElementsOnPage($strPageId) {
-
+        $objORM = new class_orm_objectlist();
         $strQuery = "SELECT *
 						 FROM "._dbprefix_."page_element,
 						      "._dbprefix_."element,
@@ -416,6 +418,7 @@ class class_module_pages_pageelement extends class_model implements interface_mo
 						   AND system_id = right_id
 						   AND page_element_ph_element = element_name
 						   AND system_id = page_element_id
+						   ".$objORM->getDeletedWhereRestriction()."
 				      ORDER BY page_element_ph_placeholder ASC,
 				               page_element_ph_language ASC,
 						 	   system_sort ASC";
@@ -454,6 +457,7 @@ class class_module_pages_pageelement extends class_model implements interface_mo
             $arrParams[] = time();
         }
 
+        $objORM = new class_orm_objectlist();
         $strQuery = "SELECT *
                          FROM "._dbprefix_."page_element,
                               "._dbprefix_."element,
@@ -468,6 +472,7 @@ class class_module_pages_pageelement extends class_model implements interface_mo
                            AND page_element_ph_language = ?
                            AND page_element_ph_placeholder = ?
                            ".$strAnd."
+                           ".$objORM->getDeletedWhereRestriction()."
                          ORDER BY system_sort ASC";
 
         $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, $arrParams);
@@ -489,6 +494,7 @@ class class_module_pages_pageelement extends class_model implements interface_mo
      */
     public function getSortedElementsAtPlaceholder() {
 
+        $objORM = new class_orm_objectlist();
         $strQuery = "SELECT *
 						 FROM "._dbprefix_."page_element,
 						      "._dbprefix_."element,
@@ -498,6 +504,7 @@ class class_module_pages_pageelement extends class_model implements interface_mo
                            AND page_element_ph_language = ?
                            AND page_element_ph_placeholder = ?
 						   AND system_id = page_element_id
+						   ".$objORM->getDeletedWhereRestriction()."
 						 ORDER BY system_sort ASC";
 
         $arrElementsOnPage = $this->objDB->getPArray($strQuery, array($this->getPrevId(), $this->getStrLanguage(), $this->getStrPlaceholder()), null, null, false);
@@ -597,6 +604,7 @@ class class_module_pages_pageelement extends class_model implements interface_mo
     public static function updatePlaceholders($strTemplate, $strOldPlaceholder, $strNewPlaceholder) {
         $bitReturn = true;
         //Fetch all pages
+        $objORM = new class_orm_objectlist();
         $arrObjPages = class_module_pages_page::getAllPages();
         foreach($arrObjPages as $objOnePage) {
             if($objOnePage->getStrTemplate() == $strTemplate || $strTemplate == "-1") {
@@ -608,6 +616,7 @@ class class_module_pages_pageelement extends class_model implements interface_mo
 						 WHERE system_prev_id= ?
 						   AND page_element_ph_element = element_name
 						   AND system_id = page_element_id
+						   ".$objORM->getDeletedWhereRestriction()."
 						 ORDER BY page_element_ph_placeholder ASC,
 						 		system_sort ASC";
 

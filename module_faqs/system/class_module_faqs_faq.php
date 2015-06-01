@@ -280,6 +280,7 @@ class class_module_faqs_faq extends class_model implements interface_model, inte
      * @return mixed
      */
     public function updateSearchResult(class_search_result $objResult) {
+        $objORM = new class_orm_objectlist();
         //search for matching pages
         $strQuery = "SELECT page_name,  page_id
                        FROM " . _dbprefix_ . "element_faqs,
@@ -299,6 +300,7 @@ class class_module_faqs_faq extends class_model implements interface_model, inte
                         )
                         AND system_prev_id = page_id
                         AND system_status = 1
+                        ".$objORM->getDeletedWhereRestriction()."
                         AND page_element_ph_language = ? ";
 
         $arrRows = $this->objDB->getPArray($strQuery, array($this->getSystemid(), $objResult->getObjSearch()->getStrPortalLangFilter()));

@@ -153,21 +153,12 @@ class class_module_rating_rate extends class_model implements interface_model {
      * @return class_module_rating_rate
      */
     public static function getRating($strSystemid, $strChecksum = "") {
-        $arrParams = array($strSystemid);
+        $objORM = new class_orm_objectlist();
+        $objORM->addWhereRestriction(new class_orm_objectlist_restriction("AND rating_systemid = ?"), $strSystemid);
         if($strChecksum != "")
-            $arrParams[] = $strChecksum;
+            $objORM->addWhereRestriction(new class_orm_objectlist_restriction("AND rating_checksum = ?"), $strChecksum);
 
-        $strQuery = "SELECT rating_id
-                     FROM "._dbprefix_."rating
-                     WHERE rating_systemid = ?
-                     ".($strChecksum != "" ? " AND rating_checksum = ? " : "")."";
-        $arrMatches = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, $arrParams);
-
-        if(isset($arrMatches["rating_id"]))
-            return new class_module_rating_rate($arrMatches["rating_id"]);
-        else
-            return null;
-
+        return $objORM->getObjectCount(get_called_class());
     }
 
     /**

@@ -525,6 +525,7 @@ class class_module_news_news extends class_model implements interface_model, int
      * @return mixed
      */
     public function updateSearchResult(class_search_result $objResult) {
+        $objORM = new class_orm_objectlist();
         $strQuery = "SELECT news_detailspage
                        FROM "._dbprefix_."element_news,
                             "._dbprefix_."news_member,
@@ -543,6 +544,7 @@ class class_module_news_news extends class_model implements interface_model, int
                         AND system_prev_id = page_id
                         AND system_status = 1
                         AND news_view = 0
+                        ".$objORM->getDeletedWhereRestriction()."
                         AND page_element_ph_language = ? ";
 
         $arrRows = $this->objDB->getPArray($strQuery, array($this->getSystemid(), $objResult->getObjSearch()->getStrPortalLangFilter()));
