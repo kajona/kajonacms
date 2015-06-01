@@ -215,55 +215,13 @@ class class_date_helper {
     }
 
     /**
-     * Calculates the beginning of the next week depending on the given date.
-     * Beginning day of week is monday.
+     * Calculates the first day of the last given period depending on the given date.
      *
+     * @param class_date_period_enum $objPeriod
      * @param class_date $objDate
      *
      * @return class_date
-     * @deprecated
      */
-    public function calcBeginningNextWeek(class_date $objDate) {
-        return $this->firstDayOfNext(class_date_period_enum::WEEK(), $objDate);
-    }
-
-    /**
-     * Calculates the beginning of the next quarter depending on the given date.
-     *
-     * @param class_date $objDate
-     *
-     * @return class_date
-     * @deprecated
-     */
-    public function calcBeginningNextQuarter(class_date $objDate) {
-        return $this->firstDayOfNext(class_date_period_enum::QUARTER(), $objDate);
-    }
-
-    /**
-     * Calculates the beginning of the next half year depending on the given date.
-     *
-     * @param class_date $objDate
-     *
-     * @return class_date
-     * @deprecated
-     */
-    public function calcBeginningNextHalfYear(class_date $objDate) {
-        return $this->firstDayOfNext(class_date_period_enum::HALFYEAR(), $objDate);
-    }
-
-    /**
-     * Calculates the beginning of the next year depending on the given date.
-     *
-     * @param class_date $objDate
-     *
-     * @return class_date
-     * @deprecated
-     */
-    public function calcBeginningNextYear(class_date $objDate) {
-        return $this->firstDayOfNext(class_date_period_enum::YEAR(), $objDate);
-    }
-
-
     public function firstDayOfLast(class_date_period_enum $objPeriod, class_date $objDate) {
         $strRelativeString = "";
 
@@ -314,6 +272,14 @@ class class_date_helper {
 
     }
 
+    /**
+     * Calculates the last day of the last given period depending on the given date.
+     *
+     * @param class_date_period_enum $objPeriod
+     * @param class_date $objDate
+     *
+     * @return class_date
+     */
     public function lastDayOfLast(class_date_period_enum $objPeriod, class_date $objDate) {
         $strRelativeString = "";
 
@@ -362,6 +328,14 @@ class class_date_helper {
         return $objNewDate;
     }
 
+    /**
+     * Calculates the first day of the next given period depending on the given date.
+     *
+     * @param class_date_period_enum $objPeriod
+     * @param class_date $objDate
+     *
+     * @return class_date
+     */
     public function firstDayOfNext(class_date_period_enum $objPeriod, class_date $objDate) {
         $strRelativeString = "";
 
@@ -410,6 +384,14 @@ class class_date_helper {
         return $objNewDate;
     }
 
+    /**
+     * Calculates the last day of the next given period depending on the given date.
+     *
+     * @param class_date_period_enum $objPeriod
+     * @param class_date $objDate
+     *
+     * @return class_date
+     */
     public function lastDayOfNext(class_date_period_enum $objPeriod, class_date $objDate) {
         $strRelativeString = "";
 
@@ -458,6 +440,14 @@ class class_date_helper {
         return $objNewDate;
     }
 
+    /**
+     * Calculates the first day of the given period depending on the given date.
+     *
+     * @param class_date_period_enum $objPeriod
+     * @param class_date $objDate
+     *
+     * @return class_date
+     */
     public function firstDayOfThis(class_date_period_enum $objPeriod, class_date $objDate) {
         $strRelativeString = "";
 
@@ -506,6 +496,15 @@ class class_date_helper {
         return $objNewDate;
     }
 
+
+    /**
+     * Calculates the first day of the given period depending on the given date.
+     *
+     * @param class_date_period_enum $objPeriod
+     * @param class_date $objDate
+     *
+     * @return class_date
+     */
     public function lastDayOfThis(class_date_period_enum $objPeriod, class_date $objDate) {
         $strRelativeString = "";
 

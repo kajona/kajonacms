@@ -104,41 +104,6 @@ class test_class_dateHelperTest extends class_testbase  {
         $objDate = new class_date(20150207000001);
         $objCalcDate = $objHelper->calcLastWorkingDay($objDate);
         $this->assertEquals($objCalcDate->getLongTimestamp(), 20150206000001);
-
-        //Next Week1
-        $objDate = new class_date(20150201000001);
-        $objCalcDate = $objHelper->calcBeginningNextWeek($objDate);
-        $this->assertEquals($objCalcDate->getLongTimestamp(), 20150202000001);
-
-        //Next Week2
-        $objDate = new class_date(20150202000001);
-        $objCalcDate = $objHelper->calcBeginningNextWeek($objDate);
-        $this->assertEquals($objCalcDate->getLongTimestamp(), 20150209000001);
-
-        //Quarter1
-        $objDate = new class_date(20150201000001);
-        $objCalcDate = $objHelper->calcBeginningNextQuarter($objDate);
-        $this->assertEquals($objCalcDate->getLongTimestamp(), 20150401000001);
-
-        //Quarter2
-        $objDate = new class_date(20150401000001);
-        $objCalcDate = $objHelper->calcBeginningNextQuarter($objDate);
-        $this->assertEquals($objCalcDate->getLongTimestamp(), 20150701000001);
-
-        //Half Year1
-        $objDate = new class_date(20150201000001);
-        $objCalcDate = $objHelper->calcBeginningNextHalfYear($objDate);
-        $this->assertEquals($objCalcDate->getLongTimestamp(), 20150701000001);
-
-        //Half Year2
-        $objDate = new class_date(20150701000001);
-        $objCalcDate = $objHelper->calcBeginningNextHalfYear($objDate);
-        $this->assertEquals($objCalcDate->getLongTimestamp(), 20160101000001);
-
-        //Year1
-        $objDate = new class_date(20151231000001);
-        $objCalcDate = $objHelper->calcBeginningNextYear($objDate);
-        $this->assertEquals($objCalcDate->getLongTimestamp(), 20160101000001);
     }
 
     public function test_firstDayOfThis() {
@@ -268,6 +233,7 @@ class test_class_dateHelperTest extends class_testbase  {
         $arrDates[] = array("period" => class_date_period_enum::WEEK(), "basedate" => 20150206000001, "expecteddate" => 20150126000001);//fri
         $arrDates[] = array("period" => class_date_period_enum::WEEK(), "basedate" => 20150207000001, "expecteddate" => 20150126000001);//sat
         $arrDates[] = array("period" => class_date_period_enum::WEEK(), "basedate" => 20150208000001, "expecteddate" => 20150126000001);//sun
+        $arrDates[] = array("period" => class_date_period_enum::WEEK(), "basedate" => 20150527000001, "expecteddate" => 20150518000001);//sun
 
 
         foreach($arrDates as $arrDate) {
