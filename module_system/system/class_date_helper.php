@@ -217,6 +217,8 @@ class class_date_helper {
     /**
      * Calculates the first day of the last given period depending on the given date.
      *
+     * For period Weeks: First day of a week is always monday
+     *
      * @param class_date_period_enum $objPeriod
      * @param class_date $objDate
      *
@@ -275,6 +277,8 @@ class class_date_helper {
     /**
      * Calculates the last day of the last given period depending on the given date.
      *
+     * For period Weeks: Last day of a week is always sunday
+     *
      * @param class_date_period_enum $objPeriod
      * @param class_date $objDate
      *
@@ -330,6 +334,8 @@ class class_date_helper {
 
     /**
      * Calculates the first day of the next given period depending on the given date.
+     *
+     * For period Weeks: First day of a week is always monday
      *
      * @param class_date_period_enum $objPeriod
      * @param class_date $objDate
@@ -387,6 +393,8 @@ class class_date_helper {
     /**
      * Calculates the last day of the next given period depending on the given date.
      *
+     * For period Weeks: Last day of a week is always sunday
+     *
      * @param class_date_period_enum $objPeriod
      * @param class_date $objDate
      *
@@ -442,6 +450,8 @@ class class_date_helper {
 
     /**
      * Calculates the first day of the given period depending on the given date.
+     *
+     * For period Weeks: First day of a week is always monday
      *
      * @param class_date_period_enum $objPeriod
      * @param class_date $objDate
@@ -499,6 +509,8 @@ class class_date_helper {
 
     /**
      * Calculates the first day of the given period depending on the given date.
+     *
+     * For period Weeks: Last day of a week is always sunday
      *
      * @param class_date_period_enum $objPeriod
      * @param class_date $objDate
