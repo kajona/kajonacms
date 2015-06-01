@@ -93,7 +93,7 @@ abstract class class_testbase extends PHPUnit_Framework_TestCase {
      */
     protected function createObject($strClassType, $strParentId, array $arrExcludeFillProperty = array(),  array $arrPropertyValues = array(), $bitAutofillProperties = true) {
         //get properties with an tablecolumn annotation
-        $obj = new $strClassType();
+        $objObject = new $strClassType();
         $objReflection = new class_reflection($strClassType);
         $arrProperties = $objReflection->getPropertiesWithAnnotation(class_orm_base::STR_ANNOTATION_TABLECOLUMN);
 
@@ -109,7 +109,7 @@ abstract class class_testbase extends PHPUnit_Framework_TestCase {
                 $strSetterMethod = $objReflection->getSetter($strPropName);
                 if($strSetterMethod !== null) {
                     $objValue = $arrPropertyValues[$strPropName];
-                    $obj->$strSetterMethod($objValue);
+                    $objObject->$strSetterMethod($objValue);
                     continue;
                 }
             }
@@ -148,15 +148,15 @@ abstract class class_testbase extends PHPUnit_Framework_TestCase {
                             continue;//continue with foreach
                         }
 
-                        $obj->$strSetterMethod($objMethodValue);
+                        $objObject->$strSetterMethod($objMethodValue);
                     }
                 }
             }
         }
 
         //save it
-        $obj->updateObjectToDb($strParentId);
-        return $obj;
+        $objObject->updateObjectToDb($strParentId);
+        return $objObject;
     }
 
 
