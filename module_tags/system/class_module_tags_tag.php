@@ -130,7 +130,7 @@ class class_module_tags_tag extends class_model implements interface_model, inte
         $strQuery = "SELECT DISTINCT(tags_tagid), tags_tag_name
                        FROM "._dbprefix_."tags_member,
                             "._dbprefix_."tags_tag,
-                            "._dbprefix_."tags_system
+                            "._dbprefix_."system
                       WHERE tags_systemid = ?
                         AND tags_tag_id = tags_tagid
                         AND tags_tagid = system_id
