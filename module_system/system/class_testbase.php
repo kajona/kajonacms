@@ -97,6 +97,10 @@ abstract class class_testbase extends PHPUnit_Framework_TestCase {
         $objReflection = new class_reflection($strClassType);
         $arrProperties = $objReflection->getPropertiesWithAnnotation(class_orm_base::STR_ANNOTATION_TABLECOLUMN);
 
+        //exclude class_root properties
+        $objRootReflection = new class_reflection("class_root");
+        $arrExcludeFillProperty = array_merge($arrExcludeFillProperty, array_keys($objRootReflection->getPropertiesWithAnnotation(class_orm_base::STR_ANNOTATION_TABLECOLUMN)));
+
         foreach($arrProperties as $strPropName => $strValue) {
 
             //Exclude properties to be set
@@ -126,7 +130,7 @@ abstract class class_testbase extends PHPUnit_Framework_TestCase {
 
                         if($strDataType == "string") {
                             if($strFieldType == "text" || $strFieldType == "textarea") {
-                                $objMethodValue = $strPropName."_".$obj->getStrSystemid();
+                                $objMethodValue = $strPropName."_".$objObject->getStrSystemid();
 
                                 if(uniStrlen($objMethodValue) > 10) {
                                     $objMethodValue = uniStrTrim($objMethodValue, 10, "");
