@@ -673,25 +673,19 @@ class class_module_pages_page extends class_model implements interface_model, in
         $strName = str_replace(" ", "_", $strName);
 
         $objORM = new class_orm_objectlist();
-        //Pagename already existing?
-        $strQuery = "SELECT page_id
-					FROM " . _dbprefix_ . "page
-					WHERE page_name=?
-					".$objORM->getDeletedWhereRestriction()." ";
-        $arrTemp = $this->objDB->getPRow($strQuery, array($strName));
+        $objORM->addWhereRestriction(new class_orm_objectlist_restriction(" AND page_name = ?", $strName));
+        $objPage = $objORM->getSingleObject(get_called_class());
 
-        $intNumbers = count($arrTemp);
-        if($intNumbers != 0 && !($bitAvoidSelfchek && $arrTemp["page_id"] == $this->getSystemid())) {
+        if($objPage !== null && !($bitAvoidSelfchek && $objPage->getSystemid() == $this->getSystemid())) {
             $intCount = 1;
             $strTemp = "";
-            while($intNumbers != 0 && !($bitAvoidSelfchek && $arrTemp["page_id"] == $this->getSystemid())) {
+            if($objPage !== null && !($bitAvoidSelfchek && $objPage->getSystemid() == $this->getSystemid())) {
                 $strTemp = $strName . "_" . $intCount;
-                $strQuery = "SELECT page_id
-							FROM " . _dbprefix_ . "page
-							WHERE page_name=?
-							".$objORM->getDeletedWhereRestriction()." ";
-                $arrTemp = $this->objDB->getPRow($strQuery, array($strTemp));
-                $intNumbers = count($arrTemp);
+
+                $objORM = new class_orm_objectlist();
+                $objORM->addWhereRestriction(new class_orm_objectlist_restriction(" AND page_name = ?", $strName));
+                $objPage = $objORM->getSingleObject(get_called_class());
+
                 $intCount++;
             }
             $strName = $strTemp;
