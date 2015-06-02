@@ -508,7 +508,7 @@ class class_module_pages_page extends class_model implements interface_model, in
         if($bitJustActive)
             $objORM->addWhereRestriction(new class_orm_objectlist_restriction("AND system_status = 1", array()));
 
-        return $objORM->getObjectCount(get_called_class());
+        return $objORM->getObjectCount("class_module_pages_pageelement");
     }
 
     /**
