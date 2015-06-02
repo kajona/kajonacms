@@ -92,18 +92,16 @@ abstract class class_testbase extends PHPUnit_Framework_TestCase {
      * @return class_model
      */
     protected function createObject($strClassType, $strParentId, array $arrExcludeFillProperty = array(),  array $arrPropertyValues = array(), $bitAutofillProperties = true) {
-        //create the object
-        $objReflector = new ReflectionClass($strClassType);
-        $obj = $objReflector->newInstance();
-        //TODO: why is this required here? could lead to wrong onInsertToDb triggers
-//        $obj->updateObjectToDb($strParentId);
+        //get properties with an tablecolumn annotation
+        $objObject = new $strClassType();
+        $objReflection = new class_reflection($strClassType);
+        $arrProperties = $objReflection->getPropertiesWithAnnotation(class_orm_base::STR_ANNOTATION_TABLECOLUMN);
 
-        $objReflectorAnnotated = new class_reflection($strClassType);
+        //exclude class_root properties
+        $objRootReflection = new class_reflection("class_root");
+        $arrExcludeFillProperty = array_merge($arrExcludeFillProperty, array_keys($objRootReflection->getPropertiesWithAnnotation(class_orm_base::STR_ANNOTATION_TABLECOLUMN)));
 
-        //get properties which are annotated with @var and have a setter method
-        $arrReflectionProperties = $objReflector->getProperties();
-        foreach($arrReflectionProperties as $objReflectionProperty) {
-            $strPropName = $objReflectionProperty->getName();
+        foreach($arrProperties as $strPropName => $strValue) {
 
             //Exclude properties to be set
             if(in_array($strPropName, $arrExcludeFillProperty)) {
@@ -112,31 +110,27 @@ abstract class class_testbase extends PHPUnit_Framework_TestCase {
 
             //Set properties from array $arrPropertyValues
             if(array_key_exists($strPropName, $arrPropertyValues)) {
-                $strSetterMethod = $objReflectorAnnotated->getSetter($strPropName);
-                if($objReflector->hasMethod($strSetterMethod)) {
+                $strSetterMethod = $objReflection->getSetter($strPropName);
+                if($strSetterMethod !== null) {
                     $objValue = $arrPropertyValues[$strPropName];
-                    $objReflectionMethod = $objReflector->getMethod($strSetterMethod);
-                    $objReflectionMethod->invoke($obj, $objValue);
+                    $objObject->$strSetterMethod($objValue);
                     continue;
                 }
             }
 
             //check if the property is annotated with @tablecolumn
             if($bitAutofillProperties) {
-                if($objReflectorAnnotated->hasPropertyAnnotation($strPropName, class_orm_base::STR_ANNOTATION_TABLECOLUMN)) {
-                    $strSetterMethod = $objReflectorAnnotated->getSetter($strPropName);
-
-                    if($objReflector->hasMethod($strSetterMethod)) {
-                        $objReflectionMethod = $objReflector->getMethod($strSetterMethod);
-
+                if($objReflection->hasPropertyAnnotation($strPropName, class_orm_base::STR_ANNOTATION_TABLECOLUMN)) {
+                    $strSetterMethod = $objReflection->getSetter($strPropName);
+                    if($strSetterMethod !== null) {
                         //determine the field type
-                        $strDataType = $objReflectorAnnotated->getAnnotationValueForProperty($strPropName, "@var");
-                        $strFieldType = $objReflectorAnnotated->getAnnotationValueForProperty($strPropName, "@fieldType");
+                        $strDataType = $objReflection->getAnnotationValueForProperty($strPropName, "@var");
+                        $strFieldType = $objReflection->getAnnotationValueForProperty($strPropName, "@fieldType");
                         $objMethodValue = null;
 
                         if($strDataType == "string") {
                             if($strFieldType == "text" || $strFieldType == "textarea") {
-                                $objMethodValue = $strPropName."_".$obj->getStrSystemid();
+                                $objMethodValue = $strPropName."_".$objObject->getStrSystemid();
 
                                 if(uniStrlen($objMethodValue) > 10) {
                                     $objMethodValue = uniStrTrim($objMethodValue, 10, "");
@@ -149,24 +143,24 @@ abstract class class_testbase extends PHPUnit_Framework_TestCase {
                             }
                         }
                         else if($strDataType == "class_date") {
-                                $objMethodValue = new class_date();
+                            $objMethodValue = new class_date();
                         }
                         else if($strDataType == "bool") {
-                                $objMethodValue = false;
+                            $objMethodValue = false;
                         }
                         else {
                             continue;//continue with foreach
                         }
 
-                        $objReflectionMethod->invoke($obj, $objMethodValue);
+                        $objObject->$strSetterMethod($objMethodValue);
                     }
                 }
             }
         }
 
         //save it
-        $obj->updateObjectToDb($strParentId);
-        return $obj;
+        $objObject->updateObjectToDb($strParentId);
+        return $objObject;
     }
 
 
