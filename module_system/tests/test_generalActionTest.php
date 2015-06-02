@@ -8,6 +8,7 @@ class class_test_generalActionTest extends class_testbase  {
 
     public function testAdminModules() {
 
+        class_adminskin_helper::defineSkinWebpath();
         class_carrier::getInstance()->getObjRights()->setBitTestMode(true);
 
         //load all admin-classes
