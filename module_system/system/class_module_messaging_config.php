@@ -98,7 +98,14 @@ class class_module_messaging_config extends class_model implements interface_mod
         $objORM = new class_orm_objectlist();
         $objORM->addWhereRestriction(new class_orm_objectlist_restriction("AND config_user = ?", $strUserid));
         $objORM->addWhereRestriction(new class_orm_objectlist_restriction("AND config_provider = ?", get_class($objProvider)));
-        return $objORM->getSingleObject(get_called_class());
+        $objConfig = $objORM->getSingleObject(get_called_class());
+
+        if($objConfig === null) {
+            $objConfig = new class_module_messaging_config();
+            $objConfig->setStrUser($strUserid);
+            $objConfig->setStrMessageprovider(get_class($objProvider));
+        }
+        return $objConfig;
     }
 
     /**
