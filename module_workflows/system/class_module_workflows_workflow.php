@@ -232,56 +232,34 @@ class class_module_workflows_workflow extends class_model implements interface_m
             return array();
         }
 
+
+        $objORM = new class_orm_objectlist();
+        $objORM->addWhereRestriction(new class_orm_objectlist_restriction(" AND workflows_systemid = ?", $strAffectedSystemid));
+
         //1. handle param $objClass
-        $strINClasses = "";
         if($objClass != null) {
             if(is_string($objClass)) {
                 $objClass = array($objClass);
             }
             $arrClasses = array_map(function($strId) {return "?";}, $objClass);
             $strINClasses = implode(",", $arrClasses);
-        }
 
-        //2. Create SQL
-        $strQuery = "SELECT * FROM
-                            "._dbprefix_."system,
-                            "._dbprefix_."system_right,
-                            "._dbprefix_."workflows,
-                            "._dbprefix_."system_date
-                      WHERE system_id = workflows_id
-                        AND system_id = system_date_id
-                        AND system_id = right_id
-                        AND workflows_systemid = ?
-                     ".($bitOnlyScheduled ? " AND ( workflows_state = ? OR workflows_state = ? )" : "" )  ."
-                     ".($bitOnlyScheduled ? " AND ( system_date_start > ? OR system_date_start = 0 )" : "")."
-                     ".($objClass != null ? " AND workflows_class IN (".$strINClasses.") " : "")."
-                   ORDER BY system_date_start DESC";
-
-        //3. Set params
-        $arrParams = array();
-        $arrParams[] = $strAffectedSystemid;
-
-        if($bitOnlyScheduled) {
-            $arrParams[] = (int)self::$INT_STATE_SCHEDULED;
-            $arrParams[] = (int)self::$INT_STATE_NEW;
-            $arrParams[] = class_date::getCurrentTimestamp();
-        }
-
-        if($objClass != null) {
+            $arrParams = array();
             foreach($objClass as $strClass) {
                 $arrParams[] = $strClass;
             }
+
+            $objORM->addWhereRestriction(new class_orm_objectlist_restriction(" AND workflows_class IN (".$strINClasses.")  ", $arrParams));
         }
 
-        //4. Execute SQL
-        $arrRows = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, $arrParams);
-        class_orm_rowcache::addArrayOfInitRows($arrRows);
-        $arrReturn = array();
-        foreach($arrRows as $arrSingleRow) {
-            $arrReturn[] = class_objectfactory::getInstance()->getObject($arrSingleRow["system_id"]);
+        if($bitOnlyScheduled) {
+            $objORM->addWhereRestriction(new class_orm_objectlist_restriction(" AND ( workflows_state = ? OR workflows_state = ? )", array((int)self::$INT_STATE_SCHEDULED, (int)self::$INT_STATE_NEW)));
+            $objORM->addWhereRestriction(new class_orm_objectlist_restriction(" AND ( system_date_start > ? OR system_date_start = 0 )", class_date::getCurrentTimestamp()));
         }
 
-        return $arrReturn;
+        $objORM->addOrderBy(new class_orm_objectlist_orderby("system_date_start DESC"));
+        return $objORM->getObjectList(get_called_class());
+
     }
 
 

@@ -51,7 +51,7 @@ class class_module_system_worker {
         $strQuery = "SELECT system_id, system_prev_id, system_comment
                        FROM "._dbprefix_."system
                       WHERE system_id != '0'";
-        $arrRecords = $this->objDB->getPArray($strQuery, array(), null, null, false);
+        $arrRecords = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array(), null, null, false);
         //Check every record for its prev_id. To get valid results, flush the db-cache
         class_carrier::getInstance()->getObjDB()->flushQueryCache();
         foreach ($arrRecords as $arrOneRecord) {

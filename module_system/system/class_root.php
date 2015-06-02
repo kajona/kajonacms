@@ -419,7 +419,6 @@ abstract class class_root {
             }
         }
 
-        //TODO: sort-id auf -1 setzen
         $this->intRecordDeleted = 1;
         $this->intSort = -1;
         $bitReturn = $this->updateObjectToDb();
@@ -876,14 +875,20 @@ abstract class class_root {
         $this->setStrPrevId($strPrevId);
 
         //determine the correct new sort-id - append by default
-        $strQuery = "SELECT COUNT(*) FROM "._dbprefix_."system WHERE system_prev_id = ? AND system_id != '0'";
+        if(class_module_system_module::getModuleByName("system") != null  && version_compare(class_module_system_module::getModuleByName("system")->getStrVersion(), "4.7.5", "lt")) {
+            $strQuery = "SELECT COUNT(*) FROM "._dbprefix_."system WHERE system_prev_id = ? AND system_id != '0'";
+        }
+        else {
+            $strQuery = "SELECT COUNT(*) FROM "._dbprefix_."system WHERE system_prev_id = ? AND system_id != '0' AND system_deleted = 0";
+
+        }
         $arrRow = $this->objDB->getPRow($strQuery, array($strPrevId), 0, false);
         $intSiblings = $arrRow["COUNT(*)"];
 
         $strComment = uniStrTrim(strip_tags($strComment), 240);
 
 
-        if(class_module_system_module::getModuleByName("system") != null  && version_compare(class_module_system_module::getModuleByName("system")->getStrVersion(), 4.5, "lt")) {
+        if(class_module_system_module::getModuleByName("system") != null  && version_compare(class_module_system_module::getModuleByName("system")->getStrVersion(), "4.7.5", "lt")) {
             //So, lets generate the record
             $strQuery = "INSERT INTO "._dbprefix_."system
                      ( system_id, system_prev_id, system_module_nr, system_owner, system_create_date, system_lm_user,
@@ -1170,10 +1175,13 @@ abstract class class_root {
         if($strSystemid == "")
             $strSystemid = $this->getSystemid();
 
+        $objORM = new class_orm_objectlist();
+
         $strQuery = "SELECT COUNT(*)
                      FROM "._dbprefix_."system as sys1,
                           "._dbprefix_."system as sys2
                      WHERE sys1.system_id=?
+                     ".$objORM->getDeletedWhereRestriction()."
                      AND sys2.system_prev_id = sys1.system_prev_id";
         $arrRow = $this->objDB->getPRow($strQuery, array($strSystemid), 0, $bitUseCache);
         return $arrRow["COUNT(*)"];
@@ -1191,10 +1199,13 @@ abstract class class_root {
         if($strSystemid == "")
             $strSystemid = $this->getSystemid();
 
+        $objORM = new class_orm_objectlist();
+
         $strQuery = "SELECT system_id
                      FROM "._dbprefix_."system
                      WHERE system_prev_id=?
                        AND system_id != '0'
+                       ".$objORM->getDeletedWhereRestriction()."
                      ORDER BY system_sort ASC";
 
         $arrReturn = array();

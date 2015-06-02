@@ -164,6 +164,7 @@ class class_module_workflows_handler extends class_model implements interface_mo
 
         //find workflows to remove
         $arrWorkflows = self::getObjectList();
+        /** @var class_module_workflows_handler $objOneWorkflow */
         foreach($arrWorkflows as $objOneWorkflow) {
             if(!in_array($objOneWorkflow->getStrHandlerClass().".php", $arrFiles))
                 $objOneWorkflow->deleteObjectFromDatabase();
