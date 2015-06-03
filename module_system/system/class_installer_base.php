@@ -107,7 +107,7 @@ abstract class class_installer_base extends class_root implements interface_inst
 		class_logger::getInstance()->addLogRow("New module registered: ".$objModule->getSystemid(). "(".$strName.")", class_logger::$levelInfo);
 
 		//flush db-cache afterwards
-        class_carrier::getInstance()->flushCache(class_carrier::INT_CACHE_TYPE_DBQUERIES | class_carrier::INT_CACHE_TYPE_DBTABLES | class_carrier::INT_CACHE_TYPE_MODULES);
+        class_carrier::getInstance()->flushCache(class_carrier::INT_CACHE_TYPE_DBQUERIES | class_carrier::INT_CACHE_TYPE_DBTABLES | class_carrier::INT_CACHE_TYPE_MODULES | class_carrier::INT_CACHE_TYPE_ORMCACHE);
 
 		return $objModule->getSystemid();
 	}

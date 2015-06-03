@@ -841,7 +841,7 @@ abstract class class_root {
 
         class_carrier::getInstance()->flushCache(class_carrier::INT_CACHE_TYPE_DBQUERIES | class_carrier::INT_CACHE_TYPE_ORMCACHE);
 
-        if($this->strOldPrevId != $this->strPrevId) {
+        if($this->strOldPrevId != $this->strPrevId && $this->strOldPrevId != -1) {
             class_carrier::getInstance()->getObjRights()->rebuildRightsStructure($this->getSystemid());
             $this->objSortManager->fixSortOnPrevIdChange($this->strOldPrevId, $this->strPrevId);
             class_core_eventdispatcher::getInstance()->notifyGenericListeners(class_system_eventidentifier::EVENT_SYSTEM_PREVIDCHANGED, array($this->getSystemid(), $this->strOldPrevId, $this->strPrevId));

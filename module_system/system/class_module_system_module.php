@@ -112,12 +112,6 @@ class class_module_system_module extends class_model implements interface_model,
         }
     }
 
-    /**
-     * Loads all module data from the database
-     */
-    public static function staticConstruct() {
-        self::loadModuleData();
-    }
 
 
     /**
