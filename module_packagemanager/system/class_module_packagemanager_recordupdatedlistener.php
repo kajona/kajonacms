@@ -42,8 +42,10 @@ class class_module_packagemanager_recordupdatedlistener implements interface_gen
 
                 //update the active-pack constant
                 $objSetting = class_module_system_setting::getConfigByName("_packagemanager_defaulttemplate_");
-                $objSetting->setStrValue($objRecord->getStrName());
-                $objSetting->updateObjectToDb();
+                if($objSetting !== null) {
+                    $objSetting->setStrValue($objRecord->getStrName());
+                    $objSetting->updateObjectToDb();
+                }
 
                 class_cache::flushCache("class_element_portal");
             }
