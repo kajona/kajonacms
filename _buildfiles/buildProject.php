@@ -83,7 +83,7 @@ class BuildHelper {
             $objDB->_pQuery("DROP TABLE ".$strOneTable, array());
         }
 
-        class_carrier::getInstance()->flushCache(class_carrier::INT_CACHE_TYPE_DBQUERIES | class_carrier::INT_CACHE_TYPE_DBTABLES | class_carrier::INT_CACHE_TYPE_MODULES);
+        class_carrier::getInstance()->flushCache(class_carrier::INT_CACHE_TYPE_DBQUERIES | class_carrier::INT_CACHE_TYPE_DBTABLES | class_carrier::INT_CACHE_TYPE_MODULES | class_carrier::INT_CACHE_TYPE_OBJECTFACTORY | class_carrier::INT_CACHE_TYPE_ORMCACHE);
 
         echo "\n\n";
         echo "Blocking browscap update\n";
