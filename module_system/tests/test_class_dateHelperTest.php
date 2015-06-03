@@ -95,6 +95,7 @@ class test_class_dateHelperTest extends class_testbase  {
         $objCalcDate = $objHelper->calcNextWorkingDay($objDate);
         $this->assertEquals($objCalcDate->getLongTimestamp(), 20150202000001);
 
+        $objDate = new class_date(20150201000001);
         $objCalcDate = $objHelper->calcNextWorkingDay($objDate, 4);
         $this->assertEquals($objCalcDate->getLongTimestamp(), 20150205000001);
 
@@ -103,6 +104,7 @@ class test_class_dateHelperTest extends class_testbase  {
         $objCalcDate = $objHelper->calcNextWorkingDay($objDate);
         $this->assertEquals($objCalcDate->getLongTimestamp(), 20150209000001);
 
+        $objDate = new class_date(20150207000001);
         $objCalcDate = $objHelper->calcNextWorkingDay($objDate, 4);
         $this->assertEquals($objCalcDate->getLongTimestamp(), 20150212000001);
 
@@ -111,9 +113,14 @@ class test_class_dateHelperTest extends class_testbase  {
         $objCalcDate = $objHelper->calcLastWorkingDay($objDate);
         $this->assertEquals($objCalcDate->getLongTimestamp(), 20150206000001);
 
+        $objDate = new class_date(20150207000001);
         $objCalcDate = $objHelper->calcLastWorkingDay($objDate, 4);
         $this->assertEquals($objCalcDate->getLongTimestamp(), 20150203000001);
 
+        //LastWorking day with weekend
+        $objDate = new class_date(20150211000001);
+        $objCalcDate = $objHelper->calcLastWorkingDay($objDate, 4);
+        $this->assertEquals($objCalcDate->getLongTimestamp(), 20150205000001);
     }
 
     public function test_firstDayOfThis() {
