@@ -1170,18 +1170,17 @@ abstract class class_root {
      * @param string $strSystemid
      * @param bool $bitUseCache
      * @return int
+     * @deprecated
      */
     public function getNumberOfSiblings($strSystemid = "", $bitUseCache = true) {
         if($strSystemid == "")
             $strSystemid = $this->getSystemid();
 
-        $objORM = new class_orm_objectlist();
-
         $strQuery = "SELECT COUNT(*)
                      FROM "._dbprefix_."system as sys1,
                           "._dbprefix_."system as sys2
                      WHERE sys1.system_id=?
-                     ".$objORM->getDeletedWhereRestriction()."
+                     WHERE sys1.system_id=?
                      AND sys2.system_prev_id = sys1.system_prev_id";
         $arrRow = $this->objDB->getPRow($strQuery, array($strSystemid), 0, $bitUseCache);
         return $arrRow["COUNT(*)"];
