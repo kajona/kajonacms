@@ -427,7 +427,7 @@ abstract class class_root {
         class_orm_rowcache::removeSingleRow($this->getSystemid());
         $this->objDB->flushQueryCache();
 
-        $this->objSortManager->fixSortOnDelete($this->getSystemid());
+        $this->objSortManager->fixSortOnDelete();
 
         $bitReturn = $bitReturn && class_core_eventdispatcher::getInstance()->notifyGenericListeners(class_system_eventidentifier::EVENT_SYSTEM_RECORDDELETED_LOGICALLY, array($this->getSystemid(), get_class($this)));
 
@@ -475,10 +475,12 @@ abstract class class_root {
         $objORM = new class_orm_objectdelete($this);
         $bitReturn = $objORM->deleteObject();
 
+        $this->objSortManager->fixSortOnDelete();
         $bitReturn = $bitReturn && $this->deleteSystemRecord($this->getSystemid());
 
         class_objectfactory::getInstance()->removeFromCache($this->getSystemid());
         class_orm_rowcache::removeSingleRow($this->getSystemid());
+
 
         //try to call other modules, maybe wanting to delete anything in addition, if the current record
         //is going to be deleted
