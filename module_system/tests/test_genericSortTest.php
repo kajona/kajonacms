@@ -30,7 +30,7 @@ class class_test_sortTest extends class_testbase  {
 
         $objOrm = new class_orm_objectlist();
         $arrChilds = $objOrm->getObjectList("class_module_system_aspect", $objRootAspect->getSystemid());
-        $this->assertEquals(count($arrChilds), 100);
+        $this->assertEquals(count($arrChilds), 99);
         for($intI = 1; $intI <= 99; $intI++) {
             $this->assertEquals($arrChilds[$intI-1]->getIntSort(), $intI);
         }
