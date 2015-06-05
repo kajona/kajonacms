@@ -599,22 +599,20 @@ abstract class class_root {
         $this->setStrRecordComment($this->getStrDisplayName());
 
         //save back to the database
-        $bitCommit = $bitCommit & $this->updateSystemrecord();
+        $bitCommit = $bitCommit && $this->updateSystemrecord();
 
         //update ourselves to the database
-        if(!$this->updateStateToDb())
+        if($bitCommit && !$this->updateStateToDb())
             $bitCommit = false;
 
         if($bitCommit) {
             $this->objDB->transactionCommit();
             //unlock the record
             $this->getLockManager()->unlockRecord();
-            $bitReturn = true;
             class_logger::getInstance()->addLogRow("updateObjectToDb() succeeded for systemid ".$this->getSystemid()." (".$this->getRecordComment().")", class_logger::$levelInfo);
         }
         else {
             $this->objDB->transactionRollback();
-            $bitReturn = false;
             class_logger::getInstance()->addLogRow("updateObjectToDb() failed for systemid ".$this->getSystemid()." (".$this->getRecordComment().")", class_logger::$levelWarning);
         }
 
@@ -623,7 +621,7 @@ abstract class class_root {
         class_core_eventdispatcher::getInstance()->notifyGenericListeners(class_system_eventidentifier::EVENT_SYSTEM_RECORDUPDATED, array($this));
 
         class_carrier::getInstance()->flushCache(class_carrier::INT_CACHE_TYPE_DBQUERIES);
-        return $bitReturn;
+        return $bitCommit;
     }
 
 
