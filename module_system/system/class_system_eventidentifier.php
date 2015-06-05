@@ -162,6 +162,21 @@ interface class_system_eventidentifier {
     const EVENT_SYSTEM_RECORDDELETED_LOGICALLY = "core.system.recorddeleted.logically";
 
     /**
+     * Called whenever a records is restored from the database.
+     * The event is fired after the record was restored but before the transaction will be committed.
+     *
+     * Make sure to return a matching boolean-value, otherwise the transaction may be rolled back.
+     *
+     *
+     * @param string $strSystemid
+     * @param string $strSourceClass The class-name of the object deleted
+     * @param class_model $objObject The object which is being restored
+     *
+     * @since 4.8
+     */
+    const EVENT_SYSTEM_RECORDRESTORED_LOGICALLY = "core.system.recordrestored.logically";
+
+    /**
      * Callback method, triggered each time a user logs into the system for the very first time.
      * May be used to trigger actions or initial setups for the user.
      *

@@ -41,7 +41,7 @@ class class_orm_objectinit extends class_orm_base {
                           ".$this->getQueryBase()."
                            AND system.system_id = ? ";
 
-                if($this->bitLogcialDeleteAvailable) {
+                if(self::$bitLogcialDeleteAvailable) {
                     $strQuery .= $this->getDeletedWhereRestriction();
                 }
 

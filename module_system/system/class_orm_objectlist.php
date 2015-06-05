@@ -201,7 +201,7 @@ class class_orm_objectlist extends class_orm_base {
 
     protected function addLogicalDeleteRestriction() {
 
-        if(!$this->bitLogcialDeleteAvailable)
+        if(!self::$bitLogcialDeleteAvailable)
             return;
 
         $this->addWhereRestriction(new class_orm_objectlist_restriction($this->getDeletedWhereRestriction(), array()));

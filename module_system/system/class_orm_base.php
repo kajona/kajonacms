@@ -30,7 +30,7 @@ abstract class class_orm_base {
     private $objHandleLogicalDeleted = null;
 
 
-    protected $bitLogcialDeleteAvailable = true;
+    protected static $bitLogcialDeleteAvailable = null;
 
     const STR_ANNOTATION_TARGETTABLE = "@targetTable";
     const STR_ANNOTATION_TARGETTABLETXSAFE = "@targetTableTxSafe";
@@ -50,8 +50,13 @@ abstract class class_orm_base {
      */
     function __construct($objObject = null) {
         $this->objObject = $objObject;
-        $arrColumns = class_db::getInstance()->getColumnsOfTable(_dbprefix_."system");
-        $this->bitLogcialDeleteAvailable = count(array_filter($arrColumns, function($arrOneTable) { return $arrOneTable["columnName"] == "system_deleted"; } )) > 0;
+        if(self::$bitLogcialDeleteAvailable === null) {
+
+            $arrColumns = class_db::getInstance()->getColumnsOfTable(_dbprefix_."system");
+            self::$bitLogcialDeleteAvailable = count(array_filter($arrColumns, function ($arrOneTable) {
+                return $arrOneTable["columnName"] == "system_deleted";
+            })) > 0;
+        }
     }
 
     /**
@@ -166,7 +171,7 @@ abstract class class_orm_base {
      */
     public function getDeletedWhereRestriction() {
         $strQuery = "";
-        if($this->bitLogcialDeleteAvailable) {
+        if(self::$bitLogcialDeleteAvailable) {
             if($this->getIntCombinedLogicalDeletionConfig()->equals(class_orm_deletedhandling_enum::EXCLUDED())) {
                 $strQuery .= " AND system_deleted = 0 ";
             }

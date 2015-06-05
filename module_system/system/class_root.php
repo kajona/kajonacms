@@ -390,6 +390,46 @@ abstract class class_root {
     }
 
 
+    /**
+     * Validates if the current record may be restored
+     * @return bool
+     */
+    public function isRestorable() {
+        //validate the parent nodes' id
+        $objParent = class_objectfactory::getInstance()->getObject($this->getStrPrevId());
+        return $objParent != null && $objParent->getIntRecordDeleted() == 0;
+    }
+
+
+    public function restoreObject() {
+
+        /** @var $this class_root|interface_model */
+        $this->objDB->transactionBegin();
+
+        $this->intRecordDeleted = 0;
+        $this->intSort = $this->getNextSortValue($this->getStrPrevId());
+        $bitReturn = $this->updateObjectToDb();
+
+        class_objectfactory::getInstance()->removeFromCache($this->getSystemid());
+        class_orm_rowcache::removeSingleRow($this->getSystemid());
+        $this->objDB->flushQueryCache();
+
+        $this->objSortManager->fixSortOnPrevIdChange($this->strPrevId, $this->strPrevId);
+
+        $bitReturn = $bitReturn && class_core_eventdispatcher::getInstance()->notifyGenericListeners(class_system_eventidentifier::EVENT_SYSTEM_RECORDRESTORED_LOGICALLY, array($this->getSystemid(), get_class($this), $this));
+
+        if($bitReturn) {
+            class_logger::getInstance()->addLogRow("successfully restored record ".$this->getSystemid()." / ".$this->getStrDisplayName(), class_logger::$levelInfo);
+            $this->objDB->transactionCommit();
+            return true;
+        }
+        else {
+            class_logger::getInstance()->addLogRow("error restoring record ".$this->getSystemid()." / ".$this->getStrDisplayName(), class_logger::$levelInfo);
+            $this->objDB->transactionRollback();
+            return false;
+        }
+    }
+
 
     /**
      * Triggers the logical delete of the current object.
@@ -404,10 +444,8 @@ abstract class class_root {
         if(!$this->getLockManager()->isAccessibleForCurrentUser())
             return false;
 
-
         /** @var $this class_root|interface_model */
         $this->objDB->transactionBegin();
-
 
         //validate, if there are subrecords, so child nodes to be deleted
         $arrChilds = $this->objDB->getPArray("SELECT system_id FROM "._dbprefix_."system where system_prev_id = ?", array($this->getSystemid()));
@@ -856,6 +894,26 @@ abstract class class_root {
 
 
     /**
+     * Internal helper to fetch the next sort-id
+     * @param string $strPrevId
+     *
+     * @return int
+     */
+    private function getNextSortValue($strPrevId) {
+        //determine the correct new sort-id - append by default
+        if(class_module_system_module::getModuleByName("system") != null  && version_compare(class_module_system_module::getModuleByName("system")->getStrVersion(), "4.7.5", "lt")) {
+            $strQuery = "SELECT COUNT(*) FROM "._dbprefix_."system WHERE system_prev_id = ? AND system_id != '0'";
+        }
+        else {
+            $strQuery = "SELECT COUNT(*) FROM "._dbprefix_."system WHERE system_prev_id = ? AND system_id != '0' AND system_deleted = 0";
+
+        }
+        $arrRow = $this->objDB->getPRow($strQuery, array($strPrevId), 0, false);
+        $intSiblings = $arrRow["COUNT(*)"];
+        return (int)($intSiblings+1);
+    }
+
+    /**
      * Generates a new SystemRecord and, if needed, the corresponding record in the rights-table (here inheritance is default)
      * Returns the systemID used for this record
      *
@@ -911,7 +969,7 @@ abstract class class_root {
                     time(),
                     (int)$this->getIntRecordStatus(),
                     $strComment,
-                    (int)($intSiblings+1),
+                    $this->getNextSortValue($strPrevId),
                     $this->getStrRecordClass()
                 )
             );

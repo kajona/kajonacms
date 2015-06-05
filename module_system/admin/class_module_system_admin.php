@@ -34,6 +34,7 @@ class class_module_system_admin extends class_admin_simple implements interface_
         $arrReturn[] = array("right5", class_link::getLinkAdmin($this->getArrModule("modul"), "aspects", "", $this->getLang("action_aspects"), "", "", true, "adminnavi"));
         $arrReturn[] = array("right1", class_link::getLinkAdmin($this->getArrModule("modul"), "systemSessions", "", $this->getLang("action_system_sessions"), "", "", true, "adminnavi"));
         $arrReturn[] = array("right1", class_link::getLinkAdmin($this->getArrModule("modul"), "lockedRecords", "", $this->getLang("action_locked_records"), "", "", true, "adminnavi"));
+        $arrReturn[] = array("right1", class_link::getLinkAdmin($this->getArrModule("modul"), "deletedRecords", "", $this->getLang("action_deleted_records"), "", "", true, "adminnavi"));
         $arrReturn[] = array("", "");
         $arrReturn[] = array("", class_link::getLinkAdmin($this->getArrModule("modul"), "about", "", $this->getLang("action_about"), "", "", true, "adminnavi"));
         $arrReturn[] = array("", "");
@@ -558,9 +559,83 @@ JS;
 
         $strReturn .= $this->objToolkit->listFooter();
 
-        $strReturn .= $this->objToolkit->getPageview($objArraySectionIterator, "system", "systemSessions");
+        $strReturn .= $this->objToolkit->getPageview($objArraySectionIterator, "system", "lockedRecords");
 
         return $strReturn;
+    }
+
+    /**
+     * Renders a list of logically deleted records
+     *
+     * @permissions right1
+     * @return string
+     * @autoTestable
+     */
+    protected function actionDeletedRecords() {
+        $objArraySectionIterator = new class_array_section_iterator(class_module_system_worker::getDeletedRecordsCount());
+        $objArraySectionIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
+        $objArraySectionIterator->setArraySection(class_module_system_worker::getDeletedRecords($objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
+
+        $strReturn = "";
+        if(!$objArraySectionIterator->valid()) {
+            $strReturn .= $this->getLang("commons_list_empty");
+        }
+
+        $strReturn .= $this->objToolkit->listHeader();
+
+        /** @var class_model $objOneRecord */
+        foreach($objArraySectionIterator as $objOneRecord) {
+
+            $strImage = "";
+            if($objOneRecord instanceof interface_admin_listable) {
+                $strImage = $objOneRecord->getStrIcon();
+                if(is_array($strImage))
+                    $strImage = class_adminskin_helper::getAdminImage($strImage[0], $strImage[1]);
+                else
+                    $strImage = class_adminskin_helper::getAdminImage($strImage);
+            }
+
+            if($objOneRecord->isRestorable()) {
+                $strActions = $this->objToolkit->listButton(class_link::getLinkAdmin($this->getArrModule("modul"), "restoreRecord", "&systemid=".$objOneRecord->getSystemid(), $this->getLang("action_restore_record"), $this->getLang("action_restore_record"), "icon_delete"));
+            }
+            else {
+                $strActions = $this->objToolkit->listButton(class_adminskin_helper::getAdminImage("icon_deleteDisabled", $this->getLang("action_restore_record_blocked")));
+            }
+
+            $strReturn .= $this->objToolkit->genericAdminList(
+                $objOneRecord->getSystemid(),
+                $objOneRecord instanceof interface_model ? $objOneRecord->getStrDisplayName() : get_class($objOneRecord),
+                $strImage,
+                $strActions,
+                0
+            );
+        }
+
+        $strReturn .= $this->objToolkit->listFooter();
+
+        $strReturn .= $this->objToolkit->getPageview($objArraySectionIterator, "system", "deletedRecords");
+
+        return $strReturn;
+    }
+
+    /**
+     * Restores a single object
+     *
+     * @permissions right1
+     * @return string
+     * @throws class_exception
+     * @autoTestable
+     */
+    protected function actionRestoreRecord() {
+        class_orm_base::setObjHandleLogicalDeletedGlobal(class_orm_deletedhandling_enum::INCLUDED());
+        $objRecord = class_objectfactory::getInstance()->getObject($this->getSystemid());
+        if(!$objRecord->isRestorable()) {
+            throw new class_exception("Record is not restoreable", class_exception::$level_ERROR);
+        }
+
+        $objRecord->restoreObject();
+        $this->adminReload(getLinkAdminHref($this->getArrModule("modul"), "deletedRecords"));
+        return "";
     }
 
 

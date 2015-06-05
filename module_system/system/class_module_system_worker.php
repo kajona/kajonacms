@@ -18,6 +18,37 @@ class class_module_system_worker {
 
 
     /**
+     * Fetches a list of records currently marked as deleted
+     *
+     * @return class_model[]
+     */
+    public static function getDeletedRecords($intStart = null, $intEnd = null) {
+        class_orm_base::setObjHandleLogicalDeletedGlobal(class_orm_deletedhandling_enum::INCLUDED());
+        $strQuery = "SELECT system_id FROM "._dbprefix_."system WHERE system_deleted = 1 ORDER BY system_id DESC";
+        $arrRows = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array(), $intStart, $intEnd);
+
+        $arrReturn = array();
+        foreach($arrRows as $arrOneRow) {
+            $arrReturn[] = class_objectfactory::getInstance()->getObject($arrOneRow["system_id"]);
+        }
+
+        class_orm_base::setObjHandleLogicalDeletedGlobal(class_orm_deletedhandling_enum::EXCLUDED());
+        return $arrReturn;
+    }
+
+    /**
+     * Counts the number of records currently marked as deleted
+     *
+     * @return int
+     */
+    public static function getDeletedRecordsCount() {
+        $strQuery = "SELECT COUNT(*) FROM "._dbprefix_."system WHERE system_deleted = 1 ";
+        $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array());
+        return $arrRow["COUNT(*)"];
+    }
+
+
+    /**
      * Checks if there are more nodes on the first level
      * then modules installed.
      *
