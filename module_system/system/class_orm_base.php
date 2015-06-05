@@ -154,7 +154,7 @@ abstract class class_orm_base {
      *
      * @return class_orm_deletedhandling_enum
      */
-    protected function getIntCombinedLogicalDeletionConfig() {
+    public function getIntCombinedLogicalDeletionConfig() {
         if($this->objHandleLogicalDeleted !== null)
             return $this->objHandleLogicalDeleted;
 
