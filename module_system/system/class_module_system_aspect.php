@@ -216,12 +216,11 @@ class class_module_system_aspect extends class_model implements interface_model,
                 return $objAspect;
             }
         }
-        else {
-            $objAspect = class_module_system_aspect::getDefaultAspect();
-            if($objAspect != null)
-                self::setCurrentAspectId($objAspect->getSystemid());
-            return $objAspect;
-        }
+
+        $objAspect = class_module_system_aspect::getDefaultAspect();
+        if($objAspect != null)
+            self::setCurrentAspectId($objAspect->getSystemid());
+        return $objAspect;
     }
 
     /**

@@ -43,4 +43,4 @@ class class_module_system_aspectrecorddeletedlistener implements interface_gener
 }
 
 //static inits
-class_core_eventdispatcher::getInstance()->removeAndAddListener(class_system_eventidentifier::EVENT_SYSTEM_RECORDDELETED, new class_module_system_aspectrecorddeletedlistener());
+class_core_eventdispatcher::getInstance()->removeAndAddListener(class_system_eventidentifier::EVENT_SYSTEM_RECORDDELETED_LOGICALLY, new class_module_system_aspectrecorddeletedlistener());

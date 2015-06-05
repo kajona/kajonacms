@@ -624,17 +624,16 @@ JS;
      * @permissions right1
      * @return string
      * @throws class_exception
-     * @autoTestable
      */
     protected function actionRestoreRecord() {
         class_orm_base::setObjHandleLogicalDeletedGlobal(class_orm_deletedhandling_enum::INCLUDED());
         $objRecord = class_objectfactory::getInstance()->getObject($this->getSystemid());
-        if(!$objRecord->isRestorable()) {
+        if($objRecord !== null && !$objRecord->isRestorable()) {
             throw new class_exception("Record is not restoreable", class_exception::$level_ERROR);
         }
 
         $objRecord->restoreObject();
-        $this->adminReload(getLinkAdminHref($this->getArrModule("modul"), "deletedRecords"));
+        $this->adminReload(class_link::getLinkAdminHref($this->getArrModule("modul"), "deletedRecords"));
         return "";
     }
 
