@@ -18,6 +18,7 @@ class class_formentry_tableeditor extends class_formentry_base {
     protected $arrOptions;
     protected $arrTypes;
     protected $strAddLink;
+    protected $strRemoveLink;
 
     public function setOptions(array $arrOptions)
     {
@@ -40,6 +41,13 @@ class class_formentry_tableeditor extends class_formentry_base {
         return $this;
     }
 
+    public function setRemoveLink($strRemoveLink)
+    {
+        $this->strRemoveLink = $strRemoveLink;
+
+        return $this;
+    }
+
     /**
      * Renders the field itself.
      * In most cases, based on the current toolkit.
@@ -52,7 +60,7 @@ class class_formentry_tableeditor extends class_formentry_base {
         if($this->getStrHint() != null)
             $strReturn .= $objToolkit->formTextRow($this->getStrHint());
 
-        $strReturn .= $objToolkit->formInputTableEditor($this->getStrEntryName(), $this->getStrLabel(), $this->arrOptions, $this->arrTypes, $this->strAddLink);
+        $strReturn .= $objToolkit->formInputTableEditor($this->getStrEntryName(), $this->getStrLabel(), $this->arrOptions, $this->arrTypes, $this->strAddLink, $this->strRemoveLink);
 
         return $strReturn;
     }

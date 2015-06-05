@@ -906,7 +906,7 @@ class class_toolkit_admin extends class_toolkit {
      * @return string
      * @throws class_exception
      */
-    public function formInputTableEditor($strName, $strTitle = "", array $arrValues = array(), array $arrTypes, $strAddLink = null, $bitReadOnly = false) {
+    public function formInputTableEditor($strName, $strTitle = "", array $arrValues = array(), array $arrTypes, $strAddLink = null, $strRemoveLink = null, $bitReadOnly = false) {
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "input_tableeditor");
         $strTemplateRowID = $this->objTemplate->readTemplate("/elements.tpl", "input_tableeditor_row");
         $strTemplateRowTypeID = $this->objTemplate->readTemplate("/elements.tpl", "input_tableeditor_row_type");
@@ -920,12 +920,6 @@ class class_toolkit_admin extends class_toolkit {
         $intIndex = 0;
         foreach($arrValues as $arrRow) {
             $intType = isset($arrRow['type']) ? $arrRow['type'] : null;
-
-            $strRemoveLink = "";
-            if(!$bitReadOnly) {
-                $strDelete = class_carrier::getInstance()->getObjLang()->getLang("commons_delete", "module_system");
-                $strRemoveLink = class_link::getLinkAdminDialog(null, "", "", $strDelete, $strDelete, "icon_delete", $strDelete, true, false, "ARTEMEON.checklist.criteria.table.removeColumn(this);return false;");
-            }
 
             $strOptions = "";
             foreach($arrTypes as $intKey => $strValue) {
@@ -945,7 +939,7 @@ class class_toolkit_admin extends class_toolkit {
                 'value' => isset($arrRow['value']) ? $arrRow['value'] : null,
                 'type' => $intType,
                 'options' => $strOptions,
-                'removeLink' => $strRemoveLink,
+                'removeLink' => !$bitReadOnly ? $strRemoveLink : "",
             );
 
             $strTable.= $this->objTemplate->fillTemplate($arrRow, $strTemplateRowID, true);
