@@ -769,6 +769,40 @@ in addition, a container for the calendar is needed. Use %%calendarContainerId%%
     </div>
 </input_datetime_simple>
 
+<input_objectlist>
+    <div class="form-group">
+        <label for="%%name%%" class="col-sm-3 control-label">%%title%%</label>
+
+        <div class="col-sm-6 inputText">
+            <table id="%%name%%" data-name="%%name%%" class="table table-striped">
+                <colgroup>
+                    <col width="20" />
+                    <col width="*" />
+                    <col width="20" />
+                </colgroup>
+                <tfoot>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td class="icon-cell">%%addLink%%</td>
+                </tr>
+                </tfoot>
+                <tbody>
+                %%table%%
+                </tbody>
+            </table>
+        </div>
+    </div>
+</input_objectlist>
+
+<input_objectlist_row>
+    <tr>
+        <td class="listimage">%%icon%%</td>
+        <td>%%displayName%% <input type="hidden" name="%%name%%[]" value="%%value%%" /></td>
+        <td class="icon-cell">%%removeLink%%</td>
+    </tr>
+</input_objectlist_row>
+
 <input_tageditor>
     <div class="form-group">
         <label for="%%name%%" class="col-sm-3 control-label">%%title%%</label>
@@ -1603,6 +1637,68 @@ The language switch surrounds the buttons
 </tree>
 
 
+Checkbox tree which shows an structure
+<tree_checkbox>
+    <div id="%%treeId%%" class="treeDiv"></div>
+    <script type="text/javascript">
+        KAJONA.admin.loader.loadFile([
+            "/core/module_system/admin/scripts/jstree/jquery.jstree.js",
+            "/core/module_system/admin/scripts/jstree/jquery.hotkeys.js"
+        ], function() {
+
+            $('#%%treeId%%').jstree({
+                json_data: {
+                    ajax: {
+                        url: "%%loadNodeDataUrl%%",
+                        data: function (n) {
+                            return {
+                                "systemid" : n.attr ? n.attr("systemid") : '%%rootNodeSystemid%%',
+                                "rootnode" : '%%rootNodeSystemid%%'
+                            };
+                        }
+                    }
+                },
+                themes: {
+                    url: "_webpath_/core/module_system/admin/scripts/jstree/themes/default/style.css",
+                    icons: false
+                },
+                core: {
+                    //"initially_open" : [ %%treeviewExpanders%% ],
+                    html_titles: true
+                },
+                checkbox: {
+                    two_state: true,
+                    checked_parent_open: false
+                },
+                plugins: [ "themes","json_data","checkbox" ]
+            }).bind("loaded.jstree", function (event, data) {
+                if(typeof KAJONA.v4skin.getCheckboxTreeSelectionFromParent === 'function') {
+                    var arrSystemIds = KAJONA.v4skin.getCheckboxTreeSelectionFromParent();
+                    for(var i = 0; i < arrSystemIds.length; i++) {
+                        if($('#' + arrSystemIds[i]).length > 0) {
+                            $(this).jstree('change_state', [$('#' + arrSystemIds[i]).find('.jstree-checkbox:first').get(0), true]);
+                        }
+                    }
+                }
+            }).bind("open_node.jstree close_node.jstree", function (event, data) {
+                if(typeof KAJONA.v4skin.getCheckboxTreeSelectionFromParent === 'function') {
+                    var arrSystemIds = KAJONA.v4skin.getCheckboxTreeSelectionFromParent();
+                    // go only through the child elements of the loaded node
+                    if(data.rslt.obj.length > 0) {
+                        data.rslt.obj.find('ul > li').each(function() {
+                            if($.inArray($(this).attr('systemid'), arrSystemIds) !== -1) {
+                                $(event.target).jstree('change_state', [$('#' + $(this).attr('systemid')).find('.jstree-checkbox:first').get(0), true]);
+                            }
+                        });
+                    }
+                }
+            });
+
+        });
+    </script>
+</tree_checkbox>
+
+
 <treeview>
     <table width="100%" cellpadding="3">
         <tr>
@@ -1617,6 +1713,14 @@ The language switch surrounds the buttons
         </tr>
     </table>
 </treeview>
+
+
+<treeview_modal>
+    <div class="treeViewWrapper" style="overflow:auto;">
+        %%treeContent%%
+    </div>
+</treeview_modal>
+
 
 The tag-wrapper is the section used to surround the list of tag.
 Please make sure that the containers' id is named tagsWrapper_%%targetSystemid%%,
