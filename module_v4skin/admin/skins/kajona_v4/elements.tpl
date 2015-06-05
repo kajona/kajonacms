@@ -806,54 +806,6 @@ in addition, a container for the calendar is needed. Use %%calendarContainerId%%
     <div class="inputContainerPanel">%%element%%</div>
 </input_container_row>
 
-<input_tableeditor>
-    <div class="form-group">
-        <label for="%%name%%" class="col-sm-3 control-label">%%title%%</label>
-
-        <div id="%%name%%" class="col-sm-6 inputText">
-            <table class="table table-striped ui-sortable">
-                <colgroup>
-                    <col width="20" />
-                    <col width="100" />
-                    <col width="*" />
-                    <col width="200" />
-                    <col width="20" />
-                </colgroup>
-                <tfoot>
-                <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td class="icon-cell">%%addLink%%</td>
-                </tr>
-                </tfoot>
-                <tbody>
-                %%table%%
-                </tbody>
-            </table>
-        </div>
-    </div>
-</input_tableeditor>
-
-<input_tableeditor_row>
-    <tr>
-        <td class="listsorthandle" style="cursor:move"><i class="fa fa-arrows-v"></i></td>
-        <td>%%column%% %%index%%</td>
-        <td><input type="text" name="%%name%%[%%index%%][value]" class="form-control" value="%%value%%" /></td>
-        <td>
-            <select name="%%name%%[%%index%%][type]" class="form-control">
-                %%options%%
-            </select>
-        </td>
-        <td class="icon-cell">%%removeLink%%</td>
-    </tr>
-</input_tableeditor_row>
-
-<input_tableeditor_row_type>
-    <option value="%%key%%" %%selected%%>%%value%%</option>
-</input_tableeditor_row_type>
-
 A page-selector.
 If you want to use ajax to load a list of proposals on entering a char,
 place ajaxScript before the closing input_pageselector-tag and make sure, that you
