@@ -769,6 +769,40 @@ in addition, a container for the calendar is needed. Use %%calendarContainerId%%
     </div>
 </input_datetime_simple>
 
+<input_objectlist>
+    <div class="form-group">
+        <label for="%%name%%" class="col-sm-3 control-label">%%title%%</label>
+
+        <div class="col-sm-6 inputText">
+            <table id="%%name%%" data-name="%%name%%" class="table table-striped">
+                <colgroup>
+                    <col width="20" />
+                    <col width="*" />
+                    <col width="20" />
+                </colgroup>
+                <tfoot>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td class="icon-cell">%%addLink%%</td>
+                </tr>
+                </tfoot>
+                <tbody>
+                %%table%%
+                </tbody>
+            </table>
+        </div>
+    </div>
+</input_objectlist>
+
+<input_objectlist_row>
+    <tr>
+        <td class="listimage">%%icon%%</td>
+        <td>%%displayName%% <input type="hidden" name="%%name%%[]" value="%%value%%" /></td>
+        <td class="icon-cell">%%removeLink%%</td>
+    </tr>
+</input_objectlist_row>
+
 <input_tageditor>
     <div class="form-group">
         <label for="%%name%%" class="col-sm-3 control-label">%%title%%</label>
