@@ -898,60 +898,6 @@ class class_toolkit_admin extends class_toolkit {
     }
 
     /**
-     * Form entry which displays an input text field where you can add or remove tags
-     *
-     * @param $strName
-     * @param string $strTitle
-     * @param array $arrObjects
-     * @return string
-     * @throws class_exception
-     */
-    public function formInputTableEditor($strName, $strTitle = "", array $arrValues = array(), array $arrTypes, $strAddLink = null, $strRemoveLink = null, $bitReadOnly = false) {
-        $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "input_tableeditor");
-        $strTemplateRowID = $this->objTemplate->readTemplate("/elements.tpl", "input_tableeditor_row");
-        $strTemplateRowTypeID = $this->objTemplate->readTemplate("/elements.tpl", "input_tableeditor_row_type");
-
-        $arrTemplate = array();
-        $arrTemplate["name"] = $strName;
-        $arrTemplate["title"] = $strTitle;
-        $arrTemplate["addLink"] = $strAddLink;
-
-        $strTable = "";
-        $intIndex = 0;
-        foreach($arrValues as $arrRow) {
-            $intType = isset($arrRow['type']) ? $arrRow['type'] : null;
-
-            $strOptions = "";
-            foreach($arrTypes as $intKey => $strValue) {
-                $arrSubRow = array(
-                    'key' => $intKey,
-                    'value' => $strValue,
-                    'selected' => $intKey == $intType ? 'selected' : '',
-                );
-
-                $strOptions.= $this->objTemplate->fillTemplate($arrSubRow, $strTemplateRowTypeID, true);
-            }
-
-            $arrRow = array(
-                'column' => class_carrier::getInstance()->getObjLang()->getLang("form_criteria_table_columns", "checklist"),
-                'index' => $intIndex,
-                'name' => $strName,
-                'value' => isset($arrRow['value']) ? $arrRow['value'] : null,
-                'type' => $intType,
-                'options' => $strOptions,
-                'removeLink' => !$bitReadOnly ? $strRemoveLink : "",
-            );
-
-            $strTable.= $this->objTemplate->fillTemplate($arrRow, $strTemplateRowID, true);
-            $intIndex++;
-        }
-
-        $arrTemplate["table"] = $strTable;
-
-        return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID, true);
-    }
-
-    /**
      * @param $strName
      * @param string $strTitle
      * @param $intType
