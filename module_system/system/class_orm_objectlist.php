@@ -110,6 +110,16 @@ class class_orm_objectlist extends class_orm_base {
                 class_orm_rowcache::addSingleInitRow($arrOneRow);
                 $arrReturn[] = class_objectfactory::getInstance()->getObject($arrOneRow["system_id"]);
             }
+            else {
+                $objReflectionClass = new ReflectionClass($arrOneRow["system_class"]);
+                if($objReflectionClass->isSubclassOf($strTargetClass)) {
+                    //returns the instance, but enforces a fresh reload from the database.
+                    //this is useful if extending classes need to query additional tables
+                    $arrReturn[] = class_objectfactory::getInstance()->getObject($arrOneRow["system_id"]);
+                }
+            }
+
+
         }
 
         return $arrReturn;
