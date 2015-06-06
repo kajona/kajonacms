@@ -94,6 +94,8 @@ $lang["worker_intro"]                    = "Hier können verschiedene Wartungs-T
 $lang["worker_lookupReset_end"]          = "Vorgang abgeschlossen. Alle fehlerhaften Hostnames wurden zurückgesetzt.";
 $lang["worker_lookup_end"]               = "Vorgang abgeschlossen. Alle Adressen wurden ausgewertet.";
 $lang["worker_run"]                      = "Ausführen";
+$lang["systemtask_browscapupdate_name"]                      = "Browscap Daten aktualisieren (Browsererkennung)";
+$lang["browscapupdate_end"]                      = "Browscap Daten wurden aktualisiert";
 
 //non-editable entries
 $lang["permissions_header"]              = array(0 => "Anzeigen", 1 => "Bearbeiten", 2 => "Löschen", 3 => "Rechte", 4 => "", 5 => "", 6 => "", 7 => "", 8 => "");

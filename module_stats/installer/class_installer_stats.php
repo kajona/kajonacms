@@ -73,9 +73,7 @@ class class_installer_stats extends class_installer_base implements interface_in
             $objModule->updateObjectToDb();
         }
 
-        $strReturn .= "Updating browscap informations...\n";
-        $objBrowscap = new class_browscap();
-        $objBrowscap->updateBrowscap();
+        $strReturn .= $this->extractBrowscap();
 
 		return $strReturn;
 	}
@@ -185,13 +183,37 @@ class class_installer_stats extends class_installer_base implements interface_in
             $this->updateModuleVersion("stats", "4.7");
         }
 
-        $strReturn .= "Updating browscap informations...\n";
-        $objBrowscap = new class_browscap();
-        $objBrowscap->updateBrowscap();
+        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "4.7") {
+            $strReturn .= "Updating to 4.7.1...\n";
+            $this->updateModuleVersion("stats", "4.7.1");
+        }
 
+        $strReturn .= $this->extractBrowscap();
         return $strReturn."\n\n";
 	}
 
+
+    private function extractBrowscap() {
+        $strReturn = "";
+        if(!is_file(_realpath_._projectpath_."/temp/browscap.cache.php")) {
+            $objZip = new class_gzip();
+            $objFile = new class_filesystem();
+            $objFile->fileCopy(class_resourceloader::getInstance()->getCorePathForModule("module_stats")."/module_stats/installer/browscap.cache.php.gz", _projectpath_."/temp/browscap.cache.php.gz");
+            if(is_file(_realpath_._projectpath_."/temp/browscap.cache.php.gz")) {
+                $objZip->decompressFile(_projectpath_."/temp/browscap.cache.php.gz");
+                $objFile->fileDelete(_projectpath_."/temp/browscap.cache.php.gz");
+
+                touch(_realpath_._projectpath_."/temp/browscap.ini");
+            }
+            else
+                $strReturn .= "Failed to copy the browscap file to the project folder\n";
+        }
+        else
+            $strReturn .= "Browscap cache file already existing\n";
+
+        return $strReturn;
+    }
 
 
     private function update_342_349() {
