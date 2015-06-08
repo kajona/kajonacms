@@ -133,6 +133,7 @@
             <arg line=" global"/>
             <arg line=" install"/>
             <arg line=" --prefer-source"/>
+            <arg line=" --no-dev"/>
         </exec>
     </target>
 
@@ -175,7 +176,7 @@
                 <exclude name="**/_buildfiles/*/*.json"/>
                 <exclude name="**/_vagrant/**/*.json"/>
             </fileset>
-            <arg line="install --prefer-source --working-dir "/>
+            <arg line="install --prefer-source --no-dev --working-dir "/>
             <targetfile/>
             <mapper type="glob" from="*composer.json" to="${basedir}${composerTempPath}*"/>
         </apply>
