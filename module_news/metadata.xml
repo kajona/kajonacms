@@ -5,7 +5,7 @@
     >
     <title>news</title>
     <description>Fully fledged news-management. Rss-Feed, categories, and time-based publishing allow flexible and dynamic news-lists.</description>
-    <version>4.7</version>
+    <version>4.7.1</version>
     <author>Kajona Team</author>
     <type>MODULE</type>
     <providesInstaller>TRUE</providesInstaller>
