@@ -54,7 +54,7 @@ class class_formentry_objectlist extends class_formentry_multiselect {
             return $objObject->rightView();
         }));
 
-        $strReturn.= $objToolkit->formInputObjectList($this->getStrEntryName(), $this->getStrLabel(), $arrObjects, $this->strAddLink);
+        $strReturn.= $objToolkit->formInputObjectList($this->getStrEntryName(), $this->getStrLabel(), $arrObjects, $this->strAddLink, $this->getBitReadonly());
         return $strReturn;
     }
 
