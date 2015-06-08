@@ -38,28 +38,19 @@ class class_module_postacomment_recorddeletedlistener implements interface_gener
         if($strSourceClass == "class_module_postacomment_post" || class_module_system_module::getModuleByName("postacomment") == null)
             return true;
 
+        $objOrm = new class_orm_objectlist();
+        $objOrm->setObjHandleLogicalDeleted(class_orm_deletedhandling_enum::INCLUDED());
+        $objOrm->addWhereRestriction(new class_orm_objectlist_restriction(" AND (postacomment_page = ? OR  postacomment_systemid = ? ) ", array($strSystemid, $strSystemid)));
+        $arrComments = $objOrm->getObjectList("class_module_postacomment_post");
 
-        $strQuery = "SELECT *
-					 FROM "._dbprefix_."postacomment,
-						  "._dbprefix_."system_right,
-						  "._dbprefix_."system
-                 LEFT JOIN "._dbprefix_."system_date
-                        ON system_id = system_date_id
-					 WHERE system_id = postacomment_id
-					      AND system_id = right_id
-                          AND (postacomment_page = ? OR  postacomment_systemid = ? )
-					 ORDER BY postacomment_page ASC,
-						      postacomment_language ASC,
-							  postacomment_date DESC";
+        foreach($arrComments as $objPost) {
 
-        $arrComments = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array($strSystemid, $strSystemid));
-
-        if(count($arrComments) > 0) {
-            foreach($arrComments as $arrOneComment) {
-                class_orm_rowcache::addSingleInitRow($arrOneComment);
-                $objPost = class_objectfactory::getInstance()->getObject($arrOneComment["system_id"]);
+            if($strEventName == class_system_eventidentifier::EVENT_SYSTEM_RECORDDELETED_LOGICALLY)
                 $objPost->deleteObject();
-            }
+
+            if($strEventName == class_system_eventidentifier::EVENT_SYSTEM_RECORDDELETED)
+                $objPost->deleteObjectFromDatabase();
+
         }
 
         return $bitReturn;
@@ -71,6 +62,7 @@ class class_module_postacomment_recorddeletedlistener implements interface_gener
      */
     public static function staticConstruct() {
         class_core_eventdispatcher::getInstance()->removeAndAddListener(class_system_eventidentifier::EVENT_SYSTEM_RECORDDELETED, new class_module_postacomment_recorddeletedlistener());
+        class_core_eventdispatcher::getInstance()->removeAndAddListener(class_system_eventidentifier::EVENT_SYSTEM_RECORDDELETED_LOGICALLY, new class_module_postacomment_recorddeletedlistener());
     }
 
 }

@@ -259,6 +259,10 @@ class class_db_oci8 extends class_db_base {
         $arrReturn = array();
         $arrTemp = $this->getPArray("select column_name, data_type from user_tab_columns where table_name=?", array(strtoupper($strTableName)));
 
+        if(empty($arrTemp)) {
+            return array();
+        }
+
         foreach($arrTemp as $arrOneColumn) {
             $arrReturn[] = array(
                 "columnName" => strtolower($arrOneColumn["column_name"]),

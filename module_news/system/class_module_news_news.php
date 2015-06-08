@@ -243,12 +243,15 @@ class class_module_news_news extends class_model implements interface_model, int
     public static function getObjectList($strFilter = "", $intStart = null, $intEnd = null, class_date $objStartDate = null, class_date $objEndDate = null) {
         $arrParams = array();
 
-        $strDateWhere = "";
+        $strWhere = "";
         if($objStartDate != null && $objEndDate != null) {
-            $strDateWhere = "AND (system_date_start >= ? and system_date_start < ?) ";
+            $strWhere = "AND (system_date_start >= ? and system_date_start < ?) ";
             $arrParams[] = $objStartDate->getLongTimestamp();
             $arrParams[] = $objEndDate->getLongTimestamp();
         }
+
+        $objOrm = new class_orm_objectlist();
+        $strWhere .= $objOrm->getDeletedWhereRestriction();
 
         if($strFilter != "") {
             $strQuery = "SELECT *
@@ -261,7 +264,7 @@ class class_module_news_news extends class_model implements interface_model, int
 							WHERE system_id = news_id
 							  AND news_id = newsmem_news
 							  AND system_id = right_id
-							  " . $strDateWhere . "
+							  " . $strWhere . "
 							  AND newsmem_category = ?
 							ORDER BY system_date_start DESC";
             $arrParams[] = $strFilter;
@@ -275,7 +278,7 @@ class class_module_news_news extends class_model implements interface_model, int
 						       ON system_id = system_date_id
 							WHERE system_id = news_id
 							  AND system_id = right_id
-							  " . $strDateWhere . "
+							  " . $strWhere . "
 							ORDER BY system_date_start DESC";
         }
 
@@ -300,15 +303,35 @@ class class_module_news_news extends class_model implements interface_model, int
      */
     public static function getObjectCount($strFilter = "") {
         $arrParams = array();
+
+        $objOrm = new class_orm_objectlist();
+        $strWhere = $objOrm->getDeletedWhereRestriction();
+
         if($strFilter != "") {
             $strQuery = "SELECT COUNT(*)
-							FROM " . _dbprefix_ . "news_member
-							WHERE newsmem_category = ?";
+							FROM " . _dbprefix_ . "news,
+							      " ._dbprefix_."system_right,
+							      " . _dbprefix_ . "news_member,
+							      " . _dbprefix_ . "system
+						LEFT JOIN " . _dbprefix_ . "system_date
+						       ON system_id = system_date_id
+							WHERE system_id = news_id
+							  AND news_id = newsmem_news
+							  AND system_id = right_id
+							  " . $strWhere . "
+							  AND newsmem_category = ?";
             $arrParams[] = $strFilter;
         }
         else {
             $strQuery = "SELECT COUNT(*)
-							FROM " . _dbprefix_ . "news";
+							FROM " . _dbprefix_ . "news,
+							      " ._dbprefix_."system_right,
+							      " . _dbprefix_ . "system
+					    LEFT JOIN " . _dbprefix_ . "system_date
+						       ON system_id = system_date_id
+							WHERE system_id = news_id
+							  AND system_id = right_id
+							  " . $strWhere;
         }
 
         $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, $arrParams);
@@ -356,6 +379,9 @@ class class_module_news_news extends class_model implements interface_model, int
             $strTime = "";
         }
 
+        $objOrm = new class_orm_objectlist();
+        $strWhere = $objOrm->getDeletedWhereRestriction();
+
         //check if news should be ordered de- or ascending
         if($intOrder == 0) {
             $strOrder = "DESC";
@@ -378,7 +404,7 @@ class class_module_news_news extends class_model implements interface_model, int
                               AND newsmem_category = ?
                               AND system_status = 1
                               AND (system_date_start IS NULL or(system_date_start < ? OR system_date_start = 0))
-                                " . $strTime . "
+                                " . $strTime.$strWhere . "
                               AND (system_date_end IS NULL or (system_date_end > ? OR system_date_end = 0))
                             ORDER BY system_date_start " . $strOrder.", system_create_date DESC";
             $arrParams[] = $strCat;
@@ -400,7 +426,7 @@ class class_module_news_news extends class_model implements interface_model, int
                               AND system_id = right_id
                               AND system_status = 1
                               AND (system_date_start IS NULL or(system_date_start < ? OR system_date_start = 0))
-                                " . $strTime . "
+                                " . $strTime.$strWhere . "
                               AND (system_date_end IS NULL or (system_date_end > ? OR system_date_end = 0))
                             ORDER BY system_date_start " . $strOrder.", system_create_date DESC";
 
@@ -499,6 +525,7 @@ class class_module_news_news extends class_model implements interface_model, int
      * @return mixed
      */
     public function updateSearchResult(class_search_result $objResult) {
+        $objORM = new class_orm_objectlist();
         $strQuery = "SELECT news_detailspage
                        FROM "._dbprefix_."element_news,
                             "._dbprefix_."news_member,
@@ -517,6 +544,7 @@ class class_module_news_news extends class_model implements interface_model, int
                         AND system_prev_id = page_id
                         AND system_status = 1
                         AND news_view = 0
+                        ".$objORM->getDeletedWhereRestriction()."
                         AND page_element_ph_language = ? ";
 
         $arrRows = $this->objDB->getPArray($strQuery, array($this->getSystemid(), $objResult->getObjSearch()->getStrPortalLangFilter()));

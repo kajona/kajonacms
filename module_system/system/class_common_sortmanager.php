@@ -52,6 +52,7 @@ class class_common_sortmanager implements interface_sortmanager {
                      FROM "._dbprefix_."system
                      WHERE system_prev_id=?
                      AND system_id != '0'
+                     AND system_deleted = 0
                      ".$strWhere."
                      ORDER BY system_sort ASC";
         $arrSiblings = $this->objDB->getPArray($strQuery, $arrParams);
@@ -71,6 +72,7 @@ class class_common_sortmanager implements interface_sortmanager {
                      FROM "._dbprefix_."system
                      WHERE system_prev_id=?
                      AND system_id != '0'
+                     AND system_deleted = 0
                      ".$strWhere."
                      ORDER BY system_sort ASC";
         $arrSiblings = $this->objDB->getPArray($strQuery, $arrParams);
@@ -109,6 +111,7 @@ class class_common_sortmanager implements interface_sortmanager {
         $strQuery = "SELECT system_id, system_sort
                      FROM "._dbprefix_."system
                      WHERE system_prev_id=?
+                     AND system_deleted = 0
                      ".$strWhere."
                      ORDER BY system_sort ASC";
         $arrSiblings = $this->objDB->getPArray($strQuery, $arrParams);
@@ -186,6 +189,7 @@ class class_common_sortmanager implements interface_sortmanager {
         $strQuery = "SELECT *
                          FROM "._dbprefix_."system
                          WHERE system_prev_id=? AND system_id != '0'
+                           AND system_deleted = 0
                          ".$strWhere."
                          ORDER BY system_sort ASC, system_comment ASC";
 

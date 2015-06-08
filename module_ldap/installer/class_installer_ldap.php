@@ -69,14 +69,14 @@ class class_installer_ldap extends class_installer_base implements interface_ins
         //remove the workflow
         if(class_module_system_module::getModuleByName("workflows") !== null) {
             foreach(class_module_workflows_workflow::getWorkflowsForClass("class_workflow_ldap_sync") as $objOneWorkflow) {
-                if(!$objOneWorkflow->deleteObject()) {
+                if(!$objOneWorkflow->deleteObjectFromDatabase()) {
                     $strReturn .= "Error deleting workflow, aborting.\n";
                     return false;
                 }
             }
 
             $objHandler = class_module_workflows_handler::getHandlerByClass("class_workflow_ldap_sync");
-            if(!$objHandler->deleteObject()) {
+            if(!$objHandler->deleteObjectFromDatabase()) {
                 $strReturn .= "Error deleting workflow handler, aborting.\n";
                 return false;
             }
@@ -86,20 +86,20 @@ class class_installer_ldap extends class_installer_base implements interface_ins
         foreach($this->objDB->getPArray("SELECT * FROM "._dbprefix_."user_ldap", array()) as $arrOneRow) {
             $objOneUser = new class_module_user_user($arrOneRow["user_ldap_id"]);
             echo "Deleting ldap user ".$objOneUser->getStrDisplayName()."...\n";
-            $objOneUser->deleteObject();
+            $objOneUser->deleteObjectFromDatabase();
         }
 
         //fetch associated groups
         foreach($this->objDB->getPArray("SELECT * FROM "._dbprefix_."user_group_ldap", array()) as $arrOneRow) {
             $objOneUser = new class_module_user_group($arrOneRow["group_ldap_id"]);
             echo "Deleting ldap group ".$objOneUser->getStrDisplayName()."...\n";
-            $objOneUser->deleteObject();
+            $objOneUser->deleteObjectFromDatabase();
         }
 
         //delete the module-node
         $strReturn .= "Deleting the module-registration...\n";
         $objModule = class_module_system_module::getModuleByName($this->objMetadata->getStrTitle(), true);
-        if(!$objModule->deleteObject()) {
+        if(!$objModule->deleteObjectFromDatabase()) {
             $strReturn .= "Error deleting module, aborting.\n";
             return false;
         }

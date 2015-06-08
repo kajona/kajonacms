@@ -52,7 +52,7 @@ interface class_system_eventidentifier {
      * This means you are not able to change the response anymore, also the session is already closed to
      * keep other threads from waiting. Use this event to perform internal cleanups if required.
      *
-     * @param class_request_entrypoint_enum objEntrypoint
+     * @param class_request_entrypoint_enum $objEntrypoint
      *
      * @since 4.6
      */
@@ -131,8 +131,8 @@ interface class_system_eventidentifier {
     const EVENT_SYSTEM_PREVIDCHANGED = "core.system.previdchanged";
 
     /**
-     * Called whenever a records was deleted using the common methods.
-     * Implement this method to be notified when a record is deleted, e.g. to to additional cleanups afterwards.
+     * Called whenever a records was deleted from the database using the common methods.
+     * Implement this method to be notified when a record is deleted, e.g. to perform additional cleanups afterwards.
      * There's no need to register the listener, this is done automatically.
      *
      * Make sure to return a matching boolean-value, otherwise the transaction may be rolled back.
@@ -144,6 +144,37 @@ interface class_system_eventidentifier {
      * @since 4.5
      */
     const EVENT_SYSTEM_RECORDDELETED = "core.system.recorddeleted";
+
+    /**
+     * Called whenever a records was deleted logically, so set inactive. The record is NOT removed from the database!
+     *
+     * Implement this method to be notified when a record is deleted, e.g. to perform additional cleanups afterwards.
+     * There's no need to register the listener, this is done automatically.
+     *
+     * Make sure to return a matching boolean-value, otherwise the transaction may be rolled back.
+     *
+     *
+     * @param string $strSystemid
+     * @param string $strSourceClass The class-name of the object deleted
+     *
+     * @since 4.8
+     */
+    const EVENT_SYSTEM_RECORDDELETED_LOGICALLY = "core.system.recorddeleted.logically";
+
+    /**
+     * Called whenever a records is restored from the database.
+     * The event is fired after the record was restored but before the transaction will be committed.
+     *
+     * Make sure to return a matching boolean-value, otherwise the transaction may be rolled back.
+     *
+     *
+     * @param string $strSystemid
+     * @param string $strSourceClass The class-name of the object deleted
+     * @param class_model $objObject The object which is being restored
+     *
+     * @since 4.8
+     */
+    const EVENT_SYSTEM_RECORDRESTORED_LOGICALLY = "core.system.recordrestored.logically";
 
     /**
      * Callback method, triggered each time a user logs into the system for the very first time.

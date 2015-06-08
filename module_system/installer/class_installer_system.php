@@ -46,8 +46,9 @@ class class_installer_system extends class_installer_base implements interface_i
         $arrFields["system_status"] = array("int", true);
         $arrFields["system_class"] = array("char254", true);
         $arrFields["system_comment"] = array("char254", true);
+        $arrFields["system_deleted"] = array("int", true);
 
-        if(!$this->objDB->createTable("system", $arrFields, array("system_id"), array("system_prev_id", "system_module_nr", "system_sort", "system_owner", "system_create_date", "system_status", "system_lm_time", "system_lock_time")))
+        if(!$this->objDB->createTable("system", $arrFields, array("system_id"), array("system_prev_id", "system_module_nr", "system_sort", "system_owner", "system_create_date", "system_status", "system_lm_time", "system_lock_time", "system_deleted")))
             $strReturn .= "An error occurred! ...\n";
 
         //Rights table ----------------------------------------------------------------------------------
@@ -665,6 +666,11 @@ class class_installer_system extends class_installer_base implements interface_i
             $strReturn .= $this->update_465_47();
         }
 
+        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "4.7") {
+            $strReturn .= $this->update_47_475();
+        }
+
         return $strReturn."\n\n";
     }
 
@@ -1182,9 +1188,9 @@ class class_installer_system extends class_installer_base implements interface_i
         $this->objDB->addColumn("user", "user_items_per_page", class_db_datatypes::STR_TYPE_INT);
 
         $strReturn .= "Removing setting _user_log_nrofrecords_...\n";
-        class_module_system_setting::getConfigByName("_user_log_nrofrecords_")->deleteObject();
+        class_module_system_setting::getConfigByName("_user_log_nrofrecords_")->deleteObjectFromDatabase();
         $strReturn .= "Removing setting _system_use_dbcache_...\n";
-        class_module_system_setting::getConfigByName("_system_use_dbcache_")->deleteObject();
+        class_module_system_setting::getConfigByName("_system_use_dbcache_")->deleteObjectFromDatabase();
 
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion($this->objMetadata->getStrTitle(), "4.6.5");
@@ -1210,5 +1216,18 @@ class class_installer_system extends class_installer_base implements interface_i
         $this->updateModuleVersion($this->objMetadata->getStrTitle(), "4.7");
         return $strReturn;
     }
+
+    private function update_47_475() {
+
+        $strReturn = "Updating 4.7 to 4.7.5...\n";
+
+        $strReturn .= "Updating system table\n";
+        $this->objDB->addColumn("system", "system_deleted", class_db_datatypes::STR_TYPE_INT);
+
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion($this->objMetadata->getStrTitle(), "4.7.5");
+        return $strReturn;
+    }
+
 
 }

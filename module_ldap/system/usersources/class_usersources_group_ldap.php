@@ -189,7 +189,7 @@ class class_usersources_group_ldap extends class_model implements interface_mode
      *
      * @return bool
      */
-    public function deleteObject() {
+    public function deleteObjectFromDatabase() {
         return $this->deleteObject();
     }
 

@@ -90,6 +90,7 @@ class class_module_tags_favorite extends class_model implements interface_model,
      */
     public static function getAllFavoritesForUserAndTag($strUserid, $strTagId, $intStart = null, $intEnd = null) {
 
+        $objORM = new class_orm_objectlist();
         $strQuery = "SELECT tags_fav_id
                        FROM "._dbprefix_."tags_favorite,
                             "._dbprefix_."tags_tag,
@@ -98,6 +99,7 @@ class class_module_tags_favorite extends class_model implements interface_model,
                        AND tags_fav_userid = ?
                        AND tags_fav_tagid = tags_tag_id
                        AND tags_fav_tagid = ?
+                       ".$objORM->getDeletedWhereRestriction()."
                   ORDER BY tags_tag_name ASC";
 
         $arrRows = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array($strUserid, $strTagId), $intStart, $intEnd);
@@ -117,7 +119,7 @@ class class_module_tags_favorite extends class_model implements interface_model,
      * @return class_module_tags_favorite[]
      */
     public static function getAllFavoritesForTag($strTagid) {
-
+        $objORM = new class_orm_objectlist();
         $strQuery = "SELECT tags_fav_id
                        FROM "._dbprefix_."tags_favorite,
                             "._dbprefix_."tags_tag,
@@ -125,6 +127,7 @@ class class_module_tags_favorite extends class_model implements interface_model,
                      WHERE tags_fav_id = system_id
                        AND tags_fav_tagid = ?
                        AND tags_fav_tagid = tags_tag_id
+                       ".$objORM->getDeletedWhereRestriction()."
                   ORDER BY tags_tag_name ASC";
 
         $arrRows = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array($strTagid));
@@ -146,7 +149,7 @@ class class_module_tags_favorite extends class_model implements interface_model,
      * @return class_module_tags_favorite[]
      */
     public static function getAllFavoritesForUser($strUserid, $intStart = null, $intEnd = null) {
-
+        $objORM = new class_orm_objectlist();
         $strQuery = "SELECT tags_fav_id
                        FROM "._dbprefix_."tags_favorite,
                             "._dbprefix_."tags_tag,
@@ -154,6 +157,7 @@ class class_module_tags_favorite extends class_model implements interface_model,
                      WHERE tags_fav_id = system_id
                        AND tags_fav_userid = ?
                        AND tags_fav_tagid = tags_tag_id
+                       ".$objORM->getDeletedWhereRestriction()."
                   ORDER BY tags_tag_name ASC";
 
         $arrRows = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array($strUserid), $intStart, $intEnd);
@@ -174,9 +178,16 @@ class class_module_tags_favorite extends class_model implements interface_model,
      */
     public static function getNumberOfFavoritesForUser($strUserid) {
 
+        $objORM = new class_orm_objectlist();
         $strQuery = "SELECT COUNT(*)
-                       FROM "._dbprefix_."tags_favorite
-                      WHERE tags_fav_userid = ?";
+                       FROM "._dbprefix_."tags_favorite,
+                            "._dbprefix_."tags_tag,
+                            "._dbprefix_."system
+                     WHERE tags_fav_id = system_id
+                       AND tags_fav_userid = ?
+                       AND tags_fav_tagid = tags_tag_id
+                       ".$objORM->getDeletedWhereRestriction()."
+                  ";
 
         $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array($strUserid));
         return $arrRow["COUNT(*)"];

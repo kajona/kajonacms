@@ -78,7 +78,7 @@ abstract class class_testbase_object extends class_testbase {
     protected function cleanStructure() {
         /** @var class_model $objOneModel */
         foreach(array_reverse($this->arrStructure, true) as $objOneModel) {
-            $objOneModel->deleteObject();
+            $objOneModel->deleteObjectFromDatabase();
         }
 
     }

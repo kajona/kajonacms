@@ -137,27 +137,11 @@ class class_module_guestbook_post extends class_model implements interface_model
      * @static
      */
     public static function getPosts($strPrevId = "", $bitJustActive = false, $intStart = null, $intEnd = null) {
-        $strQuery = "SELECT *
-						FROM " . _dbprefix_ . "guestbook_post,
-						     " . _dbprefix_ . "system_right,
-						     " . _dbprefix_ . "system
-				   LEFT JOIN "._dbprefix_."system_date
-                            ON system_id = system_date_id
-						WHERE system_id = guestbook_post_id
-						  AND system_prev_id = ?
-						  AND system_id = right_id
-						  " . ($bitJustActive ? " AND system_status = 1" : "") . "
-						ORDER BY guestbook_post_date DESC";
-
-        $objDB = class_carrier::getInstance()->getObjDB();
-        $arrPosts = $objDB->getPArray($strQuery, array($strPrevId), $intStart, $intEnd);
-        class_orm_rowcache::addArrayOfInitRows($arrPosts);
-        $arrReturn = array();
-        //load all posts as objects
-        foreach($arrPosts as $arrOnePostID) {
-            $arrReturn[] = class_objectfactory::getInstance()->getObject($arrOnePostID["system_id"]);
-        }
-        return $arrReturn;
+        $objORM = new class_orm_objectlist();
+        if($bitJustActive)
+            $objORM->addWhereRestriction(new class_orm_objectlist_systemstatus_restriction(class_orm_comparator_enum::Equal(), 1));
+        $objORM->addOrderBy(new class_orm_objectlist_orderby("guestbook_post_date DESC"));
+        return $objORM->getObjectList(get_called_class(), $strPrevId, $intStart, $intEnd);
     }
 
     /**
@@ -170,15 +154,10 @@ class class_module_guestbook_post extends class_model implements interface_model
      * @static
      */
     public static function getPostsCount($strPrevID = "", $bitJustActive = false) {
-        $strQuery = "SELECT COUNT(*)
-						FROM " . _dbprefix_ . "guestbook_post, " . _dbprefix_ . "system
-						WHERE system_id = guestbook_post_id
-						  AND system_prev_id=?
-						  " . ($bitJustActive ? " AND system_status = 1" : "") . "";
-
-        $objDB = class_carrier::getInstance()->getObjDB();
-        $arrRow = $objDB->getPRow($strQuery, array($strPrevID));
-        return $arrRow["COUNT(*)"];
+        $objORM = new class_orm_objectlist();
+        if($bitJustActive)
+            $objORM->addWhereRestriction(new class_orm_objectlist_systemstatus_restriction(class_orm_comparator_enum::Equal(), 1));
+        return $objORM->getObjectCount(get_called_class(), $strPrevID);
     }
 
     /**
@@ -197,6 +176,7 @@ class class_module_guestbook_post extends class_model implements interface_model
      * @return mixed
      */
     public function updateSearchResult(class_search_result $objResult) {
+        $objORM = new class_orm_objectlist();
         $strQuery =  "SELECT page_name, guestbook_amount, page_id
                        FROM "._dbprefix_."element_guestbook,
                             "._dbprefix_."page_element,
@@ -207,6 +187,7 @@ class class_module_guestbook_post extends class_model implements interface_model
                         AND content_id = system_id
                         AND system_prev_id = page_id
                         AND system_status = 1
+                        ".$objORM->getDeletedWhereRestriction()."
                         AND page_element_ph_language = ? " ;
 
         $arrRows = $this->objDB->getPArray($strQuery, array($this->getPrevId(), $objResult->getObjSearch()->getStrPortalLangFilter()));
