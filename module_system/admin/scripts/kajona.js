@@ -356,36 +356,82 @@ KAJONA.admin.switchLanguage = function(strLanguageToLoad) {
 /**
  * little helper function for the system right matrix
  */
-KAJONA.admin.checkRightMatrix = function() {
-	// mode 1: inheritance
-	if (document.getElementById('inherit').checked) {
-		// loop over all checkboxes to disable them
-		for (var intI = 0; intI < document.forms['rightsForm'].elements.length; intI++) {
-			var objCurElement = document.forms['rightsForm'].elements[intI];
-			if (objCurElement.type == 'checkbox') {
-				if (objCurElement.id != 'inherit') {
-					objCurElement.disabled = true;
-					objCurElement.checked = false;
-					var strCurId = "inherit," + objCurElement.id;
-					if (document.getElementById(strCurId) != null) {
-						if (document.getElementById(strCurId).value == '1') {
-							objCurElement.checked = true;
-						}
-					}
-				}
-			}
-		}
-	} else {
-		// mode 2: no inheritance, make all checkboxes editable
-		for (intI = 0; intI < document.forms['rightsForm'].elements.length; intI++) {
-			var objCurElement = document.forms['rightsForm'].elements[intI];
-			if (objCurElement.type == 'checkbox') {
-				if (objCurElement.id != 'inherit') {
-					objCurElement.disabled = false;
-				}
-			}
-		}
-	}
+KAJONA.admin.permissions = {
+    checkRightMatrix : function () {
+        // mode 1: inheritance
+        if (document.getElementById('inherit').checked) {
+            // loop over all checkboxes to disable them
+            for (var intI = 0; intI < document.forms['rightsForm'].elements.length; intI++) {
+                var objCurElement = document.forms['rightsForm'].elements[intI];
+                if (objCurElement.type == 'checkbox') {
+                    if (objCurElement.id != 'inherit') {
+                        objCurElement.disabled = true;
+                        objCurElement.checked = false;
+                        var strCurId = "inherit," + objCurElement.id;
+                        if (document.getElementById(strCurId) != null) {
+                            if (document.getElementById(strCurId).value == '1') {
+                                objCurElement.checked = true;
+                            }
+                        }
+                    }
+                }
+            }
+        } else {
+            // mode 2: no inheritance, make all checkboxes editable
+            for (intI = 0; intI < document.forms['rightsForm'].elements.length; intI++) {
+                var objCurElement = document.forms['rightsForm'].elements[intI];
+                if (objCurElement.type == 'checkbox') {
+                    if (objCurElement.id != 'inherit') {
+                        objCurElement.disabled = false;
+                    }
+                }
+            }
+        }
+    },
+
+    toggleEmtpyRows : function (strVisibleName, strHiddenName) {
+
+        $('#rightsForm tr').each(function(){
+            if($(this).find("input:checked").length == 0) {
+                $(this).toggle();
+            }
+        });
+
+        if($('#rowToggleLink').hasClass("rowsVisible")) {
+            $('#rowToggleLink').html(strVisibleName);
+            $('#rowToggleLink').removeClass("rowsVisible");
+        }
+        else {
+            $('#rowToggleLink').html(strHiddenName);
+            $('#rowToggleLink').addClass("rowsVisible")
+        }
+    },
+
+    submitForm : function() {
+        var objResponse = {
+            bitInherited : $("#inherit").is(":checked"),
+            arrConfigs : []
+        };
+
+        $('#rightsForm table tr input:checked').each(function(){
+            if($(this).find("input:checked").length == 0) {
+                objResponse.arrConfigs.push($(this).attr('id'));
+            }
+        });
+
+
+        $.ajax({
+            url: KAJONA_WEBPATH + '/xml.php?admin=1&module=right&action=saveRights&systemid='+ $('#systemid').val(),
+            type: 'POST',
+            data: {json: JSON.stringify(objResponse)},
+            dataType: 'json'
+        }).done(function(data) {
+            $("#responseContainer").html(data.message);
+        });
+
+
+        return false;
+    }
 };
 
 /**
