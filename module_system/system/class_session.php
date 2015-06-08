@@ -513,7 +513,7 @@ final class class_session {
 
         $this->getObjInternalSession()->setStrLoginstatus(class_module_system_session::$LOGINSTATUS_LOGGEDOUT);
         $this->getObjInternalSession()->updateObjectToDb();
-        $this->getObjInternalSession()->deleteObject();
+        $this->getObjInternalSession()->deleteObjectFromDatabase();
         $this->objInternalSession = null;
         $this->objUser = null;
         if(isset($_COOKIE[session_name()])) {

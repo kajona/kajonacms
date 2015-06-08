@@ -167,7 +167,7 @@ class class_usersources_group_kajona extends class_model implements interface_mo
      * @return bool
      */
     public function deleteObject() {
-        return $this->deleteObject();
+        return $this->deleteGroup();
     }
 
 

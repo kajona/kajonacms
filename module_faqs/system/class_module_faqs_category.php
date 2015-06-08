@@ -76,19 +76,6 @@ class class_module_faqs_category extends class_model implements interface_model,
 
 
     /**
-     * Overwritten to perform a cleanup of the relation table
-     * @return bool
-     */
-    public function deleteObjectInternal() {
-        //start by deleting from members and cat table
-        $strQuery = "DELETE FROM " . _dbprefix_ . "faqs_member WHERE faqsmem_category = ? ";
-        if($this->objDB->_pQuery($strQuery, array($this->getSystemid()))) {
-            return parent::deleteObjectInternal();
-        }
-        return false;
-    }
-
-    /**
      * Return an on-click link for the passed object.
      * This link is rendered by the portal search result generator, so
      * make sure the link is a valid portal page.
@@ -102,6 +89,8 @@ class class_module_faqs_category extends class_model implements interface_model,
     public function updateSearchResult(class_search_result $objResult) {
         //search for matching pages
         $arrReturn = array();
+
+        $objORM = new class_orm_objectlist();
 
         $strQuery = "SELECT page_name,  page_id
                        FROM " . _dbprefix_ . "element_faqs,
@@ -117,6 +106,7 @@ class class_module_faqs_category extends class_model implements interface_model,
                         )
                         AND system_prev_id = page_id
                         AND system_status = 1
+                        ".$objORM->getDeletedWhereRestriction()."
                         AND page_element_ph_language = ? ";
 
         $arrRows = $this->objDB->getPArray($strQuery, array($this->getSystemid(), $objResult->getObjSearch()->getStrPortalLangFilter()));

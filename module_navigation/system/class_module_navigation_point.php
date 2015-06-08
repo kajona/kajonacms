@@ -163,26 +163,10 @@ class class_module_navigation_point extends class_model implements interface_mod
      * @static
      */
     public static function getNaviLayer($strSystemid, $bitJustActive = false, $intStart = null, $intEnd = null) {
-        $strQuery = "SELECT *
-                          FROM "._dbprefix_."navigation,
-                               "._dbprefix_."system_right,
-                               "._dbprefix_."system
-                     LEFT JOIN "._dbprefix_."system_date
-                            ON system_id = system_date_id
-    			         WHERE system_id = navigation_id
-    			           AND system_prev_id = ?
-    			           AND system_id = right_id
-    			             ".($bitJustActive ? " AND system_status = 1 " : "")."
-    			      ORDER BY system_sort ASC, system_comment ASC";
-        $arrRows = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array($strSystemid), $intStart, $intEnd);
-        $arrReturn = array();
-        foreach($arrRows as $arrOneRow) {
-            class_orm_rowcache::addSingleInitRow($arrOneRow);
-            $objNavigationPoint = class_objectfactory::getInstance()->getObject($arrOneRow["system_id"]);
-            $arrReturn[] = $objNavigationPoint;
-        }
-
-        return $arrReturn;
+        $objOrm = new class_orm_objectlist();
+        if($bitJustActive)
+            $objOrm->addWhereRestriction(new class_orm_objectlist_restriction(" AND system_status = 1 ", array()));
+        return $objOrm->getObjectList(get_called_class(), $strSystemid, $intStart, $intEnd);
     }
 
 
@@ -233,27 +217,13 @@ class class_module_navigation_point extends class_model implements interface_mod
      * @param string $strPagename
      *
      * @static
-     * @return mixed
+     * @return class_module_navigation_point[]
      */
     public static function loadPagePoint($strPagename) {
-        $objDB = class_carrier::getInstance()->getObjDB();
-        $arrReturn = array();
-        $strQuery = "SELECT *
-                       FROM "._dbprefix_."navigation,
-                            "._dbprefix_."system_right,
-                            "._dbprefix_."system
-                  LEFT JOIN "._dbprefix_."system_date
-                         ON system_id = system_date_id
-    			      WHERE system_id = navigation_id
-                        AND navigation_page_i = ?
-                        AND system_id = right_id
-        	            AND system_status = 1";
-        $arrRows = $objDB->getPArray($strQuery, array($strPagename));
-        class_orm_rowcache::addArrayOfInitRows($arrRows);
-        foreach($arrRows as $arrOneId)
-            $arrReturn[] = class_objectfactory::getInstance()->getObject($arrOneId["system_id"]);
-
-        return $arrReturn;
+        $objOrm = new class_orm_objectlist();
+        $objOrm->addWhereRestriction(new class_orm_objectlist_restriction(" AND system_status = 1 ", array()));
+        $objOrm->addWhereRestriction(new class_orm_objectlist_restriction(" AND navigation_page_i = ? ", array($strPagename)));
+        return $objOrm->getObjectList(get_called_class());
     }
 
 

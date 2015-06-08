@@ -85,11 +85,12 @@ class class_installer_navigation extends class_installer_base implements interfa
      * @return bool
      */
     public function remove(&$strReturn) {
+
         //delete the page-element
         $objElement = class_module_pages_element::getElement("navigation");
         if($objElement != null) {
             $strReturn .= "Deleting page-element 'navigation'...\n";
-            $objElement->deleteObject();
+            $objElement->deleteObjectFromDatabase();
         }
         else {
             $strReturn .= "Error finding page-element 'navigation', aborting.\n";
@@ -99,7 +100,7 @@ class class_installer_navigation extends class_installer_base implements interfa
         /** @var class_module_navigation_tree $objOneObject */
         foreach(class_module_navigation_tree::getObjectList() as $objOneObject) {
             $strReturn .= "Deleting object '".$objOneObject->getStrDisplayName()."' ...\n";
-            if(!$objOneObject->deleteObject()) {
+            if(!$objOneObject->deleteObjectFromDatabase()) {
                 $strReturn .= "Error deleting object, aborting.\n";
                 return false;
             }
@@ -108,7 +109,7 @@ class class_installer_navigation extends class_installer_base implements interfa
         //delete the module-node
         $strReturn .= "Deleting the module-registration...\n";
         $objModule = class_module_system_module::getModuleByName($this->objMetadata->getStrTitle(), true);
-        if(!$objModule->deleteObject()) {
+        if(!$objModule->deleteObjectFromDatabase()) {
             $strReturn .= "Error deleting module, aborting.\n";
             return false;
         }

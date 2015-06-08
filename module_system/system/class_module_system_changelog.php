@@ -22,7 +22,7 @@
  * @module system
  * @moduleId _system_modul_id_
  */
-class class_module_system_changelog extends class_model implements interface_model {
+class class_module_system_changelog {
 
     const ANNOTATION_PROPERTY_VERSIONABLE = "@versionable";
 
@@ -49,23 +49,6 @@ class class_module_system_changelog extends class_model implements interface_mod
     public static $STR_ACTION_EDIT = "actionEdit";
     public static $STR_ACTION_DELETE = "actionDelete";
 
-
-    /**
-     * Returns the name to be used when rendering the current object, e.g. in admin-lists.
-     *
-     * @return string
-     */
-    public function getStrDisplayName() {
-        return "changelog";
-    }
-
-
-    /**
-     * Initialises the current object, if a systemid was given
-     * @return void
-     */
-    protected function initObjectInternal() {
-    }
 
     /**
      * Checks if an objects properties changed.
@@ -370,7 +353,7 @@ class class_module_system_changelog extends class_model implements interface_mod
                     class_date::getCurrentTimestamp(),
                     $objSourceModel->getSystemid(),
                     $objSourceModel->getPrevid(),
-                    $this->objSession->getUserID(),
+                    class_carrier::getInstance()->getObjSession()->getUserID(),
                     get_class($objSourceModel),
                     $strAction,
                     $strProperty,
@@ -396,7 +379,7 @@ class class_module_system_changelog extends class_model implements interface_mod
         $bitReturn = true;
         foreach(self::$arrInsertCache as $strTable => $arrRows) {
             if(count($arrRows) > 0) {
-                $bitReturn = $this->objDB->multiInsert(
+                $bitReturn = class_carrier::getInstance()->getObjDB()->multiInsert(
                     $strTable,
                     array("change_id", "change_date", "change_systemid", "change_system_previd", "change_user", "change_class", "change_action", "change_property", "change_oldvalue", "change_newvalue"),
                     $arrRows
@@ -829,29 +812,6 @@ class class_module_system_changelog extends class_model implements interface_mod
         $arrRow = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array($strSystemid, $strProperty, $objDateFrom->getLongTimestamp(), $objDateTo->getLongTimestamp()), 0, 1);
         return $arrRow;
     }
-
-    /**
-     * Deletes the current object from the system
-     * Overwrite!
-     *
-     * @return bool
-     */
-    public function deleteObject() {
-        return true;
-    }
-
-
-    /**
-     * Called whenever a update-request was fired.
-     * Use this method to synchronize yourselves with the database.
-     * Use only updates, inserts are not required to be implemented.
-     *
-     * @return bool
-     */
-    protected function updateStateToDb() {
-        return true;
-    }
-
 
     /**
      * Returns a list of objects implementing the changelog-provider-interface

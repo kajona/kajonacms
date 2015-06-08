@@ -41,6 +41,10 @@ class class_orm_objectinit extends class_orm_base {
                           ".$this->getQueryBase()."
                            AND system.system_id = ? ";
 
+                if(self::$bitLogcialDeleteAvailable) {
+                    $strQuery .= $this->getDeletedWhereRestriction();
+                }
+
                 $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array($this->getObjObject()->getSystemid()));
             }
 

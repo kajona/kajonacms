@@ -58,7 +58,7 @@ class class_test_packageserver extends class_testbase  {
 
 
 
-        $objMediamanagerRepo->deleteObject();
+        $objMediamanagerRepo->deleteObjectFromDatabase();
         $objFilesystem->fileDelete("/files/packageservertest/autotest.zip");
 
     }

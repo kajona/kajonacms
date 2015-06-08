@@ -95,29 +95,17 @@ class class_module_messaging_config extends class_model implements interface_mod
      * @static
      */
     public static function getConfigForUserAndProvider($strUserid, interface_messageprovider $objProvider) {
-        $strQuery = "SELECT *
-                     FROM "._dbprefix_."messages_cfg,
-                          "._dbprefix_."system_right,
-                          "._dbprefix_."system
-                  LEFT JOIN "._dbprefix_."system_date
-                        ON system_id = system_date_id
-		            WHERE system_id = config_id
-		              AND system_id = right_id
-		              AND config_user = ?
-		              AND config_provider = ? ";
+        $objORM = new class_orm_objectlist();
+        $objORM->addWhereRestriction(new class_orm_objectlist_restriction("AND config_user = ?", $strUserid));
+        $objORM->addWhereRestriction(new class_orm_objectlist_restriction("AND config_provider = ?", get_class($objProvider)));
+        $objConfig = $objORM->getSingleObject(get_called_class());
 
-        $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array($strUserid, get_class($objProvider)));
-
-        if(isset($arrRow["system_id"])) {
-            class_orm_rowcache::addSingleInitRow($arrRow);
-            return new class_module_messaging_config($arrRow["system_id"]);
-        }
-        else {
+        if($objConfig === null) {
             $objConfig = new class_module_messaging_config();
             $objConfig->setStrUser($strUserid);
             $objConfig->setStrMessageprovider(get_class($objProvider));
-            return $objConfig;
         }
+        return $objConfig;
     }
 
     /**

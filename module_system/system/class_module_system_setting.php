@@ -16,6 +16,8 @@
  * @moduleId _system_modul_id_
  *
  * @blockFromAutosave
+ *
+ * @todo make settings "real" objects, so with a systemid
  */
 class class_module_system_setting extends class_model implements interface_model, interface_versionable {
 
@@ -122,6 +124,10 @@ class class_module_system_setting extends class_model implements interface_model
      * @return bool
      */
     public function deleteObject() {
+        return true;
+    }
+
+    public function deleteObjectFromDatabase() {
         $strQuery = "DELETE FROM " . _dbprefix_ . "system_config WHERE system_config_id = ?";
         return class_carrier::getInstance()->getObjDB()->_pQuery($strQuery, array($this->getSystemid()));
     }

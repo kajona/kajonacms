@@ -70,12 +70,12 @@ class class_installer_workflows extends class_installer_base implements interfac
 
         $strReturn .= "Removing system settings...\n";
         if(class_module_system_setting::getConfigByName("_workflows_trigger_authkey_") != null)
-            class_module_system_setting::getConfigByName("_workflows_trigger_authkey_")->deleteObject();
+            class_module_system_setting::getConfigByName("_workflows_trigger_authkey_")->deleteObjectFromDatabase();
 
         /** @var class_module_workflows_workflow $objOneObject */
         foreach(class_module_workflows_workflow::getObjectList() as $objOneObject) {
             $strReturn .= "Deleting object '".$objOneObject->getStrDisplayName()."' ...\n";
-            if(!$objOneObject->deleteObject()) {
+            if(!$objOneObject->deleteObjectFromDatabase()) {
                 $strReturn .= "Error deleting object, aborting.\n";
                 return false;
             }
@@ -84,7 +84,7 @@ class class_installer_workflows extends class_installer_base implements interfac
         /** @var class_module_workflows_handler $objOneObject */
         foreach(class_module_workflows_handler::getObjectList() as $objOneObject) {
             $strReturn .= "Deleting object '".$objOneObject->getStrDisplayName()."' ...\n";
-            if(!$objOneObject->deleteObject()) {
+            if(!$objOneObject->deleteObjectFromDatabase()) {
                 $strReturn .= "Error deleting object, aborting.\n";
                 return false;
             }
@@ -93,7 +93,7 @@ class class_installer_workflows extends class_installer_base implements interfac
         //delete the module-node
         $strReturn .= "Deleting the module-registration...\n";
         $objModule = class_module_system_module::getModuleByName($this->objMetadata->getStrTitle(), true);
-        if(!$objModule->deleteObject()) {
+        if(!$objModule->deleteObjectFromDatabase()) {
             $strReturn .= "Error deleting module, aborting.\n";
             return false;
         }

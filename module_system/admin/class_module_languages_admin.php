@@ -25,7 +25,7 @@ class class_module_languages_admin extends class_admin_simple implements interfa
 
     public function getOutputModuleNavi() {
         $arrReturn = array();
-        $arrReturn[] = array("view", getLinkAdmin($this->arrModule["modul"], "list", "", $this->getLang("commons_list"), "", "", true, "adminnavi"));
+        $arrReturn[] = array("view", class_link::getLinkAdmin($this->getArrModule("modul"), "list", "", $this->getLang("commons_list"), "", "", true, "adminnavi"));
         return $arrReturn;
     }
 
@@ -91,7 +91,7 @@ class class_module_languages_admin extends class_admin_simple implements interfa
         $objForm = $this->getAdminForm($objLanguage);
 
         $objForm->addField(new class_formentry_hidden("", "mode"))->setStrValue($strMode);
-        return $objForm->renderForm(getLinkAdminHref($this->arrModule["modul"], "saveLanguage"));
+        return $objForm->renderForm(class_link::getLinkAdminHref($this->getArrModule("modul"), "saveLanguage"));
 
     }
 
@@ -173,40 +173,9 @@ class class_module_languages_admin extends class_admin_simple implements interfa
             }
         }
 
-        $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
+        $this->adminReload(class_link::getLinkAdminHref($this->getArrModule("modul")));
     }
 
-    /**
-     * Deletes the language
-     *
-     * @throws class_exception
-     * @return string
-     * @permissions delete
-     */
-    protected function actionDelete() {
-        $strReturn = "";
-        $objLang = new class_module_languages_language($this->getSystemid());
-        if($objLang->rightDelete()) {
-            if(!$objLang->deleteObject()) {
-                throw new class_exception("Error deleting language", class_exception::$level_ERROR);
-            }
-
-            //check if the current active one was deleted. if, then reset. #kajona trace id 613
-            if($this->getLanguageToWorkOn() == $objLang->getStrName()) {
-                class_carrier::getInstance()->getObjDB()->flushQueryCache();
-                $arrLangs = class_module_languages_language::getObjectList();
-                if(count($arrLangs) > 0) {
-                    $objLang->setStrAdminLanguageToWorkOn($arrLangs[0]->getStrName());
-                }
-            }
-
-            $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
-        }
-        else {
-            $strReturn = $this->getLang("commons_error_permissions");
-        }
-        return $strReturn;
-    }
 
     /**
      * Creates a language-switch as ready-to-output html-code
@@ -247,8 +216,8 @@ class class_module_languages_admin extends class_admin_simple implements interfa
                 foreach($arrObjLanguages as $objOneLang) {
                     self::$arrLanguageSwitchEntries[$objOneLang->getStrName()] = class_carrier::getInstance()->getObjLang()->getLang("lang_" . $objOneLang->getStrName(), "languages");
                 }
-                $objSystemCommon = new class_module_system_common();
-                self::$strActiveKey = $objSystemCommon->getStrAdminLanguageToWorkOn();
+                $objLanguage = new class_module_languages_language();
+                self::$strActiveKey = $objLanguage->getAdminLanguage();
             }
         }
     }

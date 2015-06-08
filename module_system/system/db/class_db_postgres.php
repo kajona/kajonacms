@@ -185,6 +185,10 @@ class class_db_postgres extends class_db_base {
             , array()
         );
 
+        if(empty($arrTemp)) {
+            return array();
+        }
+
         foreach($arrTemp as $arrOneColumn) {
             $arrReturn[] = array(
                 "columnName" => $arrOneColumn["column_name"],

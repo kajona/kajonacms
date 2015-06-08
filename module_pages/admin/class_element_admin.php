@@ -378,6 +378,7 @@ abstract class class_element_admin extends class_admin_controller implements int
         else if($this->getArrModule("table") != "")
             $strTargetTable =  $this->getArrModule("table");
 
+        $objORM = new class_orm_objectlist();
         //Element-Table given?
         if($strTargetTable != "") {
             $strQuery = "SELECT *
@@ -392,6 +393,7 @@ abstract class class_element_admin extends class_admin_controller implements int
     					   AND page_element_id = content_id
     					   AND system_id = right_id
     					   AND system_id = content_id
+    					   ".$objORM->getDeletedWhereRestriction()."
     					   AND system_id = ? ";
         }
         else {
@@ -405,6 +407,7 @@ abstract class class_element_admin extends class_admin_controller implements int
     					 WHERE element_name = page_element_ph_element
     					   AND page_element_id = system_id
     					   AND system_id = right_id
+    					   ".$objORM->getDeletedWhereRestriction()."
     					   AND system_id = ? ";
 
         }
@@ -651,7 +654,7 @@ abstract class class_element_admin extends class_admin_controller implements int
      * @return mixed
      */
     public function updateSearchResult(class_search_result $objResult) {
-
+        $objORM = new class_orm_objectlist();
         //load the matching site of the current page-element
         $strQuery = "SELECT page_name, page_id, pageproperties_browsername
 						 FROM "._dbprefix_."page_element,
@@ -662,6 +665,7 @@ abstract class class_element_admin extends class_admin_controller implements int
 						   AND pageproperties_id = page_id
 						   AND system_id = page_element_id
 						   AND page_element_id = ?
+						   ".$objORM->getDeletedWhereRestriction()."
 						   AND system_status = 1";
 
         $arrPage = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array($this->getSystemid()));

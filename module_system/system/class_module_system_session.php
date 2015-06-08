@@ -186,11 +186,19 @@ class class_module_system_session extends class_model implements interface_model
      *
      * @return bool
      */
-    public function deleteObject() {
+    public function deleteObjectFromDatabase() {
         class_logger::getInstance()->addLogRow("deleted session ".$this->getSystemid(), class_logger::$levelInfo);
-        //start with the modul-table
+        //start with the module-table
         $strQuery = "DELETE FROM "._dbprefix_."session WHERE session_id = ?";
         return $this->objDB->_pQuery($strQuery, array($this->getSystemid()));
+    }
+
+    /**
+     * Overwritten, no real delete required
+     * @return bool
+     */
+    public function deleteObject() {
+        return $this->deleteObjectFromDatabase();
     }
 
 

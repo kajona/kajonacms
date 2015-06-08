@@ -96,13 +96,13 @@ class class_module_packagemanager_template extends class_model implements interf
      *
      * @return bool
      */
-    protected function deleteObjectInternal() {
+    public function deleteObjectFromDatabase() {
 
         //delete all files from the filesystem
         $objFilesystem = new class_filesystem();
         $objFilesystem->folderDeleteRecursive(_templatepath_."/".$this->getStrName());
 
-        return parent::deleteObjectInternal();
+        return parent::deleteObjectFromDatabase();
     }
 
     /**
@@ -141,39 +141,9 @@ class class_module_packagemanager_template extends class_model implements interf
         //scan folders not existing any more
         foreach($arrPacksInstalled as $objOnePack) {
             if(!in_array($objOnePack->getStrName(), $arrFolders["folders"]))
-                $objOnePack->deleteObject();
+                $objOnePack->deleteObjectFromDatabase();
         }
     }
-
-    /**
-     * @param int $intRecordStatus
-     * @todo move this to an eventhandler
-     */
-    public function setIntRecordStatus($intRecordStatus) {
-        if($intRecordStatus == 1) {
-            //if set to active, mark all other packs as invalid
-            $strQuery = "SELECT templatepack_id
-                          FROM "._dbprefix_."templatepacks,
-                               "._dbprefix_."system
-                         WHERE system_id = templatepack_id
-                           AND system_status = 1";
-            $arrRows = $this->objDB->getPArray($strQuery, array());
-            foreach($arrRows as $arrSingleRow) {
-                $objPack = new class_module_packagemanager_template($arrSingleRow["templatepack_id"]);
-                $objPack->setIntRecordStatus(0);
-                $objPack->updateObjectToDb();
-            }
-
-            //update the active-pack constant
-            $objSetting = class_module_system_setting::getConfigByName("_packagemanager_defaulttemplate_");
-            $objSetting->setStrValue($this->getStrName());
-            $objSetting->updateObjectToDb();
-            $this->flushCompletePagesCache();
-        }
-
-        parent::setIntRecordStatus($intRecordStatus);
-    }
-
 
     /**
      * @return class_module_packagemanager_metadata|null

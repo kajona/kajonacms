@@ -142,7 +142,7 @@ class class_usersources_user_ldap extends class_model implements interface_model
      * Deletes the current object from the system
      * @return bool
      */
-    public function deleteObject() {
+    public function deleteObjectFromDatabase() {
         return $this->deleteUser();
     }
 

@@ -17,7 +17,7 @@
  * @see class_logger
  * @since 4.5
  */
-class class_module_system_changelog_restorer extends class_module_system_changelog implements interface_model {
+class class_module_system_changelog_restorer extends class_module_system_changelog  {
 
     /**
      * Restores a single property marked as versionable

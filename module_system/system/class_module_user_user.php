@@ -341,6 +341,10 @@ class class_module_user_user extends class_model implements interface_model, int
         return $bitReturn;
     }
 
+    public function deleteObjectFromDatabase() {
+        return $this->deleteObject();
+    }
+
 
     /**
      * Returns an array of group-ids the current user is assigned to
