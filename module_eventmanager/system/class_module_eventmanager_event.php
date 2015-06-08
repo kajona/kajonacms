@@ -209,37 +209,24 @@ class class_module_eventmanager_event extends class_model implements interface_m
      */
     public static function getAllEvents($intStart = false, $intEnd = false, class_date $objStartDate = null, class_date $objEndDate = null, $bitOnlyActive = false, $intOrder = 0, $intStatusFilter = null) {
 
-        $strAddon = "";
-        $arrParams = array();
+
+        $objORM = new class_orm_objectlist();
+
         if($objStartDate != null && $objEndDate != null) {
-            $strAddon .= "AND (system_date_start > ? AND system_date_start <= ?) ";
-            $arrParams[] = $objStartDate->getLongTimestamp();
-            $arrParams[] = $objEndDate->getLongTimestamp();
-        }
+            $objORM->addWhereRestriction(new class_orm_objectlist_restriction("AND (system_date_start > ? AND system_date_start <= ?", array($objStartDate->getLongTimestamp(), $objEndDate->getLongTimestamp())));
 
+        }
         if($intStatusFilter != null) {
-            $strAddon .= "AND em_ev_eventstatus = ? ";
-            $arrParams[] = $intStatusFilter;
+            $objORM->addWhereRestriction(new class_orm_objectlist_restriction("AND em_ev_eventstatus = ?", array($intStatusFilter)));
         }
 
-        $strQuery = "SELECT *
-                       FROM "._dbprefix_."em_event,
-                            "._dbprefix_."system,
-                            "._dbprefix_."system_right,
-                            "._dbprefix_."system_date
-                      WHERE system_id = em_ev_id
-                        AND system_id = right_id
-                        AND system_id = system_date_id
-                        ".$strAddon."
-                        ".($bitOnlyActive ? " AND system_status = 1 " : "")."    
-                      ORDER BY system_date_start ".($intOrder == "1" ? " ASC " : " DESC ").", em_ev_title ASC";
-        $arrQuery = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, $arrParams, $intStart, $intEnd);
-        class_orm_rowcache::addArrayOfInitRows($arrQuery);
-        $arrReturn = array();
-        foreach($arrQuery as $arrSingleRow)
-            $arrReturn[] = class_objectfactory::getInstance()->getObject($arrSingleRow["system_id"]);
+        if($bitOnlyActive) {
+            $objORM->addWhereRestriction(new class_orm_objectlist_systemstatus_restriction(class_orm_comparator_enum::Equal(), 1));
+        }
 
-        return $arrReturn;
+        $objORM->addOrderBy(new class_orm_objectlist_orderby("system_date_start ".($intOrder == "1" ? " ASC " : " DESC ")));
+        $objORM->addOrderBy(new class_orm_objectlist_orderby("em_ev_title  ASC "));
+        return $objORM->getObjectList(get_called_class(), "", $intStart, $intEnd);
     }
 
     /**

@@ -95,11 +95,12 @@ class class_installer_news extends class_installer_base implements interface_ins
      * @return bool
      */
     public function remove(&$strReturn) {
+
         //delete the page-element
         $objElement = class_module_pages_element::getElement("news");
         if($objElement != null) {
             $strReturn .= "Deleting page-element 'news'...\n";
-            $objElement->deleteObject();
+            $objElement->deleteObjectFromDatabase();
         }
         else {
             $strReturn .= "Error finding page-element 'news', aborting.\n";
@@ -109,7 +110,7 @@ class class_installer_news extends class_installer_base implements interface_ins
         /** @var class_module_news_feed $objOneObject */
         foreach(class_module_news_feed::getObjectList() as $objOneObject) {
             $strReturn .= "Deleting object '".$objOneObject->getStrDisplayName()."' ...\n";
-            if(!$objOneObject->deleteObject()) {
+            if(!$objOneObject->deleteObjectFromDatabase()) {
                 $strReturn .= "Error deleting object, aborting.\n";
                 return false;
             }
@@ -118,7 +119,7 @@ class class_installer_news extends class_installer_base implements interface_ins
         /** @var class_module_news_category $objOneObject */
         foreach(class_module_news_category::getObjectList() as $objOneObject) {
             $strReturn .= "Deleting object '".$objOneObject->getStrDisplayName()."' ...\n";
-            if(!$objOneObject->deleteObject()) {
+            if(!$objOneObject->deleteObjectFromDatabase()) {
                 $strReturn .= "Error deleting object, aborting.\n";
                 return false;
             }
@@ -127,7 +128,7 @@ class class_installer_news extends class_installer_base implements interface_ins
         /** @var class_module_news_news $objOneObject */
         foreach(class_module_news_news::getObjectList() as $objOneObject) {
             $strReturn .= "Deleting object '".$objOneObject->getStrDisplayName()."' ...\n";
-            if(!$objOneObject->deleteObject()) {
+            if(!$objOneObject->deleteObjectFromDatabase()) {
                 $strReturn .= "Error deleting object, aborting.\n";
                 return false;
             }
@@ -136,7 +137,7 @@ class class_installer_news extends class_installer_base implements interface_ins
         //delete the module-node
         $strReturn .= "Deleting the module-registration...\n";
         $objModule = class_module_system_module::getModuleByName($this->objMetadata->getStrTitle(), true);
-        if(!$objModule->deleteObject()) {
+        if(!$objModule->deleteObjectFromDatabase()) {
             $strReturn .= "Error deleting module, aborting.\n";
             return false;
         }

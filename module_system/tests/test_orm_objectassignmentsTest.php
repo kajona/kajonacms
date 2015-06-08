@@ -122,7 +122,7 @@ class class_test_orm_objectassignmentsTest extends class_testbase_object {
         $this->assertEquals(2, $arrRow["COUNT(*)"]);
 
         $objDB->flushQueryCache();
-        $objTestobject->deleteObject();
+        $objTestobject->deleteObjectFromDatabase();
 
 
 
@@ -294,7 +294,7 @@ class class_test_orm_objectassignmentsTest extends class_testbase_object {
         $arrRow = $objDB->getPRow("SELECT COUNT(*) FROM "._dbprefix_."testclass_rel WHERE testclass_source_id = ?", array($objTestobject->getSystemid()));
         $this->assertEquals(2, $arrRow["COUNT(*)"]);
 
-        $objTestobject->deleteObject();
+        $objTestobject->deleteObjectFromDatabase();
 
         $arrRow = $objDB->getPRow("SELECT COUNT(*) FROM "._dbprefix_."testclass_rel WHERE testclass_source_id = ?", array($objTestobject->getSystemid()), 0, false);
         $this->assertEquals(0, $arrRow["COUNT(*)"]);

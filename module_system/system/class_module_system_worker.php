@@ -14,23 +14,37 @@
  * @module system
  * @moduleId _system_modul_id_
  */
-class class_module_system_worker extends class_model implements interface_model  {
+class class_module_system_worker {
 
 
     /**
-     * Returns the name to be used when rendering the current object, e.g. in admin-lists.
-     * @return string
+     * Fetches a list of records currently marked as deleted
+     *
+     * @return class_model[]
      */
-    public function getStrDisplayName() {
-        return "";
+    public static function getDeletedRecords($intStart = null, $intEnd = null) {
+        class_orm_base::setObjHandleLogicalDeletedGlobal(class_orm_deletedhandling_enum::INCLUDED());
+        $strQuery = "SELECT system_id FROM "._dbprefix_."system WHERE system_deleted = 1 ORDER BY system_id DESC";
+        $arrRows = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array(), $intStart, $intEnd);
+
+        $arrReturn = array();
+        foreach($arrRows as $arrOneRow) {
+            $arrReturn[] = class_objectfactory::getInstance()->getObject($arrOneRow["system_id"]);
+        }
+
+        class_orm_base::setObjHandleLogicalDeletedGlobal(class_orm_deletedhandling_enum::EXCLUDED());
+        return $arrReturn;
     }
 
     /**
-     * Deletes the current object from the system
-     * @return bool
+     * Counts the number of records currently marked as deleted
+     *
+     * @return int
      */
-    public function deleteObject() {
-        return true;
+    public static function getDeletedRecordsCount() {
+        $strQuery = "SELECT COUNT(*) FROM "._dbprefix_."system WHERE system_deleted = 1 ";
+        $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array());
+        return $arrRow["COUNT(*)"];
     }
 
 
@@ -49,7 +63,7 @@ class class_module_system_worker extends class_model implements interface_model 
                          AND system_prev_id = '0'
                          AND system_id != '0'";
 
-        $arrReturn = $this->objDB->getPArray($strQuery, array());
+        $arrReturn = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array());
 
         return $arrReturn;
     }
@@ -68,14 +82,14 @@ class class_module_system_worker extends class_model implements interface_model 
         $strQuery = "SELECT system_id, system_prev_id, system_comment
                        FROM "._dbprefix_."system
                       WHERE system_id != '0'";
-        $arrRecords = $this->objDB->getPArray($strQuery, array(), null, null, false);
+        $arrRecords = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array(), null, null, false);
         //Check every record for its prev_id. To get valid results, flush the db-cache
-        $this->objDB->flushQueryCache();
+        class_carrier::getInstance()->getObjDB()->flushQueryCache();
         foreach ($arrRecords as $arrOneRecord) {
             $strQuery = "SELECT COUNT(*) as number
                            FROM "._dbprefix_."system
                           WHERE system_id = ?";
-            $arrRow = $this->objDB->getPRow($strQuery, array($arrOneRecord["system_prev_id"]));
+            $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array($arrOneRecord["system_prev_id"]));
             if($arrRow["number"] == "0") {
                 $arrReturn[$arrOneRecord["system_id"]] = $arrOneRecord["system_comment"];
             }
@@ -95,7 +109,7 @@ class class_module_system_worker extends class_model implements interface_model 
                        LEFT JOIN "._dbprefix_."system
                         ON (right_id = system_id)
                        WHERE system_id IS NULL ";
-        $arrReturn = $this->objDB->getPArray($strQuery, array());
+        $arrReturn = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array());
 
         return $arrReturn;
     }
@@ -112,7 +126,7 @@ class class_module_system_worker extends class_model implements interface_model 
                        LEFT JOIN "._dbprefix_."system
                         ON (system_date_id = system_id)
                        WHERE system_id IS NULL ";
-        $arrReturn = $this->objDB->getPArray($strQuery, array());
+        $arrReturn = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array());
 
         return $arrReturn;
     }

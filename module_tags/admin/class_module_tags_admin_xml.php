@@ -42,7 +42,7 @@ class class_module_tags_admin_xml extends class_admin_controller implements inte
         if(count(class_module_tags_favorite::getAllFavoritesForUserAndTag($this->objSession->getUserID(), $this->getSystemid())) > 0) {
             $arrFavorites = class_module_tags_favorite::getAllFavoritesForUserAndTag($this->objSession->getUserID(), $this->getSystemid());
             foreach($arrFavorites as $objOneFavorite)
-                $objOneFavorite->deleteObject();
+                $objOneFavorite->deleteObjectFromDatabase();
 
             return $strExisting;
         }

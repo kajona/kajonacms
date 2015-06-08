@@ -230,13 +230,13 @@ class class_v3_v4_postupdate {
             echo "deleting downloads-toplist element...\n";
             $objElement = class_module_pages_element::getElement("downloadstoplist");
             if($objElement != null)
-                $objElement->deleteObject();
+                $objElement->deleteObjectFromDatabase();
 
             echo "deleting old adminwidgets...\n";
             $arrWidgets = class_module_dashboard_widget::getAllWidgets();
             foreach($arrWidgets as $objOneWidget) {
                 if($objOneWidget->getStrClass() == "class_adminwidget_downloads")
-                    $objOneWidget->deleteObject();
+                    $objOneWidget->deleteObjectFromDatabase();
             }
 
             echo "deleting archive and contained downloads data...\n";

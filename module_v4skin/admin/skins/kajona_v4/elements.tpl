@@ -1071,7 +1071,12 @@ Used to print headline in a form
 The following sections specify the layout of the rights-mgmt
 
 <rights_form_header>
-	<div>%%desc%% %%record%% <br /><br /></div>
+    <div>
+        %%desc%% %%record%% <br />
+        <a href="javascript:KAJONA.admin.permissions.toggleEmtpyRows('[lang,permissions_toggle_visible,system]', '[lang,permissions_toggle_hidden,system]');" id="rowToggleLink" class="rowsVisible">[lang,permissions_toggle_visible,system]</a><br /><br />
+    </div>
+    <div id="responseContainer">
+    </div>
 </rights_form_header>
 
 <rights_form_form>
@@ -1117,7 +1122,7 @@ The following sections specify the layout of the rights-mgmt
     <div class="col-sm-6">
         <div class="checkbox">
             <label>
-                <input name="%%name%%" type="checkbox" id="%%name%%" value="1" onclick="this.blur();" onchange="KAJONA.admin.checkRightMatrix();" %%checked%% />
+                    <input name="%%name%%" type="checkbox" id="%%name%%" value="1" onclick="this.blur();" onchange="KAJONA.admin.permissions.checkRightMatrix();" %%checked%% />
                 %%title%%
             </label>
         </div>

@@ -205,6 +205,11 @@ class class_db_mysqli extends class_db_base {
     public function getColumnsOfTable($strTableName) {
         $arrReturn = array();
         $arrTemp = $this->getPArray("SHOW COLUMNS FROM ".$this->encloseTableName(class_db::getInstance()->dbsafeString($strTableName)), array());
+
+        if(empty($arrTemp)) {
+            return array();
+        }
+
         foreach($arrTemp as $arrOneColumn) {
             $arrReturn[] = array(
                 "columnName" => $arrOneColumn["Field"],

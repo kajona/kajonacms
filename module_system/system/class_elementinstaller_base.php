@@ -41,7 +41,7 @@ abstract class class_elementinstaller_base extends class_installer_base implemen
         $objElement = class_module_pages_element::getElement($this->objMetadata->getStrTitle());
         if($objElement != null) {
             $strReturn .= "Deleting page-element '".$this->objMetadata->getStrTitle()."'...\n";
-            $objElement->deleteObject();
+            $objElement->deleteObjectFromDatabase();
         }
         else {
             $strReturn .= "Error finding page-element '".$this->objMetadata->getStrTitle()."', aborting.\n";

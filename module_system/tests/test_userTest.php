@@ -65,7 +65,7 @@ class class_test_user extends class_testbase  {
         foreach($arrUsersCreated as $strOneUser) {
             echo "\t\tdeleting user ".$strOneUser."...\n";
             $objUser = new class_module_user_user($strOneUser);
-            $objUser->deleteObject();
+            $objUser->deleteObjectFromDatabase();
         }
         $objDB->flushQueryCache();
 
@@ -79,7 +79,7 @@ class class_test_user extends class_testbase  {
         echo "\tdeleting groups created...\n";
         foreach($arrGroupsCreated as $strOneGroup) {
             $objOneGroup = new class_module_user_group($strOneGroup);
-            $objOneGroup->deleteObject();
+            $objOneGroup->deleteObjectFromDatabase();
         }
         $objDB->flushQueryCache();
 
@@ -109,9 +109,9 @@ class class_test_user extends class_testbase  {
         echo "\tdeleting groups & users\n";
         foreach($objGroup->getObjSourceGroup()->getUserIdsForGroup() as $strOneUser) {
             $objOneUser = new class_module_user_user($strOneUser);
-            $objOneUser->deleteObject();
+            $objOneUser->deleteObjectFromDatabase();
         }
-        $objGroup->deleteObject();
+        $objGroup->deleteObjectFromDatabase();
 
 
         $objDB->flushQueryCache();

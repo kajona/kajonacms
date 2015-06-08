@@ -88,7 +88,7 @@ class class_module_system_admin_xml extends class_admin_controller implements in
 
 
     /**
-     * Changes the status of the current systemid
+     * Deletes are record identified by its systemid
      *
      * @return string
      * @permissions delete

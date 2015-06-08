@@ -443,27 +443,30 @@ class class_module_pages_content_admin extends class_admin_simple implements int
             if($this->getParam("placeholder") != "")
                 $objElementData->setStrPlaceholder($this->getParam("placeholder"));
 
-            if(!$objElementData->updateObjectToDb())
-                throw new class_exception("Error updating object to db", class_exception::$level_ERROR);
-
-
-            //check, if we have to update the date-records
             $objStartDate = new class_date("0");
             $objEndDate = new class_date("0");
             $objStartDate->generateDateFromParams("start", $this->getAllParams());
             $objEndDate->generateDateFromParams("end", $this->getAllParams());
 
-            $objSystemCommon = new class_module_system_common($this->getSystemid());
-            if($objStartDate->getIntYear() == "0000" && $objEndDate->getIntYear() == "0000") {
-                //Delete the record (maybe) existing in the dates-table
-                if(!$objSystemCommon->deleteDateRecord())
-                    throw new class_exception("Error deleting dates from db", class_exception::$level_ERROR);
+
+            if($objStartDate->getIntYear() == "0000") {
+                $objElementData->setObjStartDate(null);
             }
             else {
-                //inserts needed
-                $objSystemCommon->setStartDate($objStartDate);
-                $objSystemCommon->setEndDate($objEndDate);
+                $objElementData->setObjStartDate($objStartDate);
             }
+
+            if($objEndDate->getIntYear() == "0000") {
+                $objElementData->setObjEndDate(null);
+            }
+            else {
+                $objElementData->setObjEndDate($objEndDate);
+            }
+
+
+            if(!$objElementData->updateObjectToDb())
+                throw new class_exception("Error updating object to db", class_exception::$level_ERROR);
+
 
             //allow the element to run actions after saving
             $objElement->doAfterSaveToDb();

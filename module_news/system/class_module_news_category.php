@@ -41,7 +41,7 @@ class class_module_news_category extends class_model implements interface_model,
      * @return mixed
      */
     public function getSearchAdminLinkForObject() {
-        return getLinkAdminHref("news", "listNewsAndCategories", "&filterid=".$this->getSystemid());
+        return class_link::getLinkAdminHref("news", "listNewsAndCategories", "&filterid=".$this->getSystemid());
     }
 
 
@@ -105,14 +105,6 @@ class class_module_news_category extends class_model implements interface_model,
         return $arrReturn;
     }
 
-    public function deleteObject() {
-        //start by deleting from members an cat table
-        $strQuery = "DELETE FROM " . _dbprefix_ . "news_member WHERE newsmem_category = ?";
-        if($this->objDB->_pQuery($strQuery, array($this->getSystemid()))) {
-            return parent::deleteObject();
-        }
-        return false;
-    }
 
     public function getStrTitle() {
         return $this->strTitle;

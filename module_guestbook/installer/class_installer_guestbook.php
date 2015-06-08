@@ -86,7 +86,7 @@ class class_installer_guestbook extends class_installer_base implements interfac
         $objElement = class_module_pages_element::getElement("guestbook");
         if($objElement != null) {
             $strReturn .= "Deleting page-element 'guestbook'...\n";
-            $objElement->deleteObject();
+            $objElement->deleteObjectFromDatabase();
         }
         else {
             $strReturn .= "Error finding page-element 'guestbook', aborting.\n";
@@ -96,7 +96,7 @@ class class_installer_guestbook extends class_installer_base implements interfac
         /** @var class_module_guestbook_guestbook $objOneObject */
         foreach(class_module_guestbook_guestbook::getObjectList() as $objOneObject) {
             $strReturn .= "Deleting object '".$objOneObject->getStrDisplayName()."' ...\n";
-            if(!$objOneObject->deleteObject()) {
+            if(!$objOneObject->deleteObjectFromDatabase()) {
                 $strReturn .= "Error deleting object, aborting.\n";
                 return false;
             }
@@ -105,7 +105,7 @@ class class_installer_guestbook extends class_installer_base implements interfac
         //delete the module-node
         $strReturn .= "Deleting the module-registration...\n";
         $objModule = class_module_system_module::getModuleByName($this->objMetadata->getStrTitle(), true);
-        if(!$objModule->deleteObject()) {
+        if(!$objModule->deleteObjectFromDatabase()) {
             $strReturn .= "Error deleting module, aborting.\n";
             return false;
         }

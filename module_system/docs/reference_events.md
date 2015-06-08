@@ -151,8 +151,48 @@ The relevant object and the name of the changed property are passed, too.<br />R
 		</tr>
 		<tr>
 			<td>Description</td>
-			<td>Thrown as soon as record is deleted. Listen to those events if you want to trigger additional cleanups or delete linked contents.</td>
+			<td>Thrown as soon as record is deleted from the database. Listen to those events if you want to trigger additional cleanups or delete linked contents.<br />Make sure to return a matching boolean-value, otherwise the transaction may be rolled back.</td>
 		</tr>
+		
+		
+		
+		<tr>
+			<td rowspan="3" style="border-top: 1px solid #ccc; border-right: 1px solid #ccc;vertical-align: top;">core.system.recorddeleted.logically</td>
+			<td style="border-top: 1px solid #ccc;">Since</td>
+			<td style="border-top: 1px solid #ccc;">4.8</td>
+		</tr>
+		<tr>
+			<td>Arguments</td>
+			<td>string $strSystemid &nbsp;&nbsp;<br />
+			string $strSourceClass</td>
+		</tr>
+		<tr>
+			<td>Description</td>
+			<td>Thrown as soon as record is deleted logically, so set inactive. The reocord is NOT removed from the database. Listen to those events if you want to trigger additional cleanups or delete linked contents.<br />Make sure to return a matching boolean-value, otherwise the transaction may be rolled back.</td>
+		</tr>
+		
+		
+		
+		
+		<tr>
+        			<td rowspan="3" style="border-top: 1px solid #ccc; border-right: 1px solid #ccc;vertical-align: top;">core.system.recordrestored.logically</td>
+        			<td style="border-top: 1px solid #ccc;">Since</td>
+        			<td style="border-top: 1px solid #ccc;">4.8</td>
+        		</tr>
+        		<tr>
+        			<td>Arguments</td>
+        			<td>string $strSystemid<br />
+                        string $strSourceClass The class-name of the object deleted<br />
+                        class_model $objObject The object which is being restored</td>
+        		</tr>
+        		<tr>
+        			<td>Description</td>
+        			<td>Called whenever a records is restored from the database.<br />The event is fired after the record was restored but before the transaction will be committed.<br />Make sure to return a matching boolean-value, otherwise the transaction may be rolled back.</td>
+        		</tr>
+		
+		
+		
+		
 		<tr>
 			<td rowspan="3" style="border-top: 1px solid #ccc; border-right: 1px solid #ccc;vertical-align: top;">core.system.userfirstlogin</td>
 			<td style="border-top: 1px solid #ccc;">Since</td>
@@ -216,4 +256,4 @@ The relevant object and the name of the changed property are passed, too.<br />R
 			<td colspan="2">&nbsp;</td>
 		</tr>
 	</tbody>
-</table>
+</table>

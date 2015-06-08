@@ -55,8 +55,8 @@ class class_rights {
         $this->objSession = class_carrier::getInstance()->getObjSession();
 
         if(count($this->objDb->getTables()) > 0) {
-            $arrModule = class_module_system_module::getPlainModuleData("system");
-            if(version_compare($arrModule["module_version"], "4.3.1") < 0)
+            $objModule = class_module_system_module::getModuleByName("system");
+            if($objModule !== null && version_compare($objModule->getStrVersion(), "4.3.1") < 0)
                 $this->bitChangelog = false;
         }
     }

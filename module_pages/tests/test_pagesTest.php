@@ -59,7 +59,7 @@ class class_test_pages extends class_testbase {
         echo "\tdeleting pages created...\n";
         foreach($arrPagesCreated as $strOnePageID) {
             $objDelPage = new class_module_pages_page($strOnePageID);
-            $objDelPage->deleteObject();
+            $objDelPage->deleteObjectFromDatabase();
             $objDB->flushQueryCache();
         }
         echo "\tcheck number of pages installed...\n";
@@ -69,7 +69,7 @@ class class_test_pages extends class_testbase {
         echo "\tdeleting folders created...\n";
         foreach($arrFoldersCreated as $strOneFolderID) {
             $objFolder = new class_module_pages_folder($strOneFolderID);
-            $objFolder->deleteObject();
+            $objFolder->deleteObjectFromDatabase();
             $objDB->flushQueryCache();
         }
         echo "\tcheck number of folders installed...\n";
@@ -79,7 +79,7 @@ class class_test_pages extends class_testbase {
 
         echo"\tdeleting folder...\n";
         $objFolder = new class_module_pages_folder($strTestFolderID);
-        $objFolder->deleteObject();
+        $objFolder->deleteObjectFromDatabase();
 
     }
 
@@ -164,8 +164,8 @@ class class_test_pages extends class_testbase {
         $this->assertEquals($objNewElementInstance->getStrTitle(), "autotest");
 
 
-        $objNewPage->deleteObject();
-        $objOldPage->deleteObject();
+        $objNewPage->deleteObjectFromDatabase();
+        $objOldPage->deleteObjectFromDatabase();
 
     }
 
