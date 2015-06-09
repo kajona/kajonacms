@@ -56,6 +56,7 @@ class class_element_news_admin extends class_element_admin implements interface_
      * @fieldType dropdown
      * @fieldLabel news_mode
      * @fieldDDValues [0 => news_mode_normal],[1 => news_mode_archive]
+     * @fieldMandatory
      */
     private $intMode;
 
@@ -79,6 +80,7 @@ class class_element_news_admin extends class_element_admin implements interface_
      * @fieldLabel template
      *
      * @fieldTemplateDir /module_news
+     * @fieldMandatory
      */
     private $strTemplate;
 

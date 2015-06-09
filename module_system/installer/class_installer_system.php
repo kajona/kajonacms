@@ -1223,7 +1223,9 @@ class class_installer_system extends class_installer_base implements interface_i
 
         $strReturn .= "Updating system table\n";
         $this->objDB->addColumn("system", "system_deleted", class_db_datatypes::STR_TYPE_INT);
-
+        $strQuery = "UPDATE "._dbprefix_."system SET system_deleted = 0";
+        $this->objDB->_pQuery($strQuery, array());
+        class_carrier::getInstance()->flushCache(class_carrier::INT_CACHE_TYPE_DBTABLES | class_carrier::INT_CACHE_TYPE_DBSTATEMENTS);
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion($this->objMetadata->getStrTitle(), "4.7.5");
         return $strReturn;
