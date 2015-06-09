@@ -5,8 +5,10 @@
 ********************************************************************************************************/
 
 /**
- * @author  sidler@mulchprod.de
- * @since   4.0
+ * A formelement which provides an div container. The container can optional contain other formentry elements.
+ *
+ * @author  christoph.kappestein@gmail.com
+ * @since   4.8
  * @package module_formgenerator
  */
 class class_formentry_container extends class_formentry_base {
