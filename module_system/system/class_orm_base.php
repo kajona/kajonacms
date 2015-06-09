@@ -136,7 +136,12 @@ abstract class class_orm_base {
     public final function getAssignmentsFromDatabase($strPropertyName) {
         $objCfg = class_orm_assignment_config::getConfigForProperty($this->getObjObject(), $strPropertyName);
         $objDB = class_carrier::getInstance()->getObjDB();
-        $strQuery = "SELECT * FROM ".$objDB->encloseTableName(_dbprefix_.$objCfg->getStrTableName())." WHERE ".$objDB->encloseColumnName($objCfg->getStrSourceColumn())." = ? ";
+        $strQuery = " SELECT *
+                        FROM ".$objDB->encloseTableName(_dbprefix_.$objCfg->getStrTableName()).",
+                             ".$objDB->encloseTableName(_dbprefix_."system")."
+                       WHERE system_id =  ".$objDB->encloseColumnName($objCfg->getStrTargetColumn())."
+                         AND ".$objDB->encloseColumnName($objCfg->getStrSourceColumn())." = ?
+                             ".$this->getDeletedWhereRestriction();
         $arrRows = $objDB->getPArray($strQuery, array($this->getObjObject()->getSystemid()), null, null);
 
         $strTargetCol = $objCfg->getStrTargetColumn();
