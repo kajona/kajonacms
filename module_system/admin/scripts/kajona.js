@@ -392,7 +392,7 @@ KAJONA.admin.permissions = {
     toggleEmtpyRows : function (strVisibleName, strHiddenName) {
 
         $('#rightsForm tr').each(function(){
-            if($(this).find("input:checked").length == 0) {
+            if($(this).find("input:checked").length == 0 && $(this).find("th").length == 0) {
                 $(this).toggle();
             }
         });
