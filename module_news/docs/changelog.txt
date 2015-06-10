@@ -1,5 +1,8 @@
 Module News
 
+V4.7.1 --------------------------------------------------------------------------------------------------
+BUG: module_news | portal list -> the pageview is capable of rendering multiple news-elements per page. the elements' systemid is used to parameterize the pageview.
+
 V4.6 ----------------------------------------------------------------------------------------------------
 BUG: module_news | portal list -> the "show more" link is rendered even if there is only a image for the details-view (and no fulltext). fixes #49.
 BUG: module_news | news_admin -> having datetime mode enabled for news caused the date-fields to be rendered twice

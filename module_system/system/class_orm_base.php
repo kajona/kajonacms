@@ -136,7 +136,12 @@ abstract class class_orm_base {
     public final function getAssignmentsFromDatabase($strPropertyName) {
         $objCfg = class_orm_assignment_config::getConfigForProperty($this->getObjObject(), $strPropertyName);
         $objDB = class_carrier::getInstance()->getObjDB();
-        $strQuery = "SELECT * FROM ".$objDB->encloseTableName(_dbprefix_.$objCfg->getStrTableName())." WHERE ".$objDB->encloseColumnName($objCfg->getStrSourceColumn())." = ? ";
+        $strQuery = " SELECT *
+                        FROM ".$objDB->encloseTableName(_dbprefix_.$objCfg->getStrTableName()).",
+                             ".$objDB->encloseTableName(_dbprefix_."system")."
+                       WHERE system_id =  ".$objDB->encloseColumnName($objCfg->getStrTargetColumn())."
+                         AND ".$objDB->encloseColumnName($objCfg->getStrSourceColumn())." = ?
+                             ".$this->getDeletedWhereRestriction();
         $arrRows = $objDB->getPArray($strQuery, array($this->getObjObject()->getSystemid()), null, null);
 
         $strTargetCol = $objCfg->getStrTargetColumn();
@@ -169,14 +174,19 @@ abstract class class_orm_base {
      * Currently the methods returns a string based where restriction.
      * @return string
      */
-    public function getDeletedWhereRestriction() {
+    public function getDeletedWhereRestriction($strSystemTablePrefix = "") {
         $strQuery = "";
+
+        if($strSystemTablePrefix != "") {
+            $strSystemTablePrefix = $strSystemTablePrefix.".";
+        }
+
         if(self::$bitLogcialDeleteAvailable) {
             if($this->getIntCombinedLogicalDeletionConfig()->equals(class_orm_deletedhandling_enum::EXCLUDED())) {
-                $strQuery .= " AND system_deleted = 0 ";
+                $strQuery .= " AND {$strSystemTablePrefix}system_deleted = 0 ";
             }
             else if($this->getIntCombinedLogicalDeletionConfig()->equals(class_orm_deletedhandling_enum::EXCLUSIVE())) {
-                $strQuery .= " AND system_deleted = 1 ";
+                $strQuery .= " AND {$strSystemTablePrefix}system_deleted = 1 ";
             }
         }
 

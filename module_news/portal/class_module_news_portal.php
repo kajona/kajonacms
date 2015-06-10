@@ -60,10 +60,16 @@ class class_module_news_portal extends class_portal_controller implements interf
             $strFilterId = $this->arrElementData["news_category"];
         }
 
+        $strPageview = 1;
+        if($this->getParam("pv") != 1 && $this->getSystemid() == $this->arrElementData["content_id"]) {
+            $strPageview = $this->getParam("pv");
+        }
+
+
         //Load all posts
         $objArraySectionIterator = new class_array_section_iterator(class_module_news_news::getNewsCountPortal($this->arrElementData["news_mode"], $strFilterId));
         $objArraySectionIterator->setIntElementsPerPage($this->arrElementData["news_amount"]);
-        $objArraySectionIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
+        $objArraySectionIterator->setPageNumber((int)$strPageview);
         $objArraySectionIterator->setArraySection(
             class_module_news_news::loadListNewsPortal($this->arrElementData["news_mode"], $strFilterId, $this->arrElementData["news_order"], $objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos())
         );
@@ -74,7 +80,7 @@ class class_module_news_portal extends class_portal_controller implements interf
             $this->getLang("commons_back"),
             "",
             $this->getPagename(),
-            "",
+            "&systemid=".$this->arrElementData["content_id"],
             "pv",
             "/module_news/".$this->arrElementData["news_template"]
         );

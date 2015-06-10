@@ -392,7 +392,7 @@ KAJONA.admin.permissions = {
     toggleEmtpyRows : function (strVisibleName, strHiddenName) {
 
         $('#rightsForm tr').each(function(){
-            if($(this).find("input:checked").length == 0) {
+            if($(this).find("input:checked").length == 0 && $(this).find("th").length == 0) {
                 $(this).toggle();
             }
         });
@@ -419,6 +419,7 @@ KAJONA.admin.permissions = {
             }
         });
 
+        $("#responseContainer").html('').addClass("loadingContainer");
 
         $.ajax({
             url: KAJONA_WEBPATH + '/xml.php?admin=1&module=right&action=saveRights&systemid='+ $('#systemid').val(),
@@ -426,7 +427,7 @@ KAJONA.admin.permissions = {
             data: {json: JSON.stringify(objResponse)},
             dataType: 'json'
         }).done(function(data) {
-            $("#responseContainer").html(data.message);
+            $("#responseContainer").removeClass("loadingContainer").html(data.message);
         });
 
 
