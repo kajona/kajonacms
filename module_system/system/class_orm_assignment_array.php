@@ -28,13 +28,19 @@ class class_orm_assignment_array extends ArrayObject {
     private $strProperty = "";
 
     /**
+     * @var class_orm_deletedhandling_enum
+     */
+    private $objDeletedHandling = null;
+
+    /**
      * Create a new lazy-loaded array for a mapped assignment-property
      * @param class_root $objTargetObject
      * @param int $strProperty
      */
-    function __construct(class_root $objTargetObject, $strProperty) {
+    function __construct(class_root $objTargetObject, $strProperty, class_orm_deletedhandling_enum $objDeletedHandling) {
         $this->objTargetObject = $objTargetObject;
         $this->strProperty = $strProperty;
+        $this->objDeletedHandling = $objDeletedHandling;
 
         parent::__construct(array());
     }
@@ -50,6 +56,7 @@ class class_orm_assignment_array extends ArrayObject {
         $this->bitInitialized = true;
 
         $objInit = new class_orm_objectinit($this->objTargetObject);
+        $objInit->setObjHandleLogicalDeleted($this->objDeletedHandling);
         $objCfg = class_orm_assignment_config::getConfigForProperty($this->objTargetObject, $this->strProperty);
 
         foreach($objInit->getAssignmentsFromDatabase($this->strProperty) as $strOneId) {
@@ -137,6 +144,15 @@ class class_orm_assignment_array extends ArrayObject {
     public function getBitInitialized() {
         return $this->bitInitialized;
     }
+
+    /**
+     * @return class_orm_deletedhandling_enum
+     */
+    public function getObjDeletedHandling() {
+        return $this->objDeletedHandling;
+    }
+
+
 
 
 }

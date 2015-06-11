@@ -129,7 +129,7 @@ abstract class class_orm_base {
 
     /**
      * Reads the assignment values currently stored in the database for a given property of the current object.
-     * @param $strPropertyName
+     * @param string $strPropertyName
      *
      * @return string[] array of systemids
      */

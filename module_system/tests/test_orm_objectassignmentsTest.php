@@ -56,6 +56,113 @@ class class_test_orm_objectassignmentsTest extends class_testbase_object {
     }
 
 
+    public function testLogicalDeleteUpdateHandlingExcluded() {
+        $objDB = class_carrier::getInstance()->getObjDB();
+
+        /** @var orm_objectlist_testclass $objTestobject */
+        $objTestobject = $this->getObject("testobject");
+        $arrAspects = array($this->getObject("aspect1"), $this->getObject("aspect2"), $this->getObject("aspect3"));
+
+
+        $objTestobject->setArrObject1($arrAspects);
+        $objTestobject->updateObjectToDb();
+
+        $arrRow = $objDB->getPRow("SELECT COUNT(*) FROM "._dbprefix_."testclass_rel WHERE testclass_source_id = ?", array($objTestobject->getSystemid()));
+        $this->assertEquals(3, $arrRow["COUNT(*)"]);
+
+        //delete one aspect logically
+        $arrAspects[1]->deleteObject();
+
+        $objDB->flushQueryCache();
+
+
+        $objTestobject = new orm_objectlist_testclass($objTestobject->getSystemid());
+        $this->assertEquals(count($objTestobject->getArrObject1()), 2);
+        $objTestobject->setArrObject1(array($arrAspects[0], $arrAspects[1]));
+        $objTestobject->updateObjectToDb();
+
+        $arrRow = $objDB->getPRow("SELECT COUNT(*) FROM "._dbprefix_."testclass_rel WHERE testclass_source_id = ?", array($objTestobject->getSystemid()));
+        $this->assertEquals(3, $arrRow["COUNT(*)"]);
+    }
+
+    public function testLogicalDeleteUpdateHandlingIncluded() {
+        $objDB = class_carrier::getInstance()->getObjDB();
+
+        /** @var orm_objectlist_testclass $objTestobject */
+        $objTestobject = $this->getObject("testobject");
+        $arrAspects = array($this->getObject("aspect1"), $this->getObject("aspect2"), $this->getObject("aspect3"));
+
+
+        $objTestobject->setArrObject1($arrAspects);
+        $objTestobject->updateObjectToDb();
+
+        $arrRow = $objDB->getPRow("SELECT COUNT(*) FROM "._dbprefix_."testclass_rel WHERE testclass_source_id = ?", array($objTestobject->getSystemid()));
+        $this->assertEquals(3, $arrRow["COUNT(*)"]);
+
+        //delete one aspect logically
+        $arrAspects[1]->deleteObject();
+
+        $objDB->flushQueryCache();
+
+        class_orm_base::setObjHandleLogicalDeletedGlobal(class_orm_deletedhandling_enum::INCLUDED());
+        $objTestobject = new orm_objectlist_testclass($objTestobject->getSystemid());
+        class_orm_base::setObjHandleLogicalDeletedGlobal(null);
+        $this->assertEquals(count($objTestobject->getArrObject1()), 3);
+        $objTestobject->updateObjectToDb();
+
+        $arrRow = $objDB->getPRow("SELECT COUNT(*) FROM "._dbprefix_."testclass_rel WHERE testclass_source_id = ?", array($objTestobject->getSystemid()));
+        $this->assertEquals(3, $arrRow["COUNT(*)"]);
+    }
+
+
+
+
+    public function testLogicalDeleteLoadHandling() {
+        $objDB = class_carrier::getInstance()->getObjDB();
+
+        /** @var orm_objectlist_testclass $objTestobject */
+        $objTestobject = $this->getObject("testobject");
+        $arrAspects = array($this->getObject("aspect1"), $this->getObject("aspect2"), $this->getObject("aspect3"));
+
+
+        $objTestobject->setArrObject1($arrAspects);
+        $objTestobject->updateObjectToDb();
+
+        $arrRow = $objDB->getPRow("SELECT COUNT(*) FROM "._dbprefix_."testclass_rel WHERE testclass_source_id = ?", array($objTestobject->getSystemid()));
+        $this->assertEquals(3, $arrRow["COUNT(*)"]);
+
+        //delete one aspect logically
+        $arrAspects[1]->deleteObject();
+
+        $objDB->flushQueryCache();
+
+
+        $objTestobject = new orm_objectlist_testclass($objTestobject->getSystemid());
+        $this->assertEquals(count($objTestobject->getArrObject1()), 2);
+
+        class_orm_base::setObjHandleLogicalDeletedGlobal(class_orm_deletedhandling_enum::INCLUDED());
+        $objTestobject = new orm_objectlist_testclass($objTestobject->getSystemid());
+        class_orm_base::setObjHandleLogicalDeletedGlobal(null);
+        $this->assertEquals(count($objTestobject->getArrObject1()), 3);
+
+        class_orm_base::setObjHandleLogicalDeletedGlobal(class_orm_deletedhandling_enum::EXCLUSIVE());
+        $objTestobject = new orm_objectlist_testclass($objTestobject->getSystemid());
+        class_orm_base::setObjHandleLogicalDeletedGlobal(null);
+        $this->assertEquals(count($objTestobject->getArrObject1()), 1);
+        $this->assertEquals($objTestobject->getArrObject1()[0]->getSystemid(), $arrAspects[1]->getSystemid());
+
+        class_orm_base::setObjHandleLogicalDeletedGlobal(null);
+        $objTestobject = new orm_objectlist_testclass($objTestobject->getSystemid());
+        class_orm_base::setObjHandleLogicalDeletedGlobal(null);
+        $this->assertEquals(count($objTestobject->getArrObject1()), 2);
+        $this->assertTrue(in_array($objTestobject->getArrObject1()[0]->getSystemid(), array($arrAspects[0]->getSystemid(), $arrAspects[2]->getSystemid())));
+
+
+
+
+    }
+
+
     public function testObjectassignmentsSaving() {
 
         $objDB = class_carrier::getInstance()->getObjDB();
