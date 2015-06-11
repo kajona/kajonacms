@@ -200,7 +200,7 @@ abstract class class_orm_base {
      *
      * @param class_orm_deletedhandling_enum $objHandleLogicalDeleted
      */
-    public static function setObjHandleLogicalDeletedGlobal(class_orm_deletedhandling_enum $objHandleLogicalDeleted) {
+    public static function setObjHandleLogicalDeletedGlobal(class_orm_deletedhandling_enum $objHandleLogicalDeleted = null) {
         class_carrier::getInstance()->flushCache(class_carrier::INT_CACHE_TYPE_DBQUERIES | class_carrier::INT_CACHE_TYPE_ORMCACHE);
         self::$objHandleLogicalDeletedGlobal = $objHandleLogicalDeleted;
     }
@@ -222,8 +222,12 @@ abstract class class_orm_base {
         $this->objHandleLogicalDeleted = $objHandleLogicalDeleted;
     }
 
-
-
+    /**
+     * @return int
+     */
+    public static function getObjHandleLogicalDeletedGlobal() {
+        return self::$objHandleLogicalDeletedGlobal;
+    }
 }
 
 /**
