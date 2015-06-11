@@ -142,7 +142,7 @@ abstract class class_orm_base {
                        WHERE system_id =  ".$objDB->encloseColumnName($objCfg->getStrTargetColumn())."
                          AND ".$objDB->encloseColumnName($objCfg->getStrSourceColumn())." = ?
                              ".$this->getDeletedWhereRestriction();
-        $arrRows = $objDB->getPArray($strQuery, array($this->getObjObject()->getSystemid()), null, null);
+        $arrRows = $objDB->getPArray($strQuery, array($this->getObjObject()->getSystemid()));
 
         $strTargetCol = $objCfg->getStrTargetColumn();
         array_walk($arrRows, function(array &$arrSingleRow) use ($strTargetCol) {

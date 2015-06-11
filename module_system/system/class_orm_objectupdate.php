@@ -150,6 +150,25 @@ class class_orm_objectupdate extends class_orm_base {
             $arrAssignmentsFromDatabase = $this->getAssignmentsFromDatabase($strPropertyName);
             $this->setObjHandleLogicalDeleted($objOldHandling);
 
+            //if the delete handling was set to excluded when loading the assignment, the logically deleted nodes should be merged with the values from db
+            if($objAssignmentDeleteHandling->equals(class_orm_deletedhandling_enum::EXCLUDED())) {
+                $this->setObjHandleLogicalDeleted(class_orm_deletedhandling_enum::EXCLUSIVE());
+                $arrDeletedIds = $this->getAssignmentsFromDatabase($strPropertyName);
+                $this->setObjHandleLogicalDeleted($objOldHandling);
+
+                foreach($arrDeletedIds as $strOneId) {
+                    if(!in_array($strOneId, $arrAssignmentsFromDatabase)) {
+                        $arrAssignmentsFromDatabase[] = $strOneId;
+                    }
+
+                    if(!in_array($strOneId, $arrAssignmentsFromObject)) {
+                        $arrAssignmentsFromObject[] = $strOneId;
+                    }
+                }
+
+
+            }
+
 
             sort($arrAssignmentsFromObject);
             sort($arrAssignmentsFromDatabase);
@@ -165,23 +184,12 @@ class class_orm_objectupdate extends class_orm_base {
             $objDB = class_carrier::getInstance()->getObjDB();
 
             $arrInserts = array();
-            foreach($arrNewAssignments as $strOneTargetId)
+            foreach($arrAssignmentsFromObject as $strOneTargetId)
                 $arrInserts[] = array($this->getObjObject()->getSystemid(), $strOneTargetId);
 
-
-            $arrParams = array($this->getObjObject()->getSystemid());
-            $arrPlaceholder = array();
-            foreach($arrDeletedAssignments as $strOneId) {
-                $arrParams[] = $strOneId;
-                $arrPlaceholder[] = "?";
-            }
-
-            if(count($arrDeletedAssignments) > 0) {
                 $bitReturn = $bitReturn && $objDB->_pQuery(
-                        "DELETE FROM ".$objDB->encloseTableName(_dbprefix_.$objCfg->getStrTableName())." WHERE ".$objDB->encloseColumnName($objCfg->getStrSourceColumn())." = ? AND ".$objDB->encloseColumnName($objCfg->getStrTargetColumn())." IN (".implode(",", $arrPlaceholder).")",
-                        $arrParams
+                "DELETE FROM ".$objDB->encloseTableName(_dbprefix_.$objCfg->getStrTableName())." WHERE ".$objDB->encloseColumnName($objCfg->getStrSourceColumn())." = ?", array($this->getObjObject()->getSystemid())
                     );
-            }
             $bitReturn = $bitReturn && $objDB->multiInsert($objCfg->getStrTableName(), array($objCfg->getStrSourceColumn(), $objCfg->getStrTargetColumn()), $arrInserts);
 
             $bitReturn = $bitReturn && class_core_eventdispatcher::getInstance()->notifyGenericListeners(

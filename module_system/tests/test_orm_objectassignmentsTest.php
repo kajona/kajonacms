@@ -73,7 +73,33 @@ class class_test_orm_objectassignmentsTest extends class_testbase_object {
         //delete one aspect logically
         $arrAspects[1]->deleteObject();
 
-        $objDB->flushQueryCache();
+
+        $objTestobject = new orm_objectlist_testclass($objTestobject->getSystemid());
+        $this->assertEquals(count($objTestobject->getArrObject1()), 2);
+        $objTestobject->setArrObject1(array($arrAspects[0], $arrAspects[2]));
+        $objTestobject->updateObjectToDb();
+
+        $arrRow = $objDB->getPRow("SELECT COUNT(*) FROM "._dbprefix_."testclass_rel WHERE testclass_source_id = ?", array($objTestobject->getSystemid()));
+        $this->assertEquals(3, $arrRow["COUNT(*)"]);
+    }
+
+
+    public function testLogicalDeleteUpdateHandlingExcludedVariant2() {
+        $objDB = class_carrier::getInstance()->getObjDB();
+
+        /** @var orm_objectlist_testclass $objTestobject */
+        $objTestobject = $this->getObject("testobject");
+        $arrAspects = array($this->getObject("aspect1"), $this->getObject("aspect2"), $this->getObject("aspect3"));
+
+
+        $objTestobject->setArrObject1($arrAspects);
+        $objTestobject->updateObjectToDb();
+
+        $arrRow = $objDB->getPRow("SELECT COUNT(*) FROM "._dbprefix_."testclass_rel WHERE testclass_source_id = ?", array($objTestobject->getSystemid()));
+        $this->assertEquals(3, $arrRow["COUNT(*)"]);
+
+        //delete one aspect logically
+        $arrAspects[1]->deleteObject();
 
 
         $objTestobject = new orm_objectlist_testclass($objTestobject->getSystemid());
@@ -82,7 +108,7 @@ class class_test_orm_objectassignmentsTest extends class_testbase_object {
         $objTestobject->updateObjectToDb();
 
         $arrRow = $objDB->getPRow("SELECT COUNT(*) FROM "._dbprefix_."testclass_rel WHERE testclass_source_id = ?", array($objTestobject->getSystemid()));
-        $this->assertEquals(3, $arrRow["COUNT(*)"]);
+        $this->assertEquals(2, $arrRow["COUNT(*)"]);
     }
 
     public function testLogicalDeleteUpdateHandlingIncluded() {
@@ -101,8 +127,6 @@ class class_test_orm_objectassignmentsTest extends class_testbase_object {
 
         //delete one aspect logically
         $arrAspects[1]->deleteObject();
-
-        $objDB->flushQueryCache();
 
         class_orm_base::setObjHandleLogicalDeletedGlobal(class_orm_deletedhandling_enum::INCLUDED());
         $objTestobject = new orm_objectlist_testclass($objTestobject->getSystemid());
@@ -133,8 +157,6 @@ class class_test_orm_objectassignmentsTest extends class_testbase_object {
 
         //delete one aspect logically
         $arrAspects[1]->deleteObject();
-
-        $objDB->flushQueryCache();
 
 
         $objTestobject = new orm_objectlist_testclass($objTestobject->getSystemid());
@@ -178,8 +200,6 @@ class class_test_orm_objectassignmentsTest extends class_testbase_object {
         $arrRow = $objDB->getPRow("SELECT COUNT(*) FROM "._dbprefix_."testclass_rel WHERE testclass_source_id = ?", array($objTestobject->getSystemid()));
         $this->assertEquals(2, $arrRow["COUNT(*)"]);
 
-        $objDB->flushQueryCache();
-
         //change the assignments
         $objTestobject = $this->getObject("testobject");
         $arrAspects = array($this->getObject("aspect2"));
@@ -189,8 +209,6 @@ class class_test_orm_objectassignmentsTest extends class_testbase_object {
         $arrRow = $objDB->getPRow("SELECT COUNT(*) FROM "._dbprefix_."testclass_rel WHERE testclass_source_id = ?", array($objTestobject->getSystemid()));
         $this->assertEquals(1, $arrRow["COUNT(*)"]);
 
-        $objDB->flushQueryCache();
-
         //change the assignments
         $objTestobject = $this->getObject("testobject");
         $objTestobject->setArrObject1(array());
@@ -198,9 +216,6 @@ class class_test_orm_objectassignmentsTest extends class_testbase_object {
 
         $arrRow = $objDB->getPRow("SELECT COUNT(*) FROM "._dbprefix_."testclass_rel WHERE testclass_source_id = ?", array($objTestobject->getSystemid()));
         $this->assertEquals(0, $arrRow["COUNT(*)"]);
-
-
-        $objDB->flushQueryCache();
 
         //change the assignments
         $objTestobject = $this->getObject("testobject");
@@ -228,7 +243,6 @@ class class_test_orm_objectassignmentsTest extends class_testbase_object {
         $arrRow = $objDB->getPRow("SELECT COUNT(*) FROM "._dbprefix_."testclass_rel WHERE testclass_source_id = ?", array($objTestobject->getSystemid()));
         $this->assertEquals(2, $arrRow["COUNT(*)"]);
 
-        $objDB->flushQueryCache();
         $objTestobject->deleteObjectFromDatabase();
 
 
@@ -289,8 +303,6 @@ class class_test_orm_objectassignmentsTest extends class_testbase_object {
         $this->assertTrue(in_array($objHandler->arrCurrentAssignments[0], array($this->getObject("aspect1")->getSystemid(), $this->getObject("aspect2")->getSystemid())));
         $this->assertTrue(in_array($objHandler->arrCurrentAssignments[1], array($this->getObject("aspect1")->getSystemid(), $this->getObject("aspect2")->getSystemid())));
 
-        $objDB->flushQueryCache();
-
         //change the assignments
         $objHandler = new orm_objectlist_testhandler();
         class_core_eventdispatcher::getInstance()->removeAndAddListener(class_system_eventidentifier::EVENT_SYSTEM_OBJECTASSIGNMENTSUPDATED, $objHandler);
@@ -313,8 +325,6 @@ class class_test_orm_objectassignmentsTest extends class_testbase_object {
         $this->assertTrue(in_array($objHandler->arrCurrentAssignments[0], array($this->getObject("aspect2")->getSystemid())));
 
 
-        $objDB->flushQueryCache();
-
         //change the assignments
         $objHandler = new orm_objectlist_testhandler();
         class_core_eventdispatcher::getInstance()->removeAndAddListener(class_system_eventidentifier::EVENT_SYSTEM_OBJECTASSIGNMENTSUPDATED, $objHandler);
@@ -334,9 +344,6 @@ class class_test_orm_objectassignmentsTest extends class_testbase_object {
         $this->assertEquals(count($objHandler->arrRemovedAssignments), 1);
         $this->assertEquals(count($objHandler->arrCurrentAssignments), 0);
         $this->assertTrue(in_array($objHandler->arrRemovedAssignments[0], array($this->getObject("aspect2")->getSystemid())));
-
-
-        $objDB->flushQueryCache();
 
         //change the assignments
 
@@ -420,15 +427,11 @@ class class_test_orm_objectassignmentsTest extends class_testbase_object {
         $arrRow = $objDB->getPRow("SELECT COUNT(*) FROM "._dbprefix_."testclass2_rel WHERE testclass_source_id = ?", array($objTestobject->getSystemid()));
         $this->assertEquals(2, $arrRow["COUNT(*)"]);
 
-        $objDB->flushQueryCache();
-
         $objTestobject = new orm_objectlist_testclass($objTestobject->getSystemid());
         $this->assertEquals(2, count($objTestobject->getArrObject2()));
 
         $strQuery = "INSERT INTO "._dbprefix_."testclass2_rel  (testclass_source_id, testclass_target_id) VALUES (?, ?)";
         $objDB->_pQuery($strQuery, array($objTestobject->getSystemid(), $this->getObject("language")->getSystemid()));
-
-        $objDB->flushQueryCache();
 
         $objTestobject = new orm_objectlist_testclass($objTestobject->getSystemid());
         $this->assertEquals(2, count($objTestobject->getArrObject2()));
