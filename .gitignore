@@ -1,4 +1,2 @@
 cache.properties
-composer.lock
-!_buildfiles/composer/composer.lock
 vendor/

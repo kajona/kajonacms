@@ -352,6 +352,10 @@ abstract class class_admin_simple extends class_admin_controller {
      * @return string
      */
     protected function renderEditAction(class_model $objListEntry, $bitDialog = false) {
+        if($objListEntry->getIntRecordDeleted() == 1) {
+            return "";
+        }
+
         if($objListEntry->rightEdit()) {
 
             $objLockmanager = $objListEntry->getLockManager();
@@ -392,6 +396,9 @@ abstract class class_admin_simple extends class_admin_controller {
      * @return string
      */
     protected function renderUnlockAction(interface_model $objListEntry) {
+        if($objListEntry->getIntRecordDeleted() == 1) {
+            return "";
+        }
 
         $objLockmanager = $objListEntry->getLockManager();
         if(!$objLockmanager->isAccessibleForCurrentUser()) {
@@ -411,6 +418,10 @@ abstract class class_admin_simple extends class_admin_controller {
      * @return string
      */
     protected function renderDeleteAction(interface_model $objListEntry) {
+        if($objListEntry->getIntRecordDeleted() == 1) {
+            return "";
+        }
+
         if($objListEntry->rightDelete()) {
 
             $objLockmanager = $objListEntry->getLockManager();
@@ -435,6 +446,10 @@ abstract class class_admin_simple extends class_admin_controller {
      * @return string
      */
     protected function renderStatusAction(class_model $objListEntry, $strAltActive = "", $strAltInactive = "") {
+        if($objListEntry->getIntRecordDeleted() == 1) {
+            return "";
+        }
+
         if($objListEntry->rightEdit() && $this->strPeAddon == "") {
             return $this->objToolkit->listStatusButton($objListEntry, false, $strAltActive, $strAltInactive);
         }
@@ -471,6 +486,10 @@ abstract class class_admin_simple extends class_admin_controller {
      * @return string
      */
     protected function renderTagAction(class_model $objListEntry) {
+        if($objListEntry->getIntRecordDeleted() == 1) {
+            return "";
+        }
+
         if($objListEntry->rightView()) {
 
             //the tag list is more complex and wrapped by a js-logic to load the tags by ajax afterwards
@@ -492,6 +511,10 @@ abstract class class_admin_simple extends class_admin_controller {
      * @return string
      */
     protected function renderCopyAction(class_model $objListEntry) {
+        if($objListEntry->getIntRecordDeleted() == 1) {
+            return "";
+        }
+
         if($objListEntry->rightEdit() && $this->strPeAddon == "") {
             $strHref = class_link::getLinkAdminHref($objListEntry->getArrModule("modul"), $this->getActionNameForClass("copyObject", $objListEntry), "&systemid=".$objListEntry->getSystemid().$this->strPeAddon);
             return $this->objToolkit->listButton(
