@@ -48,7 +48,7 @@ class class_adminwidget_lastmodifiedpages extends class_adminwidget implements i
     public function getWidgetOutput() {
         $strReturn = "";
 
-        if(!class_module_system_module::getModuleByName("pages")->rightEdit())
+        if(!class_module_system_module::getModuleByName("pages")->rightView())
             return $this->getLang("commons_error_permissions");
 
         $intMax = $this->getFieldValue("nrofrows");
