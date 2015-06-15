@@ -131,9 +131,44 @@ class class_orm_objectupdate extends class_orm_base {
 
             $objCfg = class_orm_assignment_config::getConfigForProperty($this->getObjObject(), $strPropertyName);
 
+            //try to load the orm config of the arrayObject - if given
+            $strGetter = $objReflection->getGetter($strPropertyName);
+            $arrValues = null;
+            if($strGetter !== null) {
+                $arrValues = call_user_func(array($this->getObjObject(), $strGetter));
+            }
+            $objAssignmentDeleteHandling = $this->getIntCombinedLogicalDeletionConfig();
+            if($arrValues != null && $arrValues instanceof class_orm_assignment_array) {
+                $objAssignmentDeleteHandling = $arrValues->getObjDeletedHandling();
+            }
 
+
+            //try to restore the object-set from the database using the same config as when initializing the object
+            $objOldHandling = $this->getIntCombinedLogicalDeletionConfig();
+            $this->setObjHandleLogicalDeleted($objAssignmentDeleteHandling);
             $arrAssignmentsFromObject = $this->getAssignmentValuesFromObject($strPropertyName, $objCfg->getArrTypeFilter());
             $arrAssignmentsFromDatabase = $this->getAssignmentsFromDatabase($strPropertyName);
+            $this->setObjHandleLogicalDeleted($objOldHandling);
+
+            //if the delete handling was set to excluded when loading the assignment, the logically deleted nodes should be merged with the values from db
+            if($objAssignmentDeleteHandling->equals(class_orm_deletedhandling_enum::EXCLUDED())) {
+                $this->setObjHandleLogicalDeleted(class_orm_deletedhandling_enum::EXCLUSIVE());
+                $arrDeletedIds = $this->getAssignmentsFromDatabase($strPropertyName);
+                $this->setObjHandleLogicalDeleted($objOldHandling);
+
+                foreach($arrDeletedIds as $strOneId) {
+                    if(!in_array($strOneId, $arrAssignmentsFromDatabase)) {
+                        $arrAssignmentsFromDatabase[] = $strOneId;
+                    }
+
+                    if(!in_array($strOneId, $arrAssignmentsFromObject)) {
+                        $arrAssignmentsFromObject[] = $strOneId;
+                    }
+                }
+
+
+            }
+
 
             sort($arrAssignmentsFromObject);
             sort($arrAssignmentsFromDatabase);
@@ -152,9 +187,9 @@ class class_orm_objectupdate extends class_orm_base {
             foreach($arrAssignmentsFromObject as $strOneTargetId)
                 $arrInserts[] = array($this->getObjObject()->getSystemid(), $strOneTargetId);
 
-            $bitReturn = $bitReturn && $objDB->_pQuery(
+                $bitReturn = $bitReturn && $objDB->_pQuery(
                 "DELETE FROM ".$objDB->encloseTableName(_dbprefix_.$objCfg->getStrTableName())." WHERE ".$objDB->encloseColumnName($objCfg->getStrSourceColumn())." = ?", array($this->getObjObject()->getSystemid())
-            );
+                    );
             $bitReturn = $bitReturn && $objDB->multiInsert($objCfg->getStrTableName(), array($objCfg->getStrSourceColumn(), $objCfg->getStrTargetColumn()), $arrInserts);
 
             $bitReturn = $bitReturn && class_core_eventdispatcher::getInstance()->notifyGenericListeners(
@@ -176,8 +211,8 @@ class class_orm_objectupdate extends class_orm_base {
      * Internal helper to fetch the values of an assignment property.
      * Capable of handling both, objects and systemids.
      *
-     * @param $strPropertyName
-     * @param $arrClassFilter
+     * @param string $strPropertyName
+     * @param string[]|null $arrClassFilter
      * @return array
      */
     private function getAssignmentValuesFromObject($strPropertyName, $arrClassFilter) {

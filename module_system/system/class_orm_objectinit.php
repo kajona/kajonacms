@@ -87,7 +87,7 @@ class class_orm_objectinit extends class_orm_base {
 
         foreach($arrProperties as $strPropertyName => $arrValues) {
 
-            $objPropertyLazyLoader = new class_orm_assignment_array($this->getObjObject(), $strPropertyName);
+            $objPropertyLazyLoader = new class_orm_assignment_array($this->getObjObject(), $strPropertyName, $this->getIntCombinedLogicalDeletionConfig());
 
             $strSetter = $objReflection->getSetter($strPropertyName);
             if($strSetter !== null)
