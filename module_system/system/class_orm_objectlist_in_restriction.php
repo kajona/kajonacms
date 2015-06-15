@@ -64,10 +64,18 @@ class class_orm_objectlist_in_restriction extends class_orm_objectlist_restricti
 
 
     protected function getInStatement($strColumnName) {
-        $arrParamsPlaceholder = array_map(function($objParameter){ return "?";}, $this->arrParams);
-        $strPlaceholder = implode(",", $arrParamsPlaceholder);
 
-        return "{$this->strCondition} {$strColumnName} IN ({$strPlaceholder})";
+        if(is_array($this->arrParams) && count($this->arrParams) > 0 ) {
+
+            $arrParamsPlaceholder = array_map(function ($objParameter) {
+                return "?";
+            }, $this->arrParams);
+            $strPlaceholder = implode(",", $arrParamsPlaceholder);
+
+            return "{$this->strCondition} {$strColumnName} IN ({$strPlaceholder})";
+        }
+
+        return "";
     }
 
 }
