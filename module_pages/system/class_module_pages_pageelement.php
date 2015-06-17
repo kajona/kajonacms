@@ -266,7 +266,7 @@ class class_module_pages_pageelement extends class_model implements interface_mo
      * @throws class_exception
      * @return class_module_pages_pageelement the new element or null in case of an error
      */
-    public function copyObject($strNewPage = "", $bitChangeTitle = true) {
+    public function copyObject($strNewPage = "", $bitChangeTitle = true, $bitCopyChilds = true) {
 
         class_logger::getInstance()->addLogRow("copy pageelement ".$this->getSystemid(), class_logger::$levelInfo);
         $this->objDB->transactionBegin();
@@ -276,7 +276,7 @@ class class_module_pages_pageelement extends class_model implements interface_mo
         $arrElementData = $objElement->loadElementData();
 
         //duplicate the current elements - afterwards $this is the new element
-        parent::copyObject($strNewPage, $bitChangeTitle);
+        parent::copyObject($strNewPage, $bitChangeTitle, $bitCopyChilds);
 
         //copy the old contents into the new elements
         $objElement = $this->getConcreteAdminInstance();
