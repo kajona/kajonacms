@@ -36,7 +36,7 @@ class class_orm_objectlist_property_in_restriction extends class_orm_objectlist_
         $strPropertyValue = $objReflection->getAnnotationValueForProperty($this->strPropertyName, class_orm_base::STR_ANNOTATION_TABLECOLUMN);
 
         if($strPropertyValue == null)
-            throw new class_orm_exception("Failed to load annotation ".class_orm_base::STR_ANNOTATION_TABLECOLUMN." for property ".$this->strProperty."@".$this->getStrTargetClass(), class_exception::$level_ERROR);
+            throw new class_orm_exception("Failed to load annotation ".class_orm_base::STR_ANNOTATION_TABLECOLUMN." for property ".$this->strPropertyName."@".$this->getStrTargetClass(), class_exception::$level_ERROR);
 
 
         return $this->getInStatement($strPropertyValue);
