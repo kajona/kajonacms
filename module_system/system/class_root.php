@@ -670,11 +670,12 @@ abstract class class_root {
      *
      * @param string $strNewPrevid
      * @param bool $bitChangeTitle
+     * @param bool $bitCopyChilds
      *
      * @throws class_exception
      * @return bool
      */
-    public function copyObject($strNewPrevid = "", $bitChangeTitle = true) {
+    public function copyObject($strNewPrevid = "", $bitChangeTitle = true, $bitCopyChilds = true) {
 
         $this->objDB->transactionBegin();
 
@@ -708,14 +709,16 @@ abstract class class_root {
         $bitReturn = $bitReturn && class_core_eventdispatcher::getInstance()->notifyGenericListeners(class_system_eventidentifier::EVENT_SYSTEM_RECORDCOPIED, array($strOldSysid, $this->getSystemid(), $this));
 
 
-        //process subrecords
-        //validate, if there are subrecords, so child nodes to be copied to the current record
-        $arrChilds = $this->objDB->getPArray("SELECT system_id FROM "._dbprefix_."system where system_prev_id = ? ORDER BY system_sort ASC", array($strOldSysid));
-        foreach($arrChilds as $arrOneChild) {
-            if(validateSystemid($arrOneChild["system_id"])) {
-                $objInstance = class_objectfactory::getInstance()->getObject($arrOneChild["system_id"]);
-                if($objInstance !== null)
-                    $objInstance->copyObject($this->getSystemid(), false);
+        if($bitCopyChilds) {
+            //process subrecords
+            //validate, if there are subrecords, so child nodes to be copied to the current record
+            $arrChilds = $this->objDB->getPArray("SELECT system_id FROM "._dbprefix_."system where system_prev_id = ? ORDER BY system_sort ASC", array($strOldSysid));
+            foreach($arrChilds as $arrOneChild) {
+                if(validateSystemid($arrOneChild["system_id"])) {
+                    $objInstance = class_objectfactory::getInstance()->getObject($arrOneChild["system_id"]);
+                    if($objInstance !== null)
+                        $objInstance->copyObject($this->getSystemid(), false);
+                }
             }
         }
 
