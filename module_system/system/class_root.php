@@ -575,7 +575,9 @@ abstract class class_root {
         $this->objDB->transactionBegin();
 
         //current systemid given? if not, create a new record.
+        $bitRecordCreated = false;
         if(!validateSystemid($this->getSystemid())) {
+            $bitRecordCreated = true;
 
             if($strPrevId === false || $strPrevId === "" || $strPrevId === null) {
                 //try to find the current modules-one
@@ -656,7 +658,7 @@ abstract class class_root {
 
 
         //call the recordUpdated-Listeners
-        class_core_eventdispatcher::getInstance()->notifyGenericListeners(class_system_eventidentifier::EVENT_SYSTEM_RECORDUPDATED, array($this));
+        class_core_eventdispatcher::getInstance()->notifyGenericListeners(class_system_eventidentifier::EVENT_SYSTEM_RECORDUPDATED, array($this, $bitRecordCreated));
 
         class_carrier::getInstance()->flushCache(class_carrier::INT_CACHE_TYPE_DBQUERIES);
         return $bitCommit;

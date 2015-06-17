@@ -96,6 +96,7 @@ abstract class class_testbase extends PHPUnit_Framework_TestCase {
         $objObject = new $strClassType();
         $objReflection = new class_reflection($strClassType);
         $arrProperties = $objReflection->getPropertiesWithAnnotation(class_orm_base::STR_ANNOTATION_TABLECOLUMN);
+        $arrProperties = array_merge($objReflection->getPropertiesWithAnnotation(class_orm_base::STR_ANNOTATION_OBJECTLIST), $arrProperties);
 
         //exclude class_root properties
         $objRootReflection = new class_reflection("class_root");

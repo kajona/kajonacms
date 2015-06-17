@@ -151,12 +151,21 @@ abstract class class_testbase_object extends class_testbase {
         foreach($arrParameters as $strKey => $strValue) {
             if(substr($strValue, 0, 4) == 'ref:') {
                 $strRef = trim(substr($strValue, 4));
-                $objRef = $this->getObject($strRef);
-                if($objRef instanceof class_model) {
-                    $arrParameters[$strKey] = $objRef->getStrSystemid();
+                $arrRefs = explode(",", $strRef);
+                $arrParameters[$strKey] = array();
+
+                foreach($arrRefs as $strRefKey) {
+                    $objRef = $this->getObject($strRefKey);
+                    if($objRef instanceof class_model) {
+                        $arrParameters[$strKey][] = $objRef;
+                    }
+                    else {
+                        throw new RuntimeException('Object "' . $strName . '" refers to an non existing object (' . $objElement->getNodePath() . ')');
+                    }
                 }
-                else {
-                    throw new RuntimeException('Object "' . $strName . '" refers to an non existing object (' . $objElement->getNodePath() . ')');
+                $objReflection = new class_reflection($strClassName);
+                if(!$objReflection->hasPropertyAnnotation($strKey, class_orm_base::STR_ANNOTATION_OBJECTLIST)) {
+                    $arrParameters[$strKey] =  $arrParameters[$strKey][0]->getStrSystemid();
                 }
             }
         }

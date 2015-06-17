@@ -83,6 +83,9 @@ $lang["commons_validator_posint_validationmessage"] = "The field must contain po
 $lang["commons_yes"]                     = "Yes";
 
 $lang["commons_remove_assignment"]                     = "Remove assignment";
+$lang["commons_add_assignment"]                     = "Add assignment";
+$lang["commons_objectlist_manage_assignment"]       = "Manage assignments";
+$lang["commons_objectlist_update_assignment"]       = "Update assignments";
 $lang["commons_object_validator_datecompare_validationmessage_after"] = "'{0}' must not be greater than '{1}'.";
 $lang["commons_object_validator_datecompare_validationmessage_before"] = "'{0}' must not be less than '{1}'.";
 $lang["commons_object_validator_number_range"] = "Number must be between '{0}' and '{1}'.";
