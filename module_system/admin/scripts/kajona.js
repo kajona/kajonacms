@@ -80,14 +80,14 @@ KAJONA.util.fold = function (strElementId, objCallbackVisible, objCallbackInvisi
         $element.removeClass("folderHidden");
         $element.addClass("folderVisible");
 		if ($.isFunction(objCallbackVisible)) {
-			objCallbackVisible();
+			objCallbackVisible(strElementId);
 		}
     }
     else {
         $element.removeClass("folderVisible");
         $element.addClass("folderHidden");
 		if ($.isFunction(objCallbackInvisible)) {
-			objCallbackInvisible();
+			objCallbackInvisible(strElementId);
 		}
     }
 };
@@ -757,6 +757,9 @@ KAJONA.admin.lists = {
     strDialogStart : '',
     intTotal : 0,
 
+    /**
+     * Toggles all fields
+     */
     toggleAllFields : function() {
         //batchActionSwitch
         $("table.admintable input[type='checkbox']").each(function() {
@@ -764,6 +767,29 @@ KAJONA.admin.lists = {
                 $(this)[0].checked = $('#kj_cb_batchActionSwitch')[0].checked;
             }
         });
+    },
+
+    /**
+     * Toggles all fields with the given system id's
+     *
+     * @param arrSystemIds
+     */
+    toggleFields : function(arrSystemIds) {
+        //batchActionSwitch
+        $("table.admintable input[type='checkbox']").each(function() {
+            if($(this).attr('id').substr(0, 6) == "kj_cb_" && $(this).attr('id') != 'kj_cb_batchActionSwitch') {
+                var strSysid = $(this).closest("tr").data('systemid');
+                if($.inArray(strSysid, arrSystemIds) !== -1) {//if strId in array
+                    if($(this)[0].checked) {
+                        $(this)[0].checked = false;
+                    }
+                    else {
+                        $(this)[0].checked = true;
+                    };
+                }
+            }
+        });
+        KAJONA.admin.lists.updateToolbar();
     },
 
     updateToolbar : function() {
@@ -848,6 +874,26 @@ KAJONA.admin.lists = {
 
         //get the selected elements
         $("table.admintable  input:checked").each(function() {
+            if($(this).attr('id').substr(0, 6) == "kj_cb_" && $(this).attr('id') != 'kj_cb_batchActionSwitch') {
+                var sysid = $(this).closest("tr").data('systemid');
+                if(sysid != "")
+                    selectedElements.push(sysid);
+            }
+        });
+
+        return selectedElements;
+    },
+
+    /**
+     * Creates an array which contains all system id's.
+     *
+     * @returns {Array}
+     */
+    getAllElements : function () {
+        var selectedElements = [];
+
+        //get the selected elements
+        $("table.admintable  input[type='checkbox']").each(function() {
             if($(this).attr('id').substr(0, 6) == "kj_cb_" && $(this).attr('id') != 'kj_cb_batchActionSwitch') {
                 var sysid = $(this).closest("tr").data('systemid');
                 if(sysid != "")
