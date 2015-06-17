@@ -129,7 +129,7 @@ abstract class class_orm_base {
 
     /**
      * Reads the assignment values currently stored in the database for a given property of the current object.
-     * @param $strPropertyName
+     * @param string $strPropertyName
      *
      * @return string[] array of systemids
      */
@@ -142,7 +142,7 @@ abstract class class_orm_base {
                        WHERE system_id =  ".$objDB->encloseColumnName($objCfg->getStrTargetColumn())."
                          AND ".$objDB->encloseColumnName($objCfg->getStrSourceColumn())." = ?
                              ".$this->getDeletedWhereRestriction();
-        $arrRows = $objDB->getPArray($strQuery, array($this->getObjObject()->getSystemid()), null, null);
+        $arrRows = $objDB->getPArray($strQuery, array($this->getObjObject()->getSystemid()));
 
         $strTargetCol = $objCfg->getStrTargetColumn();
         array_walk($arrRows, function(array &$arrSingleRow) use ($strTargetCol) {

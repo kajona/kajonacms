@@ -154,11 +154,11 @@ class class_module_rating_rate extends class_model implements interface_model {
      */
     public static function getRating($strSystemid, $strChecksum = "") {
         $objORM = new class_orm_objectlist();
-        $objORM->addWhereRestriction(new class_orm_objectlist_restriction("AND rating_systemid = ?"), $strSystemid);
+        $objORM->addWhereRestriction(new class_orm_objectlist_restriction("AND rating_systemid = ?", $strSystemid));
         if($strChecksum != "")
             $objORM->addWhereRestriction(new class_orm_objectlist_restriction("AND rating_checksum = ?"), $strChecksum);
 
-        return $objORM->getObjectCount(get_called_class());
+        return $objORM->getSingleObject(get_called_class());
     }
 
     /**
