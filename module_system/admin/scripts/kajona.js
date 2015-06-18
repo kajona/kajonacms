@@ -645,7 +645,10 @@ KAJONA.admin.ajax = {
 
 	genericAjaxCall : function(module, action, systemid, objCallback) {
 		var postTarget = KAJONA_WEBPATH + '/xml.php?admin=1&module='+module+'&action='+action;
-        var data = this.getDataObjectFromString(systemid, true);
+        var data;
+        if(systemid) {
+            data = this.getDataObjectFromString(systemid, true);
+        }
 
         $.ajax({
             type: 'POST',
