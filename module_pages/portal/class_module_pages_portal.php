@@ -59,7 +59,7 @@ class class_module_pages_portal extends class_portal_controller implements inter
         //the system could frighten your cat or eat up all your cheese with marshmallows...
         //get the current state of the portal editor
         $bitPeRequested = false;
-        if(_pages_portaleditor_ == "true" && $this->objSession->getSession("pe_disable") != "true" && $this->objSession->isAdmin() && $objPageData->rightEdit()) {
+        if(class_module_system_setting::getConfigValue("_pages_portaleditor_") == "true" && $this->objSession->getSession("pe_disable") != "true" && $this->objSession->isAdmin() && $objPageData->rightEdit()) {
             $bitPeRequested = true;
         }
 
@@ -146,7 +146,7 @@ class class_module_pages_portal extends class_portal_controller implements inter
 
             //cache-handling. load element from cache.
             //if the element is re-generated, save it back to cache.
-            if(_pages_cacheenabled_ == "true" && $this->getParam("preview") != "1" && $objPageData->getStrName() != _pages_errorpage_) {
+            if(class_module_system_setting::getConfigValue("_pages_cacheenabled_") == "true" && $this->getParam("preview") != "1" && $objPageData->getStrName() != class_module_system_setting::getConfigValue("_pages_errorpage_")) {
                 $strElementOutput = "";
                 //if the portaleditor is disabled, do the regular cache lookups in storage. otherwise regenerate again and again :)
                 if($bitPeRequested) {
@@ -383,15 +383,15 @@ class class_module_pages_portal extends class_portal_controller implements inter
                 }
 
                 if($bitErrorpage) {
-                    $strPagename = _pages_errorpage_;
-                    $this->setParam("page", _pages_errorpage_);
+                    $strPagename = class_module_system_setting::getConfigValue("_pages_errorpage_");
+                    $this->setParam("page", class_module_system_setting::getConfigValue("_pages_errorpage_"));
                     //revert to the old language - fallback didn't work
                     $objDefaultLang->setStrPortalLanguage($strPreviousLang);
                 }
             }
             else {
-                $strPagename = _pages_errorpage_;
-                $this->setParam("page", _pages_errorpage_);
+                $strPagename = class_module_system_setting::getConfigValue("_pages_errorpage_");
+                $this->setParam("page", class_module_system_setting::getConfigValue("_pages_errorpage_"));
             }
 
             $objPageData = class_module_pages_page::getPageByName($strPagename);
@@ -419,7 +419,7 @@ class class_module_pages_portal extends class_portal_controller implements inter
      */
     private function renderPortalEditorCode(class_module_pages_page $objPageData, $bitEditPermissionOnMasterPage, $strPageContent) {
         //add the portaleditor toolbar
-        if(_pages_portaleditor_ == "false")
+        if(class_module_system_setting::getConfigValue("_pages_portaleditor_") == "false")
             return $strPageContent;
 
         if(!$this->objSession->isAdmin())
@@ -485,7 +485,7 @@ class class_module_pages_portal extends class_portal_controller implements inter
                         KAJONA.admin.portaleditor.RTE.config = {
                             language : '".(class_session::getInstance()->getAdminLanguage() != "" ? class_session::getInstance()->getAdminLanguage() : "en")."',
                             filebrowserBrowseUrl : '".uniStrReplace("&amp;", "&", class_link::getLinkAdminHref("folderview", "browserChooser", "&form_element=ckeditor"))."',
-                            filebrowserImageBrowseUrl : '".uniStrReplace("&amp;", "&", class_link::getLinkAdminHref("mediamanager", "folderContentFolderviewMode", "systemid="._mediamanager_default_imagesrepoid_."&form_element=ckeditor&bit_link=1"))."',
+                            filebrowserImageBrowseUrl : '".uniStrReplace("&amp;", "&", class_link::getLinkAdminHref("mediamanager", "folderContentFolderviewMode", "systemid=".class_module_system_setting::getConfigValue("_mediamanager_default_imagesrepoid_")."&form_element=ckeditor&bit_link=1"))."',
                             customConfig : {$strConfigFile},
                             ".$strSkinInit."
                         }
@@ -502,7 +502,7 @@ class class_module_pages_portal extends class_portal_controller implements inter
                         KAJONA.admin.portaleditor.RTE.config = {
                             language : '".(class_session::getInstance()->getAdminLanguage() != "" ? class_session::getInstance()->getAdminLanguage() : "en")."',
                             filebrowserBrowseUrl : '".uniStrReplace("&amp;", "&", class_link::getLinkAdminHref("folderview", "browserChooser", "&form_element=ckeditor"))."',
-                            filebrowserImageBrowseUrl : '".uniStrReplace("&amp;", "&", class_link::getLinkAdminHref("mediamanager", "folderContentFolderviewMode", "systemid="._mediamanager_default_imagesrepoid_."&form_element=ckeditor&bit_link=1"))."',
+                            filebrowserImageBrowseUrl : '".uniStrReplace("&amp;", "&", class_link::getLinkAdminHref("mediamanager", "folderContentFolderviewMode", "systemid=".class_module_system_setting::getConfigValue("_mediamanager_default_imagesrepoid_")."&form_element=ckeditor&bit_link=1"))."',
                             ".$strSkinInit."
                         }
                         $(KAJONA.admin.portaleditor.initPortaleditor);
@@ -528,7 +528,7 @@ class class_module_pages_portal extends class_portal_controller implements inter
             $strEnableButton = "<div id=\"peEnableButton\" style=\"z-index: 1000; position: fixed; top: 0px; right: 0px;\"><a href=\"#\" onclick=\"KAJONA.admin.portaleditor.switchEnabled(true); return false;\" title=\"\">"
                 .getImageAdmin("icon_disabled", $this->getLang("pe_enable", "pages"))."</a></div>";
             //Load portaleditor javascript
-            $strEnableButton .= "\n<script type=\"text/javascript\" src=\""._webpath_."/core/module_pages/admin/scripts/kajona_portaleditor.js?"._system_browser_cachebuster_."\"></script>";
+            $strEnableButton .= "\n<script type=\"text/javascript\" src=\""._webpath_."/core/module_pages/admin/scripts/kajona_portaleditor.js?".class_module_system_setting::getConfigValue("_system_browser_cachebuster_")."\"></script>";
             $strEnableButton .= $this->objToolkit->getPeBasicData();
             //Load portaleditor styles
             //The toobar has to be added right after the body-tag - to generate correct html-code

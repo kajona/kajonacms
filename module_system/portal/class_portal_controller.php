@@ -104,8 +104,8 @@ abstract class class_portal_controller extends class_abstract_controller {
                     $this->strOutput = $this->getLang("commons_error_permissions");
 
                     //redirect to the error page
-                    if($this->getPagename() != _pages_errorpage_) {
-                        $this->portalReload(class_link::getLinkPortalHref(_pages_errorpage_, ""));
+                    if($this->getPagename() != class_module_system_setting::getConfigValue("_pages_errorpage_")) {
+                        $this->portalReload(class_link::getLinkPortalHref(class_module_system_setting::getConfigValue("_pages_errorpage_"), ""));
                         return "";
                     }
 
@@ -252,8 +252,8 @@ abstract class class_portal_controller extends class_abstract_controller {
      */
     public function getPagename() {
         //check, if the portal is disabled
-        if(_system_portal_disable_ == "true") {
-            $strReturn = _system_portal_disablepage_;
+        if(class_module_system_setting::getConfigValue("_system_portal_disable_") == "true") {
+            $strReturn = class_module_system_setting::getConfigValue("_system_portal_disablepage_");
         }
         else {
             //Standard
@@ -262,12 +262,12 @@ abstract class class_portal_controller extends class_abstract_controller {
             }
             //Use the page set in the configs
             else {
-                $strReturn = defined("_pages_indexpage_") ? _pages_indexpage_ : "index";
+                $strReturn = class_module_system_setting::getConfigValue("_pages_indexpage_") != "" ? class_module_system_setting::getConfigValue("_pages_indexpage_") : "index";
             }
 
             //disallow rendering of master-page
             if($strReturn == "master") {
-                $strReturn = _pages_errorpage_;
+                $strReturn = class_module_system_setting::getConfigValue("_pages_errorpage_");
             }
         }
         $strReturn = htmlspecialchars($strReturn);

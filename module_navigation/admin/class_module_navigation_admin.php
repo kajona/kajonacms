@@ -34,7 +34,7 @@ class class_module_navigation_admin extends class_admin_simple implements interf
 
     public function getOutputModuleNavi() {
         $arrReturn = array();
-        $arrReturn[] = array("view", getLinkAdmin($this->arrModule["modul"], "list", "", $this->getLang("commons_list"), "", "", true, "adminnavi"));
+        $arrReturn[] = array("view", class_link::getLinkAdmin($this->getArrModule("modul"), "list", "", $this->getLang("commons_list"), "", "", true, "adminnavi"));
         return $arrReturn;
     }
 
@@ -76,7 +76,7 @@ class class_module_navigation_admin extends class_admin_simple implements interf
         if($strListIdentifier == "naviPoints") {
             if($this->getSystemid() != "") {
                 $objEditObject = class_objectfactory::getInstance()->getObject($this->getSystemid());
-                return getLinkAdmin(
+                return class_link::getLinkAdmin(
                     "navigation",
                     "list",
                     "&systemid=".$objEditObject->getPrevId().$this->strPeAddon,
@@ -98,14 +98,14 @@ class class_module_navigation_admin extends class_admin_simple implements interf
                 $arrReturn[] = $this->objToolkit->listButton(getImageAdmin("icon_treeBranchOpenDisabled", $this->getLang("navigation_show_disabled")));
             else
                 $arrReturn[] = $this->objToolkit->listButton(
-                    getLinkAdmin($this->getArrModule("modul"), "list", "&systemid=".$objListEntry->getSystemid().$this->strPeAddon, "", $this->getLang("navigation_anzeigen"), "icon_treeBranchOpen")
+                    class_link::getLinkAdmin($this->getArrModule("modul"), "list", "&systemid=".$objListEntry->getSystemid().$this->strPeAddon, "", $this->getLang("navigation_anzeigen"), "icon_treeBranchOpen")
                 );
 
         }
 
         if($objListEntry instanceof class_module_navigation_point) {
             $arrReturn[] = $this->objToolkit->listButton(
-                getLinkAdmin("navigation", "list", "&systemid=".$objListEntry->getSystemid().$this->strPeAddon, "", $this->getLang("navigationp_anzeigen"), "icon_treeBranchOpen")
+                class_link::getLinkAdmin("navigation", "list", "&systemid=".$objListEntry->getSystemid().$this->strPeAddon, "", $this->getLang("navigationp_anzeigen"), "icon_treeBranchOpen")
             );
         }
 
@@ -116,7 +116,7 @@ class class_module_navigation_admin extends class_admin_simple implements interf
         if($strListIdentifier == "naviPoints") {
             if($this->getObjModule()->rightEdit()) {
                 return $this->objToolkit->listButton(
-                    getLinkAdmin(
+                    class_link::getLinkAdmin(
                         $this->getArrModule("modul"),
                         "newNaviPoint",
                         "&systemid=".$this->getSystemid().$this->strPeAddon,
@@ -143,7 +143,7 @@ class class_module_navigation_admin extends class_admin_simple implements interf
      */
     protected function actionNew() {
         if($this->getSystemid() == "")
-            $this->adminReload(getLinkAdminHref($this->getArrModule("modul"), "newNavi"));
+            $this->adminReload(class_link::getLinkAdminHref($this->getArrModule("modul"), "newNavi"));
     }
 
     /**
@@ -154,11 +154,11 @@ class class_module_navigation_admin extends class_admin_simple implements interf
     protected function actionEdit() {
         $objEditObject = class_objectfactory::getInstance()->getObject($this->getSystemid());
         if($objEditObject instanceof class_module_navigation_tree) {
-            $this->adminReload(getLinkAdminHref($this->getArrModule("modul"), "editNavi", "&systemid=".$objEditObject->getSystemid().$this->strPeAddon));
+            $this->adminReload(class_link::getLinkAdminHref($this->getArrModule("modul"), "editNavi", "&systemid=".$objEditObject->getSystemid().$this->strPeAddon));
         }
 
         if($objEditObject instanceof class_module_navigation_point) {
-            $this->adminReload(getLinkAdminHref($this->getArrModule("modul"), "editNaviPoint", "&systemid=".$objEditObject->getSystemid().$this->strPeAddon));
+            $this->adminReload(class_link::getLinkAdminHref($this->getArrModule("modul"), "editNaviPoint", "&systemid=".$objEditObject->getSystemid().$this->strPeAddon));
         }
     }
 
@@ -195,14 +195,14 @@ class class_module_navigation_admin extends class_admin_simple implements interf
 
         $objForm->addField(new class_formentry_hidden("", "mode"))->setStrValue($strMode);
 
-        return $objForm->renderForm(getLinkAdminHref($this->arrModule["modul"], "saveNavi"));
+        return $objForm->renderForm(class_link::getLinkAdminHref($this->getArrModule("modul"), "saveNavi"));
 
     }
 
 
     private function getNaviAdminForm(class_module_navigation_tree $objTree) {
 
-        $strFolderBrowser = getLinkAdminDialog(
+        $strFolderBrowser = class_link::getLinkAdminDialog(
             "pages",
             "pagesFolderBrowser",
             "&form_element=navi_folder_i&folder=1",
@@ -252,7 +252,7 @@ class class_module_navigation_admin extends class_admin_simple implements interf
             throw new class_exception("Error saving object to db", class_exception::$level_ERROR);
 
 
-        $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
+        $this->adminReload(class_link::getLinkAdminHref($this->getArrModule("modul")));
 
         return $strReturn;
     }
@@ -284,7 +284,7 @@ class class_module_navigation_admin extends class_admin_simple implements interf
             $objForm = $this->getPointAdminForm($objPoint, $strMode);
 
         $objForm->addField(new class_formentry_hidden("", "mode"))->setStrValue($strMode);
-        return $objForm->renderForm(getLinkAdminHref($this->arrModule["modul"], "saveNaviPoint"));
+        return $objForm->renderForm(class_link::getLinkAdminHref($this->getArrModule("modul"), "saveNaviPoint"));
     }
 
 
@@ -330,7 +330,7 @@ class class_module_navigation_admin extends class_admin_simple implements interf
 
         //Flush pages cache
         $this->flushCompletePagesCache();
-        $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "list", "systemid=".$objPoint->getPrevId().($this->getParam("pe") == "" ? "" : "&peClose=".$this->getParam("pe"))));
+        $this->adminReload(class_link::getLinkAdminHref($this->getArrModule("modul"), "list", "systemid=".$objPoint->getPrevId().($this->getParam("pe") == "" ? "" : "&peClose=".$this->getParam("pe"))));
         return $strReturn;
     }
 
@@ -349,10 +349,10 @@ class class_module_navigation_admin extends class_admin_simple implements interf
         $this->flushCompletePagesCache();
 
         $strPrevId = $objPoint->getPrevId();
-        if(($objPoint instanceof class_module_navigation_point || $objPoint instanceof  class_module_navigation_tree) && !$objPoint->deleteObject())
+        if(($objPoint instanceof class_module_navigation_point || $objPoint instanceof  class_module_navigation_tree) && !$objPoint->deleteObjectFromDatabase())
             throw new class_exception("Error deleting object from db. Needed rights given?", class_exception::$level_ERROR);
 
-        $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "list", "systemid=".$strPrevId.($this->getParam("pe") == "" ? "" : "&peClose=".$this->getParam("pe"))));
+        $this->adminReload(class_link::getLinkAdminHref($this->getArrModule("modul"), "list", "systemid=".$strPrevId.($this->getParam("pe") == "" ? "" : "&peClose=".$this->getParam("pe"))));
 
         return $strReturn;
     }
@@ -378,8 +378,8 @@ class class_module_navigation_admin extends class_admin_simple implements interf
         $strPrevID = $objPoint->getPrevId();
         if($strPrevID != $this->getObjModule()->getSystemid()) {
             $strAction = $this->objToolkit->listButton(
-                getLinkAdmin(
-                    $this->arrModule["modul"],
+                class_link::getLinkAdmin(
+                    $this->getArrModule("modul"),
                     "navigationPointBrowser",
                     "&systemid=".$strPrevID."&form_element=".$this->getParam("form_element"),
                     $this->getLang("commons_one_level_up"),
@@ -400,8 +400,8 @@ class class_module_navigation_admin extends class_admin_simple implements interf
             foreach($arrPoints as $objSinglePoint) {
                 if($objSinglePoint->rightView()) {
                     $strAction = $this->objToolkit->listButton(
-                        getLinkAdmin(
-                            $this->arrModule["modul"],
+                        class_link::getLinkAdmin(
+                            $this->getArrModule("modul"),
                             "navigationPointBrowser",
                             "&systemid=".$objSinglePoint->getSystemid()."&form_element=".$this->getParam("form_element"),
                             $this->getLang("navigationp_anzeigen"),
@@ -433,7 +433,7 @@ class class_module_navigation_admin extends class_admin_simple implements interf
 
         foreach($arrPath as $strOneSystemid) {
             $objPoint = new class_module_navigation_point($strOneSystemid);
-            $arrEntries[] = getLinkAdmin("navigation", "list", "&systemid=".$strOneSystemid, $objPoint->getStrName(), $objPoint->getStrName());
+            $arrEntries[] = class_link::getLinkAdmin("navigation", "list", "&systemid=".$strOneSystemid, $objPoint->getStrName(), $objPoint->getStrName());
         }
 
         return $arrEntries;
@@ -453,7 +453,7 @@ class class_module_navigation_admin extends class_admin_simple implements interf
 
         //generate the array of ids to expand initially
         $arrNodes = $this->getPathArray();
-        $strReturn .= $this->objToolkit->getTreeview(getLinkAdminXml($this->getArrModule("modul"), "getChildNodes"), $arrNodes[0], $arrNodes, $strSideContent);
+        $strReturn .= $this->objToolkit->getTreeview(class_link::getLinkAdminXml($this->getArrModule("modul"), "getChildNodes"), $arrNodes[0], $arrNodes, $strSideContent);
         return $strReturn;
     }
 
@@ -487,7 +487,7 @@ class class_module_navigation_admin extends class_admin_simple implements interf
                         "attr" => array(
                             "id" => $objSinglePoint->getSystemid(),
                             "systemid" => $objSinglePoint->getSystemid(),
-                            "link" => getLinkAdminHref("navigation", "list", "&systemid=".$objSinglePoint->getSystemid(), false),
+                            "link" => class_link::getLinkAdminHref("navigation", "list", "&systemid=".$objSinglePoint->getSystemid(), false),
                         )
                     );
 

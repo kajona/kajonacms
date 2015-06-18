@@ -98,7 +98,7 @@ class class_link {
         $strAction = urlencode($strAction);
 
         //rewriting enabled?
-        if(_system_mod_rewrite_ == "true") {
+        if(class_module_system_setting::getConfigValue("_system_mod_rewrite_") == "true") {
 
             //scheme: /admin/module.action.systemid
             if($strModule != "" && $strAction == "" && $strSystemid == "")
@@ -148,7 +148,7 @@ class class_link {
         $strAction = urlencode($strAction);
 
         //rewriting enabled?
-        if(_system_mod_rewrite_ == "true") {
+        if(class_module_system_setting::getConfigValue("_system_mod_rewrite_") == "true") {
 
             //scheme: /admin/module.action.systemid
             if($strModule != "" && $strAction == "" && $strSystemid == "")
@@ -374,7 +374,7 @@ class class_link {
         if($bitInternal) {
             //check, if we could use mod_rewrite
             $bitRegularLink = true;
-            if(_system_mod_rewrite_ == "true") {
+            if(class_module_system_setting::getConfigValue("_system_mod_rewrite_") == "true") {
 
                 $strAddKeys = "";
 

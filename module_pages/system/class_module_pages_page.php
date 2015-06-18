@@ -247,7 +247,7 @@ class class_module_pages_page extends class_model implements interface_model, in
      * @return void
      */
     protected function initObjectInternal() {
-
+        $objORM = new class_orm_objectlist();
         $strQuery = "SELECT *
                           FROM "._dbprefix_."system_right,
                                "._dbprefix_."page,
@@ -259,6 +259,7 @@ class class_module_pages_page extends class_model implements interface_model, in
                            AND system_id = page_id
                            AND page_id = pageproperties_id
                            AND system_id = ?
+                           ".$objORM->getDeletedWhereRestriction()."
                            AND pageproperties_language = ?";
 
         $arrRow = $this->objDB->getPRow($strQuery, array($this->getSystemid(), $this->getStrLanguage()));
@@ -272,6 +273,7 @@ class class_module_pages_page extends class_model implements interface_model, in
                             ON system_id = system_date_id
                          WHERE system_id = right_id
                            AND system_id = page_id
+                           ".$objORM->getDeletedWhereRestriction()."
                            AND system_id = ? ";
 
             $arrRow = $this->objDB->getPRow($strQuery, array($this->getSystemid()));
@@ -323,7 +325,7 @@ class class_module_pages_page extends class_model implements interface_model, in
     public function onInsertToDb() {
 
         //Create the system-record
-        if(_pages_newdisabled_ == "true") {
+        if(class_module_system_setting::getConfigValue("_pages_newdisabled_") == "true") {
             $this->setIntRecordStatus(0);
         }
 
@@ -435,7 +437,7 @@ class class_module_pages_page extends class_model implements interface_model, in
      * @return void
      */
     public function updatePath() {
-        $arrPathIds = $this->getPathArray("", _pages_modul_id_);
+        $arrPathIds = $this->getPathArray("", class_module_system_module::getModuleByName("pages")->getSystemid());
         $arrPathIds = array_slice($arrPathIds, 0, count($arrPathIds) - 1);
         $arrPathNames = array();
 
@@ -467,31 +469,12 @@ class class_module_pages_page extends class_model implements interface_model, in
      * @static
      */
     public static function getAllPages($intStart = null, $intEnd = null, $strFilter = "") {
-        $arrParams = array();
-
+        $objORM = new class_orm_objectlist();
         if($strFilter != "") {
-            $arrParams[] = $strFilter . "%";
+            $objORM->addWhereRestriction(new class_orm_objectlist_restriction("AND page_name LIKE ?", $strFilter."%"));
         }
-
-        $strQuery = "SELECT *
-					FROM " . _dbprefix_ . "page,
-					     " . _dbprefix_ . "system_right,
-					     " . _dbprefix_ . "system
-				LEFT JOIN "._dbprefix_."system_date
-                        ON system_id = system_date_id
-					WHERE system_id = page_id
-					  AND system_id = right_id
-					" . ($strFilter != "" ? " AND page_name like ? " : "") . "
-					ORDER BY page_name ASC";
-
-        $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, $arrParams, $intStart, $intEnd);
-        class_orm_rowcache::addArrayOfInitRows($arrIds);
-        $arrReturn = array();
-        foreach($arrIds as $arrOneId) {
-            $arrReturn[] = class_objectfactory::getInstance()->getObject($arrOneId["system_id"]);
-        }
-
-        return $arrReturn;
+        $objORM->addOrderBy(new class_orm_objectlist_orderby("page_name ASC"));
+        return $objORM->getObjectList(get_called_class(), "", $intStart, $intEnd);
     }
 
     /**
@@ -507,16 +490,9 @@ class class_module_pages_page extends class_model implements interface_model, in
         if(uniStrpos($strName, "#") !== false)
             $strName = uniSubstr($strName, 0, uniStrpos($strName, "#"));
 
-        $strQuery = "SELECT page_id
-						FROM " . _dbprefix_ . "page
-						WHERE page_name= ?";
-        $arrId = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array($strName));
-
-        if(isset($arrId["page_id"]))
-            return new class_module_pages_page($arrId["page_id"]);
-        else
-            return null;
-
+        $objORM = new class_orm_objectlist();
+        $objORM->addWhereRestriction(new class_orm_objectlist_restriction("AND page_name = ?", $strName));
+        return $objORM->getSingleObject(get_called_class());
     }
 
     /**
@@ -527,18 +503,12 @@ class class_module_pages_page extends class_model implements interface_model, in
      * @return int
      */
     public function getNumberOfElementsOnPage($bitJustActive = false) {
-        //Check, if there are any Elements on this page
-        $strQuery = "SELECT COUNT(*)
-						 FROM " . _dbprefix_ . "page_element,
-						      " . _dbprefix_ . "element,
-						      " . _dbprefix_ . "system
-						 WHERE system_prev_id=?
-						   AND page_element_ph_element = element_name
-						   AND system_id = page_element_id
-						   " . ($bitJustActive ? "AND system_status = 1 " : "") . "
-						   AND page_element_ph_language = ?";
-        $arrRow = $this->objDB->getPRow($strQuery, array($this->getSystemid(), $this->getStrLanguage()));
-        return $arrRow["COUNT(*)"];
+        $objORM = new class_orm_objectlist();
+        $objORM->addWhereRestriction(new class_orm_objectlist_restriction("AND page_element_ph_language = ?", $this->getStrLanguage()));
+        if($bitJustActive)
+            $objORM->addWhereRestriction(new class_orm_objectlist_restriction("AND system_status = 1", array()));
+
+        return $objORM->getObjectCount("class_module_pages_pageelement");
     }
 
     /**
@@ -547,29 +517,16 @@ class class_module_pages_page extends class_model implements interface_model, in
      * @return int
      */
     public function getNumberOfLockedElementsOnPage() {
+        $objORM = new class_orm_objectlist();
         //Check, if there are any Elements on this page
         $strQuery = "SELECT COUNT(*)
 						 FROM " . _dbprefix_ . "system as system
 						  WHERE system_prev_id=?
 							AND system_lock_id != ?
+							".$objORM->getDeletedWhereRestriction()."
 							AND system_lock_id != ? ";
         $arrRow = $this->objDB->getPRow($strQuery, array( $this->getSystemid(), $this->objSession->getUserID(), "0"));
         return $arrRow["COUNT(*)"];
-    }
-
-    /**
-     * Deletes the given page and all related elements from the system.
-     * Subelements, so pages and/or folders below are delete, too
-     *
-     * @return bool
-     */
-    protected function deleteObjectInternal() {
-
-        //Delete the page and the properties out of the tables
-        $strQuery2 = "DELETE FROM " . _dbprefix_ . "page_properties WHERE pageproperties_id = ?";
-        $this->objDB->_pQuery($strQuery2, array($this->getSystemid()));
-
-        return parent::deleteObjectInternal();
     }
 
     /**
@@ -715,23 +672,20 @@ class class_module_pages_page extends class_model implements interface_model, in
         //Filter blanks out of pagename
         $strName = str_replace(" ", "_", $strName);
 
-        //Pagename already existing?
-        $strQuery = "SELECT page_id
-					FROM " . _dbprefix_ . "page
-					WHERE page_name=? ";
-        $arrTemp = $this->objDB->getPRow($strQuery, array($strName));
+        $objORM = new class_orm_objectlist();
+        $objORM->addWhereRestriction(new class_orm_objectlist_restriction(" AND page_name = ?", $strName));
+        $objPage = $objORM->getSingleObject(get_called_class());
 
-        $intNumbers = count($arrTemp);
-        if($intNumbers != 0 && !($bitAvoidSelfchek && $arrTemp["page_id"] == $this->getSystemid())) {
+        if($objPage !== null && !($bitAvoidSelfchek && $objPage->getSystemid() == $this->getSystemid())) {
             $intCount = 1;
             $strTemp = "";
-            while($intNumbers != 0 && !($bitAvoidSelfchek && $arrTemp["page_id"] == $this->getSystemid())) {
+            if($objPage !== null && !($bitAvoidSelfchek && $objPage->getSystemid() == $this->getSystemid())) {
                 $strTemp = $strName . "_" . $intCount;
-                $strQuery = "SELECT page_id
-							FROM " . _dbprefix_ . "page
-							WHERE page_name=? ";
-                $arrTemp = $this->objDB->getPRow($strQuery, array($strTemp));
-                $intNumbers = count($arrTemp);
+
+                $objORM = new class_orm_objectlist();
+                $objORM->addWhereRestriction(new class_orm_objectlist_restriction(" AND page_name = ?", $strName));
+                $objPage = $objORM->getSingleObject(get_called_class());
+
                 $intCount++;
             }
             $strName = $strTemp;

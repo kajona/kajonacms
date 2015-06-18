@@ -131,7 +131,7 @@ class class_toolkit_admin extends class_toolkit {
                 ".$strTemplateInit."
                 language : '".$strLanguage."',
                 filebrowserBrowseUrl : '".uniStrReplace("&amp;", "&", getLinkAdminHref("folderview", "browserChooser", "&form_element=ckeditor"))."',
-                filebrowserImageBrowseUrl : '".uniStrReplace("&amp;", "&", getLinkAdminHref("mediamanager", "folderContentFolderviewMode", "systemid="._mediamanager_default_imagesrepoid_."&form_element=ckeditor&bit_link=1"))."'
+                filebrowserImageBrowseUrl : '".uniStrReplace("&amp;", "&", getLinkAdminHref("mediamanager", "folderContentFolderviewMode", "systemid=".class_module_system_setting::getConfigValue("_mediamanager_default_imagesrepoid_")."&form_element=ckeditor&bit_link=1"))."'
 	        };
             CKEDITOR.replace($(\"textarea[name='".$strName."'][data-kajona-editorid='".$arrTemplate["editorid"]."']\")[0], ckeditorConfig);
         ";
@@ -344,7 +344,6 @@ class class_toolkit_admin extends class_toolkit {
      * The element creates two fields:
      * a text-field, and a hidden field for the selected systemid.
      * The hidden field is names as $strName, appended by "_id".
-     *
      * If you want to filter the list for users having at least view-permissions on a given systemid, you may pass the id as an optional param.
      *
      * @param string $strName
@@ -354,12 +353,12 @@ class class_toolkit_admin extends class_toolkit {
      * @param bool $bitUser
      * @param bool $bitGroups
      * @param bool $bitBlockCurrentUser
-     * @param string $strValidateSystemid If you want to check the view-permissions for a given systemid, pass the id here
+     * @param string $arrValidateSystemid If you want to check the view-permissions for a given systemid, pass the id here
      *
      * @return string
      * @throws class_exception
      */
-    public function formInputUserSelector($strName, $strTitle = "", $strValue = "", $strClass = "", $bitUser = true, $bitGroups = false, $bitBlockCurrentUser = false, $strValidateSystemid = null) {
+    public function formInputUserSelector($strName, $strTitle = "", $strValue = "", $strClass = "", $bitUser = true, $bitGroups = false, $bitBlockCurrentUser = false, array $arrValidateSystemid = null) {
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "input_userselector");
 
         $strUserName = "";
@@ -372,6 +371,8 @@ class class_toolkit_admin extends class_toolkit {
             $strUserId = $strValue;
         }
 
+        $strCheckIds = json_encode($arrValidateSystemid);
+
         $arrTemplate = array();
         $arrTemplate["name"] = $strName;
         $arrTemplate["value"] = htmlspecialchars($strUserName, ENT_QUOTES, "UTF-8", false);
@@ -381,7 +382,7 @@ class class_toolkit_admin extends class_toolkit {
         $arrTemplate["opener"] = class_link::getLinkAdminDialog(
             "user",
             "userBrowser",
-            "&form_element={$strName}&checkid={$strValidateSystemid}".($bitGroups ? "&allowGroup=1" : "").($bitBlockCurrentUser ? "&filter=current" : ""),
+            "&form_element={$strName}&checkid={$strCheckIds}".($bitGroups ? "&allowGroup=1" : "").($bitBlockCurrentUser ? "&filter=current" : ""),
             class_carrier::getInstance()->getObjLang()->getLang("user_browser", "user"),
             class_carrier::getInstance()->getObjLang()->getLang("user_browser", "user"),
             "icon_externalBrowser",
@@ -396,8 +397,6 @@ class class_toolkit_admin extends class_toolkit {
         );
 
         $arrTemplate["opener"] .= " ".$strResetIcon;
-
-        $strJsVarName = uniStrReplace(array("[", "]"), array("", ""), $strName);
 
         $strName = uniStrReplace(array("[", "]"), array("\\\[", "\\\]"), $strName);
         $arrTemplate["ajaxScript"] = "
@@ -415,7 +414,7 @@ class class_toolkit_admin extends class_toolkit {
                                     user: ".($bitUser ? "'true'" : "'false'").",
                                     group: ".($bitGroups ? "'true'" : "'false'").",
                                     block: ".($bitBlockCurrentUser ? "'current'" : "''").",
-                                    checkid: '".$strValidateSystemid."'
+                                    checkid: '".$strCheckIds."'
                                 },
                                 success: response
                             });
@@ -462,14 +461,15 @@ class class_toolkit_admin extends class_toolkit {
             if($objObject instanceof interface_model && $objObject->rightView()) {
                 $strRemoveLink = "";
                 if(!$bitReadOnly) {
-                    $strDelete = class_carrier::getInstance()->getObjLang()->getLang("commons_delete", "module_system");
-                    $strRemoveLink = class_link::getLinkAdminDialog(null, "", "", $strDelete, $strDelete, "", $strDelete, true, false, "KAJONA.v4skin.removeObjectListItem(this);return false;");
+                    $strDelete = class_carrier::getInstance()->getObjLang()->getLang("commons_remove_assignment", "system");
+                    $strRemoveLink = class_link::getLinkAdminDialog(null, "", "", $strDelete, $strDelete, "icon_delete", $strDelete, true, false, "KAJONA.v4skin.removeObjectListItem(this);return false;");
                 }
 
+                $strIcon = is_array($objObject->getStrIcon()) ? $objObject->getStrIcon()[0]: $objObject->getStrIcon();
                 $arrTemplateRow = array(
                     'name' => $strName,
                     'displayName' => $objObject->getStrDisplayName(),
-                    'icon' => $objObject->getStrIcon(),
+                    'icon' => class_adminskin_helper::getAdminImage($strIcon),
                     'value' => $objObject->getSystemid(),
                     'removeLink' => $strRemoveLink,
                 );
@@ -526,7 +526,7 @@ class class_toolkit_admin extends class_toolkit {
         $strOpener = getLinkAdminDialog(
             "mediamanager",
             "folderContentFolderviewMode",
-            "&form_element=".$strName."&systemid="._mediamanager_default_imagesrepoid_,
+            "&form_element=".$strName."&systemid=".class_module_system_setting::getConfigValue("_mediamanager_default_imagesrepoid_"),
             class_carrier::getInstance()->getObjLang()->getLang("filebrowser", "system"),
             class_carrier::getInstance()->getObjLang()->getLang("filebrowser", "system"),
             "icon_externalBrowser",
@@ -690,9 +690,12 @@ class class_toolkit_admin extends class_toolkit {
      * @param bool $bitEnabled
      * @param string $strAddons
      * @param string $strDataPlaceholder
+     * @param string $strOpener
+     *
      * @return string
+     * @throws class_exception
      */
-    public function formInputDropdown($strName, array $arrKeyValues, $strTitle = "", $strKeySelected = "", $strClass = "", $bitEnabled = true, $strAddons = "", $strDataPlaceholder = "") {
+    public function formInputDropdown($strName, array $arrKeyValues, $strTitle = "", $strKeySelected = "", $strClass = "", $bitEnabled = true, $strAddons = "", $strDataPlaceholder = "", $strOpener = "") {
         $strOptions = "";
         $strTemplateOptionID = $this->objTemplate->readTemplate("/elements.tpl", "input_dropdown_row");
         $strTemplateOptionSelectedID = $this->objTemplate->readTemplate("/elements.tpl", "input_dropdown_row_selected");
@@ -728,6 +731,7 @@ class class_toolkit_admin extends class_toolkit {
         $arrTemplate["disabled"] = ($bitEnabled ? "" : "disabled=\"disabled\"");
         $arrTemplate["options"] = $strOptions;
         $arrTemplate["addons"] = $strAddons;
+        $arrTemplate["opener"] = $strOpener;
         $arrTemplate["dataplaceholder"] = $strDataPlaceholder != "" ? $strDataPlaceholder : class_carrier::getInstance()->getObjLang()->getLang("commons_dropdown_dataplaceholder", "system");
 
 
@@ -866,6 +870,54 @@ class class_toolkit_admin extends class_toolkit {
         return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID, true);
     }
 
+    /**
+     * @param $strName
+     * @param string $strTitle
+     * @param $intType
+     * @param array $arrValues
+     * @param array $arrSelected
+     * @param bool $bitInline
+     * @return string
+     * @throws class_exception
+     */
+    public function formInputCheckboxArray($strName, $strTitle = "", $intType, array $arrValues, array $arrSelected, $bitInline = false, $bitReadonly = false) {
+        $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "input_checkboxarray");
+        $strTemplateCheckboxID = $this->objTemplate->readTemplate("/elements.tpl", "input_checkboxarray_checkbox");
+
+        $arrTemplate = array();
+        $arrTemplate["name"] = $strName;
+        $arrTemplate["title"] = $strTitle;
+
+        $strElements = '';
+        foreach($arrValues as $strKey => $strValue) {
+            $arrTemplateRow = array(
+                'key' => $strKey,
+                'name' => $intType == class_formentry_checkboxarray::TYPE_RADIO ? $strName : $strName . '[' . $strKey . ']',
+                'value' => $intType == class_formentry_checkboxarray::TYPE_RADIO ? $strKey : 'checked',
+                'title' => $strValue,
+                'checked' => in_array($strKey, $arrSelected) ? 'checked' : '',
+                'inline' => $bitInline ? '-inline' : '',
+                'readonly' => $bitReadonly ? 'disabled' : '',
+            );
+
+            switch($intType) {
+                case class_formentry_checkboxarray::TYPE_RADIO:
+                    $arrTemplateRow['type'] = 'radio';
+                    $strElements.= $this->objTemplate->fillTemplate($arrTemplateRow, $strTemplateCheckboxID, true);
+                    break;
+
+                default:
+                case class_formentry_checkboxarray::TYPE_CHECKBOX:
+                    $arrTemplateRow['type'] = 'checkbox';
+                    $strElements.= $this->objTemplate->fillTemplate($arrTemplateRow, $strTemplateCheckboxID, true);
+                    break;
+            }
+        }
+
+        $arrTemplate["elements"] = $strElements;
+
+        return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID, true);
+    }
 
     /**
      * Creates the header needed to open a form-element
@@ -2135,17 +2187,16 @@ JS;
     }
 
     /**
+     * Creates a tree-view with an button which can be used inside an mode dialog
+     *
      * @param $strLoadNodeDataUrl
      * @param string $strRootNodeSystemid
      * @param array $arrNodesToExpand
-     * @param string $strOnClick
      * @return string
      * @throws class_exception
      */
-    public function getTreeModalCheckbox($strLoadNodeDataUrl, $strRootNodeSystemid = "", $arrNodesToExpand = array(), $strOnClick = "") {
+    public function getTreeModalCheckbox($strLoadNodeDataUrl, $strRootNodeSystemid = "", $arrNodesToExpand = array()) {
         $arrTemplate = array();
-        $arrTemplate["onClick"] = $strOnClick;
-        $arrTemplate["btnText"] = class_carrier::getInstance()->getObjLang()->getLang("commons_accept", "module_system");
         $arrTemplate["treeContent"] = $this->getTreeCheckbox($strLoadNodeDataUrl, $strRootNodeSystemid, $arrNodesToExpand);
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "treeview_modal");
         return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
@@ -2184,11 +2235,11 @@ JS;
     }
 
     /**
-     * @param string $strLoadNodeDataUrl
+     * Returns an checkbox tree-view
+     *
+     * @param $strLoadNodeDataUrl
      * @param string $strRootNodeSystemid
      * @param array $arrNodesToExpand
-     * @param bool $bitOrderingEnabled
-     * @param bool $bitHierachicalSortEnabled
      * @return string
      * @throws class_exception
      */

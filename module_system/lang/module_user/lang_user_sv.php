@@ -14,8 +14,6 @@
 $lang["_admin_skin_default_"]            = "Standard administrations-skin";
 $lang["_admins_group_id_"]               = "ID för admin-grupp";
 $lang["_guests_group_id_"]               = "ID för gäst-grupp";
-$lang["_user_log_nrofrecords_"]          = "Antal rader";
-$lang["_user_log_nrofrecords_hint"]      = "Definierar hur många rader som skall visas i inloggningsprotokollet.";
 $lang["_user_selfedit_"]                 = "Redigera egna data";
 $lang["_user_selfedit_hint"]             = "Bestämmer om en användare skall kunna redigeras sina egna data";
 $lang["action_edit_user"]                = "Redigera användare";

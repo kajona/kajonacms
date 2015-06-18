@@ -149,7 +149,7 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
         }
 
         if($objListEntry instanceof class_module_user_group) {
-            if($objListEntry->getSystemid() != _guests_group_id_ && $objListEntry->getSystemid() != _admins_group_id_ && $this->isGroupEditable($objListEntry)) {
+            if($objListEntry->getSystemid() != class_module_system_setting::getConfigValue("_guests_group_id_") && $objListEntry->getSystemid() != class_module_system_setting::getConfigValue("_admins_group_id_") && $this->isGroupEditable($objListEntry)) {
                 if($objListEntry->rightDelete()) {
                     return $this->objToolkit->listDeleteButton(
                         $objListEntry->getStrDisplayName(), $this->getLang("gruppe_loeschen_frage"), class_link::getLinkAdminHref($this->getArrModule("modul"), "groupDelete", "&systemid=" . $objListEntry->getSystemid())
@@ -231,7 +231,7 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
             $arrReturn[] = $this->objToolkit->listButton(class_link::getLinkAdminDialog("messaging", "new", "&messaging_user_id=" . $objListEntry->getSystemid(), "", $this->getLang("user_send_message"), "icon_mail", $this->getLang("user_send_message")));
         }
 
-        if($objListEntry instanceof class_module_user_user && $objListEntry->getIntActive() == 1 && in_array(_admins_group_id_, $this->objSession->getGroupIdsAsArray())) {
+        if($objListEntry instanceof class_module_user_user && $objListEntry->getIntActive() == 1 && class_carrier::getInstance()->getObjSession()->isSuperAdmin()) {
             $arrReturn[] = $this->objToolkit->listButton(class_link::getLinkAdmin("user", "switchToUser", "&systemid=" . $objListEntry->getSystemid(), "", $this->getLang("user_switch_to"), "icon_userswitch"));
         }
 
@@ -250,7 +250,7 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
      */
     protected function renderEditAction(class_model $objListEntry, $bitDialog = false) {
         if($objListEntry instanceof class_module_user_group) {
-            if($objListEntry->getSystemid() != _guests_group_id_ && $objListEntry->getSystemid() != _admins_group_id_ && $this->isGroupEditable($objListEntry)) {
+            if($objListEntry->getSystemid() != class_module_system_setting::getConfigValue("_guests_group_id_") && $objListEntry->getSystemid() != class_module_system_setting::getConfigValue("_admins_group_id_") && $this->isGroupEditable($objListEntry)) {
                 if($objListEntry->rightEdit()) {
                     return $this->objToolkit->listButton(class_link::getLinkAdminDialog("user", "groupEdit", "&systemid=" . $objListEntry->getSystemid(), "", $this->getLang("action_group_edit"), "icon_edit"));
                 }
@@ -427,7 +427,7 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
                 }
 
                 $objForm->addField(new class_formentry_hidden("", "usersource"))->setStrValue($this->getParam("usersource"));
-                
+
                 return $objForm->renderForm(class_link::getLinkAdminHref($this->getArrModule("modul"), "saveUser"));
             }
         }
@@ -436,7 +436,7 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
             $bitSelfedit = false;
             if(!$this->getObjModule()->rightEdit()) {
 
-                if($this->getSystemid() == $this->objSession->getUserID() && _user_selfedit_ == "true") {
+                if($this->getSystemid() == $this->objSession->getUserID() && class_module_system_setting::getConfigValue("_user_selfedit_") == "true") {
                     $bitSelfedit = true;
                 }
                 else {
@@ -483,7 +483,7 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
             }
 
             $objForm->addField(new class_formentry_hidden("", "usersource"))->setStrValue($this->getParam("usersource"));
-            
+
             return $objForm->renderForm(class_link::getLinkAdminHref($this->getArrModule("modul"), "saveUser"));
         }
 
@@ -554,7 +554,7 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
 
         $objForm->addField(new class_formentry_dropdown("user", "skin"))
             ->setArrKeyValues($arrSkins)
-            ->setStrValue(($this->getParam("user_skin") != "" ? $this->getParam("user_skin") : _admin_skin_default_))
+            ->setStrValue(($this->getParam("user_skin") != "" ? $this->getParam("user_skin") : class_module_system_setting::getConfigValue("_admin_skin_default_")))
             ->setStrLabel($this->getLang("user_skin"));
 
         $objForm->addField(new class_formentry_dropdown("user", "language"))
@@ -611,7 +611,7 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
         }
         else {
             if(!$this->getObjModule()->rightEdit()) {
-                if($this->getSystemid() == $this->objSession->getUserID() && _user_selfedit_ == "true") {
+                if($this->getSystemid() == $this->objSession->getUserID() && class_module_system_setting::getConfigValue("_user_selfedit_") == "true") {
                     $bitSelfedit = true;
                 }
                 else {
@@ -902,8 +902,7 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
         $objConfig = class_config::getInstance("blockedgroups.php");
         $arrBlockedGroups = explode(",", $objConfig->getConfig("blockedgroups"));
 
-        $bitIsSuperAdmin = in_array(_admins_group_id_, $this->objSession->getGroupIdsAsArray());
-        $bitRenderEdit = $bitIsSuperAdmin || ($objGroup->rightEdit() && !in_array($objGroup->getSystemid(), $arrBlockedGroups));
+        $bitRenderEdit = class_carrier::getInstance()->getObjSession()->isSuperAdmin() || ($objGroup->rightEdit() && !in_array($objGroup->getSystemid(), $arrBlockedGroups));
 
         return $bitRenderEdit;
     }
@@ -1075,18 +1074,9 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
         $arrGroups = $objSourcesytem->getAllGroupIds();
         $arrUserGroups = $objUser->getArrGroupIds();
 
-        //to avoid privilege escalation, the admin-group has to be treated in a special manner
-        //only render the group, if the current user is member of this group
-        $bitShowAdmin = false;
-        if(in_array(_admins_group_id_, $this->objSession->getGroupIdsAsArray())) {
-            $bitShowAdmin = true;
-        }
-
-        $objConfig = class_config::getInstance("blockedgroups.php");
-        $arrBlockedGroups = explode(",", $objConfig->getConfig("blockedgroups"));
-
         foreach($arrGroups as $strSingleGroup) {
-
+            //to avoid privilege escalation, the admin-group has to be treated in a special manner
+            //only render the group, if the current user is member of this group
             $objSingleGroup = new class_module_user_group($strSingleGroup);
             if(!$this->isGroupEditable($objSingleGroup))
                 continue;
@@ -1127,8 +1117,6 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
         $objConfig = class_config::getInstance("blockedgroups.php");
         $arrBlockedGroups = explode(",", $objConfig->getConfig("blockedgroups"));
 
-        $bitIsSuperAdmin = in_array(_admins_group_id_, $this->objSession->getGroupIdsAsArray());
-
         //Searching for groups to enter
         foreach($arrGroups as $strSingleGroup) {
 
@@ -1158,8 +1146,8 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
 
         //check, if the current user is member of the admin-group.
         //if not, remain the admin-group as-is
-        if(!$bitIsSuperAdmin) {
-            $intKey = array_search(_admins_group_id_, $arrUserGroups);
+        if(!class_carrier::getInstance()->getObjSession()->isSuperAdmin()) {
+            $intKey = array_search(class_module_system_setting::getConfigValue("_admins_group_id_"), $arrUserGroups);
             if($intKey !== false) {
                 $arrUserGroups[$intKey] = null;
             }
@@ -1196,7 +1184,6 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
         //fetch log-rows
         $objLogbook = new class_module_user_log();
         $objIterator = new class_array_section_iterator($objLogbook->getLoginLogsCount());
-        $objIterator->setIntElementsPerPage(_user_log_nrofrecords_);
         $objIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
         $objIterator->setArraySection(class_module_user_log::getLoginLogs($objIterator->calculateStartPos(), $objIterator->calculateEndPos()));
 
@@ -1348,7 +1335,7 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
      */
     protected function actionSwitchToUser() {
         $strReturn = "";
-        if(class_module_system_module::getModuleByName("system")->rightEdit() && in_array(_admins_group_id_, $this->objSession->getGroupIdsAsArray())) {
+        if(class_module_system_module::getModuleByName("system")->rightEdit() && class_carrier::getInstance()->getObjSession()->isSuperAdmin()) {
 
             //reset the aspect
             $strAddon = "";
@@ -1462,6 +1449,7 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
     protected function actionGetUserByFilter() {
         $strFilter = $this->getParam("filter");
         $strCheckId = $this->getParam("checkid");
+        $arrCheckIds = json_decode($strCheckId);
 
         $arrElements = array();
         $objSource = new class_module_user_sourcefactory();
@@ -1501,40 +1489,48 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
                 continue;
             }
 
-            if(validateSystemid($strCheckId) && $objOneElement instanceof class_module_user_user) {
-                $objInstance = class_objectfactory::getInstance()->getObject($strCheckId);
-                if($objInstance != null) {
-                    class_session::getInstance()->switchSessionToUser($objOneElement, true);
-                    if(!$objInstance->rightView()) {
-                        class_session::getInstance()->switchSessionToUser($objCurUser, true);
-                        continue;
+            $bitUserHasRightView = true;
+            if(!empty($arrCheckIds) && is_array($arrCheckIds) && $objOneElement instanceof class_module_user_user) {
+
+                foreach($arrCheckIds as $strCheckId) {
+
+                    $objInstance = class_objectfactory::getInstance()->getObject($strCheckId);
+
+                    if($objInstance != null) {
+                        class_session::getInstance()->switchSessionToUser($objOneElement, true);
+                        if(!$objInstance->rightView()) {
+                            class_session::getInstance()->switchSessionToUser($objCurUser, true);
+                            $bitUserHasRightView = false;
+                            break;
+                        }
+                        else {
+                            class_session::getInstance()->switchSessionToUser($objCurUser, true);
+                        }
                     }
-                    class_session::getInstance()->switchSessionToUser($objCurUser, true);
-                }
-                else {
-                    continue;
                 }
             }
 
 
-            $arrEntry = array();
+            if($bitUserHasRightView) {
+                $arrEntry = array();
 
-            if($objOneElement instanceof class_module_user_user) {
-                $arrEntry["title"] = $objOneElement->getStrUsername() . " (" . $objOneElement->getStrName() . ", " . $objOneElement->getStrForename() . " )";
-                $arrEntry["label"] = $objOneElement->getStrUsername() . " (" . $objOneElement->getStrName() . ", " . $objOneElement->getStrForename() . " )";
-                $arrEntry["value"] = $objOneElement->getStrUsername() . " (" . $objOneElement->getStrName() . ", " . $objOneElement->getStrForename() . " )";
-                $arrEntry["systemid"] = $objOneElement->getSystemid();
-                $arrEntry["icon"] = class_adminskin_helper::getAdminImage("icon_user");
-            }
-            else if($objOneElement instanceof class_module_user_group) {
-                $arrEntry["title"] = $objOneElement->getStrName();
-                $arrEntry["value"] = $objOneElement->getStrName();
-                $arrEntry["label"] = $objOneElement->getStrName();
-                $arrEntry["systemid"] = $objOneElement->getSystemid();
-                $arrEntry["icon"] = class_adminskin_helper::getAdminImage("icon_group");
-            }
+                if($objOneElement instanceof class_module_user_user) {
+                    $arrEntry["title"] = $objOneElement->getStrUsername()." (".$objOneElement->getStrName().", ".$objOneElement->getStrForename()." )";
+                    $arrEntry["label"] = $objOneElement->getStrUsername()." (".$objOneElement->getStrName().", ".$objOneElement->getStrForename()." )";
+                    $arrEntry["value"] = $objOneElement->getStrUsername()." (".$objOneElement->getStrName().", ".$objOneElement->getStrForename()." )";
+                    $arrEntry["systemid"] = $objOneElement->getSystemid();
+                    $arrEntry["icon"] = class_adminskin_helper::getAdminImage("icon_user");
+                }
+                else if($objOneElement instanceof class_module_user_group) {
+                    $arrEntry["title"] = $objOneElement->getStrName();
+                    $arrEntry["value"] = $objOneElement->getStrName();
+                    $arrEntry["label"] = $objOneElement->getStrName();
+                    $arrEntry["systemid"] = $objOneElement->getSystemid();
+                    $arrEntry["icon"] = class_adminskin_helper::getAdminImage("icon_group");
+                }
 
-            $arrReturn[] = $arrEntry;
+                $arrReturn[] = $arrEntry;
+            }
         }
 
         class_response_object::getInstance()->setStrResponseType(class_http_responsetypes::STR_TYPE_JSON);

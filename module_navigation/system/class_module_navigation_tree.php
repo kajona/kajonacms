@@ -87,6 +87,10 @@ class class_module_navigation_tree extends class_model implements interface_mode
         return parent::getObjectList(class_module_system_module::getModuleIdByNr(_navigation_modul_id_), $intStart, $intEnd);
     }
 
+    public static function getObjectCount($strPrevid = "") {
+        return parent::getObjectCount(class_module_system_module::getModuleIdByNr(_navigation_modul_id_));
+    }
+
 
     /**
      * Looks up a navigation by its name
@@ -97,25 +101,13 @@ class class_module_navigation_tree extends class_model implements interface_mode
      * @static
      */
     public static function getNavigationByName($strName) {
-        $strQuery = "SELECT *
-                     FROM  ". _dbprefix_ . "navigation,
-                           "._dbprefix_."system_right,
-                           ". _dbprefix_ . "system
-               LEFT JOIN "._dbprefix_."system_date
-                    ON system_id = system_date_id
-                     WHERE system_id = navigation_id
-                     AND system_prev_id = ?
-                     AND system_id = right_id
-                     AND navigation_name = ?
-                     ORDER BY system_sort ASC, system_comment ASC";
-        $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array(class_module_system_module::getModuleIdByNr(_navigation_modul_id_), $strName));
-        class_orm_rowcache::addSingleInitRow($arrRow);
-        if(isset($arrRow["system_id"])) {
-            return new class_module_navigation_tree($arrRow["system_id"]);
-        }
-        else {
-            return null;
-        }
+        $objOrm = new class_orm_objectlist();
+        $objOrm->addWhereRestriction(new class_orm_objectlist_property_restriction("strName", class_orm_comparator_enum::Equal(), $strName));
+        $arrRows = $objOrm->getObjectList("class_module_navigation_tree", class_module_system_module::getModuleIdByNr(_navigation_modul_id_));
+        if(count($arrRows) == 1)
+            return $arrRows[0];
+
+        return null;
 
     }
 

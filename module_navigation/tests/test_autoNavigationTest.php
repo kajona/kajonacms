@@ -9,7 +9,7 @@ class class_test_autonavigationtest extends class_testbase  {
     private static $strPage2Systemid;
     private static $strPage2aSystemid;
 
-    public function testSetup() {
+    public function setUp() {
         //creating a new page-node structure
         $objFolder = new class_module_pages_folder();
         $objFolder->setStrName("naviautotest");
@@ -64,11 +64,10 @@ class class_test_autonavigationtest extends class_testbase  {
         $objPagelement->updateObjectToDb($objPage3->getSystemid());
 
         class_carrier::getInstance()->getObjDB()->flushQueryCache();
+
+        parent::setUp();
     }
 
-    /**
-     * @depends testSetup
-     */
     public function testGeneration() {
 
         echo "test auto navigation...\n";
@@ -104,28 +103,27 @@ class class_test_autonavigationtest extends class_testbase  {
         $this->assertEquals("testpage2a", $objFirstNode->getStrPageI());
 
 
-        $objTestNavigation->deleteObject();
+        $objTestNavigation->deleteObjectFromDatabase();
     }
 
 
-    /**
-     * @depends testGeneration
-     */
-    public function testFinalize() {
+    public function tearDown() {
         class_carrier::getInstance()->getObjDB()->flushQueryCache();
         //delete pages and folders created
 
         $objPage = new class_module_pages_page(self::$strPage2aSystemid);
-        $objPage->deleteObject();
+        $objPage->deleteObjectFromDatabase();
 
         $objPage = new class_module_pages_page(self::$strPage2Systemid);
-        $objPage->deleteObject();
+        $objPage->deleteObjectFromDatabase();
 
         $objPage = new class_module_pages_page(self::$strPage1Systemid);
-        $objPage->deleteObject();
+        $objPage->deleteObjectFromDatabase();
 
         $objFolder = new class_module_pages_folder(self::$strFolderSystemid);
-        $objFolder->deleteObject();
+        $objFolder->deleteObjectFromDatabase();
+
+        parent::tearDown();
     }
 
 }

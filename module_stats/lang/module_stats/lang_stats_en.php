@@ -14,8 +14,6 @@ $lang["_stats_duration_online_"]         = "Number of seconds";
 $lang["_stats_duration_online_hint"]     = "Defines, how long a user applies to be online";
 $lang["_stats_exclusionlist_"]           = "Domains to exclude";
 $lang["_stats_exclusionlist_hint"]       = "Comma-separated list of domains to exclude from stats";
-$lang["_stats_nrofrecords_"]             = "Number of rows";
-$lang["_stats_nrofrecords_hint"]         = "The number of rows to be shown in lists";
 $lang["allgemein"]                       = "General";
 $lang["anteil"]                          = "% ";
 $lang["anzahl_hits"]                     = "Total page hits";
@@ -94,6 +92,8 @@ $lang["worker_intro"]                    = "Here you can start different mainten
 $lang["worker_lookupReset_end"]          = "Execution finished. All erroneous hostnames have been resetted.";
 $lang["worker_lookup_end"]               = "Execution finished. All addresses have been processed.";
 $lang["worker_run"]                      = "Run";
+$lang["systemtask_browscapupdate_name"]                      = "Refresh browscap data (browser detection)";
+$lang["browscapupdate_end"]                      = "Browscap data was refreshed";
 
 //non-editable entries
 $lang["permissions_header"]              = array(0 => "View", 1 => "Edit", 2 => "Delete", 3 => "Permissions", 4 => "", 5 => "", 6 => "", 7 => "", 8 => "");

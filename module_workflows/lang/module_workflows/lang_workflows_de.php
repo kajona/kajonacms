@@ -15,7 +15,7 @@ $lang["permissions_header"]              = array(0 => "Anzeigen", 1 => "Bearbeit
 
 //editable entries
 $lang["_workflows_trigger_authkey_"]     = "Auth-Key";
-$lang["_workflows_trigger_authkey_hint"] = "Der Auth-Key wird als Geheimnis beim Aufruf der Workflow-Engine verwendet. Nur wenn der übergebene Auth-Key dem gespeicherten entspricht werden die ausstehenden Workflows ausgeführt. Dies verhindert, dass Dritte durch einfache Aufrufe die Workflows starten können (DOS-Attacke).<br />Nachstehende URL kann zum Aufruf der Workflows-Egine, z.B. in einem Cron-Job, verwendet werden: <br />"._xmlpath_."?module=workflows&action=trigger&authkey=".(defined("_workflows_trigger_authkey_") ? _workflows_trigger_authkey_ : "")."";
+$lang["_workflows_trigger_authkey_hint"] = "Der Auth-Key wird als Geheimnis beim Aufruf der Workflow-Engine verwendet. Nur wenn der übergebene Auth-Key dem gespeicherten entspricht werden die ausstehenden Workflows ausgeführt. Dies verhindert, dass Dritte durch einfache Aufrufe die Workflows starten können (DOS-Attacke).<br />Nachstehende URL kann zum Aufruf der Workflows-Egine, z.B. in einem Cron-Job, verwendet werden: <br />"._xmlpath_."?module=workflows&action=trigger&authkey=".class_module_system_setting::getConfigValue("_workflows_trigger_authkey_")."";
 $lang["action_edit_handler"]             = "Default-Werte bearbeiten";
 $lang["action_instantiate_handler"]      = "Neue Instanz des Workflows erstellen";
 $lang["action_list_handlers"]            = "Workflow-Handlers";

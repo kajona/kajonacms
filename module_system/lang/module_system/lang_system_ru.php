@@ -33,8 +33,6 @@ $lang["_system_portal_disablepage_"]     = "Временная страница"
 $lang["_system_portal_disablepage_hint"] = "Эта страница отображается, если портал деактивирован.";
 $lang["_system_release_time_"]           = "Продолжительность сессии";
 $lang["_system_release_time_hint"]       = "После этого количества секунд сессия станет недействительной.";
-$lang["_system_use_dbcache_"]            = "Кеш датабазы";
-$lang["_system_use_dbcache_hint"]        = "Разрешает / запрещает кеш внутренней датабазы запросов.";
 $lang["about_part1"]                     = "<h2>Kajona V4 - Open Source Content Management System - Открытое техническое решение в области управления контентом </h2>Kajona V 4.7, Кодовое название \"springtide\"<br /><br /><a href=\"http://www.kajona.de\" target=\"_blank\">www.kajona.de</a><br /><a href=\"mailto:info@kajona.de\" target=\"_blank\">info@kajona.de</a><br /><br />Пожалуйста, для дальней информации, поддержки и предложений посетите наш сайт<br />Дополнительная поддержка также предоставлена при использовании <a href=\"http://board.kajona.de/\" target=\"_blank\">board</a>.";
 $lang["about_part2_header"]              = "<h2> Главные разработчики </h2>";
 $lang["about_part2b_header"]             = "<h2>Переводы</h2>";

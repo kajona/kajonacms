@@ -245,6 +245,32 @@ class test_systemchangelogTest extends class_testbase {
 
 
     }
+
+    public function testArrayHandling() {
+        $objChangelog = new class_module_system_changelog();
+
+        $objOne = new dummyObject2(generateSystemid());
+        $objChangelog->readOldValues($objOne);
+
+        $arrChanges = array();
+        $this->assertTrue(!$objChangelog->isObjectChanged($objOne, $arrChanges));
+        $this->assertTrue(count($arrChanges) == 0);
+
+        $objOne->setArrValues(array("a", "c", "d"));
+        $arrChanges = array();
+        $this->assertTrue($objChangelog->isObjectChanged($objOne, $arrChanges));
+        $this->assertTrue(count($arrChanges) == 1);
+        $this->assertEquals($arrChanges[0]["property"], "arrValues");
+        $this->assertEquals($arrChanges[0]["oldvalue"], "b,c,d");
+        $this->assertEquals($arrChanges[0]["newvalue"], "a,c,d");
+
+        $objChangelog->readOldValues($objOne);
+        $objOne->setArrValues(array("a", "d", "c"));
+        $arrChanges = array();
+        $this->assertTrue(!$objChangelog->isObjectChanged($objOne, $arrChanges));
+        $this->assertTrue(count($arrChanges) == 0);
+
+    }
 }
 
 
@@ -314,5 +340,65 @@ class dummyObject implements interface_versionable {
     public function getStrTest() {
         return $this->strTest;
     }
+
+}
+
+
+
+class dummyObject2 implements interface_versionable {
+
+       /**
+     * @var
+     * @versionable
+     */
+    private $arrValues = array("b", "c", "d");
+
+    private $strSystemid;
+    function __construct($strSystemid) {
+        $this->strSystemid = $strSystemid;
+    }
+
+    public function getSystemid() {
+        return $this->strSystemid;
+    }
+
+    public function getPrevid() {
+        return "";
+    }
+
+    public function setStrSystemid($strSystemid) {
+        $this->strSystemid = $strSystemid;
+    }
+
+    public function renderVersionValue($strProperty, $strValue) {
+        return $strValue;
+    }
+
+    public function getVersionActionName($strAction) {
+        return "dummy";
+    }
+
+    public function getArrModule($strKey) {
+        return "dummy";
+    }
+
+    public function getVersionPropertyName($strProperty) {
+        return $strProperty;
+    }
+
+    public function getVersionRecordName() {
+        return "dummy";
+    }
+
+
+    public function getArrValues() {
+        return $this->arrValues;
+    }
+
+    public function setArrValues($arrValues) {
+        $this->arrValues = $arrValues;
+    }
+
+
 
 }

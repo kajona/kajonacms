@@ -154,6 +154,8 @@ class class_db {
      * @return bool
      */
     public function multiInsert($strTable, $arrColumns, $arrValueSets) {
+        if(count($arrValueSets) == 0)
+            return true;
         return $this->objDbDriver->triggerMultiInsert(_dbprefix_.$strTable, $arrColumns, $arrValueSets, $this);
     }
 
@@ -283,12 +285,6 @@ class class_db {
         $strQuery = $this->processQuery($strQuery);
         //Increasing global counter
         $this->intNumber++;
-
-        if(defined("_system_use_dbcache_")) {
-            if(_system_use_dbcache_ == "false") {
-                $bitCache = false;
-            }
-        }
 
         $strQueryMd5 = null;
         if($bitCache) {
@@ -511,36 +507,7 @@ class class_db {
 
             //increase global counter
             $this->intNumber++;
-
-            $strFakeQuery = "SELECT ALL TABLES /// KAJONA INTERNAL QUERY";
-            $strQueryMd5 = md5($strFakeQuery);
-
-            $bitCache = true;
-            if(defined("_system_use_dbcache_") && _system_use_dbcache_ == "false")
-                $bitCache = false;
-
-            $arrTemp = array();
-            if($bitCache) {
-                if(isset($this->arrQueryCache[$strQueryMd5])) {
-                    //Increasing Cache counter
-                    $this->intNumberCache++;
-                    $arrTemp = $this->arrQueryCache[$strQueryMd5];
-                }
-                else {
-                    $arrTemp = $this->objDbDriver->getTables();
-                    if(_dblog_)
-                        class_logger::getInstance(class_logger::QUERIES)->addLogRow("\r\n".$strFakeQuery, class_logger::$levelInfo, true);
-                }
-            }
-            else {
-                $arrTemp = $this->objDbDriver->getTables();
-                if(_dblog_)
-                    class_logger::getInstance(class_logger::QUERIES)->addLogRow("\r\n".$strFakeQuery, class_logger::$levelInfo, true);
-            }
-
-            if($bitCache)
-                $this->arrQueryCache[$strQueryMd5] = $arrTemp;
-
+            $arrTemp = $this->objDbDriver->getTables();
 
             //Filtering tables not used by this project, if dbprefix was given
             if(_dbprefix_ != "") {
@@ -706,7 +673,7 @@ class class_db {
         $objFilesystem = new class_filesystem();
         $arrFiles = $objFilesystem->getFilelist(_projectpath_."/dbdumps/", array(".sql", ".gz"));
 
-        while(count($arrFiles) >= _system_dbdump_amount_) {
+        while(count($arrFiles) >= class_module_system_setting::getConfigValue("_system_dbdump_amount_")) {
             $strFile = array_shift($arrFiles);
             if(!$objFilesystem->fileDelete(_projectpath_."/dbdumps/".$strFile)) {
                 class_logger::getInstance(class_logger::DBLOG)->addLogRow("Error deleting old db-dumps", class_logger::$levelWarning);

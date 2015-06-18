@@ -134,8 +134,6 @@ class class_usersources_user_ldap extends class_model implements interface_model
         $strQuery = "DELETE FROM "._dbprefix_."user_ldap WHERE user_ldap_id=?";
         //call other models that may be interested
         $bitDelete = $this->objDB->_pQuery($strQuery, array($this->getSystemid()));
-        //TODO: remove legacy call
-        class_core_eventdispatcher::notifyRecordDeletedListeners($this->getSystemid(), get_class($this));
         class_core_eventdispatcher::getInstance()->notifyGenericListeners(class_system_eventidentifier::EVENT_SYSTEM_RECORDDELETED, array($this->getSystemid(), get_class($this)));
         return $bitDelete;
     }
@@ -144,7 +142,7 @@ class class_usersources_user_ldap extends class_model implements interface_model
      * Deletes the current object from the system
      * @return bool
      */
-    public function deleteObject() {
+    public function deleteObjectFromDatabase() {
         return $this->deleteUser();
     }
 

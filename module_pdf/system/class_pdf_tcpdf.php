@@ -7,7 +7,12 @@
 *	$Id$                                   *
 ********************************************************************************************************/
 
-require_once(__DIR__."/tcpdf/tcpdf.php");
+require_once(__DIR__."/tcpdf/vendor/autoload.php");
+
+/**
+ * Cache directory for temporary files (full path).
+ */
+define ('K_PATH_CACHE', _realpath_.'/project/temp');
 
 /**
  * Extends the TCPDF class and is being used internally by class_pdf.

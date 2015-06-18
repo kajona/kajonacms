@@ -43,7 +43,7 @@ class class_installer_packageserver extends class_installer_base implements inte
         $objRepo->setStrTitle("Packageserver packages");
         $objRepo->updateObjectToDb();
 
-        class_carrier::getInstance()->getObjRights()->addGroupToRight(_guests_group_id_, $objRepo->getSystemid(), class_rights::$STR_RIGHT_RIGHT2);
+        class_carrier::getInstance()->getObjRights()->addGroupToRight(class_module_system_setting::getConfigValue("_guests_group_id_"), $objRepo->getSystemid(), class_rights::$STR_RIGHT_RIGHT2);
 
 
         $strReturn .= "Registering system-constants...\n";
@@ -83,12 +83,12 @@ class class_installer_packageserver extends class_installer_base implements inte
     public function remove(&$strReturn) {
 
         $strReturn .= "Deleting config-entries..\n";
-        class_module_system_setting::getConfigByName("_packageserver_repo_id_")->deleteObject();
+        class_module_system_setting::getConfigByName("_packageserver_repo_id_")->deleteObjectFromDatabase();
 
         //delete the module-node
         $strReturn .= "Deleting the module-registration...\n";
         $objModule = class_module_system_module::getModuleByName($this->objMetadata->getStrTitle(), true);
-        if(!$objModule->deleteObject()) {
+        if(!$objModule->deleteObjectFromDatabase()) {
             $strReturn .= "Error deleting module, aborting.\n";
             return false;
         }

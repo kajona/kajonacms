@@ -210,12 +210,18 @@ class class_module_user_group extends class_model implements interface_model, in
         return $this->objSourceGroup->getNumberOfMembers();
     }
 
+
+    public function deleteObject() {
+        return $this->deleteObjectFromDatabase();
+    }
+
+
     /**
      * Deletes the given group
      *
      * @return bool
      */
-    public function deleteObject() {
+    public function deleteObjectFromDatabase() {
         class_logger::getInstance(class_logger::USERSOURCES)->addLogRow("deleted group with id ".$this->getSystemid(). " (".$this->getStrName().")", class_logger::$levelWarning);
 
         //Delete related group
@@ -223,8 +229,6 @@ class class_module_user_group extends class_model implements interface_model, in
 
         $strQuery = "DELETE FROM "._dbprefix_."user_group WHERE group_id=?";
         $bitReturn = $this->objDB->_pQuery($strQuery, array($this->getSystemid()));
-        //TODO: remove legacy call
-        class_core_eventdispatcher::notifyRecordDeletedListeners($this->getSystemid(), get_class($this));
         class_core_eventdispatcher::getInstance()->notifyGenericListeners(class_system_eventidentifier::EVENT_SYSTEM_RECORDDELETED, array($this->getSystemid(), get_class($this)));
         return $bitReturn;
     }

@@ -63,6 +63,7 @@ class class_orm_objectlist extends class_orm_base {
         if($strPrevid != "")
             $arrParams[] = $strPrevid;
 
+        $this->addLogicalDeleteRestriction();
         $this->processWhereRestrictions($strQuery, $arrParams, $strTargetClass);
 
         $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, $arrParams);
@@ -97,6 +98,7 @@ class class_orm_objectlist extends class_orm_base {
         if($strPrevid != "")
             $arrParams[] = $strPrevid;
 
+        $this->addLogicalDeleteRestriction();
         $this->processWhereRestrictions($strQuery, $arrParams, $strTargetClass);
         $strQuery .= $this->getOrderBy(new class_reflection($strTargetClass));
         $arrRows = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, $arrParams, $intStart, $intEnd);
@@ -104,10 +106,20 @@ class class_orm_objectlist extends class_orm_base {
         $arrReturn = array();
         foreach($arrRows as $arrOneRow) {
             //Caching is only allowed if the fetched and required classes match. Otherwise there could be missing queried tables.
-            if($arrOneRow["system_class"] == $strTargetClass)
+            if($arrOneRow["system_class"] == $strTargetClass) {
                 class_orm_rowcache::addSingleInitRow($arrOneRow);
+                $arrReturn[] = class_objectfactory::getInstance()->getObject($arrOneRow["system_id"]);
+            }
+            else {
+                $objReflectionClass = new ReflectionClass($arrOneRow["system_class"]);
+                if($objReflectionClass->isSubclassOf($strTargetClass)) {
+                    //returns the instance, but enforces a fresh reload from the database.
+                    //this is useful if extending classes need to query additional tables
+                    $arrReturn[] = class_objectfactory::getInstance()->getObject($arrOneRow["system_id"]);
+                }
+            }
 
-            $arrReturn[] = class_objectfactory::getInstance()->getObject($arrOneRow["system_id"]);
+
         }
 
         return $arrReturn;
@@ -195,6 +207,15 @@ class class_orm_objectlist extends class_orm_base {
         return $strOrderBy;
     }
 
+
+
+    protected function addLogicalDeleteRestriction() {
+
+        if(!self::$bitLogcialDeleteAvailable)
+            return;
+
+        $this->addWhereRestriction(new class_orm_objectlist_restriction($this->getDeletedWhereRestriction(), array()));
+    }
 
 
     /**

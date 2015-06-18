@@ -2,8 +2,6 @@
 /*"******************************************************************************************************
 *   (c) 2007-2015 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
-*-------------------------------------------------------------------------------------------------------*
-*   $Id$                                        *
 ********************************************************************************************************/
 
 /**
@@ -73,7 +71,29 @@ class class_orm_objectinit extends class_orm_base {
                     call_user_func(array($this->getObjObject(), $strSetter), $arrRow[$strColumn]);
             }
 
+            $this->initAssignmentProperties();
         }
+    }
+
+    /**
+     * Injects the lazy loading objects for assignment properties into the current object
+     * @return void
+     */
+    private function initAssignmentProperties() {
+        $objReflection = new class_reflection($this->getObjObject());
+
+        //get the mapped properties
+        $arrProperties = $objReflection->getPropertiesWithAnnotation(class_orm_base::STR_ANNOTATION_OBJECTLIST, class_reflection_enum::PARAMS());
+
+        foreach($arrProperties as $strPropertyName => $arrValues) {
+
+            $objPropertyLazyLoader = new class_orm_assignment_array($this->getObjObject(), $strPropertyName, $this->getIntCombinedLogicalDeletionConfig());
+
+            $strSetter = $objReflection->getSetter($strPropertyName);
+            if($strSetter !== null)
+                call_user_func(array($this->getObjObject(), $strSetter), $objPropertyLazyLoader);
+        }
+
     }
 
 }

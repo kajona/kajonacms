@@ -356,7 +356,7 @@ class class_db_sqlite3 extends class_db_base  {
 
             // Extract the column definitions from the create statement
             $arrMatch = array();
-            preg_match("/CREATE TABLE\s+[a-z_]+\s+\((.+)\)/ism", trim($strTableDef), $arrMatch);
+            preg_match("/CREATE TABLE\s+[a-z_0-9]+\s+\((.+)\)/ism", trim($strTableDef), $arrMatch);
 
             // Get all column names and types
             $strColumnDef = $arrMatch[1];

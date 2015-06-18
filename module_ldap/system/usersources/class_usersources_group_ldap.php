@@ -180,8 +180,6 @@ class class_usersources_group_ldap extends class_model implements interface_mode
     public function deleteGroup() {
         class_logger::getInstance()->addLogRow("deleted ldap group with id " . $this->getSystemid(), class_logger::$levelInfo);
         $strQuery = "DELETE FROM " . _dbprefix_ . "user_group_ldap WHERE group_ldap_id=?";
-        //TODO: remove legacy call
-        class_core_eventdispatcher::notifyRecordDeletedListeners($this->getSystemid(), get_class($this));
         class_core_eventdispatcher::getInstance()->notifyGenericListeners(class_system_eventidentifier::EVENT_SYSTEM_RECORDDELETED, array($this->getSystemid(), get_class($this)));
         return $this->objDB->_pQuery($strQuery, array($this->getSystemid()));
     }
@@ -191,7 +189,7 @@ class class_usersources_group_ldap extends class_model implements interface_mode
      *
      * @return bool
      */
-    public function deleteObject() {
+    public function deleteObjectFromDatabase() {
         return $this->deleteObject();
     }
 

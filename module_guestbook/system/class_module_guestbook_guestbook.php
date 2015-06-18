@@ -86,7 +86,7 @@ class class_module_guestbook_guestbook extends class_model implements interface_
      * @return bool
      */
     protected function onInsertToDb() {
-        return $this->objRights->addGroupToRight(_guests_group_id_, $this->getSystemid(), "right1");
+        return class_carrier::getInstance()->getObjRights()->addGroupToRight(class_module_system_setting::getConfigValue("_guests_group_id_"), $this->getSystemid(), "right1");
     }
 
     /**

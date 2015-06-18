@@ -30,10 +30,10 @@ class class_mediamanagerTest extends class_testbase  {
 
         $this->assertEquals(3, count($arrFiles));
         foreach($arrFiles as $objOneFile)
-            $objOneFile->deleteObject();
+            $objOneFile->deleteObjectFromDatabase();
 
 
-        $objRepo->deleteObject();
+        $objRepo->deleteObjectFromDatabase();
 
         $arrFiles = $objFilesystem->getFilelist(_filespath_."/images/autotest");
 

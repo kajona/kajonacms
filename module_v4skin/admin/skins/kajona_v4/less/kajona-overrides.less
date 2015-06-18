@@ -819,9 +819,10 @@ footer {
             padding: 7px 0 0 0;
         }
 
-        &.form-horizontal .checkbox {
-            padding-top: 0;
-        }
+//TODO: sir 05/2015: removed again, where was this required?
+//        &.form-horizontal .checkbox {
+//            padding-top: 0;
+//        }
 
     }
 
@@ -1268,7 +1269,6 @@ footer {
 
 }
 
-
 :focus {
   -moz-outline-style:none;
   outline:medium none;
@@ -1581,6 +1581,36 @@ footer {
     .bootstrap-switch-handle-on.bootstrap-switch-primary {
         background: @kajona-brand-color;
     }
+}
+
+
+/* JS TREE */
+.jstree-default.jstree-focused {
+    background:#fff!important;
+}
+
+.jstree-default .jstree-checked > a > .jstree-checkbox {
+    background-position:-38px -18px!important;
+}
+
+.jstree-default .jstree-unchecked > a > .jstree-checkbox {
+    background-position:-2px -18px!important;
+}
+
+.jstree-default .jstree-undetermined > a > .jstree-checkbox {
+    background-position:-20px -18px!important;
+}
+
+.jstree-default .jstree-checked > a > .jstree-checkbox:hover {
+    background-position:-38px -36px!important;
+}
+
+.jstree-default .jstree-unchecked > a > .jstree-checkbox:hover {
+    background-position:-2px -36px!important;
+}
+
+.jstree-default .jstree-undetermined > a > .jstree-checkbox:hover {
+    background-position:-20px -36px!important;
 }
 
 

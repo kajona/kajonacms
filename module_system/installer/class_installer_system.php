@@ -46,8 +46,9 @@ class class_installer_system extends class_installer_base implements interface_i
         $arrFields["system_status"] = array("int", true);
         $arrFields["system_class"] = array("char254", true);
         $arrFields["system_comment"] = array("char254", true);
+        $arrFields["system_deleted"] = array("int", true);
 
-        if(!$this->objDB->createTable("system", $arrFields, array("system_id"), array("system_prev_id", "system_module_nr", "system_sort", "system_owner", "system_create_date", "system_status", "system_lm_time", "system_lock_time")))
+        if(!$this->objDB->createTable("system", $arrFields, array("system_id"), array("system_prev_id", "system_module_nr", "system_sort", "system_owner", "system_create_date", "system_status", "system_lm_time", "system_lock_time", "system_deleted")))
             $strReturn .= "An error occurred! ...\n";
 
         //Rights table ----------------------------------------------------------------------------------
@@ -268,8 +269,6 @@ class class_installer_system extends class_installer_base implements interface_i
 
         //Registering a few constants
         $strReturn .= "Registering system-constants...\n";
-        //Number of rows in the login-log
-        $this->registerConstant("_user_log_nrofrecords_", "50", 1, _user_modul_id_);
 
         //And the default skin
         $this->registerConstant("_admin_skin_default_", "kajona_v4", class_module_system_setting::$int_TYPE_STRING, _user_modul_id_);
@@ -296,7 +295,6 @@ class class_installer_system extends class_installer_base implements interface_i
         //3.1: nr of rows in admin
         $this->registerConstant("_admin_nr_of_rows_", 15, class_module_system_setting::$int_TYPE_INT, _system_modul_id_);
         $this->registerConstant("_admin_only_https_", "false", class_module_system_setting::$int_TYPE_BOOL, _system_modul_id_);
-        $this->registerConstant("_system_use_dbcache_", "true", class_module_system_setting::$int_TYPE_BOOL, _system_modul_id_);
 
         //3.1: remoteloader max cachtime --> default 60 min
         $this->registerConstant("_remoteloader_max_cachetime_", 60 * 60, class_module_system_setting::$int_TYPE_INT, _system_modul_id_);
@@ -358,7 +356,7 @@ class class_installer_system extends class_installer_base implements interface_i
         $this->objDB->flushQueryCache();
 
         $strReturn .= "Modified root-rights....\n";
-        $this->objRights->rebuildRightsStructure();
+        class_carrier::getInstance()->getObjRights()->rebuildRightsStructure();
         $strReturn .= "Rebuilt rights structures...\n";
 
         //Creating an admin-user
@@ -668,6 +666,11 @@ class class_installer_system extends class_installer_base implements interface_i
             $strReturn .= $this->update_465_47();
         }
 
+        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "4.7") {
+            $strReturn .= $this->update_47_475();
+        }
+
         return $strReturn."\n\n";
     }
 
@@ -792,6 +795,10 @@ class class_installer_system extends class_installer_base implements interface_i
         if($arrColumns == null || !in_array("change_property", $arrColumns))
             $this->objDB->_pQuery("ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."changelog")." ADD INDEX ( ".$this->objDB->encloseColumnName("change_property")." ) ", array());
 
+
+        $strReturn .= "Altering system_module table...\n";
+        $this->objDB->_pQuery("ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."system_module")." CHANGE ".$this->objDB->encloseColumnName("module_nr")." ".$this->objDB->encloseColumnName("module_nr")." ".$this->objDB->getDatatype("int")." NULL", array());
+        $this->objDB->_pQuery("ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."system_module")." CHANGE ".$this->objDB->encloseColumnName("module_name")." ".$this->objDB->encloseColumnName("module_name")." ".$this->objDB->getDatatype("char254")." NULL", array());
 
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion("", "3.4.9");
@@ -1107,7 +1114,7 @@ class class_installer_system extends class_installer_base implements interface_i
 
         $strReturn .= "Updating default changelog permissions for admins...\n";
         $strQuery = "UPDATE "._dbprefix_."system_right SET right_changelog = ?";
-        $this->objDB->_pQuery($strQuery, array(_admins_group_id_));
+        $this->objDB->_pQuery($strQuery, array(class_module_system_setting::getConfigValue("_admins_group_id_")));
 
 
         class_carrier::getInstance()->flushCache(class_carrier::INT_CACHE_TYPE_DBQUERIES | class_carrier::INT_CACHE_TYPE_DBSTATEMENTS);
@@ -1165,7 +1172,7 @@ class class_installer_system extends class_installer_base implements interface_i
 
         $strReturn .= "Adding mail-config settings...\n";
 
-        $this->registerConstant("_system_email_defaultsender_", _system_admin_email_, class_module_system_setting::$int_TYPE_STRING, _system_modul_id_);
+        $this->registerConstant("_system_email_defaultsender_", class_module_system_setting::getConfigValue("_system_admin_email_"), class_module_system_setting::$int_TYPE_STRING, _system_modul_id_);
         $this->registerConstant("_system_email_forcesender_", "false", class_module_system_setting::$int_TYPE_BOOL, _system_modul_id_);
 
 
@@ -1179,6 +1186,11 @@ class class_installer_system extends class_installer_base implements interface_i
 
         $strReturn .= "Updating user table...\n";
         $this->objDB->addColumn("user", "user_items_per_page", class_db_datatypes::STR_TYPE_INT);
+
+        $strReturn .= "Removing setting _user_log_nrofrecords_...\n";
+        class_module_system_setting::getConfigByName("_user_log_nrofrecords_")->deleteObjectFromDatabase();
+        $strReturn .= "Removing setting _system_use_dbcache_...\n";
+        class_module_system_setting::getConfigByName("_system_use_dbcache_")->deleteObjectFromDatabase();
 
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion($this->objMetadata->getStrTitle(), "4.6.5");
@@ -1204,5 +1216,20 @@ class class_installer_system extends class_installer_base implements interface_i
         $this->updateModuleVersion($this->objMetadata->getStrTitle(), "4.7");
         return $strReturn;
     }
+
+    private function update_47_475() {
+
+        $strReturn = "Updating 4.7 to 4.7.5...\n";
+
+        $strReturn .= "Updating system table\n";
+        $this->objDB->addColumn("system", "system_deleted", class_db_datatypes::STR_TYPE_INT);
+        $strQuery = "UPDATE "._dbprefix_."system SET system_deleted = 0";
+        $this->objDB->_pQuery($strQuery, array());
+        class_carrier::getInstance()->flushCache(class_carrier::INT_CACHE_TYPE_DBTABLES | class_carrier::INT_CACHE_TYPE_DBSTATEMENTS);
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion($this->objMetadata->getStrTitle(), "4.7.5");
+        return $strReturn;
+    }
+
 
 }

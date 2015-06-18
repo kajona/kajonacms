@@ -55,8 +55,8 @@ class class_rights {
         $this->objSession = class_carrier::getInstance()->getObjSession();
 
         if(count($this->objDb->getTables()) > 0) {
-            $arrModule = class_module_system_module::getPlainModuleData("system");
-            if(version_compare($arrModule["module_version"], "4.3.1") < 0)
+            $objModule = class_module_system_module::getModuleByName("system");
+            if($objModule !== null && version_compare($objModule->getStrVersion(), "4.3.1") < 0)
                 $this->bitChangelog = false;
         }
     }
@@ -488,7 +488,7 @@ class class_rights {
             $arrGroupIds = $this->objSession->getGroupIdsAsArray();
         }
         else
-            $arrGroupIds[] = _guests_group_id_;
+            $arrGroupIds[] = class_module_system_setting::getConfigValue("_guests_group_id_");
 
         foreach($arrGroupIds as $strOneGroupId)
             if($this->checkPermissionForGroup($strOneGroupId, $strPermission, $strSystemid))

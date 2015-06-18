@@ -80,14 +80,14 @@ KAJONA.util.fold = function (strElementId, objCallbackVisible, objCallbackInvisi
         $element.removeClass("folderHidden");
         $element.addClass("folderVisible");
 		if ($.isFunction(objCallbackVisible)) {
-			objCallbackVisible();
+			objCallbackVisible(strElementId);
 		}
     }
     else {
         $element.removeClass("folderVisible");
         $element.addClass("folderHidden");
 		if ($.isFunction(objCallbackInvisible)) {
-			objCallbackInvisible();
+			objCallbackInvisible(strElementId);
 		}
     }
 };
@@ -356,36 +356,83 @@ KAJONA.admin.switchLanguage = function(strLanguageToLoad) {
 /**
  * little helper function for the system right matrix
  */
-KAJONA.admin.checkRightMatrix = function() {
-	// mode 1: inheritance
-	if (document.getElementById('inherit').checked) {
-		// loop over all checkboxes to disable them
-		for (var intI = 0; intI < document.forms['rightsForm'].elements.length; intI++) {
-			var objCurElement = document.forms['rightsForm'].elements[intI];
-			if (objCurElement.type == 'checkbox') {
-				if (objCurElement.id != 'inherit') {
-					objCurElement.disabled = true;
-					objCurElement.checked = false;
-					var strCurId = "inherit," + objCurElement.id;
-					if (document.getElementById(strCurId) != null) {
-						if (document.getElementById(strCurId).value == '1') {
-							objCurElement.checked = true;
-						}
-					}
-				}
-			}
-		}
-	} else {
-		// mode 2: no inheritance, make all checkboxes editable
-		for (intI = 0; intI < document.forms['rightsForm'].elements.length; intI++) {
-			var objCurElement = document.forms['rightsForm'].elements[intI];
-			if (objCurElement.type == 'checkbox') {
-				if (objCurElement.id != 'inherit') {
-					objCurElement.disabled = false;
-				}
-			}
-		}
-	}
+KAJONA.admin.permissions = {
+    checkRightMatrix : function () {
+        // mode 1: inheritance
+        if (document.getElementById('inherit').checked) {
+            // loop over all checkboxes to disable them
+            for (var intI = 0; intI < document.forms['rightsForm'].elements.length; intI++) {
+                var objCurElement = document.forms['rightsForm'].elements[intI];
+                if (objCurElement.type == 'checkbox') {
+                    if (objCurElement.id != 'inherit') {
+                        objCurElement.disabled = true;
+                        objCurElement.checked = false;
+                        var strCurId = "inherit," + objCurElement.id;
+                        if (document.getElementById(strCurId) != null) {
+                            if (document.getElementById(strCurId).value == '1') {
+                                objCurElement.checked = true;
+                            }
+                        }
+                    }
+                }
+            }
+        } else {
+            // mode 2: no inheritance, make all checkboxes editable
+            for (intI = 0; intI < document.forms['rightsForm'].elements.length; intI++) {
+                var objCurElement = document.forms['rightsForm'].elements[intI];
+                if (objCurElement.type == 'checkbox') {
+                    if (objCurElement.id != 'inherit') {
+                        objCurElement.disabled = false;
+                    }
+                }
+            }
+        }
+    },
+
+    toggleEmtpyRows : function (strVisibleName, strHiddenName) {
+
+        $('#rightsForm tr').each(function(){
+            if($(this).find("input:checked").length == 0 && $(this).find("th").length == 0) {
+                $(this).toggle();
+            }
+        });
+
+        if($('#rowToggleLink').hasClass("rowsVisible")) {
+            $('#rowToggleLink').html(strVisibleName);
+            $('#rowToggleLink').removeClass("rowsVisible");
+        }
+        else {
+            $('#rowToggleLink').html(strHiddenName);
+            $('#rowToggleLink').addClass("rowsVisible")
+        }
+    },
+
+    submitForm : function() {
+        var objResponse = {
+            bitInherited : $("#inherit").is(":checked"),
+            arrConfigs : []
+        };
+
+        $('#rightsForm table tr input:checked').each(function(){
+            if($(this).find("input:checked").length == 0) {
+                objResponse.arrConfigs.push($(this).attr('id'));
+            }
+        });
+
+        $("#responseContainer").html('').addClass("loadingContainer");
+
+        $.ajax({
+            url: KAJONA_WEBPATH + '/xml.php?admin=1&module=right&action=saveRights&systemid='+ $('#systemid').val(),
+            type: 'POST',
+            data: {json: JSON.stringify(objResponse)},
+            dataType: 'json'
+        }).done(function(data) {
+            $("#responseContainer").removeClass("loadingContainer").html(data.message);
+        });
+
+
+        return false;
+    }
 };
 
 /**
@@ -710,6 +757,9 @@ KAJONA.admin.lists = {
     strDialogStart : '',
     intTotal : 0,
 
+    /**
+     * Toggles all fields
+     */
     toggleAllFields : function() {
         //batchActionSwitch
         $("table.admintable input[type='checkbox']").each(function() {
@@ -717,6 +767,29 @@ KAJONA.admin.lists = {
                 $(this)[0].checked = $('#kj_cb_batchActionSwitch')[0].checked;
             }
         });
+    },
+
+    /**
+     * Toggles all fields with the given system id's
+     *
+     * @param arrSystemIds
+     */
+    toggleFields : function(arrSystemIds) {
+        //batchActionSwitch
+        $("table.admintable input[type='checkbox']").each(function() {
+            if($(this).attr('id').substr(0, 6) == "kj_cb_" && $(this).attr('id') != 'kj_cb_batchActionSwitch') {
+                var strSysid = $(this).closest("tr").data('systemid');
+                if($.inArray(strSysid, arrSystemIds) !== -1) {//if strId in array
+                    if($(this)[0].checked) {
+                        $(this)[0].checked = false;
+                    }
+                    else {
+                        $(this)[0].checked = true;
+                    };
+                }
+            }
+        });
+        KAJONA.admin.lists.updateToolbar();
     },
 
     updateToolbar : function() {
@@ -801,6 +874,26 @@ KAJONA.admin.lists = {
 
         //get the selected elements
         $("table.admintable  input:checked").each(function() {
+            if($(this).attr('id').substr(0, 6) == "kj_cb_" && $(this).attr('id') != 'kj_cb_batchActionSwitch') {
+                var sysid = $(this).closest("tr").data('systemid');
+                if(sysid != "")
+                    selectedElements.push(sysid);
+            }
+        });
+
+        return selectedElements;
+    },
+
+    /**
+     * Creates an array which contains all system id's.
+     *
+     * @returns {Array}
+     */
+    getAllElements : function () {
+        var selectedElements = [];
+
+        //get the selected elements
+        $("table.admintable  input[type='checkbox']").each(function() {
             if($(this).attr('id').substr(0, 6) == "kj_cb_" && $(this).attr('id') != 'kj_cb_batchActionSwitch') {
                 var sysid = $(this).closest("tr").data('systemid');
                 if(sysid != "")

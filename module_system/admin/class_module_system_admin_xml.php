@@ -73,12 +73,10 @@ class class_module_system_admin_xml extends class_admin_controller implements in
             if($intNewStatus == "")
                 $intNewStatus = $objCommon->getIntRecordStatus() == 0 ? 1 : 0;
 
-            if($objCommon->setIntRecordStatus($intNewStatus)) {
-                $strReturn .= "<message>".$objCommon->getStrDisplayName()." - ".$this->getLang("setStatusOk")."<newstatus>".$intNewStatus."</newstatus></message>";
-                $this->flushCompletePagesCache();
-            }
-            else
-                $strReturn .= "<message><error>".$objCommon->getStrDisplayName()." - ".$this->getLang("setStatusError")."</error></message>";
+            $objCommon->setIntRecordStatus($intNewStatus);
+            $objCommon->updateObjectToDb();
+            $strReturn .= "<message>".$objCommon->getStrDisplayName()." - ".$this->getLang("setStatusOk")."<newstatus>".$intNewStatus."</newstatus></message>";
+            $this->flushCompletePagesCache();
         }
         else {
             class_response_object::getInstance()->setStrStatusCode(class_http_statuscodes::SC_UNAUTHORIZED);
@@ -90,7 +88,7 @@ class class_module_system_admin_xml extends class_admin_controller implements in
 
 
     /**
-     * Changes the status of the current systemid
+     * Deletes are record identified by its systemid
      *
      * @return string
      * @permissions delete
@@ -433,7 +431,7 @@ class class_module_system_admin_xml extends class_admin_controller implements in
             else {
                 $strActivity .= $this->getLang("session_portal");
                 if($strLastUrl == "")
-                    $strActivity .= _pages_indexpage_;
+                    $strActivity .= class_module_system_setting::getConfigValue("_pages_indexpage_");
                 else {
                     foreach(explode("&amp;", $strLastUrl) as $strOneParam) {
                         $arrUrlParam = explode("=", $strOneParam);

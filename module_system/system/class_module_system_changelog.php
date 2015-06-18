@@ -22,7 +22,7 @@
  * @module system
  * @moduleId _system_modul_id_
  */
-class class_module_system_changelog extends class_model implements interface_model {
+class class_module_system_changelog {
 
     const ANNOTATION_PROPERTY_VERSIONABLE = "@versionable";
 
@@ -35,6 +35,11 @@ class class_module_system_changelog extends class_model implements interface_mod
     public static $bitChangelogEnabled = null;
 
     private static $arrOldValueCache = array();
+
+    /**
+     * @todo: is the init value cache still required?
+     * @var array
+     */
     private static $arrInitValueCache = array();
     private static $arrCachedProviders = null;
 
@@ -44,23 +49,6 @@ class class_module_system_changelog extends class_model implements interface_mod
     public static $STR_ACTION_EDIT = "actionEdit";
     public static $STR_ACTION_DELETE = "actionDelete";
 
-
-    /**
-     * Returns the name to be used when rendering the current object, e.g. in admin-lists.
-     *
-     * @return string
-     */
-    public function getStrDisplayName() {
-        return "changelog";
-    }
-
-
-    /**
-     * Initialises the current object, if a systemid was given
-     * @return void
-     */
-    protected function initObjectInternal() {
-    }
 
     /**
      * Checks if an objects properties changed.
@@ -107,8 +95,21 @@ class class_module_system_changelog extends class_model implements interface_mod
     }
 
     /**
+     * Sets the passed entry for a concrete objects' property to the set of old values
+     *
+     * @param string $strSystemid
+     * @param $strProperty
+     * @param $strValue
+     */
+    public function setOldValueForSystemidAndProperty($strSystemid, $strProperty, $strValue) {
+        if(!isset(self::$arrOldValueCache[$strSystemid]))
+            self::$arrOldValueCache[$strSystemid] = array();
+
+        self::$arrOldValueCache[$strSystemid][$strProperty] = $strValue;
+    }
+
+    /**
      * Scans the passed object and tries to find all properties marked with the annotation @versionable.
-     * Updates the internal "oldvalues" cache.
      * @param interface_versionable|class_model $objCurrentObject
      *
      * @return array|null
@@ -118,7 +119,7 @@ class class_module_system_changelog extends class_model implements interface_mod
             return null;
 
         if(validateSystemid($objCurrentObject->getSystemid())) {
-            $arrOldValues = array();
+            $arrCurrentValues = array();
 
             $objReflection = new class_reflection($objCurrentObject);
             $arrProperties = $objReflection->getPropertiesWithAnnotation(self::ANNOTATION_PROPERTY_VERSIONABLE);
@@ -134,10 +135,24 @@ class class_module_system_changelog extends class_model implements interface_mod
                     $strValue = call_user_func(array($objCurrentObject, $strGetter));
                 }
 
-                $arrOldValues[$strProperty] = $strValue;
+                if(is_array($strValue) || $strValue instanceof ArrayAccess) {
+                    $arrNewValues = array();
+                    foreach($strValue as $objOneValue) {
+                        if(is_object($objOneValue)&& $objOneValue instanceof class_root) {
+                            $arrNewValues[] = $objOneValue->getSystemid();
+                        }
+                        else {
+                            $arrNewValues[] = $objOneValue."";
+                        }
+                    }
+                    sort($arrNewValues);
+                    $strValue = implode(",", $arrNewValues);
+                }
+
+                $arrCurrentValues[$strProperty] = $strValue;
             }
 
-            return $arrOldValues;
+            return $arrCurrentValues;
         }
         return null;
     }
@@ -280,10 +295,10 @@ class class_module_system_changelog extends class_model implements interface_mod
         if(self::$bitChangelogEnabled !== null)
             return self::$bitChangelogEnabled;
 
-        if(!defined("_system_changehistory_enabled_") || _system_changehistory_enabled_ == "false") {
-            self::$bitChangelogEnabled = false;
-            return false;
-        }
+//        if(class_module_system_setting::getConfigValue("_system_changehistory_enabled_") != "true") {
+//            self::$bitChangelogEnabled = false;
+//            return false;
+//        }
 
         if(!$objSourceModel instanceof interface_versionable) {
             throw new class_exception("object passed to create changelog not implementing interface_versionable", class_logger::$levelWarning);
@@ -338,7 +353,7 @@ class class_module_system_changelog extends class_model implements interface_mod
                     class_date::getCurrentTimestamp(),
                     $objSourceModel->getSystemid(),
                     $objSourceModel->getPrevid(),
-                    $this->objSession->getUserID(),
+                    class_carrier::getInstance()->getObjSession()->getUserID(),
                     get_class($objSourceModel),
                     $strAction,
                     $strProperty,
@@ -364,7 +379,7 @@ class class_module_system_changelog extends class_model implements interface_mod
         $bitReturn = true;
         foreach(self::$arrInsertCache as $strTable => $arrRows) {
             if(count($arrRows) > 0) {
-                $bitReturn = $this->objDB->multiInsert(
+                $bitReturn = class_carrier::getInstance()->getObjDB()->multiInsert(
                     $strTable,
                     array("change_id", "change_date", "change_systemid", "change_system_previd", "change_user", "change_class", "change_action", "change_property", "change_oldvalue", "change_newvalue"),
                     $arrRows
@@ -404,7 +419,7 @@ class class_module_system_changelog extends class_model implements interface_mod
 
 
             //array may be processed automatically, too
-            if(is_array($strOldvalue) && is_array($strNewvalue)) {
+            if((is_array($strOldvalue) || $strOldvalue instanceof ArrayAccess) && (is_array($strNewvalue) || $strNewvalue instanceof ArrayAccess)) {
 
                 $arrArrayChanges = array();
                 foreach($strNewvalue as $strOneId) {
@@ -797,29 +812,6 @@ class class_module_system_changelog extends class_model implements interface_mod
         $arrRow = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array($strSystemid, $strProperty, $objDateFrom->getLongTimestamp(), $objDateTo->getLongTimestamp()), 0, 1);
         return $arrRow;
     }
-
-    /**
-     * Deletes the current object from the system
-     * Overwrite!
-     *
-     * @return bool
-     */
-    public function deleteObject() {
-        return true;
-    }
-
-
-    /**
-     * Called whenever a update-request was fired.
-     * Use this method to synchronize yourselves with the database.
-     * Use only updates, inserts are not required to be implemented.
-     *
-     * @return bool
-     */
-    protected function updateStateToDb() {
-        return true;
-    }
-
 
     /**
      * Returns a list of objects implementing the changelog-provider-interface

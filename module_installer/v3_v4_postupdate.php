@@ -164,6 +164,7 @@ class class_v3_v4_postupdate {
             if($objOnePackage->getStrName() == "v3template") {
                 echo "setting the template-pack active...\n";
                 $objOnePackage->setIntRecordStatus(1);
+                $objOnePackage->updateObjectToDb();
 
                 echo "If you didn't change the templates in v3, delete the unmodified ones from /templates/v3template/tpl.\n";
                 echo "Otherwise make sure to update the references to js and css files and consider to upgrade your js-implementation to the now-standard jQuery instead of YUI.\n";
@@ -229,13 +230,13 @@ class class_v3_v4_postupdate {
             echo "deleting downloads-toplist element...\n";
             $objElement = class_module_pages_element::getElement("downloadstoplist");
             if($objElement != null)
-                $objElement->deleteObject();
+                $objElement->deleteObjectFromDatabase();
 
             echo "deleting old adminwidgets...\n";
             $arrWidgets = class_module_dashboard_widget::getAllWidgets();
             foreach($arrWidgets as $objOneWidget) {
                 if($objOneWidget->getStrClass() == "class_adminwidget_downloads")
-                    $objOneWidget->deleteObject();
+                    $objOneWidget->deleteObjectFromDatabase();
             }
 
             echo "deleting archive and contained downloads data...\n";

@@ -93,14 +93,14 @@ class class_stats_report_searchqueries implements interface_admin_statsreports {
 
         //showing a list using the pageview
         $objArraySectionIterator = new class_array_section_iterator($this->getTopQueriesCount());
-        $objArraySectionIterator->setIntElementsPerPage(_stats_nrofrecords_);
         $objArraySectionIterator->setPageNumber((int)(getGet("pv") != "" ? getGet("pv") : 1));
         $objArraySectionIterator->setArraySection($this->getTopQueries($objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
 
         $intI = 0;
         $arrLogs = array();
+        $objUser = new class_module_user_user(class_session::getInstance()->getUserID());
         foreach($objArraySectionIterator as $intKey => $arrOneLog) {
-            if($intI++ >= _stats_nrofrecords_)
+            if($intI++ >= $objUser->getIntItemsPerPage())
                 break;
 
             $arrLogs[$intKey][0] = $intI;
@@ -166,6 +166,7 @@ class class_stats_report_searchqueries implements interface_admin_statsreports {
      * @return array
      */
     private function getTopQueries($intStart = false, $intEnd = false) {
+        $objUser = new class_module_user_user(class_session::getInstance()->getUserID());
         $strQuery = "SELECT search_log_query, COUNT(*) as hits
 					  FROM "._dbprefix_."search_log
 					  WHERE search_log_date > ?
@@ -176,7 +177,7 @@ class class_stats_report_searchqueries implements interface_admin_statsreports {
         if($intStart !== false && $intEnd !== false)
             $arrReturn = $this->objDB->getPArray($strQuery, array($this->intDateStart, $this->intDateEnd), $intStart, $intEnd);
         else
-            $arrReturn = $this->objDB->getPArray($strQuery, array($this->intDateStart, $this->intDateEnd), 0, _stats_nrofrecords_ - 1);
+            $arrReturn = $this->objDB->getPArray($strQuery, array($this->intDateStart, $this->intDateEnd), 0, $objUser->getIntItemsPerPage() - 1);
 
         return $arrReturn;
     }

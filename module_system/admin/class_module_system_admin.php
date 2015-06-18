@@ -29,11 +29,12 @@ class class_module_system_admin extends class_admin_simple implements interface_
         $arrReturn[] = array("right1", class_link::getLinkAdmin($this->getArrModule("modul"), "systemSettings", "", $this->getLang("action_system_settings"), "", "", true, "adminnavi"));
         $arrReturn[] = array("right2", class_link::getLinkAdmin($this->getArrModule("modul"), "systemTasks", "", $this->getLang("action_system_tasks"), "", "", true, "adminnavi"));
         $arrReturn[] = array("right3", class_link::getLinkAdmin($this->getArrModule("modul"), "systemlog", "", $this->getLang("action_systemlog"), "", "", true, "adminnavi"));
-        if(_system_changehistory_enabled_ != "false")
+        if(class_module_system_setting::getConfigValue("_system_changehistory_enabled_") != "false")
             $arrReturn[] = array("right3", class_link::getLinkAdmin($this->getArrModule("modul"), "genericChangelog", "&bitBlockFolderview=true", $this->getLang("action_changelog"), "", "", true, "adminnavi"));
         $arrReturn[] = array("right5", class_link::getLinkAdmin($this->getArrModule("modul"), "aspects", "", $this->getLang("action_aspects"), "", "", true, "adminnavi"));
         $arrReturn[] = array("right1", class_link::getLinkAdmin($this->getArrModule("modul"), "systemSessions", "", $this->getLang("action_system_sessions"), "", "", true, "adminnavi"));
         $arrReturn[] = array("right1", class_link::getLinkAdmin($this->getArrModule("modul"), "lockedRecords", "", $this->getLang("action_locked_records"), "", "", true, "adminnavi"));
+        $arrReturn[] = array("right1", class_link::getLinkAdmin($this->getArrModule("modul"), "deletedRecords", "", $this->getLang("action_deleted_records"), "", "", true, "adminnavi"));
         $arrReturn[] = array("", "");
         $arrReturn[] = array("", class_link::getLinkAdmin($this->getArrModule("modul"), "about", "", $this->getLang("action_about"), "", "", true, "adminnavi"));
         $arrReturn[] = array("", "");
@@ -49,11 +50,10 @@ class class_module_system_admin extends class_admin_simple implements interface_
      */
     protected function actionModuleStatus() {
         //status: for setting the status of modules, you have to be member of the admin-group
-        $objUser = new class_module_user_user($this->objSession->getUserID());
-        $arrGroups = $objUser->getObjSourceUser()->getGroupIdsForUser();
         $objModule = new class_module_system_module($this->getSystemid());
-        if($objModule->rightEdit() && in_array(_admins_group_id_, $arrGroups)) {
+        if($objModule->rightEdit() && class_carrier::getInstance()->getObjSession()->isSuperAdmin()) {
             $objModule->setIntRecordStatus($objModule->getIntRecordStatus() == 0 ? 1 : 0);
+            $objModule->updateObjectToDb();
             $this->adminReload(class_link::getLinkAdminHref($this->getArrModule("modul")));
         }
     }
@@ -110,7 +110,7 @@ class class_module_system_admin extends class_admin_simple implements interface_
             $arrReturn = array();
             $arrReturn[] = $this->objToolkit->listButton(class_link::getLinkAdminDialog("system", "moduleAspect", "&systemid=".$objListEntry->getSystemid(), "", $this->getLang("modul_aspectedit"), "icon_aspect", $this->getLang("modul_aspectedit")));
 
-            if($objListEntry->rightEdit() && in_array(_admins_group_id_, $this->objSession->getGroupIdsAsArray())) {
+            if($objListEntry->rightEdit() && class_carrier::getInstance()->getObjSession()->isSuperAdmin()) {
                 if($objListEntry->getStrName() == "system")
                     $arrReturn[] = $this->objToolkit->listButton(class_link::getLinkAdmin("system", "moduleList", "", "", $this->getLang("modul_status_system"), "icon_enabled"));
                 else if($objListEntry->getIntRecordStatus() == 0)
@@ -559,9 +559,82 @@ JS;
 
         $strReturn .= $this->objToolkit->listFooter();
 
-        $strReturn .= $this->objToolkit->getPageview($objArraySectionIterator, "system", "systemSessions");
+        $strReturn .= $this->objToolkit->getPageview($objArraySectionIterator, "system", "lockedRecords");
 
         return $strReturn;
+    }
+
+    /**
+     * Renders a list of logically deleted records
+     *
+     * @permissions right1
+     * @return string
+     * @autoTestable
+     */
+    protected function actionDeletedRecords() {
+        $objArraySectionIterator = new class_array_section_iterator(class_module_system_worker::getDeletedRecordsCount());
+        $objArraySectionIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
+        $objArraySectionIterator->setArraySection(class_module_system_worker::getDeletedRecords($objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
+
+        $strReturn = "";
+        if(!$objArraySectionIterator->valid()) {
+            $strReturn .= $this->getLang("commons_list_empty");
+        }
+
+        $strReturn .= $this->objToolkit->listHeader();
+
+        /** @var class_model $objOneRecord */
+        foreach($objArraySectionIterator as $objOneRecord) {
+
+            $strImage = "";
+            if($objOneRecord instanceof interface_admin_listable) {
+                $strImage = $objOneRecord->getStrIcon();
+                if(is_array($strImage))
+                    $strImage = class_adminskin_helper::getAdminImage($strImage[0], $strImage[1]);
+                else
+                    $strImage = class_adminskin_helper::getAdminImage($strImage);
+            }
+
+            if($objOneRecord->isRestorable()) {
+                $strActions = $this->objToolkit->listButton(class_link::getLinkAdmin($this->getArrModule("modul"), "restoreRecord", "&systemid=".$objOneRecord->getSystemid(), $this->getLang("action_restore_record"), $this->getLang("action_restore_record"), "icon_delete"));
+            }
+            else {
+                $strActions = $this->objToolkit->listButton(class_adminskin_helper::getAdminImage("icon_deleteDisabled", $this->getLang("action_restore_record_blocked")));
+            }
+
+            $strReturn .= $this->objToolkit->genericAdminList(
+                $objOneRecord->getSystemid(),
+                $objOneRecord instanceof interface_model ? $objOneRecord->getStrDisplayName() : get_class($objOneRecord),
+                $strImage,
+                $strActions,
+                0
+            );
+        }
+
+        $strReturn .= $this->objToolkit->listFooter();
+
+        $strReturn .= $this->objToolkit->getPageview($objArraySectionIterator, "system", "deletedRecords");
+
+        return $strReturn;
+    }
+
+    /**
+     * Restores a single object
+     *
+     * @permissions right1
+     * @return string
+     * @throws class_exception
+     */
+    protected function actionRestoreRecord() {
+        class_orm_base::setObjHandleLogicalDeletedGlobal(class_orm_deletedhandling_enum::INCLUDED());
+        $objRecord = class_objectfactory::getInstance()->getObject($this->getSystemid());
+        if($objRecord !== null && !$objRecord->isRestorable()) {
+            throw new class_exception("Record is not restoreable", class_exception::$level_ERROR);
+        }
+
+        $objRecord->restoreObject();
+        $this->adminReload(class_link::getLinkAdminHref($this->getArrModule("modul"), "deletedRecords"));
+        return "";
     }
 
 
@@ -628,7 +701,7 @@ JS;
             else {
                 $strActivity .= $this->getLang("session_portal");
                 if($strLastUrl == "")
-                    $strActivity .= defined("_pages_indexpage_") ? _pages_indexpage_ : "";
+                    $strActivity .= class_module_system_setting::getConfigValue("_pages_indexpage_") != "" ? class_module_system_setting::getConfigValue("_pages_indexpage_") : "";
                 else {
                     foreach(explode("&amp;", $strLastUrl) as $strOneParam) {
                         $arrUrlParam = explode("=", $strOneParam);

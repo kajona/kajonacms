@@ -11,46 +11,19 @@ class class_test_system extends class_testbase  {
         //--- system kernel -------------------------------------------------------------------------------------
         echo "\tsystem-kernel...\n";
 
-        $arrSysRecords = array();
-        echo "\tcreating 100 system-records without right-records...\n";
-        //nr of records currently
-        $arrRow = $objDB->getPRow("SELECT COUNT(*) FROM "._dbprefix_."system", array(), 0, false);
-        $intNrSystemRecords = $arrRow["COUNT(*)"];
-        $arrRow = $objDB->getPRow("SELECT COUNT(*) FROM "._dbprefix_."system_right", array(), 0, false);
-        $intNrRightsRecords = $arrRow["COUNT(*)"];
-        $objSystemCommon = new class_module_system_common();
-        $arrSysRecords = array();
-        for ($intI = 0; $intI < 100; $intI++) {
-            $intSysId = $objSystemCommon->createSystemRecord(0, "autotest", false);
-            $arrSysRecords[] = $intSysId;
-            $arrRow = $objDB->getPRow("SELECT COUNT(*) FROM "._dbprefix_."system", array(), 0, false);
-            $this->assertEquals($arrRow["COUNT(*)"], $intI+$intNrSystemRecords+1, __FILE__." checkCreateSysRecordsWithoutRights");
-            $arrRow = $objDB->getPRow("SELECT COUNT(*) FROM "._dbprefix_."system_right", array(), 0, false);
-            $this->assertEquals($arrRow["COUNT(*)"], $intNrRightsRecords, __FILE__." checkCreateSysRecordsWithoutRights");
-        }
-
-
-        echo "\tdeleting 100 system-records without right-records...\n";
-        foreach($arrSysRecords as $strOneId) {
-            $objSystemCommon->deleteSystemRecord($strOneId);
-        }
-        $arrRow = $objDB->getPRow("SELECT COUNT(*) FROM "._dbprefix_."system", array(), 0, false);
-        $this->assertEquals($arrRow["COUNT(*)"], $intNrSystemRecords, __FILE__." checkDeleteSysRecordsWithoutRights");
-        $arrRow = $objDB->getPRow("SELECT COUNT(*) FROM "._dbprefix_."system_right", array(), 0, false);
-        $this->assertEquals($arrRow["COUNT(*)"], $intNrRightsRecords, __FILE__." checkDeleteSysRecordsWithoutRights");
-
-
         echo "\tcreating 100 system-records with right-records...\n";
         //nr of records currently
         $arrRow = $objDB->getPRow("SELECT COUNT(*) FROM "._dbprefix_."system", array(), 0, false);
         $intNrSystemRecords = $arrRow["COUNT(*)"];
         $arrRow = $objDB->getPRow("SELECT COUNT(*) FROM "._dbprefix_."system_right", array(), 0, false);
         $intNrRightsRecords = $arrRow["COUNT(*)"];
-        $objSystemCommon = new class_module_system_common();
+        $objAspect = new class_module_system_aspect();
         $arrSysRecords = array();
         for ($intI = 0; $intI <= 100; $intI++) {
-            $intSysId = $objSystemCommon->createSystemRecord(0, "autotest");
-            $arrSysRecords[] = $intSysId;
+            $objAspect = new class_module_system_aspect();
+            $objAspect->updateObjectToDb();
+            $arrSysRecords[] = $objAspect->getSystemid();
+
             $arrRow = $objDB->getPRow("SELECT COUNT(*) FROM "._dbprefix_."system", array(), 0, false);
             $this->assertEquals($arrRow["COUNT(*)"], $intI+$intNrSystemRecords+1, __FILE__." checkCreateSysRecordsWithRights");
             $arrRow = $objDB->getPRow("SELECT COUNT(*) FROM "._dbprefix_."system_right", array(), 0, false);
@@ -60,7 +33,8 @@ class class_test_system extends class_testbase  {
 
         echo "\tdeleting 100 system-records with right-records...\n";
         foreach($arrSysRecords as $strOneId) {
-            $objSystemCommon->deleteSystemRecord($strOneId);
+            $objAspect = new class_module_system_aspect($strOneId);
+            $objAspect->deleteObjectFromDatabase();
         }
         $arrRow = $objDB->getPRow("SELECT COUNT(*) FROM "._dbprefix_."system", array(), 0, false);
         $this->assertEquals($arrRow["COUNT(*)"], $intNrSystemRecords, __FILE__." checkDeleteSysRecordsWithRights");
@@ -77,12 +51,15 @@ class class_test_system extends class_testbase  {
         //test sections
         echo "\tsection-handling of class db...\n";
         //create 10 test records
-        $objSystemCommon = new class_module_system_common();
+        $objAspect = new class_module_system_aspect();
         //new base-node
-        $strBaseNodeId = $objSystemCommon->createSystemRecord(0, "sectionTest");
+        $objAspect->updateObjectToDb();
+        $strBaseNodeId = $objAspect->getSystemid();
         $arrNodes = array();
         for($intI = 1; $intI <= 10; $intI++) {
-            $arrNodes[] = $objSystemCommon->createSystemRecord($strBaseNodeId, "sectionTest_".$intI);
+            $objAspect = new class_module_system_aspect(); $objAspect->setStrName("sectionTest_".$intI);
+            $objAspect->updateObjectToDb($strBaseNodeId);
+            $arrNodes[] = $objAspect->getSystemid();
         }
         $arrNodes = $objDB->getPArray("SELECT system_id FROM "._dbprefix_."system WHERE system_prev_id = ? ORDER BY system_sort ASC", array($strBaseNodeId));
         $arrNodesSection = $objDB->getPArray("SELECT system_id FROM "._dbprefix_."system WHERE system_prev_id = ? ORDER BY system_sort ASC", array($strBaseNodeId),  2, 4, false);
@@ -91,9 +68,12 @@ class class_test_system extends class_testbase  {
         $this->assertEquals($arrNodesSection[2]["system_id"], $arrNodes[4]["system_id"], __FILE__." checkSectionLoading");
 
         //deleting all records created
-        foreach ($arrNodes as $arrOneNode)
-            $objSystemCommon->deleteSystemRecord($arrOneNode["system_id"]);
-        $objSystemCommon->deleteSystemRecord($strBaseNodeId);
+        foreach ($arrNodes as $arrOneNode) {
+            $objAspect = new class_module_system_aspect($arrOneNode["system_id"]);
+            $objAspect->deleteObjectFromDatabase();
+        }
+        $objAspect = new class_module_system_aspect($strBaseNodeId);
+        $objAspect->deleteObjectFromDatabase($strBaseNodeId);
     }
 
 
@@ -101,7 +81,6 @@ class class_test_system extends class_testbase  {
 
 
 
-        $objSystemCommon = new class_module_system_common();
         $objDB = class_carrier::getInstance()->getObjDB();
         echo "\ttesting tree-behaviour...\n";
         //nr of records currently
@@ -111,22 +90,34 @@ class class_test_system extends class_testbase  {
         $arrRow = $objDB->getPRow("SELECT COUNT(*) FROM "._dbprefix_."system_right", array(), 0, false);
         //base-id
         echo "\tcreating root node...\n";
-        $intBaseId = $objSystemCommon->createSystemRecord(0, "autotest");
+        $objAspect = new class_module_system_aspect();
+        $objAspect->updateObjectToDb();
+        $intBaseId = $objAspect->getSystemid();
         //two under the base
         echo "\tcreating child nodes...\n";
-        $intSecOneId = $objSystemCommon->createSystemRecord($intBaseId, "autotest");
-        $intSecTwoId = $objSystemCommon->createSystemRecord($intBaseId, "autotest");
+        $objAspect = new class_module_system_aspect();
+        $objAspect->updateObjectToDb($intBaseId);
+        $intSecOneId = $objAspect->getSystemid();
+        $objAspect = new class_module_system_aspect();
+        $objAspect->updateObjectToDb($intBaseId);
+        $intSecTwoId = $objAspect->getSystemid();
         $arrSysRecords[] = $intBaseId;
         $arrSysRecords[] = $intSecOneId;
         $arrSysRecords[] = $intSecTwoId;
         //twenty under both levels
         for ($intI = 0; $intI < 20; $intI++) {
-            $arrSysRecords[] = $objSystemCommon->createSystemRecord($intSecOneId, "autotest");
-            $arrSysRecords[] = $objSystemCommon->createSystemRecord($intSecTwoId, "autotest");
-            $arrSysRecords[] = $objSystemCommon->createSystemRecord($intBaseId, "autotest");
+            $objAspect = new class_module_system_aspect();
+            $objAspect->updateObjectToDb($intSecOneId);
+            $arrSysRecords[] = $objAspect->getSystemid();
+            $objAspect = new class_module_system_aspect();
+            $objAspect->updateObjectToDb($intSecTwoId);
+            $arrSysRecords[] = $objAspect->getSystemid();
+            $objAspect = new class_module_system_aspect();
+            $objAspect->updateObjectToDb($intBaseId);
+            $arrSysRecords[] = $objAspect->getSystemid();
         }
         //check nr of records
-        $intCount = $objSystemCommon->getNumberOfSiblings($intSecOneId);
+        $intCount = $objAspect->getNumberOfSiblings($intSecOneId);
         $this->assertEquals($intCount, 22, __FILE__." checkNrOfSiblingsInTree");
         //check nr of childs
         $arrRow = $objDB->getPRow("SELECT COUNT(*) FROM "._dbprefix_."system WHERE system_prev_id = ?", array($intBaseId));
@@ -139,66 +130,56 @@ class class_test_system extends class_testbase  {
         //deleting all records
         echo "\tdeleting nodes...\n";
         foreach($arrSysRecords as $strOneId) {
-            $objSystemCommon->deleteSystemRecord($strOneId);
+            $objAspect->deleteSystemRecord($strOneId);
         }
 
     }
 
 
-    public function testCopySysrecord() {
-        $objDB = class_carrier::getInstance()->getObjDB();
 
-        $objModule = new class_module_system_module();
-        $objModule->setStrName("autotest module");
-        $objModule->setIntNr(99129293);
-
-        $objModule->updateObjectToDb("0");
-
-        $strModuleId = $objModule->getSystemid();
-
-        $arrSourceRow = $objDB->getPRow("SELECT * FROM "._dbprefix_."system WHERE system_id = ?", array($strModuleId));
-
-        $objCommon = new class_module_system_common($strModuleId);
-
-        $strNewId = generateSystemid();
-        $objCommon->copyCurrentSystemrecord($strNewId);
-
-        $arrCopiedRow = $objDB->getPRow("SELECT * FROM "._dbprefix_."system WHERE system_id = ?", array($strNewId));
-
-        foreach($arrSourceRow as $strKey => $strValue) {
-            if(!in_array($strKey, array("system_id", "system_sort")) && !is_numeric($strKey))
-                $this->assertEquals($strValue, $arrCopiedRow[$strKey], __FILE__." key ".$strKey." copy sysrecord");
-        }
-
-        $objModule->deleteObject();
-
-        $objCommon->deleteSystemRecord($strNewId);
-
-    }
 
     public function testTreeDelete() {
-        $objCommon = new class_module_system_common("0");
 
-        $strRootNodeId = $objCommon->createSystemRecord("0", "autotest");
-        $strSub1Node1Id = $objCommon->createSystemRecord($strRootNodeId, "autotest");
-        $strSub1Node2Id = $objCommon->createSystemRecord($strRootNodeId, "autotest");
-        $strSub1Node2Id = $objCommon->createSystemRecord($strRootNodeId, "autotest");
+        $objAspect = new class_module_system_aspect();
+        $objAspect->updateObjectToDb("0");
+        $strRootNodeId = $objAspect->getSystemid();
 
-        $strSub2Node1aId = $objCommon->createSystemRecord($strSub1Node1Id, "autotest");
-        $strSub2Node1bId = $objCommon->createSystemRecord($strSub1Node1Id, "autotest");
-        $strSub2Node1cId = $objCommon->createSystemRecord($strSub1Node1Id, "autotest");
-
-        $this->assertEquals(3, count($objCommon->getChildNodesAsIdArray($strRootNodeId)));
-
-        $this->assertEquals(3, count($objCommon->getChildNodesAsIdArray($strSub1Node1Id)));
-
-        $objCommon->setSystemid($strRootNodeId);
-        $objCommon->deleteObject();
+        $objAspect = new class_module_system_aspect();
+        $objAspect->updateObjectToDb($strRootNodeId);
+        $strSub1Node1Id = $objAspect->getSystemid();
+        $objAspect = new class_module_system_aspect();
+        $objAspect->updateObjectToDb($strRootNodeId);
+        $strSub1Node2Id = $objAspect->getSystemid();
+        $objAspect = new class_module_system_aspect();
+        $objAspect->updateObjectToDb($strRootNodeId);
+        $strSub1Node2Id = $objAspect->getSystemid();
 
 
-        $this->assertEquals(0, count($objCommon->getChildNodesAsIdArray($strRootNodeId)));
+        $objAspect = new class_module_system_aspect();
+        $objAspect->updateObjectToDb($strSub1Node1Id);
+        $strSub2Node1aId = $objAspect->getSystemid();
 
-        $this->assertEquals(0, count($objCommon->getChildNodesAsIdArray($strSub1Node1Id)));
+        $objAspect = new class_module_system_aspect();
+        $objAspect->updateObjectToDb($strSub1Node1Id);
+        $strSub2Node1bId = $objAspect->getSystemid();
+
+        $objAspect = new class_module_system_aspect();
+        $objAspect->updateObjectToDb($strSub1Node1Id);
+        $strSub2Node1cId = $objAspect->getSystemid();
+
+
+
+
+        $this->assertEquals(3, count($objAspect->getChildNodesAsIdArray($strRootNodeId)));
+        $this->assertEquals(3, count($objAspect->getChildNodesAsIdArray($strSub1Node1Id)));
+
+        $objAspect = new class_module_system_aspect($strRootNodeId);
+        $objAspect->deleteObjectFromDatabase();
+        class_db::getInstance()->flushQueryCache();
+
+
+        $this->assertEquals(0, count($objAspect->getChildNodesAsIdArray($strRootNodeId)));
+        $this->assertEquals(0, count($objAspect->getChildNodesAsIdArray($strSub1Node1Id)));
     }
 
     public function testPrevIdHandling() {

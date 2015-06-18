@@ -18,6 +18,8 @@
  */
 abstract class class_testbase_object extends class_testbase {
 
+    private $arrStructure = array();
+
     protected function setUp() {
 
         parent::setUp();
@@ -73,7 +75,13 @@ abstract class class_testbase_object extends class_testbase {
      *
      * @return void
      */
-    abstract protected function cleanStructure();
+    protected function cleanStructure() {
+        /** @var class_model $objOneModel */
+        foreach(array_reverse($this->arrStructure, true) as $objOneModel) {
+            $objOneModel->deleteObjectFromDatabase();
+        }
+
+    }
 
     /**
      * Returns the default root id for an given class name
@@ -89,7 +97,9 @@ abstract class class_testbase_object extends class_testbase {
      * @param string $strName
      * @param class_model $objObject
      */
-    abstract protected function addObject($strName, class_model $objObject);
+    protected function addObject($strName, class_model $objObject) {
+        $this->arrStructure[$strName] = $objObject;
+    }
 
     /**
      * Returns an object for an given reference name
@@ -97,7 +107,12 @@ abstract class class_testbase_object extends class_testbase {
      * @param $strName
      * @return class_model
      */
-    abstract protected function getObject($strName);
+    protected function getObject($strName) {
+        if(isset($this->arrStructure[$strName]))
+            return $this->arrStructure[$strName];
+
+        return null;
+    }
 
     /**
      * Assigns an reference to an object
@@ -134,7 +149,22 @@ abstract class class_testbase_object extends class_testbase {
 
         // resolve references
         foreach($arrParameters as $strKey => $strValue) {
-            if(substr($strValue, 0, 4) == 'ref:') {
+            if(substr($strValue, 0, 11) == 'objectlist:') {
+                $strRef = trim(substr($strValue, 11));
+                $arrRefs = explode(",", $strRef);
+
+                $arrParameters[$strKey] = array();
+                foreach($arrRefs as $strRefKey) {
+                    $objRef = $this->getObject($strRefKey);
+                    if($objRef instanceof class_model) {
+                        $arrParameters[$strKey][] = $objRef;
+                    }
+                    else {
+                        throw new RuntimeException('Object "' . $strName . '" refers to an non existing object (' . $objElement->getNodePath() . ')');
+                    }
+                }
+            }
+            else if(substr($strValue, 0, 4) == 'ref:') {
                 $strRef = trim(substr($strValue, 4));
                 $objRef = $this->getObject($strRef);
                 if($objRef instanceof class_model) {

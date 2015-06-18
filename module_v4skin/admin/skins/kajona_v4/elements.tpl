@@ -350,6 +350,9 @@ Dropdown
         <div class="col-sm-6">
             <select data-placeholder="%%dataplaceholder%%" name="%%name%%" id="%%name%%" class="form-control %%class%%" %%disabled%% %%addons%%>%%options%%</select>
         </div>
+        <div class="col-sm-2 form-opener">
+            %%opener%%
+        </div>
     </div>
 </input_dropdown>
 
@@ -702,7 +705,8 @@ in addition, a container for the calendar is needed. Use %%calendarContainerId%%
                             format: format,
                             weekStart: 1,
                             autoclose: true,
-                            language: '%%calendarLang%%'
+                            language: '%%calendarLang%%',
+                            todayHighlight: true
                         });
 
                         if($('#%%calendarId%%').is(':focus')) {
@@ -750,7 +754,8 @@ in addition, a container for the calendar is needed. Use %%calendarContainerId%%
                         format: format,
                         weekStart: 1,
                         autoclose: true,
-                        language: '%%calendarLang%%'
+                        language: '%%calendarLang%%',
+                        todayHighlight: true
                     });
 
                     if($('#%%calendarId%%').is(':focus')) {
@@ -763,6 +768,40 @@ in addition, a container for the calendar is needed. Use %%calendarContainerId%%
         </script>
     </div>
 </input_datetime_simple>
+
+<input_objectlist>
+    <div class="form-group">
+        <label for="%%name%%" class="col-sm-3 control-label">%%title%%</label>
+
+        <div class="col-sm-6 inputText">
+            <table id="%%name%%" data-name="%%name%%" class="table table-striped">
+                <colgroup>
+                    <col width="20" />
+                    <col width="*" />
+                    <col width="20" />
+                </colgroup>
+                <tfoot>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td class="icon-cell">%%addLink%%</td>
+                </tr>
+                </tfoot>
+                <tbody>
+                %%table%%
+                </tbody>
+            </table>
+        </div>
+    </div>
+</input_objectlist>
+
+<input_objectlist_row>
+    <tr>
+        <td class="listimage">%%icon%%</td>
+        <td>%%displayName%% <input type="hidden" name="%%name%%[]" value="%%value%%" /></td>
+        <td class="icon-cell">%%removeLink%%</td>
+    </tr>
+</input_objectlist_row>
 
 <input_tageditor>
     <div class="form-group">
@@ -819,40 +858,24 @@ have a surrounding div with class "ac_container" and a div with id "%%name%%_con
 </div>
 </input_userselector>
 
-
-<input_objectlist>
+A list of checkbox or radio input elements
+<input_checkboxarray>
     <div class="form-group">
         <label for="%%name%%" class="col-sm-3 control-label">%%title%%</label>
 
         <div class="col-sm-6 inputText">
-            <table id="%%name%%" data-name="%%name%%" class="table table-striped" style="border:1px solid #bfbfbf;">
-                <colgroup>
-                    <col width="20" />
-                    <col width="*" />
-                    <col width="20" />
-                </colgroup>
-                <tfoot>
-                <tr>
-                    <td></td>
-                    <td></td>
-                    <td>%%addLink%%</td>
-                </tr>
-                </tfoot>
-                <tbody>
-                %%table%%
-                </tbody>
-            </table>
+            <div id="%%name%%" class="inputContainer %%class%%">
+                %%elements%%
+            </div>
         </div>
     </div>
-</input_objectlist>
+</input_checkboxarray>
 
-<input_objectlist_row>
-    <tr>
-        <td><div class="%%icon%%" data-kajona-icon="%%icon%%" style="display:inline-block;width:20px;height:20px;"></div></td>
-        <td>%%displayName%% <input type="hidden" name="%%name%%[]" value="%%value%%" /></td>
-        <td>%%removeLink%%</td>
-    </tr>
-</input_objectlist_row>
+<input_checkboxarray_checkbox>
+    <div class="%%type%%%%inline%%">
+        <label><input type="%%type%%" name="%%name%%" value="%%value%%" %%checked%% %%readonly%% /> %%title%%</label>
+    </div>
+</input_checkboxarray_checkbox>
 
 ---------------------------------------------------------------------------------------------------------
 -- MISC ELEMENTS ----------------------------------------------------------------------------------------
@@ -1048,7 +1071,12 @@ Used to print headline in a form
 The following sections specify the layout of the rights-mgmt
 
 <rights_form_header>
-	<div>%%desc%% %%record%% <br /><br /></div>
+    <div>
+        %%desc%% %%record%% <br />
+        <a href="javascript:KAJONA.admin.permissions.toggleEmtpyRows('[lang,permissions_toggle_visible,system]', '[lang,permissions_toggle_hidden,system]');" id="rowToggleLink" class="rowsVisible">[lang,permissions_toggle_visible,system]</a><br /><br />
+    </div>
+    <div id="responseContainer">
+    </div>
 </rights_form_header>
 
 <rights_form_form>
@@ -1094,7 +1122,7 @@ The following sections specify the layout of the rights-mgmt
     <div class="col-sm-6">
         <div class="checkbox">
             <label>
-                <input name="%%name%%" type="checkbox" id="%%name%%" value="1" onclick="this.blur();" onchange="KAJONA.admin.checkRightMatrix();" %%checked%% />
+                    <input name="%%name%%" type="checkbox" id="%%name%%" value="1" onclick="this.blur();" onchange="KAJONA.admin.permissions.checkRightMatrix();" %%checked%% />
                 %%title%%
             </label>
         </div>
@@ -1632,6 +1660,27 @@ Checkbox tree which shows an structure
                     checked_parent_open: false
                 },
                 plugins: [ "themes","json_data","checkbox" ]
+            }).bind("loaded.jstree", function (event, data) {
+                if(typeof KAJONA.v4skin.getCheckboxTreeSelectionFromParent === 'function') {
+                    var arrSystemIds = KAJONA.v4skin.getCheckboxTreeSelectionFromParent();
+                    for(var i = 0; i < arrSystemIds.length; i++) {
+                        if($('#' + arrSystemIds[i]).length > 0) {
+                            $(this).jstree('change_state', [$('#' + arrSystemIds[i]).find('.jstree-checkbox:first').get(0), true]);
+                        }
+                    }
+                }
+            }).bind("open_node.jstree close_node.jstree", function (event, data) {
+                if(typeof KAJONA.v4skin.getCheckboxTreeSelectionFromParent === 'function') {
+                    var arrSystemIds = KAJONA.v4skin.getCheckboxTreeSelectionFromParent();
+                    // go only through the child elements of the loaded node
+                    if(data.rslt.obj.length > 0) {
+                        data.rslt.obj.find('ul > li').each(function() {
+                            if($.inArray($(this).attr('systemid'), arrSystemIds) !== -1) {
+                                $(event.target).jstree('change_state', [$('#' + $(this).attr('systemid')).find('.jstree-checkbox:first').get(0), true]);
+                            }
+                        });
+                    }
+                }
             });
 
         });
@@ -1656,14 +1705,8 @@ Checkbox tree which shows an structure
 
 
 <treeview_modal>
-    <div class="treeViewWrapper" style="height:600px;overflow:auto;">
+    <div class="treeViewWrapper" style="overflow:auto;">
         %%treeContent%%
-    </div>
-    <div class="pull-right">
-        <button type="submit" class="btn btn-default savechanges " onclick="%%onClick%%">
-            <span class="btn-text">%%btnText%%</span>
-            <span class="statusicon"></span>
-        </button>
     </div>
 </treeview_modal>
 

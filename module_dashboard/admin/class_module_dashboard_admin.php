@@ -30,10 +30,10 @@ class class_module_dashboard_admin extends class_admin_controller implements int
      */
     public function getOutputModuleNavi() {
         $arrReturn = array();
-        $arrReturn[] = array("view", getLinkAdmin($this->arrModule["modul"], "list", "", $this->getLang("modul_titel"), "", "", true, "adminnavi"));
-        $arrReturn[] = array("view", getLinkAdmin($this->arrModule["modul"], "calendar", "", $this->getLang("action_calendar"), "", "", true, "adminnavi"));
+        $arrReturn[] = array("view", class_link::getLinkAdmin($this->getArrModule("modul"), "list", "", $this->getLang("modul_titel"), "", "", true, "adminnavi"));
+        $arrReturn[] = array("view", class_link::getLinkAdmin($this->getArrModule("modul"), "calendar", "", $this->getLang("action_calendar"), "", "", true, "adminnavi"));
         $arrReturn[] = array("", "");
-        $arrReturn[] = array("edit", getLinkAdmin($this->arrModule["modul"], "addWidgetToDashboard", "", $this->getLang("action_add_widget_to_dashboard"), "", "", true, "adminnavi"));
+        $arrReturn[] = array("edit", class_link::getLinkAdmin($this->getArrModule("modul"), "addWidgetToDashboard", "", $this->getLang("action_add_widget_to_dashboard"), "", "", true, "adminnavi"));
         return $arrReturn;
     }
 
@@ -104,7 +104,7 @@ class class_module_dashboard_admin extends class_admin_controller implements int
                     $objDashboardWidget->getConcreteAdminwidget()->getWidgetName(),
                     $this->getLang("widgetDeleteQuestion"),
                     "javascript:KAJONA.admin.dashboard.removeWidget(\'".$objDashboardWidget->getSystemid()."\');"
-//                    getLinkAdminHref($this->arrModule["modul"], "deleteWidget", "&systemid=".$objDashboardWidget->getSystemid())
+//                    getLinkAdminHref($this->getArrModule("modul"), "deleteWidget", "&systemid=".$objDashboardWidget->getSystemid())
                 )  : ""),
                 $objDashboardWidget->getConcreteAdminwidget()->getLayoutSection()
             )
@@ -221,8 +221,8 @@ JS;
         $objPrevDate = clone $objDate;
         $objPrevDate->setPreviousDay();
 
-        $strPrev = getLinkAdmin($this->arrModule["modul"], "calendar", "&month=".$objPrevDate->getIntMonth()."&year=".$objPrevDate->getIntYear(), $this->getLang("calendar_prev"));
-        $strNext = getLinkAdmin($this->arrModule["modul"], "calendar", "&month=".$objEndDate->getIntMonth()."&year=".$objEndDate->getIntYear(), $this->getLang("calendar_next"));
+        $strPrev = class_link::getLinkAdmin($this->getArrModule("modul"), "calendar", "&month=".$objPrevDate->getIntMonth()."&year=".$objPrevDate->getIntYear(), $this->getLang("calendar_prev"));
+        $strNext = class_link::getLinkAdmin($this->getArrModule("modul"), "calendar", "&month=".$objEndDate->getIntMonth()."&year=".$objEndDate->getIntYear(), $this->getLang("calendar_next"));
 
         $strReturn .= $this->objToolkit->getCalendarPager($strPrev, $strCenter, $strNext);
         $strReturn .= $strContent;
@@ -259,7 +259,7 @@ JS;
                 $arrColumnsAvailable[$strOneColumn] = $this->getLang($strOneColumn);
 
 
-            $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref("dashboard", "addWidgetToDashboard"));
+            $strReturn .= $this->objToolkit->formHeader(class_link::getLinkAdminHref("dashboard", "addWidgetToDashboard"));
             $strReturn .= $this->objToolkit->formInputDropdown("widget", $arrDD, $this->getLang("widget"));
             $strReturn .= $this->objToolkit->formInputDropdown("column", $arrColumnsAvailable, $this->getLang("column"));
             $strReturn .= $this->objToolkit->formInputHidden("step", "2");
@@ -271,14 +271,15 @@ JS;
         //step 2: loading the widget and allow it to show a view fields
         else if($this->getParam("step") == "2") {
             $strWidgetClass = $this->getParam("widget");
+            /** @var class_adminwidget|interface_adminwidget $objWidget */
             $objWidget = new $strWidgetClass();
 
             if($objWidget->getEditForm() == "") {
-                $this->adminReload(getLinkAdminHref("dashboard", "addWidgetToDashboard", "&step=3&widget=".$strWidgetClass."&column=".$this->getParam("column")));
+                $this->adminReload(class_link::getLinkAdminHref("dashboard", "addWidgetToDashboard", "&step=3&widget=".$strWidgetClass."&column=".$this->getParam("column")));
             }
             else {
                 //ask the widget to generate its form-parts and wrap our elements around
-                $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref("dashboard", "addWidgetToDashboard"));
+                $strReturn .= $this->objToolkit->formHeader(class_link::getLinkAdminHref("dashboard", "addWidgetToDashboard"));
                 $strReturn .= $objWidget->getEditForm();
                 $strReturn .= $this->objToolkit->formInputHidden("step", "3");
                 $strReturn .= $this->objToolkit->formInputHidden("widget", $strWidgetClass);
@@ -291,6 +292,7 @@ JS;
         else if($this->getParam("step") == "3") {
             //instantiate the concrete widget
             $strWidgetClass = $this->getParam("widget");
+            /** @var class_adminwidget|interface_adminwidget $objWidget */
             $objWidget = new $strWidgetClass();
 
             //let it process its fields
@@ -304,7 +306,7 @@ JS;
             $objDashboard->setStrUser($this->objSession->getUserID());
             $objDashboard->setStrAspect(class_module_system_aspect::getCurrentAspectId());
             if($objDashboard->updateObjectToDb(class_module_dashboard_widget::getWidgetsRootNodeForUser($this->objSession->getUserID(), class_module_system_aspect::getCurrentAspectId())))
-                $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
+                $this->adminReload(class_link::getLinkAdminHref($this->getArrModule("modul")));
             else
                 return $this->getLang("errorSavingWidget");
         }
@@ -324,9 +326,9 @@ JS;
         $strReturn = "";
         $objDashboardwidget = new class_module_dashboard_widget($this->getSystemid());
         if(!$objDashboardwidget->deleteObject())
-            throw new class_exception("Error deleting object from db", class_exception::$level_ERROR);
+            throw new class_exception("Error deleting widget", class_exception::$level_ERROR);
 
-        $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
+        $this->adminReload(class_link::getLinkAdminHref($this->getArrModule("modul")));
 
         return $strReturn;
     }
@@ -346,7 +348,7 @@ JS;
             $objWidget = $objDashboardwidget->getConcreteAdminwidget();
 
             //ask the widget to generate its form-parts and wrap our elements around
-            $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref("dashboard", "editWidget"));
+            $strReturn .= $this->objToolkit->formHeader(class_link::getLinkAdminHref("dashboard", "editWidget"));
             $strReturn .= $objWidget->getEditForm();
             $strReturn .= $this->objToolkit->formInputHidden("systemid", $this->getSystemid());
             $strReturn .= $this->objToolkit->formInputHidden("saveWidget", "1");
@@ -364,7 +366,7 @@ JS;
             if(!$objDashboardwidget->updateObjectToDb())
                 throw new class_exception("Error updating widget to db!", class_exception::$level_ERROR);
 
-            $this->adminReload(getLinkAdminHref($this->getArrModule("modul"), "", "&peClose=1&blockAction=1"));
+            $this->adminReload(class_link::getLinkAdminHref($this->getArrModule("modul"), "", "&peClose=1&blockAction=1"));
         }
 
         return $strReturn;

@@ -180,7 +180,7 @@ class class_module_search_indexwriter {
      */
     private function getIndexableEntries(){
         //Load possible existing document if exists
-        $strQuery = "SELECT * FROM " . _dbprefix_ . "system ";
+        $strQuery = "SELECT * FROM " . _dbprefix_ . "system WHERE system_deleted = 0";
         return $this->objDB->getPArray($strQuery, array());
     }
 

@@ -77,8 +77,8 @@ class class_test_searchIndexEventTest extends class_testbase {
 
 
 
-        $objAspect->deleteObject();
-        $objTag->deleteObject();
+        $objAspect->deleteObjectFromDatabase();
+        $objTag->deleteObjectFromDatabase();
 
     }
 

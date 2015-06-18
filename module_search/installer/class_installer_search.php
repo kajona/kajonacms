@@ -110,12 +110,13 @@ class class_installer_search extends class_installer_base implements interface_i
      * @return bool
      */
     public function remove(&$strReturn) {
+
         //delete the page-element
         if(class_module_system_module::getModuleByName("pages") !== null && class_module_pages_element::getElement("search") != null) {
             $objElement = class_module_pages_element::getElement("search");
             if($objElement != null) {
                 $strReturn .= "Deleting page-element 'search'...\n";
-                $objElement->deleteObject();
+                $objElement->deleteObjectFromDatabase();
             }
             else {
                 $strReturn .= "Error finding page-element 'search', aborting.\n";
@@ -126,7 +127,7 @@ class class_installer_search extends class_installer_base implements interface_i
         /** @var class_module_search_search $objOneObject */
         foreach(class_module_search_search::getObjectList() as $objOneObject) {
             $strReturn .= "Deleting object '".$objOneObject->getStrDisplayName()."' ...\n";
-            if(!$objOneObject->deleteObject()) {
+            if(!$objOneObject->deleteObjectFromDatabase()) {
                 $strReturn .= "Error deleting object, aborting.\n";
                 return false;
             }
@@ -135,7 +136,7 @@ class class_installer_search extends class_installer_base implements interface_i
         //delete the module-node
         $strReturn .= "Deleting the module-registration...\n";
         $objModule = class_module_system_module::getModuleByName($this->objMetadata->getStrTitle(), true);
-        if(!$objModule->deleteObject()) {
+        if(!$objModule->deleteObjectFromDatabase()) {
             $strReturn .= "Error deleting module, aborting.\n";
             return false;
         }

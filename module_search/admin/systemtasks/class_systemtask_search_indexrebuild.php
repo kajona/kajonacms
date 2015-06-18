@@ -61,7 +61,7 @@ class class_systemtask_search_indexrebuild extends class_systemtask_base impleme
         if(!class_carrier::getInstance()->getObjSession()->sessionIsset($this->STR_SESSION_KEY)) {
 
             //fetch all records to be indexed
-            $strQuery = "SELECT system_id FROM " . _dbprefix_ . "system ";
+            $strQuery = "SELECT system_id FROM " . _dbprefix_ . "system WHERE system_deleted = 0";
             $arrRows = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array());
 
             $arrIds = array();

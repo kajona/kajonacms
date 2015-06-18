@@ -55,7 +55,7 @@ class class_test_generalModelTest extends class_testbase {
 
 
             echo "deleting ".$strSystemid."@".$strClass."\n";
-            $objInstance->deleteObject();
+            $objInstance->deleteObjectFromDatabase();
         }
 
 

@@ -156,11 +156,13 @@ class class_module_pages_folder extends class_model implements interface_model, 
             $strFolderid = class_module_system_module::getModuleByName("pages")->getSystemid();
         }
 
+        $objORM = new class_orm_objectlist();
         $strQuery = "SELECT system_id, system_module_nr
 						FROM " . _dbprefix_ . "system
 						WHERE system_prev_id=?
                          AND (system_module_nr = ? OR system_module_nr = ? )
 	                      ".($bitOnlyActive ? " AND system_status = 1 ": "")."
+	                      ".$objORM->getDeletedWhereRestriction()."
                     ORDER BY system_sort ASC";
 
         $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array($strFolderid, _pages_modul_id_, _pages_folder_id_), $intStart, $intEnd);
@@ -188,11 +190,12 @@ class class_module_pages_folder extends class_model implements interface_model, 
         if(!validateSystemid($strFolderid)) {
             $strFolderid = class_module_system_module::getModuleByName("pages")->getSystemid();
         }
-
+        $objORM = new class_orm_objectlist();
         $strQuery = "SELECT COUNT(*)
 						FROM " . _dbprefix_ . "system
 						WHERE system_prev_id=?
                          AND (system_module_nr = ? OR system_module_nr = ? )
+                         ".$objORM->getDeletedWhereRestriction()."
 	                      ".($bitOnlyActive ? " AND system_status = 1 ": "");
 
         $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array($strFolderid, _pages_modul_id_, _pages_folder_id_));

@@ -1,24 +1,7 @@
 Reference: Events
 ===
 
-<table>
-	<tr>
-		<th>Identifier</th>
-		<th>Description</th>
-	</tr>
-	<tr>
-		<td>core.system.request.startprocessing</td>
-		<td>
-			<table>
-				<tr><td>Since</td><td>4.6</td></tr>
-				<tr><td>Argument</td><td>bool $bitAdmin<br />
-			string $strModule<br />
-			string $strAction<br />
-			string $strLanguageParam</td></tr>				<tr><td>Description</td><td>Invoked right before starting to process the current request. The event is triggered&nbsp;by the request-dispatcher right before the request is given over to the controller.</td></tr>				
-			</table>
-		</td>
-	</tr>
-</table>
+
 
 
 
@@ -88,6 +71,29 @@ Description</th>
 			<td>Description</td>
 			<td>Thrown whenever a record is updated to the database.</td>
 		</tr>
+		
+		<tr>
+			<td rowspan="3" style="border-top: 1px solid #ccc;border-right: 1px solid #ccc; vertical-align: top;">core.system.objectassignmentsupdated</td>
+			<td style="border-top: 1px solid #ccc;">Since</td>
+			<td style="border-top: 1px solid #ccc;">4.8</td>
+		</tr>
+		<tr>
+			<td>Arguments</td>
+			<td>string[] $arrNewAssignments<br />
+string[] $areRemovedAssignments<br />
+string[] $areCurrentAssignments<br />
+class_root $objObject<br />
+string $strProperty<br /><br />return bool</td>
+		</tr>
+		<tr>
+			<td>Description</td>
+			<td>Triggered as soon as a property mapping to objects is updated. Therefore the event is triggered as soon
+as assignments are added or removed from an object.
+The event gets a list of all three relevant items: assignments added, assignments removed, assignments remaining.
+The relevant object and the name of the changed property are passed, too.<br />Return a valid bool value, otherwise the transaction will be rolled back!</td>
+		</tr>
+		
+		
 		<tr>
 			<td rowspan="3" style="border-top: 1px solid #ccc; border-right: 1px solid #ccc;vertical-align: top;">core.system.recordcopied</td>
 			<td style="border-top: 1px solid #ccc;">Since</td>
@@ -145,8 +151,48 @@ Description</th>
 		</tr>
 		<tr>
 			<td>Description</td>
-			<td>Thrown as soon as record is deleted. Listen to those events if you want to trigger additional cleanups or delete linked contents.</td>
+			<td>Thrown as soon as record is deleted from the database. Listen to those events if you want to trigger additional cleanups or delete linked contents.<br />Make sure to return a matching boolean-value, otherwise the transaction may be rolled back.</td>
 		</tr>
+		
+		
+		
+		<tr>
+			<td rowspan="3" style="border-top: 1px solid #ccc; border-right: 1px solid #ccc;vertical-align: top;">core.system.recorddeleted.logically</td>
+			<td style="border-top: 1px solid #ccc;">Since</td>
+			<td style="border-top: 1px solid #ccc;">4.8</td>
+		</tr>
+		<tr>
+			<td>Arguments</td>
+			<td>string $strSystemid &nbsp;&nbsp;<br />
+			string $strSourceClass</td>
+		</tr>
+		<tr>
+			<td>Description</td>
+			<td>Thrown as soon as record is deleted logically, so set inactive. The reocord is NOT removed from the database. Listen to those events if you want to trigger additional cleanups or delete linked contents.<br />Make sure to return a matching boolean-value, otherwise the transaction may be rolled back.</td>
+		</tr>
+		
+		
+		
+		
+		<tr>
+        			<td rowspan="3" style="border-top: 1px solid #ccc; border-right: 1px solid #ccc;vertical-align: top;">core.system.recordrestored.logically</td>
+        			<td style="border-top: 1px solid #ccc;">Since</td>
+        			<td style="border-top: 1px solid #ccc;">4.8</td>
+        		</tr>
+        		<tr>
+        			<td>Arguments</td>
+        			<td>string $strSystemid<br />
+                        string $strSourceClass The class-name of the object deleted<br />
+                        class_model $objObject The object which is being restored</td>
+        		</tr>
+        		<tr>
+        			<td>Description</td>
+        			<td>Called whenever a records is restored from the database.<br />The event is fired after the record was restored but before the transaction will be committed.<br />Make sure to return a matching boolean-value, otherwise the transaction may be rolled back.</td>
+        		</tr>
+		
+		
+		
+		
 		<tr>
 			<td rowspan="3" style="border-top: 1px solid #ccc; border-right: 1px solid #ccc;vertical-align: top;">core.system.userfirstlogin</td>
 			<td style="border-top: 1px solid #ccc;">Since</td>
@@ -210,4 +256,4 @@ Description</th>
 			<td colspan="2">&nbsp;</td>
 		</tr>
 	</tbody>
-</table>
+</table>

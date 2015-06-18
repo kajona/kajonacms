@@ -33,8 +33,8 @@ class class_installer_postacomment extends class_installer_base implements inter
 
 		//modify default rights to allow guests to post
 		$strReturn .= "Modifying modules' rights node...\n";
-		$this->objRights->addGroupToRight(_guests_group_id_, $strSystemID, "right1");
-		$this->objRights->addGroupToRight(_guests_group_id_, $strSystemID, "right2");
+        class_carrier::getInstance()->getObjRights()->addGroupToRight(class_module_system_setting::getConfigValue("_guests_group_id_"), $strSystemID, "right1");
+        class_carrier::getInstance()->getObjRights()->addGroupToRight(class_module_system_setting::getConfigValue("_guests_group_id_"), $strSystemID, "right2");
 
 
         $strReturn .= "Registering postacomment-element...\n";
@@ -86,11 +86,12 @@ class class_installer_postacomment extends class_installer_base implements inter
      * @return bool
      */
     public function remove(&$strReturn) {
+
         //delete the page-element
         $objElement = class_module_pages_element::getElement("postacomment");
         if($objElement != null) {
             $strReturn .= "Deleting page-element 'postacomment'...\n";
-            $objElement->deleteObject();
+            $objElement->deleteObjectFromDatabase();
         }
         else {
             $strReturn .= "Error finding page-element 'postacomment', aborting.\n";
@@ -100,7 +101,7 @@ class class_installer_postacomment extends class_installer_base implements inter
         /** @var class_module_postacomment_post $objOneObject */
         foreach(class_module_postacomment_post::getObjectList() as $objOneObject) {
             $strReturn .= "Deleting object '".$objOneObject->getStrDisplayName()."' ...\n";
-            if(!$objOneObject->deleteObject()) {
+            if(!$objOneObject->deleteObjectFromDatabase()) {
                 $strReturn .= "Error deleting object, aborting.\n";
                 return false;
             }
@@ -109,7 +110,7 @@ class class_installer_postacomment extends class_installer_base implements inter
         //delete the module-node
         $strReturn .= "Deleting the module-registration...\n";
         $objModule = class_module_system_module::getModuleByName($this->objMetadata->getStrTitle(), true);
-        if(!$objModule->deleteObject()) {
+        if(!$objModule->deleteObjectFromDatabase()) {
             $strReturn .= "Error deleting module, aborting.\n";
             return false;
         }

@@ -99,14 +99,14 @@ class class_installer_tags extends class_installer_base implements interface_ins
 
         $strReturn .= "Removing settings...\n";
         if(class_module_system_setting::getConfigByName("_tags_defaultprivate_") != null)
-            class_module_system_setting::getConfigByName("_tags_defaultprivate_")->deleteObject();
+            class_module_system_setting::getConfigByName("_tags_defaultprivate_")->deleteObjectFromDatabase();
 
         //delete the page-element
         if(class_module_system_module::getModuleByName("pages") !== null && class_module_pages_element::getElement("tags") != null) {
             $objElement = class_module_pages_element::getElement("tags");
             if($objElement != null) {
                 $strReturn .= "Deleting page-element 'tags'...\n";
-                $objElement->deleteObject();
+                $objElement->deleteObjectFromDatabase();
             }
             else {
                 $strReturn .= "Error finding page-element 'guestbook', tags.\n";
@@ -117,7 +117,7 @@ class class_installer_tags extends class_installer_base implements interface_ins
         /** @var class_module_tags_favorite $objOneObject */
         foreach(class_module_tags_favorite::getObjectList() as $objOneObject) {
             $strReturn .= "Deleting object '".$objOneObject->getStrDisplayName()."' ...\n";
-            if(!$objOneObject->deleteObject()) {
+            if(!$objOneObject->deleteObjectFromDatabase()) {
                 $strReturn .= "Error deleting object, aborting.\n";
                 return false;
             }
@@ -126,7 +126,7 @@ class class_installer_tags extends class_installer_base implements interface_ins
         /** @var class_module_tags_tag $objOneObject */
         foreach(class_module_tags_tag::getObjectList() as $objOneObject) {
             $strReturn .= "Deleting object '".$objOneObject->getStrDisplayName()."' ...\n";
-            if(!$objOneObject->deleteObject()) {
+            if(!$objOneObject->deleteObjectFromDatabase()) {
                 $strReturn .= "Error deleting object, aborting.\n";
                 return false;
             }
@@ -135,7 +135,7 @@ class class_installer_tags extends class_installer_base implements interface_ins
         //delete the module-node
         $strReturn .= "Deleting the module-registration...\n";
         $objModule = class_module_system_module::getModuleByName($this->objMetadata->getStrTitle(), true);
-        if(!$objModule->deleteObject()) {
+        if(!$objModule->deleteObjectFromDatabase()) {
             $strReturn .= "Error deleting module, aborting.\n";
             return false;
         }
@@ -290,12 +290,6 @@ class class_installer_tags extends class_installer_base implements interface_ins
         if(!$this->objDB->_query($strQuery))
             $strReturn .= "An error occurred! ...\n";
 
-        $strQuery = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."tags_member")."
-                      DROP PRIMARY KEY,
-                      ADD PRIMARY KEY(tags_systemid, tags_tagid, tags_owner)";
-
-        if(!$this->objDB->_query($strQuery))
-            $strReturn .= "An error occurred! ...\n";
 
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion($this->objMetadata->getStrTitle(), "3.4.9.1");

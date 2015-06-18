@@ -153,33 +153,13 @@ class class_module_rating_rate extends class_model implements interface_model {
      * @return class_module_rating_rate
      */
     public static function getRating($strSystemid, $strChecksum = "") {
-        $arrParams = array($strSystemid);
+        $objORM = new class_orm_objectlist();
+        $objORM->addWhereRestriction(new class_orm_objectlist_restriction("AND rating_systemid = ?", $strSystemid));
         if($strChecksum != "")
-            $arrParams[] = $strChecksum;
+            $objORM->addWhereRestriction(new class_orm_objectlist_restriction("AND rating_checksum = ?"), $strChecksum);
 
-        $strQuery = "SELECT rating_id
-                     FROM "._dbprefix_."rating
-                     WHERE rating_systemid = ?
-                     ".($strChecksum != "" ? " AND rating_checksum = ? " : "")."";
-        $arrMatches = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, $arrParams);
-
-        if(isset($arrMatches["rating_id"]))
-            return new class_module_rating_rate($arrMatches["rating_id"]);
-        else
-            return null;
-
+        return $objORM->getSingleObject(get_called_class());
     }
-
-    /**
-     * @return bool
-     */
-    protected function deleteObjectInternal() {
-        //delete the corresponding history entries
-        $strQuery = "DELETE FROM "._dbprefix_."rating_history"." WHERE rating_history_rating=? ";
-        $this->objDB->_pQuery($strQuery, array($this->getSystemid()));
-        return parent::deleteObjectInternal();
-    }
-
 
     /**
      * Fetches the rating-history of the current rating from the database.
