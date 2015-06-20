@@ -26,7 +26,7 @@ class class_module_postacomment_post extends class_model implements interface_mo
      * @tableColumnDatatype char254
      *
      * @fieldType text
-     * @fieldLabel form_comment_title
+     * @fieldLabel commons_title
      *
      * @addSearchIndex
      */

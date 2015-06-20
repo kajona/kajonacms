@@ -5,7 +5,7 @@
         >
     <title>postacomment</title>
     <description>Postacomment provides users the possibility to add comments to contents.</description>
-    <version>4.7</version>
+    <version>4.7.1</version>
     <author>Kajona Team</author>
     <type>MODULE</type>
     <providesInstaller>TRUE</providesInstaller>
