@@ -1,5 +1,8 @@
 Module Pages
 
+V4.7.1 --------------------------------------------------------------------------------------------------
+BUG: module_pages | formentry_template -> if only one template is available, the first entry is pre-selected by default. fixes #66.
+
 V4.7 --------------------------------------------------------------------------------------------------
 NEW: module_pages | pages_content -> A table of contents is rendered when editing a page. this provides a better overview for templates with many placeholders.
 BUG: module_pages | formentry_template -> if only one template is available, the first entry is pre-selected by default.
