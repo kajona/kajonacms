@@ -17,3 +17,4 @@ $lang["systemtask_ldapsync_name"]        = "Benutzerdaten synchronisieren";
 $lang["systemtask_ldapsync_success"]     = "Abgleich der Benutzerdaten erfolgreich";
 $lang["workflow_ldapsync_title"]         = "LDAP Daten synchronisieren";
 $lang["workflow_ldapsync_val1"]          = "Ausführungs-Intervall";
+$lang["usersource_ldap_name"]            = "LDAP";

@@ -19,6 +19,8 @@
 $config = array();
 
 $config[0] = array();
+//a readable name to identify the server within the GUI
+$config[0]["alias"]                                = "Server 1";
 $config[0]["ldap_server"]                          = "192.168.60.206";
 $config[0]["ldap_port"]                            = 389;
 
