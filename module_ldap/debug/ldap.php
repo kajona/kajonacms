@@ -17,9 +17,6 @@ echo "+-------------------------------------------------------------------------
 $intI = 0;
 foreach(class_ldap::getAllInstances() as $objOneLdap) {
 
-    if($intI++ == 0)
-        continue;
-
     $arrCfg = class_config::getInstance("ldap.php")->getConfig($objOneLdap->getIntCfgNr());
     echo "Connecting to ldap at ".$arrCfg["ldap_server"]."\n";
 
@@ -32,9 +29,9 @@ foreach(class_ldap::getAllInstances() as $objOneLdap) {
     var_dump($arrUser);
 
 
-    echo "Loading groups for user\n";
-    var_dump($objOneLdap->getMembersOfGroup("CN=Entwickler,OU=Gruppen,DC=ad,DC=artemeon,DC=int"));
-    var_dump($objOneLdap->getNumberOfGroupMembers("CN=Entwickler,OU=Gruppen,DC=ad,DC=artemeon,DC=int"));
+//    echo "Loading groups for user\n";
+//    var_dump($objOneLdap->getMembersOfGroup("CN=Entwickler,OU=Gruppen,DC=ad,DC=artemeon,DC=int"));
+//    var_dump($objOneLdap->getNumberOfGroupMembers("CN=Entwickler,OU=Gruppen,DC=ad,DC=artemeon,DC=int"));
 }
 
 echo "\n\n";

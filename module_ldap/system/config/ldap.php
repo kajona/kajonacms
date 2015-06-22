@@ -20,7 +20,7 @@ $config = array();
 
 $config[0] = array();
 //a readable name to identify the server within the GUI
-$config[0]["alias"]                                = "Server 1";
+$config[0]["ldap_alias"]                           = "Server 1";
 $config[0]["ldap_server"]                          = "192.168.60.206";
 $config[0]["ldap_port"]                            = 389;
 
@@ -62,3 +62,27 @@ $config[0]["ldap_group_isUserMemberOf"]            = "(&(objectClass=group)(memb
 //the attribute mapping to the groups' members
 $config[0]["ldap_group_attribute_member"]          = "member";
 
+
+
+
+$config[1] = array();
+//a readable name to identify the server within the GUI
+$config[1]["ldap_alias"]                           = "Server 2";
+$config[1]["ldap_server"]                          = "192.168.60.216";
+$config[1]["ldap_port"]                            = 389;
+$config[1]["ldap_bind_anonymous"]                  = false;
+$config[1]["ldap_bind_username"]                   = "ldapbind@ad.artemeon.int";
+$config[1]["ldap_bind_userpwd"]                    = "123";
+$config[1]["ldap_common_identifier"]               = "distinguishedName";
+$config[1]["ldap_common_name"]                     = "cn";
+$config[1]["ldap_user_base_dn"]                    = "OU=Anwender,DC=ad,DC=artemeon,DC=int";
+$config[1]["ldap_user_filter"]                     = "(&(objectClass=user)(objectCategory=person)(cn=*))";
+$config[1]["ldap_user_search_filter"]              = "(&(objectClass=user)(objectCategory=person)(userPrincipalName=?))";
+$config[1]["ldap_user_attribute_username"]         = "userPrincipalName";
+$config[1]["ldap_user_attribute_mail_fallback"]    = "userPrincipalName";
+$config[1]["ldap_user_attribute_mail"]             = "mail";
+$config[1]["ldap_user_attribute_familyname"]       = "sn";
+$config[1]["ldap_user_attribute_givenname"]        = "givenName";
+$config[1]["ldap_group_filter"]                    = "(objectClass=group)";
+$config[1]["ldap_group_isUserMemberOf"]            = "(&(objectClass=group)(member=?))";
+$config[1]["ldap_group_attribute_member"]          = "member";
