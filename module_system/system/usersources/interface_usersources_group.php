@@ -74,4 +74,12 @@ interface interface_usersources_group {
      * @return void
      */
     public function setNewRecordId($strId);
+
+    /**
+     * Hook to update the admin-form when editing / creating a single group
+     * @param class_admin_formgenerator $objForm
+     *
+     * @return mixed
+     */
+    public function updateAdminForm(class_admin_formgenerator $objForm);
 }

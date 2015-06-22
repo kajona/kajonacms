@@ -34,7 +34,6 @@ class class_ldap {
      */
     private static $arrInstances = null;
 
-
     /**
      * Constructor
      *
@@ -42,6 +41,7 @@ class class_ldap {
      */
     private function __construct($intConfigNumber = 0) {
         $this->arrConfig = class_config::getInstance("ldap.php")->getConfig($intConfigNumber);
+        $this->arrConfig["nr"] = $intConfigNumber;
 
         $this->connect();
     }
@@ -167,7 +167,7 @@ class class_ldap {
             }
         }
         else {
-            throw new class_exception("loading of group failed: ".ldap_errno($this->objCx)." # ".ldap_error($this->objCx), class_exception::$level_FATALERROR);
+            throw new class_exception("loading of group members failed: ".ldap_errno($this->objCx)." # ".ldap_error($this->objCx), class_exception::$level_FATALERROR);
         }
 
         return $arrReturn;
@@ -195,7 +195,7 @@ class class_ldap {
             }
         }
         else {
-            throw new class_exception("loading of group failed: ".ldap_errno($this->objCx)." # ".ldap_error($this->objCx), class_exception::$level_FATALERROR);
+            throw new class_exception("loading of number of group failed: ".ldap_errno($this->objCx)." # ".ldap_error($this->objCx), class_exception::$level_FATALERROR);
         }
         return -1;
     }
@@ -268,7 +268,7 @@ class class_ldap {
             }
         }
         else {
-            throw new class_exception("loading of group failed: ".ldap_errno($this->objCx)." # ".ldap_error($this->objCx), class_exception::$level_FATALERROR);
+            throw new class_exception("loading of user failed: ".ldap_errno($this->objCx)." # ".ldap_error($this->objCx), class_exception::$level_FATALERROR);
         }
 
         return $arrReturn;
@@ -336,6 +336,14 @@ class class_ldap {
             $strReturn = $arrValues[0];
 
         return $strReturn;
+    }
+
+    public function getIntCfgNr() {
+        return $this->arrConfig["nr"];
+    }
+
+    public function getStrCfgName() {
+        return $this->arrConfig["ldap_alias"];
     }
 }
 

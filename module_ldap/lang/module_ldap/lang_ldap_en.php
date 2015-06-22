@@ -12,6 +12,7 @@
 
 //editable entries
 $lang["form_group_dn"]                   = "DN";
+$lang["form_group_cfg"]                   = "LDAP system";
 $lang["systemtask_ldapsync_error"]       = "Error while updating user-data";
 $lang["systemtask_ldapsync_name"]        = "Sync userdata";
 $lang["systemtask_ldapsync_success"]     = "Update of userdata successful";

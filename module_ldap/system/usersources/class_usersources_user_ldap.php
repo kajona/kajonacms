@@ -157,19 +157,29 @@ class class_usersources_user_ldap extends class_model implements interface_model
 
 		$arrReturn = array();
         
-        $objLdap = class_ldap::getInstance();
+        $objLdap = class_ldap::getInstance($this->intCfg);
         $objLdapSource = new class_usersources_source_ldap();
         $arrLdapGroups = $objLdapSource->getAllGroupIds();
         
         foreach($arrLdapGroups as $strOneGroupId) {
             $objGroup = new class_usersources_group_ldap($strOneGroupId);
             
-            if($objLdap->isUserMemberOfGroup($this->getStrDN(), $objGroup->getStrDn()))
+            if($objGroup->getIntCfg() == $this->intCfg && $objLdap->isUserMemberOfGroup($this->getStrDN(), $objGroup->getStrDn()))
                 $arrReturn[] = $strOneGroupId;
         }
         
         
         return $arrReturn;
+    }
+
+    /**
+     * Hook to update the admin-form when editing / creating a single user
+     * @param class_admin_formgenerator $objForm
+     *
+     * @return mixed
+     */
+    public function updateAdminForm(class_admin_formgenerator $objForm) {
+
     }
     
     /**

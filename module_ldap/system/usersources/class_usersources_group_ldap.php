@@ -30,6 +30,7 @@ class class_usersources_group_ldap extends class_model implements interface_mode
 
     /**
      * @var int
+     * @fieldType dropdown
      */
     private $intCfg = 0;
 
@@ -124,7 +125,7 @@ class class_usersources_group_ldap extends class_model implements interface_mode
 
         $arrReturn = array();
         //load all members from ldap
-        $objLdap = class_ldap::getInstance();
+        $objLdap = class_ldap::getInstance($this->intCfg);
         $arrMembers = $objLdap->getMembersOfGroup($this->getStrDn());
         $objSource = new class_usersources_source_ldap();
 
@@ -168,7 +169,7 @@ class class_usersources_group_ldap extends class_model implements interface_mode
      * @return int
      */
     public function getNumberOfMembers() {
-        $objLdap = class_ldap::getInstance();
+        $objLdap = class_ldap::getInstance($this->intCfg);
         try {
             return $objLdap->getNumberOfGroupMembers($this->getStrDn());
         }
@@ -219,6 +220,20 @@ class class_usersources_group_ldap extends class_model implements interface_mode
         return true;
     }
 
+
+    /**
+     * Hook to update the admin-form when editing / creating a single group
+     * @param class_admin_formgenerator $objForm
+     *
+     * @return mixed
+     */
+    public function updateAdminForm(class_admin_formgenerator $objForm) {
+        $arrDD = array();
+        foreach(class_ldap::getAllInstances() as $objOneInstance)
+            $arrDD[$objOneInstance->getIntCfgNr()] = $objOneInstance->getStrCfgName();
+
+        $objForm->getField("cfg")->setArrKeyValues($arrDD);
+    }
 
     /**
      * Removes a member from the current group - if possible.

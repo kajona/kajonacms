@@ -317,6 +317,15 @@ class class_usersources_user_kajona extends class_model implements interface_mod
         return true;
     }
 
+    /**
+     * Hook to update the admin-form when editing / creating a single user
+     * @param class_admin_formgenerator $objForm
+     *
+     * @return mixed
+     */
+    public function updateAdminForm(class_admin_formgenerator $objForm) {
+
+    }
 
     // --- GETTERS / SETTERS --------------------------------------------------------------------------------
 

@@ -48,6 +48,10 @@ class class_usersources_source_ldap implements interface_usersources_usersource 
     public function authenticateUser(interface_usersources_user $objUser, $strPassword) {
         if($objUser instanceof class_usersources_user_ldap) {
             foreach(class_ldap::getAllInstances() as $objSingleLdap) {
+
+                if($objUser->getIntCfg() != $objSingleLdap->getIntCfgNr())
+                    continue;
+
                 $bitReturn = $objSingleLdap->authenticateUser($objUser->getStrDN(), $strPassword);
 
                 //synchronize the local data with the ldap-data
@@ -59,14 +63,16 @@ class class_usersources_source_ldap implements interface_usersources_usersource 
                             $objUser->setStrFamilyname($arrSingleUser["familyname"]);
                             $objUser->setStrGivenname($arrSingleUser["givenname"]);
                             $objUser->setStrEmail($arrSingleUser["mail"]);
+                            $objUser->setIntCfg($objSingleLdap->getIntCfgNr());
                             $objUser->updateObjectToDb();
                             $this->objDB->flushQueryCache();
                         }
 
                     }
+
+                    return $bitReturn;
                 }
 
-                return $bitReturn;
             }
         }
 
@@ -206,6 +212,7 @@ class class_usersources_source_ldap implements interface_usersources_usersource 
                     $objSourceUser->setStrFamilyname($arrSingleUser["familyname"]);
                     $objSourceUser->setStrGivenname($arrSingleUser["givenname"]);
                     $objSourceUser->setStrEmail($arrSingleUser["mail"]);
+                    $objSourceUser->setIntCfg($objSingleLdap->getIntCfgNr());
                     $objSourceUser->updateObjectToDb();
 
                     $this->objDB->flushQueryCache();

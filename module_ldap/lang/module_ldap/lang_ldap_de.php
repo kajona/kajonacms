@@ -12,6 +12,7 @@
 
 //editable entries
 $lang["form_group_dn"]                   = "DN";
+$lang["form_group_cfg"]                   = "LDAP System";
 $lang["systemtask_ldapsync_error"]       = "Fehler beim Abgleich der Benutzerdaten";
 $lang["systemtask_ldapsync_name"]        = "Benutzerdaten synchronisieren";
 $lang["systemtask_ldapsync_success"]     = "Abgleich der Benutzerdaten erfolgreich";
