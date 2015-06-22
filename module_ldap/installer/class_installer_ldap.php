@@ -21,19 +21,21 @@ class class_installer_ldap extends class_installer_base implements interface_ins
 
         $strReturn .= "Installing table group_ldap...\n";
 		$arrFields = array();
-        $arrFields["group_ldap_id"]                                     = array("char20", false);
-		$arrFields["group_ldap_dn"]                                     = array("text", true);
+        $arrFields["group_ldap_id"]                                     = array(class_db_datatypes::STR_TYPE_CHAR20, false);
+		$arrFields["group_ldap_dn"]                                     = array(class_db_datatypes::STR_TYPE_TEXT, true);
+		$arrFields["group_ldap_cfg"]                                    = array(class_db_datatypes::STR_TYPE_INT, true);
 
 		if(!$this->objDB->createTable("user_group_ldap", $arrFields, array("group_ldap_id")))
 			$strReturn .= "An error occurred! ...\n";
         
         $strReturn .= "Installing table user_ldap...\n";
 		$arrFields = array();
-        $arrFields["user_ldap_id"]                                     = array("char20", false);
-		$arrFields["user_ldap_email"]                                  = array("char254", true);
-		$arrFields["user_ldap_familyname"]                             = array("char254", true);
-		$arrFields["user_ldap_givenname"]                              = array("char254", true);
-		$arrFields["user_ldap_dn"]                                     = array("text", true);
+        $arrFields["user_ldap_id"]                                     = array(class_db_datatypes::STR_TYPE_CHAR20, false);
+		$arrFields["user_ldap_email"]                                  = array(class_db_datatypes::STR_TYPE_CHAR254, true);
+		$arrFields["user_ldap_familyname"]                             = array(class_db_datatypes::STR_TYPE_CHAR254, true);
+		$arrFields["user_ldap_givenname"]                              = array(class_db_datatypes::STR_TYPE_CHAR254, true);
+		$arrFields["user_ldap_dn"]                                     = array(class_db_datatypes::STR_TYPE_TEXT, true);
+		$arrFields["user_ldap_cfg"]                                    = array(class_db_datatypes::STR_TYPE_INT, true);
 
 		if(!$this->objDB->createTable("user_ldap", $arrFields, array("user_ldap_id")))
 			$strReturn .= "An error occurred! ...\n";
@@ -183,7 +185,27 @@ class class_installer_ldap extends class_installer_base implements interface_ins
             $this->updateModuleVersion("ldap", "4.7");
         }
 
+        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "4.7") {
+            $strReturn .= $this->update_47_471();
+        }
+
         return $strReturn."\n\n";
 	}
+
+    private function update_47_471() {
+        $strReturn = "Updating to 4.7.1...\n";
+
+        $strReturn .= "Updating schema\n";
+        $this->objDB->addColumn("user_group_ldap", "group_ldap_cfg", class_db_datatypes::STR_TYPE_INT);
+        $this->objDB->addColumn("user_ldap", "user_ldap_cfg", class_db_datatypes::STR_TYPE_INT);
+
+        $strReturn .= "Updating existing entries...\n";
+        $this->objDB->_pQuery("UPDATE ".$this->objDB->encloseTableName(_dbprefix_."user_group_ldap")." SET group_ldap_cfg = 0", array());
+        $this->objDB->_pQuery("UPDATE ".$this->objDB->encloseTableName(_dbprefix_."user_ldap")." SET user_ldap_cfg = 0", array());
+
+        $this->updateModuleVersion("ldap", "4.7.1");
+        return $strReturn;
+    }
 
 }
