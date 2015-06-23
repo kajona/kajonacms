@@ -66,6 +66,7 @@ Description</th>
 		<tr>
 			<td>Arguments</td>
 			<td>class_model $objRecord</td>
+			<td>bool $bitRecordCreated</td>
 		</tr>
 		<tr>
 			<td>Description</td>
