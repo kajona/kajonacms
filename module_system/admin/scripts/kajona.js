@@ -22,6 +22,25 @@ if (typeof KAJONA == "undefined") {
  * -------------------------------------------------------------------------
  */
 
+
+/**
+ * Function to get the element from the current opener.
+ *
+ * @param strElementId
+ * @returns {*}
+ */
+KAJONA.util.getElementFromOpener = function(strElementId) {
+    var objElement;
+    if (window.opener) {
+        return window.opener.$('#' + strElementId);
+    } else if (parent){
+        return parent.$('#' + strElementId);
+    }
+    else {
+        return $('#' + strElementId);
+    }
+};
+
 /**
  * Function to evaluate the script-tags in a passed string, e.g. loaded by an ajax-request
  *

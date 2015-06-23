@@ -1435,7 +1435,7 @@ abstract class class_root {
         while($strTempId != "0" && $strTempId != "" && $strTempId != -1 && $strTempId != $strStopSystemid) {
             $arrReturn[] = $strTempId;
 
-            $objCommon = new class_module_system_common($strTempId);
+            $objCommon = class_objectfactory::getInstance()->getObject($strTempId);
             $strTempId = $objCommon->getPrevId();
         }
 

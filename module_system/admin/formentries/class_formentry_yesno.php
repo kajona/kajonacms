@@ -36,7 +36,7 @@ class class_formentry_yesno extends class_formentry_base implements interface_fo
         $strReturn = "";
         if($this->getStrHint() != null)
             $strReturn .= $objToolkit->formTextRow($this->getStrHint());
-        $strReturn .=  $objToolkit->formInputDropdown($this->getStrEntryName(), $arrYesNo, $this->getStrLabel(), $this->getStrValue());
+        $strReturn .=  $objToolkit->formInputDropdown($this->getStrEntryName(), $arrYesNo, $this->getStrLabel(), $this->getStrValue(), "", !$this->getBitReadonly());
         return $strReturn;
     }
 
@@ -51,6 +51,10 @@ class class_formentry_yesno extends class_formentry_base implements interface_fo
             return class_carrier::getInstance()->getObjLang()->getLang("commons_yes", "system");
         else
             return class_carrier::getInstance()->getObjLang()->getLang("commons_no", "system");
+    }
+
+    public function validateValue() {
+        return in_array($this->getStrValue(), array(0,1));
     }
 
 }

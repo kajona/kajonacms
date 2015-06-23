@@ -63,6 +63,7 @@ interface class_system_eventidentifier {
      *
      * The params-array contains a single entry:
      * @param class_model $objRecord
+     * @param bool $bitRecordCreated - true => if the record was created, false => if it is only an update
      *
      * @since 4.5
      */

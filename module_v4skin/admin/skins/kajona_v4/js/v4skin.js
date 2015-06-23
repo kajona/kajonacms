@@ -287,15 +287,7 @@ KAJONA.v4skin.removeObjectListItem = function(el){
  * @returns {Array}
  */
 KAJONA.v4skin.getObjectListItems = function(strElementName) {
-    var table;
-    if (window.opener) {
-        table = window.opener.$('#' + strElementName);
-    } else if (parent){
-        table =  parent.$('#' + strElementName);
-    }
-    else {
-        table = $('#' + strElementName);
-    }
+    var table = KAJONA.util.getElementFromOpener(strElementName);
 
     var arrItems = [];
 
@@ -319,15 +311,7 @@ KAJONA.v4skin.getObjectListItems = function(strElementName) {
  * @param arrAvailableIds -
  */
 KAJONA.v4skin.setObjectListItems = function(strElementName, arrItems, arrAvailableIds, strDeleteButton){
-    var table;
-    if (window.opener) {
-        table = window.opener.$('#' + strElementName);
-    } else if (parent){
-        table =  parent.$('#' + strElementName);
-    }
-    else {
-        table = $('#' + strElementName);
-    }
+    var table = KAJONA.util.getElementFromOpener(strElementName);
 
     var tbody = table.find('tbody');
     if(tbody.length > 0) {

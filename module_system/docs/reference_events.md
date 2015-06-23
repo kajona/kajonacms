@@ -65,11 +65,14 @@ Description</th>
 		</tr>
 		<tr>
 			<td>Arguments</td>
-			<td>class_model $objRecord</td>
+			<td>class_model $objRecord <br />
+			bool $bitRecordCreated
+			</td>
 		</tr>
 		<tr>
 			<td>Description</td>
-			<td>Thrown whenever a record is updated to the database.</td>
+			<td>Thrown whenever a record is updated to the database.<br/> The param $bitRecordCreated indicates
+			if a record was created(true) of if is only being updated(false)</td>
 		</tr>
 		
 		<tr>

@@ -32,6 +32,7 @@ $lang["commons_create_folder"]           = "Create folder";
 $lang["commons_continue"]                = "Continue";
 $lang["commons_close"]                   = "Close";
 $lang["commons_date"]                    = "Date";
+$lang["commons_lastmodification_date"]   = "Last modification date";
 $lang["commons_delete"]                  = "Delete";
 $lang["commons_delete_category_question"] = "Do you really want to delete the category &quot;<b>%%element_name%%</b>&quot;?";
 $lang["commons_delete_error"]            = "Error deleting the record";
