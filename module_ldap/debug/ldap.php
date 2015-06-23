@@ -10,7 +10,7 @@
 echo "+-------------------------------------------------------------------------------+\n";
 echo "| Kajona Debug Subsystem                                                        |\n";
 echo "|                                                                               |\n";
-echo "| LDAP                                                                          |\n";
+echo "| Checks the connection to the configured ldap servers                          |\n";
 echo "|                                                                               |\n";
 echo "+-------------------------------------------------------------------------------+\n";
 
