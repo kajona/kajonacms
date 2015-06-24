@@ -94,7 +94,9 @@ class class_admin_formgenerator {
      */
     public function updateSourceObject() {
         foreach($this->arrFields as $objOneField) {
-            $objOneField->setValueToObject();
+            if($objOneField->getObjSourceObject() != null) {
+                $objOneField->setValueToObject();
+            }
         }
     }
 

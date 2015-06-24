@@ -149,7 +149,22 @@ abstract class class_testbase_object extends class_testbase {
 
         // resolve references
         foreach($arrParameters as $strKey => $strValue) {
-            if(substr($strValue, 0, 4) == 'ref:') {
+            if(substr($strValue, 0, 11) == 'objectlist:') {
+                $strRef = trim(substr($strValue, 11));
+                $arrRefs = explode(",", $strRef);
+
+                $arrParameters[$strKey] = array();
+                foreach($arrRefs as $strRefKey) {
+                    $objRef = $this->getObject($strRefKey);
+                    if($objRef instanceof class_model) {
+                        $arrParameters[$strKey][] = $objRef;
+                    }
+                    else {
+                        throw new RuntimeException('Object "' . $strName . '" refers to an non existing object (' . $objElement->getNodePath() . ')');
+                    }
+                }
+            }
+            else if(substr($strValue, 0, 4) == 'ref:') {
                 $strRef = trim(substr($strValue, 4));
                 $objRef = $this->getObject($strRef);
                 if($objRef instanceof class_model) {

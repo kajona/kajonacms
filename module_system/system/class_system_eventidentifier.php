@@ -63,6 +63,7 @@ interface class_system_eventidentifier {
      *
      * The params-array contains a single entry:
      * @param class_model $objRecord
+     * @param bool $bitRecordCreated - true => if the record was created, false => if it is only an update
      *
      * @since 4.5
      */
@@ -129,6 +130,20 @@ interface class_system_eventidentifier {
      * @since 4.5
      */
     const EVENT_SYSTEM_PREVIDCHANGED = "core.system.previdchanged";
+
+
+    /**
+     * Invoked every time a records status was changed.
+     * Please note that the event is only triggered on changes, not during a records creation.
+     *
+     * @param string $strSystemid
+     * @param class_root $objObject
+     * @param string $intOldStatus
+     * @param string $intNewStatus
+     *
+     * @since 4.8
+     */
+    const EVENT_SYSTEM_STATUSCHANGED = "core.system.statuschanged";
 
     /**
      * Called whenever a records was deleted from the database using the common methods.

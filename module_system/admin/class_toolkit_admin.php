@@ -461,7 +461,7 @@ class class_toolkit_admin extends class_toolkit {
             if($objObject instanceof interface_model && $objObject->rightView()) {
                 $strRemoveLink = "";
                 if(!$bitReadOnly) {
-                    $strDelete = class_carrier::getInstance()->getObjLang()->getLang("commons_delete", "module_system");
+                    $strDelete = class_carrier::getInstance()->getObjLang()->getLang("commons_remove_assignment", "system");
                     $strRemoveLink = class_link::getLinkAdminDialog(null, "", "", $strDelete, $strDelete, "icon_delete", $strDelete, true, false, "KAJONA.v4skin.removeObjectListItem(this);return false;");
                 }
 

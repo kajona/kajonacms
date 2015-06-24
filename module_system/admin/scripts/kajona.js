@@ -22,6 +22,25 @@ if (typeof KAJONA == "undefined") {
  * -------------------------------------------------------------------------
  */
 
+
+/**
+ * Function to get the element from the current opener.
+ *
+ * @param strElementId
+ * @returns {*}
+ */
+KAJONA.util.getElementFromOpener = function(strElementId) {
+    var objElement;
+    if (window.opener) {
+        return window.opener.$('#' + strElementId);
+    } else if (parent){
+        return parent.$('#' + strElementId);
+    }
+    else {
+        return $('#' + strElementId);
+    }
+};
+
 /**
  * Function to evaluate the script-tags in a passed string, e.g. loaded by an ajax-request
  *
@@ -80,14 +99,14 @@ KAJONA.util.fold = function (strElementId, objCallbackVisible, objCallbackInvisi
         $element.removeClass("folderHidden");
         $element.addClass("folderVisible");
 		if ($.isFunction(objCallbackVisible)) {
-			objCallbackVisible();
+			objCallbackVisible(strElementId);
 		}
     }
     else {
         $element.removeClass("folderVisible");
         $element.addClass("folderHidden");
 		if ($.isFunction(objCallbackInvisible)) {
-			objCallbackInvisible();
+			objCallbackInvisible(strElementId);
 		}
     }
 };
@@ -645,7 +664,10 @@ KAJONA.admin.ajax = {
 
 	genericAjaxCall : function(module, action, systemid, objCallback) {
 		var postTarget = KAJONA_WEBPATH + '/xml.php?admin=1&module='+module+'&action='+action;
-        var data = this.getDataObjectFromString(systemid, true);
+        var data;
+        if(systemid) {
+            data = this.getDataObjectFromString(systemid, true);
+        }
 
         $.ajax({
             type: 'POST',
@@ -717,6 +739,53 @@ KAJONA.admin.ajax = {
  * Form management
  */
 KAJONA.admin.forms = {};
+
+KAJONA.admin.forms.initForm = function(strFormid) {
+    $('#'+strFormid+' input , #'+strFormid+' select , #'+strFormid+' textarea ').each(function() {
+        $(this).attr("data-kajona-initval", $(this).val());
+    });
+};
+
+KAJONA.admin.forms.changeLabel = '';
+KAJONA.admin.forms.changeConfirmation = '';
+
+/**
+ * Adds an onchange listener to the formentry with the passed ID. If the value is changed, a warning is rendered below the field.
+ * In addition, a special confirmation may be required to change the field to the new value.
+ *
+ * @param strElementId
+ * @param bitConfirmChange
+ */
+KAJONA.admin.forms.addChangelistener = function(strElementId, bitConfirmChange) {
+
+    $('#'+strElementId).on('change', function(objEvent) {
+        if($(this).val() != $(this).attr("data-kajona-initval")) {
+            if($(this).closest(".form-group").find("div.changeHint").length == 0) {
+
+                if(bitConfirmChange && bitConfirmChange == true) {
+                    var bitResponse = confirm(KAJONA.admin.forms.changeConfirmation);
+                    if(!bitResponse) {
+                        $(this).val($(this).attr("data-kajona-initval"));
+                        objEvent.preventDefault();
+                        return;
+                    }
+                }
+
+                $(this).closest(".form-group").addClass("has-warning");
+                $(this).closest(".form-group").children("div:first").append($('<div class="changeHint text-warning"><span class="glyphicon glyphicon-warning-sign"></span> ' + KAJONA.admin.forms.changeLabel + '</div>'));
+            }
+        }
+        else {
+            if($(this).closest(".form-group").find("div.changeHint"))
+                $(this).closest(".form-group").find("div.changeHint").remove();
+
+            $(this).closest(".form-group").removeClass("has-warning");
+        }
+    });
+
+};
+
+
 KAJONA.admin.forms.renderMandatoryFields = function(arrFields) {
 
     for(var i=0; i<arrFields.length; i++) {
@@ -733,7 +802,6 @@ KAJONA.admin.forms.renderMandatoryFields = function(arrFields) {
                 $objElement.addClass("mandatoryFormElement");
         }
 
-        //closest(".control-group").addClass("error")
     }
 };
 
@@ -742,7 +810,7 @@ KAJONA.admin.forms.renderMissingMandatoryFields = function(arrFields) {
         var strFieldName = strField[0];
         if($("#"+strFieldName) && !$("#"+strFieldName).hasClass('inputWysiwyg')) {
             $("#"+strFieldName).closest(".form-group").addClass("has-error has-feedback");
-			objNode = $('<span class="glyphicon glyphicon-warning-sign form-control-feedback" aria-hidden="true"></span>');
+			var objNode = $('<span class="glyphicon glyphicon-warning-sign form-control-feedback" aria-hidden="true"></span>');
             $("#"+strFieldName).closest("div").append(objNode);
         }
     });
@@ -757,6 +825,9 @@ KAJONA.admin.lists = {
     strDialogStart : '',
     intTotal : 0,
 
+    /**
+     * Toggles all fields
+     */
     toggleAllFields : function() {
         //batchActionSwitch
         $("table.admintable input[type='checkbox']").each(function() {
@@ -764,6 +835,29 @@ KAJONA.admin.lists = {
                 $(this)[0].checked = $('#kj_cb_batchActionSwitch')[0].checked;
             }
         });
+    },
+
+    /**
+     * Toggles all fields with the given system id's
+     *
+     * @param arrSystemIds
+     */
+    toggleFields : function(arrSystemIds) {
+        //batchActionSwitch
+        $("table.admintable input[type='checkbox']").each(function() {
+            if($(this).attr('id').substr(0, 6) == "kj_cb_" && $(this).attr('id') != 'kj_cb_batchActionSwitch') {
+                var strSysid = $(this).closest("tr").data('systemid');
+                if($.inArray(strSysid, arrSystemIds) !== -1) {//if strId in array
+                    if($(this)[0].checked) {
+                        $(this)[0].checked = false;
+                    }
+                    else {
+                        $(this)[0].checked = true;
+                    };
+                }
+            }
+        });
+        KAJONA.admin.lists.updateToolbar();
     },
 
     updateToolbar : function() {
@@ -848,6 +942,26 @@ KAJONA.admin.lists = {
 
         //get the selected elements
         $("table.admintable  input:checked").each(function() {
+            if($(this).attr('id').substr(0, 6) == "kj_cb_" && $(this).attr('id') != 'kj_cb_batchActionSwitch') {
+                var sysid = $(this).closest("tr").data('systemid');
+                if(sysid != "")
+                    selectedElements.push(sysid);
+            }
+        });
+
+        return selectedElements;
+    },
+
+    /**
+     * Creates an array which contains all system id's.
+     *
+     * @returns {Array}
+     */
+    getAllElements : function () {
+        var selectedElements = [];
+
+        //get the selected elements
+        $("table.admintable  input[type='checkbox']").each(function() {
             if($(this).attr('id').substr(0, 6) == "kj_cb_" && $(this).attr('id') != 'kj_cb_batchActionSwitch') {
                 var sysid = $(this).closest("tr").data('systemid');
                 if(sysid != "")

@@ -281,19 +281,44 @@ KAJONA.v4skin.removeObjectListItem = function(el){
 };
 
 /**
- * Sets an array of items to an object list. We remove only elements which are available in the arrAvailableIds array
+ * Gets all items containd in the object list
  *
  * @param strElementName
- * @param arrItems
- * @param arrAvailableIds
+ * @returns {Array}
  */
-KAJONA.v4skin.setObjectListItems = function(strElementName, arrItems, arrAvailableIds, strDeleteButton){
-    var table = $('#' + strElementName);
+KAJONA.v4skin.getObjectListItems = function(strElementName) {
+    var table = KAJONA.util.getElementFromOpener(strElementName);
+
+    var arrItems = [];
+
     var tbody = table.find('tbody');
     if(tbody.length > 0) {
         // remove only elements which are in the arrAvailableIds array
         tbody.children().each(function(){
-            if($.inArray($(this).find('input[type="hidden"]').val(), arrAvailableIds) !== -1) {
+            var strId = $(this).find('input[type="hidden"]').val();
+            arrItems.push(strId);
+        });
+    }
+
+    return arrItems;
+};
+
+/**
+ * Sets an array of items to an object list. We remove only elements which are available in the arrAvailableIds array
+ *
+ * @param strElementName  - name of the objectlist element
+ * @param arrItems        - array with item of the following format {strSystemId: <systemid>, strDisplayName:<displayname>, strIcon:<icon>}
+ * @param arrAvailableIds -
+ */
+KAJONA.v4skin.setObjectListItems = function(strElementName, arrItems, arrAvailableIds, strDeleteButton){
+    var table = KAJONA.util.getElementFromOpener(strElementName);
+
+    var tbody = table.find('tbody');
+    if(tbody.length > 0) {
+        // remove only elements which are in the arrAvailableIds array
+        tbody.children().each(function(){
+            var strId = $(this).find('input[type="hidden"]').val();
+            if($.inArray(strId, arrAvailableIds) !== -1) {//if strId in array
                 $(this).remove();
             }
         });
