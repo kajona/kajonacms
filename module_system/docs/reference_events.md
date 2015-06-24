@@ -127,6 +127,8 @@ The relevant object and the name of the changed property are passed, too.<br />R
 			<td>Description</td>
 			<td>Called whenever a record was copied. Event will be fired AFTER child objects were copied. Useful to perform additional actions, e.g. update / duplicate foreign assignments.</td>
 		</tr>
+		
+		
 		<tr>
 			<td rowspan="3" style="border-top: 1px solid #ccc; border-right: 1px solid #ccc;vertical-align: top;">core.system.previdchanged</td>
 			<td style="border-top: 1px solid #ccc;">Since</td>
@@ -140,8 +142,30 @@ The relevant object and the name of the changed property are passed, too.<br />R
 		</tr>
 		<tr>
 			<td>Description</td>
+			<td>Invoked every time a records status was changed.
+                Please note that the event is only triggered on changes, not during a records creation.</td>
+		</tr>		
+		
+		<tr>
+			<td rowspan="3" style="border-top: 1px solid #ccc; border-right: 1px solid #ccc;vertical-align: top;">core.system.statuschanged</td>
+			<td style="border-top: 1px solid #ccc;">Since</td>
+			<td style="border-top: 1px solid #ccc;">4.8</td>
+		</tr>
+		<tr>
+			<td>Arguments</td>
+			<td>string $strSystemid<br />
+                class_root $objObject<br />
+                string $intOldStatus<br />
+                string $intNewStatus</td>
+		</tr>
+		<tr>
+			<td>Description</td>
 			<td>Thrown if a records parent-id changed, e.g. if a record is moved within a hierarchical tree.</td>
 		</tr>
+		
+		
+		
+		
 		<tr>
 			<td rowspan="3" style="border-top: 1px solid #ccc; border-right: 1px solid #ccc;vertical-align: top;">core.system.recorddeleted</td>
 			<td style="border-top: 1px solid #ccc;">Since</td>

@@ -127,7 +127,7 @@ abstract class class_root {
     private $intLmTime = 0;
 
     /**
-     * The id of the user locking the current record, emtpy otherwise
+     * The id of the user locking the current record, empty otherwise
      * @var string
      * @tableColumn system.system_lock_id
      */
@@ -149,6 +149,12 @@ abstract class class_root {
      * @tableColumn system.system_status
      */
     private $intRecordStatus = 1;
+
+    /**
+     * The records previous status, used to trigger status changed events
+     * @var int
+     */
+    private $intOldRecordStatus = 1;
 
     /**
      * Indicates whether the object is deleted, or not
@@ -340,6 +346,7 @@ abstract class class_root {
                     $this->intRecordDeleted = $arrRow["system_deleted"];
 
                 $this->strOldPrevId = $this->strPrevId;
+                $this->intOldRecordStatus = $this->intRecordStatus;
 
                 if($arrRow["system_date_start"] > 0)
                     $this->objStartDate = new class_date($arrRow["system_date_start"]);
@@ -888,8 +895,12 @@ abstract class class_root {
         if($this->strOldPrevId != $this->strPrevId) {
             $this->objSortManager->fixSortOnPrevIdChange($this->strOldPrevId, $this->strPrevId);
         }
+        if($this->intOldRecordStatus != $this->intRecordStatus && $this->intOldRecordStatus != -1) {
+            class_core_eventdispatcher::getInstance()->notifyGenericListeners(class_system_eventidentifier::EVENT_SYSTEM_STATUSCHANGED, array($this->getSystemid(), $this, $this->intOldRecordStatus, $this->intRecordStatus));
+        }
 
         $this->strOldPrevId = $this->strPrevId;
+        $this->intOldRecordStatus = $this->intRecordStatus;
 
         return $bitReturn;
     }
@@ -1011,8 +1022,9 @@ abstract class class_root {
         class_logger::getInstance()->addLogRow("new system-record created: ".$strSystemId ." (".$strComment.")", class_logger::$levelInfo);
         $this->objDB->flushQueryCache();
         $this->internalInit();
-        //reset the old previd since we're having a new record
+        //reset the old values since we're having a new record
         $this->strOldPrevId = -1;
+        $this->intOldRecordStatus = -1;
 
         return $strSystemId;
 
