@@ -739,6 +739,53 @@ KAJONA.admin.ajax = {
  * Form management
  */
 KAJONA.admin.forms = {};
+
+KAJONA.admin.forms.initForm = function(strFormid) {
+    $('#'+strFormid+' input , #'+strFormid+' select , #'+strFormid+' textarea ').each(function() {
+        $(this).attr("data-kajona-initval", $(this).val());
+    });
+};
+
+KAJONA.admin.forms.changeLabel = '';
+KAJONA.admin.forms.changeConfirmation = '';
+
+/**
+ * Adds an onchange listener to the formentry with the passed ID. If the value is changed, a warning is rendered below the field.
+ * In addition, a special confirmation may be required to change the field to the new value.
+ *
+ * @param strElementId
+ * @param bitConfirmChange
+ */
+KAJONA.admin.forms.addChangelistener = function(strElementId, bitConfirmChange) {
+
+    $('#'+strElementId).on('change', function(objEvent) {
+        if($(this).val() != $(this).attr("data-kajona-initval")) {
+            if($(this).closest(".form-group").find("div.changeHint").length == 0) {
+
+                if(bitConfirmChange && bitConfirmChange == true) {
+                    var bitResponse = confirm(KAJONA.admin.forms.changeConfirmation);
+                    if(!bitResponse) {
+                        $(this).val($(this).attr("data-kajona-initval"));
+                        objEvent.preventDefault();
+                        return;
+                    }
+                }
+
+                $(this).closest(".form-group").addClass("has-warning");
+                $(this).closest(".form-group").children("div:first").append($('<div class="changeHint text-warning"><span class="glyphicon glyphicon-warning-sign"></span> ' + KAJONA.admin.forms.changeLabel + '</div>'));
+            }
+        }
+        else {
+            if($(this).closest(".form-group").find("div.changeHint"))
+                $(this).closest(".form-group").find("div.changeHint").remove();
+
+            $(this).closest(".form-group").removeClass("has-warning");
+        }
+    });
+
+};
+
+
 KAJONA.admin.forms.renderMandatoryFields = function(arrFields) {
 
     for(var i=0; i<arrFields.length; i++) {
@@ -755,7 +802,6 @@ KAJONA.admin.forms.renderMandatoryFields = function(arrFields) {
                 $objElement.addClass("mandatoryFormElement");
         }
 
-        //closest(".control-group").addClass("error")
     }
 };
 
@@ -764,7 +810,7 @@ KAJONA.admin.forms.renderMissingMandatoryFields = function(arrFields) {
         var strFieldName = strField[0];
         if($("#"+strFieldName) && !$("#"+strFieldName).hasClass('inputWysiwyg')) {
             $("#"+strFieldName).closest(".form-group").addClass("has-error has-feedback");
-			objNode = $('<span class="glyphicon glyphicon-warning-sign form-control-feedback" aria-hidden="true"></span>');
+			var objNode = $('<span class="glyphicon glyphicon-warning-sign form-control-feedback" aria-hidden="true"></span>');
             $("#"+strFieldName).closest("div").append(objNode);
         }
     });

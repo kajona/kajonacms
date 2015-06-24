@@ -337,6 +337,7 @@ To avoid side-effects, no line-break in this case -> not needed by default, but 
 
 <form_start>
 <form name="%%name%%" id="%%name%%" method="post" action="%%action%%" enctype="%%enctype%%" onsubmit="%%onsubmit%%" class="form-horizontal">
+    <script type="text/javascript">$(function() { KAJONA.admin.forms.initForm('%%name%%');  KAJONA.admin.forms.changeLabel = '[lang,commons_form_entry_changed,system]';   KAJONA.admin.forms.changeConfirmation = '[lang,commons_form_entry_changed_conf,system]'; } );</script>
 </form_start>
 
 <form_close>
