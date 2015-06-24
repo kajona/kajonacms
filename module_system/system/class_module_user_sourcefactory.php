@@ -89,7 +89,7 @@ class class_module_user_sourcefactory {
 
         //validate if a group with the given name is available
 
-        if(version_compare(class_module_system_module::getModuleByName("user")->getStrVersion(), "4.5", ">="))
+        if(class_module_system_module::getModuleByName("user") != null && version_compare(class_module_system_module::getModuleByName("user")->getStrVersion(), "4.5", ">="))
             $strQuery = "SELECT user_id FROM " . _dbprefix_ . "user where user_username = ? AND (user_deleted = 0 OR user_deleted IS NULL)";
         else
             $strQuery = "SELECT user_id FROM " . _dbprefix_ . "user where user_username = ?";
