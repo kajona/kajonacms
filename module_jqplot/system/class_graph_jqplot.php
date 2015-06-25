@@ -248,9 +248,6 @@ class class_graph_jqplot implements interface_graph {
         if($this->containsChartType(class_graph_jqplot_charttype::PIE)) {
             throw new class_exception("Chart already contains a Pie chart. Combinations of pie charts and stacked bar charts are not allowed", class_exception::$level_ERROR);
         }
-        if($this->containsChartType(class_graph_jqplot_charttype::LINE)) {
-            throw new class_exception("Chart already contains a line chart. Combinations of line charts and stacked bar charts are not allowed", class_exception::$level_ERROR);
-        }
         if($this->containsChartType(class_graph_jqplot_charttype::BAR)) {
             throw new class_exception("Chart already contains a bar chart. Combinations of bar charts and stacked bar charts are not allowed", class_exception::$level_ERROR);
         }
@@ -304,9 +301,6 @@ class class_graph_jqplot implements interface_graph {
 
         if($this->containsChartType(class_graph_jqplot_charttype::PIE)) {
             throw new class_exception("Chart already contains a pie chart. Combinations of pie charts and line charts are not allowed", class_exception::$level_ERROR);
-        }
-        if($this->containsChartType(class_graph_jqplot_charttype::STACKEDBAR)) {
-            throw new class_exception("Chart already contains a stacked bar chart. Combinations of stacked bar charts and line charts are not allowed", class_exception::$level_ERROR);
         }
 
         $objSeriesData = new class_graph_jqplot_seriesdata(class_graph_jqplot_charttype::LINE, count($this->arrSeriesData), $this->arrOptions);
@@ -558,6 +552,17 @@ class class_graph_jqplot implements interface_graph {
                     $arrSeriesOptions["rendererOptions"]["barMargin"] = 4;
                     $objSeriesData->setArrSeriesOptions($arrSeriesOptions);
                 }
+            }
+        }
+
+        //4. If stacked bar chart and line chart disable stack for the line charts
+        $arrSeriesStackedBarCharts = $this->getSeriesObjectsByChartType(array(class_graph_jqplot_charttype::STACKEDBAR));
+        $arrSeriesLineCharts = $this->getSeriesObjectsByChartType(array(class_graph_jqplot_charttype::LINE));
+        if(count($arrSeriesStackedBarCharts) > 0 && count($arrSeriesLineCharts) > 0) {
+            foreach($arrSeriesLineCharts as $objSeriesData) {
+                $arrSeriesOptions = $objSeriesData->getArrSeriesOptions();
+                $arrSeriesOptions["disableStack"] = true;
+                $objSeriesData->setArrSeriesOptions($arrSeriesOptions);
             }
         }
     }

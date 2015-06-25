@@ -132,6 +132,21 @@ class class_test_charts_jqPlotTest extends class_testbase  {
         echo $objGraph->renderGraph();
 
         $objGraph = class_graph_factory::getGraphInstance(class_graph_factory::$STR_TYPE_JQPLOT);
+        $objGraph->setStrGraphTitle("A Mixed stacked Chart");
+        $objGraph->setStrXAxisTitle("My new X-Axis");
+        $objGraph->setStrYAxisTitle("My new Y-Axis");
+        $objGraph->addStackedBarChartSet(array(4, 2, 3, 4), "serie 3");
+        $objGraph->addStackedBarChartSet(array(1, 3, 3, 4), "serie 4");
+        $objGraph->addStackedBarChartSet(array(1, 2, 2, 3), "serie 5");
+        $objGraph->addStackedBarChartSet(array(2, 2, 3, 1), "serie 6");
+        $objGraph->addStackedBarChartSet(array(1, 2, 3, 4), "serie 7");
+        $objGraph->addLinePlot(array(8, 1, 2, 4), "serie 8");
+        $objGraph->addLinePlot(array(1, 2, 3, 4), "serie 9");
+        $objGraph->setBitRenderLegend(true);
+        $objGraph->setStrFont("open sans");
+        echo $objGraph->renderGraph();
+
+        $objGraph = class_graph_factory::getGraphInstance(class_graph_factory::$STR_TYPE_JQPLOT);
         $objGraph->setStrGraphTitle("A Bar Chart");
         $objGraph->setStrXAxisTitle("My new X-Axis");
         $objGraph->setStrYAxisTitle("My new Y-Axis");
