@@ -356,7 +356,7 @@ class class_module_system_admin extends class_admin_simple implements interface_
 
         //include the list of possible tasks
         //TODO: move to common helper, see class_module_system_admin_xml. additionally use the common plugin mechanism
-        $arrFiles = class_resourceloader::getInstance()->getFolderContent("/admin/systemtasks/", array(".php"), false, function(&$strOneFile) {
+        $arrFiles = class_resourceloader::getInstance()->getFolderContent("/admin/systemtasks/", array(".php"), false, function($strOneFile) {
             if($strOneFile == "class_systemtask_base.php" || $strOneFile == "interface_admin_systemtask.php")
                 return false;
 
@@ -367,6 +367,10 @@ class class_module_system_admin extends class_admin_simple implements interface_
                 return true;
             else
                 return false;
+        },
+        function(&$strOneFile) {
+            $strOneFile = uniSubstr($strOneFile, 0, -4);
+            $strOneFile = new $strOneFile();
         });
 
         //react on special task-commands?
