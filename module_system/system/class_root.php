@@ -645,12 +645,21 @@ abstract class class_root {
         //new comment?
         $this->setStrRecordComment($this->getStrDisplayName());
 
+        //Keep old and new status here, status changed event is being fired after record is completely updated (so after updateStateToDb())
+        $intOldStatus = $this->intOldRecordStatus;
+        $intNewStatus = $this->intRecordStatus;
+
         //save back to the database
         $bitCommit = $bitCommit && $this->updateSystemrecord();
 
         //update ourselves to the database
         if($bitCommit && !$this->updateStateToDb())
             $bitCommit = false;
+
+        //now fire the status changed event
+        if($intOldStatus != $intNewStatus && $intOldStatus != -1) {
+            class_core_eventdispatcher::getInstance()->notifyGenericListeners(class_system_eventidentifier::EVENT_SYSTEM_STATUSCHANGED, array($this->getSystemid(), $this, $intOldStatus, $intNewStatus));
+        }
 
         if($bitCommit) {
             $this->objDB->transactionCommit();
@@ -894,9 +903,6 @@ abstract class class_root {
         }
         if($this->strOldPrevId != $this->strPrevId) {
             $this->objSortManager->fixSortOnPrevIdChange($this->strOldPrevId, $this->strPrevId);
-        }
-        if($this->intOldRecordStatus != $this->intRecordStatus && $this->intOldRecordStatus != -1) {
-            class_core_eventdispatcher::getInstance()->notifyGenericListeners(class_system_eventidentifier::EVENT_SYSTEM_STATUSCHANGED, array($this->getSystemid(), $this, $this->intOldRecordStatus, $this->intRecordStatus));
         }
 
         $this->strOldPrevId = $this->strPrevId;
