@@ -56,6 +56,9 @@ class class_systemtask_pageexport extends class_systemtask_base implements inter
      */
     public function executeTask() {
 
+        if(!class_module_system_module::getModuleByName("pages")->rightEdit())
+            return $this->getLang("commons_error_permissions");
+
         //load the page itself
         $objPage = class_module_pages_page::getPageByName($this->getParam("pageExport"));
         if($objPage !== null) {

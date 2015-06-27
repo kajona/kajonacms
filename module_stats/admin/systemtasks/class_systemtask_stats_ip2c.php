@@ -54,6 +54,10 @@ class class_systemtask_stats_ip2c extends class_systemtask_base implements inter
      * @return string
      */
     public function executeTask() {
+
+        if(!class_module_system_module::getModuleByName("stats")->rightEdit())
+            return $this->getLang("commons_error_permissions");
+
         $strReturn = "";
 
         $objWorker = new class_module_stats_worker();

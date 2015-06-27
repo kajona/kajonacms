@@ -44,6 +44,9 @@ class class_systemtask_dbimport extends class_systemtask_base implements interfa
      * @return string
      */
     public function executeTask() {
+        if(!class_module_system_module::getModuleByName("system")->rightRight2())
+            return $this->getLang("commons_error_permissions");
+
         if(class_carrier::getInstance()->getObjDB()->importDb($this->getParam("dbImportFile")))
             return $this->objToolkit->getTextRow($this->getLang("systemtask_dbimport_success"));
         else

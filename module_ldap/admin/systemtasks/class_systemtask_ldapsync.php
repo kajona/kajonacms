@@ -55,6 +55,9 @@ class class_systemtask_ldapsync extends class_systemtask_base implements interfa
      */
     public function executeTask() {
 
+        if(!class_module_system_module::getModuleByName("ldap")->rightEdit())
+            return $this->getLang("commons_error_permissions");
+
         $objUsersources = new class_usersources_source_ldap();
         $bitSync = $objUsersources->updateUserData();
         
