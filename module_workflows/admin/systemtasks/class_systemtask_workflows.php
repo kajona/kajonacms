@@ -55,6 +55,10 @@ class class_systemtask_workflows extends class_systemtask_base implements interf
      */
     public function executeTask() {
 
+        if(!class_module_system_module::getModuleByName("workflows")->rightRight1())
+            return $this->getLang("commons_error_permissions");
+
+
         $objWorkflowController = new class_workflows_controller();
 
         $objWorkflowController->scheduleWorkflows();
