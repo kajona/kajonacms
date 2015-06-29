@@ -56,6 +56,9 @@ class class_systemtask_pageimport extends class_systemtask_base implements inter
      */
     public function executeTask() {
 
+        if(!class_module_system_module::getModuleByName("pages")->rightEdit())
+            return $this->getLang("commons_error_permissions");
+
         $strReturn = "";
 
         $objFilesystem = new class_filesystem();

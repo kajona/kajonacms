@@ -52,6 +52,10 @@ class class_systemtask_stats_hostnamelookup extends class_systemtask_base implem
      * @return string
      */
     public function executeTask() {
+
+        if(!class_module_system_module::getModuleByName("stats")->rightEdit())
+            return $this->getLang("commons_error_permissions");
+
         $strMessage = "";
         $objWorker = new class_module_stats_worker("");
 

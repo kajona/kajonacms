@@ -53,6 +53,10 @@ class class_systemtask_navigationcheck extends class_systemtask_base implements 
      * @return string
      */
     public function executeTask() {
+
+        if(!class_module_system_module::getModuleByName("navigation")->rightEdit())
+            return $this->getLang("commons_error_permissions");
+
         $strReturn = "";
 
         //load all navigation points, tree by tree

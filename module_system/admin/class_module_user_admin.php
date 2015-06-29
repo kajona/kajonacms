@@ -399,7 +399,7 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
                 foreach($arrSubsystems as $strOneName) {
                     $objConcreteSubsystem = $objUsersources->getUsersource($strOneName);
                     if($objConcreteSubsystem->getCreationOfUsersAllowed()) {
-                        $arrDD[$strOneName] = $strOneName;
+                        $arrDD[$strOneName] = $objConcreteSubsystem->getStrReadableName();
                     }
                 }
 
@@ -412,7 +412,8 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
                     return $strReturn;
                 }
                 else {
-                    $this->setParam("usersource", array_pop($arrDD));
+                    $arrKeys = array_keys($arrDD);
+                    $this->setParam("usersource", array_pop($arrKeys));
                 }
 
             }
@@ -587,6 +588,7 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
 
         $objForm->addField(new class_formentry_hidden("", "mode"))->setStrValue($strMode);
 
+        $objUser->updateAdminForm($objForm);
         return $objForm;
     }
 
@@ -773,7 +775,7 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
                 foreach($arrSubsystems as $strOneName) {
                     $objConcreteSubsystem = $objUsersources->getUsersource($strOneName);
                     if($objConcreteSubsystem->getCreationOfGroupsAllowed()) {
-                        $arrDD[$strOneName] = $strOneName;
+                        $arrDD[$strOneName] = $objConcreteSubsystem->getStrReadableName();
                     }
                 }
 
@@ -786,7 +788,8 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
                     return $strReturn;
                 }
                 else {
-                    $this->setParam("usersource", array_pop($arrDD));
+                    $arrKeys = array_keys($arrDD);
+                    $this->setParam("usersource", array_pop($arrKeys));
                 }
             }
 
@@ -844,6 +847,7 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
 
         }
 
+        $objGroup->updateAdminForm($objForm);
         return $objForm;
     }
 

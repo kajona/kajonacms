@@ -86,9 +86,12 @@ class class_module_user_user extends class_model implements interface_model, int
      * @return string
      */
     public function getStrLongDescription() {
-        $objUsersources = new class_module_user_sourcefactory();
-        if(count($objUsersources->getArrUsersources()) > 1) {
-            return $this->getLang("user_list_source", "user")." ".$this->getStrSubsystem();
+        if($this->objSession->isSuperAdmin()) {
+            $objUsersources = new class_module_user_sourcefactory();
+            if(count($objUsersources->getArrUsersources()) > 1) {
+                $objSubsystem = new class_module_user_sourcefactory();
+                return $this->getLang("user_list_source", "user")." ".$objSubsystem->getUsersource($this->getStrSubsystem())->getStrReadableName();
+            }
         }
         return "";
     }

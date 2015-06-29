@@ -28,6 +28,11 @@ class class_usersources_group_ldap extends class_model implements interface_mode
      */
     private $strDn = "";
 
+    /**
+     * @var int
+     * @fieldType dropdown
+     */
+    private $intCfg = 0;
 
     /**
      * Returns the name to be used when rendering the current object, e.g. in admin-lists.
@@ -48,6 +53,7 @@ class class_usersources_group_ldap extends class_model implements interface_mode
 
         if(count($arrRow) > 0) {
             $this->setStrDn($arrRow["group_ldap_dn"]);
+            $this->setIntCfg($arrRow["group_ldap_cfg"]);
         }
     }
 
@@ -66,16 +72,16 @@ class class_usersources_group_ldap extends class_model implements interface_mode
             $strGrId = generateSystemid();
             $this->setSystemid($strGrId);
             $strQuery = "INSERT INTO " . _dbprefix_ . "user_group_ldap
-                          (group_ldap_id, group_ldap_dn) VALUES
-                          (?, ?)";
-            return $this->objDB->_pQuery($strQuery, array($strGrId, $this->getStrDn()));
+                          (group_ldap_id, group_ldap_dn, group_ldap_cfg) VALUES
+                          (?, ?, ?)";
+            return $this->objDB->_pQuery($strQuery, array($strGrId, $this->getStrDn(), $this->getIntCfg()));
         }
         else {
             class_logger::getInstance(class_logger::USERSOURCES)->addLogRow("updated ldap group " . $this->getSystemid(), class_logger::$levelInfo);
             $strQuery = "UPDATE " . _dbprefix_ . "user_group_ldap
-                            SET group_ldap_dn=?
+                            SET group_ldap_dn=?, group_ldap_cfg=?
                           WHERE group_ldap_id=?";
-            return $this->objDB->_pQuery($strQuery, array($this->getStrDn(), $this->getSystemid()));
+            return $this->objDB->_pQuery($strQuery, array($this->getStrDn(), $this->getIntCfg(), $this->getSystemid()));
         }
     }
 
@@ -119,7 +125,7 @@ class class_usersources_group_ldap extends class_model implements interface_mode
 
         $arrReturn = array();
         //load all members from ldap
-        $objLdap = class_ldap::getInstance();
+        $objLdap = class_ldap::getInstance($this->intCfg);
         $arrMembers = $objLdap->getMembersOfGroup($this->getStrDn());
         $objSource = new class_usersources_source_ldap();
 
@@ -163,7 +169,7 @@ class class_usersources_group_ldap extends class_model implements interface_mode
      * @return int
      */
     public function getNumberOfMembers() {
-        $objLdap = class_ldap::getInstance();
+        $objLdap = class_ldap::getInstance($this->intCfg);
         try {
             return $objLdap->getNumberOfGroupMembers($this->getStrDn());
         }
@@ -216,6 +222,20 @@ class class_usersources_group_ldap extends class_model implements interface_mode
 
 
     /**
+     * Hook to update the admin-form when editing / creating a single group
+     * @param class_admin_formgenerator $objForm
+     *
+     * @return mixed
+     */
+    public function updateAdminForm(class_admin_formgenerator $objForm) {
+        $arrDD = array();
+        foreach(class_ldap::getAllInstances() as $objOneInstance)
+            $arrDD[$objOneInstance->getIntCfgNr()] = $objOneInstance->getStrCfgName();
+
+        $objForm->getField("cfg")->setArrKeyValues($arrDD);
+    }
+
+    /**
      * Removes a member from the current group - if possible.
      *
      * @param interface_usersources_user $objUser
@@ -233,5 +253,20 @@ class class_usersources_group_ldap extends class_model implements interface_mode
     public function setStrDn($strDn) {
         $this->strDn = $strDn;
     }
+
+    /**
+     * @return int
+     */
+    public function getIntCfg() {
+        return $this->intCfg;
+    }
+
+    /**
+     * @param int $intCfg
+     */
+    public function setIntCfg($intCfg) {
+        $this->intCfg = $intCfg;
+    }
+
 
 }

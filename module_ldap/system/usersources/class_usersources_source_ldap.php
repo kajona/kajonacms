@@ -9,7 +9,8 @@
 
 /**
  * Global entry into the ldap-subsystem.
- * Mappes all calls and redirects them to the directory-services.
+ * Mapps all calls and redirects them to the directory-services.
+ * Since 4.8, the class is able to handle various ldap connections
  *
  * @author sidler@mulchprod.de
  * @since 3.4.1
@@ -19,14 +20,20 @@ class class_usersources_source_ldap implements interface_usersources_usersource 
 
     private $objDB;
 
-    private $objLdap;
-
     /**
      * Default constructor
      */
     public function __construct() {
         $this->objDB = class_carrier::getInstance()->getObjDB();
-        $this->objLdap = class_ldap::getInstance();
+    }
+
+    /**
+     * Returns a readable name of the source, e.g. "Kajona" or "LDAP Company 1"
+     *
+     * @return mixed
+     */
+    public function getStrReadableName() {
+        return class_carrier::getInstance()->getObjLang()->getLang("usersource_ldap_name", "ldap");
     }
 
     /**
@@ -40,25 +47,33 @@ class class_usersources_source_ldap implements interface_usersources_usersource 
      */
     public function authenticateUser(interface_usersources_user $objUser, $strPassword) {
         if($objUser instanceof class_usersources_user_ldap) {
-            $bitReturn = $this->objLdap->authenticateUser($objUser->getStrDN(), $strPassword);
+            foreach(class_ldap::getAllInstances() as $objSingleLdap) {
 
-            //synchronize the local data with the ldap-data
-            if($bitReturn === true) {
-                $arrSingleUser = $this->objLdap->getUserDetailsByDN($objUser->getStrDN());
+                if($objUser->getIntCfg() != $objSingleLdap->getIntCfgNr())
+                    continue;
 
-                if($arrSingleUser !== false) {
-                    if($objUser instanceof class_usersources_user_ldap) {
-                        $objUser->setStrFamilyname($arrSingleUser["familyname"]);
-                        $objUser->setStrGivenname($arrSingleUser["givenname"]);
-                        $objUser->setStrEmail($arrSingleUser["mail"]);
-                        $objUser->updateObjectToDb();
-                        $this->objDB->flushQueryCache();
+                $bitReturn = $objSingleLdap->authenticateUser($objUser->getStrDN(), $strPassword);
+
+                //synchronize the local data with the ldap-data
+                if($bitReturn === true) {
+                    $arrSingleUser = $objSingleLdap->getUserDetailsByDN($objUser->getStrDN());
+
+                    if($arrSingleUser !== false) {
+                        if($objUser instanceof class_usersources_user_ldap) {
+                            $objUser->setStrFamilyname($arrSingleUser["familyname"]);
+                            $objUser->setStrGivenname($arrSingleUser["givenname"]);
+                            $objUser->setStrEmail($arrSingleUser["mail"]);
+                            $objUser->setIntCfg($objSingleLdap->getIntCfgNr());
+                            $objUser->updateObjectToDb();
+                            $this->objDB->flushQueryCache();
+                        }
+
                     }
 
+                    return $bitReturn;
                 }
-            }
 
-            return $bitReturn;
+            }
         }
 
         return false;
@@ -93,7 +108,7 @@ class class_usersources_source_ldap implements interface_usersources_usersource 
      * @return interface_usersources_group or null
      */
     public function getGroupById($strId) {
-        $strQuery = "SELECT group_id FROM "._dbprefix_."user_group WHERE group_id = ?";
+        $strQuery = "SELECT group_id FROM "._dbprefix_."user_group WHERE group_id = ? AND group_subsystem = 'ldap'";
 
         $arrIds = $this->objDB->getPRow($strQuery, array($strId));
         if(isset($arrIds["group_id"]) && validateSystemid($arrIds["group_id"])) {
@@ -178,29 +193,33 @@ class class_usersources_source_ldap implements interface_usersources_usersource 
         }
 
         //user not found. search for a matching user in the ldap and add a possible match to the system
-        $arrDetails = $this->objLdap->getUserdetailsByName($strUsername);
-        if($arrDetails !== false && count($arrDetails) == 1) {
-            $arrSingleUser = $arrDetails[0];
-            $objUser = new class_module_user_user();
-            $objUser->setStrUsername($strUsername);
-            $objUser->setStrSubsystem("ldap");
-            $objUser->setIntActive(1);
-            $objUser->setIntAdmin(1);
-            $objUser->updateObjectToDb();
+        foreach(class_ldap::getAllInstances() as $objSingleLdap) {
+            $arrDetails = $objSingleLdap->getUserdetailsByName($strUsername);
 
-            /** @var $objSourceUser class_usersources_user_ldap */
-            $objSourceUser = $objUser->getObjSourceUser();
-            if($objSourceUser instanceof class_usersources_user_ldap) {
-                $objSourceUser->setStrDN($arrSingleUser["identifier"]);
-                $objSourceUser->setStrFamilyname($arrSingleUser["familyname"]);
-                $objSourceUser->setStrGivenname($arrSingleUser["givenname"]);
-                $objSourceUser->setStrEmail($arrSingleUser["mail"]);
-                $objSourceUser->updateObjectToDb();
+            if($arrDetails !== false && count($arrDetails) == 1) {
+                $arrSingleUser = $arrDetails[0];
+                $objUser = new class_module_user_user();
+                $objUser->setStrUsername($strUsername);
+                $objUser->setStrSubsystem("ldap");
+                $objUser->setIntActive(1);
+                $objUser->setIntAdmin(1);
+                $objUser->updateObjectToDb();
 
-                $this->objDB->flushQueryCache();
+                /** @var $objSourceUser class_usersources_user_ldap */
+                $objSourceUser = $objUser->getObjSourceUser();
+                if($objSourceUser instanceof class_usersources_user_ldap) {
+                    $objSourceUser->setStrDN($arrSingleUser["identifier"]);
+                    $objSourceUser->setStrFamilyname($arrSingleUser["familyname"]);
+                    $objSourceUser->setStrGivenname($arrSingleUser["givenname"]);
+                    $objSourceUser->setStrEmail($arrSingleUser["mail"]);
+                    $objSourceUser->setIntCfg($objSingleLdap->getIntCfgNr());
+                    $objSourceUser->updateObjectToDb();
+
+                    $this->objDB->flushQueryCache();
+                }
+
+                return $objUser;
             }
-
-            return $objUser;
         }
 
         return null;

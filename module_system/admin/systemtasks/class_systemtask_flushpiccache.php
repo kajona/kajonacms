@@ -45,6 +45,10 @@ class class_systemtask_flushpiccache extends class_systemtask_base implements in
      * @return string
      */
     public function executeTask() {
+
+        if(!class_module_system_module::getModuleByName("system")->rightRight2())
+            return $this->getLang("commons_error_permissions");
+
     	$strReturn = "";
     	//fetch the number of images to be deleted
     	$objFilesystem = new class_filesystem();

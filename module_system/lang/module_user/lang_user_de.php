@@ -163,3 +163,4 @@ $lang["user_usersource"]                 = "Benutzerquelle";
 $lang["user_zugehoerigkeit"]             = "Gruppenzugehörigkeiten";
 $lang["user_items_per_page"]             = "Anzahl Datensätze pro Seite";
 $lang["userlist_filter"]                 = "Filter anwenden";
+$lang["usersource_kajona_name"]          = "Kajona intern";

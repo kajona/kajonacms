@@ -160,7 +160,7 @@ class class_module_system_admin_xml extends class_admin_controller implements in
             //include the list of possible tasks
 
             //TODO: move to common helper, see class_module_system_admin
-            $arrFiles = class_resourceloader::getInstance()->getFolderContent("/admin/systemtasks/", array(".php"), false, function(&$strOneFile) {
+            $arrFiles = class_resourceloader::getInstance()->getFolderContent("/admin/systemtasks/", array(".php"), false, function($strOneFile) {
                 if($strOneFile != "class_systemtask_base.php" && $strOneFile != "interface_admin_systemtask.php") {
                     $strOneFile = uniSubstr($strOneFile, 0, -4);
                     $strOneFile = new $strOneFile();
@@ -170,6 +170,11 @@ class class_module_system_admin_xml extends class_admin_controller implements in
                 }
 
                 return false;
+            }
+            ,
+            function(&$strOneFile) {
+                $strOneFile = uniSubstr($strOneFile, 0, -4);
+                $strOneFile = new $strOneFile();
             });
 
             //search for the matching task

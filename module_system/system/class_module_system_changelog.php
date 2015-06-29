@@ -888,18 +888,21 @@ class class_module_system_changelog {
         if(self::$arrCachedProviders != null)
             return self::$arrCachedProviders;
 
-        $arrReturn = class_resourceloader::getInstance()->getFolderContent("/system", array(".php"), false, function(&$strOneFile) {
+        $arrReturn = class_resourceloader::getInstance()->getFolderContent("/system", array(".php"), false, function($strOneFile) {
             if(uniStrpos($strOneFile, "class_changelog_provider") === false)
                 return false;
 
             $objReflection = new ReflectionClass(uniSubstr($strOneFile, 0, -4));
             if($objReflection->implementsInterface("interface_changelog_provider")) {
-                $strOneFile = $objReflection->newInstance();
                 return true;
             }
 
             return false;
 
+        },
+        function(&$strOneFile) {
+            $objReflection = new ReflectionClass(uniSubstr($strOneFile, 0, -4));
+            $strOneFile = $objReflection->newInstance();
         });
 
         self::$arrCachedProviders = $arrReturn;

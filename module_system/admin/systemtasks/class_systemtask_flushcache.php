@@ -45,6 +45,9 @@ class class_systemtask_flushcache extends class_systemtask_base implements inter
      */
     public function executeTask() {
 
+        if(!class_module_system_module::getModuleByName("system")->rightRight2())
+            return $this->getLang("commons_error_permissions");
+
         //increase the cachebuster, so browsers are forced to reload JS and CSS files
         $objCachebuster = class_module_system_setting::getConfigByName("_system_browser_cachebuster_");
         $objCachebuster->setStrValue((int)$objCachebuster->getStrValue() + 1);

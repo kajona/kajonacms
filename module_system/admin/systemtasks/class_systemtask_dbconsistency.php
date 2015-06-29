@@ -45,6 +45,10 @@ class class_systemtask_dbconsistency extends class_systemtask_base implements in
      * @return string
      */
     public function executeTask() {
+
+        if(!class_module_system_module::getModuleByName("system")->rightRight2())
+            return $this->getLang("commons_error_permissions");
+
     	$intI = 0;
     	$strReturn = "";
         $objWorker = new class_module_system_worker();

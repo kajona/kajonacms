@@ -52,6 +52,10 @@ class class_systemtask_stats_browscapupdate extends class_systemtask_base implem
      * @return string
      */
     public function executeTask() {
+
+        if(!class_module_system_module::getModuleByName("stats")->rightEdit())
+            return $this->getLang("commons_error_permissions");
+
         $objBrowscap = new class_browscap();
         $objBrowscap->updateBrowscap();
 

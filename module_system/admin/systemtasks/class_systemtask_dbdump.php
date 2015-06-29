@@ -49,6 +49,9 @@ class class_systemtask_dbdump extends class_systemtask_base implements interface
      */
     public function executeTask() {
 
+        if(!class_module_system_module::getModuleByName("system")->rightRight2())
+            return $this->getLang("commons_error_permissions");
+
         $arrToExclude = array();
         if($this->getParam("excludeTables") == "1")
             $arrToExclude = $this->arrTablesToExlucde;
