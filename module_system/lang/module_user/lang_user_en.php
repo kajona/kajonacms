@@ -164,3 +164,4 @@ $lang["user_usersource"]                 = "User-Source";
 $lang["user_zugehoerigkeit"]             = "Group assignments";
 $lang["user_items_per_page"]             = "Number of records per page";
 $lang["userlist_filter"]                 = "Apply filter";
+$lang["usersource_kajona_name"]          = "Kajona internal";
