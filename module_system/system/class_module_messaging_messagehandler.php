@@ -17,13 +17,15 @@ class class_module_messaging_messagehandler {
      * @return interface_messageprovider[]
      */
     public function getMessageproviders() {
-        return class_resourceloader::getInstance()->getFolderContent("/system/messageproviders", array(".php"), false, function(&$strOneFile) {
+        return class_resourceloader::getInstance()->getFolderContent("/system/messageproviders", array(".php"), false, function($strOneFile) {
             if(uniStrpos($strOneFile, "interface") !== false)
                 return false;
 
-            $strOneFile = uniSubstr($strOneFile, 0, -4);
-            $strOneFile = new $strOneFile;
             return true;
+        },
+        function(&$strOneFile) {
+            $strOneFile = uniSubstr($strOneFile, 0, -4);
+            $strOneFile = new $strOneFile();
         });
     }
 

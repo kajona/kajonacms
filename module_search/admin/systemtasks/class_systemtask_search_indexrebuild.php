@@ -56,6 +56,9 @@ class class_systemtask_search_indexrebuild extends class_systemtask_base impleme
      */
     public function executeTask() {
 
+        if(!class_module_system_module::getModuleByName("search")->rightEdit())
+            return $this->getLang("commons_error_permissions");
+
         $objWorker = new class_module_search_indexwriter();
 
         if(!class_carrier::getInstance()->getObjSession()->sessionIsset($this->STR_SESSION_KEY)) {

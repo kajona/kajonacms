@@ -37,7 +37,7 @@ class class_systeminfo_time implements interface_systeminfo {
         $arrReturn[] = array($objLang->getLang("time_localsystemtime", "system"),  timeToString(time()));
         date_default_timezone_set("UTC");
         $arrReturn[] = array($objLang->getLang("time_systemtime_UTC", "system"),  date('Y-m-d H:i:s'));
-        $arrReturn[] = array($objLang->getLang("time_systemzone_manual_setting", "system"),  _system_timezone_);
+        $arrReturn[] = array($objLang->getLang("time_systemzone_manual_setting", "system"),  class_module_system_setting::getConfigValue("_system_timezone_"));
 
         date_default_timezone_set($strOldTimezone);
         return $arrReturn;
