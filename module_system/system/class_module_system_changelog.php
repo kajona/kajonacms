@@ -814,6 +814,72 @@ class class_module_system_changelog {
     }
 
     /**
+     * Returns the count of an specific class and property for a given date range in the changelog. Counts optional
+     * only the entries which are available in $arrNewValues
+     *
+     * @param $strClass
+     * @param $strProperty
+     * @param class_date $objDateFrom
+     * @param class_date $objDateTo
+     * @param $arrNewValues
+     * @return int
+     */
+    public static function getCountForDateRange($strClass, $strProperty, class_date $objDateFrom, class_date $objDateTo, array $arrNewValues = null) {
+        $strQuery = "SELECT COUNT(change_id) AS num
+                       FROM "._dbprefix_.self::getTableForClass($strClass)."
+                      WHERE change_class = ?
+                        AND change_property = ?
+                        AND change_date >= ?
+                        AND change_date <= ?";
+
+        $arrParameters = array($strClass, $strProperty);
+        $arrParameters[] = $objDateFrom->getLongTimestamp();
+        $arrParameters[] = $objDateTo->getLongTimestamp();
+
+        if(!empty($arrNewValues)) {
+            if(count($arrNewValues) > 1) {
+                $strQuery.= " AND change_newvalue IN (" . implode(",", array_fill(0, count($arrNewValues), "?")). ")";
+                foreach($arrNewValues as $strValue) {
+                    $arrParameters[] = $strValue;
+                }
+            }
+            else {
+                $strQuery.= " AND change_newvalue = ?";
+                $arrParameters[] = current($arrNewValues);
+            }
+        }
+
+        $arrRow = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, $arrParameters, 0, 1);
+        return isset($arrRow[0]["num"]) ? $arrRow[0]["num"] : 0;
+    }
+
+    /**
+     * Returns the new values for an specific class and property in a given date range. Groups the result by systemid so
+     * that only the latest value is returned (in the given date range)
+     *
+     * @param $strClass
+     * @param $strProperty
+     * @param class_date $objDateFrom
+     * @param class_date $objDateTo
+     * @return array
+     */
+    public static function getNewValuesForDateRange($strClass, $strProperty, class_date $objDateFrom, class_date $objDateTo) {
+
+        $strQuery = "SELECT change_newvalue,
+                            change_systemid
+                       FROM "._dbprefix_.self::getTableForClass($strClass)."
+                      WHERE change_date >= ?
+                        AND change_date <= ?
+                        AND change_class = ?
+                        AND change_property = ?
+                   GROUP BY change_systemid
+                   ORDER BY change_date DESC";
+
+        $arrParameters = array($objDateFrom->getLongTimestamp(), $objDateTo->getLongTimestamp(), $strClass, $strProperty);
+        return class_carrier::getInstance()->getObjDB()->getPArray($strQuery, $arrParameters);
+    }
+
+    /**
      * Returns a list of objects implementing the changelog-provider-interface
      * @return interface_changelog_provider[]
      */
