@@ -25,51 +25,58 @@ class class_admin_helper {
      * @param string $strSourceModule
      *
      * @static
-     * @internal param array $arrModuleActions
      * @return string
      */
     public static function getAdminPathNavi($arrPathEntries, $strSourceModule = "") {
         //modify some of the entries
-        $arrMenuEntries = array();
-        $arrModules = class_module_system_module::getModulesInNaviAsArray();
-        foreach($arrModules as $arrOneModule) {
-            $objModule = class_module_system_module::getModuleByName($arrOneModule["module_name"]);
 
-            if(!$objModule->rightView())
-                continue;
+        $strKey = __CLASS__."getAdminPathNavi".class_module_system_aspect::getCurrentAspectId();
+        $arrMenuEntries = class_carrier::getInstance()->getObjSession()->getSession($strKey);
+        if($arrMenuEntries === false) {
 
-            $arrCurMenuEntry = array(
-                "name" => class_carrier::getInstance()->getObjLang()->getLang("modul_titel", $arrOneModule["module_name"]),
-                "onclick" => "location.href='".class_link::getLinkAdminHref($arrOneModule["module_name"], "", "", false)."'",
-                "link" => "#"
-            );
+            $arrModules = class_module_system_module::getModulesInNaviAsArray();
+            foreach($arrModules as $arrOneModule) {
+                $objModule = class_module_system_module::getModuleBySystemid($arrOneModule["module_id"]);
 
-            //fetch the submenu entries
-            if($objModule != null) {
-                $arrActionMenuEntries = array();
-                $arrModuleActions = self::getModuleActionNaviHelper($objModule);
-                foreach($arrModuleActions as $strOneAction) {
-                    if($strOneAction != "") {
-                        $arrLink = splitUpLink($strOneAction);
-
-                        if($arrLink["name"] != "" && $arrLink["href"] != "")
-                            $arrActionMenuEntries[] = array(
-                                "name" => $arrLink["name"],
-                                "onclick" => "location.href='".$arrLink["href"]."'",
-                                "link" => $arrLink["href"]
-                            );
-
-
-                    }
-                    else if($strOneAction == "") {
-                        $arrActionMenuEntries[] = array(
-                            "name" => ""
-                        );
-                    }
+                if(!$objModule->rightView()) {
+                    continue;
                 }
-                $arrCurMenuEntry["submenu"] = $arrActionMenuEntries;
+
+                $arrCurMenuEntry = array(
+                    "name"    => class_carrier::getInstance()->getObjLang()->getLang("modul_titel", $arrOneModule["module_name"]),
+                    "onclick" => "location.href='".class_link::getLinkAdminHref($arrOneModule["module_name"], "", "", false)."'",
+                    "link"    => "#"
+                );
+
+                //fetch the submenu entries
+                if($objModule != null) {
+                    $arrActionMenuEntries = array();
+                    $arrModuleActions = self::getModuleActionNaviHelper($objModule);
+                    foreach($arrModuleActions as $strOneAction) {
+                        if($strOneAction != "") {
+                            $arrLink = splitUpLink($strOneAction);
+
+                            if($arrLink["name"] != "" && $arrLink["href"] != "") {
+                                $arrActionMenuEntries[] = array(
+                                    "name"    => $arrLink["name"],
+                                    "onclick" => "location.href='".$arrLink["href"]."'",
+                                    "link"    => $arrLink["href"]
+                                );
+                            }
+
+                        }
+                        else if($strOneAction == "") {
+                            $arrActionMenuEntries[] = array(
+                                "name" => ""
+                            );
+                        }
+                    }
+                    $arrCurMenuEntry["submenu"] = $arrActionMenuEntries;
+                }
+                $arrMenuEntries[] = $arrCurMenuEntry;
             }
-            $arrMenuEntries[] = $arrCurMenuEntry;
+
+            class_carrier::getInstance()->getObjSession()->setSession($strKey, $arrMenuEntries);
         }
 
 
@@ -144,8 +151,10 @@ class class_admin_helper {
 
         foreach(class_module_system_module::getModulesInNaviAsArray() as $arrOneModule) {
             $objOneModule = class_module_system_module::getModuleByName($arrOneModule["module_name"]);
-            foreach($arrAspects as $objOneAspect)
+            foreach($arrAspects as $objOneAspect) {
                 class_carrier::getInstance()->getObjSession()->sessionUnset(__CLASS__."adminNaviEntries".$objOneModule->getSystemid().$objOneAspect->getSystemid());
+                class_carrier::getInstance()->getObjSession()->sessionUnset(__CLASS__."getAdminPathNavi".$objOneModule->getSystemid().$objOneAspect->getSystemid());
+            }
         }
 
     }
