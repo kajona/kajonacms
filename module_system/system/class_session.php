@@ -104,7 +104,7 @@ final class class_session {
     public function sessionClose() {
         $this->bitClosed = true;
         session_write_close();
-        if($this->objInternalSession != null && !$this->bitBlockDbUpdate)
+        if($this->objInternalSession != null && !$this->bitBlockDbUpdate && !_autotesting_)
             $this->objInternalSession->updateObjectToDb();
     }
 
