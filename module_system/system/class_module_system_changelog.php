@@ -824,7 +824,7 @@ class class_module_system_changelog {
      * @param $arrNewValues
      * @return int
      */
-    public static function getCountForDateRange($strClass, $strProperty, class_date $objDateFrom, class_date $objDateTo, array $arrNewValues = null) {
+    public static function getCountForDateRange($strClass, $strProperty, class_date $objDateFrom, class_date $objDateTo, array $arrNewValues = null, array $arrAllowedSystemIds = null) {
         $strQuery = "SELECT COUNT(DISTINCT change_systemid) AS num
                        FROM "._dbprefix_.self::getTableForClass($strClass)."
                       WHERE change_class = ?
@@ -838,15 +838,20 @@ class class_module_system_changelog {
 
         if(!empty($arrNewValues)) {
             if(count($arrNewValues) > 1) {
-                $strQuery.= " AND change_newvalue IN (" . implode(",", array_fill(0, count($arrNewValues), "?")). ")";
-                foreach($arrNewValues as $strValue) {
-                    $arrParameters[] = $strValue;
-                }
+                $objRestriction = new class_orm_objectlist_in_restriction("change_newvalue", $arrNewValues);
+                $strQuery.= " " . $objRestriction->getStrWhere();
+                $arrParameters = array_merge($arrParameters, $objRestriction->getArrParams());
             }
             else {
                 $strQuery.= " AND change_newvalue = ?";
                 $arrParameters[] = current($arrNewValues);
             }
+        }
+
+        if($arrAllowedSystemIds !== null) {
+            $objRestriction = new class_orm_objectlist_in_restriction("change_systemid", $arrAllowedSystemIds);
+            $strQuery.= " " . $objRestriction->getStrWhere();
+            $arrParameters = array_merge($arrParameters, $objRestriction->getArrParams());
         }
 
         $arrRow = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, $arrParameters, 0, 1);
@@ -863,7 +868,7 @@ class class_module_system_changelog {
      * @param class_date $objDateTo
      * @return array
      */
-    public static function getNewValuesForDateRange($strClass, $strProperty, class_date $objDateFrom, class_date $objDateTo) {
+    public static function getNewValuesForDateRange($strClass, $strProperty, class_date $objDateFrom, class_date $objDateTo, array $arrAllowedSystemIds = null) {
 
         $strQuery = "SELECT change_newvalue,
                             change_systemid
@@ -871,11 +876,18 @@ class class_module_system_changelog {
                       WHERE change_date >= ?
                         AND change_date <= ?
                         AND change_class = ?
-                        AND change_property = ?
-                   GROUP BY change_systemid
-                   ORDER BY change_date DESC";
+                        AND change_property = ?";
 
         $arrParameters = array($objDateFrom->getLongTimestamp(), $objDateTo->getLongTimestamp(), $strClass, $strProperty);
+
+        if($arrAllowedSystemIds !== null) {
+            $objRestriction = new class_orm_objectlist_in_restriction("change_systemid", $arrAllowedSystemIds);
+            $strQuery.= " " . $objRestriction->getStrWhere();
+            $arrParameters = array_merge($arrParameters, $objRestriction->getArrParams());
+        }
+
+        $strQuery.= "GROUP BY change_systemid ORDER BY change_date DESC";
+
         return class_carrier::getInstance()->getObjDB()->getPArray($strQuery, $arrParameters);
     }
 
