@@ -44,6 +44,38 @@ class test_orm_objectlistInRestrictionTest extends class_testbase  {
         $this->assertEquals(count($arrParams), substr_count($strWhere, "?"));
     }
 
+    public function testQueryDatabase()
+    {
+        $objDB = class_carrier::getInstance()->getObjDB();
+
+        $arrFields = array();
+        $arrFields["temp_systemid"]  = array("char40", true);
+        $arrFields["temp_name"]  = array("char254", true);
+
+        $this->assertTrue($objDB->createTable("temp_propertyintest", $arrFields, array("temp_systemid")), "testDataBase createTable");
+
+        echo "\tcreating 50 records...\n";
+
+        $arrValues = array();
+        for($intI = 1; $intI <= 50; $intI++) {
+            $arrValues[] = array(generateSystemid(), "text " . $intI);
+        }
+
+        $this->assertTrue($objDB->multiInsert("temp_propertyintest", array("temp_systemid", "temp_name"), $arrValues));
+
+        $arrParams = array();
+        for($intI = 1; $intI <= class_orm_objectlist_in_restriction::MAX_IN_VALUES + 10; $intI++) {
+            $arrParams[] = generateSystemid();
+        }
+        $arrParams[] = $arrValues[0][0];
+
+        $objRestriction = new class_orm_objectlist_in_restriction("temp_systemid", $arrParams);
+
+        $arrResult = $objDB->getPArray("SELECT * FROM "._dbprefix_."temp_propertyintest WHERE 1 " . $objRestriction->getStrWhere(), $objRestriction->getArrParams());
+
+        $this->assertEquals("text 1", $arrResult[0]["temp_name"]);
+    }
+
 }
 
 
