@@ -886,7 +886,7 @@ class class_module_system_changelog {
             $arrParameters = array_merge($arrParameters, $objRestriction->getArrParams());
         }
 
-        $strQuery.= "GROUP BY change_systemid ORDER BY change_date DESC";
+        $strQuery.= " GROUP BY change_systemid ORDER BY change_date DESC";
 
         return class_carrier::getInstance()->getObjDB()->getPArray($strQuery, $arrParameters);
     }
