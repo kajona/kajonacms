@@ -35,7 +35,6 @@ class class_lockmanager {
         $this->strSystemid = $strSystemid;
         $this->objSourceObject = $objSourceObject;
 
-        $this->unlockOldRecords();
     }
 
     /**
@@ -146,8 +145,7 @@ class class_lockmanager {
      *
      * @return bool
      */
-    private function unlockOldRecords() {
-
+    public function unlockOldRecords() {
         if(self::$bitUnlockTriggered)
             return true;
 
