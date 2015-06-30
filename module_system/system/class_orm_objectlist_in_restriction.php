@@ -16,6 +16,8 @@
  */
 class class_orm_objectlist_in_restriction extends class_orm_objectlist_restriction{
 
+    const MAX_IN_VALUES = 950;
+
     private $strColumnName = "";
     private $arrParams = array();
     private $strCondition = "";
@@ -66,13 +68,35 @@ class class_orm_objectlist_in_restriction extends class_orm_objectlist_restricti
     protected function getInStatement($strColumnName) {
 
         if(is_array($this->arrParams) && count($this->arrParams) > 0 ) {
+            if(count($this->arrParams) > self::MAX_IN_VALUES) {
+                $intCount = ceil(count($this->arrParams) / self::MAX_IN_VALUES);
+                $arrParts = array();
 
-            $arrParamsPlaceholder = array_map(function ($objParameter) {
-                return "?";
-            }, $this->arrParams);
-            $strPlaceholder = implode(",", $arrParamsPlaceholder);
+                for($intI = 0; $intI < $intCount; $intI++) {
+                    $arrParams = array_slice($this->arrParams, $intI * self::MAX_IN_VALUES, self::MAX_IN_VALUES);
+                    $arrParamsPlaceholder = array_map(function ($objParameter) {
+                        return "?";
+                    }, $arrParams);
+                    $strPlaceholder = implode(",", $arrParamsPlaceholder);
+                    if(!empty($strPlaceholder)) {
+                        $arrParts[] = "{$strColumnName} IN ({$strPlaceholder})";
+                    }
+                }
 
-            return "{$this->strCondition} {$strColumnName} IN ({$strPlaceholder})";
+                if(count($arrParts) > 0) {
+                    return $this->strCondition . " (" . implode(" OR ", $arrParts) . ")";
+                }
+            }
+            else {
+                $arrParamsPlaceholder = array_map(function ($objParameter) {
+                    return "?";
+                }, $this->arrParams);
+                $strPlaceholder = implode(",", $arrParamsPlaceholder);
+
+                if(!empty($strPlaceholder)) {
+                    return "{$this->strCondition} {$strColumnName} IN ({$strPlaceholder})";
+                }
+            }
         }
 
         return "";
