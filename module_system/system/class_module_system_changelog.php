@@ -825,7 +825,7 @@ class class_module_system_changelog {
      * @return int
      */
     public static function getCountForDateRange($strClass, $strProperty, class_date $objDateFrom, class_date $objDateTo, array $arrNewValues = null) {
-        $strQuery = "SELECT COUNT(change_id) AS num
+        $strQuery = "SELECT COUNT(DISTINCT change_systemid) AS num
                        FROM "._dbprefix_.self::getTableForClass($strClass)."
                       WHERE change_class = ?
                         AND change_property = ?
