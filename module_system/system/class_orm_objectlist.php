@@ -73,7 +73,7 @@ class class_orm_objectlist extends class_orm_base {
 
 
     /**
-     * Returns the list of objects matching the current query. The target-tables
+     * Returns the list of object id's matching the current query. The target-tables
      * are set up by analyzing the classes' annotations, the initial sort-order, too.
      * You may influence the ordering and restrictions by adding the relevant restriction / order
      * objects before calling this method.
@@ -83,12 +83,12 @@ class class_orm_objectlist extends class_orm_base {
      * @param null|int $intStart
      * @param null|int $intEnd
      *
-     * @return class_model[]|interface_model[]
+     * @return array of system ids
      *
      * @see class_orm_objectlist_restriction
      * @see class_orm_objectlist_orderby
      */
-    public function getObjectList($strTargetClass, $strPrevid = "", $intStart = null, $intEnd = null) {
+    public function getObjectListIds($strTargetClass, $strPrevid = "", $intStart = null, $intEnd = null) {
 
         $strQuery = "SELECT *
                            ".$this->getQueryBase($strTargetClass)."
@@ -108,18 +108,46 @@ class class_orm_objectlist extends class_orm_base {
             //Caching is only allowed if the fetched and required classes match. Otherwise there could be missing queried tables.
             if($arrOneRow["system_class"] == $strTargetClass) {
                 class_orm_rowcache::addSingleInitRow($arrOneRow);
-                $arrReturn[] = class_objectfactory::getInstance()->getObject($arrOneRow["system_id"]);
+                $arrReturn[] = $arrOneRow["system_id"];
             }
             else {
                 $objReflectionClass = new ReflectionClass($arrOneRow["system_class"]);
                 if($objReflectionClass->isSubclassOf($strTargetClass)) {
                     //returns the instance, but enforces a fresh reload from the database.
                     //this is useful if extending classes need to query additional tables
-                    $arrReturn[] = class_objectfactory::getInstance()->getObject($arrOneRow["system_id"]);
+                    $arrReturn[] = $arrOneRow["system_id"];
                 }
             }
 
 
+        }
+
+        return $arrReturn;
+    }
+
+    /**
+     * Returns the list of objects matching the current query. The target-tables
+     * are set up by analyzing the classes' annotations, the initial sort-order, too.
+     * You may influence the ordering and restrictions by adding the relevant restriction / order
+     * objects before calling this method.
+     *
+     * @param string $strTargetClass
+     * @param string $strPrevid
+     * @param null|int $intStart
+     * @param null|int $intEnd
+     *
+     * @return class_model[]|interface_model[]
+     *
+     * @see class_orm_objectlist_restriction
+     * @see class_orm_objectlist_orderby
+     */
+    public function getObjectList($strTargetClass, $strPrevid = "", $intStart = null, $intEnd = null) {
+        $arrIds = $this->getObjectListIds($strTargetClass, $strPrevid, $intStart, $intEnd);
+
+        $arrReturn = array();
+
+        foreach($arrIds as $strId) {
+            $arrReturn[] = class_objectfactory::getInstance()->getObject($strId);
         }
 
         return $arrReturn;
