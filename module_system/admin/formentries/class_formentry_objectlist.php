@@ -137,21 +137,21 @@ class class_formentry_objectlist extends class_formentry_multiselect {
     {
         $objSourceObject = $this->getObjSourceObject();
         if($objSourceObject == null)
-            return "-";
+            return "";
+
 
         if(!empty($this->arrKeyValues)) {
-            $strHtml = "<ul>";
+            $strHtml = "";
             foreach($this->arrKeyValues as $objObject) {
-                if($objObject instanceof interface_model) {
-                    if($objObject->rightView()) {
-                        $strHtml.= "<li>" . $objObject->getStrDisplayName() . "</li>";
-                    }
+                if($objObject instanceof interface_model && $objObject->rightView()) {
+
+                    $strHtml .= "- ". self::getDisplayName($objObject). "<br/>\n";
                 }
                 else {
                     throw new class_exception("Array must contain objects", class_exception::$level_ERROR);
                 }
             }
-            $strHtml.= "</ul>";
+            $strHtml.= "";
 
             return $strHtml;
         }
@@ -168,5 +168,28 @@ class class_formentry_objectlist extends class_formentry_multiselect {
         }
 
         return array();
+    }
+
+    /**
+     * Renders the display name for the object and, if possible, also the object type
+     *
+     * @param interface_model $objObject
+     *
+     * @return string
+     */
+    public static function getDisplayName(interface_model $objObject) {
+        $strObjectName = "";
+
+        $objClass = new ReflectionClass(get_class($objObject));
+        if ($objClass->implementsInterface('interface_aufgaben_taskable')) {
+            $strObjectName.= "[".$objObject->getStrTaskCategory()."] ";
+        }
+        else if ($objClass->implementsInterface('interface_aufgaben_taskable')) {
+            $strObjectName.= "[" . $objObject->getVersionRecordName() . "] ";
+        }
+
+        $strObjectName.= $objObject->getStrDisplayName();
+
+        return $strObjectName;
     }
 }
