@@ -98,20 +98,6 @@ class class_module_system_module extends class_model implements interface_model,
      */
     private static $arrModuleData = array();
 
-    /**
-     * Constructor to create a valid object
-     *
-     * @param string $strSystemid
-     */
-    public function __construct($strSystemid = "") {
-        //base class
-        parent::__construct($strSystemid);
-
-        if(validateSystemid($strSystemid)) {
-            self::$arrModules[$strSystemid] = $this;
-        }
-    }
-
 
 
     /**
