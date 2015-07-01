@@ -152,6 +152,27 @@ class class_rights {
         $this->flushRightsCache();
         $this->objDb->transactionBegin();
 
+        $objInstance = class_objectfactory::getInstance()->getObject($strSystemid);
+        if($objInstance !== null && $objInstance instanceof interface_versionable) {
+            $arrCurrPermissions = $this->getPlainRightRow($strSystemid);
+            //create a changehistory entry
+            $objLog = new class_module_system_changelog();
+            $arrChanges = array(
+                array("property" => "rightInherit", "oldvalue" => $arrCurrPermissions[self::$STR_RIGHT_INHERIT], "newvalue" => $arrRights[self::$STR_RIGHT_INHERIT]),
+                array("property" => "rightView", "oldvalue" => $arrCurrPermissions[self::$STR_RIGHT_VIEW], "newvalue" => $arrRights[self::$STR_RIGHT_VIEW]),
+                array("property" => "rightEdit", "oldvalue" => $arrCurrPermissions[self::$STR_RIGHT_EDIT], "newvalue" => $arrRights[self::$STR_RIGHT_EDIT]),
+                array("property" => "rightDelete", "oldvalue" => $arrCurrPermissions[self::$STR_RIGHT_DELETE], "newvalue" => $arrRights[self::$STR_RIGHT_DELETE]),
+                array("property" => "rightRight", "oldvalue" => $arrCurrPermissions[self::$STR_RIGHT_RIGHT], "newvalue" => $arrRights[self::$STR_RIGHT_RIGHT]),
+                array("property" => "rightRight1", "oldvalue" => $arrCurrPermissions[self::$STR_RIGHT_RIGHT1], "newvalue" => $arrRights[self::$STR_RIGHT_RIGHT1]),
+                array("property" => "rightRight2", "oldvalue" => $arrCurrPermissions[self::$STR_RIGHT_RIGHT2], "newvalue" => $arrRights[self::$STR_RIGHT_RIGHT2]),
+                array("property" => "rightRight3", "oldvalue" => $arrCurrPermissions[self::$STR_RIGHT_RIGHT3], "newvalue" => $arrRights[self::$STR_RIGHT_RIGHT3]),
+                array("property" => "rightRight4", "oldvalue" => $arrCurrPermissions[self::$STR_RIGHT_RIGHT4], "newvalue" => $arrRights[self::$STR_RIGHT_RIGHT4]),
+                array("property" => "rightRight5", "oldvalue" => $arrCurrPermissions[self::$STR_RIGHT_RIGHT5], "newvalue" => $arrRights[self::$STR_RIGHT_RIGHT5]),
+                array("property" => "rightChangelog", "oldvalue" => $arrCurrPermissions[self::$STR_RIGHT_CHANGELOG], "newvalue" => $arrRights[self::$STR_RIGHT_CHANGELOG])
+            );
+            $objLog->processChanges($objInstance, "editPermissions", $arrChanges);
+        }
+
         $bitSave = $this->setRightsRecursive($arrRights, $strSystemid);
 
         if($bitSave) {
@@ -185,9 +206,9 @@ class class_rights {
         if($strSystemid == "" || $strSystemid == "0")
             $arrRights[self::$STR_RIGHT_INHERIT] = 0;
 
-
-        $objCommon = new class_module_system_common($strSystemid);
-        $strPrevSystemid = $objCommon->getPrevId();
+        //plain row
+        $arrCurrentRow = $this->getPlainRightRow($strSystemid);
+        $strPrevSystemid = $arrCurrentRow["system_prev_id"];
 
 
         //separate the two possible modes: inheritance or no inheritance
@@ -200,7 +221,7 @@ class class_rights {
         $bitReturn &= $this->writeSingleRecord($strSystemid, $arrRights);
 
         //load all child records in order to update them, too.
-        $arrChilds = $objCommon->getChildNodesAsIdArray($strSystemid);
+        $arrChilds = $this->getChildNodes($strSystemid);
         foreach($arrChilds as $strOneChildId) {
             //this check is needed for strange tree-behaviours!!! DO NOT REMOVE!
             if($strOneChildId != $strSystemid) {
@@ -248,6 +269,30 @@ class class_rights {
     }
 
     /**
+     * Fetches the records placed as child nodes of the current / passed id.
+     *
+     * @param string $strSystemid
+     * @return string[]
+     */
+    private function getChildNodes($strSystemid) {
+
+        $strQuery = "SELECT system_id
+                     FROM "._dbprefix_."system
+                     WHERE system_prev_id=?
+                       AND system_id != '0'
+                     ORDER BY system_sort ASC";
+
+        $arrReturn = array();
+        $arrTemp =  $this->objDb->getPArray($strQuery, array($strSystemid));
+
+        foreach($arrTemp as $arrOneRow)
+            $arrReturn[] = $arrOneRow["system_id"];
+
+        return $arrReturn;
+    }
+
+
+    /**
      * Looks up the rights for a given SystemID and going up the tree if needed (inheritance!)
      *
      * @param string $strSystemid
@@ -282,6 +327,8 @@ class class_rights {
             $arrRights[self::$STR_RIGHT_RIGHT5] = $arrRow["right_right5"];
             $arrRights[self::$STR_RIGHT_CHANGELOG] = isset($arrRow["right_changelog"]) ? $arrRow["right_changelog"] : "";
             $arrRights[self::$STR_RIGHT_INHERIT] = (int)$arrRow["right_inherit"];
+            $arrRights["system_prev_id"] = $arrRow["system_prev_id"];
+            $arrRights["system_id"] = $arrRow["system_id"];
         }
         else {
             $arrRights[self::$STR_RIGHT_VIEW] = "";
@@ -295,6 +342,8 @@ class class_rights {
             $arrRights[self::$STR_RIGHT_RIGHT5] = "";
             $arrRights[self::$STR_RIGHT_CHANGELOG] = "";
             $arrRights[self::$STR_RIGHT_INHERIT] = 1;
+            $arrRights["system_prev_id"] = $arrRow["system_prev_id"];
+            $arrRights["system_id"] = $arrRow["system_id"];
         }
 
 
@@ -303,7 +352,7 @@ class class_rights {
 
 
     /**
-     * Returns a 2-dimensional Array containg the groups and the assigned rights.
+     * Returns a 2-dimensional Array containing the groups and the assigned rights.
      *
      * @param string $strSystemid
      *
@@ -460,9 +509,9 @@ class class_rights {
     /**
      * Checks if a given user-id is granted the passed permission for the passed systemid.
      *
-     * @param $strUserid
-     * @param $strPermission
-     * @param $strSystemid
+     * @param string $strUserid
+     * @param string $strPermission
+     * @param string $strSystemid
      *
      * @return bool
      */
@@ -502,8 +551,8 @@ class class_rights {
      * Validates, if a single group is granted a permission for a given systemid.
      *
      * @param string $strGroupId
-     * @param $strPermission
-     * @param $strSystemid
+     * @param string $strPermission
+     * @param string $strSystemid
      *
      * @return bool
      */
@@ -617,6 +666,13 @@ class class_rights {
         class_carrier::getInstance()->flushCache(class_carrier::INT_CACHE_TYPE_ORMCACHE);
     }
 
+    /**
+     * Enables the internal testing mode.
+     * Only possible if the current context is triggered out of a phpunit-context
+     *
+     * @param bool $bitTestMode
+     * @return void
+     */
     public function setBitTestMode($bitTestMode) {
         $this->bitTestMode = $bitTestMode && _autotesting_;
     }
@@ -628,7 +684,7 @@ class class_rights {
      * view, edit, delete, right, right1, right2, right3, right4, right5
      * If at least a single permission is given, true is returned, otherwise false.
      *
-     * @param $strPermissions
+     * @param string $strPermissions
      * @param class_model $objObject
      *
      * @return bool
@@ -712,8 +768,9 @@ class class_rights {
      * Adds a row to the internal cache.
      * Only to be used in combination with class_roots setArrInitRow.
      *
-     * @param $arrRow
+     * @param array $arrRow
      * @deprecated use the orm-rowcache instead to avoid multiple cache locations
+     * @return void
      */
     public function addRowToCache($arrRow) {
 

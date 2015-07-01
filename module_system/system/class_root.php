@@ -1273,6 +1273,7 @@ abstract class class_root {
      *
      * @param string $strSystemid
      * @return string[]
+     * @deprecated
      */
     public function getChildNodesAsIdArray($strSystemid = "") {
         if($strSystemid == "")
@@ -1304,6 +1305,7 @@ abstract class class_root {
      *
      * @param string $strSystemid
      * @return string[]
+     * @deprecated
      */
     public function getAllSubChildNodesAsIdArray($strSystemid = "") {
         $arrReturn = $this->getChildNodesAsIdArray($strSystemid);
