@@ -342,8 +342,8 @@ class class_rights {
             $arrRights[self::$STR_RIGHT_RIGHT5] = "";
             $arrRights[self::$STR_RIGHT_CHANGELOG] = "";
             $arrRights[self::$STR_RIGHT_INHERIT] = 1;
-            $arrRights["system_prev_id"] = $arrRow["system_prev_id"];
-            $arrRights["system_id"] = $arrRow["system_id"];
+            $arrRights["system_prev_id"] = "";
+            $arrRights["system_id"] = "";
         }
 
 
