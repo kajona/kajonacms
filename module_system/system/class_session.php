@@ -102,7 +102,7 @@ final class class_session {
      * @return void
      */
     public function sessionClose() {
-        if(_autotesting_)
+        if(defined("_autotesting_"))
             return;
 
         $this->bitClosed = true;
