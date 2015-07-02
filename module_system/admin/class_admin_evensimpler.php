@@ -24,7 +24,7 @@ abstract class class_admin_evensimpler extends class_admin_simple {
     const   STR_OBJECT_LIST_ANNOTATION = "@objectList";
     const   STR_OBJECT_NEW_ANNOTATION = "@objectNew";
     const   STR_OBJECT_EDIT_ANNOTATION = "@objectEdit";
-    
+
     private static $arrActionNameMapping = array(
         "list" => self::STR_OBJECT_LIST_ANNOTATION,
         "new" => self::STR_OBJECT_NEW_ANNOTATION,
@@ -83,14 +83,14 @@ abstract class class_admin_evensimpler extends class_admin_simple {
     protected function getActionNameForClass($strAction, $objInstance) {
         if (isset(self::$arrActionNameMapping[$strAction])) {
             $strAnnotationPrefix = self::$arrActionNameMapping[$strAction];
-            
+
             if ($strAction == "new") {
                 return $strAction . $this->getStrCurObjectTypeName();
             }
             else {
                 $objReflection = new class_reflection($this);
                 $arrAnnotations = $objReflection->getAnnotationsWithValueFromClass(get_class($objInstance));
-                
+
                 foreach ($arrAnnotations as $strProperty) {
                     if (uniStrpos($strProperty, $strAnnotationPrefix) === 0) {
                         return $strAction . uniSubstr($strProperty, uniStrlen($strAnnotationPrefix));
@@ -98,7 +98,7 @@ abstract class class_admin_evensimpler extends class_admin_simple {
                 }
             }
         }
-        
+
         return parent::getActionNameForClass($strAction, $objInstance);
     }
 
@@ -250,9 +250,8 @@ abstract class class_admin_evensimpler extends class_admin_simple {
     }
 
     /**
-     * Creates the admin-form for a given object.
-     * You may want to override this method in case you want to inject additional fields or
-     * to modify the form.
+     * Creates the admin-form for a given object. You should specify a @formGenerator annotation in your model if you
+     * want to override the default form
      *
      * @param interface_model|class_model $objInstance
      * @return class_admin_formgenerator
@@ -262,8 +261,25 @@ abstract class class_admin_evensimpler extends class_admin_simple {
         if($this->isFormExistingForInstance($objInstance))
             return $this->objCurAdminForm;
 
-        $objForm = new class_admin_formgenerator($this->getArrModule("modul"), $objInstance);
+        // check whether a specific form generator class was specified per annotation
+        $objReflection = new class_reflection($objInstance);
+        $arrValues = $objReflection->getAnnotationValuesFromClass("@formGenerator");
+
+        if(!empty($arrValues)) {
+            $strClass = current($arrValues);
+            if(class_exists($strClass)) {
+                $objForm = new $strClass($this->getArrModule("modul"), $objInstance);
+            }
+            else {
+                throw new class_exception("Provided form generator class does not exist", class_exception::$level_ERROR);
+            }
+        }
+        else {
+            $objForm = new class_admin_formgenerator($this->getArrModule("modul"), $objInstance);
+        }
+
         $objForm->generateFieldsFromObject();
+
         $this->objCurAdminForm = $objForm;
         return $objForm;
     }
@@ -346,7 +362,7 @@ abstract class class_admin_evensimpler extends class_admin_simple {
         $this->setAction($strOldAction);
 
         $arrPath = $this->getPathArray($this->getSystemid());
-        
+
         // Render additional navigation path entries for child objects.
         foreach($arrPath as $strOneSystemid) {
 
@@ -363,18 +379,18 @@ abstract class class_admin_evensimpler extends class_admin_simple {
                     $arrPathLinks[] = $objEntry;
                 }
             }
-            
+
         }
 
         return $arrPathLinks;
     }
-    
-    
+
+
     /**
      * Overwrite to generate path navigation entries for the given object.
      * If not overwritten, the entries will be skipped and won't be included into the
      * path navigation.
-     * 
+     *
      * @param interface_model $objInstance
      * @return string Navigation link.
      */
