@@ -257,31 +257,7 @@ abstract class class_admin_evensimpler extends class_admin_simple {
      * @return class_admin_formgenerator
      */
     protected function getAdminForm(interface_model $objInstance) {
-        //already generated?
-        if($this->isFormExistingForInstance($objInstance))
-            return $this->objCurAdminForm;
-
-        // check whether a specific form generator class was specified per annotation
-        $objReflection = new class_reflection($objInstance);
-        $arrValues = $objReflection->getAnnotationValuesFromClass("@formGenerator");
-
-        if(!empty($arrValues)) {
-            $strClass = current($arrValues);
-            if(class_exists($strClass)) {
-                $objForm = new $strClass($this->getArrModule("modul"), $objInstance);
-            }
-            else {
-                throw new class_exception("Provided form generator class does not exist", class_exception::$level_ERROR);
-            }
-        }
-        else {
-            $objForm = new class_admin_formgenerator($this->getArrModule("modul"), $objInstance);
-        }
-
-        $objForm->generateFieldsFromObject();
-
-        $this->objCurAdminForm = $objForm;
-        return $objForm;
+        return $this->objCurAdminForm = class_admin_formgenerator_factory::createByModel($objInstance);
     }
 
     /**
