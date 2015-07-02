@@ -22,7 +22,7 @@ class class_admin_formgenerator_factory {
     /**
      * Cache for all created form generator objects
      *
-     * @var array
+     * @var class_admin_formgenerator[]
      */
     protected static $arrForms = array();
 
@@ -41,16 +41,6 @@ class class_admin_formgenerator_factory {
             return $objForm;
         }
 
-        // get module name for model
-        $objReflection = new class_reflection($objInstance);
-        $arrAnnotationValues = $objReflection->getAnnotationValuesFromClass(class_admin_evensimpler::STR_MODULE_ANNOTATION);
-        if(count($arrAnnotationValues) > 0) {
-            $strModuleName = trim($arrAnnotationValues[0]);
-        }
-        else {
-            throw new class_exception("Model has no module specified", class_exception::$level_ERROR);
-        }
-
         // check whether a specific form generator class was specified per annotation
         $objReflection = new class_reflection($objInstance);
         $arrValues = $objReflection->getAnnotationValuesFromClass(self::STR_FORMGENERATOR_ANNOTATION);
@@ -58,14 +48,14 @@ class class_admin_formgenerator_factory {
         if(!empty($arrValues)) {
             $strClass = current($arrValues);
             if(class_exists($strClass)) {
-                $objForm = new $strClass($strModuleName, $objInstance);
+                $objForm = new $strClass($objInstance->getArrModule("module"), $objInstance);
             }
             else {
                 throw new class_exception("Provided form generator class does not exist", class_exception::$level_ERROR);
             }
         }
         else {
-            $objForm = new class_admin_formgenerator($strModuleName, $objInstance);
+            $objForm = new class_admin_formgenerator($objInstance->getArrModule("module"), $objInstance);
         }
 
         // check whether we have an correct instance
@@ -89,19 +79,12 @@ class class_admin_formgenerator_factory {
     }
 
     /**
-     * Clears the internal cache
-     */
-    public static function clearCache() {
-        self::$arrForms = array();
-    }
-
-    /**
      * Returns the form generator from the internal cache or null if not available
      *
      * @param interface_model $objInstance
-     * @return null
+     * @return class_admin_formgenerator|null
      */
-    protected static function getFormForModel(interface_model $objInstance) {
+    public static function getFormForModel(interface_model $objInstance) {
         $strKey = self::getKeyByModel($objInstance);
         return isset(self::$arrForms[$strKey]) ? self::$arrForms[$strKey] : null;
     }
