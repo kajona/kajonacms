@@ -72,6 +72,7 @@ class class_admin_formgenerator {
     private $strFormEncoding = "";
 
     private $strOnSubmit = "";
+    private $objLang;
 
     /**
      * Creates a new instance of the form-generator.
@@ -84,6 +85,7 @@ class class_admin_formgenerator {
         $this->objSourceobject = $objSourceobject;
 
         $this->strOnSubmit = "$(this).on('submit', function() { return false; }); return true;";
+        $this->objLang = class_lang::getInstance();
     }
 
     /**
@@ -482,6 +484,16 @@ class class_admin_formgenerator {
         }
         else
             throw new class_exception("failed to load validator of type ".$strClassname, class_exception::$level_ERROR);
+    }
+
+    /**
+     * Returns an language text. By default the formname is used as module name
+     *
+     * @param string $strText
+     * @return string
+     */
+    protected function getLang($strText, $strModule = null) {
+        return $this->objLang->getLang($strText, $strModule === null ? $this->strFormname : $strModule);
     }
 
     /**
