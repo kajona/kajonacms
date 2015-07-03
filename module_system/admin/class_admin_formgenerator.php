@@ -40,6 +40,7 @@ class class_admin_formgenerator {
     const  BIT_BUTTON_DELETE = 32;
     const  BIT_BUTTON_RESET  = 64;
     const  BIT_BUTTON_CONTINUE  = 128;
+    const  BIT_BUTTON_BACK = 256;
 
     const FORM_ENCTYPE_MULTIPART = "multipart/form-data";
     const FORM_ENCTYPE_TEXTPLAIN = "text/plain";
@@ -259,6 +260,9 @@ class class_admin_formgenerator {
 
         if($intButtonConfig & self::BIT_BUTTON_CONTINUE)
             $strReturn .= $objToolkit->formInputSubmit(class_lang::getInstance()->getLang("commons_continue", "system"), "submitbtn");
+
+        if($intButtonConfig & self::BIT_BUTTON_BACK)
+            $strReturn .= $objToolkit->formInputSubmit(class_lang::getInstance()->getLang("commons_back", "system"), "backbtn");
 
 
         if($strTargetURI !== null)
