@@ -172,9 +172,12 @@ abstract class class_orm_base {
     /**
      * Generates the where restriction for queries, based on the current config.
      * Currently the methods returns a string based where restriction.
+     *
+     * @param string $strSystemTablePrefix
+     * @param string $strConjunction
      * @return string
      */
-    public function getDeletedWhereRestriction($strSystemTablePrefix = "") {
+    public function getDeletedWhereRestriction($strSystemTablePrefix = "", $strConjunction = "AND") {
         $strQuery = "";
 
         if($strSystemTablePrefix != "") {
@@ -183,10 +186,10 @@ abstract class class_orm_base {
 
         if(self::$bitLogcialDeleteAvailable) {
             if($this->getIntCombinedLogicalDeletionConfig()->equals(class_orm_deletedhandling_enum::EXCLUDED())) {
-                $strQuery .= " AND {$strSystemTablePrefix}system_deleted = 0 ";
+                $strQuery .= " " . $strConjunction . " {$strSystemTablePrefix}system_deleted = 0 ";
             }
             else if($this->getIntCombinedLogicalDeletionConfig()->equals(class_orm_deletedhandling_enum::EXCLUSIVE())) {
-                $strQuery .= " AND {$strSystemTablePrefix}system_deleted = 1 ";
+                $strQuery .= " " . $strConjunction . " {$strSystemTablePrefix}system_deleted = 1 ";
             }
         }
 
