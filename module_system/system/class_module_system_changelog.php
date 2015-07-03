@@ -866,27 +866,29 @@ class class_module_system_changelog {
      * @param $strProperty
      * @param class_date $objDateFrom
      * @param class_date $objDateTo
+     * @param array $arrAllowedSystemIds
      * @return array
      */
-    public static function getNewValuesForDateRange($strClass, $strProperty, class_date $objDateFrom, class_date $objDateTo, array $arrAllowedSystemIds = null) {
+    public static function getNewValuesForDateRange($strClass, $strProperty, class_date $objDateFrom, class_date $objDateTo, array $arrAllowedSystemIds) {
+        $objRestriction = new class_orm_objectlist_in_restriction("change_systemid", $arrAllowedSystemIds);
+        $strQueryCondition = $objRestriction->getStrWhere();
 
-        $strQuery = "SELECT change_newvalue,
-                            change_systemid
-                       FROM "._dbprefix_.self::getTableForClass($strClass)."
-                      WHERE change_date >= ?
-                        AND change_date <= ?
-                        AND change_class = ?
-                        AND change_property = ?";
+        $strQuery = "  SELECT *
+                         FROM (
+                                SELECT change_newvalue,
+                                       change_systemid,
+                                       change_date
+                                  FROM "._dbprefix_.self::getTableForClass($strClass)."
+                                 WHERE change_date >= ?
+                                   AND change_date <= ?
+                                   AND change_class = ?
+                                   AND change_property = ?
+                                   {$strQueryCondition}
+                              ORDER BY change_date DESC) AS tmp_table
+                     GROUP BY change_systemid";
 
         $arrParameters = array($objDateFrom->getLongTimestamp(), $objDateTo->getLongTimestamp(), $strClass, $strProperty);
-
-        if($arrAllowedSystemIds !== null) {
-            $objRestriction = new class_orm_objectlist_in_restriction("change_systemid", $arrAllowedSystemIds);
-            $strQuery.= " " . $objRestriction->getStrWhere();
-            $arrParameters = array_merge($arrParameters, $objRestriction->getArrParams());
-        }
-
-        $strQuery.= " GROUP BY change_systemid ORDER BY change_date DESC";
+        $arrParameters = array_merge($arrParameters, $objRestriction->getArrParams());
 
         return class_carrier::getInstance()->getObjDB()->getPArray($strQuery, $arrParameters);
     }
