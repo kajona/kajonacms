@@ -871,6 +871,33 @@ class class_toolkit_admin extends class_toolkit {
     }
 
     /**
+     * Form entry which is an container for other form elements
+     *
+     * @param $strName
+     * @param string $strTitle
+     * @param array $arrFields
+     * @return string
+     * @throws class_exception
+     */
+    public function formInputContainer($strName, $strTitle = "", array $arrFields = array()) {
+        $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "input_container");
+        $strTemplateRowID = $this->objTemplate->readTemplate("/elements.tpl", "input_container_row");
+
+        $arrTemplate = array();
+        $arrTemplate["name"] = $strName;
+        $arrTemplate["title"] = $strTitle;
+
+        $strElements = "";
+        foreach($arrFields as $strField) {
+            $strElements.= $this->objTemplate->fillTemplate(array("element" => $strField), $strTemplateRowID, true);
+        }
+
+        $arrTemplate["elements"] = $strElements;
+
+        return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID, true);
+    }
+
+    /**
      * @param $strName
      * @param string $strTitle
      * @param $intType

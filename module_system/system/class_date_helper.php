@@ -180,37 +180,49 @@ class class_date_helper {
 
 
     /**
-     * Calculates the next TARGET2 working day.
+     * Calculates the next TARGET2 working day. Optional the amount of working days can be provided
      *
      * @param class_date $objDate
+     * @param integer $intDays
      *
      * @return class_date
      */
-    public function calcNextWorkingDay(class_date $objDate) {
+    public function calcNextWorkingDay(class_date $objDate, $intDays = 1) {
         $objNewDate = clone $objDate;
 
-        $objNewDate->setNextDay();
-        while(!$this->isValidTarget2Day($objNewDate)){
+        $intCount = 0;
+        while($intCount < $intDays) {
             $objNewDate->setNextDay();
+            while(!$this->isValidTarget2Day($objNewDate)){
+                $objNewDate->setNextDay();
+            }
+            $intCount++;
         }
+
         return $objNewDate;
     }
 
     /**
-     * Calculates the last TARGET2 working day.
+     * Calculates the last TARGET2 working day. Optional the amount of working days can be provided
      *
      * @param class_date $objDate
+     * @param integer $intDays
      *
      * @return class_date
      */
-    public function calcLastWorkingDay(class_date $objDate) {
+    public function calcLastWorkingDay(class_date $objDate, $intDays = 1) {
         $objNewDate = clone $objDate;
 
         //find last working day
-        $objNewDate->setPreviousDay();
-        while(!$this->isValidTarget2Day($objNewDate)) {
+        $intCount = 0;
+        while($intCount < $intDays) {
             $objNewDate->setPreviousDay();
+            while(!$this->isValidTarget2Day($objNewDate)) {
+                $objNewDate->setPreviousDay();
+            }
+            $intCount++;
         }
+
         return $objNewDate;
     }
 

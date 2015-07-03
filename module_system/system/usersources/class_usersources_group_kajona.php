@@ -221,6 +221,15 @@ class class_usersources_group_kajona extends class_model implements interface_mo
         return $this->objDB->_pQuery($strQuery, array($this->getSystemid(), $objUser->getSystemid()));
     }
 
+    /**
+     * Hook to update the admin-form when editing / creating a single group
+     * @param class_admin_formgenerator $objForm
+     *
+     * @return mixed
+     */
+    public function updateAdminForm(class_admin_formgenerator $objForm) {
+
+    }
 
     /**
      * @return string

@@ -337,6 +337,7 @@ To avoid side-effects, no line-break in this case -> not needed by default, but 
 
 <form_start>
 <form name="%%name%%" id="%%name%%" method="post" action="%%action%%" enctype="%%enctype%%" onsubmit="%%onsubmit%%" class="form-horizontal">
+    <script type="text/javascript">$(function() { KAJONA.admin.forms.initForm('%%name%%');  KAJONA.admin.forms.changeLabel = '[lang,commons_form_entry_changed,system]';   KAJONA.admin.forms.changeConfirmation = '[lang,commons_form_entry_changed_conf,system]'; } );</script>
 </form_start>
 
 <form_close>
@@ -823,6 +824,22 @@ in addition, a container for the calendar is needed. Use %%calendarContainerId%%
         }, true);
     </script>
 </input_tageditor>
+
+<input_container>
+    <div class="form-group">
+        <label for="%%name%%" class="col-sm-3 control-label">%%title%%</label>
+
+        <div class="col-sm-6 inputText">
+            <div id="%%name%%" class="inputContainer %%class%%">
+                %%elements%%
+            </div>
+        </div>
+    </div>
+</input_container>
+
+<input_container_row>
+    <div class="inputContainerPanel">%%element%%</div>
+</input_container_row>
 
 A page-selector.
 If you want to use ajax to load a list of proposals on entering a char,
