@@ -299,6 +299,34 @@ class class_date {
     }
 
     /**
+     * Shifts the current year into the past by one.
+     *
+     * @return \class_date
+     */
+    public function setPreviousYear() {
+        $intCurrentDay = $this->getIntDay();
+        $this->setIntDay(1);
+        for($intI = 0; $intI < 12; $intI++) {
+            $this->setPreviousMonth();
+        }
+        $this->setIntDay($intCurrentDay);
+    }
+
+    /**
+     * Shifts the current year into the future by one.
+     *
+     * @return \class_date
+     */
+    public function setNextYear() {
+        $intCurrentDay = $this->getIntDay();
+        $this->setIntDay(1);
+        for($intI = 0; $intI < 12; $intI++) {
+            $this->setNextMonth();
+        }
+        $this->setIntDay($intCurrentDay);
+    }
+
+    /**
      * Shifts the current date one week into the future, so seven days
      *
      * @return \class_date
