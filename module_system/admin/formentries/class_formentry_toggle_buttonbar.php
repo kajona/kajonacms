@@ -25,7 +25,12 @@ class class_formentry_toggle_buttonbar extends class_formentry_multiselect {
         if($this->getStrHint() != null) {
             $strReturn .= $objToolkit->formTextRow($this->getStrHint());
         }
-        $strReturn .= $objToolkit->formToggleButtonBar($this->getStrEntryName(), $this->arrKeyValues, $this->getStrLabel(), explode(",", $this->getStrValue()), !$this->getBitReadonly());
+
+        $arrSelectedKeys = array();
+        if($this->getStrValue() !== "") {
+            $arrSelectedKeys = explode(",", $this->getStrValue());
+        }
+        $strReturn .= $objToolkit->formToggleButtonBar($this->getStrEntryName(), $this->arrKeyValues, $this->getStrLabel(), $arrSelectedKeys, !$this->getBitReadonly());
         return $strReturn;
     }
 

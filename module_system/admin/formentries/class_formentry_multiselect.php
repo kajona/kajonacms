@@ -28,7 +28,13 @@ class class_formentry_multiselect extends class_formentry_dropdown {
         if($this->getStrHint() != null) {
             $strReturn .= $objToolkit->formTextRow($this->getStrHint());
         }
-        $strReturn .= $objToolkit->formInputMultiselect($this->getStrEntryName(), $this->arrKeyValues, $this->getStrLabel(), explode(",", $this->getStrValue()), "", !$this->getBitReadonly());
+
+
+        $arrSelectedKeys = array();
+        if($this->getStrValue() !== "") {
+            $arrSelectedKeys = explode(",", $this->getStrValue());
+        }
+        $strReturn .= $objToolkit->formInputMultiselect($this->getStrEntryName(), $this->arrKeyValues, $this->getStrLabel(), $arrSelectedKeys, "", !$this->getBitReadonly());
         return $strReturn;
     }
 
