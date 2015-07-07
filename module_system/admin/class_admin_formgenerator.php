@@ -220,9 +220,11 @@ class class_admin_formgenerator {
         $strReturn = "";
 
         //add a hidden systemid-field
-        $objField = new class_formentry_hidden($this->strFormname, "systemid");
-        $objField->setStrEntryName("systemid")->setStrValue($this->objSourceobject->getSystemid())->setObjValidator(new class_systemid_validator());
-        $this->addField($objField);
+        if($this->objSourceobject != null) {
+            $objField = new class_formentry_hidden($this->strFormname, "systemid");
+            $objField->setStrEntryName("systemid")->setStrValue($this->objSourceobject->getSystemid())->setObjValidator(new class_systemid_validator());
+            $this->addField($objField);
+        }
 
         $objToolkit = class_carrier::getInstance()->getObjToolkit("admin");
         if($strTargetURI !== null)
@@ -286,8 +288,8 @@ class class_admin_formgenerator {
 
         }
 
-        //lock the record to avoid multiple edit-sessions - in in edit mode
-        if(method_exists($this->objSourceobject, "getLockManager")) {
+        //lock the record to avoid multiple edit-sessions - if in edit mode
+        if($this->objSourceobject != null && method_exists($this->objSourceobject, "getLockManager")) {
 
             $bitSkip = false;
             if($this->getField("mode") != null && $this->getField("mode")->getStrValue() == "new")
