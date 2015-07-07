@@ -1300,8 +1300,8 @@ class class_toolkit_admin extends class_toolkit {
         }
 
         //And the content, row by row, column by column
-        foreach ($arrValues as $arrValueRow) {
-            $strReturn .= $this->objTemplate->fillTemplate(array(), $strTemplateContentHeaderID);
+        foreach ($arrValues as $strKey => $arrValueRow) {
+            $strReturn .= $this->objTemplate->fillTemplate(array("systemid" => $strKey), $strTemplateContentHeaderID);
 
             foreach($arrValueRow as $strCssClass => $strValue)
                 $strReturn .= $this->objTemplate->fillTemplate(array("value" => $strValue, "class" => $strCssClass), $strTemplateContentContentID);

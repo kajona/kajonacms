@@ -311,7 +311,7 @@ One Column in a row (header record) - the header, the content, the footer
 
 One Column in a row (data record) - the header, the content, the footer, providing the option of two styles
 <datalist_column_header>
-	<tr>
+	<tr data-systemid="%%systemid%%">
 </datalist_column_header>
 
 <datalist_column>
