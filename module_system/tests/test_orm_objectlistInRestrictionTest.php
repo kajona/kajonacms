@@ -71,7 +71,14 @@ class test_orm_objectlistInRestrictionTest extends class_testbase  {
 
         $objRestriction = new class_orm_objectlist_in_restriction("temp_systemid", $arrParams);
 
-        $arrResult = $objDB->getPArray("SELECT * FROM "._dbprefix_."temp_propertyintest WHERE 1 " . $objRestriction->getStrWhere(), $objRestriction->getArrParams());
+        $arrResult = $objDB->getPArray("SELECT * FROM "._dbprefix_."temp_propertyintest WHERE 1=1 " . $objRestriction->getStrWhere(), $objRestriction->getArrParams());
+
+        $this->assertEquals("text 1", $arrResult[0]["temp_name"]);
+
+        // double parameter count
+        $objRestriction = new class_orm_objectlist_in_restriction("temp_systemid", array_merge($arrParams, $arrParams));
+
+        $arrResult = $objDB->getPArray("SELECT * FROM "._dbprefix_."temp_propertyintest WHERE 1=1 " . $objRestriction->getStrWhere(), $objRestriction->getArrParams());
 
         $this->assertEquals("text 1", $arrResult[0]["temp_name"]);
     }
