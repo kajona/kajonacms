@@ -389,13 +389,26 @@ KAJONA.admin.permissions = {
         }
     },
 
+    toggleMode : null,
     toggleEmtpyRows : function (strVisibleName, strHiddenName) {
 
-        $('#rightsForm tr').each(function(){
+        $('#rightsForm tr').each(function() {
+
             if($(this).find("input:checked").length == 0 && $(this).find("th").length == 0) {
-                $(this).toggle();
+                if(KAJONA.admin.permissions.toggleMode == null) {
+                    KAJONA.admin.permissions.toggleMode = $(this).hasClass("hidden") ? "show" : "hide";
+                }
+
+                if(KAJONA.admin.permissions.toggleMode == "show") {
+                    $(this).removeClass("hidden");
+                }
+                else {
+                    $(this).addClass("hidden");
+                }
             }
         });
+
+        KAJONA.admin.permissions.toggleMode = null;
 
         if($('#rowToggleLink').hasClass("rowsVisible")) {
             $('#rowToggleLink').html(strVisibleName);
