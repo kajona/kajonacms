@@ -1026,6 +1026,12 @@ class class_toolkit_admin extends class_toolkit {
             $arrParams = class_carrier::getAllParams();
             if(array_key_exists("pe", $arrParams))
                 $strPeFields .= $this->formInputHidden("pe", $arrParams["pe"]);
+            if(array_key_exists("folderview", $arrParams)) {
+                $strPeFields .= $this->formInputHidden("folderview", $arrParams["folderview"]);
+
+                if(!array_key_exists("pe", $arrParams))
+                    $strPeFields .= $this->formInputHidden("pe", "1");
+            }
             if(array_key_exists("pv", $arrParams))
                 $strPeFields .= $this->formInputHidden("pv", $arrParams["pv"]);
         }
