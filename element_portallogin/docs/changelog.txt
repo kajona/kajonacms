@@ -1,8 +1,10 @@
 Element Portallogin
 
+V4.7.1 --------------------------------------------------------------------------------------------------
+BUG: element_portallogin | pwdReset -> the reset-mail was sent for inactive users, too (even if the login is not possible)
+
 V4.6 ----------------------------------------------------------------------------------------------------
 NEW: element_portallogin | template -> added missing placeholder documentation [ticket #919]
-
 
 V4.3.1 --------------------------------------------------------------------------------------------------
 BUG: The password-reset link missed to include the users' systemid

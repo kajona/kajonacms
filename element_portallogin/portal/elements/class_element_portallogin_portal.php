@@ -171,7 +171,7 @@ class class_element_portallogin_portal extends class_element_portal implements i
             $objUser = $objSubsystem->getUserByUsername($this->getParam("portallogin_username"));
             if($objUser != null) {
                 $objValidator = new class_email_validator();
-                if($objUser->getStrEmail() != "" && $objValidator->validate($objUser->getStrEmail()) && $objUser->getIntPortal() == 1) {
+                if($objUser->getStrEmail() != "" && $objValidator->validate($objUser->getStrEmail()) && $objUser->getIntPortal() == 1 && $objUser->getIntActive() == 1) {
 
                     //generate an authcode and save it with the user
                     $strAuthcode = generateSystemid();
