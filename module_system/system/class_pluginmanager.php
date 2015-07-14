@@ -18,7 +18,7 @@
 class class_pluginmanager {
 
     /**
-     * @var string[]
+     * @var string[][]
      */
     private static $arrPluginClasses = array();
 
