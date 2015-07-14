@@ -11,11 +11,11 @@
  * @author stefan.meyer1@yahoo.de.de
  * @since 4.7
  *
- * @method static class_reflection_enum WEEK()
- * @method static class_reflection_enum MONTH()
- * @method static class_reflection_enum QUARTER()
- * @method static class_reflection_enum HALFYEAR()
- * @method static class_reflection_enum YEAR()
+ * @method static class_date_period_enum WEEK()
+ * @method static class_date_period_enum MONTH()
+ * @method static class_date_period_enum QUARTER()
+ * @method static class_date_period_enum HALFYEAR()
+ * @method static class_date_period_enum YEAR()
  */
 class class_date_period_enum extends class_enum {
     /**
