@@ -470,10 +470,13 @@ JS;
      * @autoTestable
      * @xml
      *
+     * @deprecated
+     *
      * @return string
      */
     protected function actionGetUnreadMessagesCount() {
         class_carrier::getInstance()->getObjSession()->setBitBlockDbUpdate(true);
+        class_session::getInstance()->sessionClose();
         return "<messageCount>".class_module_messaging_message::getNumberOfMessagesForUser($this->objSession->getUserID(), true)."</messageCount>";
     }
 
@@ -490,6 +493,7 @@ JS;
     protected function actionGetRecentMessages() {
         class_carrier::getInstance()->getObjSession()->setBitBlockDbUpdate(true);
         class_session::getInstance()->sessionClose();
+        class_module_system_changelog::$bitChangelogEnabled = false;
         class_response_object::getInstance()->setStrResponseType(class_http_responsetypes::STR_TYPE_JSON);
 
         $intMaxAmount = $this->getParam("limit") != "" ? $this->getParam("limit") : 5 ;

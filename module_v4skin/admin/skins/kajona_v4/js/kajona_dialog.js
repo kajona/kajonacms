@@ -107,12 +107,12 @@ KAJONA.admin.ModalDialog = function (strDialogId, intDialogType, bitDragging, bi
         }
 
         if(this.iframeURL != null) {
-            $("#folderviewDialog_loading").css('z-index', '0');
+            $("#folderviewDialog_loading").css('display', 'block');
             $('#' + this.containerId + '_content').html('<iframe src="' + this.iframeURL + '" width="100%" height="'+(intHeight)+'" name="' + this.iframeId + '" id="' + this.iframeId + '" class="seamless" seamless></iframe>');
             this.iframeURL = null;
 
             $("#"+this.iframeId).on('load', function() {
-                $("#folderviewDialog_loading").css('z-index', '-1');
+                $("#folderviewDialog_loading").css('display', 'none');
             });
         }
 

@@ -125,6 +125,7 @@ class class_project_setup {
         self::createAllowHtaccess("/templates/.htaccess");
 
         self::createDenyHtaccess("/project/.htaccess");
+        self::createDenyHtaccess("/files/.htaccess");
 
     }
 
