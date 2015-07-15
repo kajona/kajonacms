@@ -1294,23 +1294,22 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
                 $intI++
             );
 
-            $objCurUser = new class_module_user_user($this->objSession->getUserID());
+            $strCheckId = $this->getParam("checkid");
+            $arrCheckIds = json_decode($strCheckId);
+
 
             foreach($arrUsers as $strSingleUser) {
                 $objSingleUser = new class_module_user_user($strSingleUser);
 
                 $bitRenderAcceptLink = true;
-                if(validateSystemid($this->getParam("checkid"))) {
-                    $objInstance = class_objectfactory::getInstance()->getObject($this->getParam("checkid"));
-                    if($objInstance != null) {
-                        class_session::getInstance()->switchSessionToUser($objSingleUser, true);
-                        if(!$objInstance->rightView()) {
+                if(!empty($arrCheckIds) && is_array($arrCheckIds)) {
+
+                    foreach($arrCheckIds as $strCheckId) {
+
+                        if(!$this->hasUserViewPermissions($strCheckId, $objSingleUser)) {
                             $bitRenderAcceptLink = false;
+                            break;
                         }
-                        class_session::getInstance()->switchSessionToUser($objCurUser, true);
-                    }
-                    else {
-                        $bitRenderAcceptLink = false;
                     }
                 }
 
@@ -1443,6 +1442,34 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
         return $bitPass;
     }
 
+    /**
+     * A internal helper to verify if the passed user is allowed to view the listed systemids
+     * @param $strValidateId
+     * @param class_module_user_user $objUser
+     *
+     * @return bool
+     */
+    private function hasUserViewPermissions($strValidateId, class_module_user_user $objUser) {
+        $objInstance = class_objectfactory::getInstance()->getObject($strValidateId);
+
+        if($objInstance != null) {
+            $objCurUser = new class_module_user_user($this->objSession->getUserID());
+
+            try {
+                class_session::getInstance()->switchSessionToUser($objUser, true);
+                if($objInstance->rightView()) {
+                    class_session::getInstance()->switchSessionToUser($objCurUser, true);
+                    return true;
+                }
+            }
+            catch (Exception $objEx) {
+            }
+            class_session::getInstance()->switchSessionToUser($objCurUser, true);
+        }
+
+        return false;
+    }
+
 
     /**
      * Returns a list of users and/or groups matching the passed query.
@@ -1455,18 +1482,18 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
         $strCheckId = $this->getParam("checkid");
         $arrCheckIds = json_decode($strCheckId);
 
-        $arrElements = array();
+        $arrUsers = array();
         $objSource = new class_module_user_sourcefactory();
 
         if($this->getParam("user") == "true") {
-            $arrElements = $objSource->getUserlistByUserquery($strFilter);
+            $arrUsers = $objSource->getUserlistByUserquery($strFilter);
         }
 
         if($this->getParam("group") == "true") {
-            $arrElements = array_merge($arrElements, $objSource->getGrouplistByQuery($strFilter));
+            $arrUsers = array_merge($arrUsers, $objSource->getGrouplistByQuery($strFilter));
         }
 
-        usort($arrElements, function($objA, $objB) {
+        usort($arrUsers, function($objA, $objB) {
             if($objA instanceof class_module_user_user) {
                 $strA = $objA->getStrUsername();
             }
@@ -1484,10 +1511,9 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
             return strcmp(strtolower($strA), strtolower($strB));
         });
 
-        $objCurUser = new class_module_user_user($this->objSession->getUserID());
 
         $arrReturn = array();
-        foreach($arrElements as $objOneElement) {
+        foreach($arrUsers as $objOneElement) {
 
             if($this->getParam("block") == "current" && $objOneElement->getSystemid() == $this->objSession->getUserID()) {
                 continue;
@@ -1498,18 +1524,9 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
 
                 foreach($arrCheckIds as $strCheckId) {
 
-                    $objInstance = class_objectfactory::getInstance()->getObject($strCheckId);
-
-                    if($objInstance != null) {
-                        class_session::getInstance()->switchSessionToUser($objOneElement, true);
-                        if(!$objInstance->rightView()) {
-                            class_session::getInstance()->switchSessionToUser($objCurUser, true);
-                            $bitUserHasRightView = false;
-                            break;
-                        }
-                        else {
-                            class_session::getInstance()->switchSessionToUser($objCurUser, true);
-                        }
+                    if(!$this->hasUserViewPermissions($strCheckId, $objOneElement)) {
+                        $bitUserHasRightView = false;
+                        break;
                     }
                 }
             }

@@ -118,7 +118,6 @@ class class_module_user_sourcefactory {
      *
      * @param string $strParam
      *
-     * @internal param string $strQuery
      * @return class_module_user_user
      */
     public function getUserlistByUserquery($strParam) {
