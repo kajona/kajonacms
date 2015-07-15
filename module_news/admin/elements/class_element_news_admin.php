@@ -58,7 +58,7 @@ class class_element_news_admin extends class_element_admin implements interface_
      * @fieldDDValues [0 => news_mode_normal],[1 => news_mode_archive]
      * @fieldMandatory
      */
-    private $intMode;
+    private $intListMode;
 
     /**
      * @var string
@@ -185,17 +185,17 @@ class class_element_news_admin extends class_element_admin implements interface_
     }
 
     /**
-     * @param string $intMode
+     * @param string $intListMode
      */
-    public function setIntMode($intMode) {
-        $this->intMode = $intMode;
+    public function setIntListMode($intListMode) {
+        $this->intListMode = $intListMode;
     }
 
     /**
      * @return string
      */
-    public function getIntMode() {
-        return $this->intMode;
+    public function getIntListMode() {
+        return $this->intListMode;
     }
 
     /**

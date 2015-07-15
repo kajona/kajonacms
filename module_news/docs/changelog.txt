@@ -1,5 +1,8 @@
 Module News
 
+V4.7.2 --------------------------------------------------------------------------------------------------
+BUG: module_news | admin_element -> the view-mode (archive vs. current news) was hidden due to a naming conflict (thx to mintdata)
+
 V4.7.1 --------------------------------------------------------------------------------------------------
 BUG: module_news | portal list -> the pageview is capable of rendering multiple news-elements per page. the elements' systemid is used to parameterize the pageview.
 
