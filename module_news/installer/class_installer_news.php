@@ -227,7 +227,7 @@ class class_installer_news extends class_installer_base implements interface_ins
         }
 
         $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModule["module_version"] == "4.7" || $arrModule["module_version"] == "4.7.1") {
+        if($arrModule["module_version"] == "4.7" || $arrModule["module_version"] == "4.7.1" || $arrModule["module_version"] == "4.7.2") {
             $strReturn .= $this->update_47_475();
         }
 
