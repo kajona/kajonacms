@@ -62,18 +62,6 @@ class class_installer_element_portalregistration extends class_elementinstaller_
 	public function update() {
         $strReturn = "";
 
-        if(class_module_pages_element::getElement("portalregistration")->getStrVersion() == "3.4.2") {
-            $strReturn .= "Updating element portalregistration to 3.4.9...\n";
-            $this->updateElementVersion("portalregistration", "3.4.9");
-            $this->objDB->flushQueryCache();
-        }
-
-        if(class_module_pages_element::getElement("portalregistration")->getStrVersion() == "3.4.9") {
-            $strReturn .= "Updating element portalregistration to 4.0...\n";
-            $this->updateElementVersion("portalregistration", "4.0");
-            $this->objDB->flushQueryCache();
-        }
-
         if(class_module_pages_element::getElement("portalregistration")->getStrVersion() == "4.0") {
             $strReturn .= "Updating element portalregistration to 4.1...\n";
             $this->updateElementVersion("portalregistration", "4.1");

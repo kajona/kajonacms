@@ -41,18 +41,6 @@ class class_installer_element_facebooklikebox extends class_elementinstaller_bas
 	public function update() {
         $strReturn = "";
 
-        if(class_module_pages_element::getElement("facebooklikebox")->getStrVersion() == "3.4.2") {
-            $strReturn .= "Updating element facebooklikebox to 3.4.9...\n";
-            $this->updateElementVersion("facebooklikebox", "3.4.9");
-            $this->objDB->flushQueryCache();
-        }
-
-        if(class_module_pages_element::getElement("facebooklikebox")->getStrVersion() == "3.4.9") {
-            $strReturn .= "Updating element facebooklikebox to 4.0...\n";
-            $this->updateElementVersion("facebooklikebox", "4.0");
-            $this->objDB->flushQueryCache();
-        }
-
         if(class_module_pages_element::getElement("facebooklikebox")->getStrVersion() == "4.0") {
             $strReturn .= "Updating element facebooklikebox to 4.1...\n";
             $this->updateElementVersion("facebooklikebox", "4.1");

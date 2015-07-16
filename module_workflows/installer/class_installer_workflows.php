@@ -118,19 +118,6 @@ class class_installer_workflows extends class_installer_base implements interfac
         $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
         $strReturn .= "Version found:\n\t Module: ".$arrModule["module_name"].", Version: ".$arrModule["module_version"]."\n\n";
 
-        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModule["module_version"] == "3.4.2" || $arrModule["module_version"] == "3.4.2.1") {
-
-            if($arrModule["module_version"] == "3.4.2.1")
-                $this->bitUpdatingFrom3421 = true;
-
-            $strReturn .= $this->update_342_349();
-        }
-
-        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModule["module_version"] == "3.4.9") {
-            $strReturn .= $this->update_349_40();
-        }
 
         $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
         if($arrModule["module_version"] == "4.0") {
@@ -195,36 +182,6 @@ class class_installer_workflows extends class_installer_base implements interfac
         return $strReturn."\n\n";
 	}
 
-    private function update_342_349() {
-        $strReturn = "Updating 3.4.2 to 3.4.9...\n";
-
-        $strReturn .= "Adding classes for existing records...\n";
-        $strReturn .= "Workflows\n";
-        $arrRows = $this->objDB->getPArray("SELECT workflows_id FROM "._dbprefix_."workflows, "._dbprefix_."system WHERE system_id = workflows_id AND (system_class IS NULL OR system_class = '')", array());
-        foreach($arrRows as $arrOneRow) {
-            $strQuery = "UPDATE "._dbprefix_."system SET system_class = ? where system_id = ?";
-            $this->objDB->_pQuery($strQuery, array( 'class_module_workflows_workflow', $arrOneRow["workflows_id"] ) );
-        }
-
-        $strReturn .= "Handler\n";
-        $arrRows = $this->objDB->getPArray("SELECT workflows_handler_id FROM "._dbprefix_."workflows_handler, "._dbprefix_."system WHERE system_id = workflows_handler_id AND (system_class IS NULL OR system_class = '')", array());
-        foreach($arrRows as $arrOneRow) {
-            $strQuery = "UPDATE "._dbprefix_."system SET system_class = ? where system_id = ?";
-            $this->objDB->_pQuery($strQuery, array( 'class_module_workflows_handler', $arrOneRow["workflows_handler_id"] ) );
-        }
-
-
-        $strReturn .= "Updating module-versions...\n";
-        $this->updateModuleVersion($this->objMetadata->getStrTitle(), "3.4.9");
-        return $strReturn;
-    }
-
-    private function update_349_40() {
-        $strReturn = "Updating 3.4.9 to 4.0...\n";
-        $strReturn .= "Updating module-versions...\n";
-        $this->updateModuleVersion($this->objMetadata->getStrTitle(), "4.0");
-        return $strReturn;
-    }
 
     private function update_40_401() {
         $strReturn = "Updating 4.0 to 4.0.1...\n";

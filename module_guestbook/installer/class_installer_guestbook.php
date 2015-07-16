@@ -131,17 +131,6 @@ class class_installer_guestbook extends class_installer_base implements interfac
 
         $strReturn .= "Version found:\n\t Module: ".$arrModule["module_name"].", Version: ".$arrModule["module_version"]."\n\n";
 
-
-        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModule["module_version"] == "3.4.2") {
-            $strReturn .= $this->update_342_349();
-        }
-
-        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModule["module_version"] == "3.4.9") {
-            $strReturn .= $this->update_349_40();
-        }
-
         $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
         if($arrModule["module_version"] == "4.0") {
             $strReturn .= $this->update_40_41();
@@ -196,54 +185,6 @@ class class_installer_guestbook extends class_installer_base implements interfac
         return $strReturn."\n\n";
 	}
 
-
-
-    private function update_342_349() {
-        $strReturn = "Updating 3.4.1 to 3.4.9...\n";
-
-
-        $strReturn .= "Adding classes for existing records...\n";
-        $strReturn .= "Guestbooks\n";
-        $arrRows = $this->objDB->getPArray("SELECT guestbook_id FROM "._dbprefix_."guestbook_book, "._dbprefix_."system WHERE system_id = guestbook_id AND (system_class IS NULL OR system_class = '')", array());
-        foreach($arrRows as $arrOneRow) {
-            $strQuery = "UPDATE "._dbprefix_."system SET system_class = ? where system_id = ?";
-            $this->objDB->_pQuery($strQuery, array( 'class_module_guestbook_guestbook', $arrOneRow["guestbook_id"] ) );
-        }
-
-        $strReturn .= "Posts\n";
-        $arrRows = $this->objDB->getPArray("SELECT guestbook_post_id FROM "._dbprefix_."guestbook_post, "._dbprefix_."system WHERE system_id = guestbook_post_id AND (system_class IS NULL OR system_class = '')", array());
-        foreach($arrRows as $arrOneRow) {
-            $strQuery = "UPDATE "._dbprefix_."system SET system_class = ? where system_id = ?";
-            $this->objDB->_pQuery($strQuery, array( 'class_module_guestbook_post', $arrOneRow["guestbook_post_id"] ) );
-        }
-
-        $strReturn .= "Removing old constants\n";
-        $strQuery = "DELETE FROM "._dbprefix_."system_config WHERE system_config_name = ?";
-        $this->objDB->_pQuery($strQuery, array("_guestbook_search_resultpage_"));
-
-
-        $strReturn .= "Setting aspect assignments...\n";
-        if(class_module_system_aspect::getAspectByName("content") != null) {
-            $objModule = class_module_system_module::getModuleByName($this->objMetadata->getStrTitle());
-            $objModule->setStrAspect(class_module_system_aspect::getAspectByName("content")->getSystemid());
-            $objModule->updateObjectToDb();
-        }
-
-        $strReturn .= "Updating module-versions...\n";
-        $this->updateModuleVersion("guestbook", "3.4.9");
-        $strReturn .= "Updating element-versions...\n";
-        $this->updateElementVersion("guestbook", "3.4.9");
-        return $strReturn;
-    }
-
-    private function update_349_40() {
-        $strReturn = "Updating 3.4.9 to 4.0...\n";
-        $strReturn .= "Updating module-versions...\n";
-        $this->updateModuleVersion("guestbook", "4.0");
-        $strReturn .= "Updating element-versions...\n";
-        $this->updateElementVersion("guestbook", "4.0");
-        return $strReturn;
-    }
 
     private function update_40_41() {
         $strReturn = "Updating 4.0 to 4.1...\n";

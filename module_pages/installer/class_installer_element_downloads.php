@@ -57,22 +57,6 @@ class class_installer_element_downloads extends class_installer_base implements 
     public function update() {
 
         $strReturn = "";
-        if(class_module_pages_element::getElement("downloads")->getStrVersion() == "3.4.2") {
-            $strReturn .= "Updating element downloads to 3.4.9...\n";
-            $this->updateElementVersion("downloads", "3.4.9");
-            $this->objDB->flushQueryCache();
-        }
-
-        if(class_module_pages_element::getElement("downloads")->getStrVersion() == "3.4.9"
-            || class_module_pages_element::getElement("downloads")->getStrVersion() == "3.4.9.1"
-            || class_module_pages_element::getElement("downloads")->getStrVersion() == "3.4.9.2"
-            || class_module_pages_element::getElement("downloads")->getStrVersion() == "3.4.9.3"
-        ) {
-            $strReturn .= "Updating element downloads to 4.0...\n";
-            $this->updateElementVersion("downloads", "4.0");
-            $this->objDB->flushQueryCache();
-        }
-
 
         if(class_module_pages_element::getElement("downloads")->getStrVersion() == "4.0") {
             $strReturn .= "Updating element downloads to 4.1...\n";

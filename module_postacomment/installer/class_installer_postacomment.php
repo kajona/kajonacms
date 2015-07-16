@@ -138,16 +138,6 @@ class class_installer_postacomment extends class_installer_base implements inter
 
 
         $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModule["module_version"] == "3.4.2") {
-            $strReturn .= $this->update_342_349();
-        }
-
-        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModule["module_version"] == "3.4.9") {
-            $strReturn .= $this->update_349_40();
-        }
-
-        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
         if($arrModule["module_version"] == "4.0") {
             $strReturn .= $this->update_40_41();
         }
@@ -215,49 +205,6 @@ class class_installer_postacomment extends class_installer_base implements inter
         return $strReturn."\n\n";
 	}
 
-
-
-
-    private function update_342_349() {
-        $strReturn = "Updating 3.4.1.1 to 3.4.9...\n";
-
-        $strReturn .= "Adding classes for existing records...\n";
-
-
-        $strReturn .= "Postacomment\n";
-        $arrRows = $this->objDB->getPArray("SELECT system_id FROM "._dbprefix_."postacomment, "._dbprefix_."system WHERE system_id = postacomment_id AND (system_class IS NULL OR system_class = '')", array());
-        foreach($arrRows as $arrOneRow) {
-            $strQuery = "UPDATE "._dbprefix_."system SET system_class = ? where system_id = ?";
-            $this->objDB->_pQuery($strQuery, array( 'class_module_postacomment_post', $arrOneRow["system_id"] ) );
-        }
-
-        $strReturn .= "Removing old notify-constant\n";
-        $strQuery = "DELETE FROM "._dbprefix_."system_config WHERE system_config_name = ? ";
-        $this->objDB->_pQuery($strQuery, array("_postacomment_notify_mail_"));
-
-        $strReturn .= "Setting aspect assignments...\n";
-        if(class_module_system_aspect::getAspectByName("content") != null) {
-            $objModule = class_module_system_module::getModuleByName($this->objMetadata->getStrTitle());
-            $objModule->setStrAspect(class_module_system_aspect::getAspectByName("content")->getSystemid());
-            $objModule->updateObjectToDb();
-        }
-
-        $strReturn .= "Updating module-versions...\n";
-        $this->updateModuleVersion($this->objMetadata->getStrTitle(), "3.4.9");
-        $strReturn .= "Updating element-versions...\n";
-        $this->updateElementVersion("postacomment", "3.4.9");
-
-        return $strReturn;
-    }
-
-    private function update_349_40() {
-        $strReturn = "Updating 3.4.9 to 4.0...\n";
-        $strReturn .= "Updating module-versions...\n";
-        $this->updateModuleVersion($this->objMetadata->getStrTitle(), "4.0");
-        $strReturn .= "Updating element-versions...\n";
-        $this->updateElementVersion("postacomment", "4.0");
-        return $strReturn;
-    }
 
     private function update_40_41() {
         $strReturn = "Updating 4.0 to 4.1...\n";

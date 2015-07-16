@@ -163,21 +163,6 @@ class class_installer_search extends class_installer_base implements interface_i
         $strReturn .= "Version found:\n\t Module: ".$arrModule["module_name"].", Version: ".$arrModule["module_version"]."\n\n";
 
         $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModule["module_version"] == "3.4.2") {
-            $strReturn .= $this->update_342_349();
-        }
-
-        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModule["module_version"] == "3.4.9") {
-            $strReturn .= $this->update_342_3491();
-        }
-
-        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModule["module_version"] == "3.4.9.1") {
-            $strReturn .= $this->update_3491_40();
-        }
-
-        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
         if($arrModule["module_version"] == "4.0") {
             $strReturn .= "Updating 4.0 to 4.1...\n";
             $strReturn .= "Updating module-versions...\n";
@@ -250,55 +235,6 @@ class class_installer_search extends class_installer_base implements interface_i
         return $strReturn."\n\n";
 	}
 
-
-    private function update_342_349() {
-        $strReturn = "Updating 3.4.2 to 3.4.9...\n";
-
-        $strReturn .= "Registering search admin class...\n";
-        $objModule = class_module_system_module::getModuleByName("search");
-        $objModule->setStrNameAdmin("class_module_search_admin.php");
-        $objModule->updateObjectToDb();
-
-        $strReturn .= "Updating module-versions...\n";
-        $this->updateModuleVersion("search", "3.4.9");
-        $strReturn .= "Updating element-versions...\n";
-        $this->updateElementVersion("search", "3.4.9");
-        return $strReturn;
-    }
-
-    private function update_342_3491() {
-        $strReturn = "Updating 3.4.9 to 3.4.9.1...\n";
-
-        $strReturn .= "Make module visible in navigation...\n";
-        $objModule = class_module_system_module::getModuleByName("search");
-        $objModule->setIntNavigation(1);
-        $objModule->updateObjectToDb();
-
-        //Table for search
-        $strReturn .= "Installing table search_search...\n";
-
-        $arrFields = array();
-        $arrFields["search_search_id"] 		= array("char20", false);
-        $arrFields["search_search_query"] 	= array("char254", true);
-        $arrFields["search_search_filter_modules"] 	= array("char254", true);
-        $arrFields["search_search_private"] = array("int", true);
-
-        if(!$this->objDB->createTable("search_search", $arrFields, array("search_search_id")))
-            $strReturn .= "An error occurred! ...\n";
-
-        $strReturn .= "Updating module-versions...\n";
-        $this->updateModuleVersion("search", "3.4.9.1");
-        $this->updateElementVersion("search", "3.4.9.1");
-        return $strReturn;
-    }
-
-    private function update_3491_40() {
-        $strReturn = "Updating 3.4.9.1 to 4.0...\n";
-        $strReturn .= "Updating module-versions...\n";
-        $this->updateModuleVersion("search", "4.0");
-        $this->updateElementVersion("search", "4.0");
-        return $strReturn;
-    }
 
     private function update_43_44() {
         $strReturn = "Updating 4.3 to 4.4...\n";

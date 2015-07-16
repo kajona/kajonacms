@@ -46,18 +46,6 @@ class class_installer_element_languageswitch extends class_elementinstaller_base
     public function update() {
         $strReturn = "";
 
-        if(class_module_pages_element::getElement("languageswitch")->getStrVersion() == "3.4.2") {
-            $strReturn .= "Updating 3.4.2 to 3.4.9...\n";
-            $this->updateElementVersion("languageswitch", "3.4.9");
-            $this->objDB->flushQueryCache();
-        }
-
-        if(class_module_pages_element::getElement("languageswitch")->getStrVersion() == "3.4.9") {
-            $strReturn .= "Updating 3.4.9 to 4.0...\n";
-            $this->updateElementVersion("languageswitch", "4.0");
-            $this->objDB->flushQueryCache();
-        }
-
         if(class_module_pages_element::getElement("languageswitch")->getStrVersion() == "4.0") {
             $strReturn .= "Updating 4.0 to 4.1...\n";
             $this->updateElementVersion("languageswitch", "4.1");

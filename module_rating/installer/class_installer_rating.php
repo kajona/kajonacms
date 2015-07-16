@@ -119,18 +119,6 @@ class class_installer_rating extends class_installer_base implements interface_i
         $strReturn .= "Version found:\n\t Module: ".$arrModule["module_name"].", Version: ".$arrModule["module_version"]."\n\n";
 
         $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModule["module_version"] == "3.4.2") {
-            $strReturn .= $this->update_342_349();
-        }
-
-        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModule["module_version"] == "3.4.9") {
-            $strReturn .= "Updating 3.4.9 to 4.0...\n";
-            $strReturn .= "Updating module-versions...\n";
-            $this->updateModuleVersion("rating", "4.0");
-        }
-
-        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
         if($arrModule["module_version"] == "4.0") {
             $strReturn .= "Updating 4.0 to 4.1...\n";
             $strReturn .= "Updating module-versions...\n";
@@ -177,37 +165,6 @@ class class_installer_rating extends class_installer_base implements interface_i
 
         return $strReturn."\n\n";
 	}
-
-
-
-    private function update_342_349() {
-        $strReturn = "Updating 3.4.2 to 3.4.9...\n";
-        $strReturn .= "Updating module definitions...\n";
-        $objModule = class_module_system_module::getModuleByName("rating");
-        $objModule->setStrNamePortal("class_module_rating_portal.php");
-        $objModule->updateObjectToDb();
-
-
-        $strReturn .= "Adding classes for existing records...\n";
-        $arrRows = $this->objDB->getPArray("SELECT system_id FROM "._dbprefix_."rating, "._dbprefix_."system WHERE system_id = rating_id AND (system_class IS NULL OR system_class = '')", array());
-        foreach($arrRows as $arrOneRow) {
-            $strQuery = "UPDATE "._dbprefix_."system SET system_class = ? where system_id = ?";
-            $this->objDB->_pQuery($strQuery, array( 'class_module_rating_rate', $arrOneRow["system_id"] ) );
-        }
-
-        $strReturn .= "Setting aspect assignments...\n";
-        if(class_module_system_aspect::getAspectByName("content") != null) {
-            $objModule = class_module_system_module::getModuleByName($this->objMetadata->getStrTitle());
-            $objModule->setStrAspect(class_module_system_aspect::getAspectByName("content")->getSystemid());
-            $objModule->updateObjectToDb();
-        }
-
-        $strReturn .= "Updating module-versions...\n";
-
-        $this->updateModuleVersion("rating", "3.4.9");
-        return $strReturn;
-    }
-
 
 
 }

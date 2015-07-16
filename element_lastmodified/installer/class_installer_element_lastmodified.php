@@ -41,18 +41,6 @@ class class_installer_element_lastmodified extends class_elementinstaller_base i
 	public function update() {
         $strReturn = "";
 
-        if(class_module_pages_element::getElement("lastmodified")->getStrVersion() == "3.4.2") {
-            $strReturn .= "Updating element lastmodified to 3.4.9...\n";
-            $this->updateElementVersion("lastmodified", "3.4.9");
-            $this->objDB->flushQueryCache();
-        }
-
-        if(class_module_pages_element::getElement("lastmodified")->getStrVersion() == "3.4.9") {
-            $strReturn .= "Updating element lastmodified to 4.0...\n";
-            $this->updateElementVersion("lastmodified", "4.0");
-            $this->objDB->flushQueryCache();
-        }
-
         if(class_module_pages_element::getElement("lastmodified")->getStrVersion() == "4.0") {
             $strReturn .= "Updating element lastmodified to 4.1...\n";
             $this->updateElementVersion("lastmodified", "4.1");

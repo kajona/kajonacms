@@ -133,17 +133,6 @@ class class_installer_votings extends class_installer_base implements interface_
         $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
         $strReturn .= "Version found:\n\t Module: ".$arrModule["module_name"].", Version: ".$arrModule["module_version"]."\n\n";
 
-        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModule["module_version"] == "1.0") {
-            $strReturn .= $this->update_10_11();
-            $this->objDB->flushQueryCache();
-        }
-
-        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModule["module_version"] == "1.1") {
-            $strReturn .= $this->update_11_12();
-            $this->objDB->flushQueryCache();
-        }
 
         $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
         if($arrModule["module_version"] == "1.2") {
@@ -199,47 +188,6 @@ class class_installer_votings extends class_installer_base implements interface_
         return $strReturn."\n\n";
 	}
     
-    private function update_10_11() {
-        $strReturn = "Updating 1.0 to 1.1...\n";
 
-
-        $strReturn .= "Adding classes for existing records...\n";
-
-        $strReturn .= "Votings\n";
-        $arrRows = $this->objDB->getPArray("SELECT system_id FROM "._dbprefix_."votings_voting, "._dbprefix_."system WHERE system_id = votings_voting_id AND (system_class IS NULL OR system_class = '')", array());
-        foreach($arrRows as $arrOneRow) {
-            $strQuery = "UPDATE "._dbprefix_."system SET system_class = ? where system_id = ?";
-            $this->objDB->_pQuery($strQuery, array( 'class_module_votings_voting', $arrOneRow["system_id"] ) );
-        }
-
-        $strReturn .= "Answerrs\n";
-        $arrRows = $this->objDB->getPArray("SELECT system_id FROM "._dbprefix_."votings_answer, "._dbprefix_."system WHERE system_id = votings_answer_id AND (system_class IS NULL OR system_class = '')", array());
-        foreach($arrRows as $arrOneRow) {
-            $strQuery = "UPDATE "._dbprefix_."system SET system_class = ? where system_id = ?";
-            $this->objDB->_pQuery($strQuery, array( 'class_module_votings_answer', $arrOneRow["system_id"] ) );
-        }
-
-        $strReturn .= "Setting aspect assignments...\n";
-        if(class_module_system_aspect::getAspectByName("content") != null) {
-            $objModule = class_module_system_module::getModuleByName($this->objMetadata->getStrTitle());
-            $objModule->setStrAspect(class_module_system_aspect::getAspectByName("content")->getSystemid());
-            $objModule->updateObjectToDb();
-        }
-
-        $strReturn .= "Updating module-versions...\n";
-        $this->updateModuleVersion("votings", "1.1");
-        $strReturn .= "Updating element-versions...\n";
-        $this->updateElementVersion("votings", "1.1");
-        return $strReturn;
-    }
-
-    private function update_11_12() {
-        $strReturn = "Updating 1.1 to 1.2...\n";
-        $strReturn .= "Updating module-versions...\n";
-        $this->updateModuleVersion("votings", "1.2");
-        $strReturn .= "Updating element-versions...\n";
-        $this->updateElementVersion("votings", "1.2");
-        return $strReturn;
-    }
 
 }

@@ -63,18 +63,6 @@ class class_installer_element_portallogin extends class_elementinstaller_base im
 	public function update() {
         $strReturn = "";
 
-        if(class_module_pages_element::getElement("portallogin")->getStrVersion() == "3.4.2") {
-            $strReturn .= "Updating element portallogin to 3.4.9...\n";
-            $this->updateElementVersion("portallogin", "3.4.9");
-            $this->objDB->flushQueryCache();
-        }
-
-        if(class_module_pages_element::getElement("portallogin")->getStrVersion() == "3.4.9") {
-            $strReturn .= "Updating element portallogin to 4.0...\n";
-            $this->updateElementVersion("portallogin", "4.0");
-            $this->objDB->flushQueryCache();
-        }
-
         if(class_module_pages_element::getElement("portallogin")->getStrVersion() == "4.0") {
             $strReturn .= "Updating element portallogin to 4.1...\n";
             $this->updateElementVersion("portallogin", "4.1");

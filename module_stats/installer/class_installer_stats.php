@@ -133,16 +133,6 @@ class class_installer_stats extends class_installer_base implements interface_in
         $strReturn .= "Version found:\n\t Module: ".$arrModule["module_name"].", Version: ".$arrModule["module_version"]."\n\n";
 
         $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModule["module_version"] == "3.4.2") {
-            $strReturn .= $this->update_342_349();
-        }
-
-        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModule["module_version"] == "3.4.9") {
-            $strReturn .= $this->update_349_40();
-        }
-
-        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
         if($arrModule["module_version"] == "4.0") {
             $strReturn .= $this->update_40_41();
         }
@@ -213,29 +203,6 @@ class class_installer_stats extends class_installer_base implements interface_in
         return $strReturn;
     }
 
-
-    private function update_342_349() {
-        $strReturn = "Updating 3.4.2 to 3.4.9...\n";
-
-        $strReturn .= "Setting aspect assignments...\n";
-        if(class_module_system_aspect::getAspectByName("management") != null) {
-            $objModule = class_module_system_module::getModuleByName($this->objMetadata->getStrTitle());
-            $objModule->setStrAspect(class_module_system_aspect::getAspectByName("management")->getSystemid());
-            $objModule->updateObjectToDb();
-        }
-
-        $strReturn .= "Updating module-versions...\n";
-        $this->updateModuleVersion("stats", "3.4.9");
-        return $strReturn;
-    }
-
-    private function update_349_40() {
-        $strReturn = "Updating 3.4.9 to 4.0...\n";
-
-        $strReturn .= "Updating module-versions...\n";
-        $this->updateModuleVersion("stats", "4.0");
-        return $strReturn;
-    }
 
     private function update_40_41() {
         $strReturn = "Updating 4.0 to 4.1...\n";
