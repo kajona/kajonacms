@@ -16,6 +16,8 @@
  *
  * @module faqs
  * @moduleId _faqs_module_id_
+ *
+ * @formGenerator class_module_faqs_formgenerator
  */
 class class_module_faqs_faq extends class_model implements interface_model, interface_sortable_rating, interface_admin_listable, interface_versionable, interface_search_portalobject {
 

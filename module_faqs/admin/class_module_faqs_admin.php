@@ -96,27 +96,6 @@ class class_module_faqs_admin extends class_admin_evensimpler implements interfa
     }
 
 
-    protected function getAdminForm(interface_model $objInstance) {
-
-        $objForm = parent::getAdminForm($objInstance);
-
-        if($objInstance instanceof class_module_faqs_faq) {
-
-            $arrCats = class_module_faqs_category::getObjectList();
-            if(count($arrCats) > 0) {
-                $arrKeyValues = array();
-                foreach($arrCats as $objOneCat) {
-                    $arrKeyValues[$objOneCat->getSystemid()] = $objOneCat->getStrDisplayName();
-                }
-
-                $objForm->getField("cats")->setStrLabel($this->getLang("commons_categories"))->setArrKeyValues($arrKeyValues);
-            }
-
-            return $objForm;
-        }
-
-        return $objForm;
-    }
 
 
     protected function getOutputNaviEntry(interface_model $objInstance) {
