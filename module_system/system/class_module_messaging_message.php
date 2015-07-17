@@ -16,6 +16,8 @@
  *
  * @module messaging
  * @moduleId _messaging_module_id_
+ *
+ * @formGenerator class_module_messaging_message_formgenerator
  */
 class class_module_messaging_message extends class_model implements interface_model, interface_admin_listable {
 

@@ -317,33 +317,6 @@ JS;
     }
 
     /**
-     * @param interface_model $objInstance
-     *
-     * @return class_admin_formgenerator
-     */
-    protected function getAdminForm(interface_model $objInstance) {
-        $objForm = parent::getAdminForm($objInstance);
-
-        if($objInstance instanceof class_module_messaging_message) {
-            if(validateSystemid($objForm->getField("messagerefid")->getStrValue()) && $objForm->getField("body")->getStrValue() == "") {
-                $objRefMessage = class_objectfactory::getInstance()->getObject($objForm->getField("messagerefid")->getStrValue());
-                if($objRefMessage instanceof class_module_messaging_message) {
-
-                    $arrBody = preg_split('/$\R?^/m', $objRefMessage->getStrBody());
-                    array_walk($arrBody, function (&$strValue) {
-                        $strValue = "> ".$strValue;
-                    });
-
-                    $objForm->getField("body")->setStrValue("\r\n\r\n\r\n".implode("\r\n", $arrBody));
-                }
-            }
-        }
-
-        return $objForm;
-    }
-
-
-    /**
      * @return string
      */
     protected function actionEdit() {
