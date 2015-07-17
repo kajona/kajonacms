@@ -16,6 +16,8 @@
  *
  * @module news
  * @moduleId _news_module_id_
+ *
+ * @formGenerator class_module_news_feed_formgenerator
  */
 class class_module_news_feed extends class_model implements interface_model, interface_admin_listable {
 
