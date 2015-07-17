@@ -8,6 +8,7 @@
 /**
  * The formgenerator for a single faqs object
  * @author sidler@mulchprod.de
+ * @package module_faqs
  * @since 4.8
  */
 class class_module_faqs_formgenerator extends class_admin_formgenerator  {

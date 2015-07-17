@@ -51,22 +51,6 @@ class class_module_eventmanager_admin extends class_admin_evensimpler implements
         return "";
     }
 
-    protected function getAdminForm(interface_model $objInstance) {
-        $objForm = parent::getAdminForm($objInstance);
-
-        if($objInstance instanceof class_module_eventmanager_participant) {
-            if(validateSystemid($objForm->getField("userid")->getStrValue())) {
-                $objForm->getField("userid")->setBitMandatory(true);
-                $objForm->getField("forename")->setBitMandatory(false);
-                $objForm->getField("lastname")->setBitMandatory(false);
-                $objForm->getField("email")->setBitMandatory(false);
-
-            }
-        }
-
-        return $objForm;
-    }
-
 
     protected function renderAdditionalActions(class_model $objListEntry) {
         if($objListEntry->rightEdit() && $objListEntry instanceof class_module_eventmanager_event) {

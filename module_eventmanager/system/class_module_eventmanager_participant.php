@@ -16,6 +16,8 @@
  *
  * @module eventmanager
  * @moduleId _eventmanager_module_id_
+ *
+ * @formGenerator class_module_eventmanager_participant_formgenerator
  */
 class class_module_eventmanager_participant extends class_model implements interface_model, interface_versionable, interface_admin_listable  {
 
