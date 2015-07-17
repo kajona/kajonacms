@@ -15,6 +15,8 @@
  *
  * @module mediamanager
  * @moduleId _mediamanager_module_id_
+ *
+ * @formGenerator class_module_mediamanager_repo_formgenerator
  */
 class class_module_mediamanager_repo extends class_model implements interface_model, interface_admin_listable {
 
