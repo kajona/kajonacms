@@ -124,6 +124,7 @@ class class_admin_formgenerator {
      */
     public function validateForm() {
         $objLang = class_carrier::getInstance()->getObjLang();
+        $this->arrValidationErrors = array();
 
         //1. Validate fields
         foreach($this->arrFields as $objOneField) {
