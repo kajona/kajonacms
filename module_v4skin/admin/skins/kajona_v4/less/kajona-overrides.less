@@ -1216,6 +1216,65 @@ footer {
 
         }
     }
+
+    table.bulkedit {
+        label {
+            display:none;
+        }
+
+        .form-opener {
+            display:none;
+        }
+
+        .form-group {
+            display:block;
+            margin-left:0;
+            margin-right:0;
+        }
+
+        .col-sm-6 {
+            width:100%;
+            padding:0;
+        }
+
+        tbody:hover {
+            tr td,
+            tr th {
+                background-color:#fff;
+            }
+        }
+
+        tbody {
+            border-bottom:none;
+        }
+    }
+
+    table.bulkedit > tbody > tr.table-row-form {
+        border-bottom:2px solid #222;
+
+        label {
+            display:inline-block!important;
+            padding-top:0;
+        }
+
+        .form-group {
+            clear:both;
+        }
+
+        .form-opener {
+            display:none;
+        }
+
+        .col-sm-6 {
+            width:50%!important;
+            padding:0;
+        }
+
+        td {
+            border-top:none;
+        }
+    }
+
 }
 
 
