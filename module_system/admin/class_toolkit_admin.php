@@ -1278,21 +1278,22 @@ class class_toolkit_admin extends class_toolkit {
      * @param mixed $arrHeader the first row to name the columns
      * @param mixed $arrValues every entry is one row
      * @param string $strTableCssAddon an optional css-class added to the table tag
+     * @param boolean $bitWithTbody whether to render the table with a tbody element
      *
      * @return string
      */
-    public function dataTable(array $arrHeader = null, array $arrValues, $strTableCssAddon = "") {
+    public function dataTable(array $arrHeader = null, array $arrValues, $strTableCssAddon = "", $bitWithTbody = false) {
         $strReturn = "";
         //The Table header & the templates
-        $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "datalist_header");
+        $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "datalist_header" . ($bitWithTbody ? "_tbody" : ""));
         $strReturn .= $this->objTemplate->fillTemplate(array("cssaddon" => $strTableCssAddon), $strTemplateID);
 
         $strTemplateHeaderHeaderID = $this->objTemplate->readTemplate("/elements.tpl", "datalist_column_head_header");
         $strTemplateHeaderContentID = $this->objTemplate->readTemplate("/elements.tpl", "datalist_column_head");
         $strTemplateHeaderFooterID = $this->objTemplate->readTemplate("/elements.tpl", "datalist_column_head_footer");
-        $strTemplateContentHeaderID = $this->objTemplate->readTemplate("/elements.tpl", "datalist_column_header");
+        $strTemplateContentHeaderID = $this->objTemplate->readTemplate("/elements.tpl", "datalist_column_header" . ($bitWithTbody ? "_tbody" : ""));
         $strTemplateContentContentID = $this->objTemplate->readTemplate("/elements.tpl", "datalist_column");
-        $strTemplateContentFooterID = $this->objTemplate->readTemplate("/elements.tpl", "datalist_column_footer");
+        $strTemplateContentFooterID = $this->objTemplate->readTemplate("/elements.tpl", "datalist_column_footer" . ($bitWithTbody ? "_tbody" : ""));
         //Iterating over the rows
 
         //Starting with the header, column by column

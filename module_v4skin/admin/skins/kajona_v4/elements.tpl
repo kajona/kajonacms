@@ -291,6 +291,10 @@ data list header. Used to open a table to print data
 <table class="table table-striped table-condensed kajona-data-table %%cssaddon%%">
 </datalist_header>
 
+<datalist_header_tbody>
+    <table class="table table-striped-tbody table-condensed kajona-data-table %%cssaddon%%">
+</datalist_header_tbody>
+
 data list footer. at the bottom of the datatable
 <datalist_footer>
 </table>
@@ -314,6 +318,11 @@ One Column in a row (data record) - the header, the content, the footer, providi
 	<tr data-systemid="%%systemid%%">
 </datalist_column_header>
 
+<datalist_column_header_tbody>
+    <tbody>
+    <tr data-systemid="%%systemid%%">
+</datalist_column_header_tbody>
+
 <datalist_column>
     <td class="%%class%%">%%value%%</td>
 </datalist_column>
@@ -321,6 +330,11 @@ One Column in a row (data record) - the header, the content, the footer, providi
 <datalist_column_footer>
 	</tr>
 </datalist_column_footer>
+
+<datalist_column_footer_tbody>
+    </tr>
+    </tbody>
+</datalist_column_footer_tbody>
 
 
 
