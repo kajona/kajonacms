@@ -252,7 +252,7 @@ class class_db_sqlite3 extends class_db_base  {
             return false;
         $intCount = 1;
         foreach($arrParams as $strOneParam) {
-            if($strOneParam == null)
+            if($strOneParam === null)
                 $objStmt->bindValue(':param'.$intCount++, $strOneParam, SQLITE3_NULL);
             //else if(is_double($strOneParam))
             //    $objStmt->bindValue(':param'.$intCount++ , $strOneParam, SQLITE3_FLOAT);
@@ -288,7 +288,7 @@ class class_db_sqlite3 extends class_db_base  {
 
         $intCount = 1;
         foreach($arrParams as $strOneParam) {
-            if($strOneParam == null)
+            if($strOneParam === null)
                 $objStmt->bindValue(':param'.$intCount++, $strOneParam, SQLITE3_NULL);
             //else if(is_double($strOneParam))
             //    $objStmt->bindValue(':param'.$intCount++ , $strOneParam, SQLITE3_FLOAT);
