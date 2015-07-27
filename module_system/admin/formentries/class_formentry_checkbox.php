@@ -54,12 +54,17 @@ class class_formentry_checkbox extends class_formentry_base implements interface
      */
     protected function updateValue() {
         $arrParams = class_carrier::getAllParams();
-        if(isset($arrParams[$this->getStrEntryName()]))
+
+
+        if(isset($arrParams[$this->getStrEntryName()])) {
             $this->setStrValue(true);
-        else if(count($_POST) > 0)
+        }
+        else if(count($_POST) > 0) {
             $this->setStrValue(false);
-        else
+        }
+        else {
             $this->setStrValue($this->getValueFromObject());
+        }
     }
 
     /**
@@ -84,5 +89,21 @@ class class_formentry_checkbox extends class_formentry_base implements interface
     public function getValueAsText() {
         return $this->getStrValue() == true ? class_carrier::getInstance()->getObjLang()->getLang("commons_yes", "commons") : class_carrier::getInstance()->getObjLang()->getLang("commons_no", "commons");
     }
+
+    /**
+     * Calls the source-objects setter and stores the value.
+     * If you want to skip a single setter, remove the field before.
+     *
+     * @throws class_exception
+     * @return mixed
+     */
+    public function setValueToObject()
+    {
+        if($this->getBitReadonly() == true) {
+            return true;
+        }
+        return parent::setValueToObject();
+    }
+
 
 }
