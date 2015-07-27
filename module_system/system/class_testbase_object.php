@@ -145,38 +145,12 @@ abstract class class_testbase_object extends class_testbase {
             throw new RuntimeException('No class name given for object "' . $strName . '" (' . $objElement->getNodePath() . ')');
         }
 
-        $strParentId = $objParent === null ? $this->getDefaultRootId($strClassName) : $objParent->getStrSystemid();
-
-        // resolve references
-        foreach($arrParameters as $strKey => $strValue) {
-            if(substr($strValue, 0, 11) == 'objectlist:') {
-                $strRef = trim(substr($strValue, 11));
-                $arrRefs = explode(",", $strRef);
-
-                $arrParameters[$strKey] = array();
-                foreach($arrRefs as $strRefKey) {
-                    $objRef = $this->getObject($strRefKey);
-                    if($objRef instanceof class_model) {
-                        $arrParameters[$strKey][] = $objRef;
-                    }
-                    else {
-                        throw new RuntimeException('Object "' . $strName . '" refers to an non existing object (' . $objElement->getNodePath() . ')');
-                    }
-                }
-            }
-            else if(substr($strValue, 0, 4) == 'ref:') {
-                $strRef = trim(substr($strValue, 4));
-                $objRef = $this->getObject($strRef);
-                if($objRef instanceof class_model) {
-                    $arrParameters[$strKey] = $objRef->getStrSystemid();
-                }
-                else {
-                    throw new RuntimeException('Object "' . $strName . '" refers to an non existing object (' . $objElement->getNodePath() . ')');
-                }
-            }
+        if($strClassName == "class_module_user_user") {
+            $objObject = $this->createFixtureUser($objElement, $objParent, $strClassName, $arrParameters, $strName);
         }
-
-        $objObject = $this->createObject($strClassName, $strParentId, array(), $arrParameters, false);
+        else {
+            $objObject = $this->createFixtureObject($objElement, $objParent, $strClassName, $arrParameters, $strName);
+        }
 
         $this->addObject($strName, $objObject);
 
@@ -202,4 +176,75 @@ abstract class class_testbase_object extends class_testbase {
             }
         }
     }
+
+    /**
+     * @param DOMElement $objElement
+     * @param $objParent
+     * @param $strClassName
+     * @param $arrParameters
+     * @param $strName
+     * @return class_model
+     */
+    protected function createFixtureObject(DOMElement $objElement, $objParent, $strClassName, $arrParameters, $strName)
+    {
+        $strParentId = $objParent === null ? $this->getDefaultRootId($strClassName) : $objParent->getStrSystemid();
+
+        // resolve references
+        foreach ($arrParameters as $strKey => $strValue) {
+            if (substr($strValue, 0, 11) == 'objectlist:') {
+                $strRef = trim(substr($strValue, 11));
+                $arrRefs = explode(",", $strRef);
+
+                $arrParameters[$strKey] = array();
+                foreach ($arrRefs as $strRefKey) {
+                    $objRef = $this->getObject($strRefKey);
+                    if ($objRef instanceof class_model) {
+                        $arrParameters[$strKey][] = $objRef;
+                    } else {
+                        throw new RuntimeException('Object "' . $strName . '" refers to an non existing object (' . $objElement->getNodePath() . ')');
+                    }
+                }
+            } else if (substr($strValue, 0, 4) == 'ref:') {
+                $strRef = trim(substr($strValue, 4));
+                $objRef = $this->getObject($strRef);
+                if ($objRef instanceof class_model) {
+                    $arrParameters[$strKey] = $objRef->getStrSystemid();
+                } else {
+                    throw new RuntimeException('Object "' . $strName . '" refers to an non existing object (' . $objElement->getNodePath() . ')');
+                }
+            }
+        }
+
+        $objObject = $this->createObject($strClassName, $strParentId, array(), $arrParameters, false);
+
+        return $objObject;
+    }
+
+
+    /**
+     * @param DOMElement $objElement
+     * @param $objParent
+     * @param $strClassName
+     * @param $arrParameters
+     * @param $strName
+     * @return class_model
+     */
+    private function createFixtureUser(DOMElement $objElement, $objParent, $strClassName, $arrParameters, $strName) {
+        $strUserName = $arrParameters["strUsername"];
+
+        $objUser = new class_module_user_user();
+        $objUser->setIntActive(1);
+        $objUser->setIntAdmin(1);
+        $objUser->setStrUsername($strUserName);
+        $objUser->updateObjectToDb();
+        $objSourceUser = $objUser->getObjSourceUser();
+        $objSourceUser->setStrPass($strUserName);
+        $objSourceUser->setStrEmail("{$strUserName}@example");
+        $objSourceUser->setStrForename($strUserName."_Forname");
+        $objSourceUser->setStrName($strUserName."Lastname");
+        $objSourceUser->updateObjectToDb();
+
+        return $objUser;
+    }
+
 }
