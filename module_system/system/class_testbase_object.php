@@ -78,9 +78,16 @@ abstract class class_testbase_object extends class_testbase {
     protected function cleanStructure() {
         /** @var class_model $objOneModel */
         foreach(array_reverse($this->arrStructure, true) as $objOneModel) {
+            $strSystemId = $objOneModel->getStrSystemid();
             $objOneModel->deleteObjectFromDatabase();
-        }
 
+            //if it is a user also delete the user from the database completeley
+            if($objOneModel instanceof class_module_user_user) {
+                $strQuery = "DELETE FROM " . _dbprefix_ . "user WHERE user_id=?";
+                //call other models that may be interested
+                $bitDelete = class_db::getInstance()->_pQuery($strQuery, array($strSystemId));
+            }
+        }
     }
 
     /**
