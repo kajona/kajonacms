@@ -1,15 +1,8 @@
 <?xml version="1.0"?>
 <ruleset name="KAJONA">
 
-
     <description>Kajona default CodeSniffs</description>
 
-    <!--
-             You can hard-code ignore patterns directly into your
-                 custom standard so you don't have to specify the
-                     patterns on the command line.
-
-    -->
     <exclude-pattern>*/vendor/*</exclude-pattern>
     <exclude-pattern>*tests*</exclude-pattern>
     <exclude-pattern>*installer*</exclude-pattern>
@@ -26,60 +19,30 @@
     <exclude-pattern>*browscap.cache*</exclude-pattern>
     <exclude-pattern>*Browscap.php*</exclude-pattern>
 
+    <rule ref="PSR2">
+        <!-- Exclude that there must be one space after the control structure keyword -->
+        <exclude name="Squiz.ControlStructures.ControlSignature"/>
 
-    <rule ref="PEAR">
-        <exclude name="PEAR.Classes.ClassDeclaration"/>
-        <exclude name="PEAR.NamingConventions.ValidClassName"/>
-        <exclude name="PEAR.NamingConventions.ValidVariableName.PrivateNoUnderscore"/>
-        <exclude name="PEAR.NamingConventions.ValidFunctionName.PrivateNoUnderscore"/>
-        <exclude name="PEAR.Functions.FunctionDeclaration.BraceOnSameLine"/>
-        <exclude name="PEAR.Commenting.ClassComment.InvalidPackage"/>
-        <exclude name="PEAR.Commenting.ClassComment.WrongStyle"/>
-        <exclude name="PEAR.Commenting.ClassComment.MissingTag"/>
-        <exclude name="PEAR.Commenting.ClassComment.InvalidAuthors"/>
-        <exclude name="PEAR.Commenting.ClassComment.TagIndent"/>
-        <exclude name="PEAR.Commenting.ClassComment.WrongTagOrder"/>
-        <exclude name="PEAR.Commenting.FileComment.WrongStyle"/>
-        <exclude name="PEAR.Commenting.FileComment.WrongTagOrder"/>
-        <exclude name="PEAR.Commenting.FileComment.TagsNotGrouped"/>
-        <exclude name="PEAR.Commenting.FileComment.MissingTag"/>
-        <exclude name="PEAR.Commenting.FileComment.InvalidAuthors"/>
-        <exclude name="PEAR.Commenting.FileComment.TagIndent"/>
-        <exclude name="PEAR.ControlStructures.ControlSignature"/>
-        <exclude name="PEAR.Commenting.FunctionComment.SpacingAfterParams"/>
-        <exclude name="PEAR.Commenting.FunctionComment.SpacingBeforeTags"/>
-        <exclude name="PEAR.Commenting.FunctionComment.ParameterCommentsNotAligned"/>
-        <exclude name="PEAR.Commenting.FunctionComment.ParameterNamesNotAligned"/>
-        <exclude name="PEAR.Commenting.FunctionComment.MissingParamComment"/>
-
-        <exclude name="Generic.NamingConventions.UpperCaseConstantName.ConstantNotUpperCase"/>
-        <exclude name="Generic.ControlStructures.InlineControlStructure.Discouraged"/>
-
+        <!-- Exclude that the class name must be in CamelCase -->
+        <exclude name="Squiz.Classes.ValidClassName"/>
     </rule>
-
 
     <rule ref="Generic.Files.LineLength">
         <properties>
             <property name="lineLimit" value="240"/>
             <property name="absoluteLineLimit" value="0"/>
         </properties>
-
     </rule>
 
-
-    <!--
-             There is a special internal error message produced by PHP_CodeSniffer
-                 when it is unable to detect code in a file, possible due to
-                     the use of short open tags even though php.ini disables them.
-                         You can disable this message in the same way as sniff messages.
-
-       Again, the code here will be displayed in the PHP_CodeSniffer
-           output when using the -s command line argument while checking a file.
-            -->
+    <!-- There is a special internal error message produced by PHP_CodeSniffer
+    when it is unable to detect code in a file, possible due to
+    the use of short open tags even though php.ini disables them.
+    You can disable this message in the same way as sniff messages.
+    Again, the code here will be displayed in the PHP_CodeSniffer
+    output when using the -s command line argument while checking a file. -->
     <rule ref="Internal.NoCodeFound">
         <severity>0</severity>
     </rule>
-
 
 </ruleset>
 
