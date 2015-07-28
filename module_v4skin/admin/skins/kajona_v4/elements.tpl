@@ -1310,9 +1310,7 @@ pe_iconbar, pe_disable
 		var peDialog;
 		KAJONA.admin.lang["pe_dialog_close_warning"] = "[lang,pe_dialog_close_warning,pages]";
         KAJONA.portal.loader.loadFile([
-            "_webpath_/core/module_v4skin/admin/skins/kajona_v4/js/modal.js",
-            "_webpath_/core/module_v4skin/admin/skins/kajona_v4/js/dropdown.js",
-            "_webpath_/core/module_v4skin/admin/skins/kajona_v4/js/button.js",
+            "_webpath_/core/module_v4skin/admin/skins/kajona_v4/js/bootstrap.min.js",
             "_webpath_/core/module_v4skin/admin/skins/kajona_v4/js/kajona_dialog.js"
         ], function() {
 		    peDialog = new KAJONA.admin.ModalDialog('peDialog', 0, true, true);
