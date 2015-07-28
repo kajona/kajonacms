@@ -346,7 +346,7 @@ abstract class class_admin_simple extends class_admin_controller {
     /**
      * Renders the edit action button for the current record.
      *
-     * @param class_model $objListEntry
+     * @param class_model|interface_admin_listable $objListEntry
      * @param bool $bitDialog opens the linked page in a js-based dialog
      *
      * @return string
@@ -371,7 +371,8 @@ abstract class class_admin_simple extends class_admin_controller {
                         "folderview=1&systemid=".$objListEntry->getSystemid().$this->strPeAddon,
                         $this->getLang("commons_list_edit"),
                         $this->getLang("commons_list_edit"),
-                        "icon_edit"
+                        "icon_edit",
+                        $objListEntry->getStrDisplayName()
                     )
                 );
             else
