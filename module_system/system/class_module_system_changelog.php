@@ -878,6 +878,8 @@ class class_module_system_changelog {
                                  WHERE change_systemid = log.change_systemid
                                    AND change_date >= ?
                                    AND change_date <= ?
+                                   AND change_class = ?
+                                   AND change_property = ?
                               ORDER BY change_date DESC
                                  LIMIT 1
                               ) AS change_newvalue
@@ -888,7 +890,7 @@ class class_module_system_changelog {
                           AND log.change_property = ?
                           {$strQueryCondition}";
 
-        $arrParameters = array($objDateFrom->getLongTimestamp(), $objDateTo->getLongTimestamp(), $objDateFrom->getLongTimestamp(), $objDateTo->getLongTimestamp(), $strClass, $strProperty);
+        $arrParameters = array($objDateFrom->getLongTimestamp(), $objDateTo->getLongTimestamp(), $strClass, $strProperty, $objDateFrom->getLongTimestamp(), $objDateTo->getLongTimestamp(), $strClass, $strProperty);
         $arrParameters = array_merge($arrParameters, $objRestriction->getArrParams());
 
         return class_carrier::getInstance()->getObjDB()->getPArray($strQuery, $arrParameters);
