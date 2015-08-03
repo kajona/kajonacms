@@ -101,7 +101,15 @@ KAJONA.admin.ModalDialog = function (strDialogId, intDialogType, bitDragging, bi
                 //open the iframe in a regular popup
                 //workaround for stacked dialogs. if a modal is already opened, the second iframe is loaded in a popup window.
                 //stacked modals still face issues with dimensions and scrolling. (see http://trace.kajona.de/view.php?id=724)
-                window.open(this.iframeURL, $('#' + this.containerId + '_title').text(), 'scrollbars=yes,resizable=yes,width=500,height=500');
+                if(!intWidth) {
+                    intWidth = 500;
+                }
+
+                if(!intHeight) {
+                    intHeight = 500;
+                }
+
+                window.open(this.iframeURL, $('#' + this.containerId + '_title').text(), 'scrollbars=yes,resizable=yes,width=' + (intWidth) + ',height=' + (intHeight));
                 return;
             }
         }
