@@ -179,6 +179,11 @@ class class_installer_workflows extends class_installer_base implements interfac
             $this->updateModuleVersion($this->objMetadata->getStrTitle(), "4.7");
         }
 
+        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "4.7") {
+            $strReturn .= $this->update_47_475();
+        }
+
         return $strReturn."\n\n";
 	}
 
@@ -236,6 +241,25 @@ class class_installer_workflows extends class_installer_base implements interfac
 
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion($this->objMetadata->getStrTitle(), "4.5.1");
+        return $strReturn;
+    }
+
+    private function update_47_475() {
+        $strReturn = "Updating 4.7 to 4.7.5...\n";
+
+        $strReturn .= "Removing messagesummary login-listeners...\n";
+
+        $objFilesystem = new class_filesystem();
+        if(is_file(_realpath_."/core/module_workflows/system/class_module_messagesummary_firstloginlistener.php")) {
+            $objFilesystem->fileDelete("/core/module_workflows/system/class_module_messagesummary_firstloginlistener.php");
+        }
+
+        if(is_file(_realpath_."/project/system/class_module_messagesummary_firstloginlistener.php")) {
+            $objFilesystem->fileDelete("/project/system/class_module_messagesummary_firstloginlistener.php");
+        }
+
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion($this->objMetadata->getStrTitle(), "4.7.5");
         return $strReturn;
     }
 
