@@ -872,28 +872,34 @@ class class_module_system_changelog {
         $objRestriction = new class_orm_objectlist_in_restriction("log.change_systemid", $arrAllowedSystemIds);
         $strQueryCondition = $objRestriction->getStrWhere();
 
-        $strQuery = "  SELECT DISTINCT change_systemid, (
-                                SELECT change_newvalue
-                                  FROM "._dbprefix_.self::getTableForClass($strClass)."
-                                 WHERE change_systemid = log.change_systemid
-                                   AND change_date >= ?
-                                   AND change_date <= ?
-                                   AND change_class = ?
-                                   AND change_property = ?
-                              ORDER BY change_date DESC
-                                 LIMIT 1
-                              ) AS change_newvalue
+        $strQuery = "  SELECT change_systemid,
+                              change_newvalue
                          FROM "._dbprefix_.self::getTableForClass($strClass)." log
                         WHERE log.change_date >= ?
                           AND log.change_date <= ?
                           AND log.change_class = ?
                           AND log.change_property = ?
-                          {$strQueryCondition}";
+                          {$strQueryCondition}
+                     ORDER BY log.change_systemid ASC, log.change_date DESC";
 
-        $arrParameters = array($objDateFrom->getLongTimestamp(), $objDateTo->getLongTimestamp(), $strClass, $strProperty, $objDateFrom->getLongTimestamp(), $objDateTo->getLongTimestamp(), $strClass, $strProperty);
+        $arrParameters = array($objDateFrom->getLongTimestamp(), $objDateTo->getLongTimestamp(), $strClass, $strProperty);
         $arrParameters = array_merge($arrParameters, $objRestriction->getArrParams());
 
-        return class_carrier::getInstance()->getObjDB()->getPArray($strQuery, $arrParameters);
+        $arrResult = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, $arrParameters);
+        $arrData = array();
+
+        $strLastId = "";
+        foreach($arrResult as $arrRow) {
+            if($strLastId != $arrRow["change_systemid"]) {
+                $arrData[] = array(
+                    "change_systemid" => $arrRow["change_systemid"],
+                    "change_newvalue" => $arrRow["change_newvalue"],
+                );
+            }
+            $strLastId = $arrRow["change_systemid"];
+        }
+
+        return $arrData;
     }
 
     /**
