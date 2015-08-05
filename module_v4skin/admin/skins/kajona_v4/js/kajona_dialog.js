@@ -16,6 +16,7 @@ KAJONA.admin.ModalDialog = function (strDialogId, intDialogType, bitDragging, bi
     this.containerId = strDialogId;
     this.iframeId;
     this.iframeURL;
+    this.bitLarge = false;
 
     /** Set this variable to false if you don't want to remove actions on click */
     this.unbindOnClick = true;
@@ -24,6 +25,10 @@ KAJONA.admin.ModalDialog = function (strDialogId, intDialogType, bitDragging, bi
         if(strTitle == "")
             strTitle = "&nbsp;";
         $('#' + this.containerId + '_title').html(strTitle);
+    };
+
+    this.setBitLarge = function (bitLarge) {
+        this.bitLarge = bitLarge
     };
 
     this.setContent = function (strContent, strConfirmButton, strLinkHref) {
@@ -93,8 +98,9 @@ KAJONA.admin.ModalDialog = function (strDialogId, intDialogType, bitDragging, bi
                 intHeight = '';
         }
 
-
         var isStackedDialog = !!(window.frameElement && window.frameElement.nodeName && window.frameElement.nodeName.toLowerCase() == 'iframe');
+
+
 
         if (isStackedDialog) {
             if(this.iframeURL != null) {
@@ -124,8 +130,22 @@ KAJONA.admin.ModalDialog = function (strDialogId, intDialogType, bitDragging, bi
             });
         }
 
+
+        if(!isStackedDialog && this.bitLarge) {
+            $('#' + this.containerId+" .modal-dialog").addClass("modal-lg-lg");
+
+            $('#' + this.containerId).on('hidden.bs.modal', function (e) {
+                console.log('hidden');
+                $(this).find(".modal-dialog").removeClass("modal-lg-lg");
+            });
+
+            this.bitLarge = false;
+        }
+
+
         //finally show the modal
         $('#' + this.containerId).modal('show');
+
         if (bitDragging) {
             this.enableDragging();
         }
@@ -164,6 +184,7 @@ KAJONA.admin.ModalDialog = function (strDialogId, intDialogType, bitDragging, bi
             $('#' + this.containerId + '_cancelButton').unbind();
             $('#' + this.containerId + '_confirmButton').unbind();
             this.unbindOnClick = true;
+            this.bitLarge = false;
         }
     };
 
