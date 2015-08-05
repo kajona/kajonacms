@@ -204,7 +204,7 @@ class class_orm_objectlist extends class_orm_base {
         foreach($this->arrOrderBy as $objOneOrder)
             $arrOrderByCriteria[] = $objOneOrder->getStrOrderBy();
 
-        $arrOrderByCriteria[] = " system_sort ASC ";
+
         if(count($arrPropertiesOrder) > 0) {
             $arrPropertiesORM = $objReflection->getPropertiesWithAnnotation(class_orm_base::STR_ANNOTATION_TABLECOLUMN);
 
@@ -228,6 +228,7 @@ class class_orm_objectlist extends class_orm_base {
             }
         }
 
+        $arrOrderByCriteria[] = " system_sort ASC ";
         $strOrderBy = "";
         if(count($arrOrderByCriteria) > 0)
             $strOrderBy = "ORDER BY ".implode(" , ", $arrOrderByCriteria)." ";
