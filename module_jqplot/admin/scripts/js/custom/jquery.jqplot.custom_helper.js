@@ -310,5 +310,12 @@ KAJONA.admin.jqplotHelper = {
             KAJONA.admin.folderview.dialog.setTitle('');
             KAJONA.admin.folderview.dialog.init();
         }
+    },
+
+    dataRedirect: function(ev, seriesIndex, pointIndex, data, objDataPoint) {
+        if(objDataPoint.actionhandlervalue != null && objDataPoint.actionhandlervalue != "") {
+            window.location = objDataPoint.actionhandlervalue;
+        }
     }
+
 };
