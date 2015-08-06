@@ -180,6 +180,9 @@ KAJONA.admin.jqplotHelper = {
         if(neighbor==null) {
             //no datapoint selected
             $('#jqplot_tooltip').remove();
+
+            $(ev.currentTarget).css('cursor', 'auto');
+
             this.previousNeighbor = null;
         }
         else {
@@ -226,6 +229,11 @@ KAJONA.admin.jqplotHelper = {
                 || ((this.previousNeighbor.seriesIndex == neighbor.seriesIndex) && (this.previousNeighbor.pointIndex != neighbor.pointIndex)))//same series but different point --> create new point
             {
                 this.showTooltip(ev.pageX, ev.pageY, objTooltip, tooltipId, false);
+
+                if (this.hasDataPoint(ev, neighbor.seriesIndex, neighbor.pointIndex)) {
+                    $(ev.currentTarget).css('cursor', 'pointer');
+                }
+
                 this.previousNeighbor = neighbor;
             }
             //same series and point -> only move tooltip
@@ -233,6 +241,16 @@ KAJONA.admin.jqplotHelper = {
                 this.showTooltip(ev.pageX, ev.pageY, null , tooltipId, true);
             }
         }
+    },
+
+    hasDataPoint: function(ev, seriesIndex, pointIndex){
+        var objChart = KAJONA.admin.jqplotHelper.arrChartObjects[$(ev.currentTarget).attr('id')];
+        if(objChart.arrSeriesToDataPoints && objChart.arrSeriesToDataPoints[seriesIndex]) {
+            if(objChart.arrSeriesToDataPoints[seriesIndex][pointIndex] && objChart.arrSeriesToDataPoints[seriesIndex][pointIndex].actionhandler != null) {
+                return true;
+            }
+        }
+        return false;
     },
 
     /**
