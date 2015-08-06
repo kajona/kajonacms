@@ -285,3 +285,4 @@ $lang["systemtask_permissions_systemid"]     = "Start Systemid";
 $lang["systemtask_permissions_groupid"]     = "Relevante Gruppe";
 $lang["systemtask_permissions_finished"]     = "Ausführung abgeschlossen";
 $lang["systemtask_permissions_name"]     = "Rechte rekursiv setzen";
+$lang["generic_changelog_no_systemid"]  = "Diese Aktion kann nur mit einer gültigen Systemid aufgerufen werden. Bitte eine entsprechende Systemid angeben.";

@@ -292,3 +292,4 @@ $lang["systemtask_permissions_systemid"]     = "Starting systemid";
 $lang["systemtask_permissions_groupid"]     = "Relevant group";
 $lang["systemtask_permissions_finished"]     = "Finished execution";
 $lang["systemtask_permissions_name"]     = "Set permissions recursively";
+$lang["generic_changelog_no_systemid"]  = "Calling this action is only possible with a valid systemid. Please enter the systemid to be investigated.";

@@ -784,6 +784,17 @@ JS;
         if($strSystemid == "")
             $strSystemid = $this->getSystemid();
 
+        if(!validateSystemid($strSystemid) && $this->getObjModule()->rightChangelog()) {
+            $strReturn = $this->objToolkit->warningBox($this->getLang("generic_changelog_no_systemid"));
+            $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref("system", "genericChangeLog", "bitBlockFolderview=1"));
+            $strReturn .= $this->objToolkit->formInputText("systemid", "systemid");
+            $strReturn .= $this->objToolkit->formInputSubmit();
+            $strReturn .= $this->objToolkit->formClose();
+
+            return $strReturn;
+//            return "asd";
+        }
+
         $strReturn = "";
 //        check needed rights - done twice since public and callable by not only the controller
 //        if(!class_carrier::getInstance()->getObjRights()->validatePermissionString(class_rights::$STR_RIGHT_CHANGELOG, $this->getObjModule()))

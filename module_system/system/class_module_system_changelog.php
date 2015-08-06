@@ -476,7 +476,7 @@ class class_module_system_changelog {
      *
      * @return class_changelog_container[]
      */
-    public static function getLogEntries($strSystemidFilter = "", $intStart = null, $intEnd = null) {
+    public static function getLogEntries($strSystemidFilter, $intStart = null, $intEnd = null) {
 
         $arrParams = array();
 
@@ -490,13 +490,7 @@ class class_module_system_changelog {
 
         }
         else {
-            $strQuery = "SELECT change_date, change_systemid, change_user, change_class, change_action, change_property, change_oldvalue, change_newvalue
-                           FROM "._dbprefix_."changelog";
-
-            foreach(self::getAdditionalTables() as $strOneTable) {
-                $strQuery .= " UNION ALL SELECT change_date, change_systemid, change_user, change_class, change_action, change_property, change_oldvalue, change_newvalue FROM "._dbprefix_.$strOneTable." ";
-            }
-
+            return array();
         }
         $strQuery .= "ORDER BY change_date DESC";
 
@@ -525,7 +519,7 @@ class class_module_system_changelog {
      *
      * @return int
      */
-    public static function getLogEntriesCount($strSystemidFilter = "") {
+    public static function getLogEntriesCount($strSystemidFilter) {
 
         $arrParams = array();
 
@@ -539,18 +533,7 @@ class class_module_system_changelog {
 
         }
         else {
-
-            $strQuery = "SELECT COUNT(*)
-                FROM (SELECT * FROM "._dbprefix_."changelog";
-
-            if($strSystemidFilter != "")
-                $arrParams[] = $strSystemidFilter;
-
-            foreach(self::getAdditionalTables() as $strOneTable) {
-                $strQuery .= " UNION ALL SELECT * FROM "._dbprefix_.$strOneTable." ";
-            }
-            $strQuery .= " ) as tem";
-
+            return 0;
         }
 
         $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, $arrParams);
