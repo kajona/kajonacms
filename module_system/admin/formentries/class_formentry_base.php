@@ -236,6 +236,9 @@ class class_formentry_base {
      * @return class_formentry_base
      */
     public function setStrHint($strHint) {
+        if(trim($strHint) != "") {
+            $strHint = nl2br($strHint);
+        }
         $this->strHint = $strHint;
         return $this;
     }
