@@ -19,9 +19,9 @@
  *
  * @package module_system
  * @author sidler@mulchprod.de
-
  */
-class class_db {
+class class_db
+{
     private $objConfig = null; //Config-Objekt
     private $arrQueryCache = array(); //Array to cache queries
     private $arrTablesCache = array();
@@ -63,41 +63,43 @@ class class_db {
     /**
      * Constructor
      */
-    private function __construct() {
-
+    private function __construct()
+    {
         $this->objConfig = class_config::getInstance();
 
         //Load the defined db-driver
         $strDriver = $this->objConfig->getConfig("dbdriver");
-        if($strDriver != "%%defaultdriver%%") {
+        if ($strDriver != "%%defaultdriver%%") {
             //build a class-name & include the driver
             $strClassname = "class_db_".$strDriver;
-            if(class_exists($strClassname))
+            if (class_exists($strClassname)) {
                 $this->objDbDriver = new $strClassname();
-            else
+            }
+            else {
                 throw new class_exception("db-driver ".$strClassname." could not be loaded", class_exception::$level_FATALERROR);
+            }
 
         }
         else {
             //Do not throw any exception here, otherwise an endless loop will exit with an overloaded stack frame
             //throw new class_exception("No db-driver defined!", class_exception::$level_FATALERROR);
         }
-
     }
 
     /**
      * Destructor.
      * Handles the closing of remaining tx and closes the db-connection
      */
-    public function __destruct() {
-        if($this->intNumberOfOpenTransactions != 0) {
+    public function __destruct()
+    {
+        if ($this->intNumberOfOpenTransactions != 0) {
             //something bad happened. rollback, plz
             $this->objDbDriver->transactionRollback();
             class_logger::getInstance(class_logger::DBLOG)->addLogRow("Rolled back open transactions on deletion of current instance of class_db!", class_logger::$levelWarning);
         }
 
 
-        if($this->objDbDriver !== null && $this->bitConnected) {
+        if ($this->objDbDriver !== null && $this->bitConnected) {
             class_logger::getInstance(class_logger::DBLOG)->addLogRow("closing database-connection", class_logger::$levelInfo);
             $this->objDbDriver->dbclose();
         }
@@ -109,8 +111,9 @@ class class_db {
      *
      * @return class_db
      */
-    public static function getInstance() {
-        if(self::$objDB == null) {
+    public static function getInstance()
+    {
+        if (self::$objDB == null) {
             self::$objDB = new class_db();
         }
 
@@ -120,10 +123,12 @@ class class_db {
 
     /**
      * This method connects with the database
+     *
      * @return void
      */
-    private function dbconnect() {
-        if($this->objDbDriver !== null) {
+    private function dbconnect()
+    {
+        if ($this->objDbDriver !== null) {
             try {
                 class_logger::getInstance(class_logger::DBLOG)->addLogRow("creating database-connection using driver ".get_class($this->objDbDriver), class_logger::$levelInfo);
                 $this->objDbDriver->dbconnect(
@@ -134,7 +139,7 @@ class class_db {
                     $this->objConfig->getConfig("dbport")
                 );
             }
-            catch(class_exception $objException) {
+            catch (class_exception $objException) {
                 $objException->processException();
             }
 
@@ -153,9 +158,11 @@ class class_db {
      *
      * @return bool
      */
-    public function multiInsert($strTable, $arrColumns, $arrValueSets) {
-        if(count($arrValueSets) == 0)
+    public function multiInsert($strTable, $arrColumns, $arrValueSets)
+    {
+        if (count($arrValueSets) == 0) {
             return true;
+        }
         return $this->objDbDriver->triggerMultiInsert(_dbprefix_.$strTable, $arrColumns, $arrValueSets, $this);
     }
 
@@ -167,7 +174,8 @@ class class_db {
      * @return bool
      * @deprecated
      */
-    public function _query($strQuery) {
+    public function _query($strQuery)
+    {
         return $this->_pQuery($strQuery, array());
     }
 
@@ -182,26 +190,30 @@ class class_db {
      * @return bool
      * @since 3.4
      */
-    public function _pQuery($strQuery, $arrParams, $arrEscapes = array()) {
-        if(!$this->bitConnected)
+    public function _pQuery($strQuery, $arrParams, $arrEscapes = array())
+    {
+        if (!$this->bitConnected) {
             $this->dbconnect();
+        }
 
         $bitReturn = false;
 
         $strQuery = $this->processQuery($strQuery);
 
-        if(_dblog_)
+        if (_dblog_) {
             class_logger::getInstance(class_logger::QUERIES)->addLogRow("\r\n".$strQuery."\r\n params: ".implode(", ", $arrParams), class_logger::$levelInfo, true);
+        }
 
         //Increasing the counter
         $this->intNumber++;
 
-        if($this->objDbDriver != null) {
+        if ($this->objDbDriver != null) {
             $bitReturn = $this->objDbDriver->_pQuery($strQuery, $this->dbsafeParams($arrParams, $arrEscapes));
         }
 
-        if(!$bitReturn)
+        if (!$bitReturn) {
             $this->getError($strQuery."\r\n params: ".implode(", ", $arrParams));
+        }
 
         return $bitReturn;
     }
@@ -217,7 +229,8 @@ class class_db {
      * @return array
      * @deprecated use getPRow() instead
      */
-    public function getRow($strQuery, $intNr = 0, $bitCache = true) {
+    public function getRow($strQuery, $intNr = 0, $bitCache = true)
+    {
         return $this->getPRow($strQuery, array(), $intNr, $bitCache);
     }
 
@@ -233,12 +246,15 @@ class class_db {
      *
      * @return array
      */
-    public function getPRow($strQuery, $arrParams, $intNr = 0, $bitCache = true) {
-        $arrTemp = $this->getPArray($strQuery, $arrParams, null, null, $bitCache);
-        if(count($arrTemp) > 0)
+    public function getPRow($strQuery, $arrParams, $intNr = 0, $bitCache = true)
+    {
+        $arrTemp = $this->getPArray($strQuery, $arrParams, $intNr, $intNr + 1, $bitCache);
+        if (count($arrTemp) > 0) {
             return $arrTemp[$intNr];
-        else
+        }
+        else {
             return array();
+        }
     }
 
 
@@ -251,7 +267,8 @@ class class_db {
      * @return array
      * @deprecated use getPArray() instead
      */
-    public function getArray($strQuery, $bitCache = true) {
+    public function getArray($strQuery, $bitCache = true)
+    {
         class_logger::getInstance(class_logger::DBLOG)->addLogRow("deprecated getArray call: ".$strQuery, class_logger::$levelWarning);
         return $this->getPArray($strQuery, array(), null, null, $bitCache);
     }
@@ -270,16 +287,20 @@ class class_db {
      * @return array
      * @since 3.4
      */
-    public function getPArray($strQuery, $arrParams, $intStart = null, $intEnd = null, $bitCache = true) {
-        if(!$this->bitConnected)
+    public function getPArray($strQuery, $arrParams, $intStart = null, $intEnd = null, $bitCache = true)
+    {
+        if (!$this->bitConnected) {
             $this->dbconnect();
+        }
 
         //param validation
-        if((int)$intStart < 0)
+        if ((int)$intStart < 0) {
             $intStart = null;
+        }
 
-        if((int)$intEnd < 0)
+        if ((int)$intEnd < 0) {
             $intEnd = null;
+        }
 
 
         $strQuery = $this->processQuery($strQuery);
@@ -287,9 +308,9 @@ class class_db {
         $this->intNumber++;
 
         $strQueryMd5 = null;
-        if($bitCache) {
+        if ($bitCache) {
             $strQueryMd5 = md5($strQuery.implode(",", $arrParams).$intStart.$intEnd);
-            if(isset($this->arrQueryCache[$strQueryMd5])) {
+            if (isset($this->arrQueryCache[$strQueryMd5])) {
                 //Increasing Cache counter
                 $this->intNumberCache++;
                 return $this->arrQueryCache[$strQueryMd5];
@@ -298,21 +319,25 @@ class class_db {
 
         $arrReturn = array();
 
-        if(_dblog_)
+        if (_dblog_) {
             class_logger::getInstance(class_logger::QUERIES)->addLogRow("\r\n".$strQuery."\r\n params: ".implode(", ", $arrParams), class_logger::$levelInfo, true);
+        }
 
-        if($this->objDbDriver != null) {
-            if($intStart !== null && $intEnd !== null && $intStart !== false && $intEnd !== false)
+        if ($this->objDbDriver != null) {
+            if ($intStart !== null && $intEnd !== null && $intStart !== false && $intEnd !== false) {
                 $arrReturn = $this->objDbDriver->getPArraySection($strQuery, $this->dbsafeParams($arrParams), $intStart, $intEnd);
-            else
+            }
+            else {
                 $arrReturn = $this->objDbDriver->getPArray($strQuery, $this->dbsafeParams($arrParams));
+            }
 
-            if($arrReturn === false) {
+            if ($arrReturn === false) {
                 $this->getError($strQuery."\n params: ".implode(", ", $arrParams));
                 return array();
             }
-            if($bitCache)
+            if ($bitCache) {
                 $this->arrQueryCache[$strQueryMd5] = $arrReturn;
+            }
         }
         return $arrReturn;
     }
@@ -331,7 +356,8 @@ class class_db {
      * @return array
      * @deprecated use getPArray() instead
      */
-    public function getArraySection($strQuery, $intStart, $intEnd, $bitCache = true) {
+    public function getArraySection($strQuery, $intStart, $intEnd, $bitCache = true)
+    {
         class_logger::getInstance(class_logger::DBLOG)->addLogRow("deprecated getArraySection call: ".$strQuery, class_logger::$levelWarning);
         return $this->getPArray($strQuery, array(), $intStart, $intEnd, $bitCache);
     }
@@ -352,7 +378,8 @@ class class_db {
      * @return array
      * @deprecated use getPArray() instead
      */
-    public function getPArraySection($strQuery, $arrParams, $intStart, $intEnd, $bitCache = true) {
+    public function getPArraySection($strQuery, $arrParams, $intStart, $intEnd, $bitCache = true)
+    {
         class_logger::getInstance(class_logger::DBLOG)->addLogRow("deprecated getPArraySection call: ".$strQuery, class_logger::$levelWarning);
         return $this->getPArray($strQuery, $arrParams, $intStart, $intEnd, $bitCache);
     }
@@ -365,15 +392,17 @@ class class_db {
      * @throws class_exception
      * @return void
      */
-    private function getError($strQuery) {
-        if(!$this->bitConnected)
+    private function getError($strQuery)
+    {
+        if (!$this->bitConnected) {
             $this->dbconnect();
+        }
 
         $strError = "";
-        if($this->objDbDriver != null) {
+        if ($this->objDbDriver != null) {
             $strError = $this->objDbDriver->getError();
         }
-        if($this->objConfig->getDebug("debuglevel") > 0) {
+        if ($this->objConfig->getDebug("debuglevel") > 0) {
 
             //reprocess query
             $strQuery = str_ireplace(
@@ -390,10 +419,10 @@ class class_db {
             $strErrorCode .= $strQuery."\n";
             $strErrorCode .= "\n";
             $strErrorCode .= "Callstack:\n";
-            if(function_exists("debug_backtrace")) {
+            if (function_exists("debug_backtrace")) {
                 $arrStack = debug_backtrace();
 
-                foreach($arrStack as $intPos => $arrValue) {
+                foreach ($arrStack as $intPos => $arrValue) {
                     $strErrorCode .= (isset($arrValue["file"]) ? $arrValue["file"] : "n.a.")."\n\t Row ".(isset($arrValue["line"]) ? $arrValue["line"] : "n.a.").", function ".$arrStack[$intPos]["function"]."\n";
                 }
             }
@@ -410,16 +439,20 @@ class class_db {
 
     /**
      * Starts a transaction
+     *
      * @return void
      */
-    public function transactionBegin() {
-        if(!$this->bitConnected)
+    public function transactionBegin()
+    {
+        if (!$this->bitConnected) {
             $this->dbconnect();
+        }
 
-        if($this->objDbDriver != null) {
+        if ($this->objDbDriver != null) {
             //just start a new tx, if no other tx is open
-            if($this->intNumberOfOpenTransactions == 0)
+            if ($this->intNumberOfOpenTransactions == 0) {
                 $this->objDbDriver->transactionBegin();
+            }
 
             //increase tx-counter
             $this->intNumberOfOpenTransactions++;
@@ -429,18 +462,21 @@ class class_db {
 
     /**
      * Ends a tx successfully
+     *
      * @return void
      */
-    public function transactionCommit() {
-        if(!$this->bitConnected)
+    public function transactionCommit()
+    {
+        if (!$this->bitConnected) {
             $this->dbconnect();
+        }
 
-        if($this->objDbDriver != null) {
+        if ($this->objDbDriver != null) {
 
             //check, if the current tx is allowed to be commited
-            if($this->intNumberOfOpenTransactions == 1) {
+            if ($this->intNumberOfOpenTransactions == 1) {
                 //so, this is the last remaining tx. Commit or rollback?
-                if(!$this->bitCurrentTxIsDirty) {
+                if (!$this->bitCurrentTxIsDirty) {
                     $this->objDbDriver->transactionCommit();
                 }
                 else {
@@ -460,15 +496,18 @@ class class_db {
 
     /**
      * Rollback of the current tx
+     *
      * @return void
      */
-    public function transactionRollback() {
-        if(!$this->bitConnected)
+    public function transactionRollback()
+    {
+        if (!$this->bitConnected) {
             $this->dbconnect();
+        }
 
-        if($this->objDbDriver != null) {
+        if ($this->objDbDriver != null) {
 
-            if($this->intNumberOfOpenTransactions == 1) {
+            if ($this->intNumberOfOpenTransactions == 1) {
                 //so, this is the last remaining tx. rollback anyway
                 $this->objDbDriver->transactionRollback();
                 $this->bitCurrentTxIsDirty = false;
@@ -493,47 +532,57 @@ class class_db {
      *
      * @return array
      */
-    public function getTables($bitAll = false) {
-        if(!$this->bitConnected)
+    public function getTables($bitAll = false)
+    {
+        if (!$this->bitConnected) {
             $this->dbconnect();
+        }
 
         $arrReturn = array();
-        if($this->objDbDriver != null) {
+        if ($this->objDbDriver != null) {
 
-            if($bitAll && isset($this->arrTablesCache["all"]))
+            if ($bitAll && isset($this->arrTablesCache["all"])) {
                 return $this->arrTablesCache["all"];
-            else if(isset($this->arrTablesCache["filtered"]))
+            }
+            elseif (isset($this->arrTablesCache["filtered"])) {
                 return $this->arrTablesCache["filtered"];
+            }
 
             //increase global counter
             $this->intNumber++;
             $arrTemp = $this->objDbDriver->getTables();
 
             //Filtering tables not used by this project, if dbprefix was given
-            if(_dbprefix_ != "") {
-                foreach($arrTemp as $arrTable) {
+            if (_dbprefix_ != "") {
+                foreach ($arrTemp as $arrTable) {
                     $intPos = uniStripos($arrTable["name"], _dbprefix_);
-                    if($intPos !== false && $intPos == 0) {
-                        if($bitAll)
+                    if ($intPos !== false && $intPos == 0) {
+                        if ($bitAll) {
                             $arrReturn[] = $arrTable;
-                        else
+                        }
+                        else {
                             $arrReturn[] = $arrTable["name"];
+                        }
                     }
                 }
             }
             else {
-                foreach($arrTemp as $arrTable) {
-                    if($bitAll)
+                foreach ($arrTemp as $arrTable) {
+                    if ($bitAll) {
                         $arrReturn[] = $arrTable;
-                    else
+                    }
+                    else {
                         $arrReturn[] = $arrTable["name"];
+                    }
                 }
             }
 
-            if($bitAll)
+            if ($bitAll) {
                 $this->arrTablesCache["all"] = $arrReturn;
-            else
+            }
+            else {
                 $this->arrTablesCache["filtered"] = $arrReturn;
+            }
         }
 
 
@@ -549,9 +598,11 @@ class class_db {
      *
      * @return array
      */
-    public function getColumnsOfTable($strTableName) {
-        if(!$this->bitConnected)
+    public function getColumnsOfTable($strTableName)
+    {
+        if (!$this->bitConnected) {
             $this->dbconnect();
+        }
 
         return $this->objDbDriver->getColumnsOfTable($strTableName);
     }
@@ -559,13 +610,15 @@ class class_db {
     /**
      * Returns the db-specific datatype for the kajona internal datatype.
      * Currently, this are
-
+     *
      * @param string $strType
+     *
      * @see class_db_datatypes
      *
      * @return string
      */
-    public function getDatatype($strType) {
+    public function getDatatype($strType)
+    {
         return $this->objDbDriver->getDatatype($strType);
     }
 
@@ -597,25 +650,30 @@ class class_db {
      *
      * @return bool
      */
-    public function createTable($strName, $arrFields, $arrKeys, $arrIndices = array(), $bitTxSafe = true) {
-        if(!$this->bitConnected)
+    public function createTable($strName, $arrFields, $arrKeys, $arrIndices = array(), $bitTxSafe = true)
+    {
+        if (!$this->bitConnected) {
             $this->dbconnect();
+        }
 
         $bitReturn = $this->objDbDriver->createTable(_dbprefix_.$strName, $arrFields, $arrKeys, $arrIndices, $bitTxSafe);
-        if(!$bitReturn)
+        if (!$bitReturn) {
             $this->getError("");
+        }
 
         return $bitReturn;
     }
 
     /**
      * Renames a table
+     *
      * @param $strOldName
      * @param $strNewName
      *
      * @return bool
      */
-    public function renameTable($strOldName, $strNewName) {
+    public function renameTable($strOldName, $strNewName)
+    {
         return $this->objDbDriver->renameTable(_dbprefix_.$strOldName, _dbprefix_.$strNewName);
     }
 
@@ -629,7 +687,8 @@ class class_db {
      *
      * @return bool
      */
-    public function changeColumn($strTable, $strOldColumnName, $strNewColumnName, $strNewDatatype) {
+    public function changeColumn($strTable, $strOldColumnName, $strNewColumnName, $strNewDatatype)
+    {
         return $this->objDbDriver->changeColumn(_dbprefix_.$strTable, $strOldColumnName, $strNewColumnName, $strNewDatatype);
     }
 
@@ -642,18 +701,21 @@ class class_db {
      *
      * @return bool
      */
-    public function addColumn($strTable, $strColumn, $strDatatype) {
+    public function addColumn($strTable, $strColumn, $strDatatype)
+    {
         return $this->objDbDriver->addColumn(_dbprefix_.$strTable, $strColumn, $strDatatype);
     }
 
     /**
      * Removes a column from a table
+     *
      * @param $strTable
      * @param $strColumn
      *
      * @return bool
      */
-    public function removeColumn($strTable, $strColumn) {
+    public function removeColumn($strTable, $strColumn)
+    {
         return $this->objDbDriver->removeColumn(_dbprefix_.$strTable, $strColumn);
     }
 
@@ -665,17 +727,19 @@ class class_db {
      *
      * @return bool
      */
-    public function dumpDb($arrTablesToExclude = array()) {
-        if(!$this->bitConnected)
+    public function dumpDb($arrTablesToExclude = array())
+    {
+        if (!$this->bitConnected) {
             $this->dbconnect();
+        }
 
         // Check, how many dumps to keep
         $objFilesystem = new class_filesystem();
         $arrFiles = $objFilesystem->getFilelist(_projectpath_."/dbdumps/", array(".sql", ".gz"));
 
-        while(count($arrFiles) >= class_module_system_setting::getConfigValue("_system_dbdump_amount_")) {
+        while (count($arrFiles) >= class_module_system_setting::getConfigValue("_system_dbdump_amount_")) {
             $strFile = array_shift($arrFiles);
-            if(!$objFilesystem->fileDelete(_projectpath_."/dbdumps/".$strFile)) {
+            if (!$objFilesystem->fileDelete(_projectpath_."/dbdumps/".$strFile)) {
                 class_logger::getInstance(class_logger::DBLOG)->addLogRow("Error deleting old db-dumps", class_logger::$levelWarning);
                 return false;
             }
@@ -687,30 +751,35 @@ class class_db {
         $arrTables = $this->getTables();
         $arrTablesFinal = array();
 
-        if(count($arrTablesToExclude) > 0) {
-            foreach($arrTables as $strOneTable) {
-                if(!in_array(uniStrReplace(_dbprefix_, "", $strOneTable), $arrTablesToExclude))
+        if (count($arrTablesToExclude) > 0) {
+            foreach ($arrTables as $strOneTable) {
+                if (!in_array(uniStrReplace(_dbprefix_, "", $strOneTable), $arrTablesToExclude)) {
                     $arrTablesFinal[] = $strOneTable;
+                }
             }
         }
-        else
+        else {
             $arrTablesFinal = $arrTables;
+        }
 
         $bitDump = $this->objDbDriver->dbExport($strTargetFilename, $arrTablesFinal);
-        if($bitDump == true) {
+        if ($bitDump == true) {
             $objGzip = new class_gzip();
             try {
-                if(!$objGzip->compressFile($strTargetFilename, true))
+                if (!$objGzip->compressFile($strTargetFilename, true)) {
                     class_logger::getInstance(class_logger::DBLOG)->addLogRow("Failed to compress (gzip) the file ".basename($strTargetFilename)."", class_logger::$levelWarning);
+                }
             }
-            catch(class_exception $objExc) {
+            catch (class_exception $objExc) {
                 $objExc->processException();
             }
         }
-        if($bitDump)
+        if ($bitDump) {
             class_logger::getInstance(class_logger::DBLOG)->addLogRow("DB-Dump ".basename($strTargetFilename)." created", class_logger::$levelInfo);
-        else
+        }
+        else {
             class_logger::getInstance(class_logger::DBLOG)->addLogRow("Error creating ".basename($strTargetFilename), class_logger::$levelError);
+        }
         return $bitDump;
     }
 
@@ -721,25 +790,28 @@ class class_db {
      *
      * @return bool
      */
-    public function importDb($strFilename) {
-        if(!$this->bitConnected)
+    public function importDb($strFilename)
+    {
+        if (!$this->bitConnected) {
             $this->dbconnect();
+        }
 
         //gz file?
         $bitGzip = false;
-        if(substr($strFilename, -3) == ".gz") {
+        if (substr($strFilename, -3) == ".gz") {
             $bitGzip = true;
             //try to decompress
             $objGzip = new class_gzip();
             try {
-                if($objGzip->decompressFile(_projectpath_."/dbdumps/".$strFilename))
+                if ($objGzip->decompressFile(_projectpath_."/dbdumps/".$strFilename)) {
                     $strFilename = substr($strFilename, 0, strlen($strFilename) - 3);
+                }
                 else {
                     class_logger::getInstance(class_logger::DBLOG)->addLogRow("Failed to decompress (gzip) the file ".basename($strFilename)."", class_logger::$levelWarning);
                     return false;
                 }
             }
-            catch(class_exception $objExc) {
+            catch (class_exception $objExc) {
                 $objExc->processException();
                 return false;
             }
@@ -747,14 +819,16 @@ class class_db {
 
         $bitImport = $this->objDbDriver->dbImport(_projectpath_."/dbdumps/".$strFilename);
         //Delete source unzipped file?
-        if($bitGzip) {
+        if ($bitGzip) {
             $objFilesystem = new class_filesystem();
             $objFilesystem->fileDelete(_projectpath_."/dbdumps/".$strFilename);
         }
-        if($bitImport)
+        if ($bitImport) {
             class_logger::getInstance(class_logger::DBLOG)->addLogRow("DB-DUMP ".$strFilename." was restored", class_logger::$levelWarning);
-        else
+        }
+        else {
             class_logger::getInstance(class_logger::DBLOG)->addLogRow("Error restoring DB-DUMP ".$strFilename, class_logger::$levelError);
+        }
         return $bitImport;
     }
 
@@ -765,7 +839,8 @@ class class_db {
      *
      * @return string
      */
-    private function processQuery($strQuery) {
+    private function processQuery($strQuery)
+    {
 
         $strQuery = trim($strQuery);
         $arrSearch = array(
@@ -794,13 +869,16 @@ class class_db {
 
     /**
      * Queries the current db-driver about common information
+     *
      * @return mixed|string
      */
-    public function getDbInfo() {
-        if(!$this->bitConnected)
+    public function getDbInfo()
+    {
+        if (!$this->bitConnected) {
             $this->dbconnect();
+        }
 
-        if($this->objDbDriver != null) {
+        if ($this->objDbDriver != null) {
             return $this->objDbDriver->getDbInfo();
         }
 
@@ -814,7 +892,8 @@ class class_db {
      *
      * @return int
      */
-    public function getNumber() {
+    public function getNumber()
+    {
         return $this->intNumber;
     }
 
@@ -823,7 +902,8 @@ class class_db {
      *
      * @return int
      */
-    public function getNumberCache() {
+    public function getNumberCache()
+    {
         return $this->intNumberCache;
     }
 
@@ -832,7 +912,8 @@ class class_db {
      *
      * @return  int
      */
-    public function getCacheSize() {
+    public function getCacheSize()
+    {
         return count($this->arrQueryCache);
     }
 
@@ -848,12 +929,15 @@ class class_db {
      * @since 3.4
      * @see class_db::dbsafeString($strString, $bitHtmlSpecialChars = true)
      */
-    private function dbsafeParams($arrParams, $arrEscapes = array()) {
-        foreach($arrParams as $intKey => &$strParam) {
-            if(isset($arrEscapes[$intKey]))
+    private function dbsafeParams($arrParams, $arrEscapes = array())
+    {
+        foreach ($arrParams as $intKey => &$strParam) {
+            if (isset($arrEscapes[$intKey])) {
                 $strParam = $this->dbsafeString($strParam, $arrEscapes[$intKey], false);
-            else
+            }
+            else {
                 $strParam = $this->dbsafeString($strParam, true, false);
+            }
         }
         return $arrParams;
     }
@@ -867,33 +951,38 @@ class class_db {
      *
      * @return string
      */
-    public function dbsafeString($strString, $bitHtmlSpecialChars = true, $bitAddSlashes = true) {
+    public function dbsafeString($strString, $bitHtmlSpecialChars = true, $bitAddSlashes = true)
+    {
 
-        if($strString === null)
+        if ($strString === null) {
             return null;
+        }
 
         //escape special chars
-        if($bitHtmlSpecialChars) {
+        if ($bitHtmlSpecialChars) {
             $strString = html_entity_decode($strString, ENT_COMPAT, "UTF-8");
             $strString = htmlspecialchars($strString, ENT_COMPAT, "UTF-8");
         }
 
         //already escaped by php?
-        if(get_magic_quotes_gpc() == 1) {
+        if (get_magic_quotes_gpc() == 1) {
             $strString = stripslashes($strString);
         }
 
-        if($bitAddSlashes)
+        if ($bitAddSlashes) {
             $strString = addslashes($strString);
+        }
 
         return $strString;
     }
 
     /**
      * Method to flush the query-cache
+     *
      * @return void
      */
-    public function flushQueryCache() {
+    public function flushQueryCache()
+    {
         //class_logger::getInstance(class_logger::DBLOG)->addLogRow("Flushing query cache", class_logger::$levelInfo);
         $this->arrQueryCache = array();
         class_objectfactory::getInstance()->flushCache();
@@ -903,9 +992,11 @@ class class_db {
      * Method to flush the table-cache.
      * Since the tables won't change during regular operations,
      * flushing the tables cache is only required during package updates / installations
+     *
      * @return void
      */
-    public function flushTablesCache() {
+    public function flushTablesCache()
+    {
         $this->arrTablesCache = array();
     }
 
@@ -915,7 +1006,8 @@ class class_db {
      *
      * @return void
      */
-    public function flushPreparedStatementsCache() {
+    public function flushPreparedStatementsCache()
+    {
         $this->objDbDriver->flushQueryCache();
     }
 
@@ -927,7 +1019,8 @@ class class_db {
      *
      * @return string
      */
-    public function encloseColumnName($strColumn) {
+    public function encloseColumnName($strColumn)
+    {
         return $this->objDbDriver->encloseColumnName($strColumn);
     }
 
@@ -939,7 +1032,8 @@ class class_db {
      *
      * @return string
      */
-    public function encloseTableName($strTable) {
+    public function encloseTableName($strTable)
+    {
         return $this->objDbDriver->encloseTableName($strTable);
     }
 
@@ -959,24 +1053,27 @@ class class_db {
      *
      * @return bool
      */
-    public function validateDbCxData($strDriver, $strDbHost, $strDbUser, $strDbPass, $strDbName, $intDbPort) {
+    public function validateDbCxData($strDriver, $strDbHost, $strDbUser, $strDbPass, $strDbName, $intDbPort)
+    {
 
         /** @var $objDbDriver interface_db_driver */
         $objDbDriver = null;
 
         $strClassname = "class_db_".$strDriver;
-        if(class_exists($strClassname))
+        if (class_exists($strClassname)) {
             $objDbDriver = new $strClassname();
-        else
+        }
+        else {
             return false;
+        }
 
         try {
-            if($objDbDriver->dbconnect($strDbHost, $strDbUser, $strDbPass, $strDbName, $intDbPort)) {
+            if ($objDbDriver->dbconnect($strDbHost, $strDbUser, $strDbPass, $strDbName, $intDbPort)) {
                 $objDbDriver->dbclose();
                 return true;
             }
         }
-        catch(class_exception $objEx) {
+        catch (class_exception $objEx) {
             return false;
         }
 
