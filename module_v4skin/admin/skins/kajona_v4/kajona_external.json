@@ -1,7 +1,7 @@
 [
     {
         "name" : "bootstrap",
-        "version" : "3.3.1",
+        "version" : "3.3.5",
         "source" : "http://getbootstrap.com/",
         "license" : "MIT",
         "licenseurl" : "https://github.com/twbs/bootstrap/blob/master/LICENSE"
