@@ -1067,9 +1067,23 @@ KAJONA.admin.renderTocNavigation = function (selector) {
     // create the navigation
     var html = '<div id="toc-navigation" class="toc-navigation-panel" role="navigation">';
     html += '<ul class="nav">';
+    var arrIdMap = Array();
     $(selector).each(function () {
-        var id = $(this).text().replace(/(?!\w)[\x00-\xC0]/g, "-");
-        $(this).attr('id', id);
+        if($(this).attr('id')) {
+            var id = $(this).attr('id');
+        }
+        else {
+            var id = $(this).text().replace(/(?!\w)[\x00-\xC0]/g, "-");
+            var newId = id;
+            var intI = 0;
+            while(KAJONA.util.inArray(newId, arrIdMap)) {
+                newId = id+"_"+(intI++);
+            }
+
+            id = newId;
+            arrIdMap.push(id);
+            $(this).attr('id', id);
+        }
         html += '<li><a href="#' + id + '">' + $(this).text() + '</a></li>';
     });
     html += '</ul>';
