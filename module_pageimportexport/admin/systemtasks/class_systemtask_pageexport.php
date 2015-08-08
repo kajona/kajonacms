@@ -3,23 +3,23 @@
 *   (c) 2004-2006 by MulchProductions, www.mulchprod.de                                                 *
 *   (c) 2007-2015 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
-*-------------------------------------------------------------------------------------------------------*
-*   $Id$                                        *
 ********************************************************************************************************/
 
 /**
  * Exports a page into a xml-structure.
  *
- * @package module_pages
+ * @package module_pageimportexport
  * @author sidler@mulchprod.de
  */
-class class_systemtask_pageexport extends class_systemtask_base implements interface_admin_systemtask {
+class class_systemtask_pageexport extends class_systemtask_base implements interface_admin_systemtask
+{
 
 
     /**
      * contructor to call the base constructor
      */
-    public function __construct() {
+    public function __construct()
+    {
         parent::__construct();
 
         $this->setStrTextBase("pages");
@@ -29,7 +29,8 @@ class class_systemtask_pageexport extends class_systemtask_base implements inter
      * @see interface_admin_systemtask::getGroupIdenitfier()
      * @return string
      */
-    public function getGroupIdentifier() {
+    public function getGroupIdentifier()
+    {
         return "pages";
     }
 
@@ -37,7 +38,8 @@ class class_systemtask_pageexport extends class_systemtask_base implements inter
      * @see interface_admin_systemtask::getStrInternalTaskName()
      * @return string
      */
-    public function getStrInternalTaskName() {
+    public function getStrInternalTaskName()
+    {
         return "pageexport";
     }
 
@@ -45,7 +47,8 @@ class class_systemtask_pageexport extends class_systemtask_base implements inter
      * @see interface_admin_systemtask::getStrTaskName()
      * @return string
      */
-    public function getStrTaskName() {
+    public function getStrTaskName()
+    {
         return $this->getLang("systemtask_pageexport_name");
     }
 
@@ -54,14 +57,16 @@ class class_systemtask_pageexport extends class_systemtask_base implements inter
      * @throws class_exception
      * @return string
      */
-    public function executeTask() {
+    public function executeTask()
+    {
 
-        if(!class_module_system_module::getModuleByName("pages")->rightEdit())
+        if (!class_module_system_module::getModuleByName("pages")->rightEdit()) {
             return $this->getLang("commons_error_permissions");
+        }
 
         //load the page itself
         $objPage = class_module_pages_page::getPageByName($this->getParam("pageExport"));
-        if($objPage !== null) {
+        if ($objPage !== null) {
 
             $objSystem = class_module_system_module::getModuleByName("system");
 
@@ -71,18 +76,22 @@ class class_systemtask_pageexport extends class_systemtask_base implements inter
             $strExportFolder = $this->getParam("exportFolder");
             $strExportPrefix = $this->getParam("exportPrefix");
 
-            if($strExportFolder == "")
+            if ($strExportFolder == "") {
                 $strExportFolder = _realpath_._projectpath_."/temp";
-            else
+            }
+            else {
                 $strExportFolder = _realpath_."/".$strExportFolder;
+            }
 
-            if($strExportPrefix != "")
+            if ($strExportPrefix != "") {
                 $strExportPrefix = "_".$strExportPrefix;
+            }
 
-            if(is_dir($strExportFolder)) {
+            if (is_dir($strExportFolder)) {
 
-                if(!$objXmlWriter->openUri($strExportFolder."/".$strExportPrefix.$objPage->getSystemid().".xml"))
+                if (!$objXmlWriter->openUri($strExportFolder."/".$strExportPrefix.$objPage->getSystemid().".xml")) {
                     throw new class_exception("failed to open export file ", class_exception::$level_ERROR);
+                }
 
                 //$objXmlWriter->openMemory();
 
@@ -93,10 +102,10 @@ class class_systemtask_pageexport extends class_systemtask_base implements inter
                 $objXmlWriter->startComment();
 
                 $strComment = "\n   Kajona XML export\n";
-                $strComment .=  "   (c) Kajona, www.kajona.de\n";
-                $strComment .=  "   Kernel version:  ".$objSystem->getStrVersion()."\n";
-                $strComment .=  "   Schema version:  1.0\n";
-                $strComment .=  "   Export Date:     ".dateToString(new class_date)."\n";
+                $strComment .= "   (c) Kajona, www.kajona.de\n";
+                $strComment .= "   Kernel version:  ".$objSystem->getStrVersion()."\n";
+                $strComment .= "   Schema version:  1.0\n";
+                $strComment .= "   Export Date:     ".dateToString(new class_date)."\n";
 
                 $objXmlWriter->text($strComment);
                 $objXmlWriter->endComment();
@@ -125,7 +134,7 @@ class class_systemtask_pageexport extends class_systemtask_base implements inter
 
                 //try to load the parent page-name
                 $strParentName = "";
-                if(validateSystemid($objPage->getPrevId())) {
+                if (validateSystemid($objPage->getPrevId())) {
                     $objParentPage = new class_module_pages_page($objPage->getPrevId());
                     $strParentName = $objParentPage->getStrName();
                 }
@@ -156,8 +165,9 @@ class class_systemtask_pageexport extends class_systemtask_base implements inter
                 //return $objXmlWriter->outputMemory(true);
                 return $this->getLang("systemtask_pageexport_success").$strExportFolder."/".$strExportPrefix.$objPage->getSystemid().".xml"."";
             }
-            else
+            else {
                 throw new class_exception("writing XML: Folder ".$strExportFolder." does not exist! ", class_exception::$level_ERROR);
+            }
 
         }
 
@@ -169,7 +179,8 @@ class class_systemtask_pageexport extends class_systemtask_base implements inter
      * @see interface_admin_systemtask::getAdminForm()
      * @return string
      */
-    public function getAdminForm() {
+    public function getAdminForm()
+    {
         return $this->objToolkit->formInputPageSelector("pageexport_page", $this->getLang("systemtask_pageexport_page"));
     }
 
@@ -177,20 +188,20 @@ class class_systemtask_pageexport extends class_systemtask_base implements inter
      * @see interface_admin_systemtask::getSubmitParams()
      * @return string
      */
-    public function getSubmitParams() {
+    public function getSubmitParams()
+    {
         return "&pageExport=".$this->getParam("pageexport_page");
     }
-
-
 
 
     //helper-functions ----------------------------------------------------------------------------------
 
 
-    private function createElementData($strPageId, XMLWriter $objWriter) {
+    private function createElementData($strPageId, XMLWriter $objWriter)
+    {
         $arrElements = class_module_pages_pageelement::getAllElementsOnPage($strPageId);
 
-        foreach($arrElements as $objOneElement) {
+        foreach ($arrElements as $objOneElement) {
             $objWriter->startElement("element");
             //elements metadata
 
@@ -239,7 +250,7 @@ class class_systemtask_pageexport extends class_systemtask_base implements inter
             $arrContentRow = class_carrier::getInstance()->getObjDB()->getPRow("SELECT * FROM ".$strElementTable." WHERE content_id = ? ", array($objOneElement->getSystemid()));
             $arrColumns = class_carrier::getInstance()->getObjDB()->getColumnsOfTable($strElementTable);
 
-            foreach($arrColumns as $arrOneCol) {
+            foreach ($arrColumns as $arrOneCol) {
 
                 $objWriter->startElement("column");
                 $objWriter->startAttribute("name");
@@ -263,13 +274,14 @@ class class_systemtask_pageexport extends class_systemtask_base implements inter
     }
 
 
-    private function createPageMetadata($strPageId, XMLWriter $objWriter) {
+    private function createPageMetadata($strPageId, XMLWriter $objWriter)
+    {
         //loop all languages if given
         $objLanguages = new class_module_languages_language();
         $strCurrentLanguage = $objLanguages->getStrAdminLanguageToWorkOn();
 
         $arrLanguages = class_module_languages_language::getObjectList();
-        foreach($arrLanguages as $objOneLanguage) {
+        foreach ($arrLanguages as $objOneLanguage) {
             $objLanguages->setStrAdminLanguageToWorkOn($objOneLanguage->getStrName());
 
             $objPage = new class_module_pages_page($strPageId);
