@@ -248,7 +248,7 @@ KAJONA.admin.jqplotHelper = {
 
         if(objChart.arrSeriesToDataPoints && objChart.arrSeriesToDataPoints[seriesIndex]) {
             var objDataPoint = objChart.arrSeriesToDataPoints[seriesIndex][pointIndex];
-            if(objDataPoint || (objDataPoint && objDataPoint.actionhandler != null)) {
+            if(objDataPoint && objDataPoint.actionhandlervalue != null) {
                 return true;
             }
         }
