@@ -66,12 +66,11 @@ class class_formentry_month_year_dropdown extends class_formentry_date {
         }
 
         if($this->bitRenderDay) {
-
             $strReturn .= $objToolkit->formInputText($this->getStrEntryName()."ph", $this->getStrLabel(), $intDay, "", "", true);
             $strReturn .= $objToolkit->formInputHidden($this->getStrEntryName().self::DAY_SUFFIX, $intDay);
         }
         else {
-            $strReturn .= $objToolkit->formInputHidden($this->getStrEntryName().self::DAY_SUFFIX, "1");
+            $strReturn .= $objToolkit->formInputHidden($this->getStrEntryName().self::DAY_SUFFIX, $intDay);
         }
         $strReturn .=  $objToolkit->formInputDropdown($this->getStrEntryName().self::MONTH_SUFFIX, self::$arrDropDownMonth, $this->bitRenderDay ? "" : $this->getStrLabel(), $intMonth, "", !$this->getBitReadonly());
         $strReturn .=  $objToolkit->formInputDropdown($this->getStrEntryName().self::YEAR_SUFFIX,  self::$arrDropDownYear,   "",                  $intYear, "", !$this->getBitReadonly());
