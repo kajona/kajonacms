@@ -13,6 +13,7 @@
  * @method static class_request_entrypoint_enum DOWNLOAD()
  * @method static class_request_entrypoint_enum IMAGE()
  * @method static class_request_entrypoint_enum INSTALLER()
+ * @method static class_request_entrypoint_enum DEBUG()
  *
  *
  * @package module_system
@@ -26,7 +27,7 @@ class class_request_entrypoint_enum extends class_enum {
      * @return string[]
      */
     protected function getArrValues() {
-        return array("INDEX", "XML", "DOWNLOAD", "IMAGE", "INSTALLER");
+        return array("INDEX", "XML", "DOWNLOAD", "IMAGE", "INSTALLER", "DEBUG");
     }
 
 }
