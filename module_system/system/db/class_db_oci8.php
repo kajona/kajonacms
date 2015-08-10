@@ -191,7 +191,7 @@ class class_db_oci8 extends class_db_base {
     }
 
     /**
-     * Returns just a part of a recodset, defined by the start- and the end-rows,
+     * Returns just a part of a recordset, defined by the start- and the end-rows,
      * defined by the params. Makes use of prepared statements.
      * <b>Note:</b> Use array-like counters, so the first row is startRow 0 whereas
      * the n-th row is the (n-1)th key!!!
