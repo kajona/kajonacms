@@ -245,8 +245,10 @@ KAJONA.admin.jqplotHelper = {
 
     hasDataPoint: function(ev, seriesIndex, pointIndex){
         var objChart = KAJONA.admin.jqplotHelper.arrChartObjects[$(ev.currentTarget).attr('id')];
+
         if(objChart.arrSeriesToDataPoints && objChart.arrSeriesToDataPoints[seriesIndex]) {
-            if(objChart.arrSeriesToDataPoints[seriesIndex][pointIndex] && objChart.arrSeriesToDataPoints[seriesIndex][pointIndex].actionhandler != null) {
+            var objDataPoint = objChart.arrSeriesToDataPoints[seriesIndex][pointIndex];
+            if(objDataPoint || (objDataPoint && objDataPoint.actionhandler != null)) {
                 return true;
             }
         }
