@@ -1269,6 +1269,9 @@ abstract class class_root {
             $arrReturn[] = $strTempId;
 
             $objCommon = class_objectfactory::getInstance()->getObject($strTempId);
+            if($objCommon === null) {
+                break;
+            }
             $strTempId = $objCommon->getPrevId();
         }
 
