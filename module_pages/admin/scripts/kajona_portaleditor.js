@@ -164,9 +164,16 @@ KAJONA.admin.portaleditor.RTE.savePage = function () {
  */
 KAJONA.admin.portaleditor.RTE.init = function () {
 
+    var count = 0;
+
     $('*[data-kajona-editable]').each(function () {
 
         var editable = $(this);
+
+        if(editable.attr('id') == undefined) {
+            editable.attr('id', 'ckeditor-hack-'+count++);
+        }
+
         var keySplitted = editable.attr('data-kajona-editable').split('#');
 
         var strMode = keySplitted[2] ? keySplitted[2] : 'wysiwyg';
