@@ -31,9 +31,9 @@ if (typeof KAJONA == "undefined") {
  */
 KAJONA.util.getElementFromOpener = function(strElementId) {
     if (window.opener) {
-        return $('#' + strElementId, window.opener);
+        return $('#' + strElementId, window.opener.document);
     } else if (parent){
-        return $('#' + strElementId, parent);
+        return $('#' + strElementId, parent.document);
     }
     else {
         return $('#' + strElementId);
