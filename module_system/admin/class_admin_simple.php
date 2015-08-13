@@ -405,7 +405,7 @@ abstract class class_admin_simple extends class_admin_controller {
         if(!$objLockmanager->isAccessibleForCurrentUser()) {
             if($objLockmanager->isUnlockableForCurrentUser() ) {
                 return $this->objToolkit->listButton(
-                    class_link::getLinkAdmin($objListEntry->getArrModule("modul"), $this->getActionNameForClass("list", $objListEntry), "&unlockid=".$objListEntry->getSystemid(), "", $this->getLang("commons_unlock"), "icon_lockerOpen")
+                    class_link::getLinkAdmin($objListEntry->getArrModule("modul"), $this->getAction(), "&systemid=".$this->getSystemid()."&unlockid=".$objListEntry->getSystemid(), "", $this->getLang("commons_unlock"), "icon_lockerOpen")
                 );
             }
         }
