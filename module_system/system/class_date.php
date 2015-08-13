@@ -119,22 +119,37 @@ class class_date {
 
         if(isset($arrParams[$strFieldname . "_month"]) && $arrParams[$strFieldname . "_month"] != "") {
             $intMonth = (int)$arrParams[$strFieldname . "_month"];
+            if($intMonth > 12) {
+                $intMonth = 12;
+            }
         }
 
         if(isset($arrParams[$strFieldname . "_day"]) && $arrParams[$strFieldname . "_day"] != "") {
             $intDay = (int)$arrParams[$strFieldname . "_day"];
+            if($intDay > 31) {
+                $intDay = 31;
+            }
         }
 
         if(isset($arrParams[$strFieldname . "_hour"]) && $arrParams[$strFieldname . "_hour"] != "") {
             $intHour = (int)$arrParams[$strFieldname . "_hour"];
+            if($intHour > 23) {
+                $intHour = 23;
+            }
         }
 
         if(isset($arrParams[$strFieldname . "_minute"]) && $arrParams[$strFieldname . "_minute"] != "") {
             $intMinute = (int)$arrParams[$strFieldname . "_minute"];
+            if($intMinute > 59) {
+                $intMinute = 59;
+            }
         }
 
         if(isset($arrParams[$strFieldname . "_second"]) && $arrParams[$strFieldname . "_second"] != "") {
             $intMinute = (int)$arrParams[$strFieldname . "_second"];
+            if($intMinute > 59) {
+                $intMinute = 59;
+            }
         }
 
         //see if the other parts may be read directly
