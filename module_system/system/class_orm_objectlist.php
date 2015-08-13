@@ -177,6 +177,7 @@ class class_orm_objectlist extends class_orm_base {
         if($strPrevid != "")
             $arrParams[] = $strPrevid;
 
+        $this->addLogicalDeleteRestriction();
         $this->processWhereRestrictions($strQuery, $arrParams, $strTargetClass);
         $strQuery .= $this->getOrderBy(new class_reflection($strTargetClass));
         $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, $arrParams);
