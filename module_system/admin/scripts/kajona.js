@@ -30,11 +30,10 @@ if (typeof KAJONA == "undefined") {
  * @returns {*}
  */
 KAJONA.util.getElementFromOpener = function(strElementId) {
-    var objElement;
     if (window.opener) {
-        return window.opener.$('#' + strElementId);
+        return $('#' + strElementId, window.opener);
     } else if (parent){
-        return parent.$('#' + strElementId);
+        return $('#' + strElementId, parent);
     }
     else {
         return $('#' + strElementId);
