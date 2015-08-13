@@ -134,7 +134,10 @@ class class_ldap {
         }
 
         if($bitBind === false) {
-            throw new class_exception("connection to ldap failed: ".ldap_errno($this->objCx)." # ".ldap_error($this->objCx), class_exception::$level_FATALERROR);
+            throw new class_exception("ldap bind failed: ".ldap_errno($this->objCx)." # ".ldap_error($this->objCx), class_exception::$level_FATALERROR);
+        }
+        else {
+            class_logger::getInstance(class_logger::USERSOURCES)->addLogRow("lpad bind succeeded: ".$this->arrConfig["ldap_server"].":".$this->arrConfig["ldap_port"], class_logger::$levelInfo);
         }
     }
 
