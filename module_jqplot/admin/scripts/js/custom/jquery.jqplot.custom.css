@@ -30,8 +30,7 @@ div.jqplot-chart-tooltip {
     position: absolute;
     display: none;
     box-shadow: 2px 2px 3px #444444;
-    border: 2px solid;
-    border-radius: 5px;
+    border: 1px solid;
     padding: 2px;
     background-color: #FFFFFF;
     color: #000000;
@@ -42,7 +41,7 @@ div.jqplot-chart-tooltip {
 }
 
 div.jqplot-chart-tooltip-series {
-    font-size: 12px;
+    font-size: 11px;
     float:left;
 }
 
@@ -61,6 +60,6 @@ div.jqplot-point-label {
 }
 
 div.ui-resizable-helper-jqplot {
-    border: 2px dotted gray;
+    border: 1px dotted gray;
     z-index: 1000 !important;
 }

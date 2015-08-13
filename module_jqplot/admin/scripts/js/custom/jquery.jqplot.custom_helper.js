@@ -17,12 +17,13 @@ KAJONA.admin.jqplotHelper = {
      * @param strChartId - id of the chart
      * @param strTooltipId - id of the tooltip of the chart
      * @param strResizeableId - id of the resizable container
+     * @param bitEnableChartResizing -
      * @param arrChartData - data array for the chart
      * @param objChartOptions - chart rendering options
      * @param objPostPlotOptions - options set for pos plotting
      * @param arrSeriesToDataPoints - two dimensional array which may contains urls for each data point of a series. format: array[seriesIndex][dataPointIndex] => strURL
      */
-    jqPlotChart : function (strChartId, strTooltipId, strResizeableId, arrChartData, objChartOptions, objPostPlotOptions, arrSeriesToDataPoints) {
+    jqPlotChart : function (strChartId, strTooltipId, strResizeableId, bitEnableChartResizing, arrChartData, objChartOptions, objPostPlotOptions, arrSeriesToDataPoints) {
         this.strTooltipId = strTooltipId;
         this.strChartId = strChartId;
         this.strResizeableId = strResizeableId;
@@ -33,6 +34,7 @@ KAJONA.admin.jqplotHelper = {
 
         this.objJqplotChart = null;//the actual jqPlot object
         this.bitIsRendered = false;//flag to tell if the chart was already rendered or not (needed in case the chart should replotted)
+        this.bitEnableChartResizing = bitEnableChartResizing;
 
         this.objChartOptions.axesDefaults.tickOptions.formatter = KAJONA.admin.jqplotHelper.customJqPlotNumberFormatter;
 
@@ -62,7 +64,9 @@ KAJONA.admin.jqplotHelper = {
             this.objJqplotChart = $.jqplot(this.strChartId, this.arrChartData, this.objChartOptions);
             KAJONA.admin.jqplotHelper.bindMouseEvents(this.strChartId, this.strTooltipId);
             KAJONA.admin.jqplotHelper.bindDataClickEvents(this.strChartId);
-            KAJONA.admin.jqplotHelper.enableChartResizing(this.strChartId, this.strResizeableId);
+            if(this.bitEnableChartResizing) {
+                KAJONA.admin.jqplotHelper.enableChartResizing(this.strChartId, this.strResizeableId);
+            }
         };
 
         /**

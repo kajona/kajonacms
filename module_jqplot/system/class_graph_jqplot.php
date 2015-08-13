@@ -29,6 +29,8 @@ class class_graph_jqplot implements interface_graph {
     private $bitXAxisLabelsInvisible = false;
     private $bitYAxisLabelsInvisible = false;
 
+    private $bitIsResizeable = true;
+
     const STRING_FORMAT = "%'g";
 
 
@@ -66,7 +68,9 @@ class class_graph_jqplot implements interface_graph {
         ),
         "grid" => array(
             "background"=> "transparent",
-            "shadow" => false
+            "shadow" => false,
+            "drawBorder" => false,
+            "borderWidth" => 0.5
         ),
         "axesDefaults" => array(
             "tickRenderer" => "$.jqplot.CanvasAxisTickRenderer",
@@ -101,7 +105,7 @@ class class_graph_jqplot implements interface_graph {
                 "showTicks" => null,
                 "tickOptions" => array(
                     "angle" => null,
-                    "showGridline" => true
+                    "showGridline" => false
                 )
             ),
             "yaxis"=> array(
@@ -454,7 +458,7 @@ class class_graph_jqplot implements interface_graph {
                         $.jqplot.sprintf.thousandsSeparator = '$strThousandsChar';
                         $.jqplot.sprintf.decimalMark = '$strDecChar';
 
-                        var objChart_$strChartId = new KAJONA.admin.jqplotHelper.jqPlotChart('$strChartId', '$strTooltipId', '$strResizeableId', $strChartData, $strChartOptions, $strPostPlotOptions, $strDataPointObjects);
+                        var objChart_$strChartId = new KAJONA.admin.jqplotHelper.jqPlotChart('$strChartId', '$strTooltipId', '$strResizeableId', '$this->bitIsResizeable', $strChartData, $strChartOptions, $strPostPlotOptions, $strDataPointObjects);
                         objChart_$strChartId.render();
                     });
                 });
@@ -899,7 +903,9 @@ class class_graph_jqplot implements interface_graph {
      * @param bool $bitHideXAxis
      */
     public function setHideXAxis($bitHideXAxis) {
+        $this->arrOptions["axes"]["xaxis"]["rendererOptions"]["drawBaseline"] = false;
         $this->arrOptions["axes"]["xaxis"]["showTicks"] = false;
+        $this->arrOptions["axes"]["yaxis"]["drawMajorTickMarks"] = false;
         $this->arrOptions["axes"]["xaxis"]["tickOptions"]["showGridline"] = false;
         $this->bitXAxisLabelsInvisible = $bitHideXAxis;
     }
@@ -912,7 +918,9 @@ class class_graph_jqplot implements interface_graph {
      * @param bool $bitHideYAxis
      */
     public function setHideYAxis($bitHideYAxis) {
+        $this->arrOptions["axes"]["yaxis"]["rendererOptions"]["drawBaseline"] = false;
         $this->arrOptions["axes"]["yaxis"]["showTicks"] = false;
+        $this->arrOptions["axes"]["yaxis"]["drawMajorTickMarks"] = false;
         $this->arrOptions["axes"]["yaxis"]["tickOptions"]["showGridline"] = false;
         $this->bitYAxisLabelsInvisible = $bitHideYAxis;
     }
@@ -934,4 +942,25 @@ class class_graph_jqplot implements interface_graph {
             }
         }
     }
+
+    public function drawBorder($bitDrawBorder) {
+        $this->arrOptions["grid"]["drawBorder"] = $bitDrawBorder;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isBitIsResizeable()
+    {
+        return $this->bitIsResizeable;
+    }
+
+    /**
+     * @param boolean $bitIsResizeable
+     */
+    public function setBitIsResizeable($bitIsResizeable)
+    {
+        $this->bitIsResizeable = $bitIsResizeable;
+    }
+
 }

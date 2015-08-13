@@ -44,23 +44,21 @@ class class_graph_jqplot_seriesdata {
 
         if($strChartType == class_graph_jqplot_charttype::LINE) {
             $this->arrSeriesOptions["renderer"] = "$.jqplot.LineRenderer";
+            $this->arrSeriesOptions["lineWidth"] = 2;
+            $this->arrSeriesOptions["shadow"] = false;
+            $this->arrSeriesOptions["markerOptions"]["size"] = 6;
         }
         elseif($strChartType == class_graph_jqplot_charttype::BAR) {
             $this->arrSeriesOptions["renderer"] = "$.jqplot.BarRenderer";
             $this->arrSeriesOptions["rendererOptions"]["fillToZero"] = true;
             $this->arrSeriesOptions["rendererOptions"]["shadow"] = false;
-
             $this->arrSeriesOptions["pointLabels"]["hideZeros"] = true;
-
-            //additionally set required global options
-            $arrGlobalOptions["axes"]["xaxis"]["tickOptions"]["showGridline"] = false;
         }
         elseif($strChartType == class_graph_jqplot_charttype::BAR_HORIZONTAL) {
             $this->arrSeriesOptions["renderer"] = "$.jqplot.BarRenderer";
             $this->arrSeriesOptions["rendererOptions"]["barDirection"] = "horizontal";
             $this->arrSeriesOptions["rendererOptions"]["shadow"] = false;
             $this->arrSeriesOptions["rendererOptions"]["fillToZero"] = true;
-
             $this->arrSeriesOptions["pointLabels"]["hideZeros"] = true;
 
             //additionally set required global options
@@ -74,8 +72,6 @@ class class_graph_jqplot_seriesdata {
 
             $this->arrSeriesOptions["pointLabels"]["show"] = true;
 
-            //additionally set required global options
-            $arrGlobalOptions["axes"]["xaxis"]["tickOptions"]["showGridline"] = false;
         }
         elseif($strChartType == class_graph_jqplot_charttype::STACKEDBAR_HORIZONTAL) {
             $this->arrSeriesOptions["renderer"] = "$.jqplot.BarRenderer";
