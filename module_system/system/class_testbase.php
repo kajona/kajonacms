@@ -61,6 +61,15 @@ abstract class class_testbase extends PHPUnit_Framework_TestCase {
             define("_autotesting_", true);
         }
 
+        if(!defined("_autotesting_sqlite_checks_")) {
+            if(class_config::getInstance("config.php")->getConfig("dbdriver") == "sqlite3") {
+                class_db::getInstance()->_pQuery("PRAGMA journal_mode = MEMORY", array());
+            }
+
+
+            define("_autotesting_sqlite_checks_", true);
+        }
+
         class_carrier::getInstance()->flushCache(class_carrier::INT_CACHE_TYPE_APC | class_carrier::INT_CACHE_TYPE_DBQUERIES);
         parent::setUp();
     }

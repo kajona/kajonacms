@@ -43,7 +43,9 @@ class class_db_sqlite3 extends class_db_base  {
         try {
             $this->linkDB = new SQLite3(_realpath_.$this->strDbFile);
             $this->_pQuery('PRAGMA encoding = "UTF-8"', array());
+            //TODO deprecated in sqlite, so may be removed
             $this->_pQuery('PRAGMA short_column_names = ON', array());
+            $this->_pQuery("PRAGMA journal_mode = TRUNCATE", array());
             if(method_exists($this->linkDB, "busyTimeout"))
                 $this->linkDB->busyTimeout(5000);
 
