@@ -124,7 +124,6 @@ class class_admin_formgenerator {
      */
     public function validateForm() {
         $objLang = class_carrier::getInstance()->getObjLang();
-        $this->arrValidationErrors = array();
 
         //1. Validate fields
         foreach($this->arrFields as $objOneField) {
@@ -543,6 +542,13 @@ class class_admin_formgenerator {
     public function removeValidationError($strEntry) {
         if(isset($this->arrValidationErrors[$strEntry]))
             unset($this->arrValidationErrors[$strEntry]);
+    }
+
+    /**
+     * Clear all validation errors in the form
+     */
+    public function removeAllValidationError() {
+        $this->arrValidationErrors = array();
     }
 
     /**
