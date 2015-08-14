@@ -900,7 +900,7 @@ KAJONA.admin.lists = {
         jsDialog_1.init();
 
         //reset pending list on hide
-        $('#'+jsDialog_1.containerId).on('hidden', function () {
+        $('#'+jsDialog_1.containerId).on('hidden.bs.modal', function () {
             KAJONA.admin.lists.arrSystemids = [];
         });
 
@@ -938,7 +938,7 @@ KAJONA.admin.lists = {
         }
         else {
             $('.batch_progressed').text((KAJONA.admin.lists.intTotal));
-            $('.progress > .progess-bar').css('width', 100+'%');
+            $('.progress > .progress-bar').css('width', 100+'%');
 			$('.progress > .progress-bar').html('100%');
             document.location.reload();
         }
