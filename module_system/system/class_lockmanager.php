@@ -225,7 +225,7 @@ class class_lockmanager
      */
     public static function getLockedRecords($intStart = null, $intEnd = null)
     {
-        $strQuery = "SELECT system_id FROM "._dbprefix_."system WHERE system_lock_id != '0' AND system_lock_id IS NOT NULL AND system_lock_time > ? ORDER BY system_id DESC";
+        $strQuery = "SELECT system_id FROM "._dbprefix_."system WHERE system_lock_time > ? ORDER BY system_id DESC";
         $arrRows = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array(time() - (int)class_module_system_setting::getConfigValue("_system_lock_maxtime_")), $intStart, $intEnd);
 
         $arrReturn = array();
@@ -263,7 +263,7 @@ class class_lockmanager
      */
     public static function getLockedRecordsCount()
     {
-        $strQuery = "SELECT COUNT(*) FROM "._dbprefix_."system WHERE system_lock_id != '0' AND system_lock_id AND system_lock_time > ? IS NOT NULL";
+        $strQuery = "SELECT COUNT(*) FROM "._dbprefix_."system WHERE system_lock_time > ?";
         $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array(time() - (int)class_module_system_setting::getConfigValue("_system_lock_maxtime_")));
         return $arrRow["COUNT(*)"];
     }
