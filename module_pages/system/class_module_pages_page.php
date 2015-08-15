@@ -437,7 +437,11 @@ class class_module_pages_page extends class_model implements interface_model, in
      * @return void
      */
     public function updatePath() {
-        $arrPathIds = $this->getPathArray("", class_module_system_module::getModuleByName("pages")->getSystemid());
+        $objPages = class_module_system_module::getModuleByName("pages");
+        if($objPages === null) {
+            return;
+        }
+        $arrPathIds = $this->getPathArray("", $objPages->getSystemid());
         $arrPathIds = array_slice($arrPathIds, 0, count($arrPathIds) - 1);
         $arrPathNames = array();
 
