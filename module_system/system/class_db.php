@@ -402,36 +402,34 @@ class class_db
         if ($this->objDbDriver != null) {
             $strError = $this->objDbDriver->getError();
         }
-        if ($this->objConfig->getDebug("debuglevel") > 0) {
 
-            //reprocess query
-            $strQuery = str_ireplace(
-                array(" from ", " where ", " and ", " group by ", " order by "),
-                array("\nFROM ", "\nWHERE ", "\n\tAND ", "\nGROUP BY ", "\nORDER BY "),
-                $strQuery
-            );
+        //reprocess query
+        $strQuery = str_ireplace(
+            array(" from ", " where ", " and ", " group by ", " order by "),
+            array("\nFROM ", "\nWHERE ", "\n\tAND ", "\nGROUP BY ", "\nORDER BY "),
+            $strQuery
+        );
 
-            $strErrorCode = "";
-            $strErrorCode .= "Error in query\n\n";
-            $strErrorCode .= "Error:\n";
-            $strErrorCode .= $strError."\n\n";
-            $strErrorCode .= "Query:\n";
-            $strErrorCode .= $strQuery."\n";
-            $strErrorCode .= "\n";
-            $strErrorCode .= "Callstack:\n";
-            if (function_exists("debug_backtrace")) {
-                $arrStack = debug_backtrace();
+        $strErrorCode = "";
+        $strErrorCode .= "Error in query\n\n";
+        $strErrorCode .= "Error:\n";
+        $strErrorCode .= $strError."\n\n";
+        $strErrorCode .= "Query:\n";
+        $strErrorCode .= $strQuery."\n";
+        $strErrorCode .= "\n";
+        $strErrorCode .= "Callstack:\n";
+        if (function_exists("debug_backtrace")) {
+            $arrStack = debug_backtrace();
 
-                foreach ($arrStack as $intPos => $arrValue) {
-                    $strErrorCode .= (isset($arrValue["file"]) ? $arrValue["file"] : "n.a.")."\n\t Row ".(isset($arrValue["line"]) ? $arrValue["line"] : "n.a.").", function ".$arrStack[$intPos]["function"]."\n";
-                }
+            foreach ($arrStack as $intPos => $arrValue) {
+                $strErrorCode .= (isset($arrValue["file"]) ? $arrValue["file"] : "n.a.")."\n\t Row ".(isset($arrValue["line"]) ? $arrValue["line"] : "n.a.").", function ".$arrStack[$intPos]["function"]."\n";
             }
-            class_logger::getInstance(class_logger::DBLOG)->addLogRow("Error in Query: ".$strQuery, class_logger::$levelWarning);
-            throw new class_exception($strErrorCode, class_exception::$level_ERROR);
         }
-        else {
-            //send a warning to the logger
-            class_logger::getInstance(class_logger::DBLOG)->addLogRow("Error in Query: ".$strQuery, class_logger::$levelWarning);
+        //send a warning to the logger
+        class_logger::getInstance(class_logger::DBLOG)->addLogRow($strErrorCode, class_logger::$levelWarning);
+
+        if ($this->objConfig->getDebug("debuglevel") > 0) {
+            throw new class_exception($strErrorCode, class_exception::$level_ERROR);
         }
 
     }
