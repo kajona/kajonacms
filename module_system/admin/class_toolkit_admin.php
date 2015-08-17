@@ -14,13 +14,15 @@
  * @package module_system
  * @author sidler@mulchprod.de
  */
-class class_toolkit_admin extends class_toolkit {
+class class_toolkit_admin extends class_toolkit
+{
 
     /**
      * Constructor
      *
      */
-    public function __construct() {
+    public function __construct()
+    {
         //Calling the base class
         parent::__construct();
     }
@@ -28,27 +30,29 @@ class class_toolkit_admin extends class_toolkit {
     /**
      * Returns a simple date-form element. By default used to enter a date without a time.
      *
-*@param string $strName
+     * @param string $strName
      * @param string $strTitle
      * @param class_date $objDateToShow
      * @param string $strClass = inputDate
      * @param boolean $bitWithTime
-
-
-*
-*@throws class_exception
+     *
+     * @throws class_exception
      * @return string
      * @since 3.2.0.9
      */
-    public function formDateSingle($strName, $strTitle, $objDateToShow, $strClass = "", $bitWithTime = false) {
+    public function formDateSingle($strName, $strTitle, $objDateToShow, $strClass = "", $bitWithTime = false)
+    {
         //check passed param
-        if($objDateToShow != null && !$objDateToShow instanceof class_date)
+        if ($objDateToShow != null && !$objDateToShow instanceof class_date) {
             throw new class_exception("param passed to class_toolkit_admin::formDateSingle is not an instance of class_date", class_exception::$level_ERROR);
+        }
 
-        if($bitWithTime)
+        if ($bitWithTime) {
             $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "input_datetime_simple");
-        else
+        }
+        else {
             $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "input_date_simple");
+        }
         $arrTemplate = array();
         $arrTemplate["class"] = $strClass;
         $arrTemplate["titleDay"] = $strName."_day";
@@ -64,7 +68,7 @@ class class_toolkit_admin extends class_toolkit {
         $arrTemplate["valueMin"] = $objDateToShow != null ? $objDateToShow->getIntMin() : "";
         $arrTemplate["valuePlain"] = dateToString($objDateToShow, false);
 //        if($bitWithTime)
-            $arrTemplate["dateFormat"] = class_carrier::getInstance()->getObjLang()->getLang("dateStyleShort", "system");
+        $arrTemplate["dateFormat"] = class_carrier::getInstance()->getObjLang()->getLang("dateStyleShort", "system");
 //        else
 //            $arrTemplate["dateFormat"] = class_carrier::getInstance()->getObjLang()->getLang("dateStyleLong", "system");
         $arrTemplate["calendarLang"] = class_carrier::getInstance()->getObjSession()->getAdminLanguage();
@@ -75,8 +79,8 @@ class class_toolkit_admin extends class_toolkit {
         $arrTemplate["calendarId"] = $strName;
         $strContainerId = $strName."_calendarContainer";
         $arrTemplate["calendarContainerId"] = $strContainerId;
-        $arrTemplate["calendarLang_weekday"] = " [" . class_carrier::getInstance()->getObjLang()->getLang("toolsetCalendarWeekday", "system") . "]\n";
-        $arrTemplate["calendarLang_month"] = " [" . class_carrier::getInstance()->getObjLang()->getLang("toolsetCalendarMonth", "system") . "]\n";
+        $arrTemplate["calendarLang_weekday"] = " [".class_carrier::getInstance()->getObjLang()->getLang("toolsetCalendarWeekday", "system")."]\n";
+        $arrTemplate["calendarLang_month"] = " [".class_carrier::getInstance()->getObjLang()->getLang("toolsetCalendarMonth", "system")."]\n";
 
         return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
     }
@@ -90,9 +94,11 @@ class class_toolkit_admin extends class_toolkit {
      * @param string $strTitle
      * @param string $strContent
      * @param string $strToolbarset
+     *
      * @return string
      */
-    public function formWysiwygEditor($strName = "inhalt", $strTitle = "", $strContent = "", $strToolbarset = "standard") {
+    public function formWysiwygEditor($strName = "inhalt", $strTitle = "", $strContent = "", $strToolbarset = "standard")
+    {
         $strReturn = "";
 
         //create the html-input element
@@ -102,14 +108,15 @@ class class_toolkit_admin extends class_toolkit {
         $arrTemplate["title"] = $strTitle;
         $arrTemplate["editorid"] = generateSystemid();
         $arrTemplate["content"] = htmlentities($strContent, ENT_COMPAT, "UTF-8");
-        $strReturn .=  $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
+        $strReturn .= $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
         //for the popups, we need the skinwebpath
         $strReturn .= $this->formInputHidden("skinwebpath", _skinwebpath_);
 
         //set the language the user defined for the admin
         $strLanguage = class_session::getInstance()->getAdminLanguage();
-        if($strLanguage == "")
+        if ($strLanguage == "") {
             $strLanguage = "en";
+        }
 
         //include the settings made by admin skin
         $strTemplateInitID = $this->objTemplate->readTemplate("/elements.tpl", "wysiwyg_ckeditor_inits");
@@ -117,8 +124,9 @@ class class_toolkit_admin extends class_toolkit {
 
         //check if a customized editor-config is available
         $strConfigFile = "'config_kajona_standard.js'";
-        if(is_file(_realpath_."/project/admin/scripts/ckeditor/config_kajona_standard.js"))
+        if (is_file(_realpath_."/project/admin/scripts/ckeditor/config_kajona_standard.js")) {
             $strConfigFile = "KAJONA_WEBPATH+'/project/admin/scripts/ckeditor/config_kajona_standard.js'";
+        }
 
         //to add role-based editors, you could load a different toolbar or also a different CKEditor config file
         //the editor code
@@ -145,9 +153,11 @@ class class_toolkit_admin extends class_toolkit {
      * Returns a divider to split up a page in logical sections
      *
      * @param string $strClass
+     *
      * @return string
      */
-    public function divider($strClass = "divider") {
+    public function divider($strClass = "divider")
+    {
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "divider");
         $arrTemplate = array();
         $arrTemplate["class"] = $strClass;
@@ -160,28 +170,35 @@ class class_toolkit_admin extends class_toolkit {
      *
      * @param float $floatPercent
      * @param int|string $intLength
+     *
      * @return string
      */
-    public function percentBeam($floatPercent, $intLength = "300")  {
+    public function percentBeam($floatPercent, $intLength = "300")
+    {
         //Calc width
         $intWidth = $intLength - 50;
         $intBeamLength = ceil($intWidth * $floatPercent / 100);
-        if($intBeamLength == 0)
+        if ($intBeamLength == 0) {
             $intBeamLength = 1;
+        }
 
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "percent_beam");
         $arrTemplate = array();
         $arrTemplate["length"] = $intLength;
         $arrTemplate["percent"] = number_format($floatPercent, 2);
         $arrTemplate["width"] = $intWidth;
-        if($arrTemplate["percent"] == "100.00")
+        if ($arrTemplate["percent"] == "100.00") {
             $arrTemplate["beamwidth"] = $intBeamLength;
-        else
-            $arrTemplate["beamwidth"] = $intBeamLength-1;
-        if(($intWidth - $intBeamLength) <= 0 || $arrTemplate["percent"] == "100.00")
+        }
+        else {
+            $arrTemplate["beamwidth"] = $intBeamLength - 1;
+        }
+        if (($intWidth - $intBeamLength) <= 0 || $arrTemplate["percent"] == "100.00") {
             $arrTemplate["transTillEnd"] = "";
-         else
-            $arrTemplate["transTillEnd"] = "<img src=\"_skinwebpath_/trans.gif\" width=\"".($intWidth - $intBeamLength-1)."\" height=\"1\" />";
+        }
+        else {
+            $arrTemplate["transTillEnd"] = "<img src=\"_skinwebpath_/trans.gif\" width=\"".($intWidth - $intBeamLength - 1)."\" height=\"1\" />";
+        }
         return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
     }
 
@@ -200,7 +217,8 @@ class class_toolkit_admin extends class_toolkit {
      *
      * @return string
      */
-    public function formInputCheckbox($strName, $strTitle, $bitChecked = false, $strClass = "", $bitReadOnly = false) {
+    public function formInputCheckbox($strName, $strTitle, $bitChecked = false, $strClass = "", $bitReadOnly = false)
+    {
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "input_checkbox");
         $arrTemplate = array();
         $arrTemplate["name"] = $strName;
@@ -223,7 +241,8 @@ class class_toolkit_admin extends class_toolkit {
      *
      * @return string
      */
-    public function formInputOnOff($strName, $strTitle, $bitChecked = false,  $bitReadOnly = false, $strOnSwitchJSCallback = "", $strClass = "") {
+    public function formInputOnOff($strName, $strTitle, $bitChecked = false, $bitReadOnly = false, $strOnSwitchJSCallback = "", $strClass = "")
+    {
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "input_on_off_switch");
         $arrTemplate = array();
         $arrTemplate["name"] = $strName;
@@ -240,9 +259,11 @@ class class_toolkit_admin extends class_toolkit {
      *
      * @param string $strName
      * @param string $strValue
+     *
      * @return string
      */
-    public function formInputHidden($strName, $strValue = "") {
+    public function formInputHidden($strName, $strValue = "")
+    {
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "input_hidden");
         $arrTemplate = array();
         $arrTemplate["name"] = $strName;
@@ -259,9 +280,11 @@ class class_toolkit_admin extends class_toolkit {
      * @param string $strClass
      * @param string $strOpener
      * @param bool $bitReadonly
+     *
      * @return string
      */
-    public function formInputText($strName, $strTitle = "", $strValue = "", $strClass = "", $strOpener = "", $bitReadonly = false) {
+    public function formInputText($strName, $strTitle = "", $strValue = "", $strClass = "", $strOpener = "", $bitReadonly = false)
+    {
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "input_text");
         $arrTemplate = array();
         $arrTemplate["name"] = $strName;
@@ -288,7 +311,8 @@ class class_toolkit_admin extends class_toolkit {
      * @throws class_exception
      * @return string
      */
-    public function formInputPageSelector($strName, $strTitle = "", $strValue = "", $strClass = "", $bitElements = true, $bitRenderOpener = true, $strAddonAction = "") {
+    public function formInputPageSelector($strName, $strTitle = "", $strValue = "", $strClass = "", $bitElements = true, $bitRenderOpener = true, $strAddonAction = "")
+    {
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "input_pageselector");
         $arrTemplate = array();
         $arrTemplate["name"] = $strName;
@@ -297,7 +321,7 @@ class class_toolkit_admin extends class_toolkit {
         $arrTemplate["class"] = $strClass;
 
         $arrTemplate["opener"] = "";
-        if($bitRenderOpener) {
+        if ($bitRenderOpener) {
             $arrTemplate["opener"] .= getLinkAdminDialog(
                 "pages",
                 "pagesFolderBrowser",
@@ -358,14 +382,15 @@ class class_toolkit_admin extends class_toolkit {
      * @return string
      * @throws class_exception
      */
-    public function formInputUserSelector($strName, $strTitle = "", $strValue = "", $strClass = "", $bitUser = true, $bitGroups = false, $bitBlockCurrentUser = false, array $arrValidateSystemid = null) {
+    public function formInputUserSelector($strName, $strTitle = "", $strValue = "", $strClass = "", $bitUser = true, $bitGroups = false, $bitBlockCurrentUser = false, array $arrValidateSystemid = null)
+    {
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "input_userselector");
 
         $strUserName = "";
         $strUserId = "";
 
         //value is a systemid
-        if(validateSystemid($strValue)) {
+        if (validateSystemid($strValue)) {
             $objUser = new class_module_user_user($strValue);
             $strUserName = $objUser->getStrDisplayName();
             $strUserId = $strValue;
@@ -443,10 +468,12 @@ class class_toolkit_admin extends class_toolkit {
      * @param string $strTitle
      * @param array $arrObjects
      * @param string $strAddLink
+     *
      * @return string
      * @throws class_exception
      */
-    public function formInputObjectList($strName, $strTitle = "", array $arrObjects, $strAddLink, $bitReadOnly = false) {
+    public function formInputObjectList($strName, $strTitle = "", array $arrObjects, $strAddLink, $bitReadOnly = false)
+    {
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "input_objectlist");
         $strTemplateRowID = $this->objTemplate->readTemplate("/elements.tpl", "input_objectlist_row");
 
@@ -456,25 +483,25 @@ class class_toolkit_admin extends class_toolkit {
         $arrTemplate["addLink"] = $bitReadOnly ? "" : $strAddLink;
 
         $strTable = '';
-        foreach($arrObjects as $objObject) {
+        foreach ($arrObjects as $objObject) {
             /** @var $objObject class_model */
-            if($objObject instanceof interface_model && $objObject->rightView()) {
+            if ($objObject instanceof interface_model && $objObject->rightView()) {
                 $strRemoveLink = "";
-                if(!$bitReadOnly) {
+                if (!$bitReadOnly) {
                     $strDelete = class_carrier::getInstance()->getObjLang()->getLang("commons_remove_assignment", "system");
                     $strRemoveLink = class_link::getLinkAdminDialog(null, "", "", $strDelete, $strDelete, "icon_delete", $strDelete, true, false, "KAJONA.v4skin.removeObjectListItem(this);return false;");
                 }
 
-                $strIcon = is_array($objObject->getStrIcon()) ? $objObject->getStrIcon()[0]: $objObject->getStrIcon();
+                $strIcon = is_array($objObject->getStrIcon()) ? $objObject->getStrIcon()[0] : $objObject->getStrIcon();
                 $arrTemplateRow = array(
-                    'name' => $strName,
+                    'name'        => $strName,
                     'displayName' => class_formentry_objectlist::getDisplayName($objObject),
-                    'icon' => class_adminskin_helper::getAdminImage($strIcon),
-                    'value' => $objObject->getSystemid(),
-                    'removeLink' => $strRemoveLink,
+                    'icon'        => class_adminskin_helper::getAdminImage($strIcon),
+                    'value'       => $objObject->getSystemid(),
+                    'removeLink'  => $strRemoveLink,
                 );
 
-                $strTable.= $this->objTemplate->fillTemplate($arrTemplateRow, $strTemplateRowID, true);
+                $strTable .= $this->objTemplate->fillTemplate($arrTemplateRow, $strTemplateRowID, true);
             }
         }
 
@@ -492,10 +519,12 @@ class class_toolkit_admin extends class_toolkit {
      * @param string $strValue
      * @param string $strRepositoryId
      * @param string $strClass
+     *
      * @return string
      * @since 3.3.4
      */
-    public function formInputFileSelector($strName, $strTitle = "", $strValue = "", $strRepositoryId = "", $strClass = "") {
+    public function formInputFileSelector($strName, $strTitle = "", $strValue = "", $strRepositoryId = "", $strClass = "")
+    {
         $strOpener = getLinkAdminDialog(
             "mediamanager",
             "folderContentFolderviewMode",
@@ -519,10 +548,12 @@ class class_toolkit_admin extends class_toolkit {
      * @param string $strTitle
      * @param string $strValue
      * @param string $strClass
+     *
      * @return string
      * @since 3.4.0
      */
-    public function formInputImageSelector($strName, $strTitle = "", $strValue = "", $strClass = "") {
+    public function formInputImageSelector($strName, $strTitle = "", $strValue = "", $strClass = "")
+    {
         $strOpener = getLinkAdminDialog(
             "mediamanager",
             "folderContentFolderviewMode",
@@ -534,23 +565,23 @@ class class_toolkit_admin extends class_toolkit {
         );
 
         $strOpener .= " ".getLinkAdminDialog(
-            "mediamanager",
-            "imageDetails",
-            "file='+document.getElementById('".$strName."').value+'",
-            class_carrier::getInstance()->getObjLang()->getLang("action_edit_image", "mediamanager"),
-            class_carrier::getInstance()->getObjLang()->getLang("action_edit_image", "mediamanager"),
-            "icon_crop",
-            class_carrier::getInstance()->getObjLang()->getLang("action_edit_image", "mediamanager"),
-            true,
-            false,
-            " (function() {
+                "mediamanager",
+                "imageDetails",
+                "file='+document.getElementById('".$strName."').value+'",
+                class_carrier::getInstance()->getObjLang()->getLang("action_edit_image", "mediamanager"),
+                class_carrier::getInstance()->getObjLang()->getLang("action_edit_image", "mediamanager"),
+                "icon_crop",
+                class_carrier::getInstance()->getObjLang()->getLang("action_edit_image", "mediamanager"),
+                true,
+                false,
+                " (function() {
              if(document.getElementById('".$strName."').value != '') {
                  KAJONA.admin.folderview.dialog.setContentIFrame('".urldecode(getLinkAdminHref("mediamanager", "imageDetails", "file='+document.getElementById('".$strName."').value+'"))."');
                  KAJONA.admin.folderview.dialog.setTitle('".$strTitle."');
                  KAJONA.admin.folderview.dialog.init();
              }
              return false; })(); return false;"
-        );
+            );
 
         return $this->formInputText($strName, $strTitle, $strValue, $strClass, $strOpener);
     }
@@ -564,9 +595,11 @@ class class_toolkit_admin extends class_toolkit {
      * @param string $strClass = inputTextarea
      * @param bool $bitReadonly
      * @param int $numberOfRows
+     *
      * @return string
      */
-    public function formInputTextArea($strName, $strTitle = "", $strValue = "", $strClass = "", $bitReadonly = false, $numberOfRows = 4) {
+    public function formInputTextArea($strName, $strTitle = "", $strValue = "", $strClass = "", $bitReadonly = false, $numberOfRows = 4)
+    {
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "input_textarea");
         $arrTemplate = array();
         $arrTemplate["name"] = $strName;
@@ -588,7 +621,8 @@ class class_toolkit_admin extends class_toolkit {
      *
      * @return string
      */
-    public function formInputPassword($strName, $strTitle = "", $strValue = "", $strClass = "") {
+    public function formInputPassword($strName, $strTitle = "", $strValue = "", $strClass = "")
+    {
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "input_password");
         $arrTemplate = array();
         $arrTemplate["name"] = $strName;
@@ -606,11 +640,14 @@ class class_toolkit_admin extends class_toolkit {
      * @param string $strEventhandler
      * @param string $strClass use cancelbutton for cancel-buttons
      * @param bool $bitEnabled
+     *
      * @return string
      */
-    public function formInputSubmit($strValue = null, $strName = "Submit", $strEventhandler = "", $strClass = "", $bitEnabled = true) {
-        if($strValue === null)
+    public function formInputSubmit($strValue = null, $strName = "Submit", $strEventhandler = "", $strClass = "", $bitEnabled = true)
+    {
+        if ($strValue === null) {
             $strValue = class_carrier::getInstance()->getObjLang()->getLang("commons_save", "system");
+        }
 
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "input_submit");
         $arrTemplate = array();
@@ -628,9 +665,11 @@ class class_toolkit_admin extends class_toolkit {
      * @param string $strName
      * @param string $strTitle
      * @param string $strClass
+     *
      * @return string
      */
-    public function formInputUpload($strName, $strTitle = "", $strClass = "") {
+    public function formInputUpload($strName, $strTitle = "", $strClass = "")
+    {
 
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "input_upload");
         $arrTemplate = array();
@@ -654,10 +693,12 @@ class class_toolkit_admin extends class_toolkit {
      *
      * @return string
      */
-    public function formInputUploadMultiple($strName, $strAllowedFileTypes, $strMediamangerRepoSystemId) {
+    public function formInputUploadMultiple($strName, $strAllowedFileTypes, $strMediamangerRepoSystemId)
+    {
 
-        if(class_module_system_module::getModuleByName("mediamanager") === null)
+        if (class_module_system_module::getModuleByName("mediamanager") === null) {
             return ($this->warningBox("Module mediamanger is required for this multiple uploads"));
+        }
 
         $objConfig = class_carrier::getInstance()->getObjConfig();
         $objText = class_carrier::getInstance()->getObjLang();
@@ -695,18 +736,24 @@ class class_toolkit_admin extends class_toolkit {
      * @return string
      * @throws class_exception
      */
-    public function formInputDropdown($strName, array $arrKeyValues, $strTitle = "", $strKeySelected = "", $strClass = "", $bitEnabled = true, $strAddons = "", $strDataPlaceholder = "", $strOpener = "") {
+    public function formInputDropdown($strName, array $arrKeyValues, $strTitle = "", $strKeySelected = "", $strClass = "", $bitEnabled = true, $strAddons = "", $strDataPlaceholder = "", $strOpener = "")
+    {
         $strOptions = "";
         $strTemplateOptionID = $this->objTemplate->readTemplate("/elements.tpl", "input_dropdown_row");
         $strTemplateOptionSelectedID = $this->objTemplate->readTemplate("/elements.tpl", "input_dropdown_row_selected");
 
-        foreach(array("", 0, "\"\"") as $strOneKeyToCheck) {
-            if(array_key_exists($strOneKeyToCheck, $arrKeyValues) && trim($arrKeyValues[$strOneKeyToCheck]) == "") {
+        foreach (array("", 0, "\"\"") as $strOneKeyToCheck) {
+            if (array_key_exists($strOneKeyToCheck, $arrKeyValues) && trim($arrKeyValues[$strOneKeyToCheck]) == "") {
                 unset($arrKeyValues[$strOneKeyToCheck]);
             }
         }
 
-        if(!isset($arrKeyValues[""])) {
+        //see if the selected value is valid
+        if (!in_array($strKeySelected, array_keys($arrKeyValues))) {
+            $strKeySelected = "";
+        }
+
+        if (!isset($arrKeyValues[""])) {
             $strPlaceholder = $strDataPlaceholder != "" ? $strDataPlaceholder : class_carrier::getInstance()->getObjLang()->getLang("commons_dropdown_dataplaceholder", "system");
             $strOptions .= "<option value='' disabled ".($strKeySelected == "" ? " selected " : "").">".$strPlaceholder."</option>";
         }
@@ -716,10 +763,12 @@ class class_toolkit_admin extends class_toolkit {
             $arrTemplate = array();
             $arrTemplate["key"] = $strKey;
             $arrTemplate["value"] = $strValue;
-            if((string)$strKey == (string)$strKeySelected)
+            if ((string)$strKey == (string)$strKeySelected) {
                 $strOptions .= $this->objTemplate->fillTemplate($arrTemplate, $strTemplateOptionSelectedID);
-            else
+            }
+            else {
                 $strOptions .= $this->objTemplate->fillTemplate($arrTemplate, $strTemplateOptionID);
+            }
         }
 
 
@@ -749,9 +798,11 @@ class class_toolkit_admin extends class_toolkit {
      * @param string $strClass
      * @param bool $bitEnabled
      * @param string $strAddons
+     *
      * @return string
      */
-    public function formInputMultiselect($strName, array $arrKeyValues, $strTitle = "", $arrKeysSelected = array(), $strClass = "", $bitEnabled = true, $strAddons = "") {
+    public function formInputMultiselect($strName, array $arrKeyValues, $strTitle = "", $arrKeysSelected = array(), $strClass = "", $bitEnabled = true, $strAddons = "")
+    {
         $strOptions = "";
         $strTemplateOptionID = $this->objTemplate->readTemplate("/elements.tpl", "input_multiselect_row");
         $strTemplateOptionSelectedID = $this->objTemplate->readTemplate("/elements.tpl", "input_multiselect_row_selected");
@@ -760,10 +811,12 @@ class class_toolkit_admin extends class_toolkit {
             $arrTemplate = array();
             $arrTemplate["key"] = $strKey;
             $arrTemplate["value"] = $strValue;
-            if(in_array($strKey, $arrKeysSelected))
+            if (in_array($strKey, $arrKeysSelected)) {
                 $strOptions .= $this->objTemplate->fillTemplate($arrTemplate, $strTemplateOptionSelectedID);
-            else
+            }
+            else {
                 $strOptions .= $this->objTemplate->fillTemplate($arrTemplate, $strTemplateOptionID);
+            }
         }
 
         $arrTemplate = array();
@@ -783,17 +836,19 @@ class class_toolkit_admin extends class_toolkit {
      * @param $strName
      * @param string $strTitle
      * @param array $arrObjects
+     *
      * @return string
      * @throws class_exception
      */
-    public function formInputTagEditor($strName, $strTitle = "", array $arrValues = array(), $strOnChange = null) {
+    public function formInputTagEditor($strName, $strTitle = "", array $arrValues = array(), $strOnChange = null)
+    {
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "input_tageditor");
 
         $arrTemplate = array();
         $arrTemplate["name"] = $strName;
         $arrTemplate["title"] = $strTitle;
         $arrTemplate["values"] = json_encode(array_values($arrValues));
-        $arrTemplate["onChange"] = empty($strOnChange) ? "function(){}" : (string) $strOnChange;
+        $arrTemplate["onChange"] = empty($strOnChange) ? "function(){}" : (string)$strOnChange;
 
         return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID, true);
     }
@@ -806,9 +861,11 @@ class class_toolkit_admin extends class_toolkit {
      * @param string $strTitle
      * @param array $arrKeysSelected
      * @param bool $bitEnabled
+     *
      * @return string
      */
-    public function formToggleButtonBar($strName, array $arrKeyValues, $strTitle = "", $arrKeysSelected = array(), $bitEnabled = true) {
+    public function formToggleButtonBar($strName, array $arrKeyValues, $strTitle = "", $arrKeysSelected = array(), $bitEnabled = true)
+    {
         $strOptions = "";
         $strTemplateOptionID = $this->objTemplate->readTemplate("/elements.tpl", "input_toggle_buttonbar_button");
         $strTemplateOptionSelectedID = $this->objTemplate->readTemplate("/elements.tpl", "input_toggle_buttonbar_button_selected");
@@ -820,10 +877,12 @@ class class_toolkit_admin extends class_toolkit {
             $arrTemplate["value"] = $strValue;
             $arrTemplate["disabled"] = ($bitEnabled ? "" : "disabled=\"disabled\"");
             $arrTemplate["btnclass"] = ($bitEnabled ? "" : "disabled");
-            if(in_array($strKey, $arrKeysSelected))
+            if (in_array($strKey, $arrKeysSelected)) {
                 $strOptions .= $this->objTemplate->fillTemplate($arrTemplate, $strTemplateOptionSelectedID);
-            else
+            }
+            else {
                 $strOptions .= $this->objTemplate->fillTemplate($arrTemplate, $strTemplateOptionID);
+            }
         }
 
         $arrTemplate = array();
@@ -847,7 +906,8 @@ class class_toolkit_admin extends class_toolkit {
      *
      * @return string
      */
-    public function formInputRadiogroup($strName, array $arrKeyValues, $strTitle = "", $strKeySelected = "", $strClass = "", $bitEnabled = true) {
+    public function formInputRadiogroup($strName, array $arrKeyValues, $strTitle = "", $strKeySelected = "", $strClass = "", $bitEnabled = true)
+    {
         $strOptions = "";
         $strTemplateRadioID = $this->objTemplate->readTemplate("/elements.tpl", "input_radiogroup_row");
         //Iterating over the array to create the options
@@ -876,10 +936,12 @@ class class_toolkit_admin extends class_toolkit {
      * @param $strName
      * @param string $strTitle
      * @param array $arrFields
+     *
      * @return string
      * @throws class_exception
      */
-    public function formInputContainer($strName, $strTitle = "", array $arrFields = array()) {
+    public function formInputContainer($strName, $strTitle = "", array $arrFields = array())
+    {
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "input_container");
         $strTemplateRowID = $this->objTemplate->readTemplate("/elements.tpl", "input_container_row");
 
@@ -888,8 +950,8 @@ class class_toolkit_admin extends class_toolkit {
         $arrTemplate["title"] = $strTitle;
 
         $strElements = "";
-        foreach($arrFields as $strField) {
-            $strElements.= $this->objTemplate->fillTemplate(array("element" => $strField), $strTemplateRowID, true);
+        foreach ($arrFields as $strField) {
+            $strElements .= $this->objTemplate->fillTemplate(array("element" => $strField), $strTemplateRowID, true);
         }
 
         $arrTemplate["elements"] = $strElements;
@@ -904,10 +966,12 @@ class class_toolkit_admin extends class_toolkit {
      * @param array $arrValues
      * @param array $arrSelected
      * @param bool $bitInline
+     *
      * @return string
      * @throws class_exception
      */
-    public function formInputCheckboxArray($strName, $strTitle = "", $intType, array $arrValues, array $arrSelected, $bitInline = false, $bitReadonly = false) {
+    public function formInputCheckboxArray($strName, $strTitle = "", $intType, array $arrValues, array $arrSelected, $bitInline = false, $bitReadonly = false)
+    {
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "input_checkboxarray");
         $strTemplateCheckboxID = $this->objTemplate->readTemplate("/elements.tpl", "input_checkboxarray_checkbox");
 
@@ -916,27 +980,27 @@ class class_toolkit_admin extends class_toolkit {
         $arrTemplate["title"] = $strTitle;
 
         $strElements = '';
-        foreach($arrValues as $strKey => $strValue) {
+        foreach ($arrValues as $strKey => $strValue) {
             $arrTemplateRow = array(
-                'key' => $strKey,
-                'name' => $intType == class_formentry_checkboxarray::TYPE_RADIO ? $strName : $strName . '[' . $strKey . ']',
-                'value' => $intType == class_formentry_checkboxarray::TYPE_RADIO ? $strKey : 'checked',
-                'title' => $strValue,
-                'checked' => in_array($strKey, $arrSelected) ? 'checked' : '',
-                'inline' => $bitInline ? '-inline' : '',
+                'key'      => $strKey,
+                'name'     => $intType == class_formentry_checkboxarray::TYPE_RADIO ? $strName : $strName.'['.$strKey.']',
+                'value'    => $intType == class_formentry_checkboxarray::TYPE_RADIO ? $strKey : 'checked',
+                'title'    => $strValue,
+                'checked'  => in_array($strKey, $arrSelected) ? 'checked' : '',
+                'inline'   => $bitInline ? '-inline' : '',
                 'readonly' => $bitReadonly ? 'disabled' : '',
             );
 
-            switch($intType) {
+            switch ($intType) {
                 case class_formentry_checkboxarray::TYPE_RADIO:
                     $arrTemplateRow['type'] = 'radio';
-                    $strElements.= $this->objTemplate->fillTemplate($arrTemplateRow, $strTemplateCheckboxID, true);
+                    $strElements .= $this->objTemplate->fillTemplate($arrTemplateRow, $strTemplateCheckboxID, true);
                     break;
 
                 default:
                 case class_formentry_checkboxarray::TYPE_CHECKBOX:
                     $arrTemplateRow['type'] = 'checkbox';
-                    $strElements.= $this->objTemplate->fillTemplate($arrTemplateRow, $strTemplateCheckboxID, true);
+                    $strElements .= $this->objTemplate->fillTemplate($arrTemplateRow, $strTemplateCheckboxID, true);
                     break;
             }
         }
@@ -953,9 +1017,11 @@ class class_toolkit_admin extends class_toolkit {
      * @param string $strName
      * @param string $strEncoding
      * @param string $strOnSubmit
+     *
      * @return string
      */
-    public function formHeader($strAction, $strName = "", $strEncoding = "", $strOnSubmit = "") {
+    public function formHeader($strAction, $strName = "", $strEncoding = "", $strOnSubmit = "")
+    {
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "form_start");
         $arrTemplate = array();
         $arrTemplate["name"] = ($strName != "" ? $strName : "form".generateSystemid());
@@ -971,10 +1037,12 @@ class class_toolkit_admin extends class_toolkit {
      * @param string $strContent
      * @param string $strTitle
      * @param bool $bitVisible
+     *
      * @return string
      */
-    public function formOptionalElementsWrapper($strContent, $strTitle = "", $bitVisible = false) {
-        $arrFolder = $this->getLayoutFolderPic($strContent, $strTitle, "icon_folderOpen", "icon_folderClosed",  $bitVisible);
+    public function formOptionalElementsWrapper($strContent, $strTitle = "", $bitVisible = false)
+    {
+        $arrFolder = $this->getLayoutFolderPic($strContent, $strTitle, "icon_folderOpen", "icon_folderClosed", $bitVisible);
         return $this->getFieldset($arrFolder[1], $arrFolder[0]);
     }
 
@@ -986,9 +1054,11 @@ class class_toolkit_admin extends class_toolkit {
      *
      * @return string
      */
-    public function formTextRow($strText, $strClass = "") {
-        if($strText == "")
+    public function formTextRow($strText, $strClass = "")
+    {
+        if ($strText == "") {
             return "";
+        }
 
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "text_row_form");
         $arrTemplate = array();
@@ -1002,9 +1072,11 @@ class class_toolkit_admin extends class_toolkit {
      *
      * @param string $strText
      * @param string $strClass
+     *
      * @return string
      */
-    public function formHeadline($strText, $strClass = "") {
+    public function formHeadline($strText, $strClass = "")
+    {
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "headline_form");
         $arrTemplate = array();
         $arrTemplate["text"] = $strText;
@@ -1017,23 +1089,28 @@ class class_toolkit_admin extends class_toolkit {
      * Includes the hidden fields for a passed pe param and a passed pv param by default.
      *
      * @param bool $bitIncludePeFields
+     *
      * @return string
      */
-    public function formClose($bitIncludePeFields = true) {
+    public function formClose($bitIncludePeFields = true)
+    {
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "form_close");
         $strPeFields = "";
-        if($bitIncludePeFields) {
+        if ($bitIncludePeFields) {
             $arrParams = class_carrier::getAllParams();
-            if(array_key_exists("pe", $arrParams))
+            if (array_key_exists("pe", $arrParams)) {
                 $strPeFields .= $this->formInputHidden("pe", $arrParams["pe"]);
-            if(array_key_exists("folderview", $arrParams)) {
+            }
+            if (array_key_exists("folderview", $arrParams)) {
                 $strPeFields .= $this->formInputHidden("folderview", $arrParams["folderview"]);
 
-                if(!array_key_exists("pe", $arrParams))
+                if (!array_key_exists("pe", $arrParams)) {
                     $strPeFields .= $this->formInputHidden("pe", "1");
+                }
             }
-            if(array_key_exists("pv", $arrParams))
+            if (array_key_exists("pv", $arrParams)) {
                 $strPeFields .= $this->formInputHidden("pv", $arrParams["pv"]);
+            }
         }
         return $strPeFields.$this->objTemplate->fillTemplate(array(), $strTemplateID);
     }
@@ -1052,7 +1129,8 @@ class class_toolkit_admin extends class_toolkit {
      *
      * @return string
      */
-    public function gridHeader($bitSortable = true, $intElementsPerPage = -1, $intCurPage = -1) {
+    public function gridHeader($bitSortable = true, $intElementsPerPage = -1, $intCurPage = -1)
+    {
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "grid_header");
         return $this->objTemplate->fillTemplate(
             array("sortable" => ($bitSortable ? "sortable" : ""), "elementsPerPage" => $intElementsPerPage, "curPage" => $intCurPage),
@@ -1069,21 +1147,23 @@ class class_toolkit_admin extends class_toolkit {
      *
      * @return string
      */
-    public function gridEntry(interface_admin_gridable $objEntry, $strActions, $strClickAction = "") {
+    public function gridEntry(interface_admin_gridable $objEntry, $strActions, $strClickAction = "")
+    {
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "grid_entry");
 
         $strCSSAddon = "";
-        if(method_exists($objEntry, "getIntRecordStatus"))
+        if (method_exists($objEntry, "getIntRecordStatus")) {
             $strCSSAddon = $objEntry->getIntRecordStatus() == 0 ? "disabled" : "";
+        }
 
         $arrTemplate = array(
-            "title" => $objEntry->getStrDisplayName(),
-            "image" => $objEntry->getStrGridIcon(),
-            "actions" => $strActions,
-            "systemid" => $objEntry->getSystemid(),
-            "subtitle" => $objEntry->getStrLongDescription(),
-            "info" => $objEntry->getStrAdditionalInfo(),
-            "cssaddon" => $strCSSAddon,
+            "title"       => $objEntry->getStrDisplayName(),
+            "image"       => $objEntry->getStrGridIcon(),
+            "actions"     => $strActions,
+            "systemid"    => $objEntry->getSystemid(),
+            "subtitle"    => $objEntry->getStrLongDescription(),
+            "info"        => $objEntry->getStrAdditionalInfo(),
+            "cssaddon"    => $strCSSAddon,
             "clickaction" => $strClickAction
         );
 
@@ -1092,9 +1172,11 @@ class class_toolkit_admin extends class_toolkit {
 
     /**
      * Renders the closing elements of a grid.
+     *
      * @return string
      */
-    public function gridFooter() {
+    public function gridFooter()
+    {
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "grid_footer");
         return $this->objTemplate->fillTemplate(array(), $strTemplateID);
     }
@@ -1107,7 +1189,8 @@ class class_toolkit_admin extends class_toolkit {
      *
      * @return string
      */
-    public function listHeader() {
+    public function listHeader()
+    {
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "list_header");
         return $this->objTemplate->fillTemplate(array(), $strTemplateID);
     }
@@ -1124,20 +1207,20 @@ class class_toolkit_admin extends class_toolkit {
      *
      * @return string
      */
-    public function dragableListHeader($strListId, $bitOnlySameTable = false, $bitAllowDropOnTree = false, $intElementsPerPage = -1, $intCurPage = -1) {
+    public function dragableListHeader($strListId, $bitOnlySameTable = false, $bitAllowDropOnTree = false, $intElementsPerPage = -1, $intCurPage = -1)
+    {
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "dragable_list_header");
         return $this->objTemplate->fillTemplate(
             array(
-                "listid" => $strListId,
-                "sameTable" => $bitOnlySameTable? "true" : "false",
-                "jsInject" => "bitMoveToTree = ".($bitAllowDropOnTree ? "true" : "false").";",
+                "listid"          => $strListId,
+                "sameTable"       => $bitOnlySameTable ? "true" : "false",
+                "jsInject"        => "bitMoveToTree = ".($bitAllowDropOnTree ? "true" : "false").";",
                 "elementsPerPage" => $intElementsPerPage,
-                "curPage" => $intCurPage
+                "curPage"         => $intCurPage
             ),
             $strTemplateID
         );
     }
-
 
 
     /**
@@ -1145,7 +1228,8 @@ class class_toolkit_admin extends class_toolkit {
      *
      * @return string
      */
-    public function listFooter() {
+    public function listFooter()
+    {
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "list_footer");
         return $this->objTemplate->fillTemplate(array(), $strTemplateID);
     }
@@ -1154,9 +1238,11 @@ class class_toolkit_admin extends class_toolkit {
      * Returns the code to finish the opened list
      *
      * @param string $strListId
+     *
      * @return string
      */
-    public function dragableListFooter($strListId) {
+    public function dragableListFooter($strListId)
+    {
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "dragable_list_footer");
         return $this->objTemplate->fillTemplate(array("listid" => $strListId), $strTemplateID);
     }
@@ -1171,16 +1257,20 @@ class class_toolkit_admin extends class_toolkit {
      *
      * @return string
      */
-    public function simpleAdminList(interface_admin_listable $objEntry, $strActions, $intCount, $bitCheckbox = false) {
+    public function simpleAdminList(interface_admin_listable $objEntry, $strActions, $intCount, $bitCheckbox = false)
+    {
         $strImage = $objEntry->getStrIcon();
-        if(is_array($strImage))
+        if (is_array($strImage)) {
             $strImage = class_adminskin_helper::getAdminImage($strImage[0], $strImage[1]);
-        else
+        }
+        else {
             $strImage = class_adminskin_helper::getAdminImage($strImage);
+        }
 
         $strCSSAddon = "";
-        if(method_exists($objEntry, "getIntRecordStatus"))
+        if (method_exists($objEntry, "getIntRecordStatus")) {
             $strCSSAddon = $objEntry->getIntRecordStatus() == 0 ? "disabled" : "";
+        }
 
         return $this->genericAdminList(
             $objEntry->getSystemid(),
@@ -1210,7 +1300,8 @@ class class_toolkit_admin extends class_toolkit {
      *
      * @return string
      */
-    public function genericAdminList($strId, $strName, $strIcon, $strActions, $intCount, $strAdditionalInfo = "", $strDescription = "", $bitCheckbox = false, $strCssAddon = "") {
+    public function genericAdminList($strId, $strName, $strIcon, $strActions, $intCount, $strAdditionalInfo = "", $strDescription = "", $bitCheckbox = false, $strCssAddon = "")
+    {
         $arrTemplate = array();
         $arrTemplate["listitemid"] = $strId;
         $arrTemplate["image"] = $strIcon;
@@ -1220,7 +1311,7 @@ class class_toolkit_admin extends class_toolkit {
         $arrTemplate["description"] = $strDescription;
         $arrTemplate["cssaddon"] = $strCssAddon;
 
-        if($bitCheckbox) {
+        if ($bitCheckbox) {
             $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "generallist_checkbox");
             $arrTemplate["checkbox"] = $this->objTemplate->fillTemplate(array("systemid" => $strId), $strTemplateID);
         }
@@ -1229,17 +1320,21 @@ class class_toolkit_admin extends class_toolkit {
         //fallback-awareness for update-scenarios (update to 4.3)
         $strGlobalTemplateId = $this->objTemplate->readTemplate("/elements.tpl");
 
-        if($strDescription != "") {
-            if($this->objTemplate->containsSection($strGlobalTemplateId, "generallist_desc"))
+        if ($strDescription != "") {
+            if ($this->objTemplate->containsSection($strGlobalTemplateId, "generallist_desc")) {
                 $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "generallist_desc");
-            else
+            }
+            else {
                 $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "generallist_desc_1");
+            }
         }
         else {
-            if($this->objTemplate->containsSection($strGlobalTemplateId, "generallist"))
+            if ($this->objTemplate->containsSection($strGlobalTemplateId, "generallist")) {
                 $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "generallist");
-            else
+            }
+            else {
                 $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "generallist_1");
+            }
         }
 
         return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
@@ -1251,15 +1346,16 @@ class class_toolkit_admin extends class_toolkit {
      *
      * @return string
      */
-    public function renderBatchActionHandlers(array $arrActions) {
+    public function renderBatchActionHandlers(array $arrActions)
+    {
         $strEntries = "";
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "batchactions_entry");
 
-        foreach($arrActions as $objOneAction) {
+        foreach ($arrActions as $objOneAction) {
             $strEntries .= $this->objTemplate->fillTemplate(
                 array(
-                    "title" => $objOneAction->getStrTitle(),
-                    "icon" => $objOneAction->getStrIcon(),
+                    "title"     => $objOneAction->getStrTitle(),
+                    "icon"      => $objOneAction->getStrIcon(),
                     "targeturl" => $objOneAction->getStrTargetUrl()
                 ),
                 $strTemplateID
@@ -1282,26 +1378,28 @@ class class_toolkit_admin extends class_toolkit {
      *
      * @return string
      */
-    public function dataTable(array $arrHeader = null, array $arrValues, $strTableCssAddon = "", $bitWithTbody = false) {
+    public function dataTable(array $arrHeader = null, array $arrValues, $strTableCssAddon = "", $bitWithTbody = false)
+    {
         $strReturn = "";
         //The Table header & the templates
-        $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "datalist_header" . ($bitWithTbody ? "_tbody" : ""));
+        $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "datalist_header".($bitWithTbody ? "_tbody" : ""));
         $strReturn .= $this->objTemplate->fillTemplate(array("cssaddon" => $strTableCssAddon), $strTemplateID);
 
         $strTemplateHeaderHeaderID = $this->objTemplate->readTemplate("/elements.tpl", "datalist_column_head_header");
         $strTemplateHeaderContentID = $this->objTemplate->readTemplate("/elements.tpl", "datalist_column_head");
         $strTemplateHeaderFooterID = $this->objTemplate->readTemplate("/elements.tpl", "datalist_column_head_footer");
-        $strTemplateContentHeaderID = $this->objTemplate->readTemplate("/elements.tpl", "datalist_column_header" . ($bitWithTbody ? "_tbody" : ""));
+        $strTemplateContentHeaderID = $this->objTemplate->readTemplate("/elements.tpl", "datalist_column_header".($bitWithTbody ? "_tbody" : ""));
         $strTemplateContentContentID = $this->objTemplate->readTemplate("/elements.tpl", "datalist_column");
-        $strTemplateContentFooterID = $this->objTemplate->readTemplate("/elements.tpl", "datalist_column_footer" . ($bitWithTbody ? "_tbody" : ""));
+        $strTemplateContentFooterID = $this->objTemplate->readTemplate("/elements.tpl", "datalist_column_footer".($bitWithTbody ? "_tbody" : ""));
         //Iterating over the rows
 
         //Starting with the header, column by column
-        if(is_array($arrHeader)) {
+        if (is_array($arrHeader)) {
             $strReturn .= $this->objTemplate->fillTemplate(array(), $strTemplateHeaderHeaderID);
 
-            foreach ($arrHeader as $strCssClass => $strHeader)
+            foreach ($arrHeader as $strCssClass => $strHeader) {
                 $strReturn .= $this->objTemplate->fillTemplate(array("value" => $strHeader, "class" => $strCssClass), $strTemplateHeaderContentID);
+            }
 
             $strReturn .= $this->objTemplate->fillTemplate(array(), $strTemplateHeaderFooterID);
         }
@@ -1310,8 +1408,9 @@ class class_toolkit_admin extends class_toolkit {
         foreach ($arrValues as $strKey => $arrValueRow) {
             $strReturn .= $this->objTemplate->fillTemplate(array("systemid" => $strKey), $strTemplateContentHeaderID);
 
-            foreach($arrValueRow as $strCssClass => $strValue)
+            foreach ($arrValueRow as $strCssClass => $strValue) {
                 $strReturn .= $this->objTemplate->fillTemplate(array("value" => $strValue, "class" => $strCssClass), $strTemplateContentContentID);
+            }
 
             $strReturn .= $this->objTemplate->fillTemplate(array(), $strTemplateContentFooterID);
         }
@@ -1330,9 +1429,11 @@ class class_toolkit_admin extends class_toolkit {
      * Creates a action-Entry in a list
      *
      * @param string $strContent
+     *
      * @return string
      */
-    public function listButton($strContent) {
+    public function listButton($strContent)
+    {
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "list_button");
         $arrTemplate = array();
         $arrTemplate["content"] = $strContent;
@@ -1348,21 +1449,25 @@ class class_toolkit_admin extends class_toolkit {
      * @param string $strElementName
      * @param string $strQuestion
      * @param string $strLinkHref
+     *
      * @return string
      */
-    public function listDeleteButton($strElementName, $strQuestion, $strLinkHref) {
+    public function listDeleteButton($strElementName, $strQuestion, $strLinkHref)
+    {
         $strElementName = uniStrReplace(array('\''), array('\\\''), $strElementName);
         $strQuestion = uniStrReplace("%%element_name%%", htmlToString($strElementName, true), $strQuestion);
 
         //get the reload-url
         $objHistory = new class_history();
         $strParam = "";
-        if(uniStrpos($strLinkHref, "javascript:") === false) {
+        if (uniStrpos($strLinkHref, "javascript:") === false) {
             $strParam = "reloadUrl=".urlencode($objHistory->getAdminHistory());
-            if(uniSubstr($strLinkHref, -4) == ".php" || uniSubstr($strLinkHref, -5) == ".html")
+            if (uniSubstr($strLinkHref, -4) == ".php" || uniSubstr($strLinkHref, -5) == ".html") {
                 $strParam = "?".$strParam;
-            else
+            }
+            else {
                 $strParam = "&".$strParam;
+            }
         }
 
         //create the list-button and the js code to show the dialog
@@ -1388,18 +1493,22 @@ class class_toolkit_admin extends class_toolkit {
      * @throws class_exception
      * @return string
      */
-    public function listStatusButton($objInstance, $bitReload = false, $strAltActive = "", $strAltInactive = "") {
+    public function listStatusButton($objInstance, $bitReload = false, $strAltActive = "", $strAltInactive = "")
+    {
         $strAltActive = $strAltActive != "" ? $strAltActive : class_carrier::getInstance()->getObjLang()->getLang("status_active", "system");
         $strAltInactive = $strAltInactive != "" ? $strAltInactive : class_carrier::getInstance()->getObjLang()->getLang("status_inactive", "system");
 
-        if(is_object($objInstance) && $objInstance instanceof class_model )
+        if (is_object($objInstance) && $objInstance instanceof class_model) {
             $objRecord = $objInstance;
-        else if(validateSystemid($objInstance) && class_objectfactory::getInstance()->getObject($objInstance) !== null)
+        }
+        else if (validateSystemid($objInstance) && class_objectfactory::getInstance()->getObject($objInstance) !== null) {
             $objRecord = class_objectfactory::getInstance()->getObject($objInstance);
-        else
+        }
+        else {
             throw new class_exception("failed loading instance for ".(is_object($objInstance) ? " @ ".get_class($objInstance) : $objInstance), class_exception::$level_ERROR);
+        }
 
-        if($objRecord->getIntRecordStatus() == 1) {
+        if ($objRecord->getIntRecordStatus() == 1) {
             $strLinkContent = class_adminskin_helper::getAdminImage("icon_enabled", $strAltActive);
         }
         else {
@@ -1409,7 +1518,7 @@ class class_toolkit_admin extends class_toolkit {
         $strJavascript = "";
 
         //output texts and image paths only once
-        if(class_carrier::getInstance()->getObjSession()->getSession("statusButton", class_session::$intScopeRequest) === false) {
+        if (class_carrier::getInstance()->getObjSession()->getSession("statusButton", class_session::$intScopeRequest) === false) {
             $strJavascript .= "<script type=\"text/javascript\">
                 KAJONA.admin.ajax.setSystemStatusMessages.strActiveIcon = '".addslashes(class_adminskin_helper::getAdminImage("icon_enabled", $strAltActive))."';
                 KAJONA.admin.ajax.setSystemStatusMessages.strInActiveIcon = '".addslashes(class_adminskin_helper::getAdminImage("icon_disabled", $strAltInactive))."';
@@ -1439,9 +1548,11 @@ class class_toolkit_admin extends class_toolkit {
      *
      * @param string $strContent
      * @param string $strClass
+     *
      * @return string
      */
-    public function warningBox($strContent, $strClass = "alert-warning") {
+    public function warningBox($strContent, $strClass = "alert-warning")
+    {
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "warning_box");
         $arrTemplate = array();
         $arrTemplate["content"] = $strContent;
@@ -1454,6 +1565,7 @@ class class_toolkit_admin extends class_toolkit {
      * navigation contains all points which match the given selector
      *
      * @param string $strSelector
+     *
      * @return string
      */
     public function getTableOfContents($strSelector)
@@ -1472,7 +1584,8 @@ class class_toolkit_admin extends class_toolkit {
      *
      * @return string
      */
-    public function getTextRow($strText, $strClass = "text") {
+    public function getTextRow($strText, $strClass = "text")
+    {
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "text_row");
         $arrTemplate = array();
         $arrTemplate["text"] = $strText;
@@ -1489,10 +1602,12 @@ class class_toolkit_admin extends class_toolkit {
      * @param bool $bitVisible
      * @param string $strCallbackVisible JS function
      * @param string $strCallbackInvisible JS function
+     *
      * @return mixed 0: The html-layout code
      *               1: The link to fold / unfold
      */
-    public function getLayoutFolder($strContent, $strLinkText, $bitVisible = false, $strCallbackVisible = "", $strCallbackInvisible = "") {
+    public function getLayoutFolder($strContent, $strLinkText, $bitVisible = false, $strCallbackVisible = "", $strCallbackInvisible = "")
+    {
         $arrReturn = array();
         $strID = str_replace(array(" ", "."), array("", ""), microtime());
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "layout_folder");
@@ -1501,7 +1616,7 @@ class class_toolkit_admin extends class_toolkit {
         $arrTemplate["content"] = $strContent;
         $arrTemplate["display"] = ($bitVisible ? "folderVisible" : "folderHidden");
         $arrReturn[0] = $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
-        $arrReturn[1] = "<a href=\"javascript:KAJONA.util.fold('".$strID."', ". ($strCallbackVisible != "" ? $strCallbackVisible : "null") .", ". ($strCallbackInvisible != "" ? $strCallbackInvisible : "null") .");\">".$strLinkText."</a>";
+        $arrReturn[1] = "<a href=\"javascript:KAJONA.util.fold('".$strID."', ".($strCallbackVisible != "" ? $strCallbackVisible : "null").", ".($strCallbackInvisible != "" ? $strCallbackInvisible : "null").");\">".$strLinkText."</a>";
         return $arrReturn;
     }
 
@@ -1514,10 +1629,12 @@ class class_toolkit_admin extends class_toolkit {
      * @param string $strImageVisible clickable
      * @param string $strImageInvisible clickable
      * @param bool $bitVisible
+     *
      * @return string
      *
      */
-    public function getLayoutFolderPic($strContent, $strLinkText = "", $strImageVisible = "icon_folderOpen", $strImageInvisible = "icon_folderClosed", $bitVisible = true) {
+    public function getLayoutFolderPic($strContent, $strLinkText = "", $strImageVisible = "icon_folderOpen", $strImageInvisible = "icon_folderClosed", $bitVisible = true)
+    {
 
         $strImageVisible = class_adminskin_helper::getAdminImage($strImageVisible);
         $strImageInvisible = class_adminskin_helper::getAdminImage($strImageInvisible);
@@ -1546,9 +1663,11 @@ JS;
      * @param string $strTitle
      * @param string $strContent
      * @param string $strClass
+     *
      * @return string
      */
-    public function getFieldset($strTitle, $strContent, $strClass = "fieldset") {
+    public function getFieldset($strTitle, $strContent, $strClass = "fieldset")
+    {
         //remove old placeholder from content
         $this->objTemplate->setTemplate($strContent);
         $this->objTemplate->deletePlaceholder();
@@ -1568,11 +1687,12 @@ JS;
      * arrayvalue => tabcontent
      *
      * @param $arrTabs array(key => content)
-     * @param bool$bitFullHeight whether the tab content should use full height
+     * @param bool $bitFullHeight whether the tab content should use full height
      *
      * @return string
      */
-    public function getTabbedContent(array $arrTabs, $bitFullHeight = false) {
+    public function getTabbedContent(array $arrTabs, $bitFullHeight = false)
+    {
 
         $strWrapperID = $this->objTemplate->readTemplate("/elements.tpl", "tabbed_content_wrapper");
         $strHeaderID = $this->objTemplate->readTemplate("/elements.tpl", "tabbed_content_tabheader");
@@ -1581,7 +1701,7 @@ JS;
         $strTabs = "";
         $strTabContent = "";
         $strClassaddon = "active in ";
-        foreach($arrTabs as $strTitle => $strContent) {
+        foreach ($arrTabs as $strTitle => $strContent) {
             $strTabId = generateSystemid();
             $strTabs .= $this->objTemplate->fillTemplate(array("tabid" => $strTabId, "tabtitle" => $strTitle, "classaddon" => $strClassaddon), $strHeaderID);
             $strTabContent .= $this->objTemplate->fillTemplate(array("tabid" => $strTabId, "tabcontent" => $strContent, "classaddon" => $strClassaddon), $strContentID);
@@ -1595,9 +1715,11 @@ JS;
      * Container for graphs, e.g. used by stats.
      *
      * @param string $strImgSrc
+     *
      * @return string
      */
-    public function getGraphContainer($strImgSrc) {
+    public function getGraphContainer($strImgSrc)
+    {
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "graph_container");
         $arrContent = array();
         $arrContent["imgsrc"] = $strImgSrc;
@@ -1613,7 +1735,8 @@ JS;
      * @return string
      * @deprecated
      */
-    public function getIFrame($strIFrameSrc, $strIframeId = "") {
+    public function getIFrame($strIFrameSrc, $strIframeId = "")
+    {
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "iframe_container");
         $arrContent = array();
         $arrContent["iframesrc"] = $strIFrameSrc;
@@ -1623,11 +1746,14 @@ JS;
 
     /**
      * Renders the login-status and corresponding links
+     *
      * @param array $arrElements
+     *
      * @return string
      * @since 3.4.0
      */
-    public function getLoginStatus(array $arrElements) {
+    public function getLoginStatus(array $arrElements)
+    {
         //Loading a small login-form
         $arrElements["renderTags"] = class_module_system_module::getModuleByName("tags") != null && class_module_system_module::getModuleByName("tags")->rightView() ? "true" : "false";
         $arrElements["renderMessages"] = class_module_system_module::getModuleByName("messaging") != null && class_module_system_module::getModuleByName("messaging")->rightView() ? "true" : "false";
@@ -1646,7 +1772,8 @@ JS;
      *
      * @return string
      */
-    public function getAdminSitemap($strCurrentModule = "") {
+    public function getAdminSitemap($strCurrentModule = "")
+    {
         $strWrapperID = $this->objTemplate->readTemplate("/elements.tpl", "sitemap_wrapper");
         $strModuleID = $this->objTemplate->readTemplate("/elements.tpl", "sitemap_module_wrapper");
         $strModuleActiveID = $this->objTemplate->readTemplate("/elements.tpl", "sitemap_module_wrapper_active");
@@ -1654,8 +1781,9 @@ JS;
         $strDividerID = $this->objTemplate->readTemplate("/elements.tpl", "sitemap_divider_entry");
         $strModules = "";
 
-        if($strCurrentModule == "elemente")
+        if ($strCurrentModule == "elemente") {
             $strCurrentModule = "pages";
+        }
 
         $arrModules = class_module_system_module::getModulesInNaviAsArray(class_module_system_aspect::getCurrentAspectId());
 
@@ -1663,7 +1791,7 @@ JS;
         $arrNaviInstances = array();
         foreach ($arrModules as $arrModule) {
             $objModule = class_module_system_module::getModuleBySystemid($arrModule["module_id"]);
-            if($objModule->rightView()) {
+            if ($objModule->rightView()) {
                 $arrNaviInstances[] = $objModule;
             }
         }
@@ -1674,8 +1802,8 @@ JS;
             $arrActions = class_admin_helper::getModuleActionNaviHelper($objOneInstance);
 
             $strActions = "";
-            foreach($arrActions as $strOneAction) {
-                if(trim($strOneAction) != "") {
+            foreach ($arrActions as $strOneAction) {
+                if (trim($strOneAction) != "") {
                     $arrActionEntries = array(
                         "action" => $strOneAction
                     );
@@ -1688,18 +1816,20 @@ JS;
 
 
             $arrModuleLevel = array(
-                "module" => class_link::getLinkAdmin($objOneInstance->getStrName(), "", "", class_carrier::getInstance()->getObjLang()->getLang("modul_titel", $objOneInstance->getStrName())),
-                "actions" => $strActions,
-                "systemid" => $objOneInstance->getSystemid(),
+                "module"      => class_link::getLinkAdmin($objOneInstance->getStrName(), "", "", class_carrier::getInstance()->getObjLang()->getLang("modul_titel", $objOneInstance->getStrName())),
+                "actions"     => $strActions,
+                "systemid"    => $objOneInstance->getSystemid(),
                 "moduleTitle" => $objOneInstance->getStrName(),
-                "moduleName" => class_carrier::getInstance()->getObjLang()->getLang("modul_titel", $objOneInstance->getStrName()),
-                "moduleHref" => class_link::getLinkAdminHref($objOneInstance->getStrName(), "")
+                "moduleName"  => class_carrier::getInstance()->getObjLang()->getLang("modul_titel", $objOneInstance->getStrName()),
+                "moduleHref"  => class_link::getLinkAdminHref($objOneInstance->getStrName(), "")
             );
 
-            if($strCurrentModule == $objOneInstance->getStrName())
+            if ($strCurrentModule == $objOneInstance->getStrName()) {
                 $strModules .= $this->objTemplate->fillTemplate($arrModuleLevel, $strModuleActiveID);
-            else
+            }
+            else {
                 $strModules .= $this->objTemplate->fillTemplate($arrModuleLevel, $strModuleID);
+            }
 
         }
 
@@ -1713,9 +1843,11 @@ JS;
      * Generates the layout for a small navigation
      *
      * @param mixed $arrEntries
+     *
      * @return string
      */
-    public function getPathNavigation(array $arrEntries) {
+    public function getPathNavigation(array $arrEntries)
+    {
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "path_container");
         $strTemplateRowID = $this->objTemplate->readTemplate("/elements.tpl", "path_entry");
         $strRows = "";
@@ -1734,18 +1866,22 @@ JS;
      *
      * @param mixed $arrEntries
      * @param int $intActiveEntry Array-counting, so first element is 0, last is array-length - 1
+     *
      * @return string
      */
-    public function getContentToolbar(array $arrEntries, $intActiveEntry = -1) {
+    public function getContentToolbar(array $arrEntries, $intActiveEntry = -1)
+    {
         $strTemplateWrapperID = $this->objTemplate->readTemplate("/elements.tpl", "contentToolbar_wrapper");
         $strTemplateEntryID = $this->objTemplate->readTemplate("/elements.tpl", "contentToolbar_entry");
         $strTemplateActiveEntryID = $this->objTemplate->readTemplate("/elements.tpl", "contentToolbar_entry_active");
         $strRows = "";
         foreach ($arrEntries as $intI => $strOneEntry) {
-            if($intI == $intActiveEntry)
+            if ($intI == $intActiveEntry) {
                 $strRows .= $this->objTemplate->fillTemplate(array("entry" => $strOneEntry), $strTemplateActiveEntryID);
-            else
+            }
+            else {
                 $strRows .= $this->objTemplate->fillTemplate(array("entry" => $strOneEntry), $strTemplateEntryID);
+            }
         }
         return $this->objTemplate->fillTemplate(array("entries" => $strRows), $strTemplateWrapperID);
 
@@ -1758,7 +1894,8 @@ JS;
      *
      * @return string
      */
-    public function getContentActionToolbar($strContent) {
+    public function getContentActionToolbar($strContent)
+    {
         return $this->objTemplate->fillTemplate(array("content" => $strContent), $this->objTemplate->readTemplate("/elements.tpl", "contentActionToolbar_wrapper"));
     }
 
@@ -1770,13 +1907,15 @@ JS;
      *
      * @param class_admin_controller|class_admin_formgenerator $objCalling
      * @param string $strTargetAction
+     *
      * @return string
      */
-    public function getValidationErrors($objCalling, $strTargetAction = null) {
+    public function getValidationErrors($objCalling, $strTargetAction = null)
+    {
         $strRendercode = "";
         //render mandatory fields?
-        if(method_exists($objCalling, "getRequiredFields") && is_callable(array($objCalling, "getRequiredFields")) ) {
-            if($objCalling instanceof class_admin_formgenerator) {
+        if (method_exists($objCalling, "getRequiredFields") && is_callable(array($objCalling, "getRequiredFields"))) {
+            if ($objCalling instanceof class_admin_formgenerator) {
                 $arrFields = $objCalling->getRequiredFields();
             }
             else {
@@ -1786,12 +1925,12 @@ JS;
                 $objCalling->setAction($strTempAction);
             }
 
-            if(count($arrFields) > 0 ) {
+            if (count($arrFields) > 0) {
 
                 $strRendercode .= "<script type=\"text/javascript\">$(document).ready(function () {
                         KAJONA.admin.forms.renderMandatoryFields([";
 
-                foreach($arrFields as $strName => $strType) {
+                foreach ($arrFields as $strName => $strType) {
                     $strRendercode .= "[ '".$strName."', '".$strType."' ], ";
                 }
                 $strRendercode .= " [] ]); });</script>";
@@ -1799,8 +1938,9 @@ JS;
         }
 
         $arrErrors = method_exists($objCalling, "getValidationErrors") ? $objCalling->getValidationErrors() : array();
-        if(count($arrErrors) == 0)
+        if (count($arrErrors) == 0) {
             return $strRendercode;
+        }
 
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "error_container");
         $strTemplateRowID = $this->objTemplate->readTemplate("/elements.tpl", "error_row");
@@ -1831,15 +1971,18 @@ JS;
      *
      * @param array $arrLines
      * @param int $nrRows number of rows to display
+     *
      * @return string
      */
-    public function getPreformatted($arrLines, $nrRows = 0, $bitHighlightKeywords = true) {
+    public function getPreformatted($arrLines, $nrRows = 0, $bitHighlightKeywords = true)
+    {
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "preformatted");
         $strRows = "";
         $intI = 0;
         foreach ($arrLines as $strOneLine) {
-            if($nrRows != 0 && $intI++ > $nrRows)
+            if ($nrRows != 0 && $intI++ > $nrRows) {
                 break;
+            }
             $strOneLine = str_replace(array("<pre>", "</pre>", "\n"), array(" ", " ", "\r\n"), $strOneLine);
 
             $strOneLine = htmlToString($strOneLine, true);
@@ -1870,7 +2013,8 @@ JS;
      *
      * @return string
      */
-    public function getLanguageSwitch($strLanguageButtons, $strOnChangeHandler) {
+    public function getLanguageSwitch($strLanguageButtons, $strOnChangeHandler)
+    {
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "language_switch");
         $arrTemplate = array();
         $arrTemplate["languagebuttons"] = $strLanguageButtons;
@@ -1882,16 +2026,20 @@ JS;
      * Creates the code for one button for a specified language, part of a language switch
      *
      * @param string $strKey
-     * @param string $strLanguageName  The full name of the language
+     * @param string $strLanguageName The full name of the language
      * @param bool $bitActive
+     *
      * @return string
      */
-    public function getLanguageButton($strKey, $strLanguageName, $bitActive = false) {
+    public function getLanguageButton($strKey, $strLanguageName, $bitActive = false)
+    {
         //active language?
-        if($bitActive)
+        if ($bitActive) {
             $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "language_switch_button_active");
-        else
+        }
+        else {
             $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "language_switch_button");
+        }
         $arrTemplate = array();
         $arrTemplate["languageKey"] = $strKey;
         $arrTemplate["languageName"] = $strLanguageName;
@@ -1901,7 +2049,6 @@ JS;
 
     /*"*****************************************************************************************************/
     // --- Pageview mechanism ------------------------------------------------------------------------------
-
 
 
     /**
@@ -1915,7 +2062,8 @@ JS;
      * @return string the pageview code
      * @since 4.6
      */
-    public function getPageview($objArraySectionIterator, $strModule, $strAction, $strLinkAdd = "") {
+    public function getPageview($objArraySectionIterator, $strModule, $strAction, $strLinkAdd = "")
+    {
 
         $intCurrentpage = $objArraySectionIterator->getPageNumber();
         $intNrOfPages = $objArraySectionIterator->getNrOfPages();
@@ -1935,54 +2083,57 @@ JS;
 
         //just load the current +-4 pages and the first/last +-2
         $intCounter2 = 1;
-        for($intI = 1; $intI <= $intNrOfPages; $intI++) {
+        for ($intI = 1; $intI <= $intNrOfPages; $intI++) {
             $bitDisplay = false;
-            if($intCounter2 <= 2) {
+            if ($intCounter2 <= 2) {
                 $bitDisplay = true;
             }
-            elseif ($intCounter2 >= ($intNrOfPages-1)) {
+            elseif ($intCounter2 >= ($intNrOfPages - 1)) {
                 $bitDisplay = true;
             }
-            elseif ($intCounter2 >= ($intCurrentpage-2) && $intCounter2 <= ($intCurrentpage+2)) {
+            elseif ($intCounter2 >= ($intCurrentpage - 2) && $intCounter2 <= ($intCurrentpage + 2)) {
                 $bitDisplay = true;
             }
 
 
-            if($bitDisplay) {
+            if ($bitDisplay) {
                 $arrLinkTemplate = array();
                 $arrLinkTemplate["href"] = class_link::getLinkAdminHref($strModule, $strAction, $strLinkAdd."&pv=".$intI);
                 $arrLinkTemplate["pageNr"] = $intI;
 
-                if($intI == $intCurrentpage)
+                if ($intI == $intCurrentpage) {
                     $strListItems .= $this->objTemplate->fillTemplate($arrLinkTemplate, $strTemplateListItemActiveID);
-                else
+                }
+                else {
                     $strListItems .= $this->objTemplate->fillTemplate($arrLinkTemplate, $strTemplateListItemID);
+                }
             }
             $intCounter2++;
         }
         $arrTemplate["pageList"] = $this->objTemplate->fillTemplate(array("pageListItems" => $strListItems), $strTemplateListID);
         $arrTemplate["nrOfElementsText"] = class_carrier::getInstance()->getObjLang()->getLang("pageview_total", "system");
         $arrTemplate["nrOfElements"] = $intNrOfElements;
-        if($intCurrentpage < $intNrOfPages)
+        if ($intCurrentpage < $intNrOfPages) {
             $arrTemplate["linkForward"] = $this->objTemplate->fillTemplate(
                 array(
                     "linkText" => class_carrier::getInstance()->getObjLang()->getLang("pageview_forward", "system"),
-                    "href" => class_link::getLinkAdminHref($strModule, $strAction, $strLinkAdd."&pv=".($intCurrentpage+1))
+                    "href"     => class_link::getLinkAdminHref($strModule, $strAction, $strLinkAdd."&pv=".($intCurrentpage + 1))
                 ),
                 $strTemplateForwardID
             );
-        if($intCurrentpage > 1)
+        }
+        if ($intCurrentpage > 1) {
             $arrTemplate["linkBackward"] = $this->objTemplate->fillTemplate(
                 array(
                     "linkText" => class_carrier::getInstance()->getObjLang()->getLang("commons_back", "commons"),
-                    "href" => class_link::getLinkAdminHref($strModule, $strAction, $strLinkAdd."&pv=".($intCurrentpage-1))
+                    "href"     => class_link::getLinkAdminHref($strModule, $strAction, $strLinkAdd."&pv=".($intCurrentpage - 1))
                 ),
                 $strTemplateBackwardID
             );
+        }
 
         return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateBodyID);
     }
-
 
 
     /**
@@ -1998,7 +2149,8 @@ JS;
      *
      * @deprecated use getPageview instead
      */
-    public function getSimplePageview($objArraySectionIterator, $strModule, $strAction, $strLinkAdd = "") {
+    public function getSimplePageview($objArraySectionIterator, $strModule, $strAction, $strLinkAdd = "")
+    {
         $arrReturn = array();
 
         $intCurrentpage = $objArraySectionIterator->getPageNumber();
@@ -2021,50 +2173,54 @@ JS;
 
         //just load the current +-4 pages and the first/last +-2
         $intCounter2 = 1;
-        for($intI = 1; $intI <= $intNrOfPages; $intI++) {
+        for ($intI = 1; $intI <= $intNrOfPages; $intI++) {
             $bitDisplay = false;
-            if($intCounter2 <= 2) {
+            if ($intCounter2 <= 2) {
                 $bitDisplay = true;
             }
-            elseif ($intCounter2 >= ($intNrOfPages-1)) {
+            elseif ($intCounter2 >= ($intNrOfPages - 1)) {
                 $bitDisplay = true;
             }
-            elseif ($intCounter2 >= ($intCurrentpage-2) && $intCounter2 <= ($intCurrentpage+2)) {
+            elseif ($intCounter2 >= ($intCurrentpage - 2) && $intCounter2 <= ($intCurrentpage + 2)) {
                 $bitDisplay = true;
             }
 
 
-            if($bitDisplay) {
+            if ($bitDisplay) {
                 $arrLinkTemplate = array();
                 $arrLinkTemplate["href"] = class_link::getLinkAdminHref($strModule, $strAction, $strLinkAdd."&pv=".$intI);
                 $arrLinkTemplate["pageNr"] = $intI;
 
-                if($intI == $intCurrentpage)
+                if ($intI == $intCurrentpage) {
                     $strListItems .= $this->objTemplate->fillTemplate($arrLinkTemplate, $strTemplateListItemActiveID);
-                else
+                }
+                else {
                     $strListItems .= $this->objTemplate->fillTemplate($arrLinkTemplate, $strTemplateListItemID);
+                }
             }
             $intCounter2++;
         }
         $arrTemplate["pageList"] = $this->objTemplate->fillTemplate(array("pageListItems" => $strListItems), $strTemplateListID);
         $arrTemplate["nrOfElementsText"] = class_carrier::getInstance()->getObjLang()->getLang("pageview_total", "system");
         $arrTemplate["nrOfElements"] = $intNrOfElements;
-        if($intCurrentpage < $intNrOfPages)
+        if ($intCurrentpage < $intNrOfPages) {
             $arrTemplate["linkForward"] = $this->objTemplate->fillTemplate(
                 array(
                     "linkText" => class_carrier::getInstance()->getObjLang()->getLang("pageview_forward", "system"),
-                    "href" => class_link::getLinkAdminHref($strModule, $strAction, $strLinkAdd."&pv=".($intCurrentpage+1))
+                    "href"     => class_link::getLinkAdminHref($strModule, $strAction, $strLinkAdd."&pv=".($intCurrentpage + 1))
                 ),
                 $strTemplateForwardID
             );
-        if($intCurrentpage > 1)
+        }
+        if ($intCurrentpage > 1) {
             $arrTemplate["linkBackward"] = $this->objTemplate->fillTemplate(
                 array(
                     "linkText" => class_carrier::getInstance()->getObjLang()->getLang("commons_back", "commons"),
-                    "href" => class_link::getLinkAdminHref($strModule, $strAction, $strLinkAdd."&pv=".($intCurrentpage-1))
+                    "href"     => class_link::getLinkAdminHref($strModule, $strAction, $strLinkAdd."&pv=".($intCurrentpage - 1))
                 ),
                 $strTemplateBackwardID
             );
+        }
 
 
         $arrReturn["pageview"] = $this->objTemplate->fillTemplate($arrTemplate, $strTemplateBodyID);
@@ -2077,7 +2233,8 @@ JS;
     // --- Adminwidget / Dashboard --------------------------------------------------------------------------
 
 
-    public function getMainDashboard(array $arrColumns) {
+    public function getMainDashboard(array $arrColumns)
+    {
         return $this->objTemplate->fillTemplate(
             array("entries" => implode("", $arrColumns)),
             $this->objTemplate->readTemplate("/elements.tpl", "dashboard_wrapper")
@@ -2089,9 +2246,11 @@ JS;
      * Inits the ajax-componentes for this list
      *
      * @param string $strColumnId
+     *
      * @return string
      */
-    public function getDashboardColumnHeader($strColumnId) {
+    public function getDashboardColumnHeader($strColumnId)
+    {
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "dashboard_column_header");
         return $this->objTemplate->fillTemplate(array("column_id" => $strColumnId), $strTemplateID);
     }
@@ -2101,7 +2260,8 @@ JS;
      *
      * @return string
      */
-    public function getDashboardColumnFooter() {
+    public function getDashboardColumnFooter()
+    {
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "dashboard_column_footer");
         return $this->objTemplate->fillTemplate(array(), $strTemplateID);
     }
@@ -2112,10 +2272,12 @@ JS;
      *
      * @param string $strDashboardEntryId
      * @param string $strWidgetContent
+     *
      * @return string
      */
-    public function getDashboardWidgetEncloser($strDashboardEntryId, $strWidgetContent) {
-         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "dashboard_encloser");
+    public function getDashboardWidgetEncloser($strDashboardEntryId, $strWidgetContent)
+    {
+        $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "dashboard_encloser");
         $arrTemplate = array();
         $arrTemplate["entryid"] = $strDashboardEntryId;
         $arrTemplate["content"] = $strWidgetContent;
@@ -2134,7 +2296,8 @@ JS;
      *
      * @return string
      */
-    public function getAdminwidget($strSystemid, $strName, $strWidgetNameAdditionalContent, $strEditLink = "", $strDeleteLink = "", $strLayoutSection = "adminwidget_widget") {
+    public function getAdminwidget($strSystemid, $strName, $strWidgetNameAdditionalContent, $strEditLink = "", $strDeleteLink = "", $strLayoutSection = "adminwidget_widget")
+    {
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", $strLayoutSection);
         $arrTemplate = array();
         $arrTemplate["widget_name"] = $strName;
@@ -2149,9 +2312,11 @@ JS;
      * Generates a text-row in a widget
      *
      * @param string $strText
+     *
      * @return string
      */
-    public function adminwidgetText($strText) {
+    public function adminwidgetText($strText)
+    {
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "adminwidget_text");
         return $this->objTemplate->fillTemplate(array("text" => $strText), $strTemplateID);
     }
@@ -2161,7 +2326,8 @@ JS;
      *
      * @return string
      */
-    public function adminwidgetSeparator() {
+    public function adminwidgetSeparator()
+    {
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "adminwidget_separator");
         return $this->objTemplate->fillTemplate(array(""), $strTemplateID);
     }
@@ -2174,11 +2340,13 @@ JS;
      * Set the contents via js-calls.
      *
      * @param int $intDialogType (0 = regular modal dialog, 1 = confirmation dialog, 2 = rawDialog, 3 = loadingDialog)
+     *
      * @return string
      *
      * @deprecated no longer required, available by the skin by default
      */
-    public function jsDialog($intDialogType) {
+    public function jsDialog($intDialogType)
+    {
         return "";
     }
 
@@ -2189,9 +2357,11 @@ JS;
      * Sets the users browser focus to the element with the given id
      *
      * @param string $strElementId
+     *
      * @return string
      */
-    public function setBrowserFocus($strElementId) {
+    public function setBrowserFocus($strElementId)
+    {
         $strReturn = "
             <script type=\"text/javascript\">
                 KAJONA.util.setBrowserFocus(\"".$strElementId."\");
@@ -2205,14 +2375,15 @@ JS;
      * The optional third param is an ordered list of systemid identifying the nodes to expand initially.
      * The tree may be wrapped into a two-column view.
      *
-     * @param string $strLoadNodeDataUrl, systemid is appended automatically
+     * @param string $strLoadNodeDataUrl , systemid is appended automatically
      * @param string $strRootNodeSystemid
      * @param array $arrNodesToExpand
      * @param string $strSideContent
      *
      * @return string
      */
-    public function getTreeview($strLoadNodeDataUrl, $strRootNodeSystemid = "", $arrNodesToExpand = array(), $strSideContent = "") {
+    public function getTreeview($strLoadNodeDataUrl, $strRootNodeSystemid = "", $arrNodesToExpand = array(), $strSideContent = "")
+    {
         $arrTemplate = array();
         $arrTemplate["sideContent"] = $strSideContent;
         $arrTemplate["treeContent"] = $this->getTree($strLoadNodeDataUrl, $strRootNodeSystemid, $arrNodesToExpand);
@@ -2226,10 +2397,12 @@ JS;
      * @param $strLoadNodeDataUrl
      * @param string $strRootNodeSystemid
      * @param array $arrNodesToExpand
+     *
      * @return string
      * @throws class_exception
      */
-    public function getTreeModalCheckbox($strLoadNodeDataUrl, $strRootNodeSystemid = "", $arrNodesToExpand = array()) {
+    public function getTreeModalCheckbox($strLoadNodeDataUrl, $strRootNodeSystemid = "", $arrNodesToExpand = array())
+    {
         $arrTemplate = array();
         $arrTemplate["treeContent"] = $this->getTreeCheckbox($strLoadNodeDataUrl, $strRootNodeSystemid, $arrNodesToExpand);
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "treeview_modal");
@@ -2242,7 +2415,7 @@ JS;
      * The optional third param is an ordered list of systemid identifying the nodes to expand initially.
      * Renders only the tree, so no other content
      *
-     * @param string $strLoadNodeDataUrl, systemid is appended automatically
+     * @param string $strLoadNodeDataUrl , systemid is appended automatically
      * @param string $strRootNodeSystemid
      * @param array $arrNodesToExpand
      * @param bool $bitOrderingEnabled
@@ -2251,7 +2424,8 @@ JS;
      *
      * @return string
      */
-    public function getTree($strLoadNodeDataUrl, $strRootNodeSystemid = "", $arrNodesToExpand = array(), $bitOrderingEnabled = false, $bitHierachicalSortEnabled = false) {
+    public function getTree($strLoadNodeDataUrl, $strRootNodeSystemid = "", $arrNodesToExpand = array(), $bitOrderingEnabled = false, $bitHierachicalSortEnabled = false)
+    {
         $arrTemplate = array();
         $arrTemplate["rootNodeSystemid"] = $strRootNodeSystemid;
         $arrTemplate["loadNodeDataUrl"] = $strLoadNodeDataUrl;
@@ -2259,10 +2433,11 @@ JS;
         $arrTemplate["orderingEnabled"] = $bitOrderingEnabled ? "true" : "false";
         $arrTemplate["hierarchialSortEnabled"] = $bitHierachicalSortEnabled ? "true" : "false";
         $arrTemplate["treeviewExpanders"] = "";
-        for($intI = 0; $intI < count($arrNodesToExpand); $intI++) {
+        for ($intI = 0; $intI < count($arrNodesToExpand); $intI++) {
             $arrTemplate["treeviewExpanders"] .= "\"".$arrNodesToExpand[$intI]."\"";
-            if($intI < count($arrNodesToExpand)-1)
+            if ($intI < count($arrNodesToExpand) - 1) {
                 $arrTemplate["treeviewExpanders"] .= ",";
+            }
         }
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "tree");
         return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
@@ -2274,19 +2449,22 @@ JS;
      * @param $strLoadNodeDataUrl
      * @param string $strRootNodeSystemid
      * @param array $arrNodesToExpand
+     *
      * @return string
      * @throws class_exception
      */
-    public function getTreeCheckbox($strLoadNodeDataUrl, $strRootNodeSystemid = "", $arrNodesToExpand = array()) {
+    public function getTreeCheckbox($strLoadNodeDataUrl, $strRootNodeSystemid = "", $arrNodesToExpand = array())
+    {
         $arrTemplate = array();
         $arrTemplate["rootNodeSystemid"] = $strRootNodeSystemid;
         $arrTemplate["loadNodeDataUrl"] = $strLoadNodeDataUrl;
         $arrTemplate["treeId"] = generateSystemid();
         $arrTemplate["treeviewExpanders"] = "";
-        for($intI = 0; $intI < count($arrNodesToExpand); $intI++) {
+        for ($intI = 0; $intI < count($arrNodesToExpand); $intI++) {
             $arrTemplate["treeviewExpanders"] .= "\"".$arrNodesToExpand[$intI]."\"";
-            if($intI < count($arrNodesToExpand)-1)
+            if ($intI < count($arrNodesToExpand) - 1) {
                 $arrTemplate["treeviewExpanders"] .= ",";
+            }
         }
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "tree_checkbox");
         return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
@@ -2296,9 +2474,11 @@ JS;
      * Renderes the quickhelp-button and the quickhelp-text passed
      *
      * @param string $strText
+     *
      * @return string
      */
-    public function getQuickhelp($strText) {
+    public function getQuickhelp($strText)
+    {
         $strReturn = "";
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "quickhelp");
         $arrTemplate = array();
@@ -2321,9 +2501,11 @@ JS;
      * @param string $strWrapperid
      * @param string $strTargetsystemid
      * @param string $strAttribute
+     *
      * @return string
      */
-    public function getTaglistWrapper($strWrapperid, $strTargetsystemid, $strAttribute) {
+    public function getTaglistWrapper($strWrapperid, $strTargetsystemid, $strAttribute)
+    {
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "tags_wrapper");
         $arrTemplate = array();
         $arrTemplate["wrapperId"] = $strWrapperid;
@@ -2341,15 +2523,18 @@ JS;
      *
      * @return string
      */
-    public function getTagEntry(class_module_tags_tag $objTag, $strTargetid, $strAttribute) {
+    public function getTagEntry(class_module_tags_tag $objTag, $strTargetid, $strAttribute)
+    {
 
-        if(class_carrier::getInstance()->getParam("delete") != "false")
+        if (class_carrier::getInstance()->getParam("delete") != "false") {
             $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "tags_tag_delete");
-        else
+        }
+        else {
             $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "tags_tag");
+        }
 
         $strFavorite = "";
-        if($objTag->rightRight1()) {
+        if ($objTag->rightRight1()) {
 
             $strJs = "<script type='text/javascript'>KAJONA.admin.loader.loadFile('".class_resourceloader::getInstance()->getCorePathForModule("module_tags")."/module_tags/admin/scripts/tags.js', function() {
                     KAJONA.admin.tags.createFavoriteEnabledIcon = '".addslashes(class_adminskin_helper::getAdminImage("icon_favorite", class_carrier::getInstance()->getObjLang()->getLang("tag_favorite_remove", "tags")))."';
@@ -2380,9 +2565,11 @@ JS;
      * @param string $strName
      * @param string $strTitle
      * @param string $strClass
+     *
      * @return string
      */
-    public function formInputTagSelector($strName, $strTitle = "", $strClass = "inputText") {
+    public function formInputTagSelector($strName, $strTitle = "", $strClass = "inputText")
+    {
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "input_tagselector");
         $arrTemplate = array();
         $arrTemplate["name"] = $strName;
@@ -2433,6 +2620,7 @@ JS;
 
     /**
      * Renders the list of aspects available
+     *
      * @param string $strLastModule
      * @param string $strLastAction
      * @param string $strLastSystemid
@@ -2440,7 +2628,8 @@ JS;
      * @return string
      * @todo param handling? remove params?
      */
-    public function getAspectChooser($strLastModule, $strLastAction, $strLastSystemid) {
+    public function getAspectChooser($strLastModule, $strLastAction, $strLastSystemid)
+    {
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "aspect_chooser");
         $strTemplateRowID = $this->objTemplate->readTemplate("/elements.tpl", "aspect_chooser_entry");
 
@@ -2452,8 +2641,8 @@ JS;
         $arrAspects = class_module_system_aspect::getActiveObjectList();
 
         $intNrOfAspects = 0;
-        foreach($arrAspects as $objSingleAspect) {
-            if($objSingleAspect->rightView()) {
+        foreach ($arrAspects as $objSingleAspect) {
+            if ($objSingleAspect->rightView()) {
                 $arrSubtemplate = array();
                 //start on dashboard since the current module may not be visible in another aspect
                 $arrSubtemplate["value"] = getLinkAdminHref("dashboard", "", "&aspect=".$objSingleAspect->getSystemid());
@@ -2465,8 +2654,9 @@ JS;
             }
         }
 
-        if($arrTemplate["options"] == "" || $intNrOfAspects < 2)
+        if ($arrTemplate["options"] == "" || $intNrOfAspects < 2) {
             return "";
+        }
 
         return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
     }
@@ -2477,12 +2667,15 @@ JS;
      *
      * @param string $strText
      * @param string $strTooltip
+     *
      * @return string
      * @since 3.4.0
      */
-    public function getTooltipText($strText, $strTooltip) {
-        if($strText == $strTooltip)
+    public function getTooltipText($strText, $strTooltip)
+    {
+        if ($strText == $strTooltip) {
             return $strText;
+        }
 
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "tooltip_text");
         return $this->objTemplate->fillTemplate(array("text" => $strText, "tooltip" => $strTooltip), $strTemplateID);
@@ -2494,15 +2687,18 @@ JS;
      * Renders a legend below the current calendar in order to illustrate the different event-types.
      *
      * @param array $arrEntries
+     *
      * @return string
      */
-    public function getCalendarLegend(array $arrEntries) {
+    public function getCalendarLegend(array $arrEntries)
+    {
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "calendar_legend");
         $strTemplateEntryID = $this->objTemplate->readTemplate("/elements.tpl", "calendar_legend_entry");
 
         $strEntries = "";
-        foreach($arrEntries as $strName => $strClass)
+        foreach ($arrEntries as $strName => $strClass) {
             $strEntries .= $this->objTemplate->fillTemplate(array("name" => $strName, "class" => $strClass), $strTemplateEntryID);
+        }
 
         return $this->objTemplate->fillTemplate(array("entries" => $strEntries), $strTemplateID);
     }
@@ -2511,14 +2707,16 @@ JS;
      * Renders a legend below the current calendar in order to illustrate the different event-types.
      *
      * @param array $arrEntries
+     *
      * @return string
      */
-    public function getCalendarFilter(array $arrEntries) {
+    public function getCalendarFilter(array $arrEntries)
+    {
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "calendar_filter");
         $strTemplateEntryID = $this->objTemplate->readTemplate("/elements.tpl", "calendar_filter_entry");
 
         $strEntries = "";
-        foreach($arrEntries as $strId => $strName) {
+        foreach ($arrEntries as $strId => $strName) {
             $strChecked = class_carrier::getInstance()->getObjSession()->getSession($strId) == "disabled" ? "" : "checked";
             $strEntries .= $this->objTemplate->fillTemplate(array("filterid" => $strId, "filtername" => $strName, "checked" => $strChecked), $strTemplateEntryID);
         }
@@ -2532,10 +2730,12 @@ JS;
      * @param string $strBackwards
      * @param string $strCenter
      * @param string $strForwards
+     *
      * @return string
      * @since 3.4
      */
-    public function getCalendarPager($strBackwards, $strCenter, $strForwards) {
+    public function getCalendarPager($strBackwards, $strCenter, $strForwards)
+    {
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "calendar_pager");
         return $this->objTemplate->fillTemplate(array("backwards" => $strBackwards, "forwards" => $strForwards, "center" => $strCenter), $strTemplateID);
     }
@@ -2544,11 +2744,13 @@ JS;
      * Renders a container used to place the calender via ajax into.
      *
      * @param string $strContainerId
+     *
      * @return string
      * @since 3.4
      */
-    public function getCalendarContainer($strContainerId) {
-       $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "calendar_container");
+    public function getCalendarContainer($strContainerId)
+    {
+        $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "calendar_container");
         return $this->objTemplate->fillTemplate(array("containerid" => $strContainerId), $strTemplateID);
     }
 
@@ -2556,10 +2758,12 @@ JS;
      * Creates the wrapper to embedd the calendar.
      *
      * @param string $strContent
+     *
      * @return string
      * @since 3.4
      */
-    public function getCalendarWrapper($strContent) {
+    public function getCalendarWrapper($strContent)
+    {
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "calendar_wrapper");
         return $this->objTemplate->fillTemplate(array("content" => $strContent), $strTemplateID);
     }
@@ -2568,16 +2772,19 @@ JS;
      * Renders the header-row of the calendar. In general those are the days.
      *
      * @param array $arrHeader
+     *
      * @return string
      * @since 3.4
      */
-    public function getCalendarHeaderRow(array $arrHeader) {
+    public function getCalendarHeaderRow(array $arrHeader)
+    {
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "calendar_header_row");
         $strTemplateEntryID = $this->objTemplate->readTemplate("/elements.tpl", "calendar_header_entry");
 
         $strEntries = "";
-        foreach($arrHeader as $strOneHeader)
+        foreach ($arrHeader as $strOneHeader) {
             $strEntries .= $this->objTemplate->fillTemplate(array("name" => $strOneHeader), $strTemplateEntryID);
+        }
 
         return $this->objTemplate->fillTemplate(array("entries" => $strEntries), $strTemplateID);
     }
@@ -2586,10 +2793,12 @@ JS;
      * Renders a complete row of days.
      *
      * @param string $strContent
+     *
      * @return string
      * @since 3.4
      */
-    public function getCalendarRow($strContent) {
+    public function getCalendarRow($strContent)
+    {
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "calendar_row");
         return $this->objTemplate->fillTemplate(array("entries" => $strContent), $strTemplateID);
     }
@@ -2600,10 +2809,12 @@ JS;
      * @param string $strContent
      * @param string $strDate
      * @param string $strClass
+     *
      * @return string
      * @since 3.4
      */
-    public function getCalendarEntry($strContent, $strDate, $strClass = "calendarEntry") {
+    public function getCalendarEntry($strContent, $strDate, $strClass = "calendarEntry")
+    {
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "calendar_entry");
         return $this->objTemplate->fillTemplate(array("content" => $strContent, "date" => $strDate, "class" => $strClass), $strTemplateID);
     }
@@ -2615,14 +2826,17 @@ JS;
      * @param string $strId
      * @param string $strHighlightId
      * @param string $strClass
+     *
      * @return string
      * @since 3.4
      */
-    public function getCalendarEvent($strContent, $strId = "", $strHighlightId = "", $strClass = "calendarEvent") {
+    public function getCalendarEvent($strContent, $strId = "", $strHighlightId = "", $strClass = "calendarEvent")
+    {
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "calendar_event");
-        if($strId == "")
+        if ($strId == "") {
             $strId = generateSystemid();
-        return $this->objTemplate->fillTemplate(array("content" => $strContent, "class" => $strClass, "systemid" => $strId, "highlightid" =>$strHighlightId), $strTemplateID);
+        }
+        return $this->objTemplate->fillTemplate(array("content" => $strContent, "class" => $strClass, "systemid" => $strId, "highlightid" => $strHighlightId), $strTemplateID);
     }
 
     //---contect menues ---------------------------------------------------------------------------------
@@ -2634,76 +2848,100 @@ JS;
      * The support of submenus depends on the current implementation, so may not be present everywhere!
      *
      * @since 3.4.1
+     *
      * @param string $strIdentifier
      * @param string[] $arrEntries
+     *
      * @return string
      */
-    public function registerMenu($strIdentifier, array $arrEntries) {
+    public function registerMenu($strIdentifier, array $arrEntries)
+    {
         $strTemplateEntryID = $this->objTemplate->readTemplate("/elements.tpl", "contextmenu_entry");
         $strTemplateFullEntryID = $this->objTemplate->readTemplate("/elements.tpl", "contextmenu_entry_full");
         $strDividerTemplateEntryID = $this->objTemplate->readTemplate("/elements.tpl", "contextmenu_divider_entry");
         $strSubmenuTemplateEntryID = $this->objTemplate->readTemplate("/elements.tpl", "contextmenu_submenucontainer_entry");
         $strSubmenuTemplateFullEntryID = $this->objTemplate->readTemplate("/elements.tpl", "contextmenu_submenucontainer_entry_full");
         $strEntries = "";
-        foreach($arrEntries as $arrOneEntry) {
+        foreach ($arrEntries as $arrOneEntry) {
 
 
-            if(!isset($arrOneEntry["link"])) $arrOneEntry["link"] = "";
-            if(!isset($arrOneEntry["name"])) $arrOneEntry["name"] = "";
-            if(!isset($arrOneEntry["onclick"])) $arrOneEntry["onclick"] = "";
-            if(!isset($arrOneEntry["fullentry"])) $arrOneEntry["fullentry"] = "";
+            if (!isset($arrOneEntry["link"])) {
+                $arrOneEntry["link"] = "";
+            }
+            if (!isset($arrOneEntry["name"])) {
+                $arrOneEntry["name"] = "";
+            }
+            if (!isset($arrOneEntry["onclick"])) {
+                $arrOneEntry["onclick"] = "";
+            }
+            if (!isset($arrOneEntry["fullentry"])) {
+                $arrOneEntry["fullentry"] = "";
+            }
 
             $arrTemplate = array(
-                "elementName" => $arrOneEntry["name"],
-                "elementAction" => $arrOneEntry["onclick"],
-                "elementLink" => $arrOneEntry["link"],
+                "elementName"          => $arrOneEntry["name"],
+                "elementAction"        => $arrOneEntry["onclick"],
+                "elementLink"          => $arrOneEntry["link"],
                 "elementActionEscaped" => uniStrReplace("'", "\'", $arrOneEntry["onclick"]),
-                "elementFullEntry" => $arrOneEntry["fullentry"]
+                "elementFullEntry"     => $arrOneEntry["fullentry"]
             );
 
-            if($arrTemplate["elementFullEntry"] != "")
+            if ($arrTemplate["elementFullEntry"] != "") {
                 $strCurTemplate = $strTemplateFullEntryID;
-            else
+            }
+            else {
                 $strCurTemplate = $strTemplateEntryID;
+            }
 
 
-            if(isset($arrOneEntry["submenu"]) && count($arrOneEntry["submenu"]) > 0) {
+            if (isset($arrOneEntry["submenu"]) && count($arrOneEntry["submenu"]) > 0) {
                 $strSubmenu = "";
-                foreach($arrOneEntry["submenu"] as $arrOneSubmenu) {
+                foreach ($arrOneEntry["submenu"] as $arrOneSubmenu) {
                     $strCurSubTemplate = $strTemplateEntryID;
 
-                    if(!isset($arrOneEntry["link"])) $arrOneEntry["link"] = "";
-                    if(!isset($arrOneEntry["name"])) $arrOneEntry["name"] = "";
-                    if(!isset($arrOneEntry["onclick"])) $arrOneEntry["onclick"] = "";
-                    if(!isset($arrOneEntry["fullentry"])) $arrOneEntry["fullentry"] = "";
+                    if (!isset($arrOneEntry["link"])) {
+                        $arrOneEntry["link"] = "";
+                    }
+                    if (!isset($arrOneEntry["name"])) {
+                        $arrOneEntry["name"] = "";
+                    }
+                    if (!isset($arrOneEntry["onclick"])) {
+                        $arrOneEntry["onclick"] = "";
+                    }
+                    if (!isset($arrOneEntry["fullentry"])) {
+                        $arrOneEntry["fullentry"] = "";
+                    }
 
-                    if($arrOneSubmenu["name"] == "") {
+                    if ($arrOneSubmenu["name"] == "") {
                         $arrSubTemplate = array();
                         $strCurSubTemplate = $strDividerTemplateEntryID;
                     }
                     else {
                         $arrSubTemplate = array(
-                            "elementName" => $arrOneSubmenu["name"],
-                            "elementAction" => $arrOneSubmenu["onclick"],
-                            "elementLink" => $arrOneSubmenu["link"],
+                            "elementName"          => $arrOneSubmenu["name"],
+                            "elementAction"        => $arrOneSubmenu["onclick"],
+                            "elementLink"          => $arrOneSubmenu["link"],
                             "elementActionEscaped" => uniStrReplace("'", "\'", $arrOneSubmenu["onclick"]),
-                            "elementFullEntry" => $arrOneEntry["fullentry"]
+                            "elementFullEntry"     => $arrOneEntry["fullentry"]
                         );
 
-                        if($arrSubTemplate["elementFullEntry"] != "")
+                        if ($arrSubTemplate["elementFullEntry"] != "") {
                             $strCurSubTemplate = $strTemplateFullEntryID;
+                        }
 
                     }
 
-                    $strSubmenu .= $this->objTemplate->fillTemplate($arrSubTemplate,  $strCurSubTemplate);
+                    $strSubmenu .= $this->objTemplate->fillTemplate($arrSubTemplate, $strCurSubTemplate);
                 }
                 $arrTemplate["entries"] = $strSubmenu;
 
 
-                if($arrTemplate["elementFullEntry"] != "")
+                if ($arrTemplate["elementFullEntry"] != "") {
                     $strCurTemplate = $strSubmenuTemplateFullEntryID;
-                else
+                }
+                else {
                     $strCurTemplate = $strSubmenuTemplateEntryID;
+                }
             }
 
 
