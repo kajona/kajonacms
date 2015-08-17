@@ -53,7 +53,7 @@ class class_test_databaseMultiInsert extends class_testbase {
         }
 
 
-        $strQuery = "TRUNCATE TABLE "._dbprefix_."temp_autotest";
+        $strQuery = "DELETE FROM "._dbprefix_."temp_autotest";
         $this->assertTrue($objDB->_pQuery($strQuery, array()), "testDataBase truncateTable");
         $objDB->flushQueryCache();
 
