@@ -278,7 +278,7 @@ abstract class class_admin_controller extends class_abstract_controller {
         $strActionName = $this->getObjLang()->stringToPlaceholder("action_".$this->getAction());
         $strAction = $this->getLang($strActionName);
         if($strAction != "!" . $strActionName . "!") {
-            $arrReturn[] = class_link::getLinkAdmin($this->getArrModule("modul"), $this->getAction(), "&systemid=" . $this->getSystemid(), $strAction);
+            $arrReturn[] = $strAction;
         }
 
         return $arrReturn;
