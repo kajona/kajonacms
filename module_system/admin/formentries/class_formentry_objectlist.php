@@ -152,7 +152,7 @@ class class_formentry_objectlist extends class_formentry_multiselect {
                         $objAdmin = $objModule->getAdminInstanceOfConcreteModule($objObject->getSystemid());
 
                         if($objAdmin !== null && method_exists($objAdmin, "actionShowSummary")) {
-                            $strTitle = class_link::getLinkAdmin($objObject->getArrModule("modul"), "showSummary", "&systemid=".$objObject->getSystemid(), $strTitleUPDATE);
+                            $strTitle = class_link::getLinkAdmin($objObject->getArrModule("modul"), "showSummary", "&systemid=".$objObject->getSystemid(), $strTitle);
                         }
                     }
 
