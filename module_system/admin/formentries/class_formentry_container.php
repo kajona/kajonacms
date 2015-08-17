@@ -11,7 +11,7 @@
  * @since   4.8
  * @package module_formgenerator
  */
-class class_formentry_container extends class_formentry_base {
+class class_formentry_container extends class_formentry_base implements interface_formentry_printable {
 
     protected $arrFields = array();
 
@@ -75,4 +75,19 @@ class class_formentry_container extends class_formentry_base {
         return true;
     }
 
+    /**
+     * Returns a textual representation of the formentries' value.
+     * May contain html, but should be stripped down to text-only.
+     *
+     * @return string
+     */
+    public function getValueAsText() {
+        foreach($this->arrFields as $objField) {
+            /** @var interface_formentry_printable $objField */
+            if($objField instanceof interface_formentry_printable) {
+                $arrFields[] = $objField->getValueAsText();
+            }
+        }
+        return implode(", ", $arrFields);
+    }
 }
