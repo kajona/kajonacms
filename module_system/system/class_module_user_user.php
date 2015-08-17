@@ -19,7 +19,8 @@
  *
  * @blockFromAutosave
  */
-class class_module_user_user extends class_model implements interface_model, interface_admin_listable {
+class class_module_user_user extends class_model implements interface_model, interface_admin_listable
+{
 
     private $strSubsystem = "kajona";
 
@@ -46,15 +47,19 @@ class class_module_user_user extends class_model implements interface_model, int
 
     /**
      * Returns the name to be used when rendering the current object, e.g. in admin-lists.
+     *
      * @return string
      */
-    public function getStrDisplayName() {
-        $strReturn =  $this->getStrUsername();
-        if($this->getStrName() != "")
+    public function getStrDisplayName()
+    {
+        $strReturn = $this->getStrUsername();
+        if ($this->getStrName() != "") {
             $strReturn .= " (".$this->getStrName().", ".$this->getStrForename().")";
+        }
 
-        if($this->intDeleted == 1)
+        if ($this->intDeleted == 1) {
             $strReturn = $this->getStrUsername()." (".$this->getLang("user_deleted").")";
+        }
 
         return $strReturn;
     }
@@ -66,16 +71,19 @@ class class_module_user_user extends class_model implements interface_model, int
      *
      * @return string the name of the icon, not yet wrapped by getImageAdmin()
      */
-    public function getStrIcon() {
+    public function getStrIcon()
+    {
         return "icon_user";
     }
 
     /**
      * In nearly all cases, the additional info is rendered left to the action-icons.
+     *
      * @return string
      */
-    public function getStrAdditionalInfo() {
-        if($this->rightRight1()) {
+    public function getStrAdditionalInfo()
+    {
+        if ($this->rightRight1()) {
             return $this->getLang("user_logins", "user")." ".$this->getIntLogins()." ".$this->getLang("user_lastlogin", "user")." ".timeToString($this->getIntLastLogin(), false);
         }
         return "";
@@ -83,12 +91,14 @@ class class_module_user_user extends class_model implements interface_model, int
 
     /**
      * If not empty, the returned string is rendered below the common title.
+     *
      * @return string
      */
-    public function getStrLongDescription() {
-        if($this->objSession->isSuperAdmin()) {
+    public function getStrLongDescription()
+    {
+        if ($this->objSession->isSuperAdmin()) {
             $objUsersources = new class_module_user_sourcefactory();
-            if(count($objUsersources->getArrUsersources()) > 1) {
+            if (count($objUsersources->getArrUsersources()) > 1) {
                 $objSubsystem = new class_module_user_sourcefactory();
                 return $this->getLang("user_list_source", "user")." ".$objSubsystem->getUsersource($this->getStrSubsystem())->getStrReadableName();
             }
@@ -100,41 +110,47 @@ class class_module_user_user extends class_model implements interface_model, int
     /**
      * @return bool
      */
-    public function rightView() {
+    public function rightView()
+    {
         return class_module_system_module::getModuleByName("user")->rightView();
     }
 
     /**
      * @return bool
      */
-    public function rightEdit() {
+    public function rightEdit()
+    {
         return class_module_system_module::getModuleByName("user")->rightEdit();
     }
 
     /**
      * @return bool
      */
-    public function rightDelete() {
+    public function rightDelete()
+    {
         return class_module_system_module::getModuleByName("user")->rightDelete();
     }
 
     /**
      * @return bool
      */
-    public function rightRight1() {
+    public function rightRight1()
+    {
         return class_module_system_module::getModuleByName("user")->rightRight1();
     }
 
 
     /**
      * Initialises the current object, if a systemid was given
+     *
      * @return void
      */
-    protected function initObjectInternal() {
+    protected function initObjectInternal()
+    {
         $strQuery = "SELECT * FROM "._dbprefix_."user WHERE user_id=?";
         $arrRow = $this->objDB->getPRow($strQuery, array($this->getSystemid()));
 
-        if(count($arrRow) > 0) {
+        if (count($arrRow) > 0) {
             $this->setStrUsername($arrRow["user_username"]);
             $this->setStrSubsystem($arrRow["user_subsystem"]);
             $this->setIntLogins($arrRow["user_logins"]);
@@ -147,14 +163,17 @@ class class_module_user_user extends class_model implements interface_model, int
             $this->setSystemid($arrRow["user_id"]);
             $this->setStrAuthcode($arrRow["user_authcode"]);
 
-            if(isset($arrRow["user_items_per_page"]))
+            if (isset($arrRow["user_items_per_page"])) {
                 $this->setIntItemsPerPage($arrRow["user_items_per_page"]);
+            }
 
-            if(isset($arrRow["user_deleted"]))
+            if (isset($arrRow["user_deleted"])) {
                 $this->intDeleted = $arrRow["user_deleted"];
+            }
 
-            if(isset($arrRow["user_admin_module"]))
+            if (isset($arrRow["user_admin_module"])) {
                 $this->setStrAdminModule($arrRow["user_admin_module"]);
+            }
 
         }
     }
@@ -164,11 +183,13 @@ class class_module_user_user extends class_model implements interface_model, int
      * <b>ATTENTION</b> If you don't want to update the password, set it to "" before!
      *
      * @param bool $strPrevid
+     *
      * @return bool
      */
-    public function updateObjectToDb($strPrevid = false) {
+    public function updateObjectToDb($strPrevid = false)
+    {
 
-        if($this->getSystemid() == "") {
+        if ($this->getSystemid() == "") {
             $strUserid = generateSystemid();
             $this->setSystemid($strUserid);
             $strQuery = "INSERT INTO "._dbprefix_."user (
@@ -213,13 +234,13 @@ class class_module_user_user extends class_model implements interface_model, int
         }
         else {
 
-            if(version_compare(class_module_system_module::getModuleByName("user")->getStrVersion(), "4.6.5", ">=")) {
+            if (version_compare(class_module_system_module::getModuleByName("user")->getStrVersion(), "4.6.5", ">=")) {
                 $strQuery = "UPDATE "._dbprefix_."user SET
                         user_active=?, user_admin=?, user_portal=?, user_admin_skin=?, user_admin_language=?, user_logins = ?, user_lastlogin = ?, user_authcode = ?, user_subsystem = ?,
                         user_username =?, user_admin_module = ?, user_items_per_page = ?
                         WHERE user_id = ?";
             }
-            else if(version_compare(class_module_system_module::getModuleByName("user")->getStrVersion(), "4.4", ">=")) {
+            else if (version_compare(class_module_system_module::getModuleByName("user")->getStrVersion(), "4.4", ">=")) {
                 $strQuery = "UPDATE "._dbprefix_."user SET
                         user_active=?, user_admin=?, user_portal=?, user_admin_skin=?, user_admin_language=?, user_logins = ?, user_lastlogin = ?, user_authcode = ?, user_subsystem = ?,
                         user_username =?, user_admin_module = ?
@@ -237,13 +258,13 @@ class class_module_user_user extends class_model implements interface_model, int
                 (int)$this->getIntAdmin(), (int)$this->getIntPortal(), $this->getStrAdminskin(), $this->getStrAdminlanguage(),
                 (int)$this->getIntLogins(), (int)$this->getIntLastLogin(), $this->getStrAuthcode(),
                 $this->getStrSubsystem(), $this->getStrUsername()
-             );
+            );
 
-            if(version_compare(class_module_system_module::getModuleByName("user")->getStrVersion(), "4.4", ">=")) {
+            if (version_compare(class_module_system_module::getModuleByName("user")->getStrVersion(), "4.4", ">=")) {
                 $arrParams[] = $this->getStrAdminModule();
             }
 
-            if(version_compare(class_module_system_module::getModuleByName("user")->getStrVersion(), "4.6.5", ">=")) {
+            if (version_compare(class_module_system_module::getModuleByName("user")->getStrVersion(), "4.6.5", ">=")) {
                 $arrParams[] = $this->getIntItemsPerPage();
             }
 
@@ -262,7 +283,8 @@ class class_module_user_user extends class_model implements interface_model, int
      *
      * @return bool
      */
-    protected function updateStateToDb() {
+    protected function updateStateToDb()
+    {
         return false;
     }
 
@@ -273,18 +295,22 @@ class class_module_user_user extends class_model implements interface_model, int
      * @param string $strUsernameFilter
      * @param bool|int $intStart
      * @param bool|int $intEnd
+     *
      * @return class_module_user_user[]
      */
-    public static function getObjectList($strUsernameFilter = "", $intStart = null, $intEnd = null) {
-        if(version_compare(class_module_system_module::getModuleByName("user")->getStrVersion(), "4.5", ">="))
-            $strQuery = "SELECT user_id FROM " . _dbprefix_ . "user WHERE user_username LIKE ? AND (user_deleted = 0 OR user_deleted IS NULL) ORDER BY user_username, user_subsystem ASC";
-        else
-            $strQuery = "SELECT user_id FROM " . _dbprefix_ . "user WHERE user_username LIKE ? ORDER BY user_username, user_subsystem ASC";
+    public static function getObjectList($strUsernameFilter = "", $intStart = null, $intEnd = null)
+    {
+        if (version_compare(class_module_system_module::getModuleByName("user")->getStrVersion(), "4.5", ">=")) {
+            $strQuery = "SELECT user_id FROM "._dbprefix_."user WHERE user_username LIKE ? AND (user_deleted = 0 OR user_deleted IS NULL) ORDER BY user_username, user_subsystem ASC";
+        }
+        else {
+            $strQuery = "SELECT user_id FROM "._dbprefix_."user WHERE user_username LIKE ? ORDER BY user_username, user_subsystem ASC";
+        }
 
-        $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array("%" . $strUsernameFilter . "%"), $intStart, $intEnd);
+        $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array("%".$strUsernameFilter."%"), $intStart, $intEnd);
 
         $arrReturn = array();
-        foreach($arrIds as $arrOneId) {
+        foreach ($arrIds as $arrOneId) {
             $arrReturn[] = new class_module_user_user($arrOneId["user_id"]);
         }
 
@@ -295,15 +321,19 @@ class class_module_user_user extends class_model implements interface_model, int
      * Counts the number of users created
      *
      * @param string $strUsernameFilter
+     *
      * @return int
      */
-    public static function getObjectCount($strUsernameFilter = "") {
-        if(version_compare(class_module_system_module::getModuleByName("user")->getStrVersion(), "4.5", ">="))
+    public static function getObjectCount($strUsernameFilter = "")
+    {
+        if (version_compare(class_module_system_module::getModuleByName("user")->getStrVersion(), "4.5", ">=")) {
             $strQuery = "SELECT COUNT(*) FROM "._dbprefix_."user WHERE user_username LIKE ? AND (user_deleted = 0 OR user_deleted IS NULL) ";
-        else
+        }
+        else {
             $strQuery = "SELECT COUNT(*) FROM "._dbprefix_."user WHERE user_username LIKE ? ";
+        }
 
-        $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array($strUsernameFilter."%"));
+        $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array("%".$strUsernameFilter."%"));
         return $arrRow["COUNT(*)"];
     }
 
@@ -311,15 +341,19 @@ class class_module_user_user extends class_model implements interface_model, int
      * Fetches all available active users with the given username an returns them in an array
      *
      * @param string $strName
+     *
      * @return mixed
      */
-    public static function getAllUsersByName($strName) {
+    public static function getAllUsersByName($strName)
+    {
         $objSubsystem = new class_module_user_sourcefactory();
         $objUser = $objSubsystem->getUserByUsername($strName);
-        if($objUser != null)
+        if ($objUser != null) {
             return array($objUser);
-        else
+        }
+        else {
             return null;
+        }
     }
 
 
@@ -329,12 +363,14 @@ class class_module_user_user extends class_model implements interface_model, int
      * @throws class_exception
      * @return bool
      */
-    public function deleteObject() {
+    public function deleteObject()
+    {
 
-        if($this->objSession->getUserID() == $this->getSystemid())
+        if ($this->objSession->getUserID() == $this->getSystemid()) {
             throw new class_exception("You can't delete yourself", class_exception::$level_FATALERROR);
+        }
 
-        class_logger::getInstance(class_logger::USERSOURCES)->addLogRow("deleted user with id ".$this->getSystemid() ." (".$this->getStrUsername()." / ".$this->getStrName().",".$this->getStrForename().")", class_logger::$levelWarning);
+        class_logger::getInstance(class_logger::USERSOURCES)->addLogRow("deleted user with id ".$this->getSystemid()." (".$this->getStrUsername()." / ".$this->getStrName().",".$this->getStrForename().")", class_logger::$levelWarning);
         $this->getObjSourceUser()->deleteUser();
         $strQuery = "UPDATE "._dbprefix_."user SET user_deleted = 1, user_active = 0 WHERE user_id = ?";
         $bitReturn = $this->objDB->_pQuery($strQuery, array($this->getSystemid()));
@@ -344,16 +380,19 @@ class class_module_user_user extends class_model implements interface_model, int
         return $bitReturn;
     }
 
-    public function deleteObjectFromDatabase() {
+    public function deleteObjectFromDatabase()
+    {
         return $this->deleteObject();
     }
 
 
     /**
      * Returns an array of group-ids the current user is assigned to
+     *
      * @return array string
      */
-    public function getArrGroupIds() {
+    public function getArrGroupIds()
+    {
         $this->loadSourceObject();
         return $this->objSourceUser->getGroupIdsForUser();
     }
@@ -361,41 +400,51 @@ class class_module_user_user extends class_model implements interface_model, int
     /**
      * @return string
      */
-    public function getStrEmail() {
+    public function getStrEmail()
+    {
         $this->loadSourceObject();
-        if($this->objSourceUser != null)
+        if ($this->objSourceUser != null) {
             return $this->objSourceUser->getStrEmail();
-        else
+        }
+        else {
             return "n.a.";
+        }
     }
 
     /**
      * @return string
      */
-    public function getStrForename() {
+    public function getStrForename()
+    {
         $this->loadSourceObject();
-        if($this->objSourceUser != null)
+        if ($this->objSourceUser != null) {
             return $this->objSourceUser->getStrForename();
-        else
+        }
+        else {
             return "n.a.";
+        }
     }
 
     /**
      * @return string
      */
-    public function getStrName() {
+    public function getStrName()
+    {
         $this->loadSourceObject();
-        if($this->objSourceUser != null)
+        if ($this->objSourceUser != null) {
             return $this->objSourceUser->getStrName();
-        else
+        }
+        else {
             return "n.a.";
+        }
     }
 
     /**
      * @return void
      */
-    private function loadSourceObject() {
-        if($this->objSourceUser == null && $this->intDeleted != 1) {
+    private function loadSourceObject()
+    {
+        if ($this->objSourceUser == null && $this->intDeleted != 1) {
             $objUsersources = new class_module_user_sourcefactory();
             $this->setObjSourceUser($objUsersources->getSourceUser($this));
         }
@@ -409,220 +458,265 @@ class class_module_user_user extends class_model implements interface_model, int
     /**
      * @return int
      */
-    public function getIntLogins() {
+    public function getIntLogins()
+    {
         return $this->intLogins;
     }
 
     /**
      * @return int
      */
-    public function getIntLastLogin() {
+    public function getIntLastLogin()
+    {
         return $this->intLastlogin;
     }
 
     /**
      * @return int
      */
-    public function getIntActive() {
+    public function getIntActive()
+    {
         return $this->intActive;
     }
 
     /**
      * @return int
      */
-    public function getIntAdmin() {
+    public function getIntAdmin()
+    {
         return $this->intAdmin;
     }
 
     /**
      * @return int
      */
-    public function getIntPortal() {
+    public function getIntPortal()
+    {
         return $this->intPortal;
     }
 
     /**
      * @return string
      */
-    public function getStrAdminskin() {
+    public function getStrAdminskin()
+    {
         return $this->strAdminskin;
     }
 
     /**
      * @return string
      */
-    public function getStrAdminlanguage() {
+    public function getStrAdminlanguage()
+    {
         return $this->strAdminlanguage;
     }
 
     /**
      * @return string
      */
-    public function getStrUsername() {
+    public function getStrUsername()
+    {
         return $this->strUsername;
     }
 
     /**
      * @param string $strUsername
+     *
      * @return void
      */
-    public function setStrUsername($strUsername) {
+    public function setStrUsername($strUsername)
+    {
         $this->strUsername = $strUsername;
     }
 
     /**
      * @param int $intLogins
+     *
      * @return void
      */
-    public function setIntLogins($intLogins) {
-        if($intLogins == "")
+    public function setIntLogins($intLogins)
+    {
+        if ($intLogins == "") {
             $intLogins = 0;
+        }
         $this->intLogins = $intLogins;
     }
 
     /**
      * @param int $intLastLogin
+     *
      * @return void
      */
-    public function setIntLastLogin($intLastLogin) {
-        if($intLastLogin == "")
+    public function setIntLastLogin($intLastLogin)
+    {
+        if ($intLastLogin == "") {
             $intLastLogin = 0;
+        }
         $this->intLastlogin = $intLastLogin;
     }
 
     /**
      * @param int $intActive
+     *
      * @return void
      */
-    public function setIntActive($intActive) {
-        if($intActive == "")
+    public function setIntActive($intActive)
+    {
+        if ($intActive == "") {
             $intActive = 0;
+        }
         $this->intActive = $intActive;
     }
 
     /**
      * @param int $intAdmin
+     *
      * @return void
      */
-    public function setIntAdmin($intAdmin) {
-        if($intAdmin == "")
+    public function setIntAdmin($intAdmin)
+    {
+        if ($intAdmin == "") {
             $intAdmin = 0;
+        }
         $this->intAdmin = $intAdmin;
     }
 
     /**
      * @param int $intPortal
+     *
      * @return void
      */
-    public function setIntPortal($intPortal) {
-        if($intPortal == "")
+    public function setIntPortal($intPortal)
+    {
+        if ($intPortal == "") {
             $intPortal = 0;
+        }
         $this->intPortal = $intPortal;
     }
 
     /**
      * @param string $strAdminskin
+     *
      * @return void
      */
-    public function setStrAdminskin($strAdminskin) {
+    public function setStrAdminskin($strAdminskin)
+    {
         $this->strAdminskin = $strAdminskin;
     }
 
     /**
      * @param string $strAdminlanguage
+     *
      * @return void
      */
-    public function setStrAdminlanguage($strAdminlanguage) {
+    public function setStrAdminlanguage($strAdminlanguage)
+    {
         $this->strAdminlanguage = $strAdminlanguage;
     }
 
     /**
      * @return string
      */
-    public function getStrAuthcode() {
+    public function getStrAuthcode()
+    {
         return $this->strAuthcode;
     }
 
     /**
      * @param string $strAuthcode
+     *
      * @return void
      */
-    public function setStrAuthcode($strAuthcode) {
+    public function setStrAuthcode($strAuthcode)
+    {
         $this->strAuthcode = $strAuthcode;
     }
 
     /**
      * @return string
      */
-    public function getStrSubsystem() {
+    public function getStrSubsystem()
+    {
         return $this->strSubsystem;
     }
 
     /**
      * @param string $strSubsystem
+     *
      * @return void
      */
-    public function setStrSubsystem($strSubsystem) {
+    public function setStrSubsystem($strSubsystem)
+    {
         $this->strSubsystem = $strSubsystem;
     }
 
     /**
      * @return interface_usersources_user
      */
-    public function getObjSourceUser() {
+    public function getObjSourceUser()
+    {
         $this->loadSourceObject();
         return $this->objSourceUser;
     }
 
     /**
      * @param interface_usersources_user $objSourceUser
+     *
      * @return void
      */
-    public function setObjSourceUser($objSourceUser) {
+    public function setObjSourceUser($objSourceUser)
+    {
         $this->objSourceUser = $objSourceUser;
     }
 
     /**
      * @return int
      */
-    public function getIntRecordStatus() {
+    public function getIntRecordStatus()
+    {
         return $this->intActive;
     }
 
     /**
      * @param string $strAdminModule
+     *
      * @return void
      */
-    public function setStrAdminModule($strAdminModule) {
+    public function setStrAdminModule($strAdminModule)
+    {
         $this->strAdminModule = $strAdminModule;
     }
 
     /**
      * @return string
      */
-    public function getStrAdminModule() {
+    public function getStrAdminModule()
+    {
         return $this->strAdminModule;
     }
 
     /**
      * @return int
      */
-    public function getIntDeleted() {
+    public function getIntDeleted()
+    {
         return $this->intDeleted;
     }
 
     /**
      * @param integer $intItemsPerPage
      */
-    public function setIntItemsPerPage($intItemsPerPage) {
-        $this->intItemsPerPage = (int) $intItemsPerPage;
+    public function setIntItemsPerPage($intItemsPerPage)
+    {
+        $this->intItemsPerPage = (int)$intItemsPerPage;
     }
 
     /**
      * @return int
      */
-    public function getIntItemsPerPage() {
-        if($this->intItemsPerPage > 0) {
+    public function getIntItemsPerPage()
+    {
+        if ($this->intItemsPerPage > 0) {
             return $this->intItemsPerPage;
         }
         else {
