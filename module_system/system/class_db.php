@@ -163,7 +163,16 @@ class class_db
         if (count($arrValueSets) == 0) {
             return true;
         }
-        return $this->objDbDriver->triggerMultiInsert(_dbprefix_.$strTable, $arrColumns, $arrValueSets, $this);
+
+        //chunk columns down to less then 1000 params, could lead to errors on oracle and sqlite otherwise
+        $bitReturn = true;
+        $intSetsPerInsert = floor(970 / count($arrColumns));
+
+        foreach(array_chunk($arrValueSets, $intSetsPerInsert) as $arrSingleValueSet) {
+            $bitReturn = $bitReturn && $this->objDbDriver->triggerMultiInsert(_dbprefix_.$strTable, $arrColumns, $arrSingleValueSet, $this);
+        }
+
+        return $bitReturn;
     }
 
     /**

@@ -185,54 +185,43 @@ class class_db_sqlite3 extends class_db_base  {
      * @return bool
      */
     public function triggerMultiInsert($strTable, $arrColumns, $arrValueSets, class_db $objDb) {
-        $bitReturn = true;
 
-        //ugly hack for sqlite 3: it only supports 999 params per query as maximum, so split into several parts
-        //calc the number of max rows per insert. to be sure split it down to 950
-        $intSetsPerInsert = floor(950 / count($arrColumns));
-        foreach(array_chunk($arrValueSets, $intSetsPerInsert) as $arrSingleValueSet) {
-
-
-            $arrVersion = SQLite3::version();
-            if(version_compare("3.7.11", $arrVersion["versionString"], "<=")) {
-                $bitReturn = parent::triggerMultiInsert($strTable, $arrColumns, $arrSingleValueSet, $objDb) && $bitReturn;
-            }
-            //legacy code
-            else {
-
-                $arrSafeColumns = array();
-                $arrPlaceholder = array();
-                foreach($arrColumns as $strOneColumn) {
-                    $arrSafeColumns[] = $this->encloseColumnName($strOneColumn);
-                    $arrPlaceholder[] = "?";
-                }
-
-                $arrParams = array();
-
-                $strQuery = "INSERT INTO ".$this->encloseTableName($strTable)."  (".implode(",", $arrSafeColumns).") ";
-                for($intI = 0; $intI < count($arrSingleValueSet); $intI++) {
-
-                    $arrTemp = array();
-                    for($intK = 0; $intK < count($arrColumns); $intK++) {
-                        $arrTemp[] = " ? AS ".$this->encloseColumnName($arrColumns[$intK]);
-                    }
-
-                    if($intI == 0) {
-                        $strQuery .= " SELECT ".implode(", ", $arrTemp);
-                    }
-                    else {
-                        $strQuery .= " UNION SELECT ".implode(", ", $arrTemp);
-                    }
-
-                    $arrParams = array_merge($arrParams, $arrSingleValueSet[$intI]);
-                }
-
-                $objDb->_pQuery($strQuery, $arrParams);
-            }
-
+        $arrVersion = SQLite3::version();
+        if(version_compare("3.7.11", $arrVersion["versionString"], "<=")) {
+            return parent::triggerMultiInsert($strTable, $arrColumns, $arrValueSets, $objDb);
         }
+        //legacy code
+        else {
 
-        return $bitReturn;
+            $arrSafeColumns = array();
+            $arrPlaceholder = array();
+            foreach($arrColumns as $strOneColumn) {
+                $arrSafeColumns[] = $this->encloseColumnName($strOneColumn);
+                $arrPlaceholder[] = "?";
+            }
+
+            $arrParams = array();
+
+            $strQuery = "INSERT INTO ".$this->encloseTableName($strTable)."  (".implode(",", $arrSafeColumns).") ";
+            for($intI = 0; $intI < count($arrValueSets); $intI++) {
+
+                $arrTemp = array();
+                for($intK = 0; $intK < count($arrColumns); $intK++) {
+                    $arrTemp[] = " ? AS ".$this->encloseColumnName($arrColumns[$intK]);
+                }
+
+                if($intI == 0) {
+                    $strQuery .= " SELECT ".implode(", ", $arrTemp);
+                }
+                else {
+                    $strQuery .= " UNION SELECT ".implode(", ", $arrTemp);
+                }
+
+                $arrParams = array_merge($arrParams, $arrValueSets[$intI]);
+            }
+
+            return $objDb->_pQuery($strQuery, $arrParams);
+        }
     }
 
     /**
