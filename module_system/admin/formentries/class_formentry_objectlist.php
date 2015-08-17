@@ -144,8 +144,20 @@ class class_formentry_objectlist extends class_formentry_multiselect {
             $strHtml = "";
             foreach($this->arrKeyValues as $objObject) {
                 if($objObject instanceof interface_model && $objObject->rightView()) {
+                    $strTitle = self::getDisplayName($objObject);
 
-                    $strHtml .= "- ". self::getDisplayName($objObject). "<br/>\n";
+                    //see, if the matching target-module provides a showSummary method
+                    $objModule= class_module_system_module::getModuleByName($objObject->getArrModule("modul"));
+                    if($objModule != null) {
+                        $objAdmin = $objModule->getAdminInstanceOfConcreteModule($objObject->getSystemid());
+
+                        if($objAdmin !== null && method_exists($objAdmin, "actionShowSummary")) {
+                            $strTitle = class_link::getLinkAdmin($objObject->getArrModule("modul"), "showSummary", "&systemid=".$objObject->getSystemid(), $strTitleUPDATE);
+                        }
+                    }
+
+
+                    $strHtml .= $strTitle. "<br/>\n";
                 }
                 else {
                     throw new class_exception("Array must contain objects", class_exception::$level_ERROR);
