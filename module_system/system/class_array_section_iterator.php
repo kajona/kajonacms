@@ -41,6 +41,15 @@ class class_array_section_iterator extends class_array_iterator {
     }
 
     /**
+     * @param int $intTotalElements
+     */
+    public function setIntTotalElements($intTotalElements)
+    {
+        $this->intTotalElements = $intTotalElements;
+    }
+
+
+    /**
      * Sets the current page-number
      *
      * @param int $intPageNumber
