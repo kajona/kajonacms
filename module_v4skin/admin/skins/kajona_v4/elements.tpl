@@ -789,7 +789,7 @@ in addition, a container for the calendar is needed. Use %%calendarContainerId%%
         <label for="%%name%%" class="col-sm-3 control-label">%%title%%</label>
 
         <div class="col-sm-6 inputText">
-            <table id="%%name%%" data-name="%%name%%" class="table table-striped">
+            <table id="%%name%%" data-name="%%name%%" class="table table-striped form-control">
                 <colgroup>
                     <col width="20" />
                     <col width="*" />
