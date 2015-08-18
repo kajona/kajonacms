@@ -253,21 +253,33 @@ abstract class class_admin_simple extends class_admin_controller {
 
         $arrMassActions = $this->getBatchActionHandlers($strListIdentifier);
 
+        $intTotalNrOfElements = $objArraySectionIterator->getNumberOfElements();
         /** @var $objOneIterable class_model|interface_model|interface_admin_listable */
         foreach($objArraySectionIterator as $objOneIterable) {
 
             // if we have a filter Closure call it else use the standard rightView method
             if($objFilter !== null) {
                 if($objFilter($objOneIterable) === false) {
+                    if($bitSortable) {
+                        //inject hidden dummy row for a proper sorting
+                        $strReturn .= $this->objToolkit->genericAdminList($objOneIterable->getSystemid(), "", "", "", 0, "", "", false, "hidden");
+                    }
+                    $intTotalNrOfElements--;
                     continue;
                 }
             }
             else if(!$objOneIterable->rightView()) {
+                if($bitSortable) {
+                    //inject hidden dummy row for a proper sorting
+                    $strReturn .= $this->objToolkit->genericAdminList($objOneIterable->getSystemid(), "", "", "", 0, "", "", false, "hidden");
+                }
+                $intTotalNrOfElements--;
                 continue;
             }
 
             $strActions = $this->getActionIcons($objOneIterable, $strListIdentifier);
             $strReturn .= $this->objToolkit->simpleAdminList($objOneIterable, $strActions, $intI++, count($arrMassActions) > 0);
+
         }
 
         $strNewActions = $this->mergeNewEntryActions($this->getNewEntryAction($strListIdentifier));
@@ -284,7 +296,7 @@ abstract class class_admin_simple extends class_admin_controller {
         else
             $strReturn .= $this->objToolkit->listFooter();
 
-
+        $objArraySectionIterator->setIntTotalElements($intTotalNrOfElements);
         $strReturn .= $this->objToolkit->getPageview($objArraySectionIterator, $this->getArrModule("modul"), $this->getAction(), "&systemid=" . $this->getSystemid() . $this->strPeAddon . $strPagerAddon);
 
         return $strReturn;
