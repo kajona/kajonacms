@@ -34,6 +34,7 @@ class class_module_workflows_workflow extends class_model implements interface_m
      * @var string
      * @tableColumn workflows.workflows_class
      * @tableColumnDatatype char254
+     * @tableColumnIndex
      */
     private $strClass = "";
 
@@ -64,6 +65,7 @@ class class_module_workflows_workflow extends class_model implements interface_m
      * @var string
      * @tableColumn workflows.workflows_responsible
      * @tableColumnDatatype char254
+     * @tableColumnIndex
      */
     private $strResponsible = "";
 

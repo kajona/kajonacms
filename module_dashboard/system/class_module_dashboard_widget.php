@@ -30,6 +30,7 @@ class class_module_dashboard_widget extends class_model implements interface_mod
      * @var string
      * @tableColumn dashboard.dashboard_user
      * @tableColumnDatatype char20
+     * @tableColumnIndex
      */
     private $strUser = "";
 
@@ -37,6 +38,7 @@ class class_module_dashboard_widget extends class_model implements interface_mod
      * @var string
      * @tableColumn dashboard.dashboard_aspect
      * @tableColumnDatatype char254
+     * @tableColumnIndex
      */
     private $strAspect = "";
 

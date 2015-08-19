@@ -5,7 +5,7 @@
         >
     <title>workflows</title>
     <description>A complex workflow-engine to trigger events by multiple triggers.</description>
-    <version>4.7.5</version>
+    <version>4.7.6</version>
     <author>Kajona Team</author>
     <type>MODULE</type>
     <providesInstaller>TRUE</providesInstaller>

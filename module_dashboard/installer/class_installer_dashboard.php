@@ -92,7 +92,25 @@ class class_installer_dashboard extends class_installer_base implements interfac
             $this->updateModuleVersion("dashboard", "4.7");
         }
 
+        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "4.7") {
+            $strReturn .= $this->update_47_475();
+        }
+
         return $strReturn."\n\n";
 	}
 
+
+    private function update_47_475() {
+        $strReturn = "Updating database indexes\n";
+
+        $this->objDB->_pQuery("ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."dashboard")." ADD INDEX ( ".$this->objDB->encloseColumnName("dashboard_user")." ) ", array());
+        $this->objDB->_pQuery("ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."dashboard")." ADD INDEX ( ".$this->objDB->encloseColumnName("dashboard_aspect")." ) ", array());
+
+        $strReturn .= "Updating module-versions...\n";
+        $this->objDB->flushQueryCache();
+        $this->updateModuleVersion($this->objMetadata->getStrTitle(), "4.7.5");
+
+        return $strReturn;
+    }
 }

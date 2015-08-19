@@ -31,6 +31,7 @@ class class_module_messaging_config extends class_model implements interface_mod
      * @var string
      * @tableColumn messages_cfg.config_user
      * @tableColumnDatatype char20
+     * @tableColumnIndex
      */
     private $strUser = "";
 

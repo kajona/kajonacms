@@ -37,6 +37,7 @@ class class_module_languages_language extends class_model implements interface_m
      * @var bool
      * @tableColumn languages.language_default
      * @tableColumnDatatype int
+     * @tableColumnIndex
      *
      * @fieldType yesno
      * @fieldMandatory

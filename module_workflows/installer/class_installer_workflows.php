@@ -184,6 +184,11 @@ class class_installer_workflows extends class_installer_base implements interfac
             $strReturn .= $this->update_47_475();
         }
 
+        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "4.7.5") {
+            $strReturn .= $this->update_475_476();
+        }
+
         return $strReturn."\n\n";
 	}
 
@@ -263,5 +268,19 @@ class class_installer_workflows extends class_installer_base implements interfac
         return $strReturn;
     }
 
+
+    private function update_475_476() {
+        $strReturn = "Updating database indexes\n";
+
+        $this->objDB->_pQuery("ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."workflows")." ADD INDEX ( ".$this->objDB->encloseColumnName("workflows_class")." ) ", array());
+        $this->objDB->_pQuery("ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."workflows")." ADD INDEX ( ".$this->objDB->encloseColumnName("workflows_responsible")." ) ", array());
+
+
+        $strReturn .= "Updating module-versions...\n";
+        $this->objDB->flushQueryCache();
+        $this->updateModuleVersion($this->objMetadata->getStrTitle(), "5.3.2");
+
+        return $strReturn;
+    }
 
 }

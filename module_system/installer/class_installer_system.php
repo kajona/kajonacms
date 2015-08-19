@@ -121,7 +121,7 @@ class class_installer_system extends class_installer_base implements interface_i
         $arrFields["user_authcode"] = array("char20", true);
         $arrFields["user_items_per_page"] = array("int", true);
 
-        if(!$this->objDB->createTable("user", $arrFields, array("user_id")))
+        if(!$this->objDB->createTable("user", $arrFields, array("user_id"), array("user_username", "user_subsystem", "user_active", "user_deleted")))
             $strReturn .= "An error occurred! ...\n";
 
         // User table kajona subsystem  -----------------------------------------------------------------
@@ -152,7 +152,7 @@ class class_installer_system extends class_installer_base implements interface_i
         $arrFields["group_name"] = array("char254", true);
         $arrFields["group_subsystem"] = array("char254", true);
 
-        if(!$this->objDB->createTable("user_group", $arrFields, array("group_id")))
+        if(!$this->objDB->createTable("user_group", $arrFields, array("group_id"), array("group_name", "group_subsystem")))
             $strReturn .= "An error occurred! ...\n";
 
 
@@ -934,6 +934,20 @@ class class_installer_system extends class_installer_base implements interface_i
         $this->objDB->addColumn("system", "system_deleted", class_db_datatypes::STR_TYPE_INT);
         $strQuery = "UPDATE "._dbprefix_."system SET system_deleted = 0";
         $this->objDB->_pQuery($strQuery, array());
+
+        $strReturn .= "Updating database indexes\n";
+        $this->objDB->_pQuery("ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."system")." ADD INDEX ( ".$this->objDB->encloseColumnName("system_deleted")." ) ", array());
+        $this->objDB->_pQuery("ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."system")." ADD INDEX ( ".$this->objDB->encloseColumnName("system_lock_time")." ) ", array());
+
+        $this->objDB->_pQuery("ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."user")." ADD INDEX ( ".$this->objDB->encloseColumnName("user_username")." ) ", array());
+        $this->objDB->_pQuery("ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."user")." ADD INDEX ( ".$this->objDB->encloseColumnName("user_subsystem")." ) ", array());
+        $this->objDB->_pQuery("ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."user")." ADD INDEX ( ".$this->objDB->encloseColumnName("user_active")." ) ", array());
+        $this->objDB->_pQuery("ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."user")." ADD INDEX ( ".$this->objDB->encloseColumnName("user_deleted")." ) ", array());
+
+        $this->objDB->_pQuery("ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."user_group")." ADD INDEX ( ".$this->objDB->encloseColumnName("group_name")." ) ", array());
+        $this->objDB->_pQuery("ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."user_group")." ADD INDEX ( ".$this->objDB->encloseColumnName("group_subsystem")." ) ", array());
+
+
         class_carrier::getInstance()->flushCache(class_carrier::INT_CACHE_TYPE_DBTABLES | class_carrier::INT_CACHE_TYPE_DBSTATEMENTS);
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion($this->objMetadata->getStrTitle(), "4.7.5");
