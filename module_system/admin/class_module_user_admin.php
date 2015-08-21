@@ -940,6 +940,7 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
         //validate possible blocked groups
         $objConfig = class_config::getInstance("blockedgroups.php");
         $arrBlockedGroups = explode(",", $objConfig->getConfig("blockedgroups"));
+        $arrBlockedGroups[] = class_module_system_setting::getConfigValue("_admins_group_id_");
 
         $bitRenderEdit = class_carrier::getInstance()->getObjSession()->isSuperAdmin() || ($objGroup->rightEdit() && !in_array($objGroup->getSystemid(), $arrBlockedGroups));
 
