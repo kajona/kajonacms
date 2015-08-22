@@ -161,6 +161,44 @@ class class_date_helper {
         return $arrWorkingDays;
     }
 
+    /**
+     * Calculates the number of working days between the given dates.
+     * The start and enddate are included in the count.
+     *
+     * @param class_date $objDateFrom
+     * @param class_date $objDateTo
+     * @return int
+     */
+    public function calcNumberOfWorkingDaysBetween(class_date $objDateFrom, class_date $objDateTo)
+    {
+        $intNumberOfWorkingDays = 0;
+        if($objDateFrom->getLongTimestamp() > $objDateTo->getLongTimestamp()) {
+            return $intNumberOfWorkingDays;
+        }
+        if($objDateFrom->isSameDay($objDateTo)) {
+            return $intNumberOfWorkingDays;
+        }
+
+        $objDateCompare = clone $objDateFrom;
+        if($this->isValidTarget2Day($objDateCompare)) {
+            $intNumberOfWorkingDays++;
+        }
+        while($objDateCompare = $this->calcNextWorkingDay($objDateCompare)) {
+            if($objDateCompare->getLongTimestamp() > $objDateTo->getLongTimestamp()) {
+                break;
+            }
+
+            $intNumberOfWorkingDays++;
+
+            if($objDateCompare->isSameDay($objDateTo)) {
+                break;
+            }
+        }
+
+        return $intNumberOfWorkingDays;
+
+    }
+
 
     /**
      * Calculates a date depending on the given date which is used as a base for the calculation of relative dates.
@@ -179,6 +217,8 @@ class class_date_helper {
     }
 
 
+
+
     /**
      * Calculates the next TARGET2 working day. Optional the amount of working days can be provided
      *
@@ -187,7 +227,8 @@ class class_date_helper {
      *
      * @return class_date
      */
-    public function calcNextWorkingDay(class_date $objDate, $intDays = 1) {
+    public function calcNextWorkingDay(class_date $objDate, $intDays = 1)
+    {
         $objNewDate = clone $objDate;
 
         $intCount = 0;
