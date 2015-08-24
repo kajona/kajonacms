@@ -797,15 +797,18 @@ in addition, a container for the calendar is needed. Use %%calendarContainerId%%
                 </colgroup>
                 <tfoot>
                 <tr>
+                    <td>&nbsp;</td>
                     <td></td>
-                    <td></td>
-                    <td class="icon-cell">%%addLink%%</td>
+                    <td class="icon-cell"></td>
                 </tr>
                 </tfoot>
                 <tbody>
                 %%table%%
                 </tbody>
             </table>
+        </div>
+        <div class="col-sm-2 form-opener">
+            %%addLink%%
         </div>
     </div>
 </input_objectlist>
