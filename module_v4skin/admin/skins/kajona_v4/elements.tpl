@@ -848,6 +848,10 @@ in addition, a container for the calendar is needed. Use %%calendarContainerId%%
                 %%elements%%
             </div>
         </div>
+
+        <div class="col-sm-2 form-opener">
+            %%opener%%
+        </div>
     </div>
 </input_container>
 

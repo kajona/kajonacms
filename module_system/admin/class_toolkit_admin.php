@@ -940,7 +940,7 @@ class class_toolkit_admin extends class_toolkit
      * @return string
      * @throws class_exception
      */
-    public function formInputContainer($strName, $strTitle = "", array $arrFields = array())
+    public function formInputContainer($strName, $strTitle = "", array $arrFields = array(), $strOpener = "")
     {
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "input_container");
         $strTemplateRowID = $this->objTemplate->readTemplate("/elements.tpl", "input_container_row");
@@ -948,6 +948,7 @@ class class_toolkit_admin extends class_toolkit
         $arrTemplate = array();
         $arrTemplate["name"] = $strName;
         $arrTemplate["title"] = $strTitle;
+        $arrTemplate["opener"] = $strOpener;
 
         $strElements = "";
         foreach ($arrFields as $strField) {
@@ -970,7 +971,7 @@ class class_toolkit_admin extends class_toolkit
      * @return string
      * @throws class_exception
      */
-    public function formInputCheckboxArray($strName, $strTitle = "", $intType, array $arrValues, array $arrSelected, $bitInline = false, $bitReadonly = false)
+    public function formInputCheckboxArray($strName, $strTitle = "", $intType, array $arrValues, array $arrSelected, $bitInline = false, $bitReadonly = false, $strOpener = "")
     {
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "input_checkboxarray");
         $strTemplateCheckboxID = $this->objTemplate->readTemplate("/elements.tpl", "input_checkboxarray_checkbox");
@@ -978,6 +979,7 @@ class class_toolkit_admin extends class_toolkit
         $arrTemplate = array();
         $arrTemplate["name"] = $strName;
         $arrTemplate["title"] = $strTitle;
+        $arrTemplate["opener"] = $strOpener;
 
         $strElements = '';
         foreach ($arrValues as $strKey => $strValue) {

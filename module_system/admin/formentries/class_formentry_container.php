@@ -14,6 +14,7 @@
 class class_formentry_container extends class_formentry_base implements interface_formentry_printable {
 
     protected $arrFields = array();
+    protected $strOpener = "";
 
     public function __construct($strFormName, $strSourceProperty)
     {
@@ -52,7 +53,7 @@ class class_formentry_container extends class_formentry_base implements interfac
             $arrFields[] = $objField->renderField();
         }
 
-        $strReturn.= $objToolkit->formInputContainer($this->getStrEntryName(), $this->getStrLabel(), $arrFields);
+        $strReturn.= $objToolkit->formInputContainer($this->getStrEntryName(), $this->getStrLabel(), $arrFields, $this->strOpener);
 
         return $strReturn;
     }
@@ -89,5 +90,23 @@ class class_formentry_container extends class_formentry_base implements interfac
             }
         }
         return implode(", ", $arrFields);
+    }
+
+    /**
+     * @return string
+     */
+    public function getStrOpener()
+    {
+        return $this->strOpener;
+    }
+
+    /**
+     * @param string $strOpener
+     */
+    public function setStrOpener($strOpener)
+    {
+        $this->strOpener = $strOpener;
+
+        return $this;
     }
 }
