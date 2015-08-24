@@ -326,16 +326,20 @@ KAJONA.v4skin.setObjectListItems = function(strElementName, arrItems, arrAvailab
         // add new elements
         for(var i = 0; i < arrItems.length; i++) {
             var strEscapedTitle = $('<div></div>').text(arrItems[i].strDisplayName).html();
-            var html = '';
-            html+= '<tr>';
-            html+= '    <td>' + arrItems[i].strIcon + '</td>';
-            html+= '    <td>' + strEscapedTitle + ' <input type="hidden" name="' + strElementName + '[]" value="' + arrItems[i].strSystemId + '" /></td>';
-            html+= '    <td class="icon-cell">';
-            html+= '        <a href="#" onclick="KAJONA.v4skin.removeObjectListItem(this);return false">' + strDeleteButton + '</a>';
-            html+= '    </td>';
-            html+= '</tr>';
+            var $objNode = $('<tr>'
+                + '    <td>' + arrItems[i].strIcon + '</td>'
+                + '    <td>' + strEscapedTitle + ' <input type="hidden" name="' + strElementName + '[]" value="' + arrItems[i].strSystemId + '" /></td>'
+                + '    <td class="icon-cell">'
+                + '        <a href="#" onclick="KAJONA.v4skin.removeObjectListItem(this);return false">' + strDeleteButton + '</a>'
+                + '    </td>'
+                + '</tr>');
 
-            tbody.append(html);
+            tbody.append($objNode);
+            if (window.opener) {
+                window.opener.KAJONA.admin.tooltip.addTooltip($objNode.find('[rel=tooltip][title!=""]'));
+            } else if (parent){
+                parent.KAJONA.admin.tooltip.addTooltip($objNode.find('[rel=tooltip][title!=""]'));
+            }
         }
     }
 };

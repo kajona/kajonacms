@@ -12,10 +12,11 @@
  * @package module_formgenerator
  */
 //TODO why does this formentry is subclass of multiselect. Does not make any sense to me.
-class class_formentry_objectlist extends class_formentry_multiselect
+class class_formentry_objectlist extends class_formentry_base implements interface_formentry_printable
 {
 
     protected $strAddLink;
+    protected $arrKeyValues = array();
 
     public function setStrAddLink($strAddLink)
     {
@@ -220,4 +221,20 @@ class class_formentry_objectlist extends class_formentry_multiselect
 
         return $strObjectName;
     }
+
+    /**
+     * @param $arrKeyValues
+     *
+     * @return class_formentry_dropdown
+     */
+    public function setArrKeyValues($arrKeyValues) {
+        $this->arrKeyValues = $arrKeyValues;
+        return $this;
+    }
+
+    public function getArrKeyValues() {
+        return $this->arrKeyValues;
+    }
+
+
 }

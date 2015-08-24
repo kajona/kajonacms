@@ -21,6 +21,7 @@ class class_orm_objectlist_in_restriction extends class_orm_objectlist_restricti
     private $strColumnName = "";
     private $arrParams = array();
     private $strCondition = "";
+    private $strInCondition = "IN";
 
     function __construct($strProperty, array $arrParams, $strCondition = "AND") {
 
@@ -64,7 +65,6 @@ class class_orm_objectlist_in_restriction extends class_orm_objectlist_restricti
         return $this->getInStatement($this->strColumnName);
     }
 
-
     protected function getInStatement($strColumnName) {
 
         if(is_array($this->arrParams) && count($this->arrParams) > 0 ) {
@@ -79,7 +79,7 @@ class class_orm_objectlist_in_restriction extends class_orm_objectlist_restricti
                     }, $arrParams);
                     $strPlaceholder = implode(",", $arrParamsPlaceholder);
                     if(!empty($strPlaceholder)) {
-                        $arrParts[] = "{$strColumnName} IN ({$strPlaceholder})";
+                        $arrParts[] = "{$strColumnName} {$this->strInCondition} ({$strPlaceholder})";
                     }
                 }
 
@@ -94,7 +94,7 @@ class class_orm_objectlist_in_restriction extends class_orm_objectlist_restricti
                 $strPlaceholder = implode(",", $arrParamsPlaceholder);
 
                 if(!empty($strPlaceholder)) {
-                    return "{$this->strCondition} {$strColumnName} IN ({$strPlaceholder})";
+                    return "{$this->strCondition} {$strColumnName} {$this->strInCondition} ({$strPlaceholder})";
                 }
             }
         }
