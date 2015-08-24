@@ -63,7 +63,9 @@ class class_graph_jqplot implements interface_graph {
             "show"=> true,
             "rendererOptions" => array(
                 "textColor" => null,
-                "fontFamily" => null
+                "fontFamily" => null,
+                "numberRows" => 2,
+                "location" => "n"
             ),
         ),
         "grid" => array(
@@ -117,6 +119,17 @@ class class_graph_jqplot implements interface_graph {
                 "showTicks" => null,
                 "tickOptions" => array(
                     "showGridline" => true
+                )
+            ),
+            "y2axis"=> array(
+                "renderer" => null,
+                "label" => null,
+                "max" => null,
+                "min" => null,
+                "ticks" => null,
+                "showTicks" => null,
+                "tickOptions" => array(
+                    "showGridline" => false
                 )
             )
         ),
@@ -308,6 +321,55 @@ class class_graph_jqplot implements interface_graph {
         }
 
         $objSeriesData = new class_graph_jqplot_seriesdata(class_graph_jqplot_charttype::LINE, count($this->arrSeriesData), $this->arrOptions);
+        $objSeriesData->setArrDataPoints($arrDataPoints);
+        $objSeriesData->setStrSeriesLabel($strLegend);
+
+        $this->arrSeriesData[] = $objSeriesData;
+    }
+
+
+    /**
+     * Registers a new plot to the current graph. Works in line-plot-mode only.
+     * Add a set of linePlot to a graph to get more then one line.
+     * If you created a bar-chart before, it it is possible to add line-plots on top of
+     * the bars. Nevertheless, the scale is calculated out of the bars, so make
+     * sure to remain inside the visible range!
+     * A sample-code could be:
+     *  $objGraph = new class_graph();
+     *  $objGraph->setStrXAxisTitle("x-axis");
+     *  $objGraph->setStrYAxisTitle("y-axis");
+     *  $objGraph->setStrGraphTitle("Test Graph");
+     *
+     *  //simple array
+     *      $objGraph->addLinePlot(array(1,4,6,7,4), "serie 1");
+     *
+     * //datapoints array
+     *      $objDataPoint1 = new class_graph_datapoint(1);
+     *      $objDataPoint2 = new class_graph_datapoint(2);
+     *      $objDataPoint3 = new class_graph_datapoint(4);
+     *      $objDataPoint4 = new class_graph_datapoint(5);
+     *
+     *      //set action handler example
+     *      $objDataPoint1->setObjActionHandler("<javascript code here>");
+     *      $objDataPoint1->getObjActionHandlerValue("<value_object> e.g. some json");
+     *
+     *      $objGraph->addLinePlot(array($objDataPoint1, $objDataPoint2, $objDataPoint3, $objDataPoint4) "serie 1");
+     *
+     *
+     * @param array $arrValues - an array with simple values or an array of data points (class_graph_datapoint).
+     *                           The advantage of a data points are that action handlers can be defined for each data point which will be executed when clicking on the data point in the chart.
+     * @param string $strLegend the name of the single plot
+     *
+     * @throws class_exception
+     */
+    public function addLinePlotY2Axis($arrValues, $strLegend) {
+        $arrDataPoints = class_graph_commons::convertArrValuesToDataPointArray($arrValues);
+
+        if($this->containsChartType(class_graph_jqplot_charttype::PIE)) {
+            throw new class_exception("Chart already contains a pie chart. Combinations of pie charts and line charts are not allowed", class_exception::$level_ERROR);
+        }
+
+        $objSeriesData = new class_graph_jqplot_seriesdata(class_graph_jqplot_charttype::LINE_Y2AXIS, count($this->arrSeriesData), $this->arrOptions);
         $objSeriesData->setArrDataPoints($arrDataPoints);
         $objSeriesData->setStrSeriesLabel($strLegend);
 
@@ -561,7 +623,7 @@ class class_graph_jqplot implements interface_graph {
 
         //4. If stacked bar chart and line chart disable stack for the line charts
         $arrSeriesStackedBarCharts = $this->getSeriesObjectsByChartType(array(class_graph_jqplot_charttype::STACKEDBAR));
-        $arrSeriesLineCharts = $this->getSeriesObjectsByChartType(array(class_graph_jqplot_charttype::LINE));
+        $arrSeriesLineCharts = $this->getSeriesObjectsByChartType(array(class_graph_jqplot_charttype::LINE, class_graph_jqplot_charttype::LINE_Y2AXIS));
         if(count($arrSeriesStackedBarCharts) > 0 && count($arrSeriesLineCharts) > 0) {
             foreach($arrSeriesLineCharts as $objSeriesData) {
                 $arrSeriesOptions = $objSeriesData->getArrSeriesOptions();
@@ -702,6 +764,15 @@ class class_graph_jqplot implements interface_graph {
      */
     public function setStrYAxisTitle($strTitle) {
         $this->arrOptions["axes"]["yaxis"]["label"] = $strTitle;
+    }
+
+    /**
+     * Set the title of the y-axis
+     *
+     * @param string $strTitle
+     */
+    public function setStrY2AxisTitle($strTitle) {
+        $this->arrOptions["axes"]["y2axis"]["label"] = $strTitle;
     }
 
     /**
@@ -868,9 +939,13 @@ class class_graph_jqplot implements interface_graph {
      * @param int $intMin
      * @param int $intMax
      */
-    public function setXAxisRange($intMin, $intMax) {
-        $this->arrOptions["axes"]["xaxis"]["min"] = $intMin;
-        $this->arrOptions["axes"]["xaxis"]["max"] = $intMax;
+    public function setXAxisRange($intMin = null, $intMax = null) {
+        if($intMin !== null) {
+            $this->arrOptions["axes"]["xaxis"]["min"] = $intMin;
+        }
+        if($intMax !== null) {
+            $this->arrOptions["axes"]["xaxis"]["max"] = $intMax;
+        }
     }
 
 
@@ -880,9 +955,28 @@ class class_graph_jqplot implements interface_graph {
      * @param int $intMin
      * @param int $intMax
      */
-    public function setYAxisRange($intMin, $intMax) {
-        $this->arrOptions["axes"]["yaxis"]["min"] = $intMin;
-        $this->arrOptions["axes"]["yaxis"]["max"] = $intMax;
+    public function setYAxisRange($intMin = null, $intMax = null) {
+        if($intMin !== null) {
+            $this->arrOptions["axes"]["yaxis"]["min"] = $intMin;
+        }
+        if($intMax !== null) {
+            $this->arrOptions["axes"]["yaxis"]["max"] = $intMax;
+        }
+    }
+
+    /**
+     * Sets the range for the yAxis.
+     *
+     * @param int $intMin
+     * @param int $intMax
+     */
+    public function setY2AxisRange($intMin = null, $intMax = null) {
+        if($intMin !== null) {
+            $this->arrOptions["axes"]["y2axis"]["min"] = $intMin;
+        }
+        if($intMax !== null) {
+            $this->arrOptions["axes"]["y2axis"]["max"] = $intMax;
+        }
     }
 
 
