@@ -17,7 +17,8 @@
  * @since 3.4.1
  * @see /system/config/ldap.php
  */
-class class_ldap {
+class class_ldap
+{
 
     /**
      * @var array
@@ -39,14 +40,16 @@ class class_ldap {
      *
      * @param int $intConfigNumber
      */
-    private function __construct($intConfigNumber = 0) {
+    private function __construct($intConfigNumber = 0)
+    {
         $this->arrConfig = class_config::getInstance("ldap.php")->getConfig($intConfigNumber);
         $this->arrConfig["nr"] = $intConfigNumber;
 
         $this->connect();
     }
 
-    public function __destruct() {
+    public function __destruct()
+    {
         ldap_close($this->objCx);
     }
 
@@ -55,8 +58,9 @@ class class_ldap {
      * Connects to the ldap-server.
      * If no connection is possible, an exception is thrown.
      */
-    private function connect() {
-        if($this->objCx == null) {
+    private function connect()
+    {
+        if ($this->objCx == null) {
             $this->objCx = ldap_connect($this->arrConfig["ldap_server"], $this->arrConfig["ldap_port"]);
 
             class_logger::getInstance(class_logger::USERSOURCES)->addLogRow("new ldap-connection to ".$this->arrConfig["ldap_server"].":".$this->arrConfig["ldap_port"], class_logger::$levelInfo);
@@ -68,21 +72,26 @@ class class_ldap {
     /**
      * Returns an instance of class_ldap, the connection is setup on first call.
      *
+     * @param int $intConfigNumber
+     *
      * @return class_ldap
      */
-    public static function getInstance($intConfigNumber = 0) {
+    public static function getInstance($intConfigNumber = 0)
+    {
         self::getAllInstances();
         return self::$arrInstances[$intConfigNumber];
     }
 
     /**
      * Returns instances for each configured ldap source
+     *
      * @return class_ldap[]
      */
-    public static function getAllInstances() {
-        if(self::$arrInstances == null) {
+    public static function getAllInstances()
+    {
+        if (self::$arrInstances == null) {
             $intI = 0;
-            while(is_array(class_config::getInstance("ldap.php")->getConfig($intI))) {
+            while (is_array(class_config::getInstance("ldap.php")->getConfig($intI))) {
                 self::$arrInstances[$intI] = new class_ldap($intI);
                 $intI++;
             }
@@ -103,10 +112,12 @@ class class_ldap {
      *
      * @return bool
      */
-    public function authenticateUser($strUsername, $strPassword, $strContext = "") {
+    public function authenticateUser($strUsername, $strPassword, $strContext = "")
+    {
 
-        if($strContext != "")
+        if ($strContext != "") {
             $strUsername = $this->arrConfig["ldap_common_name"]."=".$strUsername.",".$strContext;
+        }
 
         $bitBind = @ldap_bind($this->objCx, $strUsername, $strPassword);
         $this->internalBind();
@@ -120,9 +131,10 @@ class class_ldap {
      *
      * @throws class_exception
      */
-    private function internalBind() {
+    private function internalBind()
+    {
         $bitBind = false;
-        if($this->arrConfig["ldap_bind_anonymous"] === true) {
+        if ($this->arrConfig["ldap_bind_anonymous"] === true) {
             $bitBind = @ldap_bind($this->objCx);
         }
         else {
@@ -133,7 +145,7 @@ class class_ldap {
             );
         }
 
-        if($bitBind === false) {
+        if ($bitBind === false) {
             throw new class_exception("ldap bind failed: ".ldap_errno($this->objCx)." # ".ldap_error($this->objCx), class_exception::$level_FATALERROR);
         }
         else {
@@ -150,21 +162,24 @@ class class_ldap {
      * @throws class_exception
      * @return string[] array of distinguished names
      */
-    public function getMembersOfGroup($strGroupDN) {
+    public function getMembersOfGroup($strGroupDN)
+    {
         $arrReturn = array();
 
         //search the group itself
         $objResult = @ldap_search($this->objCx, $strGroupDN, $this->arrConfig["ldap_group_filter"]);
 
-        if($objResult !== false) {
+        if ($objResult !== false) {
             class_logger::getInstance(class_logger::USERSOURCES)->addLogRow("ldap-search found ".ldap_count_entries($this->objCx, $objResult)." entries", class_logger::$levelInfo);
 
             $arrResult = @ldap_first_entry($this->objCx, $objResult);
-            while($arrResult !== false) {
+            while ($arrResult !== false) {
                 $arrValues = @ldap_get_values($this->objCx, $arrResult, $this->arrConfig["ldap_group_attribute_member"]);
-                foreach($arrValues as $strKey => $strSingleValue)
-                    if($strKey !== "count")
+                foreach ($arrValues as $strKey => $strSingleValue) {
+                    if ($strKey !== "count") {
                         $arrReturn[] = $strSingleValue;
+                    }
+                }
 
                 $arrResult = @ldap_next_entry($this->objCx, $arrResult);
             }
@@ -185,14 +200,15 @@ class class_ldap {
      * @throws class_exception
      * @return int
      */
-    public function getNumberOfGroupMembers($strGroupDN) {
+    public function getNumberOfGroupMembers($strGroupDN)
+    {
         //search the group itself
         $objResult = @ldap_search($this->objCx, $strGroupDN, $this->arrConfig["ldap_group_filter"]);
 
-        if($objResult !== false) {
+        if ($objResult !== false) {
             class_logger::getInstance(class_logger::USERSOURCES)->addLogRow("ldap-search found ".ldap_count_entries($this->objCx, $objResult)." entries", class_logger::$levelInfo);
             $arrResult = @ldap_first_entry($this->objCx, $objResult);
-            if($arrResult !== false) {
+            if ($arrResult !== false) {
                 $arrValues = @ldap_get_values($this->objCx, $arrResult, $this->arrConfig["ldap_group_attribute_member"]);
                 return $arrValues["count"];
             }
@@ -212,7 +228,8 @@ class class_ldap {
      * @throws class_exception
      * @return boolean
      */
-    public function isUserMemberOfGroup($strUserDN, $strGroupDN) {
+    public function isUserMemberOfGroup($strUserDN, $strGroupDN)
+    {
         $bitReturn = false;
 
         //search the group itself
@@ -220,12 +237,14 @@ class class_ldap {
         $strQuery = uniStrReplace("?", $strUserDN, $strQuery);
         $objResult = @ldap_search($this->objCx, $strGroupDN, $strQuery);
 
-        if($objResult !== false) {
+        if ($objResult !== false) {
             $intCount = ldap_count_entries($this->objCx, $objResult);
-            if($intCount == 1)
+            if ($intCount == 1) {
                 $bitReturn = true;
-            else
+            }
+            else {
                 $bitReturn = false;
+            }
 
         }
         else {
@@ -244,24 +263,26 @@ class class_ldap {
      * @throws class_exception
      * @return string array of hits, each hit an array details, false in case of errors
      */
-    public function getUserDetailsByDN($strUsername) {
+    public function getUserDetailsByDN($strUsername)
+    {
         $arrReturn = false;
 
         //search the group itself
         $objResult = @ldap_search($this->objCx, $strUsername, $this->arrConfig["ldap_user_filter"]);
 
-        if($objResult !== false) {
+        if ($objResult !== false) {
             $arrReturn = array();
             class_logger::getInstance(class_logger::USERSOURCES)->addLogRow("ldap-search found ".ldap_count_entries($this->objCx, $objResult)." entries", class_logger::$levelInfo);
 
             $arrResult = @ldap_first_entry($this->objCx, $objResult);
-            while($arrResult !== false) {
+            while ($arrResult !== false) {
 
                 $arrReturn = array();
                 $arrReturn["username"] = $this->getStrAttribute($arrResult, $this->arrConfig["ldap_user_attribute_username"]);
                 $arrReturn["mail"] = $this->getStrAttribute($arrResult, $this->arrConfig["ldap_user_attribute_mail"]);
-                if($arrReturn["mail"] == "")
+                if ($arrReturn["mail"] == "") {
                     $arrReturn["mail"] = $this->getStrAttribute($arrResult, $this->arrConfig["ldap_user_attribute_mail_fallback"]);
+                }
                 $arrReturn["familyname"] = $this->getStrAttribute($arrResult, $this->arrConfig["ldap_user_attribute_familyname"]);
                 $arrReturn["givenname"] = $this->getStrAttribute($arrResult, $this->arrConfig["ldap_user_attribute_givenname"]);
                 $arrReturn["identifier"] = $this->getStrAttribute($arrResult, $this->arrConfig["ldap_common_identifier"]);
@@ -286,7 +307,8 @@ class class_ldap {
      * @throws class_exception
      * @return string array of userdetails, false in case of errors
      */
-    public function getUserdetailsByName($strUsername) {
+    public function getUserdetailsByName($strUsername)
+    {
         $arrReturn = false;
 
         $strUserFilter = $this->arrConfig["ldap_user_search_filter"];
@@ -296,17 +318,18 @@ class class_ldap {
         //search the group itself
         $objResult = @ldap_search($this->objCx, $this->arrConfig["ldap_user_base_dn"], $strUserFilter);
 
-        if($objResult !== false) {
+        if ($objResult !== false) {
             class_logger::getInstance(class_logger::USERSOURCES)->addLogRow("ldap-search found ".ldap_count_entries($this->objCx, $objResult)." entries", class_logger::$levelInfo);
 
             $arrResult = @ldap_first_entry($this->objCx, $objResult);
-            while($arrResult !== false) {
+            while ($arrResult !== false) {
 
                 $arrTemp = array();
                 $arrTemp["username"] = $this->getStrAttribute($arrResult, $this->arrConfig["ldap_user_attribute_username"]);
                 $arrTemp["mail"] = $this->getStrAttribute($arrResult, $this->arrConfig["ldap_user_attribute_mail"]);
-                if($arrTemp["mail"] == "")
+                if ($arrTemp["mail"] == "") {
                     $arrTemp["mail"] = $this->getStrAttribute($arrResult, $this->arrConfig["ldap_user_attribute_mail_fallback"]);
+                }
                 $arrTemp["familyname"] = $this->getStrAttribute($arrResult, $this->arrConfig["ldap_user_attribute_familyname"]);
                 $arrTemp["givenname"] = $this->getStrAttribute($arrResult, $this->arrConfig["ldap_user_attribute_givenname"]);
                 $arrTemp["identifier"] = $this->getStrAttribute($arrResult, $this->arrConfig["ldap_common_identifier"]);
@@ -331,22 +354,25 @@ class class_ldap {
      *
      * @return string
      */
-    private function getStrAttribute($arrResult, $strKey) {
+    private function getStrAttribute($arrResult, $strKey)
+    {
         $strReturn = "";
 
         $arrValues = @ldap_get_values($this->objCx, $arrResult, $strKey);
-        if($arrValues["count"] > 0)
-            $strReturn = $arrValues[0];
+        if ($arrValues["count"] > 0) {
+            $strReturn = utf8_encode($arrValues[0]);
+        }
 
         return $strReturn;
     }
 
-    public function getIntCfgNr() {
+    public function getIntCfgNr()
+    {
         return $this->arrConfig["nr"];
     }
 
-    public function getStrCfgName() {
+    public function getStrCfgName()
+    {
         return $this->arrConfig["ldap_alias"];
     }
 }
-
