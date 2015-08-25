@@ -83,6 +83,7 @@ class class_formentry_container extends class_formentry_base implements interfac
      * @return string
      */
     public function getValueAsText() {
+        $arrFields = array();
         foreach($this->arrFields as $objField) {
             /** @var interface_formentry_printable $objField */
             if($objField instanceof interface_formentry_printable) {
