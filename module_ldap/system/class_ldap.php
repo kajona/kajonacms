@@ -234,6 +234,8 @@ class class_ldap
 
         //search the group itself
         $strQuery = $this->arrConfig["ldap_group_isUserMemberOf"];
+        //double encode backslashes
+        $strUserDN = uniStrReplace("\\,", "\\\\,",$strUserDN);
         $strQuery = uniStrReplace("?", $strUserDN, $strQuery);
         $objResult = @ldap_search($this->objCx, $strGroupDN, $strQuery);
 
@@ -253,6 +255,34 @@ class class_ldap
 
         return $bitReturn;
     }
+
+    /**
+     * Useful to trigger a manual search query
+     * @param $strBaseDn
+     * @param $strQuery
+     *
+     * @return bool
+     * @throws class_exception
+     */
+    public function customSearch($strBaseDn, $strQuery)
+    {
+        $objResult = @ldap_search($this->objCx, $strBaseDn, $strQuery);
+        if ($objResult !== false) {
+            $intCount = ldap_count_entries($this->objCx, $objResult);
+            if ($intCount == 1) {
+                return true;
+            }
+            else {
+                return false;
+            }
+
+        }
+        else {
+            throw new class_exception("loading of group-memberships failed: ".ldap_errno($this->objCx)." # ".ldap_error($this->objCx), class_exception::$level_FATALERROR);
+        }
+
+    }
+
 
     /**
      * Returns an array of user-details for the user identified by the passed username.
