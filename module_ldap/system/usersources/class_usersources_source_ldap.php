@@ -216,9 +216,10 @@ class class_usersources_source_ldap implements interface_usersources_usersource 
                     $objSourceUser->updateObjectToDb();
 
                     $this->objDB->flushQueryCache();
+
+                    return $objSourceUser;
                 }
 
-                return $objUser;
             }
         }
 
