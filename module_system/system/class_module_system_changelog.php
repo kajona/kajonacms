@@ -851,24 +851,36 @@ class class_module_system_changelog {
      * @param array $arrAllowedSystemIds
      * @return array
      */
-    public static function getNewValuesForDateRange($strClass, $strProperty, class_date $objDateFrom, class_date $objDateTo, array $arrAllowedSystemIds) {
+    public static function getNewValuesForDateRange($strClass, $strProperty, class_date $objDateFrom = null, class_date $objDateTo = null, array $arrAllowedSystemIds) {
+        $arrParams = array($strClass, $strProperty);
+
+        //system id filter
         $objRestriction = new class_orm_objectlist_in_restriction("log.change_systemid", $arrAllowedSystemIds);
         $strQueryCondition = $objRestriction->getStrWhere();
+        $arrParams = array_merge($arrParams, $objRestriction->getArrParams());
+
+        //filter by create date from
+        if($objDateFrom != null) {
+            $objRestriction = new class_orm_objectlist_restriction("AND ( log.change_date >= ?  )", array($objDateFrom->getLongTimestamp()));
+            $strQueryCondition .= $objRestriction->getStrWhere()." ";
+            $arrParams[] = $objDateFrom->getLongTimestamp();
+        }
+        //filter by create end to
+        if($objDateTo != null) {
+            $objRestriction = new class_orm_objectlist_restriction("AND ( log.change_date <= ?  )", array($objDateTo->getLongTimestamp()));
+            $strQueryCondition .= $objRestriction->getStrWhere()." ";
+            $arrParams[] = $objDateTo->getLongTimestamp();
+        }
 
         $strQuery = "  SELECT change_systemid,
                               change_newvalue
                          FROM "._dbprefix_.self::getTableForClass($strClass)." log
-                        WHERE log.change_date >= ?
-                          AND log.change_date <= ?
-                          AND log.change_class = ?
+                        WHERE log.change_class = ?
                           AND log.change_property = ?
                           {$strQueryCondition}
                      ORDER BY log.change_systemid ASC, log.change_date DESC";
 
-        $arrParameters = array($objDateFrom->getLongTimestamp(), $objDateTo->getLongTimestamp(), $strClass, $strProperty);
-        $arrParameters = array_merge($arrParameters, $objRestriction->getArrParams());
-
-        $arrResult = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, $arrParameters);
+        $arrResult = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, $arrParams);
         $arrData = array();
 
         $strLastId = "";
