@@ -1086,4 +1086,14 @@ class class_db
 
         return false;
     }
+
+    /**
+     * @return boolean
+     */
+    public function getBitConnected()
+    {
+        return $this->bitConnected;
+    }
+
+
 }
