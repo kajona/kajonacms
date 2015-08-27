@@ -311,7 +311,7 @@ class class_usersources_source_ldap implements interface_usersources_usersource 
                 $this->objDB->flushQueryCache();
             }
             else {
-                //user seems to be delete, remove from system, too
+                //user seems to be deleted, remove from system, too
                 $objUser->deleteObject();
             }
         }

@@ -179,7 +179,7 @@ class class_usersources_user_ldap extends class_model implements interface_model
      * @return mixed
      */
     public function updateAdminForm(class_admin_formgenerator $objForm) {
-
+        $objForm->getField("user_username")->setBitReadonly(true);
     }
     
     /**
