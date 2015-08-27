@@ -258,27 +258,35 @@ class class_ldap
 
     /**
      * Useful to trigger a manual search query
+     *
      * @param $strBaseDn
      * @param $strQuery
      *
-     * @return bool
+     * @param $arrReturnValues
+     *
+     * @return array
      * @throws class_exception
      */
-    public function customSearch($strBaseDn, $strQuery)
+    public function customSearch($strBaseDn, $strQuery, $arrReturnValues)
     {
         $objResult = @ldap_search($this->objCx, $strBaseDn, $strQuery);
         if ($objResult !== false) {
-            $intCount = ldap_count_entries($this->objCx, $objResult);
-            if ($intCount == 1) {
-                return true;
-            }
-            else {
-                return false;
+            $arrResult = @ldap_first_entry($this->objCx, $objResult);
+
+            $arrReturn = array();
+            while ($arrResult !== false) {
+                $arrRow= array();
+                foreach($arrReturnValues as $strOneAttribute) {
+                    $arrRow[$strOneAttribute] = $this->getStrAttribute($arrResult, $strOneAttribute);
+                }
+                $arrReturn[] = $arrRow;
+                $arrResult = @ldap_next_entry($this->objCx, $arrResult);
             }
 
+            return $arrReturn;
         }
         else {
-            throw new class_exception("loading of group-memberships failed: ".ldap_errno($this->objCx)." # ".ldap_error($this->objCx), class_exception::$level_FATALERROR);
+            throw new class_exception("loading of custom search failed: ".ldap_errno($this->objCx)." # ".ldap_error($this->objCx), class_exception::$level_FATALERROR);
         }
 
     }
