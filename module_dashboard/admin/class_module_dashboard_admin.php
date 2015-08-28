@@ -245,8 +245,10 @@ JS;
         foreach ($arrTodos as $objTodo) {
             $strActions = "";
             $arrModule = $objTodo->getArrModuleNavi();
-            foreach ($arrModule as $strLink) {
-                $strActions.= $this->objToolkit->listButton($strLink);
+            if (!empty($arrModule) && is_array($arrModule)) {
+                foreach ($arrModule as $strLink) {
+                    $strActions.= $this->objToolkit->listButton($strLink);
+                }
             }
 
             $strReturn .= $this->objToolkit->simpleAdminList($objTodo, $strActions, $intI++);

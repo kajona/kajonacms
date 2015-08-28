@@ -32,22 +32,33 @@ class class_adminwidget_todo extends class_adminwidget implements interface_admi
      */
     public function getWidgetOutput() {
         $strReturn = "";
+        $strReturn .= "<br>";
 
         if(!class_module_system_module::getModuleByName("packagemanager")->rightEdit())
             return $this->getLang("commons_error_permissions");
 
-        $objStarDate = new class_date();
-        $objEndDate = new class_date(strtotime("+1 month"));
-        $arrTodos = class_todo_entry::getOpenTodos($objStarDate, $objEndDate);
+        $arrCategories = class_todo_entry::getAllCategories();
+        foreach ($arrCategories as $strKey => $strLabel) {
 
-        $strReturn .= "<br>";
-        $strReturn .= "<table>";
-        foreach ($arrTodos as $objTodo) {
-            $strReturn .= "<tr>";
-            $strReturn .= "<td>" . $objTodo->getStrDisplayName() . "</td>";
-            $strReturn .= "</tr>";
+            $arrTodos = class_todo_entry::getOpenTodos($strKey);
+            $strContent = "";
+            $strContent .= $this->objToolkit->listHeader();
+            $intI = 0;
+            foreach ($arrTodos as $objTodo) {
+                $strActions = "";
+                $arrModule = $objTodo->getArrModuleNavi();
+                if (!empty($arrModule) && is_array($arrModule)) {
+                    foreach ($arrModule as $strLink) {
+                        $strActions.= $this->objToolkit->listButton($strLink);
+                    }
+                }
+                $strContent .= $this->objToolkit->simpleAdminList($objTodo, $strActions, $intI++);
+            }
+            $strContent .= $this->objToolkit->listFooter();
+
+            $arrFolder = $this->objToolkit->getLayoutFolderPic($strContent, $strLabel, "icon_folderOpen", "icon_folderClosed", false);
+            $strReturn .= $this->objToolkit->getFieldset($arrFolder[1], $arrFolder[0]);
         }
-        $strReturn .= "</table>";
 
         return $strReturn;
     }

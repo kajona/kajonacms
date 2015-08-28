@@ -242,4 +242,29 @@ class class_module_dashboard_admin_xml extends class_admin_controller implements
         return $strReturn;
     }
 
+    /**
+     * @return string
+     * @permissions view
+     */
+    protected function actionTodoCategory() {
+        $strCategory = $this->getParam("category");
+        $arrTodos = class_todo_entry::getOpenTodos($strCategory);
+
+        $strReturn = "";
+        $strReturn .= $this->objToolkit->listHeader();
+        $intI = 0;
+        foreach ($arrTodos as $objTodo) {
+            $strActions = "";
+            $arrModule = $objTodo->getArrModuleNavi();
+            if (!empty($arrModule) && is_array($arrModule)) {
+                foreach ($arrModule as $strLink) {
+                    $strActions.= $this->objToolkit->listButton($strLink);
+                }
+            }
+            $strReturn .= $this->objToolkit->simpleAdminList($objTodo, $strActions, $intI++);
+        }
+        $strReturn .= $this->objToolkit->listFooter();
+
+        return $strReturn;
+    }
 }

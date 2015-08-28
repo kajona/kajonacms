@@ -194,11 +194,9 @@ class class_todo_entry implements interface_admin_listable, interface_model
     /**
      * Uses the pluginmanager to query all todo provider to get a list of available todo entries
      *
-     * @param class_date $objStarDate
-     * @param class_date $objEndDate
      * @return class_todo_entry[]
      */
-    public static function getOpenTodos(class_date $objStarDate, class_date $objEndDate)
+    public static function getOpenTodos($strCategory)
     {
         $objPluginManager = new class_pluginmanager(interface_todo_provider::EXTENSION_POINT);
         $arrPlugins = $objPluginManager->getPlugins();
@@ -207,14 +205,14 @@ class class_todo_entry implements interface_admin_listable, interface_model
         $arrTodos = array();
         foreach ($arrPlugins as $objPlugin) {
             if ($objPlugin instanceof interface_todo_provider) {
-                $arrTodos = array_merge($arrTodos, $objPlugin->getEvents($objStarDate, $objEndDate));
+                $arrTodos = array_merge($arrTodos, $objPlugin->getEventsByCategory($strCategory));
             }
         }
 
         // sort all events after date
         usort($arrTodos, function(class_todo_entry $objEntryA, class_todo_entry $objEntryB){
-            $intA = $objEntryA->getObjValidDate()->getTimeInOldStyle();
-            $intB = $objEntryB->getObjValidDate()->getTimeInOldStyle();
+            $intA = $objEntryA->getObjValidDate() instanceof class_date ? $objEntryA->getObjValidDate()->getTimeInOldStyle() : 0;
+            $intB = $objEntryB->getObjValidDate() instanceof class_date ? $objEntryB->getObjValidDate()->getTimeInOldStyle() : 0;
             if ($intA == $intB) {
                 return 0;
             }
@@ -222,5 +220,25 @@ class class_todo_entry implements interface_admin_listable, interface_model
         });
 
         return $arrTodos;
+    }
+
+    /**
+     * Returns all available categories
+     *
+     * @return array
+     */
+    public static function getAllCategories()
+    {
+        $objPluginManager = new class_pluginmanager(interface_todo_provider::EXTENSION_POINT);
+        $arrPlugins = $objPluginManager->getPlugins();
+
+        $arrCategories = array();
+        foreach ($arrPlugins as $objPlugin) {
+            if ($objPlugin instanceof interface_todo_provider) {
+                $arrCategories = array_merge($arrCategories, $objPlugin->getCategories());
+            }
+        }
+
+        return $arrCategories;
     }
 }

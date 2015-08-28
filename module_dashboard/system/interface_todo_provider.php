@@ -18,23 +18,20 @@ interface interface_todo_provider extends interface_generic_plugin {
     const EXTENSION_POINT = "core.dashboard.admin.todo_event";
 
     /**
-     * Returns all todo entries which are available in the given date range
+     * Returns all todo entries which are available. This can be entries which are in the past but still needs actions
+     * or entries which are in the future. In the end all events are sorted after the todo entry validdate
      *
-     * @param class_date $objStartDate
-     * @param class_date $objEndDate
      * @return class_todo_entry[]
      */
-    public function getEvents(class_date $objStartDate, class_date $objEndDate);
+    public function getEvents();
 
     /**
-     * Returns all todo entries for a specific category and the given date range
+     * Returns all todo entries for a specific category
      *
      * @param $strCategory
-     * @param class_date $objStartDate
-     * @param class_date $objEndDate
      * @return mixed
      */
-    public function getEventsByCategory($strCategory, class_date $objStartDate, class_date $objEndDate);
+    public function getEventsByCategory($strCategory);
 
     /**
      * Returns an array of all available categories
