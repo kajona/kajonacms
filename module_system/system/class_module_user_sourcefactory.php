@@ -103,8 +103,9 @@ class class_module_user_sourcefactory {
         //since some login-provides may trigger additional searches, query them now
         foreach($this->arrSubsystemsAvailable as $strOneSubsystem) {
             $objUser = $this->getUsersource($strOneSubsystem)->getUserByUsername($strName);
+            //convert the user to a real one
             if($objUser != null) {
-                return $objUser;
+                return new class_module_user_user($objUser->getSystemid());
             }
         }
 
