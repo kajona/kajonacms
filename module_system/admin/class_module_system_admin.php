@@ -646,11 +646,20 @@ JS;
                 }
             }
 
+            $strActions = "";
+            if($objOneRecord->rightDelete()) {
+                $strActions .= $this->objToolkit->listButton(
+                    class_link::getLinkAdmin($this->getArrModule("modul"), "finalDeleteRecord", "&systemid=".$objOneRecord->getSystemid(), $this->getLang("action_final_delete_record"), $this->getLang("action_final_delete_record"), "icon_delete")
+                );
+            }
+
             if ($objOneRecord->isRestorable()) {
-                $strActions = $this->objToolkit->listButton(class_link::getLinkAdmin($this->getArrModule("modul"), "restoreRecord", "&systemid=".$objOneRecord->getSystemid(), $this->getLang("action_restore_record"), $this->getLang("action_restore_record"), "icon_delete"));
+                $strActions .= $this->objToolkit->listButton(
+                    class_link::getLinkAdmin($this->getArrModule("modul"), "restoreRecord", "&systemid=".$objOneRecord->getSystemid(), $this->getLang("action_restore_record"), $this->getLang("action_restore_record"), "icon_undo")
+                );
             }
             else {
-                $strActions = $this->objToolkit->listButton(class_adminskin_helper::getAdminImage("icon_deleteDisabled", $this->getLang("action_restore_record_blocked")));
+                $strActions .= $this->objToolkit->listButton(class_adminskin_helper::getAdminImage("icon_undoDisabled", $this->getLang("action_restore_record_blocked")));
             }
 
             $strReturn .= $this->objToolkit->genericAdminList(
@@ -658,7 +667,8 @@ JS;
                 $objOneRecord instanceof interface_model ? $objOneRecord->getStrDisplayName() : get_class($objOneRecord),
                 $strImage,
                 $strActions,
-                0
+                0,
+                "Systemid / Previd: ".$objOneRecord->getStrSystemid()." / ".$objOneRecord->getStrPrevId()
             );
         }
 
@@ -686,6 +696,40 @@ JS;
 
         $objRecord->restoreObject();
         $this->adminReload(class_link::getLinkAdminHref($this->getArrModule("modul"), "deletedRecords"));
+        return "";
+    }
+
+    /**
+     * Restores a single object
+     *
+     * @permissions right1,delete
+     * @return string
+     * @throws class_exception
+     */
+    protected function actionFinalDeleteRecord()
+    {
+        if($this->getParam("delete") == "") {
+            class_orm_base::setObjHandleLogicalDeletedGlobal(class_orm_deletedhandling_enum::INCLUDED());
+            $objRecord = class_objectfactory::getInstance()->getObject($this->getSystemid());
+            $strReturn = $this->objToolkit->formHeader(class_link::getLinkAdminHref($this->getArrModule("modul"), "finalDeleteRecord"));
+            $strReturn .= $this->objToolkit->warningBox($this->getLang("final_delete_question", array($objRecord->getStrDisplayName())), "alert-danger");
+            $strReturn .= $this->objToolkit->formInputSubmit($this->getLang("final_delete_submit"));
+            $strReturn .= $this->objToolkit->formInputHidden("systemid", $this->getParam("systemid"));
+            $strReturn .= $this->objToolkit->formInputHidden("delete", "1");
+            $strReturn .= $this->objToolkit->formClose();
+            return $strReturn;
+        }
+        else {
+
+            class_orm_base::setObjHandleLogicalDeletedGlobal(class_orm_deletedhandling_enum::INCLUDED());
+            $objRecord = class_objectfactory::getInstance()->getObject($this->getSystemid());
+            if ($objRecord !== null && !$objRecord->rightDelete()) {
+                throw new class_exception($this->getLang("commons_error_permissions"), class_exception::$level_ERROR);
+            }
+
+            $objRecord->deleteObjectFromDatabase();
+            $this->adminReload(class_link::getLinkAdminHref($this->getArrModule("modul"), "deletedRecords"));
+        }
         return "";
     }
 
