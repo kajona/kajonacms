@@ -32,6 +32,7 @@ class class_module_dashboard_admin extends class_admin_controller implements int
         $arrReturn = array();
         $arrReturn[] = array("view", class_link::getLinkAdmin($this->getArrModule("modul"), "list", "", $this->getLang("modul_titel"), "", "", true, "adminnavi"));
         $arrReturn[] = array("view", class_link::getLinkAdmin($this->getArrModule("modul"), "calendar", "", $this->getLang("action_calendar"), "", "", true, "adminnavi"));
+        $arrReturn[] = array("view", class_link::getLinkAdmin($this->getArrModule("modul"), "todo", "", $this->getLang("action_todo"), "", "", true, "adminnavi"));
         $arrReturn[] = array("", "");
         $arrReturn[] = array("edit", class_link::getLinkAdmin($this->getArrModule("modul"), "addWidgetToDashboard", "", $this->getLang("action_add_widget_to_dashboard"), "", "", true, "adminnavi"));
         return $arrReturn;
@@ -229,6 +230,28 @@ JS;
         $strReturn .= $this->objToolkit->getCalendarContainer($strContainerId);
         $strReturn .= $this->objToolkit->getCalendarLegend($arrLegendEntries);
         $strReturn .= $this->objToolkit->getCalendarFilter($arrFilterEntries);
+
+        return $strReturn;
+    }
+
+    protected function actionTodo() {
+        $objStarDate = new class_date();
+        $objEndDate = new class_date(strtotime("+1 month"));
+        $arrTodos = class_todo_entry::getOpenTodos($objStarDate, $objEndDate);
+
+        $strReturn = "";
+        $strReturn .= $this->objToolkit->listHeader();
+        $intI = 0;
+        foreach ($arrTodos as $objTodo) {
+            $strActions = "";
+            $arrModule = $objTodo->getArrModuleNavi();
+            foreach ($arrModule as $strLink) {
+                $strActions.= $this->objToolkit->listButton($strLink);
+            }
+
+            $strReturn .= $this->objToolkit->simpleAdminList($objTodo, $strActions, $intI++);
+        }
+        $strReturn .= $this->objToolkit->listFooter();
 
         return $strReturn;
     }
