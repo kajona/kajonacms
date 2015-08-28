@@ -97,7 +97,6 @@ KAJONA.util.fold = function (strElementId, objCallbackVisible, objCallbackInvisi
 	if ($element.hasClass("folderHidden")) 	{
         $element.removeClass("folderHidden");
         $element.addClass("folderVisible");
-        $element.closest('fieldset').find(".icon_folderClosed").switchClass("icon_folderClosed","icon_folderOpen", 0);
 		if ($.isFunction(objCallbackVisible)) {
 			objCallbackVisible(strElementId);
 		}
@@ -105,7 +104,6 @@ KAJONA.util.fold = function (strElementId, objCallbackVisible, objCallbackInvisi
     else {
         $element.removeClass("folderVisible");
         $element.addClass("folderHidden");
-        $element.closest('fieldset').find(".icon_folderOpen").switchClass("icon_folderOpen","icon_folderClosed", 0);
 		if ($.isFunction(objCallbackInvisible)) {
 			objCallbackInvisible(strElementId);
 		}
