@@ -178,7 +178,7 @@ class class_todo_entry implements interface_admin_listable, interface_model
     /**
      * @param class_date $objValidDate
      */
-    public function setObjValidDate($objValidDate)
+    public function setObjValidDate(class_date $objValidDate)
     {
         $this->objValidDate = $objValidDate;
     }
@@ -186,7 +186,7 @@ class class_todo_entry implements interface_admin_listable, interface_model
     /**
      * @param array $arrModuleNavi
      */
-    public function setArrModuleNavi($arrModuleNavi)
+    public function setArrModuleNavi(array $arrModuleNavi)
     {
         $this->arrModuleNavi = $arrModuleNavi;
     }
