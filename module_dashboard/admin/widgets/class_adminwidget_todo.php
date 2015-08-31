@@ -41,31 +41,34 @@ class class_adminwidget_todo extends class_adminwidget implements interface_admi
             return $strReturn;
         }
 
-        foreach ($arrCategories as $strKey => $strLabel) {
+        foreach ($arrCategories as $strProviderName => $arrTaskCategories) {
+            $strReturn .= $this->objToolkit->formHeadline($strProviderName);
 
-            $arrTodos = class_todo_entry::getOpenTodos($strKey);
-            $strContent = "";
-            $strContent .= $this->objToolkit->listHeader();
-            $intI = 0;
-            foreach ($arrTodos as $objTodo) {
-                $strActions = "";
-                $arrModule = $objTodo->getArrModuleNavi();
-                if (!empty($arrModule) && is_array($arrModule)) {
-                    foreach ($arrModule as $strLink) {
-                        $strActions.= $this->objToolkit->listButton($strLink);
+            foreach ($arrTaskCategories as $strKey => $strCategoryName) {
+                $arrTodos = class_todo_entry::getOpenTodos($strKey);
+                $strContent = "";
+                $strContent .= $this->objToolkit->listHeader();
+                $intI = 0;
+                foreach ($arrTodos as $objTodo) {
+                    $strActions = "";
+                    $arrModule = $objTodo->getArrModuleNavi();
+                    if (!empty($arrModule) && is_array($arrModule)) {
+                        foreach ($arrModule as $strLink) {
+                            $strActions.= $this->objToolkit->listButton($strLink);
+                        }
                     }
+                    $strContent .= $this->objToolkit->simpleAdminList($objTodo, $strActions, $intI++);
                 }
-                $strContent .= $this->objToolkit->simpleAdminList($objTodo, $strActions, $intI++);
-            }
-            $strContent .= $this->objToolkit->listFooter();
+                $strContent .= $this->objToolkit->listFooter();
 
-            if (count($arrTodos) > 0) {
-                $arrFolder = $this->objToolkit->getLayoutFolderPic($strContent, $strLabel . " (" . count($arrTodos) . ")", "icon_folderOpen", "icon_folderClosed", false);
-            } else {
-                $arrFolder = $this->objToolkit->getLayoutFolderPic("", $strLabel . " (0)", "icon_accept", "icon_accept", false);
-            }
+                if (count($arrTodos) > 0) {
+                    $arrFolder = $this->objToolkit->getLayoutFolderPic($strContent, $strCategoryName . " (" . count($arrTodos) . ")", "icon_folderOpen", "icon_folderClosed", false);
+                } else {
+                    $arrFolder = $this->objToolkit->getLayoutFolderPic("", $strCategoryName . " (0)", "icon_accept", "icon_accept", false);
+                }
 
-            $strReturn .= $this->objToolkit->getFieldset($arrFolder[1], $arrFolder[0]);
+                $strReturn .= $this->objToolkit->getFieldset($arrFolder[1], $arrFolder[0]);
+            }
         }
 
         return $strReturn;

@@ -235,7 +235,7 @@ class class_todo_entry implements interface_admin_listable, interface_model
         $arrCategories = array();
         foreach ($arrPlugins as $objPlugin) {
             if ($objPlugin instanceof interface_todo_provider && $objPlugin->rightView()) {
-                $arrCategories = array_merge($arrCategories, $objPlugin->getCategories());
+                $arrCategories[$objPlugin->getName()] = $objPlugin->getCategories();
             }
         }
 

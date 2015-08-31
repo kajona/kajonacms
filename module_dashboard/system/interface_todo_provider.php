@@ -18,6 +18,13 @@ interface interface_todo_provider extends interface_generic_plugin {
     const EXTENSION_POINT = "core.dashboard.admin.todo_event";
 
     /**
+     * Returns an human readable name of this provider
+     *
+     * @return string
+     */
+    public function getName();
+
+    /**
      * Returns all todo entries for a specific category
      *
      * @param string $strCategory
