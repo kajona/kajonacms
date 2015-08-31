@@ -56,7 +56,12 @@ class class_adminwidget_todo extends class_adminwidget implements interface_admi
             }
             $strContent .= $this->objToolkit->listFooter();
 
-            $arrFolder = $this->objToolkit->getLayoutFolderPic($strContent, $strLabel, "icon_folderOpen", "icon_folderClosed", false);
+            if (count($arrTodos) > 0) {
+                $arrFolder = $this->objToolkit->getLayoutFolderPic($strContent, $strLabel . " (" . count($arrTodos) . ")", "icon_folderOpen", "icon_folderClosed", false);
+            } else {
+                $arrFolder = $this->objToolkit->getLayoutFolderPic("", $strLabel . " (" . count($arrTodos) . ")", "icon_accept", "icon_accept", false);
+            }
+
             $strReturn .= $this->objToolkit->getFieldset($arrFolder[1], $arrFolder[0]);
         }
 

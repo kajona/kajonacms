@@ -234,28 +234,34 @@ JS;
         return $strReturn;
     }
 
+    /**
+     * @permissions view
+     */
     protected function actionTodo() {
-        $objStarDate = new class_date();
-        $objEndDate = new class_date(strtotime("+1 month"));
-        $arrTodos = class_todo_entry::getOpenTodos($objStarDate, $objEndDate);
+        $arrCategories = class_todo_entry::getAllCategories();
+        $arrContent = array();
 
-        $strReturn = "";
-        $strReturn .= $this->objToolkit->listHeader();
-        $intI = 0;
-        foreach ($arrTodos as $objTodo) {
-            $strActions = "";
-            $arrModule = $objTodo->getArrModuleNavi();
-            if (!empty($arrModule) && is_array($arrModule)) {
-                foreach ($arrModule as $strLink) {
-                    $strActions.= $this->objToolkit->listButton($strLink);
+        foreach ($arrCategories as $strKey => $strCategory) {
+            $arrTodos = class_todo_entry::getOpenTodos($strKey);
+            $strReturn = "";
+            $strReturn .= $this->objToolkit->listHeader();
+            $intI = 0;
+            foreach ($arrTodos as $objTodo) {
+                $strActions = "";
+                $arrModule = $objTodo->getArrModuleNavi();
+                if (!empty($arrModule) && is_array($arrModule)) {
+                    foreach ($arrModule as $strLink) {
+                        $strActions.= $this->objToolkit->listButton($strLink);
+                    }
                 }
+                $strReturn .= $this->objToolkit->simpleAdminList($objTodo, $strActions, $intI++);
             }
+            $strReturn .= $this->objToolkit->listFooter();
 
-            $strReturn .= $this->objToolkit->simpleAdminList($objTodo, $strActions, $intI++);
+            $arrContent[$strCategory] = $strReturn;
         }
-        $strReturn .= $this->objToolkit->listFooter();
 
-        return $strReturn;
+        return $this->objToolkit->getTabbedContent($arrContent);
     }
 
     /**

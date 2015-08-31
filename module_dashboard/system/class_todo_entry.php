@@ -204,7 +204,7 @@ class class_todo_entry implements interface_admin_listable, interface_model
         /** @var class_todo_entry[] $arrTodos */
         $arrTodos = array();
         foreach ($arrPlugins as $objPlugin) {
-            if ($objPlugin instanceof interface_todo_provider) {
+            if ($objPlugin instanceof interface_todo_provider && $objPlugin->rightView()) {
                 $arrTodos = array_merge($arrTodos, $objPlugin->getEventsByCategory($strCategory));
             }
         }
@@ -234,7 +234,7 @@ class class_todo_entry implements interface_admin_listable, interface_model
 
         $arrCategories = array();
         foreach ($arrPlugins as $objPlugin) {
-            if ($objPlugin instanceof interface_todo_provider) {
+            if ($objPlugin instanceof interface_todo_provider && $objPlugin->rightView()) {
                 $arrCategories = array_merge($arrCategories, $objPlugin->getCategories());
             }
         }
