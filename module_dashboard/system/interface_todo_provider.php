@@ -33,7 +33,7 @@ interface interface_todo_provider extends interface_generic_plugin {
     public function getCategories();
 
     /**
-     * Returns whether the currently logged in user can view this events
+     * Returns whether the currently logged in user can view these events
      *
      * @return boolean
      */
