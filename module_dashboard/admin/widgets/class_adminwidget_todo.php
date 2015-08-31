@@ -13,6 +13,19 @@
  */
 class class_adminwidget_todo extends class_adminwidget implements interface_adminwidget
 {
+    public function __construct() {
+        parent::__construct();
+
+        //register the fields to be persisted and loaded
+        $arrCategories = class_todo_entry::getAllCategories();
+        $arrKeys = array();
+        foreach ($arrCategories as $strTitle => $arrRows) {
+            $arrKeys[] = md5($strTitle);
+        }
+
+        $this->setPersistenceKeys($arrKeys);
+    }
+
     /**
      * Allows the widget to add additional fields to the edit-/create form.
      * Use the toolkit class as usual.
@@ -20,7 +33,14 @@ class class_adminwidget_todo extends class_adminwidget implements interface_admi
      * @return string
      */
     public function getEditForm() {
-        return "";
+        $strReturn = "";
+        $arrCategories = class_todo_entry::getAllCategories();
+        foreach ($arrCategories as $strTitle => $arrRows) {
+            $strKey = md5($strTitle);
+            $strReturn .= $this->objToolkit->formInputCheckbox($strKey, $strTitle, $this->getFieldValue($strKey));
+        }
+
+        return $strReturn;
     }
 
     /**
@@ -41,7 +61,15 @@ class class_adminwidget_todo extends class_adminwidget implements interface_admi
             return $strReturn;
         }
 
+        $bitConfiguration = $this->hasConfiguration();
+
         foreach ($arrCategories as $strProviderName => $arrTaskCategories) {
+            // check whether the category is enabled for the user. If the user has not configured the widget all
+            // categories are displayed
+            if ($bitConfiguration && !$this->getFieldValue(md5($strProviderName))) {
+                continue;
+            }
+
             $strReturn .= $this->objToolkit->formHeadline($strProviderName);
 
             foreach ($arrTaskCategories as $strKey => $strCategoryName) {
@@ -95,4 +123,16 @@ class class_adminwidget_todo extends class_adminwidget implements interface_admi
         return $this->getLang("todo_name");
     }
 
+    protected function hasConfiguration()
+    {
+        $arrCategories = class_todo_entry::getAllCategories();
+        foreach ($arrCategories as $strTitle => $arrRows) {
+            $strKey = md5($strTitle);
+            $strValue = $this->getFieldValue($strKey);
+            if ($strValue !== "") {
+                return true;
+            }
+        }
+        return false;
+    }
 }
