@@ -34,10 +34,13 @@ class class_adminwidget_todo extends class_adminwidget implements interface_admi
         $strReturn = "";
         $strReturn .= "<br>";
 
-        if(!class_module_system_module::getModuleByName("packagemanager")->rightEdit())
-            return $this->getLang("commons_error_permissions");
-
         $arrCategories = class_todo_entry::getAllCategories();
+
+        if (empty($arrCategories)) {
+            $strReturn .= $this->objToolkit->warningBox($this->getLang("no_tasks_available"), "alert-info");
+            return $strReturn;
+        }
+
         foreach ($arrCategories as $strKey => $strLabel) {
 
             $arrTodos = class_todo_entry::getOpenTodos($strKey);
@@ -59,7 +62,7 @@ class class_adminwidget_todo extends class_adminwidget implements interface_admi
             if (count($arrTodos) > 0) {
                 $arrFolder = $this->objToolkit->getLayoutFolderPic($strContent, $strLabel . " (" . count($arrTodos) . ")", "icon_folderOpen", "icon_folderClosed", false);
             } else {
-                $arrFolder = $this->objToolkit->getLayoutFolderPic("", $strLabel . " (" . count($arrTodos) . ")", "icon_accept", "icon_accept", false);
+                $arrFolder = $this->objToolkit->getLayoutFolderPic("", $strLabel . " (0)", "icon_accept", "icon_accept", false);
             }
 
             $strReturn .= $this->objToolkit->getFieldset($arrFolder[1], $arrFolder[0]);
