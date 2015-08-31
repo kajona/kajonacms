@@ -246,22 +246,7 @@ JS;
         }
 
         // overall tab
-        $arrTodos = class_todo_entry::getAllOpenTodos();
-        $strReturn = "";
-        $strReturn .= $this->objToolkit->listHeader();
-        $intI = 0;
-        foreach ($arrTodos as $objTodo) {
-            $strActions = "";
-            $arrModule = $objTodo->getArrModuleNavi();
-            if (!empty($arrModule) && is_array($arrModule)) {
-                foreach ($arrModule as $strLink) {
-                    $strActions.= $this->objToolkit->listButton($strLink);
-                }
-            }
-            $strReturn .= $this->objToolkit->simpleAdminList($objTodo, $strActions, $intI++);
-        }
-        $strReturn .= $this->objToolkit->listFooter();
-        $arrContent[$this->getLang("todo_overall_tasks")] = $strReturn;
+        $arrContent[$this->getLang("todo_overall_tasks")] = class_link::getLinkAdminXml("dashboard", "todoCategory");
 
         // each category
         foreach ($arrCategories as $strProviderName => $arrTaskCategories) {
