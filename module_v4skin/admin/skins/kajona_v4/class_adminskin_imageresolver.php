@@ -143,6 +143,8 @@ class class_adminskin_imageresolver implements interface_adminskin_imageresolver
         "icon_treeLeaf"                    => "<i class='fa fa-sitemap'></i>",
         "icon_treeLevelUp"                 => "<span class='fa-stack fa-lg'><i class='fa fa-sitemap'></i><i class='fa fa-chevron-up fa-stack-1x'></i></span>",
         "icon_treeRoot"                    => "<i class='fa fa-sitemap'></i>",
+        "icon_undo"                        => "<i class='fa fa-undo'></i>",
+        "icon_undoDisabled"                => "<span class='fa-stack fa-lg'><i class='fa fa-undo'></i><i class='fa fa-ban fa-stack-1x' style='color: red'></i></span>",
         "icon_update"                      => "<i class='fa fa-cloud-download'></i>",
         "icon_updateDisabled"              => "<span class='fa-stack fa-lg'><i class='fa fa-cloud-download'></i><i class='fa fa-check fa-stack-1x' style='color: green'></i></span>",
         "icon_updateError"                 => "<span class='fa-stack fa-lg'><i class='fa fa-cloud-download'></i><i class='fa fa-exclamation-triangle fa-stack-1x'></i></span>",
