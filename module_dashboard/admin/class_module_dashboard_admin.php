@@ -241,6 +241,10 @@ JS;
         $arrCategories = class_todo_entry::getAllCategories();
         $arrContent = array();
 
+        if (empty($arrCategories)) {
+            return $this->objToolkit->warningBox($this->getLang("todo_no_open_tasks"), "alert-info");
+        }
+
         foreach ($arrCategories as $strProviderName => $arrTaskCategories) {
             foreach ($arrTaskCategories as $strKey => $strCategoryName) {
                 $arrTodos = class_todo_entry::getOpenTodos($strKey);
