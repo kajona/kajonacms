@@ -56,6 +56,20 @@ class class_todo_entry implements interface_admin_listable, interface_model
     protected $arrModuleNavi;
 
     /**
+     * Internal cache
+     *
+     * @var array
+     */
+    protected static $categories = array();
+
+    /**
+     * Internal cache
+     *
+     * @var array
+     */
+    protected static $todos = array();
+
+    /**
      * @return string
      */
     public function getStrCategory()
@@ -198,6 +212,10 @@ class class_todo_entry implements interface_admin_listable, interface_model
      */
     public static function getOpenTodos($strCategory)
     {
+        if (isset(self::$todos[$strCategory])) {
+            return self::$todos[$strCategory];
+        }
+
         $objPluginManager = new class_pluginmanager(interface_todo_provider::EXTENSION_POINT);
         $arrPlugins = $objPluginManager->getPlugins();
 
@@ -209,15 +227,28 @@ class class_todo_entry implements interface_admin_listable, interface_model
             }
         }
 
-        // sort all events after date
-        usort($arrTodos, function(class_todo_entry $objEntryA, class_todo_entry $objEntryB){
-            $intA = $objEntryA->getObjValidDate() instanceof class_date ? $objEntryA->getObjValidDate()->getTimeInOldStyle() : 0;
-            $intB = $objEntryB->getObjValidDate() instanceof class_date ? $objEntryB->getObjValidDate()->getTimeInOldStyle() : 0;
-            if ($intA == $intB) {
-                return 0;
+        self::sortTodos($arrTodos);
+
+        return self::$todos[$strCategory] = $arrTodos;
+    }
+
+    /**
+     * Returns all available open todos
+     *
+     * @return array
+     */
+    public static function getAllOpenTodos()
+    {
+        $arrCategories = self::getAllCategories();
+        $arrTodos = array();
+
+        foreach ($arrCategories as $strTitle => $arrCategory) {
+            foreach ($arrCategory as $strKey => $strCategoryName) {
+                $arrTodos = array_merge($arrTodos, self::getOpenTodos($strKey));
             }
-            return ($intA < $intB) ? -1 : 1;
-        });
+        }
+
+        self::sortTodos($arrTodos);
 
         return $arrTodos;
     }
@@ -229,6 +260,10 @@ class class_todo_entry implements interface_admin_listable, interface_model
      */
     public static function getAllCategories()
     {
+        if (self::$categories) {
+            return self::$categories;
+        }
+
         $objPluginManager = new class_pluginmanager(interface_todo_provider::EXTENSION_POINT);
         $arrPlugins = $objPluginManager->getPlugins();
 
@@ -239,6 +274,23 @@ class class_todo_entry implements interface_admin_listable, interface_model
             }
         }
 
-        return $arrCategories;
+        return self::$categories = $arrCategories;
+    }
+
+    /**
+     * Sorts all events after the valid date
+     *
+     * @param array $arrTodos
+     */
+    protected static function sortTodos(array &$arrTodos)
+    {
+        usort($arrTodos, function(class_todo_entry $objEntryA, class_todo_entry $objEntryB){
+            $intA = $objEntryA->getObjValidDate() instanceof class_date ? $objEntryA->getObjValidDate()->getTimeInOldStyle() : 0;
+            $intB = $objEntryB->getObjValidDate() instanceof class_date ? $objEntryB->getObjValidDate()->getTimeInOldStyle() : 0;
+            if ($intA == $intB) {
+                return 0;
+            }
+            return ($intA < $intB) ? -1 : 1;
+        });
     }
 }

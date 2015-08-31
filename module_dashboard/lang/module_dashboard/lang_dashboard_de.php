@@ -35,3 +35,4 @@ $lang["widget"]                          = "Widget";
 $lang["widgetDeleteQuestion"]            = "Möchten Sie das Widget &quot;<b>%%element_name%%</b>&quot; wirklich entfernen?";
 $lang["todo_name"]                       = "Offene Aufgaben";
 $lang["todo_no_open_tasks"]              = "Keine offenen Aufgaben vorhanden";
+$lang["todo_overall_tasks"]              = "Gesamt";

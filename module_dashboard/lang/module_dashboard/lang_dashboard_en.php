@@ -36,3 +36,4 @@ $lang["widget"]                          = "Widget";
 $lang["widgetDeleteQuestion"]            = "Do you really want to remove the widget &quot;<b>%%element_name%%</b>&quot;?";
 $lang["todo_name"]                       = "Open tasks";
 $lang["todo_no_open_tasks"]              = "No open tasks available";
+$lang["todo_overall_tasks"]              = "Overall";

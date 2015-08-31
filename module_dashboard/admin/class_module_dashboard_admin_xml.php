@@ -247,8 +247,14 @@ class class_module_dashboard_admin_xml extends class_admin_controller implements
      * @permissions view
      */
     protected function actionTodoCategory() {
+        class_response_object::getInstance()->setStrResponseType(class_http_responsetypes::STR_TYPE_HTML);
+
         $strCategory = $this->getParam("category");
         $arrTodos = class_todo_entry::getOpenTodos($strCategory);
+
+        if (empty($arrTodos)) {
+            return $this->objToolkit->warningBox($this->getLang("todo_no_open_tasks"), "alert-info");
+        }
 
         $strReturn = "";
         $strReturn .= $this->objToolkit->listHeader();

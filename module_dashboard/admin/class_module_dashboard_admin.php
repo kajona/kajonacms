@@ -245,30 +245,28 @@ JS;
             return $this->objToolkit->warningBox($this->getLang("todo_no_open_tasks"), "alert-info");
         }
 
+        // overall tab
+        $arrTodos = class_todo_entry::getAllOpenTodos();
+        $strReturn = "";
+        $strReturn .= $this->objToolkit->listHeader();
+        $intI = 0;
+        foreach ($arrTodos as $objTodo) {
+            $strActions = "";
+            $arrModule = $objTodo->getArrModuleNavi();
+            if (!empty($arrModule) && is_array($arrModule)) {
+                foreach ($arrModule as $strLink) {
+                    $strActions.= $this->objToolkit->listButton($strLink);
+                }
+            }
+            $strReturn .= $this->objToolkit->simpleAdminList($objTodo, $strActions, $intI++);
+        }
+        $strReturn .= $this->objToolkit->listFooter();
+        $arrContent[$this->getLang("todo_overall_tasks")] = $strReturn;
+
+        // each category
         foreach ($arrCategories as $strProviderName => $arrTaskCategories) {
             foreach ($arrTaskCategories as $strKey => $strCategoryName) {
-                $arrTodos = class_todo_entry::getOpenTodos($strKey);
-                $strReturn = "";
-
-                if (count($arrTodos) > 0) {
-                    $strReturn .= $this->objToolkit->listHeader();
-                    $intI = 0;
-                    foreach ($arrTodos as $objTodo) {
-                        $strActions = "";
-                        $arrModule = $objTodo->getArrModuleNavi();
-                        if (!empty($arrModule) && is_array($arrModule)) {
-                            foreach ($arrModule as $strLink) {
-                                $strActions.= $this->objToolkit->listButton($strLink);
-                            }
-                        }
-                        $strReturn .= $this->objToolkit->simpleAdminList($objTodo, $strActions, $intI++);
-                    }
-                    $strReturn .= $this->objToolkit->listFooter();
-                } else {
-                    $strReturn .= $this->objToolkit->warningBox($this->getLang("todo_no_open_tasks"), "alert-success");
-                }
-
-                $arrContent[$strCategoryName] = $strReturn;
+                $arrContent[$strCategoryName] = class_link::getLinkAdminXml("dashboard", "todoCategory", "&category=" . $strKey);
             }
         }
 
