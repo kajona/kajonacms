@@ -244,19 +244,24 @@ JS;
         foreach ($arrCategories as $strKey => $strCategory) {
             $arrTodos = class_todo_entry::getOpenTodos($strKey);
             $strReturn = "";
-            $strReturn .= $this->objToolkit->listHeader();
-            $intI = 0;
-            foreach ($arrTodos as $objTodo) {
-                $strActions = "";
-                $arrModule = $objTodo->getArrModuleNavi();
-                if (!empty($arrModule) && is_array($arrModule)) {
-                    foreach ($arrModule as $strLink) {
-                        $strActions.= $this->objToolkit->listButton($strLink);
+
+            if (count($arrTodos) > 0) {
+                $strReturn .= $this->objToolkit->listHeader();
+                $intI = 0;
+                foreach ($arrTodos as $objTodo) {
+                    $strActions = "";
+                    $arrModule = $objTodo->getArrModuleNavi();
+                    if (!empty($arrModule) && is_array($arrModule)) {
+                        foreach ($arrModule as $strLink) {
+                            $strActions.= $this->objToolkit->listButton($strLink);
+                        }
                     }
+                    $strReturn .= $this->objToolkit->simpleAdminList($objTodo, $strActions, $intI++);
                 }
-                $strReturn .= $this->objToolkit->simpleAdminList($objTodo, $strActions, $intI++);
+                $strReturn .= $this->objToolkit->listFooter();
+            } else {
+                $strReturn .= $this->objToolkit->warningBox($this->getLang("todo_no_open_tasks"), "alert-success");
             }
-            $strReturn .= $this->objToolkit->listFooter();
 
             $arrContent[$strCategory] = $strReturn;
         }

@@ -14,6 +14,7 @@
 $lang["action_add_widget_to_dashboard"]  = "Widget hinzufügen";
 $lang["action_calendar"]                 = "Kalender";
 $lang["action_sitemap"]                  = "Sitemap";
+$lang["action_todo"]                     = "Offene Aufgaben";
 $lang["calendar_next"]                   = "nächster Monat &gt;&gt;";
 $lang["calendar_prev"]                   = "&lt;&lt; vorheriger Monat";
 $lang["calendar_weekday"]                = "Montag,Dienstag,Mittwoch,Donnerstag,Freitag,Samstag,Sonntag";
@@ -32,3 +33,5 @@ $lang["quickhelp_list"]                  = "Das Dashboard dient als Ablage für 
 $lang["setDashboardPosition"]            = "Speichern der Position erfolgreich";
 $lang["widget"]                          = "Widget";
 $lang["widgetDeleteQuestion"]            = "Möchten Sie das Widget &quot;<b>%%element_name%%</b>&quot; wirklich entfernen?";
+$lang["todo_name"]                       = "Offene Aufgaben";
+$lang["todo_no_open_tasks"]              = "Keine offenen Aufgaben vorhanden";
