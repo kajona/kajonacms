@@ -1714,7 +1714,7 @@ JS;
             // if content is an url enable ajax loading
             if (substr($strContent, 0, 7) == 'http://' || substr($strContent, 0, 8) == 'https://') {
                 $strTabs .= $this->objTemplate->fillTemplate(array("tabid" => $strTabId, "tabtitle" => $strTitle, "href" => $strContent, "classaddon" => $strClassaddon), $strHeaderID);
-                $strTabContent .= $this->objTemplate->fillTemplate(array("tabid" => $strTabId, "tabcontent" => "", "classaddon" => "contentLoading"), $strContentID);
+                $strTabContent .= $this->objTemplate->fillTemplate(array("tabid" => $strTabId, "tabcontent" => "", "classaddon" => $strClassaddon . "contentLoading"), $strContentID);
                 $bitRemoteContent = true;
             } else {
                 $strTabs .= $this->objTemplate->fillTemplate(array("tabid" => $strTabId, "tabtitle" => $strTitle, "href" => "", "classaddon" => $strClassaddon), $strHeaderID);
@@ -1729,16 +1729,14 @@ JS;
         if ($bitRemoteContent) {
             $strHtml.= <<<HTML
 <script type="text/javascript">
-$('#{$strMainTabId} > li > a[data-target!=""]').on('click', function(e){
-    var containerEl = $(e.target).data('target').substr(1);
-    var href = $(e.target).data('href');
-    if (href) {
-        $("#" + containerEl).html("");
-        $("#" + containerEl).addClass("loadingContainer");
-        $.get(href, function(data){
-            $("#" + containerEl).removeClass("loadingContainer");
-            $("#" + containerEl).html(data);
-        });
+$('#{$strMainTabId} > li > a[data-href!=""]').on('click', function(e){
+    KAJONA.admin.forms.loadTab($(e.target).data('target').substr(1), $(e.target).data('href'));
+});
+
+$(document).ready(function(){
+    var el = $('#{$strMainTabId} > li.active > a[data-href!=""]');
+    if (el.length > 0) {
+        KAJONA.admin.forms.loadTab(el.data('target').substr(1), el.data('href'));
     }
 });
 </script>
