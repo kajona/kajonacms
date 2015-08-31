@@ -20,8 +20,8 @@ interface interface_todo_provider extends interface_generic_plugin {
     /**
      * Returns all todo entries for a specific category
      *
-     * @param $strCategory
-     * @return mixed
+     * @param string $strCategory
+     * @return class_todo_entry[]
      */
     public function getEventsByCategory($strCategory);
 
