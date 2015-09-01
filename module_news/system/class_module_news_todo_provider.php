@@ -24,12 +24,8 @@ class class_module_news_todo_provider implements interface_todo_provider
         return array();
     }
 
-    public function getEventsByCategoryAndDate($strCategory, class_date $objDate)
+    public function getEventsByDate(class_date $objDate)
     {
-        if ($strCategory != "news_news") {
-            return array();
-        }
-
         $arrResult = array();
         $objStartDate = clone $objDate;
         $objStartDate->setIntHour(0)->setIntMin(0)->setIntSec(0);
@@ -57,9 +53,7 @@ class class_module_news_todo_provider implements interface_todo_provider
 
     public function getCategories()
     {
-        return array(
-            "news_news" => class_lang::getInstance()->getLang("calendar_filter_news", "news"),
-        );
+        return array();
     }
 
     public function rightView()

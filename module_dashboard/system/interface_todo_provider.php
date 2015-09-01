@@ -37,11 +37,10 @@ interface interface_todo_provider extends interface_generic_plugin {
      * Returns all events for a specific date. This includes also events which are completed in the past. This is used
      * to display i.e. events on an calendar
      *
-     * @param string $strCategory
      * @param class_date $objDate
      * @return class_todo_entry[]
      */
-    public function getEventsByCategoryAndDate($strCategory, class_date $objDate);
+    public function getEventsByDate(class_date $objDate);
 
     /**
      * Returns an array of all available categories

@@ -62,14 +62,20 @@ class class_adminwidget_todo extends class_adminwidget implements interface_admi
         }
 
         $bitConfiguration = $this->hasConfiguration();
+        $bitHasEntries = false;
 
         foreach ($arrCategories as $strProviderName => $arrTaskCategories) {
+            if (empty($arrTaskCategories)) {
+                continue;
+            }
+
             // check whether the category is enabled for the user. If the user has not configured the widget all
             // categories are displayed
             if ($bitConfiguration && !$this->getFieldValue(md5($strProviderName))) {
                 continue;
             }
 
+            $bitHasEntries = true;
             $strReturn .= $this->objToolkit->formHeadline($strProviderName);
 
             foreach ($arrTaskCategories as $strKey => $strCategoryName) {
@@ -97,6 +103,11 @@ class class_adminwidget_todo extends class_adminwidget implements interface_admi
 
                 $strReturn .= $this->objToolkit->getFieldset($arrFolder[1], $arrFolder[0]);
             }
+        }
+
+        if (!$bitHasEntries) {
+            $strReturn .= $this->objToolkit->warningBox($this->getLang("no_tasks_available"), "alert-info");
+            return $strReturn;
         }
 
         return $strReturn;

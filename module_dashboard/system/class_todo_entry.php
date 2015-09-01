@@ -256,11 +256,10 @@ class class_todo_entry implements interface_admin_listable, interface_model
     /**
      * Returns all available todo entries for a specific date
      *
-     * @param string $strCategory
      * @param class_date $objDate
      * @return class_todo_entry[]
      */
-    public static function getTodoByCategoryAndDate($strCategory, class_date $objDate)
+    public static function getTodoByDate(class_date $objDate)
     {
         $objPluginManager = new class_pluginmanager(interface_todo_provider::EXTENSION_POINT);
         $arrPlugins = $objPluginManager->getPlugins();
@@ -269,7 +268,7 @@ class class_todo_entry implements interface_admin_listable, interface_model
         $arrTodos = array();
         foreach ($arrPlugins as $objPlugin) {
             if ($objPlugin instanceof interface_todo_provider && $objPlugin->rightView()) {
-                $arrTodos = array_merge($arrTodos, $objPlugin->getEventsByCategoryAndDate($strCategory, $objDate));
+                $arrTodos = array_merge($arrTodos, $objPlugin->getEventsByDate($objDate));
             }
         }
 

@@ -153,14 +153,7 @@ class class_module_dashboard_admin_xml extends class_admin_controller implements
             if($objDate->getIntMonth() == $intCurMonth) {
                 //Query modules for dates
                 $objTargetDate = clone $objDate;
-                foreach ($arrCategories as $arrCategory) {
-                    foreach ($arrCategory as $strKey => $strCategoryName) {
-                        $arrTodos = class_todo_entry::getTodoByCategoryAndDate($strKey, $objTargetDate);
-                        foreach ($arrTodos as $objTodo) {
-                            $arrEvents[] = $objTodo;
-                        }
-                    }
-                }
+                $arrEvents = class_todo_entry::getTodoByDate($objTargetDate);
             }
 
             while(count($arrEvents) <= 3) {
