@@ -272,10 +272,10 @@ KAJONA.v4skin.initTagMenu = function() {
  */
 KAJONA.v4skin.removeObjectListItem = function(el){
     // remove all active tooltips
-    $(el).children().qtip("hide");
+    KAJONA.admin.tooltip.removeTooltip(el);
 
     // remove element
-    $(el).parent().parent().fadeOut(400, function(){
+    $(el).parent().parent().fadeOut(0, function(){
         $(this).remove();
     });
 };
