@@ -816,7 +816,7 @@ in addition, a container for the calendar is needed. Use %%calendarContainerId%%
 <input_objectlist_row>
     <tr>
         <td class="listimage">%%icon%%</td>
-        <td>%%displayName%% <input type="hidden" name="%%name%%[]" value="%%value%%" /></td>
+        <td><div class="smaller">%%path%%</div> %%displayName%% <input type="hidden" name="%%name%%[]" value="%%value%%" /></td>
         <td class="icon-cell">%%removeLink%%</td>
     </tr>
 </input_objectlist_row>

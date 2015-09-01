@@ -496,6 +496,7 @@ class class_toolkit_admin extends class_toolkit
                 $arrTemplateRow = array(
                     'name'        => $strName,
                     'displayName' => class_formentry_objectlist::getDisplayName($objObject),
+                    'path'        => class_formentry_objectlist::getPathName($objObject),
                     'icon'        => class_adminskin_helper::getAdminImage($strIcon),
                     'value'       => $objObject->getSystemid(),
                     'removeLink'  => $strRemoveLink,
