@@ -180,13 +180,11 @@ JS;
         //fetch modules relevant for processing
         $arrLegendEntries = array();
         $arrFilterEntries = array();
-        $arrModules = class_module_system_module::getAllModules();
-        foreach($arrModules as $objSingleModule) {
-            /** @var $objAdminInstance interface_calendarsource_admin|class_module_system_module */
-            $objAdminInstance = $objSingleModule->getAdminInstanceOfConcreteModule();
-            if($objSingleModule->getIntRecordStatus() == 1 && $objAdminInstance instanceof interface_calendarsource_admin) { //TODO: switch to plugin manager
-                $arrLegendEntries = array_merge($arrLegendEntries, $objAdminInstance->getArrLegendEntries());
-                $arrFilterEntries = array_merge($arrFilterEntries, $objAdminInstance->getArrFilterEntries());
+
+        $arrCategories = class_todo_entry::getAllCategories();
+        foreach ($arrCategories as $arrCategory) {
+            foreach ($arrCategory as $strKey => $strCategory) {
+                $arrLegendEntries[$strCategory] = $strKey;
             }
         }
 

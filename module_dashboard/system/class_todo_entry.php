@@ -223,7 +223,7 @@ class class_todo_entry implements interface_admin_listable, interface_model
         $arrTodos = array();
         foreach ($arrPlugins as $objPlugin) {
             if ($objPlugin instanceof interface_todo_provider && $objPlugin->rightView()) {
-                $arrTodos = array_merge($arrTodos, $objPlugin->getEventsByCategory($strCategory));
+                $arrTodos = array_merge($arrTodos, $objPlugin->getCurrentEventsByCategory($strCategory));
             }
         }
 
@@ -235,7 +235,7 @@ class class_todo_entry implements interface_admin_listable, interface_model
     /**
      * Returns all available open todos
      *
-     * @return array
+     * @return class_todo_entry[]
      */
     public static function getAllOpenTodos()
     {
@@ -245,6 +245,31 @@ class class_todo_entry implements interface_admin_listable, interface_model
         foreach ($arrCategories as $strTitle => $arrCategory) {
             foreach ($arrCategory as $strKey => $strCategoryName) {
                 $arrTodos = array_merge($arrTodos, self::getOpenTodos($strKey));
+            }
+        }
+
+        self::sortTodos($arrTodos);
+
+        return $arrTodos;
+    }
+
+    /**
+     * Returns all available todo entries for a specific date
+     *
+     * @param string $strCategory
+     * @param class_date $objDate
+     * @return class_todo_entry[]
+     */
+    public static function getTodoByCategoryAndDate($strCategory, class_date $objDate)
+    {
+        $objPluginManager = new class_pluginmanager(interface_todo_provider::EXTENSION_POINT);
+        $arrPlugins = $objPluginManager->getPlugins();
+
+        /** @var class_todo_entry[] $arrTodos */
+        $arrTodos = array();
+        foreach ($arrPlugins as $objPlugin) {
+            if ($objPlugin instanceof interface_todo_provider && $objPlugin->rightView()) {
+                $arrTodos = array_merge($arrTodos, $objPlugin->getEventsByCategoryAndDate($strCategory, $objDate));
             }
         }
 

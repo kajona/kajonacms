@@ -25,12 +25,23 @@ interface interface_todo_provider extends interface_generic_plugin {
     public function getName();
 
     /**
-     * Returns all todo entries for a specific category
+     * Returns all todo entries which are currently open for the logged in user. This is used i.e. to display the user a
+     * list of open tasks
      *
      * @param string $strCategory
      * @return class_todo_entry[]
      */
-    public function getEventsByCategory($strCategory);
+    public function getCurrentEventsByCategory($strCategory);
+
+    /**
+     * Returns all events for a specific date. This includes also events which are completed in the past. This is used
+     * to display i.e. events on an calendar
+     *
+     * @param string $strCategory
+     * @param class_date $objDate
+     * @return class_todo_entry[]
+     */
+    public function getEventsByCategoryAndDate($strCategory, class_date $objDate);
 
     /**
      * Returns an array of all available categories

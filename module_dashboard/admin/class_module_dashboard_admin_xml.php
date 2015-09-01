@@ -109,15 +109,8 @@ class class_module_dashboard_admin_xml extends class_admin_controller implements
 
         $strReturn .= "<content><![CDATA[";
 
-        /** @var interface_calendarsource_admin[] $arrRelevantModules  */
-        $arrRelevantModules = array();
-
         //fetch modules relevant for processing
-        $arrModules = class_module_system_module::getAllModules();
-        foreach($arrModules as $objSingleModule) {
-            if($objSingleModule->getIntRecordStatus() == 1 && $objSingleModule->getAdminInstanceOfConcreteModule() instanceof interface_calendarsource_admin)
-                $arrRelevantModules[] = $objSingleModule->getAdminInstanceOfConcreteModule();
-        }
+        $arrCategories = class_todo_entry::getAllCategories();
 
         //the header row
         $arrWeekdays = explode(",", $this->getLang("calendar_weekday"));
@@ -159,29 +152,31 @@ class class_module_dashboard_admin_xml extends class_admin_controller implements
             $arrEvents = array();
             if($objDate->getIntMonth() == $intCurMonth) {
                 //Query modules for dates
-                $objStartDate = clone $objDate;
-                $objStartDate->setIntHour(0)->setIntMin(0)->setIntSec(0);
-                $objEndDate = clone $objDate;
-                $objEndDate->setIntHour(23)->setIntMin(59)->setIntSec(59);
-                foreach($arrRelevantModules as $objOneModule) {
-                    $arrEvents = array_merge($objOneModule->getArrCalendarEntries($objStartDate, $objEndDate), $arrEvents);
+                $objTargetDate = clone $objDate;
+                foreach ($arrCategories as $arrCategory) {
+                    foreach ($arrCategory as $strCategory) {
+                        $arrTodos = class_todo_entry::getTodoByCategoryAndDate($strCategory, $objTargetDate);
+                        foreach ($arrTodos as $objTodo) {
+                            $arrEvents[] = $objTodo;
+                        }
+                    }
                 }
             }
 
             while(count($arrEvents) <= 3) {
-                $objDummy = new class_calendarentry();
-                $objDummy->setStrClass("spacer");
-                $objDummy->setStrName("&nbsp;");
+                $objDummy = new class_todo_entry();
+                $objDummy->setStrCategory("spacer");
+                $objDummy->setStrDisplayName("&nbsp;");
                 $arrEvents[] = $objDummy;
             }
 
             $strEvents = "";
-            /** @var class_calendarentry $objOneEvent */
+            /** @var class_todo_entry $objOneEvent */
             foreach($arrEvents as $objOneEvent) {
 
-                $strName = $objOneEvent->getStrName();
-                $strSecondLine = $objOneEvent->getStrSecondLine();
+                $strName = $objOneEvent->getStrDisplayName();
 
+                /*
                 if($strSecondLine != "")
                     $strSecondLine = "<br />".$strSecondLine;
 
@@ -192,8 +187,13 @@ class class_module_dashboard_admin_xml extends class_admin_controller implements
 
                     $arrJsHighlights[$objOneEvent->getStrHighlightId()][] = $objOneEvent->getStrSystemid();
                 }
+                */
 
-                $strEvents .= $this->objToolkit->getCalendarEvent($strName.$strSecondLine, $objOneEvent->getStrSystemid(), $objOneEvent->getStrHighlightId(), $objOneEvent->getStrClass());
+                if ($objOneEvent->getStrCategory() != "spacer") {
+                    $strEvents .= $this->objToolkit->getCalendarEvent($strName, $objOneEvent->getStrSystemid(), "", "calendarEvent " . $objOneEvent->getStrCategory());
+                } else {
+                    $strEvents .= $this->objToolkit->getCalendarEvent($strName, $objOneEvent->getStrSystemid(), "", $objOneEvent->getStrCategory());
+                }
             }
 
             $bitBlocked = false;
