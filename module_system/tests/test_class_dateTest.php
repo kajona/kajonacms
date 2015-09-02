@@ -138,5 +138,16 @@ class test_class_dateTest extends class_testbase  {
         $this->assertEquals($objDate->getLongTimestamp(), 20140531120000);
     }
 
+    public function testSetEndOfDay() {
+        $objDate = new class_date(20150901133737);
+        $objDate->setEndOfDay();
+        $this->assertEquals($objDate->getLongTimestamp(), 20150901235959);
+    }
+
+    public function testSetBeginningOfDay() {
+        $objDate = new class_date(20150901133737);
+        $objDate->setBeginningOfDay();
+        $this->assertEquals($objDate->getLongTimestamp(), 20150901000000);
+    }
 }
 
