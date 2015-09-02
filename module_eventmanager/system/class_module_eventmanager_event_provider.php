@@ -34,16 +34,14 @@ class class_module_eventmanager_event_provider implements interface_event_provid
         $arrEvents = class_module_eventmanager_event::getAllEvents(null, null, $objStartDate, $objEndDate);
         foreach($arrEvents as $objOneEvent) {
             if ($objOneEvent->rightView()) {
-                $objTodo = new class_todo_entry();
-                $objTodo->setStrIcon($objOneEvent->getStrIcon());
-                $objTodo->setStrCategory("calendarEvent");
-                $objTodo->setStrDisplayName($objOneEvent->getStrDisplayName());
-                $objTodo->setObjValidDate(new class_date($objOneEvent->getObjStartDate()));
-                $objTodo->setArrModuleNavi(array(
-                    class_link::getLinkAdmin("eventmanager", "edit", "&systemid=" . $objOneEvent->getStrSystemid(), "", "", "icon_edit")
-                ));
+                $objEvent = new class_event_entry();
+                $objEvent->setStrIcon($objOneEvent->getStrIcon());
+                $objEvent->setStrCategory("calendarEvent");
+                $objEvent->setStrDisplayName($objOneEvent->getStrDisplayName());
+                $objEvent->setObjValidDate(new class_date($objOneEvent->getObjStartDate()));
+                $objEvent->setStrHref(class_link::getLinkAdminHref("eventmanager", "edit", "&systemid=" . $objOneEvent->getStrSystemid(), "", "", "icon_edit"));
 
-                $arrResult[] = $objTodo;
+                $arrResult[] = $objEvent;
             }
         }
 
@@ -52,8 +50,11 @@ class class_module_eventmanager_event_provider implements interface_event_provid
 
     public function getCategories()
     {
+        $objEvent = new class_module_eventmanager_event();
+        $strIcon = class_adminskin_helper::getAdminImage($objEvent->getStrIcon());
+
         return array(
-            "calendarEvent" => class_lang::getInstance()->getLang("calendar_type_event", "eventmanager"),
+            "calendarEvent" => $strIcon . " " . class_lang::getInstance()->getLang("calendar_type_event", "eventmanager"),
         );
     }
 

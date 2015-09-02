@@ -34,16 +34,14 @@ class class_module_news_event_provider implements interface_event_provider
         $arrNews = class_module_news_news::getObjectList("", null, null, $objStartDate, $objEndDate);
         foreach($arrNews as $objOneNews) {
             if ($objOneNews->rightView()) {
-                $objTodo = new class_todo_entry();
-                $objTodo->setStrIcon($objOneNews->getStrIcon());
-                $objTodo->setStrCategory("calendarNews");
-                $objTodo->setStrDisplayName($objOneNews->getStrDisplayName());
-                $objTodo->setObjValidDate(new class_date($objOneNews->getObjStartDate()));
-                $objTodo->setArrModuleNavi(array(
-                    class_link::getLinkAdmin("news", "edit", "&systemid=" . $objOneNews->getStrSystemid(), "", "", "icon_edit")
-                ));
+                $objEvent = new class_event_entry();
+                $objEvent->setStrIcon($objOneNews->getStrIcon());
+                $objEvent->setStrCategory("calendarNews");
+                $objEvent->setStrDisplayName($objOneNews->getStrDisplayName());
+                $objEvent->setObjValidDate(new class_date($objOneNews->getObjStartDate()));
+                $objEvent->setStrHref(class_link::getLinkAdminHref("news", "edit", "&systemid=" . $objOneNews->getStrSystemid()));
 
-                $arrResult[] = $objTodo;
+                $arrResult[] = $objEvent;
             }
         }
 
@@ -52,8 +50,11 @@ class class_module_news_event_provider implements interface_event_provider
 
     public function getCategories()
     {
+        $objNews = new class_module_news_news();
+        $strIcon = class_adminskin_helper::getAdminImage($objNews->getStrIcon());
+
         return array(
-            "calendarNews" => class_lang::getInstance()->getLang("calendar_type_news", "news"),
+            "calendarNews" => $strIcon . " " . class_lang::getInstance()->getLang("calendar_type_news", "news"),
         );
     }
 
