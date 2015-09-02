@@ -21,7 +21,7 @@ class class_module_news_event_provider implements interface_event_provider
 
     public function getEventsByCategoryAndDate($strCategory, class_date $objDate)
     {
-        if ($strCategory != "news_news") {
+        if ($strCategory != "calendarNews") {
             return array();
         }
 
@@ -36,7 +36,7 @@ class class_module_news_event_provider implements interface_event_provider
             if ($objOneNews->rightView()) {
                 $objTodo = new class_todo_entry();
                 $objTodo->setStrIcon($objOneNews->getStrIcon());
-                $objTodo->setStrCategory("news_news");
+                $objTodo->setStrCategory("calendarNews");
                 $objTodo->setStrDisplayName($objOneNews->getStrDisplayName());
                 $objTodo->setObjValidDate(new class_date($objOneNews->getObjStartDate()));
                 $objTodo->setArrModuleNavi(array(
@@ -53,7 +53,7 @@ class class_module_news_event_provider implements interface_event_provider
     public function getCategories()
     {
         return array(
-            "news_news" => class_lang::getInstance()->getLang("calendar_type_news", "news"),
+            "calendarNews" => class_lang::getInstance()->getLang("calendar_type_news", "news"),
         );
     }
 

@@ -153,7 +153,14 @@ class class_module_dashboard_admin_xml extends class_admin_controller implements
             if($objDate->getIntMonth() == $intCurMonth) {
                 //Query modules for dates
                 $objTargetDate = clone $objDate;
-                $arrEvents = class_event_repository::getEventsByCategoryAndDate("", $objTargetDate);
+
+                foreach ($arrCategories as $arrCategory) {
+                    foreach ($arrCategory as $strKey => $strValue) {
+                        if ($this->objSession->getSession($strKey) != "disabled") {
+                            $arrEvents = array_merge($arrEvents, class_event_repository::getEventsByCategoryAndDate($strKey, $objTargetDate));
+                        }
+                    }
+                }
             }
 
             while(count($arrEvents) <= 3) {

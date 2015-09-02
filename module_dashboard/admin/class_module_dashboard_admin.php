@@ -181,14 +181,13 @@ JS;
         $arrLegendEntries = array();
         $arrFilterEntries = array();
 
-        /*
-        $arrCategories = class_todo_entry::getAllCategories();
+        $arrCategories = class_event_repository::getAllCategories();
         foreach ($arrCategories as $arrCategory) {
             foreach ($arrCategory as $strKey => $strCategory) {
-                $arrLegendEntries[$strCategory] = $strKey;
+                $arrLegendEntries[$strCategory] = $strKey . " calendarEvent";
+                $arrFilterEntries[$strKey] = $strCategory;
             }
         }
-        */
 
         if($this->getParam("doCalendarFilter") != "") {
             //update filter-criteria

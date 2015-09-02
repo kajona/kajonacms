@@ -21,7 +21,7 @@ class class_module_eventmanager_event_provider implements interface_event_provid
 
     public function getEventsByCategoryAndDate($strCategory, class_date $objDate)
     {
-        if ($strCategory != "eventmanager_events") {
+        if ($strCategory != "calendarEvent") {
             return array();
         }
 
@@ -36,7 +36,7 @@ class class_module_eventmanager_event_provider implements interface_event_provid
             if ($objOneEvent->rightView()) {
                 $objTodo = new class_todo_entry();
                 $objTodo->setStrIcon($objOneEvent->getStrIcon());
-                $objTodo->setStrCategory("eventmanager_events");
+                $objTodo->setStrCategory("calendarEvent");
                 $objTodo->setStrDisplayName($objOneEvent->getStrDisplayName());
                 $objTodo->setObjValidDate(new class_date($objOneEvent->getObjStartDate()));
                 $objTodo->setArrModuleNavi(array(
@@ -53,7 +53,7 @@ class class_module_eventmanager_event_provider implements interface_event_provid
     public function getCategories()
     {
         return array(
-            "eventmanager_events" => class_lang::getInstance()->getLang("calendar_type_event", "eventmanager"),
+            "calendarEvent" => class_lang::getInstance()->getLang("calendar_type_event", "eventmanager"),
         );
     }
 
