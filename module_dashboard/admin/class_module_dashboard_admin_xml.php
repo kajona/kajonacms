@@ -280,8 +280,9 @@ class class_module_dashboard_admin_xml extends class_admin_controller implements
 
             $strIcon = class_adminskin_helper::getAdminImage($objTodo->getStrIcon());
             $strCategory = class_todo_repository::getCategoryName($objTodo->getStrCategory());
+            $strValidDate = $objTodo->getObjValidDate() !== null ? dateToString($objTodo->getObjValidDate(), false) : "-";
 
-            $arrValues[] = array($strIcon, $objTodo->getStrDisplayName(), $strCategory, $objTodo->getObjValidDate() !== null ? dateToString($objTodo->getObjValidDate()) : "-", $strActions);
+            $arrValues[] = array($strIcon, $objTodo->getStrDisplayName(), $strCategory, $strValidDate, $strActions);
         }
 
         return $this->objToolkit->dataTable($arrHeaders, $arrValues);
