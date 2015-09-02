@@ -15,4 +15,21 @@
  */
 class class_event_entry extends class_entry_abstract
 {
+    protected $strHref;
+
+    /**
+     * @return string
+     */
+    public function getStrHref()
+    {
+        return $this->strHref;
+    }
+
+    /**
+     * @param string $strHref
+     */
+    public function setStrHref($strHref)
+    {
+        $this->strHref = $strHref;
+    }
 }

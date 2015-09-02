@@ -227,7 +227,7 @@ JS;
         $strReturn .= $this->objToolkit->getCalendarPager($strPrev, $strCenter, $strNext);
         $strReturn .= $strContent;
         $strReturn .= $this->objToolkit->getCalendarContainer($strContainerId);
-        $strReturn .= $this->objToolkit->getCalendarLegend($arrLegendEntries);
+        //$strReturn .= $this->objToolkit->getCalendarLegend($arrLegendEntries);
         $strReturn .= $this->objToolkit->getCalendarFilter($arrFilterEntries);
 
         return $strReturn;

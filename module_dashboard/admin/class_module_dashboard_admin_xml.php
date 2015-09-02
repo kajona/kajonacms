@@ -164,33 +164,21 @@ class class_module_dashboard_admin_xml extends class_admin_controller implements
             }
 
             while(count($arrEvents) <= 3) {
-                $objDummy = new class_todo_entry();
+                $objDummy = new class_event_entry();
                 $objDummy->setStrCategory("spacer");
                 $objDummy->setStrDisplayName("&nbsp;");
                 $arrEvents[] = $objDummy;
             }
 
             $strEvents = "";
-            /** @var class_todo_entry $objOneEvent */
+            /** @var class_event_entry $objOneEvent */
             foreach($arrEvents as $objOneEvent) {
-
                 $strName = $objOneEvent->getStrDisplayName();
-
-                /*
-                if($strSecondLine != "")
-                    $strSecondLine = "<br />".$strSecondLine;
-
-                //register mouse-over highlight relations
-                if($objOneEvent->getStrHighlightId() != "" && $objOneEvent->getStrSystemid() != "") {
-                    if(!isset($arrJsHighlights[$objOneEvent->getStrHighlightId()]))
-                        $arrJsHighlights[$objOneEvent->getStrHighlightId()] = array();
-
-                    $arrJsHighlights[$objOneEvent->getStrHighlightId()][] = $objOneEvent->getStrSystemid();
-                }
-                */
-
                 if ($objOneEvent->getStrCategory() != "spacer") {
-                    $strEvents .= $this->objToolkit->getCalendarEvent($strName, $objOneEvent->getStrSystemid(), "", "calendarEvent " . $objOneEvent->getStrCategory());
+                    $strHref = $objOneEvent->getStrHref() != "" ? $objOneEvent->getStrHref() : "#";
+                    $strIcon = class_link::getLinkAdminManual('href="' . $strHref . '"', "", "", $objOneEvent->getStrIcon());
+
+                    $strEvents .= $this->objToolkit->getCalendarEvent($strIcon . " " . $strName, $objOneEvent->getStrSystemid(), "", "calendarEvent " . $objOneEvent->getStrCategory());
                 } else {
                     $strEvents .= $this->objToolkit->getCalendarEvent($strName, $objOneEvent->getStrSystemid(), "", $objOneEvent->getStrCategory());
                 }
