@@ -184,6 +184,9 @@ class class_formentry_objectlist extends class_formentry_base implements interfa
         return "-";
     }
 
+
+
+
     private function toObjectArray()
     {
         $strValue = $this->getStrValue();
@@ -220,6 +223,44 @@ class class_formentry_objectlist extends class_formentry_base implements interfa
         $strObjectName .= $objObject->getStrDisplayName();
 
         return $strObjectName;
+    }
+
+
+    /**
+     * @param interface_model $objOneElement
+     * @param string $intAllowedLevel
+     * @return string
+     */
+    public static function getPathName(interface_model $objOneElement)
+    {
+        //fetch the process-path, at least two levels
+        $arrParents = $objOneElement->getPathArray();
+
+        // check if oe is on the allowed level if parameter is available
+        if (count($arrParents) <= 3) {
+            return "";
+        }
+
+        array_pop($arrParents);
+
+        //Only return three levels
+        $arrPath = array();
+        for ($intI = 0; $intI < 3; $intI++) {
+            $strPathId = array_pop($arrParents);
+            if (!validateSystemid($strPathId)) {
+                break;
+            }
+
+            $objObject = class_objectfactory::getInstance()->getObject($strPathId);
+            $arrPath[] = $objObject->getStrDisplayName();
+        }
+
+        if(count($arrPath) == 0) {
+            return "";
+        }
+
+        $strPath = implode(" &gt; ", array_reverse($arrPath));
+        return $strPath;
     }
 
     /**

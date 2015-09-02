@@ -393,6 +393,24 @@ class class_date {
     }
 
     /**
+     * Sets the current time to the end of the day
+     *
+     * @return \class_date
+     */
+    public function setEndOfDay() {
+        return $this->setIntHour(23)->setIntMin(59)->setIntSec(59);
+    }
+
+    /**
+     * Sets the current time to the beginning of the day
+     *
+     * @return \class_date
+     */
+    public function setBeginningOfDay() {
+        return $this->setIntHour(0)->setIntMin(0)->setIntSec(0);
+    }
+
+    /**
      * Swap the year part
      *
      * @param int $intYear
