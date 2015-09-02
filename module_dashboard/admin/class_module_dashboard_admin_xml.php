@@ -110,7 +110,7 @@ class class_module_dashboard_admin_xml extends class_admin_controller implements
         $strReturn .= "<content><![CDATA[";
 
         //fetch modules relevant for processing
-        $arrCategories = class_todo_entry::getAllCategories();
+        $arrCategories = class_event_repository::getAllCategories();
 
         //the header row
         $arrWeekdays = explode(",", $this->getLang("calendar_weekday"));
@@ -153,7 +153,7 @@ class class_module_dashboard_admin_xml extends class_admin_controller implements
             if($objDate->getIntMonth() == $intCurMonth) {
                 //Query modules for dates
                 $objTargetDate = clone $objDate;
-                $arrEvents = class_todo_entry::getTodoByDate($objTargetDate);
+                $arrEvents = class_event_repository::getEventsByCategoryAndDate("", $objTargetDate);
             }
 
             while(count($arrEvents) <= 3) {
@@ -244,18 +244,24 @@ class class_module_dashboard_admin_xml extends class_admin_controller implements
 
         $strCategory = $this->getParam("category");
         if (empty($strCategory)) {
-            $arrTodos = class_todo_entry::getAllOpenTodos();
+            $arrTodos = class_todo_repository::getAllOpenTodos();
         } else {
-            $arrTodos = class_todo_entry::getOpenTodos($strCategory);
+            $arrTodos = class_todo_repository::getOpenTodos($strCategory);
         }
 
         if (empty($arrTodos)) {
             return $this->objToolkit->warningBox($this->getLang("todo_no_open_tasks"), "alert-info");
         }
 
-        $strReturn = "";
-        $strReturn .= $this->objToolkit->listHeader();
-        $intI = 0;
+        $arrHeaders = array(
+            "0 \" style=\"width:20px\"" => "",
+            "1" => "Objekt",
+            "2 \" style=\"width:300px\"" => "Aktion",
+            "3 \" style=\"width:160px\"" => "Fälligkeitsdatum",
+            "4 \" style=\"width:20px\"" => "",
+        );
+        $arrValues = array();
+
         foreach ($arrTodos as $objTodo) {
             $strActions = "";
             $arrModule = $objTodo->getArrModuleNavi();
@@ -264,10 +270,13 @@ class class_module_dashboard_admin_xml extends class_admin_controller implements
                     $strActions.= $this->objToolkit->listButton($strLink);
                 }
             }
-            $strReturn .= $this->objToolkit->simpleAdminList($objTodo, $strActions, $intI++);
-        }
-        $strReturn .= $this->objToolkit->listFooter();
 
-        return $strReturn;
+            $strIcon = class_adminskin_helper::getAdminImage($objTodo->getStrIcon());
+            $strCategory = class_todo_repository::getCategoryName($objTodo->getStrCategory());
+
+            $arrValues[] = array($strIcon, $objTodo->getStrDisplayName(), $strCategory, $objTodo->getObjValidDate() !== null ? dateToString($objTodo->getObjValidDate()) : "-", $strActions);
+        }
+
+        return $this->objToolkit->dataTable($arrHeaders, $arrValues);
     }
 }

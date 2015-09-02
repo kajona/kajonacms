@@ -17,7 +17,7 @@ class class_adminwidget_todo extends class_adminwidget implements interface_admi
         parent::__construct();
 
         //register the fields to be persisted and loaded
-        $arrCategories = class_todo_entry::getAllCategories();
+        $arrCategories = class_todo_repository::getAllCategories();
         $arrKeys = array();
         foreach ($arrCategories as $strTitle => $arrRows) {
             $arrKeys[] = md5($strTitle);
@@ -34,7 +34,7 @@ class class_adminwidget_todo extends class_adminwidget implements interface_admi
      */
     public function getEditForm() {
         $strReturn = "";
-        $arrCategories = class_todo_entry::getAllCategories();
+        $arrCategories = class_todo_repository::getAllCategories();
         foreach ($arrCategories as $strTitle => $arrRows) {
             $strKey = md5($strTitle);
             $strReturn .= $this->objToolkit->formInputCheckbox($strKey, $strTitle, $this->getFieldValue($strKey));
@@ -54,7 +54,7 @@ class class_adminwidget_todo extends class_adminwidget implements interface_admi
         $strReturn = "";
         $strReturn .= "<br>";
 
-        $arrCategories = class_todo_entry::getAllCategories();
+        $arrCategories = class_todo_repository::getAllCategories();
 
         if (empty($arrCategories)) {
             $strReturn .= $this->objToolkit->warningBox($this->getLang("no_tasks_available"), "alert-info");
@@ -79,7 +79,7 @@ class class_adminwidget_todo extends class_adminwidget implements interface_admi
             $strReturn .= $this->objToolkit->formHeadline($strProviderName);
 
             foreach ($arrTaskCategories as $strKey => $strCategoryName) {
-                $arrTodos = class_todo_entry::getOpenTodos($strKey);
+                $arrTodos = class_todo_repository::getOpenTodos($strKey);
                 $strContent = "";
                 $strContent .= $this->objToolkit->listHeader();
                 $intI = 0;
@@ -136,7 +136,7 @@ class class_adminwidget_todo extends class_adminwidget implements interface_admi
 
     protected function hasConfiguration()
     {
-        $arrCategories = class_todo_entry::getAllCategories();
+        $arrCategories = class_todo_repository::getAllCategories();
         foreach ($arrCategories as $strTitle => $arrRows) {
             $strKey = md5($strTitle);
             $strValue = $this->getFieldValue($strKey);

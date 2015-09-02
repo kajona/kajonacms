@@ -181,12 +181,14 @@ JS;
         $arrLegendEntries = array();
         $arrFilterEntries = array();
 
+        /*
         $arrCategories = class_todo_entry::getAllCategories();
         foreach ($arrCategories as $arrCategory) {
             foreach ($arrCategory as $strKey => $strCategory) {
                 $arrLegendEntries[$strCategory] = $strKey;
             }
         }
+        */
 
         if($this->getParam("doCalendarFilter") != "") {
             //update filter-criteria
@@ -236,7 +238,7 @@ JS;
      * @permissions view
      */
     protected function actionTodo() {
-        $arrCategories = class_todo_entry::getAllCategories();
+        $arrCategories = class_todo_repository::getAllCategories();
         $arrContent = array();
 
         if (empty($arrCategories)) {

@@ -7,7 +7,7 @@
 /**
  * @package module_news
  */
-class class_module_news_todo_provider implements interface_todo_provider
+class class_module_news_event_provider implements interface_event_provider
 {
     public static function getExtensionName()
     {
@@ -19,13 +19,12 @@ class class_module_news_todo_provider implements interface_todo_provider
         return class_lang::getInstance()->getLang("modul_titel", "news");
     }
 
-    public function getCurrentEventsByCategory($strCategory)
+    public function getEventsByCategoryAndDate($strCategory, class_date $objDate)
     {
-        return array();
-    }
+        if ($strCategory != "news_news") {
+            return array();
+        }
 
-    public function getEventsByDate(class_date $objDate)
-    {
         $arrResult = array();
         $objStartDate = clone $objDate;
         $objStartDate->setIntHour(0)->setIntMin(0)->setIntSec(0);
@@ -53,7 +52,9 @@ class class_module_news_todo_provider implements interface_todo_provider
 
     public function getCategories()
     {
-        return array();
+        return array(
+            "news_news" => class_lang::getInstance()->getLang("calendar_type_news", "news"),
+        );
     }
 
     public function rightView()

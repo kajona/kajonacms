@@ -8,11 +8,11 @@
 ********************************************************************************************************/
 
 /**
- * Object which represents a todo entry
+ * Object which represents a event entry
  *
  * @package module_dashboard
  * @author christoph.kappestein@gmail.com
  */
-class class_todo_entry extends class_entry_abstract
+class class_event_entry extends class_entry_abstract
 {
 }

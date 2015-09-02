@@ -8,14 +8,14 @@
 ********************************************************************************************************/
 
 /**
- * interface_todo_provider
+ * interface_event_provider
  *
  * @package module_dashboard
  * @author christoph.kappestein@gmail.com
  */
-interface interface_todo_provider extends interface_generic_plugin {
+interface interface_event_provider extends interface_generic_plugin {
 
-    const EXTENSION_POINT = "core.dashboard.admin.todo_provider";
+    const EXTENSION_POINT = "core.dashboard.admin.event_provider";
 
     /**
      * Returns an human readable name of this provider
@@ -25,13 +25,14 @@ interface interface_todo_provider extends interface_generic_plugin {
     public function getName();
 
     /**
-     * Returns all todo entries which are currently open for the logged in user. This is used i.e. to display the user a
-     * list of open tasks
+     * Returns all events for a specific date. This includes also events which are completed in the past. This is used
+     * to display i.e. events on a calendar
      *
      * @param string $strCategory
-     * @return class_todo_entry[]
+     * @param class_date $objDate
+     * @return class_event_entry[]
      */
-    public function getCurrentTodosByCategory($strCategory);
+    public function getEventsByCategoryAndDate($strCategory, class_date $objDate);
 
     /**
      * Returns an array of all available categories
