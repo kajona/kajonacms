@@ -51,11 +51,6 @@ abstract class class_entry_abstract implements interface_admin_listable, interfa
     protected $objValidDate;
 
     /**
-     * @var array
-     */
-    protected $arrModuleNavi;
-
-    /**
      * @return string
      */
     public function getStrCategory()
@@ -136,14 +131,6 @@ abstract class class_entry_abstract implements interface_admin_listable, interfa
     }
 
     /**
-     * @return array
-     */
-    public function getArrModuleNavi()
-    {
-        return $this->arrModuleNavi;
-    }
-
-    /**
      * @param string $strCategory
      */
     public function setStrCategory($strCategory)
@@ -181,13 +168,5 @@ abstract class class_entry_abstract implements interface_admin_listable, interfa
     public function setObjValidDate(class_date $objValidDate = null)
     {
         $this->objValidDate = $objValidDate;
-    }
-
-    /**
-     * @param array $arrModuleNavi
-     */
-    public function setArrModuleNavi(array $arrModuleNavi)
-    {
-        $this->arrModuleNavi = $arrModuleNavi;
     }
 }

@@ -15,4 +15,24 @@
  */
 class class_todo_entry extends class_entry_abstract
 {
+    /**
+     * @var array
+     */
+    protected $arrModuleNavi;
+
+    /**
+     * @return array
+     */
+    public function getArrModuleNavi()
+    {
+        return $this->arrModuleNavi;
+    }
+
+    /**
+     * @param array $arrModuleNavi
+     */
+    public function setArrModuleNavi(array $arrModuleNavi)
+    {
+        $this->arrModuleNavi = $arrModuleNavi;
+    }
 }
