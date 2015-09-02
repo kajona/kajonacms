@@ -61,6 +61,8 @@ class class_workflows_controller   {
 
 
         }
+
+        class_logger::getInstance(self::STR_LOGFILE)->addLogRow("scheduling workflows finished", class_logger::$levelInfo);
     }
 
 
@@ -109,6 +111,8 @@ class class_workflows_controller   {
             $objLockmanager->unlockRecord(true);
 
         }
+
+        class_logger::getInstance(self::STR_LOGFILE)->addLogRow("running workflows finished", class_logger::$levelInfo);
     }
 
     /**
