@@ -278,7 +278,7 @@ class class_installer_workflows extends class_installer_base implements interfac
 
         $strReturn .= "Updating module-versions...\n";
         $this->objDB->flushQueryCache();
-        $this->updateModuleVersion($this->objMetadata->getStrTitle(), "5.3.2");
+        $this->updateModuleVersion($this->objMetadata->getStrTitle(), "4.7.6");
 
         return $strReturn;
     }
