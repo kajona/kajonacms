@@ -1881,6 +1881,11 @@ It containes a list of aspects and provides the possibility to switch the differ
             %%entries%%
         </ul>
     </div>
+    <script type="text/javascript">
+        $('.dropdown-menu .dropdown-submenu a').click(function (e) {
+            e.stopPropagation();
+        });
+    </script>
 </contextmenu_wrapper>
 
 <contextmenu_entry>
@@ -1888,7 +1893,7 @@ It containes a list of aspects and provides the possibility to switch the differ
 </contextmenu_entry>
 
 <contextmenu_entry_full>
-<li >%%elementFullEntry%%</li>
+    <li >%%elementFullEntry%%</li>
 </contextmenu_entry_full>
 
 <contextmenu_divider_entry>
@@ -1900,22 +1905,17 @@ It containes a list of aspects and provides the possibility to switch the differ
         <a href="%%elementLink%%" tabindex="-1">%%elementName%%</a>
         <ul class="dropdown-menu">
             %%entries%%
-            <script type="text/javascript">
-                $('.dropdown-menu .dropdown-submenu a').click(function (e) {
-                    e.stopPropagation();
-                });
-            </script>
         </ul>
     </li>
 </contextmenu_submenucontainer_entry>
 
 <contextmenu_submenucontainer_entry_full>
-<li class="dropdown-submenu" >
-    %%elementFullEntry%%
-    <ul class="dropdown-menu">
-        %%entries%%
-    </ul>
-</li>
+    <li class="dropdown-submenu" >
+        %%elementFullEntry%%
+        <ul class="dropdown-menu">
+            %%entries%%
+        </ul>
+    </li>
 </contextmenu_submenucontainer_entry_full>
 
 
