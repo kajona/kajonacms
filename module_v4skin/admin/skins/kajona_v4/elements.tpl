@@ -297,12 +297,21 @@ data list header. Used to open a table to print data
 
 data list footer. at the bottom of the datatable
 <datalist_footer>
-</table>
+    </table>
+    <script type="text/javascript">
+        KAJONA.admin.loader.loadFile("/core/module_v4skin/admin/skins/kajona_v4/js/jquery.floatThead.min.js", function() {
+            console.log('table init');
+            $('table.kajona-data-table').floatThead({
+                scrollingTop: 70,
+                useAbsolutePositioning: true
+            });
+        });
+    </script>
 </datalist_footer>
 
 One Column in a row (header record) - the header, the content, the footer
 <datalist_column_head_header>
-	<tr>
+    <thead><tr>
 </datalist_column_head_header>
 
 <datalist_column_head>
@@ -310,7 +319,7 @@ One Column in a row (header record) - the header, the content, the footer
 </datalist_column_head>
 
 <datalist_column_head_footer>
-	</tr>
+    </tr></thead>
 </datalist_column_head_footer>
 
 One Column in a row (data record) - the header, the content, the footer, providing the option of two styles
@@ -1881,6 +1890,11 @@ It containes a list of aspects and provides the possibility to switch the differ
             %%entries%%
         </ul>
     </div>
+    <script type="text/javascript">
+        $('.dropdown-menu .dropdown-submenu a').click(function (e) {
+            e.stopPropagation();
+        });
+    </script>
 </contextmenu_wrapper>
 
 <contextmenu_entry>
@@ -1888,7 +1902,7 @@ It containes a list of aspects and provides the possibility to switch the differ
 </contextmenu_entry>
 
 <contextmenu_entry_full>
-<li >%%elementFullEntry%%</li>
+    <li >%%elementFullEntry%%</li>
 </contextmenu_entry_full>
 
 <contextmenu_divider_entry>
@@ -1900,22 +1914,17 @@ It containes a list of aspects and provides the possibility to switch the differ
         <a href="%%elementLink%%" tabindex="-1">%%elementName%%</a>
         <ul class="dropdown-menu">
             %%entries%%
-            <script type="text/javascript">
-                $('.dropdown-menu .dropdown-submenu a').click(function (e) {
-                    e.stopPropagation();
-                });
-            </script>
         </ul>
     </li>
 </contextmenu_submenucontainer_entry>
 
 <contextmenu_submenucontainer_entry_full>
-<li class="dropdown-submenu" >
-    %%elementFullEntry%%
-    <ul class="dropdown-menu">
-        %%entries%%
-    </ul>
-</li>
+    <li class="dropdown-submenu" >
+        %%elementFullEntry%%
+        <ul class="dropdown-menu">
+            %%entries%%
+        </ul>
+    </li>
 </contextmenu_submenucontainer_entry_full>
 
 

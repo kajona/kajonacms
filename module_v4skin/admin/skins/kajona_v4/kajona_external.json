@@ -33,5 +33,12 @@
         "source" : "http://opensans.com/",
         "license" : "Apache Licence v2",
         "licenseurl" : "http://www.apache.org/licenses/LICENSE-2.0"
+    },
+    {
+        "name" : "floatThead",
+        "version" : "1.2.13",
+        "source" : "http://mkoryak.github.io/floatThead",
+        "license" : "MIT",
+        "licenseurl" : "http://opensource.org/licenses/MIT"
     }
 ]

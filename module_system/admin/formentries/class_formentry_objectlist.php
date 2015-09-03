@@ -236,12 +236,16 @@ class class_formentry_objectlist extends class_formentry_base implements interfa
         //fetch the process-path, at least two levels
         $arrParents = $objOneElement->getPathArray();
 
-        // check if oe is on the allowed level if parameter is available
-        if (count($arrParents) <= 3) {
-            return "";
+        // remove first two nodes
+        if (count($arrParents) >= 2) {
+            array_shift($arrParents);
+            array_shift($arrParents);
         }
 
+        //remove current element
         array_pop($arrParents);
+
+
 
         //Only return three levels
         $arrPath = array();
