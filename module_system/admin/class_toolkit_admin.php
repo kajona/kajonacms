@@ -1397,7 +1397,7 @@ class class_toolkit_admin extends class_toolkit
         //Iterating over the rows
 
         //Starting with the header, column by column
-        if (is_array($arrHeader)) {
+        if (is_array($arrHeader) && !empty($arrHeader)) {
             $strReturn .= $this->objTemplate->fillTemplate(array(), $strTemplateHeaderHeaderID);
 
             foreach ($arrHeader as $strCssClass => $strHeader) {
