@@ -302,7 +302,7 @@ data list footer. at the bottom of the datatable
         KAJONA.admin.loader.loadFile("/core/module_v4skin/admin/skins/kajona_v4/js/jquery.floatThead.min.js", function() {
             console.log('table init');
             $('table.kajona-data-table').floatThead({
-                scrollingTop: 70,
+                scrollingTop: $("body.dialogBody").size() > 0 ? 0 : 70,
                 useAbsolutePositioning: true
             });
         });
@@ -1127,23 +1127,33 @@ The following sections specify the layout of the rights-mgmt
 </rights_form_header>
 
 <rights_form_form>
-<table class="table admintable table-striped">
-	<tr class="">
-		<th>&nbsp;</th>
-		<th>%%title0%%</th>
-		<th>%%title1%%</th>
-		<th>%%title2%%</th>
-		<th>%%title3%%</th>
-		<th>%%title4%%</th>
-		<th>%%title5%%</th>
-		<th>%%title6%%</th>
-		<th>%%title7%%</th>
-		<th>%%title8%%</th>
-		<th>%%title9%%</th>
-	</tr>
-	%%rows%%
-</table>
-%%inherit%%
+    <table class="table admintable table-striped kajona-data-table">
+        <thead>
+        <tr class="">
+            <th>&nbsp;</th>
+            <th>%%title0%%</th>
+            <th>%%title1%%</th>
+            <th>%%title2%%</th>
+            <th>%%title3%%</th>
+            <th>%%title4%%</th>
+            <th>%%title5%%</th>
+            <th>%%title6%%</th>
+            <th>%%title7%%</th>
+            <th>%%title8%%</th>
+            <th>%%title9%%</th>
+        </tr>
+        </thead>
+        %%rows%%
+    </table>
+    <script type="text/javascript">
+        KAJONA.admin.loader.loadFile("/core/module_v4skin/admin/skins/kajona_v4/js/jquery.floatThead.min.js", function() {
+            $('table.kajona-data-table').floatThead({
+                scrollingTop: $("body.dialogBody").size() > 0 ? 0 : 70,
+                useAbsolutePositioning: true
+            });
+        });
+    </script>
+    %%inherit%%
 </rights_form_form>
 
 <rights_form_row>
