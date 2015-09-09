@@ -571,13 +571,10 @@ class class_graph_jqplot implements interface_graph {
                 $objSeriesData->setArrDataPoints($arrData);
                 if($objSeriesData->getIntChartType() == class_graph_jqplot_charttype::STACKEDBAR) {
                     $arrSeriesOptions = $objSeriesData->getArrSeriesOptions();
-                    $arrSeriesOptions["pointLabels"]["hideZeros"] = true;
-                    $arrSeriesOptions["pointLabels"]["show"] = true;
                     $objSeriesData->setArrSeriesOptions($arrSeriesOptions);
                 }
                 if($objSeriesData->getIntChartType() == class_graph_jqplot_charttype::BAR) {
                     $arrSeriesOptions = $objSeriesData->getArrSeriesOptions();
-                    $arrSeriesOptions["pointLabels"]["hideZeros"] = true;
                     $objSeriesData->setArrSeriesOptions($arrSeriesOptions);
                 }
             }
