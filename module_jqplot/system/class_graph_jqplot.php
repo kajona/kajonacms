@@ -1037,6 +1037,11 @@ class class_graph_jqplot implements interface_graph {
         }
     }
 
+    public function setTickFormatString($strFormat) {
+        $this->arrOptions["axes"]["xaxis"]["tickOptions"]["formatString"] = $strFormat;
+        $this->arrOptions["axes"]["yaxis"]["tickOptions"]["formatString"] = $strFormat;
+    }
+
     public function drawBorder($bitDrawBorder) {
         $this->arrOptions["grid"]["drawBorder"] = $bitDrawBorder;
     }
@@ -1056,5 +1061,8 @@ class class_graph_jqplot implements interface_graph {
     {
         $this->bitIsResizeable = $bitIsResizeable;
     }
+
+
+
 
 }

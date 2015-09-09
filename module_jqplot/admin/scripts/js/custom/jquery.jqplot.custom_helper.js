@@ -276,21 +276,29 @@ KAJONA.admin.jqplotHelper = {
             //set value for primary and secondary xaxis
             var valuePrimaryAxis = null;
             var valueSecondaryAxis = null;
+            var tickOptionsrimaryAxis = null;
+            var tickOptionsSecondaryAxis = null;
             if(objTooltip.seriesObject._primaryAxis == "_xaxis") {
                 valuePrimaryAxis = objTooltip.xValue;
                 valueSecondaryAxis = objTooltip.yValue;
+
+                tickOptionsrimaryAxis = objTooltip.seriesObject._xaxis.tickOptions;
+                tickOptionsSecondaryAxis = objTooltip.seriesObject._yaxis.tickOptions;
             }
             else {
                 valuePrimaryAxis = objTooltip.yValue;
                 valueSecondaryAxis = objTooltip.xValue;
+
+                tickOptionsrimaryAxis = objTooltip.seriesObject._yaxis.tickOptions;
+                tickOptionsSecondaryAxis = objTooltip.seriesObject._xaxis.tickOptions;
             }
 
 
             if($.isNumeric(valuePrimaryAxis)) {
-                valuePrimaryAxis = $.jqplot.DefaultTickFormatter("%'g", valuePrimaryAxis);
+                valuePrimaryAxis = tickOptionsrimaryAxis.formatter(tickOptionsrimaryAxis.formatString, valuePrimaryAxis)
             }
             if($.isNumeric(valueSecondaryAxis)) {
-                valueSecondaryAxis = $.jqplot.DefaultTickFormatter("%'g", valueSecondaryAxis);
+                valueSecondaryAxis = tickOptionsSecondaryAxis.formatter(tickOptionsSecondaryAxis.formatString, valueSecondaryAxis);
             }
 
             //create the toolTip
