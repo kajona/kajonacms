@@ -300,14 +300,29 @@ class class_module_user_user extends class_model implements interface_model, int
      */
     public static function getObjectList($strUsernameFilter = "", $intStart = null, $intEnd = null)
     {
+        $strDbPrefix = _dbprefix_;
+        $arrParams = array();
+
         if (version_compare(class_module_system_module::getModuleByName("user")->getStrVersion(), "4.5", ">=")) {
-            $strQuery = "SELECT user_id FROM "._dbprefix_."user WHERE user_username LIKE ? AND (user_deleted = 0 OR user_deleted IS NULL) ORDER BY user_username, user_subsystem ASC";
+
+            $strQuery = "SELECT user.user_id FROM {$strDbPrefix}user as user
+                          LEFT JOIN {$strDbPrefix}user_kajona as user_kajona ON user.user_id = user_kajona.user_id
+                          WHERE
+                              (user.user_username LIKE ? OR user_kajona.user_forename LIKE ? OR user_kajona.user_name LIKE ?)
+
+                              AND (user.user_deleted = 0 OR user.user_deleted IS NULL)
+                          ORDER BY user.user_username, user.user_subsystem ASC";
+
+            $arrParams = array_merge($arrParams, array("%".$strUsernameFilter."%", "%".$strUsernameFilter."%", "%".$strUsernameFilter."%"));
         }
         else {
-            $strQuery = "SELECT user_id FROM "._dbprefix_."user WHERE user_username LIKE ? ORDER BY user_username, user_subsystem ASC";
+            $strQuery = "SELECT user_id FROM {$strDbPrefix}user
+                            WHERE user_username LIKE ? ORDER BY user_username, user_subsystem ASC";
+
+            $arrParams = array_merge($arrParams, array("%".$strUsernameFilter."%"));
         }
 
-        $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array("%".$strUsernameFilter."%"), $intStart, $intEnd);
+        $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, $arrParams, $intStart, $intEnd);
 
         $arrReturn = array();
         foreach ($arrIds as $arrOneId) {
@@ -326,14 +341,29 @@ class class_module_user_user extends class_model implements interface_model, int
      */
     public static function getObjectCount($strUsernameFilter = "")
     {
+        $strDbPrefix = _dbprefix_;
+        $arrParams = array();
+
         if (version_compare(class_module_system_module::getModuleByName("user")->getStrVersion(), "4.5", ">=")) {
-            $strQuery = "SELECT COUNT(*) FROM "._dbprefix_."user WHERE user_username LIKE ? AND (user_deleted = 0 OR user_deleted IS NULL) ";
+            $strQuery = "SELECT COUNT(*) FROM {$strDbPrefix}user as user
+                          LEFT JOIN {$strDbPrefix}user_kajona as user_kajona ON user.user_id = user_kajona.user_id
+                          WHERE
+                              (user.user_username LIKE ? OR user_kajona.user_forename LIKE ? OR user_kajona.user_name LIKE ?)
+
+                              AND (user.user_deleted = 0 OR user.user_deleted IS NULL)
+
+                          ORDER BY user.user_username, user.user_subsystem ASC";
+
+            $arrParams = array_merge($arrParams, array("%".$strUsernameFilter."%", "%".$strUsernameFilter."%", "%".$strUsernameFilter."%"));
         }
         else {
-            $strQuery = "SELECT COUNT(*) FROM "._dbprefix_."user WHERE user_username LIKE ? ";
+            $strQuery = "SELECT COUNT(*) FROM {$strDbPrefix}user
+                            WHERE user_username LIKE ? ";
+
+            $arrParams = array_merge($arrParams, array("%".$strUsernameFilter."%"));
         }
 
-        $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array("%".$strUsernameFilter."%"));
+        $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, $arrParams);
         return $arrRow["COUNT(*)"];
     }
 
