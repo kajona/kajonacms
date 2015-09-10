@@ -107,7 +107,9 @@ class class_module_search_search extends class_model implements interface_model,
      * @return array
      */
     public function getFilterUsers() {
-        if(uniStrlen($this->arrFormFilterUsers) > 0 && $this->arrFormFilterUsers != "-1") {
+        if (is_array($this->arrFormFilterUsers)) {
+            return $this->arrFormFilterUsers;
+        } elseif (!empty($this->arrFormFilterUsers) && $this->arrFormFilterUsers != "-1") {
             return explode(",", $this->arrFormFilterUsers);
         }
         return array();
