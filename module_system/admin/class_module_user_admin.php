@@ -206,9 +206,11 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
      */
     protected function renderCopyAction(class_model $objListEntry)
     {
+        if ($objListEntry instanceof class_module_user_user && $objListEntry->rightEdit()) {
+            return $this->objToolkit->listButton(class_link::getLinkAdmin("user", "newUser", "&user_inherit_permissions_id=".$objListEntry->getSystemid()."&pv=".$this->getParam("pv"), "", $this->getLang("commons_edit_copy", "common"), "icon_copy"));
+        }
         return "";
     }
-
 
     /**
      * @param class_model|class_module_user_user $objListEntry
@@ -222,7 +224,7 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
         $arrReturn = array();
         if ($objListEntry instanceof class_module_user_user && $objListEntry->rightEdit() && $objUsersources->getUsersource($objListEntry->getStrSubsystem())->getMembersEditable()) {
             $arrReturn[] = $this->objToolkit->listButton(
-                class_link::getLinkAdminDialog("user", "editMemberships", "&systemid=".$objListEntry->getSystemid(), "", $this->getLang("user_zugehoerigkeit"), "icon_group", $objListEntry->getStrUsername())
+                class_link::getLinkAdminDialog("user", "editMemberships", "&systemid=".$objListEntry->getSystemid() . "&folderview=1", "", $this->getLang("user_zugehoerigkeit"), "icon_group", $objListEntry->getStrUsername())
             );
         }
 
@@ -578,6 +580,12 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
         //system-settings
         $objForm->addField(new class_formentry_headline())->setStrValue($this->getLang("user_system"));
 
+        $strInheritPermissionsId = $this->getParam("user_inherit_permissions_id");
+        if (!empty($strInheritPermissionsId)) {
+            $objForm->addField(new class_formentry_hidden("user", "inherit_permissions_id"))
+                ->setStrValue($strInheritPermissionsId);
+        }
+
         $objForm->addField(new class_formentry_dropdown("user", "skin"))
             ->setArrKeyValues($arrSkins)
             ->setStrValue(($this->getParam("user_skin") != "" ? $this->getParam("user_skin") : class_module_system_setting::getConfigValue("_admin_skin_default_")))
@@ -697,6 +705,23 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
         $objForm->updateSourceObject();
         $objSourceUser->updateObjectToDb();
 
+        // assign user to the same groups if we have an user where we inherit the group settings
+        if ($this->getParam("mode") == "new") {
+            $strInheritUserId = $this->getParam("user_inherit_permissions_id");
+            if (!empty($strInheritUserId)) {
+                $objInheritUser = new class_module_user_user($strInheritUserId);
+                $arrGroupIds = $objInheritUser->getArrGroupIds();
+
+                foreach ($arrGroupIds as $strGroupId) {
+                    $objGroup = new class_module_user_group($strGroupId);
+                    $objSourceGroup = $objGroup->getObjSourceGroup();
+                    $objSourceGroup->addMember($objUser->getObjSourceUser());
+                }
+
+                $this->adminReload(class_link::getLinkAdminHref($this->getArrModule("modul"), "editMemberships", "&systemid=" . $objUser->getStrSystemid()));
+                return "";
+            }
+        }
 
         if ($this->getParam("mode") == "edit") {
             //Reset the admin-skin cookie to force the new skin
@@ -1109,7 +1134,6 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
     protected function actionEditMemberships()
     {
         $strReturn = "";
-        $this->setArrModuleEntry("template", "/folderview.tpl");
         //open the form
         $strReturn .= $this->objToolkit->formHeader(class_link::getLinkAdminHref($this->getArrModule("modul"), "saveMembership"));
         //Create a list of checkboxes
@@ -1221,7 +1245,11 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
             }
         }
 
-        $this->adminReload(class_link::getLinkAdminHref($this->getArrModule("modul"), "list", "&peClose=1&blockAction=1"));
+        if ($this->getParam("folderview")) {
+            $this->adminReload(class_link::getLinkAdminHref($this->getArrModule("modul"), "list", "&peClose=1&blockAction=1"));
+        } else {
+            $this->adminReload(class_link::getLinkAdminHref($this->getArrModule("modul"), "list"));
+        }
     }
 
 
