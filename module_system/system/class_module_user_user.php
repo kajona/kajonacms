@@ -301,13 +301,24 @@ class class_module_user_user extends class_model implements interface_model, int
     public static function getObjectList($strUsernameFilter = "", $intStart = null, $intEnd = null)
     {
         if (version_compare(class_module_system_module::getModuleByName("user")->getStrVersion(), "4.5", ">=")) {
-            $strQuery = "SELECT user_id FROM "._dbprefix_."user WHERE user_username LIKE ? AND (user_deleted = 0 OR user_deleted IS NULL) ORDER BY user_username, user_subsystem ASC";
+            $strQuery = "   SELECT us.user_id
+                              FROM "._dbprefix_."user AS us
+                         LEFT JOIN "._dbprefix_."user_kajona AS usk
+                                ON us.user_id = usk.user_id
+                             WHERE (us.user_username LIKE ? OR usk.user_forename LIKE ? OR usk.user_name LIKE ?)
+                               AND (us.user_deleted = 0 OR us.user_deleted IS NULL)
+                          ORDER BY us.user_username, us.user_subsystem ASC";
+            $arrParams = array("%".$strUsernameFilter."%", "%".$strUsernameFilter."%", "%".$strUsernameFilter."%");
         }
         else {
-            $strQuery = "SELECT user_id FROM "._dbprefix_."user WHERE user_username LIKE ? ORDER BY user_username, user_subsystem ASC";
+            $strQuery = "   SELECT user_id
+                              FROM "._dbprefix_."user
+                             WHERE user_username LIKE ?
+                          ORDER BY user_username, user_subsystem ASC";
+            $arrParams = array("%".$strUsernameFilter."%");
         }
 
-        $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array("%".$strUsernameFilter."%"), $intStart, $intEnd);
+        $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, $arrParams, $intStart, $intEnd);
 
         $arrReturn = array();
         foreach ($arrIds as $arrOneId) {
