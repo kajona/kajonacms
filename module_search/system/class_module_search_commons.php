@@ -194,6 +194,7 @@ class class_module_search_commons extends class_model implements interface_model
     private function getMetadataFilterFromSearch($objSearch) {
         $objMetadataFilter = new class_module_search_metadata_filter();
         $objMetadataFilter->setFilterModules($objSearch->getFilterModules());
+        $objMetadataFilter->setFilterUsers($objSearch->getFilterUsers());
         $objMetadataFilter->setFilterChangeStartDate($objSearch->getObjChangeStartdate());
         $objMetadataFilter->setFilterChangeEndDate($objSearch->getObjChangeEnddate());
         $objMetadataFilter->setBitPortalSearch($objSearch->getBitPortalObjectFilter());

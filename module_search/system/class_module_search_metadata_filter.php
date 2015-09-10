@@ -33,6 +33,11 @@ class class_module_search_metadata_filter {
     private $arrFilterModules = array();
 
     /**
+     * @var int[]
+     */
+    private $arrFilterUsers = array();
+
+    /**
      * @var string[]
      */
     private $arrFilterClasses = array();
@@ -66,6 +71,18 @@ class class_module_search_metadata_filter {
             $strIn = substr($strIn, 0, -1);
 
             $strQuery .= " AND system_module_nr in (" . $strIn . ") ";
+        }
+
+        //add the user filter
+        if(count($this->arrFilterUsers) > 0) {
+            $strIn = "";
+            foreach($this->arrFilterUsers as $strUserId) {
+                $arrParams[] = $strUserId;
+                $strIn .= "?,";
+            }
+            $strIn = substr($strIn, 0, -1);
+
+            $strQuery .= " AND system_owner in (" . $strIn . ") ";
         }
 
         //add the class filter
@@ -110,6 +127,14 @@ class class_module_search_metadata_filter {
      */
     public function setFilterModules($arrFilterModules) {
         $this->arrFilterModules = $arrFilterModules;
+    }
+
+    /**
+     * @param int[] $arrFilterUsers
+     * @return void
+     */
+    public function setFilterUsers($arrFilterUsers) {
+        $this->arrFilterUsers = $arrFilterUsers;
     }
 
     /**

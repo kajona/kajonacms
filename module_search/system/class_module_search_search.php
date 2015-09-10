@@ -53,6 +53,15 @@ class class_module_search_search extends class_model implements interface_model,
     private $arrFormFilterModules = array();
 
     /**
+     * For form-generation only
+     *
+     * @var array
+     * @fieldType dropdown
+     * @fieldLabel search_users
+     */
+    private $arrFormFilterUsers = array();
+
+    /**
      * @var null
      * @fieldType date
      */
@@ -88,6 +97,18 @@ class class_module_search_search extends class_model implements interface_model,
     public function getFilterModules() {
         if(uniStrlen($this->strInternalFilterModules) > 0 && $this->strInternalFilterModules != "-1") {
             return explode(",", $this->strInternalFilterModules);
+        }
+        return array();
+    }
+
+    /**
+     * Returns the filter modules to edit the filter modules
+     *
+     * @return array
+     */
+    public function getFilterUsers() {
+        if(uniStrlen($this->arrFormFilterUsers) > 0 && $this->arrFormFilterUsers != "-1") {
+            return explode(",", $this->arrFormFilterUsers);
         }
         return array();
     }
@@ -215,6 +236,20 @@ class class_module_search_search extends class_model implements interface_model,
         else {
             return array();
         }
+    }
+
+    /**
+     * @param array $arrFormFilterModules
+     */
+    public function setArrFormFilterUsers($arrFormFilterUsers) {
+        $this->arrFormFilterUsers = $arrFormFilterUsers;
+    }
+
+    /**
+     * @return array
+     */
+    public function getArrFormFilterUsers() {
+        return $this->arrFormFilterUsers;
     }
 
 
