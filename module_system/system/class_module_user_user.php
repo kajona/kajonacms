@@ -305,13 +305,14 @@ class class_module_user_user extends class_model implements interface_model, int
 
         if (version_compare(class_module_system_module::getModuleByName("user")->getStrVersion(), "4.5", ">=")) {
 
-            $strQuery = "SELECT user.user_id FROM {$strDbPrefix}user as user
-                          LEFT JOIN {$strDbPrefix}user_kajona as user_kajona ON user.user_id = user_kajona.user_id
+            $strQuery = "SELECT user_tbl.user_id
+                          FROM {$strDbPrefix}user AS user_tbl
+                          LEFT JOIN {$strDbPrefix}user_kajona AS user_kajona ON user_tbl.user_id = user_kajona.user_id
                           WHERE
-                              (user.user_username LIKE ? OR user_kajona.user_forename LIKE ? OR user_kajona.user_name LIKE ?)
+                              (user_tbl.user_username LIKE ? OR user_kajona.user_forename LIKE ? OR user_kajona.user_name LIKE ?)
 
-                              AND (user.user_deleted = 0 OR user.user_deleted IS NULL)
-                          ORDER BY user.user_username, user.user_subsystem ASC";
+                              AND (user_tbl.user_deleted = 0 OR user_tbl.user_deleted IS NULL)
+                          ORDER BY user_tbl.user_username, user_tbl.user_subsystem ASC";
 
             $arrParams = array_merge($arrParams, array("%".$strUsernameFilter."%", "%".$strUsernameFilter."%", "%".$strUsernameFilter."%"));
         }
@@ -345,14 +346,14 @@ class class_module_user_user extends class_model implements interface_model, int
         $arrParams = array();
 
         if (version_compare(class_module_system_module::getModuleByName("user")->getStrVersion(), "4.5", ">=")) {
-            $strQuery = "SELECT COUNT(*) FROM {$strDbPrefix}user as user
-                          LEFT JOIN {$strDbPrefix}user_kajona as user_kajona ON user.user_id = user_kajona.user_id
+            $strQuery = "SELECT COUNT(*)
+                          FROM {$strDbPrefix}user AS user_tbl
+                          LEFT JOIN {$strDbPrefix}user_kajona AS user_kajona ON user_tbl.user_id = user_kajona.user_id
                           WHERE
-                              (user.user_username LIKE ? OR user_kajona.user_forename LIKE ? OR user_kajona.user_name LIKE ?)
+                              (user_tbl.user_username LIKE ? OR user_kajona.user_forename LIKE ? OR user_kajona.user_name LIKE ?)
 
-                              AND (user.user_deleted = 0 OR user.user_deleted IS NULL)
-
-                          ORDER BY user.user_username, user.user_subsystem ASC";
+                              AND (user_tbl.user_deleted = 0 OR user_tbl.user_deleted IS NULL)
+                          ORDER BY user_tbl.user_username, user_tbl.user_subsystem ASC";
 
             $arrParams = array_merge($arrParams, array("%".$strUsernameFilter."%", "%".$strUsernameFilter."%", "%".$strUsernameFilter."%"));
         }
