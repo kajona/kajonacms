@@ -352,8 +352,7 @@ class class_module_user_user extends class_model implements interface_model, int
                           WHERE
                               (user_tbl.user_username LIKE ? OR user_kajona.user_forename LIKE ? OR user_kajona.user_name LIKE ?)
 
-                              AND (user_tbl.user_deleted = 0 OR user_tbl.user_deleted IS NULL)
-                          ORDER BY user_tbl.user_username, user_tbl.user_subsystem ASC";
+                              AND (user_tbl.user_deleted = 0 OR user_tbl.user_deleted IS NULL)";
 
             $arrParams = array_merge($arrParams, array("%".$strUsernameFilter."%", "%".$strUsernameFilter."%", "%".$strUsernameFilter."%"));
         }
