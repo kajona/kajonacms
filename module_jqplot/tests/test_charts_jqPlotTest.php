@@ -204,7 +204,7 @@ class class_test_charts_jqPlotTest extends class_testbase  {
         $objGraph->setStrXAxisTitle("x-axis");
         $objGraph->setStrYAxisTitle("y-axis");
         $objGraph->setStrGraphTitle("Test Stacked Bar Chart");
-        $objGraph->addStackedBarChartSet(array(8, -5, 7, 8, 4, 12, 1, 1, 1, 3, 4, 5, 6), "serie 1");
+        $objGraph->addStackedBarChartSet(array(0, -5, 7, 8, 4, 12, 1, 1, 1, 3, 4, 5, 6), "serie 1");
         $objGraph->addStackedBarChartSet(array(3, -4, 6, 2, 5, 2, 2, 2, 2, 3, 4, 5, 6), "serie 2");
         $objGraph->setArrXAxisTickLabels(array("v1", "v2", "v3", "v4", "v5", "v6", "v7", "v8", "v9", "v10", "v11", "v12", "v13"));
         $objGraph->setIntXAxisAngle(-20);
@@ -217,7 +217,7 @@ class class_test_charts_jqPlotTest extends class_testbase  {
         $objGraph->setStrYAxisTitle("y-axis");
         $objGraph->setStrGraphTitle("Test Stacked Horizontal Bar Chart");
         $objGraph->addStackedBarChartSet(array(8, -5, 7, 8, 4, 12, 1, 1, 1, 3, 4, 5, 6), "serie 1");
-        $objGraph->addStackedBarChartSet(array(3, -4, 6, 2, 5, 2, 2, 2, 2, 3, 4, 5, 6), "serie 2");
+        $objGraph->addStackedBarChartSet(array(3, 0, 6, 2, 5, 2, 2, 2, 2, 3, 4, 5, 6), "serie 2");
         $objGraph->addStackedBarChartSet(array(3, -4, 6, 2, 5, 2, 2, 2, 2, 3, 4, 5, 6), "serie 3");
         $objGraph->setArrXAxisTickLabels(array("v1", "v2", "v3", "v4", "v5", "v6", "v7", "v8", "v9", "v10", "v11", "v12", "v13"), 5);
         $objGraph->setIntXAxisAngle(-20);

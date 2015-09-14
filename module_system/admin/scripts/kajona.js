@@ -803,10 +803,22 @@ KAJONA.admin.forms.renderMandatoryFields = function(arrFields) {
     for(var i=0; i<arrFields.length; i++) {
         var arrElement = arrFields[i];
         if(arrElement.length == 2) {
-            if(arrElement[1] == 'date') {
-               $("#"+arrElement[0]+"_day").addClass("mandatoryFormElement");
-               $("#"+arrElement[0]+"_month").addClass("mandatoryFormElement");
-               $("#"+arrElement[0]+"_year").addClass("mandatoryFormElement");
+            if(arrElement[1] == 'date' || arrElement[1] == 'class_date_validator') {
+
+                var $objElementDay = $("#"+arrElement[0]+"_day");
+                if($objElementDay) {
+                    $objElementDay.addClass("mandatoryFormElement");
+                }
+
+                var $objElementMonth = $("#"+arrElement[0]+"_month");
+                if($objElementMonth) {
+                    $objElementMonth.addClass("mandatoryFormElement");
+                }
+
+                var $objElementYear = $("#"+arrElement[0]+"_year");
+                if($objElementYear) {
+                    $objElementYear.addClass("mandatoryFormElement");
+               }
             }
 
             var $objElement = $("#" + arrElement[0]);

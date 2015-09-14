@@ -571,13 +571,10 @@ class class_graph_jqplot implements interface_graph {
                 $objSeriesData->setArrDataPoints($arrData);
                 if($objSeriesData->getIntChartType() == class_graph_jqplot_charttype::STACKEDBAR) {
                     $arrSeriesOptions = $objSeriesData->getArrSeriesOptions();
-                    $arrSeriesOptions["pointLabels"]["hideZeros"] = true;
-                    $arrSeriesOptions["pointLabels"]["show"] = true;
                     $objSeriesData->setArrSeriesOptions($arrSeriesOptions);
                 }
                 if($objSeriesData->getIntChartType() == class_graph_jqplot_charttype::BAR) {
                     $arrSeriesOptions = $objSeriesData->getArrSeriesOptions();
-                    $arrSeriesOptions["pointLabels"]["hideZeros"] = true;
                     $objSeriesData->setArrSeriesOptions($arrSeriesOptions);
                 }
             }
@@ -1037,6 +1034,11 @@ class class_graph_jqplot implements interface_graph {
         }
     }
 
+    public function setTickFormatString($strFormat) {
+        $this->arrOptions["axes"]["xaxis"]["tickOptions"]["formatString"] = $strFormat;
+        $this->arrOptions["axes"]["yaxis"]["tickOptions"]["formatString"] = $strFormat;
+    }
+
     public function drawBorder($bitDrawBorder) {
         $this->arrOptions["grid"]["drawBorder"] = $bitDrawBorder;
     }
@@ -1056,5 +1058,8 @@ class class_graph_jqplot implements interface_graph {
     {
         $this->bitIsResizeable = $bitIsResizeable;
     }
+
+
+
 
 }

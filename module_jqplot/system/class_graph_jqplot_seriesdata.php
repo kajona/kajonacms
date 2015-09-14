@@ -77,6 +77,7 @@ class class_graph_jqplot_seriesdata {
             $this->arrSeriesOptions["rendererOptions"]["shadow"] = false;
             $this->arrSeriesOptions["rendererOptions"]["fillToZero"] = true;
 
+            $this->arrSeriesOptions["pointLabels"]["hideZeros"] = true;
             $this->arrSeriesOptions["pointLabels"]["show"] = true;
 
         }
