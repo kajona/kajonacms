@@ -121,15 +121,17 @@ class class_module_dashboard_admin_xml extends class_admin_controller implements
         $arrData = array();
         foreach ($arrEvents as $objEvent) {
             /** @var class_event_entry $objEvent */
-            $strIcon = class_adminskin_helper::getAdminImage($objEvent->getStrIcon());
-            array_push($arrData, array(
-                "title" => $objEvent->getStrDisplayName(),
-                "tooltip" => $objEvent->getStrDisplayName(),
-                "start" => date("Y-m-d", $objEvent->getObjValidDate()->getTimeInOldStyle()),
-                "allDay" => true,
-                "url" => $objEvent->getStrHref(),
-                "className" => array($objEvent->getStrCategory()),
-            ));
+            if ($objEvent->getObjValidDate() instanceof class_date) {
+                $strIcon = class_adminskin_helper::getAdminImage($objEvent->getStrIcon());
+                array_push($arrData, array(
+                    "title" => $objEvent->getStrDisplayName(),
+                    "tooltip" => $objEvent->getStrDisplayName(),
+                    "start" => date("Y-m-d", $objEvent->getObjValidDate()->getTimeInOldStyle()),
+                    "allDay" => true,
+                    "url" => $objEvent->getStrHref(),
+                    "className" => array($objEvent->getStrCategory()),
+                ));
+            }
         }
 
         return json_encode($arrData);
