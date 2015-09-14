@@ -143,92 +143,30 @@ class class_module_dashboard_admin extends class_admin_controller implements int
     protected function actionCalendar() {
         $strReturn = "";
 
-        //save dates to session
-        if($this->getParam("month") != "")
-            $this->objSession->setSession($this->strStartMonthKey, $this->getParam("month"));
-        if($this->getParam("year") != "")
-            $this->objSession->setSession($this->strStartYearKey, $this->getParam("year"));
+        $strContainerId = "calendar-" . generateSystemid();
+        $strEventCallback = class_link::getLinkAdminXml("dashboard", "getCalendarEvents");
 
-        $strContainerId = generateSystemid();
+        $strReturn .= "<div id='" . $strContainerId . "'></div>";
+        $strReturn .= "<script type=\"text/javascript\">";
+        $strReturn .= <<<JS
+            KAJONA.admin.loader.loadFile(['/core/module_dashboard/admin/scripts/fullcalendar/fullcalendar.min.js',
+                '/core/module_dashboard/admin/scripts/fullcalendar/moment.min.js',
+                '/core/module_dashboard/admin/scripts/fullcalendar/fullcalendar.min.css'], function(){
 
-        $strContent = "<script type=\"text/javascript\">";
-        $strContent .= <<<JS
-            $(document).ready(function() {
-                  KAJONA.admin.ajax.genericAjaxCall("dashboard", "renderCalendar", "{$strContainerId}", function(data, status, jqXHR) {
-                    if(status == 'success') {
-                        var intStart = data.indexOf("[CDATA[")+7;
-                        $("#{$strContainerId}").html(data.substr(
-                          intStart, data.indexOf("]]")-intStart
-                        ));
-                        if(data.indexOf("[CDATA[") < 0) {
-                            var intStart = data.indexOf("<error>")+7;
-                            $("#{$strContainerId}").html(o.responseText.substr(
-                              intStart, data.indexOf("</error>")-intStart
-                            ));
-                        }
-                        KAJONA.util.evalScript(data);
-                        KAJONA.admin.tooltip.initTooltip();
-                    }
-                    else {
-                        KAJONA.admin.statusDisplay.messageError("<b>Request failed!</b><br />" + data);
-                    }
-                  })
+                $('#{$strContainerId}').fullCalendar({
+                    header: {
+                        left: 'prev,next',
+                        center: 'title',
+                        right: 'month'
+                    },
+                    editable: false,
+                    theme: true,
+                    eventLimit: true,
+                    events: '{$strEventCallback}'
+                });
             });
 JS;
-        $strContent .= "</script>";
-
-        //fetch modules relevant for processing
-        $arrLegendEntries = array();
-        $arrFilterEntries = array();
-
-        $arrCategories = class_event_repository::getAllCategories();
-        foreach ($arrCategories as $arrCategory) {
-            foreach ($arrCategory as $strKey => $strCategory) {
-                $arrLegendEntries[$strCategory] = $strKey . " calendarEvent";
-                $arrFilterEntries[$strKey] = $strCategory;
-            }
-        }
-
-        if($this->getParam("doCalendarFilter") != "") {
-            //update filter-criteria
-            foreach(array_keys($arrFilterEntries) as $strOneId) {
-                if($this->getParam($strOneId) != "")
-                    $this->objSession->sessionUnset($strOneId);
-                else
-                    $this->objSession->setSession($strOneId, "disabled");
-            }
-        }
-
-        //render the single rows. calculate the first day of the row
-        $objDate = new class_date();
-        $objDate->setIntDay(1);
-
-        if($this->objSession->getSession($this->strStartMonthKey) != "")
-            $objDate->setIntMonth($this->objSession->getSession($this->strStartMonthKey));
-
-        if($this->objSession->getSession($this->strStartYearKey) != "")
-            $objDate->setIntYear($this->objSession->getSession($this->strStartYearKey));
-
-
-        //pager-setup
-        $objEndDate = clone $objDate;
-        $objEndDate->setNextMonth();
-        $objEndDate->setPreviousDay();
-
-        $strCenter = dateToString($objDate, false)." - ".  dateToString($objEndDate, false);
-
-        $objEndDate->setNextDay();
-        $objPrevDate = clone $objDate;
-        $objPrevDate->setPreviousDay();
-
-        $strPrev = class_link::getLinkAdmin($this->getArrModule("modul"), "calendar", "&month=".$objPrevDate->getIntMonth()."&year=".$objPrevDate->getIntYear(), $this->getLang("calendar_prev"));
-        $strNext = class_link::getLinkAdmin($this->getArrModule("modul"), "calendar", "&month=".$objEndDate->getIntMonth()."&year=".$objEndDate->getIntYear(), $this->getLang("calendar_next"));
-
-        $strReturn .= $this->objToolkit->getCalendarPager($strPrev, $strCenter, $strNext);
-        $strReturn .= $strContent;
-        $strReturn .= $this->objToolkit->getCalendarContainer($strContainerId);
-        //$strReturn .= $this->objToolkit->getCalendarLegend($arrLegendEntries);
-        $strReturn .= $this->objToolkit->getCalendarFilter($arrFilterEntries);
+        $strReturn .= "</script>";
 
         return $strReturn;
     }

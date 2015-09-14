@@ -19,18 +19,13 @@ class class_module_eventmanager_event_provider implements interface_event_provid
         return class_lang::getInstance()->getLang("modul_titel", "eventmanager");
     }
 
-    public function getEventsByCategoryAndDate($strCategory, class_date $objDate)
+    public function getEventsByCategoryAndDate($strCategory, class_date $objStartDate, class_date $objEndDate)
     {
         if ($strCategory != "calendarEvent") {
             return array();
         }
 
         $arrResult = array();
-        $objStartDate = clone $objDate;
-        $objStartDate->setIntHour(0)->setIntMin(0)->setIntSec(0);
-        $objEndDate = clone $objDate;
-        $objEndDate->setIntHour(23)->setIntMin(59)->setIntSec(59);
-
         $arrEvents = class_module_eventmanager_event::getAllEvents(null, null, $objStartDate, $objEndDate);
         foreach($arrEvents as $objOneEvent) {
             if ($objOneEvent->rightView()) {

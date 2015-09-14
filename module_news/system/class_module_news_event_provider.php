@@ -19,18 +19,13 @@ class class_module_news_event_provider implements interface_event_provider
         return class_lang::getInstance()->getLang("modul_titel", "news");
     }
 
-    public function getEventsByCategoryAndDate($strCategory, class_date $objDate)
+    public function getEventsByCategoryAndDate($strCategory, class_date $objStartDate, class_date $objEndDate)
     {
         if ($strCategory != "calendarNews") {
             return array();
         }
 
         $arrResult = array();
-        $objStartDate = clone $objDate;
-        $objStartDate->setIntHour(0)->setIntMin(0)->setIntSec(0);
-        $objEndDate = clone $objDate;
-        $objEndDate->setIntHour(23)->setIntMin(59)->setIntSec(59);
-
         $arrNews = class_module_news_news::getObjectList("", null, null, $objStartDate, $objEndDate);
         foreach($arrNews as $objOneNews) {
             if ($objOneNews->rightView()) {

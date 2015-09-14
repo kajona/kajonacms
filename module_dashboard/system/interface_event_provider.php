@@ -29,10 +29,11 @@ interface interface_event_provider extends interface_generic_plugin {
      * to display i.e. events on a calendar
      *
      * @param string $strCategory
-     * @param class_date $objDate
+     * @param class_date $objStartDate
+     * @param class_date $objEndDate
      * @return class_event_entry[]
      */
-    public function getEventsByCategoryAndDate($strCategory, class_date $objDate);
+    public function getEventsByCategoryAndDate($strCategory, class_date $objStartDate, class_date $objEndDate);
 
     /**
      * Returns an array of all available categories

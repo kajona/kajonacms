@@ -101,133 +101,38 @@ class class_module_dashboard_admin_xml extends class_admin_controller implements
      * @return string
      * @permissions view
      */
-    protected function actionRenderCalendar() {
-        $strReturn = "";
-        $strContent = "";
+    protected function actionGetCalendarEvents() {
 
-        $arrJsHighlights = array();
+        class_response_object::getInstance()->setStrResponseType(class_http_responsetypes::STR_TYPE_JSON);
 
-        $strReturn .= "<content><![CDATA[";
-
-        //fetch modules relevant for processing
+        $arrEvents = array();
         $arrCategories = class_event_repository::getAllCategories();
+        $objStartDate = new class_date(strtotime($this->getParam("start")));
+        $objEndDate = new class_date(strtotime($this->getParam("end")));
 
-        //the header row
-        $arrWeekdays = explode(",", $this->getLang("calendar_weekday"));
-        foreach($arrWeekdays as $intKey => $strValue)
-            $arrWeekdays[$intKey] = trim(uniStrReplace("\"", "", $strValue));
-
-        $strContent .= $this->objToolkit->getCalendarHeaderRow($arrWeekdays);
-
-        //render the single rows. calculate the first day of the row
-        $objDate = new class_date();
-        $objDate->setIntDay(1);
-
-        //set to interval stored in session
-        if($this->objSession->getSession($this->strStartMonthKey) != "")
-            $objDate->setIntMonth($this->objSession->getSession($this->strStartMonthKey));
-
-        if($this->objSession->getSession($this->strStartYearKey) != "")
-            $objDate->setIntYear($this->objSession->getSession($this->strStartYearKey));
-
-        $intCurMonth = $objDate->getIntMonth();
-        $intCurYear = $objDate->getIntYear();
-        $objToday = new class_date();
-
-        //start by monday
-        while($objDate->getIntDayOfWeek() != 1)
-            $objDate->setPreviousDay();
-
-        $strEntries = "";
-        $intRowEntryCount = 0;
-        while(
-            ($objDate->getIntMonth() <= $intCurMonth && $objDate->getIntYear() <= $intCurYear) ||
-            ($objDate->getIntMonth() == 12 && $objDate->getIntYear() < $intCurYear) ||
-            $intRowEntryCount % 7 != 0
-        ) {
-            $intRowEntryCount++;
-
-            $strDate = $objDate->getIntDay();
-
-            $arrEvents = array();
-            if($objDate->getIntMonth() == $intCurMonth) {
-                //Query modules for dates
-                $objTargetDate = clone $objDate;
-
-                foreach ($arrCategories as $arrCategory) {
-                    foreach ($arrCategory as $strKey => $strValue) {
-                        if ($this->objSession->getSession($strKey) != "disabled") {
-                            $arrEvents = array_merge($arrEvents, class_event_repository::getEventsByCategoryAndDate($strKey, $objTargetDate));
-                        }
-                    }
+        foreach ($arrCategories as $arrCategory) {
+            foreach ($arrCategory as $strKey => $strValue) {
+                if ($this->objSession->getSession($strKey) != "disabled") {
+                    $arrEvents = array_merge($arrEvents, class_event_repository::getEventsByCategoryAndDate($strKey, $objStartDate, $objEndDate));
                 }
             }
-
-            while(count($arrEvents) <= 3) {
-                $objDummy = new class_event_entry();
-                $objDummy->setStrCategory("spacer");
-                $objDummy->setStrDisplayName("&nbsp;");
-                $arrEvents[] = $objDummy;
-            }
-
-            $strEvents = "";
-            /** @var class_event_entry $objOneEvent */
-            foreach($arrEvents as $objOneEvent) {
-                $strName = $objOneEvent->getStrDisplayName();
-                if ($objOneEvent->getStrCategory() != "spacer") {
-                    $strHref = $objOneEvent->getStrHref() != "" ? $objOneEvent->getStrHref() : "#";
-                    $strIcon = class_link::getLinkAdminManual('href="' . $strHref . '"', "", "", $objOneEvent->getStrIcon());
-
-                    $strEvents .= $this->objToolkit->getCalendarEvent($strIcon . " " . $strName, $objOneEvent->getStrSystemid(), "", "calendarEvent " . $objOneEvent->getStrCategory());
-                } else {
-                    $strEvents .= $this->objToolkit->getCalendarEvent($strName, $objOneEvent->getStrSystemid(), "", $objOneEvent->getStrCategory());
-                }
-            }
-
-            $bitBlocked = false;
-            if($objDate->getIntDayOfWeek() == 0 || $objDate->getIntDayOfWeek() == 6)
-                $bitBlocked = true;
-
-            $strToday = "";
-            if($objToday->getIntYear() == $objDate->getIntYear() && $objToday->getIntMonth() == $objDate->getIntMonth() && $objToday->getIntDay() == $objDate->getIntDay())
-                $strToday = " calendarDateToday";
-
-
-            if($objDate->getIntMonth() != $intCurMonth)
-                $strEntries .= $this->objToolkit->getCalendarEntry($strEvents, $strDate, "calendarEntryOutOfRange".$strToday);
-            else if($bitBlocked)
-                $strEntries .= $this->objToolkit->getCalendarEntry($strEvents, $strDate, "calendarEntryBlocked".$strToday);
-            else
-                $strEntries .= $this->objToolkit->getCalendarEntry($strEvents, $strDate, "calendarEntry".$strToday);
-
-            if($intRowEntryCount % 7 == 0) {
-                $strContent .= $this->objToolkit->getCalendarRow($strEntries);
-                $strEntries = "";
-            }
-
-            $objDate->setNextDay();
         }
 
-        if($strEntries != "") {
-            $strContent .= $this->objToolkit->getCalendarRow($strEntries);
+        $arrData = array();
+        foreach ($arrEvents as $objEvent) {
+            /** @var class_event_entry $objEvent */
+            $strIcon = class_adminskin_helper::getAdminImage($objEvent->getStrIcon());
+            array_push($arrData, array(
+                "title" => $objEvent->getStrDisplayName(),
+                "tooltip" => $objEvent->getStrDisplayName(),
+                "start" => date("Y-m-d", $objEvent->getObjValidDate()->getTimeInOldStyle()),
+                "allDay" => true,
+                "url" => $objEvent->getStrHref(),
+                "className" => array($objEvent->getStrCategory()),
+            ));
         }
 
-        $strReturn .= $this->objToolkit->getCalendarWrapper($strContent);
-
-        //build js-arrays
-        $strJs = "<script type=\"text/javascript\">";
-        foreach($arrJsHighlights as $strCommonId => $arrEntries) {
-            $strJs .= " var kj_cal_".$strCommonId." = new Array();";
-            foreach($arrEntries as $strOneIdentifier) {
-                $strJs .= "kj_cal_".$strCommonId.".push('".$strOneIdentifier."');";
-            }
-        }
-        $strJs .= "</script>";
-
-        $strReturn .= $strJs;
-
-        $strReturn .= "]]></content>";
-        return $strReturn;
+        return json_encode($arrData);
     }
 
     /**

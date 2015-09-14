@@ -34,9 +34,9 @@ class class_event_repository
      *
      * @return class_event_entry[]
      */
-    public static function getEventsByCategoryAndDate($strCategory, class_date $objDate)
+    public static function getEventsByCategoryAndDate($strCategory, class_date $objStartDate, class_date $objEndDate)
     {
-        $strKey = $strCategory . substr($objDate->getLongTimestamp(), 0, 8);
+        $strKey = $strCategory . substr($objStartDate->getLongTimestamp(), 0, 8) . substr($objEndDate->getLongTimestamp(), 0, 8);
         if (isset(self::$events[$strKey])) {
             return self::$events[$strKey];
         }
@@ -48,7 +48,7 @@ class class_event_repository
         $arrEvents = array();
         foreach ($arrPlugins as $objPlugin) {
             if ($objPlugin instanceof interface_event_provider && $objPlugin->rightView()) {
-                $arrEvents = array_merge($arrEvents, $objPlugin->getEventsByCategoryAndDate($strCategory, $objDate));
+                $arrEvents = array_merge($arrEvents, $objPlugin->getEventsByCategoryAndDate($strCategory, $objStartDate, $objEndDate));
             }
         }
 
