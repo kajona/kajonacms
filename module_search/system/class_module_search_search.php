@@ -56,10 +56,10 @@ class class_module_search_search extends class_model implements interface_model,
      * For form-generation only
      *
      * @var array
-     * @fieldType dropdown
+     * @fieldType user
      * @fieldLabel search_users
      */
-    private $arrFormFilterUsers = array();
+    private $strFormFilterUser = null;
 
     /**
      * @var null
@@ -106,13 +106,11 @@ class class_module_search_search extends class_model implements interface_model,
      *
      * @return array
      */
-    public function getFilterUsers() {
-        if (is_array($this->arrFormFilterUsers)) {
-            return $this->arrFormFilterUsers;
-        } elseif (!empty($this->arrFormFilterUsers) && $this->arrFormFilterUsers != "-1") {
-            return explode(",", $this->arrFormFilterUsers);
+    public function getFilterUser() {
+        if (!empty($this->strFormFilterUser)) {
+            return $this->strFormFilterUser;
         }
-        return array();
+        return null;
     }
 
     /**
@@ -241,17 +239,17 @@ class class_module_search_search extends class_model implements interface_model,
     }
 
     /**
-     * @param array $arrFormFilterModules
+     * @param string $arrFormFilterModules
      */
-    public function setArrFormFilterUsers($arrFormFilterUsers) {
-        $this->arrFormFilterUsers = $arrFormFilterUsers;
+    public function setStrFormFilterUser($strFormFilterUser) {
+        $this->strFormFilterUser = $strFormFilterUser;
     }
 
     /**
-     * @return array
+     * @return string
      */
-    public function getArrFormFilterUsers() {
-        return $this->arrFormFilterUsers;
+    public function getStrFormFilterUser() {
+        return $this->strFormFilterUser;
     }
 
 
