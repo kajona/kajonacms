@@ -55,7 +55,7 @@ class class_module_search_search extends class_model implements interface_model,
     /**
      * For form-generation only
      *
-     * @var array
+     * @var string
      * @fieldType user
      * @fieldLabel search_users
      */
@@ -102,9 +102,9 @@ class class_module_search_search extends class_model implements interface_model,
     }
 
     /**
-     * Returns the filter modules to edit the filter modules
+     * Returns the user id of the record owner
      *
-     * @return array
+     * @return string
      */
     public function getFilterUser() {
         if (!empty($this->strFormFilterUser)) {

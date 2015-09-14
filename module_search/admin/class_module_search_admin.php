@@ -143,9 +143,6 @@ class class_module_search_admin extends class_admin_simple implements interface_
         if($this->getParam("filtermodules") != "") {
             $objSearch->setStrInternalFilterModules($this->getParam("filtermodules"));
         }
-        if($this->getParam("filterusers") != "") {
-            $objSearch->setArrFormFilterUsers($this->getParam("filterusers"));
-        }
 
         if($this->getParam("search_filter_all") != "")
             $objSearch->setStrInternalFilterModules("-1");

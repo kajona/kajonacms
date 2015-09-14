@@ -33,7 +33,6 @@ $lang["search_users"]                    = "User";
 $lang["search_search"]                   = "Search";
 $lang["searchterm_label"]                = "Search query";
 $lang["select_all"]                      = "All modules";
-$lang["select_all_users"]                = "Alle users";
 $lang["stats_title"]                     = "Search queries";
 $lang["submit_label"]                    = "Search";
 $lang["systemtask_search_indexrebuild"]              = "Rebuild search index";
