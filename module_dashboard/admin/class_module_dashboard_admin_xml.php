@@ -124,6 +124,7 @@ class class_module_dashboard_admin_xml extends class_admin_controller implements
             $strIcon = class_adminskin_helper::getAdminImage($objEvent->getStrIcon());
             $arrRow = array(
                 "title" => $objEvent->getStrDisplayName(),
+                "icon" => $strIcon,
                 "allDay" => true,
                 "url" => $objEvent->getStrHref(),
                 "className" => array($objEvent->getStrCategory()),

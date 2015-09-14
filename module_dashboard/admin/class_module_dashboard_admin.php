@@ -162,7 +162,15 @@ class class_module_dashboard_admin extends class_admin_controller implements int
                     editable: false,
                     theme: true,
                     eventLimit: true,
-                    events: '{$strEventCallback}'
+                    events: '{$strEventCallback}',
+                    eventRender: function(event, el) {
+                        el.qtip({
+                            content: event.title
+                        });
+                        if (event.icon) {
+                            el.find("span.fc-title").prepend(event.icon);
+                        }
+                    }
                 });
             });
 JS;
