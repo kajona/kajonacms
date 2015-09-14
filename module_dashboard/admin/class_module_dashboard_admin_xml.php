@@ -127,7 +127,7 @@ class class_module_dashboard_admin_xml extends class_admin_controller implements
                 "icon" => $strIcon,
                 "allDay" => true,
                 "url" => $objEvent->getStrHref(),
-                "className" => array($objEvent->getStrCategory()),
+                "className" => array($objEvent->getStrCategory(), "calendar-event"),
             );
 
             if ($objEvent->getObjStartDate() instanceof class_date && $objEvent->getObjEndDate() instanceof class_date) {

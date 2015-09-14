@@ -147,7 +147,7 @@ class class_module_dashboard_admin extends class_admin_controller implements int
         $strEventCallback = class_link::getLinkAdminXml("dashboard", "getCalendarEvents");
         $strLang = class_session::getInstance()->getAdminLanguage();
 
-        $strReturn .= "<div id='" . $strContainerId . "'></div>";
+        $strReturn .= "<div id='" . $strContainerId . "' class='calendar'></div>";
         $strReturn .= "<script type=\"text/javascript\">";
         $strReturn .= <<<JS
             KAJONA.admin.loader.loadFile(['/core/module_dashboard/admin/scripts/fullcalendar/fullcalendar.min.css',
@@ -162,17 +162,26 @@ class class_module_dashboard_admin extends class_admin_controller implements int
                                 right: ''
                             },
                             editable: false,
-                            theme: true,
+                            theme: false,
                             lang: '{$strLang}',
                             eventLimit: true,
                             events: '{$strEventCallback}',
-                            eventRender: function(event, el) {
+                            eventRender: function(event, el){
                                 KAJONA.admin.tooltip.addTooltip(el, event.title);
                                 if (event.icon) {
                                     el.find("span.fc-title").prepend(event.icon);
                                 }
+                            },
+                            loading: function(isLoading){
+                                if (isLoading) {
+                                    $('.fc-right').html('<div class="content loadingContainer" style="text-align:right;margin-right:8px;"></div>');
+                                } else {
+                                    $('.fc-right').html('');
+                                }
                             }
                         });
+                        $('.fc-button-group').removeClass().addClass('btn-group');
+                        $('.fc-button').removeClass().addClass('btn btn-default');
                     };
 
                     if ('{$strLang}' != 'en') {
