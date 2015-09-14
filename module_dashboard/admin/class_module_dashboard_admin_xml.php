@@ -121,17 +121,24 @@ class class_module_dashboard_admin_xml extends class_admin_controller implements
         $arrData = array();
         foreach ($arrEvents as $objEvent) {
             /** @var class_event_entry $objEvent */
-            if ($objEvent->getObjValidDate() instanceof class_date) {
-                $strIcon = class_adminskin_helper::getAdminImage($objEvent->getStrIcon());
-                array_push($arrData, array(
-                    "title" => $objEvent->getStrDisplayName(),
-                    "tooltip" => $objEvent->getStrDisplayName(),
-                    "start" => date("Y-m-d", $objEvent->getObjValidDate()->getTimeInOldStyle()),
-                    "allDay" => true,
-                    "url" => $objEvent->getStrHref(),
-                    "className" => array($objEvent->getStrCategory()),
-                ));
+            $strIcon = class_adminskin_helper::getAdminImage($objEvent->getStrIcon());
+            $arrRow = array(
+                "title" => $objEvent->getStrDisplayName(),
+                "allDay" => true,
+                "url" => $objEvent->getStrHref(),
+                "className" => array($objEvent->getStrCategory()),
+            );
+
+            if ($objEvent->getObjStartDate() instanceof class_date && $objEvent->getObjEndDate() instanceof class_date) {
+                $arrRow["start"] = date("Y-m-d", $objEvent->getObjStartDate()->getTimeInOldStyle());
+                $arrRow["end"] = date("Y-m-d", $objEvent->getObjEndDate()->getTimeInOldStyle());
+            } elseif ($objEvent->getObjValidDate() instanceof class_date) {
+                $arrRow["start"] = date("Y-m-d", $objEvent->getObjValidDate()->getTimeInOldStyle());
+            } else {
+                continue;
             }
+
+            array_push($arrData, $arrRow);
         }
 
         return json_encode($arrData);

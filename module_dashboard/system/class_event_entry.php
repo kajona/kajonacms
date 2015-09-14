@@ -16,6 +16,8 @@
 class class_event_entry extends class_entry_abstract
 {
     protected $strHref;
+    protected $objStartDate;
+    protected $objEndDate;
 
     /**
      * @return string
@@ -31,5 +33,37 @@ class class_event_entry extends class_entry_abstract
     public function setStrHref($strHref)
     {
         $this->strHref = $strHref;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getObjStartDate()
+    {
+        return $this->objStartDate;
+    }
+
+    /**
+     * @param mixed $objStartDate
+     */
+    public function setObjStartDate(class_data $objStartDate)
+    {
+        $this->objStartDate = $objStartDate;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getObjEndDate()
+    {
+        return $this->objEndDate;
+    }
+
+    /**
+     * @param mixed $objEndDate
+     */
+    public function setObjEndDate(class_data $objEndDate)
+    {
+        $this->objEndDate = $objEndDate;
     }
 }
