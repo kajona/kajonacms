@@ -206,8 +206,12 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
      */
     protected function renderCopyAction(class_model $objListEntry)
     {
+        $objUsersources = new class_module_user_sourcefactory();
         if ($objListEntry instanceof class_module_user_user && $objListEntry->rightEdit()) {
-            return $this->objToolkit->listButton(class_link::getLinkAdmin("user", "newUser", "&user_inherit_permissions_id=".$objListEntry->getSystemid()."&pv=".$this->getParam("pv"), "", $this->getLang("commons_edit_copy", "common"), "icon_copy"));
+            /* @var class_module_user_user $objListEntry */
+            if ($objUsersources->getUsersource($objListEntry->getStrSubsystem())->getMembersEditable()) {
+                return $this->objToolkit->listButton(class_link::getLinkAdmin("user", "newUser", "&user_inherit_permissions_id=".$objListEntry->getSystemid()."&pv=".$this->getParam("pv"), "", $this->getLang("commons_edit_copy", "common"), "icon_copy"));
+            }
         }
         return "";
     }
@@ -584,6 +588,10 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
         if (!empty($strInheritPermissionsId)) {
             $objForm->addField(new class_formentry_hidden("user", "inherit_permissions_id"))
                 ->setStrValue($strInheritPermissionsId);
+
+            $objInheritUser = new class_module_user_user($strInheritPermissionsId);
+            $objForm->addField(new class_formentry_textrow(""))
+                ->setStrValue($this->objToolkit->warningBox($this->getLang("user_copy_info", "", array($objInheritUser->getStrDisplayName())), "alert-info"));
         }
 
         $objForm->addField(new class_formentry_dropdown("user", "skin"))
