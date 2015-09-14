@@ -174,9 +174,9 @@ class class_module_dashboard_admin extends class_admin_controller implements int
                             },
                             loading: function(isLoading){
                                 if (isLoading) {
-                                    $('.fc-right').html('<div class="content loadingContainer" style="text-align:right;margin-right:8px;"></div>');
+                                    $('#moduleTitle').parent().next().html('<div style="float:right;width:30px;" class="calendar-loading"><div class="loadingContainer"></div></div>');
                                 } else {
-                                    $('.fc-right').html('');
+                                    $('#moduleTitle').parent().next().html('');
                                 }
                             }
                         });
