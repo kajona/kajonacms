@@ -145,22 +145,25 @@ class class_module_dashboard_admin extends class_admin_controller implements int
 
         $strContainerId = "calendar-" . generateSystemid();
         $strEventCallback = class_link::getLinkAdminXml("dashboard", "getCalendarEvents");
+        $strLang = class_session::getInstance()->getAdminLanguage();
 
         $strReturn .= "<div id='" . $strContainerId . "'></div>";
         $strReturn .= "<script type=\"text/javascript\">";
         $strReturn .= <<<JS
             KAJONA.admin.loader.loadFile(['/core/module_dashboard/admin/scripts/fullcalendar/fullcalendar.min.js',
                 '/core/module_dashboard/admin/scripts/fullcalendar/moment.min.js',
+                '/core/module_dashboard/admin/scripts/fullcalendar/lang.de.js',
                 '/core/module_dashboard/admin/scripts/fullcalendar/fullcalendar.min.css'], function(){
 
                 $('#{$strContainerId}').fullCalendar({
                     header: {
                         left: 'prev,next',
                         center: 'title',
-                        right: 'month'
+                        right: ''
                     },
                     editable: false,
                     theme: true,
+                    lang: '{$strLang}',
                     eventLimit: true,
                     events: '{$strEventCallback}',
                     eventRender: function(event, el) {
