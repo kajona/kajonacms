@@ -150,29 +150,35 @@ class class_module_dashboard_admin extends class_admin_controller implements int
         $strReturn .= "<div id='" . $strContainerId . "'></div>";
         $strReturn .= "<script type=\"text/javascript\">";
         $strReturn .= <<<JS
-            KAJONA.admin.loader.loadFile(['/core/module_dashboard/admin/scripts/fullcalendar/fullcalendar.min.js',
-                '/core/module_dashboard/admin/scripts/fullcalendar/moment.min.js',
-                '/core/module_dashboard/admin/scripts/fullcalendar/lang.de.js',
-                '/core/module_dashboard/admin/scripts/fullcalendar/fullcalendar.min.css'], function(){
-
-                $('#{$strContainerId}').fullCalendar({
-                    header: {
-                        left: 'prev,next',
-                        center: 'title',
-                        right: ''
-                    },
-                    editable: false,
-                    theme: true,
-                    lang: '{$strLang}',
-                    eventLimit: true,
-                    events: '{$strEventCallback}',
-                    eventRender: function(event, el) {
-                        el.qtip({
-                            content: event.title
+            KAJONA.admin.loader.loadFile(['/core/module_dashboard/admin/scripts/fullcalendar/fullcalendar.min.css',
+                '/core/module_system/admin/scripts/jquery/jquery.min.js',
+                '/core/module_dashboard/admin/scripts/fullcalendar/moment.min.js'], function(){
+                KAJONA.admin.loader.loadFile(['/core/module_dashboard/admin/scripts/fullcalendar/fullcalendar.min.js'], function(){
+                    var loadCalendar = function(){
+                        $('#{$strContainerId}').fullCalendar({
+                            header: {
+                                left: 'prev,next',
+                                center: 'title',
+                                right: ''
+                            },
+                            editable: false,
+                            theme: true,
+                            lang: '{$strLang}',
+                            eventLimit: true,
+                            events: '{$strEventCallback}',
+                            eventRender: function(event, el) {
+                                KAJONA.admin.tooltip.addTooltip(el, event.title);
+                                if (event.icon) {
+                                    el.find("span.fc-title").prepend(event.icon);
+                                }
+                            }
                         });
-                        if (event.icon) {
-                            el.find("span.fc-title").prepend(event.icon);
-                        }
+                    };
+
+                    if ('{$strLang}' != 'en') {
+                        KAJONA.admin.loader.loadFile(['/core/module_dashboard/admin/scripts/fullcalendar/lang.{$strLang}.js'], loadCalendar);
+                    } else {
+                        loadCalendar();
                     }
                 });
             });
