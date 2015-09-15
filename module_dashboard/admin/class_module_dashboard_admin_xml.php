@@ -163,11 +163,14 @@ class class_module_dashboard_admin_xml extends class_admin_controller implements
             return $this->objToolkit->warningBox($this->getLang("todo_no_open_tasks"), "alert-info");
         }
 
+        $strSearch = $this->getParam("search");
+        $strDate = $this->getParam("date");
+
         $arrHeaders = array(
             "0 \" style=\"width:20px\"" => "",
-            "1" => "Objekt",
-            "2 \" style=\"width:300px\"" => "Aktion",
-            "3 \" style=\"width:160px\"" => "Fälligkeitsdatum",
+            "1" => $this->getLang("todo_task_col_object"),
+            "2 \" style=\"width:300px\"" => $this->getLang("todo_task_col_category"),
+            "3 \" style=\"width:160px\"" => $this->getLang("todo_task_col_date"),
             "4 \" style=\"width:20px\"" => "",
         );
         $arrValues = array();
@@ -185,7 +188,12 @@ class class_module_dashboard_admin_xml extends class_admin_controller implements
             $strCategory = class_todo_repository::getCategoryName($objTodo->getStrCategory());
             $strValidDate = $objTodo->getObjValidDate() !== null ? dateToString($objTodo->getObjValidDate(), false) : "-";
 
-            $arrValues[] = array($strIcon, $objTodo->getStrDisplayName(), $strCategory, $strValidDate, $strActions);
+            $bitSearchMatch = empty($strSearch) || stripos($objTodo->getStrDisplayName(), $strSearch) !== false;
+            $bitDateMatch = empty($strDate) || $strValidDate == $strDate;
+
+            if ($bitSearchMatch && $bitDateMatch) {
+                $arrValues[] = array($strIcon, $objTodo->getStrDisplayName(), $strCategory, $strValidDate, $strActions);
+            }
         }
 
         return $this->objToolkit->dataTable($arrHeaders, $arrValues);

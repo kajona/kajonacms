@@ -115,25 +115,7 @@ class class_module_dashboard_admin extends class_admin_controller implements int
     }
 
     /**
-     * Creates a calendar-based view of the current month.
-     * Single objects may register themselves to be rendered within the calendar.
-     * The calendar-view consists of a view single elements:
-     * +---------------------------+
-     * | control-elements (pager)  |
-     * +---------------------------+
-     * | wrapper                   |
-     * +---------------------------+
-     * | the column headers        |
-     * +---------------------------+
-     * | a row for each week (4x)  |
-     * +---------------------------+
-     * | wrapper                   |
-     * +---------------------------+
-     * | legend                    |
-     * +---------------------------+
-     *
-     * The calendar internally is loaded via ajax since fetching all events
-     * may take some time.
+     * Create a calendar based on the jquery fullcalendar. Loads all events from the XML action actionGetCalendarEvents
      *
      * @return string
      * @since 3.4
@@ -201,25 +183,62 @@ JS;
      * @permissions view
      */
     protected function actionTodo() {
-        $arrCategories = class_todo_repository::getAllCategories();
         $arrContent = array();
 
-        if (empty($arrCategories)) {
-            return $this->objToolkit->warningBox($this->getLang("todo_no_open_tasks"), "alert-info");
+        // overall tab
+        $strCategory = $this->getParam("listfilter_category");
+        $strSearch = $this->getParam("listfilter_search");
+        $strDate = $this->getParam("listfilter_date");
+        if (!empty($strCategory)) {
+            $strLink = class_link::getLinkAdminXml("dashboard", "todoCategory", "&category=" . $strCategory . "&search=" . urlencode($strSearch) . "&date=" . $strDate);
+        } else {
+            $strLink = class_link::getLinkAdminXml("dashboard", "todoCategory", "&search=" . urlencode($strSearch) . "&date=" . $strDate);
         }
 
-        // overall tab
-        $arrContent[$this->getLang("todo_overall_tasks")] = class_link::getLinkAdminXml("dashboard", "todoCategory");
+        $arrContent[$this->getLang("todo_overall_tasks")] = $strLink;
 
-        // each category
+        $strReturn = $this->getListTodoFilter();
+        $strReturn .= $this->objToolkit->getTabbedContent($arrContent);
+
+        return $strReturn;
+    }
+
+
+    protected function getListTodoFilter()
+    {
+        $strReturn = "";
+
+        // create the form
+        $objFormgenerator = new class_admin_formgenerator("listfilter", null);
+
+        // provider
+        $arrProvider = array();
+        $arrCategories = class_todo_repository::getAllCategories();
         foreach ($arrCategories as $strProviderName => $arrTaskCategories) {
             foreach ($arrTaskCategories as $strKey => $strCategoryName) {
-                $arrContent[$strCategoryName] = class_link::getLinkAdminXml("dashboard", "todoCategory", "&category=" . $strKey);
+                $arrProvider[$strKey] = $strCategoryName;
             }
         }
 
-        return $this->objToolkit->getTabbedContent($arrContent);
+        $objFormgenerator->addField(new class_formentry_dropdown("listfilter", "category"))
+            ->setStrLabel($this->getLang("filter_category"))
+            ->setArrKeyValues(array_merge(array("" => $this->getLang("filter_all_categories")), $arrProvider));
+
+        $objFormgenerator->addField(new class_formentry_text("listfilter", "search"))
+            ->setStrLabel($this->getLang("filter_search"));
+
+        $objFormgenerator->addField(new class_formentry_date("listfilter", "date"))
+            ->setStrLabel($this->getLang("filter_date"));
+
+        //render filter
+        $strReturn .= $objFormgenerator->renderForm(class_link::getLinkAdminHref("dashboard", "todo"), class_admin_formgenerator::BIT_BUTTON_SUBMIT);
+
+        $arrFolder = $this->objToolkit->getLayoutFolderPic($strReturn, $this->getLang("filter_show_hide", "agp_commons"), "icon_folderOpen", "icon_folderClosed", false);
+        $strReturn = $this->objToolkit->getFieldset($arrFolder[1], $arrFolder[0]);
+
+        return $strReturn;
     }
+
 
     /**
      * Generates the forms to add a widget to the dashboard
