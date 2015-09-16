@@ -142,6 +142,8 @@ KAJONA.admin.ModalDialog = function (strDialogId, intDialogType, bitDragging, bi
             this.bitLarge = false;
         }
 
+        // load lang properties
+        KAJONA.admin.lang.initializeProperties('#' + this.containerId);
 
         //finally show the modal
         $('#' + this.containerId).modal('show');
