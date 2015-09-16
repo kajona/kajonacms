@@ -1124,6 +1124,7 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
         $arrGroups = $objSourcesytem->getAllGroupIds();
         $arrUserGroups = $objUser->getArrGroupIds();
 
+        $arrRows = array();
         foreach ($arrGroups as $strSingleGroup) {
             //to avoid privilege escalation, the admin-group has to be treated in a special manner
             //only render the group, if the current user is member of this group
@@ -1132,15 +1133,28 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
                 continue;
             }
 
-            if (in_array($strSingleGroup, $arrUserGroups)) {
-                //user in group, checkbox checked
-                $strReturn .= $this->objToolkit->formInputCheckbox($objSingleGroup->getSystemid(), $objSingleGroup->getStrName(), true);
-            }
-            else {
-                //User not yet in group, checkbox unchecked
-                $strReturn .= $this->objToolkit->formInputCheckbox($objSingleGroup->getSystemid(), $objSingleGroup->getStrName());
-            }
+            $strCheckbox = $this->objToolkit->formInputCheckbox($objSingleGroup->getSystemid(), "", in_array($strSingleGroup, $arrUserGroups));
+            $strCheckbox = uniSubstr($strCheckbox, uniStrpos($strCheckbox, "<input"));
+            $strCheckbox = uniSubstr($strCheckbox, 0, uniStrpos($strCheckbox, ">")+1);
+
+            $arrRows[] = array($strCheckbox, $objSingleGroup->getStrName());
+
+//            $strReturn .= $this->objToolkit->formInputCheckbox($objSingleGroup->getSystemid(), $objSingleGroup->getStrName(), in_array($strSingleGroup, $arrUserGroups));
+
         }
+
+
+
+        $strReturn .= <<<HTML
+    <a href="javascript:KAJONA.admin.permissions.toggleEmtpyRows('[lang,permissions_toggle_visible,system]', '[lang,permissions_toggle_hidden,system]', 'table.kajona-data-table tr');" id="rowToggleLink" class="rowsVisible">[lang,permissions_toggle_visible,system]</a><br /><br />
+HTML;
+
+
+        $strReturn .= $this->objToolkit->dataTable(null, $arrRows);
+
+        $strReturn .= "<script type=\"text/javascript\">
+                KAJONA.admin.permissions.toggleEmtpyRows('".$this->getLang("permissions_toggle_visible", "system")."', '".$this->getLang("permissions_toggle_hidden", "system")."', 'table.kajona-data-table tr');
+                </script>";
 
         $strReturn .= $this->objToolkit->formInputHidden("systemid", $this->getSystemid());
         $strReturn .= $this->objToolkit->formInputSubmit($this->getLang("commons_save"));
