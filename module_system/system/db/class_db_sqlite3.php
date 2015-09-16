@@ -43,7 +43,9 @@ class class_db_sqlite3 extends class_db_base  {
         try {
             $this->linkDB = new SQLite3(_realpath_.$this->strDbFile);
             $this->_pQuery('PRAGMA encoding = "UTF-8"', array());
+            //TODO deprecated in sqlite, so may be removed
             $this->_pQuery('PRAGMA short_column_names = ON', array());
+            $this->_pQuery("PRAGMA journal_mode = TRUNCATE", array());
             if(method_exists($this->linkDB, "busyTimeout"))
                 $this->linkDB->busyTimeout(5000);
 
@@ -183,54 +185,43 @@ class class_db_sqlite3 extends class_db_base  {
      * @return bool
      */
     public function triggerMultiInsert($strTable, $arrColumns, $arrValueSets, class_db $objDb) {
-        $bitReturn = true;
 
-        //ugly hack for sqlite 3: it only supports 999 params per query as maximum, so split into several parts
-        //calc the number of max rows per insert. to be sure split it down to 950
-        $intSetsPerInsert = floor(950 / count($arrColumns));
-        foreach(array_chunk($arrValueSets, $intSetsPerInsert) as $arrSingleValueSet) {
-
-
-            $arrVersion = SQLite3::version();
-            if(version_compare("3.7.11", $arrVersion["versionString"], "<=")) {
-                $bitReturn = parent::triggerMultiInsert($strTable, $arrColumns, $arrSingleValueSet, $objDb) && $bitReturn;
-            }
-            //legacy code
-            else {
-
-                $arrSafeColumns = array();
-                $arrPlaceholder = array();
-                foreach($arrColumns as $strOneColumn) {
-                    $arrSafeColumns[] = $this->encloseColumnName($strOneColumn);
-                    $arrPlaceholder[] = "?";
-                }
-
-                $arrParams = array();
-
-                $strQuery = "INSERT INTO ".$this->encloseTableName($strTable)."  (".implode(",", $arrSafeColumns).") ";
-                for($intI = 0; $intI < count($arrSingleValueSet); $intI++) {
-
-                    $arrTemp = array();
-                    for($intK = 0; $intK < count($arrColumns); $intK++) {
-                        $arrTemp[] = " ? AS ".$this->encloseColumnName($arrColumns[$intK]);
-                    }
-
-                    if($intI == 0) {
-                        $strQuery .= " SELECT ".implode(", ", $arrTemp);
-                    }
-                    else {
-                        $strQuery .= " UNION SELECT ".implode(", ", $arrTemp);
-                    }
-
-                    $arrParams = array_merge($arrParams, $arrSingleValueSet[$intI]);
-                }
-
-                $objDb->_pQuery($strQuery, $arrParams);
-            }
-
+        $arrVersion = SQLite3::version();
+        if(version_compare("3.7.11", $arrVersion["versionString"], "<=")) {
+            return parent::triggerMultiInsert($strTable, $arrColumns, $arrValueSets, $objDb);
         }
+        //legacy code
+        else {
 
-        return $bitReturn;
+            $arrSafeColumns = array();
+            $arrPlaceholder = array();
+            foreach($arrColumns as $strOneColumn) {
+                $arrSafeColumns[] = $this->encloseColumnName($strOneColumn);
+                $arrPlaceholder[] = "?";
+            }
+
+            $arrParams = array();
+
+            $strQuery = "INSERT INTO ".$this->encloseTableName($strTable)."  (".implode(",", $arrSafeColumns).") ";
+            for($intI = 0; $intI < count($arrValueSets); $intI++) {
+
+                $arrTemp = array();
+                for($intK = 0; $intK < count($arrColumns); $intK++) {
+                    $arrTemp[] = " ? AS ".$this->encloseColumnName($arrColumns[$intK]);
+                }
+
+                if($intI == 0) {
+                    $strQuery .= " SELECT ".implode(", ", $arrTemp);
+                }
+                else {
+                    $strQuery .= " UNION SELECT ".implode(", ", $arrTemp);
+                }
+
+                $arrParams = array_merge($arrParams, $arrValueSets[$intI]);
+            }
+
+            return $objDb->_pQuery($strQuery, $arrParams);
+        }
     }
 
     /**
@@ -252,7 +243,7 @@ class class_db_sqlite3 extends class_db_base  {
             return false;
         $intCount = 1;
         foreach($arrParams as $strOneParam) {
-            if($strOneParam == null)
+            if($strOneParam === null)
                 $objStmt->bindValue(':param'.$intCount++, $strOneParam, SQLITE3_NULL);
             //else if(is_double($strOneParam))
             //    $objStmt->bindValue(':param'.$intCount++ , $strOneParam, SQLITE3_FLOAT);
@@ -288,7 +279,7 @@ class class_db_sqlite3 extends class_db_base  {
 
         $intCount = 1;
         foreach($arrParams as $strOneParam) {
-            if($strOneParam == null)
+            if($strOneParam === null)
                 $objStmt->bindValue(':param'.$intCount++, $strOneParam, SQLITE3_NULL);
             //else if(is_double($strOneParam))
             //    $objStmt->bindValue(':param'.$intCount++ , $strOneParam, SQLITE3_FLOAT);
@@ -356,7 +347,7 @@ class class_db_sqlite3 extends class_db_base  {
 
             // Extract the column definitions from the create statement
             $arrMatch = array();
-            preg_match("/CREATE TABLE\s+[a-z_]+\s+\((.+)\)/ism", trim($strTableDef), $arrMatch);
+            preg_match("/CREATE TABLE\s+[a-z_0-9]+\s+\((.+)\)/ism", trim($strTableDef), $arrMatch);
 
             // Get all column names and types
             $strColumnDef = $arrMatch[1];

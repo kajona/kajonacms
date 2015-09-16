@@ -41,6 +41,7 @@ class class_module_right_admin extends class_admin_controller implements interfa
      * Returns a form to modify the rights
      *
      * @return string
+     * @permissions right
      */
     protected function actionChange() {
 
@@ -113,7 +114,7 @@ class class_module_right_admin extends class_admin_controller implements interfa
             $arrTemplateTotal["title6"] = $arrTitles[6];
             $arrTemplateTotal["title7"] = $arrTitles[7];
             $arrTemplateTotal["title8"] = $arrTitles[8];
-            if(_system_changehistory_enabled_ == "true") {
+            if(class_module_system_setting::getConfigValue("_system_changehistory_enabled_") == "true") {
                 if(!isset($arrTitles[9]))  //fallback for pre 4.3.2 systems
                     $arrTitles[9] = $arrDefaultHeader[9];
 
@@ -131,7 +132,7 @@ class class_module_right_admin extends class_admin_controller implements interfa
                 $arrSingleGroup["group_id"] = $objSingleGroup->getSystemid();
 
                 //hide the superglobal admin-row from non-members
-                if($objSingleGroup->getSystemid() == _admins_group_id_ && !in_array(_admins_group_id_, $this->objSession->getGroupIdsAsArray())) {
+                if($objSingleGroup->getSystemid() == class_module_system_setting::getConfigValue("_admins_group_id_") && !in_array(class_module_system_setting::getConfigValue("_admins_group_id_"), $this->objSession->getGroupIdsAsArray())) {
                     continue;
                 }
 
@@ -154,8 +155,8 @@ class class_module_right_admin extends class_admin_controller implements interfa
 
 
 
-                if(_system_changehistory_enabled_ == "true") {
-                        $arrTemplateRow["box9"] = "<input title=\"".$arrTitles[9]."\" rel=\"tooltip\" type=\"checkbox\" name=\"10," . $arrSingleGroup["group_id"] . "\" id=\"10," . $arrSingleGroup["group_id"] . "\" value=\"1\" ".(in_array($arrSingleGroup["group_id"], $arrRights["changelog"]) ? " checked=\"checked\" " : "")." />";
+                if(class_module_system_setting::getConfigValue("_system_changehistory_enabled_") == "true") {
+                    $arrTemplateRow["box9"] = "<input title=\"".$arrTitles[9]."\" rel=\"tooltip\" type=\"checkbox\" name=\"10," . $arrSingleGroup["group_id"] . "\" id=\"10," . $arrSingleGroup["group_id"] . "\" value=\"1\" ".(in_array($arrSingleGroup["group_id"], $arrRights["changelog"]) ? " checked=\"checked\" " : "")." />";
                 }
 
 
@@ -191,7 +192,7 @@ class class_module_right_admin extends class_admin_controller implements interfa
             $arrTemplate["desc"] = $this->getLang("desc");
             $strReturn .= $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
             //Followed by the form
-            $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "saverights"), "rightsForm");
+            $strReturn .= $this->objToolkit->formHeader(class_link::getLinkAdminHref($this->getArrModule("modul"), "saverights"), "rightsForm", "", "KAJONA.admin.permissions.submitForm(); return false;");
             $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "rights_form_form");
             $strReturn .= $this->objTemplate->fillTemplate($arrTemplateTotal, $strTemplateID);
             $strReturn .= $this->objToolkit->formInputHidden("systemid", $strSystemID);
@@ -224,7 +225,10 @@ class class_module_right_admin extends class_admin_controller implements interfa
             //Close the form
             $strReturn .= $this->objToolkit->formInputSubmit($this->getLang("commons_save"));
             $strReturn .= $this->objToolkit->formClose();
-            $strReturn .= "<script type=\"text/javascript\">KAJONA.admin.checkRightMatrix();</script>";
+            $strReturn .= "<script type=\"text/javascript\">
+                KAJONA.admin.permissions.checkRightMatrix();
+                KAJONA.admin.permissions.toggleEmtpyRows('".$this->getLang("permissions_toggle_visible")."', '".$this->getLang("permissions_toggle_hidden")."', '#rightsForm tr');
+                </script>";
         }
         else {
             $strReturn .= $this->getLang("commons_error_permissions");
@@ -237,9 +241,15 @@ class class_module_right_admin extends class_admin_controller implements interfa
      *
      * @throws class_exception
      * @return string "" in case of success
+     * @permissions right
+     * @xml
      */
     protected function actionSaveRights() {
-        $strReturn = "";
+
+        class_response_object::getInstance()->setStrResponseType(class_http_responsetypes::STR_TYPE_JSON);
+
+        $arrRequest = json_decode($this->getParam("json"));
+
         //Collecting & sorting the passed values
         $strSystemid = $this->getSystemid();
 
@@ -256,108 +266,101 @@ class class_module_right_admin extends class_admin_controller implements interfa
 
 
         //Special case: The root-record.
-        if($objTarget->rightRight()) {
-            //Inheritance?
-            if($this->getParam("inherit") == 1) {
-                $intInherit = 1;
-            }
-            else {
-                $intInherit = 0;
-            }
+        if(!$objTarget->rightRight()) {
+            return $this->objToolkit->warningBox($this->getLang("commons_error_permissions"), "alert-danger");
+        }
 
-            //Modified RootRecord? Here Inheritance is NOT allowed!
-            if($strSystemid == "0") {
-                $intInherit = 0;
-            }
-
-            //Get Groups
-            $arrGroups = class_module_user_group::getObjectList();
-
-            $strView = _admins_group_id_;
-            $strEdit = _admins_group_id_;
-            $strDelete = _admins_group_id_;
-            $strRight = _admins_group_id_;
-            $strRight1 = _admins_group_id_;
-            $strRight2 = _admins_group_id_;
-            $strRight3 = _admins_group_id_;
-            $strRight4 = _admins_group_id_;
-            $strRight5 = _admins_group_id_;
-            $strChangelog = _admins_group_id_;
-
-            foreach($arrGroups as $objSingleGroup) {
-                $strGroupId = $objSingleGroup->getSystemid();
-                if($strGroupId == _admins_group_id_) {
-                    continue;
-                }
-
-
-                if($this->getParam("1," . $strGroupId) == 1) {
-                    $strView .= "," . $strGroupId;
-                }
-                if($this->getParam("2," . $strGroupId) == 1) {
-                    $strEdit .= "," . $strGroupId;
-                }
-                if($this->getParam("3," . $strGroupId) == 1) {
-                    $strDelete .= "," . $strGroupId;
-                }
-                if($this->getParam("4," . $strGroupId) == 1) {
-                    $strRight .= "," . $strGroupId;
-                }
-                if($this->getParam("5," . $strGroupId) == 1) {
-                    $strRight1 .= "," . $strGroupId;
-                }
-                if($this->getParam("6," . $strGroupId) == 1) {
-                    $strRight2 .= "," . $strGroupId;
-                }
-                if($this->getParam("7," . $strGroupId) == 1) {
-                    $strRight3 .= "," . $strGroupId;
-                }
-                if($this->getParam("8," . $strGroupId) == 1) {
-                    $strRight4 .= "," . $strGroupId;
-                }
-                if($this->getParam("9," . $strGroupId) == 1) {
-                    $strRight5 .= "," . $strGroupId;
-                }
-                if($this->getParam("10," . $strGroupId) == 1) {
-                    $strChangelog .= "," . $strGroupId;
-                }
-            }
-            $arrReturn = array(
-                "inherit"          => $intInherit,
-                "view"             => $strView,
-                "edit"             => $strEdit,
-                "delete"           => $strDelete,
-                "right"            => $strRight,
-                "right1"           => $strRight1,
-                "right2"           => $strRight2,
-                "right3"           => $strRight3,
-                "right4"           => $strRight4,
-                "right5"           => $strRight5,
-                "changelog"        => $strChangelog
-            );
-
-            //Pass to right-class
-            if($objRights->setRights($arrReturn, $strSystemid)) {
-
-                //Redirecting
-                $strUrlHistory = $this->getHistory(0);
-                $arrHistory = explode("&", $strUrlHistory);
-                if(isset($arrHistory[1]) && $arrHistory[1] != "module=rights") {
-                    $this->adminReload(_indexpath_ . "?" . $this->getHistory(0) . ($this->getParam("pe") != "" ? "&peClose=1" : ""));
-                }
-                else {
-                    $this->adminReload(_indexpath_ . "?" . $this->getHistory(0) . ($this->getParam("pe") != "" ? "&peClose=1" : ""));
-                }
-
-                return "";
-            }
-            else {
-                throw new class_exception($this->getLang("fehler_setzen"), class_exception::$level_ERROR);
-            }
+        //Inheritance?
+        if($arrRequest->bitInherited) {
+            $intInherit = 1;
         }
         else {
-            $strReturn .= $this->getLang("commons_error_permissions");
+            $intInherit = 0;
         }
-        return $strReturn;
+
+        //Modified RootRecord? Here Inheritance is NOT allowed!
+        if($strSystemid == "0") {
+            $intInherit = 0;
+        }
+
+        $strAdminsGroupId = class_module_system_setting::getConfigValue("_admins_group_id_");
+        $strView = $strAdminsGroupId;
+        $strEdit = $strAdminsGroupId;
+        $strDelete = $strAdminsGroupId;
+        $strRight = $strAdminsGroupId;
+        $strRight1 = $strAdminsGroupId;
+        $strRight2 = $strAdminsGroupId;
+        $strRight3 = $strAdminsGroupId;
+        $strRight4 = $strAdminsGroupId;
+        $strRight5 = $strAdminsGroupId;
+        $strChangelog = $strAdminsGroupId;
+
+
+        foreach($arrRequest->arrConfigs as $strOneCfg) {
+            $arrRow = explode(",", $strOneCfg);
+
+            if($arrRow[1] == $strAdminsGroupId) {
+                continue;
+            }
+
+            switch($arrRow[0]) {
+                case "1":
+                    $strView .= "," . $arrRow[1];
+                    break;
+                case "2":
+                    $strEdit .= "," . $arrRow[1];
+                    break;
+                case "3":
+                    $strDelete .= "," . $arrRow[1];
+                    break;
+                case "4":
+                    $strRight .= "," . $arrRow[1];
+                    break;
+                case "5":
+                    $strRight1 .= "," . $arrRow[1];
+                    break;
+                case "6":
+                    $strRight2 .= "," . $arrRow[1];
+                    break;
+                case "7":
+                    $strRight3 .= "," . $arrRow[1];
+                    break;
+                case "8":
+                    $strRight4 .= "," . $arrRow[1];
+                    break;
+                case "9":
+                    $strRight5 .= "," . $arrRow[1];
+                    break;
+                case "10":
+                    $strChangelog .= "," . $arrRow[1];
+                    break;
+            }
+
+        }
+
+        $arrReturn = array(
+            "inherit"          => $intInherit,
+            "view"             => $strView,
+            "edit"             => $strEdit,
+            "delete"           => $strDelete,
+            "right"            => $strRight,
+            "right1"           => $strRight1,
+            "right2"           => $strRight2,
+            "right3"           => $strRight3,
+            "right4"           => $strRight4,
+            "right5"           => $strRight5,
+            "changelog"        => $strChangelog
+        );
+
+        //Pass to right-class
+        if($objRights->setRights($arrReturn, $strSystemid)) {
+            $strReturn = $this->objToolkit->warningBox($this->getLang("permissions_success"), "alert-success");
+        }
+        else {
+            $strReturn = $this->objToolkit->warningBox($this->getLang("fehler_setzen"), "alert-danger");
+        }
+
+
+        return json_encode(array("message" => $strReturn));
     }
 }

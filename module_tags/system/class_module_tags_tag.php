@@ -50,7 +50,7 @@ class class_module_tags_tag extends class_model implements interface_model, inte
      */
     public function __construct($strSystemid = "") {
 
-        if(_tags_defaultprivate_ == "true")
+        if(class_module_system_setting::getConfigValue("_tags_defaultprivate_") == "true")
             $this->intPrivate = 1;
 
         parent::__construct($strSystemid);
@@ -107,28 +107,6 @@ class class_module_tags_tag extends class_model implements interface_model, inte
         return "";
     }
 
-    /**
-     * Deletes the tag with the given systemid from the system
-     *
-     * @return bool
-     */
-    protected function deleteObjectInternal() {
-
-        //delete matching favorites
-        $arrFavorites = class_module_tags_favorite::getAllFavoritesForTag($this->getSystemid());
-        foreach($arrFavorites as $objOneFavorite) {
-            $objOneFavorite->deleteObject();
-        }
-
-        //delete memberships
-        $strQuery1 = "DELETE FROM "._dbprefix_."tags_member WHERE tags_tagid=?";
-        //delete the record itself
-        if($this->objDB->_pQuery($strQuery1, array($this->getSystemid())))
-            return parent::deleteObjectInternal();
-
-        return false;
-    }
-
 
     /**
      * Returns the list of tags related with the systemid passed.
@@ -140,6 +118,7 @@ class class_module_tags_tag extends class_model implements interface_model, inte
      */
     public static function getTagsForSystemid($strSystemid, $strAttribute = null) {
 
+        $objORM = new class_orm_objectlist();
         $arrParams = array($strSystemid, class_carrier::getInstance()->getObjSession()->getUserID());
 
         $strWhere = "";
@@ -150,11 +129,14 @@ class class_module_tags_tag extends class_model implements interface_model, inte
 
         $strQuery = "SELECT DISTINCT(tags_tagid), tags_tag_name
                        FROM "._dbprefix_."tags_member,
-                            "._dbprefix_."tags_tag
+                            "._dbprefix_."tags_tag,
+                            "._dbprefix_."system
                       WHERE tags_systemid = ?
                         AND tags_tag_id = tags_tagid
+                        AND tags_tagid = system_id
                         AND (tags_tag_private IS NULL OR tags_tag_private != 1 OR (tags_owner IS NULL OR tags_owner = '' OR tags_owner = ?))
                           ".$strWhere."
+                          ".$objORM->getDeletedWhereRestriction()."
                    ORDER BY tags_tag_name ASC";
 
         $arrRows = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, $arrParams);
@@ -173,14 +155,9 @@ class class_module_tags_tag extends class_model implements interface_model, inte
      * @return class_module_tags_tag
      */
     public static function getTagByName($strName) {
-        $strQuery = "SELECT tags_tag_id
-                       FROM "._dbprefix_."tags_tag
-                      WHERE tags_tag_name LIKE ?";
-        $arrCols = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array(trim($strName)));
-        if(isset($arrCols["tags_tag_id"]) && validateSystemid($arrCols["tags_tag_id"]))
-            return new class_module_tags_tag($arrCols["tags_tag_id"]);
-        else
-            return null;
+        $objORM = new class_orm_objectlist();
+        $objORM->addWhereRestriction(new class_orm_objectlist_property_restriction("strName", class_orm_comparator_enum::Like(), trim($strName)));
+        return $objORM->getSingleObject(get_called_class());
     }
 
     /**
@@ -190,18 +167,10 @@ class class_module_tags_tag extends class_model implements interface_model, inte
      * @return class_module_tags_tag[]
      */
     public static function getTagsByFilter($strFilter) {
-        $strQuery = "SELECT tags_tag_id
-                       FROM "._dbprefix_."tags_tag
-                      WHERE tags_tag_name LIKE ?
-                   ORDER BY tags_tag_name ASC";
-
-        $arrRows = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array($strFilter."%"));
-        $arrReturn = array();
-        foreach($arrRows as $arrSingleRow) {
-            $arrReturn[] = new class_module_tags_tag($arrSingleRow["tags_tag_id"]);
-        }
-
-        return $arrReturn;
+        $objORM = new class_orm_objectlist();
+        $objORM->addWhereRestriction(new class_orm_objectlist_property_restriction("strName", class_orm_comparator_enum::Like(), trim($strFilter."%")));
+        $objORM->addOrderBy(new class_orm_objectlist_orderby("tags_tag_name ASC"));
+        return $objORM->getObjectList(get_called_class());
     }
 
     /**
@@ -210,6 +179,7 @@ class class_module_tags_tag extends class_model implements interface_model, inte
      * @return class_module_tags_tag[]
      */
     public static function getTagsWithAssignments() {
+        $objORM = new class_orm_objectlist();
         $strQuery = "SELECT DISTINCT(tags_tagid)
                        FROM "._dbprefix_."tags_member,
                             "._dbprefix_."tags_tag,
@@ -217,6 +187,7 @@ class class_module_tags_tag extends class_model implements interface_model, inte
                       WHERE tags_tag_id = tags_tagid
                         AND tags_tag_id = system_id
                         AND (tags_tag_private IS NULL OR tags_tag_private != 1 OR (tags_owner IS NULL OR tags_owner = '' OR tags_owner = ?))
+                        ".$objORM->getDeletedWhereRestriction()."
                         AND system_status = 1";
 
         $arrRows = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array(class_carrier::getInstance()->getObjSession()->getUserID()));
@@ -243,6 +214,7 @@ class class_module_tags_tag extends class_model implements interface_model, inte
      * @return array
      */
     public function getListOfAssignments() {
+        $objORM = new class_orm_objectlist();
         $strQuery = "SELECT member.*
                        FROM "._dbprefix_."tags_member as member,
                             "._dbprefix_."system as system,
@@ -250,6 +222,7 @@ class class_module_tags_tag extends class_model implements interface_model, inte
                       WHERE tags_tagid = ?
                         AND system.system_id = member.tags_systemid
                         AND member.tags_tagid = tag.tags_tag_id
+                        ".$objORM->getDeletedWhereRestriction()."
                         AND (tags_tag_private IS NULL OR tags_tag_private != 1 OR (tags_owner IS NULL OR tags_owner = '' OR tags_owner = ?))
                         ";
 
@@ -262,12 +235,14 @@ class class_module_tags_tag extends class_model implements interface_model, inte
      * @return int
      */
     public function getIntAssignments() {
+        $objORM = new class_orm_objectlist();
         $strQuery = "SELECT COUNT(*)
                        FROM "._dbprefix_."tags_member as member,
                             "._dbprefix_."tags_tag as tag,
                             "._dbprefix_."system as system
                       WHERE member.tags_tagid = ?
                         AND member.tags_tagid = tag.tags_tag_id
+                        ".$objORM->getDeletedWhereRestriction()."
                         AND system.system_id = member.tags_systemid
                         AND (tags_tag_private IS NULL OR tags_tag_private != 1 OR (tags_owner IS NULL OR tags_owner = '' OR tags_owner = ?)) ";
 
@@ -283,6 +258,7 @@ class class_module_tags_tag extends class_model implements interface_model, inte
      * @return class_model[]
      */
     public function getArrAssignedRecords($intStart = null, $intEnd = null) {
+        $objORM = new class_orm_objectlist();
         $strQuery = "SELECT system.system_id
                        FROM "._dbprefix_."tags_member as member,
                             "._dbprefix_."tags_tag,
@@ -290,6 +266,7 @@ class class_module_tags_tag extends class_model implements interface_model, inte
                       WHERE tags_tagid = ?
                         AND tags_tagid = tags_tag_id
                         AND system.system_id = member.tags_systemid
+                        ".$objORM->getDeletedWhereRestriction()."
                         AND (tags_tag_private IS NULL OR tags_tag_private != 1 OR (tags_owner IS NULL OR tags_owner = '' OR tags_owner = ?))
                    ORDER BY system_comment ASC";
 
@@ -391,7 +368,7 @@ class class_module_tags_tag extends class_model implements interface_model, inte
      *
      * @return bool
      */
-    public function copyObject($strNewPrevid = "", $bitChangeTitle = true) {
+    public function copyObject($strNewPrevid = "", $bitChangeTitle = true, $bitCopyChilds = true) {
 
         $strPrefix = $this->getStrName()."_";
         $intCount = 1;
@@ -408,7 +385,7 @@ class class_module_tags_tag extends class_model implements interface_model, inte
         //save assigned records
         $arrRecords = $this->getListOfAssignments();
 
-        parent::copyObject($strNewPrevid, $bitChangeTitle);
+        parent::copyObject($strNewPrevid, $bitChangeTitle, $bitCopyChilds);
 
         //copy the tag assignments
         foreach($arrRecords as $arrOneRecord) {

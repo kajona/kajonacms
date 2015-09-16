@@ -27,17 +27,6 @@ class class_installer_faqs extends class_installer_base implements interface_ins
 		$strReturn .= "Installing table faqs...\n";
         $objSchemamanager->createTable("class_module_faqs_faq");
 
-		//faqs_member----------------------------------------------------------------------------------
-		$strReturn .= "Installing table faqs_member...\n";
-
-		$arrFields = array();
-		$arrFields["faqsmem_id"] 		= array("char20", false);
-		$arrFields["faqsmem_faq"]		= array("char20", false);
-		$arrFields["faqsmem_category"]	= array("char20", false);
-
-		if(!$this->objDB->createTable("faqs_member", $arrFields, array("faqsmem_id")))
-			$strReturn .= "An error occurred! ...\n";
-
 
 		//register the module
 		$this->registerModule("faqs", _faqs_module_id_, "class_module_faqs_portal.php", "class_module_faqs_admin.php", $this->objMetadata->getStrVersion(), true);
@@ -105,11 +94,12 @@ class class_installer_faqs extends class_installer_base implements interface_ins
      * @return bool
      */
     public function remove(&$strReturn) {
+
         //delete the page-element
         $objElement = class_module_pages_element::getElement("faqs");
         if($objElement != null) {
             $strReturn .= "Deleting page-element 'faqs'...\n";
-            $objElement->deleteObject();
+            $objElement->deleteObjectFromDatabase();
         }
         else {
             $strReturn .= "Error finding page-element 'faqs', aborting.\n";
@@ -120,7 +110,7 @@ class class_installer_faqs extends class_installer_base implements interface_ins
         /** @var class_module_faqs_category $objOneCategory */
         foreach(class_module_faqs_category::getObjectList() as $objOneCategory) {
             $strReturn .= "Deleting category '".$objOneCategory->getStrDisplayName()."' ...\n";
-            if(!$objOneCategory->deleteObject()) {
+            if(!$objOneCategory->deleteObjectFromDatabase()) {
                 $strReturn .= "Error deleting category, aborting.\n";
                 return false;
             }
@@ -129,7 +119,7 @@ class class_installer_faqs extends class_installer_base implements interface_ins
         /** @var class_module_faqs_faq $objOneFaq*/
         foreach(class_module_faqs_faq::getObjectList() as $objOneFaq) {
             $strReturn .= "Deleting faq '".$objOneFaq->getStrDisplayName()."' ...\n";
-            if(!$objOneFaq->deleteObject()) {
+            if(!$objOneFaq->deleteObjectFromDatabase()) {
                 $strReturn .= "Error deleting faq, aborting.\n";
                 return false;
             }
@@ -139,7 +129,7 @@ class class_installer_faqs extends class_installer_base implements interface_ins
         //delete the module-node
         $strReturn .= "Deleting the module-registration...\n";
         $objModule = class_module_system_module::getModuleByName($this->objMetadata->getStrTitle(), true);
-        if(!$objModule->deleteObject()) {
+        if(!$objModule->deleteObjectFromDatabase()) {
             $strReturn .= "Error deleting module, aborting.\n";
             return false;
         }
@@ -164,16 +154,6 @@ class class_installer_faqs extends class_installer_base implements interface_ins
         $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
 
         $strReturn .= "Version found:\n\t Module: ".$arrModule["module_name"].", Version: ".$arrModule["module_version"]."\n\n";
-
-        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModule["module_version"] == "3.4.2") {
-            $strReturn .= $this->update_342_349();
-        }
-
-        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModule["module_version"] == "3.4.9") {
-            $strReturn .= $this->update_349_40();
-        }
 
         $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
         if($arrModule["module_version"] == "4.0") {
@@ -219,56 +199,21 @@ class class_installer_faqs extends class_installer_base implements interface_ins
             $this->updateElementVersion("faqs", "4.6");
         }
 
+        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "4.6") {
+            $strReturn .= "Updating to 4.7...\n";
+            $this->updateModuleVersion("faqs", "4.7");
+            $this->updateElementVersion("faqs", "4.7");
+        }
+
+
+        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "4.7") {
+            $strReturn .= $this->update_47_475();
+        }
+
         return $strReturn."\n\n";
 	}
-
-
-    private function update_342_349() {
-
-        $strReturn = "Updating 3.4.2 to 3.4.9...\n";
-
-        $strReturn .= "Adding classes for existing records...\n";
-        $strReturn .= "FAQs\n";
-        $arrRows = $this->objDB->getPArray("SELECT faqs_id FROM "._dbprefix_."faqs, "._dbprefix_."system WHERE system_id = faqs_id AND (system_class IS NULL OR system_class = '')", array());
-        foreach($arrRows as $arrOneRow) {
-            $strQuery = "UPDATE "._dbprefix_."system SET system_class = ? where system_id = ?";
-            $this->objDB->_pQuery($strQuery, array( 'class_module_faqs_faq', $arrOneRow["faqs_id"] ) );
-        }
-
-        $strReturn .= "Categories\n";
-        $arrRows = $this->objDB->getPArray("SELECT faqs_cat_id FROM "._dbprefix_."faqs_category, "._dbprefix_."system WHERE system_id = faqs_cat_id AND (system_class IS NULL OR system_class = '')", array());
-        foreach($arrRows as $arrOneRow) {
-            $strQuery = "UPDATE "._dbprefix_."system SET system_class = ? where system_id = ?";
-            $this->objDB->_pQuery($strQuery, array( 'class_module_faqs_category', $arrOneRow["faqs_cat_id"] ) );
-        }
-
-        $strReturn .= "Removing old constants\n";
-        $strQuery = "DELETE FROM "._dbprefix_."system_config WHERE system_config_name = ?";
-        $this->objDB->_pQuery($strQuery, array("_faqs_search_resultpage_"));
-
-
-        $strReturn .= "Setting aspect assignments...\n";
-        if(class_module_system_aspect::getAspectByName("content") != null) {
-            $objModule = class_module_system_module::getModuleByName($this->objMetadata->getStrTitle());
-            $objModule->setStrAspect(class_module_system_aspect::getAspectByName("content")->getSystemid());
-            $objModule->updateObjectToDb();
-        }
-
-        $strReturn .= "Updating module-versions...\n";
-        $this->updateModuleVersion("faqs", "3.4.9");
-        $strReturn .= "Updating element-versions...\n";
-        $this->updateElementVersion("faqs", "3.4.9");
-        return $strReturn;
-    }
-
-    private function update_349_40() {
-        $strReturn = "Updating 3.4.9 to 4.0...\n";
-        $strReturn .= "Updating module-versions...\n";
-        $this->updateModuleVersion("faqs", "4.0");
-        $strReturn .= "Updating element-versions...\n";
-        $this->updateElementVersion("faqs", "4.0");
-        return $strReturn;
-    }
 
     private function update_40_41() {
         $strReturn = "Updating 4.0 to 4.1...\n";
@@ -276,6 +221,19 @@ class class_installer_faqs extends class_installer_base implements interface_ins
         $this->updateModuleVersion("faqs", "4.1");
         $strReturn .= "Updating element-versions...\n";
         $this->updateElementVersion("faqs", "4.1");
+        return $strReturn;
+    }
+
+    private function update_47_475() {
+        $strReturn = "Updating 4.7 to 4.7.5...\n";
+
+        $strReturn .= "Changing assignment table...\n";
+        class_carrier::getInstance()->getObjDB()->removeColumn("faqs_member", "faqsmem_id");
+
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion("faqs", "4.7.5");
+        $strReturn .= "Updating element-versions...\n";
+        $this->updateElementVersion("faqs", "4.7.5");
         return $strReturn;
     }
 

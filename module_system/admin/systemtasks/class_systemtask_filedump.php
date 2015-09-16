@@ -57,6 +57,9 @@ class class_systemtask_filedump extends class_systemtask_base implements interfa
      */
     public function executeTask() {
 
+        if(!class_module_system_module::getModuleByName("system")->rightRight2())
+            return $this->getLang("commons_error_permissions");
+
         $strFilename = "/backup_" . time() . ".zip";
 
         $objZip = new class_zip();

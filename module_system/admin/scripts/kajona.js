@@ -22,6 +22,24 @@ if (typeof KAJONA == "undefined") {
  * -------------------------------------------------------------------------
  */
 
+
+/**
+ * Function to get the element from the current opener.
+ *
+ * @param strElementId
+ * @returns {*}
+ */
+KAJONA.util.getElementFromOpener = function(strElementId) {
+    if (window.opener) {
+        return $('#' + strElementId, window.opener.document);
+    } else if (parent){
+        return $('#' + strElementId, parent.document);
+    }
+    else {
+        return $('#' + strElementId);
+    }
+};
+
 /**
  * Function to evaluate the script-tags in a passed string, e.g. loaded by an ajax-request
  *
@@ -80,14 +98,14 @@ KAJONA.util.fold = function (strElementId, objCallbackVisible, objCallbackInvisi
         $element.removeClass("folderHidden");
         $element.addClass("folderVisible");
 		if ($.isFunction(objCallbackVisible)) {
-			objCallbackVisible();
+			objCallbackVisible(strElementId);
 		}
     }
     else {
         $element.removeClass("folderVisible");
         $element.addClass("folderHidden");
 		if ($.isFunction(objCallbackInvisible)) {
-			objCallbackInvisible();
+			objCallbackInvisible(strElementId);
 		}
     }
 };
@@ -356,36 +374,96 @@ KAJONA.admin.switchLanguage = function(strLanguageToLoad) {
 /**
  * little helper function for the system right matrix
  */
-KAJONA.admin.checkRightMatrix = function() {
-	// mode 1: inheritance
-	if (document.getElementById('inherit').checked) {
-		// loop over all checkboxes to disable them
-		for (var intI = 0; intI < document.forms['rightsForm'].elements.length; intI++) {
-			var objCurElement = document.forms['rightsForm'].elements[intI];
-			if (objCurElement.type == 'checkbox') {
-				if (objCurElement.id != 'inherit') {
-					objCurElement.disabled = true;
-					objCurElement.checked = false;
-					var strCurId = "inherit," + objCurElement.id;
-					if (document.getElementById(strCurId) != null) {
-						if (document.getElementById(strCurId).value == '1') {
-							objCurElement.checked = true;
-						}
-					}
-				}
-			}
-		}
-	} else {
-		// mode 2: no inheritance, make all checkboxes editable
-		for (intI = 0; intI < document.forms['rightsForm'].elements.length; intI++) {
-			var objCurElement = document.forms['rightsForm'].elements[intI];
-			if (objCurElement.type == 'checkbox') {
-				if (objCurElement.id != 'inherit') {
-					objCurElement.disabled = false;
-				}
-			}
-		}
-	}
+KAJONA.admin.permissions = {
+    checkRightMatrix : function () {
+        // mode 1: inheritance
+        if (document.getElementById('inherit').checked) {
+            // loop over all checkboxes to disable them
+            for (var intI = 0; intI < document.forms['rightsForm'].elements.length; intI++) {
+                var objCurElement = document.forms['rightsForm'].elements[intI];
+                if (objCurElement.type == 'checkbox') {
+                    if (objCurElement.id != 'inherit') {
+                        objCurElement.disabled = true;
+                        objCurElement.checked = false;
+                        var strCurId = "inherit," + objCurElement.id;
+                        if (document.getElementById(strCurId) != null) {
+                            if (document.getElementById(strCurId).value == '1') {
+                                objCurElement.checked = true;
+                            }
+                        }
+                    }
+                }
+            }
+        } else {
+            // mode 2: no inheritance, make all checkboxes editable
+            for (intI = 0; intI < document.forms['rightsForm'].elements.length; intI++) {
+                var objCurElement = document.forms['rightsForm'].elements[intI];
+                if (objCurElement.type == 'checkbox') {
+                    if (objCurElement.id != 'inherit') {
+                        objCurElement.disabled = false;
+                    }
+                }
+            }
+        }
+    },
+
+    toggleMode : null,
+    toggleEmtpyRows : function (strVisibleName, strHiddenName, parentSelector) {
+
+        $(parentSelector).each(function() {
+
+            if($(this).find("input:checked").length == 0 && $(this).find("th").length == 0) {
+                if(KAJONA.admin.permissions.toggleMode == null) {
+                    KAJONA.admin.permissions.toggleMode = $(this).hasClass("hidden") ? "show" : "hide";
+                }
+
+                if(KAJONA.admin.permissions.toggleMode == "show") {
+                    $(this).removeClass("hidden");
+                }
+                else {
+                    $(this).addClass("hidden");
+                }
+            }
+        });
+
+        KAJONA.admin.permissions.toggleMode = null;
+
+        if($('#rowToggleLink').hasClass("rowsVisible")) {
+            $('#rowToggleLink').html(strVisibleName);
+            $('#rowToggleLink').removeClass("rowsVisible");
+        }
+        else {
+            $('#rowToggleLink').html(strHiddenName);
+            $('#rowToggleLink').addClass("rowsVisible")
+        }
+    },
+
+    submitForm : function() {
+        var objResponse = {
+            bitInherited : $("#inherit").is(":checked"),
+            arrConfigs : []
+        };
+
+        $('#rightsForm table tr input:checked').each(function(){
+            if($(this).find("input:checked").length == 0) {
+                objResponse.arrConfigs.push($(this).attr('id'));
+            }
+        });
+
+        $("#responseContainer").html('').addClass("loadingContainer");
+
+        $.ajax({
+            url: KAJONA_WEBPATH + '/xml.php?admin=1&module=right&action=saveRights&systemid='+ $('#systemid').val(),
+            type: 'POST',
+            data: {json: JSON.stringify(objResponse)},
+            dataType: 'json'
+        }).done(function(data) {
+            $("#responseContainer").removeClass("loadingContainer").html(data.message);
+        });
+
+
+        return false;
+    }
 };
 
 /**
@@ -598,7 +676,10 @@ KAJONA.admin.ajax = {
 
 	genericAjaxCall : function(module, action, systemid, objCallback) {
 		var postTarget = KAJONA_WEBPATH + '/xml.php?admin=1&module='+module+'&action='+action;
-        var data = this.getDataObjectFromString(systemid, true);
+        var data;
+        if(systemid) {
+            data = this.getDataObjectFromString(systemid, true);
+        }
 
         $.ajax({
             type: 'POST',
@@ -670,15 +751,74 @@ KAJONA.admin.ajax = {
  * Form management
  */
 KAJONA.admin.forms = {};
+
+KAJONA.admin.forms.initForm = function(strFormid) {
+    $('#'+strFormid+' input , #'+strFormid+' select , #'+strFormid+' textarea ').each(function() {
+        $(this).attr("data-kajona-initval", $(this).val());
+    });
+};
+
+KAJONA.admin.forms.changeLabel = '';
+KAJONA.admin.forms.changeConfirmation = '';
+
+/**
+ * Adds an onchange listener to the formentry with the passed ID. If the value is changed, a warning is rendered below the field.
+ * In addition, a special confirmation may be required to change the field to the new value.
+ *
+ * @param strElementId
+ * @param bitConfirmChange
+ */
+KAJONA.admin.forms.addChangelistener = function(strElementId, bitConfirmChange) {
+
+    $('#'+strElementId).on('change', function(objEvent) {
+        if($(this).val() != $(this).attr("data-kajona-initval")) {
+            if($(this).closest(".form-group").find("div.changeHint").length == 0) {
+
+                if(bitConfirmChange && bitConfirmChange == true) {
+                    var bitResponse = confirm(KAJONA.admin.forms.changeConfirmation);
+                    if(!bitResponse) {
+                        $(this).val($(this).attr("data-kajona-initval"));
+                        objEvent.preventDefault();
+                        return;
+                    }
+                }
+
+                $(this).closest(".form-group").addClass("has-warning");
+                $(this).closest(".form-group").children("div:first").append($('<div class="changeHint text-warning"><span class="glyphicon glyphicon-warning-sign"></span> ' + KAJONA.admin.forms.changeLabel + '</div>'));
+            }
+        }
+        else {
+            if($(this).closest(".form-group").find("div.changeHint"))
+                $(this).closest(".form-group").find("div.changeHint").remove();
+
+            $(this).closest(".form-group").removeClass("has-warning");
+        }
+    });
+
+};
+
+
 KAJONA.admin.forms.renderMandatoryFields = function(arrFields) {
 
     for(var i=0; i<arrFields.length; i++) {
         var arrElement = arrFields[i];
         if(arrElement.length == 2) {
-            if(arrElement[1] == 'date') {
-               $("#"+arrElement[0]+"_day").addClass("mandatoryFormElement");
-               $("#"+arrElement[0]+"_month").addClass("mandatoryFormElement");
-               $("#"+arrElement[0]+"_year").addClass("mandatoryFormElement");
+            if(arrElement[1] == 'date' || arrElement[1] == 'class_date_validator') {
+
+                var $objElementDay = $("#"+arrElement[0]+"_day");
+                if($objElementDay) {
+                    $objElementDay.addClass("mandatoryFormElement");
+                }
+
+                var $objElementMonth = $("#"+arrElement[0]+"_month");
+                if($objElementMonth) {
+                    $objElementMonth.addClass("mandatoryFormElement");
+                }
+
+                var $objElementYear = $("#"+arrElement[0]+"_year");
+                if($objElementYear) {
+                    $objElementYear.addClass("mandatoryFormElement");
+               }
             }
 
             var $objElement = $("#" + arrElement[0]);
@@ -686,7 +826,6 @@ KAJONA.admin.forms.renderMandatoryFields = function(arrFields) {
                 $objElement.addClass("mandatoryFormElement");
         }
 
-        //closest(".control-group").addClass("error")
     }
 };
 
@@ -695,7 +834,7 @@ KAJONA.admin.forms.renderMissingMandatoryFields = function(arrFields) {
         var strFieldName = strField[0];
         if($("#"+strFieldName) && !$("#"+strFieldName).hasClass('inputWysiwyg')) {
             $("#"+strFieldName).closest(".form-group").addClass("has-error has-feedback");
-			objNode = $('<span class="glyphicon glyphicon-warning-sign form-control-feedback" aria-hidden="true"></span>');
+			var objNode = $('<span class="glyphicon glyphicon-warning-sign form-control-feedback" aria-hidden="true"></span>');
             $("#"+strFieldName).closest("div").append(objNode);
         }
     });
@@ -710,6 +849,9 @@ KAJONA.admin.lists = {
     strDialogStart : '',
     intTotal : 0,
 
+    /**
+     * Toggles all fields
+     */
     toggleAllFields : function() {
         //batchActionSwitch
         $("table.admintable input[type='checkbox']").each(function() {
@@ -717,6 +859,29 @@ KAJONA.admin.lists = {
                 $(this)[0].checked = $('#kj_cb_batchActionSwitch')[0].checked;
             }
         });
+    },
+
+    /**
+     * Toggles all fields with the given system id's
+     *
+     * @param arrSystemIds
+     */
+    toggleFields : function(arrSystemIds) {
+        //batchActionSwitch
+        $("table.admintable input[type='checkbox']").each(function() {
+            if($(this).attr('id').substr(0, 6) == "kj_cb_" && $(this).attr('id') != 'kj_cb_batchActionSwitch') {
+                var strSysid = $(this).closest("tr").data('systemid');
+                if($.inArray(strSysid, arrSystemIds) !== -1) {//if strId in array
+                    if($(this)[0].checked) {
+                        $(this)[0].checked = false;
+                    }
+                    else {
+                        $(this)[0].checked = true;
+                    };
+                }
+            }
+        });
+        KAJONA.admin.lists.updateToolbar();
     },
 
     updateToolbar : function() {
@@ -747,7 +912,7 @@ KAJONA.admin.lists = {
         jsDialog_1.init();
 
         //reset pending list on hide
-        $('#'+jsDialog_1.containerId).on('hidden', function () {
+        $('#'+jsDialog_1.containerId).on('hidden.bs.modal', function () {
             KAJONA.admin.lists.arrSystemids = [];
         });
 
@@ -785,7 +950,7 @@ KAJONA.admin.lists = {
         }
         else {
             $('.batch_progressed').text((KAJONA.admin.lists.intTotal));
-            $('.progress > .progess-bar').css('width', 100+'%');
+            $('.progress > .progress-bar').css('width', 100+'%');
 			$('.progress > .progress-bar').html('100%');
             document.location.reload();
         }
@@ -801,6 +966,26 @@ KAJONA.admin.lists = {
 
         //get the selected elements
         $("table.admintable  input:checked").each(function() {
+            if($(this).attr('id').substr(0, 6) == "kj_cb_" && $(this).attr('id') != 'kj_cb_batchActionSwitch') {
+                var sysid = $(this).closest("tr").data('systemid');
+                if(sysid != "")
+                    selectedElements.push(sysid);
+            }
+        });
+
+        return selectedElements;
+    },
+
+    /**
+     * Creates an array which contains all system id's.
+     *
+     * @returns {Array}
+     */
+    getAllElements : function () {
+        var selectedElements = [];
+
+        //get the selected elements
+        $("table.admintable  input[type='checkbox']").each(function() {
             if($(this).attr('id').substr(0, 6) == "kj_cb_" && $(this).attr('id') != 'kj_cb_batchActionSwitch') {
                 var sysid = $(this).closest("tr").data('systemid');
                 if(sysid != "")
@@ -882,6 +1067,64 @@ KAJONA.admin.messaging = {
             }
         });
     }
+};
+
+/**
+ * Appends an table of contents navigation under the main navigation sidebar. The index contains all elements which
+ * match the given selector. The text of the element gets used as link in the navigation. Sets also the fitting id to
+ * each element.
+ */
+KAJONA.admin.renderTocNavigation = function (selector) {
+    // create the navigation
+    var html = '<div id="toc-navigation" class="toc-navigation-panel" role="navigation">';
+    html += '<ul class="nav">';
+    var arrIdMap = Array();
+    $(selector).each(function () {
+        if($(this).attr('id')) {
+            var id = $(this).attr('id');
+        }
+        else {
+            var id = $(this).text().replace(/(?!\w)[\x00-\xC0]/g, "-");
+            var newId = id;
+            var intI = 0;
+            while(KAJONA.util.inArray(newId, arrIdMap)) {
+                newId = id+"_"+(intI++);
+            }
+
+            id = newId;
+            arrIdMap.push(id);
+            $(this).attr('id', id);
+        }
+        html += '<li><a href="#' + id + '">' + $(this).text() + '</a></li>';
+    });
+    html += '</ul>';
+    html += '</div>';
+
+    // append the element only if it is not already appended
+    if($('#toc-navigation').length > 0) {
+        $('#toc-navigation').html(html);
+    }
+    else {
+        $('.sidebar-nav').append(html);
+    }
+
+    // affix toc navigation
+    $('#toc-navigation').affix({
+        offset: {
+            top: $('#toc-navigation').position().top + 30
+        }
+    });
+
+    // scroll spy
+    $('body').scrollspy({
+        target: '#toc-navigation',
+        offset: 40
+    });
+
+    // resize toc navigation to main navigation
+    $(window).resize(function() {
+        $('#toc-navigation').css('width', $('#moduleNavigation').width());
+    });
 };
 
 /**

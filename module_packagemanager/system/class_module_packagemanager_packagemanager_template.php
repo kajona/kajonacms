@@ -172,7 +172,7 @@ class class_module_packagemanager_packagemanager_template implements interface_p
      * @return bool
      */
     public function isRemovable() {
-        return _packagemanager_defaulttemplate_ != $this->getObjMetadata()->getStrTitle();
+        return class_module_system_setting::getConfigValue("_packagemanager_defaulttemplate_") != $this->getObjMetadata()->getStrTitle();
     }
 
     /**
@@ -184,6 +184,8 @@ class class_module_packagemanager_packagemanager_template implements interface_p
      */
     public function remove(&$strLog) {
 
+        class_orm_base::setObjHandleLogicalDeletedGlobal(class_orm_deletedhandling_enum::INCLUDED());
+
         if(!$this->isRemovable()) {
             return false;
         }
@@ -193,9 +195,11 @@ class class_module_packagemanager_packagemanager_template implements interface_p
 
         foreach($arrTemplates as $objOneTemplate) {
             if($objOneTemplate->getStrName() == $this->getObjMetadata()->getStrTitle()) {
-                return $objOneTemplate->deleteObject();
+                return $objOneTemplate->deleteObjectFromDatabase();
             }
         }
+
+        class_orm_base::setObjHandleLogicalDeletedGlobal(class_orm_deletedhandling_enum::EXCLUDED());
 
         return false;
     }

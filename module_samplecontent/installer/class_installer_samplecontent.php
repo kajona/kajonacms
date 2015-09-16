@@ -103,11 +103,10 @@ class class_installer_samplecontent extends class_installer_base implements inte
         //delete the module-node
         $strReturn .= "Deleting the module-registration...\n";
         $objModule = class_module_system_module::getModuleByName($this->objMetadata->getStrTitle(), true);
-        if(!$objModule->deleteObject()) {
+        if(!$objModule->deleteObjectFromDatabase()) {
             $strReturn .= "Error deleting module, aborting.\n";
             return false;
         }
-
 
 
         return true;
@@ -121,13 +120,7 @@ class class_installer_samplecontent extends class_installer_base implements inte
 
         $strReturn .= "Version found:\n\t Module: ".$arrModule["module_name"].", Version: ".$arrModule["module_version"]."\n\n";
 
-        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModule["module_version"] == "3.4.2") {
-            $strReturn .= "Updating 3.4.2 to 3.4.9...\n";
-            $this->updateModuleVersion("samplecontent", "3.4.9");
-        }
-
-        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+          $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
         if($arrModule["module_version"] == "3.4.9") {
             $strReturn .= "Updating 3.4.9 to 4.0...\n";
             $this->updateModuleVersion("samplecontent", "4.0");
@@ -167,6 +160,12 @@ class class_installer_samplecontent extends class_installer_base implements inte
         if($arrModule["module_version"] == "4.5") {
             $strReturn .= "Updating 4.5 to 4.6...\n";
             $this->updateModuleVersion("samplecontent", "4.6");
+        }
+
+        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "4.6") {
+            $strReturn .= "Updating to 4.7...\n";
+            $this->updateModuleVersion("samplecontent", "4.7");
         }
 
         return $strReturn;

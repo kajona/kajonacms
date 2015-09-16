@@ -64,6 +64,10 @@ class class_systemtask_compresspicuploads extends class_systemtask_base implemen
      * @return string
      */
     public function executeTask() {
+
+        if(!class_module_system_module::getModuleByName("system")->rightRight2())
+            return $this->getLang("commons_error_permissions");
+
         $strReturn = "";
 
         $this->intMaxWidth = (int)$this->getParam("intMaxWidth");

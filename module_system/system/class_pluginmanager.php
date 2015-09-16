@@ -18,7 +18,7 @@
 class class_pluginmanager {
 
     /**
-     * @var string[]
+     * @var string[][]
      */
     private static $arrPluginClasses = array();
 
@@ -51,7 +51,7 @@ class class_pluginmanager {
         $strKey = md5($this->strSearchPath.$this->strPluginPoint);
         if(!array_key_exists($strKey, self::$arrPluginClasses)) {
             $strPluginPoint = $this->strPluginPoint;
-            $arrClasses = class_resourceloader::getInstance()->getFolderContent($this->strSearchPath, array(".php"), false, function(&$strOneFile) use ($strPluginPoint) {
+            $arrClasses = class_resourceloader::getInstance()->getFolderContent($this->strSearchPath, array(".php"), false, function($strOneFile) use ($strPluginPoint) {
                 $strOneFile = uniSubstr($strOneFile, 0, -4);
 
                 if(uniStripos($strOneFile, "class_") === false || uniStrpos($strOneFile, "class_testbase") !== false)
@@ -65,6 +65,9 @@ class class_pluginmanager {
                 }
 
                 return false;
+            },
+            function(&$strOneFile) {
+                $strOneFile = uniSubstr($strOneFile, 0, -4);
             });
 
             self::$arrPluginClasses[$strKey] = $arrClasses;

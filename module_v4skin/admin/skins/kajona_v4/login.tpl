@@ -57,18 +57,7 @@
 </script>
 
 <script src="_skinwebpath_/js/jquery.ui.touch-punch.min.js?_system_browser_cachebuster_"></script>
-<script src="_skinwebpath_/js/transition.js?_system_browser_cachebuster_"></script>
-<script src="_skinwebpath_/js/alert.js?_system_browser_cachebuster_"></script>
-<script src="_skinwebpath_/js/modal.js?_system_browser_cachebuster_"></script>
-<script src="_skinwebpath_/js/dropdown.js?_system_browser_cachebuster_"></script>
-<script src="_skinwebpath_/js/scrollspy.js?_system_browser_cachebuster_"></script>
-<script src="_skinwebpath_/js/tab.js?_system_browser_cachebuster_"></script>
-<script src="_skinwebpath_/js/tooltip.js?_system_browser_cachebuster_"></script>
-<script src="_skinwebpath_/js/popover.js?_system_browser_cachebuster_"></script>
-<script src="_skinwebpath_/js/button.js?_system_browser_cachebuster_"></script>
-<script src="_skinwebpath_/js/collapse.js?_system_browser_cachebuster_"></script>
-<script src="_skinwebpath_/js/carousel.js?_system_browser_cachebuster_"></script>
-<script src="_skinwebpath_/js/affix.js?_system_browser_cachebuster_"></script>
+<script src="_skinwebpath_/js/bootstrap.min.js?_system_browser_cachebuster_"></script>
 <script src="_skinwebpath_/js/v4skin.js?_system_browser_cachebuster_"></script>
 </body>
 </html>

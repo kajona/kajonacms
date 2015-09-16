@@ -29,6 +29,16 @@ class class_usersources_source_kajona implements interface_usersources_usersourc
     }
 
     /**
+     * Returns a readable name of the source, e.g. "Kajona" or "LDAP Company 1"
+     *
+     * @return mixed
+     */
+    public function getStrReadableName() {
+        return class_carrier::getInstance()->getObjLang()->getLang("usersource_kajona_name", "user");
+    }
+
+
+    /**
      * Tries to authenticate a user with the given credentials.
      * The password is unencrypted, each source should take care of its own encryption.
      *

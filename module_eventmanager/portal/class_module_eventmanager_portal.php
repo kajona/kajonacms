@@ -358,6 +358,7 @@ class class_module_eventmanager_portal extends class_portal_controller implement
 
 
         $objParticipant->setIntRecordStatus(0);
+        $objParticipant->updateObjectToDb();
 
         $objMail = new class_mail();
         $objMail->setSubject($this->getLang("registerMailSubject"));
@@ -401,6 +402,7 @@ class class_module_eventmanager_portal extends class_portal_controller implement
             foreach($arrParticipants as $objOneParticipant) {
                 if($objOneParticipant->getSystemid() == $this->getParam("participantId")) {
                     $objOneParticipant->setIntRecordStatus(1);
+                    $objOneParticipant->updateObjectToDb();
                     $strMessage = $this->getLang("participantSuccessConfirmation");
                     break;
                 }

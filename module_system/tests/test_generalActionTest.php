@@ -8,19 +8,23 @@ class class_test_generalActionTest extends class_testbase  {
 
     public function testAdminModules() {
 
+        class_adminskin_helper::defineSkinWebpath();
         class_carrier::getInstance()->getObjRights()->setBitTestMode(true);
 
         //load all admin-classes
-        $arrFiles = class_resourceloader::getInstance()->getFolderContent("/admin", array(".php"), false, function(&$strOneFile) {
+        $arrFiles = class_resourceloader::getInstance()->getFolderContent("/admin", array(".php"), false, function($strOneFile) {
             if(preg_match("/class_module_(.*)_admin.php/i", $strOneFile)) {
                 $strClassname = uniSubstr($strOneFile, 0, -4);
                 $objReflection = new ReflectionClass($strClassname);
                 if(!$objReflection->isAbstract()) {
-                    $strOneFile = $objReflection->newInstance();
                     return true;
                 }
             }
             return false;
+        },
+        function(&$strOneFile) {
+            $strOneFile = uniSubstr($strOneFile, 0, -4);
+            $strOneFile = new $strOneFile();
         });
 
         foreach($arrFiles as $objAdminInstance) {
@@ -39,16 +43,19 @@ class class_test_generalActionTest extends class_testbase  {
         class_carrier::getInstance()->getObjRights()->setBitTestMode(true);
 
         //load all admin-classes
-        $arrFiles = class_resourceloader::getInstance()->getFolderContent("/portal", array(".php"), false, function(&$strOneFile) {
+        $arrFiles = class_resourceloader::getInstance()->getFolderContent("/portal", array(".php"), false, function($strOneFile) {
             if(preg_match("/class_module_(.*)_portal.php/i", $strOneFile)) {
                 $strClassname = uniSubstr($strOneFile, 0, -4);
                 $objReflection = new ReflectionClass($strClassname);
                 if(!$objReflection->isAbstract()) {
-                    $strOneFile = $objReflection->newInstance(array());
                     return true;
                 }
             }
             return false;
+        },
+        function(&$strOneFile) {
+            $strOneFile = uniSubstr($strOneFile, 0, -4);
+            $strOneFile = new $strOneFile(array());
         });
 
         foreach($arrFiles as $objPortalInstance) {

@@ -28,8 +28,7 @@ class class_test_news extends class_testbase  {
         
         
         echo "adding news to category..\n";
-        $objNews->setArrCats(array($objCat->getSystemid() => "ss"));
-        $objNews->setBitUpdateMemberships(true);
+        $objNews->setArrCats(array($objCat->getSystemid()));
         $this->assertTrue($objNews->updateObjectToDb(), __FILE__." update news");
         
         $strNewsId = $objNews->getSystemid();
@@ -44,12 +43,12 @@ class class_test_news extends class_testbase  {
         $this->assertEquals(1, count(class_module_news_news::getObjectList($objCat->getSystemid())), __FILE__." check news for cat");
 
         echo "deleting news...\n";
-        $this->assertTrue($objNews->deleteObject(), __FILE__." delete news");
+        $this->assertTrue($objNews->deleteObjectFromDatabase(), __FILE__." delete news");
         
         $this->flushDBCache();
         $this->assertEquals(0, count(class_module_news_news::getObjectList($objCat->getSystemid())), __FILE__." check news for cat");
         
-        $this->assertTrue($objCat->deleteObject(), __FILE__." delete cat");
+        $this->assertTrue($objCat->deleteObjectFromDatabase(), __FILE__." delete cat");
     }
     
     
@@ -78,8 +77,7 @@ class class_test_news extends class_testbase  {
         $this->flushDBCache();
         
         echo "adding news to category..\n";
-        $objNews->setArrCats(array($objCat->getSystemid() => "ss"));
-        $objNews->setBitUpdateMemberships(true);
+        $objNews->setArrCats(array($objCat->getSystemid()));
         $this->assertTrue($objNews->updateObjectToDb(), __FILE__." update news");
         $this->flushDBCache();
         
@@ -117,8 +115,7 @@ class class_test_news extends class_testbase  {
         
         
         echo "adding news to category..\n";
-        $objNews2->setArrCats(array($objCat->getSystemid() => "ss2"));
-        $objNews2->setBitUpdateMemberships(true);
+        $objNews2->setArrCats(array($objCat->getSystemid()));
         $this->assertTrue($objNews2->updateObjectToDb(), __FILE__." update news");
         $this->flushDBCache();
         
@@ -140,10 +137,10 @@ class class_test_news extends class_testbase  {
         
         
         echo "deleting news & category...\n";
-        $this->assertTrue($objNews->deleteObject(), __FILE__." delete news");
-        $this->assertTrue($objNews2->deleteObject(), __FILE__." delete news");
-        $this->assertTrue($objCat->deleteObject(), __FILE__." delete cat");
-        $this->assertTrue($objFeed->deleteObject(), __FILE__." delete feed");
+        $this->assertTrue($objNews->deleteObjectFromDatabase(), __FILE__." delete news");
+        $this->assertTrue($objNews2->deleteObjectFromDatabase(), __FILE__." delete news");
+        $this->assertTrue($objCat->deleteObjectFromDatabase(), __FILE__." delete cat");
+        $this->assertTrue($objFeed->deleteObjectFromDatabase(), __FILE__." delete feed");
     }
     
 

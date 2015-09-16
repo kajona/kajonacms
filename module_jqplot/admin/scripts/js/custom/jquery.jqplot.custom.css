@@ -18,20 +18,17 @@
 .jqplot-yaxis-label,
 .jqplot-yMidAxis-label,
 .jqplot-y2axis-label, .jqplot-y3axis-label, .jqplot-y4axis-label, .jqplot-y5axis-label, .jqplot-y6axis-label, .jqplot-y7axis-label, .jqplot-y8axis-label, .jqplot-y9axis-label,
-table.jqplot-table-legend, table.jqplot-cursor-legend,
 .jqplot-title
 {
     font-size: inherit;
 }
-
 
 /* -------------------------------------------  CSS styles for the tooltip ------------------------------------------*/
 div.jqplot-chart-tooltip {
     position: absolute;
     display: none;
     box-shadow: 2px 2px 3px #444444;
-    border: 2px solid;
-    border-radius: 5px;
+    border: 1px solid;
     padding: 2px;
     background-color: #FFFFFF;
     color: #000000;
@@ -42,7 +39,7 @@ div.jqplot-chart-tooltip {
 }
 
 div.jqplot-chart-tooltip-series {
-    font-size: 12px;
+    font-size: 11px;
     float:left;
 }
 
@@ -61,6 +58,6 @@ div.jqplot-point-label {
 }
 
 div.ui-resizable-helper-jqplot {
-    border: 2px dotted gray;
+    border: 1px dotted gray;
     z-index: 1000 !important;
 }

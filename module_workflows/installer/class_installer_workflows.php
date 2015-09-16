@@ -70,12 +70,12 @@ class class_installer_workflows extends class_installer_base implements interfac
 
         $strReturn .= "Removing system settings...\n";
         if(class_module_system_setting::getConfigByName("_workflows_trigger_authkey_") != null)
-            class_module_system_setting::getConfigByName("_workflows_trigger_authkey_")->deleteObject();
+            class_module_system_setting::getConfigByName("_workflows_trigger_authkey_")->deleteObjectFromDatabase();
 
         /** @var class_module_workflows_workflow $objOneObject */
         foreach(class_module_workflows_workflow::getObjectList() as $objOneObject) {
             $strReturn .= "Deleting object '".$objOneObject->getStrDisplayName()."' ...\n";
-            if(!$objOneObject->deleteObject()) {
+            if(!$objOneObject->deleteObjectFromDatabase()) {
                 $strReturn .= "Error deleting object, aborting.\n";
                 return false;
             }
@@ -84,7 +84,7 @@ class class_installer_workflows extends class_installer_base implements interfac
         /** @var class_module_workflows_handler $objOneObject */
         foreach(class_module_workflows_handler::getObjectList() as $objOneObject) {
             $strReturn .= "Deleting object '".$objOneObject->getStrDisplayName()."' ...\n";
-            if(!$objOneObject->deleteObject()) {
+            if(!$objOneObject->deleteObjectFromDatabase()) {
                 $strReturn .= "Error deleting object, aborting.\n";
                 return false;
             }
@@ -93,7 +93,7 @@ class class_installer_workflows extends class_installer_base implements interfac
         //delete the module-node
         $strReturn .= "Deleting the module-registration...\n";
         $objModule = class_module_system_module::getModuleByName($this->objMetadata->getStrTitle(), true);
-        if(!$objModule->deleteObject()) {
+        if(!$objModule->deleteObjectFromDatabase()) {
             $strReturn .= "Error deleting module, aborting.\n";
             return false;
         }
@@ -118,19 +118,6 @@ class class_installer_workflows extends class_installer_base implements interfac
         $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
         $strReturn .= "Version found:\n\t Module: ".$arrModule["module_name"].", Version: ".$arrModule["module_version"]."\n\n";
 
-        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModule["module_version"] == "3.4.2" || $arrModule["module_version"] == "3.4.2.1") {
-
-            if($arrModule["module_version"] == "3.4.2.1")
-                $this->bitUpdatingFrom3421 = true;
-
-            $strReturn .= $this->update_342_349();
-        }
-
-        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModule["module_version"] == "3.4.9") {
-            $strReturn .= $this->update_349_40();
-        }
 
         $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
         if($arrModule["module_version"] == "4.0") {
@@ -186,39 +173,25 @@ class class_installer_workflows extends class_installer_base implements interfac
             $this->updateModuleVersion($this->objMetadata->getStrTitle(), "4.6");
         }
 
+        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "4.6") {
+            $strReturn .= "Updating to 4.7...\n";
+            $this->updateModuleVersion($this->objMetadata->getStrTitle(), "4.7");
+        }
+
+        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "4.7") {
+            $strReturn .= $this->update_47_475();
+        }
+
+        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "4.7.5") {
+            $strReturn .= $this->update_475_476();
+        }
+
         return $strReturn."\n\n";
 	}
 
-    private function update_342_349() {
-        $strReturn = "Updating 3.4.2 to 3.4.9...\n";
-
-        $strReturn .= "Adding classes for existing records...\n";
-        $strReturn .= "Workflows\n";
-        $arrRows = $this->objDB->getPArray("SELECT workflows_id FROM "._dbprefix_."workflows, "._dbprefix_."system WHERE system_id = workflows_id AND (system_class IS NULL OR system_class = '')", array());
-        foreach($arrRows as $arrOneRow) {
-            $strQuery = "UPDATE "._dbprefix_."system SET system_class = ? where system_id = ?";
-            $this->objDB->_pQuery($strQuery, array( 'class_module_workflows_workflow', $arrOneRow["workflows_id"] ) );
-        }
-
-        $strReturn .= "Handler\n";
-        $arrRows = $this->objDB->getPArray("SELECT workflows_handler_id FROM "._dbprefix_."workflows_handler, "._dbprefix_."system WHERE system_id = workflows_handler_id AND (system_class IS NULL OR system_class = '')", array());
-        foreach($arrRows as $arrOneRow) {
-            $strQuery = "UPDATE "._dbprefix_."system SET system_class = ? where system_id = ?";
-            $this->objDB->_pQuery($strQuery, array( 'class_module_workflows_handler', $arrOneRow["workflows_handler_id"] ) );
-        }
-
-
-        $strReturn .= "Updating module-versions...\n";
-        $this->updateModuleVersion($this->objMetadata->getStrTitle(), "3.4.9");
-        return $strReturn;
-    }
-
-    private function update_349_40() {
-        $strReturn = "Updating 3.4.9 to 4.0...\n";
-        $strReturn .= "Updating module-versions...\n";
-        $this->updateModuleVersion($this->objMetadata->getStrTitle(), "4.0");
-        return $strReturn;
-    }
 
     private function update_40_401() {
         $strReturn = "Updating 4.0 to 4.0.1...\n";
@@ -276,5 +249,38 @@ class class_installer_workflows extends class_installer_base implements interfac
         return $strReturn;
     }
 
+    private function update_47_475() {
+        $strReturn = "Updating 4.7 to 4.7.5...\n";
+
+        $strReturn .= "Removing messagesummary login-listeners...\n";
+
+        $objFilesystem = new class_filesystem();
+        if(is_file(_realpath_."/core/module_workflows/system/class_module_messagesummary_firstloginlistener.php")) {
+            $objFilesystem->fileDelete("/core/module_workflows/system/class_module_messagesummary_firstloginlistener.php");
+        }
+
+        if(is_file(_realpath_."/project/system/class_module_messagesummary_firstloginlistener.php")) {
+            $objFilesystem->fileDelete("/project/system/class_module_messagesummary_firstloginlistener.php");
+        }
+
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion($this->objMetadata->getStrTitle(), "4.7.5");
+        return $strReturn;
+    }
+
+
+    private function update_475_476() {
+        $strReturn = "Updating database indexes\n";
+
+        $this->objDB->_pQuery("ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."workflows")." ADD INDEX ( ".$this->objDB->encloseColumnName("workflows_class")." ) ", array());
+        $this->objDB->_pQuery("ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."workflows")." ADD INDEX ( ".$this->objDB->encloseColumnName("workflows_responsible")." ) ", array());
+
+
+        $strReturn .= "Updating module-versions...\n";
+        $this->objDB->flushQueryCache();
+        $this->updateModuleVersion($this->objMetadata->getStrTitle(), "4.7.6");
+
+        return $strReturn;
+    }
 
 }

@@ -5,11 +5,11 @@
         >
     <title>directorybrowser</title>
     <description>A simple element to render the content of a folder on the filesystem.</description>
-    <version>1.3</version>
+    <version>1.4</version>
     <author>Kajona Team</author>
     <type>ELEMENT</type>
     <providesInstaller>TRUE</providesInstaller>
     <requiredModules>
-        <module name="pages" version="4.5" />
+        <module name="pages" version="4.7" />
     </requiredModules>
 </package>

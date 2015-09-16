@@ -13,8 +13,8 @@
 
 //For the sake of different loaders - check again :(
 //Mbstring loaded? If yes, we could use unicode-safe string-functions
-if(!defined("_mbstringloaded_")) {
-    if(extension_loaded("mbstring")) {
+if (!defined("_mbstringloaded_")) {
+    if (extension_loaded("mbstring")) {
         define("_mbstringloaded_", true);
         mb_internal_encoding("UTF-8");
     }
@@ -29,18 +29,21 @@ if(!defined("_mbstringloaded_")) {
  *
  * @return void
  */
-function bootstrapIncludeModuleIds() {
+function bootstrapIncludeModuleIds()
+{
     //Module-Constants
-    foreach(scandir(_realpath_) as $strRootFolder) {
+    foreach (scandir(_realpath_) as $strRootFolder) {
 
-        if(uniStrpos($strRootFolder, "core") === false)
+        if (uniStrpos($strRootFolder, "core") === false) {
             continue;
+        }
 
-        foreach(scandir(_realpath_."/".$strRootFolder) as $strDirEntry ) {
-            if(is_dir(_realpath_."/".$strRootFolder."/".$strDirEntry) && is_dir(_realpath_."/".$strRootFolder."/".$strDirEntry."/system/") && is_dir(_realpath_."/".$strRootFolder."/".$strDirEntry."/system/config/")) {
-                foreach(scandir(_realpath_."/".$strRootFolder."/".$strDirEntry."/system/config/") as $strModuleEntry ) {
-                    if(preg_match("/module\_([a-z0-9\_])+\_id\.php/", $strModuleEntry))
+        foreach (scandir(_realpath_."/".$strRootFolder) as $strDirEntry) {
+            if (is_dir(_realpath_."/".$strRootFolder."/".$strDirEntry) && is_dir(_realpath_."/".$strRootFolder."/".$strDirEntry."/system/") && is_dir(_realpath_."/".$strRootFolder."/".$strDirEntry."/system/config/")) {
+                foreach (scandir(_realpath_."/".$strRootFolder."/".$strDirEntry."/system/config/") as $strModuleEntry) {
+                    if (preg_match("/module\_([a-z0-9\_])+\_id\.php/", $strModuleEntry)) {
                         @include_once _realpath_."/".$strRootFolder."/".$strDirEntry."/system/config/".$strModuleEntry;
+                    }
                 }
             }
         }
@@ -51,14 +54,18 @@ function bootstrapIncludeModuleIds() {
  * Returns a value from the GET-array
  *
  * @param string $strKey
+ *
  * @return string
  * @deprecated use @link{class_carrier::getInstance()->getParam("")} instead
  */
-function getGet($strKey) {
-    if(issetGet($strKey))
+function getGet($strKey)
+{
+    if (issetGet($strKey)) {
         return $_GET[$strKey];
-    else
+    }
+    else {
         return "";
+    }
 }
 
 /**
@@ -66,7 +73,8 @@ function getGet($strKey) {
  *
  * @return mixed
  */
-function getArrayGet() {
+function getArrayGet()
+{
     return $_GET;
 }
 
@@ -75,7 +83,8 @@ function getArrayGet() {
  *
  * @return mixed
  */
-function getArrayFiles() {
+function getArrayFiles()
+{
     return $_FILES;
 }
 
@@ -84,27 +93,36 @@ function getArrayFiles() {
  * Checks whether a kay exists in GET-array, or not
  *
  * @param string $strKey
+ *
  * @return bool
+ * @deprecated use class_carrier::issetParam
  */
-function issetGet($strKey) {
-    if(isset($_GET[$strKey]))
+function issetGet($strKey)
+{
+    if (isset($_GET[$strKey])) {
         return true;
-    else
+    }
+    else {
         return false;
+    }
 }
 
 /**
  * Returns a value from the Post-array
  *
  * @param string $strKey
+ *
  * @return string
  * @deprecated use @link{class_carrier::getInstance()->getParam("")} instead
  */
-function getPost($strKey) {
-    if(issetPost($strKey))
+function getPost($strKey)
+{
+    if (issetPost($strKey)) {
         return $_POST[$strKey];
-    else
+    }
+    else {
         return "";
+    }
 }
 
 /**
@@ -112,7 +130,8 @@ function getPost($strKey) {
  *
  * @return mixed
  */
-function getArrayPost() {
+function getArrayPost()
+{
     return $_POST;
 }
 
@@ -120,13 +139,18 @@ function getArrayPost() {
  * Looks, if a key is in POST-array or not
  *
  * @param string $strKey
+ *
  * @return bool
+ * @deprecated use class_carrier::issetParam
  */
-function issetPost($strKey) {
-    if(isset($_POST[$strKey]))
+function issetPost($strKey)
+{
+    if (isset($_POST[$strKey])) {
         return true;
-    else
+    }
+    else {
         return false;
+    }
 }
 
 /**
@@ -135,10 +159,12 @@ function issetPost($strKey) {
  * the data is read another way internally.
  *
  * @param bool $bitMultipart
+ *
  * @return string
  * @since 3.4.0
  */
-function getPostRawData($bitMultipart = false) {
+function getPostRawData($bitMultipart = false)
+{
     /*
       sidler, 06/2014: removed, since no longer supported and deprecated up from php 5.6
 
@@ -153,13 +179,17 @@ function getPostRawData($bitMultipart = false) {
  * Returns a value from the SERVER-Array
  *
  * @param mixed $strKey
+ *
  * @return string
  */
-function getServer($strKey) {
-    if(issetServer($strKey))
+function getServer($strKey)
+{
+    if (issetServer($strKey)) {
         return $_SERVER[$strKey];
-    else
+    }
+    else {
         return "";
+    }
 }
 
 /**
@@ -170,7 +200,8 @@ function getServer($strKey) {
  * @see class_carrier::getAllParams()
  * @todo remove
  */
-function getAllPassedParams() {
+function getAllPassedParams()
+{
     return class_carrier::getAllParams();
 }
 
@@ -178,23 +209,30 @@ function getAllPassedParams() {
  * Key in SERVER-Array?
  *
  * @param string $strKey
+ *
  * @return bool
+ * @deprecated use class_carrier::issetParam
  */
-function issetServer($strKey) {
-    if(isset($_SERVER[$strKey]))
+function issetServer($strKey)
+{
+    if (isset($_SERVER[$strKey])) {
         return true;
-    else
+    }
+    else {
         return false;
+    }
 }
 
 /**
  * Tests, if the requested cookie exists
  *
  * @param string $strKey
+ *
  * @return bool
  * @deprecated
  */
-function issetCookie($strKey) {
+function issetCookie($strKey)
+{
     return isset($_COOKIE[$strKey]);
 }
 
@@ -203,14 +241,18 @@ function issetCookie($strKey) {
  * NOTE: Use the cookie-class to get data from cookies!
  *
  * @param string $strKey
+ *
  * @return mixed
  * @deprecated
  */
-function getCookie($strKey) {
-    if(issetCookie($strKey))
+function getCookie($strKey)
+{
+    if (issetCookie($strKey)) {
         return $_COOKIE[$strKey];
-    else
+    }
+    else {
         return "";
+    }
 }
 
 /**
@@ -228,9 +270,11 @@ function getCookie($strKey) {
  * @param string $strLinkId
  * @param bool $bitTooltip
  * @param string $strCss
+ *
  * @return string
  */
-function getLinkAdminManual($strLinkContent, $strText , $strAlt="", $strImage="", $strImageId = "", $strLinkId = "", $bitTooltip = true, $strCss = "") {
+function getLinkAdminManual($strLinkContent, $strText, $strAlt = "", $strImage = "", $strImageId = "", $strLinkId = "", $bitTooltip = true, $strCss = "")
+{
     return class_link::getLinkAdminManual($strLinkContent, $strText, $strAlt, $strImage, $strImageId, $strLinkId, $bitTooltip, $strCss);
 }
 
@@ -247,9 +291,11 @@ function getLinkAdminManual($strLinkContent, $strText , $strAlt="", $strImage=""
  * @param string $strImage
  * @param bool $bitTooltip
  * @param string $strCss
+ *
  * @return string
  */
-function getLinkAdmin($strModule, $strAction, $strParams = "", $strText ="", $strAlt="", $strImage="", $bitTooltip = true, $strCss = "") {
+function getLinkAdmin($strModule, $strAction, $strParams = "", $strText = "", $strAlt = "", $strImage = "", $bitTooltip = true, $strCss = "")
+{
     return class_link::getLinkAdmin($strModule, $strAction, $strParams, $strText, $strAlt, $strImage, $bitTooltip, $strCss);
 }
 
@@ -262,9 +308,11 @@ function getLinkAdmin($strModule, $strAction, $strParams = "", $strText ="", $st
  * @param string $strAction
  * @param string $strParams
  * @param bool $bitEncodedAmpersand
+ *
  * @return string
  */
-function getLinkAdminHref($strModule, $strAction = "", $strParams = "", $bitEncodedAmpersand = true) {
+function getLinkAdminHref($strModule, $strAction = "", $strParams = "", $bitEncodedAmpersand = true)
+{
     return class_link::getLinkAdminHref($strModule, $strAction, $strParams, $bitEncodedAmpersand);
 }
 
@@ -280,7 +328,8 @@ function getLinkAdminHref($strModule, $strAction = "", $strParams = "", $bitEnco
  *
  * @return mixed|string
  */
-function getLinkAdminXml($strModule, $strAction = "", $strParams = "", $bitEncodedAmpersand = false) {
+function getLinkAdminXml($strModule, $strAction = "", $strParams = "", $bitEncodedAmpersand = false)
+{
     return class_link::getLinkAdminXml($strModule, $strAction, $strParams, $bitEncodedAmpersand);
 }
 
@@ -304,7 +353,8 @@ function getLinkAdminXml($strModule, $strAction = "", $strParams = "", $bitEncod
  *
  * @return string
  */
-function getLinkAdminPopup($strModule, $strAction, $strParams = "", $strText = "", $strAlt = "", $strImage = "", $intWidth = "500", $intHeight = "500", $strTitle = "", $bitTooltip = true, $bitPortalEditor = false) {
+function getLinkAdminPopup($strModule, $strAction, $strParams = "", $strText = "", $strAlt = "", $strImage = "", $intWidth = "500", $intHeight = "500", $strTitle = "", $bitTooltip = true, $bitPortalEditor = false)
+{
     return class_link::getLinkAdminPopup($strModule, $strAction, $strParams, $strText, $strAlt, $strImage, $intWidth, $intHeight, $strTitle, $bitTooltip, $bitPortalEditor);
 }
 
@@ -325,9 +375,11 @@ function getLinkAdminPopup($strModule, $strAction, $strParams = "", $strText = "
  * @param bool|string $strOnClick
  * @param null|int $intWidth
  * @param null|int $intHeight
+ *
  * @return string
  */
-function getLinkAdminDialog($strModule, $strAction, $strParams = "", $strText = "", $strAlt="", $strImage="", $strTitle = "", $bitTooltip = true, $bitPortalEditor = false, $strOnClick = "", $intWidth = null, $intHeight = null) {
+function getLinkAdminDialog($strModule, $strAction, $strParams = "", $strText = "", $strAlt = "", $strImage = "", $strTitle = "", $bitTooltip = true, $bitPortalEditor = false, $strOnClick = "", $intWidth = null, $intHeight = null)
+{
     return class_link::getLinkAdminDialog($strModule, $strAction, $strParams, $strText, $strAlt, $strImage, $strTitle, $bitTooltip, $bitPortalEditor, $strOnClick, $intWidth, $intHeight);
 }
 
@@ -342,7 +394,8 @@ function getLinkAdminDialog($strModule, $strAction, $strParams = "", $strText = 
  * @deprecated replaced by class_adminskin_helper::getAdminImage()
  * @see class_adminskin_helper::getAdminImage()
  */
-function getImageAdmin($strImage, $strAlt="", $bitNoAlt = false) {
+function getImageAdmin($strImage, $strAlt = "", $bitNoAlt = false)
+{
     return class_adminskin_helper::getAdminImage($strImage, $strAlt, $bitNoAlt);
 }
 
@@ -351,14 +404,18 @@ function getImageAdmin($strImage, $strAlt="", $bitNoAlt = false) {
  * uses its' own rights or inherits the rights from another record.
  *
  * @param string $strSystemid
+ *
  * @return string
  * @todo move to toolkit
  */
-function getRightsImageAdminName($strSystemid) {
-    if(class_carrier::getInstance()->getObjRights()->isInherited($strSystemid))
+function getRightsImageAdminName($strSystemid)
+{
+    if (class_carrier::getInstance()->getObjRights()->isInherited($strSystemid)) {
         return "icon_key_inherited";
-    else
+    }
+    else {
         return "icon_key";
+    }
 }
 
 
@@ -366,22 +423,24 @@ function getRightsImageAdminName($strSystemid) {
  * Converts a php size string (e.g. "4M") into bytes
  *
  * @param int $strBytes
+ *
  * @return int
  */
-function phpSizeToBytes($strBytes) {
+function phpSizeToBytes($strBytes)
+{
     $intReturn = 0;
 
     $strBytes = uniStrtolower($strBytes);
 
-    if(strpos($strBytes, "m") !== false) {
+    if (strpos($strBytes, "m") !== false) {
         $intReturn = str_replace("m", "", $strBytes);
         $intReturn = $intReturn * 1024 * 1024;
     }
-    else if(strpos($strBytes, "k") !== false) {
+    else if (strpos($strBytes, "k") !== false) {
         $intReturn = str_replace("m", "", $strBytes);
         $intReturn = $intReturn * 1024;
     }
-    else if(strpos($strBytes, "g") !== false) {
+    else if (strpos($strBytes, "g") !== false) {
         $intReturn = str_replace("m", "", $strBytes);
         $intReturn = $intReturn * 1024 * 1024 * 1024;
     }
@@ -397,19 +456,20 @@ function phpSizeToBytes($strBytes) {
  *
  * @return string
  */
-function bytesToString($intBytes, $bitPhpIni = false) {
+function bytesToString($intBytes, $bitPhpIni = false)
+{
     $strReturn = "";
-    if($intBytes >= 0) {
+    if ($intBytes >= 0) {
         $arrFormats = array("B", "KB", "MB", "GB", "TB");
 
-        if($bitPhpIni) {
+        if ($bitPhpIni) {
             $intBytes = phpSizeToBytes($intBytes);
         }
 
         $intTemp = $intBytes;
         $intCounter = 0;
 
-        while($intTemp > 1024) {
+        while ($intTemp > 1024) {
             $intTemp = $intTemp / 1024;
             $intCounter++;
         }
@@ -428,13 +488,16 @@ function bytesToString($intBytes, $bitPhpIni = false) {
  *
  * @return string
  */
-function timeToString($intTime, $bitLong = true) {
+function timeToString($intTime, $bitLong = true)
+{
     $strReturn = "";
-    if($intTime > 0) {
-        if($bitLong)
+    if ($intTime > 0) {
+        if ($bitLong) {
             $strReturn = date(class_carrier::getInstance()->getObjLang()->getLang("dateStyleLong", "system"), $intTime);
-        else
+        }
+        else {
             $strReturn = date(class_carrier::getInstance()->getObjLang()->getLang("dateStyleShort", "system"), $intTime);
+        }
     }
     return $strReturn;
 }
@@ -446,27 +509,32 @@ function timeToString($intTime, $bitLong = true) {
  * @param bool $bitLong
  * @param string $strFormat if given, the passed format will be used, otherwise the format defined in the i18n files
  *                          usable placeholders are: d, m, y, h, i, s
+ *
  * @return string
  */
-function dateToString($objDate, $bitLong = true, $strFormat = "") {
+function dateToString($objDate, $bitLong = true, $strFormat = "")
+{
     $strReturn = "";
 
     //if the $objDate is a string, convert it to date object
-    if($objDate != null && !$objDate instanceof class_date && uniEreg("([0-9]){14}", $objDate)) {
+    if ($objDate != null && !$objDate instanceof class_date && uniEreg("([0-9]){14}", $objDate)) {
         $objDate = new class_date($objDate);
     }
 
-    if($objDate instanceof class_date) {
+    if ($objDate instanceof class_date) {
 
         //convert to a current date
-        if($strFormat == "") {
-            if($bitLong)
+        if ($strFormat == "") {
+            if ($bitLong) {
                 $strReturn = uniStrtolower(class_carrier::getInstance()->getObjLang()->getLang("dateStyleLong", "system"));
-            else
+            }
+            else {
                 $strReturn = uniStrtolower(class_carrier::getInstance()->getObjLang()->getLang("dateStyleShort", "system"));
+            }
         }
-        else
+        else {
             $strReturn = $strFormat;
+        }
 
         //"d.m.Y H:i:s";
         $strReturn = uniStrReplace("d", $objDate->getIntDay(), $strReturn);
@@ -487,9 +555,11 @@ function dateToString($objDate, $bitLong = true, $strFormat = "") {
  *
  * @param float $floatNumber
  * @param int $intNrOfDecimals the number of decimals
+ *
  * @return string
  */
-function numberFormat($floatNumber, $intNrOfDecimals = 2) {
+function numberFormat($floatNumber, $intNrOfDecimals = 2)
+{
     $strDecChar = class_carrier::getInstance()->getObjLang()->getLang("numberStyleDecimal", "system");
     $strThousandsChar = class_carrier::getInstance()->getObjLang()->getLang("numberStyleThousands", "system");
     return number_format((float)$floatNumber, $intNrOfDecimals, $strDecChar, $strThousandsChar);
@@ -499,40 +569,47 @@ function numberFormat($floatNumber, $intNrOfDecimals = 2) {
  * Converts a hex-string to its rgb-values
  *
  * @see http://www.jonasjohn.de/snippets/php/hex2rgb.htm
+ *
  * @param string $color
+ *
  * @return array
  */
-function hex2rgb($color){
+function hex2rgb($color)
+{
     $color = str_replace('#', '', $color);
-    if(strlen($color) != 6) {
-        return array(0,0,0);
+    if (strlen($color) != 6) {
+        return array(0, 0, 0);
     }
     $rgb = array();
-    for ($x=0;$x<3;$x++){
-        $rgb[$x] = hexdec(substr($color, (2*$x), 2));
+    for ($x = 0; $x < 3; $x++) {
+        $rgb[$x] = hexdec(substr($color, (2 * $x), 2));
     }
     return $rgb;
 }
 
 /**
  * Converts an array of R,G,B values to its matching hex-pendant
+ *
  * @param $arrRGB
+ *
  * @return string
  */
-function rgb2hex($arrRGB) {
+function rgb2hex($arrRGB)
+{
     $strHex = "";
     foreach ($arrRGB as $intColor) {
-        if($intColor > 255)
+        if ($intColor > 255) {
             $intColor = 255;
+        }
 
         $strHexVal = dechex($intColor);
-        if(uniStrlen($strHexVal) == 1)
+        if (uniStrlen($strHexVal) == 1) {
             $strHexVal = '0'.$strHexVal;
+        }
         $strHex .= $strHexVal;
     }
-    return  "#".$strHex;
+    return "#".$strHex;
 }
-
 
 
 /**
@@ -550,9 +627,11 @@ function rgb2hex($arrRGB) {
  * @param string $strCssClass
  * @param string $strLanguage
  * @param string $strSeoAddon
+ *
  * @return string
  */
-function getLinkPortal($strPageI, $strPageE, $strTarget = "_self", $strText = "", $strAction = "", $strParams = "", $strSystemid = "", $strCssClass = "", $strLanguage = "", $strSeoAddon = "") {
+function getLinkPortal($strPageI, $strPageE, $strTarget = "_self", $strText = "", $strAction = "", $strParams = "", $strSystemid = "", $strCssClass = "", $strLanguage = "", $strSeoAddon = "")
+{
     return class_link::getLinkPortal($strPageI, $strPageE, $strTarget, $strText, $strAction, $strParams, $strSystemid, $strCssClass, $strLanguage, $strSeoAddon);
 }
 
@@ -568,9 +647,11 @@ function getLinkPortal($strPageI, $strPageE, $strTarget = "_self", $strText = ""
  * @param string $strSystemid
  * @param string $strLanguage
  * @param string $strSeoAddon Only used if using mod_rewrite
+ *
  * @return string
  */
-function getLinkPortalHref($strPageI, $strPageE = "", $strAction = "", $strParams = "", $strSystemid = "", $strLanguage = "", $strSeoAddon = "") {
+function getLinkPortalHref($strPageI, $strPageE = "", $strAction = "", $strParams = "", $strSystemid = "", $strLanguage = "", $strSeoAddon = "")
+{
     return class_link::getLinkPortalHref($strPageI, $strPageE, $strAction, $strParams, $strSystemid, $strLanguage, $strSeoAddon);
 }
 
@@ -590,7 +671,8 @@ function getLinkPortalHref($strPageI, $strPageE = "", $strAction = "", $strParam
  *
  * @return string
  */
-function getLinkPortalPopup($strPageI, $strPageE, $strAction = "", $strParams = "", $strSystemid = "", $strTitle = "", $intWidth = "500", $intHeight = "500") {
+function getLinkPortalPopup($strPageI, $strPageE, $strAction = "", $strParams = "", $strSystemid = "", $strTitle = "", $intWidth = "500", $intHeight = "500")
+{
     return class_link::getLinkPortalPopup($strPageI, $strPageE, $strAction, $strParams, $strSystemid, $strTitle, $intWidth, $intHeight);
 }
 
@@ -599,28 +681,32 @@ function getLinkPortalPopup($strPageI, $strPageE, $strAction = "", $strParams = 
  * link, name, href
  *
  * @param string $strLink
+ *
  * @return array
  */
-function splitUpLink($strLink) {
+function splitUpLink($strLink)
+{
     //use regex to get href and name
     $arrHits = array();
     preg_match("/<a href=\"([^\"]+)\"\s+([^>]*)>(.*)<\/a>/i", $strLink, $arrHits);
     $arrReturn = array();
     $arrReturn["link"] = $strLink;
-    $arrReturn["name"] = isset($arrHits[3]) ? $arrHits[3] : "" ;
+    $arrReturn["name"] = isset($arrHits[3]) ? $arrHits[3] : "";
     $arrReturn["href"] = isset($arrHits[1]) ? $arrHits[1] : "";
     return $arrReturn;
 }
 
 /**
  * Tries to find all links in a given string and creates a-tags around them.
+ *
  * @param $strText
  *
  * @return string
  * @since 4.3
  * @todo: white-space handling is still messed up
  */
-function replaceTextLinks($strText) {
+function replaceTextLinks($strText)
+{
     $strReplace = preg_replace('#([^href=("|\')|^>]((http|https|ftp|file)://)[^ |^<|^>]+)#', '<a href="\1">\1</a>', $strText);
     return str_replace("a href=\" ", "a href=\"", $strReplace);
 }
@@ -631,20 +717,23 @@ function replaceTextLinks($strText) {
  * @param string $strHtml
  * @param bool $bitEntities
  * @param bool $bitEscapeCrlf
+ *
  * @return string
  */
-function htmlToString($strHtml, $bitEntities = false, $bitEscapeCrlf = true) {
+function htmlToString($strHtml, $bitEntities = false, $bitEscapeCrlf = true)
+{
     $strReturn = $strHtml;
 
-    if($bitEntities) {
+    if ($bitEntities) {
         $strReturn = htmlentities($strHtml, ENT_COMPAT, "UTF-8");
     }
     else {
-        if(get_magic_quotes_gpc() == 0)
-           $strReturn = str_replace("'", "\'", $strHtml);
+        if (get_magic_quotes_gpc() == 0) {
+            $strReturn = str_replace("'", "\'", $strHtml);
+        }
     }
     $arrSearch = array();
-    if($bitEscapeCrlf) {
+    if ($bitEscapeCrlf) {
         $arrSearch[] = "\r\n";
         $arrSearch[] = "\n\r";
         $arrSearch[] = "\n";
@@ -653,7 +742,7 @@ function htmlToString($strHtml, $bitEntities = false, $bitEscapeCrlf = true) {
     $arrSearch[] = "%%";
 
     $arrReplace = array();
-    if($bitEscapeCrlf) {
+    if ($bitEscapeCrlf) {
         $arrReplace[] = "<br />";
         $arrReplace[] = "<br />";
         $arrReplace[] = "<br />";
@@ -672,9 +761,11 @@ function htmlToString($strHtml, $bitEntities = false, $bitEscapeCrlf = true) {
  *
  * @param string $strHtml
  * @param string $strAllowTags
+ *
  * @return string
  */
-function htmlStripTags($strHtml, $strAllowTags = "") {
+function htmlStripTags($strHtml, $strAllowTags = "")
+{
     $strReturn = strip_tags($strHtml, $strAllowTags);
     return $strReturn;
 }
@@ -691,9 +782,11 @@ function htmlStripTags($strHtml, $strAllowTags = "") {
  *      <img src="_webpath_/image.php?image=/portal/pics/myimage.jpg&maxHeight=100" style="width: 100px; height: 100px" />
  *
  * @param string $strHtmlContent
+ *
  * @return string
  */
-function processWysiwygHtmlContent($strHtmlContent) {
+function processWysiwygHtmlContent($strHtmlContent)
+{
     //replace the webpath to remain flexible
     $strHtmlContent = uniStrReplace(_webpath_, "_webpath_", $strHtmlContent);
 
@@ -702,7 +795,7 @@ function processWysiwygHtmlContent($strHtmlContent) {
     //synchronize the width/height style-values set via WYSIWYG editor for on-the-fly images
     $arrImages = "";
     preg_match_all('!image\.php\?image=([/\-\._a-zA-Z0-9]*)([&;=a-zA-Z0-9]*)\" ([\"\'&;:\ =a-zA-Z0-9]*)width: ([0-9]*)px; height: ([0-9]*)px;!', $strHtmlContent, $arrImages);
-    for($i = 0; $i < sizeof($arrImages[0]); ++$i) {
+    for ($i = 0; $i < sizeof($arrImages[0]); ++$i) {
         $strSearch = $arrImages[0][$i];
         $strNewWidth = $arrImages[4][$i];
         $strNewHeight = $arrImages[5][$i];
@@ -721,9 +814,11 @@ function processWysiwygHtmlContent($strHtmlContent) {
  * Encodes an url to be more safe but being less strict than urlencode()
  *
  * @param string $strText
+ *
  * @return string
  */
-function saveUrlEncode($strText) {
+function saveUrlEncode($strText)
+{
     $arraySearch = array(" ");
     $arrayReplace = array("%20");
     return str_replace($arraySearch, $arrayReplace, $strText);
@@ -734,15 +829,18 @@ function saveUrlEncode($strText) {
  * Should be used whenever a string is placed into an URL
  *
  * @param string $strText
+ *
  * @return string
  */
-function urlSafeString($strText) {
-    if($strText == "")
+function urlSafeString($strText)
+{
+    if ($strText == "") {
         return "";
+    }
 
     $strText = html_entity_decode($strText, ENT_COMPAT, "UTF-8");
 
-    $arrSearch  = array(" ", "/", "&", "+", ".", ":", ",", ";", "=", "ä",  "Ä",  "ö",  "Ö",  "ü",  "Ü",  "ß");
+    $arrSearch = array(" ", "/", "&", "+", ".", ":", ",", ";", "=", "ä", "Ä", "ö", "Ö", "ü", "Ü", "ß");
     $arrReplace = array("-", "-", "-", "-", "-", "-", "-", "-", "-", "ae", "Ae", "oe", "Oe", "ue", "Ue", "ss");
 
     $strReturn = str_replace($arrSearch, $arrReplace, $strText);
@@ -755,10 +853,13 @@ function urlSafeString($strText) {
 
 /**
  * Removes traversals like ../ from the passed string
+ *
  * @param string $strFilename
+ *
  * @return string
  */
-function removeDirectoryTraversals($strFilename) {
+function removeDirectoryTraversals($strFilename)
+{
     $strFilename = urldecode($strFilename);
     return uniStrReplace("..", "", $strFilename);
 }
@@ -768,36 +869,43 @@ function removeDirectoryTraversals($strFilename) {
  *
  * @param string $strName
  * @param bool $bitFolder
+ *
  * @return string
  */
-function createFilename($strName, $bitFolder = false) {
+function createFilename($strName, $bitFolder = false)
+{
     $strName = uniStrtolower($strName);
 
-    if(!$bitFolder)
-        $strEnding = uniSubstr($strName, (uniStrrpos($strName, ".")+1));
-    else
+    if (!$bitFolder) {
+        $strEnding = uniSubstr($strName, (uniStrrpos($strName, ".") + 1));
+    }
+    else {
         $strEnding = "";
+    }
 
-    if(!$bitFolder)
-        $strReturn = uniSubstr($strName, 0, (uniStrrpos($strName, ".") ));
-    else
+    if (!$bitFolder) {
+        $strReturn = uniSubstr($strName, 0, (uniStrrpos($strName, ".")));
+    }
+    else {
         $strReturn = $strName;
+    }
 
     //Filter non allowed chars
-    $arrSearch =  array( " ", ".", ":", "ä", "ö", "ü", "/", "ß", "!");
-    $arrReplace = array( "_", "_", "_","ae","oe","ue", "_","ss", "_");
+    $arrSearch = array(" ", ".", ":", "ä", "ö", "ü", "/", "ß", "!");
+    $arrReplace = array("_", "_", "_", "ae", "oe", "ue", "_", "ss", "_");
 
     $strReturn = uniStrReplace($arrSearch, $arrReplace, $strReturn);
 
     //and the ending
-    if(!$bitFolder)
-       $strEnding = uniStrReplace($arrSearch, $arrReplace, $strEnding);
+    if (!$bitFolder) {
+        $strEnding = uniStrReplace($arrSearch, $arrReplace, $strEnding);
+    }
 
     //remove all other special characters
     $strTemp = preg_replace("/[^A-Za-z0-9_-]/", "", $strReturn);
 
     //do a replacing in the ending, too
-    if($strEnding != "") {
+    if ($strEnding != "") {
         //remove all other special characters
         $strEnding = ".".preg_replace("/[^A-Za-z0-9_-]/", "", $strEnding);
 
@@ -812,9 +920,11 @@ function createFilename($strName, $bitFolder = false) {
  * Returns the file extension for a file (including the dot).
  *
  * @param string $strPath
+ *
  * @return string
  */
-function getFileExtension($strPath) {
+function getFileExtension($strPath)
+{
     return uniStrtolower(uniSubstr($strPath, uniStrrpos($strPath, ".")));
 }
 
@@ -822,10 +932,12 @@ function getFileExtension($strPath) {
  * Validates if the passed string is a valid mail-address
  *
  * @param string $strAddress
+ *
  * @return bool
  * @deprecated use class_email_validator instead
  */
-function checkEmailaddress($strAddress) {
+function checkEmailaddress($strAddress)
+{
     $objValidator = new class_email_validator();
     return $objValidator->validate($strAddress);
 }
@@ -834,10 +946,12 @@ function checkEmailaddress($strAddress) {
  * Validates, if the passed value is numeric
  *
  * @param int $intNumber
+ *
  * @return bool
  * @deprecated use class_numeric_validator instead
  */
-function checkNumber($intNumber) {
+function checkNumber($intNumber)
+{
     $objValidator = new class_numeric_validator();
     return $objValidator->validate($intNumber);
 }
@@ -846,14 +960,18 @@ function checkNumber($intNumber) {
  * Validates, if the passed Param represents a valid folder in the filesystem
  *
  * @param string $strPath
+ *
  * @return bool
  */
-function checkFolder($strPath) {
+function checkFolder($strPath)
+{
     $bitTest = is_dir(_realpath_.$strPath) && strlen($strPath) > 0;
-    if($bitTest === false)
+    if ($bitTest === false) {
         return false;
-    else
+    }
+    else {
         return true;
+    }
 }
 
 /**
@@ -862,12 +980,14 @@ function checkFolder($strPath) {
  * @param string $strText
  * @param int $intMin
  * @param int $intMax
+ *
  * @return bool
  *
  * @deprecated replaced by @link{class_text_validator}
  * @see interface_validator
  */
-function checkText($strText, $intMin = 1, $intMax = 0) {
+function checkText($strText, $intMin = 1, $intMax = 0)
+{
     $objValidator = new class_text_validator();
     return $objValidator->validate($strText);
 }
@@ -878,12 +998,13 @@ function checkText($strText, $intMin = 1, $intMax = 0) {
  *
  * @return string The new SystemID
  */
-function generateSystemid() {
+function generateSystemid()
+{
     //generate md5 key
     $strKey = md5(_realpath_);
     $strTemp = "";
     //Do the magic: take out 6 characters randomly...
-    for($intI = 0; $intI < 7; $intI++) {
+    for ($intI = 0; $intI < 7; $intI++) {
         $intTemp = rand(0, 31);
         $strTemp .= $strKey[$intTemp];
     }
@@ -898,16 +1019,19 @@ function generateSystemid() {
  * Checks a systemid for the correct syntax
  *
  * @param string $strID
+ *
  * @return bool
  */
-function validateSystemid($strID) {
+function validateSystemid($strID)
+{
 
     //Check against wrong characters
-    if(strlen($strID) == 20 && ctype_alnum($strID)) {
+    if (strlen($strID) == 20 && ctype_alnum($strID)) {
         return true;
     }
-    else
+    else {
         return false;
+    }
 }
 
 /**
@@ -920,7 +1044,8 @@ function validateSystemid($strID) {
  * @see class_db::dbSafeString($strString, $bitHtmlEntities = true)
  * @return string
  */
-function dbsafeString($strString, $bitHtmlEntities = true) {
+function dbsafeString($strString, $bitHtmlEntities = true)
+{
     return class_carrier::getInstance()->getObjDB()->dbsafeString($strString, $bitHtmlEntities);
 }
 
@@ -928,9 +1053,11 @@ function dbsafeString($strString, $bitHtmlEntities = true) {
  * Makes a string safe for xml-outputs
  *
  * @param string $strString
+ *
  * @return string
  */
-function xmlSafeString($strString) {
+function xmlSafeString($strString)
+{
 
     $strString = html_entity_decode($strString, ENT_COMPAT, "UTF-8");
     //but: encode &, <, >
@@ -947,15 +1074,18 @@ function xmlSafeString($strString) {
  *
  * @param string $strHaystack
  * @param string $strNeedle
+ *
  * @return int
  */
-function uniStrpos($strHaystack, $strNeedle) {
-    if(_mbstringloaded_)
+function uniStrpos($strHaystack, $strNeedle)
+{
+    if (_mbstringloaded_) {
         return mb_strpos($strHaystack, $strNeedle);
-    else
+    }
+    else {
         return strpos($strHaystack, $strNeedle);
+    }
 }
-
 
 
 /**
@@ -963,13 +1093,17 @@ function uniStrpos($strHaystack, $strNeedle) {
  *
  * @param string $strHaystack
  * @param string $strNeedle
+ *
  * @return int
  */
-function uniStrrpos($strHaystack, $strNeedle) {
-    if(_mbstringloaded_)
+function uniStrrpos($strHaystack, $strNeedle)
+{
+    if (_mbstringloaded_) {
         return mb_strrpos($strHaystack, $strNeedle);
-    else
+    }
+    else {
         return strrpos($strHaystack, $strNeedle);
+    }
 }
 
 /**
@@ -977,52 +1111,68 @@ function uniStrrpos($strHaystack, $strNeedle) {
  *
  * @param string $strHaystack
  * @param string $strNeedle
+ *
  * @return int
  */
-function uniStripos($strHaystack, $strNeedle) {
-    if(_mbstringloaded_ && function_exists("mb_stripos"))
+function uniStripos($strHaystack, $strNeedle)
+{
+    if (_mbstringloaded_ && function_exists("mb_stripos")) {
         return mb_stripos($strHaystack, $strNeedle);
-    else
+    }
+    else {
         return stripos($strHaystack, $strNeedle);
+    }
 }
 
 /**
  * Wrapper to phps strlen
  *
  * @param string $strString
+ *
  * @return int
  */
-function uniStrlen($strString) {
-    if(_mbstringloaded_)
+function uniStrlen($strString)
+{
+    if (_mbstringloaded_) {
         return mb_strlen($strString);
-    else
+    }
+    else {
         return strlen($strString);
+    }
 }
 
 /**
  * Wrapper to phps strtolower, due to problems with UTF-8 on some configurations
  *
  * @param string $strString
+ *
  * @return string
  */
-function uniStrtolower($strString) {
-    if(_mbstringloaded_)
+function uniStrtolower($strString)
+{
+    if (_mbstringloaded_) {
         return mb_strtolower($strString);
-    else
+    }
+    else {
         return strtolower($strString);
+    }
 }
 
 /**
  * Wrapper to phps strtoupper, due to problems with UTF-8 on some configurations
  *
  * @param string $strString
+ *
  * @return string
  */
-function uniStrtoupper($strString) {
-    if(_mbstringloaded_)
+function uniStrtoupper($strString)
+{
+    if (_mbstringloaded_) {
         return mb_strtoupper($strString);
-    else
+    }
+    else {
         return strtoupper($strString);
+    }
 }
 
 /**
@@ -1034,18 +1184,23 @@ function uniStrtoupper($strString) {
  *
  * @return string
  */
-function uniSubstr($strString, $intStart, $intEnd = "") {
-    if(_mbstringloaded_) {
-        if($intEnd == "")
+function uniSubstr($strString, $intStart, $intEnd = "")
+{
+    if (_mbstringloaded_) {
+        if ($intEnd == "") {
             return mb_substr($strString, $intStart);
-        else
+        }
+        else {
             return mb_substr($strString, $intStart, $intEnd);
+        }
     }
     else {
-        if($intEnd == "")
+        if ($intEnd == "") {
             return substr($strString, $intStart);
-        else
+        }
+        else {
             return substr($strString, $intStart, $intEnd);
+        }
     }
 }
 
@@ -1054,13 +1209,17 @@ function uniSubstr($strString, $intStart, $intEnd = "") {
  *
  * @param string $strPattern
  * @param string $strString
+ *
  * @return int
  */
-function uniEreg($strPattern, $strString) {
-    if(_mbstringloaded_)
+function uniEreg($strPattern, $strString)
+{
+    if (_mbstringloaded_) {
         return mb_ereg($strPattern, $strString);
-    else
+    }
+    else {
         return preg_match("/".$strPattern."/", $strString);
+    }
 }
 
 /**
@@ -1070,14 +1229,16 @@ function uniEreg($strPattern, $strString) {
  * @param mixed $mixedReplace array or string
  * @param string $strSubject
  * @param bool $bitUnicodesafe
+ *
  * @return mixed
  */
-function uniStrReplace($mixedSearch, $mixedReplace, $strSubject, $bitUnicodesafe = false) {
-    if($bitUnicodesafe) {
-        if(!is_array($mixedSearch)) {
+function uniStrReplace($mixedSearch, $mixedReplace, $strSubject, $bitUnicodesafe = false)
+{
+    if ($bitUnicodesafe) {
+        if (!is_array($mixedSearch)) {
             $mixedSearch = '!'.preg_quote($mixedSearch, '!').'!u';
         }
-        else{
+        else {
             foreach ($mixedSearch as $strKey => $strValue) {
                 $mixedSearch[$strKey] = '!'.preg_quote($strValue).'!u';
             }
@@ -1095,10 +1256,12 @@ function uniStrReplace($mixedSearch, $mixedReplace, $strSubject, $bitUnicodesafe
  * @param string $strString string to wrap
  * @param int $intLength
  * @param string $strAdd string to add after wrapped string
+ *
  * @return string
  */
-function uniStrTrim($strString, $intLength, $strAdd = "…") {
-    if($intLength > 0 && uniStrlen($strString) > $intLength) {
+function uniStrTrim($strString, $intLength, $strAdd = "…")
+{
+    if ($intLength > 0 && uniStrlen($strString) > $intLength) {
         return trim(uniSubstr($strString, 0, $intLength)).$strAdd;
     }
     else {
@@ -1111,7 +1274,8 @@ function uniStrTrim($strString, $intLength, $strAdd = "…") {
  *
  * @param string $strChecksum Checksum of the content. Must be unique for one state.
  */
-function setConditionalGetHeaders($strChecksum) {
+function setConditionalGetHeaders($strChecksum)
+{
     class_response_object::getInstance()->addHeader("ETag: ".$strChecksum);
     class_response_object::getInstance()->addHeader("Cache-Control: max-age=86400, must-revalidate");
 
@@ -1123,11 +1287,13 @@ function setConditionalGetHeaders($strChecksum) {
  * a http 304 is sent to the browser
  *
  * @param string $strChecksum
+ *
  * @return bool
  */
-function checkConditionalGetHeaders($strChecksum) {
-    if(issetServer("HTTP_IF_NONE_MATCH")) {
-        if(getServer("HTTP_IF_NONE_MATCH") == $strChecksum) {
+function checkConditionalGetHeaders($strChecksum)
+{
+    if (issetServer("HTTP_IF_NONE_MATCH")) {
+        if (getServer("HTTP_IF_NONE_MATCH") == $strChecksum) {
             //strike. no further actions needed.
             class_response_object::getInstance()->setStrStatusCode(class_http_statuscodes::SC_NOT_MODIFIED);
             class_response_object::getInstance()->addHeader("ETag: ".$strChecksum);

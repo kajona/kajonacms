@@ -25,16 +25,6 @@ class class_installer_news extends class_installer_base implements interface_ins
 		$strReturn .= "Installing table news...\n";
         $objManager->createTable("class_module_news_news");
 
-		$strReturn .= "Installing table news_member...\n";
-
-		$arrFields = array();
-		$arrFields["newsmem_id"] 		= array("char20", false);
-		$arrFields["newsmem_news"]	 	= array("char20", true);
-		$arrFields["newsmem_category"]  = array("char20", true);
-
-		if(!$this->objDB->createTable("news_member", $arrFields, array("newsmem_id")))
-			$strReturn .= "An error occurred! ...\n";
-
 		$strReturn .= "Installing table news_feed...\n";
         $objManager->createTable("class_module_news_feed");
 
@@ -105,11 +95,12 @@ class class_installer_news extends class_installer_base implements interface_ins
      * @return bool
      */
     public function remove(&$strReturn) {
+
         //delete the page-element
         $objElement = class_module_pages_element::getElement("news");
         if($objElement != null) {
             $strReturn .= "Deleting page-element 'news'...\n";
-            $objElement->deleteObject();
+            $objElement->deleteObjectFromDatabase();
         }
         else {
             $strReturn .= "Error finding page-element 'news', aborting.\n";
@@ -119,7 +110,7 @@ class class_installer_news extends class_installer_base implements interface_ins
         /** @var class_module_news_feed $objOneObject */
         foreach(class_module_news_feed::getObjectList() as $objOneObject) {
             $strReturn .= "Deleting object '".$objOneObject->getStrDisplayName()."' ...\n";
-            if(!$objOneObject->deleteObject()) {
+            if(!$objOneObject->deleteObjectFromDatabase()) {
                 $strReturn .= "Error deleting object, aborting.\n";
                 return false;
             }
@@ -128,7 +119,7 @@ class class_installer_news extends class_installer_base implements interface_ins
         /** @var class_module_news_category $objOneObject */
         foreach(class_module_news_category::getObjectList() as $objOneObject) {
             $strReturn .= "Deleting object '".$objOneObject->getStrDisplayName()."' ...\n";
-            if(!$objOneObject->deleteObject()) {
+            if(!$objOneObject->deleteObjectFromDatabase()) {
                 $strReturn .= "Error deleting object, aborting.\n";
                 return false;
             }
@@ -137,7 +128,7 @@ class class_installer_news extends class_installer_base implements interface_ins
         /** @var class_module_news_news $objOneObject */
         foreach(class_module_news_news::getObjectList() as $objOneObject) {
             $strReturn .= "Deleting object '".$objOneObject->getStrDisplayName()."' ...\n";
-            if(!$objOneObject->deleteObject()) {
+            if(!$objOneObject->deleteObjectFromDatabase()) {
                 $strReturn .= "Error deleting object, aborting.\n";
                 return false;
             }
@@ -146,7 +137,7 @@ class class_installer_news extends class_installer_base implements interface_ins
         //delete the module-node
         $strReturn .= "Deleting the module-registration...\n";
         $objModule = class_module_system_module::getModuleByName($this->objMetadata->getStrTitle(), true);
-        if(!$objModule->deleteObject()) {
+        if(!$objModule->deleteObjectFromDatabase()) {
             $strReturn .= "Error deleting module, aborting.\n";
             return false;
         }
@@ -170,16 +161,6 @@ class class_installer_news extends class_installer_base implements interface_ins
         //check installed version and to which version we can update
         $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
         $strReturn .= "Version found:\n\t Module: ".$arrModule["module_name"].", Version: ".$arrModule["module_version"]."\n\n";
-
-        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModule["module_version"] == "3.4.2") {
-            $strReturn .= $this->update_342_349();
-        }
-
-        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModule["module_version"] == "3.4.9") {
-            $strReturn .= $this->update_349_40();
-        }
 
         $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
         if($arrModule["module_version"] == "4.0") {
@@ -228,65 +209,20 @@ class class_installer_news extends class_installer_base implements interface_ins
             $this->updateElementVersion("news", "4.6");
         }
 
+        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "4.6") {
+            $strReturn .= "Updating to 4.7...\n";
+            $this->updateModuleVersion("news", "4.7");
+            $this->updateElementVersion("news", "4.7");
+        }
+
+        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "4.7" || $arrModule["module_version"] == "4.7.1" || $arrModule["module_version"] == "4.7.2") {
+            $strReturn .= $this->update_47_475();
+        }
+
         return $strReturn."\n\n";
 	}
-
-
-    private function update_342_349() {
-
-        $strReturn = "Updating 3.4.2 to 3.4.9...\n";
-
-        $strReturn .= "Adding classes for existing records...\n";
-        $strReturn .= "FAQs\n";
-        $arrRows = $this->objDB->getPArray("SELECT news_id FROM "._dbprefix_."news, "._dbprefix_."system WHERE system_id = news_id AND (system_class IS NULL OR system_class = '')", array());
-        foreach($arrRows as $arrOneRow) {
-            $strQuery = "UPDATE "._dbprefix_."system SET system_class = ? where system_id = ?";
-            $this->objDB->_pQuery($strQuery, array( 'class_module_news_news', $arrOneRow["news_id"] ) );
-        }
-
-        $strReturn .= "Categories\n";
-        $arrRows = $this->objDB->getPArray("SELECT news_cat_id FROM "._dbprefix_."news_category, "._dbprefix_."system WHERE system_id = news_cat_id AND (system_class IS NULL OR system_class = '')", array());
-        foreach($arrRows as $arrOneRow) {
-            $strQuery = "UPDATE "._dbprefix_."system SET system_class = ? where system_id = ?";
-            $this->objDB->_pQuery($strQuery, array( 'class_module_news_category', $arrOneRow["news_cat_id"] ) );
-        }
-
-        $strReturn .= "Feeds\n";
-        $arrRows = $this->objDB->getPArray("SELECT news_feed_id FROM "._dbprefix_."news_feed, "._dbprefix_."system WHERE system_id = news_feed_id AND (system_class IS NULL OR system_class = '')", array());
-        foreach($arrRows as $arrOneRow) {
-            $strQuery = "UPDATE "._dbprefix_."system SET system_class = ? where system_id = ?";
-            $this->objDB->_pQuery($strQuery, array( 'class_module_news_feed', $arrOneRow["news_feed_id"] ) );
-        }
-
-        $strReturn .= "Removing old constants\n";
-        $strQuery = "DELETE FROM "._dbprefix_."system_config WHERE system_config_name = ?";
-        $this->objDB->_pQuery($strQuery, array("_news_search_resultpage_"));
-
-        $strReturn .= "Setting aspect assignments...\n";
-        if(class_module_system_aspect::getAspectByName("content") != null) {
-            $objModule = class_module_system_module::getModuleByName($this->objMetadata->getStrTitle());
-            $objModule->setStrAspect(class_module_system_aspect::getAspectByName("content")->getSystemid());
-            $objModule->updateObjectToDb();
-        }
-
-
-        $strReturn .= "Updating module-versions...\n";
-        $this->updateModuleVersion("news", "3.4.9");
-        $strReturn .= "Updating element-versions...\n";
-        $this->updateElementVersion("news", "3.4.9");
-        return $strReturn;
-    }
-
-
-    private function update_349_40() {
-        $strReturn = "Updating 3.4.9 to 4.0...\n";
-        $strReturn .= "Updating module-versions...\n";
-        $this->updateModuleVersion("news", "4.0");
-        $strReturn .= "Updating element-versions...\n";
-        $this->updateElementVersion("news", "4.0");
-        return $strReturn;
-    }
-
 
     private function update_40_41() {
         $strReturn = "Updating 4.0 to 4.1...\n";
@@ -335,6 +271,19 @@ class class_installer_news extends class_installer_base implements interface_ins
         $this->updateModuleVersion("news", "4.5.1");
         $strReturn .= "Updating element-versions...\n";
         $this->updateElementVersion("news", "4.5.1");
+        return $strReturn;
+    }
+
+    private function update_47_475() {
+        $strReturn = "Updating 4.7 to 4.7.5...\n";
+
+        $strReturn .= "Changing assignment table...\n";
+        class_carrier::getInstance()->getObjDB()->removeColumn("news_member", "newsmem_id");
+
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion("news", "4.7.5");
+        $strReturn .= "Updating element-versions...\n";
+        $this->updateElementVersion("news", "4.7.5");
         return $strReturn;
     }
 }

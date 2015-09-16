@@ -55,7 +55,7 @@ class class_test_searchBooleanQueryTest extends class_testbase {
         foreach(self::$arrObjectIds as $intKey => $strId) {
             $objObject = class_objectfactory::getInstance()->getObject($strId);
             if($objObject !== null)
-                $objObject->deleteObject();
+                $objObject->deleteObjectFromDatabase();
 
             unset(self::$arrObjectIds[$intKey]);
         }

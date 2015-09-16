@@ -172,7 +172,7 @@ abstract class class_admin_simple extends class_admin_controller {
      * @throws class_exception
      * @return string
      */
-    protected function renderFloatingGrid(class_array_section_iterator $objArraySectionIterator, $strListIdentifier = "", $strPagerAddon = "", $bitSortable = true) {
+    protected final function renderFloatingGrid(class_array_section_iterator $objArraySectionIterator, $strListIdentifier = "", $strPagerAddon = "", $bitSortable = true) {
         $strReturn = "";
 
         $strListActions = "";
@@ -219,18 +219,21 @@ abstract class class_admin_simple extends class_admin_controller {
     /**
      * Renders a list of items, target is the common admin-list.
      * Please be aware, that the combination of paging and sortable-lists may result in unpredictable ordering.
-     * As soon as the list is sortable, the page-size should be at least the same as the number of elements
+     * As soon as the list is sortable, the page-size should be at least the same as the number of elements. Optional
+     * it is possible to provide a filter callback which is called for each entry. If the callback returns false the
+     * entry gets skipped.
      *
      * @param class_array_section_iterator $objArraySectionIterator
      * @param bool $bitSortable
      * @param string $strListIdentifier an internal identifier to check the current parent-list
      * @param bool $bitAllowTreeDrop
      * @param string $strPagerAddon
+     * @param Closure $objFilter
      *
      * @throws class_exception
      * @return string
      */
-    protected function renderList(class_array_section_iterator $objArraySectionIterator, $bitSortable = false, $strListIdentifier = "", $bitAllowTreeDrop = false, $strPagerAddon = "") {
+    protected final function renderList(class_array_section_iterator $objArraySectionIterator, $bitSortable = false, $strListIdentifier = "", $bitAllowTreeDrop = false, $strPagerAddon = "", Closure $objFilter = null) {
         $strReturn = "";
         $intI = 0;
 
@@ -250,14 +253,33 @@ abstract class class_admin_simple extends class_admin_controller {
 
         $arrMassActions = $this->getBatchActionHandlers($strListIdentifier);
 
+        $intTotalNrOfElements = $objArraySectionIterator->getNumberOfElements();
         /** @var $objOneIterable class_model|interface_model|interface_admin_listable */
         foreach($objArraySectionIterator as $objOneIterable) {
 
-            if(!$objOneIterable->rightView())
+            // if we have a filter Closure call it else use the standard rightView method
+            if($objFilter !== null) {
+                if($objFilter($objOneIterable) === false) {
+                    if($bitSortable) {
+                        //inject hidden dummy row for a proper sorting
+                        $strReturn .= $this->objToolkit->genericAdminList($objOneIterable->getSystemid(), "", "", "", 0, "", "", false, "hidden");
+                    }
+                    $intTotalNrOfElements--;
+                    continue;
+                }
+            }
+            else if(!$objOneIterable->rightView()) {
+                if($bitSortable) {
+                    //inject hidden dummy row for a proper sorting
+                    $strReturn .= $this->objToolkit->genericAdminList($objOneIterable->getSystemid(), "", "", "", 0, "", "", false, "hidden");
+                }
+                $intTotalNrOfElements--;
                 continue;
+            }
 
             $strActions = $this->getActionIcons($objOneIterable, $strListIdentifier);
             $strReturn .= $this->objToolkit->simpleAdminList($objOneIterable, $strActions, $intI++, count($arrMassActions) > 0);
+
         }
 
         $strNewActions = $this->mergeNewEntryActions($this->getNewEntryAction($strListIdentifier));
@@ -274,7 +296,7 @@ abstract class class_admin_simple extends class_admin_controller {
         else
             $strReturn .= $this->objToolkit->listFooter();
 
-
+        $objArraySectionIterator->setIntTotalElements($intTotalNrOfElements);
         $strReturn .= $this->objToolkit->getPageview($objArraySectionIterator, $this->getArrModule("modul"), $this->getAction(), "&systemid=" . $this->getSystemid() . $this->strPeAddon . $strPagerAddon);
 
         return $strReturn;
@@ -336,12 +358,16 @@ abstract class class_admin_simple extends class_admin_controller {
     /**
      * Renders the edit action button for the current record.
      *
-     * @param class_model $objListEntry
+     * @param class_model|interface_admin_listable $objListEntry
      * @param bool $bitDialog opens the linked page in a js-based dialog
      *
      * @return string
      */
     protected function renderEditAction(class_model $objListEntry, $bitDialog = false) {
+        if($objListEntry->getIntRecordDeleted() == 1) {
+            return "";
+        }
+
         if($objListEntry->rightEdit()) {
 
             $objLockmanager = $objListEntry->getLockManager();
@@ -357,7 +383,8 @@ abstract class class_admin_simple extends class_admin_controller {
                         "folderview=1&systemid=".$objListEntry->getSystemid().$this->strPeAddon,
                         $this->getLang("commons_list_edit"),
                         $this->getLang("commons_list_edit"),
-                        "icon_edit"
+                        "icon_edit",
+                        $objListEntry->getStrDisplayName()
                     )
                 );
             else
@@ -382,12 +409,15 @@ abstract class class_admin_simple extends class_admin_controller {
      * @return string
      */
     protected function renderUnlockAction(interface_model $objListEntry) {
+        if($objListEntry->getIntRecordDeleted() == 1) {
+            return "";
+        }
 
         $objLockmanager = $objListEntry->getLockManager();
         if(!$objLockmanager->isAccessibleForCurrentUser()) {
             if($objLockmanager->isUnlockableForCurrentUser() ) {
                 return $this->objToolkit->listButton(
-                    class_link::getLinkAdmin($objListEntry->getArrModule("modul"), $this->getActionNameForClass("list", $objListEntry), "&unlockid=".$objListEntry->getSystemid(), "", $this->getLang("commons_unlock"), "icon_lockerOpen")
+                    class_link::getLinkAdmin($objListEntry->getArrModule("modul"), $this->getAction(), "&systemid=".$this->getSystemid()."&unlockid=".$objListEntry->getSystemid(), "", $this->getLang("commons_unlock"), "icon_lockerOpen")
                 );
             }
         }
@@ -401,6 +431,10 @@ abstract class class_admin_simple extends class_admin_controller {
      * @return string
      */
     protected function renderDeleteAction(interface_model $objListEntry) {
+        if($objListEntry->getIntRecordDeleted() == 1) {
+            return "";
+        }
+
         if($objListEntry->rightDelete()) {
 
             $objLockmanager = $objListEntry->getLockManager();
@@ -420,11 +454,17 @@ abstract class class_admin_simple extends class_admin_controller {
     /**
      * Renders the status action button for the current record.
      * @param class_model $objListEntry
+     * @param string $strAltActive tooltip text for the icon if record is active
+     * @param string $strAltInactive tooltip text for the icon if record is inactive
      * @return string
      */
-    protected function renderStatusAction(class_model $objListEntry) {
+    protected function renderStatusAction(class_model $objListEntry, $strAltActive = "", $strAltInactive = "") {
+        if($objListEntry->getIntRecordDeleted() == 1) {
+            return "";
+        }
+
         if($objListEntry->rightEdit() && $this->strPeAddon == "") {
-            return $this->objToolkit->listStatusButton($objListEntry);
+            return $this->objToolkit->listStatusButton($objListEntry, false, $strAltActive, $strAltInactive);
         }
         return "";
     }
@@ -459,6 +499,10 @@ abstract class class_admin_simple extends class_admin_controller {
      * @return string
      */
     protected function renderTagAction(class_model $objListEntry) {
+        if($objListEntry->getIntRecordDeleted() == 1) {
+            return "";
+        }
+
         if($objListEntry->rightView()) {
 
             //the tag list is more complex and wrapped by a js-logic to load the tags by ajax afterwards
@@ -480,6 +524,10 @@ abstract class class_admin_simple extends class_admin_controller {
      * @return string
      */
     protected function renderCopyAction(class_model $objListEntry) {
+        if($objListEntry->getIntRecordDeleted() == 1) {
+            return "";
+        }
+
         if($objListEntry->rightEdit() && $this->strPeAddon == "") {
             $strHref = class_link::getLinkAdminHref($objListEntry->getArrModule("modul"), $this->getActionNameForClass("copyObject", $objListEntry), "&systemid=".$objListEntry->getSystemid().$this->strPeAddon);
             return $this->objToolkit->listButton(
@@ -523,7 +571,7 @@ abstract class class_admin_simple extends class_admin_controller {
             if($bitDialog)
                 return $this->objToolkit->listButton(
                     class_link::getLinkAdminDialog(
-                        $this->getArrModule("modul"), $this->getActionNameForClass("new", null), "&systemid=".$this->getSystemid().$this->strPeAddon, $this->getLang("commons_list_new"), $this->getLang("commons_list_new"), "icon_new"
+                        $this->getArrModule("modul"), $this->getActionNameForClass("new", null), "&folderview=1&systemid=".$this->getSystemid().$this->strPeAddon, $this->getLang("commons_list_new"), $this->getLang("commons_list_new"), "icon_new"
                     )
                 );
             else
@@ -612,7 +660,7 @@ abstract class class_admin_simple extends class_admin_controller {
      * @return string
      */
     protected function renderChangeHistoryAction(class_model $objListEntry) {
-        if(_system_changehistory_enabled_ == "true" && $objListEntry instanceof interface_versionable && $objListEntry->rightChangelog()) {
+        if(class_module_system_setting::getConfigValue("_system_changehistory_enabled_") == "true" && $objListEntry instanceof interface_versionable && $objListEntry->rightChangelog()) {
             return $this->objToolkit->listButton(
                 class_link::getLinkAdminDialog(
                     "system",

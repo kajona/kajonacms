@@ -61,17 +61,6 @@ class class_installer_element_formular extends class_elementinstaller_base imple
     public function update() {
         $strReturn = "";
 
-        if(class_module_pages_element::getElement("form")->getStrVersion() == "3.4.2") {
-            $strReturn .= $this->postUpdate_342_349();
-            $this->objDB->flushQueryCache();
-        }
-
-        if(class_module_pages_element::getElement("form")->getStrVersion() == "3.4.9") {
-            $strReturn .= "Updating element form to 4.0...\n";
-            $this->updateElementVersion("form", "4.0");
-            $this->objDB->flushQueryCache();
-        }
-
         if(class_module_pages_element::getElement("form")->getStrVersion() == "4.0") {
             $strReturn .= "Updating element form to 4.1...\n";
             $this->updateElementVersion("form", "4.1");
@@ -108,20 +97,13 @@ class class_installer_element_formular extends class_elementinstaller_base imple
             $this->objDB->flushQueryCache();
         }
 
+        if(class_module_pages_element::getElement("form")->getStrVersion() == "4.6") {
+            $strReturn .= "Updating element form to 4.7...\n";
+            $this->updateElementVersion("form", "4.7");
+            $this->objDB->flushQueryCache();
+        }
+
         return $strReturn;
     }
-
-
-    public function postUpdate_342_349() {
-        $strReturn = "Updating element form to 3.4.9...\n";
-
-        $strReturn .= "Updating element-classes...\n";
-        $strQuery = "UPDATE "._dbprefix_."element_formular SET formular_class = ? where formular_class = ?";
-        $this->objDB->_pQuery($strQuery, array("class_formular_contact.php", "class_formular_kontakt.php"));
-
-        $this->updateElementVersion("form", "3.4.9");
-        return $strReturn;
-    }
-
 
 }

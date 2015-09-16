@@ -1,7 +1,7 @@
 [
     {
         "name" : "bootstrap",
-        "version" : "3.3.1",
+        "version" : "3.3.5",
         "source" : "http://getbootstrap.com/",
         "license" : "MIT",
         "licenseurl" : "https://github.com/twbs/bootstrap/blob/master/LICENSE"
@@ -22,7 +22,7 @@
     },
     {
         "name" : "Fontawesome",
-        "version" : "4.0.3",
+        "version" : "4.3.0",
         "source" : "http://fortawesome.github.io/Font-Awesome/",
         "license" : "OFL 1.1, MIT",
         "licenseurl" : "http://fortawesome.github.io/Font-Awesome/license/"
@@ -33,5 +33,12 @@
         "source" : "http://opensans.com/",
         "license" : "Apache Licence v2",
         "licenseurl" : "http://www.apache.org/licenses/LICENSE-2.0"
+    },
+    {
+        "name" : "floatThead",
+        "version" : "1.2.13",
+        "source" : "http://mkoryak.github.io/floatThead",
+        "license" : "MIT",
+        "licenseurl" : "http://opensource.org/licenses/MIT"
     }
 ]

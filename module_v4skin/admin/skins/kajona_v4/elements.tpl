@@ -291,14 +291,27 @@ data list header. Used to open a table to print data
 <table class="table table-striped table-condensed kajona-data-table %%cssaddon%%">
 </datalist_header>
 
+<datalist_header_tbody>
+    <table class="table table-striped-tbody table-condensed kajona-data-table %%cssaddon%%">
+</datalist_header_tbody>
+
 data list footer. at the bottom of the datatable
 <datalist_footer>
-</table>
+    </table>
+    <script type="text/javascript">
+        KAJONA.admin.loader.loadFile("/core/module_v4skin/admin/skins/kajona_v4/js/jquery.floatThead.min.js", function() {
+            console.log('table init');
+            $('table.kajona-data-table').floatThead({
+                scrollingTop: $("body.dialogBody").size() > 0 ? 0 : 70,
+                useAbsolutePositioning: true
+            });
+        });
+    </script>
 </datalist_footer>
 
 One Column in a row (header record) - the header, the content, the footer
 <datalist_column_head_header>
-	<tr>
+    <thead><tr>
 </datalist_column_head_header>
 
 <datalist_column_head>
@@ -306,13 +319,18 @@ One Column in a row (header record) - the header, the content, the footer
 </datalist_column_head>
 
 <datalist_column_head_footer>
-	</tr>
+    </tr></thead>
 </datalist_column_head_footer>
 
 One Column in a row (data record) - the header, the content, the footer, providing the option of two styles
 <datalist_column_header>
-	<tr>
+	<tr data-systemid="%%systemid%%">
 </datalist_column_header>
+
+<datalist_column_header_tbody>
+    <tbody>
+    <tr data-systemid="%%systemid%%">
+</datalist_column_header_tbody>
 
 <datalist_column>
     <td class="%%class%%">%%value%%</td>
@@ -321,6 +339,11 @@ One Column in a row (data record) - the header, the content, the footer, providi
 <datalist_column_footer>
 	</tr>
 </datalist_column_footer>
+
+<datalist_column_footer_tbody>
+    </tr>
+    </tbody>
+</datalist_column_footer_tbody>
 
 
 
@@ -337,6 +360,7 @@ To avoid side-effects, no line-break in this case -> not needed by default, but 
 
 <form_start>
 <form name="%%name%%" id="%%name%%" method="post" action="%%action%%" enctype="%%enctype%%" onsubmit="%%onsubmit%%" class="form-horizontal">
+    <script type="text/javascript">$(function() { KAJONA.admin.forms.initForm('%%name%%');  KAJONA.admin.forms.changeLabel = '[lang,commons_form_entry_changed,system]';   KAJONA.admin.forms.changeConfirmation = '[lang,commons_form_entry_changed_conf,system]'; } );</script>
 </form_start>
 
 <form_close>
@@ -349,6 +373,9 @@ Dropdown
         <label for="%%name%%" class="col-sm-3 control-label">%%title%%</label>
         <div class="col-sm-6">
             <select data-placeholder="%%dataplaceholder%%" name="%%name%%" id="%%name%%" class="form-control %%class%%" %%disabled%% %%addons%%>%%options%%</select>
+        </div>
+        <div class="col-sm-2 form-opener">
+            %%opener%%
         </div>
     </div>
 </input_dropdown>
@@ -379,6 +406,30 @@ Multiselect
 <input_multiselect_row_selected>
     <option value="%%key%%" selected="selected">%%value%%</option>
 </input_multiselect_row_selected>
+
+Toggle Button-Bar
+<input_toggle_buttonbar>
+    <div class="form-group">
+        <label for="%%name%%[]" class="col-sm-3 control-label">%%title%%</label>
+        <div class="col-sm-6">
+            <div class="btn-group buttonbar" data-toggle="buttons">
+                %%options%%
+            </div>
+        </div>
+    </div>
+</input_toggle_buttonbar>
+
+<input_toggle_buttonbar_button>
+    <label class="btn btn-primary %%btnclass%%">
+        <input type="checkbox" name="%%name%%[]" value="%%key%%" %%disabled%% %%addons%%> %%value%%
+    </label>
+</input_toggle_buttonbar_button>
+
+<input_toggle_buttonbar_button_selected>
+    <label class="btn btn-primary active %%btnclass%%">
+        <input type="checkbox" name="%%name%%[]" value="%%key%%" checked="checked" %%disabled%% %%addons%%> %%value%%
+    </label>
+</input_toggle_buttonbar_button_selected>
 
 
 Radiogroup
@@ -678,7 +729,8 @@ in addition, a container for the calendar is needed. Use %%calendarContainerId%%
                             format: format,
                             weekStart: 1,
                             autoclose: true,
-                            language: '%%calendarLang%%'
+                            language: '%%calendarLang%%',
+                            todayHighlight: true
                         });
 
                         if($('#%%calendarId%%').is(':focus')) {
@@ -726,7 +778,8 @@ in addition, a container for the calendar is needed. Use %%calendarContainerId%%
                         format: format,
                         weekStart: 1,
                         autoclose: true,
-                        language: '%%calendarLang%%'
+                        language: '%%calendarLang%%',
+                        todayHighlight: true
                     });
 
                     if($('#%%calendarId%%').is(':focus')) {
@@ -739,6 +792,84 @@ in addition, a container for the calendar is needed. Use %%calendarContainerId%%
         </script>
     </div>
 </input_datetime_simple>
+
+<input_objectlist>
+    <div class="form-group">
+        <label for="%%name%%" class="col-sm-3 control-label">%%title%%</label>
+
+        <div class="col-sm-6 inputText">
+            <table id="%%name%%" data-name="%%name%%" class="table table-striped form-control">
+                <colgroup>
+                    <col width="20" />
+                    <col width="*" />
+                    <col width="20" />
+                </colgroup>
+                <tfoot>
+                <tr>
+                    <td>&nbsp;</td>
+                    <td></td>
+                    <td class="icon-cell"></td>
+                </tr>
+                </tfoot>
+                <tbody>
+                %%table%%
+                </tbody>
+            </table>
+        </div>
+        <div class="col-sm-2 form-opener">
+            %%addLink%%
+        </div>
+    </div>
+</input_objectlist>
+
+<input_objectlist_row>
+    <tr>
+        <td class="listimage">%%icon%%</td>
+        <td><div class="smaller">%%path%%</div> %%displayName%% <input type="hidden" name="%%name%%[]" value="%%value%%" /></td>
+        <td class="icon-cell">%%removeLink%%</td>
+    </tr>
+</input_objectlist_row>
+
+<input_tageditor>
+    <div class="form-group">
+        <label for="%%name%%" class="col-sm-3 control-label">%%title%%</label>
+
+        <div class="col-sm-6 inputText inputTagEditor">
+            <input type="text" id="%%name%%" data-name="%%name%%" style="display:none" />
+        </div>
+    </div>
+    <script type="text/javascript">
+        KAJONA.admin.loader.loadFile(["_webpath_/core/module_system/admin/scripts/jquerytag/jquery.caret.min.js"], function(){
+            KAJONA.admin.loader.loadFile("_webpath_/core/module_system/admin/scripts/jquerytag/jquery.tag-editor.min.js", function(){
+                $("#%%name%%").tagEditor({
+                    initialTags: %%values%%,
+                    forceLowercase: false,
+                    onChange: %%onChange%%
+                });
+            }, true);
+        }, true);
+    </script>
+</input_tageditor>
+
+<input_container>
+    <div class="form-group">
+        <label for="%%name%%" class="col-sm-3 control-label">%%title%%</label>
+
+        <div class="col-sm-6 inputText">
+            <div id="%%name%%" class="inputContainer %%class%%">
+                %%elements%%
+            </div>
+        </div>
+
+        <div class="col-sm-2 form-opener">
+            %%opener%%
+        </div>
+    </div>
+</input_container>
+
+<input_container_row>
+    <div class="inputContainerPanel">%%element%%</div>
+</input_container_row>
 
 A page-selector.
 If you want to use ajax to load a list of proposals on entering a char,
@@ -773,6 +904,25 @@ have a surrounding div with class "ac_container" and a div with id "%%name%%_con
     </div>
 </div>
 </input_userselector>
+
+A list of checkbox or radio input elements
+<input_checkboxarray>
+    <div class="form-group">
+        <label for="%%name%%" class="col-sm-3 control-label">%%title%%</label>
+
+        <div class="col-sm-6 inputText">
+            <div id="%%name%%" class="inputContainer %%class%%">
+                %%elements%%
+            </div>
+        </div>
+    </div>
+</input_checkboxarray>
+
+<input_checkboxarray_checkbox>
+    <div class="%%type%%%%inline%%">
+        <label><input type="%%type%%" name="%%name%%" value="%%value%%" %%checked%% %%readonly%% /> %%title%%</label>
+    </div>
+</input_checkboxarray_checkbox>
 
 ---------------------------------------------------------------------------------------------------------
 -- MISC ELEMENTS ----------------------------------------------------------------------------------------
@@ -933,6 +1083,15 @@ Shown, wherever the attention of the user is needed
     </div>
 </warning_box>
 
+Renders a toc navigation
+<toc_navigation>
+    <script type="text/javascript">
+        $(document).ready(function(){
+            KAJONA.admin.renderTocNavigation("%%selector%%");
+        });
+    </script>
+</toc_navigation>
+
 Used to print plain text
 <text_row>
 <p class="%%class%%">%%text%%</p>
@@ -959,27 +1118,42 @@ Used to print headline in a form
 The following sections specify the layout of the rights-mgmt
 
 <rights_form_header>
-	<div>%%desc%% %%record%% <br /><br /></div>
+    <div>
+        %%desc%% %%record%% <br />
+        <a href="javascript:KAJONA.admin.permissions.toggleEmtpyRows('[lang,permissions_toggle_visible,system]', '[lang,permissions_toggle_hidden,system]', '#rightsForm tr');" id="rowToggleLink" class="rowsVisible">[lang,permissions_toggle_visible,system]</a><br /><br />
+    </div>
+    <div id="responseContainer">
+    </div>
 </rights_form_header>
 
 <rights_form_form>
-<table class="table admintable table-striped">
-	<tr class="">
-		<th>&nbsp;</th>
-		<th>%%title0%%</th>
-		<th>%%title1%%</th>
-		<th>%%title2%%</th>
-		<th>%%title3%%</th>
-		<th>%%title4%%</th>
-		<th>%%title5%%</th>
-		<th>%%title6%%</th>
-		<th>%%title7%%</th>
-		<th>%%title8%%</th>
-		<th>%%title9%%</th>
-	</tr>
-	%%rows%%
-</table>
-%%inherit%%
+    <table class="table admintable table-striped kajona-data-table">
+        <thead>
+        <tr class="">
+            <th>&nbsp;</th>
+            <th>%%title0%%</th>
+            <th>%%title1%%</th>
+            <th>%%title2%%</th>
+            <th>%%title3%%</th>
+            <th>%%title4%%</th>
+            <th>%%title5%%</th>
+            <th>%%title6%%</th>
+            <th>%%title7%%</th>
+            <th>%%title8%%</th>
+            <th>%%title9%%</th>
+        </tr>
+        </thead>
+        %%rows%%
+    </table>
+    <script type="text/javascript">
+        KAJONA.admin.loader.loadFile("/core/module_v4skin/admin/skins/kajona_v4/js/jquery.floatThead.min.js", function() {
+            $('table.kajona-data-table').floatThead({
+                scrollingTop: $("body.dialogBody").size() > 0 ? 0 : 70,
+                useAbsolutePositioning: true
+            });
+        });
+    </script>
+    %%inherit%%
 </rights_form_form>
 
 <rights_form_row>
@@ -1005,7 +1179,7 @@ The following sections specify the layout of the rights-mgmt
     <div class="col-sm-6">
         <div class="checkbox">
             <label>
-                <input name="%%name%%" type="checkbox" id="%%name%%" value="1" onclick="this.blur();" onchange="KAJONA.admin.checkRightMatrix();" %%checked%% />
+                    <input name="%%name%%" type="checkbox" id="%%name%%" value="1" onclick="this.blur();" onchange="KAJONA.admin.permissions.checkRightMatrix();" %%checked%% />
                 %%title%%
             </label>
         </div>
@@ -1162,9 +1336,7 @@ pe_iconbar, pe_disable
 		var peDialog;
 		KAJONA.admin.lang["pe_dialog_close_warning"] = "[lang,pe_dialog_close_warning,pages]";
         KAJONA.portal.loader.loadFile([
-            "_webpath_/core/module_v4skin/admin/skins/kajona_v4/js/modal.js",
-            "_webpath_/core/module_v4skin/admin/skins/kajona_v4/js/dropdown.js",
-            "_webpath_/core/module_v4skin/admin/skins/kajona_v4/js/button.js",
+            "_webpath_/core/module_v4skin/admin/skins/kajona_v4/js/bootstrap.min.js",
             "_webpath_/core/module_v4skin/admin/skins/kajona_v4/js/kajona_dialog.js"
         ], function() {
 		    peDialog = new KAJONA.admin.ModalDialog('peDialog', 0, true, true);
@@ -1509,6 +1681,68 @@ The language switch surrounds the buttons
 </tree>
 
 
+Checkbox tree which shows an structure
+<tree_checkbox>
+    <div id="%%treeId%%" class="treeDiv"></div>
+    <script type="text/javascript">
+        KAJONA.admin.loader.loadFile([
+            "/core/module_system/admin/scripts/jstree/jquery.jstree.js",
+            "/core/module_system/admin/scripts/jstree/jquery.hotkeys.js"
+        ], function() {
+
+            $('#%%treeId%%').jstree({
+                json_data: {
+                    ajax: {
+                        url: "%%loadNodeDataUrl%%",
+                        data: function (n) {
+                            return {
+                                "systemid" : n.attr ? n.attr("systemid") : '%%rootNodeSystemid%%',
+                                "rootnode" : '%%rootNodeSystemid%%'
+                            };
+                        }
+                    }
+                },
+                themes: {
+                    url: "_webpath_/core/module_system/admin/scripts/jstree/themes/default/style.css",
+                    icons: false
+                },
+                core: {
+                    //"initially_open" : [ %%treeviewExpanders%% ],
+                    html_titles: true
+                },
+                checkbox: {
+                    two_state: true,
+                    checked_parent_open: false
+                },
+                plugins: [ "themes","json_data","checkbox" ]
+            }).bind("loaded.jstree", function (event, data) {
+                if(typeof KAJONA.v4skin.getCheckboxTreeSelectionFromParent === 'function') {
+                    var arrSystemIds = KAJONA.v4skin.getCheckboxTreeSelectionFromParent();
+                    for(var i = 0; i < arrSystemIds.length; i++) {
+                        if($('#' + arrSystemIds[i]).length > 0) {
+                            $(this).jstree('change_state', [$('#' + arrSystemIds[i]).find('.jstree-checkbox:first').get(0), true]);
+                        }
+                    }
+                }
+            }).bind("open_node.jstree close_node.jstree", function (event, data) {
+                if(typeof KAJONA.v4skin.getCheckboxTreeSelectionFromParent === 'function') {
+                    var arrSystemIds = KAJONA.v4skin.getCheckboxTreeSelectionFromParent();
+                    // go only through the child elements of the loaded node
+                    if(data.rslt.obj.length > 0) {
+                        data.rslt.obj.find('ul > li').each(function() {
+                            if($.inArray($(this).attr('systemid'), arrSystemIds) !== -1) {
+                                $(event.target).jstree('change_state', [$('#' + $(this).attr('systemid')).find('.jstree-checkbox:first').get(0), true]);
+                            }
+                        });
+                    }
+                }
+            });
+
+        });
+    </script>
+</tree_checkbox>
+
+
 <treeview>
     <table width="100%" cellpadding="3">
         <tr>
@@ -1523,6 +1757,14 @@ The language switch surrounds the buttons
         </tr>
     </table>
 </treeview>
+
+
+<treeview_modal>
+    <div class="treeViewWrapper" style="overflow:auto;">
+        %%treeContent%%
+    </div>
+</treeview_modal>
+
 
 The tag-wrapper is the section used to surround the list of tag.
 Please make sure that the containers' id is named tagsWrapper_%%targetSystemid%%,
@@ -1658,6 +1900,11 @@ It containes a list of aspects and provides the possibility to switch the differ
             %%entries%%
         </ul>
     </div>
+    <script type="text/javascript">
+        $('.dropdown-menu .dropdown-submenu a').click(function (e) {
+            e.stopPropagation();
+        });
+    </script>
 </contextmenu_wrapper>
 
 <contextmenu_entry>
@@ -1665,7 +1912,7 @@ It containes a list of aspects and provides the possibility to switch the differ
 </contextmenu_entry>
 
 <contextmenu_entry_full>
-<li >%%elementFullEntry%%</li>
+    <li >%%elementFullEntry%%</li>
 </contextmenu_entry_full>
 
 <contextmenu_divider_entry>
@@ -1677,22 +1924,17 @@ It containes a list of aspects and provides the possibility to switch the differ
         <a href="%%elementLink%%" tabindex="-1">%%elementName%%</a>
         <ul class="dropdown-menu">
             %%entries%%
-            <script type="text/javascript">
-                $('.dropdown-menu .dropdown-submenu a').click(function (e) {
-                    e.stopPropagation();
-                });
-            </script>
         </ul>
     </li>
 </contextmenu_submenucontainer_entry>
 
 <contextmenu_submenucontainer_entry_full>
-<li class="dropdown-submenu" >
-    %%elementFullEntry%%
-    <ul class="dropdown-menu">
-        %%entries%%
-    </ul>
-</li>
+    <li class="dropdown-submenu" >
+        %%elementFullEntry%%
+        <ul class="dropdown-menu">
+            %%entries%%
+        </ul>
+    </li>
 </contextmenu_submenucontainer_entry_full>
 
 

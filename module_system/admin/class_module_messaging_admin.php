@@ -230,10 +230,12 @@ JS;
 
     /**
      * @param class_model $objListEntry
+     * @param string $strAltActive tooltip text for the icon if record is active
+     * @param string $strAltInactive tooltip text for the icon if record is inactive
      *
      * @return string
      */
-    protected function renderStatusAction(class_model $objListEntry) {
+    protected function renderStatusAction(class_model $objListEntry, $strAltActive = "", $strAltInactive = "") {
         return "";
     }
 
@@ -313,33 +315,6 @@ JS;
 
         return "<message><error /></message>";
     }
-
-    /**
-     * @param interface_model $objInstance
-     *
-     * @return class_admin_formgenerator
-     */
-    protected function getAdminForm(interface_model $objInstance) {
-        $objForm = parent::getAdminForm($objInstance);
-
-        if($objInstance instanceof class_module_messaging_message) {
-            if(validateSystemid($objForm->getField("messagerefid")->getStrValue()) && $objForm->getField("body")->getStrValue() == "") {
-                $objRefMessage = class_objectfactory::getInstance()->getObject($objForm->getField("messagerefid")->getStrValue());
-                if($objRefMessage instanceof class_module_messaging_message) {
-
-                    $arrBody = preg_split('/$\R?^/m', $objRefMessage->getStrBody());
-                    array_walk($arrBody, function (&$strValue) {
-                        $strValue = "> ".$strValue;
-                    });
-
-                    $objForm->getField("body")->setStrValue("\r\n\r\n\r\n".implode("\r\n", $arrBody));
-                }
-            }
-        }
-
-        return $objForm;
-    }
-
 
     /**
      * @return string
@@ -468,10 +443,13 @@ JS;
      * @autoTestable
      * @xml
      *
+     * @deprecated
+     *
      * @return string
      */
     protected function actionGetUnreadMessagesCount() {
         class_carrier::getInstance()->getObjSession()->setBitBlockDbUpdate(true);
+        class_session::getInstance()->sessionClose();
         return "<messageCount>".class_module_messaging_message::getNumberOfMessagesForUser($this->objSession->getUserID(), true)."</messageCount>";
     }
 
@@ -487,6 +465,8 @@ JS;
      */
     protected function actionGetRecentMessages() {
         class_carrier::getInstance()->getObjSession()->setBitBlockDbUpdate(true);
+        class_session::getInstance()->sessionClose();
+        class_module_system_changelog::$bitChangelogEnabled = false;
         class_response_object::getInstance()->setStrResponseType(class_http_responsetypes::STR_TYPE_JSON);
 
         $intMaxAmount = $this->getParam("limit") != "" ? $this->getParam("limit") : 5 ;

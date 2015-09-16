@@ -118,5 +118,36 @@ class test_class_dateTest extends class_testbase  {
     }
 
 
+    public function testNextYear() {
+        $objDate = new class_date(20130115120000);
+        $objDate->setNextYear();
+        $this->assertEquals($objDate->getLongTimestamp(), 20140115120000);
+
+        $objDate = new class_date(20150531120000);
+        $objDate->setNextYear();
+        $this->assertEquals($objDate->getLongTimestamp(), 20160531120000);
+    }
+
+    public function testPreviousYear() {
+        $objDate = new class_date(20130122120000);
+        $objDate->setPreviousYear();
+        $this->assertEquals($objDate->getLongTimestamp(), 20120122120000);
+
+        $objDate = new class_date(20150531120000);
+        $objDate->setPreviousYear();
+        $this->assertEquals($objDate->getLongTimestamp(), 20140531120000);
+    }
+
+    public function testSetEndOfDay() {
+        $objDate = new class_date(20150901133737);
+        $objDate->setEndOfDay();
+        $this->assertEquals($objDate->getLongTimestamp(), 20150901235959);
+    }
+
+    public function testSetBeginningOfDay() {
+        $objDate = new class_date(20150901133737);
+        $objDate->setBeginningOfDay();
+        $this->assertEquals($objDate->getLongTimestamp(), 20150901000000);
+    }
 }
 

@@ -13,6 +13,8 @@
  *
  * @module mediamanager
  * @moduleId _mediamanager_module_id_
+ *
+ * @formGenerator class_module_mediamanager_file_formgenerator
  */
 class class_module_mediamanager_file extends class_model implements interface_model, interface_admin_gridable, interface_search_portalobject {
 
@@ -142,6 +144,7 @@ class class_module_mediamanager_file extends class_model implements interface_mo
      */
     public function updateSearchResult(class_search_result $objResult) {
         $objLanguages = new class_module_languages_language();
+        $objORM = new class_orm_objectlist();
 
         $strQuery =  "SELECT page_name, page_id
                        FROM "._dbprefix_."element_downloads,
@@ -153,6 +156,7 @@ class class_module_mediamanager_file extends class_model implements interface_mo
                         AND content_id = system_id
                         AND system_prev_id = page_id
                         AND system_status = 1
+                        ".$objORM->getDeletedWhereRestriction()."
                         AND page_element_ph_language = ? " ;
 
         $arrRows = $this->objDB->getPArray($strQuery, array($this->getRepositoryId(), $objResult->getObjSearch()->getStrPortalLangFilter()));
@@ -167,6 +171,7 @@ class class_module_mediamanager_file extends class_model implements interface_mo
                         AND content_id = system_id
                         AND system_prev_id = page_id
                         AND system_status = 1
+                        ".$objORM->getDeletedWhereRestriction()."
                         AND page_element_ph_language = ? " ;
 
         $arrRows = array_merge($arrRows, $this->objDB->getPArray($strQuery, array($this->getRepositoryId(), $objLanguages->getStrPortalLanguage())));
@@ -280,7 +285,7 @@ class class_module_mediamanager_file extends class_model implements interface_mo
         return $this->getStrName();
     }
 
-    protected function deleteObjectInternal() {
+    public function deleteObjectFromDatabase() {
 
         //delete the current file
         if($this->getParam("deleteMediamanagerRepo") != true) {
@@ -293,7 +298,7 @@ class class_module_mediamanager_file extends class_model implements interface_mo
             }
         }
 
-        return parent::deleteObjectInternal();
+        return parent::deleteObjectFromDatabase();
     }
 
     protected function updateStateToDb() {
@@ -347,39 +352,45 @@ class class_module_mediamanager_file extends class_model implements interface_mo
      */
     public static function loadFilesDB($strPrevID, $intTypeFilter = false, $bitActiveOnly = false, $intStart = null, $intEnd = null, $bitOnlyPackages = false) {
 
-        $arrParams = array();
-        $arrParams[] = $strPrevID;
-        if($intTypeFilter !== false) {
-            $arrParams[] = $intTypeFilter;
-        }
+        $objORM = new class_orm_objectlist();
+        if($intTypeFilter !== false)
+            $objORM->addWhereRestriction(new class_orm_objectlist_restriction(" AND file_type = ? ", array($intTypeFilter)));
+
+        if($bitActiveOnly)
+            $objORM->addWhereRestriction(new class_orm_objectlist_restriction(" AND system_status = 1 ", array()));
 
         if($bitOnlyPackages)
-            $arrParams[] = self::$INT_TYPE_FOLDER;
+            $objORM->addWhereRestriction(new class_orm_objectlist_restriction(" AND (file_ispackage = 1 OR file_type= ? ) ", array(self::$INT_TYPE_FOLDER)));
 
-        $strQuery = "SELECT *
-                       FROM " . _dbprefix_ . "system_right,
-                            " . _dbprefix_ . "mediamanager_file,
-                            " . _dbprefix_ . "system
-                   LEFT JOIN "._dbprefix_."system_date
-                            ON system_id = system_date_id
-                    WHERE system_id = file_id
-                      AND system_id = right_id
-                      AND system_prev_id = ?
-                        " . ($intTypeFilter !== false ? " AND file_type = ? " : "") . "
-                        " . (!$bitActiveOnly ? "" : " AND system_status = 1 ") . "
-                        " . (!$bitOnlyPackages ? "" : " AND (file_ispackage = 1 OR file_type= ? ) ") . "
-                        ORDER BY system_sort ASC";
-        $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, $arrParams, $intStart, $intEnd);
-
-        $arrReturn = array();
-        foreach($arrIds as $arrOneId) {
-            class_orm_rowcache::addSingleInitRow($arrOneId);
-            $arrReturn[] = class_objectfactory::getInstance()->getObject($arrOneId["system_id"]);
-        }
-
-        return $arrReturn;
+        return $objORM->getObjectList(get_called_class(), $strPrevID, $intStart, $intEnd);
     }
 
+
+    /**
+     * Counts the number of files returned by the corresponding query
+     *
+     * @param string $strPrevID
+     * @param bool|int $intTypeFilter
+     * @param bool $bitActiveOnly
+     * @param bool $bitOnlyPackages
+     *
+     * @return int
+     * @static
+     */
+    public static function getFileCount($strPrevID, $intTypeFilter = false, $bitActiveOnly = false, $bitOnlyPackages = false) {
+
+        $objORM = new class_orm_objectlist();
+        if($intTypeFilter !== false)
+            $objORM->addWhereRestriction(new class_orm_objectlist_restriction(" AND file_type = ? ", array($intTypeFilter)));
+
+        if($bitActiveOnly)
+            $objORM->addWhereRestriction(new class_orm_objectlist_restriction(" AND system_status = 1 ", array()));
+
+        if($bitOnlyPackages)
+            $objORM->addWhereRestriction(new class_orm_objectlist_restriction(" AND (file_ispackage = 1 OR file_type= ? ) ", array(self::$INT_TYPE_FOLDER)));
+
+        return $objORM->getObjectCount(get_called_class(), $strPrevID);
+    }
 
     /**
      * Returns a list of all packages available
@@ -394,13 +405,14 @@ class class_module_mediamanager_file extends class_model implements interface_mo
      */
     public static function getFlatPackageList($strCategoryFilter = false, $bitActiveOnly = false, $intStart = null, $intEnd = null, $strNameFilter = false) {
 
-        $arrParams = array();
+        $objORM = new class_orm_objectlist();
+        if($bitActiveOnly)
+            $objORM->addWhereRestriction(new class_orm_objectlist_restriction(" AND system_status = 1 ", array()));
         if($strCategoryFilter !== false)
-            $arrParams[] = $strCategoryFilter;
+            $objORM->addWhereRestriction(new class_orm_objectlist_restriction(" AND file_cat = ? ", array($strCategoryFilter)));
 
-
-        $strWhere = "";
         if($strNameFilter !== false) {
+            $arrParams = array();
             if(uniStrpos($strNameFilter, ",") !== false) {
                 $arrWhere = array();
                 foreach(explode(",", $strNameFilter) as $strOneLike) {
@@ -414,30 +426,13 @@ class class_module_mediamanager_file extends class_model implements interface_mo
                 $arrParams[] = $strNameFilter."%";
                 $strWhere = "AND file_name LIKE ?";
             }
+
+            $objORM->addWhereRestriction(new class_orm_objectlist_restriction($strWhere, $arrParams));
         }
 
-        $strQuery = "SELECT *
-                       FROM " . _dbprefix_ . "system_right,
-                            " . _dbprefix_ . "mediamanager_file,
-                            " . _dbprefix_ . "system
-                 LEFT JOIN "._dbprefix_."system_date
-                            ON system_id = system_date_id
-                    WHERE system_id = file_id
-                      AND system_id = right_id
-                      AND file_ispackage = 1
-                        " . (!$bitActiveOnly ? "" : " AND system_status = 1 ") . "
-                        " . ($strCategoryFilter === false ? "" : " AND file_cat = ?  ") . "
-                        " . $strWhere . "
-                        ORDER BY file_name ASC";
-        $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, $arrParams, $intStart, $intEnd);
+        $objORM->addOrderBy(new class_orm_objectlist_orderby("file_name ASC"));
+        return $objORM->getObjectList(get_called_class(), "", $intStart, $intEnd);
 
-        $arrReturn = array();
-        foreach($arrIds as $arrOneId) {
-            class_orm_rowcache::addSingleInitRow($arrOneId);
-            $arrReturn[] = class_objectfactory::getInstance()->getObject($arrOneId["system_id"]);
-        }
-
-        return $arrReturn;
     }
 
     /**
@@ -451,13 +446,15 @@ class class_module_mediamanager_file extends class_model implements interface_mo
      */
     public static function getFlatPackageListCount($strCategoryFilter = false, $bitActiveOnly = false, $strNameFilter = false) {
 
-        $arrParams = array();
+        $objORM = new class_orm_objectlist();
+
+        if($bitActiveOnly)
+            $objORM->addWhereRestriction(new class_orm_objectlist_restriction(" AND system_status = 1 ", array()));
         if($strCategoryFilter !== false)
-            $arrParams[] = $strCategoryFilter;
+            $objORM->addWhereRestriction(new class_orm_objectlist_restriction(" AND file_cat = ? ", array($strCategoryFilter)));
 
-
-        $strWhere = "";
         if($strNameFilter !== false) {
+            $arrParams = array();
             if(uniStrpos($strNameFilter, ",") !== false) {
                 $arrWhere = array();
                 foreach(explode(",", $strNameFilter) as $strOneLike) {
@@ -471,19 +468,11 @@ class class_module_mediamanager_file extends class_model implements interface_mo
                 $arrParams[] = $strNameFilter."%";
                 $strWhere = "AND file_name LIKE ?";
             }
+
+            $objORM->addWhereRestriction(new class_orm_objectlist_restriction($strWhere, $arrParams));
         }
 
-        $strQuery = "SELECT COUNT(*)
-                       FROM " . _dbprefix_ . "system,
-                            " . _dbprefix_ . "mediamanager_file
-                    WHERE system_id = file_id
-                      AND file_ispackage = 1
-                        " . (!$bitActiveOnly ? "" : " AND system_status = 1 ") . "
-                        " . ($strCategoryFilter === false ? "" : " AND file_cat = ?  ") . "
-                        " . $strWhere . "
-                        ";
-        $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, $arrParams);
-        return $arrRow["COUNT(*)"];
+        return $objORM->getObjectCount(get_called_class());
     }
 
 
@@ -512,16 +501,11 @@ class class_module_mediamanager_file extends class_model implements interface_mo
      */
     public static function getFileForPath($strRepoId, $strPath) {
 
-        $strQuery = "SELECT system_id
-                       FROM " . _dbprefix_ . "system,
-                            " . _dbprefix_ . "mediamanager_file
-                    WHERE system_id = file_id
-                      AND file_filename = ?";
+        $objORM = new class_orm_objectlist();
+        $objORM->addWhereRestriction(new class_orm_objectlist_restriction("AND file_filename = ?", array($strPath)));
+        $arrFiles = $objORM->getObjectList(get_called_class());
 
-
-        $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array($strPath));
-        foreach($arrIds as $arrOneRow) {
-            $objFile = new class_module_mediamanager_file($arrOneRow["system_id"]);
+        foreach($arrFiles as $objFile) {
 
             $objTemp = class_objectfactory::getInstance()->getObject($objFile->getStrPrevId());
             while(validateSystemid($objTemp->getSystemid())) {
@@ -535,39 +519,7 @@ class class_module_mediamanager_file extends class_model implements interface_mo
         return null;
     }
 
-    /**
-     * Counts the number of files returned by the corresponding query
-     *
-     * @param string $strPrevID
-     * @param bool|int $intTypeFilter
-     * @param bool $bitActiveOnly
-     * @param bool $bitOnlyPackages
-     *
-     * @return int
-     * @static
-     */
-    public static function getFileCount($strPrevID, $intTypeFilter = false, $bitActiveOnly = false, $bitOnlyPackages = false) {
 
-        $arrParams = array();
-        $arrParams[] = $strPrevID;
-        if($intTypeFilter !== false) {
-            $arrParams[] = $intTypeFilter;
-        }
-
-        if($bitOnlyPackages)
-            $arrParams[] = self::$INT_TYPE_FOLDER;
-
-        $strQuery = "SELECT COUNT(*)
-                       FROM " . _dbprefix_ . "system,
-                            " . _dbprefix_ . "mediamanager_file
-                    WHERE system_id = file_id
-                      AND system_prev_id = ?
-                         " . ($intTypeFilter !== false ? " AND file_type = ? " : "") . "
-                        " . (!$bitActiveOnly ? "" : "AND system_status = 1 ") . "
-                        " . (!$bitOnlyPackages ? "" : " AND (file_ispackage = 1 OR file_type= ? ) ") . "";
-        $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, $arrParams);
-        return $arrRow["COUNT(*)"];
-    }
 
     /**
      * Searches the repository-id for the current file.
@@ -579,8 +531,8 @@ class class_module_mediamanager_file extends class_model implements interface_mo
         $strPrevid = $this->getPrevId();
         $arrRow = $this->objDB->getPRow("SELECT COUNT(*) FROM " . _dbprefix_ . "mediamanager_repo WHERE repo_id = ?", array($strPrevid));
         while($arrRow["COUNT(*)"] == 0 && $strPrevid != "" && $strPrevid != "0") {
-
-            $objFile = new class_module_mediamanager_file($strPrevid);
+            /** @var class_module_mediamanager_file $objFile */
+            $objFile = class_objectfactory::getInstance()->getObject($strPrevid);
             $strPrevid = $objFile->getPrevId();
             $arrRow = $this->objDB->getPRow("SELECT COUNT(*) FROM " . _dbprefix_ . "mediamanager_repo WHERE repo_id = ?", array($strPrevid));
         }
@@ -661,7 +613,7 @@ class class_module_mediamanager_file extends class_model implements interface_mo
         if(count($arrObjDB) > 0) {
 
             foreach($arrObjDB as $objOneFileDB) {
-                $objOneFileDB->deleteObject();
+                $objOneFileDB->deleteObjectFromDatabase();
                 $arrReturn["delete"]++;
             }
         }

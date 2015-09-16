@@ -14,8 +14,6 @@ $lang["_stats_duration_online_"]         = "Anzahl Sekunden";
 $lang["_stats_duration_online_hint"]     = "Definiert, wie lange Besucher als online gelten";
 $lang["_stats_exclusionlist_"]           = "Auszuschließende Domains";
 $lang["_stats_exclusionlist_hint"]       = "Kommaseparierte Liste an Domains, die aus den Statistiken ausgenommen werden sollen";
-$lang["_stats_nrofrecords_"]             = "Anzahl Einträge";
-$lang["_stats_nrofrecords_hint"]         = "Legt die Anzahl an Zeilen in den Statistiken fest";
 $lang["allgemein"]                       = "Allgemeines";
 $lang["anteil"]                          = "% ";
 $lang["anzahl_hits"]                     = "Seitenhits gesamt";
@@ -94,6 +92,8 @@ $lang["worker_intro"]                    = "Hier können verschiedene Wartungs-T
 $lang["worker_lookupReset_end"]          = "Vorgang abgeschlossen. Alle fehlerhaften Hostnames wurden zurückgesetzt.";
 $lang["worker_lookup_end"]               = "Vorgang abgeschlossen. Alle Adressen wurden ausgewertet.";
 $lang["worker_run"]                      = "Ausführen";
+$lang["systemtask_browscapupdate_name"]                      = "Browscap Daten aktualisieren (Browsererkennung)";
+$lang["browscapupdate_end"]                      = "Browscap Daten wurden aktualisiert";
 
 //non-editable entries
 $lang["permissions_header"]              = array(0 => "Anzeigen", 1 => "Bearbeiten", 2 => "Löschen", 3 => "Rechte", 4 => "", 5 => "", 6 => "", 7 => "", 8 => "");

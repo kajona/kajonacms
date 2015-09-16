@@ -176,7 +176,7 @@ class class_test_database extends class_testbase {
         echo "\tgetRow test\n";
         $strQuery = "SELECT * FROM "._dbprefix_."temp_autotest ORDER BY temp_long ASC";
         $arrRow = $objDB->getPRow($strQuery, array());
-        $this->assertTrue(count($arrRow) == 18 || count($arrRow) == 9, "testDataBase getRow count");
+        $this->assertTrue(count($arrRow) >= 9, "testDataBase getRow count");
         $this->assertEquals($arrRow["temp_char10"], "1", "testDataBase getRow content");
 
         echo "\tgetArray test\n";

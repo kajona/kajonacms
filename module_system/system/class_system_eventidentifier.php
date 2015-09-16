@@ -52,7 +52,7 @@ interface class_system_eventidentifier {
      * This means you are not able to change the response anymore, also the session is already closed to
      * keep other threads from waiting. Use this event to perform internal cleanups if required.
      *
-     * @param class_request_entrypoint_enum objEntrypoint
+     * @param class_request_entrypoint_enum $objEntrypoint
      *
      * @since 4.6
      */
@@ -63,10 +63,31 @@ interface class_system_eventidentifier {
      *
      * The params-array contains a single entry:
      * @param class_model $objRecord
+     * @param bool $bitRecordCreated - true => if the record was created, false => if it is only an update
      *
      * @since 4.5
      */
     const EVENT_SYSTEM_RECORDUPDATED = "core.system.recordupdated";
+
+    /**
+     * Triggered as soon as a property mapping to objects is updated. Therefore the event is triggered as soon
+     * as assignments are added or removed from an object.
+     * The event gets a list of all three relevant items: assignments added, assignments removed, assignments remaining.
+     * The relevant object and the name of the changed property are passed, too.
+     * Return a valid bool value, otherwise the transaction will be rolled back!
+     *
+     * The params-array contains the following entries:
+     * @param string[] $arrNewAssignments
+     * @param string[] $areRemovedAssignments
+     * @param string[] $areCurrentAssignments
+     * @param class_root $objObject
+     * @param string $strProperty
+     *
+     * @return bool
+     *
+     * @since 4.7
+     */
+    const EVENT_SYSTEM_OBJECTASSIGNMENTSUPDATED = "core.system.objectassignmentsupdated";
 
     /**
      * Called whenever a record was copied.
@@ -110,9 +131,23 @@ interface class_system_eventidentifier {
      */
     const EVENT_SYSTEM_PREVIDCHANGED = "core.system.previdchanged";
 
+
     /**
-     * Called whenever a records was deleted using the common methods.
-     * Implement this method to be notified when a record is deleted, e.g. to to additional cleanups afterwards.
+     * Invoked every time a records status was changed.
+     * Please note that the event is only triggered on changes, not during a records creation.
+     *
+     * @param string $strSystemid
+     * @param class_root $objObject
+     * @param string $intOldStatus
+     * @param string $intNewStatus
+     *
+     * @since 4.8
+     */
+    const EVENT_SYSTEM_STATUSCHANGED = "core.system.statuschanged";
+
+    /**
+     * Called whenever a records was deleted from the database using the common methods.
+     * Implement this method to be notified when a record is deleted, e.g. to perform additional cleanups afterwards.
      * There's no need to register the listener, this is done automatically.
      *
      * Make sure to return a matching boolean-value, otherwise the transaction may be rolled back.
@@ -124,6 +159,37 @@ interface class_system_eventidentifier {
      * @since 4.5
      */
     const EVENT_SYSTEM_RECORDDELETED = "core.system.recorddeleted";
+
+    /**
+     * Called whenever a records was deleted logically, so set inactive. The record is NOT removed from the database!
+     *
+     * Implement this method to be notified when a record is deleted, e.g. to perform additional cleanups afterwards.
+     * There's no need to register the listener, this is done automatically.
+     *
+     * Make sure to return a matching boolean-value, otherwise the transaction may be rolled back.
+     *
+     *
+     * @param string $strSystemid
+     * @param string $strSourceClass The class-name of the object deleted
+     *
+     * @since 4.8
+     */
+    const EVENT_SYSTEM_RECORDDELETED_LOGICALLY = "core.system.recorddeleted.logically";
+
+    /**
+     * Called whenever a records is restored from the database.
+     * The event is fired after the record was restored but before the transaction will be committed.
+     *
+     * Make sure to return a matching boolean-value, otherwise the transaction may be rolled back.
+     *
+     *
+     * @param string $strSystemid
+     * @param string $strSourceClass The class-name of the object deleted
+     * @param class_model $objObject The object which is being restored
+     *
+     * @since 4.8
+     */
+    const EVENT_SYSTEM_RECORDRESTORED_LOGICALLY = "core.system.recordrestored.logically";
 
     /**
      * Callback method, triggered each time a user logs into the system for the very first time.

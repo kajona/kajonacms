@@ -30,6 +30,7 @@ class class_module_dashboard_widget extends class_model implements interface_mod
      * @var string
      * @tableColumn dashboard.dashboard_user
      * @tableColumnDatatype char20
+     * @tableColumnIndex
      */
     private $strUser = "";
 
@@ -37,6 +38,7 @@ class class_module_dashboard_widget extends class_model implements interface_mod
      * @var string
      * @tableColumn dashboard.dashboard_aspect
      * @tableColumnDatatype char254
+     * @tableColumnIndex
      */
     private $strAspect = "";
 
@@ -73,7 +75,7 @@ class class_module_dashboard_widget extends class_model implements interface_mod
      */
     public static function getListOfWidgetsAvailable() {
 
-        return class_resourceloader::getInstance()->getFolderContent("/admin/widgets/", array(".php"), false, function(&$strFilename) {
+        return class_resourceloader::getInstance()->getFolderContent("/admin/widgets/", array(".php"), false, function($strFilename) {
             if($strFilename != "interface_adminwidget.php" && $strFilename != "class_adminwidget.php") {
                 $strFilename = uniSubstr($strFilename, 0, -4);
 
@@ -83,6 +85,9 @@ class class_module_dashboard_widget extends class_model implements interface_mod
             }
 
             return false;
+        },
+        function(&$strFilename) {
+            $strFilename = uniSubstr($strFilename, 0, -4);
         });
     }
 
@@ -119,35 +124,11 @@ class class_module_dashboard_widget extends class_model implements interface_mod
         if($strUserId == "")
             $strUserId = $this->objSession->getUserID();
 
-        $arrParams = array();
-        $arrParams[] = $strUserId;
-        $arrParams[] = $strColumn;
-        $arrParams[] = self::getWidgetsRootNodeForUser($strUserId, $strAspectFilter);
+        $objORM = new class_orm_objectlist();
+        $objORM->addWhereRestriction(new class_orm_objectlist_restriction("AND dashboard_user = ?", array($strUserId)));
+        $objORM->addWhereRestriction(new class_orm_objectlist_restriction("AND dashboard_column = ?", array($strColumn)));
+        return $objORM->getObjectList(get_called_class(), self::getWidgetsRootNodeForUser($strUserId, $strAspectFilter));
 
-        $strQuery = "SELECT *
-        			  FROM "._dbprefix_."dashboard,
-        			  	   "._dbprefix_."system_right,
-        			  	   "._dbprefix_."system
-                 LEFT JOIN "._dbprefix_."system_date
-                        ON system_id = system_date_id
-        			 WHERE dashboard_user = ?
-        			   AND system_id = right_id
-        			   AND dashboard_column = ?
-        			   AND dashboard_id = system_id
-        			   AND system_prev_id = ?
-                       /*".$strAspectFilter."*/
-        	     ORDER BY system_sort ASC ";
-
-        $arrRows = $this->objDB->getPArray($strQuery, $arrParams);
-        $arrReturn = array();
-        if(count($arrRows) > 0) {
-            foreach ($arrRows as $arrOneRow) {
-                class_orm_rowcache::addSingleInitRow($arrOneRow);
-                $arrReturn[] = class_objectfactory::getInstance()->getObject($arrOneRow["system_id"]);
-            }
-
-        }
-        return $arrReturn;
     }
 
     /**

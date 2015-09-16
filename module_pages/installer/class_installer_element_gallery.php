@@ -73,21 +73,6 @@ class class_installer_element_gallery extends class_installer_base implements in
 
     public function update() {
         $strReturn = "";
-        if(class_module_pages_element::getElement("gallery")->getStrVersion() == "3.4.2") {
-            $strReturn .= $this->update_342_349();
-            $this->objDB->flushQueryCache();
-        }
-
-        if(class_module_pages_element::getElement("gallery")->getStrVersion() == "3.4.9"
-            || class_module_pages_element::getElement("gallery")->getStrVersion() == "3.4.9.1"
-            || class_module_pages_element::getElement("gallery")->getStrVersion() == "3.4.9.2"
-            || class_module_pages_element::getElement("gallery")->getStrVersion() == "3.4.9.3"
-        ) {
-            $strReturn .= "Updating element gallery to 4.0...\n";
-            $this->updateElementVersion("gallery", "4.0");
-            $this->updateElementVersion("galleryRandom", "4.0");
-            $this->objDB->flushQueryCache();
-        }
 
         if(class_module_pages_element::getElement("gallery")->getStrVersion() == "4.0") {
             $strReturn .= "Updating element gallery to 4.1...\n";
@@ -130,12 +115,14 @@ class class_installer_element_gallery extends class_installer_base implements in
             $this->updateElementVersion("galleryRandom", "4.6");
             $this->objDB->flushQueryCache();
         }
+
         if(class_module_pages_element::getElement("gallery")->getStrVersion() == "4.6") {
             $strReturn .= "Updating element gallery to 4.6.1...\n";
             $this->updateElementVersion("gallery", "4.6.1");
             $this->updateElementVersion("galleryRandom", "4.6.1");
             $this->objDB->flushQueryCache();
         }
+
         if(class_module_pages_element::getElement("gallery")->getStrVersion() == "4.6.1") {
             $strReturn .= "Updating element gallery to 4.6.2...\n";
             $this->updateElementVersion("gallery", "4.6.2");
@@ -143,27 +130,22 @@ class class_installer_element_gallery extends class_installer_base implements in
             $this->objDB->flushQueryCache();
         }
 
+        if(class_module_pages_element::getElement("gallery")->getStrVersion() == "4.6.2") {
+            $strReturn .= "Updating element gallery to 4.7...\n";
+            $this->updateElementVersion("gallery", "4.7");
+            $this->updateElementVersion("galleryRandom", "4.7");
+            $this->objDB->flushQueryCache();
+        }
+
+        if(class_module_pages_element::getElement("gallery")->getStrVersion() == "4.7") {
+            $strReturn .= "Updating element gallery to 4.7.1...\n";
+            $this->updateElementVersion("gallery", "4.7.1");
+            $this->updateElementVersion("galleryRandom", "4.7.1");
+            $this->objDB->flushQueryCache();
+        }
+
         return $strReturn;
     }
-
-    private function update_342_349() {
-        $strReturn = "Updating element gallery to 3.4.9...\n";
-
-        $strReturn .= "Migrating old gallery-element table...\n";
-
-        $strQuery = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."element_gallery")."
-                            DROP ".$this->objDB->encloseColumnName("gallery_maxh_p").",
-                            DROP ".$this->objDB->encloseColumnName("gallery_maxw_p").",
-                            DROP ".$this->objDB->encloseColumnName("gallery_maxh_m").",
-                            DROP ".$this->objDB->encloseColumnName("gallery_maxw_m")."";
-        if(!$this->objDB->_pQuery($strQuery, array()))
-            $strReturn .= "An error occurred! ...\n";
-
-        $this->updateElementVersion("gallery", "3.4.9");
-        $this->updateElementVersion("galleryRandom", "3.4.9");
-        return $strReturn;
-    }
-
 
 
 }

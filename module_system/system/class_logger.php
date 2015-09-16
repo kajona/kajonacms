@@ -73,7 +73,13 @@ final class class_logger {
      */
     private function __construct($strLogfile) {
         $this->strFilename = $strLogfile;
-        $this->intLogLevel = class_carrier::getInstance()->getObjConfig()->getDebug("debuglogging");
+
+        $arrOverwriteLevel = class_carrier::getInstance()->getObjConfig()->getDebug("debuglogging_overwrite");
+        if (isset($arrOverwriteLevel[$strLogfile])) {
+            $this->intLogLevel = $arrOverwriteLevel[$strLogfile];
+        } else {
+            $this->intLogLevel = class_carrier::getInstance()->getObjConfig()->getDebug("debuglogging");
+        }
     }
 
     /**
@@ -197,6 +203,12 @@ final class class_logger {
         $this->intLogLevel = $intLogLevel;
     }
 
+    /**
+     * @return int
+     */
+    public function getIntLogLevel() {
+        return $this->intLogLevel;
+    }
 }
 
 

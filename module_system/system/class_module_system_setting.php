@@ -16,6 +16,8 @@
  * @moduleId _system_modul_id_
  *
  * @blockFromAutosave
+ *
+ * @todo make settings "real" objects, so with a systemid
  */
 class class_module_system_setting extends class_model implements interface_model, interface_versionable {
 
@@ -100,6 +102,20 @@ class class_module_system_setting extends class_model implements interface_model
         $this->setIntModule($arrRow["system_config_module"]);
 
         $this->strOldValue = $this->strValue;
+
+        $this->specialConfigInits();
+    }
+
+    /**
+     * Internal helper to trigger special events, e.g. to change phps runtime settings based on some config vars.
+     */
+    private function specialConfigInits() {
+        if($this->strName == "_system_timezone_" && !defined("_system_timezone_")) {
+            if($this->getStrValue() != "") {
+                date_default_timezone_set($this->getStrValue());
+                define("_system_timezone_", $this->getStrValue());
+            }
+        }
     }
 
     /**
@@ -108,6 +124,10 @@ class class_module_system_setting extends class_model implements interface_model
      * @return bool
      */
     public function deleteObject() {
+        return true;
+    }
+
+    public function deleteObjectFromDatabase() {
         $strQuery = "DELETE FROM " . _dbprefix_ . "system_config WHERE system_config_id = ?";
         return class_carrier::getInstance()->getObjDB()->_pQuery($strQuery, array($this->getSystemid()));
     }
@@ -195,6 +215,10 @@ class class_module_system_setting extends class_model implements interface_model
      */
     public static function getAllConfigValues() {
         if(self::$arrInstanceCache == null) {
+
+            if(count(class_db::getInstance()->getTables()) == 0)
+                return array();
+
             $strQuery = "SELECT * FROM " . _dbprefix_ . "system_config ORDER BY system_config_module ASC, system_config_name DESC";
             $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array(), null, null, false);
             foreach($arrIds as $arrOneId) {

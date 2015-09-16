@@ -1,5 +1,10 @@
 Module Postacomment
 
+V4.7.1 --------------------------------------------------------------------------------------------------
+BUG: module_postacomment | portaleditor -> editing a post used the wrong action-command, causing an exception / white page. fixed #65
+BUG: module_postacomment | properties -> fixed the missing title property
+
+
 V4.6 ----------------------------------------------------------------------------------------------------
 UPDATE: module_postacomment | recorddeleted listener -> refactored the post-loading in order to generate less queries on object deletions
 BUG: module_postacomment | portal -> wrong redirect when reloading the page right after submitting a comment (was: Falsche Weiterleitung). Credits go to MrBubbleSquare.

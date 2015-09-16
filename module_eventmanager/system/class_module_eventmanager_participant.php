@@ -16,6 +16,8 @@
  *
  * @module eventmanager
  * @moduleId _eventmanager_module_id_
+ *
+ * @formGenerator class_module_eventmanager_participant_formgenerator
  */
 class class_module_eventmanager_participant extends class_model implements interface_model, interface_versionable, interface_admin_listable  {
 
@@ -222,23 +224,10 @@ class class_module_eventmanager_participant extends class_model implements inter
      * @return class_module_eventmanager_participant
      */
     public static function getParticipantByUserid($strUserid, $strEventId) {
-        $strQuery = "SELECT *
-                       FROM "._dbprefix_."system_right,
-                            "._dbprefix_."em_participant,
-                            "._dbprefix_."system
-                  LEFT JOIN "._dbprefix_."system_date
-                            ON system_id = system_date_id
-                      WHERE system_id = em_pt_id
-                        AND system_id = right_id
-                        AND system_prev_id = ?
-                        AND em_pt_userid = ?";
 
-        $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array($strEventId, $strUserid));
-        class_orm_rowcache::addSingleInitRow($arrRow);
-        if(isset($arrRow["system_id"]))
-            return class_objectfactory::getInstance()->getObject($arrRow["system_id"]);
-        else
-            return null;
+        $objOrm = new class_orm_objectlist();
+        $objOrm->addWhereRestriction(new class_orm_objectlist_restriction("AND em_pt_userid = ?", array($strUserid)));
+        return $objOrm->getSingleObject(get_called_class(), $strEventId);
     }
 
 
@@ -248,15 +237,9 @@ class class_module_eventmanager_participant extends class_model implements inter
      * @return int
      */
     public static function getActiveParticipantsCount($strEventId) {
-        $strQuery = "SELECT COUNT(*)
-                       FROM "._dbprefix_."system,
-                            "._dbprefix_."em_participant
-                      WHERE system_id = em_pt_id
-                        AND system_prev_id = ?
-                        AND em_pt_status != 2";
-
-        $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array($strEventId));
-        return $arrRow["COUNT(*)"];
+        $objOrm = new class_orm_objectlist();
+        $objOrm->addWhereRestriction(new class_orm_objectlist_restriction("AND em_pt_status != 2", array()));
+        return $objOrm->getObjectCount(get_called_class(), $strEventId);
     }
 
 

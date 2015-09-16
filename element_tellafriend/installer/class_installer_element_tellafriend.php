@@ -59,17 +59,6 @@ class class_installer_element_tellafriend extends class_elementinstaller_base im
 
 	public function update() {
         $strReturn = "";
-        if(class_module_pages_element::getElement("tellafriend")->getStrVersion() == "3.4.2") {
-            $strReturn .= "Updating element tellafriend to 3.4.9...\n";
-            $this->updateElementVersion("tellafriend", "3.4.9");
-            $this->objDB->flushQueryCache();
-        }
-
-        if(class_module_pages_element::getElement("tellafriend")->getStrVersion() == "3.4.9") {
-            $strReturn .= "Updating element tellafriend to 4.0...\n";
-            $this->updateElementVersion("tellafriend", "4.0");
-            $this->objDB->flushQueryCache();
-        }
 
         if(class_module_pages_element::getElement("tellafriend")->getStrVersion() == "4.0") {
             $strReturn .= "Updating element tellafriend to 4.1...\n";
@@ -104,6 +93,12 @@ class class_installer_element_tellafriend extends class_elementinstaller_base im
         if(class_module_pages_element::getElement("tellafriend")->getStrVersion() == "4.5") {
             $strReturn .= "Updating element tellafriend to 4.6...\n";
             $this->updateElementVersion("tellafriend", "4.6");
+            $this->objDB->flushQueryCache();
+        }
+
+        if(class_module_pages_element::getElement("tellafriend")->getStrVersion() == "4.6") {
+            $strReturn .= "Updating element tellafriend to 4.7...\n";
+            $this->updateElementVersion("tellafriend", "4.7");
             $this->objDB->flushQueryCache();
         }
 

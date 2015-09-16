@@ -1,5 +1,8 @@
 Module JQPlot
 
+V4.7 ----------------------------------------------------------------------------------------------------
+NEW: module_jqplot -> padding and margin of bars within barcharts are differently set depending on the number of series - if the chart contains only bar chart series -> padding=1, margin=4 - if the chart contains one or more stackedbar series and each sereis has exactly one series value -> padding=1, margin=4
+
 V4.6 ----------------------------------------------------------------------------------------------------
 NEW: module_jqplot | resizable charts -> charts are now resizable by default
 NEW: module_jqplot | js-code -> extracted generated js-Code to several methods
@@ -13,7 +16,6 @@ V4.4 ---------------------------------------------------------------------------
 NEW: plugin canvasOverlay is now included, added setter and getter for the series options
 BUG: changed the rounding of y-values in mouseovers from toFixed to round. This means, decimals are only added if required and not in every case.
 BUG: Added number format to mouse over values #842
-
 
 V4.3 ----------------------------------------------------------------------------------------------------
 NEW: new charting-library, replacing flot completely

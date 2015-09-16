@@ -17,12 +17,13 @@ KAJONA.admin.jqplotHelper = {
      * @param strChartId - id of the chart
      * @param strTooltipId - id of the tooltip of the chart
      * @param strResizeableId - id of the resizable container
+     * @param bitEnableChartResizing -
      * @param arrChartData - data array for the chart
      * @param objChartOptions - chart rendering options
      * @param objPostPlotOptions - options set for pos plotting
      * @param arrSeriesToDataPoints - two dimensional array which may contains urls for each data point of a series. format: array[seriesIndex][dataPointIndex] => strURL
      */
-    jqPlotChart : function (strChartId, strTooltipId, strResizeableId, arrChartData, objChartOptions, objPostPlotOptions, arrSeriesToDataPoints) {
+    jqPlotChart : function (strChartId, strTooltipId, strResizeableId, bitEnableChartResizing, arrChartData, objChartOptions, objPostPlotOptions, arrSeriesToDataPoints) {
         this.strTooltipId = strTooltipId;
         this.strChartId = strChartId;
         this.strResizeableId = strResizeableId;
@@ -33,6 +34,7 @@ KAJONA.admin.jqplotHelper = {
 
         this.objJqplotChart = null;//the actual jqPlot object
         this.bitIsRendered = false;//flag to tell if the chart was already rendered or not (needed in case the chart should replotted)
+        this.bitEnableChartResizing = bitEnableChartResizing;
 
         this.objChartOptions.axesDefaults.tickOptions.formatter = KAJONA.admin.jqplotHelper.customJqPlotNumberFormatter;
 
@@ -62,7 +64,9 @@ KAJONA.admin.jqplotHelper = {
             this.objJqplotChart = $.jqplot(this.strChartId, this.arrChartData, this.objChartOptions);
             KAJONA.admin.jqplotHelper.bindMouseEvents(this.strChartId, this.strTooltipId);
             KAJONA.admin.jqplotHelper.bindDataClickEvents(this.strChartId);
-            KAJONA.admin.jqplotHelper.enableChartResizing(this.strChartId, this.strResizeableId);
+            if(this.bitEnableChartResizing) {
+                KAJONA.admin.jqplotHelper.enableChartResizing(this.strChartId, this.strResizeableId);
+            }
         };
 
         /**
@@ -180,6 +184,9 @@ KAJONA.admin.jqplotHelper = {
         if(neighbor==null) {
             //no datapoint selected
             $('#jqplot_tooltip').remove();
+
+            $(ev.currentTarget).css('cursor', 'auto');
+
             this.previousNeighbor = null;
         }
         else {
@@ -226,6 +233,11 @@ KAJONA.admin.jqplotHelper = {
                 || ((this.previousNeighbor.seriesIndex == neighbor.seriesIndex) && (this.previousNeighbor.pointIndex != neighbor.pointIndex)))//same series but different point --> create new point
             {
                 this.showTooltip(ev.pageX, ev.pageY, objTooltip, tooltipId, false);
+
+                if (this.hasDataPoint(ev, neighbor.seriesIndex, neighbor.pointIndex)) {
+                    $(ev.currentTarget).css('cursor', 'pointer');
+                }
+
                 this.previousNeighbor = neighbor;
             }
             //same series and point -> only move tooltip
@@ -233,6 +245,18 @@ KAJONA.admin.jqplotHelper = {
                 this.showTooltip(ev.pageX, ev.pageY, null , tooltipId, true);
             }
         }
+    },
+
+    hasDataPoint: function(ev, seriesIndex, pointIndex){
+        var objChart = KAJONA.admin.jqplotHelper.arrChartObjects[$(ev.currentTarget).attr('id')];
+
+        if(objChart.arrSeriesToDataPoints && objChart.arrSeriesToDataPoints[seriesIndex]) {
+            var objDataPoint = objChart.arrSeriesToDataPoints[seriesIndex][pointIndex];
+            if(objDataPoint && objDataPoint.actionhandlervalue != null) {
+                return true;
+            }
+        }
+        return false;
     },
 
     /**
@@ -252,21 +276,29 @@ KAJONA.admin.jqplotHelper = {
             //set value for primary and secondary xaxis
             var valuePrimaryAxis = null;
             var valueSecondaryAxis = null;
+            var tickOptionsrimaryAxis = null;
+            var tickOptionsSecondaryAxis = null;
             if(objTooltip.seriesObject._primaryAxis == "_xaxis") {
                 valuePrimaryAxis = objTooltip.xValue;
                 valueSecondaryAxis = objTooltip.yValue;
+
+                tickOptionsrimaryAxis = objTooltip.seriesObject._xaxis.tickOptions;
+                tickOptionsSecondaryAxis = objTooltip.seriesObject._yaxis.tickOptions;
             }
             else {
                 valuePrimaryAxis = objTooltip.yValue;
                 valueSecondaryAxis = objTooltip.xValue;
+
+                tickOptionsrimaryAxis = objTooltip.seriesObject._yaxis.tickOptions;
+                tickOptionsSecondaryAxis = objTooltip.seriesObject._xaxis.tickOptions;
             }
 
 
             if($.isNumeric(valuePrimaryAxis)) {
-                valuePrimaryAxis = $.jqplot.DefaultTickFormatter("%'g", valuePrimaryAxis);
+                valuePrimaryAxis = tickOptionsrimaryAxis.formatter(tickOptionsrimaryAxis.formatString, valuePrimaryAxis)
             }
             if($.isNumeric(valueSecondaryAxis)) {
-                valueSecondaryAxis = $.jqplot.DefaultTickFormatter("%'g", valueSecondaryAxis);
+                valueSecondaryAxis = tickOptionsSecondaryAxis.formatter(tickOptionsSecondaryAxis.formatString, valueSecondaryAxis);
             }
 
             //create the toolTip
@@ -310,5 +342,12 @@ KAJONA.admin.jqplotHelper = {
             KAJONA.admin.folderview.dialog.setTitle('');
             KAJONA.admin.folderview.dialog.init();
         }
+    },
+
+    dataRedirect: function(ev, seriesIndex, pointIndex, data, objDataPoint) {
+        if(objDataPoint.actionhandlervalue != null && objDataPoint.actionhandlervalue != "") {
+            window.location = objDataPoint.actionhandlervalue;
+        }
     }
+
 };

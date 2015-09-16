@@ -69,8 +69,10 @@ abstract class class_module_packagemanager_contentprovider_remote_base implement
      * @return string
      */
     public function renderPackageList() {
-        $intStart = ($this->getPageNumber() - 1) * _admin_nr_of_rows_;
-        $intEnd = $intStart + _admin_nr_of_rows_ - 1;
+
+        $objUser = new class_module_user_user(class_session::getInstance()->getUserID());
+        $intStart = ($this->getPageNumber() - 1) * $objUser->getIntItemsPerPage();
+        $intEnd = $intStart + $objUser->getIntItemsPerPage() - 1;
 
         $objToolkit = class_carrier::getInstance()->getObjToolkit("admin");
         $objLang = class_carrier::getInstance()->getObjLang();

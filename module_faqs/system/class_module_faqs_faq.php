@@ -16,6 +16,8 @@
  *
  * @module faqs
  * @moduleId _faqs_module_id_
+ *
+ * @formGenerator class_module_faqs_formgenerator
  */
 class class_module_faqs_faq extends class_model implements interface_model, interface_sortable_rating, interface_admin_listable, interface_versionable, interface_search_portalobject {
 
@@ -47,9 +49,13 @@ class class_module_faqs_faq extends class_model implements interface_model, inte
      */
     private $strAnswer = "";
 
+    /**
+     * @var class_module_faqs_category[]
+     * @objectList faqs_member (source="faqsmem_faq", target="faqsmem_category")
+     * @fieldType checkboxarray
+     * @versionable
+     */
     private $arrCats = array();
-
-    private $updateBitMemberships = false;
 
     /**
      * Returns a human readable name of the action stored with the changeset.
@@ -135,41 +141,6 @@ class class_module_faqs_faq extends class_model implements interface_model, inte
     }
 
 
-    /**
-     * saves the current object with all its params back to the database
-     *
-     * @return bool
-     */
-    protected function updateStateToDb() {
-        //delete all relations
-        if($this->updateBitMemberships) {
-            class_module_faqs_category::deleteFaqsMemberships($this->getSystemid());
-            //insert all memberships
-            $arrValues = array();
-            foreach(array_keys($this->arrCats) as $strCatID) {
-                $arrValues[] = array(generateSystemid(), $this->getSystemid(), $strCatID);
-            }
-
-            $this->objDB->multiInsert(
-                "faqs_member",
-                array("faqsmem_id", "faqsmem_faq", "faqsmem_category"),
-                $arrValues
-            );
-        }
-        return parent::updateStateToDb();
-
-    }
-
-    public function copyObject($strNewPrevid = "", $bitChangeTitle = true) {
-        $arrMemberCats = class_module_faqs_category::getFaqsMember($this->getSystemid());
-        $this->arrCats = array();
-        foreach($arrMemberCats as $objOneCat) {
-            $this->arrCats[$objOneCat->getSystemid()] = "1";
-        }
-        $this->updateBitMemberships = true;
-        return parent::copyObject($strNewPrevid, $bitChangeTitle);
-    }
-
 
     /**
      * Loads all faqs from the database
@@ -184,6 +155,9 @@ class class_module_faqs_faq extends class_model implements interface_model, inte
      */
     public static function getObjectList($strFilter = "", $intStart = null, $intEnd = null) {
         if($strFilter != "") {
+
+            $objORM = new class_orm_objectlist();
+
             $strQuery = "SELECT *
 							FROM " . _dbprefix_ . "faqs,
 							     " . _dbprefix_ . "faqs_member,
@@ -195,6 +169,7 @@ class class_module_faqs_faq extends class_model implements interface_model, inte
 							  AND system_id = right_id
 							  AND faqs_id = faqsmem_faq
 							  AND faqsmem_category = ?
+							  ".$objORM->getDeletedWhereRestriction()."
 							ORDER BY faqs_question ASC";
 
             $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array($strFilter), $intStart, $intEnd);
@@ -224,12 +199,15 @@ class class_module_faqs_faq extends class_model implements interface_model, inte
      */
     public static function getObjectCount($strFilter = "") {
         if($strFilter != "") {
+            $objORM = new class_orm_objectlist();
+
             $strQuery = "SELECT COUNT(*)
 							FROM " . _dbprefix_ . "faqs,
 							     " . _dbprefix_ . "system,
 							     " . _dbprefix_ . "faqs_member
 							WHERE system_id = faqs_id
 							  AND faqs_id = faqsmem_faq
+							  ".$objORM->getDeletedWhereRestriction()."
 							  AND faqsmem_category = ?";
             $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array($strFilter));
             return $arrRow["COUNT(*)"];
@@ -241,16 +219,7 @@ class class_module_faqs_faq extends class_model implements interface_model, inte
     }
 
 
-    public function deleteObject() {
-        //Delete memberships
-        if(class_module_faqs_category::deleteFaqsMemberships($this->getSystemid())) {
-            return parent::deleteObject();
-        }
-        return false;
-    }
-
-
-    /**
+     /**
      * Loads all faqs from the db assigned to the passed cat
      *
      * @param string $strCat
@@ -260,6 +229,7 @@ class class_module_faqs_faq extends class_model implements interface_model, inte
      */
     public static function loadListFaqsPortal($strCat) {
         $arrParams = array();
+        $objORM = new class_orm_objectlist();
         if($strCat == 1) {
             $strQuery = "SELECT *
     						FROM " . _dbprefix_ . "faqs,
@@ -269,6 +239,7 @@ class class_module_faqs_faq extends class_model implements interface_model, inte
                                ON system_id = system_date_id
     		                WHERE system_id = faqs_id
     		                  AND system_status = 1
+    		                  ".$objORM->getDeletedWhereRestriction()."
     		                  AND system_id = right_id
     						ORDER BY faqs_question ASC";
         }
@@ -285,6 +256,7 @@ class class_module_faqs_faq extends class_model implements interface_model, inte
     		                  AND system_id = right_id
     		                  AND faqsmem_category = ?
     		                  AND system_status = 1
+    		                  ".$objORM->getDeletedWhereRestriction()."
     						ORDER BY faqs_question ASC";
             $arrParams[] = $strCat;
         }
@@ -310,6 +282,7 @@ class class_module_faqs_faq extends class_model implements interface_model, inte
      * @return mixed
      */
     public function updateSearchResult(class_search_result $objResult) {
+        $objORM = new class_orm_objectlist();
         //search for matching pages
         $strQuery = "SELECT page_name,  page_id
                        FROM " . _dbprefix_ . "element_faqs,
@@ -329,6 +302,7 @@ class class_module_faqs_faq extends class_model implements interface_model, inte
                         )
                         AND system_prev_id = page_id
                         AND system_status = 1
+                        ".$objORM->getDeletedWhereRestriction()."
                         AND page_element_ph_language = ? ";
 
         $arrRows = $this->objDB->getPArray($strQuery, array($this->getSystemid(), $objResult->getObjSearch()->getStrPortalLangFilter()));
@@ -400,10 +374,6 @@ class class_module_faqs_faq extends class_model implements interface_model, inte
 
     public function setArrCats($arrCats) {
         $this->arrCats = $arrCats;
-    }
-
-    public function setUpdateBitMemberships($updateBitMemberships) {
-        $this->updateBitMemberships = $updateBitMemberships;
     }
 
 }

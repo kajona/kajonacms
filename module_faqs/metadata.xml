@@ -5,12 +5,12 @@
     >
     <title>faqs</title>
     <description>A module to organize frequently asked questions, Questions may be categorized. The different layout modes are achieved by the templates.</description>
-    <version>4.6</version>
+    <version>4.7.5</version>
     <author>Kajona Team</author>
     <type>MODULE</type>
     <providesInstaller>TRUE</providesInstaller>
     <requiredModules>
-        <module name="system" version="4.6" />
-        <module name="pages" version="4.6" />
+        <module name="system" version="4.7" />
+        <module name="pages" version="4.7" />
     </requiredModules>
 </package>

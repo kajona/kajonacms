@@ -18,9 +18,40 @@ require_once __DIR__."../../../bootstrap.php";
  */
 abstract class class_testbase extends PHPUnit_Framework_TestCase {
 
+    private $arrTestStartDate = null;
+
+    protected function printDebugValues() {
+        $strDebug = "";
+        $arrTimestampEnde = gettimeofday();
+        $intTimeUsed = (($arrTimestampEnde['sec'] * 1000000 + $arrTimestampEnde['usec'])
+                - ($this->arrTestStartDate['sec'] * 1000000 + $this->arrTestStartDate['usec'])) / 1000000;
+
+        $strDebug .= "PHP-Time:                            " . number_format($intTimeUsed, 6) . " sec \n";
+
+        //Hows about the queries?
+        $strDebug .= "Queries db/cachesize/cached/fired:   " . class_carrier::getInstance()->getObjDB()->getNumber() . "/" .
+            class_carrier::getInstance()->getObjDB()->getCacheSize() . "/" .
+            class_carrier::getInstance()->getObjDB()->getNumberCache() . "/" .
+            (class_carrier::getInstance()->getObjDB()->getNumber() - class_carrier::getInstance()->getObjDB()->getNumberCache()) . " \n";
+
+        //anything to say about the templates?
+        $strDebug .= "Templates cached:                    " . class_carrier::getInstance()->getObjTemplate()->getNumberCacheSize() . " \n";
+
+        //memory
+        $strDebug .= "Memory/Max Memory:                   " . bytesToString(memory_get_usage()) . "/" . bytesToString(memory_get_peak_usage()) . " \n";
+        $strDebug .= "Classes Loaded:                      " . class_classloader::getInstance()->getIntNumberOfClassesLoaded() . " \n";
+
+        //and check the cache-stats
+        $strDebug .= "Cache requests/hits/saves/cachesize: " .
+            class_cache::getIntRequests() . "/" . class_cache::getIntHits() . "/" . class_cache::getIntSaves() . "/" . class_cache::getIntCachesize() . " \n";
+
+
+        //echo get_called_class()."\n".$strDebug."\n";
+    }
+
     protected function setUp() {
 
-        //echo "\n\nlogging test-setUp on ".get_class($this)." @ ".timeToString(time())."...\n";
+        $this->arrTestStartDate = gettimeofday();
 
         if(!defined("_block_config_db_loading_")) {
             define("_block_config_db_loading_", true);
@@ -30,31 +61,25 @@ abstract class class_testbase extends PHPUnit_Framework_TestCase {
             define("_autotesting_", true);
         }
 
-        $objCarrier = class_carrier::getInstance();
+        if(!defined("_autotesting_sqlite_checks_")) {
+            if(class_config::getInstance("config.php")->getConfig("dbdriver") == "sqlite3") {
+                class_db::getInstance()->_pQuery("PRAGMA journal_mode = MEMORY", array());
+            }
 
-        $strSQL = "UPDATE "._dbprefix_."system_config SET system_config_value = ?
-                    WHERE system_config_name = ?";
 
-        $objCarrier->getObjDB()->_pQuery($strSQL, array("true", "_system_changehistory_enabled_"));
+            define("_autotesting_sqlite_checks_", true);
+        }
+
         class_carrier::getInstance()->flushCache(class_carrier::INT_CACHE_TYPE_APC | class_carrier::INT_CACHE_TYPE_DBQUERIES);
-
-        class_config::getInstance()->loadConfigsDatabase(class_db::getInstance());
-
-        //flush garbage collection, should avoid some segfaults on php 5.3.
-        gc_collect_cycles();
-        gc_disable();
-
         parent::setUp();
     }
 
 
     protected function tearDown() {
-
-        //reenable garbage collection
-        gc_enable();
-
-
         class_carrier::getInstance()->flushCache(class_carrier::INT_CACHE_TYPE_CHANGELOG);
+
+        $this->printDebugValues();
+
         parent::tearDown();
     }
 
@@ -76,18 +101,17 @@ abstract class class_testbase extends PHPUnit_Framework_TestCase {
      * @return class_model
      */
     protected function createObject($strClassType, $strParentId, array $arrExcludeFillProperty = array(),  array $arrPropertyValues = array(), $bitAutofillProperties = true) {
-        //create the object
-        $objReflector = new ReflectionClass($strClassType);
-        $obj = $objReflector->newInstance();
-        //TODO: why is this required here? could lead to wrong onInsertToDb triggers
-//        $obj->updateObjectToDb($strParentId);
+        //get properties with an tablecolumn annotation
+        $objObject = new $strClassType();
+        $objReflection = new class_reflection($strClassType);
+        $arrProperties = $objReflection->getPropertiesWithAnnotation(class_orm_base::STR_ANNOTATION_TABLECOLUMN);
+        $arrProperties = array_merge($objReflection->getPropertiesWithAnnotation(class_orm_base::STR_ANNOTATION_OBJECTLIST), $arrProperties);
 
-        $objReflectorAnnotated = new class_reflection($strClassType);
+        //exclude class_root properties
+        $objRootReflection = new class_reflection("class_root");
+        $arrExcludeFillProperty = array_merge($arrExcludeFillProperty, array_keys($objRootReflection->getPropertiesWithAnnotation(class_orm_base::STR_ANNOTATION_TABLECOLUMN)));
 
-        //get properties which are annotated with @var and have a setter method
-        $arrReflectionProperties = $objReflector->getProperties();
-        foreach($arrReflectionProperties as $objReflectionProperty) {
-            $strPropName = $objReflectionProperty->getName();
+        foreach($arrProperties as $strPropName => $strValue) {
 
             //Exclude properties to be set
             if(in_array($strPropName, $arrExcludeFillProperty)) {
@@ -96,31 +120,27 @@ abstract class class_testbase extends PHPUnit_Framework_TestCase {
 
             //Set properties from array $arrPropertyValues
             if(array_key_exists($strPropName, $arrPropertyValues)) {
-                $strSetterMethod = $objReflectorAnnotated->getSetter($strPropName);
-                if($objReflector->hasMethod($strSetterMethod)) {
+                $strSetterMethod = $objReflection->getSetter($strPropName);
+                if($strSetterMethod !== null) {
                     $objValue = $arrPropertyValues[$strPropName];
-                    $objReflectionMethod = $objReflector->getMethod($strSetterMethod);
-                    $objReflectionMethod->invoke($obj, $objValue);
+                    $objObject->$strSetterMethod($objValue);
                     continue;
                 }
             }
 
             //check if the property is annotated with @tablecolumn
             if($bitAutofillProperties) {
-                if($objReflectorAnnotated->hasPropertyAnnotation($strPropName, class_orm_base::STR_ANNOTATION_TABLECOLUMN)) {
-                    $strSetterMethod = $objReflectorAnnotated->getSetter($strPropName);
-
-                    if($objReflector->hasMethod($strSetterMethod)) {
-                        $objReflectionMethod = $objReflector->getMethod($strSetterMethod);
-
+                if($objReflection->hasPropertyAnnotation($strPropName, class_orm_base::STR_ANNOTATION_TABLECOLUMN)) {
+                    $strSetterMethod = $objReflection->getSetter($strPropName);
+                    if($strSetterMethod !== null) {
                         //determine the field type
-                        $strDataType = $objReflectorAnnotated->getAnnotationValueForProperty($strPropName, "@var");
-                        $strFieldType = $objReflectorAnnotated->getAnnotationValueForProperty($strPropName, "@fieldType");
+                        $strDataType = $objReflection->getAnnotationValueForProperty($strPropName, "@var");
+                        $strFieldType = $objReflection->getAnnotationValueForProperty($strPropName, "@fieldType");
                         $objMethodValue = null;
 
                         if($strDataType == "string") {
                             if($strFieldType == "text" || $strFieldType == "textarea") {
-                                $objMethodValue = $strPropName."_".$obj->getStrSystemid();
+                                $objMethodValue = $strPropName."_".$objObject->getStrSystemid();
 
                                 if(uniStrlen($objMethodValue) > 10) {
                                     $objMethodValue = uniStrTrim($objMethodValue, 10, "");
@@ -133,24 +153,24 @@ abstract class class_testbase extends PHPUnit_Framework_TestCase {
                             }
                         }
                         else if($strDataType == "class_date") {
-                                $objMethodValue = new class_date();
+                            $objMethodValue = new class_date();
                         }
                         else if($strDataType == "bool") {
-                                $objMethodValue = false;
+                            $objMethodValue = false;
                         }
                         else {
                             continue;//continue with foreach
                         }
 
-                        $objReflectionMethod->invoke($obj, $objMethodValue);
+                        $objObject->$strSetterMethod($objMethodValue);
                     }
                 }
             }
         }
 
         //save it
-        $obj->updateObjectToDb($strParentId);
-        return $obj;
+        $objObject->updateObjectToDb($strParentId);
+        return $objObject;
     }
 
 

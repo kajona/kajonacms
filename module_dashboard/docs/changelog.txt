@@ -1,5 +1,8 @@
 Module Dashboard
 
+V4.7 ----------------------------------------------------------------------------------------------------
+UPDATE: module_dashboard | rssfeed widget -> changed the internal analysis of the feed-url
+
 V4.6 ----------------------------------------------------------------------------------------------------
 NEW: module_dashboard | dashboard widget -> getListOfWidgetsAvailable() validates if the class is not abstract and implements the interface interface_adminwidget
 NEW: module_dashboard | it is now possible to add additional content below the name of a widget
@@ -10,12 +13,10 @@ NEW: module_dashboard | updatecheck-widget -> If an update is available, the lis
 BUG: module_dashboard | updatecheck-widget -> the version number of the system-package was rendered for each possible package update
 BUG: module_dashboard | dashboard.js -> removed "return false" since it caused problems in IE [ticket #888]
 
-
 V4.4 ----------------------------------------------------------------------------------------------------
 NEW: removing a widget from the dashboard no longer reloads the whole page #838
 NEW: Dashboard drop-targets got a border, increased visibility
 BUG: changed the way widget-content is loaded and embedded into the dashboard-dom tree. the old way caused problems on windows 8.1 in combination with IE 11.
-
 
 V4.3 ----------------------------------------------------------------------------------------------------
 NEW: the additional step 2, so the configuration of an admin-widget is skipped if the widget doesn't provide a config-form

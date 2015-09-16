@@ -41,8 +41,8 @@ class class_test_lockmanagerTest extends class_testbase  {
 
         class_carrier::getInstance()->getObjSession()->logout();
         $objAspect = new class_module_system_aspect($strAspectId);
-        $objAspect->deleteObject();
-        $objUser->deleteObject();
+        $objAspect->deleteObjectFromDatabase();
+        $objUser->deleteObjectFromDatabase();
     }
 
 
@@ -114,7 +114,7 @@ class class_test_lockmanagerTest extends class_testbase  {
 
 
         //add user 2 to admin group
-        $objGroup = new class_module_user_group(_admins_group_id_);
+        $objGroup = new class_module_user_group(class_module_system_setting::getConfigValue("_admins_group_id_"));
         $this->assertTrue($objGroup->getObjSourceGroup()->addMember($objUser2->getObjSourceUser()));
 
         //relogin
@@ -133,9 +133,9 @@ class class_test_lockmanagerTest extends class_testbase  {
 
         class_carrier::getInstance()->getObjSession()->logout();
         $objAspect = new class_module_system_aspect($strAspectId);
-        $objAspect->deleteObject();
-        $objUser1->deleteObject();
-        $objUser2->deleteObject();
+        $objAspect->deleteObjectFromDatabase();
+        $objUser1->deleteObjectFromDatabase();
+        $objUser2->deleteObjectFromDatabase();
     }
 
 
@@ -177,9 +177,9 @@ class class_test_lockmanagerTest extends class_testbase  {
 
         class_carrier::getInstance()->getObjSession()->logout();
         $objAspect = new class_module_system_aspect($strAspectId);
-        $objAspect->deleteObject();
-        $objUser1->deleteObject();
-        $objUser2->deleteObject();
+        $objAspect->deleteObjectFromDatabase();
+        $objUser1->deleteObjectFromDatabase();
+        $objUser2->deleteObjectFromDatabase();
     }
 
 

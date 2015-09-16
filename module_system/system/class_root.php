@@ -39,12 +39,6 @@ abstract class class_root {
      * @var class_session
      */
     protected $objSession = null; //Object containing the session-management
-    /**
-     * Instance of class_rights
-     *
-     * @var class_rights
-     */
-    protected $objRights = null; //Object handling the right-stuff
 
     /**
      * Instance of class_lang
@@ -133,7 +127,7 @@ abstract class class_root {
     private $intLmTime = 0;
 
     /**
-     * The id of the user locking the current record, emtpy otherwise
+     * The id of the user locking the current record, empty otherwise
      * @var string
      * @tableColumn system.system_lock_id
      */
@@ -155,6 +149,20 @@ abstract class class_root {
      * @tableColumn system.system_status
      */
     private $intRecordStatus = 1;
+
+    /**
+     * The records previous status, used to trigger status changed events
+     * @var int
+     */
+    private $intOldRecordStatus = 1;
+
+    /**
+     * Indicates whether the object is deleted, or not
+     * @var int
+     * @versionable
+     * @tableColumn system.system_deleted
+     */
+    private $intRecordDeleted = 0;
 
     /**
      * Human readable comment describing the current record
@@ -231,7 +239,6 @@ abstract class class_root {
         $this->objDB = $objCarrier->getObjDB();
         $this->objSession = $objCarrier->getObjSession();
         $this->objLang = $objCarrier->getObjLang();
-        $this->objRights = $objCarrier->getObjRights();
 
         $this->objSortManager = new class_common_sortmanager($this);
 
@@ -335,7 +342,11 @@ abstract class class_root {
                 if(isset($arrRow["system_class"]))
                     $this->strRecordClass = $arrRow["system_class"];
 
+                if(isset($arrRow["system_deleted"]))
+                    $this->intRecordDeleted = $arrRow["system_deleted"];
+
                 $this->strOldPrevId = $this->strPrevId;
+                $this->intOldRecordStatus = $this->intRecordStatus;
 
                 if($arrRow["system_date_start"] > 0)
                     $this->objStartDate = new class_date($arrRow["system_date_start"]);
@@ -385,38 +396,52 @@ abstract class class_root {
         return $objORM->getObjectList(get_called_class(), $strPrevid, $intStart, $intEnd);
     }
 
+
     /**
-     * Deletes the current object from the system.
-     * By default, all entries are delete from  all tables indicated by the class-doccomment.
-     * If you want to trigger additional deletes, overwrite this method.
-     * The system-record itself is being deleted automatically, too.
+     * Validates if the current record may be restored
      * @return bool
      */
-    protected function deleteObjectInternal() {
-        $bitReturn = true;
-
-        if($this instanceof interface_versionable) {
-            $objChanges = new class_module_system_changelog();
-            $objChanges->createLogEntry($this, class_module_system_changelog::$STR_ACTION_DELETE);
-        }
-
-        $objAnnotations = new class_reflection($this);
-        $arrTargetTables = $objAnnotations->getAnnotationValuesFromClass("@targetTable");
-
-        if(count($arrTargetTables) > 0) {
-            foreach($arrTargetTables as  $strOneTable) {
-                $arrSingleTable = explode(".", $strOneTable);
-                $strQuery = "DELETE FROM ".$this->objDB->encloseTableName(_dbprefix_.$arrSingleTable[0])."
-                                   WHERE ".$this->objDB->encloseColumnName($arrSingleTable[1])." = ? ";
-
-                $bitReturn = $bitReturn && $this->objDB->_pQuery($strQuery, array($this->getSystemid()));
-            }
-        }
-        return $bitReturn;
+    public function isRestorable() {
+        //validate the parent nodes' id
+        $objParent = class_objectfactory::getInstance()->getObject($this->getStrPrevId());
+        return $objParent != null && $objParent->getIntRecordDeleted() == 0;
     }
 
+
+    public function restoreObject() {
+
+        /** @var $this class_root|interface_model */
+        $this->objDB->transactionBegin();
+
+        $this->intRecordDeleted = 0;
+        $this->intSort = $this->getNextSortValue($this->getStrPrevId());
+        $bitReturn = $this->updateObjectToDb();
+
+        class_objectfactory::getInstance()->removeFromCache($this->getSystemid());
+        class_orm_rowcache::removeSingleRow($this->getSystemid());
+        $this->objDB->flushQueryCache();
+
+        $this->objSortManager->fixSortOnPrevIdChange($this->strPrevId, $this->strPrevId);
+
+        $bitReturn = $bitReturn && class_core_eventdispatcher::getInstance()->notifyGenericListeners(class_system_eventidentifier::EVENT_SYSTEM_RECORDRESTORED_LOGICALLY, array($this->getSystemid(), get_class($this), $this));
+
+        if($bitReturn) {
+            class_logger::getInstance()->addLogRow("successfully restored record ".$this->getSystemid()." / ".$this->getStrDisplayName(), class_logger::$levelInfo);
+            $this->objDB->transactionCommit();
+            return true;
+        }
+        else {
+            class_logger::getInstance()->addLogRow("error restoring record ".$this->getSystemid()." / ".$this->getStrDisplayName(), class_logger::$levelInfo);
+            $this->objDB->transactionRollback();
+            return false;
+        }
+    }
+
+
     /**
-     * Removes the current object from the system.
+     * Triggers the logical delete of the current object.
+     * This means the object itself is not deleted, but marked as deleted. Restoring the object is
+     * possible.
      *
      * @throws class_exception
      * @return bool
@@ -426,8 +451,53 @@ abstract class class_root {
         if(!$this->getLockManager()->isAccessibleForCurrentUser())
             return false;
 
-        if(!$this instanceof interface_model)
-            throw new class_exception("delete operation required interface_model to be implemented", class_exception::$level_ERROR);
+        /** @var $this class_root|interface_model */
+        $this->objDB->transactionBegin();
+
+        //validate, if there are subrecords, so child nodes to be deleted
+        $arrChilds = $this->objDB->getPArray("SELECT system_id FROM "._dbprefix_."system where system_prev_id = ?", array($this->getSystemid()));
+        foreach($arrChilds as $arrOneChild) {
+            if(validateSystemid($arrOneChild["system_id"])) {
+                $objInstance = class_objectfactory::getInstance()->getObject($arrOneChild["system_id"]);
+                if($objInstance !== null)
+                    $objInstance->deleteObject();
+            }
+        }
+
+        $this->intRecordDeleted = 1;
+        $this->intSort = -1;
+        $bitReturn = $this->updateObjectToDb();
+
+        class_objectfactory::getInstance()->removeFromCache($this->getSystemid());
+        class_orm_rowcache::removeSingleRow($this->getSystemid());
+        $this->objDB->flushQueryCache();
+
+        $this->objSortManager->fixSortOnDelete();
+
+        $bitReturn = $bitReturn && class_core_eventdispatcher::getInstance()->notifyGenericListeners(class_system_eventidentifier::EVENT_SYSTEM_RECORDDELETED_LOGICALLY, array($this->getSystemid(), get_class($this)));
+
+        if($bitReturn) {
+            class_logger::getInstance()->addLogRow("successfully deleted record ".$this->getSystemid()." / ".$this->getStrDisplayName(), class_logger::$levelInfo);
+            $this->objDB->transactionCommit();
+            return true;
+        }
+        else {
+            class_logger::getInstance()->addLogRow("error deleting record ".$this->getSystemid()." / ".$this->getStrDisplayName(), class_logger::$levelInfo);
+            $this->objDB->transactionRollback();
+            return false;
+        }
+
+    }
+
+    /**
+     * Deletes the object from the database. The record is removed in total, so no restoring will be possible.
+     *
+     * @return bool
+     * @throws class_exception
+     */
+    public function deleteObjectFromDatabase() {
+        if(!$this->getLockManager()->isAccessibleForCurrentUser())
+            return false;
 
         if($this instanceof interface_versionable) {
             $objChanges = new class_module_system_changelog();
@@ -443,12 +513,23 @@ abstract class class_root {
             if(validateSystemid($arrOneChild["system_id"])) {
                 $objInstance = class_objectfactory::getInstance()->getObject($arrOneChild["system_id"]);
                 if($objInstance !== null)
-                    $objInstance->deleteObject();
+                    $objInstance->deleteObjectFromDatabase();
             }
         }
 
-        $bitReturn = $this->deleteObjectInternal();
+        $objORM = new class_orm_objectdelete($this);
+        $bitReturn = $objORM->deleteObject();
+
+        $this->objSortManager->fixSortOnDelete();
         $bitReturn = $bitReturn && $this->deleteSystemRecord($this->getSystemid());
+
+        class_objectfactory::getInstance()->removeFromCache($this->getSystemid());
+        class_orm_rowcache::removeSingleRow($this->getSystemid());
+
+
+        //try to call other modules, maybe wanting to delete anything in addition, if the current record
+        //is going to be deleted
+        $bitReturn = $bitReturn && class_core_eventdispatcher::getInstance()->notifyGenericListeners(class_system_eventidentifier::EVENT_SYSTEM_RECORDDELETED, array($this->getSystemid(), get_class($this)));
 
         if($bitReturn) {
             class_logger::getInstance()->addLogRow("successfully deleted record ".$this->getSystemid()." / ".$this->getStrDisplayName(), class_logger::$levelInfo);
@@ -481,6 +562,8 @@ abstract class class_root {
      * @since 3.3.0
      * @throws class_exception
      * @see interface_model
+     *
+     * @todo move to class_orm_objectupdate completely
      */
     public function updateObjectToDb($strPrevId = false) {
         $bitCommit = true;
@@ -499,7 +582,9 @@ abstract class class_root {
         $this->objDB->transactionBegin();
 
         //current systemid given? if not, create a new record.
+        $bitRecordCreated = false;
         if(!validateSystemid($this->getSystemid())) {
+            $bitRecordCreated = true;
 
             if($strPrevId === false || $strPrevId === "" || $strPrevId === null) {
                 //try to find the current modules-one
@@ -560,34 +645,39 @@ abstract class class_root {
         //new comment?
         $this->setStrRecordComment($this->getStrDisplayName());
 
+        //Keep old and new status here, status changed event is being fired after record is completely updated (so after updateStateToDb())
+        $intOldStatus = $this->intOldRecordStatus;
+        $intNewStatus = $this->intRecordStatus;
+
         //save back to the database
-        $bitCommit = $bitCommit & $this->updateSystemrecord();
+        $bitCommit = $bitCommit && $this->updateSystemrecord();
 
         //update ourselves to the database
-        if(!$this->updateStateToDb())
+        if($bitCommit && !$this->updateStateToDb())
             $bitCommit = false;
+
+        //now fire the status changed event
+        if($intOldStatus != $intNewStatus && $intOldStatus != -1) {
+            class_core_eventdispatcher::getInstance()->notifyGenericListeners(class_system_eventidentifier::EVENT_SYSTEM_STATUSCHANGED, array($this->getSystemid(), $this, $intOldStatus, $intNewStatus));
+        }
 
         if($bitCommit) {
             $this->objDB->transactionCommit();
             //unlock the record
             $this->getLockManager()->unlockRecord();
-            $bitReturn = true;
             class_logger::getInstance()->addLogRow("updateObjectToDb() succeeded for systemid ".$this->getSystemid()." (".$this->getRecordComment().")", class_logger::$levelInfo);
         }
         else {
             $this->objDB->transactionRollback();
-            $bitReturn = false;
             class_logger::getInstance()->addLogRow("updateObjectToDb() failed for systemid ".$this->getSystemid()." (".$this->getRecordComment().")", class_logger::$levelWarning);
         }
 
 
         //call the recordUpdated-Listeners
-        //TODO: remove legacy call
-        class_core_eventdispatcher::notifyRecordUpdatedListeners($this);
-        class_core_eventdispatcher::getInstance()->notifyGenericListeners(class_system_eventidentifier::EVENT_SYSTEM_RECORDUPDATED, array($this));
+        class_core_eventdispatcher::getInstance()->notifyGenericListeners(class_system_eventidentifier::EVENT_SYSTEM_RECORDUPDATED, array($this, $bitRecordCreated));
 
         class_carrier::getInstance()->flushCache(class_carrier::INT_CACHE_TYPE_DBQUERIES);
-        return $bitReturn;
+        return $bitCommit;
     }
 
 
@@ -598,11 +688,12 @@ abstract class class_root {
      *
      * @param string $strNewPrevid
      * @param bool $bitChangeTitle
+     * @param bool $bitCopyChilds
      *
      * @throws class_exception
      * @return bool
      */
-    public function copyObject($strNewPrevid = "", $bitChangeTitle = true) {
+    public function copyObject($strNewPrevid = "", $bitChangeTitle = true, $bitCopyChilds = true) {
 
         $this->objDB->transactionBegin();
 
@@ -633,19 +724,19 @@ abstract class class_root {
         $this->arrInitRow = null;
         $bitReturn = $this->updateObjectToDb($strNewPrevid);
         //call event listeners
-        //TODO: remove legacy call
-        $bitReturn = $bitReturn && class_core_eventdispatcher::notifyRecordCopiedListeners($strOldSysid, $this->getSystemid());
         $bitReturn = $bitReturn && class_core_eventdispatcher::getInstance()->notifyGenericListeners(class_system_eventidentifier::EVENT_SYSTEM_RECORDCOPIED, array($strOldSysid, $this->getSystemid(), $this));
 
 
-        //process subrecords
-        //validate, if there are subrecords, so child nodes to be copied to the current record
-        $arrChilds = $this->objDB->getPArray("SELECT system_id FROM "._dbprefix_."system where system_prev_id = ? ORDER BY system_sort ASC", array($strOldSysid));
-        foreach($arrChilds as $arrOneChild) {
-            if(validateSystemid($arrOneChild["system_id"])) {
-                $objInstance = class_objectfactory::getInstance()->getObject($arrOneChild["system_id"]);
-                if($objInstance !== null)
-                    $objInstance->copyObject($this->getSystemid(), false);
+        if($bitCopyChilds) {
+            //process subrecords
+            //validate, if there are subrecords, so child nodes to be copied to the current record
+            $arrChilds = $this->objDB->getPArray("SELECT system_id FROM "._dbprefix_."system where system_prev_id = ? ORDER BY system_sort ASC", array($strOldSysid));
+            foreach($arrChilds as $arrOneChild) {
+                if(validateSystemid($arrOneChild["system_id"])) {
+                    $objInstance = class_objectfactory::getInstance()->getObject($arrOneChild["system_id"]);
+                    if($objInstance !== null)
+                        $objInstance->copyObject($this->getSystemid(), false);
+                }
             }
         }
 
@@ -718,6 +809,8 @@ abstract class class_root {
      * @return bool
      * @final
      * @since 3.4.1
+     *
+     * @todo find ussages and make private
      */
     protected final function updateSystemrecord() {
 
@@ -726,7 +819,8 @@ abstract class class_root {
 
         class_logger::getInstance()->addLogRow("updated systemrecord ".$this->getStrSystemid()." data", class_logger::$levelInfo);
 
-        $strQuery = "UPDATE "._dbprefix_."system
+        if(class_module_system_module::getModuleByName("system") != null  && version_compare(class_module_system_module::getModuleByName("system")->getStrVersion(), 4.5, "lt")) {
+            $strQuery = "UPDATE "._dbprefix_."system
                         SET system_prev_id = ?,
                             system_module_nr = ?,
                             system_sort = ?,
@@ -741,9 +835,9 @@ abstract class class_root {
                             system_create_date = ?
                       WHERE system_id = ? ";
 
-        $bitReturn = $this->objDB->_pQuery(
-            $strQuery,
-            array(
+            $bitReturn = $this->objDB->_pQuery(
+                $strQuery,
+                array(
                     $this->getStrPrevId(),
                     (int)$this->getIntModuleNr(),
                     (int)$this->getIntSort(),
@@ -757,40 +851,101 @@ abstract class class_root {
                     $this->getStrRecordClass(),
                     $this->getLongCreateDate(),
                     $this->getSystemid()
-            )
-        );
+                )
+            );
+        }
+        else {
 
+
+            $strQuery = "UPDATE "._dbprefix_."system
+                        SET system_prev_id = ?,
+                            system_module_nr = ?,
+                            system_sort = ?,
+                            system_owner = ?,
+                            system_lm_user = ?,
+                            system_lm_time = ?,
+                            system_lock_id = ?,
+                            system_lock_time = ?,
+                            system_status = ?,
+                            system_comment = ?,
+                            system_class = ?,
+                            system_create_date = ?,
+                            system_deleted = ?
+                      WHERE system_id = ? ";
+
+            $bitReturn = $this->objDB->_pQuery(
+                $strQuery,
+                array(
+                    $this->getStrPrevId(),
+                    (int)$this->getIntModuleNr(),
+                    (int)$this->getIntSort(),
+                    $this->getStrOwner(),
+                    $this->objSession->getUserID(),
+                    time(),
+                    $this->getStrLockId(),
+                    (int)$this->getIntLockTime(),
+                    (int)$this->getIntRecordStatus(),
+                    uniStrTrim($this->getStrRecordComment(), 245),
+                    $this->getStrRecordClass(),
+                    $this->getLongCreateDate(),
+                    $this->getIntRecordDeleted(),
+                    $this->getSystemid()
+                )
+            );
+        }
 
         if($this->bitDatesChanges) {
             $this->processDateChanges();
         }
 
-        $this->objDB->flushQueryCache();
+        class_carrier::getInstance()->flushCache(class_carrier::INT_CACHE_TYPE_DBQUERIES | class_carrier::INT_CACHE_TYPE_ORMCACHE);
 
-        if($this->strOldPrevId != $this->strPrevId) {
-            class_carrier::getInstance()->flushCache(class_carrier::INT_CACHE_TYPE_DBQUERIES | class_carrier::INT_CACHE_TYPE_ORMCACHE);
-            $this->objRights->rebuildRightsStructure($this->getSystemid());
-            $this->objSortManager->fixSortOnPrevIdChange($this->strOldPrevId, $this->strPrevId);
-            //TODO: remove legacy call
-            class_core_eventdispatcher::notifyPrevidChangedListeners($this->getSystemid(), $this->strOldPrevId, $this->strPrevId);
+        if($this->strOldPrevId != $this->strPrevId && $this->strOldPrevId != -1) {
+            class_carrier::getInstance()->getObjRights()->rebuildRightsStructure($this->getSystemid());
             class_core_eventdispatcher::getInstance()->notifyGenericListeners(class_system_eventidentifier::EVENT_SYSTEM_PREVIDCHANGED, array($this->getSystemid(), $this->strOldPrevId, $this->strPrevId));
-            $this->strOldPrevId = $this->strPrevId;
         }
+        if($this->strOldPrevId != $this->strPrevId) {
+            $this->objSortManager->fixSortOnPrevIdChange($this->strOldPrevId, $this->strPrevId);
+        }
+
+        $this->strOldPrevId = $this->strPrevId;
+        $this->intOldRecordStatus = $this->intRecordStatus;
 
         return $bitReturn;
     }
 
 
     /**
+     * Internal helper to fetch the next sort-id
+     * @param string $strPrevId
+     *
+     * @return int
+     */
+    private function getNextSortValue($strPrevId) {
+        //determine the correct new sort-id - append by default
+        if(class_module_system_module::getModuleByName("system") != null  && version_compare(class_module_system_module::getModuleByName("system")->getStrVersion(), "4.7.5", "lt")) {
+            $strQuery = "SELECT COUNT(*) FROM "._dbprefix_."system WHERE system_prev_id = ? AND system_id != '0'";
+        }
+        else {
+            $strQuery = "SELECT COUNT(*) FROM "._dbprefix_."system WHERE system_prev_id = ? AND system_id != '0' AND system_deleted = 0";
+
+        }
+        $arrRow = $this->objDB->getPRow($strQuery, array($strPrevId), 0, false);
+        $intSiblings = $arrRow["COUNT(*)"];
+        return (int)($intSiblings+1);
+    }
+
+    /**
      * Generates a new SystemRecord and, if needed, the corresponding record in the rights-table (here inheritance is default)
      * Returns the systemID used for this record
      *
-     * @param string $strPrevId    Previous ID in the tree-structure
+     * @param string $strPrevId  Previous ID in the tree-structure
      * @param string $strComment Comment to identify the record
-     * @param bool $bitRight Should the right-record be generated?
      * @return string The ID used/generated
+     *
+     * * @todo find ussages and make private
      */
-    public function createSystemRecord($strPrevId, $strComment, $bitRight = true) {
+    private function createSystemRecord($strPrevId, $strComment) {
 
         $strSystemId = generateSystemid();
 
@@ -803,51 +958,82 @@ abstract class class_root {
         $this->setStrPrevId($strPrevId);
 
         //determine the correct new sort-id - append by default
-        $strQuery = "SELECT COUNT(*) FROM "._dbprefix_."system WHERE system_prev_id = ? AND system_id != '0'";
+        if(class_module_system_module::getModuleByName("system") != null  && version_compare(class_module_system_module::getModuleByName("system")->getStrVersion(), "4.7.5", "lt")) {
+            $strQuery = "SELECT COUNT(*) FROM "._dbprefix_."system WHERE system_prev_id = ? AND system_id != '0'";
+        }
+        else {
+            $strQuery = "SELECT COUNT(*) FROM "._dbprefix_."system WHERE system_prev_id = ? AND system_id != '0' AND system_deleted = 0";
+
+        }
         $arrRow = $this->objDB->getPRow($strQuery, array($strPrevId), 0, false);
         $intSiblings = $arrRow["COUNT(*)"];
 
         $strComment = uniStrTrim(strip_tags($strComment), 240);
 
-        //So, lets generate the record
-        $strQuery = "INSERT INTO "._dbprefix_."system
+
+        if(class_module_system_module::getModuleByName("system") != null  && version_compare(class_module_system_module::getModuleByName("system")->getStrVersion(), "4.7.5", "lt")) {
+            //So, lets generate the record
+            $strQuery = "INSERT INTO "._dbprefix_."system
                      ( system_id, system_prev_id, system_module_nr, system_owner, system_create_date, system_lm_user,
                        system_lm_time, system_status, system_comment, system_sort, system_class) VALUES
                      (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
-        //Send the query to the db
-        $this->objDB->_pQuery(
-            $strQuery,
-            array(
-                $strSystemId,
-                $strPrevId,
-                $this->getIntModuleNr(),
-                $this->objSession->getUserID(),
-                class_date::getCurrentTimestamp(),
-                $this->objSession->getUserID(),
-                time(),
-                (int)$this->getIntRecordStatus(),
-                $strComment,
-                (int)($intSiblings+1),
-                $this->getStrRecordClass()
-            )
-        );
+            //Send the query to the db
+            $this->objDB->_pQuery(
+                $strQuery,
+                array(
+                    $strSystemId,
+                    $strPrevId,
+                    $this->getIntModuleNr(),
+                    $this->objSession->getUserID(),
+                    class_date::getCurrentTimestamp(),
+                    $this->objSession->getUserID(),
+                    time(),
+                    (int)$this->getIntRecordStatus(),
+                    $strComment,
+                    $this->getNextSortValue($strPrevId),
+                    $this->getStrRecordClass()
+                )
+            );
+        }
+        else {
+            //So, lets generate the record
+            $strQuery = "INSERT INTO "._dbprefix_."system
+                     ( system_id, system_prev_id, system_module_nr, system_owner, system_create_date, system_lm_user,
+                       system_lm_time, system_status, system_comment, system_sort, system_class, system_deleted) VALUES
+                     (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
-        //Do we need a Rights-Record?
-        if($bitRight) {
-            $strQuery = "INSERT INTO "._dbprefix_."system_right (right_id, right_inherit) VALUES (?, 1)";
-
-            $this->objDB->_pQuery($strQuery, array($strSystemId));
-            //update rights to inherit
-            $this->objRights->setInherited(true, $strSystemId);
+            //Send the query to the db
+            $this->objDB->_pQuery(
+                $strQuery,
+                array(
+                    $strSystemId,
+                    $strPrevId,
+                    $this->getIntModuleNr(),
+                    $this->objSession->getUserID(),
+                    class_date::getCurrentTimestamp(),
+                    $this->objSession->getUserID(),
+                    time(),
+                    (int)$this->getIntRecordStatus(),
+                    $strComment,
+                    (int)($intSiblings + 1),
+                    $this->getStrRecordClass(),
+                    $this->getIntRecordDeleted()
+                )
+            );
         }
 
-        class_logger::getInstance()->addLogRow("new system-record created: ".$strSystemId ." (".$strComment.")", class_logger::$levelInfo);
+        //we need a Rights-Record
+        $this->objDB->_pQuery("INSERT INTO "._dbprefix_."system_right (right_id, right_inherit) VALUES (?, 1)", array($strSystemId));
+        //update rights to inherit
+        class_carrier::getInstance()->getObjRights()->setInherited(true, $strSystemId);
 
+        class_logger::getInstance()->addLogRow("new system-record created: ".$strSystemId ." (".$strComment.")", class_logger::$levelInfo);
         $this->objDB->flushQueryCache();
         $this->internalInit();
-        //reset the old previd since we're having a new record
+        //reset the old values since we're having a new record
         $this->strOldPrevId = -1;
+        $this->intOldRecordStatus = -1;
 
         return $strSystemId;
 
@@ -873,8 +1059,7 @@ abstract class class_root {
         if($this->objSpecialDate != null && $this->objSpecialDate instanceof class_date)
             $intSpecial = $this->objSpecialDate->getLongTimestamp();
 
-        $strQuery = "SELECT COUNT(*) FROM "._dbprefix_."system_date WHERE system_date_id = ?";
-        $arrRow = $this->objDB->getPRow($strQuery, array($this->getSystemid()));
+        $arrRow = $this->objDB->getPRow("SELECT COUNT(*) FROM "._dbprefix_."system_date WHERE system_date_id = ?", array($this->getSystemid()));
         if($arrRow["COUNT(*)"] == 0) {
             //insert
             $strQuery = "INSERT INTO "._dbprefix_."system_date
@@ -968,7 +1153,7 @@ abstract class class_root {
      * @return bool
      */
     public function rightView() {
-        return $this->objRights->rightView($this->getSystemid());
+        return class_carrier::getInstance()->getObjRights()->rightView($this->getSystemid());
     }
 
     /**
@@ -978,7 +1163,7 @@ abstract class class_root {
      * @return bool
      */
     public function rightEdit() {
-        return $this->objRights->rightEdit($this->getSystemid());
+        return class_carrier::getInstance()->getObjRights()->rightEdit($this->getSystemid());
     }
 
     /**
@@ -988,7 +1173,7 @@ abstract class class_root {
      * @return bool
      */
     public function rightDelete() {
-        return $this->objRights->rightDelete($this->getSystemid());
+        return class_carrier::getInstance()->getObjRights()->rightDelete($this->getSystemid());
     }
 
     /**
@@ -998,7 +1183,7 @@ abstract class class_root {
      * @return bool
      */
     public function rightRight() {
-        return $this->objRights->rightRight($this->getSystemid());
+        return class_carrier::getInstance()->getObjRights()->rightRight($this->getSystemid());
     }
 
     /**
@@ -1008,7 +1193,7 @@ abstract class class_root {
      * @return bool
      */
     public function rightRight1() {
-        return $this->objRights->rightRight1($this->getSystemid());
+        return class_carrier::getInstance()->getObjRights()->rightRight1($this->getSystemid());
     }
 
     /**
@@ -1018,7 +1203,7 @@ abstract class class_root {
      * @return bool
      */
     public function rightRight2() {
-        return $this->objRights->rightRight2($this->getSystemid());
+        return class_carrier::getInstance()->getObjRights()->rightRight2($this->getSystemid());
     }
 
     /**
@@ -1028,7 +1213,7 @@ abstract class class_root {
      * @return bool
      */
     public function rightRight3() {
-        return $this->objRights->rightRight3($this->getSystemid());
+        return class_carrier::getInstance()->getObjRights()->rightRight3($this->getSystemid());
     }
 
     /**
@@ -1038,7 +1223,7 @@ abstract class class_root {
      * @return bool
      */
     public function rightRight4() {
-        return $this->objRights->rightRight4($this->getSystemid());
+        return class_carrier::getInstance()->getObjRights()->rightRight4($this->getSystemid());
     }
 
     /**
@@ -1048,17 +1233,17 @@ abstract class class_root {
      * @return bool
      */
     public function rightRight5() {
-        return $this->objRights->rightRight5($this->getSystemid());
+        return class_carrier::getInstance()->getObjRights()->rightRight5($this->getSystemid());
     }
 
     /**
-     * Returns the bool-value for the right5 of this record,
+     * Returns the bool-value for the changelog permissions of this record,
      * Systemid MUST be given, otherwise false
      *
      * @return bool
      */
     public function rightChangelog() {
-        return $this->objRights->rightChangelog($this->getSystemid());
+        return class_carrier::getInstance()->getObjRights()->rightChangelog($this->getSystemid());
     }
 
     // --- SystemID & System-Table Methods ------------------------------------------------------------------
@@ -1069,6 +1254,7 @@ abstract class class_root {
      * @param string $strSystemid
      * @param bool $bitUseCache
      * @return int
+     * @deprecated
      */
     public function getNumberOfSiblings($strSystemid = "", $bitUseCache = true) {
         if($strSystemid == "")
@@ -1078,7 +1264,7 @@ abstract class class_root {
                      FROM "._dbprefix_."system as sys1,
                           "._dbprefix_."system as sys2
                      WHERE sys1.system_id=?
-                     AND sys2.system_prev_id = sys1.system_prev_id";
+                       AND sys2.system_prev_id = sys1.system_prev_id";
         $arrRow = $this->objDB->getPRow($strQuery, array($strSystemid), 0, $bitUseCache);
         return $arrRow["COUNT(*)"];
 
@@ -1090,15 +1276,19 @@ abstract class class_root {
      *
      * @param string $strSystemid
      * @return string[]
+     * @deprecated
      */
     public function getChildNodesAsIdArray($strSystemid = "") {
         if($strSystemid == "")
             $strSystemid = $this->getSystemid();
 
+        $objORM = new class_orm_objectlist();
+
         $strQuery = "SELECT system_id
                      FROM "._dbprefix_."system
                      WHERE system_prev_id=?
                        AND system_id != '0'
+                       ".$objORM->getDeletedWhereRestriction()."
                      ORDER BY system_sort ASC";
 
         $arrReturn = array();
@@ -1118,6 +1308,7 @@ abstract class class_root {
      *
      * @param string $strSystemid
      * @return string[]
+     * @deprecated
      */
     public function getAllSubChildNodesAsIdArray($strSystemid = "") {
         $arrReturn = $this->getChildNodesAsIdArray($strSystemid);
@@ -1192,14 +1383,14 @@ abstract class class_root {
      * @return bool
      * @todo: remove first params, is always the current systemid. maybe mark as protected, currently only called by the test-classes
      *
+     * * @todo find ussages and make private
+     *
      */
     public final function deleteSystemRecord($strSystemid, $bitRight = true, $bitDate = true) {
         $bitResult = true;
 
         //Start a tx before deleting anything
         $this->objDB->transactionBegin();
-
-        $this->objSortManager->fixSortOnDelete($strSystemid);
 
         $strQuery = "DELETE FROM "._dbprefix_."system WHERE system_id = ?";
         $bitResult = $bitResult &&  $this->objDB->_pQuery($strQuery, array($strSystemid));
@@ -1214,11 +1405,7 @@ abstract class class_root {
             $bitResult = $bitResult &&  $this->objDB->_pQuery($strQuery, array($strSystemid));
         }
 
-        //try to call other modules, maybe wanting to delete anything in addition, if the current record
-        //is going to be deleted
-        //TODO: remove legacy call
-        $bitResult = $bitResult && class_core_eventdispatcher::notifyRecordDeletedListeners($strSystemid, get_class($this));
-        $bitResult = $bitResult && class_core_eventdispatcher::getInstance()->notifyGenericListeners(class_system_eventidentifier::EVENT_SYSTEM_RECORDDELETED, array($strSystemid, get_class($this)));
+
 
         //end tx
         if($bitResult) {
@@ -1268,7 +1455,10 @@ abstract class class_root {
         while($strTempId != "0" && $strTempId != "" && $strTempId != -1 && $strTempId != $strStopSystemid) {
             $arrReturn[] = $strTempId;
 
-            $objCommon = new class_module_system_common($strTempId);
+            $objCommon = class_objectfactory::getInstance()->getObject($strTempId);
+            if($objCommon === null) {
+                break;
+            }
             $strTempId = $objCommon->getPrevId();
         }
 
@@ -1403,7 +1593,7 @@ abstract class class_root {
      * Resets the current systemid
      * @return void
      */
-    protected function unsetSystemid() {
+    public function unsetSystemid() {
         $this->strSystemid = "";
     }
 
@@ -1456,12 +1646,6 @@ abstract class class_root {
         return $this->strPrevId;
     }
 
-    /**
-     * @return string
-     */
-    public function getStrOldPrevId() {
-        return $this->strOldPrevId;
-    }
 
     /**
      * @param string $strPrevId
@@ -1694,6 +1878,13 @@ abstract class class_root {
     }
 
     /**
+     * @return int
+     */
+    public function getIntRecordDeleted() {
+        return $this->intRecordDeleted;
+    }
+
+    /**
      * Gets the status of a systemRecord
      *
      * @param string $strSystemid
@@ -1715,27 +1906,9 @@ abstract class class_root {
      * Sets the internal status. Fires a status-changed event.
      *
      * @param int $intRecordStatus
-     * @param bool $bitFireStatusChangeEvent
-     * @return bool
      */
-    public function setIntRecordStatus($intRecordStatus, $bitFireStatusChangeEvent = true) {
-        $intPrevStatus = $this->intRecordStatus;
+    public function setIntRecordStatus($intRecordStatus) {
         $this->intRecordStatus = $intRecordStatus;
-
-        $bitReturn = true;
-
-        if($intPrevStatus != $intRecordStatus && $intPrevStatus != -1) {
-            if(validateSystemid($this->getSystemid())) {
-                $this->updateObjectToDb();
-                class_carrier::getInstance()->flushCache(class_carrier::INT_CACHE_TYPE_ORMCACHE | class_carrier::INT_CACHE_TYPE_DBQUERIES);
-            }
-            if($bitFireStatusChangeEvent && validateSystemid($this->getSystemid())) {
-                $bitReturn = class_core_eventdispatcher::notifyStatusChangedListeners($this->getSystemid(), $intRecordStatus);
-            }
-        }
-
-        return $bitReturn;
-
     }
 
     /**
@@ -1828,15 +2001,6 @@ abstract class class_root {
     }
 
     /**
-     * Returns the current instance of the class_rights
-     *
-     * @return object
-     */
-    public function getObjRights() {
-        return $this->objRights;
-    }
-
-    /**
      * Returns an instance of the lockmanager, initialized
      * with the current systemid.
      *
@@ -1872,7 +2036,6 @@ abstract class class_root {
     public function setArrInitRow($arrInitRow) {
         if(isset($arrInitRow["system_id"])) {
             $this->arrInitRow = $arrInitRow;
-            $this->objRights->addRowToCache($arrInitRow);
         }
     }
 
@@ -1889,6 +2052,11 @@ abstract class class_root {
      * @return void
      */
     public function setObjEndDate($objEndDate = null) {
+
+        if($objEndDate === 0)
+            $objEndDate = null;
+
+
         if(!$objEndDate instanceof class_date && $objEndDate != "" && $objEndDate != null)
             $objEndDate = new class_date($objEndDate);
 
@@ -1908,6 +2076,10 @@ abstract class class_root {
      * @return void
      */
     public function setObjSpecialDate($objSpecialDate = null) {
+
+        if($objSpecialDate === 0)
+            $objSpecialDate = null;
+
         if(!$objSpecialDate instanceof class_date && $objSpecialDate != "" && $objSpecialDate != null)
             $objSpecialDate = new class_date($objSpecialDate);
 
@@ -1927,6 +2099,10 @@ abstract class class_root {
      * @return void
      */
     public function setObjStartDate($objStartDate = null) {
+
+        if($objStartDate === 0)
+            $objStartDate = null;
+
         if(!$objStartDate instanceof class_date && $objStartDate != "" && $objStartDate != null)
             $objStartDate = new class_date($objStartDate);
 

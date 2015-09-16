@@ -92,33 +92,27 @@ class class_db_oci8 extends class_db_base {
 
         $bitReturn = true;
 
-        //ugly hack for oracle: it only supports 1000 params per query as maximum, so split into several parts
-        //calc the number of max rows per insert. to be sure split it down to 970
-        $intSetsPerInsert = floor(970 / count($arrColumns));
-        foreach(array_chunk($arrValueSets, $intSetsPerInsert) as $arrSingleValueSet) {
+        $arrPlaceholder = array();
+        $arrSafeColumns = array();
 
-            $arrPlaceholder = array();
-            $arrSafeColumns = array();
-
-            foreach($arrColumns as $strOneColumn) {
-                $arrSafeColumns[] = $this->encloseColumnName($strOneColumn);
-                $arrPlaceholder[] = "?";
-            }
-            $strPlaceholder = " (".implode(",", $arrPlaceholder).") ";
-            $strColumnNames = " (".implode(",", $arrSafeColumns).") ";
-
-            $arrParams = array();
-
-            $strQuery = "INSERT ALL ";
-            foreach($arrSingleValueSet as $arrOneSet) {
-                $arrParams = array_merge($arrParams, $arrOneSet);
-
-                $strQuery .= " INTO ".$this->encloseTableName($strTable)." ".$strColumnNames." VALUES ".$strPlaceholder." ";
-            }
-            $strQuery .= " SELECT * FROM dual";
-
-            $bitReturn = $objDb->_pQuery($strQuery, $arrParams) && $bitReturn;
+        foreach($arrColumns as $strOneColumn) {
+            $arrSafeColumns[] = $this->encloseColumnName($strOneColumn);
+            $arrPlaceholder[] = "?";
         }
+        $strPlaceholder = " (".implode(",", $arrPlaceholder).") ";
+        $strColumnNames = " (".implode(",", $arrSafeColumns).") ";
+
+        $arrParams = array();
+
+        $strQuery = "INSERT ALL ";
+        foreach($arrValueSets as $arrOneSet) {
+            $arrParams = array_merge($arrParams, $arrOneSet);
+
+            $strQuery .= " INTO ".$this->encloseTableName($strTable)." ".$strColumnNames." VALUES ".$strPlaceholder." ";
+        }
+        $strQuery .= " SELECT * FROM dual";
+
+        $bitReturn = $objDb->_pQuery($strQuery, $arrParams) && $bitReturn;
 
         return $bitReturn;
     }
@@ -191,7 +185,7 @@ class class_db_oci8 extends class_db_base {
     }
 
     /**
-     * Returns just a part of a recodset, defined by the start- and the end-rows,
+     * Returns just a part of a recordset, defined by the start- and the end-rows,
      * defined by the params. Makes use of prepared statements.
      * <b>Note:</b> Use array-like counters, so the first row is startRow 0 whereas
      * the n-th row is the (n-1)th key!!!
@@ -258,6 +252,10 @@ class class_db_oci8 extends class_db_base {
     public function getColumnsOfTable($strTableName) {
         $arrReturn = array();
         $arrTemp = $this->getPArray("select column_name, data_type from user_tab_columns where table_name=?", array(strtoupper($strTableName)));
+
+        if(empty($arrTemp)) {
+            return array();
+        }
 
         foreach($arrTemp as $arrOneColumn) {
             $arrReturn[] = array(

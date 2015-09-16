@@ -63,6 +63,7 @@ class class_orm_objectlist extends class_orm_base {
         if($strPrevid != "")
             $arrParams[] = $strPrevid;
 
+        $this->addLogicalDeleteRestriction();
         $this->processWhereRestrictions($strQuery, $arrParams, $strTargetClass);
 
         $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, $arrParams);
@@ -70,6 +71,59 @@ class class_orm_objectlist extends class_orm_base {
 
     }
 
+
+    /**
+     * Returns the list of object id's matching the current query. The target-tables
+     * are set up by analyzing the classes' annotations, the initial sort-order, too.
+     * You may influence the ordering and restrictions by adding the relevant restriction / order
+     * objects before calling this method.
+     *
+     * @param string $strTargetClass
+     * @param string $strPrevid
+     * @param null|int $intStart
+     * @param null|int $intEnd
+     *
+     * @return array of system ids
+     *
+     * @see class_orm_objectlist_restriction
+     * @see class_orm_objectlist_orderby
+     */
+    public function getObjectListIds($strTargetClass, $strPrevid = "", $intStart = null, $intEnd = null) {
+
+        $strQuery = "SELECT *
+                           ".$this->getQueryBase($strTargetClass)."
+                       ".($strPrevid != "" && $strPrevid !== null ? " AND system_prev_id = ? " : "");
+
+        $arrParams = array();
+        if($strPrevid != "")
+            $arrParams[] = $strPrevid;
+
+        $this->addLogicalDeleteRestriction();
+        $this->processWhereRestrictions($strQuery, $arrParams, $strTargetClass);
+        $strQuery .= $this->getOrderBy(new class_reflection($strTargetClass));
+        $arrRows = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, $arrParams, $intStart, $intEnd);
+
+        $arrReturn = array();
+        foreach($arrRows as $arrOneRow) {
+            //Caching is only allowed if the fetched and required classes match. Otherwise there could be missing queried tables.
+            if($arrOneRow["system_class"] == $strTargetClass) {
+                class_orm_rowcache::addSingleInitRow($arrOneRow);
+                $arrReturn[] = $arrOneRow["system_id"];
+            }
+            else {
+                $objReflectionClass = new ReflectionClass($arrOneRow["system_class"]);
+                if($objReflectionClass->isSubclassOf($strTargetClass)) {
+                    //returns the instance, but enforces a fresh reload from the database.
+                    //this is useful if extending classes need to query additional tables
+                    $arrReturn[] = $arrOneRow["system_id"];
+                }
+            }
+
+
+        }
+
+        return $arrReturn;
+    }
 
     /**
      * Returns the list of objects matching the current query. The target-tables
@@ -88,26 +142,12 @@ class class_orm_objectlist extends class_orm_base {
      * @see class_orm_objectlist_orderby
      */
     public function getObjectList($strTargetClass, $strPrevid = "", $intStart = null, $intEnd = null) {
-
-        $strQuery = "SELECT *
-                           ".$this->getQueryBase($strTargetClass)."
-                       ".($strPrevid != "" && $strPrevid !== null ? " AND system_prev_id = ? " : "");
-
-        $arrParams = array();
-        if($strPrevid != "")
-            $arrParams[] = $strPrevid;
-
-        $this->processWhereRestrictions($strQuery, $arrParams, $strTargetClass);
-        $strQuery .= $this->getOrderBy(new class_reflection($strTargetClass));
-        $arrRows = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, $arrParams, $intStart, $intEnd);
+        $arrIds = $this->getObjectListIds($strTargetClass, $strPrevid, $intStart, $intEnd);
 
         $arrReturn = array();
-        foreach($arrRows as $arrOneRow) {
-            //Caching is only allowed if the fetched and required classes match. Otherwise there could be missing queried tables.
-            if($arrOneRow["system_class"] == $strTargetClass)
-                class_orm_rowcache::addSingleInitRow($arrOneRow);
 
-            $arrReturn[] = class_objectfactory::getInstance()->getObject($arrOneRow["system_id"]);
+        foreach($arrIds as $strId) {
+            $arrReturn[] = class_objectfactory::getInstance()->getObject($strId);
         }
 
         return $arrReturn;
@@ -137,6 +177,7 @@ class class_orm_objectlist extends class_orm_base {
         if($strPrevid != "")
             $arrParams[] = $strPrevid;
 
+        $this->addLogicalDeleteRestriction();
         $this->processWhereRestrictions($strQuery, $arrParams, $strTargetClass);
         $strQuery .= $this->getOrderBy(new class_reflection($strTargetClass));
         $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, $arrParams);
@@ -164,7 +205,7 @@ class class_orm_objectlist extends class_orm_base {
         foreach($this->arrOrderBy as $objOneOrder)
             $arrOrderByCriteria[] = $objOneOrder->getStrOrderBy();
 
-        $arrOrderByCriteria[] = " system_sort ASC ";
+
         if(count($arrPropertiesOrder) > 0) {
             $arrPropertiesORM = $objReflection->getPropertiesWithAnnotation(class_orm_base::STR_ANNOTATION_TABLECOLUMN);
 
@@ -188,6 +229,7 @@ class class_orm_objectlist extends class_orm_base {
             }
         }
 
+        $arrOrderByCriteria[] = " system_sort ASC ";
         $strOrderBy = "";
         if(count($arrOrderByCriteria) > 0)
             $strOrderBy = "ORDER BY ".implode(" , ", $arrOrderByCriteria)." ";
@@ -195,6 +237,15 @@ class class_orm_objectlist extends class_orm_base {
         return $strOrderBy;
     }
 
+
+
+    protected function addLogicalDeleteRestriction() {
+
+        if(!self::$bitLogcialDeleteAvailable)
+            return;
+
+        $this->addWhereRestriction(new class_orm_objectlist_restriction($this->getDeletedWhereRestriction(), array()));
+    }
 
 
     /**

@@ -37,6 +37,7 @@ class class_module_languages_language extends class_model implements interface_m
      * @var bool
      * @tableColumn languages.language_default
      * @tableColumnDatatype int
+     * @tableColumnIndex
      *
      * @fieldType yesno
      * @fieldMandatory
@@ -176,26 +177,6 @@ class class_module_languages_language extends class_model implements interface_m
 
 
     /**
-     * Deletes the current object from the database
-     *
-     * @return bool
-     */
-    protected function deleteObjectInternal() {
-        parent::deleteObjectInternal();
-
-        //if we have just one language remaining, set this one as default
-        $arrObjLanguages = class_module_languages_language::getObjectList();
-        if(count($arrObjLanguages) == 1) {
-            $objOneLanguage = $arrObjLanguages[0];
-            $objOneLanguage->setBitDefault(1);
-            $objOneLanguage->updateObjectToDb();
-        }
-
-        return true;
-    }
-
-
-    /**
      * Moves all contents created in a given language to the current langugage
      *
      * @param string $strSourceLanguage
@@ -255,52 +236,48 @@ class class_module_languages_language extends class_model implements interface_m
                 foreach($arrLanguages as $strOneLanguage) {
                     if(!preg_match("#q\=[0-9]\.[0-9]#i", $strOneLanguage)) {
                         //search language
-                        $strQuery = "SELECT language_name
-                                 FROM " . _dbprefix_ . "languages, " . _dbprefix_ . "system
-            		             WHERE system_id = language_id
-            		             AND system_status = 1
-            		             AND language_name= ?
-            		             ORDER BY system_sort ASC, system_comment ASC";
-                        $arrRow = $this->objDB->getPRow($strQuery, array($strOneLanguage));
-                        if(count($arrRow) > 0) {
+                        $objORM = new class_orm_objectlist();
+                        $objORM->addWhereRestriction(new class_orm_objectlist_restriction("AND system_status = 1", array()));
+                        $objORM->addWhereRestriction(new class_orm_objectlist_restriction("AND language_name = ?", array($strOneLanguage)));
+                        /** @var class_module_languages_language $objLang */
+                        $objLang = $objORM->getSingleObject(get_called_class());
+
+                        if($objLang !== null) {
                             //save to session
                             if(!$this->objSession->getBitClosed()) {
-                                $this->objSession->setSession("portalLanguage", $arrRow["language_name"]);
+                                $this->objSession->setSession("portalLanguage", $objLang->getStrName());
                             }
-                            return $arrRow["language_name"];
+                            return $objLang->getStrName();
                         }
                     }
                 }
             }
 
-            $strQuery = "SELECT language_name
-                     FROM " . _dbprefix_ . "languages, " . _dbprefix_ . "system
-		             WHERE system_id = language_id
-		             AND language_default = 1
-		             AND system_status = 1
-		             ORDER BY system_sort ASC, system_comment ASC";
-            $arrRow = $this->objDB->getPRow($strQuery, array());
-            if(count($arrRow) > 0) {
+            $objORM = new class_orm_objectlist();
+            $objORM->addWhereRestriction(new class_orm_objectlist_restriction("AND system_status = 1", array()));
+            $objORM->addWhereRestriction(new class_orm_objectlist_restriction("AND language_default = 1", array()));
+            /** @var class_module_languages_language $objLang */
+            $objLang = $objORM->getSingleObject(get_called_class());
+
+            if($objLang !== null) {
                 //save to session
                 if(!$this->objSession->getBitClosed()) {
-                    $this->objSession->setSession("portalLanguage", $arrRow["language_name"]);
+                    $this->objSession->setSession("portalLanguage", $objLang->getStrName());
                 }
-                return $arrRow["language_name"];
+                return $objLang->getStrName();
             }
             else {
-                //No default language set? Uh oh...
-                $strQuery = "SELECT language_name
-                     FROM " . _dbprefix_ . "languages, " . _dbprefix_ . "system
-		             WHERE system_id = language_id
-		             AND system_status = 1
-		             ORDER BY system_sort ASC, system_comment ASC";
-                $arrRow = $this->objDB->getPRow($strQuery, array());
-                if(count($arrRow) > 0) {
+                $objORM = new class_orm_objectlist();
+                $objORM->addWhereRestriction(new class_orm_objectlist_restriction("AND system_status = 1", array()));
+                /** @var class_module_languages_language $objLang */
+                $objLang = $objORM->getSingleObject(get_called_class());
+
+                if($objLang !== null) {
                     //save to session
                     if(!$this->objSession->getBitClosed()) {
-                        $this->objSession->setSession("portalLanguage", $arrRow["language_name"]);
+                        $this->objSession->setSession("portalLanguage", $objLang->getStrName());
                     }
-                    return $arrRow["language_name"];
+                    return $objLang->getStrName();
                 }
                 else {
                     return "";
@@ -324,32 +301,29 @@ class class_module_languages_language extends class_model implements interface_m
         }
         else {
 
-            $strQuery = "SELECT language_name
-                     FROM " . _dbprefix_ . "languages, " . _dbprefix_ . "system
-		             WHERE system_id = language_id
-		             AND language_default = 1
-		             ORDER BY system_sort ASC, system_comment ASC";
-            $arrRow = $this->objDB->getPRow($strQuery, array());
-            if(count($arrRow) > 0) {
+            $objORM = new class_orm_objectlist();
+            $objORM->addWhereRestriction(new class_orm_objectlist_restriction("AND language_default = 1", array()));
+            /** @var class_module_languages_language $objLang */
+            $objLang = $objORM->getSingleObject(get_called_class());
+
+            if($objLang !== null) {
                 //save to session
                 if(!$this->objSession->getBitClosed()) {
-                    $this->objSession->setSession("adminLanguage", $arrRow["language_name"]);
+                    $this->objSession->setSession("adminLanguage", $objLang->getStrName());
                 }
-                return $arrRow["language_name"];
+                return $objLang->getStrName();
             }
             else {
-                //No default language set? Uh oh...
-                $strQuery = "SELECT language_name
-                     FROM " . _dbprefix_ . "languages, " . _dbprefix_ . "system
-		             WHERE system_id = language_id
-		             ORDER BY system_sort ASC, system_comment ASC";
-                $arrRow = $this->objDB->getPRow($strQuery, array());
-                if(count($arrRow) > 0) {
+                $objORM = new class_orm_objectlist();
+                /** @var class_module_languages_language $objLang */
+                $objLang = $objORM->getSingleObject(get_called_class());
+
+                if($objLang !== null) {
                     //save to session
                     if(!$this->objSession->getBitClosed()) {
-                        $this->objSession->setSession("adminLanguage", $arrRow["language_name"]);
+                        $this->objSession->setSession("adminLanguage", $objLang->getStrName());
                     }
-                    return $arrRow["language_name"];
+                    return $objLang->getStrName();
                 }
                 else {
                     return "";
@@ -364,31 +338,11 @@ class class_module_languages_language extends class_model implements interface_m
      * @return class_module_languages_language
      */
     public static function getDefaultLanguage() {
-        //try to load the default language
-        $strQuery = "SELECT *
-                 FROM " . _dbprefix_ . "languages,
-                      " . _dbprefix_ . "system_right,
-                      " . _dbprefix_ . "system
-                LEFT JOIN "._dbprefix_."system_date
-                    ON system_id = system_date_id
-	             WHERE system_id = language_id
-	             AND system_id = right_id
-	             AND language_default = 1
-	             AND system_status = 1
-	             ORDER BY system_sort ASC, system_comment ASC";
-        $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array());
-        if(count($arrRow) > 0) {
-            class_orm_rowcache::addSingleInitRow($arrRow);
-            return class_objectfactory::getInstance()->getObject($arrRow["system_id"]);
-        }
-        else {
-            if(count(class_module_languages_language::getObjectList(true)) > 0) {
-                $arrLangs = class_module_languages_language::getObjectList(true);
-                return $arrLangs[0];
-            }
-
-            return null;
-        }
+        $objORM = new class_orm_objectlist();
+        $objORM->addWhereRestriction(new class_orm_objectlist_restriction("AND system_status = 1", array()));
+        $objORM->addWhereRestriction(new class_orm_objectlist_restriction("AND language_default = 1", array()));
+        /** @var class_module_languages_language $objLang */
+        return $objORM->getSingleObject(get_called_class());
     }
 
     /**

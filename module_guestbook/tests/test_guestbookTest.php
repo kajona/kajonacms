@@ -48,7 +48,7 @@ class class_test_guestbook extends class_testbase  {
         $objDB->flushQueryCache();
 
         echo "deleting the guestbook...\n";
-        $objGuestbook->deleteObject();
+        $objGuestbook->deleteObjectFromDatabase();
 
        
     }

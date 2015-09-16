@@ -12,7 +12,7 @@ class class_test_charts_jqPlotTest extends class_testbase  {
 
 
         //JS-Imports for minimal system setup
-        echo "<script type=\"text/javascript\">KAJONA_WEBPATH = '"._webpath_."'; KAJONA_BROWSER_CACHEBUSTER = '"._system_browser_cachebuster_."';</script>\n";
+        echo "<script type=\"text/javascript\">KAJONA_WEBPATH = '"._webpath_."'; KAJONA_BROWSER_CACHEBUSTER = '".class_module_system_setting::getConfigValue("_system_browser_cachebuster_")."';</script>\n";
         echo "<script language=\"javascript\" type=\"text/javascript\" src=\""._webpath_.class_resourceloader::getInstance()->getCorePathForModule("module_system")."/module_system/admin/scripts/jquery/jquery.min.js\"></script>";
         echo "<script language=\"javascript\" type=\"text/javascript\" src=\""._webpath_.class_resourceloader::getInstance()->getCorePathForModule("module_system")."/module_system/system/scripts/loader.js\"></script>";
         echo "<script language=\"javascript\" type=\"text/javascript\" src=\""._webpath_.class_resourceloader::getInstance()->getCorePathForModule("module_system")."/module_system/admin/scripts/kajona.js\"></script>";
@@ -132,6 +132,21 @@ class class_test_charts_jqPlotTest extends class_testbase  {
         echo $objGraph->renderGraph();
 
         $objGraph = class_graph_factory::getGraphInstance(class_graph_factory::$STR_TYPE_JQPLOT);
+        $objGraph->setStrGraphTitle("A Mixed stacked Chart");
+        $objGraph->setStrXAxisTitle("My new X-Axis");
+        $objGraph->setStrYAxisTitle("My new Y-Axis");
+        $objGraph->addStackedBarChartSet(array(4, 2, 3, 4), "serie 3");
+        $objGraph->addStackedBarChartSet(array(1, 3, 3, 4), "serie 4");
+        $objGraph->addStackedBarChartSet(array(1, 2, 2, 3), "serie 5");
+        $objGraph->addStackedBarChartSet(array(2, 2, 3, 1), "serie 6");
+        $objGraph->addStackedBarChartSet(array(1, 2, 3, 4), "serie 7");
+        $objGraph->addLinePlot(array(8, 1, 2, 4), "serie 8");
+        $objGraph->addLinePlot(array(1, 2, 3, 4), "serie 9");
+        $objGraph->setBitRenderLegend(true);
+        $objGraph->setStrFont("open sans");
+        echo $objGraph->renderGraph();
+
+        $objGraph = class_graph_factory::getGraphInstance(class_graph_factory::$STR_TYPE_JQPLOT);
         $objGraph->setStrGraphTitle("A Bar Chart");
         $objGraph->setStrXAxisTitle("My new X-Axis");
         $objGraph->setStrYAxisTitle("My new Y-Axis");
@@ -189,7 +204,7 @@ class class_test_charts_jqPlotTest extends class_testbase  {
         $objGraph->setStrXAxisTitle("x-axis");
         $objGraph->setStrYAxisTitle("y-axis");
         $objGraph->setStrGraphTitle("Test Stacked Bar Chart");
-        $objGraph->addStackedBarChartSet(array(8, -5, 7, 8, 4, 12, 1, 1, 1, 3, 4, 5, 6), "serie 1");
+        $objGraph->addStackedBarChartSet(array(0, -5, 7, 8, 4, 12, 1, 1, 1, 3, 4, 5, 6), "serie 1");
         $objGraph->addStackedBarChartSet(array(3, -4, 6, 2, 5, 2, 2, 2, 2, 3, 4, 5, 6), "serie 2");
         $objGraph->setArrXAxisTickLabels(array("v1", "v2", "v3", "v4", "v5", "v6", "v7", "v8", "v9", "v10", "v11", "v12", "v13"));
         $objGraph->setIntXAxisAngle(-20);
@@ -202,7 +217,7 @@ class class_test_charts_jqPlotTest extends class_testbase  {
         $objGraph->setStrYAxisTitle("y-axis");
         $objGraph->setStrGraphTitle("Test Stacked Horizontal Bar Chart");
         $objGraph->addStackedBarChartSet(array(8, -5, 7, 8, 4, 12, 1, 1, 1, 3, 4, 5, 6), "serie 1");
-        $objGraph->addStackedBarChartSet(array(3, -4, 6, 2, 5, 2, 2, 2, 2, 3, 4, 5, 6), "serie 2");
+        $objGraph->addStackedBarChartSet(array(3, 0, 6, 2, 5, 2, 2, 2, 2, 3, 4, 5, 6), "serie 2");
         $objGraph->addStackedBarChartSet(array(3, -4, 6, 2, 5, 2, 2, 2, 2, 3, 4, 5, 6), "serie 3");
         $objGraph->setArrXAxisTickLabels(array("v1", "v2", "v3", "v4", "v5", "v6", "v7", "v8", "v9", "v10", "v11", "v12", "v13"), 5);
         $objGraph->setIntXAxisAngle(-20);

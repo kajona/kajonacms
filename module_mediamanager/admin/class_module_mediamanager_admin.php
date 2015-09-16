@@ -231,45 +231,6 @@ class class_module_mediamanager_admin extends class_admin_evensimpler implements
             throw new class_exception("error loading object ".$this->getSystemid(), class_exception::$level_ERROR);
     }
 
-
-    /**
-     * @param interface_model $objInstance
-     *
-     * @return class_admin_formgenerator
-     */
-    protected function getAdminForm(interface_model $objInstance) {
-        if($objInstance instanceof class_module_mediamanager_repo) {
-            $objForm = parent::getAdminForm($objInstance);
-
-            $objForm->getField("path")->setStrOpener(
-                class_link::getLinkAdminDialog(
-                    "mediamanager",
-                    "folderListFolderview",
-                    "&form_element=".$objForm->getField("path")->getStrEntryName(),
-                    $this->getLang("commons_open_browser"),
-                    $this->getLang("commons_open_browser"),
-                    "icon_externalBrowser",
-                    $this->getLang("commons_open_browser")
-                )
-            )->setStrHint($this->getLang("mediamanager_path_h"));
-
-            $objForm->getField("uploadfilter")->setStrHint($this->getLang("mediamanager_upload_filter_h"));
-            $objForm->getField("viewfilter")->setStrHint($this->getLang("mediamanager_view_filter_h"));
-
-            return $objForm;
-        }
-        else if($objInstance instanceof class_module_mediamanager_file) {
-            if($this->getStrPeAddon() == "" && $this->getParam("source") != "search")
-                $this->setArrModuleEntry("template", "/folderview.tpl");
-
-            $objForm = parent::getAdminForm($objInstance);
-            $objForm->addField(new class_formentry_hidden("", "source"))->setStrValue($this->getParam("source"));
-            return $objForm;
-        }
-        else
-            return parent::getAdminForm($objInstance);
-    }
-
     /**
      * @param class_model|interface_admin_listable|interface_model $objOneIterable
      * @param string $strListIdentifier

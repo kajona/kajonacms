@@ -189,6 +189,17 @@ class class_config {
     }
 
     /**
+     * Sets a value to the debug-array
+     *
+     * @param string $strName
+     * @param string $strValue
+     * @return void
+     */
+    public function setDebug($strName, $strValue) {
+        $this->arrDebug[$strName] = $strValue;
+    }
+
+    /**
      * Returns a php.ini value
      *
      * @param string $strKey
@@ -232,15 +243,15 @@ class class_config {
      * @return void
      */
     public function loadConfigsDatabase(class_db $objDB) {
-        if(count($objDB->getTables()) > 0) {
-            $strQuery = "SELECT * FROM " . _dbprefix_ . "system_config ORDER BY system_config_module ASC";
-            $arrConfigs = $objDB->getPArray($strQuery, array());
-            foreach($arrConfigs as $arrOneConfig) {
-                if(!defined($arrOneConfig["system_config_name"])) {
-                    define($arrOneConfig["system_config_name"], $arrOneConfig["system_config_value"]);
-                }
-            }
-        }
+//        if(count($objDB->getTables()) > 0) {
+//            $strQuery = "SELECT * FROM " . _dbprefix_ . "system_config ORDER BY system_config_module ASC";
+//            $arrConfigs = $objDB->getPArray($strQuery, array());
+//            foreach($arrConfigs as $arrOneConfig) {
+//                if(!defined($arrOneConfig["system_config_name"])) {
+//                    define($arrOneConfig["system_config_name"], $arrOneConfig["system_config_value"]);
+//                }
+//            }
+//        }
 
         //set the relevant values to the php env
         if(defined("_system_timezone_") && _system_timezone_ != "") {

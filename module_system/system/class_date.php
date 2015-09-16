@@ -87,7 +87,7 @@ class class_date {
     /**
      * Generates a long-timestamp of the current time
      *
-     * @return long
+     * @return int
      */
     public static function getCurrentTimestamp() {
         $objDate = new class_date();
@@ -119,22 +119,37 @@ class class_date {
 
         if(isset($arrParams[$strFieldname . "_month"]) && $arrParams[$strFieldname . "_month"] != "") {
             $intMonth = (int)$arrParams[$strFieldname . "_month"];
+            if($intMonth > 12) {
+                $intMonth = 12;
+            }
         }
 
         if(isset($arrParams[$strFieldname . "_day"]) && $arrParams[$strFieldname . "_day"] != "") {
             $intDay = (int)$arrParams[$strFieldname . "_day"];
+            if($intDay > 31) {
+                $intDay = 31;
+            }
         }
 
         if(isset($arrParams[$strFieldname . "_hour"]) && $arrParams[$strFieldname . "_hour"] != "") {
             $intHour = (int)$arrParams[$strFieldname . "_hour"];
+            if($intHour > 23) {
+                $intHour = 23;
+            }
         }
 
         if(isset($arrParams[$strFieldname . "_minute"]) && $arrParams[$strFieldname . "_minute"] != "") {
             $intMinute = (int)$arrParams[$strFieldname . "_minute"];
+            if($intMinute > 59) {
+                $intMinute = 59;
+            }
         }
 
         if(isset($arrParams[$strFieldname . "_second"]) && $arrParams[$strFieldname . "_second"] != "") {
             $intMinute = (int)$arrParams[$strFieldname . "_second"];
+            if($intMinute > 59) {
+                $intMinute = 59;
+            }
         }
 
         //see if the other parts may be read directly
@@ -160,8 +175,25 @@ class class_date {
         $this->setIntHour($intHour);
         $this->setIntMin($intMinute);
         $this->setIntSec($intSecond);
+
+        //$this->validateDate();
     }
 
+
+    private function validateDate() {
+        if(!uniEreg("([0-9]){14}", $this->getLongTimestamp())) {
+            echo $this->__toString()."\n";
+            if (function_exists("debug_backtrace")) {
+                $arrStack = debug_backtrace();
+
+                foreach ($arrStack as $intPos => $arrValue) {
+                    echo (isset($arrValue["file"]) ? $arrValue["file"] : "n.a.")."\n\t Row ".(isset($arrValue["line"]) ? $arrValue["line"] : "n.a.").", function ".$arrStack[$intPos]["function"]."\n";
+                }
+            }
+
+            die();
+        }
+    }
 
     /**
      * Allows to init the current class with an 32Bit int value representing the seconds since 1970.
@@ -174,6 +206,8 @@ class class_date {
     public function setTimeInOldStyle($intTimestamp) {
         //parse timestamp in order to get schema.
         $this->longTimestamp = date($this->strParseFormat, (int)$intTimestamp);
+
+        //$this->validateDate();
         return $this;
     }
 
@@ -261,6 +295,7 @@ class class_date {
         $this->setIntMin($objSourceDate->getIntMin());
         $this->setIntSec($objSourceDate->getIntSec());
 
+        //$this->validateDate();
         return $this;
     }
 
@@ -295,6 +330,39 @@ class class_date {
         $this->setIntMin($objSourceDate->getIntMin());
         $this->setIntSec($objSourceDate->getIntSec());
 
+        //$this->validateDate();
+        return $this;
+    }
+
+    /**
+     * Shifts the current year into the past by one.
+     *
+     * @return \class_date
+     */
+    public function setPreviousYear() {
+        $intCurrentDay = $this->getIntDay();
+        $this->setIntDay(1);
+        for($intI = 0; $intI < 12; $intI++) {
+            $this->setPreviousMonth();
+        }
+        $this->setIntDay($intCurrentDay);
+        //$this->validateDate();
+        return $this;
+    }
+
+    /**
+     * Shifts the current year into the future by one.
+     *
+     * @return \class_date
+     */
+    public function setNextYear() {
+        $intCurrentDay = $this->getIntDay();
+        $this->setIntDay(1);
+        for($intI = 0; $intI < 12; $intI++) {
+            $this->setNextMonth();
+        }
+        $this->setIntDay($intCurrentDay);
+        //$this->validateDate();
         return $this;
     }
 
@@ -307,6 +375,7 @@ class class_date {
         for($intI = 1; $intI <= 7; $intI++)
             $this->setNextDay();
 
+        //$this->validateDate();
         return $this;
     }
 
@@ -319,7 +388,26 @@ class class_date {
         for($intI = 1; $intI <= 7; $intI++)
             $this->setPreviousDay();
 
+        //$this->validateDate();
         return $this;
+    }
+
+    /**
+     * Sets the current time to the end of the day
+     *
+     * @return \class_date
+     */
+    public function setEndOfDay() {
+        return $this->setIntHour(23)->setIntMin(59)->setIntSec(59);
+    }
+
+    /**
+     * Sets the current time to the beginning of the day
+     *
+     * @return \class_date
+     */
+    public function setBeginningOfDay() {
+        return $this->setIntHour(0)->setIntMin(0)->setIntSec(0);
     }
 
     /**
@@ -330,6 +418,9 @@ class class_date {
      * @return \class_date
      */
     public function setIntYear($intYear) {
+        if($intYear < 0)
+            return $this;
+
         if(uniStrlen($intYear) == 2) {
             $intYear = "20" . $intYear;
         }
@@ -339,6 +430,8 @@ class class_date {
 
         $strYear = sprintf("%04s", $intYear);
         $this->longTimestamp = substr_replace($this->longTimestamp, $strYear, 0, 4);
+
+        //$this->validateDate();
         return $this;
     }
 
@@ -356,6 +449,7 @@ class class_date {
 
         $strMonth = sprintf("%02s", $intMonth);
         $this->longTimestamp = substr_replace($this->longTimestamp, $strMonth, 4, 2);
+        //$this->validateDate();
         return $this;
     }
 
@@ -373,6 +467,7 @@ class class_date {
 
         $strDay = sprintf("%02s", $intDay);
         $this->longTimestamp = substr_replace($this->longTimestamp, $strDay, 6, 2);
+        //$this->validateDate();
         return $this;
     }
 
@@ -391,6 +486,8 @@ class class_date {
 
         $strHour = sprintf("%02s", $intHour);
         $this->longTimestamp = substr_replace($this->longTimestamp, $strHour, 8, 2);
+
+        //$this->validateDate();
         return $this;
     }
 
@@ -409,6 +506,8 @@ class class_date {
 
         $strMin = sprintf("%02s", $intMin);
         $this->longTimestamp = substr_replace($this->longTimestamp, $strMin, 10, 2);
+
+        //$this->validateDate();
         return $this;
     }
 
@@ -427,6 +526,8 @@ class class_date {
 
         $strSec = sprintf("%02s", $intSec);
         $this->longTimestamp = substr_replace($this->longTimestamp, $strSec, 12, 2);
+
+        //$this->validateDate();
         return $this;
     }
 
@@ -487,7 +588,7 @@ class class_date {
     /**
      * Get the timstamp as a long value
      *
-     * @return long
+     * @return int
      */
     public function getLongTimestamp() {
         return $this->longTimestamp;
@@ -496,7 +597,7 @@ class class_date {
     /**
      * Set the current timestamp
      *
-     * @param long $longTimestamp
+     * @param int $longTimestamp
      *
      * @return \class_date
      */
@@ -504,7 +605,6 @@ class class_date {
         if(uniEreg("([0-9]){14}", $longTimestamp)) {
             $this->longTimestamp = $longTimestamp;
         }
-
         return $this;
     }
 

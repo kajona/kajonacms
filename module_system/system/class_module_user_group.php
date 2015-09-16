@@ -67,7 +67,8 @@ class class_module_user_group extends class_model implements interface_model, in
     public function getStrLongDescription() {
         $objUsersources = new class_module_user_sourcefactory();
         if(count($objUsersources->getArrUsersources()) > 1) {
-            return $this->getLang("user_list_source", "user")." ".$this->getStrSubsystem();
+            $objSubsystem = new class_module_user_sourcefactory();
+            return $this->getLang("user_list_source", "user")." ".$objSubsystem->getUsersource($this->getStrSubsystem())->getStrReadableName();
         }
         return "";
     }
@@ -155,17 +156,24 @@ class class_module_user_group extends class_model implements interface_model, in
     /**
      * Returns all groups from database
      *
-     * @param string $strPrevid
+     * @param string $strFilter
      * @param bool|int $intStart
      * @param bool|int $intEnd
      *
      * @return class_module_user_group[]
      * @static
      */
-    public static function getObjectList($strPrevid = "", $intStart = null, $intEnd = null) {
-        $strQuery = "SELECT group_id FROM "._dbprefix_."user_group ORDER BY group_name";
+    public static function getObjectList($strFilter = "", $intStart = null, $intEnd = null) {
+        $strQuery = "SELECT group_id
+                       FROM "._dbprefix_."user_group
+                    ".($strFilter != "" ? " WHERE group_name LIKE ? " : "")."
+                   ORDER BY group_name";
 
-        $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array(), $intStart, $intEnd);
+        $arrFilter = array();
+        if($strFilter != "")
+            $arrFilter[] = "%".$strFilter."%";
+
+        $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, $arrFilter, $intStart, $intEnd);
         $arrReturn = array();
         foreach($arrIds as $arrOneId)
             $arrReturn[] = new class_module_user_group($arrOneId["group_id"]);
@@ -176,13 +184,20 @@ class class_module_user_group extends class_model implements interface_model, in
     /**
      * Fetches the number of groups available
      *
-     * @param string $strPrevid
+     * @param string $strFilter
      *
      * @return int
      */
-    public static function getObjectCount($strPrevid = "") {
-        $strQuery = "SELECT COUNT(*) FROM "._dbprefix_."user_group";
-        $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array());
+    public static function getObjectCount($strFilter = "") {
+        $strQuery = "SELECT COUNT(*)
+                       FROM "._dbprefix_."user_group
+               ".($strFilter != "" ? " WHERE group_name LIKE ? " : "");
+
+        $arrFilter = array();
+        if($strFilter != "")
+            $arrFilter[] = "%".$strFilter."%";
+
+        $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, $arrFilter);
         return $arrRow["COUNT(*)"];
     }
 
@@ -196,12 +211,18 @@ class class_module_user_group extends class_model implements interface_model, in
         return $this->objSourceGroup->getNumberOfMembers();
     }
 
+
+    public function deleteObject() {
+        return $this->deleteObjectFromDatabase();
+    }
+
+
     /**
      * Deletes the given group
      *
      * @return bool
      */
-    public function deleteObject() {
+    public function deleteObjectFromDatabase() {
         class_logger::getInstance(class_logger::USERSOURCES)->addLogRow("deleted group with id ".$this->getSystemid(). " (".$this->getStrName().")", class_logger::$levelWarning);
 
         //Delete related group
@@ -209,8 +230,6 @@ class class_module_user_group extends class_model implements interface_model, in
 
         $strQuery = "DELETE FROM "._dbprefix_."user_group WHERE group_id=?";
         $bitReturn = $this->objDB->_pQuery($strQuery, array($this->getSystemid()));
-        //TODO: remove legacy call
-        class_core_eventdispatcher::notifyRecordDeletedListeners($this->getSystemid(), get_class($this));
         class_core_eventdispatcher::getInstance()->notifyGenericListeners(class_system_eventidentifier::EVENT_SYSTEM_RECORDDELETED, array($this->getSystemid(), get_class($this)));
         return $bitReturn;
     }

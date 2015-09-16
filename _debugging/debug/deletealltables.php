@@ -22,7 +22,7 @@ if(issetPost("dodelete")) {
     if($objUsersource->authenticateUser($strUsername, $strPassword)) {
         echo " ... authenticated.\n";
         $arrGroupIds = $objUser->getArrGroupIds();
-        if(in_array(_admins_group_id_, $arrGroupIds)) {
+        if(in_array(class_module_system_setting::getConfigValue("_admins_group_id_"), $arrGroupIds)) {
             echo "User is member of admin-group.\n";
 
             $arrTables = class_carrier::getInstance()->getObjDB()->getTables();

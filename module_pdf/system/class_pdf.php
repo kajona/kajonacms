@@ -60,6 +60,8 @@ class class_pdf {
 
         $this->setHeader(new class_pdf_header());
         $this->setFooter(new class_pdf_footer());
+
+        mb_internal_encoding('UTF-8');
     }
 
     /**
@@ -347,7 +349,9 @@ class class_pdf {
      * @return void
      */
     public function sendPdfToBrowser($strFilename = "kajonaPdf.pdf") {
+        mb_internal_encoding('ASCII');
         $this->objPdf->Output($strFilename, 'I');
+        mb_internal_encoding('UTF-8');
         die();
     }
 
@@ -358,7 +362,9 @@ class class_pdf {
      * @return void
      */
     public function savePdf($strFilename) {
+        mb_internal_encoding('ASCII');
         $this->objPdf->Output(_realpath_.$strFilename, "F");
+        mb_internal_encoding('UTF-8');
     }
 
     /**

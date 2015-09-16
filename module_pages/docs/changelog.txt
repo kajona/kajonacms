@@ -1,11 +1,17 @@
 Module Pages
 
+V4.7.1 --------------------------------------------------------------------------------------------------
+BUG: module_pages | formentry_template -> if only one template is available, the first entry is pre-selected by default. fixes #66.
+
+V4.7 --------------------------------------------------------------------------------------------------
+NEW: module_pages | pages_content -> A table of contents is rendered when editing a page. this provides a better overview for templates with many placeholders.
+BUG: module_pages | formentry_template -> if only one template is available, the first entry is pre-selected by default.
+
 V4.6.2 --------------------------------------------------------------------------------------------------
 BUG: module_pages | image element -> saving the element could fail in some combinations with special mysql versions
 
 V4.6.1 --------------------------------------------------------------------------------------------------
 BUG: module_pages | portaleditor -> the portal-edtor missed to include a custom ckeditor config
-
 
 V4.6 ----------------------------------------------------------------------------------------------------
 NEW: module_pages | pages_folderview -> choosing a page from the pages-dialog is now faster by using a autocomplete quickselect in addition to the tree [ticket #934]
@@ -26,12 +32,10 @@ BUG: module_pages | pages_portal -> portal crashes when there's no master-page #
 BUG: module_pages | lastmodified widget -> removed erroneous, non-clickable rows
 BUG: module_pages | pages_admin -> the delete-button missed to check for locks of the record
 
-
 V4.4 ----------------------------------------------------------------------------------------------------
 NEW: the wysiwyg adds <br/> on enter
 NEW: in textarea mode, the <br /> tags entered are removed before saving them to the backend. #777
 BUG: copying a page-element lost some properties for annotation based properties
-
 
 V4.3 ----------------------------------------------------------------------------------------------------
 NEW: updated elements to make use of new annotation based element-form generation
@@ -47,8 +51,6 @@ BUG: changed placeholder-column of elements to text instead of 254, avoiding pro
 BUG: the pe-outline was rendered in case the PE was enabled, but deactivated for the session
 BUG: when creating a new page, the template-dropdown was disabled in some scenarios
 BUG: the create-page button was rendered even if the parent-node missed edit-permissions. this caused an permission-exception on the following page when creating the page-form
-
-
 
 V4.2 ----------------------------------------------------------------------------------------------------
 NEW: the portaleditor is now capable of three modes: #wysiwyg, full editor, #textarea: limited editor with linebreaks and #plain, limited editor without linebreaks. Use this options to control an elements portal-editor appereance in the element-template. #801

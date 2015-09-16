@@ -656,7 +656,7 @@ class class_module_mediamanager_portal extends class_portal_controller implement
 
         $objRepo = new class_module_mediamanager_repo($this->arrElementData["repo_id"]);
         $objPoint = new class_module_navigation_point();
-        $objPoint->setIntRecordStatus(1, false);
+        $objPoint->setIntRecordStatus(1);
         $objPoint->setStrName($objRepo->getStrTitle());
         $objPoint->setStrPageI($this->getPagename());
         $objPoint->setSystemid($objRepo->getSystemid());
@@ -683,7 +683,7 @@ class class_module_mediamanager_portal extends class_portal_controller implement
         $arrReturn = array();
         foreach($arrFoldersDB as $objOneFolder) {
             $objPoint = new class_module_navigation_point();
-            $objPoint->setIntRecordStatus(1, false);
+            $objPoint->setIntRecordStatus(1);
             $objPoint->setStrName($objOneFolder->getStrName());
             $objPoint->setStrPageI($this->getPagename());
             $objPoint->setSystemid($objOneFolder->getSystemid());

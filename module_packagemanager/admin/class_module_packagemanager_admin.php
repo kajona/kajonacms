@@ -97,11 +97,13 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
                 class_link::getLinkAdminDialog($this->getArrModule("modul"), "showInfo", "&package=".$objOneMetadata->getStrTitle(), $this->getLang("package_info"), $this->getLang("package_info"), "icon_lens", $objOneMetadata->getStrTitle())
             );
 
-            if($objHandler->isRemovable($objOneMetadata)) {
-                $strActions .= $this->objToolkit->listDeleteButton($objOneMetadata->getStrTitle(), $this->getLang("package_delete_question"), class_link::getLinkAdminHref($this->getArrModule("modul"), "deletePackage", "&package=".$objOneMetadata->getStrTitle()));
-            }
-            else {
-                $strActions .= $this->objToolkit->listButton(class_adminskin_helper::getAdminImage("icon_deleteLocked", $this->getLang("package_delete_locked")));
+            if($this->getObjModule()->rightDelete()) {
+                if($objHandler->isRemovable($objOneMetadata)) {
+                    $strActions .= $this->objToolkit->listDeleteButton($objOneMetadata->getStrTitle(), $this->getLang("package_delete_question"), class_link::getLinkAdminHref($this->getArrModule("modul"), "deletePackage", "&package=".$objOneMetadata->getStrTitle()));
+                }
+                else {
+                    $strActions .= $this->objToolkit->listButton(class_adminskin_helper::getAdminImage("icon_deleteLocked", $this->getLang("package_delete_locked")));
+                }
             }
 
 
@@ -655,13 +657,15 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
 
 
     /**
-     * @param class_model $objListEntry
+     * @param class_model
+     * @param string $strAltActive tooltip text for the icon if record is active
+     * @param string $strAltInactive tooltip text for the icon if record is inactive
      *
      * @return string
      */
-    protected function renderStatusAction(class_model $objListEntry) {
+    protected function renderStatusAction(class_model $objListEntry, $strAltActive = "", $strAltInactive = "") {
         if($objListEntry->rightEdit()) {
-            if(_packagemanager_defaulttemplate_ == $objListEntry->getStrName()) {
+            if(class_module_system_setting::getConfigValue("_packagemanager_defaulttemplate_") == $objListEntry->getStrName()) {
                 return $this->objToolkit->listButton(class_adminskin_helper::getAdminImage("icon_enabled", $this->getLang("pack_active_no_status")));
             }
             else
@@ -678,8 +682,8 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
      * @return string
      */
     protected function renderDeleteAction(interface_model $objListEntry) {
-        if($objListEntry->rightDelete()) {
-            if(_packagemanager_defaulttemplate_ == $objListEntry->getStrName()) {
+        if($objListEntry->rightDelete() && $this->getObjModule()->rightDelete()) {
+            if(class_module_system_setting::getConfigValue("_packagemanager_defaulttemplate_") == $objListEntry->getStrName()) {
                 return $this->objToolkit->listButton(class_adminskin_helper::getAdminImage("icon_deleteDisabled", $this->getLang("pack_active_no_delete")));
             }
             else

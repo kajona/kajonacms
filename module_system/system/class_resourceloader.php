@@ -136,9 +136,10 @@ class class_resourceloader {
 
         $strFilename = null;
         //first try: load the file in the current template-pack
-        if(is_file(_realpath_._templatepath_."/"._packagemanager_defaulttemplate_."/tpl".$strTemplateName)) {
-            $this->arrTemplates[$strTemplateName] = _templatepath_."/"._packagemanager_defaulttemplate_."/tpl".$strTemplateName;
-            return _templatepath_."/"._packagemanager_defaulttemplate_."/tpl".$strTemplateName;
+        $strDefaultTemplate = class_module_system_setting::getConfigValue("_packagemanager_defaulttemplate_");
+        if(is_file(_realpath_._templatepath_."/".$strDefaultTemplate."/tpl".$strTemplateName)) {
+            $this->arrTemplates[$strTemplateName] = _templatepath_."/".$strDefaultTemplate."/tpl".$strTemplateName;
+            return _templatepath_."/".$strDefaultTemplate."/tpl".$strTemplateName;
         }
 
         //second try: load the file from the default-pack
@@ -181,8 +182,8 @@ class class_resourceloader {
         $arrReturn = array();
 
         //first try: load the file in the current template-pack
-        if(is_dir(_realpath_._templatepath_."/"._packagemanager_defaulttemplate_."/tpl".$strFolder)) {
-            $arrFiles = scandir(_realpath_._templatepath_."/"._packagemanager_defaulttemplate_."/tpl".$strFolder);
+        if(is_dir(_realpath_._templatepath_."/".class_module_system_setting::getConfigValue("_packagemanager_defaulttemplate_")."/tpl".$strFolder)) {
+            $arrFiles = scandir(_realpath_._templatepath_."/".class_module_system_setting::getConfigValue("_packagemanager_defaulttemplate_")."/tpl".$strFolder);
             foreach($arrFiles as $strOneFile)
                 if(substr($strOneFile, -4) == ".tpl")
                     $arrReturn[] = $strOneFile;
@@ -267,25 +268,27 @@ class class_resourceloader {
     /**
      * Loads all files in a passed folder, as usual relative to the core whereas the single module-folders may be skipped.
      * The array returned is based on [path_to_file] = [filename] where the key is relative to the project-root.
-     *
      * If you want to filter the list of files being returned, pass a callback/closure as the 4th argument. The callback is used
-     * as defined in array_filter
+     * as defined in array_filter.
+     * If you want to apply a custom function on each (filtered) element, use the 5th param to pass a closure. The callback is passed to array_walk,
+     * so the same conventions should be applied,
      *
      * @param string $strFolder
      * @param array $arrExtensionFilter
      * @param bool $bitWithSubfolders includes folders into the return set, otherwise only files will be returned
      * @param callable $objFilterFunction
+     * @param callable $objWalkFunction
      *
-     * @return array (path => filename)
-     *
-     * @see array_filter
+     * @return array
+     * @see http://php.net/manual/de/function.array-filter.php
+     * @see http://php.net/manual/de/function.array-walk.php
      */
-    public function getFolderContent($strFolder, $arrExtensionFilter = array(), $bitWithSubfolders = false, $objFilterFunction = null) {
+    public function getFolderContent($strFolder, $arrExtensionFilter = array(), $bitWithSubfolders = false, Closure $objFilterFunction = null, Closure $objWalkFunction = null) {
         $arrReturn = array();
         $strCachename = md5($strFolder.implode(",", $arrExtensionFilter).($bitWithSubfolders ? "sub" : "nosub"));
 
         if(isset($this->arrFoldercontent[$strCachename])) {
-            return $this->applyCallback($this->arrFoldercontent[$strCachename], $objFilterFunction);
+            return $this->applyCallbacks($this->arrFoldercontent[$strCachename], $objFilterFunction, $objWalkFunction);
         }
 
         $this->bitCacheSaveRequired = true;
@@ -348,25 +351,33 @@ class class_resourceloader {
 
 
         $this->arrFoldercontent[$strCachename] = $arrReturn;
-        return $this->applyCallback($arrReturn, $objFilterFunction);
+        return $this->applyCallbacks($arrReturn, $objFilterFunction, $objWalkFunction);
     }
 
     /**
-     * Internal helper to apply the passed callback as an array_walk callback to the list of matching files
+     * Internal helper to apply the passed callback as an array_filter callback to the list of matching files
+     *
      * @param string[] $arrEntries
-     * @param callable $objCallback
+     * @param callable $objFilterCallback
+     * @param callable $objWalkCallback
      *
      * @return array
      */
-    private function applyCallback($arrEntries, $objCallback = null) {
-        if($objCallback == null || !is_callable($objCallback))
+    private function applyCallbacks($arrEntries, Closure $objFilterCallback = null, Closure $objWalkCallback = null) {
+        if($objFilterCallback == null || !is_callable($objFilterCallback))
             return $arrEntries;
 
         $arrTemp = array();
         foreach($arrEntries as $strKey => $strValue)
             $arrTemp[$strKey] = $strValue;
 
-        return array_filter($arrTemp, $objCallback);
+        if($objFilterCallback !== null)
+            $arrTemp =  array_filter($arrTemp, $objFilterCallback);
+
+        if($objWalkCallback !== null)
+            array_walk($arrTemp, $objWalkCallback);
+
+        return $arrTemp;
     }
 
     /**

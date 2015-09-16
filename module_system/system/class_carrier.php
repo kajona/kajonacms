@@ -13,7 +13,8 @@
  * @package module_system
  * @author sidler@mulchprod.de
  */
-class class_carrier {
+class class_carrier
+{
 
     const INT_CACHE_TYPE_DBQUERIES = 2;
     const INT_CACHE_TYPE_DBSTATEMENTS = 4;
@@ -52,9 +53,9 @@ class class_carrier {
     /**
      * Constructor for class_carrier, doing nothing important,
      * but being private ;), so use getInstance() instead
-
      */
-    private function __construct() {
+    private function __construct()
+    {
     }
 
     /**
@@ -62,16 +63,17 @@ class class_carrier {
      *
      * @return class_carrier
      */
-    public static function getInstance() {
+    public static function getInstance()
+    {
 
-        if(self::$objCarrier == null) {
+        if (self::$objCarrier == null) {
             self::$objCarrier = new class_carrier();
-            $objConfig = self::$objCarrier->getObjConfig();
-            $objDB = self::$objCarrier->getObjDB();
+//            $objConfig = self::$objCarrier->getObjConfig();
+//            $objDB = self::$objCarrier->getObjDB();
             //so, lets init the constants
-            if(!defined("_block_config_db_loading_")) {
-                $objConfig->loadConfigsDatabase($objDB);
-            }
+//            if(!defined("_block_config_db_loading_")) {
+//                $objConfig->loadConfigsDatabase($objDB);
+//            }
             //and init the internal session
             //SIR 2010/03: deactivated session startup right here.
             //The session-start is handled by class_session internally to avoid
@@ -91,9 +93,10 @@ class class_carrier {
      *
      * @return class_db
      */
-    public function getObjDB() {
+    public function getObjDB()
+    {
         //Do we have to generate the object?
-        if($this->objDB == null) {
+        if ($this->objDB == null) {
             $this->objDB = class_db::getInstance();
             //Now we have to set up the database connection
             //SIR 2010/03: connection is established on request, lazy loading
@@ -109,9 +112,10 @@ class class_carrier {
      *
      * @return class_rights
      */
-    public function getObjRights() {
+    public function getObjRights()
+    {
         //Do we have to generate the object?
-        if($this->objRights == null) {
+        if ($this->objRights == null) {
             $this->objRights = class_rights::getInstance();
         }
         return $this->objRights;
@@ -123,9 +127,10 @@ class class_carrier {
      *
      * @return class_config
      */
-    public function getObjConfig() {
+    public function getObjConfig()
+    {
         //Do we have to generate the object?
-        if($this->objConfig == null) {
+        if ($this->objConfig == null) {
             $this->objConfig = class_config::getInstance();
 
             //Loading the config-Files
@@ -141,9 +146,10 @@ class class_carrier {
      *
      * @return class_session
      */
-    public function getObjSession() {
+    public function getObjSession()
+    {
         //Do we have to generate the object?
-        if($this->objSession == null) {
+        if ($this->objSession == null) {
             $this->objSession = class_session::getInstance();
         }
         return $this->objSession;
@@ -156,9 +162,10 @@ class class_carrier {
      *
      * @return class_template
      */
-    public function getObjTemplate() {
+    public function getObjTemplate()
+    {
         //Do we have to generate the object?
-        if($this->objTemplate == null) {
+        if ($this->objTemplate == null) {
             $this->objTemplate = class_template::getInstance();
         }
         return $this->objTemplate;
@@ -170,9 +177,10 @@ class class_carrier {
      *
      * @return class_lang
      */
-    public function getObjLang() {
+    public function getObjLang()
+    {
         //Do we have to generate the object?
-        if($this->objLang == null) {
+        if ($this->objLang == null) {
             $this->objLang = class_lang::getInstance();
         }
         return $this->objLang;
@@ -187,14 +195,15 @@ class class_carrier {
      *
      * @return class_toolkit_admin|class_toolkit_portal
      */
-    public function getObjToolkit($strArea) {
+    public function getObjToolkit($strArea)
+    {
         //Do we have to generate the object?
-        if($strArea == "admin") {
+        if ($strArea == "admin") {
             //Get the object
-            if($this->objToolkitAdmin == null) {
+            if ($this->objToolkitAdmin == null) {
                 //decide which class to load
                 $strAdminToolkitClass = $this->getObjConfig()->getConfig("admintoolkit");
-                if($strAdminToolkitClass == "") {
+                if ($strAdminToolkitClass == "") {
                     $strAdminToolkitClass = "class_toolkit_admin";
                 }
 
@@ -204,8 +213,8 @@ class class_carrier {
             }
             return $this->objToolkitAdmin;
         }
-        elseif($strArea == "portal") {
-            if($this->objToolkitPortal == null) {
+        elseif ($strArea == "portal") {
+            if ($this->objToolkitPortal == null) {
                 $strPath = class_resourceloader::getInstance()->getPathForFile("/portal/class_toolkit_portal.php");
                 include_once _realpath_.$strPath;
                 $this->objToolkitPortal = new class_toolkit_portal();
@@ -221,7 +230,8 @@ class class_carrier {
      *
      * @return array
      */
-    public static function getAllParams() {
+    public static function getAllParams()
+    {
         self::initParamsArray();
         return self::$arrParams;
     }
@@ -234,7 +244,8 @@ class class_carrier {
      *
      * @return void
      */
-    public function setParam($strKey, $strValue) {
+    public function setParam($strKey, $strValue)
+    {
         self::initParamsArray();
         self::$arrParams[$strKey] = $strValue;
     }
@@ -246,9 +257,23 @@ class class_carrier {
      *
      * @return mixed
      */
-    public function getParam($strKey) {
+    public function getParam($strKey)
+    {
         self::initParamsArray();
         return (isset(self::$arrParams[$strKey]) ? self::$arrParams[$strKey] : "");
+    }
+
+    /**
+     * Returns the value of a param sent with the current request.
+     *
+     * @param string $strKey
+     *
+     * @return bool
+     */
+    public function issetParam($strKey)
+    {
+        self::initParamsArray();
+        return isset(self::$arrParams[$strKey]);
     }
 
     /**
@@ -257,8 +282,9 @@ class class_carrier {
      * @static
      * @return void
      */
-    private static function initParamsArray() {
-        if(self::$arrParams === null) {
+    private static function initParamsArray()
+    {
+        if (self::$arrParams === null) {
             self::$arrParams = array_merge(getArrayGet(), getArrayPost(), getArrayFiles());
         }
     }
@@ -268,41 +294,42 @@ class class_carrier {
      *
      * @param int $intCacheType A bitmask of caches to be flushed, e.g. class_carrier::INT_CACHE_TYPE_DBQUERIES | class_carrier::INT_CACHE_TYPE_ORMCACHE
      */
-    public function flushCache($intCacheType = 0) {
+    public function flushCache($intCacheType = 0)
+    {
 
-        if($intCacheType & self::INT_CACHE_TYPE_DBQUERIES) {
+        if ($intCacheType & self::INT_CACHE_TYPE_DBQUERIES) {
             $this->getObjDB()->flushQueryCache();
         }
 
-        if($intCacheType & self::INT_CACHE_TYPE_DBSTATEMENTS) {
+        if ($intCacheType & self::INT_CACHE_TYPE_DBSTATEMENTS) {
             $this->getObjDB()->flushPreparedStatementsCache();
         }
 
-        if($intCacheType & self::INT_CACHE_TYPE_DBTABLES) {
+        if ($intCacheType & self::INT_CACHE_TYPE_DBTABLES) {
             $this->getObjDB()->flushTablesCache();
         }
 
-        if($intCacheType & self::INT_CACHE_TYPE_ORMCACHE) {
+        if ($intCacheType & self::INT_CACHE_TYPE_ORMCACHE) {
             class_orm_rowcache::flushCache();
         }
 
-        if($intCacheType & self::INT_CACHE_TYPE_OBJECTFACTORY) {
+        if ($intCacheType & self::INT_CACHE_TYPE_OBJECTFACTORY) {
             class_objectfactory::getInstance()->flushCache();
         }
 
-        if($intCacheType & self::INT_CACHE_TYPE_MODULES) {
+        if ($intCacheType & self::INT_CACHE_TYPE_MODULES) {
             class_module_system_module::flushCache();
         }
 
-        if($intCacheType & self::INT_CACHE_TYPE_CLASSLOADER) {
+        if ($intCacheType & self::INT_CACHE_TYPE_CLASSLOADER) {
             class_classloader::getInstance()->flushCache();
         }
 
-        if($intCacheType & self::INT_CACHE_TYPE_APC) {
+        if ($intCacheType & self::INT_CACHE_TYPE_APC) {
             class_apc_cache::getInstance()->flushCache();
         }
 
-        if($intCacheType & self::INT_CACHE_TYPE_CHANGELOG) {
+        if ($intCacheType & self::INT_CACHE_TYPE_CHANGELOG) {
             $objChangelog = new class_module_system_changelog();
             $objChangelog->processCachedInserts();
         }

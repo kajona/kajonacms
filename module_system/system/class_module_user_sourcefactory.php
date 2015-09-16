@@ -89,7 +89,7 @@ class class_module_user_sourcefactory {
 
         //validate if a group with the given name is available
 
-        if(version_compare(class_module_system_module::getModuleByName("user")->getStrVersion(), "4.5", ">="))
+        if(class_module_system_module::getModuleByName("user") != null && version_compare(class_module_system_module::getModuleByName("user")->getStrVersion(), "4.5", ">="))
             $strQuery = "SELECT user_id FROM " . _dbprefix_ . "user where user_username = ? AND (user_deleted = 0 OR user_deleted IS NULL)";
         else
             $strQuery = "SELECT user_id FROM " . _dbprefix_ . "user where user_username = ?";
@@ -103,8 +103,9 @@ class class_module_user_sourcefactory {
         //since some login-provides may trigger additional searches, query them now
         foreach($this->arrSubsystemsAvailable as $strOneSubsystem) {
             $objUser = $this->getUsersource($strOneSubsystem)->getUserByUsername($strName);
+            //convert the user to a real one
             if($objUser != null) {
-                return $objUser;
+                return new class_module_user_user($objUser->getSystemid());
             }
         }
 
@@ -118,7 +119,6 @@ class class_module_user_sourcefactory {
      *
      * @param string $strParam
      *
-     * @internal param string $strQuery
      * @return class_module_user_user
      */
     public function getUserlistByUserquery($strParam) {

@@ -39,18 +39,6 @@ class class_installer_element_flash extends class_elementinstaller_base implemen
     public function update() {
         $strReturn = "";
 
-        if(class_module_pages_element::getElement("flash")->getStrVersion() == "3.4.2") {
-            $strReturn .= "Updating element flash to 3.4.9...\n";
-            $this->updateElementVersion("flash", "3.4.9");
-            $this->objDB->flushQueryCache();
-        }
-
-        if(class_module_pages_element::getElement("flash")->getStrVersion() == "3.4.9") {
-            $strReturn .= "Updating element flash to 4.0...\n";
-            $this->updateElementVersion("flash", "4.0");
-            $this->objDB->flushQueryCache();
-        }
-
         if(class_module_pages_element::getElement("flash")->getStrVersion() == "4.0") {
             $strReturn .= "Updating element flash to 4.1...\n";
             $this->updateElementVersion("flash", "4.1");
@@ -84,6 +72,12 @@ class class_installer_element_flash extends class_elementinstaller_base implemen
         if(class_module_pages_element::getElement("flash")->getStrVersion() == "4.5") {
             $strReturn .= "Updating element flash to 4.6...\n";
             $this->updateElementVersion("flash", "4.6");
+            $this->objDB->flushQueryCache();
+        }
+
+        if(class_module_pages_element::getElement("flash")->getStrVersion() == "4.6") {
+            $strReturn .= "Updating element flash to 4.7...\n";
+            $this->updateElementVersion("flash", "4.7");
             $this->objDB->flushQueryCache();
         }
 

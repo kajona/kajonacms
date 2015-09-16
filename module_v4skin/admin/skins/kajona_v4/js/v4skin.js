@@ -101,7 +101,7 @@ $(function () {
     });
 
     //register desktop notifications for messaging
-    KAJONA.util.desktopNotification.grantPermissions();
+    //KAJONA.util.desktopNotification.grantPermissions();
 
     //init offacnvas menu
     $('[data-toggle="offcanvas"]').click(function () {
@@ -127,7 +127,7 @@ KAJONA.v4skin = {
 
         this.minLength = 2;
 
-        this.delay = KAJONA.util.isTouchDevice() ? 500 : 0;
+        this.delay = 500;
 
         this.messages = {
             noResults: '',
@@ -184,11 +184,11 @@ KAJONA.v4skin = {
                         var strTitle = document.title.replace("(" + oldCount + ")", "");
                         document.title = "(" + objResponse.messageCount + ") " + strTitle;
 
-                        if (!KAJONA.v4skin.messaging.bitFirstLoad && oldCount < objResponse.messageCount) {
-                            KAJONA.util.desktopNotification.showMessage(KAJONA.v4skin.properties.messaging.notification_title, KAJONA.v4skin.properties.messaging.notification_body, function () {
-                                document.location.href = KAJONA_WEBPATH+'/index.php?admin=1&module=messaging';
-                            });
-                        }
+                        //if (!KAJONA.v4skin.messaging.bitFirstLoad && oldCount < objResponse.messageCount) {
+                        //    KAJONA.util.desktopNotification.showMessage(KAJONA.v4skin.properties.messaging.notification_title, KAJONA.v4skin.properties.messaging.notification_body, function () {
+                        //        document.location.href = KAJONA_WEBPATH+'/index.php?admin=1&module=messaging';
+                        //    });
+                        //}
                     }
 
                 } else {
@@ -265,3 +265,157 @@ KAJONA.v4skin.initTagMenu = function() {
     });
 };
 
+/**
+ * Removes an object list row from the list
+ *
+ * @param el
+ */
+KAJONA.v4skin.removeObjectListItem = function(el){
+    // remove all active tooltips
+    KAJONA.admin.tooltip.removeTooltip(el);
+
+    // remove element
+    $(el).parent().parent().fadeOut(0, function(){
+        $(this).remove();
+    });
+};
+
+/**
+ * Gets all items containd in the object list
+ *
+ * @param strElementName
+ * @returns {Array}
+ */
+KAJONA.v4skin.getObjectListItems = function(strElementName) {
+    var table = KAJONA.util.getElementFromOpener(strElementName);
+
+    var arrItems = [];
+
+    var tbody = table.find('tbody');
+    if(tbody.length > 0) {
+        // remove only elements which are in the arrAvailableIds array
+        tbody.children().each(function(){
+            var strId = $(this).find('input[type="hidden"]').val();
+            arrItems.push(strId);
+        });
+    }
+
+    return arrItems;
+};
+
+/**
+ * Sets an array of items to an object list. We remove only elements which are available in the arrAvailableIds array
+ *
+ * @param strElementName  - name of the objectlist element
+ * @param arrItems        - array with item of the following format {strSystemId: <systemid>, strDisplayName:<displayname>, strIcon:<icon>}
+ * @param arrAvailableIds -
+ */
+KAJONA.v4skin.setObjectListItems = function(strElementName, arrItems, arrAvailableIds, strDeleteButton){
+    var table = KAJONA.util.getElementFromOpener(strElementName);
+
+    var tbody = table.find('tbody');
+    if(tbody.length > 0) {
+        // remove only elements which are in the arrAvailableIds array
+        tbody.children().each(function(){
+            var strId = $(this).find('input[type="hidden"]').val();
+            if($.inArray(strId, arrAvailableIds) !== -1) {//if strId in array
+                $(this).remove();
+            }
+        });
+
+        // add new elements
+        for(var i = 0; i < arrItems.length; i++) {
+            var strEscapedTitle = $('<div></div>').text(arrItems[i].strDisplayName).html();
+            var html = '';
+            html+= '<tr>';
+            html+= '    <td>' + arrItems[i].strIcon + '</td>';
+            html+= '    <td>' + strEscapedTitle + ' <input type="hidden" name="' + strElementName + '[]" value="' + arrItems[i].strSystemId + '" /></td>';
+            html+= '    <td class="icon-cell">';
+            html+= '        <a href="#" onclick="KAJONA.v4skin.removeObjectListItem(this);return false">' + strDeleteButton + '</a>';
+            html+= '    </td>';
+            html+= '</tr>';
+
+            tbody.append(html);
+        }
+    }
+};
+
+/**
+ * We get the current tree selection from the iframe element and set the selection in the object list
+ *
+ * @param objIframeEl
+ * @param strElementName
+ */
+KAJONA.v4skin.updateCheckboxTreeSelection = function(objIframeEl, strElementName, strDeleteButton){
+    if(objIframeEl && objIframeEl.contentWindow) {
+        var jstree = objIframeEl.contentWindow.$('.jstree');
+        if(jstree.length > 0) {
+            // we modify only the ids which are visible for the user all other ids stay untouched
+            var arrAvailableIds = [];
+            jstree.find('li').each(function(){
+                arrAvailableIds.push($(this).attr('systemid'));
+            });
+
+            var arrEls = jstree.jstree('get_checked');
+            var arrItems = [];
+            for(var i = 0; i < arrEls.length; i++) {
+                var el = $(arrEls[i]);
+                var strSystemId = el.attr('id');
+                var strDisplayName = el.text().trim();
+                var strIcon = el.find('[rel="tooltip"]').html();
+
+                arrItems.push({
+                    strSystemId: strSystemId,
+                    strDisplayName: strDisplayName,
+                    strIcon: strIcon
+                });
+            }
+
+            KAJONA.v4skin.setObjectListItems(strElementName, arrItems, arrAvailableIds, strDeleteButton);
+
+            jsDialog_1.hide();
+        }
+    }
+};
+
+/**
+ * Returns all systemids which are available in the object list. The name of the object list element name must be
+ * available as GET parameter "element_name"
+ *
+ * @returns array
+ */
+KAJONA.v4skin.getCheckboxTreeSelectionFromParent = function(){
+    if($('.jstree').length > 0) {
+        // the query parameter contains the name of the form element where we insert the selected elements
+        var strElementName = KAJONA.v4skin.getQueryParameter("element_name");
+        var table = parent.$('#' + strElementName);
+        var arrSystemIds = [];
+        if(table.length > 0) {
+            table.find('input[type="hidden"]').each(function(){
+                arrSystemIds.push($(this).val());
+            });
+        }
+
+        return arrSystemIds;
+    }
+};
+
+/**
+ * Extracts an query parameter from the location query string
+ *
+ * @param string name
+ * @returns string
+ */
+KAJONA.v4skin.getQueryParameter = function(name) {
+    var pos = location.search.indexOf("&" + name + "=");
+    if(pos != -1) {
+        var endPos = location.search.indexOf("&", pos + 1);
+        if(endPos == -1) {
+            return location.search.substr(pos + name.length + 2);
+        }
+        else {
+            return location.search.substr(pos + name.length + 2, endPos - (pos + name.length + 2));
+        }
+    }
+    return null;
+};

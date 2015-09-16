@@ -22,7 +22,7 @@
  * @module system
  * @moduleId _system_modul_id_
  */
-class class_module_system_changelog extends class_model implements interface_model {
+class class_module_system_changelog {
 
     const ANNOTATION_PROPERTY_VERSIONABLE = "@versionable";
 
@@ -35,6 +35,11 @@ class class_module_system_changelog extends class_model implements interface_mod
     public static $bitChangelogEnabled = null;
 
     private static $arrOldValueCache = array();
+
+    /**
+     * @todo: is the init value cache still required?
+     * @var array
+     */
     private static $arrInitValueCache = array();
     private static $arrCachedProviders = null;
 
@@ -44,23 +49,6 @@ class class_module_system_changelog extends class_model implements interface_mod
     public static $STR_ACTION_EDIT = "actionEdit";
     public static $STR_ACTION_DELETE = "actionDelete";
 
-
-    /**
-     * Returns the name to be used when rendering the current object, e.g. in admin-lists.
-     *
-     * @return string
-     */
-    public function getStrDisplayName() {
-        return "changelog";
-    }
-
-
-    /**
-     * Initialises the current object, if a systemid was given
-     * @return void
-     */
-    protected function initObjectInternal() {
-    }
 
     /**
      * Checks if an objects properties changed.
@@ -107,8 +95,21 @@ class class_module_system_changelog extends class_model implements interface_mod
     }
 
     /**
+     * Sets the passed entry for a concrete objects' property to the set of old values
+     *
+     * @param string $strSystemid
+     * @param $strProperty
+     * @param $strValue
+     */
+    public function setOldValueForSystemidAndProperty($strSystemid, $strProperty, $strValue) {
+        if(!isset(self::$arrOldValueCache[$strSystemid]))
+            self::$arrOldValueCache[$strSystemid] = array();
+
+        self::$arrOldValueCache[$strSystemid][$strProperty] = $strValue;
+    }
+
+    /**
      * Scans the passed object and tries to find all properties marked with the annotation @versionable.
-     * Updates the internal "oldvalues" cache.
      * @param interface_versionable|class_model $objCurrentObject
      *
      * @return array|null
@@ -118,7 +119,7 @@ class class_module_system_changelog extends class_model implements interface_mod
             return null;
 
         if(validateSystemid($objCurrentObject->getSystemid())) {
-            $arrOldValues = array();
+            $arrCurrentValues = array();
 
             $objReflection = new class_reflection($objCurrentObject);
             $arrProperties = $objReflection->getPropertiesWithAnnotation(self::ANNOTATION_PROPERTY_VERSIONABLE);
@@ -134,10 +135,24 @@ class class_module_system_changelog extends class_model implements interface_mod
                     $strValue = call_user_func(array($objCurrentObject, $strGetter));
                 }
 
-                $arrOldValues[$strProperty] = $strValue;
+                if(is_array($strValue) || $strValue instanceof ArrayAccess) {
+                    $arrNewValues = array();
+                    foreach($strValue as $objOneValue) {
+                        if(is_object($objOneValue)&& $objOneValue instanceof class_root) {
+                            $arrNewValues[] = $objOneValue->getSystemid();
+                        }
+                        else {
+                            $arrNewValues[] = $objOneValue."";
+                        }
+                    }
+                    sort($arrNewValues);
+                    $strValue = implode(",", $arrNewValues);
+                }
+
+                $arrCurrentValues[$strProperty] = $strValue;
             }
 
-            return $arrOldValues;
+            return $arrCurrentValues;
         }
         return null;
     }
@@ -280,10 +295,10 @@ class class_module_system_changelog extends class_model implements interface_mod
         if(self::$bitChangelogEnabled !== null)
             return self::$bitChangelogEnabled;
 
-        if(!defined("_system_changehistory_enabled_") || _system_changehistory_enabled_ == "false") {
-            self::$bitChangelogEnabled = false;
-            return false;
-        }
+//        if(class_module_system_setting::getConfigValue("_system_changehistory_enabled_") != "true") {
+//            self::$bitChangelogEnabled = false;
+//            return false;
+//        }
 
         if(!$objSourceModel instanceof interface_versionable) {
             throw new class_exception("object passed to create changelog not implementing interface_versionable", class_logger::$levelWarning);
@@ -338,7 +353,7 @@ class class_module_system_changelog extends class_model implements interface_mod
                     class_date::getCurrentTimestamp(),
                     $objSourceModel->getSystemid(),
                     $objSourceModel->getPrevid(),
-                    $this->objSession->getUserID(),
+                    class_carrier::getInstance()->getObjSession()->getUserID(),
                     get_class($objSourceModel),
                     $strAction,
                     $strProperty,
@@ -364,7 +379,7 @@ class class_module_system_changelog extends class_model implements interface_mod
         $bitReturn = true;
         foreach(self::$arrInsertCache as $strTable => $arrRows) {
             if(count($arrRows) > 0) {
-                $bitReturn = $this->objDB->multiInsert(
+                $bitReturn = class_carrier::getInstance()->getObjDB()->multiInsert(
                     $strTable,
                     array("change_id", "change_date", "change_systemid", "change_system_previd", "change_user", "change_class", "change_action", "change_property", "change_oldvalue", "change_newvalue"),
                     $arrRows
@@ -404,7 +419,7 @@ class class_module_system_changelog extends class_model implements interface_mod
 
 
             //array may be processed automatically, too
-            if(is_array($strOldvalue) && is_array($strNewvalue)) {
+            if((is_array($strOldvalue) || $strOldvalue instanceof ArrayAccess) && (is_array($strNewvalue) || $strNewvalue instanceof ArrayAccess)) {
 
                 $arrArrayChanges = array();
                 foreach($strNewvalue as $strOneId) {
@@ -461,7 +476,7 @@ class class_module_system_changelog extends class_model implements interface_mod
      *
      * @return class_changelog_container[]
      */
-    public static function getLogEntries($strSystemidFilter = "", $intStart = null, $intEnd = null) {
+    public static function getLogEntries($strSystemidFilter, $intStart = null, $intEnd = null) {
 
         $arrParams = array();
 
@@ -475,13 +490,7 @@ class class_module_system_changelog extends class_model implements interface_mod
 
         }
         else {
-            $strQuery = "SELECT change_date, change_systemid, change_user, change_class, change_action, change_property, change_oldvalue, change_newvalue
-                           FROM "._dbprefix_."changelog";
-
-            foreach(self::getAdditionalTables() as $strOneTable) {
-                $strQuery .= " UNION ALL SELECT change_date, change_systemid, change_user, change_class, change_action, change_property, change_oldvalue, change_newvalue FROM "._dbprefix_.$strOneTable." ";
-            }
-
+            return array();
         }
         $strQuery .= "ORDER BY change_date DESC";
 
@@ -510,7 +519,7 @@ class class_module_system_changelog extends class_model implements interface_mod
      *
      * @return int
      */
-    public static function getLogEntriesCount($strSystemidFilter = "") {
+    public static function getLogEntriesCount($strSystemidFilter) {
 
         $arrParams = array();
 
@@ -524,18 +533,7 @@ class class_module_system_changelog extends class_model implements interface_mod
 
         }
         else {
-
-            $strQuery = "SELECT COUNT(*)
-                FROM (SELECT * FROM "._dbprefix_."changelog";
-
-            if($strSystemidFilter != "")
-                $arrParams[] = $strSystemidFilter;
-
-            foreach(self::getAdditionalTables() as $strOneTable) {
-                $strQuery .= " UNION ALL SELECT * FROM "._dbprefix_.$strOneTable." ";
-            }
-            $strQuery .= " ) as tem";
-
+            return 0;
         }
 
         $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, $arrParams);
@@ -799,27 +797,105 @@ class class_module_system_changelog extends class_model implements interface_mod
     }
 
     /**
-     * Deletes the current object from the system
-     * Overwrite!
+     * Returns the count of an specific class and property for a given date range in the changelog. Counts optional
+     * only the entries which are available in $arrNewValues
      *
-     * @return bool
+     * @param $strClass
+     * @param $strProperty
+     * @param class_date $objDateFrom
+     * @param class_date $objDateTo
+     * @param $arrNewValues
+     * @return int
      */
-    public function deleteObject() {
-        return true;
-    }
+    public static function getCountForDateRange($strClass, $strProperty, class_date $objDateFrom, class_date $objDateTo, array $arrNewValues = null, array $arrAllowedSystemIds = null) {
+        $strQuery = "SELECT COUNT(DISTINCT change_systemid) AS num
+                       FROM "._dbprefix_.self::getTableForClass($strClass)."
+                      WHERE change_class = ?
+                        AND change_property = ?
+                        AND change_date >= ?
+                        AND change_date <= ?";
 
+        $arrParameters = array($strClass, $strProperty);
+        $arrParameters[] = $objDateFrom->getLongTimestamp();
+        $arrParameters[] = $objDateTo->getLongTimestamp();
+
+        if(!empty($arrNewValues)) {
+            if(count($arrNewValues) > 1) {
+                $objRestriction = new class_orm_objectlist_in_restriction("change_newvalue", $arrNewValues);
+                $strQuery.= " " . $objRestriction->getStrWhere();
+                $arrParameters = array_merge($arrParameters, $objRestriction->getArrParams());
+            }
+            else {
+                $strQuery.= " AND change_newvalue = ?";
+                $arrParameters[] = current($arrNewValues);
+            }
+        }
+
+        if($arrAllowedSystemIds !== null) {
+            $objRestriction = new class_orm_objectlist_in_restriction("change_systemid", $arrAllowedSystemIds);
+            $strQuery.= " " . $objRestriction->getStrWhere();
+            $arrParameters = array_merge($arrParameters, $objRestriction->getArrParams());
+        }
+
+        $arrRow = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, $arrParameters, 0, 1);
+        return isset($arrRow[0]["num"]) ? $arrRow[0]["num"] : 0;
+    }
 
     /**
-     * Called whenever a update-request was fired.
-     * Use this method to synchronize yourselves with the database.
-     * Use only updates, inserts are not required to be implemented.
+     * Returns the latest new_value in the date range per systemid
      *
-     * @return bool
+     * @param $strClass
+     * @param $strProperty
+     * @param class_date $objDateFrom
+     * @param class_date $objDateTo
+     * @param array $arrAllowedSystemIds
+     * @return array
      */
-    protected function updateStateToDb() {
-        return true;
-    }
+    public static function getNewValuesForDateRange($strClass, $strProperty, class_date $objDateFrom = null, class_date $objDateTo = null, array $arrAllowedSystemIds) {
+        $arrParams = array($strClass, $strProperty);
 
+        //system id filter
+        $objRestriction = new class_orm_objectlist_in_restriction("log.change_systemid", $arrAllowedSystemIds);
+        $strQueryCondition = $objRestriction->getStrWhere();
+        $arrParams = array_merge($arrParams, $objRestriction->getArrParams());
+
+        //filter by create date from
+        if($objDateFrom != null) {
+            $objRestriction = new class_orm_objectlist_restriction("AND ( log.change_date >= ?  )", array($objDateFrom->getLongTimestamp()));
+            $strQueryCondition .= $objRestriction->getStrWhere()." ";
+            $arrParams[] = $objDateFrom->getLongTimestamp();
+        }
+        //filter by create end to
+        if($objDateTo != null) {
+            $objRestriction = new class_orm_objectlist_restriction("AND ( log.change_date <= ?  )", array($objDateTo->getLongTimestamp()));
+            $strQueryCondition .= $objRestriction->getStrWhere()." ";
+            $arrParams[] = $objDateTo->getLongTimestamp();
+        }
+
+        $strQuery = "  SELECT change_systemid,
+                              change_newvalue
+                         FROM "._dbprefix_.self::getTableForClass($strClass)." log
+                        WHERE log.change_class = ?
+                          AND log.change_property = ?
+                          {$strQueryCondition}
+                     ORDER BY log.change_systemid ASC, log.change_date DESC";
+
+        $arrResult = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, $arrParams);
+        $arrData = array();
+
+        $strLastId = "";
+        foreach($arrResult as $arrRow) {
+            if($strLastId != $arrRow["change_systemid"]) {
+                $arrData[] = array(
+                    "change_systemid" => $arrRow["change_systemid"],
+                    "change_newvalue" => $arrRow["change_newvalue"],
+                );
+            }
+            $strLastId = $arrRow["change_systemid"];
+        }
+
+        return $arrData;
+    }
 
     /**
      * Returns a list of objects implementing the changelog-provider-interface
@@ -830,18 +906,21 @@ class class_module_system_changelog extends class_model implements interface_mod
         if(self::$arrCachedProviders != null)
             return self::$arrCachedProviders;
 
-        $arrReturn = class_resourceloader::getInstance()->getFolderContent("/system", array(".php"), false, function(&$strOneFile) {
+        $arrReturn = class_resourceloader::getInstance()->getFolderContent("/system", array(".php"), false, function($strOneFile) {
             if(uniStrpos($strOneFile, "class_changelog_provider") === false)
                 return false;
 
             $objReflection = new ReflectionClass(uniSubstr($strOneFile, 0, -4));
             if($objReflection->implementsInterface("interface_changelog_provider")) {
-                $strOneFile = $objReflection->newInstance();
                 return true;
             }
 
             return false;
 
+        },
+        function(&$strOneFile) {
+            $objReflection = new ReflectionClass(uniSubstr($strOneFile, 0, -4));
+            $strOneFile = $objReflection->newInstance();
         });
 
         self::$arrCachedProviders = $arrReturn;

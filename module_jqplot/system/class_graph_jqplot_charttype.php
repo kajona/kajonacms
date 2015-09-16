@@ -20,5 +20,6 @@ class class_graph_jqplot_charttype {
     const PIE = 8;
     const STACKEDBAR_HORIZONTAL = 16;
     const BAR_HORIZONTAL = 32;
+    const LINE_Y2AXIS = 32;
 }
 

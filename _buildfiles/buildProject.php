@@ -71,7 +71,7 @@ class BuildHelper {
         file_put_contents(__DIR__."/".$this->strProjectPath."/project/system/config/config.php", $strConfigfile);
 
         echo "starting up system-kernel...\n";
-        include __DIR__."/".$this->strProjectPath."/core/bootstrap.php";
+        include __DIR__."/".$this->strProjectPath."/core/module_system/bootstrap.php";
         $objCarrier = class_carrier::getInstance();
 
         echo "dropping old tables...\n";
@@ -83,7 +83,7 @@ class BuildHelper {
             $objDB->_pQuery("DROP TABLE ".$strOneTable, array());
         }
 
-        class_carrier::getInstance()->flushCache(class_carrier::INT_CACHE_TYPE_DBQUERIES | class_carrier::INT_CACHE_TYPE_DBTABLES | class_carrier::INT_CACHE_TYPE_MODULES);
+        class_carrier::getInstance()->flushCache(class_carrier::INT_CACHE_TYPE_DBQUERIES | class_carrier::INT_CACHE_TYPE_DBTABLES | class_carrier::INT_CACHE_TYPE_MODULES | class_carrier::INT_CACHE_TYPE_OBJECTFACTORY | class_carrier::INT_CACHE_TYPE_ORMCACHE);
 
         echo "\n\n";
         echo "Blocking browscap update\n";

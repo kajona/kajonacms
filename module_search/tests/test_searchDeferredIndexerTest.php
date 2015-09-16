@@ -35,7 +35,7 @@ class class_test_searchDeferredIndexerTest extends class_testbase {
         $this->assertTrue($arrRows[0]["search_queue_systemid"] == $objNews->getSystemid());
 
 
-        class_objectfactory::getInstance()->getObject($strNewsId)->deleteObject();
+        class_objectfactory::getInstance()->getObject($strNewsId)->deleteObjectFromDatabase();
         $objHandler->handleEvent(class_system_eventidentifier::EVENT_SYSTEM_REQUEST_AFTERCONTENTSEND, array());
 
 
@@ -118,7 +118,7 @@ class class_test_searchDeferredIndexerTest extends class_testbase {
         $objConfig->updateObjectToDb();
 
         foreach($arrNewsIds as $strNewsId)
-            class_objectfactory::getInstance()->getObject($strNewsId)->deleteObject();
+            class_objectfactory::getInstance()->getObject($strNewsId)->deleteObjectFromDatabase();
 
     }
 }

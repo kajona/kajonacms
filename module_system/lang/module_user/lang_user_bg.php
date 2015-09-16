@@ -14,8 +14,6 @@
 $lang["_admin_skin_default_"]            = "Начален административен скин";
 $lang["_admins_group_id_"]               = "ID на административната група";
 $lang["_guests_group_id_"]               = "ID на група гости";
-$lang["_user_log_nrofrecords_"]          = "Брой на редове";
-$lang["_user_log_nrofrecords_hint"]      = "Определи колко реда да се показват в дневника за грешки при вписване.";
 $lang["_user_selfedit_"]                 = "Личен профил";
 $lang["_user_selfedit_hint"]             = "Определя дали потребителя може сам да си променя информацията от профила.";
 $lang["action_edit_user"]                = "Редактирай потребител";

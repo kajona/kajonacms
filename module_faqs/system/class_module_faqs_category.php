@@ -76,52 +76,7 @@ class class_module_faqs_category extends class_model implements interface_model,
 
 
     /**
-     * Loads all categories, the given faq is in
-     *
-     * @param string $strSystemid
-     *
-     * @return class_module_faqs_category[]
-     * @static
-     */
-    public static function getFaqsMember($strSystemid) {
-        $strQuery = "SELECT faqsmem_category as system_id FROM " . _dbprefix_ . "faqs_member
-	                   WHERE faqsmem_faq = ? ";
-        $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array($strSystemid));
-        $arrReturn = array();
-        foreach($arrIds as $arrOneId) {
-            $arrReturn[] = new class_module_faqs_category($arrOneId["system_id"]);
-        }
-
-        return $arrReturn;
-    }
-
-
-    /**
-     * Deletes all memberships of the given FAQ
-     *
-     * @param string $strSystemid FAQ-ID
-     *
-     * @return bool
-     */
-    public static function deleteFaqsMemberships($strSystemid) {
-        $strQuery = "DELETE FROM " . _dbprefix_ . "faqs_member
-	                  WHERE faqsmem_faq = ? ";
-        return class_carrier::getInstance()->getObjDB()->_pQuery($strQuery, array($strSystemid));
-    }
-
-    public function deleteObject() {
-
-        //start by deleting from members and cat table
-        $strQuery = "DELETE FROM " . _dbprefix_ . "faqs_member WHERE faqsmem_category = ? ";
-
-        if($this->objDB->_pQuery($strQuery, array($this->getSystemid()))) {
-            return parent::deleteObject();
-        }
-        return false;
-    }
-
-    /**
-     * Return an on-lick link for the passed object.
+     * Return an on-click link for the passed object.
      * This link is rendered by the portal search result generator, so
      * make sure the link is a valid portal page.
      * If you want to suppress the entry from the result, return an empty string instead.
@@ -134,6 +89,8 @@ class class_module_faqs_category extends class_model implements interface_model,
     public function updateSearchResult(class_search_result $objResult) {
         //search for matching pages
         $arrReturn = array();
+
+        $objORM = new class_orm_objectlist();
 
         $strQuery = "SELECT page_name,  page_id
                        FROM " . _dbprefix_ . "element_faqs,
@@ -149,9 +106,9 @@ class class_module_faqs_category extends class_model implements interface_model,
                         )
                         AND system_prev_id = page_id
                         AND system_status = 1
+                        ".$objORM->getDeletedWhereRestriction()."
                         AND page_element_ph_language = ? ";
 
-        $objLanguages = new class_module_languages_language();
         $arrRows = $this->objDB->getPArray($strQuery, array($this->getSystemid(), $objResult->getObjSearch()->getStrPortalLangFilter()));
 
         foreach($arrRows as $arrOnePage) {

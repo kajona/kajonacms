@@ -110,7 +110,19 @@ class class_test_charts_ezcTest extends class_testbase  {
         echo $objGraph->renderGraph();
 
 
-
+        echo "\thorizontal bar chart...\n";
+        $objGraph = new class_graph_ezc();
+        $objGraph->setStrXAxisTitle("x-axis");
+        $objGraph->setStrYAxisTitle("y-axis");
+        $objGraph->setStrGraphTitle("Test Horizontal Bar Chart");
+        $objGraph->setArrXAxisTickLabels(array("v1", "v2", "v3", "v4", "v5", "v6"));
+        $objGraph->addBarChartSet(array(8,5,7,8,4,12), "serie 1");
+        $objGraph->addBarChartSet(array(3,4,-6,2,5,2 ), "serie 2", true);
+        $objGraph->setBarHorizontal(true);
+        $objGraph->setIntXAxisAngle(45);
+        $objGraph->saveGraph(_images_cachepath_."/graph7.png");
+        $this->assertFileExists(_realpath_._images_cachepath_."/graph7.png");
+        echo $objGraph->renderGraph();
     }
 
 

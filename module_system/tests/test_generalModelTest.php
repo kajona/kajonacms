@@ -11,7 +11,7 @@ class class_test_generalModelTest extends class_testbase {
 
         class_carrier::getInstance()->getObjRights()->setBitTestMode(true);
 
-        $arrFiles = class_resourceloader::getInstance()->getFolderContent("/system", array(".php"), false, function(&$strOneFile) {
+        $arrFiles = class_resourceloader::getInstance()->getFolderContent("/system", array(".php"), false, function($strOneFile) {
             if(uniStripos($strOneFile, "class_module_") !== false) {
                 $objClass = new ReflectionClass(uniSubstr($strOneFile, 0, -4));
                 if(!$objClass->isAbstract() && $objClass->isSubclassOf("class_model")) {
@@ -20,16 +20,19 @@ class class_test_generalModelTest extends class_testbase {
 
                     //block from autotesting?
                     if($objAnnotations->hasClassAnnotation("@blockFromAutosave")) {
-                        echo "skipping class ".uniSubstr($strOneFile, 0, -4)." due to @blockFromAutosave annoation"."\n";
+                        echo "skipping class ".uniSubstr($strOneFile, 0, -4)." due to @blockFromAutosave annotation"."\n";
                         return false;
                     }
 
-                    $strOneFile = $objClass->newInstance();
                     return true;
                 }
             }
 
             return false;
+        },
+        function(&$strOneFile) {
+            $strOneFile = uniSubstr($strOneFile, 0, -4);
+            $strOneFile = new $strOneFile();
         });
 
         $arrSystemids = array();
@@ -55,7 +58,7 @@ class class_test_generalModelTest extends class_testbase {
 
 
             echo "deleting ".$strSystemid."@".$strClass."\n";
-            $objInstance->deleteObject();
+            $objInstance->deleteObjectFromDatabase();
         }
 
 

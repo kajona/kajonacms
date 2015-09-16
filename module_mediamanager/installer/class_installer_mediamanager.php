@@ -76,26 +76,6 @@ class class_installer_mediamanager extends class_installer_base implements inter
         $strReturn .= "Version found:\n\t Module: ".$arrModule["module_name"].", Version: ".$arrModule["module_version"]."\n\n";
 
         $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModule["module_version"] == "3.4.9") {
-            $strReturn .= $this->update_349_3491();
-        }
-
-        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModule["module_version"] == "3.4.9.1") {
-            $strReturn .= $this->update_3491_3492();
-        }
-
-        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModule["module_version"] == "3.4.9.2") {
-            $strReturn .= $this->update_3492_3493();
-        }
-
-        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModule["module_version"] == "3.4.9.3") {
-            $strReturn .= $this->update_3493_40();
-        }
-
-        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
         if($arrModule["module_version"] == "4.0") {
             $strReturn .= $this->update_40_41();
         }
@@ -143,65 +123,15 @@ class class_installer_mediamanager extends class_installer_base implements inter
             $this->updateModuleVersion("folderview", "4.6");
         }
 
+        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "4.6") {
+            $strReturn = "Updating to 4.7...\n";
+            $this->updateModuleVersion($this->objMetadata->getStrTitle(), "4.7");
+            $this->updateModuleVersion("folderview", "4.7");
+        }
+
         return $strReturn."\n\n";
 	}
-
-
-    private function update_349_3491() {
-        $strReturn = "Updating 3.4.9 to 3.4.9.1...\n";
-
-        $strReturn .= "Altering element-table...\n";
-
-        $strQuery = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."mediamanager_file")."
-                    ADD ".$this->objDB->encloseColumnName("file_ispackage")." ".$this->objDB->getDatatype("int")." NULL";
-        if(!$this->objDB->_query($strQuery))
-            $strReturn .= "An error occurred! ...\n";
-
-        $strReturn .= "Updating module-versions...\n";
-        $this->updateModuleVersion($this->objMetadata->getStrTitle(), "3.4.9.1");
-        return $strReturn;
-    }
-
-    private function update_3491_3492() {
-        $strReturn = "Updating 3.4.9.1 to 3.4.9.2...\n";
-
-        $strReturn .= "Altering element-table...\n";
-
-        $strQuery = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."mediamanager_file")."
-                    ADD ".$this->objDB->encloseColumnName("file_cat")." ".$this->objDB->getDatatype("int")." NULL,
-                    ADD ".$this->objDB->encloseColumnName("file_screen1")." ".$this->objDB->getDatatype("char254")." NULL,
-                    ADD ".$this->objDB->encloseColumnName("file_screen2")." ".$this->objDB->getDatatype("char254")." NULL,
-                    ADD ".$this->objDB->encloseColumnName("file_screen3")." ".$this->objDB->getDatatype("char254")." NULL";
-        if(!$this->objDB->_query($strQuery))
-            $strReturn .= "An error occurred! ...\n";
-
-        $strReturn .= "Updating module-versions...\n";
-        $this->updateModuleVersion($this->objMetadata->getStrTitle(), "3.4.9.2");
-        return $strReturn;
-    }
-
-
-    private function update_3492_3493() {
-        $strReturn = "Updating 3.4.9.2 to 3.4.9.3...\n";
-
-        $strReturn .= "Altering element-table...\n";
-
-        $strQuery = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."mediamanager_file")."
-                    CHANGE ".$this->objDB->encloseColumnName("file_cat")." ".$this->objDB->encloseColumnName("file_cat")." ".$this->objDB->getDatatype("char254")." NULL";
-        if(!$this->objDB->_query($strQuery))
-            $strReturn .= "An error occurred! ...\n";
-
-        $strReturn .= "Updating module-versions...\n";
-        $this->updateModuleVersion($this->objMetadata->getStrTitle(), "3.4.9.3");
-        return $strReturn;
-    }
-
-    private function update_3493_40() {
-        $strReturn = "Updating 3.4.9.3 to 4.0...\n";
-        $strReturn .= "Updating module-versions...\n";
-        $this->updateModuleVersion($this->objMetadata->getStrTitle(), "4.0");
-        return $strReturn;
-    }
 
     private function update_40_41() {
         $strReturn = "Updating 4.0 to 4.1...\n";

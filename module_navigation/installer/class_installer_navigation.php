@@ -85,11 +85,12 @@ class class_installer_navigation extends class_installer_base implements interfa
      * @return bool
      */
     public function remove(&$strReturn) {
+
         //delete the page-element
         $objElement = class_module_pages_element::getElement("navigation");
         if($objElement != null) {
             $strReturn .= "Deleting page-element 'navigation'...\n";
-            $objElement->deleteObject();
+            $objElement->deleteObjectFromDatabase();
         }
         else {
             $strReturn .= "Error finding page-element 'navigation', aborting.\n";
@@ -99,7 +100,7 @@ class class_installer_navigation extends class_installer_base implements interfa
         /** @var class_module_navigation_tree $objOneObject */
         foreach(class_module_navigation_tree::getObjectList() as $objOneObject) {
             $strReturn .= "Deleting object '".$objOneObject->getStrDisplayName()."' ...\n";
-            if(!$objOneObject->deleteObject()) {
+            if(!$objOneObject->deleteObjectFromDatabase()) {
                 $strReturn .= "Error deleting object, aborting.\n";
                 return false;
             }
@@ -108,7 +109,7 @@ class class_installer_navigation extends class_installer_base implements interfa
         //delete the module-node
         $strReturn .= "Deleting the module-registration...\n";
         $objModule = class_module_system_module::getModuleByName($this->objMetadata->getStrTitle(), true);
-        if(!$objModule->deleteObject()) {
+        if(!$objModule->deleteObjectFromDatabase()) {
             $strReturn .= "Error deleting module, aborting.\n";
             return false;
         }
@@ -133,26 +134,6 @@ class class_installer_navigation extends class_installer_base implements interfa
         $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
 
         $strReturn .= "Version found:\n\t Module: ".$arrModule["module_name"].", Version: ".$arrModule["module_version"]."\n\n";
-
-        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModule["module_version"] == "3.4.2") {
-            $strReturn .= $this->update_342_349();
-        }
-
-        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModule["module_version"] == "3.4.9") {
-            $strReturn .= $this->update_349_3491();
-        }
-
-        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModule["module_version"] == "3.4.9.1") {
-            $strReturn .= $this->update_3491_3492();
-        }
-
-        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModule["module_version"] == "3.4.9.2") {
-            $strReturn .= $this->update_3492_40();
-        }
 
         $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
         if($arrModule["module_version"] == "4.0") {
@@ -198,92 +179,16 @@ class class_installer_navigation extends class_installer_base implements interfa
             $this->updateElementVersion("navigation", "4.6");
         }
 
+        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "4.6") {
+            $strReturn = "Updating to 4.7...\n";
+            $this->updateModuleVersion("navigation", "4.7");
+            $this->updateElementVersion("navigation", "4.7");
+        }
+
         return $strReturn."\n\n";
 	}
 
-
-    private function update_342_349() {
-        $strReturn = "Updating 3.4.2 to 3.4.9...\n";
-
-        $strReturn .= "Adding classes for existing records...\n";
-        $strReturn .= "Trees\n";
-        $arrRows = $this->objDB->getPArray(
-            "SELECT system_id FROM "._dbprefix_."navigation, "._dbprefix_."system WHERE system_id = navigation_id AND system_prev_id = ? AND (system_class IS NULL OR system_class = '')",
-            array(class_module_system_module::getModuleIdByNr(_navigation_modul_id_))
-        );
-        foreach($arrRows as $arrOneRow) {
-            $strQuery = "UPDATE "._dbprefix_."system SET system_class = ? where system_id = ?";
-            $this->objDB->_pQuery($strQuery, array( 'class_module_navigation_tree', $arrOneRow["system_id"] ) );
-        }
-
-        $strReturn .= "Navigation Points\n";
-        $arrRows = $this->objDB->getPArray("SELECT system_id FROM "._dbprefix_."navigation, "._dbprefix_."system WHERE system_id = navigation_id AND (system_class IS NULL OR system_class = '')", array());
-        foreach($arrRows as $arrOneRow) {
-            $strQuery = "UPDATE "._dbprefix_."system SET system_class = ? where system_id = ?";
-            $this->objDB->_pQuery($strQuery, array( 'class_module_navigation_point', $arrOneRow["system_id"] ) );
-        }
-
-        $strReturn .= "Setting aspect assignments...\n";
-        if(class_module_system_aspect::getAspectByName("content") != null) {
-            $objModule = class_module_system_module::getModuleByName($this->objMetadata->getStrTitle());
-            $objModule->setStrAspect(class_module_system_aspect::getAspectByName("content")->getSystemid());
-            $objModule->updateObjectToDb();
-        }
-
-        $strReturn .= "Updating module-versions...\n";
-        $this->updateModuleVersion("navigation", "3.4.9");
-        $strReturn .= "Updating element-versions...\n";
-        $this->updateElementVersion("navigation", "3.4.9");
-
-        return $strReturn;
-    }
-
-    private function update_349_3491() {
-        $strReturn = "Updating 3.4.9 to 3.4.9.1...\n";
-
-        $strReturn .= "Adding foreign-column to navigation element...\n";
-
-        $strQuery = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."element_navigation")."
-                    ADD ".$this->objDB->encloseColumnName("navigation_foreign")." ".$this->objDB->getDatatype("int")." ";
-
-        if(!$this->objDB->_query($strQuery))
-            $strReturn .= "An error occurred! ...\n";
-
-        $strReturn .= "Updating module-versions...\n";
-        $this->updateModuleVersion("navigation", "3.4.9.1");
-        $strReturn .= "Updating element-versions...\n";
-        $this->updateElementVersion("navigation", "3.4.9.1");
-
-        return $strReturn;
-    }
-
-    private function update_3491_3492() {
-        $strReturn = "Updating 3.4.9.1 to 3.4.9.2...\n";
-
-        $strReturn .= "Removing mode column from navigation element...\n";
-
-        $strQuery = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."element_navigation")."
-                    DROP ".$this->objDB->encloseColumnName("navigation_mode")."";
-
-        if(!$this->objDB->_query($strQuery))
-            $strReturn .= "An error occurred! ...\n";
-
-        $strReturn .= "Updating module-versions...\n";
-        $this->updateModuleVersion("navigation", "3.4.9.2");
-        $strReturn .= "Updating element-versions...\n";
-        $this->updateElementVersion("navigation", "3.4.9.2");
-
-        return $strReturn;
-    }
-
-    private function update_3492_40() {
-        $strReturn = "Updating 3.4.9.2 to 4.0...\n";
-        $strReturn .= "Updating module-versions...\n";
-        $this->updateModuleVersion("navigation", "4.0");
-        $strReturn .= "Updating element-versions...\n";
-        $this->updateElementVersion("navigation", "4.0");
-        return $strReturn;
-    }
 
     private function update_40_41() {
         $strReturn = "Updating 4.0 to 4.1...\n";

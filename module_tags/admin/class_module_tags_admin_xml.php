@@ -42,7 +42,7 @@ class class_module_tags_admin_xml extends class_admin_controller implements inte
         if(count(class_module_tags_favorite::getAllFavoritesForUserAndTag($this->objSession->getUserID(), $this->getSystemid())) > 0) {
             $arrFavorites = class_module_tags_favorite::getAllFavoritesForUserAndTag($this->objSession->getUserID(), $this->getSystemid());
             foreach($arrFavorites as $objOneFavorite)
-                $objOneFavorite->deleteObject();
+                $objOneFavorite->deleteObjectFromDatabase();
 
             return $strExisting;
         }
@@ -176,7 +176,9 @@ class class_module_tags_admin_xml extends class_admin_controller implements inte
      * @permissions view
      */
     protected function actionGetFavoriteTags() {
+        class_session::getInstance()->sessionClose();
         class_carrier::getInstance()->getObjSession()->setBitBlockDbUpdate(true);
+        class_module_system_changelog::$bitChangelogEnabled = false;
         $arrReturn = array();
 
         $arrFavorites = class_module_tags_favorite::getAllFavoritesForUser(class_carrier::getInstance()->getObjSession()->getUserID(), 0, 10);

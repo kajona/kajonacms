@@ -97,9 +97,10 @@ class class_stats_report_topqueries implements interface_admin_statsreports {
         }
 
         $intI = 0;
+        $objUser = new class_module_user_user(class_session::getInstance()->getUserID());
         foreach($arrStats as $strKey => $intHits) {
             //Escape?
-            if($intI >= _stats_nrofrecords_) {
+            if($intI >= $objUser->getIntItemsPerPage()) {
                 break;
             }
             $arrValues[$intI] = array();
@@ -127,7 +128,7 @@ class class_stats_report_topqueries implements interface_admin_statsreports {
      */
     public function getTopQueries() {
         //Load all records in the passed interval
-        $arrBlocked = explode(",", _stats_exclusionlist_);
+        $arrBlocked = explode(",", class_module_system_setting::getConfigValue("_stats_exclusionlist_"));
 
         $arrParams = array($this->intDateStart, $this->intDateEnd);
 

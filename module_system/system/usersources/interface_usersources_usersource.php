@@ -101,4 +101,9 @@ interface interface_usersources_usersource {
      */
     public function getAllGroupIds();
 
+    /**
+     * Returns a readable name of the source, e.g. "Kajona" or "LDAP Company 1"
+     * @return mixed
+     */
+    public function getStrReadableName();
 }

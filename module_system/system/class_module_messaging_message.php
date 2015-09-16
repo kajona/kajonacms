@@ -16,6 +16,8 @@
  *
  * @module messaging
  * @moduleId _messaging_module_id_
+ *
+ * @formGenerator class_module_messaging_message_formgenerator
  */
 class class_module_messaging_message extends class_model implements interface_model, interface_admin_listable {
 
@@ -190,24 +192,11 @@ class class_module_messaging_message extends class_model implements interface_mo
         if($strUserid == "")
             $strUserid = class_carrier::getInstance()->getObjSession()->getUserID();
 
-        $strQuery = "SELECT *
-                     FROM "._dbprefix_."messages,
-                          "._dbprefix_."system_right,
-                          "._dbprefix_."system
-                 LEFT JOIN "._dbprefix_."system_date
-                        ON system_id = system_date_id
-		            WHERE system_id = message_id
-		              AND message_user = ?
-		              AND system_id = right_id
-		         ORDER BY message_read ASC, system_create_date DESC";
-
-        $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array($strUserid), $intStart, $intEnd);
-        class_orm_rowcache::addArrayOfInitRows($arrIds);
-        $arrReturn = array();
-        foreach($arrIds as $arrOneId)
-            $arrReturn[] = class_objectfactory::getInstance()->getObject($arrOneId["system_id"]);
-
-        return $arrReturn;
+        $objOrm = new class_orm_objectlist();
+        $objOrm->addWhereRestriction(new class_orm_objectlist_property_restriction("strUser", class_orm_comparator_enum::Equal(), $strUserid));
+        $objOrm->addOrderBy(new class_orm_objectlist_orderby("message_read ASC"));
+        $objOrm->addOrderBy(new class_orm_objectlist_orderby("system_create_date DESC"));
+        return $objOrm->getObjectList(__CLASS__, "", $intStart, $intEnd);
     }
 
 
@@ -222,24 +211,11 @@ class class_module_messaging_message extends class_model implements interface_mo
      * @static
      */
     public static function getMessagesByIdentifier($strIdentifier, $intStart = null, $intEnd = null) {
-        $strQuery = "SELECT *
-                     FROM "._dbprefix_."messages,
-                          "._dbprefix_."system_right,
-                          "._dbprefix_."system
-                LEFT JOIN "._dbprefix_."system_date
-                       ON system_id = system_date_id
-		            WHERE system_id = message_id
-		              AND system_id = right_id
-		              AND message_internalidentifier = ?
-		         ORDER BY message_read ASC, system_create_date DESC";
-
-        $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array($strIdentifier), $intStart, $intEnd);
-        class_orm_rowcache::addArrayOfInitRows($arrIds);
-        $arrReturn = array();
-        foreach($arrIds as $arrOneId)
-            $arrReturn[] = class_objectfactory::getInstance()->getObject($arrOneId["system_id"]);
-
-        return $arrReturn;
+        $objOrm = new class_orm_objectlist();
+        $objOrm->addWhereRestriction(new class_orm_objectlist_property_restriction("strInternalIdentifier", class_orm_comparator_enum::Equal(), $strIdentifier));
+        $objOrm->addOrderBy(new class_orm_objectlist_orderby("message_read ASC"));
+        $objOrm->addOrderBy(new class_orm_objectlist_orderby("system_create_date DESC"));
+        return $objOrm->getObjectList(__CLASS__, $intStart, $intEnd);
     }
 
 
@@ -253,14 +229,12 @@ class class_module_messaging_message extends class_model implements interface_mo
      * @return int
      */
     public static function getNumberOfMessagesForUser($strUserid, $bitOnlyUnread = false) {
-        $strQuery = "SELECT COUNT(*)
-                     FROM "._dbprefix_."messages, "._dbprefix_."system
-		            WHERE system_id = message_id
-		              AND message_user = ?
-		              ".($bitOnlyUnread ? " AND (message_read IS NULL OR message_read = 0 )" : "")."";
+        $objOrm = new class_orm_objectlist();
+        $objOrm->addWhereRestriction(new class_orm_objectlist_property_restriction("strUser", class_orm_comparator_enum::Equal(), $strUserid));
+        if($bitOnlyUnread)
+            $objOrm->addWhereRestriction(new class_orm_objectlist_restriction("AND (message_read IS NULL OR message_read = 0 )"));
 
-        $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array($strUserid));
-        return $arrRow["COUNT(*)"];
+        return $objOrm->getObjectCount(__CLASS__);
     }
 
 

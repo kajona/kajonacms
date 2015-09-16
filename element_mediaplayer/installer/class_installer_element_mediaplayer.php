@@ -40,17 +40,6 @@ class class_installer_element_mediaplayer extends class_elementinstaller_base im
 
 	public function update() {
         $strReturn = "";
-        if(class_module_pages_element::getElement("mediaplayer")->getStrVersion() == "3.4.2") {
-            $strReturn .= "Updating element mediaplayer to 3.4.9...\n";
-            $this->updateElementVersion("mediaplayer", "3.4.9");
-            $this->objDB->flushQueryCache();
-        }
-
-        if(class_module_pages_element::getElement("mediaplayer")->getStrVersion() == "3.4.9") {
-            $strReturn .= "Updating element mediaplayer to 4.0...\n";
-            $this->updateElementVersion("mediaplayer", "4.0");
-            $this->objDB->flushQueryCache();
-        }
 
         if(class_module_pages_element::getElement("mediaplayer")->getStrVersion() == "4.0") {
             $strReturn .= "Updating element mediaplayer to 4.1...\n";
@@ -79,6 +68,12 @@ class class_installer_element_mediaplayer extends class_elementinstaller_base im
         if(class_module_pages_element::getElement("mediaplayer")->getStrVersion() == "4.5") {
             $strReturn .= "Updating element mediaplayer to 4.6...\n";
             $this->updateElementVersion("mediaplayer", "4.6");
+            $this->objDB->flushQueryCache();
+        }
+
+        if(class_module_pages_element::getElement("mediaplayer")->getStrVersion() == "4.6") {
+            $strReturn .= "Updating element mediaplayer to 4.7...\n";
+            $this->updateElementVersion("mediaplayer", "4.7");
             $this->objDB->flushQueryCache();
         }
 

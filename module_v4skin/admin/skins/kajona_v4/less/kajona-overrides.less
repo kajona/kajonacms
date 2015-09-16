@@ -40,11 +40,17 @@
 @kajona-search-bg:          "../img/pusteblume-submenu.png";
 @kajona-breadcrumb-bg:      "../img/pusteblume.png";
 @kajona-portal-bg:          "../img/portaleditor-arrow.png";
+@kajona-tree-sprite:        "../../../../../../core/module_system/admin/scripts/jstree/themes/default/d.png";
 
 //glyphicons
 @icon-font-path:          "../fonts/glyphicons/";
 
 /* END KAJONA redefinitions */
+
+
+.smaller {
+    font-size: floor((85% * @font-size-small / @font-size-base));
+}
 
 
 /* Reintroduce the multilevel dropdown */
@@ -142,6 +148,52 @@ footer {
         line-height: 20px;
         padding: 5px 15px;
         text-transform: uppercase;
+    }
+
+    .toc-navigation-panel {
+        margin:2px 0px 2px 0px;
+        white-space:nowrap;
+        text-align:right;
+    }
+
+    .affix {
+        width:302px;
+        left:0px;
+        top:60px;
+    }
+
+    @media (max-width: @screen-sm-max) {
+        .affix {
+            display:none;
+        }
+    }
+
+    .toc-navigation-panel ul {
+        list-style-type:none;
+        margin:0 0 1px 0;
+        padding:0px;
+    }
+
+    .toc-navigation-panel li {
+        margin:0px;
+        padding:0px;
+        border:0px solid @white;
+        border-left-width:10px;
+    }
+
+    .toc-navigation-panel li.active {
+        background-color:@gray-light;
+        border:0px solid @kajona-brand-color;
+        border-left-width:10px;
+    }
+
+    .toc-navigation-panel a {
+        margin-right:15px;
+        margin-left:4px;
+        padding:4px;
+        padding-right:0px;
+        overflow:hidden;
+        text-align:left;
     }
 
     .panel-group .panel, .panel {
@@ -362,6 +414,10 @@ footer {
 
 .listButton .generalContextMenu {
     min-width: 180px;
+}
+
+.actions .generalContextMenu {
+    .dropdown-menu-right;
 }
 
 
@@ -660,6 +716,34 @@ footer {
         color: @white;
     }
 
+    /* BUTTON GROUPS */
+    .btn-group {
+        label.btn {
+            background-color: @gray-light;
+            margin: 0 2px 2px 0;
+            padding: 4px 6px;
+        }
+
+        label.btn.active {
+            background-color: @brand-primary;
+            color: @white;
+        }
+
+        &.buttonbar {
+
+            label.btn:before {
+                content: @fa-var-square-o;
+                font-family: fontawesome;
+                padding: 0 2px;
+            }
+
+            label.btn.active:before {
+                content: @fa-var-check-square-o;
+                padding-right: 1px;
+            }
+        }
+    }
+
     pre, code {
         font-size: @font-size-base - 3;
         white-space: pre-wrap;
@@ -709,6 +793,10 @@ footer {
 				.opacity(0);
 				.transition(opacity linear .2s);
                 padding-top: 3px;
+
+                .fa-lg {
+                    font-size: 1em;
+                }
 			}
 
 			&:hover {
@@ -758,9 +846,10 @@ footer {
             padding: 7px 0 0 0;
         }
 
-        &.form-horizontal .checkbox {
-            padding-top: 0;
-        }
+//TODO: sir 05/2015: removed again, where was this required?
+//        &.form-horizontal .checkbox {
+//            padding-top: 0;
+//        }
 
     }
 
@@ -997,6 +1086,10 @@ footer {
 
     .kajona-data-table {
 
+        &.floatThead-table {
+            background-color: #FFF;
+        }
+
         td {
             vertical-align: top;
         }
@@ -1052,6 +1145,65 @@ footer {
         td.vertical-align-middle, th.vertical-align-middle {
             vertical-align: middle;
         }
+
+
+        &.bulkedit {
+            label {
+                display:none;
+            }
+
+            .form-opener {
+                display:none;
+            }
+
+            .form-group {
+                display:block;
+                margin-left:0;
+                margin-right:0;
+            }
+
+            .col-sm-6 {
+                width:100%;
+                padding:0;
+            }
+
+            tbody:hover {
+                tr td,
+                tr th {
+                    background-color:#fff;
+                }
+            }
+
+            tbody {
+                border-bottom:none;
+            }
+        }
+
+        &.bulkedit > tbody > tr.table-row-form {
+            border-bottom:2px solid #222;
+
+            label {
+                display:inline-block!important;
+                padding-top:0;
+            }
+
+            .form-group {
+                clear:both;
+            }
+
+            .form-opener {
+                display:none;
+            }
+
+            .col-sm-6 {
+                width:50%!important;
+                padding:0;
+            }
+
+            td {
+                border-top:none;
+            }
+        }
     }
 
     .divPageTarget {
@@ -1072,7 +1224,6 @@ footer {
         &.folderVisible {
             .opacity(100);
             height: auto;
-            max-height: 2000px;
         }
     }
 
@@ -1154,6 +1305,9 @@ footer {
 
         }
     }
+
+
+
 }
 
 
@@ -1165,9 +1319,24 @@ footer {
     .box-shadow(none);
     padding: 4px;
 
-    &.mandatoryFormElement {
-        .box-shadow(0 0 6px @brand-warning+20);
+    &[disabled],
+    &[readonly],
+    fieldset[disabled] & {
+        opacity: 0.5;
     }
+}
+
+.mandatoryFormElement, .form-control.mandatoryFormElement {
+    .box-shadow(0 0 6px @brand-warning+20);
+}
+
+table.form-control {
+    display: table;
+
+     tfoot > tr > td {
+         border-top: none;
+         //min-height: 22px;
+     }
 }
 
 .form-control-static {
@@ -1200,7 +1369,6 @@ footer {
     }
 
 }
-
 
 :focus {
   -moz-outline-style:none;
@@ -1268,6 +1436,10 @@ footer {
         color: @kajona-brand-color;
         padding: 1px 2px;
         text-decoration: underline;
+    }
+
+    .jstree-checkbox {
+        background-image: url(@kajona-tree-sprite);
     }
 
     ins {
@@ -1401,8 +1573,12 @@ footer {
 
     }
 
-}
+    td.icon-cell {
+        width: 20px;
+        padding: 6px;
+    }
 
+}
 
 /* L O A D I N G   C O N T A I N E R */
 .loadingContainer {
@@ -1416,10 +1592,10 @@ footer {
     background: none repeat 0% 0%;
     margin-top: 0;
 
-    -moz-animation: spin 2s infinite linear;
-    -o-animation: spin 2s infinite linear;
-    -webkit-animation: spin 2s infinite linear;
-    animation: spin 2s infinite linear;
+    -moz-animation: fa-spin 2s infinite linear;
+    -o-animation: fa-spin 2s infinite linear;
+    -webkit-animation: fa-spin 2s infinite linear;
+    animation: fa-spin 2s infinite linear;
 
     &:before {
         font-size: @font-size-base + 10;
@@ -1465,7 +1641,11 @@ footer {
             font-size: @font-size-base + 13;
             margin-top: 3px;
         }
-
+    }
+    @media (min-width: 992px) {
+        .modal-lg-lg {
+            width: 90%;
+        }
     }
 }
 
@@ -1506,6 +1686,36 @@ footer {
     .bootstrap-switch-handle-on.bootstrap-switch-primary {
         background: @kajona-brand-color;
     }
+}
+
+
+/* JS TREE */
+.jstree-default.jstree-focused {
+    background:#fff!important;
+}
+
+.jstree-default .jstree-checked > a > .jstree-checkbox {
+    background-position:-38px -18px!important;
+}
+
+.jstree-default .jstree-unchecked > a > .jstree-checkbox {
+    background-position:-2px -18px!important;
+}
+
+.jstree-default .jstree-undetermined > a > .jstree-checkbox {
+    background-position:-20px -18px!important;
+}
+
+.jstree-default .jstree-checked > a > .jstree-checkbox:hover {
+    background-position:-38px -36px!important;
+}
+
+.jstree-default .jstree-unchecked > a > .jstree-checkbox:hover {
+    background-position:-2px -36px!important;
+}
+
+.jstree-default .jstree-undetermined > a > .jstree-checkbox:hover {
+    background-position:-20px -36px!important;
 }
 
 

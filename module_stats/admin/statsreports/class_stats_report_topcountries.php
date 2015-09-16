@@ -98,9 +98,10 @@ class class_stats_report_topcountries implements interface_admin_statsreports {
             $intSum += $arrOneStat;
 
         $intI = 0;
+        $objUser = new class_module_user_user(class_session::getInstance()->getUserID());
         foreach($arrStats as $strCountry => $arrOneStat) {
             //Escape?
-            if($intI >= _stats_nrofrecords_)
+            if($intI >= $objUser->getIntItemsPerPage())
                 break;
 
             $arrValues[$intI] = array();

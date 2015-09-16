@@ -17,6 +17,8 @@
  * @module news
  * @moduleId _news_module_id_
  * @objectValidator class_news_news_objectvalidator
+ *
+ * @formGenerator class_module_news_news_formgenerator
  */
 class class_module_news_news extends class_model implements interface_model, interface_admin_listable, interface_versionable, interface_search_portalobject {
 
@@ -176,12 +178,13 @@ class class_module_news_news extends class_model implements interface_model, int
     private $objDateTimeSpecial = 0;
 
 
-
+    /**
+     * @var class_module_news_category[]
+     * @objectList news_member (source="newsmem_news", target="newsmem_category")
+     * @fieldType checkboxarray
+     * @versionable
+     */
     private $arrCats = null;
-
-    private $bitTitleChanged = false;
-
-    private $bitUpdateMemberships = false;
 
     /**
      * Returns the icon the be used in lists.
@@ -210,9 +213,10 @@ class class_module_news_news extends class_model implements interface_model, int
      * @return string
      */
     public function getStrLongDescription() {
-        return "S: " . dateToString($this->getObjStartDate(), _news_news_datetime_ == "true")
-            . ($this->getObjEndDate() != null ? " E: " . dateToString($this->getObjEndDate(), _news_news_datetime_ == "true") : "")
-            . ($this->getObjSpecialDate() != null ? " A: " . dateToString($this->getObjSpecialDate(), _news_news_datetime_ == "true") : "");
+        $strConfigValue = class_module_system_setting::getConfigValue("_news_news_datetime_");
+        return "S: " . dateToString($this->getObjStartDate(), $strConfigValue == "true")
+            . ($this->getObjEndDate() != null ? " E: " . dateToString($this->getObjEndDate(), $strConfigValue == "true") : "")
+            . ($this->getObjSpecialDate() != null ? " A: " . dateToString($this->getObjSpecialDate(), $strConfigValue == "true") : "");
     }
 
     /**
@@ -222,62 +226,6 @@ class class_module_news_news extends class_model implements interface_model, int
      */
     public function getStrDisplayName() {
         return $this->getStrTitle();
-    }
-
-
-    /**
-     * @return bool
-     */
-    protected function updateStateToDb() {
-
-        if($this->bitUpdateMemberships) {
-
-            //add records to the change-history manually
-            $arrOldAssignments = class_module_news_category::getNewsMember($this->getSystemid());
-
-            $arrOldGroupIds = array();
-            foreach($arrOldAssignments as $objOneAssignment)
-                $arrOldGroupIds[] = $objOneAssignment->getSystemid();
-
-            $arrNewGroupIds = array_keys($this->arrCats);
-
-            $arrChanges = array(
-                array("property" => "assignedCategories", "oldvalue" => $arrOldGroupIds, "newvalue" => $arrNewGroupIds)
-            );
-            $objChanges = new class_module_system_changelog();
-            $objChanges->processChanges($this, "editCategoryAssignments", $arrChanges);
-
-            class_module_news_category::deleteNewsMemberships($this->getSystemid());
-            //insert all memberships
-            $arrValues = array();
-            foreach($this->arrCats as $strCatID => $strValue) {
-                $arrValues[] = array(generateSystemid(), $this->getSystemid(), $strCatID);
-            }
-
-
-            if(count($arrValues) > 0 && !$this->objDB->multiInsert("news_member", array("newsmem_id", "newsmem_news", "newsmem_category"), $arrValues))
-                return false;
-        }
-
-        $this->bitTitleChanged = false;
-
-        return parent::updateStateToDb();
-    }
-
-    /**
-     * @param string $strNewPrevid
-     * @param bool $bitChangeTitle
-     *
-     * @return bool
-     */
-    public function copyObject($strNewPrevid = "", $bitChangeTitle = true) {
-        $arrMemberCats = class_module_news_category::getNewsMember($this->getSystemid());
-        $this->arrCats = array();
-        foreach($arrMemberCats as $objOneCat) {
-            $this->arrCats[$objOneCat->getSystemid()] = "1";
-        }
-        $this->bitUpdateMemberships = true;
-        return parent::copyObject($strNewPrevid, $bitChangeTitle);
     }
 
     /**
@@ -297,12 +245,15 @@ class class_module_news_news extends class_model implements interface_model, int
     public static function getObjectList($strFilter = "", $intStart = null, $intEnd = null, class_date $objStartDate = null, class_date $objEndDate = null) {
         $arrParams = array();
 
-        $strDateWhere = "";
+        $strWhere = "";
         if($objStartDate != null && $objEndDate != null) {
-            $strDateWhere = "AND (system_date_start >= ? and system_date_start < ?) ";
+            $strWhere = "AND (system_date_start >= ? and system_date_start < ?) ";
             $arrParams[] = $objStartDate->getLongTimestamp();
             $arrParams[] = $objEndDate->getLongTimestamp();
         }
+
+        $objOrm = new class_orm_objectlist();
+        $strWhere .= $objOrm->getDeletedWhereRestriction();
 
         if($strFilter != "") {
             $strQuery = "SELECT *
@@ -315,7 +266,7 @@ class class_module_news_news extends class_model implements interface_model, int
 							WHERE system_id = news_id
 							  AND news_id = newsmem_news
 							  AND system_id = right_id
-							  " . $strDateWhere . "
+							  " . $strWhere . "
 							  AND newsmem_category = ?
 							ORDER BY system_date_start DESC";
             $arrParams[] = $strFilter;
@@ -329,7 +280,7 @@ class class_module_news_news extends class_model implements interface_model, int
 						       ON system_id = system_date_id
 							WHERE system_id = news_id
 							  AND system_id = right_id
-							  " . $strDateWhere . "
+							  " . $strWhere . "
 							ORDER BY system_date_start DESC";
         }
 
@@ -354,34 +305,40 @@ class class_module_news_news extends class_model implements interface_model, int
      */
     public static function getObjectCount($strFilter = "") {
         $arrParams = array();
+
+        $objOrm = new class_orm_objectlist();
+        $strWhere = $objOrm->getDeletedWhereRestriction();
+
         if($strFilter != "") {
             $strQuery = "SELECT COUNT(*)
-							FROM " . _dbprefix_ . "news_member
-							WHERE newsmem_category = ?";
+							FROM " . _dbprefix_ . "news,
+							      " ._dbprefix_."system_right,
+							      " . _dbprefix_ . "news_member,
+							      " . _dbprefix_ . "system
+						LEFT JOIN " . _dbprefix_ . "system_date
+						       ON system_id = system_date_id
+							WHERE system_id = news_id
+							  AND news_id = newsmem_news
+							  AND system_id = right_id
+							  " . $strWhere . "
+							  AND newsmem_category = ?";
             $arrParams[] = $strFilter;
         }
         else {
             $strQuery = "SELECT COUNT(*)
-							FROM " . _dbprefix_ . "news";
+							FROM " . _dbprefix_ . "news,
+							      " ._dbprefix_."system_right,
+							      " . _dbprefix_ . "system
+					    LEFT JOIN " . _dbprefix_ . "system_date
+						       ON system_id = system_date_id
+							WHERE system_id = news_id
+							  AND system_id = right_id
+							  " . $strWhere;
         }
 
         $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, $arrParams);
         return $arrRow["COUNT(*)"];
     }
-
-    /**
-     * Deletes the given news and all relating memberships
-     *
-     * @return bool
-     */
-    public function deleteObject() {
-        //Delete memberships
-        if(class_module_news_category::deleteNewsMemberships($this->getSystemid())) {
-            return parent::deleteObject();
-        }
-        return false;
-    }
-
 
     /**
      * Counts the number of news displayed for the passed portal-setup
@@ -424,6 +381,9 @@ class class_module_news_news extends class_model implements interface_model, int
             $strTime = "";
         }
 
+        $objOrm = new class_orm_objectlist();
+        $strWhere = $objOrm->getDeletedWhereRestriction();
+
         //check if news should be ordered de- or ascending
         if($intOrder == 0) {
             $strOrder = "DESC";
@@ -446,7 +406,7 @@ class class_module_news_news extends class_model implements interface_model, int
                               AND newsmem_category = ?
                               AND system_status = 1
                               AND (system_date_start IS NULL or(system_date_start < ? OR system_date_start = 0))
-                                " . $strTime . "
+                                " . $strTime.$strWhere . "
                               AND (system_date_end IS NULL or (system_date_end > ? OR system_date_end = 0))
                             ORDER BY system_date_start " . $strOrder.", system_create_date DESC";
             $arrParams[] = $strCat;
@@ -468,7 +428,7 @@ class class_module_news_news extends class_model implements interface_model, int
                               AND system_id = right_id
                               AND system_status = 1
                               AND (system_date_start IS NULL or(system_date_start < ? OR system_date_start = 0))
-                                " . $strTime . "
+                                " . $strTime.$strWhere . "
                               AND (system_date_end IS NULL or (system_date_end > ? OR system_date_end = 0))
                             ORDER BY system_date_start " . $strOrder.", system_create_date DESC";
 
@@ -567,6 +527,7 @@ class class_module_news_news extends class_model implements interface_model, int
      * @return mixed
      */
     public function updateSearchResult(class_search_result $objResult) {
+        $objORM = new class_orm_objectlist();
         $strQuery = "SELECT news_detailspage
                        FROM "._dbprefix_."element_news,
                             "._dbprefix_."news_member,
@@ -585,6 +546,7 @@ class class_module_news_news extends class_model implements interface_model, int
                         AND system_prev_id = page_id
                         AND system_status = 1
                         AND news_view = 0
+                        ".$objORM->getDeletedWhereRestriction()."
                         AND page_element_ph_language = ? ";
 
         $arrRows = $this->objDB->getPArray($strQuery, array($this->getSystemid(), $objResult->getObjSearch()->getStrPortalLangFilter()));
@@ -761,7 +723,6 @@ class class_module_news_news extends class_model implements interface_model, int
      */
     public function setStrTitle($strTitle) {
         $this->strTitle = $strTitle;
-        $this->bitTitleChanged = true;
     }
 
     /**
@@ -802,14 +763,6 @@ class class_module_news_news extends class_model implements interface_model, int
      */
     public function setArrCats($arrCats) {
         $this->arrCats = $arrCats;
-    }
-
-    /**
-     * @param bool $bitUpdateMemberships
-     * @return void
-     */
-    public function setBitUpdateMemberships($bitUpdateMemberships) {
-        $this->bitUpdateMemberships = $bitUpdateMemberships;
     }
 
     /**

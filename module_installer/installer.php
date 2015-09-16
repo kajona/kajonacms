@@ -27,7 +27,7 @@ class class_installer {
     private $strForwardLink = "";
     private $strBackwardLink = "";
 
-    private $strVersion = "V 4.6";
+    private $strVersion = "V 4.7";
 
     /**
      * Instance of template-engine
@@ -813,6 +813,7 @@ define("_admin_", false);
 //Creating the Installer-Object
 $objInstaller = new class_installer();
 $objInstaller->action();
+class_core_eventdispatcher::getInstance()->notifyGenericListeners(class_system_eventidentifier::EVENT_SYSTEM_REQUEST_ENDPROCESSING, array());
 class_response_object::getInstance()->sendHeaders();
 class_response_object::getInstance()->sendContent();
 class_core_eventdispatcher::getInstance()->notifyGenericListeners(class_system_eventidentifier::EVENT_SYSTEM_REQUEST_AFTERCONTENTSEND, array(class_request_entrypoint_enum::INSTALLER()));

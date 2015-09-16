@@ -14,6 +14,24 @@
  */
 abstract class class_orm_base {
 
+    /**
+     * Static flag to change the handling of deleted objects globally, so for every following
+     * ORM operation
+     * @var int
+     */
+    protected static $objHandleLogicalDeletedGlobal = null;
+
+    /**
+     * Flag to change the handling of deleted obejcts locally, so only for the current instance of the ORM
+     * mapper.
+     *
+     * @var class_orm_deletedhandling_enum
+     */
+    private $objHandleLogicalDeleted = null;
+
+
+    protected static $bitLogcialDeleteAvailable = null;
+
     const STR_ANNOTATION_TARGETTABLE = "@targetTable";
     const STR_ANNOTATION_TARGETTABLETXSAFE = "@targetTableTxSafe";
     const STR_ANNOTATION_TABLECOLUMN = "@tableColumn";
@@ -22,6 +40,7 @@ abstract class class_orm_base {
     const STR_ANNOTATION_TABLECOLUMNINDEX = "@tableColumnIndex";
     const STR_ANNOTATION_BLOCKESCAPING = "@blockEscaping";
     const STR_ANNOTATION_LISTORDER = "@listOrder";
+    const STR_ANNOTATION_OBJECTLIST = "@objectList";
 
     /** @var class_root */
     private $objObject = null;
@@ -31,6 +50,13 @@ abstract class class_orm_base {
      */
     function __construct($objObject = null) {
         $this->objObject = $objObject;
+        if(self::$bitLogcialDeleteAvailable === null) {
+
+            $arrColumns = class_db::getInstance()->getColumnsOfTable(_dbprefix_."system");
+            self::$bitLogcialDeleteAvailable = count(array_filter($arrColumns, function ($arrOneTable) {
+                return $arrOneTable["columnName"] == "system_deleted";
+            })) > 0;
+        }
     }
 
     /**
@@ -100,6 +126,111 @@ abstract class class_orm_base {
     }
 
 
+
+    /**
+     * Reads the assignment values currently stored in the database for a given property of the current object.
+     * @param string $strPropertyName
+     *
+     * @return string[] array of systemids
+     */
+    public final function getAssignmentsFromDatabase($strPropertyName) {
+        $objCfg = class_orm_assignment_config::getConfigForProperty($this->getObjObject(), $strPropertyName);
+        $objDB = class_carrier::getInstance()->getObjDB();
+        $strQuery = " SELECT *
+                        FROM ".$objDB->encloseTableName(_dbprefix_.$objCfg->getStrTableName()).",
+                             ".$objDB->encloseTableName(_dbprefix_."system")."
+                       WHERE system_id =  ".$objDB->encloseColumnName($objCfg->getStrTargetColumn())."
+                         AND ".$objDB->encloseColumnName($objCfg->getStrSourceColumn())." = ?
+                             ".$this->getDeletedWhereRestriction();
+        $arrRows = $objDB->getPArray($strQuery, array($this->getObjObject()->getSystemid()));
+
+        $strTargetCol = $objCfg->getStrTargetColumn();
+        array_walk($arrRows, function(array &$arrSingleRow) use ($strTargetCol) {
+            $arrSingleRow = $arrSingleRow[$strTargetCol];
+        });
+
+        return $arrRows;
+    }
+
+
+    /**
+     * Returns the current config of the deleted-handling, evaluates both, the current instances' config and the
+     * global config.
+     *
+     * @return class_orm_deletedhandling_enum
+     */
+    public function getIntCombinedLogicalDeletionConfig() {
+        if($this->objHandleLogicalDeleted !== null)
+            return $this->objHandleLogicalDeleted;
+
+        if(self::$objHandleLogicalDeletedGlobal !== null)
+            return self::$objHandleLogicalDeletedGlobal;
+
+        return class_orm_deletedhandling_enum::EXCLUDED();
+    }
+
+    /**
+     * Generates the where restriction for queries, based on the current config.
+     * Currently the methods returns a string based where restriction.
+     *
+     * @param string $strSystemTablePrefix
+     * @param string $strConjunction
+     * @return string
+     */
+    public function getDeletedWhereRestriction($strSystemTablePrefix = "", $strConjunction = "AND") {
+        $strQuery = "";
+
+        if($strSystemTablePrefix != "") {
+            $strSystemTablePrefix = $strSystemTablePrefix.".";
+        }
+
+        if(self::$bitLogcialDeleteAvailable) {
+            if($this->getIntCombinedLogicalDeletionConfig()->equals(class_orm_deletedhandling_enum::EXCLUDED())) {
+                $strQuery .= " " . $strConjunction . " {$strSystemTablePrefix}system_deleted = 0 ";
+            }
+            else if($this->getIntCombinedLogicalDeletionConfig()->equals(class_orm_deletedhandling_enum::EXCLUSIVE())) {
+                $strQuery .= " " . $strConjunction . " {$strSystemTablePrefix}system_deleted = 1 ";
+            }
+        }
+
+        return $strQuery;
+    }
+
+
+    /**
+     * Static flag to change the handling of deleted objects globally, so for every following
+     * ORM operation
+     *
+     * @param class_orm_deletedhandling_enum $objHandleLogicalDeleted
+     */
+    public static function setObjHandleLogicalDeletedGlobal(class_orm_deletedhandling_enum $objHandleLogicalDeleted = null) {
+        class_carrier::getInstance()->flushCache(class_carrier::INT_CACHE_TYPE_DBQUERIES | class_carrier::INT_CACHE_TYPE_ORMCACHE);
+        self::$objHandleLogicalDeletedGlobal = $objHandleLogicalDeleted;
+    }
+
+    /**
+     * @return class_orm_deletedhandling_enum
+     */
+    public function getObjHandleLogicalDeleted() {
+        return $this->objHandleLogicalDeleted;
+    }
+
+    /**
+     * Flag to change the handling of deleted obejcts locally, so only for the current instance of the ORM
+     * mapper.
+     *
+     * @param class_orm_deletedhandling_enum $objHandleLogicalDeleted
+     */
+    public function setObjHandleLogicalDeleted(class_orm_deletedhandling_enum $objHandleLogicalDeleted) {
+        $this->objHandleLogicalDeleted = $objHandleLogicalDeleted;
+    }
+
+    /**
+     * @return int
+     */
+    public static function getObjHandleLogicalDeletedGlobal() {
+        return self::$objHandleLogicalDeletedGlobal;
+    }
 }
 
 /**

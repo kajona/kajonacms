@@ -84,6 +84,7 @@ class class_formentry_textarea extends class_formentry_base implements interface
      */
     public function setIntNumberOfRows($intNumberOfRows) {
         $this->intNumberOfRows = $intNumberOfRows;
+        return $this;
     }
 
     /**

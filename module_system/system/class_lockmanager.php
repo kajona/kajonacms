@@ -15,7 +15,8 @@
  * @author sidler@mulchprod.de
  * @since 3.3.0
  */
-class class_lockmanager {
+class class_lockmanager
+{
 
     private $strSystemid = "";
     /**
@@ -23,19 +24,17 @@ class class_lockmanager {
      */
     private $objSourceObject = null;
 
-    private static $bitUnlockTriggered = false;
-
     /**
      * Constructor
      *
      * @param string $strSystemid
      * @param \class_root|null $objSourceObject
      */
-    public function __construct($strSystemid = "", class_root $objSourceObject = null) {
+    public function __construct($strSystemid = "", class_root $objSourceObject = null)
+    {
         $this->strSystemid = $strSystemid;
         $this->objSourceObject = $objSourceObject;
 
-        $this->unlockOldRecords();
     }
 
     /**
@@ -43,13 +42,14 @@ class class_lockmanager {
      *
      * @return bool
      */
-    public function lockRecord() {
-        $strQuery = "UPDATE " . _dbprefix_ . "system
-						SET system_lock_id=?,
+    public function lockRecord()
+    {
+        $strQuery = "UPDATE "._dbprefix_."system
+						SET system_lock_id = ?,
 						    system_lock_time = ?
 						WHERE system_id =?";
 
-        if(class_carrier::getInstance()->getObjDB()->_pQuery($strQuery, array(class_carrier::getInstance()->getObjSession()->getUserID(), time(), $this->strSystemid))) {
+        if (class_carrier::getInstance()->getObjDB()->_pQuery($strQuery, array(class_carrier::getInstance()->getObjSession()->getUserID(), time(), $this->strSystemid))) {
             class_carrier::getInstance()->flushCache(class_carrier::INT_CACHE_TYPE_DBQUERIES | class_carrier::INT_CACHE_TYPE_ORMCACHE);
             return true;
         }
@@ -62,8 +62,9 @@ class class_lockmanager {
      *
      * @return bool
      */
-    public function isLocked() {
-        return $this->getLockId() != "0";
+    public function isLocked()
+    {
+        return $this->getLockedUntilTimestamp() > time() && $this->getLockId() != "0";
     }
 
     /**
@@ -73,15 +74,17 @@ class class_lockmanager {
      *
      * @return bool
      */
-    public function unlockRecord($bitForceUnlock = false) {
-        if($this->isLockedByCurrentUser() || $bitForceUnlock ) {
+    public function unlockRecord($bitForceUnlock = false)
+    {
+        if ($bitForceUnlock || $this->isLockedByCurrentUser()) {
 
-            $strQuery = "UPDATE " . _dbprefix_ . "system
-                            SET system_lock_id='0'
+            $strQuery = "UPDATE "._dbprefix_."system
+                            SET system_lock_id = '0'
                             WHERE system_id=? ";
-            if(class_carrier::getInstance()->getObjDB()->_pQuery($strQuery, array($this->strSystemid))) {
-                if($this->objSourceObject !== null)
+            if (class_carrier::getInstance()->getObjDB()->_pQuery($strQuery, array($this->strSystemid))) {
+                if ($this->objSourceObject !== null) {
                     $this->objSourceObject->setStrLockId("");
+                }
 
                 class_carrier::getInstance()->flushCache(class_carrier::INT_CACHE_TYPE_DBQUERIES | class_carrier::INT_CACHE_TYPE_ORMCACHE);
                 return true;
@@ -92,15 +95,23 @@ class class_lockmanager {
     }
 
     /**
-     * Checks if the record is locked for the current user and so not accessible.
+     * Checks if the record is locked for the current user and so accessible.
      * If the record is locked by someone else, false will be returned, true otherwise.
      *
      * @return bool
      */
-    public function isAccessibleForCurrentUser() {
+    public function isAccessibleForCurrentUser()
+    {
+        $intLockedUntil = $this->getLockedUntilTimestamp();
+        //lock is already outdated
+        if($intLockedUntil < time()) {
+            return true;
+        }
+
+        //lock not outdated, so validate the owner-id
         $strLockId = $this->getLockId();
-        if(validateSystemid($strLockId)) {
-            if($strLockId != class_carrier::getInstance()->getObjSession()->getUserID()) {
+        if (validateSystemid($strLockId)) {
+            if ($strLockId != class_carrier::getInstance()->getObjSession()->getUserID()) {
                 return false;
             }
         }
@@ -114,10 +125,17 @@ class class_lockmanager {
      *
      * @return bool
      */
-    public function isLockedByCurrentUser() {
+    public function isLockedByCurrentUser()
+    {
+        $intLockedUntil = $this->getLockedUntilTimestamp();
+        //lock is already outdated
+        if($intLockedUntil < time()) {
+            return false;
+        }
+
         $strLockId = $this->getLockId();
-        if(validateSystemid($strLockId)) {
-            if($strLockId == class_carrier::getInstance()->getObjSession()->getUserID()) {
+        if (validateSystemid($strLockId)) {
+            if ($strLockId == class_carrier::getInstance()->getObjSession()->getUserID()) {
                 return true;
             }
         }
@@ -131,9 +149,10 @@ class class_lockmanager {
      *
      * @return bool
      */
-    public function isUnlockableForCurrentUser() {
+    public function isUnlockableForCurrentUser()
+    {
 
-        if(in_array(_admins_group_id_, class_carrier::getInstance()->getObjSession()->getGroupIdsAsArray())) {
+        if (class_carrier::getInstance()->getObjSession()->isSuperAdmin()) {
             return true;
         }
 
@@ -145,23 +164,21 @@ class class_lockmanager {
      * Unlocks records locked passed the defined max-locktime
      *
      * @return bool
+     * @deprecated this method is no longer used
      */
-    private function unlockOldRecords() {
+    public function unlockOldRecords()
+    {
+        return true;
 
-        if(self::$bitUnlockTriggered)
-            return true;
+        /*
 
-        self::$bitUnlockTriggered = true;
-
-        if(!defined("_system_lock_maxtime_"))
-            define("_system_lock_maxtime_", 0);
-
-
-        $intMinTime = time() - _system_lock_maxtime_;
-        $strQuery = "UPDATE " . _dbprefix_ . "system
+         $intMinTime = time() - class_module_system_setting::getConfigValue("_system_lock_maxtime_");
+        $strQuery = "UPDATE "._dbprefix_."system
 						SET system_lock_id='0'
 				      WHERE system_lock_time <= ?";
         return class_carrier::getInstance()->getObjDB()->_pQuery($strQuery, array($intMinTime));
+
+        */
     }
 
     /**
@@ -169,10 +186,28 @@ class class_lockmanager {
      *
      * @return string
      */
-    public function getLockId() {
+    public function getLockId()
+    {
         $objObject = class_objectfactory::getInstance()->getObject($this->strSystemid);
-        if(validateSystemid($this->strSystemid) && $objObject != null && $objObject->getStrLockId() != "") {
+        if (validateSystemid($this->strSystemid) && $objObject != null && $objObject->getStrLockId() != "") {
             return $objObject->getStrLockId();
+        }
+        else {
+            return "0";
+        }
+    }
+
+
+    /**
+     * Fetches the current user-id locking the record
+     *
+     * @return string
+     */
+    private function getLockedUntilTimestamp()
+    {
+        $objObject = class_objectfactory::getInstance()->getObject($this->strSystemid);
+        if (validateSystemid($this->strSystemid) && $objObject != null && $objObject->getStrLockId() != "") {
+            return $objObject->getIntLockTime() + (int)class_module_system_setting::getConfigValue("_system_lock_maxtime_");
         }
         else {
             return "0";
@@ -188,12 +223,13 @@ class class_lockmanager {
      *
      * @return class_model[]
      */
-    public static function getLockedRecords($intStart = null, $intEnd = null) {
-        $strQuery = "SELECT system_id FROM "._dbprefix_."system WHERE system_lock_id != '0' AND system_lock_id IS NOT NULL ORDER BY system_id DESC";
-        $arrRows = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array(), $intStart, $intEnd);
+    public static function getLockedRecords($intStart = null, $intEnd = null)
+    {
+        $strQuery = "SELECT system_id FROM "._dbprefix_."system WHERE system_lock_time > ? ORDER BY system_id DESC";
+        $arrRows = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array(time() - (int)class_module_system_setting::getConfigValue("_system_lock_maxtime_")), $intStart, $intEnd);
 
         $arrReturn = array();
-        foreach($arrRows as $arrOneRow) {
+        foreach ($arrRows as $arrOneRow) {
             $arrReturn[] = class_objectfactory::getInstance()->getObject($arrOneRow["system_id"]);
         }
 
@@ -207,12 +243,13 @@ class class_lockmanager {
      *
      * @return class_model[]
      */
-    public static function getLockedRecordsForUser($strUserId) {
-        $strQuery = "SELECT system_id FROM "._dbprefix_."system WHERE system_lock_id = ? ORDER BY system_id DESC";
-        $arrRows = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array($strUserId));
+    public static function getLockedRecordsForUser($strUserId)
+    {
+        $strQuery = "SELECT system_id FROM "._dbprefix_."system WHERE system_lock_id = ? AND system_lock_time > ? ORDER BY system_id DESC";
+        $arrRows = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array($strUserId, time() - (int)class_module_system_setting::getConfigValue("_system_lock_maxtime_")));
 
         $arrReturn = array();
-        foreach($arrRows as $arrOneRow) {
+        foreach ($arrRows as $arrOneRow) {
             $arrReturn[] = class_objectfactory::getInstance()->getObject($arrOneRow["system_id"]);
         }
 
@@ -224,9 +261,10 @@ class class_lockmanager {
      *
      * @return int
      */
-    public static function getLockedRecordsCount() {
-        $strQuery = "SELECT COUNT(*) FROM "._dbprefix_."system WHERE system_lock_id != '0' AND system_lock_id IS NOT NULL";
-        $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array());
+    public static function getLockedRecordsCount()
+    {
+        $strQuery = "SELECT COUNT(*) FROM "._dbprefix_."system WHERE system_lock_time > ?";
+        $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array(time() - (int)class_module_system_setting::getConfigValue("_system_lock_maxtime_")));
         return $arrRow["COUNT(*)"];
     }
 

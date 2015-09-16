@@ -203,15 +203,17 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
 
     /**
      * @param class_model $objListEntry
+     * @param string $strAltActive tooltip text for the icon if record is active
+     * @param string $strAltInactive tooltip text for the icon if record is inactive
      *
      * @return string
      */
-    protected function renderStatusAction(class_model $objListEntry) {
+    protected function renderStatusAction(class_model $objListEntry, $strAltActive = "", $strAltInactive = "") {
         if($objListEntry instanceof class_module_pages_element) {
             return "";
         }
         else
-            return parent::renderStatusAction($objListEntry);
+            return parent::renderStatusAction($objListEntry, $strAltActive, $strAltInactive);
     }
 
     /**
@@ -473,7 +475,7 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
                 $objField->setStrHint($this->getLang("templateNotSelectedBefore"));
 
             $bitReadonly = false;
-            if(_pages_templatechange_ == "false") {
+            if(class_module_system_setting::getConfigValue("_pages_templatechange_") == "false") {
                 if($this->getAction() == "newPage" || $this->getParam("mode") == "new")
                     $bitReadonly = false;
                 else if($objPage->getNumberOfElementsOnPage() != 0)
@@ -482,7 +484,7 @@ class class_module_pages_admin extends class_admin_simple implements interface_a
             $objField->setBitReadonly($bitReadonly);
 
             if($strMode == "new" && $this->getParam("page_template") == "")
-                $objField->setStrValue(_pages_defaulttemplate_);
+                $objField->setStrValue(class_module_system_setting::getConfigValue("_pages_defaulttemplate_"));
 
         }
         else {

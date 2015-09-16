@@ -40,6 +40,7 @@ class class_admin_formgenerator {
     const  BIT_BUTTON_DELETE = 32;
     const  BIT_BUTTON_RESET  = 64;
     const  BIT_BUTTON_CONTINUE  = 128;
+    const  BIT_BUTTON_BACK = 256;
 
     const FORM_ENCTYPE_MULTIPART = "multipart/form-data";
     const FORM_ENCTYPE_TEXTPLAIN = "text/plain";
@@ -72,6 +73,7 @@ class class_admin_formgenerator {
     private $strFormEncoding = "";
 
     private $strOnSubmit = "";
+    private $objLang;
 
     /**
      * Creates a new instance of the form-generator.
@@ -84,6 +86,7 @@ class class_admin_formgenerator {
         $this->objSourceobject = $objSourceobject;
 
         $this->strOnSubmit = "$(this).on('submit', function() { return false; }); return true;";
+        $this->objLang = class_lang::getInstance();
     }
 
     /**
@@ -94,7 +97,9 @@ class class_admin_formgenerator {
      */
     public function updateSourceObject() {
         foreach($this->arrFields as $objOneField) {
-            $objOneField->setValueToObject();
+            if($objOneField->getObjSourceObject() != null) {
+                $objOneField->setValueToObject();
+            }
         }
     }
 
@@ -215,9 +220,11 @@ class class_admin_formgenerator {
         $strReturn = "";
 
         //add a hidden systemid-field
-        $objField = new class_formentry_hidden($this->strFormname, "systemid");
-        $objField->setStrEntryName("systemid")->setStrValue($this->objSourceobject->getSystemid())->setObjValidator(new class_systemid_validator());
-        $this->addField($objField);
+        if($this->objSourceobject != null) {
+            $objField = new class_formentry_hidden($this->strFormname, "systemid");
+            $objField->setStrEntryName("systemid")->setStrValue($this->objSourceobject->getSystemid())->setObjValidator(new class_systemid_validator());
+            $this->addField($objField);
+        }
 
         $objToolkit = class_carrier::getInstance()->getObjToolkit("admin");
         if($strTargetURI !== null)
@@ -256,6 +263,9 @@ class class_admin_formgenerator {
         if($intButtonConfig & self::BIT_BUTTON_CONTINUE)
             $strReturn .= $objToolkit->formInputSubmit(class_lang::getInstance()->getLang("commons_continue", "system"), "submitbtn");
 
+        if($intButtonConfig & self::BIT_BUTTON_BACK)
+            $strReturn .= $objToolkit->formInputSubmit(class_lang::getInstance()->getLang("commons_back", "system"), "backbtn");
+
 
         if($strTargetURI !== null)
             $strReturn .= $objToolkit->formClose();
@@ -278,8 +288,8 @@ class class_admin_formgenerator {
 
         }
 
-        //lock the record to avoid multiple edit-sessions - in in edit mode
-        if(method_exists($this->objSourceobject, "getLockManager")) {
+        //lock the record to avoid multiple edit-sessions - if in edit mode
+        if($this->objSourceobject != null && method_exists($this->objSourceobject, "getLockManager")) {
 
             $bitSkip = false;
             if($this->getField("mode") != null && $this->getField("mode")->getStrValue() == "new")
@@ -483,6 +493,16 @@ class class_admin_formgenerator {
     }
 
     /**
+     * Returns an language text. By default the formname is used as module name
+     *
+     * @param string $strText
+     * @return string
+     */
+    protected function getLang($strText, $strModule = null) {
+        return $this->objLang->getLang($strText, $strModule === null ? $this->strFormname : $strModule);
+    }
+
+    /**
      * Returns an array of validation-errors
      * @return array
      */
@@ -522,6 +542,13 @@ class class_admin_formgenerator {
     public function removeValidationError($strEntry) {
         if(isset($this->arrValidationErrors[$strEntry]))
             unset($this->arrValidationErrors[$strEntry]);
+    }
+
+    /**
+     * Clear all validation errors in the form
+     */
+    public function removeAllValidationError() {
+        $this->arrValidationErrors = array();
     }
 
     /**

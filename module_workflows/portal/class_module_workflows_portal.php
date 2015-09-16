@@ -36,9 +36,10 @@ class class_module_workflows_portal extends class_portal_controller implements i
      */
     protected function actionTrigger() {
         class_carrier::getInstance()->getObjSession()->setBitBlockDbUpdate(true);
-        if($this->getParam("authkey") == _workflows_trigger_authkey_) {
-            $objSystemtask = new class_systemtask_workflows();
-            $objSystemtask->executeTask();
+        if($this->getParam("authkey") == class_module_system_setting::getConfigValue("_workflows_trigger_authkey_")) {
+            $objWorkflowController = new class_workflows_controller();
+            $objWorkflowController->scheduleWorkflows();
+            $objWorkflowController->runWorkflows();
 
             return "<message>Execution successful</message>";
         }

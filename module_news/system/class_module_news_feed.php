@@ -16,6 +16,8 @@
  *
  * @module news
  * @moduleId _news_module_id_
+ *
+ * @formGenerator class_module_news_feed_formgenerator
  */
 class class_module_news_feed extends class_model implements interface_model, interface_admin_listable {
 
@@ -124,7 +126,7 @@ class class_module_news_feed extends class_model implements interface_model, int
      * @return string
      */
     public function getStrLongDescription() {
-        if(_system_mod_rewrite_ == "true") {
+        if(class_module_system_setting::getConfigValue("_system_mod_rewrite_") == "true") {
             return _webpath_ . "/" . $this->getStrUrlTitle() . ".rss";
         }
         else {
@@ -150,23 +152,9 @@ class class_module_news_feed extends class_model implements interface_model, int
      * @static
      */
     public static function getFeedByUrlName($strFeedTitle) {
-        $strQuery = "SELECT *
-	                   FROM " . _dbprefix_ . "news_feed,
-	                        " . _dbprefix_ . "system_right,
-	                        " . _dbprefix_ . "system
-	                LEFT JOIN "._dbprefix_."system_date
-                          ON system_id = system_date_id
-	                   WHERE news_feed_id = system_id
-	                     AND system_id = right_id
-	                     AND news_feed_urltitle = ? ";
-        $arrOneId = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array($strFeedTitle));
-        class_orm_rowcache::addSingleInitRow($arrOneId);
-        if(isset($arrOneId["system_id"])) {
-            return class_objectfactory::getInstance()->getObject($arrOneId["system_id"]);
-        }
-        else {
-            return null;
-        }
+        $objORM = new class_orm_objectlist();
+        $objORM->addWhereRestriction(new class_orm_objectlist_restriction("AND news_feed_urltitle = ? ", array($strFeedTitle)));
+        return $objORM->getSingleObject(get_called_class());
     }
 
 
@@ -191,6 +179,7 @@ class class_module_news_feed extends class_model implements interface_model, int
      * @static
      */
     public static function getNewsList($strFilter = "", $intAmount = 0) {
+        $objORM = new class_orm_objectlist();
         $intNow = class_date::getCurrentTimestamp();
         $arrParams = array($intNow, $intNow, $intNow);
         if($strFilter != "") {
@@ -209,6 +198,7 @@ class class_module_news_feed extends class_model implements interface_model, int
 							  AND (system_date_start IS NULL or(system_date_start < ? OR system_date_start = 0))
 							  AND (system_date_end IS NULL or (system_date_end > ? OR system_date_end = 0))
 							  AND newsmem_category = ?
+							  ".$objORM->getDeletedWhereRestriction()."
 							ORDER BY system_date_start DESC";
             $arrParams[] = $strFilter;
         }
@@ -225,6 +215,7 @@ class class_module_news_feed extends class_model implements interface_model, int
 							  AND (system_date_special IS NULL OR (system_date_special > ? OR system_date_special = 0))
 							  AND (system_date_start IS NULL or(system_date_start < ? OR system_date_start = 0))
 							  AND (system_date_end IS NULL or (system_date_end > ? OR system_date_end = 0))
+							  ".$objORM->getDeletedWhereRestriction()."
 							ORDER BY system_date_start DESC";
         }
 

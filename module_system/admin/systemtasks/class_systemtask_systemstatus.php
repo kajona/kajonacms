@@ -46,10 +46,15 @@ class class_systemtask_systemstatus extends class_systemtask_base implements int
      * @return string
      */
     public function executeTask() {
+
+        if(!class_module_system_module::getModuleByName("system")->rightRight2())
+            return $this->getLang("commons_error_permissions");
+
         //try to load and update the systemrecord
         if(validateSystemid($this->getParam("systemstatus_systemid"))) {
             $objRecord = new class_module_system_common($this->getParam("systemstatus_systemid"));
             $objRecord->setIntRecordStatus($this->getParam("systemstatus_status"));
+            $objRecord->updateObjectToDb();
 
             return $this->objToolkit->getTextRow($this->getLang("systemtask_status_success"));
         }

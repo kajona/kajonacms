@@ -3,23 +3,23 @@
 *   (c) 2004-2006 by MulchProductions, www.mulchprod.de                                                 *
 *   (c) 2007-2015 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
-*-------------------------------------------------------------------------------------------------------*
-*   $Id$                                        *
 ********************************************************************************************************/
 
 /**
  * Imports a xml-based page into the system. Tries to be as error-safe as possible.
  *
- * @package module_pages
+ * @package module_pageimportexport
  * @author sidler@mulchprod.de
  */
-class class_systemtask_pageimport extends class_systemtask_base implements interface_admin_systemtask {
+class class_systemtask_pageimport extends class_systemtask_base implements interface_admin_systemtask
+{
 
 
     /**
      * constructor to call the base constructor
      */
-    public function __construct() {
+    public function __construct()
+    {
         parent::__construct();
 
         $this->setStrTextBase("pages");
@@ -30,7 +30,8 @@ class class_systemtask_pageimport extends class_systemtask_base implements inter
      * @see interface_admin_systemtask::getGroupIdenitfier()
      * @return string
      */
-    public function getGroupIdentifier() {
+    public function getGroupIdentifier()
+    {
         return "pages";
     }
 
@@ -38,7 +39,8 @@ class class_systemtask_pageimport extends class_systemtask_base implements inter
      * @see interface_admin_systemtask::getStrInternalTaskName()
      * @return string
      */
-    public function getStrInternalTaskName() {
+    public function getStrInternalTaskName()
+    {
         return "pageimport";
     }
 
@@ -46,7 +48,8 @@ class class_systemtask_pageimport extends class_systemtask_base implements inter
      * @see interface_admin_systemtask::getStrTaskName()
      * @return string
      */
-    public function getStrTaskName() {
+    public function getStrTaskName()
+    {
         return $this->getLang("systemtask_pageimport_name");
     }
 
@@ -54,7 +57,12 @@ class class_systemtask_pageimport extends class_systemtask_base implements inter
      * @see interface_admin_systemtask::executeTask()
      * @return string
      */
-    public function executeTask() {
+    public function executeTask()
+    {
+
+        if (!class_module_system_module::getModuleByName("pages")->rightEdit()) {
+            return $this->getLang("commons_error_permissions");
+        }
 
         $strReturn = "";
 
@@ -65,8 +73,8 @@ class class_systemtask_pageimport extends class_systemtask_base implements inter
 
         $bitReplaceExisting = $this->getParam("pageimport_replace") != "";
 
-        if($strError != "suffix") {
-            if($strError != "upload") {
+        if ($strError != "suffix") {
+            if ($strError != "upload") {
 
                 //parse using the kajona xml parser
                 $objXML = new class_xml_parser();
@@ -74,16 +82,16 @@ class class_systemtask_pageimport extends class_systemtask_base implements inter
 
                 $arrXML = $objXML->xmlToArray();
 
-                foreach($arrXML as $arrOneXml) {
-                    foreach($arrOneXml as $arrNode) {
-                        foreach($arrNode as $strName => $arrSubnode) {
-                            if($strName == "page") {
+                foreach ($arrXML as $arrOneXml) {
+                    foreach ($arrOneXml as $arrNode) {
+                        foreach ($arrNode as $strName => $arrSubnode) {
+                            if ($strName == "page") {
                                 $strReturn .= $this->processSinglePage($arrSubnode[0], $bitReplaceExisting, $strTopFolderId);
                             }
                         }
                     }
                 }
-                $strReturn = $this->getLang("systemtask_pageimport_success") . $strReturn;
+                $strReturn = $this->getLang("systemtask_pageimport_success").$strReturn;
 
             }
             else {
@@ -103,7 +111,8 @@ class class_systemtask_pageimport extends class_systemtask_base implements inter
      * @see interface_admin_systemtask::getAdminForm()
      * @return string
      */
-    public function getAdminForm() {
+    public function getAdminForm()
+    {
         $strReturn = "";
         $strReturn .= $this->objToolkit->formInputUpload("pageimport_file", $this->getLang("systemtask_pageimport_file"));
         $strReturn .= $this->objToolkit->formInputCheckbox("pageimport_replace", $this->getLang("systemtask_pageimport_replace"));
@@ -114,17 +123,18 @@ class class_systemtask_pageimport extends class_systemtask_base implements inter
      * @see interface_admin_systemtask::getSubmitParams()
      * @return string
      */
-    public function getSubmitParams() {
+    public function getSubmitParams()
+    {
         $arrFile = $this->getParam("pageimport_file");
         $strError = "";
 
         $objFilesystem = new class_filesystem();
-        $strTarget = "/import_" . generateSystemid() . ".xml";
+        $strTarget = "/import_".generateSystemid().".xml";
 
         $strSuffix = uniStrtolower(uniSubstr($arrFile["name"], uniStrrpos($arrFile["name"], ".")));
-        if($strSuffix == ".xml") {
-            if($objFilesystem->copyUpload($strTarget, $arrFile["tmp_name"])) {
-                class_logger::getInstance()->addLogRow("uploaded file " . $strTarget, class_logger::$levelInfo);
+        if ($strSuffix == ".xml") {
+            if ($objFilesystem->copyUpload($strTarget, $arrFile["tmp_name"])) {
+                class_logger::getInstance()->addLogRow("uploaded file ".$strTarget, class_logger::$levelInfo);
             }
             else {
                 $strError = "upload";
@@ -135,12 +145,13 @@ class class_systemtask_pageimport extends class_systemtask_base implements inter
         }
 
 
-        return "&pageimport_file=" . $strTarget . "&pageimport_error=" . $strError . "&pageimport_replace=" . $this->getParam("pageimport_replace");
+        return "&pageimport_file=".$strTarget."&pageimport_error=".$strError."&pageimport_replace=".$this->getParam("pageimport_replace");
     }
 
     //--- helpers ---------------------------------------------------------------------------------------
 
-    private function processSinglePage($arrPage, $bitReplaceExisting, $strTopFolderId) {
+    private function processSinglePage($arrPage, $bitReplaceExisting, $strTopFolderId)
+    {
 
         $strReturn = "";
 
@@ -155,29 +166,28 @@ class class_systemtask_pageimport extends class_systemtask_base implements inter
 
         //check if the exported prev-values may be used
         $strImportPrevName = $arrMetadata["prevname"][0]["value"];
-        if($strImportPrevName != "") {
+        if ($strImportPrevName != "") {
             $objPage = class_module_pages_page::getPageByName($strImportPrevName);
-            if($objPage !== null) {
+            if ($objPage !== null) {
                 $strPrevId = $objPage->getSystemid();
             }
         }
-        else if(validateSystemid($arrMetadata["previd"][0]["value"])) {
-            $objRoot = new class_module_system_common($arrMetadata["previd"][0]["value"]);
-            $arrRecord = $objRoot->getSystemRecord($arrMetadata["previd"][0]["value"]);
-            if(count($arrRecord) > 2) {
+        elseif (validateSystemid($arrMetadata["previd"][0]["value"])) {
+            $objRoot = class_objectfactory::getInstance()->getObject($arrMetadata["previd"][0]["value"]);
+            if ($objRoot !== null) {
                 $strPrevId = $arrMetadata["previd"][0]["value"];
             }
 
         }
 
-        if($strPrevId == "") {
+        if ($strPrevId == "") {
             $strPrevId = $strTopFolderId;
         }
 
         //check if an existing page should be replaced
-        if($bitReplaceExisting) {
+        if ($bitReplaceExisting) {
             $objPage = class_module_pages_page::getPageByName($strPagename);
-            if($objPage !== null) {
+            if ($objPage !== null) {
                 $strPrevId = $objPage->getPrevId();
                 $objPage->deleteObject();
             }
@@ -191,7 +201,7 @@ class class_systemtask_pageimport extends class_systemtask_base implements inter
         $objPage->updateObjectToDb($strPrevId);
         $strPageId = $objPage->getSystemid();
 
-        $strReturn .= "created page " . $objPage->getStrName() . "\n";
+        $strReturn .= "created page ".$objPage->getStrName()."\n";
 
         //save propertysets
         $objLanguages = new class_module_languages_language();
@@ -199,7 +209,7 @@ class class_systemtask_pageimport extends class_systemtask_base implements inter
 
         $arrPropertysets = $arrMetadata["pageproperties"][0]["propertyset"];
 
-        foreach($arrPropertysets as $arrOnePropSet) {
+        foreach ($arrPropertysets as $arrOnePropSet) {
 
             class_carrier::getInstance()->getObjDB()->flushQueryCache();
 
@@ -220,7 +230,7 @@ class class_systemtask_pageimport extends class_systemtask_base implements inter
 
             $objPage->updateObjectToDb();
 
-            $strReturn .= "saved propertyset for language " . $objPage->getStrLanguage() . "\n";
+            $strReturn .= "saved propertyset for language ".$objPage->getStrLanguage()."\n";
         }
 
 
@@ -228,11 +238,11 @@ class class_systemtask_pageimport extends class_systemtask_base implements inter
 
 
         //and import each element
-        foreach($arrElements as $arrSingleElement) {
+        foreach ($arrElements as $arrSingleElement) {
 
             //validate if element exists
             $strElementName = $arrSingleElement["metadata"][0]["element"][0]["value"];
-            if(class_module_pages_element::getElement($strElementName) !== null) {
+            if (class_module_pages_element::getElement($strElementName) !== null) {
 
                 $objElement = new class_module_pages_pageelement();
                 $objElement->setStrPlaceholder($arrSingleElement["metadata"][0]["placeholder"][0]["value"]);
@@ -246,21 +256,30 @@ class class_systemtask_pageimport extends class_systemtask_base implements inter
                 //and the foreign table
                 $strTable = $arrSingleElement["foreignTable"][0]["attributes"]["table"];
 
+
                 $arrValues = array();
-                foreach($arrSingleElement["foreignTable"][0]["column"] as $arrColumn) {
+                foreach ($arrSingleElement["foreignTable"][0]["column"] as $arrColumn) {
                     $arrValues[$arrColumn["attributes"]["name"]] = isset($arrColumn["value"]) ? $arrColumn["value"] : "";
                 }
 
                 unset($arrValues["content_id"]);
 
                 //and build the query itself
-                $strQuery = "UPDATE " . class_carrier::getInstance()->getObjDB()->encloseTableName(_dbprefix_ . $strTable) . " SET ";
+                $strQuery = "UPDATE ".class_carrier::getInstance()->getObjDB()->encloseTableName(_dbprefix_.$strTable)." SET ";
 
                 $arrInsertValues = array();
                 $arrEscapes = array();
 
-                foreach($arrValues as $strColumn => $strValue) {
-                    $strQuery .= class_carrier::getInstance()->getObjDB()->encloseColumnName($strColumn) . " = ? ,";
+                $arrColumns = class_carrier::getInstance()->getObjDB()->getColumnsOfTable(_dbprefix_.$strTable);
+                $arrColumns = array_map(function ($arrColumn) {
+                    return $arrColumn["columnName"];
+                }, $arrColumns);
+
+                foreach ($arrValues as $strColumn => $strValue) {
+                    if(!in_array($strColumn, $arrColumns)) {
+                        continue;
+                    }
+                    $strQuery .= class_carrier::getInstance()->getObjDB()->encloseColumnName($strColumn)." = ? ,";
 
                     $arrInsertValues[] = $strValue;
                     $arrEscapes[] = false;
@@ -271,11 +290,11 @@ class class_systemtask_pageimport extends class_systemtask_base implements inter
                 $arrInsertValues[] = $objElement->getSystemid();
 
                 class_carrier::getInstance()->getObjDB()->_pQuery($strQuery, $arrInsertValues, $arrEscapes);
-                $strReturn .= "created element " . $objElement->getStrName() . "\n";
+                $strReturn .= "created element ".$objElement->getStrName()."\n";
 
             }
             else {
-                $strReturn .= "error: element " . $strElementName . " not existing";
+                $strReturn .= "error: element ".$strElementName." not existing";
             }
 
         }

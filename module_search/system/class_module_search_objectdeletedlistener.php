@@ -46,6 +46,7 @@ class class_module_search_objectdeletedlistener implements interface_genericeven
      */
     public static function staticConstruct() {
         class_core_eventdispatcher::getInstance()->removeAndAddListener(class_system_eventidentifier::EVENT_SYSTEM_RECORDDELETED, new class_module_search_objectdeletedlistener());
+        class_core_eventdispatcher::getInstance()->removeAndAddListener(class_system_eventidentifier::EVENT_SYSTEM_RECORDDELETED_LOGICALLY, new class_module_search_objectdeletedlistener());
     }
 
 }

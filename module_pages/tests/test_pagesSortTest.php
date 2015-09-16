@@ -41,7 +41,7 @@ class class_test_pagesSortTest extends class_testbase {
         $this->assertEquals(2, $objPagelement2At2->getIntSort(), "t6");
 
 
-        $objRootPage->deleteObject();
+        $objRootPage->deleteObjectFromDatabase();
     }
 
     public function testPagesSortTest() {
@@ -94,7 +94,7 @@ class class_test_pagesSortTest extends class_testbase {
 
 
 
-        $objRootPage->deleteObject();
+        $objRootPage->deleteObjectFromDatabase();
     }
 
 
@@ -137,7 +137,7 @@ class class_test_pagesSortTest extends class_testbase {
         $this->assertEquals($arrNodes[1]->getSystemid(), $objSubPage2->getSystemid());
         $this->assertEquals($arrNodes[2]->getSystemid(), $objSubFolder1->getSystemid());
 
-        $objRootPage->deleteObject();
+        $objRootPage->deleteObjectFromDatabase();
     }
 
 
@@ -231,7 +231,7 @@ class class_test_pagesSortTest extends class_testbase {
         $this->assertEquals(2, $arrElements[1]->getIntSort()); $this->assertEquals($objPagelementd1->getSystemid(), $arrElements[1]->getSystemid());
         $this->assertEquals(3, $arrElements[2]->getIntSort()); $this->assertEquals($objPagelementd3->getSystemid(), $arrElements[2]->getSystemid());
 
-        $objPage->deleteObject();
+        $objPage->deleteObjectFromDatabase();
     }
 
 
@@ -363,7 +363,7 @@ class class_test_pagesSortTest extends class_testbase {
         $this->assertEquals(2, $arrElements[1]->getIntSort()); $this->assertEquals($objPagelementdA3->getSystemid(), $arrElements[1]->getSystemid());
 
 
-        $objPage->deleteObject();
+        $objPage->deleteObjectFromDatabase();
     }
 
 
@@ -405,7 +405,7 @@ class class_test_pagesSortTest extends class_testbase {
         $this->assertEquals(3, $arrElements[2]->getIntSort()); $this->assertEquals($objPagelementb3->getSystemid(), $arrElements[2]->getSystemid());
 
 
-        $objPagelementb2->deleteObject();
+        $objPagelementb2->deleteObjectFromDatabase();
         $this->flushDBCache();
 
         $arrElements = class_module_pages_pageelement::getElementsByPlaceholderAndPage($objPage->getSystemid(), "b_test", $objLangugage->getStrAdminLanguageToWorkOn(), false);
@@ -414,7 +414,7 @@ class class_test_pagesSortTest extends class_testbase {
         $this->assertEquals(2, $arrElements[1]->getIntSort()); $this->assertEquals($objPagelementb3->getSystemid(), $arrElements[1]->getSystemid());
 
 
-        $objPage->deleteObject();
+        $objPage->deleteObjectFromDatabase();
 
     }
 
@@ -484,7 +484,7 @@ class class_test_pagesSortTest extends class_testbase {
         $this->assertEquals(3, $arrElements[2]->getIntSort()); $this->assertEquals($objPagelementc3->getSystemid(), $arrElements[2]->getSystemid());
 
 
-        $objPagelementb2->deleteObject();
+        $objPagelementb2->deleteObjectFromDatabase();
         $this->flushDBCache();
 
         $arrElements = class_module_pages_pageelement::getElementsByPlaceholderAndPage($objPage->getSystemid(), "b_test", "a1", false);
@@ -500,7 +500,7 @@ class class_test_pagesSortTest extends class_testbase {
         $this->assertEquals(3, $arrElements[2]->getIntSort()); $this->assertEquals($objPagelementc3->getSystemid(), $arrElements[2]->getSystemid());
 
 
-        $objPage->deleteObject();
+        $objPage->deleteObjectFromDatabase();
 
     }
 }

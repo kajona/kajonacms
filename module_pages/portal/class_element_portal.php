@@ -99,7 +99,7 @@ abstract class class_element_portal extends class_portal_controller {
         //wrap all in a try catch block
         try {
 
-            if(_pages_portaleditor_ == "true" && $this->objSession->isAdmin() && class_carrier::getInstance()->getObjSession()->getSession("pe_disable") != "true") {
+            if(class_module_system_setting::getConfigValue("_pages_portaleditor_") == "true" && $this->objSession->isAdmin() && class_carrier::getInstance()->getObjSession()->getSession("pe_disable") != "true") {
                 //Check needed rights
 
                 $objElement = class_objectfactory::getInstance()->getObject($this->getSystemid());
@@ -130,8 +130,8 @@ abstract class class_element_portal extends class_portal_controller {
             //An error occurred during content generation. redirect to error page
             $objEx->processException();
             //if available, show the error-page. on debugging-environments, the exception processing already die()d the process.
-            if($this->getPagename() != _pages_errorpage_)
-                $this->portalReload(class_link::getLinkPortalHref(_pages_errorpage_));
+            if($this->getPagename() != class_module_system_setting::getConfigValue("_pages_errorpage_"))
+                $this->portalReload(class_link::getLinkPortalHref(class_module_system_setting::getConfigValue("_pages_errorpage_")));
 
             $strReturn = $objEx->getMessage();
         }
@@ -251,7 +251,7 @@ abstract class class_element_portal extends class_portal_controller {
             return $strContent;
 
         $objInstance = class_objectfactory::getInstance()->getObject($strSystemid);
-        if($objInstance == null || _pages_portaleditor_ != "true")
+        if($objInstance == null || class_module_system_setting::getConfigValue("_pages_portaleditor_") != "true")
             return $strContent;
 
         if(!class_carrier::getInstance()->getObjSession()->isAdmin() || !$objInstance->rightEdit($strSystemid) || class_carrier::getInstance()->getObjSession()->getSession("pe_disable") == "true")
@@ -385,7 +385,7 @@ abstract class class_element_portal extends class_portal_controller {
     public static function addPortalEditorSetActiveCode($strContent, $strSystemid, $arrConfig) {
         $strReturn = "";
 
-        if(_pages_portaleditor_ == "true" && class_carrier::getInstance()->getObjRights()->rightEdit($strSystemid) && class_carrier::getInstance()->getObjSession()->isAdmin()) {
+        if(class_module_system_setting::getConfigValue("_pages_portaleditor_") == "true" && class_carrier::getInstance()->getObjRights()->rightEdit($strSystemid) && class_carrier::getInstance()->getObjSession()->isAdmin()) {
 
             if(class_carrier::getInstance()->getObjSession()->getSession("pe_disable") != "true") {
 

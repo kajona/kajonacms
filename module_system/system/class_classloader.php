@@ -2,8 +2,6 @@
 /*"******************************************************************************************************
 *   (c) 2007-2015 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
-*-------------------------------------------------------------------------------------------------------*
-*	$Id$                                            *
 ********************************************************************************************************/
 
 /**
@@ -13,7 +11,8 @@
  * @package module_system
  * @author sidler@mulchprod.de
  */
-class class_classloader {
+class class_classloader
+{
 
     private $intNumberOfClassesLoaded = 0;
 
@@ -37,16 +36,18 @@ class class_classloader {
     private $arrFiles = array();
 
 
-
     /**
      * Factory method returning an instance of class_classloader.
      * The class-loader implements the singleton pattern.
+     *
      * @static
      * @return class_classloader
      */
-    public static function getInstance() {
-        if(self::$objInstance == null)
+    public static function getInstance()
+    {
+        if (self::$objInstance == null) {
             self::$objInstance = new class_classloader();
+        }
 
         return self::$objInstance;
     }
@@ -54,21 +55,22 @@ class class_classloader {
     /**
      * Constructor, initializes the internal fields
      */
-    private function __construct() {
+    private function __construct()
+    {
 
 
-        $this->strModulesCacheFile          = _realpath_."/project/temp/modules.cache";
-        $this->strClassesCacheFile          = _realpath_."/project/temp/classes.cache";
+        $this->strModulesCacheFile = _realpath_."/project/temp/modules.cache";
+        $this->strClassesCacheFile = _realpath_."/project/temp/classes.cache";
 
         include_once(__DIR__."/class_apc_cache.php");
         $this->arrModules = class_apc_cache::getInstance()->getValue(__CLASS__."modules");
         $this->arrFiles = class_apc_cache::getInstance()->getValue(__CLASS__."files");
 
-        if($this->arrModules === false || $this->arrFiles == false) {
+        if ($this->arrModules === false || $this->arrFiles == false) {
             $this->arrModules = array();
             $this->arrFiles = array();
 
-            if(is_file($this->strModulesCacheFile) && is_file($this->strClassesCacheFile)) {
+            if (is_file($this->strModulesCacheFile) && is_file($this->strClassesCacheFile)) {
                 $this->arrModules = unserialize(file_get_contents($this->strModulesCacheFile));
                 $this->arrFiles = unserialize(file_get_contents($this->strClassesCacheFile));
             }
@@ -87,8 +89,9 @@ class class_classloader {
     /**
      * Stores the cached structures to file - if enabled and required
      */
-    public function __destruct() {
-        if($this->bitCacheSaveRequired && class_config::getInstance()->getConfig('resourcecaching') == true) {
+    public function __destruct()
+    {
+        if ($this->bitCacheSaveRequired && class_config::getInstance()->getConfig('resourcecaching') == true) {
 
             class_apc_cache::getInstance()->addValue(__CLASS__."modules", $this->arrModules);
             class_apc_cache::getInstance()->addValue(__CLASS__."files", $this->arrFiles);
@@ -103,45 +106,54 @@ class class_classloader {
      * This is required since otherwise static init blocks would be skipped.
      * Currently enabled for classes matching the pattern "class_module_" only.
      *
-     * @return void
+     * @throws class_exception
      */
-    public function includeClasses() {
-        foreach($this->arrFiles as $strClass => $strOneFile) {
-            if(uniStrpos($strClass, "class_module_") !== false /*$strClass != "class_testbase"*/) {
+    public function includeClasses()
+    {
+        foreach ($this->arrFiles as $strClass => $strOneFile) {
+            if (uniStrpos($strClass, "class_module_") !== false /*$strClass != "class_testbase"*/) {
                 $this->loadClass($strClass);
+
+                /*if (ob_get_contents() !== "") {
+                    throw new class_exception("Whitespace outside php-tags in file ".$strOneFile." @ ".$strClass.", aborting system-startup", class_exception::$level_FATALERROR);
+                }*/
             }
         }
     }
 
     /**
+     * Scans all core directories for matching modules
+     *
      * @return void
      */
-    private function scanModules() {
+    private function scanModules()
+    {
 
         $arrExcludedModules = array();
         $arrIncludedModules = array();
-        if(is_file(_realpath_."/project/system/config/packageconfig.php")) {
+        if (is_file(_realpath_."/project/system/config/packageconfig.php")) {
             include(_realpath_."/project/system/config/packageconfig.php");
         }
 
         //Module-Constants
         $arrModules = array();
-        foreach(scandir(_realpath_) as $strRootFolder) {
+        foreach ($this->getCoreDirectories() as $strRootFolder) {
 
-            if(uniStrpos($strRootFolder, "core") === false)
+            if (uniStrpos($strRootFolder, "core") === false) {
                 continue;
+            }
 
-            foreach(scandir(_realpath_."/".$strRootFolder) as $strOneModule) {
+            foreach (scandir(_realpath_."/".$strRootFolder) as $strOneModule) {
 
-                if(preg_match("/^(module|element|_)+.*/i", $strOneModule)) {
+                if (preg_match("/^(module|element|_)+.*/i", $strOneModule)) {
 
                     //skip excluded modules
-                    if(isset($arrExcludedModules[$strRootFolder]) && in_array($strOneModule, $arrExcludedModules[$strRootFolder])) {
+                    if (isset($arrExcludedModules[$strRootFolder]) && in_array($strOneModule, $arrExcludedModules[$strRootFolder])) {
                         continue;
                     }
 
                     //skip module if not marked as to be included
-                    if(count($arrIncludedModules) > 0 && (isset($arrIncludedModules[$strRootFolder]) && !in_array($strOneModule, $arrIncludedModules[$strRootFolder]))) {
+                    if (count($arrIncludedModules) > 0 && (isset($arrIncludedModules[$strRootFolder]) && !in_array($strOneModule, $arrIncludedModules[$strRootFolder]))) {
                         continue;
                     }
 
@@ -154,12 +166,19 @@ class class_classloader {
         $this->arrModules = $arrModules;
     }
 
-    public static function getCoreDirectories() {
+    /**
+     * Returns a list of all core directories available
+     *
+     * @return array
+     */
+    public static function getCoreDirectories()
+    {
         $arrCores = array();
-        foreach(scandir(_realpath_) as $strRootFolder) {
+        foreach (scandir(_realpath_) as $strRootFolder) {
 
-            if(uniStrpos($strRootFolder, "core") === false)
+            if (uniStrpos($strRootFolder, "core") === false) {
                 continue;
+            }
 
             $arrCores[] = $strRootFolder;
         }
@@ -175,7 +194,8 @@ class class_classloader {
      *
      * @return void
      */
-    public function flushCache() {
+    public function flushCache()
+    {
         $objFilesystem = new class_filesystem();
         $objFilesystem->fileDelete($this->strModulesCacheFile);
         $objFilesystem->fileDelete($this->strClassesCacheFile);
@@ -192,44 +212,46 @@ class class_classloader {
      *
      * @return void
      */
-    private function indexAvailableCodefiles() {
-
-        $this->arrFiles = array_merge($this->arrFiles, $this->getClassesInFolder("/admin/elements/"));
-        $this->arrFiles = array_merge($this->arrFiles, $this->getClassesInFolder("/admin/formentries/"));
-        $this->arrFiles = array_merge($this->arrFiles, $this->getClassesInFolder("/admin/statsreports/"));
-        $this->arrFiles = array_merge($this->arrFiles, $this->getClassesInFolder("/admin/systemtasks/"));
-        $this->arrFiles = array_merge($this->arrFiles, $this->getClassesInFolder("/admin/widgets/"));
-        $this->arrFiles = array_merge($this->arrFiles, $this->getClassesInFolder("/admin/"));
-        $this->arrFiles = array_merge($this->arrFiles, $this->getClassesInFolder("/portal/elements/"));
-        $this->arrFiles = array_merge($this->arrFiles, $this->getClassesInFolder("/portal/templatemapper/"));
-        $this->arrFiles = array_merge($this->arrFiles, $this->getClassesInFolder("/portal/"));
-        $this->arrFiles = array_merge($this->arrFiles, $this->getClassesInFolder("/system/db/"));
-        $this->arrFiles = array_merge($this->arrFiles, $this->getClassesInFolder("/system/usersources/"));
-        $this->arrFiles = array_merge($this->arrFiles, $this->getClassesInFolder("/system/imageplugins/"));
-        $this->arrFiles = array_merge($this->arrFiles, $this->getClassesInFolder("/system/validators/"));
-        $this->arrFiles = array_merge($this->arrFiles, $this->getClassesInFolder("/system/workflows/"));
-        $this->arrFiles = array_merge($this->arrFiles, $this->getClassesInFolder("/system/messageproviders/"));
-        $this->arrFiles = array_merge($this->arrFiles, $this->getClassesInFolder("/system/scriptlets/"));
-        $this->arrFiles = array_merge($this->arrFiles, $this->getClassesInFolder("/system/"));
-        $this->arrFiles = array_merge($this->arrFiles, $this->getClassesInFolder("/installer/"));
-
+    private function indexAvailableCodefiles()
+    {
+        $this->addClassFolder("/admin/elements/");
+        $this->addClassFolder("/admin/formentries/");
+        $this->addClassFolder("/admin/statsreports/");
+        $this->addClassFolder("/admin/systemtasks/");
+        $this->addClassFolder("/admin/widgets/");
+        $this->addClassFolder("/admin/");
+        $this->addClassFolder("/portal/elements/");
+        $this->addClassFolder("/portal/templatemapper/");
+        $this->addClassFolder("/portal/");
+        $this->addClassFolder("/system/db/");
+        $this->addClassFolder("/system/usersources/");
+        $this->addClassFolder("/system/imageplugins/");
+        $this->addClassFolder("/system/validators/");
+        $this->addClassFolder("/system/workflows/");
+        $this->addClassFolder("/system/messageproviders/");
+        $this->addClassFolder("/system/scriptlets/");
+        $this->addClassFolder("/system/");
+        $this->addClassFolder("/installer/");
     }
 
     /**
      * Loads all classes in a single folder, but traversing each module available.
      * Internal helper.
+     *
      * @param string $strFolder
+     *
      * @return string[]
      */
-    private function getClassesInFolder($strFolder) {
+    private function getClassesInFolder($strFolder)
+    {
 
         $arrFiles = array();
 
-        foreach($this->arrModules as $strPath => $strSingleModule) {
-            if(is_dir(_realpath_."/".$strPath.$strFolder)) {
+        foreach ($this->arrModules as $strPath => $strSingleModule) {
+            if (is_dir(_realpath_."/".$strPath.$strFolder)) {
                 $arrTempFiles = scandir(_realpath_."/".$strPath.$strFolder);
-                foreach($arrTempFiles as $strSingleFile) {
-                    if(preg_match("/(class|interface)(.*)\.php/i", $strSingleFile)) {
+                foreach ($arrTempFiles as $strSingleFile) {
+                    if (preg_match("/(class|interface|trait)(.*)\.php$/i", $strSingleFile)) {
                         $arrFiles[substr($strSingleFile, 0, -4)] = _realpath_."/".$strPath.$strFolder.$strSingleFile;
                     }
                 }
@@ -237,10 +259,10 @@ class class_classloader {
         }
 
         //scan for overwrites
-        if(is_dir(_realpath_."/project".$strFolder)) {
+        if (is_dir(_realpath_."/project".$strFolder)) {
             $arrTempFiles = scandir(_realpath_."/project".$strFolder);
-            foreach($arrTempFiles as $strSingleFile) {
-                if(preg_match("/(class|interface)(.*)\.php/i", $strSingleFile)) {
+            foreach ($arrTempFiles as $strSingleFile) {
+                if (preg_match("/(class|interface|trait)(.*)\.php$/i", $strSingleFile)) {
                     $arrFiles[substr($strSingleFile, 0, -4)] = _realpath_."/project".$strFolder.$strSingleFile;
                 }
             }
@@ -250,16 +272,17 @@ class class_classloader {
     }
 
 
-
     /**
      * The class-loader itself. Loads the class, if existing. Otherwise the chain of class-loaders is triggered.
      *
      * @param string $strClassName
+     *
      * @return bool
      */
-    public function loadClass($strClassName) {
+    public function loadClass($strClassName)
+    {
 
-        if(isset($this->arrFiles[$strClassName])) {
+        if (isset($this->arrFiles[$strClassName])) {
             $this->intNumberOfClassesLoaded++;
             include_once $this->arrFiles[$strClassName];
             return true;
@@ -271,26 +294,33 @@ class class_classloader {
 
     /**
      * Returns the list of modules indexed by the classloader, so residing under /core
+     *
      * @return string[]
      */
-    public function getArrModules() {
+    public function getArrModules()
+    {
         return $this->arrModules;
     }
 
     /**
      * Adds a new folder to the autoload locations
+     *
      * @param string $strPath
+     *
      * @return void
      */
-    public function addClassFolder($strPath){
+    public function addClassFolder($strPath)
+    {
         $this->arrFiles = array_merge($this->arrFiles, $this->getClassesInFolder($strPath));
     }
 
     /**
      * Returns the number of classes loaded internally
+     *
      * @return int
      */
-    public function getIntNumberOfClassesLoaded() {
+    public function getIntNumberOfClassesLoaded()
+    {
         return $this->intNumberOfClassesLoaded;
     }
 

@@ -24,7 +24,7 @@ abstract class class_admin_evensimpler extends class_admin_simple {
     const   STR_OBJECT_LIST_ANNOTATION = "@objectList";
     const   STR_OBJECT_NEW_ANNOTATION = "@objectNew";
     const   STR_OBJECT_EDIT_ANNOTATION = "@objectEdit";
-    
+
     private static $arrActionNameMapping = array(
         "list" => self::STR_OBJECT_LIST_ANNOTATION,
         "new" => self::STR_OBJECT_NEW_ANNOTATION,
@@ -83,14 +83,14 @@ abstract class class_admin_evensimpler extends class_admin_simple {
     protected function getActionNameForClass($strAction, $objInstance) {
         if (isset(self::$arrActionNameMapping[$strAction])) {
             $strAnnotationPrefix = self::$arrActionNameMapping[$strAction];
-            
+
             if ($strAction == "new") {
                 return $strAction . $this->getStrCurObjectTypeName();
             }
             else {
                 $objReflection = new class_reflection($this);
                 $arrAnnotations = $objReflection->getAnnotationsWithValueFromClass(get_class($objInstance));
-                
+
                 foreach ($arrAnnotations as $strProperty) {
                     if (uniStrpos($strProperty, $strAnnotationPrefix) === 0) {
                         return $strAction . uniSubstr($strProperty, uniStrlen($strAnnotationPrefix));
@@ -98,7 +98,7 @@ abstract class class_admin_evensimpler extends class_admin_simple {
                 }
             }
         }
-        
+
         return parent::getActionNameForClass($strAction, $objInstance);
     }
 
@@ -165,8 +165,9 @@ abstract class class_admin_evensimpler extends class_admin_simple {
             /** @var $objEdit interface_model|class_model */
             $objEdit = new $strType();
 
-            if($this->isFormExistingForInstance($objEdit))
-                $objEdit = $this->objCurAdminForm->getObjSourceobject();
+            $objForm = class_admin_formgenerator_factory::getFormForModel($objEdit);
+            if($objForm !== null)
+                $objEdit = $objForm->getObjSourceobject();
 
             //reset the current object reference to an object created before (e.g. during actionSave)
             $objForm = $this->getAdminForm($objEdit);
@@ -209,8 +210,9 @@ abstract class class_admin_evensimpler extends class_admin_simple {
         if(!is_null($strType)) {
 
             //reset the current object reference to an object created before (e.g. during actionSave)
-            if($this->isFormExistingForInstance($objInstance))
-                $objInstance = $this->objCurAdminForm->getObjSourceobject();
+            $objForm = class_admin_formgenerator_factory::getFormForModel($objInstance);
+            if($objForm !== null)
+                $objInstance = $objForm->getObjSourceobject();
 
             $objForm = $this->getAdminForm($objInstance);
             $objForm->addField(new class_formentry_hidden("", "mode"))->setStrValue("edit");
@@ -250,32 +252,14 @@ abstract class class_admin_evensimpler extends class_admin_simple {
     }
 
     /**
-     * Creates the admin-form for a given object.
-     * You may want to override this method in case you want to inject additional fields or
-     * to modify the form.
+     * Creates the admin-form for a given object. You should specify a @formGenerator annotation in your model if you
+     * want to override the default form
      *
      * @param interface_model|class_model $objInstance
      * @return class_admin_formgenerator
      */
     protected function getAdminForm(interface_model $objInstance) {
-        //already generated?
-        if($this->isFormExistingForInstance($objInstance))
-            return $this->objCurAdminForm;
-
-        $objForm = new class_admin_formgenerator($this->getArrModule("modul"), $objInstance);
-        $objForm->generateFieldsFromObject();
-        $this->objCurAdminForm = $objForm;
-        return $objForm;
-    }
-
-    /**
-     * Internal helper to check if a form-object is already existing for the passed instance
-     * @param interface_model $objInstance
-     *
-     * @return bool
-     */
-    private function isFormExistingForInstance(interface_model $objInstance) {
-        return $this->objCurAdminForm != null && get_class($this->objCurAdminForm->getObjSourceobject()) == get_class($objInstance) && $objInstance->getSystemid() == $this->objCurAdminForm->getObjSourceobject()->getSystemid();
+        return $this->objCurAdminForm = class_admin_formgenerator_factory::createByModel($objInstance);
     }
 
     /**
@@ -315,6 +299,8 @@ abstract class class_admin_evensimpler extends class_admin_simple {
                 $objRecord = $objForm->getObjSourceobject();
                 $objRecord->updateObjectToDb($strSystemId);
 
+                $this->setSystemid($objRecord->getStrSystemid());
+
                 $this->adminReload(class_link::getLinkAdminHref($this->getArrModule("modul"), $this->getActionNameForClass("list", $objRecord), "&systemid=".$objRecord->getStrPrevId().($this->getParam("pe") != "" ? "&peClose=1&blockAction=1" : "")));
                 return "";
             }
@@ -346,7 +332,7 @@ abstract class class_admin_evensimpler extends class_admin_simple {
         $this->setAction($strOldAction);
 
         $arrPath = $this->getPathArray($this->getSystemid());
-        
+
         // Render additional navigation path entries for child objects.
         foreach($arrPath as $strOneSystemid) {
 
@@ -363,18 +349,18 @@ abstract class class_admin_evensimpler extends class_admin_simple {
                     $arrPathLinks[] = $objEntry;
                 }
             }
-            
+
         }
 
         return $arrPathLinks;
     }
-    
-    
+
+
     /**
      * Overwrite to generate path navigation entries for the given object.
      * If not overwritten, the entries will be skipped and won't be included into the
      * path navigation.
-     * 
+     *
      * @param interface_model $objInstance
      * @return string Navigation link.
      */
@@ -431,6 +417,7 @@ abstract class class_admin_evensimpler extends class_admin_simple {
 
     /**
      * @param \class_admin_formgenerator $objCurAdminForm
+     * @deprecated
      */
     public function setObjCurAdminForm($objCurAdminForm) {
         $this->objCurAdminForm = $objCurAdminForm;
@@ -438,6 +425,7 @@ abstract class class_admin_evensimpler extends class_admin_simple {
 
     /**
      * @return \class_admin_formgenerator
+     * @deprecated
      */
     public function getObjCurAdminForm() {
         return $this->objCurAdminForm;

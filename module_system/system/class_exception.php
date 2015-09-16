@@ -15,7 +15,8 @@
  *
  * @package module_system
  */
-class class_exception extends Exception {
+class class_exception extends Exception
+{
 
     /**
      * This level is for common errors happening from time to time ;)
@@ -40,7 +41,8 @@ class class_exception extends Exception {
      * @param string $strError
      * @param int $intErrorlevel
      */
-    public function __construct($strError, $intErrorlevel) {
+    public function __construct($strError, $intErrorlevel)
+    {
         parent::__construct($strError);
         $this->intErrorlevel = $intErrorlevel;
 
@@ -58,8 +60,8 @@ class class_exception extends Exception {
      *
      * @return void
      */
-    public function processException() {
-
+    public function processException()
+    {
 
         //set which POST parameters should read out
         $arrPostParams = array("module", "action", "page", "systemid");
@@ -67,29 +69,40 @@ class class_exception extends Exception {
         $objHistory = new class_history();
 
         //send an email to the admin?
-        if(defined("_system_admin_email_") && _system_admin_email_ != "") {
+        $strAdminMail = "";
+        try {
+            if (class_db::getInstance()->getBitConnected()) {
+                $strAdminMail = class_module_system_setting::getConfigValue("_system_admin_email_");
+            }
+        }
+        catch (Exception $objEx) {
+        }
+
+        if ($strAdminMail != "") {
             $strMailtext = "";
             $strMailtext .= "The system installed at "._webpath_." registered an error!\n\n";
             $strMailtext .= "The error message was:\n";
             $strMailtext .= "\t".$this->getMessage()."\n\n";
             $strMailtext .= "The level of this error was:\n";
             $strMailtext .= "\t";
-            if($this->getErrorlevel() == self::$level_FATALERROR)
+            if ($this->getErrorlevel() == self::$level_FATALERROR) {
                 $strMailtext .= "FATAL ERROR";
-            if($this->getErrorlevel() == self::$level_ERROR)
+            }
+            if ($this->getErrorlevel() == self::$level_ERROR) {
                 $strMailtext .= "REGULAR ERROR";
+            }
             $strMailtext .= "\n\n";
             $strMailtext .= "File and line number the error was thrown:\n";
-            $strMailtext .= "\t".basename($this->getFile()) ." in line ".$this->getLine()."\n\n";
+            $strMailtext .= "\t".basename($this->getFile())." in line ".$this->getLine()."\n\n";
             $strMailtext .= "Callstack / Backtrace:\n\n";
             $strMailtext .= $this->getTraceAsString();
             $strMailtext .= "\n\n";
-            $strMailtext .= "User: ".  class_carrier::getInstance()->getObjSession()->getUserID()." (".class_carrier::getInstance()->getObjSession()->getUsername().")\n";
+            $strMailtext .= "User: ".class_carrier::getInstance()->getObjSession()->getUserID()." (".class_carrier::getInstance()->getObjSession()->getUsername().")\n";
             $strMailtext .= "Source host: ".getServer("REMOTE_ADDR")." (".@gethostbyaddr(getServer("REMOTE_ADDR")).")\n";
             $strMailtext .= "Query string: ".getServer("REQUEST_URI")."\n";
             $strMailtext .= "POST data (selective):\n";
-            foreach($arrPostParams as $strParam) {
-                if(getPost($strParam) != "") {
+            foreach ($arrPostParams as $strParam) {
+                if (getPost($strParam) != "") {
                     $strMailtext .= "\t".$strParam.": ".getPost($strParam)."\n";
                 }
             }
@@ -97,23 +110,27 @@ class class_exception extends Exception {
             $strMailtext .= "Last actions called:\n";
             $strMailtext .= "Admin:\n";
             $arrHistory = $objHistory->getArrAdminHistory();
-            if(is_array($arrHistory))
-                foreach($arrHistory as $intIndex => $strOneUrl)
+            if (is_array($arrHistory)) {
+                foreach ($arrHistory as $intIndex => $strOneUrl) {
                     $strMailtext .= " #".$intIndex.": ".$strOneUrl."\n";
+                }
+            }
             $strMailtext .= "Portal:\n";
             $arrHistory = $objHistory->getArrPortalHistory();
-            if(is_array($arrHistory))
-                foreach($arrHistory as $intIndex => $strOneUrl)
+            if (is_array($arrHistory)) {
+                foreach ($arrHistory as $intIndex => $strOneUrl) {
                     $strMailtext .= " #".$intIndex.": ".$strOneUrl."\n";
+                }
+            }
             $strMailtext .= "\n\n";
             $strMailtext .= "If you don't know what to do, feel free to open a ticket.\n\n";
             $strMailtext .= "For more help visit http://www.kajona.de.\n\n";
 
             $objMail = new class_mail();
             $objMail->setSubject("Error on website "._webpath_." occured!");
-            $objMail->setSender(_system_admin_email_);
+            $objMail->setSender($strAdminMail);
             $objMail->setText($strMailtext);
-            $objMail->addTo(_system_admin_email_);
+            $objMail->addTo($strAdminMail);
             $objMail->sendMail();
 
 
@@ -121,16 +138,16 @@ class class_exception extends Exception {
             $objMessage = new class_module_messaging_message();
             $objMessage->setStrBody($strMailtext);
             $objMessage->setObjMessageProvider(new class_messageprovider_exceptions());
-            $objMessageHandler->sendMessageObject($objMessage, new class_module_user_group(_admins_group_id_));
+            $objMessageHandler->sendMessageObject($objMessage, new class_module_user_group(class_module_system_setting::getConfigValue("_admins_group_id_")));
         }
 
-        if($this->intErrorlevel == class_exception::$level_FATALERROR) {
+        if ($this->intErrorlevel == class_exception::$level_FATALERROR) {
             //Handle fatal errors.
-            $strLogMessage = basename($this->getFile()).":".$this->getLine(). " -- ".$this->getMessage();
+            $strLogMessage = basename($this->getFile()).":".$this->getLine()." -- ".$this->getMessage();
             class_logger::getInstance()->addLogRow($strLogMessage, class_logger::$levelError);
 
             //fatal errors are displayed in every case
-            if(_xmlLoader_ === true) {
+            if (_xmlLoader_ === true) {
                 $strErrormessage = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
                 $strErrormessage .= "<error>".xmlSafeString($this->getMessage())."</error>";
             }
@@ -145,20 +162,21 @@ class class_exception extends Exception {
             }
             print $strErrormessage;
             //Execution has to be stopped here!
-            if(class_response_object::getInstance()->getStrStatusCode() == "" || class_response_object::getInstance()->getStrStatusCode() == class_http_statuscodes::SC_OK)
+            if (class_response_object::getInstance()->getStrStatusCode() == "" || class_response_object::getInstance()->getStrStatusCode() == class_http_statuscodes::SC_OK) {
                 class_response_object::getInstance()->setStrStatusCode(class_http_statuscodes::SC_INTERNAL_SERVER_ERROR);
+            }
 
             class_response_object::getInstance()->sendHeaders();
             die();
         }
         elseif ($this->intErrorlevel == class_exception::$level_ERROR) {
             //handle regular errors
-            $strLogMessage = basename($this->getFile()).":".$this->getLine(). " -- ".$this->getMessage();
+            $strLogMessage = basename($this->getFile()).":".$this->getLine()." -- ".$this->getMessage();
             class_logger::getInstance()->addLogRow($strLogMessage, class_logger::$levelWarning);
 
             //check, if regular errors should be displayed:
-            if($this->intDebuglevel >= 1) {
-                if(_xmlLoader_ === true) {
+            if ($this->intDebuglevel >= 1) {
+                if (_xmlLoader_ === true) {
                     $strErrormessage = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
                     $strErrormessage .= "<error>".xmlSafeString($this->getMessage())."</error>";
                 }
@@ -185,11 +203,14 @@ class class_exception extends Exception {
      * by an try-catch block.
      *
      * @param class_exception $objException
+     *
      * @return void
      */
-    public static function globalExceptionHandler($objException) {
-        if (!($objException instanceof class_exception))
+    public static function globalExceptionHandler($objException)
+    {
+        if (!($objException instanceof class_exception)) {
             $objException = new class_exception((string)$objException, class_exception::$level_FATALERROR);
+        }
         $objException->processException();
         class_response_object::getInstance()->sendHeaders();
     }
@@ -197,30 +218,36 @@ class class_exception extends Exception {
     /**
      * @return int
      */
-    public function getErrorlevel() {
+    public function getErrorlevel()
+    {
         return $this->intErrorlevel;
     }
 
     /**
      * @param int $intErrorlevel
+     *
      * @return void
      */
-    public function setErrorlevel($intErrorlevel) {
+    public function setErrorlevel($intErrorlevel)
+    {
         $this->intErrorlevel = $intErrorlevel;
     }
 
     /**
      * @param string $intDebuglevel
+     *
      * @return void
      */
-    public function setIntDebuglevel($intDebuglevel) {
+    public function setIntDebuglevel($intDebuglevel)
+    {
         $this->intDebuglevel = $intDebuglevel;
     }
 
     /**
      * @return string
      */
-    public function getIntDebuglevel() {
+    public function getIntDebuglevel()
+    {
         return $this->intDebuglevel;
     }
 
@@ -233,13 +260,15 @@ class class_exception extends Exception {
 /**
  * Class class_authentication_exception
  */
-class class_authentication_exception extends class_exception {
+class class_authentication_exception extends class_exception
+{
 
 }
 
 /**
  * Class class_io_exception
  */
-class class_io_exception extends class_exception {
+class class_io_exception extends class_exception
+{
 
 }

@@ -46,8 +46,9 @@ class class_installer_system extends class_installer_base implements interface_i
         $arrFields["system_status"] = array("int", true);
         $arrFields["system_class"] = array("char254", true);
         $arrFields["system_comment"] = array("char254", true);
+        $arrFields["system_deleted"] = array("int", true);
 
-        if(!$this->objDB->createTable("system", $arrFields, array("system_id"), array("system_prev_id", "system_module_nr", "system_sort", "system_owner", "system_create_date", "system_status", "system_lm_time", "system_lock_time")))
+        if(!$this->objDB->createTable("system", $arrFields, array("system_id"), array("system_prev_id", "system_module_nr", "system_sort", "system_owner", "system_create_date", "system_status", "system_lm_time", "system_lock_time", "system_deleted")))
             $strReturn .= "An error occurred! ...\n";
 
         //Rights table ----------------------------------------------------------------------------------
@@ -118,8 +119,9 @@ class class_installer_system extends class_installer_base implements interface_i
         $arrFields["user_admin_language"] = array("char254", true);
         $arrFields["user_admin_module"] = array("char254", true);
         $arrFields["user_authcode"] = array("char20", true);
+        $arrFields["user_items_per_page"] = array("int", true);
 
-        if(!$this->objDB->createTable("user", $arrFields, array("user_id")))
+        if(!$this->objDB->createTable("user", $arrFields, array("user_id"), array("user_username", "user_subsystem", "user_active", "user_deleted")))
             $strReturn .= "An error occurred! ...\n";
 
         // User table kajona subsystem  -----------------------------------------------------------------
@@ -150,7 +152,7 @@ class class_installer_system extends class_installer_base implements interface_i
         $arrFields["group_name"] = array("char254", true);
         $arrFields["group_subsystem"] = array("char254", true);
 
-        if(!$this->objDB->createTable("user_group", $arrFields, array("group_id")))
+        if(!$this->objDB->createTable("user_group", $arrFields, array("group_id"), array("group_name", "group_subsystem")))
             $strReturn .= "An error occurred! ...\n";
 
 
@@ -267,8 +269,6 @@ class class_installer_system extends class_installer_base implements interface_i
 
         //Registering a few constants
         $strReturn .= "Registering system-constants...\n";
-        //Number of rows in the login-log
-        $this->registerConstant("_user_log_nrofrecords_", "50", 1, _user_modul_id_);
 
         //And the default skin
         $this->registerConstant("_admin_skin_default_", "kajona_v4", class_module_system_setting::$int_TYPE_STRING, _user_modul_id_);
@@ -295,7 +295,6 @@ class class_installer_system extends class_installer_base implements interface_i
         //3.1: nr of rows in admin
         $this->registerConstant("_admin_nr_of_rows_", 15, class_module_system_setting::$int_TYPE_INT, _system_modul_id_);
         $this->registerConstant("_admin_only_https_", "false", class_module_system_setting::$int_TYPE_BOOL, _system_modul_id_);
-        $this->registerConstant("_system_use_dbcache_", "true", class_module_system_setting::$int_TYPE_BOOL, _system_modul_id_);
 
         //3.1: remoteloader max cachtime --> default 60 min
         $this->registerConstant("_remoteloader_max_cachetime_", 60 * 60, class_module_system_setting::$int_TYPE_INT, _system_modul_id_);
@@ -357,7 +356,7 @@ class class_installer_system extends class_installer_base implements interface_i
         $this->objDB->flushQueryCache();
 
         $strReturn .= "Modified root-rights....\n";
-        $this->objRights->rebuildRightsStructure();
+        class_carrier::getInstance()->getObjRights()->rebuildRightsStructure();
         $strReturn .= "Rebuilt rights structures...\n";
 
         //Creating an admin-user
@@ -501,39 +500,6 @@ class class_installer_system extends class_installer_base implements interface_i
         $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
         $strReturn .= "Version found:\n\t Module: ".$arrModule["module_name"].", Version: ".$arrModule["module_version"]."\n\n";
 
-
-        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModule["module_version"] == "3.4.2" || $arrModule["module_version"] == "3.4.2.2") {
-            $strReturn .= $this->update_342_349();
-            class_carrier::getInstance()->flushCache(class_carrier::INT_CACHE_TYPE_DBQUERIES | class_carrier::INT_CACHE_TYPE_DBSTATEMENTS);
-            $strReturn .= "<b>Temporary breaking update, please retrigger update sequence...</b>\n";
-            return $strReturn;
-        }
-
-        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModule["module_version"] == "3.4.9") {
-            $strReturn .= $this->update_349_3491();
-            $this->objDB->flushQueryCache();
-        }
-
-        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModule["module_version"] == "3.4.9.1") {
-            $strReturn .= $this->update_3491_3492();
-            $this->objDB->flushQueryCache();
-        }
-
-        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModule["module_version"] == "3.4.9.2") {
-            $strReturn .= $this->update_3492_3493();
-            $this->objDB->flushQueryCache();
-        }
-
-        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModule["module_version"] == "3.4.9.3") {
-            $strReturn .= $this->update_3493_40();
-            $this->objDB->flushQueryCache();
-        }
-
         $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
         if($arrModule["module_version"] == "4.0") {
             $strReturn .= $this->update_40_401();
@@ -657,263 +623,24 @@ class class_installer_system extends class_installer_base implements interface_i
             $strReturn .= $this->update_463_464();
         }
 
+        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "4.6.4") {
+            $strReturn .= $this->update_464_465();
+        }
+
+        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "4.6.5") {
+            $strReturn .= $this->update_465_47();
+        }
+
+        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "4.7") {
+            $strReturn .= $this->update_47_475();
+        }
+
         return $strReturn."\n\n";
     }
 
-
-    private function update_342_349() {
-        $strReturn = "Updating 3.4.2 to 3.4.9...\n";
-
-        $strReturn .= "Updating model-classes...\n";
-        $strQuery = "SELECT * FROM "._dbprefix_."system_module";
-        $arrRows = $this->objDB->getPArray($strQuery, array());
-        foreach($arrRows as $arrOneRow) {
-            $strQuery = "UPDATE "._dbprefix_."system_module SET
-                                module_filenameadmin = ?,
-                                module_xmlfilenameadmin = ?,
-                                module_filenameportal = ?,
-                                module_xmlfilenameportal = ?
-                            WHERE module_id = ?";
-            $arrParams = array();
-            $arrParams[] = uniStrReplace("class_modul_", "class_module_", $arrOneRow["module_filenameadmin"]);
-            $arrParams[] = uniStrReplace("class_modul_", "class_module_", $arrOneRow["module_xmlfilenameadmin"]);
-            $arrParams[] = uniStrReplace("class_modul_", "class_module_", $arrOneRow["module_filenameportal"]);
-            $arrParams[] = uniStrReplace("class_modul_", "class_module_", $arrOneRow["module_xmlfilenameportal"]);
-            $arrParams[] = $arrOneRow["module_id"];
-
-            $strReturn .= "Updated ".$arrOneRow["module_name"]."\n";
-            $this->objDB->_pQuery($strQuery, $arrParams);
-        }
-
-        $strReturn .= "Updating system table...\n";
-        $strQuery = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."system")."
-                            ADD ".$this->objDB->encloseColumnName("system_class")." ".$this->objDB->getDatatype("char254")." NULL";
-        if(!$this->objDB->_pQuery($strQuery, array()))
-            $strReturn .= "An error occurred! ...\n";
-
-
-        $strReturn .= "Adding classes for existing records...\n";
-        $strReturn .= "Modules\n";
-        foreach(class_module_system_module::getAllModules() as $objOneModule) {
-            $strQuery = "UPDATE "._dbprefix_."system SET system_class = ? where system_id = ?";
-            $this->objDB->_pQuery($strQuery, array(get_class($objOneModule), $objOneModule->getSystemid()));
-        }
-
-        $strReturn .= "Languages\n";
-        $arrRows = $this->objDB->getPArray("SELECT system_id FROM "._dbprefix_."languages, "._dbprefix_."system WHERE system_id = language_id", array());
-        foreach($arrRows as $arrOneRow) {
-            $strQuery = "UPDATE "._dbprefix_."system SET system_class = ? where system_id = ?";
-            $this->objDB->_pQuery($strQuery, array('class_module_languages_language', $arrOneRow["system_id"]));
-        }
-
-        $strReturn .= "Languages\n";
-        $arrRows = $this->objDB->getPArray("SELECT system_id FROM "._dbprefix_."aspects, "._dbprefix_."system WHERE system_id = aspect_id", array());
-        foreach($arrRows as $arrOneRow) {
-            $strQuery = "UPDATE "._dbprefix_."system SET system_class = ? where system_id = ?";
-            $this->objDB->_pQuery($strQuery, array('class_module_system_aspect', $arrOneRow["system_id"]));
-        }
-
-        //TODO: add existance check
-
-
-        $strReturn .= "Adding index to table system\n";
-
-        $arrColumns = null;
-        if(class_config::getInstance()->getConfig("dbdriver") == "mysqli") {
-            $arrIndex = $this->objDB->getPArray("SHOW INDEX FROM "._dbprefix_."system", array());
-            $arrColumns = array();
-            foreach($arrIndex as $arrOneRow)
-                $arrColumns[] = $arrOneRow["Column_name"];
-        }
-
-        if($arrColumns == null || !in_array("system_sort", $arrColumns))
-            $this->objDB->_pQuery("ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."system")." ADD INDEX ( ".$this->objDB->encloseColumnName("system_sort")." ) ", array());
-
-        if($arrColumns == null || !in_array("system_owner", $arrColumns))
-            $this->objDB->_pQuery("ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."system")." ADD INDEX ( ".$this->objDB->encloseColumnName("system_owner")." ) ", array());
-
-        if($arrColumns == null || !in_array("system_create_date", $arrColumns))
-            $this->objDB->_pQuery("ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."system")." ADD INDEX ( ".$this->objDB->encloseColumnName("system_create_date")." ) ", array());
-
-        if($arrColumns == null || !in_array("system_status", $arrColumns))
-            $this->objDB->_pQuery("ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."system")." ADD INDEX ( ".$this->objDB->encloseColumnName("system_status")." ) ", array());
-
-        if($arrColumns == null || !in_array("system_lm_time", $arrColumns))
-            $this->objDB->_pQuery("ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."system")." ADD INDEX ( ".$this->objDB->encloseColumnName("system_lm_time")." ) ", array());
-
-
-        $strReturn .= "Adding index to table system_date\n";
-        $arrColumns = null;
-        if(class_config::getInstance()->getConfig("dbdriver") == "mysqli") {
-            $arrIndex = $this->objDB->getPArray("SHOW INDEX FROM "._dbprefix_."system_date", array());
-            $arrColumns = array();
-            foreach($arrIndex as $arrOneRow)
-                $arrColumns[] = $arrOneRow["Column_name"];
-        }
-
-        if($arrColumns == null || !in_array("system_date_start", $arrColumns))
-            $this->objDB->_pQuery("ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."system_date")." ADD INDEX ( ".$this->objDB->encloseColumnName("system_date_start")." ) ", array());
-
-        if($arrColumns == null || !in_array("system_date_end", $arrColumns))
-            $this->objDB->_pQuery("ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."system_date")." ADD INDEX ( ".$this->objDB->encloseColumnName("system_date_end")." ) ", array());
-
-        if($arrColumns == null || !in_array("system_date_special", $arrColumns))
-            $this->objDB->_pQuery("ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."system_date")." ADD INDEX ( ".$this->objDB->encloseColumnName("system_date_special")." ) ", array());
-
-        $strReturn .= "Adding index to table changelog\n";
-        $arrColumns = null;
-        if(class_config::getInstance()->getConfig("dbdriver") == "mysqli") {
-            $arrIndex = $this->objDB->getPArray("SHOW INDEX FROM "._dbprefix_."changelog", array());
-            $arrColumns = array();
-            foreach($arrIndex as $arrOneRow)
-                $arrColumns[] = $arrOneRow["Column_name"];
-        }
-
-        if($arrColumns == null || !in_array("change_date", $arrColumns))
-            $this->objDB->_pQuery("ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."changelog")." ADD INDEX ( ".$this->objDB->encloseColumnName("change_date")." ) ", array());
-
-        if($arrColumns == null || !in_array("change_user", $arrColumns))
-            $this->objDB->_pQuery("ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."changelog")." ADD INDEX ( ".$this->objDB->encloseColumnName("change_user")." ) ", array());
-
-        if($arrColumns == null || !in_array("change_systemid", $arrColumns))
-            $this->objDB->_pQuery("ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."changelog")." ADD INDEX ( ".$this->objDB->encloseColumnName("change_systemid")." ) ", array());
-
-        if($arrColumns == null || !in_array("change_property", $arrColumns))
-            $this->objDB->_pQuery("ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."changelog")." ADD INDEX ( ".$this->objDB->encloseColumnName("change_property")." ) ", array());
-
-
-        $strReturn .= "Updating module-versions...\n";
-        $this->updateModuleVersion("", "3.4.9");
-        return $strReturn;
-    }
-
-
-    private function update_349_3491() {
-        $strReturn = "Updating 3.4.9 to 3.4.9.1...\n";
-
-
-        //messages
-        $strReturn .= "Installing table messages...\n";
-
-        $arrFields = array();
-        $arrFields["message_id"] = array("char20", false);
-        $arrFields["message_title"] = array("char254", true);
-        $arrFields["message_body"] = array("text", true);
-        $arrFields["message_read"] = array("int", true);
-        $arrFields["message_user"] = array("char20", true);
-        $arrFields["message_provider"] = array("char254", true);
-        $arrFields["message_internalidentifier"] = array("char254", true);
-
-        if(!$this->objDB->createTable("messages", $arrFields, array("message_id"), array("message_user", "message_read")))
-            $strReturn .= "An error occurred! ...\n";
-
-        $arrFields = array();
-        $arrFields["config_id"] = array("char20", false);
-        $arrFields["config_provider"] = array("char254", true);
-        $arrFields["config_user"] = array("char20", true);
-        $arrFields["config_enabled"] = array("int", true);
-        $arrFields["config_bymail"] = array("int", true);
-
-        if(!$this->objDB->createTable("messages_cfg", $arrFields, array("config_id")))
-            $strReturn .= "An error occurred! ...\n";
-
-        $strReturn .= "Registering module...\n";
-        $this->registerModule("messaging", _messaging_module_id_, "", "class_module_messaging_admin.php", $this->objMetadata->getStrVersion(), true);
-
-        $strReturn .= "Updating module-versions...\n";
-        $this->updateModuleVersion("", "3.4.9.1");
-        return $strReturn;
-    }
-
-    private function update_3491_3492() {
-        $strReturn = "Updating 3.4.9.1 to 3.4.9.2...\n";
-
-        //messages
-        $strReturn .= "Updating table user_kajona...\n";
-        $strQuery = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."user_kajona")."
-                            ADD ".$this->objDB->encloseColumnName("user_salt")." ".$this->objDB->getDatatype("char20")." NULL";
-        if(!$this->objDB->_pQuery($strQuery, array()))
-            $strReturn .= "An error occurred! ...\n";
-
-
-        $strReturn .= "Updating module-versions...\n";
-        $this->updateModuleVersion("", "3.4.9.2");
-        return $strReturn;
-    }
-
-
-
-    private function update_3492_3493() {
-        $strReturn = "Updating 3.4.9.2 to 3.4.9.3...\n";
-
-        //messages
-        $strReturn .= "Updating table user_log...\n";
-        $strQuery = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."user_log")."
-                            ADD ".$this->objDB->encloseColumnName("user_log_sessid")." ".$this->objDB->getDatatype("char20")." NULL,
-                            ADD ".$this->objDB->encloseColumnName("user_log_enddate")." ".$this->objDB->getDatatype("long")." NULL,
-                            CHANGE ".$this->objDB->encloseColumnName("user_log_date")." ".$this->objDB->encloseColumnName("user_log_date")." ".$this->objDB->getDatatype("long")." NULL";
-        if(!$this->objDB->_pQuery($strQuery, array()))
-            $strReturn .= "An error occurred! ...\n";
-
-        $this->objDB->_pQuery("ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."user_log")." ADD INDEX ( ".$this->objDB->encloseColumnName("user_log_sessid")." ) ", array());
-
-        $strReturn .= "Creating default aspects...\n";
-
-        $arrAspects = class_module_system_aspect::getObjectList();
-
-        if(
-            (count($arrAspects) == 0 || (count($arrAspects) == 1 && $arrAspects[0]->getStrName() == "default"))
-            && class_module_system_aspect::getAspectByName("management") == null
-            && class_module_system_aspect::getAspectByName("content") == null
-        ) {
-
-            if(count($arrAspects) == 1 && $arrAspects[0]->getStrName() == "default")
-                $objAspect = $arrAspects[0];
-            else
-                $objAspect = new class_module_system_aspect();
-
-
-            $objAspect->setStrName("content");
-            $objAspect->updateObjectToDb();
-            $objAspect = new class_module_system_aspect();
-            $objAspect->setStrName("management");
-            $objAspect->updateObjectToDb();
-
-            $strReturn .= "Assigning modules to default aspects...\n";
-            $objModule = class_module_system_module::getModuleByName("system");
-            $objModule->setStrAspect(class_module_system_aspect::getAspectByName("management")->getSystemid());
-            $objModule->updateObjectToDb();
-
-            $objModule = class_module_system_module::getModuleByName("user");
-            $objModule->setStrAspect(class_module_system_aspect::getAspectByName("management")->getSystemid());
-            $objModule->updateObjectToDb();
-
-            $objModule = class_module_system_module::getModuleByName("languages");
-            $objModule->setStrAspect(class_module_system_aspect::getAspectByName("management")->getSystemid());
-            $objModule->updateObjectToDb();
-        }
-
-
-        $strReturn .= "Updating default skin...\n";
-        $objSetting = class_module_system_setting::getConfigByName("_admin_skin_default_");
-        if($objSetting->getStrValue() == "kajona_v3") {
-            $objSetting->setStrValue("kajona_v4");
-            $objSetting->updateObjectToDb();
-        }
-
-
-        $strReturn .= "Updating module-versions...\n";
-        $this->updateModuleVersion("", "3.4.9.3");
-        return $strReturn;
-    }
-
-    private function update_3493_40() {
-        $strReturn = "Updating 3.4.9.3 to 4.0...\n";
-
-        $strReturn .= "Updating module-versions...\n";
-        $this->updateModuleVersion("", "4.0");
-        return $strReturn;
-    }
 
     private function update_40_401() {
 
@@ -968,13 +695,16 @@ class class_installer_system extends class_installer_base implements interface_i
         $strReturn = "Updating 4.1 to 4.1.1...\n";
 
         $strReturn .= "Patching current bootstrap.php\n";
-        $objFileystem = new class_filesystem();
-        if(!$objFileystem->isWritable("/core/bootstrap.php")) {
-            $strReturn .= "Error! /core/bootstrap.php is not writable. Please set up write permissions for the update-procedure.\nAborting update.";
-            return $strReturn;
-        }
 
-        $objFileystem->fileCopy(class_resourceloader::getInstance()->getCorePathForModule("module_system")."/module_system/installer/bootstrap.php_411", "/core/bootstrap.php", true);
+        if(is_file(_realpath_."/core/bootstrap.php")) {
+            $objFileystem = new class_filesystem();
+            if(!$objFileystem->isWritable("/core/bootstrap.php")) {
+                $strReturn .= "Error! /core/bootstrap.php is not writable. Please set up write permissions for the update-procedure.\nAborting update.";
+                return $strReturn;
+            }
+
+            $objFileystem->fileCopy(class_resourceloader::getInstance()->getCorePathForModule("module_system")."/module_system/installer/bootstrap.php_411", "/core/bootstrap.php", true);
+        }
 
 
         $strReturn .= "Updating module-versions...\n";
@@ -1093,7 +823,7 @@ class class_installer_system extends class_installer_base implements interface_i
 
         $strReturn .= "Updating default changelog permissions for admins...\n";
         $strQuery = "UPDATE "._dbprefix_."system_right SET right_changelog = ?";
-        $this->objDB->_pQuery($strQuery, array(_admins_group_id_));
+        $this->objDB->_pQuery($strQuery, array(class_module_system_setting::getConfigValue("_admins_group_id_")));
 
 
         class_carrier::getInstance()->flushCache(class_carrier::INT_CACHE_TYPE_DBQUERIES | class_carrier::INT_CACHE_TYPE_DBSTATEMENTS);
@@ -1151,7 +881,7 @@ class class_installer_system extends class_installer_base implements interface_i
 
         $strReturn .= "Adding mail-config settings...\n";
 
-        $this->registerConstant("_system_email_defaultsender_", _system_admin_email_, class_module_system_setting::$int_TYPE_STRING, _system_modul_id_);
+        $this->registerConstant("_system_email_defaultsender_", class_module_system_setting::getConfigValue("_system_admin_email_"), class_module_system_setting::$int_TYPE_STRING, _system_modul_id_);
         $this->registerConstant("_system_email_forcesender_", "false", class_module_system_setting::$int_TYPE_BOOL, _system_modul_id_);
 
 
@@ -1159,5 +889,70 @@ class class_installer_system extends class_installer_base implements interface_i
         $this->updateModuleVersion($this->objMetadata->getStrTitle(), "4.6.4");
         return $strReturn;
     }
+
+    private function update_464_465() {
+        $strReturn = "Updating 4.6.4 to 4.6.5...\n";
+
+        $strReturn .= "Updating user table...\n";
+        $this->objDB->addColumn("user", "user_items_per_page", class_db_datatypes::STR_TYPE_INT);
+
+        $strReturn .= "Removing setting _user_log_nrofrecords_...\n";
+        class_module_system_setting::getConfigByName("_user_log_nrofrecords_")->deleteObjectFromDatabase();
+        $strReturn .= "Removing setting _system_use_dbcache_...\n";
+        class_module_system_setting::getConfigByName("_system_use_dbcache_")->deleteObjectFromDatabase();
+
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion($this->objMetadata->getStrTitle(), "4.6.5");
+        return $strReturn;
+    }
+
+
+    private function update_465_47() {
+
+        $strReturn = "Updating 4.6.5 to 4.7...\n";
+
+        $strReturn .= "Patching bootstrap.php < 4.7\n";
+        if(is_file(_realpath_."/core/bootstrap.php")) {
+            $objFileystem = new class_filesystem();
+            if(!$objFileystem->isWritable("/core/bootstrap.php")) {
+                $strReturn .= "Error! /core/bootstrap.php is not writable. Please set up write permissions for the update-procedure.\nAborting update.";
+                return $strReturn;
+            }
+            $objFileystem->fileCopy(class_resourceloader::getInstance()->getCorePathForModule("module_system")."/module_system/installer/bootstrap.php_47", "/core/bootstrap.php", true);
+        }
+
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion($this->objMetadata->getStrTitle(), "4.7");
+        return $strReturn;
+    }
+
+    private function update_47_475() {
+
+        $strReturn = "Updating 4.7 to 4.7.5...\n";
+
+        $strReturn .= "Updating system table\n";
+        $this->objDB->addColumn("system", "system_deleted", class_db_datatypes::STR_TYPE_INT);
+        $strQuery = "UPDATE "._dbprefix_."system SET system_deleted = 0";
+        $this->objDB->_pQuery($strQuery, array());
+
+        $strReturn .= "Updating database indexes\n";
+        $this->objDB->_pQuery("ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."system")." ADD INDEX ( ".$this->objDB->encloseColumnName("system_deleted")." ) ", array());
+        $this->objDB->_pQuery("ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."system")." ADD INDEX ( ".$this->objDB->encloseColumnName("system_lock_time")." ) ", array());
+
+        $this->objDB->_pQuery("ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."user")." ADD INDEX ( ".$this->objDB->encloseColumnName("user_username")." ) ", array());
+        $this->objDB->_pQuery("ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."user")." ADD INDEX ( ".$this->objDB->encloseColumnName("user_subsystem")." ) ", array());
+        $this->objDB->_pQuery("ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."user")." ADD INDEX ( ".$this->objDB->encloseColumnName("user_active")." ) ", array());
+        $this->objDB->_pQuery("ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."user")." ADD INDEX ( ".$this->objDB->encloseColumnName("user_deleted")." ) ", array());
+
+        $this->objDB->_pQuery("ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."user_group")." ADD INDEX ( ".$this->objDB->encloseColumnName("group_name")." ) ", array());
+        $this->objDB->_pQuery("ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."user_group")." ADD INDEX ( ".$this->objDB->encloseColumnName("group_subsystem")." ) ", array());
+
+
+        class_carrier::getInstance()->flushCache(class_carrier::INT_CACHE_TYPE_DBTABLES | class_carrier::INT_CACHE_TYPE_DBSTATEMENTS);
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion($this->objMetadata->getStrTitle(), "4.7.5");
+        return $strReturn;
+    }
+
 
 }
