@@ -462,4 +462,20 @@ class class_module_system_admin_xml extends class_admin_controller implements in
 
         return $strReturn;
     }
+
+    /**
+     * Returns all properties for the given module
+     *
+     * @return string
+     * @permissions view
+     */
+    public function actionFetchProperty() {
+        class_response_object::getInstance()->setStrResponseType(class_http_responsetypes::STR_TYPE_JSON);
+
+        $strTargetModule = $this->getParam("target_module");
+        $strReturn = class_lang::getInstance()->getProperties($strTargetModule);
+
+        return json_encode($strReturn);
+    }
+
 }

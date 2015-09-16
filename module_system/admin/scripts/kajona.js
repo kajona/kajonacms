@@ -1196,3 +1196,97 @@ KAJONA.util.desktopNotification = {
     }
 
 };
+
+/**
+ * Searches inside the container for all data-lang-property attributes and loads the specific property and replaces the
+ * html content with the value. If no container element was provided we search in the entire body. I.e.
+ * <span data-lang-property="faqs:action_new_faq" data-lang-params="foo,bar"></span>
+ *
+ * @param {HTMLElement} containerEl
+ */
+KAJONA.admin.lang.initializeProperties = function(containerEl){
+    if (!containerEl) {
+        containerEl = "body";
+    }
+    $(containerEl).find("*[data-lang-property]").each(function(){
+        var strProperty = $(this).data("lang-property");
+        if (strProperty) {
+            var arrValues = strProperty.split(":", 2);
+            if (arrValues.length == 2) {
+                var arrParams = [];
+                var strParams = $(this).data("lang-params");
+                if (strParams) {
+                    arrParams = strParams.split("|");
+                }
+
+                KAJONA.admin.lang.fetchProperty(arrValues[1], arrValues[0], arrParams, function(strText){
+                    $(this).html(strText);
+                }, this);
+            }
+        }
+    });
+};
+
+/**
+ * Fetches all properties for the given module and stores them in the local storage. Calls then the callback with the
+ * fitting property value as argument. The callback is called directly if the property exists already in the storage
+ *
+ * @param {String} strText
+ * @param {String} strModule
+ * @param {Array} arrParams
+ * @param {Function} objCallback
+ * @param {Object} objScope
+ */
+KAJONA.admin.lang.fetchProperty = function(strText, strModule, arrParams, objCallback, objScope){
+    // we can only do this magic if we have an local storage
+    if (!localStorage) {
+        return;
+    }
+
+    if (!arrParams) {
+        arrParams = [];
+    }
+
+    var strKey = strModule + '_' + strText;
+    var strResp = localStorage.getItem(strKey);
+    if (strResp) {
+        strResp = KAJONA.admin.lang.replacePropertyParams(strResp, arrParams);
+        if (typeof objCallback === "function") {
+            objCallback.apply(objScope ? objScope : this, [strResp]);
+        }
+        return;
+    }
+
+    $.ajax({
+        url: KAJONA_WEBPATH + '/xml.php?admin=1&module=system&action=fetchProperty&target_module=' + encodeURIComponent(strModule),
+        type: 'POST',
+        success: function(objResp){
+            var strResp = null;
+            for (strKey in objResp) {
+                if (strText == strKey) {
+                    strResp = objResp[strKey];
+                }
+                localStorage.setItem(strModule + '_' + strKey, objResp[strKey]);
+            }
+            if (strResp !== null) {
+                strResp = KAJONA.admin.lang.replacePropertyParams(strResp, arrParams);
+                if (typeof objCallback === "function") {
+                    objCallback.apply(objScope ? objScope : this, [strResp]);
+                }
+            }
+        }
+    });
+};
+
+/**
+ * Replaces all wildcards i.e. {0} with the value of the array
+ *
+ * @param {String} strText
+ * @param {Array} arrParams
+ */
+KAJONA.admin.lang.replacePropertyParams = function(strText, arrParams){
+    for (var i = 0; i < arrParams.length; i++) {
+        strText = strText.replace("{" + i + "}", arrParams[i]);
+    }
+    return strText;
+};

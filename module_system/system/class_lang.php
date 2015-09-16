@@ -150,6 +150,25 @@ class class_lang {
     }
 
     /**
+     * Returns all properties for a specific module
+     *
+     * @param string $strModule
+     */
+    public function getProperties($strModule)
+    {
+        //Did we already load this text?
+        if(!isset($this->arrTexts[$this->strLanguage][$strModule])) {
+            $this->loadText($strModule);
+        }
+
+        if (isset($this->arrTexts[$this->strLanguage][$strModule])) {
+            return $this->arrTexts[$this->strLanguage][$strModule];
+        } else {
+            return array();
+        }
+    }
+
+    /**
      *
      * Internal helper to fill parametrized properties.
      *
