@@ -412,7 +412,7 @@ Toggle Button-Bar
     <div class="form-group">
         <label for="%%name%%[]" class="col-sm-3 control-label">%%title%%</label>
         <div class="col-sm-6">
-            <div class="btn-group" data-toggle="buttons">
+            <div class="btn-group buttonbar" data-toggle="buttons">
                 %%options%%
             </div>
         </div>

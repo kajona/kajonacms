@@ -728,6 +728,20 @@ footer {
             background-color: @brand-primary;
             color: @white;
         }
+
+        &.buttonbar {
+
+            label.btn:before {
+                content: @fa-var-square-o;
+                font-family: fontawesome;
+                padding: 0 2px;
+            }
+
+            label.btn.active:before {
+                content: @fa-var-check-square-o;
+                padding-right: 1px;
+            }
+        }
     }
 
     pre, code {
