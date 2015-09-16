@@ -108,6 +108,9 @@ $(function () {
         $('.row-offcanvas').toggleClass('active')
     });
 
+    // init lang
+    KAJONA.admin.lang.initializeProperties();
+
 });
 
 if (typeof KAJONA == "undefined") {

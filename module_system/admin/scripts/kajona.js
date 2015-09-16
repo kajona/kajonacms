@@ -1198,6 +1198,53 @@ KAJONA.util.desktopNotification = {
 };
 
 /**
+ * Cache manager which can get and set key values pairs
+ *
+ * @type {{container: {}, get: Function, set: Function}}
+ */
+KAJONA.util.cacheManager = {
+
+    container: {},
+
+    /**
+     * @param {String} strKey
+     * @return {String}
+     */
+    get: function(strKey){
+        if (localStorage) {
+            return localStorage.getItem(strKey);
+        }
+
+        if (KAJONA.util.cacheManager.container[strKey]) {
+            return KAJONA.util.cacheManager.container[strKey];
+        }
+
+        return false;
+    },
+
+    /**
+     * @param {String} strKey
+     * @param {String} strValue
+     */
+    set: function(strKey, strValue){
+        if (localStorage) {
+            localStorage.setItem(strKey, strValue);
+            return;
+        }
+
+        KAJONA.util.cacheManager.container[strKey] = strValue;
+    }
+
+};
+
+/**
+ * Contains the list of lang properties which must be resolved
+ *
+ * @type {Array}
+ */
+KAJONA.admin.lang.queue = [];
+
+/**
  * Searches inside the container for all data-lang-property attributes and loads the specific property and replaces the
  * html content with the value. If no container element was provided we search in the entire body. I.e.
  * <span data-lang-property="faqs:action_new_faq" data-lang-params="foo,bar"></span>
@@ -1219,61 +1266,70 @@ KAJONA.admin.lang.initializeProperties = function(containerEl){
                     arrParams = strParams.split("|");
                 }
 
-                KAJONA.admin.lang.fetchProperty(arrValues[1], arrValues[0], arrParams, function(strText){
+                var objCallback = function(strText){
                     $(this).html(strText);
-                }, this);
+                };
+
+                KAJONA.admin.lang.queue.push({
+                    text: arrValues[1],
+                    module: arrValues[0],
+                    params: arrParams,
+                    callback: objCallback,
+                    scope: this
+                });
             }
         }
     });
+
+    KAJONA.admin.lang.fetchProperties();
 };
 
 /**
  * Fetches all properties for the given module and stores them in the local storage. Calls then the callback with the
- * fitting property value as argument. The callback is called directly if the property exists already in the storage
- *
- * @param {String} strText
- * @param {String} strModule
- * @param {Array} arrParams
- * @param {Function} objCallback
- * @param {Object} objScope
+ * fitting property value as argument. The callback is called directly if the property exists already in the storage.
+ * The requests are triggered sequential so that we send per module only one request
  */
-KAJONA.admin.lang.fetchProperty = function(strText, strModule, arrParams, objCallback, objScope){
-    // we can only do this magic if we have an local storage
-    if (!localStorage) {
+KAJONA.admin.lang.fetchProperties = function(){
+    if (KAJONA.admin.lang.queue == 0) {
         return;
     }
 
-    if (!arrParams) {
-        arrParams = [];
-    }
-
-    var strKey = strModule + '_' + strText;
-    var strResp = localStorage.getItem(strKey);
+    var arrData = KAJONA.admin.lang.queue[0];
+    var strKey = arrData.module + '_' + arrData.text;
+    var strResp = KAJONA.util.cacheManager.get(strKey);
     if (strResp) {
-        strResp = KAJONA.admin.lang.replacePropertyParams(strResp, arrParams);
-        if (typeof objCallback === "function") {
-            objCallback.apply(objScope ? objScope : this, [strResp]);
+        arrData = KAJONA.admin.lang.queue.shift();
+
+        strResp = KAJONA.admin.lang.replacePropertyParams(strResp, arrData.params);
+        if (typeof arrData.callback === "function") {
+            arrData.callback.apply(arrData.scope ? arrData.scope : this, [strResp, arrData.module, arrData.text]);
         }
+
+        KAJONA.admin.lang.fetchProperties();
         return;
     }
 
     $.ajax({
-        url: KAJONA_WEBPATH + '/xml.php?admin=1&module=system&action=fetchProperty&target_module=' + encodeURIComponent(strModule),
+        url: KAJONA_WEBPATH + '/xml.php?admin=1&module=system&action=fetchProperty&target_module=' + encodeURIComponent(arrData.module),
         type: 'POST',
         success: function(objResp){
+            var arrData = KAJONA.admin.lang.queue.shift();
+
             var strResp = null;
             for (strKey in objResp) {
-                if (strText == strKey) {
+                if (arrData.text == strKey) {
                     strResp = objResp[strKey];
                 }
-                localStorage.setItem(strModule + '_' + strKey, objResp[strKey]);
+                KAJONA.util.cacheManager.set(arrData.module + '_' + strKey, objResp[strKey]);
             }
             if (strResp !== null) {
-                strResp = KAJONA.admin.lang.replacePropertyParams(strResp, arrParams);
-                if (typeof objCallback === "function") {
-                    objCallback.apply(objScope ? objScope : this, [strResp]);
+                strResp = KAJONA.admin.lang.replacePropertyParams(strResp, arrData.params);
+                if (typeof arrData.callback === "function") {
+                    arrData.callback.apply(arrData.scope ? arrData.scope : this, [strResp, arrData.module, arrData.text]);
                 }
             }
+
+            KAJONA.admin.lang.fetchProperties();
         }
     });
 };
