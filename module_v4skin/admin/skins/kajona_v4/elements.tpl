@@ -412,7 +412,7 @@ Toggle Button-Bar
     <div class="form-group">
         <label for="%%name%%[]" class="col-sm-3 control-label">%%title%%</label>
         <div class="col-sm-6">
-            <div class="btn-group" data-toggle="buttons">
+            <div class="btn-group buttonbar" data-toggle="buttons">
                 %%options%%
             </div>
         </div>
@@ -1120,7 +1120,7 @@ The following sections specify the layout of the rights-mgmt
 <rights_form_header>
     <div>
         %%desc%% %%record%% <br />
-        <a href="javascript:KAJONA.admin.permissions.toggleEmtpyRows('[lang,permissions_toggle_visible,system]', '[lang,permissions_toggle_hidden,system]');" id="rowToggleLink" class="rowsVisible">[lang,permissions_toggle_visible,system]</a><br /><br />
+        <a href="javascript:KAJONA.admin.permissions.toggleEmtpyRows('[lang,permissions_toggle_visible,system]', '[lang,permissions_toggle_hidden,system]', '#rightsForm tr');" id="rowToggleLink" class="rowsVisible">[lang,permissions_toggle_visible,system]</a><br /><br />
     </div>
     <div id="responseContainer">
     </div>

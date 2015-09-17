@@ -85,7 +85,7 @@ class class_admin_formgenerator {
         $this->strFormname = $strFormname;
         $this->objSourceobject = $objSourceobject;
 
-        $this->strOnSubmit = "$(this).on('submit', function() { return false; }); return true;";
+        $this->strOnSubmit = "$(this).on('submit', function() { return false; }); $(this).find('.savechanges[name=submitbtn]').addClass('processing'); return true;";
         $this->objLang = class_lang::getInstance();
     }
 
@@ -252,16 +252,16 @@ class class_admin_formgenerator {
             $strReturn .= $objToolkit->formInputSubmit(class_lang::getInstance()->getLang("commons_cancel", "system"), "cancelbtn");
 
         if($intButtonConfig & self::BIT_BUTTON_CLOSE)
-            $strReturn .= $objToolkit->formInputSubmit(class_lang::getInstance()->getLang("commons_close", "system"), "submitbtn");
+            $strReturn .= $objToolkit->formInputSubmit(class_lang::getInstance()->getLang("commons_close", "system"), "closebtn");
 
         if($intButtonConfig & self::BIT_BUTTON_DELETE)
-            $strReturn .= $objToolkit->formInputSubmit(class_lang::getInstance()->getLang("commons_delete", "system"), "submitbtn");
+            $strReturn .= $objToolkit->formInputSubmit(class_lang::getInstance()->getLang("commons_delete", "system"), "deletebtn");
 
         if($intButtonConfig & self::BIT_BUTTON_RESET)
             $strReturn .= $objToolkit->formInputSubmit(class_lang::getInstance()->getLang("commons_reset", "system"), "reset", "", "cancelbutton");
 
         if($intButtonConfig & self::BIT_BUTTON_CONTINUE)
-            $strReturn .= $objToolkit->formInputSubmit(class_lang::getInstance()->getLang("commons_continue", "system"), "submitbtn");
+            $strReturn .= $objToolkit->formInputSubmit(class_lang::getInstance()->getLang("commons_continue", "system"), "continuebtn");
 
         if($intButtonConfig & self::BIT_BUTTON_BACK)
             $strReturn .= $objToolkit->formInputSubmit(class_lang::getInstance()->getLang("commons_back", "system"), "backbtn");

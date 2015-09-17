@@ -408,9 +408,9 @@ KAJONA.admin.permissions = {
     },
 
     toggleMode : null,
-    toggleEmtpyRows : function (strVisibleName, strHiddenName) {
+    toggleEmtpyRows : function (strVisibleName, strHiddenName, parentSelector) {
 
-        $('#rightsForm tr').each(function() {
+        $(parentSelector).each(function() {
 
             if($(this).find("input:checked").length == 0 && $(this).find("th").length == 0) {
                 if(KAJONA.admin.permissions.toggleMode == null) {
