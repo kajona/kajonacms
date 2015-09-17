@@ -21,10 +21,6 @@ class class_module_dashboard_admin extends class_admin_controller implements int
 
     protected $arrColumnsOnDashboard = array("column1", "column2", "column3");
 
-    private $strStartMonthKey = "DASHBOARD_CALENDAR_START_MONTH";
-    private $strStartYearKey = "DASHBOARD_CALENDAR_START_YEAR";
-
-
     /**
      * @return array
      */

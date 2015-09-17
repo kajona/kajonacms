@@ -20,14 +20,14 @@ class class_todo_repository
      *
      * @var array
      */
-    protected static $categories = array();
+    protected static $arrCategories = array();
 
     /**
      * Internal cache
      *
      * @var array
      */
-    protected static $todos = array();
+    protected static $arrTodos = array();
 
     /**
      * Uses the pluginmanager to query all todo provider to get a list of available todo entries
@@ -36,8 +36,8 @@ class class_todo_repository
      */
     public static function getOpenTodos($strCategory)
     {
-        if (isset(self::$todos[$strCategory])) {
-            return self::$todos[$strCategory];
+        if (isset(self::$arrTodos[$strCategory])) {
+            return self::$arrTodos[$strCategory];
         }
 
         $objPluginManager = new class_pluginmanager(interface_todo_provider::EXTENSION_POINT);
@@ -53,7 +53,7 @@ class class_todo_repository
 
         self::sortTodos($arrTodos);
 
-        return self::$todos[$strCategory] = $arrTodos;
+        return self::$arrTodos[$strCategory] = $arrTodos;
     }
 
     /**
@@ -84,8 +84,8 @@ class class_todo_repository
      */
     public static function getAllCategories()
     {
-        if (self::$categories) {
-            return self::$categories;
+        if (self::$arrCategories) {
+            return self::$arrCategories;
         }
 
         $objPluginManager = new class_pluginmanager(interface_todo_provider::EXTENSION_POINT);
@@ -98,7 +98,7 @@ class class_todo_repository
             }
         }
 
-        return self::$categories = $arrCategories;
+        return self::$arrCategories = $arrCategories;
     }
 
     /**
