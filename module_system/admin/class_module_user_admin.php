@@ -209,8 +209,8 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
         $objUsersources = new class_module_user_sourcefactory();
         if ($objListEntry instanceof class_module_user_user && $objListEntry->rightEdit()) {
             /* @var class_module_user_user $objListEntry */
-            if ($objUsersources->getUsersource($objListEntry->getStrSubsystem())->getMembersEditable()) {
-                return $this->objToolkit->listButton(class_link::getLinkAdmin("user", "newUser", "&user_inherit_permissions_id=".$objListEntry->getSystemid()."&pv=".$this->getParam("pv"), "", $this->getLang("commons_edit_copy", "common"), "icon_copy"));
+            if ($objUsersources->getUsersource($objListEntry->getStrSubsystem())->getCreationOfUsersAllowed()) {
+                return $this->objToolkit->listButton(class_link::getLinkAdmin("user", "newUser", "&user_inherit_permissions_id=".$objListEntry->getSystemid()."&pv=".$this->getParam("pv")."&usersource=".$objListEntry->getStrSubsystem(), "", $this->getLang("commons_edit_copy", "common"), "icon_copy"));
             }
         }
         return "";
@@ -590,8 +590,10 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
                 ->setStrValue($strInheritPermissionsId);
 
             $objInheritUser = new class_module_user_user($strInheritPermissionsId);
-            $objForm->addField(new class_formentry_textrow(""))
+            $objForm->addField(new class_formentry_plaintext("inherit_hint"))
                 ->setStrValue($this->objToolkit->warningBox($this->getLang("user_copy_info", "", array($objInheritUser->getStrDisplayName())), "alert-info"));
+
+            $objForm->setFieldToPosition("inherit_hint", 1);
         }
 
         $objForm->addField(new class_formentry_dropdown("user", "skin"))
@@ -622,7 +624,7 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
             $objForm->addField(new class_formentry_checkbox("user", "active"))->setStrLabel($this->getLang("user_aktiv"));
         }
 
-        if (count($objUser->getGroupIdsForUser()) == 0) {
+        if (count($objUser->getGroupIdsForUser()) == 0 && empty($strInheritPermissionsId)) {
             $objForm->addField(new class_formentry_plaintext("group_hint"))->setStrValue($this->objToolkit->warningBox($this->getLang("form_user_hint_groups")));
             $objForm->setFieldToPosition("group_hint", 1);
         }
