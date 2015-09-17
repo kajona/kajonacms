@@ -37,6 +37,13 @@ class class_classloader
 
 
     /**
+     * Cached array of the core dirs
+     *
+     * @var array
+     */
+    private $arrCoreDirs = array();
+
+    /**
      * Factory method returning an instance of class_classloader.
      * The class-loader implements the singleton pattern.
      *
@@ -136,8 +143,10 @@ class class_classloader
         }
 
         //Module-Constants
+        $this->arrCoreDirs = self::getCoreDirectories();
+
         $arrModules = array();
-        foreach ($this->getCoreDirectories() as $strRootFolder) {
+        foreach ($this->arrCoreDirs as $strRootFolder) {
 
             if (uniStrpos($strRootFolder, "core") === false) {
                 continue;
@@ -281,6 +290,25 @@ class class_classloader
      */
     public function loadClass($strClassName)
     {
+        // check whether we can autoload a class which has a namespace
+        if (strpos($strClassName, "\\") !== false) {
+            $arrParts = explode("\\", $strClassName);
+            $strModule = strtolower(array_shift($arrParts));
+            $strFolder = strtolower(array_shift($arrParts));
+            $strRest = implode(DIRECTORY_SEPARATOR, $arrParts);
+
+            if (!empty($strModule) && !empty($strFolder) && !empty($strRest)) {
+                $strClassName = "module_" . $strModule . DIRECTORY_SEPARATOR . $strFolder . DIRECTORY_SEPARATOR . $strRest;
+
+                foreach ($this->arrCoreDirs as $strDir) {
+                    $strFile = $strDir . DIRECTORY_SEPARATOR . $strClassName . ".php";
+                    if (is_file($strFile)) {
+                        include_once $strFile;
+                        return true;
+                    }
+                }
+            }
+        }
 
         if (isset($this->arrFiles[$strClassName])) {
             $this->intNumberOfClassesLoaded++;
