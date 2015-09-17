@@ -149,7 +149,7 @@ class class_module_dashboard_admin extends class_admin_controller implements int
                             eventLimit: true,
                             events: '{$strEventCallback}',
                             eventRender: function(event, el){
-                                KAJONA.admin.tooltip.addTooltip(el, event.title);
+                                KAJONA.admin.tooltip.addTooltip(el, event.tooltip);
                                 if (event.icon) {
                                     el.find("span.fc-title").prepend(event.icon);
                                 }

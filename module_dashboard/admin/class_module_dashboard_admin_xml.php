@@ -123,7 +123,8 @@ class class_module_dashboard_admin_xml extends class_admin_controller implements
             /** @var class_event_entry $objEvent */
             $strIcon = class_adminskin_helper::getAdminImage($objEvent->getStrIcon());
             $arrRow = array(
-                "title" => $objEvent->getStrDisplayName(),
+                "title" => strip_tags($objEvent->getStrDisplayName()),
+                "tooltip" => $objEvent->getStrDisplayName(),
                 "icon" => $strIcon,
                 "allDay" => true,
                 "url" => $objEvent->getStrHref(),
