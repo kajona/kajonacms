@@ -53,6 +53,15 @@ class class_module_search_search extends class_model implements interface_model,
     private $arrFormFilterModules = array();
 
     /**
+     * For form-generation only
+     *
+     * @var string
+     * @fieldType user
+     * @fieldLabel search_users
+     */
+    private $strFormFilterUser = null;
+
+    /**
      * @var null
      * @fieldType date
      */
@@ -90,6 +99,18 @@ class class_module_search_search extends class_model implements interface_model,
             return explode(",", $this->strInternalFilterModules);
         }
         return array();
+    }
+
+    /**
+     * Returns the user id of the record owner
+     *
+     * @return string
+     */
+    public function getFilterUser() {
+        if (!empty($this->strFormFilterUser)) {
+            return $this->strFormFilterUser;
+        }
+        return null;
     }
 
     /**
@@ -215,6 +236,20 @@ class class_module_search_search extends class_model implements interface_model,
         else {
             return array();
         }
+    }
+
+    /**
+     * @param string $arrFormFilterModules
+     */
+    public function setStrFormFilterUser($strFormFilterUser) {
+        $this->strFormFilterUser = $strFormFilterUser;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStrFormFilterUser() {
+        return $this->strFormFilterUser;
     }
 
 

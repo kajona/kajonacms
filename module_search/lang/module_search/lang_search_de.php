@@ -29,6 +29,7 @@ $lang["hitlist_text3"]                   = "Treffer";
 $lang["modul_titel"]                     = "Suche";
 $lang["search_details"]                  = "Ausführliches Ergebnis anzeigen";
 $lang["search_modules"]                  = "Suchmodul";
+$lang["search_users"]                    = "Benutzer";
 $lang["search_search"]                   = "Suche";
 $lang["searchterm_label"]                = "Suchbegriff";
 $lang["select_all"]                      = "Alle Module";

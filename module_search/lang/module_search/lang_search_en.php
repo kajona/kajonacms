@@ -29,6 +29,7 @@ $lang["hitlist_text3"]                   = "results";
 $lang["modul_titel"]                     = "Search";
 $lang["search_details"]                  = "View detailed search results";
 $lang["search_modules"]                  = "Module";
+$lang["search_users"]                    = "User";
 $lang["search_search"]                   = "Search";
 $lang["searchterm_label"]                = "Search query";
 $lang["select_all"]                      = "All modules";

@@ -143,6 +143,7 @@ class class_module_search_admin extends class_admin_simple implements interface_
         if($this->getParam("filtermodules") != "") {
             $objSearch->setStrInternalFilterModules($this->getParam("filtermodules"));
         }
+
         if($this->getParam("search_filter_all") != "")
             $objSearch->setStrInternalFilterModules("-1");
 
@@ -378,8 +379,6 @@ class class_module_search_admin extends class_admin_simple implements interface_
         $arrFilterModules = $objSearch->getPossibleModulesForFilter();
         $objForm->getField("formfiltermodules")->setArrKeyValues($arrFilterModules);
 
-
-
         $objForm->addField(new class_formentry_checkbox("search", "filter_all"))
             ->setStrLabel($this->getLang("select_all"))
             ->setStrValue($objSearch->getStrInternalFilterModules() == "-1" || $objSearch->getStrInternalFilterModules() == "");
@@ -389,6 +388,7 @@ class class_module_search_admin extends class_admin_simple implements interface_
 
         $objForm->setStrHiddenGroupTitle($this->getLang("form_additionalheader"));
         $objForm->addFieldToHiddenGroup($objForm->getField("formfiltermodules"));
+        $objForm->addFieldToHiddenGroup($objForm->getField("formfilteruser"));
         $objForm->addFieldToHiddenGroup($objForm->getField("search_filter_all"));
         $objForm->addFieldToHiddenGroup($objForm->getField("changestartdate"));
         $objForm->addFieldToHiddenGroup($objForm->getField("changeenddate"));
