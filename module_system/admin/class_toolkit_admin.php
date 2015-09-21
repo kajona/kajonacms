@@ -462,7 +462,7 @@ class class_toolkit_admin extends class_toolkit
     /**
      * General form entry which displays an list of objects which can be deleted. It is possible to provide an addlink
      * where entries can be appended to the list. To add an entry you can use the javascript function
-     * KAJONA.v4skin.addObjectListItem
+     * KAJONA.v4skin.setObjectListItems
      *
      * @param $strName
      * @param string $strTitle

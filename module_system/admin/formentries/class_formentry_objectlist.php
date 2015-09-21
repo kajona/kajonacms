@@ -69,6 +69,7 @@ class class_formentry_objectlist extends class_formentry_base implements interfa
         }));
 
         $strReturn .= $objToolkit->formInputObjectList($this->getStrEntryName(), $this->getStrLabel(), $arrObjects, $this->strAddLink, $this->getBitReadonly());
+        $strReturn .= $objToolkit->formInputHidden($this->getStrEntryName()."_empty", "1");
         return $strReturn;
     }
 
