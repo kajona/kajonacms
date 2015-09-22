@@ -1340,6 +1340,7 @@ footer {
 
 .mandatoryFormElement, .form-control.mandatoryFormElement {
     .box-shadow(0 0 6px @brand-warning+20);
+    .opacity(100); //mandatory form elements being disabled need a full opacity anyways
 }
 
 table.form-control {
@@ -1348,6 +1349,7 @@ table.form-control {
      tfoot > tr > td {
          border-top: none;
          //min-height: 22px;
+         padding: 7px;
      }
 }
 
