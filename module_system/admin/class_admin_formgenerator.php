@@ -547,9 +547,9 @@ class class_admin_formgenerator
      *
      * @return string
      */
-    protected function getLang($strText, $strModule = null)
+    protected function getLang($strText, $strModule = null, array $arrParameters = array())
     {
-        return $this->objLang->getLang($strText, $strModule === null ? $this->strFormname : $strModule);
+        return $this->objLang->getLang($strText, $strModule === null ? $this->strFormname : $strModule, $arrParameters);
     }
 
     /**
