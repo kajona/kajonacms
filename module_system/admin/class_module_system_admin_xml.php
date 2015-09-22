@@ -194,7 +194,7 @@ class class_module_system_admin_xml extends class_admin_controller implements in
                         $strTaskOutput .= $objTask->getStrProgressInformation();
 
                     if(is_numeric($strTempOutput) && ($strTempOutput >= 0 && $strTempOutput <= 100)) {
-                        $strTaskOutput .= "<br />".$this->getLang("systemtask_progress")."<br />".$this->objToolkit->percentBeam($strTempOutput, 400);
+                        $strTaskOutput .= "<br />".$this->getLang("systemtask_progress")."<br />".$this->objToolkit->percentBeam($strTempOutput);
                     }
                     else {
                         $strTaskOutput .= $strTempOutput;
