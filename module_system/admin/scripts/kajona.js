@@ -758,6 +758,17 @@ KAJONA.admin.forms.initForm = function(strFormid) {
     });
 };
 
+KAJONA.admin.forms.animateSubmit = function(objForm) {
+    //try to get the button currently clicked
+
+    if($(document.activeElement).prop('tagName') == "BUTTON") {
+        $(document.activeElement).addClass('processing');
+    }
+    else {
+        $(objForm).find('.savechanges[name=submitbtn]').addClass('processing');
+    }
+};
+
 KAJONA.admin.forms.changeLabel = '';
 KAJONA.admin.forms.changeConfirmation = '';
 
