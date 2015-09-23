@@ -150,7 +150,6 @@ class class_module_system_admin_xml extends class_admin_controller implements in
      * <statusinfo></statusinfo><reloadurl></reloadurl>
      *
      * @return string
-     * @permissions right2
      */
     protected function actionExecuteSystemTask() {
         $strReturn = "";
