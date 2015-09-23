@@ -911,6 +911,14 @@ footer {
             }
         }
 
+        .cancelbutton, .cancelbtn {
+            .statusicon {
+                &:before {
+                    content: @fa-var-times;
+                }
+            }
+        }
+
         .processing {
             .statusicon {
                 &:before {
@@ -920,13 +928,6 @@ footer {
             }
         }
 
-        .cancelbutton, .cancelbtn {
-            .statusicon {
-                &:before {
-                    content: @fa-var-times;
-                }
-            }
-        }
 
     }
 
