@@ -169,36 +169,15 @@ class class_toolkit_admin extends class_toolkit
      * Creates a percent-beam to illustrate proportions
      *
      * @param float $floatPercent
-     * @param int|string $intLength
      *
      * @return string
      */
-    public function percentBeam($floatPercent, $intLength = "300")
+    public function percentBeam($floatPercent, $bitRenderAnimated = true)
     {
-        //Calc width
-        $intWidth = $intLength - 50;
-        $intBeamLength = ceil($intWidth * $floatPercent / 100);
-        if ($intBeamLength == 0) {
-            $intBeamLength = 1;
-        }
-
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "percent_beam");
         $arrTemplate = array();
-        $arrTemplate["length"] = $intLength;
         $arrTemplate["percent"] = number_format($floatPercent, 2);
-        $arrTemplate["width"] = $intWidth;
-        if ($arrTemplate["percent"] == "100.00") {
-            $arrTemplate["beamwidth"] = $intBeamLength;
-        }
-        else {
-            $arrTemplate["beamwidth"] = $intBeamLength - 1;
-        }
-        if (($intWidth - $intBeamLength) <= 0 || $arrTemplate["percent"] == "100.00") {
-            $arrTemplate["transTillEnd"] = "";
-        }
-        else {
-            $arrTemplate["transTillEnd"] = "<img src=\"_skinwebpath_/trans.gif\" width=\"".($intWidth - $intBeamLength - 1)."\" height=\"1\" />";
-        }
+        $arrTemplate["animationClass"] = $bitRenderAnimated ? "progress-bar-striped" : "";
         return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
     }
 

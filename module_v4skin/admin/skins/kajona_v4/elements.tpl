@@ -934,7 +934,7 @@ Used to fold elements / hide/unhide elements
 A precent-beam to illustrate proportions
 <percent_beam>
     <div class="progress">
-        <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="%%percent%%" aria-valuemin="0" aria-valuemax="100" style="width: %%percent%%%;">%%percent%%%</div>
+        <div class="progress-bar %%animationClass%% active" role="progressbar" aria-valuenow="%%percent%%" aria-valuemin="0" aria-valuemax="100" style="width: %%percent%%%;">%%percent%%%</div>
     </div>
 </percent_beam>
 

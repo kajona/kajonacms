@@ -11,6 +11,7 @@
 @input-bg:                  @gray-lighter;
 @input-border-focus:        @kajona-brand-color;
 @btn-primary-bg:            @gray-darker;
+@input-mandatory-glow:      @brand-warning+20;
 
 @label-color:               @text-color;
 @brand-primary:             @kajona-brand-color;
@@ -910,6 +911,14 @@ footer {
             }
         }
 
+        .cancelbutton, .cancelbtn {
+            .statusicon {
+                &:before {
+                    content: @fa-var-times;
+                }
+            }
+        }
+
         .processing {
             .statusicon {
                 &:before {
@@ -919,13 +928,6 @@ footer {
             }
         }
 
-        .cancelbutton, .cancelbtn {
-            .statusicon {
-                &:before {
-                    content: @fa-var-times;
-                }
-            }
-        }
 
     }
 
@@ -1339,7 +1341,7 @@ footer {
 }
 
 .mandatoryFormElement, .form-control.mandatoryFormElement {
-    .box-shadow(0 0 6px @brand-warning+20);
+    .box-shadow(0 0 6px @input-mandatory-glow);
     .opacity(100); //mandatory form elements being disabled need a full opacity anyways
 }
 
