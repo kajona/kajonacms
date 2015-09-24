@@ -18,7 +18,29 @@
  * @module system
  * @moduleId _system_modul_id_
  */
-class class_module_system_admin_xml extends class_admin_controller implements interface_xml_admin {
+class class_module_system_admin_xml extends class_admin_controller implements interface_xml_admin
+{
+
+    /**
+     * Unlocks a record if currently locked by the current user
+     * @return void
+     * @permissions view
+     */
+    protected function actionUnlockRecord()
+    {
+        if(class_objectfactory::getInstance()->getObject($this->getSystemid()) !== null) {
+            $objLockmanager = class_objectfactory::getInstance()->getObject($this->getSystemid())->getLockManager();
+
+            if($objLockmanager->unlockRecord())
+            {
+                return "<ok></ok>";
+            }
+            else {
+                class_response_object::getInstance()->setStrStatusCode(class_http_statuscodes::SC_FORBIDDEN);
+                return "<error></error>";
+            }
+        }
+    }
 
 
     /**
@@ -27,19 +49,20 @@ class class_module_system_admin_xml extends class_admin_controller implements in
      * @return string
      * @permissions edit
      */
-    protected function actionSetAbsolutePosition() {
+    protected function actionSetAbsolutePosition()
+    {
         $strReturn = "";
 
         $objCommon = class_objectfactory::getInstance()->getObject($this->getSystemid());
         $intNewPos = $this->getParam("listPos");
         //check permissions
-        if($objCommon != null && $objCommon->rightEdit() && $intNewPos != "") {
+        if ($objCommon != null && $objCommon->rightEdit() && $intNewPos != "") {
 
             //there is a different mode for page-elements, catch now
             //store edit date
             $objCommon->updateObjectToDb();
 
-            if($objCommon instanceof class_module_pages_pageelement) {
+            if ($objCommon instanceof class_module_pages_pageelement) {
                 $objElement = new class_module_pages_pageelement($this->getSystemid());
                 $objElement->setAbsolutePosition($intNewPos);
             }
@@ -64,14 +87,16 @@ class class_module_system_admin_xml extends class_admin_controller implements in
      * @return string
      * @permissions edit
      */
-    protected function actionSetStatus() {
+    protected function actionSetStatus()
+    {
         $strReturn = "";
         $objCommon = class_objectfactory::getInstance()->getObject($this->getSystemid());
-        if($objCommon != null && $objCommon->rightEdit()) {
+        if ($objCommon != null && $objCommon->rightEdit()) {
 
             $intNewStatus = $this->getParam("status");
-            if($intNewStatus == "")
+            if ($intNewStatus == "") {
                 $intNewStatus = $objCommon->getIntRecordStatus() == 0 ? 1 : 0;
+            }
 
             $objCommon->setIntRecordStatus($intNewStatus);
             $objCommon->updateObjectToDb();
@@ -93,17 +118,19 @@ class class_module_system_admin_xml extends class_admin_controller implements in
      * @return string
      * @permissions delete
      */
-    protected function actionDelete() {
+    protected function actionDelete()
+    {
         $strReturn = "";
         $objCommon = class_objectfactory::getInstance()->getObject($this->getSystemid());
-        if($objCommon != null && $objCommon->rightDelete()) {
+        if ($objCommon != null && $objCommon->rightDelete()) {
             $strName = $objCommon->getStrDisplayName();
-            if($objCommon->deleteObject()) {
+            if ($objCommon->deleteObject()) {
                 $strReturn .= "<message>".$strName." - ".$this->getLang("commons_delete_ok")."</message>";
                 $this->flushCompletePagesCache();
             }
-            else
+            else {
                 $strReturn .= "<error>".$strName." - ".$this->getLang("commons_delete_error")."</error>";
+            }
         }
         else {
             class_response_object::getInstance()->setStrStatusCode(class_http_statuscodes::SC_UNAUTHORIZED);
@@ -120,15 +147,16 @@ class class_module_system_admin_xml extends class_admin_controller implements in
      * @return string
      * @permissions edit
      */
-    protected function actionSetPrevid() {
+    protected function actionSetPrevid()
+    {
         $strReturn = "";
 
         $objRecord = class_objectfactory::getInstance()->getObject($this->getSystemid());
         $strNewPrevId = $this->getParam("prevId");
         //check permissions
-        if($objRecord != null && $objRecord->rightEdit() && validateSystemid($strNewPrevId)) {
+        if ($objRecord != null && $objRecord->rightEdit() && validateSystemid($strNewPrevId)) {
 
-            if($objRecord->getStrPrevId() != $strNewPrevId) {
+            if ($objRecord->getStrPrevId() != $strNewPrevId) {
                 $objRecord->updateObjectToDb($strNewPrevId);
             }
 
@@ -151,37 +179,39 @@ class class_module_system_admin_xml extends class_admin_controller implements in
      *
      * @return string
      */
-    protected function actionExecuteSystemTask() {
+    protected function actionExecuteSystemTask()
+    {
         $strReturn = "";
         $strTaskOutput = "";
 
-        if($this->getParam("task") != "") {
+        if ($this->getParam("task") != "") {
             //include the list of possible tasks
 
             //TODO: move to common helper, see class_module_system_admin
-            $arrFiles = class_resourceloader::getInstance()->getFolderContent("/admin/systemtasks/", array(".php"), false, function($strOneFile) {
-                if($strOneFile != "class_systemtask_base.php" && $strOneFile != "interface_admin_systemtask.php") {
+            $arrFiles = class_resourceloader::getInstance()->getFolderContent("/admin/systemtasks/", array(".php"), false, function ($strOneFile) {
+                if ($strOneFile != "class_systemtask_base.php" && $strOneFile != "interface_admin_systemtask.php") {
                     $strOneFile = uniSubstr($strOneFile, 0, -4);
                     $strOneFile = new $strOneFile();
 
-                    if($strOneFile instanceof interface_admin_systemtask)
+                    if ($strOneFile instanceof interface_admin_systemtask) {
                         return true;
+                    }
                 }
 
                 return false;
             }
-            ,
-            function(&$strOneFile) {
-                $strOneFile = uniSubstr($strOneFile, 0, -4);
-                $strOneFile = new $strOneFile();
-            });
+                ,
+                function (&$strOneFile) {
+                    $strOneFile = uniSubstr($strOneFile, 0, -4);
+                    $strOneFile = new $strOneFile();
+                });
 
             //search for the matching task
             /** @var interface_admin_systemtask|class_systemtask_base $objTask */
-            foreach($arrFiles as $objTask) {
+            foreach ($arrFiles as $objTask) {
 
                 //instantiate the current task
-                if($objTask->getStrInternalTaskname() == $this->getParam("task")) {
+                if ($objTask->getStrInternalTaskname() == $this->getParam("task")) {
 
                     class_logger::getInstance(class_logger::ADMINTASKS)->addLogRow("executing task ".$objTask->getStrInternalTaskname(), class_logger::$levelWarning);
 
@@ -189,10 +219,11 @@ class class_module_system_admin_xml extends class_admin_controller implements in
                     $strTempOutput = trim($objTask->executeTask());
 
                     //progress information?
-                    if($objTask->getStrProgressInformation() != "")
+                    if ($objTask->getStrProgressInformation() != "") {
                         $strTaskOutput .= $objTask->getStrProgressInformation();
+                    }
 
-                    if(is_numeric($strTempOutput) && ($strTempOutput >= 0 && $strTempOutput <= 100)) {
+                    if (is_numeric($strTempOutput) && ($strTempOutput >= 0 && $strTempOutput <= 100)) {
                         $strTaskOutput .= "<br />".$this->getLang("systemtask_progress")."<br />".$this->objToolkit->percentBeam($strTempOutput);
                     }
                     else {
@@ -203,8 +234,9 @@ class class_module_system_admin_xml extends class_admin_controller implements in
                     $strReturn .= "<statusinfo>".$strTaskOutput."</statusinfo>\n";
 
                     //reload requested by worker?
-                    if($objTask->getStrReloadUrl() != "")
+                    if ($objTask->getStrReloadUrl() != "") {
                         $strReturn .= "<reloadurl>".("&task=".$this->getParam("task").$objTask->getStrReloadParam())."</reloadurl>";
+                    }
 
                     break;
                 }
@@ -232,12 +264,14 @@ class class_module_system_admin_xml extends class_admin_controller implements in
      * @return string
      * @permissions right3
      */
-    protected function actionSystemLog() {
+    protected function actionSystemLog()
+    {
         $strReturn = "";
 
         $intStartDate = false;
-        if($this->getParam("latestEntry") != "")
+        if ($this->getParam("latestEntry") != "") {
             $intStartDate = strtotime($this->getParam("latestEntry"));
+        }
 
         //read the last few lines
         $objFile = new class_filesystem();
@@ -245,7 +279,7 @@ class class_module_system_admin_xml extends class_admin_controller implements in
 
         $intOffset = 0;
         $bitSkip = false;
-        if($arrDetails["filesize"] > 20000) {
+        if ($arrDetails["filesize"] > 20000) {
             $intOffset = $arrDetails["filesize"] - 20000;
             $bitSkip = true;
         }
@@ -253,15 +287,17 @@ class class_module_system_admin_xml extends class_admin_controller implements in
         $objFile->openFilePointer("/system/debug/systemlog.log", "r");
 
         //forward to the new offset, skip entry
-        if($intOffset > 0)
+        if ($intOffset > 0) {
             $objFile->setFilePointerOffset($intOffset);
+        }
 
         $arrRows = array();
 
         $strRow = $objFile->readLineFromFile();
-        while($strRow !== false) {
-            if(!$bitSkip && trim($strRow) > 0)
+        while ($strRow !== false) {
+            if (!$bitSkip && trim($strRow) > 0) {
                 $arrRows[] = $strRow;
+            }
 
             $bitSkip = false;
             $strRow = $objFile->readLineFromFile();
@@ -271,7 +307,7 @@ class class_module_system_admin_xml extends class_admin_controller implements in
 
         $strReturn .= "<entries>\n";
         $arrRows = array_reverse($arrRows);
-        foreach($arrRows as $strSingleRow) {
+        foreach ($arrRows as $strSingleRow) {
 
             //parse entry
             $strDate = uniSubstr($strSingleRow, 0, 19);
@@ -286,10 +322,11 @@ class class_module_system_admin_xml extends class_admin_controller implements in
 
             $strLogEntry = uniSubstr($strSingleRow, $intTempPos);
 
-            if($intStartDate !== false) {
+            if ($intStartDate !== false) {
                 $intCurDate = strtotime($strDate);
-                if($intStartDate >= $intCurDate)
+                if ($intStartDate >= $intCurDate) {
                     continue;
+                }
             }
 
             $strReturn .= "\t<entry>\n";
@@ -323,17 +360,18 @@ class class_module_system_admin_xml extends class_admin_controller implements in
      * @return string
      * @permissions edit
      */
-    protected function actionSystemInfo() {
+    protected function actionSystemInfo()
+    {
         $strReturn = "<info>";
 
         $objPluginmanager = new class_pluginmanager(interface_systeminfo::STR_EXTENSION_POINT);
         /** @var interface_systeminfo[] $arrPlugins */
         $arrPlugins = $objPluginmanager->getPlugins();
 
-        foreach($arrPlugins as $objOnePlugin) {
+        foreach ($arrPlugins as $objOnePlugin) {
             $strReturn .= "<infoset name=\"".$objOnePlugin->getStrTitle()."\">";
 
-            foreach($objOnePlugin->getArrContent() as $arrValue) {
+            foreach ($objOnePlugin->getArrContent() as $arrValue) {
                 $strReturn .= "<entry>";
                 $strReturn .= "<key>".xmlSafeString($arrValue[0])."</key>";
                 $strReturn .= "<value>".xmlSafeString($arrValue[1])."</value>";
@@ -361,13 +399,14 @@ class class_module_system_admin_xml extends class_admin_controller implements in
      * @return string
      * @permissions view
      */
-    protected function actionModuleList() {
+    protected function actionModuleList()
+    {
         $strReturn = "";
 
         $strReturn .= "<modules>";
         //Loading the modules
         $arrModules = class_module_system_module::getAllModules();
-        foreach($arrModules as $objSingleModule) {
+        foreach ($arrModules as $objSingleModule) {
             $strReturn .= "<module>";
             $strReturn .= "<name>".xmlSafeString($objSingleModule->getStrName())."</name>";
             $strReturn .= "<version>".xmlSafeString($objSingleModule->getStrVersion())."</version>";
@@ -395,55 +434,62 @@ class class_module_system_admin_xml extends class_admin_controller implements in
      * @return string
      * @permissions right1
      */
-    protected function actionSystemSessions() {
+    protected function actionSystemSessions()
+    {
         $strReturn = "";
         //check needed rights
 
         $arrSessions = class_module_system_session::getAllActiveSessions();
         $strReturn .= "<sessions>";
 
-        foreach($arrSessions as $objOneSession) {
+        foreach ($arrSessions as $objOneSession) {
 
             $strReturn .= "<session>";
 
             $strUsername = "";
-            if($objOneSession->getStrUserid() != "") {
+            if ($objOneSession->getStrUserid() != "") {
                 $objUser = new class_module_user_user($objOneSession->getStrUserid());
                 $strUsername = $objUser->getStrUsername();
             }
 
             $strLoginStatus = "";
-            if($objOneSession->getStrLoginstatus() == class_module_system_session::$LOGINSTATUS_LOGGEDIN)
+            if ($objOneSession->getStrLoginstatus() == class_module_system_session::$LOGINSTATUS_LOGGEDIN) {
                 $strLoginStatus = $this->getLang("session_loggedin");
-            else
+            }
+            else {
                 $strLoginStatus = $this->getLang("session_loggedout");
+            }
 
             //find out what the user is doing...
             $strLastUrl = $objOneSession->getStrLasturl();
-            if(uniStrpos($strLastUrl, "?") !== false)
+            if (uniStrpos($strLastUrl, "?") !== false) {
                 $strLastUrl = uniSubstr($strLastUrl, uniStrpos($strLastUrl, "?"));
+            }
             $strActivity = "";
 
-            if(uniStrpos($strLastUrl, "admin=1") !== false) {
+            if (uniStrpos($strLastUrl, "admin=1") !== false) {
                 $strActivity .= $this->getLang("session_admin");
-                foreach(explode("&amp;", $strLastUrl) as $strOneParam) {
+                foreach (explode("&amp;", $strLastUrl) as $strOneParam) {
                     $arrUrlParam = explode("=", $strOneParam);
-                    if($arrUrlParam[0] == "module")
+                    if ($arrUrlParam[0] == "module") {
                         $strActivity .= $arrUrlParam[1];
+                    }
                 }
             }
             else {
                 $strActivity .= $this->getLang("session_portal");
-                if($strLastUrl == "")
+                if ($strLastUrl == "") {
                     $strActivity .= class_module_system_setting::getConfigValue("_pages_indexpage_");
+                }
                 else {
-                    foreach(explode("&amp;", $strLastUrl) as $strOneParam) {
+                    foreach (explode("&amp;", $strLastUrl) as $strOneParam) {
                         $arrUrlParam = explode("=", $strOneParam);
-                        if($arrUrlParam[0] == "page")
+                        if ($arrUrlParam[0] == "page") {
                             $strActivity .= $arrUrlParam[1];
+                        }
                     }
 
-                    if($strActivity == $this->getLang("session_portal") && uniSubstr($strLastUrl, 0, 5) == "image") {
+                    if ($strActivity == $this->getLang("session_portal") && uniSubstr($strLastUrl, 0, 5) == "image") {
                         $strActivity .= $this->getLang("session_portal_imagegeneration");
                     }
                 }

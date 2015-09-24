@@ -89,7 +89,7 @@ class class_admin_formgenerator
         $this->strFormname = $strFormname;
         $this->objSourceobject = $objSourceobject;
 
-        $this->strOnSubmit = "$(this).on('submit', function() { return false; }); KAJONA.admin.forms.animateSubmit(this); return true;";
+        $this->strOnSubmit = "$(this).on('submit', function() { return false; }); $(window).off('unload'); KAJONA.admin.forms.animateSubmit(this); return true;";
         $this->objLang = class_lang::getInstance();
     }
 
@@ -237,9 +237,10 @@ class class_admin_formgenerator
             $this->addField($objField);
         }
 
+        $strGeneratedFormname = "form".generateSystemid();
         $objToolkit = class_carrier::getInstance()->getObjToolkit("admin");
         if ($strTargetURI !== null) {
-            $strReturn .= $objToolkit->formHeader($strTargetURI, "", $this->strFormEncoding, $this->strOnSubmit);
+            $strReturn .= $objToolkit->formHeader($strTargetURI, $strGeneratedFormname, $this->strFormEncoding, $this->strOnSubmit);
         }
         $strReturn .= $objToolkit->getValidationErrors($this);
 
@@ -326,6 +327,13 @@ class class_admin_formgenerator
             if (!$bitSkip) {
                 if ($this->objSourceobject->getLockManager()->isAccessibleForCurrentUser()) {
                     $this->objSourceobject->getLockManager()->lockRecord();
+
+                    //register a new unlock-handler
+                    // KAJONA.admin.ajax.genericAjaxCall('system', 'unlockRecord', '".$this->objSourceobject->getSystemid()."');
+                    $strReturn .= "<script type='text/javascript'>
+                        $(window).on('unload', function() { $.ajax({url: KAJONA_WEBPATH + '/xml.php?admin=1&module=system&action=unlockRecord&systemid=".$this->objSourceobject->getSystemid()."', async:false}) ; });
+//                        $('#{$strGeneratedFormname}').on('submit', function() { $(window).off('unload'); return true;});
+                    </script>";
                 }
                 else {
                     $objUser = new class_module_user_user($this->objSourceobject->getLockManager()->getLockId());
