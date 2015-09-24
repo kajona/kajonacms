@@ -865,7 +865,7 @@ class class_toolkit_admin extends class_toolkit
      *
      * @return string
      */
-    public function formToggleButtonBar($strName, array $arrKeyValues, $strTitle = "", $arrKeysSelected = array(), $bitEnabled = true)
+    public function formToggleButtonBar($strName, array $arrKeyValues, $strTitle = "", $arrKeysSelected = array(), $bitEnabled = true, $strType = "checkbox")
     {
         $strOptions = "";
         $strTemplateOptionID = $this->objTemplate->readTemplate("/elements.tpl", "input_toggle_buttonbar_button");
@@ -874,6 +874,7 @@ class class_toolkit_admin extends class_toolkit
         foreach ($arrKeyValues as $strKey => $strValue) {
             $arrTemplate = array();
             $arrTemplate["name"] = $strName;
+            $arrTemplate["type"] = $strType;
             $arrTemplate["key"] = $strKey;
             $arrTemplate["value"] = $strValue;
             $arrTemplate["disabled"] = ($bitEnabled ? "" : "disabled=\"disabled\"");

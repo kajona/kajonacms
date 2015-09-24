@@ -421,13 +421,13 @@ Toggle Button-Bar
 
 <input_toggle_buttonbar_button>
     <label class="btn btn-primary %%btnclass%%">
-        <input type="checkbox" name="%%name%%[]" value="%%key%%" %%disabled%% %%addons%%> %%value%%
+        <input type="%%type%%" name="%%name%%[]" value="%%key%%" %%disabled%% %%addons%%> %%value%%
     </label>
 </input_toggle_buttonbar_button>
 
 <input_toggle_buttonbar_button_selected>
     <label class="btn btn-primary active %%btnclass%%">
-        <input type="checkbox" name="%%name%%[]" value="%%key%%" checked="checked" %%disabled%% %%addons%%> %%value%%
+        <input type="%%type%%" name="%%name%%[]" value="%%key%%" checked="checked" %%disabled%% %%addons%%> %%value%%
     </label>
 </input_toggle_buttonbar_button_selected>
 
