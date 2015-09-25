@@ -12,10 +12,6 @@
  * @package module_system
  * @author sidler@mulchprod.de
  *
- * @todo add attribute parsing
- *
- * @todo consider refactoring the class to a more object-oriented approach, so once instance per template (section). or split up the class in class_template and class_template_section
- *
  */
 class class_template {
 
@@ -37,6 +33,9 @@ class class_template {
     /** @var  class_template_section_parser */
     private $objSectionParser;
 
+    /** @var  class_template_placeholder_parser */
+    private $objPlaceholderParser;
+
     /**
      * @inheritDoc
      */
@@ -44,9 +43,8 @@ class class_template {
     {
         $this->objFileParser = new class_template_file_parser();
         $this->objSectionParser = new class_template_section_parser();
+        $this->objPlaceholderParser = new class_template_placeholder_parser();
     }
-
-
 
 
     /**
@@ -54,7 +52,8 @@ class class_template {
      *
      * @return class_template The template object
      */
-    public static function getInstance() {
+    public static function getInstance()
+    {
         if(self::$objTemplate == null) {
             self::$objTemplate = new class_template();
         }
@@ -113,8 +112,8 @@ class class_template {
      * @return string The filled template
      */
     public function fillTemplate($arrContent, $strIdentifier, $bitRemovePlaceholder = true) {
-        if(array_key_exists($strIdentifier, $this->arrCacheTemplateSections)) {
-            $strTemplate = (string)$this->arrCacheTemplateSections[$strIdentifier];
+        if(array_key_exists($strIdentifier, $this->arrTemplateIdMap)) {
+            $strTemplate = (string)$this->arrTemplateIdMap[$strIdentifier];
         }
         else {
             $strTemplate = "Load template first!";
@@ -126,8 +125,9 @@ class class_template {
             }
         }
 
-        if($bitRemovePlaceholder)
-            $strTemplate = $this->deletePlaceholderRaw($strTemplate);
+        if($bitRemovePlaceholder){
+            $strTemplate = $this->objPlaceholderParser->deletePlaceholder($strTemplate);
+        }
         return $strTemplate;
     }
 
@@ -162,19 +162,9 @@ class class_template {
      * Deletes placeholder in the template set by setTemplate()
      */
     public function deletePlaceholder() {
-        $this->strTempTemplate = preg_replace("^%%([A-Za-z0-9_\|]*)%%^", "", $this->strTempTemplate);
+        $this->strTempTemplate = $this->objPlaceholderParser->deletePlaceholder($this->strTempTemplate);
     }
 
-    /**
-     * Deletes placeholder in the string
-     *
-     * @param string $strText
-     *
-     * @return string
-     */
-    private function deletePlaceholderRaw($strText) {
-        return preg_replace("^%%([A-Za-z0-9_\|]*)%%^", "", $strText);
-    }
 
     /**
      * Returns the template set by setTemplate() and sets its back to ""
@@ -213,10 +203,8 @@ class class_template {
      * @return bool
      */
     public function containsPlaceholder($strIdentifier, $strPlaceholdername) {
-        if(!isset($this->arrCacheTemplateSections[$strIdentifier]))
-            return array();
-
-        return false;
+        return (isset($this->arrTemplateIdMap[$strIdentifier])
+            && $this->objPlaceholderParser->containsPlaceholder($this->arrTemplateIdMap[$strIdentifier], $strPlaceholdername));
     }
 
     /**
@@ -228,7 +216,7 @@ class class_template {
      */
     public function containsSection($strIdentifier, $strSection) {
         return (isset($this->arrTemplateIdMap[$strIdentifier])
-            && $this->objSectionParser->containsSection($this->arrTemplateIdMap[$strIdentifier], $strSection) !== null);
+            && $this->objSectionParser->containsSection($this->arrTemplateIdMap[$strIdentifier], $strSection));
     }
 
     /**
@@ -251,52 +239,15 @@ class class_template {
      * @return mixed
      */
     public function getElements($strIdentifier, $intMode = 0) {
-        $arrReturn = array();
 
-        if(isset($this->arrCacheTemplateSections[$strIdentifier]))
-            $strTemplate = $this->arrCacheTemplateSections[$strIdentifier];
+        if(isset($this->arrTemplateIdMap[$strIdentifier]))
+            $strTemplate = $this->arrTemplateIdMap[$strIdentifier];
         else
             return array();
 
-        //search placeholders
-        $arrTemp = array();
-
         $strTemplate = $this->removeSection($strTemplate, class_template_kajona_sections::BLOCKS);
 
-        preg_match_all("'(%%([A-Za-z0-9_]+?))+?\_([A-Za-z0-9_\|]+?)%%'i", $strTemplate, $arrTemp);
-
-        $intCounter = 0;
-        foreach($arrTemp[0] as $strPlacehoder) {
-
-            if(uniStrpos($strPlacehoder, "master") !== false && $intMode == class_template::INT_ELEMENT_MODE_REGULAR) {
-                continue;
-            }
-
-            $strTemp = uniSubstr($strPlacehoder, 2, -2);
-            $arrTemp = explode("_", $strTemp);
-            //are there any pipes?
-            if(uniStrpos($arrTemp[1], "|") !== false) {
-                $arrElementTypes = explode("|", $arrTemp[1]);
-                $intCount2 = 0;
-                $arrReturn[$intCounter]["placeholder"] = $strTemp;
-
-                foreach($arrElementTypes as $strOneElementType) {
-                    $arrReturn[$intCounter]["elementlist"][$intCount2]["name"] = $arrTemp[0];
-                    $arrReturn[$intCounter]["elementlist"][$intCount2]["element"] = $strOneElementType;
-                    $intCount2++;
-                }
-                $intCounter++;
-            }
-            else {
-                $arrReturn[$intCounter]["placeholder"] = $strTemp;
-                $arrReturn[$intCounter]["elementlist"][0]["name"] = $arrTemp[0];
-                $arrReturn[$intCounter]["elementlist"][0]["element"] = $arrTemp[1];
-                $intCounter++;
-            }
-
-        }
-
-        return $arrReturn;
+        return $this->objPlaceholderParser->getElements($strTemplate, $intMode);
     }
 
     /**
@@ -309,8 +260,7 @@ class class_template {
     public function setTemplate($strTemplate) {
         $this->strTempTemplate = $strTemplate;
         $strIdentifier = generateSystemid();
-        $this->arrCacheTemplates[$strIdentifier] = $strTemplate;
-        $this->arrCacheTemplateSections[$strIdentifier] = $strTemplate;
+        $this->arrTemplateIdMap[$strIdentifier] = $strTemplate;
         return $strIdentifier;
     }
 
@@ -324,7 +274,7 @@ class class_template {
      * @return int
      */
     public function getNumberCacheSize() {
-        return count($this->arrCacheTemplateSections);
+        return count($this->arrTemplateIdMap);
     }
 }
 
