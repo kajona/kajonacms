@@ -1669,6 +1669,9 @@ JS;
      * arraykey => tabname
      * arrayvalue => tabcontent
      *
+     * If tabcontent is an url the content is loaded per ajax from this url. Url means the content string starts with
+     * http:// or https://
+     *
      * @param $arrTabs array(key => content)
      * @param bool $bitFullHeight whether the tab content should use full height
      *
@@ -1681,17 +1684,47 @@ JS;
         $strHeaderID = $this->objTemplate->readTemplate("/elements.tpl", "tabbed_content_tabheader");
         $strContentID = $this->objTemplate->readTemplate("/elements.tpl", "tabbed_content_tabcontent");
 
+        $strMainTabId = generateSystemid();
+        $bitRemoteContent = false;
+
         $strTabs = "";
         $strTabContent = "";
         $strClassaddon = "active in ";
         foreach ($arrTabs as $strTitle => $strContent) {
             $strTabId = generateSystemid();
-            $strTabs .= $this->objTemplate->fillTemplate(array("tabid" => $strTabId, "tabtitle" => $strTitle, "classaddon" => $strClassaddon), $strHeaderID);
-            $strTabContent .= $this->objTemplate->fillTemplate(array("tabid" => $strTabId, "tabcontent" => $strContent, "classaddon" => $strClassaddon), $strContentID);
+            // if content is an url enable ajax loading
+            if (substr($strContent, 0, 7) == 'http://' || substr($strContent, 0, 8) == 'https://') {
+                $strTabs .= $this->objTemplate->fillTemplate(array("tabid" => $strTabId, "tabtitle" => $strTitle, "href" => $strContent, "classaddon" => $strClassaddon), $strHeaderID);
+                $strTabContent .= $this->objTemplate->fillTemplate(array("tabid" => $strTabId, "tabcontent" => "", "classaddon" => $strClassaddon . "contentLoading"), $strContentID);
+                $bitRemoteContent = true;
+            } else {
+                $strTabs .= $this->objTemplate->fillTemplate(array("tabid" => $strTabId, "tabtitle" => $strTitle, "href" => "", "classaddon" => $strClassaddon), $strHeaderID);
+                $strTabContent .= $this->objTemplate->fillTemplate(array("tabid" => $strTabId, "tabcontent" => $strContent, "classaddon" => $strClassaddon), $strContentID);
+            }
             $strClassaddon = "";
         }
 
-        return $this->objTemplate->fillTemplate(array("tabheader" => $strTabs, "tabcontent" => $strTabContent, "classaddon" => ($bitFullHeight === true ? 'fullHeight' : '')), $strWrapperID);
+        $strHtml = $this->objTemplate->fillTemplate(array("id" => $strMainTabId, "tabheader" => $strTabs, "tabcontent" => $strTabContent, "classaddon" => ($bitFullHeight === true ? 'fullHeight' : '')), $strWrapperID);
+
+        // add ajax loader if we have content which we need to fetch per ajax
+        if ($bitRemoteContent) {
+            $strHtml.= <<<HTML
+<script type="text/javascript">
+$('#{$strMainTabId} > li > a[data-href!=""]').on('click', function(e){
+    KAJONA.admin.forms.loadTab($(e.target).data('target').substr(1), $(e.target).data('href'));
+});
+
+$(document).ready(function(){
+    var el = $('#{$strMainTabId} > li.active > a[data-href!=""]');
+    if (el.length > 0) {
+        KAJONA.admin.forms.loadTab(el.data('target').substr(1), el.data('href'));
+    }
+});
+</script>
+HTML;
+        }
+
+        return $strHtml;
     }
 
     /**

@@ -976,7 +976,7 @@ A fieldset to structure logical sections
 
 
 <tabbed_content_wrapper>
-    <ul class="nav nav-tabs" id="">
+    <ul class="nav nav-tabs" id="%%id%%">
         %%tabheader%%
     </ul>
 
@@ -986,7 +986,7 @@ A fieldset to structure logical sections
 </tabbed_content_wrapper>
 
 <tabbed_content_tabheader>
-    <li class="%%classaddon%%"><a href="" data-target="#%%tabid%%" data-toggle="tab">%%tabtitle%%</a></li>
+    <li class="%%classaddon%%"><a href="" data-target="#%%tabid%%" data-href="%%href%%" data-toggle="tab">%%tabtitle%%</a></li>
 </tabbed_content_tabheader>
 
 <tabbed_content_tabcontent>
