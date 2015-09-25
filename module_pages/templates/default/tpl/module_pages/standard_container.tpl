@@ -64,7 +64,7 @@
 
                 %%headline_row%%
 
-                <kajona-blocks name="content">
+                <kajona-blocks kajona-name="content">
 
                     <kajona-block kajona-name="Row light" kajona-name-de="Zeile hell">
                         <div class="row-light">
@@ -92,7 +92,7 @@
                 </kajona-blocks>
 
 
-                <kajona-blocks name="2ndcontent">
+                <kajona-blocks kajona-name="2ndcontent">
 
                     <kajona-block kajona-name="Row light" kajona-name-de="Zeile hell">
                         <div class="row-light">

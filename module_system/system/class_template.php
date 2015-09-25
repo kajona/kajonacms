@@ -22,39 +22,31 @@ class class_template {
     const INT_ELEMENT_MODE_MASTER = 1;
     const INT_ELEMENT_MODE_REGULAR = 0;
 
-    private $arrCacheTemplates = array();
-    private $arrCacheTemplateSections = array();
 
     private $strTempTemplate = "";
 
     private static $objTemplate = null;
 
-    /**
-     * @var class_apc_cache
-     */
-    private $objApcCache;
-    private $bitSaveToCacheRequired = false;
+
+    /** @var array for backwards compatibility */
+    private $arrTemplateIdMap = array();
+
+
+    /** @var  class_template_file_parser */
+    private $objFileParser;
+    /** @var  class_template_section_parser */
+    private $objSectionParser;
 
     /**
-     * Constructor
-
+     * @inheritDoc
      */
-    private function __construct() {
-        $this->objApcCache = class_apc_cache::getInstance();
-
-        //any caches to load from session?
-        $this->arrCacheTemplates = $this->objApcCache->getValue("templateSessionCacheTemplate", $this->arrCacheTemplates);
-        $this->arrCacheTemplateSections = $this->objApcCache->getValue("templateSessionCacheTemplateSections", $this->arrCacheTemplateSections);
-
+    private function __construct()
+    {
+        $this->objFileParser = new class_template_file_parser();
+        $this->objSectionParser = new class_template_section_parser();
     }
 
-    public function __destruct() {
-        //save cache to apc
-        if($this->bitSaveToCacheRequired) {
-            $this->objApcCache->addValue("templateSessionCacheTemplate", $this->arrCacheTemplates, class_config::getInstance()->getConfig("templatecachetime"));
-            $this->objApcCache->addValue("templateSessionCacheTemplateSections", $this->arrCacheTemplateSections, class_config::getInstance()->getConfig("templatecachetime"));
-        }
-    }
+
 
 
     /**
@@ -80,60 +72,21 @@ class class_template {
      *
      * @return string The identifier for further actions
      * @throws class_exception
+     *
+     * @deprecated
      */
     public function readTemplate($strName, $strSection = "", $bitForce = false, $bitThrowErrors = false) {
 
-        //avoid directory traversals
-        $strName = removeDirectoryTraversals($strName);
-        if(!$bitForce) {
-            try {
-                $strName = class_resourceloader::getInstance()->getTemplate($strName);
-            }
-            catch(class_exception $objEx) {
-                //try to resolve the file in the current skin
-                $strName = class_resourceloader::getInstance()->getTemplate($strName, true);
-            }
+        $strTemplate = $this->objFileParser->readTemplate($strName);
 
-        }
+        if($strSection != "")
+            $strTemplate = $this->objSectionParser->readSection($strTemplate, $strSection);
 
-        $bitKnownTemplate = false;
-        //Is this template already in the cache?
-        $strCacheTemplate = md5($strName);
-        $strCacheSection = md5($strName.$strSection);
 
-        if(array_key_exists($strCacheSection, $this->arrCacheTemplateSections))
-            return $strCacheSection;
+        $strHash = md5($strName.$strSection);
+        $this->arrTemplateIdMap[$strHash] = $strTemplate;
 
-        $this->bitSaveToCacheRequired = true;
-
-        if(isset($this->arrCacheTemplates[$strCacheTemplate]))
-            $bitKnownTemplate = true;
-
-        if(!$bitKnownTemplate) {
-            //We have to read the whole template from the filesystem
-            if(uniSubstr($strName, -4) == ".tpl" && is_file(_realpath_."/".$strName)) {
-                $strTemplate = file_get_contents(_realpath_."/".$strName);
-                //Saving to the cache
-                $this->arrCacheTemplates[$strCacheTemplate] = $strTemplate;
-            }
-            else {
-                $strTemplate = "Template ".$strName." not found!";
-                if($bitThrowErrors)
-                    throw new class_exception("Template ".$strName." not found!", class_exception::$level_FATALERROR);
-            }
-        }
-        else
-            $strTemplate = $this->arrCacheTemplates[$strCacheTemplate];
-
-        //Now we have to extract the section
-        if($strSection != "") {
-            $strTemplate = $this->getSectionFromTemplate($strTemplate, $strSection);
-        }
-
-        //Saving the section to the cache
-        $this->arrCacheTemplateSections[$strCacheSection] = $strTemplate;
-
-        return $strCacheSection;
+        return $strHash;
     }
 
     /**
@@ -144,38 +97,7 @@ class class_template {
      * @return string|null
      */
     public function getSectionFromTemplate($strTemplate, $strSection, $bitKeepSectionTag = false) {
-        //find opening tag
-        $arrMatches = array();
-        $intStart = false;
-        if(preg_match("/<".$strSection."([\ a-zA-Z0-9='\"])*>/i", $strTemplate, $arrMatches) > 0) {
-            $strPattern = $arrMatches[0];
-            $intStart = uniStrpos($strTemplate, $strPattern);
-            if(!$bitKeepSectionTag)
-                $intStart += uniStrlen($strPattern);
-        }
-
-        //find closing tag
-        $intEnd = uniStrpos($strTemplate, "</".$strSection.">");
-        if($bitKeepSectionTag)
-            $intEnd += uniStrlen("</".$strSection.">");
-
-
-
-        if($intStart !== false && $intEnd !== false) {
-            $intEnd = $intEnd - $intStart;
-
-            if($intEnd == 0) {
-                $strTemplate = "";
-            }
-            else {
-                //delete substring before and after
-                $strTemplate = uniSubstr($strTemplate, $intStart, $intEnd);
-            }
-        }
-        else
-            $strTemplate = null;
-
-        return $strTemplate;
+        return $this->objSectionParser->readSection($strTemplate, $strSection, $bitKeepSectionTag);
     }
 
 
@@ -291,10 +213,8 @@ class class_template {
      * @return bool
      */
     public function containsPlaceholder($strIdentifier, $strPlaceholdername) {
-        $arrElements = $this->getElements($strIdentifier);
-        foreach($arrElements as $arrSinglePlaceholder)
-            if($arrSinglePlaceholder["placeholder"] == $strPlaceholdername)
-                return true;
+        if(!isset($this->arrCacheTemplateSections[$strIdentifier]))
+            return array();
 
         return false;
     }
@@ -307,8 +227,8 @@ class class_template {
      * @return bool
      */
     public function containsSection($strIdentifier, $strSection) {
-        return (isset($this->arrCacheTemplates[$strIdentifier])
-            && $this->getSectionFromTemplate($this->arrCacheTemplates[$strIdentifier], $strSection) !== null);
+        return (isset($this->arrTemplateIdMap[$strIdentifier])
+            && $this->objSectionParser->containsSection($this->arrTemplateIdMap[$strIdentifier], $strSection) !== null);
     }
 
     /**
@@ -319,12 +239,7 @@ class class_template {
      * @return string
      */
     public function removeSection($strTemplate, $strSection) {
-        do {
-            $strFullSection = $this->getSectionFromTemplate($strTemplate, $strSection, true);
-            $strTemplate = uniStrReplace($strFullSection, "", $strTemplate);
-        } while ($strFullSection != "" && $strFullSection != null);
-
-        return $strTemplate;
+        return $this->objSectionParser->removeSection($strTemplate, $strSection);
     }
 
     /**
@@ -400,7 +315,7 @@ class class_template {
     }
 
     public function isValidTemplate($strTemplateId) {
-        return isset($this->arrCacheTemplateSections[$strTemplateId]) && $this->arrCacheTemplateSections[$strTemplateId] != "";
+        return isset($this->arrTemplateIdMap[$strTemplateId]) && $this->arrTemplateIdMap[$strTemplateId] != "";
     }
 
     /**

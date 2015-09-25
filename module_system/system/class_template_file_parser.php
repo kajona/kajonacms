@@ -1,0 +1,54 @@
+<?php
+/*"******************************************************************************************************
+*   (c) 2015 by Kajona, www.kajona.de                                                              *
+*       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
+********************************************************************************************************/
+
+/**
+ * Used to parse template files and to extract single sections from a template
+ *
+ * @package module_system
+ * @author sidler@mulchprod.de
+ * @since 5.0
+ *
+ */
+class class_template_file_parser
+{
+
+    private $arrCacheTemplates = array();
+
+
+    public function readTemplate($strTemplateFilename)
+    {
+        $strFilename = $this->getPathForTemplate($strTemplateFilename);
+        $strHash = md5($strFilename);
+
+        if (isset($this->arrCacheTemplates[$strHash])) {
+            return $this->arrCacheTemplates[$strHash];
+        }
+
+
+        //We have to read the whole template from the filesystem
+        if (uniSubstr($strFilename, -4) == ".tpl" && is_file(_realpath_."/".$strFilename)) {
+            $strTemplateContent = file_get_contents(_realpath_."/".$strFilename);
+        }
+        else {
+            $strTemplateContent = "Template ".$strTemplateFilename." not found!";
+        }
+
+        //Saving to the cache
+        $this->arrCacheTemplates[$strHash] = $strTemplateContent;
+        return $strTemplateContent;
+    }
+
+
+    private function getPathForTemplate($strTemplate)
+    {
+        $strName = removeDirectoryTraversals($strTemplate);
+        $strName = class_resourceloader::getInstance()->getTemplate($strName, true);
+        return $strName;
+    }
+
+
+}
+
