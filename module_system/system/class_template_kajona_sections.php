@@ -18,5 +18,8 @@ class class_template_kajona_sections  {
     const BLOCKS = "kajona-blocks";
     const BLOCK = "kajona-block";
 
+
+    const ATTR_NAME = "kajona-name";
+
 }
 

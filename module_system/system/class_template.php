@@ -72,7 +72,7 @@ class class_template {
      * @return string The identifier for further actions
      * @throws class_exception
      *
-     * @deprecated
+     * @deprecated use the direct  fill / parse methods instead
      */
     public function readTemplate($strName, $strSection = "", $bitForce = false, $bitThrowErrors = false) {
 
@@ -131,6 +131,36 @@ class class_template {
         return $strTemplate;
     }
 
+    /**
+     * Fills a template with values passed in an array.
+     * As an optional parameter an instance of class_lang_wrapper can be passed
+     * to fill placeholders matching the schema %%lang_...%% automatically.
+     *
+     * @param $arrContent
+     * @param $strTemplateFile
+     * @param string $strSection
+     * @param bool $bitRemovePlaceholder
+     *
+     * @return string The filled template
+     */
+    public function fillTemplateFile($arrContent, $strTemplateFile, $strSection = "", $bitRemovePlaceholder = true)
+    {
+
+        $strTemplate = $this->objFileParser->readTemplate($strTemplateFile);
+
+        if($strSection != "")
+            $strTemplate = $this->objSectionParser->readSection($strTemplate, $strSection);
+
+        foreach($arrContent as $strPlaceholder => $strContent) {
+            $strTemplate = str_replace("%%".$strPlaceholder."%%", $strContent."%%".$strPlaceholder."%%", $strTemplate);
+        }
+
+        if($bitRemovePlaceholder){
+            $strTemplate = $this->objPlaceholderParser->deletePlaceholder($strTemplate);
+        }
+        return $strTemplate;
+    }
+
 
     /**
      * Fills the current temp-template with the passed values.
@@ -160,6 +190,8 @@ class class_template {
 
     /**
      * Deletes placeholder in the template set by setTemplate()
+     *
+     * @deprecated
      */
     public function deletePlaceholder() {
         $this->strTempTemplate = $this->objPlaceholderParser->deletePlaceholder($this->strTempTemplate);
@@ -170,6 +202,7 @@ class class_template {
      * Returns the template set by setTemplate() and sets its back to ""
      *
      * @return string
+     * @deprecated
      */
     public function getTemplate() {
         $strTemp = $this->strTempTemplate;
@@ -256,6 +289,7 @@ class class_template {
      * @param string $strTemplate
      *
      * @return string
+     * @deprecated
      */
     public function setTemplate($strTemplate) {
         $this->strTempTemplate = $strTemplate;
@@ -264,6 +298,12 @@ class class_template {
         return $strIdentifier;
     }
 
+    /**
+     * @param $strTemplateId
+     *
+     * @return bool
+     * @deprecated
+     */
     public function isValidTemplate($strTemplateId) {
         return isset($this->arrTemplateIdMap[$strTemplateId]) && $this->arrTemplateIdMap[$strTemplateId] != "";
     }
@@ -272,6 +312,7 @@ class class_template {
      * Returns the number of cached template sections
      *
      * @return int
+     * @deprecated
      */
     public function getNumberCacheSize() {
         return count($this->arrTemplateIdMap);
