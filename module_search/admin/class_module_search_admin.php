@@ -228,6 +228,8 @@ class class_module_search_admin extends class_admin_simple implements interface_
     protected function actionSearchXml() {
         $strReturn = "";
 
+        class_carrier::getInstance()->getObjSession()->sessionClose();
+
         $strSearchterm = "";
         if($this->getParam("search_query") != "") {
             $strSearchterm = htmlToString(urldecode($this->getParam("search_query")), false);
