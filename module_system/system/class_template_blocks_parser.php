@@ -16,20 +16,20 @@ class class_template_blocks_parser
 {
 
 
-    public function readBlocks($strTemplate)
+    public function readBlocks($strTemplate, $strBlockDefinition = class_template_kajona_sections::BLOCKS)
     {
         $arrBlocks = array();
 
 
         //find opening tag
         $arrMatches = array();
-        while (preg_match("/<".class_template_kajona_sections::BLOCKS."([\ a-zA-Z0-9=']*)(.*) ".class_template_kajona_sections::ATTR_NAME."=(\"|\')([a-zA-Z0-9]*)(\"|\')(.*)>/i", $strTemplate, $arrMatches) > 0) {
+        while (preg_match("/<".$strBlockDefinition."([\ a-zA-Z0-9=']*)(.*) ".class_template_kajona_sections::ATTR_NAME."=(\"|\')([a-zA-Z0-9]*)(\"|\')(.*)>/i", $strTemplate, $arrMatches) > 0) {
 
             $strPattern = $arrMatches[0];
             $intStart = uniStrpos($strTemplate, $strPattern);
 
-            $intEnd = uniStrpos($strTemplate, "</".class_template_kajona_sections::BLOCKS.">");
-            $intEnd += uniStrlen("</".class_template_kajona_sections::BLOCKS.">");
+            $intEnd = uniStrpos($strTemplate, "</".$strBlockDefinition.">");
+            $intEnd += uniStrlen("</".$strBlockDefinition.">");
 
 
             if ($intStart !== false && $intEnd !== false) {

@@ -6,6 +6,7 @@
 *-------------------------------------------------------------------------------------------------------*
 *	$Id$                                           *
 ********************************************************************************************************/
+
 /**
  * This class does all the template stuff as loading, parsing, etc..
  *
@@ -13,7 +14,8 @@
  * @author sidler@mulchprod.de
  *
  */
-class class_template {
+class class_template
+{
 
     const INT_ELEMENT_MODE_MASTER = 1;
     const INT_ELEMENT_MODE_REGULAR = 0;
@@ -36,6 +38,9 @@ class class_template {
     /** @var  class_template_placeholder_parser */
     private $objPlaceholderParser;
 
+    /** @var  class_template_blocks_parser */
+    private $objBlocksParser;
+
     /**
      * @inheritDoc
      */
@@ -43,6 +48,7 @@ class class_template {
     {
         $this->objFileParser = new class_template_file_parser();
         $this->objSectionParser = new class_template_section_parser();
+        $this->objPlaceholderParser = new class_template_placeholder_parser();
         $this->objPlaceholderParser = new class_template_placeholder_parser();
     }
 
@@ -54,7 +60,7 @@ class class_template {
      */
     public static function getInstance()
     {
-        if(self::$objTemplate == null) {
+        if (self::$objTemplate == null) {
             self::$objTemplate = new class_template();
         }
 
@@ -74,12 +80,14 @@ class class_template {
      *
      * @deprecated use the direct  fill / parse methods instead
      */
-    public function readTemplate($strName, $strSection = "", $bitForce = false, $bitThrowErrors = false) {
+    public function readTemplate($strName, $strSection = "", $bitForce = false, $bitThrowErrors = false)
+    {
 
         $strTemplate = $this->objFileParser->readTemplate($strName);
 
-        if($strSection != "")
+        if ($strSection != "") {
             $strTemplate = $this->objSectionParser->readSection($strTemplate, $strSection);
+        }
 
 
         $strHash = md5($strName.$strSection);
@@ -88,14 +96,26 @@ class class_template {
         return $strHash;
     }
 
+    public function getBlocksElementsFromTemplate($strTemplate)
+    {
+        return $this->objBlocksParser->readBlocks($strTemplate, class_template_kajona_sections::BLOCKS);
+    }
+
+    public function getBlockElementsFromBlock($strBlock)
+    {
+        return $this->objBlocksParser->readBlocks($strBlock, class_template_kajona_sections::BLOCK);
+    }
+
     /**
      * Helper to parse a single section out of a given template
+     *
      * @param $strTemplate
      * @param $strSection
      *
      * @return string|null
      */
-    public function getSectionFromTemplate($strTemplate, $strSection, $bitKeepSectionTag = false) {
+    public function getSectionFromTemplate($strTemplate, $strSection, $bitKeepSectionTag = false)
+    {
         return $this->objSectionParser->readSection($strTemplate, $strSection, $bitKeepSectionTag);
     }
 
@@ -111,21 +131,22 @@ class class_template {
      *
      * @return string The filled template
      */
-    public function fillTemplate($arrContent, $strIdentifier, $bitRemovePlaceholder = true) {
-        if(array_key_exists($strIdentifier, $this->arrTemplateIdMap)) {
+    public function fillTemplate($arrContent, $strIdentifier, $bitRemovePlaceholder = true)
+    {
+        if (array_key_exists($strIdentifier, $this->arrTemplateIdMap)) {
             $strTemplate = (string)$this->arrTemplateIdMap[$strIdentifier];
         }
         else {
             $strTemplate = "Load template first!";
         }
 
-        if(count($arrContent) >= 1) {
-            foreach($arrContent as $strPlaceholder => $strContent) {
+        if (count($arrContent) >= 1) {
+            foreach ($arrContent as $strPlaceholder => $strContent) {
                 $strTemplate = str_replace("%%".$strPlaceholder."%%", $strContent."%%".$strPlaceholder."%%", $strTemplate);
             }
         }
 
-        if($bitRemovePlaceholder){
+        if ($bitRemovePlaceholder) {
             $strTemplate = $this->objPlaceholderParser->deletePlaceholder($strTemplate);
         }
         return $strTemplate;
@@ -148,14 +169,15 @@ class class_template {
 
         $strTemplate = $this->objFileParser->readTemplate($strTemplateFile);
 
-        if($strSection != "")
+        if ($strSection != "") {
             $strTemplate = $this->objSectionParser->readSection($strTemplate, $strSection);
+        }
 
-        foreach($arrContent as $strPlaceholder => $strContent) {
+        foreach ($arrContent as $strPlaceholder => $strContent) {
             $strTemplate = str_replace("%%".$strPlaceholder."%%", $strContent."%%".$strPlaceholder."%%", $strTemplate);
         }
 
-        if($bitRemovePlaceholder){
+        if ($bitRemovePlaceholder) {
             $strTemplate = $this->objPlaceholderParser->deletePlaceholder($strTemplate);
         }
         return $strTemplate;
@@ -172,7 +194,8 @@ class class_template {
      * @return string The filled template
      * @deprecated use setTemplate() and fillTemplate() instead
      */
-    public function fillCurrentTemplate($arrContent, $bitRemovePlaceholder = true) {
+    public function fillCurrentTemplate($arrContent, $bitRemovePlaceholder = true)
+    {
         $strIdentifier = $this->setTemplate($this->strTempTemplate);
         return $this->fillTemplate($arrContent, $strIdentifier, $bitRemovePlaceholder);
     }
@@ -183,7 +206,8 @@ class class_template {
      *
      * @deprecated use scriptlets instead
      */
-    public function fillConstants() {
+    public function fillConstants()
+    {
         $objConstantScriptlet = new class_scriptlet_xconstants();
         $this->strTempTemplate = $objConstantScriptlet->processContent($this->strTempTemplate);
     }
@@ -193,7 +217,8 @@ class class_template {
      *
      * @deprecated
      */
-    public function deletePlaceholder() {
+    public function deletePlaceholder()
+    {
         $this->strTempTemplate = $this->objPlaceholderParser->deletePlaceholder($this->strTempTemplate);
     }
 
@@ -204,7 +229,8 @@ class class_template {
      * @return string
      * @deprecated
      */
-    public function getTemplate() {
+    public function getTemplate()
+    {
         $strTemp = $this->strTempTemplate;
         $this->strTempTemplate = "";
         return $strTemp;
@@ -221,7 +247,8 @@ class class_template {
      * @deprecated replaced by containsPlaceholder
      * @see class_template::containsPlaceholder
      */
-    public function containesPlaceholder($strIdentifier, $strPlaceholdername) {
+    public function containesPlaceholder($strIdentifier, $strPlaceholdername)
+    {
         return $this->containsPlaceholder($strIdentifier, $strPlaceholdername);
     }
 
@@ -235,31 +262,36 @@ class class_template {
      *
      * @return bool
      */
-    public function containsPlaceholder($strIdentifier, $strPlaceholdername) {
+    public function containsPlaceholder($strIdentifier, $strPlaceholdername)
+    {
         return (isset($this->arrTemplateIdMap[$strIdentifier])
             && $this->objPlaceholderParser->containsPlaceholder($this->arrTemplateIdMap[$strIdentifier], $strPlaceholdername));
     }
 
     /**
      * Checks if the template referenced by the given identifier provides the section passed.
+     *
      * @param $strIdentifier
      * @param $strSection
      *
      * @return bool
      */
-    public function containsSection($strIdentifier, $strSection) {
+    public function containsSection($strIdentifier, $strSection)
+    {
         return (isset($this->arrTemplateIdMap[$strIdentifier])
             && $this->objSectionParser->containsSection($this->arrTemplateIdMap[$strIdentifier], $strSection));
     }
 
     /**
      * Removes a section with all contents from the given (template) string
+     *
      * @param $strTemplate
      * @param $strSection
      *
      * @return string
      */
-    public function removeSection($strTemplate, $strSection) {
+    public function removeSection($strTemplate, $strSection)
+    {
         return $this->objSectionParser->removeSection($strTemplate, $strSection);
     }
 
@@ -271,12 +303,15 @@ class class_template {
      *
      * @return mixed
      */
-    public function getElements($strIdentifier, $intMode = 0) {
+    public function getElements($strIdentifier, $intMode = 0)
+    {
 
-        if(isset($this->arrTemplateIdMap[$strIdentifier]))
+        if (isset($this->arrTemplateIdMap[$strIdentifier])) {
             $strTemplate = $this->arrTemplateIdMap[$strIdentifier];
-        else
+        }
+        else {
             return array();
+        }
 
         $strTemplate = $this->removeSection($strTemplate, class_template_kajona_sections::BLOCKS);
 
@@ -291,7 +326,8 @@ class class_template {
      * @return string
      * @deprecated
      */
-    public function setTemplate($strTemplate) {
+    public function setTemplate($strTemplate)
+    {
         $this->strTempTemplate = $strTemplate;
         $strIdentifier = generateSystemid();
         $this->arrTemplateIdMap[$strIdentifier] = $strTemplate;
@@ -304,7 +340,8 @@ class class_template {
      * @return bool
      * @deprecated
      */
-    public function isValidTemplate($strTemplateId) {
+    public function isValidTemplate($strTemplateId)
+    {
         return isset($this->arrTemplateIdMap[$strTemplateId]) && $this->arrTemplateIdMap[$strTemplateId] != "";
     }
 
@@ -314,7 +351,8 @@ class class_template {
      * @return int
      * @deprecated
      */
-    public function getNumberCacheSize() {
+    public function getNumberCacheSize()
+    {
         return count($this->arrTemplateIdMap);
     }
 }
