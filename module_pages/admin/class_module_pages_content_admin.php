@@ -127,19 +127,37 @@ class class_module_pages_content_admin extends class_admin_simple implements int
         //So, loop through the placeholders and check, if there's any element already belonging to this one
         $strReturn .= $this->renderPlaceholderList($arrElementsOnTemplate, $arrElementsOnPage);
 
+        $arrBlocksOnTemplate = $this->objTemplate->getBlocksElementsFromTemplate("/module_pages/".$objPage->getStrTemplate());
+        $strReturn .= $this->renderBlocksList($arrBlocksOnTemplate, array());
+
         return $strReturn;
     }
 
+    private function renderBlocksList($arrBlocksOnTemplate, $arrBlocksOnPage)
+    {
+        $strReturn = $this->objToolkit->listHeader();
+
+        foreach($arrBlocksOnTemplate as $strName => $strContent) {
+
+            $strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), $strName, "", "", 0);
+
+        }
+
+        $strReturn .= $this->objToolkit->listFooter();
+        return $strReturn;
+    }
+
+
     /**
      * @param $arrElementsOnTemplate
-     * @param class_module_pages_pageelement[] $arrElementsInSystem
+     * @param class_module_pages_pageelement[] $arrElementsOnPage
      *
      * @return string
      */
-    private function renderPlaceholderList($arrElementsOnTemplate, $arrElementsInSystem) {
+    private function renderPlaceholderList($arrElementsOnTemplate, $arrElementsOnPage) {
         $strReturn = "";
         //save a copy of the array to be able to check against all values later on
-        $arrElementsOnPageCopy = $arrElementsInSystem;
+        $arrElementsOnPageCopy = $arrElementsOnPage;
 
 
         if(is_array($arrElementsOnTemplate) && count($arrElementsOnTemplate) > 0) {
@@ -151,7 +169,7 @@ class class_module_pages_content_admin extends class_admin_simple implements int
                 $bitHit = false;
 
                 //Iterate over every single element-type provided by the placeholder
-                foreach($arrElementsInSystem as $intArrElementsOnPageKey => $objOneElementOnPage) {
+                foreach($arrElementsOnPage as $intArrElementsOnPageKey => $objOneElementOnPage) {
                     //Check, if its the same placeholder
                     $bitSamePlaceholder = false;
                     if($arrOneElementOnTemplate["placeholder"] == $objOneElementOnPage->getStrPlaceholder()) {
@@ -167,7 +185,7 @@ class class_module_pages_content_admin extends class_admin_simple implements int
                         $strOutputAtPlaceholder .= $this->objToolkit->simpleAdminList($objOneElementOnPage, $strActions, 0);
 
                         //remove the element from the array
-                        unset($arrElementsInSystem[$intArrElementsOnPageKey]);
+                        unset($arrElementsOnPage[$intArrElementsOnPageKey]);
                     }
 
                 }
@@ -222,13 +240,13 @@ class class_module_pages_content_admin extends class_admin_simple implements int
 
 
         //if there are any page-elements remaining, print a warning and print the elements row
-        if(count($arrElementsInSystem) > 0) {
+        if(count($arrElementsOnPage) > 0) {
             $strReturn .= $this->objToolkit->divider();
             $strReturn .= $this->objToolkit->warningBox($this->getLang("warning_elementsremaining"));
             $strReturn .= $this->objToolkit->listHeader();
 
             //minimized actions now, plz. this ain't being a real element anymore!
-            foreach($arrElementsInSystem as $objOneElement) {
+            foreach($arrElementsOnPage as $objOneElement) {
                 $strActions = "";
                 $strActions .= $this->objToolkit->listDeleteButton($objOneElement->getStrDisplayName(), $this->getLang("element_loeschen_frage"), class_link::getLinkAdminHref("pages_content", "deleteElementFinal", "&systemid=".$objOneElement->getSystemid().($this->getParam("pe") == "" ? "" : "&peClose=".$this->getParam("pe"))));
 

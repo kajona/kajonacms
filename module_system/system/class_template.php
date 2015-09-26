@@ -49,7 +49,7 @@ class class_template
         $this->objFileParser = new class_template_file_parser();
         $this->objSectionParser = new class_template_section_parser();
         $this->objPlaceholderParser = new class_template_placeholder_parser();
-        $this->objPlaceholderParser = new class_template_placeholder_parser();
+        $this->objBlocksParser = new class_template_blocks_parser();
     }
 
 
@@ -96,8 +96,14 @@ class class_template
         return $strHash;
     }
 
-    public function getBlocksElementsFromTemplate($strTemplate)
+    public function getBlocksElementsFromTemplate($strTemplateFile, $strSection = "")
     {
+        $strTemplate = $this->objFileParser->readTemplate($strTemplateFile);
+
+        if ($strSection != "") {
+            $strTemplate = $this->objSectionParser->readSection($strTemplate, $strSection);
+        }
+
         return $this->objBlocksParser->readBlocks($strTemplate, class_template_kajona_sections::BLOCKS);
     }
 

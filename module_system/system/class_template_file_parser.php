@@ -44,8 +44,7 @@ class class_template_file_parser
 
     private function getPathForTemplate($strTemplate)
     {
-        $strName = removeDirectoryTraversals($strTemplate);
-        $strName = class_resourceloader::getInstance()->getTemplate($strName, true);
+        $strName = class_resourceloader::getInstance()->getTemplate($strTemplate, true);
         return $strName;
     }
 
