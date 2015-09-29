@@ -126,8 +126,7 @@ class class_formentry_month_year_dropdown extends class_formentry_date {
     private static function getArrYear() {
         $arrDropDownYear = array();
 
-        $objCurrentDate = new class_date();
-        for($intI = $objCurrentDate->getIntYear(); $intI < 2100; $intI++ ) {
+        for($intI = 2000; $intI < 2100; $intI++ ) {
             $arrDropDownYear[$intI.""] = $intI;
         }
 
