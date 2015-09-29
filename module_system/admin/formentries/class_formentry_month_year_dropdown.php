@@ -148,19 +148,6 @@ class class_formentry_month_year_dropdown extends class_formentry_date {
         $this->bitRenderDay = $bitRenderDay;
     }
 
-    protected function updateValue()
-    {
-        $arrParams = class_carrier::getAllParams();
-        if (array_key_exists($this->getStrEntryName() . self::DAY_SUFFIX, $arrParams)
-            && array_key_exists($this->getStrEntryName() . self::MONTH_SUFFIX, $arrParams)
-            && array_key_exists($this->getStrEntryName() . self::YEAR_SUFFIX, $arrParams)
-        ) {
-            parent::updateValue();
-        }
-        $this->setStrValue(null);
-    }
-
-
     public function validateValue()
     {
         if($this->getBitMandatory()) {
