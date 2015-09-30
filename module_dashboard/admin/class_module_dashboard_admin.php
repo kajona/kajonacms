@@ -229,7 +229,9 @@ JS;
         //render filter
         $strReturn .= $objFormgenerator->renderForm(class_link::getLinkAdminHref("dashboard", "todo"), class_admin_formgenerator::BIT_BUTTON_SUBMIT);
 
-        $arrFolder = $this->objToolkit->getLayoutFolderPic($strReturn, $this->getLang("filter_show_hide", "agp_commons"), "icon_folderOpen", "icon_folderClosed", false);
+        $bitFilterActive = $this->getParam("listfilter_category") != "" || $this->getParam("listfilter_search") != "" || $this->getParam("listfilter_date") != "";
+
+        $arrFolder = $this->objToolkit->getLayoutFolderPic($strReturn, $this->getLang("filter_show_hide", "agp_commons").($bitFilterActive ? $this->getLang("commons_filter_active") : ""), "icon_folderOpen", "icon_folderClosed", false);
         $strReturn = $this->objToolkit->getFieldset($arrFolder[1], $arrFolder[0]);
 
         return $strReturn;
