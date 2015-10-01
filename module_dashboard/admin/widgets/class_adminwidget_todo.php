@@ -63,6 +63,7 @@ class class_adminwidget_todo extends class_adminwidget implements interface_admi
 
         $bitConfiguration = $this->hasConfiguration();
         $bitHasEntries = false;
+        $arrValues = array();
 
         foreach ($arrCategories as $strProviderName => $arrTaskCategories) {
             if (empty($arrTaskCategories)) {
@@ -76,34 +77,21 @@ class class_adminwidget_todo extends class_adminwidget implements interface_admi
             }
 
             $bitHasEntries = true;
-            $strReturn .= $this->objToolkit->formHeadline($strProviderName);
 
             foreach ($arrTaskCategories as $strKey => $strCategoryName) {
                 $arrTodos = class_todo_repository::getOpenTodos($strKey);
-                $strContent = "";
-                $strContent .= $this->objToolkit->listHeader();
-                $intI = 0;
-                foreach ($arrTodos as $objTodo) {
-                    $strActions = "";
-                    $arrModule = $objTodo->getArrModuleNavi();
-                    if (!empty($arrModule) && is_array($arrModule)) {
-                        foreach ($arrModule as $strLink) {
-                            $strActions.= $this->objToolkit->listButton($strLink);
-                        }
-                    }
-                    $strContent .= $this->objToolkit->simpleAdminList($objTodo, $strActions, $intI++);
-                }
-                $strContent .= $this->objToolkit->listFooter();
 
                 if (count($arrTodos) > 0) {
-                    $arrFolder = $this->objToolkit->getLayoutFolderPic($strContent, $strCategoryName . " (" . count($arrTodos) . ")", "icon_folderOpen", "icon_folderClosed", false);
+                    $strLink = class_link::getLinkAdmin("dashboard", "todo", "listfilter_category=" . $strKey, count($arrTodos));
+                    $arrValues[] = array($strCategoryName, $strLink);
                 } else {
-                    $arrFolder = $this->objToolkit->getLayoutFolderPic("", $strCategoryName . " (0)", "icon_accept", "icon_accept", false);
+                    $strIcon = class_adminskin_helper::getAdminImage("icon_accept");
+                    $arrValues[] = array($strCategoryName, $strIcon);
                 }
-
-                $strReturn .= $this->objToolkit->getFieldset($arrFolder[1], $arrFolder[0]);
             }
         }
+
+        $strReturn .= $this->objToolkit->dataTable(array(), $arrValues);
 
         if (!$bitHasEntries) {
             $strReturn .= $this->objToolkit->warningBox($this->getLang("no_tasks_available"), "alert-info");
