@@ -34,8 +34,7 @@ class class_module_dashboard_firstloginlistener implements interface_genericeven
         foreach($arrWidgets as $strOneWidgetClass) {
             /** @var $objInstance interface_adminwidget */
             $objInstance = new $strOneWidgetClass();
-
-            $bitReturn = $bitReturn && $objInstance->onFistLogin($strUserid);
+            $objInstance->onFistLogin($strUserid);
         }
 
         return $bitReturn;
