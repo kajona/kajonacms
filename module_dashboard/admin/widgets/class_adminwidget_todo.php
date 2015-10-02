@@ -83,10 +83,10 @@ class class_adminwidget_todo extends class_adminwidget implements interface_admi
 
                 if (count($arrTodos) > 0) {
                     $strLink = class_link::getLinkAdmin("dashboard", "todo", "listfilter_category=" . $strKey, count($arrTodos));
-                    $arrValues[] = array($strCategoryName, $strLink);
+                    $arrValues[] = array($strProviderName, $strCategoryName, $strLink);
                 } else {
                     $strIcon = class_adminskin_helper::getAdminImage("icon_accept");
-                    $arrValues[] = array($strCategoryName, $strIcon);
+                    $arrValues[] = array($strProviderName, $strCategoryName, $strIcon);
                 }
             }
         }
