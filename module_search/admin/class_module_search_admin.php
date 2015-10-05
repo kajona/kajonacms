@@ -23,7 +23,9 @@ class class_module_search_admin extends class_admin_simple implements interface_
     /**
      * The maximum number of records to return on xml/json requests
      */
-    const INT_MAX_NR_OF_RESULTS = 30;
+    const INT_MAX_NR_OF_RESULTS_AUTOCOMPLETE = 30;
+
+    const INT_MAX_NR_OF_RESULTS_FULLSEARCH = 150;
 
     /**
      * @return array
@@ -148,6 +150,17 @@ class class_module_search_admin extends class_admin_simple implements interface_
         $objForm = $this->getSearchAdminForm($objSearch);
         $objForm->updateSourceObject();
 
+
+        if($this->getParam("filtermodules") == "" && $this->getParam("search_filter_all") == "") {
+            $arrNrs = array_keys($objSearch->getPossibleModulesForFilter());
+            $intSearch = array_search(class_module_system_module::getModuleByName("messaging")->getIntNr(), $arrNrs);
+            if($intSearch !== false) {
+                unset($arrNrs[$intSearch]);
+            }
+
+            $objSearch->setArrFormFilterModules($arrNrs);
+        }
+
         if ($this->getParam("filtermodules") != "") {
             $objSearch->setStrInternalFilterModules($this->getParam("filtermodules"));
         }
@@ -158,45 +171,91 @@ class class_module_search_admin extends class_admin_simple implements interface_
 
         // Search Form
         $objForm = $this->getSearchAdminForm($objSearch);
+
+        $objForm->setStrOnSubmit('KAJONA.admin.search.triggerFullSearch(); return false;');
         $strReturn .= $objForm->renderForm(class_link::getLinkAdminHref($this->getArrModule("modul"), "search"), class_admin_formgenerator::BIT_BUTTON_SUBMIT);
 
-        // Execute Search
+
+        $strCore = class_resourceloader::getInstance()->getCorePathForModule("module_search");
+        $strReturn .= "
+
+        <script type=\"text/javascript\">
+        KAJONA.admin.loader.loadFile('{$strCore}/module_search/admin/scripts/search.js', function() {
+            KAJONA.admin.search.triggerFullSearch();
+        });
+
+
+        </script>";
+        $strReturn .= "<div id=\"search_container\" ></div>";
+
+        return $strReturn;
+
+
+
+
+    }
+
+    /**
+     * Decoupled rendering of search results
+     * @permissions view
+     * @xml
+     */
+    public function actionRenderSearch() {
+
+        class_carrier::getInstance()->getObjSession()->sessionClose();
+
+        $objSearch = new class_module_search_search();
+
+        if ($this->getParam("search_query") != "") {
+            $objSearch->setStrQuery(urldecode($this->getParam("search_query")));
+        }
+        if ($this->getParam("filtermodules") != "") {
+            $objSearch->setStrInternalFilterModules(urldecode($this->getParam("filtermodules")));
+        }
+
+        if ($this->getParam("search_changestartdate") != "") {
+            $objDate = new class_date();
+            $objDate->generateDateFromParams("search_changestartdate", class_carrier::getAllParams());
+            $objSearch->setObjChangeStartdate($objDate);
+        }
+
+        if ($this->getParam("search_changeenddate") != "") {
+            $objDate = new class_date();
+            $objDate->generateDateFromParams("search_changeenddate", class_carrier::getAllParams());
+            $objSearch->setObjChangeEnddate($objDate);
+        }
+
+        if ($this->getParam("search_formfilteruser_id") != "") {
+            $objSearch->setStrFormFilterUser(urldecode($this->getParam("search_formfilteruser_id")));
+        }
+
+
         $objSearchCommons = new class_module_search_commons();
-        $arrResult = $objSearchCommons->doAdminSearch($objSearch);
+        $arrResult = $objSearchCommons->doIndexedSearch($objSearch, 0, self::INT_MAX_NR_OF_RESULTS_FULLSEARCH);
 
-        $objArraySectionIterator = new class_array_section_iterator($objSearchCommons->getIndexedSearchCount($objSearch));
-        $objArraySectionIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
-        $objArraySectionIterator->setArraySection($objSearchCommons->doIndexedSearch($objSearch, $objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
+        $arrMappedObjects = array_map(function(class_search_result $objSearchResult) {
+            return $objSearchResult->getObjObject();
+        }, $arrResult);
 
-        //convert entries to real objects
-        $arrObjects = array();
-        /** @var $objSearchResult class_search_result */
-        foreach ($arrResult as $objSearchResult) {
-            $arrObjects[] = $objSearchResult->getObjObject();
+
+        $strReturn = "<content><![CDATA[";
+
+        if(count($arrMappedObjects) > 20) {
+            $strReturn .= $this->objToolkit->warningBox($this->getLang("search_reduce_hits_link"));
         }
 
-        $objArraySectionIterator->setArrElements($arrObjects);
-        $objArraySectionIterator->setArraySection($objArraySectionIterator->getElementsOnPage(1));
-
-        $strQueryAppend = "&filtermodules=".$objSearch->getStrInternalFilterModules();
-
-        if ($objSearch->getObjChangeStartdate() != null) {
-            $strQueryAppend .= "&search_changestartdate=".$objSearch->getObjChangeStartdate()->getLongTimestamp();
+        $strReturn .= $this->objToolkit->listHeader();
+        foreach($arrMappedObjects as $objOneObject) {
+            $strReturn .= $this->objToolkit->simpleAdminList($objOneObject, $this->getActionIcons($objOneObject), 0);
         }
+        $strReturn .= $this->objToolkit->listFooter();
 
-        if ($objSearch->getObjChangeEnddate() != null) {
-            $strQueryAppend .= "&search_changeenddate=".$objSearch->getObjChangeEnddate()->getLongTimestamp();
-        }
 
-        $strReturn .= $this->renderList(
-            $objArraySectionIterator,
-            false,
-            "searchResultList",
-            false,
-            "&search_query=".$objSearch->getStrQuery().$strQueryAppend
-        );
+        $strReturn .= "]]></content>";
+
         return $strReturn;
     }
+
 
     /**
      * @param class_model|interface_admin_listable|interface_model $objOneIterable
@@ -255,7 +314,7 @@ class class_module_search_admin extends class_admin_simple implements interface_
         $arrResult = array();
         $objSearchCommons = new class_module_search_commons();
         if ($strSearchterm != "") {
-            $arrResult = $objSearchCommons->doAdminSearch($objSearch, 0, self::INT_MAX_NR_OF_RESULTS);
+            $arrResult = $objSearchCommons->doAdminSearch($objSearch, 0, self::INT_MAX_NR_OF_RESULTS_AUTOCOMPLETE);
         }
 
         $objSearchFunc = function (class_search_result $objA, class_search_result $objB) {
@@ -405,7 +464,7 @@ class class_module_search_admin extends class_admin_simple implements interface_
             ->setStrValue($objSearch->getStrInternalFilterModules() == "-1" || $objSearch->getStrInternalFilterModules() == "");
         $objForm->setFieldToPosition("search_filter_all", 3);
 
-        $bitVisible = ($objSearch->getStrInternalFilterModules() != "-1" && $objSearch->getStrInternalFilterModules() != "") || $objSearch->getObjChangeEnddate() != null || $objSearch->getObjChangeStartdate() != null;
+        $bitVisible = $objSearch->getObjChangeEnddate() != null || $objSearch->getObjChangeStartdate() != null;
 
         $objForm->setStrHiddenGroupTitle($this->getLang("form_additionalheader"));
         $objForm->addFieldToHiddenGroup($objForm->getField("formfiltermodules"));

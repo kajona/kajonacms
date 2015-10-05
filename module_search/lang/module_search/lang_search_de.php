@@ -44,3 +44,5 @@ $lang["quickhelp_new"]                  = "Über diese Funktion können routinem
 
 $lang["workflow_deferredindexer_cfg_val1"] = "Sekunden zwischen zwei Ausführungen";
 $lang["workflow_deferredindexer_cfg_val2"] = "Zu indexierende Objekte je Durchlauf";
+
+$lang["search_reduce_hits_link"] = "Die Suchanfrage liefert sehr viele Ergebnisse. Bitte verfeinern Sie die Suchanfrage durch zusätzliche Filter oder Bedingungen:<br /><ul><li>Mehrere Suchbegriffe werden durch Leerzeichen voneinander getrennt: wort1 wort2</li><li>Ist ein Wort zwingend erforderlich, kann dieses mit einem + Symbol gekennzeichnet werden: wort1 +wort2</li><li>Soll ein Wort ausgeschlossen werden, kann dieses mit einem - Symbol gekennzeichnet werden: wort1 -wort2</li></ul>";
