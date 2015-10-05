@@ -76,13 +76,55 @@ HTML;
 
         $objParser = new class_template_blocks_parser();
 
+        /** @var class_template_block_container[] $arrBlocks */
         $arrBlocks = $objParser->readBlocks($strTemplate, class_template_kajona_sections::BLOCK);
 
         $this->assertEquals(count($arrBlocks), 4);
         $this->assertEquals(array_keys($arrBlocks)[0], "name1");
+        $this->assertEquals($arrBlocks["name1"]->getStrName(), "name1");
+        $this->assertEquals(trim($arrBlocks["name1"]->getStrContent()), "content1");
+        $this->assertEquals(trim($arrBlocks["name1"]->getStrType()), class_template_kajona_sections::BLOCK);
+
         $this->assertEquals(array_keys($arrBlocks)[1], "name2");
         $this->assertEquals(array_keys($arrBlocks)[2], "name3");
         $this->assertEquals(array_keys($arrBlocks)[3], "name4");
+
+    }
+
+
+
+    public function testBlockParser2() {
+        $strTemplate = <<<HTML
+
+                    <kajona-block kajona-name="Row light">
+                        <div class="row-light">
+                            <h1>%%headline_plaintext%%</h1>
+                            %%content_richtext%%
+                            %%date_date%%
+                        </div>
+                    </kajona-block>
+
+                    <kajona-block kajona-name="Row dark" >
+                        <div class="row-dark">
+                            <h1>%%headline_plaintext%%</h1>
+                            %%content_richtext%%
+                        </div>
+                    </kajona-block>
+
+
+HTML;
+
+
+        $objParser = new class_template_blocks_parser();
+
+        /** @var class_template_block_container[] $arrBlocks */
+        $arrBlocks = $objParser->readBlocks($strTemplate, class_template_kajona_sections::BLOCK);
+
+        $this->assertEquals(count($arrBlocks), 2);
+        $this->assertEquals(array_keys($arrBlocks)[0], "Row light");
+        $this->assertEquals($arrBlocks["Row light"]->getStrName(), "Row light");
+
+        $this->assertEquals(array_keys($arrBlocks)[1], "Row dark");
 
     }
 

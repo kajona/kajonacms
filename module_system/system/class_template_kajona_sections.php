@@ -13,8 +13,10 @@
  * @author sidler@mulchprod.de
  *
  */
-class class_template_kajona_sections  {
+class class_template_kajona_sections
+{
 
+    const ROOT = "kajona-root";
     const BLOCKS = "kajona-blocks";
     const BLOCK = "kajona-block";
 

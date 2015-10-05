@@ -31,7 +31,7 @@ class class_template_section_parser
         //find opening tag
         $arrMatches = array();
         $intStart = false;
-        if (preg_match("/<".$strSection."([\ a-zA-Z0-9='\"])*>/i", $strTemplate, $arrMatches) > 0) {
+        if (preg_match("/<".$strSection."([\ a-zA-Z0-9\-='\"])*>/i", $strTemplate, $arrMatches) > 0) {
             $strPattern = $arrMatches[0];
             $intStart = uniStrpos($strTemplate, $strPattern);
 

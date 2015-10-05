@@ -96,6 +96,44 @@ class class_template
         return $strHash;
     }
 
+
+
+    public function parsePageTemplateString($strContent, $intMode = class_template::INT_ELEMENT_MODE_REGULAR)
+    {
+
+
+        //read top level placeholder
+        $arrPlaceholder = $this->objPlaceholderParser->getElements($this->removeSection($strContent, class_template_kajona_sections::BLOCKS), $intMode);
+        $objRoot = new class_template_block_container(class_template_kajona_sections::ROOT, "", "", "", "");
+        $objRoot->setArrPlaceholder($arrPlaceholder);
+
+        //fetch blocks sections
+        $arrBlocksSections = $this->objBlocksParser->readBlocks($strContent, class_template_kajona_sections::BLOCKS);
+        $objRoot->setArrBlocks($arrBlocksSections);
+
+        //fetch block sections
+        foreach($arrBlocksSections as $objOneBlock) {
+            $arrBlockSections = $this->objBlocksParser->readBlocks($objOneBlock->getStrContent(), class_template_kajona_sections::BLOCK);
+
+            $objOneBlock->setArrBlocks($arrBlockSections);
+
+            //fetch elements per block section
+            foreach($arrBlockSections as $objOneBlockSection) {
+                $arrElements = $this->objPlaceholderParser->getElements($objOneBlockSection->getStrContent(), $intMode);
+                $objOneBlockSection->setArrPlaceholder($arrElements);
+            }
+        }
+
+        return $objRoot;
+    }
+
+    public function parsePageTemplate($strName, $intMode = class_template::INT_ELEMENT_MODE_REGULAR)
+    {
+        $strTemplate = $this->objFileParser->readTemplate($strName);
+        return $this->parsePageTemplateString($strTemplate, $intMode);
+    }
+
+
     public function getBlocksElementsFromTemplate($strTemplateFile, $strSection = "")
     {
         $strTemplate = $this->objFileParser->readTemplate($strTemplateFile);

@@ -15,7 +15,12 @@
 class class_template_blocks_parser
 {
 
-
+    /**
+     * @param $strTemplate
+     * @param string $strBlockDefinition
+     *
+     * @return class_template_block_container[]
+     */
     public function readBlocks($strTemplate, $strBlockDefinition = class_template_kajona_sections::BLOCKS)
     {
         $arrBlocks = array();
@@ -23,7 +28,7 @@ class class_template_blocks_parser
 
         //find opening tag
         $arrMatches = array();
-        while (preg_match("/<".$strBlockDefinition."([\ a-zA-Z0-9=']*)(.*) ".class_template_kajona_sections::ATTR_NAME."=(\"|\')([a-zA-Z0-9]*)(\"|\')(.*)>/i", $strTemplate, $arrMatches) > 0) {
+        while (preg_match("/<".$strBlockDefinition."([\ a-zA-Z0-9=']*)(.*) ".class_template_kajona_sections::ATTR_NAME."=(\"|\')([\ a-zA-Z0-9]*)(\"|\')(.*)>/i", $strTemplate, $arrMatches) > 0) {
 
             $strPattern = $arrMatches[0];
             $intStart = uniStrpos($strTemplate, $strPattern);
@@ -41,7 +46,9 @@ class class_template_blocks_parser
                 else {
                     //delete substring before and after
                     $strTemplateSection = uniSubstr($strTemplate, $intStart, $intEnd);
-                    $arrBlocks[$arrMatches[4]] = $strTemplateSection;
+
+                    $strContent = uniSubstr($strTemplateSection, uniStrlen($arrMatches[0]), uniStrlen("</".$strBlockDefinition.">")*-1);
+                    $arrBlocks[$arrMatches[4]] = new class_template_block_container($strBlockDefinition, $arrMatches[4], $arrMatches[0], $strContent, $strTemplateSection);
 
                     $strTemplate = uniStrReplace($strTemplateSection, "", $strTemplate);
                 }
