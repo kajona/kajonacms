@@ -35,6 +35,10 @@ $(function () {
     });
 
     $('#globalSearchInput').catcomplete({
+
+        minLength: 2,
+        delay: 700,
+
         //source: '_skinwebpath_/search.json',
         source: function(request, response) {
             $.ajax({

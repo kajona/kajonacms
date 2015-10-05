@@ -317,6 +317,12 @@ class class_module_search_admin extends class_admin_simple implements interface_
             $arrResult = $objSearchCommons->doAdminSearch($objSearch, 0, self::INT_MAX_NR_OF_RESULTS_AUTOCOMPLETE);
         }
 
+        $intSteps = 1;
+        //try to load more entries if there's no hit
+        while(count($arrResult) == 0 && $intSteps < 10) {
+            $arrResult = $objSearchCommons->doAdminSearch($objSearch, self::INT_MAX_NR_OF_RESULTS_AUTOCOMPLETE*$intSteps, self::INT_MAX_NR_OF_RESULTS_AUTOCOMPLETE*++$intSteps);
+        }
+
         $objSearchFunc = function (class_search_result $objA, class_search_result $objB) {
             //first by module, second by score
             if ($objA->getObjObject() instanceof class_model && $objB->getObjObject() instanceof class_model) {
