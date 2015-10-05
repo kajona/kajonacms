@@ -75,6 +75,7 @@ $lang["commons_save"]                    = "Save";
 $lang["commons_cancel"]                  = "Cancel";
 $lang["commons_back"]                    = "Back";
 $lang["commons_select_all"]              = "Select all";
+$lang["commons_show_selected_only"]      = "Show selected only";
 $lang["commons_sort_totree"]             = "Set Parent-Node by dropping to the tree";
 $lang["commons_sort_vertical"]           = "Change order using drag n drop";
 $lang["commons_start"]                   = "Start";
