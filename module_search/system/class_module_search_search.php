@@ -16,7 +16,8 @@
  * @module search
  * @moduleId _search_module_id_
  */
-class class_module_search_search extends class_model implements interface_model, interface_sortable_rating, interface_admin_listable {
+class class_module_search_search extends class_model implements interface_model, interface_sortable_rating, interface_admin_listable
+{
 
 
     /**
@@ -71,7 +72,7 @@ class class_module_search_search extends class_model implements interface_model,
      * @var null
      * @fieldType date
      */
-    private $objChangeEnddate= null;
+    private $objChangeEnddate = null;
 
     /**
      * @var null
@@ -84,7 +85,8 @@ class class_module_search_search extends class_model implements interface_model,
     private $strPortalLangFilter = null;
 
 
-    public function getStrDisplayName() {
+    public function getStrDisplayName()
+    {
         return $this->getStrQuery();
     }
 
@@ -94,8 +96,9 @@ class class_module_search_search extends class_model implements interface_model,
      *
      * @return array
      */
-    public function getFilterModules() {
-        if(uniStrlen($this->strInternalFilterModules) > 0 && $this->strInternalFilterModules != "-1") {
+    public function getFilterModules()
+    {
+        if (uniStrlen($this->strInternalFilterModules) > 0 && $this->strInternalFilterModules != "-1") {
             return explode(",", $this->strInternalFilterModules);
         }
         return array();
@@ -106,7 +109,8 @@ class class_module_search_search extends class_model implements interface_model,
      *
      * @return string
      */
-    public function getFilterUser() {
+    public function getFilterUser()
+    {
         if (!empty($this->strFormFilterUser)) {
             return $this->strFormFilterUser;
         }
@@ -117,19 +121,22 @@ class class_module_search_search extends class_model implements interface_model,
      * Returns all modules available in the module-table.
      * Limited to those with a proper title, so
      * a subset of getModuleIds() / all module-entries
+     *
      * @return array
      */
-    public function getPossibleModulesForFilter() {
+    public function getPossibleModulesForFilter()
+    {
 
         $arrFilterModules = array();
 
         $arrModules = class_module_system_module::getAllModules();
         $arrNrs = $this->getModuleNumbers();
-        foreach($arrModules as $objOneModule) {
-            if(in_array($objOneModule->getIntNr(), $arrNrs) && $objOneModule->rightView()) {
+        foreach ($arrModules as $objOneModule) {
+            if (in_array($objOneModule->getIntNr(), $arrNrs) && $objOneModule->rightView()) {
                 $strName = $this->getLang("modul_titel", $objOneModule->getStrName());
-                if($strName != "!modul_titel!")
+                if ($strName != "!modul_titel!") {
                     $arrFilterModules[$objOneModule->getIntNr()] = $strName;
+                }
             }
         }
 
@@ -138,15 +145,17 @@ class class_module_search_search extends class_model implements interface_model,
 
     /**
      * Fetches the list of module-ids currently available in the system-table
+     *
      * @return array
      */
-    private function getModuleNumbers() {
+    private function getModuleNumbers()
+    {
         $strQuery = "SELECT DISTINCT system_module_nr FROM "._dbprefix_."system WHERE system_prev_id != '0' AND system_id != '0' AND system_deleted = 0";
 
         $arrRows = $this->objDB->getPArray($strQuery, array());
 
         $arrReturn = array();
-        foreach($arrRows as $arrOneRow) {
+        foreach ($arrRows as $arrOneRow) {
             $arrReturn[] = $arrOneRow["system_module_nr"];
         }
 
@@ -158,7 +167,8 @@ class class_module_search_search extends class_model implements interface_model,
      *
      * @param $arrFilterModules
      */
-    public function setFilterModules($arrFilterModules) {
+    public function setFilterModules($arrFilterModules)
+    {
         $this->strInternalFilterModules = implode(",", $arrFilterModules);
     }
 
@@ -169,7 +179,8 @@ class class_module_search_search extends class_model implements interface_model,
      *
      * @return string the name of the icon, not yet wrapped by getImageAdmin()
      */
-    public function getStrIcon() {
+    public function getStrIcon()
+    {
         return "icon_lens";
     }
 
@@ -179,7 +190,8 @@ class class_module_search_search extends class_model implements interface_model,
      *
      * @return string
      */
-    public function getStrLongDescription() {
+    public function getStrLongDescription()
+    {
         return "";
     }
 
@@ -189,18 +201,21 @@ class class_module_search_search extends class_model implements interface_model,
      *
      * @return string
      */
-    public function getStrAdditionalInfo() {
+    public function getStrAdditionalInfo()
+    {
         return "";
     }
 
     /**
      * @return string
      */
-    public function getStrQuery() {
+    public function getStrQuery()
+    {
         return $this->strQuery;
     }
 
-    public function setStrQuery($strQuery) {
+    public function setStrQuery($strQuery)
+    {
         $this->strQuery = trim($strQuery);
     }
 
@@ -208,8 +223,9 @@ class class_module_search_search extends class_model implements interface_model,
     /**
      * @return array
      */
-    public function getArrFilterModules() {
-        if($this->strInternalFilterModules != "" && $this->strInternalFilterModules != "-1") {
+    public function getArrFilterModules()
+    {
+        if ($this->strInternalFilterModules != "" && $this->strInternalFilterModules != "-1") {
             return explode(",", $this->strInternalFilterModules);
         }
         else {
@@ -220,17 +236,20 @@ class class_module_search_search extends class_model implements interface_model,
     /**
      * @param array $arrFormFilterModules
      */
-    public function setArrFormFilterModules($arrFormFilterModules) {
-        if(is_array($arrFormFilterModules))
+    public function setArrFormFilterModules($arrFormFilterModules)
+    {
+        if (is_array($arrFormFilterModules)) {
             $arrFormFilterModules = implode(",", $arrFormFilterModules);
+        }
         $this->strInternalFilterModules = $arrFormFilterModules;
     }
 
     /**
      * @return array
      */
-    public function getArrFormFilterModules() {
-        if($this->strInternalFilterModules != "" && $this->strInternalFilterModules != "-1") {
+    public function getArrFormFilterModules()
+    {
+        if ($this->strInternalFilterModules != "" && $this->strInternalFilterModules != "-1") {
             return explode(",", $this->strInternalFilterModules);
         }
         else {
@@ -241,105 +260,115 @@ class class_module_search_search extends class_model implements interface_model,
     /**
      * @param string $arrFormFilterModules
      */
-    public function setStrFormFilterUser($strFormFilterUser) {
+    public function setStrFormFilterUser($strFormFilterUser)
+    {
         $this->strFormFilterUser = $strFormFilterUser;
     }
 
     /**
      * @return string
      */
-    public function getStrFormFilterUser() {
+    public function getStrFormFilterUser()
+    {
         return $this->strFormFilterUser;
     }
-
 
 
     /**
      * @param string $strFilterModules
      */
-    public function setStrInternalFilterModules($strFilterModules) {
+    public function setStrInternalFilterModules($strFilterModules)
+    {
         $this->strInternalFilterModules = $strFilterModules;
     }
 
     /**
      * @return string
      */
-    public function getStrInternalFilterModules() {
+    public function getStrInternalFilterModules()
+    {
         return $this->strInternalFilterModules;
     }
 
     /**
      * @param class_date $objChangeEnddate
      */
-    public function setObjChangeEnddate($objChangeEnddate) {
+    public function setObjChangeEnddate($objChangeEnddate)
+    {
         $this->setObjEndDate($objChangeEnddate);
     }
 
     /**
      * @return class_date
      */
-    public function getObjChangeEnddate() {
+    public function getObjChangeEnddate()
+    {
         return $this->getObjEndDate();
     }
 
     /**
      * @param class_date $objChangeStartdate
      */
-    public function setObjChangeStartdate($objChangeStartdate) {
+    public function setObjChangeStartdate($objChangeStartdate)
+    {
         $this->setObjStartDate($objChangeStartdate);
     }
 
     /**
      * @return class_date
      */
-    public function getObjChangeStartdate() {
+    public function getObjChangeStartdate()
+    {
         return $this->getObjStartDate();
     }
 
     /**
      * @param null $bitPortalObjectFilter
      */
-    public function setBitPortalObjectFilter($bitPortalObjectFilter) {
+    public function setBitPortalObjectFilter($bitPortalObjectFilter)
+    {
         $this->bitPortalObjectFilter = $bitPortalObjectFilter;
     }
 
     /**
      * @return null
      */
-    public function getBitPortalObjectFilter() {
+    public function getBitPortalObjectFilter()
+    {
         return $this->bitPortalObjectFilter;
     }
 
     /**
      * @param null $strPortalLangFilter
      */
-    public function setStrPortalLangFilter($strPortalLangFilter) {
+    public function setStrPortalLangFilter($strPortalLangFilter)
+    {
         $this->strPortalLangFilter = $strPortalLangFilter;
     }
 
     /**
      * @return null
      */
-    public function getStrPortalLangFilter() {
+    public function getStrPortalLangFilter()
+    {
         return $this->strPortalLangFilter;
     }
 
     /**
      * @param string $intPrivate
      */
-    public function setIntPrivate($intPrivate) {
+    public function setIntPrivate($intPrivate)
+    {
         $this->intPrivate = $intPrivate;
     }
 
     /**
      * @return string
      */
-    public function getIntPrivate() {
+    public function getIntPrivate()
+    {
         return $this->intPrivate;
     }
-
-
-
 
 
 }
