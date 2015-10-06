@@ -249,6 +249,15 @@ JS;
      */
     protected function actionList() {
 
+        //render two multi-buttons
+        $strReturn = "";
+
+        $strReturn .= $this->objToolkit->getContentToolbar(array(
+            getLinkAdmin($this->getArrModule("module"), "setAllRead", "", $this->getLang("action_set_all_read")),
+            getLinkAdmin($this->getArrModule("module"), "deleteAllRead", "", $this->getLang("action_delete_all_read")),
+            getLinkAdmin($this->getArrModule("module"), "deleteAll", "", $this->getLang("action_delete_all"))
+        ));
+
         $objArraySectionIterator = new class_array_section_iterator(class_module_messaging_message::getNumberOfMessagesForUser($this->objSession->getUserID()));
         $objArraySectionIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
         $objArraySectionIterator->setArraySection(
@@ -259,7 +268,8 @@ JS;
             )
         );
 
-        return $this->renderList($objArraySectionIterator);
+        $strReturn .= $this->renderList($objArraySectionIterator);
+        return$strReturn;
 
     }
 
@@ -277,6 +287,27 @@ JS;
         return $arrDefault;
     }
 
+    /**
+     * @return string
+     * @permissions delete
+     */
+    protected function actionDeleteAllRead()
+    {
+        class_module_messaging_message::deleteAllReadMessages($this->objSession->getUserID());
+        $this->adminReload(getLinkAdminHref($this->getArrModule("modul"), "list"));
+        return "";
+    }
+
+    /**
+     * @return string
+     * @permissions view
+     */
+    protected function actionSetAllRead()
+    {
+        class_module_messaging_message::markAllMessagesAsRead($this->objSession->getUserID());
+        $this->adminReload(getLinkAdminHref($this->getArrModule("modul"), "list"));
+        return "";
+    }
 
     /**
      * Marks a single message as read

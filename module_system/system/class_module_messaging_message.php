@@ -154,6 +154,36 @@ class class_module_messaging_message extends class_model implements interface_mo
         return $objHandler->getStrName();
     }
 
+    /**
+     * @param $strUserid
+     *
+     * @throws class_exception
+     */
+    public static function markAllMessagesAsRead($strUserid) {
+        $objORM = new class_orm_objectlist();
+        $objORM->addWhereRestriction(new class_orm_objectlist_property_restriction("bitRead", class_orm_comparator_enum::Equal(), false));
+        $objORM->addWhereRestriction(new class_orm_objectlist_property_restriction("strUser", class_orm_comparator_enum::Equal(), $strUserid));
+        /** @var class_module_messaging_message $objOneMessage */
+        foreach($objORM->getObjectList(__CLASS__) as $objOneMessage) {
+            $objOneMessage->setBitRead(true);
+            $objOneMessage->updateObjectToDb();
+        }
+    }
+
+    /**
+     * @param $strUserid
+     *
+     * @throws class_exception
+     */
+    public static function deleteAllReadMessages($strUserid) {
+        $objORM = new class_orm_objectlist();
+        $objORM->addWhereRestriction(new class_orm_objectlist_property_restriction("bitRead", class_orm_comparator_enum::Equal(), true));
+        $objORM->addWhereRestriction(new class_orm_objectlist_property_restriction("strUser", class_orm_comparator_enum::Equal(), $strUserid));
+        /** @var class_module_messaging_message $objOneMessage */
+        foreach($objORM->getObjectList(__CLASS__) as $objOneMessage) {
+            $objOneMessage->deleteObject();
+        }
+    }
 
     /**
      * Returns an array of all messages available for a single user
