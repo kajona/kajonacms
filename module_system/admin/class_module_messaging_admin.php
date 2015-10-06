@@ -252,10 +252,23 @@ JS;
         //render two multi-buttons
         $strReturn = "";
 
+
+        //create the list-button and the js code to show the dialog
+        $strDeleteAllRead = class_link::getLinkAdminManual(
+            "href=\"#\" onclick=\"javascript:jsDialog_1.setTitle('".class_carrier::getInstance()->getObjLang()->getLang("dialog_deleteHeader", "system")."'); jsDialog_1.setContent('".$this->getLang("delete_all_read_question")."', '".class_carrier::getInstance()->getObjLang()->getLang("dialog_deleteButton", "system")."',  '".getLinkAdminHref($this->getArrModule("module"), "deleteAllRead")."'); jsDialog_1.init(); return false;\"",
+            $this->getLang("action_delete_all_read")
+        );
+
+        $strDeleteAll = class_link::getLinkAdminManual(
+            "href=\"#\" onclick=\"javascript:jsDialog_1.setTitle('".class_carrier::getInstance()->getObjLang()->getLang("dialog_deleteHeader", "system")."'); jsDialog_1.setContent('".$this->getLang("delete_all_question")."', '".class_carrier::getInstance()->getObjLang()->getLang("dialog_deleteButton", "system")."',  '".getLinkAdminHref($this->getArrModule("module"), "deleteAll")."'); jsDialog_1.init(); return false;\"",
+            $this->getLang("action_delete_all")
+        );
+
+
         $strReturn .= $this->objToolkit->getContentToolbar(array(
             getLinkAdmin($this->getArrModule("module"), "setAllRead", "", $this->getLang("action_set_all_read")),
-            getLinkAdmin($this->getArrModule("module"), "deleteAllRead", "", $this->getLang("action_delete_all_read")),
-            getLinkAdmin($this->getArrModule("module"), "deleteAll", "", $this->getLang("action_delete_all"))
+            $strDeleteAllRead,
+            $strDeleteAll
         ));
 
         $objArraySectionIterator = new class_array_section_iterator(class_module_messaging_message::getNumberOfMessagesForUser($this->objSession->getUserID()));
@@ -294,6 +307,17 @@ JS;
     protected function actionDeleteAllRead()
     {
         class_module_messaging_message::deleteAllReadMessages($this->objSession->getUserID());
+        $this->adminReload(getLinkAdminHref($this->getArrModule("modul"), "list"));
+        return "";
+    }
+
+    /**
+     * @return string
+     * @permissions delete
+     */
+    protected function actionDeleteAll()
+    {
+        class_module_messaging_message::deleteAllMessages($this->objSession->getUserID());
         $this->adminReload(getLinkAdminHref($this->getArrModule("modul"), "list"));
         return "";
     }

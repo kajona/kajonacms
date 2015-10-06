@@ -186,6 +186,20 @@ class class_module_messaging_message extends class_model implements interface_mo
     }
 
     /**
+     * @param $strUserid
+     *
+     * @throws class_exception
+     */
+    public static function deleteAllMessages($strUserid) {
+        $objORM = new class_orm_objectlist();
+        $objORM->addWhereRestriction(new class_orm_objectlist_property_restriction("strUser", class_orm_comparator_enum::Equal(), $strUserid));
+        /** @var class_module_messaging_message $objOneMessage */
+        foreach($objORM->getObjectList(__CLASS__) as $objOneMessage) {
+            $objOneMessage->deleteObject();
+        }
+    }
+
+    /**
      * Returns an array of all messages available for a single user
      *
      * @param string $strUserid
