@@ -151,11 +151,13 @@ class class_formentry_month_year_dropdown extends class_formentry_date {
     {
         if($this->getBitMandatory()) {
             $arrParams = class_carrier::getAllParams();
-            if (!array_key_exists($this->getStrEntryName() . self::DAY_SUFFIX, $arrParams)
-                || !array_key_exists($this->getStrEntryName() . self::MONTH_SUFFIX, $arrParams)
-                || !array_key_exists($this->getStrEntryName() . self::YEAR_SUFFIX, $arrParams)
+
+            if (array_key_exists($this->getStrEntryName() . self::DAY_SUFFIX, $arrParams)
+
             ) {
-                return false;
+                $objDate = new class_date("0");
+                $objDate->generateDateFromParams($this->getStrEntryName(), $arrParams);
+                return $this->getObjValidator()->validate($objDate) && $objDate->getIntMonth() > 0 && $objDate->getIntYear() > 0;
             }
         }
 
@@ -163,4 +165,5 @@ class class_formentry_month_year_dropdown extends class_formentry_date {
     }
 }
 
+//TODO: remove, add to construct
 class_formentry_month_year_dropdown::classInit();
