@@ -117,53 +117,46 @@ class class_module_pages_content_admin extends class_admin_simple implements int
         $strReturn .= $this->getPageInfoBox($objPage);
 
 
-        //try to load template, otherwise abort
-        $strTemplateID = null;
-        try {
-            $strTemplateID = $this->objTemplate->readTemplate("/module_pages/".$objPage->getStrTemplate(), "", false, true);
-        }
-        catch(class_exception $objException) {
-            $strReturn .= $this->getLang("templateNotLoaded")."<br />";
-        }
-
-        //Load elements on template, master-page special case!
-        if($objPage->getStrName() == "master")
-            $arrElementsOnTemplate = $this->objTemplate->getElements($strTemplateID, 1);
-        else
-            $arrElementsOnTemplate = $this->objTemplate->getElements($strTemplateID, 0);
+        //parse the whole template
+        $objParsedBlocks = $this->objTemplate->parsePageTemplate("/module_pages/".$objPage->getStrTemplate(), $objPage->getStrName() == "master" ? class_template::INT_ELEMENT_MODE_MASTER : class_template::INT_ELEMENT_MODE_REGULAR);
 
 
-
+        $arrTabs = array();
+        //start the top level elements
         //Language-dependant loading of elements, if installed
         $arrAllElementsOnPage = class_module_pages_pageelement::getElementsOnPage($this->getSystemid(), false, $this->getLanguageToWorkOn());
         $arrPageelementsOnPage = array_filter($arrAllElementsOnPage, function(class_module_pages_pageelement $objSingleElement) {
-           return $objSingleElement->getStrElement() != "blocks";
-        });
-
-        $arrBlocksOnPage = array_filter($arrAllElementsOnPage, function(class_module_pages_pageelement $objSingleElement) {
-            return $objSingleElement->getStrElement() == "blocks";
-        });
-
-        $arrBlockOnPage = array_filter($arrAllElementsOnPage, function(class_module_pages_pageelement $objSingleElement) {
-            return $objSingleElement->getStrElement() == "block";
+            return $objSingleElement->getStrElement() != "blocks";
         });
 
 
-        //So, loop through the placeholders and check, if there's any element already belonging to this one
-        $arrTabs = array();
+        //trigger blocks rendering
+        $strBlocks = "";
+        foreach($objParsedBlocks->getArrBlocks() as $objOneBlocks) {
 
-        if($objCurObject instanceof class_module_pages_page) {
-            $arrTabs["blocks"] = $this->renderBlocksList($objCurObject, $arrBlocksOnPage);
-            $arrTabs["placeholder"] = $this->renderElementPlaceholderList($arrElementsOnTemplate, $arrPageelementsOnPage);
+            foreach($objOneBlocks->getArrBlocks() as $objOneBlock) {
+                $strBlocks .= $this->objToolkit->formHeadline($objOneBlocks->getStrName()." > ".$objOneBlock->getStrName());
+
+                $strBlocks .= $this->renderElementPlaceholderList($objOneBlock->getArrPlaceholder(), array(), true);
+            }
         }
 
-        if($objCurObject instanceof class_module_pages_pageelement && $objCurObject->getStrElement() == "blocks") {
-            $arrTabs["block"] = $this->renderBlockList($objCurObject, $arrBlockOnPage);
-        }
 
+//        $arrBlocksOnPage = array_filter($arrAllElementsOnPage, function(class_module_pages_pageelement $objSingleElement) {
+//            return $objSingleElement->getStrElement() == "blocks";
+//        });
+//
+//        $arrBlockOnPage = array_filter($arrAllElementsOnPage, function(class_module_pages_pageelement $objSingleElement) {
+//            return $objSingleElement->getStrElement() == "block";
+//        });
+
+        $arrTabs["blocks"] = $strBlocks;
+        $arrTabs["elements"] = $this->renderElementPlaceholderList($objParsedBlocks->getArrPlaceholder(), $arrPageelementsOnPage);
 
         $strReturn .= $this->objToolkit->getTabbedContent($arrTabs);
+
         return $strReturn;
+
     }
 
 
@@ -252,7 +245,7 @@ class class_module_pages_content_admin extends class_admin_simple implements int
      *
      * @return string
      */
-    private function renderElementPlaceholderList($arrElementsOnTemplate, $arrElementsOnPage) {
+    private function renderElementPlaceholderList($arrElementsOnTemplate, $arrElementsOnPage, $bitRenderCompact = false) {
 
 
         $strReturn = "";
@@ -322,7 +315,7 @@ class class_module_pages_content_admin extends class_admin_simple implements int
 
                 if((int)uniStrlen($strOutputAtPlaceholder) > 0) {
                     $arrSinglePlaceholder = explode("_", $arrOneElementOnTemplate["placeholder"]);
-                    if(count($arrSinglePlaceholder) == 2)
+                    if(count($arrSinglePlaceholder) == 2 && !$bitRenderCompact)
                         $strOutputAtPlaceholder .= $this->objToolkit->formHeadline($arrSinglePlaceholder[0]);
 
                     $strListId = generateSystemid();
