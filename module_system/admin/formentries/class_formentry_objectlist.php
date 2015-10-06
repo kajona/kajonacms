@@ -11,7 +11,6 @@
  * @since 4.7
  * @package module_formgenerator
  */
-//TODO why does this formentry is subclass of multiselect. Does not make any sense to me.
 class class_formentry_objectlist extends class_formentry_base implements interface_formentry_printable
 {
 
