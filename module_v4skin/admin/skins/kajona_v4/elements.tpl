@@ -1220,6 +1220,7 @@ The following sections are used to display the path-navigations, e.g. used by th
 <path_container>
     <ul class="breadcrumb">
         %%pathnavi%%
+        <li id="quickhelp" class=" pull-right" style=" "><i class="fa fa-question-circle"></i></li>
     </ul>
 </path_container>
 
@@ -1436,13 +1437,13 @@ The language switch surrounds the buttons
 <quickhelp>
     <script>
         $(function () {
-            $('#moduleTitle').popover({
+            $('#quickhelp').popover({
                 title: '%%title%%',
                 content: '%%text%%',
                 placement: 'bottom',
                 trigger: 'hover',
                 html: true
-            }).css("cursor", "help");
+            }).css("cursor", "help").show();
         });
     </script>
 </quickhelp>
