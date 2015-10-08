@@ -176,7 +176,7 @@ class class_date {
         $this->setIntMin($intMinute);
         $this->setIntSec($intSecond);
 
-        //$this->validateDate();
+        $this->validateDate();
     }
 
 
@@ -207,7 +207,7 @@ class class_date {
         //parse timestamp in order to get schema.
         $this->longTimestamp = date($this->strParseFormat, (int)$intTimestamp);
 
-        //$this->validateDate();
+        $this->validateDate();
         return $this;
     }
 
@@ -253,6 +253,7 @@ class class_date {
 
         $objDate->sub(DateInterval::createFromDateString('1 day'));
         $this->setTimeInOldStyle($objDate->getTimestamp());
+
         return $this;
     }
 
@@ -435,7 +436,7 @@ class class_date {
         $strYear = sprintf("%04s", $intYear);
         $this->longTimestamp = substr_replace($this->longTimestamp, $strYear, 0, 4);
 
-        //$this->validateDate();
+        $this->validateDate();
         return $this;
     }
 
@@ -453,7 +454,7 @@ class class_date {
 
         $strMonth = sprintf("%02s", $intMonth);
         $this->longTimestamp = substr_replace($this->longTimestamp, $strMonth, 4, 2);
-        //$this->validateDate();
+        $this->validateDate();
         return $this;
     }
 
@@ -471,7 +472,7 @@ class class_date {
 
         $strDay = sprintf("%02s", $intDay);
         $this->longTimestamp = substr_replace($this->longTimestamp, $strDay, 6, 2);
-        //$this->validateDate();
+        $this->validateDate();
         return $this;
     }
 
@@ -491,7 +492,7 @@ class class_date {
         $strHour = sprintf("%02s", $intHour);
         $this->longTimestamp = substr_replace($this->longTimestamp, $strHour, 8, 2);
 
-        //$this->validateDate();
+        $this->validateDate();
         return $this;
     }
 
@@ -511,7 +512,7 @@ class class_date {
         $strMin = sprintf("%02s", $intMin);
         $this->longTimestamp = substr_replace($this->longTimestamp, $strMin, 10, 2);
 
-        //$this->validateDate();
+        $this->validateDate();
         return $this;
     }
 
@@ -531,7 +532,7 @@ class class_date {
         $strSec = sprintf("%02s", $intSec);
         $this->longTimestamp = substr_replace($this->longTimestamp, $strSec, 12, 2);
 
-        //$this->validateDate();
+        $this->validateDate();
         return $this;
     }
 
