@@ -176,12 +176,12 @@ class class_date {
         $this->setIntMin($intMinute);
         $this->setIntSec($intSecond);
 
-        $this->validateDate();
+//        $this->validateDate();
     }
 
 
     private function validateDate() {
-        if(!uniEreg("([0-9]){14}", $this->getLongTimestamp())) {
+        if(!uniEreg("([0-9]){14}", $this->getLongTimestamp()) || $this->getLongTimestamp() < 0) {
             echo $this->__toString()."\n";
             if (function_exists("debug_backtrace")) {
                 $arrStack = debug_backtrace();
@@ -207,7 +207,7 @@ class class_date {
         //parse timestamp in order to get schema.
         $this->longTimestamp = date($this->strParseFormat, (int)$intTimestamp);
 
-        $this->validateDate();
+//        $this->validateDate();
         return $this;
     }
 
@@ -253,7 +253,7 @@ class class_date {
 
         $objDate->sub(DateInterval::createFromDateString('1 day'));
         $this->setTimeInOldStyle($objDate->getTimestamp());
-
+//        $this->validateDate();
         return $this;
     }
 
@@ -268,6 +268,7 @@ class class_date {
         $objDate = DateTime::createFromFormat($this->strParseFormat, $this->getLongTimestamp());
         $objDate->add(DateInterval::createFromDateString('1 day'));
         $this->setTimeInOldStyle($objDate->getTimestamp());
+//        $this->validateDate();
         return $this;
     }
 
@@ -300,7 +301,7 @@ class class_date {
         $this->setIntMin($objSourceDate->getIntMin());
         $this->setIntSec($objSourceDate->getIntSec());
 
-        //$this->validateDate();
+//        $this->validateDate();
         return $this;
     }
 
@@ -335,7 +336,7 @@ class class_date {
         $this->setIntMin($objSourceDate->getIntMin());
         $this->setIntSec($objSourceDate->getIntSec());
 
-        //$this->validateDate();
+//        $this->validateDate();
         return $this;
     }
 
@@ -351,7 +352,7 @@ class class_date {
             $this->setPreviousMonth();
         }
         $this->setIntDay($intCurrentDay);
-        //$this->validateDate();
+//        $this->validateDate();
         return $this;
     }
 
@@ -367,7 +368,7 @@ class class_date {
             $this->setNextMonth();
         }
         $this->setIntDay($intCurrentDay);
-        //$this->validateDate();
+//        $this->validateDate();
         return $this;
     }
 
@@ -380,7 +381,7 @@ class class_date {
         for($intI = 1; $intI <= 7; $intI++)
             $this->setNextDay();
 
-        //$this->validateDate();
+//        $this->validateDate();
         return $this;
     }
 
@@ -436,7 +437,7 @@ class class_date {
         $strYear = sprintf("%04s", $intYear);
         $this->longTimestamp = substr_replace($this->longTimestamp, $strYear, 0, 4);
 
-        $this->validateDate();
+//        $this->validateDate();
         return $this;
     }
 
@@ -454,7 +455,7 @@ class class_date {
 
         $strMonth = sprintf("%02s", $intMonth);
         $this->longTimestamp = substr_replace($this->longTimestamp, $strMonth, 4, 2);
-        $this->validateDate();
+//        $this->validateDate();
         return $this;
     }
 
@@ -472,7 +473,7 @@ class class_date {
 
         $strDay = sprintf("%02s", $intDay);
         $this->longTimestamp = substr_replace($this->longTimestamp, $strDay, 6, 2);
-        $this->validateDate();
+//        $this->validateDate();
         return $this;
     }
 
@@ -492,7 +493,7 @@ class class_date {
         $strHour = sprintf("%02s", $intHour);
         $this->longTimestamp = substr_replace($this->longTimestamp, $strHour, 8, 2);
 
-        $this->validateDate();
+//        $this->validateDate();
         return $this;
     }
 
@@ -512,7 +513,7 @@ class class_date {
         $strMin = sprintf("%02s", $intMin);
         $this->longTimestamp = substr_replace($this->longTimestamp, $strMin, 10, 2);
 
-        $this->validateDate();
+//        $this->validateDate();
         return $this;
     }
 
@@ -532,7 +533,7 @@ class class_date {
         $strSec = sprintf("%02s", $intSec);
         $this->longTimestamp = substr_replace($this->longTimestamp, $strSec, 12, 2);
 
-        $this->validateDate();
+//        $this->validateDate();
         return $this;
     }
 
