@@ -247,6 +247,10 @@ class class_date {
      */
     public function setPreviousDay() {
         $objDate = DateTime::createFromFormat($this->strParseFormat, $this->getLongTimestamp());
+        if($objDate == null)  {
+            throw new class_exception("Can't parse date ".$this->getLongTimestamp(), class_exception::$level_ERROR);
+        }
+
         $objDate->sub(DateInterval::createFromDateString('1 day'));
         $this->setTimeInOldStyle($objDate->getTimestamp());
         return $this;
