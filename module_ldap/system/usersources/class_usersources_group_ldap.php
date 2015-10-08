@@ -74,14 +74,14 @@ class class_usersources_group_ldap extends class_model implements interface_mode
             $strQuery = "INSERT INTO " . _dbprefix_ . "user_group_ldap
                           (group_ldap_id, group_ldap_dn, group_ldap_cfg) VALUES
                           (?, ?, ?)";
-            return $this->objDB->_pQuery($strQuery, array($strGrId, $this->getStrDn(), $this->getIntCfg()));
+            return $this->objDB->_pQuery($strQuery, array($strGrId, $this->getStrDn(), $this->getIntCfg()), array(true, false));
         }
         else {
             class_logger::getInstance(class_logger::USERSOURCES)->addLogRow("updated ldap group " . $this->getSystemid(), class_logger::$levelInfo);
             $strQuery = "UPDATE " . _dbprefix_ . "user_group_ldap
                             SET group_ldap_dn=?, group_ldap_cfg=?
                           WHERE group_ldap_id=?";
-            return $this->objDB->_pQuery($strQuery, array($this->getStrDn(), $this->getIntCfg(), $this->getSystemid()));
+            return $this->objDB->_pQuery($strQuery, array($this->getStrDn(), $this->getIntCfg(), $this->getSystemid()), array(false, false));
         }
     }
 
