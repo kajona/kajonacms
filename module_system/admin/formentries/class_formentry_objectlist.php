@@ -156,21 +156,22 @@ class class_formentry_objectlist extends class_formentry_base implements interfa
         if (!empty($this->arrKeyValues)) {
             $strHtml = "";
             foreach ($this->arrKeyValues as $objObject) {
-                if ($objObject instanceof interface_model && $objObject->rightView()) {
-                    $strTitle = self::getDisplayName($objObject);
+                if ($objObject instanceof interface_model) {
 
-                    //see, if the matching target-module provides a showSummary method
-                    $objModule = class_module_system_module::getModuleByName($objObject->getArrModule("modul"));
-                    if ($objModule != null) {
-                        $objAdmin = $objModule->getAdminInstanceOfConcreteModule($objObject->getSystemid());
+                    if($objObject->rightView()) {
+                        $strTitle = self::getDisplayName($objObject);
 
-                        if ($objAdmin !== null && method_exists($objAdmin, "actionShowSummary")) {
-                            $strTitle = class_link::getLinkAdmin($objObject->getArrModule("modul"), "showSummary", "&systemid=".$objObject->getSystemid(), $strTitle);
+                        //see, if the matching target-module provides a showSummary method
+                        $objModule = class_module_system_module::getModuleByName($objObject->getArrModule("modul"));
+                        if ($objModule != null) {
+                            $objAdmin = $objModule->getAdminInstanceOfConcreteModule($objObject->getSystemid());
+
+                            if ($objAdmin !== null && method_exists($objAdmin, "actionShowSummary")) {
+                                $strTitle = class_link::getLinkAdmin($objObject->getArrModule("modul"), "showSummary", "&systemid=" . $objObject->getSystemid(), $strTitle);
+                            }
                         }
+                        $strHtml .= $strTitle."<br/>\n";
                     }
-
-
-                    $strHtml .= $strTitle."<br/>\n";
                 }
                 else {
                     throw new class_exception("Array must contain objects", class_exception::$level_ERROR);
