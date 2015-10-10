@@ -138,16 +138,51 @@ class class_module_pages_content_admin extends class_admin_simple implements int
             return $objSingleElement->getStrElement() != "blocks";
         });
 
+        $arrBlocksOnPage = array_filter($arrAllElementsOnPage, function (class_module_pages_pageelement $objSingleElement) {
+            return $objSingleElement->getStrElement() == "blocks";
+        });
+
 
         //trigger blocks rendering
         $strBlocks = "";
         foreach ($objParsedBlocks->getArrBlocks() as $objOneBlocks) {
 
-            foreach ($objOneBlocks->getArrBlocks() as $objOneBlock) {
-                $strBlocks .= $this->objToolkit->formHeadline($objOneBlocks->getStrName()." > ".$objOneBlock->getStrName());
 
-                $strBlocks .= $this->renderElementPlaceholderList($objOneBlock->getArrPlaceholder(), array(), true);
+
+            $strCurBlocks = "";
+            foreach ($objOneBlocks->getArrBlocks() as $objOneBlock) {
+
+                $strCurBlock = "";
+
+                //process existing blocks
+                /** @var class_module_pages_pageelement $objOneBlocskOnPage */
+                foreach($arrBlocksOnPage as $objOneBlocksOnPage) {
+                    if($objOneBlocksOnPage->getStrName() == $objOneBlocks->getStrName()) {
+                        $arrSubBlock = class_module_pages_pageelement::getElementsOnPage($objOneBlocksOnPage->getSystemid(), false, $this->getLanguageToWorkOn());
+
+                        foreach($arrSubBlock as $objOneBlockOnPage) {
+
+                            if($objOneBlockOnPage->getStrName() == $objOneBlock->getStrName()) {
+                                $arrElementsInBlock = class_module_pages_pageelement::getElementsOnPage($objOneBlockOnPage->getSystemid(), false, $this->getLanguageToWorkOn());
+                                $strCurBlock .= $this->renderElementPlaceholderList($objOneBlock->getArrPlaceholder(), $arrElementsInBlock, true, $objOneBlocksOnPage->getSystemid(), $objOneBlockOnPage->getSystemid());
+                            }
+                        }
+
+                    }
+                }
+
+
+
+
+                $strCurBlock .= $this->renderElementPlaceholderList($objOneBlock->getArrPlaceholder(), array(), true, $objOneBlocks->getStrName(), $objOneBlock->getStrName());
+
+                $strCurBlocks .= $this->objToolkit->getFieldset(
+                    $objOneBlock->getStrName(),
+                    $strCurBlock
+                );
             }
+
+            $strBlocks .= $this->objToolkit->getFieldset($objOneBlocks->getStrName(), $strCurBlocks);
         }
 
 
@@ -168,96 +203,14 @@ class class_module_pages_content_admin extends class_admin_simple implements int
 
     }
 
-
-    /**
-     * @param class_module_pages_page $objPage
-     * @param class_module_pages_pageelement[] $arrBlocksOnPage
-     *
-     * @return string
-     */
-    private function renderBlocksList(class_module_pages_page $objPage, $arrBlocksOnPage)
-    {
-        $arrBlocksOnTemplate = $this->objTemplate->getBlocksElementsFromTemplate("/module_pages/".$objPage->getStrTemplate());
-
-
-        $strReturn = "";
-        foreach ($arrBlocksOnTemplate as $strName => $strContent) {
-            $strReturn .= $this->objToolkit->formHeadline($strName);
-            $strReturn .= $this->objToolkit->listHeader();
-
-            foreach ($arrBlocksOnPage as $objOneBlockselement) {
-                if ($objOneBlockselement->getStrName() == $strName) {
-                    $strAction = $this->objToolkit->listButton(class_link::getLinkAdmin("pages_content", "list", "&systemid=".$objOneBlockselement->getSystemid(), "", $this->getLang("element_bearbeiten"), "icon_folderActionOpen"));
-                    $strReturn .= $this->objToolkit->simpleAdminList($objOneBlockselement, $strAction, 0);
-                }
-            }
-
-
-            $strActions = $this->objToolkit->listButton(class_link::getLinkAdmin("pages_content", "newBlocks", "page_element_ph_language=".$this->objSession->getAdminLanguage()."&blocks=".$strName."&systemid=".$this->getSystemid(), "", $this->getLang("action_create_blocks"), "icon_new"));
-            $strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), $strName, getImageAdmin("icon_folderClosed"), $strActions, 0);
-            $strReturn .= $this->objToolkit->listFooter();
-        }
-
-        return $strReturn;
-    }
-
-    /**
-     * @todo section rendering
-     *
-     * @param string[] $arrBlockOnTemplate
-     * @param class_module_pages_pageelement[] $arrBlockOnPage
-     *
-     * @return string
-     */
-    private function renderBlockList(class_module_pages_pageelement $objBlockElement, $arrBlockOnPage)
-    {
-
-        /** @var class_module_pages_page $objPage */
-        $objPage = class_objectfactory::getInstance()->getObject($objBlockElement->getStrPrevId());
-
-        $arrBlocksOnTemplate = $this->objTemplate->getBlocksElementsFromTemplate("/module_pages/".$objPage->getStrTemplate());
-        $strBlockTemplate = "";
-        foreach ($arrBlocksOnTemplate as $strName => $strBlockContent) {
-            if ($strName == $objBlockElement->getStrName()) {
-                $strBlockTemplate = $strBlockContent;
-            }
-        }
-
-        //TODO: hier kommen falsche sachen zurück, wrapper block wird ebenfalls geparsed
-        //TODO:
-        $arrBlockInBlocks = $this->objTemplate->getBlockElementsFromBlock($strBlockTemplate);
-
-        $strReturn = "";
-        foreach ($arrBlockInBlocks as $strName => $strContent) {
-            $strReturn .= $this->objToolkit->formHeadline($strName);
-            $strReturn .= $this->objToolkit->listHeader();
-
-            foreach ($arrBlockOnPage as $objOneBlockelement) {
-                if ($objOneBlockelement->getStrName() == $strName) {
-                    $strAction = $this->objToolkit->listButton(class_link::getLinkAdmin("pages_content", "listElement", "&systemid=".$objOneBlockelement->getSystemid(), "", $this->getLang("element_bearbeiten"), "icon_folderActionOpen"));
-                    $strReturn .= $this->objToolkit->simpleAdminList($objOneBlockelement, $strAction, 0);
-                }
-            }
-
-
-            $strActions = $this->objToolkit->listButton(class_link::getLinkAdmin("pages_content", "newBlock", "page_element_ph_language=".$this->objSession->getAdminLanguage()."&block=".$strName."&systemid=".$this->getSystemid(), "", $this->getLang("action_create_block"), "icon_new"));
-            $strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), $strName, getImageAdmin("icon_folderClosed"), $strActions, 0);
-            $strReturn .= $this->objToolkit->listFooter();
-        }
-
-        return $strReturn;
-    }
-
-
     /**
      * @param $arrElementsOnTemplate
      * @param class_module_pages_pageelement[] $arrElementsOnPage
      *
      * @return string
      */
-    private function renderElementPlaceholderList($arrElementsOnTemplate, $arrElementsOnPage, $bitRenderCompact = false)
+    private function renderElementPlaceholderList($arrElementsOnTemplate, $arrElementsOnPage, $bitRenderCompact = false, $strBlocks = "", $strBlock = "")
     {
-
 
         $strReturn = "";
         //save a copy of the array to be able to check against all values later on
@@ -301,10 +254,20 @@ class class_module_pages_content_admin extends class_admin_simple implements int
                     /** @var class_module_pages_element $objOnePossibleElementInSystem */
                     foreach (class_module_pages_element::getObjectList() as $objOnePossibleElementInSystem) {
                         if ($objOnePossibleElementInSystem->getStrName() == $arrSingleElementOnTemplateplaceholder["element"]) {
+
+                            $strNewElementLink = class_link::getLinkAdmin(
+                                "pages_content",
+                                "new",
+                                "&placeholder={$arrOneElementOnTemplate["placeholder"]}&blocks={$strBlocks}&block={$strBlock}&element={$arrSingleElementOnTemplateplaceholder["element"]}&systemid={$this->getSystemid()}",
+                                "",
+                                $this->getLang("element_anlegen"),
+                                "icon_new"
+                            );
+
                             if ($objOnePossibleElementInSystem->getIntRepeat() == 1 || $bitHit === false) {
                                 //So, the Row for a new element: element is repeatable or not yet created
-                                $strActions = $this->objToolkit->listButton(class_link::getLinkAdmin("pages_content", "new", "&placeholder=".$arrOneElementOnTemplate["placeholder"]."&element=".$arrSingleElementOnTemplateplaceholder["element"]."&systemid=".$this->getSystemid(), "", $this->getLang("element_anlegen"), "icon_new"));
-                                $strOutputAtPlaceholder .= $this->objToolkit->genericAdminList("", $objOnePossibleElementInSystem->getStrDisplayName(), "", $strActions, 0);
+                                $strActions = $this->objToolkit->listButton($strNewElementLink);
+                                $strOutputAtPlaceholder .= $this->objToolkit->genericAdminList("", $objOnePossibleElementInSystem->getStrDisplayName(), "", $strActions, 0, ($bitRenderCompact ? $arrOneElementOnTemplate["placeholder"] : ""));
                             }
                             else {
                                 //element not repeatable.
@@ -317,8 +280,8 @@ class class_module_pages_content_admin extends class_admin_simple implements int
                                 }
                                 if (!$bitOneInstalled) {
                                     //So, the Row for a new element
-                                    $strActions = $this->objToolkit->listButton(class_link::getLinkAdmin("pages_content", "new", "&placeholder=".$arrOneElementOnTemplate["placeholder"]."&element=".$arrSingleElementOnTemplateplaceholder["element"]."&systemid=".$this->getSystemid(), "", $this->getLang("element_anlegen"), "icon_new"));
-                                    $strOutputAtPlaceholder .= $this->objToolkit->genericAdminList("", $objOnePossibleElementInSystem->getStrDisplayName(), "", $strActions, 0);
+                                    $strActions = $this->objToolkit->listButton($strNewElementLink);
+                                    $strOutputAtPlaceholder .= $this->objToolkit->genericAdminList("", $objOnePossibleElementInSystem->getStrDisplayName(), "", $strActions, 0, ($bitRenderCompact ? $arrOneElementOnTemplate["placeholder"] : ""));
                                 }
                             }
                         }
@@ -473,12 +436,6 @@ class class_module_pages_content_admin extends class_admin_simple implements int
         //allow the element to run actions after saving
         $objElement->doAfterSaveToDb();
 
-        //Loading the data of the corresponding site
-        $this->flushCompletePagesCache();
-
-        $this->adminReload(class_link::getLinkAdminHref("pages_content", "list", "systemid=".$objElement->getSystemid()));
-
-        return "";
     }
 
 
@@ -557,6 +514,37 @@ class class_module_pages_content_admin extends class_admin_simple implements int
         return $strReturn;
     }
 
+    private function processBlocksDefinition($strPageId, $strBlocks, $strBlock)
+    {
+        $strNewPrevId = $strPageId;
+
+        if($strBlocks != "" && $strBlock != "") {
+
+            $objBlocksElement = new class_module_pages_pageelement();
+            $objBlocksElement->setStrName($strBlocks);
+            $objBlocksElement->setStrPlaceholder("blocks");
+            $objBlocksElement->setStrElement("blocks");
+            $objBlocksElement->setStrLanguage($this->getParam("page_element_ph_language"));
+            if (!$objBlocksElement->updateObjectToDb($strNewPrevId)) {
+                throw new class_exception("Error saving new element-object to db", class_exception::$level_ERROR);
+            }
+
+            $objBlockElement = new class_module_pages_pageelement();
+            $objBlockElement->setStrName($strBlock);
+            $objBlockElement->setStrPlaceholder("block");
+            $objBlockElement->setStrElement("block");
+            $objBlockElement->setStrLanguage($this->getParam("page_element_ph_language"));
+            if (!$objBlockElement->updateObjectToDb($objBlocksElement->getSystemid())) {
+                throw new class_exception("Error saving new element-object to db", class_exception::$level_ERROR);
+            }
+
+            $strNewPrevId = $objBlockElement->getSystemid();
+        }
+
+
+        return $strNewPrevId;
+    }
+
     /**
      * Saves the passed Element to the database (edit or new modes)
      *
@@ -570,6 +558,7 @@ class class_module_pages_content_admin extends class_admin_simple implements int
         //The element itself just knows the edit mode, so in case of new, we have to create a dummy element - before
         //passing control to the element
         if ($this->getParam("mode") == "new") {
+
             //Using the passed placeholder-param to load the element and get the table
             $strPlaceholder = $this->getParam("placeholder");
             //Split up the placeholder
@@ -590,11 +579,17 @@ class class_module_pages_content_admin extends class_admin_simple implements int
                 $strReturn .= $this->actionNew(true);
                 return $strReturn;
             }
-            else if (!$objElement->validateForm()) {
+            elseif (!$objElement->validateForm()) {
                 class_carrier::getInstance()->setParam("peClose", "");
                 $strReturn .= $this->actionNew(true);
                 return $strReturn;
             }
+
+
+            $strCurrentParentId = $this->getSystemid();
+            //update / create blocks and block element
+            $strCurrentParentId = $this->processBlocksDefinition($strCurrentParentId, $this->getParam("blocks"), $this->getParam("block"));
+
 
             //So, lets do the magic - create the records
             $objPageElement = new class_module_pages_pageelement();
@@ -602,7 +597,7 @@ class class_module_pages_content_admin extends class_admin_simple implements int
             $objPageElement->setStrPlaceholder($strPlaceholder);
             $objPageElement->setStrElement($strPlaceholderElement);
             $objPageElement->setStrLanguage($this->getParam("page_element_ph_language"));
-            if (!$objPageElement->updateObjectToDb($this->getSystemid())) {
+            if (!$objPageElement->updateObjectToDb($strCurrentParentId)) {
                 throw new class_exception("Error saving new element-object to db", class_exception::$level_ERROR);
             }
             $strElementSystemId = $objPageElement->getSystemid();
@@ -723,7 +718,7 @@ JS;
 
             }
 
-            $this->adminReload(class_link::getLinkAdminHref("pages_content", "list", "systemid=".$objElementData->getStrPrevid()));
+            $this->adminReload(class_link::getLinkAdminHref("pages_content", "list", "&systemid=".$strPageSystemid));
 
         }
         else {

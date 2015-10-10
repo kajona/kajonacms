@@ -14,7 +14,7 @@
  *
  * @targetTable element_universal.content_id
  */
-class class_element_blocks_admin extends class_element_admin implements interface_admin_element {
+class class_element_block_admin extends class_element_admin implements interface_admin_element {
 
 
 }
