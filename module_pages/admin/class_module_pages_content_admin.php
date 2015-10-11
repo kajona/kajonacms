@@ -152,11 +152,11 @@ class class_module_pages_content_admin extends class_admin_simple implements int
             $strCurBlocks = "";
             foreach ($objOneBlocks->getArrBlocks() as $objOneBlock) {
 
-                $strCurBlock = "";
 
                 //process existing blocks
                 /** @var class_module_pages_pageelement $objOneBlocskOnPage */
                 foreach($arrBlocksOnPage as $objOneBlocksOnPage) {
+                    $strExistingBlock = "";
                     if($objOneBlocksOnPage->getStrName() == $objOneBlocks->getStrName()) {
                         $arrSubBlock = class_module_pages_pageelement::getElementsOnPage($objOneBlocksOnPage->getSystemid(), false, $this->getLanguageToWorkOn());
 
@@ -164,35 +164,32 @@ class class_module_pages_content_admin extends class_admin_simple implements int
 
                             if($objOneBlockOnPage->getStrName() == $objOneBlock->getStrName()) {
                                 $arrElementsInBlock = class_module_pages_pageelement::getElementsOnPage($objOneBlockOnPage->getSystemid(), false, $this->getLanguageToWorkOn());
-                                $strCurBlock .= $this->renderElementPlaceholderList($objOneBlock->getArrPlaceholder(), $arrElementsInBlock, true, $objOneBlocksOnPage->getSystemid(), $objOneBlockOnPage->getSystemid());
+                                $strExistingBlock .= $this->renderElementPlaceholderList($objOneBlock->getArrPlaceholder(), $arrElementsInBlock, true, $objOneBlocksOnPage->getSystemid(), $objOneBlockOnPage->getSystemid());
                             }
                         }
 
                     }
+
+                    if($strExistingBlock != "") {
+                        $strCurBlocks .= $this->objToolkit->getFieldset(
+                            $objOneBlock->getStrName(),
+                            $strExistingBlock
+                        );
+                    }
                 }
 
 
-
-
-                $strCurBlock .= $this->renderElementPlaceholderList($objOneBlock->getArrPlaceholder(), array(), true, $objOneBlocks->getStrName(), $objOneBlock->getStrName());
+                $strNewBlock = $this->renderElementPlaceholderList($objOneBlock->getArrPlaceholder(), array(), true, $objOneBlocks->getStrName(), $objOneBlock->getStrName());
 
                 $strCurBlocks .= $this->objToolkit->getFieldset(
                     $objOneBlock->getStrName(),
-                    $strCurBlock
+                    $strNewBlock
                 );
             }
 
             $strBlocks .= $this->objToolkit->getFieldset($objOneBlocks->getStrName(), $strCurBlocks);
         }
 
-
-//        $arrBlocksOnPage = array_filter($arrAllElementsOnPage, function(class_module_pages_pageelement $objSingleElement) {
-//            return $objSingleElement->getStrElement() == "blocks";
-//        });
-//
-//        $arrBlockOnPage = array_filter($arrAllElementsOnPage, function(class_module_pages_pageelement $objSingleElement) {
-//            return $objSingleElement->getStrElement() == "block";
-//        });
 
         $arrTabs["blocks"] = $strBlocks;
         $arrTabs["elements"] = $this->renderElementPlaceholderList($objParsedBlocks->getArrPlaceholder(), $arrPageelementsOnPage);
@@ -392,54 +389,6 @@ class class_module_pages_content_admin extends class_admin_simple implements int
 
 
     /**
-     * @permissions edit
-     */
-    protected function actionNewBlocks()
-    {
-        $strBlocksName = $this->getParam("blocks");
-
-        //Using the passed placeholder-param to load the element and get the table
-        $strPlaceholder = $this->getParam("placeholder");
-
-        //So, lets do the magic - create the records
-        $objPageElement = new class_module_pages_pageelement();
-        $objPageElement->setStrName($strBlocksName);
-        $objPageElement->setStrPlaceholder("blocks");
-        $objPageElement->setStrElement("blocks");
-        $objPageElement->setStrLanguage($this->getParam("page_element_ph_language"));
-        if (!$objPageElement->updateObjectToDb($this->getSystemid())) {
-            throw new class_exception("Error saving new element-object to db", class_exception::$level_ERROR);
-        }
-
-        $objPageElement = new class_module_pages_pageelement($objPageElement->getSystemid());
-
-        /** @var $objElement class_element_admin */
-        $objElement = $objPageElement->getConcreteAdminInstance();
-
-        //pass the data to the element, maybe the element wants to update some data
-        $objElement->setArrParamData($this->getAllParams());
-
-        if ($objElement->getAdminForm() !== null) {
-            $objElement->getAdminForm()->updateSourceObject();
-        }
-
-        $objElement->doBeforeSaveToDb();
-
-        //check, if we could save the data, so the element needn't to
-        //woah, we are soooo great
-        $objElement->updateForeignElement();
-
-        //Edit Date of page & unlock
-        $objPage = class_objectfactory::getInstance()->getObject($this->getSystemid());
-        $objPage->updateObjectToDb();
-
-        //allow the element to run actions after saving
-        $objElement->doAfterSaveToDb();
-
-    }
-
-
-    /**
      * Loads the form to create a new element
      *
      * @param bool $bitShowErrors
@@ -514,11 +463,31 @@ class class_module_pages_content_admin extends class_admin_simple implements int
         return $strReturn;
     }
 
+    /**
+     * Internal helper to resolve or create the matching blocks and block element for the current page-element
+     * @param $strPageId
+     * @param $strBlocks
+     * @param $strBlock
+     *
+     * @return string
+     * @throws class_exception
+     */
     private function processBlocksDefinition($strPageId, $strBlocks, $strBlock)
     {
         $strNewPrevId = $strPageId;
 
         if($strBlocks != "" && $strBlock != "") {
+
+            if(validateSystemid($strBlocks) && validateSystemid($strBlock)) {
+                //fetch the matching elements
+                $objBlocks = new class_module_pages_pageelement($strBlocks);
+                $objBlock = new class_module_pages_pageelement($strBlock);
+
+                if($objBlocks->getStrElement() == "blocks" && $objBlock->getStrElement() == "block") {
+                    return $objBlock->getSystemid();
+                }
+            }
+
 
             $objBlocksElement = new class_module_pages_pageelement();
             $objBlocksElement->setStrName($strBlocks);
@@ -539,6 +508,7 @@ class class_module_pages_content_admin extends class_admin_simple implements int
             }
 
             $strNewPrevId = $objBlockElement->getSystemid();
+
         }
 
 
