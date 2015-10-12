@@ -300,7 +300,6 @@ data list footer. at the bottom of the datatable
     </table>
     <script type="text/javascript">
         KAJONA.admin.loader.loadFile("/core/module_v4skin/admin/skins/kajona_v4/js/jquery.floatThead.min.js", function() {
-            console.log('table init');
             $('table.kajona-data-table').floatThead({
                 scrollingTop: $("body.dialogBody").size() > 0 ? 0 : 70,
                 useAbsolutePositioning: true
@@ -715,7 +714,7 @@ in addition, a container for the calendar is needed. Use %%calendarContainerId%%
         <div class="col-sm-6">
             <div class="input-group">
                 <div class="input-group-addon"><i class="fa fa-calendar-o"></i></div>
-                <input id="%%calendarId%%" name="%%calendarId%%" class="form-control %%class%%" size="16" type="text" value="%%valuePlain%%">
+                <input id="%%calendarId%%" name="%%calendarId%%" class="form-control %%class%%" size="16" type="text" value="%%valuePlain%%" %%readonly%%>
             </div>
             <script>
                 KAJONA.admin.loader.loadFile(["_webpath_/core/module_v4skin/admin/skins/kajona_v4/js/bootstrap-datepicker.js"], function() {
@@ -753,7 +752,7 @@ in addition, a container for the calendar is needed. Use %%calendarContainerId%%
         <div class="col-sm-2">
             <div class="input-group">
                 <div class="input-group-addon"><i class="fa fa-calendar-o"></i></div>
-                <input id="%%calendarId%%" name="%%calendarId%%" class="form-control" size="16" type="text" value="%%valuePlain%%">
+                <input id="%%calendarId%%" name="%%calendarId%%" class="form-control" size="16" type="text" value="%%valuePlain%%" %%readonly%%>
             </div>
         </div>
 
