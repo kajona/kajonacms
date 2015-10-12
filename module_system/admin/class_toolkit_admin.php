@@ -40,7 +40,7 @@ class class_toolkit_admin extends class_toolkit
      * @return string
      * @since 3.2.0.9
      */
-    public function formDateSingle($strName, $strTitle, $objDateToShow, $strClass = "", $bitWithTime = false)
+    public function formDateSingle($strName, $strTitle, $objDateToShow, $strClass = "", $bitWithTime = false, $bitReadOnly = false)
     {
         //check passed param
         if ($objDateToShow != null && !$objDateToShow instanceof class_date) {
@@ -81,6 +81,8 @@ class class_toolkit_admin extends class_toolkit
         $arrTemplate["calendarContainerId"] = $strContainerId;
         $arrTemplate["calendarLang_weekday"] = " [".class_carrier::getInstance()->getObjLang()->getLang("toolsetCalendarWeekday", "system")."]\n";
         $arrTemplate["calendarLang_month"] = " [".class_carrier::getInstance()->getObjLang()->getLang("toolsetCalendarMonth", "system")."]\n";
+
+        $arrTemplate["readonly"] = ($bitReadOnly ? "disabled=\"disabled\"" : "");
 
         return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
     }
