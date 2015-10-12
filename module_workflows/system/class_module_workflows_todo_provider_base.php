@@ -7,7 +7,7 @@
 /**
  * @package module_workflows
  */
-abstract class class_module_workflow_todo_provider_base implements interface_todo_provider
+abstract class class_module_workflows_todo_provider_base implements interface_todo_provider
 {
     public static function getExtensionName()
     {
