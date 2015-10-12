@@ -172,7 +172,7 @@ class class_module_dashboard_admin_xml extends class_admin_controller implements
             "1" => $this->getLang("todo_task_col_object"),
             "2 \" style=\"width:300px\"" => $this->getLang("todo_task_col_category"),
             "3 \" style=\"width:160px\"" => $this->getLang("todo_task_col_date"),
-            "4 \" style=\"width:20px\"" => "",
+            "4 \" style=\"width:80px\"" => "",
         );
         $arrValues = array();
 
@@ -193,7 +193,13 @@ class class_module_dashboard_admin_xml extends class_admin_controller implements
             $bitDateMatch = empty($strDate) || $strValidDate == $strDate;
 
             if ($bitSearchMatch && $bitDateMatch) {
-                $arrValues[] = array($strIcon, $objTodo->getStrDisplayName(), $strCategory, $strValidDate, $strActions);
+                $arrValues[] = array(
+                    $strIcon,
+                    $objTodo->getStrDisplayName(),
+                    $strCategory,
+                    $strValidDate,
+                    "4\" style=\"text-align:right" => $strActions
+                );
             }
         }
 
