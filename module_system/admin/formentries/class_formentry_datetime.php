@@ -30,12 +30,7 @@ class class_formentry_datetime extends class_formentry_date {
         else if($this->getStrValue() != "")
             $objDate = new class_date($this->getStrValue());
 
-        if($this->getBitReadonly()) {
-            $strReturn .= $objToolkit->formInputText($this->getStrEntryName(), $this->getStrLabel(), dateToString($objDate, false), "", "", true);
-        }
-        else {
-            $strReturn .= $objToolkit->formDateSingle($this->getStrEntryName(), $this->getStrLabel(), $objDate, "inputDate", true);
-        }
+        $strReturn .= $objToolkit->formDateSingle($this->getStrEntryName(), $this->getStrLabel(), $objDate, "inputDate", true, $this->getBitReadonly());
 
         return $strReturn;
     }
