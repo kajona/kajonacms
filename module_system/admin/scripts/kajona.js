@@ -1312,12 +1312,12 @@ KAJONA.admin.lang.initializeProperties = function(containerEl){
  * The requests are triggered sequential so that we send per module only one request
  */
 KAJONA.admin.lang.fetchProperties = function(){
-    if (KAJONA.admin.lang.queue == 0) {
+    if (KAJONA.admin.lang.queue.length == 0) {
         return;
     }
 
     var arrData = KAJONA.admin.lang.queue[0];
-    var strKey = arrData.module + '_' + arrData.text;
+    var strKey = arrData.module + '_' + KAJONA_LANGUAGE + '_' + KAJONA_BROWSER_CACHEBUSTER + '_' + arrData.text;
     var strResp = KAJONA.util.cacheManager.get(strKey);
     if (strResp) {
         arrData = KAJONA.admin.lang.queue.shift();
@@ -1340,7 +1340,7 @@ KAJONA.admin.lang.fetchProperties = function(){
             if (arrData.text == strKey) {
                 strResp = objResp[strKey];
             }
-            KAJONA.util.cacheManager.set(arrData.module + '_' + strKey, objResp[strKey]);
+            KAJONA.util.cacheManager.set(arrData.module + '_' + KAJONA_LANGUAGE + '_' + KAJONA_BROWSER_CACHEBUSTER + '_' + strKey, objResp[strKey]);
         }
         if (strResp !== null) {
             strResp = KAJONA.admin.lang.replacePropertyParams(strResp, arrData.params);
