@@ -29,7 +29,7 @@
  * @moduleId _eventmanager_module_id_
  *
  */
-class class_module_eventmanager_admin extends class_admin_evensimpler implements interface_admin, interface_calendarsource_admin {
+class class_module_eventmanager_admin extends class_admin_evensimpler implements interface_admin {
 
     const STR_CALENDAR_FILTER_EVENT = "STR_CALENDAR_FILTER_EVENT";
 
@@ -103,51 +103,6 @@ class class_module_eventmanager_admin extends class_admin_evensimpler implements
         $strReturn .= $this->actionList();
         return $strReturn;
 
-    }
-
-
-    /**
-     * @see interface_calendarsource_admin::getArrCalendarEntries()
-     */
-    public function getArrCalendarEntries(class_date $objStartDate, class_date $objEndDate) {
-        $arrEntries = array();
-
-        if($this->objSession->getSession(self::STR_CALENDAR_FILTER_EVENT) != "disabled") {
-            $arrEvents = class_module_eventmanager_event::getAllEvents(null, null, $objStartDate, $objEndDate);
-            foreach($arrEvents as $objOneEvent) {
-
-                $objEntry = new class_calendarentry();
-                $strAlt = $this->getLang("calendar_type_event");
-
-                $strTitle = $objOneEvent->getStrTitle();
-                if(uniStrlen($strTitle) > 15) {
-                    $strAlt = $strTitle . "<br />" . $strAlt;
-                    $strTitle = uniStrTrim($strTitle, 14);
-                }
-
-                $strName = getLinkAdmin($this->arrModule["modul"], "edit", "&systemid=" . $objOneEvent->getSystemid(), $strTitle, $strAlt);
-                $objEntry->setStrName($strName);
-                $arrEntries[] = $objEntry;
-            }
-        }
-
-        return $arrEntries;
-    }
-
-    /**
-     * @see interface_calendarsource_admin::getArrLegendEntries()
-     */
-    public function getArrLegendEntries() {
-        return array($this->getLang("calendar_type_event") => "calendarEvent");
-    }
-
-    /**
-     * @see interface_calendarsource_admin::getArrFilterEntries()
-     */
-    public function getArrFilterEntries() {
-        return array(
-            self::STR_CALENDAR_FILTER_EVENT => $this->getLang("calendar_filter_event"),
-        );
     }
 
 }

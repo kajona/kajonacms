@@ -606,11 +606,11 @@ abstract class class_admin_simple extends class_admin_controller {
             $strOneAction = trim($strOneAction);
             //search for a title attribute
             $arrMatches = array();
-            if(preg_match('/title=\"([a-zA-Z0-9\ \-\_\/]+)\"/i', $strOneAction, $arrMatches)) {
+            if(preg_match('/<a.*?title=(["\'])(.*?)\1.*$/i', $strOneAction, $arrMatches)) {
                 if(uniSubstr($strOneAction, -11) == "</a></span>")
-                    $strOneAction = uniSubstr($strOneAction, 0, -11).$arrMatches[1]."</a></span>";
+                    $strOneAction = uniSubstr($strOneAction, 0, -11).$arrMatches[2]."</a></span>";
                 else
-                    $strOneAction .= $arrMatches[1];
+                    $strOneAction .= $arrMatches[2];
             }
 
             $arrActionMenuEntries[] = array("fullentry" => $strOneAction);

@@ -300,7 +300,6 @@ data list footer. at the bottom of the datatable
     </table>
     <script type="text/javascript">
         KAJONA.admin.loader.loadFile("/core/module_v4skin/admin/skins/kajona_v4/js/jquery.floatThead.min.js", function() {
-            console.log('table init');
             $('table.kajona-data-table').floatThead({
                 scrollingTop: $("body.dialogBody").size() > 0 ? 0 : 70,
                 useAbsolutePositioning: true
@@ -412,7 +411,7 @@ Toggle Button-Bar
     <div class="form-group">
         <label for="%%name%%[]" class="col-sm-3 control-label">%%title%%</label>
         <div class="col-sm-6">
-            <div class="btn-group" data-toggle="buttons">
+            <div class="btn-group buttonbar" data-toggle="buttons">
                 %%options%%
             </div>
         </div>
@@ -421,13 +420,13 @@ Toggle Button-Bar
 
 <input_toggle_buttonbar_button>
     <label class="btn btn-primary %%btnclass%%">
-        <input type="checkbox" name="%%name%%[]" value="%%key%%" %%disabled%% %%addons%%> %%value%%
+        <input type="%%type%%" name="%%name%%[]" value="%%key%%" %%disabled%% %%addons%%> %%value%%
     </label>
 </input_toggle_buttonbar_button>
 
 <input_toggle_buttonbar_button_selected>
     <label class="btn btn-primary active %%btnclass%%">
-        <input type="checkbox" name="%%name%%[]" value="%%key%%" checked="checked" %%disabled%% %%addons%%> %%value%%
+        <input type="%%type%%" name="%%name%%[]" value="%%key%%" checked="checked" %%disabled%% %%addons%%> %%value%%
     </label>
 </input_toggle_buttonbar_button_selected>
 
@@ -715,7 +714,7 @@ in addition, a container for the calendar is needed. Use %%calendarContainerId%%
         <div class="col-sm-6">
             <div class="input-group">
                 <div class="input-group-addon"><i class="fa fa-calendar-o"></i></div>
-                <input id="%%calendarId%%" name="%%calendarId%%" class="form-control %%class%%" size="16" type="text" value="%%valuePlain%%">
+                <input id="%%calendarId%%" name="%%calendarId%%" class="form-control %%class%%" size="16" type="text" value="%%valuePlain%%" %%readonly%%>
             </div>
             <script>
                 KAJONA.admin.loader.loadFile(["_webpath_/core/module_v4skin/admin/skins/kajona_v4/js/bootstrap-datepicker.js"], function() {
@@ -753,7 +752,7 @@ in addition, a container for the calendar is needed. Use %%calendarContainerId%%
         <div class="col-sm-2">
             <div class="input-group">
                 <div class="input-group-addon"><i class="fa fa-calendar-o"></i></div>
-                <input id="%%calendarId%%" name="%%calendarId%%" class="form-control" size="16" type="text" value="%%valuePlain%%">
+                <input id="%%calendarId%%" name="%%calendarId%%" class="form-control" size="16" type="text" value="%%valuePlain%%" %%readonly%%>
             </div>
         </div>
 
@@ -934,7 +933,7 @@ Used to fold elements / hide/unhide elements
 A precent-beam to illustrate proportions
 <percent_beam>
     <div class="progress">
-        <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="%%percent%%" aria-valuemin="0" aria-valuemax="100" style="width: %%percent%%%;">%%percent%%%</div>
+        <div class="progress-bar %%animationClass%% active" role="progressbar" aria-valuenow="%%percent%%" aria-valuemin="0" aria-valuemax="100" style="width: %%percent%%%;">%%percent%%%</div>
     </div>
 </percent_beam>
 
@@ -976,7 +975,7 @@ A fieldset to structure logical sections
 
 
 <tabbed_content_wrapper>
-    <ul class="nav nav-tabs" id="">
+    <ul class="nav nav-tabs" id="%%id%%">
         %%tabheader%%
     </ul>
 
@@ -986,7 +985,7 @@ A fieldset to structure logical sections
 </tabbed_content_wrapper>
 
 <tabbed_content_tabheader>
-    <li class="%%classaddon%%"><a href="" data-target="#%%tabid%%" data-toggle="tab">%%tabtitle%%</a></li>
+    <li class="%%classaddon%%"><a href="" data-target="#%%tabid%%" data-href="%%href%%" data-toggle="tab">%%tabtitle%%</a></li>
 </tabbed_content_tabheader>
 
 <tabbed_content_tabcontent>
@@ -1120,7 +1119,7 @@ The following sections specify the layout of the rights-mgmt
 <rights_form_header>
     <div>
         %%desc%% %%record%% <br />
-        <a href="javascript:KAJONA.admin.permissions.toggleEmtpyRows('[lang,permissions_toggle_visible,system]', '[lang,permissions_toggle_hidden,system]');" id="rowToggleLink" class="rowsVisible">[lang,permissions_toggle_visible,system]</a><br /><br />
+        <a href="javascript:KAJONA.admin.permissions.toggleEmtpyRows('[lang,permissions_toggle_visible,system]', '[lang,permissions_toggle_hidden,system]', '#rightsForm tr');" id="rowToggleLink" class="rowsVisible">[lang,permissions_toggle_visible,system]</a><br /><br />
     </div>
     <div id="responseContainer">
     </div>
@@ -1220,6 +1219,7 @@ The following sections are used to display the path-navigations, e.g. used by th
 <path_container>
     <ul class="breadcrumb">
         %%pathnavi%%
+        <li id="quickhelp" class=" pull-right" style=" "><i class="fa fa-question-circle"></i></li>
     </ul>
 </path_container>
 
@@ -1436,13 +1436,13 @@ The language switch surrounds the buttons
 <quickhelp>
     <script>
         $(function () {
-            $('#moduleTitle').popover({
+            $('#quickhelp').popover({
                 title: '%%title%%',
                 content: '%%text%%',
                 placement: 'bottom',
                 trigger: 'hover',
                 html: true
-            }).css("cursor", "help");
+            }).css("cursor", "help").show();
         });
     </script>
 </quickhelp>

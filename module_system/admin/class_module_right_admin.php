@@ -227,7 +227,7 @@ class class_module_right_admin extends class_admin_controller implements interfa
             $strReturn .= $this->objToolkit->formClose();
             $strReturn .= "<script type=\"text/javascript\">
                 KAJONA.admin.permissions.checkRightMatrix();
-                KAJONA.admin.permissions.toggleEmtpyRows('".$this->getLang("permissions_toggle_visible")."', '".$this->getLang("permissions_toggle_hidden")."');
+                KAJONA.admin.permissions.toggleEmtpyRows('".$this->getLang("permissions_toggle_visible")."', '".$this->getLang("permissions_toggle_hidden")."', '#rightsForm tr');
                 </script>";
         }
         else {
