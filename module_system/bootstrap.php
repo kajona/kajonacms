@@ -52,29 +52,35 @@ if(!@include_once _corepath_."/module_system/system/class_logger.php")
     rawIncludeError("logging engine");
 
 
+//see if there's a custom bootstrap.php to include
+if(file_exists(_realpath_."/project/bootstrap.php"))
+    @include_once _realpath_."/project/bootstrap.php";
+
 //---The Path on web-------------------------------------------------------------------------------------
 
 require_once _corepath_."/module_system/system/class_config.php";
 $strHeaderName = class_config::readPlainConfigsFromFilesystem("https_header");
 $strHeaderValue = strtolower(class_config::readPlainConfigsFromFilesystem("https_header_value"));
 
-if(strpos($_SERVER['SCRIPT_FILENAME'], "/debug/")) {
-    //Determine the current path on the web
-    $strWeb = dirname(
-        (isset($_SERVER[$strHeaderName]) && (strtolower($_SERVER[$strHeaderName]) == $strHeaderValue) ? "https://" : "http://") .
-        $_SERVER['HTTP_HOST'].$_SERVER['SCRIPT_NAME']
-    );
-    define("_webpath_", saveUrlEncode(substr_replace($strWeb, "", strrpos($strWeb, "/"))));
-}
-else {
-    //Determine the current path on the web
-    $strWeb = dirname(
-        (isset($_SERVER[$strHeaderName]) && (strtolower($_SERVER[$strHeaderName]) == $strHeaderValue) ? "https://" : "http://") .
-        (isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : "localhost").$_SERVER['SCRIPT_NAME']
-    );
-    define("_webpath_", saveUrlEncode($strWeb));
-}
+if(!defined("_webpath_")) {
+    if (strpos($_SERVER['SCRIPT_FILENAME'], "/debug/")) {
+        //Determine the current path on the web
+        $strWeb = dirname(
+            (isset($_SERVER[$strHeaderName]) && (strtolower($_SERVER[$strHeaderName]) == $strHeaderValue) ? "https://" : "http://").
+            $_SERVER['HTTP_HOST'].$_SERVER['SCRIPT_NAME']
+        );
+        define("_webpath_", saveUrlEncode(substr_replace($strWeb, "", strrpos($strWeb, "/"))));
+    }
+    else {
+        //Determine the current path on the web
+        $strWeb = dirname(
+            (isset($_SERVER[$strHeaderName]) && (strtolower($_SERVER[$strHeaderName]) == $strHeaderValue) ? "https://" : "http://").
+            (isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : "localhost").$_SERVER['SCRIPT_NAME']
+        );
+        define("_webpath_", saveUrlEncode($strWeb));
+    }
 
+}
 //---Include Section 2-----------------------------------------------------------------------------------
 //load module-ids
 bootstrapIncludeModuleIds();

@@ -408,9 +408,9 @@ KAJONA.admin.permissions = {
     },
 
     toggleMode : null,
-    toggleEmtpyRows : function (strVisibleName, strHiddenName) {
+    toggleEmtpyRows : function (strVisibleName, strHiddenName, parentSelector) {
 
-        $('#rightsForm tr').each(function() {
+        $(parentSelector).each(function() {
 
             if($(this).find("input:checked").length == 0 && $(this).find("th").length == 0) {
                 if(KAJONA.admin.permissions.toggleMode == null) {
@@ -758,6 +758,17 @@ KAJONA.admin.forms.initForm = function(strFormid) {
     });
 };
 
+KAJONA.admin.forms.animateSubmit = function(objForm) {
+    //try to get the button currently clicked
+
+    if($(document.activeElement).prop('tagName') == "BUTTON") {
+        $(document.activeElement).addClass('processing');
+    }
+    else {
+        $(objForm).find('.savechanges[name=submitbtn]').addClass('processing');
+    }
+};
+
 KAJONA.admin.forms.changeLabel = '';
 KAJONA.admin.forms.changeConfirmation = '';
 
@@ -838,6 +849,17 @@ KAJONA.admin.forms.renderMissingMandatoryFields = function(arrFields) {
             $("#"+strFieldName).closest("div").append(objNode);
         }
     });
+};
+
+KAJONA.admin.forms.loadTab = function(strEl, strHref) {
+    if (strHref && $("#" + strEl).length > 0) {
+        $("#" + strEl).html("");
+        $("#" + strEl).addClass("loadingContainer");
+        $.get(strHref, function(data){
+            $("#" + strEl).removeClass("loadingContainer");
+            $("#" + strEl).html(data);
+        });
+    }
 };
 
 KAJONA.admin.lists = {

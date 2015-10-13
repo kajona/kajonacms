@@ -2053,7 +2053,7 @@ abstract class class_root {
      */
     public function setObjEndDate($objEndDate = null) {
 
-        if($objEndDate === 0)
+        if($objEndDate === 0  || $objEndDate === "0")
             $objEndDate = null;
 
 
@@ -2077,7 +2077,7 @@ abstract class class_root {
      */
     public function setObjSpecialDate($objSpecialDate = null) {
 
-        if($objSpecialDate === 0)
+        if($objSpecialDate === 0 || $objSpecialDate === "0")
             $objSpecialDate = null;
 
         if(!$objSpecialDate instanceof class_date && $objSpecialDate != "" && $objSpecialDate != null)
@@ -2100,7 +2100,7 @@ abstract class class_root {
      */
     public function setObjStartDate($objStartDate = null) {
 
-        if($objStartDate === 0)
+        if($objStartDate === 0 || $objStartDate === "0")
             $objStartDate = null;
 
         if(!$objStartDate instanceof class_date && $objStartDate != "" && $objStartDate != null)

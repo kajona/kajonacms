@@ -206,9 +206,15 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
      */
     protected function renderCopyAction(class_model $objListEntry)
     {
+        $objUsersources = new class_module_user_sourcefactory();
+        if ($objListEntry instanceof class_module_user_user && $objListEntry->rightEdit()) {
+            /* @var class_module_user_user $objListEntry */
+            if ($objUsersources->getUsersource($objListEntry->getStrSubsystem())->getCreationOfUsersAllowed()) {
+                return $this->objToolkit->listButton(class_link::getLinkAdmin("user", "newUser", "&user_inherit_permissions_id=".$objListEntry->getSystemid()."&pv=".$this->getParam("pv")."&usersource=".$objListEntry->getStrSubsystem(), "", $this->getLang("commons_edit_copy", "common"), "icon_copy"));
+            }
+        }
         return "";
     }
-
 
     /**
      * @param class_model|class_module_user_user $objListEntry
@@ -222,7 +228,7 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
         $arrReturn = array();
         if ($objListEntry instanceof class_module_user_user && $objListEntry->rightEdit() && $objUsersources->getUsersource($objListEntry->getStrSubsystem())->getMembersEditable()) {
             $arrReturn[] = $this->objToolkit->listButton(
-                class_link::getLinkAdminDialog("user", "editMemberships", "&systemid=".$objListEntry->getSystemid(), "", $this->getLang("user_zugehoerigkeit"), "icon_group", $objListEntry->getStrUsername())
+                class_link::getLinkAdminDialog("user", "editMemberships", "&systemid=".$objListEntry->getSystemid() . "&folderview=1", "", $this->getLang("user_zugehoerigkeit"), "icon_group", $objListEntry->getStrUsername())
             );
         }
 
@@ -578,6 +584,18 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
         //system-settings
         $objForm->addField(new class_formentry_headline())->setStrValue($this->getLang("user_system"));
 
+        $strInheritPermissionsId = $this->getParam("user_inherit_permissions_id");
+        if (!empty($strInheritPermissionsId)) {
+            $objForm->addField(new class_formentry_hidden("user", "inherit_permissions_id"))
+                ->setStrValue($strInheritPermissionsId);
+
+            $objInheritUser = new class_module_user_user($strInheritPermissionsId);
+            $objForm->addField(new class_formentry_plaintext("inherit_hint"))
+                ->setStrValue($this->objToolkit->warningBox($this->getLang("user_copy_info", "", array($objInheritUser->getStrDisplayName())), "alert-info"));
+
+            $objForm->setFieldToPosition("inherit_hint", 1);
+        }
+
         $objForm->addField(new class_formentry_dropdown("user", "skin"))
             ->setArrKeyValues($arrSkins)
             ->setStrValue(($this->getParam("user_skin") != "" ? $this->getParam("user_skin") : class_module_system_setting::getConfigValue("_admin_skin_default_")))
@@ -606,7 +624,7 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
             $objForm->addField(new class_formentry_checkbox("user", "active"))->setStrLabel($this->getLang("user_aktiv"));
         }
 
-        if (count($objUser->getGroupIdsForUser()) == 0) {
+        if (count($objUser->getGroupIdsForUser()) == 0 && empty($strInheritPermissionsId)) {
             $objForm->addField(new class_formentry_plaintext("group_hint"))->setStrValue($this->objToolkit->warningBox($this->getLang("form_user_hint_groups")));
             $objForm->setFieldToPosition("group_hint", 1);
         }
@@ -697,6 +715,23 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
         $objForm->updateSourceObject();
         $objSourceUser->updateObjectToDb();
 
+        // assign user to the same groups if we have an user where we inherit the group settings
+        if ($this->getParam("mode") == "new") {
+            $strInheritUserId = $this->getParam("user_inherit_permissions_id");
+            if (!empty($strInheritUserId)) {
+                $objInheritUser = new class_module_user_user($strInheritUserId);
+                $arrGroupIds = $objInheritUser->getArrGroupIds();
+
+                foreach ($arrGroupIds as $strGroupId) {
+                    $objGroup = new class_module_user_group($strGroupId);
+                    $objSourceGroup = $objGroup->getObjSourceGroup();
+                    $objSourceGroup->addMember($objUser->getObjSourceUser());
+                }
+
+                $this->adminReload(class_link::getLinkAdminHref($this->getArrModule("modul"), "editMemberships", "&systemid=" . $objUser->getStrSystemid()));
+                return "";
+            }
+        }
 
         if ($this->getParam("mode") == "edit") {
             //Reset the admin-skin cookie to force the new skin
@@ -1109,7 +1144,6 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
     protected function actionEditMemberships()
     {
         $strReturn = "";
-        $this->setArrModuleEntry("template", "/folderview.tpl");
         //open the form
         $strReturn .= $this->objToolkit->formHeader(class_link::getLinkAdminHref($this->getArrModule("modul"), "saveMembership"));
         //Create a list of checkboxes
@@ -1124,6 +1158,7 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
         $arrGroups = $objSourcesytem->getAllGroupIds();
         $arrUserGroups = $objUser->getArrGroupIds();
 
+        $arrRows = array();
         foreach ($arrGroups as $strSingleGroup) {
             //to avoid privilege escalation, the admin-group has to be treated in a special manner
             //only render the group, if the current user is member of this group
@@ -1132,15 +1167,28 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
                 continue;
             }
 
-            if (in_array($strSingleGroup, $arrUserGroups)) {
-                //user in group, checkbox checked
-                $strReturn .= $this->objToolkit->formInputCheckbox($objSingleGroup->getSystemid(), $objSingleGroup->getStrName(), true);
-            }
-            else {
-                //User not yet in group, checkbox unchecked
-                $strReturn .= $this->objToolkit->formInputCheckbox($objSingleGroup->getSystemid(), $objSingleGroup->getStrName());
-            }
+            $strCheckbox = $this->objToolkit->formInputCheckbox($objSingleGroup->getSystemid(), "", in_array($strSingleGroup, $arrUserGroups));
+            $strCheckbox = uniSubstr($strCheckbox, uniStrpos($strCheckbox, "<input"));
+            $strCheckbox = uniSubstr($strCheckbox, 0, uniStrpos($strCheckbox, ">")+1);
+
+            $arrRows[] = array($strCheckbox, $objSingleGroup->getStrName());
+
+//            $strReturn .= $this->objToolkit->formInputCheckbox($objSingleGroup->getSystemid(), $objSingleGroup->getStrName(), in_array($strSingleGroup, $arrUserGroups));
+
         }
+
+
+
+        $strReturn .= <<<HTML
+    <a href="javascript:KAJONA.admin.permissions.toggleEmtpyRows('[lang,permissions_toggle_visible,system]', '[lang,permissions_toggle_hidden,system]', 'table.kajona-data-table tr');" id="rowToggleLink" class="rowsVisible">[lang,permissions_toggle_visible,system]</a><br /><br />
+HTML;
+
+
+        $strReturn .= $this->objToolkit->dataTable(null, $arrRows);
+
+        $strReturn .= "<script type=\"text/javascript\">
+                KAJONA.admin.permissions.toggleEmtpyRows('".$this->getLang("permissions_toggle_visible", "system")."', '".$this->getLang("permissions_toggle_hidden", "system")."', 'table.kajona-data-table tr');
+                </script>";
 
         $strReturn .= $this->objToolkit->formInputHidden("systemid", $this->getSystemid());
         $strReturn .= $this->objToolkit->formInputSubmit($this->getLang("commons_save"));
@@ -1221,7 +1269,11 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
             }
         }
 
-        $this->adminReload(class_link::getLinkAdminHref($this->getArrModule("modul"), "list", "&peClose=1&blockAction=1"));
+        if ($this->getParam("folderview")) {
+            $this->adminReload(class_link::getLinkAdminHref($this->getArrModule("modul"), "list", "&peClose=1&blockAction=1"));
+        } else {
+            $this->adminReload(class_link::getLinkAdminHref($this->getArrModule("modul"), "list"));
+        }
     }
 
 

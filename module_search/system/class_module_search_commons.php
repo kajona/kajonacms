@@ -14,7 +14,8 @@
  * @module search
  * @moduleId _search_module_id_
  */
-class class_module_search_commons extends class_model implements interface_model {
+class class_module_search_commons extends class_model implements interface_model
+{
 
 
     /**
@@ -22,7 +23,8 @@ class class_module_search_commons extends class_model implements interface_model
      *
      * @return string
      */
-    public function getStrDisplayName() {
+    public function getStrDisplayName()
+    {
         return "";
     }
 
@@ -34,10 +36,12 @@ class class_module_search_commons extends class_model implements interface_model
      *
      * @return class_search_result[]
      */
-    public function doPortalSearch($objSearch) {
+    public function doPortalSearch($objSearch)
+    {
         $objSearch->setStrQuery(trim(uniStrReplace("%", "", $objSearch->getStrQuery())));
-        if(uniStrlen($objSearch->getStrQuery()) == 0)
+        if (uniStrlen($objSearch->getStrQuery()) == 0) {
             return array();
+        }
 
         //create a search object
         $objSearch->setBitPortalObjectFilter(true);
@@ -45,24 +49,27 @@ class class_module_search_commons extends class_model implements interface_model
         $arrHits = $this->doIndexedSearch($objSearch);
 
         $arrReturn = array();
-        foreach($arrHits as $objOneResult) {
+        foreach ($arrHits as $objOneResult) {
             $objInstance = $objOneResult->getObjObject();
 
-            if($objInstance instanceof class_module_pages_pageelement) {
+            if ($objInstance instanceof class_module_pages_pageelement) {
                 $objInstance = $objInstance->getConcreteAdminInstance();
 
-                if($objInstance != null)
+                if ($objInstance != null) {
                     $objInstance->loadElementData();
-                else
+                }
+                else {
                     continue;
+                }
             }
 
             $arrUpdatedResults = $objInstance->updateSearchResult($objOneResult);
-            if(is_array($arrUpdatedResults)) {
+            if (is_array($arrUpdatedResults)) {
                 $arrReturn = array_merge($arrReturn, $arrUpdatedResults);
             }
-            else if($objOneResult != null && $objOneResult instanceof class_search_result)
+            else if ($objOneResult != null && $objOneResult instanceof class_search_result) {
                 $arrReturn[] = $objOneResult;
+            }
         }
 
         //log the query
@@ -83,14 +90,16 @@ class class_module_search_commons extends class_model implements interface_model
      *
      * @return class_search_result[]
      */
-    public function doAdminSearch(class_module_search_search $objSearch, $intStart = null, $intEnd = null) {
+    public function doAdminSearch(class_module_search_search $objSearch, $intStart = null, $intEnd = null)
+    {
 
         $arrHits = $this->doIndexedSearch($objSearch, $intStart, $intEnd);
 
         //if the object is an instance of interface_search_resultobject, the target-link may be updated
-        foreach($arrHits as $objOneResult) {
-            if($objOneResult->getObjObject() instanceof interface_search_resultobject)
+        foreach ($arrHits as $objOneResult) {
+            if ($objOneResult->getObjObject() instanceof interface_search_resultobject) {
                 $objOneResult->setStrPagelink($objOneResult->getObjObject()->getSearchAdminLinkForObject());
+            }
         }
 
         return $arrHits;
@@ -104,13 +113,14 @@ class class_module_search_commons extends class_model implements interface_model
      *
      * @return class_search_result[]
      */
-    private function mergeDuplicates($arrResults) {
+    private function mergeDuplicates($arrResults)
+    {
         /** @var $arrReturn class_search_result[] */
         $arrReturn = array();
 
-        foreach($arrResults as $objOneResult) {
+        foreach ($arrResults as $objOneResult) {
 
-            if(isset($arrReturn[$objOneResult->getStrSortHash()])) {
+            if (isset($arrReturn[$objOneResult->getStrSortHash()])) {
                 $objResult = $arrReturn[$objOneResult->getStrSortHash()];
                 $objResult->setIntHits($objResult->getIntHits() + 1);
             }
@@ -130,13 +140,15 @@ class class_module_search_commons extends class_model implements interface_model
      *
      * @return class_search_result[]
      */
-    public function doIndexedSearch($objSearch, $intStart = null, $intEnd = null) {
+    public function doIndexedSearch($objSearch, $intStart = null, $intEnd = null)
+    {
         $arrHits = array();
 
         $objParser = new class_module_search_query_parser();
         $objSearchQuery = $objParser->parseText($objSearch->getStrQuery());
-        if($objSearchQuery == null)
+        if ($objSearchQuery == null) {
             return array();
+        }
 
         $objSearchQuery->setMetadataFilter($this->getMetadataFilterFromSearch($objSearch));
 
@@ -146,11 +158,11 @@ class class_module_search_commons extends class_model implements interface_model
         $arrSearchResult = $this->objDB->getPArray($strQuery, $arrParameters, $intStart, $intEnd);
 
         // check view permissions on both, record and matching module
-        foreach($arrSearchResult as $arrOneRow) {
+        foreach ($arrSearchResult as $arrOneRow) {
             $objInstance = class_objectfactory::getInstance()->getObject($arrOneRow["search_ix_system_id"]);
 
             $objModule = $objInstance != null ? class_module_system_module::getModuleByName($objInstance->getArrModule("modul")) : null;
-            if($objInstance != null && $objModule != null && $objInstance->rightView() && $objModule->rightView()) {
+            if ($objInstance != null && $objModule != null && $objInstance->rightView() && $objModule->rightView()) {
                 $objResult = new class_search_result();
                 $objResult->setObjSearch($objSearch);
                 $objResult->setObjObject($objInstance);
@@ -170,12 +182,14 @@ class class_module_search_commons extends class_model implements interface_model
      *
      * @return int
      */
-    public function getIndexedSearchCount($objSearch) {
+    public function getIndexedSearchCount($objSearch)
+    {
         $objParser = new class_module_search_query_parser();
         $objSearchQuery = $objParser->parseText($objSearch->getStrQuery());
 
-        if($objSearchQuery == null)
+        if ($objSearchQuery == null) {
             return 0;
+        }
 
         $objSearchQuery->setMetadataFilter($this->getMetadataFilterFromSearch($objSearch));
 
@@ -191,9 +205,11 @@ class class_module_search_commons extends class_model implements interface_model
      *
      * @return class_module_search_metadata_filter
      */
-    private function getMetadataFilterFromSearch($objSearch) {
+    private function getMetadataFilterFromSearch($objSearch)
+    {
         $objMetadataFilter = new class_module_search_metadata_filter();
         $objMetadataFilter->setFilterModules($objSearch->getFilterModules());
+        $objMetadataFilter->setFilterUser($objSearch->getFilterUser());
         $objMetadataFilter->setFilterChangeStartDate($objSearch->getObjChangeStartdate());
         $objMetadataFilter->setFilterChangeEndDate($objSearch->getObjChangeEnddate());
         $objMetadataFilter->setBitPortalSearch($objSearch->getBitPortalObjectFilter());
