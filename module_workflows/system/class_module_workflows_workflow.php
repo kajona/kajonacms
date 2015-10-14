@@ -316,10 +316,14 @@ class class_module_workflows_workflow extends class_model implements interface_m
      * @param array $arrUserids
      * @return int
      */
-    public static function getPendingWorkflowsForUserCount($arrUserids) {
+    public static function getPendingWorkflowsForUserCount($arrUserids, array $arrClasses = null) {
         $objOrmMapper = new class_orm_objectlist();
         $objOrmMapper->addWhereRestriction(new class_orm_objectlist_property_restriction("intState", class_orm_comparator_enum::Equal(), (int)self::$INT_STATE_SCHEDULED));
         $objOrmMapper->addWhereRestriction(self::getUserWhereStatement($arrUserids));
+
+        if (!empty($arrClasses)) {
+            $objOrmMapper->addWhereRestriction(new class_orm_objectlist_property_in_restriction("strClass", $arrClasses));
+        }
 
         return $objOrmMapper->getObjectCount("class_module_workflows_workflow");
     }
@@ -333,10 +337,15 @@ class class_module_workflows_workflow extends class_model implements interface_m
      * @param bool|int $intEnd
      * @return class_module_workflows_workflow[]
      */
-    public static function getPendingWorkflowsForUser($arrUserids, $intStart = false, $intEnd = false) {
+    public static function getPendingWorkflowsForUser($arrUserids, $intStart = false, $intEnd = false, array $arrClasses = null) {
         $objOrmMapper = new class_orm_objectlist();
         $objOrmMapper->addWhereRestriction(new class_orm_objectlist_property_restriction("intState", class_orm_comparator_enum::Equal(), (int)self::$INT_STATE_SCHEDULED));
         $objOrmMapper->addWhereRestriction(self::getUserWhereStatement($arrUserids));
+
+        if (!empty($arrClasses)) {
+            $objOrmMapper->addWhereRestriction(new class_orm_objectlist_property_in_restriction("strClass", $arrClasses));
+        }
+
         $objOrmMapper->addOrderBy(new class_orm_objectlist_orderby("system_date_start DESC"));
         $objOrmMapper->addOrderBy(new class_orm_objectlist_orderby("system_sort DESC"));
 
