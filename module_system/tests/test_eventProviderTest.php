@@ -10,8 +10,8 @@ class class_test_event_provider extends class_testbase
         $arrPlugins = $objPluginManager->getPlugins();
         $arrNames = array();
 
-        $objStartDate = new class_date();
-        $objEndDate = new class_date(strtotime('-1 month'));
+        $objStartDate = new class_date(strtotime('-1 month'));
+        $objEndDate = new class_date(strtotime('+1 month'));
 
         foreach ($arrPlugins as $objPlugin) {
             // get all categories
