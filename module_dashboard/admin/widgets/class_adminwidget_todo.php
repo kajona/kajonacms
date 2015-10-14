@@ -62,7 +62,6 @@ class class_adminwidget_todo extends class_adminwidget implements interface_admi
         }
 
         $bitConfiguration = $this->hasConfiguration();
-        $bitHasEntries = false;
         $arrValues = array();
 
         foreach ($arrCategories as $strProviderName => $arrTaskCategories) {
@@ -76,8 +75,6 @@ class class_adminwidget_todo extends class_adminwidget implements interface_admi
                 continue;
             }
 
-            $bitHasEntries = true;
-
             foreach ($arrTaskCategories as $strKey => $strCategoryName) {
                 $arrTodos = class_todo_repository::getOpenTodos($strKey);
 
@@ -85,17 +82,19 @@ class class_adminwidget_todo extends class_adminwidget implements interface_admi
                     $strLink = class_link::getLinkAdmin("dashboard", "todo", "listfilter_category=" . $strKey, count($arrTodos));
                     $arrValues[] = array($strProviderName, $strCategoryName, $strLink);
                 } else {
+                    /*
                     $strIcon = class_adminskin_helper::getAdminImage("icon_accept");
                     $arrValues[] = array($strProviderName, $strCategoryName, $strIcon);
+                    */
                 }
             }
         }
 
-        $strReturn .= $this->objToolkit->dataTable(array(), $arrValues);
-
-        if (!$bitHasEntries) {
+        if (empty($arrValues)) {
             $strReturn .= $this->objToolkit->warningBox($this->getLang("no_tasks_available"), "alert-info");
             return $strReturn;
+        } else {
+            $strReturn .= $this->objToolkit->dataTable(array(), $arrValues);
         }
 
         return $strReturn;
