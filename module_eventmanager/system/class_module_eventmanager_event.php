@@ -213,7 +213,7 @@ class class_module_eventmanager_event extends class_model implements interface_m
         $objORM = new class_orm_objectlist();
 
         if($objStartDate != null && $objEndDate != null) {
-            $objORM->addWhereRestriction(new class_orm_objectlist_restriction("AND (system_date_start > ? AND system_date_start <= ?", array($objStartDate->getLongTimestamp(), $objEndDate->getLongTimestamp())));
+            $objORM->addWhereRestriction(new class_orm_objectlist_restriction("AND (system_date_start > ? AND system_date_start <= ?) ", array($objStartDate->getLongTimestamp(), $objEndDate->getLongTimestamp())));
 
         }
         if($intStatusFilter != null) {
