@@ -37,7 +37,10 @@ class class_formentry_date extends class_formentry_base implements interface_for
         else if($this->getStrValue() != "")
             $objDate = new class_date($this->getStrValue());
 
-        $strReturn .= $objToolkit->formDateSingle($this->getStrEntryName(), $this->getStrLabel(), $objDate, "", false, $this->getBitReadonly());
+        if($this->getBitReadonly())
+            $strReturn .= $objToolkit->formInputText($this->getStrEntryName(), $this->getStrLabel(), dateToString($objDate, false), "", "", true);
+        else
+            $strReturn .= $objToolkit->formDateSingle($this->getStrEntryName(), $this->getStrLabel(), $objDate, "", false, $this->getBitReadonly());
 
         return $strReturn;
     }
