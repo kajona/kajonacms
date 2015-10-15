@@ -372,7 +372,7 @@ class class_module_user_user extends class_model implements interface_model, int
      *
      * @param string $strName
      *
-     * @return mixed
+     * @return class_module_user_user[]
      */
     public static function getAllUsersByName($strName)
     {
