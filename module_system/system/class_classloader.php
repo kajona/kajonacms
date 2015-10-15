@@ -82,6 +82,8 @@ class class_classloader
 
                 $this->bitCacheSaveRequired = true;
             }
+
+            $this->registerComposerAutoloader();
         }
 
     }
@@ -272,6 +274,19 @@ class class_classloader
         return $arrFiles;
     }
 
+    /**
+     * Registers all available composer autoloader in each module
+     */
+    private function registerComposerAutoloader()
+    {
+        foreach ($this->arrModules as $strModule => $arrFiles) {
+            $strFile = $strModule . "/vendor/autoload.php";
+            if (is_file($strFile)) {
+                // register composer autoloader
+                include_once $strFile;
+            }
+        }
+    }
 
     /**
      * The class-loader itself. Loads the class, if existing. Otherwise the chain of class-loaders is triggered.

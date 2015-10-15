@@ -169,12 +169,10 @@
 
     <!-- task to fetch all composer dependencies, use the param "targetPath" to specify the base dir to be scanned -->
     <target name="installComposerPackageDependencies">
-        <echo>Searching for composer.js files in ${basedir}${composerTempPath}</echo>
+        <echo>Searching for composer.json files in ${basedir}${composerTempPath}</echo>
         <apply executable="${path.composer}" parallel="false" verbose="true" force="true" failonerror="true" addsourcefile="false">
             <fileset dir="${basedir}${composerTempPath}">
-                <include name="**/composer.json"/>
-                <exclude name="**/_buildfiles/*/*.json"/>
-                <exclude name="**/_vagrant/**/*.json"/>
+                <include name="*/composer.json"/>
             </fileset>
             <arg line="install --prefer-source --no-dev --working-dir "/>
             <targetfile/>

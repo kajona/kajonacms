@@ -7,7 +7,7 @@
 *	$Id$                                   *
 ********************************************************************************************************/
 
-require_once(__DIR__."/tcpdf/vendor/autoload.php");
+//require_once(__DIR__."/tcpdf/vendor/autoload.php");
 
 /**
  * Cache directory for temporary files (full path).
