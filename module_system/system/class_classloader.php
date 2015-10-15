@@ -280,7 +280,7 @@ class class_classloader
     private function registerComposerAutoloader()
     {
         foreach ($this->arrModules as $strModule => $arrFiles) {
-            $strFile = $strModule . "/vendor/autoload.php";
+            $strFile = _realpath_ . "/" . $strModule . "/vendor/autoload.php";
             if (is_file($strFile)) {
                 // register composer autoloader
                 include_once $strFile;
