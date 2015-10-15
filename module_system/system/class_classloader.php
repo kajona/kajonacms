@@ -102,8 +102,7 @@ class class_classloader
     }
 
     /**
-     * Internal helper, triggers the loading/inclusion of all classes.
-     * This is required since otherwise static init blocks would be skipped.
+     * We autoload all classes which are in the event folder of each module. Theses classes can register events etc.
      * Currently enabled for classes matching the pattern "class_module_" only.
      *
      * @throws class_exception
@@ -111,13 +110,14 @@ class class_classloader
     public function includeClasses()
     {
         foreach ($this->arrFiles as $strClass => $strOneFile) {
-            if (uniStrpos($strClass, "class_module_") !== false /*$strClass != "class_testbase"*/) {
+            if (uniStrpos($strClass, "class_module_") !== false && uniStrpos($strOneFile, "/event/") !== false) {
+                // include all classes which are in the event folder
                 $this->loadClass($strClass);
-
-                /*if (ob_get_contents() !== "") {
-                    throw new class_exception("Whitespace outside php-tags in file ".$strOneFile." @ ".$strClass.", aborting system-startup", class_exception::$level_FATALERROR);
-                }*/
             }
+
+            /*if (ob_get_contents() !== "") {
+                throw new class_exception("Whitespace outside php-tags in file ".$strOneFile." @ ".$strClass.", aborting system-startup", class_exception::$level_FATALERROR);
+            }*/
         }
     }
 
@@ -232,6 +232,7 @@ class class_classloader
         $this->addClassFolder("/system/scriptlets/");
         $this->addClassFolder("/system/");
         $this->addClassFolder("/installer/");
+        $this->addClassFolder("/event/");
     }
 
     /**
