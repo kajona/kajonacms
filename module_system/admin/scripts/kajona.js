@@ -855,9 +855,10 @@ KAJONA.admin.forms.loadTab = function(strEl, strHref) {
     if (strHref && $("#" + strEl).length > 0) {
         $("#" + strEl).html("");
         $("#" + strEl).addClass("loadingContainer");
-        $.get(strHref, function(data){
+        $.get(strHref, function(data) {
             $("#" + strEl).removeClass("loadingContainer");
             $("#" + strEl).html(data);
+            KAJONA.admin.tooltip.initTooltip();
         });
     }
 };
