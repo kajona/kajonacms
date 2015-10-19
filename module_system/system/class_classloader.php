@@ -57,8 +57,6 @@ class class_classloader
      */
     private function __construct()
     {
-
-
         $this->strModulesCacheFile = _realpath_."/project/temp/modules.cache";
         $this->strClassesCacheFile = _realpath_."/project/temp/classes.cache";
 
@@ -83,9 +81,9 @@ class class_classloader
                 $this->bitCacheSaveRequired = true;
             }
 
-            $this->registerComposerAutoloader();
         }
 
+        $this->registerComposerAutoloader();
     }
 
     /**
