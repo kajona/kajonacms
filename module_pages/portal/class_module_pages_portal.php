@@ -85,6 +85,11 @@ class class_module_pages_portal extends class_portal_controller implements inter
 
         }
 
+        //load the merged placeholder-list
+        $objPlaceholders = $this->objTemplate->parsePageTemplate("/module_pages/".$objPageData->getStrTemplate(), class_template::INT_ELEMENT_MODE_REGULAR);
+        $objPlaceholdersMaster = $this->objTemplate->parsePageTemplate("/module_pages/".$objPageData->getStrTemplate(), class_template::INT_ELEMENT_MODE_MASTER);
+
+
         //Load the template from the filesystem to get the placeholders
         $strTemplateID = $this->objTemplate->readTemplate("/module_pages/".$objPageData->getStrTemplate(), "", false, true);
         //bit include the masters-elements!!
