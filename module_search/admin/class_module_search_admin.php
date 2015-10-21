@@ -246,7 +246,7 @@ class class_module_search_admin extends class_admin_simple implements interface_
 
         $strReturn .= $this->objToolkit->listHeader();
         foreach($arrMappedObjects as $objOneObject) {
-            $strReturn .= $this->objToolkit->simpleAdminList($objOneObject, $this->getActionIcons($objOneObject), 0);
+            $strReturn .= $this->objToolkit->simpleAdminList($objOneObject, $this->getActionIcons($objOneObject, "searchResultList"), 0);
         }
         $strReturn .= $this->objToolkit->listFooter();
 

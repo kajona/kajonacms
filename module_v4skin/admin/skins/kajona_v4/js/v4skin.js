@@ -128,8 +128,7 @@ KAJONA.v4skin = {
 
 
     defaultAutoComplete : function() {
-
-        this.minLength = 2;
+        this.minLength = 0;
 
         this.delay = 500;
 
@@ -140,12 +139,17 @@ KAJONA.v4skin = {
 
         this.search = function(event, ui) {
             var $objCur = $(this);
-            $objCur.css('background-image', 'url('+KAJONA_WEBPATH+'/core/module_v4skin/admin/skins/kajona_v4/img/loading-small.gif)');
             if(!$objCur.is('[readonly]')) {
                 if($('#'+$objCur.attr('id')+'_id')) {
                     $( '#'+$objCur.attr('id')+'_id' ).val( "" );
                 }
             }
+
+            if(event.target.value.length < 2) {
+                event.stopPropagation();
+                return false;
+            }
+            $objCur.css('background-image', 'url('+KAJONA_WEBPATH+'/core/module_v4skin/admin/skins/kajona_v4/img/loading-small.gif)');
         };
 
         this.response = function(event, ui) {
