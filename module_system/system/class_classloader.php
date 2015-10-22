@@ -290,6 +290,12 @@ class class_classloader
      */
     public function loadClass($strClassName)
     {
+        if (isset($this->arrFiles[$strClassName])) {
+            $this->intNumberOfClassesLoaded++;
+            include_once $this->arrFiles[$strClassName];
+            return true;
+        }
+
         // check whether we can autoload a class which has a namespace
         if (strpos($strClassName, "\\") !== false) {
             $arrParts = explode("\\", $strClassName);
@@ -298,26 +304,22 @@ class class_classloader
             $strRest = implode(DIRECTORY_SEPARATOR, $arrParts);
 
             if (!empty($strModule) && !empty($strFolder) && !empty($strRest)) {
-                $strClassName = "module_" . $strModule . DIRECTORY_SEPARATOR . $strFolder . DIRECTORY_SEPARATOR . $strRest;
-
-                foreach ($this->arrCoreDirs as $strDir) {
+                $arrDirs = array_merge(array("project"), $this->arrCoreDirs);
+                foreach ($arrDirs as $strDir) {
                     $strFile = $strDir . DIRECTORY_SEPARATOR . $strClassName . ".php";
                     if (is_file($strFile)) {
+                        $this->arrFiles[$strClassName] = $strFile;
+                        $this->bitCacheSaveRequired = true;
+
                         include_once $strFile;
+
                         return true;
                     }
                 }
             }
         }
 
-        if (isset($this->arrFiles[$strClassName])) {
-            $this->intNumberOfClassesLoaded++;
-            include_once $this->arrFiles[$strClassName];
-            return true;
-        }
-
         return false;
-
     }
 
     /**
