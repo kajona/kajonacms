@@ -189,6 +189,69 @@ KAJONA.util.mover = (function() {
 	}
 }());
 
+/**
+ * Converts a string into an integer representation of the string regarding thousands and decimal separator.
+ * e.g. "1.000.000" => "1000000"
+ * e.g. "7.000" => "7000"
+ *
+ * @param objValue
+ * @param strStyleThousand
+ * @param strStyleDecimal
+ * @returns {string}
+ */
+KAJONA.util.convertValueToInt = function(objValue, strStyleThousand, strStyleDecimal) {
+    var strValue = objValue+"";
+
+    var strRegExpThousand = new RegExp("\\"+strStyleThousand, 'g')
+    strValue = strValue.replace(strRegExpThousand, "");//remove first thousand separator
+
+    return parseInt(strValue);
+};
+
+/**
+ * Converts a string into a float representation of the string regarding thousands and decimal separator.
+ * e.g. "1.000.000,23" => "1000000.23"
+ *
+ * @param objValue
+ * @param strStyleThousand
+ * @param strStyleDecimal
+ * @returns {string}
+ */
+KAJONA.util.convertValueToFloat = function(objValue, strStyleThousand, strStyleDecimal) {
+    var strValue = objValue+"";
+
+    var strRegExpThousand = new RegExp("\\"+strStyleThousand, 'g')
+    var strRegExpDecimal = new RegExp("\\"+strStyleDecimal, 'g')
+    var strRegExpComma = new RegExp("\\,", 'g')
+
+    strValue = strValue.replace(strRegExpThousand, "");//remove first thousand separator
+    strValue = strValue.replace(strRegExpComma, ".");//replace decimal with decimal point for db
+    strValue = strValue.replace(strRegExpDecimal, ".");//replace decimal with decimal point for db
+
+    return parseFloat(strValue);
+};
+
+/**
+ * Formats a number into a formatted string
+ * @see http://stackoverflow.com/questions/149055/how-can-i-format-numbers-as-money-in-javascript
+ *
+ * .format(12345678.9, 2, 3, '.', ',');  // "12.345.678,90"
+ * .format(123456.789, 4, 4, ' ', ':');  // "12 3456:7890"
+ * .format(12345678.9, 0, 3, '-');       // "12-345-679"
+ *
+ * @param floatValue mixed: number to be formatted
+ * @param intDecimalLength integer: length of decimal
+ * @param intLengthWholePart integer: length of whole part
+ * @param strDelimiterSections mixed: sections delimiter
+ * @param strDelimiterDecimal mixed: decimal delimiter
+ */
+KAJONA.util.formatNumber = function(floatValue, intDecimalLength, intLengthWholePart, strDelimiterSections, strDelimiterDecimal) {
+    var re = '\\d(?=(\\d{' + (intLengthWholePart || 3) + '})+' + (intDecimalLength > 0 ? '\\D' : '$') + ')',
+        num = floatValue.toFixed(Math.max(0, ~~intDecimalLength));
+
+    return (strDelimiterDecimal ? num.replace('.', strDelimiterDecimal) : num).replace(new RegExp(re, 'g'), '$&' + (strDelimiterSections || ','));
+};
+
 /*
  * -------------------------------------------------------------------------
  * Admin-specific functions
