@@ -295,7 +295,6 @@
                 var label = p._labels[i];
                 
                 if (label == null || (p.hideZeros && parseFloat(label) == 0)) {//22.10.2015 -> changed parseInt(label, 10) to parseFloat(label)
-                    debugger;
                     continue;
                 }
                 
