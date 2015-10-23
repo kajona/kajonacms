@@ -328,12 +328,15 @@ KAJONA.admin.jqplotHelper = {
 
     customJqPlotNumberFormatter: function (format, value) {
         if(typeof value == "number") {
+            var intNumberDecimals = 0;
+            var intWholePart = 3;
             if(value % 1 !== 0) {
-                value = value.toFixed(2);
+                intNumberDecimals = 3;
             }
+            value = KAJONA.util.formatNumber(value, intNumberDecimals, intWholePart, $.jqplot.sprintf.thousandsSeparator, $.jqplot.sprintf.decimalMark);
         }
-        var formattedValue =  $.jqplot.sprintf(format, value);
-        return formattedValue;
+
+        return  $.jqplot.sprintf(format, value);
     },
 
     dataPointOnClickURLHandler: function(ev, seriesIndex, pointIndex, data, objDataPoint) {

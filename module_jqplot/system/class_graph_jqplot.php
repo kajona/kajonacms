@@ -31,7 +31,7 @@ class class_graph_jqplot implements interface_graph {
 
     private $bitIsResizeable = true;
 
-    const STRING_FORMAT = "%'g";
+    const STRING_FORMAT = "%s";
 
 
 

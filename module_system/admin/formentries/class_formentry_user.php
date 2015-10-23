@@ -128,6 +128,7 @@ class class_formentry_user extends class_formentry_base implements interface_for
     /**
      * @param null $arrValidateId
      *
+     * @deprecated
      * @return $this
      */
     public function setArrValidateId($arrValidateId) {
