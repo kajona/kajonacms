@@ -63,6 +63,25 @@ class class_template_blocks_parser
         return $arrBlocks;
     }
 
+    /**
+     * @param $strTemplate
+     * @param $arrBlocks strBlockName -> strContent
+     * @param string $strBlocksDefinition
+     */
+    public function fillBlocks($strTemplate, $arrBlocks, $strBlocksDefinition = class_template_kajona_sections::BLOCKS) {
+        $arrBlocksOnTemplate = $this->readBlocks($strTemplate, $strBlocksDefinition);
+
+        foreach($arrBlocks as $strBlockName => $strContent) {
+            if(isset($arrBlocksOnTemplate[$strBlockName])) {
+                $objCurBlock = $arrBlocksOnTemplate[$strBlockName];
+                $strTemplate = uniStrReplace($objCurBlock->getStrFullSection(), $strContent, $strTemplate);
+            }
+
+        }
+
+        return $strTemplate;
+    }
+
 
 }
 

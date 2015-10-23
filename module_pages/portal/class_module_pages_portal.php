@@ -86,14 +86,15 @@ class class_module_pages_portal extends class_portal_controller implements inter
         }
 
         //load the merged placeholder-list
-        $objPlaceholders = $this->objTemplate->parsePageTemplate("/module_pages/".$objPageData->getStrTemplate(), class_template::INT_ELEMENT_MODE_REGULAR);
-        $objPlaceholdersMaster = $this->objTemplate->parsePageTemplate("/module_pages/".$objPageData->getStrTemplate(), class_template::INT_ELEMENT_MODE_MASTER);
+        $objPlaceholders = $this->objTemplate->parsePageTemplate("/module_pages/".$objPageData->getStrTemplate(), class_template::INT_ELEMENT_MODE_MASTER);
+
+
 
 
         //Load the template from the filesystem to get the placeholders
         $strTemplateID = $this->objTemplate->readTemplate("/module_pages/".$objPageData->getStrTemplate(), "", false, true);
         //bit include the masters-elements!!
-        $arrRawPlaceholders = array_merge($this->objTemplate->getElements($strTemplateID, 0), $this->objTemplate->getElements($strTemplateID, 1));
+        $arrRawPlaceholders = $objPlaceholders->getArrPlaceholder();
 
         $arrPlaceholders = array();
         //and retransform
@@ -122,14 +123,20 @@ class class_module_pages_portal extends class_portal_controller implements inter
         //Get back the filled element
         //Build the array to fill the template
         $arrTemplate = array();
+        $arrBlocks = array();
 
         /** @var class_module_pages_pageelement $objOneElementOnPage */
         foreach($arrElementsOnPage as $objOneElementOnPage) {
+
+
             //element really available on the template?
-            if(!in_array($objOneElementOnPage->getStrPlaceholder(), $arrPlaceholders)) {
+            if($objOneElementOnPage->getStrElement() != "block" && $objOneElementOnPage->getStrElement() != "blocks" && !in_array($objOneElementOnPage->getStrPlaceholder(), $arrPlaceholders)) {
                 //next one, plz
                 continue;
             }
+//            elseif($objOneElementOnPage->getStrName() == "block" || $objOneElementOnPage->getStrName() == "blocks") {
+//
+//            }
             else {
                 //create a protocol of placeholders filled
                 //remove from pe-additional-array, pe code is injected by element directly
@@ -183,7 +190,22 @@ class class_module_pages_portal extends class_portal_controller implements inter
                 $strElementOutput = class_element_portal::addPortalEditorSetActiveCode($strElementOutput, $objElement->getSystemid(), array());
             }
 
-            $arrTemplate[$objOneElementOnPage->getStrPlaceholder()] .= $strElementOutput;
+            if($objOneElementOnPage->getStrElement() == "blocks") {
+                //try to fetch the whole block as a placeholder
+                foreach($objPlaceholders->getArrBlocks() as $objOneBlock) {
+                    if($objOneBlock->getStrName() == $objOneElementOnPage->getStrName()) {
+                        if(!isset($arrBlocks[$objOneBlock->getStrFullSection()])) {
+                            $arrBlocks[$objOneBlock->getStrName()] = "";
+                        }
+                        $arrBlocks[$objOneBlock->getStrName()] .= $strElementOutput;
+                    }
+                }
+            }
+            else {
+                $arrTemplate[$objOneElementOnPage->getStrPlaceholder()] .= $strElementOutput;
+
+            }
+
         }
 
         //pe-code to add new elements on unfilled placeholders --> only if pe is visible?
@@ -296,8 +318,10 @@ class class_module_pages_portal extends class_portal_controller implements inter
 
         $arrTemplate = array_merge($arrTemplate, $arrGlobal);
         //fill the template. the template was read before
-        $strPageContent = $this->fillTemplate($arrTemplate, $strTemplateID);
+        $strPageContent = $this->objTemplate->fillTemplateFile($arrTemplate, "/module_pages/".$objPageData->getStrTemplate(), "", true);
+        $strPageContent = $this->objTemplate->fillBlocksToTemplateFile($arrBlocks, $strPageContent);
 
+        //add portaleditor main code
         $strPageContent = $this->renderPortalEditorCode($objPageData, $bitEditPermissionOnMasterPage, $strPageContent);
 
         //insert the copyright headers. Due to our licence, you are NOT allowed to remove those lines.
@@ -312,7 +336,7 @@ class class_module_pages_portal extends class_portal_controller implements inter
             $intBodyPos += 0;
             $strPageContent = uniSubstr($strPageContent, 0, $intBodyPos).$strHeader.uniSubstr($strPageContent, $intBodyPos);
         }
-        else if($intPosXml !== false) {
+        elseif($intPosXml !== false) {
             $intBodyPos = uniStripos($strPageContent, "?>");
             $intBodyPos += 2;
             $strPageContent = uniSubstr($strPageContent, 0, $intBodyPos).$strHeader.uniSubstr($strPageContent, $intBodyPos);

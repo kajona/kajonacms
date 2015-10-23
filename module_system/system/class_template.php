@@ -201,14 +201,14 @@ class class_template
      * As an optional parameter an instance of class_lang_wrapper can be passed
      * to fill placeholders matching the schema %%lang_...%% automatically.
      *
-     * @param $arrContent
+     * @param $arrPlaceholderContent
      * @param $strTemplateFile
      * @param string $strSection
      * @param bool $bitRemovePlaceholder
      *
      * @return string The filled template
      */
-    public function fillTemplateFile($arrContent, $strTemplateFile, $strSection = "", $bitRemovePlaceholder = true)
+    public function fillTemplateFile($arrPlaceholderContent, $strTemplateFile, $strSection = "", $bitRemovePlaceholder = true)
     {
 
         $strTemplate = $this->objFileParser->readTemplate($strTemplateFile);
@@ -217,8 +217,12 @@ class class_template
             $strTemplate = $this->objSectionParser->readSection($strTemplate, $strSection);
         }
 
-        foreach ($arrContent as $strPlaceholder => $strContent) {
+        foreach ($arrPlaceholderContent as $strPlaceholder => $strContent) {
             $strTemplate = str_replace("%%".$strPlaceholder."%%", $strContent."%%".$strPlaceholder."%%", $strTemplate);
+        }
+
+        if(!empty($arrBlocks)) {
+            $strTemplate = $this->objBlocksParser->fillBlocks($strTemplate, $arrBlocks);
         }
 
         if ($bitRemovePlaceholder) {
@@ -227,6 +231,11 @@ class class_template
         return $strTemplate;
     }
 
+
+    public function fillBlocksToTemplateFile($arrBlocks, $strTemplateFile, $strBlocksDefinition = class_template_kajona_sections::BLOCKS)
+    {
+            return $this->objBlocksParser->fillBlocks($strTemplateFile, $arrBlocks, $strBlocksDefinition);
+    }
 
     /**
      * Fills the current temp-template with the passed values.
