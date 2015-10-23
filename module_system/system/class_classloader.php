@@ -299,20 +299,21 @@ class class_classloader
         // check whether we can autoload a class which has a namespace
         if (strpos($strClassName, "\\") !== false) {
             $arrParts = explode("\\", $strClassName);
-            $strModule = strtolower(array_shift($arrParts));
+            $strVendor = array_shift($arrParts); // remove vendor part
+            $strModule = "module_" . strtolower(array_shift($arrParts));
             $strFolder = strtolower(array_shift($arrParts));
             $strRest = implode(DIRECTORY_SEPARATOR, $arrParts);
 
             if (!empty($strModule) && !empty($strFolder) && !empty($strRest)) {
                 $arrDirs = array_merge(array("project"), $this->arrCoreDirs);
                 foreach ($arrDirs as $strDir) {
-                    $strFile = $strDir . DIRECTORY_SEPARATOR . $strClassName . ".php";
+                    $strFile = implode(DIRECTORY_SEPARATOR, array($strDir, $strModule, $strFolder, $strRest . ".php"));
                     if (is_file($strFile)) {
                         $this->arrFiles[$strClassName] = $strFile;
                         $this->bitCacheSaveRequired = true;
 
+                        $this->intNumberOfClassesLoaded++;
                         include_once $strFile;
-
                         return true;
                     }
                 }
