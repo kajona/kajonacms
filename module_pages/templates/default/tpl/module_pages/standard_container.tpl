@@ -69,8 +69,8 @@
                     <kajona-block kajona-name="Row light" kajona-name-de="Zeile hell">
                         <div class="row-light">
                             <h1>%%headline_plaintext%%</h1>
-                            %%content_richtext%%
-                            %%date_date%%
+                            <div>%%content_richtext%%</div>
+                            <div>%%date_date%%</div>
                         </div>
                     </kajona-block>
 

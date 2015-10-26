@@ -221,10 +221,6 @@ class class_template
             $strTemplate = str_replace("%%".$strPlaceholder."%%", $strContent."%%".$strPlaceholder."%%", $strTemplate);
         }
 
-        if(!empty($arrBlocks)) {
-            $strTemplate = $this->objBlocksParser->fillBlocks($strTemplate, $arrBlocks);
-        }
-
         if ($bitRemovePlaceholder) {
             $strTemplate = $this->objPlaceholderParser->deletePlaceholder($strTemplate);
         }
@@ -234,7 +230,7 @@ class class_template
 
     public function fillBlocksToTemplateFile($arrBlocks, $strTemplateFile, $strBlocksDefinition = class_template_kajona_sections::BLOCKS)
     {
-            return $this->objBlocksParser->fillBlocks($strTemplateFile, $arrBlocks, $strBlocksDefinition);
+        return $this->objBlocksParser->fillBlocks($strTemplateFile, $arrBlocks, $strBlocksDefinition);
     }
 
     /**
