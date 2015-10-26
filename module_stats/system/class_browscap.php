@@ -22,7 +22,7 @@ class class_browscap  {
     private $objBrowscap;
 
     public function __construct() {
-        //require_once __DIR__."/phpbrowscap/vendor/autoload.php";
+        require_once __DIR__."/phpbrowscap/vendor/autoload.php";
 
         $this->objBrowscap = new \phpbrowscap\Browscap(_realpath_._projectpath_."/temp");
         $this->objBrowscap->doAutoUpdate = false;

@@ -36,7 +36,7 @@ class class_qrcode {
             return _images_cachepath_."/".$strFilename;
 
 
-        //require_once __DIR__."/phpqrcode/vendor/autoload.php";
+        require_once __DIR__."/phpqrcode/vendor/autoload.php";
 
         \PHPQRCode\QRcode::png($strContent, _realpath_._images_cachepath_."/".$strFilename, $this->strCorrectionLevel, $this->intSize, $this->intPadding);
 
