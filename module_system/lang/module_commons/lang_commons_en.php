@@ -100,3 +100,11 @@ $lang["commons_object_validator_number_greater_than"] = "Number must be > '{0}'.
 $lang["commons_object_validator_number_greaterequals_than"] = "Number must be >= '{0}'.";
 $lang["commons_object_validator_number_less_than"] = "Number must be < '{0}'.";
 $lang["commons_object_validator_number_lessequals_than"] = "Number must be <= '{0}'.";
+$lang["commons_object_validator_number_field_greater_than"] = "'{0}' must be > '{1}'.";
+$lang["commons_object_validator_number_field_greaterequals_than"] = "'{0}' must be >= '{1}'.";
+$lang["commons_object_validator_number_field_less_than"] = "'{0}' must be < '{1}'.";
+$lang["commons_object_validator_number_field_lessequals_than"] = "'{0}' must be <= '{1}'.";
+$lang["commons_object_validator_number_fieldcompare_greater_than"] = "'{0}' must be > '{1}'";
+$lang["commons_object_validator_number_fieldcompare_greaterequals_than"] = "'{0}' must be >= '{1}'.";
+$lang["commons_object_validator_number_fieldcompare_less_than"] = "'{0}' must be < '{1}'";
+$lang["commons_object_validator_number_fieldcompare_lessequals_than"] = "'{0}' must be <= '{1}'.";
