@@ -657,6 +657,28 @@ class class_admin_formgenerator
         }
     }
 
+
+    /**
+     * Orders the fields by the given array.
+     * The array must contain as values the keys of the form fields
+     *
+     * @param $arrFieldOrder
+     * @return int
+     * @throws class_exception
+     */
+    public function orderFields($arrFieldOrder)
+    {
+        $intPosition = 1;
+
+        foreach($arrFieldOrder as $strFieldName) {
+            if($this->getField($strFieldName) != null) {
+                $this->setFieldToPosition($strFieldName, $intPosition);
+                $intPosition++;
+            }
+        }
+        return $intPosition;
+    }
+
     /**
      * Removes a single entry form the fields, identified by its form-entry-name.
      *
