@@ -31,9 +31,9 @@ class class_module_search_query_parser {
 
             $objParser = new class_module_search_standard_analyzer();
             $objParser->analyze($arrHits[0]['term']);
-            $arrResult = $objParser->getResults();
+            $arrResult = array_keys($objParser->getResults());
             if(count($arrResult) == 1) {
-                $arrHits[0]['term'] = array_keys($arrResult[0]);
+                $arrHits[0]['term'] = $arrResult[0];
             }
 
             $objSearchQuery = new class_module_search_term_query(new class_module_search_term(str_replace(":", "", $arrHits[0]['term']), substr($arrHits[0]['field'], 0, -1)));
