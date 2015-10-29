@@ -2,5 +2,5 @@
 
 <!-- available placeholders: objDate -->
 <date>
-    <date>%%objDate%%</date>
+    %%objDate%%
 </date>

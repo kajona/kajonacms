@@ -152,34 +152,46 @@ class class_module_pages_content_admin extends class_admin_simple implements int
             $strCurBlocks = "";
             foreach ($objOneBlocks->getArrBlocks() as $objOneBlock) {
 
+                $strNewBlocksSystemid = $objOneBlocks->getStrName();
 
                 //process existing blocks
-                /** @var class_module_pages_pageelement $objOneBlocskOnPage */
+                /** @var class_module_pages_pageelement $objOneBlocksOnPage */
                 foreach($arrBlocksOnPage as $objOneBlocksOnPage) {
-                    $strExistingBlock = "";
+
+                    $strNewBlocksSystemid = $objOneBlocksOnPage->getSystemid();
+
                     if($objOneBlocksOnPage->getStrName() == $objOneBlocks->getStrName()) {
                         $arrSubBlock = class_module_pages_pageelement::getElementsOnPage($objOneBlocksOnPage->getSystemid(), false, $this->getLanguageToWorkOn());
 
                         foreach($arrSubBlock as $objOneBlockOnPage) {
 
+                            $strExistingBlock = "";
+
                             if($objOneBlockOnPage->getStrName() == $objOneBlock->getStrName()) {
                                 $arrElementsInBlock = class_module_pages_pageelement::getElementsOnPage($objOneBlockOnPage->getSystemid(), false, $this->getLanguageToWorkOn());
                                 $strExistingBlock .= $this->renderElementPlaceholderList($objOneBlock->getArrPlaceholder(), $arrElementsInBlock, true, $objOneBlocksOnPage->getSystemid(), $objOneBlockOnPage->getSystemid());
+                            }
+
+                            if($strExistingBlock != "") {
+                                $strCurBlocks .= $this->objToolkit->getFieldset(
+                                    $objOneBlock->getStrName(),
+                                    $strExistingBlock
+                                );
                             }
                         }
 
                     }
 
-                    if($strExistingBlock != "") {
-                        $strCurBlocks .= $this->objToolkit->getFieldset(
-                            $objOneBlock->getStrName(),
-                            $strExistingBlock
-                        );
-                    }
+//                    if($strExistingBlock != "") {
+//                        $strCurBlocks .= $this->objToolkit->getFieldset(
+//                            $objOneBlock->getStrName(),
+//                            $strExistingBlock
+//                        );
+//                    }
                 }
 
 
-                $strNewBlock = $this->renderElementPlaceholderList($objOneBlock->getArrPlaceholder(), array(), true, $objOneBlocks->getStrName(), $objOneBlock->getStrName());
+                $strNewBlock = $this->renderElementPlaceholderList($objOneBlock->getArrPlaceholder(), array(), true, $strNewBlocksSystemid, $objOneBlock->getStrName());
 
                 $strCurBlocks .= $this->objToolkit->getFieldset(
                     $objOneBlock->getStrName(),
@@ -187,7 +199,7 @@ class class_module_pages_content_admin extends class_admin_simple implements int
                 );
             }
 
-            $strBlocks .= $this->objToolkit->getFieldset($objOneBlocks->getStrName(), $strCurBlocks);
+            $strBlocks .= "<br/ ><hr /><br />".$this->objToolkit->getFieldset($objOneBlocks->getStrName(), $strCurBlocks);
         }
 
 
@@ -478,6 +490,7 @@ class class_module_pages_content_admin extends class_admin_simple implements int
 
         if($strBlocks != "" && $strBlock != "") {
 
+
             if(validateSystemid($strBlocks) && validateSystemid($strBlock)) {
                 //fetch the matching elements
                 $objBlocks = new class_module_pages_pageelement($strBlocks);
@@ -488,14 +501,21 @@ class class_module_pages_content_admin extends class_admin_simple implements int
                 }
             }
 
+            $objBlocksElement = null;
+            if(validateSystemid($strBlocks) && !validateSystemid($strBlock)) {
+                $objBlocksElement = new class_module_pages_pageelement($strBlocks);
+            }
 
-            $objBlocksElement = new class_module_pages_pageelement();
-            $objBlocksElement->setStrName($strBlocks);
-            $objBlocksElement->setStrPlaceholder("blocks");
-            $objBlocksElement->setStrElement("blocks");
-            $objBlocksElement->setStrLanguage($this->getParam("page_element_ph_language"));
-            if (!$objBlocksElement->updateObjectToDb($strNewPrevId)) {
-                throw new class_exception("Error saving new element-object to db", class_exception::$level_ERROR);
+
+            if($objBlocksElement == null) {
+                $objBlocksElement = new class_module_pages_pageelement();
+                $objBlocksElement->setStrName($strBlocks);
+                $objBlocksElement->setStrPlaceholder("blocks");
+                $objBlocksElement->setStrElement("blocks");
+                $objBlocksElement->setStrLanguage($this->getParam("page_element_ph_language"));
+                if (!$objBlocksElement->updateObjectToDb($strNewPrevId)) {
+                    throw new class_exception("Error saving new element-object to db", class_exception::$level_ERROR);
+                }
             }
 
             $objBlockElement = new class_module_pages_pageelement();

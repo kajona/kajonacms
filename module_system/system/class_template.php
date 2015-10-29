@@ -233,6 +233,16 @@ class class_template
         return $this->objBlocksParser->fillBlocks($strTemplateFile, $arrBlocks, $strBlocksDefinition);
     }
 
+
+    public function deleteBlocksFromTemplate($strTemplate, $strBlockDefinition = class_template_kajona_sections::BLOCKS)
+    {
+        foreach($this->objBlocksParser->readBlocks($strTemplate, $strBlockDefinition) as $objOneContainer) {
+            $strTemplate = uniStrReplace($objOneContainer->getStrFullSection(), "", $strTemplate);
+        }
+        return $strTemplate;
+    }
+
+
     /**
      * Fills the current temp-template with the passed values.
      * <b>Make sure to have the wanted template loaded before by using setTemplate()</b>

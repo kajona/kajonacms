@@ -38,18 +38,15 @@ class class_element_blocks_portal extends class_element_portal implements interf
             if($objOneBlock->getStrName() == $this->arrElementData["page_element_ph_name"]) {
 
                 foreach($arrElementsOnBlocks as $objOneElement) {
-                    /** @var  class_element_portal $objElement  */
+                    /** @var  class_element_block_portal $objElement  */
                     $objElement = $objOneElement->getConcretePortalInstance();
-
                     $strReturn .= $objElement->getElementOutput();
                 }
 
             }
-            break;
         }
 
-
-        //TODO: blocks template replacement
+//        $this->objTemplate->deleteBlocksFromTemplate($strReturn, class_template_kajona_sections::BLOCKS);
         return $strReturn;
     }
 

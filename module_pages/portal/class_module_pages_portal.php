@@ -194,7 +194,7 @@ class class_module_pages_portal extends class_portal_controller implements inter
                 //try to fetch the whole block as a placeholder
                 foreach($objPlaceholders->getArrBlocks() as $objOneBlock) {
                     if($objOneBlock->getStrName() == $objOneElementOnPage->getStrName()) {
-                        if(!isset($arrBlocks[$objOneBlock->getStrFullSection()])) {
+                        if(!isset($arrBlocks[$objOneBlock->getStrName()])) {
                             $arrBlocks[$objOneBlock->getStrName()] = "";
                         }
                         $arrBlocks[$objOneBlock->getStrName()] .= $strElementOutput;

@@ -37,20 +37,18 @@ class class_element_block_portal extends class_element_portal implements interfa
 
         $objPlaceholders = $this->objTemplate->parsePageTemplate("/module_pages/".$objPageData->getStrTemplate(), class_template::INT_ELEMENT_MODE_REGULAR);
 
+
         foreach($objPlaceholders->getArrBlocks() as $objOneBlocks) {
 
             if($objOneBlocks->getStrName() == $objBlocksElement->getStrName()) {
 
                 foreach ($objOneBlocks->getArrBlocks() as $objOneBlock) {
 
-
                     if ($objOneBlock->getStrName() == $this->arrElementData["page_element_ph_name"]) {
 
                         $arrTemplate = array();
 
                         foreach ($arrElementsOnBlock as $objOneElement) {
-
-
 
                             /** @var  class_element_portal $objElement */
                             $objElement = $objOneElement->getConcretePortalInstance();
@@ -59,16 +57,16 @@ class class_element_block_portal extends class_element_portal implements interfa
                         }
 
                         $this->objTemplate->setTemplate($objOneBlock->getStrContent());
-                        $strReturn .= $this->objTemplate->fillCurrentTemplate($arrTemplate, false);
+                        $strReturn .= $this->objTemplate->fillCurrentTemplate($arrTemplate, true);
+                        //$strReturn .= $this->objTemplate->fillBlocksToTemplateFile(array($objOneBlock->getStrName() => $this->objTemplate->fillCurrentTemplate($arrTemplate, false)), $objOneBlocks->getStrContent(), class_template_kajona_sections::BLOCK);
                     }
-
 
                 }
             }
+
         }
 
-        //TODO: block template replacement
-
+//        $strReturn = $this->objTemplate->deleteBlocksFromTemplate($strReturn, class_template_kajona_sections::BLOCK);
         return $strReturn;
     }
 
