@@ -939,7 +939,7 @@ A precent-beam to illustrate proportions
 
 A fieldset to structure logical sections
 <misc_fieldset>
-<fieldset class="%%class%%"><legend>%%title%%</legend><div>%%content%%</div></fieldset>
+<fieldset class="%%class%%" data-systemid="%%systemid%%"><legend>%%title%%</legend><div>%%content%%</div></fieldset>
 </misc_fieldset>
 
 <graph_container>
