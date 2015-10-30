@@ -54,7 +54,7 @@ if(!@include_once _corepath_."/module_system/system/class_logger.php")
 
 //see if there's a custom bootstrap.php to include
 if(file_exists(_realpath_."/project/bootstrap.php"))
-    include_once _realpath_."/project/bootstrap.php";
+    @include_once _realpath_."/project/bootstrap.php";
 
 //---The Path on web-------------------------------------------------------------------------------------
 
@@ -91,7 +91,7 @@ require_once _corepath_."/module_system/system/class_classloader.php";
 spl_autoload_register(array(class_classloader::getInstance(), "loadClass"));
 
 //The Carrier-Class
-if(!@include_once _corepath_."/module_system/system/class_carrier.php")
+if(!include_once _corepath_."/module_system/system/class_carrier.php")
     rawIncludeError("carrier-class");
 
 
