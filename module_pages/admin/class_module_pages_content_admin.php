@@ -152,7 +152,8 @@ class class_module_pages_content_admin extends class_admin_simple implements int
                                 $strCurBlocks .= $this->objToolkit->getFieldset(
                                     $objOneBlock->getStrName(),
                                     $strExistingBlock,
-                                    "fieldset block"
+                                    "fieldset block",
+                                    $objOneBlockOnPage->getSystemid()
                                 );
                             }
                         }
@@ -179,6 +180,16 @@ class class_module_pages_content_admin extends class_admin_simple implements int
         $arrTabs["elements"] = $this->renderElementPlaceholderList($objParsedBlocks->getArrPlaceholder(), $arrPageelementsOnPage);
 
         $strReturn .= $this->objToolkit->getTabbedContent($arrTabs);
+        $strCore = class_resourceloader::getInstance()->getCorePathForModule("module_pages");
+
+        $strReturn .= <<<HTML
+            <script type="text/javascript">
+                KAJONA.admin.loader.loadFile('{$strCore}/module_pages/admin/scripts/pages.js', function() {
+                    KAJONA.admin.pages.initBlockSort();
+                });
+
+            </script>
+HTML;
 
         return $strReturn;
 
