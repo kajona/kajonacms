@@ -23,9 +23,6 @@ function rawIncludeError($strFileMissed) {
     die($strErrorMessage);
 }
 
-
-echo "temp1 ";
-
 //---The Path on the filesystem--------------------------------------------------------------------------
 //Determine the current path on the filesystem. Use the dir-name of the current file minus core/module_system
 define("_realpath_", str_replace(" ", "\040", substr(__DIR__, 0, -18)));
@@ -38,30 +35,26 @@ if(!defined("_xmlLoader_"))
 //---Include Section 1-----------------------------------------------------------------------------------
 
 //Setting up the default timezone, determined by the server / environment. may be redefined by _system_timezone_
-date_default_timezone_set(date_default_timezone_get());
+@date_default_timezone_set(date_default_timezone_get());
 
 //Functions to have fun & check for mb-string
-if(!include_once _corepath_."/module_system/system/functions.php")
+if(!@include_once _corepath_."/module_system/system/functions.php")
     rawIncludeError(_corepath_."/module_system/system/functions.php");
 
 //Exception-Handler
-if(!include_once _corepath_."/module_system/system/class_exception.php")
+if(!@include_once _corepath_."/module_system/system/class_exception.php")
     rawIncludeError("global exception handler");
 //register global exception handler for exceptions thrown but not catched (bad style ;) )
-set_exception_handler(array("class_exception", "globalExceptionHandler"));
+@set_exception_handler(array("class_exception", "globalExceptionHandler"));
 
 //Include the logging-engine
-if(!include_once _corepath_."/module_system/system/class_logger.php")
+if(!@include_once _corepath_."/module_system/system/class_logger.php")
     rawIncludeError("logging engine");
 
-echo "temp2 ";
 
 //see if there's a custom bootstrap.php to include
 if(file_exists(_realpath_."/project/bootstrap.php"))
     include_once _realpath_."/project/bootstrap.php";
-
-
-echo "temp3 ";
 
 //---The Path on web-------------------------------------------------------------------------------------
 
@@ -91,15 +84,15 @@ if(!defined("_webpath_")) {
 //---Include Section 2-----------------------------------------------------------------------------------
 //load module-ids
 bootstrapIncludeModuleIds();
-echo "temp4 ";
+
 
 //---Auto-Loader for classes-----------------------------------------------------------------------------
 require_once _corepath_."/module_system/system/class_classloader.php";
 spl_autoload_register(array(class_classloader::getInstance(), "loadClass"));
 
 //The Carrier-Class
-if(!include_once _corepath_."/module_system/system/class_carrier.php")
+if(!@include_once _corepath_."/module_system/system/class_carrier.php")
     rawIncludeError("carrier-class");
 
 
-echo "temp5 ";
+
