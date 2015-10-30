@@ -281,6 +281,9 @@ class class_formentry_base {
         return $this;
     }
 
+    /**
+     * @return string
+     */
     public function getStrValidationErrorMsg() {
         if($this->strValidationErrorMsg != "") {
             return $this->strValidationErrorMsg;
@@ -293,6 +296,45 @@ class class_formentry_base {
                 return "'".$this->getStrLabel()."'";
             }
         }
+    }
+
+    protected function getAnnotationParamsForCurrentProperty() {
+        //params
+
+        if($this->getObjSourceObject() != null) {
+            $objReflection = new class_reflection($this->getObjSourceObject());
+
+            $arrProperties = $objReflection->getPropertiesWithAnnotation("@fieldType");
+            $strSourceProperty = null;
+            foreach ($arrProperties as $strPropertyName => $strValue) {
+
+                $strPropertyWithoutPrefix = "";
+
+                $strStart = uniSubstr($strPropertyName, 0, 3);
+                if (in_array($strStart, array("int", "bit", "str", "arr", "obj"))) {
+                    $strPropertyWithoutPrefix = uniStrtolower(uniSubstr($strPropertyName, 3));
+                }
+
+                $strStart = uniSubstr($strPropertyName, 0, 4);
+                if (in_array($strStart, array("long"))) {
+                    $strPropertyWithoutPrefix = uniStrtolower(uniSubstr($strPropertyName, 4));
+                }
+
+                $strStart = uniSubstr($strPropertyName, 0, 5);
+                if (in_array($strStart, array("float"))) {
+                    $strPropertyWithoutPrefix = uniStrtolower(uniSubstr($strPropertyName, 5));
+                }
+
+                if ($strPropertyWithoutPrefix == $this->getStrSourceProperty()) {
+                    $strSourceProperty = $strPropertyName;
+                    break;
+                }
+            }
+            //get key vlaues
+            return $objReflection->getAnnotationValueForProperty($strSourceProperty, "@fieldType", class_reflection_enum::PARAMS());
+        }
+
+        return array();
     }
 
 

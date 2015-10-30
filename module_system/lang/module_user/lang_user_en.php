@@ -165,3 +165,4 @@ $lang["user_zugehoerigkeit"]             = "Group assignments";
 $lang["user_items_per_page"]             = "Number of records per page";
 $lang["userlist_filter"]                 = "Apply filter";
 $lang["usersource_kajona_name"]          = "Kajona internal";
+$lang["user_copy_info"]                  = "The group settings are inherited from the user {0}. In the next step it is possible to adjust the group settings.";

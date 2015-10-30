@@ -126,8 +126,7 @@ class class_formentry_month_year_dropdown extends class_formentry_date {
     private static function getArrYear() {
         $arrDropDownYear = array();
 
-        $objCurrentDate = new class_date();
-        for($intI = $objCurrentDate->getIntYear(); $intI < 2100; $intI++ ) {
+        for($intI = 2000; $intI < 2100; $intI++ ) {
             $arrDropDownYear[$intI.""] = $intI;
         }
 
@@ -148,28 +147,17 @@ class class_formentry_month_year_dropdown extends class_formentry_date {
         $this->bitRenderDay = $bitRenderDay;
     }
 
-    protected function updateValue()
-    {
-        $arrParams = class_carrier::getAllParams();
-        if (array_key_exists($this->getStrEntryName() . self::DAY_SUFFIX, $arrParams)
-            && array_key_exists($this->getStrEntryName() . self::MONTH_SUFFIX, $arrParams)
-            && array_key_exists($this->getStrEntryName() . self::YEAR_SUFFIX, $arrParams)
-        ) {
-            parent::updateValue();
-        }
-        $this->setStrValue(null);
-    }
-
-
     public function validateValue()
     {
         if($this->getBitMandatory()) {
             $arrParams = class_carrier::getAllParams();
-            if (!array_key_exists($this->getStrEntryName() . self::DAY_SUFFIX, $arrParams)
-                || !array_key_exists($this->getStrEntryName() . self::MONTH_SUFFIX, $arrParams)
-                || !array_key_exists($this->getStrEntryName() . self::YEAR_SUFFIX, $arrParams)
+
+            if (array_key_exists($this->getStrEntryName() . self::DAY_SUFFIX, $arrParams)
+
             ) {
-                return false;
+                $objDate = new class_date("0");
+                $objDate->generateDateFromParams($this->getStrEntryName(), $arrParams);
+                return $this->getObjValidator()->validate($objDate) && $objDate->getIntMonth() > 0 && $objDate->getIntYear() > 0;
             }
         }
 
@@ -177,4 +165,5 @@ class class_formentry_month_year_dropdown extends class_formentry_date {
     }
 }
 
+//TODO: remove, add to construct
 class_formentry_month_year_dropdown::classInit();

@@ -14,23 +14,7 @@
  */
 class class_messageprovider_packageupdate implements interface_messageprovider_extended {
 
-    /**
-     * Called whenever a message is being deleted
-     *
-     * @param class_module_messaging_message $objMessage
-     */
-    public function onDelete(class_module_messaging_message $objMessage) {
 
-    }
-
-    /**
-     * Called whenever a message is set as read
-     *
-     * @param class_module_messaging_message $objMessage
-     */
-    public function onSetRead(class_module_messaging_message $objMessage) {
-
-    }
 
     /**
      * Returns the name of the message-provider

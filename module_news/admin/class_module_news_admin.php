@@ -30,7 +30,7 @@
  * @module news
  * @moduleId _news_module_id_
  */
-class class_module_news_admin extends class_admin_evensimpler implements interface_admin, interface_calendarsource_admin {
+class class_module_news_admin extends class_admin_evensimpler implements interface_admin {
 
     const STR_CAT_LIST = "STR_CAT_LIST";
     const STR_NEWS_LIST = "STR_NEWS_LIST";
@@ -471,55 +471,6 @@ class class_module_news_admin extends class_admin_evensimpler implements interfa
         }
 
         return $strReturn;
-    }
-
-
-    /**
-     * @see interface_calendarsource_admin::getArrCalendarEntries()
-     */
-    public function getArrCalendarEntries(class_date $objStartDate, class_date $objEndDate) {
-        $arrEntries = array();
-
-        if($this->objSession->getSession(self::STR_CALENDAR_FILTER_NEWS) != "disabled") {
-
-            $arrNews = class_module_news_news::getObjectList("", null, null, $objStartDate, $objEndDate);
-
-            foreach($arrNews as $objOneNews) {
-
-                $objEntry = new class_calendarentry();
-                $objEntry->setStrClass("calendarEvent calendarNews");
-                $strAlt = $this->getLang("calendar_type_news");
-
-                $strTitle = $objOneNews->getStrTitle();
-                if(uniStrlen($strTitle) > 15) {
-                    $strAlt = $strTitle . "<br />" . $strAlt;
-                    $strTitle = uniStrTrim($strTitle, 14);
-                }
-
-                $strName = class_link::getLinkAdmin($this->getArrModule("modul"), "edit", "&systemid=" . $objOneNews->getSystemid(), $strTitle, $strAlt);
-                $objEntry->setStrName($strName);
-                $arrEntries[] = $objEntry;
-            }
-        }
-
-
-        return $arrEntries;
-    }
-
-    /**
-     * @see interface_calendarsource_admin::getArrLegendEntries()
-     */
-    public function getArrLegendEntries() {
-        return array($this->getLang("calendar_type_news") => "calendarEvent calendarNews");
-    }
-
-    /**
-     * @see interface_calendarsource_admin::getArrFilterEntries()
-     */
-    public function getArrFilterEntries() {
-        return array(
-            self::STR_CALENDAR_FILTER_NEWS => $this->getLang("calendar_filter_news"),
-        );
     }
 
 }

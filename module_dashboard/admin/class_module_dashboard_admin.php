@@ -21,10 +21,6 @@ class class_module_dashboard_admin extends class_admin_controller implements int
 
     protected $arrColumnsOnDashboard = array("column1", "column2", "column3");
 
-    private $strStartMonthKey = "DASHBOARD_CALENDAR_START_MONTH";
-    private $strStartYearKey = "DASHBOARD_CALENDAR_START_YEAR";
-
-
     /**
      * @return array
      */
@@ -32,6 +28,7 @@ class class_module_dashboard_admin extends class_admin_controller implements int
         $arrReturn = array();
         $arrReturn[] = array("view", class_link::getLinkAdmin($this->getArrModule("modul"), "list", "", $this->getLang("modul_titel"), "", "", true, "adminnavi"));
         $arrReturn[] = array("view", class_link::getLinkAdmin($this->getArrModule("modul"), "calendar", "", $this->getLang("action_calendar"), "", "", true, "adminnavi"));
+        $arrReturn[] = array("view", class_link::getLinkAdmin($this->getArrModule("modul"), "todo", "", $this->getLang("action_todo"), "", "", true, "adminnavi"));
         $arrReturn[] = array("", "");
         $arrReturn[] = array("edit", class_link::getLinkAdmin($this->getArrModule("modul"), "addWidgetToDashboard", "", $this->getLang("action_add_widget_to_dashboard"), "", "", true, "adminnavi"));
         return $arrReturn;
@@ -114,25 +111,7 @@ class class_module_dashboard_admin extends class_admin_controller implements int
     }
 
     /**
-     * Creates a calendar-based view of the current month.
-     * Single objects may register themselves to be rendered within the calendar.
-     * The calendar-view consists of a view single elements:
-     * +---------------------------+
-     * | control-elements (pager)  |
-     * +---------------------------+
-     * | wrapper                   |
-     * +---------------------------+
-     * | the column headers        |
-     * +---------------------------+
-     * | a row for each week (4x)  |
-     * +---------------------------+
-     * | wrapper                   |
-     * +---------------------------+
-     * | legend                    |
-     * +---------------------------+
-     *
-     * The calendar internally is loaded via ajax since fetching all events
-     * may take some time.
+     * Create a calendar based on the jquery fullcalendar. Loads all events from the XML action actionGetCalendarEvents
      *
      * @return string
      * @since 3.4
@@ -142,96 +121,122 @@ class class_module_dashboard_admin extends class_admin_controller implements int
     protected function actionCalendar() {
         $strReturn = "";
 
-        //save dates to session
-        if($this->getParam("month") != "")
-            $this->objSession->setSession($this->strStartMonthKey, $this->getParam("month"));
-        if($this->getParam("year") != "")
-            $this->objSession->setSession($this->strStartYearKey, $this->getParam("year"));
+        $strContainerId = "calendar-" . generateSystemid();
+        $strEventCallback = class_link::getLinkAdminXml("dashboard", "getCalendarEvents");
+        $strLang = class_session::getInstance()->getAdminLanguage();
 
-        $strContainerId = generateSystemid();
+        $strReturn .= "<div id='" . $strContainerId . "' class='calendar'></div>";
+        $strReturn .= "<script type=\"text/javascript\">";
+        $strReturn .= <<<JS
+            KAJONA.admin.loader.loadFile(['/core/module_dashboard/admin/scripts/fullcalendar/fullcalendar.min.css',
+                '/core/module_system/admin/scripts/jquery/jquery.min.js',
+                '/core/module_dashboard/admin/scripts/fullcalendar/moment.min.js'], function(){
+                KAJONA.admin.loader.loadFile(['/core/module_dashboard/admin/scripts/fullcalendar/fullcalendar.min.js'], function(){
+                    var loadCalendar = function(){
+                        $('#{$strContainerId}').fullCalendar({
+                            header: {
+                                left: 'prev,next',
+                                center: 'title',
+                                right: ''
+                            },
+                            editable: false,
+                            theme: false,
+                            lang: '{$strLang}',
+                            eventLimit: true,
+                            events: '{$strEventCallback}',
+                            eventRender: function(event, el){
+                                KAJONA.admin.tooltip.addTooltip(el, event.tooltip);
+                                if (event.icon) {
+                                    el.find("span.fc-title").prepend(event.icon);
+                                }
+                            },
+                            loading: function(isLoading){
+                                if (isLoading) {
+                                    $('#moduleTitle').parent().next().html('<div style="float:right;width:30px;" class="calendar-loading"><div class="loadingContainer"></div></div>');
+                                } else {
+                                    $('#moduleTitle').parent().next().html('');
+                                }
+                            }
+                        });
+                        $('.fc-button-group').removeClass().addClass('btn-group');
+                        $('.fc-button').removeClass().addClass('btn btn-default');
+                    };
 
-        $strContent = "<script type=\"text/javascript\">";
-        $strContent .= <<<JS
-            $(document).ready(function() {
-                  KAJONA.admin.ajax.genericAjaxCall("dashboard", "renderCalendar", "{$strContainerId}", function(data, status, jqXHR) {
-                    if(status == 'success') {
-                        var intStart = data.indexOf("[CDATA[")+7;
-                        $("#{$strContainerId}").html(data.substr(
-                          intStart, data.indexOf("]]")-intStart
-                        ));
-                        if(data.indexOf("[CDATA[") < 0) {
-                            var intStart = data.indexOf("<error>")+7;
-                            $("#{$strContainerId}").html(o.responseText.substr(
-                              intStart, data.indexOf("</error>")-intStart
-                            ));
-                        }
-                        KAJONA.util.evalScript(data);
-                        KAJONA.admin.tooltip.initTooltip();
+                    if ('{$strLang}' != 'en') {
+                        KAJONA.admin.loader.loadFile(['/core/module_dashboard/admin/scripts/fullcalendar/lang.{$strLang}.js'], loadCalendar);
+                    } else {
+                        loadCalendar();
                     }
-                    else {
-                        KAJONA.admin.statusDisplay.messageError("<b>Request failed!</b><br />" + data);
-                    }
-                  })
+                });
             });
 JS;
-        $strContent .= "</script>";
-
-        //fetch modules relevant for processing
-        $arrLegendEntries = array();
-        $arrFilterEntries = array();
-        $arrModules = class_module_system_module::getAllModules();
-        foreach($arrModules as $objSingleModule) {
-            /** @var $objAdminInstance interface_calendarsource_admin|class_module_system_module */
-            $objAdminInstance = $objSingleModule->getAdminInstanceOfConcreteModule();
-            if($objSingleModule->getIntRecordStatus() == 1 && $objAdminInstance instanceof interface_calendarsource_admin) { //TODO: switch to plugin manager
-                $arrLegendEntries = array_merge($arrLegendEntries, $objAdminInstance->getArrLegendEntries());
-                $arrFilterEntries = array_merge($arrFilterEntries, $objAdminInstance->getArrFilterEntries());
-            }
-        }
-
-        if($this->getParam("doCalendarFilter") != "") {
-            //update filter-criteria
-            foreach(array_keys($arrFilterEntries) as $strOneId) {
-                if($this->getParam($strOneId) != "")
-                    $this->objSession->sessionUnset($strOneId);
-                else
-                    $this->objSession->setSession($strOneId, "disabled");
-            }
-        }
-
-        //render the single rows. calculate the first day of the row
-        $objDate = new class_date();
-        $objDate->setIntDay(1);
-
-        if($this->objSession->getSession($this->strStartMonthKey) != "")
-            $objDate->setIntMonth($this->objSession->getSession($this->strStartMonthKey));
-
-        if($this->objSession->getSession($this->strStartYearKey) != "")
-            $objDate->setIntYear($this->objSession->getSession($this->strStartYearKey));
-
-
-        //pager-setup
-        $objEndDate = clone $objDate;
-        $objEndDate->setNextMonth();
-        $objEndDate->setPreviousDay();
-
-        $strCenter = dateToString($objDate, false)." - ".  dateToString($objEndDate, false);
-
-        $objEndDate->setNextDay();
-        $objPrevDate = clone $objDate;
-        $objPrevDate->setPreviousDay();
-
-        $strPrev = class_link::getLinkAdmin($this->getArrModule("modul"), "calendar", "&month=".$objPrevDate->getIntMonth()."&year=".$objPrevDate->getIntYear(), $this->getLang("calendar_prev"));
-        $strNext = class_link::getLinkAdmin($this->getArrModule("modul"), "calendar", "&month=".$objEndDate->getIntMonth()."&year=".$objEndDate->getIntYear(), $this->getLang("calendar_next"));
-
-        $strReturn .= $this->objToolkit->getCalendarPager($strPrev, $strCenter, $strNext);
-        $strReturn .= $strContent;
-        $strReturn .= $this->objToolkit->getCalendarContainer($strContainerId);
-        $strReturn .= $this->objToolkit->getCalendarLegend($arrLegendEntries);
-        $strReturn .= $this->objToolkit->getCalendarFilter($arrFilterEntries);
+        $strReturn .= "</script>";
 
         return $strReturn;
     }
+
+    /**
+     * @permissions view
+     */
+    protected function actionTodo() {
+        $arrContent = array();
+
+        // overall tab
+        $strCategory = $this->getParam("listfilter_category");
+        $strSearch = $this->getParam("listfilter_search");
+        $strDate = $this->getParam("listfilter_date");
+        if (!empty($strCategory)) {
+            $strLink = class_link::getLinkAdminXml("dashboard", "todoCategory", "&category=" . $strCategory . "&search=" . urlencode($strSearch) . "&date=" . $strDate);
+        } else {
+            $strLink = class_link::getLinkAdminXml("dashboard", "todoCategory", "&search=" . urlencode($strSearch) . "&date=" . $strDate);
+        }
+
+        $arrContent[$this->getLang("todo_overall_tasks")] = $strLink;
+
+        $strReturn = $this->getListTodoFilter();
+        $strReturn .= $this->objToolkit->getTabbedContent($arrContent);
+
+        return $strReturn;
+    }
+
+
+    protected function getListTodoFilter()
+    {
+        $strReturn = "";
+
+        // create the form
+        $objFormgenerator = new class_admin_formgenerator("listfilter", null);
+
+        // provider
+        $arrProvider = array();
+        $arrCategories = class_todo_repository::getAllCategories();
+        foreach ($arrCategories as $strProviderName => $arrTaskCategories) {
+            foreach ($arrTaskCategories as $strKey => $strCategoryName) {
+                $arrProvider[$strKey] = $strCategoryName;
+            }
+        }
+
+        $objFormgenerator->addField(new class_formentry_dropdown("listfilter", "category"))
+            ->setStrLabel($this->getLang("filter_category"))
+            ->setArrKeyValues(array_merge(array("" => $this->getLang("filter_all_categories")), $arrProvider));
+
+        $objFormgenerator->addField(new class_formentry_text("listfilter", "search"))
+            ->setStrLabel($this->getLang("filter_search"));
+
+        $objFormgenerator->addField(new class_formentry_date("listfilter", "date"))
+            ->setStrLabel($this->getLang("filter_date"));
+
+        //render filter
+        $strReturn .= $objFormgenerator->renderForm(class_link::getLinkAdminHref("dashboard", "todo"), class_admin_formgenerator::BIT_BUTTON_SUBMIT);
+
+        $bitFilterActive = $this->getParam("listfilter_category") != "" || $this->getParam("listfilter_search") != "" || $this->getParam("listfilter_date") != "";
+
+        $arrFolder = $this->objToolkit->getLayoutFolderPic($strReturn, $this->getLang("filter_show_hide", "agp_commons").($bitFilterActive ? $this->getLang("commons_filter_active") : ""), "icon_folderOpen", "icon_folderClosed", false);
+        $strReturn = $this->objToolkit->getFieldset($arrFolder[1], $arrFolder[0]);
+
+        return $strReturn;
+    }
+
 
     /**
      * Generates the forms to add a widget to the dashboard

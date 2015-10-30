@@ -95,8 +95,9 @@ class class_formentry_masterdropdown extends class_formentry_base implements int
                         arrValues = (this.objValues[strTargetElement]);
                     }
                     else {
-                        if(strPrefix[0] != "_")
+                        if(strPrefix[0] != "_") {
                             strPrefix = "_"+strPrefix;
+                        }
 
                         arrValues = (this.objValues[strTargetElement][strPrefix]);
                     }
@@ -106,18 +107,21 @@ class class_formentry_masterdropdown extends class_formentry_base implements int
                     if(!arrValues)
                         return;
 
+                    var objDefault = null;
                     $.each(arrValues, function(key, value) {
                         if(key == '') {
-                            var objDefault = $("<option></option>").attr("value", "").attr("disabled", true).text(value);
-                            //if(this.bitInitial)
-                                objDefault.attr("selected", true);
-
-                            objTargetElement.append(objDefault);
+                            objDefault = $("<option></option>").attr("value", "").attr("disabled", true).text(value);
+                            objDefault.attr("selected", true);
                         }
                         else {
-                            objTargetElement.append($("<option></option>").attr("value", key).text(value));
+                            var objOption = $("<option></option>").attr("value", key).text(value);
+                            objTargetElement.append(objOption);
                         }
                     });
+                    //Add default always to the beginning
+                    if(objDefault !== null) {
+                        objTargetElement.prepend(objDefault);
+                    }
 
                     if(this.bitInitial) {
                         objTargetElement.val(objTargetElement.attr("data-kajona-selected"));

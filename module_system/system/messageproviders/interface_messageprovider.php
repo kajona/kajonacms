@@ -19,22 +19,6 @@
 interface interface_messageprovider {
 
     /**
-     * Called whenever a message is being deleted
-     *
-     * @abstract
-     * @param class_module_messaging_message $objMessage
-     */
-    public function onDelete(class_module_messaging_message $objMessage);
-
-    /**
-     * Called whenever a message is set as read
-     *
-     * @abstract
-     * @param class_module_messaging_message $objMessage
-     */
-    public function onSetRead(class_module_messaging_message $objMessage);
-
-    /**
      * Returns the name of the message-provider
      *
      * @abstract
