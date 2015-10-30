@@ -57,30 +57,6 @@ class class_module_pages_content_admin extends class_admin_simple implements int
     }
 
 
-    /**
-     * @permissions edit
-     * @return string
-     */
-    protected function actionListElement()
-    {
-        $objElement = class_objectfactory::getInstance()->getObject($this->getSystemid());
-
-        //load all blocks
-
-
-        //Language-dependant loading of elements, if installed
-        $arrElementsAtElement = class_module_pages_pageelement::getElementsOnPage($objElement->getSystemid(), false, $this->getLanguageToWorkOn());
-
-        //TODO: load this list of possible placeholder from the template section (block vs blocks)
-        $arrPlaceholder = array(
-            array("placeholder" => "headline_row", "elementlist" => array(array("name" => "headline", "element" => "row"))),
-            array("placeholder" => "content_paragraph", "elementlist" => array(array("name" => "content", "element" => "paragraph")))
-        );
-
-        return $this->renderElementPlaceholderList($arrPlaceholder, $arrElementsAtElement);
-    }
-
-
     private function getPageInfoBox(class_module_pages_page $objPage)
     {
         $strReturn = "";
@@ -175,19 +151,14 @@ class class_module_pages_content_admin extends class_admin_simple implements int
                             if($strExistingBlock != "") {
                                 $strCurBlocks .= $this->objToolkit->getFieldset(
                                     $objOneBlock->getStrName(),
-                                    $strExistingBlock
+                                    $strExistingBlock,
+                                    "fieldset block"
                                 );
                             }
                         }
 
                     }
 
-//                    if($strExistingBlock != "") {
-//                        $strCurBlocks .= $this->objToolkit->getFieldset(
-//                            $objOneBlock->getStrName(),
-//                            $strExistingBlock
-//                        );
-//                    }
                 }
 
 
@@ -195,11 +166,12 @@ class class_module_pages_content_admin extends class_admin_simple implements int
 
                 $strCurBlocks .= $this->objToolkit->getFieldset(
                     $objOneBlock->getStrName(),
-                    $strNewBlock
+                    $strNewBlock,
+                    "fieldset block newblock"
                 );
             }
 
-            $strBlocks .= "<br/ ><hr /><br />".$this->objToolkit->getFieldset($objOneBlocks->getStrName(), $strCurBlocks);
+            $strBlocks .= $this->objToolkit->getFieldset($objOneBlocks->getStrName(), $strCurBlocks, "fieldset blocks");
         }
 
 
@@ -303,10 +275,19 @@ class class_module_pages_content_admin extends class_admin_simple implements int
                         $strOutputAtPlaceholder .= $this->objToolkit->formHeadline($arrSinglePlaceholder[0]);
                     }
 
-                    $strListId = generateSystemid();
-                    $strReturn .= $this->objToolkit->dragableListHeader($strListId, true);
-                    $strReturn .= $strOutputAtPlaceholder;
-                    $strReturn .= $this->objToolkit->dragableListFooter($strListId);
+
+                    if($bitRenderCompact) {
+                        $strReturn .= $this->objToolkit->listHeader();
+                        $strReturn .= $strOutputAtPlaceholder;
+                        $strReturn .= $this->objToolkit->listFooter();
+                    }
+                    else {
+                        $strListId = generateSystemid();
+                        $strReturn .= $this->objToolkit->dragableListHeader($strListId, true);
+                        $strReturn .= $strOutputAtPlaceholder;
+                        $strReturn .= $this->objToolkit->dragableListFooter($strListId);
+                    }
+
                 }
 
             }
