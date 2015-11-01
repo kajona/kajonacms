@@ -40,7 +40,7 @@ class class_element_blocks_portal extends class_element_portal implements interf
                 foreach($arrElementsOnBlocks as $objOneElement) {
                     /** @var  class_element_block_portal $objElement  */
                     $objElement = $objOneElement->getConcretePortalInstance();
-                    $strReturn .= $objElement->getElementOutput();
+                    $strReturn .= $objElement->getRenderedElementOutput();
                 }
 
             }

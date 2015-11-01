@@ -108,7 +108,7 @@ class class_module_pages_portal extends class_portal_controller implements inter
 
         //try to load the additional title from cache
         $strAdditionalTitleFromCache = "";
-        $intMaxCacheDuration = 0;
+        $intMaxCacheDuration = 0; //TODO find a better cache sum, in v4 determined by the elements
         $objCachedTitle = class_cache::getCachedEntry(__CLASS__, $this->getPagename(), $this->generateHash2Sum(), $this->getStrPortalLanguage());
         if($objCachedTitle != null) {
             $strAdditionalTitleFromCache = $objCachedTitle->getStrContent();
@@ -134,9 +134,6 @@ class class_module_pages_portal extends class_portal_controller implements inter
                 //next one, plz
                 continue;
             }
-//            elseif($objOneElementOnPage->getStrName() == "block" || $objOneElementOnPage->getStrName() == "blocks") {
-//
-//            }
             else {
                 //create a protocol of placeholders filled
                 //remove from pe-additional-array, pe code is injected by element directly
@@ -158,37 +155,7 @@ class class_module_pages_portal extends class_portal_controller implements inter
 
             //cache-handling. load element from cache.
             //if the element is re-generated, save it back to cache.
-            if(class_module_system_setting::getConfigValue("_pages_cacheenabled_") == "true" && $this->getParam("preview") != "1" && $objPageData->getStrName() != class_module_system_setting::getConfigValue("_pages_errorpage_")) {
-                $strElementOutput = "";
-                //if the portaleditor is disabled, do the regular cache lookups in storage. otherwise regenerate again and again :)
-                if($bitPeRequested) {
-                    $strElementOutput = $objElement->getElementOutput();
-                }
-                else {
-                    //pe not to be taken into account --> full support of caching
-                    $strElementOutput = $objElement->getElementOutputFromCache();
-
-                    if($objOneElementOnPage->getIntCachetime() > $intMaxCacheDuration)
-                        $intMaxCacheDuration = $objOneElementOnPage->getIntCachetime();
-
-                    if($strElementOutput === false) {
-                        $strElementOutput = $objElement->getElementOutput();
-
-                        $objElement->saveElementToCache($strElementOutput);
-                    }
-                }
-
-            }
-            else
-                $strElementOutput = $objElement->getElementOutput();
-
-            //if element is disabled & the pe is requested, wrap the content
-            if($bitPeRequested && $objOneElementOnPage->getIntRecordStatus() == 0) {
-                $arrPeElement = array();
-                $arrPeElement["title"] = $this->getLang("pe_inactiveElement", "pages")." (".$objOneElementOnPage->getStrElement().")";
-                $strElementOutput = $this->objToolkit->getPeInactiveElement($arrPeElement);
-                $strElementOutput = class_element_portal::addPortalEditorSetActiveCode($strElementOutput, $objElement->getSystemid(), array());
-            }
+            $strElementOutput = $objElement->getRenderedElementOutput($bitPeRequested);
 
             if($objOneElementOnPage->getStrElement() == "blocks") {
                 //try to fetch the whole block as a placeholder
@@ -208,7 +175,7 @@ class class_module_pages_portal extends class_portal_controller implements inter
 
         }
 
-        //pe-code to add new elements on unfilled placeholders --> only if pe is visible?
+        //pe-code to add new elements on unfilled placeholders --> only if pe is visible TODO: move this to each element, so each element is able to render its own create button.
         if($bitPeRequested) {
             //loop placeholders on template in order to remove already filled ones not being repeatable
             $arrRawPlaceholdersForPe = $arrRawPlaceholders;

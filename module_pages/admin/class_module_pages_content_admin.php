@@ -686,7 +686,7 @@ HTML;
 
                 //generate the elements' output
                 $objPortalElement = $objElementData->getConcretePortalInstance();
-                $strElementContent = $objPortalElement->getElementOutput();
+                $strElementContent = $objPortalElement->getRenderedElementOutput(false);
 
                 $strContent = json_encode($strElementContent, JSON_FORCE_OBJECT); //JSON_HEX_QUOT|JSON_HEX_APOS
 

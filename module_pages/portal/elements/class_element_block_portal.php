@@ -53,7 +53,7 @@ class class_element_block_portal extends class_element_portal implements interfa
                             /** @var  class_element_portal $objElement */
                             $objElement = $objOneElement->getConcretePortalInstance();
 
-                            $arrTemplate[$objOneElement->getStrPlaceholder()] = $objElement->getElementOutput();
+                            $arrTemplate[$objOneElement->getStrPlaceholder()] = $objElement->getRenderedElementOutput();
                         }
 
                         $this->objTemplate->setTemplate($objOneBlock->getStrContent());

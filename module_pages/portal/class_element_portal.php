@@ -91,7 +91,7 @@ abstract class class_element_portal extends class_portal_controller {
      *
      * @return string
      */
-    public function getElementOutput() {
+    private function getElementOutput() {
         $strReturn = "";
         //load the data from the database
         $this->arrElementData = array_merge($this->getElementContent($this->objElementData->getSystemid()), $this->arrElementData);
@@ -155,7 +155,7 @@ abstract class class_element_portal extends class_portal_controller {
      * @return string false in case of no matching entry
      * @see class_element_portal::getElementOutput()
      */
-    public function getElementOutputFromCache() {
+    private function getElementOutputFromCache() {
         $strReturn = false;
 
         //load the matching cache-entry
@@ -188,11 +188,7 @@ abstract class class_element_portal extends class_portal_controller {
      *
      * @since 3.3.1
      */
-    public function saveElementToCache($strElementOutput = "") {
-
-        //if no content was passed, rebuild the content
-        if($strElementOutput == "")
-            $strElementOutput = $this->getElementOutput();
+    private function saveElementToCache($strElementOutput) {
 
         //strip the data-editable values - no use case for regular page views
         $strElementOutput = preg_replace('/data-kajona-editable=\"([a-zA-Z0-9#_]*)\"/i', "", $strElementOutput);
@@ -229,6 +225,57 @@ abstract class class_element_portal extends class_portal_controller {
      */
     private function getCacheHash1() {
         return $this->getPagename();
+    }
+
+
+    private function getPageData() {
+        return class_module_pages_page::getPageByName($this->getPagename());
+    }
+
+
+    /**
+     * Forces the rendering of the current portal element.
+     * Takes care of loading the element from cache or regenerating the element.
+     * If enabled, the portal-editor code is rendered, too.
+     * @param bool|false $bitActivePortaleditor
+     *
+     * @return string
+     */
+    public function getRenderedElementOutput($bitActivePortaleditor = false) {
+
+        if(class_module_system_setting::getConfigValue("_pages_cacheenabled_") == "true" && $this->getParam("preview") != "1" && $this->getPageData()->getStrName() != class_module_system_setting::getConfigValue("_pages_errorpage_")) {
+            $strElementOutput = "";
+            //if the portaleditor is disabled, do the regular cache lookups in storage. otherwise regenerate again and again :)
+            if($bitActivePortaleditor) {
+                $strElementOutput = $this->getElementOutput();
+            }
+            else {
+                //pe not to be taken into account --> full support of caching
+                $strElementOutput = $this->getElementOutputFromCache();
+
+                if($strElementOutput === false) {
+                    $strElementOutput = $this->getElementOutput();
+                    $this->saveElementToCache($strElementOutput);
+                }
+            }
+
+        }
+        else
+            $strElementOutput = $this->getElementOutput();
+
+
+        $objBaseElement = new class_module_pages_pageelement($this->getSystemid());
+
+        //if element is disabled & the pe is requested, wrap the content
+        if($bitActivePortaleditor && $objBaseElement->getIntRecordStatus() == 0) {
+            $arrPeElement = array();
+            $arrPeElement["title"] = $this->getLang("pe_inactiveElement", "pages")." (".$objBaseElement->getStrElement().")";
+            $strElementOutput = $this->objToolkit->getPeInactiveElement($arrPeElement);
+            $strElementOutput = class_element_portal::addPortalEditorSetActiveCode($strElementOutput, $this->getSystemid(), array());
+        }
+
+
+        return $strElementOutput;
     }
 
 
