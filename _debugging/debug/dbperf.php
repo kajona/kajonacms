@@ -29,11 +29,19 @@ for($intI = 0; $intI < 200; $intI++) {
     $arrRecords[] = $objPoint;
 }
 
+$arrTimestampEnde = gettimeofday();
+$intTimeUsed = (($arrTimestampEnde['sec'] * 1000000 + $arrTimestampEnde['usec'])
+        - ($arrTimestampStart['sec'] * 1000000 + $arrTimestampStart['usec'])) / 1000000;
+echo  "\n\n<b>PHP-Time:</b>                              " . number_format($intTimeUsed, 6) . " sec \n";
+$arrTimestampStart = gettimeofday();
+
 echo "Deletion of entries...\n";
 for($intI = 40; $intI <= 60; $intI++) {
     $arrRecords[$intI]->deleteObjectFromDatabase();
     unset($arrRecords[$intI]);
 }
+
+
 
 foreach($arrRecords as $objOnePoint) {
     $objOnePoint->deleteObjectFromDatabase();
@@ -45,19 +53,12 @@ $objNaviTree->deleteObjectFromDatabase();
 $arrTimestampEnde = gettimeofday();
 $intTimeUsed = (($arrTimestampEnde['sec'] * 1000000 + $arrTimestampEnde['usec'])
         - ($arrTimestampStart['sec'] * 1000000 + $arrTimestampStart['usec'])) / 1000000;
-
-
 echo  "\n\n<b>PHP-Time:</b>                              " . number_format($intTimeUsed, 6) . " sec \n";
-echo  "<b>Queries db/cachesize/cached/fired:</b>     " . class_carrier::getInstance()->getObjDB()->getNumber() . "/" .
-    class_carrier::getInstance()->getObjDB()->getCacheSize() . "/" .
-    class_carrier::getInstance()->getObjDB()->getNumberCache() . "/" .
-    (class_carrier::getInstance()->getObjDB()->getNumber() - class_carrier::getInstance()->getObjDB()->getNumberCache()) . "\n";
+$arrTimestampStart = gettimeofday();
 
 
-echo "</pre>";
 
-
-echo "Creating 200 records without sortmanager...\n";
+echo "\n\nCreating 200 records without sortmanager...\n";
 
 $arrTimestampStart = gettimeofday();
 
@@ -71,6 +72,12 @@ for($intI = 0; $intI < 200; $intI++) {
     $objAspect->updateObjectToDb($objRootAspect->getSystemid());
     $arrRecords[] = $objAspect;
 }
+
+$arrTimestampEnde = gettimeofday();
+$intTimeUsed = (($arrTimestampEnde['sec'] * 1000000 + $arrTimestampEnde['usec'])
+        - ($arrTimestampStart['sec'] * 1000000 + $arrTimestampStart['usec'])) / 1000000;
+echo  "\n\n<b>PHP-Time:</b>                              " . number_format($intTimeUsed, 6) . " sec \n";
+$arrTimestampStart = gettimeofday();
 
 echo "Deletion of entries...\n";
 for($intI = 40; $intI <= 60; $intI++) {
@@ -95,12 +102,5 @@ echo  "<b>Queries db/cachesize/cached/fired:</b>     " . class_carrier::getInsta
     class_carrier::getInstance()->getObjDB()->getNumberCache() . "/" .
     (class_carrier::getInstance()->getObjDB()->getNumber() - class_carrier::getInstance()->getObjDB()->getNumberCache()) . "\n";
 
-echo "</pre>";
 
 
-
-echo "\n\n";
-echo "+-------------------------------------------------------------------------------+\n";
-echo "| (c) www.kajona.de                                                             |\n";
-echo "+-------------------------------------------------------------------------------+\n";
-echo "</pre>";
