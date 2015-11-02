@@ -37,6 +37,13 @@ class class_classloader
 
 
     /**
+     * Cached array of the core dirs
+     *
+     * @var array
+     */
+    private $arrCoreDirs = array();
+
+    /**
      * Factory method returning an instance of class_classloader.
      * The class-loader implements the singleton pattern.
      *
@@ -136,8 +143,10 @@ class class_classloader
         }
 
         //Module-Constants
+        $this->arrCoreDirs = self::getCoreDirectories();
+
         $arrModules = array();
-        foreach ($this->getCoreDirectories() as $strRootFolder) {
+        foreach ($this->arrCoreDirs as $strRootFolder) {
 
             if (uniStrpos($strRootFolder, "core") === false) {
                 continue;
@@ -281,15 +290,37 @@ class class_classloader
      */
     public function loadClass($strClassName)
     {
-
         if (isset($this->arrFiles[$strClassName])) {
             $this->intNumberOfClassesLoaded++;
             include_once $this->arrFiles[$strClassName];
             return true;
         }
 
-        return false;
+        // check whether we can autoload a class which has a namespace
+        if (strpos($strClassName, "\\") !== false) {
+            $arrParts = explode("\\", $strClassName);
+            $strVendor = array_shift($arrParts); // remove vendor part
+            $strModule = "module_" . strtolower(array_shift($arrParts));
+            $strFolder = strtolower(array_shift($arrParts));
+            $strRest = implode(DIRECTORY_SEPARATOR, $arrParts);
 
+            if (!empty($strModule) && !empty($strFolder) && !empty($strRest)) {
+                $arrDirs = array_merge(array("project"), $this->arrCoreDirs);
+                foreach ($arrDirs as $strDir) {
+                    $strFile = implode(DIRECTORY_SEPARATOR, array($strDir, $strModule, $strFolder, $strRest . ".php"));
+                    if (is_file($strFile)) {
+                        $this->arrFiles[$strClassName] = $strFile;
+                        $this->bitCacheSaveRequired = true;
+
+                        $this->intNumberOfClassesLoaded++;
+                        include_once $strFile;
+                        return true;
+                    }
+                }
+            }
+        }
+
+        return false;
     }
 
     /**
