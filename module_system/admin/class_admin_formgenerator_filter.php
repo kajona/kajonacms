@@ -48,8 +48,8 @@ class class_admin_formgenerator_filter extends class_admin_formgenerator
         } else {
             // get the values from the session
             $objSessionObject = class_session::getInstance()->getSession($objFilter->getFilterId());
-            if ($objSessionObject !== false ) {
-                $objFilter = $objSessionObject;
+            if ($objSessionObject instanceof class_filter_base) {
+                $this->setObjSourceobject($objSessionObject);
             }
         }
 
@@ -63,15 +63,19 @@ class class_admin_formgenerator_filter extends class_admin_formgenerator
         $this->updateSourceObject();
         $this->addField(new class_formentry_hidden($this->getStrFormname(), "setcontentfilter"))->setStrValue("true");
 
+        // remove source object so that we dont have a systemid hidden field in the form
+        $objFilter = $this->getObjSourceobject();
+        $this->setObjSourceobject(null);
+
         // update session
         class_session::getInstance()->setSession($objFilter->getFilterId(), $objFilter);
 
-        // remove source object so that we dont have a systemid hidden field in the form
-        $this->setObjSourceobject(null);
-
-        //render filter form
+        // render filter form
         $strReturn = "";
         $strReturn .= parent::renderForm($strTargetURI, class_admin_formgenerator::BIT_BUTTON_SUBMIT | class_admin_formgenerator::BIT_BUTTON_RESET);
+
+        // set filter back to the source object
+        $this->setObjSourceobject($objFilter);
 
         // display filter active/inactive
         $bitFilterActive = false;
@@ -107,13 +111,5 @@ class class_admin_formgenerator_filter extends class_admin_formgenerator
         foreach($arrParamsSuffix as $strSuffix) {
             $objCarrier->setParam("{$this->getStrFormname()}_{$strSuffix}", "");
         }
-    }
-
-    public static function createByFilter(class_filter_base $objFilter, $strAction = "list")
-    {
-        $objFilterForm = new self($objFilter->getFilterId(), $objFilter);
-        $strTarget = class_link::getLinkAdminHref($objFilter->getArrModule(), $strAction);
-
-        return $objFilterForm->renderForm($strTarget);
     }
 }
