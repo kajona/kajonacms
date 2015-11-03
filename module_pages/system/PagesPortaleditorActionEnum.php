@@ -4,7 +4,7 @@
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 ********************************************************************************************************/
 
-namespace pages\system;
+namespace Kajona\Pages\System;
 
 /**
  * A single model for a portaleditor action
@@ -15,8 +15,9 @@ namespace pages\system;
  * @method static PagesPortaleditorActionEnum EDIT()
  * @method static PagesPortaleditorActionEnum DELETE()
  * @method static PagesPortaleditorActionEnum SETACTIVE()
- * @method static PagesPortaleditorActionEnum BSETINACTIVE()
- * @method static PagesPortaleditorActionEnum NEW()
+ * @method static PagesPortaleditorActionEnum SETINACTIVE()
+ * @method static PagesPortaleditorActionEnum CREATE()
+ * @method static PagesPortaleditorActionEnum COPY()
  */
 class PagesPortaleditorActionEnum extends \class_enum  {
 
@@ -25,7 +26,7 @@ class PagesPortaleditorActionEnum extends \class_enum  {
      */
     protected function getArrValues()
     {
-        return array("EDIT", "DELETE", "SETACTIVE", "SETINACTIVE", "NEW");
+        return array("EDIT", "DELETE", "SETACTIVE", "SETINACTIVE", "CREATE", "COPY", "MOVE");
     }
 
 

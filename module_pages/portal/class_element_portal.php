@@ -6,6 +6,10 @@
 *-------------------------------------------------------------------------------------------------------*
 *	$Id$								*
 ********************************************************************************************************/
+use Kajona\Pages\Portal\PagesPortaleditor;
+use Kajona\Pages\System\PagesPortaleditorActionEnum;
+use Kajona\Pages\System\PagesPortaleditorPlaceholderAction;
+use Kajona\Pages\System\PagesPortaleditorSystemidAction;
 
 /**
  * Base Class for all portal-elements
@@ -266,6 +270,11 @@ abstract class class_element_portal extends class_portal_controller {
 
         $objBaseElement = new class_module_pages_pageelement($this->getSystemid());
 
+
+        if($bitActivePortaleditor) {
+            $this->getPortalEditorActions();
+        }
+
         //if element is disabled & the pe is requested, wrap the content
         if($bitActivePortaleditor && $objBaseElement->getIntRecordStatus() == 0) {
             $arrPeElement = array();
@@ -280,6 +289,74 @@ abstract class class_element_portal extends class_portal_controller {
 
 
     /**
+     * Registers the default portaleditor actions for the current element
+     */
+    public function getPortalEditorActions()
+    {
+
+        $objPageelement = new class_module_pages_pageelement($this->getSystemid());
+        if(!$objPageelement->rightEdit() ) {
+            return;
+        }
+
+        //fetch the language to set the correct admin-lang
+        $objLanguages = new class_module_languages_language();
+        $strAdminLangParam = $objLanguages->getPortalLanguage();
+
+
+        PagesPortaleditor::getInstance()->registerAction(
+            new PagesPortaleditorSystemidAction(PagesPortaleditorActionEnum::EDIT(), class_link::getLinkAdminHref("pages_content", "edit", "&systemid={$this->getSystemid()}&language={$strAdminLangParam}&pe=1"), $this->getSystemid())
+        );
+        PagesPortaleditor::getInstance()->registerAction(
+            new PagesPortaleditorSystemidAction(PagesPortaleditorActionEnum::COPY(), class_link::getLinkAdminHref("pages_content", "copyElement", "&systemid={$this->getSystemid()}&language={$strAdminLangParam}&pe=1"), $this->getSystemid())
+        );
+        PagesPortaleditor::getInstance()->registerAction(
+            new PagesPortaleditorSystemidAction(PagesPortaleditorActionEnum::DELETE(), class_link::getLinkAdminHref("pages_content", "deleteElementFinal", "&systemid={$this->getSystemid()}&language={$strAdminLangParam}&pe=1"), $this->getSystemid())
+        );
+        PagesPortaleditor::getInstance()->registerAction(
+            new PagesPortaleditorSystemidAction(PagesPortaleditorActionEnum::MOVE(), "", $this->getSystemid())
+        );
+
+
+        if($objPageelement->getIntRecordStatus() == 1) {
+            PagesPortaleditor::getInstance()->registerAction(
+                new PagesPortaleditorSystemidAction(PagesPortaleditorActionEnum::SETINACTIVE(), class_link::getLinkAdminHref("pages_content", "elementStatus", "&systemid={$this->getSystemid()}&language={$strAdminLangParam}&pe=1"), $this->getSystemid())
+            );
+        }
+        else {
+            PagesPortaleditor::getInstance()->registerAction(
+                new PagesPortaleditorSystemidAction(PagesPortaleditorActionEnum::SETACTIVE(), class_link::getLinkAdminHref("pages_content", "elementStatus", "&systemid={$this->getSystemid()}&language={$strAdminLangParam}&pe=1"), $this->getSystemid())
+            );
+        }
+
+        PagesPortaleditor::getInstance()->registerAction(
+            new PagesPortaleditorPlaceholderAction(PagesPortaleditorActionEnum::CREATE(), class_link::getLinkAdminHref("pages_content", "new", "&systemid={$this->getSystemid()}&language={$strAdminLangParam}&placeholder={$objPageelement->getStrPlaceholder()}&element={$objPageelement->getStrName()}&pe=1"), $objPageelement->getStrPlaceholder(), $objPageelement->getStrName())
+        );
+    }
+
+    /**
+     * Registers new-entry actions for a given placeholder
+     *
+     * @param $bitElementIsExistingAtPlaceholder
+     * @param class_module_pages_element $objElement
+     * @param $strPlaceholder
+     *
+     */
+    public function getPortaleditorPlaceholderActions($bitElementIsExistingAtPlaceholder, class_module_pages_element $objElement, $strPlaceholder)
+    {
+        //fetch the language to set the correct admin-lang
+        $objLanguages = new class_module_languages_language();
+        $strAdminLangParam = $objLanguages->getPortalLanguage();
+
+        if($objElement->getIntRepeat() == 1 || !$bitElementIsExistingAtPlaceholder) {
+            PagesPortaleditor::getInstance()->registerAction(
+                new PagesPortaleditorPlaceholderAction(PagesPortaleditorActionEnum::CREATE(), class_link::getLinkAdminHref("pages_content", "new", "&systemid={$this->getSystemid()}&language={$strAdminLangParam}&placeholder={$strPlaceholder}&element={$objElement->getStrName()}&pe=1"), $strPlaceholder, $objElement->getStrName())
+            );
+        }
+    }
+
+
+    /**
      * Creates the code surrounding the element.
      * Creates the "entry" to the portal-editor
      *
@@ -290,6 +367,10 @@ abstract class class_element_portal extends class_portal_controller {
      *
      * @return string
      * @static
+     *
+     * @deprecated
+     *
+     * @todo remove completely
      */
     public static function addPortalEditorCode($strContent, $strSystemid, $arrConfig, $strElement = "") {
         $strReturn = "";

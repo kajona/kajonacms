@@ -115,9 +115,9 @@ class class_module_pages_portal extends class_portal_controller implements inter
             self::$strAdditionalTitle = $strAdditionalTitleFromCache;
         }
 
+        $arrPlaceholderWithElements = array();
 
         //copy for the portaleditor
-        $arrPlaceholdersFilled = array();
 
         //Iterate over all elements and pass control to them
         //Get back the filled element
@@ -128,22 +128,14 @@ class class_module_pages_portal extends class_portal_controller implements inter
         /** @var class_module_pages_pageelement $objOneElementOnPage */
         foreach($arrElementsOnPage as $objOneElementOnPage) {
 
-
             //element really available on the template?
             if($objOneElementOnPage->getStrElement() != "block" && $objOneElementOnPage->getStrElement() != "blocks" && !in_array($objOneElementOnPage->getStrPlaceholder(), $arrPlaceholders)) {
                 //next one, plz
                 continue;
             }
-            else {
-                //create a protocol of placeholders filled
-                //remove from pe-additional-array, pe code is injected by element directly
-                $arrPlaceholdersFilled[] = array(
-                    "placeholder" => $objOneElementOnPage->getStrPlaceholder(),
-                    "name"        => $objOneElementOnPage->getStrName(),
-                    "element"     => $objOneElementOnPage->getStrElement(),
-                    "repeatable"  => $objOneElementOnPage->getIntRepeat()
-                );
-            }
+
+
+            $arrPlaceholderWithElements[$objOneElementOnPage->getStrName().$objOneElementOnPage->getStrElement()] = true;
 
             //Build the class-name for the object
             /** @var  class_element_portal $objElement  */
@@ -175,89 +167,31 @@ class class_module_pages_portal extends class_portal_controller implements inter
 
         }
 
-        //pe-code to add new elements on unfilled placeholders --> only if pe is visible TODO: move this to each element, so each element is able to render its own create button.
+        //pe-code to add new elements on unfilled placeholders --> only if pe is visible
         if($bitPeRequested) {
-            //loop placeholders on template in order to remove already filled ones not being repeatable
-            $arrRawPlaceholdersForPe = $arrRawPlaceholders;
-            foreach($arrPlaceholdersFilled as $arrOnePlaceholder) {
 
-                foreach($arrRawPlaceholdersForPe as &$arrOneRawPlaceholder) {
+            foreach($objPlaceholders->getArrPlaceholder() as $arrOnePlaceholder) {
 
-                    if($arrOneRawPlaceholder["placeholder"] == $arrOnePlaceholder["placeholder"]) {
-
-                        foreach($arrOneRawPlaceholder["elementlist"] as $intElementKey => $arrOneRawElement) {
-
-                            if($arrOnePlaceholder["element"] == $arrOneRawElement["element"]) {
-                                if(uniSubstr($arrOneRawElement["name"], 0, 5) == "master") {
-                                    $arrOneRawPlaceholder["elementlist"][$intElementKey] = null;
-                                }
-                                else if($arrOnePlaceholder["repeatable"] == "0") {
-                                    $arrOneRawPlaceholder["elementlist"][$intElementKey] = null;
-                                }
-                            }
-
-                        }
-                    }
-                }
-            }
-
-            //array is now set up. loop again to create new-buttons
-            $arrPePlaceholdersDone = array();
-            $arrPeNewButtons = array();
-            foreach($arrRawPlaceholdersForPe as $arrOneRawPlaceholderForPe) {
-                $strPeNewPlaceholder = $arrOneRawPlaceholderForPe["placeholder"];
-                foreach($arrOneRawPlaceholderForPe["elementlist"] as $arrOnePeNewElement) {
-
-                    if($arrOnePeNewElement == null)
+                foreach($arrOnePlaceholder["elementlist"] as $arrSinglePlaceholder)
+                {
+                    /** @var class_module_pages_element $objElement */
+                    $objElement = class_module_pages_element::getElement($arrSinglePlaceholder["element"]);
+                    if($objElement == null) {
                         continue;
-
-                    //check if the linked element exists
-                    $objPeNewElement = class_module_pages_element::getElement($arrOnePeNewElement["element"]);
-                    if($objPeNewElement == null)
-                        continue;
-
-                    //placeholder processed before?
-                    $strArrayKey = $strPeNewPlaceholder.$objPeNewElement->getStrName();
-
-                    if(in_array($strArrayKey, $arrPePlaceholdersDone))
-                        continue;
-                    else
-                        $arrPePlaceholdersDone[] = $strArrayKey;
-
-                    //create and register the button to add a new element
-                    if(!isset($arrPeNewButtons[$strPeNewPlaceholder]))
-                        $arrPeNewButtons[$strPeNewPlaceholder] = "";
-
-                    if(uniStripos($strArrayKey, "master") !== false) {
-                        $strLink = "";
-                        if($objMasterData !== null)
-                            $strLink = class_element_portal::getPortaleditorNewCode($objMasterData->getSystemid(), $strPeNewPlaceholder, $objPeNewElement);
-                    }
-                    else {
-                        $strLink = class_element_portal::getPortaleditorNewCode($objPageData->getSystemid(), $strPeNewPlaceholder, $objPeNewElement);
                     }
 
-                    $arrPeNewButtons[$strPeNewPlaceholder] .= $strLink;
+                    $objPortalElement = $objElement->getPortalElementInstance();
+
+                    $objPortalElement->getPortaleditorPlaceholderActions(isset($arrPlaceholderWithElements[$arrSinglePlaceholder["name"].$arrSinglePlaceholder["element"]]), $objElement, $arrOnePlaceholder["placeholder"]);
 
                 }
+
+                if(!isset($arrTemplate[$arrOnePlaceholder["placeholder"]])) {
+                    $arrTemplate[$arrOnePlaceholder["placeholder"]] = "";
+                }
+                $arrTemplate[$arrOnePlaceholder["placeholder"]] .= "<span data-placeholder='".$arrOnePlaceholder["placeholder"]."'></span>";
             }
 
-            //loop pe-new code in order to add the wrappers and assign the code to the matching placeholder
-            foreach($arrPeNewButtons as $strPlaceholderName => $strNewButtons) {
-
-                if(!isset($arrTemplate[$strPlaceholderName]))
-                    $arrTemplate[$strPlaceholderName] = "";
-
-                if($strNewButtons != "")
-                    $strNewButtons = class_element_portal::getPortaleditorNewWrapperCode($strPlaceholderName, $strNewButtons);
-
-                $arrTemplate[$strPlaceholderName] .= $strNewButtons;
-            }
-
-            // add placeholder wrapping
-            foreach($arrTemplate as $strPlaceholder => $strContent) {
-                $arrTemplate[$strPlaceholder] = class_carrier::getInstance()->getObjToolkit("portal")->getPePlaceholderWrapper($strPlaceholder, $strContent);
-            }
         }
 
 
@@ -502,8 +436,12 @@ class class_module_pages_portal extends class_portal_controller implements inter
                             ".$strSkinInit."
                         }
                         $(KAJONA.admin.portaleditor.initPortaleditor);
+
+
                     });
                 }
+
+                KAJONA.admin.actions = ".\Kajona\Pages\Portal\PagesPortaleditor::getInstance()->convertToJs().";
             </script>";
             //Load portaleditor styles
             $strPeToolbar .= $this->objToolkit->getPeBasicData();
