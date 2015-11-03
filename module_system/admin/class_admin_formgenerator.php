@@ -742,6 +742,14 @@ class class_admin_formgenerator
     }
 
     /**
+     * @param \class_model|interface_model $objSource
+     */
+    protected function setObjSourceobject($objSource)
+    {
+        $this->objSourceobject = $objSource;
+    }
+
+    /**
      * @return class_formentry_base[]|interface_formentry[]
      */
     public function getArrFields()
