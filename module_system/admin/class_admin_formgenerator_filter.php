@@ -42,42 +42,43 @@ class class_admin_formgenerator_filter extends class_admin_formgenerator
         $objLang = class_carrier::getInstance()->getObjLang();
         $objFilter = $this->getObjSourceobject();
 
-        // check if post request was send?
+        //1. Check if post request was send?
         if ($objCarrier->getParam("{$objFilter->getFilterId()}_setcontentfilter") == "true") {
             $objCarrier->setParam("pv", "1");
         } else {
-            // get the values from the session
+            // Get the values from the session
             $objSessionObject = class_session::getInstance()->getSession($objFilter->getFilterId());
             if ($objSessionObject instanceof class_filter_base) {
                 $this->setObjSourceobject($objSessionObject);
             }
         }
 
-        // filter reset?
+        // 2. Check if filter was reset?
         if ($objCarrier->getParam("reset") != "") {
             $this->resetParams();
         }
 
-        // init form
+        // 3. Init the form
         $this->generateFieldsFromObject();
         $this->updateSourceObject();
         $this->addField(new class_formentry_hidden($this->getStrFormname(), "setcontentfilter"))->setStrValue("true");
 
-        // remove source object so that we dont have a systemid hidden field in the form
+        // 4. Keep filter object in separate variable
         $objFilter = $this->getObjSourceobject();
-        $this->setObjSourceobject(null);
 
-        // update session
+        // 5. Update session with filter object
         class_session::getInstance()->setSession($objFilter->getFilterId(), $objFilter);
 
-        // render filter form
-        $strReturn = "";
-        $strReturn .= parent::renderForm($strTargetURI, class_admin_formgenerator::BIT_BUTTON_SUBMIT | class_admin_formgenerator::BIT_BUTTON_RESET);
-
-        // set filter back to the source object
+        /*
+        6. Render filter form.
+        6.1. Remove source object so that we dont have a systemid hidden field in the form (@see parent::renderForm)
+        6.2. Set filter back to the source object
+        */
+        $this->setObjSourceobject(null);
+        $strReturn = parent::renderForm($strTargetURI, class_admin_formgenerator::BIT_BUTTON_SUBMIT | class_admin_formgenerator::BIT_BUTTON_RESET);
         $this->setObjSourceobject($objFilter);
 
-        // display filter active/inactive
+        // 7. Display filter active/inactive
         $bitFilterActive = false;
         foreach ($this->getArrFields() as $objOneField) {
             if (!$objOneField instanceof class_formentry_hidden) {
@@ -85,7 +86,7 @@ class class_admin_formgenerator_filter extends class_admin_formgenerator
             }
         }
 
-        // render Folder toggle
+        // 8. Render folder toggle
         $arrFolder = $objToolkit->getLayoutFolderPic($strReturn, $objLang->getLang("filter_show_hide", "agp_commons").($bitFilterActive ? $objLang->getLang("commons_filter_active", "system") : ""), "icon_folderOpen", "icon_folderClosed", false);
         $strReturn = $objToolkit->getFieldset($arrFolder[1], $arrFolder[0]);
 
