@@ -113,4 +113,21 @@ class class_admin_formgenerator_filter extends class_admin_formgenerator
             $objCarrier->setParam("{$this->getStrFormname()}_{$strSuffix}", "");
         }
     }
+
+    /**
+     * @param class_filter_base $objFilter
+     * @param string $strAction
+     * @return string
+     */
+    public static function generateFilterForm(class_filter_base &$objFilter, $strAction = "list")
+    {
+        $objFilterForm = new class_admin_formgenerator_filter($objFilter->getFilterId(), $objFilter);
+        $strTarget = class_link::getLinkAdminHref($objFilter->getArrModule(), $strAction);
+
+        $strList = $objFilterForm->renderForm($strTarget);
+        $objFilter = $objFilterForm->getObjSourceobject();
+
+        return $strList;
+    }
+
 }
