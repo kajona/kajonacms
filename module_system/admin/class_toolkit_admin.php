@@ -1651,7 +1651,7 @@ JS;
      *
      * @return string
      */
-    public function getFieldset($strTitle, $strContent, $strClass = "fieldset")
+    public function getFieldset($strTitle, $strContent, $strClass = "fieldset", $strSystemid = "")
     {
         //remove old placeholder from content
         $this->objTemplate->setTemplate($strContent);
@@ -1662,6 +1662,7 @@ JS;
         $arrContent["title"] = $strTitle;
         $arrContent["content"] = $strContent;
         $arrContent["class"] = $strClass;
+        $arrContent["systemid"] = $strSystemid;
         return $this->objTemplate->fillTemplate($arrContent, $strTemplateID);
     }
 

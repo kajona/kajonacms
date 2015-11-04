@@ -314,7 +314,7 @@ class class_module_pages_pageelement extends class_model implements interface_mo
 
     /**
      * Loads all Elements on the given page known by the system, so db-sided, not template-sided.
-     * Returns the list of object
+     * Returns the list of objects
      *
      * @param string $strPageId
      * @param bool $bitJustActive
@@ -325,7 +325,7 @@ class class_module_pages_pageelement extends class_model implements interface_mo
      */
     public static function getElementsOnPage($strPageId, $bitJustActive = false, $strLanguage = "") {
 
-        //since theres the time as an parameter, theres no need for querying the cache...
+        //since there's the time as an parameter, there's no need for querying the cache...
         $arrIds = self::getPlainElementsOnPage($strPageId, $bitJustActive, $strLanguage);
 
         $arrReturn = array();

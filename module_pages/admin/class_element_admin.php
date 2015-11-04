@@ -46,11 +46,11 @@ abstract class class_element_admin extends class_admin_controller implements int
     /**
      * Constructor
      */
-    public function __construct() {
+    public function __construct($strSystemid = "") {
 
         parent::__construct();
 
-        if(validateSystemid($this->getSystemid()))
+        if(validateSystemid($strSystemid))
             $this->loadElementData();
     }
 
@@ -116,10 +116,13 @@ abstract class class_element_admin extends class_admin_controller implements int
         }
 
 
-        $objORM = new class_orm_objectinit($this);
-        $objORM->initObjectFromDb();
-        $objForm = $this->getAdminForm();
+        if($strMode == "edit") {
+            $this->loadElementData();
+            $objORM = new class_orm_objectinit($this);
+            $objORM->initObjectFromDb();
+        }
 
+        $objForm = $this->getAdminForm();
         //validation errors?
         if($this->bitDoValidation) {
             $objForm->validateForm();
@@ -169,6 +172,8 @@ abstract class class_element_admin extends class_admin_controller implements int
         $objForm->addField(new class_formentry_hidden("", "systemid"))->setStrValue($this->getSystemid());
         $objForm->addField(new class_formentry_hidden("", "mode"))->setStrValue($strMode);
         $objForm->addField(new class_formentry_hidden("", "element"))->setStrValue($this->getParam("element"));
+        $objForm->addField(new class_formentry_hidden("", "blocks"))->setStrValue($this->getParam("blocks"));
+        $objForm->addField(new class_formentry_hidden("", "block"))->setStrValue($this->getParam("block"));
 
         //An finally the submit Button
         if($this->getParam("pe") != "") {

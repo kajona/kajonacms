@@ -211,6 +211,27 @@ class class_module_pages_element extends class_model implements interface_model,
         }
     }
 
+    /**
+     * Factory method, creates an instance of the portal-element represented by this page-element.
+     * The admin-element won't get initialized by a systemid, so you shouldn't retrieve
+     * it for further usings.
+     *
+     * @throws class_exception
+     * @return interface_portal_element|class_element_portal An instance of the portal-class linked by the current element
+     */
+    public function getPortalElementInstance() {
+        //Build the class-name
+        $strElementClass = str_replace(".php", "", $this->getStrClassPortal());
+        //and finally create the object
+        if(class_exists($strElementClass)) {
+            $objElement = new $strElementClass(new class_module_pages_pageelement());
+            return $objElement;
+        }
+        else {
+            throw new class_exception("element class ".$strElementClass." not existing", class_exception::$level_FATALERROR);
+        }
+    }
+
 
     /**
      * @return string
