@@ -28,7 +28,6 @@ KAJONA.admin.pages = {
             },
             stop: function(event, ui) {
                 if(oldPos != ui.item.index()  ) {
-                    console.debug('shifting '+ui.item.data('systemid')+' to '+(ui.item.index()+1));
                     KAJONA.admin.ajax.setAbsolutePosition(ui.item.data('systemid'), ui.item.index()+1);
                 }
                 oldPos = 0;
@@ -39,15 +38,7 @@ KAJONA.admin.pages = {
         $('fieldset.block:not(.newblock)').css('cursor', 'move');
         $('fieldset.block:not(.newblock)  table').css('cursor', 'auto');
 
-        //$('#%%listid%% > tbody:has(tr[data-systemid!=""]) > tr').each(function(index) {
-        //    $(this).find("td.listsorthandle").css('cursor', 'move').append("<i class='fa fa-arrows-v'></i>");
-        //    KAJONA.admin.tooltip.addTooltip($(this).find("td.listsorthandle"), "[lang,commons_sort_vertical,system]");
-        //
-        //    if(bitMoveToTree) {
-        //        $(this).find("td.treedrag").css('cursor', 'move').addClass("jstree-draggable").append("<i class='fa fa-arrows-h' data-systemid='"+$(this).closest("tr").data("systemid")+"'></i>");
-        //        KAJONA.admin.tooltip.addTooltip($(this).find("td.treedrag"), "[lang,commons_sort_totree,system]");
-        //    }
-        //});
+
 
     }
 };
