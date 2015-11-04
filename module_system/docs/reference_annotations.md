@@ -11,6 +11,7 @@ Annotation         |Context    |Introduced in     |Description
 |@blockEscaping	|Property	|4.0	|If given, the OR-mapper skips the escaping of special chars for the value of the property right before passing the value to the database.
 |@blockFromAutosave	|Class	|4.6	|If a class is marked with this annotation, the generalModel unit-tests skips this class. This means, the test won't try to save and delete the object automatically. May be useful if the marked class only works in combination with other classes or hierarchy elements.
 |@elementContentTtitle	|Property	|4.3|	Allowed for element-admin-classes. The value of the property marked with this annotation is used as a list-title, so when rendering the list of page-elements in the backend.
+|@filterCompareOperator operator |Property	|5.0|	Only to be used for properties in classes which are derived from class_filter_base. Possible values are: EQ, GT, LT, GE, LE, NE, LIKE 
 |@fieldDDValues key -> value	|Property	|4.3|	Only to be used in combination with @fieldType dropdown, lists the key-value-pairs of options. Syntax: [ index => langKey ],[ index => langKey]. Example: @fieldDDValues [0 => commons_no],[1 => commons_yes]
 |@fieldHidden	|Property	|4.3	|Flag to move a form-entry to the list of hidden form-fields. Hidden in terms of not visible by default, may be shown using a css / js call.
 |@fieldTemplateDir path	|Property	|4.3	|Only to be used in combination with @fieldType template (template formentry). Defines the path to the directory of templates to choose from.
