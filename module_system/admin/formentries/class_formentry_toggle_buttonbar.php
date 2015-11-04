@@ -49,7 +49,7 @@ class class_formentry_toggle_buttonbar extends class_formentry_multiselect {
         }
 
         $arrSelectedKeys = array();
-        if($this->getStrValue() !== "") {
+        if($this->getStrValue() !== "" && $this->getStrValue() !== null) {
             $arrSelectedKeys = explode(",", $this->getStrValue());
         }
         $strReturn .= $objToolkit->formToggleButtonBar($this->getStrEntryName(), $this->arrKeyValues, $this->getStrLabel(), $arrSelectedKeys, !$this->getBitReadonly(), $this->strType);
