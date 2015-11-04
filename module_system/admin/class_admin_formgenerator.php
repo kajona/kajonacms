@@ -76,6 +76,7 @@ class class_admin_formgenerator
     private $strFormEncoding = "";
 
     private $strOnSubmit = "";
+    private $strMethod = "POST";
     private $objLang;
 
     /**
@@ -240,7 +241,7 @@ class class_admin_formgenerator
         $strGeneratedFormname = "form".generateSystemid();
         $objToolkit = class_carrier::getInstance()->getObjToolkit("admin");
         if ($strTargetURI !== null) {
-            $strReturn .= $objToolkit->formHeader($strTargetURI, $strGeneratedFormname, $this->strFormEncoding, $this->strOnSubmit);
+            $strReturn .= $objToolkit->formHeader($strTargetURI, $strGeneratedFormname, $this->strFormEncoding, $this->strOnSubmit, $this->strMethod);
         }
         $strReturn .= $objToolkit->getValidationErrors($this);
 
@@ -801,5 +802,26 @@ class class_admin_formgenerator
     public function getStrFormname()
     {
         return $this->strFormname;
+    }
+
+    /**
+     * @param string $strMethod
+     * @throws class_exception
+     */
+    public function setStrMethod($strMethod)
+    {
+        if (in_array($strMethod, array("GET", "POST"))) {
+            $this->strMethod = $strMethod;
+        } else {
+            throw new class_exception("Invalid form method", class_exception::$level_ERROR);
+        }
+    }
+
+    /**
+     * @return string
+     */
+    public function getStrMethod()
+    {
+        return $this->strMethod;
     }
 }

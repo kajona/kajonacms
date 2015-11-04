@@ -75,6 +75,10 @@ class class_admin_formgenerator_filter extends class_admin_formgenerator
         6.2. Set filter back to the source object
         */
         $this->setObjSourceobject(null);
+
+        // set form method to GET
+        $this->setStrMethod("GET");
+
         $strReturn = parent::renderForm($strTargetURI, class_admin_formgenerator::BIT_BUTTON_SUBMIT | class_admin_formgenerator::BIT_BUTTON_RESET);
         $this->setObjSourceobject($objFilter);
 
