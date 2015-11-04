@@ -18,6 +18,7 @@ namespace Kajona\Pages\System;
  * @method static PagesPortaleditorActionEnum SETINACTIVE()
  * @method static PagesPortaleditorActionEnum CREATE()
  * @method static PagesPortaleditorActionEnum COPY()
+ * @method static PagesPortaleditorActionEnum MOVE()
  */
 class PagesPortaleditorActionEnum extends \class_enum  {
 
