@@ -42,7 +42,6 @@ class class_formentry_masterdropdown extends class_formentry_base implements int
         $strValues = $this->arrLabels;
         $arrNewValues = array();
         array_walk($strValues, function(&$strValue, &$strKey) use(&$arrNewValues) {
-            $strKey = uniStrtolower(uniStrReplace(array("int", "str"), "", $strKey));
             $strKey = $this->getStrFormName()."_".$strKey;
             $arrNewValues[$strKey] = $strValue;
         });
@@ -53,7 +52,6 @@ class class_formentry_masterdropdown extends class_formentry_base implements int
 
         $arrFormentries = $this->arrDepends;
         array_walk($arrFormentries, function(&$strValue) {
-            $strValue = uniStrtolower(uniStrReplace(array("int", "str"), "", $strValue));
             $strValue = $this->getStrFormName()."_".$strValue;
         });
         $arrFormentries = array_merge(array($this->getStrEntryName()), $arrFormentries);
@@ -173,8 +171,9 @@ JS;
 
             //load all language entries
             $this->arrLabels = array($this->getStrSourceProperty() => array("" => class_carrier::getInstance()->getObjLang()->getLang("commons_dropdown_dataplaceholder", "system")));
-            foreach($this->arrDepends as $strOneDepend)
+            foreach($this->arrDepends as $strOneDepend) {
                 $this->arrLabels[$strOneDepend] = array("" => class_carrier::getInstance()->getObjLang()->getLang("commons_dropdown_dataplaceholder", "system"));
+            }
 
 
             $intI = 1;
@@ -210,7 +209,15 @@ JS;
         $strPrefix = trim($objReflection->getAnnotationValueForProperty($strSourceProperty, self::STR_VALUE_ANNOTATION));
         $strDependant = trim($objReflection->getAnnotationValueForProperty($strSourceProperty, self::STR_DEPENDS_ANNOTATION));
         $arrDepends = explode(" ", $strDependant);
-        array_walk($arrDepends, function(&$strValue) { $strValue = trim($strValue); });
+        array_walk($arrDepends, function(&$strValue) {
+
+            $strValue = trim($strValue);
+            $strStart = uniSubstr($strValue, 0, 3);
+            if (in_array($strStart, array("int", "bit", "str", "arr", "obj"))) {
+                $strValue = uniStrtolower(uniSubstr($strValue, 3));
+            }
+            
+        });
     }
 
     private function getSublevel($strVarLabel, $strPrefix, $intLevel) {
