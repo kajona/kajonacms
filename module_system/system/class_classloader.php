@@ -241,6 +241,8 @@ class class_classloader
         $this->addClassFolder("/system/scriptlets/");
         $this->addClassFolder("/system/");
         $this->addClassFolder("/installer/");
+
+        $this->addClassFolder("/legacy/");
     }
 
     /**

@@ -4,6 +4,9 @@
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 ********************************************************************************************************/
 
+namespace Kajona\System\System;
+use class_exception;
+
 /**
  * The enum base class may be used to create php-based enum approaches.
  * Use it as following:
@@ -13,24 +16,24 @@
  *
  * /**
  *  *
- *  * @ method static class_test_enum A()
- *  * @ method static class_test_enum B()
+ *  * @ method static TestEnum A()
+ *  * @ method static TestEnum B()
  *  *
- * class_test_enum extends class_enum {
+ * class TestEnum extends Enum {
  *   protected function getArrValues() { return array("A", "B"); }
  * }
  *
  * Later on you may access all possible enums using magical static methods, returning A
- * $objEnum = class_test_enum::A()
+ * $objEnum = TestEnum::A()
  *
  * Compare it using the internal equals:
- * $objEnum->equals(class_test_enum::A())
+ * $objEnum->equals(TestEnum::A())
  *
  * @package module_system
  * @author sidler@mulchprod.de
  * @since 4.6
  */
-abstract class class_enum {
+abstract class Enum {
 
 
     /**
@@ -61,7 +64,7 @@ abstract class class_enum {
      * @param string $strName
      *
      * @throws class_exception
-     * @return class_enum
+     * @return Enum
      */
     public static function __callStatic($strName, $arrArguments) {
         $objEnum =  new static($strName);
@@ -74,11 +77,11 @@ abstract class class_enum {
 
     /**
      * Use this method to compare enum-instances
-     * @param class_enum $objB
+     * @param Enum $objB
      *
      * @return bool
      */
-    public function equals(class_enum $objB) {
+    public function equals(Enum $objB) {
         return $this->strValue == $objB->strValue && get_class($this) == get_class($objB);
     }
 
