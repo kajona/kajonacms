@@ -6,7 +6,7 @@ require_once (__DIR__."/../../module_system/system/class_testbase.php");
  * Class class_test_templateTest
  *
  */
-class class_test_templateParseBlocksTest extends class_testbase
+class class_test_templateFullParseTest extends class_testbase
 {
 
 
