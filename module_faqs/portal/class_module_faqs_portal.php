@@ -8,7 +8,6 @@
 ********************************************************************************************************/
 
 use Kajona\Pages\Portal\PagesPortaleditor;
-use Kajona\Pages\System\PagesPortaleditorAction;
 use Kajona\Pages\System\PagesPortaleditorActionEnum;
 use Kajona\Pages\System\PagesPortaleditorSystemidAction;
 
