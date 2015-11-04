@@ -232,7 +232,7 @@ class class_admin_formgenerator
         $strReturn = "";
 
         //add a hidden systemid-field
-        if ($this->objSourceobject != null) {
+        if ($this->objSourceobject != null && $this->objSourceobject instanceof class_model) {
             $objField = new class_formentry_hidden($this->strFormname, "systemid");
             $objField->setStrEntryName("systemid")->setStrValue($this->objSourceobject->getSystemid())->setObjValidator(new class_systemid_validator());
             $this->addField($objField);

@@ -235,7 +235,7 @@ class class_ldap
         //search the group itself
         $strQuery = $this->arrConfig["ldap_group_isUserMemberOf"];
         //double encode backslashes
-        $strUserDN = uniStrReplace("\\,", "\\\\,",$strUserDN);
+        $strUserDN = uniStrReplace("\\,", "\\\\,", utf8_decode($strUserDN));
         $strQuery = uniStrReplace("?", $strUserDN, $strQuery);
         $objResult = @ldap_search($this->objCx, $strGroupDN, $strQuery);
 
@@ -306,7 +306,7 @@ class class_ldap
         $arrReturn = false;
 
         //search the group itself
-        $objResult = @ldap_search($this->objCx, $strUsername, $this->arrConfig["ldap_user_filter"]);
+        $objResult = @ldap_search($this->objCx, utf8_decode($strUsername), $this->arrConfig["ldap_user_filter"]);
 
         if ($objResult !== false) {
             $arrReturn = array();
@@ -350,7 +350,7 @@ class class_ldap
         $arrReturn = false;
 
         $strUserFilter = $this->arrConfig["ldap_user_search_filter"];
-        $strUserFilter = uniStrReplace("?", $strUsername, $strUserFilter);
+        $strUserFilter = uniStrReplace("?", utf8_decode($strUsername), $strUserFilter);
 
 
         //search the group itself
