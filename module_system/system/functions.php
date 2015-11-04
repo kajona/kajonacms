@@ -1306,3 +1306,59 @@ function checkConditionalGetHeaders($strChecksum)
     return false;
 }
 
+/**
+ * Converts a given string to an array
+ *
+ * @param $strString
+ * @param string $strDelimiter
+ * @return array|null
+ */
+function strToArray($strString, $strDelimiter = ",") {
+
+    if(is_string($strString) && $strString !== "") {
+        return explode($strDelimiter, $strString);
+    }
+    elseif(is_array($strString)) {
+        return $strString;
+    }
+
+    return null;
+
+}
+
+/**
+ * Converts a string to an int
+ *
+ * @param $strString
+ * @return int|null
+ */
+function strToInt($strString) {
+    if(is_string($strString) && $strString !== "") {
+        return (int)$strString;
+    }
+    if(is_numeric($strString)) {
+        return $strString;
+    }
+
+    return null;
+}
+
+/**
+ * Converts a string to a class_date
+ *
+ * @param $strString
+ * @return class_date|null
+ */
+function strToDate($strString) {
+
+    if($strString instanceof class_date) {
+        return $strString;
+    }
+    elseif($strString == "") {
+        return null;
+    }
+    else {
+        return new class_date($strString);
+    }
+}
+

@@ -9,7 +9,7 @@
 
 /**
  * @author christoph.kappestein@gmail.com
- * @since  4.0
+ * @since  5.0
  * @module module_formgenerator
  */
 class class_admin_formgenerator_filter extends class_admin_formgenerator
@@ -35,6 +35,14 @@ class class_admin_formgenerator_filter extends class_admin_formgenerator
         return parent::getObjSourceobject();
     }
 
+    /**
+     * Renders a filter including session handling for the given filter
+     *
+     * @param string $strTargetURI
+     * @param int $intButtonConfig
+     * @return string
+     * @throws class_exception
+     */
     public function renderForm($strTargetURI, $intButtonConfig = 2)
     {
         $objCarrier = class_carrier::getInstance();
@@ -69,20 +77,13 @@ class class_admin_formgenerator_filter extends class_admin_formgenerator
         // 5. Update session with filter object
         class_session::getInstance()->setSession($objFilter->getFilterId(), $objFilter);
 
-        /*
-        6. Render filter form.
-        6.1. Remove source object so that we dont have a systemid hidden field in the form (@see parent::renderForm)
-        6.2. Set filter back to the source object
-        */
-        $this->setObjSourceobject(null);
+        // 6. Set form method to GET
+        $this->setStrMethod(self::STR_METHOD_GET);
 
-        // set form method to GET
-        $this->setStrMethod("GET");
-
+        // 7. Render filter form.
         $strReturn = parent::renderForm($strTargetURI, class_admin_formgenerator::BIT_BUTTON_SUBMIT | class_admin_formgenerator::BIT_BUTTON_RESET);
-        $this->setObjSourceobject($objFilter);
 
-        // 7. Display filter active/inactive
+        // 8. Display filter active/inactive
         $bitFilterActive = false;
         foreach ($this->getArrFields() as $objOneField) {
             if (!$objOneField instanceof class_formentry_hidden) {
@@ -90,7 +91,7 @@ class class_admin_formgenerator_filter extends class_admin_formgenerator
             }
         }
 
-        // 8. Render folder toggle
+        // 9. Render folder toggle
         $arrFolder = $objToolkit->getLayoutFolderPic($strReturn, $objLang->getLang("filter_show_hide", "agp_commons").($bitFilterActive ? $objLang->getLang("commons_filter_active", "system") : ""), "icon_folderOpen", "icon_folderClosed", false);
         $strReturn = $objToolkit->getFieldset($arrFolder[1], $arrFolder[0]);
 
@@ -119,19 +120,20 @@ class class_admin_formgenerator_filter extends class_admin_formgenerator
     }
 
     /**
+     * Generates a filter based on the given filter object.
+     *
      * @param class_filter_base $objFilter
      * @param string $strAction
      * @return string
      */
-    public static function generateFilterForm(class_filter_base &$objFilter, $strAction = "list")
+    public static function generateFilterForm(class_filter_base $objFilter, $strAction = "list")
     {
         $objFilterForm = new class_admin_formgenerator_filter($objFilter->getFilterId(), $objFilter);
         $strTarget = class_link::getLinkAdminHref($objFilter->getArrModule(), $strAction);
 
-        $strList = $objFilterForm->renderForm($strTarget);
-        $objFilter = $objFilterForm->getObjSourceobject();
+        $strFilter = $objFilterForm->renderForm($strTarget);
 
-        return $strList;
+        return $strFilter;
     }
 
 }

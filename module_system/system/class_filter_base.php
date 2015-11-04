@@ -46,7 +46,9 @@ abstract class class_filter_base
     }
 
     /**
-     * @return array
+     * Generates ORM restrictions based on the properties of the filter.
+     *
+     * @return class_orm_objectlist_restriction[]
      */
     public function getOrmRestrictions()
     {
@@ -73,19 +75,20 @@ abstract class class_filter_base
                         if (is_string($strValue)) {
                             $strCompareOperator = $enumFilterCompareOperator === null ? "LIKE" : $enumFilterCompareOperator->getEnumAsSqlString();
                             if (validateSystemid($strValue)) {
-                                $arrRestriction[] = new class_orm_objectlist_restriction(" AND " . $strTableColumn . " $strCompareOperator ? ", $strValue);
+                                $arrRestriction[] = new class_orm_objectlist_restriction("AND " . $strTableColumn . " $strCompareOperator ?", $strValue);
                             } else {
-                                $arrRestriction[] = new class_orm_objectlist_restriction(" AND " . $strTableColumn . " $strCompareOperator ? ", "%" . $strValue . "%");
+                                $arrRestriction[] = new class_orm_objectlist_restriction("AND " . $strTableColumn . " $strCompareOperator ?", "%" . $strValue . "%");
                             }
                         } elseif (is_int($strValue) || is_float($strValue)) {
                             $strCompareOperator = $enumFilterCompareOperator === null ? "=" : $enumFilterCompareOperator->getEnumAsSqlString();
-                            $arrRestriction[] = new class_orm_objectlist_restriction(" AND " . $strTableColumn . " $strCompareOperator ? ", $strValue);
+                            $arrRestriction[] = new class_orm_objectlist_restriction("AND " . $strTableColumn . " $strCompareOperator ?", $strValue);
                         } elseif (is_bool($strValue)) {
                             $strCompareOperator = $enumFilterCompareOperator === null ? "=" : $enumFilterCompareOperator->getEnumAsSqlString();
-                            $arrRestriction[] = new class_orm_objectlist_restriction(" AND " . $strTableColumn . " $strCompareOperator ? ", $strValue ? 1 : 0);
+                            $arrRestriction[] = new class_orm_objectlist_restriction("AND " . $strTableColumn . " $strCompareOperator ?", $strValue ? 1 : 0);
                         } elseif (is_array($strValue)) {
                             $arrRestriction[] = new class_orm_objectlist_in_restriction($strTableColumn, $strValue);
                         } elseif ($strValue instanceof class_date) {
+                            $strValue = clone $strValue;
                             $strCompareOperator = $enumFilterCompareOperator === null ? "=" : $enumFilterCompareOperator->getEnumAsSqlString();
 
                             if($enumFilterCompareOperator !== null) {
@@ -101,7 +104,7 @@ abstract class class_filter_base
                                 }
                             }
 
-                            $arrRestriction[] = new class_orm_objectlist_restriction(" AND " . $strTableColumn . " $strCompareOperator ? ", $strValue->getLongTimestamp());
+                            $arrRestriction[] = new class_orm_objectlist_restriction("AND " . $strTableColumn . " $strCompareOperator ?", $strValue->getLongTimestamp());
                         }
                     }
                 }
@@ -112,6 +115,8 @@ abstract class class_filter_base
     }
 
     /**
+     * Adds all ORM restrictions to the given $objORM
+     *
      * @param class_orm_objectlist $objORM
      */
     public function addWhereRestrictions(class_orm_objectlist $objORM)
@@ -123,7 +128,9 @@ abstract class class_filter_base
     }
 
     /**
-     * @param $strFilterCompareType
+     * Gets class_orm_comparator_enum by the given $strFilterCompareType
+     *
+     * @param string $strFilterCompareType
      * @return class_orm_comparator_enum
      */
     private function getFilterCompareOperator($strFilterCompareType) {
@@ -145,62 +152,6 @@ abstract class class_filter_base
                 return class_orm_comparator_enum::Like();
             default:
                 return null;
-        }
-    }
-
-
-    /**
-     * Converts a given string to an array
-     *
-     * @param $strString
-     * @return array|null
-     */
-    public static function toArray($strString) {
-
-        if(is_string($strString) && $strString !== "") {
-            return explode(",", $strString);
-        }
-        elseif(is_array($strString)) {
-            return $strString;
-        }
-
-        return null;
-
-    }
-
-    /**
-     * Converts a string to an int
-     *
-     * @param $strString
-     * @return int|null
-     */
-    public static function toInt($strString) {
-        if(is_string($strString)) {
-            return (int)$strString;
-        }
-        if(is_numeric($strString)) {
-            return $strString;
-        }
-
-        return null;
-    }
-
-    /**
-     * Converts a string to a class_date
-     *
-     * @param $strString
-     * @return class_date|null
-     */
-    public static function toDate($strString) {
-
-        if($strString instanceof class_date) {
-            return $strString;
-        }
-        elseif($strString == "") {
-            return null;
-        }
-        else {
-            return new class_date($strString);
         }
     }
 }

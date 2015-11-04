@@ -26,6 +26,9 @@
 class class_admin_formgenerator
 {
 
+    const STR_METHOD_POST = "POST";
+    const STR_METHOD_GET = "GET";
+
     const  STR_TYPE_ANNOTATION = "@fieldType";
     const  STR_VALIDATOR_ANNOTATION = "@fieldValidator";
     const  STR_MANDATORY_ANNOTATION = "@fieldMandatory";
@@ -810,7 +813,7 @@ class class_admin_formgenerator
      */
     public function setStrMethod($strMethod)
     {
-        if (in_array($strMethod, array("GET", "POST"))) {
+        if (in_array($strMethod, array(self::STR_METHOD_GET, self::STR_METHOD_POST))) {
             $this->strMethod = $strMethod;
         } else {
             throw new class_exception("Invalid form method", class_exception::$level_ERROR);
