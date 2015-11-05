@@ -242,6 +242,7 @@ class class_classloader
         $this->addClassFolder("/system/");
         $this->addClassFolder("/installer/");
         $this->addClassFolder("/event/");
+        $this->addClassFolder("/legacy/");
     }
 
     /**
