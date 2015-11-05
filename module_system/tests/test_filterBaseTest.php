@@ -31,6 +31,7 @@ class test_filterBaseTest extends class_testbase  {
         $arrRestrictions = $objFilter->getOrmRestrictions();
         $this->assertCount(9, $arrRestrictions);
 
+        //Without annotation @filterCompareOperator
         $this->assertTrue($arrRestrictions[0] instanceof class_orm_objectlist_restriction);
         $this->assertEquals(" AND filter.filter1 LIKE ? ", $arrRestrictions[0]->getStrWhere());
         $this->assertCount(1, $arrRestrictions[0]->getArrParams());
@@ -59,6 +60,8 @@ class test_filterBaseTest extends class_testbase  {
         $this->assertEquals(" AND filter.filter6 <= ? ", $arrRestrictions[5]->getStrWhere());
         $this->assertEquals(12, $arrRestrictions[5]->getArrParams()[0]);
 
+
+        //With annotation @filterCompareOperator
         $this->assertTrue($arrRestrictions[6] instanceof class_orm_objectlist_restriction);
         $this->assertEquals(" AND filter.filter7 >= ? ", $arrRestrictions[6]->getStrWhere());
         $this->assertEquals(20150101000000, $arrRestrictions[6]->getArrParams()[0]);
@@ -67,6 +70,7 @@ class test_filterBaseTest extends class_testbase  {
         $this->assertEquals(" AND filter.filter8 <= ? ", $arrRestrictions[7]->getStrWhere());
         $this->assertEquals(20150101235959, $arrRestrictions[7]->getArrParams()[0]);
 
+        //Filter by system id
         $this->assertTrue($arrRestrictions[8] instanceof class_orm_objectlist_restriction);
         $this->assertEquals(" AND filter.filter9 LIKE ? ", $arrRestrictions[8]->getStrWhere());
         $this->assertCount(1, $arrRestrictions[8]->getArrParams());
