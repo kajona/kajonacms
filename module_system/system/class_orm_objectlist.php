@@ -230,7 +230,7 @@ class class_orm_objectlist extends class_orm_base {
         }
 
         $arrOrderByCriteria[] = " system_sort ASC  ";
-        $arrOrderByCriteria[] = " system_lm_time DESC ";
+        $arrOrderByCriteria[] = " system_create_date DESC ";
         $strOrderBy = "";
         if(count($arrOrderByCriteria) > 0)
             $strOrderBy = "ORDER BY ".implode(" , ", $arrOrderByCriteria)." ";
