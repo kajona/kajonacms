@@ -24,26 +24,19 @@ abstract class class_filter_base
     const STR_COMPAREOPERATOR_LIKE = "LIKE";
 
     /**
-     * Returns the ID of the filter
+     * Returns the ID of the filter.
+     * This ID is also being used to store the filter in the session. Please make sure to use a unique ID.
      *
      * @return string
      */
     abstract public function getFilterId();
 
     /**
-     * Returns the module name
+     * Returns the module name.
      *
      * @return string
      */
     abstract public function getArrModule();
-
-    /**
-     * @return string
-     */
-    public function getSystemid()
-    {
-        return generateSystemid();
-    }
 
     /**
      * Generates ORM restrictions based on the properties of the filter.
