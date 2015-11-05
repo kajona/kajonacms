@@ -6,9 +6,9 @@
 
 /**
  * @inheritdoc
- * @deprecated use \Kajona\System\System\Enum instead
- * @see \Kajona\System\System\Enum
+ * @deprecated use \Kajona\System\System\EnumBase instead
+ * @see \Kajona\System\System\EnumBase
  */
-abstract class class_enum extends \Kajona\System\System\Enum {
+abstract class class_enum extends \Kajona\System\System\EnumBase {
 
 }

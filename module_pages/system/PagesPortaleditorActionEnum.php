@@ -6,7 +6,7 @@
 
 namespace Kajona\Pages\System;
 
-use Kajona\System\System\Enum;
+use Kajona\System\System\EnumBase;
 
 /**
  * A single model for a portaleditor action
@@ -22,7 +22,7 @@ use Kajona\System\System\Enum;
  * @method static PagesPortaleditorActionEnum COPY()
  * @method static PagesPortaleditorActionEnum MOVE()
  */
-class PagesPortaleditorActionEnum extends Enum
+class PagesPortaleditorActionEnum extends EnumBase
 {
 
     /**

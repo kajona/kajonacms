@@ -5,6 +5,7 @@
 ********************************************************************************************************/
 
 namespace Kajona\System\System;
+
 use class_exception;
 
 /**
@@ -19,7 +20,7 @@ use class_exception;
  *  * @ method static TestEnum A()
  *  * @ method static TestEnum B()
  *  *
- * class TestEnum extends Enum {
+ * class TestEnum extends EnumBase {
  *   protected function getArrValues() { return array("A", "B"); }
  * }
  *
@@ -33,7 +34,8 @@ use class_exception;
  * @author sidler@mulchprod.de
  * @since 4.6
  */
-abstract class Enum {
+abstract class EnumBase
+{
 
 
     /**
@@ -41,7 +43,7 @@ abstract class Enum {
      *
      * @return string[]
      */
-    protected abstract function getArrValues();
+     abstract protected function getArrValues();
 
     /**
      * @var string
@@ -54,7 +56,8 @@ abstract class Enum {
      *
      * @param $strCurValue
      */
-    private function __construct($strCurValue) {
+    private function __construct($strCurValue)
+    {
         $this->strValue = $strCurValue;
     }
 
@@ -64,12 +67,13 @@ abstract class Enum {
      * @param string $strName
      *
      * @throws class_exception
-     * @return Enum
+     * @return EnumBase
      */
-    public static function __callStatic($strName, $arrArguments) {
-        $objEnum =  new static($strName);
-        if(!in_array($strName, $objEnum->getArrValues())) {
-            throw new class_exception($strName ." is not allowed for enum ".get_called_class(), class_exception::$level_FATALERROR);
+    public static function __callStatic($strName, $arrArguments)
+    {
+        $objEnum = new static($strName);
+        if (!in_array($strName, $objEnum->getArrValues())) {
+            throw new class_exception($strName." is not allowed for enum ".get_called_class(), class_exception::$level_FATALERROR);
         }
 
         return $objEnum;
@@ -77,19 +81,23 @@ abstract class Enum {
 
     /**
      * Use this method to compare enum-instances
-     * @param Enum $objB
+     *
+     * @param EnumBase $objB
      *
      * @return bool
      */
-    public function equals(Enum $objB) {
+    public function equals(EnumBase $objB)
+    {
         return $this->strValue == $objB->strValue && get_class($this) == get_class($objB);
     }
 
     /**
      * Prints the enums current value
+     *
      * @return string
      */
-    public function __toString() {
+    public function __toString()
+    {
         return $this->strValue."";
     }
 
