@@ -67,7 +67,6 @@
                 <kajona-blocks kajona-name="content">
 
                     <kajona-block kajona-name="Row light" kajona-name-de="Zeile hell">
-                        block row light
                         <div class="row-light">
                             <h1>%%headline_plaintext%%</h1>
                             <div>%%content_richtext%%</div>
@@ -76,7 +75,6 @@
                     </kajona-block>
 
                     <kajona-block kajona-name="Row dark" kajona-name-de="Zeile dunkel">
-                        block row dark
                         <div class="row-dark">
                             <h1>%%headline_plaintext%%</h1>
                             %%content_richtext%%
@@ -84,7 +82,6 @@
                     </kajona-block>
 
                     <kajona-block kajona-name="Row 3 column" kajona-name-de="Zeile 3-spaltig">
-                        block row 3 column
                         <div class="row-3column">
                             <div>%%column1_richtext%%</div>
                             <div>%%column2_richtext%%</div>
@@ -98,14 +95,12 @@
                 <kajona-blocks kajona-name="2ndcontent">
 
                     <kajona-block kajona-name="Row light" kajona-name-de="Zeile hell">
-                        block row light
                         <div class="row-light">
                             %%date_date%%
                         </div>
                     </kajona-block>
 
                     <kajona-block kajona-name="Row dark" kajona-name-de="Zeile dunkel">
-                        block row dark
                         <div class="row-dark">
                             %%content_richtext%%
                         </div>
