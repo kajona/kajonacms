@@ -62,7 +62,7 @@ class class_orm_objectlist_in_restriction extends class_orm_objectlist_restricti
      * @throws class_orm_exception
      */
     public function getStrWhere() {
-        return $this->getInStatement($this->strColumnName);
+        return " ".$this->getInStatement($this->strColumnName)." ";
     }
 
     protected function getInStatement($strColumnName) {

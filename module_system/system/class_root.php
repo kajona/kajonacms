@@ -19,6 +19,7 @@ abstract class class_root {
 
     const STR_MODULE_ANNOTATION = "@module";
     const STR_MODULEID_ANNOTATION = "@moduleId";
+    const STR_SORTMANAGER_ANNOTATION = "@sortManager";
 
 
     /**
@@ -50,7 +51,7 @@ abstract class class_root {
     /**
      * @var interface_sortmanager
      */
-    protected $objSortManager = null;
+    private $objSortManager = null;
 
     private $strAction; //current action to perform (GET/POST)
     protected $arrModule = array(); //Array containing information about the current module
@@ -240,8 +241,6 @@ abstract class class_root {
         $this->objSession = $objCarrier->getObjSession();
         $this->objLang = $objCarrier->getObjLang();
 
-        $this->objSortManager = new class_common_sortmanager($this);
-
         //And keep the action
         $this->strAction = $this->getParam("action");
 
@@ -265,6 +264,13 @@ abstract class class_root {
                 $this->setArrModuleEntry("moduleId", constant(trim($arrAnnotationValues[0])));
                 $this->setIntModuleNr(constant(trim($arrAnnotationValues[0])));
             }
+        }
+
+        //set up a possible sort-manager
+        $arrAnnotationValues = $objReflection->getAnnotationValuesFromClass(self::STR_SORTMANAGER_ANNOTATION);
+        if(count($arrAnnotationValues) > 0) {
+            $strClass = trim($arrAnnotationValues[0]);
+            $this->objSortManager = new $strClass($this);
         }
 
         if($strSystemid != "") {
@@ -414,14 +420,18 @@ abstract class class_root {
         $this->objDB->transactionBegin();
 
         $this->intRecordDeleted = 0;
-        $this->intSort = $this->getNextSortValue($this->getStrPrevId());
+        if($this->objSortManager !== null) {
+            $this->intSort = $this->getNextSortValue($this->getStrPrevId());
+        }
         $bitReturn = $this->updateObjectToDb();
 
         class_objectfactory::getInstance()->removeFromCache($this->getSystemid());
         class_orm_rowcache::removeSingleRow($this->getSystemid());
         $this->objDB->flushQueryCache();
 
-        $this->objSortManager->fixSortOnPrevIdChange($this->strPrevId, $this->strPrevId);
+        if($this->objSortManager !== null) {
+            $this->objSortManager->fixSortOnPrevIdChange($this->strPrevId, $this->strPrevId);
+        }
 
         $bitReturn = $bitReturn && class_core_eventdispatcher::getInstance()->notifyGenericListeners(class_system_eventidentifier::EVENT_SYSTEM_RECORDRESTORED_LOGICALLY, array($this->getSystemid(), get_class($this), $this));
 
@@ -472,7 +482,9 @@ abstract class class_root {
         class_orm_rowcache::removeSingleRow($this->getSystemid());
         $this->objDB->flushQueryCache();
 
-        $this->objSortManager->fixSortOnDelete();
+        if($this->objSortManager !== null) {
+            $this->objSortManager->fixSortOnDelete();
+        }
 
         $bitReturn = $bitReturn && class_core_eventdispatcher::getInstance()->notifyGenericListeners(class_system_eventidentifier::EVENT_SYSTEM_RECORDDELETED_LOGICALLY, array($this->getSystemid(), get_class($this)));
 
@@ -520,7 +532,9 @@ abstract class class_root {
         $objORM = new class_orm_objectdelete($this);
         $bitReturn = $objORM->deleteObject();
 
-        $this->objSortManager->fixSortOnDelete();
+        if($this->objSortManager !== null) {
+            $this->objSortManager->fixSortOnDelete();
+        }
         $bitReturn = $bitReturn && $this->deleteSystemRecord($this->getSystemid());
 
         class_objectfactory::getInstance()->removeFromCache($this->getSystemid());
@@ -904,7 +918,7 @@ abstract class class_root {
             class_carrier::getInstance()->getObjRights()->rebuildRightsStructure($this->getSystemid());
             class_core_eventdispatcher::getInstance()->notifyGenericListeners(class_system_eventidentifier::EVENT_SYSTEM_PREVIDCHANGED, array($this->getSystemid(), $this->strOldPrevId, $this->strPrevId));
         }
-        if($this->strOldPrevId != $this->strPrevId) {
+        if($this->strOldPrevId != $this->strPrevId && $this->objSortManager !== null) {
             $this->objSortManager->fixSortOnPrevIdChange($this->strOldPrevId, $this->strPrevId);
         }
 
@@ -922,6 +936,11 @@ abstract class class_root {
      * @return int
      */
     private function getNextSortValue($strPrevId) {
+
+        if($this->objSortManager == null) {
+            return -1;
+        }
+
         //determine the correct new sort-id - append by default
         if(class_module_system_module::getModuleByName("system") != null  && version_compare(class_module_system_module::getModuleByName("system")->getStrVersion(), "4.7.5", "lt")) {
             $strQuery = "SELECT COUNT(*) FROM "._dbprefix_."system WHERE system_prev_id = ? AND system_id != '0'";
@@ -956,17 +975,6 @@ abstract class class_root {
             $strPrevId = 0;
 
         $this->setStrPrevId($strPrevId);
-
-        //determine the correct new sort-id - append by default
-        if(class_module_system_module::getModuleByName("system") != null  && version_compare(class_module_system_module::getModuleByName("system")->getStrVersion(), "4.7.5", "lt")) {
-            $strQuery = "SELECT COUNT(*) FROM "._dbprefix_."system WHERE system_prev_id = ? AND system_id != '0'";
-        }
-        else {
-            $strQuery = "SELECT COUNT(*) FROM "._dbprefix_."system WHERE system_prev_id = ? AND system_id != '0' AND system_deleted = 0";
-
-        }
-        $arrRow = $this->objDB->getPRow($strQuery, array($strPrevId), 0, false);
-        $intSiblings = $arrRow["COUNT(*)"];
 
         $strComment = uniStrTrim(strip_tags($strComment), 240);
 
@@ -1016,7 +1024,7 @@ abstract class class_root {
                     time(),
                     (int)$this->getIntRecordStatus(),
                     $strComment,
-                    (int)($intSiblings + 1),
+                    $this->getNextSortValue($strPrevId),
                     $this->getStrRecordClass(),
                     $this->getIntRecordDeleted()
                 )
@@ -1324,11 +1332,17 @@ abstract class class_root {
      * Sets the Position of a SystemRecord in the currect level one position upwards or downwards
      *
      * @param string $strDirection upwards || downwards
-     * @return void
+     *
+     * @throws class_exception
      * @deprecated
      */
     public function setPosition($strDirection = "upwards") {
-        $this->objSortManager->setPosition($strDirection);
+        if($this->objSortManager !== null) {
+            $this->objSortManager->setPosition($strDirection);
+        }
+        else {
+            throw new class_exception("Current instance of ".get_class($this)." is not sortable", class_exception::$level_ERROR);
+        }
     }
 
     /**
@@ -1337,10 +1351,16 @@ abstract class class_root {
      * @param int $intNewPosition
      * @param array|bool $arrRestrictionModules If an array of module-ids is passed, the determination of siblings will be limited to the module-records matching one of the module-ids
      *
-     * @return void
+     * @throws class_exception
      */
     public function setAbsolutePosition($intNewPosition, $arrRestrictionModules = false) {
-        $this->objSortManager->setAbsolutePosition($intNewPosition, $arrRestrictionModules);
+
+        if($this->objSortManager !== null) {
+            $this->objSortManager->setAbsolutePosition($intNewPosition, $arrRestrictionModules);
+        }
+        else {
+            throw new class_exception("Current instance of ".get_class($this)." is not sortable", class_exception::$level_ERROR);
+        }
     }
 
     /**

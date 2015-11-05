@@ -19,6 +19,8 @@
  *
  * @module system
  * @moduleId _system_modul_id_
+ *
+ * @sortManager class_common_sortmanager
  */
 class class_module_system_aspect extends class_model implements interface_model, interface_admin_listable {
 

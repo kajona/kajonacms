@@ -85,10 +85,16 @@ class class_module_pages_portal extends class_portal_controller implements inter
 
         }
 
+        //load the merged placeholder-list
+        $objPlaceholders = $this->objTemplate->parsePageTemplate("/module_pages/".$objPageData->getStrTemplate(), class_template::INT_ELEMENT_MODE_MASTER);
+
+
+
+
         //Load the template from the filesystem to get the placeholders
         $strTemplateID = $this->objTemplate->readTemplate("/module_pages/".$objPageData->getStrTemplate(), "", false, true);
         //bit include the masters-elements!!
-        $arrRawPlaceholders = array_merge($this->objTemplate->getElements($strTemplateID, 0), $this->objTemplate->getElements($strTemplateID, 1));
+        $arrRawPlaceholders = $objPlaceholders->getArrPlaceholder();
 
         $arrPlaceholders = array();
         //and retransform
@@ -102,39 +108,34 @@ class class_module_pages_portal extends class_portal_controller implements inter
 
         //try to load the additional title from cache
         $strAdditionalTitleFromCache = "";
-        $intMaxCacheDuration = 0;
+        $intMaxCacheDuration = 0; //TODO find a better cache sum, in v4 determined by the elements
         $objCachedTitle = class_cache::getCachedEntry(__CLASS__, $this->getPagename(), $this->generateHash2Sum(), $this->getStrPortalLanguage());
         if($objCachedTitle != null) {
             $strAdditionalTitleFromCache = $objCachedTitle->getStrContent();
             self::$strAdditionalTitle = $strAdditionalTitleFromCache;
         }
 
+        $arrPlaceholderWithElements = array();
 
         //copy for the portaleditor
-        $arrPlaceholdersFilled = array();
 
         //Iterate over all elements and pass control to them
         //Get back the filled element
         //Build the array to fill the template
         $arrTemplate = array();
+        $arrBlocks = array();
 
         /** @var class_module_pages_pageelement $objOneElementOnPage */
         foreach($arrElementsOnPage as $objOneElementOnPage) {
+
             //element really available on the template?
-            if(!in_array($objOneElementOnPage->getStrPlaceholder(), $arrPlaceholders)) {
+            if($objOneElementOnPage->getStrElement() != "block" && $objOneElementOnPage->getStrElement() != "blocks" && !in_array($objOneElementOnPage->getStrPlaceholder(), $arrPlaceholders)) {
                 //next one, plz
                 continue;
             }
-            else {
-                //create a protocol of placeholders filled
-                //remove from pe-additional-array, pe code is injected by element directly
-                $arrPlaceholdersFilled[] = array(
-                    "placeholder" => $objOneElementOnPage->getStrPlaceholder(),
-                    "name"        => $objOneElementOnPage->getStrName(),
-                    "element"     => $objOneElementOnPage->getStrElement(),
-                    "repeatable"  => $objOneElementOnPage->getIntRepeat()
-                );
-            }
+
+
+            $arrPlaceholderWithElements[$objOneElementOnPage->getStrName().$objOneElementOnPage->getStrElement()] = true;
 
             //Build the class-name for the object
             /** @var  class_element_portal $objElement  */
@@ -146,124 +147,51 @@ class class_module_pages_portal extends class_portal_controller implements inter
 
             //cache-handling. load element from cache.
             //if the element is re-generated, save it back to cache.
-            if(class_module_system_setting::getConfigValue("_pages_cacheenabled_") == "true" && $this->getParam("preview") != "1" && $objPageData->getStrName() != class_module_system_setting::getConfigValue("_pages_errorpage_")) {
-                $strElementOutput = "";
-                //if the portaleditor is disabled, do the regular cache lookups in storage. otherwise regenerate again and again :)
-                if($bitPeRequested) {
-                    $strElementOutput = $objElement->getElementOutput();
-                }
-                else {
-                    //pe not to be taken into account --> full support of caching
-                    $strElementOutput = $objElement->getElementOutputFromCache();
+            $strElementOutput = $objElement->getRenderedElementOutput($bitPeRequested);
 
-                    if($objOneElementOnPage->getIntCachetime() > $intMaxCacheDuration)
-                        $intMaxCacheDuration = $objOneElementOnPage->getIntCachetime();
-
-                    if($strElementOutput === false) {
-                        $strElementOutput = $objElement->getElementOutput();
-
-                        $objElement->saveElementToCache($strElementOutput);
+            if($objOneElementOnPage->getStrElement() == "blocks") {
+                //try to fetch the whole block as a placeholder
+                foreach($objPlaceholders->getArrBlocks() as $objOneBlock) {
+                    if($objOneBlock->getStrName() == $objOneElementOnPage->getStrName()) {
+                        if(!isset($arrBlocks[$objOneBlock->getStrName()])) {
+                            $arrBlocks[$objOneBlock->getStrName()] = "";
+                        }
+                        $arrBlocks[$objOneBlock->getStrName()] .= $strElementOutput;
                     }
                 }
+            }
+            else {
+                $arrTemplate[$objOneElementOnPage->getStrPlaceholder()] .= $strElementOutput;
 
             }
-            else
-                $strElementOutput = $objElement->getElementOutput();
 
-            //if element is disabled & the pe is requested, wrap the content
-            if($bitPeRequested && $objOneElementOnPage->getIntRecordStatus() == 0) {
-                $arrPeElement = array();
-                $arrPeElement["title"] = $this->getLang("pe_inactiveElement", "pages")." (".$objOneElementOnPage->getStrElement().")";
-                $strElementOutput = $this->objToolkit->getPeInactiveElement($arrPeElement);
-                $strElementOutput = class_element_portal::addPortalEditorSetActiveCode($strElementOutput, $objElement->getSystemid(), array());
-            }
-
-            $arrTemplate[$objOneElementOnPage->getStrPlaceholder()] .= $strElementOutput;
         }
 
-        //pe-code to add new elements on unfilled placeholders --> only if pe is visible?
+        //pe-code to add new elements on unfilled placeholders --> only if pe is visible
         if($bitPeRequested) {
-            //loop placeholders on template in order to remove already filled ones not being repeatable
-            $arrRawPlaceholdersForPe = $arrRawPlaceholders;
-            foreach($arrPlaceholdersFilled as $arrOnePlaceholder) {
 
-                foreach($arrRawPlaceholdersForPe as &$arrOneRawPlaceholder) {
+            foreach($objPlaceholders->getArrPlaceholder() as $arrOnePlaceholder) {
 
-                    if($arrOneRawPlaceholder["placeholder"] == $arrOnePlaceholder["placeholder"]) {
-
-                        foreach($arrOneRawPlaceholder["elementlist"] as $intElementKey => $arrOneRawElement) {
-
-                            if($arrOnePlaceholder["element"] == $arrOneRawElement["element"]) {
-                                if(uniSubstr($arrOneRawElement["name"], 0, 5) == "master") {
-                                    $arrOneRawPlaceholder["elementlist"][$intElementKey] = null;
-                                }
-                                else if($arrOnePlaceholder["repeatable"] == "0") {
-                                    $arrOneRawPlaceholder["elementlist"][$intElementKey] = null;
-                                }
-                            }
-
-                        }
-                    }
-                }
-            }
-
-            //array is now set up. loop again to create new-buttons
-            $arrPePlaceholdersDone = array();
-            $arrPeNewButtons = array();
-            foreach($arrRawPlaceholdersForPe as $arrOneRawPlaceholderForPe) {
-                $strPeNewPlaceholder = $arrOneRawPlaceholderForPe["placeholder"];
-                foreach($arrOneRawPlaceholderForPe["elementlist"] as $arrOnePeNewElement) {
-
-                    if($arrOnePeNewElement == null)
+                foreach($arrOnePlaceholder["elementlist"] as $arrSinglePlaceholder)
+                {
+                    /** @var class_module_pages_element $objElement */
+                    $objElement = class_module_pages_element::getElement($arrSinglePlaceholder["element"]);
+                    if($objElement == null) {
                         continue;
-
-                    //check if the linked element exists
-                    $objPeNewElement = class_module_pages_element::getElement($arrOnePeNewElement["element"]);
-                    if($objPeNewElement == null)
-                        continue;
-
-                    //placeholder processed before?
-                    $strArrayKey = $strPeNewPlaceholder.$objPeNewElement->getStrName();
-
-                    if(in_array($strArrayKey, $arrPePlaceholdersDone))
-                        continue;
-                    else
-                        $arrPePlaceholdersDone[] = $strArrayKey;
-
-                    //create and register the button to add a new element
-                    if(!isset($arrPeNewButtons[$strPeNewPlaceholder]))
-                        $arrPeNewButtons[$strPeNewPlaceholder] = "";
-
-                    if(uniStripos($strArrayKey, "master") !== false) {
-                        $strLink = "";
-                        if($objMasterData !== null)
-                            $strLink = class_element_portal::getPortaleditorNewCode($objMasterData->getSystemid(), $strPeNewPlaceholder, $objPeNewElement);
-                    }
-                    else {
-                        $strLink = class_element_portal::getPortaleditorNewCode($objPageData->getSystemid(), $strPeNewPlaceholder, $objPeNewElement);
                     }
 
-                    $arrPeNewButtons[$strPeNewPlaceholder] .= $strLink;
+                    $objPortalElement = $objElement->getPortalElementInstance();
+
+                    $objPortalElement->getPortaleditorPlaceholderActions(isset($arrPlaceholderWithElements[$arrSinglePlaceholder["name"].$arrSinglePlaceholder["element"]]), $objElement, $arrOnePlaceholder["placeholder"]);
 
                 }
+
+                if(!isset($arrTemplate[$arrOnePlaceholder["placeholder"]])) {
+                    $arrTemplate[$arrOnePlaceholder["placeholder"]] = "";
+                }
+                $arrTemplate[$arrOnePlaceholder["placeholder"]] .= "<span data-placeholder='".$arrOnePlaceholder["placeholder"]."'></span>";
             }
 
-            //loop pe-new code in order to add the wrappers and assign the code to the matching placeholder
-            foreach($arrPeNewButtons as $strPlaceholderName => $strNewButtons) {
-
-                if(!isset($arrTemplate[$strPlaceholderName]))
-                    $arrTemplate[$strPlaceholderName] = "";
-
-                if($strNewButtons != "")
-                    $strNewButtons = class_element_portal::getPortaleditorNewWrapperCode($strPlaceholderName, $strNewButtons);
-
-                $arrTemplate[$strPlaceholderName] .= $strNewButtons;
-            }
-
-            // add placeholder wrapping
-            foreach($arrTemplate as $strPlaceholder => $strContent) {
-                $arrTemplate[$strPlaceholder] = class_carrier::getInstance()->getObjToolkit("portal")->getPePlaceholderWrapper($strPlaceholder, $strContent);
-            }
         }
 
 
@@ -291,8 +219,10 @@ class class_module_pages_portal extends class_portal_controller implements inter
 
         $arrTemplate = array_merge($arrTemplate, $arrGlobal);
         //fill the template. the template was read before
-        $strPageContent = $this->fillTemplate($arrTemplate, $strTemplateID);
+        $strPageContent = $this->objTemplate->fillTemplateFile($arrTemplate, "/module_pages/".$objPageData->getStrTemplate(), "", true);
+        $strPageContent = $this->objTemplate->fillBlocksToTemplateFile($arrBlocks, $strPageContent);
 
+        //add portaleditor main code
         $strPageContent = $this->renderPortalEditorCode($objPageData, $bitEditPermissionOnMasterPage, $strPageContent);
 
         //insert the copyright headers. Due to our licence, you are NOT allowed to remove those lines.
@@ -307,7 +237,7 @@ class class_module_pages_portal extends class_portal_controller implements inter
             $intBodyPos += 0;
             $strPageContent = uniSubstr($strPageContent, 0, $intBodyPos).$strHeader.uniSubstr($strPageContent, $intBodyPos);
         }
-        else if($intPosXml !== false) {
+        elseif($intPosXml !== false) {
             $intBodyPos = uniStripos($strPageContent, "?>");
             $intBodyPos += 2;
             $strPageContent = uniSubstr($strPageContent, 0, $intBodyPos).$strHeader.uniSubstr($strPageContent, $intBodyPos);
@@ -506,8 +436,12 @@ class class_module_pages_portal extends class_portal_controller implements inter
                             ".$strSkinInit."
                         }
                         $(KAJONA.admin.portaleditor.initPortaleditor);
+
+
                     });
                 }
+
+                KAJONA.admin.actions = ".\Kajona\Pages\Portal\PagesPortaleditor::getInstance()->convertToJs().";
             </script>";
             //Load portaleditor styles
             $strPeToolbar .= $this->objToolkit->getPeBasicData();

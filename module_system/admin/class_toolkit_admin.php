@@ -1002,15 +1002,17 @@ class class_toolkit_admin extends class_toolkit
      * @param string $strName
      * @param string $strEncoding
      * @param string $strOnSubmit
+     * @param string $strMethod
      *
      * @return string
      */
-    public function formHeader($strAction, $strName = "", $strEncoding = "", $strOnSubmit = "")
+    public function formHeader($strAction, $strName = "", $strEncoding = "", $strOnSubmit = "", $strMethod = "POST")
     {
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "form_start");
         $arrTemplate = array();
         $arrTemplate["name"] = ($strName != "" ? $strName : "form".generateSystemid());
         $arrTemplate["action"] = $strAction;
+        $arrTemplate["method"] = in_array($strMethod, array("GET", "POST")) ? $strMethod : "POST";
         $arrTemplate["enctype"] = $strEncoding;
         $arrTemplate["onsubmit"] = $strOnSubmit;
         return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
@@ -1651,7 +1653,7 @@ JS;
      *
      * @return string
      */
-    public function getFieldset($strTitle, $strContent, $strClass = "fieldset")
+    public function getFieldset($strTitle, $strContent, $strClass = "fieldset", $strSystemid = "")
     {
         //remove old placeholder from content
         $this->objTemplate->setTemplate($strContent);
@@ -1662,6 +1664,7 @@ JS;
         $arrContent["title"] = $strTitle;
         $arrContent["content"] = $strContent;
         $arrContent["class"] = $strClass;
+        $arrContent["systemid"] = $strSystemid;
         return $this->objTemplate->fillTemplate($arrContent, $strTemplateID);
     }
 

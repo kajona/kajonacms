@@ -80,6 +80,7 @@ $lang["commons_sort_totree"]             = "Übergeordneten Knoten durch Fallenl
 $lang["commons_sort_vertical"]           = "Reihenfolge durch Drag n Drop anpassen";
 $lang["commons_start"]                   = "Starten";
 $lang["commons_submit"]                  = "Absenden";
+$lang["commons_text"]                    = "Text";
 $lang["commons_title"]                   = "Titel";
 $lang["commons_unlock"]                  = "Datensatz entsperren";
 $lang["commons_validator_date_validationmessage"] = "Das Feld muss ein Datumsformat im Format '{0}' enthalten";

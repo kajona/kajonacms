@@ -25,7 +25,7 @@ class class_module_search_admin extends class_admin_simple implements interface_
      */
     const INT_MAX_NR_OF_RESULTS_AUTOCOMPLETE = 30;
 
-    const INT_MAX_NR_OF_RESULTS_FULLSEARCH = 150;
+    const INT_MAX_NR_OF_RESULTS_FULLSEARCH = 100;
 
     /**
      * @return array
@@ -244,11 +244,16 @@ class class_module_search_admin extends class_admin_simple implements interface_
             $strReturn .= $this->objToolkit->warningBox($this->getLang("search_reduce_hits_link"));
         }
 
-        $strReturn .= $this->objToolkit->listHeader();
-        foreach($arrMappedObjects as $objOneObject) {
-            $strReturn .= $this->objToolkit->simpleAdminList($objOneObject, $this->getActionIcons($objOneObject, "searchResultList"), 0);
+        if(count($arrMappedObjects) > 0) {
+            $strReturn .= $this->objToolkit->listHeader();
+            foreach ($arrMappedObjects as $objOneObject) {
+                $strReturn .= $this->objToolkit->simpleAdminList($objOneObject, $this->getActionIcons($objOneObject, "searchResultList"), 0);
+            }
+            $strReturn .= $this->objToolkit->listFooter();
         }
-        $strReturn .= $this->objToolkit->listFooter();
+        else {
+            $strReturn .= $this->getLang("commons_list_empty");
+        }
 
 
         $strReturn .= "]]></content>";

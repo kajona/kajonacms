@@ -80,6 +80,7 @@ $lang["commons_sort_totree"]             = "Set Parent-Node by dropping to the t
 $lang["commons_sort_vertical"]           = "Change order using drag n drop";
 $lang["commons_start"]                   = "Start";
 $lang["commons_submit"]                  = "Submit";
+$lang["commons_text"]                    = "Text";
 $lang["commons_title"]                   = "Title";
 $lang["commons_unlock"]                  = "Unlock record";
 $lang["commons_validator_date_validationmessage"] = "The field must contain a date format '{0}'";

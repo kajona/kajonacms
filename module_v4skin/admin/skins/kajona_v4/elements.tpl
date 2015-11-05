@@ -358,7 +358,7 @@ To avoid side-effects, no line-break in this case -> not needed by default, but 
 -- FORM ELEMENTS ----------------------------------------------------------------------------------------
 
 <form_start>
-<form name="%%name%%" id="%%name%%" method="post" action="%%action%%" enctype="%%enctype%%" onsubmit="%%onsubmit%%" class="form-horizontal">
+<form name="%%name%%" id="%%name%%" method="%%method%%" action="%%action%%" enctype="%%enctype%%" onsubmit="%%onsubmit%%" class="form-horizontal">
     <script type="text/javascript">$(function() { KAJONA.admin.forms.initForm('%%name%%');  KAJONA.admin.forms.changeLabel = '[lang,commons_form_entry_changed,system]';   KAJONA.admin.forms.changeConfirmation = '[lang,commons_form_entry_changed_conf,system]'; } );</script>
 </form_start>
 
@@ -939,7 +939,7 @@ A precent-beam to illustrate proportions
 
 A fieldset to structure logical sections
 <misc_fieldset>
-<fieldset class="%%class%%"><legend>%%title%%</legend><div>%%content%%</div></fieldset>
+<fieldset class="%%class%%" data-systemid="%%systemid%%"><legend>%%title%%</legend><div>%%content%%</div></fieldset>
 </misc_fieldset>
 
 <graph_container>

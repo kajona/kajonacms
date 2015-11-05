@@ -28,6 +28,14 @@ class class_module_search_query_parser {
 
 
         if(count($arrHits) == 1) {
+
+            $objParser = new class_module_search_standard_analyzer();
+            $objParser->analyze($arrHits[0]['term']);
+            $arrResult = array_keys($objParser->getResults());
+            if(count($arrResult) == 1) {
+                $arrHits[0]['term'] = $arrResult[0];
+            }
+
             $objSearchQuery = new class_module_search_term_query(new class_module_search_term(str_replace(":", "", $arrHits[0]['term']), substr($arrHits[0]['field'], 0, -1)));
             return $objSearchQuery;
         }
@@ -39,6 +47,17 @@ class class_module_search_query_parser {
             $arrNoOperators = array();
 
             foreach($arrHits as $arrHit) {
+
+                $objParser = new class_module_search_standard_analyzer();
+                $objParser->analyze($arrHit['term']);
+                $arrResult = array_keys($objParser->getResults());
+                if(count($arrResult) == 1) {
+                    $arrHit['term'] = $arrResult[0];
+                }
+                else {
+                    continue;
+                }
+
                 $objTerm = new class_module_search_term(str_replace(":", "", $arrHit['term']), substr($arrHit['field'], 0, -1));
                 switch($arrHit['must']) {
                     case "+":

@@ -91,7 +91,7 @@ require_once _corepath_."/module_system/system/class_classloader.php";
 spl_autoload_register(array(class_classloader::getInstance(), "loadClass"));
 
 //The Carrier-Class
-if(!@include_once _corepath_."/module_system/system/class_carrier.php")
+if(!include_once _corepath_."/module_system/system/class_carrier.php")
     rawIncludeError("carrier-class");
 
 

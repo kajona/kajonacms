@@ -26,6 +26,9 @@
 class class_admin_formgenerator
 {
 
+    const STR_METHOD_POST = "POST";
+    const STR_METHOD_GET = "GET";
+
     const  STR_TYPE_ANNOTATION = "@fieldType";
     const  STR_VALIDATOR_ANNOTATION = "@fieldValidator";
     const  STR_MANDATORY_ANNOTATION = "@fieldMandatory";
@@ -76,6 +79,7 @@ class class_admin_formgenerator
     private $strFormEncoding = "";
 
     private $strOnSubmit = "";
+    private $strMethod = "POST";
     private $objLang;
 
     /**
@@ -231,7 +235,7 @@ class class_admin_formgenerator
         $strReturn = "";
 
         //add a hidden systemid-field
-        if ($this->objSourceobject != null) {
+        if ($this->objSourceobject != null && $this->objSourceobject instanceof class_model) {
             $objField = new class_formentry_hidden($this->strFormname, "systemid");
             $objField->setStrEntryName("systemid")->setStrValue($this->objSourceobject->getSystemid())->setObjValidator(new class_systemid_validator());
             $this->addField($objField);
@@ -240,7 +244,7 @@ class class_admin_formgenerator
         $strGeneratedFormname = "form".generateSystemid();
         $objToolkit = class_carrier::getInstance()->getObjToolkit("admin");
         if ($strTargetURI !== null) {
-            $strReturn .= $objToolkit->formHeader($strTargetURI, $strGeneratedFormname, $this->strFormEncoding, $this->strOnSubmit);
+            $strReturn .= $objToolkit->formHeader($strTargetURI, $strGeneratedFormname, $this->strFormEncoding, $this->strOnSubmit, $this->strMethod);
         }
         $strReturn .= $objToolkit->getValidationErrors($this);
 
@@ -657,6 +661,28 @@ class class_admin_formgenerator
         }
     }
 
+
+    /**
+     * Orders the fields by the given array.
+     * The array must contain as values the keys of the form fields
+     *
+     * @param $arrFieldOrder
+     * @return int
+     * @throws class_exception
+     */
+    public function orderFields($arrFieldOrder)
+    {
+        $intPosition = 1;
+
+        foreach($arrFieldOrder as $strFieldName) {
+            if($this->getField($strFieldName) != null) {
+                $this->setFieldToPosition($strFieldName, $intPosition);
+                $intPosition++;
+            }
+        }
+        return $intPosition;
+    }
+
     /**
      * Removes a single entry form the fields, identified by its form-entry-name.
      *
@@ -720,6 +746,14 @@ class class_admin_formgenerator
     }
 
     /**
+     * @param \class_model|interface_model $objSource
+     */
+    protected function setObjSourceobject($objSource)
+    {
+        $this->objSourceobject = $objSource;
+    }
+
+    /**
      * @return class_formentry_base[]|interface_formentry[]
      */
     public function getArrFields()
@@ -771,5 +805,26 @@ class class_admin_formgenerator
     public function getStrFormname()
     {
         return $this->strFormname;
+    }
+
+    /**
+     * @param string $strMethod
+     * @throws class_exception
+     */
+    public function setStrMethod($strMethod)
+    {
+        if (in_array($strMethod, array(self::STR_METHOD_GET, self::STR_METHOD_POST))) {
+            $this->strMethod = $strMethod;
+        } else {
+            throw new class_exception("Invalid form method", class_exception::$level_ERROR);
+        }
+    }
+
+    /**
+     * @return string
+     */
+    public function getStrMethod()
+    {
+        return $this->strMethod;
     }
 }

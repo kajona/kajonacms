@@ -157,6 +157,11 @@ class class_resourceloader {
         }
 
         if($bitScanAdminSkin) {
+            //scan directly
+            if(is_file(_realpath_.$strTemplateName))
+                $strFilename = $strTemplateName;
+
+            //prepend path
             if(is_file(_realpath_.class_adminskin_helper::getPathForSkin(class_session::getInstance()->getAdminSkin()).$strTemplateName))
                 $strFilename = class_adminskin_helper::getPathForSkin(class_session::getInstance()->getAdminSkin()).$strTemplateName;
         }

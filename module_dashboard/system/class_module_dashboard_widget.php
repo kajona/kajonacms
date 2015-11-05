@@ -16,6 +16,8 @@
  * @targetTable dashboard.dashboard_id
  * @module dashboard
  * @moduleId _dashboard_module_id_
+ *
+ * @sortManager class_common_sortmanager
  */
 class class_module_dashboard_widget extends class_model implements interface_model {
 

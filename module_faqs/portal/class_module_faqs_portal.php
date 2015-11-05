@@ -7,6 +7,10 @@
 *	$Id$									*
 ********************************************************************************************************/
 
+use Kajona\Pages\Portal\PagesPortaleditor;
+use Kajona\Pages\System\PagesPortaleditorActionEnum;
+use Kajona\Pages\System\PagesPortaleditorSystemidAction;
+
 /**
  * Portal-class of the faqs. Handles the printing of faqs lists / detail
  *
@@ -89,6 +93,18 @@ class class_module_faqs_portal extends class_portal_controller implements interf
                         "pe_action_delete_params" => "&systemid=".$objOneFaq->getSystemid()
                     );
                     $strFaqs .= class_element_portal::addPortalEditorCode($strOneFaq, $objOneFaq->getSystemid(), $arrPeConfig);
+
+                    PagesPortaleditor::getInstance()->registerAction(
+                        new PagesPortaleditorSystemidAction(PagesPortaleditorActionEnum::EDIT(), class_link::getLinkAdminHref($this->getArrModule("module"), "editFaq", "&systemid={$objOneFaq->getSystemid()}"), $objOneFaq->getSystemid())
+                    );
+
+                    PagesPortaleditor::getInstance()->registerAction(
+                        new PagesPortaleditorSystemidAction(PagesPortaleditorActionEnum::DELETE(), class_link::getLinkAdminHref($this->getArrModule("module"), "deleteFaq", "&systemid={$objOneFaq->getSystemid()}"), $objOneFaq->getSystemid())
+                    );
+
+                    PagesPortaleditor::getInstance()->registerAction(
+                        new PagesPortaleditorSystemidAction(PagesPortaleditorActionEnum::CREATE(), class_link::getLinkAdminHref($this->getArrModule("module"), "newFaq"), $objOneFaq->getSystemid())
+                    );
                 }
             }
 
@@ -110,6 +126,8 @@ class class_module_faqs_portal extends class_portal_controller implements interf
         $arrTemplate["faq_categories"] = $strCats;
 
         $strReturn .= $this->objTemplate->fillTemplate($arrTemplate, $strListTemplateID);
+
+
 
         return $strReturn;
     }
