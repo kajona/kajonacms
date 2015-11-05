@@ -1003,6 +1003,11 @@ KAJONA.admin.lists = {
             KAJONA.admin.lists.arrSystemids = [];
         });
 
+        // reset messages
+        if (KAJONA.admin.lists.bitRenderInfo) {
+            $('.batchaction_messages_list').html("");
+        }
+
         return false;
     },
 
@@ -1032,8 +1037,9 @@ KAJONA.admin.lists = {
                 success: function(resp) {
                     KAJONA.admin.lists.triggerSingleAction();
                     if (KAJONA.admin.lists.bitRenderInfo) {
-                        if (resp != "") {
-                            $('.batch_messages_list').append("<li>" + resp + "</li>");
+                        var data = JSON.parse(resp);
+                        if (data && data.message) {
+                            $('.batchaction_messages_list').append("<li>" + data.message + "</li>");
                         }
                     }
                 },
