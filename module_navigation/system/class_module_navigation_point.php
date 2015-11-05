@@ -11,6 +11,7 @@
  * @package module_navigation
  * @author sidler@mulchprod.de
  * @targetTable navigation.navigation_id
+ * @sortManager class_common_sortmanager
  *
  * @module navigation
  * @moduleId _navigation_modul_id_

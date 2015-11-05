@@ -11,6 +11,7 @@
  * @package module_pages
  * @author sidler@mulchprod.de
  * @targetTable page_element.page_element_id
+ * @sortManager class_pageelement_sortmanager
  *
  * @module pages_content
  * @moduleId _pages_content_modul_id_
@@ -70,16 +71,6 @@ class class_module_pages_pageelement extends class_model implements interface_mo
     private $strConfigVal2 = "";
     private $strConfigVal3 = "";
 
-    /**
-     * Constructor to create a valid object
-     *
-     * @param string $strSystemid (use "" on new objects)
-     */
-    public function __construct($strSystemid = "") {
-        parent::__construct($strSystemid);
-
-        $this->objSortManager = new class_pageelement_sortmanager($this);
-    }
 
     /**
      * Returns the name to be used when rendering the current object, e.g. in admin-lists.
@@ -314,7 +305,7 @@ class class_module_pages_pageelement extends class_model implements interface_mo
 
     /**
      * Loads all Elements on the given page known by the system, so db-sided, not template-sided.
-     * Returns the list of object
+     * Returns the list of objects
      *
      * @param string $strPageId
      * @param bool $bitJustActive
@@ -325,7 +316,7 @@ class class_module_pages_pageelement extends class_model implements interface_mo
      */
     public static function getElementsOnPage($strPageId, $bitJustActive = false, $strLanguage = "") {
 
-        //since theres the time as an parameter, theres no need for querying the cache...
+        //since there's the time as an parameter, there's no need for querying the cache...
         $arrIds = self::getPlainElementsOnPage($strPageId, $bitJustActive, $strLanguage);
 
         $arrReturn = array();

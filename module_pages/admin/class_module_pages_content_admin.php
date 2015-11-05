@@ -16,23 +16,26 @@
  * @module pages
  * @moduleId _pages_content_modul_id_
  */
-class class_module_pages_content_admin extends class_admin_simple implements interface_admin {
+class class_module_pages_content_admin extends class_admin_simple implements interface_admin
+{
 
     /**
      * Constructor
      */
-    public function __construct() {
+    public function __construct()
+    {
         parent::__construct();
 
-        if(_xmlLoader_)
+        if (_xmlLoader_) {
             $this->setArrModuleEntry("modul", "pages_content");
+        }
 
         //If there's anything to unlock, do it now
-        if($this->getParam("unlockid") != "") {
+        if ($this->getParam("unlockid") != "") {
             $objLockmanager = new class_lockmanager($this->getParam("unlockid"));
             $objLockmanager->unlockRecord();
         }
-        if($this->getParam("adminunlockid") != "") {
+        if ($this->getParam("adminunlockid") != "") {
             $objLockmanager = new class_lockmanager($this->getParam("adminunlockid"));
             $objLockmanager->unlockRecord(true);
         }
@@ -44,31 +47,28 @@ class class_module_pages_content_admin extends class_admin_simple implements int
      *
      * @return string
      */
-    public function getOutputModuleTitle() {
+    public function getOutputModuleTitle()
+    {
         $objPage = new class_module_pages_page($this->getSystemid());
-        if($objPage->getStrName() == "")
+        if ($objPage->getStrName() == "") {
             $objPage = new class_module_pages_page($objPage->getPrevId());
+        }
         return $this->getLang("modul_titel")." (".$objPage->getStrName().")";
     }
 
-    /**
-     * Returns a list of available placeholders & elements on this page
-     *
-     * @return string
-     * @permissions edit
-     */
-    protected function actionList() {
+
+    private function getPageInfoBox(class_module_pages_page $objPage)
+    {
         $strReturn = "";
-        class_module_languages_admin::enableLanguageSwitch();
-        $objPage = new class_module_pages_page($this->getSystemid());
         //get infos about the page
         $arrToolbarEntries = array();
-        $arrToolbarEntries[0] = "<a href=\"".class_link::getLinkAdminHref("pages", "editPage", "&systemid=".$this->getSystemid())."\">".class_adminskin_helper::getAdminImage("icon_edit").$this->getLang("contentToolbar_pageproperties")."</a>";
-        $arrToolbarEntries[1] = "<a href=\"".class_link::getLinkAdminHref("pages_content", "list", "&systemid=".$this->getSystemid())."\">".class_adminskin_helper::getAdminImage("icon_page").$this->getLang("contentToolbar_content")."</a>";
+        $arrToolbarEntries[0] = "<a href=\"".class_link::getLinkAdminHref("pages", "editPage", "&systemid=".$objPage->getSystemid())."\">".class_adminskin_helper::getAdminImage("icon_edit").$this->getLang("contentToolbar_pageproperties")."</a>";
+        $arrToolbarEntries[1] = "<a href=\"".class_link::getLinkAdminHref("pages_content", "list", "&systemid=".$objPage->getSystemid())."\">".class_adminskin_helper::getAdminImage("icon_page").$this->getLang("contentToolbar_content")."</a>";
         $arrToolbarEntries[2] = "<a href=\"".class_link::getLinkPortalHref($objPage->getStrName(), "", "", "&preview=1", "", $this->getLanguageToWorkOn())."\" target=\"_blank\">".class_adminskin_helper::getAdminImage("icon_lens").$this->getLang("contentToolbar_preview")."</a>";
 
-        if($objPage->getIntType() != class_module_pages_page::$INT_TYPE_ALIAS)
+        if ($objPage->getIntType() != class_module_pages_page::$INT_TYPE_ALIAS) {
             $strReturn .= $this->objToolkit->getContentToolbar($arrToolbarEntries, 1);
+        }
 
         $arrInfoRows = array(
             array($this->getLang("template"), $objPage->getStrTemplate()),
@@ -77,57 +77,161 @@ class class_module_pages_content_admin extends class_admin_simple implements int
         );
         $strReturn .= $this->objToolkit->dataTable(null, $arrInfoRows);
         $strReturn .= $this->objToolkit->divider();
+        return $strReturn;
+    }
 
 
-        //try to load template, otherwise abort
-        $strTemplateID = null;
-        try {
-            $strTemplateID = $this->objTemplate->readTemplate("/module_pages/".$objPage->getStrTemplate(), "", false, true);
+    /**
+     * Returns a list of available placeholders & elements on this page
+     *
+     * @return string
+     * @permissions edit
+     */
+    protected function actionList()
+    {
+        $strReturn = "";
+        class_module_languages_admin::enableLanguageSwitch();
+        $objCurObject = class_objectfactory::getInstance()->getObject($this->getSystemid());
+
+        /** @var class_module_pages_page $objPage */
+        $objPage = $objCurObject;
+        while (!$objPage instanceof class_module_pages_page && validateSystemid($objPage->getSystemid())) {
+            $objPage = class_objectfactory::getInstance()->getObject($objPage->getStrPrevId());
         }
-        catch(class_exception $objException) {
-            $strReturn .= $this->getLang("templateNotLoaded")."<br />";
-        }
 
-        //Load elements on template, master-page special case!
-        if($objPage->getStrName() == "master")
-            $arrElementsOnTemplate = $this->objTemplate->getElements($strTemplateID, 1);
-        else
-            $arrElementsOnTemplate = $this->objTemplate->getElements($strTemplateID, 0);
+        $strReturn .= $this->getPageInfoBox($objPage);
 
+
+        //parse the whole template
+        $objParsedBlocks = $this->objTemplate->parsePageTemplate("/module_pages/".$objPage->getStrTemplate(), $objPage->getStrName() == "master" ? class_template::INT_ELEMENT_MODE_MASTER : class_template::INT_ELEMENT_MODE_REGULAR);
+
+
+        $arrTabs = array();
+        //start the top level elements
         //Language-dependant loading of elements, if installed
-        $arrElementsOnPage = class_module_pages_pageelement::getElementsOnPage($this->getSystemid(), false, $this->getLanguageToWorkOn());
+        $arrAllElementsOnPage = class_module_pages_pageelement::getElementsOnPage($this->getSystemid(), false, $this->getLanguageToWorkOn());
+        $arrPageelementsOnPage = array_filter($arrAllElementsOnPage, function (class_module_pages_pageelement $objSingleElement) {
+            return $objSingleElement->getStrElement() != "blocks";
+        });
+
+        $arrBlocksOnPage = array_filter($arrAllElementsOnPage, function (class_module_pages_pageelement $objSingleElement) {
+            return $objSingleElement->getStrElement() == "blocks";
+        });
+
+
+        //trigger blocks rendering
+        $strBlocks = "";
+        foreach ($objParsedBlocks->getArrBlocks() as $objOneBlocks) {
+
+
+
+            $strCurBlocks = "";
+            foreach ($objOneBlocks->getArrBlocks() as $objOneBlock) {
+
+                $strNewBlocksSystemid = $objOneBlocks->getStrName();
+
+                //process existing blocks
+                /** @var class_module_pages_pageelement $objOneBlocksOnPage */
+                foreach($arrBlocksOnPage as $objOneBlocksOnPage) {
+
+                    $strNewBlocksSystemid = $objOneBlocksOnPage->getSystemid();
+
+                    if($objOneBlocksOnPage->getStrName() == $objOneBlocks->getStrName()) {
+                        $arrSubBlock = class_module_pages_pageelement::getElementsOnPage($objOneBlocksOnPage->getSystemid(), false, $this->getLanguageToWorkOn());
+
+                        foreach($arrSubBlock as $objOneBlockOnPage) {
+
+                            $strExistingBlock = "";
+
+                            if($objOneBlockOnPage->getStrName() == $objOneBlock->getStrName()) {
+                                $arrElementsInBlock = class_module_pages_pageelement::getElementsOnPage($objOneBlockOnPage->getSystemid(), false, $this->getLanguageToWorkOn());
+                                $strExistingBlock .= $this->renderElementPlaceholderList($objOneBlock->getArrPlaceholder(), $arrElementsInBlock, true, $objOneBlocksOnPage->getSystemid(), $objOneBlockOnPage->getSystemid());
+                            }
+
+                            if($strExistingBlock != "") {
+                                $strCurBlocks .= $this->objToolkit->getFieldset(
+                                    $objOneBlock->getStrName(),
+                                    $strExistingBlock,
+                                    "fieldset block",
+                                    $objOneBlockOnPage->getSystemid()
+                                );
+                            }
+                        }
+
+                    }
+
+                }
+
+
+                $strNewBlock = $this->renderElementPlaceholderList($objOneBlock->getArrPlaceholder(), array(), true, $strNewBlocksSystemid, $objOneBlock->getStrName());
+
+                $strCurBlocks .= $this->objToolkit->getFieldset(
+                    $objOneBlock->getStrName(),
+                    $strNewBlock,
+                    "fieldset block newblock"
+                );
+            }
+
+            $strBlocks .= $this->objToolkit->getFieldset($objOneBlocks->getStrName(), $strCurBlocks, "fieldset blocks");
+        }
+
+
+        $arrTabs["blocks"] = $strBlocks;
+        $arrTabs["elements"] = $this->renderElementPlaceholderList($objParsedBlocks->getArrPlaceholder(), $arrPageelementsOnPage);
+
+        $strReturn .= $this->objToolkit->getTabbedContent($arrTabs);
+        $strCore = class_resourceloader::getInstance()->getCorePathForModule("module_pages");
+
+        $strReturn .= <<<HTML
+            <script type="text/javascript">
+                KAJONA.admin.loader.loadFile('{$strCore}/module_pages/admin/scripts/pages.js', function() {
+                    KAJONA.admin.pages.initBlockSort();
+                });
+
+            </script>
+HTML;
+
+        return $strReturn;
+
+    }
+
+    /**
+     * @param $arrElementsOnTemplate
+     * @param class_module_pages_pageelement[] $arrElementsOnPage
+     *
+     * @return string
+     */
+    private function renderElementPlaceholderList($arrElementsOnTemplate, $arrElementsOnPage, $bitRenderCompact = false, $strBlocks = "", $strBlock = "")
+    {
+
+        $strReturn = "";
         //save a copy of the array to be able to check against all values later on
         $arrElementsOnPageCopy = $arrElementsOnPage;
 
-        //Loading all Elements installed on the system ("RAW"-Elements)
-        $arrElementsInSystem = class_module_pages_element::getObjectList();
 
-
-        //So, loop through the placeholders and check, if there's any element already belonging to this one
-        $intI = 0;
-        if(is_array($arrElementsOnTemplate) && count($arrElementsOnTemplate) > 0) {
+        if (is_array($arrElementsOnTemplate) && count($arrElementsOnTemplate) > 0) {
             //Iterate over every single placeholder provided by the template
-            foreach($arrElementsOnTemplate as $arrOneElementOnTemplate) {
+            foreach ($arrElementsOnTemplate as $arrOneElementOnTemplate) {
 
                 $strOutputAtPlaceholder = "";
                 //Do we have one or more elements already in db at this placeholder?
                 $bitHit = false;
 
                 //Iterate over every single element-type provided by the placeholder
-                foreach($arrElementsOnPage as $intArrElementsOnPageKey => $objOneElementOnPage) {
+                foreach ($arrElementsOnPage as $intArrElementsOnPageKey => $objOneElementOnPage) {
                     //Check, if its the same placeholder
                     $bitSamePlaceholder = false;
-                    if($arrOneElementOnTemplate["placeholder"] == $objOneElementOnPage->getStrPlaceholder()) {
+                    if ($arrOneElementOnTemplate["placeholder"] == $objOneElementOnPage->getStrPlaceholder()) {
                         $bitSamePlaceholder = true;
                     }
 
-                    if($bitSamePlaceholder) {
+                    if ($bitSamePlaceholder) {
                         $bitHit = true;
                         //try to unlock the record
                         $objOneElementOnPage->getLockManager()->unlockRecord();
                         $strActions = $this->getActionIcons($objOneElementOnPage);
                         //Put all Output together
-                        $strOutputAtPlaceholder .= $this->objToolkit->simpleAdminList($objOneElementOnPage, $strActions, $intI++);
+                        $strOutputAtPlaceholder .= $this->objToolkit->simpleAdminList($objOneElementOnPage, $strActions, 0);
 
                         //remove the element from the array
                         unset($arrElementsOnPage[$intArrElementsOnPageKey]);
@@ -136,43 +240,65 @@ class class_module_pages_content_admin extends class_admin_simple implements int
                 }
 
                 //Check, if one of the elements in the placeholder is allowed to be used multiple times
-                foreach($arrOneElementOnTemplate["elementlist"] as $arrSingleElementOnTemplateplaceholder) {
+                foreach ($arrOneElementOnTemplate["elementlist"] as $arrSingleElementOnTemplateplaceholder) {
 
-                    /** @var class_module_pages_element $objOneElementInSystem  */
-                    foreach($arrElementsInSystem as $objOneElementInSystem) {
-                        if($objOneElementInSystem->getStrName() == $arrSingleElementOnTemplateplaceholder["element"]) {
-                            if($objOneElementInSystem->getIntRepeat() == 1 || $bitHit === false) {
+                    //Loading all Elements installed on the system ("RAW"-Elements)
+                    /** @var class_module_pages_element $objOnePossibleElementInSystem */
+                    foreach (class_module_pages_element::getObjectList() as $objOnePossibleElementInSystem) {
+                        if ($objOnePossibleElementInSystem->getStrName() == $arrSingleElementOnTemplateplaceholder["element"]) {
+
+                            $strNewElementLink = class_link::getLinkAdmin(
+                                "pages_content",
+                                "new",
+                                "&placeholder={$arrOneElementOnTemplate["placeholder"]}&blocks={$strBlocks}&block={$strBlock}&element={$arrSingleElementOnTemplateplaceholder["element"]}&systemid={$this->getSystemid()}",
+                                "",
+                                $this->getLang("element_anlegen"),
+                                "icon_new"
+                            );
+
+                            if ($objOnePossibleElementInSystem->getIntRepeat() == 1 || $bitHit === false) {
                                 //So, the Row for a new element: element is repeatable or not yet created
-                                $strActions = $this->objToolkit->listButton(class_link::getLinkAdmin("pages_content", "new", "&placeholder=".$arrOneElementOnTemplate["placeholder"]."&element=".$arrSingleElementOnTemplateplaceholder["element"]."&systemid=".$this->getSystemid(), "", $this->getLang("element_anlegen"), "icon_new"));
-                                $strOutputAtPlaceholder .= $this->objToolkit->genericAdminList("", $objOneElementInSystem->getStrDisplayName(), "", $strActions, $intI++);
+                                $strActions = $this->objToolkit->listButton($strNewElementLink);
+                                $strOutputAtPlaceholder .= $this->objToolkit->genericAdminList("", $objOnePossibleElementInSystem->getStrDisplayName(), "", $strActions, 0, ($bitRenderCompact ? $arrOneElementOnTemplate["placeholder"] : ""));
                             }
                             else {
                                 //element not repeatable.
                                 //Is there already one element installed? if not, then it IS allowed to create a new one
                                 $bitOneInstalled = false;
-                                foreach($arrElementsOnPageCopy as $objOneElementToCheck) {
-                                    if($arrOneElementOnTemplate["placeholder"] == $objOneElementToCheck->getStrPlaceholder() && $arrSingleElementOnTemplateplaceholder["element"] == $objOneElementToCheck->getStrElement())
+                                foreach ($arrElementsOnPageCopy as $objOneElementToCheck) {
+                                    if ($arrOneElementOnTemplate["placeholder"] == $objOneElementToCheck->getStrPlaceholder() && $arrSingleElementOnTemplateplaceholder["element"] == $objOneElementToCheck->getStrElement()) {
                                         $bitOneInstalled = true;
+                                    }
                                 }
-                                if(!$bitOneInstalled) {
+                                if (!$bitOneInstalled) {
                                     //So, the Row for a new element
-                                    $strActions = $this->objToolkit->listButton(class_link::getLinkAdmin("pages_content", "new", "&placeholder=".$arrOneElementOnTemplate["placeholder"]."&element=".$arrSingleElementOnTemplateplaceholder["element"]."&systemid=".$this->getSystemid(), "", $this->getLang("element_anlegen"), "icon_new"));
-                                    $strOutputAtPlaceholder .= $this->objToolkit->genericAdminList("", $objOneElementInSystem->getStrDisplayName(), "", $strActions, $intI++);
+                                    $strActions = $this->objToolkit->listButton($strNewElementLink);
+                                    $strOutputAtPlaceholder .= $this->objToolkit->genericAdminList("", $objOnePossibleElementInSystem->getStrDisplayName(), "", $strActions, 0, ($bitRenderCompact ? $arrOneElementOnTemplate["placeholder"] : ""));
                                 }
                             }
                         }
                     }
                 }
 
-                if((int)uniStrlen($strOutputAtPlaceholder) > 0) {
+                if ((int)uniStrlen($strOutputAtPlaceholder) > 0) {
                     $arrSinglePlaceholder = explode("_", $arrOneElementOnTemplate["placeholder"]);
-                    if(count($arrSinglePlaceholder) == 2)
+                    if (count($arrSinglePlaceholder) == 2 && !$bitRenderCompact) {
                         $strOutputAtPlaceholder .= $this->objToolkit->formHeadline($arrSinglePlaceholder[0]);
+                    }
 
-                    $strListId = generateSystemid();
-                    $strReturn .= $this->objToolkit->dragableListHeader($strListId, true);
-                    $strReturn .= $strOutputAtPlaceholder;
-                    $strReturn .= $this->objToolkit->dragableListFooter($strListId);
+
+                    if($bitRenderCompact) {
+                        $strReturn .= $this->objToolkit->listHeader();
+                        $strReturn .= $strOutputAtPlaceholder;
+                        $strReturn .= $this->objToolkit->listFooter();
+                    }
+                    else {
+                        $strListId = generateSystemid();
+                        $strReturn .= $this->objToolkit->dragableListHeader($strListId, true);
+                        $strReturn .= $strOutputAtPlaceholder;
+                        $strReturn .= $this->objToolkit->dragableListFooter($strListId);
+                    }
+
                 }
 
             }
@@ -182,19 +308,20 @@ class class_module_pages_content_admin extends class_admin_simple implements int
             $strReturn .= $this->getLang("element_liste_leer");
         }
 
+
         //if there are any page-elements remaining, print a warning and print the elements row
-        if(count($arrElementsOnPage) > 0) {
+        if (count($arrElementsOnPage) > 0) {
             $strReturn .= $this->objToolkit->divider();
             $strReturn .= $this->objToolkit->warningBox($this->getLang("warning_elementsremaining"));
             $strReturn .= $this->objToolkit->listHeader();
 
             //minimized actions now, plz. this ain't being a real element anymore!
-            foreach($arrElementsOnPage as $objOneElement) {
+            foreach ($arrElementsOnPage as $objOneElement) {
                 $strActions = "";
                 $strActions .= $this->objToolkit->listDeleteButton($objOneElement->getStrDisplayName(), $this->getLang("element_loeschen_frage"), class_link::getLinkAdminHref("pages_content", "deleteElementFinal", "&systemid=".$objOneElement->getSystemid().($this->getParam("pe") == "" ? "" : "&peClose=".$this->getParam("pe"))));
 
                 //Put all Output together
-                $strReturn .= $this->objToolkit->genericAdminList("", $objOneElement->getStrDisplayName().$this->getLang("placeholder").$objOneElement->getStrPlaceholder(), "", $strActions, $intI++);
+                $strReturn .= $this->objToolkit->genericAdminList("", $objOneElement->getStrDisplayName().$this->getLang("placeholder").$objOneElement->getStrPlaceholder(), "", $strActions, 0);
             }
             $strReturn .= $this->objToolkit->listFooter();
         }
@@ -204,39 +331,46 @@ class class_module_pages_content_admin extends class_admin_simple implements int
         return $strReturn;
     }
 
+
     /**
      * @param class_model|interface_admin_listable|interface_model|class_module_pages_pageelement $objOneIterable
      * @param string $strListIdentifier
      *
      * @return string
      */
-    public function getActionIcons($objOneIterable, $strListIdentifier = "") {
+    public function getActionIcons($objOneIterable, $strListIdentifier = "")
+    {
         $strActions = "";
 
-        if($objOneIterable instanceof class_module_pages_pageelement) {
+        if ($objOneIterable instanceof class_module_pages_pageelement) {
             $objLockmanager = $objOneIterable->getLockManager();
 
             //Create a row to handle the element, check all necessary stuff such as locking etc
             $strActions = "";
             //First step - Record locked? Offer button to unlock? But just as admin! For the user, who locked the record, the unlock-button
             //won't be visible
-            if(!$objLockmanager->isAccessibleForCurrentUser()) {
+            if (!$objLockmanager->isAccessibleForCurrentUser()) {
                 //So, return a button, if we have an admin in front of us
-                if($objLockmanager->isUnlockableForCurrentUser()) {
+                if ($objLockmanager->isUnlockableForCurrentUser()) {
                     $strActions .= $this->objToolkit->listButton(class_link::getLinkAdmin("pages_content", "list", "&systemid=".$this->getSystemid()."&adminunlockid=".$objOneIterable->getSystemid(), "", $this->getLang("ds_entsperren"), "icon_lockerOpen"));
                 }
                 //If the Element is locked, then its not allowed to edit or delete the record, so disable the icons
-                if($objOneIterable->rightEdit())
+                if ($objOneIterable->rightEdit()) {
                     $strActions .= $this->objToolkit->listButton(class_adminskin_helper::getAdminImage("icon_editLocked", $this->getLang("ds_gesperrt")));
-                if($objOneIterable->rightDelete())
+                    $strActions .= $this->objToolkit->listButton(class_adminskin_helper::getAdminImage("icon_editLocked", $this->getLang("ds_gesperrt")));
+                }
+                if ($objOneIterable->rightDelete()) {
                     $strActions .= $this->objToolkit->listButton(class_adminskin_helper::getAdminImage("icon_deleteLocked", $this->getLang("ds_gesperrt")));
+                }
             }
             else {
 
-                if($objOneIterable->rightEdit())
+                if ($objOneIterable->rightEdit()) {
                     $strActions .= $this->objToolkit->listButton(class_link::getLinkAdmin("pages_content", "edit", "&systemid=".$objOneIterable->getSystemid(), "", $this->getLang("element_bearbeiten"), "icon_edit"));
-                if($objOneIterable->rightDelete())
+                }
+                if ($objOneIterable->rightDelete()) {
                     $strActions .= $this->objToolkit->listDeleteButton($objOneIterable->getStrName().($objOneIterable->getConcreteAdminInstance()->getContentTitle() != "" ? " - ".$objOneIterable->getConcreteAdminInstance()->getContentTitle() : "").($objOneIterable->getStrTitle() != "" ? " - ".$objOneIterable->getStrTitle() : ""), $this->getLang("element_loeschen_frage"), class_link::getLinkAdminHref("pages_content", "deleteElementFinal", "&systemid=".$objOneIterable->getSystemid().($this->getParam("pe") == "" ? "" : "&peClose=".$this->getParam("pe"))));
+                }
             }
 
             //The Icons to sort the list and to copy the element
@@ -246,9 +380,9 @@ class class_module_pages_content_admin extends class_admin_simple implements int
             $strActions .= $this->objToolkit->listStatusButton($objOneIterable->getSystemid());
 
         }
-        else if($objOneIterable instanceof class_module_pages_element) {
+        else if ($objOneIterable instanceof class_module_pages_element) {
             $objAdminInstance = class_module_system_module::getModuleByName("pages")->getAdminInstanceOfConcreteModule();
-            if($objAdminInstance != null && $objAdminInstance instanceof class_admin_simple) {
+            if ($objAdminInstance != null && $objAdminInstance instanceof class_admin_simple) {
                 return $objAdminInstance->getActionIcons($objOneIterable);
             }
         }
@@ -263,29 +397,27 @@ class class_module_pages_content_admin extends class_admin_simple implements int
      *
      * @param bool $bitShowErrors
      *
+     * @permissions edit
+     *
      * @return string
      */
-    protected function actionNew($bitShowErrors = false) {
+    protected function actionNew($bitShowErrors = false)
+    {
         $strReturn = "";
-        //check rights
-        $objCommon = new class_module_system_common($this->getSystemid());
-        if($objCommon->rightEdit()) {
-            //OK, here we go. So, what information do we have?
-            $strPlaceholderElement = $this->getParam("element");
-            //Now, load all infos about the requested element
-            $objElement = class_module_pages_element::getElement($strPlaceholderElement);
-            //Build the class-name
-            $strElementClass = str_replace(".php", "", $objElement->getStrClassAdmin());
-            //and finally create the object
-            /** @var $objElement class_element_admin */
-            $objElement = new $strElementClass();
-            if($bitShowErrors)
-                $objElement->setDoValidation(true);
-
-            $strReturn = $objElement->actionEdit("new");
+        //OK, here we go. So, what information do we have?
+        $strPlaceholderElement = $this->getParam("element");
+        //Now, load all infos about the requested element
+        $objElement = class_module_pages_element::getElement($strPlaceholderElement);
+        //Build the class-name
+        $strElementClass = str_replace(".php", "", $objElement->getStrClassAdmin());
+        //and finally create the object
+        /** @var $objElement class_element_admin */
+        $objElement = new $strElementClass();
+        if ($bitShowErrors) {
+            $objElement->setDoValidation(true);
         }
-        else
-            $strReturn .= $this->getLang("commons_error_permissions");
+
+        $strReturn = $objElement->actionEdit("new");
 
         return $strReturn;
     }
@@ -298,43 +430,101 @@ class class_module_pages_content_admin extends class_admin_simple implements int
      * @return string
      * @permissions edit
      */
-    protected function actionEdit($bitShowErrors = false) {
+    protected function actionEdit($bitShowErrors = false)
+    {
         $strReturn = "";
         //check rights
         /** @var $objElement class_module_pages_element */
         $objElement = class_objectfactory::getInstance()->getObject($this->getSystemid());
 
-        if($objElement instanceof class_module_pages_element) {
+        if ($objElement instanceof class_module_pages_element) {
             $this->adminReload(class_link::getLinkAdminHref("pages", "edit", "&systemid=".$objElement->getSystemid()));
             return "";
         }
 
 
-        if($objElement->rightEdit()) {
-            //Load the element data
-            //check, if the element isn't locked
-            if($objElement->getLockManager()->isAccessibleForCurrentUser()) {
-                $objElement->getLockManager()->lockRecord();
+        //Load the element data
+        //check, if the element isn't locked
+        if ($objElement->getLockManager()->isAccessibleForCurrentUser()) {
+            $objElement->getLockManager()->lockRecord();
 
-                //Load the class to create an object
+            //Load the class to create an object
 
-                $strElementClass = str_replace(".php", "", $objElement->getStrClassAdmin());
-                //and finally create the object
-                /** @var $objPageElement class_element_admin */
-                $objPageElement = new $strElementClass();
-                if($bitShowErrors)
-                    $objPageElement->setDoValidation(true);
-                $strReturn .= $objPageElement->actionEdit("edit");
-
+            $strElementClass = str_replace(".php", "", $objElement->getStrClassAdmin());
+            //and finally create the object
+            /** @var $objPageElement class_element_admin */
+            $objPageElement = new $strElementClass();
+            if ($bitShowErrors) {
+                $objPageElement->setDoValidation(true);
             }
-            else {
-                $strReturn .= $this->objToolkit->warningBox($this->getLang("ds_gesperrt"));
-            }
+            $strReturn .= $objPageElement->actionEdit("edit");
+
         }
-        else
-            $strReturn .= $this->getLang("commons_error_permissions");
+        else {
+            $strReturn .= $this->objToolkit->warningBox($this->getLang("ds_gesperrt"));
+        }
 
         return $strReturn;
+    }
+
+    /**
+     * Internal helper to resolve or create the matching blocks and block element for the current page-element
+     * @param $strPageId
+     * @param $strBlocks
+     * @param $strBlock
+     *
+     * @return string
+     * @throws class_exception
+     */
+    private function processBlocksDefinition($strPageId, $strBlocks, $strBlock)
+    {
+        $strNewPrevId = $strPageId;
+
+        if($strBlocks != "" && $strBlock != "") {
+
+
+            if(validateSystemid($strBlocks) && validateSystemid($strBlock)) {
+                //fetch the matching elements
+                $objBlocks = new class_module_pages_pageelement($strBlocks);
+                $objBlock = new class_module_pages_pageelement($strBlock);
+
+                if($objBlocks->getStrElement() == "blocks" && $objBlock->getStrElement() == "block") {
+                    return $objBlock->getSystemid();
+                }
+            }
+
+            $objBlocksElement = null;
+            if(validateSystemid($strBlocks) && !validateSystemid($strBlock)) {
+                $objBlocksElement = new class_module_pages_pageelement($strBlocks);
+            }
+
+
+            if($objBlocksElement == null) {
+                $objBlocksElement = new class_module_pages_pageelement();
+                $objBlocksElement->setStrName($strBlocks);
+                $objBlocksElement->setStrPlaceholder("blocks");
+                $objBlocksElement->setStrElement("blocks");
+                $objBlocksElement->setStrLanguage($this->getParam("page_element_ph_language"));
+                if (!$objBlocksElement->updateObjectToDb($strNewPrevId)) {
+                    throw new class_exception("Error saving new element-object to db", class_exception::$level_ERROR);
+                }
+            }
+
+            $objBlockElement = new class_module_pages_pageelement();
+            $objBlockElement->setStrName($strBlock);
+            $objBlockElement->setStrPlaceholder("block");
+            $objBlockElement->setStrElement("block");
+            $objBlockElement->setStrLanguage($this->getParam("page_element_ph_language"));
+            if (!$objBlockElement->updateObjectToDb($objBlocksElement->getSystemid())) {
+                throw new class_exception("Error saving new element-object to db", class_exception::$level_ERROR);
+            }
+
+            $strNewPrevId = $objBlockElement->getSystemid();
+
+        }
+
+
+        return $strNewPrevId;
     }
 
     /**
@@ -343,12 +533,14 @@ class class_module_pages_content_admin extends class_admin_simple implements int
      * @throws class_exception
      * @return string "" in case of success
      */
-    protected function actionSaveElement() {
+    protected function actionSaveElement()
+    {
         $strReturn = "";
         //There are two modes - edit and new
         //The element itself just knows the edit mode, so in case of new, we have to create a dummy element - before
         //passing control to the element
-        if($this->getParam("mode") == "new") {
+        if ($this->getParam("mode") == "new") {
+
             //Using the passed placeholder-param to load the element and get the table
             $strPlaceholder = $this->getParam("placeholder");
             //Split up the placeholder
@@ -364,16 +556,22 @@ class class_module_pages_content_admin extends class_admin_simple implements int
             $objElement = new $strElementClass();
 
             //really continue? try to validate the passed data.
-            if($objElement->getAdminForm() !== null && !$objElement->getAdminForm()->validateForm()) {
+            if ($objElement->getAdminForm() !== null && !$objElement->getAdminForm()->validateForm()) {
                 class_carrier::getInstance()->setParam("peClose", "");
                 $strReturn .= $this->actionNew(true);
                 return $strReturn;
             }
-            else if(!$objElement->validateForm()) {
+            elseif (!$objElement->validateForm()) {
                 class_carrier::getInstance()->setParam("peClose", "");
                 $strReturn .= $this->actionNew(true);
                 return $strReturn;
             }
+
+
+            $strCurrentParentId = $this->getSystemid();
+            //update / create blocks and block element
+            $strCurrentParentId = $this->processBlocksDefinition($strCurrentParentId, $this->getParam("blocks"), $this->getParam("block"));
+
 
             //So, lets do the magic - create the records
             $objPageElement = new class_module_pages_pageelement();
@@ -381,8 +579,9 @@ class class_module_pages_content_admin extends class_admin_simple implements int
             $objPageElement->setStrPlaceholder($strPlaceholder);
             $objPageElement->setStrElement($strPlaceholderElement);
             $objPageElement->setStrLanguage($this->getParam("page_element_ph_language"));
-            if(!$objPageElement->updateObjectToDb($this->getSystemid()))
+            if (!$objPageElement->updateObjectToDb($strCurrentParentId)) {
                 throw new class_exception("Error saving new element-object to db", class_exception::$level_ERROR);
+            }
             $strElementSystemId = $objPageElement->getSystemid();
 
             $objLockmanager = new class_lockmanager($strElementSystemId);
@@ -396,24 +595,29 @@ class class_module_pages_content_admin extends class_admin_simple implements int
         // ************************************* Edit the current Element *******************************
 
         //check, if the element isn't locked
-        $objCommons = new class_module_system_common($this->getSystemid());
-        $strPageSystemid = $objCommons->getPrevId();
+        $objTemp = class_objectfactory::getInstance()->getObject($this->getSystemid());
+        $strPageSystemid = $this->getSystemid();
+
+        while (!$objTemp instanceof class_module_pages_page && validateSystemid($objTemp->getStrPrevId())) {
+            $objTemp = class_objectfactory::getInstance()->getObject($objTemp->getStrPrevId());
+            $strPageSystemid = $objTemp->getSystemid();
+        }
 
         $objLockmanager = new class_lockmanager($this->getSystemid());
 
-        if($objLockmanager->isLockedByCurrentUser()) {
+        if ($objLockmanager->isLockedByCurrentUser()) {
             //Load the data of the current element
             $objElementData = new class_module_pages_pageelement($this->getSystemid());
             /** @var $objElement class_element_admin */
             $objElement = $objElementData->getConcreteAdminInstance();
 
             //really continue? try to validate the passed data.
-            if($objElement->getAdminForm() !== null && !$objElement->getAdminForm()->validateForm()) {
+            if ($objElement->getAdminForm() !== null && !$objElement->getAdminForm()->validateForm()) {
                 class_carrier::getInstance()->setParam("peClose", "");
                 $strReturn .= $this->actionEdit(true);
                 return $strReturn;
             }
-            else if(!$objElement->validateForm()) {
+            else if (!$objElement->validateForm()) {
                 class_carrier::getInstance()->setParam("peClose", "");
                 $strReturn .= $this->actionEdit(true);
                 return $strReturn;
@@ -422,8 +626,9 @@ class class_module_pages_content_admin extends class_admin_simple implements int
             //pass the data to the element, maybe the element wants to update some data
             $objElement->setArrParamData($this->getAllParams());
 
-            if($objElement->getAdminForm() !== null)
+            if ($objElement->getAdminForm() !== null) {
                 $objElement->getAdminForm()->updateSourceObject();
+            }
 
             $objElement->doBeforeSaveToDb();
 
@@ -440,8 +645,9 @@ class class_module_pages_content_admin extends class_admin_simple implements int
             $objElementData->setStrTitle($this->getParam("page_element_ph_title"));
             $objElementData->setStrLanguage($this->getParam("page_element_ph_language"));
             //placeholder to update?
-            if($this->getParam("placeholder") != "")
+            if ($this->getParam("placeholder") != "") {
                 $objElementData->setStrPlaceholder($this->getParam("placeholder"));
+            }
 
             $objStartDate = new class_date("0");
             $objEndDate = new class_date("0");
@@ -449,14 +655,14 @@ class class_module_pages_content_admin extends class_admin_simple implements int
             $objEndDate->generateDateFromParams("end", $this->getAllParams());
 
 
-            if($objStartDate->getIntYear() == "0000") {
+            if ($objStartDate->getIntYear() == "0000") {
                 $objElementData->setObjStartDate(null);
             }
             else {
                 $objElementData->setObjStartDate($objStartDate);
             }
 
-            if($objEndDate->getIntYear() == "0000") {
+            if ($objEndDate->getIntYear() == "0000") {
                 $objElementData->setObjEndDate(null);
             }
             else {
@@ -464,8 +670,9 @@ class class_module_pages_content_admin extends class_admin_simple implements int
             }
 
 
-            if(!$objElementData->updateObjectToDb())
+            if (!$objElementData->updateObjectToDb()) {
                 throw new class_exception("Error updating object to db", class_exception::$level_ERROR);
+            }
 
 
             //allow the element to run actions after saving
@@ -473,14 +680,13 @@ class class_module_pages_content_admin extends class_admin_simple implements int
 
 
             //Loading the data of the corresponding site
-            $objPage = new class_module_pages_page($strPageSystemid);
             $this->flushCompletePagesCache();
 
-            if($this->getParam("peClose") == "1") {
+            if ($this->getParam("peClose") == "1") {
 
                 //generate the elements' output
                 $objPortalElement = $objElementData->getConcretePortalInstance();
-                $strElementContent = $objPortalElement->getElementOutput();
+                $strElementContent = $objPortalElement->getRenderedElementOutput(false);
 
                 $strContent = json_encode($strElementContent, JSON_FORCE_OBJECT); //JSON_HEX_QUOT|JSON_HEX_APOS
 
@@ -494,7 +700,7 @@ JS;
 
             }
 
-            $this->adminReload(class_link::getLinkAdminHref("pages_content", "list", "systemid=".$objPage->getSystemid()));
+            $this->adminReload(class_link::getLinkAdminHref("pages_content", "list", "&systemid=".$strPageSystemid));
 
         }
         else {
@@ -510,21 +716,23 @@ JS;
      * @return string , "" in case of success
      * @permissions delete
      */
-    protected function actionDeleteElementFinal() {
+    protected function actionDeleteElementFinal()
+    {
         $strReturn = "";
 
         $objPageElement = new class_module_pages_pageelement($this->getSystemid());
-        if($objPageElement->rightDelete()) {
+        if ($objPageElement->rightDelete()) {
             //Locked?
             $objLockmanager = new class_lockmanager($this->getSystemid());
             $strPrevId = $objPageElement->getPrevId();
 
-            if($objLockmanager->isAccessibleForCurrentUser()) {
+            if ($objLockmanager->isAccessibleForCurrentUser()) {
                 //delete object
-                if(!$objPageElement->deleteObject())
+                if (!$objPageElement->deleteObject()) {
                     throw new class_exception("Error deleting element from db", class_exception::$level_ERROR);
+                }
 
-                if($this->getParam("pe") == "1") {
+                if ($this->getParam("pe") == "1") {
                     $strReturn = <<<JS
                     parent.KAJONA.admin.portaleditor.deleteElementData('{$objPageElement->getSystemid()}');
                     parent.KAJONA.admin.portaleditor.closeDialog(true);
@@ -539,8 +747,9 @@ JS;
                 $strReturn .= $this->objToolkit->warningBox($this->getLang("ds_gesperrt"));
             }
         }
-        else
+        else {
             $strReturn = $this->getLang("commons_error_permissions");
+        }
 
         return $strReturn;
     }
@@ -554,17 +763,19 @@ JS;
      * @permissions delete
      * @xml
      */
-    protected function actionDeleteElementFinalXML() {
+    protected function actionDeleteElementFinalXML()
+    {
 
         $objPageElement = new class_module_pages_pageelement($this->getSystemid());
-        if($objPageElement->rightDelete()) {
+        if ($objPageElement->rightDelete()) {
             //Locked?
             $objLockmanager = new class_lockmanager($this->getSystemid());
 
-            if($objLockmanager->isAccessibleForCurrentUser()) {
+            if ($objLockmanager->isAccessibleForCurrentUser()) {
                 //delete object
-                if(!$objPageElement->deleteObject())
+                if (!$objPageElement->deleteObject()) {
                     throw new class_exception("Error deleting element from db", class_exception::$level_ERROR);
+                }
 
 
                 return "<message><success></success></message>";
@@ -583,16 +794,17 @@ JS;
      * @return string , "" in case of success
      * @permissions edit
      */
-    protected function actionCopyElement() {
+    protected function actionCopyElement()
+    {
         $strReturn = "";
 
         $this->setArrModuleEntry("template", "/folderview.tpl");
 
         $objSourceElement = new class_module_pages_pageelement($this->getSystemid());
-        if($objSourceElement->rightEdit($this->getSystemid())) {
+        if ($objSourceElement->rightEdit($this->getSystemid())) {
 
             $objLang = null;
-            if($this->getParam("copyElement_language") != "") {
+            if ($this->getParam("copyElement_language") != "") {
                 $objLang = new class_module_languages_language($this->getParam("copyElement_language"));
             }
             else {
@@ -600,10 +812,11 @@ JS;
             }
 
             $objPage = null;
-            if($this->getParam("copyElement_page") != "") {
+            if ($this->getParam("copyElement_page") != "") {
                 $objPage = class_module_pages_page::getPageByName($this->getParam("copyElement_page"));
-                if($objPage == null)
+                if ($objPage == null) {
                     throw new class_exception("failed to load page ".$this->getParam("copyElement_page"), class_exception::$level_ERROR);
+                }
                 $objPage->setStrLanguage($objLang->getStrName());
                 $objPage->initObject();
             }
@@ -622,8 +835,9 @@ JS;
             //step one: language selection
             $arrLanguages = class_module_languages_language::getObjectList(true);
             $arrLanguageDD = array();
-            foreach($arrLanguages as $objSingleLanguage)
+            foreach ($arrLanguages as $objSingleLanguage) {
                 $arrLanguageDD[$objSingleLanguage->getSystemid()] = $this->getLang("lang_".$objSingleLanguage->getStrName(), "languages");
+            }
 
             $strReturn .= $this->objToolkit->formInputDropdown("copyElement_language", $arrLanguageDD, $this->getLang("copyElement_language"), $objLang->getSystemid());
 
@@ -641,11 +855,11 @@ JS;
             $arrPlaceholders = $this->objTemplate->getElements($strTemplateId);
             $arrPlaceholdersDD = array();
 
-            foreach($arrPlaceholders as $arrSinglePlaceholder) {
+            foreach ($arrPlaceholders as $arrSinglePlaceholder) {
 
-                foreach($arrSinglePlaceholder["elementlist"] as $arrSinglePlaceholderlist) {
-                    if($objSourceElement->getStrElement() == $arrSinglePlaceholderlist["element"]) {
-                        if($objSourceElement->getIntRepeat() == 1) {
+                foreach ($arrSinglePlaceholder["elementlist"] as $arrSinglePlaceholderlist) {
+                    if ($objSourceElement->getStrElement() == $arrSinglePlaceholderlist["element"]) {
+                        if ($objSourceElement->getIntRepeat() == 1) {
                             //repeatable, ok in every case
                             $arrPlaceholdersDD[$arrSinglePlaceholder["placeholder"]] = $arrSinglePlaceholder["placeholder"];
                         }
@@ -655,13 +869,15 @@ JS;
                             //loop in order to find same element-types - other elements may be possible due to piped placeholders, too
                             $bitAdd = true;
                             //var_dump($arrElementsOnPage);
-                            foreach($arrElementsOnPage as $objSingleElementOnPage) {
-                                if($objSingleElementOnPage->getStrElement() == $objSourceElement->getStrElement())
+                            foreach ($arrElementsOnPage as $objSingleElementOnPage) {
+                                if ($objSingleElementOnPage->getStrElement() == $objSourceElement->getStrElement()) {
                                     $bitAdd = false;
+                                }
                             }
 
-                            if($bitAdd)
+                            if ($bitAdd) {
                                 $arrPlaceholdersDD[$arrSinglePlaceholder["placeholder"]] = $arrSinglePlaceholder["placeholder"];
+                            }
                         }
                     }
                 }
@@ -669,7 +885,7 @@ JS;
 
 
             $bitCopyingAllowed = true;
-            if(count($arrPlaceholdersDD) == 0) {
+            if (count($arrPlaceholdersDD) == 0) {
                 $strReturn .= $this->objToolkit->formTextRow($this->getLang("copyElement_err_placeholder"));
                 $bitCopyingAllowed = false;
             }
@@ -709,24 +925,26 @@ JS;
                 </script>";
 
             //any actions to take?
-            if($this->getParam("copyElement_doCopy") == 1) {
+            if ($this->getParam("copyElement_doCopy") == 1) {
                 $objNewElement = $objSourceElement->copyObject($objPage->getSystemid());
                 $objNewElement->setStrLanguage($objLang->getStrName());
                 $objNewElement->setStrPlaceholder($this->getParam("copyElement_placeholder"));
-                if($objNewElement->updateObjectToDb()) {
+                if ($objNewElement->updateObjectToDb()) {
                     $this->setSystemid($objNewElement->getSystemid());
                     $strReturn = "";
 
                     $this->adminReload(class_link::getLinkAdminHref("pages_content", "list", "systemid=".$objNewElement->getPrevId()."&blockAction=1&peClose=1"));
                 }
-                else
+                else {
                     throw new class_exception("Error copying the pageelement ".$objSourceElement->getSystemid(), class_exception::$level_ERROR);
+                }
 
             }
 
         }
-        else
+        else {
             $strReturn = $this->getLang("commons_error_permissions");
+        }
         return $strReturn;
     }
 
@@ -736,24 +954,26 @@ JS;
      *
      * @return array
      */
-    protected function getArrOutputNaviEntries() {
+    protected function getArrOutputNaviEntries()
+    {
         $arrPath = $this->getPathArray();
 
         $arrPathLinks = parent::getArrOutputNaviEntries();
         array_pop($arrPathLinks);
         $arrPathLinks[] = class_link::getLinkAdmin("pages", "list", "&unlockid=".$this->getSystemid(), $this->getLang("modul_titel", "pages"));
 
-        foreach($arrPath as $strOneSystemid) {
+        foreach ($arrPath as $strOneSystemid) {
             /** @var $objObject class_module_pages_folder|class_module_pages_page */
             $objObject = class_objectfactory::getInstance()->getObject($strOneSystemid);
             //Skip Elements: No sense to show in path-navigation
-            if($objObject == null || $objObject->getIntModuleNr() == _pages_content_modul_id_)
+            if ($objObject == null || $objObject->getIntModuleNr() == _pages_content_modul_id_) {
                 continue;
+            }
 
-            if($objObject instanceof class_module_pages_folder) {
+            if ($objObject instanceof class_module_pages_folder) {
                 $arrPathLinks[] = class_link::getLinkAdmin("pages", "list", "&systemid=".$strOneSystemid."&unlockid=".$this->getSystemid(), $objObject->getStrName());
             }
-            if($objObject instanceof class_module_pages_page) {
+            if ($objObject instanceof class_module_pages_page) {
                 $arrPathLinks[] = class_link::getLinkAdmin("pages", "list", "&systemid=".$strOneSystemid."&unlockid=".$this->getSystemid(), $objObject->getStrBrowsername());
             }
 
@@ -763,9 +983,11 @@ JS;
 
     /**
      * Sorts the current element upwards
+     *
      * @return void
      */
-    protected function actionElementStatus() {
+    protected function actionElementStatus()
+    {
         //Create the object
         $objElement = new class_module_pages_pageelement($this->getSystemid());
         $objElement->setIntRecordStatus($objElement->getIntRecordStatus() == 0 ? 1 : 0);
@@ -784,12 +1006,13 @@ JS;
      * @xml
      * @return string
      */
-    protected function actionMoveElement() {
+    protected function actionMoveElement()
+    {
         $strReturn = "";
         //get the object to update
         /** @var $objObject class_module_pages_pageelement */
         $objObject = class_objectfactory::getInstance()->getObject($this->getSystemid());
-        if($objObject instanceof class_module_pages_pageelement && $objObject->rightEdit()) {
+        if ($objObject instanceof class_module_pages_pageelement && $objObject->rightEdit()) {
 
             $strPageSystemid = $objObject->getPrevId();
             $objLockmanager = new class_lockmanager($objObject->getSystemid());
@@ -797,12 +1020,13 @@ JS;
             $strPlaceholder = $this->getParam("placeholder");
             $arrParts = explode("_", $strPlaceholder);
 
-            if(uniStrpos($arrParts[1], $objObject->getStrElement()) !== false) {
+            if (uniStrpos($arrParts[1], $objObject->getStrElement()) !== false) {
 
-                if(!$objLockmanager->isLocked())
+                if (!$objLockmanager->isLocked()) {
                     $objLockmanager->lockRecord();
+                }
 
-                if($objLockmanager->isLockedByCurrentUser()) {
+                if ($objLockmanager->isLockedByCurrentUser()) {
 
                     //ph_placeholder
                     $objObject->setStrPlaceholder($strPlaceholder);
@@ -843,22 +1067,24 @@ JS;
      * @permissions edit
      * @return string
      */
-    protected function actionUpdateObjectProperty() {
+    protected function actionUpdateObjectProperty()
+    {
         $strReturn = "";
         //get the object to update
         /** @var $objObject class_module_pages_element */
         $objObject = class_objectfactory::getInstance()->getObject($this->getSystemid());
-        if($objObject->rightEdit()) {
+        if ($objObject->rightEdit()) {
             //differ between two modes - page-elements or regular objects
-            if($objObject instanceof class_module_pages_pageelement) {
+            if ($objObject instanceof class_module_pages_pageelement) {
 
                 $strPageSystemid = $objObject->getPrevId();
                 $objLockmanager = new class_lockmanager($objObject->getSystemid());
 
-                if(!$objLockmanager->isLocked())
+                if (!$objLockmanager->isLocked()) {
                     $objLockmanager->lockRecord();
+                }
 
-                if($objLockmanager->isLockedByCurrentUser()) {
+                if ($objLockmanager->isLockedByCurrentUser()) {
                     //and finally create the object
                     /** @var class_module_pages_pageelement $objElement */
                     $strElementClass = str_replace(".php", "", $objObject->getStrClassAdmin());
@@ -869,7 +1095,7 @@ JS;
                     $arrElementData = $objElement->loadElementData();
 
                     //see if we could set the param to the element
-                    if($this->getParam("property") != "") {
+                    if ($this->getParam("property") != "") {
 
                         $strProperty = null;
 
@@ -878,25 +1104,28 @@ JS;
 
                         //try to fetch the property based on the orm annotations
                         $strTargetTable = $objReflection->getAnnotationValuesFromClass(class_orm_base::STR_ANNOTATION_TARGETTABLE);
-                        if(count($strTargetTable) > 0)
+                        if (count($strTargetTable) > 0) {
                             $strTargetTable = $strTargetTable[0];
-
-                        $arrTable = explode(".", $strTargetTable);
-                        if(count($arrTable) == 2)
-                            $strTargetTable = $arrTable[0];
-
-                        $arrOrmProperty = $objReflection->getPropertiesWithAnnotation(class_orm_base::STR_ANNOTATION_TABLECOLUMN);
-                        foreach($arrOrmProperty as $strCurProperty => $strValue) {
-                            if($strValue == $strTargetTable.".".$this->getParam("property"))
-                                $strProperty = $strCurProperty;
                         }
 
-                        if($strProperty == null) {
+                        $arrTable = explode(".", $strTargetTable);
+                        if (count($arrTable) == 2) {
+                            $strTargetTable = $arrTable[0];
+                        }
+
+                        $arrOrmProperty = $objReflection->getPropertiesWithAnnotation(class_orm_base::STR_ANNOTATION_TABLECOLUMN);
+                        foreach ($arrOrmProperty as $strCurProperty => $strValue) {
+                            if ($strValue == $strTargetTable.".".$this->getParam("property")) {
+                                $strProperty = $strCurProperty;
+                            }
+                        }
+
+                        if ($strProperty == null) {
                             $strProperty = $this->getParam("property");
                         }
 
                         $strSetter = $objReflection->getSetter($strProperty);
-                        if($strSetter != null) {
+                        if ($strSetter != null) {
                             call_user_func(array($objElement, $strSetter), $this->getParam("value"));
                         }
                         else {
@@ -928,14 +1157,14 @@ JS;
             }
             else {
                 //any other object - try to find the matching property and write the value
-                if($this->getParam("property") == "") {
+                if ($this->getParam("property") == "") {
                     class_response_object::getInstance()->setStrStatusCode(class_http_statuscodes::SC_BADREQUEST);
                     return "<message><error>missing property param</error></message>";
                 }
 
                 $objReflection = new class_reflection($objObject);
                 $strSetter = $objReflection->getSetter($this->getParam("property"));
-                if($strSetter == null) {
+                if ($strSetter == null) {
                     class_response_object::getInstance()->setStrStatusCode(class_http_statuscodes::SC_BADREQUEST);
                     return "<message><error>setter not found</error></message>";
                 }

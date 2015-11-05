@@ -13,6 +13,7 @@
  * @package module_pages
  * @author sidler@mulchprod.de
  * @targetTable page.page_id
+ * @sortManager class_pages_sortmanager
  *
  * @module pages
  * @moduleId _pages_modul_id_
@@ -144,8 +145,6 @@ class class_module_pages_page extends class_model implements interface_model, in
 
         //base class
         parent::__construct($strSystemid);
-
-        $this->objSortManager = new class_pages_sortmanager($this);
     }
 
     /**
