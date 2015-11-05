@@ -172,7 +172,7 @@
         <echo>Searching for composer.json files in ${basedir}${composerTempPath}</echo>
         <apply executable="${path.composer}" parallel="false" verbose="true" force="true" failonerror="true" addsourcefile="false">
             <fileset dir="${basedir}${composerTempPath}">
-                <include name="*/composer.json"/>
+                <include name="core*/*/composer.json"/>
             </fileset>
             <arg line="install --prefer-source --no-dev --working-dir "/>
             <targetfile/>
