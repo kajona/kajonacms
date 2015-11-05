@@ -979,10 +979,11 @@ KAJONA.admin.lists = {
         }
     },
 
-    triggerAction : function(strTitle, strUrl) {
+    triggerAction : function(strTitle, strUrl, bitRenderInfo) {
         KAJONA.admin.lists.arrSystemids = [];
         KAJONA.admin.lists.strCurrentUrl = strUrl;
         KAJONA.admin.lists.strCurrentTitle = strTitle;
+        KAJONA.admin.lists.bitRenderInfo = bitRenderInfo;
 
         //get the selected elements
         KAJONA.admin.lists.arrSystemids = KAJONA.admin.lists.getSelectedElements();
@@ -1028,8 +1029,13 @@ KAJONA.admin.lists = {
             $.ajax({
                 type: 'POST',
                 url: strUrl,
-                success: function() {
+                success: function(resp) {
                     KAJONA.admin.lists.triggerSingleAction();
+                    if (KAJONA.admin.lists.bitRenderInfo) {
+                        if (resp != "") {
+                            $('.batch_messages_list').append("<li>" + resp + "</li>");
+                        }
+                    }
                 },
                 dataType: 'text'
             });
@@ -1038,7 +1044,10 @@ KAJONA.admin.lists = {
             $('.batch_progressed').text((KAJONA.admin.lists.intTotal));
             $('.progress > .progress-bar').css('width', 100+'%');
 			$('.progress > .progress-bar').html('100%');
-            document.location.reload();
+
+            if (!KAJONA.admin.lists.bitRenderInfo) {
+                document.location.reload();
+            }
         }
     },
 
