@@ -7,6 +7,25 @@
 *	$Id$                                   *
 ********************************************************************************************************/
 
+namespace Kajona\Pages\System;
+
+use class_carrier;
+use class_link;
+use class_logger;
+use class_module_system_changelog;
+use class_module_system_module;
+use class_module_system_setting;
+use class_objectfactory;
+use class_orm_objectlist;
+use class_orm_objectlist_orderby;
+use class_orm_objectlist_restriction;
+use class_search_result;
+use interface_admin_listable;
+use interface_model;
+use interface_search_portalobject;
+use interface_search_resultobject;
+use interface_versionable;
+
 /**
  * Model for a page
  *
@@ -18,7 +37,8 @@
  * @module pages
  * @moduleId _pages_modul_id_
  */
-class class_module_pages_page extends class_model implements interface_model, interface_versionable, interface_admin_listable, interface_search_resultobject, interface_search_portalobject {
+class PagesPage extends \class_model implements interface_model, interface_versionable, interface_admin_listable, interface_search_resultobject, interface_search_portalobject
+{
 
     public static $INT_TYPE_PAGE = 0;
     public static $INT_TYPE_ALIAS = 1;
@@ -133,10 +153,11 @@ class class_module_pages_page extends class_model implements interface_model, in
      *
      * @param string $strSystemid (use "" on new objects)
      */
-    public function __construct($strSystemid = "") {
+    public function __construct($strSystemid = "")
+    {
 
         //init the object with the language currently selected - admin or portal
-        if(defined("_admin_") && _admin_ === true) {
+        if (defined("_admin_") && _admin_ === true) {
             $this->setStrLanguage($this->getStrAdminLanguageToWorkOn());
         }
         else {
@@ -154,7 +175,8 @@ class class_module_pages_page extends class_model implements interface_model, in
      * @see getLinkAdminHref()
      * @return mixed
      */
-    public function getSearchAdminLinkForObject() {
+    public function getSearchAdminLinkForObject()
+    {
         return class_link::getLinkAdminHref("pages_content", "list", "&systemid=".$this->getSystemid());
     }
 
@@ -169,7 +191,8 @@ class class_module_pages_page extends class_model implements interface_model, in
      * @see getLinkPortalHref()
      * @return mixed
      */
-    public function updateSearchResult(class_search_result $objResult) {
+    public function updateSearchResult(class_search_result $objResult)
+    {
         $objResult->setStrPagelink(class_link::getLinkPortal($this->getStrName(), "", "_self", $this->getStrBrowsername(), "", "&highlight=".urlencode(html_entity_decode($objResult->getObjSearch()->getStrQuery(), ENT_QUOTES, "UTF-8"))));
         $objResult->setStrPagename($this->getStrName());
     }
@@ -182,7 +205,8 @@ class class_module_pages_page extends class_model implements interface_model, in
      *
      * @return mixed
      */
-    public function getContentLang() {
+    public function getContentLang()
+    {
         return $this->getStrLanguage();
     }
 
@@ -192,11 +216,13 @@ class class_module_pages_page extends class_model implements interface_model, in
      *
      * @return string
      */
-    public function getStrDisplayName() {
+    public function getStrDisplayName()
+    {
         $strName = $this->getStrBrowsername();
 
-        if($strName == "")
+        if ($strName == "") {
             $strName = $this->getStrName();
+        }
 
         return $strName;
     }
@@ -208,8 +234,9 @@ class class_module_pages_page extends class_model implements interface_model, in
      *
      * @return string the name of the icon, not yet wrapped by getImageAdmin()
      */
-    public function getStrIcon() {
-        if($this->getIntType() == self::$INT_TYPE_ALIAS) {
+    public function getStrIcon()
+    {
+        if ($this->getIntType() == self::$INT_TYPE_ALIAS) {
             return "icon_page_alias";
         }
         else {
@@ -222,9 +249,10 @@ class class_module_pages_page extends class_model implements interface_model, in
      *
      * @return string
      */
-    public function getStrAdditionalInfo() {
-        if($this->getIntType() == self::$INT_TYPE_ALIAS) {
-            return "-> " . uniStrTrim($this->getStrAlias(), 20);
+    public function getStrAdditionalInfo()
+    {
+        if ($this->getIntType() == self::$INT_TYPE_ALIAS) {
+            return "-> ".uniStrTrim($this->getStrAlias(), 20);
         }
         else {
             return $this->getStrName();
@@ -236,16 +264,19 @@ class class_module_pages_page extends class_model implements interface_model, in
      *
      * @return string
      */
-    public function getStrLongDescription() {
+    public function getStrLongDescription()
+    {
         return "";
     }
 
 
     /**
      * Initialises the current object, if a systemid was given
+     *
      * @return void
      */
-    protected function initObjectInternal() {
+    protected function initObjectInternal()
+    {
         $objORM = new class_orm_objectlist();
         $strQuery = "SELECT *
                           FROM "._dbprefix_."system_right,
@@ -263,7 +294,7 @@ class class_module_pages_page extends class_model implements interface_model, in
 
         $arrRow = $this->objDB->getPRow($strQuery, array($this->getSystemid(), $this->getStrLanguage()));
 
-        if(!isset($arrRow["page_id"]) || $arrRow["page_id"] == null) {
+        if (!isset($arrRow["page_id"]) || $arrRow["page_id"] == null) {
             $strQuery = "SELECT *
                           FROM "._dbprefix_."system_right,
                                "._dbprefix_."page,
@@ -290,7 +321,7 @@ class class_module_pages_page extends class_model implements interface_model, in
 
         $this->setArrInitRow($arrRow);
 
-        if(isset($arrRow["page_name"])) {
+        if (isset($arrRow["page_name"])) {
             $this->setStrName($arrRow["page_name"]);
             $this->setIntType($arrRow["page_type"]);
             $this->setStrBrowsername($arrRow["pageproperties_browsername"]);
@@ -321,10 +352,11 @@ class class_module_pages_page extends class_model implements interface_model, in
      *
      * @return bool
      */
-    public function onInsertToDb() {
+    public function onInsertToDb()
+    {
 
         //Create the system-record
-        if(class_module_system_setting::getConfigValue("_pages_newdisabled_") == "true") {
+        if (class_module_system_setting::getConfigValue("_pages_newdisabled_") == "true") {
             $this->setIntRecordStatus(0);
         }
 
@@ -348,7 +380,8 @@ class class_module_pages_page extends class_model implements interface_model, in
      *
      * @return bool
      */
-    protected function updateStateToDb() {
+    protected function updateStateToDb()
+    {
 
         //Make texts db-safe
         $strName = $this->generateNonexistingPagename($this->getStrName());
@@ -366,14 +399,14 @@ class class_module_pages_page extends class_model implements interface_model, in
         //and the properties record
         //properties for this language already existing?
         $strCountQuery = "SELECT COUNT(*)
-                          FROM " . _dbprefix_ . "page_properties
+                          FROM "._dbprefix_."page_properties
 		                 WHERE pageproperties_id= ?
 		                   AND pageproperties_language= ?";
         $arrCountRow = $this->objDB->getPRow($strCountQuery, array($this->getSystemid(), $this->getStrLanguage()), 0, false);
 
-        if((int)$arrCountRow["COUNT(*)"] >= 1) {
+        if ((int)$arrCountRow["COUNT(*)"] >= 1) {
             //Already existing, updating properties
-            $strQuery2 = "UPDATE  " . _dbprefix_ . "page_properties
+            $strQuery2 = "UPDATE  "._dbprefix_."page_properties
     					SET pageproperties_description=?,
     						pageproperties_template=?,
     						pageproperties_keywords=?,
@@ -400,7 +433,7 @@ class class_module_pages_page extends class_model implements interface_model, in
         }
         else {
             //Not existing, create one
-            $strQuery2 = "INSERT INTO " . _dbprefix_ . "page_properties
+            $strQuery2 = "INSERT INTO "._dbprefix_."page_properties
 						(pageproperties_id, pageproperties_keywords, pageproperties_description, pageproperties_template, pageproperties_browsername,
 						 pageproperties_seostring, pageproperties_alias, pageproperties_target, pageproperties_language, pageproperties_path) VALUES
 						(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
@@ -433,11 +466,13 @@ class class_module_pages_page extends class_model implements interface_model, in
 
     /**
      * Updates the navigation path of this page based on the parent's name.
+     *
      * @return void
      */
-    public function updatePath() {
+    public function updatePath()
+    {
         $objPages = class_module_system_module::getModuleByName("pages");
-        if($objPages === null) {
+        if ($objPages === null) {
             return;
         }
         $arrPathIds = $this->getPathArray("", $objPages->getSystemid());
@@ -447,7 +482,7 @@ class class_module_pages_page extends class_model implements interface_model, in
         foreach ($arrPathIds as $strParentId) {
             $objInstance = class_objectfactory::getInstance()->getObject($strParentId);
 
-            if($objInstance instanceof class_module_pages_page) {
+            if ($objInstance instanceof PagesPage) {
                 $arrPathNames[] = urlSafeString($objInstance->getStrBrowsername());
             }
             //elseif($objInstance instanceof class_module_pages_folder) {
@@ -468,12 +503,13 @@ class class_module_pages_page extends class_model implements interface_model, in
      * @param int $intEnd
      * @param string $strFilter
      *
-     * @return class_module_pages_page[]
+     * @return PagesPage[]
      * @static
      */
-    public static function getAllPages($intStart = null, $intEnd = null, $strFilter = "") {
+    public static function getAllPages($intStart = null, $intEnd = null, $strFilter = "")
+    {
         $objORM = new class_orm_objectlist();
-        if($strFilter != "") {
+        if ($strFilter != "") {
             $objORM->addWhereRestriction(new class_orm_objectlist_restriction("AND page_name LIKE ?", $strFilter."%"));
         }
         $objORM->addOrderBy(new class_orm_objectlist_orderby("page_name ASC"));
@@ -486,12 +522,14 @@ class class_module_pages_page extends class_model implements interface_model, in
      *
      * @param string $strName
      *
-     * @return class_module_pages_page|null
+     * @return PagesPage|null
      */
-    public static function getPageByName($strName) {
+    public static function getPageByName($strName)
+    {
         //strip possible anchors
-        if(uniStrpos($strName, "#") !== false)
+        if (uniStrpos($strName, "#") !== false) {
             $strName = uniSubstr($strName, 0, uniStrpos($strName, "#"));
+        }
 
         $objORM = new class_orm_objectlist();
         $objORM->addWhereRestriction(new class_orm_objectlist_restriction("AND page_name = ?", $strName));
@@ -505,11 +543,13 @@ class class_module_pages_page extends class_model implements interface_model, in
      *
      * @return int
      */
-    public function getNumberOfElementsOnPage($bitJustActive = false) {
+    public function getNumberOfElementsOnPage($bitJustActive = false)
+    {
         $objORM = new class_orm_objectlist();
         $objORM->addWhereRestriction(new class_orm_objectlist_restriction("AND page_element_ph_language = ?", $this->getStrLanguage()));
-        if($bitJustActive)
+        if ($bitJustActive) {
             $objORM->addWhereRestriction(new class_orm_objectlist_restriction("AND system_status = 1", array()));
+        }
 
         return $objORM->getObjectCount("class_module_pages_pageelement");
     }
@@ -519,16 +559,17 @@ class class_module_pages_page extends class_model implements interface_model, in
      *
      * @return int
      */
-    public function getNumberOfLockedElementsOnPage() {
+    public function getNumberOfLockedElementsOnPage()
+    {
         $objORM = new class_orm_objectlist();
         //Check, if there are any Elements on this page
         $strQuery = "SELECT COUNT(*)
-						 FROM " . _dbprefix_ . "system as system
+						 FROM "._dbprefix_."system as system
 						  WHERE system_prev_id=?
 							AND system_lock_id != ?
 							".$objORM->getDeletedWhereRestriction()."
 							AND system_lock_id != ? ";
-        $arrRow = $this->objDB->getPRow($strQuery, array( $this->getSystemid(), $this->objSession->getUserID(), "0"));
+        $arrRow = $this->objDB->getPRow($strQuery, array($this->getSystemid(), $this->objSession->getUserID(), "0"));
         return $arrRow["COUNT(*)"];
     }
 
@@ -541,28 +582,31 @@ class class_module_pages_page extends class_model implements interface_model, in
      *
      * @return bool
      */
-    public static function assignNullProperties($strTargetLanguage, $bitForce = false) {
+    public static function assignNullProperties($strTargetLanguage, $bitForce = false)
+    {
         //Load all non-assigned props
-        if($bitForce)
-            $strQuery = "SELECT pageproperties_id FROM " . _dbprefix_ . "page_properties";
-        else
-            $strQuery = "SELECT pageproperties_id FROM " . _dbprefix_ . "page_properties WHERE pageproperties_language = '' OR pageproperties_language IS NULL";
+        if ($bitForce) {
+            $strQuery = "SELECT pageproperties_id FROM "._dbprefix_."page_properties";
+        }
+        else {
+            $strQuery = "SELECT pageproperties_id FROM "._dbprefix_."page_properties WHERE pageproperties_language = '' OR pageproperties_language IS NULL";
+        }
         $arrPropIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array());
 
-        foreach($arrPropIds as $arrOneId) {
+        foreach ($arrPropIds as $arrOneId) {
             $strId = $arrOneId["pageproperties_id"];
             $strCountQuery = "SELECT COUNT(*)
-                                FROM " . _dbprefix_ . "page_properties
+                                FROM "._dbprefix_."page_properties
                                WHERE pageproperties_language = ?
                                  AND pageproperties_id = ? ";
             $arrCount = class_carrier::getInstance()->getObjDB()->getPRow($strCountQuery, array($strTargetLanguage, $strId));
 
-            if((int)$arrCount["COUNT(*)"] == 0) {
-                $strUpdate = "UPDATE " . _dbprefix_ . "page_properties
+            if ((int)$arrCount["COUNT(*)"] == 0) {
+                $strUpdate = "UPDATE "._dbprefix_."page_properties
                               SET pageproperties_language = ?
                               WHERE pageproperties_id = ? ";
 
-                if(!class_carrier::getInstance()->getObjDB()->_pQuery($strUpdate, array($strTargetLanguage, $strId))) {
+                if (!class_carrier::getInstance()->getObjDB()->_pQuery($strUpdate, array($strTargetLanguage, $strId))) {
                     return false;
                 }
             }
@@ -581,14 +625,15 @@ class class_module_pages_page extends class_model implements interface_model, in
      *
      * @return bool
      */
-    public function copyObject($strNewPrevid = "", $bitChangeTitle = true, $bitCopyChilds = true) {
+    public function copyObject($strNewPrevid = "", $bitChangeTitle = true, $bitCopyChilds = true)
+    {
 
 
         $this->objDB->transactionBegin();
 
         //fetch data to be updated after the general copy process
         //page-properties, language dependant
-        $arrBasicSourceProperties = $this->objDB->getPArray("SELECT * FROM " . _dbprefix_ . "page_properties WHERE pageproperties_id = ?", array($this->getSystemid()));
+        $arrBasicSourceProperties = $this->objDB->getPArray("SELECT * FROM "._dbprefix_."page_properties WHERE pageproperties_id = ?", array($this->getSystemid()));
 
         //create a new page-name
         $this->setStrName($this->generateNonexistingPagename($this->getStrName(), false));
@@ -597,15 +642,15 @@ class class_module_pages_page extends class_model implements interface_model, in
         parent::copyObject($strNewPrevid, $bitChangeTitle, $bitCopyChilds);
 
         //update the pages' properties in the table - manually
-        foreach($arrBasicSourceProperties as $arrOneProperty) {
+        foreach ($arrBasicSourceProperties as $arrOneProperty) {
 
             //insert or update - the properties for the current language should aready be in place
             $this->objDB->flushQueryCache();
-            $arrCount = $this->objDB->getPRow("SELECT COUNT(*) FROM " . _dbprefix_ . "page_properties WHERE pageproperties_id = ? AND pageproperties_language = ? ", array($this->getSystemid(), $arrOneProperty["pageproperties_language"]));
+            $arrCount = $this->objDB->getPRow("SELECT COUNT(*) FROM "._dbprefix_."page_properties WHERE pageproperties_id = ? AND pageproperties_language = ? ", array($this->getSystemid(), $arrOneProperty["pageproperties_language"]));
 
-            if($arrCount["COUNT(*)"] == 0) {
+            if ($arrCount["COUNT(*)"] == 0) {
 
-                $strQuery = "INSERT INTO " . _dbprefix_ . "page_properties
+                $strQuery = "INSERT INTO "._dbprefix_."page_properties
                 (pageproperties_browsername,
                  pageproperties_keywords,
                  pageproperties_description,
@@ -621,7 +666,7 @@ class class_module_pages_page extends class_model implements interface_model, in
 
             }
             else {
-                $strQuery = "UPDATE " . _dbprefix_ . "page_properties
+                $strQuery = "UPDATE "._dbprefix_."page_properties
                         SET pageproperties_browsername = ?,
                             pageproperties_keywords = ?,
                             pageproperties_description = ?,
@@ -648,7 +693,7 @@ class class_module_pages_page extends class_model implements interface_model, in
                 $this->getSystemid()
             );
 
-            if(!$this->objDB->_pQuery($strQuery, $arrValues, array(false, false, false, false, false, false, false, false))) {
+            if (!$this->objDB->_pQuery($strQuery, $arrValues, array(false, false, false, false, false, false, false, false))) {
                 $this->objDB->transactionRollback();
                 class_logger::getInstance()->addLogRow("error while copying page properties", class_logger::$levelError);
                 return false;
@@ -671,7 +716,8 @@ class class_module_pages_page extends class_model implements interface_model, in
      *
      * @return string
      */
-    public function generateNonexistingPagename($strName, $bitAvoidSelfchek = true) {
+    public function generateNonexistingPagename($strName, $bitAvoidSelfchek = true)
+    {
         //Filter blanks out of pagename
         $strName = str_replace(" ", "_", $strName);
 
@@ -679,11 +725,11 @@ class class_module_pages_page extends class_model implements interface_model, in
         $objORM->addWhereRestriction(new class_orm_objectlist_restriction(" AND page_name = ?", $strName));
         $objPage = $objORM->getSingleObject(get_called_class());
 
-        if($objPage !== null && !($bitAvoidSelfchek && $objPage->getSystemid() == $this->getSystemid())) {
+        if ($objPage !== null && !($bitAvoidSelfchek && $objPage->getSystemid() == $this->getSystemid())) {
             $intCount = 1;
             $strTemp = "";
-            if($objPage !== null && !($bitAvoidSelfchek && $objPage->getSystemid() == $this->getSystemid())) {
-                $strTemp = $strName . "_" . $intCount;
+            if ($objPage !== null && !($bitAvoidSelfchek && $objPage->getSystemid() == $this->getSystemid())) {
+                $strTemp = $strName."_".$intCount;
 
                 $objORM = new class_orm_objectlist();
                 $objORM->addWhereRestriction(new class_orm_objectlist_restriction(" AND page_name = ?", $strName));
@@ -702,11 +748,12 @@ class class_module_pages_page extends class_model implements interface_model, in
      *
      * @return string
      */
-    public function getVersionActionName($strAction) {
-        if($strAction == class_module_system_changelog::$STR_ACTION_EDIT) {
+    public function getVersionActionName($strAction)
+    {
+        if ($strAction == class_module_system_changelog::$STR_ACTION_EDIT) {
             return $this->getLang("seite_bearbeiten", "pages");
         }
-        else if($strAction == class_module_system_changelog::$STR_ACTION_DELETE) {
+        elseif ($strAction == class_module_system_changelog::$STR_ACTION_DELETE) {
             return $this->getLang("seite_loeschen", "pages");
         }
 
@@ -719,7 +766,8 @@ class class_module_pages_page extends class_model implements interface_model, in
      *
      * @return string
      */
-    public function renderVersionValue($strProperty, $strValue) {
+    public function renderVersionValue($strProperty, $strValue)
+    {
         return $strValue;
     }
 
@@ -728,71 +776,82 @@ class class_module_pages_page extends class_model implements interface_model, in
      *
      * @return string
      */
-    public function getVersionPropertyName($strProperty) {
+    public function getVersionPropertyName($strProperty)
+    {
         return $strProperty;
     }
 
     /**
      * @return string
      */
-    public function getVersionRecordName() {
+    public function getVersionRecordName()
+    {
         return class_carrier::getInstance()->getObjLang()->getLang("change_object_page", "pages");
     }
 
     /**
      * @return string
      */
-    public function getStrName() {
+    public function getStrName()
+    {
         return $this->strName;
     }
 
     /**
      * @return string
      */
-    public function getStrKeywords() {
+    public function getStrKeywords()
+    {
         return $this->strKeywords;
     }
 
     /**
      * @return string
      */
-    public function getStrDesc() {
+    public function getStrDesc()
+    {
         return $this->strDescription;
     }
 
     /**
      * @return string
      */
-    public function getStrTemplate() {
+    public function getStrTemplate()
+    {
         return $this->strTemplate;
     }
 
     /**
      * @return string
      */
-    public function getStrBrowsername() {
+    public function getStrBrowsername()
+    {
         return $this->strBrowsername;
     }
 
     /**
      * @return string
      */
-    public function getStrSeostring() {
+    public function getStrSeostring()
+    {
         return $this->strSeostring;
     }
 
     /**
      * @return string
      */
-    public function getStrLanguage() {
+    public function getStrLanguage()
+    {
         return $this->strLanguage;
     }
 
     /**
      * @param string $strName
+     *
      * @return void
      */
-    public function setStrName($strName) {
+    public function setStrName($strName)
+    {
         //make a valid pagename
         $strName = uniStrtolower(urlSafeString($strName));
 
@@ -801,128 +860,154 @@ class class_module_pages_page extends class_model implements interface_model, in
 
     /**
      * @param string $strKeywords
+     *
      * @return void
      */
-    public function setStrKeywords($strKeywords) {
+    public function setStrKeywords($strKeywords)
+    {
         $this->strKeywords = $strKeywords;
     }
 
     /**
      * @param string $strDesc
+     *
      * @return void
      */
-    public function setStrDesc($strDesc) {
+    public function setStrDesc($strDesc)
+    {
         $this->strDescription = $strDesc;
     }
 
     /**
      * @param string $strTemplate
+     *
      * @return void
      */
-    public function setStrTemplate($strTemplate) {
+    public function setStrTemplate($strTemplate)
+    {
         $this->strTemplate = $strTemplate;
     }
 
     /**
      * @param string $strBrowsername
+     *
      * @return void
      */
-    public function setStrBrowsername($strBrowsername) {
+    public function setStrBrowsername($strBrowsername)
+    {
         $this->strBrowsername = $strBrowsername;
     }
 
     /**
      * @param string $strSeostring
+     *
      * @return void
      */
-    public function setStrSeostring($strSeostring) {
+    public function setStrSeostring($strSeostring)
+    {
         //Remove permitted characters
         $this->strSeostring = urlSafeString($strSeostring);
     }
 
     /**
      * @param string $strLanguage
+     *
      * @return void
      */
-    public function setStrLanguage($strLanguage) {
+    public function setStrLanguage($strLanguage)
+    {
         $this->strLanguage = $strLanguage;
     }
 
     /**
      * @param string $strPath
+     *
      * @return void
      */
-    public function setStrPath($strPath) {
+    public function setStrPath($strPath)
+    {
         $this->strPath = $strPath;
     }
 
     /**
      * @return int
      */
-    public function getIntType() {
+    public function getIntType()
+    {
         return $this->intType;
     }
 
     /**
      * @param int $intType
+     *
      * @return void
      */
-    public function setIntType($intType) {
+    public function setIntType($intType)
+    {
         $this->intType = $intType;
     }
 
     /**
      * @return string
      */
-    public function getStrAlias() {
+    public function getStrAlias()
+    {
         return $this->strAlias;
     }
 
     /**
      * @param string $strAlias
+     *
      * @return void
      */
-    public function setStrAlias($strAlias) {
+    public function setStrAlias($strAlias)
+    {
         $this->strAlias = $strAlias;
     }
 
     /**
      * @param string $strDescription
+     *
      * @return void
      */
-    public function setStrDescription($strDescription) {
+    public function setStrDescription($strDescription)
+    {
         $this->strDescription = $strDescription;
     }
 
     /**
      * @return string
      */
-    public function getStrDescription() {
+    public function getStrDescription()
+    {
         return $this->strDescription;
     }
 
     /**
      * @return string
      */
-    public function getStrPath() {
+    public function getStrPath()
+    {
         return $this->strPath;
     }
 
     /**
      * @param string $strTarget
+     *
      * @return void
      */
-    public function setStrTarget($strTarget) {
+    public function setStrTarget($strTarget)
+    {
         $this->strTarget = $strTarget;
     }
 
     /**
      * @return string
      */
-    public function getStrTarget() {
+    public function getStrTarget()
+    {
         return $this->strTarget;
     }
-
 
 
 }
