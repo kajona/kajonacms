@@ -5,6 +5,21 @@
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 ********************************************************************************************************/
 
+
+namespace Kajona\Pages\System;
+
+use class_carrier;
+use class_link;
+use class_model;
+use class_module_system_changelog;
+use class_module_system_module;
+use class_objectfactory;
+use class_orm_objectlist;
+use interface_admin_listable;
+use interface_model;
+use interface_search_resultobject;
+use interface_versionable;
+
 /**
  * This class manages all stuff related with folders, used by pages. Folders just exist in the database,
  * not in the filesystem
@@ -17,7 +32,8 @@
  * @module pages
  * @moduleId _pages_folder_id_
  */
-class class_module_pages_folder extends class_model implements interface_model, interface_versionable, interface_admin_listable, interface_search_resultobject {
+class PagesFolder extends class_model implements interface_model, interface_versionable, interface_admin_listable, interface_search_resultobject
+{
 
     /**
      * @var string
@@ -40,12 +56,14 @@ class class_module_pages_folder extends class_model implements interface_model, 
      * @see getLinkAdminHref()
      * @return mixed
      */
-    public function getSearchAdminLinkForObject() {
+    public function getSearchAdminLinkForObject()
+    {
         return class_link::getLinkAdminHref("pages", "list", "&systemid=".$this->getSystemid());
     }
 
 
-    protected function onInsertToDb() {
+    protected function onInsertToDb()
+    {
 
         //fix the initial sort-id
         $strQuery = "SELECT COUNT(*)
@@ -63,7 +81,8 @@ class class_module_pages_folder extends class_model implements interface_model, 
      *
      * @return string
      */
-    public function getStrDisplayName() {
+    public function getStrDisplayName()
+    {
         return $this->getStrName();
     }
 
@@ -74,7 +93,8 @@ class class_module_pages_folder extends class_model implements interface_model, 
      *
      * @return string the name of the icon, not yet wrapped by getImageAdmin()
      */
-    public function getStrIcon() {
+    public function getStrIcon()
+    {
         return "icon_folderClosed";
     }
 
@@ -83,7 +103,8 @@ class class_module_pages_folder extends class_model implements interface_model, 
      *
      * @return string
      */
-    public function getStrAdditionalInfo() {
+    public function getStrAdditionalInfo()
+    {
         return "";
     }
 
@@ -92,7 +113,8 @@ class class_module_pages_folder extends class_model implements interface_model, 
      *
      * @return string
      */
-    public function getStrLongDescription() {
+    public function getStrLongDescription()
+    {
         return "";
     }
 
@@ -102,11 +124,12 @@ class class_module_pages_folder extends class_model implements interface_model, 
      *
      * @param string $strSystemid
      *
-     * @return class_module_pages_folder[]
+     * @return PagesFolder[]
      * @static
      */
-    public static function getFolderList($strSystemid = "") {
-        if(!validateSystemid($strSystemid)) {
+    public static function getFolderList($strSystemid = "")
+    {
+        if (!validateSystemid($strSystemid)) {
             $strSystemid = class_module_system_module::getModuleByName("pages")->getSystemid();
         }
 
@@ -118,15 +141,16 @@ class class_module_pages_folder extends class_model implements interface_model, 
      *
      * @param string $strFolderid
      *
-     * @return class_module_pages_page[]
+     * @return PagesPage[]
      * @static
      */
-    public static function getPagesInFolder($strFolderid = "") {
-        if(!validateSystemid($strFolderid)) {
+    public static function getPagesInFolder($strFolderid = "")
+    {
+        if (!validateSystemid($strFolderid)) {
             $strFolderid = class_module_system_module::getModuleByName("pages")->getSystemid();
         }
 
-        return class_module_pages_page::getObjectList($strFolderid);
+        return PagesPage::getObjectList($strFolderid);
 
     }
 
@@ -139,28 +163,30 @@ class class_module_pages_folder extends class_model implements interface_model, 
      * @param null $intStart
      * @param null $intEnd
      *
-     * @return class_module_pages_page[] | class_module_pages_folder[]
+     * @return PagesPage[] | PagesFolder[]
      */
-    public static function getPagesAndFolderList($strFolderid = "", $bitOnlyActive = false, $intStart = null, $intEnd = null) {
-        if(!validateSystemid($strFolderid)) {
+    public static function getPagesAndFolderList($strFolderid = "", $bitOnlyActive = false, $intStart = null, $intEnd = null)
+    {
+        if (!validateSystemid($strFolderid)) {
             $strFolderid = class_module_system_module::getModuleByName("pages")->getSystemid();
         }
 
         $objORM = new class_orm_objectlist();
         $strQuery = "SELECT system_id, system_module_nr
-						FROM " . _dbprefix_ . "system
+						FROM "._dbprefix_."system
 						WHERE system_prev_id=?
                          AND (system_module_nr = ? OR system_module_nr = ? )
-	                      ".($bitOnlyActive ? " AND system_status = 1 ": "")."
+	                      ".($bitOnlyActive ? " AND system_status = 1 " : "")."
 	                      ".$objORM->getDeletedWhereRestriction()."
                     ORDER BY system_sort ASC";
 
         $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array($strFolderid, _pages_modul_id_, _pages_folder_id_), $intStart, $intEnd);
         $arrReturn = array();
-        foreach($arrIds as $arrOneRecord) {
+        foreach ($arrIds as $arrOneRecord) {
             $objRecord = class_objectfactory::getInstance()->getObject($arrOneRecord["system_id"]);
-            if($objRecord instanceof class_module_pages_folder || $objRecord instanceof class_module_pages_page)
+            if ($objRecord instanceof PagesFolder || $objRecord instanceof PagesPage) {
                 $arrReturn[] = $objRecord;
+            }
 
         }
 
@@ -176,43 +202,48 @@ class class_module_pages_folder extends class_model implements interface_model, 
      *
      * @return int
      */
-    public static function getPagesAndFolderListCount($strFolderid = "", $bitOnlyActive = false) {
-        if(!validateSystemid($strFolderid)) {
+    public static function getPagesAndFolderListCount($strFolderid = "", $bitOnlyActive = false)
+    {
+        if (!validateSystemid($strFolderid)) {
             $strFolderid = class_module_system_module::getModuleByName("pages")->getSystemid();
         }
         $objORM = new class_orm_objectlist();
         $strQuery = "SELECT COUNT(*)
-						FROM " . _dbprefix_ . "system
+						FROM "._dbprefix_."system
 						WHERE system_prev_id=?
                          AND (system_module_nr = ? OR system_module_nr = ? )
                          ".$objORM->getDeletedWhereRestriction()."
-	                      ".($bitOnlyActive ? " AND system_status = 1 ": "");
+	                      ".($bitOnlyActive ? " AND system_status = 1 " : "");
 
         $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array($strFolderid, _pages_modul_id_, _pages_folder_id_));
         return $arrRow["COUNT(*)"];
     }
 
 
-    public function getVersionActionName($strAction) {
-        if($strAction == class_module_system_changelog::$STR_ACTION_EDIT) {
+    public function getVersionActionName($strAction)
+    {
+        if ($strAction == class_module_system_changelog::$STR_ACTION_EDIT) {
             return $this->getLang("pages_ordner_edit", "pages");
         }
-        else if($strAction == class_module_system_changelog::$STR_ACTION_DELETE) {
+        elseif ($strAction == class_module_system_changelog::$STR_ACTION_DELETE) {
             return $this->getLang("pages_ordner_delete", "pages");
         }
 
         return $strAction;
     }
 
-    public function renderVersionValue($strProperty, $strValue) {
+    public function renderVersionValue($strProperty, $strValue)
+    {
         return $strValue;
     }
 
-    public function getVersionPropertyName($strProperty) {
+    public function getVersionPropertyName($strProperty)
+    {
         return $strProperty;
     }
 
-    public function getVersionRecordName() {
+    public function getVersionRecordName()
+    {
         return class_carrier::getInstance()->getObjLang()->getLang("change_object_folder", "pages");
     }
 
@@ -220,11 +251,13 @@ class class_module_pages_folder extends class_model implements interface_model, 
      * @return string
      *
      */
-    public function getStrName() {
+    public function getStrName()
+    {
         return $this->strName;
     }
 
-    public function setStrName($strName) {
+    public function setStrName($strName)
+    {
         $this->strName = $strName;
     }
 

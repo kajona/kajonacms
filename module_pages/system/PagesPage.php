@@ -12,6 +12,7 @@ namespace Kajona\Pages\System;
 use class_carrier;
 use class_link;
 use class_logger;
+use class_model;
 use class_module_system_changelog;
 use class_module_system_module;
 use class_module_system_setting;
@@ -37,7 +38,7 @@ use interface_versionable;
  * @module pages
  * @moduleId _pages_modul_id_
  */
-class PagesPage extends \class_model implements interface_model, interface_versionable, interface_admin_listable, interface_search_resultobject, interface_search_portalobject
+class PagesPage extends class_model implements interface_model, interface_versionable, interface_admin_listable, interface_search_resultobject, interface_search_portalobject
 {
 
     public static $INT_TYPE_PAGE = 0;
