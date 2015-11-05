@@ -10,6 +10,7 @@
  * @package module_mediamanager
  * @author sidler@mulchprod.de
  * @targetTable mediamanager_file.file_id
+ * @sortManager class_common_sortmanager
  *
  * @module mediamanager
  * @moduleId _mediamanager_module_id_

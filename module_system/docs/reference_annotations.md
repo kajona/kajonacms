@@ -29,6 +29,7 @@ Annotation         |Context    |Introduced in     |Description
 |@objectNew[Name] class	|Class	|4.2	|Assigns an object type (class) to an action-name (actionNew), see evensimpler-classes. Used to render a new-instance form.
 |@objectValidator class	|Class	|4.6	|Name of a class implementing interface_object_validator. Used by the form-generator to validate a classes instance during edit-operations.
 |@permissions permission	|Action-Method	|4.0|Comma-separated list of permission required to execute the action (one / many of view, edit, delete, right, right1, right2, right3, right4, right5)
+|@sortManager class	|Class	|5.0| Name of the sort-manager to be used by the current model-class, instance of interface_sortmanager 
 |@targetTable table.column	|Class	|4.0|	Defines the / a target-table of the or-mapper. Syntax table.primary--id-column. 
 |@targetTableTxSafe yes/no	|Class	|4.6	|Indicates if the target-table should support transactions (dependes on the RDBMS, default is yes)
 |@tableColumn table.column	|Property	|4.0	|Sets the target-column of a property, used by the OR-mapper on loading / persisting the object.

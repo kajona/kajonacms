@@ -12,6 +12,7 @@
  *
  * @package module_system
  * @targetTable system_module.module_id
+ * @sortManager class_common_sortmanager
  *
  * @module system
  * @moduleId _system_modul_id_

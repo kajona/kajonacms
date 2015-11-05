@@ -12,6 +12,7 @@
  * @package module_pages
  * @author sidler@mulchprod.de
  * @targetTable page_folder.folder_id
+ * @sortManager class_pages_sortmanager
  *
  * @module pages
  * @moduleId _pages_folder_id_
@@ -31,17 +32,6 @@ class class_module_pages_folder extends class_model implements interface_model, 
      */
     private $strName = "";
 
-    /**
-     * Constructor to create a valid object
-     *
-     * @param string $strSystemid (use "" on new objects)
-     */
-    public function __construct($strSystemid = "") {
-        //base class
-        parent::__construct($strSystemid);
-
-        $this->objSortManager = new class_pages_sortmanager($this);
-    }
 
     /**
      * Return an on-lick link for the passed object.
