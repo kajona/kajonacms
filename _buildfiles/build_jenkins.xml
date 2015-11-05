@@ -163,7 +163,7 @@
     <!-- helper target to install the compose dependencies within the current clone / project -->
     <target name="installComposerPackageDependenciesForCurrentProject">
         <antcall target="installComposerPackageDependencies">
-            <param name="composerTempPath" value="/../"/>
+            <param name="composerTempPath" value="/../../"/>
         </antcall>
     </target>
 
