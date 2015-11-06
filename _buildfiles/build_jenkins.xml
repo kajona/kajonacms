@@ -183,9 +183,15 @@
 
     <!-- builds the project, aka creates a project out of the sources -->
     <target name="buildProject">
+
+        <antcall target="installComposerPackageDependencies">
+            <param name="composerTempPath" value="${sourcesPath}/"/>
+        </antcall>
+
         <copy todir="${basedir}${projectPath}" overwrite="true"  includeEmptyDirs="true" >
             <fileset id="sources.dirs" dir="${basedir}${sourcesPath}">
                 <exclude name=".svn"/>
+                <exclude name=".git"/>
                 <include name="core*/element_*/**"/>
                 <include name="core*/module_*/*/**"/>
                 <include name="core*/template_*/*/**"/>
@@ -195,9 +201,7 @@
             </fileset>
         </copy>
 
-        <antcall target="installComposerPackageDependencies">
-            <param name="composerTempPath" value="${sourcesPath}/"/>
-        </antcall>
+
     </target>
 
     <!-- creates the full-zip including all modules and elements -->
@@ -206,6 +210,7 @@
         <copy todir="${basedir}${tempPath}" overwrite="true"  includeEmptyDirs="true" >
             <fileset id="sources.dirs" dir="${basedir}${sourcesPath}">
                 <exclude name=".svn"/>
+                <exclude name=".git"/>
                 <exclude name="core*/module_pchart/" />
                 <exclude name="core*/module_flotchart/" />
 
@@ -231,6 +236,7 @@
         <copy todir="${basedir}${tempPath}" overwrite="true"  includeEmptyDirs="true" >
             <fileset id="sources.dirs" dir="${basedir}${sourcesPath}">
                 <exclude name=".svn"/>
+                <exclude name=".git"/>
                 <exclude name="core*/element_flash/" />
                 <exclude name="core*/element_maps/" />
                 <exclude name="core*/element_userlist/" />
@@ -265,6 +271,7 @@
         <copy todir="${basedir}${tempPath}" overwrite="true"  includeEmptyDirs="true"  >
             <fileset id="sources.dirs" dir="${basedir}${sourcesPath}">
                 <exclude name=".svn"/>
+                <exclude name=".git"/>
                 <include name="core*/module_navigation/**"/>
                 <include name="core*/module_pages/**"/>
                 <include name="core*/module_samplecontent/**"/>
@@ -292,6 +299,7 @@
         <copy todir="${basedir}${tempPath}" overwrite="true"  includeEmptyDirs="true"  >
             <fileset id="sources.dirs" dir="${basedir}${sourcesPath}">
                 <exclude name=".svn"/>
+                <exclude name=".git"/>
                 <include name="core*/element_*/**"/>
                 <include name="core*/module_*/**"/>
                 <include name="core*/template_*/**"/>
