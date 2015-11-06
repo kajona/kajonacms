@@ -12,7 +12,6 @@ use Kajona\Pages\System\PagesPortaleditorSystemidAction;
 /**
  * The V5 way of generating the portal-editor. now way more object-oriented then in v4, so a plug n play mechanism
  *
- * @package module_pages
  * @author sidler@mulchprod.de
  *
  * @module pages

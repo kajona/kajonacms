@@ -32,7 +32,6 @@ use interface_validator;
 /**
  * The base class for all page-elements
  *
- * @package module_pages
  * @author sidler@mulchprod.de
  * @abstract
  *

@@ -24,7 +24,6 @@ use interface_versionable;
  * This class manages all stuff related with folders, used by pages. Folders just exist in the database,
  * not in the filesystem
  *
- * @package module_pages
  * @author sidler@mulchprod.de
  * @targetTable page_folder.folder_id
  * @sortManager Kajona\Pages\System\PagesSortmanager

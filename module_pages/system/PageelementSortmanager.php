@@ -9,6 +9,11 @@ namespace Kajona\Pages\System;
 use class_common_sortmanager;
 use class_logger;
 
+/**
+ * Class PageelementSortmanager
+ *
+ * @author sidler
+ */
 class PageelementSortmanager extends class_common_sortmanager
 {
 

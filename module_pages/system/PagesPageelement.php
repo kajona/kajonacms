@@ -26,7 +26,6 @@ use interface_model;
 /**
  * Model for a element assigned to a page. NOT the raw-element!
  *
- * @package module_pages
  * @author sidler@mulchprod.de
  * @targetTable page_element.page_element_id
  * @sortManager Kajona\Pages\System\PageelementSortmanager

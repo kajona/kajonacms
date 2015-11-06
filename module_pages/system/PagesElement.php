@@ -26,7 +26,6 @@ use interface_portal_element;
 /**
  * Model for a element. This is the "raw"-element, not the element on a page
  *
- * @package module_pages
  * @author sidler@mulchprod.de
  * @targetTable element.element_id
  *

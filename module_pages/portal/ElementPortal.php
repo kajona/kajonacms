@@ -32,7 +32,6 @@ use Kajona\Pages\System\PagesPortaleditorSystemidAction;
 /**
  * Base Class for all portal-elements
  *
- * @package module_pages
  * @author sidler@mulchprod.de
  * @abstract
  *

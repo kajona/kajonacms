@@ -30,7 +30,6 @@ use interface_versionable;
 /**
  * Model for a page
  *
- * @package module_pages
  * @author sidler@mulchprod.de
  * @targetTable page.page_id
  * @sortManager Kajona\Pages\System\PagesSortmanager
