@@ -110,14 +110,13 @@ class class_classloader
 
     /**
      * We autoload all classes which are in the event folder of each module. Theses classes can register events etc.
-     * Currently enabled for classes matching the pattern "class_module_" only.
      *
      * @throws class_exception
      */
     public function includeClasses()
     {
         foreach ($this->arrFiles as $strClass => $strOneFile) {
-            if (uniStrpos($strClass, "class_module_") !== false && uniStrpos($strOneFile, "/event/") !== false) {
+            if (uniStrpos($strOneFile, "/event/") !== false) {
                 // include all classes which are in the event folder
                 $this->loadClass($strClass);
             }
