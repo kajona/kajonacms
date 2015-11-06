@@ -303,9 +303,17 @@ class class_classloader
         // check whether we can autoload a class which has a namespace
         if (strpos($strClassName, "\\") !== false) {
             $arrParts = explode("\\", $strClassName);
-            $strVendor = array_shift($arrParts); // remove vendor part
-            $strModule = "module_" . strtolower(array_shift($arrParts));
-            $strFolder = strtolower(array_shift($arrParts));
+
+            // strtolower all parts except for the class name
+            $strClass = array_pop($arrParts);
+            $arrParts = array_map("strtolower", $arrParts);
+            array_push($arrParts, $strClass);
+
+            // remove vendor part
+            $strVendor = array_shift($arrParts);
+
+            $strModule = "module_" . array_shift($arrParts);
+            $strFolder = array_shift($arrParts);
             $strRest = implode(DIRECTORY_SEPARATOR, $arrParts);
 
             if (!empty($strModule) && !empty($strFolder) && !empty($strRest)) {
