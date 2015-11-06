@@ -7,6 +7,22 @@
 *	$Id$                                *
 ********************************************************************************************************/
 
+
+namespace Kajona\Pages\System;
+
+use class_carrier;
+use class_element_admin;
+use class_element_portal;
+use class_exception;
+use class_model;
+use class_module_pages_pageelement;
+use class_orm_objectlist;
+use class_orm_objectlist_restriction;
+use interface_admin_element;
+use interface_admin_listable;
+use interface_model;
+use interface_portal_element;
+
 /**
  * Model for a element. This is the "raw"-element, not the element on a page
  *
@@ -19,7 +35,8 @@
  *
  * @blockFromAutosave
  */
-class class_module_pages_element extends class_model implements interface_model, interface_admin_listable {
+class PagesElement extends class_model implements interface_model, interface_admin_listable
+{
 
     /**
      * @var string
@@ -105,11 +122,12 @@ class class_module_pages_element extends class_model implements interface_model,
     /**
      * @return bool
      */
-    public function deleteObjectFromDatabase() {
+    public function deleteObjectFromDatabase()
+    {
 
         //delete elements in the database
         $arrElements = $this->objDB->getPArray("SELECT page_element_id FROM "._dbprefix_."page_element WHERE page_element_ph_element = ?", array($this->getStrName()));
-        foreach($arrElements as $arrOneRow) {
+        foreach ($arrElements as $arrOneRow) {
             $objElement = new class_module_pages_pageelement($arrOneRow["page_element_id"]);
             $objElement->deleteObjectFromDatabase();
         }
@@ -121,14 +139,16 @@ class class_module_pages_element extends class_model implements interface_model,
     /**
      * @return bool
      */
-    public function rightView() {
+    public function rightView()
+    {
         return true;
     }
 
     /**
      * @return bool
      */
-    public function rightEdit() {
+    public function rightEdit()
+    {
         return true;
     }
 
@@ -137,12 +157,15 @@ class class_module_pages_element extends class_model implements interface_model,
      *
      * @return string
      */
-    public function getStrDisplayName() {
+    public function getStrDisplayName()
+    {
         $strName = class_carrier::getInstance()->getObjLang()->getLang("element_".$this->getStrName()."_name", "elements");
-        if($strName == "!element_".$this->getStrName()."_name!")
+        if ($strName == "!element_".$this->getStrName()."_name!") {
             $strName = $this->getStrName();
-        else
+        }
+        else {
             $strName .= " (".$this->getStrName().")";
+        }
         return $strName;
     }
 
@@ -153,7 +176,8 @@ class class_module_pages_element extends class_model implements interface_model,
      *
      * @return string the name of the icon, not yet wrapped by getImageAdmin()
      */
-    public function getStrIcon() {
+    public function getStrIcon()
+    {
         return "icon_dot";
     }
 
@@ -162,7 +186,8 @@ class class_module_pages_element extends class_model implements interface_model,
      *
      * @return string
      */
-    public function getStrAdditionalInfo() {
+    public function getStrAdditionalInfo()
+    {
         return " V ".$this->getStrVersion()." (".($this->getIntCachetime() == "-1" ? "<b>".$this->getIntCachetime()."</b>" : $this->getIntCachetime()).")";
     }
 
@@ -171,7 +196,8 @@ class class_module_pages_element extends class_model implements interface_model,
      *
      * @return string
      */
-    public function getStrLongDescription() {
+    public function getStrLongDescription()
+    {
         $objAdminInstance = $this->getAdminElementInstance();
         return $objAdminInstance->getElementDescription();
     }
@@ -181,9 +207,10 @@ class class_module_pages_element extends class_model implements interface_model,
      *
      * @param string $strName
      *
-     * @return class_module_pages_element
+     * @return PagesElement
      */
-    public static function getElement($strName) {
+    public static function getElement($strName)
+    {
         $objORM = new class_orm_objectlist();
         $objORM->addWhereRestriction(new class_orm_objectlist_restriction("AND element_name = ?", array($strName)));
         return $objORM->getSingleObject(get_called_class());
@@ -198,11 +225,12 @@ class class_module_pages_element extends class_model implements interface_model,
      * @throws class_exception
      * @return interface_admin_element|class_element_admin An instance of the admin-class linked by the current element
      */
-    public function getAdminElementInstance() {
+    public function getAdminElementInstance()
+    {
         //Build the class-name
         $strElementClass = str_replace(".php", "", $this->getStrClassAdmin());
         //and finally create the object
-        if(class_exists($strElementClass)) {
+        if (class_exists($strElementClass)) {
             $objElement = new $strElementClass();
             return $objElement;
         }
@@ -219,11 +247,12 @@ class class_module_pages_element extends class_model implements interface_model,
      * @throws class_exception
      * @return interface_portal_element|class_element_portal An instance of the portal-class linked by the current element
      */
-    public function getPortalElementInstance() {
+    public function getPortalElementInstance()
+    {
         //Build the class-name
         $strElementClass = str_replace(".php", "", $this->getStrClassPortal());
         //and finally create the object
-        if(class_exists($strElementClass)) {
+        if (class_exists($strElementClass)) {
             $objElement = new $strElementClass(new class_module_pages_pageelement());
             return $objElement;
         }
@@ -236,35 +265,40 @@ class class_module_pages_element extends class_model implements interface_model,
     /**
      * @return string
      */
-    public function getStrName() {
+    public function getStrName()
+    {
         return $this->strName;
     }
 
     /**
      * @return string
      */
-    public function getStrClassPortal() {
+    public function getStrClassPortal()
+    {
         return $this->strClassPortal;
     }
 
     /**
      * @return string
      */
-    public function getStrClassAdmin() {
+    public function getStrClassAdmin()
+    {
         return $this->strClassAdmin;
     }
 
     /**
      * @return int
      */
-    public function getIntRepeat() {
+    public function getIntRepeat()
+    {
         return (int)$this->intRepeat;
     }
 
     /**
      * @return int
      */
-    public function getIntCachetime() {
+    public function getIntCachetime()
+    {
         return $this->intCachetime;
     }
 
@@ -276,111 +310,135 @@ class class_module_pages_element extends class_model implements interface_model,
      * @deprecated use getStrDisplayName()
      * @fixme remove me
      */
-    public function getStrReadableName() {
+    public function getStrReadableName()
+    {
         $strName = class_carrier::getInstance()->getObjLang()->getLang("element_".$this->getStrName()."_name", "elemente");
-        if($strName == "!element_".$this->getStrName()."_name!")
+        if ($strName == "!element_".$this->getStrName()."_name!") {
             $strName = $this->getStrName();
+        }
         return $strName;
     }
 
 
     /**
      * @param string $strName
+     *
      * @return void
      */
-    public function setStrName($strName) {
+    public function setStrName($strName)
+    {
         $this->strName = $strName;
     }
 
     /**
      * @param string $strClassPortal
+     *
      * @return void
      */
-    public function setStrClassPortal($strClassPortal) {
+    public function setStrClassPortal($strClassPortal)
+    {
         $this->strClassPortal = $strClassPortal;
     }
 
     /**
      * @param string $strClassAdmin
+     *
      * @return void
      */
-    public function setStrClassAdmin($strClassAdmin) {
+    public function setStrClassAdmin($strClassAdmin)
+    {
         $this->strClassAdmin = $strClassAdmin;
     }
 
     /**
      * @param int $intRepeat
+     *
      * @return void
      */
-    public function setIntRepeat($intRepeat) {
+    public function setIntRepeat($intRepeat)
+    {
         $this->intRepeat = $intRepeat;
     }
 
     /**
      * @param int $intCachetime
+     *
      * @return void
      */
-    public function setIntCachetime($intCachetime) {
+    public function setIntCachetime($intCachetime)
+    {
         $this->intCachetime = $intCachetime;
     }
 
     /**
      * @return string
      */
-    public function getStrVersion() {
+    public function getStrVersion()
+    {
         return $this->strVersion;
     }
 
     /**
      * @param string $strVersion
+     *
      * @return void
      */
-    public function setStrVersion($strVersion) {
+    public function setStrVersion($strVersion)
+    {
         $this->strVersion = $strVersion;
     }
 
     /**
      * @param string $strConfigVal1
+     *
      * @return void
      */
-    public function setStrConfigVal1($strConfigVal1) {
+    public function setStrConfigVal1($strConfigVal1)
+    {
         $this->strConfigVal1 = $strConfigVal1;
     }
 
     /**
      * @return string
      */
-    public function getStrConfigVal1() {
+    public function getStrConfigVal1()
+    {
         return $this->strConfigVal1;
     }
 
     /**
      * @param string $strConfigVal2
+     *
      * @return void
      */
-    public function setStrConfigVal2($strConfigVal2) {
+    public function setStrConfigVal2($strConfigVal2)
+    {
         $this->strConfigVal2 = $strConfigVal2;
     }
 
     /**
      * @return string
      */
-    public function getStrConfigVal2() {
+    public function getStrConfigVal2()
+    {
         return $this->strConfigVal2;
     }
 
     /**
      * @param string $strConfigVal3
+     *
      * @return void
      */
-    public function setStrConfigVal3($strConfigVal3) {
+    public function setStrConfigVal3($strConfigVal3)
+    {
         $this->strConfigVal3 = $strConfigVal3;
     }
 
     /**
      * @return string
      */
-    public function getStrConfigVal3() {
+    public function getStrConfigVal3()
+    {
         return $this->strConfigVal3;
     }
 

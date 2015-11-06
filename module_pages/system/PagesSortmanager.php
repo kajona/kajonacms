@@ -4,10 +4,14 @@
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 ********************************************************************************************************/
 
+namespace Kajona\Pages\System;
+
+use class_common_sortmanager;
+
 /**
  * A sort-manager for pages & folders
  */
-class class_pages_sortmanager extends class_common_sortmanager {
+class PagesSortmanager extends class_common_sortmanager {
 
     public function setAbsolutePosition($intNewPosition, $arrRestrictionModules = false) {
         parent::setAbsolutePosition($intNewPosition, array(_pages_modul_id_, _pages_folder_id_));

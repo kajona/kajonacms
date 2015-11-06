@@ -27,7 +27,7 @@ use interface_versionable;
  * @package module_pages
  * @author sidler@mulchprod.de
  * @targetTable page_folder.folder_id
- * @sortManager class_pages_sortmanager
+ * @sortManager Kajona\Pages\System\PagesSortmanager
  *
  * @module pages
  * @moduleId _pages_folder_id_

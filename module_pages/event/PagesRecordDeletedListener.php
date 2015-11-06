@@ -4,6 +4,13 @@
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 ********************************************************************************************************/
 
+namespace Kajona\Pages\Event;
+
+use class_carrier;
+use class_core_eventdispatcher;
+use class_system_eventidentifier;
+use interface_genericevent_listener;
+
 /**
  * Removes category-assignments on record-deletions
  *
@@ -11,7 +18,7 @@
  * @author sidler@mulchprod.de
  *
  */
-class class_module_pages_recorddeletedlistener implements interface_genericevent_listener {
+class PagesRecordDeletedListener implements interface_genericevent_listener {
 
 
     /**
@@ -41,10 +48,10 @@ class class_module_pages_recorddeletedlistener implements interface_genericevent
      * @return void
      */
     public static function staticConstruct() {
-        class_core_eventdispatcher::getInstance()->removeAndAddListener(class_system_eventidentifier::EVENT_SYSTEM_RECORDDELETED, new class_module_pages_recorddeletedlistener());
+        class_core_eventdispatcher::getInstance()->removeAndAddListener(class_system_eventidentifier::EVENT_SYSTEM_RECORDDELETED, new PagesRecordDeletedListener());
     }
 
 
 }
 
-class_module_pages_recorddeletedlistener::staticConstruct();
+PagesRecordDeletedListener::staticConstruct();

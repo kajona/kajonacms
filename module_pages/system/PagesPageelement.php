@@ -5,20 +5,39 @@
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 ********************************************************************************************************/
 
+namespace Kajona\Pages\System;
+
+use class_cache;
+use class_carrier;
+use class_date;
+use class_element_admin;
+use class_element_portal;
+use class_exception;
+use class_logger;
+use class_model;
+use class_objectfactory;
+use class_orm_base;
+use class_orm_objectlist;
+use class_orm_rowcache;
+use class_reflection;
+use interface_admin_listable;
+use interface_model;
+
 /**
  * Model for a element assigned to a page. NOT the raw-element!
  *
  * @package module_pages
  * @author sidler@mulchprod.de
  * @targetTable page_element.page_element_id
- * @sortManager class_pageelement_sortmanager
+ * @sortManager Kajona\Pages\System\PageelementSortmanager
  *
  * @module pages_content
  * @moduleId _pages_content_modul_id_
  *
  * @blockFromAutosave
  */
-class class_module_pages_pageelement extends class_model implements interface_model, interface_admin_listable {
+class PagesPageelement extends class_model implements interface_model, interface_admin_listable
+{
 
 
     /**
@@ -77,7 +96,8 @@ class class_module_pages_pageelement extends class_model implements interface_mo
      *
      * @return string
      */
-    public function getStrDisplayName() {
+    public function getStrDisplayName()
+    {
         return $this->getStrReadableName()." (".$this->getStrName().")"." - ".$this->getStrTitle(true);
     }
 
@@ -88,7 +108,8 @@ class class_module_pages_pageelement extends class_model implements interface_mo
      *
      * @return string the name of the icon, not yet wrapped by getImageAdmin()
      */
-    public function getStrIcon() {
+    public function getStrIcon()
+    {
         return "icon_page";
     }
 
@@ -97,7 +118,8 @@ class class_module_pages_pageelement extends class_model implements interface_mo
      *
      * @return string
      */
-    public function getStrAdditionalInfo() {
+    public function getStrAdditionalInfo()
+    {
         return "";
     }
 
@@ -106,20 +128,23 @@ class class_module_pages_pageelement extends class_model implements interface_mo
      *
      * @return string
      */
-    public function getStrLongDescription() {
+    public function getStrLongDescription()
+    {
         return "";
     }
 
 
     /**
      * Initialises the current object, if a systemid was given
+     *
      * @return void
      */
-    protected function initObjectInternal() {
+    protected function initObjectInternal()
+    {
 
         //maybe
         $arrRow = class_orm_rowcache::getCachedInitRow($this->getSystemid());
-        if($arrRow === null) {
+        if ($arrRow === null) {
             $strQuery = "SELECT *
                              FROM "._dbprefix_."page_element,
                                   "._dbprefix_."element,
@@ -137,7 +162,7 @@ class class_module_pages_pageelement extends class_model implements interface_mo
         }
 
         $this->setArrInitRow($arrRow);
-        if(count($arrRow) > 1) {
+        if (count($arrRow) > 1) {
             $this->setStrPlaceholder($arrRow["page_element_ph_placeholder"]);
             $this->setStrName($arrRow["page_element_ph_name"]);
             $this->setStrElement($arrRow["page_element_ph_element"]);
@@ -151,11 +176,13 @@ class class_module_pages_pageelement extends class_model implements interface_mo
             $this->setStrConfigVal2($arrRow["element_config2"]);
             $this->setStrConfigVal3($arrRow["element_config3"]);
 
-            if($arrRow["system_date_start"] > 0)
+            if ($arrRow["system_date_start"] > 0) {
                 $this->intStartDate = $arrRow["system_date_start"];
+            }
 
-            if($arrRow["system_date_end"] > 0)
+            if ($arrRow["system_date_end"] > 0) {
                 $this->intEndDate = $arrRow["system_date_end"];
+            }
 
         }
     }
@@ -165,29 +192,29 @@ class class_module_pages_pageelement extends class_model implements interface_mo
      *
      * @return bool
      */
-    protected function onInsertToDb() {
+    protected function onInsertToDb()
+    {
 
-        $objElementdefinitionToCreate = class_module_pages_element::getElement($this->getStrElement());
-        if($objElementdefinitionToCreate != null) {
+        $objElementdefinitionToCreate = PagesElement::getElement($this->getStrElement());
+        if ($objElementdefinitionToCreate != null) {
 
             //Build the class-name
             $strElementClass = str_replace(".php", "", $objElementdefinitionToCreate->getStrClassAdmin());
             //and finally create the object
-            if($strElementClass != "") {
+            if ($strElementClass != "") {
                 $objElement = new $strElementClass();
                 /** @var class_element_admin $objElement */
                 $strForeignTable = $objElement->getTable();
 
 
                 //And create the row in the Element-Table, if given
-                if($strForeignTable != "") {
+                if ($strForeignTable != "") {
                     $strQuery = "INSERT INTO ".$this->objDB->encloseTableName($strForeignTable)." (".$this->objDB->encloseColumnName("content_id").") VALUES (?)";
                     $this->objDB->_pQuery($strQuery, array($this->getSystemid()));
                 }
 
             }
         }
-
 
 
         $this->objDB->flushQueryCache();
@@ -203,11 +230,12 @@ class class_module_pages_pageelement extends class_model implements interface_mo
      *
      * @return class_element_admin
      */
-    public function getConcreteAdminInstance() {
-        if($this->getStrClassAdmin() == "") {
+    public function getConcreteAdminInstance()
+    {
+        if ($this->getStrClassAdmin() == "") {
             //Build the class-name based on the linked element
-            $objElementdefinitionToCreate = class_module_pages_element::getElement($this->getStrElement());
-            if($objElementdefinitionToCreate == null) {
+            $objElementdefinitionToCreate = PagesElement::getElement($this->getStrElement());
+            if ($objElementdefinitionToCreate == null) {
                 return null;
             }
             $this->setStrClassAdmin($objElementdefinitionToCreate->getStrClassAdmin());
@@ -227,12 +255,13 @@ class class_module_pages_pageelement extends class_model implements interface_mo
      *
      * @return class_element_portal
      */
-    public function getConcretePortalInstance() {
+    public function getConcretePortalInstance()
+    {
 
-        if($this->getStrClassAdmin() == "") {
+        if ($this->getStrClassAdmin() == "") {
             //Build the class-name based on the linked element
-            $objElementdefinitionToCreate = class_module_pages_element::getElement($this->getStrElement());
-            if($objElementdefinitionToCreate == null) {
+            $objElementdefinitionToCreate = PagesElement::getElement($this->getStrElement());
+            if ($objElementdefinitionToCreate == null) {
                 return null;
             }
             $this->setStrClassPortal($objElementdefinitionToCreate->getStrClassPortal());
@@ -255,9 +284,10 @@ class class_module_pages_pageelement extends class_model implements interface_mo
      * @param bool $bitChangeTitle
      *
      * @throws class_exception
-     * @return class_module_pages_pageelement the new element or null in case of an error
+     * @return PagesPageelement the new element or null in case of an error
      */
-    public function copyObject($strNewPage = "", $bitChangeTitle = true, $bitCopyChilds = true) {
+    public function copyObject($strNewPage = "", $bitChangeTitle = true, $bitCopyChilds = true)
+    {
 
         class_logger::getInstance()->addLogRow("copy pageelement ".$this->getSystemid(), class_logger::$levelInfo);
         $this->objDB->transactionBegin();
@@ -281,12 +311,12 @@ class class_module_pages_pageelement extends class_model implements interface_mo
         $objAnnotation = new class_reflection($objElement);
         $arrMappedProperties = $objAnnotation->getPropertiesWithAnnotation(class_orm_base::STR_ANNOTATION_TABLECOLUMN);
 
-        foreach($arrElementData as $strColumn => $strValue) {
-            foreach($arrMappedProperties as $strPropertyname => $strAnnotation) {
-                $strMappedColumn = uniSubstr($strAnnotation, uniStrpos($strAnnotation, ".")+1);
-                if($strColumn == $strMappedColumn) {
+        foreach ($arrElementData as $strColumn => $strValue) {
+            foreach ($arrMappedProperties as $strPropertyname => $strAnnotation) {
+                $strMappedColumn = uniSubstr($strAnnotation, uniStrpos($strAnnotation, ".") + 1);
+                if ($strColumn == $strMappedColumn) {
                     $objSetter = $objAnnotation->getSetter($strPropertyname);
-                    if($objSetter != null) {
+                    if ($objSetter != null) {
                         call_user_func_array(array($objElement, $objSetter), array($strValue));
                     }
                 }
@@ -311,17 +341,19 @@ class class_module_pages_pageelement extends class_model implements interface_mo
      * @param bool $bitJustActive
      * @param string $strLanguage
      *
-     * @return class_module_pages_pageelement[]
+     * @return PagesPageelement[]
      * @static
      */
-    public static function getElementsOnPage($strPageId, $bitJustActive = false, $strLanguage = "") {
+    public static function getElementsOnPage($strPageId, $bitJustActive = false, $strLanguage = "")
+    {
 
         //since there's the time as an parameter, there's no need for querying the cache...
         $arrIds = self::getPlainElementsOnPage($strPageId, $bitJustActive, $strLanguage);
 
         $arrReturn = array();
-        foreach($arrIds as $arrOneId)
-            $arrReturn[] = new class_module_pages_pageelement($arrOneId["system_id"]);
+        foreach ($arrIds as $arrOneId) {
+            $arrReturn[] = new PagesPageelement($arrOneId["system_id"]);
+        }
 
         return $arrReturn;
     }
@@ -336,10 +368,11 @@ class class_module_pages_pageelement extends class_model implements interface_mo
      * @param bool $bitJustActive
      * @param string $strLanguage
      *
-     * @see class_module_pages_pageelement::getElementsOnPage()
+     * @see PagesPageelement::getElementsOnPage()
      * @return array
      */
-    public static function getPlainElementsOnPage($strPageId, $bitJustActive = false, $strLanguage = "") {
+    public static function getPlainElementsOnPage($strPageId, $bitJustActive = false, $strLanguage = "")
+    {
         //Calculate the current day as a time-stamp. This improves database-caches e.g. the kajona or mysql-query-cache.
         $objDate = new class_date();
         $objDate->setIntMin(0, true);
@@ -351,7 +384,7 @@ class class_module_pages_pageelement extends class_model implements interface_mo
         $objORM = new class_orm_objectlist();
 
         $strAnd = "";
-        if($bitJustActive) {
+        if ($bitJustActive) {
             $strAnd = "AND system_status = 1
                        AND ( system_date_start IS null OR (system_date_start = 0 OR system_date_start <= ?))
                        AND ( system_date_end IS null OR (system_date_end = 0 OR system_date_end >= ?)) ";
@@ -380,7 +413,7 @@ class class_module_pages_pageelement extends class_model implements interface_mo
 
         $arrReturn = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, $arrParams);
 
-        foreach($arrReturn as $arrOneRow) {
+        foreach ($arrReturn as $arrOneRow) {
             class_orm_rowcache::addSingleInitRow($arrOneRow);
         }
 
@@ -393,10 +426,11 @@ class class_module_pages_pageelement extends class_model implements interface_mo
      *
      * @param string $strPageId
      *
-     * @return class_module_pages_pageelement[]
+     * @return PagesPageelement[]
      * @static
      */
-    public static function getAllElementsOnPage($strPageId) {
+    public static function getAllElementsOnPage($strPageId)
+    {
         $objORM = new class_orm_objectlist();
         $strQuery = "SELECT *
 						 FROM "._dbprefix_."page_element,
@@ -417,8 +451,9 @@ class class_module_pages_pageelement extends class_model implements interface_mo
         $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array($strPageId));
         class_orm_rowcache::addArrayOfInitRows($arrIds);
         $arrReturn = array();
-        foreach($arrIds as $arrOneId)
+        foreach ($arrIds as $arrOneId) {
             $arrReturn[] = class_objectfactory::getInstance()->getObject($arrOneId["system_id"]);
+        }
 
         return $arrReturn;
     }
@@ -432,14 +467,15 @@ class class_module_pages_pageelement extends class_model implements interface_mo
      * @param string $strLanguage
      * @param bool $bitJustActive
      *
-     * @return class_module_pages_pageelement[]
+     * @return PagesPageelement[]
      */
-    public static function getElementsByPlaceholderAndPage($strPageId, $strPlaceholder, $strLanguage, $bitJustActive = true) {
+    public static function getElementsByPlaceholderAndPage($strPageId, $strPlaceholder, $strLanguage, $bitJustActive = true)
+    {
         $strAnd = "";
 
         $arrParams = array($strPageId, $strLanguage, $strPlaceholder);
 
-        if($bitJustActive) {
+        if ($bitJustActive) {
             $strAnd = "AND system_status = 1
                        AND ( system_date_start IS null OR (system_date_start = 0 OR system_date_start <= ?))
                        AND ( system_date_end IS null OR (system_date_end = 0 OR system_date_end >= ? )) ";
@@ -469,7 +505,7 @@ class class_module_pages_pageelement extends class_model implements interface_mo
         $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, $arrParams);
         class_orm_rowcache::addArrayOfInitRows($arrIds);
         $arrReturn = array();
-        foreach($arrIds as $arrOneRow) {
+        foreach ($arrIds as $arrOneRow) {
             $arrReturn[] = class_objectfactory::getInstance()->getObject($arrOneRow["system_id"]);
         }
 
@@ -483,7 +519,8 @@ class class_module_pages_pageelement extends class_model implements interface_mo
      *
      * @return array
      */
-    public function getSortedElementsAtPlaceholder() {
+    public function getSortedElementsAtPlaceholder()
+    {
 
         $objORM = new class_orm_objectlist();
         $strQuery = "SELECT *
@@ -509,39 +546,44 @@ class class_module_pages_pageelement extends class_model implements interface_mo
      *
      * @return bool
      */
-    public function deleteObjectFromDatabase() {
+    public function deleteObjectFromDatabase()
+    {
 
         //fix the internal sorting
         $arrElements = $this->getSortedElementsAtPlaceholder();
 
         $arrIds = array();
         $bitHit = false;
-        foreach($arrElements as $arrOneSibling) {
+        foreach ($arrElements as $arrOneSibling) {
 
-            if($bitHit) {
+            if ($bitHit) {
                 $arrIds[] = $arrOneSibling["system_id"];
             }
 
-            if($arrOneSibling["system_id"] == $this->getSystemid())
+            if ($arrOneSibling["system_id"] == $this->getSystemid()) {
                 $bitHit = true;
+            }
         }
 
-        if(count($arrIds) > 0) {
-            $strQuery = "UPDATE "._dbprefix_."system SET system_sort = system_sort-1 where system_id IN (".implode(",", array_map(function($strVal) {return "?";}, $arrIds)).")";
+        if (count($arrIds) > 0) {
+            $strQuery = "UPDATE "._dbprefix_."system SET system_sort = system_sort-1 where system_id IN (".implode(",", array_map(function ($strVal) {
+                    return "?";
+                }, $arrIds)).")";
             $this->objDB->_pQuery($strQuery, $arrIds);
         }
 
 
         //Load the Element-Data
         $objElement = $this->getConcreteAdminInstance();
-        if($objElement != null) {
+        if ($objElement != null) {
             //Fetch the table
             $strElementTable = $objElement->getTable();
             //Delete the entry in the Element-Table
-            if($strElementTable != "") {
+            if ($strElementTable != "") {
                 $strQuery = "DELETE FROM ".$strElementTable." WHERE content_id= ?";
-                if(!$this->objDB->_pQuery($strQuery, array($this->getSystemid())))
+                if (!$this->objDB->_pQuery($strQuery, array($this->getSystemid()))) {
                     return false;
+                }
             }
         }
 
@@ -549,7 +591,7 @@ class class_module_pages_pageelement extends class_model implements interface_mo
         parent::deleteObjectFromDatabase();
 
         //Loading the data of the corresponding site
-        $objPage = new class_module_pages_page($this->getPrevId());
+        $objPage = new PagesPage($this->getPrevId());
         class_cache::flushCache("class_element_portal", $objPage->getStrName());
 
         return true;
@@ -562,20 +604,22 @@ class class_module_pages_pageelement extends class_model implements interface_mo
      *
      * @return bool
      */
-    public static function assignNullElements($strTargetLanguage) {
+    public static function assignNullElements($strTargetLanguage)
+    {
         //Load all non-assigned props
         $strQuery = "SELECT page_element_id FROM "._dbprefix_."page_element
                      WHERE page_element_ph_language = '' OR page_element_ph_language IS NULL";
         $arrElementIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array());
 
-        foreach($arrElementIds as $arrOneId) {
+        foreach ($arrElementIds as $arrOneId) {
             $strId = $arrOneId["page_element_id"];
             $strUpdate = "UPDATE "._dbprefix_."page_element
                           SET page_element_ph_language = ?
                           WHERE page_element_id = ?";
 
-            if(!class_carrier::getInstance()->getObjDB()->_pQuery($strUpdate, array($strTargetLanguage, $strId)))
+            if (!class_carrier::getInstance()->getObjDB()->_pQuery($strUpdate, array($strTargetLanguage, $strId))) {
                 return false;
+            }
 
         }
 
@@ -592,13 +636,14 @@ class class_module_pages_pageelement extends class_model implements interface_mo
      *
      * @return bool
      */
-    public static function updatePlaceholders($strTemplate, $strOldPlaceholder, $strNewPlaceholder) {
+    public static function updatePlaceholders($strTemplate, $strOldPlaceholder, $strNewPlaceholder)
+    {
         $bitReturn = true;
         //Fetch all pages
         $objORM = new class_orm_objectlist();
-        $arrObjPages = class_module_pages_page::getAllPages();
-        foreach($arrObjPages as $objOnePage) {
-            if($objOnePage->getStrTemplate() == $strTemplate || $strTemplate == "-1") {
+        $arrObjPages = PagesPage::getAllPages();
+        foreach ($arrObjPages as $objOnePage) {
+            if ($objOnePage->getStrTemplate() == $strTemplate || $strTemplate == "-1") {
                 //Search for matching elements
                 $strQuery = "SELECT system_id
 						 FROM "._dbprefix_."page_element,
@@ -612,17 +657,18 @@ class class_module_pages_pageelement extends class_model implements interface_mo
 						 		system_sort ASC";
 
                 $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array($objOnePage->getSystemid()));
-                /** @var class_module_pages_pageelement[] $arrPageElements */
+                /** @var PagesPageelement[] $arrPageElements */
                 $arrPageElements = array();
-                foreach($arrIds as $arrOneRow) {
-                    $arrPageElements[] = new class_module_pages_pageelement($arrOneRow["system_id"]);
+                foreach ($arrIds as $arrOneRow) {
+                    $arrPageElements[] = new PagesPageelement($arrOneRow["system_id"]);
                 }
 
-                foreach($arrPageElements as $objOnePageelement) {
-                    if($objOnePageelement->getStrPlaceholder() == $strOldPlaceholder) {
+                foreach ($arrPageElements as $objOnePageelement) {
+                    if ($objOnePageelement->getStrPlaceholder() == $strOldPlaceholder) {
                         $objOnePageelement->setStrPlaceholder($strNewPlaceholder);
-                        if(!$objOnePageelement->updateObjectToDb())
+                        if (!$objOnePageelement->updateObjectToDb()) {
                             $bitReturn = false;
+                        }
                     }
                 }
             }
@@ -634,21 +680,24 @@ class class_module_pages_pageelement extends class_model implements interface_mo
     /**
      * @return string
      */
-    public function getStrPlaceholder() {
+    public function getStrPlaceholder()
+    {
         return $this->strPlaceholder;
     }
 
     /**
      * @return string
      */
-    public function getStrName() {
+    public function getStrName()
+    {
         return $this->strName;
     }
 
     /**
      * @return string
      */
-    public function getStrElement() {
+    public function getStrElement()
+    {
         return $this->strElement;
     }
 
@@ -658,10 +707,12 @@ class class_module_pages_pageelement extends class_model implements interface_mo
      *
      * @return string
      */
-    public function getStrReadableName() {
+    public function getStrReadableName()
+    {
         $strName = class_carrier::getInstance()->getObjLang()->getLang("element_".$this->getStrElement()."_name", "elements");
-        if($strName == "!element_".$this->getStrElement()."_name!")
+        if ($strName == "!element_".$this->getStrElement()."_name!") {
             $strName = $this->getStrElement();
+        }
         return $strName;
     }
 
@@ -674,9 +725,11 @@ class class_module_pages_pageelement extends class_model implements interface_mo
      *
      * @return string
      */
-    public function getStrTitle($bitClever = false) {
-        if($this->strTitle != "" || !$bitClever || $this->getStrClassAdmin() == "")
+    public function getStrTitle($bitClever = false)
+    {
+        if ($this->strTitle != "" || !$bitClever || $this->getStrClassAdmin() == "") {
             return $this->strTitle;
+        }
         //Create an instance of the object and let it serve the comment...
         $objElement = $this->getConcreteAdminInstance();
         return $objElement->getContentTitle();
@@ -685,166 +738,200 @@ class class_module_pages_pageelement extends class_model implements interface_mo
     /**
      * @return string
      */
-    public function getStrClassPortal() {
+    public function getStrClassPortal()
+    {
         return $this->strClassPortal;
     }
 
     /**
      * @return string
      */
-    public function getStrClassAdmin() {
+    public function getStrClassAdmin()
+    {
         return $this->strClassAdmin;
     }
 
     /**
      * @return int
      */
-    public function getIntCachetime() {
+    public function getIntCachetime()
+    {
         return $this->intCachetime;
     }
 
     /**
      * @return int
      */
-    public function getIntRepeat() {
+    public function getIntRepeat()
+    {
         return $this->intRepeat;
     }
 
     /**
      * @return string
      */
-    public function getStrLanguage() {
+    public function getStrLanguage()
+    {
         return $this->strLanguage;
     }
 
     /**
      * @return int
      */
-    public function getStartDate() {
+    public function getStartDate()
+    {
         return $this->intStartDate;
     }
 
     /**
      * @return int
      */
-    public function getEndDate() {
+    public function getEndDate()
+    {
         return $this->intEndDate;
     }
 
     /**
      * @param string $strPlaceholder
+     *
      * @return void
      */
-    public function setStrPlaceholder($strPlaceholder) {
+    public function setStrPlaceholder($strPlaceholder)
+    {
         $this->strPlaceholder = $strPlaceholder;
     }
 
     /**
      * @param string $strName
+     *
      * @return void
      */
-    public function setStrName($strName) {
+    public function setStrName($strName)
+    {
         $this->strName = $strName;
     }
 
     /**
      * @param string $strElement
+     *
      * @return void
      */
-    public function setStrElement($strElement) {
+    public function setStrElement($strElement)
+    {
         $this->strElement = $strElement;
     }
 
     /**
      * @param string $strTitle
+     *
      * @return void
      */
-    public function setStrTitle($strTitle) {
+    public function setStrTitle($strTitle)
+    {
         $this->strTitle = $strTitle;
     }
 
     /**
      * @param string $strClassPortal
+     *
      * @return void
      */
-    private function setStrClassPortal($strClassPortal) {
+    private function setStrClassPortal($strClassPortal)
+    {
         $this->strClassPortal = $strClassPortal;
     }
 
     /**
      * @param string $strClassAdmin
+     *
      * @return void
      */
-    private function setStrClassAdmin($strClassAdmin) {
+    private function setStrClassAdmin($strClassAdmin)
+    {
         $this->strClassAdmin = $strClassAdmin;
     }
 
     /**
      * @param int $intCachtime
+     *
      * @return void
      */
-    private function setIntCachetime($intCachtime) {
+    private function setIntCachetime($intCachtime)
+    {
         $this->intCachetime = $intCachtime;
     }
 
     /**
      * @param int $intRepeat
+     *
      * @return void
      */
-    private function setIntRepeat($intRepeat) {
+    private function setIntRepeat($intRepeat)
+    {
         $this->intRepeat = $intRepeat;
     }
 
     /**
      * @param string $strLanguage
+     *
      * @return void
      */
-    public function setStrLanguage($strLanguage) {
+    public function setStrLanguage($strLanguage)
+    {
         $this->strLanguage = $strLanguage;
     }
 
     /**
      * @param int $intConfigVal1
+     *
      * @return void
      */
-    public function setStrConfigVal1($intConfigVal1) {
+    public function setStrConfigVal1($intConfigVal1)
+    {
         $this->strConfigVal1 = $intConfigVal1;
     }
 
     /**
      * @return string
      */
-    public function getStrConfigVal1() {
+    public function getStrConfigVal1()
+    {
         return $this->strConfigVal1;
     }
 
     /**
      * @param string $intConfigVal2
+     *
      * @return void
      */
-    public function setStrConfigVal2($intConfigVal2) {
+    public function setStrConfigVal2($intConfigVal2)
+    {
         $this->strConfigVal2 = $intConfigVal2;
     }
 
     /**
      * @return string
      */
-    public function getStrConfigVal2() {
+    public function getStrConfigVal2()
+    {
         return $this->strConfigVal2;
     }
 
     /**
      * @param string $intConfigVal3
+     *
      * @return void
      */
-    public function setStrConfigVal3($intConfigVal3) {
+    public function setStrConfigVal3($intConfigVal3)
+    {
         $this->strConfigVal3 = $intConfigVal3;
     }
 
     /**
      * @return string
      */
-    public function getStrConfigVal3() {
+    public function getStrConfigVal3()
+    {
         return $this->strConfigVal3;
     }
 
