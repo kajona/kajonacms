@@ -5,17 +5,40 @@
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 ********************************************************************************************************/
 
+namespace Kajona\Pages\Portal;
+
+use class_adminskin_helper;
+use class_cache;
+use class_carrier;
+use class_exception;
+use class_http_statuscodes;
+use class_link;
+use class_logger;
+use class_module_languages_language;
+use class_module_system_setting;
+use class_portal_controller;
+use class_resourceloader;
+use class_response_object;
+use class_scriptlet_helper;
+use class_session;
+use class_template;
+use interface_portal;
+use interface_scriptlet;
+use Kajona\Pages\System\PagesElement;
+use Kajona\Pages\System\PagesPage;
+use Kajona\Pages\System\PagesPageelement;
+
 /**
  * Handles the loading of the pages - loads the elements, passes control to them and returns the complete
  * page ready for output
  *
- * @package module_pages
  * @author sidler@mulchprod.de
  *
  * @module pages
  * @moduleId _pages_modul_id_
  */
-class class_module_pages_portal extends class_portal_controller implements interface_portal {
+class PagesPortalController extends class_portal_controller implements interface_portal
+{
 
     /**
      * Static field storing the last registered page-title. Modules may register additional page-titles in order
@@ -29,7 +52,8 @@ class class_module_pages_portal extends class_portal_controller implements inter
     /**
      * @param array|mixed $arrElementData
      */
-    public function __construct($arrElementData) {
+    public function __construct($arrElementData)
+    {
         parent::__construct($arrElementData);
         $this->setAction("generatePage");
     }
@@ -41,17 +65,18 @@ class class_module_pages_portal extends class_portal_controller implements inter
      * @return string the generated page
      * @permissions view
      */
-    protected function actionGeneratePage() {
+    protected function actionGeneratePage()
+    {
 
         //Determine the pagename
         $objPageData = $this->getPageData();
 
         //react on portaleditor commands
         //pe to display, or pe to disable?
-        if($this->getParam("pe") == "false") {
+        if ($this->getParam("pe") == "false") {
             $this->objSession->setSession("pe_disable", "true");
         }
-        if($this->getParam("pe") == "true") {
+        if ($this->getParam("pe") == "true") {
             $this->objSession->setSession("pe_disable", "false");
         }
 
@@ -59,36 +84,39 @@ class class_module_pages_portal extends class_portal_controller implements inter
         //the system could frighten your cat or eat up all your cheese with marshmallows...
         //get the current state of the portal editor
         $bitPeRequested = false;
-        if(class_module_system_setting::getConfigValue("_pages_portaleditor_") == "true" && $this->objSession->getSession("pe_disable") != "true" && $this->objSession->isAdmin() && $objPageData->rightEdit()) {
+        if (class_module_system_setting::getConfigValue("_pages_portaleditor_") == "true" && $this->objSession->getSession("pe_disable") != "true" && $this->objSession->isAdmin() && $objPageData->rightEdit()) {
             $bitPeRequested = true;
         }
 
         //If we reached up till here, we can begin loading the elements to fill
-        if($bitPeRequested)
-            $arrElementsOnPage = class_module_pages_pageelement::getElementsOnPage($objPageData->getSystemid(), false, $this->getStrPortalLanguage());
-        else
-            $arrElementsOnPage = class_module_pages_pageelement::getElementsOnPage($objPageData->getSystemid(), true, $this->getStrPortalLanguage());
+        if ($bitPeRequested) {
+            $arrElementsOnPage = PagesPageelement::getElementsOnPage($objPageData->getSystemid(), false, $this->getStrPortalLanguage());
+        }
+        else {
+            $arrElementsOnPage = PagesPageelement::getElementsOnPage($objPageData->getSystemid(), true, $this->getStrPortalLanguage());
+        }
 
         //If there's a master-page, load elements on that, too
-        $objMasterData = class_module_pages_page::getPageByName("master");
+        $objMasterData = PagesPage::getPageByName("master");
         $bitEditPermissionOnMasterPage = false;
-        if($objMasterData != null) {
-            if($bitPeRequested)
-                $arrElementsOnMaster = class_module_pages_pageelement::getElementsOnPage($objMasterData->getSystemid(), false, $this->getStrPortalLanguage());
-            else
-                $arrElementsOnMaster = class_module_pages_pageelement::getElementsOnPage($objMasterData->getSystemid(), true, $this->getStrPortalLanguage());
+        if ($objMasterData != null) {
+            if ($bitPeRequested) {
+                $arrElementsOnMaster = PagesPageelement::getElementsOnPage($objMasterData->getSystemid(), false, $this->getStrPortalLanguage());
+            }
+            else {
+                $arrElementsOnMaster = PagesPageelement::getElementsOnPage($objMasterData->getSystemid(), true, $this->getStrPortalLanguage());
+            }
 
             //and merge them
             $arrElementsOnPage = array_merge($arrElementsOnPage, $arrElementsOnMaster);
-            if($objMasterData->rightEdit())
+            if ($objMasterData->rightEdit()) {
                 $bitEditPermissionOnMasterPage = true;
+            }
 
         }
 
         //load the merged placeholder-list
         $objPlaceholders = $this->objTemplate->parsePageTemplate("/module_pages/".$objPageData->getStrTemplate(), class_template::INT_ELEMENT_MODE_MASTER);
-
-
 
 
         //Load the template from the filesystem to get the placeholders
@@ -98,8 +126,9 @@ class class_module_pages_portal extends class_portal_controller implements inter
 
         $arrPlaceholders = array();
         //and retransform
-        foreach($arrRawPlaceholders as $arrOneRawPlaceholder)
+        foreach ($arrRawPlaceholders as $arrOneRawPlaceholder) {
             $arrPlaceholders[] = $arrOneRawPlaceholder["placeholder"];
+        }
 
 
         //Initialize the caches internal cache :)
@@ -110,7 +139,7 @@ class class_module_pages_portal extends class_portal_controller implements inter
         $strAdditionalTitleFromCache = "";
         $intMaxCacheDuration = 0; //TODO find a better cache sum, in v4 determined by the elements
         $objCachedTitle = class_cache::getCachedEntry(__CLASS__, $this->getPagename(), $this->generateHash2Sum(), $this->getStrPortalLanguage());
-        if($objCachedTitle != null) {
+        if ($objCachedTitle != null) {
             $strAdditionalTitleFromCache = $objCachedTitle->getStrContent();
             self::$strAdditionalTitle = $strAdditionalTitleFromCache;
         }
@@ -125,11 +154,11 @@ class class_module_pages_portal extends class_portal_controller implements inter
         $arrTemplate = array();
         $arrBlocks = array();
 
-        /** @var class_module_pages_pageelement $objOneElementOnPage */
-        foreach($arrElementsOnPage as $objOneElementOnPage) {
+        /** @var PagesPageelement $objOneElementOnPage */
+        foreach ($arrElementsOnPage as $objOneElementOnPage) {
 
             //element really available on the template?
-            if($objOneElementOnPage->getStrElement() != "block" && $objOneElementOnPage->getStrElement() != "blocks" && !in_array($objOneElementOnPage->getStrPlaceholder(), $arrPlaceholders)) {
+            if ($objOneElementOnPage->getStrElement() != "block" && $objOneElementOnPage->getStrElement() != "blocks" && !in_array($objOneElementOnPage->getStrPlaceholder(), $arrPlaceholders)) {
                 //next one, plz
                 continue;
             }
@@ -138,22 +167,23 @@ class class_module_pages_portal extends class_portal_controller implements inter
             $arrPlaceholderWithElements[$objOneElementOnPage->getStrName().$objOneElementOnPage->getStrElement()] = true;
 
             //Build the class-name for the object
-            /** @var  class_element_portal $objElement  */
+            /** @var  ElementPortal $objElement */
             $objElement = $objOneElementOnPage->getConcretePortalInstance();
             //let the element do the work and earn the output
-            if(!isset($arrTemplate[$objOneElementOnPage->getStrPlaceholder()]))
+            if (!isset($arrTemplate[$objOneElementOnPage->getStrPlaceholder()])) {
                 $arrTemplate[$objOneElementOnPage->getStrPlaceholder()] = "";
+            }
 
 
             //cache-handling. load element from cache.
             //if the element is re-generated, save it back to cache.
             $strElementOutput = $objElement->getRenderedElementOutput($bitPeRequested);
 
-            if($objOneElementOnPage->getStrElement() == "blocks") {
+            if ($objOneElementOnPage->getStrElement() == "blocks") {
                 //try to fetch the whole block as a placeholder
-                foreach($objPlaceholders->getArrBlocks() as $objOneBlock) {
-                    if($objOneBlock->getStrName() == $objOneElementOnPage->getStrName()) {
-                        if(!isset($arrBlocks[$objOneBlock->getStrName()])) {
+                foreach ($objPlaceholders->getArrBlocks() as $objOneBlock) {
+                    if ($objOneBlock->getStrName() == $objOneElementOnPage->getStrName()) {
+                        if (!isset($arrBlocks[$objOneBlock->getStrName()])) {
                             $arrBlocks[$objOneBlock->getStrName()] = "";
                         }
                         $arrBlocks[$objOneBlock->getStrName()] .= $strElementOutput;
@@ -168,15 +198,14 @@ class class_module_pages_portal extends class_portal_controller implements inter
         }
 
         //pe-code to add new elements on unfilled placeholders --> only if pe is visible
-        if($bitPeRequested) {
+        if ($bitPeRequested) {
 
-            foreach($objPlaceholders->getArrPlaceholder() as $arrOnePlaceholder) {
+            foreach ($objPlaceholders->getArrPlaceholder() as $arrOnePlaceholder) {
 
-                foreach($arrOnePlaceholder["elementlist"] as $arrSinglePlaceholder)
-                {
-                    /** @var class_module_pages_element $objElement */
-                    $objElement = class_module_pages_element::getElement($arrSinglePlaceholder["element"]);
-                    if($objElement == null) {
+                foreach ($arrOnePlaceholder["elementlist"] as $arrSinglePlaceholder) {
+                    /** @var PagesElement $objElement */
+                    $objElement = PagesElement::getElement($arrSinglePlaceholder["element"]);
+                    if ($objElement == null) {
                         continue;
                     }
 
@@ -186,7 +215,7 @@ class class_module_pages_portal extends class_portal_controller implements inter
 
                 }
 
-                if(!isset($arrTemplate[$arrOnePlaceholder["placeholder"]])) {
+                if (!isset($arrTemplate[$arrOnePlaceholder["placeholder"]])) {
                     $arrTemplate[$arrOnePlaceholder["placeholder"]] = "";
                 }
                 $arrTemplate[$arrOnePlaceholder["placeholder"]] .= "<span data-placeholder='".$arrOnePlaceholder["placeholder"]."'></span>";
@@ -196,7 +225,7 @@ class class_module_pages_portal extends class_portal_controller implements inter
 
 
         //check if the additional title has to be saved to the cache
-        if(self::$strAdditionalTitle != "" && self::$strAdditionalTitle != $strAdditionalTitleFromCache) {
+        if (self::$strAdditionalTitle != "" && self::$strAdditionalTitle != $strAdditionalTitleFromCache) {
             $objCacheEntry = class_cache::getCachedEntry(__CLASS__, $this->getPagename(), $this->generateHash2Sum(), $this->getStrPortalLanguage(), true);
             $objCacheEntry->setStrContent(self::$strAdditionalTitle);
             $objCacheEntry->setIntLeasetime(time() + $intMaxCacheDuration);
@@ -214,8 +243,9 @@ class class_module_pages_portal extends class_portal_controller implements inter
         //Include the $arrGlobal Elements
         $arrGlobal = array();
         $strPath = class_resourceloader::getInstance()->getPathForFile("/portal/global_includes.php");
-        if($strPath !== false)
+        if ($strPath !== false) {
             include(_realpath_.$strPath);
+        }
 
         $arrTemplate = array_merge($arrTemplate, $arrGlobal);
         //fill the template. the template was read before
@@ -233,11 +263,11 @@ class class_module_pages_portal extends class_portal_controller implements inter
 
         $intBodyPos = uniStripos($strPageContent, "</head>");
         $intPosXml = uniStripos($strPageContent, "<?xml");
-        if($intBodyPos !== false) {
+        if ($intBodyPos !== false) {
             $intBodyPos += 0;
             $strPageContent = uniSubstr($strPageContent, 0, $intBodyPos).$strHeader.uniSubstr($strPageContent, $intBodyPos);
         }
-        elseif($intPosXml !== false) {
+        elseif ($intPosXml !== false) {
             $intBodyPos = uniStripos($strPageContent, "?>");
             $intBodyPos += 2;
             $strPageContent = uniSubstr($strPageContent, 0, $intBodyPos).$strHeader.uniSubstr($strPageContent, $intBodyPos);
@@ -254,65 +284,73 @@ class class_module_pages_portal extends class_portal_controller implements inter
      * This includes the evaluation of the current page-data and the fallback to another language or even the error-page
      *
      * @throws class_exception
-     * @return class_module_pages_page
+     * @return PagesPage
      */
-    private function getPageData() {
+    private function getPageData()
+    {
         $strPagename = $this->getPagename();
 
         //Load the data of the page
-        $objPageData = class_module_pages_page::getPageByName($strPagename);
+        $objPageData = PagesPage::getPageByName($strPagename);
 
         //check, if the page is enabled and if the rights are given, or if we want to load a preview of a page
         $bitErrorpage = false;
-        if($objPageData == null || ($objPageData->getIntRecordStatus() != 1 || !$objPageData->rightView()))
+        if ($objPageData == null || ($objPageData->getIntRecordStatus() != 1 || !$objPageData->rightView())) {
             $bitErrorpage = true;
+        }
 
         //but: if count != 0 && preview && rights:
-        if($bitErrorpage && $objPageData != null && $this->getParam("preview") == "1" && $objPageData->rightEdit())
+        if ($bitErrorpage && $objPageData != null && $this->getParam("preview") == "1" && $objPageData->rightEdit()) {
             $bitErrorpage = false;
+        }
 
         //check, if the template could be loaded
         try {
-            if(!$bitErrorpage)
+            if (!$bitErrorpage) {
                 $this->objTemplate->readTemplate("/module_pages/".$objPageData->getStrTemplate(), "", false, true);
+            }
         }
-        catch(class_exception $objException) {
+        catch (class_exception $objException) {
             $bitErrorpage = true;
         }
 
-        if($bitErrorpage) {
+        if ($bitErrorpage) {
             //Unfortunately, we have to load the errorpage
 
             //try to send the correct header
             //page not found
-            if($objPageData == null || $objPageData->getIntRecordStatus() != 1)
+            if ($objPageData == null || $objPageData->getIntRecordStatus() != 1) {
                 class_response_object::getInstance()->setStrStatusCode(class_http_statuscodes::SC_NOT_FOUND);
+            }
 
             //user is not allowed to view the page
-            if($objPageData != null && !$objPageData->rightView())
+            if ($objPageData != null && !$objPageData->rightView()) {
                 class_response_object::getInstance()->setStrStatusCode(class_http_statuscodes::SC_FORBIDDEN);
+            }
 
             //check, if the page may be loaded using the default-language
             $strPreviousLang = $this->getStrPortalLanguage();
             $objDefaultLang = class_module_languages_language::getDefaultLanguage();
-            if($this->getStrPortalLanguage() != $objDefaultLang->getStrName()) {
+            if ($this->getStrPortalLanguage() != $objDefaultLang->getStrName()) {
                 class_logger::getInstance()->addLogRow("Requested page ".$strPagename." not existing in language ".$this->getStrPortalLanguage().", switch to fallback lang", class_logger::$levelWarning);
                 $objDefaultLang->setStrPortalLanguage($objDefaultLang->getStrName());
-                $objPageData = class_module_pages_page::getPageByName($strPagename);
+                $objPageData = PagesPage::getPageByName($strPagename);
 
                 $bitErrorpage = false;
 
                 try {
-                    if($objPageData != null)
+                    if ($objPageData != null) {
                         $this->objTemplate->readTemplate("/module_pages/".$objPageData->getStrTemplate(), "", false, true);
-                    else
+                    }
+                    else {
                         $bitErrorpage = true;
+                    }
                 }
-                catch(class_exception $objException) {
+                catch (class_exception $objException) {
                     $bitErrorpage = true;
                 }
 
-                if($bitErrorpage) {
+                if ($bitErrorpage) {
                     $strPagename = class_module_system_setting::getConfigValue("_pages_errorpage_");
                     $this->setParam("page", class_module_system_setting::getConfigValue("_pages_errorpage_"));
                     //revert to the old language - fallback didn't work
@@ -324,10 +362,10 @@ class class_module_pages_portal extends class_portal_controller implements inter
                 $this->setParam("page", class_module_system_setting::getConfigValue("_pages_errorpage_"));
             }
 
-            $objPageData = class_module_pages_page::getPageByName($strPagename);
+            $objPageData = PagesPage::getPageByName($strPagename);
 
             //check, if the page is enabled and if the rights are given, too
-            if($objPageData == null || ($objPageData->getIntRecordStatus() != 1 || !$objPageData->rightView())) {
+            if ($objPageData == null || ($objPageData->getIntRecordStatus() != 1 || !$objPageData->rightView())) {
                 //Whoops. Nothing to output here
                 throw new class_exception("Requested Page ".$strPagename." not existing, no errorpage created or set!", class_exception::$level_FATALERROR);
             }
@@ -341,22 +379,26 @@ class class_module_pages_portal extends class_portal_controller implements inter
     /**
      * Adds the portal-editor code to the current page-output - if all requirements are given
      *
-     * @param class_module_pages_page $objPageData
+     * @param PagesPage $objPageData
      * @param bool $bitEditPermissionOnMasterPage
      * @param string $strPageContent
      *
      * @return string
      */
-    private function renderPortalEditorCode(class_module_pages_page $objPageData, $bitEditPermissionOnMasterPage, $strPageContent) {
+    private function renderPortalEditorCode(PagesPage $objPageData, $bitEditPermissionOnMasterPage, $strPageContent)
+    {
         //add the portaleditor toolbar
-        if(class_module_system_setting::getConfigValue("_pages_portaleditor_") == "false")
+        if (class_module_system_setting::getConfigValue("_pages_portaleditor_") == "false") {
             return $strPageContent;
+        }
 
-        if(!$this->objSession->isAdmin())
+        if (!$this->objSession->isAdmin()) {
             return $strPageContent;
+        }
 
-        if(!$objPageData->rightEdit() && !$bitEditPermissionOnMasterPage)
+        if (!$objPageData->rightEdit() && !$bitEditPermissionOnMasterPage) {
             return $strPageContent;
+        }
 
         class_adminskin_helper::defineSkinWebpath();
 
@@ -364,7 +406,7 @@ class class_module_pages_portal extends class_portal_controller implements inter
         $strPortalLanguage = class_carrier::getInstance()->getObjLang()->getStrTextLanguage();
         class_carrier::getInstance()->getObjLang()->setStrTextLanguage($this->objSession->getAdminLanguage());
 
-        if($this->objSession->getSession("pe_disable") != "true") {
+        if ($this->objSession->getSession("pe_disable") != "true") {
             $strPeToolbar = "";
             $arrPeContents = array();
             $arrPeContents["pe_status_page_val"] = $objPageData->getStrName();
@@ -400,11 +442,12 @@ class class_module_pages_portal extends class_portal_controller implements inter
             $strSkinInit = $this->objTemplate->fillTemplate(array(), $strTemplateInitID);
 
             $strConfigFile = "'config_kajona_standard.js'";
-            if(is_file(_realpath_."/project/admin/scripts/ckeditor/config_kajona_standard.js"))
+            if (is_file(_realpath_."/project/admin/scripts/ckeditor/config_kajona_standard.js")) {
                 $strConfigFile = "KAJONA_WEBPATH+'/project/admin/scripts/ckeditor/config_kajona_standard.js'";
+            }
 
             $strPeToolbar .= "<script type='text/javascript'>
-                KAJONA.admin.lang.pe_rte_unsavedChanges = '" . $this->getLang("pe_rte_unsavedChanges", "pages") . "';
+                KAJONA.admin.lang.pe_rte_unsavedChanges = '".$this->getLang("pe_rte_unsavedChanges", "pages")."';
 
                 if($) {
                     KAJONA.portal.loader.loadFile([
@@ -481,8 +524,6 @@ class class_module_pages_portal extends class_portal_controller implements inter
     }
 
 
-
-
     /**
      * Sets the passed text as an additional title information.
      * If set, the separator placeholder from global_includes.php will be included, too.
@@ -493,18 +534,21 @@ class class_module_pages_portal extends class_portal_controller implements inter
      *
      * @return void
      */
-    public static function registerAdditionalTitle($strTitle) {
+    public static function registerAdditionalTitle($strTitle)
+    {
         self::$strAdditionalTitle = $strTitle."%%kajonaTitleSeparator%%";
     }
 
     /**
      * @return string
      */
-    private function generateHash2Sum() {
+    private function generateHash2Sum()
+    {
         $strGuestId = "";
         //when browsing the site as a guest, drop the userid
-        if($this->objSession->isLoggedin())
+        if ($this->objSession->isLoggedin()) {
             $strGuestId = $this->objSession->getUserID();
+        }
 
         return sha1("".$strGuestId.$this->getAction().$this->getParam("pv").$this->getSystemid().$this->getParam("systemid").$this->getParam("highlight"));
     }

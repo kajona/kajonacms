@@ -5,6 +5,33 @@
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 ********************************************************************************************************/
 
+namespace Kajona\Pages\Admin;
+
+use class_admin_simple;
+use class_adminskin_helper;
+use class_carrier;
+use class_date;
+use class_exception;
+use class_http_statuscodes;
+use class_link;
+use class_lockmanager;
+use class_model;
+use class_module_languages_admin;
+use class_module_languages_language;
+use class_module_system_module;
+use class_objectfactory;
+use class_orm_base;
+use class_reflection;
+use class_resourceloader;
+use class_response_object;
+use class_template;
+use interface_admin;
+use interface_admin_listable;
+use interface_model;
+use Kajona\Pages\System\PagesElement;
+use Kajona\Pages\System\PagesFolder;
+use Kajona\Pages\System\PagesPage;
+use Kajona\Pages\System\PagesPageelement;
 
 /**
  * This class is used to edit the content of a page. So, to create / delete / modify elements on a
@@ -16,7 +43,7 @@
  * @module pages
  * @moduleId _pages_content_modul_id_
  */
-class class_module_pages_content_admin extends class_admin_simple implements interface_admin
+class PagesContentAdmin extends class_admin_simple implements interface_admin
 {
 
     /**
@@ -49,15 +76,15 @@ class class_module_pages_content_admin extends class_admin_simple implements int
      */
     public function getOutputModuleTitle()
     {
-        $objPage = new class_module_pages_page($this->getSystemid());
+        $objPage = new PagesPage($this->getSystemid());
         if ($objPage->getStrName() == "") {
-            $objPage = new class_module_pages_page($objPage->getPrevId());
+            $objPage = new PagesPage($objPage->getPrevId());
         }
         return $this->getLang("modul_titel")." (".$objPage->getStrName().")";
     }
 
 
-    private function getPageInfoBox(class_module_pages_page $objPage)
+    private function getPageInfoBox(PagesPage $objPage)
     {
         $strReturn = "";
         //get infos about the page
@@ -66,7 +93,7 @@ class class_module_pages_content_admin extends class_admin_simple implements int
         $arrToolbarEntries[1] = "<a href=\"".class_link::getLinkAdminHref("pages_content", "list", "&systemid=".$objPage->getSystemid())."\">".class_adminskin_helper::getAdminImage("icon_page").$this->getLang("contentToolbar_content")."</a>";
         $arrToolbarEntries[2] = "<a href=\"".class_link::getLinkPortalHref($objPage->getStrName(), "", "", "&preview=1", "", $this->getLanguageToWorkOn())."\" target=\"_blank\">".class_adminskin_helper::getAdminImage("icon_lens").$this->getLang("contentToolbar_preview")."</a>";
 
-        if ($objPage->getIntType() != class_module_pages_page::$INT_TYPE_ALIAS) {
+        if ($objPage->getIntType() != PagesPage::$INT_TYPE_ALIAS) {
             $strReturn .= $this->objToolkit->getContentToolbar($arrToolbarEntries, 1);
         }
 
@@ -93,9 +120,9 @@ class class_module_pages_content_admin extends class_admin_simple implements int
         class_module_languages_admin::enableLanguageSwitch();
         $objCurObject = class_objectfactory::getInstance()->getObject($this->getSystemid());
 
-        /** @var class_module_pages_page $objPage */
+        /** @var PagesPage $objPage */
         $objPage = $objCurObject;
-        while (!$objPage instanceof class_module_pages_page && validateSystemid($objPage->getSystemid())) {
+        while (!$objPage instanceof PagesPage && validateSystemid($objPage->getSystemid())) {
             $objPage = class_objectfactory::getInstance()->getObject($objPage->getStrPrevId());
         }
 
@@ -109,12 +136,12 @@ class class_module_pages_content_admin extends class_admin_simple implements int
         $arrTabs = array();
         //start the top level elements
         //Language-dependant loading of elements, if installed
-        $arrAllElementsOnPage = class_module_pages_pageelement::getElementsOnPage($this->getSystemid(), false, $this->getLanguageToWorkOn());
-        $arrPageelementsOnPage = array_filter($arrAllElementsOnPage, function (class_module_pages_pageelement $objSingleElement) {
+        $arrAllElementsOnPage = PagesPageelement::getElementsOnPage($this->getSystemid(), false, $this->getLanguageToWorkOn());
+        $arrPageelementsOnPage = array_filter($arrAllElementsOnPage, function (PagesPageelement $objSingleElement) {
             return $objSingleElement->getStrElement() != "blocks";
         });
 
-        $arrBlocksOnPage = array_filter($arrAllElementsOnPage, function (class_module_pages_pageelement $objSingleElement) {
+        $arrBlocksOnPage = array_filter($arrAllElementsOnPage, function (PagesPageelement $objSingleElement) {
             return $objSingleElement->getStrElement() == "blocks";
         });
 
@@ -131,20 +158,20 @@ class class_module_pages_content_admin extends class_admin_simple implements int
                 $strNewBlocksSystemid = $objOneBlocks->getStrName();
 
                 //process existing blocks
-                /** @var class_module_pages_pageelement $objOneBlocksOnPage */
+                /** @var PagesPageelement $objOneBlocksOnPage */
                 foreach($arrBlocksOnPage as $objOneBlocksOnPage) {
 
                     $strNewBlocksSystemid = $objOneBlocksOnPage->getSystemid();
 
                     if($objOneBlocksOnPage->getStrName() == $objOneBlocks->getStrName()) {
-                        $arrSubBlock = class_module_pages_pageelement::getElementsOnPage($objOneBlocksOnPage->getSystemid(), false, $this->getLanguageToWorkOn());
+                        $arrSubBlock = PagesPageelement::getElementsOnPage($objOneBlocksOnPage->getSystemid(), false, $this->getLanguageToWorkOn());
 
                         foreach($arrSubBlock as $objOneBlockOnPage) {
 
                             $strExistingBlock = "";
 
                             if($objOneBlockOnPage->getStrName() == $objOneBlock->getStrName()) {
-                                $arrElementsInBlock = class_module_pages_pageelement::getElementsOnPage($objOneBlockOnPage->getSystemid(), false, $this->getLanguageToWorkOn());
+                                $arrElementsInBlock = PagesPageelement::getElementsOnPage($objOneBlockOnPage->getSystemid(), false, $this->getLanguageToWorkOn());
                                 $strExistingBlock .= $this->renderElementPlaceholderList($objOneBlock->getArrPlaceholder(), $arrElementsInBlock, true, $objOneBlocksOnPage->getSystemid(), $objOneBlockOnPage->getSystemid());
                             }
 
@@ -197,7 +224,7 @@ HTML;
 
     /**
      * @param $arrElementsOnTemplate
-     * @param class_module_pages_pageelement[] $arrElementsOnPage
+     * @param PagesPageelement[] $arrElementsOnPage
      *
      * @return string
      */
@@ -243,8 +270,8 @@ HTML;
                 foreach ($arrOneElementOnTemplate["elementlist"] as $arrSingleElementOnTemplateplaceholder) {
 
                     //Loading all Elements installed on the system ("RAW"-Elements)
-                    /** @var class_module_pages_element $objOnePossibleElementInSystem */
-                    foreach (class_module_pages_element::getObjectList() as $objOnePossibleElementInSystem) {
+                    /** @var PagesElement $objOnePossibleElementInSystem */
+                    foreach (PagesElement::getObjectList() as $objOnePossibleElementInSystem) {
                         if ($objOnePossibleElementInSystem->getStrName() == $arrSingleElementOnTemplateplaceholder["element"]) {
 
                             $strNewElementLink = class_link::getLinkAdmin(
@@ -333,7 +360,7 @@ HTML;
 
 
     /**
-     * @param class_model|interface_admin_listable|interface_model|class_module_pages_pageelement $objOneIterable
+     * @param class_model|interface_admin_listable|interface_model|PagesPageelement $objOneIterable
      * @param string $strListIdentifier
      *
      * @return string
@@ -342,7 +369,7 @@ HTML;
     {
         $strActions = "";
 
-        if ($objOneIterable instanceof class_module_pages_pageelement) {
+        if ($objOneIterable instanceof PagesPageelement) {
             $objLockmanager = $objOneIterable->getLockManager();
 
             //Create a row to handle the element, check all necessary stuff such as locking etc
@@ -380,7 +407,7 @@ HTML;
             $strActions .= $this->objToolkit->listStatusButton($objOneIterable->getSystemid());
 
         }
-        else if ($objOneIterable instanceof class_module_pages_element) {
+        elseif ($objOneIterable instanceof PagesElement) {
             $objAdminInstance = class_module_system_module::getModuleByName("pages")->getAdminInstanceOfConcreteModule();
             if ($objAdminInstance != null && $objAdminInstance instanceof class_admin_simple) {
                 return $objAdminInstance->getActionIcons($objOneIterable);
@@ -407,11 +434,11 @@ HTML;
         //OK, here we go. So, what information do we have?
         $strPlaceholderElement = $this->getParam("element");
         //Now, load all infos about the requested element
-        $objElement = class_module_pages_element::getElement($strPlaceholderElement);
+        $objElement = PagesElement::getElement($strPlaceholderElement);
         //Build the class-name
         $strElementClass = str_replace(".php", "", $objElement->getStrClassAdmin());
         //and finally create the object
-        /** @var $objElement class_element_admin */
+        /** @var $objElement ElementAdmin */
         $objElement = new $strElementClass();
         if ($bitShowErrors) {
             $objElement->setDoValidation(true);
@@ -434,10 +461,10 @@ HTML;
     {
         $strReturn = "";
         //check rights
-        /** @var $objElement class_module_pages_element */
+        /** @var $objElement PagesElement */
         $objElement = class_objectfactory::getInstance()->getObject($this->getSystemid());
 
-        if ($objElement instanceof class_module_pages_element) {
+        if ($objElement instanceof PagesElement) {
             $this->adminReload(class_link::getLinkAdminHref("pages", "edit", "&systemid=".$objElement->getSystemid()));
             return "";
         }
@@ -452,7 +479,7 @@ HTML;
 
             $strElementClass = str_replace(".php", "", $objElement->getStrClassAdmin());
             //and finally create the object
-            /** @var $objPageElement class_element_admin */
+            /** @var $objPageElement ElementAdmin */
             $objPageElement = new $strElementClass();
             if ($bitShowErrors) {
                 $objPageElement->setDoValidation(true);
@@ -485,8 +512,8 @@ HTML;
 
             if(validateSystemid($strBlocks) && validateSystemid($strBlock)) {
                 //fetch the matching elements
-                $objBlocks = new class_module_pages_pageelement($strBlocks);
-                $objBlock = new class_module_pages_pageelement($strBlock);
+                $objBlocks = new PagesPageelement($strBlocks);
+                $objBlock = new PagesPageelement($strBlock);
 
                 if($objBlocks->getStrElement() == "blocks" && $objBlock->getStrElement() == "block") {
                     return $objBlock->getSystemid();
@@ -495,12 +522,12 @@ HTML;
 
             $objBlocksElement = null;
             if(validateSystemid($strBlocks) && !validateSystemid($strBlock)) {
-                $objBlocksElement = new class_module_pages_pageelement($strBlocks);
+                $objBlocksElement = new PagesPageelement($strBlocks);
             }
 
 
             if($objBlocksElement == null) {
-                $objBlocksElement = new class_module_pages_pageelement();
+                $objBlocksElement = new PagesPageelement();
                 $objBlocksElement->setStrName($strBlocks);
                 $objBlocksElement->setStrPlaceholder("blocks");
                 $objBlocksElement->setStrElement("blocks");
@@ -510,7 +537,7 @@ HTML;
                 }
             }
 
-            $objBlockElement = new class_module_pages_pageelement();
+            $objBlockElement = new PagesPageelement();
             $objBlockElement->setStrName($strBlock);
             $objBlockElement->setStrPlaceholder("block");
             $objBlockElement->setStrElement("block");
@@ -548,11 +575,11 @@ HTML;
             $strPlaceholderName = $arrPlaceholder[0];
             $strPlaceholderElement = $this->getParam("element");
             //Now, load all infos about the requested element
-            $objElement = class_module_pages_element::getElement($strPlaceholderElement);
+            $objElement = PagesElement::getElement($strPlaceholderElement);
             //Load the class to create an object
             $strElementClass = str_replace(".php", "", $objElement->getStrClassAdmin());
             //and finally create the object
-            /** @var class_element_admin $objElement */
+            /** @var PagesElement $objElement */
             $objElement = new $strElementClass();
 
             //really continue? try to validate the passed data.
@@ -574,7 +601,7 @@ HTML;
 
 
             //So, lets do the magic - create the records
-            $objPageElement = new class_module_pages_pageelement();
+            $objPageElement = new PagesPageelement();
             $objPageElement->setStrName($strPlaceholderName);
             $objPageElement->setStrPlaceholder($strPlaceholder);
             $objPageElement->setStrElement($strPlaceholderElement);
@@ -598,7 +625,7 @@ HTML;
         $objTemp = class_objectfactory::getInstance()->getObject($this->getSystemid());
         $strPageSystemid = $this->getSystemid();
 
-        while (!$objTemp instanceof class_module_pages_page && validateSystemid($objTemp->getStrPrevId())) {
+        while (!$objTemp instanceof PagesPage && validateSystemid($objTemp->getStrPrevId())) {
             $objTemp = class_objectfactory::getInstance()->getObject($objTemp->getStrPrevId());
             $strPageSystemid = $objTemp->getSystemid();
         }
@@ -607,8 +634,8 @@ HTML;
 
         if ($objLockmanager->isLockedByCurrentUser()) {
             //Load the data of the current element
-            $objElementData = new class_module_pages_pageelement($this->getSystemid());
-            /** @var $objElement class_element_admin */
+            $objElementData = new PagesPageelement($this->getSystemid());
+            /** @var $objElement ElementAdmin */
             $objElement = $objElementData->getConcreteAdminInstance();
 
             //really continue? try to validate the passed data.
@@ -617,7 +644,7 @@ HTML;
                 $strReturn .= $this->actionEdit(true);
                 return $strReturn;
             }
-            else if (!$objElement->validateForm()) {
+            elseif (!$objElement->validateForm()) {
                 class_carrier::getInstance()->setParam("peClose", "");
                 $strReturn .= $this->actionEdit(true);
                 return $strReturn;
@@ -720,7 +747,7 @@ JS;
     {
         $strReturn = "";
 
-        $objPageElement = new class_module_pages_pageelement($this->getSystemid());
+        $objPageElement = new PagesPageelement($this->getSystemid());
         if ($objPageElement->rightDelete()) {
             //Locked?
             $objLockmanager = new class_lockmanager($this->getSystemid());
@@ -766,7 +793,7 @@ JS;
     protected function actionDeleteElementFinalXML()
     {
 
-        $objPageElement = new class_module_pages_pageelement($this->getSystemid());
+        $objPageElement = new PagesPageelement($this->getSystemid());
         if ($objPageElement->rightDelete()) {
             //Locked?
             $objLockmanager = new class_lockmanager($this->getSystemid());
@@ -800,7 +827,7 @@ JS;
 
         $this->setArrModuleEntry("template", "/folderview.tpl");
 
-        $objSourceElement = new class_module_pages_pageelement($this->getSystemid());
+        $objSourceElement = new PagesPageelement($this->getSystemid());
         if ($objSourceElement->rightEdit($this->getSystemid())) {
 
             $objLang = null;
@@ -813,7 +840,7 @@ JS;
 
             $objPage = null;
             if ($this->getParam("copyElement_page") != "") {
-                $objPage = class_module_pages_page::getPageByName($this->getParam("copyElement_page"));
+                $objPage = PagesPage::getPageByName($this->getParam("copyElement_page"));
                 if ($objPage == null) {
                     throw new class_exception("failed to load page ".$this->getParam("copyElement_page"), class_exception::$level_ERROR);
                 }
@@ -821,7 +848,7 @@ JS;
                 $objPage->initObject();
             }
             else {
-                $objPage = new class_module_pages_page($objSourceElement->getPrevId());
+                $objPage = new PagesPage($objSourceElement->getPrevId());
             }
 
             //form header
@@ -865,7 +892,7 @@ JS;
                         }
                         else {
                             //not repeatable - element already existing at placeholder?
-                            $arrElementsOnPage = class_module_pages_pageelement::getElementsOnPage($objPage->getSystemid(), false, $objLang->getStrName());
+                            $arrElementsOnPage = PagesPageelement::getElementsOnPage($objPage->getSystemid(), false, $objLang->getStrName());
                             //loop in order to find same element-types - other elements may be possible due to piped placeholders, too
                             $bitAdd = true;
                             //var_dump($arrElementsOnPage);
@@ -963,17 +990,17 @@ JS;
         $arrPathLinks[] = class_link::getLinkAdmin("pages", "list", "&unlockid=".$this->getSystemid(), $this->getLang("modul_titel", "pages"));
 
         foreach ($arrPath as $strOneSystemid) {
-            /** @var $objObject class_module_pages_folder|class_module_pages_page */
+            /** @var $objObject PagesFolder|PagesPage */
             $objObject = class_objectfactory::getInstance()->getObject($strOneSystemid);
             //Skip Elements: No sense to show in path-navigation
             if ($objObject == null || $objObject->getIntModuleNr() == _pages_content_modul_id_) {
                 continue;
             }
 
-            if ($objObject instanceof class_module_pages_folder) {
+            if ($objObject instanceof PagesFolder) {
                 $arrPathLinks[] = class_link::getLinkAdmin("pages", "list", "&systemid=".$strOneSystemid."&unlockid=".$this->getSystemid(), $objObject->getStrName());
             }
-            if ($objObject instanceof class_module_pages_page) {
+            if ($objObject instanceof PagesPage) {
                 $arrPathLinks[] = class_link::getLinkAdmin("pages", "list", "&systemid=".$strOneSystemid."&unlockid=".$this->getSystemid(), $objObject->getStrBrowsername());
             }
 
@@ -989,7 +1016,7 @@ JS;
     protected function actionElementStatus()
     {
         //Create the object
-        $objElement = new class_module_pages_pageelement($this->getSystemid());
+        $objElement = new PagesPageelement($this->getSystemid());
         $objElement->setIntRecordStatus($objElement->getIntRecordStatus() == 0 ? 1 : 0);
         $objElement->updateObjectToDb();
         $this->adminReload(class_link::getLinkAdminHref("pages_content", "list", "systemid=".$objElement->getPrevId().($this->getParam("pe") == "" ? "" : "&peClose=".$this->getParam("pe"))));
@@ -1010,9 +1037,9 @@ JS;
     {
         $strReturn = "";
         //get the object to update
-        /** @var $objObject class_module_pages_pageelement */
+        /** @var $objObject PagesPageelement */
         $objObject = class_objectfactory::getInstance()->getObject($this->getSystemid());
-        if ($objObject instanceof class_module_pages_pageelement && $objObject->rightEdit()) {
+        if ($objObject instanceof PagesPageelement && $objObject->rightEdit()) {
 
             $strPageSystemid = $objObject->getPrevId();
             $objLockmanager = new class_lockmanager($objObject->getSystemid());
@@ -1071,11 +1098,11 @@ JS;
     {
         $strReturn = "";
         //get the object to update
-        /** @var $objObject class_module_pages_element */
+        /** @var $objObject PagesElement */
         $objObject = class_objectfactory::getInstance()->getObject($this->getSystemid());
         if ($objObject->rightEdit()) {
             //differ between two modes - page-elements or regular objects
-            if ($objObject instanceof class_module_pages_pageelement) {
+            if ($objObject instanceof PagesPageelement) {
 
                 $strPageSystemid = $objObject->getPrevId();
                 $objLockmanager = new class_lockmanager($objObject->getSystemid());
@@ -1086,10 +1113,10 @@ JS;
 
                 if ($objLockmanager->isLockedByCurrentUser()) {
                     //and finally create the object
-                    /** @var class_module_pages_pageelement $objElement */
+                    /** @var PagesPageelement $objElement */
                     $strElementClass = str_replace(".php", "", $objObject->getStrClassAdmin());
                     //and finally create the object
-                    /** @var $objElement class_element_admin */
+                    /** @var $objElement ElementAdmin */
                     $objElement = new $strElementClass();
                     $objElement->setSystemid($this->getSystemid());
                     $arrElementData = $objElement->loadElementData();

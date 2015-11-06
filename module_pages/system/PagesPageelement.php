@@ -10,8 +10,6 @@ namespace Kajona\Pages\System;
 use class_cache;
 use class_carrier;
 use class_date;
-use class_element_admin;
-use class_element_portal;
 use class_exception;
 use class_logger;
 use class_model;
@@ -22,6 +20,8 @@ use class_orm_rowcache;
 use class_reflection;
 use interface_admin_listable;
 use interface_model;
+use Kajona\Pages\Admin\ElementAdmin;
+use Kajona\Pages\Portal\ElementPortal;
 
 /**
  * Model for a element assigned to a page. NOT the raw-element!
@@ -202,7 +202,7 @@ class PagesPageelement extends class_model implements interface_model, interface
             //and finally create the object
             if ($strElementClass != "") {
                 $objElement = new $strElementClass();
-                /** @var class_element_admin $objElement */
+                /** @var ElementAdmin $objElement */
                 $strForeignTable = $objElement->getTable();
 
 
@@ -227,7 +227,7 @@ class PagesPageelement extends class_model implements interface_model, interface
      * Please note, that due to performance issues the foreign content is not loaded in the step, use
      * $objElement->loadElementData() in order to fully initialize.
      *
-     * @return class_element_admin
+     * @return ElementAdmin
      */
     public function getConcreteAdminInstance()
     {
@@ -242,7 +242,7 @@ class PagesPageelement extends class_model implements interface_model, interface
 
         $strElementClass = str_replace(".php", "", $this->getStrClassAdmin());
         //and finally create the object
-        /** @var $objElement class_element_admin */
+        /** @var $objElement ElementAdmin */
         $objElement = new $strElementClass();
         $objElement->setSystemid($this->getSystemid());
         return $objElement;
@@ -252,7 +252,7 @@ class PagesPageelement extends class_model implements interface_model, interface
      * Creates an instance of the concrete admin-element instance, e.g. the concrete row-element
      * Please note, that due to performance issues the foreign content is not loaded in the step!
      *
-     * @return class_element_portal
+     * @return ElementPortal
      */
     public function getConcretePortalInstance()
     {
@@ -268,7 +268,7 @@ class PagesPageelement extends class_model implements interface_model, interface
 
         $strElementClass = str_replace(".php", "", $this->getStrClassPortal());
         //and finally create the object
-        /** @var $objElement class_element_portal */
+        /** @var $objElement ElementPortal */
         $objElement = new $strElementClass($this);
         $objElement->setSystemid($this->getSystemid());
         return $objElement;
