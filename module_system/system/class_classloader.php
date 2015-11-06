@@ -257,26 +257,18 @@ class class_classloader
 
         $arrFiles = array();
 
-        foreach ($this->arrModules as $strPath => $strSingleModule) {
+        foreach (array_merge($this->arrModules, array("project")) as $strPath => $strSingleModule) {
             if (is_dir(_realpath_."/".$strPath.$strFolder)) {
                 $arrTempFiles = scandir(_realpath_."/".$strPath.$strFolder);
                 foreach ($arrTempFiles as $strSingleFile) {
-                    if (preg_match("/(class|interface|trait)(.*)\.php$/i", $strSingleFile)) {
+                    if (strpos($strSingleFile, ".php") !== false) {
                         $arrFiles[substr($strSingleFile, 0, -4)] = _realpath_."/".$strPath.$strFolder.$strSingleFile;
                     }
                 }
             }
         }
 
-        //scan for overwrites
-        if (is_dir(_realpath_."/project".$strFolder)) {
-            $arrTempFiles = scandir(_realpath_."/project".$strFolder);
-            foreach ($arrTempFiles as $strSingleFile) {
-                if (preg_match("/(class|interface|trait)(.*)\.php$/i", $strSingleFile)) {
-                    $arrFiles[substr($strSingleFile, 0, -4)] = _realpath_."/project".$strFolder.$strSingleFile;
-                }
-            }
-        }
+
 
         return $arrFiles;
     }
