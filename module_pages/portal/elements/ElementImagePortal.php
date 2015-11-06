@@ -7,6 +7,13 @@
 *	$Id$                                      *
 ********************************************************************************************************/
 
+namespace Kajona\Pages\Portal\Elements;
+
+use Kajona\Pages\Portal\ElementPortal;
+use Kajona\Pages\Portal\PortalElementInterface;
+use Kajona\Pages\System\PagesPage;
+
+
 /**
  * Portal-Class of the picture element
  *
@@ -15,7 +22,7 @@
  *
  * @targetTable element_image.content_id
  */
-class class_element_image_portal extends class_element_portal implements interface_portal_element {
+class ElementImagePortal extends ElementPortal implements PortalElementInterface {
 
     /**
      * Returns the ready image-htmlcode
@@ -46,7 +53,7 @@ class class_element_image_portal extends class_element_portal implements interfa
         //Link?
         if($this->arrElementData["image_link"] != "") {
             //internal page?
-            if(class_module_pages_page::getPageByName($this->arrElementData["image_link"]) !== null)
+            if(PagesPage::getPageByName($this->arrElementData["image_link"]) !== null)
                 $this->arrElementData["link_href"] = getLinkPortalHref($this->arrElementData["image_link"], "");
             else
                 $this->arrElementData["link_href"] = getLinkPortalHref("", $this->arrElementData["image_link"]);

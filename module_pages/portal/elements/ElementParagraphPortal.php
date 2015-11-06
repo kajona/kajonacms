@@ -5,14 +5,20 @@
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 ********************************************************************************************************/
 
+namespace Kajona\Pages\Portal\Elements;
+
+use Kajona\Pages\Portal\ElementPortal;
+use Kajona\Pages\Portal\PortalElementInterface;
+use Kajona\Pages\System\PagesPage;
+
+
 /**
  * Portal-Part of the paragraph
  *
- * @package module_pages
  * @author sidler@mulchprod.de
  * @targetTable element_paragraph.content_id
  */
-class class_element_paragraph_portal extends class_element_portal implements interface_portal_element {
+class ElementParagraphPortal extends ElementPortal implements PortalElementInterface {
 
 
     /**
@@ -34,10 +40,10 @@ class class_element_paragraph_portal extends class_element_portal implements int
         if($this->arrElementData["paragraph_image"] != "" && $this->arrElementData["paragraph_link"] != "") {
             $strTemplateSection = "paragraph_image_link";
         }
-        else if($this->arrElementData["paragraph_image"] != "" && $this->arrElementData["paragraph_link"] == "") {
+        elseif($this->arrElementData["paragraph_image"] != "" && $this->arrElementData["paragraph_link"] == "") {
             $strTemplateSection = "paragraph_image";
         }
-        else if($this->arrElementData["paragraph_image"] == "" && $this->arrElementData["paragraph_link"] != "") {
+        elseif($this->arrElementData["paragraph_image"] == "" && $this->arrElementData["paragraph_link"] != "") {
             $strTemplateSection = "paragraph_link";
         }
 
@@ -50,7 +56,7 @@ class class_element_paragraph_portal extends class_element_portal implements int
 
         if($this->arrElementData["paragraph_link"] != "") {
             //internal page?
-            if(class_module_pages_page::getPageByName($this->arrElementData["paragraph_link"]) !== null)
+            if(PagesPage::getPageByName($this->arrElementData["paragraph_link"]) !== null)
                 $this->arrElementData["paragraph_link"] = getLinkPortalHref($this->arrElementData["paragraph_link"]);
             else
                 $this->arrElementData["paragraph_link"] = getLinkPortalHref("", $this->arrElementData["paragraph_link"]);

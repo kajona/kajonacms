@@ -4,15 +4,25 @@
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 ********************************************************************************************************/
 
+namespace Kajona\Pages\Admin\Formentries;
+
+use class_carrier;
+use class_formentry_base;
+use class_formentry_dropdown;
+use class_reflection;
+use class_resourceloader;
+use class_text_validator;
+use interface_formentry;
+
+
 /**
  * A yes-no field renders a dropdown containing a list of entries.
  * Make sure to pass the list of possible entries before rendering the form.
  *
  * @author sidler@mulchprod.de
  * @since 4.3
- * @package module_pages
  */
-class class_formentry_template extends class_formentry_base implements interface_formentry {
+class FormentryTemplate extends class_formentry_base implements interface_formentry {
 
     /**
      * the path to the folder of matching templates
@@ -91,7 +101,7 @@ class class_formentry_template extends class_formentry_base implements interface
 
     /**
      * @param $arrKeyValues
-     * @return class_formentry_dropdown
+     * @return FormentryTemplate
      */
     public function setArrKeyValues($arrKeyValues) {
         $this->arrKeyValues = $arrKeyValues;
@@ -104,7 +114,7 @@ class class_formentry_template extends class_formentry_base implements interface
 
     /**
      * @param string $strAddons
-     * @return $this
+     * @return FormentryTemplate
      */
     public function setStrAddons($strAddons) {
         $this->strAddons = $strAddons;

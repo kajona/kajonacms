@@ -7,13 +7,22 @@
 *	$Id$		                        *
 ********************************************************************************************************/
 
+namespace Kajona\Pages\Admin\Widgets;
+
+use class_adminwidget;
+use class_link;
+use class_module_dashboard_widget;
+use class_module_system_aspect;
+use class_module_system_common;
+use class_module_system_module;
+use interface_adminwidget;
+use Kajona\Pages\System\PagesPage;
+
 
 /**
  * A widget rendering the pages last modified
- *
- * @package module_dashboard
  */
-class class_adminwidget_lastmodifiedpages extends class_adminwidget implements interface_adminwidget {
+class AdminwidgetLastmodifiedpages extends class_adminwidget implements interface_adminwidget {
 
     /**
      * Basic constructor, registers the fields to be persisted and loaded
@@ -55,7 +64,7 @@ class class_adminwidget_lastmodifiedpages extends class_adminwidget implements i
         if($intMax < 0)
             $intMax = 1;
 
-        /** @var class_module_pages_page[] $arrRecords */
+        /** @var PagesPage[] $arrRecords */
         $arrRecords = class_module_system_common::getLastModifiedRecords($intMax, false, "class_module_pages_page");
 
         foreach($arrRecords as $objPage) {

@@ -4,45 +4,66 @@
 *   (c) 2007-2014 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
-*	$Id$                                      *
+*   $Id$                           *
 ********************************************************************************************************/
+
+namespace Kajona\Pages\Admin\Elements;
+
+use Kajona\Pages\Admin\AdminElementInterface;
+use Kajona\Pages\Admin\ElementAdmin;
 
 
 /**
- * Admin class to handle dates
+ * Admin class to handle the richtext
  *
- * @package module_pages
  * @author jschroeter@kajona.de
  *
  * @targetTable element_universal.content_id
  */
-class class_element_date_admin extends class_element_admin implements interface_admin_element {
+class ElementRichtextAdmin extends ElementAdmin implements AdminElementInterface {
 
     /**
-     * @var int
-     * @todo add long column to universal table
-     * @tableColumn element_universal.char2
-     * @fieldType date
-     * @fieldLabel commons_date
-     * @fieldMandatory
+     * @var string
+     * @tableColumn element_universal.text
+     * @tableColumnDatatype text
+     * @blockEscaping
      *
+     * @fieldType wysiwyg
+     * @fieldLabel commons_text
+     *
+     * @addSearchIndex
      * @templateExport
-     * @templateMapper date
      */
-    private $objDate = 0;
+    private $strText = "";
 
     /**
      * @var string
      * @tableColumn element_universal.char1
+     * @tableColumnDatatype char254
      *
      * @fieldType template
-     * @fieldTemplateDir /element_date
-     * @fieldMandatory
      * @fieldLabel template
-     *
-     * @addSearchIndex
+     * @fieldTemplateDir /element_richtext
      */
     private $strTemplate = "";
+
+
+    /**
+     * Returns an abstract of the current element
+     *
+     * @return string
+     */
+    public function getContentTitle() {
+        $this->loadElementData();
+
+        if($this->getStrText() != "") {
+            return uniStrTrim(htmlStripTags($this->getStrText()), 120);
+        }
+        else
+            return parent::getContentTitle();
+    }
+
+
 
     /**
      * @param string $strTemplate
@@ -59,17 +80,18 @@ class class_element_date_admin extends class_element_admin implements interface_
     }
 
     /**
-     * @param string $objDate
+     * @param string $strText
      */
-    public function setObjDate($objDate) {
-        $this->objDate = $objDate;
+    public function setStrText($strText) {
+        $this->strText = $strText;
     }
 
     /**
      * @return string
      */
-    public function getObjDate() {
-        return $this->objDate;
+    public function getStrText() {
+        return $this->strText;
     }
+
 
 }

@@ -4,14 +4,22 @@
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 ********************************************************************************************************/
 
+namespace Kajona\Pages\Portal\Elements;
+
+use class_template;
+use Kajona\Pages\Portal\ElementPortal;
+use Kajona\Pages\Portal\PortalElementInterface;
+use Kajona\Pages\System\PagesPage;
+use Kajona\Pages\System\PagesPageelement;
+
+
 /**
  * Portal-Part of the blocks-element
  *
- * @package module_pages
  * @author sidler@mulchprod.de
  * @targetTable element_universal.content_id
  */
-class class_element_blocks_portal extends class_element_portal implements interface_portal_element {
+class ElementBlocksPortal extends ElementPortal implements PortalElementInterface {
 
 
     /**
@@ -24,13 +32,13 @@ class class_element_blocks_portal extends class_element_portal implements interf
         $strReturn = "";
 
         //load elements below
-        $arrElementsOnBlocks = class_module_pages_pageelement::getElementsOnPage($this->getSystemid(), true, $this->getStrPortalLanguage());
+        $arrElementsOnBlocks = PagesPageelement::getElementsOnPage($this->getSystemid(), true, $this->getStrPortalLanguage());
 
         if(count($arrElementsOnBlocks) == 0) {
             return "";
         }
 
-        $objPageData = class_module_pages_page::getPageByName($this->getPagename());
+        $objPageData = PagesPage::getPageByName($this->getPagename());
 
         $objPlaceholders = $this->objTemplate->parsePageTemplate("/module_pages/".$objPageData->getStrTemplate(), class_template::INT_ELEMENT_MODE_REGULAR);
 
@@ -38,7 +46,7 @@ class class_element_blocks_portal extends class_element_portal implements interf
             if($objOneBlock->getStrName() == $this->arrElementData["page_element_ph_name"]) {
 
                 foreach($arrElementsOnBlocks as $objOneElement) {
-                    /** @var  class_element_block_portal $objElement  */
+                    /** @var  ElementBlockPortal $objElement  */
                     $objElement = $objOneElement->getConcretePortalInstance();
                     $strReturn .= $objElement->getRenderedElementOutput();
                 }
@@ -46,7 +54,6 @@ class class_element_blocks_portal extends class_element_portal implements interf
             }
         }
 
-//        $this->objTemplate->deleteBlocksFromTemplate($strReturn, class_template_kajona_sections::BLOCKS);
         return $strReturn;
     }
 

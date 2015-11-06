@@ -7,14 +7,21 @@
 *	$Id$                                      *
 ********************************************************************************************************/
 
+namespace Kajona\Pages\Portal\Elements;
+
+use class_template_mapper;
+use Kajona\Pages\Portal\ElementPortal;
+use Kajona\Pages\Portal\PortalElementInterface;
+use Kajona\Pages\System\PagesPageelement;
+
+
 /**
  * Portal-Part of the date element
  *
- * @package module_pages
  * @author jschroeter@kajona.de
  * @targetTable element_universal.content_id
  */
-class class_element_date_portal extends class_element_portal implements interface_portal_element {
+class ElementDatePortal extends ElementPortal implements PortalElementInterface {
 
     /**
      * Does a little "make-up" to the contents
@@ -23,15 +30,13 @@ class class_element_date_portal extends class_element_portal implements interfac
      */
     public function loadData() {
 
-        $strReturn = "";
-
         $strTemplate = $this->arrElementData["char1"];
         //fallback
         if($strTemplate == "") {
             $strTemplate = "date.tpl";
         }
 
-        $objPageElement = new class_module_pages_pageelement($this->getSystemid());
+        $objPageElement = new PagesPageelement($this->getSystemid());
         $objAdmin = $objPageElement->getConcreteAdminInstance();
         $objAdmin->loadElementData();
 
