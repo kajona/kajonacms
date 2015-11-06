@@ -3,29 +3,31 @@
 *   (c) 2004-2006 by MulchProductions, www.mulchprod.de                                                 *
 *   (c) 2007-2015 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
-*-------------------------------------------------------------------------------------------------------*
-*   $Id$                           *
 ********************************************************************************************************/
 
+namespace Kajona\Pages\Admin\Elements;
+
+use Kajona\Pages\Admin\AdminElementInterface;
+use Kajona\Pages\Admin\ElementAdmin;
+
+
 /**
- * Admin class to handle the paragraphs
+ * Class to handle the admin-part of the element
  *
  * @package module_pages
  * @author sidler@mulchprod.de
  *
- * @targetTable element_paragraph.content_id
+ * @targetTable element_image.content_id
  */
-class class_element_paragraph_admin extends class_element_admin implements interface_admin_element {
+class ElementImageAdmin extends ElementAdmin implements AdminElementInterface {
 
     /**
      * @var string
-     * @tableColumn element_paragraph.paragraph_title
+     * @tableColumn element_image.image_title
      * @tableColumnDatatype char254
      *
      * @fieldType text
      * @fieldLabel commons_title
-     *
-     * @elementContentTitle
      *
      * @addSearchIndex
      */
@@ -33,24 +35,11 @@ class class_element_paragraph_admin extends class_element_admin implements inter
 
     /**
      * @var string
-     * @tableColumn element_paragraph.paragraph_content
-     * @tableColumnDatatype text
-     * @blockEscaping
-     *
-     * @fieldType wysiwyg
-     * @fieldLabel paragraph_content
-     *
-     * @addSearchIndex
-     */
-    private $strTextContent = "";
-
-    /**
-     * @var string
-     * @tableColumn element_paragraph.paragraph_link
+     * @tableColumn element_image.image_link
      * @tableColumnDatatype char254
      *
      * @fieldType page
-     * @fieldLabel paragraph_link
+     * @fieldLabel image_link
      *
      * @addSearchIndex
      */
@@ -58,11 +47,13 @@ class class_element_paragraph_admin extends class_element_admin implements inter
 
     /**
      * @var string
-     * @tableColumn element_paragraph.paragraph_image
+     * @tableColumn element_image.image_image
      * @tableColumnDatatype char254
      *
      * @fieldType image
      * @fieldLabel commons_image
+     *
+     * @elementContentTitle
      *
      * @addSearchIndex
      */
@@ -70,49 +61,39 @@ class class_element_paragraph_admin extends class_element_admin implements inter
 
     /**
      * @var string
-     * @tableColumn element_paragraph.paragraph_template
+     * @tableColumn element_image.image_x
+     * @tableColumnDatatype int
+     *
+     * @fieldType text
+     * @fieldLabel image_x
+     * @fieldHidden
+     */
+    private $strImageX = 0;
+
+    /**
+     * @var string
+     * @tableColumn element_image.image_y
+     * @tableColumnDatatype int
+     *
+     * @fieldType text
+     * @fieldLabel image_y
+     * @fieldHidden
+     */
+    private $strImageY = 0;
+
+    /**
+     * @var string
+     * @tableColumn element_image.image_template
      * @tableColumnDatatype char254
      *
      * @fieldType template
      * @fieldLabel template
-     * @fieldTemplateDir /element_paragraph
+     *
+     * @fieldTemplateDir /element_image
      */
     private $strTemplate = "";
 
 
-    /**
-     * Returns an abstract of the current element
-     *
-     * @return string
-     */
-    public function getContentTitle() {
-        $this->loadElementData();
-
-        if($this->getStrTitle() != "") {
-            return htmlStripTags($this->getStrTitle());
-        }
-        else if($this->getStrTextContent() != "") {
-            return uniStrTrim(htmlStripTags($this->getStrTextContent()), 120);
-        }
-        else
-            return parent::getContentTitle();
-    }
-
-
-
-    /**
-     * @param string $strContent
-     */
-    public function setStrTextContent($strContent) {
-        $this->strTextContent = $strContent;
-    }
-
-    /**
-     * @return string
-     */
-    public function getStrTextContent() {
-        return $this->strTextContent;
-    }
 
     /**
      * @param string $strImage
@@ -126,6 +107,34 @@ class class_element_paragraph_admin extends class_element_admin implements inter
      */
     public function getStrImage() {
         return $this->strImage;
+    }
+
+    /**
+     * @param string $strImageX
+     */
+    public function setStrImageX($strImageX) {
+        $this->strImageX = $strImageX;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStrImageX() {
+        return $this->strImageX;
+    }
+
+    /**
+     * @param string $strImageY
+     */
+    public function setStrImageY($strImageY) {
+        $this->strImageY = $strImageY;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStrImageY() {
+        return $this->strImageY;
     }
 
     /**
@@ -169,6 +178,9 @@ class class_element_paragraph_admin extends class_element_admin implements inter
     public function getStrTitle() {
         return $this->strTitle;
     }
+
+
+
 
 
 }

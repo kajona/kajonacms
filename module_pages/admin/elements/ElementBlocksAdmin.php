@@ -5,16 +5,20 @@
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 ********************************************************************************************************/
 
+namespace Kajona\Pages\Admin\Elements;
+
+use Kajona\Pages\Admin\AdminElementInterface;
+use Kajona\Pages\Admin\ElementAdmin;
+
 
 /**
  * Internal representation of the blocks-wrapper element
  *
- * @package module_pages
  * @author sidler@mulchprod.de
  *
  * @targetTable element_universal.content_id
  */
-class class_element_blocks_admin extends class_element_admin implements interface_admin_element {
+class ElementBlocksAdmin extends ElementAdmin implements AdminElementInterface {
 
 
 }

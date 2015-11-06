@@ -7,45 +7,46 @@
 *	$Id$                                      *
 ********************************************************************************************************/
 
+namespace Kajona\Pages\Admin\Elements;
+
+use Kajona\Pages\Admin\AdminElementInterface;
+use Kajona\Pages\Admin\ElementAdmin;
+
 
 /**
- * Admin class to handle the paragraphs
+ * Admin class to handle dates
  *
- * @package module_pages
  * @author jschroeter@kajona.de
  *
  * @targetTable element_universal.content_id
  */
-class class_element_plaintext_admin extends class_element_admin implements interface_admin_element {
+class ElementDateAdmin extends ElementAdmin implements AdminElementInterface {
 
     /**
-     * @var string
-     * @tableColumn element_universal.text
-     *
-     * @fieldType text
+     * @var int
+     * @todo add long column to universal table
+     * @tableColumn element_universal.char2
+     * @fieldType date
+     * @fieldLabel commons_date
      * @fieldMandatory
-     * @fieldLabel commons_title
      *
-     * @elementContentTitle
-     *
-     * @addSearchIndex
      * @templateExport
+     * @templateMapper date
      */
-    private $strText = "";
+    private $objDate = 0;
 
     /**
      * @var string
      * @tableColumn element_universal.char1
      *
      * @fieldType template
-     * @fieldTemplateDir /element_plaintext
+     * @fieldTemplateDir /element_date
      * @fieldMandatory
      * @fieldLabel template
      *
      * @addSearchIndex
      */
     private $strTemplate = "";
-
 
     /**
      * @param string $strTemplate
@@ -62,17 +63,17 @@ class class_element_plaintext_admin extends class_element_admin implements inter
     }
 
     /**
-     * @param string $strText
+     * @param string $objDate
      */
-    public function setStrText($strText) {
-        $this->strText = $strText;
+    public function setObjDate($objDate) {
+        $this->objDate = $objDate;
     }
 
     /**
      * @return string
      */
-    public function getStrText() {
-        return $this->strText;
+    public function getObjDate() {
+        return $this->objDate;
     }
 
 }

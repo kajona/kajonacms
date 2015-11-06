@@ -1,26 +1,31 @@
 <?php
 /*"******************************************************************************************************
 *   (c) 2004-2006 by MulchProductions, www.mulchprod.de                                                 *
-*   (c) 2007-2015 by Kajona, www.kajona.de                                                              *
+*   (c) 2007-2014 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
 *	$Id$                                      *
 ********************************************************************************************************/
+
+namespace Kajona\Pages\Admin\Elements;
+
+use Kajona\Pages\Admin\AdminElementInterface;
+use Kajona\Pages\Admin\ElementAdmin;
 
 
 /**
  * Admin class to handle the paragraphs
  *
  * @package module_pages
- * @author sidler@mulchprod.de
+ * @author jschroeter@kajona.de
  *
- * @targetTable element_paragraph.content_id
+ * @targetTable element_universal.content_id
  */
-class class_element_row_admin extends class_element_admin implements interface_admin_element {
+class ElementPlaintextAdmin extends ElementAdmin implements AdminElementInterface {
 
     /**
      * @var string
-     * @tableColumn element_paragraph.paragraph_title
+     * @tableColumn element_universal.text
      *
      * @fieldType text
      * @fieldMandatory
@@ -29,15 +34,16 @@ class class_element_row_admin extends class_element_admin implements interface_a
      * @elementContentTitle
      *
      * @addSearchIndex
+     * @templateExport
      */
-    private $strTitle = "";
+    private $strText = "";
 
     /**
      * @var string
-     * @tableColumn element_paragraph.paragraph_template
+     * @tableColumn element_universal.char1
      *
      * @fieldType template
-     * @fieldTemplateDir /element_row
+     * @fieldTemplateDir /element_plaintext
      * @fieldMandatory
      * @fieldLabel template
      *
@@ -61,19 +67,17 @@ class class_element_row_admin extends class_element_admin implements interface_a
     }
 
     /**
-     * @param string $strTitle
+     * @param string $strText
      */
-    public function setStrTitle($strTitle) {
-        $this->strTitle = $strTitle;
+    public function setStrText($strText) {
+        $this->strText = $strText;
     }
 
     /**
      * @return string
      */
-    public function getStrTitle() {
-        return $this->strTitle;
+    public function getStrText() {
+        return $this->strText;
     }
-
-
 
 }

@@ -4,17 +4,24 @@
 *   (c) 2007-2014 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
-*	$Id$                                     *
+*	$Id$                                      *
 ********************************************************************************************************/
 
+namespace Kajona\Pages\Portal\Elements;
+
+use class_template_mapper;
+use Kajona\Pages\Portal\ElementPortal;
+use Kajona\Pages\Portal\PortalElementInterface;
+use Kajona\Pages\System\PagesPageelement;
+
+
 /**
- * Portal-Part of the richtext element
+ * Portal-Part of the plaintext element
  *
- * @package module_pages
  * @author jschroeter@kajona.de
  * @targetTable element_universal.content_id
  */
-class class_element_richtext_portal extends class_element_portal implements interface_portal_element {
+class ElementPlaintextPortal extends ElementPortal implements PortalElementInterface {
 
     /**
      * Does a little "make-up" to the contents
@@ -23,20 +30,18 @@ class class_element_richtext_portal extends class_element_portal implements inte
      */
     public function loadData() {
 
-        $strReturn = "";
-
         $strTemplate = $this->arrElementData["char1"];
         //fallback
         if($strTemplate == "") {
-            $strTemplate = "richtext.tpl";
+            $strTemplate = "plaintext.tpl";
         }
 
-        $objPageElement = new class_module_pages_pageelement($this->getSystemid());
+        $objPageElement = new PagesPageelement($this->getSystemid());
         $objAdmin = $objPageElement->getConcreteAdminInstance();
         $objAdmin->loadElementData();
 
         $objMapper = new class_template_mapper($objAdmin);
-        return $objMapper->writeToTemplate("/element_richtext/".$strTemplate, "richtext");
+        return $objMapper->writeToTemplate("/element_plaintext/".$strTemplate, "plaintext");
     }
 
 }
