@@ -7,6 +7,27 @@
 *	$Id$                                      *
 ********************************************************************************************************/
 
+namespace Kajona\Pages\Admin;
+
+use class_admin_controller;
+use class_admin_formgenerator;
+use class_carrier;
+use class_date;
+use class_exception;
+use class_formentry_date;
+use class_formentry_hidden;
+use class_formentry_template;
+use class_formentry_text;
+use class_orm_base;
+use class_orm_objectinit;
+use class_orm_objectlist;
+use class_orm_objectupdate;
+use class_orm_rowcache;
+use class_reflection;
+use class_resourceloader;
+use class_search_result;
+use interface_search_portalobject;
+use interface_validator;
 
 /**
  * The base class for all page-elements
@@ -18,7 +39,8 @@
  * @module elements
  * @moduleId _pages_elemente_modul_id_
  */
-abstract class class_element_admin extends class_admin_controller implements interface_search_portalobject {
+abstract class ElementAdmin extends class_admin_controller implements interface_search_portalobject
+{
 
     const STR_ANNOTATION_ELEMENTCONTENTTITLE = "@elementContentTitle";
 
@@ -46,24 +68,26 @@ abstract class class_element_admin extends class_admin_controller implements int
     /**
      * Constructor
      */
-    public function __construct($strSystemid = "") {
+    public function __construct($strSystemid = "")
+    {
 
         parent::__construct();
 
-        if(validateSystemid($strSystemid))
+        if (validateSystemid($strSystemid)) {
             $this->loadElementData();
+        }
     }
-
 
 
     /**
      * @return class_admin_formgenerator|null
      */
-    public function getAdminForm() {
-        if($this->objAdminForm == null) {
+    public function getAdminForm()
+    {
+        if ($this->objAdminForm == null) {
             $objAnnotations = new class_reflection($this);
             $arrTargetTables = $objAnnotations->getAnnotationValuesFromClass(class_orm_base::STR_ANNOTATION_TARGETTABLE);
-            if(count($arrTargetTables) == 0) {
+            if (count($arrTargetTables) == 0) {
                 return null;
             }
 
@@ -80,10 +104,12 @@ abstract class class_element_admin extends class_admin_controller implements int
      * Legacy method for elements not yet supporting the annotation based forms / content updates
      *
      * @param array $arrElementData
+     *
      * @deprecated
      * @return string
      */
-    public function getEditForm($arrElementData) {
+    public function getEditForm($arrElementData)
+    {
 
     }
 
@@ -95,7 +121,8 @@ abstract class class_element_admin extends class_admin_controller implements int
      *
      * @return class_admin_formgenerator
      */
-    protected function updateEditForm(class_admin_formgenerator $objForm) {
+    protected function updateEditForm(class_admin_formgenerator $objForm)
+    {
         return $objForm;
     }
 
@@ -106,17 +133,18 @@ abstract class class_element_admin extends class_admin_controller implements int
      *
      * @return string
      */
-    final public function actionEdit($strMode = "edit") {
+    final public function actionEdit($strMode = "edit")
+    {
 
         //split modes - legacy definitions or coooooool declarative processing
         $objAnnotations = new class_reflection($this);
         $arrTargetTables = $objAnnotations->getAnnotationValuesFromClass(class_orm_base::STR_ANNOTATION_TARGETTABLE);
-        if(count($arrTargetTables) == 0) {
+        if (count($arrTargetTables) == 0) {
             return $this->generateLegacyEdit($strMode);
         }
 
 
-        if($strMode == "edit") {
+        if ($strMode == "edit") {
             $this->loadElementData();
             $objORM = new class_orm_objectinit($this);
             $objORM->initObjectFromDb();
@@ -124,32 +152,32 @@ abstract class class_element_admin extends class_admin_controller implements int
 
         $objForm = $this->getAdminForm();
         //validation errors?
-        if($this->bitDoValidation) {
+        if ($this->bitDoValidation) {
             $objForm->validateForm();
         }
 
         $bitShow = false;
 
         $objStartDate = null;
-        if(isset($this->arrElementData["system_date_start"]) && $this->arrElementData["system_date_start"] > 0) {
+        if (isset($this->arrElementData["system_date_start"]) && $this->arrElementData["system_date_start"] > 0) {
             $objStartDate = new class_date($this->arrElementData["system_date_start"]);
             $bitShow = true;
         }
 
         $objEndDate = null;
-        if(isset($this->arrElementData["system_date_end"]) && $this->arrElementData["system_date_end"] > 0) {
+        if (isset($this->arrElementData["system_date_end"]) && $this->arrElementData["system_date_end"] > 0) {
             $objEndDate = new class_date($this->arrElementData["system_date_end"]);
             $bitShow = true;
         }
 
         $strInternalTitle = (isset($this->arrElementData["page_element_ph_title"]) ? $this->arrElementData["page_element_ph_title"] : "");
-        if($strInternalTitle != "") {
+        if ($strInternalTitle != "") {
             $bitShow = true;
         }
 
         // hide template chooser when there is only one template available
-        foreach($objForm->getArrFields() as $objOneField) {
-            if($objOneField instanceof class_formentry_template && count($objOneField->getArrKeyValues()) <= 1) {
+        foreach ($objForm->getArrFields() as $objOneField) {
+            if ($objOneField instanceof class_formentry_template && count($objOneField->getArrKeyValues()) <= 1) {
                 $objForm->addFieldToHiddenGroup($objOneField);
             }
         }
@@ -161,7 +189,7 @@ abstract class class_element_admin extends class_admin_controller implements int
         $objForm->setStrHiddenGroupTitle($this->getLang("page_element_system_folder", "pages"));
 
         //Language is placed right here instead as a hidden field
-        if($strMode == "edit") {
+        if ($strMode == "edit") {
             $objForm->addField(new class_formentry_hidden("", "page_element_ph_language"))->setStrValue($this->arrElementData["page_element_ph_language"]);
         }
         else {
@@ -176,7 +204,7 @@ abstract class class_element_admin extends class_admin_controller implements int
         $objForm->addField(new class_formentry_hidden("", "block"))->setStrValue($this->getParam("block"));
 
         //An finally the submit Button
-        if($this->getParam("pe") != "") {
+        if ($this->getParam("pe") != "") {
             $objForm->addField(new class_formentry_hidden("", "peClose"))->setStrValue("1")->setStrEntryName("peClose");
         }
 
@@ -186,11 +214,13 @@ abstract class class_element_admin extends class_admin_controller implements int
 
     /**
      * Method still being kept for legacy elements, so admin-elements not yet switched to annotations
+     *
      * @param string $strMode
      *
      * @return string
      */
-    private function generateLegacyEdit($strMode = "edit") {
+    private function generateLegacyEdit($strMode = "edit")
+    {
 
         $strReturn = "";
         //Right before we do anything, load the data of the current element
@@ -203,8 +233,9 @@ abstract class class_element_admin extends class_admin_controller implements int
         $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref("pages_content", "saveElement"), "elEditForm");
 
         //validation errors?
-        if($this->bitDoValidation)
+        if ($this->bitDoValidation) {
             $this->validateForm();
+        }
 
         $strReturn .= $this->objToolkit->getValidationErrors($this, "saveElement");
 
@@ -214,19 +245,19 @@ abstract class class_element_admin extends class_admin_controller implements int
         $bitShow = false;
 
         $objStartDate = null;
-        if(isset($arrElementData["system_date_start"]) && $arrElementData["system_date_start"] > 0) {
+        if (isset($arrElementData["system_date_start"]) && $arrElementData["system_date_start"] > 0) {
             $objStartDate = new class_date($arrElementData["system_date_start"]);
             $bitShow = true;
         }
 
         $objEndDate = null;
-        if(isset($arrElementData["system_date_end"]) && $arrElementData["system_date_end"] > 0) {
+        if (isset($arrElementData["system_date_end"]) && $arrElementData["system_date_end"] > 0) {
             $objEndDate = new class_date($arrElementData["system_date_end"]);
             $bitShow = true;
         }
 
         $strInternalTitle = (isset($arrElementData["page_element_ph_title"]) ? $arrElementData["page_element_ph_title"] : "");
-        if($strInternalTitle != "") {
+        if ($strInternalTitle != "") {
             $bitShow = true;
         }
 
@@ -245,7 +276,7 @@ abstract class class_element_admin extends class_admin_controller implements int
         $strReturn .= $strFormElement;
 
         //Language is placed right here instead as a hidden field
-        if($strMode == "edit") {
+        if ($strMode == "edit") {
             $strReturn .= $this->objToolkit->formInputHidden("page_element_ph_language", $arrElementData["page_element_ph_language"]);
         }
         else {
@@ -259,7 +290,7 @@ abstract class class_element_admin extends class_admin_controller implements int
 
         //An finally the submit Button
         $strEventhandler = "";
-        if($this->getParam("pe") == 1) {
+        if ($this->getParam("pe") == 1) {
             $strReturn .= $this->objToolkit->formInputHidden("peClose", "1");
         }
 
@@ -270,14 +301,14 @@ abstract class class_element_admin extends class_admin_controller implements int
     }
 
 
-
     /**
      * Overwrite this function, if you want to validate passed form-input
      *
      * @return mixed
      * @deprecated
      */
-    public function getRequiredFields() {
+    public function getRequiredFields()
+    {
         return array();
     }
 
@@ -296,39 +327,42 @@ abstract class class_element_admin extends class_admin_controller implements int
      * @return bool
      * @deprecated
      */
-    public function validateForm() {
+    public function validateForm()
+    {
         $arrReturn = array();
 
         $arrFieldsToCheck = $this->getRequiredFields();
 
-        foreach($arrFieldsToCheck as $strFieldname => $strType) {
+        foreach ($arrFieldsToCheck as $strFieldname => $strType) {
 
             //backwards compatibility
-            if($strType == "string")
+            if ($strType == "string") {
                 $strType = "text";
+            }
 
             //backwards compatibility
-            if($strType == "number")
+            if ($strType == "number") {
                 $strType = "numeric";
+            }
 
             $strValue = $this->getParam($strFieldname);
 
-            if($strType == "date") {
+            if ($strType == "date") {
                 $objDate = new class_date("0");
                 $objDate->generateDateFromParams($strFieldname, $this->getAllParams());
                 $strValue = $objDate;
             }
 
             $objValidator = $this->getValidatorInstance($strType);
-            if(!$objValidator->validate($strValue)) {
-                if($this->getLang("required_" . $strFieldname) != "!required_" . $strFieldname . "!") {
-                    $arrReturn[$strFieldname] = $this->getLang("required_" . $strFieldname);
+            if (!$objValidator->validate($strValue)) {
+                if ($this->getLang("required_".$strFieldname) != "!required_".$strFieldname."!") {
+                    $arrReturn[$strFieldname] = $this->getLang("required_".$strFieldname);
                 }
-                else if($this->getLang($strFieldname) != "!" . $strFieldname . "!") {
+                elseif ($this->getLang($strFieldname) != "!".$strFieldname."!") {
                     $arrReturn[$strFieldname] = $this->getLang($strFieldname);
                 }
                 else {
-                    $arrReturn[$strFieldname] = $this->getLang("required_" . $strFieldname);
+                    $arrReturn[$strFieldname] = $this->getLang("required_".$strFieldname);
                 }
 
             }
@@ -343,17 +377,20 @@ abstract class class_element_admin extends class_admin_controller implements int
      * Loads the validator identified by the passed name.
      *
      * @param string $strName
+     *
      * @return interface_validator
      * @throws class_exception
      * @deprecated
      */
-    private function getValidatorInstance($strName) {
+    private function getValidatorInstance($strName)
+    {
         $strClassname = "class_".$strName."_validator";
-        if(class_resourceloader::getInstance()->getPathForFile("/system/validators/".$strClassname.".php")) {
+        if (class_resourceloader::getInstance()->getPathForFile("/system/validators/".$strClassname.".php")) {
             return new $strClassname();
         }
-        else
+        else {
             throw new class_exception("failed to load validator of type ".$strClassname, class_exception::$level_ERROR);
+        }
     }
 
 
@@ -362,15 +399,16 @@ abstract class class_element_admin extends class_admin_controller implements int
      *
      * @return mixed
      */
-    public final function loadElementData() {
+    public final function loadElementData()
+    {
 
         $objAnnotations = new class_reflection($this);
         $arrTargetTables = $objAnnotations->getAnnotationValuesFromClass(class_orm_base::STR_ANNOTATION_TARGETTABLE);
         $strTargetTable = "";
-        if(count($arrTargetTables) != 0) {
+        if (count($arrTargetTables) != 0) {
 
             $arrCachedRow = class_orm_rowcache::getCachedInitRow($this->getSystemid());
-            if($arrCachedRow !== null && !isset($arrCachedRow["content_id"])) {
+            if ($arrCachedRow !== null && !isset($arrCachedRow["content_id"])) {
                 class_orm_rowcache::removeSingleRow($this->getSystemid());
             }
 
@@ -380,19 +418,20 @@ abstract class class_element_admin extends class_admin_controller implements int
             $strTargetTable = _dbprefix_.$arrTables[0];
 
         }
-        else if($this->getArrModule("table") != "")
-            $strTargetTable =  $this->getArrModule("table");
+        elseif ($this->getArrModule("table") != "") {
+            $strTargetTable = $this->getArrModule("table");
+        }
 
         $objORM = new class_orm_objectlist();
         //Element-Table given?
-        if($strTargetTable != "") {
+        if ($strTargetTable != "") {
             $strQuery = "SELECT *
-    					 FROM " . $strTargetTable . ",
-    					 	  " . _dbprefix_ . "element,
-    					 	  " . _dbprefix_ . "page_element,
-    					 	  " . _dbprefix_ . "system_right,
-    					 	  " . _dbprefix_ . "system
-    					 LEFT JOIN " . _dbprefix_ . "system_date
+    					 FROM ".$strTargetTable.",
+    					 	  "._dbprefix_."element,
+    					 	  "._dbprefix_."page_element,
+    					 	  "._dbprefix_."system_right,
+    					 	  "._dbprefix_."system
+    					 LEFT JOIN "._dbprefix_."system_date
     					    ON (system_id = system_date_id)
     					 WHERE element_name = page_element_ph_element
     					   AND page_element_id = content_id
@@ -403,11 +442,11 @@ abstract class class_element_admin extends class_admin_controller implements int
         }
         else {
             $strQuery = "SELECT *
-    					 FROM " . _dbprefix_ . "element,
-    					 	  " . _dbprefix_ . "page_element,
-    					 	  " . _dbprefix_ . "system_right,
-    					 	  " . _dbprefix_ . "system
-    					 LEFT JOIN " . _dbprefix_ . "system_date
+    					 FROM "._dbprefix_."element,
+    					 	  "._dbprefix_."page_element,
+    					 	  "._dbprefix_."system_right,
+    					 	  "._dbprefix_."system
+    					 LEFT JOIN "._dbprefix_."system_date
     					    ON (system_id = system_date_id)
     					 WHERE element_name = page_element_ph_element
     					   AND page_element_id = system_id
@@ -426,17 +465,18 @@ abstract class class_element_admin extends class_admin_controller implements int
      * @throws class_exception
      * @return void
      */
-    public function updateForeignElement() {
+    public function updateForeignElement()
+    {
         $objAnnotations = new class_reflection($this);
         $arrTargetTables = $objAnnotations->getAnnotationValuesFromClass(class_orm_base::STR_ANNOTATION_TARGETTABLE);
-        if(count($arrTargetTables) != 0) {
+        if (count($arrTargetTables) != 0) {
             $objORM = new class_orm_objectupdate($this);
             $objORM->updateStateToDb();
         }
 
         //legacy code
         $strElementTableColumns = $this->getArrModule("tableColumns");
-        if($strElementTableColumns != "") {
+        if ($strElementTableColumns != "") {
 
             //open new tx
             class_carrier::getInstance()->getObjDB()->transactionBegin();
@@ -444,29 +484,29 @@ abstract class class_element_admin extends class_admin_controller implements int
             $arrElementParams = $this->getArrParamData();
 
             $arrTableRows = explode(",", $strElementTableColumns);
-            if(count($arrTableRows) > 0) {
+            if (count($arrTableRows) > 0) {
                 $arrInserts = array();
                 $arrParams = array();
 
-                foreach($arrTableRows as $strTableColumnName) {
+                foreach ($arrTableRows as $strTableColumnName) {
 
                     $strColumnValue = "";
-                    if(isset($arrElementParams[$strTableColumnName])) {
+                    if (isset($arrElementParams[$strTableColumnName])) {
                         $strColumnValue = $arrElementParams[$strTableColumnName];
                     }
 
                     $arrParams[] = $strColumnValue;
-                    $arrInserts[] = " " . class_carrier::getInstance()->getObjDB()->encloseColumnName($strTableColumnName) . " = ? ";
+                    $arrInserts[] = " ".class_carrier::getInstance()->getObjDB()->encloseColumnName($strTableColumnName)." = ? ";
                 }
 
                 $strRowUpdates = implode(", ", $arrInserts);
-                $strUpdateQuery = " UPDATE " . $this->getTable() . " SET "
-                        . $strRowUpdates .
-                        " WHERE content_id= ? ";
+                $strUpdateQuery = " UPDATE ".$this->getTable()." SET "
+                    .$strRowUpdates.
+                    " WHERE content_id= ? ";
 
                 $arrParams[] = $this->getSystemid();
 
-                if(!class_carrier::getInstance()->getObjDB()->_pQuery($strUpdateQuery, $arrParams)) {
+                if (!class_carrier::getInstance()->getObjDB()->_pQuery($strUpdateQuery, $arrParams)) {
                     class_carrier::getInstance()->getObjDB()->transactionRollback();
                 }
                 else {
@@ -480,7 +520,7 @@ abstract class class_element_admin extends class_admin_controller implements int
         else {
             //To remain backwards-compatible:
             //Call the save-method of the element instead or if the element wants to update its data specially
-            if(method_exists($this, "actionSave") && !$this->actionSave($this->getSystemid())) {
+            if (method_exists($this, "actionSave") && !$this->actionSave($this->getSystemid())) {
                 throw new class_exception("Element returned error saving to database!!!", class_exception::$level_ERROR);
             }
         }
@@ -491,10 +531,11 @@ abstract class class_element_admin extends class_admin_controller implements int
      *
      * @return string
      */
-    public function getTable() {
+    public function getTable()
+    {
         $objAnnotations = new class_reflection($this);
         $arrTargetTables = $objAnnotations->getAnnotationValuesFromClass(class_orm_base::STR_ANNOTATION_TARGETTABLE);
-        if(count($arrTargetTables) != 0) {
+        if (count($arrTargetTables) != 0) {
             $arrTable = explode(".", $arrTargetTables[0]);
             return _dbprefix_.$arrTable[0];
         }
@@ -511,7 +552,8 @@ abstract class class_element_admin extends class_admin_controller implements int
      *
      * @return string
      */
-    public function getConfigVal1Name() {
+    public function getConfigVal1Name()
+    {
         return "";
     }
 
@@ -523,7 +565,8 @@ abstract class class_element_admin extends class_admin_controller implements int
      *
      * @return string
      */
-    public function getConfigVal2Name() {
+    public function getConfigVal2Name()
+    {
         return "";
     }
 
@@ -535,7 +578,8 @@ abstract class class_element_admin extends class_admin_controller implements int
      *
      * @return string
      */
-    public function getConfigVal3Name() {
+    public function getConfigVal3Name()
+    {
         return "";
     }
 
@@ -545,14 +589,15 @@ abstract class class_element_admin extends class_admin_controller implements int
      *
      * @return string
      */
-    public function getContentTitle() {
+    public function getContentTitle()
+    {
         $objAnnotations = new class_reflection($this);
-        $arrProperties = $objAnnotations->getPropertiesWithAnnotation(class_element_admin::STR_ANNOTATION_ELEMENTCONTENTTITLE);
-        if(count($arrProperties) > 0) {
+        $arrProperties = $objAnnotations->getPropertiesWithAnnotation(ElementAdmin::STR_ANNOTATION_ELEMENTCONTENTTITLE);
+        if (count($arrProperties) > 0) {
             $this->loadElementData();
             $arrKeys = array_keys($arrProperties);
             $strGetter = $objAnnotations->getGetter($arrKeys[0]);
-            if($strGetter != null) {
+            if ($strGetter != null) {
                 //explicit casts required? could be relevant, depending on the target column type / database system
                 return call_user_func(array($this, $strGetter));
             }
@@ -568,10 +613,11 @@ abstract class class_element_admin extends class_admin_controller implements int
      * @return string
      * @since 3.2.1
      */
-    public function getElementDescription() {
+    public function getElementDescription()
+    {
         $strName = uniSubstr(get_class($this), uniStrlen("class_"), -6);
-        $strDesc = $this->getLang($strName . "_description");
-        if($strDesc == "!" . $strName . "_description!") {
+        $strDesc = $this->getLang($strName."_description");
+        if ($strDesc == "!".$strName."_description!") {
             $strDesc = "";
         }
         return $strDesc;
@@ -585,7 +631,8 @@ abstract class class_element_admin extends class_admin_controller implements int
      * @since 3.2.1
      * @return void
      */
-    public function doAfterSaveToDb() {
+    public function doAfterSaveToDb()
+    {
     }
 
     /**
@@ -595,7 +642,8 @@ abstract class class_element_admin extends class_admin_controller implements int
      * @since 3.4.0
      * @return void
      */
-    public function doBeforeSaveToDb() {
+    public function doBeforeSaveToDb()
+    {
     }
 
     /**
@@ -605,9 +653,11 @@ abstract class class_element_admin extends class_admin_controller implements int
      * need to call this setter in concrete element classes.
      *
      * @param bool $bitDoValidation
+     *
      * @return void
      */
-    public final function setDoValidation($bitDoValidation) {
+    public final function setDoValidation($bitDoValidation)
+    {
         $this->bitDoValidation = $bitDoValidation;
     }
 
@@ -617,12 +667,14 @@ abstract class class_element_admin extends class_admin_controller implements int
      * Using this form-section is usefull for mostly unused settings.
      *
      * @param string $strContent
+     *
      * @return void
      * @since 3.3
      *
      * @todo
      */
-    protected final function addOptionalFormElement($strContent) {
+    protected final function addOptionalFormElement($strContent)
+    {
         $this->strSystemFormElements .= $strContent;
     }
 
@@ -632,7 +684,8 @@ abstract class class_element_admin extends class_admin_controller implements int
      *
      * @return array
      */
-    public function getArrParamData() {
+    public function getArrParamData()
+    {
         return $this->arrParamData;
     }
 
@@ -640,9 +693,11 @@ abstract class class_element_admin extends class_admin_controller implements int
      * Sets the array of parameters passed by the request
      *
      * @param array $arrParamData
+     *
      * @return void
      */
-    public function setArrParamData($arrParamData) {
+    public function setArrParamData($arrParamData)
+    {
         $this->arrParamData = $arrParamData;
     }
 
@@ -658,7 +713,8 @@ abstract class class_element_admin extends class_admin_controller implements int
      * @see getLinkPortalHref()
      * @return mixed
      */
-    public function updateSearchResult(class_search_result $objResult) {
+    public function updateSearchResult(class_search_result $objResult)
+    {
         $objORM = new class_orm_objectlist();
         //load the matching site of the current page-element
         $strQuery = "SELECT page_name, page_id, pageproperties_browsername
@@ -675,7 +731,7 @@ abstract class class_element_admin extends class_admin_controller implements int
 
         $arrPage = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array($this->getSystemid()));
 
-        if(isset($arrPage["page_name"])) {
+        if (isset($arrPage["page_name"])) {
             $objResult->setStrPagelink(class_link::getLinkPortal($arrPage["page_name"], "", "_self", $arrPage["pageproperties_browsername"], "", "&highlight=".urlencode(html_entity_decode($objResult->getObjSearch()->getStrQuery(), ENT_QUOTES, "UTF-8"))));
             $objResult->setStrPagename($arrPage["page_name"]);
         }
@@ -691,7 +747,8 @@ abstract class class_element_admin extends class_admin_controller implements int
      *
      * @return mixed
      */
-    public function getContentLang() {
+    public function getContentLang()
+    {
         $this->loadElementData();
         return $this->arrElementData["page_element_ph_language"];
     }
@@ -703,7 +760,8 @@ abstract class class_element_admin extends class_admin_controller implements int
      * @see getLinkAdminHref()
      * @return mixed
      */
-    public function getSearchAdminLinkForObject() {
+    public function getSearchAdminLinkForObject()
+    {
         //the default, plz
         return "";
     }

@@ -6,7 +6,25 @@
 *-------------------------------------------------------------------------------------------------------*
 *	$Id$								*
 ********************************************************************************************************/
+namespace Kajona\Pages\Portal;
+
+use class_cache;
+use class_carrier;
+use class_exception;
+use class_link;
+use class_module_languages_language;
+use class_module_navigation_point;
+use class_module_system_setting;
+use class_objectfactory;
+use class_orm_base;
+use class_portal_controller;
+use class_reflection;
+use class_scriptlet_helper;
+use interface_scriptlet;
 use Kajona\Pages\Portal\PagesPortaleditor;
+use Kajona\Pages\System\PagesElement;
+use Kajona\Pages\System\PagesPage;
+use Kajona\Pages\System\PagesPageelement;
 use Kajona\Pages\System\PagesPortaleditorActionEnum;
 use Kajona\Pages\System\PagesPortaleditorPlaceholderAction;
 use Kajona\Pages\System\PagesPortaleditorSystemidAction;
@@ -21,21 +39,23 @@ use Kajona\Pages\System\PagesPortaleditorSystemidAction;
  * @module elements
  * @moduleId _pages_elemente_modul_id_
  */
-abstract class class_element_portal extends class_portal_controller {
+abstract class ElementPortal extends class_portal_controller
+{
 
     private $strCacheAddon = "";
 
     /**
-     * @var class_module_pages_pageelement
+     * @var PagesPageelement
      */
     private $objElementData;
 
     /**
      * Constructor
      *
-     * @param class_module_pages_pageelement $objElementData
+     * @param PagesPageelement $objElementData
      */
-    public function __construct($objElementData) {
+    public function __construct($objElementData)
+    {
         parent::__construct();
 
         $this->setSystemid($objElementData->getSystemid());
@@ -54,10 +74,11 @@ abstract class class_element_portal extends class_portal_controller {
      *
      * @return string
      */
-    public function getTable() {
+    public function getTable()
+    {
         $objAnnotations = new class_reflection($this);
         $arrTargetTables = $objAnnotations->getAnnotationValuesFromClass(class_orm_base::STR_ANNOTATION_TARGETTABLE);
-        if(count($arrTargetTables) != 0) {
+        if (count($arrTargetTables) != 0) {
             $arrTable = explode(".", $arrTargetTables[0]);
             return _dbprefix_.$arrTable[0];
         }
@@ -74,16 +95,18 @@ abstract class class_element_portal extends class_portal_controller {
      *
      * @return mixed
      */
-    public function getElementContent($strSystemid) {
+    public function getElementContent($strSystemid)
+    {
         //table given?
-        if($this->getTable() != "") {
+        if ($this->getTable() != "") {
             $strQuery = "SELECT *
     						FROM ".$this->getTable()."
     						WHERE content_id = ? ";
             return class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array($strSystemid));
         }
-        else
+        else {
             return array();
+        }
 
     }
 
@@ -95,7 +118,8 @@ abstract class class_element_portal extends class_portal_controller {
      *
      * @return string
      */
-    private function getElementOutput() {
+    private function getElementOutput()
+    {
         $strReturn = "";
         //load the data from the database
         $this->arrElementData = array_merge($this->getElementContent($this->objElementData->getSystemid()), $this->arrElementData);
@@ -103,19 +127,21 @@ abstract class class_element_portal extends class_portal_controller {
         //wrap all in a try catch block
         try {
 
-            if(class_module_system_setting::getConfigValue("_pages_portaleditor_") == "true" && $this->objSession->isAdmin() && class_carrier::getInstance()->getObjSession()->getSession("pe_disable") != "true") {
+            if (class_module_system_setting::getConfigValue("_pages_portaleditor_") == "true" && $this->objSession->isAdmin() && class_carrier::getInstance()->getObjSession()->getSession("pe_disable") != "true") {
                 //Check needed rights
 
                 $objElement = class_objectfactory::getInstance()->getObject($this->getSystemid());
-                if($objElement->rightEdit()) {
+                if ($objElement->rightEdit()) {
                     $arrConfig = array();
                     $arrConfig["pe_module"] = "";
                     $arrConfig["pe_action"] = "";
 
-                    if($this->getArrModule("pe_module") != "")
+                    if ($this->getArrModule("pe_module") != "") {
                         $arrConfig["pe_module"] = $this->getArrModule("pe_module");
-                    if($this->getArrModule("pe_action") != "")
+                    }
+                    if ($this->getArrModule("pe_action") != "") {
                         $arrConfig["pe_action"] = $this->getArrModule("pe_action");
+                    }
 
                     $strReturn = $this->addPortalEditorCode($this->loadData(), $this->getSystemid(), $arrConfig, $this->arrElementData["page_element_ph_element"]);
                 }
@@ -130,12 +156,13 @@ abstract class class_element_portal extends class_portal_controller {
                 $strReturn = preg_replace('/data-kajona-editable=\"([a-zA-Z0-9#_]*)\"/i', "", $strReturn);
             }
         }
-        catch(class_exception $objEx) {
+        catch (class_exception $objEx) {
             //An error occurred during content generation. redirect to error page
             $objEx->processException();
             //if available, show the error-page. on debugging-environments, the exception processing already die()d the process.
-            if($this->getPagename() != class_module_system_setting::getConfigValue("_pages_errorpage_"))
+            if ($this->getPagename() != class_module_system_setting::getConfigValue("_pages_errorpage_")) {
                 $this->portalReload(class_link::getLinkPortalHref(class_module_system_setting::getConfigValue("_pages_errorpage_")));
+            }
 
             $strReturn = $objEx->getMessage();
         }
@@ -157,15 +184,17 @@ abstract class class_element_portal extends class_portal_controller {
      * In this case, use getElementOutput to load the content.
      *
      * @return string false in case of no matching entry
-     * @see class_element_portal::getElementOutput()
+     * @see ElementPortal::getElementOutput()
      */
-    private function getElementOutputFromCache() {
+    private function getElementOutputFromCache()
+    {
         $strReturn = false;
 
         //load the matching cache-entry
         $objCacheEntry = class_cache::getCachedEntry(__CLASS__, $this->getCacheHash1(), $this->getCacheHash2(), $this->getStrPortalLanguage());
-        if($objCacheEntry != null && $this->onLoadFromCache())
+        if ($objCacheEntry != null && $this->onLoadFromCache()) {
             $strReturn = $objCacheEntry->getStrContent();
+        }
 
         return $strReturn;
     }
@@ -178,7 +207,8 @@ abstract class class_element_portal extends class_portal_controller {
      * @return boolean
      * @since 3.3.1
      */
-    public function onLoadFromCache() {
+    public function onLoadFromCache()
+    {
         return true;
     }
 
@@ -192,7 +222,8 @@ abstract class class_element_portal extends class_portal_controller {
      *
      * @since 3.3.1
      */
-    private function saveElementToCache($strElementOutput) {
+    private function saveElementToCache($strElementOutput)
+    {
 
         //strip the data-editable values - no use case for regular page views
         $strElementOutput = preg_replace('/data-kajona-editable=\"([a-zA-Z0-9#_]*)\"/i', "", $strElementOutput);
@@ -211,12 +242,14 @@ abstract class class_element_portal extends class_portal_controller {
      * @return string
      * @since 3.3.1
      */
-    private function getCacheHash2() {
+    private function getCacheHash2()
+    {
 
         $strGuestId = "";
         //when browsing the site as a guest, drop the userid
-        if($this->objSession->isLoggedin())
+        if ($this->objSession->isLoggedin()) {
             $strGuestId = $this->objSession->getUserID();
+        }
 
         return sha1("".$strGuestId.$this->getAction().$this->strCacheAddon.$this->getParam("pv").$this->getSystemid().$this->getParam("systemid").$this->getParam("highlight"));
     }
@@ -227,13 +260,15 @@ abstract class class_element_portal extends class_portal_controller {
      * @return string
      * @since 3.3.1
      */
-    private function getCacheHash1() {
+    private function getCacheHash1()
+    {
         return $this->getPagename();
     }
 
 
-    private function getPageData() {
-        return class_module_pages_page::getPageByName($this->getPagename());
+    private function getPageData()
+    {
+        return PagesPage::getPageByName($this->getPagename());
     }
 
 
@@ -241,46 +276,49 @@ abstract class class_element_portal extends class_portal_controller {
      * Forces the rendering of the current portal element.
      * Takes care of loading the element from cache or regenerating the element.
      * If enabled, the portal-editor code is rendered, too.
+     *
      * @param bool|false $bitActivePortaleditor
      *
      * @return string
      */
-    public function getRenderedElementOutput($bitActivePortaleditor = false) {
+    public function getRenderedElementOutput($bitActivePortaleditor = false)
+    {
 
-        if(class_module_system_setting::getConfigValue("_pages_cacheenabled_") == "true" && $this->getParam("preview") != "1" && $this->getPageData()->getStrName() != class_module_system_setting::getConfigValue("_pages_errorpage_")) {
+        if (class_module_system_setting::getConfigValue("_pages_cacheenabled_") == "true" && $this->getParam("preview") != "1" && $this->getPageData()->getStrName() != class_module_system_setting::getConfigValue("_pages_errorpage_")) {
             $strElementOutput = "";
             //if the portaleditor is disabled, do the regular cache lookups in storage. otherwise regenerate again and again :)
-            if($bitActivePortaleditor) {
+            if ($bitActivePortaleditor) {
                 $strElementOutput = $this->getElementOutput();
             }
             else {
                 //pe not to be taken into account --> full support of caching
                 $strElementOutput = $this->getElementOutputFromCache();
 
-                if($strElementOutput === false) {
+                if ($strElementOutput === false) {
                     $strElementOutput = $this->getElementOutput();
                     $this->saveElementToCache($strElementOutput);
                 }
             }
 
         }
-        else
+        else {
             $strElementOutput = $this->getElementOutput();
+        }
 
 
-        $objBaseElement = new class_module_pages_pageelement($this->getSystemid());
+        $objBaseElement = new PagesPageelement($this->getSystemid());
 
 
-        if($bitActivePortaleditor) {
+        if ($bitActivePortaleditor) {
             $this->getPortalEditorActions();
         }
 
         //if element is disabled & the pe is requested, wrap the content
-        if($bitActivePortaleditor && $objBaseElement->getIntRecordStatus() == 0) {
+        if ($bitActivePortaleditor && $objBaseElement->getIntRecordStatus() == 0) {
             $arrPeElement = array();
             $arrPeElement["title"] = $this->getLang("pe_inactiveElement", "pages")." (".$objBaseElement->getStrElement().")";
             $strElementOutput = $this->objToolkit->getPeInactiveElement($arrPeElement);
-            $strElementOutput = class_element_portal::addPortalEditorSetActiveCode($strElementOutput, $this->getSystemid(), array());
+            $strElementOutput = ElementPortal::addPortalEditorSetActiveCode($strElementOutput, $this->getSystemid(), array());
         }
 
 
@@ -294,8 +332,8 @@ abstract class class_element_portal extends class_portal_controller {
     public function getPortalEditorActions()
     {
 
-        $objPageelement = new class_module_pages_pageelement($this->getSystemid());
-        if(!$objPageelement->rightEdit() ) {
+        $objPageelement = new PagesPageelement($this->getSystemid());
+        if (!$objPageelement->rightEdit()) {
             return;
         }
 
@@ -318,7 +356,7 @@ abstract class class_element_portal extends class_portal_controller {
         );
 
 
-        if($objPageelement->getIntRecordStatus() == 1) {
+        if ($objPageelement->getIntRecordStatus() == 1) {
             PagesPortaleditor::getInstance()->registerAction(
                 new PagesPortaleditorSystemidAction(PagesPortaleditorActionEnum::SETINACTIVE(), class_link::getLinkAdminHref("pages_content", "elementStatus", "&systemid={$this->getSystemid()}&language={$strAdminLangParam}&pe=1"), $this->getSystemid())
             );
@@ -338,17 +376,17 @@ abstract class class_element_portal extends class_portal_controller {
      * Registers new-entry actions for a given placeholder
      *
      * @param $bitElementIsExistingAtPlaceholder
-     * @param class_module_pages_element $objElement
+     * @param PagesElement $objElement
      * @param $strPlaceholder
      *
      */
-    public function getPortaleditorPlaceholderActions($bitElementIsExistingAtPlaceholder, class_module_pages_element $objElement, $strPlaceholder)
+    public function getPortaleditorPlaceholderActions($bitElementIsExistingAtPlaceholder, PagesElement $objElement, $strPlaceholder)
     {
         //fetch the language to set the correct admin-lang
         $objLanguages = new class_module_languages_language();
         $strAdminLangParam = $objLanguages->getPortalLanguage();
 
-        if($objElement->getIntRepeat() == 1 || !$bitElementIsExistingAtPlaceholder) {
+        if ($objElement->getIntRepeat() == 1 || !$bitElementIsExistingAtPlaceholder) {
             PagesPortaleditor::getInstance()->registerAction(
                 new PagesPortaleditorPlaceholderAction(PagesPortaleditorActionEnum::CREATE(), class_link::getLinkAdminHref("pages_content", "new", "&systemid={$this->getSystemid()}&language={$strAdminLangParam}&placeholder={$strPlaceholder}&element={$objElement->getStrName()}&pe=1"), $strPlaceholder, $objElement->getStrName())
             );
@@ -372,18 +410,22 @@ abstract class class_element_portal extends class_portal_controller {
      *
      * @todo remove completely
      */
-    public static function addPortalEditorCode($strContent, $strSystemid, $arrConfig, $strElement = "") {
+    public static function addPortalEditorCode($strContent, $strSystemid, $arrConfig, $strElement = "")
+    {
         $strReturn = "";
 
-        if(!validateSystemid($strSystemid))
+        if (!validateSystemid($strSystemid)) {
             return $strContent;
+        }
 
         $objInstance = class_objectfactory::getInstance()->getObject($strSystemid);
-        if($objInstance == null || class_module_system_setting::getConfigValue("_pages_portaleditor_") != "true")
+        if ($objInstance == null || class_module_system_setting::getConfigValue("_pages_portaleditor_") != "true") {
             return $strContent;
+        }
 
-        if(!class_carrier::getInstance()->getObjSession()->isAdmin() || !$objInstance->rightEdit($strSystemid) || class_carrier::getInstance()->getObjSession()->getSession("pe_disable") == "true")
+        if (!class_carrier::getInstance()->getObjSession()->isAdmin() || !$objInstance->rightEdit($strSystemid) || class_carrier::getInstance()->getObjSession()->getSession("pe_disable") == "true") {
             return $strContent;
+        }
 
 
         //switch the text-language temporary
@@ -399,7 +441,7 @@ abstract class class_element_portal extends class_portal_controller {
         $strAction = "edit";
         //param-inits ---------------------------------------
         //Generate url to the admin-area
-        if($arrConfig["pe_module"] != "") {
+        if ($arrConfig["pe_module"] != "") {
             $strModule = $arrConfig["pe_module"];
         }
         //---------------------------------------------------
@@ -408,9 +450,9 @@ abstract class class_element_portal extends class_portal_controller {
         //---------------------------------------------------
         //Link to create a new entry - only for modules, so not the page-content directly!
         $strNewLink = "";
-        if($strModule != "pages_content") {
+        if ($strModule != "pages_content") {
             //Use Module-config to generate link
-            if(isset($arrConfig["pe_action_new"]) && $arrConfig["pe_action_new"] != "") {
+            if (isset($arrConfig["pe_action_new"]) && $arrConfig["pe_action_new"] != "") {
                 $strNewUrl = class_link::getLinkAdminHref($strModule, $arrConfig["pe_action_new"], $arrConfig["pe_action_new_params"].$strAdminLangParam."&pe=1");
                 $strNewLink = "<a href=\"#\" onclick=\"KAJONA.admin.portaleditor.openDialog('".$strNewUrl."'); return false;\">".class_carrier::getInstance()->getObjLang()->getLang("pe_new_old", "pages")."</a>";
             }
@@ -421,12 +463,12 @@ abstract class class_element_portal extends class_portal_controller {
         //Link to edit current element
         $strEditLink = "";
         //standard: pages_content.
-        if($strModule == "pages_content") {
+        if ($strModule == "pages_content") {
             $arrConfig["pe_action_edit"] = $strAction;
             $arrConfig["pe_action_edit_params"] = "&systemid=".$strSystemid;
         }
         //Use Module-config to generate link
-        if(isset($arrConfig["pe_action_edit"]) && $arrConfig["pe_action_edit"] != "") {
+        if (isset($arrConfig["pe_action_edit"]) && $arrConfig["pe_action_edit"] != "") {
             $strEditUrl = class_link::getLinkAdminHref($strModule, $arrConfig["pe_action_edit"], $arrConfig["pe_action_edit_params"].$strAdminLangParam."&pe=1");
             $strEditLink = "<a href=\"#\" onclick=\"KAJONA.admin.portaleditor.openDialog('".$strEditUrl."'); return false;\">".class_carrier::getInstance()->getObjLang()->getLang("pe_edit", "pages")."</a>";
         }
@@ -435,12 +477,12 @@ abstract class class_element_portal extends class_portal_controller {
         //link to copy an element to the same or another placeholder
         $strCopyLink = "";
         //standard: pages_content.
-        if($strModule == "pages_content") {
+        if ($strModule == "pages_content") {
             $arrConfig["pe_action_copy"] = "copyElement";
             $arrConfig["pe_action_copy_params"] = "&systemid=".$strSystemid;
         }
         //Use Module-config to generate link
-        if(isset($arrConfig["pe_action_copy"]) && $arrConfig["pe_action_copy"] != "") {
+        if (isset($arrConfig["pe_action_copy"]) && $arrConfig["pe_action_copy"] != "") {
             $strCopyUrl = class_link::getLinkAdminHref($strModule, $arrConfig["pe_action_copy"], $arrConfig["pe_action_copy_params"].$strAdminLangParam."&pe=1");
             $strCopyLink = "<a href=\"#\" onclick=\"KAJONA.admin.portaleditor.openDialog('".$strCopyUrl."'); return false;\">".class_carrier::getInstance()->getObjLang()->getLang("pe_copy", "pages")."</a>";
         }
@@ -448,21 +490,21 @@ abstract class class_element_portal extends class_portal_controller {
         //---------------------------------------------------
         //link to delete the current element
         $strDeleteLink = "";
-        if($objInstance->rightDelete()) {
+        if ($objInstance->rightDelete()) {
 
             //standard: pages_content.
-            if($strModule == "pages_content") {
+            if ($strModule == "pages_content") {
                 $arrConfig["pe_action_delete"] = "deleteElementFinal";
                 $arrConfig["pe_action_edit_params"] = "&systemid=".$strSystemid;
 
                 $strCallback = " function() { delDialog.hide(); KAJONA.admin.portaleditor.deleteElementData('$strSystemid'); return false; } ";
             }
-            else if(isset($arrConfig["pe_action_delete"]) && $arrConfig["pe_action_delete"] != "") {
+            elseif (isset($arrConfig["pe_action_delete"]) && $arrConfig["pe_action_delete"] != "") {
                 $strDeleteUrl = class_link::getLinkAdminHref($strModule, $arrConfig["pe_action_delete"], $arrConfig["pe_action_edit_params"].$strAdminLangParam."&pe=1");
                 $strCallback = " function() { delDialog.hide(); KAJONA.admin.portaleditor.openDialog('$strDeleteUrl'); return false; } ";
             }
 
-            if(isset($arrConfig["pe_action_delete"]) && $arrConfig["pe_action_delete"] != "") {
+            if (isset($arrConfig["pe_action_delete"]) && $arrConfig["pe_action_delete"] != "") {
                 $strElementName = uniStrReplace(array('\''), array('\\\''), $objInstance->getStrDisplayName());
                 $strQuestion = uniStrReplace("%%element_name%%", htmlToString($strElementName, true), class_carrier::getInstance()->getObjLang()->getLang("commons_delete_record_question", "system"));
 
@@ -478,7 +520,7 @@ abstract class class_element_portal extends class_portal_controller {
         //link to drag n drop element
         //TODO: check if there are more than one elements in current placeholder before showing shift buttons
         $strMoveHandle = "";
-        if($strModule == "pages_content") {
+        if ($strModule == "pages_content") {
             $strMoveHandle = "<i href=\"#\" class=\"moveHandle fa fa-arrows\" title=\"".class_carrier::getInstance()->getObjLang()->getLang("pe_move", "pages")."\" rel=\"tooltip\"></i>";
         }
 
@@ -486,12 +528,12 @@ abstract class class_element_portal extends class_portal_controller {
         //link to set element inactive
         $strSetInactiveLink = "";
         //standard: pages_content.
-        if($strModule == "pages_content") {
+        if ($strModule == "pages_content") {
             $arrConfig["pe_action_setStatus"] = "elementStatus";
             $arrConfig["pe_action_setStatus_params"] = "&systemid=".$strSystemid;
         }
         //Use Module-config to generate link
-        if(isset($arrConfig["pe_action_setStatus"]) && $arrConfig["pe_action_setStatus"] != "") {
+        if (isset($arrConfig["pe_action_setStatus"]) && $arrConfig["pe_action_setStatus"] != "") {
             $strSetInactiveUrl = class_link::getLinkAdminHref($strModule, $arrConfig["pe_action_setStatus"], $arrConfig["pe_action_setStatus_params"].$strAdminLangParam."&pe=1");
             $strSetInactiveLink = "<a href=\"#\" onclick=\"KAJONA.admin.portaleditor.openDialog('".$strSetInactiveUrl."'); return false;\">".class_carrier::getInstance()->getObjLang()->getLang("pe_setinactive", "pages")."</a>";
         }
@@ -510,12 +552,13 @@ abstract class class_element_portal extends class_portal_controller {
     }
 
 
-    public static function addPortalEditorSetActiveCode($strContent, $strSystemid, $arrConfig) {
+    public static function addPortalEditorSetActiveCode($strContent, $strSystemid, $arrConfig)
+    {
         $strReturn = "";
 
-        if(class_module_system_setting::getConfigValue("_pages_portaleditor_") == "true" && class_carrier::getInstance()->getObjRights()->rightEdit($strSystemid) && class_carrier::getInstance()->getObjSession()->isAdmin()) {
+        if (class_module_system_setting::getConfigValue("_pages_portaleditor_") == "true" && class_carrier::getInstance()->getObjRights()->rightEdit($strSystemid) && class_carrier::getInstance()->getObjSession()->isAdmin()) {
 
-            if(class_carrier::getInstance()->getObjSession()->getSession("pe_disable") != "true") {
+            if (class_carrier::getInstance()->getObjSession()->getSession("pe_disable") != "true") {
 
                 //switch the text-language temporary
                 $strPortalLanguage = class_carrier::getInstance()->getObjLang()->getStrTextLanguage();
@@ -529,7 +572,7 @@ abstract class class_element_portal extends class_portal_controller {
                 $strModule = "pages_content";
                 //param-inits ---------------------------------------
                 //Generate url to the admin-area
-                if(isset($arrConfig["pe_module"]) && $arrConfig["pe_module"] != "") {
+                if (isset($arrConfig["pe_module"]) && $arrConfig["pe_module"] != "") {
                     $strModule = $arrConfig["pe_module"];
                 }
                 //---------------------------------------------------
@@ -539,13 +582,13 @@ abstract class class_element_portal extends class_portal_controller {
                 //link to set element active
                 $strSetActiveLink = "";
                 //standard: pages_content.
-                if($strModule == "pages_content") {
+                if ($strModule == "pages_content") {
                     $strSetActiveUrl = class_link::getLinkAdminHref("pages_content", "elementStatus", "&systemid=".$strSystemid.$strAdminLangParam."&pe=1");
                     $strSetActiveLink = "<a href=\"#\" onclick=\"KAJONA.admin.portaleditor.openDialog('".$strSetActiveUrl."'); return false;\">".class_carrier::getInstance()->getObjLang()->getLang("pe_setactive", "pages")."</a>";
                 }
                 else {
                     //Use Module-config to generate link
-                    if(isset($arrConfig["pe_action_setStatus"]) && $arrConfig["pe_action_setStatus"] != "") {
+                    if (isset($arrConfig["pe_action_setStatus"]) && $arrConfig["pe_action_setStatus"] != "") {
                         $strSetActiveUrl = class_link::getLinkAdminHref($strModule, $arrConfig["pe_action_setStatus"], $arrConfig["pe_action_setStatus_params"].$strAdminLangParam."&pe=1");
                         $strSetActiveLink = "<a href=\"#\" onclick=\"KAJONA.admin.portaleditor.openDialog('".$strSetActiveUrl."'); return false;\">".class_carrier::getInstance()->getObjLang()->getLang("pe_setactive", "pages")."</a>";
                     }
@@ -559,11 +602,13 @@ abstract class class_element_portal extends class_portal_controller {
                 //reset the portal texts language
                 class_carrier::getInstance()->getObjLang()->setStrTextLanguage($strPortalLanguage);
             }
-            else
+            else {
                 $strReturn = $strContent;
+            }
         }
-        else
+        else {
             $strReturn = $strContent;
+        }
         return $strReturn;
     }
 
@@ -572,14 +617,15 @@ abstract class class_element_portal extends class_portal_controller {
      *
      * @param string $strSystemid
      * @param string $strPlaceholder
-     * @param class_module_pages_element $objElement
+     * @param PagesElement $objElement
      *
      * @return string
      * @static
      */
-    public static function getPortaleditorNewCode($strSystemid, $strPlaceholder, class_module_pages_element $objElement) {
+    public static function getPortaleditorNewCode($strSystemid, $strPlaceholder, PagesElement $objElement)
+    {
         $strReturn = "";
-        if(class_carrier::getInstance()->getObjRights()->rightEdit($strSystemid) && class_carrier::getInstance()->getObjSession()->isAdmin()) {
+        if (class_carrier::getInstance()->getObjRights()->rightEdit($strSystemid) && class_carrier::getInstance()->getObjSession()->isAdmin()) {
             //switch the text-language temporary
             $strPortalLanguage = class_carrier::getInstance()->getObjLang()->getStrTextLanguage();
             class_carrier::getInstance()->getObjLang()->setStrTextLanguage(class_carrier::getInstance()->getObjSession()->getAdminLanguage());
@@ -607,7 +653,8 @@ abstract class class_element_portal extends class_portal_controller {
      * @return string
      * @static
      */
-    public static function getPortaleditorNewWrapperCode($strPlaceholder, $strContentElements) {
+    public static function getPortaleditorNewWrapperCode($strPlaceholder, $strContentElements)
+    {
         $strPlaceholderClean = uniSubstr($strPlaceholder, 0, uniStrpos($strPlaceholder, "_"));
 
         //switch the text-language temporary
@@ -627,7 +674,8 @@ abstract class class_element_portal extends class_portal_controller {
      *
      * @return string
      */
-    protected function loadData() {
+    protected function loadData()
+    {
         return "Element needs to overwrite loadData()!";
     }
 
@@ -637,7 +685,8 @@ abstract class class_element_portal extends class_portal_controller {
      *
      * @return string
      */
-    protected function getAnchorTag() {
+    protected function getAnchorTag()
+    {
         return "<a name=\"".$this->getSystemid()."\" class=\"hiddenAnchor\"></a>";
     }
 
@@ -648,7 +697,8 @@ abstract class class_element_portal extends class_portal_controller {
      *
      * @param string $strCacheAddon
      */
-    public function setStrCacheAddon($strCacheAddon) {
+    public function setStrCacheAddon($strCacheAddon)
+    {
         $this->strCacheAddon .= $strCacheAddon;
     }
 
@@ -660,7 +710,8 @@ abstract class class_element_portal extends class_portal_controller {
      *
      * @return bool
      */
-    public static function providesNavigationEntries() {
+    public static function providesNavigationEntries()
+    {
         return false;
     }
 
@@ -690,14 +741,16 @@ abstract class class_element_portal extends class_portal_controller {
      * @return array|class_module_navigation_point[]|bool
      * @since 4.0
      */
-    public function getNavigationEntries() {
+    public function getNavigationEntries()
+    {
         return false;
     }
 
     /**
      * @return \class_module_pages_pageelement
      */
-    public function getObjElementData() {
+    public function getObjElementData()
+    {
         return $this->objElementData;
     }
 
