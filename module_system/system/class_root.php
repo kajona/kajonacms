@@ -603,7 +603,11 @@ abstract class class_root {
             if($strPrevId === false || $strPrevId === "" || $strPrevId === null) {
                 //try to find the current modules-one
                 if(isset($this->arrModule["modul"])) {
-                    $strPrevId = class_module_system_module::getModuleByName($this->getArrModule("modul"), true)->getSystemid();
+                    $objModule = class_module_system_module::getModuleByName($this->getArrModule("modul"), true);
+                    if($objModule == null) {
+                        throw new class_exception("failed to load module ".$this->getArrModule("modul")."@".get_class($this), class_exception::$level_FATALERROR);
+                    }
+                    $strPrevId = $objModule->getSystemid();
                     if(!validateSystemid($strPrevId))
                         throw new class_exception("automatic determination of module-id failed ", class_exception::$level_FATALERROR);
                 }
