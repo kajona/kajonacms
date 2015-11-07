@@ -11,34 +11,38 @@ class class_test_generalModelTest extends class_testbase {
 
         class_carrier::getInstance()->getObjRights()->setBitTestMode(true);
 
-        $arrFiles = class_resourceloader::getInstance()->getFolderContent("/system", array(".php"), false, function($strOneFile) {
-            if(uniStripos($strOneFile, "class_module_") !== false) {
-                $objClass = new ReflectionClass(uniSubstr($strOneFile, 0, -4));
-                if(!$objClass->isAbstract() && $objClass->isSubclassOf("class_model")) {
+        $arrFiles = class_resourceloader::getInstance()->getFolderContent("/system", array(".php"), false, function($strName) { return true; },
+        function(&$strOneFile, $strFilename) {
 
-                    $objAnnotations = new class_reflection(uniSubstr($strOneFile, 0, -4));
+            $objInstance = class_classloader::getInstance()->getInstanceFromFilename($strFilename, "class_model");
 
-                    //block from autotesting?
-                    if($objAnnotations->hasClassAnnotation("@blockFromAutosave")) {
-                        echo "skipping class ".uniSubstr($strOneFile, 0, -4)." due to @blockFromAutosave annotation"."\n";
-                        return false;
-                    }
-
-                    return true;
-                }
+            if($objInstance == null) {
+                return;
             }
 
-            return false;
-        },
-        function(&$strOneFile) {
-            $strOneFile = uniSubstr($strOneFile, 0, -4);
-            $strOneFile = new $strOneFile();
+            $objClass = new ReflectionClass($objInstance);
+
+            $objAnnotations = new class_reflection($objInstance);
+
+            //block from autotesting?
+            if($objAnnotations->hasClassAnnotation("@blockFromAutosave")) {
+                echo "skipping class ".uniSubstr($strOneFile, 0, -4)." due to @blockFromAutosave annotation"."\n";
+                return;
+            }
+
+            $strOneFile = $objClass->newInstance();
+
         });
 
         $arrSystemids = array();
 
         /** @var $objOneInstance class_model */
         foreach($arrFiles as $objOneInstance) {
+
+            if(!is_object($objOneInstance)) {
+                continue;
+            }
+
             echo "testing object of type ".get_class($objOneInstance)."@".$objOneInstance->getSystemid()."\n";
             $this->assertTrue($objOneInstance->updateObjectToDb(), "saving object ".get_class($objOneInstance));
             $arrSystemids[$objOneInstance->getSystemid()] = get_class($objOneInstance);

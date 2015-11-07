@@ -336,6 +336,35 @@ class class_classloader
     }
 
     /**
+     * Creates a new instance of an object based on the filename
+     *
+     * @param $strFilename
+     * @param null $strBaseclass an optional filter-restriction based on a base class
+     *
+     * @return null|object
+     */
+    public function getInstanceFromFilename($strFilename, $strBaseclass = null)
+    {
+        include_once _realpath_.$strFilename;
+        $strClassname = uniSubstr(basename($strFilename), 0, -4);
+        //fetch the namespace
+        $strResolvedClassname = null;
+        foreach(get_declared_classes() as $strOneClass) {
+            if(uniStrpos($strOneClass, $strClassname) !== false)
+                $strResolvedClassname = $strOneClass;
+        }
+
+        if($strResolvedClassname != null) {
+            $objReflection = new ReflectionClass($strResolvedClassname);
+            if($objReflection->isInstantiable() && ($strBaseclass == null || $objReflection->isSubclassOf($strBaseclass))) {
+                return $objReflection->newInstance();
+            }
+        }
+
+        return null;
+    }
+
+    /**
      * Returns the list of modules indexed by the classloader, so residing under /core
      *
      * @return string[]
