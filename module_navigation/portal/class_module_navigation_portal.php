@@ -46,8 +46,8 @@ class class_module_navigation_portal extends class_portal_controller implements 
      *
      * @param array $arrElementData
      */
-    public function __construct($arrElementData) {
-        parent::__construct($arrElementData);
+    public function __construct($arrElementData = array(), $strSystemid = "") {
+        parent::__construct($arrElementData, $strSystemid);
 
         //Determine the current site to load
         $this->strCurrentSite = $this->getPagename();
