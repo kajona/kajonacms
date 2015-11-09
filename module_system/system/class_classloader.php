@@ -345,18 +345,29 @@ class class_classloader
      */
     public function getInstanceFromFilename($strFilename, $strBaseclass = null)
     {
-        include_once _realpath_.$strFilename;
-        $strClassname = uniSubstr(basename($strFilename), 0, -4);
-        //fetch the namespace
+        include_once _realpath_ . $strFilename;
+
         $strResolvedClassname = null;
-        foreach(get_declared_classes() as $strOneClass) {
-            if(uniStrpos($strOneClass, $strClassname) !== false)
-                $strResolvedClassname = $strOneClass;
+        $strClassname = uniSubstr(basename($strFilename), 0, -4);
+
+        if (class_exists($strClassname)) {
+            $strResolvedClassname = $strClassname;
+        } else {
+            $strSource = file_get_contents(_realpath_ . $strFilename);
+            preg_match('/namespace ([a-zA-Z0-9_\x7f-\xff\\\\]+);/', $strSource, $arrMatches);
+
+            $strNamespace = isset($arrMatches[1]) ? $arrMatches[1] : null;
+            if (!empty($strNamespace)) {
+                $strClassname = $strNamespace . "\\" . $strClassname;
+                if (class_exists($strClassname)) {
+                    $strResolvedClassname = $strClassname;
+                }
+            }
         }
 
-        if($strResolvedClassname != null) {
+        if ($strResolvedClassname != null) {
             $objReflection = new ReflectionClass($strResolvedClassname);
-            if($objReflection->isInstantiable() && ($strBaseclass == null || $objReflection->isSubclassOf($strBaseclass))) {
+            if ($objReflection->isInstantiable() && ($strBaseclass == null || $objReflection->isSubclassOf($strBaseclass))) {
                 return $objReflection->newInstance();
             }
         }
