@@ -5,12 +5,22 @@
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 ********************************************************************************************************/
 
+
+namespace Kajona\Ldap\System\Workflows;
+
+use class_carrier;
+use class_date;
+use class_module_workflows_workflow;
+use class_usersources_source_ldap;
+use interface_workflows_handler;
+
+
 /**
  * triggers the internal sync of the ldap-userbase
  *
  * @package module_ldap
  */
-class class_workflow_ldap_sync implements interface_workflows_handler  {
+class WorkflowLdapSync implements interface_workflows_handler {
 
     private $intIntervalHours = 24;
     

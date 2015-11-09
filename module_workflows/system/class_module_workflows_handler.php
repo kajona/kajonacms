@@ -142,15 +142,15 @@ class class_module_workflows_handler extends class_model implements interface_mo
     public static function synchronizeHandlerList() {
         //load the list of handlers in the filesystem
         $arrFiles = class_resourceloader::getInstance()->getFolderContent("/system/workflows", array(".php"));
-        foreach($arrFiles as $strOneFile) {
-            $strClassname = uniStrReplace(".php", "", $strOneFile);
-            $objReflection = new ReflectionClass($strClassname);
+        foreach($arrFiles as $strPath => $strOneFile) {
 
-            if(!$objReflection->isAbstract()) {
-                $objWorkflow = class_module_workflows_handler::getHandlerByClass($strClassname);
+            $objInstance = class_classloader::getInstance()->getInstanceFromFilename($strPath, null, "interface_workflows_handler");
+            if($objInstance !== null) {
+                $objWorkflow = class_module_workflows_handler::getHandlerByClass(get_class($objInstance));
+
                 if($objWorkflow == null) {
                     $objWorkflow = new class_module_workflows_handler();
-                    $objWorkflow->setStrHandlerClass($strClassname);
+                    $objWorkflow->setStrHandlerClass(get_class($objInstance));
 
                     $arrDefault = $objWorkflow->getObjInstanceOfHandler()->getDefaultValues();
                     if(isset($arrDefault[0]))   $objWorkflow->setStrConfigVal1($arrDefault[0]);
@@ -166,7 +166,12 @@ class class_module_workflows_handler extends class_model implements interface_mo
         $arrWorkflows = self::getObjectList();
         /** @var class_module_workflows_handler $objOneWorkflow */
         foreach($arrWorkflows as $objOneWorkflow) {
-            if(!in_array($objOneWorkflow->getStrHandlerClass().".php", $arrFiles))
+
+            $strClassname = $objOneWorkflow->getStrHandlerClass();
+            if(uniStrrpos($objOneWorkflow->getStrHandlerClass(), "\\") > 0)
+                $strClassname = uniSubstr($objOneWorkflow->getStrHandlerClass(), uniStrrpos($objOneWorkflow->getStrHandlerClass(), "\\")+1);
+
+            if(!in_array($strClassname.".php", $arrFiles))
                 $objOneWorkflow->deleteObjectFromDatabase();
         }
     }
@@ -178,7 +183,11 @@ class class_module_workflows_handler extends class_model implements interface_mo
      */
     public function getObjInstanceOfHandler() {
 
-        if($this->getStrHandlerClass() != "" && class_resourceloader::getInstance()->getPathForFile("/system/workflows/".$this->getStrHandlerClass().".php") !== false) {
+        $strClassname = $this->getStrHandlerClass();
+        if(uniStrrpos($this->getStrHandlerClass(), "\\") > 0)
+            $strClassname = uniSubstr($this->getStrHandlerClass(), uniStrrpos($this->getStrHandlerClass(), "\\")+1);
+
+        if($this->getStrHandlerClass() != "" && class_resourceloader::getInstance()->getPathForFile("/system/workflows/".$strClassname.".php") !== false) {
             $strClassname = uniStrReplace(".php", "", $this->getStrHandlerClass());
             $objReflection = new ReflectionClass($strClassname);
 

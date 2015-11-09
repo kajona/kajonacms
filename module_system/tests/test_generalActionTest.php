@@ -12,23 +12,14 @@ class class_test_generalActionTest extends class_testbase  {
         class_carrier::getInstance()->getObjRights()->setBitTestMode(true);
 
         //load all admin-classes
-        $arrFiles = class_resourceloader::getInstance()->getFolderContent("/admin", array(".php"), false, function($strOneFile) {
-            if(preg_match("/class_module_(.*)_admin.php/i", $strOneFile)) {
-                $strClassname = uniSubstr($strOneFile, 0, -4);
-                $objReflection = new ReflectionClass($strClassname);
-                if(!$objReflection->isAbstract()) {
-                    return true;
-                }
-            }
-            return false;
-        },
-        function(&$strOneFile) {
-            $strOneFile = uniSubstr($strOneFile, 0, -4);
-            $strOneFile = new $strOneFile();
+        $arrFiles = class_resourceloader::getInstance()->getFolderContent("/admin", array(".php"), false, null,
+        function(&$strOneFile, $strPath) {
+            $strOneFile = class_classloader::getInstance()->getInstanceFromFilename($strPath, "class_admin_controller");
         });
 
         foreach($arrFiles as $objAdminInstance) {
-            $this->runSingleFile($objAdminInstance);
+            if($objAdminInstance !== null)
+                $this->runSingleFile($objAdminInstance);
         }
 
         class_carrier::getInstance()->getObjRights()->setBitTestMode(false);
@@ -53,13 +44,13 @@ class class_test_generalActionTest extends class_testbase  {
             }
             return false;
         },
-        function(&$strOneFile) {
-            $strOneFile = uniSubstr($strOneFile, 0, -4);
-            $strOneFile = new $strOneFile(array());
+        function(&$strOneFile, $strPath) {
+            $strOneFile = class_classloader::getInstance()->getInstanceFromFilename($strPath, "class_portal_controller");
         });
 
         foreach($arrFiles as $objPortalInstance) {
-            $this->runSingleFile($objPortalInstance);
+            if($objPortalInstance !== null)
+                $this->runSingleFile($objPortalInstance);
         }
 
         class_carrier::getInstance()->getObjRights()->setBitTestMode(false);

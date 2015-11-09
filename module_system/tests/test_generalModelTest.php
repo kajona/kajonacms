@@ -11,7 +11,7 @@ class class_test_generalModelTest extends class_testbase {
 
         class_carrier::getInstance()->getObjRights()->setBitTestMode(true);
 
-        $arrFiles = class_resourceloader::getInstance()->getFolderContent("/system", array(".php"), false, function($strName) { return true; },
+        $arrFiles = class_resourceloader::getInstance()->getFolderContent("/system", array(".php"), false, null,
         function(&$strOneFile, $strFilename) {
 
             $objInstance = class_classloader::getInstance()->getInstanceFromFilename($strFilename, "class_model");
