@@ -77,16 +77,10 @@ class class_module_dashboard_widget extends class_model implements interface_mod
      */
     public static function getListOfWidgetsAvailable() {
 
-        return class_resourceloader::getInstance()->getFolderContent("/admin/widgets/", array(".php"), false, function($strFilename, $strPath) {
+        $arrWidgets = class_resourceloader::getInstance()->getFolderContent("/admin/widgets/", array(".php"), false, function($strFilename) {
             if($strFilename != "interface_adminwidget.php" && $strFilename != "class_adminwidget.php") {
-
-                $objInstance = class_classloader::getInstance()->getInstanceFromFilename($strPath);
-
-                if($objInstance instanceof interface_adminwidget) {
-                    return true;
-                }
+                return true;
             }
-
             return false;
         },
         function(&$strFilename, $strPath) {
@@ -95,7 +89,12 @@ class class_module_dashboard_widget extends class_model implements interface_mod
             if($objInstance instanceof interface_adminwidget) {
                 $strFilename = get_class($objInstance);
             }
+            else {
+                $strFilename = null;
+            }
         });
+
+        return array_filter($arrWidgets, function($objEntry) { return $objEntry != null; });
     }
 
 

@@ -404,7 +404,7 @@ class class_resourceloader
         }
 
         if ($objFilterCallback !== null) {
-            $arrTemp = array_filter($arrTemp, $objFilterCallback, ARRAY_FILTER_USE_BOTH);
+            $arrTemp = array_filter($arrTemp, $objFilterCallback);
         }
 
         if ($objWalkCallback !== null) {
