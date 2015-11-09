@@ -54,12 +54,18 @@ class class_pluginmanager {
             $arrClasses = class_resourceloader::getInstance()->getFolderContent($this->strSearchPath, array(".php"), false, null,
             function(&$strOneFile, $strPath) use ($strPluginPoint, $arrConstructorArguments) {
 
-                $objInstance = class_classloader::getInstance()->getInstanceFromFilename($strPath, null, "interface_generic_plugin", $arrConstructorArguments);
+                $strClassname = class_classloader::getInstance()->getClassnameFromFilename($strPath);
 
-                if($objInstance != null) {
+                if($strClassname == null) {
+                    $strOneFile = null;
+                    return;
+                }
 
-                    if($objInstance->getExtensionName() == $strPluginPoint) {
-                        $strOneFile = get_class($objInstance);
+                $objReflection = new ReflectionClass($strClassname);
+
+                if($objReflection->isInstantiable() && $objReflection->implementsInterface("interface_generic_plugin")) {
+                    if($objReflection->hasMethod("getExtensionName") && $objReflection->getMethod("getExtensionName")->invoke(null) == $strPluginPoint) {
+                        $strOneFile = $strClassname;
                         return;
                     }
                 }
