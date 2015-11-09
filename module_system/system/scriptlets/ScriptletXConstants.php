@@ -4,14 +4,18 @@
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 ********************************************************************************************************/
 
+namespace Kajona\System\System\Scriptlets;
+
+use class_module_system_setting;
+use interface_scriptlet;
+
 /**
  * General replacement of global constants such as the webpath
  *
- * @package module_system
  * @since 4.0
  * @author sidler@mulchprod.de
  */
-class class_scriptlet_xconstants implements interface_scriptlet {
+class ScriptletXConstants implements interface_scriptlet {
 
     /**
      * Processes the content.
