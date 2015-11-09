@@ -605,7 +605,6 @@ abstract class class_root {
                 if(isset($this->arrModule["modul"])) {
                     $objModule = class_module_system_module::getModuleByName($this->getArrModule("modul"), true);
                     if($objModule == null) {
-                        die("failed to load module ".$this->getArrModule("modul")."@".get_class($this));
                         throw new class_exception("failed to load module ".$this->getArrModule("modul")."@".get_class($this), class_exception::$level_FATALERROR);
                     }
                     $strPrevId = $objModule->getSystemid();
