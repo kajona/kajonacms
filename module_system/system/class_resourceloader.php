@@ -304,8 +304,8 @@ class class_resourceloader
      * @param string $strFolder
      * @param array $arrExtensionFilter
      * @param bool $bitWithSubfolders includes folders into the return set, otherwise only files will be returned
-     * @param callable $objFilterFunction
-     * @param callable $objWalkFunction
+     * @param Closure $objFilterFunction
+     * @param Closure $objWalkFunction
      *
      * @return array
      * @see http://php.net/manual/de/function.array-filter.php

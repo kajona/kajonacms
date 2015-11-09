@@ -26,8 +26,8 @@ class class_module_votings_portal extends class_portal_controller implements int
      *
      * @param mixed $arrElementData
      */
-    public function __construct($arrElementData) {
-        parent::__construct($arrElementData);
+    public function __construct($arrElementData = array(), $strSystemid = "") {
+        parent::__construct($arrElementData, $strSystemid);
 
         // save a cookie to store the voting
         $objCookie = new class_cookie();

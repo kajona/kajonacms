@@ -52,9 +52,8 @@ class PagesPortalController extends class_portal_controller implements interface
     /**
      * @param array|mixed $arrElementData
      */
-    public function __construct($arrElementData)
-    {
-        parent::__construct($arrElementData);
+    public function __construct($arrElementData = array(), $strSystemid = "") {
+        parent::__construct($arrElementData, $strSystemid);
         $this->setAction("generatePage");
     }
 
