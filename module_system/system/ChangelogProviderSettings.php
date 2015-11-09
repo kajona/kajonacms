@@ -6,13 +6,17 @@
 *	$Id$                      *
 ********************************************************************************************************/
 
+namespace Kajona\System\System;
+
+use interface_changelog_provider;
+
 /**
  * A simple provider to separate settings-changes from the other changes
  *
- * @package module_system
  * @author sidler@mulchprod.de
  */
-class class_changelog_provider_settings implements interface_changelog_provider  {
+class ChangelogProviderSettings implements interface_changelog_provider
+{
 
     /**
      * Returns the name of the table used by the current provider.
@@ -22,7 +26,8 @@ class class_changelog_provider_settings implements interface_changelog_provider 
      *
      * @return string
      */
-    public function getTargetTable() {
+    public function getTargetTable()
+    {
         return "changelog_setting";
     }
 
@@ -31,7 +36,8 @@ class class_changelog_provider_settings implements interface_changelog_provider 
      *
      * @return array
      */
-    public function getHandledClasses() {
+    public function getHandledClasses()
+    {
         return array("class_module_system_setting");
     }
 
