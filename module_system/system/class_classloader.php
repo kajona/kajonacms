@@ -345,9 +345,8 @@ class class_classloader
      */
     public function getInstanceFromFilename($strFilename, $strBaseclass = null, $strImplementsInterface = null, $arrConstructorParams = null)
     {
-
         //blacklisting!
-        if(in_array(basename($strFilename), array("class_testbase.php", "class_testbase_object.php"))) {
+        if (uniStrpos(basename($strFilename), "class_testbase") === 0) {
             return null;
         }
 
