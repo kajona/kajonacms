@@ -10,13 +10,13 @@ class class_test_portalTest extends class_testbase  {
 
         echo "generating all pages existing to find notices...\n";
 
-        $arrPages = class_module_pages_page::getAllPages();
+        $arrPages = \Kajona\Pages\System\PagesPage::getAllPages();
         $objModule = class_module_system_module::getModuleByName("pages");
 
-        /** @var $objModuleRequested class_module_pages_portal */
+        /** @var $objModuleRequested \Kajona\Pages\Portal\PagesPortalController */
         $objModuleRequested = $objModule->getPortalInstanceOfConcreteModule();
 
-        /** @var class_module_pages_page $objOnePage */
+        /** @var \Kajona\Pages\System\PagesPage $objOnePage */
         foreach($arrPages as $objOnePage) {
             echo "generating page ".$objOnePage->getStrName()."\n";
 

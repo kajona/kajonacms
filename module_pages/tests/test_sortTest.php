@@ -10,14 +10,14 @@ class class_test_sort extends class_testbase {
         echo "testing sorting-behaviour....\n";
 
 
-        $objRootPage = new class_module_pages_page();
+        $objRootPage = new \Kajona\Pages\System\PagesPage();
 
         $objRootPage->setStrName("test1");
         $objRootPage->updateObjectToDb();
 
 
         for($intI = 1; $intI <= 10; $intI++) {
-            $objPage = new class_module_pages_page();
+            $objPage = new \Kajona\Pages\System\PagesPage();
             $objPage->setStrName("sortsubpage_".$intI);
             $objPage->updateObjectToDb($objRootPage->getSystemid());
         }
@@ -169,60 +169,60 @@ class class_test_sort extends class_testbase {
 
 
     public function testHierarchicalSort() {
-        $objRootPage = new class_module_pages_page();
+        $objRootPage = new \Kajona\Pages\System\PagesPage();
 
         $objRootPage->setStrName("test1");
         $objRootPage->updateObjectToDb();
 
 
-        $objPageL1 = new class_module_pages_page();
+        $objPageL1 = new \Kajona\Pages\System\PagesPage();
         $objPageL1->setStrName("layer_1"); $objPageL1->updateObjectToDb($objRootPage->getSystemid());
 
-        $objPageL2 = new class_module_pages_page();
+        $objPageL2 = new \Kajona\Pages\System\PagesPage();
         $objPageL2->setStrName("layer_2"); $objPageL2->updateObjectToDb($objRootPage->getSystemid());
 
-        $objPage = new class_module_pages_page();
+        $objPage = new \Kajona\Pages\System\PagesPage();
         $objPage->setStrName("layer_1_1"); $objPage->updateObjectToDb($objPageL1->getSystemid());
 
-        $objPage = new class_module_pages_page();
+        $objPage = new \Kajona\Pages\System\PagesPage();
         $objPage->setStrName("layer_1_2"); $objPage->updateObjectToDb($objPageL1->getSystemid());
 
-        $objPage = new class_module_pages_page();
+        $objPage = new \Kajona\Pages\System\PagesPage();
         $objPage->setStrName("layer_1_3"); $objPage->updateObjectToDb($objPageL1->getSystemid());
 
-        $objPage = new class_module_pages_page();
+        $objPage = new \Kajona\Pages\System\PagesPage();
         $objPage->setStrName("layer_2_1"); $objPage->updateObjectToDb($objPageL2->getSystemid());
 
-        $objPage = new class_module_pages_page();
+        $objPage = new \Kajona\Pages\System\PagesPage();
         $objPage->setStrName("layer_2_2"); $objPage->updateObjectToDb($objPageL2->getSystemid());
 
-        $objPage = new class_module_pages_page();
+        $objPage = new \Kajona\Pages\System\PagesPage();
         $objPage->setStrName("layer_2_3"); $objPage->updateObjectToDb($objPageL2->getSystemid());
 
 
-        $this->assertEquals(1, class_module_pages_page::getPageByName("layer_1")->getIntSort());
-        $this->assertEquals(2, class_module_pages_page::getPageByName("layer_2")->getIntSort());
+        $this->assertEquals(1, \Kajona\Pages\System\PagesPage::getPageByName("layer_1")->getIntSort());
+        $this->assertEquals(2, \Kajona\Pages\System\PagesPage::getPageByName("layer_2")->getIntSort());
 
-        $this->assertEquals(1, class_module_pages_page::getPageByName("layer_1_1")->getIntSort());
-        $this->assertEquals(2, class_module_pages_page::getPageByName("layer_1_2")->getIntSort());
-        $this->assertEquals(3, class_module_pages_page::getPageByName("layer_1_3")->getIntSort());
+        $this->assertEquals(1, \Kajona\Pages\System\PagesPage::getPageByName("layer_1_1")->getIntSort());
+        $this->assertEquals(2, \Kajona\Pages\System\PagesPage::getPageByName("layer_1_2")->getIntSort());
+        $this->assertEquals(3, \Kajona\Pages\System\PagesPage::getPageByName("layer_1_3")->getIntSort());
 
-        $this->assertEquals(1, class_module_pages_page::getPageByName("layer_2_1")->getIntSort());
-        $this->assertEquals(2, class_module_pages_page::getPageByName("layer_2_2")->getIntSort());
-        $this->assertEquals(3, class_module_pages_page::getPageByName("layer_2_3")->getIntSort());
+        $this->assertEquals(1, \Kajona\Pages\System\PagesPage::getPageByName("layer_2_1")->getIntSort());
+        $this->assertEquals(2, \Kajona\Pages\System\PagesPage::getPageByName("layer_2_2")->getIntSort());
+        $this->assertEquals(3, \Kajona\Pages\System\PagesPage::getPageByName("layer_2_3")->getIntSort());
 
 
 
         //shifting hierarchies
-        class_module_pages_page::getPageByName("layer_2_2")->updateObjectToDb($objPageL1->getSystemid());
+        \Kajona\Pages\System\PagesPage::getPageByName("layer_2_2")->updateObjectToDb($objPageL1->getSystemid());
 
-        $this->assertEquals(1, class_module_pages_page::getPageByName("layer_1_1")->getIntSort());
-        $this->assertEquals(2, class_module_pages_page::getPageByName("layer_1_2")->getIntSort());
-        $this->assertEquals(3, class_module_pages_page::getPageByName("layer_1_3")->getIntSort());
-        $this->assertEquals(4, class_module_pages_page::getPageByName("layer_2_2")->getIntSort());
+        $this->assertEquals(1, \Kajona\Pages\System\PagesPage::getPageByName("layer_1_1")->getIntSort());
+        $this->assertEquals(2, \Kajona\Pages\System\PagesPage::getPageByName("layer_1_2")->getIntSort());
+        $this->assertEquals(3, \Kajona\Pages\System\PagesPage::getPageByName("layer_1_3")->getIntSort());
+        $this->assertEquals(4, \Kajona\Pages\System\PagesPage::getPageByName("layer_2_2")->getIntSort());
 
-        $this->assertEquals(1, class_module_pages_page::getPageByName("layer_2_1")->getIntSort());
-        $this->assertEquals(2, class_module_pages_page::getPageByName("layer_2_3")->getIntSort());
+        $this->assertEquals(1, \Kajona\Pages\System\PagesPage::getPageByName("layer_2_1")->getIntSort());
+        $this->assertEquals(2, \Kajona\Pages\System\PagesPage::getPageByName("layer_2_3")->getIntSort());
 
 
         $objRootPage->deleteObjectFromDatabase();
@@ -230,7 +230,7 @@ class class_test_sort extends class_testbase {
 
 
     public function testRandomSortTest() {
-        $objRootPage = new class_module_pages_page();
+        $objRootPage = new \Kajona\Pages\System\PagesPage();
 
         $objRootPage->setStrName("randomSortTest");
         $objRootPage->updateObjectToDb();
@@ -239,14 +239,14 @@ class class_test_sort extends class_testbase {
 
 
         for($intI = 0; $intI < 5; $intI++) {
-            $objPage = new class_module_pages_page();
+            $objPage = new \Kajona\Pages\System\PagesPage();
             $objPage->setStrName("l1_".$intI);
             $objPage->updateObjectToDb($objRootPage->getSystemid());
 
             $arrNodes[] = $objPage->getSystemid();
 
             for($intK = 0; $intK < 10; $intK++) {
-                $objPageK = new class_module_pages_page();
+                $objPageK = new \Kajona\Pages\System\PagesPage();
                 $objPageK->setStrName("l2_".$intI);
                 $objPageK->updateObjectToDb($objPage->getSystemid());
 
@@ -256,7 +256,7 @@ class class_test_sort extends class_testbase {
 
         $intMax = count($arrNodes)-1;
         for($intI = 0; $intI < 50; $intI++) {
-            $objPage = new class_module_pages_page($arrNodes[rand(0, $intMax)]);
+            $objPage = new \Kajona\Pages\System\PagesPage($arrNodes[rand(0, $intMax)]);
 
             $objPage->updateObjectToDb($arrNodes[rand(0, $intMax)]);
         }

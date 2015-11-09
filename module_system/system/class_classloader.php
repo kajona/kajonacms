@@ -110,14 +110,13 @@ class class_classloader
 
     /**
      * We autoload all classes which are in the event folder of each module. Theses classes can register events etc.
-     * Currently enabled for classes matching the pattern "class_module_" only.
      *
      * @throws class_exception
      */
     public function includeClasses()
     {
         foreach ($this->arrFiles as $strClass => $strOneFile) {
-            if (uniStrpos($strClass, "class_module_") !== false && uniStrpos($strOneFile, "/event/") !== false) {
+            if (uniStrpos($strOneFile, "/event/") !== false) {
                 // include all classes which are in the event folder
                 $this->loadClass($strClass);
             }
@@ -258,26 +257,29 @@ class class_classloader
 
         $arrFiles = array();
 
-        foreach ($this->arrModules as $strPath => $strSingleModule) {
+        foreach (array_merge($this->arrModules, array("project")) as $strPath => $strSingleModule) {
             if (is_dir(_realpath_."/".$strPath.$strFolder)) {
                 $arrTempFiles = scandir(_realpath_."/".$strPath.$strFolder);
                 foreach ($arrTempFiles as $strSingleFile) {
-                    if (preg_match("/(class|interface|trait)(.*)\.php$/i", $strSingleFile)) {
+                    if (strpos($strSingleFile, ".php") !== false) {
                         $arrFiles[substr($strSingleFile, 0, -4)] = _realpath_."/".$strPath.$strFolder.$strSingleFile;
                     }
                 }
             }
         }
 
+
         //scan for overwrites
+        //FIXME: remove in 5.x, only needed for backwards compatibility where content under /project was not organized within module-folders
         if (is_dir(_realpath_."/project".$strFolder)) {
             $arrTempFiles = scandir(_realpath_."/project".$strFolder);
             foreach ($arrTempFiles as $strSingleFile) {
-                if (preg_match("/(class|interface|trait)(.*)\.php$/i", $strSingleFile)) {
+                if (strpos($strSingleFile, ".php") !== false) {
                     $arrFiles[substr($strSingleFile, 0, -4)] = _realpath_."/project".$strFolder.$strSingleFile;
                 }
             }
         }
+
 
         return $arrFiles;
     }
@@ -301,9 +303,17 @@ class class_classloader
         // check whether we can autoload a class which has a namespace
         if (strpos($strClassName, "\\") !== false) {
             $arrParts = explode("\\", $strClassName);
-            $strVendor = array_shift($arrParts); // remove vendor part
-            $strModule = "module_" . strtolower(array_shift($arrParts));
-            $strFolder = strtolower(array_shift($arrParts));
+
+            // strtolower all parts except for the class name
+            $strClass = array_pop($arrParts);
+            $arrParts = array_map("strtolower", $arrParts);
+            array_push($arrParts, $strClass);
+
+            // remove vendor part
+            $strVendor = array_shift($arrParts);
+
+            $strModule = "module_" . array_shift($arrParts);
+            $strFolder = array_shift($arrParts);
             $strRest = implode(DIRECTORY_SEPARATOR, $arrParts);
 
             if (!empty($strModule) && !empty($strFolder) && !empty($strRest)) {
@@ -323,6 +333,35 @@ class class_classloader
         }
 
         return false;
+    }
+
+    /**
+     * Creates a new instance of an object based on the filename
+     *
+     * @param $strFilename
+     * @param null $strBaseclass an optional filter-restriction based on a base class
+     *
+     * @return null|object
+     */
+    public function getInstanceFromFilename($strFilename, $strBaseclass = null)
+    {
+        include_once _realpath_.$strFilename;
+        $strClassname = uniSubstr(basename($strFilename), 0, -4);
+        //fetch the namespace
+        $strResolvedClassname = null;
+        foreach(get_declared_classes() as $strOneClass) {
+            if(uniStrpos($strOneClass, $strClassname) !== false)
+                $strResolvedClassname = $strOneClass;
+        }
+
+        if($strResolvedClassname != null) {
+            $objReflection = new ReflectionClass($strResolvedClassname);
+            if($objReflection->isInstantiable() && ($strBaseclass == null || $objReflection->isSubclassOf($strBaseclass))) {
+                return $objReflection->newInstance();
+            }
+        }
+
+        return null;
     }
 
     /**
