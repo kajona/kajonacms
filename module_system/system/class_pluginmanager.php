@@ -51,24 +51,25 @@ class class_pluginmanager {
         $strKey = md5($this->strSearchPath.$this->strPluginPoint);
         if(!array_key_exists($strKey, self::$arrPluginClasses)) {
             $strPluginPoint = $this->strPluginPoint;
-            $arrClasses = class_resourceloader::getInstance()->getFolderContent($this->strSearchPath, array(".php"), false, function($strOneFile) use ($strPluginPoint) {
-                $strOneFile = uniSubstr($strOneFile, 0, -4);
+            $arrClasses = class_resourceloader::getInstance()->getFolderContent($this->strSearchPath, array(".php"), false, null,
+            function(&$strOneFile, $strPath) use ($strPluginPoint, $arrConstructorArguments) {
 
-                if(uniStripos($strOneFile, "class_") === false || uniStrpos($strOneFile, "class_testbase") !== false)
-                    return false;
+                $objInstance = class_classloader::getInstance()->getInstanceFromFilename($strPath, null, "interface_generic_plugin", $arrConstructorArguments);
 
-                $objReflection = new ReflectionClass($strOneFile);
-                if(!$objReflection->isAbstract() && $objReflection->implementsInterface("interface_generic_plugin")) {
-                    $objMethod = $objReflection->getMethod("getExtensionName");
-                    if($objMethod->invoke(null) == $strPluginPoint)
-                        return true;
+                if($objInstance != null) {
+
+                    if($objInstance->getExtensionName() == $strPluginPoint) {
+                        $strOneFile = get_class($objInstance);
+                        return;
+                    }
                 }
 
-                return false;
-            },
-            function(&$strOneFile) {
-                $strOneFile = uniSubstr($strOneFile, 0, -4);
+                $strOneFile = null;
+
             });
+
+
+            $arrClasses = array_filter($arrClasses, function ($strClass) { return $strClass !== null; });
 
             self::$arrPluginClasses[$strKey] = $arrClasses;
         }

@@ -343,21 +343,40 @@ class class_classloader
      *
      * @return null|object
      */
-    public function getInstanceFromFilename($strFilename, $strBaseclass = null)
+    public function getInstanceFromFilename($strFilename, $strBaseclass = null, $strImplementsInterface = null, $arrConstructorParams = null)
     {
-        include_once _realpath_.$strFilename;
-        $strClassname = uniSubstr(basename($strFilename), 0, -4);
-        //fetch the namespace
-        $strResolvedClassname = null;
-        foreach(get_declared_classes() as $strOneClass) {
-            if(uniStrpos($strOneClass, $strClassname) !== false)
-                $strResolvedClassname = $strOneClass;
+        //blacklisting!
+        if (uniStrpos(basename($strFilename), "class_testbase") === 0) {
+            return null;
         }
 
-        if($strResolvedClassname != null) {
+        include_once _realpath_ . $strFilename;
+
+        $strResolvedClassname = null;
+        $strClassname = uniSubstr(basename($strFilename), 0, -4);
+
+        if (class_exists($strClassname)) {
+            $strResolvedClassname = $strClassname;
+        } else {
+            $strSource = file_get_contents(_realpath_ . $strFilename);
+            preg_match('/namespace ([a-zA-Z0-9_\x7f-\xff\\\\]+);/', $strSource, $arrMatches);
+
+            $strNamespace = isset($arrMatches[1]) ? $arrMatches[1] : null;
+            if (!empty($strNamespace)) {
+                $strClassname = $strNamespace . "\\" . $strClassname;
+                if (class_exists($strClassname)) {
+                    $strResolvedClassname = $strClassname;
+                }
+            }
+        }
+
+        if ($strResolvedClassname != null) {
             $objReflection = new ReflectionClass($strResolvedClassname);
-            if($objReflection->isInstantiable() && ($strBaseclass == null || $objReflection->isSubclassOf($strBaseclass))) {
-                return $objReflection->newInstance();
+            if ($objReflection->isInstantiable() && ($strBaseclass == null || $objReflection->isSubclassOf($strBaseclass)) && ($strImplementsInterface == null || $objReflection->implementsInterface($strImplementsInterface))) {
+                if(!empty($arrConstructorParams))
+                    return $objReflection->newInstanceArgs($arrConstructorParams);
+                else
+                    return $objReflection->newInstance();
             }
         }
 
