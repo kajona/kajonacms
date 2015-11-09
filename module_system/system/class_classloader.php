@@ -343,8 +343,14 @@ class class_classloader
      *
      * @return null|object
      */
-    public function getInstanceFromFilename($strFilename, $strBaseclass = null)
+    public function getInstanceFromFilename($strFilename, $strBaseclass = null, $strImplementsInterface = null, $arrConstructorParams = null)
     {
+
+        //blacklisting!
+        if(in_array(basename($strFilename), array("class_testbase.php", "class_testbase_object.php"))) {
+            return null;
+        }
+
         include_once _realpath_ . $strFilename;
 
         $strResolvedClassname = null;
@@ -367,8 +373,11 @@ class class_classloader
 
         if ($strResolvedClassname != null) {
             $objReflection = new ReflectionClass($strResolvedClassname);
-            if ($objReflection->isInstantiable() && ($strBaseclass == null || $objReflection->isSubclassOf($strBaseclass))) {
-                return $objReflection->newInstance();
+            if ($objReflection->isInstantiable() && ($strBaseclass == null || $objReflection->isSubclassOf($strBaseclass)) && ($strImplementsInterface == null || $objReflection->implementsInterface($strImplementsInterface))) {
+                if(!empty($arrConstructorParams))
+                    return $objReflection->newInstanceArgs($arrConstructorParams);
+                else
+                    return $objReflection->newInstance();
             }
         }
 

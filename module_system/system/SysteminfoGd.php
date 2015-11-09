@@ -6,6 +6,11 @@
 *	$Id: class_changelog_provider_settings.php 6322 2014-01-02 08:31:49Z sidler $                      *
 ********************************************************************************************************/
 
+namespace Kajona\System\System;
+
+use class_carrier;
+use interface_systeminfo;
+
 /**
  * General information regarding the current gd lib environment
  *
@@ -13,7 +18,8 @@
  * @author sidler@mulchprod.de
  * @since 4.5
  */
-class class_systeminfo_gd implements interface_systeminfo {
+class SysteminfoGd implements interface_systeminfo {
+
     /**
      * Returns the title of the info-block
      *

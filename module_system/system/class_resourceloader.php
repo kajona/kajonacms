@@ -394,7 +394,7 @@ class class_resourceloader
      */
     private function applyCallbacks($arrEntries, Closure $objFilterCallback = null, Closure $objWalkCallback = null)
     {
-        if ($objFilterCallback == null || !is_callable($objFilterCallback)) {
+        if (($objFilterCallback == null || !is_callable($objFilterCallback)) && ($objWalkCallback == null || !is_callable($objWalkCallback))) {
             return $arrEntries;
         }
 

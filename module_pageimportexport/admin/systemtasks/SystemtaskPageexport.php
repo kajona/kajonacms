@@ -5,13 +5,27 @@
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 ********************************************************************************************************/
 
+namespace Kajona\Pageimportexport\Admin\Systemtasks;
+
+use class_carrier;
+use class_date;
+use class_exception;
+use class_module_languages_language;
+use class_module_system_module;
+use class_systemtask_base;
+use interface_admin_systemtask;
+use Kajona\Pages\System\PagesPage;
+use Kajona\Pages\System\PagesPageelement;
+use XMLWriter;
+
+
 /**
  * Exports a page into a xml-structure.
  *
  * @package module_pageimportexport
  * @author sidler@mulchprod.de
  */
-class class_systemtask_pageexport extends class_systemtask_base implements interface_admin_systemtask
+class SystemtaskPageexport extends class_systemtask_base implements interface_admin_systemtask
 {
 
 
@@ -65,7 +79,7 @@ class class_systemtask_pageexport extends class_systemtask_base implements inter
         }
 
         //load the page itself
-        $objPage = class_module_pages_page::getPageByName($this->getParam("pageExport"));
+        $objPage = PagesPage::getPageByName($this->getParam("pageExport"));
         if ($objPage !== null) {
 
             $objSystem = class_module_system_module::getModuleByName("system");
@@ -135,7 +149,7 @@ class class_systemtask_pageexport extends class_systemtask_base implements inter
                 //try to load the parent page-name
                 $strParentName = "";
                 if (validateSystemid($objPage->getPrevId())) {
-                    $objParentPage = new class_module_pages_page($objPage->getPrevId());
+                    $objParentPage = new PagesPage($objPage->getPrevId());
                     $strParentName = $objParentPage->getStrName();
                 }
 
@@ -199,7 +213,7 @@ class class_systemtask_pageexport extends class_systemtask_base implements inter
 
     private function createElementData($strPageId, XMLWriter $objWriter)
     {
-        $arrElements = class_module_pages_pageelement::getAllElementsOnPage($strPageId);
+        $arrElements = PagesPageelement::getAllElementsOnPage($strPageId);
 
         foreach ($arrElements as $objOneElement) {
             $objWriter->startElement("element");
@@ -284,7 +298,7 @@ class class_systemtask_pageexport extends class_systemtask_base implements inter
         foreach ($arrLanguages as $objOneLanguage) {
             $objLanguages->setStrAdminLanguageToWorkOn($objOneLanguage->getStrName());
 
-            $objPage = new class_module_pages_page($strPageId);
+            $objPage = new PagesPage($strPageId);
 
             $objWriter->startElement("propertyset");
             $objWriter->startAttribute("language");

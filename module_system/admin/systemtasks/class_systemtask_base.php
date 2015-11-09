@@ -80,6 +80,29 @@ abstract class class_systemtask_base {
     }
 
     /**
+     * A helper to fetch instances of all systemtasks found in the current installation
+     *
+     * @return class_systemtask_base[]|interface_admin_systemtask[]
+     */
+    public static function getAllSystemtasks()
+    {
+        $arrFiles = class_resourceloader::getInstance()->getFolderContent("/admin/systemtasks/", array(".php"), false, null, function (&$strOneFile, $strPath) {
+
+            $objInstance = class_classloader::getInstance()->getInstanceFromFilename($strPath, "class_systemtask_base");
+
+            if($objInstance instanceof interface_admin_systemtask)
+                $strOneFile = $objInstance;
+            else
+                $strOneFile = null;
+
+        });
+
+        return array_filter($arrFiles, function ($objTask) {
+            return $objTask != null;
+        });
+    }
+
+    /**
      * Delegate requests for strings to the text-subsystem
      *
      * @param string $strLangKey
@@ -115,7 +138,7 @@ abstract class class_systemtask_base {
             $strLink = class_link::getLinkAdminHref($strTargetModule, $strTargetAction, "task=" . $this->getStrInternalTaskName());
             $strReturn = $objAdminForm->renderForm($strLink, 0);
         }
-        else if($objAdminForm != "") {
+        elseif($objAdminForm != "") {
             if($this->bitMultipartform) {
                 $strReturn .= $this->objToolkit->formHeader(class_link::getLinkAdminHref($strTargetModule, $strTargetAction, "task=" . $this->getStrInternalTaskName()), "taskParamForm", class_admin_formgenerator::FORM_ENCTYPE_MULTIPART);
             }

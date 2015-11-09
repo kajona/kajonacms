@@ -4,16 +4,21 @@
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 ********************************************************************************************************/
 
+
+namespace Kajona\Postacomment\System\Messageproviders;
+
+use class_carrier;
+use interface_messageprovider;
+
 /**
  * The postacomment message-provider is able to send mails as soon as a new comment is available.
  * By default, all users with edit-permissions of the postacomment-module are notified.
  *
  * @author sidler@mulchprod.de
- * @package module_postacomment
  * @since 4.0
  */
-class class_messageprovider_postacomment implements interface_messageprovider {
-
+class MessageproviderPostacomment implements interface_messageprovider
+{
 
 
     /**
@@ -21,7 +26,8 @@ class class_messageprovider_postacomment implements interface_messageprovider {
      *
      * @return string
      */
-    public function getStrName() {
+    public function getStrName()
+    {
         return class_carrier::getInstance()->getObjLang()->getLang("messageprovider_postacomment_name", "postacomment");
     }
 
@@ -30,7 +36,8 @@ class class_messageprovider_postacomment implements interface_messageprovider {
      *
      * @return string
      */
-    public function getStrIdentifier() {
+    public function getStrIdentifier()
+    {
         return "postacomment";
     }
 }

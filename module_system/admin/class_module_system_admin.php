@@ -388,31 +388,12 @@ class class_module_system_admin extends class_admin_simple implements interface_
         $strTaskOutput = "";
 
         //include the list of possible tasks
-        //TODO: move to common helper, see class_module_system_admin_xml. additionally use the common plugin mechanism
-        $arrFiles = class_resourceloader::getInstance()->getFolderContent("/admin/systemtasks/", array(".php"), false, function ($strOneFile) {
-            if ($strOneFile == "class_systemtask_base.php" || $strOneFile == "interface_admin_systemtask.php") {
-                return false;
-            }
-
-            $strOneFile = uniSubstr($strOneFile, 0, -4);
-            $strOneFile = new $strOneFile();
-
-            if ($strOneFile instanceof interface_admin_systemtask) {
-                return true;
-            }
-            else {
-                return false;
-            }
-        },
-            function (&$strOneFile) {
-                $strOneFile = uniSubstr($strOneFile, 0, -4);
-                $strOneFile = new $strOneFile();
-            });
+        $arrFiles = class_systemtask_base::getAllSystemtasks();
 
         //react on special task-commands?
         if ($this->getParam("task") != "") {
             //search for the matching task
-            /** @var $objTask interface_admin_systemtask */
+            /** @var $objTask class_systemtask_base */
             foreach ($arrFiles as $objTask) {
                 if ($objTask->getStrInternalTaskname() == $this->getParam("task")) {
                     $strTaskOutput .= self::getTaskDialogExecuteCode($this->getParam("execute") == "true", $objTask, "system", "systemTasks", $this->getParam("executedirectly") == "true");
@@ -424,6 +405,7 @@ class class_module_system_admin extends class_admin_simple implements interface_
         $intI = 0;
         //loop over the found files and group them
         $arrTaskGroups = array();
+        /** @var interface_admin_systemtask|class_systemtask_base $objTask */
         foreach ($arrFiles as $objTask) {
             if (!isset($arrTaskGroups[$objTask->getGroupIdentifier()])) {
                 $arrTaskGroups[$objTask->getGroupIdentifier()] = array();

@@ -5,13 +5,29 @@
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 ********************************************************************************************************/
 
+namespace Kajona\Pageimportexport\Admin\Systemtasks;
+
+use class_carrier;
+use class_filesystem;
+use class_logger;
+use class_module_languages_language;
+use class_module_system_module;
+use class_objectfactory;
+use class_systemtask_base;
+use class_xml_parser;
+use interface_admin_systemtask;
+use Kajona\Pages\System\PagesElement;
+use Kajona\Pages\System\PagesPage;
+use Kajona\Pages\System\PagesPageelement;
+
+
 /**
  * Imports a xml-based page into the system. Tries to be as error-safe as possible.
  *
  * @package module_pageimportexport
  * @author sidler@mulchprod.de
  */
-class class_systemtask_pageimport extends class_systemtask_base implements interface_admin_systemtask
+class SystemtaskPageimport extends class_systemtask_base implements interface_admin_systemtask
 {
 
 
@@ -167,7 +183,7 @@ class class_systemtask_pageimport extends class_systemtask_base implements inter
         //check if the exported prev-values may be used
         $strImportPrevName = $arrMetadata["prevname"][0]["value"];
         if ($strImportPrevName != "") {
-            $objPage = class_module_pages_page::getPageByName($strImportPrevName);
+            $objPage = PagesPage::getPageByName($strImportPrevName);
             if ($objPage !== null) {
                 $strPrevId = $objPage->getSystemid();
             }
@@ -186,7 +202,7 @@ class class_systemtask_pageimport extends class_systemtask_base implements inter
 
         //check if an existing page should be replaced
         if ($bitReplaceExisting) {
-            $objPage = class_module_pages_page::getPageByName($strPagename);
+            $objPage = PagesPage::getPageByName($strPagename);
             if ($objPage !== null) {
                 $strPrevId = $objPage->getPrevId();
                 $objPage->deleteObject();
@@ -195,7 +211,7 @@ class class_systemtask_pageimport extends class_systemtask_base implements inter
         }
 
 
-        $objPage = new class_module_pages_page();
+        $objPage = new PagesPage();
         $objPage->setStrName($strPagename);
 
         $objPage->updateObjectToDb($strPrevId);
@@ -216,7 +232,7 @@ class class_systemtask_pageimport extends class_systemtask_base implements inter
             $objLanguages->setStrAdminLanguageToWorkOn($arrOnePropSet["attributes"]["language"]);
 
             //reload page to save correct prop-sets
-            $objPage = new class_module_pages_page($strPageId);
+            $objPage = new PagesPage($strPageId);
             $objPage->setStrLanguage($arrOnePropSet["language"][0]["value"]);
             $objPage->setStrBrowsername($arrOnePropSet["browsername"][0]["value"]);
             $objPage->setStrDesc($arrOnePropSet["description"][0]["value"]);
@@ -242,9 +258,9 @@ class class_systemtask_pageimport extends class_systemtask_base implements inter
 
             //validate if element exists
             $strElementName = $arrSingleElement["metadata"][0]["element"][0]["value"];
-            if (class_module_pages_element::getElement($strElementName) !== null) {
+            if (PagesElement::getElement($strElementName) !== null) {
 
-                $objElement = new class_module_pages_pageelement();
+                $objElement = new PagesPageelement();
                 $objElement->setStrPlaceholder($arrSingleElement["metadata"][0]["placeholder"][0]["value"]);
                 $objElement->setStrName($arrSingleElement["metadata"][0]["name"][0]["value"]);
                 $objElement->setStrElement($arrSingleElement["metadata"][0]["element"][0]["value"]);

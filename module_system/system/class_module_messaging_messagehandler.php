@@ -11,21 +11,29 @@
  * @since 4.0
  * @package module_messaging
  */
-class class_module_messaging_messagehandler {
+class class_module_messaging_messagehandler
+{
 
     /**
      * @return interface_messageprovider[]
      */
-    public function getMessageproviders() {
-        return class_resourceloader::getInstance()->getFolderContent("/system/messageproviders", array(".php"), false, function($strOneFile) {
-            if(uniStrpos($strOneFile, "interface") !== false)
-                return false;
+    public function getMessageproviders()
+    {
+        $arrHandler = class_resourceloader::getInstance()->getFolderContent("/system/messageproviders", array(".php"), false, null,
+            function (&$strOneFile, $strPath) {
 
-            return true;
-        },
-        function(&$strOneFile) {
-            $strOneFile = uniSubstr($strOneFile, 0, -4);
-            $strOneFile = new $strOneFile();
+                $objInstance = class_classloader::getInstance()->getInstanceFromFilename($strPath);
+
+                if ($objInstance != null && $objInstance instanceof interface_messageprovider) {
+                    $strOneFile = $objInstance;
+                }
+                else {
+                    $strOneFile = null;
+                }
+            });
+
+        return array_filter($arrHandler, function ($objInstance) {
+            return $objInstance != null;
         });
     }
 
@@ -44,7 +52,8 @@ class class_module_messaging_messagehandler {
      *
      * @return bool
      */
-    public function sendMessage($strContent, $arrRecipients, interface_messageprovider $objProvider, $strInternalIdentifier = "", $strSubject = "") {
+    public function sendMessage($strContent, $arrRecipients, interface_messageprovider $objProvider, $strInternalIdentifier = "", $strSubject = "")
+    {
 
         //build a default message and pass it to sendMessageObject
         $objMessage = new class_module_messaging_message();
@@ -66,23 +75,26 @@ class class_module_messaging_messagehandler {
      *
      * @return bool
      */
-    public function sendMessageObject(class_module_messaging_message $objMessage, $arrRecipients) {
+    public function sendMessageObject(class_module_messaging_message $objMessage, $arrRecipients)
+    {
         $objValidator = new class_email_validator();
 
-        if($arrRecipients instanceof class_module_user_group || $arrRecipients instanceof class_module_user_user)
+        if ($arrRecipients instanceof class_module_user_group || $arrRecipients instanceof class_module_user_user) {
             $arrRecipients = array($arrRecipients);
+        }
 
         $arrRecipients = $this->getRecipientsFromArray($arrRecipients);
 
-        foreach($arrRecipients as $objOneUser) {
+        foreach ($arrRecipients as $objOneUser) {
 
             //skip inactive users
-            if($objOneUser->getIntActive() != 1)
+            if ($objOneUser->getIntActive() != 1) {
                 continue;
+            }
 
             $objConfig = class_module_messaging_config::getConfigForUserAndProvider($objOneUser->getSystemid(), $objMessage->getObjMessageProvider());
 
-            if($objConfig->getBitEnabled()) {
+            if ($objConfig->getBitEnabled()) {
 
                 //clone the message
                 $objCurrentMessage = new class_module_messaging_message();
@@ -96,13 +108,13 @@ class class_module_messaging_messagehandler {
 
                 $objCurrentMessage->updateObjectToDb();
 
-                if($objConfig->getBitBymail() && $objValidator->validate($objOneUser->getStrEmail()))
+                if ($objConfig->getBitBymail() && $objValidator->validate($objOneUser->getStrEmail())) {
                     $this->sendMessageByMail($objCurrentMessage, $objOneUser);
+                }
             }
         }
 
     }
-
 
 
     /**
@@ -110,9 +122,11 @@ class class_module_messaging_messagehandler {
      *
      * @param class_module_messaging_message $objMessage
      * @param class_module_user_user $objUser
+     *
      * @return bool
      */
-    private function sendMessageByMail(class_module_messaging_message $objMessage, class_module_user_user $objUser) {
+    private function sendMessageByMail(class_module_messaging_message $objMessage, class_module_user_user $objUser)
+    {
 
         $strOriginalLang = class_carrier::getInstance()->getObjLang()->getStrTextLanguage();
 
@@ -127,11 +141,12 @@ class class_module_messaging_messagehandler {
         $objMail = new class_mail();
 
         //try to get a matching sender and place it into the mail
-        if(validateSystemid($objMessage->getStrSenderId())) {
+        if (validateSystemid($objMessage->getStrSenderId())) {
             $objSenderUser = new class_module_user_user($objMessage->getStrSenderId());
             $objValidator = new class_email_validator();
-            if($objValidator->validate($objSenderUser->getStrEmail()))
+            if ($objValidator->validate($objSenderUser->getStrEmail())) {
                 $objMail->setSender($objSenderUser->getStrEmail());
+            }
         }
 
         $objMail->setSubject($strSubject);
@@ -147,23 +162,26 @@ class class_module_messaging_messagehandler {
      * Transforms a mixed array of users and groups into a list of users.
      *
      * @param class_module_user_group[]|class_module_user_user[] $arrRecipients
+     *
      * @return class_module_user_user[]
      */
-    private function getRecipientsFromArray($arrRecipients) {
+    private function getRecipientsFromArray($arrRecipients)
+    {
         $arrReturn = array();
 
-        foreach($arrRecipients as $objOneRecipient) {
-            if($objOneRecipient instanceof class_module_user_user) {
+        foreach ($arrRecipients as $objOneRecipient) {
+            if ($objOneRecipient instanceof class_module_user_user) {
                 $arrReturn[$objOneRecipient->getStrSystemid()] = $objOneRecipient;
             }
-            else if($objOneRecipient instanceof class_module_user_group) {
+            else if ($objOneRecipient instanceof class_module_user_group) {
                 $objUsersources = new class_module_user_sourcefactory();
-                if($objUsersources->getSourceGroup($objOneRecipient) != null) {
+                if ($objUsersources->getSourceGroup($objOneRecipient) != null) {
                     $arrMembers = $objUsersources->getSourceGroup($objOneRecipient)->getUserIdsForGroup();
 
-                    foreach($arrMembers as $strOneId) {
-                        if(!isset($arrReturn[$strOneId]))
+                    foreach ($arrMembers as $strOneId) {
+                        if (!isset($arrReturn[$strOneId])) {
                             $arrReturn[$strOneId] = new class_module_user_user($strOneId);
+                        }
                     }
                 }
             }
