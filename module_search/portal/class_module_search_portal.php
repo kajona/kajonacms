@@ -25,9 +25,8 @@ class class_module_search_portal extends class_portal_controller implements inte
      *
      * @param mixed $arrElementData
      */
-    public function __construct($arrElementData) {
-
-        parent::__construct($arrElementData);
+    public function __construct($arrElementData = array(), $strSystemid = "") {
+        parent::__construct($arrElementData, $strSystemid);
 
         if(isset($arrElementData["search_query_id"]) && $arrElementData["search_query_id"] != "")
             $this->setAction("search");
