@@ -175,9 +175,11 @@ class class_ldap
             $arrResult = @ldap_first_entry($this->objCx, $objResult);
             while ($arrResult !== false) {
                 $arrValues = @ldap_get_values($this->objCx, $arrResult, $this->arrConfig["ldap_group_attribute_member"]);
-                foreach ($arrValues as $strKey => $strSingleValue) {
-                    if ($strKey !== "count") {
-                        $arrReturn[] = $strSingleValue;
+                if(!empty($arrValues)) {
+                    foreach ($arrValues as $strKey => $strSingleValue) {
+                        if ($strKey !== "count") {
+                            $arrReturn[] = utf8_encode($strSingleValue);
+                        }
                     }
                 }
 
