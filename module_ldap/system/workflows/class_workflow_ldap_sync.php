@@ -12,8 +12,7 @@
  */
 class class_workflow_ldap_sync implements interface_workflows_handler  {
 
-    private $intIntervalHours = 24;
-    
+
     /**
      * @var class_module_workflows_workflow
      */
@@ -25,7 +24,7 @@ class class_workflow_ldap_sync implements interface_workflows_handler  {
      */
     public function getConfigValueNames() {
         return array(
-            class_carrier::getInstance()->getObjLang()->getLang("workflow_ldapsync_val1", "ldap")
+
         );
     }
 
@@ -38,8 +37,6 @@ class class_workflow_ldap_sync implements interface_workflows_handler  {
      * @return void
      */
     public function setConfigValues($strVal1, $strVal2, $strVal3) {
-        if($strVal1 != "" && is_numeric($strVal1))
-            $this->intIntervalHours = $strVal1;
 
     }
 
@@ -48,7 +45,7 @@ class class_workflow_ldap_sync implements interface_workflows_handler  {
      * @return string[]
      */
     public function getDefaultValues() {
-        return array(24); // by default there are 24h between each sync
+        return array(); // by default there are 24h between each sync
     }
 
     /**
@@ -92,7 +89,11 @@ class class_workflow_ldap_sync implements interface_workflows_handler  {
      * @return void
      */
     public function schedule() {
-        $this->objWorkflow->setObjTriggerdate(new class_date(time() - 30 + $this->intIntervalHours * 36000));
+        $objDate = new class_date();
+        $objDate->setNextDay();
+        $objDate->setIntHour(3);
+        $objDate->setIntMin(20);
+        $this->objWorkflow->setObjTriggerdate($objDate);
     }
 
     /**
