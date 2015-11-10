@@ -312,14 +312,14 @@ class class_classloader
             // remove vendor part
             $strVendor = array_shift($arrParts);
 
-            $strModule = "module_" . array_shift($arrParts);
+            $strModule = "module_".array_shift($arrParts);
             $strFolder = array_shift($arrParts);
             $strRest = implode(DIRECTORY_SEPARATOR, $arrParts);
 
             if (!empty($strModule) && !empty($strFolder) && !empty($strRest)) {
                 $arrDirs = array_merge(array("project"), $this->arrCoreDirs);
                 foreach ($arrDirs as $strDir) {
-                    $strFile = _realpath_.implode(DIRECTORY_SEPARATOR, array($strDir, $strModule, $strFolder, $strRest . ".php"));
+                    $strFile = _realpath_.implode(DIRECTORY_SEPARATOR, array($strDir, $strModule, $strFolder, $strRest.".php"));
                     if (is_file($strFile)) {
                         $this->arrFiles[$strClassName] = $strFile;
                         $this->bitCacheSaveRequired = true;
@@ -336,47 +336,68 @@ class class_classloader
     }
 
     /**
-     * Creates a new instance of an object based on the filename
+     * Extracts the class-name out of a filename.
+     * Normally this method is only used by getInstanceFromFilename, so no use to call it directly.
      *
      * @param $strFilename
-     * @param null $strBaseclass an optional filter-restriction based on a base class
      *
-     * @return null|object
+     * @return null|string
      */
-    public function getInstanceFromFilename($strFilename, $strBaseclass = null, $strImplementsInterface = null, $arrConstructorParams = null)
+    public function getClassnameFromFilename($strFilename)
     {
         //blacklisting!
         if (uniStrpos(basename($strFilename), "class_testbase") === 0) {
             return null;
         }
 
-        include_once _realpath_ . $strFilename;
+        include_once _realpath_.$strFilename;
 
         $strResolvedClassname = null;
         $strClassname = uniSubstr(basename($strFilename), 0, -4);
 
         if (class_exists($strClassname)) {
             $strResolvedClassname = $strClassname;
-        } else {
-            $strSource = file_get_contents(_realpath_ . $strFilename);
+        }
+        else {
+            $strSource = file_get_contents(_realpath_.$strFilename);
             preg_match('/namespace ([a-zA-Z0-9_\x7f-\xff\\\\]+);/', $strSource, $arrMatches);
 
             $strNamespace = isset($arrMatches[1]) ? $arrMatches[1] : null;
             if (!empty($strNamespace)) {
-                $strClassname = $strNamespace . "\\" . $strClassname;
+                $strClassname = $strNamespace."\\".$strClassname;
                 if (class_exists($strClassname)) {
                     $strResolvedClassname = $strClassname;
                 }
             }
         }
 
+        return $strResolvedClassname;
+    }
+
+
+    /**
+     * Creates a new instance of an object based on the filename
+     *
+     * @param $strFilename
+     * @param string $strBaseclass an optional filter-restriction based on a base class
+     * @param string $strImplementsInterface
+     * @param array $arrConstructorParams
+     *
+     * @return null|object
+     */
+    public function getInstanceFromFilename($strFilename, $strBaseclass = null, $strImplementsInterface = null, $arrConstructorParams = null)
+    {
+        $strResolvedClassname = $this->getClassnameFromFilename($strFilename);
+
         if ($strResolvedClassname != null) {
             $objReflection = new ReflectionClass($strResolvedClassname);
             if ($objReflection->isInstantiable() && ($strBaseclass == null || $objReflection->isSubclassOf($strBaseclass)) && ($strImplementsInterface == null || $objReflection->implementsInterface($strImplementsInterface))) {
-                if(!empty($arrConstructorParams))
+                if (!empty($arrConstructorParams)) {
                     return $objReflection->newInstanceArgs($arrConstructorParams);
-                else
+                }
+                else {
                     return $objReflection->newInstance();
+                }
             }
         }
 

@@ -267,7 +267,7 @@ class class_template
      */
     public function fillConstants()
     {
-        $objConstantScriptlet = new class_scriptlet_xconstants();
+        $objConstantScriptlet = new \Kajona\System\System\Scriptlets\ScriptletXConstants();
         $this->strTempTemplate = $objConstantScriptlet->processContent($this->strTempTemplate);
     }
 

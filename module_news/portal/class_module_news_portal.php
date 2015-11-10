@@ -23,8 +23,8 @@ class class_module_news_portal extends class_portal_controller implements interf
      *
      * @param mixed $arrElementData
      */
-    public function __construct($arrElementData) {
-        parent::__construct($arrElementData);
+    public function __construct($arrElementData = array(), $strSystemid = "") {
+        parent::__construct($arrElementData, $strSystemid);
 
         $strAction = $this->getParam("action");
         if($strAction == "newsDetail" && $this->arrElementData["news_view"] == 1) {
