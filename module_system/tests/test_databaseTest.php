@@ -218,13 +218,13 @@ class class_test_database extends class_testbase {
 INSERT INTO {$dbPrefix}temp_autotest
     (temp_id, temp_long, temp_double, temp_char10, temp_char20, temp_char100, temp_char254, temp_char500, temp_text)
 VALUES
-    ("{$systemId}", 123456, 23.45, "Foo\\\\Bar\\\\Baz", "Foo\\\\Bar\\\\Baz", "Foo\\\\Bar\\\\Baz", "Foo\\\\Bar\\\\Baz", "Foo\\\\Bar\\\\Baz", "Foo\\\\Bar\\\\Baz")
+    ("{$systemId}", 123456, 23.45, "Foo\\Bar\\Baz", "Foo\\Bar\\Baz", "Foo\\Bar\\Baz", "Foo\\Bar\\Baz", "Foo\\Bar\\Baz", "Foo\\Bar\\Baz")
 SQL;
 
         $this->assertTrue($objDB->_pQuery($strQuery, array()), "testDataBase insert");
 
         $strQuery = "SELECT * FROM "._dbprefix_."temp_autotest WHERE temp_char20 LIKE ?";
-        $arrRow = $objDB->getPRow($strQuery, array("Foo\\\\Bar%"));
+        $arrRow = $objDB->getPRow($strQuery, array("Foo\\Bar%"));
 
         $this->assertEquals('Foo\\Bar\\Baz', $arrRow['temp_char20']);
     }
