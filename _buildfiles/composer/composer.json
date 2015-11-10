@@ -1,6 +1,6 @@
 {
     "require": {
-		"phpunit/phpunit": "4.6.*",
+		"phpunit/phpunit": "5.0.*",
 		"squizlabs/php_codesniffer": "1.5.*",
         "pdepend/pdepend" : "2.0.*",
         "phpmd/phpmd" : "2.2.*",
