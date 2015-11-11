@@ -226,7 +226,7 @@ SQL;
         $this->assertTrue($objDB->_pQuery($strQuery, array('Foo\\Bar\\Baz', 'Foo\\Bar\\Baz', 'Foo\\Bar\\Baz', 'Foo\\Bar\\Baz', 'Foo\\Bar\\Baz')), "testDataBase insert");
 
         $strQuery = "SELECT * FROM "._dbprefix_."temp_autotest WHERE temp_char20 LIKE ?";
-        $arrRow = $objDB->getPRow($strQuery, $objDB->escape(array("Foo\\Bar%")));
+        $arrRow = $objDB->getPRow($strQuery, array($objDB->escape("Foo\\Bar%")));
 
         $this->assertNotEmpty($arrRow);
         $this->assertEquals('Foo\\Bar\\Baz', $arrRow['temp_char20']);
