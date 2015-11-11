@@ -212,7 +212,7 @@ JS;
         $arrCategories = class_todo_repository::getAllCategories();
         foreach ($arrCategories as $strProviderName => $arrTaskCategories) {
             foreach ($arrTaskCategories as $strKey => $strCategoryName) {
-                $arrProvider[$strKey] = $strCategoryName;
+                $arrProvider[$strKey] = $strProviderName . " / " . $strCategoryName;
             }
         }
 
