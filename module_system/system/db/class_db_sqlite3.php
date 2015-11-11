@@ -612,5 +612,13 @@ class class_db_sqlite3 extends class_db_base  {
         return "'".$strTable."'";
     }
 
+    /**
+     * @param string $strValue
+     * @return string
+     */
+    public function escape($strValue) {
+        return $strValue;
+    }
+
 }
 

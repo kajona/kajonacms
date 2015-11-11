@@ -270,6 +270,13 @@ interface interface_db_driver {
      * @return void
      */
     public function flushQueryCache();
+
+    /**
+     * @param string $strValue
+     * @return mixed
+     */
+    public function escape($strValue);
+
 }
 
 

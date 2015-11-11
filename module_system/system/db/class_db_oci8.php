@@ -560,5 +560,13 @@ class class_db_oci8 extends class_db_base {
     public function flushQueryCache() {
     }
 
+    /**
+     * @param string $strValue
+     * @return string
+     */
+    public function escape($strValue) {
+        return $strValue;
+    }
+
 }
 

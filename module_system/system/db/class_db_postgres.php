@@ -426,6 +426,14 @@ class class_db_postgres extends class_db_base {
     }
 
     /**
+     * @param string $strValue
+     * @return mixed
+     */
+    public function escape($strValue) {
+        return str_replace("\\", "\\\\", $strValue);
+    }
+
+    /**
      * Transforms the query into a valid postgres-syntax
      *
      * @param string $strQuery
