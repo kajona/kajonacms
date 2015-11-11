@@ -13,7 +13,7 @@
  * @package module_workflows
  * @since 4.5
  */
-class class_messageprovider_summary implements interface_messageprovider {
+class class_messageprovider_summary implements interface_messageprovider_extended {
 
 
 
@@ -26,4 +26,27 @@ class class_messageprovider_summary implements interface_messageprovider {
         return class_carrier::getInstance()->getObjLang()->getLang("messageprovider_workflows_summary", "workflows");
     }
 
+    /**
+     * @inheritDoc
+     */
+    public function isAlwaysActive()
+    {
+        return false;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function isAlwaysByMail()
+    {
+        return false;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function isVisibleInConfigView()
+    {
+        return true;
+    }
 }
