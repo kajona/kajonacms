@@ -36,37 +36,34 @@ class class_installer_samplecontent extends class_installer_base implements inte
         $this->registerModule($this->objMetadata->getStrTitle(), _samplecontent_modul_id_, "", "", $this->objMetadata->getStrVersion() , false);
 
 		//search for installers available
-        $arrInstaller = class_resourceloader::getInstance()->getFolderContent("/installer", array(".php"), false, function($strFile) {
-            return strpos($strFile, "installer_sc_") !== false;
+        $arrInstaller = class_resourceloader::getInstance()->getFolderContent("/installer", array(".php"), false, null, function(&$strFilename, $strPath) {
+            $strFilename = class_classloader::getInstance()->getInstanceFromFilename($strPath, "interface_sc_installer");
         });
 
         asort($arrInstaller);
 
         $strReturn .= "Loading installers...\n";
-        foreach ($arrInstaller as $strOneInstaller) {
-            $strReturn .= "\n\nInstaller found: ".$strOneInstaller."\n";
-            include_once(_realpath_.array_search($strOneInstaller, $arrInstaller));
-            //Creating an object....
-            $strClass = "class_".str_replace(".php", "", $strOneInstaller);
-            /** @var $objInstaller interface_sc_installer|class_installer_base */
-            $objInstaller = new $strClass();
+        /** @var $objInstaller interface_sc_installer|class_installer_base */
+        foreach ($arrInstaller as $objInstaller) {
 
-            if($objInstaller instanceof interface_sc_installer ) {
-                $strModule = $objInstaller->getCorrespondingModule();
-                $strReturn .= "Module ".$strModule."...\n";
-                $objModule = class_module_system_module::getModuleByName($strModule);
-                if($objModule == null) {
-                    $strReturn .= "\t... not installed!\n";
-                }
-                else {
-                    $strReturn .= "\t... installed.\n";
-                    $objInstaller->setObjDb($this->objDB);
-                    $objInstaller->setStrContentlanguage($this->strContentLanguage);
-                    $strReturn .= $objInstaller->install();
-                }
+            if($objInstaller == null)
+                continue;
+
+            $strReturn .= "\n\nInstaller found: ".get_class($objInstaller)."\n";
+            $strModule = $objInstaller->getCorrespondingModule();
+            $strReturn .= "Module ".$strModule."...\n";
+            $objModule = class_module_system_module::getModuleByName($strModule);
+            if($objModule == null) {
+                $strReturn .= "\t... not installed!\n";
             }
-            $this->objDB->flushQueryCache();
+            else {
+                $strReturn .= "\t... installed.\n";
+                $objInstaller->setObjDb($this->objDB);
+                $objInstaller->setStrContentlanguage($this->strContentLanguage);
+                $strReturn .= $objInstaller->install();
+            }
         }
+        $this->objDB->flushQueryCache();
 
         if(!file_exists(_realpath_."/favicon.ico")) {
             if(!copy(class_resourceloader::getInstance()->getCorePathForModule("module_samplecontent", true)."/module_samplecontent/favicon.ico.root", _realpath_."/favicon.ico"))

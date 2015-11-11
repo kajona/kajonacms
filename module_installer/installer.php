@@ -484,7 +484,6 @@ class class_installer {
 
     /**
      * Installs, if available, the samplecontent
-
      */
     public function installSamplecontent() {
         $strReturn = "";

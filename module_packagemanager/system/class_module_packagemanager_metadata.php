@@ -107,8 +107,9 @@ class class_module_packagemanager_metadata implements interface_admin_listable {
      */
     private function initFromFilesystem($strPackage) {
 
-        if(!is_file(_realpath_.$strPackage."/metadata.xml"))
+        if(!is_file(_realpath_.$strPackage."/metadata.xml")) {
             throw new class_exception("file not found: "._realpath_.$strPackage."/metadata.xml", class_exception::$level_ERROR);
+        }
 
         $strMetadata = file_get_contents(_realpath_.$strPackage."/metadata.xml");
         $this->parseXMLDocument($strMetadata);
