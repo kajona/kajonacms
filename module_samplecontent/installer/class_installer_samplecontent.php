@@ -36,11 +36,34 @@ class class_installer_samplecontent extends class_installer_base implements inte
         $this->registerModule($this->objMetadata->getStrTitle(), _samplecontent_modul_id_, "", "", $this->objMetadata->getStrVersion() , false);
 
 		//search for installers available
-        $arrInstaller = class_resourceloader::getInstance()->getFolderContent("/installer", array(".php"), false, null, function(&$strFilename, $strPath) {
-            $strFilename = class_classloader::getInstance()->getInstanceFromFilename($strPath, "interface_sc_installer");
+        $arrTempInstaller = class_resourceloader::getInstance()->getFolderContent("/installer", array(".php"), false, null, function(&$strFilename, $strPath) {
+            $objInstance = class_classloader::getInstance()->getInstanceFromFilename($strPath, "interface_sc_installer");
+
+            //See if a legacy class was stored in the file
+            if($objInstance == null) {
+                $strClass = uniSubstr($strFilename, 0, -4);
+                $strClass = "class_".$strClass;
+
+                if(in_array($strClass, get_declared_classes())) {
+                    $strFilename = new $strClass();
+                }
+                else {
+                    $strFilename = null;
+                }
+            }
+            else {
+                $strFilename = $objInstance;
+            }
         });
 
-        asort($arrInstaller);
+
+        foreach($arrTempInstaller as $objInstaller) {
+            if($objInstaller !== null) {
+                $arrInstaller[uniStrReplace("class_", "", get_class($objInstaller))] = $objInstaller;
+            }
+        }
+
+        ksort($arrInstaller);
 
         $strReturn .= "Loading installers...\n";
         /** @var $objInstaller interface_sc_installer|class_installer_base */
