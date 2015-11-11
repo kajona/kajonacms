@@ -284,9 +284,12 @@ class class_usersources_source_ldap implements interface_usersources_usersource 
 
         //fill all groups - loads new members
         $arrGroups = $this->getAllGroupIds();
+
+        $arrUserIds = array();
+
         foreach($arrGroups as $strSingleGroupId) {
             $objGroup = new class_usersources_group_ldap($strSingleGroupId);
-            $objGroup->getUserIdsForGroup();
+            $arrUserIds = array_merge($arrUserIds, $objGroup->getUserIdsForGroup());
         }
 
         //parse all users
@@ -297,11 +300,13 @@ class class_usersources_source_ldap implements interface_usersources_usersource 
             $objSourceUser = $objUser->getObjSourceUser();
             $arrUserDetails = false;
             try {
-                $arrUserDetails = $objLdap->getUserDetailsByDN($objSourceUser->getStrDN());
+                $arrUserDetails = $objLdap->getUserdetailsByName($objUser->getStrUsername());
+                if($arrUserDetails != false && isset($arrUserDetails[0]))
+                    $arrUserDetails = $arrUserDetails[0];
             }
             catch(class_exception $objEx) {
             }
-            if($arrUserDetails !== false) {
+            if($arrUserDetails !== false && in_array($strOneUserId, $arrUserIds)) {
                 $objSourceUser->setStrDN($arrUserDetails["identifier"]);
                 $objSourceUser->setStrFamilyname($arrUserDetails["familyname"]);
                 $objSourceUser->setStrGivenname($arrUserDetails["givenname"]);
@@ -312,7 +317,8 @@ class class_usersources_source_ldap implements interface_usersources_usersource 
             }
             else {
                 //user seems to be deleted, remove from system, too
-                $objUser->deleteObject();
+//                $objUser->deleteObject();
+                class_logger::getInstance("ldapsync.log")->addLogRow("Deleting user ".$strOneUserId."@".$objSourceUser->getStrDN(), class_logger::$levelWarning);
             }
         }
 

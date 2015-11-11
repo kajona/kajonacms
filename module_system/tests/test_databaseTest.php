@@ -205,5 +205,32 @@ class class_test_database extends class_testbase {
 
     }
 
+    public function testEscapeText()
+    {
+        $this->markTestIncomplete('Escaping not solved yet');
+
+        $this->createTable();
+
+        $objDB = class_carrier::getInstance()->getObjDB();
+
+        $dbPrefix = _dbprefix_;
+        $systemId = generateSystemid();
+
+        $strQuery = <<<SQL
+INSERT INTO {$dbPrefix}temp_autotest
+    (temp_id, temp_long, temp_double, temp_char10, temp_char20, temp_char100, temp_char254, temp_char500, temp_text)
+VALUES
+    ('{$systemId}', 123456, 23.45, '', ?, ?, ?, ?, ?)
+SQL;
+
+        $this->assertTrue($objDB->_pQuery($strQuery, array('Foo\\Bar\\Baz', 'Foo\\Bar\\Baz', 'Foo\\Bar\\Baz', 'Foo\\Bar\\Baz', 'Foo\\Bar\\Baz')), "testDataBase insert");
+
+        $strQuery = "SELECT * FROM "._dbprefix_."temp_autotest WHERE temp_char20 LIKE ?";
+        $arrRow = $objDB->getPRow($strQuery, array("Foo\\Bar%"));
+
+        $this->assertNotEmpty($arrRow);
+        $this->assertEquals('Foo\\Bar\\Baz', $arrRow['temp_char20']);
+    }
+
 }
 
