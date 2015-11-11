@@ -6,6 +6,8 @@
 *-------------------------------------------------------------------------------------------------------*
 *   $Id$                                       *
 ********************************************************************************************************/
+use Kajona\Pages\System\PagesFolder;
+use Kajona\Pages\System\PagesPage;
 
 
 /**
@@ -27,7 +29,7 @@ class class_installer_sc_votings implements interface_sc_installer  {
 
         //fetch navifolder-id
         $strNaviFolderId = "";
-        $arrFolder = class_module_pages_folder::getFolderList();
+        $arrFolder = PagesFolder::getFolderList();
         foreach($arrFolder as $objOneFolder)
             if($objOneFolder->getStrName() == "mainnavigation")
                 $strNaviFolderId = $objOneFolder->getSystemid();
@@ -63,7 +65,7 @@ class class_installer_sc_votings implements interface_sc_installer  {
 
 
         $strReturn .= "Creating voting-page\n";
-        $objPage = new class_module_pages_page();
+        $objPage = new PagesPage();
         $objPage->setStrName("votings");
         $objPage->setStrBrowsername("Votings");
         $objPage->setStrTemplate("standard.tpl");

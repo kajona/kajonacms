@@ -6,6 +6,8 @@
 *-------------------------------------------------------------------------------------------------------*
 *   $Id$                               *
 ********************************************************************************************************/
+use Kajona\Pages\System\PagesFolder;
+use Kajona\Pages\System\PagesPage;
 
 /**
  * Installer of the navigation samplecontent
@@ -30,13 +32,13 @@ class class_installer_sc_02navigation implements interface_sc_installer  {
     public function install() {
 
         //search the master page
-        $objMaster = class_module_pages_page::getPageByName("master");
+        $objMaster = PagesPage::getPageByName("master");
         if($objMaster != null)
             $this->strMasterID = $objMaster->getSystemid();
 
         //fetch navifolder-id
         $strNaviFolderId = "";
-        $arrFolder = class_module_pages_folder::getFolderList();
+        $arrFolder = PagesFolder::getFolderList();
         foreach($arrFolder as $objOneFolder)
             if($objOneFolder->getStrName() == "mainnavigation")
                 $strNaviFolderId = $objOneFolder->getSystemid();
@@ -132,7 +134,7 @@ class class_installer_sc_02navigation implements interface_sc_installer  {
         }
 
         $strReturn .= "Creating simple sitemap...\n";
-        $objPage = new class_module_pages_page();
+        $objPage = new PagesPage();
         $objPage->setStrName("sitemap");
         $objPage->setStrBrowsername("Sitemap");
         $objPage->setStrTemplate("standard.tpl");

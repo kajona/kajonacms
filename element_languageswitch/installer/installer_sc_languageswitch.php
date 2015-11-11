@@ -6,6 +6,7 @@
 *-------------------------------------------------------------------------------------------------------*
 *   $Id$                            *
 ********************************************************************************************************/
+use Kajona\Pages\System\PagesPage;
 
 
 /**
@@ -32,7 +33,7 @@ class class_installer_sc_languageswitch implements interface_sc_installer  {
         $strReturn = "";
 
         //search the master page
-        $objMaster = class_module_pages_page::getPageByName("master");
+        $objMaster = PagesPage::getPageByName("master");
         if($objMaster != null)
             $this->strMasterID = $objMaster->getSystemid();
 

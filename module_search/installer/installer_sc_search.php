@@ -6,6 +6,8 @@
 *-------------------------------------------------------------------------------------------------------*
 *   $Id$                               *
 ********************************************************************************************************/
+use Kajona\Pages\System\PagesFolder;
+use Kajona\Pages\System\PagesPage;
 
 
 /**
@@ -43,14 +45,14 @@ class class_installer_sc_search implements interface_sc_installer {
         if($objModule != null) {
 
             $strSystemFolderId = "";
-            $arrFolder = class_module_pages_folder::getFolderList();
+            $arrFolder = PagesFolder::getFolderList();
             foreach($arrFolder as $objOneFolder) {
                 if($objOneFolder->getStrName() == "_system")
                     $strSystemFolderId = $objOneFolder->getSystemid();
             }
 
             //search the master page
-            $objMaster = class_module_pages_page::getPageByName("master");
+            $objMaster = PagesPage::getPageByName("master");
             if($objMaster != null)
                 $this->strMasterID = $objMaster->getSystemid();
 
@@ -76,7 +78,7 @@ class class_installer_sc_search implements interface_sc_installer {
             }
 
             $strReturn .= "Creating search page\n";
-            $objPage = new class_module_pages_page();
+            $objPage = new PagesPage();
             $objPage->setStrName("search");
 
             if($this->strContentLanguage == "de")
