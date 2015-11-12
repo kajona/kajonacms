@@ -223,8 +223,16 @@ SQL;
 
         $this->assertTrue($objDB->_pQuery($strQuery, array('Foo\\Bar\\Baz', 'Foo\\Bar\\Baz', 'Foo\\Bar\\Baz', 'Foo\\Bar\\Baz', 'Foo\\Bar\\Baz')), "testDataBase insert");
 
+        // like must be escaped
         $strQuery = "SELECT * FROM "._dbprefix_."temp_autotest WHERE temp_char20 LIKE ?";
         $arrRow = $objDB->getPRow($strQuery, array($objDB->escape("Foo\\Bar%")));
+
+        $this->assertNotEmpty($arrRow);
+        $this->assertEquals('Foo\\Bar\\Baz', $arrRow['temp_char20']);
+
+        // equals needs no escape
+        $strQuery = "SELECT * FROM "._dbprefix_."temp_autotest WHERE temp_char20 = ?";
+        $arrRow = $objDB->getPRow($strQuery, array("Foo\\Bar\\Baz"));
 
         $this->assertNotEmpty($arrRow);
         $this->assertEquals('Foo\\Bar\\Baz', $arrRow['temp_char20']);
