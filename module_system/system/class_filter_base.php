@@ -66,18 +66,19 @@ abstract class class_filter_base
                     $strValue = $this->$strGetter();
                     if ($strValue !== null && $strValue !== "") {
                         if (is_string($strValue)) {
-                            $strCompareOperator = $enumFilterCompareOperator === null ? "LIKE" : $enumFilterCompareOperator->getEnumAsSqlString();
                             if (validateSystemid($strValue)) {
-                                $arrRestriction[] = new class_orm_objectlist_restriction("AND " . $strTableColumn . " $strCompareOperator ?", $strValue);
+                                $strCompareOperator = $enumFilterCompareOperator === null ? "=" : $enumFilterCompareOperator->getEnumAsSqlString();
+                                $arrRestriction[] = new class_orm_objectlist_restriction("AND $strTableColumn $strCompareOperator ?", $strValue);
                             } else {
-                                $arrRestriction[] = new class_orm_objectlist_restriction("AND " . $strTableColumn . " $strCompareOperator ?", "%" . $strValue . "%");
+                                $strCompareOperator = $enumFilterCompareOperator === null ? "LIKE" : $enumFilterCompareOperator->getEnumAsSqlString();
+                                $arrRestriction[] = new class_orm_objectlist_restriction("AND $strTableColumn $strCompareOperator ?", "%" . $strValue . "%");
                             }
                         } elseif (is_int($strValue) || is_float($strValue)) {
                             $strCompareOperator = $enumFilterCompareOperator === null ? "=" : $enumFilterCompareOperator->getEnumAsSqlString();
-                            $arrRestriction[] = new class_orm_objectlist_restriction("AND " . $strTableColumn . " $strCompareOperator ?", $strValue);
+                            $arrRestriction[] = new class_orm_objectlist_restriction("AND $strTableColumn $strCompareOperator ?", $strValue);
                         } elseif (is_bool($strValue)) {
                             $strCompareOperator = $enumFilterCompareOperator === null ? "=" : $enumFilterCompareOperator->getEnumAsSqlString();
-                            $arrRestriction[] = new class_orm_objectlist_restriction("AND " . $strTableColumn . " $strCompareOperator ?", $strValue ? 1 : 0);
+                            $arrRestriction[] = new class_orm_objectlist_restriction("AND $strTableColumn $strCompareOperator ?", $strValue ? 1 : 0);
                         } elseif (is_array($strValue)) {
                             $arrRestriction[] = new class_orm_objectlist_in_restriction($strTableColumn, $strValue);
                         } elseif ($strValue instanceof class_date) {
@@ -97,7 +98,7 @@ abstract class class_filter_base
                                 }
                             }
 
-                            $arrRestriction[] = new class_orm_objectlist_restriction("AND " . $strTableColumn . " $strCompareOperator ?", $strValue->getLongTimestamp());
+                            $arrRestriction[] = new class_orm_objectlist_restriction("AND $strTableColumn $strCompareOperator ?", $strValue->getLongTimestamp());
                         }
                     }
                 }
