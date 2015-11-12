@@ -52,7 +52,7 @@ KAJONA.admin.jqplotHelper = {
             if (this.objPostPlotOptions.hasOwnProperty("bitXAxisLabelsInvisible") && this.objPostPlotOptions["bitXAxisLabelsInvisible"]) {
                 KAJONA.admin.jqplotHelper.setAxisInvisible(this.strChartId, "xaxis");
             }
-            if (this.objPostPlotOptions.hasOwnProperty("bitXAxisLabelsInvisible") && this.objPostPlotOptions["bitXAxisLabelsInvisible"]) {
+            if (this.objPostPlotOptions.hasOwnProperty("bitYAxisLabelsInvisible") && this.objPostPlotOptions["bitYAxisLabelsInvisible"]) {
                 KAJONA.admin.jqplotHelper.setAxisInvisible(this.strChartId, "yaxis");
             }
         };
