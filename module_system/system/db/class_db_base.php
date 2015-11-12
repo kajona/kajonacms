@@ -166,5 +166,14 @@ abstract class class_db_base implements interface_db_driver {
     public function flushQueryCache() {
         $this->arrStatementsCache = array();
     }
+
+    /**
+     * @param string $strValue
+     * @return string
+     */
+    public function escape($strValue) {
+        return $strValue;
+    }
+
 }
 

@@ -207,8 +207,6 @@ class class_test_database extends class_testbase {
 
     public function testEscapeText()
     {
-        //$this->markTestIncomplete('Escaping not solved yet');
-
         $this->createTable();
 
         $objDB = class_carrier::getInstance()->getObjDB();
