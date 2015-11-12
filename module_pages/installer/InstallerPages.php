@@ -7,13 +7,25 @@
 *   $Id$                                         *
 ********************************************************************************************************/
 
+namespace Kajona\Pages\Installer;
+
+use class_filesystem;
+use class_installer_base;
+use class_module_packagemanager_template;
+use class_module_system_aspect;
+use class_module_system_module;
+use class_module_system_setting;
+use class_orm_schemamanager;
+use interface_installer;
+use Kajona\Pages\System\PagesElement;
+
 /**
  * Installer of the pages-module
  *
  * @package module_pages
  * @moduleId _pages_modul_id_
  */
-class class_installer_pages extends class_installer_base implements interface_installer {
+class InstallerPages extends class_installer_base implements interface_installer {
 
 	public function install() {
 
@@ -77,86 +89,6 @@ class class_installer_pages extends class_installer_base implements interface_in
 
 
 
-
-        //Table for paragraphes
-        $strReturn .= "Installing paragraph table...\n";
-        $objManager->createTable("class_element_paragraph_admin");
-
-        //Register the element
-        $strReturn .= "Registering paragraph...\n";
-        //check, if not already existing
-        $objElement = null;
-        try {
-            $objElement = class_module_pages_element::getElement("paragraph");
-        }
-        catch (class_exception $objEx)  {
-        }
-        if($objElement == null) {
-            $objElement = new class_module_pages_element();
-            $objElement->setStrName("paragraph");
-            $objElement->setStrClassAdmin("class_element_paragraph_admin.php");
-            $objElement->setStrClassPortal("class_element_paragraph_portal.php");
-            $objElement->setIntCachetime(3600*24*30);
-            $objElement->setIntRepeat(1);
-            $objElement->setStrVersion($this->objMetadata->getStrVersion());
-            $objElement->updateObjectToDb();
-            $strReturn .= "Element registered...\n";
-        }
-        else {
-            $strReturn .= "Element already installed!...\n";
-        }
-
-        $strReturn .= "Registering row...\n";
-        //check, if not already existing
-        $objElement = null;
-        try {
-            $objElement = class_module_pages_element::getElement("row");
-        }
-        catch (class_exception $objEx)  {
-        }
-        if($objElement == null) {
-            $objElement = new class_module_pages_element();
-            $objElement->setStrName("row");
-            $objElement->setStrClassAdmin("class_element_row_admin.php");
-            $objElement->setStrClassPortal("class_element_row_portal.php");
-            $objElement->setIntCachetime(3600*24*30);
-            $objElement->setIntRepeat(0);
-            $objElement->setStrVersion($this->objMetadata->getStrVersion());
-            $objElement->updateObjectToDb();
-            $strReturn .= "Element registered...\n";
-        }
-        else {
-            $strReturn .= "Element already installed!...\n";
-        }
-
-        //Table for images
-        $strReturn .= "Installing image table...\n";
-        $objManager->createTable("class_element_image_admin");
-
-        //Register the element
-        $strReturn .= "Registering image...\n";
-        //check, if not already existing
-        $objElement = null;
-        try {
-            $objElement = class_module_pages_element::getElement("image");
-        }
-        catch (class_exception $objEx)  {
-        }
-        if($objElement == null) {
-            $objElement = new class_module_pages_element();
-            $objElement->setStrName("image");
-            $objElement->setStrClassAdmin("class_element_image_admin.php");
-            $objElement->setStrClassPortal("class_element_image_portal.php");
-            $objElement->setIntCachetime(3600*24*30);
-            $objElement->setIntRepeat(1);
-            $objElement->setStrVersion($this->objMetadata->getStrVersion());
-            $objElement->updateObjectToDb();
-            $strReturn .= "Element registered...\n";
-        }
-        else {
-            $strReturn .= "Element already installed!...\n";
-        }
-
         $strReturn .= "Installing universal element table...\n";
 
         $arrFields = array();
@@ -171,6 +103,57 @@ class class_installer_pages extends class_installer_base implements interface_in
 
         if(!$this->objDB->createTable("element_universal", $arrFields, array("content_id")))
             $strReturn .= "An error occurred! ...\n";
+
+        //Table for paragraphes
+        $strReturn .= "Installing paragraph table...\n";
+        $objManager->createTable("class_element_paragraph_admin");
+
+        //Table for page-element
+        $strReturn .= "Installing gallery-element table...\n";
+        $objManager->createTable("class_element_gallery_admin");
+
+        //Table for page-element
+        $strReturn .= "Installing downloads-element table...\n";
+        $objManager->createTable("class_element_downloads_admin");
+
+        //Table for images
+        $strReturn .= "Installing image table...\n";
+        $objManager->createTable("class_element_image_admin");
+
+
+        $arrElements = array(
+            "row" => array("class_element_row_admin.php", "class_element_row_portal.php"),
+            "paragraph" => array("class_element_paragraph_admin.php", "class_element_paragraph_portal.php"),
+            "image" => array("class_element_image_admin.php", "class_element_image_portal.php"),
+            "downloads" => array("class_element_downloads_admin.php", "class_element_downloads_portal.php"),
+            "gallery" => array("class_element_gallery_admin.php", "class_element_gallery_portal.php"),
+            "galleryRandom" => array("class_element_galleryRandom_admin.php", "class_element_gallery_portal.php"),
+        );
+
+        foreach($arrElements as $strOneElement => $arrConfig) {
+
+            //Register the element
+            $strReturn .= "Registering element ".$strOneElement."...\n";
+            //check, if not already existing
+            $objElement = PagesElement::getElement($strOneElement);
+            if ($objElement == null) {
+                $objElement = new PagesElement();
+                $objElement->setStrName($strOneElement);
+                $objElement->setStrClassAdmin($arrConfig[0]);
+                $objElement->setStrClassPortal($arrConfig[1]);
+                $objElement->setIntCachetime(3600);
+                $objElement->setIntRepeat(1);
+                $objElement->setStrVersion($this->objMetadata->getStrVersion());
+                $objElement->updateObjectToDb();
+                $strReturn .= "Element registered...\n";
+            }
+            else {
+                $strReturn .= "Element already installed!...\n";
+            }
+
+        }
+
+
 
 
         $strReturn .= "Setting aspect assignments...\n";
@@ -279,6 +262,18 @@ class class_installer_pages extends class_installer_base implements interface_in
             $this->updateElementVersion("row", "4.7.1");
             $this->updateElementVersion("paragraph", "4.7.1");
             $this->updateElementVersion("image", "4.7.1");
+        }
+
+        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "4.7.1") {
+            $strReturn = "Updating to 4.7.2...\n";
+            $this->updateModuleVersion("", "4.7.2");
+            $this->updateElementVersion("row", "4.7.2");
+            $this->updateElementVersion("paragraph", "4.7.2");
+            $this->updateElementVersion("image", "4.7.2");
+            $this->updateElementVersion("gallery", "4.7.2");
+            $this->updateElementVersion("galleryRandom", "4.7.2");
+            $this->updateElementVersion("downloads", "4.7.2");
         }
 
         return $strReturn."\n\n";

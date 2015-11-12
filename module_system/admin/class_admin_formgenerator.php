@@ -518,8 +518,27 @@ class class_admin_formgenerator
     private function getFormEntryInstance($strName, $strPropertyname)
     {
 
-        $strClassname = "class_formentry_".$strName;
-        if (class_resourceloader::getInstance()->getPathForFile("/admin/formentries/".$strClassname.".php")) {
+        //backslash given?
+        //the V5 way: namespaves
+        if(uniStrpos($strName, "\\") !== false) {
+            $strClassname = $strName;
+        }
+        else {
+            //backwards support for v4
+            $strClassname = "class_formentry_".$strName;
+            $strPath = class_resourceloader::getInstance()->getPathForFile("/admin/formentries/".$strClassname.".php");
+
+            if($strPath == null) {
+                class_resourceloader::getInstance()->getPathForFile("/legacy/".$strClassname.".php");
+
+                if($strPath == null) {
+                    $strClassname = null;
+                }
+            }
+
+        }
+
+        if ($strClassname !== null) {
             return new $strClassname($this->strFormname, $strPropertyname, $this->objSourceobject);
         }
         else {

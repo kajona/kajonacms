@@ -1095,5 +1095,17 @@ class class_db
         return $this->bitConnected;
     }
 
+    /**
+     * For some database vendors we need to escape the backslash character even if we are using prepared statments. This
+     * method unifies the behaviour. In order to select a column which contains a backslash you need to escape the value
+     * with this method
+     *
+     * @param string $strValue
+     * @return mixed
+     */
+    public function escape($strValue)
+    {
+        return $this->objDbDriver->escape($strValue);
+    }
 
 }

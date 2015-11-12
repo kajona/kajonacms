@@ -4,6 +4,9 @@
 *   (c) 2007-2015 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 ********************************************************************************************************/
+use Kajona\Pages\System\PagesElement;
+use Kajona\Pages\System\PagesPage;
+use Kajona\Pages\System\PagesPageelement;
 
 
 /**
@@ -388,8 +391,8 @@ class class_module_navigation_portal extends class_portal_controller implements 
     private function isPageVisibleInOtherNavigation() {
 
         //load the placeholders placed on the current page-template. therefore, instantiate a page-object
-        $objPageData = class_module_pages_page::getPageByName($this->getPagename());
-        $objMasterPageData = class_module_pages_page::getPageByName("master");
+        $objPageData = PagesPage::getPageByName($this->getPagename());
+        $objMasterPageData = PagesPage::getPageByName("master");
         if($objPageData != null) {
             //analyze the placeholders on the page, faster than iterating the the elements available in the db
             $strTemplateId = $this->objTemplate->readTemplate("/module_pages/".$objPageData->getStrTemplate());
@@ -404,10 +407,10 @@ class class_module_navigation_portal extends class_portal_controller implements 
 
                             //seems as we have a navigation-element different than the current one.
                             //check, if the element is installed on the current page
-                            $arrElements = class_module_pages_pageelement::getElementsByPlaceholderAndPage($objPageData->getSystemid(), $arrPlaceholder["placeholder"], $this->getStrPortalLanguage());
+                            $arrElements = PagesPageelement::getElementsByPlaceholderAndPage($objPageData->getSystemid(), $arrPlaceholder["placeholder"], $this->getStrPortalLanguage());
                             //maybe on the masters-page?
                             if(count($arrElements) == 0 && $objMasterPageData != null)
-                                $arrElements = class_module_pages_pageelement::getElementsByPlaceholderAndPage($objMasterPageData->getSystemid(), $arrPlaceholder["placeholder"], $this->getStrPortalLanguage());
+                                $arrElements = PagesPageelement::getElementsByPlaceholderAndPage($objMasterPageData->getSystemid(), $arrPlaceholder["placeholder"], $this->getStrPortalLanguage());
 
                             if(count($arrElements) > 0) {
                                 foreach($arrElements as $objElement) {
@@ -492,7 +495,7 @@ class class_module_navigation_portal extends class_portal_controller implements 
         }
 
         if($objPointData->getStrPageI() != "") {
-            $objPage = class_module_pages_page::getPageByName($objPointData->getStrPageI());
+            $objPage = PagesPage::getPageByName($objPointData->getStrPageI());
             if($objPage != null && $objPage->getIntLmTime() != "")
                 $arrTemp["lastmodified"] = strftime("%Y-%m-%dT%H:%M:%S", $objPage->getIntLmTime());
         }

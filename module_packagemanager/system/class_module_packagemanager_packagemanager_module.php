@@ -98,7 +98,7 @@ class class_module_packagemanager_packagemanager_module implements interface_pac
         $strReturn = "";
 
         if(uniStrpos($this->getObjMetadata()->getStrPath(), "core") === false)
-            throw new class_exception("Current module not located in a  core directory.", class_exception::$level_ERROR);
+            throw new class_exception("Current module not located in a core directory.", class_exception::$level_ERROR);
 
         if(!$this->isInstallable())
             throw new class_exception("Current module isn't installable, not all requirements are given", class_exception::$level_ERROR);
@@ -107,38 +107,36 @@ class class_module_packagemanager_packagemanager_module implements interface_pac
         $objFilesystem = new class_filesystem();
         $arrInstaller = $objFilesystem->getFilelist($this->objMetadata->getStrPath()."/installer/", array(".php"));
 
+
         if($arrInstaller === false)
             return "";
 
         //start with modules
         foreach($arrInstaller as $strOneInstaller) {
 
-            //skip samplecontent files
-            if(uniStrpos($strOneInstaller, "class_") === false)
+            $objInstance = class_classloader::getInstance()->getInstanceFromFilename($this->objMetadata->getStrPath()."/installer/".$strOneInstaller, "class_installer_base");
+
+            if($objInstance == false)
                 continue;
 
             //skip element installers at first run
-            if(uniStrpos($strOneInstaller, "element") === false) {
-                class_logger::getInstance(class_logger::PACKAGEMANAGEMENT)->addLogRow("triggering updateOrInstall() on installer ".$strOneInstaller.", all requirements given", class_logger::$levelInfo);
-                //trigger update or install
-                $strName = uniSubstr($strOneInstaller, 0, -4);
-                /** @var $objInstaller interface_installer */
-                $objInstaller = new $strName();
-                $strReturn .= $objInstaller->installOrUpdate();
-            }
+            class_logger::getInstance(class_logger::PACKAGEMANAGEMENT)->addLogRow("triggering updateOrInstall() on installer ".$strOneInstaller.", all requirements given", class_logger::$levelInfo);
+            //trigger update or install
+            $strReturn .= $objInstance->installOrUpdate();
         }
 
         //proceed with elements
         foreach($arrInstaller as $strOneInstaller) {
+
+            $objInstance = class_classloader::getInstance()->getInstanceFromFilename($this->objMetadata->getStrPath()."/installer/".$strOneInstaller, "class_elementinstaller_base");
+
+            if($objInstance == false)
+                continue;
+
             //skip samplecontent files
-            if(uniStrpos($strOneInstaller, "element") !== false) {
-                class_logger::getInstance(class_logger::PACKAGEMANAGEMENT)->addLogRow("triggering updateOrInstall() on installer ".$strOneInstaller.", all requirements given", class_logger::$levelInfo);
-                //trigger update or install
-                $strName = uniSubstr($strOneInstaller, 0, -4);
-                /** @var $objInstaller interface_installer */
-                $objInstaller = new $strName();
-                $strReturn .= $objInstaller->installOrUpdate();
-            }
+            class_logger::getInstance(class_logger::PACKAGEMANAGEMENT)->addLogRow("triggering updateOrInstall() on installer ".$strOneInstaller.", all requirements given", class_logger::$levelInfo);
+            //trigger update or install
+            $strReturn .= $objInstance->installOrUpdate();
         }
 
         class_cache::flushCache();
