@@ -6,6 +6,10 @@
 *-------------------------------------------------------------------------------------------------------*
 *	$Id$									*
 ********************************************************************************************************/
+use Kajona\Pages\Portal\PagesPortalController;
+use Kajona\Pages\Portal\PagesPortaleditor;
+use Kajona\Pages\System\PagesPortaleditorActionEnum;
+use Kajona\Pages\System\PagesPortaleditorSystemidAction;
 
 /**
  * Portal-class of the news. Handles thd printing of news lists / detail
@@ -148,16 +152,17 @@ class class_module_news_portal extends class_portal_controller implements interf
                 }
 
                 //Add pe code
-                $arrPeConfig = array(
-                    "pe_module"               => "news",
-                    "pe_action_edit"          => "editNews",
-                    "pe_action_edit_params"   => "&systemid=" . $objOneNews->getSystemid(),
-                    "pe_action_new"           => "newNews",
-                    "pe_action_new_params"    => "",
-                    "pe_action_delete"        => "delete",
-                    "pe_action_delete_params" => "&systemid=" . $objOneNews->getSystemid()
+                $strReturn .= PagesPortaleditor::addPortaleditorContentWrapper($strOneNews, $objOneNews->getSystemid());
+
+                PagesPortaleditor::getInstance()->registerAction(
+                    new PagesPortaleditorSystemidAction(PagesPortaleditorActionEnum::EDIT(), class_link::getLinkAdminHref($this->getArrModule("module"), "editNews", "&systemid={$objOneNews->getSystemid()}"), $objOneNews->getSystemid())
                 );
-                $strReturn .= class_element_portal::addPortalEditorCode($strOneNews, $objOneNews->getSystemid(), $arrPeConfig);
+                PagesPortaleditor::getInstance()->registerAction(
+                    new PagesPortaleditorSystemidAction(PagesPortaleditorActionEnum::DELETE(), class_link::getLinkAdminHref($this->getArrModule("module"), "delete", "&systemid={$objOneNews->getSystemid()}"), $objOneNews->getSystemid())
+                );
+                PagesPortaleditor::getInstance()->registerAction(
+                    new PagesPortaleditorSystemidAction(PagesPortaleditorActionEnum::CREATE(), class_link::getLinkAdminHref($this->getArrModule("module"), "newNews", ""), $objOneNews->getSystemid())
+                );
             }
         }
         $arrWrapperTemplate = array();
@@ -233,18 +238,16 @@ class class_module_news_portal extends class_portal_controller implements interf
             }
 
             //Add pe code
-            $arrPeConfig = array(
-                "pe_module"             => "news",
-                "pe_action_edit"        => "editNews",
-                "pe_action_edit_params" => "&systemid=" . $this->getSystemid()
+            $strReturn = PagesPortaleditor::addPortaleditorContentWrapper($strReturn, $objNews->getSystemid());
+            PagesPortaleditor::getInstance()->registerAction(
+                new PagesPortaleditorSystemidAction(PagesPortaleditorActionEnum::EDIT(), class_link::getLinkAdminHref($this->getArrModule("module"), "editNews", "&systemid={$this->getSystemid()}"), $this->getSystemid())
             );
-            $strReturn = class_element_portal::addPortalEditorCode($strReturn, $objNews->getSystemid(), $arrPeConfig);
 
             //and count the hit
             $objNews->increaseHits();
 
             //set the name of the current news to the page-title via class_pages
-            class_module_pages_portal::registerAdditionalTitle($objNews->getStrTitle());
+            PagesPortalController::registerAdditionalTitle($objNews->getStrTitle());
         }
         else {
             $strReturn = $this->getLang("commons_error_permissions");

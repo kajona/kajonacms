@@ -5,6 +5,10 @@
 ********************************************************************************************************/
 
 namespace Kajona\Pages\Portal;
+use class_carrier;
+use class_model;
+use class_module_system_setting;
+use class_objectfactory;
 use Kajona\Pages\System\PagesPortaleditorActionAbstract;
 use Kajona\Pages\System\PagesPortaleditorPlaceholderAction;
 use Kajona\Pages\System\PagesPortaleditorSystemidAction;
@@ -77,4 +81,43 @@ class PagesPortaleditor  {
         $this->arrActions[] = $objAction;
     }
 
+
+    /**
+     * Adds the wrapper for an element rendered by the portal-editor
+     * @param $strOutput
+     * @param $strSystemid
+     * @param $strElement
+     *
+     * @return string
+     */
+    public static function addPortaleditorContentWrapper($strOutput, $strSystemid, $strElement = "")
+    {
+
+        if (!validateSystemid($strSystemid)) {
+            return $strOutput;
+        }
+
+        /** @var class_model $objInstance */
+        $objInstance = class_objectfactory::getInstance()->getObject($strSystemid);
+        if ($objInstance == null || class_module_system_setting::getConfigValue("_pages_portaleditor_") != "true") {
+            return $strOutput;
+        }
+
+        if (!class_carrier::getInstance()->getObjSession()->isAdmin() || !$objInstance->rightEdit() || class_carrier::getInstance()->getObjSession()->getSession("pe_disable") == "true") {
+            return $strOutput;
+        }
+
+        return "<div class='peElementWrapper' data-systemid='{$strSystemid}' data-element='{$strElement}'>{$strOutput}</div>";
+    }
+
+    /**
+     * Adds the code to render a placeholder-fragement for the portal-editor
+     * @param $strPlaceholder
+     *
+     * @return string
+     */
+    public static function getPlaceholderWrapper($strPlaceholder)
+    {
+        return "<span data-placeholder='{$strPlaceholder}'></span>";
+    }
 }

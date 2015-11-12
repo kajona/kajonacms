@@ -27,6 +27,7 @@ use interface_scriptlet;
 use Kajona\Pages\System\PagesElement;
 use Kajona\Pages\System\PagesPage;
 use Kajona\Pages\System\PagesPageelement;
+use Kajona\Pages\System\PagesPortaleditorActionEnum;
 
 /**
  * Handles the loading of the pages - loads the elements, passes control to them and returns the complete
@@ -217,7 +218,7 @@ class PagesPortalController extends class_portal_controller implements interface
                 if (!isset($arrTemplate[$arrOnePlaceholder["placeholder"]])) {
                     $arrTemplate[$arrOnePlaceholder["placeholder"]] = "";
                 }
-                $arrTemplate[$arrOnePlaceholder["placeholder"]] .= "<span data-placeholder='".$arrOnePlaceholder["placeholder"]."'></span>";
+                $arrTemplate[$arrOnePlaceholder["placeholder"]] .= PagesPortaleditor::getPlaceholderWrapper($arrOnePlaceholder["placeholder"]);
             }
 
         }
@@ -383,6 +384,7 @@ class PagesPortalController extends class_portal_controller implements interface
      * @param string $strPageContent
      *
      * @return string
+     * @todo move this to an external class
      */
     private function renderPortalEditorCode(PagesPage $objPageData, $bitEditPermissionOnMasterPage, $strPageContent)
     {
@@ -483,7 +485,7 @@ class PagesPortalController extends class_portal_controller implements interface
                     });
                 }
 
-                KAJONA.admin.actions = ".\Kajona\Pages\Portal\PagesPortaleditor::getInstance()->convertToJs().";
+                KAJONA.admin.actions = ".PagesPortaleditor::getInstance()->convertToJs().";
             </script>";
             //Load portaleditor styles
             $strPeToolbar .= $this->objToolkit->getPeBasicData();
@@ -501,7 +503,7 @@ class PagesPortalController extends class_portal_controller implements interface
         }
         else {
             //Button to enable the toolbar & pe
-            $strEnableButton = "<div id=\"peEnableButton\" style=\"z-index: 1000; position: fixed; top: 0px; right: 0px;\"><a href=\"#\" onclick=\"KAJONA.admin.portaleditor.switchEnabled(true); return false;\" title=\"\">"
+            $strEnableButton = "<div id=\"peEnableButton\" style=\"z-index: 1000; position: fixed; top: 0; right: 0;\"><a href=\"#\" onclick=\"KAJONA.admin.portaleditor.switchEnabled(true); return false;\" title=\"\">"
                 .getImageAdmin("icon_disabled", $this->getLang("pe_enable", "pages"))."</a></div>";
             //Load portaleditor javascript
             $strEnableButton .= "\n<script type=\"text/javascript\" src=\""._webpath_."/core/module_pages/admin/scripts/kajona_portaleditor.js?".class_module_system_setting::getConfigValue("_system_browser_cachebuster_")."\"></script>";

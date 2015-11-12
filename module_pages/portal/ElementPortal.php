@@ -12,6 +12,7 @@ use class_cache;
 use class_carrier;
 use class_exception;
 use class_link;
+use class_model;
 use class_module_languages_language;
 use class_module_navigation_point;
 use class_module_system_setting;
@@ -125,43 +126,16 @@ abstract class ElementPortal extends class_portal_controller
 
         //wrap all in a try catch block
         try {
-
-            if (class_module_system_setting::getConfigValue("_pages_portaleditor_") == "true" && $this->objSession->isAdmin() && class_carrier::getInstance()->getObjSession()->getSession("pe_disable") != "true") {
-                //Check needed rights
-
-                $objElement = class_objectfactory::getInstance()->getObject($this->getSystemid());
-                if ($objElement->rightEdit()) {
-                    $arrConfig = array();
-                    $arrConfig["pe_module"] = "";
-                    $arrConfig["pe_action"] = "";
-
-                    if ($this->getArrModule("pe_module") != "") {
-                        $arrConfig["pe_module"] = $this->getArrModule("pe_module");
-                    }
-                    if ($this->getArrModule("pe_action") != "") {
-                        $arrConfig["pe_action"] = $this->getArrModule("pe_action");
-                    }
-
-                    $strReturn = $this->addPortalEditorCode($this->loadData(), $this->getSystemid(), $arrConfig, $this->arrElementData["page_element_ph_element"]);
-                }
-                else {
-                    $strReturn = $this->loadData();
-                    $strReturn = preg_replace('/data-kajona-editable=\"([a-zA-Z0-9#_]*)\"/i', "", $strReturn);
-                }
-            }
-            else {
-                $strReturn = $this->loadData();
-                //strip the data-editable values - no use case for regular page views
-                $strReturn = preg_replace('/data-kajona-editable=\"([a-zA-Z0-9#_]*)\"/i', "", $strReturn);
-            }
+            $strReturn = $this->loadData();
         }
         catch (class_exception $objEx) {
+            //FIXME: error handling is currently disabled
             //An error occurred during content generation. redirect to error page
-            $objEx->processException();
+            //$objEx->processException();
             //if available, show the error-page. on debugging-environments, the exception processing already die()d the process.
-            if ($this->getPagename() != class_module_system_setting::getConfigValue("_pages_errorpage_")) {
-                $this->portalReload(class_link::getLinkPortalHref(class_module_system_setting::getConfigValue("_pages_errorpage_")));
-            }
+//            if ($this->getPagename() != class_module_system_setting::getConfigValue("_pages_errorpage_")) {
+//                $this->portalReload(class_link::getLinkPortalHref(class_module_system_setting::getConfigValue("_pages_errorpage_")));
+//            }
 
             $strReturn = $objEx->getMessage();
         }
@@ -308,22 +282,25 @@ abstract class ElementPortal extends class_portal_controller
         $objBaseElement = new PagesPageelement($this->getSystemid());
 
 
-        if ($bitActivePortaleditor) {
-            $this->getPortalEditorActions();
-        }
-
         //if element is disabled & the pe is requested, wrap the content
         if ($bitActivePortaleditor && $objBaseElement->getIntRecordStatus() == 0) {
-            $arrPeElement = array();
-            $arrPeElement["title"] = $this->getLang("pe_inactiveElement", "pages")." (".$objBaseElement->getStrElement().")";
-            $strElementOutput = $this->objToolkit->getPeInactiveElement($arrPeElement);
-            $strElementOutput = ElementPortal::addPortalEditorSetActiveCode($strElementOutput, $this->getSystemid(), array());
+            //TODO really render the whole disabled element?
+            //$strElementOutput = $this->objToolkit->getPeInactiveElement(array("title" => $this->getLang("pe_inactiveElement", "pages")." (".$objBaseElement->getStrElement().")"));
+            $strElementOutput = $this->objToolkit->getPeInactiveElement(array("title" => $this->getElementOutput()));
+        }
+
+        if($bitActivePortaleditor) {
+            $this->getPortalEditorActions();
+            $strElementOutput = PagesPortaleditor::addPortaleditorContentWrapper($strElementOutput, $this->getSystemid(), $this->arrElementData["page_element_ph_element"]);
+
+        }
+        else {
+            $strElementOutput = preg_replace('/data-kajona-editable=\"([a-zA-Z0-9#_]*)\"/i', "", $strElementOutput);
         }
 
 
         return $strElementOutput;
     }
-
 
     /**
      * Registers the default portaleditor actions for the current element
@@ -390,164 +367,6 @@ abstract class ElementPortal extends class_portal_controller
                 new PagesPortaleditorPlaceholderAction(PagesPortaleditorActionEnum::CREATE(), class_link::getLinkAdminHref("pages_content", "new", "&systemid={$this->getSystemid()}&language={$strAdminLangParam}&placeholder={$strPlaceholder}&element={$objElement->getStrName()}&pe=1"), $strPlaceholder, $objElement->getStrName())
             );
         }
-    }
-
-
-    /**
-     * Creates the code surrounding the element.
-     * Creates the "entry" to the portal-editor
-     *
-     * @param string $strContent elements' output
-     * @param string $strSystemid elements' systemid
-     * @param array $arrConfig : pe_module, pe_action, [pe_action_new, pe_action_new_params]
-     * @param string $strElement
-     *
-     * @return string
-     * @static
-     *
-     * @deprecated
-     *
-     * @todo remove completely
-     */
-    public static function addPortalEditorCode($strContent, $strSystemid, $arrConfig, $strElement = "")
-    {
-        $strReturn = "";
-
-        if (!validateSystemid($strSystemid)) {
-            return $strContent;
-        }
-
-        $objInstance = class_objectfactory::getInstance()->getObject($strSystemid);
-        if ($objInstance == null || class_module_system_setting::getConfigValue("_pages_portaleditor_") != "true") {
-            return $strContent;
-        }
-
-        if (!class_carrier::getInstance()->getObjSession()->isAdmin() || !$objInstance->rightEdit($strSystemid) || class_carrier::getInstance()->getObjSession()->getSession("pe_disable") == "true") {
-            return $strContent;
-        }
-
-
-        //switch the text-language temporary
-        $strPortalLanguage = class_carrier::getInstance()->getObjLang()->getStrTextLanguage();
-        class_carrier::getInstance()->getObjLang()->setStrTextLanguage(class_carrier::getInstance()->getObjSession()->getAdminLanguage());
-
-        //fetch the language to set the correct admin-lang
-        $objLanguages = new class_module_languages_language();
-        $strAdminLangParam = "&language=".$objLanguages->getPortalLanguage();
-
-
-        $strModule = "pages_content";
-        $strAction = "edit";
-        //param-inits ---------------------------------------
-        //Generate url to the admin-area
-        if ($arrConfig["pe_module"] != "") {
-            $strModule = $arrConfig["pe_module"];
-        }
-        //---------------------------------------------------
-
-
-        //---------------------------------------------------
-        //Link to create a new entry - only for modules, so not the page-content directly!
-        $strNewLink = "";
-        if ($strModule != "pages_content") {
-            //Use Module-config to generate link
-            if (isset($arrConfig["pe_action_new"]) && $arrConfig["pe_action_new"] != "") {
-                $strNewUrl = class_link::getLinkAdminHref($strModule, $arrConfig["pe_action_new"], $arrConfig["pe_action_new_params"].$strAdminLangParam."&pe=1");
-                $strNewLink = "<a href=\"#\" onclick=\"KAJONA.admin.portaleditor.openDialog('".$strNewUrl."'); return false;\">".class_carrier::getInstance()->getObjLang()->getLang("pe_new_old", "pages")."</a>";
-            }
-        }
-
-
-        //---------------------------------------------------
-        //Link to edit current element
-        $strEditLink = "";
-        //standard: pages_content.
-        if ($strModule == "pages_content") {
-            $arrConfig["pe_action_edit"] = $strAction;
-            $arrConfig["pe_action_edit_params"] = "&systemid=".$strSystemid;
-        }
-        //Use Module-config to generate link
-        if (isset($arrConfig["pe_action_edit"]) && $arrConfig["pe_action_edit"] != "") {
-            $strEditUrl = class_link::getLinkAdminHref($strModule, $arrConfig["pe_action_edit"], $arrConfig["pe_action_edit_params"].$strAdminLangParam."&pe=1");
-            $strEditLink = "<a href=\"#\" onclick=\"KAJONA.admin.portaleditor.openDialog('".$strEditUrl."'); return false;\">".class_carrier::getInstance()->getObjLang()->getLang("pe_edit", "pages")."</a>";
-        }
-
-        //---------------------------------------------------
-        //link to copy an element to the same or another placeholder
-        $strCopyLink = "";
-        //standard: pages_content.
-        if ($strModule == "pages_content") {
-            $arrConfig["pe_action_copy"] = "copyElement";
-            $arrConfig["pe_action_copy_params"] = "&systemid=".$strSystemid;
-        }
-        //Use Module-config to generate link
-        if (isset($arrConfig["pe_action_copy"]) && $arrConfig["pe_action_copy"] != "") {
-            $strCopyUrl = class_link::getLinkAdminHref($strModule, $arrConfig["pe_action_copy"], $arrConfig["pe_action_copy_params"].$strAdminLangParam."&pe=1");
-            $strCopyLink = "<a href=\"#\" onclick=\"KAJONA.admin.portaleditor.openDialog('".$strCopyUrl."'); return false;\">".class_carrier::getInstance()->getObjLang()->getLang("pe_copy", "pages")."</a>";
-        }
-
-        //---------------------------------------------------
-        //link to delete the current element
-        $strDeleteLink = "";
-        if ($objInstance->rightDelete()) {
-
-            //standard: pages_content.
-            if ($strModule == "pages_content") {
-                $arrConfig["pe_action_delete"] = "deleteElementFinal";
-                $arrConfig["pe_action_edit_params"] = "&systemid=".$strSystemid;
-
-                $strCallback = " function() { delDialog.hide(); KAJONA.admin.portaleditor.deleteElementData('$strSystemid'); return false; } ";
-            }
-            elseif (isset($arrConfig["pe_action_delete"]) && $arrConfig["pe_action_delete"] != "") {
-                $strDeleteUrl = class_link::getLinkAdminHref($strModule, $arrConfig["pe_action_delete"], $arrConfig["pe_action_edit_params"].$strAdminLangParam."&pe=1");
-                $strCallback = " function() { delDialog.hide(); KAJONA.admin.portaleditor.openDialog('$strDeleteUrl'); return false; } ";
-            }
-
-            if (isset($arrConfig["pe_action_delete"]) && $arrConfig["pe_action_delete"] != "") {
-                $strElementName = uniStrReplace(array('\''), array('\\\''), $objInstance->getStrDisplayName());
-                $strQuestion = uniStrReplace("%%element_name%%", htmlToString($strElementName, true), class_carrier::getInstance()->getObjLang()->getLang("commons_delete_record_question", "system"));
-
-                $strDeleteLink = class_link::getLinkAdminManual(
-                    "href=\"#\" onclick=\"javascript:delDialog.setTitle('".class_carrier::getInstance()->getObjLang()->getLang("dialog_deleteHeader", "system")."'); delDialog.setContent('".$strQuestion."', '".class_carrier::getInstance()->getObjLang()->getLang("dialog_deleteButton", "system")."',  ".$strCallback."); delDialog.init(); return false;\"",
-                    class_carrier::getInstance()->getObjLang()->getLang("commons_delete", "system"),
-                    class_carrier::getInstance()->getObjLang()->getLang("commons_delete", "system")
-                );
-            }
-        }
-
-        //---------------------------------------------------
-        //link to drag n drop element
-        //TODO: check if there are more than one elements in current placeholder before showing shift buttons
-        $strMoveHandle = "";
-        if ($strModule == "pages_content") {
-            $strMoveHandle = "<i href=\"#\" class=\"moveHandle fa fa-arrows\" title=\"".class_carrier::getInstance()->getObjLang()->getLang("pe_move", "pages")."\" rel=\"tooltip\"></i>";
-        }
-
-        //---------------------------------------------------
-        //link to set element inactive
-        $strSetInactiveLink = "";
-        //standard: pages_content.
-        if ($strModule == "pages_content") {
-            $arrConfig["pe_action_setStatus"] = "elementStatus";
-            $arrConfig["pe_action_setStatus_params"] = "&systemid=".$strSystemid;
-        }
-        //Use Module-config to generate link
-        if (isset($arrConfig["pe_action_setStatus"]) && $arrConfig["pe_action_setStatus"] != "") {
-            $strSetInactiveUrl = class_link::getLinkAdminHref($strModule, $arrConfig["pe_action_setStatus"], $arrConfig["pe_action_setStatus_params"].$strAdminLangParam."&pe=1");
-            $strSetInactiveLink = "<a href=\"#\" onclick=\"KAJONA.admin.portaleditor.openDialog('".$strSetInactiveUrl."'); return false;\">".class_carrier::getInstance()->getObjLang()->getLang("pe_setinactive", "pages")."</a>";
-        }
-
-        //---------------------------------------------------
-        // layout generation
-
-        $strReturn .= class_carrier::getInstance()->getObjToolkit("portal")->getPeActionToolbar(
-            $strSystemid, array($strMoveHandle, $strNewLink, $strEditLink, $strCopyLink, $strDeleteLink, $strSetInactiveLink), $strContent, $strElement
-        );
-
-        //reset the portal texts language
-        class_carrier::getInstance()->getObjLang()->setStrTextLanguage($strPortalLanguage);
-
-        return $strReturn;
     }
 
 

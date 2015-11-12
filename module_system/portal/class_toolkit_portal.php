@@ -264,6 +264,7 @@ class class_toolkit_portal extends class_toolkit {
      * @internal param \class_module_pages_element $objElement
      *
      * @return string
+     * @deprecated
      */
     public function getPeActionToolbar($strSystemid, $arrLinks, $strContent, $strElementName = "") {
         $strAdminSkin = class_carrier::getInstance()->getObjSession()->getAdminSkin();
@@ -299,6 +300,7 @@ class class_toolkit_portal extends class_toolkit {
      * @param $strElementHref
      *
      * @return string
+     * @deprecated
      */
     public function getPeNewButton($strPlaceholder, $strElementName, $strElementHref) {
         $strAdminSkin = class_carrier::getInstance()->getObjSession()->getAdminSkin();
@@ -316,6 +318,7 @@ class class_toolkit_portal extends class_toolkit {
      * @param $strContentElements
      *
      * @return string
+     * @deprecated
      */
     public function getPeNewButtonWrapper($strPlaceholder, $strPlaceholderName, $strLabel, $strContentElements) {
         $strAdminSkin = class_carrier::getInstance()->getObjSession()->getAdminSkin();
@@ -331,6 +334,7 @@ class class_toolkit_portal extends class_toolkit {
      * @param $strContent
      *
      * @return string
+     * @deprecated
      */
     public function getPePlaceholderWrapper($strPlaceholder, $strContent) {
         $strAdminSkin = class_carrier::getInstance()->getObjSession()->getAdminSkin();
@@ -345,6 +349,7 @@ class class_toolkit_portal extends class_toolkit {
      * @param array $arrContent
      *
      * @return string
+     * @deprecated
      */
     public function getPeInactiveElement($arrContent) {
         $strAdminSkin = class_carrier::getInstance()->getObjSession()->getAdminSkin();

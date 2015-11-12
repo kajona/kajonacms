@@ -4,9 +4,12 @@
 *   (c) 2007-2015 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 ********************************************************************************************************/
+use Kajona\Pages\Portal\PagesPortaleditor;
 use Kajona\Pages\System\PagesElement;
 use Kajona\Pages\System\PagesPage;
 use Kajona\Pages\System\PagesPageelement;
+use Kajona\Pages\System\PagesPortaleditorActionEnum;
+use Kajona\Pages\System\PagesPortaleditorSystemidAction;
 
 
 /**
@@ -86,34 +89,19 @@ class class_module_navigation_portal extends class_portal_controller implements 
 
         $objNavigation = new class_module_navigation_tree($this->arrElementData["navigation_id"]);
 
-        //Add pe code
-        $arrPeConfig = array(
-            "pe_module"               => "navigation",
-            "pe_action_edit"          => "list",
-            "pe_action_edit_params"   => "&systemid=".$this->arrElementData["navigation_id"],
-            "pe_action_new"           => "",
-            "pe_action_new_params"    => "",
-            "pe_action_delete"        => "",
-            "pe_action_delete_params" => ""
-        );
-
-        $arrPeConfigAutoNavigation = array(
-            "pe_module"               => "pages",
-            "pe_action_edit"          => "list",
-            "pe_action_edit_params"   => "&systemid=".$objNavigation->getStrFolderId(),
-            "pe_action_new"           => "",
-            "pe_action_new_params"    => "",
-            "pe_action_delete"        => "",
-            "pe_action_delete_params" => ""
-        );
-
-
         //only add the code, if not auto-generated
-        if(!validateSystemid($objNavigation->getStrFolderId()))
-            $strReturn = class_element_portal::addPortalEditorCode($strReturn, $this->arrElementData["navigation_id"], $arrPeConfig);
-        else
-            $strReturn = class_element_portal::addPortalEditorCode($strReturn, $this->arrElementData["navigation_id"], $arrPeConfigAutoNavigation);
+        if(!validateSystemid($objNavigation->getStrFolderId())) {
+            PagesPortaleditor::getInstance()->registerAction(
+                new PagesPortaleditorSystemidAction(PagesPortaleditorActionEnum::EDIT(), class_link::getLinkAdminHref($this->getArrModule("module"), "list", "&systemid={$this->arrElementData['navigation_id']}"), $this->arrElementData["navigation_id"])
+            );
+        }
+        else {
+            PagesPortaleditor::getInstance()->registerAction(
+                new PagesPortaleditorSystemidAction(PagesPortaleditorActionEnum::EDIT(), class_link::getLinkAdminHref("pages", "list", "&systemid={$objNavigation->getStrFolderId()}"), $objNavigation->getStrFolderId())
+            );
+        }
 
+        $strReturn = PagesPortaleditor::addPortaleditorContentWrapper($strReturn, $this->arrElementData["navigation_id"]);
         return $strReturn;
     }
 
