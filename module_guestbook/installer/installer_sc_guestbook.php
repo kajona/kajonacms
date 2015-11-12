@@ -4,6 +4,8 @@
 *   (c) 2007-2015 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 ********************************************************************************************************/
+use Kajona\Pages\System\PagesFolder;
+use Kajona\Pages\System\PagesPage;
 
 
 /**
@@ -29,7 +31,7 @@ class class_installer_sc_guestbook implements interface_sc_installer  {
 
         //fetch navifolder-id
         $strNaviFolderId = "";
-        $arrFolder = class_module_pages_folder::getFolderList();
+        $arrFolder = PagesFolder::getFolderList();
         foreach($arrFolder as $objOneFolder)
             if($objOneFolder->getStrName() == "mainnavigation")
                 $strNaviFolderId = $objOneFolder->getSystemid();
@@ -45,7 +47,7 @@ class class_installer_sc_guestbook implements interface_sc_installer  {
 
         $strReturn .= "Creating new guestbook page...\n";
 
-        $objPage = new class_module_pages_page();
+        $objPage = new PagesPage();
         $objPage->setStrName("guestbook");
         $objPage->setStrBrowsername("Guestbook");
         $objPage->setStrTemplate("standard.tpl");

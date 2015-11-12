@@ -21,7 +21,7 @@ echo str_pad("PServer-Requests", 20);
 echo str_pad("PServer-Unique", 20);
 echo "\n";
 
-for($intYear = 2012; $intYear <= 2014; $intYear++) {
+for($intYear = 2012; $intYear <= 2015; $intYear++) {
     for($intMonth = 1; $intMonth <= 12; $intMonth++) {
 
         $objStartDate->setIntDay(1)->setIntMonth($intMonth)->setIntYear($intYear)->setIntHour(0)->setIntMin(0)->setIntSec(1);

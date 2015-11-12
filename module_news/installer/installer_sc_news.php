@@ -6,6 +6,8 @@
 *-------------------------------------------------------------------------------------------------------*
 *   $Id$                                       *
 ********************************************************************************************************/
+use Kajona\Pages\System\PagesFolder;
+use Kajona\Pages\System\PagesPage;
 
 
 /**
@@ -33,14 +35,14 @@ class class_installer_sc_news implements interface_sc_installer  {
 
         //fetch navifolder-id
         $strNaviFolderId = "";
-        $arrFolder = class_module_pages_folder::getFolderList();
+        $arrFolder = PagesFolder::getFolderList();
         foreach($arrFolder as $objOneFolder)
             if($objOneFolder->getStrName() == "mainnavigation")
                 $strNaviFolderId = $objOneFolder->getSystemid();
 
         //search the index page
-        $objIndex = class_module_pages_page::getPageByName("index");
-        $objMaster = class_module_pages_page::getPageByName("master");
+        $objIndex = PagesPage::getPageByName("index");
+        $objMaster = PagesPage::getPageByName("master");
         if($objIndex != null)
             $this->strIndexID = $objIndex->getSystemid();
 
@@ -115,7 +117,7 @@ class class_installer_sc_news implements interface_sc_installer  {
             }
         }
         $strReturn .= "Creating news-detail\n";
-        $objPage = new class_module_pages_page();
+        $objPage = new PagesPage();
         $objPage->setStrName("newsdetails");
         $objPage->setStrBrowsername("News");
         $objPage->setStrTemplate("standard.tpl");
@@ -171,7 +173,7 @@ class class_installer_sc_news implements interface_sc_installer  {
 
 
         $strReturn .= "Creating news-list-pge\n";
-        $objPage = new class_module_pages_page();
+        $objPage = new PagesPage();
         $objPage->setStrName("news");
         $objPage->setStrBrowsername("News");
         $objPage->setStrTemplate("standard.tpl");

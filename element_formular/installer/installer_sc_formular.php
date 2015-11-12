@@ -6,6 +6,8 @@
 *-------------------------------------------------------------------------------------------------------*
 *   $Id$                              *
 ********************************************************************************************************/
+use Kajona\Pages\System\PagesFolder;
+use Kajona\Pages\System\PagesPage;
 
 
 /**
@@ -30,14 +32,14 @@ class class_installer_sc_formular implements interface_sc_installer  {
 
         //fetch navifolder-id
         $strNaviFolderId = "";
-        $arrFolder = class_module_pages_folder::getFolderList();
+        $arrFolder = PagesFolder::getFolderList();
         foreach($arrFolder as $objOneFolder)
             if($objOneFolder->getStrName() == "mainnavigation")
                 $strNaviFolderId = $objOneFolder->getSystemid();
 
         $strReturn .= "Creating new page contact...\n";
 
-        $objPage = new class_module_pages_page();
+        $objPage = new PagesPage();
         $objPage->setStrName("contact");
         $objPage->setStrBrowsername("Contact");
         $objPage->setStrTemplate("standard.tpl");

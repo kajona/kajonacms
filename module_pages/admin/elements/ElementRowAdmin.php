@@ -40,7 +40,7 @@ class ElementRowAdmin extends ElementAdmin implements AdminElementInterface {
      * @var string
      * @tableColumn element_paragraph.paragraph_template
      *
-     * @fieldType template
+     * @fieldType Kajona\Pages\Admin\Formentries\FormentryTemplate
      * @fieldTemplateDir /element_row
      * @fieldMandatory
      * @fieldLabel template
