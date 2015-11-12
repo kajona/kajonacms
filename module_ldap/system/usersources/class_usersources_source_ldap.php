@@ -317,7 +317,7 @@ class class_usersources_source_ldap implements interface_usersources_usersource 
             }
             else {
                 //user seems to be deleted, remove from system, too
-//                $objUser->deleteObject();
+                $objUser->deleteObject();
                 class_logger::getInstance("ldapsync.log")->addLogRow("Deleting user ".$strOneUserId."@".$objSourceUser->getStrDN(), class_logger::$levelWarning);
             }
         }

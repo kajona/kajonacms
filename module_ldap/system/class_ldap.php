@@ -119,7 +119,7 @@ class class_ldap
             $strUsername = $this->arrConfig["ldap_common_name"]."=".$strUsername.",".$strContext;
         }
 
-        $bitBind = @ldap_bind($this->objCx, $strUsername, $strPassword);
+        $bitBind = @ldap_bind($this->objCx, utf8_decode($strUsername), $strPassword);
         $this->internalBind();
 
         return $bitBind;
