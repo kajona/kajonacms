@@ -82,17 +82,7 @@ class class_module_faqs_portal extends class_portal_controller implements interf
 
                     $strOneFaq = $objMapper->writeToTemplate("/module_faqs/".$this->arrElementData["faqs_template"], "faq_faq", false);
 
-                    //Add pe code
-                    $arrPeConfig = array(
-                        "pe_module"               => "faqs",
-                        "pe_action_edit"          => "editFaq",
-                        "pe_action_edit_params"   => "&systemid=".$objOneFaq->getSystemid(),
-                        "pe_action_new"           => "newFaq",
-                        "pe_action_new_params"    => "",
-                        "pe_action_delete"        => "deleteFaq",
-                        "pe_action_delete_params" => "&systemid=".$objOneFaq->getSystemid()
-                    );
-                    $strFaqs .= class_element_portal::addPortalEditorCode($strOneFaq, $objOneFaq->getSystemid(), $arrPeConfig);
+                    $strFaqs .= PagesPortaleditor::addPortaleditorContentWrapper($strOneFaq, $objOneFaq->getSystemid());
 
                     PagesPortaleditor::getInstance()->registerAction(
                         new PagesPortaleditorSystemidAction(PagesPortaleditorActionEnum::EDIT(), class_link::getLinkAdminHref($this->getArrModule("module"), "editFaq", "&systemid={$objOneFaq->getSystemid()}"), $objOneFaq->getSystemid())

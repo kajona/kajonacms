@@ -585,7 +585,7 @@ class class_graph_jqplot implements interface_graph {
         }
 
 
-        //2. Change padding and margin of bars, if the chart contains only bar chart series
+        //2. Change padding and margin of bars, if the chart contains only one bar chart series
         $arrSeriesBarCharts = $this->getSeriesObjectsByChartType(array(class_graph_jqplot_charttype::BAR, class_graph_jqplot_charttype::BAR_HORIZONTAL));
         if(count($arrSeriesBarCharts) == 1) {
             $objSeriesData = $arrSeriesBarCharts[0];
@@ -595,7 +595,7 @@ class class_graph_jqplot implements interface_graph {
             $objSeriesData->setArrSeriesOptions($arrSeriesOptions);
         }
 
-        //3. Change padding and margin of bars, if the chart contains one or more stackedbar series and each sereis has exactly one series value
+        //3. Change padding and margin of bars, if the chart contains one or more stackedbar series and each series has exactly one series value
         $arrSeriesStackedBarCharts = $this->getSeriesObjectsByChartType(array(class_graph_jqplot_charttype::STACKEDBAR, class_graph_jqplot_charttype::STACKEDBAR_HORIZONTAL));
         if(count($arrSeriesStackedBarCharts) > 0) {
             $bitChangeMarginAndPadding = true;
@@ -996,7 +996,7 @@ class class_graph_jqplot implements interface_graph {
     public function setHideXAxis($bitHideXAxis) {
         $this->arrOptions["axes"]["xaxis"]["rendererOptions"]["drawBaseline"] = false;
         $this->arrOptions["axes"]["xaxis"]["showTicks"] = false;
-        $this->arrOptions["axes"]["yaxis"]["drawMajorTickMarks"] = false;
+        $this->arrOptions["axes"]["xaxis"]["drawMajorTickMarks"] = false;
         $this->arrOptions["axes"]["xaxis"]["tickOptions"]["showGridline"] = false;
         $this->bitXAxisLabelsInvisible = $bitHideXAxis;
     }

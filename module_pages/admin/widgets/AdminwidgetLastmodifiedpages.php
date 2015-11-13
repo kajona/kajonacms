@@ -65,7 +65,7 @@ class AdminwidgetLastmodifiedpages extends class_adminwidget implements interfac
             $intMax = 1;
 
         /** @var PagesPage[] $arrRecords */
-        $arrRecords = class_module_system_common::getLastModifiedRecords($intMax, false, "class_module_pages_page");
+        $arrRecords = class_module_system_common::getLastModifiedRecords($intMax, false, "Kajona\\Pages\\System\\PagesPage");
 
         foreach($arrRecords as $objPage) {
             if($objPage->rightEdit())

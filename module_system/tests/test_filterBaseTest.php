@@ -72,7 +72,7 @@ class test_filterBaseTest extends class_testbase  {
 
         //Filter by system id
         $this->assertTrue($arrRestrictions[8] instanceof class_orm_objectlist_restriction);
-        $this->assertEquals(" AND filter.filter9 LIKE ? ", $arrRestrictions[8]->getStrWhere());
+        $this->assertEquals(" AND filter.filter9 = ? ", $arrRestrictions[8]->getStrWhere());
         $this->assertCount(1, $arrRestrictions[8]->getArrParams());
         $this->assertEquals($strSystemid, $arrRestrictions[8]->getArrParams()[0]);
     }
