@@ -392,7 +392,7 @@ KAJONA.admin.portaleditor.elementActionToolbar = {
     },
 
     injectElementEditUI: function ($element, actions) {
-        var $toolbar = $('<div class="peElementActions" style="display: none">');
+        var $toolbar = $('<div class="peElementActions">');
         $toolbar.append(KAJONA.admin.portaleditor.elementActionToolbar.generateActionList(actions));
 
         $element.prepend($toolbar);

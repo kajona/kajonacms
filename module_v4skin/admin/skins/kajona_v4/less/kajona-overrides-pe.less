@@ -110,7 +110,8 @@
 
 
 /* P O R T A L E D I T O R   C O N T A I N E R */
-.peElementWrapper {
+.peElementWrapper,
+[data-systemid] {
     & > .peElementActions {
         display: none !important;
     }
@@ -130,7 +131,7 @@
             margin: -17px 0 0 -1px !important;
             z-index: 1;
 
-            .actions {
+            ul {
                 display: block !important;
                 background-color: @peColorHover !important;
                 font-family: Verdana, Arial, Helvetica, sans-serif !important;
@@ -139,6 +140,15 @@
                 padding: 1px 3px 2px 3px !important;
                 text-transform: none !important;
                 line-height: 14px !important;
+                list-style: none !important;
+                margin: 0 !important;
+
+                li {
+                    display: inline-block !important;
+                    list-style: none !important;
+                    margin: 0 !important;
+                    padding: 0 !important;
+                }
 
                 a, a:link, a:visited, a:hover, a:active, a:focus {
                     font-family: Verdana, Arial, Helvetica, sans-serif !important;
@@ -158,6 +168,7 @@
                     width: auto !important;
                     height: auto !important;
                     text-shadow: none !important;
+                    cursor: pointer !important;
                 }
 
                 a:hover, a:active, a:focus {
