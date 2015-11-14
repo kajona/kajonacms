@@ -294,7 +294,12 @@ class class_lang {
     private function loadAndMergeTextfile($strModule, $strFilename, $strLanguage, &$arrTargetArray) {
         $lang = array();
         $this->bitSaveToCache = true;
-        include_once _realpath_ . $strFilename;
+
+        if (substr($strFilename, 0, 7) == "phar://") {
+            include_once $strFilename;
+        } else {
+            include_once _realpath_ . $strFilename;
+        }
 
         if(!isset($arrTargetArray[$strLanguage])) {
             $arrTargetArray[$strLanguage] = array();

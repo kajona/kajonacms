@@ -160,9 +160,17 @@ class class_resourceloader
 
         //third try: try to load the file from a given module
         foreach ($this->arrModules as $strCorePath => $strOneModule) {
-            if (is_file(_realpath_."/".$strCorePath."/templates/default/tpl".$strTemplateName)) {
-                $strFilename = "/".$strCorePath."/templates/default/tpl".$strTemplateName;
-                break;
+            if (is_dir(_realpath_."/".$strCorePath)) {
+                if (is_file(_realpath_."/".$strCorePath."/templates/default/tpl".$strTemplateName)) {
+                    $strFilename = "/".$strCorePath."/templates/default/tpl".$strTemplateName;
+                    break;
+                }
+            } elseif (is_file(_realpath_."/".$strCorePath)) {
+                $strPhar = "phar://" . _realpath_."/".$strCorePath."/templates/default/tpl".$strTemplateName;
+                if (is_file($strPhar)) {
+                    $strFilename = $strPhar;
+                    break;
+                }
             }
         }
 
@@ -267,6 +275,17 @@ class class_resourceloader
                         $arrReturn["/".$strCorePath._langpath_."/".$strFolder."/".$strSingleEntry] = $strSingleEntry;
                     }
                 }
+            } elseif (is_file(_realpath_."/".$strCorePath)) {
+
+                $phar = new Phar(_realpath_."/".$strCorePath, 0);
+                foreach (new RecursiveIteratorIterator($phar) as $file) {
+                    if (strpos($file->getPathname(), $strFolder) !== false) {
+
+                        $arrReturn[$file->getPathname()] = $file->getFilename();
+
+                    }
+                }
+
             }
         }
 
