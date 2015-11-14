@@ -153,6 +153,7 @@ class PagesContentAdmin extends class_admin_simple implements interface_admin
 
 
             $strCurBlocks = "";
+            $strNewBlocks = "";
             foreach ($objOneBlocks->getArrBlocks() as $objOneBlock) {
 
                 $strNewBlocksSystemid = $objOneBlocks->getStrName();
@@ -192,14 +193,14 @@ class PagesContentAdmin extends class_admin_simple implements interface_admin
 
                 $strNewBlock = $this->renderElementPlaceholderList($objOneBlock->getArrPlaceholder(), array(), true, $strNewBlocksSystemid, $objOneBlock->getStrName());
 
-                $strCurBlocks .= $this->objToolkit->getFieldset(
+                $strNewBlocks .= $this->objToolkit->getFieldset(
                     $objOneBlock->getStrName(),
                     $strNewBlock,
                     "fieldset block newblock"
                 );
             }
 
-            $strBlocks .= $this->objToolkit->getFieldset($objOneBlocks->getStrName(), $strCurBlocks, "fieldset blocks");
+            $strBlocks .= $this->objToolkit->getFieldset($objOneBlocks->getStrName(), $strCurBlocks.$strNewBlocks, "fieldset blocks");
         }
 
 
@@ -752,7 +753,11 @@ JS;
         if ($objPageElement->rightDelete()) {
             //Locked?
             $objLockmanager = new class_lockmanager($this->getSystemid());
-            $strPrevId = $objPageElement->getPrevId();
+
+            $objPage = class_objectfactory::getInstance()->getObject($objPageElement->getStrPrevId());
+            while(!$objPage instanceof PagesPage && validateSystemid($objPage->getStrPrevId())) {
+                $objPage = class_objectfactory::getInstance()->getObject($objPage->getStrPrevId());
+            }
 
             if ($objLockmanager->isAccessibleForCurrentUser()) {
                 //delete object
@@ -769,7 +774,7 @@ JS;
                     return "<script type='text/javascript'>{$strReturn}</script>";
                 }
 
-                $this->adminReload(class_link::getLinkAdminHref("pages_content", "list", "systemid=".$strPrevId.($this->getParam("pe") == "" ? "" : "&peClose=".$this->getParam("pe"))));
+                $this->adminReload(class_link::getLinkAdminHref("pages_content", "list", "systemid=".$objPage->getSystemid().($this->getParam("pe") == "" ? "" : "&peClose=".$this->getParam("pe"))));
             }
             else {
                 $strReturn .= $this->objToolkit->warningBox($this->getLang("ds_gesperrt"));
