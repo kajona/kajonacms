@@ -274,9 +274,9 @@ class class_classloader
                       && substr($strArchivePath, 0, strlen($strFolder)) === $strFolder) {
                         $strFilename = substr($file->getFileName(), 0, -4);
                         // PHAR archive files must never override existing file system files
-                        if (!isset($arrFiles[$strFilename]) {
+                        if (!isset($arrFiles[$strFilename])) {
                             $arrFiles[$strFilename] = $file->getPathName();
-                        });
+                        }
                     }
                 }
             }
