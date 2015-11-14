@@ -331,6 +331,118 @@ KAJONA.admin.portaleditor.dragndrop.init = function () {
 };
 
 
+/**
+ * Initialise the action toolbar logic
+ */
+KAJONA.admin.portaleditor.elementActionToolbar = {
+    init: function () {
+        KAJONA.admin.portaleditor.elementActionToolbar.injectPlaceholderActions();
+    },
+
+    injectPlaceholderActions: function () {
+        var actions = {
+            placeholder: {
+                content: [{
+                    name: 'Row light',
+                    type: 'CREATE',
+                    link: ''
+                }, {
+                    name: 'Row dark',
+                    type: 'CREATE',
+                    link: ''
+                }, {
+                    name: 'Row 3 column',
+                    type: 'CREATE',
+                    link: ''
+                }]
+            },
+            systemIds: {
+                '50c198c564727966917c': [{
+                    type: 'EDIT',
+                    link: ''
+                }, {
+                    type: 'DELETE',
+                    link: ''
+                }, {
+                    type: 'MOVE',
+                    link: ''
+                }],
+
+                '9e2a8ea564757a5e04ca': [{
+                    type: 'EDIT',
+                    link: ''
+                }, {
+                    type: 'DELETE',
+                    link: ''
+                }, {
+                    type: 'MOVE',
+                    link: ''
+                }]
+            }
+        };
+        actions = KAJONA.admin.actions;
+
+        $.each(actions.placeholder, function (placeholderName, actions) {
+            KAJONA.admin.portaleditor.elementActionToolbar.injectElementCreateUI($('[data-name="' + placeholderName + '"]'), actions, placeholderName);
+        });
+
+        $.each(actions.systemIds, function (systemId, actions) {
+            KAJONA.admin.portaleditor.elementActionToolbar.injectElementEditUI($('[data-systemid="' + systemId + '"]'), actions);
+        });
+    },
+
+    injectElementEditUI: function ($element, actions) {
+        var $toolbar = $('<div class="peElementActions" style="display: none">');
+        $toolbar.append(KAJONA.admin.portaleditor.elementActionToolbar.generateActionList(actions));
+
+        $element.prepend($toolbar);
+    },
+
+    injectElementCreateUI: function ($element, actions, placeholderName) {
+        var $button = $('<i class="peNewButton fa fa-plus-circle" role="button" data-toggle="dropdown" title="Neues Element an Platzhalter &quot;' + placeholderName + '&quot;" rel="tooltip"></i>');
+        var $menu = $('<div class="dropdown-menu peContextMenu" role="menu">');
+
+        $menu.append(KAJONA.admin.portaleditor.elementActionToolbar.generateActionList(actions));
+
+        $element.append($('<div class="dropdown">').append($button).append($menu));
+    },
+
+    generateActionList: function (actions) {
+        var $actionList = $('<ul>');
+        actions.forEach(function (action) {
+            var $actionListEntry = $('<li>');
+            switch (action.type) {
+                case 'CREATE':
+                    var $actionElement = $('<a>');
+                    $actionElement.append(action.name);
+                    $actionElement.on('click', function () {
+                        KAJONA.admin.portaleditor.openDialog(action.link);
+                    });
+                    break;
+                case 'MOVE':
+                    var $actionElement = $('<i rel="tooltip">');
+                    $actionElement.addClass('moveHandle fa fa-arrows');
+                    $actionElement.attr('title', 'Verschieben');
+                    break;
+                default:
+                    var $actionElement = $('<a>');
+                    $actionElement.append(action.type);
+                    $actionElement.on('click', function () {
+                        KAJONA.admin.portaleditor.openDialog(action.link);
+                    });
+            }
+
+            $actionListEntry.append($actionElement);
+            $actionList.append($actionListEntry);
+        });
+
+        return $actionList;
+    }
+};
+
+$(function () {
+    KAJONA.admin.portaleditor.elementActionToolbar.init();
+});
 
 /**
  * Folderview functions

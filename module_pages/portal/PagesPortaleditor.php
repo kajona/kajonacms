@@ -49,11 +49,11 @@ class PagesPortaleditor  {
         foreach($this->arrActions as $objOneAction) {
 
             if($objOneAction instanceof PagesPortaleditorSystemidAction) {
-                $arrReturn["systemid"][$objOneAction->getStrSystemid()][] = array("type" => $objOneAction->getObjAction()."", "link" => $objOneAction->getStrLink());
+                $arrReturn["systemIds"][$objOneAction->getStrSystemid()][] = array("type" => $objOneAction->getObjAction()."", "link" => $objOneAction->getStrLink());
             }
 
             if($objOneAction instanceof PagesPortaleditorPlaceholderAction) {
-                $arrReturn["placeholder"][$objOneAction->getStrPlaceholder()][] = array("type" => $objOneAction->getObjAction()."", "link" => $objOneAction->getStrLink(), "element" => $objOneAction->getStrElement());
+                $arrReturn["placeholder"][$objOneAction->getStrPlaceholder()][] = array("type" => $objOneAction->getObjAction()."", "link" => $objOneAction->getStrLink(), "element" => $objOneAction->getStrElement(), "name" => $objOneAction->getStrElement());
             }
         }
 
@@ -118,6 +118,6 @@ class PagesPortaleditor  {
      */
     public static function getPlaceholderWrapper($strPlaceholder)
     {
-        return "<span data-placeholder='{$strPlaceholder}'></span>";
+        return "<span data-placeholder='{$strPlaceholder}' data-name='{$strPlaceholder}'></span>";
     }
 }

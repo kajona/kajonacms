@@ -74,7 +74,7 @@ class ElementBlockPortal extends ElementPortal implements PortalElementInterface
 
         }
 
-        return $strReturn;
+        return '<div data-element="block" data-systemid="' . $this->getSystemid() . '">' . $strReturn . '</div>';
     }
 
 }
