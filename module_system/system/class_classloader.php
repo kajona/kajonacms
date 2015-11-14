@@ -269,7 +269,10 @@ class class_classloader
                 $phar = new Phar(_realpath_."/".$strPath, 0);
                 foreach (new RecursiveIteratorIterator($phar) as $file) {
                     // Make sure the file is a PHP file and is inside the requested folder
-                    $strArchivePath = "/".substr($file->getPathName(), strlen("phar://"._realpath_."/".$strPath));
+                    $strArchivePath = DIRECTORY_SEPARATOR.substr($file->getPathName(), strlen("phar://"._realpath_."/".$strPath));
+                    $strArchivePath = str_replace("\\", "/", $strArchivePath);
+                    $strFolder = str_replace("\\", "/", $strFolder);
+                    //var_dump(substr($strArchivePath, 0, strlen($strFolder)), $strFolder, $file->getPathName(), $strArchivePath);
                     if (substr($strArchivePath, -4) === ".php"
                       && substr($strArchivePath, 0, strlen($strFolder)) === $strFolder) {
                         $strFilename = substr($file->getFileName(), 0, -4);
@@ -277,6 +280,8 @@ class class_classloader
                         if (!isset($arrFiles[$strFilename])) {
                             $arrFiles[$strFilename] = $file->getPathName();
                         }
+                    } elseif (preg_match("/module\_([a-z0-9\_])+\_id\.php/", $file->getFileName())) {
+                        include_once $file->getPathName();
                     }
                 }
             }
@@ -301,7 +306,6 @@ class class_classloader
                 }
             }
         }
-
 
         return $arrFiles;
     }
@@ -351,6 +355,19 @@ class class_classloader
                         return true;
                     }
                 }
+
+                foreach ($this->arrCoreDirs as $strDir) {
+                    $strFile = 'phar://' . _realpath_.implode(DIRECTORY_SEPARATOR, array($strDir, $strModule.".phar", $strFolder, $strRest.".php"));
+                    if (is_file($strFile)) {
+                        $this->arrFiles[$strClassName] = $strFile;
+                        $this->bitCacheSaveRequired = true;
+
+                        $this->intNumberOfClassesLoaded++;
+                        include_once $strFile;
+                        return true;
+                    }
+                }
+
             }
         }
 
