@@ -6,12 +6,17 @@
 
 namespace Kajona\Pages\Portal\Elements;
 
+use class_link;
+use class_module_languages_language;
 use class_objectfactory;
 use class_template;
 use Kajona\Pages\Portal\ElementPortal;
+use Kajona\Pages\Portal\PagesPortaleditor;
 use Kajona\Pages\Portal\PortalElementInterface;
 use Kajona\Pages\System\PagesPage;
 use Kajona\Pages\System\PagesPageelement;
+use Kajona\Pages\System\PagesPortaleditorActionEnum;
+use Kajona\Pages\System\PagesPortaleditorSystemidAction;
 
 
 /**
@@ -62,7 +67,7 @@ class ElementBlockPortal extends ElementPortal implements PortalElementInterface
                             /** @var  ElementPortal $objElement */
                             $objElement = $objOneElement->getConcretePortalInstance();
 
-                            $arrTemplate[$objOneElement->getStrPlaceholder()] = $objElement->getRenderedElementOutput();
+                            $arrTemplate[$objOneElement->getStrPlaceholder()] = $objElement->getRenderedElementOutput(PagesPortaleditor::isActive());
                         }
 
                         $this->objTemplate->setTemplate($objOneBlock->getStrContent());
