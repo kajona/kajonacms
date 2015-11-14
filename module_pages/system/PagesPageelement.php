@@ -197,14 +197,13 @@ class PagesPageelement extends class_model implements interface_model, interface
         $objElementdefinitionToCreate = PagesElement::getElement($this->getStrElement());
         if ($objElementdefinitionToCreate != null) {
 
-            //Build the class-name
-            $strElementClass = str_replace(".php", "", $objElementdefinitionToCreate->getStrClassAdmin());
-            //and finally create the object
-            if ($strElementClass != "") {
-                $objElement = new $strElementClass();
-                /** @var ElementAdmin $objElement */
-                $strForeignTable = $objElement->getTable();
+            $strFilename = \class_resourceloader::getInstance()->getPathForFile("/admin/elements/".$objElementdefinitionToCreate->getStrClassAdmin());
+            $objInstance = \class_classloader::getInstance()->getInstanceFromFilename($strFilename, "Kajona\\Pages\\Admin\\ElementAdmin");
 
+            //and finally create the object
+            if ($objInstance != null) {
+
+                $strForeignTable = $objInstance->getTable();
 
                 //And create the row in the Element-Table, if given
                 if ($strForeignTable != "") {
@@ -240,12 +239,13 @@ class PagesPageelement extends class_model implements interface_model, interface
             $this->setStrClassAdmin($objElementdefinitionToCreate->getStrClassAdmin());
         }
 
-        $strElementClass = str_replace(".php", "", $this->getStrClassAdmin());
+        $strFilename = \class_resourceloader::getInstance()->getPathForFile("/admin/elements/".$this->getStrClassAdmin());
+        $objInstance = \class_classloader::getInstance()->getInstanceFromFilename($strFilename, "Kajona\\Pages\\Admin\\ElementAdmin");
+
         //and finally create the object
-        /** @var $objElement ElementAdmin */
-        $objElement = new $strElementClass();
-        $objElement->setSystemid($this->getSystemid());
-        return $objElement;
+        /** @var $objInstance ElementAdmin */
+        $objInstance->setSystemid($this->getSystemid());
+        return $objInstance;
     }
 
     /**
@@ -257,7 +257,7 @@ class PagesPageelement extends class_model implements interface_model, interface
     public function getConcretePortalInstance()
     {
 
-        if ($this->getStrClassAdmin() == "") {
+        if ($this->getStrClassPortal() == "") {
             //Build the class-name based on the linked element
             $objElementdefinitionToCreate = PagesElement::getElement($this->getStrElement());
             if ($objElementdefinitionToCreate == null) {
@@ -266,12 +266,14 @@ class PagesPageelement extends class_model implements interface_model, interface
             $this->setStrClassPortal($objElementdefinitionToCreate->getStrClassPortal());
         }
 
-        $strElementClass = str_replace(".php", "", $this->getStrClassPortal());
+
+        $strFilename = \class_resourceloader::getInstance()->getPathForFile("/portal/elements/".$this->getStrClassPortal());
+        $objInstance = \class_classloader::getInstance()->getInstanceFromFilename($strFilename, "Kajona\\Pages\\Portal\\ElementPortal", null, array($this));
+
         //and finally create the object
-        /** @var $objElement ElementPortal */
-        $objElement = new $strElementClass($this);
-        $objElement->setSystemid($this->getSystemid());
-        return $objElement;
+        /** @var $objInstance ElementAdmin */
+        $objInstance->setSystemid($this->getSystemid());
+        return $objInstance;
     }
 
 
