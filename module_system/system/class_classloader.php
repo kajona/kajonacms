@@ -389,7 +389,12 @@ class class_classloader
             return null;
         }
 
-        include_once _realpath_.$strFilename;
+        // check is_file in case of a phar:// or absolute path
+        if (is_file($strFilename)) {
+            include_once $strFilename;
+        } else {
+            include_once _realpath_.$strFilename;
+        }
 
         $strResolvedClassname = null;
         $strClassname = uniSubstr(basename($strFilename), 0, -4);

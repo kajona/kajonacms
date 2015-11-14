@@ -343,9 +343,16 @@ class class_resourceloader
                     }
 
                 }
+            } elseif (is_file(_realpath_."/".$strCorePath)) {
+                $objPhar = new Phar(_realpath_."/".$strCorePath, 0);
+                foreach (new RecursiveIteratorIterator($objPhar) as $strFile) {
+                    $strPath = substr($strFile->getPathname(), strlen(_realpath_) + 6);
+                    if (strpos($strPath, $strFolder) !== false) {
+                        $arrReturn[$strPath] = $strFile->getFilename();
+                    }
+                }
             }
         }
-
 
         //check if the same is available in the projects-folder and overwrite the first hits
         if (is_dir(_realpath_._projectpath_."/".$strFolder)) {
@@ -435,6 +442,12 @@ class class_resourceloader
         foreach ($this->arrModules as $strPath => $strSingleModule) {
             if (is_file(_realpath_."/".$strPath."/".$strFile)) {
                 return str_replace("//", "/", "/".$strPath."/".$strFile);
+            } elseif (is_file(_realpath_."/".$strPath)) {
+                // phar
+                $strPhar = "phar://" . _realpath_."/".$strPath . $strFile;
+                if (is_file($strPhar)) {
+                    return $strPhar;
+                }
             }
         }
 
