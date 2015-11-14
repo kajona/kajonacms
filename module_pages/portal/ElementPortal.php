@@ -24,6 +24,7 @@ use class_scriptlet_helper;
 use interface_scriptlet;
 use Kajona\Pages\Admin\Elements\ElementBlockAdmin;
 use Kajona\Pages\Admin\Elements\ElementBlocksAdmin;
+use Kajona\Pages\Portal\Elements\ElementBlocksPortal;
 use Kajona\Pages\Portal\PagesPortaleditor;
 use Kajona\Pages\System\PagesElement;
 use Kajona\Pages\System\PagesPage;
@@ -354,10 +355,12 @@ abstract class ElementPortal extends class_portal_controller
                 );
             }
 
+            if(!$this instanceof ElementBlocksPortal) {
+                PagesPortaleditor::getInstance()->registerAction(
+                    new PagesPortaleditorPlaceholderAction(PagesPortaleditorActionEnum::CREATE(), class_link::getLinkAdminHref("pages_content", "new", "&systemid={$this->getSystemid()}&language={$strAdminLangParam}&placeholder={$objPageelement->getStrPlaceholder()}&element={$objPageelement->getStrName()}&pe=1"), $objPageelement->getStrPlaceholder(), $objPageelement->getStrName())
+                );
+            }
 
-            PagesPortaleditor::getInstance()->registerAction(
-                new PagesPortaleditorPlaceholderAction(PagesPortaleditorActionEnum::CREATE(), class_link::getLinkAdminHref("pages_content", "new", "&systemid={$this->getSystemid()}&language={$strAdminLangParam}&placeholder={$objPageelement->getStrPlaceholder()}&element={$objPageelement->getStrName()}&pe=1"), $objPageelement->getStrPlaceholder(), $objPageelement->getStrName())
-            );
         }
     }
 

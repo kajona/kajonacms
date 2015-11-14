@@ -111,7 +111,7 @@ class PagesPortaleditor  {
     }
 
     /**
-     * Adds the code to render a placeholder-fragement for the portal-editor
+     * Adds the code to render a placeholder-fragment for the portal-editor
      * @param $strPlaceholder
      *
      * @return string

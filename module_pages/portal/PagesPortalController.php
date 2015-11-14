@@ -28,6 +28,7 @@ use Kajona\Pages\System\PagesElement;
 use Kajona\Pages\System\PagesPage;
 use Kajona\Pages\System\PagesPageelement;
 use Kajona\Pages\System\PagesPortaleditorActionEnum;
+use Kajona\Pages\System\PagesPortaleditorPlaceholderAction;
 
 /**
  * Handles the loading of the pages - loads the elements, passes control to them and returns the complete
@@ -145,6 +146,8 @@ class PagesPortalController extends class_portal_controller implements interface
         $arrTemplate = array();
         $arrBlocks = array();
 
+        $arrBlocksIds = array();
+
         /** @var PagesPageelement $objOneElementOnPage */
         foreach ($arrElementsOnPage as $objOneElementOnPage) {
 
@@ -178,6 +181,7 @@ class PagesPortalController extends class_portal_controller implements interface
                             $arrBlocks[$objOneBlock->getStrName()] = "";
                         }
                         $arrBlocks[$objOneBlock->getStrName()] .= $strElementOutput;
+                        $arrBlocksIds[$objOneBlock->getStrName()] = $objOneElementOnPage->getSystemid();
                     }
                 }
             }
@@ -190,6 +194,32 @@ class PagesPortalController extends class_portal_controller implements interface
 
         //pe-code to add new elements on unfilled placeholders --> only if pe is visible
         if (PagesPortaleditor::isActive()) {
+
+            foreach($objPlaceholders->getArrBlocks() as $objOneBlocks) {
+                foreach($objOneBlocks->getArrBlocks() as $objOneBlock) {
+
+                    //register a new-action per block-element
+                    if (PagesPortaleditor::isActive()) {
+                        $strId = $objOneBlocks->getStrName();
+                        if(isset($arrBlocksIds[$objOneBlocks->getStrName()])) {
+                            $strId = $arrBlocksIds[$objOneBlocks->getStrName()];
+                        }
+
+                        PagesPortaleditor::getInstance()->registerAction(
+                            new PagesPortaleditorPlaceholderAction(
+                                PagesPortaleditorActionEnum::CREATE(),
+                                class_link::getLinkAdminHref("pages_content", "newBlock", "&blocks={$strId}&block={$objOneBlock->getStrName()}&systemid={$objPageData->getSystemid()}"), "blocks_".$objOneBlocks->getStrName(),
+                                $objOneBlock->getStrName()
+                            )
+                        );
+                    }
+                }
+                if(!isset($arrBlocks[$objOneBlocks->getStrName()])) {
+                    $arrBlocks[$objOneBlocks->getStrName()] = "";
+                }
+                $arrBlocks[$objOneBlocks->getStrName()] .= PagesPortaleditor::getPlaceholderWrapper("blocks_".$objOneBlocks->getStrName());
+
+            }
 
             foreach ($objPlaceholders->getArrPlaceholder() as $arrOnePlaceholder) {
 
