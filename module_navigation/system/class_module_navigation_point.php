@@ -322,16 +322,16 @@ class class_module_navigation_point extends class_model implements interface_mod
 
         foreach($arrPlainElements as $arrOneElementOnPage) {
             //Build the class-name for the object
-            $strClassname = uniSubstr($arrOneElementOnPage["element_class_portal"], 0, -4);
 
+            $strFilename = \class_resourceloader::getInstance()->getPathForFile("/portal/elements/".$arrOneElementOnPage["element_class_portal"]);
+            $objInstance = \class_classloader::getInstance()->getInstanceFromFilename($strFilename, "Kajona\\Pages\\Portal\\ElementPortal", null, array(new class_module_pages_pageelement($arrOneElementOnPage["system_id"])));
 
-            if($strClassname::providesNavigationEntries()) {
+            if($objInstance::providesNavigationEntries()) {
 
-                /** @var  class_element_portal $objElement */
-                $objElement = new $strClassname(new class_module_pages_pageelement($arrOneElementOnPage["system_id"]));
-                $objElement->setParam("page", $objPage->getStrName());
+                /** @var  class_element_portal $objInstance */
+                $objInstance->setParam("page", $objPage->getStrName());
 
-                $arrNavigationPoints = $objElement->getNavigationEntries();
+                $arrNavigationPoints = $objInstance->getNavigationEntries();
                 if($arrNavigationPoints !== false) {
                     $arrReturn = array_merge($arrReturn, $arrNavigationPoints);
                 }

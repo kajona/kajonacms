@@ -1341,9 +1341,10 @@ class class_toolkit_admin extends class_toolkit
         foreach ($arrActions as $objOneAction) {
             $strEntries .= $this->objTemplate->fillTemplate(
                 array(
-                    "title"     => $objOneAction->getStrTitle(),
-                    "icon"      => $objOneAction->getStrIcon(),
-                    "targeturl" => $objOneAction->getStrTargetUrl()
+                    "title"      => $objOneAction->getStrTitle(),
+                    "icon"       => $objOneAction->getStrIcon(),
+                    "targeturl"  => $objOneAction->getStrTargetUrl(),
+                    "renderinfo" => $objOneAction->getBitRenderInfo() ? "1" : "0"
                 ),
                 $strTemplateID
             );

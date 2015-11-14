@@ -266,6 +266,9 @@ Currently, there are two modes: with and without a description.
         <div class="progress">
             <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">0%</div>
         </div>
+        <div class="batchaction_messages">
+            <ul class="batchaction_messages_list"></ul>
+        </div>
     </div>
 </div>
 <script type="text/javascript">
@@ -278,7 +281,7 @@ Currently, there are two modes: with and without a description.
 </batchactions_wrapper>
 
 <batchactions_entry>
-    <a href="#" onclick="KAJONA.admin.lists.triggerAction('%%title%%', '%%targeturl%%');return false;" title="%%title%%" rel="tooltip">%%icon%%</a>
+    <a href="#" onclick="KAJONA.admin.lists.triggerAction('%%title%%', '%%targeturl%%', %%renderinfo%%);return false;" title="%%title%%" rel="tooltip">%%icon%%</a>
 </batchactions_entry>
 
 Divider to split up a page in logical sections
