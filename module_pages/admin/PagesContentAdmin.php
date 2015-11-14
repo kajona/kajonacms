@@ -283,7 +283,7 @@ HTML;
                                 "icon_new"
                             );
 
-                            if ($objOnePossibleElementInSystem->getIntRepeat() == 1 || $bitHit === false) {
+                            if (($objOnePossibleElementInSystem->getIntRepeat() == 1 || $bitHit === false) && ($strBlock == "" && $strBlocks == "")) {
                                 //So, the Row for a new element: element is repeatable or not yet created
                                 $strActions = $this->objToolkit->listButton($strNewElementLink);
                                 $strOutputAtPlaceholder .= $this->objToolkit->genericAdminList("", $objOnePossibleElementInSystem->getStrDisplayName(), "", $strActions, 0, ($bitRenderCompact ? $arrOneElementOnTemplate["placeholder"] : ""));
@@ -476,10 +476,11 @@ HTML;
 
             //Load the class to create an object
 
-            $strElementClass = str_replace(".php", "", $objElement->getStrClassAdmin());
+
             //and finally create the object
+            $strFilename = \class_resourceloader::getInstance()->getPathForFile("/admin/elements/".$objElement->getStrClassAdmin());
             /** @var $objPageElement ElementAdmin */
-            $objPageElement = new $strElementClass();
+            $objPageElement = \class_classloader::getInstance()->getInstanceFromFilename($strFilename, "Kajona\\Pages\\Admin\\ElementAdmin");
             if ($bitShowErrors) {
                 $objPageElement->setDoValidation(true);
             }
