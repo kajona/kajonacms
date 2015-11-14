@@ -140,9 +140,25 @@ KAJONA.admin.portaleditor.RTE.savePage = function () {
             value: value
         };
 
-        $.post(KAJONA_WEBPATH + '/xml.php?admin=1&module=pages_content&action=updateObjectProperty', data, function () {
-            //console. warn('server response');
-            //console. log(this.responseText);
+        var $editable = $('[data-kajona-editable="' + key + '"]');
+        $editable.addClass('peSaving');
+
+        $.post(KAJONA_WEBPATH + '/xml.php?admin=1&module=pages_content&action=updateObjectProperty', data)
+            .always(function () {
+                $editable.addClass('peSaving');
+            })
+            .done(function () {
+                $editable.addClass('peSaved');
+                window.setTimeout(function () {
+                    $editable.removeClass('peSaving peSaved peFailed');
+                }, 3000);
+            }).fail(function () {
+                $editable.addClass('peFailed');
+                window.setTimeout(function () {
+                    $editable.removeClass('peSaving peSaved peFailed');
+                }, 5000);
+                //console. warn('server response');
+                //console. log(this.responseText);
         });
     });
     //console. groupEnd('savePage');
