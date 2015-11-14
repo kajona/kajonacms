@@ -519,7 +519,7 @@ class class_admin_formgenerator
     {
 
         //backslash given?
-        //the V5 way: namespaves
+        //the V5 way: namespaces
         if(uniStrpos($strName, "\\") !== false) {
             $strClassname = $strName;
         }
@@ -528,8 +528,8 @@ class class_admin_formgenerator
             $strClassname = "class_formentry_".$strName;
             $strPath = class_resourceloader::getInstance()->getPathForFile("/admin/formentries/".$strClassname.".php");
 
-            if($strPath == null) {
-                class_resourceloader::getInstance()->getPathForFile("/legacy/".$strClassname.".php");
+            if(!$strPath) {
+                $strPath = class_resourceloader::getInstance()->getPathForFile("/legacy/".$strClassname.".php");
 
                 if($strPath == null) {
                     $strClassname = null;

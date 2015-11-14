@@ -436,10 +436,9 @@ HTML;
         //Now, load all infos about the requested element
         $objElement = PagesElement::getElement($strPlaceholderElement);
         //Build the class-name
-        $strElementClass = str_replace(".php", "", $objElement->getStrClassAdmin());
         //and finally create the object
-        /** @var $objElement ElementAdmin */
-        $objElement = new $strElementClass();
+        $strFilename = \class_resourceloader::getInstance()->getPathForFile("/admin/elements/".$objElement->getStrClassAdmin());
+        $objElement = \class_classloader::getInstance()->getInstanceFromFilename($strFilename, "Kajona\\Pages\\Admin\\ElementAdmin");
         if ($bitShowErrors) {
             $objElement->setDoValidation(true);
         }
@@ -577,10 +576,11 @@ HTML;
             //Now, load all infos about the requested element
             $objElement = PagesElement::getElement($strPlaceholderElement);
             //Load the class to create an object
-            $strElementClass = str_replace(".php", "", $objElement->getStrClassAdmin());
+
+
             //and finally create the object
-            /** @var PagesElement $objElement */
-            $objElement = new $strElementClass();
+            $strFilename = \class_resourceloader::getInstance()->getPathForFile("/admin/elements/".$objElement->getStrClassAdmin());
+            $objElement = \class_classloader::getInstance()->getInstanceFromFilename($strFilename, "Kajona\\Pages\\Admin\\ElementAdmin");
 
             //really continue? try to validate the passed data.
             if ($objElement->getAdminForm() !== null && !$objElement->getAdminForm()->validateForm()) {
