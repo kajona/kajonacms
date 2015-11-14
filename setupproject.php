@@ -127,6 +127,8 @@ class class_project_setup {
         self::createDenyHtaccess("/project/.htaccess");
         self::createDenyHtaccess("/files/.htaccess");
 
+        echo "\n<b>Done.</b>\nIf everything went well, <a href=\"../installer.php\">open the installer</a>\n";
+
     }
 
 
