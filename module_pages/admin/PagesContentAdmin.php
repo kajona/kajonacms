@@ -13,6 +13,7 @@ use class_carrier;
 use class_date;
 use class_exception;
 use class_http_statuscodes;
+use class_lang;
 use class_link;
 use class_lockmanager;
 use class_model;
@@ -162,9 +163,9 @@ class PagesContentAdmin extends class_admin_simple implements interface_admin
                 /** @var PagesPageelement $objOneBlocksOnPage */
                 foreach($arrBlocksOnPage as $objOneBlocksOnPage) {
 
-                    $strNewBlocksSystemid = $objOneBlocksOnPage->getSystemid();
 
                     if($objOneBlocksOnPage->getStrName() == $objOneBlocks->getStrName()) {
+                        $strNewBlocksSystemid = $objOneBlocksOnPage->getSystemid();
                         $arrSubBlock = PagesPageelement::getElementsOnPage($objOneBlocksOnPage->getSystemid(), false, $this->getLanguageToWorkOn());
 
                         foreach($arrSubBlock as $objOneBlockOnPage) {
@@ -191,13 +192,9 @@ class PagesContentAdmin extends class_admin_simple implements interface_admin
                 }
 
 
-                $strNewBlock = $this->renderElementPlaceholderList($objOneBlock->getArrPlaceholder(), array(), true, $strNewBlocksSystemid, $objOneBlock->getStrName());
+                $strNewBlocks .= $this->renderNewBlockLinkRow($strNewBlocksSystemid, $objOneBlock->getStrName());
 
-                $strNewBlocks .= $this->objToolkit->getFieldset(
-                    $objOneBlock->getStrName(),
-                    $strNewBlock,
-                    "fieldset block newblock"
-                );
+
             }
 
             $strBlocks .= $this->objToolkit->getFieldset($objOneBlocks->getStrName(), $strCurBlocks.$strNewBlocks, "fieldset blocks");
@@ -221,6 +218,25 @@ HTML;
 
         return $strReturn;
 
+    }
+
+    private function renderNewBlockLinkRow($strBlocks, $strBlock)
+    {
+        $strNewElementLink = class_link::getLinkAdmin(
+            "pages_content",
+            "newBlock",
+            "&blocks={$strBlocks}&block={$strBlock}&systemid={$this->getSystemid()}",
+            "",
+            $this->getLang("element_anlegen"),
+            "icon_new"
+        );
+
+            //So, the Row for a new element: element is repeatable or not yet created
+        $strActions = $this->objToolkit->listButton($strNewElementLink);
+        $strReturn = $this->objToolkit->listHeader();
+        $strReturn .= $this->objToolkit->genericAdminList("", $strBlock, "", $strActions, 0);
+        $strReturn .= $this->objToolkit->listFooter();
+        return $strReturn;
     }
 
     /**
@@ -419,6 +435,98 @@ HTML;
         return $strActions;
     }
 
+    protected function actionNewBlock()
+    {
+        $strBlocks = $this->getParam("blocks");
+        $strBlock = $this->getParam("block");
+        $strPageId = $this->getSystemid();
+        $strLanguage = $this->getLanguageToWorkOn();
+
+        if($strBlocks != "" && $strBlock != "") {
+
+
+            if(validateSystemid($strBlocks) && validateSystemid($strBlock)) {
+                //fetch the matching elements
+                $objBlocks = new PagesPageelement($strBlocks);
+                $objBlock = new PagesPageelement($strBlock);
+
+                if($objBlocks->getStrElement() == "blocks" && $objBlock->getStrElement() == "block") {
+                    return $objBlock->getSystemid();
+                }
+            }
+
+            $objBlocksElement = null;
+            if(validateSystemid($strBlocks) && !validateSystemid($strBlock)) {
+                $objBlocksElement = new PagesPageelement($strBlocks);
+            }
+
+
+            if($objBlocksElement == null) {
+                $objBlocksElement = new PagesPageelement();
+                $objBlocksElement->setStrName($strBlocks);
+                $objBlocksElement->setStrPlaceholder("blocks");
+                $objBlocksElement->setStrElement("blocks");
+                $objBlocksElement->setStrLanguage($strLanguage);
+                if (!$objBlocksElement->updateObjectToDb($strPageId)) {
+                    throw new class_exception("Error saving new element-object to db", class_exception::$level_ERROR);
+                }
+            }
+
+            $objBlockElement = new PagesPageelement();
+            $objBlockElement->setStrName($strBlock);
+            $objBlockElement->setStrPlaceholder("block");
+            $objBlockElement->setStrElement("block");
+            $objBlockElement->setStrLanguage($strLanguage);
+            if (!$objBlockElement->updateObjectToDb($objBlocksElement->getSystemid())) {
+                throw new class_exception("Error saving new element-object to db", class_exception::$level_ERROR);
+            }
+
+            $strNewPrevId = $objBlockElement->getSystemid();
+
+
+            //create dummy elements, therefore parse the template
+            /** @var PagesPage $objPage */
+            $objPage = class_objectfactory::getInstance()->getObject($this->getSystemid());
+            $objTemplate = class_template::getInstance()->parsePageTemplate("/module_pages/".$objPage->getStrTemplate());
+            foreach($objTemplate->getArrBlocks() as $objOneBlocks) {
+                foreach($objOneBlocks->getArrBlocks() as $objOneBlock) {
+                    if($objOneBlocks->getStrName() == $objBlocksElement->getStrName() && $objOneBlock->getStrName() == $objBlockElement->getStrName()) {
+
+                        foreach($objOneBlock->getArrPlaceholder() as $arrOnePlaceholder) {
+                            foreach($arrOnePlaceholder["elementlist"] as $arrElementList) {
+                                //Create dummy elements
+                                $strPlaceholder = $arrOnePlaceholder["placeholder"];
+
+
+                                $objPageElement = new PagesPageelement();
+                                $objPageElement->setStrName($arrElementList["name"]);
+                                $objPageElement->setStrPlaceholder($strPlaceholder);
+                                $objPageElement->setStrElement($arrElementList["element"]);
+                                $objPageElement->setStrLanguage($strLanguage);
+                                if (!$objPageElement->updateObjectToDb($strNewPrevId)) {
+                                    throw new class_exception("Error saving new element-object to db", class_exception::$level_ERROR);
+                                }
+
+                                $objPageElement = new PagesPageelement($objPageElement->getSystemid());
+                                /** @var $objElement ElementAdmin */
+                                $objElement = $objPageElement->getConcreteAdminInstance();
+
+                                $objElement->doBeforeSaveToDb();
+
+                                //check, if we could save the data, so the element needn't to
+                                //woah, we are soooo great
+                                $objElement->updateForeignElement();
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        $this->adminReload(class_link::getLinkAdminHref("pages_content", "list", "&systemid=".$strPageId));
+        return "";
+    }
+    
 
     /**
      * Loads the form to create a new element
@@ -494,6 +602,9 @@ HTML;
 
         return $strReturn;
     }
+
+
+
 
     /**
      * Internal helper to resolve or create the matching blocks and block element for the current page-element
@@ -599,6 +710,7 @@ HTML;
 
             $strCurrentParentId = $this->getSystemid();
             //update / create blocks and block element
+            //TODO: the following row may be removed
             $strCurrentParentId = $this->processBlocksDefinition($strCurrentParentId, $this->getParam("blocks"), $this->getParam("block"));
 
 
