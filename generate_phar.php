@@ -14,12 +14,8 @@ foreach ($arrFiles as $strFile) {
               FilesystemIterator::CURRENT_AS_FILEINFO | FilesystemIterator::KEY_AS_FILENAME,
               $pharName);
           $phar->buildFromDirectory(__DIR__ . "/module_" . $moduleName);
-  //$phar["index.php"] = file_get_contents($srcRoot . "/index.php");
-  //$phar["common.php"] = file_get_contents($srcRoot . "/common.php");
           $phar->setStub($phar->createDefaultStub());
-
-  //copy($srcRoot . "/config.ini", $buildRoot . "/config.ini");
-
+          $phar->compress(Phar::GZ);
           echo 'Generated phar ' . $pharName . "\n";
         }
     }

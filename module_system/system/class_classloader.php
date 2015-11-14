@@ -195,8 +195,9 @@ class class_classloader
                 $strModuleName = null;
                 $boolIsPhar = false;
 
-                if (substr($strOneModule, -5) === ".phar") {
-                    $strModuleName = substr($strOneModule, 0, -5);
+                $pharExtensionPos = uniStrpos($strOneModule, ".phar");
+                if ($pharExtensionPos !== false) {
+                    $strModuleName = substr($strOneModule, 0, $pharExtensionPos);
                     $boolIsPhar = true;
                 }
                 elseif (preg_match("/^(module|element|_)+.*/i", $strOneModule)) {
@@ -395,9 +396,11 @@ class class_classloader
                 }
 
                 foreach ($this->arrCoreDirs as $strDir) {
-                    $strFile = 'phar://' . _realpath_.implode(DIRECTORY_SEPARATOR, array($strDir, $strModule.".phar", $strFolder, $strRest.".php"));
-                    if ($this->addAndIncludeFile($strClassName, $strFile)) {
-                        return true;
+                    foreach (array(".phar", ".phar.gz", ".phar.bz2", ".phar.zip") as $strPharExtension) {
+                        $strFile = 'phar://' . _realpath_.implode(DIRECTORY_SEPARATOR, array($strDir, $strModule.$strPharExtension, $strFolder, $strRest.".php"));
+                        if ($this->addAndIncludeFile($strClassName, $strFile)) {
+                            return true;
+                        }
                     }
                 }
 
