@@ -17,6 +17,7 @@ class class_classloader
     private $intNumberOfClassesLoaded = 0;
 
     private $strModulesCacheFile = "";
+    private $strPharModulesCacheFile = "";
     private $strClassesCacheFile = "";
 
     private $bitCacheSaveRequired = false;
@@ -27,6 +28,8 @@ class class_classloader
     private static $objInstance = null;
 
     private $arrModules = array();
+
+    private $arrPharModules = array();
 
     /**
      * Cached index of class-files available
@@ -42,6 +45,34 @@ class class_classloader
      * @var array
      */
     private $arrCoreDirs = array();
+
+    /**
+     * List of folder names that are supposed to contain code.
+     *
+     * @var array
+     */
+    private static $arrCodeFolders = array(
+      "/admin/elements/",
+      "/admin/formentries/",
+      "/admin/statsreports/",
+      "/admin/systemtasks/",
+      "/admin/widgets/",
+      "/admin/",
+      "/portal/elements/",
+      "/portal/templatemapper/",
+      "/portal/",
+      "/system/db/",
+      "/system/usersources/",
+      "/system/imageplugins/",
+      "/system/validators/",
+      "/system/workflows/",
+      "/system/messageproviders/",
+      "/system/scriptlets/",
+      "/system/",
+      "/installer/",
+      "/event/",
+      "/legacy/"
+    );
 
     /**
      * Factory method returning an instance of class_classloader.
@@ -67,18 +98,24 @@ class class_classloader
 
 
         $this->strModulesCacheFile = _realpath_."/project/temp/modules.cache";
+        $this->strPharModulesCacheFile = _realpath_."/project/temp/pharmodules.cache";
         $this->strClassesCacheFile = _realpath_."/project/temp/classes.cache";
 
         include_once(__DIR__."/class_apc_cache.php");
         $this->arrModules = class_apc_cache::getInstance()->getValue(__CLASS__."modules");
+        $this->arrPharModules = class_apc_cache::getInstance()->getValue(__CLASS__."pharmodules");
         $this->arrFiles = class_apc_cache::getInstance()->getValue(__CLASS__."files");
 
-        if ($this->arrModules === false || $this->arrFiles == false) {
+        if ($this->arrModules === false || $this->arrPharModules === false || $this->arrFiles == false) {
             $this->arrModules = array();
+            $this->arrPharModules = array();
             $this->arrFiles = array();
 
-            if (is_file($this->strModulesCacheFile) && is_file($this->strClassesCacheFile)) {
+            if (is_file($this->strModulesCacheFile)
+              && is_file($this->strPharModulesCacheFile)
+              && is_file($this->strClassesCacheFile)) {
                 $this->arrModules = unserialize(file_get_contents($this->strModulesCacheFile));
+                $this->arrPharModules = unserialize(file_get_contents($this->strPharModulesCacheFile));
                 $this->arrFiles = unserialize(file_get_contents($this->strClassesCacheFile));
             }
             else {
@@ -101,9 +138,11 @@ class class_classloader
         if ($this->bitCacheSaveRequired && class_config::getInstance()->getConfig('resourcecaching') == true) {
 
             class_apc_cache::getInstance()->addValue(__CLASS__."modules", $this->arrModules);
+            class_apc_cache::getInstance()->addValue(__CLASS__."pharmodules", $this->arrPharModules);
             class_apc_cache::getInstance()->addValue(__CLASS__."files", $this->arrFiles);
 
             file_put_contents($this->strModulesCacheFile, serialize($this->arrModules));
+            file_put_contents($this->strPharModulesCacheFile, serialize($this->arrPharModules));
             file_put_contents($this->strClassesCacheFile, serialize($this->arrFiles));
         }
     }
@@ -145,6 +184,7 @@ class class_classloader
         $this->arrCoreDirs = self::getCoreDirectories();
 
         $arrModules = array();
+        $arrPharModules = array();
         foreach ($this->arrCoreDirs as $strRootFolder) {
 
             if (uniStrpos($strRootFolder, "core") === false) {
@@ -153,9 +193,11 @@ class class_classloader
 
             foreach (scandir(_realpath_."/".$strRootFolder) as $strOneModule) {
                 $strModuleName = null;
+                $boolIsPhar = false;
 
                 if (substr($strOneModule, -5) === ".phar") {
                     $strModuleName = substr($strOneModule, 0, -5);
+                    $boolIsPhar = true;
                 }
                 elseif (preg_match("/^(module|element|_)+.*/i", $strOneModule)) {
                     $strModuleName = $strOneModule;
@@ -172,12 +214,18 @@ class class_classloader
                         continue;
                     }
 
-                    $arrModules[$strRootFolder."/".$strOneModule] = $strModuleName;
+                    if ($boolIsPhar) {
+                        $arrPharModules[$strRootFolder."/".$strOneModule] = $strModuleName;
+                    }
+                    else {
+                        $arrModules[$strRootFolder."/".$strOneModule] = $strModuleName;
+                    }
                 }
             }
         }
 
         $this->arrModules = $arrModules;
+        $this->arrPharModules = array_diff($arrPharModules, $arrModules);
     }
 
     /**
@@ -212,10 +260,12 @@ class class_classloader
     {
         $objFilesystem = new class_filesystem();
         $objFilesystem->fileDelete($this->strModulesCacheFile);
+        $objFilesystem->fileDelete($this->strPharModulesCacheFile);
         $objFilesystem->fileDelete($this->strClassesCacheFile);
 
         $this->arrFiles = array();
         $this->arrModules = array();
+        $this->arrPharModules = array();
         $this->scanModules();
         $this->indexAvailableCodefiles();
     }
@@ -228,26 +278,13 @@ class class_classloader
      */
     private function indexAvailableCodefiles()
     {
-        $this->addClassFolder("/admin/elements/");
-        $this->addClassFolder("/admin/formentries/");
-        $this->addClassFolder("/admin/statsreports/");
-        $this->addClassFolder("/admin/systemtasks/");
-        $this->addClassFolder("/admin/widgets/");
-        $this->addClassFolder("/admin/");
-        $this->addClassFolder("/portal/elements/");
-        $this->addClassFolder("/portal/templatemapper/");
-        $this->addClassFolder("/portal/");
-        $this->addClassFolder("/system/db/");
-        $this->addClassFolder("/system/usersources/");
-        $this->addClassFolder("/system/imageplugins/");
-        $this->addClassFolder("/system/validators/");
-        $this->addClassFolder("/system/workflows/");
-        $this->addClassFolder("/system/messageproviders/");
-        $this->addClassFolder("/system/scriptlets/");
-        $this->addClassFolder("/system/");
-        $this->addClassFolder("/installer/");
-        $this->addClassFolder("/event/");
-        $this->addClassFolder("/legacy/");
+        foreach (self::$arrCodeFolders as $strFolder) {
+            $this->addClassFolder($strFolder);
+        }
+
+        foreach ($this->arrPharModules as $strPath => $strSingleModule) {
+            $this->addPhar($strPath);
+        }
     }
 
     /**
@@ -264,29 +301,7 @@ class class_classloader
         $arrFiles = array();
 
         foreach (array_merge($this->arrModules, array("project")) as $strPath => $strSingleModule) {
-            // Handle PHAR module
-            if (substr($strPath, -5) === ".phar") {
-                $phar = new Phar(_realpath_."/".$strPath, 0);
-                foreach (new RecursiveIteratorIterator($phar) as $file) {
-                    // Make sure the file is a PHP file and is inside the requested folder
-                    $strArchivePath = DIRECTORY_SEPARATOR.substr($file->getPathName(), strlen("phar://"._realpath_."/".$strPath));
-                    $strArchivePath = str_replace("\\", "/", $strArchivePath);
-                    $strFolder = str_replace("\\", "/", $strFolder);
-                    //var_dump(substr($strArchivePath, 0, strlen($strFolder)), $strFolder, $file->getPathName(), $strArchivePath);
-                    if (substr($strArchivePath, -4) === ".php"
-                      && substr($strArchivePath, 0, strlen($strFolder)) === $strFolder) {
-                        $strFilename = substr($file->getFileName(), 0, -4);
-                        // PHAR archive files must never override existing file system files
-                        if (!isset($arrFiles[$strFilename])) {
-                            $arrFiles[$strFilename] = $file->getPathName();
-                        }
-                    } elseif (preg_match("/module\_([a-z0-9\_])+\_id\.php/", $file->getFileName())) {
-                        include_once $file->getPathName();
-                    }
-                }
-            }
-            // Folder based modules
-            else if (is_dir(_realpath_."/".$strPath.$strFolder)) {
+            if (is_dir(_realpath_."/".$strPath.$strFolder)) {
                 $arrTempFiles = scandir(_realpath_."/".$strPath.$strFolder);
                 foreach ($arrTempFiles as $strSingleFile) {
                     if (strpos($strSingleFile, ".php") !== false) {
@@ -308,6 +323,34 @@ class class_classloader
         }
 
         return $arrFiles;
+    }
+
+    private function addPhar($strPharPath)
+    {
+        $phar = new Phar(_realpath_."/".$strPharPath, 0);
+        foreach (new RecursiveIteratorIterator($phar) as $file) {
+            // Make sure the file is a PHP file and is inside the requested folder
+            $strArchivePath = DIRECTORY_SEPARATOR.substr($file->getPathName(), strlen("phar://"._realpath_."/".$strPharPath));
+            $strArchivePath = str_replace("\\", "/", $strArchivePath);
+
+            foreach (self::$arrCodeFolders as $strFolder) {
+              $strFolder = str_replace("\\", "/", $strFolder);
+
+              if (substr($strArchivePath, -4) === ".php"
+                && substr($strArchivePath, 0, strlen($strFolder)) === $strFolder) {
+                  $strFilename = substr($file->getFileName(), 0, -4);
+                  // PHAR archive files must never override existing file system files
+                  if (!isset($this->arrFiles[$strFilename])) {
+                      $this->arrFiles[$strFilename] = $file->getPathName();
+                  }
+              }
+            }
+
+            // Include the module ID
+            if (preg_match("/module\_([a-z0-9\_])+\_id\.php/", $file->getFileName())) {
+                include_once $file->getPathName();
+            }
+        }
     }
 
 
@@ -346,29 +389,33 @@ class class_classloader
                 $arrDirs = array_merge(array("project"), $this->arrCoreDirs);
                 foreach ($arrDirs as $strDir) {
                     $strFile = _realpath_.implode(DIRECTORY_SEPARATOR, array($strDir, $strModule, $strFolder, $strRest.".php"));
-                    if (is_file($strFile)) {
-                        $this->arrFiles[$strClassName] = $strFile;
-                        $this->bitCacheSaveRequired = true;
-
-                        $this->intNumberOfClassesLoaded++;
-                        include_once $strFile;
+                    if ($this->addAndIncludeFile($strClassName, $strFile)) {
                         return true;
                     }
                 }
 
                 foreach ($this->arrCoreDirs as $strDir) {
                     $strFile = 'phar://' . _realpath_.implode(DIRECTORY_SEPARATOR, array($strDir, $strModule.".phar", $strFolder, $strRest.".php"));
-                    if (is_file($strFile)) {
-                        $this->arrFiles[$strClassName] = $strFile;
-                        $this->bitCacheSaveRequired = true;
-
-                        $this->intNumberOfClassesLoaded++;
-                        include_once $strFile;
+                    if ($this->addAndIncludeFile($strClassName, $strFile)) {
                         return true;
                     }
                 }
 
             }
+        }
+
+        return false;
+    }
+
+    private function addAndIncludeFile($strClassName, $strFile)
+    {
+        if (is_file($strFile)) {
+            $this->arrFiles[$strClassName] = $strFile;
+            $this->bitCacheSaveRequired = true;
+
+            $this->intNumberOfClassesLoaded++;
+            include_once $strFile;
+            return true;
         }
 
         return false;
