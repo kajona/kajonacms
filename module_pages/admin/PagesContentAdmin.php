@@ -29,6 +29,7 @@ use class_template;
 use interface_admin;
 use interface_admin_listable;
 use interface_model;
+use Kajona\Pages\Admin\Elements\ElementBlockAdmin;
 use Kajona\Pages\System\PagesElement;
 use Kajona\Pages\System\PagesFolder;
 use Kajona\Pages\System\PagesPage;
@@ -178,8 +179,11 @@ class PagesContentAdmin extends class_admin_simple implements interface_admin
                             }
 
                             if($strExistingBlock != "") {
+
+                                $strActions = $this->getActionIcons($objOneBlockOnPage);
+
                                 $strCurBlocks .= $this->objToolkit->getFieldset(
-                                    $objOneBlock->getStrName(),
+                                    $objOneBlock->getStrName()."<span class='pull-right'>".$strActions."</span>",
                                     $strExistingBlock,
                                     "fieldset block",
                                     $objOneBlockOnPage->getSystemid()
@@ -389,6 +393,12 @@ HTML;
         if ($objOneIterable instanceof PagesPageelement) {
             $objLockmanager = $objOneIterable->getLockManager();
 
+            $bitParentIsBlock = false;
+            $objParent = class_objectfactory::getInstance()->getObject($objOneIterable->getStrPrevId());
+            if($objParent instanceof PagesPageelement) {
+                $bitParentIsBlock = $objParent->getConcreteAdminInstance() instanceof ElementBlockAdmin;
+            }
+
             //Create a row to handle the element, check all necessary stuff such as locking etc
             $strActions = "";
             //First step - Record locked? Offer button to unlock? But just as admin! For the user, who locked the record, the unlock-button
@@ -399,29 +409,30 @@ HTML;
                     $strActions .= $this->objToolkit->listButton(class_link::getLinkAdmin("pages_content", "list", "&systemid=".$this->getSystemid()."&adminunlockid=".$objOneIterable->getSystemid(), "", $this->getLang("ds_entsperren"), "icon_lockerOpen"));
                 }
                 //If the Element is locked, then its not allowed to edit or delete the record, so disable the icons
-                if ($objOneIterable->rightEdit()) {
-                    $strActions .= $this->objToolkit->listButton(class_adminskin_helper::getAdminImage("icon_editLocked", $this->getLang("ds_gesperrt")));
+                if ($objOneIterable->rightEdit() && !$objOneIterable->getConcreteAdminInstance() instanceof ElementBlockAdmin) {
                     $strActions .= $this->objToolkit->listButton(class_adminskin_helper::getAdminImage("icon_editLocked", $this->getLang("ds_gesperrt")));
                 }
-                if ($objOneIterable->rightDelete()) {
+                if ($objOneIterable->rightDelete() && !$bitParentIsBlock) {
                     $strActions .= $this->objToolkit->listButton(class_adminskin_helper::getAdminImage("icon_deleteLocked", $this->getLang("ds_gesperrt")));
                 }
             }
             else {
 
-                if ($objOneIterable->rightEdit()) {
+                if ($objOneIterable->rightEdit() && !$objOneIterable->getConcreteAdminInstance() instanceof ElementBlockAdmin) {
                     $strActions .= $this->objToolkit->listButton(class_link::getLinkAdmin("pages_content", "edit", "&systemid=".$objOneIterable->getSystemid(), "", $this->getLang("element_bearbeiten"), "icon_edit"));
                 }
-                if ($objOneIterable->rightDelete()) {
+                if ($objOneIterable->rightDelete() && !$bitParentIsBlock) {
                     $strActions .= $this->objToolkit->listDeleteButton($objOneIterable->getStrName().($objOneIterable->getConcreteAdminInstance()->getContentTitle() != "" ? " - ".$objOneIterable->getConcreteAdminInstance()->getContentTitle() : "").($objOneIterable->getStrTitle() != "" ? " - ".$objOneIterable->getStrTitle() : ""), $this->getLang("element_loeschen_frage"), class_link::getLinkAdminHref("pages_content", "deleteElementFinal", "&systemid=".$objOneIterable->getSystemid().($this->getParam("pe") == "" ? "" : "&peClose=".$this->getParam("pe"))));
                 }
             }
 
+            if(!$bitParentIsBlock) {
             //The Icons to sort the list and to copy the element
-            $strActions .= $this->objToolkit->listButton(class_link::getLinkAdminDialog("pages_content", "copyElement", "&systemid=".$objOneIterable->getSystemid(), "", $this->getLang("element_copy"), "icon_copy"));
+                $strActions .= $this->objToolkit->listButton(class_link::getLinkAdminDialog("pages_content", "copyElement", "&systemid=".$objOneIterable->getSystemid(), "", $this->getLang("element_copy"), "icon_copy"));
+                //The status-icons
+                $strActions .= $this->objToolkit->listStatusButton($objOneIterable->getSystemid());
+            }
 
-            //The status-icons
-            $strActions .= $this->objToolkit->listStatusButton($objOneIterable->getSystemid());
 
         }
         elseif ($objOneIterable instanceof PagesElement) {
