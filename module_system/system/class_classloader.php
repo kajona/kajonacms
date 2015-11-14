@@ -502,7 +502,7 @@ class class_classloader
      */
     public function getArrModules()
     {
-        return $this->arrModules;
+        return array_merge($this->arrModules, $this->arrPharModules);
     }
 
     /**
