@@ -120,4 +120,11 @@ class PagesPortaleditor  {
     {
         return "<span data-placeholder='{$strPlaceholder}'></span>";
     }
+
+    public static function isActive()
+    {
+        return class_module_system_setting::getConfigValue("_pages_portaleditor_") == "true"
+            && class_carrier::getInstance()->getObjSession()->getSession("pe_disable") != "true"
+            && class_carrier::getInstance()->getObjSession()->isAdmin();
+    }
 }

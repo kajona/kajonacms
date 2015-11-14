@@ -80,16 +80,8 @@ class PagesPortalController extends class_portal_controller implements interface
             $this->objSession->setSession("pe_disable", "false");
         }
 
-        //if using the pe, the cache shouldn't be used, otherwise strange things might happen.
-        //the system could frighten your cat or eat up all your cheese with marshmallows...
-        //get the current state of the portal editor
-        $bitPeRequested = false;
-        if (class_module_system_setting::getConfigValue("_pages_portaleditor_") == "true" && $this->objSession->getSession("pe_disable") != "true" && $this->objSession->isAdmin() && $objPageData->rightEdit()) {
-            $bitPeRequested = true;
-        }
-
         //If we reached up till here, we can begin loading the elements to fill
-        if ($bitPeRequested) {
+        if (PagesPortaleditor::isActive()) {
             $arrElementsOnPage = PagesPageelement::getElementsOnPage($objPageData->getSystemid(), false, $this->getStrPortalLanguage());
         }
         else {
@@ -100,7 +92,7 @@ class PagesPortalController extends class_portal_controller implements interface
         $objMasterData = PagesPage::getPageByName("master");
         $bitEditPermissionOnMasterPage = false;
         if ($objMasterData != null) {
-            if ($bitPeRequested) {
+            if (PagesPortaleditor::isActive()) {
                 $arrElementsOnMaster = PagesPageelement::getElementsOnPage($objMasterData->getSystemid(), false, $this->getStrPortalLanguage());
             }
             else {
@@ -177,7 +169,7 @@ class PagesPortalController extends class_portal_controller implements interface
 
             //cache-handling. load element from cache.
             //if the element is re-generated, save it back to cache.
-            $strElementOutput = $objElement->getRenderedElementOutput($bitPeRequested);
+            $strElementOutput = $objElement->getRenderedElementOutput(PagesPortaleditor::isActive());
 
             if ($objOneElementOnPage->getStrElement() == "blocks") {
                 //try to fetch the whole block as a placeholder
@@ -198,7 +190,7 @@ class PagesPortalController extends class_portal_controller implements interface
         }
 
         //pe-code to add new elements on unfilled placeholders --> only if pe is visible
-        if ($bitPeRequested) {
+        if (PagesPortaleditor::isActive()) {
 
             foreach ($objPlaceholders->getArrPlaceholder() as $arrOnePlaceholder) {
 
