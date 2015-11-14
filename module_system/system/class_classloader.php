@@ -152,22 +152,28 @@ class class_classloader
             }
 
             foreach (scandir(_realpath_."/".$strRootFolder) as $strOneModule) {
+                $strModuleName = null;
 
-                if (preg_match("/^(module|element|_)+.*/i", $strOneModule)) {
+                if (substr($strOneModule, -5) === ".phar") {
+                    $strModuleName = substr($strOneModule, 0, -5);
+                }
+                elseif (preg_match("/^(module|element|_)+.*/i", $strOneModule)) {
+                    $strModuleName = $strOneModule;
+                }
 
+                if ($strModuleName != null) {
                     //skip excluded modules
-                    if (isset($arrExcludedModules[$strRootFolder]) && in_array($strOneModule, $arrExcludedModules[$strRootFolder])) {
+                    if (isset($arrExcludedModules[$strRootFolder]) && in_array($strModuleName, $arrExcludedModules[$strRootFolder])) {
                         continue;
                     }
 
                     //skip module if not marked as to be included
-                    if (count($arrIncludedModules) > 0 && (isset($arrIncludedModules[$strRootFolder]) && !in_array($strOneModule, $arrIncludedModules[$strRootFolder]))) {
+                    if (count($arrIncludedModules) > 0 && (isset($arrIncludedModules[$strRootFolder]) && !in_array($strModuleName, $arrIncludedModules[$strRootFolder]))) {
                         continue;
                     }
 
-                    $arrModules[$strRootFolder."/".$strOneModule] = $strOneModule;
+                    $arrModules[$strRootFolder."/".$strOneModule] = $strModuleName;
                 }
-
             }
         }
 
@@ -258,7 +264,24 @@ class class_classloader
         $arrFiles = array();
 
         foreach (array_merge($this->arrModules, array("project")) as $strPath => $strSingleModule) {
-            if (is_dir(_realpath_."/".$strPath.$strFolder)) {
+            // Handle PHAR module
+            if (substr($strPath, -5) === ".phar") {
+                $phar = new Phar(_realpath_."/".$strPath, 0);
+                foreach (new RecursiveIteratorIterator($phar) as $file) {
+                    // Make sure the file is a PHP file and is inside the requested folder
+                    $strArchivePath = "/".substr($file->getPathName(), strlen("phar://"._realpath_."/".$strPath));
+                    if (substr($strArchivePath, -4) === ".php"
+                      && substr($strArchivePath, 0, strlen($strFolder)) === $strFolder) {
+                        $strFilename = substr($file->getFileName(), 0, -4);
+                        // PHAR archive files must never override existing file system files
+                        if (!isset($arrFiles[$strFilename]) {
+                            $arrFiles[$strFilename] = $file->getPathName();
+                        });
+                    }
+                }
+            }
+            // Folder based modules
+            else if (is_dir(_realpath_."/".$strPath.$strFolder)) {
                 $arrTempFiles = scandir(_realpath_."/".$strPath.$strFolder);
                 foreach ($arrTempFiles as $strSingleFile) {
                     if (strpos($strSingleFile, ".php") !== false) {
@@ -267,7 +290,6 @@ class class_classloader
                 }
             }
         }
-
 
         //scan for overwrites
         //FIXME: remove in 5.x, only needed for backwards compatibility where content under /project was not organized within module-folders
