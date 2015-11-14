@@ -112,7 +112,6 @@ class PagesPortalController extends class_portal_controller implements interface
 
 
         //Load the template from the filesystem to get the placeholders
-        $strTemplateID = $this->objTemplate->readTemplate("/module_pages/".$objPageData->getStrTemplate(), "", false, true);
         //bit include the masters-elements!!
         $arrRawPlaceholders = $objPlaceholders->getArrPlaceholder();
 

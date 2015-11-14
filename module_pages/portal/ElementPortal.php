@@ -22,6 +22,8 @@ use class_portal_controller;
 use class_reflection;
 use class_scriptlet_helper;
 use interface_scriptlet;
+use Kajona\Pages\Admin\Elements\ElementBlockAdmin;
+use Kajona\Pages\Admin\Elements\ElementBlocksAdmin;
 use Kajona\Pages\Portal\PagesPortaleditor;
 use Kajona\Pages\System\PagesElement;
 use Kajona\Pages\System\PagesPage;
@@ -313,6 +315,12 @@ abstract class ElementPortal extends class_portal_controller
             return;
         }
 
+        $objParent = class_objectfactory::getInstance()->getObject($objPageelement->getPrevId());
+        if($objParent instanceof PagesPageelement) {
+            $objParent  = $objParent->getConcreteAdminInstance();
+        }
+
+
         //fetch the language to set the correct admin-lang
         $objLanguages = new class_module_languages_language();
         $strAdminLangParam = $objLanguages->getPortalLanguage();
@@ -321,31 +329,36 @@ abstract class ElementPortal extends class_portal_controller
         PagesPortaleditor::getInstance()->registerAction(
             new PagesPortaleditorSystemidAction(PagesPortaleditorActionEnum::EDIT(), class_link::getLinkAdminHref("pages_content", "edit", "&systemid={$this->getSystemid()}&language={$strAdminLangParam}&pe=1"), $this->getSystemid())
         );
-        PagesPortaleditor::getInstance()->registerAction(
-            new PagesPortaleditorSystemidAction(PagesPortaleditorActionEnum::COPY(), class_link::getLinkAdminHref("pages_content", "copyElement", "&systemid={$this->getSystemid()}&language={$strAdminLangParam}&pe=1"), $this->getSystemid())
-        );
-        PagesPortaleditor::getInstance()->registerAction(
-            new PagesPortaleditorSystemidAction(PagesPortaleditorActionEnum::DELETE(), class_link::getLinkAdminHref("pages_content", "deleteElementFinal", "&systemid={$this->getSystemid()}&language={$strAdminLangParam}&pe=1"), $this->getSystemid())
-        );
-        PagesPortaleditor::getInstance()->registerAction(
-            new PagesPortaleditorSystemidAction(PagesPortaleditorActionEnum::MOVE(), "", $this->getSystemid())
-        );
 
+        if(!$objParent instanceof ElementBlockAdmin) {
 
-        if ($objPageelement->getIntRecordStatus() == 1) {
             PagesPortaleditor::getInstance()->registerAction(
-                new PagesPortaleditorSystemidAction(PagesPortaleditorActionEnum::SETINACTIVE(), class_link::getLinkAdminHref("pages_content", "elementStatus", "&systemid={$this->getSystemid()}&language={$strAdminLangParam}&pe=1"), $this->getSystemid())
+                new PagesPortaleditorSystemidAction(PagesPortaleditorActionEnum::COPY(), class_link::getLinkAdminHref("pages_content", "copyElement", "&systemid={$this->getSystemid()}&language={$strAdminLangParam}&pe=1"), $this->getSystemid())
+            );
+            PagesPortaleditor::getInstance()->registerAction(
+                new PagesPortaleditorSystemidAction(PagesPortaleditorActionEnum::DELETE(), class_link::getLinkAdminHref("pages_content", "deleteElementFinal", "&systemid={$this->getSystemid()}&language={$strAdminLangParam}&pe=1"), $this->getSystemid())
+            );
+            PagesPortaleditor::getInstance()->registerAction(
+                new PagesPortaleditorSystemidAction(PagesPortaleditorActionEnum::MOVE(), "", $this->getSystemid())
+            );
+
+
+            if ($objPageelement->getIntRecordStatus() == 1) {
+                PagesPortaleditor::getInstance()->registerAction(
+                    new PagesPortaleditorSystemidAction(PagesPortaleditorActionEnum::SETINACTIVE(), class_link::getLinkAdminHref("pages_content", "elementStatus", "&systemid={$this->getSystemid()}&language={$strAdminLangParam}&pe=1"), $this->getSystemid())
+                );
+            }
+            else {
+                PagesPortaleditor::getInstance()->registerAction(
+                    new PagesPortaleditorSystemidAction(PagesPortaleditorActionEnum::SETACTIVE(), class_link::getLinkAdminHref("pages_content", "elementStatus", "&systemid={$this->getSystemid()}&language={$strAdminLangParam}&pe=1"), $this->getSystemid())
+                );
+            }
+
+
+            PagesPortaleditor::getInstance()->registerAction(
+                new PagesPortaleditorPlaceholderAction(PagesPortaleditorActionEnum::CREATE(), class_link::getLinkAdminHref("pages_content", "new", "&systemid={$this->getSystemid()}&language={$strAdminLangParam}&placeholder={$objPageelement->getStrPlaceholder()}&element={$objPageelement->getStrName()}&pe=1"), $objPageelement->getStrPlaceholder(), $objPageelement->getStrName())
             );
         }
-        else {
-            PagesPortaleditor::getInstance()->registerAction(
-                new PagesPortaleditorSystemidAction(PagesPortaleditorActionEnum::SETACTIVE(), class_link::getLinkAdminHref("pages_content", "elementStatus", "&systemid={$this->getSystemid()}&language={$strAdminLangParam}&pe=1"), $this->getSystemid())
-            );
-        }
-
-        PagesPortaleditor::getInstance()->registerAction(
-            new PagesPortaleditorPlaceholderAction(PagesPortaleditorActionEnum::CREATE(), class_link::getLinkAdminHref("pages_content", "new", "&systemid={$this->getSystemid()}&language={$strAdminLangParam}&placeholder={$objPageelement->getStrPlaceholder()}&element={$objPageelement->getStrName()}&pe=1"), $objPageelement->getStrPlaceholder(), $objPageelement->getStrName())
-        );
     }
 
     /**
