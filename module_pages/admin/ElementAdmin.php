@@ -582,6 +582,16 @@ abstract class ElementAdmin extends class_admin_controller implements interface_
         return "";
     }
 
+
+    /**
+     * Callback method to fill a new element with dummy content.
+     * May be overwritten by extending classes.
+     */
+    public function generateDummyContent()
+    {
+
+    }
+
     /**
      * Returns a short description of the saved content
      * Overwrite if needed

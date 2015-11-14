@@ -521,6 +521,7 @@ HTML;
                                 $objPageElement = new PagesPageelement($objPageElement->getSystemid());
                                 /** @var $objElement ElementAdmin */
                                 $objElement = $objPageElement->getConcreteAdminInstance();
+                                $objElement->generateDummyContent();
 
                                 $objElement->doBeforeSaveToDb();
 

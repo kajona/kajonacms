@@ -63,6 +63,13 @@ class ElementRichtextAdmin extends ElementAdmin implements AdminElementInterface
             return parent::getContentTitle();
     }
 
+    /**
+     * @inheritDoc
+     */
+    public function generateDummyContent()
+    {
+        $this->setStrText("Lorem <b>ipsum</b> dolor");
+    }
 
 
     /**

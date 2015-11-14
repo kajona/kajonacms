@@ -93,6 +93,13 @@ class ElementImageAdmin extends ElementAdmin implements AdminElementInterface {
      */
     private $strTemplate = "";
 
+    /**
+     * @inheritDoc
+     */
+    public function generateDummyContent()
+    {
+        $this->setStrImage("/files/images/samples/img_3000.jpg");
+    }
 
 
     /**
