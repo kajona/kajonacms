@@ -81,9 +81,6 @@ if(!defined("_webpath_")) {
     }
 
 }
-//---Include Section 2-----------------------------------------------------------------------------------
-//load module-ids
-bootstrapIncludeModuleIds();
 
 
 //---Auto-Loader for classes-----------------------------------------------------------------------------
@@ -95,4 +92,7 @@ if(!include_once _corepath_."/module_system/system/class_carrier.php")
     rawIncludeError("carrier-class");
 
 
+//---Include Section 2-----------------------------------------------------------------------------------
+//load module-ids
+bootstrapIncludeModuleIds();
 

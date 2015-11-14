@@ -44,6 +44,11 @@ function bootstrapIncludeModuleIds()
                     if (preg_match("/module\_([a-z0-9\_])+\_id\.php/", $strModuleEntry)) {
                         @include_once _realpath_."/".$strRootFolder."/".$strDirEntry."/system/config/".$strModuleEntry;
                     }
+
+                    if ($strModuleEntry == "services.php") {
+                        $objContainer = class_carrier::getInstance()->getContainer();
+                        @include_once _realpath_."/".$strRootFolder."/".$strDirEntry."/system/config/".$strModuleEntry;
+                    }
                 }
             }
         }
