@@ -34,15 +34,6 @@ class class_carrier
      */
     private static $arrParams = null;
 
-    private $objDB = null;
-    private $objConfig = null;
-    private $objSession = null;
-    private $objTemplate = null;
-    private $objRights = null;
-    private $objLang = null;
-    private $objToolkitAdmin = null;
-    private $objToolkitPortal = null;
-
     /**
      * Current instance
      *
@@ -50,12 +41,16 @@ class class_carrier
      */
     private static $objCarrier = null;
 
+
+    private $objContainer;
+
     /**
      * Constructor for class_carrier, doing nothing important,
      * but being private ;), so use getInstance() instead
      */
     private function __construct()
     {
+        $this->objContainer = $this->buildContainer();
     }
 
     /**
@@ -95,14 +90,7 @@ class class_carrier
      */
     public function getObjDB()
     {
-        //Do we have to generate the object?
-        if ($this->objDB == null) {
-            $this->objDB = class_db::getInstance();
-            //Now we have to set up the database connection
-            //SIR 2010/03: connection is established on request, lazy loading
-            //$this->objDB->dbconnect();
-        }
-        return $this->objDB;
+        return $this->objContainer['db'];
     }
 
 
@@ -114,11 +102,7 @@ class class_carrier
      */
     public function getObjRights()
     {
-        //Do we have to generate the object?
-        if ($this->objRights == null) {
-            $this->objRights = class_rights::getInstance();
-        }
-        return $this->objRights;
+        return $this->objContainer['rights'];
     }
 
     /**
@@ -129,15 +113,7 @@ class class_carrier
      */
     public function getObjConfig()
     {
-        //Do we have to generate the object?
-        if ($this->objConfig == null) {
-            $this->objConfig = class_config::getInstance();
-
-            //Loading the config-Files
-            //Invocation removed, all configs from database
-            //$this->objConfig->loadConfigsFilesystem();
-        }
-        return $this->objConfig;
+        return $this->objContainer['config'];
     }
 
     /**
@@ -148,11 +124,7 @@ class class_carrier
      */
     public function getObjSession()
     {
-        //Do we have to generate the object?
-        if ($this->objSession == null) {
-            $this->objSession = class_session::getInstance();
-        }
-        return $this->objSession;
+        return $this->objContainer['session'];
     }
 
 
@@ -164,11 +136,7 @@ class class_carrier
      */
     public function getObjTemplate()
     {
-        //Do we have to generate the object?
-        if ($this->objTemplate == null) {
-            $this->objTemplate = class_template::getInstance();
-        }
-        return $this->objTemplate;
+        return $this->objContainer['template'];
     }
 
     /**
@@ -179,11 +147,7 @@ class class_carrier
      */
     public function getObjLang()
     {
-        //Do we have to generate the object?
-        if ($this->objLang == null) {
-            $this->objLang = class_lang::getInstance();
-        }
-        return $this->objLang;
+        return $this->objContainer['lang'];
     }
 
 
@@ -197,29 +161,10 @@ class class_carrier
      */
     public function getObjToolkit($strArea)
     {
-        //Do we have to generate the object?
         if ($strArea == "admin") {
-            //Get the object
-            if ($this->objToolkitAdmin == null) {
-                //decide which class to load
-                $strAdminToolkitClass = $this->getObjConfig()->getConfig("admintoolkit");
-                if ($strAdminToolkitClass == "") {
-                    $strAdminToolkitClass = "class_toolkit_admin";
-                }
-
-                $strPath = class_resourceloader::getInstance()->getPathForFile("/admin/".$strAdminToolkitClass.".php");
-                include_once _realpath_.$strPath;
-                $this->objToolkitAdmin = new $strAdminToolkitClass();
-            }
-            return $this->objToolkitAdmin;
-        }
-        elseif ($strArea == "portal") {
-            if ($this->objToolkitPortal == null) {
-                $strPath = class_resourceloader::getInstance()->getPathForFile("/portal/class_toolkit_portal.php");
-                include_once _realpath_.$strPath;
-                $this->objToolkitPortal = new class_toolkit_portal();
-            }
-            return $this->objToolkitPortal;
+            return $this->objContainer['admintoolkit'];
+        } elseif ($strArea == "portal") {
+            return $this->objContainer['portaltoolkit'];
         }
         return null;
     }
@@ -334,6 +279,75 @@ class class_carrier
             $objChangelog->processCachedInserts();
         }
 
+    }
+
+    /**
+     * @return \Pimple\Container
+     */
+    public function getContainer()
+    {
+        return $this->objContainer;
+    }
+
+    private function buildContainer()
+    {
+        require_once _realpath_."/core/module_system/vendor/autoload.php";
+
+        $objContainer = new \Pimple\Container();
+
+        $objContainer['db'] = function($c){
+            return class_db::getInstance();
+        };
+
+        $objContainer['rights'] = function($c){
+            return class_rights::getInstance();
+        };
+
+        $objContainer['config'] = function($c){
+            return class_config::getInstance();
+        };
+
+        $objContainer['session'] = function($c){
+            return class_session::getInstance();
+        };
+
+        $objContainer['admintoolkit'] = function($c){
+
+            // decide which class to load
+            $strAdminToolkitClass = $c['config']->getConfig("admintoolkit");
+            if ($strAdminToolkitClass == "") {
+                $strAdminToolkitClass = "class_toolkit_admin";
+            }
+
+            $strPath = class_resourceloader::getInstance()->getPathForFile("/admin/".$strAdminToolkitClass.".php");
+            include_once _realpath_.$strPath;
+
+            return new $strAdminToolkitClass();
+
+        };
+
+        $objContainer['portaltoolkit'] = function(){
+
+            $strPath = class_resourceloader::getInstance()->getPathForFile("/portal/class_toolkit_portal.php");
+            include_once _realpath_.$strPath;
+
+            return new class_toolkit_portal();
+
+        };
+
+        $objContainer['objectfactory'] = function(){
+            return class_objectfactory::getInstance();
+        };
+
+        $objContainer['template'] = function(){
+            return class_template::getInstance();
+        };
+
+        $objContainer['lang'] = function(){
+            return class_lang::getInstance();
+        };
+
+        return $objContainer;
     }
 
 }

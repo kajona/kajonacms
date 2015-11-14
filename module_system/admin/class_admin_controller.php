@@ -473,5 +473,15 @@ abstract class class_admin_controller extends class_abstract_controller {
     }
 
 
+    /**
+     * Returns a service from the DI container
+     *
+     * @param string $strService
+     */
+    public function get($strService)
+    {
+        return class_carrier::getInstance()->getContainer()->offsetGet($strService);
+    }
+
 }
 
