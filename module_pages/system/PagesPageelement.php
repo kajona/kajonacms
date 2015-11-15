@@ -271,7 +271,7 @@ class PagesPageelement extends class_model implements interface_model, interface
         $objInstance = \class_classloader::getInstance()->getInstanceFromFilename($strFilename, "Kajona\\Pages\\Portal\\ElementPortal", null, array($this));
 
         //and finally create the object
-        /** @var $objInstance ElementAdmin */
+        /** @var $objInstance ElementPortal */
         $objInstance->setSystemid($this->getSystemid());
         return $objInstance;
     }

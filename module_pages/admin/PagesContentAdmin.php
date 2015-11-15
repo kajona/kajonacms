@@ -1246,9 +1246,14 @@ JS;
                     /** @var PagesPageelement $objElement */
                     $strElementClass = str_replace(".php", "", $objObject->getStrClassAdmin());
                     //and finally create the object
+                    $strFilename = \class_resourceloader::getInstance()->getPathForFile("/admin/elements/".$objObject->getStrClassAdmin());
+                    $objElement = \class_classloader::getInstance()->getInstanceFromFilename($strFilename, "Kajona\\Pages\\Admin\\ElementAdmin");
+
+                    //and finally create the object
                     /** @var $objElement ElementAdmin */
-                    $objElement = new $strElementClass();
                     $objElement->setSystemid($this->getSystemid());
+
+
                     $arrElementData = $objElement->loadElementData();
 
                     //see if we could set the param to the element

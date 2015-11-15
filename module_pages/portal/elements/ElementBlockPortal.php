@@ -82,4 +82,12 @@ class ElementBlockPortal extends ElementPortal implements PortalElementInterface
         return '<div data-element="block" data-systemid="' . $this->getSystemid() . '">' . $strReturn . '</div>';
     }
 
+    /**
+     * @inheritDoc
+     */
+    protected function removePortalEditorTags($strElementOutput)
+    {
+        return $strElementOutput;
+    }
+
 }

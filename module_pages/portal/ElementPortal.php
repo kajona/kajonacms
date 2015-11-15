@@ -298,11 +298,22 @@ abstract class ElementPortal extends class_portal_controller
 
         }
         else {
-            $strElementOutput = preg_replace('/data-kajona-editable=\"([a-zA-Z0-9#_]*)\"/i', "", $strElementOutput);
+            $strElementOutput = $this->removePortalEditorTags($strElementOutput);
         }
 
 
         return $strElementOutput;
+    }
+
+    /**
+     * Removes the portal-editor editable ids
+     * @param $strElementOutput
+     *
+     * @return mixed
+     */
+    protected function removePortalEditorTags($strElementOutput)
+    {
+        return preg_replace('/data-kajona-editable=\"([a-zA-Z0-9#_]*)\"/i', "", $strElementOutput);
     }
 
     /**
