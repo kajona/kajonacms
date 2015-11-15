@@ -298,11 +298,22 @@ abstract class ElementPortal extends class_portal_controller
 
         }
         else {
-            $strElementOutput = preg_replace('/data-kajona-editable=\"([a-zA-Z0-9#_]*)\"/i', "", $strElementOutput);
+            $strElementOutput = $this->removePortalEditorTags($strElementOutput);
         }
 
 
         return $strElementOutput;
+    }
+
+    /**
+     * Removes the portal-editor editable ids
+     * @param $strElementOutput
+     *
+     * @return mixed
+     */
+    protected function removePortalEditorTags($strElementOutput)
+    {
+        return preg_replace('/data-kajona-editable=\"([a-zA-Z0-9#_]*)\"/i', "", $strElementOutput);
     }
 
     /**
@@ -357,7 +368,7 @@ abstract class ElementPortal extends class_portal_controller
 
             if(!$this instanceof ElementBlocksPortal) {
                 PagesPortaleditor::getInstance()->registerAction(
-                    new PagesPortaleditorPlaceholderAction(PagesPortaleditorActionEnum::CREATE(), class_link::getLinkAdminHref("pages_content", "new", "&systemid={$this->getSystemid()}&language={$strAdminLangParam}&placeholder={$objPageelement->getStrPlaceholder()}&element={$objPageelement->getStrName()}&pe=1"), $objPageelement->getStrPlaceholder(), $objPageelement->getStrName())
+                    new PagesPortaleditorPlaceholderAction(PagesPortaleditorActionEnum::CREATE(), class_link::getLinkAdminHref("pages_content", "new", "&systemid={$this->getSystemid()}&language={$strAdminLangParam}&placeholder={$objPageelement->getStrPlaceholder()}&element={$objPageelement->getStrElement()}&pe=1"), $objPageelement->getStrPlaceholder(), $objPageelement->getStrName())
                 );
             }
 
