@@ -208,7 +208,7 @@ class PagesPortalController extends class_portal_controller implements interface
                         PagesPortaleditor::getInstance()->registerAction(
                             new PagesPortaleditorPlaceholderAction(
                                 PagesPortaleditorActionEnum::CREATE(),
-                                class_link::getLinkAdminHref("pages_content", "newBlock", "&blocks={$strId}&block={$objOneBlock->getStrName()}&systemid={$objPageData->getSystemid()}"), "blocks_".$objOneBlocks->getStrName(),
+                                class_link::getLinkAdminHref("pages_content", "newBlock", "&blocks={$strId}&block={$objOneBlock->getStrName()}&systemid={$objPageData->getSystemid()}&peClose=1"), "blocks_".$objOneBlocks->getStrName(),
                                 $objOneBlock->getStrName()
                             )
                         );
@@ -470,10 +470,18 @@ class PagesPortalController extends class_portal_controller implements interface
 
             $strPeToolbar .= "<script type='text/javascript'>
                 KAJONA.admin.lang.pe_rte_unsavedChanges = '".$this->getLang("pe_rte_unsavedChanges", "pages")."';
+                KAJONA.admin.lang.peMOVE = '".$this->getLang("pe_move", "pages")."';
+                KAJONA.admin.lang.peEDIT = '".$this->getLang("pe_edit", "pages")."';
+                KAJONA.admin.lang.peCOPY = '".$this->getLang("pe_copy", "pages")."';
+                KAJONA.admin.lang.peDELETE = '".$this->getLang("pe_delete", "pages")."';
+                KAJONA.admin.lang.peCREATE = '".$this->getLang("pe_new", "pages")."';
+                KAJONA.admin.lang.peSETACTIVE = '".$this->getLang("pe_setactive", "pages")."';
+                KAJONA.admin.lang.peSETINACTIVE = '".$this->getLang("pe_setinactive", "pages")."';
 
                 if($) {
                     KAJONA.portal.loader.loadFile([
                         '/core/module_pages/admin/scripts/kajona_portaleditor.js',
+                        '/core/module_system/admin/scripts/lang.js',
                         '/core/module_system/admin/scripts/jqueryui/jquery-ui.custom.min.js',
                         '/core/module_system/admin/scripts/jqueryui/css/smoothness/jquery-ui.custom.css',
                         '/core/module_system/admin/scripts/dropit/dropit.js'

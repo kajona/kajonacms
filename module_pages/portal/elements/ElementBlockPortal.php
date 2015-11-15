@@ -47,7 +47,8 @@ class ElementBlockPortal extends ElementPortal implements PortalElementInterface
         /** @var PagesPageelement $objBlocksElement */
         $objBlocksElement = class_objectfactory::getInstance()->getObject($this->getPrevId());
 
-        $objPageData = PagesPage::getPageByName($this->getPagename());
+        //fetch the matching page
+        $objPageData = class_objectfactory::getInstance()->getObject($objBlocksElement->getPrevId());
 
         $objPlaceholders = $this->objTemplate->parsePageTemplate("/module_pages/".$objPageData->getStrTemplate(), class_template::INT_ELEMENT_MODE_REGULAR);
 

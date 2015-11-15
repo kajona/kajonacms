@@ -102,6 +102,7 @@ $lang["pages_ordner_edit"]               = "Edit folder";
 $lang["pages_ordner_loeschen_frage"]     = "Do you really want to delete the folder &quot;<b>%%element_name%%</b>&quot;? All pages and folders contained by the current folder are delete, too.";
 $lang["pages_ordner_oeffnen"]            = "Open folder";
 $lang["pe_copy"]                         = "Copy";
+$lang["pe_delete"]                       = "Delete";
 $lang["pe_dialog_close_warning"]         = "Do you want to close the editor and discard possible modifications?";
 $lang["pe_disable"]                      = "Set portaleditor temporary inactive";
 $lang["pe_edit"]                         = "Edit";

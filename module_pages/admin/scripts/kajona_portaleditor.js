@@ -98,7 +98,6 @@ KAJONA.admin.portaleditor = {
     changeElementData : function(strDataPlaceholder, strDataSystemid, objElementData) {
 
         var $objContent = jQuery.parseHTML(objElementData);
-
         //see if the element is already present, then flip the contents
         if($("div.peElementWrapper[data-systemid='"+strDataSystemid+"']").length) {
             $("div.peElementWrapper[data-systemid='"+strDataSystemid+"']").html($($objContent).closest("div.peElementWrapper[data-systemid="+strDataSystemid+"]").html());
@@ -106,7 +105,13 @@ KAJONA.admin.portaleditor = {
         else {
             //add it as the last element to the placeholder itself
             strDataPlaceholder = strDataPlaceholder.replace(/\|/g, '\\|');
-            $("#menuContainer_"+strDataPlaceholder).before($($objContent).closest("div.peElementWrapper[data-systemid="+strDataSystemid+"]"));
+            if($('span[data-placeholder='+strDataPlaceholder+']')) {
+                $('span[data-placeholder='+strDataPlaceholder+']').before($($objContent));
+            }
+
+            else if($("#menuContainer_"+strDataPlaceholder)) {
+                $("#menuContainer_"+strDataPlaceholder).before($($objContent).closest("div.peElementWrapper[data-systemid="+strDataSystemid+"]"));
+            }
         }
 
     },
@@ -419,6 +424,9 @@ KAJONA.admin.portaleditor.elementActionToolbar = {
         var $buttonWrapper = $('<li>');
         var $button = $('<a class="peNewButton fa fa-plus-circle" role="button" title="Neues Element an Platzhalter &quot;' + placeholderName + '&quot;" rel="tooltip"></a>');
         var $menu = (KAJONA.admin.portaleditor.elementActionToolbar.generateActionList(actions));
+        var buttonTitle = KAJONA.admin.lang['peCREATE'];
+        var $button = $('<i class="peNewButton fa fa-plus-circle" role="button" data-toggle="dropdown" title="' + buttonTitle + ' &quot;' + placeholderName + '&quot;" rel="tooltip"></i>');
+        var $menu = $('<div class="dropdown-menu peContextMenu" role="menu">');
 
         $element.append($dropdown.append($buttonWrapper.append($button).append($menu)));
         $dropdown.dropit();
@@ -440,6 +448,7 @@ KAJONA.admin.portaleditor.elementActionToolbar = {
         var $actionList = $('<ul>');
         actions.forEach(function (action) {
             var $actionListEntry = $('<li>');
+            var actionTitle = KAJONA.admin.lang['pe' + action.type];
             switch (action.type) {
                 case 'CREATE':
                     var $actionElement = $('<a>');
@@ -451,11 +460,11 @@ KAJONA.admin.portaleditor.elementActionToolbar = {
                 case 'MOVE':
                     var $actionElement = $('<i rel="tooltip">');
                     $actionElement.addClass('moveHandle fa fa-arrows');
-                    $actionElement.attr('title', 'Verschieben');
+                    $actionElement.attr('title', actionTitle);
                     break;
                 default:
                     var $actionElement = $('<a>');
-                    $actionElement.append(action.type);
+                    $actionElement.append(actionTitle);
                     $actionElement.on('click', function () {
                         KAJONA.admin.portaleditor.openDialog(action.link);
                     });
@@ -608,3 +617,6 @@ KAJONA.admin.tooltip = {
 };
 
 KAJONA.admin.tooltip.initTooltip();
+
+// init lang
+KAJONA.admin.lang.initializeProperties();
