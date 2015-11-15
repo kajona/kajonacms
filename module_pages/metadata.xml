@@ -5,7 +5,7 @@
         >
     <title>pages</title>
     <description>Pages are the central part of the system. A page is rendered in the portal and contains several page elements, such as paragraphs, tables or even galleries. The layout is based on the integrated template-engine-</description>
-    <version>4.7.1</version>
+    <version>4.7.2</version>
     <author>Kajona Team</author>
     <type>MODULE</type>
     <providesInstaller>TRUE</providesInstaller>

@@ -33,6 +33,11 @@ class class_module_search_metadata_filter {
     private $arrFilterModules = array();
 
     /**
+     * @var string
+     */
+    private $strFilterUser;
+
+    /**
      * @var string[]
      */
     private $arrFilterClasses = array();
@@ -66,6 +71,12 @@ class class_module_search_metadata_filter {
             $strIn = substr($strIn, 0, -1);
 
             $strQuery .= " AND system_module_nr in (" . $strIn . ") ";
+        }
+
+        //add the user filter
+        if(!empty($this->strFilterUser)) {
+            $strQuery .= " AND system_owner = ? ";
+            $arrParams[] = $this->strFilterUser;
         }
 
         //add the class filter
@@ -110,6 +121,14 @@ class class_module_search_metadata_filter {
      */
     public function setFilterModules($arrFilterModules) {
         $this->arrFilterModules = $arrFilterModules;
+    }
+
+    /**
+     * @param string $strFilterUser
+     * @return void
+     */
+    public function setFilterUser($strFilterUser) {
+        $this->strFilterUser = $strFilterUser;
     }
 
     /**

@@ -15,6 +15,8 @@ class class_project_setup {
 
         echo "<b>Kajona V4 project setup.</b>\nCreates the folder-structure required to build a new project.\n\n";
 
+        echo "<div style=\"border: 2px solid red; padding: 5px; margin: 10px; font-family: arial,verdana,sans-serif; font-size: 12px;\"><b>Please remember: After setting up the project you have to install the composer packages!\n\n</b>Change to <i>core/_buildfiles</i> and execute the following command:\n\n<pre>ant -buildfile build_jenkins.xml installComposerPackageDependenciesForCurrentProject</pre></div>";
+
         $strCurFolder = __DIR__;
 
         echo "core-path: ".$strCurFolder.", folder found: ".substr($strCurFolder, -4)."\n";
@@ -126,6 +128,8 @@ class class_project_setup {
 
         self::createDenyHtaccess("/project/.htaccess");
         self::createDenyHtaccess("/files/.htaccess");
+
+        echo "\n<b>Done.</b>\nIf everything went well, <a href=\"../installer.php\">open the installer</a>\n";
 
     }
 

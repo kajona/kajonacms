@@ -34,8 +34,9 @@ class class_formentry_datetime extends class_formentry_date {
             $strReturn .= $objToolkit->formInputText($this->getStrEntryName(), $this->getStrLabel(), dateToString($objDate, false), "", "", true);
         }
         else {
-            $strReturn .= $objToolkit->formDateSingle($this->getStrEntryName(), $this->getStrLabel(), $objDate, "inputDate", true);
+            $strReturn .= $objToolkit->formDateSingle($this->getStrEntryName(), $this->getStrLabel(), $objDate, "inputDate", true, $this->getBitReadonly());
         }
+
 
         return $strReturn;
     }

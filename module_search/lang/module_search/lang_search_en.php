@@ -29,6 +29,7 @@ $lang["hitlist_text3"]                   = "results";
 $lang["modul_titel"]                     = "Search";
 $lang["search_details"]                  = "View detailed search results";
 $lang["search_modules"]                  = "Module";
+$lang["search_users"]                    = "User";
 $lang["search_search"]                   = "Search";
 $lang["searchterm_label"]                = "Search query";
 $lang["select_all"]                      = "All modules";
@@ -43,3 +44,5 @@ $lang["quickhelp_new"]                  = "By using this function it is possible
 
 $lang["workflow_deferredindexer_cfg_val1"] = "Seconds between workflow runs";
 $lang["workflow_deferredindexer_cfg_val2"] = "Max number of object to index per run";
+
+$lang["search_reduce_hits_link"] = "The query returns a lot of hits. Please refine the query by using additional filters or conditions:<br /><ul><li>Multiple terms are seperated by a blank space: term1 term2</li><li>If a term must be included, the term may be marked with a + character: term1 +term2</li><li>If a term should be excluded, the term may be marked with a - symbol: term1 -term2</li></ul>";

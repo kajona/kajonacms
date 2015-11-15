@@ -30,12 +30,11 @@ class class_scriptlet_helper {
         $arrScriptletFiles = class_resourceloader::getInstance()->getFolderContent("/system/scriptlets", array(".php"));
 
         foreach($arrScriptletFiles as $strPath => $strOneScriptlet) {
-            $strOneScriptlet = uniSubstr($strOneScriptlet, 0, -4);
 
             /** @var $objScriptlet interface_scriptlet */
-            $objScriptlet = new $strOneScriptlet();
+            $objScriptlet = class_classloader::getInstance()->getInstanceFromFilename($strPath, "", "interface_scriptlet");
 
-            if($objScriptlet instanceof interface_scriptlet && ($intContext == null || ($intContext & $objScriptlet->getProcessingContext()))) {
+            if($objScriptlet != null && ($intContext == null || ($intContext & $objScriptlet->getProcessingContext()))) {
                 $strContent = $objScriptlet->processContent($strContent);
                 class_logger::getInstance("scriptlets.log")->addLogRow("processing call to ".$strOneScriptlet.", filter: ".$intContext, class_logger::$levelInfo);
             }

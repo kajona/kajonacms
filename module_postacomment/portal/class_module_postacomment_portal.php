@@ -6,6 +6,9 @@
 *-------------------------------------------------------------------------------------------------------*
 *	$Id$							*
 ********************************************************************************************************/
+use Kajona\Pages\Portal\PagesPortaleditor;
+use Kajona\Pages\System\PagesPortaleditorActionEnum;
+use Kajona\Pages\System\PagesPortaleditorSystemidAction;
 
 /**
  * Portal-class of the postacomment. Handles the printing of postacomment lists / detail
@@ -96,16 +99,13 @@ class class_module_postacomment_portal extends class_portal_controller implement
                 $strOnePost .= $this->objTemplate->fillTemplate($arrOnePost, $strTemplateID, false);
 
                 //Add pe code
-                $arrPeConfig = array(
-                    "pe_module"               => "postacomment",
-                    "pe_action_edit"          => "edit",
-                    "pe_action_edit_params"   => "&systemid=".$objOnePost->getSystemid(),
-                    "pe_action_new"           => "",
-                    "pe_action_new_params"    => "",
-                    "pe_action_delete"        => "delete",
-                    "pe_action_delete_params" => "&systemid=".$objOnePost->getSystemid()
+                $strPosts .= PagesPortaleditor::addPortaleditorContentWrapper($strOnePost, $objOnePost->getSystemid());
+                PagesPortaleditor::getInstance()->registerAction(
+                    new PagesPortaleditorSystemidAction(PagesPortaleditorActionEnum::EDIT(), class_link::getLinkAdminHref($this->getArrModule("module"), "edit", "&systemid={$objOnePost->getSystemid()}"), $objOnePost->getSystemid())
                 );
-                $strPosts .= class_element_portal::addPortalEditorCode($strOnePost, $objOnePost->getSystemid(), $arrPeConfig);
+                PagesPortaleditor::getInstance()->registerAction(
+                    new PagesPortaleditorSystemidAction(PagesPortaleditorActionEnum::DELETE(), class_link::getLinkAdminHref($this->getArrModule("module"), "delete", "&systemid={$objOnePost->getSystemid()}"), $objOnePost->getSystemid())
+                );
             }
         }
 

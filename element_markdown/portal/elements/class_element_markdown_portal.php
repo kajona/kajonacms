@@ -21,7 +21,7 @@ class class_element_markdown_portal extends class_element_portal implements inte
      */
     public function loadData() {
         
-        require_once class_resourceloader::getInstance()->getCorePathForModule("element_markdown", true)."/element_markdown/system/parsedown/vendor/autoload.php";
+        require_once class_resourceloader::getInstance()->getCorePathForModule("element_markdown", true)."/element_markdown/vendor/autoload.php";
 
         $arrUrl = parse_url($this->arrElementData["char2"]);
 

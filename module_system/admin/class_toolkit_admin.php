@@ -40,7 +40,7 @@ class class_toolkit_admin extends class_toolkit
      * @return string
      * @since 3.2.0.9
      */
-    public function formDateSingle($strName, $strTitle, $objDateToShow, $strClass = "", $bitWithTime = false)
+    public function formDateSingle($strName, $strTitle, $objDateToShow, $strClass = "", $bitWithTime = false, $bitReadOnly = false)
     {
         //check passed param
         if ($objDateToShow != null && !$objDateToShow instanceof class_date) {
@@ -81,6 +81,8 @@ class class_toolkit_admin extends class_toolkit
         $arrTemplate["calendarContainerId"] = $strContainerId;
         $arrTemplate["calendarLang_weekday"] = " [".class_carrier::getInstance()->getObjLang()->getLang("toolsetCalendarWeekday", "system")."]\n";
         $arrTemplate["calendarLang_month"] = " [".class_carrier::getInstance()->getObjLang()->getLang("toolsetCalendarMonth", "system")."]\n";
+
+        $arrTemplate["readonly"] = ($bitReadOnly ? "disabled=\"disabled\"" : "");
 
         return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
     }
@@ -169,36 +171,15 @@ class class_toolkit_admin extends class_toolkit
      * Creates a percent-beam to illustrate proportions
      *
      * @param float $floatPercent
-     * @param int|string $intLength
      *
      * @return string
      */
-    public function percentBeam($floatPercent, $intLength = "300")
+    public function percentBeam($floatPercent, $bitRenderAnimated = true)
     {
-        //Calc width
-        $intWidth = $intLength - 50;
-        $intBeamLength = ceil($intWidth * $floatPercent / 100);
-        if ($intBeamLength == 0) {
-            $intBeamLength = 1;
-        }
-
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "percent_beam");
         $arrTemplate = array();
-        $arrTemplate["length"] = $intLength;
         $arrTemplate["percent"] = number_format($floatPercent, 2);
-        $arrTemplate["width"] = $intWidth;
-        if ($arrTemplate["percent"] == "100.00") {
-            $arrTemplate["beamwidth"] = $intBeamLength;
-        }
-        else {
-            $arrTemplate["beamwidth"] = $intBeamLength - 1;
-        }
-        if (($intWidth - $intBeamLength) <= 0 || $arrTemplate["percent"] == "100.00") {
-            $arrTemplate["transTillEnd"] = "";
-        }
-        else {
-            $arrTemplate["transTillEnd"] = "<img src=\"_skinwebpath_/trans.gif\" width=\"".($intWidth - $intBeamLength - 1)."\" height=\"1\" />";
-        }
+        $arrTemplate["animationClass"] = $bitRenderAnimated ? "progress-bar-striped" : "";
         return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
     }
 
@@ -462,7 +443,7 @@ class class_toolkit_admin extends class_toolkit
     /**
      * General form entry which displays an list of objects which can be deleted. It is possible to provide an addlink
      * where entries can be appended to the list. To add an entry you can use the javascript function
-     * KAJONA.v4skin.addObjectListItem
+     * KAJONA.v4skin.setObjectListItems
      *
      * @param $strName
      * @param string $strTitle
@@ -865,7 +846,7 @@ class class_toolkit_admin extends class_toolkit
      *
      * @return string
      */
-    public function formToggleButtonBar($strName, array $arrKeyValues, $strTitle = "", $arrKeysSelected = array(), $bitEnabled = true)
+    public function formToggleButtonBar($strName, array $arrKeyValues, $strTitle = "", $arrKeysSelected = array(), $bitEnabled = true, $strType = "checkbox")
     {
         $strOptions = "";
         $strTemplateOptionID = $this->objTemplate->readTemplate("/elements.tpl", "input_toggle_buttonbar_button");
@@ -874,6 +855,7 @@ class class_toolkit_admin extends class_toolkit
         foreach ($arrKeyValues as $strKey => $strValue) {
             $arrTemplate = array();
             $arrTemplate["name"] = $strName;
+            $arrTemplate["type"] = $strType;
             $arrTemplate["key"] = $strKey;
             $arrTemplate["value"] = $strValue;
             $arrTemplate["disabled"] = ($bitEnabled ? "" : "disabled=\"disabled\"");
@@ -1020,15 +1002,17 @@ class class_toolkit_admin extends class_toolkit
      * @param string $strName
      * @param string $strEncoding
      * @param string $strOnSubmit
+     * @param string $strMethod
      *
      * @return string
      */
-    public function formHeader($strAction, $strName = "", $strEncoding = "", $strOnSubmit = "")
+    public function formHeader($strAction, $strName = "", $strEncoding = "", $strOnSubmit = "", $strMethod = "POST")
     {
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "form_start");
         $arrTemplate = array();
         $arrTemplate["name"] = ($strName != "" ? $strName : "form".generateSystemid());
         $arrTemplate["action"] = $strAction;
+        $arrTemplate["method"] = in_array($strMethod, array("GET", "POST")) ? $strMethod : "POST";
         $arrTemplate["enctype"] = $strEncoding;
         $arrTemplate["onsubmit"] = $strOnSubmit;
         return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
@@ -1357,9 +1341,10 @@ class class_toolkit_admin extends class_toolkit
         foreach ($arrActions as $objOneAction) {
             $strEntries .= $this->objTemplate->fillTemplate(
                 array(
-                    "title"     => $objOneAction->getStrTitle(),
-                    "icon"      => $objOneAction->getStrIcon(),
-                    "targeturl" => $objOneAction->getStrTargetUrl()
+                    "title"      => $objOneAction->getStrTitle(),
+                    "icon"       => $objOneAction->getStrIcon(),
+                    "targeturl"  => $objOneAction->getStrTargetUrl(),
+                    "renderinfo" => $objOneAction->getBitRenderInfo() ? "1" : "0"
                 ),
                 $strTemplateID
             );
@@ -1669,7 +1654,7 @@ JS;
      *
      * @return string
      */
-    public function getFieldset($strTitle, $strContent, $strClass = "fieldset")
+    public function getFieldset($strTitle, $strContent, $strClass = "fieldset", $strSystemid = "")
     {
         //remove old placeholder from content
         $this->objTemplate->setTemplate($strContent);
@@ -1680,6 +1665,7 @@ JS;
         $arrContent["title"] = $strTitle;
         $arrContent["content"] = $strContent;
         $arrContent["class"] = $strClass;
+        $arrContent["systemid"] = $strSystemid;
         return $this->objTemplate->fillTemplate($arrContent, $strTemplateID);
     }
 
@@ -1688,6 +1674,9 @@ JS;
      * The params is expected as
      * arraykey => tabname
      * arrayvalue => tabcontent
+     *
+     * If tabcontent is an url the content is loaded per ajax from this url. Url means the content string starts with
+     * http:// or https://
      *
      * @param $arrTabs array(key => content)
      * @param bool $bitFullHeight whether the tab content should use full height
@@ -1701,17 +1690,47 @@ JS;
         $strHeaderID = $this->objTemplate->readTemplate("/elements.tpl", "tabbed_content_tabheader");
         $strContentID = $this->objTemplate->readTemplate("/elements.tpl", "tabbed_content_tabcontent");
 
+        $strMainTabId = generateSystemid();
+        $bitRemoteContent = false;
+
         $strTabs = "";
         $strTabContent = "";
         $strClassaddon = "active in ";
         foreach ($arrTabs as $strTitle => $strContent) {
             $strTabId = generateSystemid();
-            $strTabs .= $this->objTemplate->fillTemplate(array("tabid" => $strTabId, "tabtitle" => $strTitle, "classaddon" => $strClassaddon), $strHeaderID);
-            $strTabContent .= $this->objTemplate->fillTemplate(array("tabid" => $strTabId, "tabcontent" => $strContent, "classaddon" => $strClassaddon), $strContentID);
+            // if content is an url enable ajax loading
+            if (substr($strContent, 0, 7) == 'http://' || substr($strContent, 0, 8) == 'https://') {
+                $strTabs .= $this->objTemplate->fillTemplate(array("tabid" => $strTabId, "tabtitle" => $strTitle, "href" => $strContent, "classaddon" => $strClassaddon), $strHeaderID);
+                $strTabContent .= $this->objTemplate->fillTemplate(array("tabid" => $strTabId, "tabcontent" => "", "classaddon" => $strClassaddon . "contentLoading"), $strContentID);
+                $bitRemoteContent = true;
+            } else {
+                $strTabs .= $this->objTemplate->fillTemplate(array("tabid" => $strTabId, "tabtitle" => $strTitle, "href" => "", "classaddon" => $strClassaddon), $strHeaderID);
+                $strTabContent .= $this->objTemplate->fillTemplate(array("tabid" => $strTabId, "tabcontent" => $strContent, "classaddon" => $strClassaddon), $strContentID);
+            }
             $strClassaddon = "";
         }
 
-        return $this->objTemplate->fillTemplate(array("tabheader" => $strTabs, "tabcontent" => $strTabContent, "classaddon" => ($bitFullHeight === true ? 'fullHeight' : '')), $strWrapperID);
+        $strHtml = $this->objTemplate->fillTemplate(array("id" => $strMainTabId, "tabheader" => $strTabs, "tabcontent" => $strTabContent, "classaddon" => ($bitFullHeight === true ? 'fullHeight' : '')), $strWrapperID);
+
+        // add ajax loader if we have content which we need to fetch per ajax
+        if ($bitRemoteContent) {
+            $strHtml.= <<<HTML
+<script type="text/javascript">
+$('#{$strMainTabId} > li > a[data-href!=""]').on('click', function(e){
+    KAJONA.admin.forms.loadTab($(e.target).data('target').substr(1), $(e.target).data('href'));
+});
+
+$(document).ready(function(){
+    var el = $('#{$strMainTabId} > li.active > a[data-href!=""]');
+    if (el.length > 0) {
+        KAJONA.admin.forms.loadTab(el.data('target').substr(1), el.data('href'));
+    }
+});
+</script>
+HTML;
+        }
+
+        return $strHtml;
     }
 
     /**

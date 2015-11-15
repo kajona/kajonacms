@@ -6,6 +6,8 @@
 *-------------------------------------------------------------------------------------------------------*
 *	$Id$	                                            *
 ********************************************************************************************************/
+use Kajona\Pages\System\PagesElement;
+use Kajona\Pages\System\PagesPageelement;
 
 /**
  * The Base-Class for all admin-interface classes.
@@ -236,18 +238,19 @@ abstract class class_admin_controller extends class_abstract_controller {
         if($this->getParam("module") == "pages_content" && ($this->getParam("action") == "edit" || $this->getParam("action") == "new")) {
             $objElement = null;
             if($this->getParam("action") == "edit") {
-                $objElement = new class_module_pages_pageelement($this->getSystemid());
+                $objElement = new PagesPageelement($this->getSystemid());
             }
-            else if($this->getParam("action") == "new") {
+            elseif($this->getParam("action") == "new") {
                 $strPlaceholderElement = $this->getParam("element");
-                $objElement = class_module_pages_element::getElement($strPlaceholderElement);
+                $objElement = PagesElement::getElement($strPlaceholderElement);
             }
-            //Build the class-name
-            $strElementClass = str_replace(".php", "", $objElement->getStrClassAdmin());
+
             //and finally create the object
-            if($strElementClass != "") {
-                /** @var class_element_admin $objElement */
-                $objElement = new $strElementClass();
+            $strFilename = \class_resourceloader::getInstance()->getPathForFile("/admin/elements/".$objElement->getStrClassAdmin());
+            $objElement = \class_classloader::getInstance()->getInstanceFromFilename($strFilename, "Kajona\\Pages\\Admin\\ElementAdmin");
+
+            //and finally create the object
+            if($objElement != null) {
                 $strTextname = $this->getObjLang()->stringToPlaceholder("quickhelp_" . $objElement->getArrModule("name"));
                 $strText = class_carrier::getInstance()->getObjLang()->getLang($strTextname, $objElement->getArrModule("modul"));
             }

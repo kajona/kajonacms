@@ -12,9 +12,12 @@
  *
  * @package module_system
  * @targetTable system_module.module_id
+ * @sortManager class_common_sortmanager
  *
  * @module system
  * @moduleId _system_modul_id_
+ *
+ * @blockFromAutosave
  */
 class class_module_system_module extends class_model implements interface_model, interface_admin_listable {
 
@@ -79,7 +82,7 @@ class class_module_system_module extends class_model implements interface_model,
      * @tableColumn system_module.module_nr
      * @tableColumnDatatype int
      */
-    private $intNr = "";
+    private $intNr = -1;
 
     /**
      * @var string

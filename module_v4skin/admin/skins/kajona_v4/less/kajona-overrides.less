@@ -11,6 +11,7 @@
 @input-bg:                  @gray-lighter;
 @input-border-focus:        @kajona-brand-color;
 @btn-primary-bg:            @gray-darker;
+@input-mandatory-glow:      @brand-warning+20;
 
 @label-color:               @text-color;
 @brand-primary:             @kajona-brand-color;
@@ -666,6 +667,13 @@ footer {
         padding: 2px 14px 0 14px;
     }
 
+    #quickhelp {
+        color: @white;
+        font-size: @font-size-base+3;
+        margin-top: -4px;
+        display: none;
+    }
+
 }
 
 // Special redefinition for the dropdowns in the top-bar, relevant for smaller display sizes
@@ -727,6 +735,20 @@ footer {
         label.btn.active {
             background-color: @brand-primary;
             color: @white;
+        }
+
+        &.buttonbar {
+
+            label.btn:before {
+                content: @fa-var-square-o;
+                font-family: fontawesome;
+                padding: 0 2px;
+            }
+
+            label.btn.active:before {
+                content: @fa-var-check-square-o;
+                padding-right: 1px;
+            }
         }
     }
 
@@ -832,11 +854,6 @@ footer {
             padding: 7px 0 0 0;
         }
 
-//TODO: sir 05/2015: removed again, where was this required?
-//        &.form-horizontal .checkbox {
-//            padding-top: 0;
-//        }
-
     }
 
 
@@ -869,8 +886,6 @@ footer {
             padding: 0 0 0 10px;
             line-height: 30px;
             position: relative;
-            width: 65%;
-            max-width: 300px;
             min-width: 250px;
             &:hover {
                 color:@black;
@@ -879,7 +894,11 @@ footer {
                 }
             }
 
-            &:after {
+            .btn-text {
+                padding-right: 30px;
+            }
+
+            .statusicon {
                 width:30px;
                 height:30px;
                 display:inline-block;
@@ -891,15 +910,31 @@ footer {
                 position: absolute;
                 right: 0;
                 background-color: @kajona-brand-color;
-            }
 
-        }
+                &:before {
+                    content: @fa-var-check;
+                }
 
-        .cancelbutton {
-            &:after {
-                content: @fa-var-times;
             }
         }
+
+        .cancelbutton, .cancelbtn {
+            .statusicon {
+                &:before {
+                    content: @fa-var-times;
+                }
+            }
+        }
+
+        .processing {
+            .statusicon {
+                &:before {
+                    content: @fa-var-spinner;
+                    animation: fa-spin 1s infinite steps(8);
+                }
+            }
+        }
+
 
     }
 
@@ -1038,6 +1073,10 @@ footer {
 			margin: 3px !important;
 			white-space: nowrap;
 		}
+
+        input {
+            margin-right:4px;
+        }
 	}
 
 
@@ -1066,6 +1105,19 @@ footer {
         margin-top: 5px;
         legend {
             font-size: @font-size-base+2;
+        }
+
+        &.blocks fieldset.block {
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid @gray-light;
+            border-left-width: 5px;
+
+            legend {
+                padding-right: 8px;
+                border: none;
+                margin-bottom: auto;
+            }
         }
     }
 
@@ -1313,7 +1365,8 @@ footer {
 }
 
 .mandatoryFormElement, .form-control.mandatoryFormElement {
-    .box-shadow(0 0 6px @brand-warning+20);
+    .box-shadow(0 0 6px @input-mandatory-glow);
+    .opacity(100); //mandatory form elements being disabled need a full opacity anyways
 }
 
 table.form-control {
@@ -1322,6 +1375,7 @@ table.form-control {
      tfoot > tr > td {
          border-top: none;
          //min-height: 22px;
+         padding: 7px;
      }
 }
 
@@ -1659,6 +1713,7 @@ table.form-control {
 
 .popover {
     border-width: 2px;
+    max-width: 600px;
 }
 
 
@@ -1786,4 +1841,5 @@ body.login {
 }
 
 
+@import "stbfont.less";
 

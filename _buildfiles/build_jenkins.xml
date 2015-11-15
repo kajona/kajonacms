@@ -163,18 +163,16 @@
     <!-- helper target to install the compose dependencies within the current clone / project -->
     <target name="installComposerPackageDependenciesForCurrentProject">
         <antcall target="installComposerPackageDependencies">
-            <param name="composerTempPath" value="/../"/>
+            <param name="composerTempPath" value="/../../"/>
         </antcall>
     </target>
 
     <!-- task to fetch all composer dependencies, use the param "targetPath" to specify the base dir to be scanned -->
     <target name="installComposerPackageDependencies">
-        <echo>Searching for composer.js files in ${basedir}${composerTempPath}</echo>
+        <echo>Searching for composer.json files in ${basedir}${composerTempPath}</echo>
         <apply executable="${path.composer}" parallel="false" verbose="true" force="true" failonerror="true" addsourcefile="false">
             <fileset dir="${basedir}${composerTempPath}">
-                <include name="**/composer.json"/>
-                <exclude name="**/_buildfiles/*/*.json"/>
-                <exclude name="**/_vagrant/**/*.json"/>
+                <include name="core*/*/composer.json"/>
             </fileset>
             <arg line="install --prefer-source --no-dev --working-dir "/>
             <targetfile/>
@@ -185,9 +183,15 @@
 
     <!-- builds the project, aka creates a project out of the sources -->
     <target name="buildProject">
+
+        <antcall target="installComposerPackageDependencies">
+            <param name="composerTempPath" value="${sourcesPath}/"/>
+        </antcall>
+
         <copy todir="${basedir}${projectPath}" overwrite="true"  includeEmptyDirs="true" >
             <fileset id="sources.dirs" dir="${basedir}${sourcesPath}">
                 <exclude name=".svn"/>
+                <exclude name=".git"/>
                 <include name="core*/element_*/**"/>
                 <include name="core*/module_*/*/**"/>
                 <include name="core*/template_*/*/**"/>
@@ -197,9 +201,7 @@
             </fileset>
         </copy>
 
-        <antcall target="installComposerPackageDependencies">
-            <param name="composerTempPath" value="${sourcesPath}/"/>
-        </antcall>
+
     </target>
 
     <!-- creates the full-zip including all modules and elements -->
@@ -208,6 +210,7 @@
         <copy todir="${basedir}${tempPath}" overwrite="true"  includeEmptyDirs="true" >
             <fileset id="sources.dirs" dir="${basedir}${sourcesPath}">
                 <exclude name=".svn"/>
+                <exclude name=".git"/>
                 <exclude name="core*/module_pchart/" />
                 <exclude name="core*/module_flotchart/" />
 
@@ -233,6 +236,7 @@
         <copy todir="${basedir}${tempPath}" overwrite="true"  includeEmptyDirs="true" >
             <fileset id="sources.dirs" dir="${basedir}${sourcesPath}">
                 <exclude name=".svn"/>
+                <exclude name=".git"/>
                 <exclude name="core*/element_flash/" />
                 <exclude name="core*/element_maps/" />
                 <exclude name="core*/element_userlist/" />
@@ -267,6 +271,7 @@
         <copy todir="${basedir}${tempPath}" overwrite="true"  includeEmptyDirs="true"  >
             <fileset id="sources.dirs" dir="${basedir}${sourcesPath}">
                 <exclude name=".svn"/>
+                <exclude name=".git"/>
                 <include name="core*/module_navigation/**"/>
                 <include name="core*/module_pages/**"/>
                 <include name="core*/module_samplecontent/**"/>
@@ -294,6 +299,7 @@
         <copy todir="${basedir}${tempPath}" overwrite="true"  includeEmptyDirs="true"  >
             <fileset id="sources.dirs" dir="${basedir}${sourcesPath}">
                 <exclude name=".svn"/>
+                <exclude name=".git"/>
                 <include name="core*/element_*/**"/>
                 <include name="core*/module_*/**"/>
                 <include name="core*/template_*/**"/>

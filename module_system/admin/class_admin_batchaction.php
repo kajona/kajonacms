@@ -22,11 +22,13 @@ class class_admin_batchaction {
     private $strIcon;
     private $strTitle;
     private $strTargetUrl;
+    private $bitRenderInfo;
 
-    function __construct($strIcon, $strTargetUrl, $strTitle) {
+    function __construct($strIcon, $strTargetUrl, $strTitle, $bitRenderInfo = false) {
         $this->strIcon = $strIcon;
         $this->strTargetUrl = $strTargetUrl;
         $this->strTitle = $strTitle;
+        $this->bitRenderInfo = $bitRenderInfo;
     }
 
     public function setStrIcon($strIcon) {
@@ -53,6 +55,13 @@ class class_admin_batchaction {
         return $this->strTitle;
     }
 
+    public function setBitRenderInfo($bitRenderInfo)
+    {
+        $this->bitRenderInfo = (bool) $bitRenderInfo;
+    }
 
-
+    public function getBitRenderInfo()
+    {
+        return $this->bitRenderInfo;
+    }
 }

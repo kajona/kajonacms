@@ -23,23 +23,27 @@
  * @since  4.0
  * @module module_formgenerator
  */
-class class_admin_formgenerator {
+class class_admin_formgenerator
+{
 
-    const  STR_TYPE_ANNOTATION      = "@fieldType";
+    const STR_METHOD_POST = "POST";
+    const STR_METHOD_GET = "GET";
+
+    const  STR_TYPE_ANNOTATION = "@fieldType";
     const  STR_VALIDATOR_ANNOTATION = "@fieldValidator";
     const  STR_MANDATORY_ANNOTATION = "@fieldMandatory";
-    const  STR_LABEL_ANNOTATION     = "@fieldLabel";
-    const  STR_HIDDEN_ANNOTATION    = "@fieldHidden";
-    const  STR_READONLY_ANNOTATION  = "@fieldReadonly";
-    const  STR_OBJECTVALIDATOR_ANNOTATION  = "@objectValidator";
+    const  STR_LABEL_ANNOTATION = "@fieldLabel";
+    const  STR_HIDDEN_ANNOTATION = "@fieldHidden";
+    const  STR_READONLY_ANNOTATION = "@fieldReadonly";
+    const  STR_OBJECTVALIDATOR_ANNOTATION = "@objectValidator";
 
-    const  BIT_BUTTON_SAVE   = 2;
-    const  BIT_BUTTON_CLOSE  = 4;
+    const  BIT_BUTTON_SAVE = 2;
+    const  BIT_BUTTON_CLOSE = 4;
     const  BIT_BUTTON_CANCEL = 8;
     const  BIT_BUTTON_SUBMIT = 16;
     const  BIT_BUTTON_DELETE = 32;
-    const  BIT_BUTTON_RESET  = 64;
-    const  BIT_BUTTON_CONTINUE  = 128;
+    const  BIT_BUTTON_RESET = 64;
+    const  BIT_BUTTON_CONTINUE = 128;
     const  BIT_BUTTON_BACK = 256;
 
     const FORM_ENCTYPE_MULTIPART = "multipart/form-data";
@@ -54,12 +58,14 @@ class class_admin_formgenerator {
 
     /**
      * The internal name of the form. Used to generate the field-identifiers and more.
+     *
      * @var string
      */
     private $strFormname = "";
 
     /**
      * The source-object to be rendered by the form
+     *
      * @var class_model
      */
     private $objSourceobject = null;
@@ -73,6 +79,7 @@ class class_admin_formgenerator {
     private $strFormEncoding = "";
 
     private $strOnSubmit = "";
+    private $strMethod = "POST";
     private $objLang;
 
     /**
@@ -81,11 +88,12 @@ class class_admin_formgenerator {
      * @param string $strFormname
      * @param class_model $objSourceobject
      */
-    public function __construct($strFormname,  $objSourceobject) {
+    public function __construct($strFormname, $objSourceobject)
+    {
         $this->strFormname = $strFormname;
         $this->objSourceobject = $objSourceobject;
 
-        $this->strOnSubmit = "$(this).on('submit', function() { return false; }); return true;";
+        $this->strOnSubmit = "$(this).on('submit', function() { return false; }); $(window).off('unload'); KAJONA.admin.forms.animateSubmit(this); return true;";
         $this->objLang = class_lang::getInstance();
     }
 
@@ -95,9 +103,10 @@ class class_admin_formgenerator {
      *
      * @return void
      */
-    public function updateSourceObject() {
-        foreach($this->arrFields as $objOneField) {
-            if($objOneField->getObjSourceObject() != null) {
+    public function updateSourceObject()
+    {
+        foreach ($this->arrFields as $objOneField) {
+            if ($objOneField->getObjSourceObject() != null) {
                 $objOneField->setValueToObject();
             }
         }
@@ -105,13 +114,17 @@ class class_admin_formgenerator {
 
     /**
      * Returns an array of required fields.
+     *
      * @return string[] where string[fielName] = type
      */
-    public function getRequiredFields() {
+    public function getRequiredFields()
+    {
         $arrReturn = array();
-        foreach($this->arrFields as $objOneField)
-            if($objOneField->getBitMandatory())
+        foreach ($this->arrFields as $objOneField) {
+            if ($objOneField->getBitMandatory()) {
                 $arrReturn[$objOneField->getStrEntryName()] = get_class($objOneField->getObjValidator());
+            }
+        }
 
         return $arrReturn;
     }
@@ -122,11 +135,12 @@ class class_admin_formgenerator {
      * @throws class_exception
      * @return bool
      */
-    public function validateForm() {
+    public function validateForm()
+    {
         $objLang = class_carrier::getInstance()->getObjLang();
 
         //1. Validate fields
-        foreach($this->arrFields as $objOneField) {
+        foreach ($this->arrFields as $objOneField) {
 
             $bitFieldIsEmpty
                 = (!is_array($objOneField->getStrValue()) && trim($objOneField->getStrValue()) === "")
@@ -134,29 +148,29 @@ class class_admin_formgenerator {
                 || (is_array($objOneField->getStrValue()) && count($objOneField->getStrValue()) == 0); //if it is an array with no entries
 
             //mandatory field
-            if($objOneField->getBitMandatory()) {
+            if ($objOneField->getBitMandatory()) {
                 //if field is mandatory and empty -> validation error
-                if($bitFieldIsEmpty) {
+                if ($bitFieldIsEmpty) {
                     $this->addValidationError($objOneField->getStrEntryName(), $objLang->getLang("commons_validator_field_empty", "system", array($objOneField->getStrLabel())));
                 }
             }
 
             //if field is not empty -> validate
-            if(!$bitFieldIsEmpty) {
-                if(!$objOneField->validateValue()) {
+            if (!$bitFieldIsEmpty) {
+                if (!$objOneField->validateValue()) {
                     $this->addValidationError($objOneField->getStrEntryName(), $objOneField->getStrValidationErrorMsg());
                 }
             }
         }
 
         //2. Validate complete object
-        if($this->getObjSourceobject() != null) {
+        if ($this->getObjSourceobject() != null) {
             $objReflection = new class_reflection($this->getObjSourceobject());
             $arrObjectValidator = $objReflection->getAnnotationValuesFromClass(self::STR_OBJECTVALIDATOR_ANNOTATION);
-            if(count($arrObjectValidator) == 1) {
+            if (count($arrObjectValidator) == 1) {
 
                 $strObjectValidator = $arrObjectValidator[0];
-                if(!class_exists($strObjectValidator)) {
+                if (!class_exists($strObjectValidator)) {
                     throw new class_exception("object validator ".$strObjectValidator." not existing", class_exception::$level_ERROR);
                 }
 
@@ -170,14 +184,14 @@ class class_admin_formgenerator {
                 //Each existing field will also reference the new created source object
                 $strClassName = get_class($this->objSourceobject);
                 $this->objSourceobject = new $strClassName($this->objSourceobject->getStrSystemid());
-                foreach($this->arrFields as $objOneField) {
-                    if($objOneField->getObjSourceObject() != null) {
+                foreach ($this->arrFields as $objOneField) {
+                    if ($objOneField->getObjSourceObject() != null) {
                         $objOneField->setObjSourceObject($this->objSourceobject);
                     }
                 }
 
                 //if we are in new-mode, we should fix the prev-id to the lateron matching one
-                if(($this->getField("mode") != null && $this->getField("mode")->getStrValue() == "new") || class_carrier::getInstance()->getParam("mode") == "new") {
+                if (($this->getField("mode") != null && $this->getField("mode")->getStrValue() == "new") || class_carrier::getInstance()->getParam("mode") == "new") {
                     $this->objSourceobject->setStrPrevId(class_carrier::getInstance()->getParam("systemid"));
                 }
 
@@ -185,20 +199,20 @@ class class_admin_formgenerator {
                 $this->updateSourceObject();
                 $objValidator->validateObject($this->getObjSourceobject());
 
-                foreach($objValidator->getArrValidationMessages() as $strKey => $arrMessages) {
-                    if(!is_array($arrMessages)) {
+                foreach ($objValidator->getArrValidationMessages() as $strKey => $arrMessages) {
+                    if (!is_array($arrMessages)) {
                         throw new class_exception("method validateObject must return an array of format array(\"<messageKey>\" => array())", class_exception::$level_ERROR);
                     }
 
-                    foreach($arrMessages as $strMessage) {
+                    foreach ($arrMessages as $strMessage) {
                         $this->addValidationError($strKey, $strMessage);
                     }
                 }
 
                 //Set back kept reference to the formgenerator and all it's fields
                 $this->objSourceobject = $objSourceObjectTemp;
-                foreach($this->arrFields as $objOneField) {
-                    if($objOneField->getObjSourceObject() != null) {
+                foreach ($this->arrFields as $objOneField) {
+                    if ($objOneField->getObjSourceObject() != null) {
                         $objOneField->setObjSourceObject($objSourceObjectTemp);
                     }
                 }
@@ -216,66 +230,81 @@ class class_admin_formgenerator {
      * @throws class_exception
      * @return string
      */
-    public function renderForm($strTargetURI, $intButtonConfig = 2) {
+    public function renderForm($strTargetURI, $intButtonConfig = 2)
+    {
         $strReturn = "";
 
         //add a hidden systemid-field
-        if($this->objSourceobject != null) {
+        if ($this->objSourceobject != null && $this->objSourceobject instanceof class_model) {
             $objField = new class_formentry_hidden($this->strFormname, "systemid");
             $objField->setStrEntryName("systemid")->setStrValue($this->objSourceobject->getSystemid())->setObjValidator(new class_systemid_validator());
             $this->addField($objField);
         }
 
+        $strGeneratedFormname = "form".generateSystemid();
         $objToolkit = class_carrier::getInstance()->getObjToolkit("admin");
-        if($strTargetURI !== null)
-            $strReturn .= $objToolkit->formHeader($strTargetURI, "", $this->strFormEncoding, $this->strOnSubmit);
+        if ($strTargetURI !== null) {
+            $strReturn .= $objToolkit->formHeader($strTargetURI, $strGeneratedFormname, $this->strFormEncoding, $this->strOnSubmit, $this->strMethod);
+        }
         $strReturn .= $objToolkit->getValidationErrors($this);
 
         $strHidden = "";
-        foreach($this->arrFields as $objOneField) {
-            if(in_array($objOneField->getStrEntryName(), $this->arrHiddenElements))
+        foreach ($this->arrFields as $objOneField) {
+            if (in_array($objOneField->getStrEntryName(), $this->arrHiddenElements)) {
                 $strHidden .= $objOneField->renderField();
-            else
+            }
+            else {
                 $strReturn .= $objOneField->renderField();
+            }
         }
 
-        if($strHidden != "")
+        if ($strHidden != "") {
             $strReturn .= $objToolkit->formOptionalElementsWrapper($strHidden, $this->strHiddenGroupTitle, $this->bitHiddenElementsVisible);
+        }
 
-        if($intButtonConfig & self::BIT_BUTTON_SUBMIT)
+        if ($intButtonConfig & self::BIT_BUTTON_SUBMIT) {
             $strReturn .= $objToolkit->formInputSubmit(class_lang::getInstance()->getLang("commons_submit", "system"), "submitbtn");
+        }
 
-        if($intButtonConfig & self::BIT_BUTTON_SAVE)
+        if ($intButtonConfig & self::BIT_BUTTON_SAVE) {
             $strReturn .= $objToolkit->formInputSubmit(class_lang::getInstance()->getLang("commons_save", "system"), "submitbtn");
+        }
 
-        if($intButtonConfig & self::BIT_BUTTON_CANCEL)
+        if ($intButtonConfig & self::BIT_BUTTON_CANCEL) {
             $strReturn .= $objToolkit->formInputSubmit(class_lang::getInstance()->getLang("commons_cancel", "system"), "cancelbtn");
+        }
 
-        if($intButtonConfig & self::BIT_BUTTON_CLOSE)
-            $strReturn .= $objToolkit->formInputSubmit(class_lang::getInstance()->getLang("commons_close", "system"), "submitbtn");
+        if ($intButtonConfig & self::BIT_BUTTON_CLOSE) {
+            $strReturn .= $objToolkit->formInputSubmit(class_lang::getInstance()->getLang("commons_close", "system"), "closebtn");
+        }
 
-        if($intButtonConfig & self::BIT_BUTTON_DELETE)
-            $strReturn .= $objToolkit->formInputSubmit(class_lang::getInstance()->getLang("commons_delete", "system"), "submitbtn");
+        if ($intButtonConfig & self::BIT_BUTTON_DELETE) {
+            $strReturn .= $objToolkit->formInputSubmit(class_lang::getInstance()->getLang("commons_delete", "system"), "deletebtn");
+        }
 
-        if($intButtonConfig & self::BIT_BUTTON_RESET)
+        if ($intButtonConfig & self::BIT_BUTTON_RESET) {
             $strReturn .= $objToolkit->formInputSubmit(class_lang::getInstance()->getLang("commons_reset", "system"), "reset", "", "cancelbutton");
+        }
 
-        if($intButtonConfig & self::BIT_BUTTON_CONTINUE)
-            $strReturn .= $objToolkit->formInputSubmit(class_lang::getInstance()->getLang("commons_continue", "system"), "submitbtn");
+        if ($intButtonConfig & self::BIT_BUTTON_CONTINUE) {
+            $strReturn .= $objToolkit->formInputSubmit(class_lang::getInstance()->getLang("commons_continue", "system"), "continuebtn");
+        }
 
-        if($intButtonConfig & self::BIT_BUTTON_BACK)
+        if ($intButtonConfig & self::BIT_BUTTON_BACK) {
             $strReturn .= $objToolkit->formInputSubmit(class_lang::getInstance()->getLang("commons_back", "system"), "backbtn");
+        }
 
 
-        if($strTargetURI !== null)
+        if ($strTargetURI !== null) {
             $strReturn .= $objToolkit->formClose();
+        }
 
-        if(count($this->arrFields) > 0) {
+        if (count($this->arrFields) > 0) {
             reset($this->arrFields);
 
             do {
                 $objField = current($this->arrFields);
-                if(!$objField instanceof class_formentry_hidden
+                if (!$objField instanceof class_formentry_hidden
                     && !$objField instanceof class_formentry_plaintext
                     && !$objField instanceof class_formentry_headline
                     && !$objField instanceof class_formentry_divider
@@ -283,24 +312,32 @@ class class_admin_formgenerator {
                     $strReturn .= $objToolkit->setBrowserFocus($objField->getStrEntryName());
                     break;
                 }
-            }
-            while(next($this->arrFields) !== false);
+            } while (next($this->arrFields) !== false);
 
         }
 
         //lock the record to avoid multiple edit-sessions - if in edit mode
-        if($this->objSourceobject != null && method_exists($this->objSourceobject, "getLockManager")) {
+        if ($this->objSourceobject != null && method_exists($this->objSourceobject, "getLockManager")) {
 
             $bitSkip = false;
-            if($this->getField("mode") != null && $this->getField("mode")->getStrValue() == "new")
+            if ($this->getField("mode") != null && $this->getField("mode")->getStrValue() == "new") {
                 $bitSkip = true;
+            }
 
-            if(!$bitSkip && !validateSystemid($this->objSourceobject->getSystemid()))
+            if (!$bitSkip && !validateSystemid($this->objSourceobject->getSystemid())) {
                 $bitSkip = true;
+            }
 
-            if(!$bitSkip) {
-                if($this->objSourceobject->getLockManager()->isAccessibleForCurrentUser()) {
+            if (!$bitSkip) {
+                if ($this->objSourceobject->getLockManager()->isAccessibleForCurrentUser()) {
                     $this->objSourceobject->getLockManager()->lockRecord();
+
+                    //register a new unlock-handler
+                    // KAJONA.admin.ajax.genericAjaxCall('system', 'unlockRecord', '".$this->objSourceobject->getSystemid()."');
+                    $strReturn .= "<script type='text/javascript'>
+                        $(window).on('unload', function() { $.ajax({url: KAJONA_WEBPATH + '/xml.php?admin=1&module=system&action=unlockRecord&systemid=".$this->objSourceobject->getSystemid()."', async:false}) ; });
+//                        $('#{$strGeneratedFormname}').on('submit', function() { $(window).off('unload'); return true;});
+                    </script>";
                 }
                 else {
                     $objUser = new class_module_user_user($this->objSourceobject->getLockManager()->getLockId());
@@ -323,13 +360,14 @@ class class_admin_formgenerator {
      *
      * @return void
      */
-    public function generateFieldsFromObject() {
+    public function generateFieldsFromObject()
+    {
 
         //load all methods
         $objAnnotations = new class_reflection($this->objSourceobject);
 
         $arrProperties = $objAnnotations->getPropertiesWithAnnotation("@fieldType");
-        foreach($arrProperties as $strPropertyName => $strDataType) {
+        foreach ($arrProperties as $strPropertyName => $strDataType) {
             $this->addDynamicField($strPropertyName);
         }
 
@@ -343,66 +381,77 @@ class class_admin_formgenerator {
      * set up dynamically.
      *
      * @param string $strPropertyName
+     *
      * @return class_formentry_base|interface_formentry
      * @throws class_exception
      */
-    public function addDynamicField($strPropertyName) {
+    public function addDynamicField($strPropertyName)
+    {
 
         //try to get the matching getter
         $objReflection = new class_reflection($this->objSourceobject);
         $strGetter = $objReflection->getGetter($strPropertyName);
-        if($strGetter === null)
+        if ($strGetter === null) {
             throw new class_exception("unable to find getter for property ".$strPropertyName."@".get_class($this->objSourceobject), class_exception::$level_ERROR);
+        }
 
         //load detailed properties
 
-        $strType      = $objReflection->getAnnotationValueForProperty($strPropertyName, self::STR_TYPE_ANNOTATION);
+        $strType = $objReflection->getAnnotationValueForProperty($strPropertyName, self::STR_TYPE_ANNOTATION);
         $strValidator = $objReflection->getAnnotationValueForProperty($strPropertyName, self::STR_VALIDATOR_ANNOTATION);
         $strMandatory = $objReflection->getAnnotationValueForProperty($strPropertyName, self::STR_MANDATORY_ANNOTATION);
-        $strLabel     = $objReflection->getAnnotationValueForProperty($strPropertyName, self::STR_LABEL_ANNOTATION);
-        $strHidden    = $objReflection->getAnnotationValueForProperty($strPropertyName, self::STR_HIDDEN_ANNOTATION);
-        $strReadonly  = $objReflection->getAnnotationValueForProperty($strPropertyName, self::STR_READONLY_ANNOTATION);
+        $strLabel = $objReflection->getAnnotationValueForProperty($strPropertyName, self::STR_LABEL_ANNOTATION);
+        $strHidden = $objReflection->getAnnotationValueForProperty($strPropertyName, self::STR_HIDDEN_ANNOTATION);
+        $strReadonly = $objReflection->getAnnotationValueForProperty($strPropertyName, self::STR_READONLY_ANNOTATION);
 
-        if($strType === null)
+        if ($strType === null) {
             $strType = "text";
+        }
 
         $strStart = uniSubstr($strPropertyName, 0, 3);
-        if(in_array($strStart, array("int", "bit", "str", "arr", "obj")))
+        if (in_array($strStart, array("int", "bit", "str", "arr", "obj"))) {
             $strPropertyName = uniStrtolower(uniSubstr($strPropertyName, 3));
+        }
 
         $strStart = uniSubstr($strPropertyName, 0, 4);
-        if(in_array($strStart, array("long")))
+        if (in_array($strStart, array("long"))) {
             $strPropertyName = uniStrtolower(uniSubstr($strPropertyName, 4));
+        }
 
         $strStart = uniSubstr($strPropertyName, 0, 5);
-        if(in_array($strStart, array("float")))
+        if (in_array($strStart, array("float"))) {
             $strPropertyName = uniStrtolower(uniSubstr($strPropertyName, 5));
+        }
 
         $objField = $this->getFormEntryInstance($strType, $strPropertyName);
-        if($strLabel !== null) {
+        if ($strLabel !== null) {
             $objField->updateLabel($strLabel);
         }
 
         $bitMandatory = false;
-        if($strMandatory !== null && $strMandatory !== "false")
+        if ($strMandatory !== null && $strMandatory !== "false") {
             $bitMandatory = true;
+        }
 
         $objField->setBitMandatory($bitMandatory);
 
         $bitReadonly = false;
-        if($strReadonly !== null && $strReadonly !== "false")
+        if ($strReadonly !== null && $strReadonly !== "false") {
             $bitReadonly = true;
+        }
 
         $objField->setBitReadonly($bitReadonly);
 
 
-        if($strValidator !== null)
+        if ($strValidator !== null) {
             $objField->setObjValidator($this->getValidatorInstance($strValidator));
+        }
 
         $this->addField($objField, $strPropertyName);
 
-        if($strHidden !== null)
+        if ($strHidden !== null) {
             $this->addFieldToHiddenGroup($objField);
+        }
 
         return $objField;
     }
@@ -419,22 +468,25 @@ class class_admin_formgenerator {
      * @throws class_exception
      * @return void
      */
-    public function setFieldToPosition($strField, $intPos) {
+    public function setFieldToPosition($strField, $intPos)
+    {
 
-        if(!isset($this->arrFields[$strField]))
+        if (!isset($this->arrFields[$strField])) {
             throw new class_exception("field ".$strField." not found in list ".implode(", ", array_keys($this->arrFields)), class_exception::$level_ERROR);
+        }
 
         $objField = $this->arrFields[$strField];
 
         $arrNewOrder = array();
 
         $intI = 1;
-        foreach($this->arrFields as $strKey => $objValue) {
+        foreach ($this->arrFields as $strKey => $objValue) {
             //skip the same field, is inserted somewhere else
-            if($strKey == $strField)
+            if ($strKey == $strField) {
                 continue;
+            }
 
-            if($intI == $intPos) {
+            if ($intI == $intPos) {
                 $arrNewOrder[$strField] = $objField;
                 $objField = null;
             }
@@ -445,13 +497,13 @@ class class_admin_formgenerator {
             $intI++;
         }
 
-        if($objField !== null)
+        if ($objField !== null) {
             $arrNewOrder[$strField] = $objField;
+        }
 
 
         $this->arrFields = $arrNewOrder;
     }
-
 
 
     /**
@@ -459,17 +511,39 @@ class class_admin_formgenerator {
      *
      * @param string $strName
      * @param string $strPropertyname
+     *
      * @return class_formentry_base|interface_formentry
      * @throws class_exception
      */
-    private function getFormEntryInstance($strName, $strPropertyname) {
+    private function getFormEntryInstance($strName, $strPropertyname)
+    {
 
-        $strClassname = "class_formentry_".$strName;
-        if(class_resourceloader::getInstance()->getPathForFile("/admin/formentries/".$strClassname.".php")) {
+        //backslash given?
+        //the V5 way: namespaces
+        if(uniStrpos($strName, "\\") !== false) {
+            $strClassname = $strName;
+        }
+        else {
+            //backwards support for v4
+            $strClassname = "class_formentry_".$strName;
+            $strPath = class_resourceloader::getInstance()->getPathForFile("/admin/formentries/".$strClassname.".php");
+
+            if(!$strPath) {
+                $strPath = class_resourceloader::getInstance()->getPathForFile("/legacy/".$strClassname.".php");
+
+                if($strPath == null) {
+                    $strClassname = null;
+                }
+            }
+
+        }
+
+        if ($strClassname !== null) {
             return new $strClassname($this->strFormname, $strPropertyname, $this->objSourceobject);
         }
-        else
+        else {
             throw new class_exception("failed to load form-entry of type ".$strClassname, class_exception::$level_ERROR);
+        }
 
     }
 
@@ -481,42 +555,53 @@ class class_admin_formgenerator {
      * @throws class_exception
      * @return interface_validator
      */
-    private function getValidatorInstance($strClassname) {
-        if(uniStrpos($strClassname, "class_") === false)
+    private function getValidatorInstance($strClassname)
+    {
+        if (uniStrpos($strClassname, "class_") === false) {
             $strClassname = "class_".$strClassname."_validator";
+        }
 
-        if(class_resourceloader::getInstance()->getPathForFile("/system/validators/".$strClassname.".php")) {
+        if (class_resourceloader::getInstance()->getPathForFile("/system/validators/".$strClassname.".php")) {
             return new $strClassname();
         }
-        else
+        else {
             throw new class_exception("failed to load validator of type ".$strClassname, class_exception::$level_ERROR);
+        }
     }
 
     /**
      * Returns an language text. By default the formname is used as module name
      *
      * @param string $strText
+     *
+     * @param null $strModule
+     *
      * @return string
      */
-    protected function getLang($strText, $strModule = null) {
-        return $this->objLang->getLang($strText, $strModule === null ? $this->strFormname : $strModule);
+    protected function getLang($strText, $strModule = null, array $arrParameters = array())
+    {
+        return $this->objLang->getLang($strText, $strModule === null ? $this->strFormname : $strModule, $arrParameters);
     }
 
     /**
      * Returns an array of validation-errors
+     *
      * @return array
      */
-    public function getArrValidationErrors() {
+    public function getArrValidationErrors()
+    {
         return $this->arrValidationErrors;
     }
 
     /**
      * Returns an array of validation-errors.
      * Alias for getArrValidationErrors due to backwards compatibility.
+     *
      * @return array
      * @see getArrValidationErrors
      */
-    public function getValidationErrors() {
+    public function getValidationErrors()
+    {
         return $this->getArrValidationErrors();
     }
 
@@ -525,10 +610,12 @@ class class_admin_formgenerator {
      *
      * @param string $strEntry
      * @param string $strMessage
+     *
      * @return void
      */
-    public function addValidationError($strEntry, $strMessage) {
-        if(!array_key_exists($strEntry, $this->arrValidationErrors)) {
+    public function addValidationError($strEntry, $strMessage)
+    {
+        if (!array_key_exists($strEntry, $this->arrValidationErrors)) {
             $this->arrValidationErrors[$strEntry] = array();
         }
         $this->arrValidationErrors[$strEntry][] = $strMessage;
@@ -536,18 +623,23 @@ class class_admin_formgenerator {
 
     /**
      * Removes a single validation error
+     *
      * @param string $strEntry
+     *
      * @return void
      */
-    public function removeValidationError($strEntry) {
-        if(isset($this->arrValidationErrors[$strEntry]))
+    public function removeValidationError($strEntry)
+    {
+        if (isset($this->arrValidationErrors[$strEntry])) {
             unset($this->arrValidationErrors[$strEntry]);
+        }
     }
 
     /**
      * Clear all validation errors in the form
      */
-    public function removeAllValidationError() {
+    public function removeAllValidationError()
+    {
         $this->arrValidationErrors = array();
     }
 
@@ -557,11 +649,14 @@ class class_admin_formgenerator {
      *
      * @param class_formentry_base $objField
      * @param string $strKey
+     *
      * @return class_formentry_base|interface_formentry
      */
-    public function addField(class_formentry_base $objField, $strKey = "") {
-        if($strKey == "")
+    public function addField(class_formentry_base $objField, $strKey = "")
+    {
+        if ($strKey == "") {
             $strKey = $objField->getStrEntryName();
+        }
 
         $this->arrFields[$strKey] = $objField;
 
@@ -570,23 +665,52 @@ class class_admin_formgenerator {
 
     /**
      * Returns a single entry form the fields, identified by its form-entry-name.
+     *
      * @param string $strName
+     *
      * @return class_formentry_base|interface_formentry
      */
-    public function getField($strName) {
-        if(isset($this->arrFields[$strName]))
+    public function getField($strName)
+    {
+        if (isset($this->arrFields[$strName])) {
             return $this->arrFields[$strName];
-        else
+        }
+        else {
             return null;
+        }
+    }
+
+
+    /**
+     * Orders the fields by the given array.
+     * The array must contain as values the keys of the form fields
+     *
+     * @param $arrFieldOrder
+     * @return int
+     * @throws class_exception
+     */
+    public function orderFields($arrFieldOrder)
+    {
+        $intPosition = 1;
+
+        foreach($arrFieldOrder as $strFieldName) {
+            if($this->getField($strFieldName) != null) {
+                $this->setFieldToPosition($strFieldName, $intPosition);
+                $intPosition++;
+            }
+        }
+        return $intPosition;
     }
 
     /**
      * Removes a single entry form the fields, identified by its form-entry-name.
      *
      * @param string $strName
+     *
      * @return $this
      */
-    public function removeField($strName) {
+    public function removeField($strName)
+    {
         unset($this->arrFields[$strName]);
         return $this;
     }
@@ -595,9 +719,11 @@ class class_admin_formgenerator {
      * Sets the name of the group of hidden elements
      *
      * @param string $strHiddenGroupTitle
+     *
      * @return $this
      */
-    public function setStrHiddenGroupTitle($strHiddenGroupTitle) {
+    public function setStrHiddenGroupTitle($strHiddenGroupTitle)
+    {
         $this->strHiddenGroupTitle = $strHiddenGroupTitle;
         return $this;
     }
@@ -606,12 +732,15 @@ class class_admin_formgenerator {
      * Moves a single field to the list of hidden elements
      *
      * @param class_formentry_base $objField
+     *
      * @return class_formentry_base
      */
-    public function addFieldToHiddenGroup(class_formentry_base $objField) {
+    public function addFieldToHiddenGroup(class_formentry_base $objField)
+    {
         $this->arrHiddenElements[] = $objField->getStrEntryName();
-        if(!isset($this->arrFields[$objField->getStrEntryName()]) && !isset($this->arrFields[$objField->getStrSourceProperty()]))
+        if (!isset($this->arrFields[$objField->getStrEntryName()]) && !isset($this->arrFields[$objField->getStrSourceProperty()])) {
             $this->addField($objField);
+        }
         return $objField;
     }
 
@@ -619,23 +748,35 @@ class class_admin_formgenerator {
      * Makes the group of hidden elements visible or hides the content on page-load
      *
      * @param bool $bitHiddenElementsVisible
+     *
      * @return void
      */
-    public function setBitHiddenElementsVisible($bitHiddenElementsVisible) {
+    public function setBitHiddenElementsVisible($bitHiddenElementsVisible)
+    {
         $this->bitHiddenElementsVisible = $bitHiddenElementsVisible;
     }
 
     /**
      * @return \class_model|interface_model
      */
-    public function getObjSourceobject() {
+    public function getObjSourceobject()
+    {
         return $this->objSourceobject;
+    }
+
+    /**
+     * @param \class_model|interface_model $objSource
+     */
+    protected function setObjSourceobject($objSource)
+    {
+        $this->objSourceobject = $objSource;
     }
 
     /**
      * @return class_formentry_base[]|interface_formentry[]
      */
-    public function getArrFields() {
+    public function getArrFields()
+    {
         return $this->arrFields;
     }
 
@@ -643,40 +784,66 @@ class class_admin_formgenerator {
      * Allows to inject an onsubmit handler
      *
      * @param string $strOnSubmit
+     *
      * @return void
      */
-    public function setStrOnSubmit($strOnSubmit) {
+    public function setStrOnSubmit($strOnSubmit)
+    {
         $this->strOnSubmit = $strOnSubmit;
     }
 
     /**
      * @return string
      */
-    public function getStrOnSubmit() {
+    public function getStrOnSubmit()
+    {
         return $this->strOnSubmit;
     }
 
     /**
      * @param string $strFormEncoding
+     *
      * @return void
      */
-    public function setStrFormEncoding($strFormEncoding) {
+    public function setStrFormEncoding($strFormEncoding)
+    {
         $this->strFormEncoding = $strFormEncoding;
     }
 
     /**
      * @return string
      */
-    public function getStrFormEncoding() {
+    public function getStrFormEncoding()
+    {
         return $this->strFormEncoding;
     }
 
     /**
      * @return string
      */
-    public function getStrFormname() {
+    public function getStrFormname()
+    {
         return $this->strFormname;
     }
 
+    /**
+     * @param string $strMethod
+     * @throws class_exception
+     */
+    public function setStrMethod($strMethod)
+    {
+        if (in_array($strMethod, array(self::STR_METHOD_GET, self::STR_METHOD_POST))) {
+            $this->strMethod = $strMethod;
+        } else {
+            throw new class_exception("Invalid form method", class_exception::$level_ERROR);
+        }
+    }
 
+    /**
+     * @return string
+     */
+    public function getStrMethod()
+    {
+        return $this->strMethod;
+    }
 }

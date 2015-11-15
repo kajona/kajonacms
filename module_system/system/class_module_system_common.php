@@ -37,8 +37,10 @@ class class_module_system_common extends class_model implements interface_model 
 
         $strQuery = "SELECT system_id
                        FROM " . _dbprefix_ . "system
-                   " . ($intModuleFilter !== false ? "WHERE system_module_nr = ? " : "") . "
-                   " . ($strClassFilter !== false ? "WHERE system_class = ? " : "") . "
+                       WHERE 1=1
+                   " . ($intModuleFilter !== false ? " AND system_module_nr = ? " : "") . "
+                   " . ($strClassFilter !== false ? " AND system_class = ? " : "") . "
+                       AND system_deleted != 1
                    ORDER BY system_lm_time DESC";
 
         $arrParams = array();

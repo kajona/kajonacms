@@ -5,6 +5,10 @@
 *-------------------------------------------------------------------------------------------------------*
 *    $Id$                                            *
 ********************************************************************************************************/
+use Kajona\Pages\Portal\PagesPortalController;
+use Kajona\Pages\Portal\PagesPortaleditor;
+use Kajona\Pages\System\PagesPortaleditorActionEnum;
+use Kajona\Pages\System\PagesPortaleditorSystemidAction;
 
 /**
  * Gallery Portal. Loads the thumbnails or detail-views
@@ -28,8 +32,8 @@ class class_module_mediamanager_portal extends class_portal_controller implement
      *
      * @param mixed $arrElementData
      */
-    public function __construct($arrElementData) {
-        parent::__construct($arrElementData);
+    public function __construct($arrElementData = array(), $strSystemid = "") {
+        parent::__construct($arrElementData, $strSystemid);
 
         if($this->getAction() == "mediaFolder" || $this->getAction() == "imageFolder" || $this->getAction() == "openDlFolder")
             $this->setAction("list");
@@ -51,24 +55,18 @@ class class_module_mediamanager_portal extends class_portal_controller implement
      */
     private function addPortaleditorCode($strReturn) {
 
-        $arrPeConfig = array(
-            "pe_module"               => "mediamanager",
-            "pe_action_edit"          => "openFolder",
-            "pe_action_edit_params"   => "&systemid=" . $this->arrElementData["repo_id"],
-            "pe_action_new"           => "",
-            "pe_action_new_params"    => "",
-            "pe_action_delete"        => "",
-            "pe_action_delete_params" => ""
-        );
+        $strRelevantSystemid = $this->arrElementData["repo_id"];
 
         //open a subfolder?
         if($this->getParam("action") == "mediaFolder" && validateSystemid($this->getSystemid()))
-            $arrPeConfig["pe_action_edit_params"] = "&systemid=".$this->getSystemid();
+            $strRelevantSystemid = $this->getSystemid();
 
-        $strReturn = class_element_portal::addPortalEditorCode($strReturn, $this->arrElementData["repo_id"], $arrPeConfig);
+        $strReturn = PagesPortaleditor::addPortaleditorContentWrapper($strReturn, $strRelevantSystemid);
+        PagesPortaleditor::getInstance()->registerAction(
+            new PagesPortaleditorSystemidAction(PagesPortaleditorActionEnum::EDIT(), class_link::getLinkAdminHref($this->getArrModule("module"), "openFolder", "&systemid={$strRelevantSystemid}"), $strRelevantSystemid)
+        );
 
         return $strReturn;
-
     }
 
 
@@ -400,16 +398,16 @@ class class_module_mediamanager_portal extends class_portal_controller implement
         $strReturn = $this->fillTemplate($arrDetailsTemplate, $strTemplateID);
 
         //Add pe code
-        $arrPeConfig = array(
-            "pe_module" => "mediamanager",
-            "pe_action_edit" => "editFile",
-            "pe_action_edit_params" => "&systemid=".$objFile->getSystemid()
+        $strReturn = PagesPortaleditor::addPortaleditorContentWrapper($strReturn, $objFile->getSystemid());
+
+        PagesPortaleditor::getInstance()->registerAction(
+            new PagesPortaleditorSystemidAction(PagesPortaleditorActionEnum::EDIT(), class_link::getLinkAdminHref($this->getArrModule("module"), "editFile", "&systemid={$objFile->getSystemid()}"), $objFile->getSystemid())
         );
-        $strReturn = class_element_portal::addPortalEditorCode($strReturn, $objFile->getSystemid(), $arrPeConfig);
+
 
         //set the name of the current image to the page title via class_pages
         if($bitRegisterAdditionalTitle)
-            class_module_pages_portal::registerAdditionalTitle($objFile->getStrName());
+            PagesPortalController::registerAdditionalTitle($objFile->getStrName());
 
         //Update view counter
         if($bitIsImage) {

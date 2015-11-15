@@ -6,6 +6,7 @@
 *-------------------------------------------------------------------------------------------------------*
 *   $Id$                            *
 ********************************************************************************************************/
+use Kajona\Pages\System\PagesPage;
 
 
 /**
@@ -36,8 +37,8 @@ class class_installer_sc_zzlanguages implements interface_sc_installer  {
 
             $strReturn .= " Target language: de\n";
 
-            if(class_exists("class_module_pages_page", false) || class_classloader::getInstance()->loadClass("class_module_pages_page") !== false)
-                class_module_pages_page::assignNullProperties("de", true);
+            if(class_exists("PagesPage", false) || class_classloader::getInstance()->loadClass("PagesPage") !== false)
+                PagesPage::assignNullProperties("de", true);
             if(class_exists("class_module_pages_pageelement", false) || class_classloader::getInstance()->loadClass("class_module_pages_pageelement") !== false)
                 class_module_pages_pageelement::assignNullElements("de");
 
@@ -48,8 +49,8 @@ class class_installer_sc_zzlanguages implements interface_sc_installer  {
 
             $strReturn .= " Target language: en\n";
 
-            if(class_exists("class_module_pages_page", false) || class_classloader::getInstance()->loadClass("class_module_pages_page") !== false)
-                class_module_pages_page::assignNullProperties("en", true);
+            if(class_exists("PagesPage", false) || class_classloader::getInstance()->loadClass("PagesPage") !== false)
+                PagesPage::assignNullProperties("en", true);
             if(class_exists("class_module_pages_pageelement", false) || class_classloader::getInstance()->loadClass("class_module_pages_pageelement") !== false)
                 class_module_pages_pageelement::assignNullElements("en");
 

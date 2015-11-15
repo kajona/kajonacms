@@ -4,6 +4,8 @@
 *   (c) 2007-2015 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 ********************************************************************************************************/
+use Kajona\Pages\System\PagesFolder;
+use Kajona\Pages\System\PagesPage;
 
 /**
  * Model for a navigation point itself
@@ -11,6 +13,7 @@
  * @package module_navigation
  * @author sidler@mulchprod.de
  * @targetTable navigation.navigation_id
+ * @sortManager class_common_sortmanager
  *
  * @module navigation
  * @moduleId _navigation_modul_id_
@@ -133,7 +136,7 @@ class class_module_navigation_point extends class_model implements interface_mod
         $strNameExternal = $this->getStrPageE();
         $strNameFolder = "";
         if(validateSystemid($this->getStrFolderI())) {
-            $objFolder = new class_module_pages_folder($this->getStrFolderI());
+            $objFolder = new PagesFolder($this->getStrFolderI());
             $strNameFolder = $objFolder->getStrName();
         }
 
@@ -201,7 +204,7 @@ class class_module_navigation_point extends class_model implements interface_mod
                 $arrReturn = self::getNaviLayer($strSystemid, true);
         }
         //current node belongs to pages
-        else if($objNode instanceof class_module_pages_page || $objNode instanceof class_module_pages_folder) {
+        else if($objNode instanceof PagesPage || $objNode instanceof PagesFolder) {
             //load the page-level below
             $arrReturn = self::loadPageLevelToNavigationNodes($strSystemid);
         }
@@ -239,7 +242,7 @@ class class_module_navigation_point extends class_model implements interface_mod
      */
     private static function loadPageLevelToNavigationNodes($strSourceId) {
 
-        $arrPages = class_module_pages_page::getObjectList($strSourceId);
+        $arrPages = PagesPage::getObjectList($strSourceId);
         $arrReturn = array();
 
         //transform the sublevel
@@ -250,10 +253,10 @@ class class_module_navigation_point extends class_model implements interface_mod
 
             $objLanguage = new class_module_languages_language();
 
-            if($objOneEntry instanceof class_module_pages_page) {
+            if($objOneEntry instanceof PagesPage) {
 
                 //validate if the page to be linked has a template assigned and at least a single element created
-                if($objOneEntry->getIntType() == class_module_pages_page::$INT_TYPE_ALIAS
+                if($objOneEntry->getIntType() == PagesPage::$INT_TYPE_ALIAS
                     || ($objOneEntry->getStrTemplate() != "" && count(class_module_pages_pageelement::getPlainElementsOnPage($objOneEntry->getSystemid(), true, $objLanguage->getStrPortalLanguage())) > 0)
                 ) {
 
@@ -262,7 +265,7 @@ class class_module_navigation_point extends class_model implements interface_mod
                     $objPoint->setIntRecordStatus(1);
 
                     //if in alias mode, then check what type of target is requested
-                    if($objOneEntry->getIntType() == class_module_pages_page::$INT_TYPE_ALIAS) {
+                    if($objOneEntry->getIntType() == PagesPage::$INT_TYPE_ALIAS) {
                         $strAlias = uniStrtolower($objOneEntry->getStrAlias());
                         if(uniStrpos($strAlias, "http") !== false) {
                             $objPoint->setStrPageE($objOneEntry->getStrAlias());
@@ -285,14 +288,14 @@ class class_module_navigation_point extends class_model implements interface_mod
         }
 
         //merge with elements on the page - if given
-        /** @var $objInstance class_module_pages_page */
+        /** @var $objInstance PagesPage */
         $objInstance = class_objectfactory::getInstance()->getObject($strSourceId);
-        if($objInstance instanceof class_module_pages_page) {
+        if($objInstance instanceof PagesPage) {
 
-            if($objInstance->getIntType() != class_module_pages_page::$INT_TYPE_ALIAS)
+            if($objInstance->getIntType() != PagesPage::$INT_TYPE_ALIAS)
                 $arrReturn = array_merge($arrReturn, self::getAdditionalEntriesForPage($objInstance));
             //else
-            //    $arrReturn = array_merge($arrReturn, self::getAdditionalEntriesForPage(class_module_pages_page::getPageByName($objInstance->getStrAlias())));
+            //    $arrReturn = array_merge($arrReturn, self::getAdditionalEntriesForPage(PagesPage::getPageByName($objInstance->getStrAlias())));
 
         }
 
@@ -304,13 +307,13 @@ class class_module_navigation_point extends class_model implements interface_mod
      * Triggers all subelements in order to fetch the additional navigation
      * entries.
      *
-     * @param class_module_pages_page $objPage
+     * @param PagesPage $objPage
      *
      * @see class_element_portal::getNavigationEntries()
      * @return class_module_navigation_point[]|array
      * @since 4.0
      */
-    private static function getAdditionalEntriesForPage(class_module_pages_page $objPage) {
+    private static function getAdditionalEntriesForPage(PagesPage $objPage) {
         $arrReturn = array();
         $objLanguage = new class_module_languages_language();
         $arrPlainElements = class_module_pages_pageelement::getPlainElementsOnPage($objPage->getSystemid(), true, $objLanguage->getStrPortalLanguage());
@@ -319,16 +322,16 @@ class class_module_navigation_point extends class_model implements interface_mod
 
         foreach($arrPlainElements as $arrOneElementOnPage) {
             //Build the class-name for the object
-            $strClassname = uniSubstr($arrOneElementOnPage["element_class_portal"], 0, -4);
 
+            $strFilename = \class_resourceloader::getInstance()->getPathForFile("/portal/elements/".$arrOneElementOnPage["element_class_portal"]);
+            $objInstance = \class_classloader::getInstance()->getInstanceFromFilename($strFilename, "Kajona\\Pages\\Portal\\ElementPortal", null, array(new class_module_pages_pageelement($arrOneElementOnPage["system_id"])));
 
-            if($strClassname::providesNavigationEntries()) {
+            if($objInstance::providesNavigationEntries()) {
 
-                /** @var  class_element_portal $objElement */
-                $objElement = new $strClassname(new class_module_pages_pageelement($arrOneElementOnPage["system_id"]));
-                $objElement->setParam("page", $objPage->getStrName());
+                /** @var  class_element_portal $objInstance */
+                $objInstance->setParam("page", $objPage->getStrName());
 
-                $arrNavigationPoints = $objElement->getNavigationEntries();
+                $arrNavigationPoints = $objInstance->getNavigationEntries();
                 if($arrNavigationPoints !== false) {
                     $arrReturn = array_merge($arrReturn, $arrNavigationPoints);
                 }

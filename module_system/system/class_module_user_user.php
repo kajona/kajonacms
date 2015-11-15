@@ -314,13 +314,13 @@ class class_module_user_user extends class_model implements interface_model, int
                               AND (user_tbl.user_deleted = 0 OR user_tbl.user_deleted IS NULL)
                           ORDER BY user_tbl.user_username, user_tbl.user_subsystem ASC";
 
-            $arrParams = array_merge($arrParams, array("%".$strUsernameFilter."%", "%".$strUsernameFilter."%", "%".$strUsernameFilter."%"));
+            $arrParams = array("%".$strUsernameFilter."%", "%".$strUsernameFilter."%", "%".$strUsernameFilter."%");
         }
         else {
             $strQuery = "SELECT user_id FROM {$strDbPrefix}user
                             WHERE user_username LIKE ? ORDER BY user_username, user_subsystem ASC";
 
-            $arrParams = array_merge($arrParams, array("%".$strUsernameFilter."%"));
+            $arrParams = array("%".$strUsernameFilter."%");
         }
 
         $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, $arrParams, $intStart, $intEnd);
@@ -354,13 +354,13 @@ class class_module_user_user extends class_model implements interface_model, int
 
                               AND (user_tbl.user_deleted = 0 OR user_tbl.user_deleted IS NULL)";
 
-            $arrParams = array_merge($arrParams, array("%".$strUsernameFilter."%", "%".$strUsernameFilter."%", "%".$strUsernameFilter."%"));
+            $arrParams = array("%".$strUsernameFilter."%", "%".$strUsernameFilter."%", "%".$strUsernameFilter."%");
         }
         else {
             $strQuery = "SELECT COUNT(*) FROM {$strDbPrefix}user
                             WHERE user_username LIKE ? ";
 
-            $arrParams = array_merge($arrParams, array("%".$strUsernameFilter."%"));
+            $arrParams = array("%".$strUsernameFilter."%");
         }
 
         $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, $arrParams);
@@ -372,7 +372,7 @@ class class_module_user_user extends class_model implements interface_model, int
      *
      * @param string $strName
      *
-     * @return mixed
+     * @return class_module_user_user[]
      */
     public static function getAllUsersByName($strName)
     {

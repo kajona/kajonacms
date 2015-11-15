@@ -46,15 +46,16 @@ class class_module_packagemanager_packagemanager_element extends class_module_pa
 
         //proceed with elements
         foreach($arrInstaller as $strOneInstaller) {
+
+            $objInstance = class_classloader::getInstance()->getInstanceFromFilename($this->objMetadata->getStrPath()."/installer/".$strOneInstaller, "class_elementinstaller_base");
+
+            if($objInstance == false)
+                continue;
+
             //skip samplecontent files
-            if(uniStrpos($strOneInstaller, "element") !== false) {
-                class_logger::getInstance(class_logger::PACKAGEMANAGEMENT)->addLogRow("triggering updateOrInstall() on installer ".$strOneInstaller.", all requirements given", class_logger::$levelInfo);
-                //trigger update or install
-                $strName = uniSubstr($strOneInstaller, 0, -4);
-                /** @var $objInstaller interface_installer */
-                $objInstaller = new $strName();
-                $strReturn .= $objInstaller->installOrUpdate();
-            }
+            class_logger::getInstance(class_logger::PACKAGEMANAGEMENT)->addLogRow("triggering updateOrInstall() on installer ".$strOneInstaller.", all requirements given", class_logger::$levelInfo);
+            //trigger update or install
+            $strReturn .= $objInstance->installOrUpdate();
         }
 
         $strReturn .= "Updating default template pack...\n";

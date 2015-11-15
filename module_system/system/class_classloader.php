@@ -37,6 +37,13 @@ class class_classloader
 
 
     /**
+     * Cached array of the core dirs
+     *
+     * @var array
+     */
+    private $arrCoreDirs = array();
+
+    /**
      * Factory method returning an instance of class_classloader.
      * The class-loader implements the singleton pattern.
      *
@@ -102,22 +109,21 @@ class class_classloader
     }
 
     /**
-     * Internal helper, triggers the loading/inclusion of all classes.
-     * This is required since otherwise static init blocks would be skipped.
-     * Currently enabled for classes matching the pattern "class_module_" only.
+     * We autoload all classes which are in the event folder of each module. Theses classes can register events etc.
      *
      * @throws class_exception
      */
     public function includeClasses()
     {
         foreach ($this->arrFiles as $strClass => $strOneFile) {
-            if (uniStrpos($strClass, "class_module_") !== false /*$strClass != "class_testbase"*/) {
+            if (uniStrpos($strOneFile, "/event/") !== false) {
+                // include all classes which are in the event folder
                 $this->loadClass($strClass);
-
-                /*if (ob_get_contents() !== "") {
-                    throw new class_exception("Whitespace outside php-tags in file ".$strOneFile." @ ".$strClass.", aborting system-startup", class_exception::$level_FATALERROR);
-                }*/
             }
+
+            /*if (ob_get_contents() !== "") {
+                throw new class_exception("Whitespace outside php-tags in file ".$strOneFile." @ ".$strClass.", aborting system-startup", class_exception::$level_FATALERROR);
+            }*/
         }
     }
 
@@ -136,8 +142,10 @@ class class_classloader
         }
 
         //Module-Constants
+        $this->arrCoreDirs = self::getCoreDirectories();
+
         $arrModules = array();
-        foreach ($this->getCoreDirectories() as $strRootFolder) {
+        foreach ($this->arrCoreDirs as $strRootFolder) {
 
             if (uniStrpos($strRootFolder, "core") === false) {
                 continue;
@@ -232,6 +240,8 @@ class class_classloader
         $this->addClassFolder("/system/scriptlets/");
         $this->addClassFolder("/system/");
         $this->addClassFolder("/installer/");
+        $this->addClassFolder("/event/");
+        $this->addClassFolder("/legacy/");
     }
 
     /**
@@ -247,26 +257,29 @@ class class_classloader
 
         $arrFiles = array();
 
-        foreach ($this->arrModules as $strPath => $strSingleModule) {
+        foreach (array_merge($this->arrModules, array("project")) as $strPath => $strSingleModule) {
             if (is_dir(_realpath_."/".$strPath.$strFolder)) {
                 $arrTempFiles = scandir(_realpath_."/".$strPath.$strFolder);
                 foreach ($arrTempFiles as $strSingleFile) {
-                    if (preg_match("/(class|interface|trait)(.*)\.php$/i", $strSingleFile)) {
+                    if (strpos($strSingleFile, ".php") !== false) {
                         $arrFiles[substr($strSingleFile, 0, -4)] = _realpath_."/".$strPath.$strFolder.$strSingleFile;
                     }
                 }
             }
         }
 
+
         //scan for overwrites
+        //FIXME: remove in 5.x, only needed for backwards compatibility where content under /project was not organized within module-folders
         if (is_dir(_realpath_."/project".$strFolder)) {
             $arrTempFiles = scandir(_realpath_."/project".$strFolder);
             foreach ($arrTempFiles as $strSingleFile) {
-                if (preg_match("/(class|interface|trait)(.*)\.php$/i", $strSingleFile)) {
+                if (strpos($strSingleFile, ".php") !== false) {
                     $arrFiles[substr($strSingleFile, 0, -4)] = _realpath_."/project".$strFolder.$strSingleFile;
                 }
             }
         }
+
 
         return $arrFiles;
     }
@@ -281,15 +294,114 @@ class class_classloader
      */
     public function loadClass($strClassName)
     {
-
         if (isset($this->arrFiles[$strClassName])) {
             $this->intNumberOfClassesLoaded++;
             include_once $this->arrFiles[$strClassName];
             return true;
         }
 
-        return false;
+        // check whether we can autoload a class which has a namespace
+        if (strpos($strClassName, "\\") !== false) {
+            $arrParts = explode("\\", $strClassName);
 
+            // strtolower all parts except for the class name
+            $strClass = array_pop($arrParts);
+            $arrParts = array_map("strtolower", $arrParts);
+            array_push($arrParts, $strClass);
+
+            // remove vendor part
+            $strVendor = array_shift($arrParts);
+
+            $strModule = "module_".array_shift($arrParts);
+            $strFolder = array_shift($arrParts);
+            $strRest = implode(DIRECTORY_SEPARATOR, $arrParts);
+
+            if (!empty($strModule) && !empty($strFolder) && !empty($strRest)) {
+                $arrDirs = array_merge(array("project"), $this->arrCoreDirs);
+                foreach ($arrDirs as $strDir) {
+                    $strFile = _realpath_.implode(DIRECTORY_SEPARATOR, array($strDir, $strModule, $strFolder, $strRest.".php"));
+                    if (is_file($strFile)) {
+                        $this->arrFiles[$strClassName] = $strFile;
+                        $this->bitCacheSaveRequired = true;
+
+                        $this->intNumberOfClassesLoaded++;
+                        include_once $strFile;
+                        return true;
+                    }
+                }
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Extracts the class-name out of a filename.
+     * Normally this method is only used by getInstanceFromFilename, so no use to call it directly.
+     *
+     * @param $strFilename
+     *
+     * @return null|string
+     */
+    public function getClassnameFromFilename($strFilename)
+    {
+        //blacklisting!
+        if (uniStrpos(basename($strFilename), "class_testbase") === 0) {
+            return null;
+        }
+
+        include_once _realpath_.$strFilename;
+
+        $strResolvedClassname = null;
+        $strClassname = uniSubstr(basename($strFilename), 0, -4);
+
+        if (class_exists($strClassname)) {
+            $strResolvedClassname = $strClassname;
+        }
+        else {
+            $strSource = file_get_contents(_realpath_.$strFilename);
+            preg_match('/namespace ([a-zA-Z0-9_\x7f-\xff\\\\]+);/', $strSource, $arrMatches);
+
+            $strNamespace = isset($arrMatches[1]) ? $arrMatches[1] : null;
+            if (!empty($strNamespace)) {
+                $strClassname = $strNamespace."\\".$strClassname;
+                if (class_exists($strClassname)) {
+                    $strResolvedClassname = $strClassname;
+                }
+            }
+        }
+
+        return $strResolvedClassname;
+    }
+
+
+    /**
+     * Creates a new instance of an object based on the filename
+     *
+     * @param $strFilename
+     * @param string $strBaseclass an optional filter-restriction based on a base class
+     * @param string $strImplementsInterface
+     * @param array $arrConstructorParams
+     *
+     * @return null|object
+     */
+    public function getInstanceFromFilename($strFilename, $strBaseclass = null, $strImplementsInterface = null, $arrConstructorParams = null)
+    {
+        $strResolvedClassname = $this->getClassnameFromFilename($strFilename);
+
+        if ($strResolvedClassname != null) {
+            $objReflection = new ReflectionClass($strResolvedClassname);
+            if ($objReflection->isInstantiable() && ($strBaseclass == null || $objReflection->isSubclassOf($strBaseclass)) && ($strImplementsInterface == null || $objReflection->implementsInterface($strImplementsInterface))) {
+                if (!empty($arrConstructorParams)) {
+                    return $objReflection->newInstanceArgs($arrConstructorParams);
+                }
+                else {
+                    return $objReflection->newInstance();
+                }
+            }
+        }
+
+        return null;
     }
 
     /**

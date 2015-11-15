@@ -512,6 +512,13 @@ class class_db_mysqli extends class_db_base {
         return $objStatement;
     }
 
+    /**
+     * @param string $strValue
+     * @return mixed
+     */
+    public function escape($strValue) {
+        return str_replace("\\", "\\\\", $strValue);
+    }
 
 }
 

@@ -119,7 +119,7 @@ class class_ldap
             $strUsername = $this->arrConfig["ldap_common_name"]."=".$strUsername.",".$strContext;
         }
 
-        $bitBind = @ldap_bind($this->objCx, $strUsername, $strPassword);
+        $bitBind = @ldap_bind($this->objCx, utf8_decode($strUsername), $strPassword);
         $this->internalBind();
 
         return $bitBind;
@@ -175,9 +175,11 @@ class class_ldap
             $arrResult = @ldap_first_entry($this->objCx, $objResult);
             while ($arrResult !== false) {
                 $arrValues = @ldap_get_values($this->objCx, $arrResult, $this->arrConfig["ldap_group_attribute_member"]);
-                foreach ($arrValues as $strKey => $strSingleValue) {
-                    if ($strKey !== "count") {
-                        $arrReturn[] = $strSingleValue;
+                if(!empty($arrValues)) {
+                    foreach ($arrValues as $strKey => $strSingleValue) {
+                        if ($strKey !== "count") {
+                            $arrReturn[] = utf8_encode($strSingleValue);
+                        }
                     }
                 }
 
@@ -235,7 +237,7 @@ class class_ldap
         //search the group itself
         $strQuery = $this->arrConfig["ldap_group_isUserMemberOf"];
         //double encode backslashes
-        $strUserDN = uniStrReplace("\\,", "\\\\,",$strUserDN);
+        $strUserDN = uniStrReplace("\\,", "\\\\,", utf8_decode($strUserDN));
         $strQuery = uniStrReplace("?", $strUserDN, $strQuery);
         $objResult = @ldap_search($this->objCx, $strGroupDN, $strQuery);
 
@@ -306,7 +308,7 @@ class class_ldap
         $arrReturn = false;
 
         //search the group itself
-        $objResult = @ldap_search($this->objCx, $strUsername, $this->arrConfig["ldap_user_filter"]);
+        $objResult = @ldap_search($this->objCx, utf8_decode($strUsername), $this->arrConfig["ldap_user_filter"]);
 
         if ($objResult !== false) {
             $arrReturn = array();
@@ -350,7 +352,7 @@ class class_ldap
         $arrReturn = false;
 
         $strUserFilter = $this->arrConfig["ldap_user_search_filter"];
-        $strUserFilter = uniStrReplace("?", $strUsername, $strUserFilter);
+        $strUserFilter = uniStrReplace("?", utf8_decode($strUsername), $strUserFilter);
 
 
         //search the group itself

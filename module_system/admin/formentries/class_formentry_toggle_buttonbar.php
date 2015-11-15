@@ -13,6 +13,28 @@
  */
 class class_formentry_toggle_buttonbar extends class_formentry_multiselect {
 
+    protected $strType = "checkbox";
+
+    /**
+     * @return string
+     */
+    public function getStrType()
+    {
+        return $this->strType;
+    }
+
+    /**
+     * The type either "checkbox" or "radio"
+     *
+     * @param string $strType
+     */
+    public function setStrType($strType)
+    {
+        $this->strType = $strType;
+
+        return $this;
+    }
+
     /**
      * Renders the field itself.
      * In most cases, based on the current toolkit.
@@ -27,10 +49,10 @@ class class_formentry_toggle_buttonbar extends class_formentry_multiselect {
         }
 
         $arrSelectedKeys = array();
-        if($this->getStrValue() !== "") {
+        if($this->getStrValue() !== "" && $this->getStrValue() !== null) {
             $arrSelectedKeys = explode(",", $this->getStrValue());
         }
-        $strReturn .= $objToolkit->formToggleButtonBar($this->getStrEntryName(), $this->arrKeyValues, $this->getStrLabel(), $arrSelectedKeys, !$this->getBitReadonly());
+        $strReturn .= $objToolkit->formToggleButtonBar($this->getStrEntryName(), $this->arrKeyValues, $this->getStrLabel(), $arrSelectedKeys, !$this->getBitReadonly(), $this->strType);
         return $strReturn;
     }
 

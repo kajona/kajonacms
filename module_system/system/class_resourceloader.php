@@ -19,7 +19,8 @@
  * @package module_system
  * @author sidler@mulchprod.de
  */
-class class_resourceloader {
+class class_resourceloader
+{
 
     private $strTemplatesCacheFile = "";
     private $strFoldercontentCacheFile = "";
@@ -41,12 +42,15 @@ class class_resourceloader {
     /**
      * Factory method returning an instance of class_resourceloader.
      * The resource-loader implements the singleton pattern.
+     *
      * @static
      * @return class_resourceloader
      */
-    public static function getInstance() {
-        if(self::$objInstance == null)
+    public static function getInstance()
+    {
+        if (self::$objInstance == null) {
             self::$objInstance = new class_resourceloader();
+        }
 
         return self::$objInstance;
     }
@@ -54,12 +58,13 @@ class class_resourceloader {
     /**
      * Constructor, initializes the internal fields
      */
-    private function __construct() {
+    private function __construct()
+    {
 
 
-        $this->strTemplatesCacheFile        = _realpath_."/project/temp/templates.cache";
-        $this->strFoldercontentCacheFile    = _realpath_."/project/temp/foldercontent.cache";
-        $this->strFoldercontentLangFile     = _realpath_."/project/temp/lang.cache";
+        $this->strTemplatesCacheFile = _realpath_."/project/temp/templates.cache";
+        $this->strFoldercontentCacheFile = _realpath_."/project/temp/foldercontent.cache";
+        $this->strFoldercontentLangFile = _realpath_."/project/temp/lang.cache";
 
         $this->arrModules = class_classloader::getInstance()->getArrModules();
 
@@ -69,12 +74,12 @@ class class_resourceloader {
         $this->arrLangfiles = class_apc_cache::getInstance()->getValue(__CLASS__."langfiles");
 
 
-        if($this->arrTemplates === false || $this->arrFoldercontent === false || $this->arrLangfiles === false) {
+        if ($this->arrTemplates === false || $this->arrFoldercontent === false || $this->arrLangfiles === false) {
             $this->arrTemplates = array();
             $this->arrFoldercontent = array();
             $this->arrLangfiles = array();
 
-            if(is_file($this->strTemplatesCacheFile) && is_file($this->strFoldercontentCacheFile) && is_file($this->strFoldercontentLangFile)) {
+            if (is_file($this->strTemplatesCacheFile) && is_file($this->strFoldercontentCacheFile) && is_file($this->strFoldercontentLangFile)) {
                 $this->arrTemplates = unserialize(file_get_contents($this->strTemplatesCacheFile));
                 $this->arrFoldercontent = unserialize(file_get_contents($this->strFoldercontentCacheFile));
                 $this->arrLangfiles = unserialize(file_get_contents($this->strFoldercontentLangFile));
@@ -87,9 +92,10 @@ class class_resourceloader {
     /**
      * Stores the currently cached entries back to the filesystem - if required.
      */
-    public function __destruct() {
+    public function __destruct()
+    {
 
-        if($this->bitCacheSaveRequired && class_config::getInstance()->getConfig('resourcecaching') == true) {
+        if ($this->bitCacheSaveRequired && class_config::getInstance()->getConfig('resourcecaching') == true) {
 
             class_apc_cache::getInstance()->addValue(__CLASS__."templates", $this->arrTemplates);
             class_apc_cache::getInstance()->addValue(__CLASS__."foldercontent", $this->arrFoldercontent);
@@ -104,9 +110,11 @@ class class_resourceloader {
     /**
      * Deletes all cached resource-information,
      * so the .cache-files.
+     *
      * @return void
      */
-    public function flushCache() {
+    public function flushCache()
+    {
         $objFilesystem = new class_filesystem();
         $objFilesystem->fileDelete($this->strTemplatesCacheFile);
         $objFilesystem->fileDelete($this->strFoldercontentCacheFile);
@@ -127,42 +135,52 @@ class class_resourceloader {
      * @throws class_exception
      * @return string The path on the filesystem, relative to the root-folder. Null if the file could not be mapped.
      */
-    public function getTemplate($strTemplateName, $bitScanAdminSkin = false) {
+    public function getTemplate($strTemplateName, $bitScanAdminSkin = false)
+    {
         $strTemplateName = removeDirectoryTraversals($strTemplateName);
-        if(isset($this->arrTemplates[$strTemplateName]))
+        if (isset($this->arrTemplates[$strTemplateName])) {
             return $this->arrTemplates[$strTemplateName];
+        }
 
         $this->bitCacheSaveRequired = true;
 
         $strFilename = null;
         //first try: load the file in the current template-pack
         $strDefaultTemplate = class_module_system_setting::getConfigValue("_packagemanager_defaulttemplate_");
-        if(is_file(_realpath_._templatepath_."/".$strDefaultTemplate."/tpl".$strTemplateName)) {
+        if (is_file(_realpath_._templatepath_."/".$strDefaultTemplate."/tpl".$strTemplateName)) {
             $this->arrTemplates[$strTemplateName] = _templatepath_."/".$strDefaultTemplate."/tpl".$strTemplateName;
             return _templatepath_."/".$strDefaultTemplate."/tpl".$strTemplateName;
         }
 
         //second try: load the file from the default-pack
-        if(is_file(_realpath_._templatepath_."/default/tpl".$strTemplateName)) {
+        if (is_file(_realpath_._templatepath_."/default/tpl".$strTemplateName)) {
             $this->arrTemplates[$strTemplateName] = _templatepath_."/default/tpl".$strTemplateName;
             return _templatepath_."/default/tpl".$strTemplateName;
         }
 
         //third try: try to load the file from a given module
-        foreach($this->arrModules as $strCorePath => $strOneModule) {
-            if(is_file(_realpath_."/".$strCorePath."/templates/default/tpl".$strTemplateName)) {
+        foreach ($this->arrModules as $strCorePath => $strOneModule) {
+            if (is_file(_realpath_."/".$strCorePath."/templates/default/tpl".$strTemplateName)) {
                 $strFilename = "/".$strCorePath."/templates/default/tpl".$strTemplateName;
                 break;
             }
         }
 
-        if($bitScanAdminSkin) {
-            if(is_file(_realpath_.class_adminskin_helper::getPathForSkin(class_session::getInstance()->getAdminSkin()).$strTemplateName))
+        if ($bitScanAdminSkin) {
+            //scan directly
+            if (is_file(_realpath_.$strTemplateName)) {
+                $strFilename = $strTemplateName;
+            }
+
+            //prepend path
+            if (is_file(_realpath_.class_adminskin_helper::getPathForSkin(class_session::getInstance()->getAdminSkin()).$strTemplateName)) {
                 $strFilename = class_adminskin_helper::getPathForSkin(class_session::getInstance()->getAdminSkin()).$strTemplateName;
+            }
         }
 
-        if($strFilename === null)
+        if ($strFilename === null) {
             throw new class_exception("Required file ".$strTemplateName." could not be mapped on the filesystem.", class_exception::$level_ERROR);
+        }
 
         $this->arrTemplates[$strTemplateName] = $strFilename;
 
@@ -175,38 +193,45 @@ class class_resourceloader {
      * The filename is the relative path, so adding /templates/[packname] is not required and not allowed.
      *
      * @param string $strFolder
+     *
      * @return array A list of templates, so the merged result of the current template-pack + default-pack + fallback-files
      */
-    public function getTemplatesInFolder($strFolder) {
+    public function getTemplatesInFolder($strFolder)
+    {
 
         $arrReturn = array();
 
         //first try: load the file in the current template-pack
-        if(is_dir(_realpath_._templatepath_."/".class_module_system_setting::getConfigValue("_packagemanager_defaulttemplate_")."/tpl".$strFolder)) {
+        if (is_dir(_realpath_._templatepath_."/".class_module_system_setting::getConfigValue("_packagemanager_defaulttemplate_")."/tpl".$strFolder)) {
             $arrFiles = scandir(_realpath_._templatepath_."/".class_module_system_setting::getConfigValue("_packagemanager_defaulttemplate_")."/tpl".$strFolder);
-            foreach($arrFiles as $strOneFile)
-                if(substr($strOneFile, -4) == ".tpl")
+            foreach ($arrFiles as $strOneFile) {
+                if (substr($strOneFile, -4) == ".tpl") {
                     $arrReturn[] = $strOneFile;
-        }
-
-        //second try: load the file from the default-pack
-        if(is_dir(_realpath_._templatepath_."/default/tpl".$strFolder)) {
-            $arrFiles = scandir(_realpath_._templatepath_."/default/tpl".$strFolder);
-            foreach($arrFiles as $strOneFile)
-                if(substr($strOneFile, -4) == ".tpl")
-                    $arrReturn[] = $strOneFile;
-        }
-
-        //third try: try to load the file from given modules
-        foreach($this->arrModules as $strCorePath => $strOneModule) {
-            if(is_dir(_realpath_."/".$strCorePath."/templates/default/tpl".$strFolder)) {
-                $arrFiles = scandir(_realpath_."/".$strCorePath."/templates/default/tpl".$strFolder);
-                foreach($arrFiles as $strOneFile)
-                    if(substr($strOneFile, -4) == ".tpl")
-                        $arrReturn[] = $strOneFile;
+                }
             }
         }
 
+        //second try: load the file from the default-pack
+        if (is_dir(_realpath_._templatepath_."/default/tpl".$strFolder)) {
+            $arrFiles = scandir(_realpath_._templatepath_."/default/tpl".$strFolder);
+            foreach ($arrFiles as $strOneFile) {
+                if (substr($strOneFile, -4) == ".tpl") {
+                    $arrReturn[] = $strOneFile;
+                }
+            }
+        }
+
+        //third try: try to load the file from given modules
+        foreach ($this->arrModules as $strCorePath => $strOneModule) {
+            if (is_dir(_realpath_."/".$strCorePath."/templates/default/tpl".$strFolder)) {
+                $arrFiles = scandir(_realpath_."/".$strCorePath."/templates/default/tpl".$strFolder);
+                foreach ($arrFiles as $strOneFile) {
+                    if (substr($strOneFile, -4) == ".tpl") {
+                        $arrReturn[] = $strOneFile;
+                    }
+                }
+            }
+        }
 
 
         return $arrReturn;
@@ -219,23 +244,26 @@ class class_resourceloader {
      * No caching is done for lang-files, since the entries are cached by the lang-class, too.
      *
      * @param string $strFolder
+     *
      * @return array
      */
-    public function getLanguageFiles($strFolder) {
+    public function getLanguageFiles($strFolder)
+    {
         $arrReturn = array();
 
-        if(isset($this->arrLangfiles[$strFolder]))
+        if (isset($this->arrLangfiles[$strFolder])) {
             return $this->arrLangfiles[$strFolder];
+        }
 
         $this->bitCacheSaveRequired = true;
 
         //loop all given modules
-        foreach($this->arrModules as $strCorePath => $strSingleModule) {
-            if(is_dir(_realpath_."/".$strCorePath._langpath_."/".$strFolder)) {
+        foreach ($this->arrModules as $strCorePath => $strSingleModule) {
+            if (is_dir(_realpath_."/".$strCorePath._langpath_."/".$strFolder)) {
                 $arrContent = scandir(_realpath_."/".$strCorePath._langpath_."/".$strFolder);
-                foreach($arrContent as $strSingleEntry) {
+                foreach ($arrContent as $strSingleEntry) {
 
-                    if(substr($strSingleEntry, -4) == ".php") {
+                    if (substr($strSingleEntry, -4) == ".php") {
                         $arrReturn["/".$strCorePath._langpath_."/".$strFolder."/".$strSingleEntry] = $strSingleEntry;
                     }
                 }
@@ -243,14 +271,14 @@ class class_resourceloader {
         }
 
         //check if the same is available in the projects-folder
-        if(is_dir(_realpath_._projectpath_._langpath_."/".$strFolder)) {
+        if (is_dir(_realpath_._projectpath_._langpath_."/".$strFolder)) {
             $arrContent = scandir(_realpath_._projectpath_._langpath_."/".$strFolder);
-            foreach($arrContent as $strSingleEntry) {
+            foreach ($arrContent as $strSingleEntry) {
 
-                if(substr($strSingleEntry, -4) == ".php") {
+                if (substr($strSingleEntry, -4) == ".php") {
 
                     $strKey = array_search($strSingleEntry, $arrReturn);
-                    if($strKey !== false) {
+                    if ($strKey !== false) {
                         unset($arrReturn[$strKey]);
                     }
                     $arrReturn[_projectpath_._langpath_."/".$strFolder."/".$strSingleEntry] = $strSingleEntry;
@@ -276,38 +304,39 @@ class class_resourceloader {
      * @param string $strFolder
      * @param array $arrExtensionFilter
      * @param bool $bitWithSubfolders includes folders into the return set, otherwise only files will be returned
-     * @param callable $objFilterFunction
-     * @param callable $objWalkFunction
+     * @param Closure $objFilterFunction
+     * @param Closure $objWalkFunction
      *
      * @return array
      * @see http://php.net/manual/de/function.array-filter.php
      * @see http://php.net/manual/de/function.array-walk.php
      */
-    public function getFolderContent($strFolder, $arrExtensionFilter = array(), $bitWithSubfolders = false, Closure $objFilterFunction = null, Closure $objWalkFunction = null) {
+    public function getFolderContent($strFolder, $arrExtensionFilter = array(), $bitWithSubfolders = false, Closure $objFilterFunction = null, Closure $objWalkFunction = null)
+    {
         $arrReturn = array();
         $strCachename = md5($strFolder.implode(",", $arrExtensionFilter).($bitWithSubfolders ? "sub" : "nosub"));
 
-        if(isset($this->arrFoldercontent[$strCachename])) {
+        if (isset($this->arrFoldercontent[$strCachename])) {
             return $this->applyCallbacks($this->arrFoldercontent[$strCachename], $objFilterFunction, $objWalkFunction);
         }
 
         $this->bitCacheSaveRequired = true;
 
         //loop all given modules
-        foreach($this->arrModules as $strCorePath => $strSingleModule) {
-            if(is_dir(_realpath_."/".$strCorePath.$strFolder)) {
+        foreach ($this->arrModules as $strCorePath => $strSingleModule) {
+            if (is_dir(_realpath_."/".$strCorePath.$strFolder)) {
                 $arrContent = scandir(_realpath_."/".$strCorePath.$strFolder);
-                foreach($arrContent as $strSingleEntry) {
+                foreach ($arrContent as $strSingleEntry) {
 
-                    if(($strSingleEntry != "." && $strSingleEntry != "..") && ($bitWithSubfolders || is_file(_realpath_."/".$strCorePath.$strFolder."/".$strSingleEntry))) {
+                    if (($strSingleEntry != "." && $strSingleEntry != "..") && ($bitWithSubfolders || is_file(_realpath_."/".$strCorePath.$strFolder."/".$strSingleEntry))) {
                         //Wanted Type?
-                        if(count($arrExtensionFilter)==0) {
+                        if (count($arrExtensionFilter) == 0) {
                             $arrReturn["/".$strCorePath.$strFolder."/".$strSingleEntry] = $strSingleEntry;
                         }
                         else {
                             //check, if suffix is in allowed list
                             $strFileSuffix = uniSubstr($strSingleEntry, uniStrrpos($strSingleEntry, "."));
-                            if(in_array($strFileSuffix, $arrExtensionFilter)) {
+                            if (in_array($strFileSuffix, $arrExtensionFilter)) {
                                 $arrReturn["/".$strCorePath.$strFolder."/".$strSingleEntry] = $strSingleEntry;
                             }
                         }
@@ -319,15 +348,15 @@ class class_resourceloader {
 
 
         //check if the same is available in the projects-folder and overwrite the first hits
-        if(is_dir(_realpath_._projectpath_."/".$strFolder)) {
+        if (is_dir(_realpath_._projectpath_."/".$strFolder)) {
             $arrContent = scandir(_realpath_._projectpath_."/".$strFolder);
-            foreach($arrContent as $strSingleEntry) {
+            foreach ($arrContent as $strSingleEntry) {
 
                 //Wanted Type?
-                if(count($arrExtensionFilter)==0) {
+                if (count($arrExtensionFilter) == 0) {
 
                     $strKey = array_search($strSingleEntry, $arrReturn);
-                    if($strKey !== false) {
+                    if ($strKey !== false) {
                         unset($arrReturn[$strKey]);
                     }
                     $arrReturn[_projectpath_."/".$strFolder."/".$strSingleEntry] = $strSingleEntry;
@@ -336,9 +365,9 @@ class class_resourceloader {
                 else {
                     //check, if suffix is in allowed list
                     $strFileSuffix = uniSubstr($strSingleEntry, uniStrrpos($strSingleEntry, "."));
-                    if(in_array($strFileSuffix, $arrExtensionFilter)) {
+                    if (in_array($strFileSuffix, $arrExtensionFilter)) {
                         $strKey = array_search($strSingleEntry, $arrReturn);
-                        if($strKey !== false) {
+                        if ($strKey !== false) {
                             unset($arrReturn[$strKey]);
                         }
                         $arrReturn[_projectpath_."/".$strFolder."/".$strSingleEntry] = $strSingleEntry;
@@ -363,19 +392,24 @@ class class_resourceloader {
      *
      * @return array
      */
-    private function applyCallbacks($arrEntries, Closure $objFilterCallback = null, Closure $objWalkCallback = null) {
-        if($objFilterCallback == null || !is_callable($objFilterCallback))
+    private function applyCallbacks($arrEntries, Closure $objFilterCallback = null, Closure $objWalkCallback = null)
+    {
+        if (($objFilterCallback == null || !is_callable($objFilterCallback)) && ($objWalkCallback == null || !is_callable($objWalkCallback))) {
             return $arrEntries;
+        }
 
         $arrTemp = array();
-        foreach($arrEntries as $strKey => $strValue)
+        foreach ($arrEntries as $strKey => $strValue) {
             $arrTemp[$strKey] = $strValue;
+        }
 
-        if($objFilterCallback !== null)
-            $arrTemp =  array_filter($arrTemp, $objFilterCallback);
+        if ($objFilterCallback !== null) {
+            $arrTemp = array_filter($arrTemp, $objFilterCallback);
+        }
 
-        if($objWalkCallback !== null)
+        if ($objWalkCallback !== null) {
             array_walk($arrTemp, $objWalkCallback);
+        }
 
         return $arrTemp;
     }
@@ -386,18 +420,20 @@ class class_resourceloader {
      *
      * @param string $strFile the relative path
      * @param bool $bitCheckProject en- or disables the lookup in the /project folder
+     *
      * @return string|bool the absolute path
      */
-    public function getPathForFile($strFile, $bitCheckProject = true) {
+    public function getPathForFile($strFile, $bitCheckProject = true)
+    {
 
         //check if the same is available in the projects-folder
-        if($bitCheckProject && is_file(_realpath_._projectpath_."/".$strFile)) {
+        if ($bitCheckProject && is_file(_realpath_._projectpath_."/".$strFile)) {
             return str_replace("//", "/", _projectpath_."/".$strFile);
         }
 
         //loop all given modules
-        foreach($this->arrModules as $strPath => $strSingleModule) {
-            if(is_file(_realpath_."/".$strPath."/".$strFile)) {
+        foreach ($this->arrModules as $strPath => $strSingleModule) {
+            if (is_file(_realpath_."/".$strPath."/".$strFile)) {
                 return str_replace("//", "/", "/".$strPath."/".$strFile);
             }
         }
@@ -412,20 +448,22 @@ class class_resourceloader {
      *
      * @param string $strFolder the relative path
      * @param bool $bitCheckProject en- or disables the lookup in the /project folder
+     *
      * @return string|bool the absolute path
      *
      * @todo may be cached?
      */
-    public function getPathForFolder($strFolder, $bitCheckProject = true) {
+    public function getPathForFolder($strFolder, $bitCheckProject = true)
+    {
 
         //check if the same is available in the projects-folder
-        if($bitCheckProject && is_dir(_realpath_._projectpath_."/".$strFolder)) {
+        if ($bitCheckProject && is_dir(_realpath_._projectpath_."/".$strFolder)) {
             return str_replace("//", "/", _projectpath_."/".$strFolder);
         }
 
         //loop all given modules
-        foreach($this->arrModules as $strPath => $strSingleModule) {
-            if(is_dir(_realpath_."/".$strPath."/".$strFolder)) {
+        foreach ($this->arrModules as $strPath => $strSingleModule) {
+            if (is_dir(_realpath_."/".$strPath."/".$strFolder)) {
                 return str_replace("//", "/", "/".$strPath."/".$strFolder);
 
             }
@@ -443,11 +481,13 @@ class class_resourceloader {
      *
      * @return string
      */
-    public function getCorePathForModule($strModule, $bitPrependRealpath = false) {
+    public function getCorePathForModule($strModule, $bitPrependRealpath = false)
+    {
         $arrFlipped = array_flip($this->arrModules);
 
-        if(!array_key_exists($strModule, $arrFlipped))
+        if (!array_key_exists($strModule, $arrFlipped)) {
             return null;
+        }
 
         $strPath = uniSubstr(uniStrReplace($strModule, "", $arrFlipped[$strModule]), 0, -1);
 
@@ -463,7 +503,8 @@ class class_resourceloader {
      *
      * @return string
      */
-    public function getCorePathForPath($strPath, $bitPrependRealpath = false) {
+    public function getCorePathForPath($strPath, $bitPrependRealpath = false)
+    {
         $strPath = uniStrReplace(_realpath_."/", "", $strPath);
         $strPath = uniSubstr($strPath, 0, uniStrpos($strPath, "/"));
 
@@ -473,9 +514,11 @@ class class_resourceloader {
 
     /**
      * Returns the list of modules and elements under the /core folder
+     *
      * @return array [folder/module] => [module]
      */
-    public function getArrModules() {
+    public function getArrModules()
+    {
         return $this->arrModules;
     }
 

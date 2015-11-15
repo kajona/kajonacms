@@ -13,25 +13,9 @@
  * @package module_workflows
  * @since 4.5
  */
-class class_messageprovider_summary implements interface_messageprovider {
+class class_messageprovider_summary implements interface_messageprovider_extended {
 
-    /**
-     * Called whenever a message is being deleted
-     *
-     * @param class_module_messaging_message $objMessage
-     * @return void
-     */
-    public function onDelete(class_module_messaging_message $objMessage) {
-    }
 
-    /**
-     * Called whenever a message is set as read
-     *
-     * @param class_module_messaging_message $objMessage
-     * @return void
-     */
-    public function onSetRead(class_module_messaging_message $objMessage) {
-    }
 
     /**
      * Returns the name of the message-provider
@@ -42,4 +26,27 @@ class class_messageprovider_summary implements interface_messageprovider {
         return class_carrier::getInstance()->getObjLang()->getLang("messageprovider_workflows_summary", "workflows");
     }
 
+    /**
+     * @inheritDoc
+     */
+    public function isAlwaysActive()
+    {
+        return false;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function isAlwaysByMail()
+    {
+        return false;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function isVisibleInConfigView()
+    {
+        return true;
+    }
 }

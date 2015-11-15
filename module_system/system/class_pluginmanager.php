@@ -51,24 +51,31 @@ class class_pluginmanager {
         $strKey = md5($this->strSearchPath.$this->strPluginPoint);
         if(!array_key_exists($strKey, self::$arrPluginClasses)) {
             $strPluginPoint = $this->strPluginPoint;
-            $arrClasses = class_resourceloader::getInstance()->getFolderContent($this->strSearchPath, array(".php"), false, function($strOneFile) use ($strPluginPoint) {
-                $strOneFile = uniSubstr($strOneFile, 0, -4);
+            $arrClasses = class_resourceloader::getInstance()->getFolderContent($this->strSearchPath, array(".php"), false, null,
+            function(&$strOneFile, $strPath) use ($strPluginPoint, $arrConstructorArguments) {
 
-                if(uniStripos($strOneFile, "class_") === false || uniStrpos($strOneFile, "class_testbase") !== false)
-                    return false;
+                $strClassname = class_classloader::getInstance()->getClassnameFromFilename($strPath);
 
-                $objReflection = new ReflectionClass($strOneFile);
-                if(!$objReflection->isAbstract() && $objReflection->implementsInterface("interface_generic_plugin")) {
-                    $objMethod = $objReflection->getMethod("getExtensionName");
-                    if($objMethod->invoke(null) == $strPluginPoint)
-                        return true;
+                if($strClassname == null) {
+                    $strOneFile = null;
+                    return;
                 }
 
-                return false;
-            },
-            function(&$strOneFile) {
-                $strOneFile = uniSubstr($strOneFile, 0, -4);
+                $objReflection = new ReflectionClass($strClassname);
+
+                if($objReflection->isInstantiable() && $objReflection->implementsInterface("interface_generic_plugin")) {
+                    if($objReflection->hasMethod("getExtensionName") && $objReflection->getMethod("getExtensionName")->invoke(null) == $strPluginPoint) {
+                        $strOneFile = $strClassname;
+                        return;
+                    }
+                }
+
+                $strOneFile = null;
+
             });
+
+
+            $arrClasses = array_filter($arrClasses, function ($strClass) { return $strClass !== null; });
 
             self::$arrPluginClasses[$strKey] = $arrClasses;
         }

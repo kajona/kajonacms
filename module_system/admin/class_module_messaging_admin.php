@@ -89,10 +89,12 @@ JS;
             $bitAlwaysEnabled = $objOneProvider instanceof interface_messageprovider_extended && $objOneProvider->isAlwaysActive();
             $bitAlwaysMail = $objOneProvider instanceof interface_messageprovider_extended && $objOneProvider->isAlwaysByMail();
 
+            $strClassname = uniStrReplace("\\", "", get_class($objOneProvider));
+
             $arrRows[] = array(
                 $objOneProvider->getStrName(),
-                "inlineFormEntry 1" => $this->objToolkit->formInputOnOff(get_class($objOneProvider)."_enabled", $this->getLang("provider_enabled"), $objConfig->getBitEnabled() == 1, $bitAlwaysEnabled, $strCallback),
-                "inlineFormEntry 2" => $this->objToolkit->formInputOnOff(get_class($objOneProvider)."_bymail", $this->getLang("provider_bymail"), $objConfig->getBitBymail() == 1, $bitAlwaysMail, $strCallback, ($bitAlwaysMail ? "blockEnable" : ""))
+                "inlineFormEntry 1" => $this->objToolkit->formInputOnOff($strClassname."_enabled", $this->getLang("provider_enabled"), $objConfig->getBitEnabled() == 1, $bitAlwaysEnabled, $strCallback),
+                "inlineFormEntry 2" => $this->objToolkit->formInputOnOff($strClassname."_bymail", $this->getLang("provider_bymail"), $objConfig->getBitBymail() == 1, $bitAlwaysMail, $strCallback, ($bitAlwaysMail ? "blockEnable" : ""))
             );
 
         }
@@ -156,9 +158,11 @@ JS;
 
         foreach($arrMessageproviders as $objOneProvider) {
 
+            $strClassname = uniStrReplace("\\", "", get_class($objOneProvider));
+
             $objConfig = class_module_messaging_config::getConfigForUserAndProvider($this->objSession->getUserID(), $objOneProvider);
-            $objConfig->setBitBymail($this->getParam(get_class($objOneProvider)."_bymail") != "");
-            $objConfig->setBitEnabled($this->getParam(get_class($objOneProvider)."_enabled") != "");
+            $objConfig->setBitBymail($this->getParam($strClassname."_bymail") != "");
+            $objConfig->setBitEnabled($this->getParam($strClassname."_enabled") != "");
             $objConfig->updateObjectToDb();
 
         }
@@ -183,8 +187,10 @@ JS;
         foreach($arrMessageproviders as $objOneProvider) {
             $objConfig = class_module_messaging_config::getConfigForUserAndProvider($this->objSession->getUserID(), $objOneProvider);
 
+            $strClassname = uniStrReplace("\\", "", get_class($objOneProvider));
+
             //only update the message provider which is set in the param "messageprovidertype"
-            if($this->getParam("messageprovidertype") == get_class($objOneProvider)) {
+            if($this->getParam("messageprovidertype") == $strClassname) {
                 if($this->getParam(get_class($objOneProvider)."_bymail") != "") {
                     $bitA = $this->getParam(get_class($objOneProvider)."_bymail") == "true";
                     $objConfig->setBitBymail($bitA);
@@ -193,8 +199,8 @@ JS;
                     break;
 
                 }
-                else if($this->getParam(get_class($objOneProvider)."_enabled") != "") {
-                    $bitA = $this->getParam(get_class($objOneProvider)."_enabled") == "true";
+                else if($this->getParam($strClassname."_enabled") != "") {
+                    $bitA = $this->getParam($strClassname."_enabled") == "true";
                     $objConfig->setBitEnabled($bitA);
                     $objConfig->updateObjectToDb();
                     $strMessage = $objOneProvider->getStrName()." ".$this->getLang("provider_enabled")."=".$this->getParam(get_class($objOneProvider)."_enabled");
@@ -249,6 +255,28 @@ JS;
      */
     protected function actionList() {
 
+        //render two multi-buttons
+        $strReturn = "";
+
+
+        //create the list-button and the js code to show the dialog
+        $strDeleteAllRead = class_link::getLinkAdminManual(
+            "href=\"#\" onclick=\"javascript:jsDialog_1.setTitle('".class_carrier::getInstance()->getObjLang()->getLang("dialog_deleteHeader", "system")."'); jsDialog_1.setContent('".$this->getLang("delete_all_read_question")."', '".class_carrier::getInstance()->getObjLang()->getLang("dialog_deleteButton", "system")."',  function() {jsDialog_3.init(); document.location.href= '".getLinkAdminHref($this->getArrModule("module"), "deleteAllRead")."';}); jsDialog_1.init(); return false;\"",
+            $this->getLang("action_delete_all_read")
+        );
+
+        $strDeleteAll = class_link::getLinkAdminManual(
+            "href=\"#\" onclick=\"javascript:jsDialog_1.setTitle('".class_carrier::getInstance()->getObjLang()->getLang("dialog_deleteHeader", "system")."'); jsDialog_1.setContent('".$this->getLang("delete_all_question")."', '".class_carrier::getInstance()->getObjLang()->getLang("dialog_deleteButton", "system")."',  function() {jsDialog_3.init(); document.location.href= '".getLinkAdminHref($this->getArrModule("module"), "deleteAll")."';}); jsDialog_1.init(); return false;\"",
+            $this->getLang("action_delete_all")
+        );
+
+
+        $strReturn .= $this->objToolkit->getContentToolbar(array(
+            getLinkAdmin($this->getArrModule("module"), "setAllRead", "", $this->getLang("action_set_all_read")),
+            $strDeleteAllRead,
+            $strDeleteAll
+        ));
+
         $objArraySectionIterator = new class_array_section_iterator(class_module_messaging_message::getNumberOfMessagesForUser($this->objSession->getUserID()));
         $objArraySectionIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
         $objArraySectionIterator->setArraySection(
@@ -259,7 +287,8 @@ JS;
             )
         );
 
-        return $this->renderList($objArraySectionIterator);
+        $strReturn .= $this->renderList($objArraySectionIterator);
+        return$strReturn;
 
     }
 
@@ -277,6 +306,38 @@ JS;
         return $arrDefault;
     }
 
+    /**
+     * @return string
+     * @permissions delete
+     */
+    protected function actionDeleteAllRead()
+    {
+        class_module_messaging_message::deleteAllReadMessages($this->objSession->getUserID());
+        $this->adminReload(getLinkAdminHref($this->getArrModule("modul"), "list"));
+        return "";
+    }
+
+    /**
+     * @return string
+     * @permissions delete
+     */
+    protected function actionDeleteAll()
+    {
+        class_module_messaging_message::deleteAllMessages($this->objSession->getUserID());
+        $this->adminReload(getLinkAdminHref($this->getArrModule("modul"), "list"));
+        return "";
+    }
+
+    /**
+     * @return string
+     * @permissions view
+     */
+    protected function actionSetAllRead()
+    {
+        class_module_messaging_message::markAllMessagesAsRead($this->objSession->getUserID());
+        $this->adminReload(getLinkAdminHref($this->getArrModule("modul"), "list"));
+        return "";
+    }
 
     /**
      * Marks a single message as read

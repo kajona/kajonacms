@@ -123,13 +123,28 @@ class class_module_user_sourcefactory {
      */
     public function getUserlistByUserquery($strParam) {
 
+        $strDbPrefix = _dbprefix_;
         //validate if a group with the given name is available
-        if(version_compare(class_module_system_module::getModuleByName("user")->getStrVersion(), "4.5", ">="))
-            $strQuery = "SELECT user_id, user_subsystem FROM " . _dbprefix_ . "user where user_username LIKE ? AND user_active = 1 AND (user_deleted = 0 OR user_deleted IS NULL)";
-        else
-            $strQuery = "SELECT user_id, user_subsystem FROM " . _dbprefix_ . "user where user_username LIKE ? AND user_active = 1";
+        if(version_compare(class_module_system_module::getModuleByName("user")->getStrVersion(), "4.5", ">=")) {
 
-        $arrRows = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array("%" . $strParam . "%"));
+            $strQuery = "SELECT user_tbl.user_id, user_tbl.user_subsystem
+                          FROM {$strDbPrefix}user AS user_tbl
+                          LEFT JOIN {$strDbPrefix}user_kajona AS user_kajona ON user_tbl.user_id = user_kajona.user_id
+                          WHERE
+                              (user_tbl.user_username LIKE ? OR user_kajona.user_forename LIKE ? OR user_kajona.user_name LIKE ?)
+
+                              AND (user_tbl.user_deleted = 0 OR user_tbl.user_deleted IS NULL)
+                              AND user_active = 1
+                          ORDER BY user_tbl.user_username, user_tbl.user_subsystem ASC";
+
+            $arrParams = array("%".$strParam."%", "%".$strParam."%", "%".$strParam."%");
+        }
+        else {
+            $strQuery = "SELECT user_id, user_subsystem FROM {$strDbPrefix}user where user_username LIKE ? AND user_active = 1";
+            $arrParams = array("%".$strParam."%");
+        }
+
+        $arrRows = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, $arrParams);
 
         $arrReturn = array();
         foreach($arrRows as $arrOneRow) {
