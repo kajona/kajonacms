@@ -367,7 +367,7 @@ class class_resourceloader
                 foreach (new RecursiveIteratorIterator($objPhar) as $strFile) {
                     $strPath = substr($strFile->getPathname(), strlen(_realpath_) + 6);
                     if (strpos($strPath, $strFolder) !== false) {
-                        $arrReturn[$strPath] = $strFile->getFilename();
+                        $arrReturn[$strFile->getPathname()] = $strFile->getFilename();
                     }
                 }
             }
