@@ -244,7 +244,11 @@ class PagesPortalController extends class_portal_controller implements interface
         $arrGlobal = array();
         $strPath = class_resourceloader::getInstance()->getPathForFile("/portal/global_includes.php");
         if ($strPath !== false) {
-            include(_realpath_.$strPath);
+            if (is_file($strPath)) {
+                include($strPath);
+            } else {
+                include(_realpath_.$strPath);
+            }
         }
 
         $arrTemplate = array_merge($arrTemplate, $arrGlobal);
