@@ -603,6 +603,3 @@ KAJONA.admin.tooltip = {
 };
 
 KAJONA.admin.tooltip.initTooltip();
-
-// init lang
-KAJONA.admin.lang.initializeProperties();
