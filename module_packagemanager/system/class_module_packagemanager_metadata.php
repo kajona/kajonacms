@@ -6,6 +6,8 @@
 *	$Id$                                  *
 ********************************************************************************************************/
 
+use Kajona\System\System\PharModule;
+
 /**
  * Helper class, used to read the metadata-files from packages or the filesystem.
  * Read access only!
@@ -92,7 +94,7 @@ class class_module_packagemanager_metadata implements interface_admin_listable {
     public function autoInit($strPath) {
         if(uniSubstr($strPath, -4) == ".zip") {
             $this->initFromPackage($strPath);
-        } elseif (uniSubstr($strPath, -5) == ".phar") {
+        } elseif (PharModule::isPhar($strPath)) {
             $this->initFromPhar($strPath);
         } else {
             $this->initFromFilesystem($strPath);
@@ -129,7 +131,7 @@ class class_module_packagemanager_metadata implements interface_admin_listable {
         } else {
             $strFile = _realpath_.$strPackage;
         }
-        
+
         $objPhar = new Phar($strFile);
 
         if(!isset($objPhar["metadata.xml"])) {
@@ -178,7 +180,7 @@ class class_module_packagemanager_metadata implements interface_admin_listable {
         $this->setStrAuthor($arrXml["package"]["0"]["author"]["0"]["value"]);
         if(isset($arrXml["package"]["0"]["target"]["0"]["value"]))
             $this->setStrTarget($arrXml["package"]["0"]["target"]["0"]["value"]);
-        
+
         $this->setStrType($arrXml["package"]["0"]["type"]["0"]["value"]);
         $this->setBitProvidesInstaller($arrXml["package"]["0"]["providesInstaller"]["0"]["value"] == "TRUE");
 
