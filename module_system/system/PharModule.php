@@ -36,7 +36,7 @@ class PharModule
     public function load($arrCodeFolders)
     {
         $arrCodeFiles = [];
-        foreach (new \RecursiveIteratorIterator($this->objPhar) as $objFile) {
+        foreach ($this->getFileIterator() as $objFile) {
             // Make sure the file is a PHP file and is inside the requested folder
             $strArchivePath = $this->getRelativeFilePath($objFile);
 
@@ -67,30 +67,52 @@ class PharModule
     // }
 
     /**
+     * Return a file iterator
+     *
+     * @return RecursiveIteratorIterator
+     */
+    public function getFileIterator()
+    {
+        return new \RecursiveIteratorIterator($this->objPhar);
+    }
+
+    /**
      * Check whether a given path is a Phar file.
      *
-     * @param string Path to Phar file.
+     * @param string Path to Phar archive file.
      * @return bool
      */
-    public static function isPhar($strPath)
+    public static function isPhar($strPharFilePath)
     {
-        return uniStrpos($strPath, ".phar") !== false;
+        return uniStrpos($strPharFilePath, ".phar") !== false;
     }
 
     /**
      * Returns a Phar file's name withou extension.
      *
-     * @param string Path to Phar file.
+     * @param string Path to Phar archive file.
      * @return string
      */
-    public static function getPharBasename($strPath)
+    public static function getPharBasename($strPharFilePath)
     {
-        $intExtensionPos = uniStrpos($strPath, ".phar");
+        $intExtensionPos = uniStrpos($strPharFilePath, ".phar");
         if ($intExtensionPos !== false) {
-            return substr($strPath, 0, $intExtensionPos);
+            return substr($strPharFilePath, 0, $intExtensionPos);
         }
 
         return false;
+    }
+
+    /**
+     * Returns the phar:// path to a file inside a Phar archive
+     *
+     * @param string Absolute path to the Phar archive file.
+     * @param string Relative path to the file inside the Phar archive
+     * @return string
+     */
+    public static function getPharStreamPath($strPharFilePath, $strContentFilePath)
+    {
+        return "phar://".$strPharFilePath.$strContentFilePath;
     }
 
     /**

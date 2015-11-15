@@ -6,6 +6,8 @@
 *    $Id$                                            *
 ********************************************************************************************************/
 
+use Kajona\System\System\PharModule;
+
 /**
  * Loader to dynamically resolve and load resources (this is mapping a virtual file-name to a real filename,
  * relative to the project-root).
@@ -165,10 +167,10 @@ class class_resourceloader
                     $strFilename = "/".$strCorePath."/templates/default/tpl".$strTemplateName;
                     break;
                 }
-            } elseif (is_file(_realpath_."/".$strCorePath)) {
-                $strPhar = "phar://" . _realpath_."/".$strCorePath."/templates/default/tpl".$strTemplateName;
-                if (is_file($strPhar)) {
-                    $strFilename = $strPhar;
+            } elseif (PharModule::isPhar(_realpath_."/".$strCorePath)) {
+                $strAbsolutePath = PharModule::getPharStreamPath(_realpath_."/".$strCorePath, "/templates/default/tpl".$strTemplateName);
+                if (is_file($strAbsolutePath)) {
+                    $strFilename = $strAbsolutePath;
                     break;
                 }
             }
@@ -275,13 +277,13 @@ class class_resourceloader
                         $arrReturn["/".$strCorePath._langpath_."/".$strFolder."/".$strSingleEntry] = $strSingleEntry;
                     }
                 }
-            } elseif (is_file(_realpath_."/".$strCorePath)) {
+            } elseif (PharModule::isPhar(_realpath_."/".$strCorePath)) {
 
-                $phar = new Phar(_realpath_."/".$strCorePath, 0);
-                foreach (new RecursiveIteratorIterator($phar) as $file) {
-                    if (strpos($file->getPathname(), $strFolder) !== false) {
+                $objPhar = new PharModule($strCorePath);
+                foreach ($objPhar->getFileIterator() as $objFile) {
+                    if (strpos($objFile->getPathname(), $strFolder) !== false) {
 
-                        $arrReturn[$file->getPathname()] = $file->getFilename();
+                        $arrReturn[$objFile->getPathname()] = $objFile->getFilename();
 
                     }
                 }
@@ -363,11 +365,11 @@ class class_resourceloader
 
                 }
             } elseif (is_file(_realpath_."/".$strCorePath)) {
-                $objPhar = new Phar(_realpath_."/".$strCorePath, 0);
-                foreach (new RecursiveIteratorIterator($objPhar) as $strFile) {
-                    $strPath = substr($strFile->getPathname(), strlen(_realpath_) + 6);
+                $objPhar = new PharModule($strCorePath);
+                foreach ($objPhar->getFileIterator() as $objFile) {
+                    $strPath = substr($objFile->getPathname(), strlen(_realpath_) + 6);
                     if (strpos($strPath, $strFolder) !== false) {
-                        $arrReturn[$strFile->getPathname()] = $strFile->getFilename();
+                        $arrReturn[$objFile->getPathname()] = $objFile->getFilename();
                     }
                 }
             }
@@ -461,11 +463,11 @@ class class_resourceloader
         foreach ($this->arrModules as $strPath => $strSingleModule) {
             if (is_file(_realpath_."/".$strPath."/".$strFile)) {
                 return str_replace("//", "/", "/".$strPath."/".$strFile);
-            } elseif (is_file(_realpath_."/".$strPath)) {
+            } elseif (PharModule::isPhar($strPath)) {
                 // phar
-                $strPhar = "phar://" . _realpath_."/".$strPath . $strFile;
+                $strPhar = PharModule::getPharStreamPath(_realpath_."/".$strPath, "/".$strFile);
                 if (is_file($strPhar)) {
-                    return $strPhar;
+                    return str_replace("//", "/", $strPhar);
                 }
             }
         }
