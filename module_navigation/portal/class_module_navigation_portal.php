@@ -176,13 +176,13 @@ class class_module_navigation_portal extends class_portal_controller implements 
 
                 //Create the navigation point
                 if ($intI == 0) {
-                    $strCurrentPoint = $this->createNavigationPoint($arrOneChild["node"], $bitActive, $intLevel, true);
+                    $strCurrentPoint = $this->createNavigationPoint($arrOneChild["node"], $bitActive, $intLevel, true, false, count($arrOneChild["subnodes"]) > 0);
                 }
                 elseif ($intI == $intNrOfChilds - 1) {
-                    $strCurrentPoint = $this->createNavigationPoint($arrOneChild["node"], $bitActive, $intLevel, false, true);
+                    $strCurrentPoint = $this->createNavigationPoint($arrOneChild["node"], $bitActive, $intLevel, false, true, count($arrOneChild["subnodes"]) > 0);
                 }
                 else {
-                    $strCurrentPoint = $this->createNavigationPoint($arrOneChild["node"], $bitActive, $intLevel);
+                    $strCurrentPoint = $this->createNavigationPoint($arrOneChild["node"], $bitActive, $intLevel, false, false, count($arrOneChild["subnodes"]) > 0);
                 }
 
                 //And load all points below
@@ -492,7 +492,7 @@ class class_module_navigation_portal extends class_portal_controller implements 
      *
      * @return string
      */
-    private function createNavigationPoint(class_module_navigation_point $objPointData, $bitActive, $intLevel, $bitFirst = false, $bitLast = false)
+    private function createNavigationPoint(class_module_navigation_point $objPointData, $bitActive, $intLevel, $bitFirst = false, $bitLast = false, $bitHasChildEntries = false)
     {
         //and start to create a link and all needed stuff
         $arrTemp = array();
@@ -525,17 +525,20 @@ class class_module_navigation_portal extends class_portal_controller implements 
 
         //Load the correct template
         $strSection = "level_".$intLevel."_".($bitActive ? "active" : "inactive").($bitFirst ? "_first" : "").($bitLast ? "_last" : "");
-        $strTemplateId = $this->objTemplate->readTemplate("/module_navigation/".$this->arrElementData["navigation_template"], $strSection);
-        //Fill the template
-        $strReturn = $this->objTemplate->fillTemplate($arrTemp, $strTemplateId, false);
+
         //BUT: if we received an empty string and are in the situation of a first or last point, then maybe the template
         //     didn't supply a first / last section. so we'll try to load a regular point
-        if ($strReturn == "" && ($bitFirst || $bitLast)) {
+        if(!$this->objTemplate->providesPlaceholder("/module_navigation/".$this->arrElementData["navigation_template"], $strSection."_withchilds") && ($bitFirst || $bitLast)) {
             $strSection = "level_".$intLevel."_".($bitActive ? "active" : "inactive");
-            $strTemplateId = $this->objTemplate->readTemplate("/module_navigation/".$this->arrElementData["navigation_template"], $strSection);
-            //And fill it once more
-            $strReturn = $this->objTemplate->fillTemplate($arrTemp, $strTemplateId, false);
         }
+
+        //add the _withchilds suffix additionally
+        if($bitHasChildEntries && $this->objTemplate->providesPlaceholder("/module_navigation/".$this->arrElementData["navigation_template"], $strSection."_withchilds")) {
+            $strSection .= "_withchilds"; //FIXME: to the docs, plz
+        }
+
+        //Fill the template
+        $strReturn = $this->objTemplate->fillTemplateFile($arrTemp, "/module_navigation/".$this->arrElementData["navigation_template"], $strSection, false);
 
         return $strReturn;
     }
