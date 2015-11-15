@@ -1391,12 +1391,12 @@ KAJONA.admin.lang.initializeProperties = function(containerEl){
  * The requests are triggered sequential so that we send per module only one request
  */
 KAJONA.admin.lang.fetchProperties = function(){
-    if (KAJONA.admin.lang.queue == 0) {
+    if (KAJONA.admin.lang.queue.length == 0) {
         return;
     }
 
     var arrData = KAJONA.admin.lang.queue[0];
-    var strKey = arrData.module + '_' + arrData.text;
+    var strKey = arrData.module + '_' + KAJONA_LANGUAGE + '_' + KAJONA_BROWSER_CACHEBUSTER + '_' + arrData.text;
     var strResp = KAJONA.util.cacheManager.get(strKey);
     if (strResp) {
         arrData = KAJONA.admin.lang.queue.shift();
@@ -1410,28 +1410,25 @@ KAJONA.admin.lang.fetchProperties = function(){
         return;
     }
 
-    $.ajax({
-        url: KAJONA_WEBPATH + '/xml.php?admin=1&module=system&action=fetchProperty&target_module=' + encodeURIComponent(arrData.module),
-        type: 'POST',
-        success: function(objResp){
-            var arrData = KAJONA.admin.lang.queue.shift();
+    KAJONA.admin.ajax.genericAjaxCall("system", "fetchProperty", "&target_module=" + encodeURIComponent(arrData.module), function(strResp){
+        var arrData = KAJONA.admin.lang.queue.shift();
+        var objResp = JSON.parse(strResp);
 
-            var strResp = null;
-            for (strKey in objResp) {
-                if (arrData.text == strKey) {
-                    strResp = objResp[strKey];
-                }
-                KAJONA.util.cacheManager.set(arrData.module + '_' + strKey, objResp[strKey]);
+        var strResp = null;
+        for (strKey in objResp) {
+            if (arrData.text == strKey) {
+                strResp = objResp[strKey];
             }
-            if (strResp !== null) {
-                strResp = KAJONA.admin.lang.replacePropertyParams(strResp, arrData.params);
-                if (typeof arrData.callback === "function") {
-                    arrData.callback.apply(arrData.scope ? arrData.scope : this, [strResp, arrData.module, arrData.text]);
-                }
-            }
-
-            KAJONA.admin.lang.fetchProperties();
+            KAJONA.util.cacheManager.set(arrData.module + '_' + KAJONA_LANGUAGE + '_' + KAJONA_BROWSER_CACHEBUSTER + '_' + strKey, objResp[strKey]);
         }
+        if (strResp !== null) {
+            strResp = KAJONA.admin.lang.replacePropertyParams(strResp, arrData.params);
+            if (typeof arrData.callback === "function") {
+                arrData.callback.apply(arrData.scope ? arrData.scope : this, [strResp, arrData.module, arrData.text]);
+            }
+        }
+
+        KAJONA.admin.lang.fetchProperties();
     });
 };
 
