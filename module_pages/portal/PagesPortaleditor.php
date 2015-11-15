@@ -10,6 +10,7 @@ use class_model;
 use class_module_system_setting;
 use class_objectfactory;
 use Kajona\Pages\System\PagesPortaleditorActionAbstract;
+use Kajona\Pages\System\PagesPortaleditorActionEnum;
 use Kajona\Pages\System\PagesPortaleditorPlaceholderAction;
 use Kajona\Pages\System\PagesPortaleditorSystemidAction;
 
@@ -45,8 +46,23 @@ class PagesPortaleditor  {
      * @return string
      */
     public function convertToJs() {
+
+        $arrActions = $this->arrActions;
+        usort($arrActions, function(PagesPortaleditorActionAbstract $objActionA, PagesPortaleditorActionAbstract $objActionB) {
+
+            if($objActionA->getObjAction()->equals(PagesPortaleditorActionEnum::MOVE()) && !$objActionB->getObjAction()->equals(PagesPortaleditorActionEnum::MOVE())) {
+                return -1;
+            }
+
+            if(!$objActionA->getObjAction()->equals(PagesPortaleditorActionEnum::MOVE()) && $objActionB->getObjAction()->equals(PagesPortaleditorActionEnum::MOVE())) {
+                return 1;
+            }
+
+            return strcmp($objActionA->getObjAction(), $objActionB->getObjAction());
+        });
+
         $arrReturn = array("systemid" => array(), "placeholder" => array());
-        foreach($this->arrActions as $objOneAction) {
+        foreach($arrActions as $objOneAction) {
 
             if($objOneAction instanceof PagesPortaleditorSystemidAction) {
                 $arrReturn["systemIds"][$objOneAction->getStrSystemid()][] = array("type" => $objOneAction->getObjAction()."", "link" => $objOneAction->getStrLink());
@@ -56,7 +72,6 @@ class PagesPortaleditor  {
                 $arrReturn["placeholder"][$objOneAction->getStrPlaceholder()][] = array("type" => $objOneAction->getObjAction()."", "link" => $objOneAction->getStrLink(), "element" => $objOneAction->getStrElement(), "name" => $objOneAction->getStrElement());
             }
         }
-
         return json_encode($arrReturn);
     }
 
