@@ -453,7 +453,12 @@ class class_classloader
             $strResolvedClassname = $strClassname;
         }
         else {
-            $strSource = file_get_contents(_realpath_.$strFilename);
+            if (is_file($strFilename)) {
+                $strSource = file_get_contents($strFilename);
+            } else {
+                $strSource = file_get_contents(_realpath_.$strFilename);
+            }
+
             preg_match('/namespace ([a-zA-Z0-9_\x7f-\xff\\\\]+);/', $strSource, $arrMatches);
 
             $strNamespace = isset($arrMatches[1]) ? $arrMatches[1] : null;
