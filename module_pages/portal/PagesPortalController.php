@@ -481,7 +481,6 @@ class PagesPortalController extends class_portal_controller implements interface
                 if($) {
                     KAJONA.portal.loader.loadFile([
                         '/core/module_pages/admin/scripts/kajona_portaleditor.js',
-                        '/core/module_system/admin/scripts/lang.js',
                         '/core/module_system/admin/scripts/jqueryui/jquery-ui.custom.min.js',
                         '/core/module_system/admin/scripts/jqueryui/css/smoothness/jquery-ui.custom.css'
                     ], function() {

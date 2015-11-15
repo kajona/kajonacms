@@ -320,11 +320,17 @@ class class_template
      * @param string $strPlaceholdername
      *
      * @return bool
+     * @deprecated
      */
     public function containsPlaceholder($strIdentifier, $strPlaceholdername)
     {
         return (isset($this->arrTemplateIdMap[$strIdentifier])
             && $this->objPlaceholderParser->containsPlaceholder($this->arrTemplateIdMap[$strIdentifier], $strPlaceholdername));
+    }
+
+    public function providesPlaceholder($strTemplate, $strSection)
+    {
+        return $this->objSectionParser->containsSection($this->objFileParser->readTemplate($strTemplate), $strSection);
     }
 
     /**
