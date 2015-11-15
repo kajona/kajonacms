@@ -4,6 +4,10 @@
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 ********************************************************************************************************/
 
+require __DIR__."/PharModule.php";
+
+use Kajona\System\System\PharModule;
+
 /**
  * Class-loader for all Kajona classes.
  * Implemented as a singleton.
@@ -193,12 +197,10 @@ class class_classloader
 
             foreach (scandir(_realpath_."/".$strRootFolder) as $strOneModule) {
                 $strModuleName = null;
-                $boolIsPhar = false;
+                $boolIsPhar = PharModule::isPhar($strOneModule);
 
-                $pharExtensionPos = uniStrpos($strOneModule, ".phar");
-                if ($pharExtensionPos !== false) {
-                    $strModuleName = substr($strOneModule, 0, $pharExtensionPos);
-                    $boolIsPhar = true;
+                if ($boolIsPhar) {
+                    $strModuleName = PharModule::getPharBasename($strOneModule);
                 }
                 elseif (preg_match("/^(module|element|_)+.*/i", $strOneModule)) {
                     $strModuleName = $strOneModule;
@@ -284,7 +286,10 @@ class class_classloader
         }
 
         foreach ($this->arrPharModules as $strPath => $strSingleModule) {
-            $this->addPhar($strPath);
+            $objPhar = new PharModule($strPath);
+            $arrFiles = $objPhar->load(self::$arrCodeFolders);
+            // PHAR archive files must never override existing file system files
+            $this->arrFiles += array_diff_key($arrFiles, $this->arrFiles);
         }
     }
 
@@ -324,34 +329,6 @@ class class_classloader
         }
 
         return $arrFiles;
-    }
-
-    private function addPhar($strPharPath)
-    {
-        $phar = new Phar(_realpath_."/".$strPharPath, 0);
-        foreach (new RecursiveIteratorIterator($phar) as $file) {
-            // Make sure the file is a PHP file and is inside the requested folder
-            $strArchivePath = DIRECTORY_SEPARATOR.substr($file->getPathName(), strlen("phar://"._realpath_."/".$strPharPath));
-            $strArchivePath = str_replace("\\", "/", $strArchivePath);
-
-            foreach (self::$arrCodeFolders as $strFolder) {
-              $strFolder = str_replace("\\", "/", $strFolder);
-
-              if (substr($strArchivePath, -4) === ".php"
-                && substr($strArchivePath, 0, strlen($strFolder)) === $strFolder) {
-                  $strFilename = substr($file->getFileName(), 0, -4);
-                  // PHAR archive files must never override existing file system files
-                  if (!isset($this->arrFiles[$strFilename])) {
-                      $this->arrFiles[$strFilename] = $file->getPathName();
-                  }
-              }
-            }
-
-            // Include the module ID
-            if (preg_match("/module\_([a-z0-9\_])+\_id\.php/", $file->getFileName())) {
-                include_once $file->getPathName();
-            }
-        }
     }
 
 
