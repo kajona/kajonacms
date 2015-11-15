@@ -25,7 +25,8 @@ use Kajona\Pages\System\PagesPortaleditorSystemidAction;
  * @module navigation
  * @moduleId _navigation_modul_id_
  */
-class class_module_navigation_portal extends class_portal_controller implements interface_portal {
+class class_module_navigation_portal extends class_portal_controller implements interface_portal
+{
 
     private $strCurrentSite = "";
 
@@ -52,16 +53,17 @@ class class_module_navigation_portal extends class_portal_controller implements 
      *
      * @param array $arrElementData
      */
-    public function __construct($arrElementData = array(), $strSystemid = "") {
+    public function __construct($arrElementData = array(), $strSystemid = "")
+    {
         parent::__construct($arrElementData, $strSystemid);
 
         //Determine the current site to load
         $this->strCurrentSite = $this->getPagename();
 
         //init with the current navigation, required in all cases
-        if(isset($this->arrElementData["navigation_id"])) {
+        if (isset($this->arrElementData["navigation_id"])) {
 
-            if(!isset(self::$arrStaticNodes[$this->arrElementData["navigation_id"]])) {
+            if (!isset(self::$arrStaticNodes[$this->arrElementData["navigation_id"]])) {
                 /** @var class_module_navigation_tree $objNavigation */
                 $objNavigation = class_objectfactory::getInstance()->getObject($this->arrElementData["navigation_id"]);
                 self::$arrStaticNodes[$this->arrElementData["navigation_id"]] = $objNavigation->getCompleteNaviStructure();
@@ -85,12 +87,13 @@ class class_module_navigation_portal extends class_portal_controller implements 
      *
      * @return string
      */
-    private function addPortaleditorCode($strReturn) {
+    private function addPortaleditorCode($strReturn)
+    {
 
         $objNavigation = new class_module_navigation_tree($this->arrElementData["navigation_id"]);
 
         //only add the code, if not auto-generated
-        if(!validateSystemid($objNavigation->getStrFolderId())) {
+        if (!validateSystemid($objNavigation->getStrFolderId())) {
             PagesPortaleditor::getInstance()->registerAction(
                 new PagesPortaleditorSystemidAction(PagesPortaleditorActionEnum::EDIT(), class_link::getLinkAdminHref($this->getArrModule("module"), "list", "&systemid={$this->arrElementData['navigation_id']}"), $this->arrElementData["navigation_id"])
             );
@@ -112,13 +115,14 @@ class class_module_navigation_portal extends class_portal_controller implements 
      * @return string
      * @permissions view
      */
-    protected function actionNavigationSitemap() {
+    protected function actionNavigationSitemap()
+    {
 
 
         $strReturn = "";
         //check rights on the navigation
         $objNavi = new class_module_navigation_tree($this->arrElementData["navigation_id"]);
-        if($objNavi->rightView() && $objNavi->getIntRecordStatus() == 1) {
+        if ($objNavi->rightView() && $objNavi->getIntRecordStatus() == 1) {
             //create a stack to highlight the points being active
             $objActivePoint = $this->searchPageInNavigationTree($this->strCurrentSite, $this->arrElementData["navigation_id"], $this->getParam("systemid"), $this->getParam("action"));
             $strStack = $this->getActiveIdStack($objActivePoint);
@@ -142,42 +146,50 @@ class class_module_navigation_portal extends class_portal_controller implements 
      * @internal param string $strSystemid
      * @return string
      */
-    private function sitemapRecursive($intLevel, $objStartEntry, $strStack) {
+    private function sitemapRecursive($intLevel, $objStartEntry, $strStack)
+    {
         $strReturn = "";
         $arrChilds = $objStartEntry["subnodes"];
 
         $intNrOfChilds = count($arrChilds);
         //Anything to do right here?
-        if($intNrOfChilds == 0)
+        if ($intNrOfChilds == 0) {
             return "";
+        }
 
         //Iterate over every child
-        for($intI = 0; $intI < $intNrOfChilds; $intI++) {
+        for ($intI = 0; $intI < $intNrOfChilds; $intI++) {
             $arrOneChild = $arrChilds[$intI];
             //Check the rights
-            if($arrOneChild["node"]->rightView()) {
+            if ($arrOneChild["node"]->rightView()) {
 
                 //check if it's a foreign node and whether foreign nodes should be included
-                if($arrOneChild["node"]->getBitIsForeignNode() && $this->arrElementData["navigation_foreign"] === 0)
+                if ($arrOneChild["node"]->getBitIsForeignNode() && $this->arrElementData["navigation_foreign"] === 0) {
                     continue;
+                }
 
                 //current point active?
                 $bitActive = false;
-                if(uniStripos($strStack, $arrOneChild["node"]->getSystemid()) !== false)
+                if (uniStripos($strStack, $arrOneChild["node"]->getSystemid()) !== false) {
                     $bitActive = true;
+                }
 
                 //Create the navigation point
-                if($intI == 0)
+                if ($intI == 0) {
                     $strCurrentPoint = $this->createNavigationPoint($arrOneChild["node"], $bitActive, $intLevel, true);
-                elseif($intI == $intNrOfChilds - 1)
+                }
+                elseif ($intI == $intNrOfChilds - 1) {
                     $strCurrentPoint = $this->createNavigationPoint($arrOneChild["node"], $bitActive, $intLevel, false, true);
-                else
+                }
+                else {
                     $strCurrentPoint = $this->createNavigationPoint($arrOneChild["node"], $bitActive, $intLevel);
+                }
 
                 //And load all points below
                 $strChilds = "";
-                if(uniStrpos($strCurrentPoint, "level".($intLevel + 1)) !== false)
+                if (uniStrpos($strCurrentPoint, "level".($intLevel + 1)) !== false) {
                     $strChilds = $this->sitemapRecursive($intLevel + 1, $arrOneChild, $strStack);
+                }
 
                 //Put the childs below into the current template
                 $this->objTemplate->setTemplate($strCurrentPoint);
@@ -191,8 +203,9 @@ class class_module_navigation_portal extends class_portal_controller implements 
         //wrap into the wrapper-section
         $strLevelTemplateID = $this->objTemplate->readTemplate("/module_navigation/".$this->arrElementData["navigation_template"], "level_".$intLevel."_wrapper");
         $strWrappedLevel = $this->fillTemplate(array("level".$intLevel => $strReturn), $strLevelTemplateID);
-        if(uniStrlen($strWrappedLevel) > 0)
+        if (uniStrlen($strWrappedLevel) > 0) {
             $strReturn = $strWrappedLevel;
+        }
 
         return $strReturn;
     }
@@ -209,27 +222,31 @@ class class_module_navigation_portal extends class_portal_controller implements 
      *
      * @return string
      */
-    private function getActiveIdStack($objActivePoint) {
+    private function getActiveIdStack($objActivePoint)
+    {
         //Loading the points above
         $objTemp = $objActivePoint;
 
-        if($objTemp == null) {
+        if ($objTemp == null) {
             //Special case: no active point found --> load the first level inactive
             return $this->arrElementData["navigation_id"];
         }
 
         $arrStacks = array();
-        foreach($this->arrTempNodes[$this->arrElementData["navigation_id"]]["subnodes"] as $arrOneNode) {
+        foreach ($this->arrTempNodes[$this->arrElementData["navigation_id"]]["subnodes"] as $arrOneNode) {
             $strStack = $this->createActiveIdStackHelper($objActivePoint, $arrOneNode);
-            if($strStack != null)
+            if ($strStack != null) {
                 $arrStacks[] = $strStack.",".$this->arrElementData["navigation_id"];
+            }
         }
 
         $strStack = "";
         //search the deepest stack
-        foreach($arrStacks as $strOneStack)
-            if(uniStrlen($strOneStack) > uniStrlen($strStack))
+        foreach ($arrStacks as $strOneStack) {
+            if (uniStrlen($strOneStack) > uniStrlen($strStack)) {
                 $strStack = $strOneStack;
+            }
+        }
 
 
         return $strStack;
@@ -243,18 +260,19 @@ class class_module_navigation_portal extends class_portal_controller implements 
      *
      * @return string
      */
-    private function createActiveIdStackHelper($objNodeToSearch, $arrNodes) {
+    private function createActiveIdStackHelper($objNodeToSearch, $arrNodes)
+    {
         $strReturn = null;
 
-        if($arrNodes["node"]->getSystemid() == $objNodeToSearch->getSystemid()) {
+        if ($arrNodes["node"]->getSystemid() == $objNodeToSearch->getSystemid()) {
             $strReturn = $objNodeToSearch->getSystemid();
             return $strReturn;
         }
 
 
-        foreach($arrNodes["subnodes"] as $arrOneSubnode) {
+        foreach ($arrNodes["subnodes"] as $arrOneSubnode) {
             $strReturnTemp = $this->createActiveIdStackHelper($objNodeToSearch, $arrOneSubnode);
-            if($strReturnTemp != null) {
+            if ($strReturnTemp != null) {
                 $strReturn = $strReturnTemp.",".$arrNodes["node"]->getSystemid();
                 return $strReturn;
             }
@@ -275,47 +293,50 @@ class class_module_navigation_portal extends class_portal_controller implements 
      *
      * @return class_module_navigation_point or null
      */
-    private function searchPageInNavigationTree($strPagename, $strNavigationId, $strCheckId = "", $strCheckAction = "") {
+    private function searchPageInNavigationTree($strPagename, $strNavigationId, $strCheckId = "", $strCheckAction = "")
+    {
 
         $this->arrNodeTempHelper = array();
 
         //nodestructure given?
-        if(!isset($this->arrTempNodes[$strNavigationId])) {
+        if (!isset($this->arrTempNodes[$strNavigationId])) {
             $objNavigation = new class_module_navigation_tree($strNavigationId);
             $this->arrTempNodes[$strNavigationId] = $objNavigation->getCompleteNaviStructure();
         }
 
         //process the hierarchy
         $arrNodes = $this->arrTempNodes[$strNavigationId];
-        foreach($arrNodes["subnodes"] as $arrOneNode)
+        foreach ($arrNodes["subnodes"] as $arrOneNode) {
             $this->searchPageInNavigationTreeHelper(1, $strPagename, $arrOneNode, $strCheckId, $strCheckAction);
+        }
 
         //process the nodes found
         $intMaxLevel = 0;
         $objEntry = null;
-        foreach($this->arrNodeTempHelper as $intLevel => $arrNodes) {
-            if(count($arrNodes) > 0 && $intLevel > $intMaxLevel) {
+        foreach ($this->arrNodeTempHelper as $intLevel => $arrNodes) {
+            if (count($arrNodes) > 0 && $intLevel > $intMaxLevel) {
                 $intMaxLevel = $intLevel;
                 $objEntry = $arrNodes[0];
             }
         }
 
         //if not found, check for links in other navigations - or use the fallback
-        if($objEntry == null) {
+        if ($objEntry == null) {
             //not visible, so load fallback from session - if given
-            if(!$this->isPageVisibleInOtherNavigation()) {
+            if (!$this->isPageVisibleInOtherNavigation()) {
                 $strFallbackPage = $this->objSession->getSession("navi_fallback_page_".$this->arrElementData["navigation_id"]);
 
                 //use the fallback page
-                if($strFallbackPage !== false) {
+                if ($strFallbackPage !== false) {
                     $this->arrNodeTempHelper = array();
-                    foreach($this->arrTempNodes[$strNavigationId]["subnodes"] as $arrOneNode)
+                    foreach ($this->arrTempNodes[$strNavigationId]["subnodes"] as $arrOneNode) {
                         $this->searchPageInNavigationTreeHelper(1, $strFallbackPage, $arrOneNode, $strCheckId, $strCheckAction);
+                    }
 
                     $intMaxLevel = 0;
                     $objEntry = null;
-                    foreach($this->arrNodeTempHelper as $intLevel => $arrNodes) {
-                        if(count($arrNodes) > 0 && $intLevel > $intMaxLevel) {
+                    foreach ($this->arrNodeTempHelper as $intLevel => $arrNodes) {
+                        if (count($arrNodes) > 0 && $intLevel > $intMaxLevel) {
                             $intMaxLevel = $intLevel;
                             $objEntry = $arrNodes[0];
                         }
@@ -341,28 +362,33 @@ class class_module_navigation_portal extends class_portal_controller implements 
      * @param string $strCheckId systemid to check, only used to get active id stack
      * @param string $strCheckAction action to check, only used to get active id stack
      */
-    private function searchPageInNavigationTreeHelper($intLevel, $strPage, $arrNodes, $strCheckId = "", $strCheckAction = "") {
-        if(!isset($this->arrNodeTempHelper[$intLevel]))
+    private function searchPageInNavigationTreeHelper($intLevel, $strPage, $arrNodes, $strCheckId = "", $strCheckAction = "")
+    {
+        if (!isset($this->arrNodeTempHelper[$intLevel])) {
             $this->arrNodeTempHelper[$intLevel] = array();
-
-        if($arrNodes["node"]->getStrPageI() == $strPage) {
-
-            //systemid & ation given
-            if(validateSystemid($arrNodes["node"]->getStrLinkSystemid()) && $arrNodes["node"]->getStrLinkAction() != "") {
-                if($arrNodes["node"]->getStrLinkSystemid() == $strCheckId && $arrNodes["node"]->getStrLinkAction() == $strCheckAction)
-                    $this->arrNodeTempHelper[$intLevel][] = $arrNodes["node"];
-            }
-            //only systemid given
-            else if(validateSystemid($arrNodes["node"]->getStrLinkSystemid())) {
-                if($arrNodes["node"]->getStrLinkSystemid() == $strCheckId)
-                    $this->arrNodeTempHelper[$intLevel][] = $arrNodes["node"];
-            }
-            //nothing given
-            else
-                $this->arrNodeTempHelper[$intLevel][] = $arrNodes["node"];
         }
 
-        foreach($arrNodes["subnodes"] as $arrOneSubnode) {
+        if ($arrNodes["node"]->getStrPageI() == $strPage) {
+
+            //systemid & ation given
+            if (validateSystemid($arrNodes["node"]->getStrLinkSystemid()) && $arrNodes["node"]->getStrLinkAction() != "") {
+                if ($arrNodes["node"]->getStrLinkSystemid() == $strCheckId && $arrNodes["node"]->getStrLinkAction() == $strCheckAction) {
+                    $this->arrNodeTempHelper[$intLevel][] = $arrNodes["node"];
+                }
+            }
+            //only systemid given
+            else if (validateSystemid($arrNodes["node"]->getStrLinkSystemid())) {
+                if ($arrNodes["node"]->getStrLinkSystemid() == $strCheckId) {
+                    $this->arrNodeTempHelper[$intLevel][] = $arrNodes["node"];
+                }
+            }
+            //nothing given
+            else {
+                $this->arrNodeTempHelper[$intLevel][] = $arrNodes["node"];
+            }
+        }
+
+        foreach ($arrNodes["subnodes"] as $arrOneSubnode) {
             $this->searchPageInNavigationTreeHelper($intLevel + 1, $strPage, $arrOneSubnode, $strCheckId, $strCheckAction);
         }
     }
@@ -376,67 +402,74 @@ class class_module_navigation_portal extends class_portal_controller implements 
      *
      * @return bool
      */
-    private function isPageVisibleInOtherNavigation() {
+    private function isPageVisibleInOtherNavigation()
+    {
 
         //load the placeholders placed on the current page-template. therefore, instantiate a page-object
         $objPageData = PagesPage::getPageByName($this->getPagename());
         $objMasterPageData = PagesPage::getPageByName("master");
-        if($objPageData != null) {
+        if ($objPageData != null) {
             //analyze the placeholders on the page, faster than iterating the the elements available in the db
             $strTemplateId = $this->objTemplate->readTemplate("/module_pages/".$objPageData->getStrTemplate());
             $arrElementsTemplate = array_merge($this->objTemplate->getElements($strTemplateId, 0), $this->objTemplate->getElements($strTemplateId, 1));
 
             //loop elements to remove navigation-elements. to do so, get the current elements-name (maybe the user renamed the default "navigation")
-            foreach($arrElementsTemplate as $arrPlaceholder) {
-                if($arrPlaceholder["placeholder"] != $this->arrElementData["page_element_ph_placeholder"]) {
+            foreach ($arrElementsTemplate as $arrPlaceholder) {
+                if ($arrPlaceholder["placeholder"] != $this->arrElementData["page_element_ph_placeholder"]) {
                     //loop the elements-list
-                    foreach($arrPlaceholder["elementlist"] as $arrOneElement) {
-                        if($arrOneElement["element"] == $this->arrElementData["page_element_ph_element"]) {
+                    foreach ($arrPlaceholder["elementlist"] as $arrOneElement) {
+                        if ($arrOneElement["element"] == $this->arrElementData["page_element_ph_element"]) {
 
                             //seems as we have a navigation-element different than the current one.
                             //check, if the element is installed on the current page
                             $arrElements = PagesPageelement::getElementsByPlaceholderAndPage($objPageData->getSystemid(), $arrPlaceholder["placeholder"], $this->getStrPortalLanguage());
                             //maybe on the masters-page?
-                            if(count($arrElements) == 0 && $objMasterPageData != null)
+                            if (count($arrElements) == 0 && $objMasterPageData != null) {
                                 $arrElements = PagesPageelement::getElementsByPlaceholderAndPage($objMasterPageData->getSystemid(), $arrPlaceholder["placeholder"], $this->getStrPortalLanguage());
+                            }
 
-                            if(count($arrElements) > 0) {
-                                foreach($arrElements as $objElement) {
+                            if (count($arrElements) > 0) {
+                                foreach ($arrElements as $objElement) {
                                     //wohooooo, an element was found.
                                     //check, if the current point is in the tree linked by the navigation - if it's a different navigation....
                                     //load the real-pageelement
                                     $objRealElement = new class_element_navigation_portal($objElement);
                                     $arrContent = $objRealElement->getElementContent($objElement->getSystemid());
-                                    if(count($arrContent) == 0)
+                                    if (count($arrContent) == 0) {
                                         continue;
+                                    }
 
                                     //navigation found. trigger loading of nodes if not yet happend
-                                    if(!isset($this->arrTempNodes[$arrContent["navigation_id"]])) {
+                                    if (!isset($this->arrTempNodes[$arrContent["navigation_id"]])) {
                                         $objNavigation = new class_module_navigation_tree($arrContent["navigation_id"]);
 
-                                        if($objNavigation->getStatus() == 0)
+                                        if ($objNavigation->getStatus() == 0) {
                                             $this->arrTempNodes[$arrContent["navigation_id"]] = array("node" => null, "subnodes" => array());
-                                        else
+                                        }
+                                        else {
                                             $this->arrTempNodes[$arrContent["navigation_id"]] = $objNavigation->getCompleteNaviStructure();
+                                        }
                                     }
 
                                     //search navigation tree
                                     $this->arrNodeTempHelper = array();
-                                    foreach($this->arrTempNodes[$arrContent["navigation_id"]]["subnodes"] as $objOneNodeToScan)
+                                    foreach ($this->arrTempNodes[$arrContent["navigation_id"]]["subnodes"] as $objOneNodeToScan) {
                                         $this->searchPageInNavigationTreeHelper(0, $this->strCurrentSite, $objOneNodeToScan);
+                                    }
 
                                     $intMaxLevel = 0;
                                     $objEntry = null;
-                                    foreach($this->arrNodeTempHelper as $intLevel => $arrNodes) {
-                                        if(count($arrNodes) > 0 && $intLevel >= $intMaxLevel) {
+                                    foreach ($this->arrNodeTempHelper as $intLevel => $arrNodes) {
+                                        if (count($arrNodes) > 0 && $intLevel >= $intMaxLevel) {
                                             $intMaxLevel = $intLevel;
                                             $objEntry = $arrNodes[0];
                                         }
                                     }
 
                                     //jepp, page found in another tree, so return true
-                                    if($objEntry != null)
+                                    if ($objEntry != null) {
                                         return true;
+                                    }
                                 }
 
                             }
@@ -459,7 +492,8 @@ class class_module_navigation_portal extends class_portal_controller implements 
      *
      * @return string
      */
-    private function createNavigationPoint(class_module_navigation_point $objPointData, $bitActive, $intLevel, $bitFirst = false, $bitLast = false) {
+    private function createNavigationPoint(class_module_navigation_point $objPointData, $bitActive, $intLevel, $bitFirst = false, $bitLast = false)
+    {
         //and start to create a link and all needed stuff
         $arrTemp = array();
         $arrTemp["page_intern"] = $objPointData->getStrPageI();
@@ -469,7 +503,7 @@ class class_module_navigation_portal extends class_portal_controller implements 
         $arrTemp["link"] = getLinkPortal($arrTemp["page_intern"], $arrTemp["page_extern"], $objPointData->getStrTarget(), $arrTemp["text"], $objPointData->getStrLinkAction(), "", $objPointData->getStrLinkSystemid());
         $arrTemp["href"] = getLinkPortalHref($arrTemp["page_intern"], $arrTemp["page_extern"], $objPointData->getStrLinkAction(), "", $objPointData->getStrLinkSystemid());
         $arrTemp["target"] = $objPointData->getStrTarget();
-        if($objPointData->getStrImage() != "") {
+        if ($objPointData->getStrImage() != "") {
             $arrTemp["image"] = getLinkPortal(
                 $arrTemp["page_intern"],
                 $arrTemp["page_extern"],
@@ -482,10 +516,11 @@ class class_module_navigation_portal extends class_portal_controller implements 
             $arrTemp["image_src"] = $objPointData->getStrImage();
         }
 
-        if($objPointData->getStrPageI() != "") {
+        if ($objPointData->getStrPageI() != "") {
             $objPage = PagesPage::getPageByName($objPointData->getStrPageI());
-            if($objPage != null && $objPage->getIntLmTime() != "")
+            if ($objPage != null && $objPage->getIntLmTime() != "") {
                 $arrTemp["lastmodified"] = strftime("%Y-%m-%dT%H:%M:%S", $objPage->getIntLmTime());
+            }
         }
 
         //Load the correct template
@@ -495,7 +530,7 @@ class class_module_navigation_portal extends class_portal_controller implements 
         $strReturn = $this->objTemplate->fillTemplate($arrTemp, $strTemplateId, false);
         //BUT: if we received an empty string and are in the situation of a first or last point, then maybe the template
         //     didn't supply a first / last section. so we'll try to load a regular point
-        if($strReturn == "" && ($bitFirst || $bitLast)) {
+        if ($strReturn == "" && ($bitFirst || $bitLast)) {
             $strSection = "level_".$intLevel."_".($bitActive ? "active" : "inactive");
             $strTemplateId = $this->objTemplate->readTemplate("/module_navigation/".$this->arrElementData["navigation_template"], $strSection);
             //And fill it once more
@@ -513,14 +548,16 @@ class class_module_navigation_portal extends class_portal_controller implements 
      * @param $intLevel
      * @param $arrNodes
      */
-    private function printTreeLevel($intLevel, $arrNodes) {
-        for($intI = 0; $intI < $intLevel; $intI++) {
+    private function printTreeLevel($intLevel, $arrNodes)
+    {
+        for ($intI = 0; $intI < $intLevel; $intI++) {
             echo "  ";
         }
         echo $arrNodes["node"]->getStrName()."/".$arrNodes["node"]->getSystemid()."/".$arrNodes["node"]->getStrPageI()."<br />\n";
 
-        foreach($arrNodes["subnodes"] as $arrOneNode)
+        foreach ($arrNodes["subnodes"] as $arrOneNode) {
             $this->printTreeLevel($intLevel + 1, $arrOneNode);
+        }
     }
 }
 
