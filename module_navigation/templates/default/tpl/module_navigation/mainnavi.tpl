@@ -16,6 +16,14 @@
 <li><a href="%%href%%" target="%%target%%">%%text%%</a>%%level2%%</li>
 </level_1_inactive>
 
+<level_1_inactive_withchilds>
+<li><a href="%%href%%" target="%%target%%">%%text%% &downarrow;</a>%%level2%%</li>
+</level_1_inactive_withchilds>
+
+<level_1_active_withchilds>
+<li><a href="%%href%%" target="%%target%%">%%text%% &downarrow;</a>%%level2%%</li>
+</level_1_active_withchilds>
+
 
 
 
