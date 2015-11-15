@@ -546,7 +546,7 @@ HTML;
                 $strContent = json_encode($strElementContent, JSON_FORCE_OBJECT); //JSON_HEX_QUOT|JSON_HEX_APOS
 
                 $strReturn = <<<JS
-                    parent.KAJONA.admin.portaleditor.changeElementData('blocks_{$objBlocksElement->getStrPlaceholder()}', '{$objBlockElement->getSystemid()}', {$strContent});
+                    parent.KAJONA.admin.portaleditor.changeElementData('blocks_{$objBlocksElement->getStrName()}', '{$objBlockElement->getSystemid()}', {$strContent});
                     parent.KAJONA.admin.portaleditor.closeDialog(true);
 
 JS;
