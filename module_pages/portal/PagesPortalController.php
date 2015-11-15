@@ -470,6 +470,13 @@ class PagesPortalController extends class_portal_controller implements interface
 
             $strPeToolbar .= "<script type='text/javascript'>
                 KAJONA.admin.lang.pe_rte_unsavedChanges = '".$this->getLang("pe_rte_unsavedChanges", "pages")."';
+                KAJONA.admin.lang.peMOVE = '".$this->getLang("pe_move", "pages")."';
+                KAJONA.admin.lang.peEDIT = '".$this->getLang("pe_edit", "pages")."';
+                KAJONA.admin.lang.peCOPY = '".$this->getLang("pe_copy", "pages")."';
+                KAJONA.admin.lang.peDELETE = '".$this->getLang("pe_delete", "pages")."';
+                KAJONA.admin.lang.peCREATE = '".$this->getLang("pe_new", "pages")."';
+                KAJONA.admin.lang.peSETACTIVE = '".$this->getLang("pe_setactive", "pages")."';
+                KAJONA.admin.lang.peSETINACTIVE = '".$this->getLang("pe_setinactive", "pages")."';
 
                 if($) {
                     KAJONA.portal.loader.loadFile([

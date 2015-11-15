@@ -420,7 +420,8 @@ KAJONA.admin.portaleditor.elementActionToolbar = {
     },
 
     injectElementCreateUI: function ($element, actions, placeholderName) {
-        var $button = $('<i class="peNewButton fa fa-plus-circle" role="button" data-toggle="dropdown" title="Neues Element an Platzhalter &quot;' + placeholderName + '&quot;" rel="tooltip"></i>');
+        var buttonTitle = KAJONA.admin.lang['peCREATE'];
+        var $button = $('<i class="peNewButton fa fa-plus-circle" role="button" data-toggle="dropdown" title="' + buttonTitle + ' &quot;' + placeholderName + '&quot;" rel="tooltip"></i>');
         var $menu = $('<div class="dropdown-menu peContextMenu" role="menu">');
 
         $menu.append(KAJONA.admin.portaleditor.elementActionToolbar.generateActionList(actions));
@@ -432,6 +433,7 @@ KAJONA.admin.portaleditor.elementActionToolbar = {
         var $actionList = $('<ul>');
         actions.forEach(function (action) {
             var $actionListEntry = $('<li>');
+            var actionTitle = KAJONA.admin.lang['pe' + action.type];
             switch (action.type) {
                 case 'CREATE':
                     var $actionElement = $('<a>');
@@ -443,11 +445,11 @@ KAJONA.admin.portaleditor.elementActionToolbar = {
                 case 'MOVE':
                     var $actionElement = $('<i rel="tooltip">');
                     $actionElement.addClass('moveHandle fa fa-arrows');
-                    $actionElement.attr('title', 'Verschieben');
+                    $actionElement.attr('title', actionTitle);
                     break;
                 default:
                     var $actionElement = $('<a>');
-                    $actionElement.append(action.type);
+                    $actionElement.append(actionTitle);
                     $actionElement.on('click', function () {
                         KAJONA.admin.portaleditor.openDialog(action.link);
                     });
