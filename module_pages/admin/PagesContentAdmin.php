@@ -30,6 +30,7 @@ use interface_admin;
 use interface_admin_listable;
 use interface_model;
 use Kajona\Pages\Admin\Elements\ElementBlockAdmin;
+use Kajona\Pages\Portal\PagesPortaleditor;
 use Kajona\Pages\System\PagesElement;
 use Kajona\Pages\System\PagesFolder;
 use Kajona\Pages\System\PagesPage;
@@ -456,23 +457,23 @@ HTML;
         if($strBlocks != "" && $strBlock != "") {
 
 
-            if(validateSystemid($strBlocks) && validateSystemid($strBlock)) {
+            if (validateSystemid($strBlocks) && validateSystemid($strBlock)) {
                 //fetch the matching elements
                 $objBlocks = new PagesPageelement($strBlocks);
                 $objBlock = new PagesPageelement($strBlock);
 
-                if($objBlocks->getStrElement() == "blocks" && $objBlock->getStrElement() == "block") {
+                if ($objBlocks->getStrElement() == "blocks" && $objBlock->getStrElement() == "block") {
                     return $objBlock->getSystemid();
                 }
             }
 
             $objBlocksElement = null;
-            if(validateSystemid($strBlocks) && !validateSystemid($strBlock)) {
+            if (validateSystemid($strBlocks) && !validateSystemid($strBlock)) {
                 $objBlocksElement = new PagesPageelement($strBlocks);
             }
 
 
-            if($objBlocksElement == null) {
+            if ($objBlocksElement == null) {
                 $objBlocksElement = new PagesPageelement();
                 $objBlocksElement->setStrName($strBlocks);
                 $objBlocksElement->setStrPlaceholder("blocks");
@@ -499,12 +500,12 @@ HTML;
             /** @var PagesPage $objPage */
             $objPage = class_objectfactory::getInstance()->getObject($this->getSystemid());
             $objTemplate = class_template::getInstance()->parsePageTemplate("/module_pages/".$objPage->getStrTemplate());
-            foreach($objTemplate->getArrBlocks() as $objOneBlocks) {
-                foreach($objOneBlocks->getArrBlocks() as $objOneBlock) {
-                    if($objOneBlocks->getStrName() == $objBlocksElement->getStrName() && $objOneBlock->getStrName() == $objBlockElement->getStrName()) {
+            foreach ($objTemplate->getArrBlocks() as $objOneBlocks) {
+                foreach ($objOneBlocks->getArrBlocks() as $objOneBlock) {
+                    if ($objOneBlocks->getStrName() == $objBlocksElement->getStrName() && $objOneBlock->getStrName() == $objBlockElement->getStrName()) {
 
-                        foreach($objOneBlock->getArrPlaceholder() as $arrOnePlaceholder) {
-                            foreach($arrOnePlaceholder["elementlist"] as $arrElementList) {
+                        foreach ($objOneBlock->getArrPlaceholder() as $arrOnePlaceholder) {
+                            foreach ($arrOnePlaceholder["elementlist"] as $arrElementList) {
                                 //Create dummy elements
                                 $strPlaceholder = $arrOnePlaceholder["placeholder"];
 
@@ -533,9 +534,32 @@ HTML;
                     }
                 }
             }
+
+
+            if ($this->getParam("peClose") == "1") {
+
+                //generate the elements' output
+                $objBlockElement = new PagesPageelement($objBlockElement->getSystemid());
+                $objPortalElement = $objBlockElement->getConcretePortalInstance();
+                $strElementContent = $objPortalElement->getRenderedElementOutput(PagesPortaleditor::isActive());
+
+                $strContent = json_encode($strElementContent, JSON_FORCE_OBJECT); //JSON_HEX_QUOT|JSON_HEX_APOS
+
+                $strReturn = <<<JS
+                    parent.KAJONA.admin.portaleditor.changeElementData('blocks_{$objBlocksElement->getStrPlaceholder()}', '{$objBlockElement->getSystemid()}', {$strContent});
+                    parent.KAJONA.admin.portaleditor.closeDialog(true);
+
+JS;
+                class_carrier::getInstance()->setParam("peClose", null);
+                return "<script type='text/javascript'>{$strReturn}</script>";
+
+            }
+            else {
+                $this->adminReload(class_link::getLinkAdminHref("pages_content", "list", "&systemid=".$strPageId));
+            }
+
         }
 
-        $this->adminReload(class_link::getLinkAdminHref("pages_content", "list", "&systemid=".$strPageId));
         return "";
     }
     

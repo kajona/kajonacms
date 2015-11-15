@@ -208,7 +208,7 @@ class PagesPortalController extends class_portal_controller implements interface
                         PagesPortaleditor::getInstance()->registerAction(
                             new PagesPortaleditorPlaceholderAction(
                                 PagesPortaleditorActionEnum::CREATE(),
-                                class_link::getLinkAdminHref("pages_content", "newBlock", "&blocks={$strId}&block={$objOneBlock->getStrName()}&systemid={$objPageData->getSystemid()}"), "blocks_".$objOneBlocks->getStrName(),
+                                class_link::getLinkAdminHref("pages_content", "newBlock", "&blocks={$strId}&block={$objOneBlock->getStrName()}&systemid={$objPageData->getSystemid()}&peClose=1"), "blocks_".$objOneBlocks->getStrName(),
                                 $objOneBlock->getStrName()
                             )
                         );
