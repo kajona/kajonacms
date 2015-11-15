@@ -1362,3 +1362,17 @@ function strToDate($strString) {
     }
 }
 
+/**
+ * Appends _realpath_ to any non-absolute path
+ *
+ * @param string $strPath
+ * @return strings
+ */
+function makeAbsolutePath($strPath) {
+    if (uniStrpos($strPath, "://") === false) {
+        return _realpath_."/".$strPath;
+    }
+    else {
+        return $strPath;
+    }
+}

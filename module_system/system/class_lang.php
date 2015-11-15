@@ -184,25 +184,25 @@ class class_lang {
         return $strProperty;
     }
 
-    
+
     public function stringToPlaceholder($strText) {
         $strReturn = "";
         $strLastChar = "";
-        
+
         for ($i = 0; $i < uniStrlen($strText); $i++) {
             $strChar = uniSubstr($strText, $i, 1);
             $strCharLower = uniStrtolower($strChar);
-            
+
             if ($i > 0 && $strChar != $strCharLower && $strLastChar != "_") {
                 $strReturn .= "_" . $strCharLower;
             }
             else {
                 $strReturn .= $strCharLower;
             }
-            
+
             $strLastChar = $strChar;
         }
-        
+
         return $strReturn;
     }
 
@@ -314,11 +314,7 @@ class class_lang {
         $lang = array();
         $this->bitSaveToCache = true;
 
-        if (substr($strFilename, 0, 7) == "phar://") {
-            include_once $strFilename;
-        } else {
-            include_once _realpath_ . $strFilename;
-        }
+        include_once makeAbsolutePath($strFilename);
 
         if(!isset($arrTargetArray[$strLanguage])) {
             $arrTargetArray[$strLanguage] = array();

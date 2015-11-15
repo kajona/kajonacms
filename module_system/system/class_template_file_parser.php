@@ -29,11 +29,7 @@ class class_template_file_parser
 
 
         //We have to read the whole template from the filesystem
-        if (substr($strFilename, 0, 7) == "phar://") {
-            $strFullPath = $strFilename;
-        } else {
-            $strFullPath = _realpath_."/".$strFilename;
-        }
+        $strFullPath = makeAbsolutePath($strFilename);
 
         if (uniSubstr($strFilename, -4) == ".tpl" && is_file($strFullPath)) {
             $strTemplateContent = file_get_contents($strFullPath);
@@ -56,4 +52,3 @@ class class_template_file_parser
 
 
 }
-
