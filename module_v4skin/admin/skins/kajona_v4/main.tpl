@@ -20,6 +20,7 @@
     %%head%%
     <script src="_webpath_/core/module_system/system/scripts/loader.js?_system_browser_cachebuster_"></script>
     <script src="_webpath_/core/module_system/admin/scripts/kajona.js?_system_browser_cachebuster_"></script>
+    <script src="_webpath_/core/module_system/admin/scripts/lang.js?_system_browser_cachebuster_"></script>
 
     <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>

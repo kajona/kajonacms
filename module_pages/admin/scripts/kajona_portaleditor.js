@@ -98,7 +98,6 @@ KAJONA.admin.portaleditor = {
     changeElementData : function(strDataPlaceholder, strDataSystemid, objElementData) {
 
         var $objContent = jQuery.parseHTML(objElementData);
-
         //see if the element is already present, then flip the contents
         if($("div.peElementWrapper[data-systemid='"+strDataSystemid+"']").length) {
             $("div.peElementWrapper[data-systemid='"+strDataSystemid+"']").html($($objContent).closest("div.peElementWrapper[data-systemid="+strDataSystemid+"]").html());
@@ -106,7 +105,13 @@ KAJONA.admin.portaleditor = {
         else {
             //add it as the last element to the placeholder itself
             strDataPlaceholder = strDataPlaceholder.replace(/\|/g, '\\|');
-            $("#menuContainer_"+strDataPlaceholder).before($($objContent).closest("div.peElementWrapper[data-systemid="+strDataSystemid+"]"));
+            if($('span[data-placeholder='+strDataPlaceholder+']')) {
+                $('span[data-placeholder='+strDataPlaceholder+']').before($($objContent));
+            }
+
+            else if($("#menuContainer_"+strDataPlaceholder)) {
+                $("#menuContainer_"+strDataPlaceholder).before($($objContent).closest("div.peElementWrapper[data-systemid="+strDataSystemid+"]"));
+            }
         }
 
     },
@@ -467,3 +472,6 @@ KAJONA.admin.tooltip = {
 };
 
 KAJONA.admin.tooltip.initTooltip();
+
+// init lang
+KAJONA.admin.lang.initializeProperties();

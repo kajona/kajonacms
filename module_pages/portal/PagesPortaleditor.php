@@ -111,7 +111,7 @@ class PagesPortaleditor  {
     }
 
     /**
-     * Adds the code to render a placeholder-fragement for the portal-editor
+     * Adds the code to render a placeholder-fragment for the portal-editor
      * @param $strPlaceholder
      *
      * @return string
@@ -119,5 +119,12 @@ class PagesPortaleditor  {
     public static function getPlaceholderWrapper($strPlaceholder)
     {
         return "<span data-placeholder='{$strPlaceholder}'></span>";
+    }
+
+    public static function isActive()
+    {
+        return class_module_system_setting::getConfigValue("_pages_portaleditor_") == "true"
+            && class_carrier::getInstance()->getObjSession()->getSession("pe_disable") != "true"
+            && class_carrier::getInstance()->getObjSession()->isAdmin();
     }
 }
