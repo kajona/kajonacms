@@ -408,20 +408,33 @@ KAJONA.admin.portaleditor.elementActionToolbar = {
     },
 
     injectElementEditUI: function ($element, actions) {
-        var $toolbar = $('<div class="peElementActions">');
+        var $toolbar = $('<div class="peElementActions ">');
         $toolbar.append(KAJONA.admin.portaleditor.elementActionToolbar.generateActionList(actions));
 
         $element.prepend($toolbar);
     },
 
     injectElementCreateUI: function ($element, actions, placeholderName) {
-        var $button = $('<i class="peNewButton fa fa-plus-circle" role="button" data-toggle="dropdown" title="Neues Element an Platzhalter &quot;' + placeholderName + '&quot;" rel="tooltip"></i>');
-        var $menu = $('<div class="dropdown-menu peContextMenu" role="menu">');
+        var $dropdown = $('<ul class="xxx-dropdown peContextMenu">')
+        var $buttonWrapper = $('<li>');
+        var $button = $('<a class="peNewButton fa fa-plus-circle" role="button" title="Neues Element an Platzhalter &quot;' + placeholderName + '&quot;" rel="tooltip"></a>');
+        var $menu = (KAJONA.admin.portaleditor.elementActionToolbar.generateActionList(actions));
 
-        $menu.append(KAJONA.admin.portaleditor.elementActionToolbar.generateActionList(actions));
-
-        $element.append($('<div class="dropdown">').append($button).append($menu));
+        $element.append($dropdown.append($buttonWrapper.append($button).append($menu)));
+        $dropdown.dropit();
     },
+
+//    <ul class="menu">
+//      <li>
+//          <a href="#">Dropdown</a>
+//          <ul>
+//              <li><a href="#">Some Action 1</a></li>
+//              <li><a href="#">Some Action 2</a></li>
+//              <li><a href="#">Some Action 3</a></li>
+//              <li><a href="#">Some Action 4</a></li>
+//          </ul>
+//      </li>
+//  </ul>
 
     generateActionList: function (actions) {
         var $actionList = $('<ul>');

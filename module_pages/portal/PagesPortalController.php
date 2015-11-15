@@ -475,7 +475,8 @@ class PagesPortalController extends class_portal_controller implements interface
                     KAJONA.portal.loader.loadFile([
                         '/core/module_pages/admin/scripts/kajona_portaleditor.js',
                         '/core/module_system/admin/scripts/jqueryui/jquery-ui.custom.min.js',
-                        '/core/module_system/admin/scripts/jqueryui/css/smoothness/jquery-ui.custom.css'
+                        '/core/module_system/admin/scripts/jqueryui/css/smoothness/jquery-ui.custom.css',
+                        '/core/module_system/admin/scripts/dropit/dropit.js'
                     ], function() {
                         KAJONA.admin.portaleditor.RTE.config = {
                             language : '".(class_session::getInstance()->getAdminLanguage() != "" ? class_session::getInstance()->getAdminLanguage() : "en")."',
@@ -492,7 +493,8 @@ class PagesPortalController extends class_portal_controller implements interface
                         '/core/module_system/admin/scripts/jquery/jquery.min.js',
                         '/core/module_system/admin/scripts/jqueryui/jquery-ui.custom.min.js',
                         '/core/module_pages/admin/scripts/kajona_portaleditor.js',
-                        '/core/module_system/admin/scripts/jqueryui/css/smoothness/jquery-ui.custom.css'
+                        '/core/module_system/admin/scripts/jqueryui/css/smoothness/jquery-ui.custom.css',
+                        '/core/module_system/admin/scripts/dropit/dropit.js'
                     ], function() {
                         KAJONA.admin.portaleditor.RTE.config = {
                             language : '".(class_session::getInstance()->getAdminLanguage() != "" ? class_session::getInstance()->getAdminLanguage() : "en")."',
