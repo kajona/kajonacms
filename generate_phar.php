@@ -15,7 +15,9 @@ foreach ($arrFiles as $strFile) {
               $pharName);
           $phar->buildFromDirectory(__DIR__ . "/module_" . $moduleName);
           $phar->setStub($phar->createDefaultStub());
-          $phar->compress(Phar::GZ);
+          // Compression with ZIP or GZ?
+          //$phar->convertToExecutable(Phar::ZIP);
+          //$phar->compress(Phar::GZ);
           echo 'Generated phar ' . $pharName . "\n";
         }
     }
