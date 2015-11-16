@@ -936,14 +936,18 @@ class class_graph_jqplot implements interface_graph {
      *
      * @param int $intMin
      * @param int $intMax
+     * @param int $intTickInterval
      */
-    public function setXAxisRange($intMin = null, $intMax = null) {
+    public function setXAxisRange($intMin = null, $intMax = null, $intTickInterval = null) {
         if($intMin !== null) {
             $this->arrOptions["axes"]["xaxis"]["min"] = $intMin;
         }
         if($intMax !== null) {
             $this->arrOptions["axes"]["xaxis"]["max"] = $intMax;
         }
+        if($intTickInterval !== null) {
+            $this->arrOptions["axes"]["xaxis"]["tickInterval"] = $intTickInterval;
+        }
     }
 
 
@@ -952,14 +956,18 @@ class class_graph_jqplot implements interface_graph {
      *
      * @param int $intMin
      * @param int $intMax
+     * @param int $intTickInterval
      */
-    public function setYAxisRange($intMin = null, $intMax = null) {
+    public function setYAxisRange($intMin = null, $intMax = null, $intTickInterval = null) {
         if($intMin !== null) {
             $this->arrOptions["axes"]["yaxis"]["min"] = $intMin;
         }
         if($intMax !== null) {
             $this->arrOptions["axes"]["yaxis"]["max"] = $intMax;
         }
+        if($intTickInterval !== null) {
+            $this->arrOptions["axes"]["yaxis"]["tickInterval"] = $intTickInterval;
+        }
     }
 
     /**
@@ -967,13 +975,17 @@ class class_graph_jqplot implements interface_graph {
      *
      * @param int $intMin
      * @param int $intMax
+     * @param int $intTickInterval
      */
-    public function setY2AxisRange($intMin = null, $intMax = null) {
+    public function setY2AxisRange($intMin = null, $intMax = null, $intTickInterval = null) {
         if($intMin !== null) {
             $this->arrOptions["axes"]["y2axis"]["min"] = $intMin;
         }
         if($intMax !== null) {
             $this->arrOptions["axes"]["y2axis"]["max"] = $intMax;
+        }
+        if($intTickInterval !== null) {
+            $this->arrOptions["axes"]["y2axis"]["tickInterval"] = $intTickInterval;
         }
     }
 
