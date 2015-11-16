@@ -860,6 +860,7 @@ class class_graph_jqplot implements interface_graph {
             $this->arrOptions["legend"]["show"] = $bitRenderLegend;
             $this->arrOptions["legend"]["renderer"] = "$.jqplot.EnhancedLegendRenderer";
             $this->arrOptions["legend"]["rowSpacing"] = "0px";
+            $this->arrOptions["legend"]["marginTop"] = "5px";
         }
         else {
             $this->arrOptions["legend"]["show"] = null;
