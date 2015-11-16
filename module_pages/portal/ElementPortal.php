@@ -293,9 +293,7 @@ abstract class ElementPortal extends class_portal_controller
         }
 
         if($bitActivePortaleditor) {
-            $this->getPortalEditorActions();
-            $strElementOutput = PagesPortaleditor::addPortaleditorContentWrapper($strElementOutput, $this->getSystemid(), $this->arrElementData["page_element_ph_element"]);
-
+            $strElementOutput = $this->addPortalEditorCode($strElementOutput);
         }
         else {
             $strElementOutput = $this->removePortalEditorTags($strElementOutput);
@@ -303,6 +301,18 @@ abstract class ElementPortal extends class_portal_controller
 
 
         return $strElementOutput;
+    }
+
+    /**
+     * Adds the portal-editor code to the current elements' content
+     * @param $strElementOutput
+     *
+     * @return string
+     */
+    protected function addPortalEditorCode($strElementOutput)
+    {
+        $this->getPortalEditorActions();
+        return PagesPortaleditor::addPortaleditorContentWrapper($strElementOutput, $this->getSystemid(), $this->arrElementData["page_element_ph_element"]);
     }
 
     /**
@@ -329,7 +339,7 @@ abstract class ElementPortal extends class_portal_controller
 
         $objParent = class_objectfactory::getInstance()->getObject($objPageelement->getPrevId());
         if($objParent instanceof PagesPageelement) {
-            $objParent  = $objParent->getConcreteAdminInstance();
+            $objParent = $objParent->getConcreteAdminInstance();
         }
 
 

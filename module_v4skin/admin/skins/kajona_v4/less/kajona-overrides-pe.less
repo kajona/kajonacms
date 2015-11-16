@@ -105,7 +105,7 @@
     padding: 3px;
     margin: 2px 0 2px 0px;
     background-color: #ccc;
-    .opacity(50);
+    .opacity(0.5);
 }
 
 
@@ -121,66 +121,10 @@
         outline: 1px solid @peColorHover !important;
 
         *[data-kajona-editable] {
-          outline: 1px dotted @wysiwygOutlineColor;
+            outline: 1px dotted @wysiwygOutlineColor;
         }
 
-        .peElementActions {
-            position: absolute !important;
-            border: none !important;
-            display: block !important;
-            margin: -17px 0 0 -1px !important;
-            z-index: 1;
 
-            ul {
-                display: block !important;
-                background-color: @peColorHover !important;
-                font-family: Verdana, Arial, Helvetica, sans-serif !important;
-                font-size: 11px !important;
-                text-align: left !important;
-                padding: 1px 3px 2px 3px !important;
-                text-transform: none !important;
-                line-height: 14px !important;
-                list-style: none !important;
-                margin: 0 !important;
-
-                li {
-                    display: inline-block !important;
-                    list-style: none !important;
-                    margin: 0 !important;
-                    padding: 0 !important;
-                }
-
-                a, a:link, a:visited, a:hover, a:active, a:focus {
-                    font-family: Verdana, Arial, Helvetica, sans-serif !important;
-                    font-size: 11px !important;
-                    color: #ffffff !important;
-                    text-decoration: none !important;
-                    font-weight: normal !important;
-                    background: none !important;
-                    padding: 0 2px 0 2px !important;
-                    margin: 0 !important;
-                    text-transform: none !important;
-                    letter-spacing: normal !important;
-                    line-height: 14px !important;
-                    border: none !important;
-                    outline: none !important;
-                    display: inline !important;
-                    width: auto !important;
-                    height: auto !important;
-                    text-shadow: none !important;
-                    cursor: pointer !important;
-                }
-
-                a:hover, a:active, a:focus {
-                    text-decoration: underline !important;
-                }
-
-                .moveHandle {
-                    cursor: move;
-                    color: white;
-                }
-            }
-        }
 
         // nested pe actions shouldn't overlap
         .peElementWrapper > .peElementActions {
