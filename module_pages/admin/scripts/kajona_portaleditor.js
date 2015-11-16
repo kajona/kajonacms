@@ -361,46 +361,7 @@ KAJONA.admin.portaleditor.elementActionToolbar = {
     },
 
     injectPlaceholderActions: function () {
-        var actions = {
-            placeholder: {
-                content: [{
-                    name: 'Row light',
-                    type: 'CREATE',
-                    link: ''
-                }, {
-                    name: 'Row dark',
-                    type: 'CREATE',
-                    link: ''
-                }, {
-                    name: 'Row 3 column',
-                    type: 'CREATE',
-                    link: ''
-                }]
-            },
-            systemIds: {
-                '50c198c564727966917c': [{
-                    type: 'EDIT',
-                    link: ''
-                }, {
-                    type: 'DELETE',
-                    link: ''
-                }, {
-                    type: 'MOVE',
-                    link: ''
-                }],
 
-                '9e2a8ea564757a5e04ca': [{
-                    type: 'EDIT',
-                    link: ''
-                }, {
-                    type: 'DELETE',
-                    link: ''
-                }, {
-                    type: 'MOVE',
-                    link: ''
-                }]
-            }
-        };
         actions = KAJONA.admin.actions;
 
         $.each(actions.placeholder, function (placeholderName, actions) {
@@ -413,27 +374,41 @@ KAJONA.admin.portaleditor.elementActionToolbar = {
     },
 
     injectElementEditUI: function ($element, actions) {
-        var $toolbar = $('<div class="peElementActions ">');
-        $toolbar.append(KAJONA.admin.portaleditor.elementActionToolbar.generateActionList(actions));
 
-        $element.prepend($toolbar);
+        $toolbar = KAJONA.admin.portaleditor.elementActionToolbar.generateActionList(actions);
+        $toolbar.attr('id', 'toolbar_'+$element.data('systemid'));
+
+        //$toolbar.append(KAJONA.admin.portaleditor.elementActionToolbar.generateActionList(actions));
+
+        $element.append($toolbar);
+        $element.toolbar({
+            content: '#toolbar_'+$element.data('systemid'),
+            position: 'bottom',
+            style: 'peEditBar'
+        });
     },
 
     injectElementCreateUI: function ($element, actions, placeholderName) {
-        var $dropdown = $('<ul class="xxx-dropdown peContextMenu">')
-        var $buttonWrapper = $('<li>');
-        var $button = $('<a class="peNewButton fa fa-plus-circle" role="button" title="' + buttonTitle + ' &quot;' + placeholderName + '&quot;" rel="tooltip"></a>');
-        var $menu = (KAJONA.admin.portaleditor.elementActionToolbar.generateActionList(actions));
-        var buttonTitle = KAJONA.admin.lang['peCREATE'];
 
-        $element.append($dropdown.append($buttonWrapper.append($button).append($menu)));
-        $dropdown.dropit();
+        placeholderName = placeholderName.replace(/\|/g, '');
+
+        var $addButton = $('<div class="btn-toolbar btn-toolbar-dark peAddButton"><i class="fa fa-plus-circle"></i></div>');
+
+        var $objMenu = $('<div>').addClass('hidden').addClass('peAddToolbar').attr('id', 'menu_'+placeholderName);
+        var $menuItems = $(KAJONA.admin.portaleditor.elementActionToolbar.generateAddActionList(actions, $objMenu));
+
+        $element.append($objMenu).append($addButton).append($objMenu);
+        $addButton.toolbar({
+            content: '#menu_'+placeholderName,
+            position: 'bottom',
+            style: 'peAddBar',
+            //event: 'click'
+        });
     },
 
-    generateActionList: function (actions) {
-        var $actionList = $('<ul>');
+
+    generateAddActionList: function (actions, $objParent) {
         actions.forEach(function (action) {
-            var $actionListEntry = $('<li>');
             var actionTitle = KAJONA.admin.lang['pe' + action.type];
             switch (action.type) {
                 case 'CREATE':
@@ -442,22 +417,75 @@ KAJONA.admin.portaleditor.elementActionToolbar = {
                     $actionElement.on('click', function () {
                         KAJONA.admin.portaleditor.openDialog(action.link);
                     });
+                    $objParent.append($actionElement);
                     break;
-                case 'MOVE':
-                    var $actionElement = $('<i rel="tooltip">');
-                    $actionElement.addClass('moveHandle fa fa-arrows');
-                    $actionElement.attr('title', actionTitle);
-                    break;
-                default:
-                    var $actionElement = $('<a>');
-                    $actionElement.append(actionTitle);
+            }
+
+        });
+    },
+
+    generateActionList: function (actions) {
+        var $actionList = $('<div>').addClass('hidden');
+        actions.forEach(function (action) {
+            var actionTitle = KAJONA.admin.lang['pe' + action.type];
+            var $actionElement = $('<a>');
+            switch (action.type) {
+                case 'EDIT':
+                    //$actionElement.append(action.name);
                     $actionElement.on('click', function () {
                         KAJONA.admin.portaleditor.openDialog(action.link);
                     });
+                    $actionElement.append($('<i>').addClass('fa fa-pencil'));
+                    break;
+                case 'DELETE':
+                    //$actionElement.append(action.name);
+                    $actionElement.on('click', function () {
+                        KAJONA.admin.portaleditor.openDialog(action.link);
+                    });
+                    $actionElement.append($('<i>').addClass('fa fa-trash'));
+                    break;
+                case 'SETACTIVE':
+                    //$actionElement.append(action.name);
+                    $actionElement.on('click', function () {
+                        KAJONA.admin.portaleditor.openDialog(action.link);
+                    });
+                    $actionElement.append($('<i>').addClass('fa fa-eye'));
+                    break;
+                case 'SETINACTIVE':
+                    //$actionElement.append(action.name);
+                    $actionElement.on('click', function () {
+                        KAJONA.admin.portaleditor.openDialog(action.link);
+                    });
+                    $actionElement.append($('<i>').addClass('fa fa-eye-slash'));
+                    break;
+                case 'CREATE':
+                    //$actionElement.append(action.name);
+                    $actionElement.on('click', function () {
+                        KAJONA.admin.portaleditor.openDialog(action.link);
+                    });
+                    $actionElement.append($('<i>').addClass('fa fa-plus-circle'));
+                    break;
+
+                case 'COPY':
+                    //$actionElement.append(action.name);
+                    $actionElement.on('click', function () {
+                        KAJONA.admin.portaleditor.openDialog(action.link);
+                    });
+                    $actionElement.append($('<i>').addClass('fa fa-files-o'));
+                    break;
+                case 'MOVE':
+                    return;
+                    break;
+                    //var $actionElement = $('<i rel="tooltip">');
+                    //$actionElement.addClass('moveHandle fa fa-arrows');
+                    //$actionElement.attr('title', actionTitle);
+                    //break;
+
+                default:
+                    return;
             }
 
-            $actionListEntry.append($actionElement);
-            $actionList.append($actionListEntry);
+            $actionList.append($actionElement);
         });
 
         return $actionList;

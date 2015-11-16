@@ -1,0 +1,7 @@
+{
+    "name" : "toolbar",
+    "version" : "1.1.0",
+    "source" : "https://github.com/paulkinzett/toolbar",
+    "license" : "MIT license",
+    "licenseurl" : "https://github.com/paulkinzett/toolbar/blob/master/LICENSE.txt"
+}

@@ -116,7 +116,7 @@
         display: none !important;
     }
 
-    &:hover {
+    &:hover, &.pressed {
         display: block !important;
         outline: 1px solid @peColorHover !important;
 
@@ -376,5 +376,44 @@ body *[data-kajona-editable] {
         line-height: 120%;
         color: #FFFFFF !important;
         font-size: @font-size-base - 3 !important;
+    }
+}
+
+/* toolbar items */
+div.tool-container.tool-bottom.toolbar-peAddBar {
+    border-radius: 0;
+    height: auto;
+    //&.tool-bottom
+
+    a.tool-item {
+        float: none;
+        width: auto;
+        color: #fff;
+    }
+
+    .tool-item:first-child:hover {
+        border-radius: 0;
+    }
+    .tool-item:last-child:hover {
+        border-radius: 0;
+    }
+
+}
+
+div.tool-container.tool-bottom.toolbar-peEditBar {
+    a.tool-item i {
+        color: #fff;
+    }
+}
+
+div.peAddButton {
+    width: 14px;
+    height: 14px;
+    padding: 7px;
+    display: inline-block;
+    background-color: inherit;
+
+    > i {
+        color: inherit;
     }
 }
