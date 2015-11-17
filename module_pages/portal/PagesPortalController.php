@@ -192,7 +192,7 @@ class PagesPortalController extends class_portal_controller implements interface
 
         }
 
-        //pe-code to add new elements on unfilled placeholders --> only if pe is visible
+        //pe-code to add new elements on unfilled block --> only if pe is visible
         if (PagesPortaleditor::isActive()) {
 
             foreach($objPlaceholders->getArrBlocks() as $objOneBlocks) {
@@ -232,7 +232,7 @@ class PagesPortalController extends class_portal_controller implements interface
 
                     $objPortalElement = $objElement->getPortalElementInstance();
 
-                    $objPortalElement->getPortaleditorPlaceholderActions(isset($arrPlaceholderWithElements[$arrSinglePlaceholder["name"].$arrSinglePlaceholder["element"]]), $objElement, $arrOnePlaceholder["placeholder"]);
+                    $objPortalElement->getPortaleditorPlaceholderActions(isset($arrPlaceholderWithElements[$arrSinglePlaceholder["name"].$arrSinglePlaceholder["element"]]), $objElement, $arrOnePlaceholder["placeholder"], $objPageData);
 
                 }
 

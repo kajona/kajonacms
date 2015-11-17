@@ -1,12 +1,16 @@
 
 
+
 @fa-font-path: "../fonts/fontawesome/font";
 @peColorHover: #9a9a9a;
+@peColorHoverBackground: rgba(154, 154, 154, 0.2);
+@peColorBackgroundInactive: #ccc;
 @wysiwygOutlineColor: #afafaf;
 @wysiwygOutlineColorHover: #7b7b7b;
 @green:                     #6cb121;
 @btn-primary-bg:            @gray-darker;
 @gray-darker:               #bfbfbf;
+
 @border-radius-base:        0px;
 @border-radius-small:       0px;
 @border-radius-large:       6px;
@@ -95,18 +99,12 @@
     //Fontawesome configuration end
 }
 
+//push the main content downwards
 #peToolbarSpacer {
     clear: both;
     height: 36px;
 }
 
-.peInactiveElement {
-    border: 1px solid #333;
-    padding: 3px;
-    margin: 2px 0 2px 0px;
-    background-color: #ccc;
-    .opacity(0.5);
-}
 
 
 /* P O R T A L E D I T O R   C O N T A I N E R */
@@ -118,20 +116,31 @@
 
     &:hover, &.pressed {
         display: block !important;
-        outline: 1px solid @peColorHover !important;
+        //outline: 1px solid @peColorHover !important;
+        background: @peColorHoverBackground !important;
+        outline: 1px solid @peColorHoverBackground !important;
+
 
         *[data-kajona-editable] {
             outline: 1px dotted @wysiwygOutlineColor;
         }
 
 
-
-        // nested pe actions shouldn't overlap
-        .peElementWrapper > .peElementActions {
-            margin: -1px 0 0 -1px !important;
+        &[data-element='block'] {
+            outline: 2px solid @wysiwygOutlineColor;
         }
+
     }
+
+    &.peInactiveElement {
+        background-color: @peColorBackgroundInactive;
+        .opacity(0.5);
+    }
+
+
 }
+
+/* MOVE / DRAG N DROP */
 
 .peElementMovePlaceholder {
     border: 3px dotted @wysiwygOutlineColor;
@@ -333,6 +342,7 @@ div.tool-container.tool-bottom.toolbar-peAddBar {
         float: none;
         width: auto;
         color: #fff;
+        text-align: left;
     }
 
     .tool-item:first-child:hover {
@@ -342,10 +352,13 @@ div.tool-container.tool-bottom.toolbar-peAddBar {
         border-radius: 0;
     }
 
+    .tool-item i {
+        color: #fff;
+    }
 }
 
 div.tool-container.tool-bottom.toolbar-peEditBar {
-    a.tool-item i {
+    a.tool-item i    {
         color: #fff;
     }
 }

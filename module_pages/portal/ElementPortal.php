@@ -282,16 +282,6 @@ abstract class ElementPortal extends class_portal_controller
         }
 
 
-        $objBaseElement = new PagesPageelement($this->getSystemid());
-
-
-        //if element is disabled & the pe is requested, wrap the content
-        if ($bitActivePortaleditor && $objBaseElement->getIntRecordStatus() == 0) {
-            //TODO really render the whole disabled element?
-            //$strElementOutput = $this->objToolkit->getPeInactiveElement(array("title" => $this->getLang("pe_inactiveElement", "pages")." (".$objBaseElement->getStrElement().")"));
-            $strElementOutput = $this->objToolkit->getPeInactiveElement(array("title" => $this->getElementOutput()));
-        }
-
         if($bitActivePortaleditor) {
             $strElementOutput = $this->addPortalEditorCode($strElementOutput);
         }
@@ -391,138 +381,27 @@ abstract class ElementPortal extends class_portal_controller
      * @param $bitElementIsExistingAtPlaceholder
      * @param PagesElement $objElement
      * @param $strPlaceholder
-     *
+     * @param PagesPage $objPage
      */
-    public function getPortaleditorPlaceholderActions($bitElementIsExistingAtPlaceholder, PagesElement $objElement, $strPlaceholder)
+    public function getPortaleditorPlaceholderActions($bitElementIsExistingAtPlaceholder, PagesElement $objElement, $strPlaceholder, PagesPage $objPage)
     {
         //fetch the language to set the correct admin-lang
         $objLanguages = new class_module_languages_language();
         $strAdminLangParam = $objLanguages->getPortalLanguage();
 
+
         if ($objElement->getIntRepeat() == 1 || !$bitElementIsExistingAtPlaceholder) {
             PagesPortaleditor::getInstance()->registerAction(
-                new PagesPortaleditorPlaceholderAction(PagesPortaleditorActionEnum::CREATE(), class_link::getLinkAdminHref("pages_content", "new", "&systemid={$this->getSystemid()}&language={$strAdminLangParam}&placeholder={$strPlaceholder}&element={$objElement->getStrName()}&pe=1"), $strPlaceholder, $objElement->getStrName())
+                new PagesPortaleditorPlaceholderAction(PagesPortaleditorActionEnum::CREATE(), class_link::getLinkAdminHref("pages_content", "new", "&systemid={$objPage->getSystemid()}&language={$strAdminLangParam}&placeholder={$strPlaceholder}&element={$objElement->getStrName()}&pe=1"), $strPlaceholder, $objElement->getStrName())
             );
         }
     }
 
 
-    public static function addPortalEditorSetActiveCode($strContent, $strSystemid, $arrConfig)
-    {
-        $strReturn = "";
-
-        if (class_module_system_setting::getConfigValue("_pages_portaleditor_") == "true" && class_carrier::getInstance()->getObjRights()->rightEdit($strSystemid) && class_carrier::getInstance()->getObjSession()->isAdmin()) {
-
-            if (class_carrier::getInstance()->getObjSession()->getSession("pe_disable") != "true") {
-
-                //switch the text-language temporary
-                $strPortalLanguage = class_carrier::getInstance()->getObjLang()->getStrTextLanguage();
-                class_carrier::getInstance()->getObjLang()->setStrTextLanguage(class_carrier::getInstance()->getObjSession()->getAdminLanguage());
-
-                //fetch the language to set the correct admin-lang
-                $objLanguages = new class_module_languages_language();
-                $strAdminLangParam = "&language=".$objLanguages->getPortalLanguage();
 
 
-                $strModule = "pages_content";
-                //param-inits ---------------------------------------
-                //Generate url to the admin-area
-                if (isset($arrConfig["pe_module"]) && $arrConfig["pe_module"] != "") {
-                    $strModule = $arrConfig["pe_module"];
-                }
-                //---------------------------------------------------
 
 
-                //---------------------------------------------------
-                //link to set element active
-                $strSetActiveLink = "";
-                //standard: pages_content.
-                if ($strModule == "pages_content") {
-                    $strSetActiveUrl = class_link::getLinkAdminHref("pages_content", "elementStatus", "&systemid=".$strSystemid.$strAdminLangParam."&pe=1");
-                    $strSetActiveLink = "<a href=\"#\" onclick=\"KAJONA.admin.portaleditor.openDialog('".$strSetActiveUrl."'); return false;\">".class_carrier::getInstance()->getObjLang()->getLang("pe_setactive", "pages")."</a>";
-                }
-                else {
-                    //Use Module-config to generate link
-                    if (isset($arrConfig["pe_action_setStatus"]) && $arrConfig["pe_action_setStatus"] != "") {
-                        $strSetActiveUrl = class_link::getLinkAdminHref($strModule, $arrConfig["pe_action_setStatus"], $arrConfig["pe_action_setStatus_params"].$strAdminLangParam."&pe=1");
-                        $strSetActiveLink = "<a href=\"#\" onclick=\"KAJONA.admin.portaleditor.openDialog('".$strSetActiveUrl."'); return false;\">".class_carrier::getInstance()->getObjLang()->getLang("pe_setactive", "pages")."</a>";
-                    }
-                }
-
-                //---------------------------------------------------
-                // layout generation
-
-                $strReturn .= class_carrier::getInstance()->getObjToolkit("portal")->getPeActionToolbar($strSystemid, array($strSetActiveLink), $strContent);
-
-                //reset the portal texts language
-                class_carrier::getInstance()->getObjLang()->setStrTextLanguage($strPortalLanguage);
-            }
-            else {
-                $strReturn = $strContent;
-            }
-        }
-        else {
-            $strReturn = $strContent;
-        }
-        return $strReturn;
-    }
-
-    /**
-     * Generates the link to create an element at a placeholder not yet existing
-     *
-     * @param string $strSystemid
-     * @param string $strPlaceholder
-     * @param PagesElement $objElement
-     *
-     * @return string
-     * @static
-     */
-    public static function getPortaleditorNewCode($strSystemid, $strPlaceholder, PagesElement $objElement)
-    {
-        $strReturn = "";
-        if (class_carrier::getInstance()->getObjRights()->rightEdit($strSystemid) && class_carrier::getInstance()->getObjSession()->isAdmin()) {
-            //switch the text-language temporary
-            $strPortalLanguage = class_carrier::getInstance()->getObjLang()->getStrTextLanguage();
-            class_carrier::getInstance()->getObjLang()->setStrTextLanguage(class_carrier::getInstance()->getObjSession()->getAdminLanguage());
-
-            //fetch the language to set the correct admin-lang
-            $objLanguages = new class_module_languages_language();
-            $strAdminLangParam = "&language=".$objLanguages->getPortalLanguage();
-
-            $strElementHref = class_link::getLinkAdminHref("pages_content", "new", "&systemid=".$strSystemid.$strAdminLangParam."&placeholder=".$strPlaceholder."&element=".$objElement->getStrName()."&pe=1");
-
-            $strReturn = class_carrier::getInstance()->getObjToolkit("portal")->getPeNewButton($strPlaceholder, $objElement->getStrDisplayName(), $strElementHref);
-
-            //reset the portal texts language
-            class_carrier::getInstance()->getObjLang()->setStrTextLanguage($strPortalLanguage);
-        }
-        return $strReturn;
-    }
-
-    /**
-     * Generates a wrapper for the single new-buttons at a given placeholder
-     *
-     * @param string $strPlaceholder
-     * @param string $strContentElements
-     *
-     * @return string
-     * @static
-     */
-    public static function getPortaleditorNewWrapperCode($strPlaceholder, $strContentElements)
-    {
-        $strPlaceholderClean = uniSubstr($strPlaceholder, 0, uniStrpos($strPlaceholder, "_"));
-
-        //switch the text-language temporary
-        $strPortalLanguage = class_carrier::getInstance()->getObjLang()->getStrTextLanguage();
-        class_carrier::getInstance()->getObjLang()->setStrTextLanguage(class_carrier::getInstance()->getObjSession()->getAdminLanguage());
-
-        $strLabel = class_carrier::getInstance()->getObjLang()->getLang("pe_new", "pages");
-
-        //reset the portal texts language
-        class_carrier::getInstance()->getObjLang()->setStrTextLanguage($strPortalLanguage);
-
-        return class_carrier::getInstance()->getObjToolkit("portal")->getPeNewButtonWrapper($strPlaceholder, $strPlaceholderClean, $strLabel, $strContentElements);
-    }
 
     /**
      * Dummy method, element needs to overwrite it

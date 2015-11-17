@@ -92,21 +92,15 @@ class ElementBlockPortal extends ElementPortal implements PortalElementInterface
      */
     public function getPortalEditorActions()
     {
-        return parent::getPortalEditorActions();
-        //FIXME: required?
 
         $objPageelement = new PagesPageelement($this->getSystemid());
         if (!$objPageelement->rightEdit()) {
             return;
         }
 
-
-
         //fetch the language to set the correct admin-lang
         $objLanguages = new class_module_languages_language();
         $strAdminLangParam = $objLanguages->getPortalLanguage();
-
-
 
         PagesPortaleditor::getInstance()->registerAction(
             new PagesPortaleditorSystemidAction(PagesPortaleditorActionEnum::COPY(), class_link::getLinkAdminHref("pages_content", "copyElement", "&systemid={$this->getSystemid()}&language={$strAdminLangParam}&pe=1"), $this->getSystemid())
@@ -129,10 +123,6 @@ class ElementBlockPortal extends ElementPortal implements PortalElementInterface
                 new PagesPortaleditorSystemidAction(PagesPortaleditorActionEnum::SETACTIVE(), class_link::getLinkAdminHref("pages_content", "elementStatus", "&systemid={$this->getSystemid()}&language={$strAdminLangParam}&pe=1"), $this->getSystemid())
             );
         }
-
-        PagesPortaleditor::getInstance()->registerAction(
-            new PagesPortaleditorPlaceholderAction(PagesPortaleditorActionEnum::CREATE(), class_link::getLinkAdminHref("pages_content", "new", "&systemid={$this->getSystemid()}&language={$strAdminLangParam}&placeholder={$objPageelement->getStrPlaceholder()}&element={$objPageelement->getStrElement()}&pe=1"), $objPageelement->getStrPlaceholder(), $objPageelement->getStrName())
-        );
 
     }
 

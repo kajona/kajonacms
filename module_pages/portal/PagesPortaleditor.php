@@ -122,7 +122,12 @@ class PagesPortaleditor  {
             return $strOutput;
         }
 
-        return "<div class='peElementWrapper' data-systemid='{$strSystemid}' data-element='{$strElement}'>{$strOutput}</div>";
+        $strClass = "peElementWrapper";
+        if($objInstance->getIntRecordStatus() == 0) {
+            $strClass .= " peInactiveElement";
+        }
+
+        return "<div class='{$strClass}' data-systemid='{$strSystemid}' data-element='{$strElement}'>{$strOutput}</div>";
     }
 
     /**

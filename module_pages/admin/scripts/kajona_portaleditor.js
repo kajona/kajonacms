@@ -371,6 +371,8 @@ KAJONA.admin.portaleditor.elementActionToolbar = {
         $.each(actions.systemIds, function (systemId, actions) {
             KAJONA.admin.portaleditor.elementActionToolbar.injectElementEditUI($('[data-systemid="' + systemId + '"]'), actions);
         });
+
+        KAJONA.admin.tooltip.initTooltip();
     },
 
     injectElementEditUI: function ($element, actions) {
@@ -384,7 +386,8 @@ KAJONA.admin.portaleditor.elementActionToolbar = {
         $element.toolbar({
             content: '#toolbar_'+$element.data('systemid'),
             position: 'bottom',
-            style: 'peEditBar'
+            style: 'peEditBar',
+            //event: 'click'
         });
     },
 
@@ -395,7 +398,7 @@ KAJONA.admin.portaleditor.elementActionToolbar = {
         var $addButton = $('<div class="btn-toolbar btn-toolbar-dark peAddButton"><i class="fa fa-plus-circle"></i></div>');
 
         var $objMenu = $('<div>').addClass('hidden').addClass('peAddToolbar').attr('id', 'menu_'+placeholderName);
-        var $menuItems = $(KAJONA.admin.portaleditor.elementActionToolbar.generateAddActionList(actions, $objMenu));
+        $(KAJONA.admin.portaleditor.elementActionToolbar.generateAddActionList(actions, $objMenu));
 
         $element.append($objMenu).append($addButton).append($objMenu);
         $addButton.toolbar({
@@ -413,10 +416,12 @@ KAJONA.admin.portaleditor.elementActionToolbar = {
             switch (action.type) {
                 case 'CREATE':
                     var $actionElement = $('<a>');
-                    $actionElement.append(action.name);
+                    $actionElement.append($('<i>').addClass('fa fa-plus-circle'));
+                    $actionElement.append(' '+action.name);
                     $actionElement.on('click', function () {
                         KAJONA.admin.portaleditor.openDialog(action.link);
                     });
+
                     $objParent.append($actionElement);
                     break;
             }
@@ -429,6 +434,7 @@ KAJONA.admin.portaleditor.elementActionToolbar = {
         actions.forEach(function (action) {
             var actionTitle = KAJONA.admin.lang['pe' + action.type];
             var $actionElement = $('<a>');
+            $actionElement.attr('rel', 'tooltip').attr('title', actionTitle);
             switch (action.type) {
                 case 'EDIT':
                     //$actionElement.append(action.name);
