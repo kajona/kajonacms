@@ -380,15 +380,23 @@ KAJONA.admin.portaleditor.elementActionToolbar = {
         $toolbar = KAJONA.admin.portaleditor.elementActionToolbar.generateActionList(actions);
         $toolbar.attr('id', 'toolbar_'+$element.data('systemid'));
 
-        //$toolbar.append(KAJONA.admin.portaleditor.elementActionToolbar.generateActionList(actions));
-
         $element.append($toolbar);
         $element.toolbar({
             content: '#toolbar_'+$element.data('systemid'),
             position: 'bottom',
-            style: 'peEditBar',
+            style: 'peEditBar'
             //event: 'click'
         });
+
+        //and generate the move-toolbar
+        actions.forEach(function (action) {
+            switch (action.type) {
+                case 'MOVE':
+                    $objHandle = $('<div>').addClass('moveHandle').append($('<i>').addClass('fa fa-arrows'));
+                    $element.prepend($objHandle);
+            }
+        });
+
     },
 
     injectElementCreateUI: function ($element, actions, placeholderName) {

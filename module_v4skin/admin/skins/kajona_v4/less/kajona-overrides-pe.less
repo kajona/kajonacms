@@ -110,11 +110,29 @@
 /* P O R T A L E D I T O R   C O N T A I N E R */
 .peElementWrapper,
 [data-systemid] {
-    & > .peElementActions {
-        display: none !important;
+    .moveHandle {
+        width: 20px;
+        height: 20px;
+        display: block !important;
+        border: 1px solid @peColorHoverBackground;
+        //position: absolute;
+        //float: left;
+        float: right;
+        //margin-left: -20px;
+        //margin-top: -1px;
+        //top: -20px;
+
+
+        background-color: @peColorHoverBackground;
     }
 
     &:hover, &.pressed {
+
+        .moveHandle {
+            display: inline-block !important;
+        }
+
+
         display: block !important;
         //outline: 1px solid @peColorHover !important;
         background: @peColorHoverBackground !important;
