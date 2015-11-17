@@ -1,0 +1,1644 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>ARTEMEON AGP [localhost/agp-core]</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow" />
+    <meta name="generator" content="AGP, www.artemeon.de" />
+</head>
+
+<body>
+
+<div class="navbar-nav navbar-fixed-top hidden-print">
+    <div class="navbar-topbar">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="sidebar-menu col-xs-1 col-sm-1 hidden-md hidden-lg">
+                    <button type="button" class="" data-toggle="offcanvas"><i class="fa fa-bars"></i></button>
+                </div>
+                <div class="col-md-4 col-sm-2 col-xs-4">
+
+                    <div class="dropdown userNotificationsDropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <i class="fa fa-user" id="icon-user"><span class="badge badge-info" id="userNotificationsCount">-</span></i> <span class="username">test</span>
+                        </a>
+                        <ul class="dropdown-menu generalContextMenu" role="menu">
+                            <li class="dropdown-submenu">
+                                <a tabindex="-1" href="#"><i class='fa fa-envelope'></i> Nachrichten</a>
+                                <ul class="dropdown-menu sub-menu" id="messagingShortlist"></ul>
+                            </li>
+
+                            <!-- messages will be inserted here -->
+                            <li class="divider"></li>
+                            <li class="dropdown-submenu">
+                                <a tabindex="-1" href="#"><i class='fa fa-tag'></i> Tags</a>
+                                <ul class="dropdown-menu sub-menu" id="tagsSubemenu"></ul>
+                            </li>
+                            <li class="divider"></li>
+                            <li><a href="https://localhost/agp-core/dashboard.html"><i class='fa fa-home'></i> Startseite</a></li>
+                            <li class="divider"></li>
+                            <li><a href="#" onclick="window.print();"><i class='fa fa-print'></i> Seite drucken</a></li>
+                            <li class="divider"></li>
+                            <li><a href="https://localhost/agp-core/user/edit.html?userid=eeec30a5645efcf1ce3f"><i class='fa fa-user'></i> Benutzer bearbeiten</a></li>
+                            <li class="divider"></li>
+                            <li><a href="https://localhost/agp-core/login/adminLogout.html"><i class="fa fa-power-off"></i> Abmelden</a></li>
+                        </ul>
+                    </div>
+                    <!--
+                    <script type="text/javascript">
+
+                        if(true) {
+                            $(function() {
+                                KAJONA.v4skin.properties.messaging = {
+                                    notification_title : 'Neue Nachrichten',
+                                    notification_body : 'Sie haben eine neue Nachricht erhalten. Klicken Sie auf diese Benachrichtigung um zur Übersicht aller Nachrichten zu gelangen.',
+                                    show_all : 'Alle Nachrichten anzeigen'
+                                };
+                                KAJONA.v4skin.messaging.pollMessages()
+                            });
+                        }
+                        else {
+                            $('#messagingShortlist').closest("li").hide();
+                        }
+
+                        if(true) {
+                            $(function() {
+                                KAJONA.v4skin.properties.tags.show_all = 'Alle Tags anzeigen';
+                                KAJONA.v4skin.initTagMenu();
+                            });
+                        }
+                        else {
+                            $('#tagsSubemenu').closest("li").hide();
+                        }
+                    </script>
+                    -->
+                    <script type='text/javascript'>            var objNode = $("<li class='divider'></li><li class='dropdown-submenu'><a tabindex='-1' href='#'><i class='fa fa-question-circle'></i> Hilfe</a><ul class='dropdown-menu sub-menu' id='helpSubmenu'><li><a href='https://localhost/agp-core/download.php?systemid=10300c05645efd15f929'><i class='fa fa-download'></i> help.txt</a></li></ul></li>");
+                    $('#tagsSubemenu').parent("li").after(objNode);</script>
+                </div>
+                <div class="col-md-3 col-sm-3 hidden-xs" style="text-align: right;">
+                    <form class="navbar-search pull-left" action="https://localhost/agp-core/index.php">
+                        <input type="hidden" name="admin" value="1" >
+                        <input type="hidden" name="module" value="search">
+                        <input type="hidden" name="action" value="search">
+
+                        <div class="input-group">
+                            <input type="text" name="search_query" class="form-control search-query" placeholder="Suchbegriff" id="globalSearchInput">
+                            <span class="input-group-addon"><i class="fa fa-search" aria-hidden="true"></i></span>
+                        </div>
+                    </form>
+
+                </div>
+                <div class="col-md-5 col-sm-6 col-xs-7 navbar-dropdown-section pull-right">
+                    <span></span>
+                    <span class="">
+    <select onchange="window.location.replace(this.value);">
+
+        <option value="https://localhost/agp-core/dashboard.html?aspect=c1561105645efcf14585" selected="selected">Providermanagement</option>
+
+        <option value="https://localhost/agp-core/dashboard.html?aspect=5ec4ee15645efcf18fbe" >Verwaltung</option>
+
+        <option value="https://localhost/agp-core/dashboard.html?aspect=1cceccc5645efd11f1da" >IMS</option>
+
+        <option value="https://localhost/agp-core/dashboard.html?aspect=e9356405645efd125f3c" >Auditmanager</option>
+
+        <option value="https://localhost/agp-core/dashboard.html?aspect=27cc0505645efd12b145" >Riskmanager</option>
+
+    </select>
+</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid pathNaviContainer">
+        <div class="row row row-offcanvas row-offcanvas-left">
+            <div class="col-md-2 hidden-xs hidden-sm" style="z-index: 0 !important;">&nbsp;</div>
+            <div class="col-md-10">
+
+                <ul class="breadcrumb">
+
+                    <li class="pathentry">
+
+                    <span class='dropdown moduleSwitch'><a href='#' data-toggle='dropdown' class='moduleSwitchLink' role='button'><i class='fa fa-home'></i></a>
+
+    <div class="dropdown-menu generalContextMenu" role="menu">
+        <ul>
+
+            <li class="dropdown-submenu" >
+                <a href="#" tabindex="-1">Übersicht</a>
+                <ul class="dropdown-menu">
+
+                    <li ><a href="https://localhost/agp-core/dashboard/list.html">Übersicht</a></li>
+
+                    <li ><a href="https://localhost/agp-core/dashboard/calendar.html">Kalender</a></li>
+
+                    <li ><a href="https://localhost/agp-core/dashboard/todo.html">Offene Aufgaben</a></li>
+
+                    <li class="divider"></li>
+
+                    <li ><a href="https://localhost/agp-core/dashboard/addWidgetToDashboard.html">Widget hinzufügen</a></li>
+
+                    <li class="divider"></li>
+
+                    <li ><a href="https://localhost/agp-core/right/change.html?changemodule=dashboard">Modul-Rechte</a></li>
+
+                </ul>
+            </li>
+
+            <li class="dropdown-submenu" >
+                <a href="#" tabindex="-1">Nachrichten</a>
+                <ul class="dropdown-menu">
+
+                    <li ><a href="https://localhost/agp-core/messaging/list.html">Liste</a></li>
+
+                    <li ><a href="https://localhost/agp-core/messaging/config.html">Einstellungen</a></li>
+
+                    <li class="divider"></li>
+
+                    <li ><a href="https://localhost/agp-core/right/change.html?changemodule=messaging">Modul-Rechte</a></li>
+
+                </ul>
+            </li>
+
+            <li class="dropdown-submenu" >
+                <a href="#" tabindex="-1">System</a>
+                <ul class="dropdown-menu">
+
+                    <li ><a href="https://localhost/agp-core/system/list.html">Installierte Module</a></li>
+
+                    <li ><a href="https://localhost/agp-core/system/systemInfo.html">Systeminformationen</a></li>
+
+                    <li ><a href="https://localhost/agp-core/system/systemSettings.html">Systemeinstellungen</a></li>
+
+                    <li ><a href="https://localhost/agp-core/system/systemTasks.html">System-Tasks</a></li>
+
+                    <li ><a href="https://localhost/agp-core/system/systemlog.html">System-Log</a></li>
+
+                    <li ><a href="https://localhost/agp-core/system/genericChangelog.html?bitBlockFolderview=true">Änderungshistorie</a></li>
+
+                    <li ><a href="https://localhost/agp-core/system/aspects.html">Aspekte</a></li>
+
+                    <li ><a href="https://localhost/agp-core/system/systemSessions.html">Sessions</a></li>
+
+                    <li ><a href="https://localhost/agp-core/system/lockedRecords.html">Gesperrte Datensätze</a></li>
+
+                    <li ><a href="https://localhost/agp-core/system/deletedRecords.html">Gelöschte Datensätze</a></li>
+
+                    <li class="divider"></li>
+
+                    <li ><a href="https://localhost/agp-core/right/change.html">Root-Rechte</a></li>
+
+                    <li class="divider"></li>
+
+                    <li ><a href="https://localhost/agp-core/right/change.html?changemodule=system">Modul-Rechte</a></li>
+
+                </ul>
+            </li>
+
+            <li class="dropdown-submenu" >
+                <a href="#" tabindex="-1">Benutzer</a>
+                <ul class="dropdown-menu">
+
+                    <li ><a href="https://localhost/agp-core/user/list.html">Alle Benutzer</a></li>
+
+                    <li class="divider"></li>
+
+                    <li ><a href="https://localhost/agp-core/user/groupList.html">Alle Gruppen</a></li>
+
+                    <li class="divider"></li>
+
+                    <li ><a href="https://localhost/agp-core/user/loginLog.html">Login-Protokoll</a></li>
+
+                    <li class="divider"></li>
+
+                    <li ><a href="https://localhost/agp-core/right/change.html?changemodule=user">Modul-Rechte</a></li>
+
+                </ul>
+            </li>
+
+            <li class="dropdown-submenu" >
+                <a href="#" tabindex="-1">Sprachen</a>
+                <ul class="dropdown-menu">
+
+                    <li ><a href="https://localhost/agp-core/languages/list.html">Liste</a></li>
+
+                    <li class="divider"></li>
+
+                    <li ><a href="https://localhost/agp-core/right/change.html?changemodule=languages">Modul-Rechte</a></li>
+
+                </ul>
+            </li>
+
+            <li class="dropdown-submenu" >
+                <a href="#" tabindex="-1">Tags</a>
+                <ul class="dropdown-menu">
+
+                    <li ><a href="https://localhost/agp-core/tags/list.html">Liste</a></li>
+
+                    <li ><a href="https://localhost/agp-core/tags/listFavorites.html">Favoriten</a></li>
+
+                    <li class="divider"></li>
+
+                    <li ><a href="https://localhost/agp-core/right/change.html?changemodule=tags">Modul-Rechte</a></li>
+
+                </ul>
+            </li>
+
+            <li class="dropdown-submenu" >
+                <a href="#" tabindex="-1">Workflows</a>
+                <ul class="dropdown-menu">
+
+                    <li ><a href="https://localhost/agp-core/workflows/myList.html">Meine Workflows</a></li>
+
+                    <li ><a href="https://localhost/agp-core/workflows/list.html">Liste</a></li>
+
+                    <li class="divider"></li>
+
+                    <li ><a href="https://localhost/agp-core/workflows/listHandlers.html">Workflow-Handlers</a></li>
+
+                    <li class="divider"></li>
+
+                    <li ><a href="https://localhost/agp-core/right/change.html?changemodule=workflows">Modul-Rechte</a></li>
+
+                </ul>
+            </li>
+
+            <li class="dropdown-submenu" >
+                <a href="#" tabindex="-1">Nested Sets</a>
+                <ul class="dropdown-menu">
+
+                    <li ><a href="https://localhost/agp-core/nestedset/list.html">Liste</a></li>
+
+                    <li class="divider"></li>
+
+                    <li ><a href="https://localhost/agp-core/right/change.html?changemodule=nestedset">Modul-Rechte</a></li>
+
+                </ul>
+            </li>
+
+            <li class="dropdown-submenu" >
+                <a href="#" tabindex="-1">Medien-Manager</a>
+                <ul class="dropdown-menu">
+
+                    <li ><a href="https://localhost/agp-core/mediamanager/list.html">Liste</a></li>
+
+                    <li class="divider"></li>
+
+                    <li ><a href="https://localhost/agp-core/mediamanager/massSync.html">Alle synchronisieren</a></li>
+
+                    <li ><a href="https://localhost/agp-core/mediamanager/logbook.html">Logbuch</a></li>
+
+                    <li class="divider"></li>
+
+                    <li ><a href="https://localhost/agp-core/right/change.html?changemodule=mediamanager">Modul-Rechte</a></li>
+
+                </ul>
+            </li>
+
+            <li class="dropdown-submenu" >
+                <a href="#" tabindex="-1">Paketverwaltung</a>
+                <ul class="dropdown-menu">
+
+                    <li ><a href="https://localhost/agp-core/packagemanager/list.html">Installierte Pakete</a></li>
+
+                    <li ><a href="https://localhost/agp-core/packagemanager/listTemplates.html">Template-Verwaltung</a></li>
+
+                    <li class="divider"></li>
+
+                    <li ><a href="https://localhost/agp-core/right/change.html?changemodule=packagemanager">Modul-Rechte</a></li>
+
+                </ul>
+            </li>
+
+            <li class="dropdown-submenu" >
+                <a href="#" tabindex="-1">Suche</a>
+                <ul class="dropdown-menu">
+
+                    <li ><a href="https://localhost/agp-core/search/search.html">Suche</a></li>
+
+                    <li class="divider"></li>
+
+                    <li ><a href="https://localhost/agp-core/search/list.html">Liste</a></li>
+
+                    <li class="divider"></li>
+
+                    <li ><a href="https://localhost/agp-core/right/change.html?changemodule=search">Modul-Rechte</a></li>
+
+                </ul>
+            </li>
+
+            <li class="dropdown-submenu" >
+                <a href="#" tabindex="-1">Auswertung</a>
+                <ul class="dropdown-menu">
+
+                    <li ><a href="https://localhost/agp-core/auswertung/show.html?report=userrights">Anwenderliste mit zugehörigen Gruppen</a></li>
+
+                    <li ><a href="https://localhost/agp-core/auswertung/show.html?report=bewertungen">Bewertungen</a></li>
+
+                    <li ><a href="https://localhost/agp-core/auswertung/show.html?report=kritischebewertungen">Bewertungen mit nicht grüner Teilampel</a></li>
+
+                    <li ><a href="https://localhost/agp-core/auswertung/show.html?report=ratingpermissions">Bewertungs-Berechtigungen</a></li>
+
+                    <li ><a href="https://localhost/agp-core/auswertung/show.html?report=ratingparameter">Bewertungs-Parameter</a></li>
+
+                    <li ><a href="https://localhost/agp-core/auswertung/show.html?report=bewstat">Bewertungsstatistik</a></li>
+
+                    <li ><a href="https://localhost/agp-core/auswertung/show.html?report=dmsleistungsscheine">DMS Leistungsscheine</a></li>
+
+                    <li ><a href="https://localhost/agp-core/auswertung/show.html?report=mep_fulfillment">Erfüllungsgrad MEP Objekte</a></li>
+
+                    <li ><a href="https://localhost/agp-core/auswertung/show.html?report=ergebnisausweis">Ergebnisausweis</a></li>
+
+                    <li ><a href="https://localhost/agp-core/auswertung/show.html?report=maluscalc">Malusermittlung</a></li>
+
+                    <li ><a href="https://localhost/agp-core/auswertung/show.html?report=aufgaben">Maßnahmen</a></li>
+
+                    <li ><a href="https://localhost/agp-core/auswertung/show.html?report=aufgaben_bystatus">Maßnahmen nach Status</a></li>
+
+                    <li ><a href="https://localhost/agp-core/auswertung/show.html?report=prozesse">Objekte</a></li>
+
+                    <li ><a href="https://localhost/agp-core/auswertung/show.html?report=matrix">Objekte und Steuerungsdimensionen</a></li>
+
+                    <li ><a href="https://localhost/agp-core/auswertung/show.html?report=thresholds">Parameterhistorie</a></li>
+
+                    <li ><a href="https://localhost/agp-core/auswertung/show.html?report=imsclaim">Schadensfälle</a></li>
+
+                    <li ><a href="https://localhost/agp-core/auswertung/show.html?report=scorecombination">Scorekombination</a></li>
+
+                    <li ><a href="https://localhost/agp-core/auswertung/show.html?report=dimensionen">Steuerungs-Dimensionen</a></li>
+
+                    <li ><a href="https://localhost/agp-core/auswertung/show.html?report=zeitreihen">Zeitscheiben</a></li>
+
+                    <li ><a href="https://localhost/agp-core/auswertung/show.html?report=rateableobjectsoverview">Übersicht bewertbare Objekte</a></li>
+
+                    <li class="divider"></li>
+
+                    <li ><a href="https://localhost/agp-core/auswertung/setParams.html?report=">Aktuelle Parametrisierung</a></li>
+
+                    <li ><a href="https://localhost/agp-core/auswertung/listParams.html">Gespeicherte Parameter</a></li>
+
+                    <li class="divider"></li>
+
+                    <li ><a href="https://localhost/agp-core/right/change.html?changemodule=auswertung">Modul-Rechte</a></li>
+
+                </ul>
+            </li>
+
+            <li class="dropdown-submenu" >
+                <a href="#" tabindex="-1">CIM</a>
+                <ul class="dropdown-menu">
+
+                    <li ><a href="https://localhost/agp-core/cim/list.html">Incidents</a></li>
+
+                    <li class="divider"></li>
+
+                    <li ><a href="https://localhost/agp-core/cim/showReport.html?report=incident_open">Offene Incidents</a></li>
+
+                    <li ><a href="https://localhost/agp-core/cim/showReport.html?report=incident_delta">Delta-Analyse</a></li>
+
+                    <li ><a href="https://localhost/agp-core/cim/showReport.html?report=incident_time_history">Zeitliche Entwicklung</a></li>
+
+                    <li ><a href="https://localhost/agp-core/cim/showReport.html?report=incident_dgm">Data governance Management report</a></li>
+
+                    <li ><a href="https://localhost/agp-core/cim/showReport.html?report=incident_kpi">KPI-Report</a></li>
+
+                    <li ><a href="https://localhost/agp-core/cim/showReport.html?report=incident_escalation">Eskalations-Monitoring</a></li>
+
+                    <li ><a href="https://localhost/agp-core/cim/setTimeslot.html">Auswertungszeitraum setzen</a></li>
+
+                    <li class="divider"></li>
+
+                    <li ><a href="https://localhost/agp-core/right/change.html?changemodule=cim">Modul-Rechte</a></li>
+
+                </ul>
+            </li>
+
+            <li class="dropdown-submenu" >
+                <a href="#" tabindex="-1">Einstellungen</a>
+                <ul class="dropdown-menu">
+
+                    <li ><a href="https://localhost/agp-core/einstellungen/list.html">Alle Einstellungen</a></li>
+
+                    <li ><a href="https://localhost/agp-core/einstellungen/changeStatus.html">Statusänderung</a></li>
+
+                    <li ><a href="https://localhost/agp-core/einstellungen/changeDate.html">Datumsänderung</a></li>
+
+                    <li class="divider"></li>
+
+                    <li ><a href="https://localhost/agp-core/einstellungen/changeSettingHistory.html?field=threshold">Schwellenwert für Aggregation anpassen</a></li>
+
+                    <li ><a href="https://localhost/agp-core/einstellungen/changeSettingHistory.html?field=ratingscores">Ampel-Wertigkeiten anpassen</a></li>
+
+                    <li ><a href="https://localhost/agp-core/einstellungen/changeSettingHistory.html?field=thresholdrating">Schwellenwert für Bewertungen anpassen</a></li>
+
+                    <li ><a href="https://localhost/agp-core/einstellungen/changeSettingHistory.html?field=weight">Gewicht anpassen</a></li>
+
+                    <li class="divider"></li>
+
+                    <li ><a href="https://localhost/agp-core/einstellungen/listBlockedday.html">Gesperrte Tage</a></li>
+
+                    <li class="divider"></li>
+
+                    <li ><a href="https://localhost/agp-core/right/change.html?changemodule=einstellungen">Modul-Rechte</a></li>
+
+                </ul>
+            </li>
+
+            <li class="dropdown-submenu" >
+                <a href="#" tabindex="-1">Schadensfälle</a>
+                <ul class="dropdown-menu">
+
+                    <li ><a href="https://localhost/agp-core/imsclaim/list.html">Liste</a></li>
+
+                    <li ><a href="https://localhost/agp-core/imsclaim/showReport.html">Auswertung</a></li>
+
+                    <li ><a href="https://localhost/agp-core/imsclaim/setZeitscheibe.html">Auswertungszeitraum setzen</a></li>
+
+                    <li class="divider"></li>
+
+                    <li ><a href="https://localhost/agp-core/right/change.html?changemodule=imsclaim">Modul-Rechte</a></li>
+
+                </ul>
+            </li>
+
+            <li class="dropdown-submenu" >
+                <a href="#" tabindex="-1">Report Generator</a>
+                <ul class="dropdown-menu">
+
+                    <li ><a href="https://localhost/agp-core/reportconfigurator/list.html">Reports</a></li>
+
+                    <li class="divider"></li>
+
+                    <li ><a href="https://localhost/agp-core/right/change.html?changemodule=reportconfigurator">Modul-Rechte</a></li>
+
+                </ul>
+            </li>
+
+            <li class="dropdown-submenu" >
+                <a href="#" tabindex="-1">Schulungen</a>
+                <ul class="dropdown-menu">
+
+                    <li ><a href="https://localhost/agp-core/trainings/list.html">Schulungen</a></li>
+
+                    <li class="divider"></li>
+
+                    <li ><a href="https://localhost/agp-core/trainings/showReport.html">Auswertung</a></li>
+
+                    <li ><a href="https://localhost/agp-core/trainings/setZeitscheibe.html">Auswertungszeitraum setzen</a></li>
+
+                    <li class="divider"></li>
+
+                    <li ><a href="https://localhost/agp-core/right/change.html?changemodule=trainings">Modul-Rechte</a></li>
+
+                </ul>
+            </li>
+
+            <li class="dropdown-submenu" >
+                <a href="#" tabindex="-1">Maßnahmen</a>
+                <ul class="dropdown-menu">
+
+                    <li ><a href="https://localhost/agp-core/aufgaben/list.html">Meine Maßnahmen</a></li>
+
+                    <li class="divider"></li>
+
+                    <li ><a href="https://localhost/agp-core/right/change.html?changemodule=aufgaben">Modul-Rechte</a></li>
+
+                </ul>
+            </li>
+
+            <li class="dropdown-submenu" >
+                <a href="#" tabindex="-1">Projektabwicklung</a>
+                <ul class="dropdown-menu">
+
+                    <li ><a href="https://localhost/agp-core/projecttracker/list.html">Projekte</a></li>
+
+                    <li class="divider"></li>
+
+                    <li ><a href="https://localhost/agp-core/projecttracker/showReport.html">Auswertung</a></li>
+
+                    <li ><a href="https://localhost/agp-core/projecttracker/setZeitscheibe.html">Auswertungszeitraum setzen</a></li>
+
+                    <li class="divider"></li>
+
+                    <li ><a href="https://localhost/agp-core/right/change.html?changemodule=projecttracker">Modul-Rechte</a></li>
+
+                </ul>
+            </li>
+
+            <li class="dropdown-submenu" >
+                <a href="#" tabindex="-1">Objektverwaltung</a>
+                <ul class="dropdown-menu">
+
+                    <li ><a href="https://localhost/agp-core/prozessverwaltung/list.html">Objekt Hierarchie</a></li>
+
+                    <li ><a href="https://localhost/agp-core/prozessverwaltung/edit/f4106e05645efd3666fd.html">Default Werte bearbeiten</a></li>
+
+                    <li class="divider"></li>
+
+                    <li ><a href="https://localhost/agp-core/prozessverwaltung/listDimension.html">Steuerungsdimensionen</a></li>
+
+                    <li class="divider"></li>
+
+                    <li ><a href="https://localhost/agp-core/prozessverwaltung/listOe.html">Organisationseinheiten</a></li>
+
+                    <li class="divider"></li>
+
+                    <li ><a href="https://localhost/agp-core/prozessverwaltung/listFavorit.html">Objekt Favoriten</a></li>
+
+                    <li class="divider"></li>
+
+                    <li ><a href="https://localhost/agp-core/right/change.html?changemodule=prozessverwaltung">Modul-Rechte</a></li>
+
+                </ul>
+            </li>
+
+            <li class="dropdown-submenu" >
+                <a href="#" tabindex="-1">Portfolioperformance</a>
+                <ul class="dropdown-menu">
+
+                    <li ><a href="https://localhost/agp-core/risikocockpit/list.html">Nominalvolumen</a></li>
+
+                    <li ><a href="https://localhost/agp-core/risikocockpit/listNettofehlbetrag.html">Nettofehlbetrag/ -Überschuss</a></li>
+
+                    <li ><a href="https://localhost/agp-core/risikocockpit/listBusinessplaneffekt.html">Businessplaneffekte</a></li>
+
+                    <li ><a href="https://localhost/agp-core/risikocockpit/listRisikovorsorge.html">Risikovorsorge</a></li>
+
+                    <li ><a href="https://localhost/agp-core/risikocockpit/listPortfolio.html">Ratingstruktur Portfolio</a></li>
+
+                    <li ><a href="https://localhost/agp-core/risikocockpit/listZinssensitivitaet.html">Zins-/Spreadrisiko-Sensitivität</a></li>
+
+                    <li ><a href="https://localhost/agp-core/risikocockpit/listWaehrungssensitivitaet.html">Währungssensitivitäten</a></li>
+
+                    <li ><a href="https://localhost/agp-core/risikocockpit/listLiquiditaetsrisiko.html">Liquiditätsrisiken</a></li>
+
+                    <li class="divider"></li>
+
+                    <li ><a href="https://localhost/agp-core/risikocockpit/csvImport.html">Excel-Daten importieren</a></li>
+
+                    <li class="divider"></li>
+
+                    <li ><a href="https://localhost/agp-core/risikocockpit/showReportAbwicklung.html">Auswertung Abwicklung</a></li>
+
+                    <li ><a href="https://localhost/agp-core/risikocockpit/showReportRisiko.html">Auswertung Risiko</a></li>
+
+                    <li ><a href="https://localhost/agp-core/risikocockpit/setZeitscheibe.html">Auswertungszeitraum setzen</a></li>
+
+                    <li class="divider"></li>
+
+                    <li ><a href="https://localhost/agp-core/right/change.html?changemodule=risikocockpit">Modul-Rechte</a></li>
+
+                </ul>
+            </li>
+
+            <li class="dropdown-submenu" >
+                <a href="#" tabindex="-1">Risikoanalyse</a>
+                <ul class="dropdown-menu">
+
+                    <li ><a href="https://localhost/agp-core/riskanalysis/list.html">Liste</a></li>
+
+                    <li class="divider"></li>
+
+                    <li ><a href="https://localhost/agp-core/riskanalysis/showReport.html?report=riskheatmap">Risiko Heatmap</a></li>
+
+                    <li class="divider"></li>
+
+                    <li ><a href="https://localhost/agp-core/right/change.html?changemodule=riskanalysis">Modul-Rechte</a></li>
+
+                </ul>
+            </li>
+
+            <li class="dropdown-submenu" >
+                <a href="#" tabindex="-1">OpRisk</a>
+                <ul class="dropdown-menu">
+
+                    <li ><a href="https://localhost/agp-core/oprisk/list.html">ORSA</a></li>
+
+                    <li ><a href="https://localhost/agp-core/oprisk/listEvent.html">OpRisk Ereignisse</a></li>
+
+                    <li ><a href="https://localhost/agp-core/oprisk/listEventCauser.html">Stellungnahmen Ereignisse</a></li>
+
+                    <li ><a href="https://localhost/agp-core/oprisk/listAllTasks.html">Maßnahmen</a></li>
+
+                    <li class="divider"></li>
+
+                    <li ><a href="https://localhost/agp-core/oprisk/releaseOrsa.html">ORSA freigeben</a></li>
+
+                    <li ><a href="https://localhost/agp-core/oprisk/releaseEvent.html">OpRisk Ereignisse freigeben</a></li>
+
+                    <li ><a href="https://localhost/agp-core/oprisk/listOrsaConfirmationProcess.html">ORSA Bestätigungsprozess</a></li>
+
+                    <li ><a href="https://localhost/agp-core/oprisk/listEventConfirmationProcess.html">Ereignis Bestätigungsprozess</a></li>
+
+                    <li ><a href="https://localhost/agp-core/oprisk/rolloverOrsa.html">ORSA Rollover</a></li>
+
+                    <li class="divider"></li>
+
+                    <li ><a href="https://localhost/agp-core/oprisk/showReport.html?report=opriskoevsrating">Auswertung Risiken</a></li>
+
+                    <li ><a href="https://localhost/agp-core/oprisk/showReport.html?report=riskmap">Risikolandkarte</a></li>
+
+                    <li ><a href="https://localhost/agp-core/oprisk/showReport.html?report=scenario">Auswertung Szenarien</a></li>
+
+                    <li ><a href="https://localhost/agp-core/oprisk/showReport.html?report=riskheatmap">Risiko Heatmap</a></li>
+
+                    <li ><a href="https://localhost/agp-core/oprisk/showReport.html?report=backtesting">Backtesting Risiken</a></li>
+
+                    <li ><a href="https://localhost/agp-core/oprisk/showReport.html?report=riskcategory">Risiko nach Ursachenkategorie</a></li>
+
+                    <li ><a href="https://localhost/agp-core/oprisk/showReport.html?report=opriskexport">Export Risiken</a></li>
+
+                    <li class="divider"></li>
+
+                    <li ><a href="https://localhost/agp-core/oprisk/showReport.html?report=eventoevsrating">Auswertung Ereignisse</a></li>
+
+                    <li ><a href="https://localhost/agp-core/oprisk/showReport.html?report=eventmap">Ereignislandkarte</a></li>
+
+                    <li ><a href="https://localhost/agp-core/oprisk/showReport.html?report=loss_event">Auswertung Ereignisse nach Verlust/Gewinn</a></li>
+
+                    <li ><a href="https://localhost/agp-core/oprisk/showReport.html?report=event_awb">AWB</a></li>
+
+                    <li ><a href="https://localhost/agp-core/oprisk/showReport.html?report=eventexport">Export Ereignisse</a></li>
+
+                    <li class="divider"></li>
+
+                    <li ><a href="https://localhost/agp-core/oprisk/showReport.html?report=oprisk_tasks">Auswertung Maßnahmen</a></li>
+
+                    <li class="divider"></li>
+
+                    <li ><a href="https://localhost/agp-core/oprisk/setTimeslot.html">Auswertungszeitraum setzen</a></li>
+
+                    <li class="divider"></li>
+
+                    <li ><a href="https://localhost/agp-core/oprisk/listOeAssignments.html">Verantwortlichkeiten</a></li>
+
+                    <li class="divider"></li>
+
+                    <li ><a href="https://localhost/agp-core/right/change.html?changemodule=oprisk">Modul-Rechte</a></li>
+
+                </ul>
+            </li>
+
+            <li class="dropdown-submenu" >
+                <a href="#" tabindex="-1">Transaktionen</a>
+                <ul class="dropdown-menu">
+
+                    <li ><a href="https://localhost/agp-core/transactions/list.html">Liste</a></li>
+
+                    <li class="divider"></li>
+
+                    <li ><a href="https://localhost/agp-core/right/change.html?changemodule=transactions">Modul-Rechte</a></li>
+
+                </ul>
+            </li>
+
+            <li class="dropdown-submenu" >
+                <a href="#" tabindex="-1">Auditmanager</a>
+                <ul class="dropdown-menu">
+
+                    <li ><a href="https://localhost/agp-core/auditmanager/list.html">Monita</a></li>
+
+                    <li class="divider"></li>
+
+                    <li ><a href="https://localhost/agp-core/auditmanager/showReport.html?report=admentityvsaudit">Übersicht Ges. &amp; Prüfung</a></li>
+
+                    <li ><a href="https://localhost/agp-core/auditmanager/showReport.html?report=admentityvsauditmonita">Monita Ges. &amp; Prüfung</a></li>
+
+                    <li ><a href="https://localhost/agp-core/auditmanager/showReport.html?report=admentityvsaudittask">Maßnahmen Ges. &amp; Prüfung</a></li>
+
+                    <li ><a href="https://localhost/agp-core/auditmanager/showReport.html?report=admoevsaudit">Übersicht GB &amp; Prüfung</a></li>
+
+                    <li class="divider"></li>
+
+                    <li ><a href="https://localhost/agp-core/auditmanager/showReport.html?report=admoevsauditmonita">Monita GB &amp; Status</a></li>
+
+                    <li ><a href="https://localhost/agp-core/auditmanager/showReport.html?report=admoevsaudittask">Maßnahmen GB &amp; Status</a></li>
+
+                    <li ><a href="https://localhost/agp-core/auditmanager/showReport.html?report=admentityvsstatus">Gesellschaft &amp; Status</a></li>
+
+                    <li class="divider"></li>
+
+                    <li ><a href="https://localhost/agp-core/auditmanager/showReport.html?report=admentityvsrating">Gesellschaft &amp; Gewichtung/Schweregrad</a></li>
+
+                    <li ><a href="https://localhost/agp-core/auditmanager/showReport.html?report=admclustervsstatus">Cluster und Status</a></li>
+
+                    <li ><a href="https://localhost/agp-core/auditmanager/showReport.html?report=admclustervsrating">Cluster &amp; Gewichtung/Schweregrad</a></li>
+
+                    <li ><a href="https://localhost/agp-core/auditmanager/showReport.html?report=admclustervsresource">Prüfungsverteilung</a></li>
+
+                    <li ><a href="https://localhost/agp-core/auditmanager/showReport.html?report=admclustervsaudit">Prüfungstermine</a></li>
+
+                    <li class="divider"></li>
+
+                    <li ><a href="https://localhost/agp-core/auditmanager/showReport.html?report=admresources">Ressourcenauslastung</a></li>
+
+                    <li class="divider"></li>
+
+                    <li ><a href="https://localhost/agp-core/auditmanager/setTimeslot.html">Auswertungszeitraum setzen</a></li>
+
+                    <li class="divider"></li>
+
+                    <li ><a href="https://localhost/agp-core/auditmanager/import.html">Excel-Import</a></li>
+
+                    <li ><a href="https://localhost/agp-core/auditmanagerresources/listImportLog.html">Import-Protokolle</a></li>
+
+                    <li ><a href="https://localhost/agp-core/auditmanagerresources/resetFollowup.html">Follow-Up zurücksetzen</a></li>
+
+                    <li class="divider"></li>
+
+                    <li ><a href="https://localhost/agp-core/auditmanagerresources/listCluster.html">Cluster</a></li>
+
+                    <li ><a href="https://localhost/agp-core/auditmanagerresources/listEntity.html">Gesellschaften</a></li>
+
+                    <li ><a href="https://localhost/agp-core/auditmanagerresources/listReference.html">Referenzen</a></li>
+
+                    <li ><a href="https://localhost/agp-core/auditmanagerresources/listResource.html">Auditressourcen</a></li>
+
+                    <li ><a href="https://localhost/agp-core/auditmanagerresources/listAudititem.html">Prüfungsschwerpunkte</a></li>
+
+                    <li ><a href="https://localhost/agp-core/auditmanagerresources/listOeAssignments.html">Verantwortlichkeiten</a></li>
+
+                    <li class="divider"></li>
+
+                    <li ><a href="https://localhost/agp-core/right/change.html?changemodule=auditmanager">Modul-Rechte</a></li>
+
+                </ul>
+            </li>
+
+            <li class="dropdown-submenu" >
+                <a href="#" tabindex="-1">DMS Integration</a>
+                <ul class="dropdown-menu">
+
+                    <li ><a href="https://localhost/agp-core/dmsintegration/list.html">DMS Pingbacks</a></li>
+
+                    <li class="divider"></li>
+
+                    <li ><a href="https://localhost/agp-core/right/change.html?changemodule=dmsintegration">Modul-Rechte</a></li>
+
+                </ul>
+            </li>
+
+            <li class="dropdown-submenu" >
+                <a href="#" tabindex="-1">Schadensfälle & Risikoereignisse</a>
+                <ul class="dropdown-menu">
+
+                    <li ><a href="https://localhost/agp-core/incidents/list.html">Liste</a></li>
+
+                    <li class="divider"></li>
+
+                    <li ><a href="https://localhost/agp-core/incidents/showReport.html?report=incidents">Auswertung Schadensfälle</a></li>
+
+                    <li class="divider"></li>
+
+                    <li ><a href="https://localhost/agp-core/right/change.html?changemodule=incidents">Modul-Rechte</a></li>
+
+                </ul>
+            </li>
+
+            <li class="dropdown-submenu" >
+                <a href="#" tabindex="-1">Bewertungen</a>
+                <ul class="dropdown-menu">
+
+                    <li ><a href="https://localhost/agp-core/leistungsscheine/list.html?filter=all">Alle Bewertungen</a></li>
+
+                    <li ><a href="https://localhost/agp-core/leistungsscheine/list.html?filter=owner">Meine Bewertungen</a></li>
+
+                    <li class="divider"></li>
+
+                    <li ><a href="https://localhost/agp-core/right/change.html?changemodule=leistungsscheine">Modul-Rechte</a></li>
+
+                </ul>
+            </li>
+
+            <li class="dropdown-submenu" >
+                <a href="#" tabindex="-1">Bewertungen Import</a>
+                <ul class="dropdown-menu">
+
+                    <li ><a href="https://localhost/agp-core/leistungsscheineimport/import.html">Bewertungen importieren</a></li>
+
+                    <li ><a href="https://localhost/agp-core/leistungsscheineimport/list.html">Import-Protokolle</a></li>
+
+                    <li class="divider"></li>
+
+                    <li ><a href="https://localhost/agp-core/right/change.html?changemodule=leistungsscheineimport">Modul-Rechte</a></li>
+
+                </ul>
+            </li>
+
+            <li class="dropdown-submenu" >
+                <a href="#" tabindex="-1">Langfristige Bewertung</a>
+                <ul class="dropdown-menu">
+
+                    <li ><a href="https://localhost/agp-core/longtermrating/list.html">Liste</a></li>
+
+                    <li class="divider"></li>
+
+                    <li ><a href="https://localhost/agp-core/right/change.html?changemodule=longtermrating">Modul-Rechte</a></li>
+
+                </ul>
+            </li>
+
+            <li class="dropdown-submenu" >
+                <a href="#" tabindex="-1">Malusermittlung</a>
+                <ul class="dropdown-menu">
+
+                    <li ><a href="https://localhost/agp-core/maluscalc/list.html">Malus gem. Governance</a></li>
+
+                    <li ><a href="https://localhost/agp-core/maluscalc/listPrice.html">Basisvergütungen</a></li>
+
+                    <li ><a href="https://localhost/agp-core/maluscalc/listSettings.html">Einstellungen</a></li>
+
+                    <li ><a href="https://localhost/agp-core/auswertung/show.html?report=maluscalc">Auswertung</a></li>
+
+                    <li class="divider"></li>
+
+                    <li ><a href="https://localhost/agp-core/right/change.html?changemodule=maluscalc">Modul-Rechte</a></li>
+
+                </ul>
+            </li>
+
+            <li class="dropdown-submenu" >
+                <a href="#" tabindex="-1">Pönale</a>
+                <ul class="dropdown-menu">
+
+                    <li ><a href="https://localhost/agp-core/penitentfee/list.html">Liste</a></li>
+
+                    <li ><a href="https://localhost/agp-core/penitentfee/listVerzoegerungsstufe.html">Ausstehende KPIs Verzögerungsstufe</a></li>
+
+                    <li ><a href="https://localhost/agp-core/penitentfee/listRatingmodell.html">Ausstehende KPIs Ratingmodelle</a></li>
+
+                    <li ><a href="https://localhost/agp-core/penitentfee/showReport.html">Auswertung</a></li>
+
+                    <li class="divider"></li>
+
+                    <li ><a href="https://localhost/agp-core/right/change.html?changemodule=penitentfee">Modul-Rechte</a></li>
+
+                </ul>
+            </li>
+
+            <li class="dropdown-submenu" >
+                <a href="#" tabindex="-1">Checklisten</a>
+                <ul class="dropdown-menu">
+
+                    <li ><a href="https://localhost/agp-core/checklist/listCheckTemplate.html">Vorlagenverwaltung</a></li>
+
+                    <li ><a href="https://localhost/agp-core/checklist/listCheck.html">Fragebögen</a></li>
+
+                    <li class="divider"></li>
+
+                    <li ><a href="https://localhost/agp-core/checklist/showReport.html?report=checklist">Auswertung</a></li>
+
+                    <li ><a href="https://localhost/agp-core/checklist/setTimeslot.html">Auswertungszeitraum</a></li>
+
+                    <li class="divider"></li>
+
+                    <li ><a href="https://localhost/agp-core/checklist/listOeAssignments.html">Verantwortlichkeiten</a></li>
+
+                    <li class="divider"></li>
+
+                    <li ><a href="https://localhost/agp-core/right/change.html?changemodule=checklist">Modul-Rechte</a></li>
+
+                </ul>
+            </li>
+
+            <li class="dropdown-submenu" >
+                <a href="#" tabindex="-1">CWFT</a>
+                <ul class="dropdown-menu">
+
+                    <li ><a href="https://localhost/agp-core/cwft/showReport.html">Auswertung</a></li>
+
+                    <li ><a href="https://localhost/agp-core/cwft/setTimeslot.html">Auswertungszeitraum setzen</a></li>
+
+                    <li class="divider"></li>
+
+                    <li ><a href="https://localhost/agp-core/right/change.html?changemodule=cwft">Modul-Rechte</a></li>
+
+                </ul>
+            </li>
+
+            <li class="dropdown-submenu" >
+                <a href="#" tabindex="-1">Ergebnisausweis</a>
+                <ul class="dropdown-menu">
+
+                    <li ><a href="https://localhost/agp-core/ergebnisausweis/list.html">Ergebnisausweis Konfiguration</a></li>
+
+                    <li ><a href="https://localhost/agp-core/auswertung/show.html?report=ergebnisausweis">Auswertung</a></li>
+
+                    <li class="divider"></li>
+
+                    <li ><a href="https://localhost/agp-core/right/change.html?changemodule=ergebnisausweis">Modul-Rechte</a></li>
+
+                </ul>
+            </li>
+        </ul>
+    </div>
+    <script type="text/javascript">
+        $('.dropdown-menu .dropdown-submenu a').click(function (e) {
+            e.stopPropagation();
+        });
+    </script>
+</span>
+                    </li>
+
+                    <li class="pathentry">
+                        <a href="https://localhost/agp-core/dashboard.html" title="Übersicht"    >Übersicht</a>
+                    </li>
+
+                    <li id="quickhelp" class=" pull-right" style=" "><i class="fa fa-question-circle"></i></li>
+                </ul>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid main-container">
+    <div class="row row-offcanvas row-offcanvas-left">
+
+        <!-- MODULE NAVIGATION -->
+        <div class="col-md-2 hidden-print mainnavi-container sidebar-offcanvas" id="sidebar">
+            <div class="sidebar-nav">
+                <div class="panel-group" id="moduleNavigation">
+                    <div class="nav-header">AGP V5</div>
+
+
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <a class="active" data-toggle="collapse" data-parent="#moduleNavigation" href="#cc1e00c5645efd05a2ff">
+                                Übersicht
+                            </a>
+                        </div>
+                        <div id="cc1e00c5645efd05a2ff" class="panel-collapse collapse in">
+                            <div class="panel-body">
+                                <ul>
+                                    <li><a href="https://localhost/agp-core/dashboard/list.html" title="Übersicht"  class="adminnavi"   >Übersicht</a></li>
+
+                                    <li><a href="https://localhost/agp-core/dashboard/calendar.html" title="Kalender"  class="adminnavi"   >Kalender</a></li>
+
+                                    <li><a href="https://localhost/agp-core/dashboard/todo.html" title="Offene Aufgaben"  class="adminnavi"   >Offene Aufgaben</a></li>
+
+                                    <li class="divider"></li>
+
+                                    <li><a href="https://localhost/agp-core/dashboard/addWidgetToDashboard.html" title="Widget hinzufügen"  class="adminnavi"   >Widget hinzufügen</a></li>
+
+                                    <li class="divider"></li>
+
+                                    <li><a href="https://localhost/agp-core/right/change.html?changemodule=dashboard" title="Modul-Rechte"    >Modul-Rechte</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <a data-toggle="collapse" data-parent="#moduleNavigation" href="#21910155645efcee68c5">
+                                Nachrichten
+                            </a>
+                        </div>
+                        <div id="21910155645efcee68c5" class="panel-collapse collapse">
+                            <div class="panel-body">
+                                <ul>
+                                    <li><a href="https://localhost/agp-core/messaging/list.html" title="Liste"  class="adminnavi"   >Liste</a></li>
+
+                                    <li><a href="https://localhost/agp-core/messaging/config.html" title="Einstellungen"  class="adminnavi"   >Einstellungen</a></li>
+
+                                    <li class="divider"></li>
+
+                                    <li><a href="https://localhost/agp-core/right/change.html?changemodule=messaging" title="Modul-Rechte"    >Modul-Rechte</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <a data-toggle="collapse" data-parent="#moduleNavigation" href="#cc0005e5645efcf41068">
+                                Tags
+                            </a>
+                        </div>
+                        <div id="cc0005e5645efcf41068" class="panel-collapse collapse">
+                            <div class="panel-body">
+                                <ul>
+                                    <li><a href="https://localhost/agp-core/tags/list.html" title="Liste"  class="adminnavi"   >Liste</a></li>
+
+                                    <li><a href="https://localhost/agp-core/tags/listFavorites.html" title="Favoriten"  class="adminnavi"   >Favoriten</a></li>
+
+                                    <li class="divider"></li>
+
+                                    <li><a href="https://localhost/agp-core/right/change.html?changemodule=tags" title="Modul-Rechte"    >Modul-Rechte</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <a data-toggle="collapse" data-parent="#moduleNavigation" href="#407c1f45645efcf5dd5e">
+                                Workflows
+                            </a>
+                        </div>
+                        <div id="407c1f45645efcf5dd5e" class="panel-collapse collapse">
+                            <div class="panel-body">
+                                <ul>
+                                    <li><a href="https://localhost/agp-core/workflows/myList.html" title="Meine Workflows"  class="adminnavi"   >Meine Workflows</a></li>
+
+                                    <li><a href="https://localhost/agp-core/workflows/list.html" title="Liste"  class="adminnavi"   >Liste</a></li>
+
+                                    <li class="divider"></li>
+
+                                    <li><a href="https://localhost/agp-core/workflows/listHandlers.html" title="Workflow-Handlers"  class="adminnavi"   >Workflow-Handlers</a></li>
+
+                                    <li class="divider"></li>
+
+                                    <li><a href="https://localhost/agp-core/right/change.html?changemodule=workflows" title="Modul-Rechte"    >Modul-Rechte</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <a data-toggle="collapse" data-parent="#moduleNavigation" href="#16335c35645efd0ce67a">
+                                Suche
+                            </a>
+                        </div>
+                        <div id="16335c35645efd0ce67a" class="panel-collapse collapse">
+                            <div class="panel-body">
+                                <ul>
+                                    <li><a href="https://localhost/agp-core/search/search.html" title="Suche"  class="adminnavi"   >Suche</a></li>
+
+                                    <li class="divider"></li>
+
+                                    <li><a href="https://localhost/agp-core/search/list.html" title="Liste"  class="adminnavi"   >Liste</a></li>
+
+                                    <li class="divider"></li>
+
+                                    <li><a href="https://localhost/agp-core/right/change.html?changemodule=search" title="Modul-Rechte"    >Modul-Rechte</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <a data-toggle="collapse" data-parent="#moduleNavigation" href="#1e1e6ee5645efd1804a1">
+                                Auswertung
+                            </a>
+                        </div>
+                        <div id="1e1e6ee5645efd1804a1" class="panel-collapse collapse">
+                            <div class="panel-body">
+                                <ul>
+                                    <li><a href="https://localhost/agp-core/auswertung/show.html?report=userrights" title="Anwenderliste mit zugehörigen Gruppen"  class="adminnavi"   >Anwenderliste mit zugehörigen Gruppen</a></li>
+
+                                    <li><a href="https://localhost/agp-core/auswertung/show.html?report=bewertungen" title="Bewertungen"  class="adminnavi"   >Bewertungen</a></li>
+
+                                    <li><a href="https://localhost/agp-core/auswertung/show.html?report=kritischebewertungen" title="Bewertungen mit nicht grüner Teilampel"  class="adminnavi"   >Bewertungen mit nicht grüner Teilampel</a></li>
+
+                                    <li><a href="https://localhost/agp-core/auswertung/show.html?report=ratingpermissions" title="Bewertungs-Berechtigungen"  class="adminnavi"   >Bewertungs-Berechtigungen</a></li>
+
+                                    <li><a href="https://localhost/agp-core/auswertung/show.html?report=ratingparameter" title="Bewertungs-Parameter"  class="adminnavi"   >Bewertungs-Parameter</a></li>
+
+                                    <li><a href="https://localhost/agp-core/auswertung/show.html?report=bewstat" title="Bewertungsstatistik"  class="adminnavi"   >Bewertungsstatistik</a></li>
+
+                                    <li><a href="https://localhost/agp-core/auswertung/show.html?report=dmsleistungsscheine" title="DMS Leistungsscheine"  class="adminnavi"   >DMS Leistungsscheine</a></li>
+
+                                    <li><a href="https://localhost/agp-core/auswertung/show.html?report=mep_fulfillment" title="Erfüllungsgrad MEP Objekte"  class="adminnavi"   >Erfüllungsgrad MEP Objekte</a></li>
+
+                                    <li><a href="https://localhost/agp-core/auswertung/show.html?report=ergebnisausweis" title="Ergebnisausweis"  class="adminnavi"   >Ergebnisausweis</a></li>
+
+                                    <li><a href="https://localhost/agp-core/auswertung/show.html?report=maluscalc" title="Malusermittlung"  class="adminnavi"   >Malusermittlung</a></li>
+
+                                    <li><a href="https://localhost/agp-core/auswertung/show.html?report=aufgaben" title="Maßnahmen"  class="adminnavi"   >Maßnahmen</a></li>
+
+                                    <li><a href="https://localhost/agp-core/auswertung/show.html?report=aufgaben_bystatus" title="Maßnahmen nach Status"  class="adminnavi"   >Maßnahmen nach Status</a></li>
+
+                                    <li><a href="https://localhost/agp-core/auswertung/show.html?report=prozesse" title="Objekte"  class="adminnavi"   >Objekte</a></li>
+
+                                    <li><a href="https://localhost/agp-core/auswertung/show.html?report=matrix" title="Objekte und Steuerungsdimensionen"  class="adminnavi"   >Objekte und Steuerungsdimensionen</a></li>
+
+                                    <li><a href="https://localhost/agp-core/auswertung/show.html?report=thresholds" title="Parameterhistorie"  class="adminnavi"   >Parameterhistorie</a></li>
+
+                                    <li><a href="https://localhost/agp-core/auswertung/show.html?report=imsclaim" title="Schadensfälle"  class="adminnavi"   >Schadensfälle</a></li>
+
+                                    <li><a href="https://localhost/agp-core/auswertung/show.html?report=scorecombination" title="Scorekombination"  class="adminnavi"   >Scorekombination</a></li>
+
+                                    <li><a href="https://localhost/agp-core/auswertung/show.html?report=dimensionen" title="Steuerungs-Dimensionen"  class="adminnavi"   >Steuerungs-Dimensionen</a></li>
+
+                                    <li><a href="https://localhost/agp-core/auswertung/show.html?report=zeitreihen" title="Zeitscheiben"  class="adminnavi"   >Zeitscheiben</a></li>
+
+                                    <li><a href="https://localhost/agp-core/auswertung/show.html?report=rateableobjectsoverview" title="Übersicht bewertbare Objekte"  class="adminnavi"   >Übersicht bewertbare Objekte</a></li>
+
+                                    <li class="divider"></li>
+
+                                    <li><a href="https://localhost/agp-core/auswertung/setParams.html?report=" title="Aktuelle Parametrisierung"  class="adminnavi"   >Aktuelle Parametrisierung</a></li>
+
+                                    <li><a href="https://localhost/agp-core/auswertung/listParams.html" title="Gespeicherte Parameter"  class="adminnavi"   >Gespeicherte Parameter</a></li>
+
+                                    <li class="divider"></li>
+
+                                    <li><a href="https://localhost/agp-core/right/change.html?changemodule=auswertung" title="Modul-Rechte"    >Modul-Rechte</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <a data-toggle="collapse" data-parent="#moduleNavigation" href="#46101615645efd1a5a52">
+                                CIM
+                            </a>
+                        </div>
+                        <div id="46101615645efd1a5a52" class="panel-collapse collapse">
+                            <div class="panel-body">
+                                <ul>
+                                    <li><a href="https://localhost/agp-core/cim/list.html" title="Incidents"  class="adminnavi"   >Incidents</a></li>
+
+                                    <li class="divider"></li>
+
+                                    <li><a href="https://localhost/agp-core/cim/showReport.html?report=incident_open" title="Offene Incidents"  class="adminnavi"   >Offene Incidents</a></li>
+
+                                    <li><a href="https://localhost/agp-core/cim/showReport.html?report=incident_delta" title="Delta-Analyse"  class="adminnavi"   >Delta-Analyse</a></li>
+
+                                    <li><a href="https://localhost/agp-core/cim/showReport.html?report=incident_time_history" title="Zeitliche Entwicklung"  class="adminnavi"   >Zeitliche Entwicklung</a></li>
+
+                                    <li><a href="https://localhost/agp-core/cim/showReport.html?report=incident_dgm" title="Data governance Management report"  class="adminnavi"   >Data governance Management report</a></li>
+
+                                    <li><a href="https://localhost/agp-core/cim/showReport.html?report=incident_kpi" title="KPI-Report"  class="adminnavi"   >KPI-Report</a></li>
+
+                                    <li><a href="https://localhost/agp-core/cim/showReport.html?report=incident_escalation" title="Eskalations-Monitoring"  class="adminnavi"   >Eskalations-Monitoring</a></li>
+
+                                    <li><a href="https://localhost/agp-core/cim/setTimeslot.html" title="Auswertungszeitraum setzen"  class="adminnavi"   >Auswertungszeitraum setzen</a></li>
+
+                                    <li class="divider"></li>
+
+                                    <li><a href="https://localhost/agp-core/right/change.html?changemodule=cim" title="Modul-Rechte"    >Modul-Rechte</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <a data-toggle="collapse" data-parent="#moduleNavigation" href="#935c1e05645efd1f193c">
+                                Schadensfälle
+                            </a>
+                        </div>
+                        <div id="935c1e05645efd1f193c" class="panel-collapse collapse">
+                            <div class="panel-body">
+                                <ul>
+                                    <li><a href="https://localhost/agp-core/imsclaim/list.html" title="Liste"  class="adminnavi"   >Liste</a></li>
+
+                                    <li><a href="https://localhost/agp-core/imsclaim/showReport.html" title="Auswertung"  class="adminnavi"   >Auswertung</a></li>
+
+                                    <li><a href="https://localhost/agp-core/imsclaim/setZeitscheibe.html" title="Auswertungszeitraum setzen"  class="adminnavi"   >Auswertungszeitraum setzen</a></li>
+
+                                    <li class="divider"></li>
+
+                                    <li><a href="https://localhost/agp-core/right/change.html?changemodule=imsclaim" title="Modul-Rechte"    >Modul-Rechte</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <a data-toggle="collapse" data-parent="#moduleNavigation" href="#01a0c195645efd220d6c">
+                                Report Generator
+                            </a>
+                        </div>
+                        <div id="01a0c195645efd220d6c" class="panel-collapse collapse">
+                            <div class="panel-body">
+                                <ul>
+                                    <li><a href="https://localhost/agp-core/reportconfigurator/list.html" title="Reports"  class="adminnavi"   >Reports</a></li>
+
+                                    <li class="divider"></li>
+
+                                    <li><a href="https://localhost/agp-core/right/change.html?changemodule=reportconfigurator" title="Modul-Rechte"    >Modul-Rechte</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <a data-toggle="collapse" data-parent="#moduleNavigation" href="#ce4deec5645efd28629c">
+                                Maßnahmen
+                            </a>
+                        </div>
+                        <div id="ce4deec5645efd28629c" class="panel-collapse collapse">
+                            <div class="panel-body">
+                                <ul>
+                                    <li><a href="https://localhost/agp-core/aufgaben/list.html" title="Meine Maßnahmen"  class="adminnavi"   >Meine Maßnahmen</a></li>
+
+                                    <li class="divider"></li>
+
+                                    <li><a href="https://localhost/agp-core/right/change.html?changemodule=aufgaben" title="Modul-Rechte"    >Modul-Rechte</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <a data-toggle="collapse" data-parent="#moduleNavigation" href="#ce401335645efd344fcd">
+                                Objektverwaltung
+                            </a>
+                        </div>
+                        <div id="ce401335645efd344fcd" class="panel-collapse collapse">
+                            <div class="panel-body">
+                                <ul>
+                                    <li><a href="https://localhost/agp-core/prozessverwaltung/list.html" title="Objekt Hierarchie"  class="adminnavi"   >Objekt Hierarchie</a></li>
+
+                                    <li><a href="https://localhost/agp-core/prozessverwaltung/edit/f4106e05645efd3666fd.html" title="Default Werte bearbeiten"  class="adminnavi"   >Default Werte bearbeiten</a></li>
+
+                                    <li class="divider"></li>
+
+                                    <li><a href="https://localhost/agp-core/prozessverwaltung/listDimension.html" title="Steuerungsdimensionen"  class="adminnavi"   >Steuerungsdimensionen</a></li>
+
+                                    <li class="divider"></li>
+
+                                    <li><a href="https://localhost/agp-core/prozessverwaltung/listOe.html" title="Organisationseinheiten"  class="adminnavi"   >Organisationseinheiten</a></li>
+
+                                    <li class="divider"></li>
+
+                                    <li><a href="https://localhost/agp-core/prozessverwaltung/listFavorit.html" title="Objekt Favoriten"  class="adminnavi"   >Objekt Favoriten</a></li>
+
+                                    <li class="divider"></li>
+
+                                    <li><a href="https://localhost/agp-core/right/change.html?changemodule=prozessverwaltung" title="Modul-Rechte"    >Modul-Rechte</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <a data-toggle="collapse" data-parent="#moduleNavigation" href="#e651ce45645efd6d785b">
+                                Risikoanalyse
+                            </a>
+                        </div>
+                        <div id="e651ce45645efd6d785b" class="panel-collapse collapse">
+                            <div class="panel-body">
+                                <ul>
+                                    <li><a href="https://localhost/agp-core/riskanalysis/list.html" title="Liste"  class="adminnavi"   >Liste</a></li>
+
+                                    <li class="divider"></li>
+
+                                    <li><a href="https://localhost/agp-core/riskanalysis/showReport.html?report=riskheatmap" title="Risiko Heatmap"  class="adminnavi"   >Risiko Heatmap</a></li>
+
+                                    <li class="divider"></li>
+
+                                    <li><a href="https://localhost/agp-core/right/change.html?changemodule=riskanalysis" title="Modul-Rechte"    >Modul-Rechte</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <a data-toggle="collapse" data-parent="#moduleNavigation" href="#e50e31c5645efd7b1344">
+                                Transaktionen
+                            </a>
+                        </div>
+                        <div id="e50e31c5645efd7b1344" class="panel-collapse collapse">
+                            <div class="panel-body">
+                                <ul>
+                                    <li><a href="https://localhost/agp-core/transactions/list.html" title="Liste"  class="adminnavi"   >Liste</a></li>
+
+                                    <li class="divider"></li>
+
+                                    <li><a href="https://localhost/agp-core/right/change.html?changemodule=transactions" title="Modul-Rechte"    >Modul-Rechte</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <a data-toggle="collapse" data-parent="#moduleNavigation" href="#ecc135e5645efd8ca5db">
+                                Schadensfälle & Risikoereignisse
+                            </a>
+                        </div>
+                        <div id="ecc135e5645efd8ca5db" class="panel-collapse collapse">
+                            <div class="panel-body">
+                                <ul>
+                                    <li><a href="https://localhost/agp-core/incidents/list.html" title="Liste"  class="adminnavi"   >Liste</a></li>
+
+                                    <li class="divider"></li>
+
+                                    <li><a href="https://localhost/agp-core/incidents/showReport.html?report=incidents" title="Auswertung Schadensfälle"  class="adminnavi"   >Auswertung Schadensfälle</a></li>
+
+                                    <li class="divider"></li>
+
+                                    <li><a href="https://localhost/agp-core/right/change.html?changemodule=incidents" title="Modul-Rechte"    >Modul-Rechte</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <a data-toggle="collapse" data-parent="#moduleNavigation" href="#0c10e0d5645efd934f51">
+                                Bewertungen
+                            </a>
+                        </div>
+                        <div id="0c10e0d5645efd934f51" class="panel-collapse collapse">
+                            <div class="panel-body">
+                                <ul>
+                                    <li><a href="https://localhost/agp-core/leistungsscheine/list.html?filter=all" title="Alle Bewertungen"  class="adminnavi"   >Alle Bewertungen</a></li>
+
+                                    <li><a href="https://localhost/agp-core/leistungsscheine/list.html?filter=owner" title="Meine Bewertungen"  class="adminnavi"   >Meine Bewertungen</a></li>
+
+                                    <li class="divider"></li>
+
+                                    <li><a href="https://localhost/agp-core/right/change.html?changemodule=leistungsscheine" title="Modul-Rechte"    >Modul-Rechte</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <a data-toggle="collapse" data-parent="#moduleNavigation" href="#e0fe31c5645efd96d5b6">
+                                Bewertungen Import
+                            </a>
+                        </div>
+                        <div id="e0fe31c5645efd96d5b6" class="panel-collapse collapse">
+                            <div class="panel-body">
+                                <ul>
+                                    <li><a href="https://localhost/agp-core/leistungsscheineimport/import.html" title="Bewertungen importieren"  class="adminnavi"   >Bewertungen importieren</a></li>
+
+                                    <li><a href="https://localhost/agp-core/leistungsscheineimport/list.html" title="Import-Protokolle"  class="adminnavi"   >Import-Protokolle</a></li>
+
+                                    <li class="divider"></li>
+
+                                    <li><a href="https://localhost/agp-core/right/change.html?changemodule=leistungsscheineimport" title="Modul-Rechte"    >Modul-Rechte</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <a data-toggle="collapse" data-parent="#moduleNavigation" href="#c6151fe5645efd996dd0">
+                                Langfristige Bewertung
+                            </a>
+                        </div>
+                        <div id="c6151fe5645efd996dd0" class="panel-collapse collapse">
+                            <div class="panel-body">
+                                <ul>
+                                    <li><a href="https://localhost/agp-core/longtermrating/list.html" title="Liste"  class="adminnavi"   >Liste</a></li>
+
+                                    <li class="divider"></li>
+
+                                    <li><a href="https://localhost/agp-core/right/change.html?changemodule=longtermrating" title="Modul-Rechte"    >Modul-Rechte</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <a data-toggle="collapse" data-parent="#moduleNavigation" href="#cc01c9c5645efd9c9e44">
+                                Malusermittlung
+                            </a>
+                        </div>
+                        <div id="cc01c9c5645efd9c9e44" class="panel-collapse collapse">
+                            <div class="panel-body">
+                                <ul>
+                                    <li><a href="https://localhost/agp-core/maluscalc/list.html" title="Malus gem. Governance"  class="adminnavi"   >Malus gem. Governance</a></li>
+
+                                    <li><a href="https://localhost/agp-core/maluscalc/listPrice.html" title="Basisvergütungen"  class="adminnavi"   >Basisvergütungen</a></li>
+
+                                    <li><a href="https://localhost/agp-core/maluscalc/listSettings.html" title="Einstellungen"  class="adminnavi"   >Einstellungen</a></li>
+
+                                    <li><a href="https://localhost/agp-core/auswertung/show.html?report=maluscalc" title="Auswertung"  class="adminnavi"   >Auswertung</a></li>
+
+                                    <li class="divider"></li>
+
+                                    <li><a href="https://localhost/agp-core/right/change.html?changemodule=maluscalc" title="Modul-Rechte"    >Modul-Rechte</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <a data-toggle="collapse" data-parent="#moduleNavigation" href="#ecee40c5645efda2f999">
+                                Pönale
+                            </a>
+                        </div>
+                        <div id="ecee40c5645efda2f999" class="panel-collapse collapse">
+                            <div class="panel-body">
+                                <ul>
+                                    <li><a href="https://localhost/agp-core/penitentfee/list.html" title="Liste"  class="adminnavi"   >Liste</a></li>
+
+                                    <li><a href="https://localhost/agp-core/penitentfee/listVerzoegerungsstufe.html" title="Ausstehende KPIs Verzögerungsstufe"  class="adminnavi"   >Ausstehende KPIs Verzögerungsstufe</a></li>
+
+                                    <li><a href="https://localhost/agp-core/penitentfee/listRatingmodell.html" title="Ausstehende KPIs Ratingmodelle"  class="adminnavi"   >Ausstehende KPIs Ratingmodelle</a></li>
+
+                                    <li><a href="https://localhost/agp-core/penitentfee/showReport.html" title="Auswertung"  class="adminnavi"   >Auswertung</a></li>
+
+                                    <li class="divider"></li>
+
+                                    <li><a href="https://localhost/agp-core/right/change.html?changemodule=penitentfee" title="Modul-Rechte"    >Modul-Rechte</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <a data-toggle="collapse" data-parent="#moduleNavigation" href="#c46c1c55645efdad4e48">
+                                Checklisten
+                            </a>
+                        </div>
+                        <div id="c46c1c55645efdad4e48" class="panel-collapse collapse">
+                            <div class="panel-body">
+                                <ul>
+                                    <li><a href="https://localhost/agp-core/checklist/listCheckTemplate.html" title="Vorlagenverwaltung"  class="adminnavi"   >Vorlagenverwaltung</a></li>
+
+                                    <li><a href="https://localhost/agp-core/checklist/listCheck.html" title="Fragebögen"  class="adminnavi"   >Fragebögen</a></li>
+
+                                    <li class="divider"></li>
+
+                                    <li><a href="https://localhost/agp-core/checklist/showReport.html?report=checklist" title="Auswertung"  class="adminnavi"   >Auswertung</a></li>
+
+                                    <li><a href="https://localhost/agp-core/checklist/setTimeslot.html" title="Auswertungszeitraum"  class="adminnavi"   >Auswertungszeitraum</a></li>
+
+                                    <li class="divider"></li>
+
+                                    <li><a href="https://localhost/agp-core/checklist/listOeAssignments.html" title="Verantwortlichkeiten"  class="adminnavi"   >Verantwortlichkeiten</a></li>
+
+                                    <li class="divider"></li>
+
+                                    <li><a href="https://localhost/agp-core/right/change.html?changemodule=checklist" title="Modul-Rechte"    >Modul-Rechte</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <a data-toggle="collapse" data-parent="#moduleNavigation" href="#0e47ee25645efdb0d302">
+                                CWFT
+                            </a>
+                        </div>
+                        <div id="0e47ee25645efdb0d302" class="panel-collapse collapse">
+                            <div class="panel-body">
+                                <ul>
+                                    <li><a href="https://localhost/agp-core/cwft/showReport.html" title="Auswertung"  class="adminnavi"   >Auswertung</a></li>
+
+                                    <li><a href="https://localhost/agp-core/cwft/setTimeslot.html" title="Auswertungszeitraum setzen"  class="adminnavi"   >Auswertungszeitraum setzen</a></li>
+
+                                    <li class="divider"></li>
+
+                                    <li><a href="https://localhost/agp-core/right/change.html?changemodule=cwft" title="Modul-Rechte"    >Modul-Rechte</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <a data-toggle="collapse" data-parent="#moduleNavigation" href="#914c1c55645efdb376d4">
+                                Ergebnisausweis
+                            </a>
+                        </div>
+                        <div id="914c1c55645efdb376d4" class="panel-collapse collapse">
+                            <div class="panel-body">
+                                <ul>
+                                    <li><a href="https://localhost/agp-core/ergebnisausweis/list.html" title="Ergebnisausweis Konfiguration"  class="adminnavi"   >Ergebnisausweis Konfiguration</a></li>
+
+                                    <li><a href="https://localhost/agp-core/auswertung/show.html?report=ergebnisausweis" title="Auswertung"  class="adminnavi"   >Auswertung</a></li>
+
+                                    <li class="divider"></li>
+
+                                    <li><a href="https://localhost/agp-core/right/change.html?changemodule=ergebnisausweis" title="Modul-Rechte"    >Modul-Rechte</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+
+        <!-- CONTENT CONTAINER -->
+        <div class="col-md-10" id="content">
+        </div>
+    </div>
+
+    <footer>
+        <p><a href="http://www.artemeon.de/" target="_blank" title="ARTEMEON AGP">ARTEMEON Geschäftsprozess Portal</a></p>
+    </footer>
+
+</div>
+
+<!--
+<script src="https://localhost/agp-core/core/module_v4skin/admin/skins/kajona_v4/js/jquery.ui.touch-punch.min.js?0"></script>
+<script src="https://localhost/agp-core/core/module_v4skin/admin/skins/kajona_v4/js/bootstrap.min.js?0"></script>
+<script type="text/javascript">var searchExtendText = 'Ausführliches Ergebnis anzeigen';</script>
+<script src="https://localhost/agp-core/core/module_v4skin/admin/skins/kajona_v4/js/v4skin.js?0"></script>
+-->
+
+<!-- folderview container -->
+<div class="modal fade" id="folderviewDialog" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h3 id="folderviewDialog_title" class="modal-title">BROWSER</h3>
+            </div>
+            <div class="modal-body">
+                <div id="folderviewDialog_loading" class="loadingContainer loadingContainerBackground"></div>
+                <div id="folderviewDialog_content"><!-- filled by js --></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- modal dialog container -->
+<div class="modal fade" id="jsDialog_0">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h3 id="jsDialog_0_title"><!-- filled by js --></h3>
+            </div>
+            <div class="modal-body" id="jsDialog_0_content">
+                <!-- filled by js -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- confirmation dialog container -->
+<div class="modal fade" id="jsDialog_1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h3 id="jsDialog_1_title"><!-- filled by js --></h3>
+            </div>
+            <div class="modal-body" id="jsDialog_1_content">
+                <!-- filled by js -->
+            </div>
+            <div class="modal-footer">
+                <a href="#" class="btn btn-default" data-dismiss="modal" id="jsDialog_1_cancelButton">Abbrechen</a>
+                <a href="#" class="btn btn-default btn-primary" id="jsDialog_1_confirmButton">confirm</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- loading dialog container -->
+<div class="modal fade" id="jsDialog_3">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="jsDialog_3_title"></h3>
+            </div>
+            <div class="modal-body">
+                <div id="dialogLoadingDiv" class="loadingContainer loadingContainerBackground"></div>
+                <div id="jsDialog_3_content"><!-- filled by js --></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- raw dialog container -->
+<div class="modal" id="jsDialog_2">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div id="jsDialog_2_content"><!-- filled by js --></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--
+<script type="text/javascript">
+    // for fucking ie 8
+    var jsDialog_0 = null;
+    var jsDialog_1 = null;
+    var jsDialog_2 = null;
+    var jsDialog_3 = null;
+    // end for fucking ie 8
+
+    KAJONA.admin.loader.loadFile("https://localhost/agp-core/core/module_v4skin/admin/skins/kajona_v4/js/kajona_dialog.js", function() {
+        KAJONA.admin.folderview.dialog = new KAJONA.admin.ModalDialog('folderviewDialog', 0);
+        jsDialog_0 = new KAJONA.admin.ModalDialog('jsDialog_0', 0);
+        jsDialog_1 = new KAJONA.admin.ModalDialog('jsDialog_1', 1);
+        jsDialog_2 = new KAJONA.admin.ModalDialog('jsDialog_2', 2);
+        jsDialog_3 = new KAJONA.admin.ModalDialog('jsDialog_3', 3);
+    }, true);
+</script>
+-->
+
+<div id="jsStatusBox" class="" style="display: none; position: absolute;"><div class="jsStatusBoxHeader">Status-Info</div><div id="jsStatusBoxContent" class="jsStatusBoxContent"></div></div>
+
+</body>
+</html>
