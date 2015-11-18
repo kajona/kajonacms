@@ -1,6 +1,6 @@
 
-include('../../core/module_system/system/scripts/loader.js');
-include('../../core/module_system/admin/scripts/kajona.js');
+include('../../../core/module_system/system/scripts/loader.js');
+include('../../../core/module_system/admin/scripts/kajona.js');
 
 describe("kajona.js", function() {
 
