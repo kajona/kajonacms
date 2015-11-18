@@ -408,7 +408,7 @@ KAJONA.admin.portaleditor.elementActionToolbar = {
 
         });
 
-        return $('<div>').addClass('peActionToolbar').append($('<div>').addClass('peActionToolbarCaret')).append($actionList);
+        return $('<div>').addClass('peActionToolbar').append($('<div>').addClass('peActionToolbarCaretTop')).append($actionList);
     },
 
     generateActionList: function (actions) {
@@ -466,8 +466,21 @@ KAJONA.admin.portaleditor.elementActionToolbar = {
         });
 
         //create the wrapper code
-        return $('<div>').addClass('peActionToolbar').append($('<div>').addClass('peActionToolbarCaret')).append($actionList);
-    }
+        return $('<div>').addClass('peActionToolbar').append($actionList).append($('<div>').addClass('peActionToolbarCaretBottom'));
+    },
+
+    show : function(element) {
+        var $objEl = $(element);
+        if($objEl.children('.peActionToolbar')) {
+            $objEl.children('.peActionToolbar')
+                .css('display', 'block')
+                .css('top', ($objEl.position().top) - 35)
+                .css('left', ($objEl.position().left));
+                //.animate({top: ($objEl.position().top) - 35, opacity: 100}, 500);
+        }
+
+    },
+
 };
 
 $(function () {

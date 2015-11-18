@@ -127,7 +127,7 @@ class PagesPortaleditor  {
             $strClass .= " peInactiveElement";
         }
 
-        return "<div class='{$strClass}' data-systemid='{$strSystemid}' data-element='{$strElement}'>{$strOutput}</div>";
+        return "<div class='{$strClass}' data-systemid='{$strSystemid}' data-element='{$strElement}' onmouseover='KAJONA.admin.portaleditor.elementActionToolbar.show(this)'>{$strOutput}</div>";
     }
 
     /**

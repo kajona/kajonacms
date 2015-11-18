@@ -141,8 +141,7 @@
 
     .peActionToolbar {
         position: absolute;
-        display: block;
-        .opacity(0);
+        display: none;
         z-index: 400;
 
         .peActionToolbarActionContainer {
@@ -167,7 +166,15 @@
             }
         }
 
-        .peActionToolbarCaret {
+        .peActionToolbarCaretBottom {
+            width: 0;
+            height: 0;
+            border-left: 7px solid transparent;
+            border-right: 7px solid transparent;
+            border-top: 7px solid @peButtonToolbarBackground;
+        }
+
+        .peActionToolbarCaretTop {
             width: 0;
             height: 0;
             border-left: 7px solid transparent;
@@ -179,9 +186,6 @@
     &:hover {
         > .peActionToolbar {
             display: block;
-            .opacity(100);
-
-            .transition(all 0.5s ease-in-out);
         }
     }
 
