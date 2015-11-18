@@ -43,6 +43,8 @@
     <property name="projectPath"  value="/buildproject" />
     <!-- artifacts such as logs and reports will be stored here -->
     <property name="buildPath"    value="/build" />
+    <!-- js tests and node tasks -->
+    <property name="jsPath"    value="/jstests" />
     <!-- generated zips will be placed here (full, light) -->
     <property name="packagesPath" value="/packages" />
     <!-- temp-folder, required to build the packages -->
@@ -55,7 +57,11 @@
 
 
     <!-- path to composer -->
-    <property name="path.composer"   value="composer${script-suffix}" />
+    <property name="path.composer"  value="composer${script-suffix}" />
+    <!-- path to node -->
+    <property name="path.node"      value="node" />
+    <!-- path to npm -->
+    <property name="path.npm"       value="npm${script-suffix}" />
     <!-- path to phpunit -->
     <property name="path.phpunit"   value="${composerBinariesPath}/phpunit${script-suffix}" />
     <!-- path to phpcs -->
@@ -80,37 +86,37 @@
 
 
     <!-- internal initialization -->
-    <target name="init" depends="cleanFilesystem,installComposerBuildDependencies">
+    <target name="init" depends="cleanFilesystem,installComposerBuildDependencies,installNpmBuildDependencies">
         <tstamp />
     </target>
 
     <target name="buildSqliteFast" depends="
 		    								init,
 					    					buildProject, installProjectSqlite,
-					    					lint,phploc,phpunitFast,
+					    					lint,phploc,phpunitFast,jasmine,
 					    					buildFullZip, buildLightZip, buildAllInOneZip" />
 
 
     <target name="buildSqliteFull" depends="
 		    								init,
 					    					buildProject, installProjectSqlite,
-					    					lint,phpunit,phploc,pdepend,phpmd-ci,phpcs-ci,phpcpd,generateDoxygenDocs,phpcb,
+					    					lint,phpunit,jasmine,phploc,pdepend,phpmd-ci,phpcs-ci,phpcpd,generateDoxygenDocs,phpcb,
 					    					buildFullZip, buildLightZip, buildAllInOneZip" />
 
     <target name="buildMysql" depends="
 		    								init,
 					    					buildProject, installProjectMysql,
-					    					phpunitFast" />
+					    					phpunitFast,jasmine" />
 
     <target name="buildOracle" depends="
 		    								init,
 					    					buildProject, installProjectOracle,
-					    					phpunitFast" />
+					    					phpunitFast,jasmine" />
 
     <target name="buildPostgres" depends="
 		    								init,
 					    					buildProject, installProjectPostgres,
-					    					phpunitFast" />
+					    					phpunitFast,jasmine" />
 
     <target name="buildFullZipOnly" depends="
                                             init,
@@ -134,6 +140,21 @@
             <arg line=" install"/>
             <arg line=" --prefer-source"/>
             <arg line=" --no-dev"/>
+        </exec>
+    </target>
+
+    <!-- installs all node dependencies -->
+    <target name="installNpmBuildDependencies" >
+        <echo>Execute npm</echo>
+        <exec dir="${basedir}${jsPath}" executable="${path.npm}" failonerror="on">
+            <arg line=" install"/>
+        </exec>
+    </target>
+
+    <!-- executes javascript jasmine tests -->
+    <target name="jasmine">
+        <exec dir="${basedir}${jsPath}" executable="${path.node}" failonerror="on">
+            <arg line="./node_modules/jasmine/bin/jasmine.js"/>
         </exec>
     </target>
 
