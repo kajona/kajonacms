@@ -11,6 +11,9 @@
 @btn-primary-bg:            @gray-darker;
 @gray-darker:               #bfbfbf;
 
+@peButtonToolbarBackground: #5E696D;
+@peButtonToolbarBackgroundHover: #02BAF2;
+
 @border-radius-base:        0px;
 @border-radius-small:       0px;
 @border-radius-large:       6px;
@@ -108,30 +111,10 @@
 
 
 /* P O R T A L E D I T O R   C O N T A I N E R */
-.peElementWrapper,
+.peAddButton, .peElementWrapper,
 [data-systemid] {
-    .moveHandle {
-        width: 20px;
-        height: 20px;
-        display: block !important;
-        border: 1px solid @peColorHoverBackground;
-        //position: absolute;
-        //float: left;
-        float: right;
-        //margin-left: -20px;
-        //margin-top: -1px;
-        //top: -20px;
 
-
-        background-color: @peColorHoverBackground;
-    }
-
-    &:hover, &.pressed {
-
-        .moveHandle {
-            display: inline-block !important;
-        }
-
+    &:hover {
 
         display: block !important;
         //outline: 1px solid @peColorHover !important;
@@ -156,6 +139,64 @@
     }
 
 
+    .peActionToolbar {
+        position: absolute;
+        display: block;
+        .opacity(0);
+        z-index: 400;
+
+        .peActionToolbarActionContainer {
+
+            background-color: @peButtonToolbarBackground;
+            a {
+                color: #fff;
+                display: inline-block;
+                width: 20px;
+                text-align: center;
+                padding: 5px;
+                font-size: 13px;
+                font-weight:normal;
+
+                i {
+                    font-size: 18px;
+                }
+
+                &:hover {
+                    background-color: @peButtonToolbarBackgroundHover;
+                }
+            }
+        }
+
+        .peActionToolbarCaret {
+            width: 0;
+            height: 0;
+            border-left: 7px solid transparent;
+            border-right: 7px solid transparent;
+            border-bottom: 7px solid @peButtonToolbarBackground;
+        }
+    }
+
+    &:hover {
+        > .peActionToolbar {
+            display: block;
+            .opacity(100);
+
+            .transition(all 0.5s ease-in-out);
+        }
+    }
+
+}
+
+.peAddButton {
+    .peActionToolbar {
+        .peActionToolbarActionContainer {
+            a {
+                width: auto;
+                display: block;
+                text-align: left;
+            }
+        }
+    }
 }
 
 /* MOVE / DRAG N DROP */
@@ -347,48 +388,5 @@ body *[data-kajona-editable] {
         line-height: 120%;
         color: #FFFFFF !important;
         font-size: @font-size-base - 3 !important;
-    }
-}
-
-/* toolbar items */
-div.tool-container.tool-bottom.toolbar-peAddBar {
-    border-radius: 0;
-    height: auto;
-    //&.tool-bottom
-
-    a.tool-item {
-        float: none;
-        width: auto;
-        color: #fff;
-        text-align: left;
-    }
-
-    .tool-item:first-child:hover {
-        border-radius: 0;
-    }
-    .tool-item:last-child:hover {
-        border-radius: 0;
-    }
-
-    .tool-item i {
-        color: #fff;
-    }
-}
-
-div.tool-container.tool-bottom.toolbar-peEditBar {
-    a.tool-item i    {
-        color: #fff;
-    }
-}
-
-div.peAddButton {
-    width: 14px;
-    height: 14px;
-    padding: 7px;
-    display: inline-block;
-    background-color: inherit;
-
-    > i {
-        color: inherit;
     }
 }

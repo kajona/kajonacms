@@ -105,8 +105,8 @@ KAJONA.admin.portaleditor = {
         else {
             //add it as the last element to the placeholder itself
             strDataPlaceholder = strDataPlaceholder.replace(/\|/g, '\\|');
-            if($('span[data-placeholder='+strDataPlaceholder+']')) {
-                $('span[data-placeholder='+strDataPlaceholder+']').before($($objContent));
+            if($('div.pePlaceholderWrapper[data-placeholder='+strDataPlaceholder+']')) {
+                $('div.pePlaceholderWrapper[data-placeholder='+strDataPlaceholder+']').append($($objContent));
             }
 
             else if($("#menuContainer_"+strDataPlaceholder)) {
@@ -362,7 +362,7 @@ KAJONA.admin.portaleditor.elementActionToolbar = {
 
     injectPlaceholderActions: function () {
 
-        actions = KAJONA.admin.actions;
+        var actions = KAJONA.admin.actions;
 
         $.each(actions.placeholder, function (placeholderName, actions) {
             KAJONA.admin.portaleditor.elementActionToolbar.injectElementCreateUI($('[data-name="' + placeholderName + '"]'), actions, placeholderName);
@@ -376,49 +376,21 @@ KAJONA.admin.portaleditor.elementActionToolbar = {
     },
 
     injectElementEditUI: function ($element, actions) {
-
-        $toolbar = KAJONA.admin.portaleditor.elementActionToolbar.generateActionList(actions);
-        $toolbar.attr('id', 'toolbar_'+$element.data('systemid'));
-
-        $element.append($toolbar);
-        $element.toolbar({
-            content: '#toolbar_'+$element.data('systemid'),
-            position: 'bottom',
-            style: 'peEditBar'
-            //event: 'click'
-        });
-
-        //and generate the move-toolbar
-        actions.forEach(function (action) {
-            switch (action.type) {
-                case 'MOVE':
-                    $objHandle = $('<div>').addClass('moveHandle').append($('<i>').addClass('fa fa-arrows'));
-                    $element.prepend($objHandle);
-            }
-        });
-
+        $element.append(KAJONA.admin.portaleditor.elementActionToolbar.generateActionList(actions));
     },
 
     injectElementCreateUI: function ($element, actions, placeholderName) {
-
-        placeholderName = placeholderName.replace(/\|/g, '');
-
-        var $addButton = $('<div class="btn-toolbar btn-toolbar-dark peAddButton"><i class="fa fa-plus-circle"></i></div>');
-
-        var $objMenu = $('<div>').addClass('hidden').addClass('peAddToolbar').attr('id', 'menu_'+placeholderName);
-        $(KAJONA.admin.portaleditor.elementActionToolbar.generateAddActionList(actions, $objMenu));
-
-        $element.append($objMenu).append($addButton).append($objMenu);
-        $addButton.toolbar({
-            content: '#menu_'+placeholderName,
-            position: 'bottom',
-            style: 'peAddBar',
-            //event: 'click'
-        });
+        var $addButton = $('<div class="peAddButton"><i class="fa fa-plus-circle"></i></div>');
+        var $objMenu = $(KAJONA.admin.portaleditor.elementActionToolbar.generateAddActionList(actions, $objMenu));
+        $addButton.append($objMenu);
+        $element.after($addButton);
     },
 
 
     generateAddActionList: function (actions, $objParent) {
+
+        var $actionList = $('<div>').addClass('peActionToolbarActionContainer');
+
         actions.forEach(function (action) {
             var actionTitle = KAJONA.admin.lang['pe' + action.type];
             switch (action.type) {
@@ -430,50 +402,47 @@ KAJONA.admin.portaleditor.elementActionToolbar = {
                         KAJONA.admin.portaleditor.openDialog(action.link);
                     });
 
-                    $objParent.append($actionElement);
+                    $actionList.append($actionElement);
                     break;
             }
 
         });
+
+        return $('<div>').addClass('peActionToolbar').append($('<div>').addClass('peActionToolbarCaret')).append($actionList);
     },
 
     generateActionList: function (actions) {
-        var $actionList = $('<div>').addClass('hidden');
+        var $actionList = $('<div>').addClass('peActionToolbarActionContainer');
         actions.forEach(function (action) {
             var actionTitle = KAJONA.admin.lang['pe' + action.type];
             var $actionElement = $('<a>');
             $actionElement.attr('rel', 'tooltip').attr('title', actionTitle);
             switch (action.type) {
                 case 'EDIT':
-                    //$actionElement.append(action.name);
                     $actionElement.on('click', function () {
                         KAJONA.admin.portaleditor.openDialog(action.link);
                     });
                     $actionElement.append($('<i>').addClass('fa fa-pencil'));
                     break;
                 case 'DELETE':
-                    //$actionElement.append(action.name);
                     $actionElement.on('click', function () {
                         KAJONA.admin.portaleditor.openDialog(action.link);
                     });
                     $actionElement.append($('<i>').addClass('fa fa-trash'));
                     break;
                 case 'SETACTIVE':
-                    //$actionElement.append(action.name);
                     $actionElement.on('click', function () {
                         KAJONA.admin.portaleditor.openDialog(action.link);
                     });
                     $actionElement.append($('<i>').addClass('fa fa-eye'));
                     break;
                 case 'SETINACTIVE':
-                    //$actionElement.append(action.name);
                     $actionElement.on('click', function () {
                         KAJONA.admin.portaleditor.openDialog(action.link);
                     });
                     $actionElement.append($('<i>').addClass('fa fa-eye-slash'));
                     break;
                 case 'CREATE':
-                    //$actionElement.append(action.name);
                     $actionElement.on('click', function () {
                         KAJONA.admin.portaleditor.openDialog(action.link);
                     });
@@ -481,20 +450,14 @@ KAJONA.admin.portaleditor.elementActionToolbar = {
                     break;
 
                 case 'COPY':
-                    //$actionElement.append(action.name);
                     $actionElement.on('click', function () {
                         KAJONA.admin.portaleditor.openDialog(action.link);
                     });
                     $actionElement.append($('<i>').addClass('fa fa-files-o'));
                     break;
                 case 'MOVE':
-                    return;
+                    $actionElement.append($('<i>').addClass('fa fa-arrows moveHandle'));
                     break;
-                    //var $actionElement = $('<i rel="tooltip">');
-                    //$actionElement.addClass('moveHandle fa fa-arrows');
-                    //$actionElement.attr('title', actionTitle);
-                    //break;
-
                 default:
                     return;
             }
@@ -502,7 +465,8 @@ KAJONA.admin.portaleditor.elementActionToolbar = {
             $actionList.append($actionElement);
         });
 
-        return $actionList;
+        //create the wrapper code
+        return $('<div>').addClass('peActionToolbar').append($('<div>').addClass('peActionToolbarCaret')).append($actionList);
     }
 };
 
