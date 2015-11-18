@@ -7,6 +7,14 @@ describe("kajona.js", function() {
     beforeEach(function() {
     });
 
+    it("test functions available", function() {
+        expect(typeof KAJONA.util.getElementFromOpener).toBe("function");
+        expect(typeof KAJONA.util.evalScript).toBe("function");
+        expect(typeof KAJONA.util.isTouchDevice).toBe("function");
+        expect(typeof KAJONA.util.inArray).toBe("function");
+        expect(typeof KAJONA.util.fold).toBe("function");
+    });
+
     it("test is touch device", function() {
         expect(KAJONA.util.isTouchDevice()).toBe(0);
     });

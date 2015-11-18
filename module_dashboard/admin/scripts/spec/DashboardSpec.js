@@ -8,8 +8,9 @@ describe("dashboard.js", function() {
     beforeEach(function() {
     });
 
-    it("test nothing", function() {
-        expect(0).toBe(0);
+    it("test functions available", function() {
+        expect(typeof KAJONA.admin.dashboard.removeWidget).toBe("function");
+        expect(typeof KAJONA.admin.dashboard.init).toBe("function");
     });
 
 });
