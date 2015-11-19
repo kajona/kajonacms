@@ -142,7 +142,6 @@ KAJONA.admin.ModalDialog = function (strDialogId, intDialogType, bitDragging, bi
             this.bitLarge = false;
         }
 
-
         //finally show the modal
         $('#' + this.containerId).modal('show');
 

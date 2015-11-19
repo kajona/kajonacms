@@ -80,7 +80,7 @@ class class_test_pageimportexportTest extends class_testbase
 
         $this->assertEquals(1, count($objElements));
         $objElements = $objElements[0];
-        $this->assertEquals($objElements->getStrClassAdmin(), "class_element_paragraph_admin.php");
+        $this->assertEquals($objElements->getStrClassAdmin(), "ElementParagraphAdmin.php");
 
 
         $objElement = $objElements->getConcreteAdminInstance();

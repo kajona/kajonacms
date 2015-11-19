@@ -1,2 +1,3 @@
 cache.properties
 vendor/
+.vagrant/

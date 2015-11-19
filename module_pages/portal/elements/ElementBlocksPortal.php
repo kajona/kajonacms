@@ -8,6 +8,7 @@ namespace Kajona\Pages\Portal\Elements;
 
 use class_template;
 use Kajona\Pages\Portal\ElementPortal;
+use Kajona\Pages\Portal\PagesPortaleditor;
 use Kajona\Pages\Portal\PortalElementInterface;
 use Kajona\Pages\System\PagesPage;
 use Kajona\Pages\System\PagesPageelement;
@@ -49,6 +50,7 @@ class ElementBlocksPortal extends ElementPortal implements PortalElementInterfac
                     /** @var  ElementBlockPortal $objElement  */
                     $objElement = $objOneElement->getConcretePortalInstance();
                     $strReturn .= $objElement->getRenderedElementOutput();
+//                    $strReturn .= PagesPortaleditor::getPlaceholderWrapper("block_".$objOneElement->getSystemid());
                 }
 
             }

@@ -14,8 +14,7 @@ KAJONA.admin.pages = {
         var oldPos = null;
 
         $('fieldset.blocks').sortable({
-            //items: 'fieldset.block:not(.newblock)',
-            items: 'fieldset.block:has([data-systemid!=""])',
+            items: 'fieldset.block:not(.newblock)',
             //handle: 'label',
             cursor: 'move',
             forcePlaceholderSize: true,

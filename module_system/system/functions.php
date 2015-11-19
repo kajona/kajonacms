@@ -7,6 +7,9 @@
 *   $Id$                                                *
 ********************************************************************************************************/
 
+require_once (__DIR__."/../../module_system/system/StringUtil.php");
+
+use Kajona\System\System\StringUtil;
 /**
  * @package module_system
  */
@@ -1081,15 +1084,11 @@ function xmlSafeString($strString)
  * @param string $strNeedle
  *
  * @return int
+ * @deprecated (use Kajona\System\System\StringUtil::indexOf instead)
  */
 function uniStrpos($strHaystack, $strNeedle)
 {
-    if (_mbstringloaded_) {
-        return mb_strpos($strHaystack, $strNeedle);
-    }
-    else {
-        return strpos($strHaystack, $strNeedle);
-    }
+    return StringUtil::indexOf($strHaystack, $strNeedle);
 }
 
 
@@ -1100,15 +1099,11 @@ function uniStrpos($strHaystack, $strNeedle)
  * @param string $strNeedle
  *
  * @return int
+ * @deprecated (use Kajona\System\System\StringUtil::lastIndexOf instead)
  */
 function uniStrrpos($strHaystack, $strNeedle)
 {
-    if (_mbstringloaded_) {
-        return mb_strrpos($strHaystack, $strNeedle);
-    }
-    else {
-        return strrpos($strHaystack, $strNeedle);
-    }
+    return StringUtil::lastIndexOf($strHaystack, $strNeedle);
 }
 
 /**
@@ -1118,15 +1113,11 @@ function uniStrrpos($strHaystack, $strNeedle)
  * @param string $strNeedle
  *
  * @return int
+ * @deprecated (use Kajona\System\System\StringUtil::indexOf instead)
  */
 function uniStripos($strHaystack, $strNeedle)
 {
-    if (_mbstringloaded_ && function_exists("mb_stripos")) {
-        return mb_stripos($strHaystack, $strNeedle);
-    }
-    else {
-        return stripos($strHaystack, $strNeedle);
-    }
+    return StringUtil::indexOf($strHaystack, $strNeedle, false);
 }
 
 /**
@@ -1135,15 +1126,11 @@ function uniStripos($strHaystack, $strNeedle)
  * @param string $strString
  *
  * @return int
+ * @deprecated (use Kajona\System\System\StringUtil::length instead)
  */
 function uniStrlen($strString)
 {
-    if (_mbstringloaded_) {
-        return mb_strlen($strString);
-    }
-    else {
-        return strlen($strString);
-    }
+    return StringUtil::length($strString);
 }
 
 /**
@@ -1152,15 +1139,11 @@ function uniStrlen($strString)
  * @param string $strString
  *
  * @return string
+ * @deprecated (use Kajona\System\System\StringUtil::toLowerCase instead)
  */
 function uniStrtolower($strString)
 {
-    if (_mbstringloaded_) {
-        return mb_strtolower($strString);
-    }
-    else {
-        return strtolower($strString);
-    }
+    return StringUtil::toLowerCase($strString);
 }
 
 /**
@@ -1169,15 +1152,11 @@ function uniStrtolower($strString)
  * @param string $strString
  *
  * @return string
+ * @deprecated (use Kajona\System\System\StringUtil::toUpperCase instead)
  */
 function uniStrtoupper($strString)
 {
-    if (_mbstringloaded_) {
-        return mb_strtoupper($strString);
-    }
-    else {
-        return strtoupper($strString);
-    }
+    return StringUtil::toUpperCase($strString);
 }
 
 /**
@@ -1188,25 +1167,14 @@ function uniStrtoupper($strString)
  * @param int|string $intEnd
  *
  * @return string
+ * @deprecated (use Kajona\System\System\StringUtil::substring instead)
  */
 function uniSubstr($strString, $intStart, $intEnd = "")
 {
-    if (_mbstringloaded_) {
-        if ($intEnd == "") {
-            return mb_substr($strString, $intStart);
-        }
-        else {
-            return mb_substr($strString, $intStart, $intEnd);
-        }
+    if($intEnd == "") {
+        $intEnd = null;
     }
-    else {
-        if ($intEnd == "") {
-            return substr($strString, $intStart);
-        }
-        else {
-            return substr($strString, $intStart, $intEnd);
-        }
-    }
+    return StringUtil::substring($strString, $intStart, $intEnd);
 }
 
 /**
@@ -1216,15 +1184,11 @@ function uniSubstr($strString, $intStart, $intEnd = "")
  * @param string $strString
  *
  * @return int
+ * @deprecated (use Kajona\System\System\StringUtil::matches instead)
  */
 function uniEreg($strPattern, $strString)
 {
-    if (_mbstringloaded_) {
-        return mb_ereg($strPattern, $strString);
-    }
-    else {
-        return preg_match("/".$strPattern."/", $strString);
-    }
+    return StringUtil::matches($strString, $strPattern);
 }
 
 /**
@@ -1236,23 +1200,11 @@ function uniEreg($strPattern, $strString)
  * @param bool $bitUnicodesafe
  *
  * @return mixed
+ * @deprecated (use Kajona\System\System\StringUtil::replace instead)
  */
 function uniStrReplace($mixedSearch, $mixedReplace, $strSubject, $bitUnicodesafe = false)
 {
-    if ($bitUnicodesafe) {
-        if (!is_array($mixedSearch)) {
-            $mixedSearch = '!'.preg_quote($mixedSearch, '!').'!u';
-        }
-        else {
-            foreach ($mixedSearch as $strKey => $strValue) {
-                $mixedSearch[$strKey] = '!'.preg_quote($strValue).'!u';
-            }
-        }
-        return preg_replace($mixedSearch, $mixedReplace, $strSubject);
-    }
-    else {
-        return str_replace($mixedSearch, $mixedReplace, $strSubject);
-    }
+    return StringUtil::replace($mixedSearch, $mixedReplace, $strSubject, $bitUnicodesafe);
 }
 
 /**
@@ -1263,15 +1215,11 @@ function uniStrReplace($mixedSearch, $mixedReplace, $strSubject, $bitUnicodesafe
  * @param string $strAdd string to add after wrapped string
  *
  * @return string
+ * @deprecated (use Kajona\System\System\StringUtil::truncate instead)
  */
 function uniStrTrim($strString, $intLength, $strAdd = "…")
 {
-    if ($intLength > 0 && uniStrlen($strString) > $intLength) {
-        return trim(uniSubstr($strString, 0, $intLength)).$strAdd;
-    }
-    else {
-        return $strString;
-    }
+    return StringUtil::truncate($strString, $intLength, $strAdd);
 }
 
 /**
@@ -1317,18 +1265,10 @@ function checkConditionalGetHeaders($strChecksum)
  * @param $strString
  * @param string $strDelimiter
  * @return array|null
+ * @deprecated (use Kajona\System\System\StringUtil::toArray instead)
  */
 function strToArray($strString, $strDelimiter = ",") {
-
-    if(is_string($strString) && $strString !== "") {
-        return explode($strDelimiter, $strString);
-    }
-    elseif(is_array($strString)) {
-        return $strString;
-    }
-
-    return null;
-
+    return StringUtil::toArray($strString, $strDelimiter);
 }
 
 /**
@@ -1336,16 +1276,10 @@ function strToArray($strString, $strDelimiter = ",") {
  *
  * @param $strString
  * @return int|null
+ * @deprecated (use Kajona\System\System\StringUtil::strToInt instead)
  */
 function strToInt($strString) {
-    if(is_string($strString) && $strString !== "") {
-        return (int)$strString;
-    }
-    if(is_numeric($strString)) {
-        return $strString;
-    }
-
-    return null;
+    return StringUtil::toInt($strString);
 }
 
 /**
@@ -1353,17 +1287,9 @@ function strToInt($strString) {
  *
  * @param $strString
  * @return class_date|null
+ * @deprecated (use Kajona\System\System\StringUtil::strToDate instead)
  */
 function strToDate($strString) {
-
-    if($strString instanceof class_date) {
-        return $strString;
-    }
-    elseif($strString == "") {
-        return null;
-    }
-    else {
-        return new class_date($strString);
-    }
+    return StringUtil::toDate($strString);
 }
 

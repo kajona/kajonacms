@@ -28,6 +28,7 @@ use Kajona\Pages\System\PagesElement;
 use Kajona\Pages\System\PagesPage;
 use Kajona\Pages\System\PagesPageelement;
 use Kajona\Pages\System\PagesPortaleditorActionEnum;
+use Kajona\Pages\System\PagesPortaleditorPlaceholderAction;
 
 /**
  * Handles the loading of the pages - loads the elements, passes control to them and returns the complete
@@ -80,16 +81,8 @@ class PagesPortalController extends class_portal_controller implements interface
             $this->objSession->setSession("pe_disable", "false");
         }
 
-        //if using the pe, the cache shouldn't be used, otherwise strange things might happen.
-        //the system could frighten your cat or eat up all your cheese with marshmallows...
-        //get the current state of the portal editor
-        $bitPeRequested = false;
-        if (class_module_system_setting::getConfigValue("_pages_portaleditor_") == "true" && $this->objSession->getSession("pe_disable") != "true" && $this->objSession->isAdmin() && $objPageData->rightEdit()) {
-            $bitPeRequested = true;
-        }
-
         //If we reached up till here, we can begin loading the elements to fill
-        if ($bitPeRequested) {
+        if (PagesPortaleditor::isActive()) {
             $arrElementsOnPage = PagesPageelement::getElementsOnPage($objPageData->getSystemid(), false, $this->getStrPortalLanguage());
         }
         else {
@@ -100,7 +93,7 @@ class PagesPortalController extends class_portal_controller implements interface
         $objMasterData = PagesPage::getPageByName("master");
         $bitEditPermissionOnMasterPage = false;
         if ($objMasterData != null) {
-            if ($bitPeRequested) {
+            if (PagesPortaleditor::isActive()) {
                 $arrElementsOnMaster = PagesPageelement::getElementsOnPage($objMasterData->getSystemid(), false, $this->getStrPortalLanguage());
             }
             else {
@@ -120,7 +113,6 @@ class PagesPortalController extends class_portal_controller implements interface
 
 
         //Load the template from the filesystem to get the placeholders
-        $strTemplateID = $this->objTemplate->readTemplate("/module_pages/".$objPageData->getStrTemplate(), "", false, true);
         //bit include the masters-elements!!
         $arrRawPlaceholders = $objPlaceholders->getArrPlaceholder();
 
@@ -154,6 +146,8 @@ class PagesPortalController extends class_portal_controller implements interface
         $arrTemplate = array();
         $arrBlocks = array();
 
+        $arrBlocksIds = array();
+
         /** @var PagesPageelement $objOneElementOnPage */
         foreach ($arrElementsOnPage as $objOneElementOnPage) {
 
@@ -177,7 +171,7 @@ class PagesPortalController extends class_portal_controller implements interface
 
             //cache-handling. load element from cache.
             //if the element is re-generated, save it back to cache.
-            $strElementOutput = $objElement->getRenderedElementOutput($bitPeRequested);
+            $strElementOutput = $objElement->getRenderedElementOutput(PagesPortaleditor::isActive());
 
             if ($objOneElementOnPage->getStrElement() == "blocks") {
                 //try to fetch the whole block as a placeholder
@@ -187,6 +181,7 @@ class PagesPortalController extends class_portal_controller implements interface
                             $arrBlocks[$objOneBlock->getStrName()] = "";
                         }
                         $arrBlocks[$objOneBlock->getStrName()] .= $strElementOutput;
+                        $arrBlocksIds[$objOneBlock->getStrName()] = $objOneElementOnPage->getSystemid();
                     }
                 }
             }
@@ -198,7 +193,33 @@ class PagesPortalController extends class_portal_controller implements interface
         }
 
         //pe-code to add new elements on unfilled placeholders --> only if pe is visible
-        if ($bitPeRequested) {
+        if (PagesPortaleditor::isActive()) {
+
+            foreach($objPlaceholders->getArrBlocks() as $objOneBlocks) {
+                foreach($objOneBlocks->getArrBlocks() as $objOneBlock) {
+
+                    //register a new-action per block-element
+                    if (PagesPortaleditor::isActive()) {
+                        $strId = $objOneBlocks->getStrName();
+                        if(isset($arrBlocksIds[$objOneBlocks->getStrName()])) {
+                            $strId = $arrBlocksIds[$objOneBlocks->getStrName()];
+                        }
+
+                        PagesPortaleditor::getInstance()->registerAction(
+                            new PagesPortaleditorPlaceholderAction(
+                                PagesPortaleditorActionEnum::CREATE(),
+                                class_link::getLinkAdminHref("pages_content", "newBlock", "&blocks={$strId}&block={$objOneBlock->getStrName()}&systemid={$objPageData->getSystemid()}&peClose=1"), "blocks_".$objOneBlocks->getStrName(),
+                                $objOneBlock->getStrName()
+                            )
+                        );
+                    }
+                }
+                if(!isset($arrBlocks[$objOneBlocks->getStrName()])) {
+                    $arrBlocks[$objOneBlocks->getStrName()] = "";
+                }
+                $arrBlocks[$objOneBlocks->getStrName()] .= PagesPortaleditor::getPlaceholderWrapper("blocks_".$objOneBlocks->getStrName());
+
+            }
 
             foreach ($objPlaceholders->getArrPlaceholder() as $arrOnePlaceholder) {
 

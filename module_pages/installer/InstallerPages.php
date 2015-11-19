@@ -122,12 +122,17 @@ class InstallerPages extends class_installer_base implements interface_installer
 
 
         $arrElements = array(
-            "row" => array("class_element_row_admin.php", "class_element_row_portal.php"),
-            "paragraph" => array("class_element_paragraph_admin.php", "class_element_paragraph_portal.php"),
-            "image" => array("class_element_image_admin.php", "class_element_image_portal.php"),
+            "row" => array("ElementRowAdmin.php", "ElementRowPortal.php"),
+            "paragraph" => array("ElementParagraphAdmin.php", "ElementParagraphPortal.php"),
+            "image" => array("ElementImageAdmin.php", "ElementImagePortal.php"),
             "downloads" => array("class_element_downloads_admin.php", "class_element_downloads_portal.php"),
             "gallery" => array("class_element_gallery_admin.php", "class_element_gallery_portal.php"),
             "galleryRandom" => array("class_element_galleryRandom_admin.php", "class_element_gallery_portal.php"),
+            "blocks" => array("ElementBlocksAdmin.php", "ElementBlocksPortal.php"),
+            "block" => array("ElementBlockAdmin.php", "ElementBlockPortal.php"),
+            "date" => array("ElementDateAdmin.php", "ElementDatePortal.php"),
+            "plaintext" => array("ElementPlaintextAdmin.php", "ElementPlaintextPortal.php"),
+            "richtext" => array("ElementRichtextAdmin.php", "ElementRichtextPortal.php"),
         );
 
         foreach($arrElements as $strOneElement => $arrConfig) {

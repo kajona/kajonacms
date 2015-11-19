@@ -51,6 +51,14 @@ class ElementPlaintextAdmin extends ElementAdmin implements AdminElementInterfac
      */
     private $strTemplate = "";
 
+    /**
+     * @inheritDoc
+     */
+    public function generateDummyContent()
+    {
+        $this->setStrText("Lorem Ipsum");
+    }
+
 
     /**
      * @param string $strTemplate

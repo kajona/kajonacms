@@ -248,15 +248,18 @@ class PagesElement extends class_model implements interface_model, interface_adm
      */
     public function getPortalElementInstance()
     {
+
+        $strFilename = \class_resourceloader::getInstance()->getPathForFile("/portal/elements/".$this->getStrClassPortal());
+        $objInstance = \class_classloader::getInstance()->getInstanceFromFilename($strFilename, "Kajona\\Pages\\Portal\\ElementPortal", null, array(new class_module_pages_pageelement()));
+
+
         //Build the class-name
-        $strElementClass = str_replace(".php", "", $this->getStrClassPortal());
         //and finally create the object
-        if (class_exists($strElementClass)) {
-            $objElement = new $strElementClass(new class_module_pages_pageelement());
-            return $objElement;
+        if ($objInstance != null) {
+            return $objInstance;
         }
         else {
-            throw new class_exception("element class ".$strElementClass." not existing", class_exception::$level_FATALERROR);
+            throw new class_exception("element class ".$this->getStrClassPortal()." not existing", class_exception::$level_FATALERROR);
         }
     }
 

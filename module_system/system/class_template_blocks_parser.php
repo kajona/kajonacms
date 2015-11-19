@@ -28,7 +28,7 @@ class class_template_blocks_parser
 
         //find opening tag
         $arrMatches = array();
-        while (preg_match("/<".$strBlockDefinition."([\ a-zA-Z0-9=']*)(.*) ".class_template_kajona_sections::ATTR_NAME."=(\"|\')([\ a-zA-Z0-9]*)(\"|\')(.*)>/i", $strTemplate, $arrMatches) > 0) {
+        while (preg_match("/<".$strBlockDefinition."([\ a-zA-Z0-9=']*)(.*) ".class_template_kajona_sections::ATTR_NAME."=(\"|\')([\-\ a-zA-Z0-9]*)(\"|\')(.*)>/i", $strTemplate, $arrMatches) > 0) {
 
             $strPattern = $arrMatches[0];
             $intStart = uniStrpos($strTemplate, $strPattern);
