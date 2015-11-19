@@ -27,15 +27,10 @@ beforeEach(function () {
 // JUnit reporting
 (function() {
 
-    var env = global.jasmine.getEnv();
-
-    var reporters = require('jasmine-reporters');
-    var junitReporter = new reporters.JUnitXmlReporter({
-        savePath: './reporting',
-        consolidateAll: false
-    });
-
-    env.addReporter(junitReporter);
+    var jasmineReporters = require('jasmine-reporters');
+    jasmine.getEnv().addReporter(new jasmineReporters.JUnitXmlReporter({
+        savePath: '.'
+    }));
 
 }());
 
