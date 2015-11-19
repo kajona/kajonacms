@@ -143,6 +143,7 @@
         position: absolute;
         display: none;
         z-index: 400;
+        .opacity(1) !important;
 
         .peActionToolbarActionContainer {
 
@@ -184,7 +185,7 @@
     }
 
     &:hover {
-        > .peActionToolbar {
+         > .peActionToolbar {
             display: block;
         }
     }
@@ -256,6 +257,31 @@ body *[data-kajona-editable] {
     &:focus {
         outline: 1px dotted @wysiwygOutlineColorHover;
     }
+
+    &.peFailed {
+
+        @keyframes shake {
+            from, to {
+                transform: translate3d(0, 0, 0);
+            }
+
+            10%, 30%, 50%, 70%, 90% {
+                transform: translate3d(-10px, 0, 0);
+            }
+
+            20%, 40%, 60%, 80% {
+                transform: translate3d(10px, 0, 0);
+            }
+        }
+        animation: shake 2s ease-in-out;
+    }
+}
+
+.peProgressIndicator {
+
+    position: absolute;
+    width: 1px;
+    height: 1px;
 
     &.peSaving {
         &:after,

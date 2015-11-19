@@ -1,7 +1,9 @@
 //   (c) 2004-2006 by MulchProductions, www.mulchprod.de
 //   (c) 2007-2015 by Kajona, www.kajona.de
 //       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt
-//       $Id$
+
+//please leave this line for remote debuggers such as webstorm / phpstorm
+//@ sourceURL=/core/module_pages/admin/scripts/kajona_portaleditor.js
 
 if (typeof KAJONA == "undefined") {
     var KAJONA = {
@@ -148,28 +150,65 @@ KAJONA.admin.portaleditor.RTE.savePage = function () {
         var $editable = $('[data-kajona-editable="' + key + '"]');
         $editable.addClass('peSaving');
 
+        var objStatusIndicator = new KAJONA.admin.portaleditor.RTE.saveIndicatorObj($editable);
+
         $.post(KAJONA_WEBPATH + '/xml.php?admin=1&module=pages_content&action=updateObjectProperty', data)
             .always(function () {
-                $editable.addClass('peSaving');
+                objStatusIndicator.showProgress();
             })
             .done(function () {
-                $editable.addClass('peSaved');
+                objStatusIndicator.addClass('peSaved');
                 window.setTimeout(function () {
-                    $editable.removeClass('peSaving peSaved peFailed');
-                }, 3000);
+                    objStatusIndicator.hide();
+                }, 5000);
             }).fail(function () {
                 $editable.addClass('peFailed');
+                objStatusIndicator.addClass('peFailed');
+
                 window.setTimeout(function () {
-                    $editable.removeClass('peSaving peSaved peFailed');
+                    objStatusIndicator.hide();
+                    $editable.removeClass('peFailed');
                 }, 5000);
-                //console. warn('server response');
-                //console. log(this.responseText);
         });
     });
     //console. groupEnd('savePage');
 
     KAJONA.admin.portaleditor.RTE.modifiedFields = {};
 };
+
+/**
+ * The saveIndicator is used to show a working-indicator associated with a ui element.
+ * currently the indicator may represent various states:
+ * - showProgress showing the indicator
+ * - addClass adding a class, e.g. to indicate a new status
+ * - hide destroying the indicator completely
+ * @param $objSourceElement
+ */
+KAJONA.admin.portaleditor.RTE.saveIndicatorObj = function($objSourceElement) {
+
+    var indicatorId = $objSourceElement.data('kajona-editable');
+    var objDiv = null;
+    var objSourceElement = $objSourceElement;
+
+    this.showProgress = function () {
+
+        objDiv = $('<div>').addClass('peProgressIndicator peSaving').attr('data-kajona-indicator', indicatorId);
+        $('body').append(objDiv);
+        objDiv.css('left', objSourceElement.position().left+objSourceElement.width()).css('top', objSourceElement.position().top);
+    };
+
+    this.addClass = function(strClass) {
+
+        objDiv.addClass(strClass);
+    };
+
+    this.hide = function() {
+        objDiv.remove();
+        objDiv = null;
+    };
+};
+
+
 
 /**
  * To init the portaleditor, use a syntax like
@@ -376,7 +415,7 @@ KAJONA.admin.portaleditor.elementActionToolbar = {
     },
 
     injectElementEditUI: function ($element, actions) {
-        $element.append(KAJONA.admin.portaleditor.elementActionToolbar.generateActionList(actions));
+        $element.prepend(KAJONA.admin.portaleditor.elementActionToolbar.generateActionList(actions));
     },
 
     injectElementCreateUI: function ($element, actions, placeholderName) {
@@ -473,19 +512,29 @@ KAJONA.admin.portaleditor.elementActionToolbar = {
         var $objEl = $(element);
         if($objEl.children('.peActionToolbar')) {
             $objEl.children('.peActionToolbar')
-                .css('display', 'block')
                 .css('top', ($objEl.position().top) - 35)
-                .css('left', ($objEl.position().left));
-                //.animate({top: ($objEl.position().top) - 35, opacity: 100}, 500);
+                .css('left', ($objEl.position().left))
+                .addClass('peShown');
+
+            //$objEl.closest(".peShown").css('display', 'none');
+            //$objEl.parent().parent().parents(".peElementWrapper").find(".peShown").css('display', 'none');
         }
 
     },
 
+    hide : function(element) {
+        var $objEl = $(element);
+        if($objEl.children('.peActionToolbar')) {
+            $objEl.children('.peActionToolbar')
+                .removeClass('peShown');
+        }
+
+    }
+
+
 };
 
-$(function () {
-    KAJONA.admin.portaleditor.elementActionToolbar.init();
-});
+
 
 /**
  * Folderview functions
@@ -621,4 +670,8 @@ KAJONA.admin.tooltip = {
 
 };
 
-KAJONA.admin.tooltip.initTooltip();
+
+$(function () {
+    KAJONA.admin.portaleditor.elementActionToolbar.init();
+    KAJONA.admin.tooltip.initTooltip();
+});
