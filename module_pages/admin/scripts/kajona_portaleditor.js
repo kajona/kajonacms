@@ -167,7 +167,6 @@ KAJONA.admin.portaleditor.RTE.savePage = function () {
 
                 window.setTimeout(function () {
                     objStatusIndicator.hide();
-                    $editable.removeClass('peFailed');
                 }, 5000);
         });
     });
@@ -186,13 +185,12 @@ KAJONA.admin.portaleditor.RTE.savePage = function () {
  */
 KAJONA.admin.portaleditor.RTE.saveIndicatorObj = function($objSourceElement) {
 
-    var indicatorId = $objSourceElement.data('kajona-editable');
     var objDiv = null;
     var objSourceElement = $objSourceElement;
 
     this.showProgress = function () {
 
-        objDiv = $('<div>').addClass('peProgressIndicator peSaving').attr('data-kajona-indicator', indicatorId);
+        objDiv = $('<div>').addClass('peProgressIndicator peSaving');//.attr('data-kajona-indicator', indicatorId);
         $('body').append(objDiv);
         objDiv.css('left', objSourceElement.position().left+objSourceElement.width()).css('top', objSourceElement.position().top);
     };
@@ -203,6 +201,7 @@ KAJONA.admin.portaleditor.RTE.saveIndicatorObj = function($objSourceElement) {
     };
 
     this.hide = function() {
+        objSourceElement.removeClass('peFailed');
         objDiv.remove();
         objDiv = null;
     };
@@ -274,6 +273,11 @@ KAJONA.admin.portaleditor.RTE.init = function () {
         });
 
         editable.attr("contenteditable", "true");
+
+        /**
+         * @todo detect if not already present
+         */
+
         CKEDITOR.inline(editable.get(0), ckeditorConfig);
     });
 
@@ -292,6 +296,51 @@ KAJONA.admin.portaleditor.RTE.init = function () {
     });
 };
 
+
+/**
+ * A helper to trigger the status-actions of a page-element, so setting the element active / inactive
+ * @type {{setStatus: KAJONA.admin.portaleditor.status.setStatus}}
+ */
+KAJONA.admin.portaleditor.status = {
+    setStatus : function(strSystemid, intStatus) {
+
+        var $objElement = $('.peElementWrapper[data-systemid="'+strSystemid+'"]');
+
+        var objStatusIndicator = new KAJONA.admin.portaleditor.RTE.saveIndicatorObj($objElement);
+
+
+        if(intStatus == 0) {
+            $objElement.addClass("peInactiveElement");
+        }
+        else {
+            $objElement.removeClass("peInactiveElement");
+        }
+
+        var data = {
+            systemid: strSystemid,
+            status: intStatus
+        };
+
+        $.post(KAJONA_WEBPATH + '/xml.php?admin=1&module=system&action=setStatus', data)
+            .always(function () {
+                objStatusIndicator.showProgress();
+            })
+            .done(function () {
+                objStatusIndicator.addClass('peSaved');
+                window.setTimeout(function () {
+                    objStatusIndicator.hide();
+                }, 5000);
+            }).fail(function () {
+            $objElement.addClass('peFailed');
+            objStatusIndicator.addClass('peFailed');
+
+            window.setTimeout(function () {
+                objStatusIndicator.hide();
+            }, 5000);
+        });
+
+    }
+};
 
 /**
  * Initialise the drag & drop logic to move page elements
@@ -471,13 +520,15 @@ KAJONA.admin.portaleditor.elementActionToolbar = {
                     break;
                 case 'SETACTIVE':
                     $actionElement.on('click', function () {
-                        KAJONA.admin.portaleditor.openDialog(action.link);
+                        KAJONA.admin.portaleditor.status.setStatus(action.systemid, 1);
+                        //KAJONA.admin.portaleditor.openDialog(action.link);
                     });
                     $actionElement.append($('<i>').addClass('fa fa-eye'));
                     break;
                 case 'SETINACTIVE':
                     $actionElement.on('click', function () {
-                        KAJONA.admin.portaleditor.openDialog(action.link);
+                        KAJONA.admin.portaleditor.status.setStatus(action.systemid, 0);
+                        //KAJONA.admin.portaleditor.openDialog(action.link);
                     });
                     $actionElement.append($('<i>').addClass('fa fa-eye-slash'));
                     break;

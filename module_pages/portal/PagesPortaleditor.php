@@ -65,7 +65,7 @@ class PagesPortaleditor  {
         foreach($arrActions as $objOneAction) {
 
             if($objOneAction instanceof PagesPortaleditorSystemidAction) {
-                $arrReturn["systemIds"][$objOneAction->getStrSystemid()][] = array("type" => $objOneAction->getObjAction()."", "link" => $objOneAction->getStrLink());
+                $arrReturn["systemIds"][$objOneAction->getStrSystemid()][] = array("type" => $objOneAction->getObjAction()."", "link" => $objOneAction->getStrLink(), "systemid" => $objOneAction->getStrSystemid());
             }
 
             if($objOneAction instanceof PagesPortaleditorPlaceholderAction) {

@@ -355,16 +355,12 @@ abstract class ElementPortal extends class_portal_controller
             );
 
 
-            if ($objPageelement->getIntRecordStatus() == 1) {
-                PagesPortaleditor::getInstance()->registerAction(
-                    new PagesPortaleditorSystemidAction(PagesPortaleditorActionEnum::SETINACTIVE(), class_link::getLinkAdminHref("pages_content", "elementStatus", "&systemid={$this->getSystemid()}&language={$strAdminLangParam}&pe=1"), $this->getSystemid())
-                );
-            }
-            else {
-                PagesPortaleditor::getInstance()->registerAction(
-                    new PagesPortaleditorSystemidAction(PagesPortaleditorActionEnum::SETACTIVE(), class_link::getLinkAdminHref("pages_content", "elementStatus", "&systemid={$this->getSystemid()}&language={$strAdminLangParam}&pe=1"), $this->getSystemid())
-                );
-            }
+            PagesPortaleditor::getInstance()->registerAction(
+                new PagesPortaleditorSystemidAction(PagesPortaleditorActionEnum::SETINACTIVE(), class_link::getLinkAdminHref("pages_content", "elementStatus", "&systemid={$this->getSystemid()}&language={$strAdminLangParam}&pe=1"), $this->getSystemid())
+            );
+            PagesPortaleditor::getInstance()->registerAction(
+                new PagesPortaleditorSystemidAction(PagesPortaleditorActionEnum::SETACTIVE(), class_link::getLinkAdminHref("pages_content", "elementStatus", "&systemid={$this->getSystemid()}&language={$strAdminLangParam}&pe=1"), $this->getSystemid())
+            );
 
             if(!$this instanceof ElementBlocksPortal) {
                 PagesPortaleditor::getInstance()->registerAction(
