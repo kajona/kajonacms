@@ -24,3 +24,19 @@ beforeEach(function () {
 
 });
 
+// JUnit reporting
+(function() {
+
+    var env = global.jasmine.getEnv();
+
+    var reporters = require('jasmine-reporters');
+    var junitReporter = new reporters.JUnitXmlReporter({
+        savePath: './reporting',
+        consolidateAll: false
+    });
+
+    env.addReporter(junitReporter);
+
+}());
+
+
