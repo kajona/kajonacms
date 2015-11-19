@@ -4,6 +4,14 @@ namespace Kajona\System\System;
 
 use class_date;
 
+/**
+ * Util class for processing strings.
+ *
+ * Class StringUtil
+ * @package Kajona\System\System
+ * @author stefan.meyer1@yahoo.de
+ * @since 4.6
+ */
 class StringUtil
 {
     /**
@@ -135,7 +143,7 @@ class StringUtil
     }
 
     /**
-     * trip whitespace (or other characters) from the beginning and end of a string.
+     * Trim whitespaces (or other characters) from the beginning and end of a string.
      *
      * @param $strString
      * @return string
@@ -154,7 +162,7 @@ class StringUtil
      * @param string $strAdd
      * @return string
      */
-    public static function truncate($strString, $intLength, $strAdd = "...")
+    public static function truncate($strString, $intLength, $strAdd = "…")
     {
         if ($intLength > 0 && self::length($strString) > $intLength) {
             return trim(self::substring($strString, 0, $intLength)).$strAdd;
@@ -212,10 +220,11 @@ class StringUtil
     }
 
     /**
-     * Converts a string to a class_date
+     * Converts a string to an array
      *
      * @param $strString
-     * @return class_date|null
+     * @param string $strDelimiter
+     * @return array|null
      */
     public static function toArray($strString, $strDelimiter = ",")
     {
