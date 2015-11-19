@@ -29,7 +29,7 @@ beforeEach(function () {
 
     var jasmineReporters = require('jasmine-reporters');
     jasmine.getEnv().addReporter(new jasmineReporters.JUnitXmlReporter({
-        savePath: '.'
+        savePath: '../build/logs'
     }));
 
 }());
