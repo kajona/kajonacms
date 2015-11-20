@@ -229,12 +229,16 @@ KAJONA.admin.portaleditor.RTE.init = function () {
 
         var editable = $(this);
 
+        //quit if the init run before
+        if(editable.hasClass('cke_editable')) {
+            return;
+        }
+
         if(editable.attr('id') == undefined) {
             editable.attr('id', 'ckeditor-hack-'+count++);
         }
 
         var keySplitted = editable.attr('data-kajona-editable').split('#');
-
         var strMode = keySplitted[2] ? keySplitted[2] : 'wysiwyg';
 
         var ckeditorConfig = KAJONA.admin.portaleditor.RTE.config;
@@ -255,7 +259,6 @@ KAJONA.admin.portaleditor.RTE.init = function () {
 
                 KAJONA.admin.portaleditor.RTE.modifiedFields[attr] = data;
 
-
                 // save field on blur
                 KAJONA.admin.portaleditor.RTE.savePage();
             },
@@ -273,11 +276,6 @@ KAJONA.admin.portaleditor.RTE.init = function () {
         });
 
         editable.attr("contenteditable", "true");
-
-        /**
-         * @todo detect if not already present
-         */
-
         CKEDITOR.inline(editable.get(0), ckeditorConfig);
     });
 
@@ -445,12 +443,10 @@ KAJONA.admin.portaleditor.dragndrop.init = function () {
  */
 KAJONA.admin.portaleditor.elementActionToolbar = {
     init: function () {
-        KAJONA.admin.portaleditor.elementActionToolbar.injectPlaceholderActions();
+        KAJONA.admin.portaleditor.elementActionToolbar.injectPlaceholderActions(KAJONA.admin.actions);
     },
 
-    injectPlaceholderActions: function () {
-
-        var actions = KAJONA.admin.actions;
+    injectPlaceholderActions: function (actions) {
 
         $.each(actions.placeholder, function (placeholderName, actions) {
             KAJONA.admin.portaleditor.elementActionToolbar.injectElementCreateUI($('[data-name="' + placeholderName + '"]'), actions, placeholderName);

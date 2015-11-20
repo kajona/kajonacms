@@ -865,13 +865,13 @@ JS;
                 $objPortalElement = $objElementData->getConcretePortalInstance();
                 $strElementContent = $objPortalElement->getRenderedElementOutput(true);
 
-                $strElementContent = PagesPortaleditor::addPortaleditorContentWrapper($strElementContent, $objElementData->getSystemid());
-
                 $strContent = json_encode($strElementContent, JSON_FORCE_OBJECT); //JSON_HEX_QUOT|JSON_HEX_APOS
+                $strActions = PagesPortaleditor::getInstance()->convertToJs();
 
                 $strReturn = <<<JS
                     parent.KAJONA.admin.portaleditor.changeElementData('{$objElementData->getStrPlaceholder()}', '{$objElementData->getSystemid()}', {$strContent});
                     parent.KAJONA.admin.portaleditor.RTE.init();
+                    parent.KAJONA.admin.portaleditor.elementActionToolbar.injectPlaceholderActions({$strActions});
                     parent.KAJONA.admin.portaleditor.closeDialog(true);
 
 JS;
