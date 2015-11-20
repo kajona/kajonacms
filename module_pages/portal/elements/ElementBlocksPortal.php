@@ -20,7 +20,8 @@ use Kajona\Pages\System\PagesPageelement;
  * @author sidler@mulchprod.de
  * @targetTable element_universal.content_id
  */
-class ElementBlocksPortal extends ElementPortal implements PortalElementInterface {
+class ElementBlocksPortal extends ElementPortal implements PortalElementInterface
+{
 
 
     /**
@@ -28,7 +29,8 @@ class ElementBlocksPortal extends ElementPortal implements PortalElementInterfac
      *
      * @return string
      */
-    public function loadData() {
+    public function loadData()
+    {
 
         $strReturn = "";
 

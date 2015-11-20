@@ -230,6 +230,8 @@ class PagesPortalController extends class_portal_controller implements interface
                         continue;
                     }
 
+                    //see if the element was rendered at the same placeholder and skip it if not repeatable
+
                     $objPortalElement = $objElement->getPortalElementInstance();
 
                     $objPortalElement->getPortaleditorPlaceholderActions(isset($arrPlaceholderWithElements[$arrSinglePlaceholder["name"].$arrSinglePlaceholder["element"]]), $objElement, $arrOnePlaceholder["placeholder"], $objPageData);

@@ -362,12 +362,6 @@ abstract class ElementPortal extends class_portal_controller
                 new PagesPortaleditorSystemidAction(PagesPortaleditorActionEnum::SETACTIVE(), class_link::getLinkAdminHref("pages_content", "elementStatus", "&systemid={$this->getSystemid()}&language={$strAdminLangParam}&pe=1"), $this->getSystemid())
             );
 
-            if(!$this instanceof ElementBlocksPortal) {
-                PagesPortaleditor::getInstance()->registerAction(
-                    new PagesPortaleditorPlaceholderAction(PagesPortaleditorActionEnum::CREATE(), class_link::getLinkAdminHref("pages_content", "new", "&systemid={$this->getSystemid()}&language={$strAdminLangParam}&placeholder={$objPageelement->getStrPlaceholder()}&element={$objPageelement->getStrElement()}&pe=1"), $objPageelement->getStrPlaceholder(), $objPageelement->getStrName())
-                );
-            }
-
         }
     }
 

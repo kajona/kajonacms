@@ -360,11 +360,29 @@ KAJONA.admin.portaleditor.dragndrop.init = function () {
     };
 
     // checks if the page element is allowed in the given placeholder or not
-    var saveElementPosition = function (systemId, newPos) {
+    var saveElementPosition = function (systemId, newPos, $objUiElement) {
+
+        var objStatusIndicator = new KAJONA.admin.portaleditor.RTE.saveIndicatorObj($objUiElement);
+
         $.post(KAJONA_WEBPATH + '/xml.php?admin=1&module=system&action=setAbsolutePosition', {
             systemid: systemId,
             listPos: newPos + 1
-        });
+        }).always(function () {
+                objStatusIndicator.showProgress();
+            })
+            .done(function () {
+                objStatusIndicator.addClass('peSaved');
+                window.setTimeout(function () {
+                    objStatusIndicator.hide();
+                }, 5000);
+            }).fail(function () {
+                $editable.addClass('peFailed');
+                objStatusIndicator.addClass('peFailed');
+
+                window.setTimeout(function () {
+                    objStatusIndicator.hide();
+                }, 5000);
+            });
     };
 
     var oldPos;
@@ -410,7 +428,7 @@ KAJONA.admin.portaleditor.dragndrop.init = function () {
                     systemid: systemId,
                     placeholder: newPlaceholder
                 }, function () {
-                    saveElementPosition(systemId, newPos);
+                    saveElementPosition(systemId, newPos, ui.item);
                     suspendStop = false;
                 });
             } else {
@@ -423,7 +441,7 @@ KAJONA.admin.portaleditor.dragndrop.init = function () {
 
                 if (oldPos !== newPos) {
                     var systemId = ui.item.data('systemid');
-                    saveElementPosition(systemId, newPos);
+                    saveElementPosition(systemId, newPos, ui.item);
                 }
             }
 
