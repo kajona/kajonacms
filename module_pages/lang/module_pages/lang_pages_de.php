@@ -103,6 +103,7 @@ $lang["pages_ordner_loeschen_frage"]     = "Möchten Sie den Ordner &quot;<b>%%e
 $lang["pages_ordner_oeffnen"]            = "Ordner öffnen";
 $lang["pe_copy"]                         = "Kopieren";
 $lang["pe_delete"]                       = "Löschen";
+$lang["pe_delete_warning"]               = "Möchten Sie den Datensatz wirklich löschen?";
 $lang["pe_dialog_close_warning"]         = "Wollen Sie den Editor schließen und mögliche Änderungen verwerfen?";
 $lang["pe_disable"]                      = "Den Portaleditor temporär deaktivieren";
 $lang["pe_edit"]                         = "Bearbeiten";

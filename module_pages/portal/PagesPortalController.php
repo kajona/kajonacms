@@ -475,6 +475,7 @@ class PagesPortalController extends class_portal_controller implements interface
                 KAJONA.admin.lang.peEDIT = '".$this->getLang("pe_edit", "pages")."';
                 KAJONA.admin.lang.peCOPY = '".$this->getLang("pe_copy", "pages")."';
                 KAJONA.admin.lang.peDELETE = '".$this->getLang("pe_delete", "pages")."';
+                KAJONA.admin.lang.peDELETEWARNING = '".$this->getLang("pe_delete_hint", "pages")."';
                 KAJONA.admin.lang.peCREATE = '".$this->getLang("pe_new", "pages")."';
                 KAJONA.admin.lang.peSETACTIVE = '".$this->getLang("pe_setactive", "pages")."';
                 KAJONA.admin.lang.peSETINACTIVE = '".$this->getLang("pe_setinactive", "pages")."';

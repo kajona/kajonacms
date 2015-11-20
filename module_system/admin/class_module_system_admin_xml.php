@@ -104,7 +104,7 @@ class class_module_system_admin_xml extends class_admin_controller implements in
             $this->flushCompletePagesCache();
         }
         else {
-            class_response_object::getInstance()->setStrStatusCode(class_http_statuscodes::SC_UNAUTHORIZED);
+            class_response_object::getInstance()->setStrStatusCode(class_http_statuscodes::SC_FORBIDDEN);
             $strReturn .= "<message><error>".xmlSafeString($this->getLang("commons_error_permissions"))."</error></message>";
         }
 
@@ -122,7 +122,7 @@ class class_module_system_admin_xml extends class_admin_controller implements in
     {
         $strReturn = "";
         $objCommon = class_objectfactory::getInstance()->getObject($this->getSystemid());
-        if ($objCommon != null && $objCommon->rightDelete()) {
+        if ($objCommon != null && $objCommon->rightDelete() && $objCommon->getLockManager()->isAccessibleForCurrentUser()) {
             $strName = $objCommon->getStrDisplayName();
             if ($objCommon->deleteObject()) {
                 $strReturn .= "<message>".$strName." - ".$this->getLang("commons_delete_ok")."</message>";
@@ -133,7 +133,7 @@ class class_module_system_admin_xml extends class_admin_controller implements in
             }
         }
         else {
-            class_response_object::getInstance()->setStrStatusCode(class_http_statuscodes::SC_UNAUTHORIZED);
+            class_response_object::getInstance()->setStrStatusCode(class_http_statuscodes::SC_FORBIDDEN);
             $strReturn .= "<message><error>".xmlSafeString($this->getLang("commons_error_permissions"))."</error></message>";
         }
 
@@ -164,7 +164,7 @@ class class_module_system_admin_xml extends class_admin_controller implements in
             $this->flushCompletePagesCache();
         }
         else {
-            class_response_object::getInstance()->setStrStatusCode(class_http_statuscodes::SC_UNAUTHORIZED);
+            class_response_object::getInstance()->setStrStatusCode(class_http_statuscodes::SC_FORBIDDEN);
             $strReturn .= "<message><error>".xmlSafeString($this->getLang("commons_error_permissions"))."</error></message>";
         }
 

@@ -103,6 +103,7 @@ $lang["pages_ordner_loeschen_frage"]     = "Do you really want to delete the fol
 $lang["pages_ordner_oeffnen"]            = "Open folder";
 $lang["pe_copy"]                         = "Copy";
 $lang["pe_delete"]                       = "Delete";
+$lang["pe_delete_warning"]               = "Do you really want to delete this record?";
 $lang["pe_dialog_close_warning"]         = "Do you want to close the editor and discard possible modifications?";
 $lang["pe_disable"]                      = "Set portaleditor temporary inactive";
 $lang["pe_edit"]                         = "Edit";

@@ -118,16 +118,49 @@ KAJONA.admin.portaleditor = {
 
     },
 
-    deleteElementData : function(strSystemid) {
-        $("div.peElementWrapper[data-systemid='"+strSystemid+"']").remove();
+    deleteElement : function(strSystemid) {
+
+        var $objWrapper = $("div.peElementWrapper[data-systemid='"+strSystemid+"']");
+
+        var objStatusIndicator = null;
+        if($objWrapper) {
+            objStatusIndicator = new KAJONA.admin.portaleditor.RTE.SaveIndicator($objWrapper);
+        }
+
         //and delete the element on the backend
         var data = {
             systemid: strSystemid
         };
-        $.post(KAJONA_WEBPATH + '/xml.php?admin=1&module=pages_content&action=deleteElementFinalXML', data, function () {
-        }).fail(function() {
-            location.reload();
+        $.post(KAJONA_WEBPATH + '/xml.php?admin=1&module=system&action=delete', data, function () {
+        }).always(function () {
+                if(objStatusIndicator) {
+                    $objWrapper.addClass('peInactiveElement');
+                    objStatusIndicator.showProgress();
+                }
+            })
+            .done(function () {
+                if(objStatusIndicator) {
+                    objStatusIndicator.addClass('peSaved');
+                    window.setTimeout(function () {
+                        objStatusIndicator.hide();
+
+                        $objWrapper.remove();
+                    }, 1000);
+                }
+                else {
+                    location.reload();
+                }
+            }).fail(function () {
+                if(objStatusIndicator) {
+                    objStatusIndicator.addClass('peFailed');
+                    window.setTimeout(function () {
+                        objStatusIndicator.hide();
+                    }, 5000);
+                }
         });
+
+
+
     }
 };
 
@@ -542,8 +575,16 @@ KAJONA.admin.portaleditor.elementActionToolbar = {
                     $actionElement.append($('<i>').addClass('fa fa-pencil'));
                     break;
                 case 'DELETE':
+
                     $actionElement.on('click', function () {
-                        KAJONA.admin.portaleditor.openDialog(action.link);
+                        delDialog.setTitle(actionTitle);
+                        delDialog.setContent(KAJONA.admin.lang.peDELETEWARNING, actionTitle, function() {
+                            delDialog.hide();
+                            KAJONA.admin.portaleditor.deleteElement(action.systemid);
+                            return false;
+                        });
+                        delDialog.init();
+                        return false;
                     });
                     $actionElement.append($('<i>').addClass('fa fa-trash'));
                     break;
