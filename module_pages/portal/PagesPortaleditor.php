@@ -9,6 +9,8 @@ use class_carrier;
 use class_model;
 use class_module_system_setting;
 use class_objectfactory;
+use Kajona\Pages\System\PagesElement;
+use Kajona\Pages\System\PagesPageelement;
 use Kajona\Pages\System\PagesPortaleditorActionAbstract;
 use Kajona\Pages\System\PagesPortaleditorActionEnum;
 use Kajona\Pages\System\PagesPortaleditorPlaceholderAction;
@@ -122,9 +124,16 @@ class PagesPortaleditor  {
             return $strOutput;
         }
 
+        //if the parent one is a block, we want to avoid it being a drag n drop entry
+        $objParent = class_objectfactory::getInstance()->getObject($objInstance->getStrPrevId());
+
         $strClass = "peElementWrapper";
         if($objInstance->getIntRecordStatus() == 0) {
             $strClass .= " peInactiveElement";
+        }
+
+        if($objParent instanceof PagesPageelement && $objParent->getStrPlaceholder() == "block") {
+            $strClass .= " peNoDnd";
         }
 
         return "<div class='{$strClass}' data-systemid='{$strSystemid}' data-element='{$strElement}' onmouseover='KAJONA.admin.portaleditor.elementActionToolbar.show(this)'  onmouseout='KAJONA.admin.portaleditor.elementActionToolbar.hide(this)'>{$strOutput}</div>";

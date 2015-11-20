@@ -150,7 +150,7 @@ KAJONA.admin.portaleditor.RTE.savePage = function () {
         var $editable = $('[data-kajona-editable="' + key + '"]');
         $editable.addClass('peSaving');
 
-        var objStatusIndicator = new KAJONA.admin.portaleditor.RTE.saveIndicatorObj($editable);
+        var objStatusIndicator = new KAJONA.admin.portaleditor.RTE.SaveIndicator($editable);
 
         $.post(KAJONA_WEBPATH + '/xml.php?admin=1&module=pages_content&action=updateObjectProperty', data)
             .always(function () {
@@ -183,7 +183,7 @@ KAJONA.admin.portaleditor.RTE.savePage = function () {
  * - hide destroying the indicator completely
  * @param $objSourceElement
  */
-KAJONA.admin.portaleditor.RTE.saveIndicatorObj = function($objSourceElement) {
+KAJONA.admin.portaleditor.RTE.SaveIndicator = function($objSourceElement) {
 
     var objDiv = null;
     var objSourceElement = $objSourceElement;
@@ -304,7 +304,7 @@ KAJONA.admin.portaleditor.status = {
 
         var $objElement = $('.peElementWrapper[data-systemid="'+strSystemid+'"]');
 
-        var objStatusIndicator = new KAJONA.admin.portaleditor.RTE.saveIndicatorObj($objElement);
+        var objStatusIndicator = new KAJONA.admin.portaleditor.RTE.SaveIndicator($objElement);
 
 
         if(intStatus == 0) {
@@ -348,21 +348,36 @@ KAJONA.admin.portaleditor.dragndrop.init = function () {
 
     // checks if the page element is allowed in the given placeholder or not
     var isElementAllowedInPlaceholder = function (ui, $placeholderWrapper) {
+
+        //split between regular elements and block elements
+
+
         var elementName = ui.item.data('element');
         var placeholder = $placeholderWrapper.data('placeholder');
 
-        //if either the source or target element is from the master-page, only placeholders on the master-page are allowes
-        if(placeholder.substring(0, "master".length) == "master" && ui.item.parent('.pePlaceholderWrapper').data('placeholder').substring(0, "master".length) != "master")
-            return false;
+        if(elementName == "block") {
+            if(ui.item.parent(".pePlaceholderWrapper").data('placeholder') == placeholder) {
+                return true;
+            }
+        }
+        else {
 
-        var allowedElements = placeholder.split('_')[1].split('|');
-        return allowedElements.indexOf(elementName) !== -1;
+
+            //if either the source or target element is from the master-page, only placeholders on the master-page are allowes
+            if (placeholder.substring(0, "master".length) == "master" && ui.item.parent('.pePlaceholderWrapper').data('placeholder').substring(0, "master".length) != "master")
+                return false;
+
+            var allowedElements = placeholder.split('_')[1].split('|');
+            return allowedElements.indexOf(elementName) !== -1;
+        }
+
+        return false;
     };
 
     // checks if the page element is allowed in the given placeholder or not
     var saveElementPosition = function (systemId, newPos, $objUiElement) {
 
-        var objStatusIndicator = new KAJONA.admin.portaleditor.RTE.saveIndicatorObj($objUiElement);
+        var objStatusIndicator = new KAJONA.admin.portaleditor.RTE.SaveIndicator($objUiElement);
 
         $.post(KAJONA_WEBPATH + '/xml.php?admin=1&module=system&action=setAbsolutePosition', {
             systemid: systemId,
@@ -389,7 +404,7 @@ KAJONA.admin.portaleditor.dragndrop.init = function () {
     var suspendStop = false;
 
     $('.pePlaceholderWrapper').sortable({
-        items: 'div.peElementWrapper',
+        items: 'div.peElementWrapper:not(.peNoDnd)',
         handle: '.moveHandle',
         connectWith: '.pePlaceholderWrapper',
         cursor: 'move',

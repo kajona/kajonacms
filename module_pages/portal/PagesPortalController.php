@@ -217,7 +217,7 @@ class PagesPortalController extends class_portal_controller implements interface
                 if(!isset($arrBlocks[$objOneBlocks->getStrName()])) {
                     $arrBlocks[$objOneBlocks->getStrName()] = "";
                 }
-                $arrBlocks[$objOneBlocks->getStrName()] .= PagesPortaleditor::getPlaceholderWrapper("blocks_".$objOneBlocks->getStrName());
+                $arrBlocks[$objOneBlocks->getStrName()] = PagesPortaleditor::getPlaceholderWrapper("blocks_".$objOneBlocks->getStrName(), $arrBlocks[$objOneBlocks->getStrName()]);
 
             }
 
