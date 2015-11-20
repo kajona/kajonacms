@@ -20,13 +20,18 @@
  * @author sidler@mulchprod.de
  * @see class_admin::action()
  */
-abstract class class_portal_controller extends class_abstract_controller {
-
-
+abstract class class_portal_controller extends class_abstract_controller
+{
     /**
      * @var array
      */
     protected $arrElementData = array();
+
+    /**
+     * @Inject portaltoolkit
+     * @var class_toolkit_portal
+     */
+    protected $objToolkit;
 
     /**
      * Constructor
@@ -34,11 +39,9 @@ abstract class class_portal_controller extends class_abstract_controller {
      * @param array $arrElementData
      * @param string $strSystemid
      */
-    public function __construct($arrElementData = array(), $strSystemid = "") {
-
+    public function __construct($arrElementData = array(), $strSystemid = "")
+    {
         parent::__construct($strSystemid);
-
-        $this->objToolkit = class_carrier::getInstance()->getObjToolkit("portal");
 
         //set the pagename
         if($this->getParam("page") == "") {

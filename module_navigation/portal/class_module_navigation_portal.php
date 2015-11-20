@@ -433,7 +433,8 @@ class class_module_navigation_portal extends class_portal_controller implements 
                                     //wohooooo, an element was found.
                                     //check, if the current point is in the tree linked by the navigation - if it's a different navigation....
                                     //load the real-pageelement
-                                    $objRealElement = new class_element_navigation_portal($objElement);
+                                    $objBuilder = class_carrier::getInstance()->getContainer()->offsetGet("object_builder");
+                                    $objRealElement = $objBuilder->factory("class_element_navigation_portal", array($objElement));
                                     $arrContent = $objRealElement->getElementContent($objElement->getSystemid());
                                     if (count($arrContent) == 0) {
                                         continue;

@@ -274,6 +274,21 @@ class StringUtil
 
 
     /**
+     * Checks if a string ends with the given search string $strSearch.
+     *
+     * @param $strString
+     * @param $strSearch
+     * @return bool
+     */
+    public static function endsWith($strString, $strSearch) {
+        $intLengthSearch = self::length($strSearch);
+        $strStart = self::substring($strString, $intLengthSearch * -1);
+
+        return $strStart === $strSearch;
+    }
+
+
+    /**
      * Perform a global regular expression match on a given string.
      *
      * @param $strString

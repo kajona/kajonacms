@@ -50,7 +50,6 @@ class class_carrier
      */
     private function __construct()
     {
-        $this->objContainer = $this->buildContainer();
     }
 
     /**
@@ -76,7 +75,7 @@ class class_carrier
             //self::$objCarrier->getObjSession()->initInternalSession();
 
             //include relevant classes for possible static init blocks
-            class_classloader::getInstance()->includeClasses();
+            //class_classloader::getInstance()->includeClasses();
         }
 
         return self::$objCarrier;
@@ -289,65 +288,21 @@ class class_carrier
         return $this->objContainer;
     }
 
-    private function buildContainer()
+    /**
+     * Creates a new DI container and register the system services
+     */
+    public function boot()
     {
+        // needed to autoload pimple
         require_once _realpath_."/core/module_system/vendor/autoload.php";
 
         $objContainer = new \Pimple\Container();
 
-        $objContainer['db'] = function($c){
-            return class_db::getInstance();
-        };
+        // register the core services from the system module
+        $objServiceProvider = new \Kajona\System\System\CoreProvider();
+        $objServiceProvider->register($objContainer);
 
-        $objContainer['rights'] = function($c){
-            return class_rights::getInstance();
-        };
-
-        $objContainer['config'] = function($c){
-            return class_config::getInstance();
-        };
-
-        $objContainer['session'] = function($c){
-            return class_session::getInstance();
-        };
-
-        $objContainer['admintoolkit'] = function($c){
-
-            // decide which class to load
-            $strAdminToolkitClass = $c['config']->getConfig("admintoolkit");
-            if ($strAdminToolkitClass == "") {
-                $strAdminToolkitClass = "class_toolkit_admin";
-            }
-
-            $strPath = class_resourceloader::getInstance()->getPathForFile("/admin/".$strAdminToolkitClass.".php");
-            include_once _realpath_.$strPath;
-
-            return new $strAdminToolkitClass();
-
-        };
-
-        $objContainer['portaltoolkit'] = function(){
-
-            $strPath = class_resourceloader::getInstance()->getPathForFile("/portal/class_toolkit_portal.php");
-            include_once _realpath_.$strPath;
-
-            return new class_toolkit_portal();
-
-        };
-
-        $objContainer['objectfactory'] = function(){
-            return class_objectfactory::getInstance();
-        };
-
-        $objContainer['template'] = function(){
-            return class_template::getInstance();
-        };
-
-        $objContainer['lang'] = function(){
-            return class_lang::getInstance();
-        };
-
-        return $objContainer;
+        $this->objContainer = $objContainer;
     }
 
 }

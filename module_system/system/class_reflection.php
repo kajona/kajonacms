@@ -498,6 +498,40 @@ class class_reflection {
     }
 
     /**
+     * @param object $objObject
+     * @param string $strPropertyName
+     * @param mixed $strValue
+     */
+    public function setObjectProperty($objObject, $strPropertyName, $strValue)
+    {
+        $objProperty = $this->objReflectionClass->getProperty($strPropertyName);
+        $objProperty->setAccessible(true);
+        $objProperty->setValue($objObject, $strValue);
+    }
+
+    /**
+     * Returns a new object instance
+     *
+     * @param array $arrArguments
+     * @return object
+     */
+    public function newInstance(array $arrArguments = array())
+    {
+        return $this->objReflectionClass->newInstanceArgs($arrArguments);
+    }
+
+    /**
+     * Returns a new object instance without calling the constructor
+     *
+     * @param array $arrArguments
+     * @return object
+     */
+    public function newInstanceWithoutConstructor()
+    {
+        return $this->objReflectionClass->newInstanceWithoutConstructor();
+    }
+
+    /**
      * Internal helper, does the parsing of the comment.
      * Returns the first annotation matching the passed name.
      *

@@ -32,24 +32,52 @@ abstract class class_admin_controller extends class_abstract_controller {
     private $arrOutput;
 
     /**
+     * @Inject admintoolkit
+     * @var class_toolkit_admin
+     */
+    protected $objToolkit;
+
+    /**
+     * @Inject object_builder
+     * @var \Kajona\System\System\ObjectBuilder
+     */
+    protected $objBuilder;
+
+    /**
+     * @Inject rights
+     * @var class_rights
+     */
+    protected $objRights;
+
+    /**
+     * @Inject resource_loader
+     * @var class_resourceloader
+     */
+    protected $objResourceLoader;
+
+    /**
+     * @Inject class_loader
+     * @var class_classloader
+     */
+    protected $objClassLoader;
+
+    /**
      * Constructor
      *
      * @param string $strSystemid
      */
-    public function __construct($strSystemid = "") {
-
+    public function __construct($strSystemid = "")
+    {
         parent::__construct($strSystemid);
 
-        //default-template: main.tpl
-        if($this->getArrModule("template") == "") {
+        // default-template: main.tpl
+        if ($this->getArrModule("template") == "") {
             $this->setArrModuleEntry("template", "/main.tpl");
         }
 
-        if($this->getParam("folderview") != "") {
+        if ($this->getParam("folderview") != "") {
             $this->setArrModuleEntry("template", "/folderview.tpl");
         }
-
-        $this->objToolkit = class_carrier::getInstance()->getObjToolkit("admin");
 
         //set the correct language to the text-object
         $this->getObjLang()->setStrTextLanguage($this->objSession->getAdminLanguage(true));
@@ -158,7 +186,7 @@ abstract class class_admin_controller extends class_abstract_controller {
         $this->arrOutput["languageswitch"] = (class_module_system_module::getModuleByName("languages") != null ? class_module_system_module::getModuleByName("languages")->getAdminInstanceOfConcreteModule()->getLanguageSwitch() : "");
         $this->arrOutput["module_id"] = $this->getArrModule("moduleId");
         $this->arrOutput["webpathTitle"] = urldecode(str_replace(array("http://", "https://"), array("", ""), _webpath_));
-        $this->arrOutput["head"] = "<script type=\"text/javascript\">KAJONA_DEBUG = ".$this->objConfig->getDebug("debuglevel")."; KAJONA_WEBPATH = '"._webpath_."'; KAJONA_BROWSER_CACHEBUSTER = ".class_module_system_setting::getConfigValue("_system_browser_cachebuster_")."; KAJONA_LANGUAGE = '" . class_carrier::getInstance()->getObjLang()->getStrTextLanguage() . "';</script>";
+        $this->arrOutput["head"] = "<script type=\"text/javascript\">KAJONA_DEBUG = ".$this->objConfig->getDebug("debuglevel")."; KAJONA_WEBPATH = '"._webpath_."'; KAJONA_BROWSER_CACHEBUSTER = ".class_module_system_setting::getConfigValue("_system_browser_cachebuster_")."; KAJONA_LANGUAGE = '" . $this->objLang->getStrTextLanguage() . "';</script>";
 
         //see if there are any hooks to be called
         $this->onRenderOutput($this->arrOutput);
@@ -246,17 +274,17 @@ abstract class class_admin_controller extends class_abstract_controller {
             }
 
             //and finally create the object
-            $strFilename = \class_resourceloader::getInstance()->getPathForFile("/admin/elements/".$objElement->getStrClassAdmin());
-            $objElement = \class_classloader::getInstance()->getInstanceFromFilename($strFilename, "Kajona\\Pages\\Admin\\ElementAdmin");
+            $strFilename = $this->objResourceLoader->getPathForFile("/admin/elements/".$objElement->getStrClassAdmin());
+            $objElement = $this->objClassLoader->getInstanceFromFilename($strFilename, "Kajona\\Pages\\Admin\\ElementAdmin");
 
             //and finally create the object
             if($objElement != null) {
-                $strTextname = $this->getObjLang()->stringToPlaceholder("quickhelp_" . $objElement->getArrModule("name"));
-                $strText = class_carrier::getInstance()->getObjLang()->getLang($strTextname, $objElement->getArrModule("modul"));
+                $strTextname = $this->objLang->stringToPlaceholder("quickhelp_" . $objElement->getArrModule("name"));
+                $strText = $this->objLang->getLang($strTextname, $objElement->getArrModule("modul"));
             }
         }
         else {
-            $strTextname = $this->getObjLang()->stringToPlaceholder("quickhelp_" . $this->getAction());
+            $strTextname = $this->objLang->stringToPlaceholder("quickhelp_" . $this->getAction());
             $strText = $this->getLang($strTextname);
         }
 
@@ -342,7 +370,7 @@ abstract class class_admin_controller extends class_abstract_controller {
      * @return string
      */
     protected function getOutputLogin() {
-        $objLogin = new class_module_login_admin();
+        $objLogin = $this->objBuilder->factory("class_module_login_admin");
         return $objLogin->getLoginStatus();
     }
 
@@ -392,7 +420,7 @@ abstract class class_admin_controller extends class_abstract_controller {
                     $objObjectToCheck = $this->getObjModule();
                 }
 
-                if(!class_carrier::getInstance()->getObjRights()->validatePermissionString($strPermissions, $objObjectToCheck)) {
+                if(!$this->objRights->validatePermissionString($strPermissions, $objObjectToCheck)) {
                     class_response_object::getInstance()->setStrStatusCode(class_http_statuscodes::SC_UNAUTHORIZED);
                     $this->strOutput = $this->objToolkit->warningBox($this->getLang("commons_error_permissions"));
                     $objException = new class_exception("you are not authorized/authenticated to call this action", class_exception::$level_ERROR);
@@ -473,17 +501,6 @@ abstract class class_admin_controller extends class_abstract_controller {
     public function getLanguageToWorkOn() {
         $objSystemCommon = new class_module_system_common();
         return $objSystemCommon->getStrAdminLanguageToWorkOn();
-    }
-
-
-    /**
-     * Returns a service from the DI container
-     *
-     * @param string $strService
-     */
-    public function get($strService)
-    {
-        return class_carrier::getInstance()->getContainer()->offsetGet($strService);
     }
 
 }

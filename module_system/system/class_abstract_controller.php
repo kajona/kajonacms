@@ -20,48 +20,44 @@ abstract class class_abstract_controller {
     const STR_MODULE_ANNOTATION = "@module";
     const STR_MODULEID_ANNOTATION = "@moduleId";
 
-
     /**
      * Object containing config-data
      *
+     * @Inject config
      * @var class_config
      */
-    protected $objConfig = null;
-
-    /**
-     * Toolkit-Object
-     *
-     * @var class_toolkit_admin|class_toolkit_portal
-     */
-    protected $objToolkit = null;
+    protected $objConfig;
 
     /**
      * Object containing the session-management
      *
+     * @Inject session
      * @var class_session
      */
-    protected $objSession = null;
+    protected $objSession;
 
     /**
      * Object to handle templates
      *
+     * @Inject template
      * @var class_template
      */
-    protected $objTemplate = null;
+    protected $objTemplate;
 
     /**
      * Object managing the lang-files
      *
+     * @Inject lang
      * @var class_lang
      */
-    private $objLang = null;
+    protected $objLang;
 
     /**
      * Instance of the current modules' definition
      *
      * @var class_module_system_module
      */
-    private $objModule = null;
+    private $objModule;
 
     /**
      * The current module to load lang-files from
@@ -99,22 +95,12 @@ abstract class class_abstract_controller {
     /**
      * @param string $strSystemid
      */
-    public function __construct($strSystemid = "") {
-
-        //Generating all the required objects. For this we use our cool cool carrier-object
-        //take care of loading just the necessary objects
-        $objCarrier = class_carrier::getInstance();
-
-        $this->objConfig = $objCarrier->getObjConfig();
-        $this->objSession = $objCarrier->getObjSession();
-        $this->objLang = $objCarrier->getObjLang();
-        $this->objTemplate = $objCarrier->getObjTemplate();
-
+    public function __construct($strSystemid = "")
+    {
         //Setting SystemID
-        if($strSystemid == "") {
+        if ($strSystemid == "") {
             $this->setSystemid(class_carrier::getInstance()->getParam("systemid"));
-        }
-        else {
+        } else {
             $this->setSystemid($strSystemid);
         }
 
