@@ -98,8 +98,8 @@ class class_test_news extends class_testbase  {
         
         
         echo "generating feed by creating a fake request...\n";
-        
-        $objNewsPortalXML = new class_module_news_portal_xml();
+
+        $objNewsPortalXML = class_carrier::getInstance()->getContainer()->offsetGet("object_builder")->factory("class_module_news_portal_xml");
         $objNewsPortalXML->setParam("feedTitle", "autotest");
         $strFeed = $objNewsPortalXML->action("newsFeed");
         $this->assertTrue(uniStrpos($strFeed, "<title>autotest</title>") !== false, __FILE__." check rss feed");
@@ -118,10 +118,10 @@ class class_test_news extends class_testbase  {
         $objNews2->setArrCats(array($objCat->getSystemid()));
         $this->assertTrue($objNews2->updateObjectToDb(), __FILE__." update news");
         $this->flushDBCache();
-        
-        
-        
-        $objNewsPortalXML = new class_module_news_portal_xml();
+
+
+
+        $objNewsPortalXML = class_carrier::getInstance()->getContainer()->offsetGet("object_builder")->factory("class_module_news_portal_xml");
         $objNewsPortalXML->setParam("feedTitle", "autotest");
         $strFeed = $objNewsPortalXML->action("newsFeed");
         $this->assertTrue(uniStrpos($strFeed, "<title>autotest</title>") !== false, __FILE__." check rss feed");

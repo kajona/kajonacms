@@ -390,17 +390,16 @@ class class_classloader
                 include_once _realpath_ . $strFilename;
             }
 
-            if ($bitInject) {
-                $objFactory = class_carrier::getInstance()->getContainer()->offsetGet("object_builder");
-
-                if (!empty($arrConstructorParams)) {
-                    return $objFactory->factory($strResolvedClassname, $arrConstructorParams);
+            $objReflection = new ReflectionClass($strResolvedClassname);
+            if ($objReflection->isInstantiable() && ($strBaseclass == null || $objReflection->isSubclassOf($strBaseclass)) && ($strImplementsInterface == null || $objReflection->implementsInterface($strImplementsInterface))) {
+                if ($bitInject) {
+                    $objFactory = class_carrier::getInstance()->getContainer()->offsetGet("object_builder");
+                    if (!empty($arrConstructorParams)) {
+                        return $objFactory->factory($objReflection->getName(), $arrConstructorParams);
+                    } else {
+                        return $objFactory->factory($objReflection->getName());
+                    }
                 } else {
-                    return $objFactory->factory($strResolvedClassname);
-                }
-            } else {
-                $objReflection = new ReflectionClass($strResolvedClassname);
-                if ($objReflection->isInstantiable() && ($strBaseclass == null || $objReflection->isSubclassOf($strBaseclass)) && ($strImplementsInterface == null || $objReflection->implementsInterface($strImplementsInterface))) {
                     if (!empty($arrConstructorParams)) {
                         return $objReflection->newInstanceArgs($arrConstructorParams);
                     }
