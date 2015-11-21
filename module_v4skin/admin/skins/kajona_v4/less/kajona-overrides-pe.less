@@ -1,22 +1,22 @@
 
 
 
-@fa-font-path: "../fonts/fontawesome/font";
-@peColorHover: #9a9a9a;
-@peColorHoverBackground: rgba(154, 154, 154, 0.2);
+@fa-font-path:              "../fonts/fontawesome/font";
+@peColorHover:              #9a9a9a;
+@peColorHoverBackground:    rgba(154, 154, 154, 0.2);
 @peColorBackgroundInactive: #ccc;
-@wysiwygOutlineColor: #afafaf;
-@wysiwygOutlineColorHover: #7b7b7b;
-@green:                     #6cb121;
+@wysiwygOutlineColor:       #afafaf;
+@wysiwygOutlineColorHover:  #7b7b7b;
+@green:                     #6CB121;
 @btn-primary-bg:            @gray-darker;
 @gray-darker:               #bfbfbf;
 
 @peButtonToolbarBackground: #5E696D;
-@peButtonToolbarBackgroundHover: #02BAF2;
+@peButtonToolbarBackgroundHover: @green; // #02BAF2;
 
 @border-radius-base:        0px;
 @border-radius-small:       0px;
-@border-radius-large:       6px;
+@border-radius-large:       0px;
 
 /* P O R T A L E D I T O R   T O O L B A R */
 #peToolbar {
@@ -114,6 +114,7 @@
 .peAddButton, .peElementWrapper,
 [data-systemid] {
 
+    //todo: not an elegant solution at all
     padding-top: 5px;
 
     &:hover {
@@ -160,7 +161,7 @@
                 font-weight:normal;
 
                 i {
-                    font-size: 18px;
+                    font-size: 16px;
                 }
 
                 &:hover {
@@ -201,6 +202,7 @@
                 width: auto;
                 display: block;
                 text-align: left;
+                font-family: Arial, Verdana, Helvetica, sans-serif;
             }
         }
     }
@@ -387,16 +389,21 @@ body *[data-kajona-editable] {
 .modal {
     text-align: left;
 
-    .modal-content {
-        border-radius: 0px;
-    }
-
     iframe {
         border: none;
     }
 
     .modal-header {
         border: none;
+        padding: 15px 15px 0 15px;
+        h3 {
+            margin: 0;
+        }
+    }
+
+    .modal-footer {
+        padding: 0 15px 15px 15px;
+        border-top: none;
     }
 
     .modal-body {
