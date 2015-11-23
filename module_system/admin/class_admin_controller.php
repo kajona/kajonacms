@@ -62,6 +62,12 @@ abstract class class_admin_controller extends class_abstract_controller {
     protected $objClassLoader;
 
     /**
+     * @Inject object_factory
+     * @var class_objectfactory
+     */
+    protected $objFactory;
+
+    /**
      * Constructor
      *
      * @param string $strSystemid
@@ -413,8 +419,8 @@ abstract class class_admin_controller extends class_abstract_controller {
             $strPermissions = $objAnnotations->getMethodAnnotationValue($strMethodName, "@permissions");
             if($strPermissions !== false) {
 
-                if(validateSystemid($this->getSystemid()) && class_objectfactory::getInstance()->getObject($this->getSystemid()) != null) {
-                    $objObjectToCheck = class_objectfactory::getInstance()->getObject($this->getSystemid());
+                if(validateSystemid($this->getSystemid()) && $this->objFactory->getObject($this->getSystemid()) != null) {
+                    $objObjectToCheck = $this->objFactory->getObject($this->getSystemid());
                 }
                 else {
                     $objObjectToCheck = $this->getObjModule();

@@ -2,6 +2,7 @@
 
 namespace Kajona\System\System;
 
+use class_classloader;
 use class_config;
 use class_db;
 use class_lang;
@@ -76,7 +77,7 @@ class ServiceProvider implements ServiceProviderInterface
         };
 
         $objContainer['class_loader'] = function($c){
-            return \class_classloader::getInstance();
+            return class_classloader::getInstance();
         };
 
         $objContainer['template'] = function($c){
