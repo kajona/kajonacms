@@ -56,7 +56,7 @@ class ElementPlaintextAdmin extends ElementAdmin implements AdminElementInterfac
      */
     public function generateDummyContent()
     {
-        $this->setStrText("Lorem Ipsum");
+        $this->setStrText("Lorem Ipsum Plaintext");
     }
 
 
