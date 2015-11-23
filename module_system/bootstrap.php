@@ -59,9 +59,6 @@ class_classloader::getInstance()->registerModuleServices(class_carrier::getInsta
 // Now we include all classes which i.e. register event listeners
 class_classloader::getInstance()->includeClasses();
 
-// Load module-ids
-//bootstrapIncludeModuleIds();
-
 // -- Helper functions -------------------------------------------------------------------------------------------------
 // Helper for bad bad bad cases
 function rawIncludeError($strFileMissed)
