@@ -225,7 +225,7 @@ class class_request_dispatcher {
                     return "";
                 }
 
-                $objLogin = new class_module_login_admin();
+                $objLogin = $this->objBuilder->factory("class_module_login_admin");
                 $objLogin->action($strAction);
                 $strReturn = $objLogin->getModuleOutput();
             }
