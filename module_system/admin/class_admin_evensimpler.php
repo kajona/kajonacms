@@ -191,7 +191,7 @@ abstract class class_admin_evensimpler extends class_admin_simple {
     protected function actionEdit() {
 
         //try 1: get the object type and names based on the current object
-        $objInstance = class_objectfactory::getInstance()->getObject($this->getSystemid());
+        $objInstance = $this->objFactory->getObject($this->getSystemid());
 
         if($objInstance == null) {
             throw new class_exception("given object with system id {$this->getSystemid()} does not exist", class_exception::$level_ERROR);
@@ -339,7 +339,7 @@ abstract class class_admin_evensimpler extends class_admin_simple {
             if(!validateSystemid($strOneSystemid))
                 continue;
 
-            $objInstance = class_objectfactory::getInstance()->getObject($strOneSystemid);
+            $objInstance = $this->objFactory->getObject($strOneSystemid);
             if($objInstance != null) {
                 $objEntry = $this->getOutputNaviEntry($objInstance);
                 if($objEntry != null) {
