@@ -124,55 +124,5 @@ class class_test_functions extends class_testbase  {
         $intEnd = microtime(true);
         echo "ctype based : ".($intEnd-$intStart)." sec\n";
     }
-
-
-    public function testStrToDate() {
-        $strString = "";
-        $objResult = strToDate($strString);
-        $this->assertNull($objResult);
-
-        $strString = "0";
-        $objResult = strToDate($strString);
-        $this->assertTrue($objResult instanceof class_date);
-
-        $strString = new class_date();
-        $objResult = strToDate($strString);
-        $this->assertTrue($objResult instanceof class_date);
-    }
-
-    public function testStrToInt() {
-        $strString = "";
-        $intResult = strToInt($strString);
-        $this->assertNull($intResult);
-
-        $strString = 0;
-        $intResult = strToInt($strString);
-        $this->assertEquals(0, $intResult);
-
-        $strString = "0";
-        $intResult = strToInt($strString);
-        $this->assertEquals(0, $intResult);
-    }
-
-    public function testStrToArray() {
-        $strString = "";
-        $arrResult = strToArray($strString);
-        $this->assertNull($arrResult);
-
-        $strString = "1,0,3";
-        $arrResult = strToArray($strString);
-        $this->assertTrue(is_array($arrResult));
-        $this->assertCount(3, $arrResult);
-
-        $strString = "1.0.3";
-        $arrResult = strToArray($strString, ".");
-        $this->assertTrue(is_array($arrResult));
-        $this->assertCount(3, $arrResult);
-
-        $strString = array();
-        $arrResult = strToArray($strString);
-        $this->assertTrue(is_array($arrResult));
-        $this->assertCount(0, $arrResult);
-    }
 }
 
