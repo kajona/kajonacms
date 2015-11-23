@@ -12,6 +12,7 @@
     "jasmine": "^2.3.2",
     "jasmine-reporters": "^2.0.7",
     "jquery": "^2.1.4",
-    "jsdom": "^7.0.2"
+    "jsdom": "^7.0.2",
+    "protractor": "^2.5.1"
   }
 }
