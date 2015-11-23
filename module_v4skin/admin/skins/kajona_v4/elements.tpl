@@ -1287,11 +1287,7 @@ Used to print pre-formatted text, e.g. log-file contents
 -- PORTALEDITOR -----------------------------------------------------------------------------------------
 
 <pe_basic_data>
-    <!-- KAJONA_BUILD_LESS_START -->
-    <link href="_skinwebpath_/less/bootstrap_pe.less?_system_browser_cachebuster_" rel="stylesheet/less">
-    <script> less = { env:'development' }; </script>
-    <script src="_skinwebpath_/less/less.min.js"></script>
-    <!-- KAJONA_BUILD_LESS_END -->
+
 </pe_basic_data>
 
 The following section is the toolbar of the portaleditor, displayed at top of the page.
@@ -1300,6 +1296,13 @@ pe_status_page, pe_status_status, pe_status_autor, pe_status_time
 pe_status_page_val, pe_status_status_val, pe_status_autor_val, pe_status_time_val
 pe_iconbar, pe_disable
 <pe_toolbar>
+
+
+    <!-- KAJONA_BUILD_LESS_START -->
+    <link href="_skinwebpath_/less/bootstrap_pe.less?_system_browser_cachebuster_" rel="stylesheet/less">
+    <script> less = { env:'development' }; </script>
+    <script src="_skinwebpath_/less/less.min.js"></script>
+    <!-- KAJONA_BUILD_LESS_END -->
 
 
 
@@ -1337,6 +1340,63 @@ pe_iconbar, pe_disable
 
 	<script type="text/javascript">
 		var peDialog;
+
+
+        if($) {
+            KAJONA.portal.loader.loadFile([
+                '/core/module_pages/admin/scripts/kajona_portaleditor.js',
+                '/core/module_system/admin/scripts/jqueryui/jquery-ui.custom.min.js',
+                '/core/module_system/admin/scripts/jqueryui/css/smoothness/jquery-ui.custom.css'
+            ], function() {
+                KAJONA.admin.portaleditor.RTE.config = {
+                    language : '".(class_session::getInstance()->getAdminLanguage() != "" ? class_session::getInstance()->getAdminLanguage() : "en")."',
+                    filebrowserBrowseUrl : '".uniStrReplace("&amp;", "&", class_link::getLinkAdminHref("folderview", "browserChooser", "&form_element=ckeditor"))."',
+                    filebrowserImageBrowseUrl : '".uniStrReplace("&amp;", "&", class_link::getLinkAdminHref("mediamanager", "folderContentFolderviewMode", "systemid=".class_module_system_setting::getConfigValue("_mediamanager_default_imagesrepoid_")."&form_element=ckeditor&bit_link=1"))."',
+                    customConfig : %%ckconfig%%,
+                    resize_minWidth : 640,
+                    filebrowserWindowWidth : 400,
+                    filebrowserWindowHeight : 500,
+                    filebrowserImageWindowWidth : 400,
+                    filebrowserImageWindowWindowHeight : 500,
+                }
+                $(KAJONA.admin.portaleditor.initPortaleditor);
+            });
+        }
+        else {
+            KAJONA.portal.loader.loadFile([
+                '/core/module_system/admin/scripts/jquery/jquery.min.js',
+                '/core/module_system/admin/scripts/jqueryui/jquery-ui.custom.min.js',
+                '/core/module_pages/admin/scripts/kajona_portaleditor.js',
+                '/core/module_system/admin/scripts/jqueryui/css/smoothness/jquery-ui.custom.css'
+            ], function() {
+                KAJONA.admin.portaleditor.RTE.config = {
+                    language : '".(class_session::getInstance()->getAdminLanguage() != "" ? class_session::getInstance()->getAdminLanguage() : "en")."',
+                    filebrowserBrowseUrl : '".uniStrReplace("&amp;", "&", class_link::getLinkAdminHref("folderview", "browserChooser", "&form_element=ckeditor"))."',
+                    filebrowserImageBrowseUrl : '".uniStrReplace("&amp;", "&", class_link::getLinkAdminHref("mediamanager", "folderContentFolderviewMode", "systemid=".class_module_system_setting::getConfigValue("_mediamanager_default_imagesrepoid_")."&form_element=ckeditor&bit_link=1"))."',
+                    customConfig : %%ckconfig%%,
+                    resize_minWidth : 640,
+                    filebrowserWindowWidth : 400,
+                    filebrowserWindowHeight : 500,
+                    filebrowserImageWindowWidth : 400,
+                    filebrowserImageWindowWindowHeight : 500,
+                }
+                $(KAJONA.admin.portaleditor.initPortaleditor);
+
+
+            });
+        }
+
+
+
+        KAJONA.admin.lang.pe_rte_unsavedChanges = "[lang,pe_rte_unsavedChanges,pages]";
+        KAJONA.admin.lang.peMOVE = "[lang,pe_move,pages]";
+        KAJONA.admin.lang.peEDIT = "[lang,pe_edit,pages]";
+        KAJONA.admin.lang.peCOPY = "[lang,pe_copy,pages]";
+        KAJONA.admin.lang.peDELETE = "[lang,pe_delete,pages]";
+        KAJONA.admin.lang.peDELETEWARNING = "[lang,pe_delete_warning,pages]";
+        KAJONA.admin.lang.peCREATE = "[lang,pe_new,pages]";
+        KAJONA.admin.lang.peSETACTIVE = "[lang,pe_setactive,pages]";
+        KAJONA.admin.lang.peSETINACTIVE = "[lang,pe_setinactive,pages]";
 		KAJONA.admin.lang["pe_dialog_close_warning"] = "[lang,pe_dialog_close_warning,pages]";
         KAJONA.portal.loader.loadFile([
             "_webpath_/core/module_v4skin/admin/skins/kajona_v4/js/bootstrap.min.js",
