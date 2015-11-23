@@ -293,16 +293,10 @@ class class_carrier
      */
     public function boot()
     {
-        // needed to autoload pimple
+        // we include the system autoloader so that we can load all core dependencies
         require_once _realpath_."/core/module_system/vendor/autoload.php";
 
-        $objContainer = new \Pimple\Container();
-
-        // register the core services from the system module
-        $objServiceProvider = new \Kajona\System\System\CoreProvider();
-        $objServiceProvider->register($objContainer);
-
-        $this->objContainer = $objContainer;
+        $this->objContainer = new \Pimple\Container();
     }
 
 }

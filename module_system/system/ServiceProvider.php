@@ -16,16 +16,25 @@ use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 
 /**
- * CoreProvider
+ * ServiceProvider
  *
  * @package Kajona\System\System
  * @author christoph.kappestein@gmail.com
  * @since 4.6
  */
-class CoreProvider implements ServiceProviderInterface
+class ServiceProvider implements ServiceProviderInterface
 {
     public function register(Container $objContainer)
     {
+        define("_system_modul_id_", 0);
+
+        define("_user_modul_id_", 15);
+
+        define("_languages_modul_id_", 65);
+
+        define("_messaging_module_id_", 135);
+
+
         $objContainer['db'] = function($c){
             return class_db::getInstance();
         };

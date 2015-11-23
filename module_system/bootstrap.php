@@ -36,8 +36,8 @@ if (!include_once _corepath_."/module_system/system/class_classloader.php")
 // Register autoloader
 spl_autoload_register(array(class_classloader::getInstance(), "loadClass"));
 
-// -- Register core dependencies ---------------------------------------------------------------------------------------
-// Boot carrier class which registers all system services to the DI container
+// -- Boot core dependencies -------------------------------------------------------------------------------------------
+// Create the global DI container
 class_carrier::getInstance()->boot();
 
 // -- Exception handler ------------------------------------------------------------------------------------------------
@@ -52,15 +52,15 @@ if (file_exists(_realpath_."/project/bootstrap.php"))
 // -- The Path on web --------------------------------------------------------------------------------------------------
 defineWebPath();
 
-// -- Include needed classes of each module ------------------------------------------------------------------------------
-// This registers all service providers of each module
+// -- Include needed classes of each module ----------------------------------------------------------------------------
+// This registers all service providers of each module. This defines also the module id
 class_classloader::getInstance()->registerModuleServices(class_carrier::getInstance()->getContainer());
 
 // Now we include all classes which i.e. register event listeners
 class_classloader::getInstance()->includeClasses();
 
 // Load module-ids
-bootstrapIncludeModuleIds();
+//bootstrapIncludeModuleIds();
 
 // -- Helper functions -------------------------------------------------------------------------------------------------
 // Helper for bad bad bad cases
