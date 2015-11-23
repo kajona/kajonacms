@@ -215,7 +215,7 @@ class class_request_dispatcher {
 
         if($bitLogin) {
             if(_xmlLoader_) {
-                $objLogin = new class_module_login_admin_xml();
+                $objLogin = $this->objBuilder->factory("class_module_login_admin_xml");
                 $strReturn = $objLogin->action($strAction);
             }
             else {
