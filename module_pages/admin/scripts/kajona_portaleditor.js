@@ -504,6 +504,54 @@ KAJONA.admin.portaleditor.dragndrop.init = function () {
 };
 
 
+KAJONA.admin.portaleditor.globalToolbar = {
+    init: function() {
+        var $objBody = $('body');
+
+        var $objContainer = $('<div>').addClass('peGlobalToolbar');
+
+        $objContainer.append($('<div>').addClass('peToolbarHeader').append(
+            $('<i>').addClass('fa fa-bars')).on('click', function() {
+
+                if($('.peGlobalToolbar').hasClass('peGlobalToolbarOpen'))
+                    $('.peGlobalToolbar').removeClass('peGlobalToolbarOpen');
+                else
+                    $('.peGlobalToolbar').addClass('peGlobalToolbarOpen');
+            })
+        );
+
+        var $objInfoContainer = $('<div>').addClass('peGlobalToolbarInfo');
+
+        //render various page-informations
+        $.each(KAJONA.admin.pageInfo, function(entryName, objInfo) {
+            var $objRowContent = $('<div>').addClass('peGlobalToolbarInfoText').append($('<div>').html(objInfo.label)).append($('<div>').html(objInfo.value));
+
+            var $objRow = $('<div>').addClass('peGlobalToolbarInfoRow').append($('<div>').addClass('peGlobalToolarbarInfoIcon').append($('<i>').addClass('fa '+objInfo.icon))).append($objRowContent);
+            $objInfoContainer.append($objRow);
+        });
+
+        $objContainer.append($objInfoContainer);
+
+
+        var $objActionContainer = $('<div>').addClass('peGlobalToolbarInfo');
+
+        //render various page-informations
+        $.each(KAJONA.admin.pageActions, function(entryName, objInfo) {
+            var $objLink = $('<a>').on('click', objInfo.onclick).append($('<div>').addClass('peGlobalToolarbarInfoIcon').append($('<i>').addClass('fa '+objInfo.icon))).append($('<div>').addClass('peGlobalToolbarInfoText').append(objInfo.label));
+
+            var $objRowContent = $('<div>').addClass('peGlobalToolbarInfoLink').append($objLink);
+
+            var $objRow = $('<div>').addClass('peGlobalToolbarInfoRow peGlobalToolbarActionRow').append($objRowContent);
+            $objActionContainer.append($objRow);
+        });
+
+        $objContainer.append($objActionContainer);
+
+        $objBody.append($objContainer);
+    }
+};
+
+
 /**
  * Initialise the action toolbar logic
  */
@@ -794,5 +842,6 @@ KAJONA.admin.tooltip = {
 
 $(function () {
     KAJONA.admin.portaleditor.elementActionToolbar.init();
+    KAJONA.admin.portaleditor.globalToolbar.init();
     KAJONA.admin.tooltip.initTooltip();
 });

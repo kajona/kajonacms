@@ -432,39 +432,61 @@ class PagesPortalController extends class_portal_controller implements interface
 
         if ($this->objSession->getSession("pe_disable") != "true") {
             $strPeToolbar = "";
-            $arrPeContents = array();
-            $arrPeContents["pe_status_page_val"] = $objPageData->getStrName();
-            $arrPeContents["pe_status_status_val"] = ($objPageData->getIntRecordStatus() == 1 ? "active" : "inactive");
-            $arrPeContents["pe_status_autor_val"] = $objPageData->getLastEditUser();
-            $arrPeContents["pe_status_time_val"] = timeToString($objPageData->getIntLmTime(), false);
-            $arrPeContents["pe_dialog_close_warning"] = $this->getLang("pe_dialog_close_warning", "pages");
 
             //Add an iconbar
-            $arrPeContents["pe_iconbar"] = "";
-            $arrPeContents["pe_iconbar"] .= class_link::getLinkAdmin(
-                "pages_content", "list", "&systemid=".$objPageData->getSystemid()."&language=".$strPortalLanguage, $this->getLang("pe_icon_edit"),
-                $this->getLang("pe_icon_edit", "pages"),
-                "icon_page"
-            );
-            $arrPeContents["pe_iconbar"] .= "&nbsp;";
-
+            $strPageEditUrl = class_link::getLinkAdminHref("pages_content", "list", "&systemid=".$objPageData->getSystemid()."&language=".$strPortalLanguage, false);
             $strEditUrl = class_link::getLinkAdminHref("pages", "editPage", "&systemid=".$objPageData->getSystemid()."&language=".$strPortalLanguage."&pe=1");
-            $arrPeContents["pe_iconbar"] .= "<a href=\"#\" onclick=\"KAJONA.admin.portaleditor.openDialog('".$strEditUrl."'); return false;\">"
-                .class_adminskin_helper::getAdminImage("icon_edit", $this->getLang("pe_icon_page", "pages"))."</a>";
+            $strNewUrl = class_link::getLinkAdminHref("pages", "newPage", "&systemid=".$objPageData->getSystemid()."&language=".$strPortalLanguage."&pe=1");
 
-            $arrPeContents["pe_iconbar"] .= "&nbsp;";
-            $strEditUrl = class_link::getLinkAdminHref("pages", "newPage", "&systemid=".$objPageData->getSystemid()."&language=".$strPortalLanguage."&pe=1");
-            $arrPeContents["pe_iconbar"] .= "<a href=\"#\" onclick=\"KAJONA.admin.portaleditor.openDialog('".$strEditUrl."'); return false;\">"
-                .class_adminskin_helper::getAdminImage("icon_new", $this->getLang("pe_icon_new", "pages"))."</a>";
-
-            $arrPeContents["pe_disable"] = "<a href=\"#\" onclick=\"KAJONA.admin.portaleditor.switchEnabled(false); return false;\" title=\"\">"
-                .class_adminskin_helper::getAdminImage("icon_enabled", $this->getLang("pe_disable", "pages"))."</a>";
+            $strEditDate = timeToString($objPageData->getIntLmTime(), false);
+            $strPageStatus = ($objPageData->getIntRecordStatus() == 1 ? $this->getLang("systemtask_systemstatus_active", "system") : $this->getLang("systemtask_systemstatus_inactive", "system"));
 
             $strPeToolbar .= "<script type='text/javascript'>
                 KAJONA.admin.actions = ".PagesPortaleditor::getInstance()->convertToJs().";
+
+                KAJONA.admin.pageInfo = {
+                    pagename : {
+                        label : '{$this->getLang('pe_status_page')}',
+                        value : '{$objPageData->getStrName()}',
+                        icon : 'fa-file-o'
+                    },
+                    pagestatus : {
+                        label : '{$this->getLang('pe_status_status')}',
+                        value : '{$strPageStatus}',
+                        icon : 'fa-eye'
+                    },
+                    pageauthor : {
+                        label : '{$this->getLang('pe_status_autor')}',
+                        value : '{$objPageData->getLastEditUser()}',
+                        icon : 'fa-user'
+                    },
+                    pagechangetime : {
+                        label : '{$this->getLang('pe_status_time')}',
+                        value : '{$strEditDate}',
+                        icon : 'fa-clock-o'
+                    }
+                };
+
+                KAJONA.admin.pageActions = {
+                    edit : {
+                        label: '{$this->getLang('pe_icon_page', 'pages')}',
+                        onclick: function() { KAJONA.admin.portaleditor.openDialog('{$strEditUrl}'); return false;},
+                        icon: 'fa-pencil'
+                    },
+                    new : {
+                        label: '{$this->getLang('pe_icon_new', 'pages')}',
+                        onclick: function() { KAJONA.admin.portaleditor.openDialog('{$strNewUrl}'); return false;},
+                        icon: 'fa-plus-circle'
+                    },
+                    backend : {
+                        label: '{$this->getLang('pe_icon_edit', 'pages')}',
+                        onclick: function() { document.location = '{$strPageEditUrl}';},
+                        icon: 'fa-file-o'
+                    }
+                };
             </script>";
             //Load portaleditor styles
-            $strPeToolbar .= $this->objToolkit->getPeToolbar($arrPeContents);
+            $strPeToolbar .= $this->objToolkit->getPeToolbar();
 
             $objScriptlets = new class_scriptlet_helper();
             $strPeToolbar = $objScriptlets->processString($strPeToolbar, interface_scriptlet::BIT_CONTEXT_ADMIN);

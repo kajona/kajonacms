@@ -1407,73 +1407,11 @@ pe_iconbar, pe_disable
 		}, true);
 	</script>
 
-    <div id="peToolbar" style="display: none;">
-		<div class="info">
-			<table>
-				<tbody>
-		            <tr>
-			            <td rowspan="2" style="width: 100%; text-align: center; vertical-align: middle;">%%pe_iconbar%%</td>
-		                <td class="key" style="vertical-align: bottom;">[lang,pe_status_page,pages]</td>
-		                <td class="value" style="vertical-align: bottom;">%%pe_status_page_val%%</td>
-		                <td class="key" style="vertical-align: bottom;">[lang,pe_status_time,pages]</td>
-		                <td class="value" style="vertical-align: bottom;">%%pe_status_time_val%%</td>
-		                <td rowspan="2" style="text-align: right; vertical-align: top;">%%pe_disable%%</td>
-		            </tr>
-		            <tr>
-		                <td class="key" style="vertical-align: top;">[lang,pe_status_status,pages]</td>
-		                <td class="value" style="vertical-align: top;">%%pe_status_status_val%%</td>
-		                <td class="key" style="vertical-align: top;">[lang,pe_status_autor,pages]</td>
-		                <td class="value" style="vertical-align: top;">%%pe_status_autor_val%%</td>
-		            </tr>
-	            </tbody>
-	        </table>
-		</div>
-    </div>
-    <div id="peToolbarSpacer"></div>
+
 </pe_toolbar>
 
-<pe_actionToolbar>
-<div class="peElementWrapper" data-systemid="%%systemid%%" data-element="%%elementname%%">
-    <div class="peElementActions" style="display: none;">
-        <div class="actions">
-            %%actionlinks%%
-        </div>
-    </div>
-    %%content%%
-</div>
-</pe_actionToolbar>
-
-Possible placeholders: %%link_complete%%, %%name%%, %%href%%
-<pe_actionToolbar_link>
-%%link_complete%%
-</pe_actionToolbar_link>
-
-Code to add single elements to portaleditors new element menu (will be inserted in pe_actionNewWrapper)
-<pe_actionNew>
-    <li ><a href="#" onclick="KAJONA.admin.portaleditor.openDialog('%%elementHref%%')">%%elementName%%</a></li>
-</pe_actionNew>
-
-Displays the new element button
-<pe_actionNewWrapper>
-    <div id="menuContainer_%%placeholder%%" class="dropdown">
-        <i class="peNewButton fa fa-plus-circle" role="button" data-toggle="dropdown" title="%%label%% &quot;%%placeholderName%%&quot;" rel="tooltip"></i>
-        <div class="dropdown-menu peContextMenu" role="menu">
-            <ul >
-                %%contentElements%%
-            </ul>
-        </div>
-    </div>
-</pe_actionNewWrapper>
-
-Displays the new element button
-<pe_placeholderWrapper>
-    <div class="pePlaceholderWrapper" data-placeholder="%%placeholder%%">%%content%%</div>
-</pe_placeholderWrapper>
 
 
-<pe_inactiveElement>
-    <div class="peInactiveElement">%%title%%</div>
-</pe_inactiveElement>
 
 ---------------------------------------------------------------------------------------------------------
 -- LANGUAGES --------------------------------------------------------------------------------------------
