@@ -21,7 +21,9 @@
  */
 class class_module_system_setting extends class_model implements interface_model, interface_versionable {
 
-
+    /**
+     * @var class_module_system_setting[]
+     */
     private static $arrInstanceCache = null;
 
 
@@ -224,7 +226,7 @@ class class_module_system_setting extends class_model implements interface_model
             foreach($arrIds as $arrOneId) {
                 $arrOneId["system_id"] = $arrOneId["system_config_id"];
                 class_orm_rowcache::addSingleInitRow($arrOneId);
-                self::$arrInstanceCache[$arrOneId["system_config_id"]] = new class_module_system_setting($arrOneId["system_config_id"]);
+                self::$arrInstanceCache[$arrOneId["system_config_name"]] = new class_module_system_setting($arrOneId["system_config_id"]);
             }
         }
 
@@ -243,14 +245,10 @@ class class_module_system_setting extends class_model implements interface_model
      * @static
      */
     public static function getConfigByName($strName) {
-
-        $arrConfigs = self::getAllConfigValues();
-        foreach($arrConfigs as $objOneConfig) {
-            if($objOneConfig->getStrName() == $strName) {
-                return $objOneConfig;
-            }
+        $arrSettings = self::getAllConfigValues();
+        if(isset($arrSettings[$strName])) {
+            return $arrSettings[$strName];
         }
-
         return null;
 
     }
