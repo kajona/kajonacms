@@ -356,12 +356,18 @@ class class_rights {
      *
      * @param string $strSystemid
      *
+     * @param string $strPermissionFilter may be used to return only the set for a given permission, this reduces the number of explodes
+     *
      * @return mixed
      */
-    public function getArrayRights($strSystemid) {
+    public function getArrayRights($strSystemid, $strPermissionFilter = "") {
         $arrReturn = array();
 
         $arrRow = $this->getPlainRightRow($strSystemid);
+
+        if($strPermissionFilter != "") {
+            return array($strPermissionFilter => explode(",", $arrRow[$strPermissionFilter]));
+        }
 
         //Exploding the array
         $arrReturn[self::$STR_RIGHT_VIEW] = explode(",", $arrRow[self::$STR_RIGHT_VIEW]);
@@ -563,7 +569,7 @@ class class_rights {
         if($this->bitTestMode)
             return true;
 
-        $arrRights = $this->getArrayRights($strSystemid);
+        $arrRights = $this->getArrayRights($strSystemid, $strPermission);
         return in_array($strGroupId, $arrRights[$strPermission]);
     }
 
@@ -626,7 +632,7 @@ class class_rights {
         class_carrier::getInstance()->flushCache(class_carrier::INT_CACHE_TYPE_DBQUERIES | class_carrier::INT_CACHE_TYPE_ORMCACHE);
 
         //Load the current rights
-        $arrRights = $this->getArrayRights($strSystemid, false);
+        $arrRights = $this->getArrayRights($strSystemid);
 
         //rights not given, add now, disabling inheritance
         $arrRights[self::$STR_RIGHT_INHERIT] = 0;
