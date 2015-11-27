@@ -132,13 +132,13 @@ class class_module_system_changelog {
                 //all prerequisites match, start creating query
                 $strGetter = $objReflection->getGetter($strProperty);
                 if($strGetter !== null) {
-                    $strValue = call_user_func(array($objCurrentObject, $strGetter));
+                    $strValue = $objCurrentObject->{$strGetter}();
                 }
 
                 if(is_array($strValue) || $strValue instanceof ArrayAccess) {
                     $arrNewValues = array();
                     foreach($strValue as $objOneValue) {
-                        if(is_object($objOneValue)&& $objOneValue instanceof class_root) {
+                        if(is_object($objOneValue) && $objOneValue instanceof class_root) {
                             $arrNewValues[] = $objOneValue->getSystemid();
                         }
                         else {
