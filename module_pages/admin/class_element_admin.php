@@ -549,7 +549,7 @@ abstract class class_element_admin extends class_admin_controller implements int
             $strGetter = $objAnnotations->getGetter($arrKeys[0]);
             if($strGetter != null) {
                 //explicit casts required? could be relevant, depending on the target column type / database system
-                return call_user_func(array($this, $strGetter));
+                return $this->{$strGetter}();
             }
         }
         return "";
