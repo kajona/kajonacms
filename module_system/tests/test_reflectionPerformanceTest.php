@@ -20,11 +20,11 @@ class class_test_reflectionPerformanceTest extends class_testbase  {
         }
 
         $arrTimestampEnde = gettimeofday();
-        $intTimeUsed = (($arrTimestampEnde['sec'] * 1000000 + $arrTimestampEnde['usec'])
+        $intTimeUsedUserFunc = (($arrTimestampEnde['sec'] * 1000000 + $arrTimestampEnde['usec'])
                 - ($arrTestStartDate['sec'] * 1000000 + $arrTestStartDate['usec'])) / 1000000;
 
 
-        echo $intTimeUsed ." sec\n";
+        echo $intTimeUsedUserFunc ." sec\n";
 
 
 
@@ -36,10 +36,10 @@ class class_test_reflectionPerformanceTest extends class_testbase  {
         }
 
         $arrTimestampEnde = gettimeofday();
-        $intTimeUsed = (($arrTimestampEnde['sec'] * 1000000 + $arrTimestampEnde['usec'])
+        $intTimeUsedString = (($arrTimestampEnde['sec'] * 1000000 + $arrTimestampEnde['usec'])
                 - ($arrTestStartDate['sec'] * 1000000 + $arrTestStartDate['usec'])) / 1000000;
 
-        echo $intTimeUsed ." sec\n";
+        echo $intTimeUsedString ." sec\n";
 
 
 
@@ -51,10 +51,10 @@ class class_test_reflectionPerformanceTest extends class_testbase  {
         }
 
         $arrTimestampEnde = gettimeofday();
-        $intTimeUsed = (($arrTimestampEnde['sec'] * 1000000 + $arrTimestampEnde['usec'])
+        $intTimeUsedRef = (($arrTimestampEnde['sec'] * 1000000 + $arrTimestampEnde['usec'])
                 - ($arrTestStartDate['sec'] * 1000000 + $arrTestStartDate['usec'])) / 1000000;
 
-        echo $intTimeUsed ." sec\n";
+        echo $intTimeUsedRef ." sec\n";
 
 
 
@@ -66,10 +66,14 @@ class class_test_reflectionPerformanceTest extends class_testbase  {
         }
 
         $arrTimestampEnde = gettimeofday();
-        $intTimeUsed = (($arrTimestampEnde['sec'] * 1000000 + $arrTimestampEnde['usec'])
+        $intTimeUsedDirect = (($arrTimestampEnde['sec'] * 1000000 + $arrTimestampEnde['usec'])
                 - ($arrTestStartDate['sec'] * 1000000 + $arrTestStartDate['usec'])) / 1000000;
 
-        echo $intTimeUsed ." sec\n";
+        echo $intTimeUsedDirect ." sec\n";
+
+
+        $this->assertTrue($intTimeUsedUserFunc > $intTimeUsedString);
+        $this->assertTrue($intTimeUsedUserFunc > $intTimeUsedRef);
     }
 
 }
