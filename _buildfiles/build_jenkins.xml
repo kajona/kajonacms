@@ -161,32 +161,32 @@
     </target>
 
     <!-- helper target to install the compose dependencies within the current clone / project -->
-    <target name="installComposerPackageDependenciesForCurrentProject">
+    <!--<target name="installComposerPackageDependenciesForCurrentProject">
         <antcall target="installComposerPackageDependencies">
             <param name="composerTempPath" value="/../../"/>
         </antcall>
-    </target>
+    </target>-->
 
     <!-- task to fetch all composer dependencies, use the param "targetPath" to specify the base dir to be scanned -->
-    <target name="installComposerPackageDependencies">
+    <!--<target name="installComposerPackageDependencies">
         <echo>Searching for composer.json files in ${basedir}${composerTempPath}</echo>
         <apply executable="${path.composer}" parallel="false" verbose="true" force="true" failonerror="true" addsourcefile="false">
             <fileset dir="${basedir}${composerTempPath}">
                 <include name="core*/*/composer.json"/>
             </fileset>
-            <arg line="install --prefer-source --no-dev --working-dir "/>
+            <arg line="install - -prefer-source - -no-dev - -working-dir "/>
             <targetfile/>
             <mapper type="glob" from="*composer.json" to="${basedir}${composerTempPath}*"/>
         </apply>
-    </target>
+    </target>-->
 
 
     <!-- builds the project, aka creates a project out of the sources -->
     <target name="buildProject">
 
-        <antcall target="installComposerPackageDependencies">
+        <!--<antcall target="installComposerPackageDependencies">
             <param name="composerTempPath" value="${sourcesPath}/"/>
-        </antcall>
+        </antcall>-->
 
         <copy todir="${basedir}${projectPath}" overwrite="true"  includeEmptyDirs="true" >
             <fileset id="sources.dirs" dir="${basedir}${sourcesPath}">
