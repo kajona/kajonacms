@@ -64,6 +64,17 @@
 
                 %%headline_row%%
 
+                <kajona-blocks kajona-name="pageheaderdddd">
+
+                    <kajona-block kajona-name="pageheaderblockddd" kajona-name-de="Zeile hell">
+                        <div class="row-light">
+                            <h1>%%headline_plaintext%%</h1>
+                        </div>
+                    </kajona-block>
+
+
+                </kajona-blocks>
+
                 <kajona-blocks kajona-name="content">
 
                     <kajona-block kajona-name="Row light" kajona-name-de="Zeile hell">

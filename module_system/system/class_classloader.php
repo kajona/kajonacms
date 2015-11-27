@@ -262,19 +262,28 @@ class class_classloader
                 $arrTempFiles = scandir(_realpath_."/".$strPath.$strFolder);
                 foreach ($arrTempFiles as $strSingleFile) {
                     if (strpos($strSingleFile, ".php") !== false) {
-                        $arrFiles[substr($strSingleFile, 0, -4)] = _realpath_."/".$strPath.$strFolder.$strSingleFile;
+                        // if there is an underscore we have a legacy class name else a camel case
+                        if (strpos($strSingleFile, "_") !== false) {
+                            if (preg_match("/(class|interface|trait)(.*)\.php$/i", $strSingleFile)) {
+                                $arrFiles[substr($strSingleFile, 0, -4)] = _realpath_."/".$strPath.$strFolder.$strSingleFile;
+                            }
+                        } else {
+                            $strClassName = $this->getClassnameFromFilename($strPath.$strFolder.$strSingleFile);
+                            if (!empty($strClassName)) {
+                                $arrFiles[$strClassName] = _realpath_."/".$strPath.$strFolder.$strSingleFile;
+                            }
+                        }
                     }
                 }
             }
         }
-
 
         //scan for overwrites
         //FIXME: remove in 5.x, only needed for backwards compatibility where content under /project was not organized within module-folders
         if (is_dir(_realpath_."/project".$strFolder)) {
             $arrTempFiles = scandir(_realpath_."/project".$strFolder);
             foreach ($arrTempFiles as $strSingleFile) {
-                if (strpos($strSingleFile, ".php") !== false) {
+                if (preg_match("/(class|interface|trait)(.*)\.php$/i", $strSingleFile)) {
                     $arrFiles[substr($strSingleFile, 0, -4)] = _realpath_."/project".$strFolder.$strSingleFile;
                 }
             }
@@ -300,78 +309,46 @@ class class_classloader
             return true;
         }
 
-        // check whether we can autoload a class which has a namespace
-        if (strpos($strClassName, "\\") !== false) {
-            $arrParts = explode("\\", $strClassName);
-
-            // strtolower all parts except for the class name
-            $strClass = array_pop($arrParts);
-            $arrParts = array_map("strtolower", $arrParts);
-            array_push($arrParts, $strClass);
-
-            // remove vendor part
-            $strVendor = array_shift($arrParts);
-
-            $strModule = "module_".array_shift($arrParts);
-            $strFolder = array_shift($arrParts);
-            $strRest = implode(DIRECTORY_SEPARATOR, $arrParts);
-
-            if (!empty($strModule) && !empty($strFolder) && !empty($strRest)) {
-                $arrDirs = array_merge(array("project"), $this->arrCoreDirs);
-                foreach ($arrDirs as $strDir) {
-                    $strFile = _realpath_.implode(DIRECTORY_SEPARATOR, array($strDir, $strModule, $strFolder, $strRest.".php"));
-                    if (is_file($strFile)) {
-                        $this->arrFiles[$strClassName] = $strFile;
-                        $this->bitCacheSaveRequired = true;
-
-                        $this->intNumberOfClassesLoaded++;
-                        include_once $strFile;
-                        return true;
-                    }
-                }
-            }
-        }
-
         return false;
     }
 
     /**
      * Extracts the class-name out of a filename.
      * Normally this method is only used by getInstanceFromFilename, so no use to call it directly.
+     * The method does not include the file so it does not trigger any other autoload calls
      *
      * @param $strFilename
-     *
      * @return null|string
      */
     public function getClassnameFromFilename($strFilename)
     {
-        //blacklisting!
+        // if empty we cant resolve a class name
+        if (empty($strFilename)) {
+            return null;
+        }
+
+        // blacklisting!
         if (uniStrpos(basename($strFilename), "class_testbase") === 0) {
             return null;
         }
 
-        include_once _realpath_.$strFilename;
+        $strFile = uniSubstr(basename($strFilename), 0, -4);
+        $strClassname = null;
 
-        $strResolvedClassname = null;
-        $strClassname = uniSubstr(basename($strFilename), 0, -4);
-
-        if (class_exists($strClassname)) {
-            $strResolvedClassname = $strClassname;
-        }
-        else {
+        // if the filename contains an underscore we have an old class else a camelcase one
+        if (strpos($strFile, "_") !== false) {
+            $strClassname = $strFile;
+        } elseif (is_file(_realpath_.$strFilename)) {
             $strSource = file_get_contents(_realpath_.$strFilename);
             preg_match('/namespace ([a-zA-Z0-9_\x7f-\xff\\\\]+);/', $strSource, $arrMatches);
 
             $strNamespace = isset($arrMatches[1]) ? $arrMatches[1] : null;
             if (!empty($strNamespace)) {
-                $strClassname = $strNamespace."\\".$strClassname;
-                if (class_exists($strClassname)) {
-                    $strResolvedClassname = $strClassname;
-                }
+                $strClassname = $strNamespace . "\\" . $strFile;
             }
         }
 
-        return $strResolvedClassname;
+        return $strClassname;
     }
 
 
@@ -390,6 +367,16 @@ class class_classloader
         $strResolvedClassname = $this->getClassnameFromFilename($strFilename);
 
         if ($strResolvedClassname != null) {
+            // if the class does not exist we simply include the filename and hope that the class is defined there. This
+            // is the case where the filename is not equal to the class name i.e. installer_sc_zzlanguages.php
+            if (!class_exists($strResolvedClassname)) {
+                if (!preg_match("/(class|interface|trait)(.*)$/i", $strResolvedClassname)) {
+                    $strResolvedClassname = "class_" . $strResolvedClassname;
+                }
+
+                include_once _realpath_ . $strFilename;
+            }
+
             $objReflection = new ReflectionClass($strResolvedClassname);
             if ($objReflection->isInstantiable() && ($strBaseclass == null || $objReflection->isSubclassOf($strBaseclass)) && ($strImplementsInterface == null || $objReflection->implementsInterface($strImplementsInterface))) {
                 if (!empty($arrConstructorParams)) {
