@@ -264,7 +264,7 @@ TXT;
     private static function scanComposer() {
         $objDir = new RecursiveDirectoryIterator(__DIR__."/../");
         $objIterator = new RecursiveIteratorIterator($objDir);
-        $objRegex = new RegexIterator($objIterator, '#(module_|element_)+([a-z]*)/composer\.json$#i', RecursiveRegexIterator::GET_MATCH);
+        $objRegex = new RegexIterator($objIterator, '#(module_|element_)([a-z]*)(/|\\\\)composer\.json$#i', RecursiveRegexIterator::GET_MATCH);
 
         foreach($objRegex as $strPath => $arrValue) {
 
