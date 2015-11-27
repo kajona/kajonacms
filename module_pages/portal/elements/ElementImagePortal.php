@@ -23,6 +23,16 @@ use Kajona\Pages\System\PagesPage;
  * @targetTable element_image.content_id
  */
 class ElementImagePortal extends ElementPortal implements PortalElementInterface {
+    /**
+     * Generates an anchor tag enabling navigation-points to jump to specific page-elements.
+     * can be overwritten by subclasses
+     *
+     * @return string
+     */
+    protected function getAnchorTag() {
+        return "";
+    }
+
 
     /**
      * Returns the ready image-htmlcode
