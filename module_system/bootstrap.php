@@ -95,4 +95,5 @@ if(!include_once _corepath_."/module_system/system/class_carrier.php")
     rawIncludeError("carrier-class");
 
 
-
+//trigger the phar-extractor-----------------------------------------------------------------------------
+\Kajona\System\System\PharModuleExtractor::bootstrapPharContent();

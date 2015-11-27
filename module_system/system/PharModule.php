@@ -6,6 +6,8 @@
 
 namespace Kajona\System\System;
 
+use RecursiveIteratorIterator;
+
 /**
  * Class to load and install modules packaged as Phar archives.
  *
@@ -19,7 +21,7 @@ class PharModule
     private $objPhar;
 
     /**
-     * @param string Path to the Phar file relative to Kajona root.
+     * @param string $strPharPath Path to the Phar file relative to Kajona root.
      */
     public function __construct($strPharPath)
     {
@@ -28,7 +30,7 @@ class PharModule
     }
 
     /**
-     * Load and intialize a Phar module.
+     * Load and initialize a Phar module.
      *
      * @param string[] List of folders supposed to contain code.
      * @return string[] A list of class names and corresponding absolute file paths.
@@ -79,7 +81,7 @@ class PharModule
     /**
      * Check whether a given path is a Phar file.
      *
-     * @param string Path to Phar archive file.
+     * @param string $strPharFilePath Path to Phar archive file.
      * @return bool
      */
     public static function isPhar($strPharFilePath)
@@ -90,7 +92,7 @@ class PharModule
     /**
      * Returns a Phar file's name withou extension.
      *
-     * @param string Path to Phar archive file.
+     * @param string $strPharFilePath Path to Phar archive file.
      * @return string
      */
     public static function getPharBasename($strPharFilePath)
@@ -106,8 +108,8 @@ class PharModule
     /**
      * Returns the phar:// path to a file inside a Phar archive
      *
-     * @param string Absolute path to the Phar archive file.
-     * @param string Relative path to the file inside the Phar archive
+     * @param string $strPharFilePath Absolute path to the Phar archive file.
+     * @param string $strContentFilePath Relative path to the file inside the Phar archive
      * @return string
      */
     public static function getPharStreamPath($strPharFilePath, $strContentFilePath)
@@ -118,7 +120,7 @@ class PharModule
     /**
      * Returns a file's path relative to the Phar archive.
      *
-     * @param PharFileInfo A phar file
+     * @param $objFile PharFileInfo A phar file
      * @return string
      */
     private function getRelativeFilePath($objFile)
