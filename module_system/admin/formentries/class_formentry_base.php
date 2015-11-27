@@ -130,7 +130,7 @@ class class_formentry_base {
         if($strGetter === null)
             throw new class_exception("unable to find getter for value-property ".$this->strSourceProperty."@".get_class($this->objSourceObject), class_exception::$level_ERROR);
 
-        return call_user_func(array($this->objSourceObject, $strGetter));
+        return $this->objSourceObject->{$strGetter}();
 
     }
 
@@ -151,7 +151,7 @@ class class_formentry_base {
         if($strSetter === null)
             throw new class_exception("unable to find setter for value-property ".$this->strSourceProperty."@".get_class($this->objSourceObject), class_exception::$level_ERROR);
 
-        return call_user_func(array($this->objSourceObject, $strSetter), $this->getStrValue());
+        return $this->objSourceObject->{$strSetter}($this->getStrValue());
 
     }
 

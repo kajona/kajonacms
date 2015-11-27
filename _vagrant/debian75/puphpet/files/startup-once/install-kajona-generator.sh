@@ -1,1 +1,0 @@
-git clone https://github.com/sidler/KajonaModuleGenerator.git /var/www/kajona-generator

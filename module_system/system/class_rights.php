@@ -47,6 +47,8 @@ class class_rights {
 
     private $bitChangelog = true;
 
+    private static $arrPermissionMap = array();
+
     /**
      * Constructor doing the usual setup things
      */
@@ -528,6 +530,10 @@ class class_rights {
         if($this->bitTestMode)
             return true;
 
+        if(isset(self::$arrPermissionMap[$strSystemid][$strUserid][$strPermission])) {
+            return self::$arrPermissionMap[$strSystemid][$strUserid][$strPermission];
+        }
+
         $arrGroupIds = array();
 
         if(validateSystemid($strUserid)) {
@@ -545,10 +551,14 @@ class class_rights {
         else
             $arrGroupIds[] = class_module_system_setting::getConfigValue("_guests_group_id_");
 
-        foreach($arrGroupIds as $strOneGroupId)
-            if($this->checkPermissionForGroup($strOneGroupId, $strPermission, $strSystemid))
+        foreach($arrGroupIds as $strOneGroupId) {
+            if ($this->checkPermissionForGroup($strOneGroupId, $strPermission, $strSystemid)) {
+                self::$arrPermissionMap[$strSystemid][$strUserid][$strPermission] = true;
                 return true;
+            }
+        }
 
+        self::$arrPermissionMap[$strSystemid][$strUserid][$strPermission] = false;
         return false;
     }
 
@@ -669,6 +679,7 @@ class class_rights {
      * @return void
      */
     private function flushRightsCache() {
+        self::$arrPermissionMap = array();
         class_carrier::getInstance()->flushCache(class_carrier::INT_CACHE_TYPE_ORMCACHE);
     }
 

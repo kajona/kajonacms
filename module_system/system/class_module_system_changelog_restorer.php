@@ -47,7 +47,7 @@ class class_module_system_changelog_restorer extends class_module_system_changel
         $objReflection = new class_reflection($objObject);
         $strSetter = $objReflection->getSetter($strProperty);
         if($strSetter !== null) {
-            call_user_func(array($objObject, $strSetter), $strValue);
+            $objObject->{$strSetter}($strValue);
         }
 
         $objObject->setSystemid($strSystemid);
