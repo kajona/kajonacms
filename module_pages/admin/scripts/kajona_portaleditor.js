@@ -664,7 +664,7 @@ KAJONA.admin.portaleditor.elementActionToolbar = {
                     $actionElement.append($('<i>').addClass('fa fa-files-o'));
                     break;
                 case 'MOVE':
-                    $actionElement.append($('<i>').addClass('fa fa-arrows moveHandle'));
+                    $actionElement.addClass('moveHandle').append($('<i>').addClass('fa fa-arrows moveHandle'));
                     break;
                 default:
                     return;

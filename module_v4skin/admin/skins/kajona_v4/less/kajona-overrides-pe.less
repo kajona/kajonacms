@@ -53,6 +53,10 @@
 
     .peToolbarHeader {
         font-size: 20px;
+
+        i {
+            cursor: pointer;
+        }
     }
 
     .peGlobalToolbarInfo {
@@ -148,9 +152,14 @@
                 padding: 5px;
                 font-size: 13px;
                 font-weight:normal;
+                cursor: pointer;
 
                 i {
                     font-size: 16px;
+                }
+
+                &.moveHandle {
+                    cursor: move;
                 }
 
                 &:hover {
@@ -191,7 +200,7 @@
                 width: auto;
                 display: block;
                 text-align: left;
-                font-family: @peFontFamily
+                font-family: @peFontFamily;
             }
         }
     }
