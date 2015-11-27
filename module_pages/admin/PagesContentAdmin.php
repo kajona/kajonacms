@@ -562,7 +562,7 @@ JS;
 
         return "";
     }
-    
+
 
     /**
      * Loads the form to create a new element
@@ -1307,7 +1307,7 @@ JS;
 
                         $strSetter = $objReflection->getSetter($strProperty);
                         if ($strSetter != null) {
-                            call_user_func(array($objElement, $strSetter), $this->getParam("value"));
+                            $objElement->{$strSetter}($this->getParam("value"));
                         }
                         else {
                             $arrElementData[$this->getParam("property")] = $this->getParam("value");
@@ -1350,7 +1350,7 @@ JS;
                     return "<message><error>setter not found</error></message>";
                 }
 
-                call_user_func(array($objObject, $strSetter), $this->getParam("value"));
+                $objObject->{$strSetter}($this->getParam("value"));
                 $objObject->updateObjectToDb();
                 $this->flushCompletePagesCache();
 

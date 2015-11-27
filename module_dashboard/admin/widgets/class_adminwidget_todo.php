@@ -91,7 +91,7 @@ class class_adminwidget_todo extends class_adminwidget implements interface_admi
         }
 
         if (empty($arrValues)) {
-            $strReturn .= $this->objToolkit->warningBox($this->getLang("no_tasks_available"), "alert-info");
+            $strReturn .= $this->objToolkit->warningBox($this->getLang("no_tasks_available"), "alert-success");
             return $strReturn;
         } else {
             $strReturn .= $this->objToolkit->dataTable(array(), $arrValues);

@@ -21,8 +21,11 @@
  */
 class class_module_system_setting extends class_model implements interface_model, interface_versionable {
 
-
+    /**
+     * @var class_module_system_setting[]
+     */
     private static $arrInstanceCache = null;
+    private static $arrValueMap = array();
 
 
     //0 = bool, 1 = int, 2 = string, 3 = page
@@ -168,6 +171,7 @@ class class_module_system_setting extends class_model implements interface_model
         $objChangelog->createLogEntry($this, class_module_system_changelog::$STR_ACTION_EDIT);
 
         self::$arrInstanceCache = null;
+        self::$arrValueMap = null;
 
         if(!class_module_system_setting::checkConfigExisting($this->getStrName())) {
             class_logger::getInstance()->addLogRow("new constant " . $this->getStrName() . " with value " . $this->getStrValue(), class_logger::$levelInfo);
@@ -224,7 +228,8 @@ class class_module_system_setting extends class_model implements interface_model
             foreach($arrIds as $arrOneId) {
                 $arrOneId["system_id"] = $arrOneId["system_config_id"];
                 class_orm_rowcache::addSingleInitRow($arrOneId);
-                self::$arrInstanceCache[$arrOneId["system_config_id"]] = new class_module_system_setting($arrOneId["system_config_id"]);
+                self::$arrInstanceCache[$arrOneId["system_config_name"]] = new class_module_system_setting($arrOneId["system_config_id"]);
+                self::$arrValueMap[$arrOneId["system_config_name"]] = $arrOneId["system_config_value"];
             }
         }
 
@@ -243,14 +248,10 @@ class class_module_system_setting extends class_model implements interface_model
      * @static
      */
     public static function getConfigByName($strName) {
-
-        $arrConfigs = self::getAllConfigValues();
-        foreach($arrConfigs as $objOneConfig) {
-            if($objOneConfig->getStrName() == $strName) {
-                return $objOneConfig;
-            }
+        $arrSettings = self::getAllConfigValues();
+        if(isset($arrSettings[$strName])) {
+            return $arrSettings[$strName];
         }
-
         return null;
 
     }
@@ -277,10 +278,9 @@ class class_module_system_setting extends class_model implements interface_model
      * @return string or null
      */
     public static function getConfigValue($strName) {
-        $objConfig = self::getConfigByName($strName);
-
-        if($objConfig != null) {
-            return $objConfig->getStrValue();
+        self::getAllConfigValues();
+        if(isset(self::$arrValueMap[$strName])) {
+            return self::$arrValueMap[$strName];
         }
 
         return null;

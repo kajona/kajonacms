@@ -67,8 +67,9 @@ class class_orm_objectinit extends class_orm_base {
                 }
 
                 $strSetter = $objReflection->getSetter($strPropertyName);
-                if($strSetter !== null)
-                    call_user_func(array($this->getObjObject(), $strSetter), $arrRow[$strColumn]);
+                if($strSetter !== null) {
+                    $this->getObjObject()->{$strSetter}($arrRow[$strColumn]);
+                }
             }
 
             $this->initAssignmentProperties();
@@ -90,8 +91,9 @@ class class_orm_objectinit extends class_orm_base {
             $objPropertyLazyLoader = new class_orm_assignment_array($this->getObjObject(), $strPropertyName, $this->getIntCombinedLogicalDeletionConfig());
 
             $strSetter = $objReflection->getSetter($strPropertyName);
-            if($strSetter !== null)
-                call_user_func(array($this->getObjObject(), $strSetter), $objPropertyLazyLoader);
+            if($strSetter !== null) {
+                $this->getObjObject()->{$strSetter}($objPropertyLazyLoader);
+            }
         }
 
     }

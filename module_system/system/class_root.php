@@ -730,9 +730,9 @@ abstract class class_root {
             $strGetter = $objReflection->getGetter("strTitle");
             $strSetter = $objReflection->getSetter("strTitle");
             if($strGetter != null && $strSetter != null) {
-                $strTitle = call_user_func(array($this, $strGetter));
+                $strTitle = $this->{$strGetter}();
                 if($strTitle != "") {
-                    call_user_func(array($this, $strSetter), $strTitle."_copy");
+                    $this->{$strSetter}($strTitle."_copy");
                 }
             }
         }
