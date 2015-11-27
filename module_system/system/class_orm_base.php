@@ -45,6 +45,9 @@ abstract class class_orm_base {
     /** @var class_root */
     private $objObject = null;
 
+    /** @var array an internal cache to avoid redundant lookups of annotations */
+    private static $arrTargetTableCache = array();
+
     /**
      * @param class_root|interface_versionable|null $objObject
      */
@@ -79,8 +82,13 @@ abstract class class_orm_base {
      * @return bool
      */
     protected function hasTargetTable() {
+        if(!empty(self::$arrTargetTableCache[get_class($this->getObjObject())])) {
+            return true;
+        }
+
         $objAnnotations = new class_reflection($this->getObjObject());
         $arrTargetTables = $objAnnotations->getAnnotationValuesFromClass(class_orm_base::STR_ANNOTATION_TARGETTABLE);
+        self::$arrTargetTableCache[get_class($this->getObjObject())] = $arrTargetTables;
 
         return count($arrTargetTables) > 0;
     }
