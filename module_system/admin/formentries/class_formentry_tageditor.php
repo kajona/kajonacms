@@ -50,7 +50,7 @@ class class_formentry_tageditor extends class_formentry_multiselect {
         if($strSetter === null)
             throw new class_exception("unable to find setter for value-property ".$this->getStrSourceProperty()."@".get_class($objSourceObject), class_exception::$level_ERROR);
 
-        return call_user_func(array($objSourceObject, $strSetter), json_encode(explode(",", $this->getStrValue())));
+        return $objSourceObject->{$strSetter}(json_encode(explode(",", $this->getStrValue())));
     }
 
     public function validateValue()

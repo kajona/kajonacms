@@ -60,7 +60,7 @@ class class_object_serializer {
         foreach($properties as $strOneProperty) {
             $strGetter = $objReflection->getGetter($strOneProperty);
 
-            $strValue = call_user_func(array($this->objObject, $strGetter));
+            $strValue = $this->objObject->{$strGetter}();
             if ($strValue instanceof class_date) {
                 $strValue = date(DateTime::ATOM, $strValue->getTimeInOldStyle());
             }
