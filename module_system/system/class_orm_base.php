@@ -82,13 +82,14 @@ abstract class class_orm_base {
      * @return bool
      */
     protected function hasTargetTable() {
-        if(!empty(self::$arrTargetTableCache[get_class($this->getObjObject())])) {
+        $strClass = is_object($this->getObjObject()) ? get_class($this->getObjObject()) : $this->getObjObject();
+        if(!empty(self::$arrTargetTableCache[$strClass])) {
             return true;
         }
 
         $objAnnotations = new class_reflection($this->getObjObject());
         $arrTargetTables = $objAnnotations->getAnnotationValuesFromClass(class_orm_base::STR_ANNOTATION_TARGETTABLE);
-        self::$arrTargetTableCache[get_class($this->getObjObject())] = $arrTargetTables;
+        self::$arrTargetTableCache[$strClass] = $arrTargetTables;
 
         return count($arrTargetTables) > 0;
     }
