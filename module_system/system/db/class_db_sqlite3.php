@@ -44,9 +44,9 @@ class class_db_sqlite3 extends class_db_base  {
 
 
             $strPath = _realpath_.$this->strDbFile;
-            if(defined("_autotesting_")) {
+            /*if(defined("_autotesting_")) {
                 $strPath = ":memory:";
-            }
+            }*/
             $this->linkDB = new SQLite3($strPath);
             $this->_pQuery('PRAGMA encoding = "UTF-8"', array());
             //TODO deprecated in sqlite, so may be removed
