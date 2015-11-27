@@ -41,7 +41,13 @@ class class_db_sqlite3 extends class_db_base  {
         $this->strDbFile = _projectpath_.'/dbdumps/'.$strDbName.'.db3';
 
         try {
-            $this->linkDB = new SQLite3(_realpath_.$this->strDbFile);
+
+
+            $strPath = _realpath_.$this->strDbFile;
+            if(defined("_autotesting_")) {
+                $strPath = ":memory:";
+            }
+            $this->linkDB = new SQLite3($strPath);
             $this->_pQuery('PRAGMA encoding = "UTF-8"', array());
             //TODO deprecated in sqlite, so may be removed
             $this->_pQuery('PRAGMA short_column_names = ON', array());
