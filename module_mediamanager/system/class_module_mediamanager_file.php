@@ -239,7 +239,7 @@ class class_module_mediamanager_file extends class_model implements interface_mo
      */
     public function getStrGridIcon() {
         if($this->getIntType() == self::$INT_TYPE_FOLDER) {
-            return _webpath_.class_resourceloader::getInstance()->getCorePathForModule("module_mediamanager")."/module_mediamanager/admin/pics/folder_grey.png";
+            return _webpath_.class_resourceloader::getInstance()->getWebPathForModule("module_mediamanager")."/admin/pics/folder_grey.png";
         }
 
         //get the filetype
@@ -249,7 +249,7 @@ class class_module_mediamanager_file extends class_model implements interface_mo
             return _webpath_ . "/image.php?image=" . urlencode($this->getStrFilename()) . "&amp;fixedWidth=260&amp;fixedHeight=180";
         }
 
-        return _webpath_.class_resourceloader::getInstance()->getCorePathForModule("module_mediamanager")."/module_mediamanager/admin/pics/file.png";
+        return _webpath_.class_resourceloader::getInstance()->getWebPathForModule("module_mediamanager")."/admin/pics/file.png";
     }
 
 

@@ -529,6 +529,24 @@ class class_resourceloader
     }
 
     /**
+     * Returns the web-path of a module, useful when loading static content such as images or css from
+     * a phar-based module
+     * @param $strModule
+     *
+     * @return string
+     */
+    public function getWebPathForModule($strModule)
+    {
+        $arrPhars = class_classloader::getInstance()->getArrPharModules();
+        if (in_array($strModule, $arrPhars)) {
+            return "/files/extract/".$strModule;
+        }
+
+        return $this->getCorePathForModule($strModule)."/".$strModule;
+
+    }
+
+    /**
      * Returns the core-folder the passed file is located in, e.g. core or core2.
      * Pass a full file-path, so the absolute path and filename.
      *
