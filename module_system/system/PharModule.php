@@ -6,6 +6,8 @@
 
 namespace Kajona\System\System;
 
+use class_classloader;
+use PharFileInfo;
 use RecursiveIteratorIterator;
 
 /**
@@ -42,16 +44,22 @@ class PharModule
             // Make sure the file is a PHP file and is inside the requested folder
             $strArchivePath = $this->getRelativeFilePath($objFile);
 
-            foreach ($arrCodeFolders as $strFolder) {
-              $strFolder = str_replace("\\", "/", $strFolder);
+            if(substr($strArchivePath, -4) !== ".php") {
+                continue;
+            }
 
-              if (substr($strArchivePath, -4) === ".php"
-                && substr($strArchivePath, 0, strlen($strFolder)) === $strFolder) {
-                  $strFilename = substr($objFile->getFileName(), 0, -4);
-                  if (!isset($arrCodeFiles[$strFilename])) {
-                      $arrCodeFiles[$strFilename] = $objFile->getPathName();
-                  }
-              }
+
+            foreach ($arrCodeFolders as $strFolder) {
+                $strFolder = str_replace("\\", "/", $strFolder).basename($strArchivePath);
+
+                if (substr($strArchivePath, -4) === ".php" && substr($strArchivePath, 0, strlen($strFolder.basename($strArchivePath))) === $strFolder) {
+                    $strFilename = substr($objFile->getFileName(), 0, -4);
+
+                    if (!isset($arrCodeFiles[$strFilename])) {
+                        $arrCodeFiles[$strFilename] = $objFile->getPathName();
+                        break;
+                    }
+                }
             }
 
             // Include the module ID

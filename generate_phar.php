@@ -7,7 +7,6 @@ foreach ($arrFiles as $strFile) {
     if (is_dir($strFile) && substr($strFile, 0, 7) == 'module_') {
 
         $moduleName = substr($strFile, 7);
-        if ($moduleName != "system") {
           $pharName = "module_" . $moduleName . ".phar";
 
           $phar = new Phar(__DIR__ . "/" . $pharName,
@@ -19,7 +18,6 @@ foreach ($arrFiles as $strFile) {
           //$phar->convertToExecutable(Phar::ZIP);
           //$phar->compress(Phar::GZ);
           echo 'Generated phar ' . $pharName . "\n";
-        }
     }
 
 }

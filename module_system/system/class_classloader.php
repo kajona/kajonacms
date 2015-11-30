@@ -229,6 +229,7 @@ class class_classloader
 
         $this->arrModules = $arrModules;
         $this->arrPharModules = array_diff($arrPharModules, $arrModules);
+//        $this->arrPharModules = ($arrPharModules); //TODO: remove line!!!!
     }
 
     /**
@@ -288,9 +289,17 @@ class class_classloader
         foreach ($this->arrPharModules as $strPath => $strSingleModule) {
             $objPhar = new PharModule($strPath);
             $arrFiles = $objPhar->load(self::$arrCodeFolders);
+
+            $arrResolved = array();
+            foreach($arrFiles as $strName => $strPath) {
+                $arrResolved[$this->getClassnameFromFilename($strPath)] = $strPath;
+            }
+
             // PHAR archive files must never override existing file system files
-            $this->arrFiles += array_diff_key($arrFiles, $this->arrFiles);
+            $this->arrFiles += array_diff_key($arrResolved, $this->arrFiles);
+//            $this->arrFiles = array_merge($this->arrFiles, $arrResolved); //TODO: remove line!!!
         }
+
     }
 
     /**
@@ -311,6 +320,11 @@ class class_classloader
                 $arrTempFiles = scandir(_realpath_."/".$strPath.$strFolder);
                 foreach ($arrTempFiles as $strSingleFile) {
                     if (strpos($strSingleFile, ".php") !== false) {
+
+                        if(uniStrpos($strSingleFile, "PagesRecordDelete") !== false) {
+                            $intI = 1;
+                        }
+
                         // if there is an underscore we have a legacy class name else a camel case
                         if (strpos($strSingleFile, "_") !== false) {
                             if (preg_match("/(class|interface|trait)(.*)\.php$/i", $strSingleFile)) {
