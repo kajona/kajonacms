@@ -455,6 +455,15 @@ class class_classloader
     }
 
     /**
+     * Returns the list of phar-based modules
+     * @return array
+     */
+    public function getArrPharModules()
+    {
+        return $this->arrPharModules;
+    }
+
+    /**
      * Adds a new folder to the autoload locations
      *
      * @param string $strPath

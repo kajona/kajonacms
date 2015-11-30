@@ -159,6 +159,7 @@ abstract class class_admin_controller extends class_abstract_controller {
         $this->arrOutput["module_id"] = $this->getArrModule("moduleId");
         $this->arrOutput["webpathTitle"] = urldecode(str_replace(array("http://", "https://"), array("", ""), _webpath_));
         $this->arrOutput["head"] = "<script type=\"text/javascript\">KAJONA_DEBUG = ".$this->objConfig->getDebug("debuglevel")."; KAJONA_WEBPATH = '"._webpath_."'; KAJONA_BROWSER_CACHEBUSTER = ".class_module_system_setting::getConfigValue("_system_browser_cachebuster_")."; KAJONA_LANGUAGE = '" . class_carrier::getInstance()->getObjLang()->getStrTextLanguage() . "';</script>";
+        $this->arrOutput["head"] .= "<script type=\"text/javascript\">KAJONA_PHARMAP = ".json_encode(array_values(class_classloader::getInstance()->getArrPharModules())).";</script>";
 
         //see if there are any hooks to be called
         $this->onRenderOutput($this->arrOutput);

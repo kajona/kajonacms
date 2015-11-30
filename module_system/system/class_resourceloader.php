@@ -523,7 +523,7 @@ class class_resourceloader
             return null;
         }
 
-        $strPath = uniSubstr(uniStrReplace($strModule, "", $arrFlipped[$strModule]), 0, -1);
+        $strPath = uniSubstr(uniStrReplace(array($strModule.".phar", $strModule), "", $arrFlipped[$strModule]), 0, -1);
 
         return ($bitPrependRealpath ? _realpath_ : "")."/".$strPath;
     }
