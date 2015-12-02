@@ -130,7 +130,7 @@ class class_formentry_objectlist extends class_formentry_base implements interfa
             throw new class_exception("unable to find setter for value-property ".$this->getStrSourceProperty()."@".get_class($objSourceObject), class_exception::$level_ERROR);
         }
 
-        return $objSourceObject->{$strGetter}($arrObjects);
+        return $objSourceObject->{$strSetter}($arrObjects);
     }
 
     public function validateValue()
