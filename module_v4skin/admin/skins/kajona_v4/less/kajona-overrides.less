@@ -1274,12 +1274,16 @@ footer {
     }
 
     [class^='fa-']:before, [class*=' fa-']:before {
-        font-size: @font-size-base+4;
+        //font-size: @font-size-base+4;
     }
 
     [class*=' fa-stack']:before {
-        font-size: @font-size-base - 2;
+        font-size: 0.7em;
         text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
+    }
+
+    .kj-icon  {
+        font-size: @font-size-base+4;
     }
     //Fontawesome configuration end
 
@@ -1388,11 +1392,6 @@ table.form-control {
         &:hover {
             text-decoration: none;
         }
-    }
-
-    // group icon is a little bigger, make it smaller
-    .fa-users:before {
-        font-size: @font-size-base+3 !important;
     }
 
 }
