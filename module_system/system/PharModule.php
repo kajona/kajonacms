@@ -6,7 +6,6 @@
 
 namespace Kajona\System\System;
 
-use class_classloader;
 use PharFileInfo;
 use RecursiveIteratorIterator;
 
@@ -22,6 +21,9 @@ class PharModule
     private $strPharPath;
     private $objPhar;
 
+//    private static $arrPharContent = null;
+    private static $arrPharContent = array();
+
     /**
      * @param string $strPharPath Path to the Phar file relative to Kajona root.
      */
@@ -29,6 +31,51 @@ class PharModule
     {
         $this->strPharPath = $strPharPath;
         $this->objPhar = new \Phar(_realpath_."/".$this->strPharPath, 0);
+
+        $this->createContentMap();
+    }
+
+
+    private function createContentMap()
+    {
+
+//        if(self::$arrPharContent == null) {
+//            self::$arrPharContent = array();
+//
+//            if(is_file(_realpath_."/project/temp/pharcontent.cache")) {
+//                self::$arrPharContent = unserialize(file_get_contents(_realpath_."/project/temp/pharcontent.cache"));
+//            }
+//            else
+//                self::$arrPharContent = array();
+//        }
+
+        if(!isset(self::$arrPharContent[$this->strPharPath])) {
+
+            self::$arrPharContent[$this->strPharPath] = array();
+
+            /** @var \SplFileInfo $objFile */
+            foreach($this->getFileIterator() as $objFile) {
+                self::$arrPharContent[$this->strPharPath][$this->getRelativeFilePath($objFile)] = $objFile->getPathname();
+            }
+
+        }
+    }
+
+    /**
+     * @inheritDoc
+     */
+    function __destruct()
+    {
+//        if(self::$arrPharContent != null) {
+//            file_put_contents(_realpath_."/project/temp/pharcontent.cache", serialize(self::$arrPharContent));
+//            self::$arrPharContent = null;
+//        }
+    }
+
+
+    public function getContentMap()
+    {
+        return self::$arrPharContent[$this->strPharPath];
     }
 
     /**
@@ -40,48 +87,42 @@ class PharModule
     public function load($arrCodeFolders)
     {
         $arrCodeFiles = [];
-        foreach ($this->getFileIterator() as $objFile) {
-            // Make sure the file is a PHP file and is inside the requested folder
-            $strArchivePath = $this->getRelativeFilePath($objFile);
+        foreach ($this->getContentMap() as $strArchivePath => $strPharPath) {
 
             if(substr($strArchivePath, -4) !== ".php") {
                 continue;
             }
 
 
+            $strFullFilename = basename($strPharPath);
             foreach ($arrCodeFolders as $strFolder) {
                 $strFolder = str_replace("\\", "/", $strFolder).basename($strArchivePath);
 
-                if (substr($strArchivePath, -4) === ".php" && substr($strArchivePath, 0, strlen($strFolder.basename($strArchivePath))) === $strFolder) {
-                    $strFilename = substr($objFile->getFileName(), 0, -4);
+                if (substr($strArchivePath, -4) === ".php" && $strArchivePath == $strFolder) {
+                    $strClassname = substr($strFullFilename, 0, -4);
 
-                    if (!isset($arrCodeFiles[$strFilename])) {
-                        $arrCodeFiles[$strFilename] = $objFile->getPathName();
+                    if (!isset($arrCodeFiles[$strClassname])) {
+                        $arrCodeFiles[$strClassname] = $strPharPath;
                         break;
                     }
                 }
             }
 
             // Include the module ID
-            if (preg_match("/module\_([a-z0-9\_])+\_id\.php/", $objFile->getFileName())) {
-                include_once $objFile->getPathName();
+            if (preg_match("/module\_([a-z0-9\_])+\_id\.php/", $strFullFilename)) {
+                include_once $strPharPath;
             }
         }
 
         return $arrCodeFiles;
     }
 
-    // public function install($strPath)
-    // {
-    //
-    // }
-
     /**
      * Return a file iterator
      *
      * @return RecursiveIteratorIterator
      */
-    public function getFileIterator()
+    private function getFileIterator()
     {
         return new \RecursiveIteratorIterator($this->objPhar);
     }

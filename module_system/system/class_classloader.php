@@ -18,6 +18,9 @@ use Kajona\System\System\PharModule;
 class class_classloader
 {
 
+    const PREFER_PHAR = true;
+
+
     private $intNumberOfClassesLoaded = 0;
 
     private $strModulesCacheFile = "";
@@ -132,6 +135,7 @@ class class_classloader
             }
         }
 
+        $this->bootstrapIncludeModuleIds();
     }
 
     /**
@@ -228,8 +232,12 @@ class class_classloader
         }
 
         $this->arrModules = $arrModules;
-        $this->arrPharModules = array_diff($arrPharModules, $arrModules);
-//        $this->arrPharModules = ($arrPharModules); //TODO: remove line!!!!
+        if(self::PREFER_PHAR) {
+            $this->arrPharModules = ($arrPharModules);
+        }
+        else {
+            $this->arrPharModules = array_diff($arrPharModules, $arrModules);
+        }
     }
 
     /**
@@ -296,8 +304,12 @@ class class_classloader
             }
 
             // PHAR archive files must never override existing file system files
-            $this->arrFiles += array_diff_key($arrResolved, $this->arrFiles);
-//            $this->arrFiles = array_merge($this->arrFiles, $arrResolved); //TODO: remove line!!!
+            if(self::PREFER_PHAR) {
+                $this->arrFiles = array_merge($this->arrFiles, $arrResolved);
+            }
+            else {
+                $this->arrFiles += array_diff_key($arrResolved, $this->arrFiles);
+            }
         }
 
     }
@@ -457,6 +469,27 @@ class class_classloader
 
         return null;
     }
+
+
+    public function bootstrapIncludeModuleIds()
+    {
+        //fetch all phars and registered modules
+        foreach($this->arrModules as $strPath => $strOneModule) {
+
+            if(!in_array($strOneModule, $this->arrPharModules)) {
+                if (is_dir(_realpath_."/".$strPath."/system/") && is_dir(_realpath_."/".$strPath."/system/config/")) {
+                    foreach (scandir(_realpath_."/".$strPath."/system/config/") as $strModuleEntry) {
+                        if (preg_match("/module\_([a-z0-9\_])+\_id\.php/", $strModuleEntry)) {
+                            @include_once _realpath_."/".$strPath."/system/config/".$strModuleEntry;
+                        }
+                    }
+                }
+            }
+        }
+
+
+    }
+
 
     /**
      * Returns the list of modules indexed by the classloader, so residing under /core

@@ -78,14 +78,15 @@ class PharModuleExtractor
 
             $objPharModule = new PharModule($strPath);
 
-            foreach($objPharModule->getFileIterator() as $strKey => $arrFileInfo) {
+            foreach($objPharModule->getContentMap() as $strKey => $strFullPath) {
+
                 //check for matching suffix and move to temp dir
                 if(preg_match($this->strExtractPattern, $strKey)) {
                     //extract the file and export it
-                    $strTargetPath = _realpath_."/files/extract/".$strModule.uniSubstr($strKey, uniStrrpos($strKey, ".phar")+5);
+                    $strTargetPath = _realpath_."/files/extract/".$strModule."/".$strKey;
                     $objFilesystem->folderCreate(dirname($strTargetPath), true);
                     //copy
-                    copy($strKey, $strTargetPath);
+                    copy($strFullPath, $strTargetPath);
                 }
             }
 

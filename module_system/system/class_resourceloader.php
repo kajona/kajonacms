@@ -280,14 +280,11 @@ class class_resourceloader
             } elseif (PharModule::isPhar(_realpath_."/".$strCorePath)) {
 
                 $objPhar = new PharModule($strCorePath);
-                foreach ($objPhar->getFileIterator() as $objFile) {
-                    if (strpos($objFile->getPathname(), $strFolder) !== false) {
-
-                        $arrReturn[$objFile->getPathname()] = $objFile->getFilename();
-
+                foreach($objPhar->getContentMap() as $strFilename => $strPharPath) {
+                    if (strpos($strFilename, _langpath_."/".$strFolder) !== false) {
+                        $arrReturn[$strPharPath] = basename($strPharPath);
                     }
                 }
-
             }
         }
 
@@ -366,10 +363,10 @@ class class_resourceloader
                 }
             } elseif (is_file(_realpath_."/".$strCorePath)) {
                 $objPhar = new PharModule($strCorePath);
-                foreach ($objPhar->getFileIterator() as $objFile) {
-                    $strPath = substr($objFile->getPathname(), strlen(_realpath_) + 6);
-                    if (strpos($strPath, $strFolder) !== false) {
-                        $arrReturn[$objFile->getPathname()] = $objFile->getFilename();
+
+                foreach($objPhar->getContentMap() as $strPath => $strAbsolutePath) {
+                    if(strpos($strPath, $strFolder) === 0) {
+                        $arrReturn[$strAbsolutePath] = basename($strPath);
                     }
                 }
             }

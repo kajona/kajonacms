@@ -81,10 +81,6 @@ if(!defined("_webpath_")) {
     }
 
 }
-//---Include Section 2-----------------------------------------------------------------------------------
-//load module-ids
-bootstrapIncludeModuleIds();
-
 
 //---Auto-Loader for classes-----------------------------------------------------------------------------
 require_once _corepath_."/module_system/system/class_classloader.php";
