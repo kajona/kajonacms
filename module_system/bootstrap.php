@@ -52,6 +52,9 @@ if (file_exists(_realpath_."/project/bootstrap.php"))
 // -- The Path on web --------------------------------------------------------------------------------------------------
 defineWebPath();
 
+// -- Include module ids -----------------------------------------------------------------------------------------------
+bootstrapIncludeModuleIds();
+
 // -- Include needed classes of each module ----------------------------------------------------------------------------
 // This registers all service providers of each module. This defines also the module id
 class_classloader::getInstance()->registerModuleServices(class_carrier::getInstance()->getContainer());

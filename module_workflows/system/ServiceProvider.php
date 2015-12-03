@@ -16,6 +16,5 @@ class ServiceProvider implements ServiceProviderInterface
 {
     public function register(Container $objContainer)
     {
-        define("_workflows_module_id_", 115);
     }
 }

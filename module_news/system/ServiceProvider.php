@@ -9,6 +9,5 @@ class ServiceProvider implements ServiceProviderInterface
 {
     public function register(Container $pimple)
     {
-        define("_news_module_id_", 30);
     }
 }
