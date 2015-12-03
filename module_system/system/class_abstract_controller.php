@@ -97,6 +97,13 @@ abstract class class_abstract_controller {
      */
     public function __construct($strSystemid = "")
     {
+        // compatibility workaround. If the dependencies were not injected yet the class was created without the object
+        // builder in this case we manually inject them
+        if ($this->objConfig === null) {
+            $objBuilder = new \Kajona\System\System\ObjectBuilder(class_carrier::getInstance()->getContainer());
+            $objBuilder->resolveDependencies($this);
+        }
+
         //Setting SystemID
         if ($strSystemid == "") {
             $this->setSystemid(class_carrier::getInstance()->getParam("systemid"));
