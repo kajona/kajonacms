@@ -158,6 +158,7 @@ class class_db_mysqli extends class_db_base {
                 $arrReturn[] = $arrSingleRow;
             }
 
+            $objStatement->free_result();
         }
         else {
             return false;

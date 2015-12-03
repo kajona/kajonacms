@@ -113,6 +113,9 @@ class class_db_postgres extends class_db_base {
 
             $arrReturn[$intCounter++] = $arrRow;
         }
+
+        @pg_free_result($resultSet);
+
         return $arrReturn;
     }
 
