@@ -31,23 +31,11 @@ class PharModule
     {
         $this->strPharPath = $strPharPath;
         $this->objPhar = new \Phar(_realpath_."/".$this->strPharPath, 0);
-
-        $this->createContentMap();
     }
 
 
     private function createContentMap()
     {
-
-//        if(self::$arrPharContent == null) {
-//            self::$arrPharContent = array();
-//
-//            if(is_file(_realpath_."/project/temp/pharcontent.cache")) {
-//                self::$arrPharContent = unserialize(file_get_contents(_realpath_."/project/temp/pharcontent.cache"));
-//            }
-//            else
-//                self::$arrPharContent = array();
-//        }
 
         if(!isset(self::$arrPharContent[$this->strPharPath])) {
 
@@ -55,6 +43,11 @@ class PharModule
 
             /** @var \SplFileInfo $objFile */
             foreach($this->getFileIterator() as $objFile) {
+
+                if(strpos($objFile->getFilename(), "/vendor/") !== false) {
+                    continue;
+                }
+
                 self::$arrPharContent[$this->strPharPath][$this->getRelativeFilePath($objFile)] = $objFile->getPathname();
             }
 
@@ -66,15 +59,13 @@ class PharModule
      */
     function __destruct()
     {
-//        if(self::$arrPharContent != null) {
-//            file_put_contents(_realpath_."/project/temp/pharcontent.cache", serialize(self::$arrPharContent));
-//            self::$arrPharContent = null;
-//        }
+
     }
 
 
     public function getContentMap()
     {
+        $this->createContentMap();
         return self::$arrPharContent[$this->strPharPath];
     }
 

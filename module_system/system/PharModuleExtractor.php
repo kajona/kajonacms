@@ -106,9 +106,9 @@ class PharModuleExtractor
                 continue;
             }
 
-            $strSum = sha1_file($strPath);
+            $strSum = filemtime(_realpath_.$strPath);
             if(!isset($this->arrOldPharMap[$strModule]) || $this->arrOldPharMap[$strModule] != $strSum) {
-                $arrPharMap[$strModule] = sha1_file($strPath);
+                $arrPharMap[$strModule] = $strSum;
             }
 
         }
