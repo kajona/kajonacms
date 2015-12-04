@@ -125,6 +125,9 @@ class class_resourceloader
             if (is_file(_realpath_.class_adminskin_helper::getPathForSkin(class_session::getInstance()->getAdminSkin()).$strTemplateName)) {
                 $strFilename = class_adminskin_helper::getPathForSkin(class_session::getInstance()->getAdminSkin()).$strTemplateName;
             }
+            elseif (is_file(class_adminskin_helper::getPathForSkin(class_session::getInstance()->getAdminSkin()).$strTemplateName)) {
+                $strFilename = class_adminskin_helper::getPathForSkin(class_session::getInstance()->getAdminSkin()).$strTemplateName;
+            }
         }
 
         if ($strFilename === null) {
@@ -299,7 +302,7 @@ class class_resourceloader
                 $objPhar = new PharModule($strCorePath);
 
                 foreach($objPhar->getContentMap() as $strPath => $strAbsolutePath) {
-                    if(strpos($strPath, $strFolder) === 0) {
+                    if(strpos($strPath, $strFolder."/".basename($strPath)) === 0) {
                         $arrReturn[$strAbsolutePath] = basename($strPath);
                     }
                 }
@@ -398,7 +401,7 @@ class class_resourceloader
                 // phar
                 $strPhar = PharModule::getPharStreamPath(_realpath_."/".$strPath, "/".$strFile);
                 if (is_file($strPhar)) {
-                    return str_replace("//", "/", $strPhar);
+                    return $strPhar;//str_replace("//", "/", $strPhar);
                 }
             }
         }
@@ -428,10 +431,23 @@ class class_resourceloader
 
         //loop all given modules
         foreach (class_classloader::getInstance()->getArrModules() as $strPath => $strSingleModule) {
-            if (is_dir(_realpath_."/".$strPath."/".$strFolder)) {
-                return str_replace("//", "/", "/".$strPath."/".$strFolder);
+            if (is_dir(_realpath_."/".$strPath)) {
 
+                if (is_dir(_realpath_."/".$strPath."/".$strFolder)) {
+                    return str_replace("//", "/", "/".$strPath."/".$strFolder);
+
+                }
+
+
+            } elseif (PharModule::isPhar(_realpath_."/".$strPath)) {
+                $strPhar = PharModule::getPharStreamPath(_realpath_."/".$strPath, "/".$strFolder);
+                if (is_dir($strPhar)) {
+                    return $strPhar;//str_replace("//", "/", $strPhar);
+                }
             }
+
+
+
         }
 
         return false;

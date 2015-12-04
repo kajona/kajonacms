@@ -176,6 +176,7 @@ class class_classloader
 
         if(self::PREFER_PHAR) {
             $arrDiffedPhars = $arrPharModules;
+            $arrModules = array_diff($arrModules, $arrPharModules);
         }
         else {
             $arrDiffedPhars = array_diff($arrPharModules, $arrModules);
@@ -340,7 +341,7 @@ class class_classloader
     public function getClassnameFromFilename($strFilename)
     {
         // if empty we cant resolve a class name
-        if (empty($strFilename)) {
+        if (empty($strFilename) || uniSubstr($strFilename, -4) != '.php') {
             return null;
         }
 
@@ -396,7 +397,12 @@ class class_classloader
                     $strResolvedClassname = "class_" . $strResolvedClassname;
                 }
 
-                include_once _realpath_ . $strFilename;
+                if(is_file($strFilename)) {
+                    include_once  $strFilename;
+                }
+                else {
+                    include_once _realpath_ . $strFilename;
+                }
             }
 
             $objReflection = new ReflectionClass($strResolvedClassname);

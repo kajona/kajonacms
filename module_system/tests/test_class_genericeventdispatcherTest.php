@@ -133,7 +133,6 @@ PHP;
 
         unlink(class_resourceloader::getInstance()->getCorePathForModule("module_system", true)."/module_system/system/class_module_genericeventdispatcher_test.php");
 
-        class_resourceloader::getInstance()->flushCache();
         class_classloader::getInstance()->flushCache();
 
         parent::tearDown();
