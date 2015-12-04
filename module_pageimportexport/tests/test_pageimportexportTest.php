@@ -44,7 +44,7 @@ class class_test_pageimportexportTest extends class_testbase
         $objPagelement->setStrElement("paragraph");
         $objPagelement->updateObjectToDb($objPage->getSystemid());
 
-        $objElement = class_carrier::getInstance()->getContainer()->offsetGet("object_builder")->factory("Kajona\\Pages\\Admin\\Elements\\ElementParagraphAdmin", array($objPagelement->getSystemid()));
+        $objElement = new ElementParagraphAdmin($objPagelement->getSystemid());
         $objElement->setSystemid($objPagelement->getSystemid());
         $objElement->loadElementData();
         $objElement->setStrTitle("para_title");

@@ -34,8 +34,8 @@ class class_element_formular_portal extends class_element_portal implements inte
 
         require_once(_realpath_ . $strPath);
         $strClassname = uniStrReplace(".php", "", $this->arrElementData["formular_class"]);
-        $objBuilder = class_carrier::getInstance()->getContainer()->offsetGet("object_builder");
-        $objForm = $objBuilder->factory($strClassname, array($this->arrElementData));
+
+        $objForm = new $strClassname($this->arrElementData);
         $strReturn = $objForm->action();
 
         return $strReturn;
