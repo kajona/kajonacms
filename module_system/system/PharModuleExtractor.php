@@ -20,37 +20,7 @@ use class_logger;
 class PharModuleExtractor
 {
     private $strLogName = "pharextractor.log";
-
-    private $strPharMapCacheFile = "";
-    private $arrOldPharMap = array();
-    private $bitCacheSaveRequired = false;
-
     private $strExtractPattern = '/\.(jpg|jpeg|gif|png|js|less|css|otf|eot|svg|ttf|woff|woff2)$/i';
-
-
-    public function __construct()
-    {
-        $this->strPharMapCacheFile = _realpath_."/project/temp/pharsums.cache";
-        $this->arrOldPharMap = class_apc_cache::getInstance()->getValue(__CLASS__."pharsums");
-
-
-        if($this->arrOldPharMap === false) {
-            if (is_file($this->strPharMapCacheFile)) {
-                $this->arrOldPharMap = unserialize(file_get_contents($this->strPharMapCacheFile));
-            }
-            else {
-                $this->bitCacheSaveRequired = true;
-            }
-        }
-    }
-
-    public function __destruct()
-    {
-        if ($this->bitCacheSaveRequired && true /*FIXME reenable!! class_config::getInstance()->getConfig('resourcecaching') == true*/) {
-            class_apc_cache::getInstance()->addValue(__CLASS__."pharsums", $this->arrOldPharMap);
-            file_put_contents($this->strPharMapCacheFile, serialize($this->arrOldPharMap));
-        }
-    }
 
 
     private function extractStaticContent($arrIndexMap)
@@ -71,9 +41,7 @@ class PharModuleExtractor
             }
 
             //mark revision indexed
-            $this->arrOldPharMap[$strModule] = $arrIndexMap[$strModule];
-            $this->bitCacheSaveRequired = true;
-
+            BootstrapCache::getInstance()->addCacheRow(BootstrapCache::CACHE_PHARSUMS, $strModule, $arrIndexMap[$strModule]);
             class_logger::getInstance($this->strLogName)->addLogRow("extracting phar ".$strPath."\n", class_logger::$levelInfo);
 
             $objPharModule = new PharModule($strPath);
@@ -99,6 +67,7 @@ class PharModuleExtractor
     private function createPharMap()
     {
         $arrPharMap = array();
+        $arrOldMap = BootstrapCache::getInstance()->getCacheContent(BootstrapCache::CACHE_PHARSUMS);
         $arrModules = \class_classloader::getInstance()->getArrModules();
 
         foreach($arrModules as $strPath => $strModule) {
@@ -107,7 +76,7 @@ class PharModuleExtractor
             }
 
             $strSum = filemtime(_realpath_.$strPath);
-            if(!isset($this->arrOldPharMap[$strModule]) || $this->arrOldPharMap[$strModule] != $strSum) {
+            if(!isset($arrOldMap) || $arrOldMap[$strModule] != $strSum) {
                 $arrPharMap[$strModule] = $strSum;
             }
 

@@ -6,6 +6,7 @@
 *-------------------------------------------------------------------------------------------------------*
 *	$Id$                                            *
 ********************************************************************************************************/
+use Kajona\System\System\BootstrapCache;
 
 /**
  * Annotations are a common way to enrich classes and methods with metainformation and documentation.
@@ -18,10 +19,6 @@
  * @since 3.4.1
  */
 class class_reflection {
-
-    private static $arrAnnotationsCache = array();
-    private static $strAnnotationsCacheFile;
-    private static $bitCacheSaveRequired = false;
 
     private static $STR_HASCLASS_CACHE = "hasclass";
     private static $STR_CLASS_PROPERTIES_CACHE = "classproperties";
@@ -45,22 +42,8 @@ class class_reflection {
      */
     private $objReflectionClass;
 
-    /**
-     * Internal init block, called on class-inclusion
-     * @return void
-     */
-    public static function staticConstruct() {
-        self::$strAnnotationsCacheFile = _realpath_."/project/temp/reflection.cache";
+    private $bitCacheSaveRequired = false;
 
-        self::$arrAnnotationsCache = class_apc_cache::getInstance()->getValue("reflection");
-
-        if(self::$arrAnnotationsCache == false) {
-            self::$arrAnnotationsCache = array();
-
-            if(is_file(self::$strAnnotationsCacheFile))
-                self::$arrAnnotationsCache = unserialize(file_get_contents(self::$strAnnotationsCacheFile));
-        }
-    }
 
     /**
      * Creates an instance of the annotations-class, parametrized with the class to inspect
@@ -79,8 +62,11 @@ class class_reflection {
         if(!class_exists($this->strSourceClass))
             throw new class_exception("class ".$this->strSourceClass." not found", class_exception::$level_ERROR);
 
-        if(!isset(self::$arrAnnotationsCache[$this->strSourceClass]))
-            self::$arrAnnotationsCache[$this->strSourceClass] = array(
+
+
+        $this->arrCurrentCache = BootstrapCache::getInstance()->getCacheRow(BootstrapCache::CACHE_REFLECTION, $this->strSourceClass);
+        if($this->arrCurrentCache === false) {
+            $this->arrCurrentCache = array(
                 self::$STR_CLASS_PROPERTIES_CACHE,
                 self::$STR_METHOD_CACHE,
                 self::$STR_HASMETHOD_CACHE,
@@ -90,8 +76,9 @@ class class_reflection {
                 self::$STR_GETTER_CACHE,
                 self::$STR_SETTER_CACHE
             );
+            $this->bitCacheSaveRequired = true;
+        }
 
-        $this->arrCurrentCache = &self::$arrAnnotationsCache[$this->strSourceClass];
         $this->objReflectionClass = new ReflectionClass($this->strSourceClass);
     }
 
@@ -99,10 +86,9 @@ class class_reflection {
      * internal destructor
      */
     function __destruct() {
-        if(self::$bitCacheSaveRequired && class_config::getInstance()->getConfig('resourcecaching') == true) {
-            class_apc_cache::getInstance()->addValue("reflection", self::$arrAnnotationsCache);
-            file_put_contents(self::$strAnnotationsCacheFile, serialize(self::$arrAnnotationsCache));
-            self::$bitCacheSaveRequired = false;
+        if($this->bitCacheSaveRequired ) {
+            BootstrapCache::getInstance()->addCacheRow(BootstrapCache::CACHE_REFLECTION, $this->strSourceClass, $this->arrCurrentCache);
+            $this->bitCacheSaveRequired = false;
         }
     }
 
@@ -110,10 +96,10 @@ class class_reflection {
      * Flushes the cache-files.
      * Use this method if you added new modules / classes.
      * @return void
+     * @deprecated
      */
     public static function flushCache() {
-        $objFilesystem = new class_filesystem();
-        $objFilesystem->fileDelete(self::$strAnnotationsCacheFile);
+        BootstrapCache::getInstance()->flushCache();
     }
 
     /**
@@ -153,7 +139,7 @@ class class_reflection {
         }
 
         $this->arrCurrentCache[self::$STR_CLASS_PROPERTIES_CACHE][$strAnnotation."_".$objEnum] = $arrReturn;
-        self::$bitCacheSaveRequired = true;
+        $this->bitCacheSaveRequired = true;
         return $arrReturn;
     }
 
@@ -232,7 +218,7 @@ class class_reflection {
         }
 
         $this->arrCurrentCache[self::$STR_HASMETHOD_CACHE][$strMethodName."_".$strAnnotation] = $bitReturn;
-        self::$bitCacheSaveRequired = true;
+        $this->bitCacheSaveRequired = true;
         return $bitReturn;
     }
 
@@ -255,7 +241,7 @@ class class_reflection {
         }
 
         $this->arrCurrentCache[self::$STR_HASCLASS_CACHE][$strAnnotation] = $bitReturn;
-        self::$bitCacheSaveRequired = true;
+        $this->bitCacheSaveRequired = true;
         return $bitReturn;
     }
 
@@ -286,7 +272,7 @@ class class_reflection {
         }
 
         $this->arrCurrentCache[self::$STR_HASPROPERTY_CACHE][$strPropertyName."_".$strAnnotation] = $bitReturn;
-        self::$bitCacheSaveRequired = true;
+        $this->bitCacheSaveRequired = true;
         return $bitReturn;
     }
 
@@ -333,7 +319,7 @@ class class_reflection {
 
         //strip the annotation parts
         $this->arrCurrentCache[self::$STR_METHOD_CACHE][$strMethodName."_".$strAnnotation."_".$objEnum] = $strReturn;
-        self::$bitCacheSaveRequired = true;
+        $this->bitCacheSaveRequired = true;
         return $strReturn;
     }
 
@@ -381,7 +367,7 @@ class class_reflection {
         }
 
         $this->arrCurrentCache[self::$STR_PROPERTIES_CACHE][$strAnnotation."_".$objEnum] = $arrReturn;
-        self::$bitCacheSaveRequired = true;
+        $this->bitCacheSaveRequired = true;
         return $arrReturn;
     }
 
@@ -453,7 +439,7 @@ class class_reflection {
         foreach($arrSetters as $strOneSetter) {
             if(method_exists($this->strSourceClass, $strOneSetter)) {
                 $this->arrCurrentCache[self::$STR_SETTER_CACHE][$strPropertyName] = $strOneSetter;
-                self::$bitCacheSaveRequired = true;
+                $this->bitCacheSaveRequired = true;
                 return $strOneSetter;
             }
         }
@@ -489,7 +475,7 @@ class class_reflection {
         foreach($arrGetters as $strOneGetter) {
             if(method_exists($this->strSourceClass, $strOneGetter)) {
                 $this->arrCurrentCache[self::$STR_GETTER_CACHE][$strPropertyName] = $strOneGetter;
-                self::$bitCacheSaveRequired = true;
+                $this->bitCacheSaveRequired = true;
                 return $strOneGetter;
             }
         }
@@ -569,7 +555,7 @@ class class_reflection {
         }
 
         $this->arrCurrentCache[self::$STR_DOC_COMMENT_PROPERTIES_CACHE][$strCacheKey] = $arrReturn;
-        self::$bitCacheSaveRequired = true;
+        $this->bitCacheSaveRequired = true;
         return $arrReturn;
     }
 
@@ -632,4 +618,3 @@ class class_reflection {
         return $arrParams;
     }
 }
-class_reflection::staticConstruct();

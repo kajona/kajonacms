@@ -735,7 +735,7 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
         $objFormgenerator = new class_admin_formgenerator("pack", new class_module_system_common());
         $objFormgenerator->addField(new class_formentry_text("pack", "name"))->setStrLabel($this->getLang("pack_name"))->setBitMandatory(true)->setStrValue($this->getParam("pack_name"));
         $objFormgenerator->addField(new class_formentry_headline())->setStrValue($this->getLang("pack_copy_include"));
-        $arrModules = class_resourceloader::getInstance()->getArrModules();
+        $arrModules = class_classloader::getInstance()->getArrModules();
         foreach($arrModules as $strOneModule) {
             //validate if there's a template-folder existing
             if(is_dir(class_resourceloader::getInstance()->getCorePathForModule($strOneModule, true)."/".$strOneModule."/templates"))

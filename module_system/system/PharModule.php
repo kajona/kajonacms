@@ -19,10 +19,6 @@ use RecursiveIteratorIterator;
 class PharModule
 {
     private $strPharPath;
-    private $objPhar;
-
-//    private static $arrPharContent = null;
-    private static $arrPharContent = array();
 
     /**
      * @param string $strPharPath Path to the Phar file relative to Kajona root.
@@ -30,28 +26,30 @@ class PharModule
     public function __construct($strPharPath)
     {
         $this->strPharPath = $strPharPath;
-        $this->objPhar = new \Phar(_realpath_."/".$this->strPharPath, 0);
     }
 
 
     private function createContentMap()
     {
 
-        if(!isset(self::$arrPharContent[$this->strPharPath])) {
+        if(!BootstrapCache::getInstance()->getCacheRow(BootstrapCache::CACHE_PHARCONTENT, $this->strPharPath)) {
 
-            self::$arrPharContent[$this->strPharPath] = array();
+            $arrTemp = array();
 
-            /** @var \SplFileInfo $objFile */
+            /** @var \PharFileInfo $objFile */
             foreach($this->getFileIterator() as $objFile) {
 
                 if(strpos($objFile->getFilename(), "/vendor/") !== false) {
                     continue;
                 }
 
-                self::$arrPharContent[$this->strPharPath][$this->getRelativeFilePath($objFile)] = $objFile->getPathname();
+                $arrTemp[$this->getRelativeFilePath($objFile)] = $objFile->getPathname();
             }
 
+            BootstrapCache::getInstance()->addCacheRow(BootstrapCache::CACHE_PHARCONTENT, $this->strPharPath, $arrTemp);
         }
+
+        return BootstrapCache::getInstance()->getCacheRow(BootstrapCache::CACHE_PHARCONTENT, $this->strPharPath);
     }
 
     /**
@@ -65,8 +63,7 @@ class PharModule
 
     public function getContentMap()
     {
-        $this->createContentMap();
-        return self::$arrPharContent[$this->strPharPath];
+        return $this->createContentMap();
     }
 
     /**
@@ -99,14 +96,27 @@ class PharModule
                 }
             }
 
-            // Include the module ID
-            if (preg_match("/module\_([a-z0-9\_])+\_id\.php/", $strFullFilename)) {
-                include_once $strPharPath;
-            }
         }
 
         return $arrCodeFiles;
     }
+
+
+    public function loadModuleIds()
+    {
+        foreach ($this->getContentMap() as $strArchivePath => $strPharPath) {
+
+            if(substr($strArchivePath, -4) !== ".php") {
+                continue;
+            }
+
+            // Include the module ID
+            if (preg_match("/module\_([a-z0-9\_])+\_id\.php$/", $strPharPath)) {
+                include_once $strPharPath;
+            }
+        }
+    }
+
 
     /**
      * Return a file iterator
@@ -115,7 +125,7 @@ class PharModule
      */
     private function getFileIterator()
     {
-        return new \RecursiveIteratorIterator($this->objPhar);
+        return new \RecursiveIteratorIterator(new \Phar(_realpath_."/".$this->strPharPath, 0));
     }
 
     /**

@@ -32,7 +32,7 @@ class class_module_packagemanager_packagemanager_module implements interface_pac
         $arrReturn = array();
 
         //loop all modules
-        $arrModules = class_resourceloader::getInstance()->getArrModules();
+        $arrModules = class_classloader::getInstance()->getArrModules();
 
         foreach($arrModules as $strPath => $strOneModule) {
             try {
@@ -219,7 +219,7 @@ class class_module_packagemanager_packagemanager_module implements interface_pac
                 $objModule = class_module_system_module::getModuleByName(trim($strOneModule));
                 if($objModule === null) {
 
-                    $arrModules = class_resourceloader::getInstance()->getArrModules();
+                    $arrModules = class_classloader::getInstance()->getArrModules();
                     $objMetadata = null;
                     foreach($arrModules as $strPath => $strOneFolder) {
                         if(uniStrpos($strOneFolder, $strOneModule) !== false) {
@@ -295,7 +295,7 @@ class class_module_packagemanager_packagemanager_module implements interface_pac
             $strTarget = uniStrtolower($this->objMetadata->getStrType()."_".createFilename($this->objMetadata->getStrTitle(), true));
         }
 
-        $arrModules = array_flip(class_resourceloader::getInstance()->getArrModules());
+        $arrModules = array_flip(class_classloader::getInstance()->getArrModules());
 
         if(isset($arrModules[$strTarget]))
             return "/".$arrModules[$strTarget];

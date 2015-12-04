@@ -44,7 +44,7 @@ echo "+-------------------------------------------------------------------------
 function DEBUG_getLegacyClassNames()
 {
     $arrReturn = array();
-    $arrModules = class_resourceloader::getInstance()->getArrModules();
+    $arrModules = class_classloader::getInstance()->getArrModules();
     $objFilesystem = new class_filesystem();
 
     foreach($arrModules as $strPath => $strModule) {

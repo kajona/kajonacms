@@ -6,6 +6,7 @@
 *    $Id$                                            *
 ********************************************************************************************************/
 
+use Kajona\System\System\BootstrapCache;
 use Kajona\System\System\PharModule;
 
 /**
@@ -24,21 +25,10 @@ use Kajona\System\System\PharModule;
 class class_resourceloader
 {
 
-    private $strTemplatesCacheFile = "";
-    private $strFoldercontentCacheFile = "";
-    private $strFoldercontentLangFile = "";
-
     /**
      * @var class_resourceloader
      */
     private static $objInstance = null;
-
-    private $arrModules = array();
-    private $arrTemplates = array();
-    private $arrFoldercontent = array();
-    private $arrLangfiles = array();
-
-    private $bitCacheSaveRequired = false;
 
 
     /**
@@ -63,68 +53,19 @@ class class_resourceloader
     private function __construct()
     {
 
-
-        $this->strTemplatesCacheFile = _realpath_."/project/temp/templates.cache";
-        $this->strFoldercontentCacheFile = _realpath_."/project/temp/foldercontent.cache";
-        $this->strFoldercontentLangFile = _realpath_."/project/temp/lang.cache";
-
-        $this->arrModules = class_classloader::getInstance()->getArrModules();
-
-        //try to load the caches from apc
-        $this->arrTemplates = class_apc_cache::getInstance()->getValue(__CLASS__."templates");
-        $this->arrFoldercontent = class_apc_cache::getInstance()->getValue(__CLASS__."foldercontent");
-        $this->arrLangfiles = class_apc_cache::getInstance()->getValue(__CLASS__."langfiles");
-
-
-        if ($this->arrTemplates === false || $this->arrFoldercontent === false || $this->arrLangfiles === false) {
-            $this->arrTemplates = array();
-            $this->arrFoldercontent = array();
-            $this->arrLangfiles = array();
-
-            if (is_file($this->strTemplatesCacheFile) && is_file($this->strFoldercontentCacheFile) && is_file($this->strFoldercontentLangFile)) {
-                $this->arrTemplates = unserialize(file_get_contents($this->strTemplatesCacheFile));
-                $this->arrFoldercontent = unserialize(file_get_contents($this->strFoldercontentCacheFile));
-                $this->arrLangfiles = unserialize(file_get_contents($this->strFoldercontentLangFile));
-            }
-
-        }
-
     }
 
-    /**
-     * Stores the currently cached entries back to the filesystem - if required.
-     */
-    public function __destruct()
-    {
-
-        if ($this->bitCacheSaveRequired && class_config::getInstance()->getConfig('resourcecaching') == true) {
-
-            class_apc_cache::getInstance()->addValue(__CLASS__."templates", $this->arrTemplates);
-            class_apc_cache::getInstance()->addValue(__CLASS__."foldercontent", $this->arrFoldercontent);
-            class_apc_cache::getInstance()->addValue(__CLASS__."langfiles", $this->arrLangfiles);
-
-            file_put_contents($this->strTemplatesCacheFile, serialize($this->arrTemplates));
-            file_put_contents($this->strFoldercontentCacheFile, serialize($this->arrFoldercontent));
-            file_put_contents($this->strFoldercontentLangFile, serialize($this->arrLangfiles));
-        }
-    }
 
     /**
      * Deletes all cached resource-information,
      * so the .cache-files.
      *
      * @return void
+     * @deprecated
      */
     public function flushCache()
     {
-        $objFilesystem = new class_filesystem();
-        $objFilesystem->fileDelete($this->strTemplatesCacheFile);
-        $objFilesystem->fileDelete($this->strFoldercontentCacheFile);
-        $objFilesystem->fileDelete($this->strFoldercontentLangFile);
-        $this->arrModules = class_classloader::getInstance()->getArrModules();
-        $this->arrFoldercontent = array();
-        $this->arrTemplates = array();
-        $this->arrLangfiles = array();
+        BootstrapCache::getInstance()->flushCache();
     }
 
     /**
@@ -140,28 +81,26 @@ class class_resourceloader
     public function getTemplate($strTemplateName, $bitScanAdminSkin = false)
     {
         $strTemplateName = removeDirectoryTraversals($strTemplateName);
-        if (isset($this->arrTemplates[$strTemplateName])) {
-            return $this->arrTemplates[$strTemplateName];
+        if (BootstrapCache::getInstance()->getCacheRow(BootstrapCache::CACHE_TEMPLATES, $strTemplateName)) {
+            return BootstrapCache::getInstance()->getCacheRow(BootstrapCache::CACHE_TEMPLATES, $strTemplateName);
         }
-
-        $this->bitCacheSaveRequired = true;
 
         $strFilename = null;
         //first try: load the file in the current template-pack
         $strDefaultTemplate = class_module_system_setting::getConfigValue("_packagemanager_defaulttemplate_");
         if (is_file(_realpath_._templatepath_."/".$strDefaultTemplate."/tpl".$strTemplateName)) {
-            $this->arrTemplates[$strTemplateName] = _templatepath_."/".$strDefaultTemplate."/tpl".$strTemplateName;
+            BootstrapCache::getInstance()->addCacheRow(BootstrapCache::CACHE_TEMPLATES, $strTemplateName, _templatepath_."/".$strDefaultTemplate."/tpl".$strTemplateName);
             return _templatepath_."/".$strDefaultTemplate."/tpl".$strTemplateName;
         }
 
         //second try: load the file from the default-pack
         if (is_file(_realpath_._templatepath_."/default/tpl".$strTemplateName)) {
-            $this->arrTemplates[$strTemplateName] = _templatepath_."/default/tpl".$strTemplateName;
+            BootstrapCache::getInstance()->addCacheRow(BootstrapCache::CACHE_TEMPLATES, $strTemplateName, _templatepath_."/default/tpl".$strTemplateName);
             return _templatepath_."/default/tpl".$strTemplateName;
         }
 
         //third try: try to load the file from a given module
-        foreach ($this->arrModules as $strCorePath => $strOneModule) {
+        foreach (class_classloader::getInstance()->getArrModules() as $strCorePath => $strOneModule) {
             if (is_dir(_realpath_."/".$strCorePath)) {
                 if (is_file(_realpath_."/".$strCorePath."/templates/default/tpl".$strTemplateName)) {
                     $strFilename = "/".$strCorePath."/templates/default/tpl".$strTemplateName;
@@ -192,7 +131,7 @@ class class_resourceloader
             throw new class_exception("Required file ".$strTemplateName." could not be mapped on the filesystem.", class_exception::$level_ERROR);
         }
 
-        $this->arrTemplates[$strTemplateName] = $strFilename;
+        BootstrapCache::getInstance()->addCacheRow(BootstrapCache::CACHE_TEMPLATES, $strTemplateName, $strFilename);
 
         return $strFilename;
     }
@@ -232,7 +171,7 @@ class class_resourceloader
         }
 
         //third try: try to load the file from given modules
-        foreach ($this->arrModules as $strCorePath => $strOneModule) {
+        foreach (class_classloader::getInstance()->getArrModules() as $strCorePath => $strOneModule) {
             if (is_dir(_realpath_."/".$strCorePath."/templates/default/tpl".$strFolder)) {
                 $arrFiles = scandir(_realpath_."/".$strCorePath."/templates/default/tpl".$strFolder);
                 foreach ($arrFiles as $strOneFile) {
@@ -259,16 +198,14 @@ class class_resourceloader
      */
     public function getLanguageFiles($strFolder)
     {
+
+        if (BootstrapCache::getInstance()->getCacheRow(BootstrapCache::CACHE_LANG, $strFolder) !== false) {
+            return BootstrapCache::getInstance()->getCacheRow(BootstrapCache::CACHE_LANG, $strFolder);
+        }
         $arrReturn = array();
 
-        if (isset($this->arrLangfiles[$strFolder])) {
-            return $this->arrLangfiles[$strFolder];
-        }
-
-        $this->bitCacheSaveRequired = true;
-
         //loop all given modules
-        foreach ($this->arrModules as $strCorePath => $strSingleModule) {
+        foreach (class_classloader::getInstance()->getArrModules() as $strCorePath => $strSingleModule) {
             if (is_dir(_realpath_."/".$strCorePath._langpath_."/".$strFolder)) {
                 $arrContent = scandir(_realpath_."/".$strCorePath._langpath_."/".$strFolder);
                 foreach ($arrContent as $strSingleEntry) {
@@ -306,8 +243,7 @@ class class_resourceloader
             }
         }
 
-        $this->arrLangfiles[$strFolder] = $arrReturn;
-
+        BootstrapCache::getInstance()->addCacheRow(BootstrapCache::CACHE_LANG, $strFolder, $arrReturn);
         return $arrReturn;
     }
 
@@ -334,14 +270,12 @@ class class_resourceloader
         $arrReturn = array();
         $strCachename = md5($strFolder.implode(",", $arrExtensionFilter).($bitWithSubfolders ? "sub" : "nosub"));
 
-        if (isset($this->arrFoldercontent[$strCachename])) {
-            return $this->applyCallbacks($this->arrFoldercontent[$strCachename], $objFilterFunction, $objWalkFunction);
+        if (BootstrapCache::getInstance()->getCacheRow(BootstrapCache::CACHE_FOLDERCONTENT, $strCachename)) {
+            return $this->applyCallbacks(BootstrapCache::getInstance()->getCacheRow(BootstrapCache::CACHE_FOLDERCONTENT, $strCachename), $objFilterFunction, $objWalkFunction);
         }
 
-        $this->bitCacheSaveRequired = true;
-
         //loop all given modules
-        foreach ($this->arrModules as $strCorePath => $strSingleModule) {
+        foreach (class_classloader::getInstance()->getArrModules() as $strCorePath => $strSingleModule) {
             if (is_dir(_realpath_."/".$strCorePath.$strFolder)) {
                 $arrContent = scandir(_realpath_."/".$strCorePath.$strFolder);
                 foreach ($arrContent as $strSingleEntry) {
@@ -404,7 +338,7 @@ class class_resourceloader
         }
 
 
-        $this->arrFoldercontent[$strCachename] = $arrReturn;
+        BootstrapCache::getInstance()->addCacheRow(BootstrapCache::CACHE_FOLDERCONTENT, $strCachename, $arrReturn);
         return $this->applyCallbacks($arrReturn, $objFilterFunction, $objWalkFunction);
     }
 
@@ -457,7 +391,7 @@ class class_resourceloader
         }
 
         //loop all given modules
-        foreach ($this->arrModules as $strPath => $strSingleModule) {
+        foreach (class_classloader::getInstance()->getArrModules() as $strPath => $strSingleModule) {
             if (is_file(_realpath_."/".$strPath."/".$strFile)) {
                 return str_replace("//", "/", "/".$strPath."/".$strFile);
             } elseif (PharModule::isPhar($strPath)) {
@@ -493,7 +427,7 @@ class class_resourceloader
         }
 
         //loop all given modules
-        foreach ($this->arrModules as $strPath => $strSingleModule) {
+        foreach (class_classloader::getInstance()->getArrModules() as $strPath => $strSingleModule) {
             if (is_dir(_realpath_."/".$strPath."/".$strFolder)) {
                 return str_replace("//", "/", "/".$strPath."/".$strFolder);
 
@@ -514,7 +448,7 @@ class class_resourceloader
      */
     public function getCorePathForModule($strModule, $bitPrependRealpath = false)
     {
-        $arrFlipped = array_flip($this->arrModules);
+        $arrFlipped = array_flip(class_classloader::getInstance()->getArrModules());
 
         if (!array_key_exists($strModule, $arrFlipped)) {
             return null;
@@ -565,10 +499,11 @@ class class_resourceloader
      * Returns the list of modules and elements under the /core folder
      *
      * @return array [folder/module] => [module]
+     * @deprecated use class_classloader::getInstance()->getArrModules() instead
      */
     public function getArrModules()
     {
-        return $this->arrModules;
+        return class_classloader::getInstance()->getArrModules();
     }
 
 
