@@ -38,7 +38,6 @@ PHP;
         echo "Saving testfiles to ".class_resourceloader::getInstance()->getCorePathForModule("module_system", true)."/module_system/system/class_module_genericeventdispatcher_test.php\n";
         file_put_contents(class_resourceloader::getInstance()->getCorePathForModule("module_system", true)."/module_system/system/class_module_genericeventdispatcher_test.php", $strClass);
 
-        class_resourceloader::getInstance()->flushCache();
         class_classloader::getInstance()->flushCache();
 
         parent::setUp();

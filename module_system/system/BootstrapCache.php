@@ -148,10 +148,10 @@ class BootstrapCache
     {
         $objFilesystem = new class_filesystem();
         foreach($this->getCacheNames() as $strOneFile) {
-            self::$arrCaches[$strOneFile] = array();
             $objFilesystem->fileDelete("/project/temp/".$strOneFile);
         }
 
+        self::$arrCaches = array();
         class_apc_cache::getInstance()->flushCache();
     }
 }
