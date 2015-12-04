@@ -65,7 +65,7 @@ class class_resourceloader
      */
     public function flushCache()
     {
-        BootstrapCache::getInstance()->flushCache();
+        class_classloader::getInstance()->flushCache();
     }
 
     /**

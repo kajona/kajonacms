@@ -99,7 +99,7 @@ class class_reflection {
      * @deprecated
      */
     public static function flushCache() {
-        BootstrapCache::getInstance()->flushCache();
+        class_classloader::getInstance()->flushCache();
     }
 
     /**
