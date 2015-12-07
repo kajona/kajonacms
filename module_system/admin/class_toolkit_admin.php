@@ -836,12 +836,13 @@ class class_toolkit_admin extends class_toolkit
     }
 
     /**
-     * Form entry which displays an input text field where you can add or remove tags
+     * Form entry which displays an input text field where you must select entries from an autocomplete
      *
      * @param $strName
      * @param string $strTitle
-     * @param array $arrObjects
-     *
+     * @param $strSource
+     * @param array $arrValues
+     * @param null $strOnChange
      * @return string
      * @throws class_exception
      */
