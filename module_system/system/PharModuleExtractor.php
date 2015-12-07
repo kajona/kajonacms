@@ -6,10 +6,8 @@
 
 namespace Kajona\System\System;
 
-use class_apc_cache;
-use class_config;
+use class_classloader;
 use class_logger;
-
 
 /**
  * Tries to extract the static contents of a phar in order to make them accessible by the webserver
@@ -92,6 +90,7 @@ class PharModuleExtractor
         $arrIndex = $objInstance->createPharMap();
         if(!empty($arrIndex)) {
             $objInstance->extractStaticContent($arrIndex);
+            class_classloader::getInstance()->flushCache();
         }
     }
 
