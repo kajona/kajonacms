@@ -15,7 +15,6 @@
 class class_formentry_objecttags extends class_formentry_tageditor
 {
     protected $strSource;
-    protected $objFactory;
 
     /**
      * @param string $strSource
