@@ -854,7 +854,7 @@ class class_toolkit_admin extends class_toolkit
         if (!empty($arrValues)) {
             foreach ($arrValues as $objValue) {
                 if ($objValue instanceof interface_model) {
-                    $strData.= '<input type="hidden" name="' . $strName . '_id[]" value="' . $objValue->getStrSystemid() . '" data-title="' . $objValue->getStrDisplayName() . '" />';
+                    $strData.= '<input type="hidden" name="' . $strName . '_id[]" value="' . $objValue->getStrSystemid() . '" data-title="' . htmlspecialchars($objValue->getStrDisplayName()) . '" />';
                     $arrResult[] = $objValue->getStrDisplayName();
                 }
             }
