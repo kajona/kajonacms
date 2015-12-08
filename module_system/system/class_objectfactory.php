@@ -5,6 +5,7 @@
 *-------------------------------------------------------------------------------------------------------*
 *   $Id$                                        *
 ********************************************************************************************************/
+use Kajona\System\System\BootstrapCache;
 
 /**
  * The objectfactory is a central place to create instances of common objects.
@@ -27,11 +28,6 @@ class class_objectfactory {
     private $arrObjectCache = array();
 
     /**
-     * @var string[]
-     */
-    private $arrClassCache = array();
-
-    /**
      * @var class_db
      */
     private $objDB;
@@ -44,29 +40,7 @@ class class_objectfactory {
     private $strObjectsCacheFile;
     private $bitCacheSaveRequired = false;
 
-    private function __construct() {
-        $this->strObjectsCacheFile = _realpath_."/project/temp/objects.cache";
-
-        $this->objDB = class_carrier::getInstance()->getObjDB();
-
-        $this->arrClassCache = class_apc_cache::getInstance()->getValue(__CLASS__."classes");
-        if($this->arrClassCache == false) {
-            $this->arrClassCache = array();
-
-            if(is_file($this->strObjectsCacheFile)) {
-                $this->arrClassCache = unserialize(file_get_contents($this->strObjectsCacheFile));
-            }
-        }
-    }
-
-    function __destruct() {
-        if($this->bitCacheSaveRequired && class_config::getInstance()->getConfig('resourcecaching') == true) {
-            class_apc_cache::getInstance()->addValue(__CLASS__."classes", $this->arrClassCache);
-            file_put_contents($this->strObjectsCacheFile, serialize($this->arrClassCache));
-        }
-    }
-
-    /**
+        /**
      * Returns an instance of the objectfactory.
      *
      * @static
@@ -116,29 +90,27 @@ class class_objectfactory {
      */
     public function getClassNameForId($strSystemid) {
         $strClass = "";
-        if(isset($this->arrClassCache[$strSystemid])) {
-            $strClass = $this->arrClassCache[$strSystemid];
+        if(BootstrapCache::getInstance()->getCacheRow(BootstrapCache::CACHE_OBJECTS, $strSystemid)) {
+            return BootstrapCache::getInstance()->getCacheRow(BootstrapCache::CACHE_OBJECTS, $strSystemid);
+        }
+
+        //maybe the orm handler has already fetched this row
+        $arrCacheRow = class_orm_rowcache::getCachedInitRow($strSystemid);
+        if($arrCacheRow != null && isset($arrCacheRow["system_class"])) {
+            $strClass = $arrCacheRow["system_class"];
         }
         else {
-            //maybe the orm handler has already fetched this row
-            $arrCacheRow = class_orm_rowcache::getCachedInitRow($strSystemid);
-            if($arrCacheRow != null && isset($arrCacheRow["system_class"])) {
-                $strClass = $arrCacheRow["system_class"];
-            }
-            else {
-                $strQuery = "SELECT * FROM "._dbprefix_."system where system_id = ?";
-                $arrRow = $this->objDB->getPRow($strQuery, array($strSystemid));
-                if(isset($arrRow["system_class"])) {
-                    $strClass = $arrRow["system_class"];
-                }
-            }
-
-            if($strClass != "") {
-                $this->arrClassCache[$strSystemid] = $strClass;
-                $this->bitCacheSaveRequired = true;
+            $strQuery = "SELECT * FROM "._dbprefix_."system where system_id = ?";
+            $arrRow = $this->objDB->getPRow($strQuery, array($strSystemid));
+            if(isset($arrRow["system_class"])) {
+                $strClass = $arrRow["system_class"];
             }
         }
-        
+
+        if($strClass != "") {
+            BootstrapCache::getInstance()->addCacheRow(BootstrapCache::CACHE_OBJECTS, $strSystemid, $strClass);
+        }
+
         return $strClass;
     }
 
@@ -148,7 +120,6 @@ class class_objectfactory {
      */
     public function flushCache() {
         $this->arrObjectCache = array();
-        $this->arrClassCache = array();
     }
 
     /**

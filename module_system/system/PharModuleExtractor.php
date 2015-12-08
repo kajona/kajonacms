@@ -89,8 +89,8 @@ class PharModuleExtractor
         $objInstance = new PharModuleExtractor();
         $arrIndex = $objInstance->createPharMap();
         if(!empty($arrIndex)) {
-            $objInstance->extractStaticContent($arrIndex);
             class_classloader::getInstance()->flushCache();
+            $objInstance->extractStaticContent($arrIndex);
         }
     }
 

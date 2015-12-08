@@ -8,6 +8,7 @@
 namespace Kajona\System\System;
 
 use class_apc_cache;
+use class_config;
 use class_filesystem;
 
 /**
@@ -17,6 +18,8 @@ use class_filesystem;
  *
  * @author sidler@mulchprod.de
  * @since 5.0
+ *
+ * @todo make the caches configurable
  */
 class BootstrapCache
 {
@@ -30,6 +33,7 @@ class BootstrapCache
     const CACHE_PHARSUMS = "pharsums.cache";
     const CACHE_CLASSES = "classes.cache";
     const CACHE_REFLECTION = "reflection.cache";
+    const CACHE_OBJECTS = "objects.cache";
 
 
     /**
@@ -52,7 +56,8 @@ class BootstrapCache
             self::CACHE_PHARMODULES,
             self::CACHE_CLASSES,
             self::CACHE_PHARSUMS,
-            self::CACHE_REFLECTION
+            self::CACHE_REFLECTION,
+            self::CACHE_OBJECTS
         );
     }
 
@@ -83,7 +88,7 @@ class BootstrapCache
     public function __destruct()
     {
         foreach($this->getCacheNames() as $strOneFile) {
-            if(isset(self::$arrCacheSavesRequired[$strOneFile])) {
+            if(isset(self::$arrCacheSavesRequired[$strOneFile]) && class_config::getInstance()->getConfig("bootstrapcache_".$strOneFile) === true) {
                 class_apc_cache::getInstance()->addValue(__CLASS__.$strOneFile, self::$arrCaches[$strOneFile]);
                 file_put_contents(_realpath_."/project/temp/".$strOneFile, serialize(self::$arrCaches[$strOneFile]));
             }

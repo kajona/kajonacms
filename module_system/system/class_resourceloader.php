@@ -384,28 +384,40 @@ class class_resourceloader
      * @param bool $bitCheckProject en- or disables the lookup in the /project folder
      *
      * @return string|bool the absolute path
+     *
+     * @todo may be cached?
      */
     public function getPathForFile($strFile, $bitCheckProject = true)
     {
 
-        //check if the same is available in the projects-folder
-        if ($bitCheckProject && is_file(_realpath_._projectpath_."/".$strFile)) {
-            return str_replace("//", "/", _projectpath_."/".$strFile);
-        }
+        if($bitCheckProject) {
 
-        //loop all given modules
-        foreach (class_classloader::getInstance()->getArrModules() as $strPath => $strSingleModule) {
-            if (is_file(_realpath_."/".$strPath."/".$strFile)) {
-                return str_replace("//", "/", "/".$strPath."/".$strFile);
-            } elseif (PharModule::isPhar($strPath)) {
-                // phar
-                $strPhar = PharModule::getPharStreamPath(_realpath_."/".$strPath, "/".$strFile);
-                if (is_file($strPhar)) {
-                    return $strPhar;//str_replace("//", "/", $strPhar);
+            //fallback on the resourceloader
+            $arrContent = $this->getFolderContent(dirname($strFile));
+            $strSearchedFilename = basename($strFile);
+            foreach ($arrContent as $strPath => $strContentFile) {
+                if ($strContentFile == $strSearchedFilename) {
+                    return $strPath;
                 }
             }
         }
+        else {
 
+            //loop all given modules
+            foreach (class_classloader::getInstance()->getArrModules() as $strPath => $strSingleModule) {
+                if (in_array($strSingleModule, class_classloader::getInstance()->getArrPharModules())) {
+                    // phar
+                    $strPhar = PharModule::getPharStreamPath(_realpath_."/".$strPath, "/".$strFile);
+                    if (is_file($strPhar)) {
+                        return $strPhar;//str_replace("//", "/", $strPhar);
+                    }
+                }
+                elseif (is_file(_realpath_."/".$strPath."/".$strFile)) {
+                    return str_replace("//", "/", "/".$strPath."/".$strFile);
+                }
+            }
+
+        }
         return false;
     }
 
@@ -421,32 +433,30 @@ class class_resourceloader
      *
      * @todo may be cached?
      */
-    public function getPathForFolder($strFolder, $bitCheckProject = true)
+    public function getPathForFolder($strFolder)
     {
 
         //check if the same is available in the projects-folder
-        if ($bitCheckProject && is_dir(_realpath_._projectpath_."/".$strFolder)) {
+        if (is_dir(_realpath_._projectpath_."/".$strFolder)) {
             return str_replace("//", "/", _projectpath_."/".$strFolder);
         }
 
         //loop all given modules
         foreach (class_classloader::getInstance()->getArrModules() as $strPath => $strSingleModule) {
-            if (is_dir(_realpath_."/".$strPath)) {
+            if (in_array($strSingleModule, class_classloader::getInstance()->getArrPharModules())) {
+                $strPhar = PharModule::getPharStreamPath(_realpath_."/".$strPath, "/".$strFolder);
+                if (is_dir($strPhar)) {
+                    return $strPhar;//str_replace("//", "/", $strPhar);
+                }
+            }
+            elseif (is_dir(_realpath_."/".$strPath)) {
 
                 if (is_dir(_realpath_."/".$strPath."/".$strFolder)) {
                     return str_replace("//", "/", "/".$strPath."/".$strFolder);
 
                 }
 
-
-            } elseif (PharModule::isPhar(_realpath_."/".$strPath)) {
-                $strPhar = PharModule::getPharStreamPath(_realpath_."/".$strPath, "/".$strFolder);
-                if (is_dir($strPhar)) {
-                    return $strPhar;//str_replace("//", "/", $strPhar);
-                }
             }
-
-
 
         }
 

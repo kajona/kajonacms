@@ -82,11 +82,12 @@ class PharModule
             }
 
 
-            $strFullFilename = basename($strPharPath);
-            foreach ($arrCodeFolders as $strFolder) {
-                $strFolder = str_replace("\\", "/", $strFolder).basename($strArchivePath);
+            $strFullFilename = basename($strArchivePath);
 
-                if (substr($strArchivePath, -4) === ".php" && $strArchivePath == $strFolder) {
+            foreach ($arrCodeFolders as $strFolder) {
+                $strFolder = $strFolder.$strFullFilename;
+
+                if ($strArchivePath == $strFolder) {
                     $strClassname = substr($strFullFilename, 0, -4);
 
                     if (!isset($arrCodeFiles[$strClassname])) {
