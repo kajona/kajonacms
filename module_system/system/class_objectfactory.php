@@ -98,8 +98,7 @@ class class_objectfactory {
         
         //load the object itself
         if($strClass != "") {
-            $objReflection = new ReflectionClass($strClass);
-            $objObject = $objReflection->newInstance($strSystemid);
+            $objObject = new $strClass($strSystemid);
             $this->arrObjectCache[$strSystemid] = $objObject;
             return $objObject;
         }
@@ -126,7 +125,7 @@ class class_objectfactory {
                 $strClass = $arrCacheRow["system_class"];
             }
             else {
-                $strQuery = "SELECT * FROM "._dbprefix_."system where system_id = ?";
+                $strQuery = "SELECT system_class FROM "._dbprefix_."system where system_id = ?";
                 $arrRow = $this->objDB->getPRow($strQuery, array($strSystemid));
                 if(isset($arrRow["system_class"])) {
                     $strClass = $arrRow["system_class"];

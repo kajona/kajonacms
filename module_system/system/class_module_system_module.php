@@ -191,7 +191,12 @@ class class_module_system_module extends class_model implements interface_model,
             if(count(class_db::getInstance()->getTables()) == 0) {
                 return array();
             }
-            self::$arrModules = parent::getObjectList();
+            $arrResult = parent::getObjectList();
+            $arrModules = array();
+            foreach ($arrResult as $objModule) {
+                $arrModules[$objModule->getIntModuleNr()] = $objModule;
+            }
+            self::$arrModules = $arrModules;
         }
 
         if($intStart === null || $intEnd === null)
@@ -284,13 +289,8 @@ class class_module_system_module extends class_model implements interface_model,
      * @static
      */
     public static function getModuleIdByNr($strNr) {
-        foreach(self::getAllModules() as $objOneModule) {
-            if($objOneModule->getIntNr() == $strNr) {
-                return $objOneModule->getSystemid();
-            }
-        }
-        return "";
-
+        $arrModules = self::getAllModules();
+        return isset($arrModules[$strNr]) ? $arrModules[$strNr]->getSystemid() : "";
     }
 
     /**
