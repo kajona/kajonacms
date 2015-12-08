@@ -51,16 +51,7 @@ class class_config {
             include($strPath);
         }
         else {
-            if(!@include class_resourceloader::getInstance()->getCorePathForModule("module_system", true) . "/module_system/system/config/" . $strConfigFile) {
-                die("Error reading config-file from core folder: ".$strConfigFile);
-            }
-        }
-
-        //overwrite with settings from project
-        if(is_file(_realpath_ . "/project/system/config/" . $strConfigFile)) {
-            if(!@include _realpath_ . "/project/system/config/" . $strConfigFile) {
-                die("Error reading config-file from project folder: " . $strConfigFile);
-            }
+            die("Error reading /system/config/config.php config-file");
         }
 
         $this->arrConfig = $config;

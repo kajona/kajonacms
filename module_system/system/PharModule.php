@@ -52,14 +52,6 @@ class PharModule
         return BootstrapCache::getInstance()->getCacheRow(BootstrapCache::CACHE_PHARCONTENT, $this->strPharPath);
     }
 
-    /**
-     * @inheritDoc
-     */
-    function __destruct()
-    {
-
-    }
-
 
     public function getContentMap()
     {

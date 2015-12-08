@@ -307,8 +307,8 @@ class class_resourceloader
         }
 
         //check if the same is available in the projects-folder and overwrite the first hits
-        if (is_dir(_realpath_._projectpath_."/".$strFolder)) {
-            $arrContent = scandir(_realpath_._projectpath_."/".$strFolder);
+        if (is_dir(_realpath_."project/".$strFolder)) {
+            $arrContent = scandir(_realpath_."project/".$strFolder);
             foreach ($arrContent as $strSingleEntry) {
 
                 //Wanted Type?
@@ -318,7 +318,7 @@ class class_resourceloader
                     if ($strKey !== false) {
                         unset($arrReturn[$strKey]);
                     }
-                    $arrReturn[_realpath_._projectpath_."/".$strFolder."/".$strSingleEntry] = $strSingleEntry;
+                    $arrReturn[_realpath_."project/".$strFolder."/".$strSingleEntry] = $strSingleEntry;
 
                 }
                 else {
@@ -329,7 +329,7 @@ class class_resourceloader
                         if ($strKey !== false) {
                             unset($arrReturn[$strKey]);
                         }
-                        $arrReturn[_realpath_._projectpath_."/".$strFolder."/".$strSingleEntry] = $strSingleEntry;
+                        $arrReturn[_realpath_."project/".$strFolder."/".$strSingleEntry] = $strSingleEntry;
                     }
 
                 }
@@ -382,39 +382,18 @@ class class_resourceloader
      *
      * @return string|bool the absolute path
      *
-     * @todo may be cached?
      */
-    public function getPathForFile($strFile, $bitCheckProject = true)
+    public function getPathForFile($strFile)
     {
-
-        if($bitCheckProject) {
-
-            //fallback on the resourceloader
-            $arrContent = $this->getFolderContent(dirname($strFile));
-            $strSearchedFilename = basename($strFile);
-            foreach ($arrContent as $strPath => $strContentFile) {
-                if ($strContentFile == $strSearchedFilename) {
-                    return $strPath;
-                }
+        //fallback on the resourceloader
+        $arrContent = $this->getFolderContent(dirname($strFile));
+        $strSearchedFilename = basename($strFile);
+        foreach ($arrContent as $strPath => $strContentFile) {
+            if ($strContentFile == $strSearchedFilename) {
+                return $strPath;
             }
         }
-        else {
 
-            //loop all given modules
-            foreach (class_classloader::getInstance()->getArrModules() as $strPath => $strSingleModule) {
-                if (in_array($strSingleModule, class_classloader::getInstance()->getArrPharModules())) {
-                    // phar
-                    $strPhar = PharModule::getPharStreamPath(_realpath_."/".$strPath, "/".$strFile);
-                    if (is_file($strPhar)) {
-                        return $strPhar;//str_replace("//", "/", $strPhar);
-                    }
-                }
-                elseif (is_file(_realpath_."/".$strPath."/".$strFile)) {
-                    return str_replace("//", "/", "/".$strPath."/".$strFile);
-                }
-            }
-
-        }
         return false;
     }
 
@@ -433,28 +412,12 @@ class class_resourceloader
     public function getPathForFolder($strFolder)
     {
 
-        //check if the same is available in the projects-folder
-        if (is_dir(_realpath_._projectpath_."/".$strFolder)) {
-            return str_replace("//", "/", _realpath_._projectpath_."/".$strFolder);
-        }
-
-        //loop all given modules
-        foreach (class_classloader::getInstance()->getArrModules() as $strPath => $strSingleModule) {
-            if (in_array($strSingleModule, class_classloader::getInstance()->getArrPharModules())) {
-                $strPhar = PharModule::getPharStreamPath(_realpath_."/".$strPath, "/".$strFolder);
-                if (is_dir($strPhar)) {
-                    return $strPhar;//str_replace("//", "/", $strPhar);
-                }
+        $arrContent = $this->getFolderContent(dirname($strFolder), array(), true);
+        $strSearchedFilename = basename($strFolder);
+        foreach ($arrContent as $strPath => $strContentFile) {
+            if ($strContentFile == $strSearchedFilename) {
+                return $strPath;
             }
-            elseif (is_dir(_realpath_."/".$strPath)) {
-
-                if (is_dir(_realpath_."/".$strPath."/".$strFolder)) {
-                    return str_replace("//", "/", _realpath_."/".$strPath."/".$strFolder);
-
-                }
-
-            }
-
         }
 
         return false;

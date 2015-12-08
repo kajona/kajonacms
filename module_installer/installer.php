@@ -227,7 +227,13 @@ class class_installer {
             if($bitCxCheck) {
                 $strFileContent = "<?php\n";
                 $strFileContent .= "/*\n Kajona V4 config-file.\n If you want to overwrite additional settings, copy them from /core/module_system/system/config/config.php into this file.\n*/";
-                $strFileContent .= "\n";
+                $strFileContent .= "if(is_dir(__DIR__.\"/../../../core/module_system/\")) {\n";
+                $strFileContent .= "  include __DIR__.'/../../../core/module_system/system/config/config.php';\n";
+                $strFileContent .= "}\n";
+                $strFileContent .= "else {\n";
+                $strFileContent .= "  require_once 'phar://'.__DIR__.'/../../../core/module_system.phar/system/config/config.php';\n";
+                $strFileContent .= "}\n";
+                $strFileContent .= "\n\n\n";
                 $strFileContent .= "  \$config['dbhost']               = '".$_POST["hostname"]."';                   //Server name \n";
                 $strFileContent .= "  \$config['dbusername']           = '".$_POST["username"]."';                   //Username \n";
                 $strFileContent .= "  \$config['dbpassword']           = '".$_POST["password"]."';                   //Password \n";
