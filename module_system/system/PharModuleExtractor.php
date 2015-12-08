@@ -74,7 +74,7 @@ class PharModuleExtractor
             }
 
             $strSum = filemtime(_realpath_.$strPath);
-            if(!isset($arrOldMap) || $arrOldMap[$strModule] != $strSum) {
+            if(!isset($arrOldMap[$strModule]) || $arrOldMap[$strModule] != $strSum) {
                 $arrPharMap[$strModule] = $strSum;
             }
 

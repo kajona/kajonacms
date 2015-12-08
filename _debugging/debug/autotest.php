@@ -55,8 +55,8 @@ if(issetPost("dotest")) {
 
     if($strSearched !== false && substr($strFilename, 0, 5) == "test_" && substr($strFilename, -4) == ".php") {
         echo " \n\nfound test-script ".$strFilename." \n";
-        include_once _realpath_.$strSearched;
-        $arrClasses = get_php_classes(file_get_contents(_realpath_.$strSearched));
+        include_once $strSearched;
+        $arrClasses = get_php_classes(file_get_contents($strSearched));
         foreach($arrClasses as $strClassName) {
             if(uniStripos($strClassName, "test") !== false) {
                 $objTest = new $strClassName();

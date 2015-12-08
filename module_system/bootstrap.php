@@ -24,8 +24,17 @@ function rawIncludeError($strFileMissed) {
 }
 
 //---The Path on the filesystem--------------------------------------------------------------------------
+
 //Determine the current path on the filesystem. Use the dir-name of the current file minus core/module_system
-define("_realpath_", str_replace(" ", "\040", substr(__DIR__, 0, -18)));
+//fetch the current include path - phar or filesystem based
+if(substr(__DIR__, 0, 7) == "phar://") {
+    define("_realpath_", str_replace(" ", "\040", substr(__DIR__, 7, -23)));
+}
+else {
+    define("_realpath_", str_replace(" ", "\040", substr(__DIR__, 0, -18)));
+}
+
+
 define("_corepath_", str_replace(" ", "\040", substr(__DIR__, 0, -13)));
 
 //--- Loader pre-configuration
@@ -38,17 +47,18 @@ if(!defined("_xmlLoader_"))
 @date_default_timezone_set(date_default_timezone_get());
 
 //Functions to have fun & check for mb-string
-if(!@include_once _corepath_."/module_system/system/functions.php")
-    rawIncludeError(_corepath_."/module_system/system/functions.php");
+$intI = __DIR__;
+if(!@include_once __DIR__."/system/functions.php")
+    rawIncludeError(__DIR__."/system/functions.php");
 
 //Exception-Handler
-if(!@include_once _corepath_."/module_system/system/class_exception.php")
+if(!@include_once __DIR__."/system/class_exception.php")
     rawIncludeError("global exception handler");
 //register global exception handler for exceptions thrown but not catched (bad style ;) )
 @set_exception_handler(array("class_exception", "globalExceptionHandler"));
 
 //Include the logging-engine
-if(!@include_once _corepath_."/module_system/system/class_logger.php")
+if(!@include_once __DIR__."/system/class_logger.php")
     rawIncludeError("logging engine");
 
 
@@ -58,7 +68,7 @@ if(file_exists(_realpath_."/project/bootstrap.php"))
 
 //---The Path on web-------------------------------------------------------------------------------------
 
-require_once _corepath_."/module_system/system/class_config.php";
+require_once __DIR__."/system/class_config.php";
 $strHeaderName = class_config::readPlainConfigsFromFilesystem("https_header");
 $strHeaderValue = strtolower(class_config::readPlainConfigsFromFilesystem("https_header_value"));
 
@@ -83,11 +93,11 @@ if(!defined("_webpath_")) {
 }
 
 //---Auto-Loader for classes-----------------------------------------------------------------------------
-require_once _corepath_."/module_system/system/class_classloader.php";
+require_once __DIR__."/system/class_classloader.php";
 spl_autoload_register(array(class_classloader::getInstance(), "loadClass"));
 
 //The Carrier-Class
-if(!include_once _corepath_."/module_system/system/class_carrier.php")
+if(!include_once __DIR__."/system/class_carrier.php")
     rawIncludeError("carrier-class");
 
 

@@ -7,9 +7,10 @@
 *   $Id$                                                *
 ********************************************************************************************************/
 
-require_once (__DIR__."/../../module_system/system/StringUtil.php");
+require_once (__DIR__."/StringUtil.php");
 
 use Kajona\System\System\StringUtil;
+
 /**
  * @package module_system
  */
@@ -1262,17 +1263,4 @@ function strToDate($strString) {
     return StringUtil::toDate($strString);
 }
 
-/**
- * Appends _realpath_ to any non-absolute path
- *
- * @param string $strPath
- * @return strings
- */
-function makeAbsolutePath($strPath) {
-    if (uniStrpos($strPath, "://") === false) {
-        return _realpath_."/".$strPath;
-    }
-    else {
-        return $strPath;
-    }
-}
+

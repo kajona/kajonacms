@@ -29,10 +29,8 @@ class class_template_file_parser
 
 
         //We have to read the whole template from the filesystem
-        $strFullPath = makeAbsolutePath($strFilename);
-
-        if (uniSubstr($strFilename, -4) == ".tpl" && is_file($strFullPath)) {
-            $strTemplateContent = file_get_contents($strFullPath);
+        if (uniSubstr($strFilename, -4) == ".tpl" && is_file($strFilename)) {
+            $strTemplateContent = file_get_contents($strFilename);
         }
         else {
             $strTemplateContent = "Template ".$strTemplateFilename." not found!";

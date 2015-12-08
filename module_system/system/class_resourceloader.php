@@ -90,20 +90,20 @@ class class_resourceloader
         $strDefaultTemplate = class_module_system_setting::getConfigValue("_packagemanager_defaulttemplate_");
         if (is_file(_realpath_._templatepath_."/".$strDefaultTemplate."/tpl".$strTemplateName)) {
             BootstrapCache::getInstance()->addCacheRow(BootstrapCache::CACHE_TEMPLATES, $strTemplateName, _templatepath_."/".$strDefaultTemplate."/tpl".$strTemplateName);
-            return _templatepath_."/".$strDefaultTemplate."/tpl".$strTemplateName;
+            return _realpath_._templatepath_."/".$strDefaultTemplate."/tpl".$strTemplateName;
         }
 
         //second try: load the file from the default-pack
         if (is_file(_realpath_._templatepath_."/default/tpl".$strTemplateName)) {
             BootstrapCache::getInstance()->addCacheRow(BootstrapCache::CACHE_TEMPLATES, $strTemplateName, _templatepath_."/default/tpl".$strTemplateName);
-            return _templatepath_."/default/tpl".$strTemplateName;
+            return _realpath_._templatepath_."/default/tpl".$strTemplateName;
         }
 
         //third try: try to load the file from a given module
         foreach (class_classloader::getInstance()->getArrModules() as $strCorePath => $strOneModule) {
             if (is_dir(_realpath_."/".$strCorePath)) {
                 if (is_file(_realpath_."/".$strCorePath."/templates/default/tpl".$strTemplateName)) {
-                    $strFilename = "/".$strCorePath."/templates/default/tpl".$strTemplateName;
+                    $strFilename = _realpath_."/".$strCorePath."/templates/default/tpl".$strTemplateName;
                     break;
                 }
             } elseif (PharModule::isPhar(_realpath_."/".$strCorePath)) {
@@ -117,15 +117,12 @@ class class_resourceloader
 
         if ($bitScanAdminSkin) {
             //scan directly
-            if (is_file(_realpath_.$strTemplateName)) {
+            if (is_file($strTemplateName)) {
                 $strFilename = $strTemplateName;
             }
 
             //prepend path
-            if (is_file(_realpath_.class_adminskin_helper::getPathForSkin(class_session::getInstance()->getAdminSkin()).$strTemplateName)) {
-                $strFilename = class_adminskin_helper::getPathForSkin(class_session::getInstance()->getAdminSkin()).$strTemplateName;
-            }
-            elseif (is_file(class_adminskin_helper::getPathForSkin(class_session::getInstance()->getAdminSkin()).$strTemplateName)) {
+            if (is_file(class_adminskin_helper::getPathForSkin(class_session::getInstance()->getAdminSkin()).$strTemplateName)) {
                 $strFilename = class_adminskin_helper::getPathForSkin(class_session::getInstance()->getAdminSkin()).$strTemplateName;
             }
         }
@@ -214,7 +211,7 @@ class class_resourceloader
                 foreach ($arrContent as $strSingleEntry) {
 
                     if (substr($strSingleEntry, -4) == ".php") {
-                        $arrReturn["/".$strCorePath._langpath_."/".$strFolder."/".$strSingleEntry] = $strSingleEntry;
+                        $arrReturn[_realpath_.$strCorePath._langpath_."/".$strFolder."/".$strSingleEntry] = $strSingleEntry;
                     }
                 }
             } elseif (PharModule::isPhar(_realpath_."/".$strCorePath)) {
@@ -239,7 +236,7 @@ class class_resourceloader
                     if ($strKey !== false) {
                         unset($arrReturn[$strKey]);
                     }
-                    $arrReturn[_projectpath_._langpath_."/".$strFolder."/".$strSingleEntry] = $strSingleEntry;
+                    $arrReturn[_realpath_._projectpath_._langpath_."/".$strFolder."/".$strSingleEntry] = $strSingleEntry;
 
                 }
 
@@ -286,13 +283,13 @@ class class_resourceloader
                     if (($strSingleEntry != "." && $strSingleEntry != "..") && ($bitWithSubfolders || is_file(_realpath_."/".$strCorePath.$strFolder."/".$strSingleEntry))) {
                         //Wanted Type?
                         if (count($arrExtensionFilter) == 0) {
-                            $arrReturn["/".$strCorePath.$strFolder."/".$strSingleEntry] = $strSingleEntry;
+                            $arrReturn[_realpath_.$strCorePath.$strFolder."/".$strSingleEntry] = $strSingleEntry;
                         }
                         else {
                             //check, if suffix is in allowed list
                             $strFileSuffix = uniSubstr($strSingleEntry, uniStrrpos($strSingleEntry, "."));
                             if (in_array($strFileSuffix, $arrExtensionFilter)) {
-                                $arrReturn["/".$strCorePath.$strFolder."/".$strSingleEntry] = $strSingleEntry;
+                                $arrReturn[_realpath_.$strCorePath.$strFolder."/".$strSingleEntry] = $strSingleEntry;
                             }
                         }
                     }
@@ -321,7 +318,7 @@ class class_resourceloader
                     if ($strKey !== false) {
                         unset($arrReturn[$strKey]);
                     }
-                    $arrReturn[_projectpath_."/".$strFolder."/".$strSingleEntry] = $strSingleEntry;
+                    $arrReturn[_realpath_._projectpath_."/".$strFolder."/".$strSingleEntry] = $strSingleEntry;
 
                 }
                 else {
@@ -332,7 +329,7 @@ class class_resourceloader
                         if ($strKey !== false) {
                             unset($arrReturn[$strKey]);
                         }
-                        $arrReturn[_projectpath_."/".$strFolder."/".$strSingleEntry] = $strSingleEntry;
+                        $arrReturn[_realpath_._projectpath_."/".$strFolder."/".$strSingleEntry] = $strSingleEntry;
                     }
 
                 }
@@ -438,7 +435,7 @@ class class_resourceloader
 
         //check if the same is available in the projects-folder
         if (is_dir(_realpath_._projectpath_."/".$strFolder)) {
-            return str_replace("//", "/", _projectpath_."/".$strFolder);
+            return str_replace("//", "/", _realpath_._projectpath_."/".$strFolder);
         }
 
         //loop all given modules
@@ -452,7 +449,7 @@ class class_resourceloader
             elseif (is_dir(_realpath_."/".$strPath)) {
 
                 if (is_dir(_realpath_."/".$strPath."/".$strFolder)) {
-                    return str_replace("//", "/", "/".$strPath."/".$strFolder);
+                    return str_replace("//", "/", _realpath_."/".$strPath."/".$strFolder);
 
                 }
 

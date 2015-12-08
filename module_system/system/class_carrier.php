@@ -208,7 +208,8 @@ class class_carrier
                 }
 
                 $strPath = class_resourceloader::getInstance()->getPathForFile("/admin/".$strAdminToolkitClass.".php");
-                include_once _realpath_.$strPath;
+                include_once $strPath;
+
                 $this->objToolkitAdmin = new $strAdminToolkitClass();
             }
             return $this->objToolkitAdmin;
@@ -216,7 +217,7 @@ class class_carrier
         elseif ($strArea == "portal") {
             if ($this->objToolkitPortal == null) {
                 $strPath = class_resourceloader::getInstance()->getPathForFile("/portal/class_toolkit_portal.php");
-                include_once _realpath_.$strPath;
+                include_once $strPath;
                 $this->objToolkitPortal = new class_toolkit_portal();
             }
             return $this->objToolkitPortal;

@@ -8,5 +8,11 @@
 ********************************************************************************************************/
 
 
-require_once './core/module_system/bootstrap.php';
-require_once './core/module_mediamanager/download.php';
+if(is_dir("./core/module_system/")) {
+    require_once './core/module_system/bootstrap.php';
+    require_once './core/module_system/download.php';
+}
+else {
+    require_once 'phar://'.__DIR__.'/core/module_system.phar/bootstrap.php';
+    require_once 'phar://'.__DIR__.'/core/module_system.phar/download.php';
+}

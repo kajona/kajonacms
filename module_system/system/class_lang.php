@@ -314,7 +314,7 @@ class class_lang {
         $lang = array();
         $this->bitSaveToCache = true;
 
-        include_once makeAbsolutePath($strFilename);
+        include_once $strFilename;
 
         if(!isset($arrTargetArray[$strLanguage])) {
             $arrTargetArray[$strLanguage] = array();

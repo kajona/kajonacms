@@ -48,7 +48,7 @@ class class_config {
         //Include the config-File
         $strPath = class_resourceloader::getInstance()->getPathForFile("/system/config/" . $strConfigFile, false);
         if($strPath !== false) {
-            @include(_realpath_ . $strPath);
+            include($strPath);
         }
         else {
             if(!@include class_resourceloader::getInstance()->getCorePathForModule("module_system", true) . "/module_system/system/config/" . $strConfigFile) {

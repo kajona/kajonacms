@@ -358,11 +358,13 @@ class class_classloader
             $strClassname = $strFile;
         }
         else {
-            if (is_file($strFilename)) {
-                $strSource = file_get_contents($strFilename);
-            } else {
-                $strSource = file_get_contents(_realpath_.$strFilename);
-            }
+            $strSource = file_get_contents($strFilename);
+
+//            if (is_file($strFilename)) { //TODO: remove if else
+//                $strSource = file_get_contents($strFilename);
+//            } else {
+//                $strSource = file_get_contents(_realpath_.$strFilename);
+//            }
             preg_match('/namespace ([a-zA-Z0-9_\x7f-\xff\\\\]+);/', $strSource, $arrMatches);
 
             $strNamespace = isset($arrMatches[1]) ? $arrMatches[1] : null;
@@ -397,12 +399,14 @@ class class_classloader
                     $strResolvedClassname = "class_" . $strResolvedClassname;
                 }
 
-                if(is_file($strFilename)) {
-                    include_once  $strFilename;
-                }
-                else {
-                    include_once _realpath_ . $strFilename;
-                }
+                include_once $strFilename;
+
+//                if(is_file($strFilename)) { //TODO: remove this if/else, now with absolute paths
+//                    include_once $strFilename;
+//                }
+//                else {
+//                    include_once _realpath_ . $strFilename;
+//                }
             }
 
             $objReflection = new ReflectionClass($strResolvedClassname);

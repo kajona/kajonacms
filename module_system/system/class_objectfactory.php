@@ -28,19 +28,11 @@ class class_objectfactory {
     private $arrObjectCache = array();
 
     /**
-     * @var class_db
-     */
-    private $objDB;
-
-    /**
      * @var class_objectfactory
      */
     private static $objInstance = null;
 
-    private $strObjectsCacheFile;
-    private $bitCacheSaveRequired = false;
-
-        /**
+    /**
      * Returns an instance of the objectfactory.
      *
      * @static
@@ -101,7 +93,7 @@ class class_objectfactory {
         }
         else {
             $strQuery = "SELECT * FROM "._dbprefix_."system where system_id = ?";
-            $arrRow = $this->objDB->getPRow($strQuery, array($strSystemid));
+            $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array($strSystemid));
             if(isset($arrRow["system_class"])) {
                 $strClass = $arrRow["system_class"];
             }
