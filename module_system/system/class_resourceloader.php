@@ -406,8 +406,6 @@ class class_resourceloader
      * @param bool $bitCheckProject en- or disables the lookup in the /project folder
      *
      * @return string|bool the absolute path
-     *
-     * @todo may be cached?
      */
     public function getPathForFolder($strFolder)
     {

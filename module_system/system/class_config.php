@@ -46,11 +46,12 @@ class class_config {
         $debug = array();
 
         //Include the config-File
-        $strPath = class_resourceloader::getInstance()->getPathForFile("/system/config/" . $strConfigFile, false);
+        $strPath = class_resourceloader::getInstance()->getPathForFile("/system/config/" . $strConfigFile);
         if($strPath !== false) {
             include($strPath);
         }
         else {
+            debug_print_backtrace();
             die("Error reading /system/config/config.php config-file");
         }
 
