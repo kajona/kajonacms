@@ -240,32 +240,12 @@ abstract class class_root {
         $this->objSession = $objCarrier->getObjSession();
         $this->objLang = $objCarrier->getObjLang();
 
-        $this->objSortManager = new class_common_sortmanager($this);
-
         //And keep the action
         $this->strAction = $this->getParam("action");
 
         $this->strSystemid = $strSystemid;
 
         $this->setStrRecordClass(get_class($this));
-
-        //try to load the current module-name and the moduleId by reflection
-        $objReflection = new class_reflection($this);
-        if(!isset($this->arrModule["modul"])) {
-            $arrAnnotationValues = $objReflection->getAnnotationValuesFromClass(self::STR_MODULE_ANNOTATION);
-            if(count($arrAnnotationValues) > 0) {
-                $this->setArrModuleEntry("modul", trim($arrAnnotationValues[0]));
-                $this->setArrModuleEntry("module", trim($arrAnnotationValues[0]));
-            }
-        }
-
-        if(!isset($this->arrModule["moduleId"])) {
-            $arrAnnotationValues = $objReflection->getAnnotationValuesFromClass(self::STR_MODULEID_ANNOTATION);
-            if(count($arrAnnotationValues) > 0) {
-                $this->setArrModuleEntry("moduleId", constant(trim($arrAnnotationValues[0])));
-                $this->setIntModuleNr(constant(trim($arrAnnotationValues[0])));
-            }
-        }
 
         if ($strSystemid != "") {
             $this->initObject();
@@ -302,8 +282,40 @@ abstract class class_root {
      */
     protected function initObjectInternal()
     {
-        // get the mapped properties
         $objReflection = new class_reflection($this);
+
+        if ($this->arrInitRow === null) {
+            $this->arrInitRow = class_orm_rowcache::getCachedInitRow($this->getSystemid());
+            if ($this->arrInitRow === null) {
+                $arrTargetTables = $objReflection->getAnnotationValuesFromClass(class_orm_base::STR_ANNOTATION_TARGETTABLE);
+
+                if (count($arrTargetTables) == 0) {
+                    throw new class_orm_exception("Class " . get_class($this) . " has no target table", class_exception::$level_ERROR);
+                }
+
+                $strWhere = "";
+                $arrTables = array();
+                foreach($arrTargetTables as $strOneTable) {
+                    $arrOneTable = explode(".", $strOneTable);
+                    $strWhere .= "AND system_id=".$arrOneTable[1]." ";
+                    $arrTables[] = class_carrier::getInstance()->getObjDB()->encloseTableName(_dbprefix_.$arrOneTable[0])." AS ".class_carrier::getInstance()->getObjDB()->encloseTableName($arrOneTable[0])."";
+                }
+
+                // build the query
+                $strQuery = "SELECT * FROM ".class_carrier::getInstance()->getObjDB()->encloseTableName(_dbprefix_."system_right").",
+                            ".implode(", ", $arrTables)." ,
+                            ".class_carrier::getInstance()->getObjDB()->encloseTableName(_dbprefix_."system")." AS system
+                  LEFT JOIN "._dbprefix_."system_date AS system_date
+                         ON system_id = system_date_id
+                      WHERE system_id = right_id
+                            ".$strWhere."
+                           AND system.system_id = ? ";
+
+                $this->arrInitRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array($this->getSystemid()));
+            }
+        }
+
+        // get the mapped properties
         $arrProperties = $objReflection->getPropertiesWithAnnotation(class_orm_base::STR_ANNOTATION_TABLECOLUMN);
 
         foreach ($arrProperties as $strPropertyName => $strRow) {
@@ -317,7 +329,7 @@ abstract class class_root {
                 $strColumn = $strRow;
             }
 
-            if (!isset($arrInitRow[$strColumn])) {
+            if (!isset($this->arrInitRow[$strColumn])) {
                 continue;
             }
 
@@ -328,7 +340,7 @@ abstract class class_root {
 
             $strSetter = $objReflection->getSetter($strPropertyName);
             if($strSetter !== null) {
-                $this->{$strSetter}($arrInitRow[$strColumn]);
+                $this->{$strSetter}($this->arrInitRow[$strColumn]);
             }
         }
 
@@ -465,7 +477,7 @@ abstract class class_root {
         class_orm_rowcache::removeSingleRow($this->getSystemid());
         $this->objDB->flushQueryCache();
 
-        $this->objSortManager->fixSortOnPrevIdChange($this->strPrevId, $this->strPrevId);
+        $this->getObjSortManager()->fixSortOnPrevIdChange($this->strPrevId, $this->strPrevId);
 
         $bitReturn = $bitReturn && class_core_eventdispatcher::getInstance()->notifyGenericListeners(class_system_eventidentifier::EVENT_SYSTEM_RECORDRESTORED_LOGICALLY, array($this->getSystemid(), get_class($this), $this));
 
@@ -516,7 +528,7 @@ abstract class class_root {
         class_orm_rowcache::removeSingleRow($this->getSystemid());
         $this->objDB->flushQueryCache();
 
-        $this->objSortManager->fixSortOnDelete();
+        $this->getObjSortManager()->fixSortOnDelete();
 
         $bitReturn = $bitReturn && class_core_eventdispatcher::getInstance()->notifyGenericListeners(class_system_eventidentifier::EVENT_SYSTEM_RECORDDELETED_LOGICALLY, array($this->getSystemid(), get_class($this)));
 
@@ -564,7 +576,7 @@ abstract class class_root {
         $objORM = new class_orm_objectdelete($this);
         $bitReturn = $objORM->deleteObject();
 
-        $this->objSortManager->fixSortOnDelete();
+        $this->getObjSortManager()->fixSortOnDelete();
         $bitReturn = $bitReturn && $this->deleteSystemRecord($this->getSystemid());
 
         class_objectfactory::getInstance()->removeFromCache($this->getSystemid());
@@ -949,7 +961,7 @@ abstract class class_root {
             class_core_eventdispatcher::getInstance()->notifyGenericListeners(class_system_eventidentifier::EVENT_SYSTEM_PREVIDCHANGED, array($this->getSystemid(), $this->strOldPrevId, $this->strPrevId));
         }
         if($this->strOldPrevId != $this->strPrevId) {
-            $this->objSortManager->fixSortOnPrevIdChange($this->strOldPrevId, $this->strPrevId);
+            $this->getObjSortManager()->fixSortOnPrevIdChange($this->strOldPrevId, $this->strPrevId);
         }
 
         $this->strOldPrevId = $this->strPrevId;
@@ -1372,7 +1384,7 @@ abstract class class_root {
      * @deprecated
      */
     public function setPosition($strDirection = "upwards") {
-        $this->objSortManager->setPosition($strDirection);
+        $this->getObjSortManager()->setPosition($strDirection);
     }
 
     /**
@@ -1384,7 +1396,7 @@ abstract class class_root {
      * @return void
      */
     public function setAbsolutePosition($intNewPosition, $arrRestrictionModules = false) {
-        $this->objSortManager->setAbsolutePosition($intNewPosition, $arrRestrictionModules);
+        $this->getObjSortManager()->setAbsolutePosition($intNewPosition, $arrRestrictionModules);
     }
 
     /**
@@ -1518,10 +1530,23 @@ abstract class class_root {
      * @return string
      */
     public function getArrModule($strKey) {
-        if(isset($this->arrModule[$strKey]))
+        if (isset($this->arrModule[$strKey])) {
             return $this->arrModule[$strKey];
-        else
+        } else {
+            if ($strKey === "modul" || $strKey === "modul") {
+                // try to load the current module-name and the moduleId by reflection
+                $objReflection = new class_reflection($this);
+                $arrAnnotationValues = $objReflection->getAnnotationValuesFromClass(self::STR_MODULE_ANNOTATION);
+                if(count($arrAnnotationValues) > 0) {
+                    $this->setArrModuleEntry("modul", trim($arrAnnotationValues[0]));
+                    $this->setArrModuleEntry("module", trim($arrAnnotationValues[0]));
+                }
+            } elseif ($strKey === "moduleId") {
+                return $this->getIntModuleNr();
+            }
+
             return "";
+        }
     }
 
 
@@ -1719,7 +1744,17 @@ abstract class class_root {
     /**
      * @return int
      */
-    public function getIntModuleNr() {
+    public function getIntModuleNr()
+    {
+        if ($this->intModuleNr === null) {
+            $objReflection = new class_reflection($this);
+            $arrAnnotationValues = $objReflection->getAnnotationValuesFromClass(self::STR_MODULEID_ANNOTATION);
+            if(count($arrAnnotationValues) > 0) {
+                $this->setArrModuleEntry("moduleId", constant(trim($arrAnnotationValues[0])));
+                $this->setIntModuleNr(constant(trim($arrAnnotationValues[0])));
+            }
+        }
+
         return $this->intModuleNr;
     }
 
@@ -2161,6 +2196,12 @@ abstract class class_root {
         return $this->objStartDate;
     }
 
-
+    protected function getObjSortManager()
+    {
+        if ($this->objSortManager === null) {
+            $this->objSortManager = new class_common_sortmanager($this);
+        }
+        return $this->objSortManager;
+    }
 
 }
