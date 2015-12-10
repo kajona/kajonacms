@@ -1288,9 +1288,9 @@ Used to print pre-formatted text, e.g. log-file contents
 
 <pe_basic_data>
     <!-- KAJONA_BUILD_LESS_START -->
-    <link href="_skinwebpath_/less/bootstrap_pe.less?_system_browser_cachebuster_" rel="stylesheet/less">
+    <link href="_webpath_/[webpath,module_v4skin]/admin/skins/kajona_v4/less/bootstrap_pe.less?_system_browser_cachebuster_" rel="stylesheet/less">
     <script> less = { env:'development' }; </script>
-    <script src="_skinwebpath_/less/less.min.js"></script>
+    <script src="_webpath_/[webpath,module_v4skin]/admin/skins/kajona_v4/less/less.min.js"></script>
     <!-- KAJONA_BUILD_LESS_END -->
 </pe_basic_data>
 

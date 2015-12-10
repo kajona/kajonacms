@@ -403,18 +403,16 @@ class class_resourceloader
      * If the file can't be found, false is returned instead.
      *
      * @param string $strFolder the relative path
-     * @param bool $bitCheckProject en- or disables the lookup in the /project folder
      *
      * @return string|bool the absolute path
      */
     public function getPathForFolder($strFolder)
     {
 
-        $arrContent = $this->getFolderContent(dirname($strFolder), array(), true);
-        $strSearchedFilename = basename($strFolder);
+        $arrContent = $this->getFolderContent($strFolder, array(), true);
         foreach ($arrContent as $strPath => $strContentFile) {
-            if ($strContentFile == $strSearchedFilename) {
-                return $strPath;
+            if(strpos($strPath, $strFolder) !== false) {
+                return substr($strPath, 0, strpos($strPath, $strFolder)+strlen($strFolder));
             }
         }
 
