@@ -688,7 +688,7 @@ JS;
      */
     protected function actionRestoreRecord()
     {
-        class_orm_base::setObjHandleLogicalDeletedGlobal(class_orm_deletedhandling_enum::INCLUDED());
+        class_orm_base::setObjHandleLogicalDeletedGlobal(class_orm_deletedhandling_enum::INCLUDED);
         $objRecord = class_objectfactory::getInstance()->getObject($this->getSystemid());
         if ($objRecord !== null && !$objRecord->isRestorable()) {
             throw new class_exception("Record is not restoreable", class_exception::$level_ERROR);
@@ -709,7 +709,7 @@ JS;
     protected function actionFinalDeleteRecord()
     {
         if($this->getParam("delete") == "") {
-            class_orm_base::setObjHandleLogicalDeletedGlobal(class_orm_deletedhandling_enum::INCLUDED());
+            class_orm_base::setObjHandleLogicalDeletedGlobal(class_orm_deletedhandling_enum::INCLUDED);
             $objRecord = class_objectfactory::getInstance()->getObject($this->getSystemid());
             $strReturn = $this->objToolkit->formHeader(class_link::getLinkAdminHref($this->getArrModule("modul"), "finalDeleteRecord"));
             $strReturn .= $this->objToolkit->warningBox($this->getLang("final_delete_question", array($objRecord->getStrDisplayName())), "alert-danger");
@@ -721,7 +721,7 @@ JS;
         }
         else {
 
-            class_orm_base::setObjHandleLogicalDeletedGlobal(class_orm_deletedhandling_enum::INCLUDED());
+            class_orm_base::setObjHandleLogicalDeletedGlobal(class_orm_deletedhandling_enum::INCLUDED);
             $objRecord = class_objectfactory::getInstance()->getObject($this->getSystemid());
             if ($objRecord !== null && !$objRecord->rightDelete()) {
                 throw new class_exception($this->getLang("commons_error_permissions"), class_exception::$level_ERROR);

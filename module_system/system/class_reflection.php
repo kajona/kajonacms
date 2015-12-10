@@ -126,9 +126,9 @@ class class_reflection {
      *
      * @return array|string|string[]
      */
-    public function getAnnotationValuesFromClass($strAnnotation, class_reflection_enum $objEnum = null) {
+    public function getAnnotationValuesFromClass($strAnnotation, $objEnum = null) {
         if($objEnum == null) {
-            $objEnum = class_reflection_enum::VALUES();
+            $objEnum = class_reflection_enum::VALUES;
         }
 
         if(isset($this->arrCurrentCache[self::$STR_CLASS_PROPERTIES_CACHE][$strAnnotation."_".$objEnum]))
@@ -138,10 +138,10 @@ class class_reflection {
         $arrReturn = $this->searchAnnotationInDoc($strClassDoc, $strAnnotation);
 
         if(count($arrReturn) == 2) {
-            if($objEnum->equals(class_reflection_enum::PARAMS()))
+            if($objEnum === class_reflection_enum::PARAMS)
                 $arrReturn = $arrReturn["params"];
 
-            if($objEnum->equals(class_reflection_enum::VALUES()))
+            if($objEnum === class_reflection_enum::VALUES)
                 $arrReturn = $arrReturn["values"];
         }
 
@@ -164,9 +164,9 @@ class class_reflection {
      * @param class_reflection_enum $objEnum - whether to return annotation values or parameters, default is values
      * @return array List of annotation names
      */
-    public function getAnnotationsWithValueFromClass($strValue, class_reflection_enum $objEnum = null) {
+    public function getAnnotationsWithValueFromClass($strValue, $objEnum = null) {
         if($objEnum == null) {
-            $objEnum = class_reflection_enum::VALUES();
+            $objEnum = class_reflection_enum::VALUES;
         }
 
 
@@ -175,13 +175,13 @@ class class_reflection {
         $strClassDoc = $this->objReflectionClass->getDocComment();
         $arrProperties = $this->searchAllAnnotationsInDoc($strClassDoc);
 
-        if($objEnum->equals(class_reflection_enum::VALUES())) {
+        if($objEnum === class_reflection_enum::VALUES) {
             foreach ($arrProperties as $strName => $arrValues) {
                 if (in_array($strValue, $arrValues["values"]))
                     $arrReturn[] = $strName;
             }
         }
-        else if($objEnum->equals(class_reflection_enum::PARAMS())) {
+        else if($objEnum === class_reflection_enum::PARAMS) {
             foreach ($arrProperties as $strName => $arrValues) {
                 $arrParameters = $arrValues["params"];
 
@@ -307,9 +307,9 @@ class class_reflection {
      *
      * @return string|bool
      */
-    public function getMethodAnnotationValue($strMethodName, $strAnnotation, class_reflection_enum $objEnum = null) {
+    public function getMethodAnnotationValue($strMethodName, $strAnnotation, $objEnum = null) {
         if($objEnum == null) {
-            $objEnum = class_reflection_enum::VALUES();
+            $objEnum = class_reflection_enum::VALUES;
         }
 
         if(isset($this->arrCurrentCache[self::$STR_METHOD_CACHE][$strMethodName."_".$strAnnotation."_".$objEnum]))
@@ -319,10 +319,10 @@ class class_reflection {
 
         $strReturn = false;
         $arrReturn = $this->searchFirstAnnotationInDoc($objReflectionMethod->getDocComment(), $strAnnotation);
-        if($objEnum->equals(class_reflection_enum::VALUES())) {
+        if($objEnum === class_reflection_enum::VALUES) {
             $strReturn = $arrReturn["values"][0];
         }
-        else if($objEnum->equals(class_reflection_enum::PARAMS())) {
+        else if($objEnum === class_reflection_enum::PARAMS) {
             $strReturn = $arrReturn["params"][0];
         }
 
@@ -346,9 +346,9 @@ class class_reflection {
      * @param class_reflection_enum $objEnum - whether to return annotation values or parameters, default is values
      * @return string[] ["propertyname" => "annotationvalue"]
      */
-    public function getPropertiesWithAnnotation($strAnnotation , class_reflection_enum $objEnum = null) {
+    public function getPropertiesWithAnnotation($strAnnotation , $objEnum = null) {
         if($objEnum == null) {
-            $objEnum = class_reflection_enum::VALUES();
+            $objEnum = class_reflection_enum::VALUES;
         }
 
         if(isset($this->arrCurrentCache[self::$STR_PROPERTIES_CACHE][$strAnnotation."_".$objEnum]))
@@ -369,10 +369,10 @@ class class_reflection {
         foreach($arrProperties as $objOneProperty) {
             $arrFirstAnnotation = $this->searchFirstAnnotationInDoc($objOneProperty->getDocComment(), $strAnnotation);
             if ($arrFirstAnnotation !== false) {
-                if($objEnum->equals(class_reflection_enum::VALUES())) {
+                if($objEnum === class_reflection_enum::VALUES) {
                     $arrFirstAnnotation = $arrFirstAnnotation["values"][0];
                 }
-                else if($objEnum->equals(class_reflection_enum::PARAMS())) {
+                else if($objEnum === class_reflection_enum::PARAMS) {
                     $arrFirstAnnotation = $arrFirstAnnotation["params"][0];
                 }
 
@@ -394,9 +394,9 @@ class class_reflection {
      *
      * @return null|string
      */
-    public function getAnnotationValueForProperty($strProperty, $strAnnotation, class_reflection_enum $objEnum = null) {
-        if($objEnum == null) {
-            $objEnum = class_reflection_enum::VALUES();
+    public function getAnnotationValueForProperty($strProperty, $strAnnotation, $objEnum = null) {
+        if($objEnum === null) {
+            $objEnum = class_reflection_enum::VALUES;
         }
 
         $arrProperties = $this->objReflectionClass->getProperties();
@@ -405,10 +405,10 @@ class class_reflection {
             if($objOneProperty->getName() == $strProperty) {
                 $strFirstAnnotation = $this->searchFirstAnnotationInDoc($objOneProperty->getDocComment(), $strAnnotation);
 
-                if($objEnum->equals(class_reflection_enum::VALUES())) {
+                if($objEnum === class_reflection_enum::VALUES) {
                     $strFirstAnnotation = $strFirstAnnotation["values"][0];
                 }
-                else if($objEnum->equals(class_reflection_enum::PARAMS())) {
+                else if($objEnum === class_reflection_enum::PARAMS) {
                     $strFirstAnnotation = $strFirstAnnotation["params"][0];
                 }
 

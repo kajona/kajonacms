@@ -39,7 +39,7 @@ class class_module_postacomment_recorddeletedlistener implements interface_gener
             return true;
 
         $objOrm = new class_orm_objectlist();
-        $objOrm->setObjHandleLogicalDeleted(class_orm_deletedhandling_enum::INCLUDED());
+        $objOrm->setObjHandleLogicalDeleted(class_orm_deletedhandling_enum::INCLUDED);
         $objOrm->addWhereRestriction(new class_orm_objectlist_restriction(" AND (postacomment_page = ? OR  postacomment_systemid = ? ) ", array($strSystemid, $strSystemid)));
         $arrComments = $objOrm->getObjectList("class_module_postacomment_post");
 
