@@ -288,30 +288,28 @@ abstract class class_root {
             $this->arrInitRow = class_orm_rowcache::getCachedInitRow($this->getSystemid());
             if ($this->arrInitRow === null) {
                 $arrTargetTables = $objReflection->getAnnotationValuesFromClass(class_orm_base::STR_ANNOTATION_TARGETTABLE);
+                if (count($arrTargetTables) > 0) {
+                    $strWhere = "";
+                    $arrTables = array();
+                    foreach($arrTargetTables as $strOneTable) {
+                        $arrOneTable = explode(".", $strOneTable);
+                        $strWhere .= "AND system_id=".$arrOneTable[1]." ";
+                        $arrTables[] = class_carrier::getInstance()->getObjDB()->encloseTableName(_dbprefix_.$arrOneTable[0])." AS ".class_carrier::getInstance()->getObjDB()->encloseTableName($arrOneTable[0])."";
+                    }
 
-                if (count($arrTargetTables) == 0) {
-                    throw new class_orm_exception("Class " . get_class($this) . " has no target table", class_exception::$level_ERROR);
+                    // build the query
+                    $strQuery = "SELECT *
+                                   FROM ".class_carrier::getInstance()->getObjDB()->encloseTableName(_dbprefix_."system_right").",
+                                        ".implode(", ", $arrTables)." ,
+                                        ".class_carrier::getInstance()->getObjDB()->encloseTableName(_dbprefix_."system")." AS system
+                              LEFT JOIN "._dbprefix_."system_date AS system_date
+                                     ON system_id = system_date_id
+                                  WHERE system_id = right_id
+                                        ".$strWhere."
+                                    AND system.system_id = ? ";
+
+                    $this->arrInitRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array($this->getSystemid()));
                 }
-
-                $strWhere = "";
-                $arrTables = array();
-                foreach($arrTargetTables as $strOneTable) {
-                    $arrOneTable = explode(".", $strOneTable);
-                    $strWhere .= "AND system_id=".$arrOneTable[1]." ";
-                    $arrTables[] = class_carrier::getInstance()->getObjDB()->encloseTableName(_dbprefix_.$arrOneTable[0])." AS ".class_carrier::getInstance()->getObjDB()->encloseTableName($arrOneTable[0])."";
-                }
-
-                // build the query
-                $strQuery = "SELECT * FROM ".class_carrier::getInstance()->getObjDB()->encloseTableName(_dbprefix_."system_right").",
-                            ".implode(", ", $arrTables)." ,
-                            ".class_carrier::getInstance()->getObjDB()->encloseTableName(_dbprefix_."system")." AS system
-                  LEFT JOIN "._dbprefix_."system_date AS system_date
-                         ON system_id = system_date_id
-                      WHERE system_id = right_id
-                            ".$strWhere."
-                           AND system.system_id = ? ";
-
-                $this->arrInitRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array($this->getSystemid()));
             }
         }
 
@@ -644,8 +642,9 @@ abstract class class_root {
 
             if($strPrevId === false || $strPrevId === "" || $strPrevId === null) {
                 //try to find the current modules-one
-                if(isset($this->arrModule["modul"])) {
-                    $strPrevId = class_module_system_module::getModuleByName($this->getArrModule("modul"), true)->getSystemid();
+                $strModule = $this->getArrModule("modul");
+                if ($strModule) {
+                    $strPrevId = class_module_system_module::getModuleByName($strModule, true)->getSystemid();
                     if(!validateSystemid($strPrevId))
                         throw new class_exception("automatic determination of module-id failed ", class_exception::$level_FATALERROR);
                 }
@@ -1541,6 +1540,7 @@ abstract class class_root {
                     $this->setArrModuleEntry("modul", trim($arrAnnotationValues[0]));
                     $this->setArrModuleEntry("module", trim($arrAnnotationValues[0]));
                 }
+                return $this->arrModule[$strKey];
             } elseif ($strKey === "moduleId") {
                 return $this->getIntModuleNr();
             }
