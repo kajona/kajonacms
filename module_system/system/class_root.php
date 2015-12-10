@@ -267,7 +267,7 @@ abstract class class_root {
             }
         }
 
-        if($strSystemid != "") {
+        if ($strSystemid != "") {
             $this->initObject();
         }
     }
@@ -278,16 +278,16 @@ abstract class class_root {
      * In nearly all cases, this is triggered by the framework itself.
      * @return void
      */
-    public final function initObject() {
+    public final function initObject()
+    {
         $this->initObjectInternal();
         $this->internalInit();
 
-        //if given, read versioning information
-        if($this instanceof interface_versionable) {
+        // if given, read versioning information
+        if ($this instanceof interface_versionable) {
             $objChangelog = new class_module_system_changelog();
             $objChangelog->readOldValues($this);
         }
-
     }
 
     /**
@@ -300,9 +300,53 @@ abstract class class_root {
      * The row loaded from the database is available by calling $this->getArrInitRow().
      * @return void
      */
-    protected function initObjectInternal() {
-        $objORM = new class_orm_objectinit($this);
-        $objORM->initObjectFromDb();
+    protected function initObjectInternal()
+    {
+        // get the mapped properties
+        $objReflection = new class_reflection($this);
+        $arrProperties = $objReflection->getPropertiesWithAnnotation(class_orm_base::STR_ANNOTATION_TABLECOLUMN);
+
+        foreach ($arrProperties as $strPropertyName => $strRow) {
+
+            $arrColumn = explode(".", $strRow);
+            $intCount = count($arrColumn);
+
+            if ($intCount == 2) {
+                $strColumn = $arrColumn[1];
+            } else {
+                $strColumn = $strRow;
+            }
+
+            if (!isset($arrInitRow[$strColumn])) {
+                continue;
+            }
+
+            // skip columns from the system-table, they are set later on
+            if ($intCount == 2 && $arrColumn[0] == "system") {
+                continue;
+            }
+
+            $strSetter = $objReflection->getSetter($strPropertyName);
+            if($strSetter !== null) {
+                $this->{$strSetter}($arrInitRow[$strColumn]);
+            }
+        }
+
+        $intCombinedLogicalDeletionConfig = class_orm_objectdelete::getObjHandleLogicalDeletedGlobal();
+        if ($intCombinedLogicalDeletionConfig === null) {
+            $intCombinedLogicalDeletionConfig = class_orm_deletedhandling_enum::EXCLUDED;
+        }
+
+        // get the mapped properties
+        $arrProperties = $objReflection->getPropertiesWithAnnotation(class_orm_base::STR_ANNOTATION_OBJECTLIST, class_reflection_enum::PARAMS);
+
+        foreach ($arrProperties as $strPropertyName => $arrValues) {
+            $objPropertyLazyLoader = new class_orm_assignment_array($this, $strPropertyName, $intCombinedLogicalDeletionConfig);
+            $strSetter = $objReflection->getSetter($strPropertyName);
+            if ($strSetter !== null) {
+                $this->{$strSetter}($objPropertyLazyLoader);
+            }
+        }
     }
 
     /**
