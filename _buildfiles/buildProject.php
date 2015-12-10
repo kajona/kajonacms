@@ -49,7 +49,7 @@ class BuildHelper {
         }
 
         //include config
-        echo "include config.php -> ".__DIR__."/config.php\n";
+        echo "include config.php -> ".__DIR__."/".$this->strConfigFile."\n";
         require(__DIR__."/".$this->strConfigFile);
 
 
@@ -71,7 +71,7 @@ class BuildHelper {
         file_put_contents(__DIR__."/".$this->strProjectPath."/project/system/config/config.php", $strConfigfile);
 
         echo "starting up system-kernel...\n";
-        echo "including bootstrap.php...\n";
+        echo "including ".__DIR__."/".$this->strProjectPath."/core/module_system/bootstrap.php...\n";
         include __DIR__."/".$this->strProjectPath."/core/module_system/bootstrap.php";
         echo "creating instance of class_carrier...\n";
         $objCarrier = class_carrier::getInstance();

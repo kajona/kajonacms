@@ -284,10 +284,10 @@ class class_classloader
                         // if there is an underscore we have a legacy class name else a camel case
                         if (strpos($strSingleFile, "_") !== false) {
                             if (preg_match("/(class|interface|trait)(.*)\.php$/i", $strSingleFile)) {
-                                $arrFiles[substr($strSingleFile, 0, -4)] = _realpath_."/".$strPath.$strFolder.$strSingleFile;
+                                $arrFiles[substr($strSingleFile, 0, -4)] = _realpath_.$strPath.$strFolder.$strSingleFile;
                             }
                         } else {
-                            $strClassName = $this->getClassnameFromFilename($strPath.$strFolder.$strSingleFile);
+                            $strClassName = $this->getClassnameFromFilename(_realpath_.$strPath.$strFolder.$strSingleFile);
                             if (!empty($strClassName)) {
                                 $arrFiles[$strClassName] = _realpath_."/".$strPath.$strFolder.$strSingleFile;
                             }
@@ -359,12 +359,6 @@ class class_classloader
         }
         else {
             $strSource = file_get_contents($strFilename);
-
-//            if (is_file($strFilename)) { //TODO: remove if else
-//                $strSource = file_get_contents($strFilename);
-//            } else {
-//                $strSource = file_get_contents(_realpath_.$strFilename);
-//            }
             preg_match('/namespace ([a-zA-Z0-9_\x7f-\xff\\\\]+);/', $strSource, $arrMatches);
 
             $strNamespace = isset($arrMatches[1]) ? $arrMatches[1] : null;
@@ -400,13 +394,6 @@ class class_classloader
                 }
 
                 include_once $strFilename;
-
-//                if(is_file($strFilename)) { //TODO: remove this if/else, now with absolute paths
-//                    include_once $strFilename;
-//                }
-//                else {
-//                    include_once _realpath_ . $strFilename;
-//                }
             }
 
             $objReflection = new ReflectionClass($strResolvedClassname);

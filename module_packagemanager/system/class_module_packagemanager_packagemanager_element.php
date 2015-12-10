@@ -47,7 +47,7 @@ class class_module_packagemanager_packagemanager_element extends class_module_pa
         //proceed with elements
         foreach($arrInstaller as $strOneInstaller) {
 
-            $objInstance = class_classloader::getInstance()->getInstanceFromFilename($this->objMetadata->getStrPath()."/installer/".$strOneInstaller, "class_elementinstaller_base");
+            $objInstance = class_classloader::getInstance()->getInstanceFromFilename(_realpath_.$this->objMetadata->getStrPath()."/installer/".$strOneInstaller, "class_elementinstaller_base");
 
             if($objInstance == false)
                 continue;
