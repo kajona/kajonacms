@@ -20,7 +20,7 @@ use Kajona\System\System\PharModule;
 class class_classloader
 {
 
-    const PREFER_PHAR = true;
+    const PREFER_PHAR = false;
 
 
     private $intNumberOfClassesLoaded = 0;

@@ -88,7 +88,7 @@ class BootstrapCache
     public function __destruct()
     {
         foreach($this->getCacheNames() as $strOneFile) {
-            if(isset(self::$arrCacheSavesRequired[$strOneFile]) && class_config::getInstance()->getConfig("bootstrapcache_".$strOneFile) === true) {
+            if(isset(self::$arrCacheSavesRequired[$strOneFile]) && class_config::getInstance()->getConfig("bootstrapcache_".$strOneFile) === true && isset(self::$arrCaches[$strOneFile])) {
                 class_apc_cache::getInstance()->addValue(__CLASS__.$strOneFile, self::$arrCaches[$strOneFile]);
                 file_put_contents(_realpath_."/project/temp/".$strOneFile, serialize(self::$arrCaches[$strOneFile]));
             }
