@@ -51,8 +51,7 @@ class class_config {
             include($strPath);
         }
         else {
-            debug_print_backtrace();
-            die("Error reading /system/config/config.php config-file");
+            die("Error reading /system/config/{$strConfigFile} config-file");
         }
 
         $this->arrConfig = $config;
