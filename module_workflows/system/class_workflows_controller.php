@@ -30,7 +30,7 @@ class class_workflows_controller   {
         foreach($arrWorkflows as $objOneWorkflow) {
 
             //lock the workflow
-            $objLockmanager = new class_lockmanager($objOneWorkflow->getSystemid());
+            $objLockmanager = $objOneWorkflow->getLockManager();
             if($objLockmanager->isLocked()) {
                 class_logger::getInstance(self::STR_LOGFILE)->addLogRow("workflow ".$objOneWorkflow->getSystemid()." is locked, can't be scheduled", class_logger::$levelWarning);
                 continue;
@@ -56,7 +56,6 @@ class class_workflows_controller   {
             $objOneWorkflow->updateObjectToDb();
 
             //unlock
-            $objLockmanager->unlockRecord(true);
             $objOneWorkflow->getLockManager()->unlockRecord(true);
 
 
@@ -76,7 +75,7 @@ class class_workflows_controller   {
         foreach($arrWorkflows as $objOneWorkflow) {
 
             //lock the workflow
-            $objLockmanager = new class_lockmanager($objOneWorkflow->getSystemid());
+            $objLockmanager = $objOneWorkflow->getLockManager();
             if($objLockmanager->isLocked()) {
                 class_logger::getInstance(self::STR_LOGFILE)->addLogRow("workflow ".$objOneWorkflow->getSystemid()." is locked, can't be scheduled", class_logger::$levelWarning);
                 continue;
@@ -114,6 +113,8 @@ class class_workflows_controller   {
     /**
      * Runs a single workflow.
      * @param class_module_workflows_workflow $objOneWorkflow
+     *
+     * @deprecated
      */
     public function runSingleWorkflow($objOneWorkflow) {
 

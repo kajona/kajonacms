@@ -1,5 +1,8 @@
 Module System
 
+V4.7.1 --------------------------------------------------------------------------------------------------
+NEW: module_system | class_lockmanager -> changed some internal part to avoid race conditions for locks
+
 V4.7 ----------------------------------------------------------------------------------------------------
 NEW: module_system | class_module_system_admin > option to export an changelog as excel file
 NEW: module_system | class_toolkit_admin > add toolkit method to render an toc navigation
@@ -75,7 +78,7 @@ NEW: module_system | array section iterator -> the ArraySectionIterator now impl
 NEW: module_system | class_history -> refactored class_history (internally) and fixed the integration with the exception handler, now printing the history stacks again
 NEW: module_system | admin-exceptions -> changed the way permission- and method-not-found exceptions are handled in the backend. instead of shutting down the application, the backend is rendered including a message of the exception, providing a better user experience. internally all processing will be done as usual.
 NEW: module_system | class_db -> flushing the database-cache no longer flushes the table-cache, too. this may be triggered by a special method of class_db since only relevant for package installations / updates
-NEW / APICHANGE: massive rewrite to the ORM subsystem. It is no possible to create all DDL code using reflection. Tables may be created using the target-objects, the structure is not created manually anymore. Therefore, the following annotations have been introduced @targetTabkeTxSafe, class level, @tableColumnDatatype, property level, @tableColumnPrimaryKey, property level, @tableColumnIndex, property level
+NEW / APICHANGE: massive rewrite to the ORM subsystem. It is no possible to create all DDL code using reflection. Tables may be created using the target-objects, the structure is not created manually anymore. Therefore, the following annotations have been introduced @targetTableTxSafe, class level, @tableColumnDatatype, property level, @tableColumnPrimaryKey, property level, @tableColumnIndex, property level
 NEW / APICHANGE: rewrite of object loading and list-initialization. The new orm-objectlist helper may be used to load and fetch and count a list of objects using declarative objects instead of plaintext sql. In addition, the results are cached internally, making it possible to load a full list of objects within a single query. The orm-objectlist-orderby and orm-objectlist-restriction objects may be used to order and filter the loaded lists based on internal conditions (so to create WHERE and ORDER BY sql statements)
 NEW: module_system | orm -> added a common cache-handler class_orm_rowcache, holding all rows usable for object inits. will replace some other caches, e.g. at class_rights
 NEW: module_system | orm -> added a new class class_orm_objectlist_orderby to order the resultlist

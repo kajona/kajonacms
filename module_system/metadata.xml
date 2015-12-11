@@ -5,7 +5,7 @@
         >
     <title>system</title>
     <description>Core of the Kajona framework. By default, the system-packages includes several modules, e.g. system, permissions, user, messaging and languages.</description>
-    <version>4.7</version>
+    <version>4.7.1</version>
     <author>Kajona Team</author>
     <type>MODULE</type>
     <providesInstaller>TRUE</providesInstaller>
