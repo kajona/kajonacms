@@ -240,12 +240,32 @@ abstract class class_root {
         $this->objSession = $objCarrier->getObjSession();
         $this->objLang = $objCarrier->getObjLang();
 
+        $this->objSortManager = new class_common_sortmanager($this);
+
         //And keep the action
         $this->strAction = $this->getParam("action");
 
         $this->strSystemid = $strSystemid;
 
         $this->setStrRecordClass(get_class($this));
+
+        //try to load the current module-name and the moduleId by reflection
+        $objReflection = new class_reflection($this);
+        if(!isset($this->arrModule["modul"])) {
+            $arrAnnotationValues = $objReflection->getAnnotationValuesFromClass(self::STR_MODULE_ANNOTATION);
+            if(count($arrAnnotationValues) > 0) {
+                $this->setArrModuleEntry("modul", trim($arrAnnotationValues[0]));
+                $this->setArrModuleEntry("module", trim($arrAnnotationValues[0]));
+            }
+        }
+
+        if(!isset($this->arrModule["moduleId"])) {
+            $arrAnnotationValues = $objReflection->getAnnotationValuesFromClass(self::STR_MODULEID_ANNOTATION);
+            if(count($arrAnnotationValues) > 0) {
+                $this->setArrModuleEntry("moduleId", constant(trim($arrAnnotationValues[0])));
+                $this->setIntModuleNr(constant(trim($arrAnnotationValues[0])));
+            }
+        }
 
         if ($strSystemid != "") {
             $this->initObject();
@@ -283,22 +303,25 @@ abstract class class_root {
     protected function initObjectInternal()
     {
         $objReflection = new class_reflection($this);
+        $arrTargetTables = $objReflection->getAnnotationValuesFromClass(class_orm_base::STR_ANNOTATION_TARGETTABLE);
 
-        if ($this->arrInitRow === null) {
-            $this->arrInitRow = class_orm_rowcache::getCachedInitRow($this->getSystemid());
-            if ($this->arrInitRow === null) {
-                $arrTargetTables = $objReflection->getAnnotationValuesFromClass(class_orm_base::STR_ANNOTATION_TARGETTABLE);
-                if (count($arrTargetTables) > 0) {
-                    $strWhere = "";
-                    $arrTables = array();
-                    foreach($arrTargetTables as $strOneTable) {
-                        $arrOneTable = explode(".", $strOneTable);
-                        $strWhere .= "AND system_id=".$arrOneTable[1]." ";
-                        $arrTables[] = class_carrier::getInstance()->getObjDB()->encloseTableName(_dbprefix_.$arrOneTable[0])." AS ".class_carrier::getInstance()->getObjDB()->encloseTableName($arrOneTable[0])."";
-                    }
+        if (validateSystemid($this->getSystemid()) && count($arrTargetTables) > 0) {
+            $arrRow = class_orm_rowcache::getCachedInitRow($this->getSystemid());
+            if ($arrRow === null) {
+                if (count($arrTargetTables) == 0) {
+                    throw new class_orm_exception("Class " . get_class($this) . " has no target table", class_exception::$level_ERROR);
+                }
 
-                    // build the query
-                    $strQuery = "SELECT *
+                $strWhere = "";
+                $arrTables = array();
+                foreach($arrTargetTables as $strOneTable) {
+                    $arrOneTable = explode(".", $strOneTable);
+                    $strWhere .= "AND system_id=".$arrOneTable[1]." ";
+                    $arrTables[] = class_carrier::getInstance()->getObjDB()->encloseTableName(_dbprefix_.$arrOneTable[0])." AS ".class_carrier::getInstance()->getObjDB()->encloseTableName($arrOneTable[0])."";
+                }
+
+                // build the query
+                $strQuery = "SELECT *
                                    FROM ".class_carrier::getInstance()->getObjDB()->encloseTableName(_dbprefix_."system_right").",
                                         ".implode(", ", $arrTables)." ,
                                         ".class_carrier::getInstance()->getObjDB()->encloseTableName(_dbprefix_."system")." AS system
@@ -308,53 +331,54 @@ abstract class class_root {
                                         ".$strWhere."
                                     AND system.system_id = ? ";
 
-                    $this->arrInitRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array($this->getSystemid()));
+                $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array($this->getSystemid()));
+            }
+
+            $this->setArrInitRow($arrRow);
+
+            // get the mapped properties
+            $arrProperties = $objReflection->getPropertiesWithAnnotation(class_orm_base::STR_ANNOTATION_TABLECOLUMN);
+
+            foreach ($arrProperties as $strPropertyName => $strRow) {
+
+                $arrColumn = explode(".", $strRow);
+                $intCount = count($arrColumn);
+
+                if ($intCount == 2) {
+                    $strColumn = $arrColumn[1];
+                } else {
+                    $strColumn = $strRow;
+                }
+
+                if (!isset($arrRow[$strColumn])) {
+                    continue;
+                }
+
+                // skip columns from the system-table, they are set later on
+                if ($intCount == 2 && $arrColumn[0] == "system") {
+                    continue;
+                }
+
+                $strSetter = $objReflection->getSetter($strPropertyName);
+                if($strSetter !== null) {
+                    $this->{$strSetter}($arrRow[$strColumn]);
                 }
             }
-        }
 
-        // get the mapped properties
-        $arrProperties = $objReflection->getPropertiesWithAnnotation(class_orm_base::STR_ANNOTATION_TABLECOLUMN);
-
-        foreach ($arrProperties as $strPropertyName => $strRow) {
-
-            $arrColumn = explode(".", $strRow);
-            $intCount = count($arrColumn);
-
-            if ($intCount == 2) {
-                $strColumn = $arrColumn[1];
-            } else {
-                $strColumn = $strRow;
+            $intCombinedLogicalDeletionConfig = class_orm_objectdelete::getObjHandleLogicalDeletedGlobal();
+            if ($intCombinedLogicalDeletionConfig === null) {
+                $intCombinedLogicalDeletionConfig = class_orm_deletedhandling_enum::EXCLUDED;
             }
 
-            if (!isset($this->arrInitRow[$strColumn])) {
-                continue;
-            }
+            // get the mapped properties
+            $arrProperties = $objReflection->getPropertiesWithAnnotation(class_orm_base::STR_ANNOTATION_OBJECTLIST, class_reflection_enum::PARAMS);
 
-            // skip columns from the system-table, they are set later on
-            if ($intCount == 2 && $arrColumn[0] == "system") {
-                continue;
-            }
-
-            $strSetter = $objReflection->getSetter($strPropertyName);
-            if($strSetter !== null) {
-                $this->{$strSetter}($this->arrInitRow[$strColumn]);
-            }
-        }
-
-        $intCombinedLogicalDeletionConfig = class_orm_objectdelete::getObjHandleLogicalDeletedGlobal();
-        if ($intCombinedLogicalDeletionConfig === null) {
-            $intCombinedLogicalDeletionConfig = class_orm_deletedhandling_enum::EXCLUDED;
-        }
-
-        // get the mapped properties
-        $arrProperties = $objReflection->getPropertiesWithAnnotation(class_orm_base::STR_ANNOTATION_OBJECTLIST, class_reflection_enum::PARAMS);
-
-        foreach ($arrProperties as $strPropertyName => $arrValues) {
-            $objPropertyLazyLoader = new class_orm_assignment_array($this, $strPropertyName, $intCombinedLogicalDeletionConfig);
-            $strSetter = $objReflection->getSetter($strPropertyName);
-            if ($strSetter !== null) {
-                $this->{$strSetter}($objPropertyLazyLoader);
+            foreach ($arrProperties as $strPropertyName => $arrValues) {
+                $objPropertyLazyLoader = new class_orm_assignment_array($this, $strPropertyName, $intCombinedLogicalDeletionConfig);
+                $strSetter = $objReflection->getSetter($strPropertyName);
+                if ($strSetter !== null) {
+                    $this->{$strSetter}($objPropertyLazyLoader);
+                }
             }
         }
     }
@@ -1532,6 +1556,7 @@ abstract class class_root {
         if (isset($this->arrModule[$strKey])) {
             return $this->arrModule[$strKey];
         } else {
+            /*
             if ($strKey === "modul" || $strKey === "modul") {
                 // try to load the current module-name and the moduleId by reflection
                 $objReflection = new class_reflection($this);
@@ -1544,6 +1569,7 @@ abstract class class_root {
             } elseif ($strKey === "moduleId") {
                 return $this->getIntModuleNr();
             }
+            */
 
             return "";
         }
@@ -1746,6 +1772,7 @@ abstract class class_root {
      */
     public function getIntModuleNr()
     {
+        /*
         if ($this->intModuleNr === null) {
             $objReflection = new class_reflection($this);
             $arrAnnotationValues = $objReflection->getAnnotationValuesFromClass(self::STR_MODULEID_ANNOTATION);
@@ -1754,6 +1781,7 @@ abstract class class_root {
                 $this->setIntModuleNr(constant(trim($arrAnnotationValues[0])));
             }
         }
+        */
 
         return $this->intModuleNr;
     }
