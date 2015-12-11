@@ -72,6 +72,12 @@ class class_module_search_query_parser {
                 }
             }
 
+
+            //If all arrays are empty return null -> no search possible then
+            if(count($arrMusts) == 0 && count($arrMustNots) == 0 && count($arrNoOperators) == 0) {
+                return null;
+            }
+
             /** @var $objTerm class_module_search_term */
             foreach($arrMusts as $objTerm) {
                 $objSearchQuery->add($objTerm, class_module_search_boolean_query::BOOLEAN_CLAUSE_OCCUR_MUST);
