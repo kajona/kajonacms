@@ -64,7 +64,7 @@ class class_lockmanager {
      */
     public function isLocked()
     {
-        return $this->getLockedUntilTimestamp(true) > time();
+        return $this->getLockedUntilTimestamp(true) > time() && $this->getLockId() != "0";
     }
 
     /**
