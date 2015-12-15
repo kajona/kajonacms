@@ -14,7 +14,11 @@
  */
 class class_formentry_objecttags extends class_formentry_tageditor
 {
+    const TYPE_USER = 1;
+    const TYPE_OBJECT = 2;
+
     protected $strSource;
+    protected $intType = self::TYPE_USER;
 
     /**
      * @param string $strSource
@@ -22,6 +26,16 @@ class class_formentry_objecttags extends class_formentry_tageditor
     public function setStrSource($strSource)
     {
         $this->strSource = $strSource;
+
+        return $this;
+    }
+
+    /**
+     * @param integer $intType
+     */
+    public function setIntType($intType)
+    {
+        $this->intType = $intType;
 
         return $this;
     }
@@ -38,6 +52,12 @@ class class_formentry_objecttags extends class_formentry_tageditor
         return $strReturn;
     }
 
+    /**
+     * The normal field contains the actual display names which are shown in each tag. The _id field contains an array
+     * of corresponding systemids
+     *
+     * @throws class_exception
+     */
     protected function updateValue()
     {
         $arrParams = class_carrier::getAllParams();
@@ -48,6 +68,13 @@ class class_formentry_objecttags extends class_formentry_tageditor
         }
     }
 
+    /**
+     * The value is either an array of objects or systemids. We normalize the value so that arrKeyValues always contains
+     * an array of objects
+     *
+     * @param $strValue
+     * @return class_formentry_base
+     */
     public function setStrValue($strValue)
     {
         $arrValuesIds = array();
@@ -69,16 +96,23 @@ class class_formentry_objecttags extends class_formentry_tageditor
         return $objReturn;
     }
 
+    /**
+     * Converts an array of systemids to objects
+     *
+     * @return array
+     */
     private function toObjectArray()
     {
         $strValue = $this->getStrValue();
         if (!empty($strValue)) {
             $arrIds = explode(",", $strValue);
-            $arrObjects = array_map(function ($strId) {
-                $objObject = class_objectfactory::getInstance()->getObject($strId);
-                if (empty($objObject)) {
-                    // @TODO fix better handling user ids
+            $intType = $this->intType;
+            $arrObjects = array_map(function ($strId) use ($intType) {
+                $objObject = null;
+                if ($intType === class_formentry_objecttags::TYPE_USER) {
                     $objObject = new class_module_user_user($strId);
+                } elseif ($intType === class_formentry_objecttags::TYPE_OBJECT) {
+                    $objObject = class_objectfactory::getInstance()->getObject($strId);
                 }
                 return $objObject;
             }, $arrIds);
