@@ -394,11 +394,11 @@ KAJONA.admin.portaleditor.dragndrop.init = function () {
             }
         }
         else {
-
-
-            //if either the source or target element is from the master-page, only placeholders on the master-page are allowes
-            if (placeholder.substring(0, "master".length) == "master" && ui.item.parent('.pePlaceholderWrapper').data('placeholder').substring(0, "master".length) != "master")
+            //if either the source or target element is from the master-page, only placeholders on the master-page are allowed
+            console.log('cur placeholder: '+placeholder+" over placeholder: "+ui.item.parent('.pePlaceholderWrapper').data('placeholder'));
+            if (placeholder.substring(0, "master".length) != "master" && ui.item.parent('.pePlaceholderWrapper').data('placeholder').substring(0, "master".length) == "master") {
                 return false;
+            }
 
             var allowedElements = placeholder.split('_')[1].split('|');
             return allowedElements.indexOf(elementName) !== -1;
@@ -513,10 +513,11 @@ KAJONA.admin.portaleditor.globalToolbar = {
         $objContainer.append($('<div>').addClass('peToolbarHeader').append(
             $('<i>').addClass('fa fa-bars')).on('click', function() {
 
-                if($('.peGlobalToolbar').hasClass('peGlobalToolbarOpen'))
-                    $('.peGlobalToolbar').removeClass('peGlobalToolbarOpen');
+            var $peGlobalToolbar = $('.peGlobalToolbar');
+            if($peGlobalToolbar.hasClass('peGlobalToolbarOpen'))
+                    $peGlobalToolbar.removeClass('peGlobalToolbarOpen');
                 else
-                    $('.peGlobalToolbar').addClass('peGlobalToolbarOpen');
+                    $peGlobalToolbar.addClass('peGlobalToolbarOpen');
             })
         );
 
