@@ -302,85 +302,8 @@ abstract class class_root {
      */
     protected function initObjectInternal()
     {
-        $objReflection = new class_reflection($this);
-        $arrTargetTables = $objReflection->getAnnotationValuesFromClass(class_orm_base::STR_ANNOTATION_TARGETTABLE);
-
-        if (validateSystemid($this->getSystemid()) && count($arrTargetTables) > 0) {
-            $arrRow = class_orm_rowcache::getCachedInitRow($this->getSystemid());
-            if ($arrRow === null) {
-                if (count($arrTargetTables) == 0) {
-                    throw new class_orm_exception("Class " . get_class($this) . " has no target table", class_exception::$level_ERROR);
-                }
-
-                $strWhere = "";
-                $arrTables = array();
-                foreach($arrTargetTables as $strOneTable) {
-                    $arrOneTable = explode(".", $strOneTable);
-                    $strWhere .= "AND system_id=".$arrOneTable[1]." ";
-                    $arrTables[] = class_carrier::getInstance()->getObjDB()->encloseTableName(_dbprefix_.$arrOneTable[0])." AS ".class_carrier::getInstance()->getObjDB()->encloseTableName($arrOneTable[0])."";
-                }
-
-                // build the query
-                $strQuery = "SELECT *
-                                   FROM ".class_carrier::getInstance()->getObjDB()->encloseTableName(_dbprefix_."system_right").",
-                                        ".implode(", ", $arrTables)." ,
-                                        ".class_carrier::getInstance()->getObjDB()->encloseTableName(_dbprefix_."system")." AS system
-                              LEFT JOIN "._dbprefix_."system_date AS system_date
-                                     ON system_id = system_date_id
-                                  WHERE system_id = right_id
-                                        ".$strWhere."
-                                    AND system.system_id = ? ";
-
-                $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array($this->getSystemid()));
-            }
-
-            $this->setArrInitRow($arrRow);
-
-            // get the mapped properties
-            $arrProperties = $objReflection->getPropertiesWithAnnotation(class_orm_base::STR_ANNOTATION_TABLECOLUMN);
-
-            foreach ($arrProperties as $strPropertyName => $strRow) {
-
-                $arrColumn = explode(".", $strRow);
-                $intCount = count($arrColumn);
-
-                if ($intCount == 2) {
-                    $strColumn = $arrColumn[1];
-                } else {
-                    $strColumn = $strRow;
-                }
-
-                if (!isset($arrRow[$strColumn])) {
-                    continue;
-                }
-
-                // skip columns from the system-table, they are set later on
-                if ($intCount == 2 && $arrColumn[0] == "system") {
-                    continue;
-                }
-
-                $strSetter = $objReflection->getSetter($strPropertyName);
-                if($strSetter !== null) {
-                    $this->{$strSetter}($arrRow[$strColumn]);
-                }
-            }
-
-            $intCombinedLogicalDeletionConfig = class_orm_objectdelete::getObjHandleLogicalDeletedGlobal();
-            if ($intCombinedLogicalDeletionConfig === null) {
-                $intCombinedLogicalDeletionConfig = class_orm_deletedhandling_enum::EXCLUDED;
-            }
-
-            // get the mapped properties
-            $arrProperties = $objReflection->getPropertiesWithAnnotation(class_orm_base::STR_ANNOTATION_OBJECTLIST, class_reflection_enum::PARAMS);
-
-            foreach ($arrProperties as $strPropertyName => $arrValues) {
-                $objPropertyLazyLoader = new class_orm_assignment_array($this, $strPropertyName, $intCombinedLogicalDeletionConfig);
-                $strSetter = $objReflection->getSetter($strPropertyName);
-                if ($strSetter !== null) {
-                    $this->{$strSetter}($objPropertyLazyLoader);
-                }
-            }
-        }
+        $objORM = new class_orm_objectinit($this);
+        $objORM->initObjectFromDb();
     }
 
     /**
@@ -499,7 +422,7 @@ abstract class class_root {
         class_orm_rowcache::removeSingleRow($this->getSystemid());
         $this->objDB->flushQueryCache();
 
-        $this->getObjSortManager()->fixSortOnPrevIdChange($this->strPrevId, $this->strPrevId);
+        $this->objSortManager->fixSortOnPrevIdChange($this->strPrevId, $this->strPrevId);
 
         $bitReturn = $bitReturn && class_core_eventdispatcher::getInstance()->notifyGenericListeners(class_system_eventidentifier::EVENT_SYSTEM_RECORDRESTORED_LOGICALLY, array($this->getSystemid(), get_class($this), $this));
 
@@ -550,7 +473,7 @@ abstract class class_root {
         class_orm_rowcache::removeSingleRow($this->getSystemid());
         $this->objDB->flushQueryCache();
 
-        $this->getObjSortManager()->fixSortOnDelete();
+        $this->objSortManager->fixSortOnDelete();
 
         $bitReturn = $bitReturn && class_core_eventdispatcher::getInstance()->notifyGenericListeners(class_system_eventidentifier::EVENT_SYSTEM_RECORDDELETED_LOGICALLY, array($this->getSystemid(), get_class($this)));
 
@@ -598,7 +521,7 @@ abstract class class_root {
         $objORM = new class_orm_objectdelete($this);
         $bitReturn = $objORM->deleteObject();
 
-        $this->getObjSortManager()->fixSortOnDelete();
+        $this->objSortManager->fixSortOnDelete();
         $bitReturn = $bitReturn && $this->deleteSystemRecord($this->getSystemid());
 
         class_objectfactory::getInstance()->removeFromCache($this->getSystemid());
@@ -984,7 +907,7 @@ abstract class class_root {
             class_core_eventdispatcher::getInstance()->notifyGenericListeners(class_system_eventidentifier::EVENT_SYSTEM_PREVIDCHANGED, array($this->getSystemid(), $this->strOldPrevId, $this->strPrevId));
         }
         if($this->strOldPrevId != $this->strPrevId) {
-            $this->getObjSortManager()->fixSortOnPrevIdChange($this->strOldPrevId, $this->strPrevId);
+            $this->objSortManager->fixSortOnPrevIdChange($this->strOldPrevId, $this->strPrevId);
         }
 
         $this->strOldPrevId = $this->strPrevId;
@@ -1407,7 +1330,7 @@ abstract class class_root {
      * @deprecated
      */
     public function setPosition($strDirection = "upwards") {
-        $this->getObjSortManager()->setPosition($strDirection);
+        $this->objSortManager->setPosition($strDirection);
     }
 
     /**
@@ -1419,7 +1342,7 @@ abstract class class_root {
      * @return void
      */
     public function setAbsolutePosition($intNewPosition, $arrRestrictionModules = false) {
-        $this->getObjSortManager()->setAbsolutePosition($intNewPosition, $arrRestrictionModules);
+        $this->objSortManager->setAbsolutePosition($intNewPosition, $arrRestrictionModules);
     }
 
     /**
@@ -2222,14 +2145,6 @@ abstract class class_root {
      */
     public function getObjStartDate() {
         return $this->objStartDate;
-    }
-
-    protected function getObjSortManager()
-    {
-        if ($this->objSortManager === null) {
-            $this->objSortManager = new class_common_sortmanager($this);
-        }
-        return $this->objSortManager;
     }
 
 }
