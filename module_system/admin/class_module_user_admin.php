@@ -301,6 +301,17 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
         $strReturn .= $this->objToolkit->formInputHidden("systemid", $this->getSystemid());
         $strReturn .= $this->objToolkit->formInputSubmit($this->getLang("commons_save"));
         $strReturn .= $this->objToolkit->formClose();
+        $strReturn .= $this->objToolkit->divider();
+
+        // show recent password resets
+        $strReturn .= $this->objToolkit->getTextRow($this->getLang("user_last_pwchanges_info"));
+        $strReturn .= $this->objToolkit->listHeader();
+        $arrChanges = class_module_system_pwchangehistory::getHistoryByUser($objUser->getStrSystemid());
+        foreach ($arrChanges as $objChange) {
+            $strReturn .= $this->objToolkit->simpleAdminList($objChange, "", 0);
+        }
+        $strReturn .= $this->objToolkit->listFooter();
+
         return $strReturn;
     }
 
@@ -332,6 +343,14 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
         }
 
         $objMail->sendMail();
+
+        // insert log entry
+        $objNow = new class_date();
+        $objPwChange = new class_module_system_pwchangehistory();
+        $objPwChange->setStrTargetUser($objUser->getStrSystemid());
+        $objPwChange->setStrActivationLink($strActivationLink);
+        $objPwChange->setStrChangeDate($objNow->getLongTimestamp());
+        $objPwChange->updateObjectToDb();
 
         $this->adminReload(class_link::getLinkAdminHref($this->getArrModule("modul")));
         return $strReturn;
