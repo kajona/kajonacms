@@ -443,6 +443,8 @@ KAJONA.admin.portaleditor.dragndrop.init = function () {
         cursor: 'move',
         forcePlaceholderSize: true,
         placeholder: 'peElementMovePlaceholder',
+        tolerance: 'pointer',
+
         start: function(event, ui) {
             oldPos = ui.item.parent().children('div.peElementWrapper').index(ui.item);
         },
