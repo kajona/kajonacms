@@ -1666,9 +1666,9 @@ HTML;
                 $arrEntry = array();
 
                 if ($objOneElement instanceof class_module_user_user) {
-                    $arrEntry["title"] = $objOneElement->getStrUsername()." (".$objOneElement->getStrName()." ".$objOneElement->getStrForename().")";
-                    $arrEntry["label"] = $objOneElement->getStrUsername()." (".$objOneElement->getStrName()." ".$objOneElement->getStrForename().")";
-                    $arrEntry["value"] = $objOneElement->getStrUsername()." (".$objOneElement->getStrName()." ".$objOneElement->getStrForename().")";
+                    $arrEntry["title"] = $objOneElement->getStrDisplayName();
+                    $arrEntry["label"] = $objOneElement->getStrDisplayName();
+                    $arrEntry["value"] = $objOneElement->getStrDisplayName();
                     $arrEntry["systemid"] = $objOneElement->getSystemid();
                     $arrEntry["icon"] = class_adminskin_helper::getAdminImage("icon_user");
                 }
