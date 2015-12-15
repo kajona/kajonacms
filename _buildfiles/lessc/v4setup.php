@@ -39,10 +39,12 @@ $arrFilesToUpdate = array(
 
 foreach($arrFilesToCompile as $strSourceFile => $strTargetFile) {
     //echo "trigger less compile: lessc ".escapeshellarg($strSourceFile)." ".escapeshellarg($strTargetFile)."\n";
-    if(is_file($strSourceFile))
-        system("lessc --verbose ".escapeshellarg($strSourceFile)." ".escapeshellarg($strTargetFile));
-    else
+    if (is_file($strSourceFile)) {
+        $strLessBin = "node " . __DIR__ . "/../jstests/node_modules/less/bin/lessc";
+        system($strLessBin . " --verbose " . escapeshellarg($strSourceFile) . " " . escapeshellarg($strTargetFile));
+    } else {
         echo "Skipping ".$strSourceFile.", not existing\n";
+    }
 }
 
 echo "merging into skin-files...\n";

@@ -114,8 +114,6 @@ final class class_logger {
      */
     public function addLogRow($strMessage, $intLevel, $bitSkipSessionData = false) {
 
-        $arrStack = debug_backtrace();
-
         //check, if there someting to write
         if($this->intLogLevel == 0) {
             return;
@@ -156,6 +154,8 @@ final class class_logger {
         $strMessage = uniStrReplace(array("\r", "\n"), array(" ", " "), $strMessage);
 
         $strFileInfo = "";
+        $arrStack = debug_backtrace();
+
         if(isset($arrStack[1]) && isset($arrStack[1]["file"])) {
             $strFileInfo = basename($arrStack[1]["file"]) . ":" . $arrStack[1]["function"] . ":" . $arrStack[1]["line"];
         }
