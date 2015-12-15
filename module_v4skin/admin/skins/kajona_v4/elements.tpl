@@ -891,18 +891,16 @@ in addition, a container for the calendar is needed. Use %%calendarContainerId%%
                             }
                         });
                         if (!found) {
-                            var title = ui.item.title.replace(/,/g, ' ');
-                            $("#%%name%%-list").append('<input type="hidden" name="%%name%%_id[]" value="' + ui.item.systemid + '" data-title="' + title + '" />');
+                            $("#%%name%%-list").append('<input type="hidden" name="%%name%%_id[]" value="' + ui.item.systemid + '" data-title="' + ui.item.title + '" />');
                         }
                     },
                     create: function(event, ui) {
                         var $objCur = $(this);
 
                         $objCur.data('ui-autocomplete')._renderItem = function(ul, item){
-                            var title = item.title.replace(/,/g, ' ');
                             return $('<li></li>')
                                     .data('ui-autocomplete-item', item)
-                                    .append('<a class=\'ui-autocomplete-item\'>' + item.icon + title + '</a>')
+                                    .append('<a class=\'ui-autocomplete-item\'>' + item.icon + item.title + '</a>')
                                     .appendTo(ul);
                         };
                     }
@@ -916,7 +914,16 @@ in addition, a container for the calendar is needed. Use %%calendarContainerId%%
                         data: {
                             filter: request.term
                         },
-                        success: response
+                        success: function(resp) {
+                            if (resp) {
+                                // replace commas
+                                for (var i = 0; i < resp.length; i++) {
+                                    resp[i].title = resp[i].title.replace(/\,/g, '');
+                                    resp[i].value = resp[i].value.replace(/\,/g, '');
+                                }
+                            }
+                            response.call(this, resp);
+                        }
                     });
                 };
 
@@ -927,7 +934,6 @@ in addition, a container for the calendar is needed. Use %%calendarContainerId%%
                     autocomplete: objConfig,
                     beforeTagSave: function(field, editor, tags, tag, val){
                         var found = false;
-                        val = val.replace(/,/g, ' ');
                         $("#%%name%%-list").find('input').each(function(){
                             if ($(this).data('title') == val) {
                                 found = true;
@@ -938,7 +944,6 @@ in addition, a container for the calendar is needed. Use %%calendarContainerId%%
                         }
                     },
                     beforeTagDelete: function(field, editor, tags, val){
-                        val = val.replace(/,/g, ' ');
                         $("#%%name%%-list").find('input').each(function(){
                             if ($(this).data('title') == val) {
                                 $(this).remove();
@@ -949,7 +954,6 @@ in addition, a container for the calendar is needed. Use %%calendarContainerId%%
             }, true);
         }, true);
     </script>
-
 </input_objecttags>
 
 <input_container>
