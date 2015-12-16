@@ -251,7 +251,9 @@ class class_installer_system extends class_installer_base implements interface_i
         $objManager->createTable("class_module_messaging_message");
         $objManager->createTable("class_module_messaging_config");
 
-
+        // password change history
+        $strReturn .= "Installing password reset history...\n";
+        $objManager->createTable("class_module_system_pwchangehistory");
 
         //Now we have to register module by module
 
@@ -634,8 +636,13 @@ class class_installer_system extends class_installer_base implements interface_i
         }
 
         $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModule["module_version"] == "4.7") {
+        if($arrModule["module_version"] == "4.7" || $arrModule["module_version"] == "4.7.1") {
             $strReturn .= $this->update_47_475();
+        }
+
+        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "4.7.5") {
+            $strReturn .= $this->update_475_476();
         }
 
         return $strReturn."\n\n";
@@ -954,5 +961,19 @@ class class_installer_system extends class_installer_base implements interface_i
         return $strReturn;
     }
 
+    private function update_475_476() {
+
+        $strReturn = "Updating 4.7.5 to 4.7.6...\n";
+
+        // password change history
+        $strReturn .= "Installing password reset history...\n";
+
+        $objManager = new class_orm_schemamanager();
+        $objManager->createTable("class_module_system_pwchangehistory");
+
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion($this->objMetadata->getStrTitle(), "4.7.6");
+        return $strReturn;
+    }
 
 }

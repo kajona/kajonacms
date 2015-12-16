@@ -125,7 +125,7 @@ class class_orm_objectupdate extends class_orm_base {
         $objReflection = new class_reflection($this->getObjObject());
 
         //get the mapped properties
-        $arrProperties = $objReflection->getPropertiesWithAnnotation(class_orm_base::STR_ANNOTATION_OBJECTLIST, class_reflection_enum::PARAMS());
+        $arrProperties = $objReflection->getPropertiesWithAnnotation(class_orm_base::STR_ANNOTATION_OBJECTLIST, class_reflection_enum::PARAMS);
 
         foreach($arrProperties as $strPropertyName => $arrValues) {
 
@@ -151,8 +151,8 @@ class class_orm_objectupdate extends class_orm_base {
             $this->setObjHandleLogicalDeleted($objOldHandling);
 
             //if the delete handling was set to excluded when loading the assignment, the logically deleted nodes should be merged with the values from db
-            if($objAssignmentDeleteHandling->equals(class_orm_deletedhandling_enum::EXCLUDED())) {
-                $this->setObjHandleLogicalDeleted(class_orm_deletedhandling_enum::EXCLUSIVE());
+            if($objAssignmentDeleteHandling === class_orm_deletedhandling_enum::EXCLUDED) {
+                $this->setObjHandleLogicalDeleted(class_orm_deletedhandling_enum::EXCLUSIVE);
                 $arrDeletedIds = $this->getAssignmentsFromDatabase($strPropertyName);
                 $this->setObjHandleLogicalDeleted($objOldHandling);
 

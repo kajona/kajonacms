@@ -19,6 +19,11 @@
  * @since 4.8
  */
 class class_orm_deletedhandling_enum extends class_enum {
+
+    const INCLUDED = 1;
+    const EXCLUDED = 2;
+    const EXCLUSIVE = 3;
+
     /**
      * Return the array of possible, so allowed values for the current enum
      *

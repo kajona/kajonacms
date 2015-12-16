@@ -5,16 +5,16 @@ class class_test_logicalDelete extends class_testbase {
 
     public function testLogicalDelete() {
 
-        class_orm_base::setObjHandleLogicalDeletedGlobal(class_orm_deletedhandling_enum::INCLUDED());
+        class_orm_base::setObjHandleLogicalDeletedGlobal(class_orm_deletedhandling_enum::INCLUDED);
         $intCountTotal = class_module_system_aspect::getObjectCount();
 
-        class_orm_base::setObjHandleLogicalDeletedGlobal(class_orm_deletedhandling_enum::EXCLUDED());
+        class_orm_base::setObjHandleLogicalDeletedGlobal(class_orm_deletedhandling_enum::EXCLUDED);
         $intCountActive = class_module_system_aspect::getObjectCount();
 
-        class_orm_base::setObjHandleLogicalDeletedGlobal(class_orm_deletedhandling_enum::EXCLUSIVE());
+        class_orm_base::setObjHandleLogicalDeletedGlobal(class_orm_deletedhandling_enum::EXCLUSIVE);
         $intCountDeleted = class_module_system_aspect::getObjectCount();
 
-        class_orm_base::setObjHandleLogicalDeletedGlobal(class_orm_deletedhandling_enum::EXCLUDED());
+        class_orm_base::setObjHandleLogicalDeletedGlobal(class_orm_deletedhandling_enum::EXCLUDED);
 
         echo "Creating aspect\n";
 
@@ -44,7 +44,7 @@ class class_test_logicalDelete extends class_testbase {
         $this->assertEquals($objAspect->getIntSort(), -1);
 
 
-        class_orm_base::setObjHandleLogicalDeletedGlobal(class_orm_deletedhandling_enum::EXCLUDED());
+        class_orm_base::setObjHandleLogicalDeletedGlobal(class_orm_deletedhandling_enum::EXCLUDED);
         echo "Loading non-deleted only\n";
         $this->assertEquals($intCountActive+1, class_module_system_aspect::getObjectCount());
 
@@ -54,7 +54,7 @@ class class_test_logicalDelete extends class_testbase {
         $this->assertEquals(0, count($arrAspects));
 
         echo "Loading deleted only\n";
-        class_orm_base::setObjHandleLogicalDeletedGlobal(class_orm_deletedhandling_enum::EXCLUSIVE());
+        class_orm_base::setObjHandleLogicalDeletedGlobal(class_orm_deletedhandling_enum::EXCLUSIVE);
 
         $arrAspects = class_module_system_aspect::getObjectList();
         $arrAspects = array_filter($arrAspects, function(class_module_system_aspect $objAspect) use ($strAspectId) { return $objAspect->getSystemid() == $strAspectId; });
@@ -64,7 +64,7 @@ class class_test_logicalDelete extends class_testbase {
 
 
         echo "Loading mixed deleted and non-deleted\n";
-        class_orm_base::setObjHandleLogicalDeletedGlobal(class_orm_deletedhandling_enum::INCLUDED());
+        class_orm_base::setObjHandleLogicalDeletedGlobal(class_orm_deletedhandling_enum::INCLUDED);
 
         $arrAspects = class_module_system_aspect::getObjectList();
         $arrAspects = array_filter($arrAspects, function(class_module_system_aspect $objAspect) use ($strAspectId) { return $objAspect->getSystemid() == $strAspectId; });
@@ -79,7 +79,7 @@ class class_test_logicalDelete extends class_testbase {
         echo "Deleting from database\n";
         $objAspect->deleteObjectFromDatabase();
 
-        class_orm_base::setObjHandleLogicalDeletedGlobal(class_orm_deletedhandling_enum::EXCLUDED());
+        class_orm_base::setObjHandleLogicalDeletedGlobal(class_orm_deletedhandling_enum::EXCLUDED);
         echo "Loading non-deleted only\n";
         $this->assertEquals($intCountActive+1, class_module_system_aspect::getObjectCount());
         $arrAspects = class_module_system_aspect::getObjectList();
@@ -87,7 +87,7 @@ class class_test_logicalDelete extends class_testbase {
         $this->assertEquals(0, count($arrAspects));
 
         echo "Loading deleted only\n";
-        class_orm_base::setObjHandleLogicalDeletedGlobal(class_orm_deletedhandling_enum::EXCLUSIVE());
+        class_orm_base::setObjHandleLogicalDeletedGlobal(class_orm_deletedhandling_enum::EXCLUSIVE);
         $arrAspects = class_module_system_aspect::getObjectList();
         $arrAspects = array_filter($arrAspects, function(class_module_system_aspect $objAspect) use ($strAspectId) { return $objAspect->getSystemid() == $strAspectId; });
         $this->assertEquals($intCountDeleted, class_module_system_aspect::getObjectCount());
@@ -102,11 +102,11 @@ class class_test_logicalDelete extends class_testbase {
 
 
         echo "Loading non-deleted only\n";
-        class_orm_base::setObjHandleLogicalDeletedGlobal(class_orm_deletedhandling_enum::EXCLUDED());
+        class_orm_base::setObjHandleLogicalDeletedGlobal(class_orm_deletedhandling_enum::EXCLUDED);
         $this->assertEquals($intCountActive, class_module_system_aspect::getObjectCount());
 
         echo "Loading deleted only\n";
-        class_orm_base::setObjHandleLogicalDeletedGlobal(class_orm_deletedhandling_enum::EXCLUSIVE());
+        class_orm_base::setObjHandleLogicalDeletedGlobal(class_orm_deletedhandling_enum::EXCLUSIVE);
         $this->assertEquals($intCountDeleted, class_module_system_aspect::getObjectCount());
 
     }

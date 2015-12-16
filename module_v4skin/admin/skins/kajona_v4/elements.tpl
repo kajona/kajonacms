@@ -853,6 +853,112 @@ in addition, a container for the calendar is needed. Use %%calendarContainerId%%
     </script>
 </input_tageditor>
 
+<input_objecttags>
+    <div class="form-group">
+        <label for="%%name%%" class="col-sm-3 control-label">%%title%%</label>
+
+        <div class="col-sm-6 inputText inputTagEditor">
+            <input type="text" id="%%name%%" data-name="%%name%%" style="display:none" />
+            <div id="%%name%%-list">%%data%%</div>
+        </div>
+    </div>
+    <script type="text/javascript">
+        KAJONA.admin.loader.loadFile(["_webpath_/core/module_system/admin/scripts/jquerytag/jquery.caret.min.js"], function(){
+            KAJONA.admin.loader.loadFile("_webpath_/core/module_system/admin/scripts/jquerytag/jquery.tag-editor.js", function(){
+                var objConfig = {
+                    minLength: 0,
+                    delay: 500,
+                    search: function(event, ui) {
+                        var $objCur = $(this);
+
+                        if (event.target.value.length < 2) {
+                            event.stopPropagation();
+                            return false;
+                        }
+
+                        $objCur.parent().parent().parent().css('background-image', 'url('+KAJONA_WEBPATH+'/core/module_v4skin/admin/skins/kajona_v4/img/loading-small.gif)');
+                        $objCur.parent().parent().parent().css('background-repeat', 'no-repeat');
+                        $objCur.parent().parent().parent().css('background-position', 'right');
+                    },
+                    response: function(event, ui) {
+                        $(this).parent().parent().parent().css('background-image', 'none');
+                    },
+                    focus: function() {
+                        return false;
+                    },
+                    select: function(event, ui) {
+                        var found = false;
+                        $("#%%name%%-list").find('input').each(function(){
+                            if ($(this).val() == ui.item.systemid) {
+                                found = true;
+                            }
+                        });
+                        if (!found) {
+                            $("#%%name%%-list").append('<input type="hidden" name="%%name%%_id[]" value="' + ui.item.systemid + '" data-title="' + ui.item.title + '" />');
+                        }
+                    },
+                    create: function(event, ui) {
+                        var $objCur = $(this);
+
+                        $objCur.data('ui-autocomplete')._renderItem = function(ul, item){
+                            return $('<li></li>')
+                                    .data('ui-autocomplete-item', item)
+                                    .append('<a class=\'ui-autocomplete-item\'>' + item.icon + item.title + '</a>')
+                                    .appendTo(ul);
+                        };
+                    }
+                };
+
+                objConfig.source = function(request, response) {
+                    $.ajax({
+                        url: '%%source%%',
+                        type: 'POST',
+                        dataType: 'json',
+                        data: {
+                            filter: request.term
+                        },
+                        success: function(resp) {
+                            if (resp) {
+                                // replace commas
+                                for (var i = 0; i < resp.length; i++) {
+                                    resp[i].title = resp[i].title.replace(/\,/g, '');
+                                    resp[i].value = resp[i].value.replace(/\,/g, '');
+                                }
+                            }
+                            response.call(this, resp);
+                        }
+                    });
+                };
+
+                $("#%%name%%").tagEditor({
+                    initialTags: %%values%%,
+                    forceLowercase: false,
+                    //onChange: %%onChange%%,
+                    autocomplete: objConfig,
+                    beforeTagSave: function(field, editor, tags, tag, val){
+                        var found = false;
+                        $("#%%name%%-list").find('input').each(function(){
+                            if ($(this).data('title') == val) {
+                                found = true;
+                            }
+                        });
+                        if (!found) {
+                            return false;
+                        }
+                    },
+                    beforeTagDelete: function(field, editor, tags, val){
+                        $("#%%name%%-list").find('input').each(function(){
+                            if ($(this).data('title') == val) {
+                                $(this).remove();
+                            }
+                        });
+                    }
+                });
+            }, true);
+        }, true);
+    </script>
+</input_objecttags>
+
 <input_container>
     <div class="form-group">
         <label for="%%name%%" class="col-sm-3 control-label">%%title%%</label>
