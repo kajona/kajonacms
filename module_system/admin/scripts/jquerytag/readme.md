@@ -6,12 +6,12 @@ A powerful and lightweight tag editor plugin for jQuery.
 Compatible with jQuery 1.7.0+ in Firefox, Safari, Chrome, Opera, Internet Explorer 8+. IE7 technically works, but no care has gone into CSS/layout bugs.
 Released under the MIT License: http://www.opensource.org/licenses/mit-license.php
 
-This plugin was developed by and for [Pixabay.com](http://pixabay.com/) - an international repository for sharing free public domain images.
+This plugin was developed by and for [Pixabay.com](https://pixabay.com/) - an international repository for sharing free public domain images.
 We have implemented this plugin in production and we share this piece of software - in the spirit of Pixabay - freely with others.
 
 ## Demo and Documentation
 
-http://goodies.pixabay.com/jquery/tag-editor/demo.html
+https://goodies.pixabay.com/jquery/tag-editor/demo.html
 
 ## Features
 
@@ -31,6 +31,26 @@ http://goodies.pixabay.com/jquery/tag-editor/demo.html
 * Graceful degradation if JavaScript is disabled
 
 ## Changelog
+
+### Version 1.0.19 - 2015/12/02
+
+* Fixed #60: Tag editor fails to handle HTML operator chars.
+
+### Version 1.0.18 - 2015/08/12
+
+* Pull #43: Escape HTML special characters on input.
+
+### Version 1.0.17 - 2015/07/14
+
+* Allow beforeTagSave() to return `false` for discarding certain tag values.
+
+### Version 1.0.16 - 2015/07/01
+
+* Fix #5, #35, #37, #38: "TypeError: owner is null" backspace browser history issue.
+
+### Version 1.0.15 - 2015/05/24
+
+* Fix #31, #33, #34: Added maxTags, removeDuplicates, and animateDelete options.
 
 ### Version 1.0.14 - 2015/04/05
 
@@ -72,7 +92,6 @@ http://goodies.pixabay.com/jquery/tag-editor/demo.html
 
 * Merged pull - Added logic for selected field to be .tag-editor only:
   https://github.com/jegarts/jQuery-tagEditor/commit/498435b562d72c3e502863312b0b2ccbb9e80cab
-
 
 ### Version 1.0.4 - 2014/09/24
 

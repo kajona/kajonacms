@@ -36,8 +36,8 @@ class class_orm_assignment_config  {
     public static function getConfigForProperty($objObject, $strProperty) {
 
         $objReflection = new class_reflection($objObject);
-        $arrPropertyParams = $objReflection->getAnnotationValueForProperty($strProperty, class_orm_base::STR_ANNOTATION_OBJECTLIST, class_reflection_enum::PARAMS());
-        $strTable = $objReflection->getAnnotationValueForProperty($strProperty, class_orm_base::STR_ANNOTATION_OBJECTLIST, class_reflection_enum::VALUES());
+        $arrPropertyParams = $objReflection->getAnnotationValueForProperty($strProperty, class_orm_base::STR_ANNOTATION_OBJECTLIST, class_reflection_enum::PARAMS);
+        $strTable = $objReflection->getAnnotationValueForProperty($strProperty, class_orm_base::STR_ANNOTATION_OBJECTLIST, class_reflection_enum::VALUES);
 
         $arrTypeFilter = isset($arrPropertyParams["type"]) ? $arrPropertyParams["type"] : null;
 

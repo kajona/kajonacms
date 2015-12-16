@@ -128,7 +128,7 @@ class class_test_orm_objectassignmentsTest extends class_testbase_object {
         //delete one aspect logically
         $arrAspects[1]->deleteObject();
 
-        class_orm_base::setObjHandleLogicalDeletedGlobal(class_orm_deletedhandling_enum::INCLUDED());
+        class_orm_base::setObjHandleLogicalDeletedGlobal(class_orm_deletedhandling_enum::INCLUDED);
         $objTestobject = new orm_objectlist_testclass($objTestobject->getSystemid());
         class_orm_base::setObjHandleLogicalDeletedGlobal(null);
         $this->assertEquals(count($objTestobject->getArrObject1()), 3);
@@ -162,12 +162,12 @@ class class_test_orm_objectassignmentsTest extends class_testbase_object {
         $objTestobject = new orm_objectlist_testclass($objTestobject->getSystemid());
         $this->assertEquals(count($objTestobject->getArrObject1()), 2);
 
-        class_orm_base::setObjHandleLogicalDeletedGlobal(class_orm_deletedhandling_enum::INCLUDED());
+        class_orm_base::setObjHandleLogicalDeletedGlobal(class_orm_deletedhandling_enum::INCLUDED);
         $objTestobject = new orm_objectlist_testclass($objTestobject->getSystemid());
         class_orm_base::setObjHandleLogicalDeletedGlobal(null);
         $this->assertEquals(count($objTestobject->getArrObject1()), 3);
 
-        class_orm_base::setObjHandleLogicalDeletedGlobal(class_orm_deletedhandling_enum::EXCLUSIVE());
+        class_orm_base::setObjHandleLogicalDeletedGlobal(class_orm_deletedhandling_enum::EXCLUSIVE);
         $objTestobject = new orm_objectlist_testclass($objTestobject->getSystemid());
         class_orm_base::setObjHandleLogicalDeletedGlobal(null);
         $this->assertEquals(count($objTestobject->getArrObject1()), 1);
