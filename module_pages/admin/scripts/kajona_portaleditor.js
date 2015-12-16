@@ -395,7 +395,6 @@ KAJONA.admin.portaleditor.dragndrop.init = function () {
         }
         else {
             //if either the source or target element is from the master-page, only placeholders on the master-page are allowed
-            console.log('cur placeholder: '+placeholder+" over placeholder: "+ui.item.parent('.pePlaceholderWrapper').data('placeholder'));
             if (placeholder.substring(0, "master".length) != "master" && ui.item.parent('.pePlaceholderWrapper').data('placeholder').substring(0, "master".length) == "master") {
                 return false;
             }
