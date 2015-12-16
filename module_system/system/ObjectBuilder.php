@@ -5,7 +5,8 @@ namespace Kajona\System\System;
 use Pimple\Container;
 
 /**
- * ObjectBuilder
+ * Class which can create new objects and resolves all properties with an @Inject annotation. So you get an object
+ * containing all needed services without the need to manually use constructor or setter injection
  *
  * @package Kajona\System\System
  * @author christoph.kappestein@gmail.com
@@ -13,15 +14,23 @@ use Pimple\Container;
  */
 class ObjectBuilder
 {
+    /**
+     * @var Container
+     */
     protected $objContainer;
 
+    /**
+     * @param Container $objContainer
+     */
     public function __construct(Container $objContainer)
     {
         $this->objContainer = $objContainer;
     }
 
     /**
-     * Creates a new object. Resolves all properties with an inject annotation from the DI container
+     * Creates a new object and resolves all properties with an inject annotation from the DI container. Through this
+     * method you can use the dependencies also in the constructor. If you create the object otherwise you can NOT use
+     * the dependencies inside the constructor
      *
      * @param string $strClass
      * @param array $arrArguments
@@ -41,6 +50,11 @@ class ObjectBuilder
         return $objObject;
     }
 
+    /**
+     * Can be used to inject the properties if you have already an object. Normally you want to use the factory method
+     *
+     * @param object $objObject
+     */
     public function resolveDependencies($objObject)
     {
         // read inject annotations
