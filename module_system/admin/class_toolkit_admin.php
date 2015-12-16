@@ -836,6 +836,43 @@ class class_toolkit_admin extends class_toolkit
     }
 
     /**
+     * Form entry which displays an input text field where you must select entries from an autocomplete
+     *
+     * @param $strName
+     * @param string $strTitle
+     * @param $strSource
+     * @param array $arrValues
+     * @param null $strOnChange
+     * @return string
+     * @throws class_exception
+     */
+    public function formInputObjectTags($strName, $strTitle = "", $strSource, array $arrValues = array(), $strOnChange = null)
+    {
+        $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "input_objecttags");
+
+        $strData = "";
+        $arrResult = array();
+        if (!empty($arrValues)) {
+            foreach ($arrValues as $objValue) {
+                if ($objValue instanceof interface_model) {
+                    $strData.= '<input type="hidden" name="' . $strName . '_id[]" value="' . $objValue->getStrSystemid() . '" data-title="' . htmlspecialchars($objValue->getStrDisplayName()) . '" />';
+                    $arrResult[] = $objValue->getStrDisplayName();
+                }
+            }
+        }
+
+        $arrTemplate = array();
+        $arrTemplate["name"] = $strName;
+        $arrTemplate["title"] = $strTitle;
+        $arrTemplate["values"] = json_encode(array_values($arrResult));
+        $arrTemplate["onChange"] = empty($strOnChange) ? "function(){}" : (string)$strOnChange;
+        $arrTemplate["source"] = $strSource;
+        $arrTemplate["data"] = $strData;
+
+        return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID, true);
+    }
+
+    /**
      * Returns a toggle button bar which can be used in the same way as an multiselect
      *
      * @param string $strName
