@@ -2446,7 +2446,7 @@ HTML;
      *
      * @return string
      */
-    public function getTree($strLoadNodeDataUrl, $strRootNodeSystemid = "", $arrNodesToExpand = array(), $bitOrderingEnabled = false, $bitHierachicalSortEnabled = false)
+    public function getTree($strLoadNodeDataUrl, $strRootNodeSystemid = "", $arrNodesToExpand = array(), $bitOrderingEnabled = false, $bitHierachicalSortEnabled = false, $bitCheckboxEnabled = false)
     {
         $arrTemplate = array();
         $arrTemplate["rootNodeSystemid"] = $strRootNodeSystemid;
@@ -2454,6 +2454,7 @@ HTML;
         $arrTemplate["treeId"] = generateSystemid();
         $arrTemplate["orderingEnabled"] = $bitOrderingEnabled ? "true" : "false";
         $arrTemplate["hierarchialSortEnabled"] = $bitHierachicalSortEnabled ? "true" : "false";
+        $arrTemplate["checkboxEnabled"] = $bitCheckboxEnabled ? "true" : "false";
         $arrTemplate["treeviewExpanders"] = "";
         for ($intI = 0; $intI < count($arrNodesToExpand); $intI++) {
             $arrTemplate["treeviewExpanders"] .= "\"".$arrNodesToExpand[$intI]."\"";
