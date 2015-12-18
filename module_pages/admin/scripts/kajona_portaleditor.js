@@ -513,41 +513,67 @@ KAJONA.admin.portaleditor.globalToolbar = {
 
         $objContainer.append($('<div>').addClass('peToolbarHeader').append(
             $('<i>').addClass('fa fa-bars')).on('click', function() {
-
-            var $peGlobalToolbar = $('.peGlobalToolbar');
-            if($peGlobalToolbar.hasClass('peGlobalToolbarOpen'))
+                var $peGlobalToolbar = $('.peGlobalToolbar');
+                if($peGlobalToolbar.hasClass('peGlobalToolbarOpen'))
                     $peGlobalToolbar.removeClass('peGlobalToolbarOpen');
                 else
                     $peGlobalToolbar.addClass('peGlobalToolbarOpen');
             })
         );
 
-        var $objInfoContainer = $('<div>').addClass('peGlobalToolbarInfo');
 
         //render various page-informations
+        var $objInfoContainer = $('<div>').addClass('peGlobalToolbarInfo');
         $.each(KAJONA.admin.pageInfo, function(entryName, objInfo) {
             var $objRowContent = $('<div>').addClass('peGlobalToolbarInfoText').append($('<div>').html(objInfo.label)).append($('<div>').html(objInfo.value));
-
             var $objRow = $('<div>').addClass('peGlobalToolbarInfoRow').append($('<div>').addClass('peGlobalToolarbarInfoIcon').append($('<i>').addClass('fa '+objInfo.icon))).append($objRowContent);
             $objInfoContainer.append($objRow);
         });
-
         $objContainer.append($objInfoContainer);
 
 
-        var $objActionContainer = $('<div>').addClass('peGlobalToolbarInfo');
 
-        //render various page-informations
+        //render various page-actions
+        var $objActionContainer = $('<div>').addClass('peGlobalToolbarInfo');
         $.each(KAJONA.admin.pageActions, function(entryName, objInfo) {
             var $objLink = $('<a>').on('click', objInfo.onclick).append($('<div>').addClass('peGlobalToolarbarInfoIcon').append($('<i>').addClass('fa '+objInfo.icon))).append($('<div>').addClass('peGlobalToolbarInfoText').append(objInfo.label));
-
             var $objRowContent = $('<div>').addClass('peGlobalToolbarInfoLink').append($objLink);
-
             var $objRow = $('<div>').addClass('peGlobalToolbarInfoRow peGlobalToolbarActionRow').append($objRowContent);
             $objActionContainer.append($objRow);
         });
-
         $objContainer.append($objActionContainer);
+
+
+        //attach a page-jump autocomplete
+        var $objJumpContainer = $('<div>').addClass('peGlobalToolbarInfo');
+        var $objInput = $('<input>').attr('id', 'peGlobalToolbarPageJump').autocomplete({
+            source: function(request, response) {
+                $.ajax({
+                    url: KAJONA_WEBPATH+'/xml.php?admin=1&module=pages&action=getPagesByFilter',
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {
+                        filter: request.term
+                    },
+                    success: response
+                });
+            },
+            minLength: 2,
+            select: function( event, ui ) {
+                log( ui.item ?
+                "Selected: " + ui.item.value + " aka " + ui.item.id :
+                "Nothing selected, input was " + this.value );
+            }
+        });
+        //._renderItem = function( ul, item ) {
+        //    return $( "<li>" )
+        //        .append( "<a>" + item.label + "<br>" + item.desc + "</a>" )
+        //        .appendTo( ul );
+        //};
+
+        $objJumpContainer.append($objInput);
+
+        $objContainer.append($objJumpContainer);
 
         $objBody.append($objContainer);
     }
