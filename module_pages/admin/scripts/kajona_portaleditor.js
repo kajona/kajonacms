@@ -564,13 +564,16 @@ KAJONA.admin.portaleditor.globalToolbar = {
                 "Selected: " + ui.item.value + " aka " + ui.item.id :
                 "Nothing selected, input was " + this.value );
             }
-        });
-        //._renderItem = function( ul, item ) {
-        //    return $( "<li>" )
-        //        .append( "<a>" + item.label + "<br>" + item.desc + "</a>" )
-        //        .appendTo( ul );
-        //};
 
+
+        });
+        $objInput.data("ui-autocomplete")._renderMenu = function( ul, items ) {
+            var that = this;
+            $.each( items, function( index, item ) {
+                that._renderItemData( ul, item );
+            });
+            $( ul ).addClass('peGlobalAutocompleteSuggest');
+        };
         $objJumpContainer.append($objInput);
 
         $objContainer.append($objJumpContainer);

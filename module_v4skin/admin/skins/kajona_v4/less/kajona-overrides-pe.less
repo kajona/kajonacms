@@ -376,6 +376,35 @@ body *[data-kajona-editable] {
     }
 }
 
+.peGlobalAutocompleteSuggest {
+    z-index: 1500;
+
+    .ui-menu-item {
+        background-color: @peButtonToolbarBackground !important;
+        color: #fff;
+        font-size: 12px;
+
+        a {
+            color: #fff;
+        }
+    }
+
+    .ui-state-focus {
+        background-color: @peButtonToolbarBackgroundHover;
+        background-image: none;
+        border-radius: 0;
+    }
+
+    .ui-corner-all, &.ui-corner-all {
+        border-radius: 0;
+    }
+
+    &.ui-widget-content {
+        background: none;
+        border: 1px solid #fff;
+    }
+}
+
 .loadingContainerBackground {
     position: absolute;
     left: 50%;
