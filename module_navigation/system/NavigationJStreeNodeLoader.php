@@ -18,13 +18,11 @@ use class_adminskin_helper;
 use class_link;
 
 /**
- * Model for a page
- *
+ * @package module_navigation
  * @author stefan.meyer1@yahoo.de
- * @targetTable element.element_id
  *
- * @module pages_content
- * @moduleId _pages_content_modul_id_
+ * @module navigation
+ * @moduleId navigation_modul_id_
  */
 class NavigationJStreeNodeLoader implements InterfaceJStreeNodeLoader
 {

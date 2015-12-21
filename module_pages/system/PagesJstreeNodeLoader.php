@@ -16,13 +16,10 @@ use class_adminskin_helper;
 use class_link;
 
 /**
- * Model for a page
- *
  * @author stefan.meyer1@yahoo.de
- * @targetTable element.element_id
  *
- * @module pages_content
- * @moduleId _pages_content_modul_id_
+ * @module pages
+ * @moduleId _pages_modul_id_
  */
 class PagesJstreeNodeLoader implements InterfaceJStreeNodeLoader
 {
