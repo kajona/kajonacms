@@ -2440,20 +2440,16 @@ HTML;
      * @param string $strLoadNodeDataUrl , systemid is appended automatically
      * @param string $strRootNodeSystemid
      * @param array $arrNodesToExpand
-     * @param bool $bitOrderingEnabled
-     * @param bool $bitHierachicalSortEnabled
-     *
+     * @param bool $bitCheckboxEnabled
      *
      * @return string
      */
-    public function getTree($strLoadNodeDataUrl, $strRootNodeSystemid = "", $arrNodesToExpand = array(), $bitOrderingEnabled = false, $bitHierachicalSortEnabled = false, $bitCheckboxEnabled = false)
+    public function getTree($strLoadNodeDataUrl, $strRootNodeSystemid = "", $arrNodesToExpand = array(), $bitCheckboxEnabled = false)
     {
         $arrTemplate = array();
         $arrTemplate["rootNodeSystemid"] = $strRootNodeSystemid;
         $arrTemplate["loadNodeDataUrl"] = $strLoadNodeDataUrl;
         $arrTemplate["treeId"] = generateSystemid();
-        $arrTemplate["orderingEnabled"] = $bitOrderingEnabled ? "true" : "false";
-        $arrTemplate["hierarchialSortEnabled"] = $bitHierachicalSortEnabled ? "true" : "false";
         $arrTemplate["checkboxEnabled"] = $bitCheckboxEnabled ? "true" : "false";
         $arrTemplate["treeviewExpanders"] = "";
         for ($intI = 0; $intI < count($arrNodesToExpand); $intI++) {

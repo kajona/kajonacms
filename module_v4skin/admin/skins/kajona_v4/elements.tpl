@@ -191,8 +191,31 @@ Loads the script-helper and adds the table to the drag-n-dropable tables getting
             KAJONA.admin.tooltip.addTooltip($(this).find("td.listsorthandle"), "[lang,commons_sort_vertical,system]");
 
             if(bitMoveToTree) {
-                $(this).find("td.treedrag").css('cursor', 'move').addClass("jstree-draggable").append("<i class='fa fa-arrows-h' data-systemid='"+$(this).closest("tr").data("systemid")+"'></i>");
+                $(this).find("td.treedrag").css('cursor', 'move')
+                        .addClass("jstree-listdraggable").append("<i class='fa fa-arrows-h' data-systemid='"+$(this).data("systemid")+"'></i>");
                 KAJONA.admin.tooltip.addTooltip($(this).find("td.treedrag"), "[lang,commons_sort_totree,system]");
+
+                //init jstree dcalcraggable
+                $('td.treedrag.jstree-listdraggable').on('mousedown', function (e) {
+                    var strSystemId = $(this).closest("tr").data("systemid");
+                    var strTitle = $(this).closest("tr").find(".title").text();
+
+                    var objData = {
+                        'jstree' : true,
+                        'obj' : $(this),
+                        'nodes' : [
+                            {
+                                id : strSystemId,
+                                text: strTitle
+                            }
+                        ]
+                    };
+                    var event = e;
+                    var strHtml = '<div id="jstree-dnd" class="jstree-default"><i class="jstree-icon jstree-er"></i>' + strTitle + '</div>';//drag container
+                    return $.vakata.dnd.start(event, objData, strHtml);
+
+                    //div
+                });
             }
         });
     });
@@ -1544,141 +1567,131 @@ The language switch surrounds the buttons
     <div id="%%treeId%%" class="treeDiv"></div>
     <script type="text/javascript">
         KAJONA.admin.loader.loadFile([
-            "/core/module_system/admin/scripts/jstree/jquery.jstree.js",
-            "/core/module_system/admin/scripts/jstree/jquery.hotkeys.js"
+            "/core/module_system/admin/scripts/jstree3/dist/jstree.js"
         ], function() {
 
-            //create a valid tree config - drag n drop enabled, sorting enabled
-            var check_move = function(m) { return false; };
-            if('%%orderingEnabled%%' == 'true') {
-                check_move = function(m) {
-
-                    if(m.o.attr("draggable") === "false")
-                        return false;
-
-                    var p = this._get_parent(m.o);
-                    if(!p) return false;
-                    p = p == -1 ? this.get_container() : p;
-                    if(p === m.np) return true;
-                    if(p[0] && m.np[0] && p[0] === m.np[0]) return true;
-                    return false;
-                };
+            var bitCheckBoxEnabled = false;
+            if('%%checkboxEnabled%%' == 'true') {
+                bitCheckBoxEnabled = true;
             }
 
-            if('%%hierarchialSortEnabled%%' == 'true') {
-                check_move = function(m) {
-                    if(m.o.attr("draggable") === "false")
-                        return false;
-                    return true;
-                };
+            var arrPlugins = ['dnd'];
+            if(bitCheckBoxEnabled) {
+                arrPlugins.push('checkbox');
+            }
+
+            //Moves the given node to node_parent
+            var kjMoveNode = function(node, node_parent, node_position, more) {
+                //node moved
+                var strNodeId = node.id;
+                var strNewParentId = node_parent.id;
+
+                //save new parent to backend
+                KAJONA.admin.ajax.genericAjaxCall("system", "setPrevid", strNodeId+"&prevId="+strNewParentId, function() {
+                    location.reload();
+                });
+                return true;
             };
 
-            $('#%%treeId%%').jstree({
+            //Checks if a node can be moved
+            var kjCheckMoveNode = function(node, node_parent, node_position, more) {
+                var targetNode = more.ref;
+                var strDragId = node.id;
+                var strTargetId = targetNode.id;
+                var strInsertPosition = more.pos; //"b"=>before, "a"=>after, "i"=inside
 
-                "json_data" : {
-                    "ajax" : {
-                        "url" : "%%loadNodeDataUrl%%",
-                        "data" : function (n) {
-                            return {
-                                "systemid" : n.attr ? n.attr("systemid") : '%%rootNodeSystemid%%',
-                                "rootnode" : '%%rootNodeSystemid%%'
-                            };
-                        }
-                    }
-                },
-                "crrm" : {
-                    "move" : {
-                        "check_move" : check_move
-                    }
-                },
-                "types" : {
-                    "default" : {
-                        "renamable" : "none"
-                    }
-                },
-                "dnd" : {
-                    "drop_finish" : function () {
-                    },
-                    "drag_check" : function (data) {
-
-                        var draggedId = $(data.o).data("systemid");
-                        var targetId = $(data.r).attr("systemid");
-
-                        //validate, if the drag-node is the same as the target
-                        if(draggedId == targetId)
-                            return false;
-
-                        //node already an existing parent node?
-                        var arrParent = $("#"+targetId).closest("li[systemid='"+draggedId+"']");
-                        if(arrParent.length != 0) {
-                            return false;
-                        }
-
-                        return {
-                            after : false,
-                            before : false,
-                            inside : true
-                        };
-                    },
-                    "drag_finish" : function (data) {
-
-                        var draggedId = $(data.o).data("systemid");
-                        var targetId = $(data.r).attr("systemid");
-
-                        var arrParent = $("#"+targetId).closest("li[systemid='"+draggedId+"']");
-                        if(arrParent.length != 0) {
-                            location.reload();
-                            return false;
-                        }
-
-                        //save new parent to backend
-                        KAJONA.admin.ajax.genericAjaxCall("system", "setPrevid", draggedId+"&prevId="+targetId, function() {
-                            location.reload();
-                        });
-
-                    }
-                },
-                /*"dnd" : {
-                    "drag_check" : function (data) { return false; },
-                    "drop_target" : false,
-                    "drag_target" : false
-                },*/
-                "themes" : {
-                    "url" : "_webpath_/core/module_system/admin/scripts/jstree/themes/default/style.css",
-                    "icons" : false
-                },
-                "core" : {
-                    "initially_open" : [ %%treeviewExpanders%% ],
-                    "html_titles" : true
-                },
-                "plugins" : [ "themes","json_data","ui","dnd","crrm","types" ]
-            })
-            //TODO: Hotkeys removed. currently theres no way of preventing a node-renaming, e.g. by pressing f2
-            .bind("select_node.jstree", function (event, data) {
-                if(data.rslt.obj.attr("link")) {
-                    document.location.href=data.rslt.obj.attr("link");
+                //only insert are allowed, no ordering
+                if (strInsertPosition !== "i") {
+                    return false;
                 }
-            })
-            .bind("load_node.jstree", function(e, data) {
-                KAJONA.admin.tooltip.addTooltip('#'+this.id+" a span");
-            })
-            .bind("rename_node.jstree", function (NODE, REF_NODE) {
-                // Do your operation
-            })
-            .bind("move_node.jstree", function (e, data) {
-                data.rslt.o.each(function (i) {
 
-                    var prevId = (data.rslt.cr === -1 ? '%%rootNodeSystemid%%' : data.rslt.np.attr("id"));
-                    var systemid = $(this).attr("id");
-                    var pos = (data.rslt.cp + i +1)
-                    KAJONA.admin.ajax.genericAjaxCall("system", "setPrevid", systemid+"&prevId="+prevId, function() {
-                        KAJONA.admin.ajax.setAbsolutePosition(systemid, pos, null, function() {
-                            location.reload();
-                        });
-                    });
+                //dragged node already direct childnode of target?
+                var arrTargetChildren = targetNode.children;
+                if($.inArray(strDragId, arrTargetChildren) > -1){
+                    return false;
+                }
 
-                });
-            });
+                //dragged node is parent of target?
+                var arrTargetParents = targetNode.parents;
+                if($.inArray(strDragId, arrTargetParents) > -1){
+                    return false;//TODO maybe not needed, already check by jstree it self
+                }
+
+                //drage node same as target node?
+                if(strDragId == strTargetId) {
+                    return false;//TODO maybe not needed, already check by jstree it self
+                }
+
+                return true;
+            };
+
+            $('#%%treeId%%').jstree(
+                    {
+                        'core' : {
+
+                            /**
+                             *
+                             * @param operation operation can be 'create_node', 'rename_node', 'delete_node', 'move_node' or 'copy_node'
+                             * @param node the selected node
+                             * @param node_parent
+                             * @param node_position
+                             * @param more on dnd => more is the hovered node
+                             * @returns {boolean}
+                             */
+                            'check_callback' : function (operation, node, node_parent, node_position, more) {
+                                // operation can be 'create_node', 'rename_node', 'delete_node', 'move_node' or 'copy_node'
+                                // in case of 'rename_node' node_position is filled with the new node name
+
+                                if(operation === 'move_node') {
+                                    //check when dragging
+                                    if(more.dnd) {
+                                        return kjCheckMoveNode(node, node_parent, node_position, more);
+                                    }
+                                    else {
+                                        return kjMoveNode(node, node_parent, node_position, more);
+                                    }
+                                }
+
+                                if(operation === 'create_node') {
+                                    return true;//Check for assignment tree
+                                }
+
+                                return false;
+                            },
+                            'expand_selected_onload': true,
+                            'data': {
+                                'url': function (node) {
+                                    return "%%loadNodeDataUrl%%";
+                                },
+                                'data': function (node) {
+                                    if (node.id === "#") {
+                                        node.systemid = '%%rootNodeSystemid%%',
+                                                node.jstree_initialtoggling = [ %%treeviewExpanders%% ]
+                                    }
+                                    else {
+                                        node.systemid = node.id
+                                    }
+                                    return node
+                                }
+                            },
+                            'themes': {
+                                "url": "_webpath_/core/module_system/admin/scripts/jstree3/src/themes/default/style.css",
+                                "icons": false
+                            }
+                        },
+                        'dnd': {
+                            'check_while_dragging' : true
+                        },
+                        'plugins': arrPlugins
+                    })
+                    .bind("select_node.jstree", function (event, data) {
+
+                        if(data.node.a_attr) {
+                            if(data.node.a_attr.href) {
+                                document.location.href = data.node.a_attr.href;//Document reload
+                            }
+                        }
+                    })
         });
     </script>
 </tree>
