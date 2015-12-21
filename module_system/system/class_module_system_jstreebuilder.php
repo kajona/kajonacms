@@ -1,16 +1,21 @@
 <?php
 /*"******************************************************************************************************
-*   (c) 2010-2015 ARTEMEON                                                                              *
+*   (c) 2004-2006 by MulchProductions, www.mulchprod.de                                                 *
+*   (c) 2007-2015 by Kajona, www.kajona.de                                                              *
+*       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
-*	$Id$                                         *
+*	$Id$                                *
 ********************************************************************************************************/
 
 
 /**
  *
  *
- * @package module_prozessverwaltung
- * @author stefan.meyer@artemeon.de
+ * @package module_system
+ * @author stefan.meyer1@yahoo.de
+ *
+ * @module system
+ * @moduleId _system_modul_id_
  *
  */
 class class_module_system_jstreebuilder {
