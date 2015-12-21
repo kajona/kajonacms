@@ -184,7 +184,7 @@ class class_module_packagemanager_packagemanager_template implements interface_p
      */
     public function remove(&$strLog) {
 
-        class_orm_base::setObjHandleLogicalDeletedGlobal(class_orm_deletedhandling_enum::INCLUDED());
+        class_orm_base::setObjHandleLogicalDeletedGlobal(class_orm_deletedhandling_enum::INCLUDED);
 
         if(!$this->isRemovable()) {
             return false;
@@ -199,7 +199,7 @@ class class_module_packagemanager_packagemanager_template implements interface_p
             }
         }
 
-        class_orm_base::setObjHandleLogicalDeletedGlobal(class_orm_deletedhandling_enum::EXCLUDED());
+        class_orm_base::setObjHandleLogicalDeletedGlobal(class_orm_deletedhandling_enum::EXCLUDED);
 
         return false;
     }

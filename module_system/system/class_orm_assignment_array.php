@@ -37,7 +37,7 @@ class class_orm_assignment_array extends ArrayObject {
      * @param class_root $objTargetObject
      * @param int $strProperty
      */
-    function __construct(class_root $objTargetObject, $strProperty, class_orm_deletedhandling_enum $objDeletedHandling) {
+    function __construct(class_root $objTargetObject, $strProperty, $objDeletedHandling) {
         $this->objTargetObject = $objTargetObject;
         $this->strProperty = $strProperty;
         $this->objDeletedHandling = $objDeletedHandling;

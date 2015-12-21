@@ -14,7 +14,11 @@
  * @method static class_reflection_enum VALUES()
  * @method static class_reflection_enum PARAMS()
  */
-class class_reflection_enum extends class_enum {
+class class_reflection_enum extends class_enum
+{
+    const VALUES = 1;
+    const PARAMS = 2;
+
     /**
      * Return the array of possible, so allowed values for the current enum
      *
