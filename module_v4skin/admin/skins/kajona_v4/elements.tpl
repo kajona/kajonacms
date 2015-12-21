@@ -200,14 +200,28 @@ Loads the script-helper and adds the table to the drag-n-dropable tables getting
                     var strSystemId = $(this).closest("tr").data("systemid");
                     var strTitle = $(this).closest("tr").find(".title").text();
 
+                    //Check if there a jstree instance (there should only one)
+                    var jsTree = $.jstree.reference('.treeDiv');
+
+                    //create basic node
+                    var objNode =   {
+                        id : strSystemId,
+                        text: strTitle
+                    };
+
+                    //if a jstree instanse exists try to find a node for it
+                    if(jsTree != null) {
+                        var treeNode = jsTree.get_node(strSystemId);
+                        if(treeNode != false) {
+                            objNode = treeNode;
+                        }
+                    }
+
                     var objData = {
                         'jstree' : true,
                         'obj' : $(this),
                         'nodes' : [
-                            {
-                                id : strSystemId,
-                                text: strTitle
-                            }
+                            objNode
                         ]
                     };
                     var event = e;

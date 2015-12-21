@@ -2481,7 +2481,7 @@ HTML;
      *
      * @return string
      */
-    public function getTree(\Kajona\System\System\SystemJSTreeConfig $objTreeConfig, $arrNodesToExpand = array())
+    public function getTree(\Kajona\System\System\SystemJSTreeConfig $objTreeConfig)
     {
         $arrNodesToExpand = $objTreeConfig->getArrNodesToExpand();
 
