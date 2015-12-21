@@ -7,8 +7,10 @@
 *	$Id$                                   *
 ********************************************************************************************************/
 
-namespace Kajona\Pages\System;
+namespace Kajona\Navigation\System;
 
+use class_module_navigation_point;
+use class_module_navigation_tree;
 use Kajona\System\System\InterfaceJStreeNodeLoader;
 use class_carrier;
 use class_objectfactory;
@@ -24,7 +26,7 @@ use class_link;
  * @module pages_content
  * @moduleId _pages_content_modul_id_
  */
-class PagesJstreeNodeLoader implements InterfaceJStreeNodeLoader
+class NavigationJStreeNodeLoader implements InterfaceJStreeNodeLoader
 {
 
     const NODE_TYPE_PAGE = "page";
@@ -55,52 +57,33 @@ class PagesJstreeNodeLoader implements InterfaceJStreeNodeLoader
             $arrNodes[] = $this->getNode($objSubProcess->getStrSystemid());
         }
 
-
         return $arrNodes;
     }
 
 
-    private function getNodeFolder(PagesFolder $objSingleEntry) {
-        $strLink = "";
-        if ($objSingleEntry->rightEdit()) {
-            $strLink = class_link::getLinkAdminHref("pages", "list", "systemid=".$objSingleEntry->getSystemid(), false);
-        }
+    private function getNodeNavigationPoint(class_module_navigation_point $objSinglePoint) {
 
         $arrNode = array(
-            "id" => $objSingleEntry->getSystemid(),
-            "text" => class_adminskin_helper::getAdminImage($objSingleEntry->getStrIcon())."&nbsp;".$objSingleEntry->getStrDisplayName(),
+            "id" => $objSinglePoint->getSystemid(),
+            "text" => class_adminskin_helper::getAdminImage($objSinglePoint->getStrIcon())."&nbsp;".$objSinglePoint->getStrDisplayName(),
             "a_attr"  => array(
-                "href"     => $strLink,
+                "href"     => class_link::getLinkAdminHref("navigation", "list", "&systemid=".$objSinglePoint->getSystemid(), false),
             ),
-            "type" => "folder",
-            "children" => count($this->getChildrenObjects($objSingleEntry)) > 0
+            "type" => "navigationpoint",
+            "children" => count($this->getChildrenObjects($objSinglePoint)) > 0
         );
 
         return $arrNode;
     }
 
-    private function getNodePage(PagesPage $objSingleEntry) {
-
-        $strTargetId = $objSingleEntry->getSystemid();
-        if ($objSingleEntry->getIntType() == PagesPage::$INT_TYPE_ALIAS && PagesPage::getPageByName($objSingleEntry->getStrAlias()) != null) {
-            $strTargetId = PagesPage::getPageByName($objSingleEntry->getStrAlias())->getSystemid();
-        }
-
-        $strLink = "";
-        if ($objSingleEntry->getIntType() == PagesPage::$INT_TYPE_ALIAS && class_objectfactory::getInstance()->getObject($strTargetId)->rightEdit()) {
-            $strLink = class_link::getLinkAdminHref("pages_content", "list", "systemid=".$strTargetId, false);
-        }
-        else if ($objSingleEntry->getIntType() == PagesPage::$INT_TYPE_PAGE && $objSingleEntry->rightEdit()) {
-            $strLink = class_link::getLinkAdminHref("pages_content", "list", "systemid=".$objSingleEntry->getSystemid(), false);
-        }
-
+    private function getNodeNavigationTree(class_module_navigation_tree $objSingleEntry) {
         $arrNode = array(
             "id" => $objSingleEntry->getSystemid(),
             "text" => class_adminskin_helper::getAdminImage($objSingleEntry->getStrIcon())."&nbsp;".$objSingleEntry->getStrDisplayName(),
             "a_attr"  => array(
-                "href"     => $strLink,
+                "href"     => class_link::getLinkAdminHref("navigation", "list", "&systemid=".$objSingleEntry->getSystemid(), false),
             ),
-            "type" => "page",
+            "type" => "navigationtree",
             "children" => count($this->getChildrenObjects($objSingleEntry)) > 0
         );
 
@@ -110,14 +93,13 @@ class PagesJstreeNodeLoader implements InterfaceJStreeNodeLoader
     public function getNode($strSystemId) {
 
         //1. Get Process
-        /** @var PagesPage $objSinglePage */
         $objSingleEntry = class_objectfactory::getInstance()->getObject($strSystemId);
 
-        if ($objSingleEntry instanceof PagesFolder) {
-            return $this->getNodeFolder($objSingleEntry);
+        if ($objSingleEntry instanceof class_module_navigation_point) {
+            return $this->getNodeNavigationPoint($objSingleEntry);
         }
-        if ($objSingleEntry instanceof PagesPage) {
-            return $this->getNodePage($objSingleEntry);
+        elseif ($objSingleEntry instanceof class_module_navigation_tree) {
+            return $this->getNodeNavigationTree($objSingleEntry);
         }
 
         return null;
@@ -125,8 +107,8 @@ class PagesJstreeNodeLoader implements InterfaceJStreeNodeLoader
 
     private function getChildrenObjects($objPage) {
         //Handle Children
-        $arrPages = PagesFolder::getPagesAndFolderList($objPage->getSystemid());
-        $arrPages = array_values(array_filter($arrPages, function($objPage) {return $objPage->rightView();}));
-        return $arrPages;
+        $arrNavigations = class_module_navigation_point::getNaviLayer($objPage->getSystemid());
+        $arrNavigations = array_values(array_filter($arrNavigations, function($objPage) {return $objPage->rightView();}));
+        return $arrNavigations;
     }
 }

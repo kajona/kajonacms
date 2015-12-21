@@ -6,6 +6,9 @@
 *-------------------------------------------------------------------------------------------------------*
 *   $Id$                             *
 ********************************************************************************************************/
+use Kajona\Navigation\System\NavigationJStreeNodeLoader;
+use Kajona\System\System\SystemJSTreeBuilder;
+use Kajona\System\System\SystemJSTreeConfig;
 
 
 /**
@@ -452,8 +455,14 @@ class class_module_navigation_admin extends class_admin_simple implements interf
         $strReturn = "";
 
         //generate the array of ids to expand initially
-        $arrNodes = $this->getPathArray();
-        $strReturn .= $this->objToolkit->getTreeview(class_link::getLinkAdminXml($this->getArrModule("modul"), "getChildNodes"), $arrNodes[0], $arrNodes, $strSideContent);
+        $arrNodesToExpand = $this->getPathArray();
+
+        $objTreeConfig = new SystemJSTreeConfig( );
+        $objTreeConfig->setStrRootNodeId($arrNodesToExpand[0]);
+        $objTreeConfig->setStrNodeEndpoint(class_link::getLinkAdminXml($this->getArrModule("modul"), "getChildNodes"));
+        $objTreeConfig->setArrNodesToExpand($arrNodesToExpand);
+
+        $strReturn .= $this->objToolkit->getTreeview($objTreeConfig, $strSideContent);
         return $strReturn;
     }
 
@@ -470,53 +479,19 @@ class class_module_navigation_admin extends class_admin_simple implements interf
      */
     protected function actionGetChildNodes() {
 
-        $arrNavigations = class_module_navigation_point::getNaviLayer($this->getSystemid());
+        $objJsTreeLoader = new SystemJSTreeBuilder(
+            new NavigationJStreeNodeLoader()
+        );
 
-        $arrReturn = array();
-
-        if(count($arrNavigations) > 0) {
-            /** @var class_module_navigation_point $objSinglePoint */
-            foreach ($arrNavigations as $objSinglePoint) {
-                if($objSinglePoint->rightView()) {
-
-                    $arrReturn[] = array(
-                        "data" => array(
-                            "title" => class_adminskin_helper::getAdminImage($objSinglePoint->getStrIcon())."&nbsp;".$objSinglePoint->getStrDisplayName()
-                        ),
-                        "state" => (count(class_module_navigation_point::getNaviLayer($objSinglePoint->getSystemid())) == 0 ? "" : "closed"),
-                        "attr" => array(
-                            "id" => $objSinglePoint->getSystemid(),
-                            "systemid" => $objSinglePoint->getSystemid(),
-                            "link" => class_link::getLinkAdminHref("navigation", "list", "&systemid=".$objSinglePoint->getSystemid(), false),
-                        )
-                    );
-
-                }
-            }
+        $arrSystemIdPath = $this->getParam("jstree_initialtoggling");
+        $bitInitialLoading = is_array($arrSystemIdPath);
+        if(!$bitInitialLoading) {
+            $arrSystemIdPath = array($this->getSystemid());
         }
 
-        $objCurNode = class_objectfactory::getInstance()->getObject($this->getSystemid());
-        if($objCurNode instanceof class_module_navigation_tree) {
-
-            $arrReturn = array(
-                "data" => array(
-                    "title" => class_adminskin_helper::getAdminImage($objCurNode->getStrIcon())."&nbsp;".$objCurNode->getStrDisplayName()
-                ),
-                "state" => "",
-                "attr" => array(
-                    "id" => $objCurNode->getSystemid(),
-                    "systemid" => $objCurNode->getSystemid(),
-                    "link" => "",
-                ),
-                "children" => $arrReturn
-            );
-
-        }
-
+        $arrReturn = $objJsTreeLoader->getJson($arrSystemIdPath, $bitInitialLoading);
         class_response_object::getInstance()->setStrResponseType(class_http_responsetypes::STR_TYPE_JSON);
-        return json_encode($arrReturn);
+        return $arrReturn;
     }
-
-
 }
 
