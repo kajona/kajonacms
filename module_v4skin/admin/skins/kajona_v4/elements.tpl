@@ -1676,16 +1676,9 @@ The language switch surrounds the buttons
             "/core/module_system/admin/scripts/jstree3/dist/jstree.js"
         ], function() {
 
-            var bitCheckBoxEnabled = false;
-            if('%%checkboxEnabled%%' == 'true') {
-                bitCheckBoxEnabled = true;
-            }
 
-            var arrPlugins = ['dnd'];
-            if(bitCheckBoxEnabled) {
-                arrPlugins.push('checkbox');
-            }
 
+            //1. Define DND Methods
             //Moves the given node to node_parent
             var kjMoveNode = function(node, node_parent, node_position, more) {
                 //node moved
@@ -1731,67 +1724,91 @@ The language switch surrounds the buttons
                 return true;
             };
 
-            $('#%%treeId%%').jstree(
-                    {
-                        'core' : {
+            //2. Create JS Tree Object
+            var jsTreeObj = {
+                'core' : {
 
-                            /**
-                             *
-                             * @param operation operation can be 'create_node', 'rename_node', 'delete_node', 'move_node' or 'copy_node'
-                             * @param node the selected node
-                             * @param node_parent
-                             * @param node_position
-                             * @param more on dnd => more is the hovered node
-                             * @returns {boolean}
-                             */
-                            'check_callback' : function (operation, node, node_parent, node_position, more) {
-                                // operation can be 'create_node', 'rename_node', 'delete_node', 'move_node' or 'copy_node'
-                                // in case of 'rename_node' node_position is filled with the new node name
+                    /**
+                     *
+                     * @param operation operation can be 'create_node', 'rename_node', 'delete_node', 'move_node' or 'copy_node'
+                     * @param node the selected node
+                     * @param node_parent
+                     * @param node_position
+                     * @param more on dnd => more is the hovered node
+                     * @returns {boolean}
+                     */
+                    'check_callback' : function (operation, node, node_parent, node_position, more) {
+                        // operation can be 'create_node', 'rename_node', 'delete_node', 'move_node' or 'copy_node'
+                        // in case of 'rename_node' node_position is filled with the new node name
 
-                                if(operation === 'move_node') {
-                                    //check when dragging
-                                    if(more.dnd) {
-                                        return kjCheckMoveNode(node, node_parent, node_position, more);
-                                    }
-                                    else {
-                                        return kjMoveNode(node, node_parent, node_position, more);
-                                    }
-                                }
-
-                                if(operation === 'create_node') {
-                                    return true;//Check for assignment tree
-                                }
-
-                                return false;
-                            },
-                            'expand_selected_onload': true,
-                            'data': {
-                                'url': function (node) {
-                                    return "%%loadNodeDataUrl%%";
-                                },
-                                'data': function (node) {
-                                    if (node.id === "#") {
-                                        node.systemid = '%%rootNodeSystemid%%',
-                                                node.jstree_initialtoggling = [ %%treeviewExpanders%% ]
-                                    }
-                                    else {
-                                        node.systemid = node.id
-                                    }
-                                    return node
-                                }
-                            },
-                            'themes': {
-                                "url": "_webpath_/core/module_system/admin/scripts/jstree3/src/themes/default/style.css",
-                                "icons": false
+                        if(operation === 'move_node') {
+                            //check when dragging
+                            if(more.dnd) {
+                                return kjCheckMoveNode(node, node_parent, node_position, more);
                             }
-                        },
-                        'dnd': {
-                            'check_while_dragging' : true
-                        },
-                        'plugins': arrPlugins
-                    })
-                    .bind("select_node.jstree", function (event, data) {
+                            else {
+                                return kjMoveNode(node, node_parent, node_position, more);
+                            }
+                        }
 
+                        if(operation === 'create_node') {
+                            return true;//Check for assignment tree
+                        }
+
+                        return false;
+                    },
+                    'expand_selected_onload': true,
+                    'data': {
+                        'url': function (node) {
+                            return "%%loadNodeDataUrl%%";
+                        },
+                        'data': function (node) {
+                            if (node.id === "#") {
+                                node.systemid = '%%rootNodeSystemid%%',
+                                        node.jstree_initialtoggling = [ %%treeviewExpanders%% ]
+                            }
+                            else {
+                                node.systemid = node.id
+                            }
+                            return node
+                        }
+                    },
+                    'themes': {
+                        "url": "_webpath_/core/module_system/admin/scripts/jstree3/src/themes/default/style.css",
+                        "icons": false
+                    }
+                },
+                'dnd': {
+                    'check_while_dragging' : true
+                },
+                'types': {
+                },
+                'plugins': arrPlugins
+            };
+
+
+            //3. Get TreeCOnfig
+            var treeConfig = %%treeConfig%%;
+
+            //4. Extend Js Tree Object due to jsTreeCOnfig
+            var arrPlugins = [];
+
+            if(treeConfig.checkbox) {
+                arrPlugins.push('checkbox');
+            }
+            if(treeConfig.dnd) {
+                arrPlugins.push('dnd');
+            }
+            if(treeConfig.types) {
+                arrPlugins.push('types');
+                jsTreeObj.types = treeConfig.types;
+            }
+
+            jsTreeObj.plugins = arrPlugins;
+
+            //5. Init JS Tree
+            $('#%%treeId%%').jstree(jsTreeObj)
+                    .bind("select_node.jstree", function (event, data) {
                         if(data.node.a_attr) {
                             if(data.node.a_attr.href) {
                                 document.location.href = data.node.a_attr.href;//Document reload

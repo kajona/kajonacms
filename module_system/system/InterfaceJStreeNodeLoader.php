@@ -8,6 +8,8 @@
 ********************************************************************************************************/
 
 
+namespace Kajona\System\System;
+
 /**
  *
  *
@@ -19,7 +21,7 @@
  *
  *
  */
-interface interface_module_system_jstree_node_loader {
+interface InterfaceJStreeNodeLoader {
 
     /**
      * Returns all child nodes for the given system id
@@ -37,6 +39,4 @@ interface interface_module_system_jstree_node_loader {
      * @return mixed
      */
     public function getNode($strSystemId);
-
-
 }

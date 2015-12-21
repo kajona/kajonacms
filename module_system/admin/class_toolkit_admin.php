@@ -2441,11 +2441,11 @@ HTML;
      *
      * @return string
      */
-    public function getTreeview($strLoadNodeDataUrl, $strRootNodeSystemid = "", $arrNodesToExpand = array(), $strSideContent = "")
+    public function getTreeview(\Kajona\System\System\SystemJSTreeConfig $objTreeConfig, $strSideContent = "")
     {
         $arrTemplate = array();
         $arrTemplate["sideContent"] = $strSideContent;
-        $arrTemplate["treeContent"] = $this->getTree($strLoadNodeDataUrl, $strRootNodeSystemid, $arrNodesToExpand);
+        $arrTemplate["treeContent"] = $this->getTree($objTreeConfig);
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "treeview");
         return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
     }
@@ -2481,13 +2481,15 @@ HTML;
      *
      * @return string
      */
-    public function getTree($strLoadNodeDataUrl, $strRootNodeSystemid = "", $arrNodesToExpand = array(), $bitCheckboxEnabled = false)
+    public function getTree(\Kajona\System\System\SystemJSTreeConfig $objTreeConfig, $arrNodesToExpand = array())
     {
+        $arrNodesToExpand = $objTreeConfig->getArrNodesToExpand();
+
         $arrTemplate = array();
-        $arrTemplate["rootNodeSystemid"] = $strRootNodeSystemid;
-        $arrTemplate["loadNodeDataUrl"] = $strLoadNodeDataUrl;
+        $arrTemplate["rootNodeSystemid"] = $objTreeConfig->getStrRootNodeId();
+        $arrTemplate["loadNodeDataUrl"] = $objTreeConfig->getStrNodeEndpoint();
         $arrTemplate["treeId"] = generateSystemid();
-        $arrTemplate["checkboxEnabled"] = $bitCheckboxEnabled ? "true" : "false";
+        $arrTemplate["treeConfig"] = $objTreeConfig->toJson();
         $arrTemplate["treeviewExpanders"] = "";
         for ($intI = 0; $intI < count($arrNodesToExpand); $intI++) {
             $arrTemplate["treeviewExpanders"] .= "\"".$arrNodesToExpand[$intI]."\"";

@@ -8,6 +8,8 @@
 ********************************************************************************************************/
 
 
+namespace Kajona\System\System;
+
 /**
  *
  *
@@ -18,7 +20,7 @@
  * @moduleId _system_modul_id_
  *
  */
-class class_module_system_jstreebuilder {
+class SystemJSTreeBuilder {
 
     private $objNodeLoader = null;
 
@@ -26,7 +28,7 @@ class class_module_system_jstreebuilder {
      * interface_module_prozessverwaltung_node constructor.
      * @param null $objNodeGetter
      */
-    public function __construct(interface_module_system_jstree_node_loader $objNodeGetter)
+    public function __construct(InterfaceJStreeNodeLoader $objNodeGetter)
     {
         $this->objNodeLoader = $objNodeGetter;
     }
