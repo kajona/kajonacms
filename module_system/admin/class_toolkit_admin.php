@@ -6,6 +6,7 @@
 *-------------------------------------------------------------------------------------------------------*
 *   $Id$                                 *
 ********************************************************************************************************/
+use Kajona\System\System\SystemJSTreeConfig;
 
 
 /**
@@ -2451,24 +2452,6 @@ HTML;
     }
 
     /**
-     * Creates a tree-view with an button which can be used inside an mode dialog
-     *
-     * @param $strLoadNodeDataUrl
-     * @param string $strRootNodeSystemid
-     * @param array $arrNodesToExpand
-     *
-     * @return string
-     * @throws class_exception
-     */
-    public function getTreeModalCheckbox($strLoadNodeDataUrl, $strRootNodeSystemid = "", $arrNodesToExpand = array())
-    {
-        $arrTemplate = array();
-        $arrTemplate["treeContent"] = $this->getTreeCheckbox($strLoadNodeDataUrl, $strRootNodeSystemid, $arrNodesToExpand);
-        $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "treeview_modal");
-        return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
-    }
-
-    /**
      * Create a tree-view UI-element.
      * The nodes are loaded via AJAX by calling the url passed as the first arg.
      * The optional third param is an ordered list of systemid identifying the nodes to expand initially.
@@ -2481,7 +2464,7 @@ HTML;
      *
      * @return string
      */
-    public function getTree(\Kajona\System\System\SystemJSTreeConfig $objTreeConfig)
+    public function getTree(SystemJSTreeConfig $objTreeConfig)
     {
         $arrNodesToExpand = $objTreeConfig->getArrNodesToExpand();
 
@@ -2498,33 +2481,6 @@ HTML;
             }
         }
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "tree");
-        return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
-    }
-
-    /**
-     * Returns an checkbox tree-view
-     *
-     * @param $strLoadNodeDataUrl
-     * @param string $strRootNodeSystemid
-     * @param array $arrNodesToExpand
-     *
-     * @return string
-     * @throws class_exception
-     */
-    public function getTreeCheckbox($strLoadNodeDataUrl, $strRootNodeSystemid = "", $arrNodesToExpand = array())
-    {
-        $arrTemplate = array();
-        $arrTemplate["rootNodeSystemid"] = $strRootNodeSystemid;
-        $arrTemplate["loadNodeDataUrl"] = $strLoadNodeDataUrl;
-        $arrTemplate["treeId"] = generateSystemid();
-        $arrTemplate["treeviewExpanders"] = "";
-        for ($intI = 0; $intI < count($arrNodesToExpand); $intI++) {
-            $arrTemplate["treeviewExpanders"] .= "\"".$arrNodesToExpand[$intI]."\"";
-            if ($intI < count($arrNodesToExpand) - 1) {
-                $arrTemplate["treeviewExpanders"] .= ",";
-            }
-        }
-        $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "tree_checkbox");
         return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
     }
 

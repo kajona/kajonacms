@@ -12,7 +12,6 @@ KAJONA.kajonatree = {
 
 /**
  * Object to initilaze a JsTree
- *
  */
 KAJONA.kajonatree.jstree = function () {
 
@@ -32,7 +31,7 @@ KAJONA.kajonatree.jstree = function () {
      * @param more
      * @returns {boolean}
      */
-    this.moveNode = function (node, node_parent, node_position, more) {
+    function moveNode(node, node_parent, node_position, more) {
         //node moved
         var strNodeId = node.id,
          strNewParentId = node_parent.id;
@@ -42,7 +41,7 @@ KAJONA.kajonatree.jstree = function () {
             location.reload();
         });
         return true;
-    };
+    }
 
     /**
      * Checks if a node cann be dropped to a certain place in the tree
@@ -53,7 +52,7 @@ KAJONA.kajonatree.jstree = function () {
      * @param more
      * @returns {boolean}
      */
-    this.checkMoveNode = function (node, node_parent, node_position, more) {
+    function checkMoveNode (node, node_parent, node_position, more) {
         var targetNode = more.ref,
          strDragId = node.id,
          strTargetId = targetNode.id,
@@ -82,7 +81,7 @@ KAJONA.kajonatree.jstree = function () {
         }
 
         return true;
-    };
+    }
 
 
     /**
@@ -149,10 +148,10 @@ KAJONA.kajonatree.jstree = function () {
                     if(operation === 'move_node') {
                         //check when dragging
                         if(more.dnd) {
-                            return treeContext.checkMoveNode(node, node_parent, node_position, more);
+                            return checkMoveNode(node, node_parent, node_position, more);
                         }
                         else {
-                            return treeContext.moveNode(node, node_parent, node_position, more);
+                            return moveNode(node, node_parent, node_position, more);
                         }
                     }
 
