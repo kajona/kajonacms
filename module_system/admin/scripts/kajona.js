@@ -898,6 +898,7 @@ KAJONA.admin.forms.renderMandatoryFields = function(arrFields) {
             var $objElement = $("#" + arrElement[0]);
             if($objElement)
                 $objElement.addClass("mandatoryFormElement");
+
         }
 
     }

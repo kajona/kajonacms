@@ -864,50 +864,38 @@ in addition, a container for the calendar is needed. Use %%calendarContainerId%%
         </div>
     </div>
     <script type="text/javascript">
-        KAJONA.admin.loader.loadFile(["_webpath_/core/module_system/admin/scripts/jquerytag/jquery.caret.min.js"], function(){
-            KAJONA.admin.loader.loadFile("_webpath_/core/module_system/admin/scripts/jquerytag/jquery.tag-editor.js", function(){
-                var objConfig = {
-                    minLength: 0,
-                    delay: 500,
-                    search: function(event, ui) {
-                        var $objCur = $(this);
+        KAJONA.admin.loader.loadFile(["/core/module_system/admin/scripts/jquerytag/jquery.caret.min.js"], function(){
+            KAJONA.admin.loader.loadFile("/core/module_system/admin/scripts/jquerytag/jquery.tag-editor.min.js", function(){
+                var objConfig = new KAJONA.v4skin.defaultAutoComplete();
 
-                        if (event.target.value.length < 2) {
-                            event.stopPropagation();
-                            return false;
-                        }
-
-                        $objCur.parent().parent().parent().css('background-image', 'url('+KAJONA_WEBPATH+'/core/module_v4skin/admin/skins/kajona_v4/img/loading-small.gif)');
-                        $objCur.parent().parent().parent().css('background-repeat', 'no-repeat');
-                        $objCur.parent().parent().parent().css('background-position', 'right');
-                    },
-                    response: function(event, ui) {
-                        $(this).parent().parent().parent().css('background-image', 'none');
-                    },
-                    focus: function() {
+                objConfig.search = function(event, ui) {
+                    if (event.target.value.length < 2) {
+                        event.stopPropagation();
                         return false;
-                    },
-                    select: function(event, ui) {
-                        var found = false;
-                        $("#%%name%%-list").find('input').each(function(){
-                            if ($(this).val() == ui.item.systemid) {
-                                found = true;
-                            }
-                        });
-                        if (!found) {
-                            $("#%%name%%-list").append('<input type="hidden" name="%%name%%_id[]" value="' + ui.item.systemid + '" data-title="' + ui.item.title + '" />');
-                        }
-                    },
-                    create: function(event, ui) {
-                        var $objCur = $(this);
-
-                        $objCur.data('ui-autocomplete')._renderItem = function(ul, item){
-                            return $('<li></li>')
-                                    .data('ui-autocomplete-item', item)
-                                    .append('<a class=\'ui-autocomplete-item\'>' + item.icon + item.title + '</a>')
-                                    .appendTo(ul);
-                        };
                     }
+                    $(this).closest('ul.tag-editor').css('background-image', 'url('+KAJONA_WEBPATH+'/core/module_v4skin/admin/skins/kajona_v4/img/loading-small.gif)');
+                };
+                objConfig.response = function(event, ui) {
+                    $(this).closest('ul.tag-editor').css('background-image', 'none');
+                };
+                objConfig.select = function(event, ui) {
+                    var found = false;
+                    $("#%%name%%-list").find('input').each(function(){
+                        if ($(this).val() == ui.item.systemid) {
+                            found = true;
+                        }
+                    });
+                    if (!found) {
+                        $("#%%name%%-list").append('<input type="hidden" name="%%name%%_id[]" value="' + ui.item.systemid + '" data-title="' + ui.item.title + '" />');
+                    }
+                };
+                objConfig.create = function(event, ui) {
+                    $(this).data('ui-autocomplete')._renderItem = function(ul, item){
+                        return $('<li></li>')
+                                .data('ui-autocomplete-item', item)
+                                .append('<a class=\'ui-autocomplete-item\'>' + item.icon + item.title + '</a>')
+                                .appendTo(ul);
+                    };
                 };
 
                 objConfig.source = function(request, response) {
@@ -931,32 +919,36 @@ in addition, a container for the calendar is needed. Use %%calendarContainerId%%
                     });
                 };
 
-                $("#%%name%%").tagEditor({
-                    initialTags: %%values%%,
-                    forceLowercase: false,
-                    //onChange: %%onChange%%,
-                    autocomplete: objConfig,
-                    beforeTagSave: function(field, editor, tags, tag, val){
-                        var found = false;
-                        $("#%%name%%-list").find('input').each(function(){
-                            if ($(this).data('title') == val) {
-                                found = true;
-                            }
-                        });
-                        if (!found) {
-                            return false;
+                var $objInput = $("#%%name%%");
+                $objInput.tagEditor({
+                            initialTags: %%values%%,
+                        forceLowercase: false,
+                        autocomplete: objConfig,
+                        beforeTagSave: function(field, editor, tags, tag, val){
+                    var found = false;
+                    $("#%%name%%-list").find('input').each(function(){
+                        if ($(this).data('title') == val) {
+                            found = true;
                         }
-                    },
-                    beforeTagDelete: function(field, editor, tags, val){
-                        $("#%%name%%-list").find('input').each(function(){
-                            if ($(this).data('title') == val) {
-                                $(this).remove();
-                            }
-                        });
+                    });
+                    if (!found) {
+                        return false;
                     }
-                });
-            }, true);
-        }, true);
+                },
+                beforeTagDelete: function(field, editor, tags, val){
+                    $("#%%name%%-list").find('input').each(function(){
+                        if ($(this).data('title') == val) {
+                            $(this).remove();
+                        }
+                    });
+                }
+            });
+                $objInput.parent().find('ul.tag-editor').css('background-image', 'url('+KAJONA_WEBPATH+'/core/module_v4skin/admin/skins/kajona_v4/img/loading-small-still.gif)').css('background-repeat', 'no-repeat').css('background-position', 'right center');
+                if($objInput.hasClass('mandatoryFormElement')) {
+                    $objInput.parent().find('ul.tag-editor').addClass('mandatoryFormElement');
+                }
+            });
+        });
     </script>
 </input_objecttags>
 
