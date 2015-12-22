@@ -194,42 +194,6 @@ Loads the script-helper and adds the table to the drag-n-dropable tables getting
                 $(this).find("td.treedrag").css('cursor', 'move')
                         .addClass("jstree-listdraggable").append("<i class='fa fa-arrows-h' data-systemid='"+$(this).data("systemid")+"'></i>");
                 KAJONA.admin.tooltip.addTooltip($(this).find("td.treedrag"), "[lang,commons_sort_totree,system]");
-
-                //init jstree dcalcraggable
-                $('td.treedrag.jstree-listdraggable').on('mousedown', function (e) {
-                    var strSystemId = $(this).closest("tr").data("systemid");
-                    var strTitle = $(this).closest("tr").find(".title").text();
-
-                    //Check if there a jstree instance (there should only one)
-                    var jsTree = $.jstree.reference('.treeDiv');
-
-                    //create basic node
-                    var objNode =   {
-                        id : strSystemId,
-                        text: strTitle
-                    };
-
-                    //if a jstree instanse exists try to find a node for it
-                    if(jsTree != null) {
-                        var treeNode = jsTree.get_node(strSystemId);
-                        if(treeNode != false) {
-                            objNode = treeNode;
-                        }
-                    }
-
-                    var objData = {
-                        'jstree' : true,
-                        'obj' : $(this),
-                        'nodes' : [
-                            objNode
-                        ]
-                    };
-                    var event = e;
-                    var strHtml = '<div id="jstree-dnd" class="jstree-default"><i class="jstree-icon jstree-er"></i>' + strTitle + '</div>';//drag container
-                    return $.vakata.dnd.start(event, objData, strHtml);
-
-                    //div
-                });
             }
         });
     });
@@ -1687,148 +1651,19 @@ The language switch surrounds the buttons
     <div id="%%treeId%%" class="treeDiv"></div>
     <script type="text/javascript">
         KAJONA.admin.loader.loadFile([
-            "/core/module_system/admin/scripts/jstree3/dist/jstree.js"
+            "/core/module_system/admin/scripts/jstree3/dist/jstree.js",
+            "/core/module_system/admin/scripts/jstree3/src/themes/default/style.css",
+            "/core/module_system/admin/scripts/jstree3/kajonatree.js"
         ], function() {
 
+            var jsTree = new KAJONA.kajonatree.jstree();
+            jsTree.loadNodeDataUrl = "%%loadNodeDataUrl%%";
+            jsTree.rootNodeSystemid = '%%rootNodeSystemid%%';
+            jsTree.treeConfig = %%treeConfig%%;
+            jsTree.treeId = '%%treeId%%';
+            jsTree.treeviewExpanders = [ %%treeviewExpanders%% ];
 
-
-            //1. Define DND Methods
-            //Moves the given node to node_parent
-            var kjMoveNode = function(node, node_parent, node_position, more) {
-                //node moved
-                var strNodeId = node.id;
-                var strNewParentId = node_parent.id;
-
-                //save new parent to backend
-                KAJONA.admin.ajax.genericAjaxCall("system", "setPrevid", strNodeId+"&prevId="+strNewParentId, function() {
-                    location.reload();
-                });
-                return true;
-            };
-
-            //Checks if a node can be moved
-            var kjCheckMoveNode = function(node, node_parent, node_position, more) {
-                var targetNode = more.ref;
-                var strDragId = node.id;
-                var strTargetId = targetNode.id;
-                var strInsertPosition = more.pos; //"b"=>before, "a"=>after, "i"=inside
-
-                //only insert are allowed, no ordering
-                if (strInsertPosition !== "i") {
-                    return false;
-                }
-
-                //dragged node already direct childnode of target?
-                var arrTargetChildren = targetNode.children;
-                if($.inArray(strDragId, arrTargetChildren) > -1){
-                    return false;
-                }
-
-                //dragged node is parent of target?
-                var arrTargetParents = targetNode.parents;
-                if($.inArray(strDragId, arrTargetParents) > -1){
-                    return false;//TODO maybe not needed, already check by jstree it self
-                }
-
-                //drage node same as target node?
-                if(strDragId == strTargetId) {
-                    return false;//TODO maybe not needed, already check by jstree it self
-                }
-
-                return true;
-            };
-
-            //2. Create JS Tree Object
-            var jsTreeObj = {
-                'core' : {
-
-                    /**
-                     *
-                     * @param operation operation can be 'create_node', 'rename_node', 'delete_node', 'move_node' or 'copy_node'
-                     * @param node the selected node
-                     * @param node_parent
-                     * @param node_position
-                     * @param more on dnd => more is the hovered node
-                     * @returns {boolean}
-                     */
-                    'check_callback' : function (operation, node, node_parent, node_position, more) {
-                        // operation can be 'create_node', 'rename_node', 'delete_node', 'move_node' or 'copy_node'
-                        // in case of 'rename_node' node_position is filled with the new node name
-
-                        if(operation === 'move_node') {
-                            //check when dragging
-                            if(more.dnd) {
-                                return kjCheckMoveNode(node, node_parent, node_position, more);
-                            }
-                            else {
-                                return kjMoveNode(node, node_parent, node_position, more);
-                            }
-                        }
-
-                        if(operation === 'create_node') {
-                            return true;//Check for assignment tree
-                        }
-
-                        return false;
-                    },
-                    'expand_selected_onload': true,
-                    'data': {
-                        'url': function (node) {
-                            return "%%loadNodeDataUrl%%";
-                        },
-                        'data': function (node) {
-                            if (node.id === "#") {
-                                node.systemid = '%%rootNodeSystemid%%',
-                                        node.jstree_initialtoggling = [ %%treeviewExpanders%% ]
-                            }
-                            else {
-                                node.systemid = node.id
-                            }
-                            return node
-                        }
-                    },
-                    'themes': {
-                        "url": "_webpath_/core/module_system/admin/scripts/jstree3/src/themes/default/style.css",
-                        "icons": false
-                    }
-                },
-                'dnd': {
-                    'check_while_dragging' : true
-                },
-                'types': {
-                },
-                'plugins': arrPlugins
-            };
-
-
-            //3. Get TreeCOnfig
-            var treeConfig = %%treeConfig%%;
-
-            //4. Extend Js Tree Object due to jsTreeCOnfig
-            var arrPlugins = [];
-
-            if(treeConfig.checkbox) {
-                arrPlugins.push('checkbox');
-            }
-            if(treeConfig.dnd) {
-                arrPlugins.push('dnd');
-            }
-            if(treeConfig.types) {
-                arrPlugins.push('types');
-                jsTreeObj.types = treeConfig.types;
-            }
-
-            jsTreeObj.plugins = arrPlugins;
-
-            //5. Init JS Tree
-            $('#%%treeId%%').jstree(jsTreeObj)
-                    .bind("select_node.jstree", function (event, data) {
-                        if(data.node.a_attr) {
-                            if(data.node.a_attr.href) {
-                                document.location.href = data.node.a_attr.href;//Document reload
-                            }
-                        }
-                    })
+            jsTree.initTree();
         });
     </script>
 </tree>
