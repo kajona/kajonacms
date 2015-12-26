@@ -468,6 +468,11 @@ class PagesPortalController extends class_portal_controller implements interface
                 };
 
                 KAJONA.admin.pageActions = {
+                    onoff : {
+                        label: '{$this->getLang('pe_on_off', 'pages')}',
+                        onclick: function() { KAJONA.admin.portaleditor.openDialog('{$strEditUrl}'); return false;},
+                        icon: 'fa-power-off'
+                    },
                     edit : {
                         label: '{$this->getLang('pe_icon_page', 'pages')}',
                         onclick: function() { KAJONA.admin.portaleditor.openDialog('{$strEditUrl}'); return false;},

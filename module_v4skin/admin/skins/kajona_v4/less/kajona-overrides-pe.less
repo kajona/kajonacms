@@ -376,9 +376,17 @@ body *[data-kajona-editable] {
     }
 }
 
+#peGlobalToolbarPageJump {
+    width: 160px;
+    background-color: lighten(@peButtonToolbarBackground, 20%);
+    border: 1px solid #fff;
+    color: #fff;
+}
+
 .peGlobalAutocompleteSuggest {
     z-index: 1500;
 
+    background-color: @peButtonToolbarBackground !important;
     .ui-menu-item {
         background-color: @peButtonToolbarBackground !important;
         color: #fff;

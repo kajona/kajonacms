@@ -546,6 +546,7 @@ KAJONA.admin.portaleditor.globalToolbar = {
 
         //attach a page-jump autocomplete
         var $objJumpContainer = $('<div>').addClass('peGlobalToolbarInfo');
+
         var $objInput = $('<input>').attr('id', 'peGlobalToolbarPageJump').autocomplete({
             source: function(request, response) {
                 $.ajax({
@@ -560,9 +561,7 @@ KAJONA.admin.portaleditor.globalToolbar = {
             },
             minLength: 2,
             select: function( event, ui ) {
-                log( ui.item ?
-                "Selected: " + ui.item.value + " aka " + ui.item.id :
-                "Nothing selected, input was " + this.value );
+                document.location=KAJONA_WEBPATH+"/index.php?page="+ui.item.value;
             }
 
 
@@ -574,7 +573,10 @@ KAJONA.admin.portaleditor.globalToolbar = {
             });
             $( ul ).addClass('peGlobalAutocompleteSuggest');
         };
-        $objJumpContainer.append($objInput);
+
+        var $objRowContent = $('<div>').addClass('peGlobalToolbarInfoText').append($('<div>').html("JS.PE.lang.Quickjump")).append($('<div>').append($objInput));
+        var $objRow = $('<div>').addClass('peGlobalToolbarInfoRow').append($('<div>').addClass('peGlobalToolarbarInfoIcon').append($('<i>').addClass('fa fa-search'))).append($objRowContent);
+        $objJumpContainer.append($objRow);
 
         $objContainer.append($objJumpContainer);
 
