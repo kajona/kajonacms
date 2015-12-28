@@ -38,6 +38,7 @@
     display: block !important;
 	line-height: 17px;
     background-color: @peButtonToolbarBackground !important;
+    overflow-y: auto;
 
     background-image: url(../img/pusteblume.png);
     background-repeat: no-repeat;
@@ -86,17 +87,17 @@
 
             }
 
-            a {
-                color: #fff !important;
-                display: block;
-                padding: 7px 2px 7px 2px;
-                cursor: pointer;
+        }
+        .peGlobalToolbarInfoLink {
+            //color: #fff !important;
+            //display: block;
+            //padding: 7px 2px 7px 2px;
+            //cursor: pointer;
 
-                &:hover {
-                    background-color: @peButtonToolbarBackgroundHover;
-                }
-
+            &:hover {
+                background-color: @peButtonToolbarBackgroundHover;
             }
+
         }
     }
 }

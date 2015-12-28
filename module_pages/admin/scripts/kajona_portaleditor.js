@@ -505,9 +505,26 @@ KAJONA.admin.portaleditor.dragndrop.init = function () {
 };
 
 
+KAJONA.admin.portaleditor.toolbar = {};
+KAJONA.admin.portaleditor.toolbar.Action = function(strLabel, strValue, strIcon, strOnClick) {
+    this.strLabel = strLabel;
+    this.strValue = strValue;
+    this.strIcon = strIcon;
+    this.strOnClick = strOnClick;
+
+};
+
+KAJONA.admin.portaleditor.toolbar.Separator = function() {
+
+};
+
 KAJONA.admin.portaleditor.globalToolbar = {
     init: function() {
         var $objBody = $('body');
+
+
+
+
 
         var $objContainer = $('<div>').addClass('peGlobalToolbar');
 
@@ -522,26 +539,53 @@ KAJONA.admin.portaleditor.globalToolbar = {
         );
 
 
-        //render various page-informations
         var $objInfoContainer = $('<div>').addClass('peGlobalToolbarInfo');
-        $.each(KAJONA.admin.pageInfo, function(entryName, objInfo) {
-            var $objRowContent = $('<div>').addClass('peGlobalToolbarInfoText').append($('<div>').html(objInfo.label)).append($('<div>').html(objInfo.value));
-            var $objRow = $('<div>').addClass('peGlobalToolbarInfoRow').append($('<div>').addClass('peGlobalToolarbarInfoIcon').append($('<i>').addClass('fa '+objInfo.icon))).append($objRowContent);
+        $(KAJONA.admin.peToolbarActions).each(function(index, objEntry) {
+
+            if(objEntry instanceof KAJONA.admin.portaleditor.toolbar.Separator) {
+                var $objRow = $('<hr>');
+            }
+
+            if(objEntry instanceof KAJONA.admin.portaleditor.toolbar.Action) {
+
+                var $objRowContent = $('<div>').addClass('peGlobalToolbarInfoText')
+                    .append($('<div>').html(objEntry.strLabel))
+                    .append($('<div>').html(objEntry.strValue));
+
+                var $objRow = $('<div>').addClass('peGlobalToolbarInfoRow')
+                    .append($('<div>').addClass('peGlobalToolarbarInfoIcon')
+                        .append($('<i>').addClass('fa ' + objEntry.strIcon)))
+                    .append($objRowContent);
+
+
+                if(objEntry.strOnClick instanceof Function) {
+                    //add onclick handler
+                    $objRow.on('click', objEntry.strOnClick);
+                    $objRow.addClass('peGlobalToolbarInfoLink');
+                }
+            }
+
             $objInfoContainer.append($objRow);
         });
+
+
+        //render various page-informations
+        //$.each(KAJONA.admin.pageInfo, function(entryName, objInfo) {
+        //
+        //});
         $objContainer.append($objInfoContainer);
 
 
 
         //render various page-actions
-        var $objActionContainer = $('<div>').addClass('peGlobalToolbarInfo');
-        $.each(KAJONA.admin.pageActions, function(entryName, objInfo) {
-            var $objLink = $('<a>').on('click', objInfo.onclick).append($('<div>').addClass('peGlobalToolarbarInfoIcon').append($('<i>').addClass('fa '+objInfo.icon))).append($('<div>').addClass('peGlobalToolbarInfoText').append(objInfo.label));
-            var $objRowContent = $('<div>').addClass('peGlobalToolbarInfoLink').append($objLink);
-            var $objRow = $('<div>').addClass('peGlobalToolbarInfoRow peGlobalToolbarActionRow').append($objRowContent);
-            $objActionContainer.append($objRow);
-        });
-        $objContainer.append($objActionContainer);
+        //var $objActionContainer = $('<div>').addClass('peGlobalToolbarInfo');
+        //$.each(KAJONA.admin.pageActions, function(entryName, objInfo) {
+        //    var $objLink = $('<a>').on('click', objInfo.onclick).append($('<div>').addClass('peGlobalToolarbarInfoIcon').append($('<i>').addClass('fa '+objInfo.icon))).append($('<div>').addClass('peGlobalToolbarInfoText').append(objInfo.label));
+        //    var $objRowContent = $('<div>').addClass('peGlobalToolbarInfoLink').append($objLink);
+        //    var $objRow = $('<div>').addClass('peGlobalToolbarInfoRow peGlobalToolbarActionRow').append($objRowContent);
+        //    $objActionContainer.append($objRow);
+        //});
+        //$objContainer.append($objActionContainer);
 
 
         //attach a page-jump autocomplete

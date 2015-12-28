@@ -442,53 +442,69 @@ class PagesPortalController extends class_portal_controller implements interface
             $strPageStatus = ($objPageData->getIntRecordStatus() == 1 ? $this->getLang("systemtask_systemstatus_active", "system") : $this->getLang("systemtask_systemstatus_inactive", "system"));
 
             $strPeToolbar .= "<script type='text/javascript'>
-                KAJONA.admin.actions = ".PagesPortaleditor::getInstance()->convertToJs().";
+            KAJONA.admin.actions = ".PagesPortaleditor::getInstance()->convertToJs().";
 
-                KAJONA.admin.pageInfo = {
-                    pagename : {
-                        label : '{$this->getLang('pe_status_page')}',
-                        value : '{$objPageData->getStrName()}',
-                        icon : 'fa-file-o'
-                    },
-                    pagestatus : {
-                        label : '{$this->getLang('pe_status_status')}',
-                        value : '{$strPageStatus}',
-                        icon : 'fa-eye'
-                    },
-                    pageauthor : {
-                        label : '{$this->getLang('pe_status_autor')}',
-                        value : '{$objPageData->getLastEditUser()}',
-                        icon : 'fa-user'
-                    },
-                    pagechangetime : {
-                        label : '{$this->getLang('pe_status_time')}',
-                        value : '{$strEditDate}',
-                        icon : 'fa-clock-o'
-                    }
-                };
+            KAJONA.portal.loader.loadFile([
+                '/core/module_pages/admin/scripts/kajona_portaleditor.js'
+            ], function() {
 
-                KAJONA.admin.pageActions = {
-                    onoff : {
-                        label: '{$this->getLang('pe_on_off', 'pages')}',
-                        onclick: function() { KAJONA.admin.portaleditor.openDialog('{$strEditUrl}'); return false;},
-                        icon: 'fa-power-off'
-                    },
-                    edit : {
-                        label: '{$this->getLang('pe_icon_page', 'pages')}',
-                        onclick: function() { KAJONA.admin.portaleditor.openDialog('{$strEditUrl}'); return false;},
-                        icon: 'fa-pencil'
-                    },
-                    new : {
-                        label: '{$this->getLang('pe_icon_new', 'pages')}',
-                        onclick: function() { KAJONA.admin.portaleditor.openDialog('{$strNewUrl}'); return false;},
-                        icon: 'fa-plus-circle'
-                    },
-                    backend : {
-                        label: '{$this->getLang('pe_icon_edit', 'pages')}',
-                        onclick: function() { document.location = '{$strPageEditUrl}';},
-                        icon: 'fa-file-o'
-                    }
-                };
+                KAJONA.admin.peToolbarActions = [
+
+                    new KAJONA.admin.portaleditor.toolbar.Action(
+                        '{$this->getLang('pe_status_page')}',
+                        '{$objPageData->getStrName()}',
+                        'fa-file-o',
+                        ''
+                    ),
+                    new KAJONA.admin.portaleditor.toolbar.Action(
+                        '{$this->getLang('pe_status_status')}',
+                        '{$strPageStatus}',
+                        'fa-eye',
+                        ''
+                    ),
+                    new KAJONA.admin.portaleditor.toolbar.Action(
+                        '{$this->getLang('pe_status_autor')}',
+                        '{$objPageData->getLastEditUser()}',
+                        'fa-user',
+                        ''
+                    ),
+                    new KAJONA.admin.portaleditor.toolbar.Action(
+                        '{$this->getLang('pe_status_time')}',
+                        '{$strEditDate}',
+                        'fa-clock-o',
+                        ''
+                    ),
+
+                    new KAJONA.admin.portaleditor.toolbar.Separator(),
+
+                    new KAJONA.admin.portaleditor.toolbar.Action(
+                        '{$this->getLang('pe_on_off', 'pages')}',
+                        '',
+                        'fa-power-off',
+                        function() { KAJONA.admin.portaleditor.openDialog('{$strEditUrl}'); return false;}
+                    ),
+                    new KAJONA.admin.portaleditor.toolbar.Action(
+                        '{$this->getLang('pe_icon_page', 'pages')}',
+                        '',
+                        'fa-pencil',
+                        function() { KAJONA.admin.portaleditor.openDialog('{$strEditUrl}'); return false;}
+                    ),
+                    new KAJONA.admin.portaleditor.toolbar.Action(
+                        '{$this->getLang('pe_icon_new', 'pages')}',
+                        '',
+                        'fa-plus-circle',
+                        function() { KAJONA.admin.portaleditor.openDialog('{$strNewUrl}'); return false;}
+                    ),
+                    new KAJONA.admin.portaleditor.toolbar.Action(
+                        '{$this->getLang('pe_icon_edit', 'pages')}',
+                        '',
+                        'fa-file-o',
+                        function() { document.location = '{$strPageEditUrl}';}
+                    ),
+
+                    new KAJONA.admin.portaleditor.toolbar.Separator()
+                ];
+            });
             </script>";
             //Load portaleditor styles
             $strPeToolbar .= $this->objToolkit->getPeToolbar();
