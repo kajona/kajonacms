@@ -62,7 +62,12 @@
 
     .peGlobalToolbarInfo {
         margin-left: 25px;
-        border-bottom: 1px solid #fff;
+
+        hr {
+            border: 0;
+            border-bottom: 1px solid #fff;
+            margin: 0;
+        }
 
         .peGlobalToolbarInfoRow {
 
@@ -89,11 +94,6 @@
 
         }
         .peGlobalToolbarInfoLink {
-            //color: #fff !important;
-            //display: block;
-            //padding: 7px 2px 7px 2px;
-            //cursor: pointer;
-
             &:hover {
                 background-color: @peButtonToolbarBackgroundHover;
             }

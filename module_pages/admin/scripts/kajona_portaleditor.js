@@ -568,24 +568,7 @@ KAJONA.admin.portaleditor.globalToolbar = {
             $objInfoContainer.append($objRow);
         });
 
-
-        //render various page-informations
-        //$.each(KAJONA.admin.pageInfo, function(entryName, objInfo) {
-        //
-        //});
         $objContainer.append($objInfoContainer);
-
-
-
-        //render various page-actions
-        //var $objActionContainer = $('<div>').addClass('peGlobalToolbarInfo');
-        //$.each(KAJONA.admin.pageActions, function(entryName, objInfo) {
-        //    var $objLink = $('<a>').on('click', objInfo.onclick).append($('<div>').addClass('peGlobalToolarbarInfoIcon').append($('<i>').addClass('fa '+objInfo.icon))).append($('<div>').addClass('peGlobalToolbarInfoText').append(objInfo.label));
-        //    var $objRowContent = $('<div>').addClass('peGlobalToolbarInfoLink').append($objLink);
-        //    var $objRow = $('<div>').addClass('peGlobalToolbarInfoRow peGlobalToolbarActionRow').append($objRowContent);
-        //    $objActionContainer.append($objRow);
-        //});
-        //$objContainer.append($objActionContainer);
 
 
         //attach a page-jump autocomplete
@@ -628,7 +611,6 @@ KAJONA.admin.portaleditor.globalToolbar = {
     }
 };
 
-
 /**
  * Initialise the action toolbar logic
  */
@@ -638,7 +620,6 @@ KAJONA.admin.portaleditor.elementActionToolbar = {
     },
 
     injectPlaceholderActions: function (actions) {
-
         $.each(actions.placeholder, function (placeholderName, actions) {
             KAJONA.admin.portaleditor.elementActionToolbar.injectElementCreateUI($('[data-name="' + placeholderName + '"]'), actions, placeholderName);
         });
@@ -915,10 +896,3 @@ KAJONA.admin.tooltip = {
     }
 
 };
-
-
-$(function () {
-    KAJONA.admin.portaleditor.elementActionToolbar.init();
-    KAJONA.admin.portaleditor.globalToolbar.init();
-    KAJONA.admin.tooltip.initTooltip();
-});

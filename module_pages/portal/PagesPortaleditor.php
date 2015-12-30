@@ -63,7 +63,7 @@ class PagesPortaleditor  {
             return strcmp($objActionA->getObjAction(), $objActionB->getObjAction());
         });
 
-        $arrReturn = array("systemid" => array(), "placeholder" => array());
+        $arrReturn = array("systemIds" => array(), "placeholder" => array());
         foreach($arrActions as $objOneAction) {
 
             if($objOneAction instanceof PagesPortaleditorSystemidAction) {

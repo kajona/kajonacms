@@ -237,17 +237,9 @@ class class_toolkit_portal extends class_toolkit {
      */
     public function getPeToolbar() {
 
-        $strConfigFile = "'config_kajona_standard.js'";
-        if (is_file(_realpath_."/project/admin/scripts/ckeditor/config_kajona_standard.js")) {
-            $strConfigFile = "KAJONA_WEBPATH+'/project/admin/scripts/ckeditor/config_kajona_standard.js'";
-        }
-
-        $arrContent = array();
-        $arrContent["ckconfig"] = $strConfigFile;
-
         $strAdminSkin = class_carrier::getInstance()->getObjSession()->getAdminSkin();
         $strTemplateID = $this->objTemplate->readTemplate(class_adminskin_helper::getPathForSkin($strAdminSkin)."/elements.tpl", "pe_toolbar", true);
-        $strReturn = $this->objTemplate->fillTemplate($arrContent, $strTemplateID);
+        $strReturn = $this->objTemplate->fillTemplate(array(), $strTemplateID);
 
         return $strReturn;
     }

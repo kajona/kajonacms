@@ -122,6 +122,7 @@ $lang["pe_status_autor"]                 = "Last author";
 $lang["pe_status_page"]                  = "Page";
 $lang["pe_status_status"]                = "Status";
 $lang["pe_status_time"]                  = "Last modification";
+$lang["pe_on_off"]                       = "Enable / disable portal editor";
 $lang["plNew"]                           = "New placeholder";
 $lang["plRename"]                        = "Update";
 $lang["plToUpdate"]                      = "Old placeholder";
