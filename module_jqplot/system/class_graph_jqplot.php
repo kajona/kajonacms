@@ -30,6 +30,7 @@ class class_graph_jqplot implements interface_graph {
     private $bitYAxisLabelsInvisible = false;
 
     private $bitIsResizeable = true;
+    private $bitExportAsImage = false;
 
     const STRING_FORMAT = "%s";
 
@@ -59,13 +60,19 @@ class class_graph_jqplot implements interface_graph {
 
         "legend" => array(
             "renderer" => "$.jqplot.EnhancedLegendRenderer",
-            "rowSpacing" => "0px",
             "show"=> true,
             "rendererOptions" => array(
                 "textColor" => null,
                 "fontFamily" => null,
-                "numberRows" => 2,
-                "location" => "n"
+                "numberRows" => null,
+                "numberColumns" => 5,
+                "seriesToggleReplot" => array(
+                    "resetAxes" => true,
+                    "clear" => true,
+                ),
+                "location" => "n",
+                "placement" => "outsideGrid",
+                "rowSpacing" => "1px",
             ),
         ),
         "grid" => array(
@@ -468,7 +475,7 @@ class class_graph_jqplot implements interface_graph {
 
         $this->preGraphGeneration();
 
-        //create id's
+        //1. create id's
         $strSystemId = generateSystemid();
         $strResizeableId =  "resize_".$strSystemId;
         $strChartId =  "chart_".$strSystemId;
@@ -476,11 +483,24 @@ class class_graph_jqplot implements interface_graph {
 
         //create div where the chart is being put
         $strReturn = "<div id=\"$strResizeableId\" style=\"width:".$this->intWidth."px; height:".$this->intHeight."px;\">";
-            $strReturn .= "<div id=\"$strChartId\" style=\"width:100%; height:100%;\"></div>";
+
+            //chart div
+            $strReturn .= "<div id=\"$strChartId\" style=\"width:95%; height:100%; float: left;\"></div>";
+
+            //context div
+            $strReturn .= "<div style=\"width:5%; height:100%; float: left;\">";
+            if($this->bitExportAsImage) {
+                $strReturn .= "<a style=\"cursor: pointer; \" id=\"{$strChartId}_exportpng\" onclick=\"KAJONA.admin.jqplotHelper.exportAsImage('{$strChartId}')\"'><i class='fa fa-download' rel='tooltip' title=''></i></a>";
+            }
+            $strReturn .= "</div>";
+
         $strReturn .= "</div>";
 
+
+        //2. Sort charts by type
         $this->sortBySeriesType();
-        //create the data array and options object for the jqPlot method
+
+        //3. create the data array and options object for the jqPlot method
         $strChartOptions = $this->strCreateJSOptions();
         $strChartData = $this->strCreateJSDataArray();
         $strDataPointObjects = $this->strCreateDataPointObjects();
@@ -492,12 +512,17 @@ class class_graph_jqplot implements interface_graph {
         );
         $strPostPlotOptions = json_encode($arrPostPlotOptions);
 
+        //4. Get decimal styles
         $strDecChar = class_carrier::getInstance()->getObjLang()->getLang("numberStyleDecimal", "system");
         $strThousandsChar = class_carrier::getInstance()->getObjLang()->getLang("numberStyleThousands", "system");
 
+        //5. Init Chart
         $strCoreDirectory = class_resourceloader::getInstance()->getCorePathForModule("module_jqplot");
         $strReturn .= "<script type='text/javascript'>
-                KAJONA.admin.loader.loadFile(['{$strCoreDirectory}/module_jqplot/admin/scripts/js/jqplot/excanvas.js','{$strCoreDirectory}/module_jqplot/admin/scripts/js/jqplot/jquery.jqplot.js', '{$strCoreDirectory}/module_jqplot/admin/scripts/js/jqplot/jquery.jqplot.css'], function() {
+                KAJONA.admin.loader.loadFile([
+                '{$strCoreDirectory}/module_jqplot/admin/scripts/js/jqplot/excanvas.js',
+                '{$strCoreDirectory}/module_jqplot/admin/scripts/js/jqplot/jquery.jqplot.js',
+                '{$strCoreDirectory}/module_jqplot/admin/scripts/js/jqplot/jquery.jqplot.css'], function() {
                     KAJONA.admin.loader.loadFile([
                         '{$strCoreDirectory}/module_jqplot/admin/scripts/js/jqplot/plugins/jqplot.logAxisRenderer.js',
                         '{$strCoreDirectory}/module_jqplot/admin/scripts/js/jqplot/plugins/jqplot.barRenderer.js',
@@ -514,7 +539,11 @@ class class_graph_jqplot implements interface_graph {
                         '{$strCoreDirectory}/module_jqplot/admin/scripts/js/jqplot/plugins/jqplot.canvasOverlay.js',
 
                         '{$strCoreDirectory}/module_jqplot/admin/scripts/js/custom/jquery.jqplot.custom_helper.js',
-                        '{$strCoreDirectory}/module_jqplot/admin/scripts/js/custom/jquery.jqplot.custom.css'
+                        '{$strCoreDirectory}/module_jqplot/admin/scripts/js/custom/jquery.jqplot.custom.css',
+
+                        '{$strCoreDirectory}/module_jqplot/admin/scripts/js/filesaver/Blob.js',
+                        '{$strCoreDirectory}/module_jqplot/admin/scripts/js/filesaver/canvas-toBlob.js',
+                        '{$strCoreDirectory}/module_jqplot/admin/scripts/js/filesaver/FileSaver.js'
 
                     ], function() {
                         $.jqplot.sprintf.thousandsSeparator = '$strThousandsChar';
@@ -859,13 +888,12 @@ class class_graph_jqplot implements interface_graph {
         if($bitRenderLegend === true) {
             $this->arrOptions["legend"]["show"] = $bitRenderLegend;
             $this->arrOptions["legend"]["renderer"] = "$.jqplot.EnhancedLegendRenderer";
-            $this->arrOptions["legend"]["rowSpacing"] = "0px";
-            $this->arrOptions["legend"]["marginTop"] = "5px";
+            $this->arrOptions["legend"]["rendererOptions"]["placement"] = "outsideGrid";
         }
         else {
             $this->arrOptions["legend"]["show"] = null;
             $this->arrOptions["legend"]["renderer"] = null;
-            $this->arrOptions["legend"]["rowSpacing"] = null;
+            $this->arrOptions["legend"]["rendererOptions"]["placement"] = null;
         }
     }
 
@@ -1072,7 +1100,19 @@ class class_graph_jqplot implements interface_graph {
         $this->bitIsResizeable = $bitIsResizeable;
     }
 
+    /**
+     * @return boolean
+     */
+    public function isBitExportAsImage()
+    {
+        return $this->bitExportAsImage;
+    }
 
-
-
+    /**
+     * @param boolean $bitExportAsImage
+     */
+    public function setBitExportAsImage($bitExportAsImage)
+    {
+        $this->bitExportAsImage = $bitExportAsImage;
+    }
 }
