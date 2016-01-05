@@ -351,6 +351,12 @@ KAJONA.admin.jqplotHelper = {
         if(objDataPoint.actionhandlervalue != null && objDataPoint.actionhandlervalue != "") {
             window.location = objDataPoint.actionhandlervalue;
         }
-    }
+    },
 
+    exportAsImage : function(strElementId) {
+        var canvas = $("#"+strElementId).jqplotToImageCanvas();
+        canvas.toBlob(function(blob) {
+            saveAs(blob, "download.png");
+        });
+    },
 };

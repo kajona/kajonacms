@@ -64,8 +64,8 @@ class class_graph_jqplot_seriesdata {
         elseif($strChartType == class_graph_jqplot_charttype::BAR_HORIZONTAL) {
             $this->arrSeriesOptions["renderer"] = "$.jqplot.BarRenderer";
             $this->arrSeriesOptions["rendererOptions"]["barDirection"] = "horizontal";
-            $this->arrSeriesOptions["rendererOptions"]["shadow"] = false;
             $this->arrSeriesOptions["rendererOptions"]["fillToZero"] = true;
+            $this->arrSeriesOptions["rendererOptions"]["shadow"] = false;
             $this->arrSeriesOptions["pointLabels"]["hideZeros"] = false;
 
             //additionally set required global options
@@ -74,9 +74,8 @@ class class_graph_jqplot_seriesdata {
         }
         elseif($strChartType == class_graph_jqplot_charttype::STACKEDBAR) {
             $this->arrSeriesOptions["renderer"] = "$.jqplot.BarRenderer";
-            $this->arrSeriesOptions["rendererOptions"]["shadow"] = false;
             $this->arrSeriesOptions["rendererOptions"]["fillToZero"] = true;
-
+            $this->arrSeriesOptions["rendererOptions"]["shadow"] = false;
             $this->arrSeriesOptions["pointLabels"]["hideZeros"] = true;
             $this->arrSeriesOptions["pointLabels"]["show"] = true;
 
@@ -84,11 +83,10 @@ class class_graph_jqplot_seriesdata {
         elseif($strChartType == class_graph_jqplot_charttype::STACKEDBAR_HORIZONTAL) {
             $this->arrSeriesOptions["renderer"] = "$.jqplot.BarRenderer";
             $this->arrSeriesOptions["rendererOptions"]["barDirection"] = "horizontal";
-            $this->arrSeriesOptions["rendererOptions"]["shadow"] = false;
             $this->arrSeriesOptions["rendererOptions"]["fillToZero"] = true;
-
-            $this->arrSeriesOptions["pointLabels"]["show"] = true;
+            $this->arrSeriesOptions["rendererOptions"]["shadow"] = false;
             $this->arrSeriesOptions["pointLabels"]["hideZeros"] = true;
+            $this->arrSeriesOptions["pointLabels"]["show"] = true;
             $this->arrSeriesOptions["pointLabels"]["formatString"] = '%s';
 
             //additionally set required global options

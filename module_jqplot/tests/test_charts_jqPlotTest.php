@@ -127,6 +127,13 @@ class class_test_charts_jqPlotTest extends class_testbase  {
         $objGraph->addBarChartSet(array(1, 2, 3, 4), "serie 9");
         $objGraph->addBarChartSet(array(1, 2, 3, 4), "serie 10");
         $objGraph->addLinePlot(array(1, 2, 3, 4), "serie 11");
+        $objGraph->addLinePlot(array(1, 2, 3, 4), "serie 12");
+        $objGraph->addLinePlot(array(1, 2, 3, 4), "serie 13");
+        $objGraph->addLinePlot(array(1, 2, 3, 4), "serie 14");
+        $objGraph->addLinePlot(array(1, 2, 3, 4), "serie 15");
+        $objGraph->addLinePlot(array(1, 2, 3, 4), "serie 16");
+        $objGraph->addLinePlot(array(1, 2, 3, 4), "serie 17");
+        $objGraph->addLinePlot(array(1, 2, 3, 4), "serie 18");
         $objGraph->setBitRenderLegend(true);
         $objGraph->setStrFont("open sans");
         echo $objGraph->renderGraph();
@@ -150,7 +157,7 @@ class class_test_charts_jqPlotTest extends class_testbase  {
         $objGraph->setStrGraphTitle("A Bar Chart");
         $objGraph->setStrXAxisTitle("My new X-Axis");
         $objGraph->setStrYAxisTitle("My new Y-Axis");
-        $objGraph->addBarChartSet(array(1, 2, 3, 4), "serie 9");
+        $objGraph->addBarChartSet(array(1, 2, 3, 4), "serie 9", true);
         $objGraph->addBarChartSet(array(1, 2, 3, 4), "serie 10");
         $objGraph->setBitRenderLegend(true);
         $objGraph->setStrFont("open sans");
@@ -276,6 +283,39 @@ class class_test_charts_jqPlotTest extends class_testbase  {
         $objGraph->setIntHeight(500);
         $objGraph->setIntWidth(700);
         echo $objGraph->renderGraph();
+
+
+        $strToImage = "
+        <div>
+             <div id=\"divChart\" style=\"width:350px;height:400px;\"></div>
+             Graph's Image:
+             <div id=\"divChartImg\"></div>
+             <br />
+             <input type=\"button\" name=\"ExportGraph\" id=\"ExportGraph\" value=\"Export Chart\" />
+             <input type=\"hidden\" name=\"imgData\" id=\"imgData\" value=\"hidden text\" />
+             </div>
+
+
+             <script type=\"text/javascript\">
+                 $(document).ready(function () {
+
+                 //Draw a Sample jqPlot chart
+                 var data = [['Heavy Industry', 12], ['Retail', 9], ['Light Industry', 14], ['Out of home', 16], ['Commuting', 7], ['Orientation', 9]];
+                 var plot1 = jQuery.jqplot('divChart', [data], { seriesDefaults: { renderer: jQuery.jqplot.PieRenderer, rendererOptions: { showDataLabels: true} }, legend: { show: true, location: 'e'} }); // Save Image's data embedded in src attribute in a hidden variable
+                 $(\"#ExportGraph\").click(function () {//Convert Graph to Image
+                     var j = $(\"#chart_20262c2563ccb4c7573b\").jqplotToImageElem();
+                     $(\"#divChartImg\").append(j);
+                     $('#divChart').hide();
+                     $(\"#imgData\").val($(\"#divChartImg img\").attr('src'));
+//                     $('form').submit();
+                     });
+                 });
+             </script>
+                        ";
+
+        echo $strToImage;
+
+
     }
 }
 
