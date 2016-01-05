@@ -251,6 +251,22 @@
                     $.extend(true, opts, replot);
                 }
 
+
+
+                //before plotting
+                if (!showing) {
+                    //hide point labels
+                    if(plot.series[sidx].pointLabels && plot.series[sidx].pointLabels.show) {
+                        plot.series[sidx].plugins.pointLabels.show = false;
+                    }
+                }
+                else {
+                    //show point labels
+                    if(plot.series[sidx].pointLabels && plot.series[sidx].pointLabels.show) {
+                        plot.series[sidx].plugins.pointLabels.show = true;
+                    }
+                }
+
                 plot.replot(opts);
                 // if showing, there was no canvas element to fade in, so hide here
                 // and then do a fade in.

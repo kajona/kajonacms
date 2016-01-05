@@ -2961,7 +2961,7 @@
                 // make room  for the legend between the grid and the edge.
                 // pass a dummy offsets object and a reference to the plot.
                 var legendElem = this.legend.draw({}, this);
-                
+
                 var gridPadding = {top:0, left:0, bottom:0, right:0};
                 
                 if (this.legend.placement == "outsideGrid") {
@@ -9091,7 +9091,7 @@
         if ($.jqplot.use_excanvas) {
             return null;
         }
-        
+
         var newCanvas = document.createElement("canvas");
         var h = $(this).outerHeight(true);
         var w = $(this).outerWidth(true);
@@ -9103,10 +9103,10 @@
         // have to check if any elements are hanging outside of plot area before rendering,
         // since changing width of canvas will erase canvas.
 
-        var clses = ['jqplot-table-legend', 'jqplot-xaxis-tick', 'jqplot-x2axis-tick', 'jqplot-yaxis-tick', 'jqplot-y2axis-tick', 'jqplot-y3axis-tick', 
-        'jqplot-y4axis-tick', 'jqplot-y5axis-tick', 'jqplot-y6axis-tick', 'jqplot-y7axis-tick', 'jqplot-y8axis-tick', 'jqplot-y9axis-tick',
-        'jqplot-xaxis-label', 'jqplot-x2axis-label', 'jqplot-yaxis-label', 'jqplot-y2axis-label', 'jqplot-y3axis-label', 'jqplot-y4axis-label', 
-        'jqplot-y5axis-label', 'jqplot-y6axis-label', 'jqplot-y7axis-label', 'jqplot-y8axis-label', 'jqplot-y9axis-label' ];
+        var clses = ['jqplot-table-legend', 'jqplot-xaxis-tick', 'jqplot-x2axis-tick', 'jqplot-yaxis-tick', 'jqplot-y2axis-tick', 'jqplot-y3axis-tick',
+            'jqplot-y4axis-tick', 'jqplot-y5axis-tick', 'jqplot-y6axis-tick', 'jqplot-y7axis-tick', 'jqplot-y8axis-tick', 'jqplot-y9axis-tick',
+            'jqplot-xaxis-label', 'jqplot-x2axis-label', 'jqplot-yaxis-label', 'jqplot-y2axis-label', 'jqplot-y3axis-label', 'jqplot-y4axis-label',
+            'jqplot-y5axis-label', 'jqplot-y6axis-label', 'jqplot-y7axis-label', 'jqplot-y8axis-label', 'jqplot-y9axis-label' ];
 
         var temptop, templeft, tempbottom, tempright;
 
@@ -9136,7 +9136,7 @@
         newCanvas.width = w + Number(x_offset);
         newCanvas.height = h + Number(y_offset);
 
-        var newContext = newCanvas.getContext("2d"); 
+        var newContext = newCanvas.getContext("2d");
 
         newContext.save();
         newContext.fillStyle = backgroundColor;
@@ -9169,11 +9169,11 @@
 
             for (var i=0; i<wl; i++) {
                 w += words[i];
-                if (context.measureText(w).width > tagwidth) {
+                if (context.measureText(w).width > tagwidth && w.length > words[i].length) {
                     breaks.push(i);
                     w = '';
                     i--;
-                }   
+                }
             }
             if (breaks.length === 0) {
                 // center text if necessary
@@ -9273,6 +9273,15 @@
                     var t = top + elem.position().top + parseInt(elem.css('padding-top'), 10);
                     newContext.font = elem.jqplotGetComputedFontStyle();
                     newContext.fillStyle = elem.css('color');
+
+                    //if text has line through set opacity for written text to 0.5
+                    if(elem.css('text-decoration') == 'line-through') {
+                        newContext.globalAlpha = 0.5;
+                    }
+                    else {
+                        newContext.globalAlpha = 1;
+                    }
+
                     writeWrappedText(elem, newContext, elem.text(), l, t, w);
                 });
 
