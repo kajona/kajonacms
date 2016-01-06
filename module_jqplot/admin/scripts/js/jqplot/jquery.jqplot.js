@@ -2990,7 +2990,7 @@
                     }
                     legendElem = legendElem.detach();
                 }
-                
+
                 var ax = this.axes;
                 var name;
                 // draw the yMidAxis first, so xaxis of pyramid chart can adjust itself if needed.
@@ -9219,7 +9219,6 @@
             // var left = x_offset + p.left + $(el).css('marginLeft') + $(el).css('borderLeftWidth') 
 
             // somehow in here, for divs within divs, the width of the inner div should be used instead of the canvas.
-
             if ((tagname == 'div' || tagname == 'span') && !$(el).hasClass('jqplot-highlighter-tooltip')) {
                 $(el).children().each(function() {
                     _jqpToImage(this, left, top);
@@ -9274,7 +9273,7 @@
                     newContext.font = elem.jqplotGetComputedFontStyle();
                     newContext.fillStyle = elem.css('color');
 
-                    //if text has line through set opacity for written text to 0.5
+                    //if text has line through -> set opacity for written text to 0.5
                     if(elem.css('text-decoration') == 'line-through') {
                         newContext.globalAlpha = 0.5;
                     }
@@ -9289,6 +9288,12 @@
             }
 
             else if (tagname == 'canvas') {
+                //custom code -> do not render elements which are hidden
+                if($(el).css("visibility") == "hidden") {
+                    return;
+                }
+                //custom code
+
                 newContext.drawImage(el, left, top);
             }
         }
