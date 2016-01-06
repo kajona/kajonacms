@@ -26,11 +26,8 @@ class class_graph_jqplot implements interface_graph {
     private $arrSeriesColors =  null;
 
     private $bitIsHorizontalBar = false;
-    private $bitXAxisLabelsInvisible = false;
-    private $bitYAxisLabelsInvisible = false;
 
     private $bitIsResizeable = true;
-    private $bitExportAsImage = false;
 
     const STRING_FORMAT = "%s";
 
@@ -480,18 +477,19 @@ class class_graph_jqplot implements interface_graph {
         $strResizeableId =  "resize_".$strSystemId;
         $strChartId =  "chart_".$strSystemId;
         $strTooltipId =  "tooltip_".$strSystemId;
+        $strImageExportId =  $strChartId."_exportpng";
 
         //create div where the chart is being put
-        $strReturn = "<div id=\"$strResizeableId\" style=\"width:".$this->intWidth."px; height:".$this->intHeight."px;\">";
+        $strReturn = "<div onmouseover='$(\"#\"+\"{$strImageExportId}\").show();' onmouseout='$(\"#\"+\"{$strImageExportId}\").hide();' id=\"$strResizeableId\" style=\"width:".$this->intWidth."px; height:".$this->intHeight."px;\">";
 
             //chart div
             $strReturn .= "<div id=\"$strChartId\" style=\"width:95%; height:100%; float: left;\"></div>";
 
-            //context div
+            //image export div
             $strReturn .= "<div style=\"width:5%; height:100%; float: left;\">";
-            if($this->bitExportAsImage) {
-                $strReturn .= "<a style=\"cursor: pointer; \" id=\"{$strChartId}_exportpng\" onclick=\"KAJONA.admin.jqplotHelper.exportAsImage('{$strChartId}')\"'><i class='fa fa-download' rel='tooltip' title=''></i></a>";
-            }
+            $strReturn .= "<a style=\"display:none; cursor: pointer; \" id=\"{$strImageExportId}\" onclick=\"KAJONA.admin.jqplotHelper.exportAsImage('{$strChartId}')\"'>
+                                <i class='fa fa-download'></i>
+                            </a>";
             $strReturn .= "</div>";
 
         $strReturn .= "</div>";
@@ -506,9 +504,7 @@ class class_graph_jqplot implements interface_graph {
         $strDataPointObjects = $this->strCreateDataPointObjects();
         $arrPostPlotOptions = array(
             "intNrOfWrittenLabelsXAxis" => $this->intNrOfWrittenLabelsXAxis,
-            "intNrOfWrittenLabelsYAxis" => $this->intNrOfWrittenLabelsYAxis,
-            "bitXAxisLabelsInvisible" => $this->bitXAxisLabelsInvisible,
-            "bitYAxisLabelsInvisible" => $this->bitYAxisLabelsInvisible
+            "intNrOfWrittenLabelsYAxis" => $this->intNrOfWrittenLabelsYAxis
         );
         $strPostPlotOptions = json_encode($arrPostPlotOptions);
 
@@ -871,6 +867,7 @@ class class_graph_jqplot implements interface_graph {
             $this->arrYAxisTickLabels = $arrYAxisTickLabels;
             $this->arrOptions["axes"]["yaxis"]["renderer"] = "$.jqplot.CategoryAxisRenderer";
             $this->arrOptions["axes"]["yaxis"]["ticks"] = $arrYAxisTickLabels;
+            $this->arrOptions["axes"]["yaxis"]["numberTicks"] = $intNrOfWrittenLabels;
         }
 
         $this->intNrOfWrittenLabelsYAxis = $intNrOfWrittenLabels;
@@ -1035,11 +1032,14 @@ class class_graph_jqplot implements interface_graph {
      * @param bool $bitHideXAxis
      */
     public function setHideXAxis($bitHideXAxis) {
-        $this->arrOptions["axes"]["xaxis"]["rendererOptions"]["drawBaseline"] = false;
-        $this->arrOptions["axes"]["xaxis"]["showTicks"] = false;
-        $this->arrOptions["axes"]["xaxis"]["drawMajorTickMarks"] = false;
-        $this->arrOptions["axes"]["xaxis"]["tickOptions"]["showGridline"] = false;
-        $this->bitXAxisLabelsInvisible = $bitHideXAxis;
+        if($bitHideXAxis) {
+            $this->arrOptions["axes"]["xaxis"]["rendererOptions"]["drawBaseline"] = false;
+            $this->arrOptions["axes"]["xaxis"]["showTicks"] = false;
+            $this->arrOptions["axes"]["xaxis"]["drawMajorTickMarks"] = false;
+            $this->arrOptions["axes"]["xaxis"]["tickOptions"]["showGridline"] = false;
+            $this->arrOptions["axes"]["xaxis"]["tickOptions"]["show"] = false;
+            $this->arrOptions["axes"]["xaxis"]["label"] = null;
+        }
     }
 
 
@@ -1050,11 +1050,14 @@ class class_graph_jqplot implements interface_graph {
      * @param bool $bitHideYAxis
      */
     public function setHideYAxis($bitHideYAxis) {
-        $this->arrOptions["axes"]["yaxis"]["rendererOptions"]["drawBaseline"] = false;
-        $this->arrOptions["axes"]["yaxis"]["showTicks"] = false;
-        $this->arrOptions["axes"]["yaxis"]["drawMajorTickMarks"] = false;
-        $this->arrOptions["axes"]["yaxis"]["tickOptions"]["showGridline"] = false;
-        $this->bitYAxisLabelsInvisible = $bitHideYAxis;
+        if($bitHideYAxis) {
+            $this->arrOptions["axes"]["yaxis"]["rendererOptions"]["drawBaseline"] = false;
+            $this->arrOptions["axes"]["yaxis"]["showTicks"] = false;
+            $this->arrOptions["axes"]["yaxis"]["drawMajorTickMarks"] = false;
+            $this->arrOptions["axes"]["yaxis"]["tickOptions"]["showGridline"] = false;
+            $this->arrOptions["axes"]["yaxis"]["tickOptions"]["show"] = false;
+            $this->arrOptions["axes"]["yaxis"]["label"] = null;
+        }
     }
 
     /**
@@ -1098,21 +1101,5 @@ class class_graph_jqplot implements interface_graph {
     public function setBitIsResizeable($bitIsResizeable)
     {
         $this->bitIsResizeable = $bitIsResizeable;
-    }
-
-    /**
-     * @return boolean
-     */
-    public function isBitExportAsImage()
-    {
-        return $this->bitExportAsImage;
-    }
-
-    /**
-     * @param boolean $bitExportAsImage
-     */
-    public function setBitExportAsImage($bitExportAsImage)
-    {
-        $this->bitExportAsImage = $bitExportAsImage;
     }
 }
