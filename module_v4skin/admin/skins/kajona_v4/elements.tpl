@@ -1385,11 +1385,7 @@ Used to print pre-formatted text, e.g. log-file contents
 -- PORTALEDITOR -----------------------------------------------------------------------------------------
 
 <pe_basic_data>
-    <!-- KAJONA_BUILD_LESS_START -->
-    <link href="_skinwebpath_/less/bootstrap_pe.less?_system_browser_cachebuster_" rel="stylesheet/less">
-    <script> less = { env:'development' }; </script>
-    <script src="_skinwebpath_/less/less.min.js"></script>
-    <!-- KAJONA_BUILD_LESS_END -->
+
 </pe_basic_data>
 
 The following section is the toolbar of the portaleditor, displayed at top of the page.
@@ -1399,6 +1395,11 @@ pe_status_page_val, pe_status_status_val, pe_status_autor_val, pe_status_time_va
 pe_iconbar, pe_disable
 <pe_toolbar>
 
+    <!-- KAJONA_BUILD_LESS_START -->
+    <link href="_skinwebpath_/less/bootstrap_pe.less?_system_browser_cachebuster_" rel="stylesheet/less">
+    <script> less = { env:'development' }; </script>
+    <script src="_skinwebpath_/less/less.min.js"></script>
+    <!-- KAJONA_BUILD_LESS_END -->
 
 
     <div class="modal fade" id="peDialog">
@@ -1433,85 +1434,10 @@ pe_iconbar, pe_disable
         </div>
     </div>
 
-	<script type="text/javascript">
-		var peDialog;
-		KAJONA.admin.lang["pe_dialog_close_warning"] = "[lang,pe_dialog_close_warning,pages]";
-        KAJONA.portal.loader.loadFile([
-            "_webpath_/core/module_v4skin/admin/skins/kajona_v4/js/bootstrap.min.js",
-            "_webpath_/core/module_v4skin/admin/skins/kajona_v4/js/kajona_dialog.js"
-        ], function() {
-		    peDialog = new KAJONA.admin.ModalDialog('peDialog', 0, true, true);
-		    delDialog = new KAJONA.admin.ModalDialog('delDialog', 1, false, false);
-		}, true);
-	</script>
-
-    <div id="peToolbar" style="display: none;">
-		<div class="info">
-			<table>
-				<tbody>
-		            <tr>
-			            <td rowspan="2" style="width: 100%; text-align: center; vertical-align: middle;">%%pe_iconbar%%</td>
-		                <td class="key" style="vertical-align: bottom;">[lang,pe_status_page,pages]</td>
-		                <td class="value" style="vertical-align: bottom;">%%pe_status_page_val%%</td>
-		                <td class="key" style="vertical-align: bottom;">[lang,pe_status_time,pages]</td>
-		                <td class="value" style="vertical-align: bottom;">%%pe_status_time_val%%</td>
-		                <td rowspan="2" style="text-align: right; vertical-align: top;">%%pe_disable%%</td>
-		            </tr>
-		            <tr>
-		                <td class="key" style="vertical-align: top;">[lang,pe_status_status,pages]</td>
-		                <td class="value" style="vertical-align: top;">%%pe_status_status_val%%</td>
-		                <td class="key" style="vertical-align: top;">[lang,pe_status_autor,pages]</td>
-		                <td class="value" style="vertical-align: top;">%%pe_status_autor_val%%</td>
-		            </tr>
-	            </tbody>
-	        </table>
-		</div>
-    </div>
-    <div id="peToolbarSpacer"></div>
 </pe_toolbar>
 
-<pe_actionToolbar>
-<div class="peElementWrapper" data-systemid="%%systemid%%" data-element="%%elementname%%">
-    <div class="peElementActions" style="display: none;">
-        <div class="actions">
-            %%actionlinks%%
-        </div>
-    </div>
-    %%content%%
-</div>
-</pe_actionToolbar>
-
-Possible placeholders: %%link_complete%%, %%name%%, %%href%%
-<pe_actionToolbar_link>
-%%link_complete%%
-</pe_actionToolbar_link>
-
-Code to add single elements to portaleditors new element menu (will be inserted in pe_actionNewWrapper)
-<pe_actionNew>
-    <li ><a href="#" onclick="KAJONA.admin.portaleditor.openDialog('%%elementHref%%')">%%elementName%%</a></li>
-</pe_actionNew>
-
-Displays the new element button
-<pe_actionNewWrapper>
-    <div id="menuContainer_%%placeholder%%" class="dropdown">
-        <i class="peNewButton fa fa-plus-circle" role="button" data-toggle="dropdown" title="%%label%% &quot;%%placeholderName%%&quot;" rel="tooltip"></i>
-        <div class="dropdown-menu peContextMenu" role="menu">
-            <ul >
-                %%contentElements%%
-            </ul>
-        </div>
-    </div>
-</pe_actionNewWrapper>
-
-Displays the new element button
-<pe_placeholderWrapper>
-    <div class="pePlaceholderWrapper" data-placeholder="%%placeholder%%">%%content%%</div>
-</pe_placeholderWrapper>
 
 
-<pe_inactiveElement>
-    <div class="peInactiveElement">%%title%%</div>
-</pe_inactiveElement>
 
 ---------------------------------------------------------------------------------------------------------
 -- LANGUAGES --------------------------------------------------------------------------------------------

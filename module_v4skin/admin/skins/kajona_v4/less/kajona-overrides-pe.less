@@ -1,182 +1,213 @@
 
 
-@fa-font-path: "../fonts/fontawesome/font";
-@peColorHover: #9a9a9a;
-@wysiwygOutlineColor: #afafaf;
-@wysiwygOutlineColorHover: #7b7b7b;
-@green:                     #6cb121;
+
+@fa-font-path:              "../fonts/fontawesome/font";
+@peColorHover:              #9a9a9a;
+@peColorHoverBackground:    rgba(154, 154, 154, 0.2);
+@peColorBackgroundInactive: #ccc;
+@wysiwygOutlineColor:       #afafaf;
+@wysiwygOutlineColorHover:  #7b7b7b;
+@green:                     #6CB121;
 @btn-primary-bg:            @gray-darker;
 @gray-darker:               #bfbfbf;
+
+@peButtonToolbarBackground: #5E696D;
+@peButtonToolbarBackgroundHover: @green; // #02BAF2;
+@peGreenTransparent: rgba(108, 177, 33, 0.48); // #02BAF2;
+
 @border-radius-base:        0px;
 @border-radius-small:       0px;
-@border-radius-large:       6px;
+@border-radius-large:       0px;
+
+@peFontFamily:              "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+
 
 /* P O R T A L E D I T O R   T O O L B A R */
-#peToolbar {
+.peGlobalToolbar {
 
-    background: url("../img/navbar-inner-background.png") no-repeat scroll 300px 0 #E5E5E5;
-    height: 36px;
-    border-bottom: 1px solid #CECECE;
 
     z-index: 1000;
-    font-family: Verdana, Arial, Helvetica, sans-serif;
-    color: #575757;
-    font-size: 10px;
-    white-space: nowrap;
+    font-family: @peFontFamily;
+    color: #fff !important;
+    font-size: 12px;
     position: fixed;
-    top: 0px;
-    left: 0px;
-    width: 100%;
+    top: 0;
+    right: -200px;
+    width: 220px;
+    height: 100%;
     display: block !important;
-	line-height: 12px;
+	line-height: 17px;
+    background-color: @peButtonToolbarBackground !important;
+    overflow-y: auto;
 
-    .box-shadow(0 1px 4px rgba(0,0,0,.065));
+    background-image: url(../img/pusteblume.png);
+    background-repeat: no-repeat;
+    background-position: 0 bottom;
 
-    table {
-        height: 36px;
-		margin: 0;
-		padding: 0;
-        border: none;
+    padding: 5px;
+    transition: 0.5s ease-in-out;
 
-        td {
-            font-family: Verdana, Arial, Helvetica, sans-serif;
-            color: #575757;
-            font-size: 10px;
-            white-space: nowrap;
-			padding: 0;
-			background-color: transparent;
-			border: none;
+    &.peGlobalToolbarOpen {
+        right: 0;
+        transition: 0.5s ease-in-out;
+    }
 
-            a {
-                color: #575757;
+    .peToolbarHeader {
+        font-size: 20px;
+
+        i {
+            cursor: pointer;
+        }
+    }
+
+    .peGlobalToolbarInfo {
+        margin-left: 25px;
+
+        hr {
+            border: 0;
+            border-bottom: 1px solid #fff;
+            margin: 0;
+        }
+
+        .peGlobalToolbarInfoRow {
+
+            padding: 5px 0 5px 0;
+
+            .peGlobalToolarbarInfoIcon {
+                float: left;
+                font-size: 15px;
             }
+
+            .peGlobalToolbarInfoText {
+                margin-left: 24px;
+            }
+
+
+            &.peGlobalToolbarActionRow {
+                padding: 0;
+
+                .peGlobalToolbarInfoText {
+                    margin-left: 22px;
+                }
+
+            }
+
+        }
+        .peGlobalToolbarInfoLink {
+            &:hover {
+                background-color: @peButtonToolbarBackgroundHover;
+            }
+
         }
     }
-
-    .info {
-        height: 45px;
-        margin-left: 200px;
-
-        td.key {
-            padding-right: 5px;
-            text-align: right;
-        }
-
-        td.value {
-            padding-right: 20px;
-            text-align: left;
-        }
-    }
-
-    img {
-        border: none;
-    }
-
-
-    //Fontawesome configuration start
-    .fa-stack {
-        vertical-align: -20%;
-
-        .fa-stack-1x {
-            text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
-        }
-
-        .fa-stack-base-full {
-        }
-    }
-
-    [class^='fa-']:before, [class*=' fa-']:before, [class^='fa-stack']:before, [class*=' fa-stack']:before  {
-        font-size: @font-size-base+4;
-    }
-
-    [class*=' fa-stack-1x']:before {
-        font-size: @font-size-base - 2;
-    }
-    //Fontawesome configuration end
 }
 
-#peToolbarSpacer {
-    clear: both;
-    height: 36px;
-}
-
-.peInactiveElement {
-    border: 1px solid #333;
-    padding: 3px;
-    margin: 2px 0 2px 0px;
-    background-color: #ccc;
-    .opacity(50);
-}
 
 
 /* P O R T A L E D I T O R   C O N T A I N E R */
-.peElementWrapper {
-    & > .peElementActions {
-        display: none !important;
-    }
+.peAddButton, .peElementWrapper,
+[data-systemid] {
+
+    //todo: not an elegant solution at all
+    padding-top: 5px;
 
     &:hover {
+
         display: block !important;
-        outline: 1px solid @peColorHover !important;
+        //outline: 1px solid @peColorHover !important;
+        //background: @peColorHoverBackground !important;
+        outline: 5px solid @peGreenTransparent !important;
+
 
         *[data-kajona-editable] {
-          outline: 1px dotted @wysiwygOutlineColor;
+            outline: 1px dotted @wysiwygOutlineColor;
         }
 
-        .peElementActions {
-            position: absolute !important;
-            border: none !important;
-            display: block !important;
-            margin: -17px 0 0 -1px !important;
-            z-index: 1;
 
-            .actions {
-                display: block !important;
-                background-color: @peColorHover !important;
-                font-family: Verdana, Arial, Helvetica, sans-serif !important;
-                font-size: 11px !important;
-                text-align: left !important;
-                padding: 1px 3px 2px 3px !important;
-                text-transform: none !important;
-                line-height: 14px !important;
+        &[data-element='block'] {
+            outline: 2px solid @wysiwygOutlineColor;
+        }
 
-                a, a:link, a:visited, a:hover, a:active, a:focus {
-                    font-family: Verdana, Arial, Helvetica, sans-serif !important;
-                    font-size: 11px !important;
-                    color: #ffffff !important;
-                    text-decoration: none !important;
-                    font-weight: normal !important;
-                    background: none !important;
-                    padding: 0 2px 0 2px !important;
-                    margin: 0 !important;
-                    text-transform: none !important;
-                    letter-spacing: normal !important;
-                    line-height: 14px !important;
-                    border: none !important;
-                    outline: none !important;
-                    display: inline !important;
-                    width: auto !important;
-                    height: auto !important;
-                    text-shadow: none !important;
+    }
+
+    &.peInactiveElement {
+        background-color: @peColorBackgroundInactive;
+        .opacity(0.5);
+    }
+
+
+    .peActionToolbar {
+        position: absolute;
+        display: none;
+        z-index: 400;
+        .opacity(1) !important;
+
+        .peActionToolbarActionContainer {
+
+            background-color: @peButtonToolbarBackground;
+            a {
+                color: #fff;
+                display: inline-block;
+                width: 20px;
+                text-align: center;
+                padding: 5px;
+                font-size: 13px;
+                font-weight:normal;
+                cursor: pointer;
+
+                i {
+                    font-size: 16px;
                 }
 
-                a:hover, a:active, a:focus {
-                    text-decoration: underline !important;
-                }
-
-                .moveHandle {
+                &.moveHandle {
                     cursor: move;
-                    color: white;
+                }
+
+                &:hover {
+                    background-color: @peButtonToolbarBackgroundHover;
                 }
             }
         }
 
-        // nested pe actions shouldn't overlap
-        .peElementWrapper > .peElementActions {
-            margin: -1px 0 0 -1px !important;
+        .peActionToolbarCaretBottom {
+            width: 0;
+            height: 0;
+            border-left: 7px solid transparent;
+            border-right: 7px solid transparent;
+            border-top: 7px solid @peButtonToolbarBackground;
+        }
+
+        .peActionToolbarCaretTop {
+            width: 0;
+            height: 0;
+            border-left: 7px solid transparent;
+            border-right: 7px solid transparent;
+            border-bottom: 7px solid @peButtonToolbarBackground;
+        }
+    }
+
+    &:hover {
+         > .peActionToolbar {
+            display: block;
+        }
+    }
+
+}
+
+.peAddButton {
+    .peActionToolbar {
+        .peActionToolbarActionContainer {
+            a {
+                width: auto;
+                display: block;
+                text-align: left;
+                font-family: @peFontFamily;
+            }
         }
     }
 }
+
+/* MOVE / DRAG N DROP */
 
 .peElementMovePlaceholder {
     border: 3px dotted @wysiwygOutlineColor;
@@ -185,7 +216,7 @@
 
 .pePlaceholderWrapperDropTarget {
     background-image: repeating-linear-gradient(-45deg, transparent, transparent 8px, rgba(0,0,0,.05) 8px, rgba(0,0,0,.05) 16px);
-    min-height: 20px;
+    min-height: 50px;
 }
 
 .peNewButton {
@@ -196,17 +227,19 @@
     height: 22px !important;
     font-size: 22px !important;
     cursor: pointer;
+    color: @btn-primary-bg;
 }
 
 .peContextMenu {
-    margin: -10px 10px 0;
+    margin: 0 10px 0;
     background-color: #fff !important;
-    border-radius: 0px;
+    border-radius: 0;
     ul {
         padding: 0;
         list-style: none;
         margin: 0;
-
+        border: 1px solid black;
+        background-color: #fff !important;
         a {
             display: block;
             color: #000;
@@ -222,9 +255,100 @@
 
 
 /* WYSIWYG Inline Editor */
-body *[data-kajona-editable]:hover,
-body *[data-kajona-editable]:focus {
-    outline: 1px dotted @wysiwygOutlineColorHover;
+body *[data-kajona-editable] {
+    &:hover,
+    &:focus {
+        outline: 1px dotted @wysiwygOutlineColorHover;
+    }
+
+    &.peFailed {
+
+        @keyframes shake {
+            from, to {
+                transform: translate3d(0, 0, 0);
+            }
+
+            10%, 30%, 50%, 70%, 90% {
+                transform: translate3d(-10px, 0, 0);
+            }
+
+            20%, 40%, 60%, 80% {
+                transform: translate3d(10px, 0, 0);
+            }
+        }
+        animation: shake 2s ease-in-out;
+    }
+}
+
+.peProgressIndicator {
+
+    position: absolute;
+    width: 1px;
+    height: 1px;
+
+    &.peSaving {
+        &:after,
+        &:before {
+            position: absolute;
+            right: -20px;
+            top: 0;
+            transition: all 1s;
+            font-family: fontawesome;
+        }
+
+        &:after {
+            animation: spin 2s infinite linear;
+            font-size: @font-size-base + 10;
+            content: @fa-var-spinner;
+            color: @green;
+        }
+
+        &:before {
+            padding: 8px 5px;
+            font-size: @font-size-base - 2;
+            content: @fa-var-check;
+            color: grey;
+        }
+    }
+
+    &.peSaved {
+        &:before {
+            color: @green;
+        }
+        &:after {
+            opacity: 0;
+        }
+    }
+
+    &.peFailed {
+        &:after,
+        &:before {
+            color: red;
+        }
+        &:before {
+            font-size: @font-size-base;
+            padding: 8px 6px;
+            content: @fa-var-exclamation-circle;
+        }
+        &:after {
+            opacity: 0;
+        }
+
+        @keyframes shake {
+            from, to {
+                transform: translate3d(0, 0, 0);
+            }
+
+            10%, 30%, 50%, 70%, 90% {
+                transform: translate3d(-10px, 0, 0);
+            }
+
+            20%, 40%, 60%, 80% {
+                transform: translate3d(10px, 0, 0);
+            }
+        }
+        animation: shake 2s ease-in-out;
+    }
 }
 
 
@@ -253,6 +377,43 @@ body *[data-kajona-editable]:focus {
     }
 }
 
+#peGlobalToolbarPageJump {
+    width: 160px;
+    background-color: lighten(@peButtonToolbarBackground, 20%);
+    border: 1px solid #fff;
+    color: #fff;
+}
+
+.peGlobalAutocompleteSuggest {
+    z-index: 1500;
+
+    background-color: @peButtonToolbarBackground !important;
+    .ui-menu-item {
+        background-color: @peButtonToolbarBackground !important;
+        color: #fff;
+        font-size: 12px;
+
+        a {
+            color: #fff;
+        }
+    }
+
+    .ui-state-focus {
+        background-color: @peButtonToolbarBackgroundHover;
+        background-image: none;
+        border-radius: 0;
+    }
+
+    .ui-corner-all, &.ui-corner-all {
+        border-radius: 0;
+    }
+
+    &.ui-widget-content {
+        background: none;
+        border: 1px solid #fff;
+    }
+}
+
 .loadingContainerBackground {
     position: absolute;
     left: 50%;
@@ -264,16 +425,21 @@ body *[data-kajona-editable]:focus {
 .modal {
     text-align: left;
 
-    .modal-content {
-        border-radius: 0px;
-    }
-
     iframe {
         border: none;
     }
 
     .modal-header {
         border: none;
+        padding: 15px 15px 0 15px;
+        h3 {
+            margin: 0;
+        }
+    }
+
+    .modal-footer {
+        padding: 0 15px 15px 15px;
+        border-top: none;
     }
 
     .modal-body {
@@ -288,9 +454,9 @@ body *[data-kajona-editable]:focus {
 
 /* TOOLTIPS */
 .qtip {
-    border-radius: 0px !important;
+    border-radius: 0 !important;
     box-shadow: 0  2px 10px rgba(0,0,0,.2) !important;
-  
+
     .qtip-content {
         font-family: @font-family-base !important;
         padding: 4px !important;

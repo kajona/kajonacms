@@ -544,9 +544,12 @@ HTML;
                 $strElementContent = $objPortalElement->getRenderedElementOutput(PagesPortaleditor::isActive());
 
                 $strContent = json_encode($strElementContent, JSON_FORCE_OBJECT); //JSON_HEX_QUOT|JSON_HEX_APOS
+                $strActions = PagesPortaleditor::getInstance()->convertToJs();
 
                 $strReturn = <<<JS
-                    parent.KAJONA.admin.portaleditor.changeElementData('blocks_{$objBlocksElement->getStrPlaceholder()}', '{$objBlockElement->getSystemid()}', {$strContent});
+                    parent.KAJONA.admin.portaleditor.changeElementData('blocks_{$objBlocksElement->getStrName()}', '{$objBlockElement->getSystemid()}', {$strContent});
+                    parent.KAJONA.admin.portaleditor.RTE.init();
+                    parent.KAJONA.admin.portaleditor.elementActionToolbar.injectPlaceholderActions({$strActions});
                     parent.KAJONA.admin.portaleditor.closeDialog(true);
 
 JS;
@@ -863,12 +866,15 @@ JS;
 
                 //generate the elements' output
                 $objPortalElement = $objElementData->getConcretePortalInstance();
-                $strElementContent = $objPortalElement->getRenderedElementOutput(false);
+                $strElementContent = $objPortalElement->getRenderedElementOutput(true);
 
                 $strContent = json_encode($strElementContent, JSON_FORCE_OBJECT); //JSON_HEX_QUOT|JSON_HEX_APOS
+                $strActions = PagesPortaleditor::getInstance()->convertToJs();
 
                 $strReturn = <<<JS
                     parent.KAJONA.admin.portaleditor.changeElementData('{$objElementData->getStrPlaceholder()}', '{$objElementData->getSystemid()}', {$strContent});
+                    parent.KAJONA.admin.portaleditor.RTE.init();
+                    parent.KAJONA.admin.portaleditor.elementActionToolbar.injectPlaceholderActions({$strActions});
                     parent.KAJONA.admin.portaleditor.closeDialog(true);
 
 JS;
@@ -939,6 +945,7 @@ JS;
     /**
      * Deletes an Element
      *
+     * @todo still required? the PE doesn't call this anymore! same to the matchin delete methods in all modules making use of the pe.
      * @throws class_exception
      * @return string , "" in case of success
      * @permissions delete
@@ -1270,9 +1277,14 @@ JS;
                     /** @var PagesPageelement $objElement */
                     $strElementClass = str_replace(".php", "", $objObject->getStrClassAdmin());
                     //and finally create the object
+                    $strFilename = \class_resourceloader::getInstance()->getPathForFile("/admin/elements/".$objObject->getStrClassAdmin());
+                    $objElement = \class_classloader::getInstance()->getInstanceFromFilename($strFilename, "Kajona\\Pages\\Admin\\ElementAdmin");
+
+                    //and finally create the object
                     /** @var $objElement ElementAdmin */
-                    $objElement = new $strElementClass();
                     $objElement->setSystemid($this->getSystemid());
+
+
                     $arrElementData = $objElement->loadElementData();
 
                     //see if we could set the param to the element

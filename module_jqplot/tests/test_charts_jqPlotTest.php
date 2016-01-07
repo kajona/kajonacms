@@ -38,7 +38,7 @@ class class_test_charts_jqPlotTest extends class_testbase  {
         //custom
 //        echo "<script language=\"javascript\" type=\"text/javascript\" src=\""._webpath_.class_resourceloader::getInstance()->getCorePathForModule("module_jqplot")."/module_jqplot/admin/scripts/js/custom/jquery.jqplot.custom_helper.js\"></script>";
 //        echo "<script language=\"javascript\" type=\"text/javascript\" src=\""._webpath_.class_resourceloader::getInstance()->getCorePathForModule("module_jqplot")."/module_jqplot/admin/scripts/js/custom/jqPlotTest.js\"></script>";
-//        echo "<link rel=\"stylesheet\" type=\"text/css\" href=\""._webpath_.class_resourceloader::getInstance()->getCorePathForModule("module_jqplot")."/module_jqplot/admin/scripts/js/custom/jquery.jqplot.custom.css\"></link>";
+        echo "<link rel=\"stylesheet\" type=\"text/css\" href=\""._webpath_.class_resourceloader::getInstance()->getCorePathForModule("module_jqplot")."/module_jqplot/admin/scripts/js/custom/jquery.jqplot.custom.css\"></link>";
         //test-Divs
 
 
@@ -48,6 +48,7 @@ class class_test_charts_jqPlotTest extends class_testbase  {
 //            </div>";
 
 
+        /** @var class_graph_jqplot $objGraph */
         $objGraph = class_graph_factory::getGraphInstance(class_graph_factory::$STR_TYPE_JQPLOT);
         $objGraph->addLinePlot(array(8.112, 1, 2, 4), null);
         $objGraph->addLinePlot(array(1, 2, 3, 4), null);
@@ -65,6 +66,7 @@ class class_test_charts_jqPlotTest extends class_testbase  {
         $objGraph->setStrFontColor("#FF0000");
         $objGraph->setArrXAxisTickLabels(array("v1", "v2", "v3", "v4"));
         $objGraph->setStrFont("Open Sans");
+
         echo $objGraph->renderGraph();
 
         $objGraph = class_graph_factory::getGraphInstance(class_graph_factory::$STR_TYPE_JQPLOT);
@@ -127,6 +129,13 @@ class class_test_charts_jqPlotTest extends class_testbase  {
         $objGraph->addBarChartSet(array(1, 2, 3, 4), "serie 9");
         $objGraph->addBarChartSet(array(1, 2, 3, 4), "serie 10");
         $objGraph->addLinePlot(array(1, 2, 3, 4), "serie 11");
+        $objGraph->addLinePlot(array(1, 2, 3, 4), "serie 12");
+        $objGraph->addLinePlot(array(1, 2, 3, 4), "serie 13");
+        $objGraph->addLinePlot(array(1, 2, 3, 4), "serie 14");
+        $objGraph->addLinePlot(array(1, 2, 3, 4), "serie 15");
+        $objGraph->addLinePlot(array(1, 2, 3, 4), "serie 16");
+        $objGraph->addLinePlot(array(1, 2, 3, 4), "serie 17");
+        $objGraph->addLinePlot(array(1, 2, 3, 4), "serie 18");
         $objGraph->setBitRenderLegend(true);
         $objGraph->setStrFont("open sans");
         echo $objGraph->renderGraph();
@@ -150,7 +159,7 @@ class class_test_charts_jqPlotTest extends class_testbase  {
         $objGraph->setStrGraphTitle("A Bar Chart");
         $objGraph->setStrXAxisTitle("My new X-Axis");
         $objGraph->setStrYAxisTitle("My new Y-Axis");
-        $objGraph->addBarChartSet(array(1, 2, 3, 4), "serie 9");
+        $objGraph->addBarChartSet(array(1, 2, 3, 4), "serie 9", true);
         $objGraph->addBarChartSet(array(1, 2, 3, 4), "serie 10");
         $objGraph->setBitRenderLegend(true);
         $objGraph->setStrFont("open sans");
@@ -158,7 +167,7 @@ class class_test_charts_jqPlotTest extends class_testbase  {
 
 
         $objGraph = class_graph_factory::getGraphInstance(class_graph_factory::$STR_TYPE_JQPLOT);
-        $objGraph->setStrGraphTitle("A Horizontal Bar Chart");
+        $objGraph->setStrGraphTitle("A Horizontal Bar Chart no xAxis and yAxis");
         $objGraph->setStrXAxisTitle("My new X-Axis");
         $objGraph->setStrYAxisTitle("My new Y-Axis");
         $objGraph->addBarChartSet(array(1, 2, 3, 4), "serie 9");
@@ -166,12 +175,8 @@ class class_test_charts_jqPlotTest extends class_testbase  {
         $objGraph->setBarHorizontal(true);
         $objGraph->setBitRenderLegend(true);
         $objGraph->setStrFont("open sans");
-        if(method_exists($objGraph, "setHideXAxis")) {
             $objGraph->setHideXAxis(true);
-        }
-        if(method_exists($objGraph, "setHideYAxis")) {
             $objGraph->setHideYAxis(true);
-        }
         echo $objGraph->renderGraph();
 
         $objGraph = class_graph_factory::getGraphInstance(class_graph_factory::$STR_TYPE_JQPLOT);
@@ -189,7 +194,7 @@ class class_test_charts_jqPlotTest extends class_testbase  {
         $objGraph = class_graph_factory::getGraphInstance(class_graph_factory::$STR_TYPE_JQPLOT);
         $objGraph->addLinePlot(array(1, 2, 7, 0, 0, 0, 2, 0, 0, 0, 5, 0, 0, 0, 0, 6, 0, 0, 0, 20, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1), "serie 1");
         $objGraph->addLinePlot(array(1, 2, 7, 0, 0, 0, 2, 0, 0, 0, 5, 0, 3, 0, 0, 5, 0, 0, 0, 18, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1), "serie 2");
-        $objGraph->setArrXAxisTickLabels(array("v1", "v2", "v3", "v4", "v5", "v6", "v7", "v8", "v9", "v10", "v11", "v12", "v13", "v14", "v15", "v16", "v17", "v18", "v19", "v20", "v21", "v22", "v23", "v24", "v25", "v26", "v27", "v28", "v29", "v30", "v31", "v32", "v33", "v34", "v35", "v36", "v37", "v38", "v39", "v40"));
+        $objGraph->setArrXAxisTickLabels(array("v1", "v2", "v3", "v4", "v5", "v6", "v7", "v8", "v9", "v10", "v11", "v12", "v13", "v14", "v15", "v16", "v17", "v18", "v19", "v20", "v21", "v22", "v23", "v24", "v25", "v26", "v27", "v28", "v29", "v30", "v31", "v32", "v33", "v34", "v35", "v36", "v37", "v38", "v39", "v40"), 10);
         $objGraph->setBitRenderLegend(true);
         $objGraph->setStrXAxisTitle("XXX");
         $objGraph->setStrYAxisTitle("YYY");

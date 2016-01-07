@@ -1,7 +1,9 @@
 //   (c) 2004-2006 by MulchProductions, www.mulchprod.de
 //   (c) 2007-2015 by Kajona, www.kajona.de
 //       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt
-//       $Id$
+
+//please leave this line for remote debuggers such as webstorm / phpstorm
+//@ sourceURL=/core/module_pages/admin/scripts/kajona_portaleditor.js
 
 if (typeof KAJONA == "undefined") {
     var KAJONA = {
@@ -105,8 +107,8 @@ KAJONA.admin.portaleditor = {
         else {
             //add it as the last element to the placeholder itself
             strDataPlaceholder = strDataPlaceholder.replace(/\|/g, '\\|');
-            if($('span[data-placeholder='+strDataPlaceholder+']')) {
-                $('span[data-placeholder='+strDataPlaceholder+']').before($($objContent));
+            if($('div.pePlaceholderWrapper[data-placeholder='+strDataPlaceholder+']')) {
+                $('div.pePlaceholderWrapper[data-placeholder='+strDataPlaceholder+']').append($($objContent));
             }
 
             else if($("#menuContainer_"+strDataPlaceholder)) {
@@ -116,16 +118,49 @@ KAJONA.admin.portaleditor = {
 
     },
 
-    deleteElementData : function(strSystemid) {
-        $("div.peElementWrapper[data-systemid='"+strSystemid+"']").remove();
+    deleteElement : function(strSystemid) {
+
+        var $objWrapper = $("div.peElementWrapper[data-systemid='"+strSystemid+"']");
+
+        var objStatusIndicator = null;
+        if($objWrapper) {
+            objStatusIndicator = new KAJONA.admin.portaleditor.RTE.SaveIndicator($objWrapper);
+        }
+
         //and delete the element on the backend
         var data = {
             systemid: strSystemid
         };
-        $.post(KAJONA_WEBPATH + '/xml.php?admin=1&module=pages_content&action=deleteElementFinalXML', data, function () {
-        }).fail(function() {
-            location.reload();
+        $.post(KAJONA_WEBPATH + '/xml.php?admin=1&module=system&action=delete', data, function () {
+        }).always(function () {
+                if(objStatusIndicator) {
+                    $objWrapper.addClass('peInactiveElement');
+                    objStatusIndicator.showProgress();
+                }
+            })
+            .done(function () {
+                if(objStatusIndicator) {
+                    objStatusIndicator.addClass('peSaved');
+                    window.setTimeout(function () {
+                        objStatusIndicator.hide();
+
+                        $objWrapper.remove();
+                    }, 1000);
+                }
+                else {
+                    location.reload();
+                }
+            }).fail(function () {
+                if(objStatusIndicator) {
+                    objStatusIndicator.addClass('peFailed');
+                    window.setTimeout(function () {
+                        objStatusIndicator.hide();
+                    }, 5000);
+                }
         });
+
+
+
     }
 };
 
@@ -145,15 +180,67 @@ KAJONA.admin.portaleditor.RTE.savePage = function () {
             value: value
         };
 
-        $.post(KAJONA_WEBPATH + '/xml.php?admin=1&module=pages_content&action=updateObjectProperty', data, function () {
-            //console. warn('server response');
-            //console. log(this.responseText);
+        var $editable = $('[data-kajona-editable="' + key + '"]');
+        $editable.addClass('peSaving');
+
+        var objStatusIndicator = new KAJONA.admin.portaleditor.RTE.SaveIndicator($editable);
+
+        $.post(KAJONA_WEBPATH + '/xml.php?admin=1&module=pages_content&action=updateObjectProperty', data)
+            .always(function () {
+                objStatusIndicator.showProgress();
+            })
+            .done(function () {
+                objStatusIndicator.addClass('peSaved');
+                window.setTimeout(function () {
+                    objStatusIndicator.hide();
+                }, 5000);
+            }).fail(function () {
+                $editable.addClass('peFailed');
+                objStatusIndicator.addClass('peFailed');
+
+                window.setTimeout(function () {
+                    objStatusIndicator.hide();
+                }, 5000);
         });
     });
     //console. groupEnd('savePage');
 
     KAJONA.admin.portaleditor.RTE.modifiedFields = {};
 };
+
+/**
+ * The saveIndicator is used to show a working-indicator associated with a ui element.
+ * currently the indicator may represent various states:
+ * - showProgress showing the indicator
+ * - addClass adding a class, e.g. to indicate a new status
+ * - hide destroying the indicator completely
+ * @param $objSourceElement
+ */
+KAJONA.admin.portaleditor.RTE.SaveIndicator = function($objSourceElement) {
+
+    var objDiv = null;
+    var objSourceElement = $objSourceElement;
+
+    this.showProgress = function () {
+
+        objDiv = $('<div>').addClass('peProgressIndicator peSaving');//.attr('data-kajona-indicator', indicatorId);
+        $('body').append(objDiv);
+        objDiv.css('left', objSourceElement.position().left+objSourceElement.width()).css('top', objSourceElement.position().top);
+    };
+
+    this.addClass = function(strClass) {
+
+        objDiv.addClass(strClass);
+    };
+
+    this.hide = function() {
+        objSourceElement.removeClass('peFailed');
+        objDiv.remove();
+        objDiv = null;
+    };
+};
+
+
 
 /**
  * To init the portaleditor, use a syntax like
@@ -175,12 +262,16 @@ KAJONA.admin.portaleditor.RTE.init = function () {
 
         var editable = $(this);
 
+        //quit if the init run before
+        if(editable.hasClass('cke_editable')) {
+            return;
+        }
+
         if(editable.attr('id') == undefined) {
             editable.attr('id', 'ckeditor-hack-'+count++);
         }
 
         var keySplitted = editable.attr('data-kajona-editable').split('#');
-
         var strMode = keySplitted[2] ? keySplitted[2] : 'wysiwyg';
 
         var ckeditorConfig = KAJONA.admin.portaleditor.RTE.config;
@@ -200,7 +291,6 @@ KAJONA.admin.portaleditor.RTE.init = function () {
                 }
 
                 KAJONA.admin.portaleditor.RTE.modifiedFields[attr] = data;
-
 
                 // save field on blur
                 KAJONA.admin.portaleditor.RTE.savePage();
@@ -239,6 +329,51 @@ KAJONA.admin.portaleditor.RTE.init = function () {
 
 
 /**
+ * A helper to trigger the status-actions of a page-element, so setting the element active / inactive
+ * @type {{setStatus: KAJONA.admin.portaleditor.status.setStatus}}
+ */
+KAJONA.admin.portaleditor.status = {
+    setStatus : function(strSystemid, intStatus) {
+
+        var $objElement = $('.peElementWrapper[data-systemid="'+strSystemid+'"]');
+
+        var objStatusIndicator = new KAJONA.admin.portaleditor.RTE.SaveIndicator($objElement);
+
+
+        if(intStatus == 0) {
+            $objElement.addClass("peInactiveElement");
+        }
+        else {
+            $objElement.removeClass("peInactiveElement");
+        }
+
+        var data = {
+            systemid: strSystemid,
+            status: intStatus
+        };
+
+        $.post(KAJONA_WEBPATH + '/xml.php?admin=1&module=system&action=setStatus', data)
+            .always(function () {
+                objStatusIndicator.showProgress();
+            })
+            .done(function () {
+                objStatusIndicator.addClass('peSaved');
+                window.setTimeout(function () {
+                    objStatusIndicator.hide();
+                }, 5000);
+            }).fail(function () {
+            $objElement.addClass('peFailed');
+            objStatusIndicator.addClass('peFailed');
+
+            window.setTimeout(function () {
+                objStatusIndicator.hide();
+            }, 5000);
+        });
+
+    }
+};
+
+/**
  * Initialise the drag & drop logic to move page elements
  */
 KAJONA.admin.portaleditor.dragndrop = {};
@@ -246,35 +381,69 @@ KAJONA.admin.portaleditor.dragndrop.init = function () {
 
     // checks if the page element is allowed in the given placeholder or not
     var isElementAllowedInPlaceholder = function (ui, $placeholderWrapper) {
+
+        //split between regular elements and block elements
+
+
         var elementName = ui.item.data('element');
         var placeholder = $placeholderWrapper.data('placeholder');
 
-        //if either the source or target element is from the master-page, only placeholders on the master-page are allowes
-        if(placeholder.substring(0, "master".length) == "master" && ui.item.parent('.pePlaceholderWrapper').data('placeholder').substring(0, "master".length) != "master")
-            return false;
+        if(elementName == "block") {
+            if(ui.item.parent(".pePlaceholderWrapper").data('placeholder') == placeholder) {
+                return true;
+            }
+        }
+        else {
+            //if either the source or target element is from the master-page, only placeholders on the master-page are allowed
+            if (placeholder.substring(0, "master".length) != "master" && ui.item.parent('.pePlaceholderWrapper').data('placeholder').substring(0, "master".length) == "master") {
+                return false;
+            }
 
-        var allowedElements = placeholder.split('_')[1].split('|');
-        return allowedElements.indexOf(elementName) !== -1;
+            var allowedElements = placeholder.split('_')[1].split('|');
+            return allowedElements.indexOf(elementName) !== -1;
+        }
+
+        return false;
     };
 
     // checks if the page element is allowed in the given placeholder or not
-    var saveElementPosition = function (systemId, newPos) {
+    var saveElementPosition = function (systemId, newPos, $objUiElement) {
+
+        var objStatusIndicator = new KAJONA.admin.portaleditor.RTE.SaveIndicator($objUiElement);
+
         $.post(KAJONA_WEBPATH + '/xml.php?admin=1&module=system&action=setAbsolutePosition', {
             systemid: systemId,
             listPos: newPos + 1
-        });
+        }).always(function () {
+                objStatusIndicator.showProgress();
+            })
+            .done(function () {
+                objStatusIndicator.addClass('peSaved');
+                window.setTimeout(function () {
+                    objStatusIndicator.hide();
+                }, 5000);
+            }).fail(function () {
+                $editable.addClass('peFailed');
+                objStatusIndicator.addClass('peFailed');
+
+                window.setTimeout(function () {
+                    objStatusIndicator.hide();
+                }, 5000);
+            });
     };
 
     var oldPos;
     var suspendStop = false;
 
     $('.pePlaceholderWrapper').sortable({
-        items: 'div.peElementWrapper',
+        items: 'div.peElementWrapper:not(.peNoDnd)',
         handle: '.moveHandle',
         connectWith: '.pePlaceholderWrapper',
         cursor: 'move',
         forcePlaceholderSize: true,
         placeholder: 'peElementMovePlaceholder',
+        tolerance: 'pointer',
+
         start: function(event, ui) {
             oldPos = ui.item.parent().children('div.peElementWrapper').index(ui.item);
         },
@@ -308,7 +477,7 @@ KAJONA.admin.portaleditor.dragndrop.init = function () {
                     systemid: systemId,
                     placeholder: newPlaceholder
                 }, function () {
-                    saveElementPosition(systemId, newPos);
+                    saveElementPosition(systemId, newPos, ui.item);
                     suspendStop = false;
                 });
             } else {
@@ -321,7 +490,7 @@ KAJONA.admin.portaleditor.dragndrop.init = function () {
 
                 if (oldPos !== newPos) {
                     var systemId = ui.item.data('systemid');
-                    saveElementPosition(systemId, newPos);
+                    saveElementPosition(systemId, newPos, ui.item);
                 }
             }
 
@@ -333,6 +502,263 @@ KAJONA.admin.portaleditor.dragndrop.init = function () {
         },
         delay: KAJONA.util.isTouchDevice() ? 500 : 0
     });
+};
+
+
+KAJONA.admin.portaleditor.toolbar = {};
+KAJONA.admin.portaleditor.toolbar.Action = function(strLabel, strValue, strIcon, strOnClick) {
+    this.strLabel = strLabel;
+    this.strValue = strValue;
+    this.strIcon = strIcon;
+    this.strOnClick = strOnClick;
+
+};
+
+KAJONA.admin.portaleditor.toolbar.Separator = function() {
+
+};
+
+KAJONA.admin.portaleditor.globalToolbar = {
+    init: function() {
+        var $objBody = $('body');
+
+
+
+
+
+        var $objContainer = $('<div>').addClass('peGlobalToolbar');
+
+        $objContainer.append($('<div>').addClass('peToolbarHeader').append(
+            $('<i>').addClass('fa fa-bars')).on('click', function() {
+                var $peGlobalToolbar = $('.peGlobalToolbar');
+                if($peGlobalToolbar.hasClass('peGlobalToolbarOpen'))
+                    $peGlobalToolbar.removeClass('peGlobalToolbarOpen');
+                else
+                    $peGlobalToolbar.addClass('peGlobalToolbarOpen');
+            })
+        );
+
+
+        var $objInfoContainer = $('<div>').addClass('peGlobalToolbarInfo');
+        $(KAJONA.admin.peToolbarActions).each(function(index, objEntry) {
+
+            if(objEntry instanceof KAJONA.admin.portaleditor.toolbar.Separator) {
+                var $objRow = $('<hr>');
+            }
+
+            if(objEntry instanceof KAJONA.admin.portaleditor.toolbar.Action) {
+
+                var $objRowContent = $('<div>').addClass('peGlobalToolbarInfoText')
+                    .append($('<div>').html(objEntry.strLabel))
+                    .append($('<div>').html(objEntry.strValue));
+
+                var $objRow = $('<div>').addClass('peGlobalToolbarInfoRow')
+                    .append($('<div>').addClass('peGlobalToolarbarInfoIcon')
+                        .append($('<i>').addClass('fa ' + objEntry.strIcon)))
+                    .append($objRowContent);
+
+
+                if(objEntry.strOnClick instanceof Function) {
+                    //add onclick handler
+                    $objRow.on('click', objEntry.strOnClick);
+                    $objRow.addClass('peGlobalToolbarInfoLink');
+                }
+            }
+
+            $objInfoContainer.append($objRow);
+        });
+
+        $objContainer.append($objInfoContainer);
+
+
+        //attach a page-jump autocomplete
+        var $objJumpContainer = $('<div>').addClass('peGlobalToolbarInfo');
+
+        var $objInput = $('<input>').attr('id', 'peGlobalToolbarPageJump').autocomplete({
+            source: function(request, response) {
+                $.ajax({
+                    url: KAJONA_WEBPATH+'/xml.php?admin=1&module=pages&action=getPagesByFilter',
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {
+                        filter: request.term
+                    },
+                    success: response
+                });
+            },
+            minLength: 2,
+            select: function( event, ui ) {
+                document.location=KAJONA_WEBPATH+"/index.php?page="+ui.item.value;
+            }
+
+
+        });
+        $objInput.data("ui-autocomplete")._renderMenu = function( ul, items ) {
+            var that = this;
+            $.each( items, function( index, item ) {
+                that._renderItemData( ul, item );
+            });
+            $( ul ).addClass('peGlobalAutocompleteSuggest');
+        };
+
+        var $objRowContent = $('<div>').addClass('peGlobalToolbarInfoText').append($('<div>').html("JS.PE.lang.Quickjump")).append($('<div>').append($objInput));
+        var $objRow = $('<div>').addClass('peGlobalToolbarInfoRow').append($('<div>').addClass('peGlobalToolarbarInfoIcon').append($('<i>').addClass('fa fa-search'))).append($objRowContent);
+        $objJumpContainer.append($objRow);
+
+        $objContainer.append($objJumpContainer);
+
+        $objBody.append($objContainer);
+    }
+};
+
+/**
+ * Initialise the action toolbar logic
+ */
+KAJONA.admin.portaleditor.elementActionToolbar = {
+    init: function () {
+        KAJONA.admin.portaleditor.elementActionToolbar.injectPlaceholderActions(KAJONA.admin.actions);
+    },
+
+    injectPlaceholderActions: function (actions) {
+        $.each(actions.placeholder, function (placeholderName, actions) {
+            KAJONA.admin.portaleditor.elementActionToolbar.injectElementCreateUI($('[data-name="' + placeholderName + '"]'), actions, placeholderName);
+        });
+
+        $.each(actions.systemIds, function (systemId, actions) {
+            KAJONA.admin.portaleditor.elementActionToolbar.injectElementEditUI($('[data-systemid="' + systemId + '"]'), actions);
+        });
+
+        KAJONA.admin.tooltip.initTooltip();
+    },
+
+    injectElementEditUI: function ($element, actions) {
+        $element.prepend(KAJONA.admin.portaleditor.elementActionToolbar.generateActionList(actions));
+    },
+
+    injectElementCreateUI: function ($element, actions, placeholderName) {
+        var $addButton = $('<div class="peAddButton"><i class="fa fa-plus-circle"></i></div>');
+        var $objMenu = $(KAJONA.admin.portaleditor.elementActionToolbar.generateAddActionList(actions, $objMenu));
+        $addButton.append($objMenu);
+        $element.after($addButton);
+    },
+
+
+    generateAddActionList: function (actions, $objParent) {
+
+        var $actionList = $('<div>').addClass('peActionToolbarActionContainer');
+
+        actions.forEach(function (action) {
+            var actionTitle = KAJONA.admin.lang['pe' + action.type];
+            switch (action.type) {
+                case 'CREATE':
+                    var $actionElement = $('<a>');
+                    $actionElement.append($('<i>').addClass('fa fa-plus-circle'));
+                    $actionElement.append(' '+action.name);
+                    $actionElement.on('click', function () {
+                        KAJONA.admin.portaleditor.openDialog(action.link);
+                    });
+
+                    $actionList.append($actionElement);
+                    break;
+            }
+
+        });
+
+        return $('<div>').addClass('peActionToolbar').append($('<div>').addClass('peActionToolbarCaretTop')).append($actionList);
+    },
+
+    generateActionList: function (actions) {
+        var $actionList = $('<div>').addClass('peActionToolbarActionContainer');
+        actions.forEach(function (action) {
+            var actionTitle = KAJONA.admin.lang['pe' + action.type];
+            var $actionElement = $('<a>');
+            $actionElement.attr('rel', 'tooltip').attr('title', actionTitle);
+            switch (action.type) {
+                case 'EDIT':
+                    $actionElement.on('click', function () {
+                        KAJONA.admin.portaleditor.openDialog(action.link);
+                    });
+                    $actionElement.append($('<i>').addClass('fa fa-pencil'));
+                    break;
+                case 'DELETE':
+
+                    $actionElement.on('click', function () {
+                        delDialog.setTitle(actionTitle);
+                        delDialog.setContent(KAJONA.admin.lang.peDELETEWARNING, actionTitle, function() {
+                            delDialog.hide();
+                            KAJONA.admin.portaleditor.deleteElement(action.systemid);
+                            return false;
+                        });
+                        delDialog.init();
+                        return false;
+                    });
+                    $actionElement.append($('<i>').addClass('fa fa-trash'));
+                    break;
+                case 'SETACTIVE':
+                    $actionElement.on('click', function () {
+                        KAJONA.admin.portaleditor.status.setStatus(action.systemid, 1);
+                        //KAJONA.admin.portaleditor.openDialog(action.link);
+                    });
+                    $actionElement.append($('<i>').addClass('fa fa-eye'));
+                    break;
+                case 'SETINACTIVE':
+                    $actionElement.on('click', function () {
+                        KAJONA.admin.portaleditor.status.setStatus(action.systemid, 0);
+                        //KAJONA.admin.portaleditor.openDialog(action.link);
+                    });
+                    $actionElement.append($('<i>').addClass('fa fa-eye-slash'));
+                    break;
+                case 'CREATE':
+                    $actionElement.on('click', function () {
+                        KAJONA.admin.portaleditor.openDialog(action.link);
+                    });
+                    $actionElement.append($('<i>').addClass('fa fa-plus-circle'));
+                    break;
+
+                case 'COPY':
+                    $actionElement.on('click', function () {
+                        KAJONA.admin.portaleditor.openDialog(action.link);
+                    });
+                    $actionElement.append($('<i>').addClass('fa fa-files-o'));
+                    break;
+                case 'MOVE':
+                    $actionElement.addClass('moveHandle').append($('<i>').addClass('fa fa-arrows moveHandle'));
+                    break;
+                default:
+                    return;
+            }
+
+            $actionList.append($actionElement);
+        });
+
+        //create the wrapper code
+        return $('<div>').addClass('peActionToolbar').append($actionList).append($('<div>').addClass('peActionToolbarCaretBottom'));
+    },
+
+    show : function(element) {
+        var $objEl = $(element);
+        if($objEl.children('.peActionToolbar')) {
+            $objEl.children('.peActionToolbar')
+                .css('top', ($objEl.position().top) - 35)
+                .css('left', ($objEl.position().left))
+                .addClass('peShown');
+
+            //$objEl.closest(".peShown").css('display', 'none');
+            //$objEl.parent().parent().parents(".peElementWrapper").find(".peShown").css('display', 'none');
+        }
+
+    },
+
+    hide : function(element) {
+        var $objEl = $(element);
+        if($objEl.children('.peActionToolbar')) {
+            $objEl.children('.peActionToolbar')
+                .removeClass('peShown');
+        }
+
+    }
+
+
 };
 
 
@@ -470,5 +896,3 @@ KAJONA.admin.tooltip = {
     }
 
 };
-
-KAJONA.admin.tooltip.initTooltip();
