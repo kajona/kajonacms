@@ -47,9 +47,6 @@
 
 
     <target name="buildProject">
-        <antcall target="installComposerPackageDependencies">
-            <param name="composerTempPath" value="${sourcesPath}/"/>
-        </antcall>
 
         <copy todir="${basedir}${projectPath}" overwrite="true" includeEmptyDirs="true" >
             <fileset id="sources.dirs" dir="${basedir}${sourcesPath}">

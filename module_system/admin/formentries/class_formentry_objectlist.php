@@ -109,7 +109,7 @@ class class_formentry_objectlist extends class_formentry_base implements interfa
         }
 
 
-        $arrObjects = call_user_func(array($objSourceObject, $strGetter));
+        $arrObjects = $objSourceObject->{$strGetter}();
         $arrNotObjects = array_values(array_filter((array)$arrObjects, function (class_model $objObject) {
             return !$objObject->rightView();
         }));
@@ -130,7 +130,7 @@ class class_formentry_objectlist extends class_formentry_base implements interfa
             throw new class_exception("unable to find setter for value-property ".$this->getStrSourceProperty()."@".get_class($objSourceObject), class_exception::$level_ERROR);
         }
 
-        return call_user_func(array($objSourceObject, $strSetter), $arrObjects);
+        return $objSourceObject->{$strSetter}($arrObjects);
     }
 
     public function validateValue()

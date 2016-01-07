@@ -67,8 +67,9 @@ class class_orm_objectinit extends class_orm_base {
                 }
 
                 $strSetter = $objReflection->getSetter($strPropertyName);
-                if($strSetter !== null)
-                    call_user_func(array($this->getObjObject(), $strSetter), $arrRow[$strColumn]);
+                if($strSetter !== null) {
+                    $this->getObjObject()->{$strSetter}($arrRow[$strColumn]);
+                }
             }
 
             $this->initAssignmentProperties();
@@ -83,15 +84,16 @@ class class_orm_objectinit extends class_orm_base {
         $objReflection = new class_reflection($this->getObjObject());
 
         //get the mapped properties
-        $arrProperties = $objReflection->getPropertiesWithAnnotation(class_orm_base::STR_ANNOTATION_OBJECTLIST, class_reflection_enum::PARAMS());
+        $arrProperties = $objReflection->getPropertiesWithAnnotation(class_orm_base::STR_ANNOTATION_OBJECTLIST, class_reflection_enum::PARAMS);
 
         foreach($arrProperties as $strPropertyName => $arrValues) {
 
             $objPropertyLazyLoader = new class_orm_assignment_array($this->getObjObject(), $strPropertyName, $this->getIntCombinedLogicalDeletionConfig());
 
             $strSetter = $objReflection->getSetter($strPropertyName);
-            if($strSetter !== null)
-                call_user_func(array($this->getObjObject(), $strSetter), $objPropertyLazyLoader);
+            if($strSetter !== null) {
+                $this->getObjObject()->{$strSetter}($objPropertyLazyLoader);
+            }
         }
 
     }

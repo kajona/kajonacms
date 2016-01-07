@@ -53,7 +53,7 @@ class class_template_mapper {
             if($strMapper == null)
                 $strMapper = "default";
 
-            $this->addPlaceholder($strOneProperty, call_user_func(array($this->objObject, $strGetter)), $strMapper);
+            $this->addPlaceholder($strOneProperty, $this->objObject->{$strGetter}(), $strMapper);
         }
         $this->addPlaceholder("strSystemid", $this->objObject->getSystemid(), "default");
         $this->addPlaceholder("content_id", $this->objObject->getSystemid(), "default");

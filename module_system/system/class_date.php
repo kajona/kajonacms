@@ -90,8 +90,7 @@ class class_date {
      * @return int
      */
     public static function getCurrentTimestamp() {
-        $objDate = new class_date();
-        return $objDate->getLongTimestamp();
+        return date("YmdHis");
     }
 
     /**

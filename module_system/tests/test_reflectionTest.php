@@ -230,12 +230,12 @@ class class_test_reflection extends class_testbase  {
         class_reflection::flushCache();
 
         //Params
-        $arrParams = $objReflection->getAnnotationValuesFromClass("@classParamTest1", class_reflection_enum::PARAMS());
+        $arrParams = $objReflection->getAnnotationValuesFromClass("@classParamTest1", class_reflection_enum::PARAMS);
         $this->assertCount(1, $arrParams);
         $this->assertCount(0, $arrParams[0]);
         class_reflection::flushCache();
 
-        $arrParamsAll = $objReflection->getAnnotationValuesFromClass("@classParamTest2", class_reflection_enum::PARAMS());
+        $arrParamsAll = $objReflection->getAnnotationValuesFromClass("@classParamTest2", class_reflection_enum::PARAMS);
         $this->assertCount(2, $arrParamsAll);//param from tow classes
 
         //Class C
@@ -264,7 +264,7 @@ class class_test_reflection extends class_testbase  {
         $this->assertEquals(12334, $arrParams["param2"]);
 
         //Class C
-        $arrParams = $objReflection->getAnnotationValuesFromClass("@classParamTest3", class_reflection_enum::PARAMS());
+        $arrParams = $objReflection->getAnnotationValuesFromClass("@classParamTest3", class_reflection_enum::PARAMS);
         $arrParams = $arrParams[0];
         $this->assertCount(3, $arrParams);
         $this->assertArrayHasKey("param1", $arrParams);
@@ -278,7 +278,7 @@ class class_test_reflection extends class_testbase  {
         $this->assertEquals("456", $arrParams["param3"][2]);
 
         //Class C
-        $arrParams = $objReflection->getAnnotationValuesFromClass("@classParamTest4", class_reflection_enum::PARAMS());
+        $arrParams = $objReflection->getAnnotationValuesFromClass("@classParamTest4", class_reflection_enum::PARAMS);
         $arrParams = $arrParams[0];
         $this->assertCount(0, $arrParams);
     }
@@ -289,24 +289,24 @@ class class_test_reflection extends class_testbase  {
     public function testGetAnnotationsWithValueFromClassParameter($a) {
         $objAnnotations = new class_reflection(new C());
 
-        $arrClassAnnotations = $objAnnotations->getAnnotationsWithValueFromClass(54, class_reflection_enum::PARAMS());
+        $arrClassAnnotations = $objAnnotations->getAnnotationsWithValueFromClass(54, class_reflection_enum::PARAMS);
         $this->assertEquals(1, count($arrClassAnnotations));
 
-        $arrClassAnnotations = $objAnnotations->getAnnotationsWithValueFromClass("0", class_reflection_enum::PARAMS());
+        $arrClassAnnotations = $objAnnotations->getAnnotationsWithValueFromClass("0", class_reflection_enum::PARAMS);
         $this->assertEquals(2, count($arrClassAnnotations));
         $this->assertTrue(in_array("@classParamTest2", $arrClassAnnotations));
         $this->assertTrue(in_array("@classParamTest3", $arrClassAnnotations));
 
-        $arrClassAnnotations = $objAnnotations->getAnnotationsWithValueFromClass(0, class_reflection_enum::PARAMS());
+        $arrClassAnnotations = $objAnnotations->getAnnotationsWithValueFromClass(0, class_reflection_enum::PARAMS);
         $this->assertEquals(2, count($arrClassAnnotations));
         $this->assertTrue(in_array("@classParamTest2", $arrClassAnnotations));
         $this->assertTrue(in_array("@classParamTest3", $arrClassAnnotations));
 
-        $arrClassAnnotations = $objAnnotations->getAnnotationsWithValueFromClass("hans im glück", class_reflection_enum::PARAMS());
+        $arrClassAnnotations = $objAnnotations->getAnnotationsWithValueFromClass("hans im glück", class_reflection_enum::PARAMS);
         $this->assertEquals(1, count($arrClassAnnotations));
         $this->assertTrue(in_array("@classParamTest2", $arrClassAnnotations));
 
-        $arrClassAnnotations = $objAnnotations->getAnnotationsWithValueFromClass("", class_reflection_enum::PARAMS());
+        $arrClassAnnotations = $objAnnotations->getAnnotationsWithValueFromClass("", class_reflection_enum::PARAMS);
         $this->assertEquals(0, count($arrClassAnnotations));
 
     }
@@ -319,13 +319,13 @@ class class_test_reflection extends class_testbase  {
 
         $objAnnotations = new class_reflection(new C());
 
-        $arrParams = $objAnnotations->getMethodAnnotationValue("testMethod", "@methodTest", class_reflection_enum::PARAMS());
+        $arrParams = $objAnnotations->getMethodAnnotationValue("testMethod", "@methodTest", class_reflection_enum::PARAMS);
         $this->assertCount(2, $arrParams);
         $this->assertTrue(array_key_exists("param1", $arrParams));
         $this->assertTrue(array_key_exists("param2", $arrParams));
 
 
-        $this->assertTrue(!$objAnnotations->getMethodAnnotationValue("testMethod", "@method2Test", class_reflection_enum::PARAMS()));
+        $this->assertTrue(!$objAnnotations->getMethodAnnotationValue("testMethod", "@method2Test", class_reflection_enum::PARAMS));
     }
 
 
@@ -336,23 +336,23 @@ class class_test_reflection extends class_testbase  {
     public function testGetAnnotationValueForPropertyParameter($a) {
         $objAnnotations = new class_reflection(new C());
 
-        $arrParams = $objAnnotations->getAnnotationValueForProperty("propertyB1", "@propertyTest", class_reflection_enum::PARAMS());
+        $arrParams = $objAnnotations->getAnnotationValueForProperty("propertyB1", "@propertyTest", class_reflection_enum::PARAMS);
         $this->assertCount(0, $arrParams);
 
 
-        $arrParams = $objAnnotations->getAnnotationValueForProperty("propertyB1", "@propertyParamTest1", class_reflection_enum::PARAMS());
+        $arrParams = $objAnnotations->getAnnotationValueForProperty("propertyB1", "@propertyParamTest1", class_reflection_enum::PARAMS);
         $this->assertCount(1, $arrParams);
         $this->assertArrayHasKey("param1", $arrParams);
 
-        $arrParams = $objAnnotations->getAnnotationValueForProperty("propertyB1", "@propertyParamTest2", class_reflection_enum::PARAMS());
+        $arrParams = $objAnnotations->getAnnotationValueForProperty("propertyB1", "@propertyParamTest2", class_reflection_enum::PARAMS);
         $this->assertCount(0, $arrParams);
 
 
-        $arrParams = $objAnnotations->getAnnotationValueForProperty("propertyB1", "@propertyParamTest3", class_reflection_enum::PARAMS());
+        $arrParams = $objAnnotations->getAnnotationValueForProperty("propertyB1", "@propertyParamTest3", class_reflection_enum::PARAMS);
         $this->assertCount(1, $arrParams);
         $this->assertArrayHasKey("param1", $arrParams);
 
-        $arrParams = $objAnnotations->getAnnotationValueForProperty("propertyB1", "@propertyParamTest4", class_reflection_enum::PARAMS());
+        $arrParams = $objAnnotations->getAnnotationValueForProperty("propertyB1", "@propertyParamTest4", class_reflection_enum::PARAMS);
         $this->assertCount(0, $arrParams);
     }
 }

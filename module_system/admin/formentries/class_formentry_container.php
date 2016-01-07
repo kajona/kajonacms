@@ -69,7 +69,7 @@ class class_formentry_container extends class_formentry_base implements interfac
         if($strSetter === null)
             throw new class_exception("unable to find setter for value-property ".$this->getStrSourceProperty()."@".get_class($objSourceObject), class_exception::$level_ERROR);
 
-        return call_user_func(array($objSourceObject, $strSetter), json_encode($this->getStrValue()));
+        return $objSourceObject->{$strSetter}(json_encode($this->getStrValue()));
     }
 
     public function validateValue() {

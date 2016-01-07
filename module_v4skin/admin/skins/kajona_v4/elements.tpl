@@ -853,6 +853,104 @@ in addition, a container for the calendar is needed. Use %%calendarContainerId%%
     </script>
 </input_tageditor>
 
+<input_objecttags>
+    <div class="form-group">
+        <label for="%%name%%" class="col-sm-3 control-label">%%title%%</label>
+
+        <div class="col-sm-6 inputText inputTagEditor">
+            <input type="text" id="%%name%%" data-name="%%name%%" style="display:none" />
+            <div id="%%name%%-list">%%data%%</div>
+        </div>
+    </div>
+    <script type="text/javascript">
+        KAJONA.admin.loader.loadFile(["/core/module_system/admin/scripts/jquerytag/jquery.caret.min.js"], function(){
+            KAJONA.admin.loader.loadFile("/core/module_system/admin/scripts/jquerytag/jquery.tag-editor.min.js", function(){
+                var objConfig = new KAJONA.v4skin.defaultAutoComplete();
+
+                objConfig.search = function(event, ui) {
+                    if (event.target.value.length < 2) {
+                        event.stopPropagation();
+                        return false;
+                    }
+                    $(this).closest('ul.tag-editor').css('background-image', 'url('+KAJONA_WEBPATH+'/core/module_v4skin/admin/skins/kajona_v4/img/loading-small.gif)');
+                };
+                objConfig.response = function(event, ui) {
+                    $(this).closest('ul.tag-editor').css('background-image', 'none');
+                };
+                objConfig.select = function(event, ui) {
+                    var found = false;
+                    $("#%%name%%-list").find('input').each(function(){
+                        if ($(this).val() == ui.item.systemid) {
+                            found = true;
+                        }
+                    });
+                    if (!found) {
+                        $("#%%name%%-list").append('<input type="hidden" name="%%name%%_id[]" value="' + ui.item.systemid + '" data-title="' + ui.item.title + '" />');
+                    }
+                };
+                objConfig.create = function(event, ui) {
+                    $(this).data('ui-autocomplete')._renderItem = function(ul, item){
+                        return $('<li></li>')
+                                .data('ui-autocomplete-item', item)
+                                .append('<a class=\'ui-autocomplete-item\'>' + item.icon + item.title + '</a>')
+                                .appendTo(ul);
+                    };
+                };
+
+                objConfig.source = function(request, response) {
+                    $.ajax({
+                        url: '%%source%%',
+                        type: 'POST',
+                        dataType: 'json',
+                        data: {
+                            filter: request.term
+                        },
+                        success: function(resp) {
+                            if (resp) {
+                                // replace commas
+                                for (var i = 0; i < resp.length; i++) {
+                                    resp[i].title = resp[i].title.replace(/\,/g, '');
+                                    resp[i].value = resp[i].value.replace(/\,/g, '');
+                                }
+                            }
+                            response.call(this, resp);
+                        }
+                    });
+                };
+
+                var $objInput = $("#%%name%%");
+                $objInput.tagEditor({
+                            initialTags: %%values%%,
+                        forceLowercase: false,
+                        autocomplete: objConfig,
+                        beforeTagSave: function(field, editor, tags, tag, val){
+                    var found = false;
+                    $("#%%name%%-list").find('input').each(function(){
+                        if ($(this).data('title') == val) {
+                            found = true;
+                        }
+                    });
+                    if (!found) {
+                        return false;
+                    }
+                },
+                beforeTagDelete: function(field, editor, tags, val){
+                    $("#%%name%%-list").find('input').each(function(){
+                        if ($(this).data('title') == val) {
+                            $(this).remove();
+                        }
+                    });
+                }
+            });
+                $objInput.parent().find('ul.tag-editor').css('background-image', 'url('+KAJONA_WEBPATH+'/core/module_v4skin/admin/skins/kajona_v4/img/loading-small-still.gif)').css('background-repeat', 'no-repeat').css('background-position', 'right center');
+                if($objInput.hasClass('mandatoryFormElement')) {
+                    $objInput.parent().find('ul.tag-editor').addClass('mandatoryFormElement');
+                }
+            });
+        });
+    </script>
+</input_objecttags>
+
 <input_container>
     <div class="form-group">
         <label for="%%name%%" class="col-sm-3 control-label">%%title%%</label>

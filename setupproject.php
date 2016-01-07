@@ -15,8 +15,6 @@ class class_project_setup {
 
         echo "<b>Kajona V4 project setup.</b>\nCreates the folder-structure required to build a new project.\n\n";
 
-        echo "<div style=\"border: 2px solid red; padding: 5px; margin: 10px; font-family: arial,verdana,sans-serif; font-size: 12px;\"><b>Please remember: After setting up the project you have to install the composer packages!\n\n</b>Change to <i>core/_buildfiles</i> and execute the following command:\n\n<pre>ant -buildfile build_jenkins.xml installComposerPackageDependenciesForCurrentProject</pre></div>";
-
         $strCurFolder = __DIR__;
 
         echo "core-path: ".$strCurFolder.", folder found: ".substr($strCurFolder, -4)."\n";
@@ -88,7 +86,7 @@ class class_project_setup {
 
             $arrContent = scandir(self::$strRealPath."/".$strSingleModule);
             foreach($arrContent as $strSingleEntry) {
-                if(substr($strSingleEntry, -5) == ".root") {
+                if(substr($strSingleEntry, -5) == ".root" && !is_file(self::$strRealPath."/".substr($strSingleEntry, 0, -5))) {
                     echo "copy ".$strSingleEntry." to ".self::$strRealPath."/".substr($strSingleEntry, 0, -5)."\n";
                     copy(self::$strRealPath."/".$strSingleModule."/".$strSingleEntry, self::$strRealPath."/".substr($strSingleEntry, 0, -5));
                 }
@@ -128,6 +126,8 @@ class class_project_setup {
 
         self::createDenyHtaccess("/project/.htaccess");
         self::createDenyHtaccess("/files/.htaccess");
+
+        self::scanComposer();
 
         echo "\n<b>Done.</b>\nIf everything went well, <a href=\"../installer.php\">open the installer</a>\n";
 
@@ -244,15 +244,41 @@ TXT;
     }
 
     private static function createDenyHtaccess($strPath) {
+        if(is_file(self::$strRealPath.$strPath))
+            return;
+
         echo "placing deny htaccess in ".$strPath."\n";
         $strContent = "\n\nDeny from all\n\n";
         file_put_contents(self::$strRealPath.$strPath, $strContent);
     }
 
     private static function createAllowHtaccess($strPath) {
+        if(is_file(self::$strRealPath.$strPath))
+            return;
+
         echo "placing allow htaccess in ".$strPath."\n";
         $strContent = "\n\nAllow from all\n\n";
         file_put_contents(self::$strRealPath.$strPath, $strContent);
+    }
+
+    private static function scanComposer() {
+        $objDir = new RecursiveDirectoryIterator(__DIR__."/../");
+        $objIterator = new RecursiveIteratorIterator($objDir);
+        $objRegex = new RegexIterator($objIterator, '#(module_|element_)([a-z]*)(/|\\\\)composer\.json$#i', RecursiveRegexIterator::GET_MATCH);
+
+        foreach($objRegex as $strPath => $arrValue) {
+
+            $arrOutput = array();
+            $intReturn = 0;
+            exec('composer install --prefer-source --no-dev --working-dir '.dirname($strPath), $arrOutput, $intReturn);
+            if($intReturn == 127) {
+                echo "<span style='color: red;'>composer was not found. please run 'composer install --prefer-source --no-dev --working-dir ".dirname($strPath)."' manually</span>\n";
+                continue;
+            }
+            echo "Composer install finished for ".$strPath.": \n";
+
+            echo "   ".implode("\n   ", $arrOutput);
+        }
     }
 }
 
