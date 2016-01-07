@@ -231,6 +231,12 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
                 class_link::getLinkAdminDialog("user", "editMemberships", "&systemid=".$objListEntry->getSystemid() . "&folderview=1", "", $this->getLang("user_zugehoerigkeit"), "icon_group", $objListEntry->getStrUsername())
             );
         }
+        elseif ($objListEntry->rightEdit()) {
+            $arrReturn[] = $this->objToolkit->listButton(
+                class_link::getLinkAdminDialog("user", "browseMemberships", "&systemid=".$objListEntry->getSystemid() . "&folderview=1", "", $this->getLang("user_zugehoerigkeit"), "icon_group", $objListEntry->getStrUsername())
+            );
+        }
+
 
         $objValidator = new class_email_validator();
 
@@ -1212,6 +1218,23 @@ HTML;
         $strReturn .= $this->objToolkit->formInputHidden("systemid", $this->getSystemid());
         $strReturn .= $this->objToolkit->formInputSubmit($this->getLang("commons_save"));
         $strReturn .= $this->objToolkit->formClose();
+        return $strReturn;
+    }
+
+    /**
+     * Generates a read-only list of group-assignments for a single user
+     * @return string
+     * @permissions edit
+     */
+    protected function actionBrowseMemberships()
+    {
+        $objUser = new class_module_user_user($this->getSystemid());
+        $strReturn = $this->objToolkit->listHeader();
+        foreach($objUser->getObjSourceUser()->getGroupIdsForUser() as $strOneId) {
+            $objGroup = new class_module_user_group($strOneId);
+            $strReturn .= $this->objToolkit->genericAdminList($strOneId, $objGroup->getStrDisplayName(), class_adminskin_helper::getAdminImage("icon_group"), "", 0);
+        }
+        $strReturn .= $this->objToolkit->listFooter();
         return $strReturn;
     }
 
