@@ -231,7 +231,7 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
                 class_link::getLinkAdminDialog("user", "editMemberships", "&systemid=".$objListEntry->getSystemid() . "&folderview=1", "", $this->getLang("user_zugehoerigkeit"), "icon_group", $objListEntry->getStrUsername())
             );
         }
-        elseif ($objListEntry->rightEdit()) {
+        elseif ($objListEntry instanceof class_module_user_user && $objListEntry->rightEdit()) {
             $arrReturn[] = $this->objToolkit->listButton(
                 class_link::getLinkAdminDialog("user", "browseMemberships", "&systemid=".$objListEntry->getSystemid() . "&folderview=1", "", $this->getLang("user_zugehoerigkeit"), "icon_group", $objListEntry->getStrUsername())
             );
