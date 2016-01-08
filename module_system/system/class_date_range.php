@@ -13,6 +13,30 @@
  */
 class class_date_range
 {
+    /**
+     * The method generates an array containing start and enddates. Basically the method start at the startdate and
+     * adds the interval to the startdate until the enddate is reached. In the following an example:
+     *
+     * 01.01         02.01         03.01         04.01         05.01
+     * |-------------|-------------|-------------|-------------|
+     *        | <----------------------------------> |
+     *        01.01 12:00                            04.01 08:00
+     *
+     * In this case we get the following array
+     *
+     * array(
+     *   array(new class_date("2015-01-01 12:00:00"), new class_date("2015-02-01 11:59:59"))
+     *   array(new class_date("2015-02-01 12:00:00"), new class_date("2015-03-01 11:59:59"))
+     * )
+     *
+     * The last period 2015-03-01 12:00:00 - 2015-04-01 11:59:59 is not included since the date 2015-04-01 11:59:59 is
+     * greater then the enddate
+     *
+     * @param class_date $objStartDate
+     * @param class_date $objEndDate
+     * @param class_date_period_enum $objInterval
+     * @return array
+     */
     public static function getDateRange(class_date $objStartDate, class_date $objEndDate, class_date_period_enum $objInterval)
     {
         $objDateHelper = new class_date_helper();
@@ -34,6 +58,12 @@ class class_date_range
         return $arrResult;
     }
 
+    /**
+     * Transforms the result of the getDateRange format to another format
+     *
+     * @param array $arrRanges
+     * @return array
+     */
     public static function transformToOldFormat(array $arrRanges)
     {
         $strDateFormat = class_carrier::getInstance()->getObjLang()->getLang("dateStyleLong", "system");
