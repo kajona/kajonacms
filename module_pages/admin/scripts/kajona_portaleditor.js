@@ -76,17 +76,17 @@ KAJONA.admin.portaleditor = {
 	},
 
 	openDialog: function (strUrl) {
-		peDialog.setContentIFrame(strUrl);
-		peDialog.init();
+        KAJONA.admin.portaleditor.peDialog.setContentIFrame(strUrl);
+        KAJONA.admin.portaleditor.peDialog.init();
 	},
 
 	closeDialog: function (bitSkipConfirmation) {
         if(!bitSkipConfirmation)
 	        var bitClose = confirm(KAJONA.admin.lang["pe_dialog_close_warning"]);
 	    if(bitClose || bitSkipConfirmation) {
-	    	peDialog.hide();
+            KAJONA.admin.portaleditor.peDialog.hide();
 	    	//reset iframe
-	    	peDialog.setContentRaw("");
+            KAJONA.admin.portaleditor.peDialog.setContentRaw("");
 	    }
 	},
 
@@ -683,13 +683,13 @@ KAJONA.admin.portaleditor.elementActionToolbar = {
                 case 'DELETE':
 
                     $actionElement.on('click', function () {
-                        delDialog.setTitle(actionTitle);
-                        delDialog.setContent(KAJONA.admin.lang.peDELETEWARNING, actionTitle, function() {
-                            delDialog.hide();
+                        KAJONA.admin.portaleditor.delDialog.setTitle(actionTitle);
+                        KAJONA.admin.portaleditor.delDialog.setContent(KAJONA.admin.lang.peDELETEWARNING, actionTitle, function() {
+                            KAJONA.admin.portaleditor.delDialog.hide();
                             KAJONA.admin.portaleditor.deleteElement(action.systemid);
                             return false;
                         });
-                        delDialog.init();
+                        KAJONA.admin.portaleditor.delDialog.init();
                         return false;
                     });
                     $actionElement.append($('<i>').addClass('fa fa-trash'));

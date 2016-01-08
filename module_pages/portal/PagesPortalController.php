@@ -519,8 +519,6 @@ class PagesPortalController extends class_portal_controller implements interface
 
             KAJONA.admin.actions = ".PagesPortaleditor::getInstance()->convertToJs().";
 
-            var peDialog;
-
             KAJONA.admin.lang.pe_rte_unsavedChanges = '[lang,pe_rte_unsavedChanges,pages]';
             KAJONA.admin.lang.peMOVE = '[lang,pe_move,pages]';
             KAJONA.admin.lang.peEDIT = '[lang,pe_edit,pages]';
@@ -535,8 +533,8 @@ class PagesPortalController extends class_portal_controller implements interface
                 '_webpath_/core/module_v4skin/admin/skins/kajona_v4/js/bootstrap.min.js',
                 '_webpath_/core/module_v4skin/admin/skins/kajona_v4/js/kajona_dialog.js'
             ], function() {
-                peDialog = new KAJONA.admin.ModalDialog('peDialog', 0, true, true);
-                delDialog = new KAJONA.admin.ModalDialog('delDialog', 1, false, false);
+                KAJONA.admin.portaleditor.peDialog = new KAJONA.admin.ModalDialog('peDialog', 0, true, true);
+                KAJONA.admin.portaleditor.delDialog = new KAJONA.admin.ModalDialog('delDialog', 1, false, false);
             }, true);
 
             KAJONA.admin.portaleditor.RTE.config = {
