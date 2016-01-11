@@ -1,4 +1,6 @@
 Element Formular
 
+V4.7.1 --------------------------------------------------------------------------------------------------
+BUG: element_formular | portal_controller -> when sending an email, the scripts were called without a context. now set to page-context, avoiding side effects (e.g. with module_spamblock). thx to avman (https://board.kajona.de/viewtopic.php?f=44&p=12286#p12286)
 V4.2 ----------------------------------------------------------------------------------------------------
 NEW: form-messages (error, success) are now configurable and stylable using the form-template #796

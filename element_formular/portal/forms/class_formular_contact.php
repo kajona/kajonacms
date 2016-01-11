@@ -123,7 +123,7 @@ class class_formular_contact extends class_portal_controller implements interfac
         $this->objTemplate->deletePlaceholder();
 
         $objScriptlets = new class_scriptlet_helper();
-        $strText = $objScriptlets->processString($this->objTemplate->getTemplate());
+        $strText = $objScriptlets->processString($this->objTemplate->getTemplate(), interface_scriptlet::BIT_CONTEXT_PORTAL_PAGE);
 
 
         $objEmail->setText($strText);
