@@ -16,6 +16,7 @@
 interface interface_todo_provider extends interface_generic_plugin {
 
     const EXTENSION_POINT = "core.dashboard.admin.todo_provider";
+    const LIMITED_COUNT = 25;
 
     /**
      * Returns an human readable name of this provider
@@ -25,13 +26,14 @@ interface interface_todo_provider extends interface_generic_plugin {
     public function getName();
 
     /**
-     * Returns all todo entries which are currently open for the logged in user. This is used i.e. to display the user a
-     * list of open tasks
+     * Returns all todo entries which are currently open for the logged in user. This is used i.e. to display a list of
+     * open tasks. If the flag $bitLimited is false all entries are returned else only a subset.
      *
      * @param string $strCategory
+     * @param boolean $bitLimited
      * @return class_todo_entry[]
      */
-    public function getCurrentTodosByCategory($strCategory);
+    public function getCurrentTodosByCategory($strCategory, $bitLimited = true);
 
     /**
      * Returns an array of all available categories
