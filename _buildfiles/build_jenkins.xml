@@ -41,6 +41,8 @@
     <property name="sourcesPath"  value="/../../" />
     <!-- target dir to install the system to. this folder is also referenced in the phpunit config file! -->
     <property name="projectPath"  value="/buildproject" />
+    <!-- target dir the selenium tests are executed -->
+    <property name="seleniumPath"  value="/seleniumproject" />
     <!-- artifacts such as logs and reports will be stored here -->
     <property name="buildPath"    value="/build" />
     <!-- js tests and node tasks -->
@@ -155,6 +157,49 @@
     <target name="jasmine">
         <exec dir="${basedir}${jsPath}" executable="${path.node}" failonerror="on">
             <arg line="./node_modules/jasmine/bin/jasmine.js"/>
+        </exec>
+    </target>
+
+    <!-- executes javascript protractor tests -->
+    <target name="protractor">
+        <exec dir="${basedir}${jsPath}" executable="${path.node}" failonerror="on">
+            <arg line="./node_modules/protractor/bin/webdriver-manager update"/>
+        </exec>
+        <exec dir="${basedir}${jsPath}" executable="${path.node}" spawn="true">
+            <arg line="./node_modules/protractor/bin/webdriver-manager start"/>
+        </exec>
+
+        <!-- delete selenium project dir -->
+        <delete dir="${basedir}${seleniumPath}"/>
+        <mkdir  dir="${basedir}${seleniumPath}"/>
+
+        <!-- copy all files to a new folder -->
+        <copy todir="${basedir}${seleniumPath}" overwrite="true"  includeEmptyDirs="true" >
+            <fileset id="sources.dirs" dir="${basedir}${sourcesPath}">
+                <exclude name=".svn"/>
+                <exclude name=".git"/>
+                <include name="core*/element_*/**"/>
+                <include name="core*/module_*/*/**"/>
+                <include name="core*/template_*/*/**"/>
+                <include name="core*/_debugging/*/**"/>
+                <include name="core*/*.php"/>
+                <include name="core*/*.htaccess"/>
+            </fileset>
+        </copy>
+
+        <copy file="${basedir}setupSeleniumConfig.php" tofile="${basedir}${seleniumPath}/setupSeleniumConfig.php" />
+
+        <!-- start internal webserver -->
+        <exec dir="${basedir}${seleniumPath}" executable="${path.php}" spawn="true">
+            <arg line="-S 127.0.0.1:8080 server.php"/>
+        </exec>
+
+        <!-- wait so that the selenium and webserver are ready -->
+        <sleep seconds="4" />
+
+        <!-- run selenium tests -->
+        <exec dir="${basedir}${jsPath}" executable="${path.node}" failonerror="on">
+            <arg line="./node_modules/protractor/bin/protractor e2e/conf.js"/>
         </exec>
     </target>
 
