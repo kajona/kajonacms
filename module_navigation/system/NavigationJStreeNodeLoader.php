@@ -33,7 +33,7 @@ class NavigationJStreeNodeLoader implements InterfaceJStreeNodeLoader
     private $objToolkit = null;
 
     /**
-     * class_module_prozessverwaltung_processnode constructor.
+     * NavigationJStreeNodeLoader constructor.
      */
     public function __construct()
     {

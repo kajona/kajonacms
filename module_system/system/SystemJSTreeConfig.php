@@ -11,7 +11,7 @@
 namespace Kajona\System\System;
 
 /**
- *
+ * Config Object for a JsTree.
  *
  * @package module_system
  * @author stefan.meyer1@yahoo.de
@@ -22,8 +22,25 @@ namespace Kajona\System\System;
  */
 class SystemJSTreeConfig {
 
+    /**
+     * The rrot id of the tree
+     *
+     * @var null
+     */
     private $strRootNodeId = null;
+
+    /**
+     * Endpoint (URL) which is being called for loading the nodes
+     *
+     * @var null
+     */
     private $strNodeEndpoint = null;
+
+    /**
+     * Contains an array of id's. If set, then treepath will be opened
+     *
+     * @var null
+     */
     private $arrNodesToExpand = null;
 
     private $bitDndEnabled = true;
@@ -31,6 +48,8 @@ class SystemJSTreeConfig {
     private $arrTypes = null;
 
     /**
+     * Checks if Dnd is enabled.
+     *
      * @return boolean
      */
     public function isBitDndEnabled()
@@ -63,7 +82,14 @@ class SystemJSTreeConfig {
     }
 
 
-
+    /**
+     * Method to control nesting rules of a node, e.g.
+     *
+     * nodetypeX => array(nodetypeY, nodetypeZ) means that nodetypeX cann only have nodetypeY and nodetypeZ as children.
+     *
+     * @param $strNodeType
+     * @param array $arrValidChildren
+     */
     public function addType($strNodeType, array $arrValidChildren) {
         if($this->arrTypes == null) {
             $this->arrTypes = array();
@@ -74,6 +100,11 @@ class SystemJSTreeConfig {
     }
 
 
+    /**
+     * Converst the set configs to Json
+     *
+     * @return string
+     */
     public function toJson() {
         return json_encode(
             array(

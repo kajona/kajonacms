@@ -11,7 +11,8 @@
 namespace Kajona\System\System;
 
 /**
- *
+ * Base class for the tree nodes based on a class of type InterfaceJStreeNodeLoader.
+ * This class actually retrieves the nodes for a tree based on the given JsTreeNodeLoader
  *
  * @package module_system
  * @author stefan.meyer1@yahoo.de
@@ -25,14 +26,20 @@ class SystemJSTreeBuilder {
     private $objNodeLoader = null;
 
     /**
-     * interface_module_prozessverwaltung_node constructor.
-     * @param null $objNodeGetter
+     * SystemJSTreeBuilder constructor.
+     * @param InterfaceJStreeNodeLoader $objNodeGetter
      */
     public function __construct(InterfaceJStreeNodeLoader $objNodeGetter)
     {
         $this->objNodeLoader = $objNodeGetter;
     }
 
+    /**
+     * Retrieves nodes for a tree by the given path.
+     *
+     * @param array $arrSystemIdPath - array of system id's
+     * @return bool|mixed
+     */
     public function getNodesByPath(array $arrSystemIdPath) {
 
         if(empty($arrSystemIdPath)) {
@@ -59,6 +66,13 @@ class SystemJSTreeBuilder {
     }
 
 
+    /**
+     * Returns the JSON reprensentation for the JSTree based on the retrieved nodes
+     *
+     * @param $arrSystemIds
+     * @param bool $bitInitialLoading
+     * @return string
+     */
     public function getJson($arrSystemIds, $bitInitialLoading = false) {
         $arrNodes = $this->getNodesByPath($arrSystemIds);
 
