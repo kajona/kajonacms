@@ -231,6 +231,12 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
                 class_link::getLinkAdminDialog("user", "editMemberships", "&systemid=".$objListEntry->getSystemid() . "&folderview=1", "", $this->getLang("user_zugehoerigkeit"), "icon_group", $objListEntry->getStrUsername())
             );
         }
+        elseif ($objListEntry instanceof class_module_user_user && $objListEntry->rightEdit()) {
+            $arrReturn[] = $this->objToolkit->listButton(
+                class_link::getLinkAdminDialog("user", "browseMemberships", "&systemid=".$objListEntry->getSystemid() . "&folderview=1", "", $this->getLang("user_zugehoerigkeit"), "icon_group", $objListEntry->getStrUsername())
+            );
+        }
+
 
         $objValidator = new class_email_validator();
 
@@ -301,6 +307,17 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
         $strReturn .= $this->objToolkit->formInputHidden("systemid", $this->getSystemid());
         $strReturn .= $this->objToolkit->formInputSubmit($this->getLang("commons_save"));
         $strReturn .= $this->objToolkit->formClose();
+        $strReturn .= $this->objToolkit->divider();
+
+        // show recent password resets
+        $strReturn .= $this->objToolkit->getTextRow($this->getLang("user_last_pwchanges_info"));
+        $strReturn .= $this->objToolkit->listHeader();
+        $arrChanges = class_module_system_pwchangehistory::getHistoryByUser($objUser->getStrSystemid());
+        foreach ($arrChanges as $objChange) {
+            $strReturn .= $this->objToolkit->simpleAdminList($objChange, "", 0);
+        }
+        $strReturn .= $this->objToolkit->listFooter();
+
         return $strReturn;
     }
 
@@ -332,6 +349,14 @@ class class_module_user_admin extends class_admin_simple implements interface_ad
         }
 
         $objMail->sendMail();
+
+        // insert log entry
+        $objNow = new class_date();
+        $objPwChange = new class_module_system_pwchangehistory();
+        $objPwChange->setStrTargetUser($objUser->getStrSystemid());
+        $objPwChange->setStrActivationLink($strActivationLink);
+        $objPwChange->setStrChangeDate($objNow->getLongTimestamp());
+        $objPwChange->updateObjectToDb();
 
         $this->adminReload(class_link::getLinkAdminHref($this->getArrModule("modul")));
         return $strReturn;
@@ -1196,6 +1221,23 @@ HTML;
         return $strReturn;
     }
 
+    /**
+     * Generates a read-only list of group-assignments for a single user
+     * @return string
+     * @permissions edit
+     */
+    protected function actionBrowseMemberships()
+    {
+        $objUser = new class_module_user_user($this->getSystemid());
+        $strReturn = $this->objToolkit->listHeader();
+        foreach($objUser->getObjSourceUser()->getGroupIdsForUser() as $strOneId) {
+            $objGroup = new class_module_user_group($strOneId);
+            $strReturn .= $this->objToolkit->genericAdminList($strOneId, $objGroup->getStrDisplayName(), class_adminskin_helper::getAdminImage("icon_group"), "", 0);
+        }
+        $strReturn .= $this->objToolkit->listFooter();
+        return $strReturn;
+    }
+
 
     /**
      * Saves the memberships passed by param
@@ -1647,9 +1689,9 @@ HTML;
                 $arrEntry = array();
 
                 if ($objOneElement instanceof class_module_user_user) {
-                    $arrEntry["title"] = $objOneElement->getStrUsername()." (".$objOneElement->getStrName().", ".$objOneElement->getStrForename()." )";
-                    $arrEntry["label"] = $objOneElement->getStrUsername()." (".$objOneElement->getStrName().", ".$objOneElement->getStrForename()." )";
-                    $arrEntry["value"] = $objOneElement->getStrUsername()." (".$objOneElement->getStrName().", ".$objOneElement->getStrForename()." )";
+                    $arrEntry["title"] = $objOneElement->getStrDisplayName();
+                    $arrEntry["label"] = $objOneElement->getStrDisplayName();
+                    $arrEntry["value"] = $objOneElement->getStrDisplayName();
                     $arrEntry["systemid"] = $objOneElement->getSystemid();
                     $arrEntry["icon"] = class_adminskin_helper::getAdminImage("icon_user");
                 }

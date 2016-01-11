@@ -33,7 +33,7 @@ class class_module_tags_recorddeletedlistener implements interface_genericevent_
 
         if($strSourceClass == "class_module_tags_tag" && class_module_system_module::getModuleByName("tags") != null) {
             //delete matching favorites
-            class_orm_base::setObjHandleLogicalDeletedGlobal(class_orm_deletedhandling_enum::INCLUDED());
+            class_orm_base::setObjHandleLogicalDeletedGlobal(class_orm_deletedhandling_enum::INCLUDED);
             $arrFavorites = class_module_tags_favorite::getAllFavoritesForTag($strSystemid);
             foreach($arrFavorites as $objOneFavorite) {
 
@@ -47,7 +47,7 @@ class class_module_tags_recorddeletedlistener implements interface_genericevent_
                 }
 
             }
-            class_orm_base::setObjHandleLogicalDeletedGlobal(class_orm_deletedhandling_enum::EXCLUDED());
+            class_orm_base::setObjHandleLogicalDeletedGlobal(class_orm_deletedhandling_enum::EXCLUDED);
         }
 
 

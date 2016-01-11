@@ -226,15 +226,15 @@ class PagesElement extends class_model implements interface_model, interface_adm
      */
     public function getAdminElementInstance()
     {
-        //Build the class-name
-        $strElementClass = str_replace(".php", "", $this->getStrClassAdmin());
-        //and finally create the object
-        if (class_exists($strElementClass)) {
-            $objElement = new $strElementClass();
-            return $objElement;
+
+        $strFilename = \class_resourceloader::getInstance()->getPathForFile("/admin/elements/".$this->getStrClassAdmin());
+        $objInstance = \class_classloader::getInstance()->getInstanceFromFilename($strFilename, "Kajona\\Pages\\Admin\\ElementAdmin");
+
+        if ($objInstance != null) {
+            return $objInstance;
         }
         else {
-            throw new class_exception("element class ".$strElementClass." not existing", class_exception::$level_FATALERROR);
+            throw new class_exception("element class ".$this->getStrClassAdmin()." not existing", class_exception::$level_FATALERROR);
         }
     }
 

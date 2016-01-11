@@ -64,7 +64,7 @@ class class_lockmanager
      */
     public function isLocked()
     {
-        return $this->getLockedUntilTimestamp() > time() && $this->getLockId() != "0";
+        return $this->getLockedUntilTimestamp(true) > time();
     }
 
     /**
@@ -203,10 +203,10 @@ class class_lockmanager
      *
      * @return string
      */
-    private function getLockedUntilTimestamp()
+    private function getLockedUntilTimestamp($bitIgnoreLockId = false)
     {
         $objObject = class_objectfactory::getInstance()->getObject($this->strSystemid);
-        if (validateSystemid($this->strSystemid) && $objObject != null && $objObject->getStrLockId() != "") {
+        if (validateSystemid($this->strSystemid) && ($bitIgnoreLockId || $objObject != null && $objObject->getStrLockId() != "")) {
             return $objObject->getIntLockTime() + (int)class_module_system_setting::getConfigValue("_system_lock_maxtime_");
         }
         else {

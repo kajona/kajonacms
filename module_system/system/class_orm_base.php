@@ -175,7 +175,7 @@ abstract class class_orm_base {
         if(self::$objHandleLogicalDeletedGlobal !== null)
             return self::$objHandleLogicalDeletedGlobal;
 
-        return class_orm_deletedhandling_enum::EXCLUDED();
+        return class_orm_deletedhandling_enum::EXCLUDED;
     }
 
     /**
@@ -194,10 +194,10 @@ abstract class class_orm_base {
         }
 
         if(self::$bitLogcialDeleteAvailable) {
-            if($this->getIntCombinedLogicalDeletionConfig()->equals(class_orm_deletedhandling_enum::EXCLUDED())) {
+            if($this->getIntCombinedLogicalDeletionConfig() === class_orm_deletedhandling_enum::EXCLUDED) {
                 $strQuery .= " " . $strConjunction . " {$strSystemTablePrefix}system_deleted = 0 ";
             }
-            else if($this->getIntCombinedLogicalDeletionConfig()->equals(class_orm_deletedhandling_enum::EXCLUSIVE())) {
+            else if($this->getIntCombinedLogicalDeletionConfig() === class_orm_deletedhandling_enum::EXCLUSIVE) {
                 $strQuery .= " " . $strConjunction . " {$strSystemTablePrefix}system_deleted = 1 ";
             }
         }
@@ -210,9 +210,9 @@ abstract class class_orm_base {
      * Static flag to change the handling of deleted objects globally, so for every following
      * ORM operation
      *
-     * @param class_orm_deletedhandling_enum $objHandleLogicalDeleted
+     * @param int $objHandleLogicalDeleted
      */
-    public static function setObjHandleLogicalDeletedGlobal(class_orm_deletedhandling_enum $objHandleLogicalDeleted = null) {
+    public static function setObjHandleLogicalDeletedGlobal($objHandleLogicalDeleted = null) {
         class_carrier::getInstance()->flushCache(class_carrier::INT_CACHE_TYPE_DBQUERIES | class_carrier::INT_CACHE_TYPE_ORMCACHE);
         self::$objHandleLogicalDeletedGlobal = $objHandleLogicalDeleted;
     }
@@ -228,9 +228,9 @@ abstract class class_orm_base {
      * Flag to change the handling of deleted obejcts locally, so only for the current instance of the ORM
      * mapper.
      *
-     * @param class_orm_deletedhandling_enum $objHandleLogicalDeleted
+     * @param int $objHandleLogicalDeleted
      */
-    public function setObjHandleLogicalDeleted(class_orm_deletedhandling_enum $objHandleLogicalDeleted) {
+    public function setObjHandleLogicalDeleted($objHandleLogicalDeleted) {
         $this->objHandleLogicalDeleted = $objHandleLogicalDeleted;
     }
 

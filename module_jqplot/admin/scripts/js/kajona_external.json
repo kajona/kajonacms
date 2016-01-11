@@ -1,7 +1,30 @@
-{
+[{
     "name" : "jqplot",
     "version" : "1.0.8",
     "source" : "http://www.jqplot.com",
     "license" : "MIT License and GPL v2",
     "licenseurl" : "http://www.jqplot.com/docs/files/MIT-LICENSE-txt.html"
+},
+{
+    "name" : "FileSaver.js",
+    "version" : "1.1.20151003",
+    "source" : "https://github.com/eligrey/FileSaver.js/",
+    "license" : "MIT",
+    "licenseurl" : "https://github.com/eligrey/FileSaver.js/blob/master/LICENSE.md"
+},
+{
+    "name" : "Blob.js",
+    "version" : "2014-07-24",
+    "source" : "https://github.com/eligrey/Blob.js",
+    "license" : "MIT",
+    "licenseurl" : "https://github.com/eligrey/Blob.js/blob/master/LICENSE.md"
+},
+{
+    "name" : "canvas-toBlob.js",
+    "version" : "2013-12-27",
+    "source" : "https://github.com/eligrey/canvas-toBlob.js",
+    "license" : "MIT",
+    "licenseurl" : "https://github.com/eligrey/canvas-toBlob.js/blob/master/LICENSE.md"
 }
+
+]

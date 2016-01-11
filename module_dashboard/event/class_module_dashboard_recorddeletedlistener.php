@@ -40,7 +40,7 @@ class class_module_dashboard_recorddeletedlistener implements interface_generice
 
             $objORM = new class_orm_objectlist();
             $objORM->addWhereRestriction(new class_orm_objectlist_property_restriction("strUser", class_orm_comparator_enum::Equal(), $strSystemid));
-            $objORM->setObjHandleLogicalDeleted(class_orm_deletedhandling_enum::INCLUDED());
+            $objORM->setObjHandleLogicalDeleted(class_orm_deletedhandling_enum::INCLUDED);
             $arrWidgets = $objORM->getObjectList("class_module_dashboard_widget");
 
             foreach($arrWidgets as $objWidget) {

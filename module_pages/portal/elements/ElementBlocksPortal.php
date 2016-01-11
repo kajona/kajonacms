@@ -20,7 +20,8 @@ use Kajona\Pages\System\PagesPageelement;
  * @author sidler@mulchprod.de
  * @targetTable element_universal.content_id
  */
-class ElementBlocksPortal extends ElementPortal implements PortalElementInterface {
+class ElementBlocksPortal extends ElementPortal implements PortalElementInterface
+{
 
 
     /**
@@ -28,12 +29,13 @@ class ElementBlocksPortal extends ElementPortal implements PortalElementInterfac
      *
      * @return string
      */
-    public function loadData() {
+    public function loadData()
+    {
 
         $strReturn = "";
 
         //load elements below
-        $arrElementsOnBlocks = PagesPageelement::getElementsOnPage($this->getSystemid(), true, $this->getStrPortalLanguage());
+        $arrElementsOnBlocks = PagesPageelement::getElementsOnPage($this->getSystemid(), !PagesPortaleditor::isActive(), $this->getStrPortalLanguage());
 
         if(count($arrElementsOnBlocks) == 0) {
             return "";
@@ -49,7 +51,7 @@ class ElementBlocksPortal extends ElementPortal implements PortalElementInterfac
                 foreach($arrElementsOnBlocks as $objOneElement) {
                     /** @var  ElementBlockPortal $objElement  */
                     $objElement = $objOneElement->getConcretePortalInstance();
-                    $strReturn .= $objElement->getRenderedElementOutput();
+                    $strReturn .= $objElement->getRenderedElementOutput(PagesPortaleditor::isActive());
 //                    $strReturn .= PagesPortaleditor::getPlaceholderWrapper("block_".$objOneElement->getSystemid());
                 }
 
@@ -57,6 +59,13 @@ class ElementBlocksPortal extends ElementPortal implements PortalElementInterfac
         }
 
         return $strReturn;
+        return '<div data-element="blocks" data-name="content" data-systemid="' . $this->getSystemid() . '">' . $strReturn . '</div>';
     }
+
+    protected function addPortalEditorCode($strElementOutput)
+    {
+        return $strElementOutput;
+    }
+
 
 }

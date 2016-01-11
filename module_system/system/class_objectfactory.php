@@ -64,8 +64,7 @@ class class_objectfactory {
         
         //load the object itself
         if($strClass != "") {
-            $objReflection = new ReflectionClass($strClass);
-            $objObject = $objReflection->newInstance($strSystemid);
+            $objObject = new $strClass($strSystemid);
             $this->arrObjectCache[$strSystemid] = $objObject;
             return $objObject;
         }

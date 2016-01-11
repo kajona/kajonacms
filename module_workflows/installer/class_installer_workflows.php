@@ -180,7 +180,7 @@ class class_installer_workflows extends class_installer_base implements interfac
         }
 
         $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModule["module_version"] == "4.7") {
+        if($arrModule["module_version"] == "4.7" || $arrModule["module_version"] == "4.7.1") {
             $strReturn .= $this->update_47_475();
         }
 

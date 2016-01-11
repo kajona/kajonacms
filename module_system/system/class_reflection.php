@@ -108,26 +108,22 @@ class class_reflection {
      * Parent classes are evaluated, too.
      *
      * @param $strAnnotation
-     * @param class_reflection_enum $objEnum - whether to return annotation values or parameters, default is values
-     *
+     * @param integer $intEnum - whether to return annotation values or parameters, default is values
      * @return array|string|string[]
      */
-    public function getAnnotationValuesFromClass($strAnnotation, class_reflection_enum $objEnum = null) {
-        if($objEnum == null) {
-            $objEnum = class_reflection_enum::VALUES();
-        }
+    public function getAnnotationValuesFromClass($strAnnotation, $intEnum = class_reflection_enum::VALUES) {
 
-        if(isset($this->arrCurrentCache[self::$STR_CLASS_PROPERTIES_CACHE][$strAnnotation."_".$objEnum]))
-            return $this->arrCurrentCache[self::$STR_CLASS_PROPERTIES_CACHE][$strAnnotation."_".$objEnum];
+        if(isset($this->arrCurrentCache[self::$STR_CLASS_PROPERTIES_CACHE][$strAnnotation."_".$intEnum]))
+            return $this->arrCurrentCache[self::$STR_CLASS_PROPERTIES_CACHE][$strAnnotation."_".$intEnum];
 
         $strClassDoc = $this->objReflectionClass->getDocComment();
         $arrReturn = $this->searchAnnotationInDoc($strClassDoc, $strAnnotation);
 
         if(count($arrReturn) == 2) {
-            if($objEnum->equals(class_reflection_enum::PARAMS()))
+            if($intEnum === class_reflection_enum::PARAMS)
                 $arrReturn = $arrReturn["params"];
 
-            if($objEnum->equals(class_reflection_enum::VALUES()))
+            if($intEnum === class_reflection_enum::VALUES)
                 $arrReturn = $arrReturn["values"];
         }
 
@@ -135,10 +131,10 @@ class class_reflection {
         $objBaseClass = $this->objReflectionClass->getParentClass();
         if($objBaseClass !== false) {
             $objBaseAnnotations = new class_reflection($objBaseClass->getName());
-            $arrReturn = array_merge($arrReturn, $objBaseAnnotations->getAnnotationValuesFromClass($strAnnotation, $objEnum));
+            $arrReturn = array_merge($arrReturn, $objBaseAnnotations->getAnnotationValuesFromClass($strAnnotation, $intEnum));
         }
 
-        $this->arrCurrentCache[self::$STR_CLASS_PROPERTIES_CACHE][$strAnnotation."_".$objEnum] = $arrReturn;
+        $this->arrCurrentCache[self::$STR_CLASS_PROPERTIES_CACHE][$strAnnotation."_".$intEnum] = $arrReturn;
         $this->bitCacheSaveRequired = true;
         return $arrReturn;
     }
@@ -147,27 +143,23 @@ class class_reflection {
      * Returns a list of all annotation names with a given value.
      * 
      * @param string $strValue Annotation value
-     * @param class_reflection_enum $objEnum - whether to return annotation values or parameters, default is values
+     * @param integer $intEnum - whether to return annotation values or parameters, default is values
      * @return array List of annotation names
      */
-    public function getAnnotationsWithValueFromClass($strValue, class_reflection_enum $objEnum = null) {
-        if($objEnum == null) {
-            $objEnum = class_reflection_enum::VALUES();
-        }
-
+    public function getAnnotationsWithValueFromClass($strValue, $intEnum = class_reflection_enum::VALUES) {
 
         $arrReturn = array();
 
         $strClassDoc = $this->objReflectionClass->getDocComment();
         $arrProperties = $this->searchAllAnnotationsInDoc($strClassDoc);
 
-        if($objEnum->equals(class_reflection_enum::VALUES())) {
+        if($intEnum === class_reflection_enum::VALUES) {
             foreach ($arrProperties as $strName => $arrValues) {
                 if (in_array($strValue, $arrValues["values"]))
                     $arrReturn[] = $strName;
             }
         }
-        else if($objEnum->equals(class_reflection_enum::PARAMS())) {
+        elseif($intEnum === class_reflection_enum::PARAMS) {
             foreach ($arrProperties as $strName => $arrValues) {
                 $arrParameters = $arrValues["params"];
 
@@ -178,7 +170,7 @@ class class_reflection {
                                 $arrReturn[$strName] = $strName;
                             }
                         }
-                        else if ($objParamValue == $strValue){
+                        elseif ($objParamValue == $strValue){
                             $arrReturn[$strName] = $strName;
                         }
                     }
@@ -191,7 +183,7 @@ class class_reflection {
         $objBaseClass = $this->objReflectionClass->getParentClass();
         if($objBaseClass !== false) {
             $objBaseAnnotations = new class_reflection($objBaseClass->getName());
-            $arrReturn = array_merge($arrReturn, $objBaseAnnotations->getAnnotationsWithValueFromClass($strValue, $objEnum));
+            $arrReturn = array_merge($arrReturn, $objBaseAnnotations->getAnnotationsWithValueFromClass($strValue, $intEnum));
         }
 
         return $arrReturn;
@@ -289,36 +281,33 @@ class class_reflection {
      *
      * @param string $strMethodName
      * @param string $strAnnotation
-     * @param class_reflection_enum $objEnum - whether to return annotation values or parameters, default is values
+     * @param integer $intEnum - whether to return annotation values or parameters, default is values
      *
      * @return string|bool
      */
-    public function getMethodAnnotationValue($strMethodName, $strAnnotation, class_reflection_enum $objEnum = null) {
-        if($objEnum == null) {
-            $objEnum = class_reflection_enum::VALUES();
-        }
+    public function getMethodAnnotationValue($strMethodName, $strAnnotation, $intEnum = class_reflection_enum::VALUES) {
 
-        if(isset($this->arrCurrentCache[self::$STR_METHOD_CACHE][$strMethodName."_".$strAnnotation."_".$objEnum]))
-            return $this->arrCurrentCache[self::$STR_METHOD_CACHE][$strMethodName."_".$strAnnotation."_".$objEnum];
+        if(isset($this->arrCurrentCache[self::$STR_METHOD_CACHE][$strMethodName."_".$strAnnotation."_".$intEnum]))
+            return $this->arrCurrentCache[self::$STR_METHOD_CACHE][$strMethodName."_".$strAnnotation."_".$intEnum];
 
         $objReflectionMethod = $this->objReflectionClass->getMethod($strMethodName);
 
         $strReturn = false;
         $arrReturn = $this->searchFirstAnnotationInDoc($objReflectionMethod->getDocComment(), $strAnnotation);
-        if($objEnum->equals(class_reflection_enum::VALUES())) {
+        if($intEnum === class_reflection_enum::VALUES) {
             $strReturn = $arrReturn["values"][0];
         }
-        else if($objEnum->equals(class_reflection_enum::PARAMS())) {
+        elseif($intEnum === class_reflection_enum::PARAMS) {
             $strReturn = $arrReturn["params"][0];
         }
 
         if($arrReturn === false) {
-            $this->arrCurrentCache[self::$STR_METHOD_CACHE][$strMethodName."_".$strAnnotation."_".$objEnum] = false;
+            $this->arrCurrentCache[self::$STR_METHOD_CACHE][$strMethodName."_".$strAnnotation."_".$intEnum] = false;
             return false;
         }
 
         //strip the annotation parts
-        $this->arrCurrentCache[self::$STR_METHOD_CACHE][$strMethodName."_".$strAnnotation."_".$objEnum] = $strReturn;
+        $this->arrCurrentCache[self::$STR_METHOD_CACHE][$strMethodName."_".$strAnnotation."_".$intEnum] = $strReturn;
         $this->bitCacheSaveRequired = true;
         return $strReturn;
     }
@@ -329,16 +318,13 @@ class class_reflection {
      * The base classes are queried, too.
      *
      * @param string $strAnnotation
-     * @param class_reflection_enum $objEnum - whether to return annotation values or parameters, default is values
+     * @param integer $intEnum - whether to return annotation values or parameters, default is values
      * @return string[] ["propertyname" => "annotationvalue"]
      */
-    public function getPropertiesWithAnnotation($strAnnotation , class_reflection_enum $objEnum = null) {
-        if($objEnum == null) {
-            $objEnum = class_reflection_enum::VALUES();
-        }
+    public function getPropertiesWithAnnotation($strAnnotation , $intEnum = class_reflection_enum::VALUES) {
 
-        if(isset($this->arrCurrentCache[self::$STR_PROPERTIES_CACHE][$strAnnotation."_".$objEnum]))
-            return $this->arrCurrentCache[self::$STR_PROPERTIES_CACHE][$strAnnotation."_".$objEnum];
+        if(isset($this->arrCurrentCache[self::$STR_PROPERTIES_CACHE][$strAnnotation."_".$intEnum]))
+            return $this->arrCurrentCache[self::$STR_PROPERTIES_CACHE][$strAnnotation."_".$intEnum];
 
         $arrReturn = array();
 
@@ -348,17 +334,17 @@ class class_reflection {
         $objBaseClass = $this->objReflectionClass->getParentClass();
         if($objBaseClass !== false) {
             $objBaseAnnotations = new class_reflection($objBaseClass->getName());
-            $arrReturn = array_merge($arrReturn, $objBaseAnnotations->getPropertiesWithAnnotation($strAnnotation, $objEnum));
+            $arrReturn = array_merge($arrReturn, $objBaseAnnotations->getPropertiesWithAnnotation($strAnnotation, $intEnum));
         }
 
 
         foreach($arrProperties as $objOneProperty) {
             $arrFirstAnnotation = $this->searchFirstAnnotationInDoc($objOneProperty->getDocComment(), $strAnnotation);
             if ($arrFirstAnnotation !== false) {
-                if($objEnum->equals(class_reflection_enum::VALUES())) {
+                if($intEnum === class_reflection_enum::VALUES) {
                     $arrFirstAnnotation = $arrFirstAnnotation["values"][0];
                 }
-                else if($objEnum->equals(class_reflection_enum::PARAMS())) {
+                elseif($intEnum === class_reflection_enum::PARAMS) {
                     $arrFirstAnnotation = $arrFirstAnnotation["params"][0];
                 }
 
@@ -366,7 +352,7 @@ class class_reflection {
             }
         }
 
-        $this->arrCurrentCache[self::$STR_PROPERTIES_CACHE][$strAnnotation."_".$objEnum] = $arrReturn;
+        $this->arrCurrentCache[self::$STR_PROPERTIES_CACHE][$strAnnotation."_".$intEnum] = $arrReturn;
         $this->bitCacheSaveRequired = true;
         return $arrReturn;
     }
@@ -376,14 +362,11 @@ class class_reflection {
      *
      * @param string $strProperty
      * @param string $strAnnotation
-     * @param class_reflection_enum $objEnum - whether to return annotation values or parameters, default is values
+     * @param integer $intEnum - whether to return annotation values or parameters, default is values
      *
      * @return null|string
      */
-    public function getAnnotationValueForProperty($strProperty, $strAnnotation, class_reflection_enum $objEnum = null) {
-        if($objEnum == null) {
-            $objEnum = class_reflection_enum::VALUES();
-        }
+    public function getAnnotationValueForProperty($strProperty, $strAnnotation, $intEnum = class_reflection_enum::VALUES) {
 
         $arrProperties = $this->objReflectionClass->getProperties();
 
@@ -391,10 +374,10 @@ class class_reflection {
             if($objOneProperty->getName() == $strProperty) {
                 $strFirstAnnotation = $this->searchFirstAnnotationInDoc($objOneProperty->getDocComment(), $strAnnotation);
 
-                if($objEnum->equals(class_reflection_enum::VALUES())) {
+                if($intEnum === class_reflection_enum::VALUES) {
                     $strFirstAnnotation = $strFirstAnnotation["values"][0];
                 }
-                else if($objEnum->equals(class_reflection_enum::PARAMS())) {
+                elseif($intEnum === class_reflection_enum::PARAMS) {
                     $strFirstAnnotation = $strFirstAnnotation["params"][0];
                 }
 
@@ -407,7 +390,7 @@ class class_reflection {
         $objBaseClass = $this->objReflectionClass->getParentClass();
         if($objBaseClass !== false) {
             $objBaseAnnotations = new class_reflection($objBaseClass->getName());
-            return $objBaseAnnotations->getAnnotationValueForProperty($strProperty, $strAnnotation, $objEnum);
+            return $objBaseAnnotations->getAnnotationValueForProperty($strProperty, $strAnnotation, $intEnum);
         }
 
         return null;

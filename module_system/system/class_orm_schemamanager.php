@@ -164,7 +164,7 @@ class class_orm_schemamanager extends class_orm_base {
         $objReflection = new class_reflection($strClass);
 
         //get the mapped properties
-        $arrProperties = $objReflection->getPropertiesWithAnnotation(class_orm_base::STR_ANNOTATION_OBJECTLIST, class_reflection_enum::PARAMS());
+        $arrProperties = $objReflection->getPropertiesWithAnnotation(class_orm_base::STR_ANNOTATION_OBJECTLIST, class_reflection_enum::PARAMS);
 
         foreach($arrProperties as $strPropertyName => $arrValues) {
 
