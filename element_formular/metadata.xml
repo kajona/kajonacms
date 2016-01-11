@@ -5,7 +5,7 @@
         >
     <title>form</title>
     <description>A simple element providing a contact form. May be used to develop other forms, too.</description>
-    <version>4.7</version>
+    <version>4.7.1</version>
     <author>Kajona Team</author>
     <target>element_formular</target>
     <type>ELEMENT</type>
