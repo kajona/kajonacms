@@ -52,12 +52,38 @@ canvas.jqplot-series-canvas {
 }
 
 div.jqplot-point-label {
-    color: #ffffff;
-    text-shadow: 0 0 3px black, 0 0 3px black;
     z-index: 0;
 }
 
 div.ui-resizable-helper-jqplot {
     border: 1px dotted gray;
     z-index: 1000 !important;
+}
+
+/*custom point labels - for point lables in stacked charts*/
+div.jqplotcustom-stacked-label {
+    color: #ffffff;
+    text-shadow: 0 0 3px black;
+    z-index: 0;
+}
+
+/*point labels*/
+td.jqplot-table-legend-label {
+    padding-left: 2px;
+}
+
+td.jqplot-table-legend-swatch {
+    padding-left: 2px;
+}
+
+table.jqplot-table-legend {
+    border: none;
+}
+
+td.jqplot-table-legend-label.jqplot-series-hidden {
+    opacity: 0.5;
+}
+
+td.jqplot-table-legend-swatch.jqplot-series-hidden {
+    opacity: 1;
 }
