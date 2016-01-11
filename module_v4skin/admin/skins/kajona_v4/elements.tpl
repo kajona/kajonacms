@@ -1569,7 +1569,7 @@ The language switch surrounds the buttons
     <div id="%%treeId%%" class="treeDiv"></div>
     <script type="text/javascript">
         KAJONA.admin.loader.loadFile([
-            "/core/module_system/admin/scripts/jstree3/dist/jstree.js",
+            "/core/module_system/admin/scripts/jstree3/dist/jstree.min.js",
             "/core/module_system/admin/scripts/jstree3/dist/themes/default/style.min.css",
             "/core/module_system/admin/scripts/jstree3/kajonatree.js"
         ], function() {
