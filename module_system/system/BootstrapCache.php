@@ -116,6 +116,12 @@ class BootstrapCache
         self::$arrCacheSavesRequired[$strCacheIdentifier] = true;
     }
 
+    public function removeCacheRow($strCacheIdentifier, $strKey)
+    {
+        unset(self::$arrCaches[$strCacheIdentifier][$strKey]);
+        self::$arrCacheSavesRequired[$strCacheIdentifier] = true;
+    }
+
     /**
      * @param $strCacheIdentifier
      * @param $strKey

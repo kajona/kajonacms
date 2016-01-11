@@ -119,6 +119,7 @@ class class_objectfactory {
      */
     public function removeFromCache($strSystemid) {
         unset($this->arrObjectCache[$strSystemid]);
+        BootstrapCache::getInstance()->removeCacheRow(BootstrapCache::CACHE_OBJECTS, $strSystemid);
     }
 
     /**
