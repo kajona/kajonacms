@@ -336,6 +336,13 @@
                     }
                 }
 
+                //custom -- add additional class for styling issue on labels within a stacked chart
+                if(this._stack) {
+                    elem.addClass('jqplotcustom-stacked-label');
+                }
+                //custom
+
+
                 if (this.renderer.constructor == $.jqplot.BarRenderer) {
                     if (this.barDirection == "vertical") {
                         ell += this._barNudge;

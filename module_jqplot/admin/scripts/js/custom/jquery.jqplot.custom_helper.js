@@ -44,16 +44,10 @@ KAJONA.admin.jqplotHelper = {
          */
         this.postPlot = function() {
             if (this.objPostPlotOptions.hasOwnProperty("intNrOfWrittenLabelsXAxis") && this.objPostPlotOptions["intNrOfWrittenLabelsXAxis"] != null) {
-                KAJONA.admin.jqplotHelper.setLabelsInvisible(this.strChartId, this.objPostPlotOptions["intNrOfWrittenLabelsXAxis"], "xaxis");
+                this.objJqplotChart.postDrawHooks.add(KAJONA.admin.jqplotHelper.setLabelsInvisible, [this.strChartId, this.objPostPlotOptions["intNrOfWrittenLabelsXAxis"], "xaxis"]);
             }
             if (this.objPostPlotOptions.hasOwnProperty("intNrOfWrittenLabelsYAxis") && this.objPostPlotOptions["intNrOfWrittenLabelsYAxis"] != null) {
-                KAJONA.admin.jqplotHelper.setLabelsInvisible(this.strChartId, this.objPostPlotOptions["intNrOfWrittenLabelsYAxis"], "yaxis");
-            }
-            if (this.objPostPlotOptions.hasOwnProperty("bitXAxisLabelsInvisible") && this.objPostPlotOptions["bitXAxisLabelsInvisible"]) {
-                KAJONA.admin.jqplotHelper.setAxisInvisible(this.strChartId, "xaxis");
-            }
-            if (this.objPostPlotOptions.hasOwnProperty("bitYAxisLabelsInvisible") && this.objPostPlotOptions["bitYAxisLabelsInvisible"]) {
-                KAJONA.admin.jqplotHelper.setAxisInvisible(this.strChartId, "yaxis");
+                this.objJqplotChart.postDrawHooks.add(KAJONA.admin.jqplotHelper.setLabelsInvisible, [this.strChartId, this.objPostPlotOptions["intNrOfWrittenLabelsYAxis"], "yaxis"]);
             }
         };
 
@@ -155,25 +149,16 @@ KAJONA.admin.jqplotHelper = {
 
             for(var i = startFor; i<endFor; i++ ) {
                 if(numberTicksNotInvisible == intNoOfWrittenLabels) {
-                    $(tickArray[i]).css('display', 'none');
+                    $(tickArray[i]).css('visibility', 'hidden');
                     continue;
                 }
                 if((i%modulo)!=0) {
-                    $(tickArray[i]).css('display', 'none');
+                    $(tickArray[i]).css('visibility', 'hidden');
                     continue;
                 }
                 numberTicksNotInvisible++;
             }
         }
-    },
-    /**
-     * Sets all canvasLabels invisible for the given axis (xaxis, yaxis)
-     *
-     * @param strChartId - xaxis or yaxis
-     * @param strAxis
-     */
-    setAxisInvisible : function (strChartId, strAxis) {
-        $('#'+strChartId+' div.jqplot-'+strAxis).hide();
     },
     mouseLeave : function (ev, gridpos, datapos, neighbor, plot, tooltipId) {
         $('#jqplot_tooltip').remove();
@@ -351,6 +336,12 @@ KAJONA.admin.jqplotHelper = {
         if(objDataPoint.actionhandlervalue != null && objDataPoint.actionhandlervalue != "") {
             window.location = objDataPoint.actionhandlervalue;
         }
-    }
+    },
 
+    exportAsImage : function(strElementId) {
+        var canvas = $("#"+strElementId).jqplotToImageCanvas();
+        canvas.toBlob(function(blob) {
+            saveAs(blob, "download.png");
+        });
+    },
 };
