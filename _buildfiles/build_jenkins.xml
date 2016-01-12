@@ -187,7 +187,7 @@
             </fileset>
         </copy>
 
-        <copy file="${basedir}setupSeleniumConfig.php" tofile="${basedir}${seleniumPath}/setupSeleniumConfig.php" />
+        <copy file="${basedir}/setupSeleniumConfig.php" tofile="${basedir}${seleniumPath}/setupSeleniumConfig.php" />
 
         <!-- start internal webserver -->
         <exec dir="${basedir}${seleniumPath}" executable="${path.php}" spawn="true">
