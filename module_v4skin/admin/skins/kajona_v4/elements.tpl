@@ -721,8 +721,8 @@ in addition, a container for the calendar is needed. Use %%calendarContainerId%%
                 <input id="%%calendarId%%" name="%%calendarId%%" class="form-control %%class%%" size="16" type="text" value="%%valuePlain%%" %%readonly%%>
             </div>
             <script>
-                KAJONA.admin.loader.loadFile(["_webpath_/core/module_v4skin/admin/skins/kajona_v4/js/bootstrap-datepicker.js"], function() {
-                    var arrSecondFiles = ["_webpath_/core/module_v4skin/admin/skins/kajona_v4/js/locales/bootstrap-datepicker.%%calendarLang%%.js"];
+                KAJONA.admin.loader.loadFile(["/core/module_v4skin/admin/skins/kajona_v4/js/bootstrap-datepicker.js"], function() {
+                    var arrSecondFiles = ["/core/module_v4skin/admin/skins/kajona_v4/js/locales/bootstrap-datepicker.%%calendarLang%%.js"];
                     if('%%calendarLang%%' == 'en')
                         arrSecondFiles = [];
                     KAJONA.admin.loader.loadFile(arrSecondFiles, function() {
@@ -741,8 +741,8 @@ in addition, a container for the calendar is needed. Use %%calendarContainerId%%
                             $('#%%calendarId%%').focus();
                         }
 
-                    }, true);
-                }, true);
+                    });
+                });
             </script>
         </div>
     </div>
@@ -773,8 +773,8 @@ in addition, a container for the calendar is needed. Use %%calendarContainerId%%
         <div class="col-sm-1">
         </div>
         <script>
-            KAJONA.admin.loader.loadFile(["_webpath_/core/module_v4skin/admin/skins/kajona_v4/js/bootstrap-datepicker.js"], function() {
-                KAJONA.admin.loader.loadFile(["_webpath_/core/module_v4skin/admin/skins/kajona_v4/js/locales/bootstrap-datepicker.%%calendarLang%%.js"], function() {
+            KAJONA.admin.loader.loadFile(["/core/module_v4skin/admin/skins/kajona_v4/js/bootstrap-datepicker.js"], function() {
+                KAJONA.admin.loader.loadFile(["/core/module_v4skin/admin/skins/kajona_v4/js/locales/bootstrap-datepicker.%%calendarLang%%.js"], function() {
                     var format = '%%dateFormat%%';
                     format = format.replace('d', 'dd').replace('m', 'mm').replace('Y', 'yyyy');
                     $('#%%calendarId%%').datepicker({
@@ -790,8 +790,8 @@ in addition, a container for the calendar is needed. Use %%calendarContainerId%%
                         $('#%%calendarId%%').focus();
                     }
 
-                }, true);
-            }, true);
+                });
+            });
         </script>
     </div>
 </input_datetime_simple>
@@ -842,15 +842,15 @@ in addition, a container for the calendar is needed. Use %%calendarContainerId%%
         </div>
     </div>
     <script type="text/javascript">
-        KAJONA.admin.loader.loadFile(["_webpath_/core/module_system/admin/scripts/jquerytag/jquery.caret.min.js"], function(){
-            KAJONA.admin.loader.loadFile("_webpath_/core/module_system/admin/scripts/jquerytag/jquery.tag-editor.min.js", function(){
+        KAJONA.admin.loader.loadFile(["/core/module_system/admin/scripts/jquerytag/jquery.caret.min.js"], function(){
+            KAJONA.admin.loader.loadFile("/core/module_system/admin/scripts/jquerytag/jquery.tag-editor.min.js", function(){
                 $("#%%name%%").tagEditor({
                     initialTags: %%values%%,
                     forceLowercase: false,
                     onChange: %%onChange%%
                 });
-            }, true);
-        }, true);
+            });
+        });
     </script>
 </input_tageditor>
 
