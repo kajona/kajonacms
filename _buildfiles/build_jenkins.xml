@@ -161,7 +161,7 @@
     </target>
 
     <!-- executes javascript protractor tests -->
-    <target name="protractor">
+    <target name="protractor" depends="installNpmBuildDependencies">
         <exec dir="${basedir}${jsPath}" executable="${path.node}" failonerror="on">
             <arg line="./node_modules/protractor/bin/webdriver-manager update"/>
         </exec>
