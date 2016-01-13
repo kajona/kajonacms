@@ -103,6 +103,12 @@ class class_installer_element_formular extends class_elementinstaller_base imple
             $this->objDB->flushQueryCache();
         }
 
+        if(class_module_pages_element::getElement("form")->getStrVersion() == "4.7") {
+            $strReturn .= "Updating element form to 4.7.1...\n";
+            $this->updateElementVersion("form", "4.7.1");
+            $this->objDB->flushQueryCache();
+        }
+
         return $strReturn;
     }
 
