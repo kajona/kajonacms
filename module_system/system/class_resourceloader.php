@@ -80,10 +80,6 @@ class class_resourceloader
      */
     public function getTemplate($strTemplateName, $bitScanAdminSkin = false)
     {
-        if (substr($strTemplateName, 0, 5) == "/core") {
-            $strTemplateName = strstr(substr($strTemplateName, 1), "/");
-        }
-
         $strTemplateName = removeDirectoryTraversals($strTemplateName);
         if (BootstrapCache::getInstance()->getCacheRow(BootstrapCache::CACHE_TEMPLATES, $strTemplateName)) {
             return BootstrapCache::getInstance()->getCacheRow(BootstrapCache::CACHE_TEMPLATES, $strTemplateName);
