@@ -14,18 +14,18 @@ $arrFilesToCompile = array(
 
 $strSkinReplacement = "";
 $strSkinReplacement = <<<TXT
-    <link rel="stylesheet" href="_skinwebpath_/less/styles.css?_system_browser_cachebuster_" type="text/css" />
+    <link rel="stylesheet" href="_webpath_/[webpath,module_v4skin]/admin/skins/kajona_v4/less/styles.css?_system_browser_cachebuster_" type="text/css" />
 TXT;
 
 $strInstallerReplacement = "";
 $strInstallerReplacement = <<<TXT
-    <link rel="stylesheet" href="_webpath_/core/module_installer/less/styles.css?_system_browser_cachebuster_" type="text/css" />
+    <link rel="stylesheet" href="_webpath_/[webpath,module_installer]/less/styles.css?_system_browser_cachebuster_" type="text/css" />
 TXT;
 
 
 $strPeReplacement = "";
 $strPeReplacement = <<<TXT
-    <link rel="stylesheet" href="_skinwebpath_/less/styles_pe.css?_system_browser_cachebuster_" type="text/css" />
+    <link rel="stylesheet" href="_webpath_/[webpath,module_v4skin]/admin/skins/kajona_v4/less/styles_pe.css?_system_browser_cachebuster_" type="text/css" />
 TXT;
 
 $arrFilesToUpdate = array(
@@ -33,7 +33,7 @@ $arrFilesToUpdate = array(
     __DIR__."/../temp/kajona/core/module_v4skin/admin/skins/kajona_v4/folderview.tpl" => $strSkinReplacement,
     __DIR__."/../temp/kajona/core/module_v4skin/admin/skins/kajona_v4/login.tpl" => $strSkinReplacement,
     __DIR__."/../temp/kajona/core/module_v4skin/admin/skins/kajona_v4/elements.tpl" => $strPeReplacement,
-    __DIR__."/../temp/kajona/core/module_installer/installer.tpl" => $strInstallerReplacement
+    __DIR__."/../temp/kajona/core/module_installer/templates/default/tpl/module_installer/installer.tpl" => $strInstallerReplacement
 );
 
 
@@ -41,6 +41,7 @@ foreach($arrFilesToCompile as $strSourceFile => $strTargetFile) {
     //echo "trigger less compile: lessc ".escapeshellarg($strSourceFile)." ".escapeshellarg($strTargetFile)."\n";
     if (is_file($strSourceFile)) {
         $strLessBin = "node " . __DIR__ . "/../jstests/node_modules/less/bin/lessc";
+//        $strLessBin = "lessc";
         system($strLessBin . " --verbose " . escapeshellarg($strSourceFile) . " " . escapeshellarg($strTargetFile));
     } else {
         echo "Skipping ".$strSourceFile.", not existing\n";
