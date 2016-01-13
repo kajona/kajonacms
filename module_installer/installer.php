@@ -231,7 +231,7 @@ class class_installer {
                 $strFileContent .= "  include __DIR__.'/../../../core/module_system/system/config/config.php';\n";
                 $strFileContent .= "}\n";
                 $strFileContent .= "else {\n";
-                $strFileContent .= "  require_once 'phar://'.__DIR__.'/../../../core/module_system.phar/system/config/config.php';\n";
+                $strFileContent .= "  include 'phar://'.__DIR__.'/../../../core/module_system.phar/system/config/config.php';\n";
                 $strFileContent .= "}\n";
                 $strFileContent .= "\n\n\n";
                 $strFileContent .= "  \$config['dbhost']               = '".$_POST["hostname"]."';                   //Server name \n";
