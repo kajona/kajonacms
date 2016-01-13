@@ -196,8 +196,8 @@
         <copy file="${basedir}/setupSeleniumConfig.php" tofile="${basedir}${seleniumPath}/setupSeleniumConfig.php" />
 
         <!-- start internal webserver -->
-        <exec dir="${basedir}${seleniumPath}" executable="${path.php}" spawn="true">
-            <arg line="-S 127.0.0.1:8080 -t seleniumproject server.php"/>
+        <exec dir="${basedir}" executable="${path.php}" spawn="true">
+            <arg line="-S 127.0.0.1:8080 -t ${basedir}${seleniumPath} server.php"/>
         </exec>
 
         <!-- wait so that the selenium and webserver are ready -->

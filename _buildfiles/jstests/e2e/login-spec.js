@@ -6,7 +6,7 @@ describe('setup', function() {
     });
 
     it('test login', function() {
-        browser.get('http://127.0.0.1:8080/admin');
+        browser.get('http://127.0.0.1:8080/index.php?admin=1');
 
         browser.driver.findElement(by.id('name')).sendKeys('test');
         browser.driver.findElement(by.id('passwort')).sendKeys('test123');

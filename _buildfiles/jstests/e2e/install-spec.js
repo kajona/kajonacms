@@ -11,13 +11,23 @@ describe('setup', function() {
 
         browser.get('http://127.0.0.1:8080/installer.php');
 
-        // configuration
         browser.driver.findElement(by.css('.btn-primary')).click();
+
+        // db settings
+        browser.driver.findElement(by.id('hostname')).sendKeys('localhost');
+        browser.driver.findElement(by.id('username')).sendKeys('kajona');
+        browser.driver.findElement(by.id('password')).sendKeys('kajona');
+        browser.driver.findElement(by.id('dbname')).sendKeys('autotest');
+        browser.driver.findElement(by.id('dbprefix')).sendKeys('autotest_');
+        browser.driver.findElement(by.css('option[value="sqlite3"]')).click();
+
+        browser.driver.findElement(by.css('.savechanges')).click();
 
         // create new admin user
         browser.driver.findElement(by.id('username')).sendKeys('test');
         browser.driver.findElement(by.id('password')).sendKeys('test123');
         browser.driver.findElement(by.id('email')).sendKeys('test@test.com');
+
         browser.driver.findElement(by.css('.savechanges')).click();
 
         // start the installation this takes some time
