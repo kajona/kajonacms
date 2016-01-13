@@ -28,6 +28,7 @@ class class_graph_jqplot implements interface_graph {
     private $bitIsHorizontalBar = false;
 
     private $bitIsResizeable = true;
+    private $bitDownloadLink = true;
 
     const STRING_FORMAT = "%s";
 
@@ -487,9 +488,13 @@ class class_graph_jqplot implements interface_graph {
 
             //image export div
             $strReturn .= "<div style=\"width:5%; height:100%; float: left;\">";
-            $strReturn .= "<a style=\"display:none; cursor: pointer; \" id=\"{$strImageExportId}\" onclick=\"KAJONA.admin.jqplotHelper.exportAsImage('{$strChartId}')\"'>
-                                <i class='fa fa-download'></i>
-                            </a>";
+
+            if ($this->isBitDownloadLink()) {
+                $strReturn .= "<a style=\"display:none; cursor: pointer; \" id=\"{$strImageExportId}\" onclick=\"KAJONA.admin.jqplotHelper.exportAsImage('{$strChartId}')\"'>
+                                   <i class='fa fa-download'></i>
+                               </a>";
+            }
+
             $strReturn .= "</div>";
 
         $strReturn .= "</div>";
@@ -1101,5 +1106,21 @@ class class_graph_jqplot implements interface_graph {
     public function setBitIsResizeable($bitIsResizeable)
     {
         $this->bitIsResizeable = $bitIsResizeable;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isBitDownloadLink()
+    {
+        return $this->bitDownloadLink;
+    }
+
+    /**
+     * @param boolean $bitDownloadLink
+     */
+    public function setBitDownloadLink($bitDownloadLink)
+    {
+        $this->bitDownloadLink = $bitDownloadLink;
     }
 }
