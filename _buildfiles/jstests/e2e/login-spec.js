@@ -1,5 +1,5 @@
 
-describe('setup', function() {
+describe('login', function() {
 
     beforeEach(function() {
         browser.ignoreSynchronization = true;
