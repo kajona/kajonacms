@@ -237,7 +237,10 @@ class class_admin_formgenerator
             $this->addField($objField);
         }
 
-        $strGeneratedFormname = "form".generateSystemid();
+        $strGeneratedFormname = $this->strFormname;
+        if($strGeneratedFormname == null) {
+            $strGeneratedFormname = "form".generateSystemid();
+        }
         $objToolkit = class_carrier::getInstance()->getObjToolkit("admin");
         if ($strTargetURI !== null) {
             $strReturn .= $objToolkit->formHeader($strTargetURI, $strGeneratedFormname, $this->strFormEncoding, $this->strOnSubmit);
