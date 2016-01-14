@@ -1,7 +1,8 @@
 <?php
 
 
-$strDeployPath = "/Users/sidler/web/agp_v5_master_phar";
+$strDeployPath = "";
+//$strDeployPath = "/Users/sidler/web/agp_v5_master_phar";
 
 
 $arrCores = scandir("./../");
