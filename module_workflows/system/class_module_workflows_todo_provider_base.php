@@ -14,10 +14,10 @@ abstract class class_module_workflows_todo_provider_base implements interface_to
         return self::EXTENSION_POINT;
     }
 
-    public function getCurrentTodosByCategory($strCategory)
+    public function getCurrentTodosByCategory($strCategory, $bitLimited = true)
     {
         if (in_array($strCategory, array_keys($this->getWorkflowClasses()))) {
-            return $this->getPendingWorkflows($strCategory);
+            return $this->getPendingWorkflows($strCategory, $bitLimited);
         } else {
             return array();
         }
@@ -28,12 +28,17 @@ abstract class class_module_workflows_todo_provider_base implements interface_to
         return $this->getWorkflowClasses();
     }
 
-    protected function getPendingWorkflows($strWorkflowClass)
+    protected function getPendingWorkflows($strWorkflowClass, $bitLimited)
     {
         $objLang = class_lang::getInstance();
         $arrUsers = array_merge(array(class_session::getInstance()->getUserID()), class_session::getInstance()->getGroupIdsAsArray());
-        $arrWorkflows = class_module_workflows_workflow::getPendingWorkflowsForUser($arrUsers, false, false, array($strWorkflowClass));
         $arrResult = array();
+
+        if ($bitLimited) {
+            $arrWorkflows = class_module_workflows_workflow::getPendingWorkflowsForUser($arrUsers, 0, self::LIMITED_COUNT, array($strWorkflowClass));
+        } else {
+            $arrWorkflows = class_module_workflows_workflow::getPendingWorkflowsForUser($arrUsers, false, false, array($strWorkflowClass));
+        }
 
         foreach ($arrWorkflows as $objWorkflow) {
             if ($objWorkflow->getObjWorkflowHandler()->providesUserInterface()) {
