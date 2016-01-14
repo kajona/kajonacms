@@ -18,7 +18,8 @@ describe('setup', function() {
         browser.driver.findElement(by.id('username')).sendKeys('kajona');
         browser.driver.findElement(by.id('password')).sendKeys('kajona');
         browser.driver.findElement(by.id('dbname')).sendKeys('autotest');
-        browser.driver.findElement(by.id('dbprefix')).sendKeys('autotest_');
+        // default is "kajona_"
+        //browser.driver.findElement(by.id('dbprefix')).sendKeys('');
         browser.driver.findElement(by.css('option[value="sqlite3"]')).click();
 
         browser.driver.findElement(by.css('.savechanges')).click();
