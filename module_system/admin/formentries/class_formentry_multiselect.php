@@ -63,11 +63,13 @@ class class_formentry_multiselect extends class_formentry_dropdown {
      */
     public function getValueAsText() {
         $arrSelected = $this->getStrValue();
-        if(empty($arrSelected))
+        if($arrSelected === "" || $arrSelected === null || (is_array($arrSelected) && count($arrSelected) == 0)) {
             return "";
+        }
 
-        if(!is_array($arrSelected))
+        if(!is_array($arrSelected)) {
             $arrSelected = explode(",", $this->getStrValue());
+        }
 
         array_walk($arrSelected, function(&$strValue) {
             $strValue = $this->arrKeyValues[$strValue];
