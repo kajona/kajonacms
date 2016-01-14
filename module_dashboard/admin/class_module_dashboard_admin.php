@@ -193,6 +193,14 @@ JS;
 
         $arrContent[$this->getLang("todo_overall_tasks")] = $strLink;
 
+        // each category
+        $arrCategories = class_todo_repository::getAllCategories();
+        foreach ($arrCategories as $strProviderName => $arrTaskCategories) {
+            foreach ($arrTaskCategories as $strKey => $strCategoryName) {
+                $arrContent[$strCategoryName] = class_link::getLinkAdminXml("dashboard", "todoCategory", "&category=" . $strKey);
+            }
+        }
+
         $strReturn = $this->getListTodoFilter();
         $strReturn .= $this->objToolkit->getTabbedContent($arrContent);
 

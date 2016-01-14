@@ -157,7 +157,7 @@ class class_module_dashboard_admin_xml extends class_admin_controller implements
         if (empty($strCategory)) {
             $arrTodos = class_todo_repository::getAllOpenTodos();
         } else {
-            $arrTodos = class_todo_repository::getOpenTodos($strCategory);
+            $arrTodos = class_todo_repository::getOpenTodos($strCategory, false);
         }
 
         if (empty($arrTodos)) {
