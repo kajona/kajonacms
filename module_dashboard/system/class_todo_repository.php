@@ -34,7 +34,7 @@ class class_todo_repository
      *
      * @return class_todo_entry[]
      */
-    public static function getOpenTodos($strCategory)
+    public static function getOpenTodos($strCategory, $bitLimited = true)
     {
         if (isset(self::$arrTodos[$strCategory])) {
             return self::$arrTodos[$strCategory];
@@ -47,7 +47,7 @@ class class_todo_repository
         $arrTodos = array();
         foreach ($arrPlugins as $objPlugin) {
             if ($objPlugin instanceof interface_todo_provider && $objPlugin->rightView()) {
-                $arrTodos = array_merge($arrTodos, $objPlugin->getCurrentTodosByCategory($strCategory));
+                $arrTodos = array_merge($arrTodos, $objPlugin->getCurrentTodosByCategory($strCategory, $bitLimited));
             }
         }
 

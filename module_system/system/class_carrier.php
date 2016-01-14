@@ -65,9 +65,7 @@ class class_carrier
 //            $objConfig = self::$objCarrier->getObjConfig();
 //            $objDB = self::$objCarrier->getObjDB();
             //so, lets init the constants
-//            if(!defined("_block_config_db_loading_")) {
-//                $objConfig->loadConfigsDatabase($objDB);
-//            }
+
             //and init the internal session
             //SIR 2010/03: deactivated session startup right here.
             //The session-start is handled by class_session internally to avoid

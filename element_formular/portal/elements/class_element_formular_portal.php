@@ -32,7 +32,7 @@ class class_element_formular_portal extends class_element_portal implements inte
             throw new class_exception("failed to load form-class " . $this->arrElementData["formular_class"], class_exception::$level_ERROR);
         }
 
-        require_once(_realpath_ . $strPath);
+        require_once($strPath);
         $strClassname = uniStrReplace(".php", "", $this->arrElementData["formular_class"]);
 
         $objForm = new $strClassname($this->arrElementData);

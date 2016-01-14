@@ -28,10 +28,13 @@ use class_resourceloader;
 use class_response_object;
 use interface_admin;
 use interface_model;
+use Kajona\System\System\SystemJSTreeConfig;
+use Kajona\System\System\SystemJSTreeBuilder;
 use Kajona\Pages\System\PagesElement;
 use Kajona\Pages\System\PagesFolder;
 use Kajona\Pages\System\PagesPage;
 use Kajona\Pages\System\PagesPageelement;
+use Kajona\Pages\System\PagesJstreeNodeLoader;
 
 
 /**
@@ -823,9 +826,17 @@ class PagesAdminController extends class_admin_simple implements interface_admin
     private function generateTreeView($strSideContent)
     {
         $strReturn = "";
+        $arrNodesToExpand = array_merge(array($this->getObjModule()->getSystemid()), $this->getPathArray($this->getSystemid()));
+
         //generate the array of ids to expand initially
-        $arrNodes = array_merge(array($this->getObjModule()->getSystemid()), $this->getPathArray($this->getSystemid()));
-        $strReturn .= $this->objToolkit->getTreeview(class_link::getLinkAdminXml("pages", "getChildNodes"), "", $arrNodes, $strSideContent);
+        $objTreeConfig = new SystemJSTreeConfig( );
+        $objTreeConfig->setStrRootNodeId($this->getObjModule()->getSystemid());
+        $objTreeConfig->setStrNodeEndpoint(class_link::getLinkAdminXml("pages", "getChildNodes"));
+        $objTreeConfig->setArrNodesToExpand($arrNodesToExpand);
+        $objTreeConfig->addType("folder", array("page"));
+        $objTreeConfig->addType("page", array("page"));
+
+        $strReturn .= $this->objToolkit->getTreeview($objTreeConfig, $strSideContent);
 
         //ticket #931: no hierarchical drag n drop for folders
         $strJS = <<<JS
@@ -1300,76 +1311,19 @@ JS;
      */
     protected function actionGetChildNodes()
     {
-        $arrReturn = array();
+        $objJsTreeLoader = new SystemJSTreeBuilder(
+            new PagesJstreeNodeLoader()
+        );
 
-        $arrPages = PagesFolder::getPagesAndFolderList($this->getSystemid());
-        if (count($arrPages) > 0) {
-            foreach ($arrPages as $objSingleEntry) {
-                if ($objSingleEntry->rightView()) {
-
-                    /** @var PagesFolder $objSingleEntry */
-                    if ($objSingleEntry instanceof PagesFolder) {
-
-                        $strLink = "";
-                        if ($objSingleEntry->rightEdit()) {
-                            $strLink = class_link::getLinkAdminHref("pages", "list", "systemid=".$objSingleEntry->getSystemid(), false);
-                        }
-
-                        $arrReturn[] = array(
-                            "data"  => array(
-                                "title" => class_adminskin_helper::getAdminImage($objSingleEntry->getStrIcon())."&nbsp;".$objSingleEntry->getStrDisplayName()
-                            ),
-                            "state" => (count(PagesFolder::getPagesAndFolderList($objSingleEntry->getSystemid())) == 0 ? "" : "closed"),
-                            "attr"  => array(
-                                "id"       => $objSingleEntry->getSystemid(),
-                                "systemid" => $objSingleEntry->getSystemid(),
-                                "link"     => $strLink,
-                                "isleaf"   => (count(PagesFolder::getPagesAndFolderList($objSingleEntry->getSystemid())) == 0 ? true : false)
-                            )
-                        );
-                    }
-
-
-                    /** @var PagesPage $objSingleEntry */
-                    if ($objSingleEntry instanceof PagesPage) {
-
-                        $strTargetId = $objSingleEntry->getSystemid();
-                        if ($objSingleEntry->getIntType() == PagesPage::$INT_TYPE_ALIAS && PagesPage::getPageByName($objSingleEntry->getStrAlias()) != null) {
-                            $strTargetId = PagesPage::getPageByName($objSingleEntry->getStrAlias())->getSystemid();
-                        }
-
-                        $strLink = "";
-                        if ($objSingleEntry->getIntType() == PagesPage::$INT_TYPE_ALIAS && class_objectfactory::getInstance()->getObject($strTargetId)->rightEdit()) {
-                            $strLink = class_link::getLinkAdminHref("pages_content", "list", "systemid=".$strTargetId, false);
-                        }
-                        else if ($objSingleEntry->getIntType() == PagesPage::$INT_TYPE_PAGE && $objSingleEntry->rightEdit()) {
-                            $strLink = class_link::getLinkAdminHref("pages_content", "list", "systemid=".$objSingleEntry->getSystemid(), false);
-                        }
-
-
-                        $arrReturn[] = array(
-                            "data"  => array(
-                                "title" => class_adminskin_helper::getAdminImage($objSingleEntry->getStrIcon())."&nbsp;".$objSingleEntry->getStrDisplayName()
-                            ),
-                            "state" => (count(PagesFolder::getPagesAndFolderList($objSingleEntry->getSystemid())) == 0 ? "" : "closed"),
-                            "attr"  => array(
-                                "id"       => $objSingleEntry->getSystemid(),
-                                "systemid" => $objSingleEntry->getSystemid(),
-                                "link"     => $strLink,
-                                //"link"     => getLinkAdminHref("pages", "list", "systemid=".$objSingleEntry->getSystemid(), false),
-                                "type"     => $objSingleEntry->getIntType(),
-                                "isleaf"   => (count(PagesFolder::getPagesAndFolderList($objSingleEntry->getSystemid())) == 0 ? true : false)
-                            )
-                        );
-                    }
-
-                }
-            }
-
+        $arrSystemIdPath = $this->getParam("jstree_initialtoggling");
+        $bitInitialLoading = is_array($arrSystemIdPath);
+        if(!$bitInitialLoading) {
+            $arrSystemIdPath = array($this->getSystemid());
         }
 
+        $arrReturn = $objJsTreeLoader->getJson($arrSystemIdPath, false);
         class_response_object::getInstance()->setStrResponseType(class_http_responsetypes::STR_TYPE_JSON);
-        return json_encode($arrReturn);
+        return $arrReturn;
     }
 
 }

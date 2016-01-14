@@ -227,7 +227,13 @@ class class_installer {
             if($bitCxCheck) {
                 $strFileContent = "<?php\n";
                 $strFileContent .= "/*\n Kajona V4 config-file.\n If you want to overwrite additional settings, copy them from /core/module_system/system/config/config.php into this file.\n*/";
-                $strFileContent .= "\n";
+                $strFileContent .= "if(is_dir(__DIR__.\"/../../../core/module_system/\")) {\n";
+                $strFileContent .= "  include __DIR__.'/../../../core/module_system/system/config/config.php';\n";
+                $strFileContent .= "}\n";
+                $strFileContent .= "else {\n";
+                $strFileContent .= "  include 'phar://'.__DIR__.'/../../../core/module_system.phar/system/config/config.php';\n";
+                $strFileContent .= "}\n";
+                $strFileContent .= "\n\n\n";
                 $strFileContent .= "  \$config['dbhost']               = '".$_POST["hostname"]."';                   //Server name \n";
                 $strFileContent .= "  \$config['dbusername']           = '".$_POST["username"]."';                   //Username \n";
                 $strFileContent .= "  \$config['dbpassword']           = '".$_POST["password"]."';                   //Password \n";
@@ -277,7 +283,7 @@ class class_installer {
         }
 
         //configwizard_form
-        $strTemplateID = $this->objTemplates->readTemplate(class_resourceloader::getInstance()->getCorePathForModule("module_installer")."/module_installer/installer.tpl", "configwizard_form", true);
+        $strTemplateID = $this->objTemplates->readTemplate("/module_installer/installer.tpl", "configwizard_form", true);
         $strReturn .= $this->objTemplates->fillTemplate(
             array(
                 "mysqliInfo"       => $strMysqliInfo,
@@ -328,7 +334,7 @@ class class_installer {
         }
 
         if($bitShowForm) {
-            $strTemplateID = $this->objTemplates->readTemplate(class_resourceloader::getInstance()->getCorePathForModule("module_installer")."/module_installer/installer.tpl", "loginwizard_form", true);
+            $strTemplateID = $this->objTemplates->readTemplate("/module_installer/installer.tpl", "loginwizard_form", true);
             $this->strOutput .= $this->objTemplates->fillTemplate(array(), $strTemplateID);
         }
 
@@ -347,7 +353,7 @@ class class_installer {
             return;
         }
 
-        $strTemplateID = $this->objTemplates->readTemplate(class_resourceloader::getInstance()->getCorePathForModule("module_installer")."/module_installer/installer.tpl", "modeselect_content", true);
+        $strTemplateID = $this->objTemplates->readTemplate("/module_installer/installer.tpl", "modeselect_content", true);
         $this->strOutput .= $this->objTemplates->fillTemplate(
             array(
                 "link_autoinstall" => _webpath_."/installer.php?step=finish&autoInstall=true",
@@ -412,8 +418,8 @@ class class_installer {
         $strReturn .= $this->getLang("installer_modules_found");
 
         $strRows = "";
-        $strTemplateID = $this->objTemplates->readTemplate(class_resourceloader::getInstance()->getCorePathForModule("module_installer")."/module_installer/installer.tpl", "installer_modules_row", true);
-        $strTemplateIDInstallable = $this->objTemplates->readTemplate(class_resourceloader::getInstance()->getCorePathForModule("module_installer")."/module_installer/installer.tpl", "installer_modules_row_installable", true);
+        $strTemplateID = $this->objTemplates->readTemplate("/module_installer/installer.tpl", "installer_modules_row", true);
+        $strTemplateIDInstallable = $this->objTemplates->readTemplate("/module_installer/installer.tpl", "installer_modules_row_installable", true);
 
         //Loading each installer
 
@@ -470,7 +476,7 @@ class class_installer {
         }
 
         //wrap in form
-        $strTemplateID = $this->objTemplates->readTemplate(class_resourceloader::getInstance()->getCorePathForModule("module_installer")."/module_installer/installer.tpl", "installer_modules_form", true);
+        $strTemplateID = $this->objTemplates->readTemplate("/module_installer/installer.tpl", "installer_modules_form", true);
         $strReturn .= $this->objTemplates->fillTemplate(array("module_rows" => $strRows), $strTemplateID);
 
         $this->strOutput .= $strReturn;
@@ -518,8 +524,8 @@ class class_installer {
 
         //Loading each installer
         $strRows = "";
-        $strTemplateID = $this->objTemplates->readTemplate(class_resourceloader::getInstance()->getCorePathForModule("module_installer")."/module_installer/installer.tpl", "installer_modules_row", true);
-        $strTemplateIDInstallable = $this->objTemplates->readTemplate(class_resourceloader::getInstance()->getCorePathForModule("module_installer")."/module_installer/installer.tpl", "installer_modules_row_installable", true);
+        $strTemplateID = $this->objTemplates->readTemplate("/module_installer/installer.tpl", "installer_modules_row", true);
+        $strTemplateIDInstallable = $this->objTemplates->readTemplate("/module_installer/installer.tpl", "installer_modules_row_installable", true);
 
         $bitInstallerFound = false;
         foreach($this->arrMetadata as $objOneMetadata) {
@@ -569,7 +575,7 @@ class class_installer {
         }
 
         //wrap in form
-        $strTemplateID = $this->objTemplates->readTemplate(class_resourceloader::getInstance()->getCorePathForModule("module_installer")."/module_installer/installer.tpl", "installer_samplecontent_form", true);
+        $strTemplateID = $this->objTemplates->readTemplate("/module_installer/installer.tpl", "installer_samplecontent_form", true);
         $strReturn .= $this->objTemplates->fillTemplate(array("module_rows" => $strRows), $strTemplateID);
 
         $this->strOutput .= $strReturn;
@@ -671,7 +677,7 @@ class class_installer {
         class_core_eventdispatcher::getInstance()->notifyGenericListeners(class_system_eventidentifier::EVENT_SYSTEM_REQUEST_ENDPROCESSING, array());
 
         if($this->strLogfile != "") {
-            $strTemplateID = $this->objTemplates->readTemplate(class_resourceloader::getInstance()->getCorePathForModule("module_installer")."/module_installer/installer.tpl", "installer_log", true);
+            $strTemplateID = $this->objTemplates->readTemplate("/module_installer/installer.tpl", "installer_log", true);
             $this->strLogfile = $this->objTemplates->fillTemplate(
                 array(
                     "log_content" => $this->strLogfile,
@@ -697,9 +703,9 @@ class class_installer {
         );
 
         $strProgress = "";
-        $strTemplateEntryTodoID = $this->objTemplates->readTemplate(class_resourceloader::getInstance()->getCorePathForModule("module_installer")."/module_installer/installer.tpl", "installer_progress_entry", true);
-        $strTemplateEntryCurrentID = $this->objTemplates->readTemplate(class_resourceloader::getInstance()->getCorePathForModule("module_installer")."/module_installer/installer.tpl", "installer_progress_entry_current", true);
-        $strTemplateEntryDoneID = $this->objTemplates->readTemplate(class_resourceloader::getInstance()->getCorePathForModule("module_installer")."/module_installer/installer.tpl", "installer_progress_entry_done", true);
+        $strTemplateEntryTodoID = $this->objTemplates->readTemplate("/module_installer/installer.tpl", "installer_progress_entry", true);
+        $strTemplateEntryCurrentID = $this->objTemplates->readTemplate("/module_installer/installer.tpl", "installer_progress_entry_current", true);
+        $strTemplateEntryDoneID = $this->objTemplates->readTemplate("/module_installer/installer.tpl", "installer_progress_entry_done", true);
 
         $strTemplateEntryID = $strTemplateEntryDoneID;
         foreach($arrProgressEntries as $strKey => $strValue) {
@@ -722,7 +728,7 @@ class class_installer {
         $arrTemplate["installer_forward"] = $this->strForwardLink;
         $arrTemplate["installer_backward"] = $this->strBackwardLink;
         $arrTemplate["installer_logfile"] = $this->strLogfile;
-        $strTemplateID = $this->objTemplates->readTemplate(class_resourceloader::getInstance()->getCorePathForModule("module_installer")."/module_installer/installer.tpl", "installer_main", true);
+        $strTemplateID = $this->objTemplates->readTemplate("/module_installer/installer.tpl", "installer_main", true);
 
         $strReturn = $this->objTemplates->fillTemplate($arrTemplate, $strTemplateID);
         $strReturn = $this->callScriptlets($strReturn);
@@ -763,7 +769,7 @@ class class_installer {
      * @return string
      */
     private function getForwardLink($strHref) {
-        $strTemplateID = $this->objTemplates->readTemplate(class_resourceloader::getInstance()->getCorePathForModule("module_installer")."/module_installer/installer.tpl", "installer_forward_link", true);
+        $strTemplateID = $this->objTemplates->readTemplate("/module_installer/installer.tpl", "installer_forward_link", true);
         return $this->objTemplates->fillTemplate(array("href" => $strHref, "text" => $this->getLang("installer_next")), $strTemplateID);
     }
 
@@ -775,7 +781,7 @@ class class_installer {
      * @return string
      */
     private function getBackwardLink($strHref) {
-        $strTemplateID = $this->objTemplates->readTemplate(class_resourceloader::getInstance()->getCorePathForModule("module_installer")."/module_installer/installer.tpl", "installer_backward_link", true);
+        $strTemplateID = $this->objTemplates->readTemplate("/module_installer/installer.tpl", "installer_backward_link", true);
         return $this->objTemplates->fillTemplate(array("href" => $strHref, "text" => $this->getLang("installer_prev")), $strTemplateID);
     }
 

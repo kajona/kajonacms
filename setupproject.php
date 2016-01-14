@@ -68,6 +68,7 @@ class class_project_setup {
         self::checkDir("/files/downloads");
         self::checkDir("/files/images");
         self::checkDir("/files/public");
+        self::checkDir("/files/extract");
 
         self::checkDir("/templates/default");
         self::checkDir("/templates/default/js");
@@ -122,6 +123,7 @@ class class_project_setup {
         self::createAllowHtaccess("/files/cache/.htaccess");
         self::createAllowHtaccess("/files/images/.htaccess");
         self::createAllowHtaccess("/files/public/.htaccess");
+        self::createAllowHtaccess("/files/extract/.htaccess");
         self::createAllowHtaccess("/templates/.htaccess");
 
         self::createDenyHtaccess("/project/.htaccess");

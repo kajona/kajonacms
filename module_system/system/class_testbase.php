@@ -53,9 +53,6 @@ abstract class class_testbase extends PHPUnit_Framework_TestCase {
 
         $this->arrTestStartDate = gettimeofday();
 
-        if(!defined("_block_config_db_loading_")) {
-            define("_block_config_db_loading_", true);
-        }
 
         if(!defined("_autotesting_")) {
             define("_autotesting_", true);

@@ -742,6 +742,7 @@ abstract class class_root {
         $this->unsetSystemid();
         $this->arrInitRow = null;
         $bitReturn = $this->updateObjectToDb($strNewPrevid);
+        class_carrier::getInstance()->getObjRights()->copyPermissions($strOldSysid, $this->getSystemid());
         //call event listeners
         $bitReturn = $bitReturn && class_core_eventdispatcher::getInstance()->notifyGenericListeners(class_system_eventidentifier::EVENT_SYSTEM_RECORDCOPIED, array($strOldSysid, $this->getSystemid(), $this));
 

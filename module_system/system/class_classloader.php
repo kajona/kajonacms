@@ -4,6 +4,12 @@
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 ********************************************************************************************************/
 
+require_once __DIR__."/PharModule.php";
+require_once __DIR__."/BootstrapCache.php";
+
+use Kajona\System\System\BootstrapCache;
+use Kajona\System\System\PharModule;
+
 /**
  * Class-loader for all Kajona classes.
  * Implemented as a singleton.
@@ -14,27 +20,15 @@
 class class_classloader
 {
 
+    const PREFER_PHAR = false;
+
+
     private $intNumberOfClassesLoaded = 0;
-
-    private $strModulesCacheFile = "";
-    private $strClassesCacheFile = "";
-
-    private $bitCacheSaveRequired = false;
 
     /**
      * @var class_classloader
      */
     private static $objInstance = null;
-
-    private $arrModules = array();
-
-    /**
-     * Cached index of class-files available
-     *
-     * @var String[]
-     */
-    private $arrFiles = array();
-
 
     /**
      * Cached array of the core dirs
@@ -42,6 +36,34 @@ class class_classloader
      * @var array
      */
     private $arrCoreDirs = array();
+
+    /**
+     * List of folder names that are supposed to contain code.
+     *
+     * @var array
+     */
+    private static $arrCodeFolders = array(
+      "/admin/elements/",
+      "/admin/formentries/",
+      "/admin/statsreports/",
+      "/admin/systemtasks/",
+      "/admin/widgets/",
+      "/admin/",
+      "/portal/elements/",
+      "/portal/templatemapper/",
+      "/portal/",
+      "/system/db/",
+      "/system/usersources/",
+      "/system/imageplugins/",
+      "/system/validators/",
+      "/system/workflows/",
+      "/system/messageproviders/",
+      "/system/scriptlets/",
+      "/system/",
+      "/installer/",
+      "/event/",
+      "/legacy/"
+    );
 
     /**
      * Factory method returning an instance of class_classloader.
@@ -64,49 +86,12 @@ class class_classloader
      */
     private function __construct()
     {
-
-
-        $this->strModulesCacheFile = _realpath_."/project/temp/modules.cache";
-        $this->strClassesCacheFile = _realpath_."/project/temp/classes.cache";
-
-        include_once(__DIR__."/class_apc_cache.php");
-        $this->arrModules = class_apc_cache::getInstance()->getValue(__CLASS__."modules");
-        $this->arrFiles = class_apc_cache::getInstance()->getValue(__CLASS__."files");
-
-        if ($this->arrModules === false || $this->arrFiles == false) {
-            $this->arrModules = array();
-            $this->arrFiles = array();
-
-            if (is_file($this->strModulesCacheFile) && is_file($this->strClassesCacheFile)) {
-                $this->arrModules = unserialize(file_get_contents($this->strModulesCacheFile));
-                $this->arrFiles = unserialize(file_get_contents($this->strClassesCacheFile));
-            }
-            else {
-
-                $this->scanModules();
-
-                $this->indexAvailableCodefiles();
-
-                $this->bitCacheSaveRequired = true;
-            }
-        }
-
+        $this->scanModules();
+        $this->indexAvailableCodefiles();
+        $this->bootstrapIncludeModuleIds();
     }
 
-    /**
-     * Stores the cached structures to file - if enabled and required
-     */
-    public function __destruct()
-    {
-        if ($this->bitCacheSaveRequired && class_config::getInstance()->getConfig('resourcecaching') == true) {
 
-            class_apc_cache::getInstance()->addValue(__CLASS__."modules", $this->arrModules);
-            class_apc_cache::getInstance()->addValue(__CLASS__."files", $this->arrFiles);
-
-            file_put_contents($this->strModulesCacheFile, serialize($this->arrModules));
-            file_put_contents($this->strClassesCacheFile, serialize($this->arrFiles));
-        }
-    }
 
     /**
      * We autoload all classes which are in the event folder of each module. Theses classes can register events etc.
@@ -115,8 +100,8 @@ class class_classloader
      */
     public function includeClasses()
     {
-        foreach ($this->arrFiles as $strClass => $strOneFile) {
-            if (uniStrpos($strOneFile, "/event/") !== false) {
+        foreach (BootstrapCache::getInstance()->getCacheContent(BootstrapCache::CACHE_CLASSES) as $strClass => $strOneFile) {
+            if (strpos($strOneFile, "/event/") !== false) {
                 // include all classes which are in the event folder
                 $this->loadClass($strClass);
             }
@@ -148,6 +133,11 @@ class class_classloader
     private function scanModules()
     {
 
+        if(BootstrapCache::getInstance()->getCacheContent(BootstrapCache::CACHE_MODULES) !== false && BootstrapCache::getInstance()->getCacheContent(BootstrapCache::CACHE_PHARMODULES) !== false) {
+            return;
+        }
+
+
         $arrExcludedModules = array();
         $arrIncludedModules = array();
         if (is_file(_realpath_."/project/system/config/packageconfig.php")) {
@@ -158,33 +148,55 @@ class class_classloader
         $this->arrCoreDirs = self::getCoreDirectories();
 
         $arrModules = array();
+        $arrPharModules = array();
         foreach ($this->arrCoreDirs as $strRootFolder) {
 
-            if (uniStrpos($strRootFolder, "core") === false) {
+            if (strpos($strRootFolder, "core") === false) {
                 continue;
             }
 
             foreach (scandir(_realpath_."/".$strRootFolder) as $strOneModule) {
+                $strModuleName = null;
+                $boolIsPhar = PharModule::isPhar($strOneModule);
 
-                if (preg_match("/^(module|element|_)+.*/i", $strOneModule)) {
+                if ($boolIsPhar) {
+                    $strModuleName = PharModule::getPharBasename($strOneModule);
+                }
+                elseif (preg_match("/^(module|element|_)+.*/i", $strOneModule)) {
+                    $strModuleName = $strOneModule;
+                }
 
+                if ($strModuleName != null) {
                     //skip excluded modules
-                    if (isset($arrExcludedModules[$strRootFolder]) && in_array($strOneModule, $arrExcludedModules[$strRootFolder])) {
+                    if (isset($arrExcludedModules[$strRootFolder]) && in_array($strModuleName, $arrExcludedModules[$strRootFolder])) {
                         continue;
                     }
 
                     //skip module if not marked as to be included
-                    if (count($arrIncludedModules) > 0 && (isset($arrIncludedModules[$strRootFolder]) && !in_array($strOneModule, $arrIncludedModules[$strRootFolder]))) {
+                    if (count($arrIncludedModules) > 0 && (isset($arrIncludedModules[$strRootFolder]) && !in_array($strModuleName, $arrIncludedModules[$strRootFolder]))) {
                         continue;
                     }
 
-                    $arrModules[$strRootFolder."/".$strOneModule] = $strOneModule;
+                    if ($boolIsPhar) {
+                        $arrPharModules[$strRootFolder."/".$strOneModule] = $strModuleName;
+                    }
+                    else {
+                        $arrModules[$strRootFolder."/".$strOneModule] = $strModuleName;
+                    }
                 }
-
             }
         }
 
-        $this->arrModules = $arrModules;
+        if(self::PREFER_PHAR) {
+            $arrDiffedPhars = $arrPharModules;
+            $arrModules = array_diff($arrModules, $arrPharModules);
+        }
+        else {
+            $arrDiffedPhars = array_diff($arrPharModules, $arrModules);
+        }
+
+        BootstrapCache::getInstance()->updateCache(BootstrapCache::CACHE_MODULES, $arrModules);
+        BootstrapCache::getInstance()->updateCache(BootstrapCache::CACHE_PHARMODULES, $arrDiffedPhars);
     }
 
     /**
@@ -197,7 +209,7 @@ class class_classloader
         $arrCores = array();
         foreach (scandir(_realpath_) as $strRootFolder) {
 
-            if (uniStrpos($strRootFolder, "core") === false) {
+            if (strpos($strRootFolder, "core") === false) {
                 continue;
             }
 
@@ -217,12 +229,7 @@ class class_classloader
      */
     public function flushCache()
     {
-        $objFilesystem = new class_filesystem();
-        $objFilesystem->fileDelete($this->strModulesCacheFile);
-        $objFilesystem->fileDelete($this->strClassesCacheFile);
-
-        $this->arrFiles = array();
-        $this->arrModules = array();
+        BootstrapCache::getInstance()->flushCache();
         $this->scanModules();
         $this->indexAvailableCodefiles();
     }
@@ -235,26 +242,37 @@ class class_classloader
      */
     private function indexAvailableCodefiles()
     {
-        $this->addClassFolder("/admin/elements/");
-        $this->addClassFolder("/admin/formentries/");
-        $this->addClassFolder("/admin/statsreports/");
-        $this->addClassFolder("/admin/systemtasks/");
-        $this->addClassFolder("/admin/widgets/");
-        $this->addClassFolder("/admin/");
-        $this->addClassFolder("/portal/elements/");
-        $this->addClassFolder("/portal/templatemapper/");
-        $this->addClassFolder("/portal/");
-        $this->addClassFolder("/system/db/");
-        $this->addClassFolder("/system/usersources/");
-        $this->addClassFolder("/system/imageplugins/");
-        $this->addClassFolder("/system/validators/");
-        $this->addClassFolder("/system/workflows/");
-        $this->addClassFolder("/system/messageproviders/");
-        $this->addClassFolder("/system/scriptlets/");
-        $this->addClassFolder("/system/");
-        $this->addClassFolder("/installer/");
-        $this->addClassFolder("/event/");
-        $this->addClassFolder("/legacy/");
+
+        if(!empty(BootstrapCache::getInstance()->getCacheContent(BootstrapCache::CACHE_CLASSES))) {
+            return;
+        }
+
+        $arrMergedFiles = array();
+
+        foreach (self::$arrCodeFolders as $strFolder) {
+            $arrMergedFiles = array_merge($arrMergedFiles, $this->getClassesInFolder($strFolder));
+        }
+
+
+        foreach (BootstrapCache::getInstance()->getCacheContent(BootstrapCache::CACHE_PHARMODULES) as $strPath => $strSingleModule) {
+            $objPhar = new PharModule($strPath);
+            $arrFiles = $objPhar->load(self::$arrCodeFolders);
+
+            $arrResolved = array();
+            foreach($arrFiles as $strName => $strPath) {
+                $arrResolved[$this->getClassnameFromFilename($strPath)] = $strPath;
+            }
+
+            // PHAR archive files must never override existing file system files
+            if(self::PREFER_PHAR) {
+                $arrMergedFiles = array_merge($arrMergedFiles, $arrResolved);
+            }
+            else {
+                $arrMergedFiles += array_diff_key($arrResolved, $arrMergedFiles);
+            }
+        }
+
+        BootstrapCache::getInstance()->updateCache(BootstrapCache::CACHE_CLASSES, $arrMergedFiles);
     }
 
     /**
@@ -270,18 +288,19 @@ class class_classloader
 
         $arrFiles = array();
 
-        foreach (array_merge($this->arrModules, array("project")) as $strPath => $strSingleModule) {
+        foreach (array_merge(BootstrapCache::getInstance()->getCacheContent(BootstrapCache::CACHE_MODULES), array("project")) as $strPath => $strSingleModule) {
             if (is_dir(_realpath_."/".$strPath.$strFolder)) {
                 $arrTempFiles = scandir(_realpath_."/".$strPath.$strFolder);
                 foreach ($arrTempFiles as $strSingleFile) {
                     if (strpos($strSingleFile, ".php") !== false) {
+
                         // if there is an underscore we have a legacy class name else a camel case
                         if (strpos($strSingleFile, "_") !== false) {
                             if (preg_match("/(class|interface|trait)(.*)\.php$/i", $strSingleFile)) {
-                                $arrFiles[substr($strSingleFile, 0, -4)] = _realpath_."/".$strPath.$strFolder.$strSingleFile;
+                                $arrFiles[substr($strSingleFile, 0, -4)] = _realpath_.$strPath.$strFolder.$strSingleFile;
                             }
                         } else {
-                            $strClassName = $this->getClassnameFromFilename($strPath.$strFolder.$strSingleFile);
+                            $strClassName = $this->getClassnameFromFilename(_realpath_.$strPath.$strFolder.$strSingleFile);
                             if (!empty($strClassName)) {
                                 $arrFiles[$strClassName] = _realpath_."/".$strPath.$strFolder.$strSingleFile;
                             }
@@ -302,7 +321,6 @@ class class_classloader
             }
         }
 
-
         return $arrFiles;
     }
 
@@ -316,9 +334,9 @@ class class_classloader
      */
     public function loadClass($strClassName)
     {
-        if (isset($this->arrFiles[$strClassName])) {
+        if (BootstrapCache::getInstance()->getCacheRow(BootstrapCache::CACHE_CLASSES, $strClassName)) {
             $this->intNumberOfClassesLoaded++;
-            include_once $this->arrFiles[$strClassName];
+            include_once BootstrapCache::getInstance()->getCacheRow(BootstrapCache::CACHE_CLASSES, $strClassName);
             return true;
         }
 
@@ -336,7 +354,7 @@ class class_classloader
     public function getClassnameFromFilename($strFilename)
     {
         // if empty we cant resolve a class name
-        if (empty($strFilename)) {
+        if (empty($strFilename) || uniSubstr($strFilename, -4) != '.php') {
             return null;
         }
 
@@ -351,8 +369,9 @@ class class_classloader
         // if the filename contains an underscore we have an old class else a camelcase one
         if (strpos($strFile, "_") !== false) {
             $strClassname = $strFile;
-        } elseif (is_file(_realpath_.$strFilename)) {
-            $strSource = file_get_contents(_realpath_.$strFilename);
+        }
+        else {
+            $strSource = file_get_contents($strFilename);
             preg_match('/namespace ([a-zA-Z0-9_\x7f-\xff\\\\]+);/', $strSource, $arrMatches);
 
             $strNamespace = isset($arrMatches[1]) ? $arrMatches[1] : null;
@@ -387,7 +406,7 @@ class class_classloader
                     $strResolvedClassname = "class_" . $strResolvedClassname;
                 }
 
-                include_once _realpath_ . $strFilename;
+                include_once $strFilename;
             }
 
             $objReflection = new ReflectionClass($strResolvedClassname);
@@ -413,6 +432,31 @@ class class_classloader
         return null;
     }
 
+
+    public function bootstrapIncludeModuleIds()
+    {
+        //fetch all phars and registered modules
+        foreach(BootstrapCache::getInstance()->getCacheContent(BootstrapCache::CACHE_MODULES) as $strPath => $strOneModule) {
+
+            if(!in_array($strOneModule, BootstrapCache::getInstance()->getCacheContent(BootstrapCache::CACHE_PHARMODULES))) {
+                if (is_dir(_realpath_."/".$strPath."/system/") && is_dir(_realpath_."/".$strPath."/system/config/")) {
+                    foreach (scandir(_realpath_."/".$strPath."/system/config/") as $strModuleEntry) {
+                        if (preg_match("/module\_([a-z0-9\_])+\_id\.php/", $strModuleEntry)) {
+                            @include_once _realpath_."/".$strPath."/system/config/".$strModuleEntry;
+                        }
+                    }
+                }
+            }
+        }
+
+        foreach(BootstrapCache::getInstance()->getCacheContent(BootstrapCache::CACHE_PHARMODULES) as $strPath => $strOneModule) {
+            $objPhar = new PharModule($strPath);
+            $objPhar->loadModuleIds();
+        }
+
+    }
+
+
     /**
      * Returns the list of modules indexed by the classloader, so residing under /core
      *
@@ -420,19 +464,16 @@ class class_classloader
      */
     public function getArrModules()
     {
-        return $this->arrModules;
+        return BootstrapCache::getInstance()->getCacheContent(BootstrapCache::CACHE_MODULES) + BootstrapCache::getInstance()->getCacheContent(BootstrapCache::CACHE_PHARMODULES);
     }
 
     /**
-     * Adds a new folder to the autoload locations
-     *
-     * @param string $strPath
-     *
-     * @return void
+     * Returns the list of phar-based modules
+     * @return array
      */
-    public function addClassFolder($strPath)
+    public function getArrPharModules()
     {
-        $this->arrFiles = array_merge($this->arrFiles, $this->getClassesInFolder($strPath));
+        return BootstrapCache::getInstance()->getCacheContent(BootstrapCache::CACHE_PHARMODULES);
     }
 
     /**

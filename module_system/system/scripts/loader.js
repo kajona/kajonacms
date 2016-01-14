@@ -102,6 +102,15 @@ KAJONA.util.Loader = function () {
 
     function createFinalLoadPath(strPath, bitPreventPathAdding) {
 
+        //see if the path has to be changed according to a phar-extracted content
+
+        if(KAJONA_PHARMAP && !bitPreventPathAdding) {
+            var arrMatches = strPath.match(/(core(.*))\/((module_|element_)([a-zA-Z0-9])*)/i);
+            if (arrMatches && KAJONA.util.inArray(arrMatches[3], KAJONA_PHARMAP)) {
+                strPath = strPath.replace(arrMatches[1], "files/extract")
+            }
+        }
+
         if(!bitPreventPathAdding)
             strPath = KAJONA_WEBPATH + strPath;
 

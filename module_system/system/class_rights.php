@@ -584,6 +584,27 @@ class class_rights {
     }
 
     /**
+     * Copies permissions from one record to another record.
+     * Please be aware, that permissions are only copied in case the source-record has custom permissions.
+     * If the source record inherits permissions, the permissions won't be copied to the target record.
+     *
+     * @param $strSourceSystemid
+     * @param $strTargetSystemid
+     *
+     * @return bool
+     */
+    public function copyPermissions($strSourceSystemid, $strTargetSystemid)
+    {
+        $arrSourceRow = $this->getPlainRightRow($strSourceSystemid);
+        if($arrSourceRow[self::$STR_RIGHT_INHERIT] == 0) {
+            return $this->setRights($arrSourceRow, $strTargetSystemid);
+        }
+
+        return true;
+    }
+
+
+    /**
      * Adds a group for a right at a given systemid
      * <b>NOTE: By setting rights using this method, inheritance is set to false!!!</b>
      *

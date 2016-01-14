@@ -6,6 +6,7 @@
 *-------------------------------------------------------------------------------------------------------*
 *   $Id$                                 *
 ********************************************************************************************************/
+use Kajona\System\System\SystemJSTreeConfig;
 
 
 /**
@@ -2441,30 +2442,12 @@ HTML;
      *
      * @return string
      */
-    public function getTreeview($strLoadNodeDataUrl, $strRootNodeSystemid = "", $arrNodesToExpand = array(), $strSideContent = "")
+    public function getTreeview(\Kajona\System\System\SystemJSTreeConfig $objTreeConfig, $strSideContent = "")
     {
         $arrTemplate = array();
         $arrTemplate["sideContent"] = $strSideContent;
-        $arrTemplate["treeContent"] = $this->getTree($strLoadNodeDataUrl, $strRootNodeSystemid, $arrNodesToExpand);
+        $arrTemplate["treeContent"] = $this->getTree($objTreeConfig);
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "treeview");
-        return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
-    }
-
-    /**
-     * Creates a tree-view with an button which can be used inside an mode dialog
-     *
-     * @param $strLoadNodeDataUrl
-     * @param string $strRootNodeSystemid
-     * @param array $arrNodesToExpand
-     *
-     * @return string
-     * @throws class_exception
-     */
-    public function getTreeModalCheckbox($strLoadNodeDataUrl, $strRootNodeSystemid = "", $arrNodesToExpand = array())
-    {
-        $arrTemplate = array();
-        $arrTemplate["treeContent"] = $this->getTreeCheckbox($strLoadNodeDataUrl, $strRootNodeSystemid, $arrNodesToExpand);
-        $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "treeview_modal");
         return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
     }
 
@@ -2477,20 +2460,19 @@ HTML;
      * @param string $strLoadNodeDataUrl , systemid is appended automatically
      * @param string $strRootNodeSystemid
      * @param array $arrNodesToExpand
-     * @param bool $bitOrderingEnabled
-     * @param bool $bitHierachicalSortEnabled
-     *
+     * @param bool $bitCheckboxEnabled
      *
      * @return string
      */
-    public function getTree($strLoadNodeDataUrl, $strRootNodeSystemid = "", $arrNodesToExpand = array(), $bitOrderingEnabled = false, $bitHierachicalSortEnabled = false)
+    public function getTree(SystemJSTreeConfig $objTreeConfig)
     {
+        $arrNodesToExpand = $objTreeConfig->getArrNodesToExpand();
+
         $arrTemplate = array();
-        $arrTemplate["rootNodeSystemid"] = $strRootNodeSystemid;
-        $arrTemplate["loadNodeDataUrl"] = $strLoadNodeDataUrl;
+        $arrTemplate["rootNodeSystemid"] = $objTreeConfig->getStrRootNodeId();
+        $arrTemplate["loadNodeDataUrl"] = $objTreeConfig->getStrNodeEndpoint();
         $arrTemplate["treeId"] = generateSystemid();
-        $arrTemplate["orderingEnabled"] = $bitOrderingEnabled ? "true" : "false";
-        $arrTemplate["hierarchialSortEnabled"] = $bitHierachicalSortEnabled ? "true" : "false";
+        $arrTemplate["treeConfig"] = $objTreeConfig->toJson();
         $arrTemplate["treeviewExpanders"] = "";
         for ($intI = 0; $intI < count($arrNodesToExpand); $intI++) {
             $arrTemplate["treeviewExpanders"] .= "\"".$arrNodesToExpand[$intI]."\"";
@@ -2499,33 +2481,6 @@ HTML;
             }
         }
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "tree");
-        return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
-    }
-
-    /**
-     * Returns an checkbox tree-view
-     *
-     * @param $strLoadNodeDataUrl
-     * @param string $strRootNodeSystemid
-     * @param array $arrNodesToExpand
-     *
-     * @return string
-     * @throws class_exception
-     */
-    public function getTreeCheckbox($strLoadNodeDataUrl, $strRootNodeSystemid = "", $arrNodesToExpand = array())
-    {
-        $arrTemplate = array();
-        $arrTemplate["rootNodeSystemid"] = $strRootNodeSystemid;
-        $arrTemplate["loadNodeDataUrl"] = $strLoadNodeDataUrl;
-        $arrTemplate["treeId"] = generateSystemid();
-        $arrTemplate["treeviewExpanders"] = "";
-        for ($intI = 0; $intI < count($arrNodesToExpand); $intI++) {
-            $arrTemplate["treeviewExpanders"] .= "\"".$arrNodesToExpand[$intI]."\"";
-            if ($intI < count($arrNodesToExpand) - 1) {
-                $arrTemplate["treeviewExpanders"] .= ",";
-            }
-        }
-        $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "tree_checkbox");
         return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
     }
 

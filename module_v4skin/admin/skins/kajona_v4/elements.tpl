@@ -191,7 +191,8 @@ Loads the script-helper and adds the table to the drag-n-dropable tables getting
             KAJONA.admin.tooltip.addTooltip($(this).find("td.listsorthandle"), "[lang,commons_sort_vertical,system]");
 
             if(bitMoveToTree) {
-                $(this).find("td.treedrag").css('cursor', 'move').addClass("jstree-draggable").append("<i class='fa fa-arrows-h' data-systemid='"+$(this).closest("tr").data("systemid")+"'></i>");
+                $(this).find("td.treedrag").css('cursor', 'move')
+                        .addClass("jstree-listdraggable").append("<i class='fa fa-arrows-h' data-systemid='"+$(this).data("systemid")+"'></i>");
                 KAJONA.admin.tooltip.addTooltip($(this).find("td.treedrag"), "[lang,commons_sort_totree,system]");
             }
         });
@@ -720,8 +721,8 @@ in addition, a container for the calendar is needed. Use %%calendarContainerId%%
                 <input id="%%calendarId%%" name="%%calendarId%%" class="form-control %%class%%" size="16" type="text" value="%%valuePlain%%" %%readonly%%>
             </div>
             <script>
-                KAJONA.admin.loader.loadFile(["_webpath_/core/module_v4skin/admin/skins/kajona_v4/js/bootstrap-datepicker.js"], function() {
-                    var arrSecondFiles = ["_webpath_/core/module_v4skin/admin/skins/kajona_v4/js/locales/bootstrap-datepicker.%%calendarLang%%.js"];
+                KAJONA.admin.loader.loadFile(["/core/module_v4skin/admin/skins/kajona_v4/js/bootstrap-datepicker.js"], function() {
+                    var arrSecondFiles = ["/core/module_v4skin/admin/skins/kajona_v4/js/locales/bootstrap-datepicker.%%calendarLang%%.js"];
                     if('%%calendarLang%%' == 'en')
                         arrSecondFiles = [];
                     KAJONA.admin.loader.loadFile(arrSecondFiles, function() {
@@ -740,8 +741,8 @@ in addition, a container for the calendar is needed. Use %%calendarContainerId%%
                             $('#%%calendarId%%').focus();
                         }
 
-                    }, true);
-                }, true);
+                    });
+                });
             </script>
         </div>
     </div>
@@ -772,8 +773,8 @@ in addition, a container for the calendar is needed. Use %%calendarContainerId%%
         <div class="col-sm-1">
         </div>
         <script>
-            KAJONA.admin.loader.loadFile(["_webpath_/core/module_v4skin/admin/skins/kajona_v4/js/bootstrap-datepicker.js"], function() {
-                KAJONA.admin.loader.loadFile(["_webpath_/core/module_v4skin/admin/skins/kajona_v4/js/locales/bootstrap-datepicker.%%calendarLang%%.js"], function() {
+            KAJONA.admin.loader.loadFile(["/core/module_v4skin/admin/skins/kajona_v4/js/bootstrap-datepicker.js"], function() {
+                KAJONA.admin.loader.loadFile(["/core/module_v4skin/admin/skins/kajona_v4/js/locales/bootstrap-datepicker.%%calendarLang%%.js"], function() {
                     var format = '%%dateFormat%%';
                     format = format.replace('d', 'dd').replace('m', 'mm').replace('Y', 'yyyy');
                     $('#%%calendarId%%').datepicker({
@@ -789,8 +790,8 @@ in addition, a container for the calendar is needed. Use %%calendarContainerId%%
                         $('#%%calendarId%%').focus();
                     }
 
-                }, true);
-            }, true);
+                });
+            });
         </script>
     </div>
 </input_datetime_simple>
@@ -841,15 +842,15 @@ in addition, a container for the calendar is needed. Use %%calendarContainerId%%
         </div>
     </div>
     <script type="text/javascript">
-        KAJONA.admin.loader.loadFile(["_webpath_/core/module_system/admin/scripts/jquerytag/jquery.caret.min.js"], function(){
-            KAJONA.admin.loader.loadFile("_webpath_/core/module_system/admin/scripts/jquerytag/jquery.tag-editor.min.js", function(){
+        KAJONA.admin.loader.loadFile(["/core/module_system/admin/scripts/jquerytag/jquery.caret.min.js"], function(){
+            KAJONA.admin.loader.loadFile("/core/module_system/admin/scripts/jquerytag/jquery.tag-editor.min.js", function(){
                 $("#%%name%%").tagEditor({
                     initialTags: %%values%%,
                     forceLowercase: false,
                     onChange: %%onChange%%
                 });
-            }, true);
-        }, true);
+            });
+        });
     </script>
 </input_tageditor>
 
@@ -1396,9 +1397,9 @@ pe_iconbar, pe_disable
 <pe_toolbar>
 
     <!-- KAJONA_BUILD_LESS_START -->
-    <link href="_skinwebpath_/less/bootstrap_pe.less?_system_browser_cachebuster_" rel="stylesheet/less">
+    <link href="_webpath_/[webpath,module_v4skin]/admin/skins/kajona_v4/less/bootstrap_pe.less?_system_browser_cachebuster_" rel="stylesheet/less">
     <script> less = { env:'development' }; </script>
-    <script src="_skinwebpath_/less/less.min.js"></script>
+    <script src="_webpath_/[webpath,module_v4skin]/admin/skins/kajona_v4/less/less.min.js"></script>
     <!-- KAJONA_BUILD_LESS_END -->
 
 
@@ -1568,207 +1569,22 @@ The language switch surrounds the buttons
     <div id="%%treeId%%" class="treeDiv"></div>
     <script type="text/javascript">
         KAJONA.admin.loader.loadFile([
-            "/core/module_system/admin/scripts/jstree/jquery.jstree.js",
-            "/core/module_system/admin/scripts/jstree/jquery.hotkeys.js"
+            "/core/module_system/admin/scripts/jstree3/dist/jstree.min.js",
+            "/core/module_system/admin/scripts/jstree3/dist/themes/default/style.min.css",
+            "/core/module_system/admin/scripts/jstree3/kajonatree.js"
         ], function() {
 
-            //create a valid tree config - drag n drop enabled, sorting enabled
-            var check_move = function(m) { return false; };
-            if('%%orderingEnabled%%' == 'true') {
-                check_move = function(m) {
+            var jsTree = new KAJONA.kajonatree.jstree();
+            jsTree.loadNodeDataUrl = "%%loadNodeDataUrl%%";
+            jsTree.rootNodeSystemid = '%%rootNodeSystemid%%';
+            jsTree.treeConfig = %%treeConfig%%;
+            jsTree.treeId = '%%treeId%%';
+            jsTree.treeviewExpanders = [ %%treeviewExpanders%% ];
 
-                    if(m.o.attr("draggable") === "false")
-                        return false;
-
-                    var p = this._get_parent(m.o);
-                    if(!p) return false;
-                    p = p == -1 ? this.get_container() : p;
-                    if(p === m.np) return true;
-                    if(p[0] && m.np[0] && p[0] === m.np[0]) return true;
-                    return false;
-                };
-            }
-
-            if('%%hierarchialSortEnabled%%' == 'true') {
-                check_move = function(m) {
-                    if(m.o.attr("draggable") === "false")
-                        return false;
-                    return true;
-                };
-            };
-
-            $('#%%treeId%%').jstree({
-
-                "json_data" : {
-                    "ajax" : {
-                        "url" : "%%loadNodeDataUrl%%",
-                        "data" : function (n) {
-                            return {
-                                "systemid" : n.attr ? n.attr("systemid") : '%%rootNodeSystemid%%',
-                                "rootnode" : '%%rootNodeSystemid%%'
-                            };
-                        }
-                    }
-                },
-                "crrm" : {
-                    "move" : {
-                        "check_move" : check_move
-                    }
-                },
-                "types" : {
-                    "default" : {
-                        "renamable" : "none"
-                    }
-                },
-                "dnd" : {
-                    "drop_finish" : function () {
-                    },
-                    "drag_check" : function (data) {
-
-                        var draggedId = $(data.o).data("systemid");
-                        var targetId = $(data.r).attr("systemid");
-
-                        //validate, if the drag-node is the same as the target
-                        if(draggedId == targetId)
-                            return false;
-
-                        //node already an existing parent node?
-                        var arrParent = $("#"+targetId).closest("li[systemid='"+draggedId+"']");
-                        if(arrParent.length != 0) {
-                            return false;
-                        }
-
-                        return {
-                            after : false,
-                            before : false,
-                            inside : true
-                        };
-                    },
-                    "drag_finish" : function (data) {
-
-                        var draggedId = $(data.o).data("systemid");
-                        var targetId = $(data.r).attr("systemid");
-
-                        var arrParent = $("#"+targetId).closest("li[systemid='"+draggedId+"']");
-                        if(arrParent.length != 0) {
-                            location.reload();
-                            return false;
-                        }
-
-                        //save new parent to backend
-                        KAJONA.admin.ajax.genericAjaxCall("system", "setPrevid", draggedId+"&prevId="+targetId, function() {
-                            location.reload();
-                        });
-
-                    }
-                },
-                /*"dnd" : {
-                    "drag_check" : function (data) { return false; },
-                    "drop_target" : false,
-                    "drag_target" : false
-                },*/
-                "themes" : {
-                    "url" : "_webpath_/core/module_system/admin/scripts/jstree/themes/default/style.css",
-                    "icons" : false
-                },
-                "core" : {
-                    "initially_open" : [ %%treeviewExpanders%% ],
-                    "html_titles" : true
-                },
-                "plugins" : [ "themes","json_data","ui","dnd","crrm","types" ]
-            })
-            //TODO: Hotkeys removed. currently theres no way of preventing a node-renaming, e.g. by pressing f2
-            .bind("select_node.jstree", function (event, data) {
-                if(data.rslt.obj.attr("link")) {
-                    document.location.href=data.rslt.obj.attr("link");
-                }
-            })
-            .bind("load_node.jstree", function(e, data) {
-                KAJONA.admin.tooltip.addTooltip('#'+this.id+" a span");
-            })
-            .bind("rename_node.jstree", function (NODE, REF_NODE) {
-                // Do your operation
-            })
-            .bind("move_node.jstree", function (e, data) {
-                data.rslt.o.each(function (i) {
-
-                    var prevId = (data.rslt.cr === -1 ? '%%rootNodeSystemid%%' : data.rslt.np.attr("id"));
-                    var systemid = $(this).attr("id");
-                    var pos = (data.rslt.cp + i +1)
-                    KAJONA.admin.ajax.genericAjaxCall("system", "setPrevid", systemid+"&prevId="+prevId, function() {
-                        KAJONA.admin.ajax.setAbsolutePosition(systemid, pos, null, function() {
-                            location.reload();
-                        });
-                    });
-
-                });
-            });
+            jsTree.initTree();
         });
     </script>
 </tree>
-
-
-Checkbox tree which shows an structure
-<tree_checkbox>
-    <div id="%%treeId%%" class="treeDiv"></div>
-    <script type="text/javascript">
-        KAJONA.admin.loader.loadFile([
-            "/core/module_system/admin/scripts/jstree/jquery.jstree.js",
-            "/core/module_system/admin/scripts/jstree/jquery.hotkeys.js"
-        ], function() {
-
-            $('#%%treeId%%').jstree({
-                json_data: {
-                    ajax: {
-                        url: "%%loadNodeDataUrl%%",
-                        data: function (n) {
-                            return {
-                                "systemid" : n.attr ? n.attr("systemid") : '%%rootNodeSystemid%%',
-                                "rootnode" : '%%rootNodeSystemid%%'
-                            };
-                        }
-                    }
-                },
-                themes: {
-                    url: "_webpath_/core/module_system/admin/scripts/jstree/themes/default/style.css",
-                    icons: false
-                },
-                core: {
-                    //"initially_open" : [ %%treeviewExpanders%% ],
-                    html_titles: true
-                },
-                checkbox: {
-                    two_state: true,
-                    checked_parent_open: false
-                },
-                plugins: [ "themes","json_data","checkbox" ]
-            }).bind("loaded.jstree", function (event, data) {
-                if(typeof KAJONA.v4skin.getCheckboxTreeSelectionFromParent === 'function') {
-                    var arrSystemIds = KAJONA.v4skin.getCheckboxTreeSelectionFromParent();
-                    for(var i = 0; i < arrSystemIds.length; i++) {
-                        if($('#' + arrSystemIds[i]).length > 0) {
-                            $(this).jstree('change_state', [$('#' + arrSystemIds[i]).find('.jstree-checkbox:first').get(0), true]);
-                        }
-                    }
-                }
-            }).bind("open_node.jstree close_node.jstree", function (event, data) {
-                if(typeof KAJONA.v4skin.getCheckboxTreeSelectionFromParent === 'function') {
-                    var arrSystemIds = KAJONA.v4skin.getCheckboxTreeSelectionFromParent();
-                    // go only through the child elements of the loaded node
-                    if(data.rslt.obj.length > 0) {
-                        data.rslt.obj.find('ul > li').each(function() {
-                            if($.inArray($(this).attr('systemid'), arrSystemIds) !== -1) {
-                                $(event.target).jstree('change_state', [$('#' + $(this).attr('systemid')).find('.jstree-checkbox:first').get(0), true]);
-                            }
-                        });
-                    }
-                }
-            });
-
-        });
-    </script>
-</tree_checkbox>
-
 
 <treeview>
     <table width="100%" cellpadding="3">
@@ -1784,14 +1600,6 @@ Checkbox tree which shows an structure
         </tr>
     </table>
 </treeview>
-
-
-<treeview_modal>
-    <div class="treeViewWrapper" style="overflow:auto;">
-        %%treeContent%%
-    </div>
-</treeview_modal>
-
 
 The tag-wrapper is the section used to surround the list of tag.
 Please make sure that the containers' id is named tagsWrapper_%%targetSystemid%%,

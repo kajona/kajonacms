@@ -41,7 +41,6 @@
 @kajona-search-bg:          "../img/pusteblume-submenu.png";
 @kajona-breadcrumb-bg:      "../img/pusteblume.png";
 @kajona-portal-bg:          "../img/portaleditor-arrow.png";
-@kajona-tree-sprite:        "../../../../../../core/module_system/admin/scripts/jstree/themes/default/d.png";
 
 //glyphicons
 @icon-font-path:          "../fonts/glyphicons/";
@@ -1438,62 +1437,6 @@ table.form-control {
 
 
 .treeViewWrapper .jstree-default {
-    background-color: #ffffff !important;
-
-    li {
-        background-image: none !important;
-    }
-
-    ul li {
-
-        a {
-            font-family: @font-family-sans-serif !important;
-            font-size: @font-size-base;
-            color: @gray !important;
-            display: inline-block;
-            height: auto;
-            line-height: inherit;
-            margin: 2px 0;
-            text-decoration: none;
-            white-space: nowrap;
-        }
-    }
-
-    .jstree-closed > ins {
-        cursor: pointer;
-        &:before {
-            content: @fa-var-chevron-right;
-            font-family: fontawesome;
-        }
-    }
-
-    .jstree-open > ins {
-        cursor: pointer;
-        &:before {
-            content: @fa-var-chevron-down;
-            font-family: fontawesome;
-        }
-    }
-
-    .jstree-hovered {
-        background: none;
-        border:0 !important;
-        color: @kajona-brand-color;
-        padding: 1px 2px;
-        text-decoration: underline;
-    }
-
-    .jstree-checkbox {
-        background-image: url(@kajona-tree-sprite);
-    }
-
-    ins {
-        margin: 0;
-        height: 20px;
-        width: 15px;
-        background-image: none;
-        background-repeat: no-repeat;
-    }
 
 }
 

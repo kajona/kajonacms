@@ -26,7 +26,7 @@ class class_debug_helper {
             $strPath = array_search(getGet("debugfile"), class_resourceloader::getInstance()->getFolderContent("/debug", array(".php")));
             if($strPath !== false) {
                 echo "Passing request to ".$strPath."\n\n";
-                include _realpath_.$strPath;
+                include $strPath;
             }
 
         }

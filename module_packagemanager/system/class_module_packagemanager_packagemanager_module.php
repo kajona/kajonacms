@@ -32,7 +32,7 @@ class class_module_packagemanager_packagemanager_module implements interface_pac
         $arrReturn = array();
 
         //loop all modules
-        $arrModules = class_resourceloader::getInstance()->getArrModules();
+        $arrModules = class_classloader::getInstance()->getArrModules();
 
         foreach($arrModules as $strPath => $strOneModule) {
             try {
@@ -104,8 +104,18 @@ class class_module_packagemanager_packagemanager_module implements interface_pac
             throw new class_exception("Current module isn't installable, not all requirements are given", class_exception::$level_ERROR);
 
         //search for an existing installer
-        $objFilesystem = new class_filesystem();
-        $arrInstaller = $objFilesystem->getFilelist($this->objMetadata->getStrPath()."/installer/", array(".php"));
+        if (substr($this->objMetadata->getStrPath(), -5) == ".phar") {
+            $objPhar = new Phar(_realpath_.$this->objMetadata->getStrPath());
+            $arrInstaller = array();
+            foreach (new RecursiveIteratorIterator($objPhar) as $objFile) {
+                if (strpos($objFile->getPathname(), "/installer/") !== false) {
+                    $arrInstaller[] = $objFile->getPathname();
+                }
+            }
+        } else {
+            $objFilesystem = new class_filesystem();
+            $arrInstaller = $objFilesystem->getFilelist($this->objMetadata->getStrPath()."/installer/", array(".php"));
+        }
 
 
         if($arrInstaller === false)
@@ -114,7 +124,13 @@ class class_module_packagemanager_packagemanager_module implements interface_pac
         //start with modules
         foreach($arrInstaller as $strOneInstaller) {
 
-            $objInstance = class_classloader::getInstance()->getInstanceFromFilename($this->objMetadata->getStrPath()."/installer/".$strOneInstaller, "class_installer_base");
+            if (substr($strOneInstaller, 0, 7) == "phar://") {
+                $strFile = $strOneInstaller;
+            } else {
+                $strFile = $this->objMetadata->getStrPath()."/installer/".$strOneInstaller;
+            }
+
+            $objInstance = class_classloader::getInstance()->getInstanceFromFilename(_realpath_.$strFile, "class_installer_base");
 
             if($objInstance == false)
                 continue;
@@ -128,7 +144,13 @@ class class_module_packagemanager_packagemanager_module implements interface_pac
         //proceed with elements
         foreach($arrInstaller as $strOneInstaller) {
 
-            $objInstance = class_classloader::getInstance()->getInstanceFromFilename($this->objMetadata->getStrPath()."/installer/".$strOneInstaller, "class_elementinstaller_base");
+            if (substr($strOneInstaller, 0, 7) == "phar://") {
+                $strFile = $strOneInstaller;
+            } else {
+                $strFile = $this->objMetadata->getStrPath()."/installer/".$strOneInstaller;
+            }
+
+            $objInstance = class_classloader::getInstance()->getInstanceFromFilename(_realpath_.$strFile, "class_elementinstaller_base");
 
             if($objInstance == false)
                 continue;
@@ -197,7 +219,7 @@ class class_module_packagemanager_packagemanager_module implements interface_pac
                 $objModule = class_module_system_module::getModuleByName(trim($strOneModule));
                 if($objModule === null) {
 
-                    $arrModules = class_resourceloader::getInstance()->getArrModules();
+                    $arrModules = class_classloader::getInstance()->getArrModules();
                     $objMetadata = null;
                     foreach($arrModules as $strPath => $strOneFolder) {
                         if(uniStrpos($strOneFolder, $strOneModule) !== false) {
@@ -273,7 +295,7 @@ class class_module_packagemanager_packagemanager_module implements interface_pac
             $strTarget = uniStrtolower($this->objMetadata->getStrType()."_".createFilename($this->objMetadata->getStrTitle(), true));
         }
 
-        $arrModules = array_flip(class_resourceloader::getInstance()->getArrModules());
+        $arrModules = array_flip(class_classloader::getInstance()->getArrModules());
 
         if(isset($arrModules[$strTarget]))
             return "/".$arrModules[$strTarget];

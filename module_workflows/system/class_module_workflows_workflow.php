@@ -229,7 +229,7 @@ class class_module_workflows_workflow extends class_model implements interface_m
      * @return class_module_workflows_workflow[]
      * @throws exception
      */
-    public static function getWorkflowsForSystemid($strAffectedSystemid, $bitOnlyScheduled = true, $objClass = null) {
+    public static function getWorkflowsForSystemid($strAffectedSystemid, $bitOnlyScheduled = true, $objClass = null, $bitAsCount = false) {
         if(!validateSystemid($strAffectedSystemid)) {
             return array();
         }
@@ -260,6 +260,10 @@ class class_module_workflows_workflow extends class_model implements interface_m
         }
 
         $objORM->addOrderBy(new class_orm_objectlist_orderby("system_date_start DESC"));
+
+        if($bitAsCount) {
+            return $objORM->getObjectCount(get_called_class());
+        }
         return $objORM->getObjectList(get_called_class());
 
     }

@@ -81,12 +81,12 @@ function debug_parse_foldercontent($strSourceFolder, &$arrEntries) {
         if($strOneEntry == "." || $strOneEntry == "..")
             continue;
 
-        if(is_file(_realpath_.$strPath) && substr($strOneEntry, 0, 5) == "lang_") {
+        if(is_file($strPath) && substr($strOneEntry, 0, 5) == "lang_") {
 
             $arrTemp = explode("_", substr($strOneEntry, 0, -4));
             //regular lang file found, parse contents
             $lang = array();
-            include _realpath_.$strPath;
+            include $strPath;
 
             foreach($lang as $strKey => $strValue) {
 
@@ -104,7 +104,7 @@ function debug_parse_foldercontent($strSourceFolder, &$arrEntries) {
             }
         }
 
-        if(is_dir(_realpath_.$strPath) && $strOneEntry != ".svn") {
+        if(is_dir($strPath) && $strOneEntry != ".svn") {
             debug_parse_foldercontent($strSourceFolder."/".$strOneEntry, $arrEntries);
         }
     }
