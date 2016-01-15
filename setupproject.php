@@ -55,20 +55,28 @@ class class_project_setup {
 
         self::checkDir("/project");
         self::checkDir("/project/log");
+        self::makeWritable("/project/log");
         self::checkDir("/project/dbdumps");
+        self::makeWritable("/project/dbdumps");
         self::checkDir("/project/lang");
         self::checkDir("/project/system");
         self::checkDir("/project/system/config");
-        //self::checkDir("/project/system/classes");
+        self::makeWritable("/project/system/config");
         self::checkDir("/project/portal");
         self::checkDir("/project/temp");
+        self::makeWritable("/project/temp");
         self::checkDir("/templates");
+        self::makeWritable("/templates");
         self::checkDir("/files");
         self::checkDir("/files/cache");
+        self::makeWritable("/files/cache");
         self::checkDir("/files/downloads");
         self::checkDir("/files/images");
+        self::makeWritable("/files/images");
         self::checkDir("/files/public");
+        self::makeWritable("/files/public");
         self::checkDir("/files/extract");
+        self::makeWritable("/files/extract");
 
         self::checkDir("/templates/default");
         self::checkDir("/templates/default/js");
@@ -222,6 +230,10 @@ TXT;
         else {
             echo " \t\t... already existing.\n";
         }
+    }
+
+    private static function makeWritable($strFolder) {
+        chmod(self::$strRealPath.$strFolder, 0777);
     }
 
 

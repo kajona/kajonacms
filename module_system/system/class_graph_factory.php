@@ -50,6 +50,14 @@ class class_graph_factory {
                 return $objReflection->newInstance();
         }
 
+        $strClassname = "Graph".$strType;
+        $strPath = class_resourceloader::getInstance()->getPathForFile("/system/".$strClassname.".php");
+        if($strPath !== false) {
+            $objReflection = new ReflectionClass($strClassname);
+            if(!$objReflection->isAbstract() && $objReflection->implementsInterface("interface_graph"))
+                return $objReflection->newInstance();
+        }
+
         throw new class_exception("Requested charts-plugin ".$strType." not existing", class_exception::$level_FATALERROR);
     }
 }
