@@ -3,19 +3,26 @@
 *   (c) 2004-2006 by MulchProductions, www.mulchprod.de                                                 *
 *   (c) 2007-2015 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
-*-------------------------------------------------------------------------------------------------------*
-*   $Id$                               *
 ********************************************************************************************************/
+
+namespace Kajona\Search\Installer;
+use class_db;
+use class_exception;
+use class_module_navigation_point;
+use class_module_navigation_tree;
+use class_module_system_module;
+use interface_sc_installer;
+use Kajona\Pages\System\PagesElement;
 use Kajona\Pages\System\PagesFolder;
 use Kajona\Pages\System\PagesPage;
+use Kajona\Pages\System\PagesPageelement;
 
 
 /**
  * Interface of the search samplecontent
  *
- * @package module_search
  */
-class class_installer_sc_search implements interface_sc_installer {
+class InstallerSamplecontentSearch implements interface_sc_installer {
 
     /**
      * @var class_db
@@ -59,8 +66,8 @@ class class_installer_sc_search implements interface_sc_installer {
 
             $strReturn .= "Adding search-element to master page\n";
 
-            if($this->strMasterID != "" && class_module_pages_element::getElement("search") != null) {
-                $objPagelement = new class_module_pages_pageelement();
+            if($this->strMasterID != "" && PagesElement::getElement("search") != null) {
+                $objPagelement = new PagesPageelement();
                 $objPagelement->setStrPlaceholder("mastersearch_search");
                 $objPagelement->setStrName("mastersearch");
                 $objPagelement->setStrElement("search");
@@ -92,8 +99,8 @@ class class_installer_sc_search implements interface_sc_installer {
             $strReturn .= "ID of new page: ".$strSearchresultsId."\n";
             $strReturn .= "Adding search-element to new page\n";
 
-            if(class_module_pages_element::getElement("search") != null) {
-                $objPagelement = new class_module_pages_pageelement();
+            if(PagesElement::getElement("search") != null) {
+                $objPagelement = new PagesPageelement();
                 $objPagelement->setStrPlaceholder("special_news|guestbook|downloads|gallery|galleryRandom|form|tellafriend|maps|search|navigation|faqs|postacomment|votings|userlist|rssfeed|tagto|portallogin|portalregistration|portalupload|directorybrowser|lastmodified|tagcloud|downloadstoplist|flash|mediaplayer|tags|eventmanager");
                 $objPagelement->setStrName("special");
                 $objPagelement->setStrElement("search");
@@ -112,8 +119,8 @@ class class_installer_sc_search implements interface_sc_installer {
 
 
             $strReturn .= "Adding headline-element to new page\n";
-            if(class_module_pages_element::getElement("row") != null) {
-                $objPagelement = new class_module_pages_pageelement();
+            if(PagesElement::getElement("row") != null) {
+                $objPagelement = new PagesPageelement();
                 $objPagelement->setStrPlaceholder("headline_row");
                 $objPagelement->setStrName("headline");
                 $objPagelement->setStrElement("row");

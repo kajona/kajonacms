@@ -127,10 +127,10 @@ class class_module_packagemanager_packagemanager_module implements interface_pac
             if (substr($strOneInstaller, 0, 7) == "phar://") {
                 $strFile = $strOneInstaller;
             } else {
-                $strFile = $this->objMetadata->getStrPath()."/installer/".$strOneInstaller;
+                $strFile = _realpath_.$this->objMetadata->getStrPath()."/installer/".$strOneInstaller;
             }
 
-            $objInstance = class_classloader::getInstance()->getInstanceFromFilename(_realpath_.$strFile, "class_installer_base");
+            $objInstance = class_classloader::getInstance()->getInstanceFromFilename($strFile, "class_installer_base");
 
             if($objInstance == false)
                 continue;
@@ -147,10 +147,10 @@ class class_module_packagemanager_packagemanager_module implements interface_pac
             if (substr($strOneInstaller, 0, 7) == "phar://") {
                 $strFile = $strOneInstaller;
             } else {
-                $strFile = $this->objMetadata->getStrPath()."/installer/".$strOneInstaller;
+                $strFile = _realpath_.$this->objMetadata->getStrPath()."/installer/".$strOneInstaller;
             }
 
-            $objInstance = class_classloader::getInstance()->getInstanceFromFilename(_realpath_.$strFile, "class_elementinstaller_base");
+            $objInstance = class_classloader::getInstance()->getInstanceFromFilename($strFile, "class_elementinstaller_base");
 
             if($objInstance == false)
                 continue;

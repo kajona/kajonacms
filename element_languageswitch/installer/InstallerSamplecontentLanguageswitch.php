@@ -3,10 +3,14 @@
 *   (c) 2004-2006 by MulchProductions, www.mulchprod.de                                                 *
 *   (c) 2007-2015 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
-*-------------------------------------------------------------------------------------------------------*
-*   $Id$                            *
 ********************************************************************************************************/
+
+namespace Kajona\Languageswitch\Installer;
+use class_db;
+use interface_sc_installer;
+use Kajona\Pages\System\PagesElement;
 use Kajona\Pages\System\PagesPage;
+use Kajona\Pages\System\PagesPageelement;
 
 
 /**
@@ -14,7 +18,7 @@ use Kajona\Pages\System\PagesPage;
  *
  * @package element_languageswitch
  */
-class class_installer_sc_languageswitch implements interface_sc_installer  {
+class InstallerSamplecontentLanguageswitch implements interface_sc_installer  {
 
     /**
      * @var class_db
@@ -41,8 +45,8 @@ class class_installer_sc_languageswitch implements interface_sc_installer  {
             $strReturn .= "Adding languageswitch to master page\n";
             $strReturn .= "ID of master page: ".$this->strMasterID."\n";
 
-            if(class_module_pages_element::getElement("languageswitch") != null) {
-                $objPagelement = new class_module_pages_pageelement();
+            if(PagesElement::getElement("languageswitch") != null) {
+                $objPagelement = new PagesPageelement();
                 $objPagelement->setStrPlaceholder("masterlanguageswitch_languageswitch");
                 $objPagelement->setStrName("masterswitch");
                 $objPagelement->setStrElement("languageswitch");

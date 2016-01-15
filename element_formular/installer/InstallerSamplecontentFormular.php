@@ -3,11 +3,17 @@
 *   (c) 2004-2006 by MulchProductions, www.mulchprod.de                                                 *
 *   (c) 2007-2015 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
-*-------------------------------------------------------------------------------------------------------*
-*   $Id$                              *
 ********************************************************************************************************/
+
+namespace Kajona\Formular\Installer;
+
+use class_db;
+use class_module_system_setting;
+use interface_sc_installer;
+use Kajona\Pages\System\PagesElement;
 use Kajona\Pages\System\PagesFolder;
 use Kajona\Pages\System\PagesPage;
+use Kajona\Pages\System\PagesPageelement;
 
 
 /**
@@ -15,7 +21,7 @@ use Kajona\Pages\System\PagesPage;
  *
  * @package element_formular
  */
-class class_installer_sc_formular implements interface_sc_installer  {
+class InstallerSamplecontentFormular implements interface_sc_installer  {
 
     /**
      * @var class_db
@@ -49,8 +55,8 @@ class class_installer_sc_formular implements interface_sc_installer  {
         $strReturn .= "ID of new page: ".$strPageId."\n";
         $strReturn .= "Adding pagelement to new page\n";
 
-        $objPagelement = new class_module_pages_pageelement();
-        if(class_module_pages_element::getElement("form") != null) {
+        if(PagesElement::getElement("form") != null) {
+            $objPagelement = new PagesPageelement();
             $objPagelement->setStrPlaceholder("special_news|guestbook|downloads|gallery|galleryRandom|form|tellafriend|maps|search|navigation|faqs|postacomment|votings|userlist|rssfeed|tagto|portallogin|portalregistration|portalupload|directorybrowser|lastmodified|tagcloud|downloadstoplist|flash|mediaplayer|tags|eventmanager");
             $objPagelement->setStrName("special");
             $objPagelement->setStrElement("form");
@@ -86,8 +92,8 @@ class class_installer_sc_formular implements interface_sc_installer  {
 
 
         $strReturn .= "Adding headline-element to new page\n";
-        if(class_module_pages_element::getElement("row") != null) {
-            $objPagelement = new class_module_pages_pageelement();
+        if(PagesElement::getElement("row") != null) {
+            $objPagelement = new PagesPageelement();
             $objPagelement->setStrPlaceholder("headline_row");
             $objPagelement->setStrName("headline");
             $objPagelement->setStrElement("row");
@@ -104,8 +110,8 @@ class class_installer_sc_formular implements interface_sc_installer  {
         }
 
         $strReturn .= "Adding paragraph-element to new page\n";
-        if(class_module_pages_element::getElement("paragraph") != null) {
-            $objPagelement = new class_module_pages_pageelement();
+        if(PagesElement::getElement("paragraph") != null) {
+            $objPagelement = new PagesPageelement();
             $objPagelement->setStrPlaceholder("content_paragraph");
             $objPagelement->setStrName("content");
             $objPagelement->setStrElement("paragraph");

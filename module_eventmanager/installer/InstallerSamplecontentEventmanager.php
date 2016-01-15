@@ -3,19 +3,24 @@
 *   (c) 2004-2006 by MulchProductions, www.mulchprod.de                                                 *
 *   (c) 2007-2015 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
-*-------------------------------------------------------------------------------------------------------*
-*   $Id$                                       *
 ********************************************************************************************************/
+
+namespace Kajona\Eventmanager\Installer;
+use class_date;
+use class_db;
+use class_module_eventmanager_event;
+use interface_sc_installer;
+use Kajona\Pages\System\PagesElement;
 use Kajona\Pages\System\PagesFolder;
 use Kajona\Pages\System\PagesPage;
+use Kajona\Pages\System\PagesPageelement;
 
 
 /**
  * Installer of the eventmanagers samplecontenht
  *
- * @package module_eventmanager
  */
-class class_installer_sc_eventmanager implements interface_sc_installer  {
+class InstallerSamplecontentEventmanager implements interface_sc_installer  {
 
     /**
      * @var class_db
@@ -66,8 +71,8 @@ class class_installer_sc_eventmanager implements interface_sc_installer  {
 
         $strReturn .= "ID of new page: ".$strEventsPageId."\n";
         $strReturn .= "Adding eventmanager-element to new page\n";
-        if(class_module_pages_element::getElement("eventmanager") != null) {
-            $objPagelement = new class_module_pages_pageelement();
+        if(PagesElement::getElement("eventmanager") != null) {
+            $objPagelement = new PagesPageelement();
             $objPagelement->setStrPlaceholder("special_news|guestbook|downloads|gallery|galleryRandom|form|tellafriend|maps|search|navigation|faqs|postacomment|votings|userlist|rssfeed|tagto|portallogin|portalregistration|portalupload|directorybrowser|lastmodified|tagcloud|downloadstoplist|flash|mediaplayer|tags|eventmanager");
             $objPagelement->setStrName("special");
             $objPagelement->setStrElement("eventmanager");
@@ -86,8 +91,8 @@ class class_installer_sc_eventmanager implements interface_sc_installer  {
 
         $strReturn .= "Adding headline-element to new page\n";
         
-        if(class_module_pages_element::getElement("row") != null) {
-            $objPagelement = new class_module_pages_pageelement();
+        if(PagesElement::getElement("row") != null) {
+            $objPagelement = new PagesPageelement();
             $objPagelement->setStrPlaceholder("headline_row");
             $objPagelement->setStrName("headline");
             $objPagelement->setStrElement("row");
