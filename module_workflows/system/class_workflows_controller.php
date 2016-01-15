@@ -29,6 +29,11 @@ class class_workflows_controller   {
 
         foreach($arrWorkflows as $objOneWorkflow) {
 
+            if($objOneWorkflow->getIntRecordStatus() == 0) {
+                class_logger::getInstance(self::STR_LOGFILE)->addLogRow("workflow ".$objOneWorkflow->getSystemid()." is inactive, can't be scheduled", class_logger::$levelWarning);
+                continue;
+            }
+
             //lock the workflow
             $objLockmanager = $objOneWorkflow->getLockManager();
             if($objLockmanager->isLocked()) {
@@ -76,10 +81,15 @@ class class_workflows_controller   {
 
         foreach($arrWorkflows as $objOneWorkflow) {
 
+            if($objOneWorkflow->getIntRecordStatus() == 0) {
+                class_logger::getInstance(self::STR_LOGFILE)->addLogRow("workflow ".$objOneWorkflow->getSystemid()." is inactive, can't be executed", class_logger::$levelWarning);
+                continue;
+            }
+
             //lock the workflow
             $objLockmanager = $objOneWorkflow->getLockManager();
             if($objLockmanager->isLocked()) {
-                class_logger::getInstance(self::STR_LOGFILE)->addLogRow("workflow ".$objOneWorkflow->getSystemid()." is locked, can't be scheduled", class_logger::$levelWarning);
+                class_logger::getInstance(self::STR_LOGFILE)->addLogRow("workflow ".$objOneWorkflow->getSystemid()." is locked, can't be executed", class_logger::$levelWarning);
                 continue;
             }
 
@@ -124,7 +134,7 @@ class class_workflows_controller   {
 
         $objHandler = $objOneWorkflow->getObjWorkflowHandler();
 
-        if($objOneWorkflow->getIntState() != class_module_workflows_workflow::$INT_STATE_SCHEDULED)
+        if($objOneWorkflow->getIntState() != class_module_workflows_workflow::$INT_STATE_SCHEDULED || $objOneWorkflow->getIntRecordStatus() == 0)
             return;
 
         //trigger the workflow
