@@ -5,7 +5,10 @@
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 ********************************************************************************************************/
 
+
+
 namespace Kajona\ezchart\system;
+require_once __DIR__."/../vendor/autoload.php";
 
 use class_exception;
 use class_graph_commons;
@@ -94,7 +97,7 @@ class GraphEzc implements interface_graph
      */
     public function __construct()
     {
-        require_once __DIR__."/../vendor/autoload.php";
+
     }
 
 

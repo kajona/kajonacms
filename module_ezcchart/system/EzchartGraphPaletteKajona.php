@@ -1,6 +1,8 @@
 <?php
 
 namespace Kajona\ezchart\system;
+
+require_once __DIR__."/../vendor/autoload.php";
 use ezcGraph;
 use ezcGraphColor;
 use ezcGraphPalette;
@@ -8,7 +10,6 @@ use ezcGraphPalette;
 /**
  * Default color palette, parametrized for kajona @ ez components.
  *
- * @package module_system
  * @author sidler@mulchprod.de
  * @since 3.4
  */
@@ -27,7 +28,7 @@ class EzchartGraphPaletteKajona extends ezcGraphPalette
      * @var array
      */
     protected $dataSetColor = array(
-        "#BCE02E", "#E0642E", "#2E97E0", "#E0D62E",  "#B02EE0", "#E02E75", "#5CE02E", "#E0B02E", "#527C94", "#99993d", "#ff0000"
+        "#BCE02E", "#E0642E", "#2E97E0", "#E0D62E", "#B02EE0", "#E02E75", "#5CE02E", "#E0B02E", "#527C94", "#99993d", "#ff0000"
     );
 
     /**
@@ -89,4 +90,3 @@ class EzchartGraphPaletteKajona extends ezcGraphPalette
     protected $minorGridColor = '#DFDFDF';
 }
 
-?>
