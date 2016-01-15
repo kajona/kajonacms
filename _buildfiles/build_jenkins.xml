@@ -184,7 +184,6 @@
 
     <!-- builds the project, aka creates a project out of the sources -->
     <target name="buildProject">
-
         <copy todir="${basedir}${projectPath}" overwrite="true"  includeEmptyDirs="true" >
             <fileset id="sources.dirs" dir="${basedir}${sourcesPath}">
                 <exclude name=".svn"/>
@@ -197,8 +196,6 @@
                 <include name="core*/*.htaccess"/>
             </fileset>
         </copy>
-
-
     </target>
 
     <!-- creates the full-zip including all modules and elements -->
@@ -214,7 +211,6 @@
                 <include name="core*/element_*/**"/>
                 <include name="core*/module_*/*/**"/>
                 <include name="core*/template_*/*/**"/>
-                <!--<include name="_debugging/*/**"/>-->
                 <include name="core*/*.php"/>
                 <include name="core*/*.htaccess"/>
             </fileset>
@@ -223,6 +219,35 @@
         <antcall target="buildPackageHelper" />
 
         <zip destfile="${basedir}${packagesPath}/kajona_v4_full_${DSTAMP}-${TSTAMP}.zip">
+            <fileset dir="${basedir}${tempPath}/../" />
+        </zip>
+    </target>
+
+
+    <!-- creates the full-zip including all modules and elements -->
+    <target name="buildFullPharZip" depends="init" >
+        <antcall target="setupPackageFolders" />
+        <copy todir="${basedir}${tempPath}" overwrite="true"  includeEmptyDirs="true" >
+            <fileset id="sources.dirs" dir="${basedir}${sourcesPath}">
+                <exclude name=".git"/>
+                <exclude name="core*/module_pchart/" />
+                <exclude name="core*/module_flotchart/" />
+
+                <include name="core*/element_*/**"/>
+                <include name="core*/module_*/*/**"/>
+                <include name="core*/template_*/*/**"/>
+                <include name="core*/*.php"/>
+                <include name="core*/*.htaccess"/>
+            </fileset>
+        </copy>
+
+        <antcall target="buildPackageHelper" />
+
+        <exec executable="php" dir="${basedir}${tempPath}/core"  failonerror="on" >
+            <arg line="-f generate_phar.php removesource=true"/>
+        </exec>
+
+        <zip destfile="${basedir}${packagesPath}/kajona_v5_full_${DSTAMP}-${TSTAMP}.zip">
             <fileset dir="${basedir}${tempPath}/../" />
         </zip>
     </target>
@@ -304,15 +329,6 @@
                 <include name="core*/*.php"/>
             </fileset>
         </copy>
-
-        <apply executable="unoconv" parallel="false" dest="${basedir}${tempPath}" verbose="true">
-            <arg line="-f pdf"/>
-            <fileset dir="${basedir}${tempPath}" includes="**/*.odt"/>
-            <arg value="-o" />
-            <targetfile/>
-            <srcfile/>
-            <mapper type="glob" from="*.odt" to="*.pdf"/>
-        </apply>
 
         <antcall target="buildPackageHelper" />
 
@@ -546,6 +562,7 @@
     </target>
 
 
+    <!-- deprecated -->
     <target name="odt2pdf" description="converts odt files to pdfs" depends="cleanFilesystem, init, buildProject">
         <apply executable="unoconv" parallel="false" dest="${basedir}${projectPath}" verbose="true">
             <arg line="-f pdf"/>
