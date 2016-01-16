@@ -112,7 +112,7 @@ class InstallerSamplecontentFormular implements interface_sc_installer  {
         $strReturn .= "Adding paragraph-element to new page\n";
         if(PagesElement::getElement("paragraph") != null) {
             $objPagelement = new PagesPageelement();
-            $objPagelement->setStrPlaceholder("content_paragraph");
+            $objPagelement->setStrPlaceholder("content_paragraph|image");
             $objPagelement->setStrName("content");
             $objPagelement->setStrElement("paragraph");
             $objPagelement->updateObjectToDb($strPageId);
