@@ -16,7 +16,6 @@
 class class_module_packagemanager_manager {
 
     const STR_TYPE_MODULE = "MODULE";
-    const STR_TYPE_ELEMENT = "ELEMENT";
     const STR_TYPE_TEMPLATE = "TEMPLATE";
 
 
@@ -121,17 +120,18 @@ class class_module_packagemanager_manager {
         $objManager = null;
 
         if($objMetadata->getStrType() == self::STR_TYPE_MODULE) {
-            $objManager = new class_module_packagemanager_packagemanager_module();
+            if($objMetadata->getBitIsPhar()) {
+                $objManager = new class_module_packagemanager_packagemanager_pharmodule();
+            }
+            else {
+                $objManager = new class_module_packagemanager_packagemanager_module();
+            }
+
             $objManager->setObjMetadata($objMetadata);
         }
 
         if($objMetadata->getStrType() == self::STR_TYPE_TEMPLATE) {
             $objManager = new class_module_packagemanager_packagemanager_template();
-            $objManager->setObjMetadata($objMetadata);
-        }
-
-        if($objMetadata->getStrType() == self::STR_TYPE_ELEMENT) {
-            $objManager = new class_module_packagemanager_packagemanager_element();
             $objManager->setObjMetadata($objMetadata);
         }
 

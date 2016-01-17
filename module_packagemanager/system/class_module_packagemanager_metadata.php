@@ -31,6 +31,8 @@ class class_module_packagemanager_metadata implements interface_admin_listable {
     private $strContentprovider;
     private $strPath;
 
+    private $bitIsPhar = false;
+
 
     /**
      * Returns the icon the be used in lists.
@@ -127,6 +129,7 @@ class class_module_packagemanager_metadata implements interface_admin_listable {
     private function initFromPhar($strPackage) {
 
         if (substr($strPackage, 0, 7) == "phar://") {
+            $this->bitIsPhar = true;
             $strFile = _realpath_.substr($strPackage, 7);
         } else {
             $strFile = _realpath_.$strPackage;
@@ -392,7 +395,13 @@ class class_module_packagemanager_metadata implements interface_admin_listable {
         return $this->arrScreenshots;
     }
 
-
+    /**
+     * @return boolean
+     */
+    public function getBitIsPhar()
+    {
+        return $this->bitIsPhar;
+    }
 
 
 }
