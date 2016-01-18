@@ -5,15 +5,30 @@
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 ********************************************************************************************************/
 
+namespace Kajona\Portallogin\Portal\Elements;
+
+use class_date;
+use class_email_validator;
+use class_link;
+use class_logger;
+use class_mail;
+use class_module_user_sourcefactory;
+use class_module_user_user;
+use class_scriptlet_helper;
+use class_text_validator;
+use class_usersources_user_kajona;
+use Kajona\Pages\Portal\ElementPortal;
+use Kajona\Pages\Portal\PortalElementInterface;
+
+
 /**
  * Portal Element to load the login-form, or a small "status" area, providing an logout link
  *
- * @package element_portallogin
  * @author sidler@mulchprod.de
  *
  * @targetTable element_plogin.content_id
  */
-class class_element_portallogin_portal extends class_element_portal implements interface_portal_element {
+class ElementPortalloginPortal extends ElementPortal implements PortalElementInterface {
 
 
     /**
@@ -130,7 +145,7 @@ class class_element_portallogin_portal extends class_element_portal implements i
         }
         else {
 
-            $strTemplateID = $this->objTemplate->readTemplate("/element_portallogin/" . $this->arrElementData["portallogin_template"], "portallogin_newpwdform");
+            $strTemplateID = $this->objTemplate->readTemplate("/module_portallogin/" . $this->arrElementData["portallogin_template"], "portallogin_newpwdform");
             $arrTemplate = array();
 
             //check sysid & authcode
@@ -199,7 +214,7 @@ class class_element_portallogin_portal extends class_element_portal implements i
         }
         else {
 
-            $strTemplateID = $this->objTemplate->readTemplate("/element_portallogin/" . $this->arrElementData["portallogin_template"], "portallogin_resetform");
+            $strTemplateID = $this->objTemplate->readTemplate("/module_portallogin/" . $this->arrElementData["portallogin_template"], "portallogin_resetform");
             $arrTemplate = array();
             $arrTemplate["portallogin_action"] = "portalLoginReset";
             $arrTemplate["portallogin_resetHint"] = "portalLoginReset";
@@ -220,7 +235,7 @@ class class_element_portallogin_portal extends class_element_portal implements i
      * @return string
      */
     private function loginForm() {
-        $strTemplateID = $this->objTemplate->readTemplate("/element_portallogin/" . $this->arrElementData["portallogin_template"], "portallogin_loginform");
+        $strTemplateID = $this->objTemplate->readTemplate("/module_portallogin/" . $this->arrElementData["portallogin_template"], "portallogin_loginform");
 
         $arrTemplate = array();
         $arrTemplate["portallogin_action"] = "portalLogin";
@@ -240,7 +255,7 @@ class class_element_portallogin_portal extends class_element_portal implements i
      * @return string
      */
     private function statusArea() {
-        $strTemplateID = $this->objTemplate->readTemplate("/element_portallogin/" . $this->arrElementData["portallogin_template"], "portallogin_status");
+        $strTemplateID = $this->objTemplate->readTemplate("/module_portallogin/" . $this->arrElementData["portallogin_template"], "portallogin_status");
         $arrTemplate = array();
         $arrTemplate["loggedin_label"] = $this->getLang("loggedin_label");
         $arrTemplate["username"] = $this->objSession->getUsername();
@@ -287,10 +302,10 @@ class class_element_portallogin_portal extends class_element_portal implements i
 
         if($bitForm) {
             if($this->arrElementData["portallogin_editmode"] == 1) {
-                $strTemplateID = $this->objTemplate->readTemplate("/element_portallogin/" . $this->arrElementData["portallogin_template"], "portallogin_userdataform_complete");
+                $strTemplateID = $this->objTemplate->readTemplate("/module_portallogin/" . $this->arrElementData["portallogin_template"], "portallogin_userdataform_complete");
             }
             else {
-                $strTemplateID = $this->objTemplate->readTemplate("/element_portallogin/" . $this->arrElementData["portallogin_template"], "portallogin_userdataform_minimal");
+                $strTemplateID = $this->objTemplate->readTemplate("/module_portallogin/" . $this->arrElementData["portallogin_template"], "portallogin_userdataform_minimal");
             }
             $arrTemplate = array();
 
@@ -320,7 +335,7 @@ class class_element_portallogin_portal extends class_element_portal implements i
                 $arrTemplate["formErrors"] = "";
                 if(count($arrErrors) > 0) {
                     foreach($arrErrors as $strOneError) {
-                        $strErrTemplate = $this->objTemplate->readTemplate("/element_portallogin/" . $this->arrElementData["portallogin_template"], "errorRow");
+                        $strErrTemplate = $this->objTemplate->readTemplate("/module_portallogin/" . $this->arrElementData["portallogin_template"], "errorRow");
                         $arrTemplate["formErrors"] .= "" . $this->fillTemplate(array("error" => $strOneError), $strErrTemplate);
                     }
                 }

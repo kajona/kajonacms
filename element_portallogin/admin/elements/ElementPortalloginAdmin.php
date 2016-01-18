@@ -7,15 +7,20 @@
 *	$Id$                                   *
 ********************************************************************************************************/
 
+namespace Kajona\Portallogin\Admin\Elements;
+
+use Kajona\Pages\Admin\AdminElementInterface;
+use Kajona\Pages\Admin\ElementAdmin;
+
+
 /**
  * Class to handle the admin-stuff of the portallogin-element
  *
- * @package element_portallogin
  * @author sidler@mulchprod.de
  *
  * @targetTable element_plogin.content_id
  */
-class class_element_portallogin_admin extends class_element_admin implements interface_admin_element {
+class ElementPortalloginAdmin extends ElementAdmin implements AdminElementInterface {
 
     /**
      * @var string
@@ -25,7 +30,7 @@ class class_element_portallogin_admin extends class_element_admin implements int
      * @fieldType template
      * @fieldLabel template
      *
-     * @fieldTemplateDir /element_portallogin
+     * @fieldTemplateDir /module_portallogin
      */
     private $strTemplate;
 

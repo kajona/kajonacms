@@ -10,6 +10,7 @@ namespace Kajona\Facebooklikebox\Installer;
 use class_module_system_module;
 use class_installer_base;
 use interface_installer;
+use interface_installer_removable;
 use Kajona\Pages\System\PagesElement;
 
 /**
@@ -18,7 +19,7 @@ use Kajona\Pages\System\PagesElement;
  * @author sidler@mulchprod.de
  * @moduleId _facebooklikebox_module_id_
  */
-class InstallerFacebooklikebox extends class_installer_base implements interface_installer {
+class InstallerFacebooklikebox extends class_installer_base implements interface_installer_removable {
 
     /**
      * @inheritdoc
