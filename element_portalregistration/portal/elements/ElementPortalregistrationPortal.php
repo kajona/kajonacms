@@ -5,15 +5,28 @@
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 ********************************************************************************************************/
 
+namespace Kajona\Portalregistration\Portal\Elements;
+
+use class_email_validator;
+use class_link;
+use class_mail;
+use class_module_system_setting;
+use class_module_user_group;
+use class_module_user_user;
+use class_scriptlet_helper;
+use class_text_validator;
+use Kajona\Pages\Portal\ElementPortal;
+use Kajona\Pages\Portal\PortalElementInterface;
+
+
 /**
  * Portal Element to allow users to register themself
  *
- * @package element_portalregistration
  * @author sidler@mulchprod.de
  *
  * @targetTable element_preg.content_id
  */
-class class_element_portalregistration_portal extends class_element_portal implements interface_portal_element {
+class ElementPortalregistrationPortal extends ElementPortal implements PortalElementInterface {
 
        /**
      * Checks what to do and invokes the proper method
@@ -116,7 +129,7 @@ class class_element_portalregistration_portal extends class_element_portal imple
         }
 
         if($bitForm) {
-            $strTemplateID = $this->objTemplate->readTemplate("/element_portalregistration/" . $this->arrElementData["portalregistration_template"], "portalregistration_userdataform");
+            $strTemplateID = $this->objTemplate->readTemplate("/module_portalregistration/" . $this->arrElementData["portalregistration_template"], "portalregistration_userdataform");
             $arrTemplate = array();
 
 
@@ -129,7 +142,7 @@ class class_element_portalregistration_portal extends class_element_portal imple
             $arrTemplate["formErrors"] = "";
             if(count($arrErrors) > 0) {
                 foreach($arrErrors as $strOneError) {
-                    $strErrTemplate = $this->objTemplate->readTemplate("/element_portalregistration/" . $this->arrElementData["portalregistration_template"], "errorRow");
+                    $strErrTemplate = $this->objTemplate->readTemplate("/module_portalregistration/" . $this->arrElementData["portalregistration_template"], "errorRow");
                     $arrTemplate["formErrors"] .= "" . $this->fillTemplate(array("error" => $strOneError), $strErrTemplate);
                 }
             }

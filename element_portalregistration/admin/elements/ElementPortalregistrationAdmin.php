@@ -5,15 +5,23 @@
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 ********************************************************************************************************/
 
+namespace Kajona\Portalregistration\Admin\Elements;
+
+use class_formentry_textrow;
+use class_module_user_group;
+use Kajona\Pages\Admin\AdminElementInterface;
+use Kajona\Pages\Admin\ElementAdmin;
+
+
 /**
  * Class to handle the admin-stuff of the portalregistration-element
  *
- * @package element_portalregistration
  * @author sidler@mulchprod.de
  *
  * @targetTable element_preg.content_id
  */
-class class_element_portalregistration_admin extends class_element_admin implements interface_admin_element {
+class ElementPortalregistrationAdmin extends ElementAdmin implements AdminElementInterface
+{
 
     /**
      * @var string
@@ -23,7 +31,7 @@ class class_element_portalregistration_admin extends class_element_admin impleme
      * @fieldType template
      * @fieldLabel template
      *
-     * @fieldTemplateDir /element_portalregistration
+     * @fieldTemplateDir /module_portalregistration
      */
     private $strTemplate;
 
