@@ -1,6 +1,6 @@
 <?php
 
-namespace Kajona\ezchart\system;
+namespace Kajona\Ezchart\System;
 
 require_once __DIR__."/../vendor/autoload.php";
 use ezcGraph;

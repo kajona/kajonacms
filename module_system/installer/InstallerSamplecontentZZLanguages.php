@@ -3,18 +3,21 @@
 *   (c) 2004-2006 by MulchProductions, www.mulchprod.de                                                 *
 *   (c) 2007-2015 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
-*-------------------------------------------------------------------------------------------------------*
-*   $Id$                            *
 ********************************************************************************************************/
+namespace Kajona\System\Installer;
+use class_classloader;
+use class_db;
+use class_module_languages_language;
+use interface_sc_installer;
 use Kajona\Pages\System\PagesPage;
+use Kajona\Pages\System\PagesPageelement;
 
 
 /**
  * Installer of the navigation languages
  *
- * @package module_languages
  */
-class class_installer_sc_zzlanguages implements interface_sc_installer  {
+class InstallerSamplecontentZZLanguages implements interface_sc_installer  {
 
     /**
      * @var class_db
@@ -40,7 +43,7 @@ class class_installer_sc_zzlanguages implements interface_sc_installer  {
             if(class_exists("PagesPage", false) || class_classloader::getInstance()->loadClass("PagesPage") !== false)
                 PagesPage::assignNullProperties("de", true);
             if(class_exists("class_module_pages_pageelement", false) || class_classloader::getInstance()->loadClass("class_module_pages_pageelement") !== false)
-                class_module_pages_pageelement::assignNullElements("de");
+                PagesPageelement::assignNullElements("de");
 
             $objLang = new class_module_languages_language();
             $objLang->setStrAdminLanguageToWorkOn("de");
@@ -52,7 +55,7 @@ class class_installer_sc_zzlanguages implements interface_sc_installer  {
             if(class_exists("PagesPage", false) || class_classloader::getInstance()->loadClass("PagesPage") !== false)
                 PagesPage::assignNullProperties("en", true);
             if(class_exists("class_module_pages_pageelement", false) || class_classloader::getInstance()->loadClass("class_module_pages_pageelement") !== false)
-                class_module_pages_pageelement::assignNullElements("en");
+                PagesPageelement::assignNullElements("en");
 
             $objLang = new class_module_languages_language();
             $objLang->setStrAdminLanguageToWorkOn("en");

@@ -3,19 +3,31 @@
 *   (c) 2004-2006 by MulchProductions, www.mulchprod.de                                                 *
 *   (c) 2007-2015 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
-*-------------------------------------------------------------------------------------------------------*
-*   $Id$                                       *
 ********************************************************************************************************/
+
+namespace Kajona\News\Installer;
+
+use class_carrier;
+use class_date;
+use class_db;
+use class_module_news_category;
+use class_module_news_feed;
+use class_module_news_news;
+use class_module_system_module;
+use class_module_system_setting;
+use class_rights;
+use interface_sc_installer;
+use Kajona\Pages\System\PagesElement;
 use Kajona\Pages\System\PagesFolder;
 use Kajona\Pages\System\PagesPage;
+use Kajona\Pages\System\PagesPageelement;
 
 
 /**
  * Installer of the news samplecontenht
  *
- * @package module_news
  */
-class class_installer_sc_news implements interface_sc_installer  {
+class InstallerSamplecontentNews implements interface_sc_installer  {
     /**
      * @var class_db
      */
@@ -94,8 +106,8 @@ class class_installer_sc_news implements interface_sc_installer  {
         $strReturn .= "Adding news element to the master-page...\n";
         if($this->strMasterID != "") {
             
-            if(class_module_pages_element::getElement("news") != null) {
-                $objPagelement = new class_module_pages_pageelement();
+            if(PagesElement::getElement("news") != null) {
+                $objPagelement = new PagesPageelement();
                 $objPagelement->setStrPlaceholder("mastertopnews_news");
                 $objPagelement->setStrName("mastertopnews");
                 $objPagelement->setStrElement("news");
@@ -126,8 +138,8 @@ class class_installer_sc_news implements interface_sc_installer  {
         $strReturn .= "ID of new page: ".$strNewsdetailsId."\n";
         $strReturn .= "Adding newsdetails to new page\n";
         
-        if(class_module_pages_element::getElement("news") != null) {
-            $objPagelement = new class_module_pages_pageelement();
+        if(PagesElement::getElement("news") != null) {
+            $objPagelement = new PagesPageelement();
             $objPagelement->setStrPlaceholder("special_news|guestbook|downloads|gallery|galleryRandom|form|tellafriend|maps|search|navigation|faqs|postacomment|votings|userlist|rssfeed|tagto|portallogin|portalregistration|portalupload|directorybrowser|lastmodified|tagcloud|downloadstoplist|flash|mediaplayer|tags|eventmanager");
             $objPagelement->setStrName("special");
             $objPagelement->setStrElement("news");
@@ -151,8 +163,8 @@ class class_installer_sc_news implements interface_sc_installer  {
 
         $strReturn .= "Adding headline-element to new page\n";
         
-        if(class_module_pages_element::getElement("row") != null) {
-            $objPagelement = new class_module_pages_pageelement();
+        if(PagesElement::getElement("row") != null) {
+            $objPagelement = new PagesPageelement();
             $objPagelement->setStrPlaceholder("headline_row");
             $objPagelement->setStrName("headline");
             $objPagelement->setStrElement("row");
@@ -182,8 +194,8 @@ class class_installer_sc_news implements interface_sc_installer  {
         $strReturn .= "ID of new page: ".$strNewsdetailsId."\n";
         $strReturn .= "Adding newsdetails to new page\n";
 
-        if(class_module_pages_element::getElement("news") != null) {
-            $objPagelement = new class_module_pages_pageelement();
+        if(PagesElement::getElement("news") != null) {
+            $objPagelement = new PagesPageelement();
             $objPagelement->setStrPlaceholder("special_news|guestbook|downloads|gallery|galleryRandom|form|tellafriend|maps|search|navigation|faqs|postacomment|votings|userlist|rssfeed|tagto|portallogin|portalregistration|portalupload|directorybrowser|lastmodified|tagcloud|downloadstoplist|flash|mediaplayer|tags|eventmanager");
             $objPagelement->setStrName("special");
             $objPagelement->setStrElement("news");
@@ -207,8 +219,8 @@ class class_installer_sc_news implements interface_sc_installer  {
 
         $strReturn .= "Adding headline-element to new page\n";
 
-        if(class_module_pages_element::getElement("row") != null) {
-            $objPagelement = new class_module_pages_pageelement();
+        if(PagesElement::getElement("row") != null) {
+            $objPagelement = new PagesPageelement();
             $objPagelement->setStrPlaceholder("headline_row");
             $objPagelement->setStrName("headline");
             $objPagelement->setStrElement("row");

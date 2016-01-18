@@ -3,18 +3,21 @@
 *   (c) 2004-2006 by MulchProductions, www.mulchprod.de                                                 *
 *   (c) 2007-2015 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
-*-------------------------------------------------------------------------------------------------------*
-*   $Id$                         *
 ********************************************************************************************************/
+
+namespace Kajona\Postacomment\Installer;
+use class_db;
+use interface_sc_installer;
+use Kajona\Pages\System\PagesElement;
 use Kajona\Pages\System\PagesFolder;
 use Kajona\Pages\System\PagesPage;
+use Kajona\Pages\System\PagesPageelement;
 
 /**
  * Installer of the postacomment samplecontent
  *
- * @package module_postacomment
  */
-class class_installer_sc_postacomment implements interface_sc_installer  {
+class InstallerSamplecontentPostacomment implements interface_sc_installer  {
 
     /**
      * @var class_db
@@ -51,8 +54,8 @@ class class_installer_sc_postacomment implements interface_sc_installer  {
         $strReturn .= "ID of new page: ".$strPostacommentPageID."\n";
         $strReturn .= "Adding pagelement to new page\n";
         
-        if(class_module_pages_element::getElement("postacomment") != null) {
-            $objPagelement = new class_module_pages_pageelement();
+        if(PagesElement::getElement("postacomment") != null) {
+            $objPagelement = new PagesPageelement();
             $objPagelement->setStrPlaceholder("special_news|guestbook|downloads|gallery|galleryRandom|form|tellafriend|maps|search|navigation|faqs|postacomment|votings|userlist|rssfeed|tagto|portallogin|portalregistration|portalupload|directorybrowser|lastmodified|tagcloud|downloadstoplist|flash|mediaplayer|tags|eventmanager");
             $objPagelement->setStrName("special");
             $objPagelement->setStrElement("postacomment");
@@ -72,8 +75,8 @@ class class_installer_sc_postacomment implements interface_sc_installer  {
         }
 
         $strReturn .= "Adding headline-element to new page\n";
-        if(class_module_pages_element::getElement("row") != null) {
-            $objPagelement = new class_module_pages_pageelement();
+        if(PagesElement::getElement("row") != null) {
+            $objPagelement = new PagesPageelement();
             $objPagelement->setStrPlaceholder("headline_row");
             $objPagelement->setStrName("headline");
             $objPagelement->setStrElement("row");
@@ -91,8 +94,8 @@ class class_installer_sc_postacomment implements interface_sc_installer  {
         }
         
         $strReturn .= "Adding paragraph-element to new page\n";
-        if(class_module_pages_element::getElement("paragraph") != null) {
-            $objPagelement = new class_module_pages_pageelement();
+        if(PagesElement::getElement("paragraph") != null) {
+            $objPagelement = new PagesPageelement();
             $objPagelement->setStrPlaceholder("text_paragraph");
             $objPagelement->setStrName("text");
             $objPagelement->setStrElement("paragraph");

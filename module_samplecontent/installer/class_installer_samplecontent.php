@@ -63,7 +63,14 @@ class class_installer_samplecontent extends class_installer_base implements inte
             }
         }
 
-        ksort($arrInstaller);
+
+        uksort($arrInstaller, function($strA, $strB) {
+
+            $strNameA = uniStrrpos($strA, "\\") !== false ? uniSubstr($strA, uniStrrpos($strA, "\\")) : $strA;
+            $strNameB = uniStrrpos($strB, "\\") !== false ? uniSubstr($strB, uniStrrpos($strB, "\\")) : $strB;
+
+            return strcmp($strNameA, $strNameB);
+        });
 
         $strReturn .= "Loading installers...\n";
         /** @var $objInstaller interface_sc_installer|class_installer_base */

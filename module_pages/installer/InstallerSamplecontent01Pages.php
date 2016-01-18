@@ -24,7 +24,7 @@ use interface_sc_installer;
  *
  * @package module_pages
  */
-class Installer01SamplecontentPages implements interface_sc_installer  {
+class InstallerSamplecontent01Pages implements interface_sc_installer  {
 
     /**
      * @var class_db

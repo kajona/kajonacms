@@ -2,17 +2,18 @@
 /*"******************************************************************************************************
 *   (c) 2007-2015 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
-*-------------------------------------------------------------------------------------------------------*
-*   $Id$                          *
 ********************************************************************************************************/
 
+namespace Kajona\Mediamanager\Installer;
+
+use class_module_mediamanager_repo;
+use class_module_system_setting;
+use interface_sc_installer;
 
 /**
  * Installer of the mediamanager samplecontent
- *
- * @package module_mediamanager
  */
-class class_installer_sc_mediamanager implements interface_sc_installer  {
+class InstallerSamplecontentMediamanager implements interface_sc_installer  {
 
     private $objDB;
     private $strContentLanguage;

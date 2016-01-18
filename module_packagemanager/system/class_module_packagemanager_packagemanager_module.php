@@ -127,10 +127,10 @@ class class_module_packagemanager_packagemanager_module implements interface_pac
             if (substr($strOneInstaller, 0, 7) == "phar://") {
                 $strFile = $strOneInstaller;
             } else {
-                $strFile = $this->objMetadata->getStrPath()."/installer/".$strOneInstaller;
+                $strFile = _realpath_.$this->objMetadata->getStrPath()."/installer/".$strOneInstaller;
             }
 
-            $objInstance = class_classloader::getInstance()->getInstanceFromFilename(_realpath_.$strFile, "class_installer_base");
+            $objInstance = class_classloader::getInstance()->getInstanceFromFilename($strFile, "class_installer_base");
 
             if($objInstance == false)
                 continue;
@@ -147,10 +147,10 @@ class class_module_packagemanager_packagemanager_module implements interface_pac
             if (substr($strOneInstaller, 0, 7) == "phar://") {
                 $strFile = $strOneInstaller;
             } else {
-                $strFile = $this->objMetadata->getStrPath()."/installer/".$strOneInstaller;
+                $strFile = _realpath_.$this->objMetadata->getStrPath()."/installer/".$strOneInstaller;
             }
 
-            $objInstance = class_classloader::getInstance()->getInstanceFromFilename(_realpath_.$strFile, "class_elementinstaller_base");
+            $objInstance = class_classloader::getInstance()->getInstanceFromFilename($strFile, "class_elementinstaller_base");
 
             if($objInstance == false)
                 continue;
@@ -245,7 +245,7 @@ class class_module_packagemanager_packagemanager_module implements interface_pac
 
                 }
                 //module found, but wrong version
-                else if(version_compare($strMinVersion, $objModule->getStrVersion(), ">")) {
+                elseif(version_compare($strMinVersion, $objModule->getStrVersion(), ">")) {
                     return false;
                 }
             }
@@ -381,8 +381,20 @@ class class_module_packagemanager_packagemanager_module implements interface_pac
      * @return interface_installer[]
      */
     private function getInstaller(class_module_packagemanager_metadata $objMetadata) {
-        $objFilesystem = new class_filesystem();
-        $arrInstaller = $objFilesystem->getFilelist($objMetadata->getStrPath()."/installer/", array(".php"));
+
+
+        if (substr($objMetadata->getStrPath(), -5) == ".phar") {
+            $objPhar = new Phar(_realpath_.$objMetadata->getStrPath());
+            $arrInstaller = array();
+            foreach (new RecursiveIteratorIterator($objPhar) as $objFile) {
+                if (strpos($objFile->getPathname(), "/installer/") !== false) {
+                    $arrInstaller[] = $objFile->getPathname();
+                }
+            }
+        } else {
+            $objFilesystem = new class_filesystem();
+            $arrInstaller = $objFilesystem->getFilelist($objMetadata->getStrPath()."/installer/", array(".php"));
+        }
 
         if($arrInstaller === false)
             return array();

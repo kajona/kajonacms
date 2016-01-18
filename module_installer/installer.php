@@ -616,9 +616,14 @@ class class_installer {
         $arrPackageMetadata = $objManager->getAvailablePackages();
 
         $arrPackagesToInstall = array();
+        $objSamplecontent = null;
         foreach($arrPackageMetadata as $objOneMetadata) {
-            if(!in_array($objOneMetadata->getStrTitle(), array("samplecontent")))
+            if($objOneMetadata->getStrTitle() == "samplecontent") {
+                $objSamplecontent = $objOneMetadata;
+            }
+            else {
                 $arrPackagesToInstall[] = $objOneMetadata;
+            }
         }
 
         $strReturn .= "Number of packages found: ".count($arrPackagesToInstall)."\n";
@@ -653,14 +658,12 @@ class class_installer {
 
 
         $strReturn .= "Installing samplecontent...\n";
-        try {
-            $objHandler = $objManager->getPackageManagerForPath(class_resourceloader::getInstance()->getCorePathForModule("module_samplecontent")."/module_samplecontent");
+        if($objSamplecontent != null) {
+            $objHandler = $objManager->getPackageManagerForPath($objSamplecontent->getStrPath());
+            if ($objHandler->isInstallable()) {
+                $strReturn .= $objHandler->installOrUpdate();
+            }
         }
-        catch(class_exception $objEx) {
-            $objHandler = null;
-        }
-        if($objHandler != null && $objHandler->isInstallable())
-            $strReturn .= $objHandler->installOrUpdate();
 
 
         return $strReturn;

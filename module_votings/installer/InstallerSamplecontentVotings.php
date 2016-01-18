@@ -3,19 +3,23 @@
 *   (c) 2004-2006 by MulchProductions, www.mulchprod.de                                                 *
 *   (c) 2007-2015 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
-*-------------------------------------------------------------------------------------------------------*
-*   $Id$                                       *
 ********************************************************************************************************/
+
+namespace Kajona\Votings\Installer;
+use class_db;
+use class_module_votings_answer;
+use class_module_votings_voting;
+use interface_sc_installer;
+use Kajona\Pages\System\PagesElement;
 use Kajona\Pages\System\PagesFolder;
 use Kajona\Pages\System\PagesPage;
+use Kajona\Pages\System\PagesPageelement;
 
 
 /**
- * Installer of the faqs samplecontent
  *
- * @package module_votings
  */
-class class_installer_sc_votings implements interface_sc_installer  {
+class InstallerSamplecontentVotings implements interface_sc_installer  {
 
     /**
      * @var class_db
@@ -75,8 +79,8 @@ class class_installer_sc_votings implements interface_sc_installer  {
 
         $strReturn .= "ID of new page: ".$strFaqsPageId."\n";
         $strReturn .= "Adding votings-element 1 to new page\n";
-        if(class_module_pages_element::getElement("faqs") != null) {
-            $objPagelement = new class_module_pages_pageelement();
+        if(PagesElement::getElement("faqs") != null) {
+            $objPagelement = new PagesPageelement();
             $objPagelement->setStrPlaceholder("special_news|guestbook|downloads|gallery|galleryRandom|form|tellafriend|maps|search|navigation|faqs|postacomment|votings|userlist|rssfeed|tagto|portallogin|portalregistration|portalupload|directorybrowser|lastmodified|tagcloud|downloadstoplist|flash|mediaplayer|tags|eventmanager");
             $objPagelement->setStrName("special");
             $objPagelement->setStrElement("votings");
@@ -94,8 +98,8 @@ class class_installer_sc_votings implements interface_sc_installer  {
         }
 
         $strReturn .= "Adding votings-element 2 to new page\n";
-        if(class_module_pages_element::getElement("faqs") != null) {
-            $objPagelement = new class_module_pages_pageelement();
+        if(PagesElement::getElement("faqs") != null) {
+            $objPagelement = new PagesPageelement();
             $objPagelement->setStrPlaceholder("special_news|guestbook|downloads|gallery|galleryRandom|form|tellafriend|maps|search|navigation|faqs|postacomment|votings|userlist|rssfeed|tagto|portallogin|portalregistration|portalupload|directorybrowser|lastmodified|tagcloud|downloadstoplist|flash|mediaplayer|tags|eventmanager");
             $objPagelement->setStrName("special");
             $objPagelement->setStrElement("votings");
@@ -114,8 +118,8 @@ class class_installer_sc_votings implements interface_sc_installer  {
 
         $strReturn .= "Adding headline-element to new page\n";
         
-        if(class_module_pages_element::getElement("row") != null) {
-            $objPagelement = new class_module_pages_pageelement();
+        if(PagesElement::getElement("row") != null) {
+            $objPagelement = new PagesPageelement();
             $objPagelement->setStrPlaceholder("headline_row");
             $objPagelement->setStrName("headline");
             $objPagelement->setStrElement("row");
