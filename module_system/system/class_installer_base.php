@@ -6,6 +6,7 @@
 *-------------------------------------------------------------------------------------------------------*
 *	$Id$                                    *
 ********************************************************************************************************/
+use Kajona\Pages\System\PagesElement;
 
 /**
  * Base class for all installers. Provides some needed function to avoid multiple
@@ -127,14 +128,15 @@ abstract class class_installer_base extends class_root implements interface_inst
 	 */
 	protected function updateModuleVersion($strModuleName, $strVersion) {
         $this->objDB->flushQueryCache();
-	    $strQuery = "UPDATE "._dbprefix_."system_module
-	                 SET module_version= ?,
-	                     module_date= ?
-	               WHERE module_name= ?";
+        $objModule = class_module_system_module::getModuleByName($strModuleName);
+        $bitReturn = true;
+        if($objModule !== null) {
+            $objModule->setStrVersion($strVersion);
+            $objModule->setIntDate(time());
+            $bitReturn = $objModule->updateObjectToDb();
+        }
 
 	    class_logger::getInstance()->addLogRow("module ".$strModuleName." updated to ".$strVersion, class_logger::$levelInfo);
-
-	    $bitReturn = $this->objDB->_pQuery($strQuery, array($strVersion, time(), $strModuleName ));
         class_carrier::getInstance()->flushCache(class_carrier::INT_CACHE_TYPE_DBQUERIES | class_carrier::INT_CACHE_TYPE_MODULES);
         return $bitReturn;
 	}
@@ -148,7 +150,7 @@ abstract class class_installer_base extends class_root implements interface_inst
     protected function updateElementVersion($strElementName, $strVersion) {
         if(class_module_system_module::getModuleByName("pages", true) !== null && class_resourceloader::getInstance()->getCorePathForModule("module_pages") !== null) {
             $this->objDB->flushQueryCache();
-            $objElement = class_module_pages_element::getElement($strElementName);
+            $objElement = \Kajona\Pages\System\PagesElement::getElement($strElementName);
             if($objElement != null) {
                 $objElement->setStrVersion($strVersion);
                 $objElement->updateObjectToDb();
@@ -157,6 +159,52 @@ abstract class class_installer_base extends class_root implements interface_inst
             }
             $this->objDB->flushQueryCache();
         }
+    }
+
+    /**
+     * Updates both, module and element to a new version -  if named the same way.
+     * Makes use of $this->objMetadata->getStrTitle() to fetch the current name
+     *
+     * @param $strNewVersion
+     *
+     * @return bool
+     */
+    protected function updateElementAndModule($strNewVersion)
+    {
+        $bitReturn = $this->updateModuleVersion($this->objMetadata->getStrTitle(), $strNewVersion);
+        $bitReturn = $bitReturn && $this->updateElementVersion($this->objMetadata->getStrTitle(), $strNewVersion);
+        return $bitReturn;
+    }
+
+    /**
+     * Removes the elements / modules handled by the current installer.
+     * Use the reference param to add a human readable logging.
+     *
+     * @param string &$strReturn
+     *
+     * @return bool
+     */
+    protected function removeModuleAndElement(&$strReturn) {
+        //delete the page-element
+        $objElement = PagesElement::getElement($this->objMetadata->getStrTitle());
+        if($objElement != null) {
+            $strReturn .= "Deleting page-element '".$this->objMetadata->getStrTitle()."'...\n";
+            $objElement->deleteObjectFromDatabase();
+        }
+        else {
+            $strReturn .= "Error finding page-element '".$this->objMetadata->getStrTitle()."', aborting.\n";
+            return false;
+        }
+
+        //delete the module-node
+        $strReturn .= "Deleting the module-registration...\n";
+        $objModule = class_module_system_module::getModuleByName($this->objMetadata->getStrTitle(), true);
+        if(!$objModule->deleteObjectFromDatabase()) {
+            $strReturn .= "Error deleting module, aborting.\n";
+            return false;
+        }
+
+        return true;
     }
 
 	/**
