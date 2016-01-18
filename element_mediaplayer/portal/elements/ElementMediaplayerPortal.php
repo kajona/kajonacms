@@ -5,14 +5,19 @@
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 ********************************************************************************************************/
 
+namespace Kajona\Mediaplayer\Portal\Elements;
+
+use Kajona\Pages\Portal\ElementPortal;
+use Kajona\Pages\Portal\PortalElementInterface;
+
+
 /**
  * Loads the mediaplayer and prepares it for output
  *
- * @package element_mediaplayer
  * @author sidler@mulchprod.de
  * @targetTable element_universal.content_id
  */
-class class_element_mediaplayer_portal extends class_element_portal implements interface_portal_element {
+class ElementMediaplayerPortal extends ElementPortal implements PortalElementInterface {
 
 
     /**
@@ -29,7 +34,7 @@ class class_element_mediaplayer_portal extends class_element_portal implements i
         $arrTemplate["width"] = $this->arrElementData["int1"];
         $arrTemplate["height"] = $this->arrElementData["int2"];
 
-        $strTemplateID = $this->objTemplate->readTemplate("/element_mediaplayer/".$this->arrElementData["char3"], "mediaplayer");
+        $strTemplateID = $this->objTemplate->readTemplate("/module_mediaplayer/".$this->arrElementData["char3"], "mediaplayer");
         $strReturn = $this->fillTemplate($arrTemplate, $strTemplateID);
 
         return $strReturn;

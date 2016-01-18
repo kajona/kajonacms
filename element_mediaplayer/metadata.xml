@@ -5,9 +5,9 @@
         >
     <title>mediaplayer</title>
     <description>Embed media elements (e.g. movies) into the website using a simple flash-player. Please note that this element makes use of the JWPlayer, you have to respect the projects' licence (http://www.longtailvideo.com/jw-player/)</description>
-    <version>4.7</version>
+    <version>5.0</version>
     <author>Kajona Team</author>
-    <type>ELEMENT</type>
+    <type>MODULE</type>
     <providesInstaller>TRUE</providesInstaller>
     <requiredModules>
         <module name="pages" version="4.7" />
