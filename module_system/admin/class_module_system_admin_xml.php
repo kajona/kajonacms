@@ -23,22 +23,20 @@ class class_module_system_admin_xml extends class_admin_controller implements in
 
     /**
      * Unlocks a record if currently locked by the current user
-     * @return void
-     * @permissions view
+     * @return string
      */
     protected function actionUnlockRecord()
     {
-        if(class_objectfactory::getInstance()->getObject($this->getSystemid()) !== null) {
-            $objLockmanager = class_objectfactory::getInstance()->getObject($this->getSystemid())->getLockManager();
+        $objRecord = class_objectfactory::getInstance()->getObject($this->getSystemid());
+        $objLockmanager = $objRecord->getLockManager();
 
-            if($objLockmanager->unlockRecord())
-            {
-                return "<ok></ok>";
-            }
-            else {
-                class_response_object::getInstance()->setStrStatusCode(class_http_statuscodes::SC_FORBIDDEN);
-                return "<error></error>";
-            }
+        if($objRecord !== null && $objLockmanager->unlockRecord())
+        {
+            return "<ok></ok>";
+        }
+        else {
+            class_response_object::getInstance()->setStrStatusCode(class_http_statuscodes::SC_FORBIDDEN);
+            return "<error></error>";
         }
     }
 

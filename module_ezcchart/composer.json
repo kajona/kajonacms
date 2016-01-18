@@ -1,0 +1,5 @@
+{
+    "require": {
+      "zetacomponents/graph": "1.5.*"
+    }
+}

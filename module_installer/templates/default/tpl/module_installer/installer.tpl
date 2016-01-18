@@ -10,18 +10,13 @@
 
     <!-- KAJONA_BUILD_LESS_START -->
     <link href="_webpath_/core/module_installer/less/bootstrap.less" rel="stylesheet/less">
-    <!--<link href="_webpath_/core/module_installer/less/responsive.less" rel="stylesheet/less"> -->
     <script> less = { env:'development' }; </script>
     <script src="_webpath_/core/module_installer/less/less.min.js"></script>
     <!-- KAJONA_BUILD_LESS_END -->
 
-    <script src="_webpath_/core/module_system/admin/scripts/jquery/jquery.min.js"></script>
-    <script src="_webpath_/core/module_system/admin/scripts/jqueryui/jquery-ui.custom.min.js"></script>
+    <script src="_webpath_/[webpath,module_system]/admin/scripts/jquery/jquery.min.js"></script>
+    <script src="_webpath_/[webpath,module_system]/admin/scripts/jqueryui/jquery-ui.custom.min.js"></script>
 
-    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
-    <!--[if lt IE 9]>
-    <script src="_webpath_/core/module_installer/js/html5.js"></script>
-    <![endif]-->
 </head>
 
 

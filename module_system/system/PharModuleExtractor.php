@@ -50,7 +50,7 @@ class PharModuleExtractor
                 if(preg_match($this->strExtractPattern, $strKey)) {
                     //extract the file and export it
                     $strTargetPath = _realpath_."/files/extract/".$strModule."/".$strKey;
-                    $objFilesystem->folderCreate(dirname($strTargetPath), true);
+                    $objFilesystem->folderCreate(dirname($strTargetPath), true, true);
                     //copy
                     copy($strFullPath, $strTargetPath);
                 }
