@@ -7,15 +7,24 @@
  *   $Id$                                     *
  ********************************************************************************************************/
 
+namespace Kajona\Maps\Admin\Elements;
+
+use class_admin_formgenerator;
+use class_formentry_button;
+use class_formentry_plaintext;
+use class_formentry_textrow;
+use Kajona\Pages\Admin\AdminElementInterface;
+use Kajona\Pages\Admin\ElementAdmin;
+
+
 /**
  * Admin class to handle the maps
  *
- * @package element_maps
  * @author jschroeter@kajona.de
  *
  * @targetTable element_universal.content_id
  */
-class class_element_maps_admin extends class_element_admin implements interface_admin_element {
+class ElementMapsAdmin extends ElementAdmin implements AdminElementInterface {
 
     /**
      * @var string
@@ -50,7 +59,7 @@ class class_element_maps_admin extends class_element_admin implements interface_
      *
      * @addSearchIndex
      *
-     * @fieldTemplateDir /element_maps
+     * @fieldTemplateDir /module_maps
      */
     private $strChar3;
 
@@ -223,11 +232,6 @@ class class_element_maps_admin extends class_element_admin implements interface_
     public function getStrChar1() {
         return $this->strChar1;
     }
-
-
-
-
-
 
 
 }

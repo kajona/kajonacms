@@ -5,14 +5,19 @@
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 ********************************************************************************************************/
 
+namespace Kajona\Maps\Portal\Elements;
+
+use Kajona\Pages\Portal\ElementPortal;
+use Kajona\Pages\Portal\PortalElementInterface;
+
+
 /**
  * Portal-Part of the maps
  *
- * @package element_maps
  * @author jschroeter@kajona.de
  * @targetTable element_universal.content_id
  */
-class class_element_maps_portal extends class_element_portal implements interface_portal_element {
+class ElementMapsPortal extends ElementPortal implements PortalElementInterface {
 
 
     /**
@@ -30,7 +35,7 @@ class class_element_maps_portal extends class_element_portal implements interfac
             $strTemplate = "maps.tpl";
         }
 
-        $strTemplateID = $this->objTemplate->readTemplate("/element_maps/".$strTemplate, "map");
+        $strTemplateID = $this->objTemplate->readTemplate("/module_maps/".$strTemplate, "map");
 
         $floatLat = "0.0";
         $floatLng = "0.0";

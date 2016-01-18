@@ -7,19 +7,24 @@
  *   $Id$                                      *
  ********************************************************************************************************/
 
+namespace Kajona\Maps\System;
+
+use class_exception;
+use class_remoteloader;
+use SimpleXMLElement;
+
 
 /**
  * Class to receive geo coordinates of local addresses using external services like Google Maps.
  * Please set your API hosts and keys in the service-specific function, e.g. lookupAddressUsingGoogle()
  * Choose which remote service you want to use by setting the ApiId like:
- *     $objGeocoder = new class_geocoder(0);    (0 = Google Maps; 1 = Yahoo! Maps)
+ *     $objGeocoder = new Geocoder(0);    (0 = Google Maps; 1 = Yahoo! Maps)
  * ATTENTION: Please respect the terms of use of the remote services! E.g. Google only allows the use
  * in conjunction with displaying the results on a Google map.
  *
  * @author jschroeter
- * @package element_maps
  */
-class class_geocoder {
+class Geocoder {
     /**
      * 0 = Google Maps
      * 1 = Yahoo! Maps
@@ -76,7 +81,7 @@ class class_geocoder {
         if($this->intApiId == 0) {
             $bitReturn = $this->lookupAddressUsingGoogle($strStreet, $strPostalCode, $strCity, $strCountry);
         }
-        else if($this->intApiId == 1) {
+        elseif($this->intApiId == 1) {
             $bitReturn = $this->lookupAddressUsingYahoo($strStreet, $strPostalCode, $strCity, $strCountry);
         }
 
@@ -137,13 +142,13 @@ class class_geocoder {
                         $this->strPostalCode = "";
                         $this->strCity = $xml->Response->Placemark->AddressDetails->Country->Locality->LocalityName;
                     }
-                    else if($xml->Response->Placemark->AddressDetails->Country->AdministrativeArea->Locality) {
+                    elseif($xml->Response->Placemark->AddressDetails->Country->AdministrativeArea->Locality) {
                         $this->strStreet = $xml->Response->Placemark->AddressDetails->Country->AdministrativeArea->Locality->Thoroughfare->ThoroughfareName;
                         $this->strPostalCode = $xml->Response->Placemark->AddressDetails->Country->AdministrativeArea->Locality->PostalCode->PostalCodeNumber;
                         $this->strCity = $xml->Response->Placemark->AddressDetails->Country->AdministrativeArea->Locality->LocalityName;
 
                     }
-                    else if($xml->Response->Placemark->AddressDetails->Country->AdministrativeArea->SubAdministrativeArea->Locality->DependentLocality) {
+                    elseif($xml->Response->Placemark->AddressDetails->Country->AdministrativeArea->SubAdministrativeArea->Locality->DependentLocality) {
                         $this->strStreet = $xml->Response->Placemark->AddressDetails->Country->AdministrativeArea->SubAdministrativeArea->Locality->DependentLocality->Thoroughfare->ThoroughfareName;
                         $this->strPostalCode = $xml->Response->Placemark->AddressDetails->Country->AdministrativeArea->SubAdministrativeArea->Locality->DependentLocality->PostalCode->PostalCodeNumber;
                         $this->strCity = $xml->Response->Placemark->AddressDetails->Country->AdministrativeArea->SubAdministrativeArea->Locality->LocalityName;
@@ -172,7 +177,7 @@ class class_geocoder {
 
                     $bitReturn = $this->intAccuracy >= 4 ? true : false;
                 }
-                else if(strcmp($status, "620") == 0) {
+                elseif(strcmp($status, "620") == 0) {
                     //sent requests too fast
                     $intDelay += 100000;
                 }
