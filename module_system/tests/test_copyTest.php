@@ -25,6 +25,9 @@ class class_test_copyTest extends class_testbase  {
         $this->assertEquals($objAspect->getIntRecordStatus(), $objCopy->getIntRecordStatus());
         $this->assertEquals($objAspect->getStrRecordClass(), $objCopy->getStrRecordClass());
         $this->assertNotEquals($objAspect->getSystemid(), $objCopy->getSystemid());
+
+        $objAspect->deleteObjectFromDatabase();
+        $objCopy->deleteObjectFromDatabase();
     }
 
     function testCopySystemStatus() {
@@ -49,9 +52,38 @@ class class_test_copyTest extends class_testbase  {
         $this->assertEquals($objAspect->getIntRecordStatus(), $objCopy->getIntRecordStatus());
         $this->assertEquals($objAspect->getStrRecordClass(), $objCopy->getStrRecordClass());
         $this->assertNotEquals($objAspect->getSystemid(), $objCopy->getSystemid());
+
+        $objAspect->deleteObjectFromDatabase();
+        $objCopy->deleteObjectFromDatabase();
     }
 
 
+
+    function testCopyPermissions() {
+
+        $objAspect = new class_module_system_aspect();
+        $objAspect->setStrName("copytest");
+        $objAspect->updateObjectToDb();
+        $strViewId = generateSystemid();
+        $strSysid = $objAspect->getSystemid();
+
+        $objRights = class_carrier::getInstance()->getObjRights();
+        $objRights->addGroupToRight($strViewId, $strSysid, class_rights::$STR_RIGHT_RIGHT3);
+        $arrRow = $objRights->getArrayRights($strSysid);
+
+        $objAspect->copyObject();
+        $strCopyId = $objAspect->getSystemid();
+        $arrCopyRow = $objRights->getArrayRights($strCopyId);
+
+        $this->assertEquals($arrRow, $arrCopyRow);
+
+        $objAspect = new class_module_system_aspect($strSysid);
+        $objCopy = new class_module_system_aspect($strCopyId);
+
+        $objAspect->deleteObjectFromDatabase();
+        $objCopy->deleteObjectFromDatabase();
+
+    }
 
 
 }

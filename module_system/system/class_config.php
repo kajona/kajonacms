@@ -46,21 +46,12 @@ class class_config {
         $debug = array();
 
         //Include the config-File
-        $strPath = class_resourceloader::getInstance()->getPathForFile("/system/config/" . $strConfigFile, false);
+        $strPath = class_resourceloader::getInstance()->getPathForFile("/system/config/" . $strConfigFile);
         if($strPath !== false) {
-            @include(_realpath_ . $strPath);
+            include($strPath);
         }
         else {
-            if(!@include class_resourceloader::getInstance()->getCorePathForModule("module_system", true) . "/module_system/system/config/" . $strConfigFile) {
-                die("Error reading config-file from core folder: ".$strConfigFile);
-            }
-        }
-
-        //overwrite with settings from project
-        if(is_file(_realpath_ . "/project/system/config/" . $strConfigFile)) {
-            if(!@include _realpath_ . "/project/system/config/" . $strConfigFile) {
-                die("Error reading config-file from project folder: " . $strConfigFile);
-            }
+            die("Error reading /system/config/{$strConfigFile} config-file");
         }
 
         $this->arrConfig = $config;

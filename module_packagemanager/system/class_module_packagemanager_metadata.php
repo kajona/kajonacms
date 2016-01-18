@@ -6,6 +6,8 @@
 *	$Id$                                  *
 ********************************************************************************************************/
 
+use Kajona\System\System\PharModule;
+
 /**
  * Helper class, used to read the metadata-files from packages or the filesystem.
  * Read access only!
@@ -90,10 +92,13 @@ class class_module_packagemanager_metadata implements interface_admin_listable {
      * @return void
      */
     public function autoInit($strPath) {
-        if(uniSubstr($strPath, -4) == ".zip")
+        if(uniSubstr($strPath, -4) == ".zip") {
             $this->initFromPackage($strPath);
-        else
+        } elseif (PharModule::isPhar($strPath)) {
+            $this->initFromPhar($strPath);
+        } else {
             $this->initFromFilesystem($strPath);
+        }
 
         $this->setStrPath($strPath);
     }
@@ -112,6 +117,28 @@ class class_module_packagemanager_metadata implements interface_admin_listable {
         }
 
         $strMetadata = file_get_contents(_realpath_.$strPackage."/metadata.xml");
+        $this->parseXMLDocument($strMetadata);
+    }
+
+    /**
+     * @param string $strPackage
+     * @throws class_exception
+     */
+    private function initFromPhar($strPackage) {
+
+        if (substr($strPackage, 0, 7) == "phar://") {
+            $strFile = _realpath_.substr($strPackage, 7);
+        } else {
+            $strFile = _realpath_.$strPackage;
+        }
+
+        $objPhar = new Phar($strFile);
+
+        if(!isset($objPhar["metadata.xml"])) {
+            throw new class_exception("file not found: "._realpath_.$strPackage."/metadata.xml", class_exception::$level_ERROR);
+        }
+
+        $strMetadata = file_get_contents($objPhar["metadata.xml"]->getPathname());
         $this->parseXMLDocument($strMetadata);
     }
 
@@ -153,7 +180,7 @@ class class_module_packagemanager_metadata implements interface_admin_listable {
         $this->setStrAuthor($arrXml["package"]["0"]["author"]["0"]["value"]);
         if(isset($arrXml["package"]["0"]["target"]["0"]["value"]))
             $this->setStrTarget($arrXml["package"]["0"]["target"]["0"]["value"]);
-        
+
         $this->setStrType($arrXml["package"]["0"]["type"]["0"]["value"]);
         $this->setBitProvidesInstaller($arrXml["package"]["0"]["providesInstaller"]["0"]["value"] == "TRUE");
 

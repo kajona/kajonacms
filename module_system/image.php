@@ -296,7 +296,6 @@ class class_flyimage {
     }
 }
 
-define("_block_config_db_loading_", true);
 define("_autotesting_", false);
 
 $objImage = new class_flyimage();

@@ -11,9 +11,14 @@
  * @package module_system
  */
 
-// -- The Path on the filesystem ---------------------------------------------------------------------------------------
-// Determine the current path on the filesystem. Use the dir-name of the current file minus core/module_system
-define("_realpath_", str_replace(" ", "\040", substr(__DIR__, 0, -18)));
+//---The Path on the filesystem--------------------------------------------------------------------------
+//Determine the current path on the filesystem. Use the dir-name of the current file minus core/module_system
+if (substr(__DIR__, 0, 7) == "phar://") {
+    define("_realpath_", str_replace(" ", "\040", substr(__DIR__, 7, -23)));
+} else {
+    define("_realpath_", str_replace(" ", "\040", substr(__DIR__, 0, -18)));
+}
+
 define("_corepath_", str_replace(" ", "\040", substr(__DIR__, 0, -13)));
 
 // -- Loader pre-configuration -----------------------------------------------------------------------------------------
@@ -52,15 +57,15 @@ if (file_exists(_realpath_."/project/bootstrap.php"))
 // -- The Path on web --------------------------------------------------------------------------------------------------
 defineWebPath();
 
-// -- Include module ids -----------------------------------------------------------------------------------------------
-bootstrapIncludeModuleIds();
-
 // -- Include needed classes of each module ----------------------------------------------------------------------------
 // This registers all service providers of each module. This defines also the module id
 class_classloader::getInstance()->registerModuleServices(class_carrier::getInstance()->getContainer());
 
 // Now we include all classes which i.e. register event listeners
 class_classloader::getInstance()->includeClasses();
+
+//trigger the phar-extractor-----------------------------------------------------------------------------
+\Kajona\System\System\PharModuleExtractor::bootstrapPharContent();
 
 // -- Helper functions -------------------------------------------------------------------------------------------------
 // Helper for bad bad bad cases
@@ -90,7 +95,8 @@ function defineWebPath()
                 $_SERVER['HTTP_HOST'].$_SERVER['SCRIPT_NAME']
             );
             define("_webpath_", saveUrlEncode(substr_replace($strWeb, "", strrpos($strWeb, "/"))));
-        } else {
+        }
+        else {
             //Determine the current path on the web
             $strWeb = dirname(
                 (isset($_SERVER[$strHeaderName]) && (strtolower($_SERVER[$strHeaderName]) == $strHeaderValue) ? "https://" : "http://").

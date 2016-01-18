@@ -66,7 +66,6 @@ PHP;
         file_put_contents(class_resourceloader::getInstance()->getCorePathForModule("module_system", true)."/module_system/system/class_module_pluginmanager2_test.php", $strClass2);
         file_put_contents(class_resourceloader::getInstance()->getCorePathForModule("module_system", true)."/module_system/system/class_module_pluginmanager3_test.php", $strClass3);
 
-        class_resourceloader::getInstance()->flushCache();
         class_classloader::getInstance()->flushCache();
 
         parent::setUp();
@@ -114,7 +113,6 @@ PHP;
         unlink(class_resourceloader::getInstance()->getCorePathForModule("module_system", true)."/module_system/system/class_module_pluginmanager2_test.php");
         unlink(class_resourceloader::getInstance()->getCorePathForModule("module_system", true)."/module_system/system/class_module_pluginmanager3_test.php");
 
-        class_resourceloader::getInstance()->flushCache();
         class_classloader::getInstance()->flushCache();
 
         parent::tearDown();

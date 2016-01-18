@@ -284,16 +284,16 @@ abstract class class_root {
      * In nearly all cases, this is triggered by the framework itself.
      * @return void
      */
-    public final function initObject() {
+    public final function initObject()
+    {
         $this->initObjectInternal();
         $this->internalInit();
 
-        //if given, read versioning information
-        if($this instanceof interface_versionable) {
+        // if given, read versioning information
+        if ($this instanceof interface_versionable) {
             $objChangelog = new class_module_system_changelog();
             $objChangelog->readOldValues($this);
         }
-
     }
 
     /**
@@ -306,7 +306,8 @@ abstract class class_root {
      * The row loaded from the database is available by calling $this->getArrInitRow().
      * @return void
      */
-    protected function initObjectInternal() {
+    protected function initObjectInternal()
+    {
         $objORM = new class_orm_objectinit($this);
         $objORM->initObjectFromDb();
     }
@@ -741,6 +742,7 @@ abstract class class_root {
         $this->unsetSystemid();
         $this->arrInitRow = null;
         $bitReturn = $this->updateObjectToDb($strNewPrevid);
+        class_carrier::getInstance()->getObjRights()->copyPermissions($strOldSysid, $this->getSystemid());
         //call event listeners
         $bitReturn = $bitReturn && class_core_eventdispatcher::getInstance()->notifyGenericListeners(class_system_eventidentifier::EVENT_SYSTEM_RECORDCOPIED, array($strOldSysid, $this->getSystemid(), $this));
 
@@ -1498,10 +1500,26 @@ abstract class class_root {
      * @return string
      */
     public function getArrModule($strKey) {
-        if(isset($this->arrModule[$strKey]))
+        if (isset($this->arrModule[$strKey])) {
             return $this->arrModule[$strKey];
-        else
+        } else {
+            /*
+            if ($strKey === "modul" || $strKey === "modul") {
+                // try to load the current module-name and the moduleId by reflection
+                $objReflection = new class_reflection($this);
+                $arrAnnotationValues = $objReflection->getAnnotationValuesFromClass(self::STR_MODULE_ANNOTATION);
+                if(count($arrAnnotationValues) > 0) {
+                    $this->setArrModuleEntry("modul", trim($arrAnnotationValues[0]));
+                    $this->setArrModuleEntry("module", trim($arrAnnotationValues[0]));
+                }
+                return $this->arrModule[$strKey];
+            } elseif ($strKey === "moduleId") {
+                return $this->getIntModuleNr();
+            }
+            */
+
             return "";
+        }
     }
 
 
@@ -1699,7 +1717,19 @@ abstract class class_root {
     /**
      * @return int
      */
-    public function getIntModuleNr() {
+    public function getIntModuleNr()
+    {
+        /*
+        if ($this->intModuleNr === null) {
+            $objReflection = new class_reflection($this);
+            $arrAnnotationValues = $objReflection->getAnnotationValuesFromClass(self::STR_MODULEID_ANNOTATION);
+            if(count($arrAnnotationValues) > 0) {
+                $this->setArrModuleEntry("moduleId", constant(trim($arrAnnotationValues[0])));
+                $this->setIntModuleNr(constant(trim($arrAnnotationValues[0])));
+            }
+        }
+        */
+
         return $this->intModuleNr;
     }
 
@@ -2140,7 +2170,5 @@ abstract class class_root {
     public function getObjStartDate() {
         return $this->objStartDate;
     }
-
-
 
 }

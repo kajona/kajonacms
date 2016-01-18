@@ -9,7 +9,10 @@ use class_carrier;
 use class_model;
 use class_module_system_setting;
 use class_objectfactory;
+use Kajona\Pages\System\PagesElement;
+use Kajona\Pages\System\PagesPageelement;
 use Kajona\Pages\System\PagesPortaleditorActionAbstract;
+use Kajona\Pages\System\PagesPortaleditorActionEnum;
 use Kajona\Pages\System\PagesPortaleditorPlaceholderAction;
 use Kajona\Pages\System\PagesPortaleditorSystemidAction;
 
@@ -45,18 +48,32 @@ class PagesPortaleditor  {
      * @return string
      */
     public function convertToJs() {
-        $arrReturn = array("systemid" => array(), "placeholder" => array());
-        foreach($this->arrActions as $objOneAction) {
+
+        $arrActions = $this->arrActions;
+        usort($arrActions, function(PagesPortaleditorActionAbstract $objActionA, PagesPortaleditorActionAbstract $objActionB) {
+
+            if($objActionA->getObjAction()->equals(PagesPortaleditorActionEnum::MOVE()) && !$objActionB->getObjAction()->equals(PagesPortaleditorActionEnum::MOVE())) {
+                return -1;
+            }
+
+            if(!$objActionA->getObjAction()->equals(PagesPortaleditorActionEnum::MOVE()) && $objActionB->getObjAction()->equals(PagesPortaleditorActionEnum::MOVE())) {
+                return 1;
+            }
+
+            return strcmp($objActionA->getObjAction(), $objActionB->getObjAction());
+        });
+
+        $arrReturn = array("systemIds" => array(), "placeholder" => array());
+        foreach($arrActions as $objOneAction) {
 
             if($objOneAction instanceof PagesPortaleditorSystemidAction) {
-                $arrReturn["systemid"][$objOneAction->getStrSystemid()][] = array("type" => $objOneAction->getObjAction()."", "link" => $objOneAction->getStrLink());
+                $arrReturn["systemIds"][$objOneAction->getStrSystemid()][] = array("type" => $objOneAction->getObjAction()."", "link" => $objOneAction->getStrLink(), "systemid" => $objOneAction->getStrSystemid());
             }
 
             if($objOneAction instanceof PagesPortaleditorPlaceholderAction) {
-                $arrReturn["placeholder"][$objOneAction->getStrPlaceholder()][] = array("type" => $objOneAction->getObjAction()."", "link" => $objOneAction->getStrLink(), "element" => $objOneAction->getStrElement());
+                $arrReturn["placeholder"][$objOneAction->getStrPlaceholder()][] = array("type" => $objOneAction->getObjAction()."", "link" => $objOneAction->getStrLink(), "element" => $objOneAction->getStrElement(), "name" => $objOneAction->getStrElement());
             }
         }
-
         return json_encode($arrReturn);
     }
 
@@ -107,7 +124,19 @@ class PagesPortaleditor  {
             return $strOutput;
         }
 
-        return "<div class='peElementWrapper' data-systemid='{$strSystemid}' data-element='{$strElement}'>{$strOutput}</div>";
+        //if the parent one is a block, we want to avoid it being a drag n drop entry
+        $objParent = class_objectfactory::getInstance()->getObject($objInstance->getStrPrevId());
+
+        $strClass = "peElementWrapper";
+        if($objInstance->getIntRecordStatus() == 0) {
+            $strClass .= " peInactiveElement";
+        }
+
+        if($objParent instanceof PagesPageelement && $objParent->getStrPlaceholder() == "block") {
+            $strClass .= " peNoDnd";
+        }
+
+        return "<div class='{$strClass}' data-systemid='{$strSystemid}' data-element='{$strElement}' onmouseover='KAJONA.admin.portaleditor.elementActionToolbar.show(this)'  onmouseout='KAJONA.admin.portaleditor.elementActionToolbar.hide(this)'>{$strOutput}</div>";
     }
 
     /**
@@ -116,9 +145,11 @@ class PagesPortaleditor  {
      *
      * @return string
      */
-    public static function getPlaceholderWrapper($strPlaceholder)
+    public static function getPlaceholderWrapper($strPlaceholder, $strContent = "")
     {
-        return "<span data-placeholder='{$strPlaceholder}'></span>";
+        return "<div class='pePlaceholderWrapper' data-placeholder='{$strPlaceholder}' data-name='{$strPlaceholder}'>{$strContent}</div>";
+
+        return "<span data-placeholder='{$strPlaceholder}' data-name='{$strPlaceholder}'></span>";
     }
 
     public static function isActive()

@@ -12,7 +12,7 @@ class class_test_jsFiles extends class_testbase  {
 
         foreach($arrJsFiles as $strOneFile => $strFilename) {
 
-            $strFile = file_get_contents(_realpath_.$strOneFile);
+            $strFile = file_get_contents($strOneFile);
 
             $arrMatches = array();
             if(preg_match_all("/console\.([a-zA-Z]*)\(/i", $strFile, $arrMatches)) {
@@ -28,10 +28,6 @@ class class_test_jsFiles extends class_testbase  {
     }
 
 
-    public function testDebuggerBreaks() {
-        $arrJsFiles = class_resourceloader::getInstance()->getFolderContent("/", array(".js"), true);
-    }
-
 
     private function getJsFiles() {
 
@@ -42,8 +38,6 @@ class class_test_jsFiles extends class_testbase  {
         $arrFiles = array_merge($arrFiles, class_resourceloader::getInstance()->getFolderContent("/portal/scripts", array(".js")));
         return $arrFiles;
 
-//        $objFilesystem = new class_filesystem();
-//        return $objFilesystem->getFilelist("/", array(".js"), true);
     }
 }
 

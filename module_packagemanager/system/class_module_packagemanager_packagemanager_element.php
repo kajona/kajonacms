@@ -34,8 +34,18 @@ class class_module_packagemanager_packagemanager_element extends class_module_pa
             throw new class_exception("Current module isn't installable, not all requirements are given", class_exception::$level_ERROR);
 
         //search for an existing installer
-        $objFilesystem = new class_filesystem();
-        $arrInstaller = $objFilesystem->getFilelist($this->objMetadata->getStrPath()."/installer/", array(".php"));
+        if (substr($this->objMetadata->getStrPath(), -5) == ".phar") {
+            $objPhar = new Phar(_realpath_.$this->objMetadata->getStrPath());
+            $arrInstaller = array();
+            foreach (new RecursiveIteratorIterator($objPhar) as $objFile) {
+                if (strpos($objFile->getPathname(), "/installer/") !== false) {
+                    $arrInstaller[] = $objFile->getPathname();
+                }
+            }
+        } else {
+            $objFilesystem = new class_filesystem();
+            $arrInstaller = $objFilesystem->getFilelist($this->objMetadata->getStrPath()."/installer/", array(".php"));
+        }
 
         if($arrInstaller === false) {
             $strReturn .= "Updating default template pack...\n";
@@ -47,7 +57,13 @@ class class_module_packagemanager_packagemanager_element extends class_module_pa
         //proceed with elements
         foreach($arrInstaller as $strOneInstaller) {
 
-            $objInstance = class_classloader::getInstance()->getInstanceFromFilename($this->objMetadata->getStrPath()."/installer/".$strOneInstaller, "class_elementinstaller_base");
+            if (substr($strOneInstaller, 0, 7) == "phar://") {
+                $strFile = $strOneInstaller;
+            } else {
+                $strFile = _realpath_.$this->objMetadata->getStrPath()."/installer/".$strOneInstaller;
+            }
+
+            $objInstance = class_classloader::getInstance()->getInstanceFromFilename($strFile, "class_elementinstaller_base");
 
             if($objInstance == false)
                 continue;

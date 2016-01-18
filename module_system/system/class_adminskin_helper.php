@@ -36,7 +36,7 @@ class class_adminskin_helper {
 
         $arrReturn = array();
         foreach($arrFiles as $strPath => $strName) {
-            if(is_dir(_realpath_.$strPath))
+            if(is_dir($strPath))
                 $arrReturn[$strPath] = $strName;
         }
 
@@ -87,11 +87,11 @@ class class_adminskin_helper {
 
         if(self::$objAdminImageResolver == null) {
 
-            if(!is_file(_realpath_.self::getPathForSkin(class_carrier::getInstance()->getObjSession()->getAdminSkin())."/class_adminskin_imageresolver.php")) {
+            if(!is_file(self::getPathForSkin(class_carrier::getInstance()->getObjSession()->getAdminSkin())."/class_adminskin_imageresolver.php")) {
                 return "<img src=\""._skinwebpath_."/pics/".$strName."\"  alt=\"".$strAlt."\"  ".(!$bitBlockTooltip ? "rel=\"tooltip\" title=\"".$strAlt."\" " : "" )." ".($strEntryId != "" ? " id=\"".$strEntryId."\" " : "" )."  />";
             }
             else
-                include_once _realpath_.self::getPathForSkin(class_carrier::getInstance()->getObjSession()->getAdminSkin())."/class_adminskin_imageresolver.php";
+                include_once self::getPathForSkin(class_carrier::getInstance()->getObjSession()->getAdminSkin())."/class_adminskin_imageresolver.php";
             self::$objAdminImageResolver = new class_adminskin_imageresolver();
         }
 

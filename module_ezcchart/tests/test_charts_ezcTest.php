@@ -13,7 +13,7 @@ class class_test_charts_ezcTest extends class_testbase  {
 
 
         echo "\t pie chart...\n";
-        $objGraph = new class_graph_ezc();
+        $objGraph = new \Kajona\Ezchart\System\GraphEzc();
         $objGraph->setStrGraphTitle("Test Pie Chart");
         $objGraph->createPieChart(array(2,6,7,3), array("val 1", "val 2", "val 3", "val 4"));
         $objGraph->saveGraph(_images_cachepath_."/graph4.png");
@@ -21,7 +21,7 @@ class class_test_charts_ezcTest extends class_testbase  {
         echo $objGraph->renderGraph();
 
         echo "\t pie chart without legend...\n";
-        $objGraph = new class_graph_ezc();
+        $objGraph = new \Kajona\Ezchart\System\GraphEzc();
         $objGraph->setStrGraphTitle("Test Pie Chart without legend");
         $objGraph->createPieChart(array(2,6,7,3), array("val 1", "val 2", "val 3", "val 4"));
         $objGraph->setBitRenderLegend(false);
@@ -30,7 +30,7 @@ class class_test_charts_ezcTest extends class_testbase  {
         echo $objGraph->renderGraph();
 
         echo "\tbar chart...\n";
-        $objGraph = new class_graph_ezc();
+        $objGraph = new \Kajona\Ezchart\System\GraphEzc();
         $objGraph->setStrXAxisTitle("x-axis");
         $objGraph->setStrYAxisTitle("y-axis");
         $objGraph->setStrGraphTitle("Test Bar Chart");
@@ -44,7 +44,7 @@ class class_test_charts_ezcTest extends class_testbase  {
         echo $objGraph->renderGraph();
 
         echo "\tstacked bar chart...\n";
-        $objGraph = new class_graph_ezc();
+        $objGraph = new \Kajona\Ezchart\System\GraphEzc();
         $objGraph->setStrXAxisTitle("x-axis");
         $objGraph->setStrYAxisTitle("y-axis");
         $objGraph->setStrGraphTitle("Test Stacked Bar Chart");
@@ -60,7 +60,7 @@ class class_test_charts_ezcTest extends class_testbase  {
 
 
         echo "\tbar chart variation...\n";
-        $objGraph = new class_graph_ezc();
+        $objGraph = new \Kajona\Ezchart\System\GraphEzc();
         $objGraph->setStrXAxisTitle("x-axis");
         $objGraph->setStrYAxisTitle("y-axis");
         $objGraph->setStrGraphTitle("Test Bar Chart with 0 values");
@@ -78,7 +78,7 @@ class class_test_charts_ezcTest extends class_testbase  {
         echo $objGraph->renderGraph();
 
         echo "\tline chart...\n";
-        $objGraph = new class_graph_ezc();
+        $objGraph = new \Kajona\Ezchart\System\GraphEzc();
         $objGraph->setStrXAxisTitle("x-axis");
         $objGraph->setStrYAxisTitle("y-axis");
         $objGraph->setStrGraphTitle("Test Line Chart");
@@ -93,7 +93,7 @@ class class_test_charts_ezcTest extends class_testbase  {
 
 
         echo "\tcombined line / bar chart...\n";
-        $objGraph = new class_graph_ezc();
+        $objGraph = new \Kajona\Ezchart\System\GraphEzc();
         $objGraph->setStrXAxisTitle("x-axis");
         $objGraph->setStrYAxisTitle("y-axis");
         $objGraph->setStrGraphTitle("Test combined Bar /  Line Chart");
@@ -111,7 +111,7 @@ class class_test_charts_ezcTest extends class_testbase  {
 
 
         echo "\thorizontal bar chart...\n";
-        $objGraph = new class_graph_ezc();
+        $objGraph = new \Kajona\Ezchart\System\GraphEzc();
         $objGraph->setStrXAxisTitle("x-axis");
         $objGraph->setStrYAxisTitle("y-axis");
         $objGraph->setStrGraphTitle("Test Horizontal Bar Chart");

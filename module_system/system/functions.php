@@ -7,9 +7,10 @@
 *   $Id$                                                *
 ********************************************************************************************************/
 
-require_once (__DIR__."/../../module_system/system/StringUtil.php");
+require_once (__DIR__."/StringUtil.php");
 
 use Kajona\System\System\StringUtil;
+
 /**
  * @package module_system
  */
@@ -26,32 +27,6 @@ if (!defined("_mbstringloaded_")) {
     }
 }
 
-/**
- * Helper to load and scan all module-ids available. Triggered by the bootloader.
- * Change with care
- *
- * @return void
- */
-function bootstrapIncludeModuleIds()
-{
-    //Module-Constants
-    foreach (scandir(_realpath_) as $strRootFolder) {
-
-        if (uniStrpos($strRootFolder, "core") === false) {
-            continue;
-        }
-
-        foreach (scandir(_realpath_."/".$strRootFolder) as $strDirEntry) {
-            if (is_dir(_realpath_."/".$strRootFolder."/".$strDirEntry) && is_dir(_realpath_."/".$strRootFolder."/".$strDirEntry."/system/") && is_dir(_realpath_."/".$strRootFolder."/".$strDirEntry."/system/config/")) {
-                foreach (scandir(_realpath_."/".$strRootFolder."/".$strDirEntry."/system/config/") as $strModuleEntry) {
-                    if (preg_match("/module\_([a-z0-9\_])+\_id\.php/", $strModuleEntry)) {
-                        @include_once _realpath_."/".$strRootFolder."/".$strDirEntry."/system/config/".$strModuleEntry;
-                    }
-                }
-            }
-        }
-    }
-}
 
 /**
  * Returns a value from the GET-array
@@ -1287,4 +1262,5 @@ function strToInt($strString) {
 function strToDate($strString) {
     return StringUtil::toDate($strString);
 }
+
 

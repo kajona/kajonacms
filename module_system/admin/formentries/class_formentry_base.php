@@ -331,7 +331,7 @@ class class_formentry_base {
                 }
             }
             //get key vlaues
-            return $objReflection->getAnnotationValueForProperty($strSourceProperty, "@fieldType", class_reflection_enum::PARAMS());
+            return $objReflection->getAnnotationValueForProperty($strSourceProperty, "@fieldType", class_reflection_enum::PARAMS);
         }
 
         return array();

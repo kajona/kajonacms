@@ -184,25 +184,25 @@ class class_lang {
         return $strProperty;
     }
 
-    
+
     public function stringToPlaceholder($strText) {
         $strReturn = "";
         $strLastChar = "";
-        
+
         for ($i = 0; $i < uniStrlen($strText); $i++) {
             $strChar = uniSubstr($strText, $i, 1);
             $strCharLower = uniStrtolower($strChar);
-            
+
             if ($i > 0 && $strChar != $strCharLower && $strLastChar != "_") {
                 $strReturn .= "_" . $strCharLower;
             }
             else {
                 $strReturn .= $strCharLower;
             }
-            
+
             $strLastChar = $strChar;
         }
-        
+
         return $strReturn;
     }
 
@@ -313,7 +313,8 @@ class class_lang {
     private function loadAndMergeTextfile($strModule, $strFilename, $strLanguage, &$arrTargetArray) {
         $lang = array();
         $this->bitSaveToCache = true;
-        include_once _realpath_ . $strFilename;
+
+        include_once $strFilename;
 
         if(!isset($arrTargetArray[$strLanguage])) {
             $arrTargetArray[$strLanguage] = array();

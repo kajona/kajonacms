@@ -26,10 +26,9 @@ class class_graph_jqplot implements interface_graph {
     private $arrSeriesColors =  null;
 
     private $bitIsHorizontalBar = false;
-    private $bitXAxisLabelsInvisible = false;
-    private $bitYAxisLabelsInvisible = false;
 
     private $bitIsResizeable = true;
+    private $bitDownloadLink = true;
 
     const STRING_FORMAT = "%s";
 
@@ -59,13 +58,19 @@ class class_graph_jqplot implements interface_graph {
 
         "legend" => array(
             "renderer" => "$.jqplot.EnhancedLegendRenderer",
-            "rowSpacing" => "0px",
             "show"=> true,
             "rendererOptions" => array(
                 "textColor" => null,
                 "fontFamily" => null,
-                "numberRows" => 2,
-                "location" => "n"
+                "numberRows" => null,
+                "numberColumns" => 5,
+                "seriesToggleReplot" => array(
+                    "resetAxes" => true,
+                    "clear" => true,
+                ),
+                "location" => "n",
+                "placement" => "outsideGrid",
+                "rowSpacing" => "1px",
             ),
         ),
         "grid" => array(
@@ -468,36 +473,57 @@ class class_graph_jqplot implements interface_graph {
 
         $this->preGraphGeneration();
 
-        //create id's
+        //1. create id's
         $strSystemId = generateSystemid();
         $strResizeableId =  "resize_".$strSystemId;
         $strChartId =  "chart_".$strSystemId;
         $strTooltipId =  "tooltip_".$strSystemId;
+        $strImageExportId =  $strChartId."_exportpng";
 
         //create div where the chart is being put
-        $strReturn = "<div id=\"$strResizeableId\" style=\"width:".$this->intWidth."px; height:".$this->intHeight."px;\">";
-            $strReturn .= "<div id=\"$strChartId\" style=\"width:100%; height:100%;\"></div>";
+        $strReturn = "<div onmouseover='$(\"#\"+\"{$strImageExportId}\").show();' onmouseout='$(\"#\"+\"{$strImageExportId}\").hide();' id=\"$strResizeableId\" style=\"width:".$this->intWidth."px; height:".$this->intHeight."px;\">";
+
+            //chart div
+            $strReturn .= "<div id=\"$strChartId\" style=\"width:95%; height:100%; float: left;\"></div>";
+
+            //image export div
+            $strReturn .= "<div style=\"width:5%; height:100%; float: left;\">";
+
+            if ($this->isBitDownloadLink()) {
+                $strReturn .= "<a style=\"display:none; cursor: pointer; \" id=\"{$strImageExportId}\" onclick=\"KAJONA.admin.jqplotHelper.exportAsImage('{$strChartId}')\"'>
+                                   <i class='fa fa-download'></i>
+                               </a>";
+            }
+
+            $strReturn .= "</div>";
+
         $strReturn .= "</div>";
 
+
+        //2. Sort charts by type
         $this->sortBySeriesType();
-        //create the data array and options object for the jqPlot method
+
+        //3. create the data array and options object for the jqPlot method
         $strChartOptions = $this->strCreateJSOptions();
         $strChartData = $this->strCreateJSDataArray();
         $strDataPointObjects = $this->strCreateDataPointObjects();
         $arrPostPlotOptions = array(
             "intNrOfWrittenLabelsXAxis" => $this->intNrOfWrittenLabelsXAxis,
-            "intNrOfWrittenLabelsYAxis" => $this->intNrOfWrittenLabelsYAxis,
-            "bitXAxisLabelsInvisible" => $this->bitXAxisLabelsInvisible,
-            "bitYAxisLabelsInvisible" => $this->bitYAxisLabelsInvisible
+            "intNrOfWrittenLabelsYAxis" => $this->intNrOfWrittenLabelsYAxis
         );
         $strPostPlotOptions = json_encode($arrPostPlotOptions);
 
+        //4. Get decimal styles
         $strDecChar = class_carrier::getInstance()->getObjLang()->getLang("numberStyleDecimal", "system");
         $strThousandsChar = class_carrier::getInstance()->getObjLang()->getLang("numberStyleThousands", "system");
 
+        //5. Init Chart
         $strCoreDirectory = class_resourceloader::getInstance()->getCorePathForModule("module_jqplot");
         $strReturn .= "<script type='text/javascript'>
-                KAJONA.admin.loader.loadFile(['{$strCoreDirectory}/module_jqplot/admin/scripts/js/jqplot/excanvas.js','{$strCoreDirectory}/module_jqplot/admin/scripts/js/jqplot/jquery.jqplot.js', '{$strCoreDirectory}/module_jqplot/admin/scripts/js/jqplot/jquery.jqplot.css'], function() {
+                KAJONA.admin.loader.loadFile([
+                '{$strCoreDirectory}/module_jqplot/admin/scripts/js/jqplot/excanvas.js',
+                '{$strCoreDirectory}/module_jqplot/admin/scripts/js/jqplot/jquery.jqplot.js',
+                '{$strCoreDirectory}/module_jqplot/admin/scripts/js/jqplot/jquery.jqplot.css'], function() {
                     KAJONA.admin.loader.loadFile([
                         '{$strCoreDirectory}/module_jqplot/admin/scripts/js/jqplot/plugins/jqplot.logAxisRenderer.js',
                         '{$strCoreDirectory}/module_jqplot/admin/scripts/js/jqplot/plugins/jqplot.barRenderer.js',
@@ -514,7 +540,11 @@ class class_graph_jqplot implements interface_graph {
                         '{$strCoreDirectory}/module_jqplot/admin/scripts/js/jqplot/plugins/jqplot.canvasOverlay.js',
 
                         '{$strCoreDirectory}/module_jqplot/admin/scripts/js/custom/jquery.jqplot.custom_helper.js',
-                        '{$strCoreDirectory}/module_jqplot/admin/scripts/js/custom/jquery.jqplot.custom.css'
+                        '{$strCoreDirectory}/module_jqplot/admin/scripts/js/custom/jquery.jqplot.custom.css',
+
+                        '{$strCoreDirectory}/module_jqplot/admin/scripts/js/filesaver/Blob.js',
+                        '{$strCoreDirectory}/module_jqplot/admin/scripts/js/filesaver/canvas-toBlob.js',
+                        '{$strCoreDirectory}/module_jqplot/admin/scripts/js/filesaver/FileSaver.js'
 
                     ], function() {
                         $.jqplot.sprintf.thousandsSeparator = '$strThousandsChar';
@@ -842,6 +872,7 @@ class class_graph_jqplot implements interface_graph {
             $this->arrYAxisTickLabels = $arrYAxisTickLabels;
             $this->arrOptions["axes"]["yaxis"]["renderer"] = "$.jqplot.CategoryAxisRenderer";
             $this->arrOptions["axes"]["yaxis"]["ticks"] = $arrYAxisTickLabels;
+            $this->arrOptions["axes"]["yaxis"]["numberTicks"] = $intNrOfWrittenLabels;
         }
 
         $this->intNrOfWrittenLabelsYAxis = $intNrOfWrittenLabels;
@@ -859,13 +890,12 @@ class class_graph_jqplot implements interface_graph {
         if($bitRenderLegend === true) {
             $this->arrOptions["legend"]["show"] = $bitRenderLegend;
             $this->arrOptions["legend"]["renderer"] = "$.jqplot.EnhancedLegendRenderer";
-            $this->arrOptions["legend"]["rowSpacing"] = "0px";
-            $this->arrOptions["legend"]["marginTop"] = "5px";
+            $this->arrOptions["legend"]["rendererOptions"]["placement"] = "outsideGrid";
         }
         else {
             $this->arrOptions["legend"]["show"] = null;
             $this->arrOptions["legend"]["renderer"] = null;
-            $this->arrOptions["legend"]["rowSpacing"] = null;
+            $this->arrOptions["legend"]["rendererOptions"]["placement"] = null;
         }
     }
 
@@ -1007,11 +1037,14 @@ class class_graph_jqplot implements interface_graph {
      * @param bool $bitHideXAxis
      */
     public function setHideXAxis($bitHideXAxis) {
-        $this->arrOptions["axes"]["xaxis"]["rendererOptions"]["drawBaseline"] = false;
-        $this->arrOptions["axes"]["xaxis"]["showTicks"] = false;
-        $this->arrOptions["axes"]["xaxis"]["drawMajorTickMarks"] = false;
-        $this->arrOptions["axes"]["xaxis"]["tickOptions"]["showGridline"] = false;
-        $this->bitXAxisLabelsInvisible = $bitHideXAxis;
+        if($bitHideXAxis) {
+            $this->arrOptions["axes"]["xaxis"]["rendererOptions"]["drawBaseline"] = false;
+            $this->arrOptions["axes"]["xaxis"]["showTicks"] = false;
+            $this->arrOptions["axes"]["xaxis"]["drawMajorTickMarks"] = false;
+            $this->arrOptions["axes"]["xaxis"]["tickOptions"]["showGridline"] = false;
+            $this->arrOptions["axes"]["xaxis"]["tickOptions"]["show"] = false;
+            $this->arrOptions["axes"]["xaxis"]["label"] = null;
+        }
     }
 
 
@@ -1022,11 +1055,14 @@ class class_graph_jqplot implements interface_graph {
      * @param bool $bitHideYAxis
      */
     public function setHideYAxis($bitHideYAxis) {
-        $this->arrOptions["axes"]["yaxis"]["rendererOptions"]["drawBaseline"] = false;
-        $this->arrOptions["axes"]["yaxis"]["showTicks"] = false;
-        $this->arrOptions["axes"]["yaxis"]["drawMajorTickMarks"] = false;
-        $this->arrOptions["axes"]["yaxis"]["tickOptions"]["showGridline"] = false;
-        $this->bitYAxisLabelsInvisible = $bitHideYAxis;
+        if($bitHideYAxis) {
+            $this->arrOptions["axes"]["yaxis"]["rendererOptions"]["drawBaseline"] = false;
+            $this->arrOptions["axes"]["yaxis"]["showTicks"] = false;
+            $this->arrOptions["axes"]["yaxis"]["drawMajorTickMarks"] = false;
+            $this->arrOptions["axes"]["yaxis"]["tickOptions"]["showGridline"] = false;
+            $this->arrOptions["axes"]["yaxis"]["tickOptions"]["show"] = false;
+            $this->arrOptions["axes"]["yaxis"]["label"] = null;
+        }
     }
 
     /**
@@ -1072,7 +1108,19 @@ class class_graph_jqplot implements interface_graph {
         $this->bitIsResizeable = $bitIsResizeable;
     }
 
+    /**
+     * @return boolean
+     */
+    public function isBitDownloadLink()
+    {
+        return $this->bitDownloadLink;
+    }
 
-
-
+    /**
+     * @param boolean $bitDownloadLink
+     */
+    public function setBitDownloadLink($bitDownloadLink)
+    {
+        $this->bitDownloadLink = $bitDownloadLink;
+    }
 }
