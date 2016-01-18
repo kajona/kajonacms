@@ -115,7 +115,7 @@ class class_classloader
      */
     public function registerModuleServices(\Pimple\Container $objContainer)
     {
-        foreach ($this->arrFiles as $strClass => $strOneFile) {
+        foreach (BootstrapCache::getInstance()->getCacheContent(BootstrapCache::CACHE_CLASSES) as $strClass => $strOneFile) {
             if (\Kajona\System\System\StringUtil::endsWith($strClass, "\\ServiceProvider")) {
                 $objServiceProvider = new $strClass();
                 if ($objServiceProvider instanceof \Pimple\ServiceProviderInterface) {
