@@ -37,8 +37,8 @@ class InstallerFacebooklikebox extends class_elementinstaller_base implements in
         if($objElement == null) {
 		    $objElement = new PagesElement();
 		    $objElement->setStrName($this->objMetadata->getStrTitle());
-		    $objElement->setStrClassAdmin("class_element_facebooklikebox_admin.php");
-		    $objElement->setStrClassPortal("class_element_facebooklikebox_portal.php");
+		    $objElement->setStrClassAdmin("ElementFacebooklikeboxAdmin.php");
+		    $objElement->setStrClassPortal("ElementFacebooklikeboxPortal.php");
 		    $objElement->setIntCachetime(3600*24*30);
 		    $objElement->setIntRepeat(0);
             $objElement->setStrVersion($this->objMetadata->getStrVersion());

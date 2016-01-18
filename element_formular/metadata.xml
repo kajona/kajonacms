@@ -5,10 +5,10 @@
         >
     <title>form</title>
     <description>A simple element providing a contact form. May be used to develop other forms, too.</description>
-    <version>4.7.1</version>
+    <version>5.0</version>
     <author>Kajona Team</author>
     <target>element_formular</target>
-    <type>ELEMENT</type>
+    <type>MODULE</type>
     <providesInstaller>TRUE</providesInstaller>
     <requiredModules>
         <module name="pages" version="4.7" />

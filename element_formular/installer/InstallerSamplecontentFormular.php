@@ -65,13 +65,13 @@ class InstallerSamplecontentFormular implements interface_sc_installer  {
 
             $arrParams = array();
             if($this->strContentLanguage == "de") {
-                $arrParams[] = "class_formular_contact.php";
+                $arrParams[] = "FormularContact.php";
                 $arrParams[] = class_module_system_setting::getConfigValue("_system_admin_email_");
                 $arrParams[] = "contact.tpl";
                 $arrParams[] = $strElementId;
             }
             else {
-                $arrParams[] = "class_formular_contact.php";
+                $arrParams[] = "FormularContact.php";
                 $arrParams[] = class_module_system_setting::getConfigValue("_system_admin_email_");
                 $arrParams[] = "contact.tpl";
                 $arrParams[] = $strElementId;

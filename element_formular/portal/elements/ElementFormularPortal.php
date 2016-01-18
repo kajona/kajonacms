@@ -7,15 +7,22 @@
 *	$Id$                                   *
 ********************************************************************************************************/
 
+namespace Kajona\Formular\Portal\Elements;
+
+use class_exception;
+use class_resourceloader;
+use Kajona\Pages\Portal\ElementPortal;
+use Kajona\Pages\Portal\PortalElementInterface;
+
+
 /**
  * Portal Element to load the formular specified in the admin
  *
- * @package element_formular
  * @author sidler@mulchprod.de
  *
  * @targetTable element_formular.content_id
  */
-class class_element_formular_portal extends class_element_portal implements interface_portal_element {
+class ElementFormularPortal extends ElementPortal implements PortalElementInterface {
 
     /**
      * Loads the navigation-class and passes control

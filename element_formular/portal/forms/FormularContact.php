@@ -7,16 +7,26 @@
 *	$Id$                                  *
 ********************************************************************************************************/
 
+
+namespace Kajona\Formular\Portal\Forms;
+
+use class_email_validator;
+use class_mail;
+use class_portal_controller;
+use class_scriptlet_helper;
+use class_text_validator;
+use interface_portal;
+use interface_scriptlet;
+
 /**
  * Portal-Class to provide a simple contact-form
  *
- * @package element_formular
  * @author sidler@mulchprod.de
  *
  * @module elements
- * @moduleId _pages_elemente_modul_id_
+ * @moduleId _formular_module_id_
  */
-class class_formular_contact extends class_portal_controller implements interface_portal {
+class FormularContact extends class_portal_controller implements interface_portal {
     private $arrError = array();
 
 
@@ -53,16 +63,16 @@ class class_formular_contact extends class_portal_controller implements interfac
         if(count($this->arrError) > 0) {
             $strError = "";
             //Collect errors
-            $strTemplateErrorID = $this->objTemplate->readTemplate("/element_form/" . $this->arrElementData["formular_template"], "errorrow");
+            $strTemplateErrorID = $this->objTemplate->readTemplate("/module_form/" . $this->arrElementData["formular_template"], "errorrow");
             foreach($this->arrError as $strOneError) {
                 $strError .= $this->fillTemplate(array("error" => $strOneError), $strTemplateErrorID);
             }
             //and the complete form
-            $strTemplateErrorFormid = $this->objTemplate->readTemplate("/element_form/" . $this->arrElementData["formular_template"], "errors");
+            $strTemplateErrorFormid = $this->objTemplate->readTemplate("/module_form/" . $this->arrElementData["formular_template"], "errors");
             $arrParams["formular_fehler"] = $this->fillTemplate(array("liste_fehler" => $strError), $strTemplateErrorFormid);
         }
         //and the form itself
-        $strTemplateformId = $this->objTemplate->readTemplate("/element_form/" . $this->arrElementData["formular_template"], "contactform");
+        $strTemplateformId = $this->objTemplate->readTemplate("/module_form/" . $this->arrElementData["formular_template"], "contactform");
         //get actions
 
         $strReturn .= $this->fillTemplate($arrParams, $strTemplateformId);
@@ -118,7 +128,7 @@ class class_formular_contact extends class_portal_controller implements interfac
         $objEmail = new class_mail();
 
         //Template
-        $strMailTemplateID = $this->objTemplate->readTemplate("/element_form/" . $this->arrElementData["formular_template"], "email");
+        $strMailTemplateID = $this->objTemplate->readTemplate("/module_form/" . $this->arrElementData["formular_template"], "email");
         $this->objTemplate->setTemplate($this->fillTemplate($this->getAllParams(), $strMailTemplateID));
         $this->objTemplate->deletePlaceholder();
 
@@ -134,13 +144,13 @@ class class_formular_contact extends class_portal_controller implements interfac
             if($this->arrElementData["formular_success"] != "")
                 $strReturn = $this->arrElementData["formular_success"];
             else
-                $strReturn = $this->objTemplate->fillTemplate(array(), $this->objTemplate->readTemplate("/element_form/" . $this->arrElementData["formular_template"], "message_success"));
+                $strReturn = $this->objTemplate->fillTemplate(array(), $this->objTemplate->readTemplate("/module_form/" . $this->arrElementData["formular_template"], "message_success"));
         }
         else {
             if($this->arrElementData["formular_error"] != "")
                 $strReturn = $this->arrElementData["formular_error"];
             else
-                $strReturn = $this->objTemplate->fillTemplate(array(), $this->objTemplate->readTemplate("/element_form/" . $this->arrElementData["formular_template"], "message_error"));
+                $strReturn = $this->objTemplate->fillTemplate(array(), $this->objTemplate->readTemplate("/module_form/" . $this->arrElementData["formular_template"], "message_error"));
         }
 
         return $strReturn;

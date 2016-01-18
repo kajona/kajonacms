@@ -7,15 +7,21 @@
 *	$Id$                                   *
 ********************************************************************************************************/
 
+namespace Kajona\Formular\Admin\Elements;
+
+use class_resourceloader;
+use Kajona\Pages\Admin\AdminElementInterface;
+use Kajona\Pages\Admin\ElementAdmin;
+
+
 /**
  * Class to handle the admin-stuff of the formular-element
  *
- * @package element_formular
  * @author sidler@mulchprod.de
  *
  * @targetTable element_formular.content_id
  */
-class class_element_formular_admin extends class_element_admin implements interface_admin_element {
+class ElementFormularAdmin extends ElementAdmin implements AdminElementInterface {
 
     /**
      * @var string
@@ -68,7 +74,7 @@ class class_element_formular_admin extends class_element_admin implements interf
      * @fieldType template
      * @fieldLabel template
      *
-     * @fieldTemplateDir /element_form
+     * @fieldTemplateDir /module_form
      */
     private $strTemplate;
 
