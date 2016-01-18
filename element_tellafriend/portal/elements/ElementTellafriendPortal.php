@@ -5,14 +5,24 @@
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 ********************************************************************************************************/
 
+namespace Kajona\Tellafriend\Portal\Elements;
+
+use class_email_validator;
+use class_link;
+use class_mail;
+use class_scriptlet_helper;
+use class_text_validator;
+use Kajona\Pages\Portal\ElementPortal;
+use Kajona\Pages\Portal\PortalElementInterface;
+
+
 /**
  * Loads the last-modified date of the current page and prepares it for output
  *
- * @package element_tellafriend
  * @author sidler@mulchprod.de
  * @targetTable element_tellafriend.content_id
  */
-class class_element_tellafriend_portal extends class_element_portal implements interface_portal_element {
+class ElementTellafriendPortal extends ElementPortal implements PortalElementInterface {
 
     private $arrError = array();
 
@@ -49,16 +59,16 @@ class class_element_tellafriend_portal extends class_element_portal implements i
         if(count($this->arrError) > 0) {
             $strError = "";
             //Collect errors
-            $strTemplateErrorID = $this->objTemplate->readTemplate("/element_tellafriend/".$this->arrElementData["tellafriend_template"], "errorrow");
+            $strTemplateErrorID = $this->objTemplate->readTemplate("/module_tellafriend/".$this->arrElementData["tellafriend_template"], "errorrow");
             foreach($this->arrError as $strOneError) {
                 $strError .= $this->fillTemplate(array("error" => $strOneError), $strTemplateErrorID);
             }
             //and the complete errorform
-            $strTemplateErrorFormid = $this->objTemplate->readTemplate("/element_tellafriend/".$this->arrElementData["tellafriend_template"], "errors");
+            $strTemplateErrorFormid = $this->objTemplate->readTemplate("/module_tellafriend/".$this->arrElementData["tellafriend_template"], "errors");
             $arrTemplate["tellafriend_errors"] = $this->fillTemplate(array("liste_fehler" => $strError), $strTemplateErrorFormid);
         }
 
-        $strTemplateID = $this->objTemplate->readTemplate("/element_tellafriend/".$this->arrElementData["tellafriend_template"], "tellafriend_form");
+        $strTemplateID = $this->objTemplate->readTemplate("/module_tellafriend/".$this->arrElementData["tellafriend_template"], "tellafriend_form");
         $arrTemplate["tellafriend_sender"] = htmlToString($this->getParam("tellafriend_sender"), true);
         $arrTemplate["tellafriend_sender_name"] = htmlToString($this->getParam("tellafriend_sender_name"), true);
         $arrTemplate["tellafriend_receiver"] = htmlToString($this->getParam("tellafriend_receiver"), true);
@@ -91,12 +101,12 @@ class class_element_tellafriend_portal extends class_element_portal implements i
             $this->arrError[] = $this->getLang("tellafriend_receiver");
         }
 
-        if(!$objTextValidator->validate($this->getParam("tellafriend_sender_name"), 3)) {
+        if(!$objTextValidator->validate($this->getParam("tellafriend_sender_name"))) {
             $bitReturn = false;
             $this->arrError[] = $this->getLang("tellafriend_sender_name");
         }
 
-        if(!$objTextValidator->validate($this->getParam("tellafriend_receiver_name"), 3)) {
+        if(!$objTextValidator->validate($this->getParam("tellafriend_receiver_name"))) {
             $bitReturn = false;
             $this->arrError[] = $this->getLang("tellafriend_receiver_name");
         }
@@ -128,14 +138,14 @@ class class_element_tellafriend_portal extends class_element_portal implements i
             if($arrPair[0] == "page") {
                 $strPage = $arrPair[1];
             }
-            else if($arrPair[0] == "systemid") {
+            elseif($arrPair[0] == "systemid") {
                 $strSystemid = $arrPair[1];
             }
-            else if($arrPair[0] == "action") {
+            elseif($arrPair[0] == "action") {
                 $strAction = $arrPair[1];
             }
             //everything but the language command
-            else if($arrPair[0] != "language") {
+            elseif($arrPair[0] != "language") {
                 $strParams .= "&".$arrPair[0]."=".$arrPair[1];
             }
 
@@ -155,7 +165,7 @@ class class_element_tellafriend_portal extends class_element_portal implements i
         $strEmailBody = $objScriptlet->processString($strEmailBody);
 
         //TODO: check if we have to remove critical characters here?
-        $strSubject = $this->fillTemplate(array("tellafriend_sender_name" => htmlStripTags($this->getParam("tellafriend_sender_name"))), $this->objTemplate->readTemplate("/element_tellafriend/".$this->arrElementData["tellafriend_template"], "email_subject"));
+        $strSubject = $this->fillTemplate(array("tellafriend_sender_name" => htmlStripTags($this->getParam("tellafriend_sender_name"))), $this->objTemplate->readTemplate("/module_tellafriend/".$this->arrElementData["tellafriend_template"], "email_subject"));
 
         //TODO: check if we have to remove critical characters here?
         $objEmail = new class_mail();

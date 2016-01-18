@@ -5,15 +5,19 @@
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 ********************************************************************************************************/
 
+namespace Kajona\Tellafriend\Admin\Elements;
+
+use Kajona\Pages\Admin\AdminElementInterface;
+use Kajona\Pages\Admin\ElementAdmin;
+
 
 /**
  * Class to handle the admin-stuff of the tellafriend-element
  *
- * @package element_tellafriend
  * @author sidler@mulchprod.de
  * @targetTable element_tellafriend.content_id
  */
-class class_element_tellafriend_admin extends class_element_admin implements interface_admin_element {
+class ElementTellafriendAdmin extends ElementAdmin implements AdminElementInterface {
 
     /**
      * @var string
@@ -23,7 +27,7 @@ class class_element_tellafriend_admin extends class_element_admin implements int
      * @fieldType template
      * @fieldLabel template
      *
-     * @fieldTemplateDir /element_tellafriend
+     * @fieldTemplateDir /module_tellafriend
      */
     private $strTemplate;
 
