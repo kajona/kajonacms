@@ -7,16 +7,22 @@
 *	$Id$                                   *
 ********************************************************************************************************/
 
+namespace Kajona\Markdown\Admin\Elements;
+
+use class_element_admin;
+use interface_admin_element;
+use Kajona\Pages\Admin\AdminElementInterface;
+use Kajona\Pages\Admin\ElementAdmin;
+
 
 /**
  * Class to handle the admin-stuff of the markdown-element
  *
- * @package element_markdown
  * @author sidler@mulchprod.de
  *
  * @targetTable element_universal.content_id
  */
-class class_element_markdown_admin extends class_element_admin implements interface_admin_element {
+class ElementMarkdownAdmin extends ElementAdmin implements AdminElementInterface {
 
     /**
      * @var string
@@ -25,7 +31,7 @@ class class_element_markdown_admin extends class_element_admin implements interf
      * @fieldType template
      * @fieldLabel template
      *
-     * @fieldTemplateDir /element_markdown
+     * @fieldTemplateDir /module_markdown
      */
     private $strTemplate = "";
 

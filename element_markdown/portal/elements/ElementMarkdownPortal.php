@@ -4,15 +4,23 @@
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 ********************************************************************************************************/
 
+namespace Kajona\Markdown\Portal\Elements;
+
+use class_remoteloader;
+use class_resourceloader;
+use Kajona\Pages\Portal\ElementPortal;
+use Kajona\Pages\Portal\PortalElementInterface;
+use Parsedown;
+
+
 /**
  * Loads the markdown specified in the element-settings and prepares the output
  *
- * @package element_markdown
  * @author sidler@mulchprod.de
  *
  * @targetTable element_universal.content_id
  */
-class class_element_markdown_portal extends class_element_portal implements interface_portal_element {
+class ElementMarkdownPortal extends ElementPortal implements PortalElementInterface {
 
     /**
      * Loads the feed and displays it
@@ -21,7 +29,7 @@ class class_element_markdown_portal extends class_element_portal implements inte
      */
     public function loadData() {
         
-        require_once class_resourceloader::getInstance()->getCorePathForModule("element_markdown", true)."/element_markdown/vendor/autoload.php";
+        require_once class_resourceloader::getInstance()->getCorePathForModule("element_markdown", true)."/module_markdown/vendor/autoload.php";
 
         $arrUrl = parse_url($this->arrElementData["char2"]);
 
@@ -38,7 +46,7 @@ class class_element_markdown_portal extends class_element_portal implements inte
 
         return $this->objTemplate->fillTemplate(
             array("markdown_content" => $strParsed, "markdown_url" => $this->arrElementData["char2"]),
-            $this->objTemplate->readTemplate("/element_markdown/".$this->arrElementData["char1"], "markdown"),
+            $this->objTemplate->readTemplate("/module_markdown/".$this->arrElementData["char1"], "markdown"),
             true
         );
     }
