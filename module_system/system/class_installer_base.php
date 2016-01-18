@@ -50,15 +50,10 @@ abstract class class_installer_base extends class_root implements interface_inst
         $strReturn = "";
 
         $objModule = null;
-        if($this->objMetadata->getStrType() == class_module_packagemanager_manager::STR_TYPE_ELEMENT) {
-            if(class_module_system_module::getModuleByName("pages") !== null && is_dir(class_resourceloader::getInstance()->getCorePathForModule("module_pages", true)))
-                $objModule = class_module_pages_element::getElement(uniStrReplace("element_", "", $this->objMetadata->getStrTitle()));
-        }
-        else
-            $objModule = class_module_system_module::getModuleByName($this->objMetadata->getStrTitle());
+        $objModule = class_module_system_module::getModuleByName($this->objMetadata->getStrTitle());
 
         if($objModule === null) {
-            class_logger::getInstance("triggering installation of ".$this->objMetadata->getStrTitle(), class_logger::$levelInfo);
+            class_logger::getInstance(class_logger::PACKAGEMANAGEMENT)->addLogRow("triggering installation of ".$this->objMetadata->getStrTitle(), class_logger::$levelInfo);
             $strReturn .= $this->install();
         }
         else {
@@ -66,7 +61,7 @@ abstract class class_installer_base extends class_root implements interface_inst
             $strVersionAvailable = $this->objMetadata->getStrVersion();
 
             if(version_compare($strVersionAvailable, $strVersionInstalled, ">")) {
-                class_logger::getInstance("triggering update of ".$this->objMetadata->getStrTitle(), class_logger::$levelInfo);
+                class_logger::getInstance(class_logger::PACKAGEMANAGEMENT)->addLogRow("triggering update of ".$this->objMetadata->getStrTitle(), class_logger::$levelInfo);
                 $strReturn .= $this->update();
             }
         }
@@ -150,7 +145,7 @@ abstract class class_installer_base extends class_root implements interface_inst
     protected function updateElementVersion($strElementName, $strVersion) {
         if(class_module_system_module::getModuleByName("pages", true) !== null && class_resourceloader::getInstance()->getCorePathForModule("module_pages") !== null) {
             $this->objDB->flushQueryCache();
-            $objElement = \Kajona\Pages\System\PagesElement::getElement($strElementName);
+            $objElement = PagesElement::getElement($strElementName);
             if($objElement != null) {
                 $objElement->setStrVersion($strVersion);
                 $objElement->updateObjectToDb();

@@ -212,7 +212,7 @@ The metadata.xml file contains a descriptive xml-document. It contains general i
   <description>Renders the date of the pages' last modification.</description>
   <version>4.3</version>
   <author>Kajona Team</author>
-  <type>ELEMENT</type>
+  <type>MODULE</type>
   <providesInstaller>TRUE</providesInstaller>
   <requiredModules>
     <module name="system" version="4.3" />
