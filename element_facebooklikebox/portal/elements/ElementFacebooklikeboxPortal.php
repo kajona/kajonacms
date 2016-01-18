@@ -5,12 +5,17 @@
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 ********************************************************************************************************/
 
+namespace Kajona\Facebooklikebox\Portal\Elements;
+
+use Kajona\Pages\Portal\ElementPortal;
+use Kajona\Pages\Portal\PortalElementInterface;
+
+
 /**
- * @package element_facebooklikebox
  * @author jschroeter@kajona.de
  * @targetTable element_universal.content_id
  */
-class class_element_facebooklikebox_portal extends class_element_portal implements interface_portal_element {
+class ElementFacebooklikeboxPortal extends ElementPortal implements PortalElementInterface {
 
 
     /**
@@ -21,7 +26,7 @@ class class_element_facebooklikebox_portal extends class_element_portal implemen
     public function loadData() {
         $strLanguage = $this->getStrPortalLanguage();
         //load the template
-        $strTemplateID = $this->objTemplate->readTemplate("/element_facebooklikebox/".$this->arrElementData["char1"], "facebooklikebox");
+        $strTemplateID = $this->objTemplate->readTemplate("/module_facebooklikebox/".$this->arrElementData["char1"], "facebooklikebox");
         $strReturn = $this->fillTemplate(array("portallanguage" => $strLanguage), $strTemplateID);
         return "adfsdfs".$strReturn;
     }

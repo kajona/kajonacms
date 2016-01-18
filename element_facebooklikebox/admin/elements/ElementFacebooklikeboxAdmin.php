@@ -5,17 +5,21 @@
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 ********************************************************************************************************/
 
+namespace Kajona\Facebooklikebox\Admin\Elements;
+
+use Kajona\Pages\Admin\AdminElementInterface;
+use Kajona\Pages\Admin\ElementAdmin;
+
 
 /**
  * Class to handle the admin-stuff of the tagto-element
  *
- * @package element_facebooklikebox
  * @author jschroeter@kajona.de
  *
  * @targetTable element_universal.content_id
  *
  */
-class class_element_facebooklikebox_admin extends class_element_admin implements interface_admin_element {
+class ElementFacebooklikeboxAdmin extends ElementAdmin implements AdminElementInterface {
 
 
     /**
@@ -25,7 +29,7 @@ class class_element_facebooklikebox_admin extends class_element_admin implements
      * @fieldType template
      * @fieldLabel template
      *
-     * @fieldTemplateDir /element_facebooklikebox
+     * @fieldTemplateDir /module_facebooklikebox
      */
     private $strChar1;
 
