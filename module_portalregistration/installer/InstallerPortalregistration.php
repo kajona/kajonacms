@@ -19,7 +19,7 @@ use Kajona\Pages\System\PagesElement;
  * @author sidler@mulchprod.de
  * @moduleId _portalregistration_module_id_
  */
-class class_installer_element_portalregistration extends class_installer_base implements interface_installer_removable {
+class InstallerPortalregistration extends class_installer_base implements interface_installer_removable {
 
 	public function install() {
 		$strReturn = "";

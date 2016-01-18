@@ -5,14 +5,24 @@
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 ********************************************************************************************************/
 
+namespace Kajona\Userlist\Portal\Elements;
+
+use class_csv;
+use class_date;
+use class_module_user_group;
+use class_module_user_user;
+use class_usersources_user_kajona;
+use Kajona\Pages\Portal\ElementPortal;
+use Kajona\Pages\Portal\PortalElementInterface;
+
+
 /**
  * Creates a table-based list of all users including the option to export the list as csv.
  *
- * @package element_userlist
  * @author sidler@mulchprod.de
  * @targetTable element_universal.content_id
  */
-class class_element_userlist_portal extends class_element_portal implements interface_portal_element {
+class ElementUserlistPortal extends ElementPortal implements PortalElementInterface {
 
 
     public function loadData() {
@@ -80,8 +90,8 @@ class class_element_userlist_portal extends class_element_portal implements inte
     private function getUserlist() {
         $strReturn = "";
 
-        $strTemplateWrapperID = $this->objTemplate->readTemplate("/element_userlist/".$this->arrElementData["char1"], "userlist_wrapper");
-        $strTemplateRowID = $this->objTemplate->readTemplate("/element_userlist/".$this->arrElementData["char1"], "userlist_row");
+        $strTemplateWrapperID = $this->objTemplate->readTemplate("/module_userlist/".$this->arrElementData["char1"], "userlist_wrapper");
+        $strTemplateRowID = $this->objTemplate->readTemplate("/module_userlist/".$this->arrElementData["char1"], "userlist_row");
 
         $arrUserFinal = $this->loadUserlist();
 
@@ -139,7 +149,7 @@ class class_element_userlist_portal extends class_element_portal implements inte
                 }
             }
         }
-        else if($this->arrElementData["int1"] == "2") {
+        elseif($this->arrElementData["int1"] == "2") {
             foreach($arrUser as /** @var class_module_user_user */
                     $objOneUser) {
                 if($objOneUser->getIntActive() == "0") {

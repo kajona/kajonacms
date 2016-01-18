@@ -5,14 +5,20 @@
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 ********************************************************************************************************/
 
+namespace Kajona\Userlist\Installer;
+
+use class_installer_base;
+use class_module_system_module;
+use interface_installer_removable;
+use Kajona\Pages\System\PagesElement;
+
 /**
  * Installer to install a login-element to use in the portal
  *
- * @package element_userlist
  * @author sidler@mulchprod.de
- * @moduleId _pages_content_modul_id_
+ * @moduleId _userlist_module_id_
  */
-class class_installer_element_userlist extends class_elementinstaller_base implements interface_installer {
+class InstallerUserlist extends class_installer_base implements interface_installer_removable {
 
 	public function install() {
 		$strReturn = "";
@@ -20,8 +26,9 @@ class class_installer_element_userlist extends class_elementinstaller_base imple
 		//Register the element
         $strReturn .= "Registering userlist-element...\n";
         //check, if not already existing
-        if(class_module_pages_element::getElement("userlist") == null) {
-            $objElement = new class_module_pages_element();
+        $objElement = PagesElement::getElement("userlist");
+        if($objElement == null) {
+            $objElement = new PagesElement();
             $objElement->setStrName("userlist");
             $objElement->setStrClassAdmin("class_element_userlist_admin.php");
             $objElement->setStrClassPortal("class_element_userlist_portal.php");
@@ -33,27 +40,44 @@ class class_installer_element_userlist extends class_elementinstaller_base imple
         }
         else {
             $strReturn .= "Element already installed!...\n";
+
+            if($objElement->getStrVersion() < 1) {
+                $strReturn .= "Updating element version!...\n";
+                $objElement->setStrVersion("1.0");
+                $objElement->updateObjectToDb();
+            }
         }
         return $strReturn;
-	}
+    }
 
 
-	public function update() {
+    /**
+     * @return string
+     */
+    public function update() {
         $strReturn = "";
-        if(class_module_pages_element::getElement("userlist")->getStrVersion() == "0.2") {
-            $strReturn = "Updating element userlist to 0.3...\n";
-            $this->updateElementVersion("userlist", "0.3");
-            $this->objDB->flushQueryCache();
-        }
-        if(class_module_pages_element::getElement("userlist")->getStrVersion() == "0.3") {
-            $strReturn = "Updating element userlist to 0.4...\n";
-            $this->updateElementVersion("userlist", "0.4");
-            $this->objDB->flushQueryCache();
+
+        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        if($arrModule["module_version"] == "1.0") {
+            $strReturn .= "Updating 1.0 to 1.1...\n";
+            $this->updateElementAndModule("1.1");
         }
 
         return $strReturn;
     }
-    
 
-    
+    /**
+     * @inheritdoc
+     */
+    public function isRemovable() {
+        return true;
+    }
+
+
+    /**
+     * @inheritdoc
+     */
+    public function remove(&$strReturn) {
+        return $this->removeModuleAndElement($strReturn);
+    }
 }

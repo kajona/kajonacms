@@ -5,11 +5,11 @@
         >
     <title>userlist</title>
     <description>Renders a table of all users (filtered by groups) and provides a csv download.</description>
-    <version>0.4</version>
+    <version>1.0</version>
     <author>Kajona Team</author>
-    <type>ELEMENT</type>
+    <type>MODULE</type>
     <providesInstaller>TRUE</providesInstaller>
     <requiredModules>
-        <module name="pages" version="4.5" />
+        <module name="pages" version="4.7" />
     </requiredModules>
 </package>

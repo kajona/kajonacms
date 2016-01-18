@@ -5,15 +5,21 @@
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 ********************************************************************************************************/
 
+namespace Kajona\Userlist\Admin\Elements;
+
+use class_module_user_group;
+use Kajona\Pages\Admin\AdminElementInterface;
+use Kajona\Pages\Admin\ElementAdmin;
+
+
 /**
  * Class to handle the admin-stuff of the userlist-element
  *
- * @package element_userlist
  * @author sidler@mulchprod.de
  *
  * @targetTable element_universal.content_id
  */
-class class_element_userlist_admin extends class_element_admin implements interface_admin_element {
+class ElementUserlistAdmin extends ElementAdmin implements AdminElementInterface {
 
     /**
      * @var string
@@ -22,7 +28,7 @@ class class_element_userlist_admin extends class_element_admin implements interf
      * @fieldType template
      * @fieldLabel template
      *
-     * @fieldTemplateDir /element_userlist
+     * @fieldTemplateDir /module_userlist
      */
     private $strChar1;
 

@@ -10,6 +10,7 @@ namespace Kajona\Markdown\Installer;
 use class_installer_base;
 use class_module_system_module;
 use interface_installer;
+use interface_installer_removable;
 use Kajona\Pages\System\PagesElement;
 
 /**
@@ -18,7 +19,7 @@ use Kajona\Pages\System\PagesElement;
  * @author sidler@mulchprod.de
  * @moduleId _markdown_module_id_
  */
-class class_installer_element_markdown extends class_installer_base implements interface_installer {
+class InstallerMarkdown extends class_installer_base implements interface_installer_removable {
 
 	public function install() {
 		$strReturn = "";
