@@ -28,7 +28,7 @@ class InstallerFormular extends class_installer_base implements interface_instal
 		//Table for page-element
 		$strReturn .= "Installing formular-element table...\n";
         $objManager = new class_orm_schemamanager();
-        $objManager->createTable("ElementFormularAdmin");
+        $objManager->createTable("Kajona\\Formular\\Admin\\Elements\\ElementFormularAdmin");
 
 
         //register the module

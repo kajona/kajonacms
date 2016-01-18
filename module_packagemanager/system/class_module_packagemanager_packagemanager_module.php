@@ -346,9 +346,8 @@ class class_module_packagemanager_packagemanager_module implements interface_pac
         //start with modules
         foreach($arrInstaller as $strOneInstaller) {
 
-            $strName = uniSubstr($strOneInstaller, 0, -4);
             /** @var $objInstaller interface_installer */
-            $objInstaller = new $strName();
+            $objInstaller = class_classloader::getInstance()->getInstanceFromFilename(_realpath_.$objMetadata->getStrPath()."/installer/".$strOneInstaller);
             $arrReturn[] = $objInstaller;
         }
 

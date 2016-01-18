@@ -31,7 +31,7 @@ class InstallerTellafriend extends class_installer_base implements interface_ins
         //Table for page-element
 		$strReturn .= "Installing tellafriend-element table...\n";
         $objManager = new class_orm_schemamanager();
-        $objManager->createTable("ElementTellafriendAdmin");
+        $objManager->createTable("Kajona\\Tellafriend\\Admin\\Elements\\ElementTellafriendAdmin");
 
 		//Register the element
 		$strReturn .= "Registering tellafriend-element...\n";
