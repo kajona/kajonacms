@@ -5,15 +5,24 @@
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 ********************************************************************************************************/
 
+namespace Kajona\Languageswitch\Portal\Elements;
+
+use class_module_languages_language;
+use class_module_languages_languageset;
+use class_objectfactory;
+use Kajona\Pages\Portal\ElementPortal;
+use Kajona\Pages\Portal\PortalElementInterface;
+use Kajona\Pages\System\PagesPage;
+
+
 /**
  * Portal-Class of the picture element
  *
- * @package element_languageswitch
  * @author sidler@mulchprod.de
  *
  * @targetTable element_universal.content_id
  */
-class class_element_languageswitch_portal extends class_element_portal implements interface_portal_element {
+class ElementLanguageswitchPortal extends ElementPortal implements PortalElementInterface {
 
     /**
      * Returns the ready switch-htmlcode
@@ -35,7 +44,7 @@ class class_element_languageswitch_portal extends class_element_portal implement
         $strRows = "";
         foreach($arrObjLanguages as $objOneLanguage) {
             //Check, if the current page has elements
-            $objPage = class_module_pages_page::getPageByName($this->getPagename());
+            $objPage = PagesPage::getPageByName($this->getPagename());
             $objPage->setStrLanguage($objOneLanguage->getStrName());
             if($objPage === null)
                 continue;
@@ -66,8 +75,8 @@ class class_element_languageswitch_portal extends class_element_portal implement
             $arrTemplate["langname_short"] = $objOneLanguage->getStrName();
             $arrTemplate["langname_long"] = $this->getLang("lang_".$objOneLanguage->getStrName());
 
-            $strTemplateRowID = $this->objTemplate->readTemplate("/element_languageswitch/".$this->arrElementData["char1"], "languageswitch_entry");
-            $strTemplateActiveRowID = $this->objTemplate->readTemplate("/element_languageswitch/".$this->arrElementData["char1"], "languageswitch_entry_active");
+            $strTemplateRowID = $this->objTemplate->readTemplate("/module_languageswitch/".$this->arrElementData["char1"], "languageswitch_entry");
+            $strTemplateActiveRowID = $this->objTemplate->readTemplate("/module_languageswitch/".$this->arrElementData["char1"], "languageswitch_entry_active");
 
             if($objOneLanguage->getStrName() == $this->getStrPortalLanguage())
                 $strRows .= $this->fillTemplate($arrTemplate, $strTemplateActiveRowID);
@@ -76,7 +85,7 @@ class class_element_languageswitch_portal extends class_element_portal implement
 
         }
 
-        $strTemplateWrapperID = $this->objTemplate->readTemplate("/element_languageswitch/".$this->arrElementData["char1"], "languageswitch_wrapper");
+        $strTemplateWrapperID = $this->objTemplate->readTemplate("/module_languageswitch/".$this->arrElementData["char1"], "languageswitch_wrapper");
         return $this->fillTemplate(array("languageswitch_entries" => $strRows), $strTemplateWrapperID);
     }
 

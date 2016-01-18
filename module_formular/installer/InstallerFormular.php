@@ -8,7 +8,7 @@
 
 namespace Kajona\Formular\Installer;
 
-use class_elementinstaller_base;
+use class_installer_base;
 use class_module_system_module;
 use class_orm_schemamanager;
 use interface_installer;
@@ -20,7 +20,7 @@ use Kajona\Pages\System\PagesElement;
  * @author sidler@mulchprod.de
  * @moduleId _formular_module_id_
  */
-class InstallerFormular extends class_elementinstaller_base implements interface_installer {
+class InstallerFormular extends class_installer_base implements interface_installer {
 
     public function install() {
 		$strReturn = "";

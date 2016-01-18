@@ -3,55 +3,59 @@
 *   (c) 2004-2006 by MulchProductions, www.mulchprod.de                                                 *
 *   (c) 2007-2015 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
+*-------------------------------------------------------------------------------------------------------*
+*	$Id$                                   *
 ********************************************************************************************************/
-
-namespace Kajona\Flash\Installer;
+namespace Kajona\Languageswitch\Installer;
 
 use class_installer_base;
 use class_module_system_module;
-use interface_installer_removable;
+use interface_installer;
 use Kajona\Pages\System\PagesElement;
 
 /**
- * Installer to install a flash-element to use in the portal
+ * Installer for the languageswitch element
  *
- * @author jschroeter@kajona.de
- * @moduleId _flash_module_id_
+ * @author sidler@mulchprod.de
+ * @moduleId _languageswitch_module_id_
  */
-class InstallerFlash extends class_installer_base implements interface_installer_removable {
+class InstallerLanguageswitch extends class_installer_base implements interface_installer {
 
-	public function install() {
+    public function install() {
 
         //register the module
-        $this->registerModule($this->objMetadata->getStrTitle(), _flash_module_id_, "", "", $this->objMetadata->getStrVersion(), false);
+        $this->registerModule($this->objMetadata->getStrTitle(), _languageswitch_module_id_, "", "", $this->objMetadata->getStrVersion(), false);
 
 
-        $strReturn = "";
-		//Register the element
-		$strReturn .= "Registering flash-element...\n";
-        $objElement = PagesElement::getElement($this->objMetadata->getStrTitle());
+        //Register the element
+        $strReturn = "Registering languageswitch-element...\n";
+
+        //check, if not already existing
+        $objElement = PagesElement::getElement("languageswitch");
         if($objElement == null) {
-		    $objElement = new PagesElement();
-		    $objElement->setStrName($this->objMetadata->getStrTitle());
-		    $objElement->setStrClassAdmin("class_element_flash_admin.php");
-		    $objElement->setStrClassPortal("class_element_flash_portal.php");
-		    $objElement->setIntCachetime(3600);
-		    $objElement->setIntRepeat(0);
+            $objElement = new PagesElement();
+            $objElement->setStrName("languageswitch");
+            $objElement->setStrClassAdmin("ElementLanguageswitchAdmin.php");
+            $objElement->setStrClassPortal("ElementLanguageswitchPortal.php");
+            $objElement->setIntCachetime(3600*24*30);
+            $objElement->setIntRepeat(0);
             $objElement->setStrVersion($this->objMetadata->getStrVersion());
-			$objElement->updateObjectToDb();
-			$strReturn .= "Element registered...\n";
-		}
-		else {
-			$strReturn .= "Element already installed!...\n";
+            $objElement->updateObjectToDb();
+            $strReturn .= "Element registered...\n";
+        }
+        else {
+            $strReturn .= "Element already installed!...\n";
 
             if($objElement->getStrVersion() < 5) {
                 $strReturn .= "Updating element version!...\n";
                 $objElement->setStrVersion("5.0");
                 $objElement->updateObjectToDb();
             }
-		}
-		return $strReturn;
-	}
+        }
+
+        return $strReturn;
+    }
+
 
     /**
      * @return string
