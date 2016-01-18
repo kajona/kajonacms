@@ -7,6 +7,15 @@
 *	$Id$                                   *
 ********************************************************************************************************/
 
+namespace Kajona\Rssfeed\Portal\Elements;
+
+use class_exception;
+use class_remoteloader;
+use class_xml_parser;
+use Kajona\Pages\Portal\ElementPortal;
+use Kajona\Pages\Portal\PortalElementInterface;
+
+
 /**
  * Loads the rssfeed specified in the element-settings and prepares the output
  *
@@ -15,7 +24,7 @@
  *
  * @targetTable element_universal.content_id
  */
-class class_element_rssfeed_portal extends class_element_portal implements interface_portal_element {
+class ElementRssfeedPortal extends ElementPortal implements PortalElementInterface {
 
     /**
      * Loads the feed and displays it
@@ -41,8 +50,8 @@ class class_element_rssfeed_portal extends class_element_portal implements inter
             $strFeed = "";
         }
 
-        $strFeedTemplateID = $this->objTemplate->readTemplate("/element_rssfeed/" . $this->arrElementData["char1"], "rssfeed_feed");
-        $strPostTemplateID = $this->objTemplate->readTemplate("/element_rssfeed/" . $this->arrElementData["char1"], "rssfeed_post");
+        $strFeedTemplateID = $this->objTemplate->readTemplate("/module_rssfeed/" . $this->arrElementData["char1"], "rssfeed_feed");
+        $strPostTemplateID = $this->objTemplate->readTemplate("/module_rssfeed/" . $this->arrElementData["char1"], "rssfeed_post");
 
         $strContent = "";
         $arrTemplate = array();

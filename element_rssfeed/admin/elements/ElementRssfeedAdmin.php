@@ -7,16 +7,20 @@
 *	$Id$                                   *
 ********************************************************************************************************/
 
+namespace Kajona\Rssfeed\Admin\Elements;
+
+use Kajona\Pages\Admin\AdminElementInterface;
+use Kajona\Pages\Admin\ElementAdmin;
+
 
 /**
  * Class to handle the admin-stuff of the rssfeed-element
  *
- * @package element_rssfeed
  * @author sidler@mulchprod.de
  *
  * @targetTable element_universal.content_id
  */
-class class_element_rssfeed_admin extends class_element_admin implements interface_admin_element {
+class ElementRssfeedAdmin extends ElementAdmin implements AdminElementInterface {
 
     /**
      * @var string
@@ -25,7 +29,7 @@ class class_element_rssfeed_admin extends class_element_admin implements interfa
      * @fieldType template
      * @fieldLabel template
      *
-     * @fieldTemplateDir /element_rssfeed
+     * @fieldTemplateDir /module_rssfeed
      */
     private $strChar1;
 
