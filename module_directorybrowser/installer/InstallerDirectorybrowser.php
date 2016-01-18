@@ -19,6 +19,9 @@ use Kajona\Pages\System\PagesElement;
  */
 class InstallerDirectorybrowser extends class_installer_base implements interface_installer_removable {
 
+    /**
+     * @inheritdoc
+     */
 	public function install() {
         $strReturn = "";
 
@@ -68,11 +71,7 @@ class InstallerDirectorybrowser extends class_installer_base implements interfac
 
 
     /**
-     * Validates whether the current module/element is removable or not.
-     * This is the place to trigger special validations and consistency checks going
-     * beyond the common metadata-dependencies.
-     *
-     * @return bool
+     * @inheritdoc
      */
     public function isRemovable() {
         return true;
@@ -80,12 +79,7 @@ class InstallerDirectorybrowser extends class_installer_base implements interfac
 
 
     /**
-     * Removes the elements / modules handled by the current installer.
-     * Use the reference param to add a human readable logging.
-     *
-     * @param string &$strReturn
-     *
-     * @return bool
+     * @inheritdoc
      */
     public function remove(&$strReturn) {
         return $this->removeModuleAndElement($strReturn);
