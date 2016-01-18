@@ -5,15 +5,30 @@
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 ********************************************************************************************************/
 
+namespace Kajona\Portalupload\Portal\Elements;
+
+use class_carrier;
+use class_element_portal;
+use class_filesystem;
+use class_http_responsetypes;
+use class_http_statuscodes;
+use class_link;
+use class_module_mediamanager_file;
+use class_module_mediamanager_repo;
+use class_objectfactory;
+use class_response_object;
+use Kajona\Pages\Portal\ElementPortal;
+use Kajona\Pages\Portal\PortalElementInterface;
+
+
 /**
  * Portal Element to load the login-form, or a small "status" area, providing an logout link
  *
- * @package element_portalupload
  * @author sidler@mulchprod.de
  *
  * @targetTable element_universal.content_id
  */
-class class_element_portalupload_portal extends class_element_portal implements interface_portal_element {
+class ElementPortaluploadPortal extends ElementPortal implements PortalElementInterface {
 
     /**
      * @return string
@@ -24,7 +39,7 @@ class class_element_portalupload_portal extends class_element_portal implements 
         if($this->getParam("submitPortaluploadForm") == "1") {
             $strReturn .= $this->doUpload();
         }
-        else if($this->getParam("submitAjaxUpload") == "1") {
+        elseif($this->getParam("submitAjaxUpload") == "1") {
             $strReturn .= $this->doAjaxUpload();
         }
         else {
@@ -50,7 +65,7 @@ class class_element_portalupload_portal extends class_element_portal implements 
         if($objFilemanagerRepo->rightRight1()) {
 
 
-            $strTemplateID = $this->objTemplate->readTemplate("/element_portalupload/" . $this->arrElementData["char1"], "portalupload_uploadform");
+            $strTemplateID = $this->objTemplate->readTemplate("/module_portalupload/" . $this->arrElementData["char1"], "portalupload_uploadform");
 
             $strDlFolderId = "";
             if($this->getParam("action") == "mediaFolder") {

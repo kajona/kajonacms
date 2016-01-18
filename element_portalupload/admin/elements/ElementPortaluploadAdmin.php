@@ -5,15 +5,21 @@
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 ********************************************************************************************************/
 
+namespace Kajona\Portalupload\Admin\Elements;
+
+use class_module_mediamanager_repo;
+use Kajona\Pages\Admin\AdminElementInterface;
+use Kajona\Pages\Admin\ElementAdmin;
+
+
 /**
  * Class to handle the admin-stuff of the portalupload-element
  *
- * @package element_portalupload
  * @author sidler@mulchprod.de
  *
  * @targetTable element_universal.content_id
  */
-class class_element_portalupload_admin extends class_element_admin implements interface_admin_element {
+class ElementPortaluploadAdmin extends ElementAdmin implements AdminElementInterface {
 
     /**
      * @var string
@@ -22,7 +28,7 @@ class class_element_portalupload_admin extends class_element_admin implements in
      * @fieldType template
      * @fieldLabel template
      *
-     * @fieldTemplateDir /element_portalupload
+     * @fieldTemplateDir /module_portalupload
      */
     private $strChar1;
 
