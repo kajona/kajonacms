@@ -84,8 +84,7 @@ class class_date_range
 
     public static function getIntervalByString($strInterval)
     {
-        $strMethod = strtoupper($strInterval);
-        return class_date_period_enum::$strMethod();
+        return call_user_func(array('class_date_period_enum', strtoupper($strInterval)));
     }
 
     /**
