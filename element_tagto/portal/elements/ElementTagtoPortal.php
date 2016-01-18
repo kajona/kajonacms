@@ -5,14 +5,19 @@
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 ********************************************************************************************************/
 
+namespace Kajona\Tagto\Portal\Elements;
+
+use Kajona\Pages\Portal\ElementPortal;
+use Kajona\Pages\Portal\PortalElementInterface;
+
+
 /**
  * Loads the last-modified date of the current page and prepares it for output
  *
- * @package element_tagto
  * @author sidler@mulchprod.de
  * @targetTable element_universal.content_id
  */
-class class_element_tagto_portal extends class_element_portal implements interface_portal_element {
+class ElementTagtoPortal extends ElementPortal implements PortalElementInterface {
 
 
     /**
@@ -27,7 +32,7 @@ class class_element_tagto_portal extends class_element_portal implements interfa
         $strPageName = $this->getPagename();
 
         //load the template
-        $strTemplateID = $this->objTemplate->readTemplate("/element_tagto/".$this->arrElementData["char1"], "tagtos");
+        $strTemplateID = $this->objTemplate->readTemplate("/module_tagto/".$this->arrElementData["char1"], "tagtos");
         $strLink = getLinkPortalHref($strPageName, "", $strActions, "", $strSystemid);
         $strReturn = $this->fillTemplate(array("pageurl" => $strLink), $strTemplateID);
 

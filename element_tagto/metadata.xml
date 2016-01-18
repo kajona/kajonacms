@@ -5,9 +5,9 @@
         >
     <title>tagto</title>
     <description>A simple element embedding a "tag to service X" box to the current page, e.g. to facebook, google...</description>
-    <version>4.7</version>
+    <version>5.0</version>
     <author>Kajona Team</author>
-    <type>ELEMENT</type>
+    <type>MODULE</type>
     <providesInstaller>TRUE</providesInstaller>
     <requiredModules>
         <module name="pages" version="4.7" />

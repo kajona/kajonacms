@@ -5,16 +5,20 @@
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 ********************************************************************************************************/
 
+namespace Kajona\Tagto\Admin\Elements;
+
+use Kajona\Pages\Admin\AdminElementInterface;
+use Kajona\Pages\Admin\ElementAdmin;
+
 
 /**
  * Class to handle the admin-stuff of the tagto-element
  *
- * @package element_tagto
  * @author sidler@mulchprod.de
  *
  * @targetTable element_universal.content_id
  */
-class class_element_tagto_admin extends class_element_admin implements interface_admin_element {
+class ElementTagtoAdmin extends ElementAdmin implements AdminElementInterface {
 
     /**
      * @var string
@@ -23,7 +27,7 @@ class class_element_tagto_admin extends class_element_admin implements interface
      * @fieldType template
      * @fieldLabel template
      *
-     * @fieldTemplateDir /element_tagto
+     * @fieldTemplateDir /module_tagto
      */
     private $strChar1;
 
