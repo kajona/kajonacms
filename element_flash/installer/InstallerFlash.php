@@ -5,41 +5,37 @@
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 ********************************************************************************************************/
 
-namespace Kajona\Facebooklikebox\Installer;
+namespace Kajona\Flash\Installer;
 
 use class_elementinstaller_base;
 use class_module_system_module;
-use interface_installer;
+use interface_installer_removable;
 use Kajona\Pages\System\PagesElement;
 
 /**
- * Installer to install a facebooklikebox-element to use in the portal
+ * Installer to install a flash-element to use in the portal
  *
- * @author sidler@mulchprod.de
- * @moduleId _facebooklikebox_module_id_
+ * @author jschroeter@kajona.de
+ * @moduleId _flash_module_id_
  */
-class InstallerFacebooklikebox extends class_elementinstaller_base implements interface_installer {
+class InstallerFlash extends class_elementinstaller_base implements interface_installer_removable {
 
-    /**
-     * @inheritdoc
-     */
 	public function install() {
-		$strReturn = "";
 
         //register the module
-        $this->registerModule($this->objMetadata->getStrTitle(), _facebooklikebox_module_id_, "", "", $this->objMetadata->getStrVersion(), false);
+        $this->registerModule($this->objMetadata->getStrTitle(), _flash_module_id_, "", "", $this->objMetadata->getStrVersion(), false);
 
 
-        //Register the element
-		$strReturn .= "Registering facebooklikebox-element...\n";
-		//check, if not already existing
+        $strReturn = "";
+		//Register the element
+		$strReturn .= "Registering flash-element...\n";
         $objElement = PagesElement::getElement($this->objMetadata->getStrTitle());
         if($objElement == null) {
 		    $objElement = new PagesElement();
 		    $objElement->setStrName($this->objMetadata->getStrTitle());
-		    $objElement->setStrClassAdmin("class_element_facebooklikebox_admin.php");
-		    $objElement->setStrClassPortal("class_element_facebooklikebox_portal.php");
-		    $objElement->setIntCachetime(3600*24*30);
+		    $objElement->setStrClassAdmin("class_element_flash_admin.php");
+		    $objElement->setStrClassPortal("class_element_flash_portal.php");
+		    $objElement->setIntCachetime(3600);
 		    $objElement->setIntRepeat(0);
             $objElement->setStrVersion($this->objMetadata->getStrVersion());
 			$objElement->updateObjectToDb();
@@ -56,7 +52,6 @@ class InstallerFacebooklikebox extends class_elementinstaller_base implements in
 		}
 		return $strReturn;
 	}
-
 
     /**
      * @return string
@@ -87,4 +82,6 @@ class InstallerFacebooklikebox extends class_elementinstaller_base implements in
     public function remove(&$strReturn) {
         return $this->removeModuleAndElement($strReturn);
     }
+
+
 }

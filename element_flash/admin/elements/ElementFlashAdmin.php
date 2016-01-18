@@ -5,15 +5,20 @@
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 ********************************************************************************************************/
 
+namespace Kajona\Flash\Admin\Elements;
+
+use Kajona\Pages\Admin\AdminElementInterface;
+use Kajona\Pages\Admin\ElementAdmin;
+
+
 /**
  * Class to handle the admin-stuff of the flash-element
  *
- * @package element_flash
  * @author jschroeter@kajona.de
  *
  * @targetTable element_universal.content_id
  */
-class class_element_flash_admin extends class_element_admin implements interface_admin_element {
+class ElementFlashAdmin extends ElementAdmin implements AdminElementInterface {
 
     /**
      * @var string
@@ -32,7 +37,7 @@ class class_element_flash_admin extends class_element_admin implements interface
      * @fieldType template
      * @fieldLabel template
      *
-     * @fieldTemplateDir /element_flash
+     * @fieldTemplateDir /module_flash
      */
     private $strChar2;
 

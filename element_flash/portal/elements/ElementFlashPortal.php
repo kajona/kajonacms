@@ -5,14 +5,19 @@
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 ********************************************************************************************************/
 
+namespace Kajona\Flash\Portal\Elements;
+
+use Kajona\Pages\Portal\ElementPortal;
+use Kajona\Pages\Portal\PortalElementInterface;
+
+
 /**
  * Loads the flash element and prepares it for output
  *
- * @package element_flash
  * @author jschroeter@kajona.de
  * @targetTable element_universal.content_id
  */
-class class_element_flash_portal extends class_element_portal implements interface_portal_element {
+class ElementFlashPortal extends ElementPortal implements PortalElementInterface {
 
 
     /**
@@ -28,7 +33,7 @@ class class_element_flash_portal extends class_element_portal implements interfa
         $arrTemplate["width"] = $this->arrElementData["int1"];
         $arrTemplate["height"] = $this->arrElementData["int2"];
 
-        $strTemplateID = $this->objTemplate->readTemplate("/element_flash/".$this->arrElementData["char2"], "flash");
+        $strTemplateID = $this->objTemplate->readTemplate("/module_flash/".$this->arrElementData["char2"], "flash");
         $strReturn = $this->fillTemplate($arrTemplate, $strTemplateID);
 
         return $strReturn;

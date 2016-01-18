@@ -26,7 +26,7 @@ class InstallerDirectorybrowser extends class_installer_base implements interfac
         $strReturn = "";
 
         //register the module
-        $this->registerModule("directorybrowser", _directorybrowser_module_id_, "", "", $this->objMetadata->getStrVersion(), false);
+        $this->registerModule($this->objMetadata->getStrTitle(), _directorybrowser_module_id_, "", "", $this->objMetadata->getStrVersion(), false);
 
         //Register the element
         $strReturn .= "Registering directorybrowser-element...\n";
