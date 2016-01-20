@@ -186,9 +186,7 @@
     <target name="buildProject">
         <copy todir="${basedir}${projectPath}" overwrite="true"  includeEmptyDirs="true" >
             <fileset id="sources.dirs" dir="${basedir}${sourcesPath}">
-                <exclude name=".svn"/>
                 <exclude name=".git"/>
-                <include name="core*/element_*/**"/>
                 <include name="core*/module_*/*/**"/>
                 <include name="core*/template_*/*/**"/>
                 <include name="core*/_debugging/*/**"/>
@@ -203,37 +201,10 @@
         <antcall target="setupPackageFolders" />
         <copy todir="${basedir}${tempPath}" overwrite="true"  includeEmptyDirs="true" >
             <fileset id="sources.dirs" dir="${basedir}${sourcesPath}">
-                <exclude name=".svn"/>
                 <exclude name=".git"/>
                 <exclude name="core*/module_pchart/" />
                 <exclude name="core*/module_flotchart/" />
 
-                <include name="core*/element_*/**"/>
-                <include name="core*/module_*/*/**"/>
-                <include name="core*/template_*/*/**"/>
-                <include name="core*/*.php"/>
-                <include name="core*/*.htaccess"/>
-            </fileset>
-        </copy>
-
-        <antcall target="buildPackageHelper" />
-
-        <zip destfile="${basedir}${packagesPath}/kajona_v4_full_${DSTAMP}-${TSTAMP}.zip">
-            <fileset dir="${basedir}${tempPath}/../" />
-        </zip>
-    </target>
-
-
-    <!-- creates the full-zip including all modules and elements -->
-    <target name="buildFullPharZip" depends="init" >
-        <antcall target="setupPackageFolders" />
-        <copy todir="${basedir}${tempPath}" overwrite="true"  includeEmptyDirs="true" >
-            <fileset id="sources.dirs" dir="${basedir}${sourcesPath}">
-                <exclude name=".git"/>
-                <exclude name="core*/module_pchart/" />
-                <exclude name="core*/module_flotchart/" />
-
-                <include name="core*/element_*/**"/>
                 <include name="core*/module_*/*/**"/>
                 <include name="core*/template_*/*/**"/>
                 <include name="core*/*.php"/>
@@ -247,22 +218,24 @@
             <arg line="-f generate_phar.php removesource=true"/>
         </exec>
 
-        <zip destfile="${basedir}${packagesPath}/kajona_v5_full_${DSTAMP}-${TSTAMP}.zip">
+        <zip destfile="${basedir}${packagesPath}/kajona_v4_full_${DSTAMP}-${TSTAMP}.zip">
             <fileset dir="${basedir}${tempPath}/../" />
         </zip>
     </target>
+
+
+
 
     <!-- creates the full-zip including all modules and elements -->
     <target name="buildAllInOneZip" depends="init" >
         <antcall target="setupPackageFolders" />
         <copy todir="${basedir}${tempPath}" overwrite="true"  includeEmptyDirs="true" >
             <fileset id="sources.dirs" dir="${basedir}${sourcesPath}">
-                <exclude name=".svn"/>
                 <exclude name=".git"/>
-                <exclude name="core*/element_flash/" />
-                <exclude name="core*/element_maps/" />
-                <exclude name="core*/element_userlist/" />
-                <exclude name="core*/element_mediaplayer/" />
+                <exclude name="core*/module_flash/" />
+                <exclude name="core*/module_maps/" />
+                <exclude name="core*/module_userlist/" />
+                <exclude name="core*/module_mediaplayer/" />
                 <exclude name="core*/module_ldap/" />
                 <exclude name="core*/module_packageserver/" />
                 <exclude name="core*/module_pchart/" />
@@ -272,7 +245,6 @@
                 <exclude name="core*/module_pageimportexport/" />
                 <exclude name="core*/module_demo/" />
 
-                <include name="core*/element_*/**"/>
                 <include name="core*/module_*/**"/>
                 <include name="core*/template_*/**"/>
                 <include name="core*/*.php"/>
@@ -281,6 +253,10 @@
         </copy>
 
         <antcall target="buildPackageHelper" />
+
+        <exec executable="php" dir="${basedir}${tempPath}/core"  failonerror="on" >
+            <arg line="-f generate_phar.php removesource=true"/>
+        </exec>
 
         <zip destfile="${basedir}${packagesPath}/kajona_v4_allinone_${DSTAMP}-${TSTAMP}.zip">
             <fileset dir="${basedir}${tempPath}/../" />
@@ -312,17 +288,21 @@
 
         <antcall target="buildPackageHelper" />
 
+        <exec executable="php" dir="${basedir}${tempPath}/core"  failonerror="on" >
+            <arg line="-f generate_phar.php removesource=true"/>
+        </exec>
+
         <zip destfile="${basedir}${packagesPath}/kajona_v4_light_${DSTAMP}-${TSTAMP}.zip">
             <fileset dir="${basedir}${tempPath}/../" />
         </zip>
     </target>
 
+    <!-- deprecated -->
     <target name="modulePackagesZipHelper" depends="init" description="call this task before using the shellscript in order to generate module-zips">
         <copy todir="${basedir}${tempPath}" overwrite="true"  includeEmptyDirs="true"  >
             <fileset id="sources.dirs" dir="${basedir}${sourcesPath}">
                 <exclude name=".svn"/>
                 <exclude name=".git"/>
-                <include name="core*/element_*/**"/>
                 <include name="core*/module_*/**"/>
                 <include name="core*/template_*/**"/>
                 <include name="core*/_debugging/**"/>
