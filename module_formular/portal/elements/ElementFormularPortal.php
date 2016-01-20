@@ -9,6 +9,7 @@
 
 namespace Kajona\Formular\Portal\Elements;
 
+use class_classloader;
 use class_exception;
 use class_resourceloader;
 use Kajona\Pages\Portal\ElementPortal;
@@ -39,9 +40,7 @@ class ElementFormularPortal extends ElementPortal implements PortalElementInterf
             throw new class_exception("failed to load form-class " . $this->arrElementData["formular_class"], class_exception::$level_ERROR);
         }
 
-        require_once($strPath);
-        $strClassname = uniStrReplace(".php", "", $this->arrElementData["formular_class"]);
-        $objForm = new $strClassname($this->arrElementData);
+        $objForm = class_classloader::getInstance()->getInstanceFromFilename($strPath, null, null, array($this->arrElementData));
         $strReturn = $objForm->action();
 
         return $strReturn;
