@@ -14,7 +14,7 @@ class PharCreator
 {
 
     public $strDeployPath = "";
-    //$strDeployPath = "/Users/sidler/web/agp_v5_master_phar";
+//    public $strDeployPath = "/Users/sidler/web/kajona_phar_only";
 
     public $bitRemoveSource = false;
 

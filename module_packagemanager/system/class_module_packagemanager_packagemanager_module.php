@@ -116,6 +116,7 @@ class class_module_packagemanager_packagemanager_module implements interface_pac
             class_logger::getInstance(class_logger::PACKAGEMANAGEMENT)->addLogRow("triggering updateOrInstall() on installer ".get_class($objInstance).", all requirements given", class_logger::$levelInfo);
             //trigger update or install
             $strReturn .= $objInstance->installOrUpdate();
+            $this->updateDefaultTemplate();
         }
 
         class_cache::flushCache();

@@ -5,6 +5,8 @@
 *-------------------------------------------------------------------------------------------------------*
 *	$Id$                                  *
 ********************************************************************************************************/
+use Kajona\System\System\PharModule;
+use Kajona\System\System\StringUtil;
 
 
 /**
@@ -98,6 +100,7 @@ class class_module_packagemanager_packagemanager_pharmodule extends class_module
         }
 
         class_cache::flushCache();
+        $this->updateDefaultTemplate();
 
         return $strReturn;
     }
@@ -107,17 +110,24 @@ class class_module_packagemanager_packagemanager_pharmodule extends class_module
      * @return bool
      */
     public function updateDefaultTemplate() {
-        //TODO
+
+        //read the module and extract
+        $objPharModule = new PharModule($this->objMetadata->getStrPath());
         $objFilesystem = new class_filesystem();
-        class_logger::getInstance(class_logger::PACKAGEMANAGEMENT)->addLogRow("updating default template from /".$this->objMetadata->getStrPath(), class_logger::$levelInfo);
-        if(is_dir(_realpath_."/".$this->objMetadata->getStrPath()."/templates/default/js"))
-            $objFilesystem->folderCopyRecursive($this->objMetadata->getStrPath()."/templates/default/js", "/templates/default/js", true);
+        foreach($objPharModule->getContentMap() as $strKey => $strFullPath) {
 
-        if(is_dir(_realpath_."/".$this->objMetadata->getStrPath()."/templates/default/css"))
-            $objFilesystem->folderCopyRecursive($this->objMetadata->getStrPath()."/templates/default/css", "/templates/default/css", true);
+            foreach (array("js", "css", "pics") as $strOneSubfolder) {
 
-        if(is_dir(_realpath_."/".$this->objMetadata->getStrPath()."/templates/default/pics"))
-            $objFilesystem->folderCopyRecursive($this->objMetadata->getStrPath()."/templates/default/pics", "/templates/default/pics", true);
+                $intStrPos = StringUtil::indexOf($strFullPath, "templates/default/{$strOneSubfolder}", false);
+                if ($intStrPos !== false) {
+                    $strTargetPath = _realpath_."/templates/default/{$strOneSubfolder}/".StringUtil::substring($strFullPath, $intStrPos + StringUtil::length("templates/default/{$strOneSubfolder}"));
+                    $objFilesystem->folderCreate(dirname($strTargetPath), true, true);
+                    //copy
+                    copy($strFullPath, $strTargetPath);
+                }
+
+            }
+        }
 
         return true;
     }
@@ -177,9 +187,8 @@ class class_module_packagemanager_packagemanager_pharmodule extends class_module
         $arrReturn = array();
         foreach (new RecursiveIteratorIterator($objPhar) as $objFile) {
             if (strpos($objFile->getPathname(), "/installer/") !== false && uniSubstr($objFile->getPathname(), -4) === ".php") {
-                $strName = uniSubstr($objFile->getPathname(), 0, -4);
                 /** @var $objInstaller interface_installer */
-                $objInstaller = new $strName();
+                $objInstaller = class_classloader::getInstance()->getInstanceFromFilename($objFile->getPathname());
                 $arrReturn[] = $objInstaller;
             }
         }

@@ -127,9 +127,9 @@ class class_module_packagemanager_metadata implements interface_admin_listable {
      * @throws class_exception
      */
     private function initFromPhar($strPackage) {
+        $this->bitIsPhar = true;
 
         if (substr($strPackage, 0, 7) == "phar://") {
-            $this->bitIsPhar = true;
             $strFile = _realpath_.substr($strPackage, 7);
         } else {
             $strFile = _realpath_.$strPackage;
