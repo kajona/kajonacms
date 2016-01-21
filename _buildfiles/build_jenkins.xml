@@ -41,8 +41,6 @@
     <property name="sourcesPath"  value="/../../" />
     <!-- target dir to install the system to. this folder is also referenced in the phpunit config file! -->
     <property name="projectPath"  value="/buildproject" />
-    <!-- target dir the selenium tests are executed -->
-    <property name="seleniumPath"  value="/seleniumproject" />
     <!-- artifacts such as logs and reports will be stored here -->
     <property name="buildPath"    value="/build" />
     <!-- js tests and node tasks -->
@@ -163,16 +161,12 @@
             <arg line="./node_modules/protractor/bin/webdriver-manager start"/>
         </exec>
 
-        <!-- delete selenium project dir -->
-        <delete dir="${basedir}${seleniumPath}"/>
-        <mkdir  dir="${basedir}${seleniumPath}"/>
+        <antcall target="setupPackageFolders" />
 
-        <!-- copy all files to a new folder -->
-        <copy todir="${basedir}${seleniumPath}" overwrite="true"  includeEmptyDirs="true" >
+        <!-- copy all files to the temp folder -->
+        <copy todir="${basedir}${tempPath}" overwrite="true"  includeEmptyDirs="true" >
             <fileset id="sources.dirs" dir="${basedir}${sourcesPath}">
-                <exclude name=".svn"/>
                 <exclude name=".git"/>
-                <include name="core*/element_*/**"/>
                 <include name="core*/module_*/*/**"/>
                 <include name="core*/template_*/*/**"/>
                 <include name="core*/_debugging/*/**"/>
@@ -181,19 +175,14 @@
             </fileset>
         </copy>
 
-        <!-- call setup project -->
-        <exec dir="${basedir}${seleniumPath}/core" executable="${path.php}">
-            <arg line="setupproject.php"/>
-        </exec>
-
         <!-- copy selenium config -->
-        <copy file="${basedir}/setupSeleniumConfig.php" tofile="${basedir}${seleniumPath}/setupSeleniumConfig.php" />
+        <copy file="${basedir}/setupSeleniumConfig.php" tofile="${basedir}${tempPath}/setupSeleniumConfig.php" />
     </target>
 
     <target name="protractorExecute">
         <!-- start internal webserver -->
         <exec dir="${basedir}" executable="${path.php}" spawn="true">
-            <arg line="-S 127.0.0.1:8080 -t ${basedir}${seleniumPath} server.php"/>
+            <arg line="-S 127.0.0.1:8080 -t ${basedir}${tempPath} server.php"/>
         </exec>
 
         <!-- wait so that the selenium and webserver are ready -->
@@ -206,15 +195,13 @@
     </target>
 
     <target name="protractor" depends="protractorSetup">
+        <antcall target="buildPackageHelper" />
         <antcall target="protractorExecute" />
     </target>
 
     <target name="protractorPhar" depends="protractorSetup">
-        <!-- generate phars -->
-        <exec dir="${basedir}${seleniumPath}/core" executable="${path.php}">
-            <arg line="generate_phar.php removesource=true"/>
-        </exec>
-
+        <antcall target="buildPackageHelper" />
+        <antcall target="modulePharHelper" />
         <antcall target="protractorExecute" />
     </target>
 

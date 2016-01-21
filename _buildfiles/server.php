@@ -3,7 +3,7 @@
 $arrFiles = array('download.php', 'image.php', 'index.php', 'xml.php', 'installer.php', 'setupSeleniumConfig.php');
 $bitFound = false;
 
-chdir(__DIR__ . "/seleniumproject");
+chdir(__DIR__ . "/temp/kajona");
 
 foreach ($arrFiles as $strFile) {
     if (substr($_SERVER['REQUEST_URI'], 1, strlen($strFile)) == $strFile) {
