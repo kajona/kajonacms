@@ -88,10 +88,7 @@
         <delete dir="${basedir}${tempPath}/.idea"/>
 
         <antcall target="buildPackageHelperProject" />
-
-        <exec executable="php" dir="${basedir}${tempPath}/core"  failonerror="on" >
-            <arg line="-f generate_phar.php removesource=true"/>
-        </exec>
+        <antcall target="modulePharHelper" />
 
         <zip destfile="${basedir}${packagesPath}/${projectName}_full_${DSTAMP}-${TSTAMP}.zip">
             <fileset dir="${basedir}${tempPath}/../" />

@@ -151,12 +151,6 @@
         </exec>
     </target>
 
-    <!-- executes javascript jasmine tests -->
-    <target name="jasmine">
-        <exec dir="${basedir}${jsPath}" executable="${path.node}" failonerror="on">
-            <arg line="./node_modules/jasmine/bin/jasmine.js"/>
-        </exec>
-    </target>
 
     <!-- removes existing folders and creates them again -->
     <target name="cleanFilesystem">
@@ -213,10 +207,7 @@
         </copy>
 
         <antcall target="buildPackageHelper" />
-
-        <exec executable="php" dir="${basedir}${tempPath}/core"  failonerror="on" >
-            <arg line="-f generate_phar.php removesource=true"/>
-        </exec>
+        <antcall target="modulePharHelper" />
 
         <zip destfile="${basedir}${packagesPath}/kajona_v4_full_${DSTAMP}-${TSTAMP}.zip">
             <fileset dir="${basedir}${tempPath}/../" />
@@ -253,10 +244,7 @@
         </copy>
 
         <antcall target="buildPackageHelper" />
-
-        <exec executable="php" dir="${basedir}${tempPath}/core"  failonerror="on" >
-            <arg line="-f generate_phar.php removesource=true"/>
-        </exec>
+        <antcall target="modulePharHelper" />
 
         <zip destfile="${basedir}${packagesPath}/kajona_v4_allinone_${DSTAMP}-${TSTAMP}.zip">
             <fileset dir="${basedir}${tempPath}/../" />
@@ -287,14 +275,17 @@
         </copy>
 
         <antcall target="buildPackageHelper" />
-
-        <exec executable="php" dir="${basedir}${tempPath}/core"  failonerror="on" >
-            <arg line="-f generate_phar.php removesource=true"/>
-        </exec>
+        <antcall target="modulePharHelper" />
 
         <zip destfile="${basedir}${packagesPath}/kajona_v4_light_${DSTAMP}-${TSTAMP}.zip">
             <fileset dir="${basedir}${tempPath}/../" />
         </zip>
+    </target>
+
+    <target name="modulePharHelper" description="generates phar files out of the current module structure">
+        <exec executable="php" dir="${basedir}${tempPath}/core"  failonerror="on" >
+            <arg line="-f generate_phar.php removesource=true"/>
+        </exec>
     </target>
 
     <!-- deprecated -->
@@ -529,6 +520,14 @@
             <!--<arg path="${basedir}${projectPath}" />-->
         </exec>
     </target>
+
+    <!-- executes javascript jasmine tests -->
+    <target name="jasmine">
+        <exec dir="${basedir}${jsPath}" executable="${path.node}" failonerror="on">
+            <arg line="./node_modules/jasmine/bin/jasmine.js"/>
+        </exec>
+    </target>
+
 
     <target name="phpcb" description="Aggregate tool output with PHP_CodeBrowser">
         <exec executable="${path.phpcb}">
