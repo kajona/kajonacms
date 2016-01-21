@@ -2,3 +2,4 @@ cache.properties
 vendor/
 .vagrant/
 *.phar
+_buildfiles/jstests/node_modules

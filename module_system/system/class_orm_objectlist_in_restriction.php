@@ -18,16 +18,24 @@ class class_orm_objectlist_in_restriction extends class_orm_objectlist_restricti
 
     const MAX_IN_VALUES = 950;
 
+    const STR_CONDITION_IN = "IN";
+    const STR_CONDITION_NOTIN = "NOT IN";
+
     private $strColumnName = "";
     private $arrParams = array();
     private $strCondition = "";
-    private $strInCondition = "IN";
+    private $strInCondition = self::STR_CONDITION_IN;
 
-    function __construct($strProperty, array $arrParams, $strCondition = "AND") {
+    function __construct($strProperty, array $arrParams, $strCondition = "AND", $strInCondition = self::STR_CONDITION_IN)
+    {
+        if($strInCondition !== self::STR_CONDITION_IN && $strInCondition !== self::STR_CONDITION_NOTIN) {
+            throw new class_exception("Wrong condition set", class_exception::$level_ERROR);
+        }
 
         $this->arrParams = $arrParams;
         $this->strCondition = $strCondition;
         $this->strColumnName =  $strProperty;
+        $this->strInCondition = $strInCondition;
     }
 
     /**
@@ -101,5 +109,4 @@ class class_orm_objectlist_in_restriction extends class_orm_objectlist_restricti
 
         return "";
     }
-
 }

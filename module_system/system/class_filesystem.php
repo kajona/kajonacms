@@ -343,10 +343,12 @@ class class_filesystem {
      *
      * @param string $strFolder
      * @param bool $bitRecursive
+     * @param bool $bitThrowExceptionOnError
      *
      * @return bool
+     * @throws class_exception
      */
-    public function folderCreate($strFolder, $bitRecursive = false) {
+    public function folderCreate($strFolder, $bitRecursive = false, $bitThrowExceptionOnError = false) {
         $strFolder = uniStrReplace(_realpath_, "", $strFolder);
         $bitReturn = true;
 
@@ -356,8 +358,16 @@ class class_filesystem {
             $strFolders = "";
             foreach($arrRecursiveFolders as $strOneFolder) {
                 if($bitReturn === true) {
+
+                    $strTestfolder = $strFolders;
+
                     $strFolders .= "/".$strOneFolder;
                     if(!is_dir(_realpath_.$strFolders)) {
+
+                        if($bitThrowExceptionOnError && !is_writable(_realpath_.$strTestfolder)) {
+                            throw new class_exception("Folder "._realpath_.$strTestfolder." is not writable", class_exception::$level_FATALERROR);
+                        }
+
                         $bitReturn = $this->folderCreate($strFolders, false);
                     }
                 }
