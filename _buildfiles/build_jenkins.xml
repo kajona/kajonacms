@@ -161,7 +161,7 @@
     </target>
 
     <!-- executes javascript protractor tests -->
-    <target name="protractor" depends="installNpmBuildDependencies">
+    <target name="protractorSetup" depends="installNpmBuildDependencies">
         <exec dir="${basedir}${jsPath}" executable="${path.node}" failonerror="on">
             <arg line="./node_modules/protractor/bin/webdriver-manager update"/>
         </exec>
@@ -194,7 +194,9 @@
 
         <!-- copy selenium config -->
         <copy file="${basedir}/setupSeleniumConfig.php" tofile="${basedir}${seleniumPath}/setupSeleniumConfig.php" />
+    </target>
 
+    <target name="protractorExecute">
         <!-- start internal webserver -->
         <exec dir="${basedir}" executable="${path.php}" spawn="true">
             <arg line="-S 127.0.0.1:8080 -t ${basedir}${seleniumPath} server.php"/>
@@ -207,6 +209,19 @@
         <exec dir="${basedir}${jsPath}" executable="${path.node}" failonerror="on">
             <arg line="./node_modules/protractor/bin/protractor e2e/conf.js"/>
         </exec>
+    </target>
+
+    <target name="protractor" depends="protractorSetup">
+        <antcall target="protractorExecute" />
+    </target>
+
+    <target name="protractorPhar" depends="protractorSetup">
+        <!-- generate phars -->
+        <exec dir="${basedir}${seleniumPath}/core" executable="${path.php}">
+            <arg line="generate_phar.php removesource=true"/>
+        </exec>
+
+        <antcall target="protractorExecute" />
     </target>
 
     <!-- removes existing folders and creates them again -->
