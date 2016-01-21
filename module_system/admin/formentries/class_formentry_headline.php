@@ -13,6 +13,8 @@
  */
 class class_formentry_headline extends class_formentry_base implements interface_formentry_printable {
 
+    private $strLevel = "h2";
+
     public function __construct($strName = "") {
         if($strName == "")
             $strName = generateSystemid();
@@ -30,7 +32,7 @@ class class_formentry_headline extends class_formentry_base implements interface
      */
     public function renderField() {
         $objToolkit = class_carrier::getInstance()->getObjToolkit("admin");
-        return $objToolkit->formHeadline($this->getStrValue());
+        return $objToolkit->formHeadline($this->getStrValue(), "", $this->strLevel);
     }
 
     public function updateLabel($strKey = "") {
@@ -46,6 +48,26 @@ class class_formentry_headline extends class_formentry_base implements interface
     public function getValueAsText() {
         return class_carrier::getInstance()->getObjToolkit("admin")->formHeadline($this->getStrValue());
     }
+
+    /**
+     * @return string
+     */
+    public function getStrLevel()
+    {
+        return $this->strLevel;
+    }
+
+    /**
+     * @param string $strLevel
+     *
+     * @return $this
+     */
+    public function setStrLevel($strLevel)
+    {
+        $this->strLevel = $strLevel;
+        return $this;
+    }
+
 
 
 }
