@@ -565,7 +565,6 @@ class class_filesystem {
      * @param int $intModeDirectory
      * @param bool $bitRecursive
      *
-     * @internal param $strMode
      * @since 4.0
      * @return bool
      */

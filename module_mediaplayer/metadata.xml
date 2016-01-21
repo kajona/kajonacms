@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<package
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="https://apidocs.kajona.de/xsd/package.xsd"
+        >
+    <title>mediaplayer</title>
+    <description>Embed media elements (e.g. movies) into the website using a simple flash-player. Please note that this element makes use of the JWPlayer, you have to respect the projects' licence (http://www.longtailvideo.com/jw-player/)</description>
+    <version>5.0</version>
+    <author>Kajona Team</author>
+    <type>MODULE</type>
+    <providesInstaller>TRUE</providesInstaller>
+    <requiredModules>
+        <module name="pages" version="4.7" />
+    </requiredModules>
+</package>

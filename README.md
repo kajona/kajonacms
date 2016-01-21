@@ -11,7 +11,8 @@ Please refer to our website at http://www.kajona.de for further details and prep
 Bugtracker / Issues
 ---
 
-Since we're still migrating our infrastructure to GitHub, please make use of our ticket-system at http://trace.kajona.de
+Please feel free to report issues, ideas an general feedback using the GitHub issue pages
+https://github.com/kajona/kajonacms/issues
 
 Build-System
 ---

@@ -155,7 +155,6 @@ abstract class class_module_packagemanager_contentprovider_remote_base implement
         }
 
         $arrTypes = array(
-            class_module_packagemanager_manager::STR_TYPE_ELEMENT,
             class_module_packagemanager_manager::STR_TYPE_MODULE,
             class_module_packagemanager_manager::STR_TYPE_TEMPLATE
         );
@@ -196,7 +195,6 @@ abstract class class_module_packagemanager_contentprovider_remote_base implement
 
         $arrTypeOption = array();
         $arrTypeOption[""] = $objLang->getLang("all", self::$STR_MODULE_NAME);
-        $arrTypeOption[class_module_packagemanager_manager::STR_TYPE_ELEMENT] = $objLang->getLang("element", self::$STR_MODULE_NAME);
         $arrTypeOption[class_module_packagemanager_manager::STR_TYPE_TEMPLATE] = $objLang->getLang("template", self::$STR_MODULE_NAME);
         $arrTypeOption[class_module_packagemanager_manager::STR_TYPE_MODULE] = $objLang->getLang("module", self::$STR_MODULE_NAME);
         $strReturn .= $objToolkit->formInputDropdown("type", $arrTypeOption, $objLang->getLang("type", self::$STR_MODULE_NAME), $this->getParam("type"));

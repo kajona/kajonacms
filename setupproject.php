@@ -251,7 +251,7 @@ TXT;
                 copy($strSourceFolder."/".$strOneEntry, $strTargetFolder."/".$strOneEntry);
                 chmod($strTargetFolder."/".$strOneEntry, 0777);
             }
-            else if(is_dir($strSourceFolder."/".$strOneEntry)) {
+            elseif(is_dir($strSourceFolder."/".$strOneEntry)) {
                 self::copyFolder($strSourceFolder."/".$strOneEntry, $strTargetFolder."/".$strOneEntry, $arrExcludeSuffix);
             }
         }
