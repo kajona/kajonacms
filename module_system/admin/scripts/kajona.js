@@ -1205,13 +1205,14 @@ KAJONA.admin.renderTocNavigation = function (selector) {
     // scroll spy
     $('body').scrollspy({
         target: '#toc-navigation',
-        offset: 40
+        offset: 60
     });
 
     // resize toc navigation to main navigation
     $(window).resize(function() {
         $('#toc-navigation').css('width', $('#moduleNavigation').width());
     });
+    $('#toc-navigation').css('width', $('#moduleNavigation').width());
 };
 
 /**
