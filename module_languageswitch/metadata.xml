@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<package
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="https://apidocs.kajona.de/xsd/package.xsd"
+        >
+    <title>languageswitch</title>
+    <description>A simple element to switch the portal-language. Provides a basic logic to avoid language-switches when no content is available in other languages. Takes care of possible languagesets, e.g. for module news.</description>
+    <version>5.0</version>
+    <author>Kajona Team</author>
+    <type>MODULE</type>
+    <providesInstaller>TRUE</providesInstaller>
+    <requiredModules>
+        <module name="pages" version="4.7" />
+    </requiredModules>
+</package>

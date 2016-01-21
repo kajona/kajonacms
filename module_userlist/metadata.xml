@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<package
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="https://apidocs.kajona.de/xsd/package.xsd"
+        >
+    <title>userlist</title>
+    <description>Renders a table of all users (filtered by groups) and provides a csv download.</description>
+    <version>1.0</version>
+    <author>Kajona Team</author>
+    <type>MODULE</type>
+    <providesInstaller>TRUE</providesInstaller>
+    <requiredModules>
+        <module name="pages" version="4.7" />
+    </requiredModules>
+</package>

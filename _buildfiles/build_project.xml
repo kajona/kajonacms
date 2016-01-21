@@ -51,7 +51,6 @@
         <copy todir="${basedir}${projectPath}" overwrite="true" includeEmptyDirs="true" >
             <fileset id="sources.dirs" dir="${basedir}${sourcesPath}">
                 <exclude name="*/**/.idea"/>
-                <exclude name="*/**/.svn"/>
                 <exclude name="*/**/.git"/>
                 <exclude name="*/**/_buildfiles"/>
                 <exclude name="*/**/_vagrant"/>
@@ -89,6 +88,7 @@
         <delete dir="${basedir}${tempPath}/.idea"/>
 
         <antcall target="buildPackageHelperProject" />
+        <antcall target="modulePharHelper" />
 
         <zip destfile="${basedir}${packagesPath}/${projectName}_full_${DSTAMP}-${TSTAMP}.zip">
             <fileset dir="${basedir}${tempPath}/../" />

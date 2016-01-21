@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<package
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="https://apidocs.kajona.de/xsd/package.xsd"
+        >
+    <title>tellafriend</title>
+    <description>Generates a form to send a mail-notification about the current page to friends.</description>
+    <version>5.0</version>
+    <author>Kajona Team</author>
+    <type>MODULE</type>
+    <providesInstaller>TRUE</providesInstaller>
+    <requiredModules>
+        <module name="pages" version="4.7" />
+    </requiredModules>
+</package>

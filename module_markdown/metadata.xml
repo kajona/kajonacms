@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<package
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="https://apidocs.kajona.de/xsd/package.xsd"
+        >
+    <title>markdown</title>
+    <description>Parse external markdown files and render them locally.</description>
+    <version>1.0</version>
+    <author>Kajona Team</author>
+    <type>MODULE</type>
+    <providesInstaller>TRUE</providesInstaller>
+    <requiredModules>
+        <module name="pages" version="4.6" />
+    </requiredModules>
+</package>

@@ -104,61 +104,19 @@ class class_module_packagemanager_packagemanager_module implements interface_pac
             throw new class_exception("Current module isn't installable, not all requirements are given", class_exception::$level_ERROR);
 
         //search for an existing installer
-        if (substr($this->objMetadata->getStrPath(), -5) == ".phar") {
-            $objPhar = new Phar(_realpath_.$this->objMetadata->getStrPath());
-            $arrInstaller = array();
-            foreach (new RecursiveIteratorIterator($objPhar) as $objFile) {
-                if (strpos($objFile->getPathname(), "/installer/") !== false) {
-                    $arrInstaller[] = $objFile->getPathname();
-                }
-            }
-        } else {
-            $objFilesystem = new class_filesystem();
-            $arrInstaller = $objFilesystem->getFilelist($this->objMetadata->getStrPath()."/installer/", array(".php"));
-        }
-
-
-        if($arrInstaller === false)
-            return "";
+        $arrInstaller = $this->getInstaller($this->getObjMetadata());
 
         //start with modules
-        foreach($arrInstaller as $strOneInstaller) {
+        foreach($arrInstaller as $objInstance) {
 
-            if (substr($strOneInstaller, 0, 7) == "phar://") {
-                $strFile = $strOneInstaller;
-            } else {
-                $strFile = _realpath_.$this->objMetadata->getStrPath()."/installer/".$strOneInstaller;
-            }
-
-            $objInstance = class_classloader::getInstance()->getInstanceFromFilename($strFile, "class_installer_base");
-
-            if($objInstance == false)
+            if(!$objInstance instanceof class_installer_base)
                 continue;
 
             //skip element installers at first run
-            class_logger::getInstance(class_logger::PACKAGEMANAGEMENT)->addLogRow("triggering updateOrInstall() on installer ".$strOneInstaller.", all requirements given", class_logger::$levelInfo);
+            class_logger::getInstance(class_logger::PACKAGEMANAGEMENT)->addLogRow("triggering updateOrInstall() on installer ".get_class($objInstance).", all requirements given", class_logger::$levelInfo);
             //trigger update or install
             $strReturn .= $objInstance->installOrUpdate();
-        }
-
-        //proceed with elements
-        foreach($arrInstaller as $strOneInstaller) {
-
-            if (substr($strOneInstaller, 0, 7) == "phar://") {
-                $strFile = $strOneInstaller;
-            } else {
-                $strFile = _realpath_.$this->objMetadata->getStrPath()."/installer/".$strOneInstaller;
-            }
-
-            $objInstance = class_classloader::getInstance()->getInstanceFromFilename($strFile, "class_elementinstaller_base");
-
-            if($objInstance == false)
-                continue;
-
-            //skip samplecontent files
-            class_logger::getInstance(class_logger::PACKAGEMANAGEMENT)->addLogRow("triggering updateOrInstall() on installer ".$strOneInstaller.", all requirements given", class_logger::$levelInfo);
-            //trigger update or install
-            $strReturn .= $objInstance->installOrUpdate();
+            $this->updateDefaultTemplate();
         }
 
         class_cache::flushCache();
@@ -380,35 +338,17 @@ class class_module_packagemanager_packagemanager_module implements interface_pac
      *
      * @return interface_installer[]
      */
-    private function getInstaller(class_module_packagemanager_metadata $objMetadata) {
+    protected function getInstaller(class_module_packagemanager_metadata $objMetadata) {
 
-
-        if (substr($objMetadata->getStrPath(), -5) == ".phar") {
-            $objPhar = new Phar(_realpath_.$objMetadata->getStrPath());
-            $arrInstaller = array();
-            foreach (new RecursiveIteratorIterator($objPhar) as $objFile) {
-                if (strpos($objFile->getPathname(), "/installer/") !== false) {
-                    $arrInstaller[] = $objFile->getPathname();
-                }
-            }
-        } else {
-            $objFilesystem = new class_filesystem();
-            $arrInstaller = $objFilesystem->getFilelist($objMetadata->getStrPath()."/installer/", array(".php"));
-        }
-
-        if($arrInstaller === false)
-            return array();
+        $objFilesystem = new class_filesystem();
+        $arrInstaller = $objFilesystem->getFilelist($objMetadata->getStrPath()."/installer/", array(".php"));
 
         $arrReturn = array();
         //start with modules
         foreach($arrInstaller as $strOneInstaller) {
-            //skip samplecontent files
-            if(uniStrpos($strOneInstaller, "class_") === false || uniStrpos($strOneInstaller, "installer") === false || uniStrpos($strOneInstaller, "_sc_") !== false)
-                continue;
 
-            $strName = uniSubstr($strOneInstaller, 0, -4);
             /** @var $objInstaller interface_installer */
-            $objInstaller = new $strName();
+            $objInstaller = class_classloader::getInstance()->getInstanceFromFilename(_realpath_.$objMetadata->getStrPath()."/installer/".$strOneInstaller);
             $arrReturn[] = $objInstaller;
         }
 

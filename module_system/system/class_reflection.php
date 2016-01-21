@@ -59,8 +59,9 @@ class class_reflection {
         else
             $this->strSourceClass = $strSourceClass;
 
-        if(!class_exists($this->strSourceClass))
+        if(!class_exists($this->strSourceClass)) {
             throw new class_exception("class ".$this->strSourceClass." not found", class_exception::$level_ERROR);
+        }
 
 
 
