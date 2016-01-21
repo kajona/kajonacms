@@ -1097,12 +1097,13 @@ class class_toolkit_admin extends class_toolkit
      *
      * @return string
      */
-    public function formHeadline($strText, $strClass = "")
+    public function formHeadline($strText, $strClass = "", $strLevel = "h2")
     {
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "headline_form");
         $arrTemplate = array();
         $arrTemplate["text"] = $strText;
         $arrTemplate["class"] = $strClass;
+        $arrTemplate["level"] = $strLevel;
         return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID, true);
     }
 
