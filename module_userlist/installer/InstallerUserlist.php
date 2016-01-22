@@ -23,7 +23,10 @@ class InstallerUserlist extends class_installer_base implements interface_instal
 	public function install() {
 		$strReturn = "";
 
-		//Register the element
+        //register the module
+        $this->registerModule($this->objMetadata->getStrTitle(), _userlist_module_id_, "", "", $this->objMetadata->getStrVersion(), false);
+
+        //Register the element
         $strReturn .= "Registering userlist-element...\n";
         //check, if not already existing
         $objElement = PagesElement::getElement("userlist");
