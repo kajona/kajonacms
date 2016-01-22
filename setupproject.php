@@ -276,22 +276,28 @@ TXT;
     }
 
     private static function scanComposer() {
-        $objDir = new RecursiveDirectoryIterator(__DIR__."/../");
-        $objIterator = new RecursiveIteratorIterator($objDir);
-        $objRegex = new RegexIterator($objIterator, '#(module_|element_)([a-z]*)(/|\\\\)composer\.json$#i', RecursiveRegexIterator::GET_MATCH);
+        $objCoreDirs = new DirectoryIterator(__DIR__ . "/../");
+        foreach ($objCoreDirs as $objCoreDir) {
+            if ($objCoreDir->isDir() && substr($objCoreDir->getFilename(), 0, 4) == 'core') {
+                $objModuleDirs = new DirectoryIterator($objCoreDir->getRealPath());
+                foreach ($objModuleDirs as $objDir) {
+                    if (substr($objDir->getFilename(), 0, 7) == 'module_') {
+                        $composerFile = $objDir->getRealPath() . '/composer.json';
+                        if (is_file($composerFile)) {
+                            $arrOutput = array();
+                            $intReturn = 0;
+                            exec('composer install --prefer-source --no-dev --working-dir '.dirname($composerFile), $arrOutput, $intReturn);
+                            if($intReturn == 127) {
+                                echo "<span style='color: red;'>composer was not found. please run 'composer install --prefer-source --no-dev --working-dir ".dirname($composerFile)."' manually</span>\n";
+                                continue;
+                            }
+                            echo "Composer install finished for ".$composerFile.": \n";
 
-        foreach($objRegex as $strPath => $arrValue) {
-
-            $arrOutput = array();
-            $intReturn = 0;
-            exec('composer install --prefer-source --no-dev --working-dir '.dirname($strPath), $arrOutput, $intReturn);
-            if($intReturn == 127) {
-                echo "<span style='color: red;'>composer was not found. please run 'composer install --prefer-source --no-dev --working-dir ".dirname($strPath)."' manually</span>\n";
-                continue;
+                            echo "   ".implode("\n   ", $arrOutput);
+                        }
+                    }
+                }
             }
-            echo "Composer install finished for ".$strPath.": \n";
-
-            echo "   ".implode("\n   ", $arrOutput);
         }
     }
 }
