@@ -218,7 +218,7 @@ class class_resourceloader
 
                 $objPhar = new PharModule($strCorePath);
                 foreach($objPhar->getContentMap() as $strFilename => $strPharPath) {
-                    if (strpos($strFilename, _langpath_."/".$strFolder.DIRECTORY_SEPARATOR) !== false) {
+                    if (strpos($strFilename, _langpath_."/".$strFolder."/") !== false) {
                         $arrReturn[$strPharPath] = basename($strPharPath);
                     }
                 }
