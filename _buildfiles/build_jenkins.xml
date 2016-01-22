@@ -166,7 +166,7 @@
         <!-- copy all files to the temp folder -->
         <copy todir="${basedir}${tempPath}" overwrite="true"  includeEmptyDirs="true" >
             <fileset id="sources.dirs" dir="${basedir}${sourcesPath}">
-                <exclude name=".git"/>
+                <exclude name="**/.git"/>
                 <include name="core*/module_*/*/**"/>
                 <include name="core*/template_*/*/**"/>
                 <include name="core*/_debugging/*/**"/>
@@ -177,6 +177,8 @@
 
         <!-- copy selenium config -->
         <copy file="${basedir}/setupSeleniumConfig.php" tofile="${basedir}${tempPath}/setupSeleniumConfig.php" />
+
+        <antcall target="buildPackageHelper" />
     </target>
 
     <target name="protractorExecute">
@@ -195,12 +197,10 @@
     </target>
 
     <target name="protractor" depends="protractorSetup">
-        <antcall target="buildPackageHelper" />
         <antcall target="protractorExecute" />
     </target>
 
     <target name="protractorPhar" depends="protractorSetup">
-        <antcall target="buildPackageHelper" />
         <antcall target="modulePharHelper" />
         <antcall target="protractorExecute" />
     </target>
