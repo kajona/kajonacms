@@ -1,6 +1,4 @@
 
-var fs = require('fs');
-
 describe('installation', function() {
 
     beforeEach(function() {
@@ -14,12 +12,6 @@ describe('installation', function() {
         browser.get('http://127.0.0.1:8080/installer.php');
 
         browser.driver.findElement(by.css('.btn-primary')).click();
-
-        browser.takeScreenshot().then(function(png) {
-            var stream = fs.createWriteStream("installer.png");
-            stream.write(new Buffer(png, 'base64'));
-            stream.end();
-        });
 
         // db settings
         browser.driver.findElement(by.id('hostname')).sendKeys('localhost');
