@@ -166,7 +166,7 @@
         <!-- copy all files to the temp folder -->
         <copy todir="${basedir}${tempPath}" overwrite="true"  includeEmptyDirs="true" >
             <fileset id="sources.dirs" dir="${basedir}${sourcesPath}">
-                <exclude name="**/.git"/>
+                <exclude name=".git"/>
                 <include name="core*/module_*/*/**"/>
                 <include name="core*/template_*/*/**"/>
                 <include name="core*/_debugging/*/**"/>
@@ -181,11 +181,16 @@
         <antcall target="buildPackageHelper" />
     </target>
 
-    <target name="protractorExecute">
+    <target name="startWebServer">
         <!-- start internal webserver -->
         <exec dir="${basedir}" executable="${path.php}" spawn="true">
             <arg line="-S 127.0.0.1:8080 -t ${basedir}${tempPath} server.php"/>
         </exec>
+    </target>
+
+    <target name="protractorExecute">
+        <!-- start internal webserver -->
+        <antcall target="startWebServer" />
 
         <!-- wait so that the selenium and webserver are ready -->
         <sleep seconds="4" />
@@ -425,6 +430,7 @@
             <fileset dir="${basedir}${tempPath}" includes="**/*.odt"/>
             <fileset dir="${basedir}${tempPath}" includes="**/core*/*/tests/**"/>
             <fileset dir="${basedir}${tempPath}" includes="**/setupproject.php"/>
+            <fileset dir="${basedir}${tempPath}" includes="**/.git"/>
         </delete>
     </target>
 
