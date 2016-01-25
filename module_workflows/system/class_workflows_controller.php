@@ -31,7 +31,7 @@ class class_workflows_controller   {
 
             //lock the workflow
             $objLockmanager = new class_lockmanager($objOneWorkflow->getSystemid());
-            if($objLockmanager->isLocked()) {
+            if($objLockmanager->isLocked() || $objOneWorkflow->getIntLockTime() > (time() - _system_lock_maxtime_)) {
                 class_logger::getInstance(self::STR_LOGFILE)->addLogRow("workflow ".$objOneWorkflow->getSystemid()." is locked, can't be scheduled", class_logger::$levelWarning);
                 continue;
             }
@@ -77,7 +77,7 @@ class class_workflows_controller   {
 
             //lock the workflow
             $objLockmanager = new class_lockmanager($objOneWorkflow->getSystemid());
-            if($objLockmanager->isLocked()) {
+            if($objLockmanager->isLocked() || $objOneWorkflow->getIntLockTime() > (time() - _system_lock_maxtime_)) {
                 class_logger::getInstance(self::STR_LOGFILE)->addLogRow("workflow ".$objOneWorkflow->getSystemid()." is locked, can't be scheduled", class_logger::$levelWarning);
                 continue;
             }

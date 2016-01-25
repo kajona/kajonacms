@@ -76,7 +76,8 @@ class class_lockmanager {
         if($this->isLockedByCurrentUser() || $bitForceUnlock ) {
 
             $strQuery = "UPDATE " . _dbprefix_ . "system
-                            SET system_lock_id='0'
+                            SET system_lock_id='0',
+                                 system_lock_time = 1
                             WHERE system_id=? ";
             if(class_carrier::getInstance()->getObjDB()->_pQuery($strQuery, array($this->strSystemid))) {
                 if($this->objSourceObject !== null)
