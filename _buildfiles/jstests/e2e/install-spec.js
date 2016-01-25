@@ -1,4 +1,6 @@
 
+var fs = require('fs');
+
 describe('installation', function() {
 
     beforeEach(function() {
