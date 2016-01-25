@@ -96,15 +96,17 @@ class PharCreator
             $arrObjects = scandir($strDir);
             foreach ($arrObjects as $objObject) {
                 if ($objObject != "." && $objObject != "..") {
-                    if (filetype($strDir."/".$objObject) == "dir") {
+                    if (is_dir($strDir."/".$objObject)) {
                         $this->rrmdir($strDir."/".$objObject);
-                    }
-                    else {
-                        unlink($strDir."/".$objObject);
+                    } else {
+                        $intRetry = 0;
+                        while (!unlink($strDir."/".$objObject) && $intRetry < 8) {
+                            sleep(2);
+                            $intRetry++;
+                        }
                     }
                 }
             }
-            reset($arrObjects);
             rmdir($strDir);
         }
     }
