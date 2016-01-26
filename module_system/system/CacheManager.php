@@ -41,11 +41,6 @@ use Doctrine\Common\Cache\PhpFileCache;
 class CacheManager
 {
     /**
-     * @var CacheManager
-     */
-    private static $objInstance = null;
-
-    /**
      * Stores the data in an array
      *
      * @var integer
@@ -53,14 +48,14 @@ class CacheManager
     const TYPE_ARRAY = 1;
 
     /**
-     * Uses the APC functions if available to store the data
+     * Uses the APC functions if available to store the data. If not available an array type is used
      *
      * @var integer
      */
     const TYPE_APC = 2;
 
     /**
-     * Stores the data in the _cache table
+     * Uses the class_cache to store the data in a database table
      *
      * @var integer
      */
@@ -74,8 +69,8 @@ class CacheManager
     const TYPE_FILESYSTEM = 8;
 
     /**
-     * Stores the data in a PHP file where the data was exported through var_export. Might be faster then the
-     * filesystem type which serializes the data. For PHP >= 5.5 the internal opcode cache is also used
+     * Stores the data in a PHP file where the data is exported through var_export. Might be faster then the filesystem
+     * type. Note for PHP >= 5.5 the internal opcode cache is also used
      *
      * @var integer
      */
@@ -85,6 +80,11 @@ class CacheManager
      * @var array
      */
     protected $arrSystems = array();
+
+    /**
+     * @var CacheManager
+     */
+    private static $objInstance = null;
 
     /**
      * Returns a specific cache system
