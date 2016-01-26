@@ -386,7 +386,8 @@ class class_module_workflows_workflow extends class_model implements interface_m
             $objConfig = class_module_workflows_handler::getHandlerByClass($strClassname);
 
             /** @var $objHandler interface_workflows_handler */
-            $objHandler = new $strClassname();
+            $objBuilder = class_carrier::getInstance()->getContainer()->offsetGet("object_builder");
+            $objHandler = $objBuilder->factory($strClassname);
             $objHandler->setObjWorkflow($this);
             if($objConfig != null)
                 $objHandler->setConfigValues($objConfig->getStrConfigVal1(), $objConfig->getStrConfigVal2(), $objConfig->getStrConfigVal3());

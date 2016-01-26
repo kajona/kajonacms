@@ -226,9 +226,15 @@ class PagesElement extends class_model implements interface_model, interface_adm
      */
     public function getAdminElementInstance()
     {
-
         $strFilename = \class_resourceloader::getInstance()->getPathForFile("/admin/elements/".$this->getStrClassAdmin());
-        $objInstance = \class_classloader::getInstance()->getInstanceFromFilename($strFilename, "Kajona\\Pages\\Admin\\ElementAdmin");
+        $objInstance = \class_classloader::getInstance()->getInstanceFromFilename($strFilename, "Kajona\\Pages\\Admin\\ElementAdmin", null, array(), true);
+
+        //legacy handling
+        if ($objInstance == null) {
+            $strFilename = \class_resourceloader::getInstance()->getPathForFile("/legacy/".$this->getStrClassAdmin());
+            $objInstance = \class_classloader::getInstance()->getInstanceFromFilename($strFilename, "Kajona\\Pages\\Admin\\ElementAdmin");
+
+        }
 
         if ($objInstance != null) {
             return $objInstance;
@@ -248,9 +254,14 @@ class PagesElement extends class_model implements interface_model, interface_adm
      */
     public function getPortalElementInstance()
     {
-
         $strFilename = \class_resourceloader::getInstance()->getPathForFile("/portal/elements/".$this->getStrClassPortal());
-        $objInstance = \class_classloader::getInstance()->getInstanceFromFilename($strFilename, "Kajona\\Pages\\Portal\\ElementPortal", null, array(new class_module_pages_pageelement()));
+        $objInstance = \class_classloader::getInstance()->getInstanceFromFilename($strFilename, "Kajona\\Pages\\Portal\\ElementPortal", null, array(new class_module_pages_pageelement()), true);
+
+        if ($objInstance == null) {
+            //legacy handling
+            $strFilename = \class_resourceloader::getInstance()->getPathForFile("/legacy/".$this->getStrClassPortal());
+            $objInstance = \class_classloader::getInstance()->getInstanceFromFilename($strFilename, "Kajona\\Pages\\Portal\\ElementPortal", null, array(new class_module_pages_pageelement()), true);
+        }
 
 
         //Build the class-name

@@ -335,18 +335,21 @@ class class_module_system_module extends class_model implements interface_model,
      * @return interface_admin|class_admin_controller
      */
     public function getAdminInstanceOfConcreteModule($strSystemid = "") {
-        if($this->getStrNameAdmin() != "" && uniStrpos($this->getStrNameAdmin(), ".php") !== false) {
+
+        /** @var \Kajona\System\System\ObjectBuilder $objBuilder */
+        $objBuilder = class_carrier::getInstance()->getContainer()->offsetGet("object_builder");
+
+        if ($this->getStrNameAdmin() != "" && uniStrpos($this->getStrNameAdmin(), ".php") !== false) {
             //creating an instance of the wanted module
             $strClassname = uniStrReplace(".php", "", $this->getStrNameAdmin());
-            if(validateSystemid($strSystemid)) {
-                $objModule = new $strClassname($strSystemid);
+            if (validateSystemid($strSystemid)) {
+                $objModule = $objBuilder->factory($strClassname, array($strSystemid));
             }
             else {
-                $objModule = new $strClassname();
+                $objModule = $objBuilder->factory($strClassname);
             }
             return $objModule;
-        }
-        else {
+        } else {
             return null;
         }
     }
@@ -361,18 +364,20 @@ class class_module_system_module extends class_model implements interface_model,
      * @return interface_portal
      */
     public function getPortalInstanceOfConcreteModule($arrElementData = null) {
-        if($this->getStrNamePortal() != "" && uniStrpos($this->getStrNamePortal(), ".php") !== false) {
+
+        /** @var \Kajona\System\System\ObjectBuilder $objBuilder */
+        $objBuilder = class_carrier::getInstance()->getContainer()->offsetGet("object_builder");
+
+        if ($this->getStrNamePortal() != "" && uniStrpos($this->getStrNamePortal(), ".php") !== false) {
             //creating an instance of the wanted module
             $strClassname = uniStrReplace(".php", "", $this->getStrNamePortal());
-            if(is_array($arrElementData)) {
-                $objModule = new $strClassname($arrElementData);
-            }
-            else {
-                $objModule = new $strClassname(array());
+            if (is_array($arrElementData)) {
+                $objModule = $objBuilder->factory($strClassname, array($arrElementData));
+            } else {
+                $objModule = $objBuilder->factory($strClassname, array());
             }
             return $objModule;
-        }
-        else {
+        } else {
             return null;
         }
     }

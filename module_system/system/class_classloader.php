@@ -106,10 +106,23 @@ class class_classloader
                 // include all classes which are in the event folder
                 $this->loadClass($strClass);
             }
+        }
+    }
 
-            /*if (ob_get_contents() !== "") {
-                throw new class_exception("Whitespace outside php-tags in file ".$strOneFile." @ ".$strClass.", aborting system-startup", class_exception::$level_FATALERROR);
-            }*/
+    /**
+     * Registers all service providers to the DI container
+     *
+     * @param \Pimple\Container $objContainer
+     */
+    public function registerModuleServices(\Pimple\Container $objContainer)
+    {
+        foreach (BootstrapCache::getInstance()->getCacheContent(BootstrapCache::CACHE_CLASSES) as $strClass => $strOneFile) {
+            if (\Kajona\System\System\StringUtil::endsWith($strClass, "\\ServiceProvider")) {
+                $objServiceProvider = new $strClass();
+                if ($objServiceProvider instanceof \Pimple\ServiceProviderInterface) {
+                    $objServiceProvider->register($objContainer);
+                }
+            }
         }
     }
 
@@ -382,7 +395,7 @@ class class_classloader
      *
      * @return null|object
      */
-    public function getInstanceFromFilename($strFilename, $strBaseclass = null, $strImplementsInterface = null, $arrConstructorParams = null)
+    public function getInstanceFromFilename($strFilename, $strBaseclass = null, $strImplementsInterface = null, $arrConstructorParams = null, $bitInject = false)
     {
         $strResolvedClassname = $this->getClassnameFromFilename($strFilename);
 
@@ -399,11 +412,20 @@ class class_classloader
 
             $objReflection = new ReflectionClass($strResolvedClassname);
             if ($objReflection->isInstantiable() && ($strBaseclass == null || $objReflection->isSubclassOf($strBaseclass)) && ($strImplementsInterface == null || $objReflection->implementsInterface($strImplementsInterface))) {
-                if (!empty($arrConstructorParams)) {
-                    return $objReflection->newInstanceArgs($arrConstructorParams);
-                }
-                else {
-                    return $objReflection->newInstance();
+                if ($bitInject) {
+                    $objFactory = class_carrier::getInstance()->getContainer()->offsetGet("object_builder");
+                    if (!empty($arrConstructorParams)) {
+                        return $objFactory->factory($objReflection->getName(), $arrConstructorParams);
+                    } else {
+                        return $objFactory->factory($objReflection->getName());
+                    }
+                } else {
+                    if (!empty($arrConstructorParams)) {
+                        return $objReflection->newInstanceArgs($arrConstructorParams);
+                    }
+                    else {
+                        return $objReflection->newInstance();
+                    }
                 }
             }
         }

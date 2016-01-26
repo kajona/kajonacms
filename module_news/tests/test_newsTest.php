@@ -94,11 +94,11 @@ class class_test_news extends class_testbase  {
         
         $this->assertEquals(1, count(class_module_news_feed::getNewsList($objFeed->getStrCat())), __FILE__." check news for feed");
         $this->assertEquals(1, count(class_module_news_feed::getNewsList($objFeed->getStrCat(), 1)), __FILE__." check news for feed");
-        
-        
-        
+
+
+
         echo "generating feed by creating a fake request...\n";
-        
+
         $objNewsPortalXML = new class_module_news_portal_xml();
         $objNewsPortalXML->setParam("feedTitle", "autotest");
         $strFeed = $objNewsPortalXML->action("newsFeed");
@@ -118,9 +118,9 @@ class class_test_news extends class_testbase  {
         $objNews2->setArrCats(array($objCat->getSystemid()));
         $this->assertTrue($objNews2->updateObjectToDb(), __FILE__." update news");
         $this->flushDBCache();
-        
-        
-        
+
+
+
         $objNewsPortalXML = new class_module_news_portal_xml();
         $objNewsPortalXML->setParam("feedTitle", "autotest");
         $strFeed = $objNewsPortalXML->action("newsFeed");
