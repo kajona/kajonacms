@@ -32,6 +32,11 @@ class class_index {
     public $objResponse;
 
     /**
+     * @var \Kajona\System\System\ObjectBuilder
+     */
+    public $objBuilder;
+
+    /**
      * Triggers the processing of the current request
      * @return void
      */
@@ -49,7 +54,9 @@ class class_index {
         $this->objResponse->setStrResponseType(class_http_responsetypes::STR_TYPE_HTML);
         $this->objResponse->setStrStatusCode(class_http_statuscodes::SC_OK);
 
-        $objDispatcher = new class_request_dispatcher($this->objResponse);
+        $this->objBuilder = class_carrier::getInstance()->getContainer()->offsetGet('object_builder');
+
+        $objDispatcher = new class_request_dispatcher($this->objResponse, $this->objBuilder);
         $objDispatcher->processRequest(_admin_, $strModule, $strAction, $strLanguageParam);
     }
 

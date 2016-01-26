@@ -324,7 +324,7 @@ class class_module_navigation_point extends class_model implements interface_mod
             //Build the class-name for the object
 
             $strFilename = \class_resourceloader::getInstance()->getPathForFile("/portal/elements/".$arrOneElementOnPage["element_class_portal"]);
-            $objInstance = \class_classloader::getInstance()->getInstanceFromFilename($strFilename, "Kajona\\Pages\\Portal\\ElementPortal", null, array(new class_module_pages_pageelement($arrOneElementOnPage["system_id"])));
+            $objInstance = \class_classloader::getInstance()->getInstanceFromFilename($strFilename, "Kajona\\Pages\\Portal\\ElementPortal", null, array(new class_module_pages_pageelement($arrOneElementOnPage["system_id"])), true);
 
             if($objInstance::providesNavigationEntries()) {
 

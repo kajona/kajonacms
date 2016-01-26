@@ -14,7 +14,7 @@ class class_test_generalActionTest extends class_testbase  {
         //load all admin-classes
         $arrFiles = class_resourceloader::getInstance()->getFolderContent("/admin", array(".php"), false, null,
         function(&$strOneFile, $strPath) {
-            $strOneFile = class_classloader::getInstance()->getInstanceFromFilename($strPath, "class_admin_controller");
+            $strOneFile = class_classloader::getInstance()->getInstanceFromFilename($strPath, "class_admin_controller", null, array(), true);
         });
 
         foreach($arrFiles as $objAdminInstance) {
@@ -45,7 +45,7 @@ class class_test_generalActionTest extends class_testbase  {
             return false;
         },
         function(&$strOneFile, $strPath) {
-            $strOneFile = class_classloader::getInstance()->getInstanceFromFilename($strPath, "class_portal_controller");
+            $strOneFile = class_classloader::getInstance()->getInstanceFromFilename($strPath, "class_portal_controller", null, array(), true);
         });
 
         foreach($arrFiles as $objPortalInstance) {

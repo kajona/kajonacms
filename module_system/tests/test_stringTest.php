@@ -67,6 +67,15 @@ class test_stringTest extends class_testbase  {
         $this->assertEquals($intExpectedResult, $result);
     }
 
+    /**
+     * @dataProvider endsWithProvider()
+     */
+    public function testEndsWith($intExpectedResult, $strString, $strSearch)
+    {
+        $result = StringUtil::endsWith($strString, $strSearch);
+        $this->assertEquals($intExpectedResult, $result);
+    }
+
     public function startsWithProvider()
     {
         return array(
@@ -75,6 +84,19 @@ class test_stringTest extends class_testbase  {
             array(true, '123 456', '123 '),
             array(true, '%&§$%/()', '%&'),
             array(false, '123 456', '456'),
+            array(false, '123 456', '123 4567'),
+            array(false, 'ABC', 'abc'),
+        );
+    }
+
+    public function endsWithProvider()
+    {
+        return array(
+            array(true, '123 456', '456'),
+            array(true, '123 456', '123 456'),
+            array(true, '123 456', ' 456'),
+            array(true, '%&§$%/()', '()'),
+            array(false, '123 456', '123'),
             array(false, '123 456', '123 4567'),
             array(false, 'ABC', 'abc'),
         );

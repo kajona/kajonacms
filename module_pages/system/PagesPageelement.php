@@ -198,7 +198,7 @@ class PagesPageelement extends class_model implements interface_model, interface
         if ($objElementdefinitionToCreate != null) {
 
             $strFilename = \class_resourceloader::getInstance()->getPathForFile("/admin/elements/".$objElementdefinitionToCreate->getStrClassAdmin());
-            $objInstance = \class_classloader::getInstance()->getInstanceFromFilename($strFilename, "Kajona\\Pages\\Admin\\ElementAdmin");
+            $objInstance = \class_classloader::getInstance()->getInstanceFromFilename($strFilename, "Kajona\\Pages\\Admin\\ElementAdmin", null, array(), true);
 
             //and finally create the object
             if ($objInstance != null) {
@@ -240,7 +240,7 @@ class PagesPageelement extends class_model implements interface_model, interface
         }
 
         $strFilename = \class_resourceloader::getInstance()->getPathForFile("/admin/elements/".$this->getStrClassAdmin());
-        $objInstance = \class_classloader::getInstance()->getInstanceFromFilename($strFilename, "Kajona\\Pages\\Admin\\ElementAdmin");
+        $objInstance = \class_classloader::getInstance()->getInstanceFromFilename($strFilename, "Kajona\\Pages\\Admin\\ElementAdmin", null, array(), true);
 
         //and finally create the object
         /** @var $objInstance ElementAdmin */
@@ -268,7 +268,7 @@ class PagesPageelement extends class_model implements interface_model, interface
 
 
         $strFilename = \class_resourceloader::getInstance()->getPathForFile("/portal/elements/".$this->getStrClassPortal());
-        $objInstance = \class_classloader::getInstance()->getInstanceFromFilename($strFilename, "Kajona\\Pages\\Portal\\ElementPortal", null, array($this));
+        $objInstance = \class_classloader::getInstance()->getInstanceFromFilename($strFilename, "Kajona\\Pages\\Portal\\ElementPortal", null, array($this), true);
 
         //and finally create the object
         /** @var $objInstance ElementPortal */

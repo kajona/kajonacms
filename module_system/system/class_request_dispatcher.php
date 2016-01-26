@@ -25,6 +25,11 @@ class class_request_dispatcher {
     private $objResponse = null;
 
     /**
+     * @var \Kajona\System\System\ObjectBuilder
+     */
+    private $objBuilder;
+
+    /**
      * @var class_session
      */
     private $objSession;
@@ -36,10 +41,11 @@ class class_request_dispatcher {
      *
      * @return \class_request_dispatcher
      */
-    public function __construct(class_response_object $objResponse) {
+    public function __construct(class_response_object $objResponse, \Kajona\System\System\ObjectBuilder $objBuilder) {
         $this->arrTimestampStart = gettimeofday();
         $this->objSession = class_carrier::getInstance()->getObjSession();
         $this->objResponse = $objResponse;
+        $this->objBuilder = $objBuilder;
     }
 
     /**
@@ -152,7 +158,7 @@ class class_request_dispatcher {
                     if(_xmlLoader_) {
                         if($objModuleRequested->getStrXmlNameAdmin() != "") {
                             $strClassname = str_replace(".php", "", $objModuleRequested->getStrXmlNameAdmin());
-                            $objConcreteModule = new $strClassname();
+                            $objConcreteModule = $this->objBuilder->factory($strClassname);
                             $strReturn = $objConcreteModule->action($strAction);
                         }
                         else {
@@ -209,7 +215,7 @@ class class_request_dispatcher {
 
         if($bitLogin) {
             if(_xmlLoader_) {
-                $objLogin = new class_module_login_admin_xml();
+                $objLogin = $this->objBuilder->factory("class_module_login_admin_xml");
                 $strReturn = $objLogin->action($strAction);
             }
             else {
@@ -219,7 +225,7 @@ class class_request_dispatcher {
                     return "";
                 }
 
-                $objLogin = new class_module_login_admin();
+                $objLogin = $this->objBuilder->factory("class_module_login_admin");
                 $objLogin->action($strAction);
                 $strReturn = $objLogin->getModuleOutput();
             }
@@ -258,7 +264,7 @@ class class_request_dispatcher {
             if(_xmlLoader_) {
                 if($objModule->getStrXmlNamePortal() != "") {
                     $strClassname = str_replace(".php", "", $objModule->getStrXmlNamePortal());
-                    $objModuleRequested = new $strClassname();
+                    $objModuleRequested = $this->objObjectFactory->factory($strClassname);
                     $strReturn = $objModuleRequested->action($strAction);
                 }
                 else {

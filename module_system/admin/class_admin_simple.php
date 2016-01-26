@@ -51,7 +51,7 @@ abstract class class_admin_simple extends class_admin_controller {
             return "";
 
         if(validateSystemid($this->getSystemid())) {
-            $objRecord = class_objectfactory::getInstance()->getObject($this->getSystemid());
+            $objRecord = $this->objFactory->getObject($this->getSystemid());
 
             if($objRecord instanceof interface_admin_listable)
                 return $this->getActionIcons($objRecord);
@@ -95,7 +95,7 @@ abstract class class_admin_simple extends class_admin_controller {
      * @return void
      */
     protected function actionDelete() {
-        $objRecord = class_objectfactory::getInstance()->getObject($this->getSystemid());
+        $objRecord = $this->objFactory->getObject($this->getSystemid());
         if($objRecord != null && $objRecord->rightDelete()) {
             if(!$objRecord->deleteObject())
                 throw new class_exception("error deleting object ".strip_tags($objRecord->getStrDisplayName()), class_exception::$level_ERROR);
@@ -135,7 +135,7 @@ abstract class class_admin_simple extends class_admin_controller {
      * @return void
      */
     protected function actionCopyObject() {
-        $objRecord = class_objectfactory::getInstance()->getObject($this->getSystemid());
+        $objRecord = $this->objFactory->getObject($this->getSystemid());
         if($objRecord != null && $objRecord->rightEdit()) {
             if(!$objRecord->copyObject())
                 throw new class_exception("error creating a copy of object ".strip_tags($objRecord->getStrDisplayName()), class_exception::$level_ERROR);
@@ -561,7 +561,7 @@ abstract class class_admin_simple extends class_admin_controller {
     protected function getNewEntryAction($strListIdentifier, $bitDialog = false) {
         $objObject = null;
         if(validateSystemid($this->getSystemid())) {
-            $objObject = class_objectfactory::getInstance()->getObject($this->getSystemid());
+            $objObject = $this->objFactory->getObject($this->getSystemid());
         }
         if($objObject == null) {
             $objObject = $this->getObjModule();

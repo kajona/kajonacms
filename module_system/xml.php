@@ -33,6 +33,10 @@ class class_xml {
      */
     public $objResponse;
 
+    /**
+     * @var \Kajona\System\System\ObjectBuilder
+     */
+    public $objBuilder;
 
     /**
      * Starts the processing of the requests, fetches params and passes control to the request dispatcher
@@ -48,8 +52,9 @@ class class_xml {
         $this->objResponse->setStrResponseType(class_http_responsetypes::STR_TYPE_XML);
         $this->objResponse->setStrStatusCode(class_http_statuscodes::SC_OK);
 
+        $this->objBuilder = class_carrier::getInstance()->getContainer()->offsetGet('object_builder');
 
-        $objDispatcher = new class_request_dispatcher($this->objResponse);
+        $objDispatcher = new class_request_dispatcher($this->objResponse, $this->objBuilder);
         $objDispatcher->processRequest(_admin_, $strModule, $strAction, $strLanguageParam);
 
         if($this->objResponse->getStrContent() == "") {
