@@ -50,6 +50,7 @@ class class_classloader
       "/admin/widgets/",
       "/admin/",
       "/portal/elements/",
+      "/portal/forms/",
       "/portal/templatemapper/",
       "/portal/",
       "/system/db/",

@@ -27,6 +27,9 @@ DEBUG_walkFolderRecursive(_realpath_, $arrLegacy, $arrOccurences);
 
 echo "Class-Names to search:\n";
 foreach($arrOccurences as $strSearch => $intHit) {
+    if($intHit == 0)
+        continue;
+
     echo str_pad($strSearch, 40)." ".$intHit." Hits\n";
 }
 
@@ -65,7 +68,7 @@ function DEBUG_getLegacyClassNames()
 function DEBUG_walkFolderRecursive($strStartFolder, $arrSearchPatterns, &$arrOccurences)
 {
     $objFilesystem = new class_filesystem();
-    $arrFilesAndFolders = $objFilesystem->getCompleteList($strStartFolder, array(".php"), array(), array(".", "..", ".svn", ".git", "vendor"));
+    $arrFilesAndFolders = $objFilesystem->getCompleteList($strStartFolder, array(".php"), array(), array(".", "..", ".svn", ".git", "vendor", "legacy"));
 
     foreach($arrFilesAndFolders["files"] as $arrOneFile) {
         $strFilename = $arrOneFile["filename"];

@@ -14,7 +14,7 @@ class PharCreator
 {
 
     public $strDeployPath = "";
-    //$strDeployPath = "/Users/sidler/web/agp_v5_master_phar";
+//    public $strDeployPath = "/Users/sidler/web/kajona_phar_only";
 
     public $bitRemoveSource = false;
 
@@ -60,33 +60,6 @@ class PharCreator
                     }
                 }
 
-                if (is_dir(__DIR__."/../".$strOneCore."/".$strFile) && substr($strFile, 0, 8) == 'element_') {
-
-                    $strModuleName = substr($strFile, 8);
-                    $strPharName = "element_".$strModuleName.".phar";
-
-                    $strTargetPath = __DIR__."/../".$strOneCore."/".$strPharName;
-                    if ($this->strDeployPath != "" && is_dir($this->strDeployPath."/".$strOneCore)) {
-                        $strTargetPath = $this->strDeployPath."/".$strOneCore."/".$strPharName;
-                    }
-
-                    $phar = new Phar(
-                        $strTargetPath,
-                        FilesystemIterator::CURRENT_AS_FILEINFO | FilesystemIterator::KEY_AS_FILENAME,
-                        $strPharName
-                    );
-                    $phar->buildFromDirectory(__DIR__."/../".$strOneCore."/element_".$strModuleName);
-                    $phar->setStub($phar->createDefaultStub());
-                    // Compression with ZIP or GZ?
-                    //$phar->convertToExecutable(Phar::ZIP);
-                    //$phar->compress(Phar::GZ);
-                    echo 'Generated phar '.$strPharName."\n";
-
-                    if($this->bitRemoveSource) {
-                        $this->rrmdir(__DIR__."/../".$strOneCore."/element_".$strModuleName);
-                    }
-                }
-
             }
         }
 
@@ -123,15 +96,17 @@ class PharCreator
             $arrObjects = scandir($strDir);
             foreach ($arrObjects as $objObject) {
                 if ($objObject != "." && $objObject != "..") {
-                    if (filetype($strDir."/".$objObject) == "dir") {
+                    if (is_dir($strDir."/".$objObject)) {
                         $this->rrmdir($strDir."/".$objObject);
-                    }
-                    else {
-                        unlink($strDir."/".$objObject);
+                    } else {
+                        $intRetry = 0;
+                        while (!unlink($strDir."/".$objObject) && $intRetry < 8) {
+                            sleep(2);
+                            $intRetry++;
+                        }
                     }
                 }
             }
-            reset($arrObjects);
             rmdir($strDir);
         }
     }

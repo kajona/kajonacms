@@ -127,9 +127,18 @@ class class_usersources_group_ldap extends class_model implements interface_mode
         //load all members from ldap
         $objLdap = class_ldap::getInstance($this->intCfg);
         $arrMembers = $objLdap->getMembersOfGroup($this->getStrDn());
+        sort($arrMembers);
         $objSource = new class_usersources_source_ldap();
 
+        $intI = 0;
         foreach($arrMembers as $strOneMemberDn) {
+
+            if($intI < $intStart || $intI > $intEnd) {
+                $intI++;
+                continue;
+            }
+            $intI++;
+
             //check if the user exists in the kajona-database
             $objUser = $objSource->getUserByDn($strOneMemberDn);
             if($objUser != null) {

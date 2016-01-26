@@ -93,7 +93,6 @@ class class_module_packageserver_portal extends class_portal_controller implemen
 
     private function isValidCategoryFilter($strParam) {
         $arrTypes = array(
-            class_module_packagemanager_manager::STR_TYPE_ELEMENT,
             class_module_packagemanager_manager::STR_TYPE_MODULE,
             class_module_packagemanager_manager::STR_TYPE_TEMPLATE
         );

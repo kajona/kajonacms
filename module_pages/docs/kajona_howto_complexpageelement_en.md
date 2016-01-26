@@ -466,7 +466,7 @@ To finalize the element we'll have a look at the metadata.xml file, too. It is u
     <description>Include external rss-/atom sources into your website.</description>
     <version>4.3</version>
     <author>Kajona Team</author>
-    <type>ELEMENT</type>
+    <type>MODULE</type>
     <providesInstaller>TRUE</providesInstaller>
     <requiredModules>
         <module name="system" version="3.4.9.3" />

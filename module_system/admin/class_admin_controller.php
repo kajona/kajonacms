@@ -345,7 +345,7 @@ abstract class class_admin_controller extends class_abstract_controller {
     public function getModuleRightNaviEntry() {
         $arrLinks = array();
         $arrLinks[] = array("", "");
-        $arrLinks[] = array("right", class_link::getLinkAdmin("right", "change", "&changemodule=".$this->getArrModule("modul"), $this->getLang("commons_module_permissions")));
+        $arrLinks[] = array("right", class_link::getLinkAdmin("right", "change", "&systemid=".$this->getObjModule()->getStrSystemid(), $this->getLang("commons_module_permissions")));
         return $arrLinks;
     }
 

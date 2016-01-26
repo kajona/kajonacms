@@ -151,11 +151,69 @@
         </exec>
     </target>
 
-    <!-- executes javascript jasmine tests -->
-    <target name="jasmine">
+
+    <!-- executes javascript protractor tests -->
+    <target name="protractorSetup" depends="installNpmBuildDependencies">
         <exec dir="${basedir}${jsPath}" executable="${path.node}" failonerror="on">
-            <arg line="./node_modules/jasmine/bin/jasmine.js"/>
+            <arg line="./node_modules/protractor/bin/webdriver-manager update"/>
         </exec>
+        <exec dir="${basedir}${jsPath}" executable="${path.node}" spawn="true">
+            <arg line="./node_modules/protractor/bin/webdriver-manager start"/>
+        </exec>
+
+        <!-- deletes all files from the tmp folder -->
+        <antcall target="setupPackageFolders" />
+
+        <!-- copy all files to the temp folder -->
+        <copy todir="${basedir}${tempPath}" overwrite="true" includeEmptyDirs="true" >
+            <fileset id="sources.dirs" dir="${basedir}${sourcesPath}">
+                <exclude name=".git"/>
+                <include name="core*/module_*/*/**"/>
+                <include name="core*/template_*/*/**"/>
+                <include name="core*/_debugging/*/**"/>
+                <include name="core*/*.php"/>
+                <include name="core*/*.htaccess"/>
+            </fileset>
+        </copy>
+
+        <!-- copy selenium config -->
+        <copy file="${basedir}/setupSeleniumConfig.php" tofile="${basedir}${tempPath}/setupSeleniumConfig.php" />
+
+        <!-- remove modules which are not included in the package config -->
+        <exec executable="${path.php}" dir="${basedir}" failonerror="on" >
+            <arg line="cleanCore.php ${tempPath}"/>
+        </exec>
+
+        <antcall target="buildPackageHelperSelenium" />
+    </target>
+
+    <target name="startWebServer">
+        <!-- start internal webserver -->
+        <exec dir="${basedir}" executable="${path.php}" spawn="true">
+            <arg line="-S 127.0.0.1:8080 -t ${basedir}${tempPath} server.php"/>
+        </exec>
+    </target>
+
+    <target name="protractorExecute">
+        <!-- start internal webserver -->
+        <antcall target="startWebServer" />
+
+        <!-- wait so that the selenium and webserver are ready -->
+        <sleep seconds="4" />
+
+        <!-- run selenium tests -->
+        <exec dir="${basedir}${jsPath}" executable="${path.node}" failonerror="on">
+            <arg line="./node_modules/protractor/bin/protractor e2e/conf.js"/>
+        </exec>
+    </target>
+
+    <target name="protractor" depends="protractorSetup">
+        <antcall target="protractorExecute" />
+    </target>
+
+    <target name="protractorPhar" depends="protractorSetup">
+        <antcall target="modulePharHelper" />
+        <antcall target="protractorExecute" />
     </target>
 
     <!-- removes existing folders and creates them again -->
@@ -186,9 +244,7 @@
     <target name="buildProject">
         <copy todir="${basedir}${projectPath}" overwrite="true"  includeEmptyDirs="true" >
             <fileset id="sources.dirs" dir="${basedir}${sourcesPath}">
-                <exclude name=".svn"/>
                 <exclude name=".git"/>
-                <include name="core*/element_*/**"/>
                 <include name="core*/module_*/*/**"/>
                 <include name="core*/template_*/*/**"/>
                 <include name="core*/_debugging/*/**"/>
@@ -203,12 +259,10 @@
         <antcall target="setupPackageFolders" />
         <copy todir="${basedir}${tempPath}" overwrite="true"  includeEmptyDirs="true" >
             <fileset id="sources.dirs" dir="${basedir}${sourcesPath}">
-                <exclude name=".svn"/>
                 <exclude name=".git"/>
                 <exclude name="core*/module_pchart/" />
                 <exclude name="core*/module_flotchart/" />
 
-                <include name="core*/element_*/**"/>
                 <include name="core*/module_*/*/**"/>
                 <include name="core*/template_*/*/**"/>
                 <include name="core*/*.php"/>
@@ -217,6 +271,7 @@
         </copy>
 
         <antcall target="buildPackageHelper" />
+        <antcall target="modulePharHelper" />
 
         <zip destfile="${basedir}${packagesPath}/kajona_v4_full_${DSTAMP}-${TSTAMP}.zip">
             <fileset dir="${basedir}${tempPath}/../" />
@@ -224,45 +279,18 @@
     </target>
 
 
-    <!-- creates the full-zip including all modules and elements -->
-    <target name="buildFullPharZip" depends="init" >
-        <antcall target="setupPackageFolders" />
-        <copy todir="${basedir}${tempPath}" overwrite="true"  includeEmptyDirs="true" >
-            <fileset id="sources.dirs" dir="${basedir}${sourcesPath}">
-                <exclude name=".git"/>
-                <exclude name="core*/module_pchart/" />
-                <exclude name="core*/module_flotchart/" />
 
-                <include name="core*/element_*/**"/>
-                <include name="core*/module_*/*/**"/>
-                <include name="core*/template_*/*/**"/>
-                <include name="core*/*.php"/>
-                <include name="core*/*.htaccess"/>
-            </fileset>
-        </copy>
-
-        <antcall target="buildPackageHelper" />
-
-        <exec executable="php" dir="${basedir}${tempPath}/core"  failonerror="on" >
-            <arg line="-f generate_phar.php removesource=true"/>
-        </exec>
-
-        <zip destfile="${basedir}${packagesPath}/kajona_v5_full_${DSTAMP}-${TSTAMP}.zip">
-            <fileset dir="${basedir}${tempPath}/../" />
-        </zip>
-    </target>
 
     <!-- creates the full-zip including all modules and elements -->
     <target name="buildAllInOneZip" depends="init" >
         <antcall target="setupPackageFolders" />
         <copy todir="${basedir}${tempPath}" overwrite="true"  includeEmptyDirs="true" >
             <fileset id="sources.dirs" dir="${basedir}${sourcesPath}">
-                <exclude name=".svn"/>
                 <exclude name=".git"/>
-                <exclude name="core*/element_flash/" />
-                <exclude name="core*/element_maps/" />
-                <exclude name="core*/element_userlist/" />
-                <exclude name="core*/element_mediaplayer/" />
+                <exclude name="core*/module_flash/" />
+                <exclude name="core*/module_maps/" />
+                <exclude name="core*/module_userlist/" />
+                <exclude name="core*/module_mediaplayer/" />
                 <exclude name="core*/module_ldap/" />
                 <exclude name="core*/module_packageserver/" />
                 <exclude name="core*/module_pchart/" />
@@ -272,7 +300,6 @@
                 <exclude name="core*/module_pageimportexport/" />
                 <exclude name="core*/module_demo/" />
 
-                <include name="core*/element_*/**"/>
                 <include name="core*/module_*/**"/>
                 <include name="core*/template_*/**"/>
                 <include name="core*/*.php"/>
@@ -281,6 +308,7 @@
         </copy>
 
         <antcall target="buildPackageHelper" />
+        <antcall target="modulePharHelper" />
 
         <zip destfile="${basedir}${packagesPath}/kajona_v4_allinone_${DSTAMP}-${TSTAMP}.zip">
             <fileset dir="${basedir}${tempPath}/../" />
@@ -311,18 +339,25 @@
         </copy>
 
         <antcall target="buildPackageHelper" />
+        <antcall target="modulePharHelper" />
 
         <zip destfile="${basedir}${packagesPath}/kajona_v4_light_${DSTAMP}-${TSTAMP}.zip">
             <fileset dir="${basedir}${tempPath}/../" />
         </zip>
     </target>
 
+    <target name="modulePharHelper" description="generates phar files out of the current module structure">
+        <exec executable="php" dir="${basedir}${tempPath}/core"  failonerror="on" >
+            <arg line="-f generate_phar.php removesource=true"/>
+        </exec>
+    </target>
+
+    <!-- deprecated -->
     <target name="modulePackagesZipHelper" depends="init" description="call this task before using the shellscript in order to generate module-zips">
         <copy todir="${basedir}${tempPath}" overwrite="true"  includeEmptyDirs="true"  >
             <fileset id="sources.dirs" dir="${basedir}${sourcesPath}">
                 <exclude name=".svn"/>
                 <exclude name=".git"/>
-                <include name="core*/element_*/**"/>
                 <include name="core*/module_*/**"/>
                 <include name="core*/template_*/**"/>
                 <include name="core*/_debugging/**"/>
@@ -349,6 +384,23 @@
         <antcall target="compressCss" />
         <antcall target="compressJs" />
         <antcall target="cleanZipContent" />
+    </target>
+
+    <target name="buildPackageHelperSelenium" description="triggers the project setup and the compilation / compression of css / js files">
+        <exec executable="php" dir="${basedir}"  failonerror="on" >
+            <arg line="-f buildProject.php ${tempPath} onlySetup"/>
+        </exec>
+        <antcall target="compileLess" />
+        <antcall target="compressCss" />
+        <antcall target="compressJs" />
+        <delete includeemptydirs="true">
+            <fileset dir="${basedir}${tempPath}" includes="**/*.less"/>
+            <fileset dir="${basedir}${tempPath}" includes="**/less.js"/>
+            <fileset dir="${basedir}${tempPath}" includes="**/less-full.js"/>
+            <fileset dir="${basedir}${tempPath}" includes="**/*.odt"/>
+            <fileset dir="${basedir}${tempPath}" includes="**/setupproject.php"/>
+            <fileset dir="${basedir}${tempPath}" includes="**/.git"/>
+        </delete>
     </target>
 
     <target name="setupPackageFolders" description="deletes the temp-folders and creates the initial structure">
@@ -401,6 +453,7 @@
             <fileset dir="${basedir}${tempPath}" includes="**/*.odt"/>
             <fileset dir="${basedir}${tempPath}" includes="**/core*/*/tests/**"/>
             <fileset dir="${basedir}${tempPath}" includes="**/setupproject.php"/>
+            <fileset dir="${basedir}${tempPath}" includes="**/.git"/>
         </delete>
     </target>
 
@@ -549,6 +602,14 @@
             <!--<arg path="${basedir}${projectPath}" />-->
         </exec>
     </target>
+
+    <!-- executes javascript jasmine tests -->
+    <target name="jasmine">
+        <exec dir="${basedir}${jsPath}" executable="${path.node}" failonerror="on">
+            <arg line="./node_modules/jasmine/bin/jasmine.js"/>
+        </exec>
+    </target>
+
 
     <target name="phpcb" description="Aggregate tool output with PHP_CodeBrowser">
         <exec executable="${path.phpcb}">

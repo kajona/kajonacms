@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<package
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="https://apidocs.kajona.de/xsd/package.xsd"
+        >
+    <title>directorybrowser</title>
+    <description>A simple element to render the content of a folder on the filesystem.</description>
+    <version>2.0</version>
+    <author>Kajona Team</author>
+    <type>MODULE</type>
+    <providesInstaller>TRUE</providesInstaller>
+    <requiredModules>
+        <module name="pages" version="4.7" />
+    </requiredModules>
+</package>
