@@ -67,30 +67,16 @@ class BootstrapCache
      */
     private function __construct()
     {
-
-        include_once(__DIR__."/class_apc_cache.php");
-
         foreach($this->getCacheNames() as $strOneFile) {
-            self::$arrCaches[$strOneFile] = class_apc_cache::getInstance()->getValue(__CLASS__.$strOneFile);
-
-            if(self::$arrCaches[$strOneFile] === false) {
-                if(is_file(_realpath_."/project/temp/".$strOneFile)) {
-                    self::$arrCaches[$strOneFile] = unserialize(file_get_contents(_realpath_."/project/temp/".$strOneFile));
-                }
-                else {
-                }
-
-            }
+            self::$arrCaches[$strOneFile] = CacheManager::getInstance()->getValue(__CLASS__.$strOneFile);
         }
-
     }
 
     public function __destruct()
     {
         foreach($this->getCacheNames() as $strOneFile) {
             if(isset(self::$arrCacheSavesRequired[$strOneFile]) && class_config::getInstance()->getConfig("bootstrapcache_".$strOneFile) === true && isset(self::$arrCaches[$strOneFile])) {
-                class_apc_cache::getInstance()->addValue(__CLASS__.$strOneFile, self::$arrCaches[$strOneFile]);
-                file_put_contents(_realpath_."/project/temp/".$strOneFile, serialize(self::$arrCaches[$strOneFile]));
+                CacheManager::getInstance()->addValue(__CLASS__.$strOneFile, self::$arrCaches[$strOneFile]);
             }
         }
     }
@@ -157,13 +143,8 @@ class BootstrapCache
 
     public function flushCache()
     {
-        $objFilesystem = new class_filesystem();
-        foreach($this->getCacheNames() as $strOneFile) {
-            $objFilesystem->fileDelete("/project/temp/".$strOneFile);
-        }
-
+        CacheManager::getInstance()->flushCache();
         self::$arrCaches = array();
-        class_apc_cache::getInstance()->flushCache();
     }
 }
 

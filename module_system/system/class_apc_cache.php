@@ -16,6 +16,9 @@
  * @package module_system
  * @author sidler@mulchprod.de
  * @since 3.4.2
+ *
+ * @deprecated
+ * @see \Kajona\System\System\CacheManager
  */
 class class_apc_cache
 {

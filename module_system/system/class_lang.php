@@ -7,6 +7,7 @@
 *	$Id$                                              *
 ********************************************************************************************************/
 
+use Kajona\System\System\CacheManager;
 
 /**
  * Class managing access to lang-files
@@ -57,12 +58,12 @@ class class_lang {
      */
     private function __construct() {
         //load texts from session
-        $this->arrTexts = class_apc_cache::getInstance()->getValue("textSessionCache");
+        $this->arrTexts = CacheManager::getInstance()->getValue("textSessionCache");
         if($this->arrTexts === false) {
             $this->arrTexts = array();
         }
 
-        $this->arrFallbackTextEntrys = class_apc_cache::getInstance()->getValue("textSessionFallbackCache");
+        $this->arrFallbackTextEntrys = CacheManager::getInstance()->getValue("textSessionFallbackCache");
         if($this->arrFallbackTextEntrys === false) {
             $this->arrFallbackTextEntrys = array();
         }
@@ -71,8 +72,8 @@ class class_lang {
     public function __destruct() {
         //save texts to session
         if($this->bitSaveToCache) {
-            class_apc_cache::getInstance()->addValue("textSessionCache", $this->arrTexts, class_config::getInstance()->getConfig("textcachetime"));
-            class_apc_cache::getInstance()->addValue("textSessionFallbackCache", $this->arrFallbackTextEntrys, class_config::getInstance()->getConfig("textcachetime"));
+            CacheManager::getInstance()->addValue("textSessionCache", $this->arrTexts, class_config::getInstance()->getConfig("textcachetime"));
+            CacheManager::getInstance()->addValue("textSessionFallbackCache", $this->arrFallbackTextEntrys, class_config::getInstance()->getConfig("textcachetime"));
         }
     }
 

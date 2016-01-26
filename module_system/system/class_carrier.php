@@ -325,7 +325,7 @@ class class_carrier
         }
 
         if ($intCacheType & self::INT_CACHE_TYPE_APC) {
-            class_apc_cache::getInstance()->flushCache();
+            \Kajona\System\System\CacheManager::getInstance()->flushCache();
         }
 
         if ($intCacheType & self::INT_CACHE_TYPE_CHANGELOG) {
