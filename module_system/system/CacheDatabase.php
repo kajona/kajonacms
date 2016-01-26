@@ -13,14 +13,14 @@ use Doctrine\Common\Cache\CacheProvider;
  *
  * @author christoph.kappestein@gmail.com
  * @since 5.0
+ * @internal Do not use this class instead use \Kajona\System\System\CacheManager::getCache() to obtain a cache
  */
 class CacheDatabase extends CacheProvider
 {
     const CACHE_SOURCE = "internal_cache";
 
     /**
-     * Internal cache in case someone calls the method contains() we fetch the data from the database. After that a call
-     * to the fetch() method will not query the database again instead the cache is used
+     * Internal cache to make only one database request in case someone calls contains() and fetch()
      *
      * @var array
      */
