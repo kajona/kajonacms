@@ -45,7 +45,9 @@ class ObjectBuilder
         $this->resolveDependencies($objObject);
 
         // call the constructor after the dependencies are added because the constructor probably uses them
-        call_user_func_array(array($objObject, "__construct"), $arrArguments);
+        if (is_callable(array($objObject, "__construct"))) {
+            call_user_func_array(array($objObject, "__construct"), $arrArguments);
+        }
 
         return $objObject;
     }
