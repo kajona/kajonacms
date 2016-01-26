@@ -67,6 +67,8 @@ class BootstrapCache
      */
     private function __construct()
     {
+        require_once __DIR__ . "/CacheManager.php";
+
         foreach($this->getCacheNames() as $strOneFile) {
             self::$arrCaches[$strOneFile] = CacheManager::getInstance()->getValue(__CLASS__.$strOneFile);
         }
