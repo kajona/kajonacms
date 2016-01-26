@@ -11,8 +11,8 @@
  * @package module_system
  */
 
-//---The Path on the filesystem--------------------------------------------------------------------------
-//Determine the current path on the filesystem. Use the dir-name of the current file minus core/module_system
+// -- The Path on the filesystem ---------------------------------------------------------------------------------------
+// Determine the current path on the filesystem. Use the dir-name of the current file minus core/module_system
 if (substr(__DIR__, 0, 7) == "phar://") {
     define("_realpath_", str_replace(" ", "\040", substr(__DIR__, 7, -23)));
 } else {
@@ -58,13 +58,13 @@ if (file_exists(_realpath_."/project/bootstrap.php"))
 defineWebPath();
 
 // -- Include needed classes of each module ----------------------------------------------------------------------------
-// This registers all service providers of each module. This defines also the module id
+// This registers all service providers of each module
 class_classloader::getInstance()->registerModuleServices(class_carrier::getInstance()->getContainer());
 
 // Now we include all classes which i.e. register event listeners
 class_classloader::getInstance()->includeClasses();
 
-//trigger the phar-extractor-----------------------------------------------------------------------------
+// -- Trigger the phar-extractor ---------------------------------------------------------------------------------------
 \Kajona\System\System\PharModuleExtractor::bootstrapPharContent();
 
 // -- Helper functions -------------------------------------------------------------------------------------------------
