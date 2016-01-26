@@ -9,6 +9,8 @@ namespace Kajona\System\System;
 use Doctrine\Common\Cache\CacheProvider;
 
 /**
+ * Cache provider which uses the class_cache model
+ *
  * @author christoph.kappestein@gmail.com
  * @since 5.0
  */

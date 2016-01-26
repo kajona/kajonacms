@@ -14,7 +14,7 @@ use Doctrine\Common\Cache\FlushableCache;
 use Doctrine\Common\Cache\PhpFileCache;
 
 /**
- * Cache manager which can store and retriefe values from different cache systems. The API is compatible to the
+ * Cache manager which can store and retrieve values from different cache systems. The API is compatible to the
  * class_apc_cache but it is possible to specifiy different cache systems.
  *
  * <code>
@@ -29,8 +29,8 @@ use Doctrine\Common\Cache\PhpFileCache;
  * }
  * </code>
  *
- * It is also possible to specify specific cache types. I.e. if you want to store your data per APC and on the
- * filesystem. The cache types are sorted after speed that means the fastest cache is always applied first
+ * It is also possible to specify specific cache types. I.e. if you want to store your data per APC and also on the
+ * filesystem. In this case the system checks first whether an entry is available in APC and then the database
  * <code>
  * $objCache = CacheManager::getInstance()->getCache(CacheManager::TYPE_APC | CacheManager::TYPE_DATABASE);
  * </code>
