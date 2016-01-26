@@ -90,5 +90,9 @@ class ServiceProvider implements ServiceProviderInterface
         $objContainer['logger'] = function($c){
             return class_logger::getInstance();
         };
+
+        $objContainer['cache_manager'] = function($c){
+            return new CacheManager();
+        };
     }
 }
