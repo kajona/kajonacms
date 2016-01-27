@@ -153,6 +153,8 @@ class class_lang {
      * Returns all properties for a specific module
      *
      * @param string $strModule
+     * @todo merge with commons entries
+     * @todo switch to fallback language
      */
     public function getProperties($strModule)
     {
