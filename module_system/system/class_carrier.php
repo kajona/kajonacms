@@ -50,6 +50,8 @@ class class_carrier
      */
     private function __construct()
     {
+        // create the global DI container
+        $this->boot();
     }
 
     /**
