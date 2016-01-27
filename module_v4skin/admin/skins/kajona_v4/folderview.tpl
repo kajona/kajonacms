@@ -126,7 +126,7 @@
 </div>
 
 <script type="text/javascript">
-    KAJONA.admin.loader.loadFile("_webpath_/[webpath,module_v4skin]/admin/skins/kajona_v4/admin/skins/kajona_v4/js/kajona_dialog.js", function() {
+    KAJONA.admin.loader.loadFile("_webpath_/[webpath,module_v4skin]/admin/skins/kajona_v4/js/kajona_dialog.js", function() {
         KAJONA.admin.folderview.dialog = new KAJONA.admin.ModalDialog('folderviewDialog', 0);
         jsDialog_0 = new KAJONA.admin.ModalDialog('jsDialog_0', 0);
         jsDialog_1 = new KAJONA.admin.ModalDialog('jsDialog_1', 1);

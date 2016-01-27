@@ -7,7 +7,9 @@
 
 if (typeof KAJONA == "undefined") {
     var KAJONA = {
-        util: {},
+        util: {
+            lang: {}
+        },
         portal: {
             lang: {}
         },
@@ -80,22 +82,16 @@ KAJONA.admin.portaleditor = {
         KAJONA.admin.portaleditor.peDialog.init();
 	},
 
+    /**
+     * Called by the backend to close the dialog, e.h. when creating a new element
+     * @param bitSkipConfirmation
+     */
 	closeDialog: function (bitSkipConfirmation) {
-        if(!bitSkipConfirmation)
-	        var bitClose = confirm(KAJONA.admin.lang["pe_dialog_close_warning"]);
-	    if(bitClose || bitSkipConfirmation) {
-            KAJONA.admin.portaleditor.peDialog.hide();
-	    	//reset iframe
-            KAJONA.admin.portaleditor.peDialog.setContentRaw("");
-	    }
+        KAJONA.admin.portaleditor.peDialog.hide();
+        //reset iframe
+        KAJONA.admin.portaleditor.peDialog.setContentRaw("");
 	},
 
-	addNewElements: function (strPlaceholder, strPlaceholderName, arrElements) {
-		this.objPlaceholderWithElements[strPlaceholder] = {
-			placeholderName: strPlaceholderName,
-			elements: arrElements
-		};
-	},
 
     changeElementData : function(strDataPlaceholder, strDataSystemid, objElementData) {
 
@@ -131,8 +127,7 @@ KAJONA.admin.portaleditor = {
         var data = {
             systemid: strSystemid
         };
-        $.post(KAJONA_WEBPATH + '/xml.php?admin=1&module=system&action=delete', data, function () {
-        }).always(function () {
+        $.post(KAJONA_WEBPATH + '/xml.php?admin=1&module=system&action=delete', data, function() {}).always(function () {
                 if(objStatusIndicator) {
                     $objWrapper.addClass('peInactiveElement');
                     objStatusIndicator.showProgress();
@@ -223,7 +218,7 @@ KAJONA.admin.portaleditor.RTE.SaveIndicator = function($objSourceElement) {
 
     this.showProgress = function () {
 
-        objDiv = $('<div>').addClass('peProgressIndicator peSaving');//.attr('data-kajona-indicator', indicatorId);
+        objDiv = $('<div>').addClass('peProgressIndicator peSaving');
         $('body').append(objDiv);
         objDiv.css('left', objSourceElement.position().left+objSourceElement.width()).css('top', objSourceElement.position().top);
     };
@@ -321,9 +316,6 @@ KAJONA.admin.portaleditor.RTE.init = function () {
             return false;
         });
 
-        if (unsavedChanges) {
-            return KAJONA.admin.lang.pe_rte_unsavedChanges;
-        }
     });
 };
 
@@ -522,10 +514,6 @@ KAJONA.admin.portaleditor.globalToolbar = {
     init: function() {
         var $objBody = $('body');
 
-
-
-
-
         var $objContainer = $('<div>').addClass('peGlobalToolbar');
 
         $objContainer.append($('<div>').addClass('peToolbarHeader').append(
@@ -549,7 +537,7 @@ KAJONA.admin.portaleditor.globalToolbar = {
             if(objEntry instanceof KAJONA.admin.portaleditor.toolbar.Action) {
 
                 var $objRowContent = $('<div>').addClass('peGlobalToolbarInfoText')
-                    .append($('<div>').html(objEntry.strLabel))
+                    .append($('<span>').attr('data-lang-property', objEntry.strLabel))
                     .append($('<div>').html(objEntry.strValue));
 
                 var $objRow = $('<div>').addClass('peGlobalToolbarInfoRow')
@@ -601,7 +589,7 @@ KAJONA.admin.portaleditor.globalToolbar = {
             $( ul ).addClass('peGlobalAutocompleteSuggest');
         };
 
-        var $objRowContent = $('<div>').addClass('peGlobalToolbarInfoText').append($('<div>').html("JS.PE.lang.Quickjump")).append($('<div>').append($objInput));
+        var $objRowContent = $('<div>').addClass('peGlobalToolbarInfoText').append($('<div>').attr('data-lang-property', 'pages:pe_quickjump')).append($('<div>').append($objInput));
         var $objRow = $('<div>').addClass('peGlobalToolbarInfoRow').append($('<div>').addClass('peGlobalToolarbarInfoIcon').append($('<i>').addClass('fa fa-search'))).append($objRowContent);
         $objJumpContainer.append($objRow);
 
@@ -648,7 +636,6 @@ KAJONA.admin.portaleditor.elementActionToolbar = {
         var $actionList = $('<div>').addClass('peActionToolbarActionContainer');
 
         actions.forEach(function (action) {
-            var actionTitle = KAJONA.admin.lang['pe' + action.type];
             switch (action.type) {
                 case 'CREATE':
                     var $actionElement = $('<a>');
@@ -670,9 +657,17 @@ KAJONA.admin.portaleditor.elementActionToolbar = {
     generateActionList: function (actions) {
         var $actionList = $('<div>').addClass('peActionToolbarActionContainer');
         actions.forEach(function (action) {
-            var actionTitle = KAJONA.admin.lang['pe' + action.type];
             var $actionElement = $('<a>');
-            $actionElement.attr('rel', 'tooltip').attr('title', actionTitle);
+            $actionElement.attr('rel', 'tooltip');
+
+            KAJONA.util.lang.queue.push({
+                text: ('pe_'+action.type).toLowerCase(),
+                module: 'pages',
+                params: [],
+                callback: function(strText) { $(this).attr('title', strText);  },
+                scope: $actionElement
+            });
+
             switch (action.type) {
                 case 'EDIT':
                     $actionElement.on('click', function () {
@@ -681,15 +676,15 @@ KAJONA.admin.portaleditor.elementActionToolbar = {
                     $actionElement.append($('<i>').addClass('fa fa-pencil'));
                     break;
                 case 'DELETE':
-
                     $actionElement.on('click', function () {
-                        KAJONA.admin.portaleditor.delDialog.setTitle(actionTitle);
-                        KAJONA.admin.portaleditor.delDialog.setContent(KAJONA.admin.lang.peDELETEWARNING, actionTitle, function() {
+                        KAJONA.admin.portaleditor.delDialog.setTitle("<span data-lang-property=\"pages:pe_delete\"></span>");
+                        KAJONA.admin.portaleditor.delDialog.setContent("<span data-lang-property=\"pages:pe_delete_warning\"></span>", "<span data-lang-property=\"pages:pe_delete\"></span>", function() {
                             KAJONA.admin.portaleditor.delDialog.hide();
                             KAJONA.admin.portaleditor.deleteElement(action.systemid);
                             return false;
                         });
                         KAJONA.admin.portaleditor.delDialog.init();
+                        KAJONA.util.lang.initializeProperties($('#delDialog'));
                         return false;
                     });
                     $actionElement.append($('<i>').addClass('fa fa-trash'));
@@ -697,14 +692,12 @@ KAJONA.admin.portaleditor.elementActionToolbar = {
                 case 'SETACTIVE':
                     $actionElement.on('click', function () {
                         KAJONA.admin.portaleditor.status.setStatus(action.systemid, 1);
-                        //KAJONA.admin.portaleditor.openDialog(action.link);
                     });
                     $actionElement.append($('<i>').addClass('fa fa-eye'));
                     break;
                 case 'SETINACTIVE':
                     $actionElement.on('click', function () {
                         KAJONA.admin.portaleditor.status.setStatus(action.systemid, 0);
-                        //KAJONA.admin.portaleditor.openDialog(action.link);
                     });
                     $actionElement.append($('<i>').addClass('fa fa-eye-slash'));
                     break;
@@ -742,9 +735,6 @@ KAJONA.admin.portaleditor.elementActionToolbar = {
                 .css('top', ($objEl.position().top) - 35)
                 .css('left', ($objEl.position().left))
                 .addClass('peShown');
-
-            //$objEl.closest(".peShown").css('display', 'none');
-            //$objEl.parent().parent().parents(".peElementWrapper").find(".peShown").css('display', 'none');
         }
 
     },

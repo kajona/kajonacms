@@ -421,11 +421,8 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
 
         if($objManager->validatePackage($strFile)) {
 
-            if(uniSubstr($strFile, -4) == ".zip") {
-                $objHandler = $objManager->extractPackage($strFile);
-                $objFilesystem = new class_filesystem();
-                $objFilesystem->fileDelete($strFile);
-
+            if(\Kajona\System\System\StringUtil::indexOf($strFile, "/project") !== false) {
+                $objHandler = $objManager->getPackageManagerForPath($strFile);
                 $objHandler->move2Filesystem();
 
                 class_classloader::getInstance()->flushCache();
