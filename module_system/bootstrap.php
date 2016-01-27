@@ -19,8 +19,6 @@ if (substr(__DIR__, 0, 7) == "phar://") {
     define("_realpath_", str_replace(" ", "\040", substr(__DIR__, 0, -18)));
 }
 
-define("_corepath_", str_replace(" ", "\040", substr(__DIR__, 0, -13)));
-
 // -- Loader pre-configuration -----------------------------------------------------------------------------------------
 if (!defined("_xmlLoader_"))
     define("_xmlLoader_", false);
@@ -31,11 +29,11 @@ date_default_timezone_set(date_default_timezone_get());
 
 // -- Include core files -----------------------------------------------------------------------------------------------
 // Functions to have fun & check for mb-string
-if (!include_once _corepath_."/module_system/system/functions.php")
-    rawIncludeError(_corepath_."/module_system/system/functions.php");
+if (!include_once __DIR__."/system/functions.php")
+    rawIncludeError(__DIR__."/system/functions.php");
 
-if (!include_once _corepath_."/module_system/system/class_classloader.php")
-    rawIncludeError(_corepath_."/module_system/system/class_classloader.php");
+if (!include_once __DIR__."/system/class_classloader.php")
+    rawIncludeError(__DIR__."/system/class_classloader.php");
 
 // -- Auto-Loader for classes ------------------------------------------------------------------------------------------
 // Register autoloader
@@ -79,7 +77,7 @@ function rawIncludeError($strFileMissed)
 // Define web path
 function defineWebPath()
 {
-    require_once _corepath_."/module_system/system/class_config.php";
+    require_once __DIR__."/system/class_config.php";
     $strHeaderName = class_config::readPlainConfigsFromFilesystem("https_header");
     $strHeaderValue = strtolower(class_config::readPlainConfigsFromFilesystem("https_header_value"));
 
