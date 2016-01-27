@@ -41,10 +41,6 @@ if (!include_once _corepath_."/module_system/system/class_classloader.php")
 // Register autoloader
 spl_autoload_register(array(class_classloader::getInstance(), "loadClass"));
 
-// -- Boot core dependencies -------------------------------------------------------------------------------------------
-// Create the global DI container
-class_carrier::getInstance()->boot();
-
 // -- Exception handler ------------------------------------------------------------------------------------------------
 // Register global exception handler for exceptions thrown but not catched (bad style ;) )
 set_exception_handler(array("class_exception", "globalExceptionHandler"));
