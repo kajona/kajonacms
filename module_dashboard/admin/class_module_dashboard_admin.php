@@ -129,8 +129,7 @@ class class_module_dashboard_admin extends class_admin_controller implements int
         $strReturn .= "<script type=\"text/javascript\">";
         $strReturn .= <<<JS
             KAJONA.admin.loader.loadFile(['/core/module_dashboard/admin/scripts/fullcalendar/fullcalendar.min.css',
-                '/core/module_system/admin/scripts/jquery/jquery.min.js',
-                '/core/module_dashboard/admin/scripts/fullcalendar/moment.min.js'], function(){
+                '/core/module_dashboard/admin/scripts/fullcalendar/lib/moment.min.js'], function(){
                 KAJONA.admin.loader.loadFile(['/core/module_dashboard/admin/scripts/fullcalendar/fullcalendar.min.js'], function(){
                     var loadCalendar = function(){
                         $('#{$strContainerId}').fullCalendar({
@@ -163,7 +162,7 @@ class class_module_dashboard_admin extends class_admin_controller implements int
                     };
 
                     if ('{$strLang}' != 'en') {
-                        KAJONA.admin.loader.loadFile(['/core/module_dashboard/admin/scripts/fullcalendar/lang.{$strLang}.js'], loadCalendar);
+                        KAJONA.admin.loader.loadFile(['/core/module_dashboard/admin/scripts/fullcalendar/lang/{$strLang}.js'], loadCalendar);
                     } else {
                         loadCalendar();
                     }
