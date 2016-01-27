@@ -453,93 +453,35 @@ class PagesPortalController extends class_portal_controller implements interface
 
         $strPeToolbar .= "<script type='text/javascript'>
 
-
         KAJONA.portal.loader.loadFile([
             '/core/module_pages/admin/scripts/kajona_portaleditor.js',
             '/core/module_system/admin/scripts/jqueryui/jquery-ui.custom.min.js',
+            '/core/module_system/system/scripts/lang.js',
             '/core/module_system/admin/scripts/jqueryui/css/smoothness/jquery-ui.custom.css'
         ], function() {
 
             KAJONA.admin.peToolbarActions = [
-
-                new KAJONA.admin.portaleditor.toolbar.Action(
-                    '{$this->getLang('pe_on_off')}',
-                    '',
-                    'fa-power-off',
-                    function() { KAJONA.admin.portaleditor.switchEnabled({$bitSetEnabled}); }
-                ),
-
+                new KAJONA.admin.portaleditor.toolbar.Action('pages:pe_on_off', '', 'fa-power-off', function() { KAJONA.admin.portaleditor.switchEnabled({$bitSetEnabled}); }),
+                new KAJONA.admin.portaleditor.toolbar.Separator(),                
+                new KAJONA.admin.portaleditor.toolbar.Action('pages:pe_status_page', '{$objPageData->getStrName()}','fa-file-o','' ),
+                new KAJONA.admin.portaleditor.toolbar.Action('pages:pe_status_status','{$strPageStatus}','fa-eye',''),
+                new KAJONA.admin.portaleditor.toolbar.Action('pages:pe_status_autor','{$objPageData->getLastEditUser()}','fa-user',''),
+                new KAJONA.admin.portaleditor.toolbar.Action('pages:pe_status_time','{$strEditDate}','fa-clock-o',''),
                 new KAJONA.admin.portaleditor.toolbar.Separator(),
-
-                new KAJONA.admin.portaleditor.toolbar.Action(
-                    '{$this->getLang('pe_status_page')}',
-                    '{$objPageData->getStrName()}',
-                    'fa-file-o',
-                    ''
-                ),
-                new KAJONA.admin.portaleditor.toolbar.Action(
-                    '{$this->getLang('pe_status_status')}',
-                    '{$strPageStatus}',
-                    'fa-eye',
-                    ''
-                ),
-                new KAJONA.admin.portaleditor.toolbar.Action(
-                    '{$this->getLang('pe_status_autor')}',
-                    '{$objPageData->getLastEditUser()}',
-                    'fa-user',
-                    ''
-                ),
-                new KAJONA.admin.portaleditor.toolbar.Action(
-                    '{$this->getLang('pe_status_time')}',
-                    '{$strEditDate}',
-                    'fa-clock-o',
-                    ''
-                ),
-
-                new KAJONA.admin.portaleditor.toolbar.Separator(),
-
-
-                new KAJONA.admin.portaleditor.toolbar.Action(
-                    '{$this->getLang('pe_icon_page', 'pages')}',
-                    '',
-                    'fa-pencil',
-                    function() { KAJONA.admin.portaleditor.openDialog('{$strEditUrl}'); return false;}
-                ),
-                new KAJONA.admin.portaleditor.toolbar.Action(
-                    '{$this->getLang('pe_icon_new', 'pages')}',
-                    '',
-                    'fa-plus-circle',
-                    function() { KAJONA.admin.portaleditor.openDialog('{$strNewUrl}'); return false;}
-                ),
-                new KAJONA.admin.portaleditor.toolbar.Action(
-                    '{$this->getLang('pe_icon_edit', 'pages')}',
-                    '',
-                    'fa-file-o',
-                    function() { document.location = '{$strPageEditUrl}';}
-                ),
-
+                new KAJONA.admin.portaleditor.toolbar.Action('pages:pe_icon_page','','fa-pencil',function() { KAJONA.admin.portaleditor.openDialog('{$strEditUrl}'); return false;}),
+                new KAJONA.admin.portaleditor.toolbar.Action('pages:pe_icon_new','','fa-plus-circle',function() { KAJONA.admin.portaleditor.openDialog('{$strNewUrl}'); return false;}),
+                new KAJONA.admin.portaleditor.toolbar.Action('pages:pe_icon_edit','','fa-file-o',function() { document.location = '{$strPageEditUrl}';}),
                 new KAJONA.admin.portaleditor.toolbar.Separator()
             ];
 
             KAJONA.admin.actions = ".PagesPortaleditor::getInstance()->convertToJs().";
-
-            KAJONA.admin.lang.pe_rte_unsavedChanges = '[lang,pe_rte_unsavedChanges,pages]';
-            KAJONA.admin.lang.peMOVE = '[lang,pe_move,pages]';
-            KAJONA.admin.lang.peEDIT = '[lang,pe_edit,pages]';
-            KAJONA.admin.lang.peCOPY = '[lang,pe_copy,pages]';
-            KAJONA.admin.lang.peDELETE = '[lang,pe_delete,pages]';
-            KAJONA.admin.lang.peDELETEWARNING = '[lang,pe_delete_warning,pages]';
-            KAJONA.admin.lang.peCREATE = '[lang,pe_new,pages]';
-            KAJONA.admin.lang.peSETACTIVE = '[lang,pe_setactive,pages]';
-            KAJONA.admin.lang.peSETINACTIVE = '[lang,pe_setinactive,pages]';
-            KAJONA.admin.lang['pe_dialog_close_warning'] = '[lang,pe_dialog_close_warning,pages]';
             KAJONA.portal.loader.loadFile([
-                '_webpath_/core/module_v4skin/admin/skins/kajona_v4/js/bootstrap.min.js',
-                '_webpath_/core/module_v4skin/admin/skins/kajona_v4/js/kajona_dialog.js'
+                '/core/module_v4skin/admin/skins/kajona_v4/js/bootstrap.min.js',
+                '/core/module_v4skin/admin/skins/kajona_v4/js/kajona_dialog.js'
             ], function() {
                 KAJONA.admin.portaleditor.peDialog = new KAJONA.admin.ModalDialog('peDialog', 0, true, true);
                 KAJONA.admin.portaleditor.delDialog = new KAJONA.admin.ModalDialog('delDialog', 1, false, false);
-            }, true);
+            });
 
             KAJONA.admin.portaleditor.RTE.config = {
                 language : '".(class_session::getInstance()->getAdminLanguage() != "" ? class_session::getInstance()->getAdminLanguage() : "en")."',
@@ -553,11 +495,13 @@ class PagesPortalController extends class_portal_controller implements interface
                 filebrowserImageWindowWindowHeight : 500
             };
 
-            KAJONA.admin.portaleditor.initPortaleditor();
-
-            KAJONA.admin.portaleditor.elementActionToolbar.init();
-            KAJONA.admin.portaleditor.globalToolbar.init();
-            KAJONA.admin.tooltip.initTooltip();
+            $(function() {
+                KAJONA.admin.portaleditor.initPortaleditor();
+                KAJONA.admin.portaleditor.elementActionToolbar.init();
+                KAJONA.admin.portaleditor.globalToolbar.init();
+                KAJONA.admin.tooltip.initTooltip();
+                KAJONA.util.lang.initializeProperties();
+            });
         });
         </script>";
 

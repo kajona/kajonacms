@@ -123,6 +123,7 @@ $lang["pe_status_page"]                  = "Page";
 $lang["pe_status_status"]                = "Status";
 $lang["pe_status_time"]                  = "Last modification";
 $lang["pe_on_off"]                       = "Enable / disable portal editor";
+$lang["pe_quickjump"]                    = "Jump to page";
 $lang["plNew"]                           = "New placeholder";
 $lang["plRename"]                        = "Update";
 $lang["plToUpdate"]                      = "Old placeholder";
