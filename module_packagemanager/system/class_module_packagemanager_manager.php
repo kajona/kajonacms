@@ -144,6 +144,7 @@ class class_module_packagemanager_manager {
      * The matching packagemanager is returned.
      *
      * @param string $strPackagePath
+     * @deprecated
      *
      * @return interface_packagemanager_packagemanager
      */

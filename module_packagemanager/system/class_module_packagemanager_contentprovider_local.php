@@ -68,12 +68,12 @@ class class_module_packagemanager_contentprovider_local implements interface_pac
         //fetch the upload, validate a few settings and copy the package to /project/temp
         $arrSource = class_carrier::getInstance()->getParam("provider_local_file");
 
-        $strTarget = "/project/temp/".generateSystemid().".zip";
+        $strTarget = "/project/temp/".$arrSource["name"];
         $objFilesystem = new class_filesystem();
 
         //Check file for correct filters
         $strSuffix = uniStrtolower(uniSubstr($arrSource["name"], uniStrrpos($arrSource["name"], ".")));
-        if(in_array($strSuffix, array(".zip"))) {
+        if(in_array($strSuffix, array(".phar"))) {
             if($objFilesystem->copyUpload($strTarget, $arrSource["tmp_name"])) {
                 class_logger::getInstance(class_logger::PACKAGEMANAGEMENT)->addLogRow("uploaded package ".$arrSource["name"]." to ".$strTarget, class_logger::$levelInfo);
                 class_resourceloader::getInstance()->flushCache();
