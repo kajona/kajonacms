@@ -9,6 +9,7 @@ namespace Kajona\System\System;
 use Doctrine\Common\Cache\ApcCache;
 use Doctrine\Common\Cache\ApcuCache;
 use Doctrine\Common\Cache\ArrayCache;
+use Doctrine\Common\Cache\CacheProvider;
 use Doctrine\Common\Cache\ChainCache;
 use Doctrine\Common\Cache\FilesystemCache;
 use Doctrine\Common\Cache\FlushableCache;
@@ -83,37 +84,50 @@ class CacheManager
     protected $arrSystems = array();
 
     /**
+     * @var string
+     */
+    protected $strSystemKey;
+
+    /**
      * @var CacheManager
      */
     private static $objInstance = null;
 
-    /**
-     * Returns a specific cache system
-     *
-     * @param integer $intType
-     * @return \Doctrine\Common\Cache\Cache
-     */
-    public function getCache($intType = null)
+    public function __construct()
     {
-        if ($intType === null) {
-            $intType = self::TYPE_APC | self::TYPE_FILESYSTEM;
-        }
-
-        if (isset($this->arrSystems[$intType])) {
-            return $this->arrSystems[$intType];
-        } else {
-            return $this->arrSystems[$intType] = $this->buildDriver($intType);
-        }
+        $this->strSystemKey = md5(__FILE__);
     }
 
     /**
-     * @param $strKey
-     * @param integer $intType
+     * @param string $strKey
+     * @param int $intType
      * @return mixed
      */
     public function getValue($strKey, $intType = null)
     {
         return $this->getCache($intType)->fetch($strKey);
+    }
+
+    /**
+     * @param string $strKey
+     * @param mixed $objValue
+     * @param int $intTtl
+     * @param int $intType
+     * @return bool
+     */
+    public function addValue($strKey, $objValue, $intTtl = 180, $intType = null)
+    {
+        return $this->getCache($intType)->save($strKey, $objValue, $intTtl);
+    }
+
+    /**
+     * @param string $strKey
+     * @param int $intType
+     * @return bool
+     */
+    public function removeValue($strKey, $intType = null)
+    {
+        return $this->getCache($intType)->delete($strKey);
     }
 
     /**
@@ -130,15 +144,22 @@ class CacheManager
     }
 
     /**
-     * @param $strKey
-     * @param $objValue
-     * @param int $intTtl
+     * Returns a specific cache system
+     *
      * @param integer $intType
-     * @return bool
+     * @return \Doctrine\Common\Cache\Cache
      */
-    public function addValue($strKey, $objValue, $intTtl = 180, $intType = null)
+    protected function getCache($intType = null)
     {
-        return $this->getCache($intType)->save($strKey, $objValue, $intTtl);
+        if ($intType === null) {
+            $intType = self::TYPE_APC | self::TYPE_FILESYSTEM;
+        }
+
+        if (isset($this->arrSystems[$intType])) {
+            return $this->arrSystems[$intType];
+        } else {
+            return $this->arrSystems[$intType] = $this->buildDriver($intType);
+        }
     }
 
     protected function buildDriver($intType)
@@ -175,13 +196,20 @@ class CacheManager
             $arrDriver[] = new PhpFileCache(_realpath_ . "/project/temp/cache", ".cache.php");
         }
 
+        $objCache = null;
         if (count($arrDriver) == 1) {
-            return current($arrDriver);
+            $objCache = current($arrDriver);
         } elseif (count($arrDriver) > 1) {
-            return new ChainCache($arrDriver);
+            $objCache = new ChainCache($arrDriver);
         } else {
             throw new \class_exception("Invalid cache type", \class_exception::$level_ERROR);
         }
+
+        if ($objCache instanceof CacheProvider) {
+            $objCache->setNamespace($this->strSystemKey);
+        }
+
+        return $objCache;
     }
 
     /**

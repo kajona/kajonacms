@@ -5,6 +5,8 @@
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 ********************************************************************************************************/
 
+use Kajona\System\System\CacheManager;
+
 /**
  * The APC cache depends on the optional apc-bytecode cache.
  *
@@ -22,27 +24,17 @@
  */
 class class_apc_cache
 {
-
     /**
      * @var class_apc_cache
      */
     private static $objInstance = null;
-
-    private static $arrFallbackCache = array();
-
-    private $bitAPCInstalled = false;
-
-    private $strSystemKey = "";
 
     /**
      * singleton, use getInstance instead
      */
     private function __construct()
     {
-        $this->bitAPCInstalled = function_exists("apc_store") && function_exists("apc_cache_info") && @apc_cache_info() !== false;
-        $this->strSystemKey = md5(__FILE__);
     }
-
 
     /**
      * Returns a valid instance
@@ -70,17 +62,7 @@ class class_apc_cache
      */
     public function addValue($strKey, $objValue, $intTtl = 180)
     {
-
-        if (!is_numeric($intTtl)) {
-            $intTtl = 180;
-        }
-
-        $strKey = $this->strSystemKey.$strKey;
-        if (!$this->bitAPCInstalled) {
-            return self::$arrFallbackCache[$strKey] = $objValue;
-        }
-
-        return @apc_store($strKey, $objValue, $intTtl);
+        return CacheManager::getInstance()->addValue($strKey, $objValue, $intTtl, CacheManager::TYPE_APC);
     }
 
     /**
@@ -93,25 +75,9 @@ class class_apc_cache
      */
     public function getValue($strKey, &$objDefaultValue = false)
     {
-        $strKey = $this->strSystemKey.$strKey;
-        if (!$this->bitAPCInstalled) {
-            if (isset(self::$arrFallbackCache[$strKey])) {
-                return self::$arrFallbackCache[$strKey];
-            }
-            else {
-                return $objDefaultValue;
-            }
-        }
+        $strValue = CacheManager::getInstance()->getValue($strKey, CacheManager::TYPE_APC);
 
-        $bitSuccess = null;
-        $mixedValue = apc_fetch($strKey, $bitSuccess);
-
-        if ($bitSuccess === false) {
-            return $objDefaultValue;
-        }
-        else {
-            return $mixedValue;
-        }
+        return $strValue === false ? $objDefaultValue : $strValue;
     }
 
     /**
@@ -121,14 +87,7 @@ class class_apc_cache
      */
     public function flushCache()
     {
-        if (!$this->bitAPCInstalled) {
-            self::$arrFallbackCache = array();
-        }
-        else {
-            apc_clear_cache("user");
-            apc_clear_cache();
-        }
-
+        CacheManager::getInstance()->flushCache(CacheManager::TYPE_APC);
     }
 
     /**
@@ -136,7 +95,6 @@ class class_apc_cache
      */
     public function getBitAPCInstalled()
     {
-        return $this->bitAPCInstalled;
+        return function_exists("apc_store") && function_exists("apc_cache_info") && @apc_cache_info() !== false;
     }
-
 }
