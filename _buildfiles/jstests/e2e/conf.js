@@ -19,7 +19,19 @@ exports.config = {
     }],
     onPrepare: function() {
         jasmine.getEnv().addReporter(new ScreenShotReporter({
-            baseDirectory: '../build/screenshots'
+            baseDirectory: '../build/screenshots',
+            pathBuilder: function(spec, descriptions, results, capabilities){
+                var fileName = descriptions.reverse().join("_");
+                var name = '';
+                for (var i = 0; i < fileName.length; i++) {
+                    if (fileName.charAt(i).match(/^[A-z0-9_]$/)) {
+                        name+= fileName.charAt(i);
+                    } else if (fileName.charAt(i) == ' ') {
+                        name+= '_';
+                    }
+                }
+                return name;
+            }
         }));
     }
 };
