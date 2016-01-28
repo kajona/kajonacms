@@ -245,6 +245,10 @@ class class_installer {
                 $strFileContent .= "\n";
                 //and save to file
                 file_put_contents($this->STR_PROJECT_CONFIG_FILE, $strFileContent);
+
+                // flush cache after config was written
+                class_classloader::getInstance()->flushCache();
+
                 // and reload
                 class_response_object::getInstance()->setStrRedirectUrl(_webpath_."/installer.php?step=loginData");
                 $this->strOutput = "";
