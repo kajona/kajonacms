@@ -47,6 +47,11 @@ abstract class class_module_workflows_todo_provider_base implements interface_to
                 $objTodo->setStrIcon($objWorkflow->getStrIcon());
                 $objTodo->setStrCategory($strWorkflowClass);
                 $objTodo->setStrDisplayName($objWorkflow->getStrDisplayName());
+
+                if ($this->shouldUseTriggerDate()) {
+                    $objTodo->setObjValidDate($objWorkflow->getObjTriggerdate());
+                }
+
                 $objTodo->setArrModuleNavi(array(
                     class_link::getLinkAdmin("workflows", "showUI", "&systemid=" . $objWorkflow->getSystemid(), "", $objLang->getLang("workflow_ui", "workflows"), "icon_workflow_ui")
                 ));
@@ -64,5 +69,15 @@ abstract class class_module_workflows_todo_provider_base implements interface_to
      * @return array<workflow_class => "category label">
      */
     abstract protected function getWorkflowClasses();
+
+    /**
+     * Can be overwritten to use the trigger date as valid date for the todo entry
+     *
+     * @return bool
+     */
+    protected function shouldUseTriggerDate()
+    {
+        return false;
+    }
 }
 
