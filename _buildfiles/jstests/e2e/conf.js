@@ -1,4 +1,6 @@
 
+var ScreenShotReporter = require('protractor-screenshot-reporter');
+
 exports.config = {
     seleniumAddress: 'http://localhost:4444/wd/hub',
     specs: [
@@ -14,5 +16,10 @@ exports.config = {
         path: '../node_modules/protractor/plugins/console/index.js',
         failOnWarning: false,
         failOnError: true
-    }]
+    }],
+    onPrepare: function() {
+        jasmine.getEnv().addReporter(new ScreenShotReporter({
+            baseDirectory: '../../build/screenshots'
+        }));
+    }
 };
