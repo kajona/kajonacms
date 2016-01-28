@@ -89,13 +89,13 @@ class class_resourceloader
         //first try: load the file in the current template-pack
         $strDefaultTemplate = class_module_system_setting::getConfigValue("_packagemanager_defaulttemplate_");
         if (is_file(_realpath_._templatepath_."/".$strDefaultTemplate."/tpl".$strTemplateName)) {
-            BootstrapCache::getInstance()->addCacheRow(BootstrapCache::CACHE_TEMPLATES, $strTemplateName, _templatepath_."/".$strDefaultTemplate."/tpl".$strTemplateName);
+            BootstrapCache::getInstance()->addCacheRow(BootstrapCache::CACHE_TEMPLATES, $strTemplateName, _realpath_._templatepath_."/".$strDefaultTemplate."/tpl".$strTemplateName);
             return _realpath_._templatepath_."/".$strDefaultTemplate."/tpl".$strTemplateName;
         }
 
         //second try: load the file from the default-pack
         if (is_file(_realpath_._templatepath_."/default/tpl".$strTemplateName)) {
-            BootstrapCache::getInstance()->addCacheRow(BootstrapCache::CACHE_TEMPLATES, $strTemplateName, _templatepath_."/default/tpl".$strTemplateName);
+            BootstrapCache::getInstance()->addCacheRow(BootstrapCache::CACHE_TEMPLATES, $strTemplateName, _realpath_._templatepath_."/default/tpl".$strTemplateName);
             return _realpath_._templatepath_."/default/tpl".$strTemplateName;
         }
 

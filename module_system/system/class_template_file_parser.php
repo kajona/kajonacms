@@ -36,6 +36,13 @@ class class_template_file_parser
             $strTemplateContent = "Template ".$strTemplateFilename." not found!";
         }
 
+        //search for includes
+        preg_match_all("#\[KajonaTemplateInclude,([A-Za-z0-9_/\.]+)\]#i", $strTemplateContent, $arrTemp);
+
+        foreach($arrTemp[0] as $intKey => $strSearchString) {
+            $strTemplateContent = \Kajona\System\System\StringUtil::replace($strSearchString, $this->readTemplate($arrTemp[1][$intKey]), $strTemplateContent);
+        }
+
         //Saving to the cache
         $this->arrCacheTemplates[$strHash] = $strTemplateContent;
         return $strTemplateContent;
