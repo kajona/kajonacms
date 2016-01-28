@@ -7,6 +7,7 @@
 namespace Kajona\System\System;
 
 use Doctrine\Common\Cache\ApcCache;
+use Doctrine\Common\Cache\ApcuCache;
 use Doctrine\Common\Cache\ArrayCache;
 use Doctrine\Common\Cache\ChainCache;
 use Doctrine\Common\Cache\FilesystemCache;
@@ -142,7 +143,7 @@ class CacheManager
 
     protected function buildDriver($intType)
     {
-        require_once _realpath_ . '/core/module_system/vendor/autoload.php';
+        require_once __DIR__ . '/../vendor/autoload.php';
         $arrDriver = array();
 
         if ($intType & self::TYPE_ARRAY) {
@@ -150,9 +151,13 @@ class CacheManager
         }
 
         if ($intType & self::TYPE_APC) {
-            if (function_exists("apc_cache_info") && @apc_cache_info() !== false) {
+            if (function_exists("apcu_cache_info") && @apcu_cache_info() !== false) {
+                $arrDriver[] = new ApcuCache();
+            }
+            elseif (function_exists("apc_cache_info") && @apc_cache_info() !== false) {
                 $arrDriver[] = new ApcCache();
-            } elseif (!($intType & self::TYPE_ARRAY)) {
+            }
+            elseif (!($intType & self::TYPE_ARRAY)) {
                 // in case we have no APC use a simple array cache but only if we have not already added a array cache
                 $arrDriver[] = new ArrayCache();
             }
