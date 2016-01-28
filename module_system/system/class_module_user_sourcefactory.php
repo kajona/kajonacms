@@ -15,18 +15,20 @@
  * @since 3.4.1
  * @package module_user
  */
-class class_module_user_sourcefactory {
+class class_module_user_sourcefactory
+{
 
     private $arrSubsystemsAvailable = array("kajona");
 
     /**
      * Default constructor
      */
-    public function __construct() {
+    public function __construct()
+    {
 
         //try to load the list of subsystems available
         $strConfig = class_carrier::getInstance()->getObjConfig()->getConfig("loginproviders");
-        if($strConfig != "") {
+        if ($strConfig != "") {
             $this->arrSubsystemsAvailable = explode(",", $strConfig);
         }
     }
@@ -40,13 +42,14 @@ class class_module_user_sourcefactory {
      *
      * @return class_module_user_group or null
      */
-    public function getGroupByName($strName) {
+    public function getGroupByName($strName)
+    {
 
         //validate if a group with the given name is available
-        $strQuery = "SELECT group_id FROM " . _dbprefix_ . "user_group where group_name = ?";
+        $strQuery = "SELECT group_id FROM "._dbprefix_."user_group where group_name = ?";
         $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array($strName));
 
-        if(isset($arrRow["group_id"]) && validateSystemid($arrRow["group_id"])) {
+        if (isset($arrRow["group_id"]) && validateSystemid($arrRow["group_id"])) {
             return new class_module_user_group($arrRow["group_id"]);
         }
 
@@ -61,15 +64,16 @@ class class_module_user_sourcefactory {
      *
      * @return class_module_user_group[]
      */
-    public function getGrouplistByQuery($strName) {
+    public function getGrouplistByQuery($strName)
+    {
 
         //validate if a group with the given name is available
-        $strQuery = "SELECT group_id, group_subsystem FROM " . _dbprefix_ . "user_group where group_name LIKE ?";
-        $arrRows = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array($strName . "%"));
+        $strQuery = "SELECT group_id, group_subsystem FROM "._dbprefix_."user_group where group_name LIKE ?";
+        $arrRows = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array($strName."%"));
 
         $arrReturn = array();
-        foreach($arrRows as $arrOneRow) {
-            if(in_array($arrOneRow["group_subsystem"], $this->arrSubsystemsAvailable)) {
+        foreach ($arrRows as $arrOneRow) {
+            if (in_array($arrOneRow["group_subsystem"], $this->arrSubsystemsAvailable)) {
                 $arrReturn[] = new class_module_user_group($arrOneRow["group_id"]);
             }
         }
@@ -85,26 +89,29 @@ class class_module_user_sourcefactory {
      *
      * @return class_module_user_user or null
      */
-    public function getUserByUsername($strName) {
+    public function getUserByUsername($strName)
+    {
 
         //validate if a group with the given name is available
 
-        if(class_module_system_module::getModuleByName("user") != null && version_compare(class_module_system_module::getModuleByName("user")->getStrVersion(), "4.5", ">="))
-            $strQuery = "SELECT user_id FROM " . _dbprefix_ . "user where user_username = ? AND (user_deleted = 0 OR user_deleted IS NULL)";
-        else
-            $strQuery = "SELECT user_id FROM " . _dbprefix_ . "user where user_username = ?";
+        if (class_module_system_module::getModuleByName("user") != null && version_compare(class_module_system_module::getModuleByName("user")->getStrVersion(), "4.5", ">=")) {
+            $strQuery = "SELECT user_id FROM "._dbprefix_."user where user_username = ? AND (user_deleted = 0 OR user_deleted IS NULL)";
+        }
+        else {
+            $strQuery = "SELECT user_id FROM "._dbprefix_."user where user_username = ?";
+        }
 
         $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array($strName));
 
-        if(isset($arrRow["user_id"]) && validateSystemid($arrRow["user_id"])) {
+        if (isset($arrRow["user_id"]) && validateSystemid($arrRow["user_id"])) {
             return new class_module_user_user($arrRow["user_id"]);
         }
 
         //since some login-provides may trigger additional searches, query them now
-        foreach($this->arrSubsystemsAvailable as $strOneSubsystem) {
+        foreach ($this->arrSubsystemsAvailable as $strOneSubsystem) {
             $objUser = $this->getUsersource($strOneSubsystem)->getUserByUsername($strName);
             //convert the user to a real one
-            if($objUser != null) {
+            if ($objUser != null) {
                 return new class_module_user_user($objUser->getSystemid());
             }
         }
@@ -121,11 +128,12 @@ class class_module_user_sourcefactory {
      *
      * @return class_module_user_user
      */
-    public function getUserlistByUserquery($strParam) {
+    public function getUserlistByUserquery($strParam)
+    {
 
         $strDbPrefix = _dbprefix_;
         //validate if a group with the given name is available
-        if(version_compare(class_module_system_module::getModuleByName("user")->getStrVersion(), "4.5", ">=")) {
+        if (version_compare(class_module_system_module::getModuleByName("user")->getStrVersion(), "4.5", ">=")) {
 
             $strQuery = "SELECT user_tbl.user_id, user_tbl.user_subsystem
                           FROM {$strDbPrefix}user AS user_tbl
@@ -147,8 +155,8 @@ class class_module_user_sourcefactory {
         $arrRows = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, $arrParams);
 
         $arrReturn = array();
-        foreach($arrRows as $arrOneRow) {
-            if(in_array($arrOneRow["user_subsystem"], $this->arrSubsystemsAvailable)) {
+        foreach ($arrRows as $arrOneRow) {
+            if (in_array($arrOneRow["user_subsystem"], $this->arrSubsystemsAvailable)) {
                 $arrReturn[] = new class_module_user_user($arrOneRow["user_id"]);
             }
         }
@@ -161,6 +169,8 @@ class class_module_user_sourcefactory {
      * Tries to authenticate a user identified by its username and password.
      * If given the leightweight user-object is returned.
      * Otherwise null is returned AND an authentication-exception is being raised.
+     * Only logins with username and password are allowed. This avoids problems with
+     * mis-configured systems such as MS AD.
      *
      * @param string $strName
      * @param string $strPassword
@@ -168,19 +178,29 @@ class class_module_user_sourcefactory {
      * @throws class_authentication_exception
      * @return interface_usersources_user
      */
-    public function authenticateUser($strName, $strPassword) {
+    public function authenticateUser($strName, $strPassword)
+    {
+        if(empty($strName) || empty($strPassword)) {
+            throw new class_authentication_exception("user ".$strName." could not be authenticated", class_exception::$level_ERROR);
+        }
+
         $objUser = $this->getUserByUsername($strName);
-        if($objUser != null) {
+        //validate if the user is assigned to at least a single group
+        if(empty($objUser->getArrGroupIds())) {
+            throw new class_authentication_exception("user ".$strName." is not assigned to at least a single group", class_exception::$level_ERROR);
+        }
+
+        if ($objUser != null) {
             $objSubsystem = $this->getUsersource($objUser->getStrSubsystem());
             $objPlainUser = $objSubsystem->getUserById($objUser->getSystemid());
 
-            if($objPlainUser != null && $objSubsystem->authenticateUser($objPlainUser, $strPassword)) {
+
+            if ($objPlainUser != null && $objSubsystem->authenticateUser($objPlainUser, $strPassword)) {
                 return true;
             }
         }
 
-
-        throw new class_authentication_exception("user " . $strName . " could not be authenticated", class_exception::$level_ERROR);
+        throw new class_authentication_exception("user ".$strName." could not be authenticated", class_exception::$level_ERROR);
     }
 
     /**
@@ -190,7 +210,8 @@ class class_module_user_sourcefactory {
      *
      * @return interface_usersources_group
      */
-    public function getSourceGroup(class_module_user_group $objLeightweightGroup) {
+    public function getSourceGroup(class_module_user_group $objLeightweightGroup)
+    {
         $objSubsystem = $this->getUsersource($objLeightweightGroup->getStrSubsystem());
         $objPlainGroup = $objSubsystem->getGroupById($objLeightweightGroup->getSystemid());
         return $objPlainGroup;
@@ -204,9 +225,11 @@ class class_module_user_sourcefactory {
      * @throws class_exception
      * @return interface_usersources_user
      */
-    public function getSourceUser(class_module_user_user $objLeightweightUser) {
-        if($objLeightweightUser->getIntDeleted() == 1)
+    public function getSourceUser(class_module_user_user $objLeightweightUser)
+    {
+        if ($objLeightweightUser->getIntDeleted() == 1) {
             throw new class_exception("User was deleted, source user no longer available", class_exception::$level_ERROR);
+        }
 
         $objSubsystem = $this->getUsersource($objLeightweightUser->getStrSubsystem());
         $objPlainUser = $objSubsystem->getUserById($objLeightweightUser->getSystemid());
@@ -223,15 +246,16 @@ class class_module_user_sourcefactory {
      * @throws class_exception
      * @return interface_usersources_usersource or null if not existing, an exception is raised, too.
      */
-    public function getUsersource($strName) {
+    public function getUsersource($strName)
+    {
         $strName = trim($strName);
-        if($strName == "") {
-            throw new class_exception("login provider " . $strName . " not existing", class_exception::$level_ERROR);
+        if ($strName == "") {
+            throw new class_exception("login provider ".$strName." not existing", class_exception::$level_ERROR);
         }
 
-        $strClassname = "class_usersources_source_" . $strName;
-        if(!class_exists($strClassname)) {
-            throw new class_exception("login provider " . $strName . " not existing", class_exception::$level_ERROR);
+        $strClassname = "class_usersources_source_".$strName;
+        if (!class_exists($strClassname)) {
+            throw new class_exception("login provider ".$strName." not existing", class_exception::$level_ERROR);
         }
 
         $objSubsystem = new $strClassname();
@@ -243,7 +267,8 @@ class class_module_user_sourcefactory {
      *
      * @return string[]
      */
-    public function getArrUsersources() {
+    public function getArrUsersources()
+    {
         return $this->arrSubsystemsAvailable;
     }
 
