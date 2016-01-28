@@ -19,7 +19,7 @@ exports.config = {
     }],
     onPrepare: function() {
         jasmine.getEnv().addReporter(new ScreenShotReporter({
-            baseDirectory: '../../build/screenshots'
+            baseDirectory: '../build/screenshots'
         }));
     }
 };
