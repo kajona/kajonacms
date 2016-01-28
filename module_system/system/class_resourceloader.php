@@ -106,14 +106,31 @@ class class_resourceloader
                     $strFilename = _realpath_."/".$strCorePath."/templates/default/tpl".$strTemplateName;
                     break;
                 }
+                if (is_file(_realpath_."/".$strCorePath.$strTemplateName)) {
+                    $strFilename = _realpath_."/".$strCorePath.$strTemplateName;
+                    break;
+                }
             } elseif (PharModule::isPhar(_realpath_."/".$strCorePath)) {
                 $strAbsolutePath = PharModule::getPharStreamPath(_realpath_."/".$strCorePath, "/templates/default/tpl".$strTemplateName);
                 if (is_file($strAbsolutePath)) {
                     $strFilename = $strAbsolutePath;
                     break;
                 }
+
+                $strAbsolutePath = PharModule::getPharStreamPath(_realpath_."/".$strCorePath, $strTemplateName);
+                if (is_file($strAbsolutePath)) {
+                    $strFilename = $strAbsolutePath;
+                    break;
+                }
             }
         }
+
+        if($strFilename !== null) {
+            BootstrapCache::getInstance()->addCacheRow(BootstrapCache::CACHE_TEMPLATES, $strTemplateName, $strFilename);
+            return $strFilename;
+        }
+
+
 
         if ($bitScanAdminSkin) {
             //scan directly
