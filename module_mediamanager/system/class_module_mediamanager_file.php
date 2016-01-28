@@ -305,7 +305,7 @@ class class_module_mediamanager_file extends class_model implements interface_mo
     protected function updateStateToDb() {
 
         //check if its a valid package
-        if(uniSubstr($this->getStrFilename(), -4) == ".zip") {
+        if(uniSubstr($this->getStrFilename(), -5) == ".phar") {
             $this->updatePackageInformation();
         }
 
@@ -316,9 +316,7 @@ class class_module_mediamanager_file extends class_model implements interface_mo
      * Updates the internal information of the file based on the metadata.xml
      */
     private function updatePackageInformation() {
-        $objZip = new class_zip();
-        $strMetadata = $objZip->getFileFromArchive($this->getStrFilename(), "/metadata.xml");
-        if($strMetadata !== false) {
+        if(is_file("phar://"._realpath_."/".$this->getStrFilename()."/metadata.xml")) {
             $objMetadata = new class_module_packagemanager_metadata();
             $objMetadata->autoInit($this->getStrFilename());
             $this->setBitIspackage(1);

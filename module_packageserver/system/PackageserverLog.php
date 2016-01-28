@@ -4,16 +4,23 @@
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 ********************************************************************************************************/
 
+namespace Kajona\Packageserver\System;
+
+use class_carrier;
+use class_date;
+use class_model;
+use interface_model;
+
+
 /**
  * Model for the packageserver-log
  *
- * @package module_packageserver
  * @author sidler@mulchprod.de
  *
  * @module mediamanager
  * @moduleId _packagemanager_module_id_
  */
-class class_module_packageserver_log extends class_model implements interface_model {
+class PackageserverLog extends class_model implements interface_model {
 
     /**
      * Generates an entry in the logtable

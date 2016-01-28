@@ -5,6 +5,7 @@
 *-------------------------------------------------------------------------------------------------------*
 *	$Id$                                  *
 ********************************************************************************************************/
+use Kajona\System\System\StringUtil;
 
 /**
  * Admin-GUI of the packagemanager.
@@ -349,12 +350,11 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
         foreach($objHandler->getObjMetadata()->getArrScreenshots() as $strOneScreenshot) {
 
             $strImage = "";
-            if(uniSubstr($objHandler->getObjMetadata()->getStrPath(), 0, -4) == ".zip") {
-                $objZip = new class_zip();
-                $objImage = $objZip->getFileFromArchive($objHandler->getObjMetadata()->getStrPath(), $strOneScreenshot);
-                if($objImage !== false) {
+            if(uniSubstr($objHandler->getObjMetadata()->getStrPath(), 0, -5) == ".phar") {
+                $strPharImage = "phar://"._realpath_."/".$objHandler->getObjMetadata()->getStrPath()."/".$strOneScreenshot;
+                if(is_file($strPharImage)) {
                     $strImage = _images_cachepath_."/".generateSystemid().uniSubstr($strOneScreenshot, -4);
-                    file_put_contents(_realpath_.$strImage, $objImage);
+                    copy($strPharImage, _realpath_.$strImage);
                 }
             }
             else {
@@ -362,7 +362,7 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
             }
 
             if($strImage != "")
-                $strImages .= "<img src='"._webpath_."/image.php?image=".urlencode($strImage)."&maxWidth=300&maxHeight=200' alt='".$strOneScreenshot."' />&nbsp;";
+                $strImages .= "<img src='"._webpath_."/image.php?image=".urlencode(StringUtil::replace(_realpath_, "", $strImage))."&maxWidth=300&maxHeight=200' alt='".$strOneScreenshot."' />&nbsp;";
         }
         $arrRows[] = array($this->getLang("package_screenshots"), $strImages);
 

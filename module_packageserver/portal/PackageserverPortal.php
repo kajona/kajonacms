@@ -3,6 +3,19 @@
 *   (c) 2007-2015 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 ********************************************************************************************************/
+
+namespace Kajona\Packageserver\Portal;
+
+use class_exception;
+use class_http_responsetypes;
+use class_module_mediamanager_file;
+use class_module_packagemanager_manager;
+use class_module_system_setting;
+use class_portal_controller;
+use class_response_object;
+use interface_portal;
+use Kajona\Packageserver\System\PackageserverLog;
+
 /**
  * Portal-class of the packageserver. Processes requests and passes infos / download-links
  *
@@ -13,9 +26,9 @@
  * @module packageserver
  * @moduleId _packageserver_module_id_
  */
-class class_module_packageserver_portal extends class_portal_controller implements interface_portal {
+class PackageserverPortal extends class_portal_controller implements interface_portal {
 
-    const PROTOCOL_VERSION = 4;
+    const PROTOCOL_VERSION = 5;
 
     /**
      * Returns a list of all packages available.
@@ -67,7 +80,7 @@ class class_module_packageserver_portal extends class_portal_controller implemen
                     }
                 }
 
-                class_module_packageserver_log::generateDlLog($strNameFilter !== false ? $strNameFilter : "", isset($_SERVER["REMOTE_ADDR"]) ? $_SERVER["REMOTE_ADDR"] : "::1", urldecode($this->getParam("domain")));
+                PackageserverLog::generateDlLog($strNameFilter !== false ? $strNameFilter : "", isset($_SERVER["REMOTE_ADDR"]) ? $_SERVER["REMOTE_ADDR"] : "::1", urldecode($this->getParam("domain")));
                 class_response_object::getInstance()->setStrResponseType(class_http_responsetypes::STR_TYPE_JSON);
             }
         }
@@ -134,7 +147,7 @@ class class_module_packageserver_portal extends class_portal_controller implemen
                             if(in_array($objOneFile->getStrName(), explode(",", $strNameFilter)))
                                 $arrReturn[] = $objOneFile;
                         }
-                        else if(uniSubstr($objOneFile->getStrName(), 0, uniStrlen($strNameFilter)) == $strNameFilter)
+                        elseif(uniSubstr($objOneFile->getStrName(), 0, uniStrlen($strNameFilter)) == $strNameFilter)
                             $arrReturn[] = $objOneFile;
                     }
                     else
