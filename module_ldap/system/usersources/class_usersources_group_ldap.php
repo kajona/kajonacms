@@ -133,22 +133,31 @@ class class_usersources_group_ldap extends class_model implements interface_mode
         $intI = 0;
         foreach($arrMembers as $strOneMemberDn) {
 
-            if($intI < $intStart || $intI > $intEnd) {
+            if($intStart !== null && $intEnd !== null && ($intI < $intStart || $intI > $intEnd)) {
                 $intI++;
                 continue;
             }
             $intI++;
 
+            //fetch the user by DN and see of a matching user with the relevant user-id is given
+            $arrUserDetails = $objLdap->getUserDetailsByDN($strOneMemberDn);
+
+            $objUser = null;
+            $strUsername = null;
+            if($arrUserDetails !== false) {
+                $strUsername = $arrUserDetails["username"];
+                $objUser = $objSource->getUserByUsername($strUsername);
+            }
+
+
             //check if the user exists in the kajona-database
-            $objUser = $objSource->getUserByDn($strOneMemberDn);
             if($objUser != null) {
                 $arrReturn[] = $objUser->getSystemid();
             }
             else {
                 //import the user into the system transparently
-                $arrSingleUser = $objLdap->getUserDetailsByDN($strOneMemberDn);
                 $objUser = new class_module_user_user();
-                $objUser->setStrUsername($arrSingleUser["username"]);
+                $objUser->setStrUsername($arrUserDetails["username"]);
                 $objUser->setStrSubsystem("ldap");
                 $objUser->setIntActive(1);
                 $objUser->setIntAdmin(1);
@@ -156,10 +165,10 @@ class class_usersources_group_ldap extends class_model implements interface_mode
 
                 $objSourceUser = $objUser->getObjSourceUser();
                 if($objSourceUser instanceof class_usersources_user_ldap) {
-                    $objSourceUser->setStrDN($arrSingleUser["identifier"]);
-                    $objSourceUser->setStrFamilyname($arrSingleUser["familyname"]);
-                    $objSourceUser->setStrGivenname($arrSingleUser["givenname"]);
-                    $objSourceUser->setStrEmail($arrSingleUser["mail"]);
+                    $objSourceUser->setStrDN($arrUserDetails["identifier"]);
+                    $objSourceUser->setStrFamilyname($arrUserDetails["familyname"]);
+                    $objSourceUser->setStrGivenname($arrUserDetails["givenname"]);
+                    $objSourceUser->setStrEmail($arrUserDetails["mail"]);
                     $objSourceUser->updateObjectToDb();
 
                     $this->objDB->flushQueryCache();
