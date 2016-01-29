@@ -116,7 +116,7 @@ class class_ldap
     {
 
         if ($strContext != "") {
-            $strUsername = $this->arrConfig["ldap_common_name"]."=".$strUsername.",".$strContext;
+            $strUsername = $this->arrConfig["ldap_user_attribute_username"]."=".$strUsername.",".$strContext;
         }
 
         $bitBind = @ldap_bind($this->objCx, utf8_decode($strUsername), $strPassword);

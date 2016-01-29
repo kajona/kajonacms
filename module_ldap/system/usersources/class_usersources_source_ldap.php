@@ -52,13 +52,16 @@ class class_usersources_source_ldap implements interface_usersources_usersource 
                 if($objUser->getIntCfg() != $objSingleLdap->getIntCfgNr())
                     continue;
 
-                $bitReturn = $objSingleLdap->authenticateUser($objUser->getStrDN(), $strPassword);
+                $objRealUser = new class_module_user_user($objUser->getSystemid());
+
+                $bitReturn = $objSingleLdap->authenticateUser($objRealUser->getStrUsername(), $strPassword);
 
                 //synchronize the local data with the ldap-data
                 if($bitReturn === true) {
-                    $arrSingleUser = $objSingleLdap->getUserDetailsByDN($objUser->getStrDN());
+                    $arrSingleUser = $objSingleLdap->getUserdetailsByName($objRealUser->getStrUsername());
 
-                    if($arrSingleUser !== false) {
+                    if($arrSingleUser !== false && count($arrSingleUser) == 1) {
+                        $arrSingleUser = $arrSingleUser[0];
                         if($objUser instanceof class_usersources_user_ldap) {
                             $objUser->setStrFamilyname($arrSingleUser["familyname"]);
                             $objUser->setStrGivenname($arrSingleUser["givenname"]);
