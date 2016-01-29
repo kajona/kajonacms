@@ -149,7 +149,7 @@ class class_usersources_source_ldap implements interface_usersources_usersource 
      * @return interface_usersources_user or null
      */
     public function getUserById($strId) {
-        $strQuery = "SELECT user_id FROM "._dbprefix_."user WHERE user_id = ? AND user_subsystem = 'ldap'";
+        $strQuery = "SELECT user_id FROM "._dbprefix_."user WHERE user_id = ? AND user_subsystem = 'ldap' AND (user_deleted = 0 OR user_deleted IS NULL)";
 
         $arrIds = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array($strId));
         if(isset($arrIds["user_id"]) && validateSystemid($arrIds["user_id"])) {
@@ -188,7 +188,7 @@ class class_usersources_source_ldap implements interface_usersources_usersource 
      * @return interface_usersources_user or null
      */
     public function getUserByUsername($strUsername) {
-        $strQuery = "SELECT user_id FROM "._dbprefix_."user WHERE user_username = ? AND user_subsystem = 'ldap'";
+        $strQuery = "SELECT user_id FROM "._dbprefix_."user WHERE user_username = ? AND user_subsystem = 'ldap' AND (user_deleted = 0 OR user_deleted IS NULL)";
 
         $arrIds = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array($strUsername));
         if(isset($arrIds["user_id"]) && validateSystemid($arrIds["user_id"])) {
@@ -259,6 +259,7 @@ class class_usersources_source_ldap implements interface_usersources_usersource 
                        FROM "._dbprefix_."user_ldap,
                             "._dbprefix_."user
                       WHERE user_id = user_ldap_id
+                        AND (user_deleted = 0 OR user_deleted IS NULL)
                       ORDER BY user_username";
         $arrRows = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array());
         $arrReturn = array();
@@ -295,6 +296,8 @@ class class_usersources_source_ldap implements interface_usersources_usersource 
             $arrUserIds = array_merge($arrUserIds, $objGroup->getUserIdsForGroup());
         }
 
+        $arrUserIds = array_unique($arrUserIds);
+
         //parse all users
         $arrUsers = $this->getAllUserIds();
         foreach($arrUsers as $strOneUserId) {
@@ -321,7 +324,7 @@ class class_usersources_source_ldap implements interface_usersources_usersource 
             else {
                 //user seems to be deleted, remove from system, too
                 $objUser->deleteObject();
-                class_logger::getInstance("ldapsync.log")->addLogRow("Deleting user ".$strOneUserId."@".$objSourceUser->getStrDN(), class_logger::$levelWarning);
+                class_logger::getInstance("ldapsync.log")->addLogRow("Deleting user ".$strOneUserId." / ".$objUser->getStrUsername()." @ ".$objSourceUser->getStrDN(), class_logger::$levelWarning);
             }
         }
 
