@@ -74,6 +74,7 @@ class PackageserverTest extends class_testbase  {
 
 
 
+        unset($objPhar);
         $objMediamanagerRepo->deleteObjectFromDatabase();
         Phar::unlinkArchive(_realpath_."/files/packageservertest/autotest.phar");
 
