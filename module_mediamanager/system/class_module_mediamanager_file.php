@@ -428,7 +428,7 @@ class class_module_mediamanager_file extends class_model implements interface_mo
 
             $objORM->addWhereRestriction(new class_orm_objectlist_restriction($strWhere, $arrParams));
         }
-
+        $objORM->addWhereRestriction(new class_orm_objectlist_property_restriction("bitIspackage", class_orm_comparator_enum::Equal(), 1));
         $objORM->addOrderBy(new class_orm_objectlist_orderby("file_name ASC"));
         return $objORM->getObjectList(get_called_class(), "", $intStart, $intEnd);
 
@@ -470,7 +470,7 @@ class class_module_mediamanager_file extends class_model implements interface_mo
 
             $objORM->addWhereRestriction(new class_orm_objectlist_restriction($strWhere, $arrParams));
         }
-
+        $objORM->addWhereRestriction(new class_orm_objectlist_property_restriction("bitIspackage", class_orm_comparator_enum::Equal(), 1));
         return $objORM->getObjectCount(get_called_class());
     }
 
