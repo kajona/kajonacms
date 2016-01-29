@@ -400,8 +400,8 @@
             <arg line="-f buildProject.php ${tempPath} onlySetup"/>
         </exec>
         <antcall target="compileLess" />
-        <antcall target="compressCss" />
-        <antcall target="compressJs" />
+        <!--<antcall target="compressCss" />-->
+        <!--<antcall target="compressJs" />-->
         <delete includeemptydirs="true">
             <fileset dir="${basedir}${tempPath}" includes="**/*.less"/>
             <fileset dir="${basedir}${tempPath}" includes="**/less.js"/>
