@@ -459,6 +459,28 @@ class class_resourceloader
     }
 
     /**
+     * Returns the absolute path for a module.
+     * Validates if the module is a phar and adds the phar:// stream wrapper automatically.
+     * @param $strModule
+     *
+     * @return null|string
+     */
+    public function getAbsolutePathForModule($strModule)
+    {
+        $arrFlipped = array_flip(class_classloader::getInstance()->getArrModules());
+
+        if (!array_key_exists($strModule, $arrFlipped)) {
+            return null;
+        }
+
+        $strPath = _realpath_.$arrFlipped[$strModule];
+        if(\Kajona\System\System\StringUtil::endsWith($strPath, ".phar")) {
+            $strPath = "phar://".$strPath;
+        }
+        return $strPath;
+    }
+
+    /**
      * Returns the web-path of a module, useful when loading static content such as images or css from
      * a phar-based module
      * @param $strModule

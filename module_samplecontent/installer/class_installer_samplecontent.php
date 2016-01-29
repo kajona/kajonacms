@@ -96,7 +96,7 @@ class class_installer_samplecontent extends class_installer_base implements inte
         $this->objDB->flushQueryCache();
 
         if(!file_exists(_realpath_."/favicon.ico")) {
-            if(!copy(class_resourceloader::getInstance()->getCorePathForModule("module_samplecontent", true)."/module_samplecontent/favicon.ico.root", _realpath_."/favicon.ico"))
+            if(!copy(class_resourceloader::getInstance()->getAbsolutePathForModule("module_samplecontent")."/favicon.ico.root", _realpath_."/favicon.ico"))
                 $strReturn .= "<b>Copying the favicon.ico.root to top level failed!!!</b>";
         }
 

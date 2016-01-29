@@ -229,12 +229,19 @@ class class_filesystem {
     public function fileCopy($strSource, $strTarget, $bitForce = false) {
         $bitReturn = false;
 
-        if(is_file(_realpath_."/".$strSource)) {
+        if(\Kajona\System\System\StringUtil::indexOf($strSource, _realpath_) === false) {
+            $strSource = _realpath_.$strSource;
+        }
+        if(\Kajona\System\System\StringUtil::indexOf($strTarget, _realpath_) === false) {
+            $strTarget = _realpath_.$strTarget;
+        }
+
+        if(is_file($strSource)) {
             //bitForce: overwrite existing file
-            if(!is_file(_realpath_."/".$strTarget) || $bitForce) {
-                $bitReturn = copy(_realpath_."/".$strSource, _realpath_."/".$strTarget);
+            if(!is_file($strTarget) || $bitForce) {
+                $bitReturn = copy($strSource, $strTarget);
                 //set correct rights
-                @chmod(_realpath_."/".$strTarget, 0777);
+                @chmod($strTarget, 0777);
             }
         }
         return $bitReturn;
@@ -311,26 +318,32 @@ class class_filesystem {
      */
     public function folderCopyRecursive($strSourceDir, $strTargetDir, $bitOverwrite = false) {
 
-        $strSourceDir = uniStrReplace(_realpath_, "", $strSourceDir);
-        $strTargetDir = uniStrReplace(_realpath_, "", $strTargetDir);
+        if(\Kajona\System\System\StringUtil::indexOf($strSourceDir, _realpath_) === false) {
+            $strSourceDir = _realpath_.$strSourceDir;
+        }
 
-        $arrEntries = scandir(_realpath_.$strSourceDir);
+        if(\Kajona\System\System\StringUtil::indexOf($strTargetDir, _realpath_) === false) {
+            $strTargetDir = _realpath_.$strTargetDir;
+        }
+
+
+        $arrEntries = scandir($strSourceDir);
         foreach($arrEntries as $strOneEntry) {
             if($strOneEntry == "." || $strOneEntry == "..") {
                 continue;
             }
 
-            if(is_file(_realpath_.$strSourceDir."/".$strOneEntry) && ($bitOverwrite || !is_file(_realpath_.$strTargetDir."/".$strOneEntry))) {
+            if(is_file($strSourceDir."/".$strOneEntry) && ($bitOverwrite || !is_file($strTargetDir."/".$strOneEntry))) {
 
-                if(!is_dir(_realpath_.$strTargetDir)) {
-                    mkdir(_realpath_.$strTargetDir, 0777, true);
+                if(!is_dir($strTargetDir)) {
+                    mkdir($strTargetDir, 0777, true);
                 }
 
-                copy(_realpath_.$strSourceDir."/".$strOneEntry, _realpath_.$strTargetDir."/".$strOneEntry);
+                copy($strSourceDir."/".$strOneEntry, $strTargetDir."/".$strOneEntry);
             }
-            else if(is_dir(_realpath_.$strSourceDir."/".$strOneEntry)) {
-                if(!is_dir(_realpath_.$strTargetDir."/".$strOneEntry)) {
-                    mkdir(_realpath_.$strTargetDir."/".$strOneEntry, 0777, true);
+            elseif(is_dir($strSourceDir."/".$strOneEntry)) {
+                if(!is_dir($strTargetDir."/".$strOneEntry)) {
+                    mkdir($strTargetDir."/".$strOneEntry, 0777, true);
                 }
 
                 $this->folderCopyRecursive($strSourceDir."/".$strOneEntry, $strTargetDir."/".$strOneEntry, $bitOverwrite);

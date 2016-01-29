@@ -57,7 +57,7 @@ class class_installer_mediamanager extends class_installer_base implements inter
 
         $strReturn .= "Trying to copy the *.root files to top-level...\n";
         if(!file_exists(_realpath_."/download.php")) {
-            if(!copy(class_resourceloader::getInstance()->getCorePathForModule("module_mediamanager", true)."/module_mediamanager/download.php.root", _realpath_."/download.php"))
+            if(!copy(class_resourceloader::getInstance()->getAbsolutePathForModule("module_mediamanager")."/download.php.root", _realpath_."/download.php"))
                 $strReturn .= "<b>Copying the download.php.root to top level failed!!!</b>";
         }
 

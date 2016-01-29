@@ -133,7 +133,7 @@ class class_toolkit_admin extends class_toolkit
 
         //to add role-based editors, you could load a different toolbar or also a different CKEditor config file
         //the editor code
-        $strReturn .= " <script type=\"text/javascript\" src=\""._webpath_.class_resourceloader::getInstance()->getCorePathForModule("module_system")."/module_system/admin/scripts/ckeditor/ckeditor.js\"></script>\n";
+        $strReturn .= " <script type=\"text/javascript\" src=\""._webpath_.class_resourceloader::getInstance()->getWebPathForModule("module_system")."/admin/scripts/ckeditor/ckeditor.js\"></script>\n";
         $strReturn .= " <script type=\"text/javascript\">\n";
         $strReturn .= "
             var ckeditorConfig = {
