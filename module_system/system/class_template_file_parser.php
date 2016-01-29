@@ -51,21 +51,7 @@ class class_template_file_parser
 
     private function getPathForTemplate($strTemplate)
     {
-        $strName = null;
-        foreach (class_classloader::getInstance()->getArrModules() as $strCorePath => $strOneModule) {
-
-            if (is_dir(_realpath_."/".$strCorePath)) {
-                echo "validating tpl path: "._realpath_."/".$strCorePath.$strTemplate."\n"; //TODO: temp debug
-                if (is_file(_realpath_."/".$strCorePath.$strTemplate)) {
-                    $strName = _realpath_."/".$strCorePath.$strTemplate;
-                    break;
-                }
-            }
-        }
-
-        if($strName == null) {
-            $strName = class_resourceloader::getInstance()->getTemplate($strTemplate, true);
-        }
+        $strName = class_resourceloader::getInstance()->getTemplate($strTemplate, true);
         return $strName;
     }
 
