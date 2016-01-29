@@ -222,7 +222,7 @@ abstract class class_module_packagemanager_contentprovider_remote_base implement
      */
     public function processPackageUpload() {
 
-        $strFilename = generateSystemid().".zip";
+        $strFilename = generateSystemid().".phar";
 
         //stream the original package
         $objRemoteloader = $this->getRemoteloader();

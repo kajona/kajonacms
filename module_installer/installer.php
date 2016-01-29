@@ -14,8 +14,6 @@
  */
 class class_installer {
 
-
-    private $STR_ORIG_CONFIG_FILE = "";
     private $STR_PROJECT_CONFIG_FILE = "";
 
     /**
@@ -73,7 +71,6 @@ class class_installer {
             $this->objLang->setStrTextLanguage($this->objSession->getAdminLanguage(true));
         }
 
-        $this->STR_ORIG_CONFIG_FILE = class_resourceloader::getInstance()->getCorePathForModule("module_system")."/module_system/system/config/config.php";
         $this->STR_PROJECT_CONFIG_FILE = _realpath_."/project/system/config/config.php";
     }
 
@@ -245,6 +242,10 @@ class class_installer {
                 $strFileContent .= "\n";
                 //and save to file
                 file_put_contents($this->STR_PROJECT_CONFIG_FILE, $strFileContent);
+
+                // flush cache after config was written
+                class_classloader::getInstance()->flushCache();
+
                 // and reload
                 class_response_object::getInstance()->setStrRedirectUrl(_webpath_."/installer.php?step=loginData");
                 $this->strOutput = "";

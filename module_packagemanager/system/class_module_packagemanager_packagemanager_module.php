@@ -250,7 +250,7 @@ class class_module_packagemanager_packagemanager_module implements interface_pac
 
         $strTarget = $this->objMetadata->getStrTarget();
         if($strTarget == "") {
-            $strTarget = uniStrtolower($this->objMetadata->getStrType()."_".createFilename($this->objMetadata->getStrTitle(), true));
+            $strTarget = uniStrtolower($this->objMetadata->getStrType()."_".createFilename($this->objMetadata->getStrTitle(), true)).".phar";
         }
 
         $arrModules = array_flip(class_classloader::getInstance()->getArrModules());

@@ -13,7 +13,8 @@
  * @package module_system
  * @author sidler@mulchprod.de
  */
-final class class_session {
+final class class_session
+{
 
     private $objDB;
     private $strKey;
@@ -49,7 +50,8 @@ final class class_session {
     /**
      * Singleton, use getInstance() instead
      */
-    private function __construct() {
+    private function __construct()
+    {
 
         //Loading the needed Objects
         $this->objDB = class_db::getInstance();
@@ -65,8 +67,9 @@ final class class_session {
      *
      * @return class_session The Session-Object
      */
-    public static function getInstance() {
-        if(self::$objSession == null) {
+    public static function getInstance()
+    {
+        if (self::$objSession == null) {
             self::$objSession = new class_session();
         }
 
@@ -78,16 +81,20 @@ final class class_session {
      *
      * @return bool
      */
-    private function sessionStart() {
+    private function sessionStart()
+    {
         //New session needed or using the already started one?
-        if(!session_id()) {
-            if(@session_start())
+        if (!session_id()) {
+            if (@session_start()) {
                 $bitReturn = true;
-            else
+            }
+            else {
                 $bitReturn = false;
+            }
         }
-        else
+        else {
             $bitReturn = true;
+        }
 
         return $bitReturn;
     }
@@ -101,14 +108,17 @@ final class class_session {
      *
      * @return void
      */
-    public function sessionClose() {
-        if(defined("_autotesting_") && _autotesting_ === true)
+    public function sessionClose()
+    {
+        if (defined("_autotesting_") && _autotesting_ === true) {
             return;
+        }
 
         $this->bitClosed = true;
         session_write_close();
-        if($this->objInternalSession != null && !$this->bitBlockDbUpdate)
+        if ($this->objInternalSession != null && !$this->bitBlockDbUpdate) {
             $this->objInternalSession->updateObjectToDb();
+        }
     }
 
 
@@ -122,22 +132,26 @@ final class class_session {
      * @throws class_exception
      * @return bool
      */
-    public function setSession($strKey, $strValue, $intSessionScope = 1) {
+    public function setSession($strKey, $strValue, $intSessionScope = 1)
+    {
 
-        if($intSessionScope == class_session::$intScopeRequest) {
+        if ($intSessionScope == class_session::$intScopeRequest) {
             $this->arrRequestArray[$strKey] = $strValue;
             return true;
         }
         else {
 
-            if($this->bitClosed)
+            if ($this->bitClosed) {
                 throw new class_exception("attempt to write to session after calling sessionClose()", class_exception::$level_FATALERROR);
+            }
 
             //yes, it is wanted to have only one =. The condition checks the assignment.
-            if($_SESSION[$this->strKey][$strKey] = $strValue)
+            if ($_SESSION[$this->strKey][$strKey] = $strValue) {
                 return true;
-            else
+            }
+            else {
                 return false;
+            }
         }
     }
 
@@ -145,9 +159,11 @@ final class class_session {
      * Setter for captcha-codes. use ONLY this method to set the code.
      *
      * @param string $strCode
+     *
      * @return void
      */
-    public function setCaptchaCode($strCode) {
+    public function setCaptchaCode($strCode)
+    {
         $this->setSession("kajonaCaptchaCode", $strCode);
     }
 
@@ -158,12 +174,14 @@ final class class_session {
      *
      * @return string
      */
-    public function getCaptchaCode() {
+    public function getCaptchaCode()
+    {
         $strCode = $this->getSession("kajonaCaptchaCode");
         //reset code
         $this->setSession("kajonaCaptchaCode", "");
-        if($strCode == "")
+        if ($strCode == "") {
             $strCode = generateSystemid();
+        }
 
         return $strCode;
     }
@@ -176,18 +194,23 @@ final class class_session {
      *
      * @return string
      */
-    public function getSession($strKey, $intScope = 1) {
-        if($intScope == class_session::$intScopeRequest) {
-            if(!isset($this->arrRequestArray[$strKey]))
+    public function getSession($strKey, $intScope = 1)
+    {
+        if ($intScope == class_session::$intScopeRequest) {
+            if (!isset($this->arrRequestArray[$strKey])) {
                 return false;
-            else
+            }
+            else {
                 return $this->arrRequestArray[$strKey];
+            }
         }
         else {
-            if(!isset($_SESSION[$this->strKey][$strKey]))
+            if (!isset($_SESSION[$this->strKey][$strKey])) {
                 return false;
-            else
+            }
+            else {
                 return $_SESSION[$this->strKey][$strKey];
+            }
         }
     }
 
@@ -198,22 +221,28 @@ final class class_session {
      *
      * @return bool
      */
-    public function sessionIsset($strKey) {
-        if(isset($_SESSION[$this->strKey][$strKey]))
+    public function sessionIsset($strKey)
+    {
+        if (isset($_SESSION[$this->strKey][$strKey])) {
             return true;
-        else
+        }
+        else {
             return false;
+        }
     }
 
     /**
      * Deletes a value from the session
      *
      * @param string $strKey
+     *
      * @return void
      */
-    public function sessionUnset($strKey) {
-        if($this->sessionIsset($strKey))
+    public function sessionUnset($strKey)
+    {
+        if ($this->sessionIsset($strKey)) {
             unset($_SESSION[$this->strKey][$strKey]);
+        }
     }
 
     /**
@@ -221,11 +250,14 @@ final class class_session {
      *
      * @return bool
      */
-    public function isLoggedin() {
-        if($this->getObjInternalSession() != null)
+    public function isLoggedin()
+    {
+        if ($this->getObjInternalSession() != null) {
             return $this->getObjInternalSession()->isLoggedIn();
-        else
+        }
+        else {
             return false;
+        }
 
     }
 
@@ -234,15 +266,19 @@ final class class_session {
      *
      * @return bool
      */
-    public function isAdmin() {
-        if($this->isLoggedin()) {
-            if($this->getUser() != null && $this->getUser()->getIntAdmin() == 1)
+    public function isAdmin()
+    {
+        if ($this->isLoggedin()) {
+            if ($this->getUser() != null && $this->getUser()->getIntAdmin() == 1) {
                 return true;
-            else
+            }
+            else {
                 return false;
+            }
         }
-        else
+        else {
             return false;
+        }
     }
 
 
@@ -251,9 +287,10 @@ final class class_session {
      *
      * @return bool
      */
-    public function isSuperAdmin() {
-        if($this->isLoggedin()) {
-            if($this->getUser() != null && $this->getUser()->getIntAdmin() == 1 && in_array(class_module_system_setting::getConfigValue("_admins_group_id_"), $this->getGroupIdsAsArray())) {
+    public function isSuperAdmin()
+    {
+        if ($this->isLoggedin()) {
+            if ($this->getUser() != null && $this->getUser()->getIntAdmin() == 1 && in_array(class_module_system_setting::getConfigValue("_admins_group_id_"), $this->getGroupIdsAsArray())) {
                 return true;
             }
         }
@@ -269,21 +306,23 @@ final class class_session {
      *
      * @return string
      */
-    public function getAdminSkin($bitUseCookie = true, $bitSkipSessionEntry = false) {
+    public function getAdminSkin($bitUseCookie = true, $bitSkipSessionEntry = false)
+    {
 
-        if(!$bitSkipSessionEntry && $this->getSession(self::STR_SESSION_ADMIN_SKIN_KEY) != "")
+        if (!$bitSkipSessionEntry && $this->getSession(self::STR_SESSION_ADMIN_SKIN_KEY) != "") {
             return $this->getSession(self::STR_SESSION_ADMIN_SKIN_KEY);
+        }
 
         //Maybe we can load the skin from the cookie
         $objCookie = new class_cookie();
         $strSkin = $objCookie->getCookie("adminskin");
-        if($strSkin != "" && $bitUseCookie) {
+        if ($strSkin != "" && $bitUseCookie) {
             return $strSkin;
         }
 
-        if($this->isLoggedin()) {
-            if($this->isAdmin()) {
-                if($this->getUser() != null && $this->getUser()->getStrAdminskin() != "") {
+        if ($this->isLoggedin()) {
+            if ($this->isAdmin()) {
+                if ($this->getUser() != null && $this->getUser()->getStrAdminskin() != "") {
                     $strSkin = $this->getUser()->getStrAdminskin();
                     $this->setSession(self::STR_SESSION_ADMIN_SKIN_KEY, $strSkin);
                     return $strSkin;
@@ -304,21 +343,23 @@ final class class_session {
      *
      * @return string
      */
-    public function getAdminLanguage($bitUseCookie = true, $bitSkipSessionEntry = false) {
+    public function getAdminLanguage($bitUseCookie = true, $bitSkipSessionEntry = false)
+    {
 
-        if(!$bitSkipSessionEntry && $this->getSession(self::STR_SESSION_ADMIN_LANG_KEY) != "")
+        if (!$bitSkipSessionEntry && $this->getSession(self::STR_SESSION_ADMIN_LANG_KEY) != "") {
             return $this->getSession(self::STR_SESSION_ADMIN_LANG_KEY);
+        }
 
         //Maybe we can load the language from the cookie
         $objCookie = new class_cookie();
         $strLanguage = $objCookie->getCookie("adminlanguage");
-        if($strLanguage != "" && $bitUseCookie) {
+        if ($strLanguage != "" && $bitUseCookie) {
             return $strLanguage;
         }
 
-        if($this->isLoggedin()) {
-            if($this->isAdmin()) {
-                if($this->getUser() != null && $this->getUser()->getStrAdminlanguage() != "") {
+        if ($this->isLoggedin()) {
+            if ($this->isAdmin()) {
+                if ($this->getUser() != null && $this->getUser()->getStrAdminlanguage() != "") {
                     $strLang = $this->getUser()->getStrAdminlanguage();
                     $this->setSession(self::STR_SESSION_ADMIN_LANG_KEY, $strLang);
                     return $strLang;
@@ -328,12 +369,12 @@ final class class_session {
         else {
             //try to load a language the user requested
             $strUserLanguages = str_replace(";", ",", getServer("HTTP_ACCEPT_LANGUAGE"));
-            if(uniStrlen($strUserLanguages) > 0) {
+            if (uniStrlen($strUserLanguages) > 0) {
                 $arrLanguages = explode(",", $strUserLanguages);
                 //check, if one of the requested languages is available on our system
-                foreach($arrLanguages as $strOneLanguage) {
-                    if(!preg_match("#q\=[0-9]\.[0-9]#i", $strOneLanguage)) {
-                        if(in_array($strOneLanguage, explode(",", class_carrier::getInstance()->getObjConfig()->getConfig("adminlangs")))) {
+                foreach ($arrLanguages as $strOneLanguage) {
+                    if (!preg_match("#q\=[0-9]\.[0-9]#i", $strOneLanguage)) {
+                        if (in_array($strOneLanguage, explode(",", class_carrier::getInstance()->getObjConfig()->getConfig("adminlangs")))) {
                             return $strOneLanguage;
                         }
                     }
@@ -349,16 +390,20 @@ final class class_session {
      *
      * @return bool
      */
-    public function isPortal() {
-        if($this->isLoggedin()) {
-            if($this->getUser() != null && $this->getUser()->getIntPortal() == 1)
+    public function isPortal()
+    {
+        if ($this->isLoggedin()) {
+            if ($this->getUser() != null && $this->getUser()->getIntPortal() == 1) {
                 return true;
-            else
+            }
+            else {
                 return false;
+            }
 
         }
-        else
+        else {
             return false;
+        }
     }
 
     /**
@@ -366,15 +411,19 @@ final class class_session {
      *
      * @return bool
      */
-    public function isActive() {
-        if($this->isLoggedin()) {
-            if($this->getUser() && $this->getUser()->getIntActive() == 1)
+    public function isActive()
+    {
+        if ($this->isLoggedin()) {
+            if ($this->getUser() && $this->getUser()->getIntActive() == 1) {
                 return true;
-            else
+            }
+            else {
                 return false;
+            }
         }
-        else
+        else {
             return false;
+        }
     }
 
 
@@ -389,36 +438,40 @@ final class class_session {
      * @see class_session::login($strName, $strPass)
      * @return bool
      */
-    public function loginUser(class_module_user_user $objUser) {
+    public function loginUser(class_module_user_user $objUser)
+    {
         return $this->internalLoginHelper($objUser);
     }
 
 
     /**
      * Logs a user into the system if the credentials are correct
-     * and the user is active
+     * and the user is active.
+     * Only logins with username and password are allowed. This avoids problems with
+     * mis-configured systems such as MS AD.
      *
      * @param string $strName
      * @param string $strPassword
      *
      * @return bool
      */
-    public function login($strName, $strPassword) {
+    public function login($strName, $strPassword)
+    {
         $bitReturn = false;
         //How many users are out there with this username and being active?
         $objUsersources = new class_module_user_sourcefactory();
         try {
-            if($objUsersources->authenticateUser($strName, $strPassword)) {
+            if ($objUsersources->authenticateUser($strName, $strPassword)) {
                 $objUser = $objUsersources->getUserByUsername($strName);
                 $bitReturn = $this->internalLoginHelper($objUser);
             }
         }
-        catch(class_authentication_exception $objEx) {
+        catch (class_authentication_exception $objEx) {
             $bitReturn = false;
         }
 
 
-        if($bitReturn === false) {
+        if ($bitReturn === false) {
             class_logger::getInstance()->addLogRow("Unsuccessful login attempt by user ".$strName, class_logger::$levelInfo);
             class_module_user_log::generateLog(0, $strName);
         }
@@ -435,9 +488,10 @@ final class class_session {
      *
      * @return bool
      */
-    public function switchSessionToUser(class_module_user_user $objTargetUser, $bitForce = false) {
-        if($this->isLoggedin()) {
-            if(class_carrier::getInstance()->getObjSession()->isSuperAdmin() || $bitForce) {
+    public function switchSessionToUser(class_module_user_user $objTargetUser, $bitForce = false)
+    {
+        if ($this->isLoggedin()) {
+            if (class_carrier::getInstance()->getObjSession()->isSuperAdmin() || $bitForce) {
                 $this->getObjInternalSession()->setStrLoginstatus(class_module_system_session::$LOGINSTATUS_LOGGEDIN);
                 $this->getObjInternalSession()->setStrUserid($objTargetUser->getSystemid());
 
@@ -460,10 +514,10 @@ final class class_session {
      *
      * @return bool
      */
-    private function internalLoginHelper(class_module_user_user $objUser) {
+    private function internalLoginHelper(class_module_user_user $objUser)
+    {
 
-        if($objUser->getIntActive() == 1) {
-
+        if ($objUser->getIntActive() == 1) {
 
 
             $this->getObjInternalSession()->setStrLoginstatus(class_module_system_session::$LOGINSTATUS_LOGGEDIN);
@@ -475,7 +529,7 @@ final class class_session {
             $this->objUser = $objUser;
 
             //trigger listeners on first login
-            if($objUser->getIntLogins() == 0) {
+            if ($objUser->getIntLogins() == 0) {
                 class_core_eventdispatcher::getInstance()->notifyGenericListeners(class_system_eventidentifier::EVENT_SYSTEM_USERFIRSTLOGIN, array($objUser->getSystemid()));
             }
 
@@ -506,9 +560,11 @@ final class class_session {
 
     /**
      * Logs a user off from the system
+     *
      * @return void
      */
-    public function logout() {
+    public function logout()
+    {
         class_logger::getInstance()->addLogRow("User: ".$this->getUsername()." successfully logged out", class_logger::$levelInfo);
         class_module_user_log::registerLogout();
 
@@ -519,7 +575,7 @@ final class class_session {
         $this->getObjInternalSession()->deleteObjectFromDatabase();
         $this->objInternalSession = null;
         $this->objUser = null;
-        if(isset($_COOKIE[session_name()])) {
+        if (isset($_COOKIE[session_name()])) {
             setcookie(session_name(), '', time() - 42000);
         }
         // Finally, destroy the session.
@@ -537,8 +593,9 @@ final class class_session {
      *
      * @return string
      */
-    public function getUsername() {
-        if($this->isLoggedin() && $this->getObjInternalSession() != null) {
+    public function getUsername()
+    {
+        if ($this->isLoggedin() && $this->getObjInternalSession() != null) {
             $strUsername = $this->getUser()->getStrUsername();
         }
         else {
@@ -552,8 +609,9 @@ final class class_session {
      *
      * @return string
      */
-    public function getUserID() {
-        if($this->getObjInternalSession() != null && $this->isLoggedin()) {
+    public function getUserID()
+    {
+        if ($this->getObjInternalSession() != null && $this->isLoggedin()) {
             $strUserid = $this->getObjInternalSession()->getStrUserid();
         }
         else {
@@ -567,11 +625,13 @@ final class class_session {
      *
      * @return class_module_user_user
      */
-    private function getUser() {
-        if($this->objUser != null)
+    private function getUser()
+    {
+        if ($this->objUser != null) {
             return $this->objUser;
+        }
 
-        if($this->getUserID() != "") {
+        if ($this->getUserID() != "") {
             $this->objUser = new class_module_user_user($this->getUserID());
             return $this->objUser;
         }
@@ -581,10 +641,12 @@ final class class_session {
 
     /**
      * Resets the internal reference to the current user, e.g. to load new values from the database
+     *
      * @return void
      */
-    public function resetUser() {
-        if($this->getUserID() != "") {
+    public function resetUser()
+    {
+        if ($this->getUserID() != "") {
             $this->objUser = new class_module_user_user($this->getUserID());
         }
     }
@@ -594,8 +656,9 @@ final class class_session {
      *
      * @return string
      */
-    public function getGroupIdsAsString() {
-        if($this->getObjInternalSession() != null) {
+    public function getGroupIdsAsString()
+    {
+        if ($this->getObjInternalSession() != null) {
             $strGroupids = $this->getObjInternalSession()->getStrGroupids();
         }
         else {
@@ -609,8 +672,9 @@ final class class_session {
      *
      * @return array
      */
-    public function getGroupIdsAsArray() {
-        if($this->getObjInternalSession() != null) {
+    public function getGroupIdsAsArray()
+    {
+        if ($this->getObjInternalSession() != null) {
             $strGroupids = $this->getObjInternalSession()->getStrGroupids();
         }
         else {
@@ -624,7 +688,8 @@ final class class_session {
      *
      * @return string
      */
-    public function getSessionId() {
+    public function getSessionId()
+    {
         return session_id();
     }
 
@@ -633,44 +698,52 @@ final class class_session {
      *
      * @return string
      */
-    public function getInternalSessionId() {
-        if($this->getObjInternalSession() != null)
+    public function getInternalSessionId()
+    {
+        if ($this->getObjInternalSession() != null) {
             return $this->getObjInternalSession()->getSystemid();
-        else
+        }
+        else {
             return $this->getSessionId();
+        }
     }
 
     /**
      * Initializes the internal kajona session
+     *
      * @return void
      */
-    public function initInternalSession() {
+    public function initInternalSession()
+    {
 
 
         $arrTables = $this->objDB->getTables();
-        if(!in_array(_dbprefix_."session", $arrTables) || class_module_system_setting::getConfigValue("_guests_group_id_") === null)
+        if (!in_array(_dbprefix_."session", $arrTables) || class_module_system_setting::getConfigValue("_guests_group_id_") === null) {
             return;
+        }
 
         $this->bitLazyLoaded = true;
 
-        if($this->getSession("KAJONA_INTERNAL_SESSID") !== false) {
+        if ($this->getSession("KAJONA_INTERNAL_SESSID") !== false) {
             $this->objInternalSession = class_module_system_session::getSessionById($this->getSession("KAJONA_INTERNAL_SESSID"));
 
-            if($this->objInternalSession != null && $this->objInternalSession->isSessionValid()) {
+            if ($this->objInternalSession != null && $this->objInternalSession->isSessionValid()) {
                 $this->objInternalSession->setIntReleasetime(time() + (int)class_module_system_setting::getConfigValue("_system_release_time_"));
                 $this->objInternalSession->setStrLasturl(getServer("QUERY_STRING"));
             }
-            else
+            else {
                 $this->objInternalSession = null;
+            }
 
-            if($this->objInternalSession != null)
+            if ($this->objInternalSession != null) {
                 return;
+            }
 
         }
 
         //try to load the matching groups
         $strGroups = class_module_system_setting::getConfigValue("_guests_group_id_");
-        if(validateSystemid($this->getUserID())) {
+        if (validateSystemid($this->getUserID())) {
             $this->objUser = new class_module_user_user($this->getUserID());
             $strGroups = implode(",", $this->objUser->getArrGroupIds());
         }
@@ -694,11 +767,13 @@ final class class_session {
     /**
      * @return class_module_system_session
      */
-    private function getObjInternalSession() {
+    private function getObjInternalSession()
+    {
 
         //lazy loading
-        if($this->objInternalSession == null && !$this->bitLazyLoaded)
+        if ($this->objInternalSession == null && !$this->bitLazyLoaded) {
             $this->initInternalSession();
+        }
 
         return $this->objInternalSession;
     }
@@ -706,22 +781,26 @@ final class class_session {
     /**
      * @return bool
      */
-    public function getBitLazyLoaded() {
+    public function getBitLazyLoaded()
+    {
         return $this->bitLazyLoaded;
     }
 
     /**
      * @return bool
      */
-    public function getBitClosed() {
+    public function getBitClosed()
+    {
         return $this->bitClosed;
     }
 
     /**
      * @param bool $bitBlockDbUpdate
+     *
      * @return void
      */
-    public function setBitBlockDbUpdate($bitBlockDbUpdate) {
+    public function setBitBlockDbUpdate($bitBlockDbUpdate)
+    {
         $this->bitBlockDbUpdate = $bitBlockDbUpdate;
     }
 

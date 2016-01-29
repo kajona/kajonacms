@@ -52,13 +52,16 @@ class class_usersources_source_ldap implements interface_usersources_usersource 
                 if($objUser->getIntCfg() != $objSingleLdap->getIntCfgNr())
                     continue;
 
-                $bitReturn = $objSingleLdap->authenticateUser($objUser->getStrDN(), $strPassword);
+                $objRealUser = new class_module_user_user($objUser->getSystemid());
+
+                $bitReturn = $objSingleLdap->authenticateUser($objRealUser->getStrUsername(), $strPassword);
 
                 //synchronize the local data with the ldap-data
                 if($bitReturn === true) {
-                    $arrSingleUser = $objSingleLdap->getUserDetailsByDN($objUser->getStrDN());
+                    $arrSingleUser = $objSingleLdap->getUserdetailsByName($objRealUser->getStrUsername());
 
-                    if($arrSingleUser !== false) {
+                    if($arrSingleUser !== false && count($arrSingleUser) == 1) {
+                        $arrSingleUser = $arrSingleUser[0];
                         if($objUser instanceof class_usersources_user_ldap) {
                             $objUser->setStrFamilyname($arrSingleUser["familyname"]);
                             $objUser->setStrGivenname($arrSingleUser["givenname"]);
@@ -146,7 +149,7 @@ class class_usersources_source_ldap implements interface_usersources_usersource 
      * @return interface_usersources_user or null
      */
     public function getUserById($strId) {
-        $strQuery = "SELECT user_id FROM "._dbprefix_."user WHERE user_id = ? AND user_subsystem = 'ldap'";
+        $strQuery = "SELECT user_id FROM "._dbprefix_."user WHERE user_id = ? AND user_subsystem = 'ldap' AND (user_deleted = 0 OR user_deleted IS NULL)";
 
         $arrIds = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array($strId));
         if(isset($arrIds["user_id"]) && validateSystemid($arrIds["user_id"])) {
@@ -185,7 +188,7 @@ class class_usersources_source_ldap implements interface_usersources_usersource 
      * @return interface_usersources_user or null
      */
     public function getUserByUsername($strUsername) {
-        $strQuery = "SELECT user_id FROM "._dbprefix_."user WHERE user_username = ? AND user_subsystem = 'ldap'";
+        $strQuery = "SELECT user_id FROM "._dbprefix_."user WHERE user_username = ? AND user_subsystem = 'ldap' AND (user_deleted = 0 OR user_deleted IS NULL)";
 
         $arrIds = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array($strUsername));
         if(isset($arrIds["user_id"]) && validateSystemid($arrIds["user_id"])) {
@@ -256,6 +259,7 @@ class class_usersources_source_ldap implements interface_usersources_usersource 
                        FROM "._dbprefix_."user_ldap,
                             "._dbprefix_."user
                       WHERE user_id = user_ldap_id
+                        AND (user_deleted = 0 OR user_deleted IS NULL)
                       ORDER BY user_username";
         $arrRows = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array());
         $arrReturn = array();
@@ -292,6 +296,8 @@ class class_usersources_source_ldap implements interface_usersources_usersource 
             $arrUserIds = array_merge($arrUserIds, $objGroup->getUserIdsForGroup());
         }
 
+        $arrUserIds = array_unique($arrUserIds);
+
         //parse all users
         $arrUsers = $this->getAllUserIds();
         foreach($arrUsers as $strOneUserId) {
@@ -318,7 +324,7 @@ class class_usersources_source_ldap implements interface_usersources_usersource 
             else {
                 //user seems to be deleted, remove from system, too
                 $objUser->deleteObject();
-                class_logger::getInstance("ldapsync.log")->addLogRow("Deleting user ".$strOneUserId."@".$objSourceUser->getStrDN(), class_logger::$levelWarning);
+                class_logger::getInstance("ldapsync.log")->addLogRow("Deleting user ".$strOneUserId." / ".$objUser->getStrUsername()." @ ".$objSourceUser->getStrDN(), class_logger::$levelWarning);
             }
         }
 

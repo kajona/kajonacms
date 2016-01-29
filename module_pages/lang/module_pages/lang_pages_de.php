@@ -116,6 +116,7 @@ $lang["pe_move"]                         = "Verschieben";
 $lang["pe_new"]                          = "Neues Element an Platzhalter";
 $lang["pe_new_old"]                      = "Anlegen";
 $lang["pe_on_off"]                       = "Portaleditor aktivieren / deaktivieren";
+$lang["pe_quickjump"]                    = "Wechsel zu Seite";
 $lang["pe_rte_unsavedChanges"]           = "Möchten Sie die noch nicht gespeicherten Änderungen wirklich verwerfen?";
 $lang["pe_setactive"]                    = "Aktivieren";
 $lang["pe_setinactive"]                  = "Deaktivieren";

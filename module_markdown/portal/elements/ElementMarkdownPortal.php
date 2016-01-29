@@ -29,7 +29,7 @@ class ElementMarkdownPortal extends ElementPortal implements PortalElementInterf
      */
     public function loadData() {
         
-        require_once class_resourceloader::getInstance()->getCorePathForModule("element_markdown", true)."/module_markdown/vendor/autoload.php";
+        require_once __DIR__."/../../vendor/autoload.php";
 
         $arrUrl = parse_url($this->arrElementData["char2"]);
 

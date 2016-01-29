@@ -4,13 +4,25 @@
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 ********************************************************************************************************/
 
+
+namespace Kajona\Packageserver\Installer;
+
+use class_carrier;
+use class_filesystem;
+use class_installer_base;
+use class_module_mediamanager_repo;
+use class_module_system_aspect;
+use class_module_system_module;
+use class_module_system_setting;
+use class_rights;
+use interface_installer_removable;
+
 /**
  * Installer of the packageserver module
  *
- * @package module_packageserver
  * @moduleId _packageserver_module_id_
  */
-class class_installer_packageserver extends class_installer_base implements interface_installer_removable {
+class InstallerPackageserver extends class_installer_base implements interface_installer_removable {
 
     public function install() {
 
@@ -38,8 +50,8 @@ class class_installer_packageserver extends class_installer_base implements inte
         $objFilesytem->folderCreate("/files/packages");
         $objRepo = new class_module_mediamanager_repo();
         $objRepo->setStrPath("/files/packages");
-        $objRepo->setStrViewFilter(".zip");
-        $objRepo->setStrUploadFilter(".zip");
+        $objRepo->setStrViewFilter(".phar");
+        $objRepo->setStrUploadFilter(".phar");
         $objRepo->setStrTitle("Packageserver packages");
         $objRepo->updateObjectToDb();
 
@@ -96,7 +108,7 @@ class class_installer_packageserver extends class_installer_base implements inte
         //delete the tables
         foreach(array("packageserver_log") as $strOneTable) {
             $strReturn .= "Dropping table ".$strOneTable."...\n";
-            if(!$this->objDB->_pQuery("DROP TABLE ".$this->objDB->encloseTableName(_dbprefix_.$strOneTable)."", array())) {
+            if(!$this->objDB->_pQuery("DROP TABLE ".$this->objDB->encloseTableName(_dbprefix_.$strOneTable), array())) {
                 $strReturn .= "Error deleting table, aborting.\n";
                 return false;
             }
@@ -115,45 +127,9 @@ class class_installer_packageserver extends class_installer_base implements inte
         $strReturn .= "Version found:\n\t Module: ".$arrModule["module_name"].", Version: ".$arrModule["module_version"]."\n\n";
 
         $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModule["module_version"] == "4.0") {
-            $strReturn .= "Updating 4.0 to 4.1...\n";
-            $this->updateModuleVersion($this->objMetadata->getStrTitle(), "4.1");
-        }
-
-        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModule["module_version"] == "4.1") {
-            $strReturn .= "Updating 4.1 to 4.2...\n";
-            $this->updateModuleVersion($this->objMetadata->getStrTitle(), "4.2");
-        }
-
-        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModule["module_version"] == "4.2") {
-            $strReturn .= "Updating 4.2 to 4.3...\n";
-            $this->updateModuleVersion($this->objMetadata->getStrTitle(), "4.3");
-        }
-
-        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModule["module_version"] == "4.3") {
-            $strReturn .= "Updating 4.3 to 4.4...\n";
-            $this->updateModuleVersion($this->objMetadata->getStrTitle(), "4.4");
-        }
-
-        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModule["module_version"] == "4.4") {
-            $strReturn .= "Updating 4.4 to 4.5...\n";
-            $this->updateModuleVersion($this->objMetadata->getStrTitle(), "4.5");
-        }
-
-        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModule["module_version"] == "4.5") {
-            $strReturn .= "Updating 4.5 to 4.6...\n";
-            $this->updateModuleVersion($this->objMetadata->getStrTitle(), "4.6");
-        }
-
-        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModule["module_version"] == "4.6") {
-            $strReturn .= "Updating to 4.7...\n";
-            $this->updateModuleVersion($this->objMetadata->getStrTitle(), "4.7");
+        if($arrModule["module_version"] == "4.7") {
+            $strReturn .= "Updating 4.7 to 5.0...\n";
+            $this->updateModuleVersion($this->objMetadata->getStrTitle(), "5.0");
         }
 
         return $strReturn."\n\n";

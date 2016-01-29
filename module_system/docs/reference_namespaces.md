@@ -1,5 +1,4 @@
-Namespaces
-===
+# Namespaces
 
 With the 5.0 release Kajona supports namespaces. This document will explain the basic standards how to write and use new 
 namespaced classes. Also it explains how you can transition an existing module to the new namespaced structure.

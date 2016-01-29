@@ -187,7 +187,7 @@ class class_installer_stats extends class_installer_base implements interface_in
         if(!is_file(_realpath_._projectpath_."/temp/browscap.cache.php")) {
             $objZip = new class_gzip();
             $objFile = new class_filesystem();
-            $objFile->fileCopy(class_resourceloader::getInstance()->getCorePathForModule("module_stats")."/module_stats/installer/browscap.cache.php.gz", _projectpath_."/temp/browscap.cache.php.gz");
+            $objFile->fileCopy(class_resourceloader::getInstance()->getAbsolutePathForModule("module_stats")."/installer/browscap.cache.php.gz", _projectpath_."/temp/browscap.cache.php.gz");
             if(is_file(_realpath_._projectpath_."/temp/browscap.cache.php.gz")) {
                 $objZip->decompressFile(_projectpath_."/temp/browscap.cache.php.gz");
                 $objFile->fileDelete(_projectpath_."/temp/browscap.cache.php.gz");

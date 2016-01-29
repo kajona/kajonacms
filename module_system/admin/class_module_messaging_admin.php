@@ -444,13 +444,12 @@ JS;
             $strText = $this->getLang("message_not_existing");
             $strOk = $this->getLang("commons_ok");
             $strLink = class_link::getLinkAdminHref($this->getArrModule("modul"), "list");
-            $strCore = class_resourceloader::getInstance()->getCorePathForModule("module_v4skin");
             $strMessage = "<script type='text/javascript'>
-                KAJONA.admin.loader.loadFile('_webpath_{$strCore}/module_v4skin/admin/skins/kajona_v4/js/kajona_dialog.js', function() {
+                $(function() { setTimeout(function() {
                     jsDialog_1.setTitle('&nbsp; ');
                     jsDialog_1.setContent('{$strText}', '{$strOk}', '{$strLink}'); jsDialog_1.init();
                     $('#'+jsDialog_1.containerId+'_cancelButton').css('display', 'none');
-                });
+                }, 500) } );
             </script>";
 
             return $strMessage;

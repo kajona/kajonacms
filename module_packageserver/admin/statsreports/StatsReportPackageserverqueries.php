@@ -5,13 +5,25 @@
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 ********************************************************************************************************/
 
+namespace Kajona\Packageserver\Admin\Statsreports;
+
+use class_date;
+use class_db;
+use class_graph_factory;
+use class_lang;
+use class_module_user_user;
+use class_session;
+use class_toolkit_admin;
+use interface_admin_statsreports;
+
+
 /**
  * Plugin to module stats, ploting a list of most active query-sources
  *
- * @package module_packageserver
  * @author sidler@mulchprod.de
  */
-class class_stats_report_packageserverqueries implements interface_admin_statsreports {
+class StatsReportPackageserverqueries implements interface_admin_statsreports
+{
 
     //class vars
     private $intDateStart;
@@ -26,7 +38,8 @@ class class_stats_report_packageserverqueries implements interface_admin_statsre
     /**
      * Constructor
      */
-    public function __construct(class_db $objDB, class_toolkit_admin $objToolkit, class_lang $objTexts) {
+    public function __construct(class_db $objDB, class_toolkit_admin $objToolkit, class_lang $objTexts)
+    {
         $this->objLang = $objTexts;
         $this->objToolkit = $objToolkit;
         $this->objDB = $objDB;
@@ -37,52 +50,62 @@ class class_stats_report_packageserverqueries implements interface_admin_statsre
      *
      * @return string
      */
-    public static function getExtensionName() {
+    public static function getExtensionName()
+    {
         return "core.stats.admin.statsreport";
     }
 
     /**
      * @param int $intEndDate
+     *
      * @return void
      */
-    public function setEndDate($intEndDate) {
+    public function setEndDate($intEndDate)
+    {
         $this->intDateEnd = $intEndDate;
     }
 
     /**
      * @param int $intStartDate
+     *
      * @return void
      */
-    public function setStartDate($intStartDate) {
+    public function setStartDate($intStartDate)
+    {
         $this->intDateStart = $intStartDate;
     }
 
     /**
      * @return string
      */
-    public function getTitle() {
+    public function getTitle()
+    {
         return $this->objLang->getLang("packageservertopqueries", "packageserver");
     }
 
     /**
      * @return bool
      */
-    public function isIntervalable() {
+    public function isIntervalable()
+    {
         return true;
     }
 
     /**
      * @param int $intInterval
+     *
      * @return void
      */
-    public function setInterval($intInterval) {
+    public function setInterval($intInterval)
+    {
         $this->intInterval = $intInterval;
     }
 
     /**
      * @return string
      */
-    public function getReport() {
+    public function getReport()
+    {
         $strReturn = "";
 
         $arrData = $this->getTotalUniqueHostsInInterval();
@@ -90,8 +113,8 @@ class class_stats_report_packageserverqueries implements interface_admin_statsre
         $arrLogs = array();
         $intI = 0;
         $objUser = new class_module_user_user(class_session::getInstance()->getUserID());
-        foreach($arrData as $arrOneLog) {
-            if($intI++ >= $objUser->getIntItemsPerPage()) {
+        foreach ($arrData as $arrOneLog) {
+            if ($intI++ >= $objUser->getIntItemsPerPage()) {
                 break;
             }
 
@@ -114,7 +137,8 @@ class class_stats_report_packageserverqueries implements interface_admin_statsre
      *
      * @return mixed
      */
-    public function getTotalHitsInInterval() {
+    public function getTotalHitsInInterval()
+    {
         $objStart = new class_date($this->intDateStart);
         $objEnd = new class_date($this->intDateEnd);
         $strQuery = "SELECT COUNT(*)
@@ -130,14 +154,16 @@ class class_stats_report_packageserverqueries implements interface_admin_statsre
     /**
      * @return int
      */
-    public function getTotalUniqueHitsInInterval() {
+    public function getTotalUniqueHitsInInterval()
+    {
         return count($this->getTotalUniqueHostsInInterval());
     }
 
     /**
      * @return array
      */
-    public function getTotalUniqueHostsInInterval() {
+    public function getTotalUniqueHostsInInterval()
+    {
         $objStart = new class_date($this->intDateStart);
         $objEnd = new class_date($this->intDateEnd);
         $strQuery = "SELECT log_hostname, COUNT(*) as anzahl
@@ -155,7 +181,8 @@ class class_stats_report_packageserverqueries implements interface_admin_statsre
     /**
      * @return array
      */
-    public function getReportGraph() {
+    public function getReportGraph()
+    {
         $arrReturn = array();
 
         $arrTickLabels = array();
@@ -169,7 +196,7 @@ class class_stats_report_packageserverqueries implements interface_admin_statsre
         $arrTotalHits = array();
         $arrUniqueHits = array();
 
-        while($this->intDateStart <= $intGlobalEnd) {
+        while ($this->intDateStart <= $intGlobalEnd) {
             $arrTotalHits[$intCount] = $this->getTotalHitsInInterval();
             $arrUniqueHits[$intCount] = $this->getTotalUniqueHitsInInterval();
             $arrTickLabels[$intCount] = date("d.m.", $this->intDateStart);
@@ -179,7 +206,7 @@ class class_stats_report_packageserverqueries implements interface_admin_statsre
             $intCount++;
         }
         //create graph
-        if($intCount > 1) {
+        if ($intCount > 1) {
             $objGraph = class_graph_factory::getGraphInstance();
             $objGraph->setArrXAxisTickLabels($arrTickLabels);
             $objGraph->addLinePlot($arrTotalHits, $this->objLang->getLang("packageservertopqueries_total", "packageserver"));

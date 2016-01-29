@@ -179,6 +179,9 @@
         <!-- copy selenium config -->
         <copy file="${basedir}/setupSeleniumConfig.php" tofile="${basedir}${tempPath}/setupSeleniumConfig.php" />
 
+        <!-- copy selenium config -->
+        <copy file="${basedir}/extractPhar.php" tofile="${basedir}${tempPath}/extractPhar.php" />
+
         <!-- remove modules which are not included in the package config -->
         <exec executable="${path.php}" dir="${basedir}" failonerror="on" >
             <arg line="cleanCore.php ${tempPath}"/>
@@ -213,6 +216,12 @@
 
     <target name="protractorPhar" depends="protractorSetup">
         <antcall target="modulePharHelper" />
+
+        <!-- call extract phar -->
+        <exec dir="${basedir}${tempPath}" executable="${path.php}">
+            <arg line="extractPhar.php"/>
+        </exec>
+
         <antcall target="protractorExecute" />
     </target>
 
@@ -391,8 +400,8 @@
             <arg line="-f buildProject.php ${tempPath} onlySetup"/>
         </exec>
         <antcall target="compileLess" />
-        <antcall target="compressCss" />
-        <antcall target="compressJs" />
+        <!--<antcall target="compressCss" />-->
+        <!--<antcall target="compressJs" />-->
         <delete includeemptydirs="true">
             <fileset dir="${basedir}${tempPath}" includes="**/*.less"/>
             <fileset dir="${basedir}${tempPath}" includes="**/less.js"/>

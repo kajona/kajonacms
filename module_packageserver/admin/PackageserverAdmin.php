@@ -6,24 +6,47 @@
 *	$Id$                                  *
 ********************************************************************************************************/
 
+namespace Kajona\Packageserver\Admin;
+
+use class_admin_batchaction;
+use class_admin_controller;
+use class_adminskin_helper;
+use class_array_section_iterator;
+use class_date;
+use class_link;
+use class_model;
+use class_module_mediamanager_admin;
+use class_module_mediamanager_file;
+use class_module_packagemanager_admin;
+use class_module_packagemanager_manager;
+use class_module_packagemanager_metadata;
+use class_module_packageserver_log;
+use class_module_system_module;
+use class_module_system_setting;
+use class_objectfactory;
+use interface_admin;
+use Kajona\Packageserver\System\PackageserverLog;
+
+
 /**
  * Admin-GUI of the packageserver.
  * Provides all interfaces to manage the packages available for other systems
  *
- * @package module_packageserver
  * @author sidler@mulchprod.de
  * @since 4.0
  *
  * @module packageserver
  * @moduleId _packageserver_module_id_
  */
-class class_module_packageserver_admin extends class_module_mediamanager_admin implements interface_admin {
+class PackageserverAdmin extends class_module_mediamanager_admin implements interface_admin
+{
 
 
     /**
      * @return array
      */
-    public function getOutputModuleNavi() {
+    public function getOutputModuleNavi()
+    {
         $arrReturn = array();
         $arrReturn[] = array("view", class_link::getLinkAdmin($this->getArrModule("modul"), "list", "", $this->getLang("action_list"), "", "", true, "adminnavi"));
         $arrReturn[] = array("edit", class_link::getLinkAdmin($this->getArrModule("modul"), "logs", "", $this->getLang("action_logs"), "", "", true, "adminnavi"));
@@ -33,26 +56,31 @@ class class_module_packageserver_admin extends class_module_mediamanager_admin i
 
     /**
      * Generic list of all packages available on the local filesystem
+     *
      * @return string
      * @permissions view
      * @autoTestable
      */
-    protected function actionList() {
+    protected function actionList()
+    {
         return $this->actionOpenFolder();
     }
 
 
     /**
      * Generic list of all packages available on the local filesystem
+     *
      * @return string
      * @permissions view
      * @autoTestable
      */
-    protected function actionOpenFolder() {
+    protected function actionOpenFolder()
+    {
 
-        if(validateSystemid(class_module_system_setting::getConfigValue("_packageserver_repo_id_"))) {
-            if($this->getSystemid() == "")
+        if (validateSystemid(class_module_system_setting::getConfigValue("_packageserver_repo_id_"))) {
+            if ($this->getSystemid() == "") {
                 $this->setSystemid(class_module_system_setting::getConfigValue("_packageserver_repo_id_"));
+            }
 
             $objIterator = new class_array_section_iterator(class_module_mediamanager_file::getFileCount($this->getSystemid(), false, false, true));
             $objIterator->setPageNumber($this->getParam("pv"));
@@ -75,7 +103,8 @@ class class_module_packageserver_admin extends class_module_mediamanager_admin i
      *
      * @return string
      */
-    protected function getNewEntryAction($strListIdentifier, $bitDialog = false) {
+    protected function getNewEntryAction($strListIdentifier, $bitDialog = false)
+    {
         return "";
     }
 
@@ -85,7 +114,8 @@ class class_module_packageserver_admin extends class_module_mediamanager_admin i
      *
      * @return string
      */
-    protected function renderEditAction(class_model $objListEntry, $bitDialog = false) {
+    protected function renderEditAction(class_model $objListEntry, $bitDialog = false)
+    {
         return "";
     }
 
@@ -94,15 +124,17 @@ class class_module_packageserver_admin extends class_module_mediamanager_admin i
      *
      * @return array
      */
-    protected function renderAdditionalActions(class_model $objListEntry) {
+    protected function renderAdditionalActions(class_model $objListEntry)
+    {
 
-        if($objListEntry instanceof class_module_mediamanager_file && $objListEntry->getIntType() == class_module_mediamanager_file::$INT_TYPE_FOLDER)
+        if ($objListEntry instanceof class_module_mediamanager_file && $objListEntry->getIntType() == class_module_mediamanager_file::$INT_TYPE_FOLDER) {
             return array(
                 $this->objToolkit->listButton(class_link::getLinkAdmin($this->getArrModule("modul"), "openFolder", "&systemid=".$objListEntry->getSystemid(), "", $this->getLang("action_open_folder", "mediamanager"), "icon_folderActionOpen"))
             );
+        }
 
 
-        else if($objListEntry instanceof class_module_mediamanager_file && $objListEntry->getIntType() == class_module_mediamanager_file::$INT_TYPE_FILE) {
+        elseif ($objListEntry instanceof class_module_mediamanager_file && $objListEntry->getIntType() == class_module_mediamanager_file::$INT_TYPE_FILE) {
             return array(
                 $this->objToolkit->listButton(
                     class_link::getLinkAdminDialog($this->getArrModule("modul"), "showInfo", "&systemid=".$objListEntry->getSystemid(), $this->getLang("package_info"), $this->getLang("package_info"), "icon_lens", $objListEntry->getStrDisplayName())
@@ -118,31 +150,36 @@ class class_module_packageserver_admin extends class_module_mediamanager_admin i
      * @return string
      * @permissions edit
      */
-    protected function actionEdit() {
+    protected function actionEdit()
+    {
         return $this->getLang("commons_error_permissions");
     }
 
     /**
      * Not supported
+     *
      * @return string
      * @permissions edit
      */
-    protected function actionNew() {
+    protected function actionNew()
+    {
         return $this->getLang("commons_error_permissions");
     }
 
     /**
      * Creates a small print-view of the current package, rendering all relevant key-value-pairs
+     *
      * @permissions view
      * @return string
      */
-    protected function actionShowInfo() {
+    protected function actionShowInfo()
+    {
         $strReturn = "";
         $this->setArrModuleEntry("template", "/folderview.tpl");
 
         /** @var $objPackage class_module_mediamanager_file */
         $objPackage = class_objectfactory::getInstance()->getObject($this->getSystemid());
-        if($objPackage instanceof class_module_mediamanager_file && $objPackage->rightView()) {
+        if ($objPackage instanceof class_module_mediamanager_file && $objPackage->rightView()) {
 
             $objManager = new class_module_packagemanager_manager();
             $objHandler = $objManager->getPackageManagerForPath($objPackage->getStrFilename());
@@ -158,15 +195,16 @@ class class_module_packageserver_admin extends class_module_mediamanager_admin i
 
     /**
      * Copies the metadata.xml content into the files properties.
+     *
      * @permissions edit
      * @xml
      * @return string
      */
-    protected function actionUpdateDataFromMetadata() {
+    protected function actionUpdateDataFromMetadata()
+    {
         $objPackage = new class_module_mediamanager_file($this->getSystemid());
-        $objZip = new class_zip();
-        $strMetadata = $objZip->getFileFromArchive($objPackage->getStrFilename(), "/metadata.xml");
-        if($strMetadata !== false) {
+
+        if (is_file("phar://"._realpath_."/".$objPackage->getStrFilename()."/metadata.xml")) {
             $objMetadata = new class_module_packagemanager_metadata();
             $objMetadata->autoInit($objPackage->getStrFilename());
             $objPackage->setStrName($objMetadata->getStrTitle());
@@ -188,19 +226,20 @@ class class_module_packageserver_admin extends class_module_mediamanager_admin i
      * @permissions edit
      * @autoTestable
      */
-    protected function actionLogs() {
+    protected function actionLogs()
+    {
         $strReturn = "";
 
         $intNrOfRecordsPerPage = 25;
 
-        $objLog = new class_module_packageserver_log();
+        $objLog = new PackageserverLog();
         $objArraySectionIterator = new class_array_section_iterator($objLog->getLogDataCount());
         $objArraySectionIterator->setIntElementsPerPage($intNrOfRecordsPerPage);
         $objArraySectionIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
         $objArraySectionIterator->setArraySection($objLog->getLogData($objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
 
         $arrLogs = array();
-        foreach($objArraySectionIterator as $intKey => $arrOneLog) {
+        foreach ($objArraySectionIterator as $intKey => $arrOneLog) {
             $arrLogs[$intKey][0] = dateToString(new class_date($arrOneLog["log_date"]));
             $arrLogs[$intKey][1] = $arrOneLog["log_ip"];
             $arrLogs[$intKey][2] = $arrOneLog["log_hostname"];
@@ -224,7 +263,8 @@ class class_module_packageserver_admin extends class_module_mediamanager_admin i
      *
      * @return array
      */
-    protected function getBatchActionHandlers($strListIdentifier) {
+    protected function getBatchActionHandlers($strListIdentifier)
+    {
         $arrDefault = array();
         $arrDefault[] = new class_admin_batchaction(class_adminskin_helper::getAdminImage("icon_text"), class_link::getLinkAdminXml("packageserver", "updateDataFromMetadata", "&systemid=%systemid%"), $this->getLang("batchaction_metadata"));
         return $arrDefault;
@@ -235,13 +275,14 @@ class class_module_packageserver_admin extends class_module_mediamanager_admin i
      *
      * @return array
      */
-    protected function getArrOutputNaviEntries() {
+    protected function getArrOutputNaviEntries()
+    {
         $arrEntries = class_admin_controller::getArrOutputNaviEntries();
 
         $arrPath = $this->getPathArray();
         array_shift($arrPath);
 
-        foreach($arrPath as $strOneSystemid) {
+        foreach ($arrPath as $strOneSystemid) {
             $objPoint = class_objectfactory::getInstance()->getObject($strOneSystemid);
             $arrEntries[] = class_link::getLinkAdmin($this->getArrModule("modul"), "openFolder", "&systemid=".$strOneSystemid, $objPoint->getStrDisplayName());
         }

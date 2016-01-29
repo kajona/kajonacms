@@ -965,8 +965,13 @@ JS;
      */
     protected function actionGenericChangelogExportExcel($strSystemid = "")
     {
+
+        $objManager = new class_module_packagemanager_manager();
+        if ($objManager->getPackage("phpexcel") == null) {
+            return $this->getLang("commons_error_permissions");
+        }
         // include phpexcel
-        require_once class_resourceloader::getInstance()->getCorePathForModule("module_phpexcel", true).'/module_phpexcel/system/phpexcel/PHPExcel.php';
+        require_once class_resourceloader::getInstance()->getAbsolutePathForModule("module_phpexcel").'/vendor/autoload.php';
         $objPHPExcel = new PHPExcel();
 
         // get system id

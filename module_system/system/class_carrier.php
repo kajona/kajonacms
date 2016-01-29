@@ -294,7 +294,7 @@ class class_carrier
     public function boot()
     {
         // we include the system autoloader so that we can load all core dependencies
-        require_once _realpath_."/core/module_system/vendor/autoload.php";
+        require_once __DIR__."/../vendor/autoload.php";
 
         $this->objContainer = new \Pimple\Container();
     }

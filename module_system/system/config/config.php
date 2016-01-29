@@ -79,25 +79,25 @@ $config['dbport']               = "%%defaultport%%";               //Database po
     $config['bootstrapcache_objects.cache']        = true;             //Caches the mapping of systemid to class-names. Should be enabled by default.
                                                                        //The cache is created under /project/temp/objects.cache
 
-    $config['bootstrapcache_foldercontent.cache']  = false;            //Caches the merge of the core- and project folders. Should be enabled on production systems but disabled on development systems.
+    $config['bootstrapcache_foldercontent.cache']  = true;             //Caches the merge of the core- and project folders. Should be enabled on production systems but disabled on development systems.
                                                                        //The cache is created under /project/temp/foldercontent.cache
 
-    $config['bootstrapcache_reflection.cache']     = false;            //Caches all static analysis by the reflection API, e.g. parsing of annotations. Should be enabled on production systems but disabled on development systems.
+    $config['bootstrapcache_reflection.cache']     = true;             //Caches all static analysis by the reflection API, e.g. parsing of annotations. Should be enabled on production systems but disabled on development systems.
                                                                        //The cache is created under /project/temp/reflection.cache
 
-    $config['bootstrapcache_lang.cache']           = false;            //Caches all contents of language files. Should be enabled on production systems but disabled on development systems.
+    $config['bootstrapcache_lang.cache']           = true;             //Caches all contents of language files. Should be enabled on production systems but disabled on development systems.
                                                                        //The cache is created under /project/temp/lang.cache
 
-    $config['bootstrapcache_modules.cache']        = false;            //Caches the list of locally installed modules. Should be enabled on production systems but disabled on development systems.
+    $config['bootstrapcache_modules.cache']        = true;             //Caches the list of locally installed modules. Should be enabled on production systems but disabled on development systems.
                                                                        //The cache is created under /project/temp/modules.cache
 
-    $config['bootstrapcache_pharmodules.cache']    = false;            //Caches the list of modules deployed as phars. Should be enabled on production systems but disabled on development systems.
+    $config['bootstrapcache_pharmodules.cache']    = true;             //Caches the list of modules deployed as phars. Should be enabled on production systems but disabled on development systems.
                                                                        //The cache is created under /project/temp/pharmodules.cache
 
-    $config['bootstrapcache_classes.cache']        = false;            //Caches the locations of class-definitions collected by the classloader. Should be enabled on production systems but disabled on development systems.
+    $config['bootstrapcache_classes.cache']        = true;             //Caches the locations of class-definitions collected by the classloader. Should be enabled on production systems but disabled on development systems.
                                                                        //The cache is created under /project/temp/classes.cache
 
-    $config['bootstrapcache_templates.cache']      = false;            //Caches the locations of templates fetched by the template-engine. Should be enabled on production systems but disabled on development systems.
+    $config['bootstrapcache_templates.cache']      = true;             //Caches the locations of templates fetched by the template-engine. Should be enabled on production systems but disabled on development systems.
                                                                        //The cache is created under /project/temp/templates.cache
 
 

@@ -22,6 +22,7 @@ Annotation         |Context    |Introduced in     |Description
 |@fieldHidden	|Property	|4.4	|Moves the property to the list of hidden/optinal form-elements. Hidden form-elements are not visisible by default but may be shown using a link.
 |@fieldReadonly	|Property	|4.4	|Marks the property as a read-only formentry (same as setBitReadOnly(true))
 |@formGenerator |Class	|4.8	|If a model defines such an annotation the getAdminForm method will return the specified formgenerator class. This is useful to build custom forms.
+|@Inject |Property	|5.0	|Injects the provided service name into the property. Works only inside controller or workflow classes.
 |@listOrder ASC&#124;DESC	|Property	|4.2	|The property is used as a sort-criteria when loading object-lists dynamically.
 |@module name	|Class	|4.3	|The name of the module the current class belongs to, e.g. "news".
 |@moduleId id	|Class	|4.3	|The id-constant of the module the current class belongs to, e.g. _ navigations_module_id_

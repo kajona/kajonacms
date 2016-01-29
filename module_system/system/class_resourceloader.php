@@ -89,13 +89,13 @@ class class_resourceloader
         //first try: load the file in the current template-pack
         $strDefaultTemplate = class_module_system_setting::getConfigValue("_packagemanager_defaulttemplate_");
         if (is_file(_realpath_._templatepath_."/".$strDefaultTemplate."/tpl".$strTemplateName)) {
-            BootstrapCache::getInstance()->addCacheRow(BootstrapCache::CACHE_TEMPLATES, $strTemplateName, _templatepath_."/".$strDefaultTemplate."/tpl".$strTemplateName);
+            BootstrapCache::getInstance()->addCacheRow(BootstrapCache::CACHE_TEMPLATES, $strTemplateName, _realpath_._templatepath_."/".$strDefaultTemplate."/tpl".$strTemplateName);
             return _realpath_._templatepath_."/".$strDefaultTemplate."/tpl".$strTemplateName;
         }
 
         //second try: load the file from the default-pack
         if (is_file(_realpath_._templatepath_."/default/tpl".$strTemplateName)) {
-            BootstrapCache::getInstance()->addCacheRow(BootstrapCache::CACHE_TEMPLATES, $strTemplateName, _templatepath_."/default/tpl".$strTemplateName);
+            BootstrapCache::getInstance()->addCacheRow(BootstrapCache::CACHE_TEMPLATES, $strTemplateName, _realpath_._templatepath_."/default/tpl".$strTemplateName);
             return _realpath_._templatepath_."/default/tpl".$strTemplateName;
         }
 
@@ -106,14 +106,31 @@ class class_resourceloader
                     $strFilename = _realpath_."/".$strCorePath."/templates/default/tpl".$strTemplateName;
                     break;
                 }
+                if (is_file(_realpath_."/".$strCorePath.$strTemplateName)) {
+                    $strFilename = _realpath_."/".$strCorePath.$strTemplateName;
+                    break;
+                }
             } elseif (PharModule::isPhar(_realpath_."/".$strCorePath)) {
                 $strAbsolutePath = PharModule::getPharStreamPath(_realpath_."/".$strCorePath, "/templates/default/tpl".$strTemplateName);
                 if (is_file($strAbsolutePath)) {
                     $strFilename = $strAbsolutePath;
                     break;
                 }
+
+                $strAbsolutePath = PharModule::getPharStreamPath(_realpath_."/".$strCorePath, $strTemplateName);
+                if (is_file($strAbsolutePath)) {
+                    $strFilename = $strAbsolutePath;
+                    break;
+                }
             }
         }
+
+        if($strFilename !== null) {
+            BootstrapCache::getInstance()->addCacheRow(BootstrapCache::CACHE_TEMPLATES, $strTemplateName, $strFilename);
+            return $strFilename;
+        }
+
+
 
         if ($bitScanAdminSkin) {
             //scan directly
@@ -439,6 +456,28 @@ class class_resourceloader
         $strPath = uniSubstr(uniStrReplace(array($strModule.".phar", $strModule), "", $arrFlipped[$strModule]), 0, -1);
 
         return ($bitPrependRealpath ? _realpath_ : "")."/".$strPath;
+    }
+
+    /**
+     * Returns the absolute path for a module.
+     * Validates if the module is a phar and adds the phar:// stream wrapper automatically.
+     * @param $strModule
+     *
+     * @return null|string
+     */
+    public function getAbsolutePathForModule($strModule)
+    {
+        $arrFlipped = array_flip(class_classloader::getInstance()->getArrModules());
+
+        if (!array_key_exists($strModule, $arrFlipped)) {
+            return null;
+        }
+
+        $strPath = _realpath_.$arrFlipped[$strModule];
+        if(\Kajona\System\System\StringUtil::endsWith($strPath, ".phar")) {
+            $strPath = "phar://".$strPath;
+        }
+        return $strPath;
     }
 
     /**
