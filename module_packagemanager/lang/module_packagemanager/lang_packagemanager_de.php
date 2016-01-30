@@ -17,6 +17,7 @@ $lang["action_list"]                     = "Installierte Pakete";
 $lang["action_list_templates"]           = "Template-Verwaltung";
 $lang["action_new_copy"]                 = "Neues Template-Pack anlegen";
 $lang["action_upload_package"]           = "Neues / Aktualisiertes Paket installieren";
+$lang["package_downloadasphar"]          = "Phar-Paket aus dem Verzeichnis generieren und herunterladen";
 $lang["all"]                             = "Alle";
 $lang["delete_question"]                 = "Möchten Sie das Template-Pack &quot;<b>%%element_name%%</b>&quot; wirklich entfernen?";
 $lang["element"]                         = "Element";

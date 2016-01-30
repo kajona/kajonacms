@@ -604,5 +604,58 @@ class class_filesystem {
         }
         return $bitReturn;
     }
+
+    /**
+     * Streams the file directly to the client.
+     * Make sure to die() the process afterwards, this is not done by this method!
+     * @param $strSourceFile
+     */
+    public function streamFile($strSourceFile)
+    {
+        if(\Kajona\System\System\StringUtil::indexOf($strSourceFile, _realpath_) === false) {
+            $strSourceFile = _realpath_.$strSourceFile;
+        }
+
+
+        //Send the data to the browser
+        $strBrowser = getServer("HTTP_USER_AGENT");
+        //Check the current browsertype
+        if(\Kajona\System\System\StringUtil::indexOf($strBrowser, "IE") !== false) {
+            //Internet Explorer
+            class_response_object::getInstance()->addHeader("Content-type: application/x-ms-download");
+            class_response_object::getInstance()->addHeader("Content-type: x-type/subtype\n");
+            class_response_object::getInstance()->addHeader("Content-type: application/force-download");
+            class_response_object::getInstance()->addHeader(
+                "Content-Disposition: attachment; filename=" . preg_replace(
+                    '/\./', '%2e',
+                    saveUrlEncode(trim(basename($strSourceFile))), substr_count(basename($strSourceFile), '.') - 1
+                )
+            );
+        }
+        else {
+            //Good: another browser vendor
+            class_response_object::getInstance()->addHeader("Content-Type: application/octet-stream");
+            class_response_object::getInstance()->addHeader("Content-Disposition: attachment; filename=" . saveUrlEncode(trim(basename($strSourceFile))));
+        }
+        //Common headers
+        class_response_object::getInstance()->addHeader("Expires: Mon, 01 Jan 1995 00:00:00 GMT");
+        class_response_object::getInstance()->addHeader("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
+        class_response_object::getInstance()->addHeader("Pragma: no-cache");
+        class_response_object::getInstance()->addHeader("Content-description: JustThum-Generated Data\n");
+        class_response_object::getInstance()->addHeader("Content-Length: " . filesize($strSourceFile));
+
+        //End Session
+        class_carrier::getInstance()->getObjSession()->sessionClose();
+
+        ob_clean();
+        class_response_object::getInstance()->sendHeaders();
+
+        //Loop the file
+        $ptrFile = @fopen($strSourceFile, 'rb');
+        fpassthru($ptrFile);
+        @fclose($ptrFile);
+        ob_flush();
+        flush();
+    }
 }
 

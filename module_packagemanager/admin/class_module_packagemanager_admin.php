@@ -98,6 +98,12 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
                 );
             }
 
+            if(!$objOneMetadata->getBitIsPhar()) {
+                $strActions .= $this->objToolkit->listButton(
+                    class_link::getLinkAdmin($this->getArrModule("modul"), "downloadAsPhar", "&package=".$objOneMetadata->getStrTitle(), $this->getLang("package_downloadasphar"), $this->getLang("package_downloadasphar"), "icon_downloads")
+                );
+            }
+
             $strActions .= $this->objToolkit->listButton(
                 class_link::getLinkAdminDialog($this->getArrModule("modul"), "showInfo", "&package=".$objOneMetadata->getStrTitle(), $this->getLang("package_info"), $this->getLang("package_info"), "icon_lens", $objOneMetadata->getStrTitle())
             );
@@ -744,6 +750,27 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
         $this->adminReload(class_link::getLinkAdminHref($this->getArrModule("modul"), "listTemplates"));
     }
 
+    /**
+     * Triggers a phar-creation and download of the generated phar
+     * @permissions view,edit
+     */
+    protected function actionDownloadAsPhar()
+    {
+        $objManager = new class_module_packagemanager_manager();
+        $objHandler = $objManager->getPackage($this->getParam("package"));
+        if ($objHandler !== null) {
+            /** @var \Kajona\Packagemanager\System\PackagemanagerPharGeneratorInterface $objPharService */
+            $objPharService = class_carrier::getInstance()->getContainer()->offsetGet("packagemanager_phargenerator");
+            try {
+                $objPharService->generateAndStreamPhar(_realpath_.$objHandler->getStrPath());
+            }
+            catch (class_exception $objEx) {
+                return $this->objToolkit->warningBox($objEx->getMessage(), "alert-danger");
+            }
+        }
+
+        return "";
+    }
 
     /**
      * @return string

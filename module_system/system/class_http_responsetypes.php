@@ -40,4 +40,6 @@ class class_http_responsetypes {
 
     const STR_TYPE_GIF = "Content-type: image/gif";
 
+    const STR_TYPE_PHAR = "Content-type: application/phar";
+
 }
