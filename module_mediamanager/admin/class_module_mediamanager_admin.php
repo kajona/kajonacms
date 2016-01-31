@@ -217,6 +217,12 @@ class class_module_mediamanager_admin extends class_admin_evensimpler implements
         $strPrevid = $objRecord->getPrevId();
 
         if($objRecord != null && $objRecord->rightDelete()) {
+
+            if($objRecord instanceof class_module_mediamanager_file) {
+                $this->setParam("mediamanagerDeleteFileFromFilesystem", true);
+            }
+
+
             if(!$objRecord->deleteObject())
                 throw new class_exception("error deleting object ".$objRecord->getStrDisplayName(), class_exception::$level_ERROR);
 
@@ -320,7 +326,6 @@ class class_module_mediamanager_admin extends class_admin_evensimpler implements
                 KAJONA.admin.loader.loadFile('{$strCore}/module_mediamanager/admin/scripts/mediamanager.js', function() {
                     KAJONA.admin.ajax.genericAjaxCall("mediamanager", "syncRepo", "{$this->getSystemid()}", function(data, status, jqXHR) {
                         if(status == 'success') {
-                            console.log("sync response: "+data);
                             if(data.indexOf("<repo>0</repo>") == -1) {
                                 //show a dialog to reload the current page
                                 jsDialog_1.setTitle('{$this->getLang('repo_change')}'); jsDialog_1.setContent('{$this->getLang('repo_change_hint')}', '{$this->getLang('repo_reload')}', 'javascript:document.location.reload();'); jsDialog_1.init();
