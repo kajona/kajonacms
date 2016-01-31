@@ -1,5 +1,8 @@
 Module Mediamanager
 
+V4.7.1 --------------------------------------------------------------------------------------------------
+BUG: module_mediamanager | mediamanager_file -> fixed a case where editing the base-path of a copied mediamanager repo could lead to a loss of files in the filesystem (due to an erroneous sync request). credits go to avman. #87.
+
 V4.6 ----------------------------------------------------------------------------------------------------
 NEW: module_mediamanager | mediamanager_file -> added a new static helper method getFileForPath(), used to find the matching mediamanager-file for a given filesystem-path and a given mediamanager-repository
 BUG: module_mediamanager | installer -> fixed the folderview modules' update sequence, no longer at module pages, now at module mediamanager
