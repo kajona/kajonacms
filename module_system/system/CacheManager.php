@@ -224,5 +224,20 @@ class CacheManager
 
         return self::$objInstance;
     }
+
+    /**
+     * Returns all available drivers which can be deleted through the system task
+     *
+     * @return array
+     */
+    public static function getAvailableDriver()
+    {
+        return array(
+            self::TYPE_APC => "APC",
+            self::TYPE_DATABASE => "Datenbank",
+            self::TYPE_FILESYSTEM => "Dateisystem",
+            self::TYPE_PHPFILE => "PHP-Datei",
+        );
+    }
 }
 

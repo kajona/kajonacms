@@ -7,6 +7,8 @@
 *   $Id$                                        *
 ********************************************************************************************************/
 
+use Kajona\System\System\CacheManager;
+
 /**
  * Flushes the entries from the systemwide cache
  *
@@ -53,12 +55,14 @@ class class_systemtask_flushcache extends class_systemtask_base implements inter
         $objCachebuster->setStrValue((int)$objCachebuster->getStrValue() + 1);
         $objCachebuster->updateObjectToDb();
 
-        if(class_cache::flushCache($this->getParam("cacheSource"))) {
+        $intType = (int) $this->getParam("cacheSource");
+        if ($intType > 0) {
+            CacheManager::getInstance()->flushCache($intType);
+
             return $this->objToolkit->getTextRow($this->getLang("systemtask_flushcache_success"));
         }
-        else {
-            return $this->objToolkit->getTextRow($this->getLang("systemtask_flushcache_error"));
-        }
+
+        return $this->objToolkit->getTextRow($this->getLang("systemtask_flushcache_error"));
     }
 
     /**
@@ -68,11 +72,11 @@ class class_systemtask_flushcache extends class_systemtask_base implements inter
     public function getAdminForm() {
         $strReturn = "";
         //show dropdown to select cache-source
-        $arrSources = class_cache::getCacheSources();
+        $arrSources = CacheManager::getAvailableDriver();
         $arrOptions = array();
-        $arrOptions[""] = $this->getLang("systemtask_flushcache_all");
-        foreach($arrSources as $strOneSource) {
-            $arrOptions[$strOneSource] = $strOneSource;
+        $arrOptions[""] = CacheManager::TYPE_APC | CacheManager::TYPE_FILESYSTEM | CacheManager::TYPE_DATABASE | CacheManager::TYPE_PHPFILE;
+        foreach($arrSources as $intValue => $strLabel) {
+            $arrOptions[$intValue] = $strLabel;
         }
 
         $strReturn .= $this->objToolkit->formInputDropdown("cacheSource", $arrOptions, $this->getLang("systemtask_cacheSource_source"));
