@@ -234,9 +234,9 @@ class CacheManager
     {
         return array(
             self::TYPE_APC => "APC",
-            self::TYPE_DATABASE => "Datenbank",
-            self::TYPE_FILESYSTEM => "Dateisystem",
-            self::TYPE_PHPFILE => "PHP-Datei",
+            self::TYPE_DATABASE => "Database",
+            self::TYPE_FILESYSTEM => "Filesystem",
+            self::TYPE_PHPFILE => "PHP-File",
         );
     }
 }
