@@ -175,9 +175,6 @@ class class_module_user_sourcefactory {
 
         $objUser = $this->getUserByUsername($strName);
         //validate if the user is assigned to at least a single group
-        if(empty($objUser->getArrGroupIds())) {
-            throw new class_authentication_exception("user ".$strName." is not assigned to at least a single group", class_exception::$level_ERROR);
-        }
 
         if ($objUser != null) {
             $objSubsystem = $this->getUsersource($objUser->getStrSubsystem());
@@ -185,6 +182,12 @@ class class_module_user_sourcefactory {
 
 
             if ($objPlainUser != null && $objSubsystem->authenticateUser($objPlainUser, $strPassword)) {
+
+                if(empty($objUser->getArrGroupIds())) {
+                    throw new class_authentication_exception("user ".$strName." is not assigned to at least a single group", class_exception::$level_ERROR);
+                }
+
+
                 return true;
             }
         }
