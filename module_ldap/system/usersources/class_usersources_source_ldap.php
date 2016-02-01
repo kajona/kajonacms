@@ -54,27 +54,28 @@ class class_usersources_source_ldap implements interface_usersources_usersource 
 
                 $objRealUser = new class_module_user_user($objUser->getSystemid());
 
-                $bitReturn = $objSingleLdap->authenticateUser($objRealUser->getStrUsername(), $strPassword);
+                $arrSingleUser = $objSingleLdap->getUserdetailsByName($objRealUser->getStrUsername());
+                if($arrSingleUser !== false && count($arrSingleUser) == 1) {
+                    $arrSingleUser = $arrSingleUser[0];
+                    $bitReturn = $objSingleLdap->authenticateUser($arrSingleUser['identifier'], $strPassword);
 
-                //synchronize the local data with the ldap-data
-                if($bitReturn === true) {
-                    $arrSingleUser = $objSingleLdap->getUserdetailsByName($objRealUser->getStrUsername());
 
-                    if($arrSingleUser !== false && count($arrSingleUser) == 1) {
-                        $arrSingleUser = $arrSingleUser[0];
-                        if($objUser instanceof class_usersources_user_ldap) {
-                            $objUser->setStrFamilyname($arrSingleUser["familyname"]);
-                            $objUser->setStrGivenname($arrSingleUser["givenname"]);
-                            $objUser->setStrEmail($arrSingleUser["mail"]);
-                            $objUser->setIntCfg($objSingleLdap->getIntCfgNr());
-                            $objUser->updateObjectToDb();
-                            $this->objDB->flushQueryCache();
-                        }
+                    //synchronize the local data with the ldap-data
+                    if($objUser instanceof class_usersources_user_ldap) {
+                        $objUser->setStrFamilyname($arrSingleUser["familyname"]);
+                        $objUser->setStrGivenname($arrSingleUser["givenname"]);
+                        $objUser->setStrEmail($arrSingleUser["mail"]);
+                        $objUser->setStrDN($arrSingleUser["identifier"]);
+                        $objUser->setIntCfg($objSingleLdap->getIntCfgNr());
+                        $objUser->updateObjectToDb();
+                        $this->objDB->flushQueryCache();
 
                     }
 
                     return $bitReturn;
                 }
+
+
 
             }
         }
