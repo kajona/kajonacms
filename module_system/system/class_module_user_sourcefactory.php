@@ -169,18 +169,27 @@ class class_module_user_sourcefactory {
      * @return interface_usersources_user
      */
     public function authenticateUser($strName, $strPassword) {
+        if(empty($strName) || empty($strPassword)) {
+            throw new class_authentication_exception("user ".$strName." could not be authenticated", class_exception::$level_ERROR);
+        }
+
         $objUser = $this->getUserByUsername($strName);
-        if($objUser != null) {
+        //validate if the user is assigned to at least a single group
+        if(empty($objUser->getArrGroupIds())) {
+            throw new class_authentication_exception("user ".$strName." is not assigned to at least a single group", class_exception::$level_ERROR);
+        }
+
+        if ($objUser != null) {
             $objSubsystem = $this->getUsersource($objUser->getStrSubsystem());
             $objPlainUser = $objSubsystem->getUserById($objUser->getSystemid());
 
-            if($objPlainUser != null && $objSubsystem->authenticateUser($objPlainUser, $strPassword)) {
+
+            if ($objPlainUser != null && $objSubsystem->authenticateUser($objPlainUser, $strPassword)) {
                 return true;
             }
         }
 
-
-        throw new class_authentication_exception("user " . $strName . " could not be authenticated", class_exception::$level_ERROR);
+        throw new class_authentication_exception("user ".$strName." could not be authenticated", class_exception::$level_ERROR);
     }
 
     /**
