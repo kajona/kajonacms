@@ -88,10 +88,12 @@ $(function () {
         var scroll = $(this).scrollTop();
         if(scroll > 10 && KAJONA.admin.scroll != 'top') {
             $("ul.breadcrumb").addClass("breadcrumbTop");
+            $("#quickhelp").addClass("quickhelpTop");
             KAJONA.admin.scroll = "top";
         }
         else if(scroll <= 10 && KAJONA.admin.scroll != 'margin') {
             $("ul.breadcrumb").removeClass("breadcrumbTop");
+            $("#quickhelp").removeClass("quickhelpTop");
             KAJONA.admin.scroll = "fixed";
         }
 

@@ -1319,8 +1319,8 @@ The following sections are used to display the path-navigations, e.g. used by th
 <path_container>
     <ul class="breadcrumb">
         %%pathnavi%%
-        <li id="quickhelp" class=" pull-right" style=" "><i class="fa fa-question-circle"></i></li>
     </ul>
+    <div id="quickhelp" class=" pull-right" style=" "><i class="fa fa-question-circle"></i></div>
 </path_container>
 
 <path_entry>
