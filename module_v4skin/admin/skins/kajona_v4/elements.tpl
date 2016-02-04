@@ -542,11 +542,24 @@ Upload-Field
         <div class="col-sm-6">
             <input type="file" name="%%name%%" id="%%name%%" class="form-control %%class%%">
             <span class="help-block">
+                %%uploadFile%%
                 %%maxSize%%
             </span>
         </div>
     </div>
 </input_upload>
+
+Upload-Field readonly
+<input_upload_readonly>
+    <div class="form-group">
+        <label for="%%name%%" class="col-sm-3 control-label">%%title%%</label>
+        <div class="col-sm-6">
+            <div class="form-control">
+                <a href="%%fileDownload%%">%%uploadFile%%</a>
+            </div>
+        </div>
+    </div>
+</input_upload_readonly>
 
 Upload-Field for multiple files with progress bar
 <input_upload_multiple>
@@ -571,7 +584,7 @@ Upload-Field for multiple files with progress bar
                 </button>
 
                 <span class="fileupload-process"></span>
-                <div class="alert alert-info">
+                <div class="alert alert-info" id="drop-%%uploadId%%">
                     [lang,upload_dropArea,mediamanager]<br />
                      %%allowedExtensions%%
                 </div>
@@ -586,7 +599,7 @@ Upload-Field for multiple files with progress bar
                 <div class="progress-extended">&nbsp;</div>
             </div>
 
-        <table class="table admintable table-striped-tbody files"></table>
+        <table class="table admintable table-striped-tbody files" id="files-%%uploadId%%"></table>
     </div>
 
 <script type="text/javascript">
@@ -616,9 +629,10 @@ Upload-Field for multiple files with progress bar
                     $('#%%name%%').fileupload({
                         url: '_webpath_/xml.php?admin=1&module=mediamanager&action=fileUpload',
                         dataType: 'json',
+                        dropZone: $('#drop-%%uploadId%%'),
                         autoUpload: false,
                         paramName : '%%name%%',
-                        filesContainer: $('table.files'),
+                        filesContainer: $('#files-%%uploadId%%'),
                         formData: [
                             {name: 'systemid', value: '%%mediamanagerRepoId%%'},
                             {name: 'inputElement', value : '%%name%%'},
@@ -677,13 +691,15 @@ Upload-Field for multiple files with progress bar
                     })
                     .bind('fileuploadstop', function (e) {
                         $(this).trigger('kajonahideelements');
-                        document.location.reload();
+                        %%reloadJs%%
                     })
                     .bind('kajonahideelements', function() {
                         if(filesToUpload == 0) {
+                            /*
                             $(this).find('.fileupload-buttonbar button.start').css('display', 'none');
                             $(this).find('.fileupload-buttonbar button.cancel').css('display', 'none');
                             $(this).find('.fileupload-progress').css('display', 'none');
+                            */
                         }
                     });
                 });
