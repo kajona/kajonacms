@@ -13,11 +13,12 @@
  */
 class class_formentry_upload extends class_formentry_base implements interface_formentry {
 
-    public function __construct($strFormName, $strSourceProperty, $objSourceObject = null) {
+    public function __construct($strFormName, $strSourceProperty, $objSourceObject = null)
+    {
         parent::__construct($strFormName, $strSourceProperty, $objSourceObject);
 
         //set the default validator
-        $this->setObjValidator(new class_uploadfile_validator());
+        $this->setObjValidator(new class_dummy_validator());
     }
 
     /**
@@ -26,14 +27,34 @@ class class_formentry_upload extends class_formentry_base implements interface_f
      *
      * @return string
      */
-    public function renderField() {
+    public function renderField()
+    {
         $objToolkit = class_carrier::getInstance()->getObjToolkit("admin");
         $strReturn = "";
         if($this->getStrHint() != null)
             $strReturn .= $objToolkit->formTextRow($this->getStrHint());
 
-        $strReturn .= $objToolkit->formInputUpload($this->getStrEntryName(), $this->getStrLabel());
+        $strData = $this->getStrValue();
+        if (!is_array($strData)) {
+            $strData = json_decode($strData, true);
+        }
+
+        $strFile = isset($strData['name']) && $strData['name'] != "" ? urldecode($strData['name']) : null;
+        $strReturn .= $objToolkit->formInputUpload($this->getStrEntryName(), $this->getStrLabel(), "", $strFile, $this->getBitReadonly());
 
         return $strReturn;
+    }
+
+    public function setValueToObject()
+    {
+        $strData = $this->getStrValue();
+        if (!is_array($strData)) {
+            $strData = json_decode($strData, true);
+        }
+
+        if (isset($strData['name']) && $strData['name'] != "") {
+            // we set the value only if we have a valid upload
+            parent::setValueToObject();
+        }
     }
 }

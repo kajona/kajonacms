@@ -651,16 +651,26 @@ class class_toolkit_admin extends class_toolkit
      *
      * @return string
      */
-    public function formInputUpload($strName, $strTitle = "", $strClass = "")
+    public function formInputUpload($strName, $strTitle = "", $strClass = "", $strFile = null, $bitReadOnly = false)
     {
+        if ($bitReadOnly) {
+            $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "input_upload_readonly");
+        } else {
+            $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "input_upload");
+            if (!empty($strFile)) {
+                $strFile = "Ausgewählte Datei: " . $strFile . "<br>";
+            }
+        }
 
-        $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "input_upload");
         $arrTemplate = array();
         $arrTemplate["name"] = $strName;
         $arrTemplate["title"] = $strTitle;
         $arrTemplate["class"] = $strClass;
 
         $objText = class_carrier::getInstance()->getObjLang();
+
+        $arrTemplate["uploadFile"] = $strFile;
+        $arrTemplate["fileDownload"] = "#"; // @TODO generate download link
         $arrTemplate["maxSize"] = $objText->getLang("max_size", "mediamanager")." ".bytesToString(class_config::getInstance()->getPhpMaxUploadSize());
 
         return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
@@ -676,11 +686,15 @@ class class_toolkit_admin extends class_toolkit
      *
      * @return string
      */
-    public function formInputUploadMultiple($strName, $strAllowedFileTypes, $strMediamangerRepoSystemId)
+    public function formInputUploadMultiple($strName, $strAllowedFileTypes, $strMediamangerRepoSystemId, $strUploadId = null, $bitReloadOnUpload = true, $bitHideElements = false)
     {
 
         if (class_module_system_module::getModuleByName("mediamanager") === null) {
             return ($this->warningBox("Module mediamanger is required for this multiple uploads"));
+        }
+
+        if ($strUploadId === null) {
+            $strUploadId = generateSystemid();
         }
 
         $objConfig = class_carrier::getInstance()->getObjConfig();
@@ -690,6 +704,9 @@ class class_toolkit_admin extends class_toolkit
         $arrTemplate = array();
         $arrTemplate["name"] = $strName;
         $arrTemplate["mediamanagerRepoId"] = $strMediamangerRepoSystemId;
+        $arrTemplate["uploadId"] = $strUploadId;
+        $arrTemplate["hideelements"] = $bitHideElements ? "$(this).trigger('kajonahideelements');" : "";
+        $arrTemplate["reloadJs"] = $bitReloadOnUpload ? "document.location.reload();" : "";
 
         $strAllowedFileRegex = uniStrReplace(array(".", ","), array("", "|"), $strAllowedFileTypes);
         $strAllowedFileTypes = uniStrReplace(array(".", ","), array("", "', '"), $strAllowedFileTypes);
