@@ -11,7 +11,7 @@
  * @since 4.4
  * @package module_formgenerator
  */
-class class_formentry_upload extends class_formentry_base implements interface_formentry {
+class class_formentry_upload extends class_formentry_base implements interface_formentry, interface_formentry_printable {
 
     public function __construct($strFormName, $strSourceProperty, $objSourceObject = null)
     {
@@ -42,12 +42,11 @@ class class_formentry_upload extends class_formentry_base implements interface_f
         $strFile = isset($strData['name']) && $strData['name'] != "" ? urldecode($strData['name']) : null;
 
         if ($this->getBitReadonly()) {
-            $strFileHref = '#';
+            $strFileHref = $this->getFileHref($strData);
             $strReturn .= $objToolkit->formInputDownload($this->getStrEntryName(), $this->getStrLabel(), "", $strFile, $strFileHref);
         } else {
             $strReturn .= $objToolkit->formInputUpload($this->getStrEntryName(), $this->getStrLabel(), "", $strFile);
         }
-
 
         return $strReturn;
     }
@@ -63,5 +62,28 @@ class class_formentry_upload extends class_formentry_base implements interface_f
             // we set the value only if we have a valid upload
             parent::setValueToObject();
         }
+    }
+
+    public function getValueAsText()
+    {
+        $strData = $this->getStrValue();
+        if (!is_array($strData)) {
+            $strData = json_decode($strData, true);
+        }
+
+        $strFile = isset($strData['name']) && $strData['name'] != "" ? urldecode($strData['name']) : null;
+
+        return !empty($strFile) ? $strFile : "-";
+    }
+
+    protected function getFileHref($arrFile)
+    {
+        if (empty($arrFile)) {
+            return '#';
+        }
+
+        // @TODO generate download link
+
+        return '#';
     }
 }
