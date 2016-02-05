@@ -32,6 +32,9 @@
     <condition property="script-suffix" value=".bat" else="">
         <os family="windows" />
     </condition>
+    <condition property="script-suffix-cmd" value=".cmd" else="">
+        <os family="windows" />
+    </condition>
     <condition property="composerHome" value="${user.home}/AppData/Roaming/Composer" else="${user.home}/.composer">
         <os family="windows" />
     </condition>
@@ -61,7 +64,7 @@
     <!-- path to node -->
     <property name="path.node"      value="node" />
     <!-- path to npm -->
-    <property name="path.npm"       value="npm${script-suffix}" />
+    <property name="path.npm"       value="npm${script-suffix-cmd}" />
     <!-- path to phpunit -->
     <property name="path.phpunit"   value="${composerBinariesPath}/phpunit${script-suffix}" />
     <!-- path to phpcs -->

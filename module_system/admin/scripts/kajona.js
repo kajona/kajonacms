@@ -1177,9 +1177,14 @@ KAJONA.admin.messaging = {
  * each element.
  */
 KAJONA.admin.renderTocNavigation = function (selector) {
+
+    //handled before?
+    if($('#toc-navigation ul').length > 0) {
+        return;
+    }
+
     // create the navigation
-    var html = '<div id="toc-navigation" class="toc-navigation-panel" role="navigation">';
-    html += '<ul class="nav">';
+    var html = '';
     var arrIdMap = Array();
     $(selector).each(function () {
         if($(this).attr('id')) {
@@ -1199,16 +1204,9 @@ KAJONA.admin.renderTocNavigation = function (selector) {
         }
         html += '<li><a href="#' + id + '">' + $(this).text() + '</a></li>';
     });
-    html += '</ul>';
-    html += '</div>';
 
     // append the element only if it is not already appended
-    if($('#toc-navigation').length > 0) {
-        $('#toc-navigation').html(html);
-    }
-    else {
-        $('.sidebar-nav').append(html);
-    }
+    $('.sidebar-nav').append($('<div id="toc-navigation" class="toc-navigation-panel" role="navigation">').append($('<ul class="nav">').html(html)));
 
     // affix toc navigation
     $('#toc-navigation').affix({
@@ -1225,9 +1223,11 @@ KAJONA.admin.renderTocNavigation = function (selector) {
 
     // resize toc navigation to main navigation
     $(window).resize(function() {
-        $('#toc-navigation').css('width', $('#moduleNavigation').width());
+        $('#toc-navigation').css('width', $('#moduleNavigation').width()+20);
+        $('#toc-navigation').css('max-height', $(window).height());
     });
-    $('#toc-navigation').css('width', $('#moduleNavigation').width());
+    $('#toc-navigation').css('width', $('#moduleNavigation').width()+20);
+    $('#toc-navigation').css('max-height', $(window).height());
 };
 
 /**

@@ -13,15 +13,48 @@
  *
  * @package module_search
  * @author tim.kiefer@kojikui.de
+ * @author sidler@mulchprod.de
  * @since 4.4
  */
 class class_module_search_query_parser {
+
+    public function safeReplaceCharacter($strString, $strCharacter)
+    {
+        $intLastPos = 0;
+        $arrPositions = array();
+        while (($intLastPos = strpos($strString, $strCharacter, $intLastPos))!== false) {
+            $arrPositions[] = $intLastPos;
+            $intLastPos = $intLastPos + strlen($strCharacter);
+        }
+
+
+        $intReplacements = 0;
+        foreach($arrPositions as $intPos) {
+            $intPos -= $intReplacements;
+            if($intPos > 1 && $strString[$intPos-1] != " ") {
+                $strString = substr($strString, 0, $intPos).substr($strString, $intPos+1);
+                $intReplacements++;
+            }
+
+        }
+
+        return $strString;
+    }
+
 
     /**
      * @param string $strSearchQuery
      * @return interface_search_query
      */
     public function parseText($strSearchQuery) {
+
+
+        //replace special characters to avoid conflicts with - and + signs
+        $strSearchQuery = $this->safeReplaceCharacter($strSearchQuery, "-");
+        $strSearchQuery = $this->safeReplaceCharacter($strSearchQuery, "+");
+
+
+
 
         $arrHits = array();
         preg_match_all('/(?<must>[+-]?)(?<field>\w{1,}(?<semperator>:)){0,1}(?<term>\w{1,})/u', $strSearchQuery, $arrHits, PREG_SET_ORDER);

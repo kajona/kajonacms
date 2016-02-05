@@ -160,27 +160,30 @@ class class_module_search_boolean_query implements interface_search_query {
 
         /* @var $objTerm class_module_search_term */
         foreach($this->arrMustNotOccurs as $objTerm) {
-            $strWhereMust .= "AND NOT EXISTS (select 1 from " . _dbprefix_ . "search_ix_content WHERE search_ix_content_content= ? ". ($objTerm->getStrField()!=null ? " AND search_ix_content_field_name = ? ": "" )  ." AND search_ix_document_id = search_ix_content_document_id) ";
-            $arrParameters[] = $objTerm->getStrText();
+            //$strWhereMust .= "AND NOT EXISTS (select 1 from " . _dbprefix_ . "search_ix_content WHERE search_ix_content_content= ? ". ($objTerm->getStrField()!=null ? " AND search_ix_content_field_name = ? ": "" )  ." AND search_ix_document_id = search_ix_content_document_id) ";
+            $strWhereMust .= "AND search_ix_document_id NOT IN (select search_ix_content_document_id from " . _dbprefix_ . "search_ix_content WHERE search_ix_content_content LIKE ? ". ($objTerm->getStrField()!=null ? " AND search_ix_content_field_name = ? ": "")." ) ";
+            $arrParameters[] = $objTerm->getStrText()."%";
 
             if($objTerm->getStrField() != null)
                 $arrParameters[] = $objTerm->getStrField();
         }
         /* @var $objTerm class_module_search_term */
         foreach($this->arrMustOccurs as $objTerm) {
-            $strWhereMust .= "AND exists (select 1 from " . _dbprefix_ . "search_ix_content WHERE search_ix_content_content= ? ". ($objTerm->getStrField()!=null ? " AND search_ix_content_field_name = ? ": "" )  ." AND search_ix_document_id = search_ix_content_document_id) ";
-            $arrParameters[] = $objTerm->getStrText();
+            //$strWhereMust .= "AND exists (select 1 from " . _dbprefix_ . "search_ix_content WHERE search_ix_content_content= ? ". ($objTerm->getStrField()!=null ? " AND search_ix_content_field_name = ? ": "" )  ." AND search_ix_document_id = search_ix_content_document_id) ";
+            $strWhereMust .= "AND search_ix_document_id IN (select search_ix_content_document_id from " . _dbprefix_ . "search_ix_content WHERE search_ix_content_content LIKE ? ". ($objTerm->getStrField()!=null ? " AND search_ix_content_field_name = ? ": "")." ) ";
+            $arrParameters[] = $objTerm->getStrText()."%";
 
             if($objTerm->getStrField() != null)
                 $arrParameters[] = $objTerm->getStrField();
         }
+
         $strQuery .= $strWhereMust . ") a ";
 
         $arrMustShouldTerms = array();
         /* @var $objTerm class_module_search_term */
-        foreach ($this->arrMustOccurs as $objTerm) {
-            $strWhere = " (search_ix_content_content = ? ";
-            $arrParameters[] = $objTerm->getStrText();
+        foreach (array_merge($this->arrMustOccurs, $this->arrShouldOccurs) as $objTerm) {
+            $strWhere = " (search_ix_content_content LIKE ? ";
+            $arrParameters[] = $objTerm->getStrText()."%";
 
             if ($objTerm->getStrField() != null) {
                 $strWhere .= "AND search_ix_content_field_name = ? ";
@@ -189,19 +192,6 @@ class class_module_search_boolean_query implements interface_search_query {
             $strWhere .= ")";
             $arrMustShouldTerms[] = $strWhere;
         }
-        /* @var $objTerm class_module_search_term */
-        foreach ($this->arrShouldOccurs as $objTerm) {
-            $strWhere = " (search_ix_content_content = ? ";
-            $arrParameters[] = $objTerm->getStrText();
-
-            if ($objTerm->getStrField() != null) {
-                $strWhere .= "AND search_ix_content_field_name = ? ";
-                $arrParameters[] = $objTerm->getStrField();
-            }
-            $strWhere .= ")";
-            $arrMustShouldTerms[]=$strWhere;
-        }
-
         $strQuery .= "INNER JOIN (select search_ix_content_document_id, search_ix_content_score from " . _dbprefix_ . "search_ix_content where ". implode(" OR ", $arrMustShouldTerms).") z
                         ON search_ix_document_id = search_ix_content_document_id";
     }

@@ -47,7 +47,7 @@ KAJONA.admin.search = {
         var enddate = $('#search_changeenddate').val();
         var userfilter = $('#search_formfilteruser_id').val();
 
-        KAJONA.admin.ajax.genericAjaxCall("search", "renderSearch", "&search_query="+strQuery+"&filtermodules="+filtermodules+"&search_changestartdate="+startdate+"&search_changeenddate="+enddate+"&search_formfilteruser_id="+userfilter+"", function(data, status, jqXHR) {
+        KAJONA.admin.ajax.genericAjaxCall("search", "renderSearch", "&search_query="+encodeURIComponent(strQuery)+"&filtermodules="+filtermodules+"&search_changestartdate="+startdate+"&search_changeenddate="+enddate+"&search_formfilteruser_id="+userfilter+"", function(data, status, jqXHR) {
             if(status == 'success') {
                 var intStart = data.indexOf("[CDATA[")+7;
                 $("#search_container").html(data.substr(intStart, data.lastIndexOf("]]>")-intStart));
