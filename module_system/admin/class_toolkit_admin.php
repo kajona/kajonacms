@@ -651,15 +651,11 @@ class class_toolkit_admin extends class_toolkit
      *
      * @return string
      */
-    public function formInputUpload($strName, $strTitle = "", $strClass = "", $strFile = null, $bitReadOnly = false)
+    public function formInputUpload($strName, $strTitle = "", $strClass = "", $strFile = null)
     {
-        if ($bitReadOnly) {
-            $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "input_upload_readonly");
-        } else {
-            $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "input_upload");
-            if (!empty($strFile)) {
-                $strFile = "Ausgewählte Datei: " . $strFile . "<br>";
-            }
+        $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "input_upload");
+        if (!empty($strFile)) {
+            $strFile = "Ausgewählte Datei: " . $strFile . "<br>";
         }
 
         $arrTemplate = array();
@@ -670,8 +666,28 @@ class class_toolkit_admin extends class_toolkit
         $objText = class_carrier::getInstance()->getObjLang();
 
         $arrTemplate["uploadFile"] = $strFile;
-        $arrTemplate["fileDownload"] = "#"; // @TODO generate download link
         $arrTemplate["maxSize"] = $objText->getLang("max_size", "mediamanager")." ".bytesToString(class_config::getInstance()->getPhpMaxUploadSize());
+
+        return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
+    }
+
+    /**
+     * @param $strFileName
+     * @param $strFileHref
+     * @param string $strTitle
+     * @param string $strClass
+     * @return string
+     */
+    public function formInputDownload($strName, $strTitle = "", $strClass = "", $strFileName, $strFileHref)
+    {
+        $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "input_download");
+
+        $arrTemplate = array();
+        $arrTemplate["name"] = $strName;
+        $arrTemplate["title"] = $strTitle;
+        $arrTemplate["class"] = $strClass;
+        $arrTemplate["fileName"] = $strFileName;
+        $arrTemplate["fileHref"] = $strFileHref;
 
         return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
     }

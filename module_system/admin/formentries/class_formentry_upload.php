@@ -40,7 +40,14 @@ class class_formentry_upload extends class_formentry_base implements interface_f
         }
 
         $strFile = isset($strData['name']) && $strData['name'] != "" ? urldecode($strData['name']) : null;
-        $strReturn .= $objToolkit->formInputUpload($this->getStrEntryName(), $this->getStrLabel(), "", $strFile, $this->getBitReadonly());
+
+        if ($this->getBitReadonly()) {
+            $strFileHref = '#';
+            $strReturn .= $objToolkit->formInputDownload($this->getStrEntryName(), $this->getStrLabel(), "", $strFile, $strFileHref);
+        } else {
+            $strReturn .= $objToolkit->formInputUpload($this->getStrEntryName(), $this->getStrLabel(), "", $strFile);
+        }
+
 
         return $strReturn;
     }

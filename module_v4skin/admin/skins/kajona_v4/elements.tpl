@@ -549,17 +549,17 @@ Upload-Field
     </div>
 </input_upload>
 
-Upload-Field readonly
-<input_upload_readonly>
+Download-Field
+<input_download>
     <div class="form-group">
         <label for="%%name%%" class="col-sm-3 control-label">%%title%%</label>
         <div class="col-sm-6">
-            <div class="form-control">
-                <a href="%%fileDownload%%">%%uploadFile%%</a>
+            <div class="form-control %%class%%">
+                <a href="%%fileHref%%" id="%%name%%">%%fileName%%</a>
             </div>
         </div>
     </div>
-</input_upload_readonly>
+</input_download>
 
 Upload-Field for multiple files with progress bar
 <input_upload_multiple>
