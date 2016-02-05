@@ -78,6 +78,8 @@ class class_workflow_search_deferredindexer implements interface_workflows_handl
         //start with deletions
         $objQueue = new class_search_indexqueue();
 
+        class_carrier::getInstance()->getObjRights()->setBitTestMode(true);
+
         foreach($objQueue->getRows(class_search_enum_indexaction::DELETE()) as $arrRow) {
             $objIndex->removeRecordFromIndex($arrRow["search_queue_systemid"]);
             $objQueue->deleteBySystemid($arrRow["search_queue_systemid"]);
@@ -88,6 +90,8 @@ class class_workflow_search_deferredindexer implements interface_workflows_handl
             $objIndex->indexObject(class_objectfactory::getInstance()->getObject($arrRow["search_queue_systemid"]));
             $objQueue->deleteBySystemidAndAction($arrRow["search_queue_systemid"], class_search_enum_indexaction::INDEX());
         }
+
+        class_carrier::getInstance()->getObjRights()->setBitTestMode(false);
 
         //reschedule for the next run
         return false;

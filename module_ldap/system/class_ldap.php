@@ -106,7 +106,7 @@ class class_ldap
      * the binding is released immediately. Afterwards the credentials
      * given in the config-file are used again.
      *
-     * @param string $strUsername
+     * @param string $strUsername the dn
      * @param string $strPassword
      * @param string $strContext
      *
@@ -116,7 +116,7 @@ class class_ldap
     {
 
         if ($strContext != "") {
-            $strUsername = $this->arrConfig["ldap_user_attribute_username"]."=".$strUsername.",".$strContext;
+            $strUsername = $this->arrConfig["ldap_common_name"]."=".$strUsername.",".$strContext;
         }
 
         $bitBind = @ldap_bind($this->objCx, utf8_decode($strUsername), $strPassword);
