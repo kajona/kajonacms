@@ -140,6 +140,7 @@ KAJONA.v4skin = {
         };
 
         this.search = function(event, ui) {
+            //If input field changes -> reset hidden id field
             var $objCur = $(this);
             if(!$objCur.is('[readonly]')) {
                 if($('#'+$objCur.attr('id')+'_id')) {
@@ -147,6 +148,7 @@ KAJONA.v4skin = {
                 }
             }
 
+            //Formentry must have at least 2 charackters to trigger search.
             if(event.target.value.length < 2) {
                 event.stopPropagation();
                 return false;
@@ -158,7 +160,7 @@ KAJONA.v4skin = {
             $(this).css('background-image', 'none');
         };
 
-        this.focus = function() {
+        this.focus = function(event, ui) {
             return false;
         };
 
@@ -170,7 +172,6 @@ KAJONA.v4skin = {
                     $( '#'+$objCur.attr('id')+'_id' ).val( ui.item.systemid);
                 }
             }
-
         };
 
         this.create = function( event, ui ) {
