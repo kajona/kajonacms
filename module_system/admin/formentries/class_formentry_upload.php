@@ -53,14 +53,26 @@ class class_formentry_upload extends class_formentry_base implements interface_f
 
     public function setValueToObject()
     {
-        $strData = $this->getStrValue();
-        if (!is_array($strData)) {
-            $strData = json_decode($strData, true);
+        if ($this->getObjSourceObject() == null) {
+            return;
         }
 
-        if (isset($strData['name']) && $strData['name'] != "") {
-            // we set the value only if we have a valid upload
-            parent::setValueToObject();
+        $arrData = $this->getStrValue();
+        if (!is_array($arrData)) {
+            $arrData = json_decode($arrData, true);
+        }
+
+        // upload only if we have a valid file upload
+        if (!is_array($arrData) || !isset($arrData["tmp_name"]) || !is_uploaded_file($arrData["tmp_name"])) {
+            return;
+        }
+
+        // handle file uploads
+        $objRecord = $this->getObjSourceObject();
+        $objReflection = new class_reflection($objRecord);
+        $strSetter = $objReflection->getSetter($this->getStrSourceProperty());
+        if (!empty($strSetter)) {
+            $objRecord->$strSetter(json_encode(self::handleFileUpload($arrData)));
         }
     }
 
@@ -85,5 +97,28 @@ class class_formentry_upload extends class_formentry_base implements interface_f
         // @TODO generate download link
 
         return '#';
+    }
+
+    /**
+     * @param array $arrData
+     */
+    public static function handleFileUpload(array $arrData)
+    {
+        $arrData["file_path"] = null;
+        if (isset($arrData["tmp_name"]) && is_uploaded_file($arrData["tmp_name"])) {
+            $strSystemid = generateSystemid();
+            $strPath = _realpath_ . "/files/tmp";
+            $strFile = $strPath . "/" . $strSystemid . ".tmp";
+
+            if (!is_dir($strPath)) {
+                mkdir($strPath, 0777, true);
+            }
+
+            if (move_uploaded_file($arrData["tmp_name"], $strFile)) {
+                $arrData["file_path"] = $strFile;
+            }
+        }
+
+        return $arrData;
     }
 }
