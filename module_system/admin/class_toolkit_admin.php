@@ -702,16 +702,14 @@ class class_toolkit_admin extends class_toolkit
      *
      * @return string
      */
-    public function formInputUploadMultiple($strName, $strAllowedFileTypes, $strMediamangerRepoSystemId, $strUploadId = null, $bitReloadOnUpload = true, $bitHideElements = false)
+    public function formInputUploadMultiple($strName, $strAllowedFileTypes, $strMediamangerRepoSystemId)
     {
 
         if (class_module_system_module::getModuleByName("mediamanager") === null) {
             return ($this->warningBox("Module mediamanger is required for this multiple uploads"));
         }
 
-        if ($strUploadId === null) {
-            $strUploadId = generateSystemid();
-        }
+        $strUploadId = generateSystemid();
 
         $objConfig = class_carrier::getInstance()->getObjConfig();
         $objText = class_carrier::getInstance()->getObjLang();
@@ -721,8 +719,6 @@ class class_toolkit_admin extends class_toolkit
         $arrTemplate["name"] = $strName;
         $arrTemplate["mediamanagerRepoId"] = $strMediamangerRepoSystemId;
         $arrTemplate["uploadId"] = $strUploadId;
-        $arrTemplate["hideelements"] = $bitHideElements ? "$(this).trigger('kajonahideelements');" : "";
-        $arrTemplate["reloadJs"] = $bitReloadOnUpload ? "document.location.reload();" : "";
 
         $strAllowedFileRegex = uniStrReplace(array(".", ","), array("", "|"), $strAllowedFileTypes);
         $strAllowedFileTypes = uniStrReplace(array(".", ","), array("", "', '"), $strAllowedFileTypes);

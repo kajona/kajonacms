@@ -691,15 +691,13 @@ Upload-Field for multiple files with progress bar
                     })
                     .bind('fileuploadstop', function (e) {
                         $(this).trigger('kajonahideelements');
-                        %%reloadJs%%
+                        document.location.reload();
                     })
                     .bind('kajonahideelements', function() {
                         if(filesToUpload == 0) {
-                            /*
                             $(this).find('.fileupload-buttonbar button.start').css('display', 'none');
                             $(this).find('.fileupload-buttonbar button.cancel').css('display', 'none');
                             $(this).find('.fileupload-progress').css('display', 'none');
-                            */
                         }
                     });
                 });
