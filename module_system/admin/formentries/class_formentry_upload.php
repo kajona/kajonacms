@@ -65,7 +65,7 @@ class class_formentry_upload extends class_formentry_base implements interface_f
         }
 
         // upload only if we have a valid file upload
-        if (!(is_array($arrData) && isset($arrData["tmp_name"]))) {
+        if (!(is_array($arrData) && isset($arrData["tmp_name"]) && $arrData["tmp_name"] != "")) {
             return;
         }
 
