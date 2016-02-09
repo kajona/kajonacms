@@ -539,12 +539,16 @@ Upload-Field
 <input_upload>
     <div class="form-group">
         <label for="%%name%%" class="col-sm-3 control-label">%%title%%</label>
-        <div class="col-sm-6">
+        <div class="col-sm-2">
             <input type="file" name="%%name%%" id="%%name%%" class="form-control %%class%%">
             <span class="help-block">
-                %%uploadFile%%
                 %%maxSize%%
             </span>
+        </div>
+        <div class="col-sm-4">
+            <div class="form-control" style="white-space:nowrap;overflow:hidden;">
+                %%uploadFile%%
+            </div>
         </div>
     </div>
 </input_upload>
