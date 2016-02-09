@@ -308,22 +308,7 @@ class class_formentry_base {
             $strSourceProperty = null;
             foreach ($arrProperties as $strPropertyName => $strValue) {
 
-                $strPropertyWithoutPrefix = "";
-
-                $strStart = uniSubstr($strPropertyName, 0, 3);
-                if (in_array($strStart, array("int", "bit", "str", "arr", "obj"))) {
-                    $strPropertyWithoutPrefix = uniStrtolower(uniSubstr($strPropertyName, 3));
-                }
-
-                $strStart = uniSubstr($strPropertyName, 0, 4);
-                if (in_array($strStart, array("long"))) {
-                    $strPropertyWithoutPrefix = uniStrtolower(uniSubstr($strPropertyName, 4));
-                }
-
-                $strStart = uniSubstr($strPropertyName, 0, 5);
-                if (in_array($strStart, array("float"))) {
-                    $strPropertyWithoutPrefix = uniStrtolower(uniSubstr($strPropertyName, 5));
-                }
+                $strPropertyWithoutPrefix = class_lang::getInstance()->propertyWithoutPrefix($strPropertyName);
 
                 if ($strPropertyWithoutPrefix == $this->getStrSourceProperty()) {
                     $strSourceProperty = $strPropertyName;

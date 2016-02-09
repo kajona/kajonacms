@@ -411,20 +411,8 @@ class class_admin_formgenerator
             $strType = "text";
         }
 
-        $strStart = uniSubstr($strPropertyName, 0, 3);
-        if (in_array($strStart, array("int", "bit", "str", "arr", "obj"))) {
-            $strPropertyName = uniStrtolower(uniSubstr($strPropertyName, 3));
-        }
 
-        $strStart = uniSubstr($strPropertyName, 0, 4);
-        if (in_array($strStart, array("long"))) {
-            $strPropertyName = uniStrtolower(uniSubstr($strPropertyName, 4));
-        }
-
-        $strStart = uniSubstr($strPropertyName, 0, 5);
-        if (in_array($strStart, array("float"))) {
-            $strPropertyName = uniStrtolower(uniSubstr($strPropertyName, 5));
-        }
+        $strPropertyName = class_lang::getInstance()->propertyWithoutPrefix($strPropertyName);
 
         $objField = $this->getFormEntryInstance($strType, $strPropertyName);
         if ($strLabel !== null) {
