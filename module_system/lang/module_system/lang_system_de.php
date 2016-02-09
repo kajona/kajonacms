@@ -280,6 +280,7 @@ $lang["update_nodom"]                    = "Diese PHP-Installation unterstützt 
 $lang["update_nofilefound"]              = "Die Liste der Updates konnte nicht geladen werden.<br />Gründe hierfür können sein, dass auf diesem System der PHP-Config-Wert 'allow_url_fopen' auf 'off' gesetzt wurde, oder das System keine Unterstützung für Sockets bietet.";
 $lang["update_nourlfopen"]               = "Für diese Funktion muss der Wert &apos;allow_url_fopen&apos; in der PHP-Konfiguration auf &apos;on&apos; gesetzt sein!";
 $lang["uploadmaxsize"]                   = "Upload Max Size";
+$lang["uploadfile"]                      = "Ausgewählte Datei";
 $lang["uploads"]                         = "Uploads";
 $lang["version"]                         = "Version";
 $lang["warnung_settings"]                = "ACHTUNG!!!<br />Bei folgenden Einstellungen können falsche Werte das System unbrauchbar machen!";

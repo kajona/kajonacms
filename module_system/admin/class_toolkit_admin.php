@@ -654,8 +654,10 @@ class class_toolkit_admin extends class_toolkit
     public function formInputUpload($strName, $strTitle = "", $strClass = "", $strFile = null)
     {
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "input_upload");
+        $objLang = class_carrier::getInstance()->getObjLang();
+
         if (!empty($strFile)) {
-            $strFile = "Ausgewählte Datei: " . $strFile . "<br>";
+            $strFile = $objLang->getLang("uploadfile", "system") . ": " . $strFile . "<br>";
         }
 
         $arrTemplate = array();
