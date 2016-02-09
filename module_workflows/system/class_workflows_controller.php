@@ -79,6 +79,11 @@ class class_workflows_controller   {
 
         class_logger::getInstance(self::STR_LOGFILE)->addLogRow("running workflows, count: ".count($arrWorkflows), class_logger::$levelInfo);
 
+
+        if(!defined("_workflow_is_running_")) {
+            define("_workflow_is_running_", true);
+        }
+
         foreach($arrWorkflows as $objOneWorkflow) {
 
             if($objOneWorkflow->getIntRecordStatus() == 0) {
@@ -131,6 +136,10 @@ class class_workflows_controller   {
      * @deprecated
      */
     public function runSingleWorkflow($objOneWorkflow) {
+
+        if(!defined("_workflow_is_running_")) {
+            define("_workflow_is_running_", true);
+        }
 
         $objHandler = $objOneWorkflow->getObjWorkflowHandler();
 

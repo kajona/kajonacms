@@ -212,11 +212,8 @@ JS;
         array_walk($arrDepends, function(&$strValue) {
 
             $strValue = trim($strValue);
-            $strStart = uniSubstr($strValue, 0, 3);
-            if (in_array($strStart, array("int", "bit", "str", "arr", "obj"))) {
-                $strValue = uniStrtolower(uniSubstr($strValue, 3));
-            }
-            
+
+            $strValue = class_lang::getInstance()->propertyWithoutPrefix($strValue);
         });
     }
 

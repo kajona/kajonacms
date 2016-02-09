@@ -187,6 +187,38 @@ class class_lang {
     }
 
 
+    /** Removes prefixes (str, int, float etc.) from the given properties and returns a lower case propertyname
+     *
+     * @param $strPropertyName
+     * @return string
+     */
+    public function propertyWithoutPrefix($strPropertyName) {
+        $strStart = uniSubstr($strPropertyName, 0, 3);
+        if (in_array($strStart, array("int", "bit", "str", "arr", "obj"))) {
+            $strPropertyName = uniStrtolower(uniSubstr($strPropertyName, 3));
+        }
+
+        $strStart = uniSubstr($strPropertyName, 0, 4);
+        if (in_array($strStart, array("long"))) {
+            $strPropertyName = uniStrtolower(uniSubstr($strPropertyName, 4));
+        }
+
+        $strStart = uniSubstr($strPropertyName, 0, 5);
+        if (in_array($strStart, array("float"))) {
+            $strPropertyName = uniStrtolower(uniSubstr($strPropertyName, 5));
+        }
+
+        return $strPropertyName;
+    }
+
+
+    /**
+     * Adds underscores ("_") to the given string for each uppercase char found.
+     * The returned string is lowercase.
+     *
+     * @param $strText
+     * @return string
+     */
     public function stringToPlaceholder($strText) {
         $strReturn = "";
         $strLastChar = "";

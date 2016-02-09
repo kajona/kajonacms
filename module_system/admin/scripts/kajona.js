@@ -1223,11 +1223,11 @@ KAJONA.admin.renderTocNavigation = function (selector) {
 
     // resize toc navigation to main navigation
     $(window).resize(function() {
-        $('#toc-navigation').css('width', $('#moduleNavigation').width()+20);
-        $('#toc-navigation').css('max-height', $(window).height());
+        $('#toc-navigation').css('width', $('#moduleNavigation').width()+15);
+        $('#toc-navigation').css('max-height', $(window).height()-60);
     });
-    $('#toc-navigation').css('width', $('#moduleNavigation').width()+20);
-    $('#toc-navigation').css('max-height', $(window).height());
+    $('#toc-navigation').css('width', $('#moduleNavigation').width()+15);
+    $('#toc-navigation').css('max-height', $(window).height()-60);
 };
 
 /**
