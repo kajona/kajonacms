@@ -13,6 +13,8 @@
  */
 class class_formentry_upload extends class_formentry_base implements interface_formentry, interface_formentry_printable {
 
+    protected $arrFile;
+
     public function __construct($strFormName, $strSourceProperty, $objSourceObject = null)
     {
         parent::__construct($strFormName, $strSourceProperty, $objSourceObject);
@@ -63,7 +65,7 @@ class class_formentry_upload extends class_formentry_base implements interface_f
         }
 
         // upload only if we have a valid file upload
-        if (!is_array($arrData) || !isset($arrData["tmp_name"]) || !is_uploaded_file($arrData["tmp_name"])) {
+        if (!(is_array($arrData) && isset($arrData["tmp_name"]))) {
             return;
         }
 
@@ -72,7 +74,10 @@ class class_formentry_upload extends class_formentry_base implements interface_f
         $objReflection = new class_reflection($objRecord);
         $strSetter = $objReflection->getSetter($this->getStrSourceProperty());
         if (!empty($strSetter)) {
-            $objRecord->$strSetter(json_encode(self::handleFileUpload($arrData)));
+            if ($this->arrFile === null) {
+                $this->arrFile = json_encode(self::handleFileUpload($arrData));
+            }
+            $objRecord->$strSetter($this->arrFile);
         }
     }
 
@@ -104,7 +109,6 @@ class class_formentry_upload extends class_formentry_base implements interface_f
      */
     public static function handleFileUpload(array $arrData)
     {
-        $arrData["file_path"] = null;
         if (isset($arrData["tmp_name"]) && is_uploaded_file($arrData["tmp_name"])) {
             $strSystemid = generateSystemid();
             $strPath = _realpath_ . "/files/tmp";
@@ -116,9 +120,13 @@ class class_formentry_upload extends class_formentry_base implements interface_f
 
             if (move_uploaded_file($arrData["tmp_name"], $strFile)) {
                 $arrData["file_path"] = $strFile;
+            } else {
+                $arrData["file_path"] = null;
             }
+
+            return $arrData;
         }
 
-        return $arrData;
+        return null;
     }
 }
