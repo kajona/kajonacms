@@ -6,22 +6,22 @@
 <!-- available placeholders in each section: link, text, href, target, image, image_src, page_intern, page_extern, level(x+1), lastmodified -->
 
 
-<level_1_wrapper><nav id="breadcrumbnav"><ul>%%level1%%</ul></nav></level_1_wrapper>
+<level_1_wrapper><ol class="breadcrumb">%%level1%%</ol></level_1_wrapper>
 
 <level_1_active>
-<li><a href="%%href%%" target="%%target%%" class="active">%%text%%</a>%%level2%%</li>
+    <li><a href="%%href%%" target="%%target%%" class="active">%%text%%</a>%%level2%%</li>
 </level_1_active>
 
 <level_1_inactive></level_1_inactive>
 
 <level_2_active>
-<li><a href="%%href%%" target="%%target%%" class="active">%%text%%</a>%%level3%%</li>
+    <li><a href="%%href%%" target="%%target%%" class="active">%%text%%</a>%%level3%%</li>
 </level_2_active>
 
 <level_2_inactive></level_2_inactive>
 
 <level_3_active>
-<li><a href="%%href%%" target="%%target%%" class="active">%%text%%</a></li>
+    <li><a href="%%href%%" target="%%target%%" class="active">%%text%%</a>%%level4%%</li>
 </level_3_active>
 
 <level_3_inactive></level_3_inactive>

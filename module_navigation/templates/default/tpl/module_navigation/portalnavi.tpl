@@ -6,20 +6,18 @@
 <!-- available placeholders in each section: link, text, href, target, image, image_src, page_intern, page_extern, level(x+1), lastmodified -->
 
 
-<level_1_wrapper><nav id="portalnav"><ul>%%level1%%</ul></nav></level_1_wrapper>
+<level_1_wrapper>
+    <ul class="nav navbar-nav">%%level1%%</ul>
+</level_1_wrapper>
 
 <level_1_active>
-<li>%%link%%</li>
+    <li class="nav-item active">
+        <a class="nav-link" href="%%href%%">%%text%%</a>
+    </li>
 </level_1_active>
 
 <level_1_inactive>
-<li>%%link%%</li>
+    <li class="nav-item">
+        <a class="nav-link" href="%%href%%">%%text%%</a>
+    </li>
 </level_1_inactive>
-
-<level_1_inactive_last>
-<li>%%link%%</li>
-</level_1_inactive_last>
-
-<level_1_active_last>
-<li>%%link%%</li>
-</level_1_active_last>

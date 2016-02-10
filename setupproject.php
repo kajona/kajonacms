@@ -178,7 +178,9 @@ TXT;
     private static function createDefaultTemplateEntry() {
         $strContent = <<<TXT
 
-Kajona V4 default template-pack.
+Kajona V5 default template-pack.
+
+This template is based on plain vanilla Bootrap V4.
 
 Please don't change anything within this folder, updates may break your changes
 and overwrite them without further warning.

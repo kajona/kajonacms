@@ -278,6 +278,7 @@ class PagesPortalController extends class_portal_controller implements interface
         //fill the template. the template was read before
         $strPageContent = $this->objTemplate->fillTemplateFile($arrTemplate, "/module_pages/".$objPageData->getStrTemplate(), "", true);
         $strPageContent = $this->objTemplate->fillBlocksToTemplateFile($arrBlocks, $strPageContent);
+        $strPageContent = $this->objTemplate->deleteBlocksFromTemplate($strPageContent);
 
         //add portaleditor main code
         $strPageContent = $this->renderPortalEditorCode($objPageData, $bitEditPermissionOnMasterPage, $strPageContent);
