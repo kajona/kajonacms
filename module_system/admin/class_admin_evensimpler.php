@@ -163,14 +163,13 @@ abstract class class_admin_evensimpler extends class_admin_simple {
 
         if(!is_null($strType)) {
             /** @var $objEdit interface_model|class_model */
-            $objEdit = $this->getNewModelInstance($strType);
+            $objEdit = new $strType();
 
             $objForm = class_admin_formgenerator_factory::getFormForModel($objEdit);
-            if ($objForm !== null) {
+            if($objForm !== null)
                 $objEdit = $objForm->getObjSourceobject();
-            }
 
-            // reset the current object reference to an object created before (e.g. during actionSave)
+            //reset the current object reference to an object created before (e.g. during actionSave)
             $objForm = $this->getAdminForm($objEdit);
             $objForm->getObjSourceobject()->setSystemid($this->getParam("systemid"));
             $objForm->addField(new class_formentry_hidden("", "mode"))->setStrValue("new");
@@ -280,39 +279,28 @@ abstract class class_admin_evensimpler extends class_admin_simple {
             /** @var $objRecord interface_model|class_model */
             $objRecord = null;
 
-            if ($this->getParam("mode") == "new") {
+            if($this->getParam("mode") == "new") {
+                $objRecord = new $strType();
                 $strSystemId = $this->getSystemid();
-                $objRecord = $this->getNewModelInstance($strType);
-            } elseif ($this->getParam("mode") == "edit") {
-                $objRecord = new $strType($this->getSystemid());
             }
+            else if($this->getParam("mode") == "edit")
+                $objRecord = new $strType($this->getSystemid());
 
-            if ($objRecord != null) {
+            if($objRecord != null) {
                 $objForm = $this->getAdminForm($objRecord);
-                if (!$objForm->validateForm()) {
-                    if ($this->getParam("mode") === "new") {
-                        // if we have a validation error store the provided data in the session so that the user does
-                        // not have to enter all data again
-                        $objForm->updateSourceObject();
-
-                        $strData = class_admin_modelserializer::serialize($objForm->getObjSourceobject(), "@fieldType");
-
-                        class_session::getInstance()->setSession($this->getSessionFormKey($strType), $strData);
-
+                if(!$objForm->validateForm()) {
+                    if($this->getParam("mode") === "new")
                         return $this->actionNew();
-                    } elseif ($this->getParam("mode") === "edit") {
+                    if($this->getParam("mode") === "edit")
                         return $this->actionEdit();
-                    }
                 }
 
                 $objForm->updateSourceObject();
                 $objRecord = $objForm->getObjSourceobject();
-                $objRecord->updateObjectToDb($strSystemId);
+
+                $this->persistModel($objRecord, $strSystemId);
 
                 $this->setSystemid($objRecord->getStrSystemid());
-
-                // delete the data from the session on success
-                class_session::getInstance()->sessionUnset($this->getSessionFormKey($strType));
 
                 $this->adminReload(class_link::getLinkAdminHref($this->getArrModule("modul"), $this->getActionNameForClass("list", $objRecord), "&systemid=".$objRecord->getStrPrevId().($this->getParam("pe") != "" ? "&peClose=1&blockAction=1" : "")));
                 return "";
@@ -326,31 +314,15 @@ abstract class class_admin_evensimpler extends class_admin_simple {
     }
 
     /**
-     * Returns the session key where the model data is stored
+     * Method which persists the record to the database
      *
-     * @param string $strType
-     * @return string
+     * @param class_model $objModel
+     * @param boolean $strPrevId
+     * @throws class_exception
      */
-    private function getSessionFormKey($strType)
+    protected function persistModel(class_model $objModel, $strPrevId = false)
     {
-        return "new_form_" . $strType;
-    }
-
-    /**
-     * Returns a new model from the provided type. Checks whether we have already stored some data in the session if not
-     * create a new model
-     *
-     * @param string $strType
-     * @return interface_model
-     */
-    private function getNewModelInstance($strType)
-    {
-        $strData = class_session::getInstance()->getSession($this->getSessionFormKey($strType));
-        if (!empty($strData)) {
-            return class_admin_modelserializer::unserialize($strData, "@fieldType");
-        } else {
-            return new $strType();
-        }
+        $objModel->updateObjectToDb($strPrevId);
     }
 
     /**
