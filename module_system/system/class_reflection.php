@@ -635,4 +635,25 @@ class class_reflection {
         }
         return $arrParams;
     }
+
+    /**
+     * Checks if a property exists for a class
+     *
+     * @param $strProperty
+     * @return bool
+     */
+    public function hasProperty($strProperty) {
+        $bitReturn = $this->objReflectionClass->hasProperty($strProperty);
+
+        if(!$bitReturn) {
+            $objBaseClass = $this->objReflectionClass->getParentClass();
+            if($objBaseClass !== false) {
+                $objBaseAnnotations = new class_reflection($objBaseClass->getName());
+                return $objBaseAnnotations->hasProperty($strProperty);
+            }
+        }
+
+        return $bitReturn;
+    }
+
 }
