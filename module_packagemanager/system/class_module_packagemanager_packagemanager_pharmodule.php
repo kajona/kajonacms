@@ -20,6 +20,27 @@ class class_module_packagemanager_packagemanager_pharmodule extends class_module
 
 
 
+    /**
+     * Queries the packagemanager for the resolved target path, so the folder to package will be located at
+     * after installation (or is already located at since it's already installed.
+     *
+     * @return mixed
+     */
+    public function getStrTargetPath() {
+
+        $strTarget = $this->objMetadata->getStrTarget();
+        if($strTarget == "") {
+            $strTarget = uniStrtolower($this->objMetadata->getStrType()."_".createFilename($this->objMetadata->getStrTitle(), true)).".phar";
+        }
+
+        $arrModules = array_flip(class_classloader::getInstance()->getArrModules());
+
+        if(isset($arrModules[$strTarget]))
+            return "/".$arrModules[$strTarget];
+
+        return "/core/".$strTarget;
+    }
+
 
     /**
      * Copies the phar from the temp-folder
