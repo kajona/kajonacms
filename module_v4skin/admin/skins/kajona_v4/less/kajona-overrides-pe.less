@@ -33,7 +33,7 @@
     position: fixed;
     top: 0;
     right: -200px;
-    width: 220px;
+    width: 230px;
     height: 100%;
     display: block !important;
 	line-height: 17px;
@@ -109,7 +109,7 @@
 [data-systemid] {
 
     //todo: not an elegant solution at all
-    padding-top: 5px;
+    //padding-top: 5px;
 
     &:hover {
 
@@ -139,7 +139,7 @@
     .peActionToolbar {
         position: absolute;
         display: none;
-        z-index: 400;
+        z-index: 4000;
         .opacity(1) !important;
 
         .peActionToolbarActionContainer {
@@ -148,12 +148,13 @@
             a {
                 color: #fff;
                 display: inline-block;
-                width: 20px;
+                width: 25px;
                 text-align: center;
                 padding: 5px;
                 font-size: 13px;
                 font-weight:normal;
                 cursor: pointer;
+                text-decoration: none;
 
                 i {
                     font-size: 16px;
@@ -164,6 +165,7 @@
                 }
 
                 &:hover {
+                    text-decoration: none;
                     background-color: @peButtonToolbarBackgroundHover;
                 }
             }

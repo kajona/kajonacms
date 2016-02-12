@@ -220,7 +220,7 @@ KAJONA.admin.portaleditor.RTE.SaveIndicator = function($objSourceElement) {
 
         objDiv = $('<div>').addClass('peProgressIndicator peSaving');
         $('body').append(objDiv);
-        objDiv.css('left', objSourceElement.position().left+objSourceElement.width()).css('top', objSourceElement.position().top);
+        objDiv.css('left', objSourceElement.offset().left+objSourceElement.width()).css('top', objSourceElement.offset().top);
     };
 
     this.addClass = function(strClass) {
