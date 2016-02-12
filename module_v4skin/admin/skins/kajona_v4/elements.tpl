@@ -278,7 +278,7 @@ Currently, there are two modes: with and without a description.
 </batchactions_wrapper>
 
 <batchactions_entry>
-    <a href="#" onclick="KAJONA.admin.lists.triggerAction('%%title%%', '%%targeturl%%');return false;" title="%%title%%" rel="tooltip">%%icon%%</a>
+    <a href="#" onclick="%%onclick%% return false;" title="%%title%%" rel="tooltip">%%icon%%</a>
 </batchactions_entry>
 
 Divider to split up a page in logical sections
