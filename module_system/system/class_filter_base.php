@@ -148,4 +148,14 @@ abstract class class_filter_base
                 return null;
         }
     }
+
+    /**
+     * Overwrite method if specific form handling is required.
+     * Method is being called when the form for the filter is being generated.
+     *
+     * @param class_admin_formgenerator_filter $objFilterForm
+     */
+    public function updateFilterForm(class_admin_formgenerator_filter $objFilterForm) {
+
+    }
 }
