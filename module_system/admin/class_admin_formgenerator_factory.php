@@ -95,7 +95,7 @@ class class_admin_formgenerator_factory {
      * @param interface_model $objInstance
      * @return string
      */
-    protected static function getKeyByModel(interface_model $objInstance) {
+    public static function getKeyByModel(interface_model $objInstance) {
         return get_class($objInstance) . $objInstance->getSystemid();
     }
 
