@@ -30,7 +30,7 @@
 
 
 
-<level_2_wrapper><ul class="nav">%%level2%%</ul></level_2_wrapper>
+<level_2_wrapper><ul>%%level2%%</ul></level_2_wrapper>
 
 <level_2_active>
 <li class="nav-item"><a href="%%href%%" target="%%target%%" class="nav-link active">%%text%%</a>%%level3%%</li>
@@ -43,7 +43,7 @@
 
 
 
-<level_3_wrapper><ul class="nav">%%level3%%</ul></level_3_wrapper>
+<level_3_wrapper><ul>%%level3%%</ul></level_3_wrapper>
 
 <level_3_active>
 <li class="nav-item"><a href="%%href%%" target="%%target%%" class="nav-link active">%%text%%</a></li>

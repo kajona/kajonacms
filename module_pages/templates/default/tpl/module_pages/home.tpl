@@ -36,9 +36,9 @@
     </form>
 </nav>
 
-<ol class="breadcrumb">
+<!--<ol class="breadcrumb">-->
     %%masterpathnavi_navigation%%
-</ol>
+<!--</ol>-->
 
 <div class="container">
 
@@ -268,29 +268,29 @@
 
 </div>
 <style type="text/css">
+<!---->
+    /*h3 {*/
+        /*margin-top: 2rem;*/
+    /*}*/
 
-    h3 {
-        margin-top: 2rem;
-    }
+    /*.row {*/
+        /*margin-bottom: 1rem;*/
+    /*}*/
+    /*.row .row {*/
+        /*margin-top: 1rem;*/
+        /*margin-bottom: 0;*/
+    /*}*/
+    /*[class*="col-"] {*/
+        /*padding-top: 1rem;*/
+        /*padding-bottom: 1rem;*/
+        /*background-color: rgba(86,61,124,.15);*/
+        /*border: 1px solid rgba(86,61,124,.2);*/
+    /*}*/
 
-    .row {
-        margin-bottom: 1rem;
-    }
-    .row .row {
-        margin-top: 1rem;
-        margin-bottom: 0;
-    }
-    [class*="col-"] {
-        padding-top: 1rem;
-        padding-bottom: 1rem;
-        background-color: rgba(86,61,124,.15);
-        border: 1px solid rgba(86,61,124,.2);
-    }
-
-    hr {
-        margin-top: 2rem;
-        margin-bottom: 2rem;
-    }
+    /*hr {*/
+        /*margin-top: 2rem;*/
+        /*margin-bottom: 2rem;*/
+    /*}*/
 
 </style>
 

@@ -103,8 +103,8 @@ KAJONA.admin.portaleditor = {
         else {
             //add it as the last element to the placeholder itself
             strDataPlaceholder = strDataPlaceholder.replace(/\|/g, '\\|');
-            if($('div.pePlaceholderWrapper[data-placeholder='+strDataPlaceholder+']')) {
-                $('div.pePlaceholderWrapper[data-placeholder='+strDataPlaceholder+']').append($($objContent));
+            if($('div.pePlaceholderWrapper[data-placeholder=\''+strDataPlaceholder+'\']')) {
+                $('div.pePlaceholderWrapper[data-placeholder=\''+strDataPlaceholder+'\']').append($($objContent));
             }
 
             else if($("#menuContainer_"+strDataPlaceholder)) {

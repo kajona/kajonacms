@@ -36,28 +36,45 @@
 
     </script>
 
-    <div class="mmPathnavigation">%%pathnavigation%%</div>
-    %%folderlist%%
-    <div id="pv_%%systemid%%">%%filelist%%</div>
-    <p align="center">%%link_back%% %%link_pages%% %%link_forward%%</p>
+    <ol class="breadcrumb">%%pathnavigation%%</ol>
+
+    <div class="card-deck-wrapper">
+        <div class="card-deck" id="pv_%%systemid%%">
+         %%folderlist%%%%filelist%%
+        </div>
+    </div>
+
+    <nav class="text-xs-center">
+        <ul class=" pagination pagination-sm">%%link_back%% %%link_pages%% %%link_forward%%</ul>
+    </nav>
+
     <div>Please note: This template makes use of the jQuery plugin "lightbox". Make sure to respect the projects <a href="http://fancyapps.com/fancybox/#license" target="_blank">licence</a>.</div>
 </list>
 
 <!-- available placeholders: folder_name, folder_id, folder_description, folder_subtitle, folder_href, folder_preview_image_src -->
 <folderlist>
-<div class="mmGalleryFolder">
-    <div><a href="%%folder_href%%" data-kajona-editable="%%folder_id%%#strName#plain">%%folder_name%%</a></div>
-    <div data-kajona-editable="%%folder_id%%#strDescription">%%folder_description%%</div>
-</div>
+
+    <div class="col-sm-4">
+        <div class="card">
+            <div class="card-block">
+                <div><a href="%%folder_href%%" data-kajona-editable="%%folder_id%%#strName#plain">%%folder_name%%</a></div>
+                <div data-kajona-editable="%%folder_id%%#strDescription">%%folder_description%%</div>
+            </div>
+        </div>
+    </div>
 
 </folderlist>
 
 <folderlist_preview>
 
-<div class="mmGalleryFolder">
-    <div><a href="%%folder_href%%" data-kajona-editable="%%folder_id%%#strName#plain">%%folder_name%%</a></div>
-    <div><img src="[img,%%folder_preview_image_src%%,50,50]" style="float:left;"/><p data-kajona-editable="%%folder_id%%#strDescription">%%folder_description%%</p></div>
-</div>
+    <div class="col-sm-4">
+    <div class="card">
+        <div class="card-block">
+            <div><a href="%%folder_href%%" data-kajona-editable="%%folder_id%%#strName#plain">%%folder_name%%</a></div>
+            <div><img src="[img,%%folder_preview_image_src%%,50,50]" style="float:left;"/><p data-kajona-editable="%%folder_id%%#strDescription">%%folder_description%%</p></div>
+        <div class="card-block">
+    </div>
+    </div>
 
 </folderlist_preview>
 
@@ -67,8 +84,6 @@
 <!-- available placeholders: file_(nr) -->
 <filelist>
 %%file_0%%
-%%file_1%%
-%%file_2%%
 </filelist>
 
 
@@ -78,9 +93,13 @@
      file_owner, file_lmtime, file_link, file_link_href, file_id, file_elementid
 -->
 <filelist_file>
-    <div class="mmGalleryImage">
-        <div><a href="%%image_detail_src%%" title="%%file_name%% %%file_subtitle%%" class="fancybox-thumb" rel="fancybox-thumb"><img src="[img,%%file_filename%%,120,120,fixed]" alt="%%file_subtitle%%" /></a></div>
-        <div data-kajona-editable="%%file_id%%#strName#plain">%%file_name%%</div>
+    <div class="col-sm-4">
+        <div class="card">
+            <a href="%%image_detail_src%%" title="%%file_name%% %%file_subtitle%%" class="fancybox-thumb" rel="fancybox-thumb"><img src="[img,%%file_filename%%,220,220,fixed]" class="card-img-top" alt="%%file_subtitle%%" /></a>
+            <div class="card-block">
+                <div data-kajona-editable="%%file_id%%#strName#plain">%%file_name%%</div>
+            </div>
+        </div>
     </div>
 </filelist_file>
 
@@ -104,7 +123,7 @@
 
 <!-- available placeholders: pathnavigation_point -->
 <pathnavigation_level>
-%%pathnavigation_point%% >
+    <li>%%pathnavigation_point%%</li>
 </pathnavigation_level>
 
 
@@ -112,21 +131,21 @@
 
 <!-- available placeholders: pageHref -->
 <pager_fwd>
-    <a href="%%pageHref%%">[lang,commons_next,system]</a>
+    <li class="page-item"><a href="%%pageHref%%" class="page-link">[lang,commons_next,system]</a></li>
 </pager_fwd>
 
 <!-- available placeholders: pageHref -->
 <pager_back>
-    <a href="%%pageHref%%">[lang,commons_back,system]</a>
+    <li class="page-item"><a href="%%pageHref%%" class="page-link">[lang,commons_back,system]</a></li>
 </pager_back>
 
 <!-- available placeholders: pageHref, pageNumber -->
 <pager_entry>
-    <a href="%%pageHref%%">[%%pageNumber%%]</a>
+    <li class="page-item"><a href="%%pageHref%%" class="page-link">[%%pageNumber%%]</a></li>
 </pager_entry>
 
 <!-- available placeholders: pageHref, pageNumber -->
 <pager_entry_active>
-    <span style="font-weight: bold"><a href="%%pageHref%%">[%%pageNumber%%]</a></span>
+    <li class="page-item active"><a href="%%pageHref%%" class="page-link">[%%pageNumber%%]</a></li>
 </pager_entry_active>
 

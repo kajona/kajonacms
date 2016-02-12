@@ -148,8 +148,6 @@ class PagesPortaleditor  {
     public static function getPlaceholderWrapper($strPlaceholder, $strContent = "")
     {
         return "<div class='pePlaceholderWrapper' data-placeholder='{$strPlaceholder}' data-name='{$strPlaceholder}'>{$strContent}</div>";
-
-        return "<span data-placeholder='{$strPlaceholder}' data-name='{$strPlaceholder}'></span>";
     }
 
     public static function isActive()
