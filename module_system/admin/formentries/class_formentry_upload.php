@@ -75,9 +75,15 @@ class class_formentry_upload extends class_formentry_base implements interface_f
         $strSetter = $objReflection->getSetter($this->getStrSourceProperty());
         if (!empty($strSetter)) {
             if ($this->arrFile === null) {
-                $this->arrFile = json_encode(self::handleFileUpload($arrData));
+                $arrUpload = self::handleFileUpload($arrData);
+                if (!empty($arrUpload)) {
+                    $this->arrFile = json_encode($arrUpload);
+                }
             }
-            $objRecord->$strSetter($this->arrFile);
+
+            if (!empty($this->arrFile)) {
+                $objRecord->$strSetter($this->arrFile);
+            }
         }
     }
 
