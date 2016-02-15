@@ -94,7 +94,7 @@ class class_module_search_indexwriter {
         $arrRow = $this->objDB->getPRow("SELECT * FROM "._dbprefix_."search_ix_document WHERE search_ix_system_id = ?", array($strSystemid));
 
         if(isset($arrRow["search_ix_document_id"])) {
-            $this->objDB->_pQuery("DELETE FROM "._dbprefix_."search_ix_content WHERE search_ix_content_id = ?", array($arrRow["search_ix_document_id"]));
+            $this->objDB->_pQuery("DELETE FROM "._dbprefix_."search_ix_content WHERE search_ix_content_document_id = ?", array($arrRow["search_ix_document_id"]));
             $this->objDB->_pQuery("DELETE FROM "._dbprefix_."search_ix_document WHERE search_ix_document_id = ?", array($arrRow["search_ix_document_id"]));
         }
 
