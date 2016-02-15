@@ -296,5 +296,12 @@
 
 <script src="_webpath_/templates/default/js/tether.min.js?_system_browser_cachebuster_"></script>
 <script src="_webpath_/templates/default/js/bootstrap.min.js?_system_browser_cachebuster_"></script>
+
+<script type="text/javascript">
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip()
+    });
+
+</script>
 </body>
 </html>

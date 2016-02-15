@@ -1,0 +1,75 @@
+
+/*
+ (c) 2007-2015 by Kajona, www.kajona.de
+     Published under the GNU LGPL v2.1, see https://github.com/kajona/kajonacms/blob/master/LICENCE
+*/
+
+.inline-rating-bar {
+    display: -moz-inline-block;
+    display: -moz-inline-box;
+    display: inline-block;
+    vertical-align: middle;
+    text-align: left;
+}
+
+.rating-icon,
+.rating-icon a:hover,
+.rating-icon a:active,
+.rating-icon a:focus,
+.rating-icon .current-rating{
+    background: url(../pics/default/rating_icons.png) left -1000px repeat-x;
+}
+.rating-icon{
+    position: relative;
+    width: 65px;
+    height: 13px;
+    overflow: hidden;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    background-position: left top;
+}
+.rating-icon li{
+    display: inline;
+}
+.rating-icon a,
+.rating-icon .current-rating{
+    position: absolute;
+    top: 0;
+    left: 0;
+    text-indent: -1000em;
+    height: 13px;
+    line-height: 13px;
+    outline: none;
+    overflow: hidden;
+    border: none;
+}
+.rating-icon a:hover,
+.rating-icon a:active,
+.rating-icon a:focus{
+    background-position: left bottom;
+}
+.rating-icon a.icon-1{
+    width: 20%;
+    z-index: 6;
+}
+.rating-icon a.icon-2{
+    width: 40%;
+    z-index: 5;
+}
+.rating-icon a.icon-3{
+    width: 60%;
+    z-index: 4;
+}
+.rating-icon a.icon-4{
+    width: 80%;
+    z-index: 3;
+}
+.rating-icon a.icon-5{
+    width: 100%;
+    z-index: 2;
+}
+.rating-icon .current-rating{
+    z-index: 1;
+    background-position: left center;
+}

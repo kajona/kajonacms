@@ -66,16 +66,14 @@
 </folderlist>
 
 <folderlist_preview>
-
     <div class="col-sm-4">
-    <div class="card">
-        <div class="card-block">
-            <div><a href="%%folder_href%%" data-kajona-editable="%%folder_id%%#strName#plain">%%folder_name%%</a></div>
-            <div><img src="[img,%%folder_preview_image_src%%,50,50]" style="float:left;"/><p data-kajona-editable="%%folder_id%%#strDescription">%%folder_description%%</p></div>
-        <div class="card-block">
+        <div class="card">
+            <a href="%%folder_href%%"><img src="[img,%%folder_preview_image_src%%,220,220,fixed]" class="card-img-top" alt="%%folder_name%%" /></a>
+            <div class="card-block">
+                <div data-kajona-editable="%%folder_id%%#strName#plain">%%folder_name%%</div>
+            </div>
+        </div>
     </div>
-    </div>
-
 </folderlist_preview>
 
 <!-- the following section is used to wrap a list of files, e.g. in order to build a table.
