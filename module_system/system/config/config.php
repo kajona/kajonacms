@@ -60,45 +60,46 @@ $config['dbport']               = "%%defaultport%%";               //Database po
 
 //--caching ---------------------------------------------------------------------------------------------
 
-
+//TODO: will be replaced by the CacheManager
     $config['textcachetime']        = 10;                              //Number of seconds language-files are cached. Cached entries are shared between sessions. Reduce this amount during
                                                                        //development (probably changing the lang-files a lot) and set it to a high value as soon as the website is in
                                                                        //production. Requires APC. Attention: 0 = infinite!
 
+//TODO: will be replaced by the CacheManager
     $config['templatecachetime']    = 10;                              //Number of seconds templates are cached. Cached entries are shared between sessions. Reduce this amount during
                                                                        //development (probably changing the templates a lot) and set it to a high value as soon as the website is in
                                                                        //production. Requires APC. Attention: 0 = infinite!
 
 
-    $config['bootstrapcache_pharsums.cache']       = true;             //Enables the detection of phar-changes in order to redeploy the static contents. Should be disabled for non-phar installations only.
-                                                                       //The cache is created under /project/temp/pharsums.cache
+    $config['bootstrapcache_pharsums']       = true;                   //Enables the detection of phar-changes in order to redeploy the static contents. Should be disabled for non-phar installations only.
+                                                                       //The cache is created under /project/temp/cache
 
-    $config['bootstrapcache_pharcontent.cache']    = true;             //Enables the caching of phar-contents. Should be enabled by default.
-                                                                       //The cache is created under /project/temp/pharchontent.cache
+    $config['bootstrapcache_pharcontent']    = true;                   //Enables the caching of phar-contents. Should be enabled by default.
+                                                                       //The cache is created under /project/temp/cache
 
-    $config['bootstrapcache_objects.cache']        = true;             //Caches the mapping of systemid to class-names. Should be enabled by default.
-                                                                       //The cache is created under /project/temp/objects.cache
+    $config['bootstrapcache_objects']        = true;                   //Caches the mapping of systemid to class-names. Should be enabled by default.
+                                                                       //The cache is created under /project/temp/cache
 
-    $config['bootstrapcache_foldercontent.cache']  = true;             //Caches the merge of the core- and project folders. Should be enabled on production systems but disabled on development systems.
-                                                                       //The cache is created under /project/temp/foldercontent.cache
+    $config['bootstrapcache_foldercontent']  = true;                   //Caches the merge of the core- and project folders. Should be enabled on production systems but disabled on development systems.
+                                                                       //The cache is created under /project/temp/cache
 
-    $config['bootstrapcache_reflection.cache']     = true;             //Caches all static analysis by the reflection API, e.g. parsing of annotations. Should be enabled on production systems but disabled on development systems.
-                                                                       //The cache is created under /project/temp/reflection.cache
+    $config['bootstrapcache_reflection']     = true;                   //Caches all static analysis by the reflection API, e.g. parsing of annotations. Should be enabled on production systems but disabled on development systems.
+                                                                       //The cache is created under /project/temp/cache
 
-    $config['bootstrapcache_lang.cache']           = true;             //Caches all contents of language files. Should be enabled on production systems but disabled on development systems.
-                                                                       //The cache is created under /project/temp/lang.cache
+    $config['bootstrapcache_lang']           = true;                   //Caches all locations of language files. Should be enabled on production systems but disabled on development systems.
+                                                                       //The cache is created under /project/temp/cache
 
-    $config['bootstrapcache_modules.cache']        = true;             //Caches the list of locally installed modules. Should be enabled on production systems but disabled on development systems.
-                                                                       //The cache is created under /project/temp/modules.cache
+    $config['bootstrapcache_modules']        = true;                   //Caches the list of locally installed modules. Should be enabled on production systems but disabled on development systems.
+                                                                       //The cache is created under /project/temp/cache
 
-    $config['bootstrapcache_pharmodules.cache']    = true;             //Caches the list of modules deployed as phars. Should be enabled on production systems but disabled on development systems.
-                                                                       //The cache is created under /project/temp/pharmodules.cache
+    $config['bootstrapcache_pharmodules']    = true;                   //Caches the list of modules deployed as phars. Should be enabled on production systems but disabled on development systems.
+                                                                       //The cache is created under /project/temp/cache
 
-    $config['bootstrapcache_classes.cache']        = true;             //Caches the locations of class-definitions collected by the classloader. Should be enabled on production systems but disabled on development systems.
-                                                                       //The cache is created under /project/temp/classes.cache
+    $config['bootstrapcache_classes']        = true;                   //Caches the locations of class-definitions collected by the classloader. Should be enabled on production systems but disabled on development systems.
+                                                                       //The cache is created under /project/temp/cache
 
-    $config['bootstrapcache_templates.cache']      = true;             //Caches the locations of templates fetched by the template-engine. Should be enabled on production systems but disabled on development systems.
-                                                                       //The cache is created under /project/temp/templates.cache
+    $config['bootstrapcache_templates']      = true;                   //Caches the locations of templates fetched by the template-engine. Should be enabled on production systems but disabled on development systems.
+                                                                       //The cache is created under /project/temp/cache
 
 
 //--system settings -------------------------------------------------------------------------------------

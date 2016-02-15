@@ -24,16 +24,16 @@ use class_filesystem;
 class BootstrapCache
 {
 
-    const CACHE_TEMPLATES = "templates.cache";
-    const CACHE_FOLDERCONTENT = "foldercontent.cache";
-    const CACHE_PHARCONTENT = "pharcontent.cache";
-    const CACHE_LANG = "lang.cache";
-    const CACHE_MODULES = "modules.cache";
-    const CACHE_PHARMODULES = "pharmodules.cache";
-    const CACHE_PHARSUMS = "pharsums.cache";
-    const CACHE_CLASSES = "classes.cache";
-    const CACHE_REFLECTION = "reflection.cache";
-    const CACHE_OBJECTS = "objects.cache";
+    const CACHE_TEMPLATES = "templates";
+    const CACHE_FOLDERCONTENT = "foldercontent";
+    const CACHE_PHARCONTENT = "pharcontent";
+    const CACHE_LANG = "lang";
+    const CACHE_MODULES = "modules";
+    const CACHE_PHARMODULES = "pharmodules";
+    const CACHE_PHARSUMS = "pharsums";
+    const CACHE_CLASSES = "classes";
+    const CACHE_REFLECTION = "reflection";
+    const CACHE_OBJECTS = "objects";
 
 
     /**
@@ -69,16 +69,16 @@ class BootstrapCache
     {
         require_once __DIR__ . "/CacheManager.php";
 
-        foreach($this->getCacheNames() as $strOneFile) {
-            self::$arrCaches[$strOneFile] = CacheManager::getInstance()->getValue(__CLASS__.$strOneFile);
+        foreach($this->getCacheNames() as $strOneType) {
+            self::$arrCaches[$strOneType] = CacheManager::getInstance()->getValue(__CLASS__.$strOneType);
         }
     }
 
     public function __destruct()
     {
-        foreach($this->getCacheNames() as $strOneFile) {
-            if(isset(self::$arrCacheSavesRequired[$strOneFile]) && class_config::getInstance()->getConfig("bootstrapcache_".$strOneFile) === true && isset(self::$arrCaches[$strOneFile])) {
-                CacheManager::getInstance()->addValue(__CLASS__.$strOneFile, self::$arrCaches[$strOneFile]);
+        foreach($this->getCacheNames() as $strOneType) {
+            if(isset(self::$arrCacheSavesRequired[$strOneType]) && class_config::getInstance()->getConfig("bootstrapcache_".$strOneType) === true && isset(self::$arrCaches[$strOneType])) {
+                CacheManager::getInstance()->addValue(__CLASS__.$strOneType, self::$arrCaches[$strOneType]);
             }
         }
     }
