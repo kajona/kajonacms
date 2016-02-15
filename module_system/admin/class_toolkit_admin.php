@@ -670,7 +670,7 @@ class class_toolkit_admin extends class_toolkit
 
             return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
         } else {
-            $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "input_download");
+            $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "input_upload_disabled");
 
             return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
         }

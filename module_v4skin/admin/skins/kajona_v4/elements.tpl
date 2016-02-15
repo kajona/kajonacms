@@ -547,14 +547,14 @@ Upload-Field
         </div>
         <div class="col-sm-4">
             <div class="form-control" style="white-space:nowrap;overflow:hidden;">
-                %%uploadFile%%
+                <a href="%%fileHref%%" id="%%name%%">%%fileName%%</a>
             </div>
         </div>
     </div>
 </input_upload>
 
 Download-Field
-<input_download>
+<input_upload_disabled>
     <div class="form-group">
         <label for="%%name%%" class="col-sm-3 control-label">%%title%%</label>
         <div class="col-sm-6">
@@ -563,7 +563,7 @@ Download-Field
             </div>
         </div>
     </div>
-</input_download>
+</input_upload_disabled>
 
 Upload-Field for multiple files with progress bar
 <input_upload_multiple>
