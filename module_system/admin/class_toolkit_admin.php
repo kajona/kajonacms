@@ -1383,7 +1383,8 @@ class class_toolkit_admin extends class_toolkit
                     "title"      => $objOneAction->getStrTitle(),
                     "icon"       => $objOneAction->getStrIcon(),
                     "targeturl"  => $objOneAction->getStrTargetUrl(),
-                    "renderinfo" => $objOneAction->getBitRenderInfo() ? "1" : "0"
+                    "renderinfo" => $objOneAction->getBitRenderInfo() ? "1" : "0",
+                    "onclick"    => $objOneAction->getStrOnClickHandler()
                 ),
                 $strTemplateID
             );
