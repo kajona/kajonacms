@@ -361,7 +361,7 @@ class class_module_system_module extends class_model implements interface_model,
      *
      * @param string $arrElementData
      *
-     * @return interface_portal
+     * @return interface_portal|class_portal_controller
      */
     public function getPortalInstanceOfConcreteModule($arrElementData = null) {
 

@@ -264,7 +264,7 @@ class class_request_dispatcher {
             if(_xmlLoader_) {
                 if($objModule->getStrXmlNamePortal() != "") {
                     $strClassname = str_replace(".php", "", $objModule->getStrXmlNamePortal());
-                    $objModuleRequested = $this->objObjectFactory->factory($strClassname);
+                    $objModuleRequested = $this->objBuilder->factory($strClassname);
                     $strReturn = $objModuleRequested->action($strAction);
                 }
                 else {
