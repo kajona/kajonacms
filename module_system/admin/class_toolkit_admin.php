@@ -645,53 +645,43 @@ class class_toolkit_admin extends class_toolkit
     /**
      * Returns a input-file element
      *
-     * @param string $strName
+     * @param $strName
      * @param string $strTitle
      * @param string $strClass
-     *
+     * @param string $strFileName
+     * @param string $strFileHref
+     * @param bool $bitEnabled
      * @return string
      */
-    public function formInputUpload($strName, $strTitle = "", $strClass = "", $strFile = null)
+    public function formInputUpload($strName, $strTitle = "", $strClass = "", $strFileName = null, $strFileHref = null, $bitEnabled = true)
     {
-        $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "input_upload");
-        $objLang = class_carrier::getInstance()->getObjLang();
+        $arrTemplate = array();
+        $arrTemplate["name"] = $strName;
+        $arrTemplate["title"] = $strTitle;
+        $arrTemplate["class"] = $strClass;
 
-        if (!empty($strFile)) {
-            $strFile = $objLang->getLang("uploadfile", "system") . ": " . $strFile . "<br>";
+        if ($bitEnabled) {
+            $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "input_upload");
+            $objLang = class_carrier::getInstance()->getObjLang();
+
+            if (!empty($strFileName)) {
+                $strFileName = $objLang->getLang("uploadfile", "system") . ": " . $strFileName . "<br>";
+            }
+
+            $objText = class_carrier::getInstance()->getObjLang();
+
+            $arrTemplate["uploadFile"] = $strFileName;
+            $arrTemplate["maxSize"] = $objText->getLang("max_size", "mediamanager")." ".bytesToString(class_config::getInstance()->getPhpMaxUploadSize());
+
+            return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
+        } else {
+            $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "input_download");
+
+            $arrTemplate["fileName"] = $strFileName;
+            $arrTemplate["fileHref"] = $strFileHref;
+
+            return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
         }
-
-        $arrTemplate = array();
-        $arrTemplate["name"] = $strName;
-        $arrTemplate["title"] = $strTitle;
-        $arrTemplate["class"] = $strClass;
-
-        $objText = class_carrier::getInstance()->getObjLang();
-
-        $arrTemplate["uploadFile"] = $strFile;
-        $arrTemplate["maxSize"] = $objText->getLang("max_size", "mediamanager")." ".bytesToString(class_config::getInstance()->getPhpMaxUploadSize());
-
-        return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
-    }
-
-    /**
-     * @param $strFileName
-     * @param $strFileHref
-     * @param string $strTitle
-     * @param string $strClass
-     * @return string
-     */
-    public function formInputDownload($strName, $strTitle = "", $strClass = "", $strFileName, $strFileHref)
-    {
-        $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "input_download");
-
-        $arrTemplate = array();
-        $arrTemplate["name"] = $strName;
-        $arrTemplate["title"] = $strTitle;
-        $arrTemplate["class"] = $strClass;
-        $arrTemplate["fileName"] = $strFileName;
-        $arrTemplate["fileHref"] = $strFileHref;
-
-        return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
     }
 
     /**
