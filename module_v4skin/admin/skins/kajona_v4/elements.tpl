@@ -282,7 +282,7 @@ Currently, there are two modes: with and without a description.
 </batchactions_wrapper>
 
 <batchactions_entry>
-    <a href="#" onclick="KAJONA.admin.lists.triggerAction('%%title%%', '%%targeturl%%', %%renderinfo%%);return false;" title="%%title%%" rel="tooltip">%%icon%%</a>
+    <a href="#" onclick="%%onclick%% return false;" title="%%title%%" rel="tooltip">%%icon%%</a>
 </batchactions_entry>
 
 Divider to split up a page in logical sections
@@ -1323,8 +1323,8 @@ The following sections are used to display the path-navigations, e.g. used by th
 <path_container>
     <ul class="breadcrumb">
         %%pathnavi%%
-        <li id="quickhelp" class=" pull-right" style=" "><i class="fa fa-question-circle"></i></li>
     </ul>
+    <div id="quickhelp" class=" pull-right" style=" "><i class="fa fa-question-circle"></i></div>
 </path_container>
 
 <path_entry>

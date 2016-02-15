@@ -289,7 +289,8 @@ class class_module_mediamanager_file extends class_model implements interface_mo
     public function deleteObjectFromDatabase() {
 
         //delete the current file
-        if($this->getParam("deleteMediamanagerRepo") != true) {
+        //only delete of not used by another repo directly
+        if($this->getParam("deleteMediamanagerRepo") != true && ($this->getParam("mediamanagerDeleteFileFromFilesystem") == true || $this->countOtherFilesWithSamePath() == 0)) {
             $objFilesystem = new class_filesystem();
             if($this->getIntType() == self::$INT_TYPE_FILE) {
                 $objFilesystem->fileDelete($this->getStrFilename());
@@ -300,6 +301,24 @@ class class_module_mediamanager_file extends class_model implements interface_mo
         }
 
         return parent::deleteObjectFromDatabase();
+    }
+
+    /**
+     * Internal helper to count the number of files with the same path
+     * @return mixed
+     */
+    private function countOtherFilesWithSamePath()
+    {
+        $strQuery = "SELECT COUNT(*)
+                       FROM " . _dbprefix_ . "system,
+                            " . _dbprefix_ . "mediamanager_file
+                    WHERE system_id = file_id
+                      AND file_filename = ?
+                      AND file_id != ?";
+
+
+        $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array($this->getStrFilename(), $this->getSystemid()));
+        return $arrRow["COUNT(*)"];
     }
 
     protected function updateStateToDb() {

@@ -88,10 +88,12 @@ $(function () {
         var scroll = $(this).scrollTop();
         if(scroll > 10 && KAJONA.admin.scroll != 'top') {
             $("ul.breadcrumb").addClass("breadcrumbTop");
+            $("#quickhelp").addClass("quickhelpTop");
             KAJONA.admin.scroll = "top";
         }
         else if(scroll <= 10 && KAJONA.admin.scroll != 'margin') {
             $("ul.breadcrumb").removeClass("breadcrumbTop");
+            $("#quickhelp").removeClass("quickhelpTop");
             KAJONA.admin.scroll = "fixed";
         }
 
@@ -138,6 +140,7 @@ KAJONA.v4skin = {
         };
 
         this.search = function(event, ui) {
+            //If input field changes -> reset hidden id field
             var $objCur = $(this);
             if(!$objCur.is('[readonly]')) {
                 if($('#'+$objCur.attr('id')+'_id')) {
@@ -145,6 +148,7 @@ KAJONA.v4skin = {
                 }
             }
 
+            //Formentry must have at least 2 charackters to trigger search.
             if(event.target.value.length < 2) {
                 event.stopPropagation();
                 return false;
@@ -156,7 +160,7 @@ KAJONA.v4skin = {
             $(this).css('background-image', 'none');
         };
 
-        this.focus = function() {
+        this.focus = function(event, ui) {
             return false;
         };
 
@@ -168,7 +172,6 @@ KAJONA.v4skin = {
                     $( '#'+$objCur.attr('id')+'_id' ).val( ui.item.systemid);
                 }
             }
-
         };
 
         this.create = function( event, ui ) {

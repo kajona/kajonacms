@@ -5,6 +5,24 @@ require_once(__DIR__ . "/../../module_system/system/class_testbase.php");
 class class_test_searchQueryParserTest extends class_testbase {
 
 
+    public function testSpecialCharacterReplacement()
+    {
+        $objParser = new class_module_search_query_parser();
+
+        $this->assertEquals("-test", $objParser->safeReplaceCharacter("-test", "-"));
+        $this->assertEquals("-test", $objParser->safeReplaceCharacter("-te-st", "-"));
+        $this->assertEquals("test", $objParser->safeReplaceCharacter("test", "-"));
+        $this->assertEquals("test -test2", $objParser->safeReplaceCharacter("test -test2", "-"));
+        $this->assertEquals("test -test2", $objParser->safeReplaceCharacter("te-st -te-st2", "-"));
+        $this->assertEquals("test test2", $objParser->safeReplaceCharacter("te-st te-st2", "-"));
+        $this->assertEquals("testtest2", $objParser->safeReplaceCharacter("te-stte-st2", "-"));
+        $this->assertEquals("-testtest2", $objParser->safeReplaceCharacter("-te-sttes-t2", "-"));
+        $this->assertEquals("testtest2", $objParser->safeReplaceCharacter("te-stte-st2", "-"));
+        $this->assertEquals("test+test2", $objParser->safeReplaceCharacter("te-st+te-st2", "-"));
+        $this->assertEquals("test +test2", $objParser->safeReplaceCharacter("te-st +te-st2", "-"));
+        $this->assertEquals("test +test2", $objParser->safeReplaceCharacter("te-st +test2", "-"));
+    }
+
 
     public function testQueryParser() {
         echo "Test Query Parser\n";

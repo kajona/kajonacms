@@ -17,6 +17,7 @@ $lang["action_list"]                     = "Installed packages";
 $lang["action_list_templates"]           = "Template manager";
 $lang["action_new_copy"]                 = "Create a new template-pack";
 $lang["action_upload_package"]           = "Install/Update a package";
+$lang["package_downloadasphar"]          = "Generate and download a phar-package out of the directory";
 $lang["all"]                             = "All";
 $lang["delete_question"]                 = "Do you really want to remove the template-pack &quot;<b>%%element_name%%</b>&quot;?";
 $lang["element"]                         = "Element";

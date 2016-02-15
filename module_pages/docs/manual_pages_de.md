@@ -51,3 +51,33 @@ Jedoch sollten die Einstellungen des Seitencaches mit Vorsicht vorgenommen werde
 Zusammenfassend sei gesagt, dass nicht alle Elemente pauschal eine lange Cachedauer bekommen sollten, sondern individuell für jedes Element abgeschätzt werden sollte, welche Dauer vertretbar ist.
 
 Im Fall von durchgeführten Änderungen, die aber nicht im Portal sichtbar werden, kann der Seitencache verantwortlich sein. In diesem Fall kann es sinnvoll sein, diesen zu leeren. Das Leeren des Caches ist mit Hilfe eines System-Tasks möglich.
+
+
+##Seitenelemente
+
+Bevor man mit dem System arbeitet, sollte man den Gedanken hinter den Elementen verstanden haben und die zwei grundlegenden Typen von Elementen kennen.
+Elemente werden immer dann verwendet, wenn über den Admin-Bereich erfasste Inhalte im Portal präsentiert  werden sollen. Das kann zum Beispiel ein Text-Absatz sein, kann aber auch eine Bildergalerie sein.
+Hierfür unterscheidet Kajona zwischen zwei Arten von Elementen: 
+
+* direkte Elemente und
+* vermittelnde Elemente
+
+Diese beiden Typen sollen nun genauer beleuchtet werden.
+
+###Direkte Elemente
+Direkte Elemente werden immer dann eingesetzt, wenn die Inhalte direkt beim Element hinterlegt werden können. Dies ist beispielsweise bei Überschriften oder Absätzen der Fall. Als kleine Grafik könnte man das so darstellen:
+![](https://www.kajona.de/image.php?image=/files/images/upload/manual/007_direkteselement.png&maxWidth=500)
+
+Man erkennt: Wird das Portal aufgerufen, so lädt dieses das Element. Das Element kann dann sofort die zuvor hinterlegten Informationen an das Portal zurückgeben – es liefert den Content direkt.
+
+###Vermittelnde Elemente
+Im Gegensatz zu direkten Elementen stellen vermittelnde Elemente lediglich eine Art Schnittstelle zu anderen Modulen dar. Das bedeutet: Der Inhalt wird in den jeweiligen Modulen hinterlegt und gepflegt. Das Element stellt dann lediglich ein Bindeglied zwischen Portal und Modul dar:
+
+![](https://www.kajona.de/image.php?image=/files/images/upload/manual/008_vermittelndeselement.png&maxWidth=500)
+
+Es wird also deutlich: Das Element fungiert lediglich in vermittelnder Rolle. 
+Auch hier wird bei einem Aufruf des Portals das Element gebeten, den Inhalt zu liefern. Da dieses aber „nur“ auf ein Modul verweist, leitet das Element die Anfrage an das entsprechende Modul weiter. Das Modul kann nun eigenständig den zuvor hinterlegten Content laden und an das Element zurückgeben. Dieses leitet den Content dann an das Portal weiter, welches dann den Content in die Antwort auf die Anfrage einbettet.
+
+**Zusammenfassend**:
+Ein Element wird immer dann benötigt, wenn Inhalt in die Seiten des Portal geschrieben werden soll. Soll hierbei einfacher Content wie Text dargestellt werden, so kommt ein direktes Element zum Einsatz, soll aber komplexerer Content wie eine Bildergalerie oder Zeit gesteuerte News dargestellt werden, so übergibt das Element die Anfrage an das entsprechende Modul und dient lediglich als vermittelndes Element.
+

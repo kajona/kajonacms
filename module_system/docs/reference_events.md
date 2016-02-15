@@ -1,9 +1,45 @@
-Reference: Events
-===
+#Reference: Events
+
+Starting with Kajona v4.5, the way how events are handled was rewritten from scratch.
+Events may be used to react on special actions triggered by the system. For example, it's possible to be notified if a record is deleted, if a record is updated or if a user logs into the system for the first time.
+
+
+All events handled by Kajona are identified using a string-based identifier, e.g. ``core.system.recordupdated``. In order to be notified in case of an event, you have to implement the generic interface ``interface_genericevent_listener``. Compared to a more type-safe event-interface (e.g. interface_record_deleted_listener", the generic approach reduced the coupling between modules and avoids hard-coded dependencies between packages
+Example: If your faqs module wants to react on events triggered by the search, the ``interface_genericevent_listener`` is all you have to implement. If the interface was named ``interface_search_triggered`` and the interface is provided by the search-package, your faq implementation will fail if the search package is not available (due to an undefined interface).
+
+##Handling events 
+If you want to handle a certain event, you have to provide a listener and register the listener for this event. Let's say you want to be notified in case a record is deleted in order to write a line to a logfile. 
+The listener you have to provide would be the following implementation:
+ 
+	class class_module_logging_recorddeletedlistener implements interface_genericevent_listener {
+	 public function handleEvent($strEventName, array $arrArguments) {     list($strSystemid, $strSourceClass) = $arrArguments;
+	  class_logger::getInstance()->addLogRow("record delete, id: ".$strSystemid, class_logger::$levelInfo);
+	  return true;
+	 }
+	}
+	class_core_eventdispatcher::getInstance()->removeAndAddListener( "core.system.recorddeleted"​, new class_module_logging_recorddeletedlistener());
+
+
+This class takes care of everything. The last lines registeres the listener at the class_core_eventdispatcher for the event identified by ``core.system.recorddeleted``. The listener implements the interface and drops a line to the logfile.
+
+Kajona scans the filesystems for possible listener at startup, so you don't have to worry that your handler will be registered. All you have to stick to is placing your listener within the packages system-directory.
+
+##Throwing events
+Throwing an event is a piece of cake!
+All you have to know is the identifier of an event. Let's keep to the example above: Let's notify listeners about a deleted record. Normally this event is handled by Kajona, but let's trigger it again:
+ 
+	class_core_eventdispatcher::getInstance()->notifyGenericListeners( "core.system.recorddeleted", array($strSystemid, get_class($objRecordDeleted)));
+
+
+All we do is fetching an instance of the core_eventdispatcher and calling the method ``notifyGenericListeners``. Arguments to this method are the identifier of the event and an array of arguments. This array of arguments will be passed to the registered listeners using the callback-method handleEvent.
+
+Thats all.
+You should now be able to provide and register event-listeners and to throw new events based on an identifier.
 
 
 
 
+##Overview of core events
 
 <table>
 	<tbody>

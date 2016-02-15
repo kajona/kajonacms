@@ -248,7 +248,10 @@ class class_module_workflows_admin extends class_admin_simple implements interfa
             $strForm = $objWorkflow->getObjWorkflowHandler()->getUserInterface();
 
             if($strForm instanceof class_admin_formgenerator) {
-                $strForm->addField(new class_formentry_hidden(null, null), "workflowid")->setStrValue($objWorkflow->getSystemid());
+                $strForm->addField(new class_formentry_hidden(null, "workflowid"))->setStrValue($objWorkflow->getSystemid());
+                if($strForm->getObjSourceobject() == null) {
+                    $strForm->addField(new class_formentry_hidden(null, "systemid"))->setStrValue($objWorkflow->getSystemid());
+                }
                 $strReturn .= $strForm->renderForm(class_link::getLinkAdminHref($this->getArrModule("modul"), "saveUI"));
             }
             else {
