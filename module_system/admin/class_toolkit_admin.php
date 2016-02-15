@@ -659,26 +659,18 @@ class class_toolkit_admin extends class_toolkit
         $arrTemplate["name"] = $strName;
         $arrTemplate["title"] = $strTitle;
         $arrTemplate["class"] = $strClass;
+        $arrTemplate["fileName"] = $strFileName;
+        $arrTemplate["fileHref"] = $strFileHref;
 
         if ($bitEnabled) {
             $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "input_upload");
-            $objLang = class_carrier::getInstance()->getObjLang();
-
-            if (!empty($strFileName)) {
-                $strFileName = $objLang->getLang("uploadfile", "system") . ": " . $strFileName . "<br>";
-            }
-
             $objText = class_carrier::getInstance()->getObjLang();
 
-            $arrTemplate["uploadFile"] = $strFileName;
             $arrTemplate["maxSize"] = $objText->getLang("max_size", "mediamanager")." ".bytesToString(class_config::getInstance()->getPhpMaxUploadSize());
 
             return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
         } else {
             $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "input_download");
-
-            $arrTemplate["fileName"] = $strFileName;
-            $arrTemplate["fileHref"] = $strFileHref;
 
             return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
         }

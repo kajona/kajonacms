@@ -37,18 +37,28 @@ class class_formentry_upload extends class_formentry_base implements interface_f
             $strReturn .= $objToolkit->formTextRow($this->getStrHint());
 
         $strData = $this->getStrValue();
+
         if (!is_array($strData)) {
-            $strData = json_decode($strData, true);
+            if (validateSystemid($strData)) {
+                $strData = new class_module_mediamanager_file($strData);
+            } else {
+                $strData = json_decode($strData, true);
+            }
         }
 
-        $strFile = isset($strData['name']) && $strData['name'] != "" ? urldecode($strData['name']) : null;
-
-        if ($this->getBitReadonly()) {
-            $strFileHref = $this->getFileHref($strData);
-            $strReturn .= $objToolkit->formInputUpload($this->getStrEntryName(), $this->getStrLabel(), "", $strFile, $strFileHref, false);
+        if ($strData instanceof class_module_mediamanager_file) {
+            $strFile = $strData->getStrDisplayName();
         } else {
-            $strReturn .= $objToolkit->formInputUpload($this->getStrEntryName(), $this->getStrLabel(), "", $strFile);
+            $strFile = isset($strData['name']) && $strData['name'] != "" ? urldecode($strData['name']) : null;
         }
+
+        if ($strData instanceof class_module_mediamanager_file) {
+            $strFileHref = _webpath_ . "/download.php?systemid=" . $strData->getSystemid();
+        } else {
+            $strFileHref = "#";
+        }
+
+        $strReturn .= $objToolkit->formInputUpload($this->getStrEntryName(), $this->getStrLabel(), "", $strFile, $strFileHref, !$this->getBitReadonly());
 
         return $strReturn;
     }
@@ -97,17 +107,6 @@ class class_formentry_upload extends class_formentry_base implements interface_f
         $strFile = isset($strData['name']) && $strData['name'] != "" ? urldecode($strData['name']) : null;
 
         return !empty($strFile) ? $strFile : "-";
-    }
-
-    protected function getFileHref($arrFile)
-    {
-        if (empty($arrFile)) {
-            return '#';
-        }
-
-        // @TODO generate download link
-
-        return '#';
     }
 
     /**
