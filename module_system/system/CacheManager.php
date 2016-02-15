@@ -151,7 +151,7 @@ class CacheManager
      */
     protected function getCache($intType = null)
     {
-        if ($intType === null) {
+        if (empty($intType)) {
             $intType = self::TYPE_APC | self::TYPE_FILESYSTEM;
         }
 
