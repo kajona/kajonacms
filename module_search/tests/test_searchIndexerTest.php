@@ -193,6 +193,44 @@ class class_test_searchIndexerTest extends class_testbase {
         class_objectfactory::getInstance()->getObject($strNewsId)->deleteObjectFromDatabase();
 
     }
+
+
+    public function testIndexRemoval()
+    {
+        if(class_module_system_module::getModuleByName("messaging") === null)
+            return;
+
+        $objMessage = new class_module_messaging_message();
+        $objMessage->setStrTitle("unittest demo message");
+        $objMessage->setStrBody("unittest demo message body");
+        $objMessage->setStrMessageProvider("class_messageprovider_personalmessage");
+        $objMessage->updateObjectToDb();
+
+        $objIndexWriter = new class_module_search_indexwriter();
+        $objIndexWriter->indexObject($objMessage);
+
+        $arrRow = class_db::getInstance()->getPRow("SELECT COUNT(*) as anz FROM "._dbprefix_."search_ix_document WHERE search_ix_system_id = ?", array($objMessage->getSystemid()));
+        $this->assertEquals(1, $arrRow["anz"]);
+
+        $arrRow = class_db::getInstance()->getPRow("SELECT search_ix_document_id FROM "._dbprefix_."search_ix_document WHERE search_ix_system_id = ?", array($objMessage->getSystemid()));
+        $strDocumentId = $arrRow["search_ix_document_id"];
+
+//        $arrRow = class_db::getInstance()->getPArray("SELECT * FROM "._dbprefix_."search_ix_content WHERE search_ix_content_document_id = ?", array($strDocumentId));
+        $arrRow = class_db::getInstance()->getPRow("SELECT COUNT(*) as anz FROM "._dbprefix_."search_ix_content WHERE search_ix_content_document_id = ?", array($strDocumentId));
+        $this->assertEquals(7, $arrRow["anz"]);
+
+        class_carrier::getInstance()->flushCache(class_carrier::INT_CACHE_TYPE_DBQUERIES);
+        $objIndexWriter->removeRecordFromIndex($objMessage->getSystemid());
+        $arrRow = class_db::getInstance()->getPRow("SELECT COUNT(*) as anz FROM "._dbprefix_."search_ix_document WHERE search_ix_system_id = ?", array($objMessage->getSystemid()));
+        $this->assertEquals(0, $arrRow["anz"]);
+
+        $arrRow = class_db::getInstance()->getPRow("SELECT COUNT(*) as anz FROM "._dbprefix_."search_ix_content WHERE search_ix_content_document_id = ?", array($strDocumentId));
+        $this->assertEquals(0, $arrRow["anz"]);
+
+
+        $objMessage->deleteObjectFromDatabase();
+
+    }
 }
 
 
