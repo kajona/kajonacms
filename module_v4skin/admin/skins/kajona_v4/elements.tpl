@@ -186,7 +186,7 @@ Loads the script-helper and adds the table to the drag-n-dropable tables getting
             delay: KAJONA.util.isTouchDevice() ? 500 : 0
         });
 
-        $('#%%listid%% > tbody:has(tr[data-systemid!=""]) > tr').each(function(index) {
+        $('#%%listid%% > tbody:has(tr[data-systemid!=""][data-deleted=""]) > tr').each(function(index) {
             $(this).find("td.listsorthandle").css('cursor', 'move').append("<i class='fa fa-arrows-v'></i>");
             KAJONA.admin.tooltip.addTooltip($(this).find("td.listsorthandle"), "[lang,commons_sort_vertical,system]");
 
