@@ -29,10 +29,10 @@ class class_scriptlet_searchhighlight implements interface_scriptlet {
         if($strHighlight != "") {
             $strHighlight = strip_tags($strHighlight);
             $strJS = <<<JS
-KAJONA.portal.loader.loadFile('/templates/default/js/jquery.highlight.js', function() { $("body div[class='contentRight']").highlight("{$strHighlight}"); });
+KAJONA.portal.loader.loadFile('/templates/default/js/jquery.highlight.js', function() { $("body div[class='container']").highlight("{$strHighlight}"); });
 JS;
 
-            $strJS = "<script type=\"text/javascript\">".$strJS."</script>\n";
+            $strJS = "<script type='text/javascript'>".$strJS."</script><style type='text/css'>.searchHighlight { background-color: #ffff00;}</style>\n";
 
             $intBodyClose = uniStripos($strContent, "</body>");
             if($intBodyClose !== false)
