@@ -23,12 +23,19 @@ class class_admin_batchaction {
     private $strTitle;
     private $strTargetUrl;
     private $bitRenderInfo;
+    private $strOnClickHandler = "";
 
     function __construct($strIcon, $strTargetUrl, $strTitle, $bitRenderInfo = false) {
         $this->strIcon = $strIcon;
         $this->strTargetUrl = $strTargetUrl;
         $this->strTitle = $strTitle;
         $this->bitRenderInfo = $bitRenderInfo;
+        $this->updateOnClick();
+    }
+
+    private function updateOnClick()
+    {
+        $this->strOnClickHandler = "KAJONA.admin.lists.triggerAction('{$this->strTitle}', '{$this->strTargetUrl}', ".($this->getBitRenderInfo() ? "1" : "0").");";
     }
 
     public function setStrIcon($strIcon) {
@@ -40,6 +47,7 @@ class class_admin_batchaction {
     }
 
     public function setStrTargetUrl($strTargetUrl) {
+        $this->updateOnClick();
         $this->strTargetUrl = $strTargetUrl;
     }
 
@@ -48,6 +56,7 @@ class class_admin_batchaction {
     }
 
     public function setStrTitle($strTitle) {
+        $this->updateOnClick();
         $this->strTitle = $strTitle;
     }
 
@@ -57,6 +66,7 @@ class class_admin_batchaction {
 
     public function setBitRenderInfo($bitRenderInfo)
     {
+        $this->updateOnClick();
         $this->bitRenderInfo = (bool) $bitRenderInfo;
     }
 
@@ -64,4 +74,22 @@ class class_admin_batchaction {
     {
         return $this->bitRenderInfo;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getStrOnClickHandler()
+    {
+        return $this->strOnClickHandler;
+    }
+
+    /**
+     * @param mixed $strOnClickHandler
+     */
+    public function setStrOnClickHandler($strOnClickHandler)
+    {
+        $this->strOnClickHandler = $strOnClickHandler;
+    }
+
+
 }

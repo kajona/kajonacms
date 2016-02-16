@@ -332,6 +332,10 @@ class class_ldap
             }
         }
         else {
+            class_logger::getInstance(class_logger::USERSOURCES)->addLogRow(
+                "loading of user failed: ".ldap_errno($this->objCx)." # ".ldap_error($this->objCx)." \n Username: ".utf8_decode($strUsername)." Userfilter: ".$this->arrConfig["ldap_user_filter"],
+                class_logger::$levelError
+            );
             throw new class_exception("loading of user failed: ".ldap_errno($this->objCx)." # ".ldap_error($this->objCx), class_exception::$level_FATALERROR);
         }
 
@@ -380,6 +384,11 @@ class class_ldap
             }
         }
         else {
+            class_logger::getInstance(class_logger::USERSOURCES)->addLogRow(
+                "loading of user failed: ".ldap_errno($this->objCx)." # ".ldap_error($this->objCx)." \n Userfilter: ".$strUserFilter." Base DN: ".$this->arrConfig["ldap_user_base_dn"],
+                class_logger::$levelError
+            );
+
             throw new class_exception("loading of user failed: ".ldap_errno($this->objCx)." # ".ldap_error($this->objCx), class_exception::$level_FATALERROR);
         }
 
