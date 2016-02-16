@@ -33,30 +33,12 @@ class class_formentry_upload extends class_formentry_base implements interface_f
     {
         $objToolkit = class_carrier::getInstance()->getObjToolkit("admin");
         $strReturn = "";
-        if($this->getStrHint() != null)
+
+        if ($this->getStrHint() != null) {
             $strReturn .= $objToolkit->formTextRow($this->getStrHint());
-
-        $strData = $this->getStrValue();
-
-        if (!is_array($strData)) {
-            if (validateSystemid($strData)) {
-                $strData = new class_module_mediamanager_file($strData);
-            } else {
-                $strData = json_decode($strData, true);
-            }
         }
 
-        if ($strData instanceof class_module_mediamanager_file) {
-            $strFile = $strData->getStrDisplayName();
-        } else {
-            $strFile = isset($strData['name']) && $strData['name'] != "" ? urldecode($strData['name']) : null;
-        }
-
-        if ($strData instanceof class_module_mediamanager_file) {
-            $strFileHref = _webpath_ . "/download.php?systemid=" . $strData->getSystemid();
-        } else {
-            $strFileHref = "#";
-        }
+        list($strFile, $strFileHref) = $this->getFileNameAndHref();
 
         $strReturn .= $objToolkit->formInputUpload($this->getStrEntryName(), $this->getStrLabel(), "", $strFile, $strFileHref, !$this->getBitReadonly());
 
@@ -99,14 +81,40 @@ class class_formentry_upload extends class_formentry_base implements interface_f
 
     public function getValueAsText()
     {
+        list($strFile, $strFileHref) = $this->getFileNameAndHref();
+
+        if (!empty($strFile)) {
+            return '<a href="' . $strFileHref . '">' . $strFile . '</a>';
+        } else {
+            return '-';
+        }
+    }
+
+    private function getFileNameAndHref()
+    {
         $strData = $this->getStrValue();
+
         if (!is_array($strData)) {
-            $strData = json_decode($strData, true);
+            if (validateSystemid($strData)) {
+                $strData = new class_module_mediamanager_file($strData);
+            } else {
+                $strData = json_decode($strData, true);
+            }
         }
 
-        $strFile = isset($strData['name']) && $strData['name'] != "" ? urldecode($strData['name']) : null;
+        if ($strData instanceof class_module_mediamanager_file) {
+            $strFile = $strData->getStrDisplayName();
+        } else {
+            $strFile = isset($strData['name']) && $strData['name'] != "" ? urldecode($strData['name']) : null;
+        }
 
-        return !empty($strFile) ? $strFile : "-";
+        if ($strData instanceof class_module_mediamanager_file) {
+            $strFileHref = _webpath_ . "/download.php?systemid=" . $strData->getSystemid();
+        } else {
+            $strFileHref = "#";
+        }
+
+        return array($strFile, $strFileHref);
     }
 
     /**
