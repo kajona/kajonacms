@@ -65,40 +65,9 @@ abstract class class_filter_base
                 if ($strGetter !== null) {
                     $strValue = $this->$strGetter();
                     if ($strValue !== null && $strValue !== "") {
-                        if (is_string($strValue)) {
-                            if (validateSystemid($strValue)) {
-                                $strCompareOperator = $enumFilterCompareOperator === null ? "=" : $enumFilterCompareOperator->getEnumAsSqlString();
-                                $arrRestriction[] = new class_orm_objectlist_restriction("AND $strTableColumn $strCompareOperator ?", $strValue);
-                            } else {
-                                $strCompareOperator = $enumFilterCompareOperator === null ? "LIKE" : $enumFilterCompareOperator->getEnumAsSqlString();
-                                $arrRestriction[] = new class_orm_objectlist_restriction("AND $strTableColumn $strCompareOperator ?", "%" . $strValue . "%");
-                            }
-                        } elseif (is_int($strValue) || is_float($strValue)) {
-                            $strCompareOperator = $enumFilterCompareOperator === null ? "=" : $enumFilterCompareOperator->getEnumAsSqlString();
-                            $arrRestriction[] = new class_orm_objectlist_restriction("AND $strTableColumn $strCompareOperator ?", $strValue);
-                        } elseif (is_bool($strValue)) {
-                            $strCompareOperator = $enumFilterCompareOperator === null ? "=" : $enumFilterCompareOperator->getEnumAsSqlString();
-                            $arrRestriction[] = new class_orm_objectlist_restriction("AND $strTableColumn $strCompareOperator ?", $strValue ? 1 : 0);
-                        } elseif (is_array($strValue)) {
-                            $arrRestriction[] = new class_orm_objectlist_in_restriction($strTableColumn, $strValue);
-                        } elseif ($strValue instanceof class_date) {
-                            $strValue = clone $strValue;
-                            $strCompareOperator = $enumFilterCompareOperator === null ? "=" : $enumFilterCompareOperator->getEnumAsSqlString();
-
-                            if($enumFilterCompareOperator !== null) {
-                                if ($enumFilterCompareOperator->equals(class_orm_comparator_enum::GreaterThen())
-                                    || $enumFilterCompareOperator->equals(class_orm_comparator_enum::GreaterThenEquals())
-                                ) {
-                                    $strValue->setBeginningOfDay();
-                                }
-                                if ($enumFilterCompareOperator->equals(class_orm_comparator_enum::LessThen())
-                                    || $enumFilterCompareOperator->equals(class_orm_comparator_enum::LessThenEquals())
-                                ) {
-                                    $strValue->setEndOfDay();
-                                }
-                            }
-
-                            $arrRestriction[] = new class_orm_objectlist_restriction("AND $strTableColumn $strCompareOperator ?", $strValue->getLongTimestamp());
+                        $objRestriction = self::getORMRestriction($strValue, $strTableColumn, $enumFilterCompareOperator);
+                        if($objRestriction !== null) {
+                            $arrRestriction[] = $objRestriction;
                         }
                     }
                 }
@@ -106,6 +75,59 @@ abstract class class_filter_base
         }
 
         return $arrRestriction;
+    }
+
+    /**
+     * @param $strValue
+     * @param $strTableColumn
+     * @param class_orm_comparator_enum|null $enumFilterCompareOperator
+     * @param string $strCondition
+     * @return class_orm_objectlist_in_restriction|class_orm_objectlist_restriction|null
+     * @throws class_orm_exception
+     */
+    public static function getORMRestriction($strValue, $strTableColumn, class_orm_comparator_enum $enumFilterCompareOperator = null, $strCondition = "AND") {
+
+        if (is_string($strValue)) {
+            if (validateSystemid($strValue)) {
+                $strCompareOperator = $enumFilterCompareOperator === null ? "=" : $enumFilterCompareOperator->getEnumAsSqlString();
+               return new class_orm_objectlist_restriction("$strCondition $strTableColumn $strCompareOperator ?", $strValue);
+            } else {
+                $strCompareOperator = $enumFilterCompareOperator === null ? "LIKE" : $enumFilterCompareOperator->getEnumAsSqlString();
+               return new class_orm_objectlist_restriction("$strCondition $strTableColumn $strCompareOperator ?", "%" . $strValue . "%");
+            }
+        }
+        elseif (is_int($strValue) || is_float($strValue)) {
+            $strCompareOperator = $enumFilterCompareOperator === null ? "=" : $enumFilterCompareOperator->getEnumAsSqlString();
+           return new class_orm_objectlist_restriction("$strCondition $strTableColumn $strCompareOperator ?", $strValue);
+        }
+        elseif (is_bool($strValue)) {
+            $strCompareOperator = $enumFilterCompareOperator === null ? "=" : $enumFilterCompareOperator->getEnumAsSqlString();
+           return new class_orm_objectlist_restriction("$strCondition $strTableColumn $strCompareOperator ?", $strValue ? 1 : 0);
+        }
+        elseif (is_array($strValue)) {
+           return new class_orm_objectlist_in_restriction($strTableColumn, $strValue, $strCondition);
+        }
+        elseif ($strValue instanceof class_date) {
+            $strValue = clone $strValue;
+            $strCompareOperator = $enumFilterCompareOperator === null ? "=" : $enumFilterCompareOperator->getEnumAsSqlString();
+
+            if($enumFilterCompareOperator !== null) {
+                if ($enumFilterCompareOperator->equals(class_orm_comparator_enum::GreaterThen())
+                    || $enumFilterCompareOperator->equals(class_orm_comparator_enum::GreaterThenEquals())
+                ) {
+                    $strValue->setBeginningOfDay();
+                }
+                if ($enumFilterCompareOperator->equals(class_orm_comparator_enum::LessThen())
+                    || $enumFilterCompareOperator->equals(class_orm_comparator_enum::LessThenEquals())
+                ) {
+                    $strValue->setEndOfDay();
+                }
+            }
+
+           return new class_orm_objectlist_restriction("$strCondition $strTableColumn $strCompareOperator ?", $strValue->getLongTimestamp());
+        }
+
+        return null;
     }
 
     /**
