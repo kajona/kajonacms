@@ -2,14 +2,14 @@
 
 <!-- available placeholders: action, search_term -->
 <search_form>
-    <form name="searchResultFormSmall" method="post" action="%%action%%" accept-charset="UTF-8">
-        <input type="text" name="searchterm" id="resultSearchtermSmall" value="%%search_term%%"
+    <form name="searchResultFormSmall" method="post" action="%%action%%" accept-charset="UTF-8" class="form-inline pull-xs-right">
+        <input type="text" name="searchterm" id="resultSearchtermSmall" value="%%search_term%%" class="form-control" placeholder="[lang,searchterm_label,search]"
                onkeyup="KAJONA.portal.searchSmall.queryBackend();"
-               onblur="window.setTimeout( function() { $('#searchResultSmall').css('display', 'none');}, 200)" autocomplete="off" />
+                autocomplete="off" />
+        <div id="searchResultSmall" class="card " style="display: none; position: absolute; right: 10px;  border: 1px solid #979797;  max-width: 400px; min-width: 200px;"></div>
     </form>
 
-    <div id="searchResultSmall" ></div>
-    <div id="resultSetHeaderSmall" style="display: none;">[lang,hitlist_text1,search] <span id="spanSearchtermSmall"></span> [lang,hitlist_text2,search] <span id="spanSearchamountSmall"></span> [lang,hitlist_text3,search]:</div>
+    <div id="resultSetHeaderSmall" style="display: none;" >[lang,hitlist_text1,search] <span id="spanSearchtermSmall"></span> [lang,hitlist_text2,search] <span id="spanSearchamountSmall"></span> [lang,hitlist_text3,search]:</div>
 
 
     <script type="text/javascript">
@@ -24,17 +24,16 @@
                 searchterm : strCurrentQuery
             };
 
-            $('#searchResultSmall').html("<ul></ul>");
-            $('#plainListSmall').css("display", "none");
-            $('#searchResultSmall').css("display", "block");
-
             if(strCurrentQuery.length >= 2 && strCurrentQuery != KAJONA.portal.searchSmall.strLastQuery) {
+
                 if(searchRunning)
                     return;
 
+                $('#plainListSmall').css("display", "none");
+
                 searchRunning = true;
                 KAJONA.portal.searchSmall.strLastQuery = strCurrentQuery;
-                $('#searchResultSmall').html("<div style='height: 50px; width: 50px; background-image: url(_webpath_/templates/default/pics/default/loading.gif); background-repeat: no-repeat; background-position: center;'></div>");
+                $('#searchResultSmall').css("display", "block").html("<div class='center-block text-xs-center' style='font-size: 1.5rem;'><i class='fa fa-spinner fa-spin'></i></div>");
 
                 $.post(post_target, post_data, function(data, textStatus) {
 
@@ -42,8 +41,7 @@
                     $("#spanSearchtermSmall").html($(data).find("searchterm").html());
                     $("#spanSearchamountSmall").html($(data).find("nrofresults").html());
 
-                    $('#searchResultSmall').html($("#resultSetHeaderSmall").html());
-                    $('#searchResultSmall').append($("<ul></ul>"));
+                    $('#searchResultSmall').html("<div class='card-block'>"+$("#resultSetHeaderSmall").html()+"<ul></ul></div>");
 
                     $(data).find("item").each(function() {
                         var objNode = $("<li></li>");
@@ -66,13 +64,9 @@
 
     <!-- available placeholders: hitlist, search_term, search_nrresults, link_back, link_overview, link_forward -->
 <search_hitlist>
-<div id="plainListSmall" class="searchHitList" style="display: none;">
-    <ul>%%hitlist%%</ul>
-    <div align="center">%%link_back%%&nbsp;&nbsp;%%link_overview%%&nbsp;&nbsp;%%link_forward%%</div>
-</div>
+
 </search_hitlist>
 
 <!-- available placeholders: page_link, page_description -->
 <search_hitlist_hit>
-<li>%%page_link%%<br />%%page_description%%</li>
 </search_hitlist_hit>

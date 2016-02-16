@@ -36,7 +36,7 @@ class class_module_search_commons extends class_model implements interface_model
      *
      * @return class_search_result[]
      */
-    public function doPortalSearch($objSearch)
+    public function doPortalSearch($objSearch, $intStart = 0, $intEnd = 50)
     {
         $objSearch->setStrQuery(trim(uniStrReplace("%", "", $objSearch->getStrQuery())));
         if (uniStrlen($objSearch->getStrQuery()) == 0) {
@@ -46,7 +46,7 @@ class class_module_search_commons extends class_model implements interface_model
         //create a search object
         $objSearch->setBitPortalObjectFilter(true);
 
-        $arrHits = $this->doIndexedSearch($objSearch);
+        $arrHits = $this->doIndexedSearch($objSearch, $intStart, $intEnd);
 
         $arrReturn = array();
         foreach ($arrHits as $objOneResult) {

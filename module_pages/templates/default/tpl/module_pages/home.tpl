@@ -18,6 +18,7 @@
 
     <!-- Template specific stylesheets: CSS and fonts -->
     <link rel="stylesheet" href="_webpath_/templates/default/css/bootstrap.min.css?_system_browser_cachebuster_" type="text/css"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
     <link rel="shortcut icon" href="_webpath_/favicon.ico" type="image/x-icon"/>
 
 
@@ -30,10 +31,7 @@
 <nav class="navbar navbar-full navbar-light bg-faded">
     <a class="navbar-brand" href="#">Kajona CMS</a>
     %%masterportalnavi_navigation%%
-    <form class="form-inline pull-xs-right">
-        <input class="form-control" type="text" placeholder="Search" />
-        <button class="btn btn-success-outline" type="submit">Search</button>
-    </form>
+    %%mastersearch_search%%
 </nav>
 
 <!--<ol class="breadcrumb">-->

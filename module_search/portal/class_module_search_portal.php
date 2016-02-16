@@ -83,24 +83,31 @@ class class_module_search_portal extends class_portal_controller implements inte
         $this->objSearchSearch->setStrPortalLangFilter($this->getStrPortalLanguage());
 
         /** @var $arrHitsSorted class_search_result[] */
-        $arrHitsSorted = $objSearchCommons->doPortalSearch($this->objSearchSearch);
+        $arrHitsSorted = array_values($objSearchCommons->doPortalSearch($this->objSearchSearch));
+
+        $objArraySectionIterator = new class_array_section_iterator(count($arrHitsSorted));
+        $objArraySectionIterator->setIntElementsPerPage($this->arrElementData["search_amount"]);
+        $objArraySectionIterator->setPageNumber($this->getParam("pv"));
+        $objArraySectionIterator->setArraySection(array_slice($arrHitsSorted, $objArraySectionIterator->calculateStartPos(), $this->arrElementData["search_amount"]));
+
 
         //Resize Array to wanted size
-        $arrHitsFilter = $this->objToolkit->pager(
-            $this->arrElementData["search_amount"],
-            ($this->getParam("pv") != "" ? (int)$this->getParam("pv") : 1),
+        $arrHitsFilter = $this->objToolkit->simplePager(
+            $objArraySectionIterator,
             $this->getLang("commons_next"),
             $this->getLang("commons_back"),
             "search",
             ($this->arrElementData["search_page"] != "" ? $this->arrElementData["search_page"] : $this->getPagename()),
-            $arrHitsSorted,
-            "&searchterm=".urlencode(html_entity_decode($this->objSearchSearch->getStrQuery(), ENT_COMPAT, "UTF-8"))
+            "&searchterm=".urlencode(html_entity_decode($this->objSearchSearch->getStrQuery(), ENT_COMPAT, "UTF-8")),
+            "pv",
+            "/module_search/".$this->arrElementData["search_template"]
+
         );
 
         $strRowTemplateID = $this->objTemplate->readTemplate("/module_search/".$this->arrElementData["search_template"], "search_hitlist_hit");
 
         /** @var $objHit class_search_result */
-        foreach($arrHitsFilter["arrData"] as $objHit) {
+        foreach($objArraySectionIterator as $objHit) {
 
             if($objHit->getStrPagename() == "master")
                 continue;

@@ -3,11 +3,20 @@
 <!-- available placeholders: action, search_term -->
 <search_form>
     <form name="searchResultForm" method="post" action="%%action%%" accept-charset="UTF-8">
-        <div><label for="resultSearchterm">[lang,searchterm_label,search]:</label><input type="text" name="searchterm" id="resultSearchterm" value="%%search_term%%" class="inputText" onkeyup="KAJONA.portal.search.queryBackend();" /></div><br />
-        <div><label for="Submit">&nbsp;</label><input type="submit" name="Submit" value="[lang,submit_label,search]" class="button" /></div><br />
+        <fieldset class="form-group">
+            <label for="resultSearchterm">[lang,searchterm_label,search]</label>
+            <input type="text" name="searchterm" id="resultSearchterm" value="%%search_term%%" class="form-control" onkeyup="KAJONA.portal.search.queryBackend();" placeholder="[lang,searchterm_label,search]" />
+        </fieldset>
+        <fieldset class="form-group">
+            <button type="submit" class="btn btn-primary">[lang,submit_label,search]</button>
+        </fieldset>
     </form>
 
-    <div id="resultSetHeader" style="display: none;">[lang,hitlist_text1,search] <span id="spanSearchterm"></span> [lang,hitlist_text2,search] <span id="spanSearchamount"></span> [lang,hitlist_text3,search]:</div>
+    <div id="resultSetHeader" style="display: none;">
+        <div class="alert alert-success" role="alert">
+        [lang,hitlist_text1,search] &quot;<span id="spanSearchterm"></span>&quot; [lang,hitlist_text2,search] <span id="spanSearchamount"></span> [lang,hitlist_text3,search]
+        </div>
+    </div>
     <div id="searchResult"></div>
 
     <script type="text/javascript">
@@ -22,7 +31,7 @@
                 searchterm : strCurrentQuery
             };
 
-            $('#searchResult').html("<ul></ul>");
+            $('#searchResult').html('');
             $('#resultSetHeader').css("display", "none");
             $('#plainList').css("display", "none");
 
@@ -32,19 +41,17 @@
 
                 searchRunning = true;
                 KAJONA.portal.search.strLastQuery = strCurrentQuery;
-                $('#searchResult').html("<div style='height: 50px; background-image: url(_webpath_/templates/default/pics/default/loading.gif); background-repeat: no-repeat; background-position: center;'></div>");
+                $('#searchResult').html("<div class='center-block text-xs-center' style='font-size: 2rem;'><i class='fa fa-spinner fa-spin'></i></div>");
 
                 $.post(post_target, post_data, function(data, textStatus) {
-                    $('#searchResult').html("<ul></ul>");
+                    $('#searchResult').html('<dl class="row"></dl>');
                     $("#spanSearchterm").html($(data).find("searchterm").html());
                     $("#spanSearchamount").html($(data).find("nrofresults").html());
                     $('#resultSetHeader').css("display", "block");
 
                     $(data).find("item").each(function() {
-                        var objNode = $("<li></li>");
-                        objNode.append("<a href='"+$(this).find("pagelink").find("a").attr("href")+"'>"+$(this).find("pagelink").find("a").text()+"</a>" );
-                        objNode.append("<br />"+$(this).find("description").text());
-                        $("#searchResult ul").append(objNode);
+                        var objNode = $("<dt class='col-sm-3'><a href='"+$(this).find("pagelink").find("a").attr("href")+"'>"+$(this).find("pagelink").find("a").text()+"</a></dt><dd class='col-sm-9'>"+$(this).find("description").text()+"&nbsp;</dd>");
+                        $("#searchResult dl").append(objNode);
                         searchRunning = false;
                     });
                 }, "xml");
@@ -55,15 +62,41 @@
 </search_form>
 
 
-    <!-- available placeholders: hitlist, search_term, search_nrresults, link_back, link_overview, link_forward -->
+<!-- available placeholders: hitlist, search_term, search_nrresults, link_back, link_overview, link_forward -->
 <search_hitlist>
-<div id="plainList" class="searchHitList">
-    <ul>%%hitlist%%</ul>
-    <div align="center">%%link_back%%&nbsp;&nbsp;%%link_overview%%&nbsp;&nbsp;%%link_forward%%</div>
-</div>
+    <dl class="row" id="plainList">
+        %%hitlist%%
+    </dl>
+    <nav class="text-xs-center">
+        <ul class=" pagination pagination-sm">%%link_back%% %%link_overview%% %%link_forward%%</ul>
+    </nav>
+
 </search_hitlist>
 
-    <!-- available placeholders: page_link, page_description -->
+<!-- available placeholders: page_link, page_description -->
 <search_hitlist_hit>
-<li>%%page_link%%<br />%%page_description%%</li>
+    <dt class="col-sm-3">%%page_link%%</dt>
+    <dd class="col-sm-9">%%page_description%%&nbsp;</dd>
 </search_hitlist_hit>
+
+
+<!-- available placeholders: pageHref -->
+<pager_fwd>
+    <li class="page-item"><a href="%%pageHref%%" class="page-link">[lang,commons_next,system]</a></li>
+</pager_fwd>
+
+<!-- available placeholders: pageHref -->
+<pager_back>
+    <li class="page-item"><a href="%%pageHref%%" class="page-link">[lang,commons_back,system]</a></li>
+</pager_back>
+
+<!-- available placeholders: pageHref, pageNumber -->
+<pager_entry>
+    <li class="page-item"><a href="%%pageHref%%" class="page-link">[%%pageNumber%%]</a></li>
+</pager_entry>
+
+<!-- available placeholders: pageHref, pageNumber -->
+<pager_entry_active>
+    <li class="page-item active"><a href="%%pageHref%%" class="page-link">[%%pageNumber%%]</a></li>
+</pager_entry_active>
+
