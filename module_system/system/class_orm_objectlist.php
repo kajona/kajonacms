@@ -229,7 +229,7 @@ class class_orm_objectlist extends class_orm_base {
             }
         }
 
-        $arrOrderByCriteria[] = " system_sort ASC  ";
+        $arrOrderByCriteria[] = " CASE WHEN system_sort < 0 THEN 9999999 ELSE system_sort END ASC "; //TODO: add a better way of setting the max value
         $arrOrderByCriteria[] = " system_create_date DESC ";
         $strOrderBy = "";
         if(count($arrOrderByCriteria) > 0)
