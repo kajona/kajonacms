@@ -1320,7 +1320,8 @@ class class_toolkit_admin extends class_toolkit
             $objEntry->getStrAdditionalInfo(),
             $objEntry->getStrLongDescription(),
             $bitCheckbox,
-            $strCSSAddon
+            $strCSSAddon,
+            $objEntry->getIntRecordDeleted() != 1 ? "" : "1"
         );
     }
 
@@ -1339,7 +1340,7 @@ class class_toolkit_admin extends class_toolkit
      *
      * @return string
      */
-    public function genericAdminList($strId, $strName, $strIcon, $strActions, $intCount, $strAdditionalInfo = "", $strDescription = "", $bitCheckbox = false, $strCssAddon = "")
+    public function genericAdminList($strId, $strName, $strIcon, $strActions, $intCount, $strAdditionalInfo = "", $strDescription = "", $bitCheckbox = false, $strCssAddon = "", $strDeleted = "")
     {
         $arrTemplate = array();
         $arrTemplate["listitemid"] = $strId;
@@ -1349,6 +1350,7 @@ class class_toolkit_admin extends class_toolkit
         $arrTemplate["actions"] = $strActions;
         $arrTemplate["description"] = $strDescription;
         $arrTemplate["cssaddon"] = $strCssAddon;
+        $arrTemplate["deleted"] = $strDeleted;
 
         if ($bitCheckbox) {
             $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "generallist_checkbox");
