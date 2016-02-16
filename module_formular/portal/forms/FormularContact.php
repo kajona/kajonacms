@@ -62,14 +62,19 @@ class FormularContact extends class_portal_controller implements interface_porta
         //any errors to print?
         if(count($this->arrError) > 0) {
             $strError = "";
+            $arrErrorFields = array();
             //Collect errors
             $strTemplateErrorID = $this->objTemplate->readTemplate("/module_form/" . $this->arrElementData["formular_template"], "errorrow");
-            foreach($this->arrError as $strOneError) {
+            foreach($this->arrError as $strKey => $strOneError) {
                 $strError .= $this->fillTemplate(array("error" => $strOneError), $strTemplateErrorID);
+                $arrErrorFields[] = "'{$strKey}'";
             }
             //and the complete form
             $strTemplateErrorFormid = $this->objTemplate->readTemplate("/module_form/" . $this->arrElementData["formular_template"], "errors");
-            $arrParams["formular_fehler"] = $this->fillTemplate(array("liste_fehler" => $strError), $strTemplateErrorFormid);
+            $arrParams["error_list"] = $this->fillTemplate(array("error_list" => $strError), $strTemplateErrorFormid);
+
+            $arrParams["error_fields"] = implode(",", $arrErrorFields);
+
         }
         //and the form itself
         $strTemplateformId = $this->objTemplate->readTemplate("/module_form/" . $this->arrElementData["formular_template"], "contactform");
@@ -91,24 +96,24 @@ class FormularContact extends class_portal_controller implements interface_porta
         $objValidator = new class_email_validator();
         if(!$objValidator->validate($this->getParam("absender_email"))) {
             $bitReturn = false;
-            $this->arrError[] = $this->getLang("fehler_email");
+            $this->arrError["absender_email"] = $this->getLang("fehler_email");
         }
 
         $objValidator = new class_text_validator();
         if(!$objValidator->validate($this->getParam("absender_name"))) {
             $bitReturn = false;
-            $this->arrError[] = $this->getLang("fehler_name");
+            $this->arrError["absender_name"] = $this->getLang("fehler_name");
         }
 
         if(!$objValidator->validate($this->getParam("absender_nachricht"))) {
             $bitReturn = false;
-            $this->arrError[] = $this->getLang("fehler_nachricht");
+            $this->arrError["absender_nachricht"] = $this->getLang("fehler_nachricht");
         }
 
         //Check captachcode
         if($this->getParam("form_captcha") != $this->objSession->getCaptchaCode()) {
             $bitReturn = false;
-            $this->arrError[] = $this->getLang("fehler_captcha");
+            $this->arrError["form_captcha"] = $this->getLang("fehler_captcha");
         }
 
         return $bitReturn;
