@@ -13,6 +13,7 @@ use class_rights;
 use class_session;
 use class_template;
 use class_toolkit_portal;
+use Kajona\System\Portal\ToolkitPortal;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 
@@ -28,19 +29,19 @@ class ServiceProvider implements ServiceProviderInterface
     public function register(Container $objContainer)
     {
         $objContainer['db'] = function($c){
-            return class_db::getInstance();
+            return Database::getInstance();
         };
 
         $objContainer['rights'] = function($c){
-            return class_rights::getInstance();
+            return Rights::getInstance();
         };
 
         $objContainer['config'] = function($c){
-            return class_config::getInstance();
+            return Config::getInstance();
         };
 
         $objContainer['session'] = function($c){
-            return class_session::getInstance();
+            return Session::getInstance();
         };
 
         $objContainer['admintoolkit'] = function($c){
@@ -50,37 +51,37 @@ class ServiceProvider implements ServiceProviderInterface
                 $strAdminToolkitClass = "class_toolkit_admin";
             }
 
-            $strPath = class_resourceloader::getInstance()->getPathForFile("/admin/".$strAdminToolkitClass.".php");
+            $strPath = Resourceloader::getInstance()->getPathForFile("/admin/".$strAdminToolkitClass.".php");
             include_once $strPath;
 
             return new $strAdminToolkitClass();
         };
 
         $objContainer['portaltoolkit'] = function($c){
-            $strPath = class_resourceloader::getInstance()->getPathForFile("/portal/class_toolkit_portal.php");
+            $strPath = Resourceloader::getInstance()->getPathForFile("/portal/class_toolkit_portal.php");
             include_once $strPath;
 
-            return new class_toolkit_portal();
+            return new ToolkitPortal();
         };
 
         $objContainer['resource_loader'] = function($c){
-            return class_resourceloader::getInstance();
+            return Resourceloader::getInstance();
         };
 
         $objContainer['class_loader'] = function($c){
-            return class_classloader::getInstance();
+            return Classloader::getInstance();
         };
 
         $objContainer['template'] = function($c){
-            return class_template::getInstance();
+            return Template::getInstance();
         };
 
         $objContainer['lang'] = function($c){
-            return class_lang::getInstance();
+            return Lang::getInstance();
         };
 
         $objContainer['object_factory'] = function($c){
-            return class_objectfactory::getInstance();
+            return Objectfactory::getInstance();
         };
 
         $objContainer['object_builder'] = function($c){
@@ -88,7 +89,7 @@ class ServiceProvider implements ServiceProviderInterface
         };
 
         $objContainer['logger'] = function($c){
-            return class_logger::getInstance();
+            return Logger::getInstance();
         };
     }
 }

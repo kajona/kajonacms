@@ -246,14 +246,14 @@ class StringUtil
      */
     public static function toDate($strString)
     {
-        if($strString instanceof class_date) {
+        if($strString instanceof Date) {
             return $strString;
         }
         elseif($strString == "") {
             return null;
         }
         else {
-            return new class_date($strString);
+            return new Date($strString);
         }
     }
 

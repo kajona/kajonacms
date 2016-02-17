@@ -40,7 +40,7 @@ class ObjectBuilder
     public function factory($strClass, array $arrArguments = array())
     {
         // create new instance without constructor
-        $objReflection = new \class_reflection($strClass);
+        $objReflection = new Reflection($strClass);
         $objObject = $objReflection->newInstanceWithoutConstructor();
 
         // inject dependencies
@@ -62,7 +62,7 @@ class ObjectBuilder
     public function resolveDependencies($objObject)
     {
         // read inject annotations
-        $objReflection = new \class_reflection($objObject);
+        $objReflection = new Reflection($objObject);
         $arrValues = $objReflection->getPropertiesWithAnnotation(self::ANNOTATION_INJECT);
 
         // inject dependencies
