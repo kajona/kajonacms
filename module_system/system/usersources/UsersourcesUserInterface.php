@@ -16,7 +16,8 @@ use Kajona\System\Admin\AdminFormgenerator;
  * @since 3.4.1
  * @package module_usersource
  */
-interface UsersourcesUserInterface {
+interface UsersourcesUserInterface
+{
 
     /**
      * Returns the list of group-ids the current user is assigned to
@@ -78,6 +79,7 @@ interface UsersourcesUserInterface {
 
     /**
      * Hook to update the admin-form when editing / creating a single user
+     *
      * @param AdminFormgenerator $objForm
      *
      * @return mixed

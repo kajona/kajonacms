@@ -31,17 +31,18 @@ use ReflectionMethod;
  *
  * @author tim.kiefer@kojikui.de, ph.wolfer@googlemail.com
  */
-abstract class AdminEvensimpler extends AdminSimple {
-    
+abstract class AdminEvensimpler extends AdminSimple
+{
+
     const   STR_OBJECT_LIST_ANNOTATION = "@objectList";
     const   STR_OBJECT_NEW_ANNOTATION = "@objectNew";
     const   STR_OBJECT_EDIT_ANNOTATION = "@objectEdit";
 
     private static $arrActionNameMapping = array(
-        "list" => self::STR_OBJECT_LIST_ANNOTATION,
-        "new" => self::STR_OBJECT_NEW_ANNOTATION,
-        "edit" => self::STR_OBJECT_EDIT_ANNOTATION,
-        "save" => self::STR_OBJECT_EDIT_ANNOTATION,
+        "list"   => self::STR_OBJECT_LIST_ANNOTATION,
+        "new"    => self::STR_OBJECT_NEW_ANNOTATION,
+        "edit"   => self::STR_OBJECT_EDIT_ANNOTATION,
+        "save"   => self::STR_OBJECT_EDIT_ANNOTATION,
         "delete" => self::STR_OBJECT_EDIT_ANNOTATION
     );
 
@@ -64,17 +65,20 @@ abstract class AdminEvensimpler extends AdminSimple {
      *
      * @return string
      */
-    public function action($strAction = "") {
-        if ($strAction == "")
+    public function action($strAction = "")
+    {
+        if ($strAction == "") {
             $strActionName = $this->getAction();
-        else
+        }
+        else {
             $strActionName = $strAction;
+        }
 
         $this->strOriginalAction = $strActionName;
 
-        if(!$this->checkMethodExistsInConcreteClass("action".ucfirst($strActionName))) {
+        if (!$this->checkMethodExistsInConcreteClass("action".ucfirst($strActionName))) {
 
-            foreach(self::$arrActionNameMapping as $strAutoMatchAction => $strAnnotation) {
+            foreach (self::$arrActionNameMapping as $strAutoMatchAction => $strAnnotation) {
                 $this->autoMatchAction($strAutoMatchAction, $strAnnotation, $strActionName);
             }
         }
@@ -92,12 +96,13 @@ abstract class AdminEvensimpler extends AdminSimple {
      *
      * @return string
      */
-    protected function getActionNameForClass($strAction, $objInstance) {
+    protected function getActionNameForClass($strAction, $objInstance)
+    {
         if (isset(self::$arrActionNameMapping[$strAction])) {
             $strAnnotationPrefix = self::$arrActionNameMapping[$strAction];
 
             if ($strAction == "new") {
-                return $strAction . $this->getStrCurObjectTypeName();
+                return $strAction.$this->getStrCurObjectTypeName();
             }
             else {
                 $objReflection = new Reflection($this);
@@ -105,7 +110,7 @@ abstract class AdminEvensimpler extends AdminSimple {
 
                 foreach ($arrAnnotations as $strProperty) {
                     if (uniStrpos($strProperty, $strAnnotationPrefix) === 0) {
-                        return $strAction . uniSubstr($strProperty, uniStrlen($strAnnotationPrefix));
+                        return $strAction.uniSubstr($strProperty, uniStrlen($strAnnotationPrefix));
                     }
                 }
             }
@@ -125,19 +130,22 @@ abstract class AdminEvensimpler extends AdminSimple {
      *
      * @return void
      */
-    private function autoMatchAction($strAutoMatchAction, $strAnnotation, &$strActionName) {
+    private function autoMatchAction($strAutoMatchAction, $strAnnotation, &$strActionName)
+    {
 
-        if(uniStrpos($strActionName, $strAutoMatchAction) === 0) {
+        if (uniStrpos($strActionName, $strAutoMatchAction) === 0) {
             // Set name of current list object
             $this->setStrCurObjectTypeName(uniStrReplace($strAutoMatchAction, "", $strActionName));
             $strActionName = $strAutoMatchAction;
 
             $objReflection = new Reflection($this);
-            $arrAnnotations = $objReflection->getAnnotationValuesFromClass($strAnnotation . $this->getStrCurObjectTypeName());
-            if(count($arrAnnotations) > 0)
+            $arrAnnotations = $objReflection->getAnnotationValuesFromClass($strAnnotation.$this->getStrCurObjectTypeName());
+            if (count($arrAnnotations) > 0) {
                 $this->setCurObjectClassName(reset($arrAnnotations));
-            else
+            }
+            else {
                 $this->setCurObjectClassName(null);
+            }
         }
     }
 
@@ -149,15 +157,18 @@ abstract class AdminEvensimpler extends AdminSimple {
      * @internal param $strActionName
      * @return bool
      */
-    protected function checkMethodExistsInConcreteClass($strMethod) {
+    protected function checkMethodExistsInConcreteClass($strMethod)
+    {
 
-        if(method_exists($this, $strMethod)) {
+        if (method_exists($this, $strMethod)) {
             $objRefl = new ReflectionMethod($this, $strMethod);
 
-            if($objRefl->class != "AdminEvensimpler") {
+            if ($objRefl->class != "AdminEvensimpler") {
                 return true;
             }
-            else return false;
+            else {
+                return false;
+            }
         }
         return false;
     }
@@ -170,26 +181,29 @@ abstract class AdminEvensimpler extends AdminSimple {
      * @return string
      * @permissions edit
      */
-    protected function actionNew() {
+    protected function actionNew()
+    {
         $strType = $this->getCurObjectClassName();
 
-        if(!is_null($strType)) {
+        if (!is_null($strType)) {
             /** @var $objEdit ModelInterface|Model */
             $objEdit = new $strType();
 
             $objForm = AdminFormgeneratorFactory::getFormForModel($objEdit);
-            if($objForm !== null)
+            if ($objForm !== null) {
                 $objEdit = $objForm->getObjSourceobject();
+            }
 
             //reset the current object reference to an object created before (e.g. during actionSave)
             $objForm = $this->getAdminForm($objEdit);
             $objForm->getObjSourceobject()->setSystemid($this->getParam("systemid"));
             $objForm->addField(new FormentryHidden("", "mode"))->setStrValue("new");
 
-            return $objForm->renderForm(Link::getLinkAdminHref($this->getArrModule("modul"), "save" . $this->getStrCurObjectTypeName()));
+            return $objForm->renderForm(Link::getLinkAdminHref($this->getArrModule("modul"), "save".$this->getStrCurObjectTypeName()));
         }
-        else
+        else {
             throw new Exception("error creating new entry current object type not known ", Exception::$level_ERROR);
+        }
     }
 
 
@@ -200,17 +214,18 @@ abstract class AdminEvensimpler extends AdminSimple {
      * @return string
      * @permissions edit
      */
-    protected function actionEdit() {
+    protected function actionEdit()
+    {
 
         //try 1: get the object type and names based on the current object
         $objInstance = $this->objFactory->getObject($this->getSystemid());
 
-        if($objInstance == null) {
+        if ($objInstance == null) {
             throw new Exception("given object with system id {$this->getSystemid()} does not exist", Exception::$level_ERROR);
         }
 
         $strObjectTypeName = uniSubstr($this->getActionNameForClass("edit", $objInstance), 4);
-        if($strObjectTypeName != "") {
+        if ($strObjectTypeName != "") {
             $strType = get_class($objInstance);
             $this->setCurObjectClassName($strType);
             $this->setStrCurObjectTypeName($strObjectTypeName);
@@ -219,20 +234,22 @@ abstract class AdminEvensimpler extends AdminSimple {
         //try 2: regular, oldschool resolving based on the current action-params
         $strType = $this->getCurObjectClassName();
 
-        if(!is_null($strType)) {
+        if (!is_null($strType)) {
 
             //reset the current object reference to an object created before (e.g. during actionSave)
             $objForm = AdminFormgeneratorFactory::getFormForModel($objInstance);
-            if($objForm !== null)
+            if ($objForm !== null) {
                 $objInstance = $objForm->getObjSourceobject();
+            }
 
             $objForm = $this->getAdminForm($objInstance);
             $objForm->addField(new FormentryHidden("", "mode"))->setStrValue("edit");
 
             return $objForm->renderForm(Link::getLinkAdminHref($this->getArrModule("modul"), "save".$this->getStrCurObjectTypeName()));
         }
-        else
+        else {
             throw new Exception("error editing current object type not known ", Exception::$level_ERROR);
+        }
     }
 
 
@@ -243,11 +260,12 @@ abstract class AdminEvensimpler extends AdminSimple {
      * @return string
      * @permissions view
      */
-    protected function actionList() {
+    protected function actionList()
+    {
         /** @var $strType ModelInterface|Model */
         $strType = $this->getCurObjectClassName();
 
-        if(!is_null($strType)) {
+        if (!is_null($strType)) {
             $objArraySectionIterator = new ArraySectionIterator($strType::getObjectCount($this->getSystemid()));
             $objArraySectionIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
             $objArraySectionIterator->setArraySection($strType::getObjectList($this->getSystemid(), $objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
@@ -259,8 +277,9 @@ abstract class AdminEvensimpler extends AdminSimple {
             $this->setAction($strOriginalAction);
             return $strList;
         }
-        else
+        else {
             throw new Exception("error loading list current object type not known ", Exception::$level_ERROR);
+        }
     }
 
     /**
@@ -268,9 +287,11 @@ abstract class AdminEvensimpler extends AdminSimple {
      * want to override the default form
      *
      * @param ModelInterface|Model $objInstance
+     *
      * @return AdminFormgenerator
      */
-    protected function getAdminForm(ModelInterface $objInstance) {
+    protected function getAdminForm(ModelInterface $objInstance)
+    {
         return $this->objCurAdminForm = AdminFormgeneratorFactory::createByModel($objInstance);
     }
 
@@ -282,29 +303,33 @@ abstract class AdminEvensimpler extends AdminSimple {
      * @return string "" in case of success
      * @permissions edit
      */
-    protected function actionSave() {
+    protected function actionSave()
+    {
         $strType = $this->getCurObjectClassName();
         $strSystemId = "";
 
-        if(!is_null($strType)) {
+        if (!is_null($strType)) {
 
             /** @var $objRecord ModelInterface|Model */
             $objRecord = null;
 
-            if($this->getParam("mode") == "new") {
+            if ($this->getParam("mode") == "new") {
                 $objRecord = new $strType();
                 $strSystemId = $this->getSystemid();
             }
-            elseif($this->getParam("mode") == "edit")
+            elseif ($this->getParam("mode") == "edit") {
                 $objRecord = new $strType($this->getSystemid());
+            }
 
-            if($objRecord != null) {
+            if ($objRecord != null) {
                 $objForm = $this->getAdminForm($objRecord);
-                if(!$objForm->validateForm()) {
-                    if($this->getParam("mode") === "new")
+                if (!$objForm->validateForm()) {
+                    if ($this->getParam("mode") === "new") {
                         return $this->actionNew();
-                    if($this->getParam("mode") === "edit")
+                    }
+                    if ($this->getParam("mode") === "edit") {
                         return $this->actionEdit();
+                    }
                 }
 
                 $objForm->updateSourceObject();
@@ -318,8 +343,9 @@ abstract class AdminEvensimpler extends AdminSimple {
                 return "";
             }
         }
-        else
+        else {
             throw new Exception("error on saving current object type not known ", Exception::$level_ERROR);
+        }
 
 
         return $this->getLang("commons_error_permissions");
@@ -330,6 +356,7 @@ abstract class AdminEvensimpler extends AdminSimple {
      *
      * @param Model $objModel
      * @param boolean $strPrevId
+     *
      * @throws Exception
      */
     protected function persistModel(Model $objModel, $strPrevId = false)
@@ -348,7 +375,8 @@ abstract class AdminEvensimpler extends AdminSimple {
      * @return array
      * @see AdminEvensimpler::getOutputNaviEntry()
      */
-    protected function getArrOutputNaviEntries() {
+    protected function getArrOutputNaviEntries()
+    {
 
         $strOldAction = $this->getAction();
         $this->setAction($this->strOriginalAction);
@@ -358,15 +386,16 @@ abstract class AdminEvensimpler extends AdminSimple {
         $arrPath = $this->getPathArray($this->getSystemid());
 
         // Render additional navigation path entries for child objects.
-        foreach($arrPath as $strOneSystemid) {
+        foreach ($arrPath as $strOneSystemid) {
 
-            if(!validateSystemid($strOneSystemid))
+            if (!validateSystemid($strOneSystemid)) {
                 continue;
+            }
 
             $objInstance = $this->objFactory->getObject($strOneSystemid);
-            if($objInstance != null) {
+            if ($objInstance != null) {
                 $objEntry = $this->getOutputNaviEntry($objInstance);
-                if($objEntry != null) {
+                if ($objEntry != null) {
 //                    $arrLink = splitUpLink($objEntry);
 //                    if(uniStrlen($arrLink["name"] > 50))
 //                        $objEntry = uniStrReplace($arrLink["name"], uniStrTrim($arrLink["name"], 50), $objEntry);
@@ -386,9 +415,11 @@ abstract class AdminEvensimpler extends AdminSimple {
      * path navigation.
      *
      * @param ModelInterface $objInstance
+     *
      * @return string Navigation link.
      */
-    protected function getOutputNaviEntry(ModelInterface $objInstance) {
+    protected function getOutputNaviEntry(ModelInterface $objInstance)
+    {
         return null;
     }
 
@@ -398,7 +429,8 @@ abstract class AdminEvensimpler extends AdminSimple {
      *
      * @return string
      */
-    protected function getQuickHelp() {
+    protected function getQuickHelp()
+    {
         $strOldAction = $this->getAction();
         $this->setAction($this->strOriginalAction);
         $strQuickhelp = parent::getQuickHelp();
@@ -413,37 +445,44 @@ abstract class AdminEvensimpler extends AdminSimple {
      *
      * @return string
      */
-    protected function getOutputActionTitle() {
-        if($this->getStrCurObjectTypeName() == "")
+    protected function getOutputActionTitle()
+    {
+        if ($this->getStrCurObjectTypeName() == "") {
             return $this->getOutputModuleTitle();
-        else
+        }
+        else {
             return $this->getLang($this->getObjLang()->stringToPlaceholder("modul_titel_".$this->getStrCurObjectTypeName()));
+        }
     }
 
 
-
-
-    public function setStrCurObjectTypeName($strCurObjectTypeName) {
+    public function setStrCurObjectTypeName($strCurObjectTypeName)
+    {
         $this->strCurObjectTypeName = $strCurObjectTypeName;
     }
 
-    public function getStrCurObjectTypeName() {
+    public function getStrCurObjectTypeName()
+    {
         return $this->strCurObjectTypeName;
     }
 
-    public function setCurObjectClassName($strCurObjectTyp) {
+    public function setCurObjectClassName($strCurObjectTyp)
+    {
         $this->strCurObjectClassName = $strCurObjectTyp;
     }
 
-    public function getCurObjectClassName() {
+    public function getCurObjectClassName()
+    {
         return $this->strCurObjectClassName;
     }
 
     /**
      * @param \class_admin_formgenerator $objCurAdminForm
+     *
      * @deprecated
      */
-    public function setObjCurAdminForm($objCurAdminForm) {
+    public function setObjCurAdminForm($objCurAdminForm)
+    {
         $this->objCurAdminForm = $objCurAdminForm;
     }
 
@@ -451,7 +490,8 @@ abstract class AdminEvensimpler extends AdminSimple {
      * @return \class_admin_formgenerator
      * @deprecated
      */
-    public function getObjCurAdminForm() {
+    public function getObjCurAdminForm()
+    {
         return $this->objCurAdminForm;
     }
 

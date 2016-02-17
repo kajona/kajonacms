@@ -9,6 +9,9 @@
 
 namespace Kajona\System\System\Usersources;
 
+use Kajona\System\System\Carrier;
+use Kajona\System\System\Logger;
+
 
 /**
  * The kajona usersource is the global entry and factory / facade for the classical kajona usersystem
@@ -17,7 +20,7 @@ namespace Kajona\System\System\Usersources;
  * @since 3.4.1
  * @package module_usersource
  */
-class UsersourcesSourceKajona implements interface_usersources_usersource {
+class UsersourcesSourceKajona implements UsersourcesUserInterface {
 
 
     private static $arrUserCache = array();
@@ -28,7 +31,7 @@ class UsersourcesSourceKajona implements interface_usersources_usersource {
      * Default constructor
      */
     public function __construct() {
-        $this->objDB = class_carrier::getInstance()->getObjDB();
+        $this->objDB = Carrier::getInstance()->getObjDB();
     }
 
     /**
@@ -37,7 +40,7 @@ class UsersourcesSourceKajona implements interface_usersources_usersource {
      * @return mixed
      */
     public function getStrReadableName() {
-        return class_carrier::getInstance()->getObjLang()->getLang("usersource_kajona_name", "user");
+        return Carrier::getInstance()->getObjLang()->getLang("usersource_kajona_name", "user");
     }
 
 
@@ -45,13 +48,13 @@ class UsersourcesSourceKajona implements interface_usersources_usersource {
      * Tries to authenticate a user with the given credentials.
      * The password is unencrypted, each source should take care of its own encryption.
      *
-     * @param interface_usersources_user|class_usersources_user_kajona $objUser
+     * @param UsersourcesUserInterface|UsersourcesUserKajona $objUser
      * @param string $strPassword
      *
      * @return bool
      */
-    public function authenticateUser(interface_usersources_user $objUser, $strPassword) {
-        if($objUser instanceof class_usersources_user_kajona) {
+    public function authenticateUser(UsersourcesUserInterface $objUser, $strPassword) {
+        if($objUser instanceof UsersourcesUserKajona) {
             $bitMD5Encryption = false;
             if(uniStrlen($objUser->getStrFinalPass()) == 32) {
                 $bitMD5Encryption = true;
@@ -90,14 +93,14 @@ class UsersourcesSourceKajona implements interface_usersources_usersource {
      *
      * @param string $strId
      *
-     * @return interface_usersources_group or null
+     * @return UsersourcesGroupInterface or null
      */
     public function getGroupById($strId) {
         $strQuery = "SELECT group_id FROM " . _dbprefix_ . "user_group_kajona WHERE group_id = ?";
 
         $arrIds = $this->objDB->getPRow($strQuery, array($strId));
         if(isset($arrIds["group_id"]) && validateSystemid($arrIds["group_id"])) {
-            return new class_usersources_group_kajona($arrIds["group_id"]);
+            return new UsersourcesGroupKajona($arrIds["group_id"]);
         }
 
         return null;
@@ -107,20 +110,20 @@ class UsersourcesSourceKajona implements interface_usersources_usersource {
      * Returns an empty group, e.g. to fetch the fields available and
      * in order to fill a new one.
      *
-     * @return interface_usersources_group
+     * @return UsersourcesGroupInterface
      */
     public function getNewGroup() {
-        return new class_usersources_group_kajona();
+        return new UsersourcesGroupKajona();
     }
 
     /**
      * Returns an empty user, e.g. to fetch the fields available and
      * in order to fill a new one.
      *
-     * @return interface_usersources_user
+     * @return UsersourcesUserInterface
      */
     public function getNewUser() {
-        return new class_usersources_user_kajona();
+        return new UsersourcesUserKajona();
     }
 
     /**
@@ -128,7 +131,7 @@ class UsersourcesSourceKajona implements interface_usersources_usersource {
      *
      * @param string $strId
      *
-     * @return interface_usersources_user or null
+     * @return UsersourcesUserInterface or null
      */
     public function getUserById($strId) {
 
@@ -138,9 +141,9 @@ class UsersourcesSourceKajona implements interface_usersources_usersource {
 
         $strQuery = "SELECT user_id FROM " . _dbprefix_ . "user_kajona  WHERE user_id = ? ";
 
-        $arrIds = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array($strId));
+        $arrIds = Carrier::getInstance()->getObjDB()->getPRow($strQuery, array($strId));
         if(isset($arrIds["user_id"]) && validateSystemid($arrIds["user_id"])) {
-            self::$arrUserCache[$strId] = new class_usersources_user_kajona($arrIds["user_id"]);
+            self::$arrUserCache[$strId] = new UsersourcesUserKajona($arrIds["user_id"]);
             return self::$arrUserCache[$strId];
         }
 
@@ -154,16 +157,16 @@ class UsersourcesSourceKajona implements interface_usersources_usersource {
      *
      * @param string $strUsername
      *
-     * @return interface_usersources_user or null
+     * @return UsersourcesUserInterface or null
      */
     public function getUserByUsername($strUsername) {
         $strQuery = "SELECT user_id FROM " . _dbprefix_ . "user  WHERE user_username = ? AND user_subsystem = 'kajona' AND (user_deleted = 0 OR user_deleted IS NULL)";
 
-        $arrIds = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array($strUsername));
+        $arrIds = Carrier::getInstance()->getObjDB()->getPRow($strQuery, array($strUsername));
         if(isset($arrIds["user_id"]) && validateSystemid($arrIds["user_id"])) {
 
             if(!isset(self::$arrUserCache[$arrIds["user_id"]])) {
-                self::$arrUserCache[$arrIds["user_id"]] = new class_usersources_user_kajona($arrIds["user_id"]);
+                self::$arrUserCache[$arrIds["user_id"]] = new UsersourcesUserKajona($arrIds["user_id"]);
             }
 
             return self::$arrUserCache[$arrIds["user_id"]];
@@ -184,7 +187,7 @@ class UsersourcesSourceKajona implements interface_usersources_usersource {
      */
     public static function encryptPassword($strPassword, $strSalt = "", $bitMD5Encryption = false) {
         if($bitMD5Encryption) {
-            class_logger::getInstance(class_logger::USERSOURCES)->addLogRow("usage of old md5-encrypted password!", class_logger::$levelWarning);
+            Logger::getInstance(Logger::USERSOURCES)->addLogRow("usage of old md5-encrypted password!", Logger::$levelWarning);
             return md5($strPassword);
         }
 
@@ -208,7 +211,7 @@ class UsersourcesSourceKajona implements interface_usersources_usersource {
                             " . _dbprefix_ . "user_group AS g
                       WHERE g.group_id = gk.group_id
                       ORDER BY g.group_name";
-        $arrRows = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array());
+        $arrRows = Carrier::getInstance()->getObjDB()->getPArray($strQuery, array());
         $arrReturn = array();
         foreach($arrRows as $arrOneRow) {
             $arrReturn[] = $arrOneRow["group_id"];

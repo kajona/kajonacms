@@ -29,7 +29,8 @@ use Kajona\System\System\SystemEventidentifier;
  * @module user
  * @moduleId _user_modul_id_
  */
-class UsersourcesUserKajona extends Model implements ModelInterface, UsersourcesUserInterface {
+class UsersourcesUserKajona extends Model implements ModelInterface, UsersourcesUserInterface
+{
 
     /**
      * @var string
@@ -119,7 +120,8 @@ class UsersourcesUserKajona extends Model implements ModelInterface, Usersources
      *
      * @return string
      */
-    public function getStrDisplayName() {
+    public function getStrDisplayName()
+    {
         return $this->getStrName();
     }
 
@@ -127,11 +129,12 @@ class UsersourcesUserKajona extends Model implements ModelInterface, Usersources
     /**
      * Initialises the current object, if a systemid was given
      */
-    protected function initObjectInternal() {
-        $strQuery = "SELECT * FROM " . $this->objDB->dbsafeString(_dbprefix_ . "user_kajona") . " WHERE user_id=?";
+    protected function initObjectInternal()
+    {
+        $strQuery = "SELECT * FROM ".$this->objDB->dbsafeString(_dbprefix_."user_kajona")." WHERE user_id=?";
         $arrRow = $this->objDB->getPRow($strQuery, array($this->getSystemid()));
 
-        if(count($arrRow) > 0) {
+        if (count($arrRow) > 0) {
 
             $this->setStrEmail($arrRow["user_email"]);
             $this->setStrForename($arrRow["user_forename"]);
@@ -159,8 +162,9 @@ class UsersourcesUserKajona extends Model implements ModelInterface, Usersources
      *
      * @return void
      */
-    public function setNewRecordId($strId) {
-        $strQuery = "UPDATE " . _dbprefix_ . "user_kajona SET user_id = ? WHERE user_id = ?";
+    public function setNewRecordId($strId)
+    {
+        $strQuery = "UPDATE "._dbprefix_."user_kajona SET user_id = ? WHERE user_id = ?";
         $this->objDB->_pQuery($strQuery, array($strId, $this->getSystemid()));
         $this->setSystemid($strId);
     }
@@ -173,12 +177,13 @@ class UsersourcesUserKajona extends Model implements ModelInterface, Usersources
      *
      * @return bool
      */
-    public function updateObjectToDb($strPrevId = false) {
+    public function updateObjectToDb($strPrevId = false)
+    {
 
-        if($this->getSystemid() == "") {
+        if ($this->getSystemid() == "") {
             $strUserid = generateSystemid();
             $this->setSystemid($strUserid);
-            $strQuery = "INSERT INTO " . _dbprefix_ . "user_kajona (
+            $strQuery = "INSERT INTO "._dbprefix_."user_kajona (
                         user_id,
                         user_pass, user_email, user_forename,
                         user_name, 	user_street,
@@ -188,7 +193,7 @@ class UsersourcesUserKajona extends Model implements ModelInterface, Usersources
 
                         ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)";
 
-            class_logger::getInstance(class_logger::USERSOURCES)->addLogRow("new kajona user: " . $this->getStrEmail(), class_logger::$levelInfo);
+            class_logger::getInstance(class_logger::USERSOURCES)->addLogRow("new kajona user: ".$this->getStrEmail(), class_logger::$levelInfo);
 
             return $this->objDB->_pQuery($strQuery, array(
                 $strUserid,
@@ -210,8 +215,8 @@ class UsersourcesUserKajona extends Model implements ModelInterface, Usersources
             $strQuery = "";
             $arrParams = array();
 
-            if($this->getStrPass() != "") {
-                $strQuery = "UPDATE " . _dbprefix_ . "user_kajona SET
+            if ($this->getStrPass() != "") {
+                $strQuery = "UPDATE "._dbprefix_."user_kajona SET
                         user_pass=?, user_email=?, user_forename=?, user_name=?, user_street=?, user_postal=?, user_city=?, user_tel=?, user_mobile=?,
                         user_date=?, user_salt=? WHERE user_id = ?";
                 $arrParams = array(
@@ -222,7 +227,7 @@ class UsersourcesUserKajona extends Model implements ModelInterface, Usersources
 
             }
             else {
-                $strQuery = "UPDATE " . _dbprefix_ . "user_kajona SET
+                $strQuery = "UPDATE "._dbprefix_."user_kajona SET
                         user_email=?, user_forename=?, user_name=?, user_street=?, user_postal=?, user_city=?, user_tel=?, user_mobile=?,
                         user_date=?, user_salt=? WHERE user_id = ?";
 
@@ -233,7 +238,7 @@ class UsersourcesUserKajona extends Model implements ModelInterface, Usersources
 
             }
 
-            class_logger::getInstance(class_logger::USERSOURCES)->addLogRow("updated user " . $this->getStrEmail(), class_logger::$levelInfo);
+            class_logger::getInstance(class_logger::USERSOURCES)->addLogRow("updated user ".$this->getStrEmail(), class_logger::$levelInfo);
 
             return $this->objDB->_pQuery($strQuery, $arrParams);
         }
@@ -246,7 +251,8 @@ class UsersourcesUserKajona extends Model implements ModelInterface, Usersources
      *
      * @return bool
      */
-    protected function updateStateToDb() {
+    protected function updateStateToDb()
+    {
         return true;
     }
 
@@ -256,10 +262,11 @@ class UsersourcesUserKajona extends Model implements ModelInterface, Usersources
      *
      * @return bool
      */
-    public function deleteUser() {
-        class_logger::getInstance(class_logger::USERSOURCES)->addLogRow("deleted user with id " . $this->getSystemid(), class_logger::$levelInfo);
+    public function deleteUser()
+    {
+        class_logger::getInstance(class_logger::USERSOURCES)->addLogRow("deleted user with id ".$this->getSystemid(), class_logger::$levelInfo);
         $this->deleteAllUserMemberships();
-        $strQuery = "DELETE FROM " . _dbprefix_ . "user_kajona WHERE user_id=?";
+        $strQuery = "DELETE FROM "._dbprefix_."user_kajona WHERE user_id=?";
         //call other models that may be interested
         $bitDelete = $this->objDB->_pQuery($strQuery, array($this->getSystemid()));
         CoreEventdispatcher::getInstance()->notifyGenericListeners(SystemEventidentifier::EVENT_SYSTEM_RECORDDELETED, array($this->getSystemid(), get_class($this)));
@@ -271,7 +278,8 @@ class UsersourcesUserKajona extends Model implements ModelInterface, Usersources
      *
      * @return bool
      */
-    public function deleteObjectFromDatabase() {
+    public function deleteObjectFromDatabase()
+    {
         return $this->deleteUser();
     }
 
@@ -281,8 +289,9 @@ class UsersourcesUserKajona extends Model implements ModelInterface, Usersources
      * @return bool
      * @static
      */
-    private function deleteAllUserMemberships() {
-        $strQuery = "DELETE FROM " . _dbprefix_ . "user_kajona_members WHERE group_member_user_kajona_id=?";
+    private function deleteAllUserMemberships()
+    {
+        $strQuery = "DELETE FROM "._dbprefix_."user_kajona_members WHERE group_member_user_kajona_id=?";
         return $this->objDB->_pQuery($strQuery, array($this->getSystemid()));
     }
 
@@ -291,7 +300,8 @@ class UsersourcesUserKajona extends Model implements ModelInterface, Usersources
      *
      * @return bool
      */
-    public function isPasswordResettable() {
+    public function isPasswordResettable()
+    {
         return true;
     }
 
@@ -300,10 +310,11 @@ class UsersourcesUserKajona extends Model implements ModelInterface, Usersources
      *
      * @return array
      */
-    public function getGroupIdsForUser() {
+    public function getGroupIdsForUser()
+    {
         $strQuery = "SELECT group_id
-                       FROM " . _dbprefix_ . "user_group,
-                            " . _dbprefix_ . "user_kajona_members
+                       FROM "._dbprefix_."user_group,
+                            "._dbprefix_."user_kajona_members
                       WHERE group_member_user_kajona_id= ?
                         AND group_id = group_member_group_kajona_id
                    ORDER BY group_name ASC  ";
@@ -311,7 +322,7 @@ class UsersourcesUserKajona extends Model implements ModelInterface, Usersources
         $arrIds = $this->objDB->getPArray($strQuery, array($this->getSystemid()));
 
         $arrReturn = array();
-        foreach($arrIds as $arrOneId) {
+        foreach ($arrIds as $arrOneId) {
             $arrReturn[] = $arrOneId["group_id"];
         }
 
@@ -323,42 +334,51 @@ class UsersourcesUserKajona extends Model implements ModelInterface, Usersources
      *
      * @return bool
      */
-    public function isEditable() {
+    public function isEditable()
+    {
         return true;
     }
 
     /**
      * Hook to update the admin-form when editing / creating a single user
+     *
      * @param AdminFormgenerator $objForm
      *
      * @return mixed
      */
-    public function updateAdminForm(AdminFormgenerator $objForm) {
+    public function updateAdminForm(AdminFormgenerator $objForm)
+    {
 
     }
 
     // --- GETTERS / SETTERS --------------------------------------------------------------------------------
 
-    public function getStrPass() {
+    public function getStrPass()
+    {
         return $this->strPass;
     }
 
-    public function getStrPass2() {
+    public function getStrPass2()
+    {
         return "";
     }
 
-    public function setStrPass2($strValue) {
+    public function setStrPass2($strValue)
+    {
     }
 
-    public function getStrEmail() {
+    public function getStrEmail()
+    {
         return $this->strEmail;
     }
 
-    public function getStrForename() {
+    public function getStrForename()
+    {
         return $this->strForename;
     }
 
-    public function getStrName() {
+    public function getStrName()
+    {
         return $this->strName;
     }
 
@@ -367,82 +387,101 @@ class UsersourcesUserKajona extends Model implements ModelInterface, Usersources
      *
      * @return string
      */
-    public function getStrFinalPass() {
+    public function getStrFinalPass()
+    {
         return $this->strFinalPass;
     }
 
-    public function setStrPass($strPass) {
-        if(trim($strPass) != "") {
+    public function setStrPass($strPass)
+    {
+        if (trim($strPass) != "") {
             $this->setStrSalt(generateSystemid());
             $this->strPass = UsersourcesSourceKajona::encryptPassword($strPass, $this->getStrSalt());
         }
     }
 
-    public function setStrEmail($strEmail) {
+    public function setStrEmail($strEmail)
+    {
         $this->strEmail = $strEmail;
     }
 
-    public function setStrForename($strForename) {
+    public function setStrForename($strForename)
+    {
         $this->strForename = $strForename;
     }
 
-    public function setStrName($strName) {
+    public function setStrName($strName)
+    {
         $this->strName = $strName;
     }
 
-    public function getStrStreet() {
+    public function getStrStreet()
+    {
         return $this->strStreet;
     }
 
-    public function setStrStreet($strStreet) {
+    public function setStrStreet($strStreet)
+    {
         $this->strStreet = $strStreet;
     }
 
-    public function getStrPostal() {
+    public function getStrPostal()
+    {
         return $this->strPostal;
     }
 
-    public function setStrPostal($strPostal) {
+    public function setStrPostal($strPostal)
+    {
         $this->strPostal = $strPostal;
     }
 
-    public function getStrCity() {
+    public function getStrCity()
+    {
         return $this->strCity;
     }
 
-    public function setStrCity($strCity) {
+    public function setStrCity($strCity)
+    {
         $this->strCity = $strCity;
     }
 
-    public function getStrTel() {
+    public function getStrTel()
+    {
         return $this->strTel;
     }
 
-    public function setStrTel($strTel) {
+    public function setStrTel($strTel)
+    {
         $this->strTel = $strTel;
     }
 
-    public function getStrMobile() {
+    public function getStrMobile()
+    {
         return $this->strMobile;
     }
 
-    public function setStrMobile($strMobile) {
+    public function setStrMobile($strMobile)
+    {
         $this->strMobile = $strMobile;
     }
 
-    public function getLongDate() {
+    public function getLongDate()
+    {
         return $this->longDate;
     }
 
-    public function setLongDate($longDate) {
+    public function setLongDate($longDate)
+    {
         $this->longDate = $longDate;
     }
 
-    public function setStrSalt($strSalt) {
+    public function setStrSalt($strSalt)
+    {
         $this->strSalt = $strSalt;
     }
 
-    public function getStrSalt() {
+    public function getStrSalt()
+    {
         return $this->strSalt;
     }
 

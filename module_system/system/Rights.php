@@ -17,7 +17,8 @@ namespace Kajona\System\System;
  * @author sidler@mulchprod.de
  *
  */
-class Rights {
+class Rights
+{
 
     public static $STR_RIGHT_INHERIT = "inherit";
     public static $STR_RIGHT_VIEW = "view";
@@ -34,12 +35,14 @@ class Rights {
 
     /**
      * class_db
+     *
      * @var Database
      */
     private $objDb = null;
 
     /**
      * Session instance
+     *
      * @var Session
      */
     private $objSession = null; //Session Object
@@ -55,14 +58,16 @@ class Rights {
     /**
      * Constructor doing the usual setup things
      */
-    private function __construct() {
+    private function __construct()
+    {
         $this->objDb = Carrier::getInstance()->getObjDb();
         $this->objSession = Carrier::getInstance()->getObjSession();
 
-        if(count($this->objDb->getTables()) > 0) {
+        if (count($this->objDb->getTables()) > 0) {
             $objModule = SystemModule::getModuleByName("system");
-            if($objModule !== null && version_compare($objModule->getStrVersion(), "4.3.1") < 0)
+            if ($objModule !== null && version_compare($objModule->getStrVersion(), "4.3.1") < 0) {
                 $this->bitChangelog = false;
+            }
         }
     }
 
@@ -71,8 +76,9 @@ class Rights {
      *
      * @return Rights
      */
-    public static function getInstance() {
-        if(self::$objRights == null) {
+    public static function getInstance()
+    {
+        if (self::$objRights == null) {
             self::$objRights = new Rights();
         }
 
@@ -85,9 +91,11 @@ class Rights {
      * Rebuilds the complete rights-structure, so saves the rights downwards.
      *
      * @param string $strStartId
+     *
      * @return bool
      */
-    public function rebuildRightsStructure($strStartId = "0") {
+    public function rebuildRightsStructure($strStartId = "0")
+    {
         $this->flushRightsCache();
         //load rights from root-node
         $arrRootRights = $this->getPlainRightRow($strStartId);
@@ -103,7 +111,8 @@ class Rights {
      *
      * @return bool
      */
-    private function writeSingleRecord($strSystemid, $arrRights) {
+    private function writeSingleRecord($strSystemid, $arrRights)
+    {
 
         //Splitting up the rights
         $arrParams = array();
@@ -117,28 +126,31 @@ class Rights {
         $arrParams[] = $arrRights[self::$STR_RIGHT_RIGHT3];
         $arrParams[] = $arrRights[self::$STR_RIGHT_RIGHT4];
         $arrParams[] = $arrRights[self::$STR_RIGHT_RIGHT5];
-        if($this->bitChangelog)
+        if ($this->bitChangelog) {
             $arrParams[] = $arrRights[self::$STR_RIGHT_CHANGELOG];
+        }
         $arrParams[] = $strSystemid;
 
 
-
-        if($this->bitChangelog)
+        if ($this->bitChangelog) {
             $strQuery = "UPDATE "._dbprefix_."system_right
             SET right_inherit=?, right_view=?, right_edit=?, right_delete=?, right_right=?, right_right1=?, right_right2=?, right_right3=?, right_right4=?, right_right5=?, right_changelog=? WHERE right_id=?";
-        else
+        }
+        else {
             $strQuery = "UPDATE "._dbprefix_."system_right
             SET right_inherit=?, right_view=?, right_edit=?, right_delete=?, right_right=?, right_right1=?, right_right2=?, right_right3=?, right_right4=?, right_right5=? WHERE right_id=?";
+        }
 
 
-        if($this->objDb->_pQuery($strQuery, $arrParams)) {
+        if ($this->objDb->_pQuery($strQuery, $arrParams)) {
             //Flush the cache so later lookups will match the new rights
             $this->objDb->flushQueryCache();
             $this->flushRightsCache();
             return true;
         }
-        else
+        else {
             return false;
+        }
     }
 
     /**
@@ -152,13 +164,14 @@ class Rights {
      * @throws Exception
      * @return bool
      */
-    public function setRights($arrRights, $strSystemid) {
+    public function setRights($arrRights, $strSystemid)
+    {
         //start a new tx
         $this->flushRightsCache();
         $this->objDb->transactionBegin();
 
         $objInstance = Objectfactory::getInstance()->getObject($strSystemid);
-        if($objInstance !== null && $objInstance instanceof \VersionableInterface) {
+        if ($objInstance !== null && $objInstance instanceof VersionableInterface) {
             $arrCurrPermissions = $this->getPlainRightRow($strSystemid);
             //create a changehistory entry
             $objLog = new SystemChangelog();
@@ -180,7 +193,7 @@ class Rights {
 
         $bitSave = $this->setRightsRecursive($arrRights, $strSystemid);
 
-        if($bitSave) {
+        if ($bitSave) {
             $this->objDb->transactionCommit();
             Logger::getInstance()->addLogRow("saving rights of record ".$strSystemid." succeeded", Logger::$levelInfo);
         }
@@ -203,13 +216,15 @@ class Rights {
      *
      * @return bool
      */
-    private function setRightsRecursive($arrRights, $strSystemid) {
+    private function setRightsRecursive($arrRights, $strSystemid)
+    {
         $bitReturn = true;
         $this->flushRightsCache();
 
         //check against root-record: here no inheritance
-        if($strSystemid == "" || $strSystemid == "0")
+        if ($strSystemid == "" || $strSystemid == "0") {
             $arrRights[self::$STR_RIGHT_INHERIT] = 0;
+        }
 
         //plain row
         $arrCurrentRow = $this->getPlainRightRow($strSystemid);
@@ -218,7 +233,7 @@ class Rights {
 
         //separate the two possible modes: inheritance or no inheritance
         //if set to inheritance, set the flag, load the rights from one level above and write the rights down.
-        if(isset($arrRights[self::$STR_RIGHT_INHERIT]) && $arrRights[self::$STR_RIGHT_INHERIT] == 1) {
+        if (isset($arrRights[self::$STR_RIGHT_INHERIT]) && $arrRights[self::$STR_RIGHT_INHERIT] == 1) {
             $arrRights = $this->getPlainRightRow($strPrevSystemid);
             $arrRights[self::$STR_RIGHT_INHERIT] = 1;
         }
@@ -227,13 +242,13 @@ class Rights {
 
         //load all child records in order to update them, too.
         $arrChilds = $this->getChildNodes($strSystemid);
-        foreach($arrChilds as $strOneChildId) {
+        foreach ($arrChilds as $strOneChildId) {
             //this check is needed for strange tree-behaviours!!! DO NOT REMOVE!
-            if($strOneChildId != $strSystemid) {
+            if ($strOneChildId != $strSystemid) {
 
                 $arrChildRights = $this->getPlainRightRow($strOneChildId);
 
-                if($arrChildRights[self::$STR_RIGHT_INHERIT] == 1) {
+                if ($arrChildRights[self::$STR_RIGHT_INHERIT] == 1) {
                     $arrChildRights = $arrRights;
                     $arrChildRights[self::$STR_RIGHT_INHERIT] = 1;
                     $bitReturn &= $this->setRightsRecursive($arrChildRights, $strOneChildId);
@@ -254,7 +269,8 @@ class Rights {
      *
      * @return bool
      */
-    public function isInherited($strSystemid) {
+    public function isInherited($strSystemid)
+    {
         $arrRights = $this->getPlainRightRow($strSystemid);
         return $arrRights[self::$STR_RIGHT_INHERIT] == 1;
     }
@@ -267,7 +283,8 @@ class Rights {
      *
      * @return bool
      */
-    public function setInherited($bitIsInherited, $strSystemid) {
+    public function setInherited($bitIsInherited, $strSystemid)
+    {
         $arrRights = $this->getPlainRightRow($strSystemid);
         $arrRights[self::$STR_RIGHT_INHERIT] = ($bitIsInherited ? 1 : 0);
         return $this->setRights($arrRights, $strSystemid);
@@ -277,9 +294,11 @@ class Rights {
      * Fetches the records placed as child nodes of the current / passed id.
      *
      * @param string $strSystemid
+     *
      * @return string[]
      */
-    private function getChildNodes($strSystemid) {
+    private function getChildNodes($strSystemid)
+    {
 
         $strQuery = "SELECT system_id
                      FROM "._dbprefix_."system
@@ -288,10 +307,11 @@ class Rights {
                      ORDER BY system_sort ASC";
 
         $arrReturn = array();
-        $arrTemp =  $this->objDb->getPArray($strQuery, array($strSystemid));
+        $arrTemp = $this->objDb->getPArray($strQuery, array($strSystemid));
 
-        foreach($arrTemp as $arrOneRow)
+        foreach ($arrTemp as $arrOneRow) {
             $arrReturn[] = $arrOneRow["system_id"];
+        }
 
         return $arrReturn;
     }
@@ -304,9 +324,10 @@ class Rights {
      *
      * @return array
      */
-    private function getPlainRightRow($strSystemid) {
+    private function getPlainRightRow($strSystemid)
+    {
 
-        if(OrmRowcache::getCachedInitRow($strSystemid) != null && array_key_exists("right_id", OrmRowcache::getCachedInitRow($strSystemid))) {
+        if (OrmRowcache::getCachedInitRow($strSystemid) != null && array_key_exists("right_id", OrmRowcache::getCachedInitRow($strSystemid))) {
             $arrRow = OrmRowcache::getCachedInitRow($strSystemid);
         }
         else {
@@ -320,7 +341,7 @@ class Rights {
         }
 
         $arrRights = array();
-        if(isset($arrRow["right_id"])) {
+        if (isset($arrRow["right_id"])) {
             $arrRights[self::$STR_RIGHT_VIEW] = $arrRow["right_view"];
             $arrRights[self::$STR_RIGHT_EDIT] = $arrRow["right_edit"];
             $arrRights[self::$STR_RIGHT_DELETE] = $arrRow["right_delete"];
@@ -365,12 +386,13 @@ class Rights {
      *
      * @return mixed
      */
-    public function getArrayRights($strSystemid, $strPermissionFilter = "") {
+    public function getArrayRights($strSystemid, $strPermissionFilter = "")
+    {
         $arrReturn = array();
 
         $arrRow = $this->getPlainRightRow($strSystemid);
 
-        if($strPermissionFilter != "") {
+        if ($strPermissionFilter != "") {
             return array($strPermissionFilter => explode(",", $arrRow[$strPermissionFilter]));
         }
 
@@ -399,7 +421,8 @@ class Rights {
      *
      * @return bool
      */
-    public function rightView($strSystemid, $strUserid = "") {
+    public function rightView($strSystemid, $strUserid = "")
+    {
         return $this->checkPermissionForUserId($strUserid, self::$STR_RIGHT_VIEW, $strSystemid);
     }
 
@@ -411,7 +434,8 @@ class Rights {
      *
      * @return bool
      */
-    public function rightEdit($strSystemid, $strUserid = "") {
+    public function rightEdit($strSystemid, $strUserid = "")
+    {
         return $this->checkPermissionForUserId($strUserid, self::$STR_RIGHT_EDIT, $strSystemid);
     }
 
@@ -424,7 +448,8 @@ class Rights {
      *
      * @return bool
      */
-    public function rightDelete($strSystemid, $strUserid = "") {
+    public function rightDelete($strSystemid, $strUserid = "")
+    {
         return $this->checkPermissionForUserId($strUserid, self::$STR_RIGHT_DELETE, $strSystemid);
     }
 
@@ -437,7 +462,8 @@ class Rights {
      *
      * @return bool
      */
-    public function rightRight($strSystemid, $strUserid = "") {
+    public function rightRight($strSystemid, $strUserid = "")
+    {
         return $this->checkPermissionForUserId($strUserid, self::$STR_RIGHT_RIGHT, $strSystemid);
     }
 
@@ -450,7 +476,8 @@ class Rights {
      *
      * @return bool
      */
-    public function rightRight1($strSystemid, $strUserid = "") {
+    public function rightRight1($strSystemid, $strUserid = "")
+    {
         return $this->checkPermissionForUserId($strUserid, self::$STR_RIGHT_RIGHT1, $strSystemid);
     }
 
@@ -463,7 +490,8 @@ class Rights {
      *
      * @return bool
      */
-    public function rightRight2($strSystemid, $strUserid = "") {
+    public function rightRight2($strSystemid, $strUserid = "")
+    {
         return $this->checkPermissionForUserId($strUserid, self::$STR_RIGHT_RIGHT2, $strSystemid);
     }
 
@@ -476,7 +504,8 @@ class Rights {
      *
      * @return bool
      */
-    public function rightRight3($strSystemid, $strUserid = "") {
+    public function rightRight3($strSystemid, $strUserid = "")
+    {
         return $this->checkPermissionForUserId($strUserid, self::$STR_RIGHT_RIGHT3, $strSystemid);
     }
 
@@ -488,7 +517,8 @@ class Rights {
      *
      * @return bool
      */
-    public function rightRight4($strSystemid, $strUserid = "") {
+    public function rightRight4($strSystemid, $strUserid = "")
+    {
         return $this->checkPermissionForUserId($strUserid, self::$STR_RIGHT_RIGHT4, $strSystemid);
     }
 
@@ -501,7 +531,8 @@ class Rights {
      *
      * @return bool
      */
-    public function rightRight5($strSystemid, $strUserid = "") {
+    public function rightRight5($strSystemid, $strUserid = "")
+    {
         return $this->checkPermissionForUserId($strUserid, self::$STR_RIGHT_RIGHT5, $strSystemid);
     }
 
@@ -513,7 +544,8 @@ class Rights {
      *
      * @return bool
      */
-    public function rightChangelog($strSystemid, $strUserid = "") {
+    public function rightChangelog($strSystemid, $strUserid = "")
+    {
         return $this->checkPermissionForUserId($strUserid, self::$STR_RIGHT_CHANGELOG, $strSystemid);
     }
 
@@ -526,21 +558,24 @@ class Rights {
      *
      * @return bool
      */
-    public function checkPermissionForUserId($strUserid, $strPermission, $strSystemid) {
-        if($strSystemid == "")
+    public function checkPermissionForUserId($strUserid, $strPermission, $strSystemid)
+    {
+        if ($strSystemid == "") {
             return false;
+        }
 
-        if($this->bitTestMode)
+        if ($this->bitTestMode) {
             return true;
+        }
 
-        if(isset(self::$arrPermissionMap[$strSystemid][$strUserid][$strPermission])) {
+        if (isset(self::$arrPermissionMap[$strSystemid][$strUserid][$strPermission])) {
             return self::$arrPermissionMap[$strSystemid][$strUserid][$strPermission];
         }
 
         $arrGroupIds = array();
 
-        if(validateSystemid($strUserid)) {
-            if($strUserid == $this->objSession->getUserID()) {
+        if (validateSystemid($strUserid)) {
+            if ($strUserid == $this->objSession->getUserID()) {
                 $arrGroupIds = $this->objSession->getGroupIdsAsArray();
             }
             else {
@@ -548,13 +583,14 @@ class Rights {
                 $arrGroupIds = $objUser->getArrGroupIds();
             }
         }
-        elseif(validateSystemid($this->objSession->getUserID())) {
+        elseif (validateSystemid($this->objSession->getUserID())) {
             $arrGroupIds = $this->objSession->getGroupIdsAsArray();
         }
-        else
+        else {
             $arrGroupIds[] = SystemSetting::getConfigValue("_guests_group_id_");
+        }
 
-        foreach($arrGroupIds as $strOneGroupId) {
+        foreach ($arrGroupIds as $strOneGroupId) {
             if ($this->checkPermissionForGroup($strOneGroupId, $strPermission, $strSystemid)) {
                 self::$arrPermissionMap[$strSystemid][$strUserid][$strPermission] = true;
                 return true;
@@ -575,12 +611,15 @@ class Rights {
      *
      * @return bool
      */
-    public function checkPermissionForGroup($strGroupId, $strPermission, $strSystemid) {
-        if($strSystemid == "")
+    public function checkPermissionForGroup($strGroupId, $strPermission, $strSystemid)
+    {
+        if ($strSystemid == "") {
             return false;
+        }
 
-        if($this->bitTestMode)
+        if ($this->bitTestMode) {
             return true;
+        }
 
         $arrRights = $this->getArrayRights($strSystemid, $strPermission);
         return in_array($strGroupId, $arrRights[$strPermission]);
@@ -599,7 +638,7 @@ class Rights {
     public function copyPermissions($strSourceSystemid, $strTargetSystemid)
     {
         $arrSourceRow = $this->getPlainRightRow($strSourceSystemid);
-        if($arrSourceRow[self::$STR_RIGHT_INHERIT] == 0) {
+        if ($arrSourceRow[self::$STR_RIGHT_INHERIT] == 0) {
             return $this->setRights($arrSourceRow, $strTargetSystemid);
         }
 
@@ -617,7 +656,8 @@ class Rights {
      *
      * @return bool
      */
-    public function addGroupToRight($strGroupId, $strSystemid, $strRight) {
+    public function addGroupToRight($strGroupId, $strSystemid, $strRight)
+    {
 
         $this->objDb->flushQueryCache();
         $this->flushRightsCache();
@@ -629,8 +669,9 @@ class Rights {
         $arrRights[self::$STR_RIGHT_INHERIT] = 0;
 
         //add the group to the row
-        if(!in_array($strGroupId, $arrRights[$strRight]))
+        if (!in_array($strGroupId, $arrRights[$strRight])) {
             $arrRights[$strRight][] = $strGroupId;
+        }
 
         //build a one-dim array
         $arrRights[self::$STR_RIGHT_VIEW] = implode(",", $arrRights[self::$STR_RIGHT_VIEW]);
@@ -661,7 +702,8 @@ class Rights {
      *
      * @return bool
      */
-    public function removeGroupFromRight($strGroupId, $strSystemid, $strRight) {
+    public function removeGroupFromRight($strGroupId, $strSystemid, $strRight)
+    {
 
         Carrier::getInstance()->flushCache(Carrier::INT_CACHE_TYPE_DBQUERIES | Carrier::INT_CACHE_TYPE_ORMCACHE);
 
@@ -672,10 +714,11 @@ class Rights {
         $arrRights[self::$STR_RIGHT_INHERIT] = 0;
 
         //remove the group
-        if(in_array($strGroupId, $arrRights[$strRight])) {
-            foreach($arrRights[$strRight] as $intKey => $strSingleGroup) {
-                if($strSingleGroup == $strGroupId)
+        if (in_array($strGroupId, $arrRights[$strRight])) {
+            foreach ($arrRights[$strRight] as $intKey => $strSingleGroup) {
+                if ($strSingleGroup == $strGroupId) {
                     unset($arrRights[$strRight][$intKey]);
+                }
             }
         }
 
@@ -702,7 +745,8 @@ class Rights {
      *
      * @return void
      */
-    private function flushRightsCache() {
+    private function flushRightsCache()
+    {
         self::$arrPermissionMap = array();
         Carrier::getInstance()->flushCache(Carrier::INT_CACHE_TYPE_ORMCACHE);
     }
@@ -712,9 +756,11 @@ class Rights {
      * Only possible if the current context is triggered out of a phpunit-context
      *
      * @param bool $bitTestMode
+     *
      * @return void
      */
-    public function setBitTestMode($bitTestMode) {
+    public function setBitTestMode($bitTestMode)
+    {
         $this->bitTestMode = $bitTestMode && _autotesting_;
     }
 
@@ -732,73 +778,75 @@ class Rights {
      * @throws Exception
      * @since 4.0
      */
-    public function validatePermissionString($strPermissions, Model $objObject) {
+    public function validatePermissionString($strPermissions, Model $objObject)
+    {
 
-        if(!$objObject instanceof Model) {
+        if (!$objObject instanceof Model) {
             throw new Exception("automated permission-check only for instances of class_model", Exception::$level_ERROR);
         }
 
-        if(trim($strPermissions) == "")
+        if (trim($strPermissions) == "") {
             return false;
+        }
 
         $arrPermissions = explode(",", $strPermissions);
 
-        foreach($arrPermissions as $strOnePermissions) {
+        foreach ($arrPermissions as $strOnePermissions) {
             $strOnePermissions = trim($strOnePermissions);
 
-            switch(trim($strOnePermissions)) {
-            case self::$STR_RIGHT_VIEW:
-                if($objObject->rightView()) {
-                    return true;
-                }
-                break;
-            case self::$STR_RIGHT_EDIT:
-                if($objObject->rightEdit()) {
-                    return true;
-                }
-                break;
-            case self::$STR_RIGHT_DELETE:
-                if($objObject->rightDelete()) {
-                    return true;
-                }
-                break;
-            case self::$STR_RIGHT_RIGHT:
-                if($objObject->rightRight()) {
-                    return true;
-                }
-                break;
-            case self::$STR_RIGHT_RIGHT1:
-                if($objObject->rightRight1()) {
-                    return true;
-                }
-                break;
-            case self::$STR_RIGHT_RIGHT2:
-                if($objObject->rightRight2()) {
-                    return true;
-                }
-                break;
-            case self::$STR_RIGHT_RIGHT3:
-                if($objObject->rightRight3()) {
-                    return true;
-                }
-                break;
-            case self::$STR_RIGHT_RIGHT4:
-                if($objObject->rightRight4()) {
-                    return true;
-                }
-                break;
-            case self::$STR_RIGHT_RIGHT5:
-                if($objObject->rightRight5()) {
-                    return true;
-                }
-                break;
-            case self::$STR_RIGHT_CHANGELOG:
-                if($objObject->rightChangelog()) {
-                    return true;
-                }
-                break;
-            default:
-                break;
+            switch (trim($strOnePermissions)) {
+                case self::$STR_RIGHT_VIEW:
+                    if ($objObject->rightView()) {
+                        return true;
+                    }
+                    break;
+                case self::$STR_RIGHT_EDIT:
+                    if ($objObject->rightEdit()) {
+                        return true;
+                    }
+                    break;
+                case self::$STR_RIGHT_DELETE:
+                    if ($objObject->rightDelete()) {
+                        return true;
+                    }
+                    break;
+                case self::$STR_RIGHT_RIGHT:
+                    if ($objObject->rightRight()) {
+                        return true;
+                    }
+                    break;
+                case self::$STR_RIGHT_RIGHT1:
+                    if ($objObject->rightRight1()) {
+                        return true;
+                    }
+                    break;
+                case self::$STR_RIGHT_RIGHT2:
+                    if ($objObject->rightRight2()) {
+                        return true;
+                    }
+                    break;
+                case self::$STR_RIGHT_RIGHT3:
+                    if ($objObject->rightRight3()) {
+                        return true;
+                    }
+                    break;
+                case self::$STR_RIGHT_RIGHT4:
+                    if ($objObject->rightRight4()) {
+                        return true;
+                    }
+                    break;
+                case self::$STR_RIGHT_RIGHT5:
+                    if ($objObject->rightRight5()) {
+                        return true;
+                    }
+                    break;
+                case self::$STR_RIGHT_CHANGELOG:
+                    if ($objObject->rightChangelog()) {
+                        return true;
+                    }
+                    break;
+                default:
+                    break;
             }
         }
 
@@ -810,10 +858,12 @@ class Rights {
      * Only to be used in combination with class_roots setArrInitRow.
      *
      * @param array $arrRow
+     *
      * @deprecated use the orm-rowcache instead to avoid multiple cache locations
      * @return void
      */
-    public function addRowToCache($arrRow) {
+    public function addRowToCache($arrRow)
+    {
 
     }
 
@@ -826,8 +876,9 @@ class Rights {
      *
      * @return array
      */
-    public function filterObjectsByRight(array $arrObjects, $strPermissions) {
-        return array_filter($arrObjects, function($objObject) use ($strPermissions) {
+    public function filterObjectsByRight(array $arrObjects, $strPermissions)
+    {
+        return array_filter($arrObjects, function ($objObject) use ($strPermissions) {
             return Rights::getInstance()->getInstance()->validatePermissionString($strPermissions, $objObject);
         });
     }

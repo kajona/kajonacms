@@ -265,12 +265,12 @@ class UserAdmin extends AdminSimple implements AdminInterface
         $arrReturn = array();
         if ($objListEntry instanceof UserUser && $objListEntry->rightEdit() && $objUsersources->getUsersource($objListEntry->getStrSubsystem())->getMembersEditable()) {
             $arrReturn[] = $this->objToolkit->listButton(
-                Link::getLinkAdminDialog("user", "editMemberships", "&systemid=".$objListEntry->getSystemid() . "&folderview=1", "", $this->getLang("user_zugehoerigkeit"), "icon_group", $objListEntry->getStrUsername())
+                Link::getLinkAdminDialog("user", "editMemberships", "&systemid=".$objListEntry->getSystemid()."&folderview=1", "", $this->getLang("user_zugehoerigkeit"), "icon_group", $objListEntry->getStrUsername())
             );
         }
         elseif ($objListEntry instanceof UserUser && $objListEntry->rightEdit()) {
             $arrReturn[] = $this->objToolkit->listButton(
-                Link::getLinkAdminDialog("user", "browseMemberships", "&systemid=".$objListEntry->getSystemid() . "&folderview=1", "", $this->getLang("user_zugehoerigkeit"), "icon_group", $objListEntry->getStrUsername())
+                Link::getLinkAdminDialog("user", "browseMemberships", "&systemid=".$objListEntry->getSystemid()."&folderview=1", "", $this->getLang("user_zugehoerigkeit"), "icon_group", $objListEntry->getStrUsername())
             );
         }
 
@@ -790,7 +790,7 @@ class UserAdmin extends AdminSimple implements AdminInterface
                     $objSourceGroup->addMember($objUser->getObjSourceUser());
                 }
 
-                $this->adminReload(Link::getLinkAdminHref($this->getArrModule("modul"), "editMemberships", "&systemid=" . $objUser->getStrSystemid()));
+                $this->adminReload(Link::getLinkAdminHref($this->getArrModule("modul"), "editMemberships", "&systemid=".$objUser->getStrSystemid()));
                 return "";
             }
         }
@@ -1231,7 +1231,7 @@ class UserAdmin extends AdminSimple implements AdminInterface
 
             $strCheckbox = $this->objToolkit->formInputCheckbox($objSingleGroup->getSystemid(), "", in_array($strSingleGroup, $arrUserGroups));
             $strCheckbox = uniSubstr($strCheckbox, uniStrpos($strCheckbox, "<input"));
-            $strCheckbox = uniSubstr($strCheckbox, 0, uniStrpos($strCheckbox, ">")+1);
+            $strCheckbox = uniSubstr($strCheckbox, 0, uniStrpos($strCheckbox, ">") + 1);
 
             $arrRows[] = array($strCheckbox, $objSingleGroup->getStrName());
 
@@ -1258,6 +1258,7 @@ HTML;
 
     /**
      * Generates a read-only list of group-assignments for a single user
+     *
      * @return string
      * @permissions edit
      */
@@ -1265,7 +1266,7 @@ HTML;
     {
         $objUser = new UserUser($this->getSystemid());
         $strReturn = $this->objToolkit->listHeader();
-        foreach($objUser->getObjSourceUser()->getGroupIdsForUser() as $strOneId) {
+        foreach ($objUser->getObjSourceUser()->getGroupIdsForUser() as $strOneId) {
             $objGroup = new UserGroup($strOneId);
             $strReturn .= $this->objToolkit->genericAdminList($strOneId, $objGroup->getStrDisplayName(), AdminskinHelper::getAdminImage("icon_group"), "", 0);
         }
@@ -1348,7 +1349,8 @@ HTML;
 
         if ($this->getParam("folderview")) {
             $this->adminReload(Link::getLinkAdminHref($this->getArrModule("modul"), "list", "&peClose=1&blockAction=1"));
-        } else {
+        }
+        else {
             $this->adminReload(Link::getLinkAdminHref($this->getArrModule("modul"), "list"));
         }
     }
@@ -1730,7 +1732,7 @@ HTML;
                     $arrEntry["systemid"] = $objOneElement->getSystemid();
                     $arrEntry["icon"] = AdminskinHelper::getAdminImage("icon_user");
                 }
-                elseif($objOneElement instanceof UserGroup) {
+                elseif ($objOneElement instanceof UserGroup) {
                     $arrEntry["title"] = $objOneElement->getStrName();
                     $arrEntry["value"] = $objOneElement->getStrName();
                     $arrEntry["label"] = $objOneElement->getStrName();

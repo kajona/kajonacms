@@ -7,6 +7,14 @@
 
 namespace Kajona\System\System\Usersources;
 
+use Kajona\System\Admin\AdminFormgenerator;
+use Kajona\System\System\AdminskinHelper;
+use Kajona\System\System\Carrier;
+use Kajona\System\System\CoreEventdispatcher;
+use Kajona\System\System\Logger;
+use Kajona\System\System\Model;
+use Kajona\System\System\ModelInterface;
+use Kajona\System\System\SystemEventidentifier;
 
 
 /**
@@ -21,7 +29,7 @@ namespace Kajona\System\System\Usersources;
  * @module user
  * @moduleId _user_modul_id_
  */
-class UsersourcesGroupKajona extends class_model implements interface_model, interface_usersources_group {
+class UsersourcesGroupKajona extends Model implements ModelInterface, UsersourcesGroupInterface {
 
     /**
      * @var string
@@ -65,7 +73,7 @@ class UsersourcesGroupKajona extends class_model implements interface_model, int
     public function updateObjectToDb($strPrevId = false) {
         //mode-splitting
         if($this->getSystemid() == "") {
-            class_logger::getInstance(class_logger::USERSOURCES)->addLogRow("saved new kajona group " . $this->getStrSystemid(), class_logger::$levelInfo);
+            Logger::getInstance(Logger::USERSOURCES)->addLogRow("saved new kajona group " . $this->getStrSystemid(), Logger::$levelInfo);
             $strGrId = generateSystemid();
             $this->setSystemid($strGrId);
             $strQuery = "INSERT INTO " . _dbprefix_ . "user_group_kajona
@@ -74,7 +82,7 @@ class UsersourcesGroupKajona extends class_model implements interface_model, int
             return $this->objDB->_pQuery($strQuery, array($strGrId, $this->getStrDesc()));
         }
         else {
-            class_logger::getInstance(class_logger::USERSOURCES)->addLogRow("updated kajona group " . $this->getSystemid(), class_logger::$levelInfo);
+            Logger::getInstance(Logger::USERSOURCES)->addLogRow("updated kajona group " . $this->getSystemid(), Logger::$levelInfo);
             $strQuery = "UPDATE " . _dbprefix_ . "user_group_kajona
                             SET group_desc=?
                           WHERE group_id=?";
@@ -147,7 +155,7 @@ class UsersourcesGroupKajona extends class_model implements interface_model, int
         $strQuery = "SELECT COUNT(*)
                        FROM " . _dbprefix_ . "user_kajona_members
 					   WHERE group_member_group_kajona_id= ?";
-        $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array($this->getSystemid()));
+        $arrRow = Carrier::getInstance()->getObjDB()->getPRow($strQuery, array($this->getSystemid()));
         return $arrRow["COUNT(*)"];
     }
 
@@ -157,10 +165,10 @@ class UsersourcesGroupKajona extends class_model implements interface_model, int
      * @return bool
      */
     public function deleteGroup() {
-        class_logger::getInstance(class_logger::USERSOURCES)->addLogRow("deleted kajona group with id " . $this->getSystemid(), class_logger::$levelInfo);
+        Logger::getInstance(Logger::USERSOURCES)->addLogRow("deleted kajona group with id " . $this->getSystemid(), Logger::$levelInfo);
         $this->deleteAllUsersFromCurrentGroup();
         $strQuery = "DELETE FROM " . _dbprefix_ . "user_group_kajona WHERE group_id=?";
-        class_core_eventdispatcher::getInstance()->notifyGenericListeners(class_system_eventidentifier::EVENT_SYSTEM_RECORDDELETED, array($this->getSystemid(), get_class($this)));
+        CoreEventdispatcher::getInstance()->notifyGenericListeners(SystemEventidentifier::EVENT_SYSTEM_RECORDDELETED, array($this->getSystemid(), get_class($this)));
         return $this->objDB->_pQuery($strQuery, array($this->getSystemid()));
     }
 
@@ -187,11 +195,11 @@ class UsersourcesGroupKajona extends class_model implements interface_model, int
     /**
      * Adds a new member to the group - if possible
      *
-     * @param interface_usersources_user $objUser
+     * @param UsersourcesUserInterface $objUser
      *
      * @return bool
      */
-    public function addMember(interface_usersources_user $objUser) {
+    public function addMember(UsersourcesUserInterface $objUser) {
         $this->removeMember($objUser);
         $strQuery = "INSERT INTO " . _dbprefix_ . "user_kajona_members
                        (group_member_group_kajona_id, group_member_user_kajona_id) VALUES
@@ -213,11 +221,11 @@ class UsersourcesGroupKajona extends class_model implements interface_model, int
     /**
      * Removes a member from the current group - if possible.
      *
-     * @param interface_usersources_user $objUser
+     * @param UsersourcesUserInterface $objUser
      *
      * @return bool
      */
-    public function removeMember(interface_usersources_user $objUser) {
+    public function removeMember(UsersourcesUserInterface $objUser) {
         $strQuery = "DELETE FROM " . _dbprefix_ . "user_kajona_members
 						WHERE group_member_group_kajona_id=?
 						  AND group_member_user_kajona_id=?";
@@ -226,11 +234,11 @@ class UsersourcesGroupKajona extends class_model implements interface_model, int
 
     /**
      * Hook to update the admin-form when editing / creating a single group
-     * @param class_admin_formgenerator $objForm
+     * @param AdminFormgenerator $objForm
      *
      * @return mixed
      */
-    public function updateAdminForm(class_admin_formgenerator $objForm) {
+    public function updateAdminForm(AdminFormgenerator $objForm) {
 
     }
 

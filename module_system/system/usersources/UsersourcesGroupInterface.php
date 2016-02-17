@@ -16,12 +16,14 @@ use Kajona\System\Admin\AdminFormgenerator;
  * @since 3.4.1
  * @package module_usersource
  */
-interface UsersourcesGroupInterface {
+interface UsersourcesGroupInterface
+{
 
     /**
      * Adds a new member to the group - if possible
      *
      * @param UsersourcesUserInterface $objUser
+     *
      * @return bool
      */
     public function addMember(UsersourcesUserInterface $objUser);
@@ -56,6 +58,7 @@ interface UsersourcesGroupInterface {
      * Removes a member from the current group - if possible.
      *
      * @param UsersourcesUserInterface $objUser
+     *
      * @return bool
      */
     public function removeMember(UsersourcesUserInterface $objUser);
@@ -81,6 +84,7 @@ interface UsersourcesGroupInterface {
 
     /**
      * Hook to update the admin-form when editing / creating a single group
+     *
      * @param AdminFormgenerator $objForm
      *
      * @return mixed

@@ -8,6 +8,7 @@
 ********************************************************************************************************/
 
 namespace Kajona\System\System\Usersources;
+
 /**
  * Interface defining all main methods for a single usersource.
  *
@@ -15,7 +16,8 @@ namespace Kajona\System\System\Usersources;
  * @since 3.4.1
  * @package module_usersource
  */
-interface UsersourcesUsersourceInterface {
+interface UsersourcesUsersourceInterface
+{
 
     /**
      * Tries to authenticate a user with the given credentials.
@@ -103,6 +105,7 @@ interface UsersourcesUsersourceInterface {
 
     /**
      * Returns a readable name of the source, e.g. "Kajona" or "LDAP Company 1"
+     *
      * @return mixed
      */
     public function getStrReadableName();
