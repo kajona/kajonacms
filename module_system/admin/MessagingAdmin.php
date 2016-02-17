@@ -9,6 +9,23 @@
 
 namespace Kajona\System\Admin;
 
+use Kajona\System\System\AdminskinHelper;
+use Kajona\System\System\ArraySectionIterator;
+use Kajona\System\System\Carrier;
+use Kajona\System\System\HttpResponsetypes;
+use Kajona\System\System\Link;
+use Kajona\System\System\Messageproviders\MessageproviderExtendedInterface;
+use Kajona\System\System\Messageproviders\MessageproviderPersonalmessage;
+use Kajona\System\System\MessagingConfig;
+use Kajona\System\System\MessagingMessage;
+use Kajona\System\System\MessagingMessagehandler;
+use Kajona\System\System\Model;
+use Kajona\System\System\Objectfactory;
+use Kajona\System\System\ResponseObject;
+use Kajona\System\System\Session;
+use Kajona\System\System\SystemChangelog;
+use Kajona\System\System\UserUser;
+
 
 /**
  * Admin-class to manage a users messages.
@@ -25,7 +42,7 @@ namespace Kajona\System\Admin;
  * @objectNew class_module_messaging_message
  * @objectEdit class_module_messaging_message
  */
-class MessagingAdmin extends class_admin_evensimpler implements interface_admin {
+class MessagingAdmin extends AdminEvensimpler implements AdminInterface {
 
 
     /**
@@ -33,8 +50,8 @@ class MessagingAdmin extends class_admin_evensimpler implements interface_admin 
      */
     public function getOutputModuleNavi() {
         $arrReturn = array();
-        $arrReturn[] = array("view", class_link::getLinkAdmin($this->getArrModule("modul"), "list", "", $this->getLang("commons_list"), "", "", true, "adminnavi"));
-        $arrReturn[] = array("edit", class_link::getLinkAdmin($this->getArrModule("modul"), "config", "", $this->getLang("action_config"), "", "", true, "adminnavi"));
+        $arrReturn[] = array("view", Link::getLinkAdmin($this->getArrModule("modul"), "list", "", $this->getLang("commons_list"), "", "", true, "adminnavi"));
+        $arrReturn[] = array("edit", Link::getLinkAdmin($this->getArrModule("modul"), "config", "", $this->getLang("action_config"), "", "", true, "adminnavi"));
         return $arrReturn;
     }
 
@@ -43,9 +60,9 @@ class MessagingAdmin extends class_admin_evensimpler implements interface_admin 
      */
     protected function getArrOutputNaviEntries() {
         $arrEntries = parent::getArrOutputNaviEntries();
-        $objObject = class_objectfactory::getInstance()->getObject($this->getSystemid());
-        if($objObject instanceof class_module_messaging_message)
-            $arrEntries[] = class_link::getLinkAdmin("messaging", "edit", "&systemid=".$objObject->getSystemid(), $objObject->getStrDisplayName());
+        $objObject = Objectfactory::getInstance()->getObject($this->getSystemid());
+        if($objObject instanceof MessagingMessage)
+            $arrEntries[] = Link::getLinkAdmin("messaging", "edit", "&systemid=".$objObject->getSystemid(), $objObject->getStrDisplayName());
 
         return $arrEntries;
     }
@@ -60,7 +77,7 @@ class MessagingAdmin extends class_admin_evensimpler implements interface_admin 
      * @return string
      */
     protected function actionConfig() {
-        $objHandler = new class_module_messaging_messagehandler();
+        $objHandler = new MessagingMessagehandler();
         $arrMessageproviders = $objHandler->getMessageproviders();
 
         $strReturn = "";
@@ -84,13 +101,13 @@ JS;
         $arrRows = array();
         foreach($arrMessageproviders as $objOneProvider) {
 
-            if($objOneProvider instanceof interface_messageprovider_extended && !$objOneProvider->isVisibleInConfigView())
+            if($objOneProvider instanceof MessageproviderExtendedInterface && !$objOneProvider->isVisibleInConfigView())
                 continue;
 
-            $objConfig = class_module_messaging_config::getConfigForUserAndProvider($this->objSession->getUserID(), $objOneProvider);
+            $objConfig = MessagingConfig::getConfigForUserAndProvider($this->objSession->getUserID(), $objOneProvider);
 
-            $bitAlwaysEnabled = $objOneProvider instanceof interface_messageprovider_extended && $objOneProvider->isAlwaysActive();
-            $bitAlwaysMail = $objOneProvider instanceof interface_messageprovider_extended && $objOneProvider->isAlwaysByMail();
+            $bitAlwaysEnabled = $objOneProvider instanceof MessageproviderExtendedInterface && $objOneProvider->isAlwaysActive();
+            $bitAlwaysMail = $objOneProvider instanceof MessageproviderExtendedInterface && $objOneProvider->isAlwaysByMail();
 
             $strClassname = uniStrReplace("\\", "", get_class($objOneProvider));
 
@@ -113,14 +130,14 @@ JS;
     }
 
     /**
-     * @param class_model $objListEntry
+     * @param Model $objListEntry
      *
      * @return array
      */
-    protected function renderAdditionalActions(class_model $objListEntry) {
-        if($objListEntry instanceof class_module_messaging_message) {
+    protected function renderAdditionalActions(Model $objListEntry) {
+        if($objListEntry instanceof MessagingMessage) {
             return array(
-                class_link::getLinkAdminDialog($this->getArrModule("modul"), "new", "&messaging_user_id=".$objListEntry->getStrSenderId()."&messaging_messagerefid=".$objListEntry->getSystemid()."&messaging_title=RE: ".$objListEntry->getStrTitle(), $this->getLang("message_reply"), $this->getLang("message_reply"), "icon_reply")
+                Link::getLinkAdminDialog($this->getArrModule("modul"), "new", "&messaging_user_id=".$objListEntry->getStrSenderId()."&messaging_messagerefid=".$objListEntry->getSystemid()."&messaging_title=RE: ".$objListEntry->getStrTitle(), $this->getLang("message_reply"), $this->getLang("message_reply"), "icon_reply")
             );
         }
 
@@ -139,11 +156,11 @@ JS;
     }
 
     /**
-     * @param class_model $objListEntry
+     * @param Model $objListEntry
      *
      * @return string
      */
-    protected function renderCopyAction(class_model $objListEntry) {
+    protected function renderCopyAction(Model $objListEntry) {
         return "";
     }
 
@@ -156,21 +173,21 @@ JS;
      */
     protected function actionSaveConfig() {
 
-        $objHandler = new class_module_messaging_messagehandler();
+        $objHandler = new MessagingMessagehandler();
         $arrMessageproviders = $objHandler->getMessageproviders();
 
         foreach($arrMessageproviders as $objOneProvider) {
 
             $strClassname = uniStrReplace("\\", "", get_class($objOneProvider));
 
-            $objConfig = class_module_messaging_config::getConfigForUserAndProvider($this->objSession->getUserID(), $objOneProvider);
+            $objConfig = MessagingConfig::getConfigForUserAndProvider($this->objSession->getUserID(), $objOneProvider);
             $objConfig->setBitBymail($this->getParam($strClassname."_bymail") != "");
             $objConfig->setBitEnabled($this->getParam($strClassname."_enabled") != "");
             $objConfig->updateObjectToDb();
 
         }
 
-        $this->adminReload(class_link::getLinkAdminHref($this->getArrModule("modul")));
+        $this->adminReload(Link::getLinkAdminHref($this->getArrModule("modul")));
     }
 
     /**
@@ -183,12 +200,12 @@ JS;
      * @return string
      */
     protected function actionSaveConfigAjax() {
-        $objHandler = new class_module_messaging_messagehandler();
+        $objHandler = new MessagingMessagehandler();
         $arrMessageproviders = $objHandler->getMessageproviders();
         $strMessage = "";
 
         foreach($arrMessageproviders as $objOneProvider) {
-            $objConfig = class_module_messaging_config::getConfigForUserAndProvider($this->objSession->getUserID(), $objOneProvider);
+            $objConfig = MessagingConfig::getConfigForUserAndProvider($this->objSession->getUserID(), $objOneProvider);
 
             $strClassname = uniStrReplace("\\", "", get_class($objOneProvider));
 
@@ -202,7 +219,7 @@ JS;
                     break;
 
                 }
-                else if($this->getParam($strClassname."_enabled") != "") {
+                elseif($this->getParam($strClassname."_enabled") != "") {
                     $bitA = $this->getParam($strClassname."_enabled") == "true";
                     $objConfig->setBitEnabled($bitA);
                     $objConfig->updateObjectToDb();
@@ -216,15 +233,15 @@ JS;
     }
 
     /**
-     * @param class_model $objListEntry
+     * @param Model $objListEntry
      * @param bool $bitDialog
      *
      * @return string
      */
-    protected function renderEditAction(class_model $objListEntry, $bitDialog = false) {
+    protected function renderEditAction(Model $objListEntry, $bitDialog = false) {
         if($objListEntry->rightView()) {
             return $this->objToolkit->listButton(
-                class_link::getLinkAdmin(
+                Link::getLinkAdmin(
                     $objListEntry->getArrModule("modul"),
                     "edit",
                     "&systemid=".$objListEntry->getSystemid(),
@@ -238,13 +255,13 @@ JS;
     }
 
     /**
-     * @param class_model $objListEntry
+     * @param Model $objListEntry
      * @param string $strAltActive tooltip text for the icon if record is active
      * @param string $strAltInactive tooltip text for the icon if record is inactive
      *
      * @return string
      */
-    protected function renderStatusAction(class_model $objListEntry, $strAltActive = "", $strAltInactive = "") {
+    protected function renderStatusAction(Model $objListEntry, $strAltActive = "", $strAltInactive = "") {
         return "";
     }
 
@@ -263,13 +280,13 @@ JS;
 
 
         //create the list-button and the js code to show the dialog
-        $strDeleteAllRead = class_link::getLinkAdminManual(
-            "href=\"#\" onclick=\"javascript:jsDialog_1.setTitle('".class_carrier::getInstance()->getObjLang()->getLang("dialog_deleteHeader", "system")."'); jsDialog_1.setContent('".$this->getLang("delete_all_read_question")."', '".class_carrier::getInstance()->getObjLang()->getLang("dialog_deleteButton", "system")."',  function() {jsDialog_3.init(); document.location.href= '".getLinkAdminHref($this->getArrModule("module"), "deleteAllRead")."';}); jsDialog_1.init(); return false;\"",
+        $strDeleteAllRead = Link::getLinkAdminManual(
+            "href=\"#\" onclick=\"javascript:jsDialog_1.setTitle('".Carrier::getInstance()->getObjLang()->getLang("dialog_deleteHeader", "system")."'); jsDialog_1.setContent('".$this->getLang("delete_all_read_question")."', '".Carrier::getInstance()->getObjLang()->getLang("dialog_deleteButton", "system")."',  function() {jsDialog_3.init(); document.location.href= '".getLinkAdminHref($this->getArrModule("module"), "deleteAllRead")."';}); jsDialog_1.init(); return false;\"",
             $this->getLang("action_delete_all_read")
         );
 
-        $strDeleteAll = class_link::getLinkAdminManual(
-            "href=\"#\" onclick=\"javascript:jsDialog_1.setTitle('".class_carrier::getInstance()->getObjLang()->getLang("dialog_deleteHeader", "system")."'); jsDialog_1.setContent('".$this->getLang("delete_all_question")."', '".class_carrier::getInstance()->getObjLang()->getLang("dialog_deleteButton", "system")."',  function() {jsDialog_3.init(); document.location.href= '".getLinkAdminHref($this->getArrModule("module"), "deleteAll")."';}); jsDialog_1.init(); return false;\"",
+        $strDeleteAll = Link::getLinkAdminManual(
+            "href=\"#\" onclick=\"javascript:jsDialog_1.setTitle('".Carrier::getInstance()->getObjLang()->getLang("dialog_deleteHeader", "system")."'); jsDialog_1.setContent('".$this->getLang("delete_all_question")."', '".Carrier::getInstance()->getObjLang()->getLang("dialog_deleteButton", "system")."',  function() {jsDialog_3.init(); document.location.href= '".getLinkAdminHref($this->getArrModule("module"), "deleteAll")."';}); jsDialog_1.init(); return false;\"",
             $this->getLang("action_delete_all")
         );
 
@@ -280,10 +297,10 @@ JS;
             $strDeleteAll
         ));
 
-        $objArraySectionIterator = new class_array_section_iterator(class_module_messaging_message::getNumberOfMessagesForUser($this->objSession->getUserID()));
+        $objArraySectionIterator = new ArraySectionIterator(MessagingMessage::getNumberOfMessagesForUser($this->objSession->getUserID()));
         $objArraySectionIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
         $objArraySectionIterator->setArraySection(
-            class_module_messaging_message::getObjectList(
+            MessagingMessage::getObjectList(
                 $this->objSession->getUserID(),
                 $objArraySectionIterator->calculateStartPos(),
                 $objArraySectionIterator->calculateEndPos()
@@ -303,9 +320,9 @@ JS;
     protected function getBatchActionHandlers($strListIdentifier) {
         $arrDefault = array();
         if($this->getObjModule()->rightDelete())
-            $arrDefault[] = new class_admin_batchaction(class_adminskin_helper::getAdminImage("icon_delete"), class_link::getLinkAdminXml("system", "delete", "&systemid=%systemid%"), $this->getLang("commons_batchaction_delete"));
-        $arrDefault[] = new class_admin_batchaction(class_adminskin_helper::getAdminImage("icon_mail"), class_link::getLinkAdminXml("messaging", "setRead", "&systemid=%systemid%"), $this->getLang("batchaction_read"));
-        $arrDefault[] = new class_admin_batchaction(class_adminskin_helper::getAdminImage("icon_mailNew"), class_link::getLinkAdminXml("messaging", "setUnread", "&systemid=%systemid%"), $this->getLang("batchaction_unread"));
+            $arrDefault[] = new AdminBatchaction(AdminskinHelper::getAdminImage("icon_delete"), Link::getLinkAdminXml("system", "delete", "&systemid=%systemid%"), $this->getLang("commons_batchaction_delete"));
+        $arrDefault[] = new AdminBatchaction(AdminskinHelper::getAdminImage("icon_mail"), Link::getLinkAdminXml("messaging", "setRead", "&systemid=%systemid%"), $this->getLang("batchaction_read"));
+        $arrDefault[] = new AdminBatchaction(AdminskinHelper::getAdminImage("icon_mailNew"), Link::getLinkAdminXml("messaging", "setUnread", "&systemid=%systemid%"), $this->getLang("batchaction_unread"));
         return $arrDefault;
     }
 
@@ -315,7 +332,7 @@ JS;
      */
     protected function actionDeleteAllRead()
     {
-        class_module_messaging_message::deleteAllReadMessages($this->objSession->getUserID());
+        MessagingMessage::deleteAllReadMessages($this->objSession->getUserID());
         $this->adminReload(getLinkAdminHref($this->getArrModule("modul"), "list"));
         return "";
     }
@@ -326,7 +343,7 @@ JS;
      */
     protected function actionDeleteAll()
     {
-        class_module_messaging_message::deleteAllMessages($this->objSession->getUserID());
+        MessagingMessage::deleteAllMessages($this->objSession->getUserID());
         $this->adminReload(getLinkAdminHref($this->getArrModule("modul"), "list"));
         return "";
     }
@@ -337,7 +354,7 @@ JS;
      */
     protected function actionSetAllRead()
     {
-        class_module_messaging_message::markAllMessagesAsRead($this->objSession->getUserID());
+        MessagingMessage::markAllMessagesAsRead($this->objSession->getUserID());
         $this->adminReload(getLinkAdminHref($this->getArrModule("modul"), "list"));
         return "";
     }
@@ -350,8 +367,8 @@ JS;
      * @permissions view
      */
     protected function actionSetRead() {
-        $objMessage = class_objectfactory::getInstance()->getObject($this->getSystemid());
-        if($objMessage instanceof class_module_messaging_message) {
+        $objMessage = Objectfactory::getInstance()->getObject($this->getSystemid());
+        if($objMessage instanceof MessagingMessage) {
             $objMessage->setBitRead(true);
             $objMessage->updateObjectToDb();
 
@@ -369,8 +386,8 @@ JS;
      * @permissions view
      */
     protected function actionSetUnread() {
-        $objMessage = class_objectfactory::getInstance()->getObject($this->getSystemid());
-        if($objMessage instanceof class_module_messaging_message) {
+        $objMessage = Objectfactory::getInstance()->getObject($this->getSystemid());
+        if($objMessage instanceof MessagingMessage) {
             $objMessage->setBitRead(false);
             $objMessage->updateObjectToDb();
 
@@ -405,10 +422,10 @@ JS;
 
         $this->setArrModuleEntry("template", "/folderview.tpl");
 
-        /** @var $objMessage class_module_messaging_message */
+        /** @var $objMessage MessagingMessage */
         $objMessage = null;
 
-        $objMessage = new class_module_messaging_message();
+        $objMessage = new MessagingMessage();
 
             $objForm = $this->getAdminForm($objMessage);
             if(!$objForm->validateForm())
@@ -417,9 +434,9 @@ JS;
 
             $objForm->updateSourceObject();
 
-            $objMessageHandler = new class_module_messaging_messagehandler();
-            $objMessage->setObjMessageProvider(new class_messageprovider_personalmessage());
-            $objMessageHandler->sendMessageObject($objMessage, new class_module_user_user($objMessage->getStrUser()));
+            $objMessageHandler = new MessagingMessagehandler();
+            $objMessage->setObjMessageProvider(new MessageproviderPersonalmessage());
+            $objMessageHandler->sendMessageObject($objMessage, new UserUser($objMessage->getStrUser()));
 
 
             return $this->objToolkit->warningBox($this->getLang("message_sent_success")).
@@ -435,18 +452,18 @@ JS;
      * @return string
      */
     protected function actionView() {
-        /** @var class_module_messaging_message $objMessage */
-        $objMessage = class_objectfactory::getInstance()->getObject($this->getSystemid());
+        /** @var MessagingMessage $objMessage */
+        $objMessage = Objectfactory::getInstance()->getObject($this->getSystemid());
 
         //different permission handlings
         if($objMessage !== null && !$objMessage->rightView()) {
             return $this->strOutput = $this->getLang("commons_error_permissions");
         }
-        else if($objMessage == null) {
+        elseif($objMessage == null) {
 
             $strText = $this->getLang("message_not_existing");
             $strOk = $this->getLang("commons_ok");
-            $strLink = class_link::getLinkAdminHref($this->getArrModule("modul"), "list");
+            $strLink = Link::getLinkAdminHref($this->getArrModule("modul"), "list");
             $strMessage = "<script type='text/javascript'>
                 $(function() { setTimeout(function() {
                     jsDialog_1.setTitle('&nbsp; ');
@@ -467,11 +484,11 @@ JS;
                 $objMessage->updateObjectToDb();
             }
 
-            $objSender = new class_module_user_user($objMessage->getStrSenderId());
+            $objSender = new UserUser($objMessage->getStrSenderId());
 
             $strReference = "";
             if(validateSystemid($objMessage->getStrMessageRefId())) {
-                $objRefMessage = new class_module_messaging_message($objMessage->getStrMessageRefId());
+                $objRefMessage = new MessagingMessage($objMessage->getStrMessageRefId());
                 $strReference = $objRefMessage->getStrDisplayName();
                 if($objRefMessage->rightView())
                     $strReference = getLinkAdmin($this->getArrModule("modul"), "view", "&systemid=".$objRefMessage->getSystemid(), $strReference, "", "", false);
@@ -511,9 +528,9 @@ JS;
      * @return string
      */
     protected function actionGetUnreadMessagesCount() {
-        class_carrier::getInstance()->getObjSession()->setBitBlockDbUpdate(true);
-        class_session::getInstance()->sessionClose();
-        return "<messageCount>".class_module_messaging_message::getNumberOfMessagesForUser($this->objSession->getUserID(), true)."</messageCount>";
+        Carrier::getInstance()->getObjSession()->setBitBlockDbUpdate(true);
+        Session::getInstance()->sessionClose();
+        return "<messageCount>".MessagingMessage::getNumberOfMessagesForUser($this->objSession->getUserID(), true)."</messageCount>";
     }
 
     /**
@@ -527,27 +544,27 @@ JS;
      * @return string
      */
     protected function actionGetRecentMessages() {
-        class_carrier::getInstance()->getObjSession()->setBitBlockDbUpdate(true);
-        class_session::getInstance()->sessionClose();
-        class_module_system_changelog::$bitChangelogEnabled = false;
-        class_response_object::getInstance()->setStrResponseType(class_http_responsetypes::STR_TYPE_JSON);
+        Carrier::getInstance()->getObjSession()->setBitBlockDbUpdate(true);
+        Session::getInstance()->sessionClose();
+        SystemChangelog::$bitChangelogEnabled = false;
+        ResponseObject::getInstance()->setStrResponseType(HttpResponsetypes::STR_TYPE_JSON);
 
         $intMaxAmount = $this->getParam("limit") != "" ? $this->getParam("limit") : 5 ;
 
-        $arrMessages = class_module_messaging_message::getObjectList($this->objSession->getUserID(), 0, $intMaxAmount-1);
+        $arrMessages = MessagingMessage::getObjectList($this->objSession->getUserID(), 0, $intMaxAmount-1);
         $arrReturn = array();
         foreach($arrMessages as $objOneMessage) {
             $arrReturn[] = array(
                 "systemid" => $objOneMessage->getSystemid(),
                 "title" => $objOneMessage->getStrDisplayName(),
                 "unread" => $objOneMessage->getBitRead(),
-                "details" => class_link::getLinkAdminHref($objOneMessage->getArrModule("modul"), "edit", "&systemid=".$objOneMessage->getSystemid(), false)
+                "details" => Link::getLinkAdminHref($objOneMessage->getArrModule("modul"), "edit", "&systemid=".$objOneMessage->getSystemid(), false)
             );
         }
 
         $arrReturn = array(
             "messages" => $arrReturn,
-            "messageCount" => class_module_messaging_message::getNumberOfMessagesForUser($this->objSession->getUserID(), true)
+            "messageCount" => MessagingMessage::getNumberOfMessagesForUser($this->objSession->getUserID(), true)
         );
 
         return json_encode($arrReturn);

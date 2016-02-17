@@ -9,6 +9,13 @@
 
 namespace Kajona\System\Admin;
 
+use Kajona\System\System\Cookie;
+use Kajona\System\System\Link;
+use Kajona\System\System\Logger;
+use Kajona\System\System\ResponseObject;
+use Kajona\System\System\Session;
+use Kajona\System\System\UserUser;
+
 
 /**
  * This class shows a little LoginScreen if the user is net yet logged in
@@ -19,7 +26,7 @@ namespace Kajona\System\Admin;
  * @module login
  * @moduleId _user_modul_id_
  */
-class LoginAdmin extends class_admin_controller implements interface_admin
+class LoginAdmin extends AdminController implements AdminInterface
 {
 
     const SESSION_REFERER = "LOGIN_SESSION_REFERER";
@@ -63,7 +70,7 @@ class LoginAdmin extends class_admin_controller implements interface_admin
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "login_form");
         $arrTemplate = array();
         $strForm = "";
-        $strForm .= $this->objToolkit->formHeader(class_link::getLinkAdminHref($this->getArrModule("modul"), "adminLogin"));
+        $strForm .= $this->objToolkit->formHeader(Link::getLinkAdminHref($this->getArrModule("modul"), "adminLogin"));
         $strForm .= $this->objToolkit->formInputText("name", $this->getLang("login_loginUser", "user"), "", "input-large");
         $strForm .= $this->objToolkit->formInputPassword("passwort", $this->getLang("login_loginPass", "user"), "", "input-large");
         $strForm .= $this->objToolkit->formInputSubmit($this->getLang("login_loginButton", "user"));
@@ -96,7 +103,7 @@ class LoginAdmin extends class_admin_controller implements interface_admin
             return $this->getLang("login_change_error", "user");
         }
 
-        $objUser = new class_module_user_user($this->getParam("systemid"));
+        $objUser = new UserUser($this->getParam("systemid"));
 
         if ($objUser->getStrAuthcode() != "" && $this->getParam("authcode") == $objUser->getStrAuthcode() && $objUser->getStrUsername() != "") {
             if ($this->getParam("reset") == "") {
@@ -105,7 +112,7 @@ class LoginAdmin extends class_admin_controller implements interface_admin
                 $arrTemplate = array();
                 $strForm = "";
                 $strForm .= $this->objToolkit->getTextRow($this->getLang("login_password_form_intro", "user"));
-                $strForm .= $this->objToolkit->formHeader(class_link::getLinkAdminHref($this->getArrModule("modul"), "pwdReset"));
+                $strForm .= $this->objToolkit->formHeader(Link::getLinkAdminHref($this->getArrModule("modul"), "pwdReset"));
                 $strForm .= $this->objToolkit->formInputText("username", $this->getLang("login_loginUser", "user"), "", "inputTextShort");
                 $strForm .= $this->objToolkit->formInputPassword("password1", $this->getLang("login_loginPass", "user"), "", "inputTextShort");
                 $strForm .= $this->objToolkit->formInputPassword("password2", $this->getLang("login_loginPass2", "user"), "", "inputTextShort");
@@ -137,7 +144,7 @@ class LoginAdmin extends class_admin_controller implements interface_admin
                     }
                     $objUser->setStrAuthcode("");
                     $objUser->updateObjectToDb();
-                    class_logger::getInstance()->addLogRow("changed password of user ".$objUser->getStrUsername(), class_logger::$levelInfo);
+                    Logger::getInstance()->addLogRow("changed password of user ".$objUser->getStrUsername(), Logger::$levelInfo);
 
                     $strReturn .= $this->getLang("login_change_success", "user");
                 }
@@ -163,16 +170,16 @@ class LoginAdmin extends class_admin_controller implements interface_admin
     {
         $arrTemplate = array();
         $arrTemplate["name"] = $this->objSession->getUsername();
-        $arrTemplate["profile"] = class_link::getLinkAdminHref("user", "edit", "userid=".$this->objSession->getUserID());
-        $arrTemplate["logout"] = class_link::getLinkAdminHref($this->getArrModule("modul"), "adminLogout");
-        $arrTemplate["dashboard"] = class_link::getLinkAdminHref("dashboard");
-        $arrTemplate["sitemap"] = class_link::getLinkAdminHref("dashboard", "sitemap");
+        $arrTemplate["profile"] = Link::getLinkAdminHref("user", "edit", "userid=".$this->objSession->getUserID());
+        $arrTemplate["logout"] = Link::getLinkAdminHref($this->getArrModule("modul"), "adminLogout");
+        $arrTemplate["dashboard"] = Link::getLinkAdminHref("dashboard");
+        $arrTemplate["sitemap"] = Link::getLinkAdminHref("dashboard", "sitemap");
         $arrTemplate["statusTitle"] = $this->getLang("login_statusTitle", "user");
         $arrTemplate["profileTitle"] = $this->getLang("login_profileTitle", "user");
         $arrTemplate["logoutTitle"] = $this->getLang("login_logoutTitle", "user");
         $arrTemplate["dashboardTitle"] = $this->getLang("login_dashboard", "user");
         $arrTemplate["sitemapTitle"] = $this->getLang("login_sitemap", "user");
-        $arrTemplate["printLink"] = class_link::getLinkAdminManual("href=\"#\" onclick=\"window.print();\"", $this->getLang("login_printview", "user"));
+        $arrTemplate["printLink"] = Link::getLinkAdminManual("href=\"#\" onclick=\"window.print();\"", $this->getLang("login_printview", "user"));
         $arrTemplate["printTitle"] = $this->getLang("login_print", "user");
 
         return $this->objToolkit->getLoginStatus($arrTemplate);
@@ -193,7 +200,7 @@ class LoginAdmin extends class_admin_controller implements interface_admin
                 $this->objSession->logout();
             }
             //save the current skin as a cookie
-            $objCookie = new class_cookie();
+            $objCookie = new Cookie();
             $objCookie->setCookie("adminskin", $this->objSession->getAdminSkin(false, true));
             $objCookie->setCookie("adminlanguage", $this->objSession->getAdminLanguage(false, true));
 
@@ -202,7 +209,7 @@ class LoginAdmin extends class_admin_controller implements interface_admin
             return true;
         }
         else {
-            class_response_object::getInstance()->setStrRedirectUrl(class_link::getLinkAdminHref("login", "login", "&loginerror=1"));
+            ResponseObject::getInstance()->setStrRedirectUrl(Link::getLinkAdminHref("login", "login", "&loginerror=1"));
             return false;
         }
     }
@@ -214,7 +221,7 @@ class LoginAdmin extends class_admin_controller implements interface_admin
     protected function actionAdminlogout()
     {
         $this->objSession->logout();
-        class_response_object::getInstance()->setStrRedirectUrl(class_link::getLinkAdminHref("login"));
+        ResponseObject::getInstance()->setStrRedirectUrl(Link::getLinkAdminHref("login"));
     }
 
 
@@ -222,20 +229,20 @@ class LoginAdmin extends class_admin_controller implements interface_admin
     {
         //any url to redirect?
         if ($this->objSession->getSession(self::SESSION_REFERER) != "" && $this->objSession->getSession(self::SESSION_REFERER) != "admin=1") {
-            class_response_object::getInstance()->setStrRedirectUrl(_indexpath_."?".$this->objSession->getSession(self::SESSION_REFERER));
+            ResponseObject::getInstance()->setStrRedirectUrl(_indexpath_."?".$this->objSession->getSession(self::SESSION_REFERER));
             $this->objSession->sessionUnset(self::SESSION_REFERER);
             $this->objSession->setSession(self::SESSION_LOAD_FROM_PARAMS, "true");
         }
         else {
             //route to the default module
             $strModule = "dashboard";
-            if (class_session::getInstance()->isLoggedin()) {
-                $objUser = new class_module_user_user(class_session::getInstance()->getUserID());
+            if (Session::getInstance()->isLoggedin()) {
+                $objUser = new UserUser(Session::getInstance()->getUserID());
                 if ($objUser->getStrAdminModule() != "") {
                     $strModule = $objUser->getStrAdminModule();
                 }
             }
-            class_response_object::getInstance()->setStrRedirectUrl(class_link::getLinkAdminHref($strModule));
+            ResponseObject::getInstance()->setStrRedirectUrl(Link::getLinkAdminHref($strModule));
         }
     }
 }

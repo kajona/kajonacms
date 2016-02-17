@@ -8,6 +8,12 @@
 
 namespace Kajona\System\Admin;
 
+use Kajona\System\Admin\Formentries\FormentryHidden;
+use Kajona\System\System\Carrier;
+use Kajona\System\System\Exception;
+use Kajona\System\System\FilterBase;
+use Kajona\System\System\Link;
+use Kajona\System\System\Session;
 
 
 /**
@@ -15,16 +21,16 @@ namespace Kajona\System\Admin;
  * @since  5.0
  * @module module_formgenerator
  */
-class AdminFormgeneratorFilter extends class_admin_formgenerator
+class AdminFormgeneratorFilter extends AdminFormgenerator
 {
     /**
      * @param string $strFormname
-     * @param class_filter_base $objSourceobject
+     * @param FilterBase $objSourceobject
      */
     public function __construct($strFormname, $objSourceobject)
     {
-        if (!$objSourceobject instanceof class_filter_base) {
-            throw new class_exception("Source object must be an instance of class_filter_base object", class_exception::$level_ERROR);
+        if (!$objSourceobject instanceof FilterBase) {
+            throw new Exception("Source object must be an instance of class_filter_base object", Exception::$level_ERROR);
         }
 
         parent::__construct($strFormname, $objSourceobject);
@@ -44,13 +50,13 @@ class AdminFormgeneratorFilter extends class_admin_formgenerator
      * @param string $strTargetURI
      * @param int $intButtonConfig
      * @return string
-     * @throws class_exception
+     * @throws Exception
      */
     public function renderForm($strTargetURI, $intButtonConfig = 2)
     {
-        $objCarrier = class_carrier::getInstance();
-        $objToolkit = class_carrier::getInstance()->getObjToolkit("admin");
-        $objLang = class_carrier::getInstance()->getObjLang();
+        $objCarrier = Carrier::getInstance();
+        $objToolkit = Carrier::getInstance()->getObjToolkit("admin");
+        $objLang = Carrier::getInstance()->getObjLang();
         $objFilter = $this->getObjSourceobject();
 
         //1. Check if post request was send?
@@ -58,8 +64,8 @@ class AdminFormgeneratorFilter extends class_admin_formgenerator
             $objCarrier->setParam("pv", "1");
         } else {
             // Get the values from the session
-            $objSessionObject = class_session::getInstance()->getSession($objFilter->getFilterId());
-            if ($objSessionObject instanceof class_filter_base) {
+            $objSessionObject = Session::getInstance()->getSession($objFilter->getFilterId());
+            if ($objSessionObject instanceof FilterBase) {
                 $this->setObjSourceobject($objSessionObject);
             }
         }
@@ -72,24 +78,24 @@ class AdminFormgeneratorFilter extends class_admin_formgenerator
         // 3. Init the form
         $this->generateFieldsFromObject();
         $this->updateSourceObject();
-        $this->addField(new class_formentry_hidden($this->getStrFormname(), "setcontentfilter"))->setStrValue("true");
+        $this->addField(new FormentryHidden($this->getStrFormname(), "setcontentfilter"))->setStrValue("true");
 
         // 4. Keep filter object in separate variable
         $objFilter = $this->getObjSourceobject();
 
         // 5. Update session with filter object
-        class_session::getInstance()->setSession($objFilter->getFilterId(), $objFilter);
+        Session::getInstance()->setSession($objFilter->getFilterId(), $objFilter);
 
         // 6. Set form method to GET
         $this->setStrMethod(self::STR_METHOD_GET);
 
         // 7. Render filter form.
-        $strReturn = parent::renderForm($strTargetURI, class_admin_formgenerator::BIT_BUTTON_SUBMIT | class_admin_formgenerator::BIT_BUTTON_RESET);
+        $strReturn = parent::renderForm($strTargetURI, AdminFormgenerator::BIT_BUTTON_SUBMIT | AdminFormgenerator::BIT_BUTTON_RESET);
 
         // 8. Display filter active/inactive
         $bitFilterActive = false;
         foreach ($this->getArrFields() as $objOneField) {
-            if (!$objOneField instanceof class_formentry_hidden) {
+            if (!$objOneField instanceof FormentryHidden) {
                 $bitFilterActive = $bitFilterActive || $objOneField->getStrValue() != "";
             }
         }
@@ -106,14 +112,14 @@ class AdminFormgeneratorFilter extends class_admin_formgenerator
      */
     protected function resetParams()
     {
-        $objCarrier = class_carrier::getInstance();
+        $objCarrier = Carrier::getInstance();
         $objFilter = $this->getObjSourceobject();
 
         // we must work on a new formgenerator since we must initialize the fields before the reset
         $objFormgenerator = new self($objFilter->getFilterId(), $objFilter);
         $objFormgenerator->generateFieldsFromObject();
 
-        class_session::getInstance()->sessionUnset($objFilter->getFilterId());
+        Session::getInstance()->sessionUnset($objFilter->getFilterId());
         $arrParamsSuffix = array_keys($objFormgenerator->getArrFields());
 
         // clear params
@@ -125,14 +131,14 @@ class AdminFormgeneratorFilter extends class_admin_formgenerator
     /**
      * Generates a filter based on the given filter object.
      *
-     * @param class_filter_base $objFilter
+     * @param FilterBase $objFilter
      * @param string $strAction
      * @return string
      */
-    public static function generateFilterForm(class_filter_base $objFilter, $strAction = "list")
+    public static function generateFilterForm(FilterBase $objFilter, $strAction = "list")
     {
         $objFilterForm = new AdminFormgeneratorFilter($objFilter->getFilterId(), $objFilter);
-        $strTarget = class_link::getLinkAdminHref($objFilter->getArrModule(), $strAction);
+        $strTarget = Link::getLinkAdminHref($objFilter->getArrModule(), $strAction);
 
         $strFilter = $objFilterForm->renderForm($strTarget);
 

@@ -22,6 +22,7 @@ namespace Kajona\System\Admin;
  * @package module_system
  */
 class AdminBatchaction {
+
     private $strIcon;
     private $strTitle;
     private $strTargetUrl;

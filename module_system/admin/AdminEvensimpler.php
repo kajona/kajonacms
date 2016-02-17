@@ -8,6 +8,14 @@
 
 namespace Kajona\System\Admin;
 
+use Kajona\System\Admin\Formentries\FormentryHidden;
+use Kajona\System\System\ArraySectionIterator;
+use Kajona\System\System\Exception;
+use Kajona\System\System\Link;
+use Kajona\System\System\Model;
+use Kajona\System\System\ModelInterface;
+use Kajona\System\System\Reflection;
+use ReflectionMethod;
 
 
 /**
@@ -23,7 +31,8 @@ namespace Kajona\System\Admin;
  *
  * @author tim.kiefer@kojikui.de, ph.wolfer@googlemail.com
  */
-abstract class AdminEvensimpler extends class_admin_simple {
+abstract class AdminEvensimpler extends AdminSimple {
+    
     const   STR_OBJECT_LIST_ANNOTATION = "@objectList";
     const   STR_OBJECT_NEW_ANNOTATION = "@objectNew";
     const   STR_OBJECT_EDIT_ANNOTATION = "@objectEdit";
@@ -42,7 +51,7 @@ abstract class AdminEvensimpler extends class_admin_simple {
     private $strOriginalAction = "";
 
     /**
-     * @var class_admin_formgenerator
+     * @var AdminFormgenerator
      */
     private $objCurAdminForm = null;
 
@@ -91,7 +100,7 @@ abstract class AdminEvensimpler extends class_admin_simple {
                 return $strAction . $this->getStrCurObjectTypeName();
             }
             else {
-                $objReflection = new class_reflection($this);
+                $objReflection = new Reflection($this);
                 $arrAnnotations = $objReflection->getAnnotationsWithValueFromClass(get_class($objInstance));
 
                 foreach ($arrAnnotations as $strProperty) {
@@ -123,7 +132,7 @@ abstract class AdminEvensimpler extends class_admin_simple {
             $this->setStrCurObjectTypeName(uniStrReplace($strAutoMatchAction, "", $strActionName));
             $strActionName = $strAutoMatchAction;
 
-            $objReflection = new class_reflection($this);
+            $objReflection = new Reflection($this);
             $arrAnnotations = $objReflection->getAnnotationValuesFromClass($strAnnotation . $this->getStrCurObjectTypeName());
             if(count($arrAnnotations) > 0)
                 $this->setCurObjectClassName(reset($arrAnnotations));
@@ -157,7 +166,7 @@ abstract class AdminEvensimpler extends class_admin_simple {
     /**
      * Renders the form to create a new entry
      *
-     * @throws class_exception
+     * @throws Exception
      * @return string
      * @permissions edit
      */
@@ -165,29 +174,29 @@ abstract class AdminEvensimpler extends class_admin_simple {
         $strType = $this->getCurObjectClassName();
 
         if(!is_null($strType)) {
-            /** @var $objEdit interface_model|class_model */
+            /** @var $objEdit ModelInterface|Model */
             $objEdit = new $strType();
 
-            $objForm = class_admin_formgenerator_factory::getFormForModel($objEdit);
+            $objForm = AdminFormgeneratorFactory::getFormForModel($objEdit);
             if($objForm !== null)
                 $objEdit = $objForm->getObjSourceobject();
 
             //reset the current object reference to an object created before (e.g. during actionSave)
             $objForm = $this->getAdminForm($objEdit);
             $objForm->getObjSourceobject()->setSystemid($this->getParam("systemid"));
-            $objForm->addField(new class_formentry_hidden("", "mode"))->setStrValue("new");
+            $objForm->addField(new FormentryHidden("", "mode"))->setStrValue("new");
 
-            return $objForm->renderForm(class_link::getLinkAdminHref($this->getArrModule("modul"), "save" . $this->getStrCurObjectTypeName()));
+            return $objForm->renderForm(Link::getLinkAdminHref($this->getArrModule("modul"), "save" . $this->getStrCurObjectTypeName()));
         }
         else
-            throw new class_exception("error creating new entry current object type not known ", class_exception::$level_ERROR);
+            throw new Exception("error creating new entry current object type not known ", Exception::$level_ERROR);
     }
 
 
     /**
      * Renders the form to edit an existing entry
      *
-     * @throws class_exception
+     * @throws Exception
      * @return string
      * @permissions edit
      */
@@ -197,7 +206,7 @@ abstract class AdminEvensimpler extends class_admin_simple {
         $objInstance = $this->objFactory->getObject($this->getSystemid());
 
         if($objInstance == null) {
-            throw new class_exception("given object with system id {$this->getSystemid()} does not exist", class_exception::$level_ERROR);
+            throw new Exception("given object with system id {$this->getSystemid()} does not exist", Exception::$level_ERROR);
         }
 
         $strObjectTypeName = uniSubstr($this->getActionNameForClass("edit", $objInstance), 4);
@@ -213,33 +222,33 @@ abstract class AdminEvensimpler extends class_admin_simple {
         if(!is_null($strType)) {
 
             //reset the current object reference to an object created before (e.g. during actionSave)
-            $objForm = class_admin_formgenerator_factory::getFormForModel($objInstance);
+            $objForm = AdminFormgeneratorFactory::getFormForModel($objInstance);
             if($objForm !== null)
                 $objInstance = $objForm->getObjSourceobject();
 
             $objForm = $this->getAdminForm($objInstance);
-            $objForm->addField(new class_formentry_hidden("", "mode"))->setStrValue("edit");
+            $objForm->addField(new FormentryHidden("", "mode"))->setStrValue("edit");
 
-            return $objForm->renderForm(class_link::getLinkAdminHref($this->getArrModule("modul"), "save".$this->getStrCurObjectTypeName()));
+            return $objForm->renderForm(Link::getLinkAdminHref($this->getArrModule("modul"), "save".$this->getStrCurObjectTypeName()));
         }
         else
-            throw new class_exception("error editing current object type not known ", class_exception::$level_ERROR);
+            throw new Exception("error editing current object type not known ", Exception::$level_ERROR);
     }
 
 
     /**
      * Renders the general list of records
      *
-     * @throws class_exception
+     * @throws Exception
      * @return string
      * @permissions view
      */
     protected function actionList() {
-        /** @var $strType interface_model|class_model */
+        /** @var $strType ModelInterface|Model */
         $strType = $this->getCurObjectClassName();
 
         if(!is_null($strType)) {
-            $objArraySectionIterator = new class_array_section_iterator($strType::getObjectCount($this->getSystemid()));
+            $objArraySectionIterator = new ArraySectionIterator($strType::getObjectCount($this->getSystemid()));
             $objArraySectionIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
             $objArraySectionIterator->setArraySection($strType::getObjectList($this->getSystemid(), $objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
 
@@ -251,25 +260,25 @@ abstract class AdminEvensimpler extends class_admin_simple {
             return $strList;
         }
         else
-            throw new class_exception("error loading list current object type not known ", class_exception::$level_ERROR);
+            throw new Exception("error loading list current object type not known ", Exception::$level_ERROR);
     }
 
     /**
      * Creates the admin-form for a given object. You should specify a @formGenerator annotation in your model if you
      * want to override the default form
      *
-     * @param interface_model|class_model $objInstance
-     * @return class_admin_formgenerator
+     * @param ModelInterface|Model $objInstance
+     * @return AdminFormgenerator
      */
-    protected function getAdminForm(interface_model $objInstance) {
-        return $this->objCurAdminForm = class_admin_formgenerator_factory::createByModel($objInstance);
+    protected function getAdminForm(ModelInterface $objInstance) {
+        return $this->objCurAdminForm = AdminFormgeneratorFactory::createByModel($objInstance);
     }
 
     /**
      * Updates the source-object based on the passed form-params
      * and synchronizes it with the database.
      *
-     * @throws class_exception
+     * @throws Exception
      * @return string "" in case of success
      * @permissions edit
      */
@@ -279,14 +288,14 @@ abstract class AdminEvensimpler extends class_admin_simple {
 
         if(!is_null($strType)) {
 
-            /** @var $objRecord interface_model|class_model */
+            /** @var $objRecord ModelInterface|Model */
             $objRecord = null;
 
             if($this->getParam("mode") == "new") {
                 $objRecord = new $strType();
                 $strSystemId = $this->getSystemid();
             }
-            else if($this->getParam("mode") == "edit")
+            elseif($this->getParam("mode") == "edit")
                 $objRecord = new $strType($this->getSystemid());
 
             if($objRecord != null) {
@@ -305,12 +314,12 @@ abstract class AdminEvensimpler extends class_admin_simple {
 
                 $this->setSystemid($objRecord->getStrSystemid());
 
-                $this->adminReload(class_link::getLinkAdminHref($this->getArrModule("modul"), $this->getActionNameForClass("list", $objRecord), "&systemid=".$objRecord->getStrPrevId().($this->getParam("pe") != "" ? "&peClose=1&blockAction=1" : "")));
+                $this->adminReload(Link::getLinkAdminHref($this->getArrModule("modul"), $this->getActionNameForClass("list", $objRecord), "&systemid=".$objRecord->getStrPrevId().($this->getParam("pe") != "" ? "&peClose=1&blockAction=1" : "")));
                 return "";
             }
         }
         else
-            throw new class_exception("error on saving current object type not known ", class_exception::$level_ERROR);
+            throw new Exception("error on saving current object type not known ", Exception::$level_ERROR);
 
 
         return $this->getLang("commons_error_permissions");
@@ -319,11 +328,11 @@ abstract class AdminEvensimpler extends class_admin_simple {
     /**
      * Method which persists the record to the database
      *
-     * @param class_model $objModel
+     * @param Model $objModel
      * @param boolean $strPrevId
-     * @throws class_exception
+     * @throws Exception
      */
-    protected function persistModel(class_model $objModel, $strPrevId = false)
+    protected function persistModel(Model $objModel, $strPrevId = false)
     {
         $objModel->updateObjectToDb($strPrevId);
     }
@@ -376,10 +385,10 @@ abstract class AdminEvensimpler extends class_admin_simple {
      * If not overwritten, the entries will be skipped and won't be included into the
      * path navigation.
      *
-     * @param interface_model $objInstance
+     * @param ModelInterface $objInstance
      * @return string Navigation link.
      */
-    protected function getOutputNaviEntry(interface_model $objInstance) {
+    protected function getOutputNaviEntry(ModelInterface $objInstance) {
         return null;
     }
 

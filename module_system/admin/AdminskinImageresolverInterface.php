@@ -6,6 +6,8 @@
 *	$Id$                       *
 ********************************************************************************************************/
 
+namespace Kajona\System\Admin;
+
 /**
  * Each skin should provide a class called "class_adminskin_imageresolver.php" implementing this interface.
  * The file maps logical image-names such as icon_edit to an absolute path / element.
@@ -17,7 +19,7 @@
  * @author sidler@mulchprod.de
  * @since 4.2
  */
-interface interface_adminskin_imageresolver {
+interface AdminskinImageresolverInterface {
 
     /**
      * Converts the passed image-name into a real, resolvable code-fragment (such as an image-tag or a

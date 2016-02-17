@@ -7,6 +7,8 @@
 *	$Id$                                          *
 ********************************************************************************************************/
 
+namespace Kajona\System\Admin;
+
 /**
  * Interface for all admin-classes (modules)
  * Ensures, that all needed methods are being implemented.
@@ -15,7 +17,7 @@
  *
  * @package module_system
  */
-interface interface_admin {
+interface AdminInterface {
 
 
 }

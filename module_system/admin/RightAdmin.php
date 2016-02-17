@@ -9,6 +9,16 @@
 
 namespace Kajona\System\Admin;
 
+use Kajona\System\System\Carrier;
+use Kajona\System\System\Exception;
+use Kajona\System\System\HttpResponsetypes;
+use Kajona\System\System\Link;
+use Kajona\System\System\Objectfactory;
+use Kajona\System\System\ResponseObject;
+use Kajona\System\System\SystemCommon;
+use Kajona\System\System\SystemModule;
+use Kajona\System\System\SystemSetting;
+use Kajona\System\System\UserGroup;
 
 
 /**
@@ -20,7 +30,7 @@ namespace Kajona\System\Admin;
  * @module right
  * @moduleId _system_modul_id_
  */
-class RightAdmin extends class_admin_controller implements interface_admin {
+class RightAdmin extends AdminController implements AdminInterface {
 
     /**
      * Constructor
@@ -57,11 +67,11 @@ class RightAdmin extends class_admin_controller implements interface_admin {
 
         //Determine the systemid
         if($strSystemID != "") {
-            $objTargetRecord = class_objectfactory::getInstance()->getObject($strSystemID);
+            $objTargetRecord = Objectfactory::getInstance()->getObject($strSystemID);
         }
         //Edit a module?
         if($this->getParam("changemodule") != "") {
-            $objTargetRecord = class_module_system_module::getModuleByName($this->getParam("changemodule"));
+            $objTargetRecord = SystemModule::getModuleByName($this->getParam("changemodule"));
             $strSystemID = $objTargetRecord->getSystemid();
         }
 
@@ -69,18 +79,18 @@ class RightAdmin extends class_admin_controller implements interface_admin {
             return $this->getLang("commons_error_permissions");
         }
 
-        $objRights = class_carrier::getInstance()->getObjRights();
+        $objRights = Carrier::getInstance()->getObjRights();
 
         if($objTargetRecord->rightRight()) {
             //Get Rights
             $arrRights = $objRights->getArrayRights($objTargetRecord->getSystemid());
             //Get groups
-            $arrGroups = class_module_user_group::getObjectList();
+            $arrGroups = UserGroup::getObjectList();
 
             //Determine name of the record
-            if($objTargetRecord instanceof class_module_system_module)
-                $strTitle = class_carrier::getInstance()->getObjLang()->getLang("modul_titel", $objTargetRecord->getStrName()) ." (".$objTargetRecord->getStrDisplayName().")";
-            else if($objTargetRecord->getStrDisplayName() == "")
+            if($objTargetRecord instanceof SystemModule)
+                $strTitle = Carrier::getInstance()->getObjLang()->getLang("modul_titel", $objTargetRecord->getStrName()) ." (".$objTargetRecord->getStrDisplayName().")";
+            elseif($objTargetRecord->getStrDisplayName() == "")
                 $strTitle = $this->getLang("titel_leer");
             else
                 $strTitle = $objTargetRecord->getStrDisplayName() . " ";
@@ -88,9 +98,9 @@ class RightAdmin extends class_admin_controller implements interface_admin {
             //Load the rights header-row
             if($objTargetRecord->getIntModuleNr() == 0)
                 $strModule = "system";
-            else if($objTargetRecord instanceof class_module_system_module)
+            elseif($objTargetRecord instanceof SystemModule)
                 $strModule = $objTargetRecord->getStrName();
-            else if(defined("_pages_folder_id_") && $objTargetRecord->getIntModuleNr() == _pages_folder_id_)
+            elseif(defined("_pages_folder_id_") && $objTargetRecord->getIntModuleNr() == _pages_folder_id_)
                 $strModule = "pages";
             else
                 $strModule = $objTargetRecord->getArrModule("modul");
@@ -117,7 +127,7 @@ class RightAdmin extends class_admin_controller implements interface_admin {
             $arrTemplateTotal["title6"] = $arrTitles[6];
             $arrTemplateTotal["title7"] = $arrTitles[7];
             $arrTemplateTotal["title8"] = $arrTitles[8];
-            if(class_module_system_setting::getConfigValue("_system_changehistory_enabled_") == "true") {
+            if(SystemSetting::getConfigValue("_system_changehistory_enabled_") == "true") {
                 if(!isset($arrTitles[9]))  //fallback for pre 4.3.2 systems
                     $arrTitles[9] = $arrDefaultHeader[9];
 
@@ -135,7 +145,7 @@ class RightAdmin extends class_admin_controller implements interface_admin {
                 $arrSingleGroup["group_id"] = $objSingleGroup->getSystemid();
 
                 //hide the superglobal admin-row from non-members
-                if($objSingleGroup->getSystemid() == class_module_system_setting::getConfigValue("_admins_group_id_") && !in_array(class_module_system_setting::getConfigValue("_admins_group_id_"), $this->objSession->getGroupIdsAsArray())) {
+                if($objSingleGroup->getSystemid() == SystemSetting::getConfigValue("_admins_group_id_") && !in_array(SystemSetting::getConfigValue("_admins_group_id_"), $this->objSession->getGroupIdsAsArray())) {
                     continue;
                 }
 
@@ -158,7 +168,7 @@ class RightAdmin extends class_admin_controller implements interface_admin {
 
 
 
-                if(class_module_system_setting::getConfigValue("_system_changehistory_enabled_") == "true") {
+                if(SystemSetting::getConfigValue("_system_changehistory_enabled_") == "true") {
                     $arrTemplateRow["box9"] = "<input title=\"".$arrTitles[9]."\" rel=\"tooltip\" type=\"checkbox\" name=\"10," . $arrSingleGroup["group_id"] . "\" id=\"10," . $arrSingleGroup["group_id"] . "\" value=\"1\" ".(in_array($arrSingleGroup["group_id"], $arrRights["changelog"]) ? " checked=\"checked\" " : "")." />";
                 }
 
@@ -190,12 +200,12 @@ class RightAdmin extends class_admin_controller implements interface_admin {
             //Buliding the right-matrix
             $arrHistory = explode("&", $strUrlHistory);
             if(isset($arrHistory[0]) && isset($arrHistory[1]))
-                $arrTemplate["backlink"] = class_link::getLinkAdminManual("href=\"" . $arrHistory[0] . "&" . $arrHistory[1]."\"", $this->getLang("commons_back"));
+                $arrTemplate["backlink"] = Link::getLinkAdminManual("href=\"" . $arrHistory[0] . "&" . $arrHistory[1]."\"", $this->getLang("commons_back"));
 
             $arrTemplate["desc"] = $this->getLang("desc");
             $strReturn .= $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
             //Followed by the form
-            $strReturn .= $this->objToolkit->formHeader(class_link::getLinkAdminHref($this->getArrModule("modul"), "saverights"), "rightsForm", "", "KAJONA.admin.permissions.submitForm(); return false;");
+            $strReturn .= $this->objToolkit->formHeader(Link::getLinkAdminHref($this->getArrModule("modul"), "saverights"), "rightsForm", "", "KAJONA.admin.permissions.submitForm(); return false;");
             $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "rights_form_form");
             $strReturn .= $this->objTemplate->fillTemplate($arrTemplateTotal, $strTemplateID);
             $strReturn .= $this->objToolkit->formInputHidden("systemid", $strSystemID);
@@ -242,29 +252,29 @@ class RightAdmin extends class_admin_controller implements interface_admin {
     /**
      * Saves the rights passed by form
      *
-     * @throws class_exception
+     * @throws Exception
      * @return string "" in case of success
      * @permissions right
      * @xml
      */
     protected function actionSaveRights() {
 
-        class_response_object::getInstance()->setStrResponseType(class_http_responsetypes::STR_TYPE_JSON);
+        ResponseObject::getInstance()->setStrResponseType(HttpResponsetypes::STR_TYPE_JSON);
 
         $arrRequest = json_decode($this->getParam("json"));
 
         //Collecting & sorting the passed values
         $strSystemid = $this->getSystemid();
 
-        $objRights = class_carrier::getInstance()->getObjRights();
+        $objRights = Carrier::getInstance()->getObjRights();
 
         if($this->getParam("systemid") == "0") {
-            $objTarget = new class_module_system_common("0");
+            $objTarget = new SystemCommon("0");
             $objTarget->setStrSystemid("0");
             $strSystemid = "0";
         }
         else {
-            $objTarget = class_objectfactory::getInstance()->getObject($this->getSystemid());
+            $objTarget = Objectfactory::getInstance()->getObject($this->getSystemid());
         }
 
 
@@ -286,7 +296,7 @@ class RightAdmin extends class_admin_controller implements interface_admin {
             $intInherit = 0;
         }
 
-        $strAdminsGroupId = class_module_system_setting::getConfigValue("_admins_group_id_");
+        $strAdminsGroupId = SystemSetting::getConfigValue("_admins_group_id_");
         $strView = $strAdminsGroupId;
         $strEdit = $strAdminsGroupId;
         $strDelete = $strAdminsGroupId;

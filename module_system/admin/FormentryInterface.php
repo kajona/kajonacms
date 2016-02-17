@@ -4,25 +4,25 @@
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 ********************************************************************************************************/
 
+namespace Kajona\System\Admin;
+
 /**
- * Extension to the simple formentry-interface,
- * adds a method to fetch a textual representation of the
- * value. May be used for "readonly" fields or generic summaries of
- * a record.
+ * Interface for all form-objects.
+ * Make sure you extend class_formentry_base, too.
  *
  * @author sidler@mulchprod.de
- * @since 4.2
+ * @since 4.0
  * @package module_formgenerator
  */
-interface interface_formentry_printable extends interface_formentry {
+interface FormentryInterface {
 
     /**
-     * Returns a textual representation of the formentries' value.
-     * May contain html, but should be stripped down to text-only.
+     * Renders the field itself.
+     * In most cases, based on the current toolkit.
      *
      * @abstract
      * @return string
      */
-    public function getValueAsText();
+    public function renderField();
 
 }

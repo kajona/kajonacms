@@ -9,6 +9,22 @@
 
 namespace Kajona\System\Admin;
 
+use Kajona\Pages\System\PagesPageelement;
+use Kajona\System\Admin\Systemtasks\AdminSystemtaskInterface;
+use Kajona\System\Admin\Systemtasks\SystemtaskBase;
+use Kajona\System\System\Filesystem;
+use Kajona\System\System\HttpResponsetypes;
+use Kajona\System\System\HttpStatuscodes;
+use Kajona\System\System\Lang;
+use Kajona\System\System\Logger;
+use Kajona\System\System\Objectfactory;
+use Kajona\System\System\Pluginmanager;
+use Kajona\System\System\ResponseObject;
+use Kajona\System\System\SysteminfoInterface;
+use Kajona\System\System\SystemModule;
+use Kajona\System\System\SystemSession;
+use Kajona\System\System\SystemSetting;
+use Kajona\System\System\UserUser;
 
 
 /**
@@ -21,7 +37,7 @@ namespace Kajona\System\Admin;
  * @module system
  * @moduleId _system_modul_id_
  */
-class SystemAdminXml extends class_admin_controller implements interface_xml_admin
+class SystemAdminXml extends AdminController implements XmlAdminInterface
 {
 
     /**
@@ -30,7 +46,7 @@ class SystemAdminXml extends class_admin_controller implements interface_xml_adm
      */
     protected function actionUnlockRecord()
     {
-        $objRecord = class_objectfactory::getInstance()->getObject($this->getSystemid());
+        $objRecord = Objectfactory::getInstance()->getObject($this->getSystemid());
         $objLockmanager = $objRecord->getLockManager();
 
         if($objRecord !== null && $objLockmanager->unlockRecord())
@@ -38,7 +54,7 @@ class SystemAdminXml extends class_admin_controller implements interface_xml_adm
             return "<ok></ok>";
         }
         else {
-            class_response_object::getInstance()->setStrStatusCode(class_http_statuscodes::SC_FORBIDDEN);
+            ResponseObject::getInstance()->setStrStatusCode(HttpStatuscodes::SC_FORBIDDEN);
             return "<error></error>";
         }
     }
@@ -54,7 +70,7 @@ class SystemAdminXml extends class_admin_controller implements interface_xml_adm
     {
         $strReturn = "";
 
-        $objCommon = class_objectfactory::getInstance()->getObject($this->getSystemid());
+        $objCommon = Objectfactory::getInstance()->getObject($this->getSystemid());
         $intNewPos = $this->getParam("listPos");
         //check permissions
         if ($objCommon != null && $objCommon->rightEdit() && $intNewPos != "") {
@@ -63,8 +79,8 @@ class SystemAdminXml extends class_admin_controller implements interface_xml_adm
             //store edit date
             $objCommon->updateObjectToDb();
 
-            if ($objCommon instanceof class_module_pages_pageelement) {
-                $objElement = new class_module_pages_pageelement($this->getSystemid());
+            if ($objCommon instanceof PagesPageelement) {
+                $objElement = new PagesPageelement($this->getSystemid());
                 $objElement->setAbsolutePosition($intNewPos);
             }
             else {
@@ -75,7 +91,7 @@ class SystemAdminXml extends class_admin_controller implements interface_xml_adm
             $this->flushCompletePagesCache();
         }
         else {
-            class_response_object::getInstance()->setStrStatusCode(class_http_statuscodes::SC_UNAUTHORIZED);
+            ResponseObject::getInstance()->setStrStatusCode(HttpStatuscodes::SC_UNAUTHORIZED);
             $strReturn .= "<message><error>".xmlSafeString($this->getLang("commons_error_permissions"))."</error></message>";
         }
 
@@ -91,7 +107,7 @@ class SystemAdminXml extends class_admin_controller implements interface_xml_adm
     protected function actionSetStatus()
     {
         $strReturn = "";
-        $objCommon = class_objectfactory::getInstance()->getObject($this->getSystemid());
+        $objCommon = Objectfactory::getInstance()->getObject($this->getSystemid());
         if ($objCommon != null && $objCommon->rightEdit()) {
 
             $intNewStatus = $this->getParam("status");
@@ -105,7 +121,7 @@ class SystemAdminXml extends class_admin_controller implements interface_xml_adm
             $this->flushCompletePagesCache();
         }
         else {
-            class_response_object::getInstance()->setStrStatusCode(class_http_statuscodes::SC_FORBIDDEN);
+            ResponseObject::getInstance()->setStrStatusCode(HttpStatuscodes::SC_FORBIDDEN);
             $strReturn .= "<message><error>".xmlSafeString($this->getLang("commons_error_permissions"))."</error></message>";
         }
 
@@ -122,7 +138,7 @@ class SystemAdminXml extends class_admin_controller implements interface_xml_adm
     protected function actionDelete()
     {
         $strReturn = "";
-        $objCommon = class_objectfactory::getInstance()->getObject($this->getSystemid());
+        $objCommon = Objectfactory::getInstance()->getObject($this->getSystemid());
         if ($objCommon != null && $objCommon->rightDelete() && $objCommon->getLockManager()->isAccessibleForCurrentUser()) {
             $strName = $objCommon->getStrDisplayName();
             if ($objCommon->deleteObject()) {
@@ -134,7 +150,7 @@ class SystemAdminXml extends class_admin_controller implements interface_xml_adm
             }
         }
         else {
-            class_response_object::getInstance()->setStrStatusCode(class_http_statuscodes::SC_FORBIDDEN);
+            ResponseObject::getInstance()->setStrStatusCode(HttpStatuscodes::SC_FORBIDDEN);
             $strReturn .= "<message><error>".xmlSafeString($this->getLang("commons_error_permissions"))."</error></message>";
         }
 
@@ -152,7 +168,7 @@ class SystemAdminXml extends class_admin_controller implements interface_xml_adm
     {
         $strReturn = "";
 
-        $objRecord = class_objectfactory::getInstance()->getObject($this->getSystemid());
+        $objRecord = Objectfactory::getInstance()->getObject($this->getSystemid());
         $strNewPrevId = $this->getParam("prevId");
         //check permissions
         if ($objRecord != null && $objRecord->rightEdit() && validateSystemid($strNewPrevId)) {
@@ -165,7 +181,7 @@ class SystemAdminXml extends class_admin_controller implements interface_xml_adm
             $this->flushCompletePagesCache();
         }
         else {
-            class_response_object::getInstance()->setStrStatusCode(class_http_statuscodes::SC_FORBIDDEN);
+            ResponseObject::getInstance()->setStrStatusCode(HttpStatuscodes::SC_FORBIDDEN);
             $strReturn .= "<message><error>".xmlSafeString($this->getLang("commons_error_permissions"))."</error></message>";
         }
 
@@ -187,16 +203,16 @@ class SystemAdminXml extends class_admin_controller implements interface_xml_adm
 
         if ($this->getParam("task") != "") {
             //include the list of possible tasks
-            $arrFiles = class_systemtask_base::getAllSystemtasks();
+            $arrFiles = SystemtaskBase::getAllSystemtasks();
 
             //search for the matching task
-            /** @var interface_admin_systemtask|class_systemtask_base $objTask */
+            /** @var AdminSystemtaskInterface|SystemtaskBase $objTask */
             foreach ($arrFiles as $objTask) {
 
                 //instantiate the current task
                 if ($objTask->getStrInternalTaskname() == $this->getParam("task")) {
 
-                    class_logger::getInstance(class_logger::ADMINTASKS)->addLogRow("executing task ".$objTask->getStrInternalTaskname(), class_logger::$levelWarning);
+                    Logger::getInstance(Logger::ADMINTASKS)->addLogRow("executing task ".$objTask->getStrInternalTaskname(), Logger::$levelWarning);
 
                     //let the work begin...
                     $strTempOutput = trim($objTask->executeTask());
@@ -257,7 +273,7 @@ class SystemAdminXml extends class_admin_controller implements interface_xml_adm
         }
 
         //read the last few lines
-        $objFile = new class_filesystem();
+        $objFile = new Filesystem();
         $arrDetails = $objFile->getFileDetails("/system/debug/systemlog.log");
 
         $intOffset = 0;
@@ -347,8 +363,8 @@ class SystemAdminXml extends class_admin_controller implements interface_xml_adm
     {
         $strReturn = "<info>";
 
-        $objPluginmanager = new class_pluginmanager(interface_systeminfo::STR_EXTENSION_POINT);
-        /** @var interface_systeminfo[] $arrPlugins */
+        $objPluginmanager = new Pluginmanager(SysteminfoInterface::STR_EXTENSION_POINT);
+        /** @var SysteminfoInterface[] $arrPlugins */
         $arrPlugins = $objPluginmanager->getPlugins();
 
         foreach ($arrPlugins as $objOnePlugin) {
@@ -388,7 +404,7 @@ class SystemAdminXml extends class_admin_controller implements interface_xml_adm
 
         $strReturn .= "<modules>";
         //Loading the modules
-        $arrModules = class_module_system_module::getAllModules();
+        $arrModules = SystemModule::getAllModules();
         foreach ($arrModules as $objSingleModule) {
             $strReturn .= "<module>";
             $strReturn .= "<name>".xmlSafeString($objSingleModule->getStrName())."</name>";
@@ -422,7 +438,7 @@ class SystemAdminXml extends class_admin_controller implements interface_xml_adm
         $strReturn = "";
         //check needed rights
 
-        $arrSessions = class_module_system_session::getAllActiveSessions();
+        $arrSessions = SystemSession::getAllActiveSessions();
         $strReturn .= "<sessions>";
 
         foreach ($arrSessions as $objOneSession) {
@@ -431,12 +447,12 @@ class SystemAdminXml extends class_admin_controller implements interface_xml_adm
 
             $strUsername = "";
             if ($objOneSession->getStrUserid() != "") {
-                $objUser = new class_module_user_user($objOneSession->getStrUserid());
+                $objUser = new UserUser($objOneSession->getStrUserid());
                 $strUsername = $objUser->getStrUsername();
             }
 
             $strLoginStatus = "";
-            if ($objOneSession->getStrLoginstatus() == class_module_system_session::$LOGINSTATUS_LOGGEDIN) {
+            if ($objOneSession->getStrLoginstatus() == SystemSession::$LOGINSTATUS_LOGGEDIN) {
                 $strLoginStatus = $this->getLang("session_loggedin");
             }
             else {
@@ -462,7 +478,7 @@ class SystemAdminXml extends class_admin_controller implements interface_xml_adm
             else {
                 $strActivity .= $this->getLang("session_portal");
                 if ($strLastUrl == "") {
-                    $strActivity .= class_module_system_setting::getConfigValue("_pages_indexpage_");
+                    $strActivity .= SystemSetting::getConfigValue("_pages_indexpage_");
                 }
                 else {
                     foreach (explode("&amp;", $strLastUrl) as $strOneParam) {
@@ -498,10 +514,10 @@ class SystemAdminXml extends class_admin_controller implements interface_xml_adm
      * @permissions view
      */
     public function actionFetchProperty() {
-        class_response_object::getInstance()->setStrResponseType(class_http_responsetypes::STR_TYPE_JSON);
+        ResponseObject::getInstance()->setStrResponseType(HttpResponsetypes::STR_TYPE_JSON);
 
         $strTargetModule = $this->getParam("target_module");
-        $strReturn = class_lang::getInstance()->getProperties($strTargetModule);
+        $strReturn = Lang::getInstance()->getProperties($strTargetModule);
 
         return json_encode($strReturn);
     }

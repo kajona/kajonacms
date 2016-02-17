@@ -8,6 +8,18 @@
 
 namespace Kajona\System\Admin;
 
+use Closure;
+use Kajona\System\System\AdminGridableInterface;
+use Kajona\System\System\AdminListableInterface;
+use Kajona\System\System\AdminskinHelper;
+use Kajona\System\System\ArraySectionIterator;
+use Kajona\System\System\Exception;
+use Kajona\System\System\Link;
+use Kajona\System\System\Lockmanager;
+use Kajona\System\System\Model;
+use Kajona\System\System\ModelInterface;
+use Kajona\System\System\SystemSetting;
+use Kajona\System\System\VersionableInterface;
 
 
 /**
@@ -16,7 +28,7 @@ namespace Kajona\System\Admin;
  * @package module_system
  * @since 4.0
  */
-abstract class AdminSimple extends class_admin_controller {
+abstract class AdminSimple extends AdminController {
 
     private  $strPeAddon = "";
 
@@ -30,7 +42,7 @@ abstract class AdminSimple extends class_admin_controller {
             $this->strPeAddon = "&pe=1";
 
         if($this->getParam("unlockid") != "") {
-            $objLockmanager = new class_lockmanager($this->getParam("unlockid"));
+            $objLockmanager = new Lockmanager($this->getParam("unlockid"));
             $objLockmanager->unlockRecord(true);
         }
     }
@@ -56,7 +68,7 @@ abstract class AdminSimple extends class_admin_controller {
         if(validateSystemid($this->getSystemid())) {
             $objRecord = $this->objFactory->getObject($this->getSystemid());
 
-            if($objRecord instanceof interface_admin_listable)
+            if($objRecord instanceof AdminListableInterface)
                 return $this->getActionIcons($objRecord);
         }
 
@@ -94,14 +106,14 @@ abstract class AdminSimple extends class_admin_controller {
      * This method may be overwritten by subclasses.
      *
      * @permissions delete
-     * @throws class_exception
+     * @throws Exception
      * @return void
      */
     protected function actionDelete() {
         $objRecord = $this->objFactory->getObject($this->getSystemid());
         if($objRecord != null && $objRecord->rightDelete()) {
             if(!$objRecord->deleteObject())
-                throw new class_exception("error deleting object ".strip_tags($objRecord->getStrDisplayName()), class_exception::$level_ERROR);
+                throw new Exception("error deleting object ".strip_tags($objRecord->getStrDisplayName()), Exception::$level_ERROR);
 
             $strTargetUrl = urldecode($this->getParam("reloadUrl"));
 
@@ -126,7 +138,7 @@ abstract class AdminSimple extends class_admin_controller {
             $this->adminReload(_indexpath_."?".$strTargetUrl.($this->getParam("pe") != "" ? "&peClose=1&blockAction=1" : ""));
         }
         else
-            throw new class_exception("error loading object ".$this->getSystemid(), class_exception::$level_ERROR);
+            throw new Exception("error loading object ".$this->getSystemid(), Exception::$level_ERROR);
     }
 
     /**
@@ -134,19 +146,19 @@ abstract class AdminSimple extends class_admin_controller {
      * This method may be overwritten by subclasses.
      *
      * @permissions edit
-     * @throws class_exception
+     * @throws Exception
      * @return void
      */
     protected function actionCopyObject() {
         $objRecord = $this->objFactory->getObject($this->getSystemid());
         if($objRecord != null && $objRecord->rightEdit()) {
             if(!$objRecord->copyObject())
-                throw new class_exception("error creating a copy of object ".strip_tags($objRecord->getStrDisplayName()), class_exception::$level_ERROR);
+                throw new Exception("error creating a copy of object ".strip_tags($objRecord->getStrDisplayName()), Exception::$level_ERROR);
 
-            $this->adminReload(class_link::getLinkAdminHref($this->getArrModule("modul"), $this->getActionNameForClass("list", $objRecord), "&systemid=".$objRecord->getPrevId()));
+            $this->adminReload(Link::getLinkAdminHref($this->getArrModule("modul"), $this->getActionNameForClass("list", $objRecord), "&systemid=".$objRecord->getPrevId()));
         }
         else
-            throw new class_exception("error loading object ".$this->getSystemid(), class_exception::$level_ERROR);
+            throw new Exception("error loading object ".$this->getSystemid(), Exception::$level_ERROR);
     }
 
 
@@ -154,7 +166,7 @@ abstract class AdminSimple extends class_admin_controller {
      * Returns the action name for a given class name.
      *
      * @param string $strAction
-     * @param interface_model $objInstance
+     * @param ModelInterface $objInstance
      * @return string specific action name
      */
     protected function getActionNameForClass($strAction, $objInstance) {
@@ -167,15 +179,15 @@ abstract class AdminSimple extends class_admin_controller {
      * Please be aware, that the combination of paging and grids may result in unpredictable ordering.
      * As soon as the list is sortable, the page-size should be at least the same as the number of elements
      *
-     * @param class_array_section_iterator $objArraySectionIterator
+     * @param ArraySectionIterator $objArraySectionIterator
      * @param string $strListIdentifier an internal identifier to check the current parent-list
      * @param string $strPagerAddon
      * @param bool $bitSortable
      *
-     * @throws class_exception
+     * @throws Exception
      * @return string
      */
-    protected final function renderFloatingGrid(class_array_section_iterator $objArraySectionIterator, $strListIdentifier = "", $strPagerAddon = "", $bitSortable = true) {
+    protected final function renderFloatingGrid(ArraySectionIterator $objArraySectionIterator, $strListIdentifier = "", $strPagerAddon = "", $bitSortable = true) {
         $strReturn = "";
 
         $strListActions = "";
@@ -200,10 +212,10 @@ abstract class AdminSimple extends class_admin_controller {
 
             $strReturn .= $this->objToolkit->gridHeader($bitSortable, $objArraySectionIterator->getIntElementsPerPage(), $objArraySectionIterator->getPageNumber());
 
-            /** @var $objOneIterable class_model|interface_model|interface_admin_gridable */
+            /** @var $objOneIterable Model|ModelInterface|AdminGridableInterface */
             foreach($objArraySectionIterator as $objOneIterable) {
 
-                if(!$objOneIterable->rightView() || !$objOneIterable instanceof interface_admin_gridable)
+                if(!$objOneIterable->rightView() || !$objOneIterable instanceof AdminGridableInterface)
                     continue;
 
                 $strActions = $this->getActionIcons($objOneIterable, $strListIdentifier);
@@ -226,17 +238,17 @@ abstract class AdminSimple extends class_admin_controller {
      * it is possible to provide a filter callback which is called for each entry. If the callback returns false the
      * entry gets skipped.
      *
-     * @param class_array_section_iterator $objArraySectionIterator
+     * @param ArraySectionIterator $objArraySectionIterator
      * @param bool $bitSortable
      * @param string $strListIdentifier an internal identifier to check the current parent-list
      * @param bool $bitAllowTreeDrop
      * @param string $strPagerAddon
      * @param Closure $objFilter
      *
-     * @throws class_exception
+     * @throws Exception
      * @return string
      */
-    protected final function renderList(class_array_section_iterator $objArraySectionIterator, $bitSortable = false, $strListIdentifier = "", $bitAllowTreeDrop = false, $strPagerAddon = "", Closure $objFilter = null) {
+    protected final function renderList(ArraySectionIterator $objArraySectionIterator, $bitSortable = false, $strListIdentifier = "", $bitAllowTreeDrop = false, $strPagerAddon = "", Closure $objFilter = null) {
         $strReturn = "";
         $intI = 0;
 
@@ -257,7 +269,7 @@ abstract class AdminSimple extends class_admin_controller {
         $arrMassActions = $this->getBatchActionHandlers($strListIdentifier);
 
         $intTotalNrOfElements = $objArraySectionIterator->getNumberOfElements();
-        /** @var $objOneIterable class_model|interface_model|interface_admin_listable */
+        /** @var $objOneIterable Model|ModelInterface|AdminListableInterface|ModelInterface */
         foreach($objArraySectionIterator as $objOneIterable) {
 
             // if we have a filter Closure call it else use the standard rightView method
@@ -271,7 +283,7 @@ abstract class AdminSimple extends class_admin_controller {
                     continue;
                 }
             }
-            else if(!$objOneIterable->rightView()) {
+            elseif(!$objOneIterable->rightView()) {
                 if($bitSortable) {
                     //inject hidden dummy row for a proper sorting
                     $strReturn .= $this->objToolkit->genericAdminList($objOneIterable->getSystemid(), "", "", "", 0, "", "", false, "hidden");
@@ -308,7 +320,7 @@ abstract class AdminSimple extends class_admin_controller {
     /**
      * Wrapper rendering all action-icons for a given record. In most cases used to render a list-entry.
      *
-     * @param class_model|interface_model|interface_admin_listable $objOneIterable
+     * @param Model|ModelInterface|AdminListableInterface $objOneIterable
      * @param string $strListIdentifier
      *
      * @return string
@@ -348,7 +360,7 @@ abstract class AdminSimple extends class_admin_controller {
      * Make sure to pass a full eventhandler, e.g. onclick="document.location=''"
      * Overwrite this method if you want to provide such an action.
      *
-     * @param interface_admin_listable $objOneIterable
+     * @param AdminListableInterface $objOneIterable
      * @param string $strListIdentifier
      *
      * @return string
@@ -361,12 +373,12 @@ abstract class AdminSimple extends class_admin_controller {
     /**
      * Renders the edit action button for the current record.
      *
-     * @param class_model|interface_admin_listable $objListEntry
+     * @param Model|AdminListableInterface|ModelInterface $objListEntry
      * @param bool $bitDialog opens the linked page in a js-based dialog
      *
      * @return string
      */
-    protected function renderEditAction(class_model $objListEntry, $bitDialog = false) {
+    protected function renderEditAction(Model $objListEntry, $bitDialog = false) {
         if($objListEntry->getIntRecordDeleted() == 1) {
             return "";
         }
@@ -375,12 +387,12 @@ abstract class AdminSimple extends class_admin_controller {
 
             $objLockmanager = $objListEntry->getLockManager();
             if(!$objLockmanager->isAccessibleForCurrentUser()) {
-                return $this->objToolkit->listButton(class_adminskin_helper::getAdminImage("icon_editLocked", $this->getLang("commons_locked")));
+                return $this->objToolkit->listButton(AdminskinHelper::getAdminImage("icon_editLocked", $this->getLang("commons_locked")));
             }
 
             if($bitDialog)
                 return $this->objToolkit->listButton(
-                    class_link::getLinkAdminDialog(
+                    Link::getLinkAdminDialog(
                         $objListEntry->getArrModule("modul"),
                         $this->getActionNameForClass("edit", $objListEntry),
                         "folderview=1&systemid=".$objListEntry->getSystemid().$this->strPeAddon,
@@ -392,7 +404,7 @@ abstract class AdminSimple extends class_admin_controller {
                 );
             else
                 return $this->objToolkit->listButton(
-                    class_link::getLinkAdmin(
+                    Link::getLinkAdmin(
                         $objListEntry->getArrModule("modul"),
                         $this->getActionNameForClass("edit", $objListEntry),
                         "&systemid=".$objListEntry->getSystemid().$this->strPeAddon,
@@ -408,10 +420,10 @@ abstract class AdminSimple extends class_admin_controller {
 
     /**
      * Renders the unlock action button for the current record.
-     * @param \class_model|\interface_model $objListEntry
+     * @param Model|ModelInterface $objListEntry
      * @return string
      */
-    protected function renderUnlockAction(interface_model $objListEntry) {
+    protected function renderUnlockAction(ModelInterface $objListEntry) {
         if($objListEntry->getIntRecordDeleted() == 1) {
             return "";
         }
@@ -420,7 +432,7 @@ abstract class AdminSimple extends class_admin_controller {
         if(!$objLockmanager->isAccessibleForCurrentUser()) {
             if($objLockmanager->isUnlockableForCurrentUser() ) {
                 return $this->objToolkit->listButton(
-                    class_link::getLinkAdmin($objListEntry->getArrModule("modul"), $this->getAction(), "&systemid=".$this->getSystemid()."&unlockid=".$objListEntry->getSystemid(), "", $this->getLang("commons_unlock"), "icon_lockerOpen")
+                    Link::getLinkAdmin($objListEntry->getArrModule("modul"), $this->getAction(), "&systemid=".$this->getSystemid()."&unlockid=".$objListEntry->getSystemid(), "", $this->getLang("commons_unlock"), "icon_lockerOpen")
                 );
             }
         }
@@ -430,10 +442,10 @@ abstract class AdminSimple extends class_admin_controller {
 
     /**
      * Renders the delete action button for the current record.
-     * @param \class_model|\interface_model $objListEntry
+     * @param Model|ModelInterface $objListEntry
      * @return string
      */
-    protected function renderDeleteAction(interface_model $objListEntry) {
+    protected function renderDeleteAction(ModelInterface $objListEntry) {
         if($objListEntry->getIntRecordDeleted() == 1) {
             return "";
         }
@@ -442,13 +454,13 @@ abstract class AdminSimple extends class_admin_controller {
 
             $objLockmanager = $objListEntry->getLockManager();
             if(!$objLockmanager->isAccessibleForCurrentUser()) {
-                return $this->objToolkit->listButton(class_adminskin_helper::getAdminImage("icon_deleteLocked", $this->getLang("commons_locked")));
+                return $this->objToolkit->listButton(AdminskinHelper::getAdminImage("icon_deleteLocked", $this->getLang("commons_locked")));
             }
 
             return $this->objToolkit->listDeleteButton(
                 strip_tags($objListEntry->getStrDisplayName()),
                 $this->getLang($this->getObjLang()->stringToPlaceholder($this->getActionNameForClass("delete", $objListEntry)."_question"), $objListEntry->getArrModule("modul")),
-                class_link::getLinkAdminHref($objListEntry->getArrModule("modul"), $this->getActionNameForClass("delete", $objListEntry), "&systemid=".$objListEntry->getSystemid().$this->strPeAddon)
+                Link::getLinkAdminHref($objListEntry->getArrModule("modul"), $this->getActionNameForClass("delete", $objListEntry), "&systemid=".$objListEntry->getSystemid().$this->strPeAddon)
             );
         }
         return "";
@@ -456,12 +468,12 @@ abstract class AdminSimple extends class_admin_controller {
 
     /**
      * Renders the status action button for the current record.
-     * @param class_model $objListEntry
+     * @param Model $objListEntry
      * @param string $strAltActive tooltip text for the icon if record is active
      * @param string $strAltInactive tooltip text for the icon if record is inactive
      * @return string
      */
-    protected function renderStatusAction(class_model $objListEntry, $strAltActive = "", $strAltInactive = "") {
+    protected function renderStatusAction(Model $objListEntry, $strAltActive = "", $strAltInactive = "") {
         if($objListEntry->getIntRecordDeleted() == 1) {
             return "";
         }
@@ -474,13 +486,13 @@ abstract class AdminSimple extends class_admin_controller {
 
     /**
      * Renders the permissions action button for the current record.
-     * @param class_model|interface_model $objListEntry
+     * @param Model|ModelInterface $objListEntry
      * @return string
      */
-    protected function renderPermissionsAction(class_model $objListEntry) {
+    protected function renderPermissionsAction(Model $objListEntry) {
         if($objListEntry->rightRight() && $this->strPeAddon == "") {
             return $this->objToolkit->listButton(
-                class_link::getLinkAdminDialog(
+                Link::getLinkAdminDialog(
                     "right",
                     $this->getActionNameForClass("change", $objListEntry),
                     "&systemid=".$objListEntry->getSystemid().$this->strPeAddon,
@@ -498,10 +510,10 @@ abstract class AdminSimple extends class_admin_controller {
 
     /**
      * Renders the icon to edit a records tags
-     * @param class_model|interface_model $objListEntry
+     * @param Model|ModelInterface $objListEntry
      * @return string
      */
-    protected function renderTagAction(class_model $objListEntry) {
+    protected function renderTagAction(Model $objListEntry) {
         if($objListEntry->getIntRecordDeleted() == 1) {
             return "";
         }
@@ -511,8 +523,8 @@ abstract class AdminSimple extends class_admin_controller {
             //the tag list is more complex and wrapped by a js-logic to load the tags by ajax afterwards
 
             // @codingStandardsIgnoreStart
-            $strOnClick = "KAJONA.admin.folderview.dialog.setContentIFrame('".class_link::getLinkAdminHref("tags", "genericTagForm", "&systemid=".$objListEntry->getSystemid())."'); KAJONA.admin.folderview.dialog.setTitle('".uniStrReplace(array("\r", "\n"), "", strip_tags(nl2br($objListEntry->getStrDisplayName())))."'); KAJONA.admin.folderview.dialog.init(); return false;";
-            $strLink = "<a href=\"#\" onclick=\"".$strOnClick."\" title=\"".$this->getLang("commons_edit_tags")."\" rel=\"tagtooltip\" data-systemid=\"".$objListEntry->getSystemid()."\">".class_adminskin_helper::getAdminImage("icon_tag", $this->getLang("commons_edit_tags"), true)."</a>";
+            $strOnClick = "KAJONA.admin.folderview.dialog.setContentIFrame('".Link::getLinkAdminHref("tags", "genericTagForm", "&systemid=".$objListEntry->getSystemid())."'); KAJONA.admin.folderview.dialog.setTitle('".uniStrReplace(array("\r", "\n"), "", strip_tags(nl2br($objListEntry->getStrDisplayName())))."'); KAJONA.admin.folderview.dialog.init(); return false;";
+            $strLink = "<a href=\"#\" onclick=\"".$strOnClick."\" title=\"".$this->getLang("commons_edit_tags")."\" rel=\"tagtooltip\" data-systemid=\"".$objListEntry->getSystemid()."\">".AdminskinHelper::getAdminImage("icon_tag", $this->getLang("commons_edit_tags"), true)."</a>";
             // @codingStandardsIgnoreEnd
             return $this->objToolkit->listButton($strLink);
 
@@ -523,18 +535,18 @@ abstract class AdminSimple extends class_admin_controller {
 
     /**
      * Renders the permissions action button for the current record.
-     * @param class_model|interface_model $objListEntry
+     * @param Model|ModelInterface $objListEntry
      * @return string
      */
-    protected function renderCopyAction(class_model $objListEntry) {
+    protected function renderCopyAction(Model $objListEntry) {
         if($objListEntry->getIntRecordDeleted() == 1) {
             return "";
         }
 
         if($objListEntry->rightEdit() && $this->strPeAddon == "") {
-            $strHref = class_link::getLinkAdminHref($objListEntry->getArrModule("modul"), $this->getActionNameForClass("copyObject", $objListEntry), "&systemid=".$objListEntry->getSystemid().$this->strPeAddon);
+            $strHref = Link::getLinkAdminHref($objListEntry->getArrModule("modul"), $this->getActionNameForClass("copyObject", $objListEntry), "&systemid=".$objListEntry->getSystemid().$this->strPeAddon);
             return $this->objToolkit->listButton(
-                class_link::getLinkAdminManual(" onclick='jsDialog_3.init();' href='".$strHref."'", "", $this->getLang("commons_edit_copy"), "icon_copy")
+                Link::getLinkAdminManual(" onclick='jsDialog_3.init();' href='".$strHref."'", "", $this->getLang("commons_edit_copy"), "icon_copy")
             );
         }
         return "";
@@ -543,10 +555,10 @@ abstract class AdminSimple extends class_admin_controller {
     /**
      * Returns an additional set of action-buttons rendered right after the edit-action.
      *
-     * @param class_model $objListEntry
+     * @param Model $objListEntry
      * @return array
      */
-    protected function renderAdditionalActions(class_model $objListEntry) {
+    protected function renderAdditionalActions(Model $objListEntry) {
         return array();
     }
 
@@ -573,13 +585,13 @@ abstract class AdminSimple extends class_admin_controller {
         if($objObject->rightEdit()) {
             if($bitDialog)
                 return $this->objToolkit->listButton(
-                    class_link::getLinkAdminDialog(
+                    Link::getLinkAdminDialog(
                         $this->getArrModule("modul"), $this->getActionNameForClass("new", null), "&folderview=1&systemid=".$this->getSystemid().$this->strPeAddon, $this->getLang("commons_list_new"), $this->getLang("commons_list_new"), "icon_new"
                     )
                 );
             else
                 return $this->objToolkit->listButton(
-                    class_link::getLinkAdmin(
+                    Link::getLinkAdmin(
                         $this->getArrModule("modul"), $this->getActionNameForClass("new", null), "&systemid=".$this->getSystemid().$this->strPeAddon, $this->getLang("commons_list_new"), $this->getLang("commons_list_new"), "icon_new"
                     )
                 );
@@ -620,7 +632,7 @@ abstract class AdminSimple extends class_admin_controller {
         }
 
         return $this->objToolkit->listButton(
-            "<span class='dropdown pull-right'><a href='#' data-toggle='dropdown' role='button'>".class_adminskin_helper::getAdminImage("icon_new_multi")."</a>".$this->objToolkit->registerMenu(generateSystemid(), $arrActionMenuEntries)."</span>"
+            "<span class='dropdown pull-right'><a href='#' data-toggle='dropdown' role='button'>".AdminskinHelper::getAdminImage("icon_new_multi")."</a>".$this->objToolkit->registerMenu(generateSystemid(), $arrActionMenuEntries)."</span>"
         );
 
     }
@@ -632,7 +644,7 @@ abstract class AdminSimple extends class_admin_controller {
      *
      * @param string $strListIdentifier
      *
-     * @return class_admin_batchaction[]
+     * @return AdminBatchaction[]
      */
     protected function getBatchActionHandlers($strListIdentifier) {
         return array();
@@ -645,11 +657,11 @@ abstract class AdminSimple extends class_admin_controller {
     protected function getDefaultActionHandlers() {
         $arrReturn = array();
         if($this->getObjModule()->rightDelete())
-            $arrReturn[] = new class_admin_batchaction(class_adminskin_helper::getAdminImage("icon_delete"), class_link::getLinkAdminXml("system", "delete", "&systemid=%systemid%"), $this->getLang("commons_batchaction_delete"));
+            $arrReturn[] = new AdminBatchaction(AdminskinHelper::getAdminImage("icon_delete"), Link::getLinkAdminXml("system", "delete", "&systemid=%systemid%"), $this->getLang("commons_batchaction_delete"));
 
         if($this->getObjModule()->rightEdit()) {
-            $arrReturn[] = new class_admin_batchaction(class_adminskin_helper::getAdminImage("icon_enabled"), class_link::getLinkAdminXml("system", "setStatus", "&systemid=%systemid%&status=1"), $this->getLang("commons_batchaction_enable"));
-            $arrReturn[] = new class_admin_batchaction(class_adminskin_helper::getAdminImage("icon_disabled"), class_link::getLinkAdminXml("system", "setStatus", "&systemid=%systemid%&status=0"), $this->getLang("commons_batchaction_disable"));
+            $arrReturn[] = new AdminBatchaction(AdminskinHelper::getAdminImage("icon_enabled"), Link::getLinkAdminXml("system", "setStatus", "&systemid=%systemid%&status=1"), $this->getLang("commons_batchaction_enable"));
+            $arrReturn[] = new AdminBatchaction(AdminskinHelper::getAdminImage("icon_disabled"), Link::getLinkAdminXml("system", "setStatus", "&systemid=%systemid%&status=0"), $this->getLang("commons_batchaction_disable"));
         }
         return $arrReturn;
     }
@@ -658,14 +670,14 @@ abstract class AdminSimple extends class_admin_controller {
      * Renders the button to open the records' change history. In most cases, this is done in a overlay.
      * To open the change-history, the permission "right3" on the system-module is required.
      *
-     * @param class_model|interface_model $objListEntry
+     * @param Model|ModelInterface $objListEntry
      *
      * @return string
      */
-    protected function renderChangeHistoryAction(class_model $objListEntry) {
-        if(class_module_system_setting::getConfigValue("_system_changehistory_enabled_") == "true" && $objListEntry instanceof interface_versionable && $objListEntry->rightChangelog()) {
+    protected function renderChangeHistoryAction(Model $objListEntry) {
+        if(SystemSetting::getConfigValue("_system_changehistory_enabled_") == "true" && $objListEntry instanceof VersionableInterface && $objListEntry->rightChangelog()) {
             return $this->objToolkit->listButton(
-                class_link::getLinkAdminDialog(
+                Link::getLinkAdminDialog(
                     "system",
                     "genericChangelog",
                     "&systemid=".$objListEntry->getSystemid()."&folderview=1",

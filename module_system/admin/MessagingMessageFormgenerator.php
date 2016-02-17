@@ -9,6 +9,9 @@
 
 namespace Kajona\System\Admin;
 
+use Kajona\System\System\MessagingMessage;
+use Kajona\System\System\Objectfactory;
+
 
 /**
  * Formgenerator for a single message
@@ -18,7 +21,7 @@ namespace Kajona\System\Admin;
  * @since 4.8
  *
  */
-class MessagingMessageFormgenerator extends class_admin_formgenerator {
+class MessagingMessageFormgenerator extends AdminFormgenerator {
 
     /**
      * @inheritDoc
@@ -27,8 +30,8 @@ class MessagingMessageFormgenerator extends class_admin_formgenerator {
         parent::generateFieldsFromObject();
 
         if(validateSystemid($this->getField("messagerefid")->getStrValue()) && $this->getField("body")->getStrValue() == "") {
-            $objRefMessage = class_objectfactory::getInstance()->getObject($this->getField("messagerefid")->getStrValue());
-            if($objRefMessage instanceof class_module_messaging_message) {
+            $objRefMessage = Objectfactory::getInstance()->getObject($this->getField("messagerefid")->getStrValue());
+            if($objRefMessage instanceof MessagingMessage) {
 
                 $arrBody = preg_split('/$\R?^/m', $objRefMessage->getStrBody());
                 array_walk($arrBody, function (&$strValue) {

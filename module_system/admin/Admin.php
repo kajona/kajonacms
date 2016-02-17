@@ -18,7 +18,7 @@ namespace Kajona\System\Admin;
  * @author sidler@mulchprod.de
  * @deprecated
  */
-abstract class Admin extends Admin_controller {
+abstract class Admin extends AdminController {
 
 
 }

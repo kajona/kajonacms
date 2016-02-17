@@ -9,7 +9,32 @@
 
 namespace Kajona\System\Admin;
 
+use class_module_tags_favorite;
+use class_module_tags_tag;
+use Kajona\System\Admin\Formentries\FormentryCheckboxarray;
+use Kajona\System\Admin\Formentries\FormentryObjectlist;
+use Kajona\System\System\AdminGridableInterface;
+use Kajona\System\System\AdminListableInterface;
+use Kajona\System\System\AdminskinHelper;
+use Kajona\System\System\ArraySectionIterator;
+use Kajona\System\System\Carrier;
+use Kajona\System\System\Config;
+use Kajona\System\System\Date;
+use Kajona\System\System\Exception;
+use Kajona\System\System\History;
+use Kajona\System\System\Lang;
+use Kajona\System\System\Link;
+use Kajona\System\System\Model;
+use Kajona\System\System\ModelInterface;
+use Kajona\System\System\Objectfactory;
+use Kajona\System\System\Resourceloader;
+use Kajona\System\System\Session;
+use Kajona\System\System\SystemAspect;
 use Kajona\System\System\SystemJSTreeConfig;
+use Kajona\System\System\SystemModule;
+use Kajona\System\System\SystemSetting;
+use Kajona\System\System\Toolkit;
+use Kajona\System\System\UserUser;
 
 
 /**
@@ -18,7 +43,7 @@ use Kajona\System\System\SystemJSTreeConfig;
  * @package module_system
  * @author sidler@mulchprod.de
  */
-class ToolkitAdmin extends class_toolkit
+class ToolkitAdmin extends Toolkit
 {
 
     /**
@@ -36,19 +61,19 @@ class ToolkitAdmin extends class_toolkit
      *
      * @param string $strName
      * @param string $strTitle
-     * @param class_date $objDateToShow
+     * @param Date $objDateToShow
      * @param string $strClass = inputDate
      * @param boolean $bitWithTime
      *
-     * @throws class_exception
+     * @throws Exception
      * @return string
      * @since 3.2.0.9
      */
     public function formDateSingle($strName, $strTitle, $objDateToShow, $strClass = "", $bitWithTime = false, $bitReadOnly = false)
     {
         //check passed param
-        if ($objDateToShow != null && !$objDateToShow instanceof class_date) {
-            throw new class_exception("param passed to ToolkitAdmin::formDateSingle is not an instance of class_date", class_exception::$level_ERROR);
+        if ($objDateToShow != null && !$objDateToShow instanceof Date) {
+            throw new Exception("param passed to ToolkitAdmin::formDateSingle is not an instance of Date", Exception::$level_ERROR);
         }
 
         if ($bitWithTime) {
@@ -72,19 +97,19 @@ class ToolkitAdmin extends class_toolkit
         $arrTemplate["valueMin"] = $objDateToShow != null ? $objDateToShow->getIntMin() : "";
         $arrTemplate["valuePlain"] = dateToString($objDateToShow, false);
 //        if($bitWithTime)
-        $arrTemplate["dateFormat"] = class_carrier::getInstance()->getObjLang()->getLang("dateStyleShort", "system");
+        $arrTemplate["dateFormat"] = Carrier::getInstance()->getObjLang()->getLang("dateStyleShort", "system");
 //        else
-//            $arrTemplate["dateFormat"] = class_carrier::getInstance()->getObjLang()->getLang("dateStyleLong", "system");
-        $arrTemplate["calendarLang"] = class_carrier::getInstance()->getObjSession()->getAdminLanguage();
+//            $arrTemplate["dateFormat"] = Carrier::getInstance()->getObjLang()->getLang("dateStyleLong", "system");
+        $arrTemplate["calendarLang"] = Carrier::getInstance()->getObjSession()->getAdminLanguage();
 
-        $arrTemplate["titleTime"] = class_carrier::getInstance()->getObjLang()->getLang("titleTime", "system");
+        $arrTemplate["titleTime"] = Carrier::getInstance()->getObjLang()->getLang("titleTime", "system");
 
         //set up the container div
         $arrTemplate["calendarId"] = $strName;
         $strContainerId = $strName."_calendarContainer";
         $arrTemplate["calendarContainerId"] = $strContainerId;
-        $arrTemplate["calendarLang_weekday"] = " [".class_carrier::getInstance()->getObjLang()->getLang("toolsetCalendarWeekday", "system")."]\n";
-        $arrTemplate["calendarLang_month"] = " [".class_carrier::getInstance()->getObjLang()->getLang("toolsetCalendarMonth", "system")."]\n";
+        $arrTemplate["calendarLang_weekday"] = " [".Carrier::getInstance()->getObjLang()->getLang("toolsetCalendarWeekday", "system")."]\n";
+        $arrTemplate["calendarLang_month"] = " [".Carrier::getInstance()->getObjLang()->getLang("toolsetCalendarMonth", "system")."]\n";
 
         $arrTemplate["readonly"] = ($bitReadOnly ? "disabled=\"disabled\"" : "");
 
@@ -119,7 +144,7 @@ class ToolkitAdmin extends class_toolkit
         $strReturn .= $this->formInputHidden("skinwebpath", _skinwebpath_);
 
         //set the language the user defined for the admin
-        $strLanguage = class_session::getInstance()->getAdminLanguage();
+        $strLanguage = Session::getInstance()->getAdminLanguage();
         if ($strLanguage == "") {
             $strLanguage = "en";
         }
@@ -136,7 +161,7 @@ class ToolkitAdmin extends class_toolkit
 
         //to add role-based editors, you could load a different toolbar or also a different CKEditor config file
         //the editor code
-        $strReturn .= " <script type=\"text/javascript\" src=\""._webpath_.class_resourceloader::getInstance()->getWebPathForModule("module_system")."/admin/scripts/ckeditor/ckeditor.js\"></script>\n";
+        $strReturn .= " <script type=\"text/javascript\" src=\""._webpath_.Resourceloader::getInstance()->getWebPathForModule("module_system")."/admin/scripts/ckeditor/ckeditor.js\"></script>\n";
         $strReturn .= " <script type=\"text/javascript\">\n";
         $strReturn .= "
             var ckeditorConfig = {
@@ -145,7 +170,7 @@ class ToolkitAdmin extends class_toolkit
                 ".$strTemplateInit."
                 language : '".$strLanguage."',
                 filebrowserBrowseUrl : '".uniStrReplace("&amp;", "&", getLinkAdminHref("folderview", "browserChooser", "&form_element=ckeditor"))."',
-                filebrowserImageBrowseUrl : '".uniStrReplace("&amp;", "&", getLinkAdminHref("mediamanager", "folderContentFolderviewMode", "systemid=".class_module_system_setting::getConfigValue("_mediamanager_default_imagesrepoid_")."&form_element=ckeditor&bit_link=1"))."'
+                filebrowserImageBrowseUrl : '".uniStrReplace("&amp;", "&", getLinkAdminHref("mediamanager", "folderContentFolderviewMode", "systemid=".SystemSetting::getConfigValue("_mediamanager_default_imagesrepoid_")."&form_element=ckeditor&bit_link=1"))."'
 	        };
             CKEDITOR.replace($(\"textarea[name='".$strName."'][data-kajona-editorid='".$arrTemplate["editorid"]."']\")[0], ckeditorConfig);
         ";
@@ -186,11 +211,6 @@ class ToolkitAdmin extends class_toolkit
         $arrTemplate["animationClass"] = $bitRenderAnimated ? "progress-bar-striped" : "";
         return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
     }
-
-
-    /*"*****************************************************************************************************/
-
-namespace Kajona\System\Admin;
 
     // --- FORM-Elements ------------------------------------------------------------------------------------
 
@@ -296,7 +316,7 @@ namespace Kajona\System\Admin;
      * @param bool $bitRenderOpener
      * @param string $strAddonAction
      *
-     * @throws class_exception
+     * @throws Exception
      * @return string
      */
     public function formInputPageSelector($strName, $strTitle = "", $strValue = "", $strClass = "", $bitElements = true, $bitRenderOpener = true, $strAddonAction = "")
@@ -314,10 +334,10 @@ namespace Kajona\System\Admin;
                 "pages",
                 "pagesFolderBrowser",
                 "&pages=1&form_element=".$strName.(!$bitElements ? "&elements=false" : ""),
-                class_carrier::getInstance()->getObjLang()->getLang("select_page", "pages"),
-                class_carrier::getInstance()->getObjLang()->getLang("select_page", "pages"),
+                Carrier::getInstance()->getObjLang()->getLang("select_page", "pages"),
+                Carrier::getInstance()->getObjLang()->getLang("select_page", "pages"),
                 "icon_externalBrowser",
-                class_carrier::getInstance()->getObjLang()->getLang("select_page", "pages")
+                Carrier::getInstance()->getObjLang()->getLang("select_page", "pages")
             );
         }
 
@@ -368,7 +388,7 @@ namespace Kajona\System\Admin;
      * @param string $arrValidateSystemid If you want to check the view-permissions for a given systemid, pass the id here
      *
      * @return string
-     * @throws class_exception
+     * @throws Exception
      */
     public function formInputUserSelector($strName, $strTitle = "", $strValue = "", $strClass = "", $bitUser = true, $bitGroups = false, $bitBlockCurrentUser = false, array $arrValidateSystemid = null)
     {
@@ -379,7 +399,7 @@ namespace Kajona\System\Admin;
 
         //value is a systemid
         if (validateSystemid($strValue)) {
-            $objUser = new class_module_user_user($strValue);
+            $objUser = new UserUser($strValue);
             $strUserName = $objUser->getStrDisplayName();
             $strUserId = $strValue;
         }
@@ -392,20 +412,20 @@ namespace Kajona\System\Admin;
         $arrTemplate["value_id"] = htmlspecialchars($strUserId, ENT_QUOTES, "UTF-8", false);
         $arrTemplate["title"] = $strTitle;
         $arrTemplate["class"] = $strClass;
-        $arrTemplate["opener"] = class_link::getLinkAdminDialog(
+        $arrTemplate["opener"] = Link::getLinkAdminDialog(
             "user",
             "userBrowser",
             "&form_element={$strName}&checkid={$strCheckIds}".($bitGroups ? "&allowGroup=1" : "").($bitBlockCurrentUser ? "&filter=current" : ""),
-            class_carrier::getInstance()->getObjLang()->getLang("user_browser", "user"),
-            class_carrier::getInstance()->getObjLang()->getLang("user_browser", "user"),
+            Carrier::getInstance()->getObjLang()->getLang("user_browser", "user"),
+            Carrier::getInstance()->getObjLang()->getLang("user_browser", "user"),
             "icon_externalBrowser",
-            class_carrier::getInstance()->getObjLang()->getLang("user_browser", "user")
+            Carrier::getInstance()->getObjLang()->getLang("user_browser", "user")
         );
 
-        $strResetIcon = class_link::getLinkAdminManual(
+        $strResetIcon = Link::getLinkAdminManual(
             "href=\"#\" onclick=\"document.getElementById('".$strName."').value='';document.getElementById('".$strName."_id').value='';return false;\"",
             "",
-            class_carrier::getInstance()->getObjLang()->getLang("user_browser_reset", "user"),
+            Carrier::getInstance()->getObjLang()->getLang("user_browser_reset", "user"),
             "icon_delete"
         );
 
@@ -458,7 +478,7 @@ namespace Kajona\System\Admin;
      * @param string $strAddLink
      *
      * @return string
-     * @throws class_exception
+     * @throws Exception
      */
     public function formInputObjectList($strName, $strTitle = "", array $arrObjects, $strAddLink, $bitReadOnly = false)
     {
@@ -472,20 +492,20 @@ namespace Kajona\System\Admin;
 
         $strTable = '';
         foreach ($arrObjects as $objObject) {
-            /** @var $objObject class_model */
-            if ($objObject instanceof interface_model && $objObject->rightView()) {
+            /** @var $objObject Model */
+            if ($objObject instanceof ModelInterface && $objObject->rightView()) {
                 $strRemoveLink = "";
                 if (!$bitReadOnly) {
-                    $strDelete = class_carrier::getInstance()->getObjLang()->getLang("commons_remove_assignment", "system");
-                    $strRemoveLink = class_link::getLinkAdminDialog(null, "", "", $strDelete, $strDelete, "icon_delete", $strDelete, true, false, "KAJONA.v4skin.removeObjectListItem(this);return false;");
+                    $strDelete = Carrier::getInstance()->getObjLang()->getLang("commons_remove_assignment", "system");
+                    $strRemoveLink = Link::getLinkAdminDialog(null, "", "", $strDelete, $strDelete, "icon_delete", $strDelete, true, false, "KAJONA.v4skin.removeObjectListItem(this);return false;");
                 }
 
                 $strIcon = is_array($objObject->getStrIcon()) ? $objObject->getStrIcon()[0] : $objObject->getStrIcon();
                 $arrTemplateRow = array(
                     'name'        => $strName,
-                    'displayName' => class_formentry_objectlist::getDisplayName($objObject),
-                    'path'        => class_formentry_objectlist::getPathName($objObject),
-                    'icon'        => class_adminskin_helper::getAdminImage($strIcon),
+                    'displayName' => FormentryObjectlist::getDisplayName($objObject),
+                    'path'        => FormentryObjectlist::getPathName($objObject),
+                    'icon'        => AdminskinHelper::getAdminImage($strIcon),
                     'value'       => $objObject->getSystemid(),
                     'removeLink'  => $strRemoveLink,
                 );
@@ -518,10 +538,10 @@ namespace Kajona\System\Admin;
             "mediamanager",
             "folderContentFolderviewMode",
             "&form_element=".$strName."&systemid=".$strRepositoryId,
-            class_carrier::getInstance()->getObjLang()->getLang("filebrowser", "system"),
-            class_carrier::getInstance()->getObjLang()->getLang("filebrowser", "system"),
+            Carrier::getInstance()->getObjLang()->getLang("filebrowser", "system"),
+            Carrier::getInstance()->getObjLang()->getLang("filebrowser", "system"),
             "icon_externalBrowser",
-            class_carrier::getInstance()->getObjLang()->getLang("filebrowser", "system")
+            Carrier::getInstance()->getObjLang()->getLang("filebrowser", "system")
         );
 
         return $this->formInputText($strName, $strTitle, $strValue, $strClass, $strOpener);
@@ -546,21 +566,21 @@ namespace Kajona\System\Admin;
         $strOpener = getLinkAdminDialog(
             "mediamanager",
             "folderContentFolderviewMode",
-            "&form_element=".$strName."&systemid=".class_module_system_setting::getConfigValue("_mediamanager_default_imagesrepoid_"),
-            class_carrier::getInstance()->getObjLang()->getLang("filebrowser", "system"),
-            class_carrier::getInstance()->getObjLang()->getLang("filebrowser", "system"),
+            "&form_element=".$strName."&systemid=".SystemSetting::getConfigValue("_mediamanager_default_imagesrepoid_"),
+            Carrier::getInstance()->getObjLang()->getLang("filebrowser", "system"),
+            Carrier::getInstance()->getObjLang()->getLang("filebrowser", "system"),
             "icon_externalBrowser",
-            class_carrier::getInstance()->getObjLang()->getLang("filebrowser", "system")
+            Carrier::getInstance()->getObjLang()->getLang("filebrowser", "system")
         );
 
         $strOpener .= " ".getLinkAdminDialog(
                 "mediamanager",
                 "imageDetails",
                 "file='+document.getElementById('".$strName."').value+'",
-                class_carrier::getInstance()->getObjLang()->getLang("action_edit_image", "mediamanager"),
-                class_carrier::getInstance()->getObjLang()->getLang("action_edit_image", "mediamanager"),
+                Carrier::getInstance()->getObjLang()->getLang("action_edit_image", "mediamanager"),
+                Carrier::getInstance()->getObjLang()->getLang("action_edit_image", "mediamanager"),
                 "icon_crop",
-                class_carrier::getInstance()->getObjLang()->getLang("action_edit_image", "mediamanager"),
+                Carrier::getInstance()->getObjLang()->getLang("action_edit_image", "mediamanager"),
                 true,
                 false,
                 " (function() {
@@ -635,7 +655,7 @@ namespace Kajona\System\Admin;
     public function formInputSubmit($strValue = null, $strName = "Submit", $strEventhandler = "", $strClass = "", $bitEnabled = true)
     {
         if ($strValue === null) {
-            $strValue = class_carrier::getInstance()->getObjLang()->getLang("commons_save", "system");
+            $strValue = Carrier::getInstance()->getObjLang()->getLang("commons_save", "system");
         }
 
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "input_submit");
@@ -670,9 +690,9 @@ namespace Kajona\System\Admin;
 
         if ($bitEnabled) {
             $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "input_upload");
-            $objText = class_carrier::getInstance()->getObjLang();
+            $objText = Carrier::getInstance()->getObjLang();
 
-            $arrTemplate["maxSize"] = $objText->getLang("max_size", "mediamanager")." ".bytesToString(class_config::getInstance()->getPhpMaxUploadSize());
+            $arrTemplate["maxSize"] = $objText->getLang("max_size", "mediamanager")." ".bytesToString(Config::getInstance()->getPhpMaxUploadSize());
 
             return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
         } else {
@@ -695,14 +715,14 @@ namespace Kajona\System\Admin;
     public function formInputUploadMultiple($strName, $strAllowedFileTypes, $strMediamangerRepoSystemId)
     {
 
-        if (class_module_system_module::getModuleByName("mediamanager") === null) {
+        if (SystemModule::getModuleByName("mediamanager") === null) {
             return ($this->warningBox("Module mediamanger is required for this multiple uploads"));
         }
 
         $strUploadId = generateSystemid();
 
-        $objConfig = class_carrier::getInstance()->getObjConfig();
-        $objText = class_carrier::getInstance()->getObjLang();
+        $objConfig = Carrier::getInstance()->getObjConfig();
+        $objText = Carrier::getInstance()->getObjLang();
 
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "input_upload_multiple");
         $arrTemplate = array();
@@ -736,7 +756,7 @@ namespace Kajona\System\Admin;
      * @param string $strOpener
      *
      * @return string
-     * @throws class_exception
+     * @throws Exception
      */
     public function formInputDropdown($strName, array $arrKeyValues, $strTitle = "", $strKeySelected = "", $strClass = "", $bitEnabled = true, $strAddons = "", $strDataPlaceholder = "", $strOpener = "")
     {
@@ -756,7 +776,7 @@ namespace Kajona\System\Admin;
         }
 
         if (!isset($arrKeyValues[""])) {
-            $strPlaceholder = $strDataPlaceholder != "" ? $strDataPlaceholder : class_carrier::getInstance()->getObjLang()->getLang("commons_dropdown_dataplaceholder", "system");
+            $strPlaceholder = $strDataPlaceholder != "" ? $strDataPlaceholder : Carrier::getInstance()->getObjLang()->getLang("commons_dropdown_dataplaceholder", "system");
             $strOptions .= "<option value='' disabled ".($strKeySelected == "" ? " selected " : "").">".$strPlaceholder."</option>";
         }
 
@@ -783,7 +803,7 @@ namespace Kajona\System\Admin;
         $arrTemplate["options"] = $strOptions;
         $arrTemplate["addons"] = $strAddons;
         $arrTemplate["opener"] = $strOpener;
-        $arrTemplate["dataplaceholder"] = $strDataPlaceholder != "" ? $strDataPlaceholder : class_carrier::getInstance()->getObjLang()->getLang("commons_dropdown_dataplaceholder", "system");
+        $arrTemplate["dataplaceholder"] = $strDataPlaceholder != "" ? $strDataPlaceholder : Carrier::getInstance()->getObjLang()->getLang("commons_dropdown_dataplaceholder", "system");
 
 
         return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID, true);
@@ -840,7 +860,7 @@ namespace Kajona\System\Admin;
      * @param array $arrObjects
      *
      * @return string
-     * @throws class_exception
+     * @throws Exception
      */
     public function formInputTagEditor($strName, $strTitle = "", array $arrValues = array(), $strOnChange = null)
     {
@@ -864,7 +884,7 @@ namespace Kajona\System\Admin;
      * @param array $arrValues
      * @param null $strOnChange
      * @return string
-     * @throws class_exception
+     * @throws Exception
      */
     public function formInputObjectTags($strName, $strTitle = "", $strSource, array $arrValues = array(), $strOnChange = null)
     {
@@ -874,7 +894,7 @@ namespace Kajona\System\Admin;
         $arrResult = array();
         if (!empty($arrValues)) {
             foreach ($arrValues as $objValue) {
-                if ($objValue instanceof interface_model) {
+                if ($objValue instanceof ModelInterface) {
                     $strData.= '<input type="hidden" name="' . $strName . '_id[]" value="' . $objValue->getStrSystemid() . '" data-title="' . htmlspecialchars($objValue->getStrDisplayName()) . '" />';
                     $arrResult[] = $objValue->getStrDisplayName();
                 }
@@ -978,7 +998,7 @@ namespace Kajona\System\Admin;
      * @param array $arrFields
      *
      * @return string
-     * @throws class_exception
+     * @throws Exception
      */
     public function formInputContainer($strName, $strTitle = "", array $arrFields = array(), $strOpener = "")
     {
@@ -1009,7 +1029,7 @@ namespace Kajona\System\Admin;
      * @param bool $bitInline
      *
      * @return string
-     * @throws class_exception
+     * @throws Exception
      */
     public function formInputCheckboxArray($strName, $strTitle = "", $intType, array $arrValues, array $arrSelected, $bitInline = false, $bitReadonly = false, $strOpener = "")
     {
@@ -1025,8 +1045,8 @@ namespace Kajona\System\Admin;
         foreach ($arrValues as $strKey => $strValue) {
             $arrTemplateRow = array(
                 'key'      => $strKey,
-                'name'     => $intType == class_formentry_checkboxarray::TYPE_RADIO ? $strName : $strName.'['.$strKey.']',
-                'value'    => $intType == class_formentry_checkboxarray::TYPE_RADIO ? $strKey : 'checked',
+                'name'     => $intType == FormentryCheckboxarray::TYPE_RADIO ? $strName : $strName.'['.$strKey.']',
+                'value'    => $intType == FormentryCheckboxarray::TYPE_RADIO ? $strKey : 'checked',
                 'title'    => $strValue,
                 'checked'  => in_array($strKey, $arrSelected) ? 'checked' : '',
                 'inline'   => $bitInline ? '-inline' : '',
@@ -1034,13 +1054,13 @@ namespace Kajona\System\Admin;
             );
 
             switch ($intType) {
-                case class_formentry_checkboxarray::TYPE_RADIO:
+                case FormentryCheckboxarray::TYPE_RADIO:
                     $arrTemplateRow['type'] = 'radio';
                     $strElements .= $this->objTemplate->fillTemplate($arrTemplateRow, $strTemplateCheckboxID, true);
                     break;
 
                 default:
-                case class_formentry_checkboxarray::TYPE_CHECKBOX:
+                case FormentryCheckboxarray::TYPE_CHECKBOX:
                     $arrTemplateRow['type'] = 'checkbox';
                     $strElements .= $this->objTemplate->fillTemplate($arrTemplateRow, $strTemplateCheckboxID, true);
                     break;
@@ -1142,7 +1162,7 @@ namespace Kajona\System\Admin;
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "form_close");
         $strPeFields = "";
         if ($bitIncludePeFields) {
-            $arrParams = class_carrier::getAllParams();
+            $arrParams = Carrier::getAllParams();
             if (array_key_exists("pe", $arrParams)) {
                 $strPeFields .= $this->formInputHidden("pe", $arrParams["pe"]);
             }
@@ -1159,11 +1179,6 @@ namespace Kajona\System\Admin;
         }
         return $strPeFields.$this->objTemplate->fillTemplate(array(), $strTemplateID);
     }
-
-
-    /*"*****************************************************************************************************/
-
-namespace Kajona\System\Admin;
 
     // --- GRID-Elements ------------------------------------------------------------------------------------
 
@@ -1189,13 +1204,13 @@ namespace Kajona\System\Admin;
     /**
      * Renders a single entry of the current grid.
      *
-     * @param interface_admin_gridable|class_model|interface_model $objEntry
+     * @param AdminGridableInterface|Model|ModelInterface $objEntry
      * @param $strActions
      * @param string $strClickAction
      *
      * @return string
      */
-    public function gridEntry(interface_admin_gridable $objEntry, $strActions, $strClickAction = "")
+    public function gridEntry(AdminGridableInterface $objEntry, $strActions, $strClickAction = "")
     {
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "grid_entry");
 
@@ -1231,7 +1246,6 @@ namespace Kajona\System\Admin;
 
     /*"*****************************************************************************************************/
 
-namespace Kajona\System\Admin;
 
     // --- LIST-Elements ------------------------------------------------------------------------------------
 
@@ -1299,23 +1313,23 @@ namespace Kajona\System\Admin;
     }
 
     /**
-     * Renders a simple admin-object, implementing interface_model
+     * Renders a simple admin-object, implementing ModelInterface
      *
-     * @param interface_admin_listable|interface_model|class_model $objEntry
+     * @param AdminListableInterface|ModelInterface|Model $objEntry
      * @param string $strActions
      * @param int $intCount
      * @param bool $bitCheckbox
      *
      * @return string
      */
-    public function simpleAdminList(interface_admin_listable $objEntry, $strActions, $intCount, $bitCheckbox = false)
+    public function simpleAdminList(AdminListableInterface $objEntry, $strActions, $intCount, $bitCheckbox = false)
     {
         $strImage = $objEntry->getStrIcon();
         if (is_array($strImage)) {
-            $strImage = class_adminskin_helper::getAdminImage($strImage[0], $strImage[1]);
+            $strImage = AdminskinHelper::getAdminImage($strImage[0], $strImage[1]);
         }
         else {
-            $strImage = class_adminskin_helper::getAdminImage($strImage);
+            $strImage = AdminskinHelper::getAdminImage($strImage);
         }
 
         $strCSSAddon = "";
@@ -1477,10 +1491,6 @@ namespace Kajona\System\Admin;
     }
 
 
-    /*"*****************************************************************************************************/
-
-namespace Kajona\System\Admin;
-
     // --- Action-Elements ----------------------------------------------------------------------------------
 
     /**
@@ -1516,7 +1526,7 @@ namespace Kajona\System\Admin;
         $strQuestion = uniStrReplace("%%element_name%%", htmlToString($strElementName, true), $strQuestion);
 
         //get the reload-url
-        $objHistory = new class_history();
+        $objHistory = new History();
         $strParam = "";
         if (uniStrpos($strLinkHref, "javascript:") === false) {
             $strParam = "reloadUrl=".urlencode($objHistory->getAdminHistory());
@@ -1529,10 +1539,10 @@ namespace Kajona\System\Admin;
         }
 
         //create the list-button and the js code to show the dialog
-        $strButton = class_link::getLinkAdminManual(
-            "href=\"#\" onclick=\"javascript:jsDialog_1.setTitle('".class_carrier::getInstance()->getObjLang()->getLang("dialog_deleteHeader", "system")."'); jsDialog_1.setContent('".$strQuestion."', '".class_carrier::getInstance()->getObjLang()->getLang("dialog_deleteButton", "system")."',  '".$strLinkHref.$strParam."'); jsDialog_1.init(); return false;\"",
+        $strButton = Link::getLinkAdminManual(
+            "href=\"#\" onclick=\"javascript:jsDialog_1.setTitle('".Carrier::getInstance()->getObjLang()->getLang("dialog_deleteHeader", "system")."'); jsDialog_1.setContent('".$strQuestion."', '".Carrier::getInstance()->getObjLang()->getLang("dialog_deleteButton", "system")."',  '".$strLinkHref.$strParam."'); jsDialog_1.init(); return false;\"",
             "",
-            class_carrier::getInstance()->getObjLang()->getLang("commons_delete", "system"),
+            Carrier::getInstance()->getObjLang()->getLang("commons_delete", "system"),
             "icon_delete"
         );
 
@@ -1543,46 +1553,46 @@ namespace Kajona\System\Admin;
      * Generates a button allowing to change the status of the record passed.
      * Therefore an ajax-method is called.
      *
-     * @param class_model|string $objInstance or a systemid
+     * @param Model|string $objInstance or a systemid
      * @param bool $bitReload triggers a page-reload afterwards
      * @param string $strAltActive tooltip text for the icon if record is active
      * @param string $strAltInactive tooltip text for the icon if record is inactive
      *
-     * @throws class_exception
+     * @throws Exception
      * @return string
      */
     public function listStatusButton($objInstance, $bitReload = false, $strAltActive = "", $strAltInactive = "")
     {
-        $strAltActive = $strAltActive != "" ? $strAltActive : class_carrier::getInstance()->getObjLang()->getLang("status_active", "system");
-        $strAltInactive = $strAltInactive != "" ? $strAltInactive : class_carrier::getInstance()->getObjLang()->getLang("status_inactive", "system");
+        $strAltActive = $strAltActive != "" ? $strAltActive : Carrier::getInstance()->getObjLang()->getLang("status_active", "system");
+        $strAltInactive = $strAltInactive != "" ? $strAltInactive : Carrier::getInstance()->getObjLang()->getLang("status_inactive", "system");
 
-        if (is_object($objInstance) && $objInstance instanceof class_model) {
+        if (is_object($objInstance) && $objInstance instanceof Model) {
             $objRecord = $objInstance;
         }
-        else if (validateSystemid($objInstance) && class_objectfactory::getInstance()->getObject($objInstance) !== null) {
-            $objRecord = class_objectfactory::getInstance()->getObject($objInstance);
+        elseif (validateSystemid($objInstance) && Objectfactory::getInstance()->getObject($objInstance) !== null) {
+            $objRecord = Objectfactory::getInstance()->getObject($objInstance);
         }
         else {
-            throw new class_exception("failed loading instance for ".(is_object($objInstance) ? " @ ".get_class($objInstance) : $objInstance), class_exception::$level_ERROR);
+            throw new Exception("failed loading instance for ".(is_object($objInstance) ? " @ ".get_class($objInstance) : $objInstance), Exception::$level_ERROR);
         }
 
         if ($objRecord->getIntRecordStatus() == 1) {
-            $strLinkContent = class_adminskin_helper::getAdminImage("icon_enabled", $strAltActive);
+            $strLinkContent = AdminskinHelper::getAdminImage("icon_enabled", $strAltActive);
         }
         else {
-            $strLinkContent = class_adminskin_helper::getAdminImage("icon_disabled", $strAltInactive);
+            $strLinkContent = AdminskinHelper::getAdminImage("icon_disabled", $strAltInactive);
         }
 
         $strJavascript = "";
 
         //output texts and image paths only once
-        if (class_carrier::getInstance()->getObjSession()->getSession("statusButton", class_session::$intScopeRequest) === false) {
+        if (Carrier::getInstance()->getObjSession()->getSession("statusButton", Session::$intScopeRequest) === false) {
             $strJavascript .= "<script type=\"text/javascript\">
-                KAJONA.admin.ajax.setSystemStatusMessages.strActiveIcon = '".addslashes(class_adminskin_helper::getAdminImage("icon_enabled", $strAltActive))."';
-                KAJONA.admin.ajax.setSystemStatusMessages.strInActiveIcon = '".addslashes(class_adminskin_helper::getAdminImage("icon_disabled", $strAltInactive))."';
+                KAJONA.admin.ajax.setSystemStatusMessages.strActiveIcon = '".addslashes(AdminskinHelper::getAdminImage("icon_enabled", $strAltActive))."';
+                KAJONA.admin.ajax.setSystemStatusMessages.strInActiveIcon = '".addslashes(AdminskinHelper::getAdminImage("icon_disabled", $strAltInactive))."';
 
             </script>";
-            class_carrier::getInstance()->getObjSession()->setSession("statusButton", "true", class_session::$intScopeRequest);
+            Carrier::getInstance()->getObjSession()->setSession("statusButton", "true", Session::$intScopeRequest);
         }
 
         $strButton = getLinkAdminManual(
@@ -1597,10 +1607,6 @@ namespace Kajona\System\Admin;
 
         return $this->listButton($strButton).$strJavascript;
     }
-
-    /*"*****************************************************************************************************/
-
-namespace Kajona\System\Admin;
 
     // --- Misc-Elements ------------------------------------------------------------------------------------
 
@@ -1697,8 +1703,8 @@ namespace Kajona\System\Admin;
     public function getLayoutFolderPic($strContent, $strLinkText = "", $strImageVisible = "icon_folderOpen", $strImageInvisible = "icon_folderClosed", $bitVisible = true)
     {
 
-        $strImageVisible = class_adminskin_helper::getAdminImage($strImageVisible);
-        $strImageInvisible = class_adminskin_helper::getAdminImage($strImageInvisible);
+        $strImageVisible = AdminskinHelper::getAdminImage($strImageVisible);
+        $strImageInvisible = AdminskinHelper::getAdminImage($strImageInvisible);
 
         $strID = generateSystemid();
         $strLinkText = "<span id='{$strID}'>".($bitVisible ? $strImageVisible : $strImageInvisible)."</span> ".$strLinkText;
@@ -1850,16 +1856,12 @@ HTML;
     public function getLoginStatus(array $arrElements)
     {
         //Loading a small login-form
-        $arrElements["renderTags"] = class_module_system_module::getModuleByName("tags") != null && class_module_system_module::getModuleByName("tags")->rightView() ? "true" : "false";
-        $arrElements["renderMessages"] = class_module_system_module::getModuleByName("messaging") != null && class_module_system_module::getModuleByName("messaging")->rightView() ? "true" : "false";
+        $arrElements["renderTags"] = SystemModule::getModuleByName("tags") != null && SystemModule::getModuleByName("tags")->rightView() ? "true" : "false";
+        $arrElements["renderMessages"] = SystemModule::getModuleByName("messaging") != null && SystemModule::getModuleByName("messaging")->rightView() ? "true" : "false";
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "logout_form");
         $strReturn = $this->objTemplate->fillTemplate($arrElements, $strTemplateID);
         return $strReturn;
     }
-
-    /*"*****************************************************************************************************/
-
-namespace Kajona\System\Admin;
 
     // --- Navigation-Elements ------------------------------------------------------------------------------
 
@@ -1883,12 +1885,12 @@ namespace Kajona\System\Admin;
             $strCurrentModule = "pages";
         }
 
-        $arrModules = class_module_system_module::getModulesInNaviAsArray(class_module_system_aspect::getCurrentAspectId());
+        $arrModules = SystemModule::getModulesInNaviAsArray(SystemAspect::getCurrentAspectId());
 
-        /** @var $arrNaviInstances class_module_system_module[] */
+        /** @var $arrNaviInstances SystemModule[] */
         $arrNaviInstances = array();
         foreach ($arrModules as $arrModule) {
-            $objModule = class_module_system_module::getModuleBySystemid($arrModule["module_id"]);
+            $objModule = SystemModule::getModuleBySystemid($arrModule["module_id"]);
             if ($objModule->rightView()) {
                 $arrNaviInstances[] = $objModule;
             }
@@ -1897,7 +1899,7 @@ namespace Kajona\System\Admin;
 
         foreach ($arrNaviInstances as $objOneInstance) {
 
-            $arrActions = class_admin_helper::getModuleActionNaviHelper($objOneInstance);
+            $arrActions = AdminHelper::getModuleActionNaviHelper($objOneInstance);
 
             $strActions = "";
             foreach ($arrActions as $strOneAction) {
@@ -1914,12 +1916,12 @@ namespace Kajona\System\Admin;
 
 
             $arrModuleLevel = array(
-                "module"      => class_link::getLinkAdmin($objOneInstance->getStrName(), "", "", class_carrier::getInstance()->getObjLang()->getLang("modul_titel", $objOneInstance->getStrName())),
+                "module"      => Link::getLinkAdmin($objOneInstance->getStrName(), "", "", Carrier::getInstance()->getObjLang()->getLang("modul_titel", $objOneInstance->getStrName())),
                 "actions"     => $strActions,
                 "systemid"    => $objOneInstance->getSystemid(),
                 "moduleTitle" => $objOneInstance->getStrName(),
-                "moduleName"  => class_carrier::getInstance()->getObjLang()->getLang("modul_titel", $objOneInstance->getStrName()),
-                "moduleHref"  => class_link::getLinkAdminHref($objOneInstance->getStrName(), "")
+                "moduleName"  => Carrier::getInstance()->getObjLang()->getLang("modul_titel", $objOneInstance->getStrName()),
+                "moduleHref"  => Link::getLinkAdminHref($objOneInstance->getStrName(), "")
             );
 
             if ($strCurrentModule == $objOneInstance->getStrName()) {
@@ -1933,10 +1935,6 @@ namespace Kajona\System\Admin;
 
         return $this->objTemplate->fillTemplate(array("level" => $strModules), $strWrapperID);
     }
-
-    /*"*****************************************************************************************************/
-
-namespace Kajona\System\Admin;
 
     // --- Path Navigation ----------------------------------------------------------------------------------
 
@@ -1958,10 +1956,6 @@ namespace Kajona\System\Admin;
         return $this->objTemplate->fillTemplate(array("pathnavi" => $strRows), $strTemplateID);
 
     }
-
-    /*"*****************************************************************************************************/
-
-namespace Kajona\System\Admin;
 
     // --- Content Toolbar ----------------------------------------------------------------------------------
 
@@ -2003,16 +1997,13 @@ namespace Kajona\System\Admin;
         return $this->objTemplate->fillTemplate(array("content" => $strContent), $this->objTemplate->readTemplate("/elements.tpl", "contentActionToolbar_wrapper"));
     }
 
-    /*"*****************************************************************************************************/
-
-namespace Kajona\System\Admin;
 
     // --- Validation Errors --------------------------------------------------------------------------------
 
     /**
      * Generates a list of errors found by the form-validation
      *
-     * @param class_admin_controller|class_admin_formgenerator $objCalling
+     * @param AdminController|AdminFormgenerator $objCalling
      * @param string $strTargetAction
      *
      * @return string
@@ -2022,7 +2013,7 @@ namespace Kajona\System\Admin;
         $strRendercode = "";
         //render mandatory fields?
         if (method_exists($objCalling, "getRequiredFields") && is_callable(array($objCalling, "getRequiredFields"))) {
-            if ($objCalling instanceof class_admin_formgenerator) {
+            if ($objCalling instanceof AdminFormgenerator) {
                 $arrFields = $objCalling->getRequiredFields();
             }
             else {
@@ -2064,14 +2055,9 @@ namespace Kajona\System\Admin;
         $strRendercode .= " [] ]); });</script>";
         $arrTemplate = array();
         $arrTemplate["errorrows"] = $strRows;
-        $arrTemplate["errorintro"] = class_lang::getInstance()->getLang("errorintro", "system");
+        $arrTemplate["errorintro"] = Lang::getInstance()->getLang("errorintro", "system");
         return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID).$strRendercode;
     }
-
-
-    /*"*****************************************************************************************************/
-
-namespace Kajona\System\Admin;
 
     // --- Pre-formatted ------------------------------------------------------------------------------------
 
@@ -2111,10 +2097,6 @@ namespace Kajona\System\Admin;
 
         return $this->objTemplate->fillTemplate(array("pretext" => $strRows), $strTemplateID);
     }
-
-    /*"*****************************************************************************************************/
-
-namespace Kajona\System\Admin;
 
     // --- Language handling --------------------------------------------------------------------------------
 
@@ -2160,17 +2142,13 @@ namespace Kajona\System\Admin;
     }
 
 
-    /*"*****************************************************************************************************/
-
-namespace Kajona\System\Admin;
-
     // --- Pageview mechanism ------------------------------------------------------------------------------
 
 
     /**
      * Creates a pageview
      *
-     * @param class_array_section_iterator $objArraySectionIterator
+     * @param ArraySectionIterator $objArraySectionIterator
      * @param string $strModule
      * @param string $strAction
      * @param string $strLinkAdd
@@ -2214,7 +2192,7 @@ namespace Kajona\System\Admin;
 
             if ($bitDisplay) {
                 $arrLinkTemplate = array();
-                $arrLinkTemplate["href"] = class_link::getLinkAdminHref($strModule, $strAction, $strLinkAdd."&pv=".$intI);
+                $arrLinkTemplate["href"] = Link::getLinkAdminHref($strModule, $strAction, $strLinkAdd."&pv=".$intI);
                 $arrLinkTemplate["pageNr"] = $intI;
 
                 if ($intI == $intCurrentpage) {
@@ -2227,13 +2205,13 @@ namespace Kajona\System\Admin;
             $intCounter2++;
         }
         $arrTemplate["pageList"] = $this->objTemplate->fillTemplate(array("pageListItems" => $strListItems), $strTemplateListID);
-        $arrTemplate["nrOfElementsText"] = class_carrier::getInstance()->getObjLang()->getLang("pageview_total", "system");
+        $arrTemplate["nrOfElementsText"] = Carrier::getInstance()->getObjLang()->getLang("pageview_total", "system");
         $arrTemplate["nrOfElements"] = $intNrOfElements;
         if ($intCurrentpage < $intNrOfPages) {
             $arrTemplate["linkForward"] = $this->objTemplate->fillTemplate(
                 array(
-                    "linkText" => class_carrier::getInstance()->getObjLang()->getLang("pageview_forward", "system"),
-                    "href"     => class_link::getLinkAdminHref($strModule, $strAction, $strLinkAdd."&pv=".($intCurrentpage + 1))
+                    "linkText" => Carrier::getInstance()->getObjLang()->getLang("pageview_forward", "system"),
+                    "href"     => Link::getLinkAdminHref($strModule, $strAction, $strLinkAdd."&pv=".($intCurrentpage + 1))
                 ),
                 $strTemplateForwardID
             );
@@ -2241,8 +2219,8 @@ namespace Kajona\System\Admin;
         if ($intCurrentpage > 1) {
             $arrTemplate["linkBackward"] = $this->objTemplate->fillTemplate(
                 array(
-                    "linkText" => class_carrier::getInstance()->getObjLang()->getLang("commons_back", "commons"),
-                    "href"     => class_link::getLinkAdminHref($strModule, $strAction, $strLinkAdd."&pv=".($intCurrentpage - 1))
+                    "linkText" => Carrier::getInstance()->getObjLang()->getLang("commons_back", "commons"),
+                    "href"     => Link::getLinkAdminHref($strModule, $strAction, $strLinkAdd."&pv=".($intCurrentpage - 1))
                 ),
                 $strTemplateBackwardID
             );
@@ -2255,7 +2233,7 @@ namespace Kajona\System\Admin;
     /**
      * Creates a pageview
      *
-     * @param class_array_section_iterator $objArraySectionIterator
+     * @param ArraySectionIterator $objArraySectionIterator
      * @param string $strModule
      * @param string $strAction
      * @param string $strLinkAdd
@@ -2304,7 +2282,7 @@ namespace Kajona\System\Admin;
 
             if ($bitDisplay) {
                 $arrLinkTemplate = array();
-                $arrLinkTemplate["href"] = class_link::getLinkAdminHref($strModule, $strAction, $strLinkAdd."&pv=".$intI);
+                $arrLinkTemplate["href"] = Link::getLinkAdminHref($strModule, $strAction, $strLinkAdd."&pv=".$intI);
                 $arrLinkTemplate["pageNr"] = $intI;
 
                 if ($intI == $intCurrentpage) {
@@ -2317,13 +2295,13 @@ namespace Kajona\System\Admin;
             $intCounter2++;
         }
         $arrTemplate["pageList"] = $this->objTemplate->fillTemplate(array("pageListItems" => $strListItems), $strTemplateListID);
-        $arrTemplate["nrOfElementsText"] = class_carrier::getInstance()->getObjLang()->getLang("pageview_total", "system");
+        $arrTemplate["nrOfElementsText"] = Carrier::getInstance()->getObjLang()->getLang("pageview_total", "system");
         $arrTemplate["nrOfElements"] = $intNrOfElements;
         if ($intCurrentpage < $intNrOfPages) {
             $arrTemplate["linkForward"] = $this->objTemplate->fillTemplate(
                 array(
-                    "linkText" => class_carrier::getInstance()->getObjLang()->getLang("pageview_forward", "system"),
-                    "href"     => class_link::getLinkAdminHref($strModule, $strAction, $strLinkAdd."&pv=".($intCurrentpage + 1))
+                    "linkText" => Carrier::getInstance()->getObjLang()->getLang("pageview_forward", "system"),
+                    "href"     => Link::getLinkAdminHref($strModule, $strAction, $strLinkAdd."&pv=".($intCurrentpage + 1))
                 ),
                 $strTemplateForwardID
             );
@@ -2331,8 +2309,8 @@ namespace Kajona\System\Admin;
         if ($intCurrentpage > 1) {
             $arrTemplate["linkBackward"] = $this->objTemplate->fillTemplate(
                 array(
-                    "linkText" => class_carrier::getInstance()->getObjLang()->getLang("commons_back", "commons"),
-                    "href"     => class_link::getLinkAdminHref($strModule, $strAction, $strLinkAdd."&pv=".($intCurrentpage - 1))
+                    "linkText" => Carrier::getInstance()->getObjLang()->getLang("commons_back", "commons"),
+                    "href"     => Link::getLinkAdminHref($strModule, $strAction, $strLinkAdd."&pv=".($intCurrentpage - 1))
                 ),
                 $strTemplateBackwardID
             );
@@ -2344,10 +2322,6 @@ namespace Kajona\System\Admin;
         return $arrReturn;
     }
 
-
-    /*"*****************************************************************************************************/
-
-namespace Kajona\System\Admin;
 
     // --- Adminwidget / Dashboard --------------------------------------------------------------------------
 
@@ -2501,7 +2475,7 @@ namespace Kajona\System\Admin;
      *
      * @return string
      */
-    public function getTreeview(\Kajona\System\System\SystemJSTreeConfig $objTreeConfig, $strSideContent = "")
+    public function getTreeview(SystemJSTreeConfig $objTreeConfig, $strSideContent = "")
     {
         $arrTemplate = array();
         $arrTemplate["sideContent"] = $strSideContent;
@@ -2555,14 +2529,14 @@ namespace Kajona\System\Admin;
         $strReturn = "";
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "quickhelp");
         $arrTemplate = array();
-        $arrTemplate["title"] = class_carrier::getInstance()->getObjLang()->getLang("quickhelp_title", "system");
+        $arrTemplate["title"] = Carrier::getInstance()->getObjLang()->getLang("quickhelp_title", "system");
         $arrTemplate["text"] = uniStrReplace(array("\r", "\n"), "", addslashes($strText));
         $strReturn .= $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
 
         //and the button
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "quickhelp_button");
         $arrTemplate = array();
-        $arrTemplate["text"] = class_carrier::getInstance()->getObjLang()->getLang("quickhelp_title", "system");
+        $arrTemplate["text"] = Carrier::getInstance()->getObjLang()->getLang("quickhelp_title", "system");
         $strReturn .= $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
 
         return $strReturn;
@@ -2599,7 +2573,7 @@ namespace Kajona\System\Admin;
     public function getTagEntry(class_module_tags_tag $objTag, $strTargetid, $strAttribute)
     {
 
-        if (class_carrier::getInstance()->getParam("delete") != "false") {
+        if (Carrier::getInstance()->getParam("delete") != "false") {
             $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "tags_tag_delete");
         }
         else {
@@ -2609,14 +2583,14 @@ namespace Kajona\System\Admin;
         $strFavorite = "";
         if ($objTag->rightRight1()) {
 
-            $strJs = "<script type='text/javascript'>KAJONA.admin.loader.loadFile('".class_resourceloader::getInstance()->getCorePathForModule("module_tags")."/module_tags/admin/scripts/tags.js', function() {
-                    KAJONA.admin.tags.createFavoriteEnabledIcon = '".addslashes(class_adminskin_helper::getAdminImage("icon_favorite", class_carrier::getInstance()->getObjLang()->getLang("tag_favorite_remove", "tags")))."';
-                    KAJONA.admin.tags.createFavoriteDisabledIcon = '".addslashes(class_adminskin_helper::getAdminImage("icon_favoriteDisabled", class_carrier::getInstance()->getObjLang()->getLang("tag_favorite_add", "tags")))."';
+            $strJs = "<script type='text/javascript'>KAJONA.admin.loader.loadFile('".Resourceloader::getInstance()->getCorePathForModule("module_tags")."/module_tags/admin/scripts/tags.js', function() {
+                    KAJONA.admin.tags.createFavoriteEnabledIcon = '".addslashes(AdminskinHelper::getAdminImage("icon_favorite", Carrier::getInstance()->getObjLang()->getLang("tag_favorite_remove", "tags")))."';
+                    KAJONA.admin.tags.createFavoriteDisabledIcon = '".addslashes(AdminskinHelper::getAdminImage("icon_favoriteDisabled", Carrier::getInstance()->getObjLang()->getLang("tag_favorite_add", "tags")))."';
                 });</script>";
 
-            $strImage = class_module_tags_favorite::getAllFavoritesForUserAndTag(class_carrier::getInstance()->getObjSession()->getUserID(), $objTag->getSystemid()) != null ?
-                class_adminskin_helper::getAdminImage("icon_favorite", class_carrier::getInstance()->getObjLang()->getLang("tag_favorite_remove", "tags")) :
-                class_adminskin_helper::getAdminImage("icon_favoriteDisabled", class_carrier::getInstance()->getObjLang()->getLang("tag_favorite_add", "tags"));
+            $strImage = class_module_tags_favorite::getAllFavoritesForUserAndTag(Carrier::getInstance()->getObjSession()->getUserID(), $objTag->getSystemid()) != null ?
+                AdminskinHelper::getAdminImage("icon_favorite", Carrier::getInstance()->getObjLang()->getLang("tag_favorite_remove", "tags")) :
+                AdminskinHelper::getAdminImage("icon_favoriteDisabled", Carrier::getInstance()->getObjLang()->getLang("tag_favorite_add", "tags"));
 
             $strFavorite = $strJs."<a href=\"#\" onclick=\"KAJONA.admin.tags.createFavorite('".$objTag->getSystemid()."', this); return false;\">".$strImage."</a>";
         }
@@ -2627,7 +2601,7 @@ namespace Kajona\System\Admin;
         $arrTemplate["strTargetSystemid"] = $strTargetid;
         $arrTemplate["strAttribute"] = $strAttribute;
         $arrTemplate["strFavorite"] = $strFavorite;
-        $arrTemplate["strDelete"] = class_adminskin_helper::getAdminImage("icon_delete", class_carrier::getInstance()->getObjLang()->getLang("commons_delete", "tags"));;
+        $arrTemplate["strDelete"] = AdminskinHelper::getAdminImage("icon_delete", Carrier::getInstance()->getObjLang()->getLang("commons_delete", "tags"));;
         return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
     }
 
@@ -2710,8 +2684,8 @@ namespace Kajona\System\Admin;
         $arrTemplate["options"] = "";
 
         //process rows
-        $strCurrentId = class_module_system_aspect::getCurrentAspectId();
-        $arrAspects = class_module_system_aspect::getActiveObjectList();
+        $strCurrentId = SystemAspect::getCurrentAspectId();
+        $arrAspects = SystemAspect::getActiveObjectList();
 
         $intNrOfAspects = 0;
         foreach ($arrAspects as $objSingleAspect) {
@@ -2790,7 +2764,7 @@ namespace Kajona\System\Admin;
 
         $strEntries = "";
         foreach ($arrEntries as $strId => $strName) {
-            $strChecked = class_carrier::getInstance()->getObjSession()->getSession($strId) == "disabled" ? "" : "checked";
+            $strChecked = Carrier::getInstance()->getObjSession()->getSession($strId) == "disabled" ? "" : "checked";
             $strEntries .= $this->objTemplate->fillTemplate(array("filterid" => $strId, "filtername" => $strName, "checked" => $strChecked), $strTemplateEntryID);
         }
 

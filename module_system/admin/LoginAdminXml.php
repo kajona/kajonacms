@@ -7,6 +7,11 @@
 
 namespace Kajona\System\Admin;
 
+use Kajona\System\System\AbstractController;
+use Kajona\System\System\HttpStatuscodes;
+use Kajona\System\System\ResponseObject;
+use Kajona\System\System\Wadlgenerator;
+
 
 /**
  * The login-xml part is able to fire logins or logouts via the xml-interface (e.g. to be used by a REST client).
@@ -19,7 +24,7 @@ namespace Kajona\System\Admin;
  * @module login
  * @moduleId _user_modul_id_
  */
-class LoginAdminXml extends class_admin_controller implements interface_xml_admin {
+class LoginAdminXml extends AdminController implements XmlAdminInterface {
 
     public function __construct() {
         parent::__construct();
@@ -40,7 +45,7 @@ class LoginAdminXml extends class_admin_controller implements interface_xml_admi
      *
      */
     protected function actionGetRecentMessages() {
-        class_response_object::getInstance()->setStrStatusCode(class_http_statuscodes::SC_UNAUTHORIZED);
+        ResponseObject::getInstance()->setStrStatusCode(HttpStatuscodes::SC_UNAUTHORIZED);
         return "<error>".$this->getLang("commons_error_permissions")."</error>";
     }
 
@@ -62,7 +67,7 @@ class LoginAdminXml extends class_admin_controller implements interface_xml_admi
             return "<message><success>" . xmlSafeString($this->getLang("login_xml_succeess", "system")) . "</success></message>";
         }
         else {
-            class_response_object::getInstance()->setStrStatusCode(class_http_statuscodes::SC_UNAUTHORIZED);
+            ResponseObject::getInstance()->setStrStatusCode(HttpStatuscodes::SC_UNAUTHORIZED);
             return "<message><error>" . xmlSafeString($this->getLang("login_xml_error", "system")) . "</error></message>";
         }
     }
@@ -85,7 +90,7 @@ class LoginAdminXml extends class_admin_controller implements interface_xml_admi
      * @xml
      */
     protected function actionWADL() {
-        $objWadl = new class_wadlgenerator("admin", "login");
+        $objWadl = new Wadlgenerator("admin", "login");
         $objWadl->addIncludeGrammars("http://apidocs.kajona.de/xsd/message.xsd");
 
         $objWadl->addMethod(

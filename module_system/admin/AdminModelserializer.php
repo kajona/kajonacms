@@ -8,6 +8,11 @@
 
 namespace Kajona\System\Admin;
 
+use Kajona\System\System\Date;
+use Kajona\System\System\Exception;
+use Kajona\System\System\ModelInterface;
+use Kajona\System\System\OrmBase;
+use Kajona\System\System\Reflection;
 
 
 /**
@@ -24,11 +29,11 @@ class AdminModelserializer {
     /**
      * Converts an model into an string representation
      *
-     * @param interface_model $objModel
+     * @param ModelInterface $objModel
      * @return string
      */
-    public static function serialize(interface_model $objModel, $strAnnotation = class_orm_base::STR_ANNOTATION_TABLECOLUMN) {
-        $objReflection = new class_reflection(get_class($objModel));
+    public static function serialize(ModelInterface $objModel, $strAnnotation = OrmBase::STR_ANNOTATION_TABLECOLUMN) {
+        $objReflection = new Reflection(get_class($objModel));
         $arrProperties = $objReflection->getPropertiesWithAnnotation($strAnnotation);
         $arrJSON = array();
 
@@ -36,7 +41,7 @@ class AdminModelserializer {
             $strGetter = $objReflection->getGetter($strAttributeName);
             if($strGetter != null) {
                 $strValue = $objModel->$strGetter();
-                if($strValue instanceof class_date) {
+                if($strValue instanceof Date) {
                     $strValue = $strValue->getLongTimestamp();
                 }
                 $arrJSON[$strAttributeName] = $strValue;
@@ -51,13 +56,13 @@ class AdminModelserializer {
     /**
      * Creates an model based on an serialized string
      *
-     * @return interface_model
+     * @return ModelInterface
      */
-    public static function unserialize($strData, $strAnnotation = class_orm_base::STR_ANNOTATION_TABLECOLUMN) {
+    public static function unserialize($strData, $strAnnotation = OrmBase::STR_ANNOTATION_TABLECOLUMN) {
         $arrData = json_decode($strData, true);
         $objModel = self::getObjectFromJson($arrData);
 
-        $objReflection = new class_reflection(get_class($objModel));
+        $objReflection = new Reflection(get_class($objModel));
         $arrProperties = $objReflection->getPropertiesWithAnnotation($strAnnotation);
 
         foreach($arrProperties as $strAttributeName => $strAttributeValue) {
@@ -76,12 +81,12 @@ class AdminModelserializer {
             $strClassName = $arrData[self::CLASS_KEY];
             if(class_exists($strClassName)) {
                 $objInstance = new $strClassName();
-                if($objInstance instanceof interface_model) {
+                if($objInstance instanceof ModelInterface) {
                     return $objInstance;
                 }
             }
         }
 
-        throw new class_exception("Could not determine object type", class_exception::$level_ERROR);
+        throw new Exception("Could not determine object type", Exception::$level_ERROR);
     }
 }

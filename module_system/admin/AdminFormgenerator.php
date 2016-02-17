@@ -8,6 +8,22 @@
 
 namespace Kajona\System\Admin;
 
+use Kajona\System\Admin\Formentries\FormentryBase;
+use Kajona\System\Admin\Formentries\FormentryDivider;
+use Kajona\System\Admin\Formentries\FormentryHeadline;
+use Kajona\System\Admin\Formentries\FormentryHidden;
+use Kajona\System\Admin\Formentries\FormentryPlaintext;
+use Kajona\System\System\Carrier;
+use Kajona\System\System\Exception;
+use Kajona\System\System\Lang;
+use Kajona\System\System\Model;
+use Kajona\System\System\ModelInterface;
+use Kajona\System\System\Reflection;
+use Kajona\System\System\Resourceloader;
+use Kajona\System\System\UserUser;
+use Kajona\System\System\ValidatorInterface;
+use Kajona\System\System\Validators\ObjectvalidatorBase;
+use Kajona\System\System\Validators\SystemidValidator;
 
 
 /**
@@ -55,7 +71,7 @@ class AdminFormgenerator
     /**
      * The list of form-entries
      *
-     * @var class_formentry_base[]|interface_formentry[]
+     * @var FormentryBase[]|FormentryInterface[]
      */
     private $arrFields = array();
 
@@ -69,7 +85,7 @@ class AdminFormgenerator
     /**
      * The source-object to be rendered by the form
      *
-     * @var class_model
+     * @var Model
      */
     private $objSourceobject = null;
 
@@ -89,7 +105,7 @@ class AdminFormgenerator
      * Creates a new instance of the form-generator.
      *
      * @param string $strFormname
-     * @param class_model $objSourceobject
+     * @param Model $objSourceobject
      */
     public function __construct($strFormname, $objSourceobject)
     {
@@ -97,7 +113,7 @@ class AdminFormgenerator
         $this->objSourceobject = $objSourceobject;
 
         $this->strOnSubmit = "$(this).on('submit', function() { return false; }); $(window).off('unload'); KAJONA.admin.forms.animateSubmit(this); return true;";
-        $this->objLang = class_lang::getInstance();
+        $this->objLang = Lang::getInstance();
     }
 
     /**
@@ -135,12 +151,12 @@ class AdminFormgenerator
     /**
      * Validates the current form.
      *
-     * @throws class_exception
+     * @throws Exception
      * @return bool
      */
     public function validateForm()
     {
-        $objLang = class_carrier::getInstance()->getObjLang();
+        $objLang = Carrier::getInstance()->getObjLang();
 
         //1. Validate fields
         foreach ($this->arrFields as $objOneField) {
@@ -168,16 +184,16 @@ class AdminFormgenerator
 
         //2. Validate complete object
         if ($this->getObjSourceobject() != null) {
-            $objReflection = new class_reflection($this->getObjSourceobject());
+            $objReflection = new Reflection($this->getObjSourceobject());
             $arrObjectValidator = $objReflection->getAnnotationValuesFromClass(self::STR_OBJECTVALIDATOR_ANNOTATION);
             if (count($arrObjectValidator) == 1) {
 
                 $strObjectValidator = $arrObjectValidator[0];
                 if (!class_exists($strObjectValidator)) {
-                    throw new class_exception("object validator ".$strObjectValidator." not existing", class_exception::$level_ERROR);
+                    throw new Exception("object validator ".$strObjectValidator." not existing", Exception::$level_ERROR);
                 }
 
-                /** @var class_objectvalidator_base $objValidator */
+                /** @var ObjectvalidatorBase $objValidator */
                 $objValidator = new $strObjectValidator();
 
                 //Keep the reference of the current object
@@ -194,8 +210,8 @@ class AdminFormgenerator
                 }
 
                 //if we are in new-mode, we should fix the prev-id to the lateron matching one
-                if (($this->getField("mode") != null && $this->getField("mode")->getStrValue() == "new") || class_carrier::getInstance()->getParam("mode") == "new") {
-                    $this->objSourceobject->setStrPrevId(class_carrier::getInstance()->getParam("systemid"));
+                if (($this->getField("mode") != null && $this->getField("mode")->getStrValue() == "new") || Carrier::getInstance()->getParam("mode") == "new") {
+                    $this->objSourceobject->setStrPrevId(Carrier::getInstance()->getParam("systemid"));
                 }
 
                 //Update the new source object values from the fields and validate the object
@@ -204,7 +220,7 @@ class AdminFormgenerator
 
                 foreach ($objValidator->getArrValidationMessages() as $strKey => $arrMessages) {
                     if (!is_array($arrMessages)) {
-                        throw new class_exception("method validateObject must return an array of format array(\"<messageKey>\" => array())", class_exception::$level_ERROR);
+                        throw new Exception("method validateObject must return an array of format array(\"<messageKey>\" => array())", Exception::$level_ERROR);
                     }
 
                     foreach ($arrMessages as $strMessage) {
@@ -230,7 +246,7 @@ class AdminFormgenerator
      * @param int $intButtonConfig a list of buttons to attach to the end of the form. if you need more then the obligatory save-button,
      *                             pass them combined by a bitwise or, e.g. AdminFormgenerator::BIT_BUTTON_SAVE | AdminFormgenerator::$BIT_BUTTON_CANCEL
      *
-     * @throws class_exception
+     * @throws Exception
      * @return string
      */
     public function renderForm($strTargetURI, $intButtonConfig = 2)
@@ -238,9 +254,9 @@ class AdminFormgenerator
         $strReturn = "";
 
         //add a hidden systemid-field
-        if ($this->objSourceobject != null && $this->objSourceobject instanceof class_model) {
-            $objField = new class_formentry_hidden($this->strFormname, "systemid");
-            $objField->setStrEntryName("systemid")->setStrValue($this->objSourceobject->getSystemid())->setObjValidator(new class_systemid_validator());
+        if ($this->objSourceobject != null && $this->objSourceobject instanceof Model) {
+            $objField = new FormentryHidden($this->strFormname, "systemid");
+            $objField->setStrEntryName("systemid")->setStrValue($this->objSourceobject->getSystemid())->setObjValidator(new SystemidValidator());
             $this->addField($objField);
         }
 
@@ -248,7 +264,7 @@ class AdminFormgenerator
         if($strGeneratedFormname == null) {
             $strGeneratedFormname = "form".generateSystemid();
         }
-        $objToolkit = class_carrier::getInstance()->getObjToolkit("admin");
+        $objToolkit = Carrier::getInstance()->getObjToolkit("admin");
         if ($strTargetURI !== null) {
             $strReturn .= $objToolkit->formHeader($strTargetURI, $strGeneratedFormname, $this->strFormEncoding, $this->strOnSubmit, $this->strMethod);
         }
@@ -269,35 +285,35 @@ class AdminFormgenerator
         }
 
         if ($intButtonConfig & self::BIT_BUTTON_SUBMIT) {
-            $strReturn .= $objToolkit->formInputSubmit(class_lang::getInstance()->getLang("commons_submit", "system"), "submitbtn");
+            $strReturn .= $objToolkit->formInputSubmit(Lang::getInstance()->getLang("commons_submit", "system"), "submitbtn");
         }
 
         if ($intButtonConfig & self::BIT_BUTTON_SAVE) {
-            $strReturn .= $objToolkit->formInputSubmit(class_lang::getInstance()->getLang("commons_save", "system"), "submitbtn");
+            $strReturn .= $objToolkit->formInputSubmit(Lang::getInstance()->getLang("commons_save", "system"), "submitbtn");
         }
 
         if ($intButtonConfig & self::BIT_BUTTON_CANCEL) {
-            $strReturn .= $objToolkit->formInputSubmit(class_lang::getInstance()->getLang("commons_cancel", "system"), "cancelbtn");
+            $strReturn .= $objToolkit->formInputSubmit(Lang::getInstance()->getLang("commons_cancel", "system"), "cancelbtn");
         }
 
         if ($intButtonConfig & self::BIT_BUTTON_CLOSE) {
-            $strReturn .= $objToolkit->formInputSubmit(class_lang::getInstance()->getLang("commons_close", "system"), "closebtn");
+            $strReturn .= $objToolkit->formInputSubmit(Lang::getInstance()->getLang("commons_close", "system"), "closebtn");
         }
 
         if ($intButtonConfig & self::BIT_BUTTON_DELETE) {
-            $strReturn .= $objToolkit->formInputSubmit(class_lang::getInstance()->getLang("commons_delete", "system"), "deletebtn");
+            $strReturn .= $objToolkit->formInputSubmit(Lang::getInstance()->getLang("commons_delete", "system"), "deletebtn");
         }
 
         if ($intButtonConfig & self::BIT_BUTTON_RESET) {
-            $strReturn .= $objToolkit->formInputSubmit(class_lang::getInstance()->getLang("commons_reset", "system"), "reset", "", "cancelbutton");
+            $strReturn .= $objToolkit->formInputSubmit(Lang::getInstance()->getLang("commons_reset", "system"), "reset", "", "cancelbutton");
         }
 
         if ($intButtonConfig & self::BIT_BUTTON_CONTINUE) {
-            $strReturn .= $objToolkit->formInputSubmit(class_lang::getInstance()->getLang("commons_continue", "system"), "continuebtn");
+            $strReturn .= $objToolkit->formInputSubmit(Lang::getInstance()->getLang("commons_continue", "system"), "continuebtn");
         }
 
         if ($intButtonConfig & self::BIT_BUTTON_BACK) {
-            $strReturn .= $objToolkit->formInputSubmit(class_lang::getInstance()->getLang("commons_back", "system"), "backbtn");
+            $strReturn .= $objToolkit->formInputSubmit(Lang::getInstance()->getLang("commons_back", "system"), "backbtn");
         }
 
 
@@ -310,10 +326,10 @@ class AdminFormgenerator
 
             do {
                 $objField = current($this->arrFields);
-                if (!$objField instanceof class_formentry_hidden
-                    && !$objField instanceof class_formentry_plaintext
-                    && !$objField instanceof class_formentry_headline
-                    && !$objField instanceof class_formentry_divider
+                if (!$objField instanceof FormentryHidden
+                    && !$objField instanceof FormentryPlaintext
+                    && !$objField instanceof FormentryHeadline
+                    && !$objField instanceof FormentryDivider
                 ) {
                     $strReturn .= $objToolkit->setBrowserFocus($objField->getStrEntryName());
                     break;
@@ -346,8 +362,8 @@ class AdminFormgenerator
                     </script>";
                 }
                 else {
-                    $objUser = new class_module_user_user($this->objSourceobject->getLockManager()->getLockId());
-                    throw new class_exception("Current record is already locked by user '".$objUser->getStrDisplayName()."'.\nCannot be locked for the current user", class_exception::$level_ERROR);
+                    $objUser = new UserUser($this->objSourceobject->getLockManager()->getLockId());
+                    throw new Exception("Current record is already locked by user '".$objUser->getStrDisplayName()."'.\nCannot be locked for the current user", Exception::$level_ERROR);
                 }
             }
         }
@@ -370,7 +386,7 @@ class AdminFormgenerator
     {
 
         //load all methods
-        $objAnnotations = new class_reflection($this->objSourceobject);
+        $objAnnotations = new Reflection($this->objSourceobject);
 
         $arrProperties = $objAnnotations->getPropertiesWithAnnotation("@fieldType");
         foreach ($arrProperties as $strPropertyName => $strDataType) {
@@ -388,17 +404,17 @@ class AdminFormgenerator
      *
      * @param string $strPropertyName
      *
-     * @return class_formentry_base|interface_formentry
-     * @throws class_exception
+     * @return FormentryBase|FormentryInterface
+     * @throws Exception
      */
     public function addDynamicField($strPropertyName)
     {
 
         //try to get the matching getter
-        $objReflection = new class_reflection($this->objSourceobject);
+        $objReflection = new Reflection($this->objSourceobject);
         $strGetter = $objReflection->getGetter($strPropertyName);
         if ($strGetter === null) {
-            throw new class_exception("unable to find getter for property ".$strPropertyName."@".get_class($this->objSourceobject), class_exception::$level_ERROR);
+            throw new Exception("unable to find getter for property ".$strPropertyName."@".get_class($this->objSourceobject), Exception::$level_ERROR);
         }
 
         //load detailed properties
@@ -415,7 +431,7 @@ class AdminFormgenerator
         }
 
 
-        $strPropertyName = class_lang::getInstance()->propertyWithoutPrefix($strPropertyName);
+        $strPropertyName = Lang::getInstance()->propertyWithoutPrefix($strPropertyName);
 
         $objField = $this->getFormEntryInstance($strType, $strPropertyName);
         if ($strLabel !== null) {
@@ -459,14 +475,14 @@ class AdminFormgenerator
      * @param string $strField
      * @param int $intPos
      *
-     * @throws class_exception
+     * @throws Exception
      * @return void
      */
     public function setFieldToPosition($strField, $intPos)
     {
 
         if (!isset($this->arrFields[$strField])) {
-            throw new class_exception("field ".$strField." not found in list ".implode(", ", array_keys($this->arrFields)), class_exception::$level_ERROR);
+            throw new Exception("field ".$strField." not found in list ".implode(", ", array_keys($this->arrFields)), Exception::$level_ERROR);
         }
 
         $objField = $this->arrFields[$strField];
@@ -506,8 +522,8 @@ class AdminFormgenerator
      * @param string $strName
      * @param string $strPropertyname
      *
-     * @return class_formentry_base|interface_formentry
-     * @throws class_exception
+     * @return FormentryBase|FormentryInterface
+     * @throws Exception
      */
     private function getFormEntryInstance($strName, $strPropertyname)
     {
@@ -520,10 +536,10 @@ class AdminFormgenerator
         else {
             //backwards support for v4
             $strClassname = "class_formentry_".$strName;
-            $strPath = class_resourceloader::getInstance()->getPathForFile("/admin/formentries/".$strClassname.".php");
+            $strPath = Resourceloader::getInstance()->getPathForFile("/admin/formentries/".$strClassname.".php");
 
             if(!$strPath) {
-                $strPath = class_resourceloader::getInstance()->getPathForFile("/legacy/".$strClassname.".php");
+                $strPath = Resourceloader::getInstance()->getPathForFile("/legacy/".$strClassname.".php");
 
                 if($strPath == null) {
                     $strClassname = null;
@@ -536,7 +552,7 @@ class AdminFormgenerator
             return new $strClassname($this->strFormname, $strPropertyname, $this->objSourceobject);
         }
         else {
-            throw new class_exception("failed to load form-entry of type ".$strClassname, class_exception::$level_ERROR);
+            throw new Exception("failed to load form-entry of type ".$strClassname, Exception::$level_ERROR);
         }
 
     }
@@ -546,8 +562,8 @@ class AdminFormgenerator
      *
      * @param string $strClassname
      *
-     * @throws class_exception
-     * @return interface_validator
+     * @throws Exception
+     * @return ValidatorInterface
      */
     private function getValidatorInstance($strClassname)
     {
@@ -555,11 +571,11 @@ class AdminFormgenerator
             $strClassname = "class_".$strClassname."_validator";
         }
 
-        if (class_resourceloader::getInstance()->getPathForFile("/system/validators/".$strClassname.".php")) {
+        if (Resourceloader::getInstance()->getPathForFile("/system/validators/".$strClassname.".php")) {
             return new $strClassname();
         }
         else {
-            throw new class_exception("failed to load validator of type ".$strClassname, class_exception::$level_ERROR);
+            throw new Exception("failed to load validator of type ".$strClassname, Exception::$level_ERROR);
         }
     }
 
@@ -641,12 +657,12 @@ class AdminFormgenerator
      * Adds a single field to the current form, the hard, manual way.
      * Use this method if you want to add custom fields to the current form.
      *
-     * @param class_formentry_base $objField
+     * @param FormentryBase $objField
      * @param string $strKey
      *
-     * @return class_formentry_base|interface_formentry
+     * @return FormentryBase|FormentryInterface
      */
-    public function addField(class_formentry_base $objField, $strKey = "")
+    public function addField(FormentryBase $objField, $strKey = "")
     {
         if ($strKey == "") {
             $strKey = $objField->getStrEntryName();
@@ -662,7 +678,7 @@ class AdminFormgenerator
      *
      * @param string $strName
      *
-     * @return class_formentry_base|interface_formentry
+     * @return FormentryBase|FormentryInterface
      */
     public function getField($strName)
     {
@@ -681,7 +697,7 @@ class AdminFormgenerator
      *
      * @param $arrFieldOrder
      * @return int
-     * @throws class_exception
+     * @throws Exception
      */
     public function orderFields($arrFieldOrder)
     {
@@ -725,11 +741,11 @@ class AdminFormgenerator
     /**
      * Moves a single field to the list of hidden elements
      *
-     * @param class_formentry_base $objField
+     * @param FormentryBase $objField
      *
-     * @return class_formentry_base
+     * @return FormentryBase
      */
-    public function addFieldToHiddenGroup(class_formentry_base $objField)
+    public function addFieldToHiddenGroup(FormentryBase $objField)
     {
         $this->arrHiddenElements[] = $objField->getStrEntryName();
         if (!isset($this->arrFields[$objField->getStrEntryName()]) && !isset($this->arrFields[$objField->getStrSourceProperty()])) {
@@ -751,7 +767,7 @@ class AdminFormgenerator
     }
 
     /**
-     * @return \class_model|interface_model
+     * @return Model|ModelInterface
      */
     public function getObjSourceobject()
     {
@@ -759,7 +775,7 @@ class AdminFormgenerator
     }
 
     /**
-     * @param \class_model|interface_model $objSource
+     * @param Model|ModelInterface $objSource
      */
     protected function setObjSourceobject($objSource)
     {
@@ -767,7 +783,7 @@ class AdminFormgenerator
     }
 
     /**
-     * @return class_formentry_base[]|interface_formentry[]
+     * @return FormentryBase[]|FormentryInterface[]
      */
     public function getArrFields()
     {
@@ -822,14 +838,14 @@ class AdminFormgenerator
 
     /**
      * @param string $strMethod
-     * @throws class_exception
+     * @throws Exception
      */
     public function setStrMethod($strMethod)
     {
         if (in_array($strMethod, array(self::STR_METHOD_GET, self::STR_METHOD_POST))) {
             $this->strMethod = $strMethod;
         } else {
-            throw new class_exception("Invalid form method", class_exception::$level_ERROR);
+            throw new Exception("Invalid form method", Exception::$level_ERROR);
         }
     }
 

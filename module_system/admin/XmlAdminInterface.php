@@ -1,26 +1,20 @@
 <?php
 /*"******************************************************************************************************
+*   (c) 2004-2006 by MulchProductions, www.mulchprod.de                                                 *
 *   (c) 2007-2015 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 ********************************************************************************************************/
 
-/**
- * Interface for all form-objects.
- * Make sure you extend class_formentry_base, too.
- *
- * @author sidler@mulchprod.de
- * @since 4.0
- * @package module_formgenerator
- */
-interface interface_formentry {
+namespace Kajona\System\Admin;
 
-    /**
-     * Renders the field itself.
-     * In most cases, based on the current toolkit.
-     *
-     * @abstract
-     * @return string
-     */
-    public function renderField();
+use Kajona\System\System\XmlInterface;
+
+/**
+ * Interface for all xml-admin-classes (modules)
+ * Ensures, that all needed methods are being implemented
+ *
+ * @package module_system
+ */
+interface XmlAdminInterface extends XmlInterface  {
 
 }
