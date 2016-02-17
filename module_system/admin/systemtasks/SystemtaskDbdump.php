@@ -9,6 +9,8 @@
 
 namespace Kajona\System\Admin\Systemtasks;
 
+use Kajona\System\System\Carrier;
+use Kajona\System\System\SystemModule;
 
 
 /**
@@ -16,7 +18,7 @@ namespace Kajona\System\Admin\Systemtasks;
  *
  * @package module_system
  */
-class SystemtaskDbdump extends class_systemtask_base implements interface_admin_systemtask {
+class SystemtaskDbdump extends SystemtaskBase implements AdminSystemtaskInterface {
 
     private $arrTablesToExlucde = array(
         "stats_data", "stats_ip2country", "cache", "search_ix_document", "search_ix_content"
@@ -52,14 +54,14 @@ class SystemtaskDbdump extends class_systemtask_base implements interface_admin_
      */
     public function executeTask() {
 
-        if(!class_module_system_module::getModuleByName("system")->rightRight2())
+        if(!SystemModule::getModuleByName("system")->rightRight2())
             return $this->getLang("commons_error_permissions");
 
         $arrToExclude = array();
         if($this->getParam("excludeTables") == "1")
             $arrToExclude = $this->arrTablesToExlucde;
 
-        if(class_carrier::getInstance()->getObjDB()->dumpDb($arrToExclude))
+        if(Carrier::getInstance()->getObjDB()->dumpDb($arrToExclude))
             return $this->objToolkit->getTextRow($this->getLang("systemtask_dbexport_success"));
         else
             return $this->objToolkit->getTextRow($this->getLang("systemtask_dbexport_error"));

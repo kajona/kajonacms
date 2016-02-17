@@ -8,27 +8,9 @@
 ********************************************************************************************************/
 
 /**
- * Interface for all portal-classes (modules)
- * Ensures, that all needed methods are being implemented
- *
- * @package module_system
+ * @deprecated
  */
-interface interface_portal {
-
-    /**
-     * Contstructor accepting Element-Data. Passed to the base-class
-     *
-     * @param mixed $arrElementData
-     */
-    public function __construct($arrElementData);
-
-	/**
-	 * This method is being called from the element and controls all other actions
-	 * If given, the action passed in the GET-Array is being passed by param
-	 *
-	 * The method returns the content of the xml file, NOT the headers
-	 */
-	public function action();
+interface interface_portal extends \Kajona\System\Portal\PortalInterface {
 
 
 }

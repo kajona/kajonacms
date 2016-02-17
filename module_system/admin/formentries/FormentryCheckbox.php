@@ -6,13 +6,18 @@
 
 namespace Kajona\System\Admin\Formentries;
 
+use Kajona\System\Admin\FormentryPrintableInterface;
+use Kajona\System\System\Carrier;
+use Kajona\System\System\Exception;
+use Kajona\System\System\Validators\DummyValidator;
+
 
 /**
  * @author sidler@mulchprod.de
  * @since 4.0
  * @package module_formgenerator
  */
-class FormentryCheckbox extends class_formentry_base implements interface_formentry_printable {
+class FormentryCheckbox extends FormentryBase implements FormentryPrintableInterface {
 
     private $strOpener = "";
 
@@ -20,7 +25,7 @@ class FormentryCheckbox extends class_formentry_base implements interface_formen
         parent::__construct($strFormName, $strSourceProperty, $objSourceObject);
 
         //set the default validator
-        $this->setObjValidator(new class_dummy_validator());
+        $this->setObjValidator(new DummyValidator());
     }
 
     /**
@@ -30,7 +35,7 @@ class FormentryCheckbox extends class_formentry_base implements interface_formen
      * @return string
      */
     public function renderField() {
-        $objToolkit = class_carrier::getInstance()->getObjToolkit("admin");
+        $objToolkit = Carrier::getInstance()->getObjToolkit("admin");
         $strReturn = "";
         if($this->getStrHint() != null)
             $strReturn .= $objToolkit->formTextRow($this->getStrHint());
@@ -42,7 +47,7 @@ class FormentryCheckbox extends class_formentry_base implements interface_formen
 
     /**
      * @param $strValue
-     * @return class_formentry_base
+     * @return FormentryBase
      */
     public function setStrValue($strValue) {
         parent::setStrValue($strValue != false);
@@ -56,13 +61,13 @@ class FormentryCheckbox extends class_formentry_base implements interface_formen
      * the source-objects' getter is invoked.
      */
     protected function updateValue() {
-        $arrParams = class_carrier::getAllParams();
+        $arrParams = Carrier::getAllParams();
 
 
         if(isset($arrParams[$this->getStrEntryName()])) {
             $this->setStrValue(true);
         }
-        else if(count($_POST) > 0) {
+        elseif(count($_POST) > 0) {
             $this->setStrValue(false);
         }
         else {
@@ -72,7 +77,7 @@ class FormentryCheckbox extends class_formentry_base implements interface_formen
 
     /**
      * @param $strOpener
-     * @return class_formentry_text
+     * @return FormentryText
      */
     public function setStrOpener($strOpener) {
         $this->strOpener = $strOpener;
@@ -90,14 +95,14 @@ class FormentryCheckbox extends class_formentry_base implements interface_formen
      * @return string
      */
     public function getValueAsText() {
-        return $this->getStrValue() == true ? class_carrier::getInstance()->getObjLang()->getLang("commons_yes", "commons") : class_carrier::getInstance()->getObjLang()->getLang("commons_no", "commons");
+        return $this->getStrValue() == true ? Carrier::getInstance()->getObjLang()->getLang("commons_yes", "commons") : Carrier::getInstance()->getObjLang()->getLang("commons_no", "commons");
     }
 
     /**
      * Calls the source-objects setter and stores the value.
      * If you want to skip a single setter, remove the field before.
      *
-     * @throws class_exception
+     * @throws Exception
      * @return mixed
      */
     public function setValueToObject()

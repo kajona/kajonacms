@@ -6,6 +6,8 @@
 
 namespace Kajona\System\Admin\Formentries;
 
+use Kajona\System\System\Carrier;
+
 
 /**
  * A yes-no field renders a dropdown containing a list of entries.
@@ -15,7 +17,7 @@ namespace Kajona\System\Admin\Formentries;
  * @since 4.0
  * @package module_formgenerator
  */
-class FormentryMultiselect extends class_formentry_dropdown {
+class FormentryMultiselect extends FormentryDropdown {
 
     protected $arrKeyValues = array();
 
@@ -26,7 +28,7 @@ class FormentryMultiselect extends class_formentry_dropdown {
      * @return string
      */
     public function renderField() {
-        $objToolkit = class_carrier::getInstance()->getObjToolkit("admin");
+        $objToolkit = Carrier::getInstance()->getObjToolkit("admin");
         $strReturn = "";
         if($this->getStrHint() != null) {
             $strReturn .= $objToolkit->formTextRow($this->getStrHint());
@@ -84,7 +86,7 @@ class FormentryMultiselect extends class_formentry_dropdown {
     /**
      * @param $arrKeyValues
      *
-     * @return class_formentry_dropdown
+     * @return FormentryDropdown
      */
     public function setArrKeyValues($arrKeyValues) {
         $this->arrKeyValues = $arrKeyValues;

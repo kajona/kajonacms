@@ -8,6 +8,8 @@
 
 namespace Kajona\System\System;
 
+use Kajona\System\System\Imageplugins\ImageOperationInterface;
+
 
 /**
  * Class to manipulate and output images.
@@ -60,7 +62,7 @@ class Image2 {
      */
     public function __construct() {
         // Try to overwrite PHP memory-limit so large images can be processed, too
-        if(class_carrier::getInstance()->getObjConfig()->getPhpIni("memory_limit") < 128) {
+        if(Carrier::getInstance()->getObjConfig()->getPhpIni("memory_limit") < 128) {
             @ini_set("memory_limit", "128M");
         }
     }
@@ -104,7 +106,7 @@ class Image2 {
             return $arrColor;
         }
         // Decimal RGB, e.g. rgb(255, 0, 16)
-        else if (preg_match("/rgb\\(\\s*(\\d{1,3})\\s*,\\s*(\\d{1,3})\\s*,\\s*(\\d{1,3})\\s*\\)/i", $strColor, $arrMatches)) {
+        elseif (preg_match("/rgb\\(\\s*(\\d{1,3})\\s*,\\s*(\\d{1,3})\\s*,\\s*(\\d{1,3})\\s*\\)/i", $strColor, $arrMatches)) {
             $intRed = min((int)$arrMatches[1], 255);
             $intGreen = min((int)$arrMatches[2], 255);
             $intBlue = min((int)$arrMatches[3], 255);
@@ -112,7 +114,7 @@ class Image2 {
             return $arrColor;
         }
         // Decimal RGBA, e.g. rgba(255, 0, 16, 0.8)
-        else if (preg_match("/rgba\\(\\s*(\\d{1,3})\\s*,\\s*(\\d{1,3})\\s*,\\s*(\\d{1,3})\\s*,\\s*(\\d+(\\.\\d+)?)\\s*\\)/i", $strColor, $arrMatches)) {
+        elseif (preg_match("/rgba\\(\\s*(\\d{1,3})\\s*,\\s*(\\d{1,3})\\s*,\\s*(\\d{1,3})\\s*,\\s*(\\d+(\\.\\d+)?)\\s*\\)/i", $strColor, $arrMatches)) {
             $intRed = min((int)$arrMatches[1], 255);
             $intGreen = min((int)$arrMatches[2], 255);
             $intBlue = min((int)$arrMatches[3], 255);
@@ -194,7 +196,7 @@ class Image2 {
      * @param ImageOperationInterface $objOperation
      * @return void
      */
-    public function addOperation(interface_image_operation $objOperation) {
+    public function addOperation(ImageOperationInterface $objOperation) {
         $this->arrOperations[] = $objOperation;
         $this->bitImageIsUpToDate = false;
     }
@@ -251,20 +253,20 @@ class Image2 {
         $strResponseType = null;
         switch($strFormat) {
             case self::FORMAT_PNG:
-                $strResponseType = class_http_responsetypes::STR_TYPE_JPEG;
+                $strResponseType = HttpResponsetypes::STR_TYPE_JPEG;
                 break;
             case self::FORMAT_JPG:
-                $strResponseType = class_http_responsetypes::STR_TYPE_PNG;
+                $strResponseType = HttpResponsetypes::STR_TYPE_PNG;
                 break;
             case self::FORMAT_GIF:
-                $strResponseType = class_http_responsetypes::STR_TYPE_GIF;
+                $strResponseType = HttpResponsetypes::STR_TYPE_GIF;
                 break;
             default:
                 return false;
         }
 
-        class_response_object::getInstance()->setStrResponseType($strResponseType);
-        class_response_object::getInstance()->sendHeaders();
+        ResponseObject::getInstance()->setStrResponseType($strResponseType);
+        ResponseObject::getInstance()->sendHeaders();
 
         if (!$this->isCached($strFormat)) {
             if ($this->processImage($strFormat)) {

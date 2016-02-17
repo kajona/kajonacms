@@ -6,6 +6,9 @@
 
 namespace Kajona\System\Admin\Formentries;
 
+use Kajona\System\Admin\FormentryPrintableInterface;
+use Kajona\System\System\Validators\DummyValidator;
+
 
 /**
  * A formentry to add special code to forms, in most cases hidden js-code
@@ -14,7 +17,7 @@ namespace Kajona\System\Admin\Formentries;
  * @since 4.3
  * @package module_system
  */
-class FormentryPlaintext extends class_formentry_base implements interface_formentry_printable {
+class FormentryPlaintext extends FormentryBase implements FormentryPrintableInterface {
 
 
     /**
@@ -24,7 +27,7 @@ class FormentryPlaintext extends class_formentry_base implements interface_forme
         parent::__construct("", $strName != "" ? $strName : generateSystemid());
 
         //set the default validator
-        $this->setObjValidator(new class_dummy_validator());
+        $this->setObjValidator(new DummyValidator());
     }
 
     /**

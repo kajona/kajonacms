@@ -9,6 +9,18 @@
 
 namespace Kajona\System\Admin\Systemtasks;
 
+use Kajona\System\Admin\AdminFormgenerator;
+use Kajona\System\Admin\Formentries\FormentryButton;
+use Kajona\System\Admin\Formentries\FormentryHeadline;
+use Kajona\System\Admin\Formentries\FormentryHidden;
+use Kajona\System\Admin\ToolkitAdmin;
+use Kajona\System\System\Carrier;
+use Kajona\System\System\Classloader;
+use Kajona\System\System\Database;
+use Kajona\System\System\Lang;
+use Kajona\System\System\Link;
+use Kajona\System\System\Resourceloader;
+use Kajona\System\System\SystemCommon;
 
 
 /**
@@ -24,21 +36,21 @@ abstract class SystemtaskBase {
     /**
      * Instance of class_db
      *
-     * @var class_db
+     * @var Database
      */
     private $objDB;
 
     /**
      * Instance of class_text
      *
-     * @var class_lang
+     * @var Lang
      */
     private $objLang;
 
     /**
      * Instance of class_toolkit
      *
-     * @var class_toolkit_admin
+     * @var ToolkitAdmin
      */
     protected $objToolkit;
 
@@ -57,7 +69,7 @@ abstract class SystemtaskBase {
     private $strProgressInformation = "";
 
     /**
-     * @var class_module_system_common
+     * @var SystemCommon
      */
     private $objSystemCommon;
 
@@ -75,25 +87,25 @@ abstract class SystemtaskBase {
     public function __construct() {
 
         //load the external objects
-        $this->objDB = class_carrier::getInstance()->getObjDB();
-        $this->objLang = class_carrier::getInstance()->getObjLang();
-        $this->objToolkit = class_carrier::getInstance()->getObjToolkit("admin");
-        $this->objSystemCommon = new class_module_system_common();
+        $this->objDB = Carrier::getInstance()->getObjDB();
+        $this->objLang = Carrier::getInstance()->getObjLang();
+        $this->objToolkit = Carrier::getInstance()->getObjToolkit("admin");
+        $this->objSystemCommon = new SystemCommon();
 
     }
 
     /**
      * A helper to fetch instances of all systemtasks found in the current installation
      *
-     * @return SystemtaskBase[]|interface_admin_systemtask[]
+     * @return SystemtaskBase[]|AdminSystemtaskInterface[]
      */
     public static function getAllSystemtasks()
     {
-        $arrFiles = class_resourceloader::getInstance()->getFolderContent("/admin/systemtasks/", array(".php"), false, null, function (&$strOneFile, $strPath) {
+        $arrFiles = Resourceloader::getInstance()->getFolderContent("/admin/systemtasks/", array(".php"), false, null, function (&$strOneFile, $strPath) {
 
-            $objInstance = class_classloader::getInstance()->getInstanceFromFilename($strPath, "SystemtaskBase");
+            $objInstance = Classloader::getInstance()->getInstanceFromFilename($strPath, "SystemtaskBase");
 
-            if($objInstance instanceof interface_admin_systemtask)
+            if($objInstance instanceof AdminSystemtaskInterface)
                 $strOneFile = $objInstance;
             else
                 $strOneFile = null;
@@ -122,7 +134,7 @@ abstract class SystemtaskBase {
      *
      * @param string $strTargetModule
      * @param string $strTargetAction
-     * @param string|class_admin_formgenerator $objAdminForm
+     * @param string|AdminFormgenerator $objAdminForm
      *
      * @return string
      */
@@ -130,23 +142,23 @@ abstract class SystemtaskBase {
         $strReturn = "";
         $objAdminForm = $objAdminForm == null ? $this->getAdminForm() : $objAdminForm;
 
-        if($objAdminForm instanceof class_admin_formgenerator) {
-            $objAdminForm->addField(new class_formentry_hidden("", "execute"))->setStrValue("true");
-            $objAdminForm->addField(new class_formentry_button("", "systemtask_run"))->setStrLabel($this->objLang->getLang("systemtask_run", "system"))->setStrValue("submit");
+        if($objAdminForm instanceof AdminFormgenerator) {
+            $objAdminForm->addField(new FormentryHidden("", "execute"))->setStrValue("true");
+            $objAdminForm->addField(new FormentryButton("", "systemtask_run"))->setStrLabel($this->objLang->getLang("systemtask_run", "system"))->setStrValue("submit");
 
             if($this->bitMultipartform) {
-                $objAdminForm->setStrFormEncoding(class_admin_formgenerator::FORM_ENCTYPE_MULTIPART);
+                $objAdminForm->setStrFormEncoding(AdminFormgenerator::FORM_ENCTYPE_MULTIPART);
             }
 
-            $strLink = class_link::getLinkAdminHref($strTargetModule, $strTargetAction, "task=" . $this->getStrInternalTaskName());
+            $strLink = Link::getLinkAdminHref($strTargetModule, $strTargetAction, "task=" . $this->getStrInternalTaskName());
             $strReturn = $objAdminForm->renderForm($strLink, 0);
         }
         elseif($objAdminForm != "") {
             if($this->bitMultipartform) {
-                $strReturn .= $this->objToolkit->formHeader(class_link::getLinkAdminHref($strTargetModule, $strTargetAction, "task=" . $this->getStrInternalTaskName()), "taskParamForm", class_admin_formgenerator::FORM_ENCTYPE_MULTIPART);
+                $strReturn .= $this->objToolkit->formHeader(Link::getLinkAdminHref($strTargetModule, $strTargetAction, "task=" . $this->getStrInternalTaskName()), "taskParamForm", AdminFormgenerator::FORM_ENCTYPE_MULTIPART);
             }
             else {
-                $strReturn .= $this->objToolkit->formHeader(class_link::getLinkAdminHref($strTargetModule, $strTargetAction, "task=" . $this->getStrInternalTaskName()), "taskParamForm");
+                $strReturn .= $this->objToolkit->formHeader(Link::getLinkAdminHref($strTargetModule, $strTargetAction, "task=" . $this->getStrInternalTaskName()), "taskParamForm");
             }
             $strReturn .= $objAdminForm;
             $strReturn .= $this->objToolkit->formInputHidden("execute", "true");
@@ -172,7 +184,7 @@ abstract class SystemtaskBase {
 
     /**
      * Empty implementation, override in subclass!
-     * @return class_admin_formgenerator
+     * @return AdminFormgenerator
      */
     public function getAdminForm() {
     }

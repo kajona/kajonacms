@@ -6,13 +6,16 @@
 
 namespace Kajona\System\Admin\Formentries;
 
+use Kajona\System\System\Carrier;
+use Kajona\System\System\Date;
+
 
 /**
  * @author sidler@mulchprod.de
  * @since 4.0
  * @package module_formgenerator
  */
-class FormentryDatetime extends class_formentry_date {
+class FormentryDatetime extends FormentryDate {
 
 
     /**
@@ -22,16 +25,16 @@ class FormentryDatetime extends class_formentry_date {
      * @return string
      */
     public function renderField() {
-        $objToolkit = class_carrier::getInstance()->getObjToolkit("admin");
+        $objToolkit = Carrier::getInstance()->getObjToolkit("admin");
         $strReturn = "";
         if($this->getStrHint() != null)
             $strReturn .= $objToolkit->formTextRow($this->getStrHint());
 
         $objDate = null;
-        if($this->getStrValue() instanceof class_date)
+        if($this->getStrValue() instanceof Date)
             $objDate = $this->getStrValue();
-        else if($this->getStrValue() != "")
-            $objDate = new class_date($this->getStrValue());
+        elseif($this->getStrValue() != "")
+            $objDate = new Date($this->getStrValue());
 
         if($this->getBitReadonly()) {
             $strReturn .= $objToolkit->formInputText($this->getStrEntryName(), $this->getStrLabel(), dateToString($objDate, false), "", "", true);
@@ -52,10 +55,10 @@ class FormentryDatetime extends class_formentry_date {
      */
     public function getValueAsText() {
         $objDate = null;
-        if($this->getStrValue() instanceof class_date)
+        if($this->getStrValue() instanceof Date)
             $objDate = $this->getStrValue();
-        else if($this->getStrValue() != "")
-            $objDate = new class_date($this->getStrValue());
+        elseif($this->getStrValue() != "")
+            $objDate = new Date($this->getStrValue());
 
         if($objDate != null)
             return dateToString($objDate, true);

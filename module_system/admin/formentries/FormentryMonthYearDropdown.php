@@ -6,6 +6,9 @@
 
 namespace Kajona\System\Admin\Formentries;
 
+use Kajona\System\System\Carrier;
+use Kajona\System\System\Date;
+
 
 /**
  * Renders two dropdown boxes, on for month and one for the year.
@@ -14,7 +17,7 @@ namespace Kajona\System\Admin\Formentries;
  * @since 4.4
  * @package module_formgenerator
  */
-class FormentryMonthYearDropdown extends class_formentry_date {
+class FormentryMonthYearDropdown extends FormentryDate {
 
     const DAY_SUFFIX = "_day";
     const MONTH_SUFFIX = "_month";
@@ -43,14 +46,14 @@ class FormentryMonthYearDropdown extends class_formentry_date {
      * @return string
      */
     public function renderField() {
-        $objToolkit = class_carrier::getInstance()->getObjToolkit("admin");
+        $objToolkit = Carrier::getInstance()->getObjToolkit("admin");
 
         //create a date object if possible
         $objDate = null;
-        if($this->getStrValue() instanceof class_date)
+        if($this->getStrValue() instanceof Date)
             $objDate = $this->getStrValue();
-        else if($this->getStrValue() != "")
-            $objDate = new class_date($this->getStrValue());
+        elseif($this->getStrValue() != "")
+            $objDate = new Date($this->getStrValue());
 
         //set selected value
         $intMonth = null;
@@ -109,7 +112,7 @@ class FormentryMonthYearDropdown extends class_formentry_date {
      * @return array
      */
     private static function getArrMonths() {
-        $strMonthNames = class_carrier::getInstance()->getObjLang()->getLang("toolsetCalendarMonth", "system");
+        $strMonthNames = Carrier::getInstance()->getObjLang()->getLang("toolsetCalendarMonth", "system");
         $strMonthNames = uniStrReplace("\"", "", $strMonthNames);
         $arrMonthNames = explode(",", $strMonthNames);
 
@@ -153,12 +156,12 @@ class FormentryMonthYearDropdown extends class_formentry_date {
     public function validateValue()
     {
         if($this->getBitMandatory()) {
-            $arrParams = class_carrier::getAllParams();
+            $arrParams = Carrier::getAllParams();
 
             if (array_key_exists($this->getStrEntryName() . self::DAY_SUFFIX, $arrParams)
 
             ) {
-                $objDate = new class_date("0");
+                $objDate = new Date("0");
                 $objDate->generateDateFromParams($this->getStrEntryName(), $arrParams);
                 return $this->getObjValidator()->validate($objDate) && $objDate->getIntMonth() > 0 && $objDate->getIntYear() > 0;
             }

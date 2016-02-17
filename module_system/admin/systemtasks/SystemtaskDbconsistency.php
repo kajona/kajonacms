@@ -9,6 +9,9 @@
 
 namespace Kajona\System\Admin\Systemtasks;
 
+use Kajona\System\System\Objectfactory;
+use Kajona\System\System\SystemModule;
+use Kajona\System\System\SystemWorker;
 
 
 /**
@@ -16,7 +19,7 @@ namespace Kajona\System\Admin\Systemtasks;
  *
  * @package module_system
  */
-class SystemtaskDbconsistency extends class_systemtask_base implements interface_admin_systemtask {
+class SystemtaskDbconsistency extends SystemtaskBase implements AdminSystemtaskInterface {
 
 
     /**
@@ -49,12 +52,12 @@ class SystemtaskDbconsistency extends class_systemtask_base implements interface
      */
     public function executeTask() {
 
-        if(!class_module_system_module::getModuleByName("system")->rightRight2())
+        if(!SystemModule::getModuleByName("system")->rightRight2())
             return $this->getLang("commons_error_permissions");
 
     	$intI = 0;
     	$strReturn = "";
-        $objWorker = new class_module_system_worker();
+        $objWorker = new SystemWorker();
 
         //chec 1.level nodes
         $arrCorruptedRecords = $objWorker->checkFirstLevelNodeConsistency();
@@ -65,7 +68,7 @@ class SystemtaskDbconsistency extends class_systemtask_base implements interface
             $strReturn .= $this->objToolkit->listHeader();
             $strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), $this->getLang("systemtask_dbconsistency_firstlevel_error"), getImageAdmin("icon_disabled"), "", ++$intI);
             foreach($arrCorruptedRecords as $arrRow)  {
-                $objRecord = class_objectfactory::getInstance()->getObject($arrRow["system_id"]);
+                $objRecord = Objectfactory::getInstance()->getObject($arrRow["system_id"]);
                 $strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), $arrRow["system_id"]." (".uniStrTrim(($objRecord != null ? $objRecord->getStrDisplayName() : $arrRow["system_comment"]), 20).")", "", "", $intI);
             }
             $strReturn .= $this->objToolkit->listFooter();
@@ -105,7 +108,7 @@ class SystemtaskDbconsistency extends class_systemtask_base implements interface
             $strReturn .= $this->objToolkit->listHeader();
             $strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), $this->getLang("systemtask_dbconsistency_right_error"), getImageAdmin("icon_disabled"), "", ++$intI);
             foreach($arrCorruptedRecords as $arrOneRecords)  {
-                $objRecord = class_objectfactory::getInstance()->getObject($arrOneRecords["system_id"]);
+                $objRecord = Objectfactory::getInstance()->getObject($arrOneRecords["system_id"]);
                 $strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), $arrOneRecords["right_id"]." (".uniStrTrim(($objRecord != null ? $objRecord->getStrDisplayName() : $arrOneRecords["system_comment"]), 20).")", "", "", $intI);
             }
             $strReturn .= $this->objToolkit->listFooter();

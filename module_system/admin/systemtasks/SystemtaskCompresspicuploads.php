@@ -9,13 +9,18 @@
 
 namespace Kajona\System\Admin\Systemtasks;
 
+use Kajona\System\System\Filesystem;
+use Kajona\System\System\Image2;
+use Kajona\System\System\Imageplugins\ImageScale;
+use Kajona\System\System\SystemModule;
+
 
 /**
  * Resizes and compresses all uploaded pictures in "/files/images" to save disk space
  *
  * @package module_system
  */
-class SystemtaskCompresspicuploads extends class_systemtask_base implements interface_admin_systemtask {
+class SystemtaskCompresspicuploads extends SystemtaskBase implements AdminSystemtaskInterface {
 
     //class vars
     private $strPicsPath = "/files/images";
@@ -68,7 +73,7 @@ class SystemtaskCompresspicuploads extends class_systemtask_base implements inte
      */
     public function executeTask() {
 
-        if(!class_module_system_module::getModuleByName("system")->rightRight2())
+        if(!SystemModule::getModuleByName("system")->rightRight2())
             return $this->getLang("commons_error_permissions");
 
         $strReturn = "";
@@ -90,7 +95,7 @@ class SystemtaskCompresspicuploads extends class_systemtask_base implements inte
      * @return void
      */
     private function recursiveImageProcessing($strPath) {
-        $objFilesystem = new class_filesystem();
+        $objFilesystem = new Filesystem();
 
         $arrFilesFolders = $objFilesystem->getCompleteList($strPath, array(".jpg", ".jpeg", ".png", ".gif"), array(), array(".", "..", ".svn"));
         $this->intFilesTotal += $arrFilesFolders["nrFiles"];
@@ -102,10 +107,10 @@ class SystemtaskCompresspicuploads extends class_systemtask_base implements inte
         foreach($arrFilesFolders["files"] as $arrOneFile) {
             $strImagePath = $strPath."/".$arrOneFile["filename"];
 
-            $objImage = new class_image2();
+            $objImage = new Image2();
             $objImage->setUseCache(false);
             $objImage->load($strImagePath);
-            $objImage->addOperation(new class_image_scale($this->intMaxWidth, $this->intMaxHeight));
+            $objImage->addOperation(new ImageScale($this->intMaxWidth, $this->intMaxHeight));
             if($objImage->save($strImagePath)) {
                 $this->intFilesProcessed++;
             };

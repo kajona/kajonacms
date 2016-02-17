@@ -9,6 +9,8 @@
 
 namespace Kajona\System\Admin\Systemtasks;
 
+use Kajona\System\System\SystemModule;
+use Kajona\System\System\Zip;
 
 
 /**
@@ -16,7 +18,7 @@ namespace Kajona\System\Admin\Systemtasks;
  *
  * @package module_system
  */
-class SystemtaskFiledump extends class_systemtask_base implements interface_admin_systemtask {
+class SystemtaskFiledump extends SystemtaskBase implements AdminSystemtaskInterface {
 
     private $arrFoldersToInclude = array(
         "/files",
@@ -60,12 +62,12 @@ class SystemtaskFiledump extends class_systemtask_base implements interface_admi
      */
     public function executeTask() {
 
-        if(!class_module_system_module::getModuleByName("system")->rightRight2())
+        if(!SystemModule::getModuleByName("system")->rightRight2())
             return $this->getLang("commons_error_permissions");
 
         $strFilename = "/backup_" . time() . ".zip";
 
-        $objZip = new class_zip();
+        $objZip = new Zip();
         $objZip->openArchiveForWriting($strFilename);
         foreach($this->arrFoldersToInclude as $strOneFolder) {
             $objZip->addFolder($strOneFolder);

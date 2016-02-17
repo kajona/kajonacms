@@ -7,6 +7,13 @@
 
 namespace Kajona\System\Admin\Formentries;
 
+use Kajona\System\System\Carrier;
+use Kajona\System\System\Exception;
+use Kajona\System\System\Model;
+use Kajona\System\System\Objectfactory;
+use Kajona\System\System\UserUser;
+use Traversable;
+
 
 /**
  * A tag editor with autocomplete object selection
@@ -15,7 +22,7 @@ namespace Kajona\System\Admin\Formentries;
  * @since 4.7
  * @package module_formgenerator
  */
-class FormentryObjecttags extends class_formentry_tageditor
+class FormentryObjecttags extends FormentryTageditor
 {
     const TYPE_USER = 1;
     const TYPE_OBJECT = 2;
@@ -45,7 +52,7 @@ class FormentryObjecttags extends class_formentry_tageditor
 
     public function renderField()
     {
-        $objToolkit = class_carrier::getInstance()->getObjToolkit("admin");
+        $objToolkit = Carrier::getInstance()->getObjToolkit("admin");
         $strReturn = "";
         if($this->getStrHint() != null) {
             $strReturn .= $objToolkit->formTextRow($this->getStrHint());
@@ -59,11 +66,11 @@ class FormentryObjecttags extends class_formentry_tageditor
      * The normal field contains the actual display names which are shown in each tag. The _id field contains an array
      * of corresponding systemids
      *
-     * @throws class_exception
+     * @throws Exception
      */
     protected function updateValue()
     {
-        $arrParams = class_carrier::getAllParams();
+        $arrParams = Carrier::getAllParams();
         if (isset($arrParams[$this->getStrEntryName()."_id"])) {
             $this->setStrValue($arrParams[$this->getStrEntryName()."_id"]);
         } else {
@@ -76,14 +83,14 @@ class FormentryObjecttags extends class_formentry_tageditor
      * an array of objects
      *
      * @param $strValue
-     * @return class_formentry_base
+     * @return FormentryBase
      */
     public function setStrValue($strValue)
     {
         $arrValuesIds = array();
         if (is_array($strValue) || $strValue instanceof Traversable) {
             foreach ($strValue as $objValue) {
-                if ($objValue instanceof class_model) {
+                if ($objValue instanceof Model) {
                     $arrValuesIds[] = $objValue->getStrSystemid();
                 }
                 else {
@@ -113,9 +120,9 @@ class FormentryObjecttags extends class_formentry_tageditor
             $arrObjects = array_map(function ($strId) use ($intType) {
                 $objObject = null;
                 if ($intType === FormentryObjecttags::TYPE_USER) {
-                    $objObject = new class_module_user_user($strId);
+                    $objObject = new UserUser($strId);
                 } elseif ($intType === FormentryObjecttags::TYPE_OBJECT) {
-                    $objObject = class_objectfactory::getInstance()->getObject($strId);
+                    $objObject = Objectfactory::getInstance()->getObject($strId);
                 }
                 return $objObject;
             }, $arrIds);

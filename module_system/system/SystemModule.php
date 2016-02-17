@@ -9,6 +9,10 @@
 
 namespace Kajona\System\System;
 
+use Kajona\System\Admin\AdminController;
+use Kajona\System\Admin\AdminInterface;
+use Kajona\System\Portal\PortalInterface;
+
 
 /**
  * Model for a single system-module

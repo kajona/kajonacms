@@ -6,6 +6,10 @@
 
 namespace Kajona\System\Admin\Formentries;
 
+use Kajona\System\Admin\FormentryPrintableInterface;
+use Kajona\System\System\Carrier;
+use Kajona\System\System\Validators\DummyValidator;
+
 
 /**
  * A text-row is a graphical element, similar to a divider, but this case in order to render a text-field.
@@ -14,7 +18,7 @@ namespace Kajona\System\Admin\Formentries;
  * @since 4.1
  * @package module_formgenerator
  */
-class FormentryTextrow extends class_formentry_base implements interface_formentry_printable {
+class FormentryTextrow extends FormentryBase implements FormentryPrintableInterface {
 
 
     public function __construct($strName = "") {
@@ -23,7 +27,7 @@ class FormentryTextrow extends class_formentry_base implements interface_forment
         parent::__construct("", $strName);
 
         //set the default validator
-        $this->setObjValidator(new class_dummy_validator());
+        $this->setObjValidator(new DummyValidator());
     }
 
     /**
@@ -33,7 +37,7 @@ class FormentryTextrow extends class_formentry_base implements interface_forment
      * @return string
      */
     public function renderField() {
-        $objToolkit = class_carrier::getInstance()->getObjToolkit("admin");
+        $objToolkit = Carrier::getInstance()->getObjToolkit("admin");
         $strReturn = "";
         if($this->getStrHint() != null)
             $strReturn .= $objToolkit->formTextRow($this->getStrHint());

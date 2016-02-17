@@ -9,6 +9,11 @@
 
 namespace Kajona\System\Admin\Systemtasks;
 
+use Kajona\System\System\Carrier;
+use Kajona\System\System\Objectfactory;
+use Kajona\System\System\Rights;
+use Kajona\System\System\SystemCommon;
+use Kajona\System\System\SystemModule;
 
 
 /**
@@ -17,7 +22,7 @@ namespace Kajona\System\Admin\Systemtasks;
  *
  * @package module_system
  */
-class SystemtaskRightsinheritcheck extends class_systemtask_base implements interface_admin_systemtask {
+class SystemtaskRightsinheritcheck extends SystemtaskBase implements AdminSystemtaskInterface {
 
 
     /**
@@ -50,7 +55,7 @@ class SystemtaskRightsinheritcheck extends class_systemtask_base implements inte
      */
     public function executeTask() {
 
-        if(!class_module_system_module::getModuleByName("system")->rightRight2())
+        if(!SystemModule::getModuleByName("system")->rightRight2())
             return $this->getLang("commons_error_permissions");
 
         $arrReturn = array();
@@ -73,12 +78,12 @@ class SystemtaskRightsinheritcheck extends class_systemtask_base implements inte
     }
 
     private function checkSingleLevel($strParentId, &$arrReturn) {
-        $objRights = class_carrier::getInstance()->getObjRights();
+        $objRights = Carrier::getInstance()->getObjRights();
 
         $arrParentRights = $objRights->getArrayRights($strParentId);
 
         //load the sub-ordinate nodes
-        $objCommon = new class_module_system_common();
+        $objCommon = new SystemCommon();
         $arrChildNodes = $objCommon->getChildNodesAsIdArray($strParentId);
 
         foreach($arrChildNodes as $strOneChildId) {
@@ -88,7 +93,7 @@ class SystemtaskRightsinheritcheck extends class_systemtask_base implements inte
                 $bitIsDifferent = false;
                 foreach($arrChildRights as $strPermission => $arrOneChildPermission) {
 
-                    if($strPermission == class_rights::$STR_RIGHT_INHERIT)
+                    if($strPermission == Rights::$STR_RIGHT_INHERIT)
                         continue;
 
                     if(count(array_diff($arrChildRights[$strPermission], $arrParentRights[$strPermission])) != 0) {
@@ -98,7 +103,7 @@ class SystemtaskRightsinheritcheck extends class_systemtask_base implements inte
                 }
 
                 if(!$bitIsDifferent) {
-                    $arrReturn[] = class_objectfactory::getInstance()->getObject($strOneChildId);
+                    $arrReturn[] = Objectfactory::getInstance()->getObject($strOneChildId);
                     $objRights->setInherited(true, $strOneChildId);
                 }
             }

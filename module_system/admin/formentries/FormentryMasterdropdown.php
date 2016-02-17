@@ -6,6 +6,12 @@
 
 namespace Kajona\System\Admin\Formentries;
 
+use Kajona\System\Admin\FormentryPrintableInterface;
+use Kajona\System\System\Carrier;
+use Kajona\System\System\Lang;
+use Kajona\System\System\Reflection;
+use Kajona\System\System\Validators\TextValidator;
+
 
 /**
  * The master-dropdown may be used to fill a list of dropdowns in dependency of each other.
@@ -14,7 +20,7 @@ namespace Kajona\System\Admin\Formentries;
  * @since 4.6
  * @package module_formgenerator
  */
-class FormentryMasterdropdown extends class_formentry_base implements interface_formentry_printable {
+class FormentryMasterdropdown extends FormentryBase implements FormentryPrintableInterface {
 
     const STR_VALUE_ANNOTATION = "@fieldValuePrefix";
     const STR_DEPENDS_ANNOTATION = "@fieldDependsOn";
@@ -27,7 +33,7 @@ class FormentryMasterdropdown extends class_formentry_base implements interface_
         parent::__construct($strFormName, $strSourceProperty, $objSourceObject);
 
         //set the default validator
-        $this->setObjValidator(new class_text_validator());
+        $this->setObjValidator(new TextValidator());
     }
 
     /**
@@ -37,7 +43,7 @@ class FormentryMasterdropdown extends class_formentry_base implements interface_
      * @return string
      */
     public function renderField() {
-        $objToolkit = class_carrier::getInstance()->getObjToolkit("admin");
+        $objToolkit = Carrier::getInstance()->getObjToolkit("admin");
         $strReturn = "";
         if($this->getStrHint() != null)
             $strReturn .= $objToolkit->formTextRow($this->getStrHint());
@@ -173,9 +179,9 @@ JS;
 
 
             //load all language entries
-            $this->arrLabels = array($this->getStrSourceProperty() => array("" => class_carrier::getInstance()->getObjLang()->getLang("commons_dropdown_dataplaceholder", "system")));
+            $this->arrLabels = array($this->getStrSourceProperty() => array("" => Carrier::getInstance()->getObjLang()->getLang("commons_dropdown_dataplaceholder", "system")));
             foreach($this->arrDepends as $strOneDepend) {
-                $this->arrLabels[$strOneDepend] = array("" => class_carrier::getInstance()->getObjLang()->getLang("commons_dropdown_dataplaceholder", "system"));
+                $this->arrLabels[$strOneDepend] = array("" => Carrier::getInstance()->getObjLang()->getLang("commons_dropdown_dataplaceholder", "system"));
             }
 
 
@@ -196,7 +202,7 @@ JS;
 
 
     private function getValueForAnnotations(&$strPrefix, &$arrDepends) {
-        $objReflection = new class_reflection($this->getObjSourceObject());
+        $objReflection = new Reflection($this->getObjSourceObject());
 
         //try to find the matching source property
         $arrProperties = $objReflection->getPropertiesWithAnnotation(self::STR_VALUE_ANNOTATION);
@@ -216,7 +222,7 @@ JS;
 
             $strValue = trim($strValue);
 
-            $strValue = class_lang::getInstance()->propertyWithoutPrefix($strValue);
+            $strValue = Lang::getInstance()->propertyWithoutPrefix($strValue);
         });
     }
 
@@ -227,7 +233,7 @@ JS;
         $intI = 1;
         $strText = $this->getObjSourceObject()->getLang($strVarLabel.$strPrefix."_".$intI);
 
-        $this->arrLabels[$this->arrDepends[$intLevel]][$strPrefix] = array("" => class_carrier::getInstance()->getObjLang()->getLang("commons_dropdown_dataplaceholder", "system"));
+        $this->arrLabels[$this->arrDepends[$intLevel]][$strPrefix] = array("" => Carrier::getInstance()->getObjLang()->getLang("commons_dropdown_dataplaceholder", "system"));
 
         while($strText != "!".$strVarLabel.$strPrefix."_".$intI."!") {
             $this->arrLabels[$this->arrDepends[$intLevel]][$strPrefix][$strPrefix."_".$intI] = $this->getObjSourceObject()->getLang($strVarLabel.$strPrefix."_".$intI);

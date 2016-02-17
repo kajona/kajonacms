@@ -6,6 +6,12 @@
 
 namespace Kajona\System\Admin\Formentries;
 
+use ArrayObject;
+use Kajona\System\Admin\FormentryPrintableInterface;
+use Kajona\System\System\Carrier;
+use Kajona\System\System\Objectfactory;
+use Kajona\System\System\Validators\DummyValidator;
+
 
 /**
  * A formelement rendering an array of checkboxes.
@@ -15,7 +21,7 @@ namespace Kajona\System\Admin\Formentries;
  * @since 4.8
  * @package module_formgenerator
  */
-class FormentryCheckboxarray extends class_formentry_base implements interface_formentry_printable {
+class FormentryCheckboxarray extends FormentryBase implements FormentryPrintableInterface {
 
     const TYPE_CHECKBOX = 1;
     const TYPE_RADIO = 2;
@@ -28,7 +34,7 @@ class FormentryCheckboxarray extends class_formentry_base implements interface_f
         parent::__construct($strFormName, $strSourceProperty, $objSourceObject);
 
         //set the default validator
-        $this->setObjValidator(new class_dummy_validator());
+        $this->setObjValidator(new DummyValidator());
     }
 
     public function setIntType($intType)
@@ -52,7 +58,7 @@ class FormentryCheckboxarray extends class_formentry_base implements interface_f
      * @return string
      */
     public function renderField() {
-        $objToolkit = class_carrier::getInstance()->getObjToolkit("admin");
+        $objToolkit = Carrier::getInstance()->getObjToolkit("admin");
         $strReturn = "";
         if($this->getStrHint() != null)
             $strReturn .= $objToolkit->formTextRow($this->getStrHint());
@@ -64,7 +70,7 @@ class FormentryCheckboxarray extends class_formentry_base implements interface_f
 
     /**
      * @param $strValue
-     * @return class_formentry_base
+     * @return FormentryBase
      */
     public function setStrValue($strValue) {
         $arrTargetValues = array();
@@ -78,7 +84,7 @@ class FormentryCheckboxarray extends class_formentry_base implements interface_f
                 }
 
                 //POST vals
-                else if($strSingleValue == "checked") {
+                elseif($strSingleValue == "checked") {
                     $arrTargetValues[] = $strKey;
                 }
             }
@@ -114,7 +120,7 @@ class FormentryCheckboxarray extends class_formentry_base implements interface_f
     public function getValueAsText() {
         $arrNew = array();
         foreach($this->getStrValue() as $strOneId) {
-            $arrNew = class_objectfactory::getInstance()->getObject($strOneId)->getStrDisplayName();
+            $arrNew = Objectfactory::getInstance()->getObject($strOneId)->getStrDisplayName();
         }
         return implode("<br />", $arrNew);
     }

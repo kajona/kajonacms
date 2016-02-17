@@ -6,6 +6,11 @@
 
 namespace Kajona\System\Admin\Formentries;
 
+use Kajona\System\Admin\FormentryInterface;
+use Kajona\System\System\Carrier;
+use Kajona\System\System\Validators\DateValidator;
+use Kajona\System\System\Validators\DummyValidator;
+
 
 /**
  * A hidden field
@@ -14,13 +19,13 @@ namespace Kajona\System\Admin\Formentries;
  * @since 4.0
  * @package module_formgenerator
  */
-class FormentryDivider extends class_formentry_base implements interface_formentry {
+class FormentryDivider extends FormentryBase implements FormentryInterface {
 
     public function __construct() {
         parent::__construct("", generateSystemid());
 
         //set the default validator
-        $this->setObjValidator(new class_dummy_validator());
+        $this->setObjValidator(new DummyValidator());
     }
 
     /**
@@ -30,7 +35,7 @@ class FormentryDivider extends class_formentry_base implements interface_forment
      * @return string
      */
     public function renderField() {
-        $objToolkit = class_carrier::getInstance()->getObjToolkit("admin");
+        $objToolkit = Carrier::getInstance()->getObjToolkit("admin");
         return $objToolkit->divider();
     }
 

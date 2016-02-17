@@ -6,6 +6,10 @@
 
 namespace Kajona\System\Admin\Formentries;
 
+use Kajona\System\Admin\FormentryPrintableInterface;
+use Kajona\System\System\Carrier;
+use Kajona\System\System\Validators\TextValidator;
+
 
 /**
  * A yes-no field renders a dropdown containing one entry for yes and one for no.
@@ -15,7 +19,7 @@ namespace Kajona\System\Admin\Formentries;
  * @since 4.0
  * @package module_formgenerator
  */
-class FormentryYesno extends class_formentry_base implements interface_formentry_printable
+class FormentryYesno extends FormentryBase implements FormentryPrintableInterface
 {
     protected $strAddons;
 
@@ -23,7 +27,7 @@ class FormentryYesno extends class_formentry_base implements interface_formentry
         parent::__construct($strFormName, $strSourceProperty, $objSourceObject);
 
         //set the default validator
-        $this->setObjValidator(new class_text_validator());
+        $this->setObjValidator(new TextValidator());
     }
 
     public function setAddons($strAddons)
@@ -38,8 +42,8 @@ class FormentryYesno extends class_formentry_base implements interface_formentry
      * @return string
      */
     public function renderField() {
-        $objToolkit = class_carrier::getInstance()->getObjToolkit("admin");
-        $objLang = class_carrier::getInstance()->getObjLang();
+        $objToolkit = Carrier::getInstance()->getObjToolkit("admin");
+        $objLang = Carrier::getInstance()->getObjLang();
         $arrYesNo = array(
             0 => $objLang->getLang("commons_no", "system"), 1 => $objLang->getLang("commons_yes", "system")
         );
@@ -59,9 +63,9 @@ class FormentryYesno extends class_formentry_base implements interface_formentry
      */
     public function getValueAsText() {
         if($this->getStrValue())
-            return class_carrier::getInstance()->getObjLang()->getLang("commons_yes", "system");
+            return Carrier::getInstance()->getObjLang()->getLang("commons_yes", "system");
         else
-            return class_carrier::getInstance()->getObjLang()->getLang("commons_no", "system");
+            return Carrier::getInstance()->getObjLang()->getLang("commons_no", "system");
     }
 
     public function validateValue() {

@@ -9,6 +9,9 @@
 
 namespace Kajona\System\Admin\Systemtasks;
 
+use Kajona\System\System\SystemCommon;
+use Kajona\System\System\SystemModule;
+
 
 /**
  * A systemtask to set the status of a given record
@@ -17,7 +20,7 @@ namespace Kajona\System\Admin\Systemtasks;
  * @author sidler@mulchprod.de
  * @since 3.4
  */
-class SystemtaskSystemstatus extends class_systemtask_base implements interface_admin_systemtask {
+class SystemtaskSystemstatus extends SystemtaskBase implements AdminSystemtaskInterface {
 
 
     /**
@@ -50,12 +53,12 @@ class SystemtaskSystemstatus extends class_systemtask_base implements interface_
      */
     public function executeTask() {
 
-        if(!class_module_system_module::getModuleByName("system")->rightRight2())
+        if(!SystemModule::getModuleByName("system")->rightRight2())
             return $this->getLang("commons_error_permissions");
 
         //try to load and update the systemrecord
         if(validateSystemid($this->getParam("systemstatus_systemid"))) {
-            $objRecord = new class_module_system_common($this->getParam("systemstatus_systemid"));
+            $objRecord = new SystemCommon($this->getParam("systemstatus_systemid"));
             $objRecord->setIntRecordStatus($this->getParam("systemstatus_status"));
             $objRecord->updateObjectToDb();
 

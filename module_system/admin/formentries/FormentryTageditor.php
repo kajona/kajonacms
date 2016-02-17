@@ -6,6 +6,10 @@
 
 namespace Kajona\System\Admin\Formentries;
 
+use Kajona\System\System\Carrier;
+use Kajona\System\System\Exception;
+use Kajona\System\System\Reflection;
+
 
 /**
  * An list of tags which can be added or removed.
@@ -14,7 +18,7 @@ namespace Kajona\System\Admin\Formentries;
  * @since 4.7
  * @package module_formgenerator
  */
-class FormentryTageditor extends class_formentry_multiselect {
+class FormentryTageditor extends FormentryMultiselect {
 
     protected $strOnChangeCallback;
 
@@ -32,7 +36,7 @@ class FormentryTageditor extends class_formentry_multiselect {
      */
     public function renderField()
     {
-        $objToolkit = class_carrier::getInstance()->getObjToolkit("admin");
+        $objToolkit = Carrier::getInstance()->getObjToolkit("admin");
         $strReturn = "";
         if($this->getStrHint() != null) {
             $strReturn .= $objToolkit->formTextRow($this->getStrHint());
@@ -48,10 +52,10 @@ class FormentryTageditor extends class_formentry_multiselect {
         if($objSourceObject == null)
             return "";
 
-        $objReflection = new class_reflection($objSourceObject);
+        $objReflection = new Reflection($objSourceObject);
         $strSetter = $objReflection->getSetter($this->getStrSourceProperty());
         if($strSetter === null)
-            throw new class_exception("unable to find setter for value-property ".$this->getStrSourceProperty()."@".get_class($objSourceObject), class_exception::$level_ERROR);
+            throw new Exception("unable to find setter for value-property ".$this->getStrSourceProperty()."@".get_class($objSourceObject), Exception::$level_ERROR);
 
         return $objSourceObject->{$strSetter}(json_encode(explode(",", $this->getStrValue())));
     }

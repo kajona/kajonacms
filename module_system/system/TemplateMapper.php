@@ -8,6 +8,8 @@
 
 namespace Kajona\System\System;
 
+use Kajona\System\Portal\TemplatemapperInterface;
+
 
 /**
  * The templatemapper takes an object and scans it for various properties marked to be
@@ -103,7 +105,7 @@ class TemplateMapper {
      * Loads the validator identified by the passed name.
      *
      * @param string $strName
-     * @return interface_templatemapper
+     * @return TemplatemapperInterface
      * @throws Exception
      */
     private function getMapperInstance($strName) {

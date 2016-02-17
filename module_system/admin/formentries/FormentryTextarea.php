@@ -6,13 +6,17 @@
 
 namespace Kajona\System\Admin\Formentries;
 
+use Kajona\System\Admin\FormentryPrintableInterface;
+use Kajona\System\System\Carrier;
+use Kajona\System\System\Validators\TextValidator;
+
 
 /**
  * @author sidler@mulchprod.de
  * @since 4.0
  * @package module_formgenerator
  */
-class FormentryTextarea extends class_formentry_base implements interface_formentry_printable {
+class FormentryTextarea extends FormentryBase implements FormentryPrintableInterface {
 
     private $strOpener = "";
     private $bitLarge = false;
@@ -22,7 +26,7 @@ class FormentryTextarea extends class_formentry_base implements interface_formen
         parent::__construct($strFormName, $strSourceProperty, $objSourceObject);
 
         //set the default validator
-        $this->setObjValidator(new class_text_validator());
+        $this->setObjValidator(new TextValidator());
     }
 
     /**
@@ -32,7 +36,7 @@ class FormentryTextarea extends class_formentry_base implements interface_formen
      * @return string
      */
     public function renderField() {
-        $objToolkit = class_carrier::getInstance()->getObjToolkit("admin");
+        $objToolkit = Carrier::getInstance()->getObjToolkit("admin");
         $strReturn = "";
         if($this->getStrHint() != null)
             $strReturn .= $objToolkit->formTextRow($this->getStrHint());
@@ -54,7 +58,7 @@ class FormentryTextarea extends class_formentry_base implements interface_formen
 
     /**
      * @param $strOpener
-     * @return class_formentry_text
+     * @return FormentryText
      */
     public function setStrOpener($strOpener) {
         $this->strOpener = $strOpener;

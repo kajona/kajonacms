@@ -8,6 +8,8 @@
 
 namespace Kajona\System\Admin\Formentries;
 
+use Kajona\System\System\Carrier;
+
 
 /**
  * Renders a on off toggle field. Same behaviour as a checkbox but with a more user friendly appearance.
@@ -16,7 +18,7 @@ namespace Kajona\System\Admin\Formentries;
  * @since 4.3
  * @package module_formgenerator
  */
-class FormentryToggleonoff extends class_formentry_checkbox {
+class FormentryToggleonoff extends FormentryCheckbox {
 
     private $strOnSwitchJSCallback = null;
 
@@ -36,7 +38,7 @@ class FormentryToggleonoff extends class_formentry_checkbox {
      * @return string
      */
     public function renderField() {
-        $objToolkit = class_carrier::getInstance()->getObjToolkit("admin");
+        $objToolkit = Carrier::getInstance()->getObjToolkit("admin");
         $strReturn = "";
         if($this->getStrHint() != null) {
             $strReturn .= $objToolkit->formTextRow($this->getStrHint());

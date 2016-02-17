@@ -2,18 +2,16 @@
 /*"******************************************************************************************************
 *   (c) 2007-2015 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
+*-------------------------------------------------------------------------------------------------------*
+*	$Id$                       *
 ********************************************************************************************************/
 
-namespace Kajona\System\Admin\Formentries;
-
-
 /**
- * A sub headline may be used when nesting multiple headlines
- *
- * @author christoph.kappestein@gmail.com
- * @since 4.7
- * @package module_formgenerator
+ * @deprecated
  */
-class FormentrySubheadline extends FormentryHeadline {
+interface interface_adminskin_imageresolver extends \Kajona\System\Admin\AdminskinImageresolverInterface {
+
+
+
 
 }

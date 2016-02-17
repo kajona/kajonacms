@@ -6,13 +6,17 @@
 
 namespace Kajona\System\Admin\Formentries;
 
+use Kajona\System\Admin\FormentryInterface;
+use Kajona\System\System\Carrier;
+use Kajona\System\System\Validators\TextValidator;
+
 
 /**
  * @author sidler@mulchprod.de
  * @since 4.0
  * @package module_formgenerator
  */
-class FormentryPassword extends class_formentry_base implements interface_formentry {
+class FormentryPassword extends FormentryBase implements FormentryInterface {
 
     private $strOpener = "";
 
@@ -20,7 +24,7 @@ class FormentryPassword extends class_formentry_base implements interface_formen
         parent::__construct($strFormName, $strSourceProperty, $objSourceObject);
 
         //set the default validator
-        $this->setObjValidator(new class_text_validator());
+        $this->setObjValidator(new TextValidator());
     }
 
     /**
@@ -30,7 +34,7 @@ class FormentryPassword extends class_formentry_base implements interface_formen
      * @return string
      */
     public function renderField() {
-        $objToolkit = class_carrier::getInstance()->getObjToolkit("admin");
+        $objToolkit = Carrier::getInstance()->getObjToolkit("admin");
         $strReturn = "";
         if($this->getStrHint() != null)
             $strReturn .= $objToolkit->formTextRow($this->getStrHint());
@@ -42,7 +46,7 @@ class FormentryPassword extends class_formentry_base implements interface_formen
 
     /**
      * @param $strOpener
-     * @return class_formentry_text
+     * @return FormentryText
      */
     public function setStrOpener($strOpener) {
         $this->strOpener = $strOpener;

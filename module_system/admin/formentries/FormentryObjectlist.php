@@ -6,6 +6,18 @@
 
 namespace Kajona\System\Admin\Formentries;
 
+use Kajona\System\Admin\FormentryPrintableInterface;
+use Kajona\System\System\Carrier;
+use Kajona\System\System\Exception;
+use Kajona\System\System\Link;
+use Kajona\System\System\Model;
+use Kajona\System\System\ModelInterface;
+use Kajona\System\System\Objectfactory;
+use Kajona\System\System\Reflection;
+use Kajona\System\System\SystemModule;
+use ReflectionClass;
+use Traversable;
+
 
 /**
  * An list of objects which can be added or removed.
@@ -14,7 +26,7 @@ namespace Kajona\System\Admin\Formentries;
  * @since 4.7
  * @package module_formgenerator
  */
-class FormentryObjectlist extends class_formentry_base implements interface_formentry_printable
+class FormentryObjectlist extends FormentryBase implements FormentryPrintableInterface
 {
 
     protected $strAddLink;
@@ -35,7 +47,7 @@ class FormentryObjectlist extends class_formentry_base implements interface_form
 
     protected function updateValue()
     {
-        $arrParams = class_carrier::getAllParams();
+        $arrParams = Carrier::getAllParams();
 
         $strEntryName = $this->getStrEntryName();
         $strEntryNameEmpty = $strEntryName."_empty";
@@ -59,7 +71,7 @@ class FormentryObjectlist extends class_formentry_base implements interface_form
      */
     public function renderField()
     {
-        $objToolkit = class_carrier::getInstance()->getObjToolkit("admin");
+        $objToolkit = Carrier::getInstance()->getObjToolkit("admin");
         $strReturn = "";
         if ($this->getStrHint() != null) {
             $strReturn .= $objToolkit->formTextRow($this->getStrHint());
@@ -80,7 +92,7 @@ class FormentryObjectlist extends class_formentry_base implements interface_form
         $arrValuesIds = array();
         if (is_array($strValue) || $strValue instanceof Traversable) {
             foreach ($strValue as $objValue) {
-                if ($objValue instanceof class_model) {
+                if ($objValue instanceof Model) {
                     $arrValuesIds[] = $objValue->getStrSystemid();
                 }
                 else {
@@ -103,17 +115,17 @@ class FormentryObjectlist extends class_formentry_base implements interface_form
             return "";
         }
 
-        $objReflection = new class_reflection($objSourceObject);
+        $objReflection = new Reflection($objSourceObject);
 
         // get database object which we can not change
         $strGetter = $objReflection->getGetter($this->getStrSourceProperty());
         if ($strGetter === null) {
-            throw new class_exception("unable to find getter for value-property ".$this->getStrSourceProperty()."@".get_class($objSourceObject), class_exception::$level_ERROR);
+            throw new Exception("unable to find getter for value-property ".$this->getStrSourceProperty()."@".get_class($objSourceObject), Exception::$level_ERROR);
         }
 
 
         $arrObjects = $objSourceObject->{$strGetter}();
-        $arrNotObjects = array_values(array_filter((array)$arrObjects, function (class_model $objObject) {
+        $arrNotObjects = array_values(array_filter((array)$arrObjects, function (Model $objObject) {
             return !$objObject->rightView();
         }));
 
@@ -130,7 +142,7 @@ class FormentryObjectlist extends class_formentry_base implements interface_form
         // set value
         $strSetter = $objReflection->getSetter($this->getStrSourceProperty());
         if ($strSetter === null) {
-            throw new class_exception("unable to find setter for value-property ".$this->getStrSourceProperty()."@".get_class($objSourceObject), class_exception::$level_ERROR);
+            throw new Exception("unable to find setter for value-property ".$this->getStrSourceProperty()."@".get_class($objSourceObject), Exception::$level_ERROR);
         }
 
         return $objSourceObject->{$strSetter}($arrObjects);
@@ -159,25 +171,25 @@ class FormentryObjectlist extends class_formentry_base implements interface_form
         if (!empty($this->arrKeyValues)) {
             $strHtml = "";
             foreach ($this->arrKeyValues as $objObject) {
-                if ($objObject instanceof interface_model) {
+                if ($objObject instanceof Model && $objObject instanceof ModelInterface) {
 
                     if($objObject->rightView()) {
                         $strTitle = self::getDisplayName($objObject);
 
                         //see, if the matching target-module provides a showSummary method
-                        $objModule = class_module_system_module::getModuleByName($objObject->getArrModule("modul"));
+                        $objModule = SystemModule::getModuleByName($objObject->getArrModule("modul"));
                         if ($objModule != null) {
                             $objAdmin = $objModule->getAdminInstanceOfConcreteModule($objObject->getSystemid());
 
                             if ($objAdmin !== null && method_exists($objAdmin, "actionShowSummary")) {
-                                $strTitle = class_link::getLinkAdmin($objObject->getArrModule("modul"), "showSummary", "&systemid=" . $objObject->getSystemid(), $strTitle);
+                                $strTitle = Link::getLinkAdmin($objObject->getArrModule("modul"), "showSummary", "&systemid=" . $objObject->getSystemid(), $strTitle);
                             }
                         }
                         $strHtml .= $strTitle."<br/>\n";
                     }
                 }
                 else {
-                    throw new class_exception("Array must contain objects", class_exception::$level_ERROR);
+                    throw new Exception("Array must contain objects", Exception::$level_ERROR);
                 }
             }
             $strHtml .= "";
@@ -197,7 +209,7 @@ class FormentryObjectlist extends class_formentry_base implements interface_form
         if (!empty($strValue)) {
             $arrIds = explode(",", $strValue);
             $arrObjects = array_map(function ($strId) {
-                return class_objectfactory::getInstance()->getObject($strId);
+                return Objectfactory::getInstance()->getObject($strId);
             }, $arrIds);
             return $arrObjects;
         }
@@ -208,19 +220,19 @@ class FormentryObjectlist extends class_formentry_base implements interface_form
     /**
      * Renders the display name for the object and, if possible, also the object type
      *
-     * @param interface_model $objObject
+     * @param ModelInterface $objObject
      *
      * @return string
      */
-    public static function getDisplayName(interface_model $objObject)
+    public static function getDisplayName(ModelInterface $objObject)
     {
         $strObjectName = "";
 
-        $objClass = new ReflectionClass(get_class($objObject));
+        $objClass = new ReflectionClass(get_class($objObject)); //TODO remove hardcoded cross-module dependencies
         if ($objClass->implementsInterface('interface_aufgaben_taskable')) {
             $strObjectName .= "[".$objObject->getStrTaskCategory()."] ";
         }
-        else if ($objClass->implementsInterface('interface_aufgaben_taskable')) {
+        elseif ($objClass->implementsInterface('interface_aufgaben_taskable')) {
             $strObjectName .= "[".$objObject->getVersionRecordName()."] ";
         }
 
@@ -231,11 +243,11 @@ class FormentryObjectlist extends class_formentry_base implements interface_form
 
 
     /**
-     * @param interface_model $objOneElement
+     * @param ModelInterface $objOneElement
      * @param string $intAllowedLevel
      * @return string
      */
-    public static function getPathName(interface_model $objOneElement)
+    public static function getPathName(ModelInterface $objOneElement)
     {
         //fetch the process-path, at least two levels
         $arrParents = $objOneElement->getPathArray();
@@ -259,7 +271,7 @@ class FormentryObjectlist extends class_formentry_base implements interface_form
                 break;
             }
 
-            $objObject = class_objectfactory::getInstance()->getObject($strPathId);
+            $objObject = Objectfactory::getInstance()->getObject($strPathId);
             $arrPath[] = $objObject->getStrDisplayName();
         }
 
@@ -274,7 +286,7 @@ class FormentryObjectlist extends class_formentry_base implements interface_form
     /**
      * @param $arrKeyValues
      *
-     * @return class_formentry_dropdown
+     * @return FormentryObjectlist
      */
     public function setArrKeyValues($arrKeyValues) {
         $this->arrKeyValues = $arrKeyValues;

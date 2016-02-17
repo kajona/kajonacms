@@ -6,13 +6,17 @@
 
 namespace Kajona\System\Admin\Formentries;
 
+use Kajona\System\Admin\FormentryInterface;
+use Kajona\System\System\Carrier;
+use Kajona\System\System\Validators\DummyValidator;
+
 
 /**
  * @author sidler@mulchprod.de
  * @since 4.3
  * @package module_formgenerator
  */
-class FormentryButton extends class_formentry_base implements interface_formentry {
+class FormentryButton extends FormentryBase implements FormentryInterface {
 
     private $strEventhandler = "";
 
@@ -20,7 +24,7 @@ class FormentryButton extends class_formentry_base implements interface_formentr
         parent::__construct($strFormName, $strSourceProperty, $objSourceObject);
 
         //set the default validator
-        $this->setObjValidator(new class_dummy_validator());
+        $this->setObjValidator(new DummyValidator());
     }
 
     /**
@@ -30,7 +34,7 @@ class FormentryButton extends class_formentry_base implements interface_formentr
      * @return string
      */
     public function renderField() {
-        $objToolkit = class_carrier::getInstance()->getObjToolkit("admin");
+        $objToolkit = Carrier::getInstance()->getObjToolkit("admin");
         $strReturn = "";
         if($this->getStrHint() != null)
             $strReturn .= $objToolkit->formTextRow($this->getStrHint());

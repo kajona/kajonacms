@@ -6,6 +6,8 @@
 
 namespace Kajona\System\Admin\Formentries;
 
+use Kajona\System\System\Carrier;
+
 
 /**
  * Returns a toggle button bar which can be used in the same way as an multiselect
@@ -14,7 +16,7 @@ namespace Kajona\System\Admin\Formentries;
  * @since 4.7
  * @package module_formgenerator
  */
-class FormentryToggleButtonbar extends class_formentry_multiselect {
+class FormentryToggleButtonbar extends FormentryMultiselect {
 
     protected $strType = "checkbox";
 
@@ -45,7 +47,7 @@ class FormentryToggleButtonbar extends class_formentry_multiselect {
      * @return string
      */
     public function renderField() {
-        $objToolkit = class_carrier::getInstance()->getObjToolkit("admin");
+        $objToolkit = Carrier::getInstance()->getObjToolkit("admin");
         $strReturn = "";
         if($this->getStrHint() != null) {
             $strReturn .= $objToolkit->formTextRow($this->getStrHint());

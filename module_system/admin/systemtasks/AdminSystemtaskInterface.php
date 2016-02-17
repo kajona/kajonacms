@@ -7,13 +7,16 @@
 *   $Id$                                     *
 ********************************************************************************************************/
 
+
+namespace Kajona\System\Admin\Systemtasks;
+
 /**
  * Interface to specify the layout of a systemtask.
  * To load a simple systemtask into the system, implement the hook-methods defined in this interface.
  *
  * @package module_system
  */
-interface interface_admin_systemtask {
+interface AdminSystemtaskInterface {
 
     /**
      * Returns the internal name of the task. This name should correspond with the filename of the task.

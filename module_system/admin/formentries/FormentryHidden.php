@@ -6,6 +6,10 @@
 
 namespace Kajona\System\Admin\Formentries;
 
+use Kajona\System\Admin\FormentryInterface;
+use Kajona\System\System\Carrier;
+use Kajona\System\System\Validators\TextValidator;
+
 
 /**
  * A hidden field
@@ -14,13 +18,13 @@ namespace Kajona\System\Admin\Formentries;
  * @since 4.0
  * @package module_formgenerator
  */
-class FormentryHidden extends class_formentry_base implements interface_formentry {
+class FormentryHidden extends FormentryBase implements FormentryInterface {
 
     public function __construct($strFormName, $strSourceProperty, $objSourceObject = null) {
         parent::__construct($strFormName, $strSourceProperty, $objSourceObject);
 
         //set the default validator
-        $this->setObjValidator(new class_text_validator());
+        $this->setObjValidator(new TextValidator());
     }
 
     /**
@@ -30,7 +34,7 @@ class FormentryHidden extends class_formentry_base implements interface_formentr
      * @return string
      */
     public function renderField() {
-        $objToolkit = class_carrier::getInstance()->getObjToolkit("admin");
+        $objToolkit = Carrier::getInstance()->getObjToolkit("admin");
         return $objToolkit->formInputHidden($this->getStrEntryName(), $this->getStrValue());
     }
 

@@ -6,6 +6,15 @@
 
 namespace Kajona\System\Admin\Formentries;
 
+use Kajona\System\System\Carrier;
+use Kajona\System\System\Exception;
+use Kajona\System\System\Lang;
+use Kajona\System\System\Model;
+use Kajona\System\System\Reflection;
+use Kajona\System\System\ReflectionEnum;
+use Kajona\System\System\ValidatorExtendedInterface;
+use Kajona\System\System\ValidatorInterface;
+
 
 /**
  * The base-class for all form-entries.
@@ -20,7 +29,7 @@ namespace Kajona\System\Admin\Formentries;
 class FormentryBase {
 
     /**
-     * @var class_model
+     * @var Model
      */
     private $objSourceObject = null;
 
@@ -32,7 +41,7 @@ class FormentryBase {
     private $strFormName = "";
 
     /**
-     * @var interface_validator
+     * @var ValidatorInterface
      */
     private $objValidator;
 
@@ -53,7 +62,7 @@ class FormentryBase {
      *
      * @param $strFormName
      * @param $strSourceProperty
-     * @param class_model $objSourceObject
+     * @param Model $objSourceObject
      */
     public function __construct($strFormName, $strSourceProperty, $objSourceObject = null) {
         $this->strSourceProperty = $strSourceProperty;
@@ -85,7 +94,7 @@ class FormentryBase {
      * the source-objects' getter is invoked.
      */
     protected function updateValue() {
-        $arrParams = class_carrier::getAllParams();
+        $arrParams = Carrier::getAllParams();
         if(isset($arrParams[$this->strEntryName])) {
             $this->setStrValue($arrParams[$this->strEntryName]);
         }
@@ -102,16 +111,16 @@ class FormentryBase {
 
         //check, if label is set as a property
         if($strKey != "") {
-            $this->strLabel = class_carrier::getInstance()->getObjLang()->getLang($strKey, $this->objSourceObject->getArrModule("modul"));
+            $this->strLabel = Carrier::getInstance()->getObjLang()->getLang($strKey, $this->objSourceObject->getArrModule("modul"));
         }
         else {
-            $this->strLabel = class_carrier::getInstance()->getObjLang()->getLang("form_".$this->strFormName."_".$this->strSourceProperty, $this->objSourceObject->getArrModule("modul"));
+            $this->strLabel = Carrier::getInstance()->getObjLang()->getLang("form_".$this->strFormName."_".$this->strSourceProperty, $this->objSourceObject->getArrModule("modul"));
             $strKey = "form_".$this->strFormName."_".$this->strSourceProperty;
         }
 
         $strHint = $strKey."_hint";
-        if(class_carrier::getInstance()->getObjLang()->getLang($strHint, $this->objSourceObject->getArrModule("modul")) != "!".$strHint."!")
-            $this->setStrHint(class_carrier::getInstance()->getObjLang()->getLang($strHint, $this->objSourceObject->getArrModule("modul")));
+        if(Carrier::getInstance()->getObjLang()->getLang($strHint, $this->objSourceObject->getArrModule("modul")) != "!".$strHint."!")
+            $this->setStrHint(Carrier::getInstance()->getObjLang()->getLang($strHint, $this->objSourceObject->getArrModule("modul")));
     }
 
     /**
@@ -119,7 +128,7 @@ class FormentryBase {
      * Only used, if the field is not already populated to the
      * global params-array.
      *
-     * @throws class_exception
+     * @throws Exception
      * @return mixed
      */
     protected function getValueFromObject() {
@@ -128,10 +137,10 @@ class FormentryBase {
             return "";
 
         //try to get the matching getter
-        $objReflection = new class_reflection($this->objSourceObject);
+        $objReflection = new Reflection($this->objSourceObject);
         $strGetter = $objReflection->getGetter($this->strSourceProperty);
         if($strGetter === null)
-            throw new class_exception("unable to find getter for value-property ".$this->strSourceProperty."@".get_class($this->objSourceObject), class_exception::$level_ERROR);
+            throw new Exception("unable to find getter for value-property ".$this->strSourceProperty."@".get_class($this->objSourceObject), Exception::$level_ERROR);
 
         return $this->objSourceObject->{$strGetter}();
 
@@ -141,7 +150,7 @@ class FormentryBase {
      * Calls the source-objects setter and stores the value.
      * If you want to skip a single setter, remove the field before.
      *
-     * @throws class_exception
+     * @throws Exception
      * @return mixed
      */
     public function setValueToObject() {
@@ -149,10 +158,10 @@ class FormentryBase {
         if($this->objSourceObject == null)
             return "";
 
-        $objReflection = new class_reflection($this->objSourceObject);
+        $objReflection = new Reflection($this->objSourceObject);
         $strSetter = $objReflection->getSetter($this->strSourceProperty);
         if($strSetter === null)
-            throw new class_exception("unable to find setter for value-property ".$this->strSourceProperty."@".get_class($this->objSourceObject), class_exception::$level_ERROR);
+            throw new Exception("unable to find setter for value-property ".$this->strSourceProperty."@".get_class($this->objSourceObject), Exception::$level_ERROR);
 
         return $this->objSourceObject->{$strSetter}($this->getStrValue());
 
@@ -185,16 +194,16 @@ class FormentryBase {
     }
 
     /**
-     * @param \interface_validator $objValidator
-     * @return \FormentryBase
+     * @param ValidatorInterface $objValidator
+     * @return FormentryBase
      */
-    public function setObjValidator(interface_validator $objValidator) {
+    public function setObjValidator(ValidatorInterface $objValidator) {
         $this->objValidator = $objValidator;
         return $this;
     }
 
     /**
-     * @return \interface_validator
+     * @return ValidatorInterface
      */
     public function getObjValidator() {
         return $this->objValidator;
@@ -272,7 +281,7 @@ class FormentryBase {
     }
 
     /**
-     * @param \class_model $objSourceObject
+     * @param Model $objSourceObject
      */
     public function setObjSourceObject($objSourceObject) {
         $this->objSourceObject = $objSourceObject;
@@ -292,7 +301,7 @@ class FormentryBase {
             return $this->strValidationErrorMsg;
         }
         else {
-            if($this->getObjValidator() instanceof interface_validator_extended) {
+            if($this->getObjValidator() instanceof ValidatorExtendedInterface) {
                 return "'".$this->getStrLabel()."': ".$this->getObjValidator()->getValidationMessage();
             }
             else {
@@ -305,13 +314,13 @@ class FormentryBase {
         //params
 
         if($this->getObjSourceObject() != null) {
-            $objReflection = new class_reflection($this->getObjSourceObject());
+            $objReflection = new Reflection($this->getObjSourceObject());
 
             $arrProperties = $objReflection->getPropertiesWithAnnotation("@fieldType");
             $strSourceProperty = null;
             foreach ($arrProperties as $strPropertyName => $strValue) {
 
-                $strPropertyWithoutPrefix = class_lang::getInstance()->propertyWithoutPrefix($strPropertyName);
+                $strPropertyWithoutPrefix = Lang::getInstance()->propertyWithoutPrefix($strPropertyName);
 
                 if ($strPropertyWithoutPrefix == $this->getStrSourceProperty()) {
                     $strSourceProperty = $strPropertyName;
@@ -319,7 +328,7 @@ class FormentryBase {
                 }
             }
             //get key vlaues
-            return $objReflection->getAnnotationValueForProperty($strSourceProperty, "@fieldType", class_reflection_enum::PARAMS);
+            return $objReflection->getAnnotationValueForProperty($strSourceProperty, "@fieldType", ReflectionEnum::PARAMS);
         }
 
         return array();

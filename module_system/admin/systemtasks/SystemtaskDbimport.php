@@ -9,13 +9,17 @@
 
 namespace Kajona\System\Admin\Systemtasks;
 
+use Kajona\System\System\Carrier;
+use Kajona\System\System\Filesystem;
+use Kajona\System\System\SystemModule;
+
 
 /**
  * Restores the database from the filesystem using the current db-driver
  *
  * @package module_system
  */
-class SystemtaskDbimport extends class_systemtask_base implements interface_admin_systemtask {
+class SystemtaskDbimport extends SystemtaskBase implements AdminSystemtaskInterface {
 
 
     /**
@@ -47,10 +51,10 @@ class SystemtaskDbimport extends class_systemtask_base implements interface_admi
      * @return string
      */
     public function executeTask() {
-        if(!class_module_system_module::getModuleByName("system")->rightRight2())
+        if(!SystemModule::getModuleByName("system")->rightRight2())
             return $this->getLang("commons_error_permissions");
 
-        if(class_carrier::getInstance()->getObjDB()->importDb($this->getParam("dbImportFile")))
+        if(Carrier::getInstance()->getObjDB()->importDb($this->getParam("dbImportFile")))
             return $this->objToolkit->getTextRow($this->getLang("systemtask_dbimport_success"));
         else
             return $this->objToolkit->getTextRow($this->getLang("systemtask_dbimport_error"));
@@ -63,7 +67,7 @@ class SystemtaskDbimport extends class_systemtask_base implements interface_admi
     public function getAdminForm() {
         $strReturn = "";
         //show dropdown to select db-dump
-        $objFilesystem = new class_filesystem();
+        $objFilesystem = new Filesystem();
         $arrFiles = $objFilesystem->getFilelist(_projectpath_."/dbdumps/", array(".sql", ".gz"));
         $arrOptions = array();
         foreach($arrFiles as $strOneFile) {

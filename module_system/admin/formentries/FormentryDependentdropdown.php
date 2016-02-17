@@ -6,6 +6,11 @@
 
 namespace Kajona\System\Admin\Formentries;
 
+use Kajona\System\Admin\FormentryPrintableInterface;
+use Kajona\System\System\Carrier;
+use Kajona\System\System\Reflection;
+use Kajona\System\System\Validators\TextValidator;
+
 
 /**
  * The dependent dropdown is only useful in combination with a masterdropdown.
@@ -15,7 +20,7 @@ namespace Kajona\System\Admin\Formentries;
  * @since 4.6
  * @package module_formgenerator
  */
-class FormentryDependentdropdown extends class_formentry_base implements interface_formentry_printable {
+class FormentryDependentdropdown extends FormentryBase implements FormentryPrintableInterface {
 
     const STR_VALUE_ANNOTATION = "@fieldValuePrefix";
 
@@ -23,7 +28,7 @@ class FormentryDependentdropdown extends class_formentry_base implements interfa
         parent::__construct($strFormName, $strSourceProperty, $objSourceObject);
 
         //set the default validator
-        $this->setObjValidator(new class_text_validator());
+        $this->setObjValidator(new TextValidator());
     }
 
     /**
@@ -34,7 +39,7 @@ class FormentryDependentdropdown extends class_formentry_base implements interfa
      */
     public function renderField() {
 
-        $objToolkit = class_carrier::getInstance()->getObjToolkit("admin");
+        $objToolkit = Carrier::getInstance()->getObjToolkit("admin");
         return $objToolkit->formInputDropdown($this->getStrEntryName(), array(), $this->getStrLabel(), "", "", !$this->getBitReadonly(), " data-kajona-selected='".$this->getStrValue()."' ");
     }
 
@@ -54,7 +59,7 @@ class FormentryDependentdropdown extends class_formentry_base implements interfa
 
 
 
-        $objReflection = new class_reflection($this->getObjSourceObject());
+        $objReflection = new Reflection($this->getObjSourceObject());
 
         //try to find the matching source property
         $arrProperties = $objReflection->getPropertiesWithAnnotation(self::STR_VALUE_ANNOTATION);

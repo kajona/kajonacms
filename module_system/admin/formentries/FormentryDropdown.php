@@ -6,6 +6,12 @@
 
 namespace Kajona\System\Admin\Formentries;
 
+use Kajona\System\Admin\FormentryPrintableInterface;
+use Kajona\System\System\Carrier;
+use Kajona\System\System\Link;
+use Kajona\System\System\Reflection;
+use Kajona\System\System\Validators\TextValidator;
+
 
 /**
  * A yes-no field renders a dropdown containing a list of entries.
@@ -15,7 +21,7 @@ namespace Kajona\System\Admin\Formentries;
  * @since 4.0
  * @package module_formgenerator
  */
-class FormentryDropdown extends class_formentry_base implements interface_formentry_printable {
+class FormentryDropdown extends FormentryBase implements FormentryPrintableInterface {
 
     /**
      * a list of [key=>value],[key=>value] pairs, resolved from the language-files
@@ -32,7 +38,7 @@ class FormentryDropdown extends class_formentry_base implements interface_formen
         parent::__construct($strFormName, $strSourceProperty, $objSourceObject);
 
         //set the default validator
-        $this->setObjValidator(new class_text_validator());
+        $this->setObjValidator(new TextValidator());
     }
 
     /**
@@ -42,22 +48,22 @@ class FormentryDropdown extends class_formentry_base implements interface_formen
      * @return string
      */
     public function renderField() {
-        $objToolkit = class_carrier::getInstance()->getObjToolkit("admin");
+        $objToolkit = Carrier::getInstance()->getObjToolkit("admin");
         $strReturn = "";
         if($this->getStrHint() != null)
             $strReturn .= $objToolkit->formTextRow($this->getStrHint());
 
         $strOpener = "";
         if($this->bitRenderReset) {
-            $strOpener = " ".class_link::getLinkAdminManual(
+            $strOpener = " ".Link::getLinkAdminManual(
                 "href=\"#\" onclick=\"$('#".$this->getStrEntryName()."').val('');return false;\"",
                 "",
-                class_carrier::getInstance()->getObjLang()->getLang("commons_reset", "prozessverwaltung"),
+                    Carrier::getInstance()->getObjLang()->getLang("commons_reset", "prozessverwaltung"),
                 "icon_delete"
             );
         }
 
-        $strReturn .=  $objToolkit->formInputDropdown($this->getStrEntryName(), $this->arrKeyValues, $this->getStrLabel(), $this->getStrValue(), "", !$this->getBitReadonly(), $this->getStrAddons(), $this->getStrDataPlaceholder(), $strOpener);
+        $strReturn.=$objToolkit->formInputDropdown($this->getStrEntryName(), $this->arrKeyValues, $this->getStrLabel(), $this->getStrValue(), "", !$this->getBitReadonly(), $this->getStrAddons(), $this->getStrDataPlaceholder(), $strOpener);
         return $strReturn;
     }
 
@@ -68,7 +74,7 @@ class FormentryDropdown extends class_formentry_base implements interface_formen
         parent::updateValue();
 
         if($this->getObjSourceObject() != null && $this->getStrSourceProperty() != "") {
-            $objReflection = new class_reflection($this->getObjSourceObject());
+            $objReflection = new Reflection($this->getObjSourceObject());
 
             //try to find the matching source property
             $arrProperties = $objReflection->getPropertiesWithAnnotation(self::STR_DDVALUES_ANNOTATION);
@@ -90,7 +96,7 @@ class FormentryDropdown extends class_formentry_base implements interface_formen
 
                     $strKey = trim($arrOneKeyValue[0]) == "" ? " " : trim($arrOneKeyValue[0]);
                     if(count($arrOneKeyValue) == 2) {
-                        $strValue = class_carrier::getInstance()->getObjLang()->getLang(trim($arrOneKeyValue[1]), $this->getObjSourceObject()->getArrModule("modul"));
+                        $strValue = Carrier::getInstance()->getObjLang()->getLang(trim($arrOneKeyValue[1]), $this->getObjSourceObject()->getArrModule("modul"));
                         if($strValue == "!".trim($arrOneKeyValue[1])."!")
                             $strValue = $arrOneKeyValue[1];
                         $arrDDValues[$strKey] = $strValue;

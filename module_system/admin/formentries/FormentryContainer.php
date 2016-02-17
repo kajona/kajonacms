@@ -6,6 +6,12 @@
 
 namespace Kajona\System\Admin\Formentries;
 
+use Kajona\System\Admin\FormentryInterface;
+use Kajona\System\Admin\FormentryPrintableInterface;
+use Kajona\System\System\Carrier;
+use Kajona\System\System\Exception;
+use Kajona\System\System\Reflection;
+
 
 /**
  * A formelement which provides an div container. The container can optional contain other formentry elements.
@@ -14,7 +20,7 @@ namespace Kajona\System\Admin\Formentries;
  * @since   4.8
  * @package module_formgenerator
  */
-class FormentryContainer extends class_formentry_base implements interface_formentry_printable {
+class FormentryContainer extends FormentryBase implements FormentryPrintableInterface {
 
     protected $arrFields = array();
     protected $strOpener = "";
@@ -25,10 +31,10 @@ class FormentryContainer extends class_formentry_base implements interface_forme
     }
 
     /**
-     * @param interface_formentry $formentry
-     * @return class_formentry_base|interface_formentry
+     * @param FormentryInterface $formentry
+     * @return FormentryBase|FormentryInterface
      */
-    public function addField(class_formentry_base $objField, $strKey = "")
+    public function addField(FormentryBase $objField, $strKey = "")
     {
         if($strKey == "")
             $strKey = $objField->getStrEntryName();
@@ -45,14 +51,14 @@ class FormentryContainer extends class_formentry_base implements interface_forme
      * @return string
      */
     public function renderField() {
-        $objToolkit = class_carrier::getInstance()->getObjToolkit("admin");
+        $objToolkit = Carrier::getInstance()->getObjToolkit("admin");
         $strReturn = "";
         if($this->getStrHint() != null)
             $strReturn .= $objToolkit->formTextRow($this->getStrHint());
 
         $arrFields = array();
         foreach($this->arrFields as $objField) {
-            /** @var interface_formentry $objField */
+            /** @var FormentryInterface $objField */
             $arrFields[] = $objField->renderField();
         }
 
@@ -67,10 +73,10 @@ class FormentryContainer extends class_formentry_base implements interface_forme
         if($objSourceObject == null)
             return "";
 
-        $objReflection = new class_reflection($objSourceObject);
+        $objReflection = new Reflection($objSourceObject);
         $strSetter = $objReflection->getSetter($this->getStrSourceProperty());
         if($strSetter === null)
-            throw new class_exception("unable to find setter for value-property ".$this->getStrSourceProperty()."@".get_class($objSourceObject), class_exception::$level_ERROR);
+            throw new Exception("unable to find setter for value-property ".$this->getStrSourceProperty()."@".get_class($objSourceObject), Exception::$level_ERROR);
 
         return $objSourceObject->{$strSetter}(json_encode($this->getStrValue()));
     }
@@ -88,8 +94,8 @@ class FormentryContainer extends class_formentry_base implements interface_forme
     public function getValueAsText() {
         $arrFields = array();
         foreach($this->arrFields as $objField) {
-            /** @var interface_formentry_printable $objField */
-            if($objField instanceof interface_formentry_printable) {
+            /** @var FormentryPrintableInterface $objField */
+            if($objField instanceof FormentryPrintableInterface) {
                 $arrFields[] = $objField->getValueAsText();
             }
         }

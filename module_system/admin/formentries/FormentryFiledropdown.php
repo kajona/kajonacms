@@ -6,6 +6,12 @@
 
 namespace Kajona\System\Admin\Formentries;
 
+use Kajona\System\Admin\FormentryInterface;
+use Kajona\System\System\Carrier;
+use Kajona\System\System\Filesystem;
+use Kajona\System\System\Reflection;
+use Kajona\System\System\Validators\FileValidator;
+
 
 /**
  * A dropdown used to select a single file out of a mapped folder.
@@ -16,7 +22,7 @@ namespace Kajona\System\Admin\Formentries;
  * @since 4.7
  * @package module_formgenerator
  */
-class FormentryFiledropdown extends class_formentry_base implements interface_formentry {
+class FormentryFiledropdown extends FormentryBase implements FormentryInterface {
 
     const STR_SOURCEDIR_ANNOTATION = "@fieldSourceDir";
 
@@ -26,7 +32,7 @@ class FormentryFiledropdown extends class_formentry_base implements interface_fo
         parent::__construct($strFormName, $strSourceProperty, $objSourceObject);
 
         //set the default validator
-        $this->setObjValidator(new class_file_validator($this->getSourceDir()));
+        $this->setObjValidator(new FileValidator($this->getSourceDir()));
     }
 
     /**
@@ -36,7 +42,7 @@ class FormentryFiledropdown extends class_formentry_base implements interface_fo
      * @return string
      */
     public function renderField() {
-        $objToolkit = class_carrier::getInstance()->getObjToolkit("admin");
+        $objToolkit = Carrier::getInstance()->getObjToolkit("admin");
         $strReturn = "";
         if($this->getStrHint() != null)
             $strReturn .= $objToolkit->formTextRow($this->getStrHint());
@@ -45,7 +51,7 @@ class FormentryFiledropdown extends class_formentry_base implements interface_fo
         $arrFiles = array();
 
         if($this->getSourceDir() !== null) {
-            $objFilesystem = new class_filesystem();
+            $objFilesystem = new Filesystem();
             $arrPlainFiles = $objFilesystem->getFilelist($this->getSourceDir());
             $arrFiles = array_combine($arrPlainFiles, $arrPlainFiles);
         }
@@ -58,7 +64,7 @@ class FormentryFiledropdown extends class_formentry_base implements interface_fo
 
     private function getSourceDir() {
         if($this->getObjSourceObject() != null && $this->getStrSourceProperty() != "") {
-            $objReflection = new class_reflection($this->getObjSourceObject());
+            $objReflection = new Reflection($this->getObjSourceObject());
 
             //try to find the matching source property
             $arrProperties = $objReflection->getPropertiesWithAnnotation(self::STR_SOURCEDIR_ANNOTATION);

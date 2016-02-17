@@ -6,13 +6,15 @@
 
 namespace Kajona\System\Admin\Formentries;
 
+use Kajona\System\System\Carrier;
+
 
 /**
  * @author sidler@mulchprod.de
  * @since 4.0
  * @package module_formgenerator
  */
-class FormentryWysiwygsmall extends class_formentry_wysiwyg implements interface_formentry_printable {
+class FormentryWysiwygsmall extends FormentryWysiwyg {
 
 
 
@@ -24,7 +26,7 @@ class FormentryWysiwygsmall extends class_formentry_wysiwyg implements interface
      * @return string
      */
     public function renderField() {
-        $objToolkit = class_carrier::getInstance()->getObjToolkit("admin");
+        $objToolkit = Carrier::getInstance()->getObjToolkit("admin");
         $strReturn = "";
         if($this->getStrHint() != null)
             $strReturn .= $objToolkit->formTextRow($this->getStrHint());

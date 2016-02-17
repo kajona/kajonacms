@@ -9,13 +9,17 @@
 
 namespace Kajona\System\Admin\Systemtasks;
 
+use Kajona\System\System\Cache;
+use Kajona\System\System\SystemModule;
+use Kajona\System\System\SystemSetting;
+
 
 /**
  * Flushes the entries from the systemwide cache
  *
  * @package module_system
  */
-class SystemtaskFlushcache extends class_systemtask_base implements interface_admin_systemtask {
+class SystemtaskFlushcache extends SystemtaskBase implements AdminSystemtaskInterface {
 
 
     /**
@@ -48,15 +52,15 @@ class SystemtaskFlushcache extends class_systemtask_base implements interface_ad
      */
     public function executeTask() {
 
-        if(!class_module_system_module::getModuleByName("system")->rightRight2())
+        if(!SystemModule::getModuleByName("system")->rightRight2())
             return $this->getLang("commons_error_permissions");
 
         //increase the cachebuster, so browsers are forced to reload JS and CSS files
-        $objCachebuster = class_module_system_setting::getConfigByName("_system_browser_cachebuster_");
+        $objCachebuster = SystemSetting::getConfigByName("_system_browser_cachebuster_");
         $objCachebuster->setStrValue((int)$objCachebuster->getStrValue() + 1);
         $objCachebuster->updateObjectToDb();
 
-        if(class_cache::flushCache($this->getParam("cacheSource"))) {
+        if(Cache::flushCache($this->getParam("cacheSource"))) {
             return $this->objToolkit->getTextRow($this->getLang("systemtask_flushcache_success"));
         }
         else {
@@ -71,7 +75,7 @@ class SystemtaskFlushcache extends class_systemtask_base implements interface_ad
     public function getAdminForm() {
         $strReturn = "";
         //show dropdown to select cache-source
-        $arrSources = class_cache::getCacheSources();
+        $arrSources = Cache::getCacheSources();
         $arrOptions = array();
         $arrOptions[""] = $this->getLang("systemtask_flushcache_all");
         foreach($arrSources as $strOneSource) {

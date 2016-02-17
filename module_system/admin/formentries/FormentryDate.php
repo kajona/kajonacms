@@ -6,20 +6,26 @@
 
 namespace Kajona\System\Admin\Formentries;
 
+use Kajona\System\Admin\FormentryPrintableInterface;
+use Kajona\System\System\Carrier;
+use Kajona\System\System\Date;
+use Kajona\System\System\Reflection;
+use Kajona\System\System\Validators\DateValidator;
+
 
 /**
  * @author sidler@mulchprod.de
  * @since 4.0
  * @package module_formgenerator
  */
-class FormentryDate extends class_formentry_base implements interface_formentry_printable {
+class FormentryDate extends FormentryBase implements FormentryPrintableInterface {
 
 
     public function __construct($strFormName, $strSourceProperty, $objSourceObject = null) {
         parent::__construct($strFormName, $strSourceProperty, $objSourceObject);
 
         //set the default validator
-        $this->setObjValidator(new class_date_validator());
+        $this->setObjValidator(new DateValidator());
     }
 
     /**
@@ -29,16 +35,16 @@ class FormentryDate extends class_formentry_base implements interface_formentry_
      * @return string
      */
     public function renderField() {
-        $objToolkit = class_carrier::getInstance()->getObjToolkit("admin");
+        $objToolkit = Carrier::getInstance()->getObjToolkit("admin");
         $strReturn = "";
         if($this->getStrHint() != null)
             $strReturn .= $objToolkit->formTextRow($this->getStrHint());
 
         $objDate = null;
-        if($this->getStrValue() instanceof class_date)
+        if($this->getStrValue() instanceof Date)
             $objDate = $this->getStrValue();
-        else if($this->getStrValue() != "")
-            $objDate = new class_date($this->getStrValue());
+        elseif($this->getStrValue() != "")
+            $objDate = new Date($this->getStrValue());
 
         if($this->getBitReadonly())
             $strReturn .= $objToolkit->formInputText($this->getStrEntryName(), $this->getStrLabel(), dateToString($objDate, false), "", "", true);
@@ -51,14 +57,14 @@ class FormentryDate extends class_formentry_base implements interface_formentry_
 
 
     protected function updateValue() {
-        $arrParams = class_carrier::getAllParams();
+        $arrParams = Carrier::getAllParams();
         if((isset($arrParams[$this->getStrEntryName()."_day"]) && $arrParams[$this->getStrEntryName()."_day"] != "") || isset($arrParams[$this->getStrEntryName()])) {
 
             if(isset($arrParams[$this->getStrEntryName()]) && $arrParams[$this->getStrEntryName()] == "") {
                 $this->setStrValue(null);
             }
             else {
-                $objDate = new class_date();
+                $objDate = new Date();
                 $objDate->generateDateFromParams($this->getStrEntryName(), $arrParams);
                 $this->setStrValue($objDate->getLongTimestamp());
             }
@@ -69,14 +75,14 @@ class FormentryDate extends class_formentry_base implements interface_formentry_
     }
 
     public function validateValue() {
-        $objDate = new class_date("0");
+        $objDate = new Date("0");
 
-        $arrParams = class_carrier::getAllParams();
+        $arrParams = Carrier::getAllParams();
         if(array_key_exists($this->getStrEntryName(), $arrParams)) {
             $objDate->generateDateFromParams($this->getStrEntryName(), $arrParams);
         }
         else {
-            $objDate = new class_date($this->getStrValue());
+            $objDate = new Date($this->getStrValue());
         }
 
         return $this->getObjValidator()->validate($objDate);
@@ -84,11 +90,11 @@ class FormentryDate extends class_formentry_base implements interface_formentry_
 
     public function setValueToObject() {
 
-        $objReflection = new class_reflection($this->getObjSourceObject());
+        $objReflection = new Reflection($this->getObjSourceObject());
         $strSetter = $objReflection->getSetter($this->getStrSourceProperty());
 
-        if($strSetter !== null && uniStrtolower(uniSubstr($strSetter, 0, 6)) == "setobj" && !$this->getStrValue() instanceof class_date && $this->getStrValue() > 0)
-            $this->setStrValue(new class_date($this->getStrValue()));
+        if($strSetter !== null && uniStrtolower(uniSubstr($strSetter, 0, 6)) == "setobj" && !$this->getStrValue() instanceof Date && $this->getStrValue() > 0)
+            $this->setStrValue(new Date($this->getStrValue()));
 
         return parent::setValueToObject();
     }
@@ -103,10 +109,10 @@ class FormentryDate extends class_formentry_base implements interface_formentry_
      */
     public function getValueAsText() {
         $objDate = null;
-        if($this->getStrValue() instanceof class_date)
+        if($this->getStrValue() instanceof Date)
             $objDate = $this->getStrValue();
-        else if($this->getStrValue() != "")
-            $objDate = new class_date($this->getStrValue());
+        elseif($this->getStrValue() != "")
+            $objDate = new Date($this->getStrValue());
 
         if($objDate != null)
             return dateToString($objDate, false);

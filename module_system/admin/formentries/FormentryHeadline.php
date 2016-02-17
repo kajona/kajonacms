@@ -6,6 +6,10 @@
 
 namespace Kajona\System\Admin\Formentries;
 
+use Kajona\System\Admin\FormentryPrintableInterface;
+use Kajona\System\System\Carrier;
+use Kajona\System\System\Validators\DummyValidator;
+
 
 /**
  * A fieldset may be used to group content
@@ -14,7 +18,7 @@ namespace Kajona\System\Admin\Formentries;
  * @since 4.0
  * @package module_formgenerator
  */
-class FormentryHeadline extends class_formentry_base implements interface_formentry_printable {
+class FormentryHeadline extends FormentryBase implements FormentryPrintableInterface {
 
     protected $strLevel = "h2";
     protected $strClass = "";
@@ -25,7 +29,7 @@ class FormentryHeadline extends class_formentry_base implements interface_formen
         parent::__construct("", $strName);
 
         //set the default validator
-        $this->setObjValidator(new class_dummy_validator());
+        $this->setObjValidator(new DummyValidator());
     }
 
     /**
@@ -35,7 +39,7 @@ class FormentryHeadline extends class_formentry_base implements interface_formen
      * @return string
      */
     public function renderField() {
-        $objToolkit = class_carrier::getInstance()->getObjToolkit("admin");
+        $objToolkit = Carrier::getInstance()->getObjToolkit("admin");
         return $objToolkit->formHeadline($this->getStrValue(), $this->getStrClass(), $this->getStrLevel());
     }
 
@@ -50,7 +54,7 @@ class FormentryHeadline extends class_formentry_base implements interface_formen
      * @return string
      */
     public function getValueAsText() {
-        return class_carrier::getInstance()->getObjToolkit("admin")->formHeadline($this->getStrValue());
+        return Carrier::getInstance()->getObjToolkit("admin")->formHeadline($this->getStrValue());
     }
 
     /**

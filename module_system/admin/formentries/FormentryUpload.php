@@ -8,13 +8,19 @@
 
 namespace Kajona\System\Admin\Formentries;
 
+use class_module_mediamanager_file;
+use Kajona\System\Admin\FormentryPrintableInterface;
+use Kajona\System\System\Carrier;
+use Kajona\System\System\Reflection;
+use Kajona\System\System\Validators\DummyValidator;
+
 
 /**
  * @author stefan.meyer1@yahoo.de
  * @since 4.4
  * @package module_formgenerator
  */
-class FormentryUpload extends class_formentry_base implements interface_formentry, interface_formentry_printable {
+class FormentryUpload extends FormentryBase implements FormentryPrintableInterface {
 
     protected $arrFile;
 
@@ -23,7 +29,7 @@ class FormentryUpload extends class_formentry_base implements interface_formentr
         parent::__construct($strFormName, $strSourceProperty, $objSourceObject);
 
         //set the default validator
-        $this->setObjValidator(new class_dummy_validator());
+        $this->setObjValidator(new DummyValidator());
     }
 
     /**
@@ -34,7 +40,7 @@ class FormentryUpload extends class_formentry_base implements interface_formentr
      */
     public function renderField()
     {
-        $objToolkit = class_carrier::getInstance()->getObjToolkit("admin");
+        $objToolkit = Carrier::getInstance()->getObjToolkit("admin");
         $strReturn = "";
 
         if ($this->getStrHint() != null) {
@@ -66,7 +72,7 @@ class FormentryUpload extends class_formentry_base implements interface_formentr
 
         // handle file uploads
         $objRecord = $this->getObjSourceObject();
-        $objReflection = new class_reflection($objRecord);
+        $objReflection = new Reflection($objRecord);
         $strSetter = $objReflection->getSetter($this->getStrSourceProperty());
         if (!empty($strSetter)) {
             if ($this->arrFile === null) {

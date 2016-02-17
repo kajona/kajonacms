@@ -6,6 +6,13 @@
 
 namespace Kajona\System\Admin\Formentries;
 
+use Kajona\System\Admin\FormentryPrintableInterface;
+use Kajona\System\System\Carrier;
+use Kajona\System\System\UserUser;
+use Kajona\System\System\Validators\DifferentuserValidator;
+use Kajona\System\System\Validators\DummyValidator;
+use Kajona\System\System\Validators\UserValidator;
+
 
 /**
  *
@@ -16,7 +23,7 @@ namespace Kajona\System\Admin\Formentries;
  * @since 4.2
  * @package module_formgenerator
  */
-class FormentryUser extends class_formentry_base implements interface_formentry_printable {
+class FormentryUser extends FormentryBase implements FormentryPrintableInterface {
 
     private $bitUser = true;
     private $bitGroups = false;
@@ -27,7 +34,7 @@ class FormentryUser extends class_formentry_base implements interface_formentry_
         parent::__construct($strFormName, $strSourceProperty, $objSourceObject);
 
         //set the default validator
-        $this->setObjValidator(new class_user_validator());
+        $this->setObjValidator(new UserValidator());
     }
 
     /**
@@ -37,7 +44,7 @@ class FormentryUser extends class_formentry_base implements interface_formentry_
      * @return string
      */
     public function renderField() {
-        $objToolkit = class_carrier::getInstance()->getObjToolkit("admin");
+        $objToolkit = Carrier::getInstance()->getObjToolkit("admin");
         $strReturn = "";
         if($this->getStrHint() != null)
             $strReturn .= $objToolkit->formTextRow($this->getStrHint());
@@ -47,7 +54,7 @@ class FormentryUser extends class_formentry_base implements interface_formentry_
             $strUsername = "";
             $strUserid = "";
             if(validateSystemid($this->getStrValue())) {
-                $objUser = new class_module_user_user($this->getStrValue());
+                $objUser = new UserUser($this->getStrValue());
                 if($objUser->getIntActive() == 1) {
                     $strUsername = $objUser->getStrDisplayName();
                     $strUserid = $this->getStrValue();
@@ -70,7 +77,7 @@ class FormentryUser extends class_formentry_base implements interface_formentry_
      * Overwritten base method, processes the hidden fields, too.
      */
     protected function updateValue() {
-        $arrParams = class_carrier::getAllParams();
+        $arrParams = Carrier::getAllParams();
         if(isset($arrParams[$this->getStrEntryName()."_id"]))
             $this->setStrValue($arrParams[$this->getStrEntryName()."_id"]);
         else
@@ -85,7 +92,7 @@ class FormentryUser extends class_formentry_base implements interface_formentry_
      */
     public function getValueAsText() {
         if(validateSystemid($this->getStrValue())) {
-            $objUser = new class_module_user_user($this->getStrValue());
+            $objUser = new UserUser($this->getStrValue());
             return $objUser->getStrDisplayName();
         }
 
@@ -101,10 +108,10 @@ class FormentryUser extends class_formentry_base implements interface_formentry_
         $this->bitBlockCurrentUser = $bitBlockCurrentUser;
 
         if($this->bitBlockCurrentUser) {
-            $this->setObjValidator(new class_differentuser_validator());
+            $this->setObjValidator(new DifferentuserValidator());
         }
         else {
-            $this->setObjValidator(new class_user_validator());
+            $this->setObjValidator(new UserValidator());
         }
 
         return $this;
