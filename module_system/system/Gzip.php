@@ -17,12 +17,14 @@ namespace Kajona\System\System;
  * @package module_system
  * @author sidler@mulchprod.de
  */
-class Gzip {
+class Gzip
+{
 
     /**
      * Constructor
      */
-    public function __construct() {
+    public function __construct()
+    {
     }
 
     /**
@@ -33,42 +35,46 @@ class Gzip {
      * @param string $strFilename
      * @param bool $bitDeleteSource
      *
-     * @throws class_exception
+     * @throws Exception
      * @return bool
      */
-    public function compressFile($strFilename, $bitDeleteSource = false) {
-        if(strpos($strFilename, _realpath_) === false)
+    public function compressFile($strFilename, $bitDeleteSource = false)
+    {
+        if (strpos($strFilename, _realpath_) === false) {
             $strFilename = _realpath_.$strFilename;
+        }
         //Check if sourcefile exists
         $strTargetFilename = $strFilename.".gz";
-        if(file_exists($strFilename) && is_file($strFilename)) {
+        if (file_exists($strFilename) && is_file($strFilename)) {
             //try to open target file pointer
-            if($objTargetPointer = gzopen($strTargetFilename, "wb")) {
+            if ($objTargetPointer = gzopen($strTargetFilename, "wb")) {
                 //try to open sourcefile
-                if($objSourcePointer = fopen($strFilename, "rb")) {
+                if ($objSourcePointer = fopen($strFilename, "rb")) {
                     //Loop over filecontent
-                    while(!feof($objSourcePointer)) {
+                    while (!feof($objSourcePointer)) {
                         gzwrite($objTargetPointer, fread($objSourcePointer, 1024 * 512));
                     }
                     @fclose($objSourcePointer);
                     @gzclose($objTargetPointer);
                     //Delete the sourcefile?
-                    if($bitDeleteSource) {
-                        $objFilesystem = new class_filesystem();
+                    if ($bitDeleteSource) {
+                        $objFilesystem = new Filesystem();
                         $objFilesystem->fileDelete(str_replace(_realpath_, "", $strFilename));
                     }
                     return true;
                 }
                 else {
                     @gzclose($objTargetPointer);
-                    throw new class_exception("can't open sourcefile", class_exception::$level_ERROR);
+                    throw new Exception("can't open sourcefile", Exception::$level_ERROR);
                 }
             }
-            else
-                throw new class_exception("can't open targetfile", class_exception::$level_ERROR);
+            else {
+                throw new Exception("can't open targetfile", Exception::$level_ERROR);
+            }
         }
-        else
-            throw new class_exception("Sourcefile not valid", class_exception::$level_ERROR);
+        else {
+            throw new Exception("Sourcefile not valid", Exception::$level_ERROR);
+        }
 
         return false;
     }
@@ -80,26 +86,29 @@ class Gzip {
      *
      * @param string $strFilename
      *
-     * @throws class_exception
+     * @throws Exception
      * @return bool
      */
-    public function decompressFile($strFilename) {
-        if(substr($strFilename, -3) != ".gz")
-            throw new class_exception("sourcefile ".$strFilename." no valid .gz file", class_exception::$level_ERROR);
+    public function decompressFile($strFilename)
+    {
+        if (substr($strFilename, -3) != ".gz") {
+            throw new Exception("sourcefile ".$strFilename." no valid .gz file", Exception::$level_ERROR);
+        }
 
-        if(strpos($strFilename, _realpath_) === false)
+        if (strpos($strFilename, _realpath_) === false) {
             $strFilename = _realpath_.$strFilename;
+        }
 
         //Check if sourcefile exists
         $strTargetFilename = substr($strFilename, 0, strlen($strFilename) - 3);
 
-        if(file_exists($strFilename) && is_file($strFilename)) {
+        if (file_exists($strFilename) && is_file($strFilename)) {
             //try to open sourcefile
-            if($objSourcePointer = gzopen($strFilename, "rb")) {
+            if ($objSourcePointer = gzopen($strFilename, "rb")) {
 
-                if($objTargetPointer = fopen($strTargetFilename, "wb")) {
+                if ($objTargetPointer = fopen($strTargetFilename, "wb")) {
                     //Loop over filecontent
-                    while(!gzeof($objSourcePointer)) {
+                    while (!gzeof($objSourcePointer)) {
                         fwrite($objTargetPointer, gzread($objSourcePointer, 1024 * 512));
                         //$strContent .= gzread($objSourcePointer,  1024 * 512);
                     }
@@ -111,22 +120,22 @@ class Gzip {
                 }
                 else {
                     @gzclose($objSourcePointer);
-                    throw new class_exception("can't write to targetfile ", class_exception::$level_ERROR);
+                    throw new Exception("can't write to targetfile ", Exception::$level_ERROR);
                 }
 
             }
             else {
                 gzclose($objSourcePointer);
-                throw new class_exception("can't open sourcefile", class_exception::$level_ERROR);
+                throw new Exception("can't open sourcefile", Exception::$level_ERROR);
             }
 
         }
-        else
-            throw new class_exception("Sourcefile not valid", class_exception::$level_ERROR);
+        else {
+            throw new Exception("Sourcefile not valid", Exception::$level_ERROR);
+        }
 
         return false;
     }
-
 
 
 }

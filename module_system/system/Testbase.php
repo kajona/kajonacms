@@ -7,7 +7,6 @@
 namespace Kajona\System\System;
 
 
-
 use PHPUnit_Framework_TestCase;
 
 require_once __DIR__."../../../bootstrap.php";
@@ -21,50 +20,52 @@ require_once __DIR__."../../../bootstrap.php";
  * @since 3.4
  * @author sidler@mulchprod.de
  */
-abstract class Testbase extends PHPUnit_Framework_TestCase {
+abstract class Testbase extends PHPUnit_Framework_TestCase
+{
 
     private $arrTestStartDate = null;
 
-    protected function printDebugValues() {
+    protected function printDebugValues()
+    {
         $strDebug = "";
         $arrTimestampEnde = gettimeofday();
         $intTimeUsed = (($arrTimestampEnde['sec'] * 1000000 + $arrTimestampEnde['usec'])
                 - ($this->arrTestStartDate['sec'] * 1000000 + $this->arrTestStartDate['usec'])) / 1000000;
 
-        $strDebug .= "PHP-Time:                            " . number_format($intTimeUsed, 6) . " sec \n";
+        $strDebug .= "PHP-Time:                            ".number_format($intTimeUsed, 6)." sec \n";
 
         //Hows about the queries?
-        $strDebug .= "Queries db/cachesize/cached/fired:   " . Carrier::getInstance()->getObjDB()->getNumber() . "/" .
-            Carrier::getInstance()->getObjDB()->getCacheSize() . "/" .
-            Carrier::getInstance()->getObjDB()->getNumberCache() . "/" .
-            (Carrier::getInstance()->getObjDB()->getNumber() - Carrier::getInstance()->getObjDB()->getNumberCache()) . " \n";
+        $strDebug .= "Queries db/cachesize/cached/fired:   ".Carrier::getInstance()->getObjDB()->getNumber()."/".
+            Carrier::getInstance()->getObjDB()->getCacheSize()."/".
+            Carrier::getInstance()->getObjDB()->getNumberCache()."/".
+            (Carrier::getInstance()->getObjDB()->getNumber() - Carrier::getInstance()->getObjDB()->getNumberCache())." \n";
 
         //anything to say about the templates?
-        $strDebug .= "Templates cached:                    " . Carrier::getInstance()->getObjTemplate()->getNumberCacheSize() . " \n";
+        $strDebug .= "Templates cached:                    ".Carrier::getInstance()->getObjTemplate()->getNumberCacheSize()." \n";
 
         //memory
-        $strDebug .= "Memory/Max Memory:                   " . bytesToString(memory_get_usage()) . "/" . bytesToString(memory_get_peak_usage()) . " \n";
-        $strDebug .= "Classes Loaded:                      " . Classloader::getInstance()->getIntNumberOfClassesLoaded() . " \n";
+        $strDebug .= "Memory/Max Memory:                   ".bytesToString(memory_get_usage())."/".bytesToString(memory_get_peak_usage())." \n";
+        $strDebug .= "Classes Loaded:                      ".Classloader::getInstance()->getIntNumberOfClassesLoaded()." \n";
 
         //and check the cache-stats
-        $strDebug .= "Cache requests/hits/saves/cachesize: " .
-            Cache::getIntRequests() . "/" . Cache::getIntHits() . "/" . Cache::getIntSaves() . "/" . Cache::getIntCachesize() . " \n";
-
+        $strDebug .= "Cache requests/hits/saves/cachesize: ".
+            Cache::getIntRequests()."/".Cache::getIntHits()."/".Cache::getIntSaves()."/".Cache::getIntCachesize()." \n";
 
         //echo get_called_class()."\n".$strDebug."\n";
     }
 
-    protected function setUp() {
+    protected function setUp()
+    {
 
         $this->arrTestStartDate = gettimeofday();
 
 
-        if(!defined("_autotesting_")) {
+        if (!defined("_autotesting_")) {
             define("_autotesting_", true);
         }
 
-        if(!defined("_autotesting_sqlite_checks_")) {
-            if(Config::getInstance("config.php")->getConfig("dbdriver") == "sqlite3") {
+        if (!defined("_autotesting_sqlite_checks_")) {
+            if (Config::getInstance("config.php")->getConfig("dbdriver") == "sqlite3") {
                 Database::getInstance()->_pQuery("PRAGMA journal_mode = MEMORY", array());
             }
 
@@ -77,7 +78,8 @@ abstract class Testbase extends PHPUnit_Framework_TestCase {
     }
 
 
-    protected function tearDown() {
+    protected function tearDown()
+    {
         Carrier::getInstance()->flushCache(Carrier::INT_CACHE_TYPE_CHANGELOG);
 
         $this->printDebugValues();
@@ -85,8 +87,9 @@ abstract class Testbase extends PHPUnit_Framework_TestCase {
         parent::tearDown();
     }
 
-    protected function flushDBCache() {
-        Carrier::getInstance()->flushCache(Carrier::INT_CACHE_TYPE_DBQUERIES |Carrier::INT_CACHE_TYPE_DBTABLES);
+    protected function flushDBCache()
+    {
+        Carrier::getInstance()->flushCache(Carrier::INT_CACHE_TYPE_DBQUERIES | Carrier::INT_CACHE_TYPE_DBTABLES);
     }
 
 
@@ -102,7 +105,8 @@ abstract class Testbase extends PHPUnit_Framework_TestCase {
      *
      * @return Model
      */
-    protected function createObject($strClassType, $strParentId, array $arrExcludeFillProperty = array(),  array $arrPropertyValues = array(), $bitAutofillProperties = true) {
+    protected function createObject($strClassType, $strParentId, array $arrExcludeFillProperty = array(), array $arrPropertyValues = array(), $bitAutofillProperties = true)
+    {
         //get properties with an tablecolumn annotation
         /** @var Model $objObject */
         $objObject = new $strClassType();
@@ -114,17 +118,17 @@ abstract class Testbase extends PHPUnit_Framework_TestCase {
         $objRootReflection = new Reflection("class_root");
         $arrExcludeFillProperty = array_merge($arrExcludeFillProperty, array_keys($objRootReflection->getPropertiesWithAnnotation(OrmBase::STR_ANNOTATION_TABLECOLUMN)));
 
-        foreach($arrProperties as $strPropName => $strValue) {
+        foreach ($arrProperties as $strPropName => $strValue) {
 
             //Exclude properties to be set
-            if(in_array($strPropName, $arrExcludeFillProperty)) {
+            if (in_array($strPropName, $arrExcludeFillProperty)) {
                 continue;
             }
 
             //Set properties from array $arrPropertyValues
-            if(array_key_exists($strPropName, $arrPropertyValues)) {
+            if (array_key_exists($strPropName, $arrPropertyValues)) {
                 $strSetterMethod = $objReflection->getSetter($strPropName);
-                if($strSetterMethod !== null) {
+                if ($strSetterMethod !== null) {
                     $objValue = $arrPropertyValues[$strPropName];
                     $objObject->$strSetterMethod($objValue);
                     continue;
@@ -132,33 +136,33 @@ abstract class Testbase extends PHPUnit_Framework_TestCase {
             }
 
             //check if the property is annotated with @tablecolumn
-            if($bitAutofillProperties) {
-                if($objReflection->hasPropertyAnnotation($strPropName, OrmBase::STR_ANNOTATION_TABLECOLUMN)) {
+            if ($bitAutofillProperties) {
+                if ($objReflection->hasPropertyAnnotation($strPropName, OrmBase::STR_ANNOTATION_TABLECOLUMN)) {
                     $strSetterMethod = $objReflection->getSetter($strPropName);
-                    if($strSetterMethod !== null) {
+                    if ($strSetterMethod !== null) {
                         //determine the field type
                         $strDataType = $objReflection->getAnnotationValueForProperty($strPropName, "@var");
                         $strFieldType = $objReflection->getAnnotationValueForProperty($strPropName, "@fieldType");
                         $objMethodValue = null;
 
-                        if($strDataType == "string") {
-                            if($strFieldType == "text" || $strFieldType == "textarea") {
+                        if ($strDataType == "string") {
+                            if ($strFieldType == "text" || $strFieldType == "textarea") {
                                 $objMethodValue = $strPropName."_".$objObject->getStrSystemid();
 
-                                if(uniStrlen($objMethodValue) > 10) {
+                                if (uniStrlen($objMethodValue) > 10) {
                                     $objMethodValue = uniStrTrim($objMethodValue, 10, "");
                                 }
                             }
                         }
-                        elseif($strDataType == "int" || $strDataType == "numeric") {
-                            if($strFieldType != "dropdown") {
+                        elseif ($strDataType == "int" || $strDataType == "numeric") {
+                            if ($strFieldType != "dropdown") {
                                 $objMethodValue = 1;
                             }
                         }
-                        elseif($strDataType == "class_date") {
+                        elseif ($strDataType == "class_date") {
                             $objMethodValue = new Date();
                         }
-                        elseif($strDataType == "bool") {
+                        elseif ($strDataType == "bool") {
                             $objMethodValue = false;
                         }
                         else {
@@ -180,7 +184,8 @@ abstract class Testbase extends PHPUnit_Framework_TestCase {
     /**
      * Resets all relevant caches
      */
-    protected function resetCaches() {
+    protected function resetCaches()
+    {
         Carrier::getInstance()->flushCache(Carrier::INT_CACHE_TYPE_DBQUERIES | Carrier::INT_CACHE_TYPE_ORMCACHE | Carrier::INT_CACHE_TYPE_OBJECTFACTORY | Carrier::INT_CACHE_TYPE_APC);
     }
 

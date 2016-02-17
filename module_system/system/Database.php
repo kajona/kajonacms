@@ -173,7 +173,7 @@ class Database
         $bitReturn = true;
         $intSetsPerInsert = floor(970 / count($arrColumns));
 
-        foreach(array_chunk($arrValueSets, $intSetsPerInsert) as $arrSingleValueSet) {
+        foreach (array_chunk($arrValueSets, $intSetsPerInsert) as $arrSingleValueSet) {
             $bitReturn = $bitReturn && $this->objDbDriver->triggerMultiInsert(_dbprefix_.$strTable, $arrColumns, $arrSingleValueSet, $this);
         }
 
@@ -1106,6 +1106,7 @@ class Database
      * with this method
      *
      * @param string $strValue
+     *
      * @return mixed
      */
     public function escape($strValue)

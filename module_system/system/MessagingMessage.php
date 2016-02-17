@@ -24,7 +24,8 @@ use Kajona\System\System\Messageproviders\MessageproviderInterface;
  *
  * @formGenerator MessagingMessage_formgenerator
  */
-class MessagingMessage extends Model implements ModelInterface, AdminListableInterface {
+class MessagingMessage extends Model implements ModelInterface, AdminListableInterface
+{
 
     /**
      * @var string
@@ -71,7 +72,6 @@ class MessagingMessage extends Model implements ModelInterface, AdminListableInt
     private $bitRead = 0;
 
 
-
     /**
      * @var string
      * @tableColumn messages.message_internalidentifier
@@ -105,7 +105,8 @@ class MessagingMessage extends Model implements ModelInterface, AdminListableInt
     /**
      * @return bool
      */
-    public function rightView() {
+    public function rightView()
+    {
         return parent::rightView() && $this->getStrUser() == $this->objSession->getUserID();
     }
 
@@ -114,9 +115,11 @@ class MessagingMessage extends Model implements ModelInterface, AdminListableInt
      *
      * @return string
      */
-    public function getStrDisplayName() {
-        if($this->getStrTitle() != "")
+    public function getStrDisplayName()
+    {
+        if ($this->getStrTitle() != "") {
             return uniStrTrim($this->getStrTitle(), 70);
+        }
 
         return uniStrTrim($this->getStrBody(), 70);
     }
@@ -128,11 +131,14 @@ class MessagingMessage extends Model implements ModelInterface, AdminListableInt
      *
      * @return string the name of the icon, not yet wrapped by getImageAdmin()
      */
-    public function getStrIcon() {
-        if($this->getBitRead())
+    public function getStrIcon()
+    {
+        if ($this->getBitRead()) {
             return "icon_mail";
-        else
+        }
+        else {
             return "icon_mailNew";
+        }
     }
 
     /**
@@ -140,7 +146,8 @@ class MessagingMessage extends Model implements ModelInterface, AdminListableInt
      *
      * @return string
      */
-    public function getStrAdditionalInfo() {
+    public function getStrAdditionalInfo()
+    {
         return dateToString($this->getObjDate());
     }
 
@@ -149,10 +156,12 @@ class MessagingMessage extends Model implements ModelInterface, AdminListableInt
      *
      * @return string
      */
-    public function getStrLongDescription() {
+    public function getStrLongDescription()
+    {
         $strHandlerName = $this->getStrMessageProvider();
-        if($strHandlerName == "")
+        if ($strHandlerName == "") {
             return "";
+        }
 
         /** @var $objHandler MessageproviderInterface */
         $objHandler = new $strHandlerName();
@@ -164,12 +173,13 @@ class MessagingMessage extends Model implements ModelInterface, AdminListableInt
      *
      * @throws Exception
      */
-    public static function markAllMessagesAsRead($strUserid) {
+    public static function markAllMessagesAsRead($strUserid)
+    {
         $objORM = new OrmObjectlist();
         $objORM->addWhereRestriction(new OrmObjectlistPropertyRestriction("bitRead", OrmComparatorEnum::Equal(), false));
         $objORM->addWhereRestriction(new OrmObjectlistPropertyRestriction("strUser", OrmComparatorEnum::Equal(), $strUserid));
         /** @var MessagingMessage $objOneMessage */
-        foreach($objORM->getObjectList(__CLASS__) as $objOneMessage) {
+        foreach ($objORM->getObjectList(__CLASS__) as $objOneMessage) {
             $objOneMessage->setBitRead(true);
             $objOneMessage->updateObjectToDb();
         }
@@ -180,12 +190,13 @@ class MessagingMessage extends Model implements ModelInterface, AdminListableInt
      *
      * @throws Exception
      */
-    public static function deleteAllReadMessages($strUserid) {
+    public static function deleteAllReadMessages($strUserid)
+    {
         $objORM = new OrmObjectlist();
         $objORM->addWhereRestriction(new OrmObjectlistPropertyRestriction("bitRead", OrmComparatorEnum::Equal(), true));
         $objORM->addWhereRestriction(new OrmObjectlistPropertyRestriction("strUser", OrmComparatorEnum::Equal(), $strUserid));
         /** @var MessagingMessage $objOneMessage */
-        foreach($objORM->getObjectList(__CLASS__) as $objOneMessage) {
+        foreach ($objORM->getObjectList(__CLASS__) as $objOneMessage) {
             $objOneMessage->deleteObject();
         }
     }
@@ -195,11 +206,12 @@ class MessagingMessage extends Model implements ModelInterface, AdminListableInt
      *
      * @throws Exception
      */
-    public static function deleteAllMessages($strUserid) {
+    public static function deleteAllMessages($strUserid)
+    {
         $objORM = new OrmObjectlist();
         $objORM->addWhereRestriction(new OrmObjectlistPropertyRestriction("strUser", OrmComparatorEnum::Equal(), $strUserid));
         /** @var MessagingMessage $objOneMessage */
-        foreach($objORM->getObjectList(__CLASS__) as $objOneMessage) {
+        foreach ($objORM->getObjectList(__CLASS__) as $objOneMessage) {
             $objOneMessage->deleteObject();
         }
     }
@@ -214,9 +226,11 @@ class MessagingMessage extends Model implements ModelInterface, AdminListableInt
      * @return MessagingMessage[]
      * @static
      */
-    public static function getObjectList($strUserid = "", $intStart = null, $intEnd = null) {
-        if($strUserid == "")
+    public static function getObjectList($strUserid = "", $intStart = null, $intEnd = null)
+    {
+        if ($strUserid == "") {
             $strUserid = Carrier::getInstance()->getObjSession()->getUserID();
+        }
 
         $objOrm = new OrmObjectlist();
         $objOrm->addWhereRestriction(new OrmObjectlistPropertyRestriction("strUser", OrmComparatorEnum::Equal(), $strUserid));
@@ -236,14 +250,14 @@ class MessagingMessage extends Model implements ModelInterface, AdminListableInt
      * @return MessagingMessage[]
      * @static
      */
-    public static function getMessagesByIdentifier($strIdentifier, $intStart = null, $intEnd = null) {
+    public static function getMessagesByIdentifier($strIdentifier, $intStart = null, $intEnd = null)
+    {
         $objOrm = new OrmObjectlist();
         $objOrm->addWhereRestriction(new OrmObjectlistPropertyRestriction("strInternalIdentifier", OrmComparatorEnum::Equal(), $strIdentifier));
         $objOrm->addOrderBy(new OrmObjectlistOrderby("message_read ASC"));
         $objOrm->addOrderBy(new OrmObjectlistOrderby("system_create_date DESC"));
         return $objOrm->getObjectList(__CLASS__, $intStart, $intEnd);
     }
-
 
 
     /**
@@ -254,11 +268,13 @@ class MessagingMessage extends Model implements ModelInterface, AdminListableInt
      *
      * @return int
      */
-    public static function getNumberOfMessagesForUser($strUserid, $bitOnlyUnread = false) {
+    public static function getNumberOfMessagesForUser($strUserid, $bitOnlyUnread = false)
+    {
         $objOrm = new OrmObjectlist();
         $objOrm->addWhereRestriction(new OrmObjectlistPropertyRestriction("strUser", OrmComparatorEnum::Equal(), $strUserid));
-        if($bitOnlyUnread)
+        if ($bitOnlyUnread) {
             $objOrm->addWhereRestriction(new OrmObjectlistRestriction("AND (message_read IS NULL OR message_read = 0 )"));
+        }
 
         return $objOrm->getObjectCount(__CLASS__);
     }
@@ -266,9 +282,11 @@ class MessagingMessage extends Model implements ModelInterface, AdminListableInt
 
     /**
      * @param boolean $bitRead
+     *
      * @return void
      */
-    public function setBitRead($bitRead) {
+    public function setBitRead($bitRead)
+    {
         $this->bitRead = $bitRead;
 
     }
@@ -276,137 +294,165 @@ class MessagingMessage extends Model implements ModelInterface, AdminListableInt
     /**
      * @return boolean
      */
-    public function getBitRead() {
+    public function getBitRead()
+    {
         return $this->bitRead;
     }
 
     /**
      * @param string $strBody
+     *
      * @return void
      */
-    public function setStrBody($strBody) {
+    public function setStrBody($strBody)
+    {
         $this->strBody = $strBody;
     }
 
     /**
      * @return string
      */
-    public function getStrBody() {
+    public function getStrBody()
+    {
         return $this->strBody;
     }
 
     /**
      * @param string $strInternalIdentifier
+     *
      * @return void
      */
-    public function setStrInternalIdentifier($strInternalIdentifier) {
+    public function setStrInternalIdentifier($strInternalIdentifier)
+    {
         $this->strInternalIdentifier = $strInternalIdentifier;
     }
 
     /**
      * @return string
      */
-    public function getStrInternalIdentifier() {
+    public function getStrInternalIdentifier()
+    {
         return $this->strInternalIdentifier;
     }
 
     /**
      * @param string $strUser
+     *
      * @return void
      */
-    public function setStrUser($strUser) {
+    public function setStrUser($strUser)
+    {
         $this->strUser = $strUser;
     }
 
     /**
      * @return string
      */
-    public function getStrUser() {
+    public function getStrUser()
+    {
         return $this->strUser;
     }
 
     /**
      * @return \class_date
      */
-    public function getObjDate() {
+    public function getObjDate()
+    {
         return $this->getObjCreateDate();
     }
 
     /**
      * @param string $strMessageProvider
+     *
      * @return void
      */
-    public function setStrMessageProvider($strMessageProvider) {
+    public function setStrMessageProvider($strMessageProvider)
+    {
         $this->strMessageProvider = $strMessageProvider;
     }
 
     /**
      * @param MessageproviderInterface $objMessageProvider
+     *
      * @return void
      */
-    public function setObjMessageProvider(MessageproviderInterface $objMessageProvider) {
+    public function setObjMessageProvider(MessageproviderInterface $objMessageProvider)
+    {
         $this->strMessageProvider = get_class($objMessageProvider);
     }
 
     /**
      * @return string
      */
-    public function getStrMessageProvider() {
+    public function getStrMessageProvider()
+    {
         return $this->strMessageProvider;
     }
 
     /**
      * @return MessageproviderInterface
      */
-    public function getObjMessageProvider() {
-        if($this->strMessageProvider != "")
+    public function getObjMessageProvider()
+    {
+        if ($this->strMessageProvider != "") {
             return new $this->strMessageProvider();
-        else
+        }
+        else {
             return null;
+        }
     }
 
     /**
      * @param string $strTitle
+     *
      * @return void
      */
-    public function setStrTitle($strTitle) {
+    public function setStrTitle($strTitle)
+    {
         $this->strTitle = $strTitle;
     }
 
     /**
      * @return string
      */
-    public function getStrTitle() {
+    public function getStrTitle()
+    {
         return $this->strTitle;
     }
 
     /**
      * @param string $strSenderId
+     *
      * @return void
      */
-    public function setStrSenderId($strSenderId) {
+    public function setStrSenderId($strSenderId)
+    {
         $this->strSenderId = $strSenderId;
     }
 
     /**
      * @return string
      */
-    public function getStrSenderId() {
+    public function getStrSenderId()
+    {
         return $this->strSenderId;
     }
 
     /**
      * @param string $strMessageRefId
+     *
      * @return void
      */
-    public function setStrMessageRefId($strMessageRefId) {
+    public function setStrMessageRefId($strMessageRefId)
+    {
         $this->strMessageRefId = $strMessageRefId;
     }
 
     /**
      * @return string
      */
-    public function getStrMessageRefId() {
+    public function getStrMessageRefId()
+    {
         return $this->strMessageRefId;
     }
 

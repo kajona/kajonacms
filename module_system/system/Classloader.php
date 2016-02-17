@@ -12,6 +12,7 @@ require_once __DIR__."/BootstrapCache.php";
 
 use Kajona\System\System\BootstrapCache;
 use Kajona\System\System\PharModule;
+use ReflectionClass;
 
 /**
  * Class-loader for all Kajona classes.
@@ -46,27 +47,27 @@ class Classloader
      * @var array
      */
     private static $arrCodeFolders = array(
-      "/admin/elements/",
-      "/admin/formentries/",
-      "/admin/statsreports/",
-      "/admin/systemtasks/",
-      "/admin/widgets/",
-      "/admin/",
-      "/portal/elements/",
-      "/portal/forms/",
-      "/portal/templatemapper/",
-      "/portal/",
-      "/system/db/",
-      "/system/usersources/",
-      "/system/imageplugins/",
-      "/system/validators/",
-      "/system/workflows/",
-      "/system/messageproviders/",
-      "/system/scriptlets/",
-      "/system/",
-      "/installer/",
-      "/event/",
-      "/legacy/"
+        "/admin/elements/",
+        "/admin/formentries/",
+        "/admin/statsreports/",
+        "/admin/systemtasks/",
+        "/admin/widgets/",
+        "/admin/",
+        "/portal/elements/",
+        "/portal/forms/",
+        "/portal/templatemapper/",
+        "/portal/",
+        "/system/db/",
+        "/system/usersources/",
+        "/system/imageplugins/",
+        "/system/validators/",
+        "/system/workflows/",
+        "/system/messageproviders/",
+        "/system/scriptlets/",
+        "/system/",
+        "/installer/",
+        "/event/",
+        "/legacy/"
     );
 
     /**
@@ -96,11 +97,10 @@ class Classloader
     }
 
 
-
     /**
      * We autoload all classes which are in the event folder of each module. Theses classes can register events etc.
      *
-     * @throws class_exception
+     * @throws Exception
      */
     public function includeClasses()
     {
@@ -137,7 +137,7 @@ class Classloader
     private function scanModules()
     {
 
-        if(BootstrapCache::getInstance()->getCacheContent(BootstrapCache::CACHE_MODULES) !== false && BootstrapCache::getInstance()->getCacheContent(BootstrapCache::CACHE_PHARMODULES) !== false) {
+        if (BootstrapCache::getInstance()->getCacheContent(BootstrapCache::CACHE_MODULES) !== false && BootstrapCache::getInstance()->getCacheContent(BootstrapCache::CACHE_PHARMODULES) !== false) {
             return;
         }
 
@@ -191,7 +191,7 @@ class Classloader
             }
         }
 
-        if(self::PREFER_PHAR) {
+        if (self::PREFER_PHAR) {
             $arrDiffedPhars = $arrPharModules;
             $arrModules = array_diff($arrModules, $arrPharModules);
         }
@@ -247,7 +247,7 @@ class Classloader
     private function indexAvailableCodefiles()
     {
 
-        if(!empty(BootstrapCache::getInstance()->getCacheContent(BootstrapCache::CACHE_CLASSES))) {
+        if (!empty(BootstrapCache::getInstance()->getCacheContent(BootstrapCache::CACHE_CLASSES))) {
             return;
         }
 
@@ -263,12 +263,12 @@ class Classloader
             $arrFiles = $objPhar->load(self::$arrCodeFolders);
 
             $arrResolved = array();
-            foreach($arrFiles as $strName => $strPath) {
+            foreach ($arrFiles as $strName => $strPath) {
                 $arrResolved[$this->getClassnameFromFilename($strPath)] = $strPath;
             }
 
             // PHAR archive files must never override existing file system files
-            if(self::PREFER_PHAR) {
+            if (self::PREFER_PHAR) {
                 $arrMergedFiles = array_merge($arrMergedFiles, $arrResolved);
             }
             else {
@@ -303,7 +303,8 @@ class Classloader
                             if (preg_match("/(class|interface|trait)(.*)\.php$/i", $strSingleFile)) {
                                 $arrFiles[substr($strSingleFile, 0, -4)] = _realpath_.$strPath.$strFolder.$strSingleFile;
                             }
-                        } else {
+                        }
+                        else {
                             $strClassName = $this->getClassnameFromFilename(_realpath_.$strPath.$strFolder.$strSingleFile);
                             if (!empty($strClassName)) {
                                 $arrFiles[$strClassName] = _realpath_."/".$strPath.$strFolder.$strSingleFile;
@@ -353,6 +354,7 @@ class Classloader
      * The method does not include the file so it does not trigger any other autoload calls
      *
      * @param $strFilename
+     *
      * @return null|string
      */
     public function getClassnameFromFilename($strFilename)
@@ -380,7 +382,7 @@ class Classloader
 
             $strNamespace = isset($arrMatches[1]) ? $arrMatches[1] : null;
             if (!empty($strNamespace)) {
-                $strClassname = $strNamespace . "\\" . $strFile;
+                $strClassname = $strNamespace."\\".$strFile;
             }
         }
 
@@ -407,7 +409,7 @@ class Classloader
             // is the case where the filename is not equal to the class name i.e. installer_sc_zzlanguages.php
             if (!class_exists($strResolvedClassname)) {
                 if (!preg_match("/(class|interface|trait)(.*)$/i", $strResolvedClassname)) {
-                    $strResolvedClassname = "class_" . $strResolvedClassname;
+                    $strResolvedClassname = "class_".$strResolvedClassname;
                 }
 
                 include_once $strFilename;
@@ -416,13 +418,15 @@ class Classloader
             $objReflection = new ReflectionClass($strResolvedClassname);
             if ($objReflection->isInstantiable() && ($strBaseclass == null || $objReflection->isSubclassOf($strBaseclass)) && ($strImplementsInterface == null || $objReflection->implementsInterface($strImplementsInterface))) {
                 if ($bitInject) {
-                    $objFactory = class_carrier::getInstance()->getContainer()->offsetGet("object_builder");
+                    $objFactory = Carrier::getInstance()->getContainer()->offsetGet("object_builder");
                     if (!empty($arrConstructorParams)) {
                         return $objFactory->factory($objReflection->getName(), $arrConstructorParams);
-                    } else {
+                    }
+                    else {
                         return $objFactory->factory($objReflection->getName());
                     }
-                } else {
+                }
+                else {
                     if (!empty($arrConstructorParams)) {
                         return $objReflection->newInstanceArgs($arrConstructorParams);
                     }
@@ -440,9 +444,9 @@ class Classloader
     public function bootstrapIncludeModuleIds()
     {
         //fetch all phars and registered modules
-        foreach(BootstrapCache::getInstance()->getCacheContent(BootstrapCache::CACHE_MODULES) as $strPath => $strOneModule) {
+        foreach (BootstrapCache::getInstance()->getCacheContent(BootstrapCache::CACHE_MODULES) as $strPath => $strOneModule) {
 
-            if(!in_array($strOneModule, BootstrapCache::getInstance()->getCacheContent(BootstrapCache::CACHE_PHARMODULES))) {
+            if (!in_array($strOneModule, BootstrapCache::getInstance()->getCacheContent(BootstrapCache::CACHE_PHARMODULES))) {
                 if (is_dir(_realpath_."/".$strPath."/system/") && is_dir(_realpath_."/".$strPath."/system/config/")) {
                     foreach (scandir(_realpath_."/".$strPath."/system/config/") as $strModuleEntry) {
                         if (preg_match("/module\_([a-z0-9\_])+\_id\.php/", $strModuleEntry)) {
@@ -453,7 +457,7 @@ class Classloader
             }
         }
 
-        foreach(BootstrapCache::getInstance()->getCacheContent(BootstrapCache::CACHE_PHARMODULES) as $strPath => $strOneModule) {
+        foreach (BootstrapCache::getInstance()->getCacheContent(BootstrapCache::CACHE_PHARMODULES) as $strPath => $strOneModule) {
             $objPhar = new PharModule($strPath);
             $objPhar->loadModuleIds();
         }
@@ -473,6 +477,7 @@ class Classloader
 
     /**
      * Returns the list of phar-based modules
+     *
      * @return array
      */
     public function getArrPharModules()

@@ -6,6 +6,8 @@
 
 namespace Kajona\System\Portal\Templatemapper;
 
+use Kajona\System\Portal\TemplatemapperInterface;
+
 
 /**
  * A dummy mapper, rendering the value as is back to the template.
@@ -15,7 +17,7 @@ namespace Kajona\System\Portal\Templatemapper;
  * @author sidler@mulchpropd.de
  * @since 4.5
  */
-class DefaultTemplatemapper implements interface_templatemapper {
+class DefaultTemplatemapper implements TemplatemapperInterface {
     /**
      * Converts the passed value to a formatted value.
      * In most scenarios, the value is written directly to the template.

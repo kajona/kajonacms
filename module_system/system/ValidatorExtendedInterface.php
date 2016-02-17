@@ -15,7 +15,8 @@ namespace Kajona\System\System;
  * @package module_system
  * @since 4.4
  */
-interface ValidatorExtendedInterface extends ValidatorInterface {
+interface ValidatorExtendedInterface extends ValidatorInterface
+{
 
     /**
      * Gets the validation message of the validator.

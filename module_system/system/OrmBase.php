@@ -15,11 +15,13 @@ namespace Kajona\System\System;
  * @author sidler@mulchprod.de
  * @since 4.6
  */
-abstract class OrmBase {
+abstract class OrmBase
+{
 
     /**
      * Static flag to change the handling of deleted objects globally, so for every following
      * ORM operation
+     *
      * @var int
      */
     protected static $objHandleLogicalDeletedGlobal = null;
@@ -54,39 +56,45 @@ abstract class OrmBase {
     /**
      * @param Root|VersionableInterface|null $objObject
      */
-    function __construct($objObject = null) {
+    function __construct($objObject = null)
+    {
         $this->objObject = $objObject;
-        if(self::$bitLogcialDeleteAvailable === null) {
+        if (self::$bitLogcialDeleteAvailable === null) {
 
             $arrColumns = Database::getInstance()->getColumnsOfTable(_dbprefix_."system");
             self::$bitLogcialDeleteAvailable = count(array_filter($arrColumns, function ($arrOneTable) {
-                return $arrOneTable["columnName"] == "system_deleted";
-            })) > 0;
+                    return $arrOneTable["columnName"] == "system_deleted";
+                })) > 0;
         }
     }
 
     /**
      * @return \class_root|VersionableInterface
      */
-    protected function getObjObject() {
+    protected function getObjObject()
+    {
         return $this->objObject;
     }
 
     /**
      * @param \class_root $objObject
+     *
      * @return void
      */
-    public function setObjObject($objObject) {
+    public function setObjObject($objObject)
+    {
         $this->objObject = $objObject;
     }
 
     /**
      * Validates if the current object has at least a single target-table set up
+     *
      * @return bool
      */
-    protected function hasTargetTable() {
+    protected function hasTargetTable()
+    {
         $strClass = is_object($this->getObjObject()) ? get_class($this->getObjObject()) : $this->getObjObject();
-        if(!empty(self::$arrTargetTableCache[$strClass])) {
+        if (!empty(self::$arrTargetTableCache[$strClass])) {
             return true;
         }
 
@@ -106,20 +114,22 @@ abstract class OrmBase {
      * @return string
      * @throws OrmException
      */
-    protected function getQueryBase($strTargetClass = "") {
-        if($strTargetClass == "")
+    protected function getQueryBase($strTargetClass = "")
+    {
+        if ($strTargetClass == "") {
             $strTargetClass = $this->getObjObject();
+        }
 
         $objAnnotations = new Reflection($strTargetClass);
         $arrTargetTables = $objAnnotations->getAnnotationValuesFromClass(OrmBase::STR_ANNOTATION_TARGETTABLE);
 
-        if(count($arrTargetTables) == 0) {
+        if (count($arrTargetTables) == 0) {
             throw new OrmException("Class ".(is_object($strTargetClass) ? get_class($strTargetClass) : $strTargetClass)." has no target table", OrmException::$level_ERROR);
         }
 
         $strWhere = "";
         $arrTables = array();
-        foreach($arrTargetTables as $strOneTable) {
+        foreach ($arrTargetTables as $strOneTable) {
             $arrOneTable = explode(".", $strOneTable);
             $strWhere .= "AND system_id=".$arrOneTable[1]." ";
             $arrTables[] = Carrier::getInstance()->getObjDB()->encloseTableName(_dbprefix_.$arrOneTable[0])." AS ".Carrier::getInstance()->getObjDB()->encloseTableName($arrOneTable[0])."";
@@ -138,14 +148,15 @@ abstract class OrmBase {
     }
 
 
-
     /**
      * Reads the assignment values currently stored in the database for a given property of the current object.
+     *
      * @param string $strPropertyName
      *
      * @return string[] array of systemids
      */
-    public final function getAssignmentsFromDatabase($strPropertyName) {
+    public final function getAssignmentsFromDatabase($strPropertyName)
+    {
         $objCfg = OrmAssignmentConfig::getConfigForProperty($this->getObjObject(), $strPropertyName);
         $objDB = Carrier::getInstance()->getObjDB();
         $strQuery = " SELECT *
@@ -157,7 +168,7 @@ abstract class OrmBase {
         $arrRows = $objDB->getPArray($strQuery, array($this->getObjObject()->getSystemid()));
 
         $strTargetCol = $objCfg->getStrTargetColumn();
-        array_walk($arrRows, function(array &$arrSingleRow) use ($strTargetCol) {
+        array_walk($arrRows, function (array &$arrSingleRow) use ($strTargetCol) {
             $arrSingleRow = $arrSingleRow[$strTargetCol];
         });
 
@@ -171,12 +182,15 @@ abstract class OrmBase {
      *
      * @return int
      */
-    public function getIntCombinedLogicalDeletionConfig() {
-        if($this->objHandleLogicalDeleted !== null)
+    public function getIntCombinedLogicalDeletionConfig()
+    {
+        if ($this->objHandleLogicalDeleted !== null) {
             return $this->objHandleLogicalDeleted;
+        }
 
-        if(self::$objHandleLogicalDeletedGlobal !== null)
+        if (self::$objHandleLogicalDeletedGlobal !== null) {
             return self::$objHandleLogicalDeletedGlobal;
+        }
 
         return OrmDeletedhandlingEnum::EXCLUDED;
     }
@@ -187,21 +201,23 @@ abstract class OrmBase {
      *
      * @param string $strSystemTablePrefix
      * @param string $strConjunction
+     *
      * @return string
      */
-    public function getDeletedWhereRestriction($strSystemTablePrefix = "", $strConjunction = "AND") {
+    public function getDeletedWhereRestriction($strSystemTablePrefix = "", $strConjunction = "AND")
+    {
         $strQuery = "";
 
-        if($strSystemTablePrefix != "") {
+        if ($strSystemTablePrefix != "") {
             $strSystemTablePrefix = $strSystemTablePrefix.".";
         }
 
-        if(self::$bitLogcialDeleteAvailable) {
-            if($this->getIntCombinedLogicalDeletionConfig() === OrmDeletedhandlingEnum::EXCLUDED) {
-                $strQuery .= " " . $strConjunction . " {$strSystemTablePrefix}system_deleted = 0 ";
+        if (self::$bitLogcialDeleteAvailable) {
+            if ($this->getIntCombinedLogicalDeletionConfig() === OrmDeletedhandlingEnum::EXCLUDED) {
+                $strQuery .= " ".$strConjunction." {$strSystemTablePrefix}system_deleted = 0 ";
             }
-            elseif($this->getIntCombinedLogicalDeletionConfig() === OrmDeletedhandlingEnum::EXCLUSIVE) {
-                $strQuery .= " " . $strConjunction . " {$strSystemTablePrefix}system_deleted = 1 ";
+            elseif ($this->getIntCombinedLogicalDeletionConfig() === OrmDeletedhandlingEnum::EXCLUSIVE) {
+                $strQuery .= " ".$strConjunction." {$strSystemTablePrefix}system_deleted = 1 ";
             }
         }
 
@@ -215,7 +231,8 @@ abstract class OrmBase {
      *
      * @param int $objHandleLogicalDeleted
      */
-    public static function setObjHandleLogicalDeletedGlobal($objHandleLogicalDeleted = null) {
+    public static function setObjHandleLogicalDeletedGlobal($objHandleLogicalDeleted = null)
+    {
         Carrier::getInstance()->flushCache(Carrier::INT_CACHE_TYPE_DBQUERIES | Carrier::INT_CACHE_TYPE_ORMCACHE);
         self::$objHandleLogicalDeletedGlobal = $objHandleLogicalDeleted;
     }
@@ -223,7 +240,8 @@ abstract class OrmBase {
     /**
      * @return OrmDeletedhandlingEnum
      */
-    public function getObjHandleLogicalDeleted() {
+    public function getObjHandleLogicalDeleted()
+    {
         return $this->objHandleLogicalDeleted;
     }
 
@@ -233,14 +251,16 @@ abstract class OrmBase {
      *
      * @param int $objHandleLogicalDeleted
      */
-    public function setObjHandleLogicalDeleted($objHandleLogicalDeleted) {
+    public function setObjHandleLogicalDeleted($objHandleLogicalDeleted)
+    {
         $this->objHandleLogicalDeleted = $objHandleLogicalDeleted;
     }
 
     /**
      * @return int
      */
-    public static function getObjHandleLogicalDeletedGlobal() {
+    public static function getObjHandleLogicalDeletedGlobal()
+    {
         return self::$objHandleLogicalDeletedGlobal;
     }
 }
@@ -249,13 +269,16 @@ abstract class OrmBase {
  * Most exceptions thrown by the orm system will use the class_orm_exception type in order
  * to react with special catch-blocks
  */
-class OrmException extends Exception {
+class OrmException extends Exception
+{
 
 }
+
 /**
  * Most exceptions thrown by the orm system will use the class_orm_exception type in order
  * to react with special catch-blocks
  */
-class class_orm_exception extends OrmException {
+class class_orm_exception extends OrmException
+{
 
 }

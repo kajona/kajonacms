@@ -6,6 +6,9 @@
 
 namespace Kajona\System\Portal\Templatemapper;
 
+use Kajona\System\Portal\TemplatemapperInterface;
+use Kajona\System\System\Date;
+
 
 /**
  * A templatemapper rendering a formatted date
@@ -14,7 +17,7 @@ namespace Kajona\System\Portal\Templatemapper;
  * @author sidler@mulchpropd.de
  * @since 4.5
  */
-class DateTemplatemapper implements interface_templatemapper {
+class DateTemplatemapper implements TemplatemapperInterface {
 
     /**
      * Converts the passed value to a formatted value.
@@ -25,7 +28,7 @@ class DateTemplatemapper implements interface_templatemapper {
      * @return string
      */
     public function format($strValue) {
-        return dateToString(new class_date($strValue), false);
+        return dateToString(new Date($strValue), false);
     }
 
 } 

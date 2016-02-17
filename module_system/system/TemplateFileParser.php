@@ -42,7 +42,7 @@ class TemplateFileParser
         //search for includes
         preg_match_all("#\[KajonaTemplateInclude,([A-Za-z0-9_/\.]+)\]#i", $strTemplateContent, $arrTemp);
 
-        foreach($arrTemp[0] as $intKey => $strSearchString) {
+        foreach ($arrTemp[0] as $intKey => $strSearchString) {
             $strTemplateContent = \Kajona\System\System\StringUtil::replace($strSearchString, $this->readTemplate($arrTemp[1][$intKey]), $strTemplateContent);
         }
 

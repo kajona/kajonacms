@@ -20,7 +20,8 @@ use ReflectionClass;
  * @author sidler@mulchprod.de
  * @since 4.5
  */
-class Pluginmanager {
+class Pluginmanager
+{
 
     /**
      * @var string[][]
@@ -34,7 +35,8 @@ class Pluginmanager {
      * @param string $strPluginPoint
      * @param string $strSearchPath
      */
-    function __construct($strPluginPoint, $strSearchPath = "/system") {
+    function __construct($strPluginPoint, $strSearchPath = "/system")
+    {
         $this->strPluginPoint = $strPluginPoint;
         $this->strSearchPath = $strSearchPath;
     }
@@ -51,47 +53,52 @@ class Pluginmanager {
      * @static
      * @return GenericPluginInterface[]
      */
-    public function getPlugins($arrConstructorArguments = array()) {
+    public function getPlugins($arrConstructorArguments = array())
+    {
         //load classes in passed-folders
         $strKey = md5($this->strSearchPath.$this->strPluginPoint);
-        if(!array_key_exists($strKey, self::$arrPluginClasses)) {
+        if (!array_key_exists($strKey, self::$arrPluginClasses)) {
             $strPluginPoint = $this->strPluginPoint;
             $arrClasses = Resourceloader::getInstance()->getFolderContent($this->strSearchPath, array(".php"), false, null,
-            function(&$strOneFile, $strPath) use ($strPluginPoint, $arrConstructorArguments) {
+                function (&$strOneFile, $strPath) use ($strPluginPoint, $arrConstructorArguments) {
 
-                $strClassname = Classloader::getInstance()->getClassnameFromFilename($strPath);
+                    $strClassname = Classloader::getInstance()->getClassnameFromFilename($strPath);
 
-                if($strClassname == null) {
-                    $strOneFile = null;
-                    return;
-                }
-
-                $objReflection = new ReflectionClass($strClassname);
-
-                if($objReflection->isInstantiable() && $objReflection->implementsInterface("interface_generic_plugin")) {
-                    if($objReflection->hasMethod("getExtensionName") && $objReflection->getMethod("getExtensionName")->invoke(null) == $strPluginPoint) {
-                        $strOneFile = $strClassname;
+                    if ($strClassname == null) {
+                        $strOneFile = null;
                         return;
                     }
-                }
 
-                $strOneFile = null;
+                    $objReflection = new ReflectionClass($strClassname);
 
+                    if ($objReflection->isInstantiable() && $objReflection->implementsInterface("interface_generic_plugin")) {
+                        if ($objReflection->hasMethod("getExtensionName") && $objReflection->getMethod("getExtensionName")->invoke(null) == $strPluginPoint) {
+                            $strOneFile = $strClassname;
+                            return;
+                        }
+                    }
+
+                    $strOneFile = null;
+
+                });
+
+
+            $arrClasses = array_filter($arrClasses, function ($strClass) {
+                return $strClass !== null;
             });
-
-
-            $arrClasses = array_filter($arrClasses, function ($strClass) { return $strClass !== null; });
 
             self::$arrPluginClasses[$strKey] = $arrClasses;
         }
 
         $arrReturn = array();
-        foreach(self::$arrPluginClasses[$strKey] as $strOneClass) {
+        foreach (self::$arrPluginClasses[$strKey] as $strOneClass) {
             $objReflection = new ReflectionClass($strOneClass);
-            if(count($arrConstructorArguments) > 0)
+            if (count($arrConstructorArguments) > 0) {
                 $arrReturn[] = $objReflection->newInstanceArgs($arrConstructorArguments);
-            else
+            }
+            else {
                 $arrReturn[] = $objReflection->newInstance();
+            }
         }
 
         return $arrReturn;

@@ -7,6 +7,8 @@
 
 namespace Kajona\System\System;
 
+use Iterator;
+
 
 /**
  * Class to iterator over an array.
@@ -15,7 +17,8 @@ namespace Kajona\System\System;
  * @package module_system
  * @author sidler@mulchprod.de
  */
-class ArrayIterator implements interface_iterator, Iterator {
+class ArrayIterator implements IteratorInterface, Iterator
+{
 
     protected $arrElements = array();
     protected $intArrCursor = 0;
@@ -29,9 +32,10 @@ class ArrayIterator implements interface_iterator, Iterator {
      *
      * @return \ArrayIterator
      */
-    public function __construct($arrElements) {
+    public function __construct($arrElements)
+    {
 
-        $objUser = new class_module_user_user(class_session::getInstance()->getUserID());
+        $objUser = new UserUser(Session::getInstance()->getUserID());
 
         $this->intElementsPerPage = $objUser->getIntItemsPerPage();
         $this->setArrElements($arrElements);
@@ -42,12 +46,13 @@ class ArrayIterator implements interface_iterator, Iterator {
      *
      * @param $arrElements
      */
-    public function setArrElements($arrElements) {
+    public function setArrElements($arrElements)
+    {
         $this->arrElements = array();
 
         //Loop over elements to create numeric indices
-        if(count($arrElements) > 0) {
-            foreach($arrElements as $objOneElement) {
+        if (count($arrElements) > 0) {
+            foreach ($arrElements as $objOneElement) {
                 $this->arrElements[] = $objOneElement;
             }
         }
@@ -60,7 +65,8 @@ class ArrayIterator implements interface_iterator, Iterator {
      * @link http://php.net/manual/en/iterator.current.php
      * @return mixed Can return any type.
      */
-    public function current() {
+    public function current()
+    {
         return $this->arrElements[$this->intArrCursor];
     }
 
@@ -71,7 +77,8 @@ class ArrayIterator implements interface_iterator, Iterator {
      * @link http://php.net/manual/en/iterator.next.php
      * @return void Any returned value is ignored.
      */
-    public function next() {
+    public function next()
+    {
         $this->intArrCursor++;
     }
 
@@ -82,7 +89,8 @@ class ArrayIterator implements interface_iterator, Iterator {
      * @link http://php.net/manual/en/iterator.key.php
      * @return mixed scalar on success, or null on failure.
      */
-    public function key() {
+    public function key()
+    {
         return $this->intArrCursor;
     }
 
@@ -94,7 +102,8 @@ class ArrayIterator implements interface_iterator, Iterator {
      * @return boolean The return value will be casted to boolean and then evaluated.
      * Returns true on success or false on failure.
      */
-    public function valid() {
+    public function valid()
+    {
         return $this->intArrCursor < count($this->arrElements);
     }
 
@@ -105,7 +114,8 @@ class ArrayIterator implements interface_iterator, Iterator {
      * @link http://php.net/manual/en/iterator.rewind.php
      * @return void Any returned value is ignored.
      */
-    public function rewind() {
+    public function rewind()
+    {
         $this->intArrCursor = 0;
     }
 
@@ -115,7 +125,8 @@ class ArrayIterator implements interface_iterator, Iterator {
      *
      * @return mixed
      */
-    public function getCurrentElement() {
+    public function getCurrentElement()
+    {
         return $this->current();
     }
 
@@ -124,8 +135,9 @@ class ArrayIterator implements interface_iterator, Iterator {
      *
      * @return mixed
      */
-    public function getNextElement() {
-        if(!$this->isNext()) {
+    public function getNextElement()
+    {
+        if (!$this->isNext()) {
             return null;
         }
 
@@ -137,7 +149,8 @@ class ArrayIterator implements interface_iterator, Iterator {
      *
      * @return bool
      */
-    public function isNext() {
+    public function isNext()
+    {
         return ($this->intArrCursor < count($this->arrElements));
     }
 
@@ -147,7 +160,8 @@ class ArrayIterator implements interface_iterator, Iterator {
      *
      * @return mixed
      */
-    public function getFirstElement() {
+    public function getFirstElement()
+    {
         $this->intArrCursor = 0;
         return $this->arrElements[$this->intArrCursor];
     }
@@ -157,7 +171,8 @@ class ArrayIterator implements interface_iterator, Iterator {
      *
      * @return int
      */
-    public function getNumberOfElements() {
+    public function getNumberOfElements()
+    {
         return count($this->arrElements);
     }
 
@@ -168,8 +183,9 @@ class ArrayIterator implements interface_iterator, Iterator {
      *
      * @param int $intElements
      */
-    public function setIntElementsPerPage($intElements) {
-        if((int)$intElements > 0) {
+    public function setIntElementsPerPage($intElements)
+    {
+        if ((int)$intElements > 0) {
             $this->intElementsPerPage = (int)$intElements;
         }
         else {
@@ -180,10 +196,10 @@ class ArrayIterator implements interface_iterator, Iterator {
     /**
      * @return int|string
      */
-    public function getIntElementsPerPage() {
+    public function getIntElementsPerPage()
+    {
         return $this->intElementsPerPage;
     }
-
 
 
     /**
@@ -193,8 +209,9 @@ class ArrayIterator implements interface_iterator, Iterator {
      *
      * @return bool
      */
-    public function setCursorPosition($intElement) {
-        if($this->getNumberOfElements() > $intElement) {
+    public function setCursorPosition($intElement)
+    {
+        if ($this->getNumberOfElements() > $intElement) {
             $this->intArrCursor = $intElement;
             return true;
         }
@@ -209,8 +226,9 @@ class ArrayIterator implements interface_iterator, Iterator {
      *
      * @return int
      */
-    public function getNrOfPages() {
-        if($this->intElementsPerPage == (int)0) {
+    public function getNrOfPages()
+    {
+        if ($this->intElementsPerPage == (int)0) {
             return 0;
         }
 
@@ -224,8 +242,9 @@ class ArrayIterator implements interface_iterator, Iterator {
      *
      * @return array
      */
-    public function getElementsOnPage($intPageNumber) {
-        if((int)$intPageNumber <= 0) {
+    public function getElementsOnPage($intPageNumber)
+    {
+        if ((int)$intPageNumber <= 0) {
             $intPageNumber = 1;
         }
 
@@ -234,12 +253,12 @@ class ArrayIterator implements interface_iterator, Iterator {
         $intStart = ($intPageNumber * $this->intElementsPerPage) - $this->intElementsPerPage;
         $intEnd = $this->intElementsPerPage + $intStart - 1;
 
-        if($intEnd > $this->getNumberOfElements()) {
+        if ($intEnd > $this->getNumberOfElements()) {
             $intEnd = $this->getNumberOfElements() - 1;
         }
 
-        for($intI = $intStart; $intI <= $intEnd; $intI++) {
-            if(!$this->setCursorPosition($intI)) {
+        for ($intI = $intStart; $intI <= $intEnd; $intI++) {
+            if (!$this->setCursorPosition($intI)) {
                 break;
             }
             $arrReturn[] = $this->arrElements[$this->intArrCursor];

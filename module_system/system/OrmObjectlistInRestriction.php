@@ -17,7 +17,8 @@ namespace Kajona\System\System;
  * @author stefan.meyer1@yahoo.de
  * @since 4.8
  */
-class OrmObjectlistInRestriction extends OrmObjectlistRestriction {
+class OrmObjectlistInRestriction extends OrmObjectlistRestriction
+{
 
     const MAX_IN_VALUES = 950;
 
@@ -31,13 +32,13 @@ class OrmObjectlistInRestriction extends OrmObjectlistRestriction {
 
     function __construct($strProperty, array $arrParams, $strCondition = "AND", $strInCondition = self::STR_CONDITION_IN)
     {
-        if($strInCondition !== self::STR_CONDITION_IN && $strInCondition !== self::STR_CONDITION_NOTIN) {
+        if ($strInCondition !== self::STR_CONDITION_IN && $strInCondition !== self::STR_CONDITION_NOTIN) {
             throw new Exception("Wrong condition set", Exception::$level_ERROR);
         }
 
         $this->arrParams = $arrParams;
         $this->strCondition = $strCondition;
-        $this->strColumnName =  $strProperty;
+        $this->strColumnName = $strProperty;
         $this->strInCondition = $strInCondition;
     }
 
@@ -46,14 +47,16 @@ class OrmObjectlistInRestriction extends OrmObjectlistRestriction {
      *
      * @throws class_orm_exception
      */
-    public function setArrParams($arrParams) {
+    public function setArrParams($arrParams)
+    {
         throw new OrmException("Setting params for property IN restrictions is not supported", OrmException::$level_ERROR);
     }
 
     /**
      * @return array
      */
-    public function getArrParams() {
+    public function getArrParams()
+    {
         return $this->arrParams;
     }
 
@@ -62,7 +65,8 @@ class OrmObjectlistInRestriction extends OrmObjectlistRestriction {
      *
      * @throws class_orm_exception
      */
-    public function setStrWhere($strWhere) {
+    public function setStrWhere($strWhere)
+    {
         throw new OrmException("Setting a where restriction for property IN restrictions is not supported", OrmException::$level_ERROR);
     }
 
@@ -72,30 +76,32 @@ class OrmObjectlistInRestriction extends OrmObjectlistRestriction {
      * @return string
      * @throws class_orm_exception
      */
-    public function getStrWhere() {
+    public function getStrWhere()
+    {
         return " ".$this->getInStatement($this->strColumnName)." ";
     }
 
-    protected function getInStatement($strColumnName) {
+    protected function getInStatement($strColumnName)
+    {
 
-        if(is_array($this->arrParams) && count($this->arrParams) > 0 ) {
-            if(count($this->arrParams) > self::MAX_IN_VALUES) {
+        if (is_array($this->arrParams) && count($this->arrParams) > 0) {
+            if (count($this->arrParams) > self::MAX_IN_VALUES) {
                 $intCount = ceil(count($this->arrParams) / self::MAX_IN_VALUES);
                 $arrParts = array();
 
-                for($intI = 0; $intI < $intCount; $intI++) {
+                for ($intI = 0; $intI < $intCount; $intI++) {
                     $arrParams = array_slice($this->arrParams, $intI * self::MAX_IN_VALUES, self::MAX_IN_VALUES);
                     $arrParamsPlaceholder = array_map(function ($objParameter) {
                         return "?";
                     }, $arrParams);
                     $strPlaceholder = implode(",", $arrParamsPlaceholder);
-                    if(!empty($strPlaceholder)) {
+                    if (!empty($strPlaceholder)) {
                         $arrParts[] = "{$strColumnName} {$this->strInCondition} ({$strPlaceholder})";
                     }
                 }
 
-                if(count($arrParts) > 0) {
-                    return $this->strCondition . " (" . implode(" OR ", $arrParts) . ")";
+                if (count($arrParts) > 0) {
+                    return $this->strCondition." (".implode(" OR ", $arrParts).")";
                 }
             }
             else {
@@ -104,7 +110,7 @@ class OrmObjectlistInRestriction extends OrmObjectlistRestriction {
                 }, $this->arrParams);
                 $strPlaceholder = implode(",", $arrParamsPlaceholder);
 
-                if(!empty($strPlaceholder)) {
+                if (!empty($strPlaceholder)) {
                     return "{$this->strCondition} {$strColumnName} {$this->strInCondition} ({$strPlaceholder})";
                 }
             }

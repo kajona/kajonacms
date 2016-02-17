@@ -72,23 +72,27 @@ class TemplateSectionParser
 
     /**
      * Checks if the template referenced by the given identifier provides the section passed.
+     *
      * @param $strIdentifier
      * @param $strSection
      *
      * @return bool
      */
-    public function containsSection($strTemplate, $strSection) {
+    public function containsSection($strTemplate, $strSection)
+    {
         return $this->readSection($strTemplate, $strSection) !== null;
     }
 
     /**
      * Removes a section with all contents from the given (template) string
+     *
      * @param $strTemplate
      * @param $strSection
      *
      * @return string
      */
-    public function removeSection($strTemplate, $strSection) {
+    public function removeSection($strTemplate, $strSection)
+    {
         do {
             $strFullSection = $this->readSection($strTemplate, $strSection, true);
             $strTemplate = uniStrReplace($strFullSection, "", $strTemplate);
@@ -96,6 +100,6 @@ class TemplateSectionParser
 
         return $strTemplate;
     }
-    
+
 }
 

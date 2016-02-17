@@ -168,7 +168,8 @@ class Carrier
     {
         if ($strArea == "admin") {
             return $this->objContainer['admintoolkit'];
-        } elseif ($strArea == "portal") {
+        }
+        elseif ($strArea == "portal") {
             return $this->objContainer['portaltoolkit'];
         }
         return null;

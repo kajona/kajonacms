@@ -17,16 +17,19 @@ use ArrayObject;
  * @author sidler@mulchprod.de
  * @since 4.8
  */
-class OrmAssignmentArray extends ArrayObject {
+class OrmAssignmentArray extends ArrayObject
+{
 
     /**
      * Indicator on whether the assignments have been loaded or not
+     *
      * @var bool
      */
     private $bitInitialized = false;
 
     /**
      * The referenced target object
+     *
      * @var Root|null
      */
     private $objTargetObject = null;
@@ -39,10 +42,12 @@ class OrmAssignmentArray extends ArrayObject {
 
     /**
      * Create a new lazy-loaded array for a mapped assignment-property
+     *
      * @param Root $objTargetObject
      * @param int $strProperty
      */
-    function __construct(Root $objTargetObject, $strProperty, $objDeletedHandling) {
+    function __construct(Root $objTargetObject, $strProperty, $objDeletedHandling)
+    {
         $this->objTargetObject = $objTargetObject;
         $this->strProperty = $strProperty;
         $this->objDeletedHandling = $objDeletedHandling;
@@ -54,9 +59,11 @@ class OrmAssignmentArray extends ArrayObject {
      * Triggers the internal loading of the mapped assignments.
      * Real work is only done on first access.
      */
-    private function lazyLoadArray() {
-        if($this->bitInitialized)
+    private function lazyLoadArray()
+    {
+        if ($this->bitInitialized) {
             return;
+        }
 
         $this->bitInitialized = true;
 
@@ -64,81 +71,98 @@ class OrmAssignmentArray extends ArrayObject {
         $objInit->setObjHandleLogicalDeleted($this->objDeletedHandling);
         $objCfg = OrmAssignmentConfig::getConfigForProperty($this->objTargetObject, $this->strProperty);
 
-        foreach($objInit->getAssignmentsFromDatabase($this->strProperty) as $strOneId) {
+        foreach ($objInit->getAssignmentsFromDatabase($this->strProperty) as $strOneId) {
 
             $objObject = Objectfactory::getInstance()->getObject($strOneId);
-            if($objObject !== null && ($objCfg->getArrTypeFilter() == null || count(array_filter($objCfg->getArrTypeFilter(), function($strSingleClass) use ($objObject) { return $objObject instanceof $strSingleClass; })) > 0)) {
+            if ($objObject !== null && ($objCfg->getArrTypeFilter() == null || count(array_filter($objCfg->getArrTypeFilter(), function ($strSingleClass) use ($objObject) {
+                        return $objObject instanceof $strSingleClass;
+                    })) > 0)
+            ) {
                 $this->append($objObject);
             }
         }
     }
 
-    public function offsetExists($index) {
+    public function offsetExists($index)
+    {
         $this->lazyLoadArray();
         return parent::offsetExists($index);
     }
 
-    public function offsetGet($index) {
+    public function offsetGet($index)
+    {
         $this->lazyLoadArray();
         return parent::offsetGet($index);
     }
 
-    public function offsetSet($index, $newval) {
+    public function offsetSet($index, $newval)
+    {
         $this->lazyLoadArray();
         parent::offsetSet($index, $newval);
     }
 
-    public function offsetUnset($index) {
+    public function offsetUnset($index)
+    {
         $this->lazyLoadArray();
         parent::offsetUnset($index);
     }
 
-    public function append($value) {
+    public function append($value)
+    {
         $this->lazyLoadArray();
         parent::append($value);
     }
 
-    public function getArrayCopy() {
+    public function getArrayCopy()
+    {
         $this->lazyLoadArray();
         return parent::getArrayCopy();
     }
 
-    public function count() {
+    public function count()
+    {
         $this->lazyLoadArray();
         return parent::count();
     }
 
-    public function asort() {
+    public function asort()
+    {
         $this->lazyLoadArray();
         parent::asort();
     }
 
-    public function ksort() {
+    public function ksort()
+    {
         $this->lazyLoadArray();
         parent::ksort();
     }
 
-    public function uasort($cmp_function) {
+    public function uasort($cmp_function)
+    {
         $this->lazyLoadArray();
         parent::uasort($cmp_function);
     }
 
-    public function uksort($cmp_function) {
+    public function uksort($cmp_function)
+    {
         $this->lazyLoadArray();
         parent::uksort($cmp_function);
     }
 
-    public function natsort() {
+    public function natsort()
+    {
         $this->lazyLoadArray();
         parent::natsort();
     }
 
-    public function natcasesort() {
+    public function natcasesort()
+    {
         $this->lazyLoadArray();
         parent::natcasesort();
     }
 
-    public function getIterator() {
+    public function getIterator()
+    {
         $this->lazyLoadArray();
         return parent::getIterator();
     }
@@ -146,18 +170,18 @@ class OrmAssignmentArray extends ArrayObject {
     /**
      * @return boolean
      */
-    public function getBitInitialized() {
+    public function getBitInitialized()
+    {
         return $this->bitInitialized;
     }
 
     /**
      * @return OrmDeletedhandlingEnum
      */
-    public function getObjDeletedHandling() {
+    public function getObjDeletedHandling()
+    {
         return $this->objDeletedHandling;
     }
-
-
 
 
 }

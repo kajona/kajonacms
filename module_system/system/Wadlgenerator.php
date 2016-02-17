@@ -18,7 +18,8 @@ namespace Kajona\System\System;
  * @author sidler@mulchprod.de
  * @since 3.4.1
  */
-class Wadlgenerator {
+class Wadlgenerator
+{
 
     private $bitRewrite = false;
 
@@ -33,7 +34,8 @@ class Wadlgenerator {
      * @param string $strArea
      * @param string $strModule
      */
-    public function __construct($strArea, $strModule) {
+    public function __construct($strArea, $strModule)
+    {
         $this->bitRewrite = SystemSetting::getConfigValue("_system_mod_rewrite_") == "true";
 
         $this->strArea = $strArea;
@@ -44,9 +46,11 @@ class Wadlgenerator {
      * Adds an entry to the list of linked grammar-section
      *
      * @param string $strGrammar
+     *
      * @return void
      */
-    public function addIncludeGrammars($strGrammar) {
+    public function addIncludeGrammars($strGrammar)
+    {
         $this->arrGrammars[] = $strGrammar;
     }
 
@@ -61,13 +65,15 @@ class Wadlgenerator {
      * @param array $arrParams array( [strName, strType, bitRequired, $strFixed] )
      * @param array $arrRepresentations array( [strMediaType, strElement] )
      * @param array $arrResponseRepresentations array( [strMediaType, strElement] )
+     *
      * @return void
      */
-    public function addMethod($bitGet, $strName, $arrParams = array(), $arrRepresentations = array(), $arrResponseRepresentations = array()) {
+    public function addMethod($bitGet, $strName, $arrParams = array(), $arrRepresentations = array(), $arrResponseRepresentations = array())
+    {
 
-        if(!$this->bitRewrite) {
+        if (!$this->bitRewrite) {
 
-            if($this->strArea == "admin") {
+            if ($this->strArea == "admin") {
                 $arrParams[] = array("admin", "xsd:string", true, "1");
             }
 
@@ -75,28 +81,28 @@ class Wadlgenerator {
 
         }
 
-        $this->strMethods .= " <resource path=\"" . $strName . "\">\n";
-        $this->strMethods .= "  <method name=\"" . ($bitGet ? "GET" : "POST") . "\">\n";
+        $this->strMethods .= " <resource path=\"".$strName."\">\n";
+        $this->strMethods .= "  <method name=\"".($bitGet ? "GET" : "POST")."\">\n";
 
         $this->strMethods .= "   <request>\n";
 
-        foreach($arrRepresentations as $arrSingleRepresentation) {
+        foreach ($arrRepresentations as $arrSingleRepresentation) {
             $this->strMethods .= "    <representation \n";
-            $this->strMethods .= "      mediaType=\"" . $arrSingleRepresentation[0] . "\"\n";
-            $this->strMethods .= "      element=\"" . $arrSingleRepresentation[1] . "\"\n";
+            $this->strMethods .= "      mediaType=\"".$arrSingleRepresentation[0]."\"\n";
+            $this->strMethods .= "      element=\"".$arrSingleRepresentation[1]."\"\n";
             $this->strMethods .= "    />\n";
         }
 
 
-        foreach($arrParams as $arrSingleParam) {
+        foreach ($arrParams as $arrSingleParam) {
             $this->strMethods .= "    <param \n";
-            $this->strMethods .= "      name=\"" . $arrSingleParam[0] . "\"\n";
-            $this->strMethods .= "      type=\"" . $arrSingleParam[1] . "\"\n";
+            $this->strMethods .= "      name=\"".$arrSingleParam[0]."\"\n";
+            $this->strMethods .= "      type=\"".$arrSingleParam[1]."\"\n";
             $this->strMethods .= "      style=\"query\"\n";
-            $this->strMethods .= "      required=\"" . ($arrSingleParam[2] ? "true" : "false") . "\"\n";
+            $this->strMethods .= "      required=\"".($arrSingleParam[2] ? "true" : "false")."\"\n";
 
-            if(isset($arrSingleParam[3])) {
-                $this->strMethods .= "      fixed=\"" . $arrSingleParam[3] . "\"\n";
+            if (isset($arrSingleParam[3])) {
+                $this->strMethods .= "      fixed=\"".$arrSingleParam[3]."\"\n";
             }
 
             $this->strMethods .= "    />\n";
@@ -104,10 +110,10 @@ class Wadlgenerator {
         $this->strMethods .= "   </request>\n";
         $this->strMethods .= "   <response>\n";
 
-        foreach($arrResponseRepresentations as $arrSingleRepresentation) {
+        foreach ($arrResponseRepresentations as $arrSingleRepresentation) {
             $this->strMethods .= "    <representation \n";
-            $this->strMethods .= "      mediaType=\"" . $arrSingleRepresentation[0] . "\"\n";
-            $this->strMethods .= "      element=\"" . $arrSingleRepresentation[1] . "\"\n";
+            $this->strMethods .= "      mediaType=\"".$arrSingleRepresentation[0]."\"\n";
+            $this->strMethods .= "      element=\"".$arrSingleRepresentation[1]."\"\n";
             $this->strMethods .= "    />\n";
         }
         $this->strMethods .= "   </response>\n";
@@ -121,7 +127,8 @@ class Wadlgenerator {
      *
      * @return string
      */
-    public function getDocument() {
+    public function getDocument()
+    {
         return $this->getDocumentWrapper();
     }
 
@@ -130,38 +137,39 @@ class Wadlgenerator {
      *
      * @return string
      */
-    private function getDocumentWrapper() {
+    private function getDocumentWrapper()
+    {
         $strReturn = "<application xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"
             xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\"
             xsi:schemaLocation=\"http://research.sun.com/wadl/2006/10/wadl.xsd\"
             xmlns=\"http://research.sun.com/wadl/2006/10\">\n";
-        $strReturn .= "<!-- generated by Kajona WADL generator, kernel version " . SystemModule::getModuleByName("system")->getStrVersion() . " -->\n";
+        $strReturn .= "<!-- generated by Kajona WADL generator, kernel version ".SystemModule::getModuleByName("system")->getStrVersion()." -->\n";
 
         //_system_mod_rewrite_ == "true"
 
         $strRessource = "";
-        if($this->bitRewrite) {
-            $strRessource .= _webpath_ . "/xml";
-            if($this->strArea == "admin") {
+        if ($this->bitRewrite) {
+            $strRessource .= _webpath_."/xml";
+            if ($this->strArea == "admin") {
                 $strRessource .= "/admin/";
             }
 
-            $strRessource .= $this->strModule . "/";
+            $strRessource .= $this->strModule."/";
         }
         else {
-            $strRessource .= _webpath_ . "/xml.php";
+            $strRessource .= _webpath_."/xml.php";
         }
 
         //add grammars, if given
-        if(count($this->arrGrammars) > 0) {
+        if (count($this->arrGrammars) > 0) {
             $strReturn .= " <grammars>\n";
-            foreach($this->arrGrammars as $strOneGrammar) {
-                $strReturn .= "   <include href=\"" . $strOneGrammar . "\" />\n";
+            foreach ($this->arrGrammars as $strOneGrammar) {
+                $strReturn .= "   <include href=\"".$strOneGrammar."\" />\n";
             }
             $strReturn .= " </grammars>\n";
         }
 
-        $strReturn .= "<resources base=\"" . $strRessource . "\"> \n";
+        $strReturn .= "<resources base=\"".$strRessource."\"> \n";
         $strReturn .= $this->strMethods;
         $strReturn .= "</resources>  \n";
 

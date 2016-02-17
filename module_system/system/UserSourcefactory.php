@@ -186,14 +186,14 @@ class UserSourcefactory
      */
     public function authenticateUser($strName, $strPassword)
     {
-        if(empty($strName) || empty($strPassword)) {
+        if (empty($strName) || empty($strPassword)) {
             throw new AuthenticationException("user ".$strName." could not be authenticated", AuthenticationException::$level_ERROR);
         }
 
         $objUser = $this->getUserByUsername($strName);
         if ($objUser != null) {
             //validate if the user is assigned to at least a single group
-            if(empty($objUser->getArrGroupIds())) {
+            if (empty($objUser->getArrGroupIds())) {
                 throw new AuthenticationException("user ".$strName." is not assigned to at least a single group", AuthenticationException::$level_ERROR);
             }
 

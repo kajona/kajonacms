@@ -23,17 +23,19 @@ use RuntimeException;
  * @since 4.7
  * @author christoph.kappestein@gmail.com
  */
-abstract class TestbaseObject extends \Kajona\System\System\Testbase {
+abstract class TestbaseObject extends Testbase
+{
 
     private $arrStructure = array();
 
-    protected function setUp() {
+    protected function setUp()
+    {
 
         parent::setUp();
 
         $strFile = $this->getFixtureFile();
-        if(!is_file($strFile)) {
-            throw new RuntimeException('Could not find fixture file ' . $strFile);
+        if (!is_file($strFile)) {
+            throw new RuntimeException('Could not find fixture file '.$strFile);
         }
 
         $objDom = new DOMDocument();
@@ -45,7 +47,8 @@ abstract class TestbaseObject extends \Kajona\System\System\Testbase {
 
     }
 
-    protected function tearDown() {
+    protected function tearDown()
+    {
 
         parent::tearDown();
 
@@ -57,12 +60,13 @@ abstract class TestbaseObject extends \Kajona\System\System\Testbase {
      * Creates the database structure like defined in the xml element
      *
      * @param DOMElement $objElement
+     *
      * @return void
      */
     protected function createStructure(DOMElement $objElement)
     {
-        foreach($objElement->childNodes as $objChild) {
-            if($objChild instanceof DOMElement && $objChild->nodeName == 'object') {
+        foreach ($objElement->childNodes as $objChild) {
+            if ($objChild instanceof DOMElement && $objChild->nodeName == 'object') {
                 $this->createDataStructure($objChild);
             }
         }
@@ -82,15 +86,16 @@ abstract class TestbaseObject extends \Kajona\System\System\Testbase {
      *
      * @return void
      */
-    protected function cleanStructure() {
+    protected function cleanStructure()
+    {
         /** @var Model $objOneModel */
-        foreach(array_reverse($this->arrStructure, true) as $objOneModel) {
+        foreach (array_reverse($this->arrStructure, true) as $objOneModel) {
             $strSystemId = $objOneModel->getStrSystemid();
             $objOneModel->deleteObjectFromDatabase();
 
             //if it is a user also delete the user from the database completeley
-            if($objOneModel instanceof UserUser) {
-                $strQuery = "DELETE FROM " . _dbprefix_ . "user WHERE user_id=?";
+            if ($objOneModel instanceof UserUser) {
+                $strQuery = "DELETE FROM "._dbprefix_."user WHERE user_id=?";
                 //call other models that may be interested
                 $bitDelete = Database::getInstance()->_pQuery($strQuery, array($strSystemId));
             }
@@ -101,6 +106,7 @@ abstract class TestbaseObject extends \Kajona\System\System\Testbase {
      * Returns the default root id for an given class name
      *
      * @param string $strClassName
+     *
      * @return string
      */
     abstract protected function getDefaultRootId($strClassName);
@@ -111,7 +117,8 @@ abstract class TestbaseObject extends \Kajona\System\System\Testbase {
      * @param string $strName
      * @param Model $objObject
      */
-    protected function addObject($strName, Model $objObject) {
+    protected function addObject($strName, Model $objObject)
+    {
         $this->arrStructure[$strName] = $objObject;
     }
 
@@ -119,11 +126,14 @@ abstract class TestbaseObject extends \Kajona\System\System\Testbase {
      * Returns an object for an given reference name
      *
      * @param $strName
+     *
      * @return Model
      */
-    protected function getObject($strName) {
-        if(isset($this->arrStructure[$strName]))
+    protected function getObject($strName)
+    {
+        if (isset($this->arrStructure[$strName])) {
             return $this->arrStructure[$strName];
+        }
 
         return null;
     }
@@ -146,8 +156,8 @@ abstract class TestbaseObject extends \Kajona\System\System\Testbase {
     protected function createDataStructure(DOMElement $objElement, $objParent = null)
     {
         $arrParameters = array();
-        foreach($objElement->attributes as $objAttr) {
-            if(!in_array($objAttr->nodeName, array('class', 'name'))) {
+        foreach ($objElement->attributes as $objAttr) {
+            if (!in_array($objAttr->nodeName, array('class', 'name'))) {
                 $arrParameters[$objAttr->nodeName] = $objAttr->nodeValue;
             }
         }
@@ -155,11 +165,11 @@ abstract class TestbaseObject extends \Kajona\System\System\Testbase {
         $strName = $objElement->getAttribute('name');
 
         $strClassName = $objElement->getAttribute('class');
-        if(empty($strClassName)) {
-            throw new RuntimeException('No class name given for object "' . $strName . '" (' . $objElement->getNodePath() . ')');
+        if (empty($strClassName)) {
+            throw new RuntimeException('No class name given for object "'.$strName.'" ('.$objElement->getNodePath().')');
         }
 
-        if($strClassName == "class_module_user_user") {
+        if ($strClassName == "class_module_user_user") {
             $objObject = $this->createFixtureUser($objElement, $objParent, $strClassName, $arrParameters, $strName);
         }
         else {
@@ -171,11 +181,11 @@ abstract class TestbaseObject extends \Kajona\System\System\Testbase {
         // handle assignments
         $arrAssignments = explode(',', $objElement->getAttribute('assignments'));
 
-        foreach($arrAssignments as $strName) {
+        foreach ($arrAssignments as $strName) {
             $strName = trim($strName);
-            if(!empty($strName)) {
+            if (!empty($strName)) {
                 $objReference = $this->getObject($strName);
-                if($objReference instanceof Model) {
+                if ($objReference instanceof Model) {
                     $this->assignReferenceToObject($objObject, $objReference);
                 }
             }
@@ -184,8 +194,8 @@ abstract class TestbaseObject extends \Kajona\System\System\Testbase {
         $objObject->updateObjectToDb();
 
         // walk through child elements
-        foreach($objElement->childNodes as $objNode) {
-            if($objNode instanceof DOMElement) {
+        foreach ($objElement->childNodes as $objNode) {
+            if ($objNode instanceof DOMElement) {
                 $this->createDataStructure($objNode, $objObject);
             }
         }
@@ -197,6 +207,7 @@ abstract class TestbaseObject extends \Kajona\System\System\Testbase {
      * @param $strClassName
      * @param $arrParameters
      * @param $strName
+     *
      * @return Model
      */
     protected function createFixtureObject(DOMElement $objElement, $objParent, $strClassName, $arrParameters, $strName)
@@ -214,17 +225,20 @@ abstract class TestbaseObject extends \Kajona\System\System\Testbase {
                     $objRef = $this->getObject($strRefKey);
                     if ($objRef instanceof Model) {
                         $arrParameters[$strKey][] = $objRef;
-                    } else {
-                        throw new RuntimeException('Object "' . $strName . '" refers to an non existing object (' . $objElement->getNodePath() . ')');
+                    }
+                    else {
+                        throw new RuntimeException('Object "'.$strName.'" refers to an non existing object ('.$objElement->getNodePath().')');
                     }
                 }
-            } elseif (substr($strValue, 0, 4) == 'ref:') {
+            }
+            elseif (substr($strValue, 0, 4) == 'ref:') {
                 $strRef = trim(substr($strValue, 4));
                 $objRef = $this->getObject($strRef);
                 if ($objRef instanceof Model) {
                     $arrParameters[$strKey] = $objRef->getStrSystemid();
-                } else {
-                    throw new RuntimeException('Object "' . $strName . '" refers to an non existing object (' . $objElement->getNodePath() . ')');
+                }
+                else {
+                    throw new RuntimeException('Object "'.$strName.'" refers to an non existing object ('.$objElement->getNodePath().')');
                 }
             }
         }
@@ -241,9 +255,11 @@ abstract class TestbaseObject extends \Kajona\System\System\Testbase {
      * @param $strClassName
      * @param $arrParameters
      * @param $strName
+     *
      * @return Model
      */
-    private function createFixtureUser(DOMElement $objElement, $objParent, $strClassName, $arrParameters, $strName) {
+    private function createFixtureUser(DOMElement $objElement, $objParent, $strClassName, $arrParameters, $strName)
+    {
         $strUserName = $arrParameters["strUsername"];
 
         $objUser = new UserUser();

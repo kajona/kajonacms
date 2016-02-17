@@ -11,7 +11,8 @@ namespace Kajona\System\System;
  *
  * @package module_system
  */
-interface ChangelogProviderInterface {
+interface ChangelogProviderInterface
+{
 
     /**
      * Returns the name of the table used by the current provider.

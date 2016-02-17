@@ -10,7 +10,6 @@
 namespace Kajona\System\System;
 
 
-
 /**
  * Csv, used to access data stored in csv-files.
  * This class can either be used to write to csv-files or to read from csv-files
@@ -18,7 +17,8 @@ namespace Kajona\System\System;
  * @package module_system
  * @author sidler@mulchprod.de
  */
-class Csv {
+class Csv
+{
 
     private $arrMapping = null;
     private $arrData = null;
@@ -48,8 +48,9 @@ class Csv {
      *
      * @param string $strDelimiter
      */
-    public function __construct($strDelimiter = "") {
-        if($strDelimiter == "") {
+    public function __construct($strDelimiter = "")
+    {
+        if ($strDelimiter == "") {
             $this->strDelimiter = Csv::$str_delimiter_comma;
         }
         else {
@@ -57,7 +58,7 @@ class Csv {
         }
 
         // Try to overwrite PHP memory-limit so also large files can be processed
-        if(class_carrier::getInstance()->getObjConfig()->getPhpIni("memory_limit") < 50) {
+        if (Carrier::getInstance()->getObjConfig()->getPhpIni("memory_limit") < 50) {
             @ini_set("memory_limit", "50M");
         }
     }
@@ -67,27 +68,28 @@ class Csv {
      * Creates an array containing the rows given in the csv-file
      *
      * @return bool
-     * @throws class_exception
+     * @throws Exception
      */
-    public function createArrayFromFile() {
+    public function createArrayFromFile()
+    {
         //all needed params given?
-        if($this->arrMapping != "" && $this->strFilename != "") {
+        if ($this->arrMapping != "" && $this->strFilename != "") {
 
             //init final array
             $this->arrData = array();
             $arrFinalArray = array();
 
             //open pointer on file
-            $objFilesystem = new class_filesystem();
+            $objFilesystem = new Filesystem();
             $objFilesystem->openFilePointer($this->strFilename, "r");
 
             $strRow = $objFilesystem->readLineFromFile();
-            if($strRow === false) {
+            if ($strRow === false) {
                 return false;
             }
 
-            if($this->intImportRowOffset > 0) {
-                for($intI = 0; $intI < $this->intImportRowOffset; $intI++) {
+            if ($this->intImportRowOffset > 0) {
+                for ($intI = 0; $intI < $this->intImportRowOffset; $intI++) {
                     $strRow = $objFilesystem->readLineFromFile();
                 }
             }
@@ -96,21 +98,21 @@ class Csv {
             $arrHeader = explode($this->strDelimiter, $strRow);
 
             $strRow = $objFilesystem->readLineFromFile();
-            while($strRow !== false) {
-                if(uniStrlen($strRow) > 0) {
+            while ($strRow !== false) {
+                if (uniStrlen($strRow) > 0) {
                     $arrOneRow = explode($this->strDelimiter, $strRow);
                     $arrCSVRow = array();
-                    foreach($arrHeader as $intKey => $strHeader) {
+                    foreach ($arrHeader as $intKey => $strHeader) {
                         $strHeader = trim($strHeader);
                         //include the mapping specified
                         //add an encloser?
-                        if($this->strTextEncloser != null) {
+                        if ($this->strTextEncloser != null) {
                             $strHeader = uniStrReplace($this->strTextEncloser, "", trim($strHeader));
                         }
                         $strRowKey = $this->arrMapping[$strHeader];
                         $strValue = $arrOneRow[$intKey];
                         //remove an encloser?
-                        if($this->strTextEncloser != null) {
+                        if ($this->strTextEncloser != null) {
                             $strValue = uniStrReplace($this->strTextEncloser, "", trim($strValue));
                         }
                         $arrCSVRow[$strRowKey] = $strValue;
@@ -129,7 +131,7 @@ class Csv {
             return true;
         }
         else {
-            throw new class_exception("cannot proceed, needed values (mapping or filename) missing", class_exception::$level_ERROR);
+            throw new Exception("cannot proceed, needed values (mapping or filename) missing", Exception::$level_ERROR);
         }
     }
 
@@ -144,43 +146,44 @@ class Csv {
      * @param bool $bitStreamToBrowser
      * @param bool $bitExcludeHeaders skip the header-row in the output, generated based on the mapping
      *
-     * @throws class_exception
+     * @throws Exception
      */
-    public function writeArrayToFile($bitStreamToBrowser = false, $bitExcludeHeaders = false) {
+    public function writeArrayToFile($bitStreamToBrowser = false, $bitExcludeHeaders = false)
+    {
         //all needed values set before?
-        if($this->arrData != null && $this->arrMapping != null && $this->strFilename != null) {
+        if ($this->arrData != null && $this->arrMapping != null && $this->strFilename != null) {
             //create file-content. use a file-pointer to avoid max-mem-errors
 
-            $objFilesystem = new class_filesystem();
+            $objFilesystem = new Filesystem();
             //open file
-            if($bitStreamToBrowser) {
-                class_response_object::getInstance()->addHeader('Pragma: private');
-                class_response_object::getInstance()->addHeader('Cache-control: private, must-revalidate');
-                class_response_object::getInstance()->setStrResponseType(class_http_responsetypes::STR_TYPE_CSV);
-                class_response_object::getInstance()->addHeader("Content-Disposition: attachment; filename=" . saveUrlEncode(trim(basename($this->strFilename))));
+            if ($bitStreamToBrowser) {
+                ResponseObject::getInstance()->addHeader('Pragma: private');
+                ResponseObject::getInstance()->addHeader('Cache-control: private, must-revalidate');
+                ResponseObject::getInstance()->setStrResponseType(HttpResponsetypes::STR_TYPE_CSV);
+                ResponseObject::getInstance()->addHeader("Content-Disposition: attachment; filename=".saveUrlEncode(trim(basename($this->strFilename))));
 
-                class_response_object::getInstance()->sendHeaders();
+                ResponseObject::getInstance()->sendHeaders();
             }
             else {
                 $objFilesystem->openFilePointer($this->strFilename);
             }
 
             //the first row should contain the row-names
-            if(!$bitExcludeHeaders) {
+            if (!$bitExcludeHeaders) {
                 $strRow = "";
-                foreach($this->arrMapping as $strTagetCol) {
+                foreach ($this->arrMapping as $strTagetCol) {
                     //add enclosers?
-                    if($this->strTextEncloser != null) {
-                        $strTagetCol = $this->strTextEncloser . $strTagetCol . $this->strTextEncloser;
+                    if ($this->strTextEncloser != null) {
+                        $strTagetCol = $this->strTextEncloser.$strTagetCol.$this->strTextEncloser;
                     }
-                    $strRow .= $strTagetCol . $this->strDelimiter;
+                    $strRow .= $strTagetCol.$this->strDelimiter;
                 }
                 //remove last delimiter, eol
                 $strRow = uniSubstr($strRow, 0, (uniStrlen($this->strDelimiter)) * -1);
                 //add a linebreak
                 $strRow .= "\n";
                 //write header to file
-                if($bitStreamToBrowser) {
+                if ($bitStreamToBrowser) {
                     echo($strRow);
                 }
                 else {
@@ -189,30 +192,30 @@ class Csv {
             }
 
             //iterate over the data array to write it to the file
-            foreach($this->arrData as $arrOneRow) {
+            foreach ($this->arrData as $arrOneRow) {
                 $strRow = "";
-                foreach($this->arrMapping as $strSourceCol => $strTargetCol) {
-                    if(isset($arrOneRow[$strSourceCol])) {
+                foreach ($this->arrMapping as $strSourceCol => $strTargetCol) {
+                    if (isset($arrOneRow[$strSourceCol])) {
                         $strEntry = $arrOneRow[$strSourceCol];
                         //escape the delimiter maybe occuring in the text
-                        $strEntry = uniStrReplace($this->strDelimiter, "\\" . $this->strDelimiter, $strEntry);
+                        $strEntry = uniStrReplace($this->strDelimiter, "\\".$this->strDelimiter, $strEntry);
                         //add enclosers?
-                        if($this->strTextEncloser != null) {
-                            $strEntry = $this->strTextEncloser . $strEntry . $this->strTextEncloser;
+                        if ($this->strTextEncloser != null) {
+                            $strEntry = $this->strTextEncloser.$strEntry.$this->strTextEncloser;
                         }
                     }
                     else {
                         $strEntry = "";
                     }
 
-                    $strRow .= $strEntry . $this->strDelimiter;
+                    $strRow .= $strEntry.$this->strDelimiter;
                 }
                 //remove last delimiter, eol
                 $strRow = uniSubstr($strRow, 0, (uniStrlen($this->strDelimiter)) * -1);
                 //add linebreak
                 $strRow .= "\n";
                 //and write to file
-                if($bitStreamToBrowser) {
+                if ($bitStreamToBrowser) {
                     echo($strRow);
                 }
                 else {
@@ -220,18 +223,18 @@ class Csv {
                 }
             }
             //and close the filepointer...
-            if(!$bitStreamToBrowser) {
+            if (!$bitStreamToBrowser) {
                 $objFilesystem->closeFilePointer();
             }
 
-            if($bitStreamToBrowser) {
+            if ($bitStreamToBrowser) {
                 flush();
                 die();
             }
             return true;
         }
         else {
-            throw new class_exception("can't proceed, needed values missing", class_exception::$level_ERROR);
+            throw new Exception("can't proceed, needed values missing", Exception::$level_ERROR);
         }
     }
 
@@ -242,7 +245,8 @@ class Csv {
      *
      * @param string $strDelimiter
      */
-    public function setStrDelimiter($strDelimiter) {
+    public function setStrDelimiter($strDelimiter)
+    {
         $this->strDelimiter = $strDelimiter;
     }
 
@@ -252,8 +256,9 @@ class Csv {
      *
      * @param mixed $arrData
      */
-    public function setArrData($arrData) {
-        if(count($arrData) > 0) {
+    public function setArrData($arrData)
+    {
+        if (count($arrData) > 0) {
             $this->arrData = $arrData;
         }
     }
@@ -263,7 +268,8 @@ class Csv {
      *
      * @return array
      */
-    public function getArrData() {
+    public function getArrData()
+    {
         return $this->arrData;
     }
 
@@ -272,9 +278,10 @@ class Csv {
      *
      * @param string $strFilename
      */
-    public function setStrFilename($strFilename) {
+    public function setStrFilename($strFilename)
+    {
         //replace realpath?
-        if(uniStrpos($strFilename, _realpath_) !== false) {
+        if (uniStrpos($strFilename, _realpath_) !== false) {
             $strFilename = uniStrReplace(_realpath_, "", $strFilename);
         }
         $this->strFilename = $strFilename;
@@ -290,8 +297,9 @@ class Csv {
      *
      * @param array $arrMapping
      */
-    public function setArrMapping($arrMapping) {
-        if(count($arrMapping) > 0) {
+    public function setArrMapping($arrMapping)
+    {
+        if (count($arrMapping) > 0) {
             $this->arrMapping = $arrMapping;
         }
     }
@@ -302,8 +310,9 @@ class Csv {
      *
      * @param string $strEncloser
      */
-    public function setTextEncloser($strEncloser) {
-        if($strEncloser == "") {
+    public function setTextEncloser($strEncloser)
+    {
+        if ($strEncloser == "") {
             $strEncloser = null;
         }
 
@@ -316,7 +325,8 @@ class Csv {
      *
      * @param int $intImportRowOffset
      */
-    public function setIntImportRowOffset($intImportRowOffset) {
+    public function setIntImportRowOffset($intImportRowOffset)
+    {
         $this->intImportRowOffset = $intImportRowOffset;
     }
 

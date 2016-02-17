@@ -16,13 +16,15 @@ namespace Kajona\System\System;
  * @package module_system
  * @since 4.0
  */
-interface ValidatorInterface {
+interface ValidatorInterface
+{
 
     /**
      * Validates the passed chunk of data.
      * In most cases, this'll be a string-object.
      *
      * @param string $objValue
+     *
      * @return bool
      * @abstract
      */

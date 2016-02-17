@@ -9,6 +9,20 @@
 
 namespace Kajona\System\Portal;
 
+use Kajona\System\System\AbstractController;
+use Kajona\System\System\Carrier;
+use Kajona\System\System\Exception;
+use Kajona\System\System\History;
+use Kajona\System\System\HttpStatuscodes;
+use Kajona\System\System\LanguagesLanguage;
+use Kajona\System\System\Link;
+use Kajona\System\System\Objectfactory;
+use Kajona\System\System\Reflection;
+use Kajona\System\System\ResponseObject;
+use Kajona\System\System\SystemCommon;
+use Kajona\System\System\SystemSetting;
+use ReflectionClass;
+
 
 /**
  * Base class for all portal-interface classes.
@@ -23,7 +37,7 @@ namespace Kajona\System\Portal;
  * @author sidler@mulchprod.de
  * @see class_admin::action()
  */
-abstract class PortalController extends class_abstract_controller
+abstract class PortalController extends AbstractController
 {
     /**
      * @var array
@@ -32,7 +46,7 @@ abstract class PortalController extends class_abstract_controller
 
     /**
      * @inject portaltoolkit
-     * @var class_toolkit_portal
+     * @var ToolkitPortal
      */
     protected $objToolkit;
 
@@ -52,7 +66,7 @@ abstract class PortalController extends class_abstract_controller
         }
 
         //set the correct language
-        $objLanguage = new class_module_languages_language();
+        $objLanguage = new LanguagesLanguage();
         //set current language to the texts-object
         $this->getObjLang()->setStrTextLanguage($objLanguage->getStrPortalLanguage());
 
@@ -77,7 +91,7 @@ abstract class PortalController extends class_abstract_controller
      * @param string $strAction
      *
      * @see class_rights::validatePermissionString
-     * @throws class_exception
+     * @throws Exception
      * @return string
      * @since 3.4
      */
@@ -92,39 +106,39 @@ abstract class PortalController extends class_abstract_controller
         //search for the matching method - build method name
         $strMethodName = "action" . uniStrtoupper($strAction[0]) . uniSubstr($strAction, 1);
 
-        $objAnnotations = new class_reflection(get_class($this));
+        $objAnnotations = new Reflection(get_class($this));
         if(method_exists($this, $strMethodName)) {
 
             //validate the permissions required to call this method, the xml-part is validated afterwards
             $strPermissions = $objAnnotations->getMethodAnnotationValue($strMethodName, "@permissions");
             if($strPermissions !== false) {
 
-                if(validateSystemid($this->getSystemid()) && class_objectfactory::getInstance()->getObject($this->getSystemid()) != null) {
-                    $objObjectToCheck = class_objectfactory::getInstance()->getObject($this->getSystemid());
+                if(validateSystemid($this->getSystemid()) && Objectfactory::getInstance()->getObject($this->getSystemid()) != null) {
+                    $objObjectToCheck = Objectfactory::getInstance()->getObject($this->getSystemid());
                 }
                 else {
                     $objObjectToCheck = $this->getObjModule();
                 }
 
-                if(!class_carrier::getInstance()->getObjRights()->validatePermissionString($strPermissions, $objObjectToCheck)) {
+                if(!Carrier::getInstance()->getObjRights()->validatePermissionString($strPermissions, $objObjectToCheck)) {
                     $this->strOutput = $this->getLang("commons_error_permissions");
 
                     //redirect to the error page
-                    if($this->getPagename() != class_module_system_setting::getConfigValue("_pages_errorpage_")) {
-                        $this->portalReload(class_link::getLinkPortalHref(class_module_system_setting::getConfigValue("_pages_errorpage_"), ""));
+                    if($this->getPagename() != SystemSetting::getConfigValue("_pages_errorpage_")) {
+                        $this->portalReload(Link::getLinkPortalHref(SystemSetting::getConfigValue("_pages_errorpage_"), ""));
                         return "";
                     }
 
-                    class_response_object::getInstance()->setStrStatusCode(class_http_statuscodes::SC_UNAUTHORIZED);
-                    throw new class_exception("you are not authorized/authenticated to call this action", class_exception::$level_ERROR);
+                    ResponseObject::getInstance()->setStrStatusCode(HttpStatuscodes::SC_UNAUTHORIZED);
+                    throw new Exception("you are not authorized/authenticated to call this action", Exception::$level_ERROR);
                 }
             }
 
             if(_xmlLoader_ === true) {
                 //check it the method is allowed for xml-requests
-                $objAnnotations = new class_reflection(get_class($this));
+                $objAnnotations = new Reflection(get_class($this));
                 if(!$objAnnotations->hasMethodAnnotation($strMethodName, "@xml") && substr(get_class($this), -3) != "xml") {
-                    throw new class_exception("called method " . $strMethodName . " not allowed for xml-requests", class_exception::$level_FATALERROR);
+                    throw new Exception("called method " . $strMethodName . " not allowed for xml-requests", Exception::$level_FATALERROR);
                 }
             }
 
@@ -134,7 +148,7 @@ abstract class PortalController extends class_abstract_controller
 
             if(_xmlLoader_ === true) {
                 $objReflection = new ReflectionClass($this);
-                throw new class_exception("called method " . $strMethodName . " not existing for class " . $objReflection->getName(), class_exception::$level_FATALERROR);
+                throw new Exception("called method " . $strMethodName . " not existing for class " . $objReflection->getName(), Exception::$level_FATALERROR);
             }
 
             //try to load the list-method
@@ -144,16 +158,16 @@ abstract class PortalController extends class_abstract_controller
                 $strPermissions = $objAnnotations->getMethodAnnotationValue($strListMethodName, "@permissions");
                 if($strPermissions !== false) {
 
-                    if(validateSystemid($this->getSystemid()) && class_objectfactory::getInstance()->getObject($this->getSystemid()) != null) {
-                        $objObjectToCheck = class_objectfactory::getInstance()->getObject($this->getSystemid());
+                    if(validateSystemid($this->getSystemid()) && Objectfactory::getInstance()->getObject($this->getSystemid()) != null) {
+                        $objObjectToCheck = Objectfactory::getInstance()->getObject($this->getSystemid());
                     }
                     else {
                         $objObjectToCheck = $this->getObjModule();
                     }
 
-                    if(!class_carrier::getInstance()->getObjRights()->validatePermissionString($strPermissions, $objObjectToCheck)) {
+                    if(!Carrier::getInstance()->getObjRights()->validatePermissionString($strPermissions, $objObjectToCheck)) {
                         $this->strOutput = $this->getLang("commons_error_permissions");
-                        throw new class_exception("you are not authorized/authenticated to call this action", class_exception::$level_ERROR);
+                        throw new Exception("you are not authorized/authenticated to call this action", Exception::$level_ERROR);
                     }
                 }
 
@@ -161,7 +175,7 @@ abstract class PortalController extends class_abstract_controller
             }
             else {
                 $objReflection = new ReflectionClass($this);
-                throw new class_exception("called method " . $strMethodName . " not existing for class " . $objReflection->getName(), class_exception::$level_ERROR);
+                throw new Exception("called method " . $strMethodName . " not existing for class " . $objReflection->getName(), Exception::$level_ERROR);
             }
         }
 
@@ -182,7 +196,7 @@ abstract class PortalController extends class_abstract_controller
         if($strSystemid == "") {
             $strSystemid = $this->getSystemid();
         }
-        $objCommon = new class_module_system_common($strSystemid);
+        $objCommon = new SystemCommon($strSystemid);
         return $objCommon->getIntRecordStatus();
     }
 
@@ -197,7 +211,7 @@ abstract class PortalController extends class_abstract_controller
         if($strSystemid == 0) {
             $strSystemid = $this->getSystemid();
         }
-        $objCommon = new class_module_system_common($strSystemid);
+        $objCommon = new SystemCommon($strSystemid);
         return $objCommon->getLastEditUser();
     }
 
@@ -213,7 +227,7 @@ abstract class PortalController extends class_abstract_controller
         if($strSystemid == "") {
             $strSystemid = $this->getSystemid();
         }
-        $objCommon = new class_module_system_common($strSystemid);
+        $objCommon = new SystemCommon($strSystemid);
         return $objCommon->getPrevId();
     }
 
@@ -227,7 +241,7 @@ abstract class PortalController extends class_abstract_controller
      * @return string
      */
     protected function getHistory($intPosition = 0) {
-        $objHistory = new class_history();
+        $objHistory = new History();
         return $objHistory->getPortalHistory($intPosition);
     }
 
@@ -258,8 +272,8 @@ abstract class PortalController extends class_abstract_controller
      */
     public function getPagename() {
         //check, if the portal is disabled
-        if(class_module_system_setting::getConfigValue("_system_portal_disable_") == "true") {
-            $strReturn = class_module_system_setting::getConfigValue("_system_portal_disablepage_");
+        if(SystemSetting::getConfigValue("_system_portal_disable_") == "true") {
+            $strReturn = SystemSetting::getConfigValue("_system_portal_disablepage_");
         }
         else {
             //Standard
@@ -268,12 +282,12 @@ abstract class PortalController extends class_abstract_controller
             }
             //Use the page set in the configs
             else {
-                $strReturn = class_module_system_setting::getConfigValue("_pages_indexpage_") != "" ? class_module_system_setting::getConfigValue("_pages_indexpage_") : "index";
+                $strReturn = SystemSetting::getConfigValue("_pages_indexpage_") != "" ? SystemSetting::getConfigValue("_pages_indexpage_") : "index";
             }
 
             //disallow rendering of master-page
             if($strReturn == "master") {
-                $strReturn = class_module_system_setting::getConfigValue("_pages_errorpage_");
+                $strReturn = SystemSetting::getConfigValue("_pages_errorpage_");
             }
         }
         $strReturn = htmlspecialchars($strReturn);
@@ -300,7 +314,7 @@ abstract class PortalController extends class_abstract_controller
         //replace constants in url
         $strUrlToLoad = str_replace("_webpath_", _webpath_, $strUrlToLoad);
         $strUrlToLoad = str_replace("_indexpath_", _indexpath_, $strUrlToLoad);
-        class_response_object::getInstance()->setStrRedirectUrl($strUrlToLoad);
+        ResponseObject::getInstance()->setStrRedirectUrl($strUrlToLoad);
     }
 
 
@@ -310,7 +324,7 @@ abstract class PortalController extends class_abstract_controller
      * @see class_module_languages_language::getPortalLanguage()
      */
     protected function getStrPortalLanguage() {
-        $objLanguage = new class_module_languages_language();
+        $objLanguage = new LanguagesLanguage();
         return $objLanguage->getPortalLanguage();
     }
 

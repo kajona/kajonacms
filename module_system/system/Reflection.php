@@ -23,7 +23,8 @@ use ReflectionException;
  * @author sidler@mulchprod.de
  * @since 3.4.1
  */
-class Reflection {
+class Reflection
+{
 
     private static $STR_HASCLASS_CACHE = "hasclass";
     private static $STR_CLASS_PROPERTIES_CACHE = "classproperties";
@@ -37,7 +38,7 @@ class Reflection {
     private static $STR_SETTER_CACHE = "setters";
 
     private static $STR_DOC_COMMENT_PROPERTIES_CACHE = "doccomment";
-    
+
     private $arrCurrentCache;
     private $strSourceClass;
 
@@ -57,21 +58,23 @@ class Reflection {
      *
      * @throws Exception
      */
-    public function __construct($strSourceClass) {
+    public function __construct($strSourceClass)
+    {
 
-        if(is_object($strSourceClass))
+        if (is_object($strSourceClass)) {
             $this->strSourceClass = get_class($strSourceClass);
-        else
+        }
+        else {
             $this->strSourceClass = $strSourceClass;
+        }
 
-        if(!class_exists($this->strSourceClass)) {
+        if (!class_exists($this->strSourceClass)) {
             throw new Exception("class ".$this->strSourceClass." not found", Exception::$level_ERROR);
         }
 
 
-
         $this->arrCurrentCache = BootstrapCache::getInstance()->getCacheRow(BootstrapCache::CACHE_REFLECTION, $this->strSourceClass);
-        if($this->arrCurrentCache === false) {
+        if ($this->arrCurrentCache === false) {
             $this->arrCurrentCache = array(
                 self::$STR_CLASS_PROPERTIES_CACHE,
                 self::$STR_METHOD_CACHE,
@@ -91,8 +94,9 @@ class Reflection {
     /**
      * internal destructor
      */
-    function __destruct() {
-        if($this->bitCacheSaveRequired ) {
+    function __destruct()
+    {
+        if ($this->bitCacheSaveRequired) {
             BootstrapCache::getInstance()->addCacheRow(BootstrapCache::CACHE_REFLECTION, $this->strSourceClass, $this->arrCurrentCache);
             $this->bitCacheSaveRequired = false;
         }
@@ -101,10 +105,12 @@ class Reflection {
     /**
      * Flushes the cache-files.
      * Use this method if you added new modules / classes.
+     *
      * @return void
      * @deprecated
      */
-    public static function flushCache() {
+    public static function flushCache()
+    {
         Classloader::getInstance()->flushCache();
     }
 
@@ -115,27 +121,32 @@ class Reflection {
      *
      * @param $strAnnotation
      * @param integer $intEnum - whether to return annotation values or parameters, default is values
+     *
      * @return array|string|string[]
      */
-    public function getAnnotationValuesFromClass($strAnnotation, $intEnum = ReflectionEnum::VALUES) {
+    public function getAnnotationValuesFromClass($strAnnotation, $intEnum = ReflectionEnum::VALUES)
+    {
 
-        if(isset($this->arrCurrentCache[self::$STR_CLASS_PROPERTIES_CACHE][$strAnnotation."_".$intEnum]))
+        if (isset($this->arrCurrentCache[self::$STR_CLASS_PROPERTIES_CACHE][$strAnnotation."_".$intEnum])) {
             return $this->arrCurrentCache[self::$STR_CLASS_PROPERTIES_CACHE][$strAnnotation."_".$intEnum];
+        }
 
         $strClassDoc = $this->objReflectionClass->getDocComment();
         $arrReturn = $this->searchAnnotationInDoc($strClassDoc, $strAnnotation);
 
-        if(count($arrReturn) == 2) {
-            if($intEnum === ReflectionEnum::PARAMS)
+        if (count($arrReturn) == 2) {
+            if ($intEnum === ReflectionEnum::PARAMS) {
                 $arrReturn = $arrReturn["params"];
+            }
 
-            if($intEnum === ReflectionEnum::VALUES)
+            if ($intEnum === ReflectionEnum::VALUES) {
                 $arrReturn = $arrReturn["values"];
+            }
         }
 
         //check if there's a base-class -> inheritance
         $objBaseClass = $this->objReflectionClass->getParentClass();
-        if($objBaseClass !== false) {
+        if ($objBaseClass !== false) {
             $objBaseAnnotations = new Reflection($objBaseClass->getName());
             $arrReturn = array_merge($arrReturn, $objBaseAnnotations->getAnnotationValuesFromClass($strAnnotation, $intEnum));
         }
@@ -147,36 +158,39 @@ class Reflection {
 
     /**
      * Returns a list of all annotation names with a given value.
-     * 
+     *
      * @param string $strValue Annotation value
      * @param integer $intEnum - whether to return annotation values or parameters, default is values
+     *
      * @return array List of annotation names
      */
-    public function getAnnotationsWithValueFromClass($strValue, $intEnum = ReflectionEnum::VALUES) {
+    public function getAnnotationsWithValueFromClass($strValue, $intEnum = ReflectionEnum::VALUES)
+    {
 
         $arrReturn = array();
 
         $strClassDoc = $this->objReflectionClass->getDocComment();
         $arrProperties = $this->searchAllAnnotationsInDoc($strClassDoc);
 
-        if($intEnum === ReflectionEnum::VALUES) {
+        if ($intEnum === ReflectionEnum::VALUES) {
             foreach ($arrProperties as $strName => $arrValues) {
-                if (in_array($strValue, $arrValues["values"]))
+                if (in_array($strValue, $arrValues["values"])) {
                     $arrReturn[] = $strName;
+                }
             }
         }
-        elseif($intEnum === ReflectionEnum::PARAMS) {
+        elseif ($intEnum === ReflectionEnum::PARAMS) {
             foreach ($arrProperties as $strName => $arrValues) {
                 $arrParameters = $arrValues["params"];
 
-                foreach($arrParameters as $arrParams) {
-                    foreach($arrParams as $strParamName => $objParamValue) {
-                        if(is_array($objParamValue)) {
+                foreach ($arrParameters as $arrParams) {
+                    foreach ($arrParams as $strParamName => $objParamValue) {
+                        if (is_array($objParamValue)) {
                             if (in_array($strValue, $objParamValue)) {
                                 $arrReturn[$strName] = $strName;
                             }
                         }
-                        elseif ($objParamValue == $strValue){
+                        elseif ($objParamValue == $strValue) {
                             $arrReturn[$strName] = $strName;
                         }
                     }
@@ -187,7 +201,7 @@ class Reflection {
 
         //check if there's a base-class -> inheritance
         $objBaseClass = $this->objReflectionClass->getParentClass();
-        if($objBaseClass !== false) {
+        if ($objBaseClass !== false) {
             $objBaseAnnotations = new Reflection($objBaseClass->getName());
             $arrReturn = array_merge($arrReturn, $objBaseAnnotations->getAnnotationsWithValueFromClass($strValue, $intEnum));
         }
@@ -201,17 +215,20 @@ class Reflection {
      *
      * @param string $strMethodName
      * @param string $strAnnotation
+     *
      * @return bool
      */
-    public function hasMethodAnnotation($strMethodName, $strAnnotation) {
-        if(isset($this->arrCurrentCache[self::$STR_HASMETHOD_CACHE][$strMethodName."_".$strAnnotation]))
+    public function hasMethodAnnotation($strMethodName, $strAnnotation)
+    {
+        if (isset($this->arrCurrentCache[self::$STR_HASMETHOD_CACHE][$strMethodName."_".$strAnnotation])) {
             return $this->arrCurrentCache[self::$STR_HASMETHOD_CACHE][$strMethodName."_".$strAnnotation];
+        }
 
         try {
             $objReflectionMethod = $this->objReflectionClass->getMethod($strMethodName);
             $bitReturn = false !== $this->searchFirstAnnotationInDoc($objReflectionMethod->getDocComment(), $strAnnotation);
         }
-        catch(ReflectionException $objEx) {
+        catch (ReflectionException $objEx) {
             $bitReturn = false;
         }
 
@@ -225,16 +242,19 @@ class Reflection {
      * the existence of this annotation.
      *
      * @param string $strAnnotation
+     *
      * @return bool
      */
-    public function hasClassAnnotation($strAnnotation) {
-        if(isset($this->arrCurrentCache[self::$STR_HASCLASS_CACHE][$strAnnotation]))
+    public function hasClassAnnotation($strAnnotation)
+    {
+        if (isset($this->arrCurrentCache[self::$STR_HASCLASS_CACHE][$strAnnotation])) {
             return $this->arrCurrentCache[self::$STR_HASCLASS_CACHE][$strAnnotation];
+        }
 
         try {
             $bitReturn = false !== $this->searchFirstAnnotationInDoc($this->objReflectionClass->getDocComment(), $strAnnotation);
         }
-        catch(ReflectionException $objEx) {
+        catch (ReflectionException $objEx) {
             $bitReturn = false;
         }
 
@@ -250,20 +270,23 @@ class Reflection {
      *
      * @param string $strPropertyName
      * @param string $strAnnotation
+     *
      * @return bool
      */
-    public function hasPropertyAnnotation($strPropertyName, $strAnnotation) {
-        if(isset($this->arrCurrentCache[self::$STR_HASPROPERTY_CACHE][$strPropertyName."_".$strAnnotation]))
+    public function hasPropertyAnnotation($strPropertyName, $strAnnotation)
+    {
+        if (isset($this->arrCurrentCache[self::$STR_HASPROPERTY_CACHE][$strPropertyName."_".$strAnnotation])) {
             return $this->arrCurrentCache[self::$STR_HASPROPERTY_CACHE][$strPropertyName."_".$strAnnotation];
+        }
 
         try {
             $objReflectionMethod = $this->objReflectionClass->getProperty($strPropertyName);
             $bitReturn = false !== $this->searchFirstAnnotationInDoc($objReflectionMethod->getDocComment(), $strAnnotation);
         }
-        catch(ReflectionException $objEx) {
+        catch (ReflectionException $objEx) {
             //not found in current class, maybe a base-class is existing?
             $objBaseClass = $this->objReflectionClass->getParentClass();
-            if($objBaseClass !== false) {
+            if ($objBaseClass !== false) {
                 $objBaseAnnotations = new Reflection($objBaseClass->getName());
                 $bitReturn = $objBaseAnnotations->hasPropertyAnnotation($strPropertyName, $strAnnotation);
             }
@@ -276,9 +299,10 @@ class Reflection {
 
     /**
      * Searches an annotation (e.g. @version) in the doccomment of a passed method
-     * and passes the value, so anything behind the @name part.
+     * and passes the value, so anything behind the @name part .
      * E.g., if the annotation is written like
-     *   @test value1, value2
+     *
+     * @test value1, value2
      * then only
      *   value1, value2
      * are returned.
@@ -291,23 +315,25 @@ class Reflection {
      *
      * @return string|bool
      */
-    public function getMethodAnnotationValue($strMethodName, $strAnnotation, $intEnum = ReflectionEnum::VALUES) {
+    public function getMethodAnnotationValue($strMethodName, $strAnnotation, $intEnum = ReflectionEnum::VALUES)
+    {
 
-        if(isset($this->arrCurrentCache[self::$STR_METHOD_CACHE][$strMethodName."_".$strAnnotation."_".$intEnum]))
+        if (isset($this->arrCurrentCache[self::$STR_METHOD_CACHE][$strMethodName."_".$strAnnotation."_".$intEnum])) {
             return $this->arrCurrentCache[self::$STR_METHOD_CACHE][$strMethodName."_".$strAnnotation."_".$intEnum];
+        }
 
         $objReflectionMethod = $this->objReflectionClass->getMethod($strMethodName);
 
         $strReturn = false;
         $arrReturn = $this->searchFirstAnnotationInDoc($objReflectionMethod->getDocComment(), $strAnnotation);
-        if($intEnum === ReflectionEnum::VALUES) {
+        if ($intEnum === ReflectionEnum::VALUES) {
             $strReturn = $arrReturn["values"][0];
         }
-        elseif($intEnum === ReflectionEnum::PARAMS) {
+        elseif ($intEnum === ReflectionEnum::PARAMS) {
             $strReturn = $arrReturn["params"][0];
         }
 
-        if($arrReturn === false) {
+        if ($arrReturn === false) {
             $this->arrCurrentCache[self::$STR_METHOD_CACHE][$strMethodName."_".$strAnnotation."_".$intEnum] = false;
             return false;
         }
@@ -325,12 +351,15 @@ class Reflection {
      *
      * @param string $strAnnotation
      * @param integer $intEnum - whether to return annotation values or parameters, default is values
+     *
      * @return string[] ["propertyname" => "annotationvalue"]
      */
-    public function getPropertiesWithAnnotation($strAnnotation , $intEnum = ReflectionEnum::VALUES) {
+    public function getPropertiesWithAnnotation($strAnnotation, $intEnum = ReflectionEnum::VALUES)
+    {
 
-        if(isset($this->arrCurrentCache[self::$STR_PROPERTIES_CACHE][$strAnnotation."_".$intEnum]))
+        if (isset($this->arrCurrentCache[self::$STR_PROPERTIES_CACHE][$strAnnotation."_".$intEnum])) {
             return $this->arrCurrentCache[self::$STR_PROPERTIES_CACHE][$strAnnotation."_".$intEnum];
+        }
 
         $arrReturn = array();
 
@@ -338,19 +367,19 @@ class Reflection {
 
         //check if there's a base-class -> inheritance, so base class before extending class
         $objBaseClass = $this->objReflectionClass->getParentClass();
-        if($objBaseClass !== false) {
+        if ($objBaseClass !== false) {
             $objBaseAnnotations = new Reflection($objBaseClass->getName());
             $arrReturn = array_merge($arrReturn, $objBaseAnnotations->getPropertiesWithAnnotation($strAnnotation, $intEnum));
         }
 
 
-        foreach($arrProperties as $objOneProperty) {
+        foreach ($arrProperties as $objOneProperty) {
             $arrFirstAnnotation = $this->searchFirstAnnotationInDoc($objOneProperty->getDocComment(), $strAnnotation);
             if ($arrFirstAnnotation !== false) {
-                if($intEnum === ReflectionEnum::VALUES) {
+                if ($intEnum === ReflectionEnum::VALUES) {
                     $arrFirstAnnotation = $arrFirstAnnotation["values"][0];
                 }
-                elseif($intEnum === ReflectionEnum::PARAMS) {
+                elseif ($intEnum === ReflectionEnum::PARAMS) {
                     $arrFirstAnnotation = $arrFirstAnnotation["params"][0];
                 }
 
@@ -372,29 +401,31 @@ class Reflection {
      *
      * @return null|string
      */
-    public function getAnnotationValueForProperty($strProperty, $strAnnotation, $intEnum = ReflectionEnum::VALUES) {
+    public function getAnnotationValueForProperty($strProperty, $strAnnotation, $intEnum = ReflectionEnum::VALUES)
+    {
 
         $arrProperties = $this->objReflectionClass->getProperties();
 
-        foreach($arrProperties as $objOneProperty) {
-            if($objOneProperty->getName() == $strProperty) {
+        foreach ($arrProperties as $objOneProperty) {
+            if ($objOneProperty->getName() == $strProperty) {
                 $strFirstAnnotation = $this->searchFirstAnnotationInDoc($objOneProperty->getDocComment(), $strAnnotation);
 
-                if($intEnum === ReflectionEnum::VALUES) {
+                if ($intEnum === ReflectionEnum::VALUES) {
                     $strFirstAnnotation = $strFirstAnnotation["values"][0];
                 }
-                elseif($intEnum === ReflectionEnum::PARAMS) {
+                elseif ($intEnum === ReflectionEnum::PARAMS) {
                     $strFirstAnnotation = $strFirstAnnotation["params"][0];
                 }
 
-                if ($strFirstAnnotation !== false)
+                if ($strFirstAnnotation !== false) {
                     return $strFirstAnnotation;
+                }
             }
         }
 
         //check if there's a base-class -> inheritance
         $objBaseClass = $this->objReflectionClass->getParentClass();
-        if($objBaseClass !== false) {
+        if ($objBaseClass !== false) {
             $objBaseAnnotations = new Reflection($objBaseClass->getName());
             return $objBaseAnnotations->getAnnotationValueForProperty($strProperty, $strAnnotation, $intEnum);
         }
@@ -405,14 +436,18 @@ class Reflection {
     /**
      * Searches an object for a given properties' setter method.
      * If not found, null is returned instead.
+     *
      * @param string $strPropertyName
+     *
      * @return null|string
      * @static
      */
-    public function getSetter($strPropertyName) {
+    public function getSetter($strPropertyName)
+    {
 
-        if(isset($this->arrCurrentCache[self::$STR_SETTER_CACHE][$strPropertyName]))
+        if (isset($this->arrCurrentCache[self::$STR_SETTER_CACHE][$strPropertyName])) {
             return $this->arrCurrentCache[self::$STR_SETTER_CACHE][$strPropertyName];
+        }
 
         $arrSetters = array(
             "setStr".$strPropertyName,
@@ -425,8 +460,8 @@ class Reflection {
             "set".$strPropertyName
         );
 
-        foreach($arrSetters as $strOneSetter) {
-            if(method_exists($this->strSourceClass, $strOneSetter)) {
+        foreach ($arrSetters as $strOneSetter) {
+            if (method_exists($this->strSourceClass, $strOneSetter)) {
                 $this->arrCurrentCache[self::$STR_SETTER_CACHE][$strPropertyName] = $strOneSetter;
                 $this->bitCacheSaveRequired = true;
                 return $strOneSetter;
@@ -440,14 +475,18 @@ class Reflection {
     /**
      * Searches an object for a given properties' getter method.
      * If not found, null is returned instead.
+     *
      * @param string $strPropertyName
+     *
      * @return null|string
      * @static
      */
-    public function getGetter($strPropertyName) {
+    public function getGetter($strPropertyName)
+    {
 
-        if(isset($this->arrCurrentCache[self::$STR_GETTER_CACHE][$strPropertyName]))
+        if (isset($this->arrCurrentCache[self::$STR_GETTER_CACHE][$strPropertyName])) {
             return $this->arrCurrentCache[self::$STR_GETTER_CACHE][$strPropertyName];
+        }
 
         $arrGetters = array(
             "getStr".$strPropertyName,
@@ -461,8 +500,8 @@ class Reflection {
         );
 
 
-        foreach($arrGetters as $strOneGetter) {
-            if(method_exists($this->strSourceClass, $strOneGetter)) {
+        foreach ($arrGetters as $strOneGetter) {
+            if (method_exists($this->strSourceClass, $strOneGetter)) {
                 $this->arrCurrentCache[self::$STR_GETTER_CACHE][$strPropertyName] = $strOneGetter;
                 $this->bitCacheSaveRequired = true;
                 return $strOneGetter;
@@ -488,6 +527,7 @@ class Reflection {
      * Returns a new object instance
      *
      * @param array $arrArguments
+     *
      * @return object
      */
     public function newInstance(array $arrArguments = array())
@@ -499,6 +539,7 @@ class Reflection {
      * Returns a new object instance without calling the constructor
      *
      * @param array $arrArguments
+     *
      * @return object
      */
     public function newInstanceWithoutConstructor()
@@ -512,14 +553,16 @@ class Reflection {
      *
      * @param string $strDoc
      * @param string $strAnnotation
+     *
      * @return bool
      */
-    private function searchFirstAnnotationInDoc($strDoc, $strAnnotation) {
+    private function searchFirstAnnotationInDoc($strDoc, $strAnnotation)
+    {
         $arrAnnotations = $this->searchAnnotationInDoc($strDoc, $strAnnotation);
 
-            if(count($arrAnnotations) == 2) {
-                return $arrAnnotations;
-            }
+        if (count($arrAnnotations) == 2) {
+            return $arrAnnotations;
+        }
 
         return false;
     }
@@ -531,11 +574,13 @@ class Reflection {
      *
      * @param string $strDoc
      * @param string $strAnnotation
+     *
      * @return string[] or ["values" => array(), "params" => array()]
      */
-    private function searchAnnotationInDoc($strDoc, $strAnnotation) { 
+    private function searchAnnotationInDoc($strDoc, $strAnnotation)
+    {
         $arrAllAnnotations = $this->searchAllAnnotationsInDoc($strDoc);
-        
+
         if (isset($arrAllAnnotations[$strAnnotation])) {
             return $arrAllAnnotations[$strAnnotation];
         }
@@ -543,24 +588,27 @@ class Reflection {
             return array();
         }
     }
-    
-    
+
+
     /**
      * Internal helper, does the parsing of the comment.
      * Returns an array of all annotations.
      *
      * @param string $strDoc
+     *
      * @return array ["annotation_name" => array("values" => values, "params" => params)]
      */
-    private function searchAllAnnotationsInDoc($strDoc) {
+    private function searchAllAnnotationsInDoc($strDoc)
+    {
         $strDoc = uniStrReplace(array("\r\n", "\r"), "\n", $strDoc); //replace needed as regex on windows or mac won't work properly
 
         $arrReturn = array();
 
         $strCacheKey = md5($strDoc);
 
-        if (isset($this->arrCurrentCache[self::$STR_DOC_COMMENT_PROPERTIES_CACHE][$strCacheKey]))
+        if (isset($this->arrCurrentCache[self::$STR_DOC_COMMENT_PROPERTIES_CACHE][$strCacheKey])) {
             return $this->arrCurrentCache[self::$STR_DOC_COMMENT_PROPERTIES_CACHE][$strCacheKey];
+        }
 
         $arrMatches = array();
         if (preg_match_all("/(@[a-zA-Z0-9]+)(\s+.*)?(\s+\(.*\))?$/Um", $strDoc, $arrMatches, PREG_SET_ORDER) !== false) {
@@ -569,8 +617,9 @@ class Reflection {
                 $strValue = isset($arrOneMatch[2]) ? $arrOneMatch[2] : "";
                 $strParams = isset($arrOneMatch[3]) ? $arrOneMatch[3] : "";
 
-                if (!isset($arrReturn[$strName]))
-                    $arrReturn[$strName] = array("values" => array(), "params" =>array());
+                if (!isset($arrReturn[$strName])) {
+                    $arrReturn[$strName] = array("values" => array(), "params" => array());
+                }
 
                 $arrReturn[$strName]["values"][] = trim($strValue);
                 $arrReturn[$strName]["params"][] = $this->params2Array(trim($strParams));
@@ -599,10 +648,11 @@ class Reflection {
      *
      * @return array ["paramname" => "value"]
      */
-    private function params2Array($strParams) {
+    private function params2Array($strParams)
+    {
         $arrParams = array();
 
-        if($strParams == "") {
+        if ($strParams == "") {
             return $arrParams;
         }
 
@@ -611,25 +661,25 @@ class Reflection {
             foreach ($arrMatches as $arrOneMatch) {
                 //GetParam name
                 $strParamName = "";
-                if(isset($arrOneMatch[1]) && $arrOneMatch[1] != "") {
+                if (isset($arrOneMatch[1]) && $arrOneMatch[1] != "") {
                     $strParamName = $arrOneMatch[1];
                 }
-                elseif(isset($arrOneMatch[3]) && $arrOneMatch[3] != "") {
+                elseif (isset($arrOneMatch[3]) && $arrOneMatch[3] != "") {
                     $strParamName = $arrOneMatch[3];
                 }
-                elseif(isset($arrOneMatch[5]) && $arrOneMatch[5] != "") {
+                elseif (isset($arrOneMatch[5]) && $arrOneMatch[5] != "") {
                     $strParamName = $arrOneMatch[5];
                 }
 
                 //Get param value(s)
                 $strParamValue = "";
-                if(isset($arrOneMatch[2]) && $arrOneMatch[2] != "") {
+                if (isset($arrOneMatch[2]) && $arrOneMatch[2] != "") {
                     $strParamValue = $arrOneMatch[2];
                 }
-                elseif(isset($arrOneMatch[4]) && $arrOneMatch[4] != "") {
+                elseif (isset($arrOneMatch[4]) && $arrOneMatch[4] != "") {
                     $strParamValue = $arrOneMatch[4];
                 }
-                elseif(isset($arrOneMatch[6]) && $arrOneMatch[6] != "") {
+                elseif (isset($arrOneMatch[6]) && $arrOneMatch[6] != "") {
                     $strParamValue = $arrOneMatch[6];
                     $strParamValue = uniStrReplace(array("{"), "[", $strParamValue);
                     $strParamValue = uniStrReplace(array("}"), "]", $strParamValue);

@@ -20,7 +20,8 @@ use ZipArchive;
  * @author sidler@mulchprod.de
  * @since 3.4.0
  */
-class Zip {
+class Zip
+{
 
     /**
      * @var ZipArchive ZipArchive
@@ -32,8 +33,9 @@ class Zip {
      *
      * @throws Exception
      */
-    public function __construct() {
-        if(!class_exists("ZipArchive")) {
+    public function __construct()
+    {
+        if (!class_exists("ZipArchive")) {
             throw new Exception("current installation has no support for ZipArchive", Exception::$level_ERROR);
         }
 
@@ -47,7 +49,8 @@ class Zip {
      *
      * @return bool
      */
-    public function openArchiveForWriting($strFilename) {
+    public function openArchiveForWriting($strFilename)
+    {
         return $this->objArchive->open(_realpath_.$strFilename, ZIPARCHIVE::CREATE | ZIPARCHIVE::OVERWRITE);
     }
 
@@ -60,18 +63,19 @@ class Zip {
      *
      * @return bool
      */
-    public function addFile($strSourceFile, $strTargetFile = "") {
+    public function addFile($strSourceFile, $strTargetFile = "")
+    {
 
         $strSourceFile = uniStrReplace(_realpath_, "", $strSourceFile);
 
-        if($strTargetFile == "") {
+        if ($strTargetFile == "") {
             $strTargetFile = $strSourceFile;
         }
 
         $strTargetFile = ltrim($strTargetFile, "/");
 
 
-        if(file_exists(_realpath_.$strSourceFile)) {
+        if (file_exists(_realpath_.$strSourceFile)) {
             return $this->objArchive->addFile(_realpath_.$strSourceFile, $strTargetFile);
         }
         else {
@@ -87,16 +91,17 @@ class Zip {
      *
      * @return bool
      */
-    public function addFolder($strFolder) {
+    public function addFolder($strFolder)
+    {
         $bitReturn = true;
-        if(is_dir(_realpath_.$strFolder)) {
+        if (is_dir(_realpath_.$strFolder)) {
             $objFilesystem = new Filesystem();
             $arrFiles = $objFilesystem->getCompleteList($strFolder, array(), array(), array(".", ".."));
-            foreach($arrFiles["files"] as $arrOneFile) {
+            foreach ($arrFiles["files"] as $arrOneFile) {
                 $bitReturn = $bitReturn && $this->addFile($arrOneFile["filepath"]);
             }
 
-            foreach($arrFiles["folders"] as $strOneFolder) {
+            foreach ($arrFiles["folders"] as $strOneFolder) {
                 $bitReturn = $bitReturn && $this->addFolder($strFolder."/".$strOneFolder);
             }
 
@@ -115,7 +120,8 @@ class Zip {
      *
      * @return bool
      */
-    public function extractArchive($strSourceArchive, $strTarget) {
+    public function extractArchive($strSourceArchive, $strTarget)
+    {
         $this->objArchive->open(_realpath_.$strSourceArchive);
         $bitReturn = $this->objArchive->extractTo(_realpath_.$strTarget);
         $this->objArchive->close();
@@ -131,9 +137,10 @@ class Zip {
      *
      * @return mixed|bool
      */
-    public function getFileFromArchive($strSourceArchive, $strFilename) {
+    public function getFileFromArchive($strSourceArchive, $strFilename)
+    {
 
-        if($strFilename[0] == "/") {
+        if ($strFilename[0] == "/") {
             $strFilename = uniSubstr($strFilename, 1);
         }
 
@@ -148,7 +155,8 @@ class Zip {
      *
      * @return bool
      */
-    public function closeArchive() {
+    public function closeArchive()
+    {
         return $this->objArchive->close();
     }
 
@@ -159,7 +167,8 @@ class Zip {
      *
      * @return bool, true if the file is a zip-File, an error code if it is not a zip-file (see ZipArchive)
      */
-    public function isZipFile($strFilename) {
+    public function isZipFile($strFilename)
+    {
         return $this->objArchive->open(_realpath_.$strFilename, ZipArchive::CHECKCONS);
     }
 }

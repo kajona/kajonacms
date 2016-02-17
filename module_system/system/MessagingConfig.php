@@ -25,7 +25,8 @@ use ReflectionClass;
  * @module messaging
  * @moduleId _messaging_module_id_
  */
-class MessagingConfig extends Model implements ModelInterface  {
+class MessagingConfig extends Model implements ModelInterface
+{
 
     /**
      * @var string
@@ -59,9 +60,11 @@ class MessagingConfig extends Model implements ModelInterface  {
 
     /**
      * Returns the name to be used when rendering the current object, e.g. in admin-lists.
+     *
      * @return string
      */
-    public function getStrDisplayName() {
+    public function getStrDisplayName()
+    {
         return $this->getStrMessageprovider();
     }
 
@@ -72,23 +75,28 @@ class MessagingConfig extends Model implements ModelInterface  {
      *
      * @return string the name of the icon, not yet wrapped by getImageAdmin()
      */
-    public function getStrIcon() {
+    public function getStrIcon()
+    {
         return "icon_mail";
     }
 
     /**
      * In nearly all cases, the additional info is rendered left to the action-icons.
+     *
      * @return string
      */
-    public function getStrAdditionalInfo() {
+    public function getStrAdditionalInfo()
+    {
         return "";
     }
 
     /**
      * If not empty, the returned string is rendered below the common title.
+     *
      * @return string
      */
-    public function getStrLongDescription() {
+    public function getStrLongDescription()
+    {
         return "";
     }
 
@@ -102,13 +110,14 @@ class MessagingConfig extends Model implements ModelInterface  {
      * @return MessagingConfig
      * @static
      */
-    public static function getConfigForUserAndProvider($strUserid, MessageproviderInterface $objProvider) {
+    public static function getConfigForUserAndProvider($strUserid, MessageproviderInterface $objProvider)
+    {
         $objORM = new OrmObjectlist();
         $objORM->addWhereRestriction(new OrmObjectlistRestriction("AND config_user = ?", $strUserid));
         $objORM->addWhereRestriction(new OrmObjectlistRestriction("AND config_provider = ?", get_class($objProvider)));
         $objConfig = $objORM->getSingleObject(get_called_class());
 
-        if($objConfig === null) {
+        if ($objConfig === null) {
             $objConfig = new MessagingConfig();
             $objConfig->setStrUser($strUserid);
             $objConfig->setStrMessageprovider(get_class($objProvider));
@@ -121,8 +130,9 @@ class MessagingConfig extends Model implements ModelInterface  {
      *
      * @return null|MessageproviderInterface|MessageproviderExtendedInterface
      */
-    private function getObjProvider() {
-        if($this->getStrMessageprovider() != "") {
+    private function getObjProvider()
+    {
+        if ($this->getStrMessageprovider() != "") {
             $objRefl = new ReflectionClass($this->getStrMessageprovider());
             $objInstance = $objRefl->newInstance();
 
@@ -136,45 +146,52 @@ class MessagingConfig extends Model implements ModelInterface  {
     /**
      * @param string $strUser
      */
-    public function setStrUser($strUser) {
+    public function setStrUser($strUser)
+    {
         $this->strUser = $strUser;
     }
 
     /**
      * @return string
      */
-    public function getStrUser() {
+    public function getStrUser()
+    {
         return $this->strUser;
     }
 
     /**
      * @param string $strMessageprovider
      */
-    public function setStrMessageprovider($strMessageprovider) {
+    public function setStrMessageprovider($strMessageprovider)
+    {
         $this->strMessageprovider = $strMessageprovider;
     }
 
     /**
      * @return string
      */
-    public function getStrMessageprovider() {
+    public function getStrMessageprovider()
+    {
         return $this->strMessageprovider;
     }
 
     /**
      * @param boolean $bitEnabled
      */
-    public function setBitEnabled($bitEnabled) {
+    public function setBitEnabled($bitEnabled)
+    {
         $this->bitEnabled = $bitEnabled;
     }
 
     /**
      * @return boolean
      */
-    public function getBitEnabled() {
-        if($this->getObjProvider() instanceof MessageproviderExtendedInterface) {
-            if($this->getObjProvider()->isAlwaysActive())
+    public function getBitEnabled()
+    {
+        if ($this->getObjProvider() instanceof MessageproviderExtendedInterface) {
+            if ($this->getObjProvider()->isAlwaysActive()) {
                 return true;
+            }
         }
 
         return $this->bitEnabled;
@@ -183,17 +200,20 @@ class MessagingConfig extends Model implements ModelInterface  {
     /**
      * @param boolean $bitBymail
      */
-    public function setBitBymail($bitBymail) {
+    public function setBitBymail($bitBymail)
+    {
         $this->bitBymail = $bitBymail;
     }
 
     /**
      * @return boolean
      */
-    public function getBitBymail() {
-        if($this->getObjProvider() instanceof MessageproviderExtendedInterface) {
-            if($this->getObjProvider()->isAlwaysByMail())
+    public function getBitBymail()
+    {
+        if ($this->getObjProvider() instanceof MessageproviderExtendedInterface) {
+            if ($this->getObjProvider()->isAlwaysByMail()) {
                 return true;
+            }
         }
         return $this->bitBymail;
     }

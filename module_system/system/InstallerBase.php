@@ -9,6 +9,7 @@
 
 namespace Kajona\System\System;
 
+use class_module_packagemanager_metadata;
 use Kajona\Pages\System\PagesElement;
 
 /**
@@ -18,7 +19,7 @@ use Kajona\Pages\System\PagesElement;
  * @abstract
  * @package module_system
  */
-abstract class InstallerBase extends class_root implements interface_installer {
+abstract class InstallerBase extends Root implements InstallerInterface {
 
     /**
      * @var class_module_packagemanager_metadata
@@ -37,7 +38,7 @@ abstract class InstallerBase extends class_root implements interface_installer {
         if($intStrps !== false) {
             $strClassname = uniSubstr($strClassname, $intStrps+1);
         }
-        $strDir = class_resourceloader::getInstance()->getPathForFile("/installer/".$strClassname.".php");
+        $strDir = Resourceloader::getInstance()->getPathForFile("/installer/".$strClassname.".php");
         $strDir = dirname(_realpath_.$strDir);
         $this->objMetadata = new class_module_packagemanager_metadata();
         $this->objMetadata->autoInit(uniStrReplace(array("/installer", _realpath_), array("", ""), $strDir));
@@ -53,10 +54,10 @@ abstract class InstallerBase extends class_root implements interface_installer {
         $strReturn = "";
 
         $objModule = null;
-        $objModule = class_module_system_module::getModuleByName($this->objMetadata->getStrTitle());
+        $objModule = SystemModule::getModuleByName($this->objMetadata->getStrTitle());
 
         if($objModule === null) {
-            class_logger::getInstance(class_logger::PACKAGEMANAGEMENT)->addLogRow("triggering installation of ".$this->objMetadata->getStrTitle(), class_logger::$levelInfo);
+            Logger::getInstance(Logger::PACKAGEMANAGEMENT)->addLogRow("triggering installation of ".$this->objMetadata->getStrTitle(), Logger::$levelInfo);
             $strReturn .= $this->install();
         }
         else {
@@ -64,12 +65,12 @@ abstract class InstallerBase extends class_root implements interface_installer {
             $strVersionAvailable = $this->objMetadata->getStrVersion();
 
             if(version_compare($strVersionAvailable, $strVersionInstalled, ">")) {
-                class_logger::getInstance(class_logger::PACKAGEMANAGEMENT)->addLogRow("triggering update of ".$this->objMetadata->getStrTitle(), class_logger::$levelInfo);
+                Logger::getInstance(Logger::PACKAGEMANAGEMENT)->addLogRow("triggering update of ".$this->objMetadata->getStrTitle(), Logger::$levelInfo);
                 $strReturn .= $this->update();
             }
         }
 
-        class_carrier::getInstance()->flushCache(class_carrier::INT_CACHE_TYPE_DBTABLES);
+        Carrier::getInstance()->flushCache(Carrier::INT_CACHE_TYPE_DBTABLES);
         return $strReturn;
     }
 
@@ -95,7 +96,7 @@ abstract class InstallerBase extends class_root implements interface_installer {
 		//The previous id is the the id of the Root-Record -> 0
 		$strPrevId = "0";
 
-        $objModule = new class_module_system_module();
+        $objModule = new SystemModule();
         $objModule->setStrName($strName);
         $objModule->setIntNr($intModuleNr);
         $objModule->setStrNamePortal($strFilePortal);
@@ -109,10 +110,10 @@ abstract class InstallerBase extends class_root implements interface_installer {
         $objModule->setArrModuleEntry("moduleId", $intModuleNr);
         $objModule->updateObjectToDb($strPrevId);
 
-		class_logger::getInstance()->addLogRow("New module registered: ".$objModule->getSystemid(). "(".$strName.")", class_logger::$levelInfo);
+		Logger::getInstance()->addLogRow("New module registered: ".$objModule->getSystemid(). "(".$strName.")", Logger::$levelInfo);
 
 		//flush db-cache afterwards
-        class_carrier::getInstance()->flushCache(class_carrier::INT_CACHE_TYPE_DBQUERIES | class_carrier::INT_CACHE_TYPE_DBTABLES | class_carrier::INT_CACHE_TYPE_MODULES | class_carrier::INT_CACHE_TYPE_ORMCACHE | class_carrier::INT_CACHE_TYPE_OBJECTFACTORY);
+        Carrier::getInstance()->flushCache(Carrier::INT_CACHE_TYPE_DBQUERIES | Carrier::INT_CACHE_TYPE_DBTABLES | Carrier::INT_CACHE_TYPE_MODULES | Carrier::INT_CACHE_TYPE_ORMCACHE | Carrier::INT_CACHE_TYPE_OBJECTFACTORY);
 
 		return $objModule->getSystemid();
 	}
@@ -126,7 +127,7 @@ abstract class InstallerBase extends class_root implements interface_installer {
 	 */
 	protected function updateModuleVersion($strModuleName, $strVersion) {
         $this->objDB->flushQueryCache();
-        $objModule = class_module_system_module::getModuleByName($strModuleName);
+        $objModule = SystemModule::getModuleByName($strModuleName);
         $bitReturn = true;
         if($objModule !== null) {
             $objModule->setStrVersion($strVersion);
@@ -134,8 +135,8 @@ abstract class InstallerBase extends class_root implements interface_installer {
             $bitReturn = $objModule->updateObjectToDb();
         }
 
-	    class_logger::getInstance()->addLogRow("module ".$strModuleName." updated to ".$strVersion, class_logger::$levelInfo);
-        class_carrier::getInstance()->flushCache(class_carrier::INT_CACHE_TYPE_DBQUERIES | class_carrier::INT_CACHE_TYPE_MODULES);
+	    Logger::getInstance()->addLogRow("module ".$strModuleName." updated to ".$strVersion, Logger::$levelInfo);
+        Carrier::getInstance()->flushCache(Carrier::INT_CACHE_TYPE_DBQUERIES | Carrier::INT_CACHE_TYPE_MODULES);
         return $bitReturn;
 	}
 
@@ -146,14 +147,14 @@ abstract class InstallerBase extends class_root implements interface_installer {
      * @param string $strVersion
      */
     protected function updateElementVersion($strElementName, $strVersion) {
-        if(class_module_system_module::getModuleByName("pages", true) !== null && class_resourceloader::getInstance()->getCorePathForModule("module_pages") !== null) {
+        if(SystemModule::getModuleByName("pages", true) !== null && Resourceloader::getInstance()->getCorePathForModule("module_pages") !== null) {
             $this->objDB->flushQueryCache();
             $objElement = PagesElement::getElement($strElementName);
             if($objElement != null) {
                 $objElement->setStrVersion($strVersion);
                 $objElement->updateObjectToDb();
 
-                class_logger::getInstance()->addLogRow("element ".$strElementName." updated to ".$strVersion, class_logger::$levelInfo);
+                Logger::getInstance()->addLogRow("element ".$strElementName." updated to ".$strVersion, Logger::$levelInfo);
             }
             $this->objDB->flushQueryCache();
         }
@@ -196,7 +197,7 @@ abstract class InstallerBase extends class_root implements interface_installer {
 
         //delete the module-node
         $strReturn .= "Deleting the module-registration...\n";
-        $objModule = class_module_system_module::getModuleByName($this->objMetadata->getStrTitle(), true);
+        $objModule = SystemModule::getModuleByName($this->objMetadata->getStrTitle(), true);
         if(!$objModule->deleteObjectFromDatabase()) {
             $strReturn .= "Error deleting module, aborting.\n";
             return false;
@@ -220,8 +221,8 @@ abstract class InstallerBase extends class_root implements interface_installer {
 		if(!defined($strName))
 			define($strName, $strValue);
 
-	    if(!class_module_system_setting::checkConfigExisting($strName)) {
-    	    $objConstant = new class_module_system_setting();
+	    if(!SystemSetting::checkConfigExisting($strName)) {
+    	    $objConstant = new SystemSetting();
     	    $objConstant->setStrName($strName);
     	    $objConstant->setStrValue($strValue);
     	    $objConstant->setIntType($intType);

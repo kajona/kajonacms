@@ -15,7 +15,8 @@ namespace Kajona\System\System;
  *
  * @package module_system
  */
-class HttpStatuscodes {
+class HttpStatuscodes
+{
 
     /**
      * Status code (200) indicating all went ok

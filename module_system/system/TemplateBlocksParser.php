@@ -50,7 +50,7 @@ class TemplateBlocksParser
                     //delete substring before and after
                     $strTemplateSection = uniSubstr($strTemplate, $intStart, $intEnd);
 
-                    $strContent = uniSubstr($strTemplateSection, uniStrlen($arrMatches[0]), uniStrlen("</".$strBlockDefinition.">")*-1);
+                    $strContent = uniSubstr($strTemplateSection, uniStrlen($arrMatches[0]), uniStrlen("</".$strBlockDefinition.">") * -1);
                     $arrBlocks[$arrMatches[4]] = new TemplateBlockContainer($strBlockDefinition, $arrMatches[4], $arrMatches[0], $strContent, $strTemplateSection);
 
                     $strTemplate = uniStrReplace($strTemplateSection, "", $strTemplate);
@@ -73,11 +73,12 @@ class TemplateBlocksParser
      *
      * @return mixed
      */
-    public function fillBlocks($strTemplate, $arrBlocks, $strBlocksDefinition = TemplateKajonaSections::BLOCKS) {
+    public function fillBlocks($strTemplate, $arrBlocks, $strBlocksDefinition = TemplateKajonaSections::BLOCKS)
+    {
         $arrBlocksOnTemplate = $this->readBlocks($strTemplate, $strBlocksDefinition);
 
-        foreach($arrBlocks as $strBlockName => $strContent) {
-            if(isset($arrBlocksOnTemplate[$strBlockName])) {
+        foreach ($arrBlocks as $strBlockName => $strContent) {
+            if (isset($arrBlocksOnTemplate[$strBlockName])) {
                 $objCurBlock = $arrBlocksOnTemplate[$strBlockName];
                 $strTemplate = uniStrReplace($objCurBlock->getStrFullSection(), $strContent, $strTemplate);
             }

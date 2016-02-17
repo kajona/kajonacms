@@ -7,7 +7,6 @@
 namespace Kajona\System\System;
 
 
-
 /**
  * Tries to extract the static contents of a phar in order to make them accessible by the webserver
  *
@@ -26,14 +25,14 @@ class PharModuleExtractor
         $arrModules = Classloader::getInstance()->getArrModules();
 
         $objFilesystem = new Filesystem();
-        foreach($arrModules as $strPath => $strModule) {
+        foreach ($arrModules as $strPath => $strModule) {
 
             //to index?
-            if(!isset($arrIndexMap[$strModule])) {
+            if (!isset($arrIndexMap[$strModule])) {
                 continue;
             }
 
-            if(!PharModule::isPhar($strPath)) {
+            if (!PharModule::isPhar($strPath)) {
                 continue;
             }
 
@@ -43,10 +42,10 @@ class PharModuleExtractor
 
             $objPharModule = new PharModule($strPath);
 
-            foreach($objPharModule->getContentMap() as $strKey => $strFullPath) {
+            foreach ($objPharModule->getContentMap() as $strKey => $strFullPath) {
 
                 //check for matching suffix and move to temp dir
-                if(preg_match($this->strExtractPattern, $strKey)) {
+                if (preg_match($this->strExtractPattern, $strKey)) {
                     //extract the file and export it
                     $strTargetPath = _realpath_."/files/extract/".$strModule."/".$strKey;
                     $objFilesystem->folderCreate(dirname($strTargetPath), true, true);
@@ -57,7 +56,6 @@ class PharModuleExtractor
 
         }
 
-
     }
 
 
@@ -67,13 +65,13 @@ class PharModuleExtractor
         $arrOldMap = BootstrapCache::getInstance()->getCacheContent(BootstrapCache::CACHE_PHARSUMS);
         $arrModules = Classloader::getInstance()->getArrModules();
 
-        foreach($arrModules as $strPath => $strModule) {
+        foreach ($arrModules as $strPath => $strModule) {
             if (!PharModule::isPhar($strPath)) {
                 continue;
             }
 
             $strSum = filemtime(_realpath_.$strPath);
-            if(!isset($arrOldMap[$strModule]) || $arrOldMap[$strModule] != $strSum) {
+            if (!isset($arrOldMap[$strModule]) || $arrOldMap[$strModule] != $strSum) {
                 $arrPharMap[$strModule] = $strSum;
             }
 
@@ -87,7 +85,7 @@ class PharModuleExtractor
     {
         $objInstance = new PharModuleExtractor();
         $arrIndex = $objInstance->createPharMap();
-        if(!empty($arrIndex)) {
+        if (!empty($arrIndex)) {
             Classloader::getInstance()->flushCache();
             $objInstance->extractStaticContent($arrIndex);
         }

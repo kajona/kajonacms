@@ -33,7 +33,8 @@ use ReflectionClass;
  * @see OrmObjectlist_restriction
  * @see OrmObjectlist_orderby
  */
-class OrmObjectlist extends OrmBase {
+class OrmObjectlist extends OrmBase
+{
 
     /**
      * @var OrmObjectlistRestriction[]
@@ -57,7 +58,8 @@ class OrmObjectlist extends OrmBase {
      * @see OrmObjectlist_restriction
      * @see OrmObjectlist_orderby
      */
-    public function getObjectCount($strTargetClass, $strPrevid = "") {
+    public function getObjectCount($strTargetClass, $strPrevid = "")
+    {
 
         //build the query
         $strQuery = "SELECT COUNT(*)
@@ -65,8 +67,9 @@ class OrmObjectlist extends OrmBase {
                        ".($strPrevid != "" && $strPrevid !== null ? " AND system_prev_id = ? " : "")."";
 
         $arrParams = array();
-        if($strPrevid != "")
+        if ($strPrevid != "") {
             $arrParams[] = $strPrevid;
+        }
 
         $this->addLogicalDeleteRestriction();
         $this->processWhereRestrictions($strQuery, $arrParams, $strTargetClass);
@@ -93,15 +96,17 @@ class OrmObjectlist extends OrmBase {
      * @see OrmObjectlist_restriction
      * @see OrmObjectlist_orderby
      */
-    public function getObjectListIds($strTargetClass, $strPrevid = "", $intStart = null, $intEnd = null) {
+    public function getObjectListIds($strTargetClass, $strPrevid = "", $intStart = null, $intEnd = null)
+    {
 
         $strQuery = "SELECT *
                            ".$this->getQueryBase($strTargetClass)."
                        ".($strPrevid != "" && $strPrevid !== null ? " AND system_prev_id = ? " : "");
 
         $arrParams = array();
-        if($strPrevid != "")
+        if ($strPrevid != "") {
             $arrParams[] = $strPrevid;
+        }
 
         $this->addLogicalDeleteRestriction();
         $this->processWhereRestrictions($strQuery, $arrParams, $strTargetClass);
@@ -109,21 +114,20 @@ class OrmObjectlist extends OrmBase {
         $arrRows = Carrier::getInstance()->getObjDB()->getPArray($strQuery, $arrParams, $intStart, $intEnd);
 
         $arrReturn = array();
-        foreach($arrRows as $arrOneRow) {
+        foreach ($arrRows as $arrOneRow) {
             //Caching is only allowed if the fetched and required classes match. Otherwise there could be missing queried tables.
-            if($arrOneRow["system_class"] == $strTargetClass) {
+            if ($arrOneRow["system_class"] == $strTargetClass) {
                 OrmRowcache::addSingleInitRow($arrOneRow);
                 $arrReturn[] = $arrOneRow["system_id"];
             }
             else {
                 $objReflectionClass = new ReflectionClass($arrOneRow["system_class"]);
-                if($objReflectionClass->isSubclassOf($strTargetClass)) {
+                if ($objReflectionClass->isSubclassOf($strTargetClass)) {
                     //returns the instance, but enforces a fresh reload from the database.
                     //this is useful if extending classes need to query additional tables
                     $arrReturn[] = $arrOneRow["system_id"];
                 }
             }
-
 
         }
 
@@ -146,12 +150,13 @@ class OrmObjectlist extends OrmBase {
      * @see OrmObjectlist_restriction
      * @see OrmObjectlist_orderby
      */
-    public function getObjectList($strTargetClass, $strPrevid = "", $intStart = null, $intEnd = null) {
+    public function getObjectList($strTargetClass, $strPrevid = "", $intStart = null, $intEnd = null)
+    {
         $arrIds = $this->getObjectListIds($strTargetClass, $strPrevid, $intStart, $intEnd);
 
         $arrReturn = array();
 
-        foreach($arrIds as $strId) {
+        foreach ($arrIds as $strId) {
             $arrReturn[] = Objectfactory::getInstance()->getObject($strId);
         }
 
@@ -172,22 +177,24 @@ class OrmObjectlist extends OrmBase {
      * @see OrmObjectlist_restriction
      * @see OrmObjectlist_orderby
      */
-    public function getSingleObject($strTargetClass, $strPrevid = "") {
+    public function getSingleObject($strTargetClass, $strPrevid = "")
+    {
 
         $strQuery = "SELECT *
                            ".$this->getQueryBase($strTargetClass)."
                        ".($strPrevid != "" && $strPrevid !== null ? " AND system_prev_id = ? " : "");
 
         $arrParams = array();
-        if($strPrevid != "")
+        if ($strPrevid != "") {
             $arrParams[] = $strPrevid;
+        }
 
         $this->addLogicalDeleteRestriction();
         $this->processWhereRestrictions($strQuery, $arrParams, $strTargetClass);
         $strQuery .= $this->getOrderBy(new Reflection($strTargetClass));
         $arrRow = Carrier::getInstance()->getObjDB()->getPRow($strQuery, $arrParams);
 
-        if(isset($arrRow["system_id"])) {
+        if (isset($arrRow["system_id"])) {
             OrmRowcache::addSingleInitRow($arrRow);
             return Objectfactory::getInstance()->getObject($arrRow["system_id"]);
         }
@@ -202,32 +209,36 @@ class OrmObjectlist extends OrmBase {
      *
      * @return string
      */
-    private function getOrderBy(Reflection $objReflection) {
+    private function getOrderBy(Reflection $objReflection)
+    {
         //try to load the sort criteria
         $arrPropertiesOrder = $objReflection->getPropertiesWithAnnotation(OrmBase::STR_ANNOTATION_LISTORDER);
 
         $arrOrderByCriteria = array();
-        foreach($this->arrOrderBy as $objOneOrder)
+        foreach ($this->arrOrderBy as $objOneOrder) {
             $arrOrderByCriteria[] = $objOneOrder->getStrOrderBy();
+        }
 
 
-        if(count($arrPropertiesOrder) > 0) {
+        if (count($arrPropertiesOrder) > 0) {
             $arrPropertiesORM = $objReflection->getPropertiesWithAnnotation(OrmBase::STR_ANNOTATION_TABLECOLUMN);
 
-            foreach($arrPropertiesOrder as $strProperty => $strAnnotation) {
-                if(isset($arrPropertiesORM[$strProperty])) {
+            foreach ($arrPropertiesOrder as $strProperty => $strAnnotation) {
+                if (isset($arrPropertiesORM[$strProperty])) {
 
                     $arrColumn = explode(".", $arrPropertiesORM[$strProperty]);
-                    if(count($arrColumn) == 2)
+                    if (count($arrColumn) == 2) {
                         $strColumn = $arrColumn[1];
-                    else
+                    }
+                    else {
                         $strColumn = $arrColumn[0];
+                    }
 
                     //get order
                     $strOrder = (uniStrtoupper($strAnnotation) == "DESC" ? "DESC" : "ASC");
 
                     //get column
-                    if($strColumn != "") {
+                    if ($strColumn != "") {
                         $arrOrderByCriteria[] = " ".$strColumn." ".$strOrder." ";
                     }
                 }
@@ -237,18 +248,20 @@ class OrmObjectlist extends OrmBase {
         $arrOrderByCriteria[] = " CASE WHEN system_sort < 0 THEN 9999999 ELSE system_sort END ASC "; //TODO: add a better way of setting the max value
         $arrOrderByCriteria[] = " system_create_date DESC ";
         $strOrderBy = "";
-        if(count($arrOrderByCriteria) > 0)
+        if (count($arrOrderByCriteria) > 0) {
             $strOrderBy = "ORDER BY ".implode(" , ", $arrOrderByCriteria)." ";
+        }
 
         return $strOrderBy;
     }
 
 
+    protected function addLogicalDeleteRestriction()
+    {
 
-    protected function addLogicalDeleteRestriction() {
-
-        if(!self::$bitLogcialDeleteAvailable)
+        if (!self::$bitLogcialDeleteAvailable) {
             return;
+        }
 
         $this->addWhereRestriction(new OrmObjectlistRestriction($this->getDeletedWhereRestriction(), array()));
     }
@@ -259,13 +272,15 @@ class OrmObjectlist extends OrmBase {
      *
      * @param string &$strQuery
      * @param array &$arrParams
+     *
      * @return void
      */
-    private function processWhereRestrictions(&$strQuery, &$arrParams, $strTargetClass) {
-        foreach($this->arrWhereRestrictions as $objOneRestriction) {
+    private function processWhereRestrictions(&$strQuery, &$arrParams, $strTargetClass)
+    {
+        foreach ($this->arrWhereRestrictions as $objOneRestriction) {
             $objOneRestriction->setStrTargetClass($strTargetClass);
             $strQuery .= " ".$objOneRestriction->getStrWhere()." ";
-            foreach($objOneRestriction->getArrParams() as $strOneParam) {
+            foreach ($objOneRestriction->getArrParams() as $strOneParam) {
                 $arrParams[] = $strOneParam;
             }
         }
@@ -276,9 +291,11 @@ class OrmObjectlist extends OrmBase {
      * Add a where restriction to the current queries
      *
      * @param OrmObjectlistRestriction $objRestriction
+     *
      * @return void
      */
-    public function addWhereRestriction(OrmObjectlistRestriction $objRestriction) {
+    public function addWhereRestriction(OrmObjectlistRestriction $objRestriction)
+    {
         $this->arrWhereRestrictions[] = $objRestriction;
     }
 
@@ -289,7 +306,8 @@ class OrmObjectlist extends OrmBase {
      *
      * @return void
      */
-    public function addOrderBy(OrmObjectlistOrderby $objOrder) {
+    public function addOrderBy(OrmObjectlistOrderby $objOrder)
+    {
         $this->arrOrderBy[] = $objOrder;
     }
 

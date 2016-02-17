@@ -18,9 +18,8 @@ namespace Kajona\System\System;
  *
  * @package module_system
  */
-interface XmlInterface {
-
-
+interface XmlInterface
+{
 
 
 }

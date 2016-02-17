@@ -10,7 +10,6 @@
 namespace Kajona\System\System;
 
 
-
 /**
  * Class providing a wrapper to remote objects. Provides methods to load text-files (e.g. xml-files)
  * from a remote server. Tries to establish a connection via file_get_contents or via sockets.
@@ -18,7 +17,8 @@ namespace Kajona\System\System;
  * @package module_system
  * @author sidler@mulchprod.de
  */
-class Remoteloader {
+class Remoteloader
+{
 
     /**
      * @var bool
@@ -62,7 +62,8 @@ class Remoteloader {
      */
     private $intMaxCachetime = 3600;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->intMaxCachetime = SystemSetting::getConfigValue("_remoteloader_max_cachetime_");
     }
 
@@ -76,46 +77,47 @@ class Remoteloader {
      * @return string
      * @throws Exception
      */
-    public function getRemoteContent($bitForceReload = false) {
+    public function getRemoteContent($bitForceReload = false)
+    {
 
         $strReturn = false;
 
         //check all needed params
-        if((int)$this->intPort < 0 || $this->strHost == "" || $this->strProtocolHeader == "") {
+        if ((int)$this->intPort < 0 || $this->strHost == "" || $this->strProtocolHeader == "") {
             throw new Exception("Not all needed values given", Exception::$level_ERROR);
         }
 
         //first try: load it via the cache
-        if($bitForceReload === false) {
+        if ($bitForceReload === false) {
             $strReturn = $this->loadByCache();
 
             //if the cache was succesfull, return
-            if($strReturn !== false) {
+            if ($strReturn !== false) {
                 Logger::getInstance(Logger::REMOTELOADER)->addLogRow("remote request found in cache", Logger::$levelInfo);
                 return $strReturn;
             }
         }
 
         //second try: file_get_content
-        if($strReturn === false) {
+        if ($strReturn === false) {
             $strReturn = $this->connectByFileGetContents();
             Logger::getInstance(Logger::REMOTELOADER)->addLogRow("loaded via filegetcontents: ".$strReturn, Logger::$levelInfo);
         }
 
         //third try: curl
-        if($strReturn === false) {
+        if ($strReturn === false) {
             $strReturn = $this->connectViaCurl();
             Logger::getInstance(Logger::REMOTELOADER)->addLogRow("loaded via curl: ".$strReturn, Logger::$levelInfo);
         }
 
         //fourth try: fsockopen
-        if($strReturn === false) {
+        if ($strReturn === false) {
             $strReturn = $this->connectFSockOpen();
             Logger::getInstance(Logger::REMOTELOADER)->addLogRow("loaded via fsockopen: ".$strReturn, Logger::$levelInfo);
         }
 
         //fifth try: sockets
-        if($strReturn === false) {
+        if ($strReturn === false) {
             $strReturn = $this->connectViaSocket();
             Logger::getInstance(Logger::REMOTELOADER)->addLogRow("loaded via socket: ".$strReturn, Logger::$levelInfo);
         }
@@ -124,25 +126,25 @@ class Remoteloader {
         //in case of an error, save the result to the cache, too:
         //the possibility of receiving a regular response within the next interval is rather small.
         //BUT: reduce the max cachetime to a third of its' original value.
-        if($strReturn === false) {
+        if ($strReturn === false) {
             $this->intMaxCachetime = (int)($this->intMaxCachetime / 3);
         }
 
         //and save to the cache
-        if($strReturn !== false) {
+        if ($strReturn !== false) {
             $this->saveResponseToCache($strReturn);
         }
 
         //throw a general error?
-        if($strReturn === false) {
+        if ($strReturn === false) {
             Logger::getInstance(Logger::REMOTELOADER)->addLogRow(
-                "remoteloader failed. protocol: " . $this->strProtocolHeader . " host: " . $this->strHost . " port: " . $this->intPort . " params: " . $this->strQueryParams, Logger::$levelWarning
+                "remoteloader failed. protocol: ".$this->strProtocolHeader." host: ".$this->strHost." port: ".$this->intPort." params: ".$this->strQueryParams, Logger::$levelWarning
             );
             throw new Exception("Error loading the remote content", Exception::$level_ERROR);
         }
 
         Logger::getInstance(Logger::REMOTELOADER)->addLogRow(
-            "new remote-request succeeded. protocol: " . $this->strProtocolHeader . " host: " . $this->strHost . " port: " . $this->intPort . " params: " . $this->strQueryParams, Logger::$levelInfo
+            "new remote-request succeeded. protocol: ".$this->strProtocolHeader." host: ".$this->strHost." port: ".$this->intPort." params: ".$this->strQueryParams, Logger::$levelInfo
         );
 
         return $strReturn;
@@ -153,8 +155,9 @@ class Remoteloader {
      *
      * @return string
      */
-    private function buildCacheChecksum() {
-        return md5($this->strProtocolHeader . $this->strHost . $this->intPort . $this->strQueryParams);
+    private function buildCacheChecksum()
+    {
+        return md5($this->strProtocolHeader.$this->strHost.$this->intPort.$this->strQueryParams);
     }
 
     /**
@@ -162,9 +165,10 @@ class Remoteloader {
      *
      * @return string or false in case of no matching entry
      */
-    private function loadByCache() {
+    private function loadByCache()
+    {
 
-        if(!$this->bitCacheEnabled) {
+        if (!$this->bitCacheEnabled) {
             return false;
         }
 
@@ -172,7 +176,7 @@ class Remoteloader {
 
         //try to find an entry in the cache
         $objCachedEntry = Cache::getCachedEntry(__CLASS__, $this->buildCacheChecksum());
-        if($objCachedEntry != null) {
+        if ($objCachedEntry != null) {
             $strReturn = $objCachedEntry->getStrContent();
         }
 
@@ -185,20 +189,21 @@ class Remoteloader {
      *
      * @return string or false in case of an error
      */
-    private function connectByFileGetContents() {
+    private function connectByFileGetContents()
+    {
 
-        if(Carrier::getInstance()->getObjConfig()->getPhpIni("allow_url_fopen") != 1) {
+        if (Carrier::getInstance()->getObjConfig()->getPhpIni("allow_url_fopen") != 1) {
             return false;
         }
 
         $objCtx = stream_context_create(
             array(
-                'http' => array(
-                    'timeout' => 1,
+                'http'  => array(
+                    'timeout'       => 1,
                     'max_redirects' => 5
                 ),
                 'https' => array(
-                    'timeout' => 1,
+                    'timeout'       => 1,
                     'max_redirects' => 5
                 )
             )
@@ -206,8 +211,8 @@ class Remoteloader {
 
         $strReturn = @file_get_contents(
             $this->strProtocolHeader.
-            $this->strHost .
-            ($this->intPort > 0 ? ":" . $this->intPort : "") .
+            $this->strHost.
+            ($this->intPort > 0 ? ":".$this->intPort : "").
             $this->strQueryParams,
             false, $objCtx
         );
@@ -221,36 +226,37 @@ class Remoteloader {
      *
      * @return string or false in case of an error
      */
-    private function connectViaSocket() {
+    private function connectViaSocket()
+    {
 
         //request in list of supported protocols?
-        if($this->strProtocolHeader == "http://" || $this->strProtocolHeader == "https://") {
+        if ($this->strProtocolHeader == "http://" || $this->strProtocolHeader == "https://") {
 
             try {
                 $objSocket = new Socket($this->strHost, ($this->intPort > 0 ? $this->intPort : 80));
                 $objSocket->connect();
-                $objSocket->write("GET " . $this->strQueryParams . " HTTP/1.1");
-                $objSocket->write("HOST: " . $this->strHost);
+                $objSocket->write("GET ".$this->strQueryParams." HTTP/1.1");
+                $objSocket->write("HOST: ".$this->strHost);
                 $objSocket->writeLimiter();
                 $strReturn = $objSocket->read();
                 $objSocket->close();
 
                 $strReturn = trim($strReturn);
-                if(uniStrpos($strReturn, "\r\n\r\n") !== false) {
+                if (uniStrpos($strReturn, "\r\n\r\n") !== false) {
                     $strReturn = trim(uniSubstr($strReturn, uniStrpos($strReturn, "\r\n\r\n")));
                 }
 
-                if(uniStrpos($strReturn, "<") !== false) {
+                if (uniStrpos($strReturn, "<") !== false) {
                     $strReturn = trim(uniSubstr($strReturn, uniStrpos($strReturn, "<")));
                 }
 
                 //and, if given, remove the last 0
-                if(uniSubstr($strReturn, -1) == "0") {
+                if (uniSubstr($strReturn, -1) == "0") {
                     $strReturn = uniSubstr($strReturn, 0, -1);
                 }
 
             }
-            catch(Exception $objException) {
+            catch (Exception $objException) {
                 Logger::getInstance(Logger::REMOTELOADER)->addLogRow("exception in socket: ".$objException->getMessage(), Logger::$levelInfo);
                 //$objException->processException();
                 $strReturn = false;
@@ -271,42 +277,43 @@ class Remoteloader {
      *
      * @return string or false in case of an error
      */
-    private function connectFSockOpen() {
+    private function connectFSockOpen()
+    {
         $strReturn = "";
 
         //request in list of supported protocols?
-        if($this->strProtocolHeader == "http://" || $this->strProtocolHeader == "https://") {
+        if ($this->strProtocolHeader == "http://" || $this->strProtocolHeader == "https://") {
 
             try {
                 $intErrorNumber = "";
                 $strErrorString = "";
 
                 $strProtocolAdd = "";
-                if($this->strProtocolHeader == "http://") {
+                if ($this->strProtocolHeader == "http://") {
                     $strProtocolAdd = "tcp://";
                 }
-                if($this->strProtocolHeader == "https://") {
+                if ($this->strProtocolHeader == "https://") {
                     $strProtocolAdd = "tls://";
                 }
 
 
-                $arrUrl = parse_url($this->strProtocolHeader . $this->strHost);
-                $objRemoteResource = @fsockopen($strProtocolAdd . $arrUrl['host'], ($this->intPort > 0 ? $this->intPort : 80), $intErrorNumber, $strErrorString, 3);
+                $arrUrl = parse_url($this->strProtocolHeader.$this->strHost);
+                $objRemoteResource = @fsockopen($strProtocolAdd.$arrUrl['host'], ($this->intPort > 0 ? $this->intPort : 80), $intErrorNumber, $strErrorString, 3);
 
-                if(!isset($arrUrl['path'])) {
+                if (!isset($arrUrl['path'])) {
                     $arrUrl['path'] = "";
                 }
 
-                if(is_resource($objRemoteResource)) {
-                    fwrite($objRemoteResource, "GET " . $arrUrl['path'] . $this->strQueryParams . " HTTP/1.0\r\n");
-                    fwrite($objRemoteResource, "Host: " . $arrUrl['host'] . "\r\n");
+                if (is_resource($objRemoteResource)) {
+                    fwrite($objRemoteResource, "GET ".$arrUrl['path'].$this->strQueryParams." HTTP/1.0\r\n");
+                    fwrite($objRemoteResource, "Host: ".$arrUrl['host']."\r\n");
                     fwrite($objRemoteResource, "Connection: close\r\n\r\n");
 
                     $bitStripped = false;
-                    while(!feof($objRemoteResource)) {
+                    while (!feof($objRemoteResource)) {
                         $strTemp = fgets($objRemoteResource, 1024);
                         $strReturn .= $strTemp;
-                        if($strTemp == "\r\n" && !$bitStripped) {
+                        if ($strTemp == "\r\n" && !$bitStripped) {
                             $strReturn = "";
                             $bitStripped = true;
                         }
@@ -314,17 +321,17 @@ class Remoteloader {
                     fclose($objRemoteResource);
                 }
 
-                if($intErrorNumber != 0) {
+                if ($intErrorNumber != 0) {
                     return false;
                 }
 
                 //and, if given, remove the last 0
-                if(uniSubstr($strReturn, -1) == "0") {
+                if (uniSubstr($strReturn, -1) == "0") {
                     $strReturn = uniSubstr($strReturn, 0, -1);
                 }
 
             }
-            catch(Exception $objException) {
+            catch (Exception $objException) {
                 Logger::getInstance(Logger::REMOTELOADER)->addLogRow("exception in fsock: ".$objException->getMessage(), Logger::$levelInfo);
                 $strReturn = false;
             }
@@ -336,7 +343,7 @@ class Remoteloader {
         }
 
         //no valid response found
-        if(strlen($strReturn) == 0) {
+        if (strlen($strReturn) == 0) {
             $strReturn = false;
         }
 
@@ -350,9 +357,10 @@ class Remoteloader {
      *
      * @return string or false in case of an error
      */
-    private function connectViaCurl() {
+    private function connectViaCurl()
+    {
 
-        if(!function_exists("curl_exec")) {
+        if (!function_exists("curl_exec")) {
             return false;
         }
 
@@ -363,7 +371,7 @@ class Remoteloader {
         curl_setopt(
             $objHandle,
             CURLOPT_URL,
-            $this->strProtocolHeader.$this->strHost.($this->intPort > 0 ? ":" . $this->intPort : "").$this->strQueryParams
+            $this->strProtocolHeader.$this->strHost.($this->intPort > 0 ? ":".$this->intPort : "").$this->strQueryParams
         );
         //response-header not needed
         curl_setopt($objHandle, CURLOPT_HEADER, false);
@@ -390,8 +398,9 @@ class Remoteloader {
      *
      * @return bool
      */
-    private function saveResponseToCache($strResponse) {
-        if(!$this->bitCacheEnabled) {
+    private function saveResponseToCache($strResponse)
+    {
+        if (!$this->bitCacheEnabled) {
             return true;
         }
 
@@ -409,7 +418,8 @@ class Remoteloader {
      *
      * @return bool
      */
-    public function flushCache() {
+    public function flushCache()
+    {
         return Cache::flushCache(__CLASS__);
     }
 
@@ -418,7 +428,8 @@ class Remoteloader {
      *
      * @param string $strHeader
      */
-    public function setStrProtocolHeader($strHeader) {
+    public function setStrProtocolHeader($strHeader)
+    {
         $this->strProtocolHeader = $strHeader;
     }
 
@@ -427,7 +438,8 @@ class Remoteloader {
      *
      * @param int $intPort
      */
-    public function setIntPort($intPort) {
+    public function setIntPort($intPort)
+    {
         $this->intPort = (int)$intPort;
     }
 
@@ -436,7 +448,8 @@ class Remoteloader {
      *
      * @param string $strHost
      */
-    public function setStrHost($strHost) {
+    public function setStrHost($strHost)
+    {
         $this->strHost = $strHost;
     }
 
@@ -445,21 +458,24 @@ class Remoteloader {
      *
      * @param string $strQueryParams
      */
-    public function setStrQueryParams($strQueryParams) {
+    public function setStrQueryParams($strQueryParams)
+    {
         $this->strQueryParams = $strQueryParams;
     }
 
     /**
      * @param boolean $bitCacheEnabled
      */
-    public function setBitCacheEnabled($bitCacheEnabled) {
+    public function setBitCacheEnabled($bitCacheEnabled)
+    {
         $this->bitCacheEnabled = $bitCacheEnabled;
     }
 
     /**
      * @return boolean
      */
-    public function getBitCacheEnabled() {
+    public function getBitCacheEnabled()
+    {
         return $this->bitCacheEnabled;
     }
 

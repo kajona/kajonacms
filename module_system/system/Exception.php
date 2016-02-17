@@ -286,7 +286,7 @@ class class_authentication_exception extends AuthenticationException
 }
 
 /**
- * @deprecated 
+ * @deprecated
  */
 class class_io_exception extends IoException
 {

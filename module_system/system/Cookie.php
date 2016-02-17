@@ -15,8 +15,8 @@ namespace Kajona\System\System;
  * @package module_system
  * @author sidler@mulchprod.de
  */
-class Cookie {
-
+class Cookie
+{
 
 
     /**
@@ -28,15 +28,17 @@ class Cookie {
      *
      * @return bool
      */
-    public function setCookie($strName, $strValue, $intTime = 0) {
+    public function setCookie($strName, $strValue, $intTime = 0)
+    {
         //cookie is 30 days valid
-        if($intTime == 0) {
+        if ($intTime == 0) {
             $intTime = time() + 60 * 60 * 24 * 30;
         }
 
         $strPath = preg_replace('#http(s?)://'.getServer("HTTP_HOST").'#i', '', _webpath_);
-        if($strPath == "" || $strPath[0] != "/")
+        if ($strPath == "" || $strPath[0] != "/") {
             $strPath = "/".$strPath;
+        }
 
         return setcookie($strName, $strValue, $intTime, $strPath);
     }
@@ -48,7 +50,8 @@ class Cookie {
      *
      * @return mixed
      */
-    public function getCookie($strName) {
+    public function getCookie($strName)
+    {
         return getCookie($strName);
     }
 

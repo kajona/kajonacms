@@ -17,7 +17,8 @@ namespace Kajona\System\System;
  * @author sidler@mulchprod.de
  * @since 4.6
  */
-class OrmObjectlistRestriction {
+class OrmObjectlistRestriction
+{
 
     private $strWhere = "";
     private $arrParams = array();
@@ -28,10 +29,12 @@ class OrmObjectlistRestriction {
      * @param string $strWhere
      * @param string|string[] $arrParams either a single value or an array of params
      */
-    function __construct($strWhere, $arrParams = array()) {
+    function __construct($strWhere, $arrParams = array())
+    {
 
-        if(!is_array($arrParams))
+        if (!is_array($arrParams)) {
             $arrParams = array($arrParams);
+        }
 
         $this->arrParams = $arrParams;
         $this->strWhere = " ".$strWhere." ";
@@ -39,48 +42,55 @@ class OrmObjectlistRestriction {
 
     /**
      * @param array $arrParams
+     *
      * @return void
      */
-    public function setArrParams($arrParams) {
+    public function setArrParams($arrParams)
+    {
         $this->arrParams = $arrParams;
     }
 
     /**
      * @return array
      */
-    public function getArrParams() {
+    public function getArrParams()
+    {
         return $this->arrParams;
     }
 
     /**
      * @param string $strWhere
+     *
      * @return void
      */
-    public function setStrWhere($strWhere) {
+    public function setStrWhere($strWhere)
+    {
         $this->strWhere = $strWhere;
     }
 
     /**
      * @return string
      */
-    public function getStrWhere() {
+    public function getStrWhere()
+    {
         return $this->strWhere;
     }
 
     /**
      * @return string
      */
-    public function getStrTargetClass() {
+    public function getStrTargetClass()
+    {
         return $this->strTargetClass;
     }
 
     /**
      * @param string $strTargetClass
      */
-    public function setStrTargetClass($strTargetClass) {
+    public function setStrTargetClass($strTargetClass)
+    {
         $this->strTargetClass = $strTargetClass;
     }
-
 
 
 }

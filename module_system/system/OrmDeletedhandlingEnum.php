@@ -21,7 +21,8 @@ namespace Kajona\System\System;
  * @author sidler@mulchprod.de
  * @since 4.8
  */
-class OrmDeletedhandlingEnum extends EnumBase {
+class OrmDeletedhandlingEnum extends EnumBase
+{
 
     const INCLUDED = 1;
     const EXCLUDED = 2;
@@ -32,7 +33,8 @@ class OrmDeletedhandlingEnum extends EnumBase {
      *
      * @return string[]
      */
-    protected function getArrValues() {
+    protected function getArrValues()
+    {
         return array("INCLUDED", "EXCLUDED", "EXCLUSIVE");
     }
 

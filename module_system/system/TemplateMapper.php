@@ -20,7 +20,8 @@ use Kajona\System\Portal\TemplatemapperInterface;
  * @author sidler@mulchprod.de
  * @since 4.5
  */
-class TemplateMapper {
+class TemplateMapper
+{
 
     const STR_ANNOTATION_TEMPLATEEXPORT = "@templateExport";
     const STR_ANNOTATION_TEMPLATEMAPPER = "@templateMapper";
@@ -34,11 +35,13 @@ class TemplateMapper {
     /**
      * @param null $objObject
      */
-    function __construct($objObject = null) {
+    function __construct($objObject = null)
+    {
         $this->objObject = $objObject;
 
-        if($objObject !== null)
+        if ($objObject !== null) {
             $this->readPropertiesFromObject();
+        }
     }
 
     /**
@@ -46,17 +49,19 @@ class TemplateMapper {
      *
      * @return void
      */
-    private function readPropertiesFromObject() {
+    private function readPropertiesFromObject()
+    {
         $objReflection = new Reflection($this->objObject);
         $arrProperties = $objReflection->getPropertiesWithAnnotation(self::STR_ANNOTATION_TEMPLATEEXPORT);
 
-        foreach(array_keys($arrProperties) as $strOneProperty) {
+        foreach (array_keys($arrProperties) as $strOneProperty) {
             $strGetter = $objReflection->getGetter($strOneProperty);
 
             //get the templatemapper
             $strMapper = $objReflection->getAnnotationValueForProperty($strOneProperty, self::STR_ANNOTATION_TEMPLATEMAPPER);
-            if($strMapper == null)
+            if ($strMapper == null) {
                 $strMapper = "default";
+            }
 
             $this->addPlaceholder($strOneProperty, $this->objObject->{$strGetter}(), $strMapper);
         }
@@ -73,7 +78,8 @@ class TemplateMapper {
      *
      * @return string
      */
-    public function writeToTemplate($strTemplate, $strSection, $bitRemovePlaceholder = true) {
+    public function writeToTemplate($strTemplate, $strSection, $bitRemovePlaceholder = true)
+    {
         $objTemplate = Carrier::getInstance()->getObjTemplate();
         $strIdentifier = $objTemplate->readTemplate($strTemplate, $strSection);
 
@@ -89,12 +95,13 @@ class TemplateMapper {
      *
      * @return void
      */
-    public function addPlaceholder($strName, $strValue, $strTemplateMapper = "default") {
+    public function addPlaceholder($strName, $strValue, $strTemplateMapper = "default")
+    {
         try {
             $objMapper = $this->getMapperInstance($strTemplateMapper);
             $strValue = $objMapper->format($strValue);
         }
-        catch(Exception $objException) {
+        catch (Exception $objException) {
             $strValue = $objException->getMessage();
         }
         $this->arrMapping[$strName] = $strValue;
@@ -105,35 +112,39 @@ class TemplateMapper {
      * Loads the validator identified by the passed name.
      *
      * @param string $strName
+     *
      * @return TemplatemapperInterface
      * @throws Exception
      */
-    private function getMapperInstance($strName) {
+    private function getMapperInstance($strName)
+    {
         $strClassname = "class_".$strName."_templatemapper";
-        if(Resourceloader::getInstance()->getPathForFile("/portal/templatemapper/".$strClassname.".php")) {
+        if (Resourceloader::getInstance()->getPathForFile("/portal/templatemapper/".$strClassname.".php")) {
             return new $strClassname();
         }
-        else
+        else {
             throw new Exception("failed to load validator of type ".$strClassname, Exception::$level_ERROR);
+        }
     }
 
 
     /**
      * @param array $arrMapping
+     *
      * @return void
      */
-    public function setArrMapping($arrMapping) {
+    public function setArrMapping($arrMapping)
+    {
         $this->arrMapping = $arrMapping;
     }
 
     /**
      * @return array
      */
-    public function getArrMapping() {
+    public function getArrMapping()
+    {
         return $this->arrMapping;
     }
-
-
 
 
 }

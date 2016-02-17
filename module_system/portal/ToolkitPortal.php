@@ -7,6 +7,13 @@
 
 namespace Kajona\System\Portal;
 
+use Kajona\System\Admin\Systemtasks\AdminSystemtaskInterface;
+use Kajona\System\System\AdminskinHelper;
+use Kajona\System\System\ArrayIterator;
+use Kajona\System\System\ArraySectionIterator;
+use Kajona\System\System\Carrier;
+use Kajona\System\System\Link;
+use Kajona\System\System\Toolkit;
 
 
 /**
@@ -16,7 +23,7 @@ namespace Kajona\System\Portal;
  * @package module_system
  * @author sidler@mulchprod.de
  */
-class ToolkitPortal extends class_toolkit {
+class ToolkitPortal extends Toolkit {
 
 
     public function __construct() {
@@ -59,7 +66,7 @@ class ToolkitPortal extends class_toolkit {
         );
 
         //create array-iterator
-        $objIterator = new class_array_iterator($arrData);
+        $objIterator = new ArrayIterator($arrData);
         $objIterator->setIntElementsPerPage($intNumber);
 
         //Anything to create?
@@ -75,10 +82,10 @@ class ToolkitPortal extends class_toolkit {
 
             //FowardLink
             if($intPage < $objIterator->getNrOfPages())
-                $strLinkForward = class_link::getLinkPortal($strPage, "", null, $strForward, $strAction, "&".$strPvParam."=".($intPage + 1).$strAdd);
+                $strLinkForward = Link::getLinkPortal($strPage, "", null, $strForward, $strAction, "&".$strPvParam."=".($intPage + 1).$strAdd);
             //BackLink
             if($intPage > 1)
-                $strLinkBack = class_link::getLinkPortal($strPage, "", null, $strBack, $strAction, "&".$strPvParam."=".($intPage - 1).$strAdd);
+                $strLinkBack = Link::getLinkPortal($strPage, "", null, $strBack, $strAction, "&".$strPvParam."=".($intPage - 1).$strAdd);
 
             //just load the current +-6 pages and the first/last +-3
             $intCounter2 = 1;
@@ -97,9 +104,9 @@ class ToolkitPortal extends class_toolkit {
 
                 if($bitDisplay) {
                     if($intI == $intPage)
-                        $strLinkPages .= "  <strong>".class_link::getLinkPortal($strPage, "", null, "[".$intI."]", $strAction, "&".$strPvParam."=".$intI.$strAdd)."</strong>";
+                        $strLinkPages .= "  <strong>".Link::getLinkPortal($strPage, "", null, "[".$intI."]", $strAction, "&".$strPvParam."=".$intI.$strAdd)."</strong>";
                     else
-                        $strLinkPages .= "  ".class_link::getLinkPortal($strPage, "", null, "[".$intI."]", $strAction, "&".$strPvParam."=".$intI.$strAdd);
+                        $strLinkPages .= "  ".Link::getLinkPortal($strPage, "", null, "[".$intI."]", $strAction, "&".$strPvParam."=".$intI.$strAdd);
                 }
                 $intCounter2++;
             }
@@ -117,7 +124,7 @@ class ToolkitPortal extends class_toolkit {
     /**
      * Creates a forward / backward pager out of the passed array
      *
-     * @param class_array_section_iterator $objArraySectionIterator
+     * @param ArraySectionIterator $objArraySectionIterator
      * @param string $strForward text for the forwardlink
      * @param string $strBack text for the backwardslink
      * @param string $strAction action on the targetpage
@@ -171,17 +178,17 @@ class ToolkitPortal extends class_toolkit {
         //FowardLink
         if($intPage < $objArraySectionIterator->getNrOfPages()) {
             if($bitTemplate)
-                $strLinkForward = $this->objTemplate->fillTemplate(array("pageHref" => class_link::getLinkPortalHref($strPage, "", $strAction, "&".$strPvParam."=".($intPage + 1).$strAdd)), $strFwdId);
+                $strLinkForward = $this->objTemplate->fillTemplate(array("pageHref" => Link::getLinkPortalHref($strPage, "", $strAction, "&".$strPvParam."=".($intPage + 1).$strAdd)), $strFwdId);
             else
-                $strLinkForward = class_link::getLinkPortal($strPage, "", null, $strForward, $strAction, "&".$strPvParam."=".($intPage + 1).$strAdd);
+                $strLinkForward = Link::getLinkPortal($strPage, "", null, $strForward, $strAction, "&".$strPvParam."=".($intPage + 1).$strAdd);
 
         }
         //BackLink
         if($intPage > 1) {
             if($bitTemplate)
-                $strLinkBack = $this->objTemplate->fillTemplate(array("pageHref" => class_link::getLinkPortalHref($strPage, "", $strAction, "&".$strPvParam."=".($intPage - 1).$strAdd)), $strBackId);
+                $strLinkBack = $this->objTemplate->fillTemplate(array("pageHref" => Link::getLinkPortalHref($strPage, "", $strAction, "&".$strPvParam."=".($intPage - 1).$strAdd)), $strBackId);
             else
-                $strLinkBack = class_link::getLinkPortal($strPage, "", null, $strBack, $strAction, "&".$strPvParam."=".($intPage - 1).$strAdd);
+                $strLinkBack = Link::getLinkPortal($strPage, "", null, $strBack, $strAction, "&".$strPvParam."=".($intPage - 1).$strAdd);
 
         }
 
@@ -205,15 +212,15 @@ class ToolkitPortal extends class_toolkit {
 
                 if($bitTemplate) {
                     if($intI == $intPage)
-                        $strLinkPages .= $this->objTemplate->fillTemplate(array("pageHref" => class_link::getLinkPortalHref($strPage, "", $strAction, "&".$strPvParam."=".$intI.$strAdd), "pageNumber" => $intI), $strEntryActiveId);
+                        $strLinkPages .= $this->objTemplate->fillTemplate(array("pageHref" => Link::getLinkPortalHref($strPage, "", $strAction, "&".$strPvParam."=".$intI.$strAdd), "pageNumber" => $intI), $strEntryActiveId);
                     else
-                        $strLinkPages .= $this->objTemplate->fillTemplate(array("pageHref" => class_link::getLinkPortalHref($strPage, "", $strAction, "&".$strPvParam."=".$intI.$strAdd), "pageNumber" => $intI), $strEntryId);
+                        $strLinkPages .= $this->objTemplate->fillTemplate(array("pageHref" => Link::getLinkPortalHref($strPage, "", $strAction, "&".$strPvParam."=".$intI.$strAdd), "pageNumber" => $intI), $strEntryId);
                 }
                 else {
                     if($intI == $intPage)
-                        $strLinkPages .= "  <strong>".class_link::getLinkPortal($strPage, "", null, "[".$intI."]", $strAction, "&".$strPvParam."=".$intI.$strAdd)."</strong>";
+                        $strLinkPages .= "  <strong>".Link::getLinkPortal($strPage, "", null, "[".$intI."]", $strAction, "&".$strPvParam."=".$intI.$strAdd)."</strong>";
                     else
-                        $strLinkPages .= "  ".class_link::getLinkPortal($strPage, "", null, "[".$intI."]", $strAction, "&".$strPvParam."=".$intI.$strAdd);
+                        $strLinkPages .= "  ".Link::getLinkPortal($strPage, "", null, "[".$intI."]", $strAction, "&".$strPvParam."=".$intI.$strAdd);
                 }
             }
             $intCounter2++;
@@ -240,18 +247,12 @@ class ToolkitPortal extends class_toolkit {
      */
     public function getPeToolbar() {
 
-        $strAdminSkin = class_carrier::getInstance()->getObjSession()->getAdminSkin();
-        $strTemplateID = $this->objTemplate->readTemplate(class_adminskin_helper::getPathForSkin($strAdminSkin)."/elements.tpl", "pe_toolbar", true);
+        $strAdminSkin = Carrier::getInstance()->getObjSession()->getAdminSkin();
+        $strTemplateID = $this->objTemplate->readTemplate(AdminskinHelper::getPathForSkin($strAdminSkin)."/elements.tpl", "pe_toolbar", true);
         $strReturn = $this->objTemplate->fillTemplate(array(), $strTemplateID);
 
         return $strReturn;
     }
-
-
-
-
-
-
 
 
 }

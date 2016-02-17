@@ -24,7 +24,8 @@ use Kajona\System\System\Usersources\UsersourcesGroupInterface;
  *
  * @blockFromAutosave
  */
-class UserGroup extends Model implements ModelInterface, AdminListableInterface {
+class UserGroup extends Model implements ModelInterface, AdminListableInterface
+{
 
     private $strSubsystem = "kajona";
     private $strName = "";
@@ -40,7 +41,8 @@ class UserGroup extends Model implements ModelInterface, AdminListableInterface 
      *
      * @return string
      */
-    public function getStrDisplayName() {
+    public function getStrDisplayName()
+    {
         return $this->getStrName();
     }
 
@@ -51,7 +53,8 @@ class UserGroup extends Model implements ModelInterface, AdminListableInterface 
      *
      * @return string the name of the icon, not yet wrapped by getImageAdmin()
      */
-    public function getStrIcon() {
+    public function getStrIcon()
+    {
         return "icon_group";
     }
 
@@ -60,7 +63,8 @@ class UserGroup extends Model implements ModelInterface, AdminListableInterface 
      *
      * @return string
      */
-    public function getStrAdditionalInfo() {
+    public function getStrAdditionalInfo()
+    {
         return $this->getNumberOfMembers();
     }
 
@@ -69,9 +73,10 @@ class UserGroup extends Model implements ModelInterface, AdminListableInterface 
      *
      * @return string
      */
-    public function getStrLongDescription() {
+    public function getStrLongDescription()
+    {
         $objUsersources = new UserSourcefactory();
-        if(count($objUsersources->getArrUsersources()) > 1) {
+        if (count($objUsersources->getArrUsersources()) > 1) {
             $objSubsystem = new UserSourcefactory();
             return $this->getLang("user_list_source", "user")." ".$objSubsystem->getUsersource($this->getStrSubsystem())->getStrReadableName();
         }
@@ -79,28 +84,31 @@ class UserGroup extends Model implements ModelInterface, AdminListableInterface 
     }
 
 
-    public function rightView() {
+    public function rightView()
+    {
         return SystemModule::getModuleByName("user")->rightView();
     }
 
-    public function rightEdit() {
+    public function rightEdit()
+    {
         return SystemModule::getModuleByName("user")->rightEdit();
     }
 
-    public function rightDelete() {
+    public function rightDelete()
+    {
         return SystemModule::getModuleByName("user")->rightDelete();
     }
 
 
     /**
      * Initialises the current object, if a systemid was given
-
      */
-    protected function initObjectInternal() {
+    protected function initObjectInternal()
+    {
         $strQuery = "SELECT * FROM "._dbprefix_."user_group WHERE group_id = ?";
         $arrRow = $this->objDB->getPRow($strQuery, array($this->getSystemid()));
 
-        if(count($arrRow) > 0) {
+        if (count($arrRow) > 0) {
             $this->setStrName($arrRow["group_name"]);
             $this->setStrSubsystem($arrRow["group_subsystem"]);
         }
@@ -113,9 +121,10 @@ class UserGroup extends Model implements ModelInterface, AdminListableInterface 
      *
      * @return bool
      */
-    public function updateObjectToDb($strPrevId = false) {
+    public function updateObjectToDb($strPrevId = false)
+    {
         //mode-splitting
-        if($this->getSystemid() == "") {
+        if ($this->getSystemid() == "") {
             Logger::getInstance(Logger::USERSOURCES)->addLogRow("saved new group subsystem ".$this->getStrSubsystem()." / ".$this->getStrSystemid(), Logger::$levelInfo);
             $strGrId = generateSystemid();
             $this->setSystemid($strGrId);
@@ -153,7 +162,8 @@ class UserGroup extends Model implements ModelInterface, AdminListableInterface 
      *
      * @return bool
      */
-    protected function updateStateToDb() {
+    protected function updateStateToDb()
+    {
         return true;
     }
 
@@ -168,20 +178,23 @@ class UserGroup extends Model implements ModelInterface, AdminListableInterface 
      * @return UserGroup[]
      * @static
      */
-    public static function getObjectList($strFilter = "", $intStart = null, $intEnd = null) {
+    public static function getObjectList($strFilter = "", $intStart = null, $intEnd = null)
+    {
         $strQuery = "SELECT group_id
                        FROM "._dbprefix_."user_group
                     ".($strFilter != "" ? " WHERE group_name LIKE ? " : "")."
                    ORDER BY group_name";
 
         $arrFilter = array();
-        if($strFilter != "")
+        if ($strFilter != "") {
             $arrFilter[] = "%".$strFilter."%";
+        }
 
         $arrIds = Carrier::getInstance()->getObjDB()->getPArray($strQuery, $arrFilter, $intStart, $intEnd);
         $arrReturn = array();
-        foreach($arrIds as $arrOneId)
+        foreach ($arrIds as $arrOneId) {
             $arrReturn[] = new UserGroup($arrOneId["group_id"]);
+        }
 
         return $arrReturn;
     }
@@ -193,14 +206,16 @@ class UserGroup extends Model implements ModelInterface, AdminListableInterface 
      *
      * @return int
      */
-    public static function getObjectCount($strFilter = "") {
+    public static function getObjectCount($strFilter = "")
+    {
         $strQuery = "SELECT COUNT(*)
                        FROM "._dbprefix_."user_group
                ".($strFilter != "" ? " WHERE group_name LIKE ? " : "");
 
         $arrFilter = array();
-        if($strFilter != "")
+        if ($strFilter != "") {
             $arrFilter[] = "%".$strFilter."%";
+        }
 
         $arrRow = Carrier::getInstance()->getObjDB()->getPRow($strQuery, $arrFilter);
         return $arrRow["COUNT(*)"];
@@ -211,13 +226,15 @@ class UserGroup extends Model implements ModelInterface, AdminListableInterface 
      *
      * @return int
      */
-    public function getNumberOfMembers() {
+    public function getNumberOfMembers()
+    {
         $this->loadSourceObject();
         return $this->objSourceGroup->getNumberOfMembers();
     }
 
 
-    public function deleteObject() {
+    public function deleteObject()
+    {
         return $this->deleteObjectFromDatabase();
     }
 
@@ -227,8 +244,9 @@ class UserGroup extends Model implements ModelInterface, AdminListableInterface 
      *
      * @return bool
      */
-    public function deleteObjectFromDatabase() {
-        Logger::getInstance(Logger::USERSOURCES)->addLogRow("deleted group with id ".$this->getSystemid(). " (".$this->getStrName().")", Logger::$levelWarning);
+    public function deleteObjectFromDatabase()
+    {
+        Logger::getInstance(Logger::USERSOURCES)->addLogRow("deleted group with id ".$this->getSystemid()." (".$this->getStrName().")", Logger::$levelWarning);
 
         //Delete related group
         $this->getObjSourceGroup()->deleteGroup();
@@ -242,8 +260,9 @@ class UserGroup extends Model implements ModelInterface, AdminListableInterface 
     /**
      * Loads the mapped source-object
      */
-    private function loadSourceObject() {
-        if($this->objSourceGroup == null) {
+    private function loadSourceObject()
+    {
+        if ($this->objSourceGroup == null) {
             $objUsersources = new UserSourcefactory();
             $this->setObjSourceGroup($objUsersources->getSourceGroup($this));
         }
@@ -256,42 +275,50 @@ class UserGroup extends Model implements ModelInterface, AdminListableInterface 
      *
      * @return UserGroup
      */
-    public static function getGroupByName($strName) {
+    public static function getGroupByName($strName)
+    {
         $objFactory = new UserSourcefactory();
         return $objFactory->getGroupByName($strName);
     }
 
 
     // --- GETTERS / SETTERS --------------------------------------------------------------------------------
-    public function getStrSubsystem() {
+    public function getStrSubsystem()
+    {
         return $this->strSubsystem;
     }
 
-    public function setStrSubsystem($strSubsystem) {
+    public function setStrSubsystem($strSubsystem)
+    {
         $this->strSubsystem = $strSubsystem;
     }
 
     /**
      * @return UsersourcesGroupInterface
      */
-    public function getObjSourceGroup() {
+    public function getObjSourceGroup()
+    {
         $this->loadSourceObject();
         return $this->objSourceGroup;
     }
 
-    public function setObjSourceGroup($objSourceGroup) {
+    public function setObjSourceGroup($objSourceGroup)
+    {
         $this->objSourceGroup = $objSourceGroup;
     }
 
-    public function getStrName() {
+    public function getStrName()
+    {
         return $this->strName;
     }
 
-    public function setStrName($strName) {
+    public function setStrName($strName)
+    {
         $this->strName = $strName;
     }
 
-    public function getIntRecordStatus() {
+    public function getIntRecordStatus()
+    {
         return 1;
     }
 

@@ -17,7 +17,8 @@ namespace Kajona\System\System;
  * @author sidler@mulchprod.de
  * @since 4.8
  */
-class OrmObjectdelete extends OrmBase {
+class OrmObjectdelete extends OrmBase
+{
 
 
     /**
@@ -29,9 +30,10 @@ class OrmObjectdelete extends OrmBase {
      * @throws Exception
      * @return bool
      */
-    public function deleteObject() {
+    public function deleteObject()
+    {
 
-        if(!validateSystemid($this->getObjObject()->getSystemid()) || !$this->hasTargetTable()) {
+        if (!validateSystemid($this->getObjObject()->getSystemid()) || !$this->hasTargetTable()) {
             return true;
         }
 
@@ -41,8 +43,8 @@ class OrmObjectdelete extends OrmBase {
         $objAnnotations = new Reflection($this->getObjObject());
         $arrTargetTables = $objAnnotations->getAnnotationValuesFromClass("@targetTable");
 
-        if(count($arrTargetTables) > 0) {
-            foreach($arrTargetTables as  $strOneTable) {
+        if (count($arrTargetTables) > 0) {
+            foreach ($arrTargetTables as $strOneTable) {
                 $arrSingleTable = explode(".", $strOneTable);
                 $strQuery = "DELETE FROM ".$objDB->encloseTableName(_dbprefix_.$arrSingleTable[0])."
                                    WHERE ".$objDB->encloseColumnName($arrSingleTable[1])." = ? ";
@@ -52,7 +54,6 @@ class OrmObjectdelete extends OrmBase {
         }
         return $bitReturn;
 
-
     }
 
     /**
@@ -60,7 +61,8 @@ class OrmObjectdelete extends OrmBase {
      *
      * @return bool
      */
-    private function deleteAssignments() {
+    private function deleteAssignments()
+    {
         $bitReturn = true;
 
         $objReflection = new Reflection($this->getObjObject());
@@ -69,21 +71,18 @@ class OrmObjectdelete extends OrmBase {
         //get the mapped properties
         $arrProperties = $objReflection->getPropertiesWithAnnotation(OrmBase::STR_ANNOTATION_OBJECTLIST, Reflection::PARAMS);
 
-        foreach($arrProperties as $strPropertyName => $arrValues) {
+        foreach ($arrProperties as $strPropertyName => $arrValues) {
 
             $objCfg = OrmAssignmentConfig::getConfigForProperty($this->getObjObject(), $strPropertyName);
 
             $bitReturn = $bitReturn && $objDB->_pQuery(
-                "DELETE FROM ".$objDB->encloseTableName(_dbprefix_.$objCfg->getStrTableName())." WHERE ".$objDB->encloseColumnName($objCfg->getStrSourceColumn())." = ? ", array($this->getObjObject()->getSystemid())
-            );
+                    "DELETE FROM ".$objDB->encloseTableName(_dbprefix_.$objCfg->getStrTableName())." WHERE ".$objDB->encloseColumnName($objCfg->getStrSourceColumn())." = ? ", array($this->getObjObject()->getSystemid())
+                );
         }
-
 
 
         return $bitReturn;
     }
-
-
 
 
 }

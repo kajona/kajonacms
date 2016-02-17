@@ -18,7 +18,8 @@ namespace Kajona\System\System;
  * @see class_graph_factory
  * @package module_system
  */
-interface GraphInterface {
+interface GraphInterface
+{
 
     /**
      * Used to create a bar-chart.

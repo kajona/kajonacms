@@ -30,7 +30,8 @@ namespace Kajona\System\System;
  * @package module_system
  * @author sidler@mulchprod.de
  */
-class Mail {
+class Mail
+{
 
 
     private $arrayTo = array();
@@ -53,16 +54,19 @@ class Mail {
     /**
      * Constructor
      */
-    public function __construct() {
+    public function __construct()
+    {
     }
 
     /**
      * Adds a recipient to the to-list
      *
      * @param string $strMailaddress
+     *
      * @return void
      */
-    public function addTo($strMailaddress) {
+    public function addTo($strMailaddress)
+    {
         $this->arrayTo[] = $strMailaddress;
     }
 
@@ -70,9 +74,11 @@ class Mail {
      * Adds a recipient to the cc-list
      *
      * @param string $strMailaddress
+     *
      * @return void
      */
-    public function addCc($strMailaddress) {
+    public function addCc($strMailaddress)
+    {
         $this->arrayCc[] = $strMailaddress;
     }
 
@@ -80,9 +86,11 @@ class Mail {
      * Adds a recipient to the bcc-list
      *
      * @param string $strMailaddress
+     *
      * @return void
      */
-    public function addBcc($strMailaddress) {
+    public function addBcc($strMailaddress)
+    {
         $this->arrayBcc[] = $strMailaddress;
     }
 
@@ -90,9 +98,11 @@ class Mail {
      * Sets an email-header
      *
      * @param string $strHeader
+     *
      * @return void
      */
-    public function addHeader($strHeader) {
+    public function addHeader($strHeader)
+    {
         $this->arrHeader[] = $strHeader;
     }
 
@@ -100,9 +110,11 @@ class Mail {
      * Sets the text-content for the mail
      *
      * @param string $strText
+     *
      * @return void
      */
-    public function setText($strText) {
+    public function setText($strText)
+    {
         $this->strText = html_entity_decode($strText);
     }
 
@@ -110,9 +122,11 @@ class Mail {
      * Sets the html-content for the mail
      *
      * @param string $strHtml
+     *
      * @return void
      */
-    public function setHtml($strHtml) {
+    public function setHtml($strHtml)
+    {
         $this->bitMultipart = true;
         $this->strHtml = $strHtml;
     }
@@ -121,9 +135,11 @@ class Mail {
      * Sets the subject of the mail
      *
      * @param string $strSubject
+     *
      * @return void
      */
-    public function setSubject($strSubject) {
+    public function setSubject($strSubject)
+    {
         $strSubject = str_replace(array("\r", "\n"), array(" ", " "), $strSubject);
         $this->strSubject = $strSubject;
     }
@@ -132,9 +148,11 @@ class Mail {
      * Sets the sender of the mail
      *
      * @param string $strSender
+     *
      * @return void
      */
-    public function setSender($strSender) {
+    public function setSender($strSender)
+    {
         $this->strSender = $strSender;
     }
 
@@ -142,9 +160,11 @@ class Mail {
      * Sets the name of the mails sender
      *
      * @param string $strSenderName
+     *
      * @return void
      */
-    public function setSenderName($strSenderName) {
+    public function setSenderName($strSenderName)
+    {
         $this->strSenderName = $strSenderName;
     }
 
@@ -160,12 +180,13 @@ class Mail {
      *
      * @return bool
      */
-    public function addAttachement($strFilename, $strContentType = "", $bitInline = false) {
-        if(is_file(_realpath_.$strFilename)) {
+    public function addAttachement($strFilename, $strContentType = "", $bitInline = false)
+    {
+        if (is_file(_realpath_.$strFilename)) {
             $arrTemp = array();
             $arrTemp["filename"] = _realpath_.$strFilename;
             //content-type given?
-            if($strContentType == "") {
+            if ($strContentType == "") {
                 //try to find out
                 $objToolkit = new Toolkit();
                 $arrMime = $objToolkit->mimeType($strFilename);
@@ -191,36 +212,37 @@ class Mail {
      *
      * @return bool
      */
-    public function sendMail() {
+    public function sendMail()
+    {
         $bitReturn = false;
 
         //Do we have all neccessary arguments?
-        if(count($this->arrayTo) > 0) {
+        if (count($this->arrayTo) > 0) {
             $bitReturn = true;
         }
 
-        if($bitReturn) {
+        if ($bitReturn) {
             //Building the mail
             $strTo = implode(", ", $this->arrayTo);
             //Sender
-            if($this->strSender == "") {
+            if ($this->strSender == "") {
                 //try to load the current users' mail adress
-                if(validateSystemid(Carrier::getInstance()->getObjSession()->getUserID())) {
+                if (validateSystemid(Carrier::getInstance()->getObjSession()->getUserID())) {
                     $objUser = new UserUser(Carrier::getInstance()->getObjSession()->getUserID());
-                    if(checkEmailaddress($objUser->getStrEmail())) {
+                    if (checkEmailaddress($objUser->getStrEmail())) {
                         $this->strSender = $objUser->getStrEmail();
                     }
                 }
 
             }
 
-            if($this->strSender == "" || SystemSetting::getConfigValue("_system_email_forcesender_") == "true") {
+            if ($this->strSender == "" || SystemSetting::getConfigValue("_system_email_forcesender_") == "true") {
                 $this->strSender = SystemSetting::getConfigValue("_system_email_defaultsender_");
             }
 
-            if($this->strSender != "") {
+            if ($this->strSender != "") {
                 //build the from-arguments
-                if($this->strSenderName != "") {
+                if ($this->strSenderName != "") {
                     $strFrom = $this->encodeText($this->strSenderName)." <".$this->strSender.">";
                 }
                 else {
@@ -232,12 +254,12 @@ class Mail {
             }
 
             //cc
-            if(count($this->arrayCc) > 0) {
+            if (count($this->arrayCc) > 0) {
                 $this->arrHeader[] = "Cc: ".implode(", ", $this->arrayCc).$this->strEndOfLine;
             }
 
             //bcc
-            if(count($this->arrayBcc) > 0) {
+            if (count($this->arrayBcc) > 0) {
                 $this->arrHeader[] = "Bcc: ".implode(", ", $this->arrayBcc).$this->strEndOfLine;
             }
 
@@ -249,10 +271,10 @@ class Mail {
             //header for multipartmails?
             $strBoundary = generateSystemid();
 
-            if($this->bitMultipart || $this->bitFileAttached) {
+            if ($this->bitMultipart || $this->bitFileAttached) {
                 $this->arrHeader[] = 'MIME-Version: 1.0'.$this->strEndOfLine;
                 //file attached?
-                if($this->bitFileAttached) {
+                if ($this->bitFileAttached) {
                     $this->arrHeader[] = "Content-Type: multipart/related; boundary=\"".$strBoundary."\"".$this->strEndOfLine;
                 }
                 else {
@@ -265,12 +287,12 @@ class Mail {
             $strBody = "";
 
             //multipart mail using html?
-            if($this->bitMultipart) {
+            if ($this->bitMultipart) {
                 //multipart encoded mail
                 $strBoundaryAlt = generateSystemid();
 
                 //if a file should attached, a splitter is needed here
-                if($this->bitFileAttached) {
+                if ($this->bitFileAttached) {
                     $strBody .= "--".$strBoundary.$this->strEndOfLine;
                     $strBody .= "Content-Type: multipart/alternative; boundary=\"".$strBoundaryAlt."\"".$this->strEndOfLine;
                 }
@@ -287,7 +309,7 @@ class Mail {
                 $strBody .= "Content-Type: text/plain; charset=UTF-8".$this->strEndOfLine;
 
                 $strText = strip_tags(($this->strText == "" ? str_replace(array("<br />", "<br />"), array("\n", "\n"), $this->strHtml) : $this->strText));
-                if(function_exists("quoted_printable_encode")) {
+                if (function_exists("quoted_printable_encode")) {
                     $strBody .= "Content-Transfer-Encoding: quoted-printable".$this->strEndOfLine.$this->strEndOfLine;
                     $strBody .= quoted_printable_encode($strText);
                 }
@@ -300,7 +322,7 @@ class Mail {
 
 
                 //html-version
-                if($this->strHtml != "") {
+                if ($this->strHtml != "") {
                     $strBody .= "--".$strBoundaryAlt.$this->strEndOfLine;
                     $strBody .= "Content-Type: text/html; charset=UTF-8".$this->strEndOfLine;
                     $strBody .= "Content-Transfer-Encoding: 8bit".$this->strEndOfLine.$this->strEndOfLine;
@@ -308,14 +330,14 @@ class Mail {
                     $strBody .= $this->strEndOfLine.$this->strEndOfLine;
                 }
 
-                if($this->bitFileAttached) {
+                if ($this->bitFileAttached) {
                     $strBody .= "--".$strBoundaryAlt."--".$this->strEndOfLine.$this->strEndOfLine;
                 }
             }
             else {
                 $this->arrHeader[] = "Content-Type: text/plain; charset=UTF-8".$this->strEndOfLine;
 
-                if(function_exists("quoted_printable_encode")) {
+                if (function_exists("quoted_printable_encode")) {
                     $this->arrHeader[] = "Content-Transfer-Encoding: quoted-printable".$this->strEndOfLine;
                     $strBody .= quoted_printable_encode($this->strText);
                 }
@@ -326,14 +348,14 @@ class Mail {
 
 
             //any files to place in the mail body?
-            if($this->bitFileAttached) {
-                foreach($this->arrFiles as $arrOneFile) {
+            if ($this->bitFileAttached) {
+                foreach ($this->arrFiles as $arrOneFile) {
                     $strFileContents = chunk_split(base64_encode(file_get_contents($arrOneFile["filename"])));
                     //place file in mailbody
                     $strBody .= "--".$strBoundary.$this->strEndOfLine;
                     $strBody .= "Content-Type: ".$arrOneFile["mimetype"]."; name=\"".basename($arrOneFile["filename"])."\"".$this->strEndOfLine;
                     $strBody .= "Content-Transfer-Encoding: base64".$this->strEndOfLine;
-                    if($arrOneFile["inline"] === true) {
+                    if ($arrOneFile["inline"] === true) {
                         $strBody .= "Content-Disposition: inline; filename=\"".basename($arrOneFile["filename"])."\"".$this->strEndOfLine;
                         $strBody .= "Content-ID: <".basename($arrOneFile["filename"]).">".$this->strEndOfLine.$this->strEndOfLine;
                     }
@@ -346,7 +368,7 @@ class Mail {
             }
 
             //finish mail
-            if($this->bitFileAttached || $this->bitMultipart) {
+            if ($this->bitFileAttached || $this->bitMultipart) {
                 $strBody .= "--".$strBoundary."--".$this->strEndOfLine.$this->strEndOfLine;
             }
 
@@ -375,9 +397,10 @@ class Mail {
      * @return string
      * @see http://www.php.net/manual/en/function.mail.php#27997, credits got to gordon at kanazawa-gu dot ac dot jp
      */
-    private function encodeText($strText) {
+    private function encodeText($strText)
+    {
 
-        if(function_exists("mb_encode_mimeheader")) {
+        if (function_exists("mb_encode_mimeheader")) {
             return mb_encode_mimeheader($strText, "UTF-8", "Q", "\r\n", strlen("subject: "));
         }
 

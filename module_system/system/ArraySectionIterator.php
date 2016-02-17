@@ -15,7 +15,8 @@ namespace Kajona\System\System;
  * @package module_system
  * @author sidler@mulchprod.de
  */
-class ArraySectionIterator extends class_array_iterator {
+class ArraySectionIterator extends ArrayIterator
+{
 
     private $intTotalElements;
     private $intPageNumber = 1;
@@ -26,7 +27,8 @@ class ArraySectionIterator extends class_array_iterator {
      *
      * @param int $intNrOfElements The total number of elements
      */
-    public function __construct($intNrOfElements) {
+    public function __construct($intNrOfElements)
+    {
         $this->intTotalElements = $intNrOfElements;
 
         parent::__construct(array());
@@ -39,7 +41,8 @@ class ArraySectionIterator extends class_array_iterator {
      * @return int
      * @overwrite
      */
-    public function getNumberOfElements() {
+    public function getNumberOfElements()
+    {
         return $this->intTotalElements;
     }
 
@@ -57,13 +60,15 @@ class ArraySectionIterator extends class_array_iterator {
      *
      * @param int $intPageNumber
      */
-    public function setPageNumber($intPageNumber) {
-        if((int)$intPageNumber > 0) {
+    public function setPageNumber($intPageNumber)
+    {
+        if ((int)$intPageNumber > 0) {
             $this->intPageNumber = $intPageNumber;
         }
     }
 
-    public function getPageNumber() {
+    public function getPageNumber()
+    {
         return $this->intPageNumber;
     }
 
@@ -72,7 +77,8 @@ class ArraySectionIterator extends class_array_iterator {
      *
      * @return int
      */
-    public function calculateStartPos() {
+    public function calculateStartPos()
+    {
         return (($this->intPageNumber * $this->intElementsPerPage) - $this->intElementsPerPage);
     }
 
@@ -81,7 +87,8 @@ class ArraySectionIterator extends class_array_iterator {
      *
      * @return int
      */
-    public function calculateEndPos() {
+    public function calculateEndPos()
+    {
         return ($this->intElementsPerPage + ($this->calculateStartPos() - 1));
     }
 
@@ -90,7 +97,8 @@ class ArraySectionIterator extends class_array_iterator {
      *
      * @param array $arrSectionContent
      */
-    public function setArraySection($arrSectionContent) {
+    public function setArraySection($arrSectionContent)
+    {
         $this->arrSection = $arrSectionContent;
     }
 
@@ -102,17 +110,18 @@ class ArraySectionIterator extends class_array_iterator {
      *
      * @return array
      */
-    public function getArrayExtended($bitCompressed = false) {
+    public function getArrayExtended($bitCompressed = false)
+    {
         $arrReturn = array();
 
-        if(!$bitCompressed) {
-            for($intI = 0; $intI < $this->intTotalElements; $intI++) {
+        if (!$bitCompressed) {
+            for ($intI = 0; $intI < $this->intTotalElements; $intI++) {
                 $arrReturn[] = null;
             }
         }
         //load data
-        for($intI = $this->calculateStartPos(); $intI <= $this->calculateEndPos(); $intI++) {
-            if(isset($this->arrSection[($intI - $this->calculateStartPos())])) {
+        for ($intI = $this->calculateStartPos(); $intI <= $this->calculateEndPos(); $intI++) {
+            if (isset($this->arrSection[($intI - $this->calculateStartPos())])) {
                 $arrReturn[$intI] = $this->arrSection[($intI - $this->calculateStartPos())];
             }
         }
@@ -120,15 +129,18 @@ class ArraySectionIterator extends class_array_iterator {
         return $arrReturn;
     }
 
-    public function valid() {
+    public function valid()
+    {
         return $this->intArrCursor < count($this->arrSection);
     }
 
-    public function rewind() {
+    public function rewind()
+    {
         $this->intArrCursor = 0;
     }
 
-    public function current() {
+    public function current()
+    {
         return $this->arrSection[$this->intArrCursor];
     }
 
@@ -140,21 +152,23 @@ class ArraySectionIterator extends class_array_iterator {
      *
      * @return array
      */
-    public function getElementsOnPage($intPageNumber) {
+    public function getElementsOnPage($intPageNumber)
+    {
         $arrReturn = array();
         //calc elements to return
         $intStart = ($this->intPageNumber * $this->intElementsPerPage) - $this->intElementsPerPage;
         $intEnd = $this->intElementsPerPage + $intStart - 1;
-        if($intEnd > $this->getNumberOfElements()) {
+        if ($intEnd > $this->getNumberOfElements()) {
             $intEnd = $this->getNumberOfElements() - 1;
         }
 
-        for($intI = $intStart; $intI <= $intEnd; $intI++) {
-            if(!$this->setCursorPosition($intI)) {
+        for ($intI = $intStart; $intI <= $intEnd; $intI++) {
+            if (!$this->setCursorPosition($intI)) {
                 break;
             }
-            if(isset($this->arrElements[$this->intArrCursor]))
+            if (isset($this->arrElements[$this->intArrCursor])) {
                 $arrReturn[] = $this->arrElements[$this->intArrCursor];
+            }
         }
         return $arrReturn;
     }

@@ -17,11 +17,13 @@ namespace Kajona\System\System;
  * @author stefan.meyer1@yahoo.de
  * @since 4.8
  */
-class OrmObjectlistPropertyInRestriction extends OrmObjectlistInRestriction {
+class OrmObjectlistPropertyInRestriction extends OrmObjectlistInRestriction
+{
 
     private $strPropertyName;
 
-    function __construct($strProperty, array $arrParams, $strCondition = "AND") {
+    function __construct($strProperty, array $arrParams, $strCondition = "AND")
+    {
         parent::__construct($strProperty, $arrParams, $strCondition);
 
         $this->strPropertyName = $strProperty;
@@ -33,13 +35,15 @@ class OrmObjectlistPropertyInRestriction extends OrmObjectlistInRestriction {
      * @return string
      * @throws OrmException
      */
-    public function getStrWhere() {
+    public function getStrWhere()
+    {
         $objReflection = new Reflection($this->getStrTargetClass());
 
         $strPropertyValue = $objReflection->getAnnotationValueForProperty($this->strPropertyName, OrmBase::STR_ANNOTATION_TABLECOLUMN);
 
-        if($strPropertyValue == null)
+        if ($strPropertyValue == null) {
             throw new OrmException("Failed to load annotation ".OrmBase::STR_ANNOTATION_TABLECOLUMN." for property ".$this->strPropertyName."@".$this->getStrTargetClass(), OrmException::$level_ERROR);
+        }
 
 
         return $this->getInStatement($strPropertyValue);

@@ -21,13 +21,15 @@ namespace Kajona\System\System;
  * @method static DatePeriodEnum HALFYEAR()
  * @method static DatePeriodEnum YEAR()
  */
-class DatePeriodEnum extends class_enum {
+class DatePeriodEnum extends EnumBase
+{
     /**
      * Return the array of possible, so allowed values for the current enum
      *
      * @return string[]
      */
-    protected function getArrValues() {
+    protected function getArrValues()
+    {
         return array("DAY", "WEEK", "MONTH", "QUARTER", "HALFYEAR", "YEAR");
     }
 

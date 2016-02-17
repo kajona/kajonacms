@@ -20,7 +20,8 @@ use DOMNode;
  * @package module_system
  * @deprecated use phps built in functions
  */
-class XmlParser {
+class XmlParser
+{
 
     /**
      * @var DOMDocument
@@ -34,8 +35,9 @@ class XmlParser {
      *
      * @param string $strFile
      */
-    public function __construct($strFile = "") {
-        if($strFile != "") {
+    public function __construct($strFile = "")
+    {
+        if ($strFile != "") {
             $this->loadFile($strFile);
         }
     }
@@ -49,19 +51,20 @@ class XmlParser {
      * @throws Exception
      * @return bool
      */
-    public function loadFile($strFile) {
+    public function loadFile($strFile)
+    {
         $arrModules = get_loaded_extensions();
-        if(!in_array("dom", $arrModules)) {
+        if (!in_array("dom", $arrModules)) {
             throw new Exception("no DOM-Extension installed", Exception::$level_ERROR);
         }
 
-        if(strpos($strFile, _realpath_) === false) {
-            $strFile = _realpath_ . $strFile;
+        if (strpos($strFile, _realpath_) === false) {
+            $strFile = _realpath_.$strFile;
         }
 
         $this->objDocument = new DOMDocument();
-        if(file_exists($strFile)) {
-            if(@$this->objDocument->load($strFile)) {
+        if (file_exists($strFile)) {
+            if (@$this->objDocument->load($strFile)) {
                 $this->strFile = $strFile;
                 return true;
             }
@@ -77,9 +80,10 @@ class XmlParser {
      *
      * @return bool
      */
-    public function loadString($strString) {
+    public function loadString($strString)
+    {
         $arrModules = get_loaded_extensions();
-        if(!in_array("dom", $arrModules)) {
+        if (!in_array("dom", $arrModules)) {
             throw new Exception("no DOM-Extension installed", Exception::$level_ERROR);
         }
 
@@ -93,7 +97,8 @@ class XmlParser {
      *
      * @return array
      */
-    public function xmlToArray() {
+    public function xmlToArray()
+    {
         $arrXML = array();
         $this->parseXmlToArray($this->objDocument, $arrXML);
         return $arrXML;
@@ -105,34 +110,35 @@ class XmlParser {
      * @param DOMNode $domNode
      * @param array $arrXML
      */
-    private function parseXmlToArray($domNode, &$arrXML) {
+    private function parseXmlToArray($domNode, &$arrXML)
+    {
         //Resolve the reference to work on it
-        $arrPointer = & $arrXML;
+        $arrPointer = &$arrXML;
         //Get the first child of the current node
         $domNode = $domNode->firstChild;
-        while($domNode != null) {
-            switch($domNode->nodeType) {
-            case XML_TEXT_NODE:
-            case XML_CDATA_SECTION_NODE:
-                //Here we have a text node, so get the value if it isn't empty
-                if(trim($domNode->nodeValue)) {
-                    $arrPointer['value'] = trim($domNode->nodeValue);
-                }
-                break;
-            case XML_ELEMENT_NODE:
-                //Here we have another node, so resolve it
-                $arrPointer = & $arrXML[$domNode->nodeName][];
-                //Maybe there are some Attributes..
-                if($domNode->hasAttributes()) {
-                    $arrAttributes = $domNode->attributes;
-                    foreach($arrAttributes as $objAttribute) {
-                        $arrPointer['attributes'][$objAttribute->name] = $objAttribute->value;
+        while ($domNode != null) {
+            switch ($domNode->nodeType) {
+                case XML_TEXT_NODE:
+                case XML_CDATA_SECTION_NODE:
+                    //Here we have a text node, so get the value if it isn't empty
+                    if (trim($domNode->nodeValue)) {
+                        $arrPointer['value'] = trim($domNode->nodeValue);
                     }
-                }
-                break;
+                    break;
+                case XML_ELEMENT_NODE:
+                    //Here we have another node, so resolve it
+                    $arrPointer = &$arrXML[$domNode->nodeName][];
+                    //Maybe there are some Attributes..
+                    if ($domNode->hasAttributes()) {
+                        $arrAttributes = $domNode->attributes;
+                        foreach ($arrAttributes as $objAttribute) {
+                            $arrPointer['attributes'][$objAttribute->name] = $objAttribute->value;
+                        }
+                    }
+                    break;
             }
             //If we have more childs, call them
-            if($domNode->hasChildNodes()) {
+            if ($domNode->hasChildNodes()) {
                 $this->parseXmlToArray($domNode, $arrPointer);
             }
             //And get the values from the siblings
@@ -144,9 +150,9 @@ class XmlParser {
     /**
      * Used mainly for debugging, this method draws the current xml-tree to
      * std::out
-
      */
-    public function drawXmlTree() {
+    public function drawXmlTree()
+    {
         $arrXML = $this->xmlToArray();
         $this->drawRecursive(0, $arrXML);
     }
@@ -157,21 +163,22 @@ class XmlParser {
      * @param int $intLevel
      * @param array $arrDraw
      */
-    private function drawRecursive($intLevel, $arrDraw) {
+    private function drawRecursive($intLevel, $arrDraw)
+    {
         $intI = 1;
-        foreach($arrDraw as $strKey => $value) {
+        foreach ($arrDraw as $strKey => $value) {
             //Print out key
-            for($intI = 0; $intI < $intLevel; $intI++) {
+            for ($intI = 0; $intI < $intLevel; $intI++) {
                 echo "   ";
             }
-            echo "|--" . $strKey . "";
+            echo "|--".$strKey."";
             //Call subarrays
-            if(is_array($value)) {
+            if (is_array($value)) {
                 echo "\n";
                 $this->drawRecursive($intLevel + 1, $value);
             }
             else {
-                echo " ( " . $value . " )\n";
+                echo " ( ".$value." )\n";
             }
         }
     }
@@ -181,9 +188,10 @@ class XmlParser {
      *
      * @return bool
      */
-    public function xmlValidateDTD() {
-        if($this->objDocument != null) {
-            if($this->objDocument->validate() !== false) {
+    public function xmlValidateDTD()
+    {
+        if ($this->objDocument != null) {
+            if ($this->objDocument->validate() !== false) {
                 return true;
             }
         }
@@ -197,10 +205,11 @@ class XmlParser {
      *
      * @return bool
      */
-    public function xmlValidateSchema($strSchema) {
-        if(is_file($strSchema)) {
-            if($this->objDocument != null) {
-                if(@$this->objDocument->schemaValidate($strSchema) !== false) {
+    public function xmlValidateSchema($strSchema)
+    {
+        if (is_file($strSchema)) {
+            if ($this->objDocument != null) {
+                if (@$this->objDocument->schemaValidate($strSchema) !== false) {
                     return true;
                 }
             }
@@ -216,12 +225,13 @@ class XmlParser {
      *
      * @return array
      */
-    public function getElementValueByName($strName) {
+    public function getElementValueByName($strName)
+    {
         $arrReturn = array();
-        if($this->objDocument != null) {
+        if ($this->objDocument != null) {
             $arrNodeList = $this->objDocument->getElementsByTagName($strName);
-            if(count($arrNodeList) > 0) {
-                foreach($arrNodeList as $arrOneNode) {
+            if (count($arrNodeList) > 0) {
+                foreach ($arrNodeList as $arrOneNode) {
                     $arrReturn[] = $arrOneNode->nodeValue;
                 }
             }
@@ -235,19 +245,21 @@ class XmlParser {
      * NOTE: You get an array containing just the attributes, not the child elements!
      *
      * @param array $strTagName
+     *
      * @return array
      */
-    public function getNodesAttributesAsArray($strTagName) {
+    public function getNodesAttributesAsArray($strTagName)
+    {
         $arrReturn = array();
         $intNodeCounter = 0;
         $listNodes = $this->objDocument->getElementsByTagName($strTagName);
-        for($i = 0; $i < $listNodes->length; $i++) {
+        for ($i = 0; $i < $listNodes->length; $i++) {
             $objNode = $listNodes->item($i);
-            if($objNode->hasAttributes()) {
+            if ($objNode->hasAttributes()) {
                 $arrReturn[$intNodeCounter] = array();
                 $arrAttributes = $objNode->attributes;
                 $intAttrCounter = 0;
-                foreach($arrAttributes as $objAttribute) {
+                foreach ($arrAttributes as $objAttribute) {
                     $arrReturn[$intNodeCounter][$intAttrCounter] = array();
                     $arrReturn[$intNodeCounter][$intAttrCounter]["name"] = $objAttribute->name;
                     $arrReturn[$intNodeCounter][$intAttrCounter]["value"] = $objAttribute->value;

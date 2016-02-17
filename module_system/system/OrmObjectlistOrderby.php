@@ -19,32 +19,36 @@ namespace Kajona\System\System;
  * @author sidler@mulchprod.de
  * @since 4.6
  */
-class OrmObjectlistOrderby {
+class OrmObjectlistOrderby
+{
 
     private $strOrderBy = "";
 
     /**
      * @param string $strOrderBy
      */
-    function __construct($strOrderBy) {
+    function __construct($strOrderBy)
+    {
         $this->strOrderBy = " ".$strOrderBy." ";
     }
 
     /**
      * @param string $strWhere
+     *
      * @return void
      */
-    public function setStrOrderBy($strWhere) {
+    public function setStrOrderBy($strWhere)
+    {
         $this->strOrderBy = $strWhere;
     }
 
     /**
      * @return string
      */
-    public function getStrOrderBy() {
+    public function getStrOrderBy()
+    {
         return $this->strOrderBy;
     }
-
 
 
 }

@@ -16,7 +16,8 @@ namespace Kajona\System\System;
  * @package module_system
  * @since 4.5
  */
-interface InstallerRemovableInterface extends InstallerInterface {
+interface InstallerRemovableInterface extends InstallerInterface
+{
 
     /**
      * Validates whether the current module/element is removable or not.

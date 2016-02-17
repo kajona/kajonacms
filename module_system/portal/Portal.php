@@ -18,7 +18,7 @@ namespace Kajona\System\Portal;
  * @author sidler@mulchprod.de
  * @deprecated
  */
-abstract class Portal extends Portal_controller {
+abstract class Portal extends PortalController {
 
 
 }

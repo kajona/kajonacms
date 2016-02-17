@@ -6,6 +6,8 @@
 
 namespace Kajona\System\System;
 
+use RuntimeException;
+
 
 /**
  * Class to calculate date ranges
@@ -28,21 +30,21 @@ class DateRange
      * In this case we get the following array
      *
      * array(
-     *   array(new class_date("2015-01-01 12:00:00"), new class_date("2015-02-01 11:59:59"))
-     *   array(new class_date("2015-02-01 12:00:00"), new class_date("2015-03-01 11:59:59"))
+     *   array(new Date("2015-01-01 12:00:00"), new Date("2015-02-01 11:59:59"))
+     *   array(new Date("2015-02-01 12:00:00"), new Date("2015-03-01 11:59:59"))
      * )
      *
      * The last period 2015-03-01 12:00:00 - 2015-04-01 11:59:59 is not included since the date 2015-04-01 11:59:59 is
      * greater then the enddate
      *
-     * @param class_date $objStartDate
-     * @param class_date $objEndDate
-     * @param class_date_period_enum $objInterval
+     * @param Date $objStartDate
+     * @param Date $objEndDate
+     * @param DatePeriodEnum $objInterval
      * @return array
      */
-    public static function getDateRange(class_date $objStartDate, class_date $objEndDate, class_date_period_enum $objInterval)
+    public static function getDateRange(Date $objStartDate, Date $objEndDate, DatePeriodEnum $objInterval)
     {
-        $objDateHelper = new class_date_helper();
+        $objDateHelper = new DateHelper();
         $objTmpDate = clone $objStartDate;
         $arrResult = array();
 
@@ -69,7 +71,7 @@ class DateRange
      */
     public static function transformToOldFormat(array $arrRanges)
     {
-        $strDateFormat = class_carrier::getInstance()->getObjLang()->getLang("dateStyleLong", "system");
+        $strDateFormat = Carrier::getInstance()->getObjLang()->getLang("dateStyleLong", "system");
         $arrResult = array(
             'start_dates' => array(),
             'end_dates' => array(),
@@ -87,34 +89,34 @@ class DateRange
 
     public static function getIntervalByString($strInterval)
     {
-        return call_user_func(array('class_date_period_enum', strtoupper($strInterval)));
+        return call_user_func(array('DatePeriodEnum', strtoupper($strInterval)));
     }
 
     /**
      * Adds a specific interval to the provided date. Returns a new date object
      *
-     * @param class_date $objDate
-     * @param class_date_period_enum $objInterval
-     * @return class_date
+     * @param Date $objDate
+     * @param DatePeriodEnum $objInterval
+     * @return Date
      */
-    private static function addInterval(class_date $objDate, class_date_period_enum $objInterval)
+    private static function addInterval(Date $objDate, DatePeriodEnum $objInterval)
     {
         $objDate = clone $objDate;
-        if ($objInterval->equals(class_date_period_enum::DAY())) {
+        if ($objInterval->equals(DatePeriodEnum::DAY())) {
             $objDate->setNextDay();
-        } elseif ($objInterval->equals(class_date_period_enum::WEEK())) {
+        } elseif ($objInterval->equals(DatePeriodEnum::WEEK())) {
             $objDate->setNextWeek();
-        } elseif ($objInterval->equals(class_date_period_enum::MONTH())) {
+        } elseif ($objInterval->equals(DatePeriodEnum::MONTH())) {
             $objDate->setNextMonth();
-        } elseif ($objInterval->equals(class_date_period_enum::QUARTER())) {
+        } elseif ($objInterval->equals(DatePeriodEnum::QUARTER())) {
             for ($intI = 0; $intI < 3; $intI++) {
                 $objDate->setNextMonth();
             }
-        } elseif ($objInterval->equals(class_date_period_enum::HALFYEAR())) {
+        } elseif ($objInterval->equals(DatePeriodEnum::HALFYEAR())) {
             for ($intI = 0; $intI < 6; $intI++) {
                 $objDate->setNextMonth();
             }
-        } elseif ($objInterval->equals(class_date_period_enum::YEAR())) {
+        } elseif ($objInterval->equals(DatePeriodEnum::YEAR())) {
             $objDate->setNextYear();
         } else {
             throw new RuntimeException('Invalid interval');

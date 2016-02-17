@@ -4,27 +4,30 @@
 *   (c) 2007-2015 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
-*	$Id$                                          *
+*	$Id$                                         *
 ********************************************************************************************************/
 
-namespace Kajona\System\System;
+namespace Kajona\System\Portal;
 
 /**
- * Interface for all model-classes
+ * Interface to convert a single value to a readable value, printable to a template.
+ * Use the annotation @templateMapper in combination with @templateExport to define a mapper
+ * to be used,
  *
  * @package module_system
+ * @since 4.5
  */
-interface ModelInterface
-{
+interface TemplatemapperInterface {
 
     /**
-     * Returns the name to be used when rendering the current object, e.g. in admin-lists.
+     * Converts the passed value to a formatted value.
+     * In most scenarios, the value is written directly to the template.
      *
-     * @abstract
-     * @todo move this to class_model, making this interface obsolete
+     * @param mixed $strValue
+     *
      * @return string
      */
-    public function getStrDisplayName();
+    public function format($strValue);
 
 
 }

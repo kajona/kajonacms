@@ -16,7 +16,8 @@ namespace Kajona\System\System;
  * @package module_system
  * @author sidler@mulchprod.de
  */
-class Filesystem {
+class Filesystem
+{
 
     /**
      * @var null|resource
@@ -33,15 +34,17 @@ class Filesystem {
      *
      * @return string[]
      */
-    public function getFilelist($strFolder, $arrSuffix = array(), $bitRecursive = false) {
+    public function getFilelist($strFolder, $arrSuffix = array(), $bitRecursive = false)
+    {
 
-        if(!is_array($arrSuffix)) {
+        if (!is_array($arrSuffix)) {
             $arrSuffix = array($arrSuffix);
         }
 
         //Deleting the root-folder, if given
-        if(uniStrpos($strFolder, _realpath_) !== false)
+        if (uniStrpos($strFolder, _realpath_) !== false) {
             $strFolder = str_replace(_realpath_, "", $strFolder);
+        }
 
         $arrReturn = array();
         $this->getFilelistHelper($strFolder, $arrSuffix, $bitRecursive, $arrReturn);
@@ -58,31 +61,35 @@ class Filesystem {
      * @param string[] $arrSuffix
      * @param bool $bitRecursive
      * @param array &$arrReturn
+     *
      * @return void
      */
-    private function getFilelistHelper($strFolder, $arrSuffix, $bitRecursive, &$arrReturn) {
-        if(!is_dir(_realpath_.$strFolder))
+    private function getFilelistHelper($strFolder, $arrSuffix, $bitRecursive, &$arrReturn)
+    {
+        if (!is_dir(_realpath_.$strFolder)) {
             return;
+        }
 
         $arrFiles = scandir(_realpath_.$strFolder);
-        foreach($arrFiles as $strFilename) {
-            if($strFilename == "." || $strFilename == "..")
+        foreach ($arrFiles as $strFilename) {
+            if ($strFilename == "." || $strFilename == "..") {
                 continue;
+            }
 
-            if(is_file(_realpath_.$strFolder."/".$strFilename)) {
+            if (is_file(_realpath_.$strFolder."/".$strFilename)) {
                 //Wanted Type?
-                if(count($arrSuffix) == 0) {
+                if (count($arrSuffix) == 0) {
                     $arrReturn[$strFolder."/".$strFilename] = $strFilename;
                 }
                 else {
                     //check, if suffix is in allowed list
                     $strFileSuffix = uniSubstr($strFilename, uniStrrpos($strFilename, "."));
-                    if(in_array($strFileSuffix, $arrSuffix)) {
+                    if (in_array($strFileSuffix, $arrSuffix)) {
                         $arrReturn[$strFolder."/".$strFilename] = $strFilename;
                     }
                 }
             }
-            else if(is_dir(_realpath_.$strFolder."/".$strFilename) && $bitRecursive) {
+            elseif (is_dir(_realpath_.$strFolder."/".$strFilename) && $bitRecursive) {
                 $this->getFilelistHelper($strFolder."/".$strFilename, $arrSuffix, $bitRecursive, $arrReturn);
             }
         }
@@ -102,40 +109,41 @@ class Filesystem {
      *
      * @return mixed
      */
-    public function getCompleteList($strFolder, $arrTypes = array(), $arrExclude = array(), $arrExcludeFolders = array(".", ".."), $bitFolders = true, $bitFiles = true) {
-        $arrReturn = array("nrFiles"        => 0,
-                           "nrFolders"      => 0,
-                           "files"          => array(),
-                           "folders"        => array()
+    public function getCompleteList($strFolder, $arrTypes = array(), $arrExclude = array(), $arrExcludeFolders = array(".", ".."), $bitFolders = true, $bitFiles = true)
+    {
+        $arrReturn = array("nrFiles"   => 0,
+                           "nrFolders" => 0,
+                           "files"     => array(),
+                           "folders"   => array()
         );
 
 
-        if(uniStrpos($strFolder, _realpath_) !== false) {
+        if (uniStrpos($strFolder, _realpath_) !== false) {
             $strFolder = str_replace(_realpath_, "", $strFolder);
         }
 
 
         //Valid dir?
-        if(is_dir(_realpath_.$strFolder)) {
+        if (is_dir(_realpath_.$strFolder)) {
             $objFileHandle = opendir(_realpath_.$strFolder);
-            if($objFileHandle !== false) {
-                while(($strEntry = readdir($objFileHandle)) !== false) {
+            if ($objFileHandle !== false) {
+                while (($strEntry = readdir($objFileHandle)) !== false) {
                     //Folder
-                    if(is_dir(_realpath_.$strFolder."/".$strEntry) && $bitFolders == true) {
+                    if (is_dir(_realpath_.$strFolder."/".$strEntry) && $bitFolders == true) {
                         //Folder excluded?
-                        if(count($arrExcludeFolders) == 0 || !in_array($strEntry, $arrExcludeFolders)) {
+                        if (count($arrExcludeFolders) == 0 || !in_array($strEntry, $arrExcludeFolders)) {
                             $arrReturn["folders"][$arrReturn["nrFolders"]++] = $strEntry;
                         }
                     }
 
                     //File
-                    if(is_file(_realpath_.$strFolder."/".$strEntry) && $bitFiles == true) {
+                    if (is_file(_realpath_.$strFolder."/".$strEntry) && $bitFiles == true) {
                         $arrTemp = $this->getFileDetails(_realpath_.$strFolder."/".$strEntry);
                         //Excluded?
-                        if(count($arrExclude) == 0 || !in_array($arrTemp["filetype"], $arrExclude)) {
+                        if (count($arrExclude) == 0 || !in_array($arrTemp["filetype"], $arrExclude)) {
                             //Types given?
-                            if(count($arrTypes) != 0) {
-                                if(in_array($arrTemp["filetype"], $arrTypes)) {
+                            if (count($arrTypes) != 0) {
+                                if (in_array($arrTemp["filetype"], $arrTypes)) {
 
                                     $arrReturn["files"][$arrReturn["nrFiles"]++] = $arrTemp;
                                 }
@@ -164,20 +172,21 @@ class Filesystem {
      *
      * @return mixed
      */
-    public function getFileDetails($strFile) {
+    public function getFileDetails($strFile)
+    {
         $arrReturn = array();
 
-        if(strpos($strFile, _realpath_) === false) {
+        if (strpos($strFile, _realpath_) === false) {
             $strFile = _realpath_.$strFile;
         }
 
-        if(is_file($strFile)) {
+        if (is_file($strFile)) {
             //Filename
             $arrReturn["filename"] = basename($strFile);
 
             //Type
             $intTemp = uniStrrpos($strFile, ".");
-            if($intTemp !== false) {
+            if ($intTemp !== false) {
                 $arrReturn["filetype"] = uniSubstr($strFile, $intTemp);
             }
             else {
@@ -208,12 +217,13 @@ class Filesystem {
      *
      * @return bool
      */
-    public function fileRename($strSource, $strTarget, $bitForce = false) {
+    public function fileRename($strSource, $strTarget, $bitForce = false)
+    {
         $bitReturn = false;
 
-        if(is_file(_realpath_."/".$strSource)) {
+        if (is_file(_realpath_."/".$strSource)) {
             //bitForce: overwrite existing file
-            if(!is_file(_realpath_."/".$strTarget) || $bitForce) {
+            if (!is_file(_realpath_."/".$strTarget) || $bitForce) {
                 $bitReturn = rename(_realpath_."/".$strSource, _realpath_."/".$strTarget);
             }
         }
@@ -229,19 +239,20 @@ class Filesystem {
      *
      * @return bool
      */
-    public function fileCopy($strSource, $strTarget, $bitForce = false) {
+    public function fileCopy($strSource, $strTarget, $bitForce = false)
+    {
         $bitReturn = false;
 
-        if(\Kajona\System\System\StringUtil::indexOf($strSource, _realpath_) === false) {
+        if (\Kajona\System\System\StringUtil::indexOf($strSource, _realpath_) === false) {
             $strSource = _realpath_.$strSource;
         }
-        if(\Kajona\System\System\StringUtil::indexOf($strTarget, _realpath_) === false) {
+        if (\Kajona\System\System\StringUtil::indexOf($strTarget, _realpath_) === false) {
             $strTarget = _realpath_.$strTarget;
         }
 
-        if(is_file($strSource)) {
+        if (is_file($strSource)) {
             //bitForce: overwrite existing file
-            if(!is_file($strTarget) || $bitForce) {
+            if (!is_file($strTarget) || $bitForce) {
                 $bitReturn = copy($strSource, $strTarget);
                 //set correct rights
                 @chmod($strTarget, 0777);
@@ -254,12 +265,14 @@ class Filesystem {
      * Deletes a file from the filesystem
      *
      * @param string $strFile
+     *
      * @return bool
      */
-    public function fileDelete($strFile) {
+    public function fileDelete($strFile)
+    {
         $strFile = uniStrReplace(_realpath_, "", $strFile);
         $bitReturn = false;
-        if(is_file(_realpath_.$strFile)) {
+        if (is_file(_realpath_.$strFile)) {
             $bitReturn = unlink(_realpath_.$strFile);
         }
         return $bitReturn;
@@ -272,11 +285,12 @@ class Filesystem {
      *
      * @return bool
      */
-    public function folderDelete($strFolder) {
+    public function folderDelete($strFolder)
+    {
         $bitReturn = false;
         $strFolder = uniStrReplace(_realpath_, "", $strFolder);
 
-        if(is_dir(_realpath_.$strFolder)) {
+        if (is_dir(_realpath_.$strFolder)) {
             $bitReturn = rmdir(_realpath_.$strFolder);
         }
 
@@ -290,17 +304,18 @@ class Filesystem {
      *
      * @return bool
      */
-    public function folderDeleteRecursive($strFolder) {
+    public function folderDeleteRecursive($strFolder)
+    {
         $bitReturn = true;
         $strFolder = uniStrReplace(_realpath_, "", $strFolder);
 
         $arrContents = $this->getCompleteList($strFolder, array(), array(), array(".", ".."));
 
-        foreach($arrContents["folders"] as $strOneFolder) {
+        foreach ($arrContents["folders"] as $strOneFolder) {
             $bitReturn = $bitReturn && $this->folderDeleteRecursive($strFolder."/".$strOneFolder);
         }
 
-        foreach($arrContents["files"] as $strOneFile) {
+        foreach ($arrContents["files"] as $strOneFile) {
             $bitReturn = $bitReturn && $this->fileDelete($strFolder."/".$strOneFile["filename"]);
         }
 
@@ -319,33 +334,34 @@ class Filesystem {
      *
      * @since 4.0
      */
-    public function folderCopyRecursive($strSourceDir, $strTargetDir, $bitOverwrite = false) {
+    public function folderCopyRecursive($strSourceDir, $strTargetDir, $bitOverwrite = false)
+    {
 
-        if(\Kajona\System\System\StringUtil::indexOf($strSourceDir, _realpath_) === false) {
+        if (\Kajona\System\System\StringUtil::indexOf($strSourceDir, _realpath_) === false) {
             $strSourceDir = _realpath_.$strSourceDir;
         }
 
-        if(\Kajona\System\System\StringUtil::indexOf($strTargetDir, _realpath_) === false) {
+        if (\Kajona\System\System\StringUtil::indexOf($strTargetDir, _realpath_) === false) {
             $strTargetDir = _realpath_.$strTargetDir;
         }
 
 
         $arrEntries = scandir($strSourceDir);
-        foreach($arrEntries as $strOneEntry) {
-            if($strOneEntry == "." || $strOneEntry == "..") {
+        foreach ($arrEntries as $strOneEntry) {
+            if ($strOneEntry == "." || $strOneEntry == "..") {
                 continue;
             }
 
-            if(is_file($strSourceDir."/".$strOneEntry) && ($bitOverwrite || !is_file($strTargetDir."/".$strOneEntry))) {
+            if (is_file($strSourceDir."/".$strOneEntry) && ($bitOverwrite || !is_file($strTargetDir."/".$strOneEntry))) {
 
-                if(!is_dir($strTargetDir)) {
+                if (!is_dir($strTargetDir)) {
                     mkdir($strTargetDir, 0777, true);
                 }
 
                 copy($strSourceDir."/".$strOneEntry, $strTargetDir."/".$strOneEntry);
             }
-            elseif(is_dir($strSourceDir."/".$strOneEntry)) {
-                if(!is_dir($strTargetDir."/".$strOneEntry)) {
+            elseif (is_dir($strSourceDir."/".$strOneEntry)) {
+                if (!is_dir($strTargetDir."/".$strOneEntry)) {
                     mkdir($strTargetDir."/".$strOneEntry, 0777, true);
                 }
 
@@ -364,23 +380,24 @@ class Filesystem {
      * @return bool
      * @throws class_exception
      */
-    public function folderCreate($strFolder, $bitRecursive = false, $bitThrowExceptionOnError = false) {
+    public function folderCreate($strFolder, $bitRecursive = false, $bitThrowExceptionOnError = false)
+    {
         $strFolder = uniStrReplace(_realpath_, "", $strFolder);
         $bitReturn = true;
 
-        if($bitRecursive) {
+        if ($bitRecursive) {
             $arrRecursiveFolders = explode("/", $strFolder);
 
             $strFolders = "";
-            foreach($arrRecursiveFolders as $strOneFolder) {
-                if($bitReturn === true) {
+            foreach ($arrRecursiveFolders as $strOneFolder) {
+                if ($bitReturn === true) {
 
                     $strTestfolder = $strFolders;
 
                     $strFolders .= "/".$strOneFolder;
-                    if(!is_dir(_realpath_.$strFolders)) {
+                    if (!is_dir(_realpath_.$strFolders)) {
 
-                        if($bitThrowExceptionOnError && !is_writable(_realpath_.$strTestfolder)) {
+                        if ($bitThrowExceptionOnError && !is_writable(_realpath_.$strTestfolder)) {
                             throw new class_exception("Folder "._realpath_.$strTestfolder." is not writable", class_exception::$level_FATALERROR);
                         }
 
@@ -390,7 +407,7 @@ class Filesystem {
             }
         }
         else {
-            if(!is_dir(_realpath_.$strFolder)) {
+            if (!is_dir(_realpath_.$strFolder)) {
                 $bitReturn = mkdir(_realpath_.$strFolder, 0777);
             }
         }
@@ -408,18 +425,19 @@ class Filesystem {
      *
      * @return int
      */
-    public function folderSize($strFolder, $arrTypes = array(), $arrExclude = array(), $arrExcludeFolders = array(".svn", ".", "..")) {
+    public function folderSize($strFolder, $arrTypes = array(), $arrExclude = array(), $arrExcludeFolders = array(".svn", ".", ".."))
+    {
         $intReturn = 0;
 
         $arrFiles = $this->getCompleteList($strFolder, $arrTypes, $arrExclude, $arrExcludeFolders);
 
-        foreach($arrFiles["files"] as $arrFile) {
+        foreach ($arrFiles["files"] as $arrFile) {
             $intReturn += $arrFile["filesize"];
         }
 
         //Call it recursive
-        if(count($arrFiles["folders"]) > 0) {
-            foreach($arrFiles["folders"] as $strOneFolder) {
+        if (count($arrFiles["folders"]) > 0) {
+            foreach ($arrFiles["folders"] as $strOneFolder) {
                 $intReturn += $this->folderSize($strFolder."/".$strOneFolder, $arrTypes, $arrExclude, $arrExcludeFolders);
             }
         }
@@ -434,11 +452,12 @@ class Filesystem {
      *
      * @return bool
      */
-    public function copyUpload($strTarget, $strTempfile) {
+    public function copyUpload($strTarget, $strTempfile)
+    {
         $bitReturn = false;
         $strTarget = _realpath_.$strTarget;
-        if(is_uploaded_file($strTempfile)) {
-            if(@move_uploaded_file($strTempfile, $strTarget)) {
+        if (is_uploaded_file($strTempfile)) {
+            if (@move_uploaded_file($strTempfile, $strTarget)) {
                 @unlink($strTempfile);
                 //set correct rights
                 @chmod($strTarget, 0777);
@@ -459,9 +478,10 @@ class Filesystem {
      *
      * @return bool
      */
-    public function openFilePointer($strFilename, $strMode = "w") {
+    public function openFilePointer($strFilename, $strMode = "w")
+    {
         $this->objFilePointer = @fopen(_realpath_.$strFilename, $strMode);
-        if($this->objFilePointer) {
+        if ($this->objFilePointer) {
             return true;
         }
         else {
@@ -471,10 +491,10 @@ class Filesystem {
 
     /**
      * Closes the filepointer currently opened and releases the pointer
-
      */
-    public function closeFilePointer() {
-        if($this->objFilePointer != null) {
+    public function closeFilePointer()
+    {
+        if ($this->objFilePointer != null) {
             @fclose($this->objFilePointer);
         }
 
@@ -486,8 +506,9 @@ class Filesystem {
      *
      * @param int $intOffset
      */
-    public function setFilePointerOffset($intOffset) {
-        if($this->objFilePointer != null) {
+    public function setFilePointerOffset($intOffset)
+    {
+        if ($this->objFilePointer != null) {
             @fseek($this->objFilePointer, $intOffset);
         }
     }
@@ -499,9 +520,10 @@ class Filesystem {
      *
      * @return bool
      */
-    public function writeToFile($strContent) {
-        if($this->objFilePointer != null) {
-            if(@fwrite($this->objFilePointer, $strContent) !== false) {
+    public function writeToFile($strContent)
+    {
+        if ($this->objFilePointer != null) {
+            if (@fwrite($this->objFilePointer, $strContent) !== false) {
                 return true;
             }
         }
@@ -513,11 +535,12 @@ class Filesystem {
      *
      * @return string or false if eof or error
      */
-    public function readLineFromFile() {
+    public function readLineFromFile()
+    {
         $strContent = false;
 
-        if($this->objFilePointer != null) {
-            if(!feof($this->objFilePointer)) {
+        if ($this->objFilePointer != null) {
+            if (!feof($this->objFilePointer)) {
                 $strContent = trim(fgets($this->objFilePointer));
             }
         }
@@ -534,22 +557,23 @@ class Filesystem {
      *
      * @return string
      */
-    public function readLastLinesFromFile($intNrOfLines = 10) {
+    public function readLastLinesFromFile($intNrOfLines = 10)
+    {
         $strReturn = "";
         $intCursor = -1;
         $intLinesRead = 0;
 
-        if($this->objFilePointer != null) {
+        if ($this->objFilePointer != null) {
             @fseek($this->objFilePointer, $intCursor, SEEK_END);
             $strChar = @fgetc($this->objFilePointer);
 
-            while($strChar !== false && $intLinesRead <= $intNrOfLines) {
+            while ($strChar !== false && $intLinesRead <= $intNrOfLines) {
                 $strReturn = $strChar.$strReturn;
 
                 @fseek($this->objFilePointer, $intCursor--, SEEK_END);
                 $strChar = fgetc($this->objFilePointer);
 
-                if($strChar == "\n") {
+                if ($strChar == "\n") {
                     $intLinesRead++;
                 }
             }
@@ -565,7 +589,8 @@ class Filesystem {
      *
      * @return bool
      */
-    public function isWritable($strFile) {
+    public function isWritable($strFile)
+    {
         return is_writable(_realpath_."/".$strFile);
     }
 
@@ -584,10 +609,12 @@ class Filesystem {
      * @since 4.0
      * @return bool
      */
-    public function chmod($strPath, $intModeFile = 0644, $intModeDirectory = 0755, $bitRecursive = false) {
+    public function chmod($strPath, $intModeFile = 0644, $intModeDirectory = 0755, $bitRecursive = false)
+    {
 
-        if(!file_exists(_realpath_.$strPath))
+        if (!file_exists(_realpath_.$strPath)) {
             return false;
+        }
 
 
         $bitReturn = @chmod(
@@ -595,13 +622,13 @@ class Filesystem {
             (is_dir(_realpath_.$strPath) ? $intModeDirectory : $intModeFile)
         );
 
-        if($bitRecursive && is_dir(_realpath_.$strPath)) {
+        if ($bitRecursive && is_dir(_realpath_.$strPath)) {
             $arrFiles = $this->getCompleteList($strPath);
 
-            foreach($arrFiles["files"] as $strOneFile) {
+            foreach ($arrFiles["files"] as $strOneFile) {
                 $bitReturn = $bitReturn && chmod(_realpath_."/".$strPath."/".$strOneFile, $intModeFile);
             }
-            foreach($arrFiles["folders"] as $strOneFolder) {
+            foreach ($arrFiles["folders"] as $strOneFolder) {
                 $bitReturn = $bitReturn && $this->chmod($strPath."/".$strOneFolder, $intModeFile, $intModeDirectory, $bitRecursive);
             }
         }
@@ -611,11 +638,12 @@ class Filesystem {
     /**
      * Streams the file directly to the client.
      * Make sure to die() the process afterwards, this is not done by this method!
+     *
      * @param $strSourceFile
      */
     public function streamFile($strSourceFile)
     {
-        if(\Kajona\System\System\StringUtil::indexOf($strSourceFile, _realpath_) === false) {
+        if (StringUtil::indexOf($strSourceFile, _realpath_) === false) {
             $strSourceFile = _realpath_.$strSourceFile;
         }
 
@@ -623,13 +651,13 @@ class Filesystem {
         //Send the data to the browser
         $strBrowser = getServer("HTTP_USER_AGENT");
         //Check the current browsertype
-        if(\Kajona\System\System\StringUtil::indexOf($strBrowser, "IE") !== false) {
+        if (StringUtil::indexOf($strBrowser, "IE") !== false) {
             //Internet Explorer
-            class_response_object::getInstance()->addHeader("Content-type: application/x-ms-download");
-            class_response_object::getInstance()->addHeader("Content-type: x-type/subtype\n");
-            class_response_object::getInstance()->addHeader("Content-type: application/force-download");
-            class_response_object::getInstance()->addHeader(
-                "Content-Disposition: attachment; filename=" . preg_replace(
+            ResponseObject::getInstance()->addHeader("Content-type: application/x-ms-download");
+            ResponseObject::getInstance()->addHeader("Content-type: x-type/subtype\n");
+            ResponseObject::getInstance()->addHeader("Content-type: application/force-download");
+            ResponseObject::getInstance()->addHeader(
+                "Content-Disposition: attachment; filename=".preg_replace(
                     '/\./', '%2e',
                     saveUrlEncode(trim(basename($strSourceFile))), substr_count(basename($strSourceFile), '.') - 1
                 )
@@ -637,21 +665,21 @@ class Filesystem {
         }
         else {
             //Good: another browser vendor
-            class_response_object::getInstance()->addHeader("Content-Type: application/octet-stream");
-            class_response_object::getInstance()->addHeader("Content-Disposition: attachment; filename=" . saveUrlEncode(trim(basename($strSourceFile))));
+            ResponseObject::getInstance()->addHeader("Content-Type: application/octet-stream");
+            ResponseObject::getInstance()->addHeader("Content-Disposition: attachment; filename=".saveUrlEncode(trim(basename($strSourceFile))));
         }
         //Common headers
-        class_response_object::getInstance()->addHeader("Expires: Mon, 01 Jan 1995 00:00:00 GMT");
-        class_response_object::getInstance()->addHeader("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
-        class_response_object::getInstance()->addHeader("Pragma: no-cache");
-        class_response_object::getInstance()->addHeader("Content-description: JustThum-Generated Data\n");
-        class_response_object::getInstance()->addHeader("Content-Length: " . filesize($strSourceFile));
+        ResponseObject::getInstance()->addHeader("Expires: Mon, 01 Jan 1995 00:00:00 GMT");
+        ResponseObject::getInstance()->addHeader("Last-Modified: ".gmdate("D, d M Y H:i:s")." GMT");
+        ResponseObject::getInstance()->addHeader("Pragma: no-cache");
+        ResponseObject::getInstance()->addHeader("Content-description: JustThum-Generated Data\n");
+        ResponseObject::getInstance()->addHeader("Content-Length: ".filesize($strSourceFile));
 
         //End Session
-        class_carrier::getInstance()->getObjSession()->sessionClose();
+        Carrier::getInstance()->getObjSession()->sessionClose();
 
         ob_clean();
-        class_response_object::getInstance()->sendHeaders();
+        ResponseObject::getInstance()->sendHeaders();
 
         //Loop the file
         $ptrFile = @fopen($strSourceFile, 'rb');

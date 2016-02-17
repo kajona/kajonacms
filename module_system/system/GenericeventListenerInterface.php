@@ -16,7 +16,8 @@ namespace Kajona\System\System;
  * @package module_system
  * @since 4.5
  */
-interface GenericeventListenerInterface {
+interface GenericeventListenerInterface
+{
 
     /**
      * This generic method is called in case of dispatched events.

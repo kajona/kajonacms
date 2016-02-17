@@ -16,7 +16,8 @@ namespace Kajona\System\System;
  * @package module_system
  * @deprecated replaced by phps' Iterator
  */
-interface IteratorInterface {
+interface IteratorInterface
+{
 
     /**
      * Returns the current element

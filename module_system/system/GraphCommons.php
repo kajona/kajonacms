@@ -8,7 +8,6 @@
 namespace Kajona\System\System;
 
 
-
 /**
  * Class which provides common methods for graphs
  *
@@ -17,7 +16,8 @@ namespace Kajona\System\System;
  * @author stefan.meyer1@yahoo.de
  */
 
-class GraphCommons {
+class GraphCommons
+{
 
     /**
      * Converts a simple array (e.g. array(1,2,3,4,5)) to a data point array.
@@ -27,13 +27,14 @@ class GraphCommons {
      *
      * @return array of class_graph_datapoints
      */
-    public static function convertArrValuesToDataPointArray(array $arrValues) {
+    public static function convertArrValuesToDataPointArray(array $arrValues)
+    {
         $arrDataPoints = array();
 
-        foreach($arrValues as $objValue) {
+        foreach ($arrValues as $objValue) {
             $objDataPoint = $objValue;
-            if(!($objValue instanceof class_graph_datapoint)) {
-                $objDataPoint = new class_graph_datapoint($objValue);
+            if (!($objValue instanceof GraphDatapoint)) {
+                $objDataPoint = new GraphDatapoint($objValue);
             }
             $arrDataPoints[] = $objDataPoint;
         }
@@ -48,9 +49,10 @@ class GraphCommons {
      *
      * @return array
      */
-    public static function getDataPointFloatValues(array $arrDataPoints) {
+    public static function getDataPointFloatValues(array $arrDataPoints)
+    {
         $arrValues = array();
-        foreach($arrDataPoints as $objDataPoint) {
+        foreach ($arrDataPoints as $objDataPoint) {
             $arrValues[] = $objDataPoint->getFloatValue();
         }
         return $arrValues;

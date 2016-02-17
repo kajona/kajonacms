@@ -16,13 +16,15 @@ namespace Kajona\System\System;
  * @author sidler@mulchprod.de
  * @since 4.7
  */
-class OrmObjectlistSystemstatusRestriction extends OrmObjectlistPropertyRestriction {
+class OrmObjectlistSystemstatusRestriction extends OrmObjectlistPropertyRestriction
+{
 
     /**
      * @param OrmComparatorEnum $objComparator
      * @param string $intStatus
      */
-    function __construct(OrmComparatorEnum $objComparator, $intStatus) {
+    function __construct(OrmComparatorEnum $objComparator, $intStatus)
+    {
         parent::__construct("intRecordStatus", $objComparator, $intStatus);
     }
 

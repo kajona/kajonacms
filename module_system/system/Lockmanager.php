@@ -107,7 +107,7 @@ class Lockmanager
     {
         $intLockedUntil = $this->getLockedUntilTimestamp();
         //lock is already outdated
-        if($intLockedUntil < time()) {
+        if ($intLockedUntil < time()) {
             return true;
         }
 
@@ -132,7 +132,7 @@ class Lockmanager
     {
         $intLockedUntil = $this->getLockedUntilTimestamp();
         //lock is already outdated
-        if($intLockedUntil < time()) {
+        if ($intLockedUntil < time()) {
             return false;
         }
 

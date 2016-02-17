@@ -19,7 +19,8 @@ namespace Kajona\System\System;
  * @author sidler@mulchprod.de
  * @since 4.7
  */
-class OrmObjectlistPropertyRestriction extends OrmObjectlistRestriction {
+class OrmObjectlistPropertyRestriction extends OrmObjectlistRestriction
+{
 
     private $strProperty = "";
 
@@ -34,11 +35,12 @@ class OrmObjectlistPropertyRestriction extends OrmObjectlistRestriction {
      * @param OrmComparatorEnum $objComparator
      * @param $strValue
      */
-    function __construct($strProperty, OrmComparatorEnum $objComparator, $strValue) {
+    function __construct($strProperty, OrmComparatorEnum $objComparator, $strValue)
+    {
 
         $this->arrParams = array($strValue);
         $this->objComparator = $objComparator;
-        $this->strProperty =  $strProperty;
+        $this->strProperty = $strProperty;
     }
 
     /**
@@ -46,14 +48,16 @@ class OrmObjectlistPropertyRestriction extends OrmObjectlistRestriction {
      *
      * @throws OrmException
      */
-    public function setArrParams($arrParams) {
+    public function setArrParams($arrParams)
+    {
         throw new OrmException("Setting params for property restrictions is not supported", OrmException::$level_ERROR);
     }
 
     /**
      * @return array
      */
-    public function getArrParams() {
+    public function getArrParams()
+    {
         return $this->arrParams;
     }
 
@@ -62,7 +66,8 @@ class OrmObjectlistPropertyRestriction extends OrmObjectlistRestriction {
      *
      * @throws class_orm_exception
      */
-    public function setStrWhere($strWhere) {
+    public function setStrWhere($strWhere)
+    {
         throw new class_orm_exception("Setting a where restriction for property restrictions is not supported", Exception::$level_ERROR);
     }
 
@@ -72,18 +77,18 @@ class OrmObjectlistPropertyRestriction extends OrmObjectlistRestriction {
      * @return string
      * @throws OrmException
      */
-    public function getStrWhere() {
+    public function getStrWhere()
+    {
         $objReflection = new Reflection($this->getStrTargetClass());
 
         $strPropertyValue = $objReflection->getAnnotationValueForProperty($this->strProperty, OrmBase::STR_ANNOTATION_TABLECOLUMN);
 
-        if($strPropertyValue == null)
+        if ($strPropertyValue == null) {
             throw new OrmException("Failed to load annotation ".OrmBase::STR_ANNOTATION_TABLECOLUMN." for property ".$this->strProperty."@".$this->getStrTargetClass(), OrmException::$level_ERROR);
+        }
 
-        return " AND ".$strPropertyValue. " ".$this->objComparator->getEnumAsSqlString()." ? ";
+        return " AND ".$strPropertyValue." ".$this->objComparator->getEnumAsSqlString()." ? ";
     }
-
-
 
 
 }

@@ -16,10 +16,12 @@ namespace Kajona\System\System;
  * @package module_system
  * @since 4.5
  */
-interface GenericPluginInterface {
+interface GenericPluginInterface
+{
 
     /**
      * Returns the name of extension/plugin the objects wants to contribute to.
+     *
      * @return string
      */
     public static function getExtensionName();

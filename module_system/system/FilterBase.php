@@ -44,24 +44,24 @@ abstract class FilterBase
     /**
      * Generates ORM restrictions based on the properties of the filter.
      *
-     * @return class_orm_objectlist_restriction[]
+     * @return OrmObjectlistRestriction[]
      */
     public function getOrmRestrictions()
     {
         $arrRestriction = array();
 
-        $objReflection = new class_reflection(get_class($this));
-        $arrProperties = $objReflection->getPropertiesWithAnnotation(class_orm_base::STR_ANNOTATION_TABLECOLUMN);
+        $objReflection = new Reflection(get_class($this));
+        $arrProperties = $objReflection->getPropertiesWithAnnotation(OrmBase::STR_ANNOTATION_TABLECOLUMN);
         $arrPropertiesFilterComparator = $objReflection->getPropertiesWithAnnotation(self::STR_ANNOTATION_FILTER_COMPARE_OPERATOR);
 
         $arrValues = get_object_vars($this);
-        foreach($arrProperties as $strAttributeName => $strAttributeValue) {
+        foreach ($arrProperties as $strAttributeName => $strAttributeValue) {
             if (isset($arrValues[$strAttributeName])) {
                 $strTableColumn = $strAttributeValue;
                 $strGetter = $objReflection->getGetter($strAttributeName);
 
                 $enumFilterCompareOperator = null;
-                if(array_key_exists($strAttributeName, $arrPropertiesFilterComparator)) {
+                if (array_key_exists($strAttributeName, $arrPropertiesFilterComparator)) {
                     $enumFilterCompareOperator = $this->getFilterCompareOperator($arrPropertiesFilterComparator[$strAttributeName]);
                 }
 
@@ -71,37 +71,42 @@ abstract class FilterBase
                         if (is_string($strValue)) {
                             if (validateSystemid($strValue)) {
                                 $strCompareOperator = $enumFilterCompareOperator === null ? "=" : $enumFilterCompareOperator->getEnumAsSqlString();
-                                $arrRestriction[] = new class_orm_objectlist_restriction("AND $strTableColumn $strCompareOperator ?", $strValue);
-                            } else {
-                                $strCompareOperator = $enumFilterCompareOperator === null ? "LIKE" : $enumFilterCompareOperator->getEnumAsSqlString();
-                                $arrRestriction[] = new class_orm_objectlist_restriction("AND $strTableColumn $strCompareOperator ?", "%" . $strValue . "%");
+                                $arrRestriction[] = new OrmObjectlistRestriction("AND $strTableColumn $strCompareOperator ?", $strValue);
                             }
-                        } elseif (is_int($strValue) || is_float($strValue)) {
+                            else {
+                                $strCompareOperator = $enumFilterCompareOperator === null ? "LIKE" : $enumFilterCompareOperator->getEnumAsSqlString();
+                                $arrRestriction[] = new OrmObjectlistRestriction("AND $strTableColumn $strCompareOperator ?", "%".$strValue."%");
+                            }
+                        }
+                        elseif (is_int($strValue) || is_float($strValue)) {
                             $strCompareOperator = $enumFilterCompareOperator === null ? "=" : $enumFilterCompareOperator->getEnumAsSqlString();
-                            $arrRestriction[] = new class_orm_objectlist_restriction("AND $strTableColumn $strCompareOperator ?", $strValue);
-                        } elseif (is_bool($strValue)) {
+                            $arrRestriction[] = new OrmObjectlistRestriction("AND $strTableColumn $strCompareOperator ?", $strValue);
+                        }
+                        elseif (is_bool($strValue)) {
                             $strCompareOperator = $enumFilterCompareOperator === null ? "=" : $enumFilterCompareOperator->getEnumAsSqlString();
-                            $arrRestriction[] = new class_orm_objectlist_restriction("AND $strTableColumn $strCompareOperator ?", $strValue ? 1 : 0);
-                        } elseif (is_array($strValue)) {
-                            $arrRestriction[] = new class_orm_objectlist_in_restriction($strTableColumn, $strValue);
-                        } elseif ($strValue instanceof class_date) {
+                            $arrRestriction[] = new OrmObjectlistRestriction("AND $strTableColumn $strCompareOperator ?", $strValue ? 1 : 0);
+                        }
+                        elseif (is_array($strValue)) {
+                            $arrRestriction[] = new OrmObjectlistInRestriction($strTableColumn, $strValue);
+                        }
+                        elseif ($strValue instanceof Date) {
                             $strValue = clone $strValue;
                             $strCompareOperator = $enumFilterCompareOperator === null ? "=" : $enumFilterCompareOperator->getEnumAsSqlString();
 
-                            if($enumFilterCompareOperator !== null) {
-                                if ($enumFilterCompareOperator->equals(class_orm_comparator_enum::GreaterThen())
-                                    || $enumFilterCompareOperator->equals(class_orm_comparator_enum::GreaterThenEquals())
+                            if ($enumFilterCompareOperator !== null) {
+                                if ($enumFilterCompareOperator->equals(OrmComparatorEnum::GreaterThen())
+                                    || $enumFilterCompareOperator->equals(OrmComparatorEnum::GreaterThenEquals())
                                 ) {
                                     $strValue->setBeginningOfDay();
                                 }
-                                if ($enumFilterCompareOperator->equals(class_orm_comparator_enum::LessThen())
-                                    || $enumFilterCompareOperator->equals(class_orm_comparator_enum::LessThenEquals())
+                                if ($enumFilterCompareOperator->equals(OrmComparatorEnum::LessThen())
+                                    || $enumFilterCompareOperator->equals(OrmComparatorEnum::LessThenEquals())
                                 ) {
                                     $strValue->setEndOfDay();
                                 }
                             }
 
-                            $arrRestriction[] = new class_orm_objectlist_restriction("AND $strTableColumn $strCompareOperator ?", $strValue->getLongTimestamp());
+                            $arrRestriction[] = new OrmObjectlistRestriction("AND $strTableColumn $strCompareOperator ?", $strValue->getLongTimestamp());
                         }
                     }
                 }
@@ -114,9 +119,9 @@ abstract class FilterBase
     /**
      * Adds all ORM restrictions to the given $objORM
      *
-     * @param class_orm_objectlist $objORM
+     * @param OrmObjectlist $objORM
      */
-    public function addWhereRestrictions(class_orm_objectlist $objORM)
+    public function addWhereRestrictions(OrmObjectlist $objORM)
     {
         $objRestrictions = $this->getOrmRestrictions();
         foreach ($objRestrictions as $objRestriction) {
@@ -128,25 +133,27 @@ abstract class FilterBase
      * Gets class_orm_comparator_enum by the given $strFilterCompareType
      *
      * @param string $strFilterCompareType
-     * @return class_orm_comparator_enum
+     *
+     * @return OrmComparatorEnum
      */
-    private function getFilterCompareOperator($strFilterCompareType) {
+    private function getFilterCompareOperator($strFilterCompareType)
+    {
 
-        switch($strFilterCompareType) {
+        switch ($strFilterCompareType) {
             case self::STR_COMPAREOPERATOR_EQ:
-                return class_orm_comparator_enum::Equal();
+                return OrmComparatorEnum::Equal();
             case self::STR_COMPAREOPERATOR_GT:
-                return class_orm_comparator_enum::GreaterThen();
+                return OrmComparatorEnum::GreaterThen();
             case self::STR_COMPAREOPERATOR_LT:
-                return class_orm_comparator_enum::LessThen();
+                return OrmComparatorEnum::LessThen();
             case self::STR_COMPAREOPERATOR_GE:
-                return class_orm_comparator_enum::GreaterThenEquals();
+                return OrmComparatorEnum::GreaterThenEquals();
             case self::STR_COMPAREOPERATOR_LE:
-                return class_orm_comparator_enum::LessThenEquals();
+                return OrmComparatorEnum::LessThenEquals();
             case self::STR_COMPAREOPERATOR_NE:
-                return class_orm_comparator_enum::NotEqual();
+                return OrmComparatorEnum::NotEqual();
             case self::STR_COMPAREOPERATOR_LIKE:
-                return class_orm_comparator_enum::Like();
+                return OrmComparatorEnum::Like();
             default:
                 return null;
         }

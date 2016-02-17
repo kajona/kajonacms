@@ -20,10 +20,11 @@ namespace Kajona\System\System;
  * @author sidler@mulchprod.de
  * @since 4.4
  */
-class History {
+class History
+{
 
     /**
-     * @var class_session
+     * @var Session
      */
     private $objSession = null;
 
@@ -33,15 +34,18 @@ class History {
     /**
      * Default constructor
      */
-    function __construct() {
-        $this->objSession = class_carrier::getInstance()->getObjSession();
+    function __construct()
+    {
+        $this->objSession = Carrier::getInstance()->getObjSession();
     }
 
     /**
      * Add the current call to the stack of backend-urls
+     *
      * @return void
      */
-    public function setAdminHistory() {
+    public function setAdminHistory()
+    {
         $this->writeToHistoryArray(self::STR_ADMIN_SESSION_KEY);
     }
 
@@ -50,33 +54,35 @@ class History {
      *
      * @return void
      */
-    public function setPortalHistory() {
+    public function setPortalHistory()
+    {
         $this->writeToHistoryArray(self::STR_PORTAL_SESSION_KEY);
     }
 
-    private function writeToHistoryArray($strSessionKey) {
+    private function writeToHistoryArray($strSessionKey)
+    {
         $strQueryString = getServer("QUERY_STRING");
 
         //Clean querystring of empty actions
-        if(uniSubstr($strQueryString, -8) == "&action=") {
+        if (uniSubstr($strQueryString, -8) == "&action=") {
             $strQueryString = substr_replace($strQueryString, "", -8);
         }
 
         //Just do s.th., if not in the rights-mgmt
-        if(uniStrpos($strQueryString, "module=right") !== false) {
+        if (uniStrpos($strQueryString, "module=right") !== false) {
             return;
         }
 
         $arrHistory = $this->objSession->getSession($strSessionKey);
 
         //And insert just, if different to last entry
-        if($strQueryString == $this->getHistoryEntry(0, $strSessionKey)) {
+        if ($strQueryString == $this->getHistoryEntry(0, $strSessionKey)) {
             return;
         }
         //If we reach up here, we can enter the current query
-        if($arrHistory !== false) {
+        if ($arrHistory !== false) {
             array_unshift($arrHistory, $strQueryString);
-            while(count($arrHistory) > 10) {
+            while (count($arrHistory) > 10) {
                 array_pop($arrHistory);
             }
         }
@@ -90,14 +96,16 @@ class History {
 
     /**
      * Internal helper to access the session based arrays
+     *
      * @param int $intPosition
      * @param string $strSessionKey
      *
      * @return null
      */
-    private function getHistoryEntry($intPosition, $strSessionKey) {
+    private function getHistoryEntry($intPosition, $strSessionKey)
+    {
         $arrHistory = $this->objSession->getSession($strSessionKey);
-        if(isset($arrHistory[$intPosition])) {
+        if (isset($arrHistory[$intPosition])) {
             return $arrHistory[$intPosition];
         }
         else {
@@ -112,7 +120,8 @@ class History {
      *
      * @return string
      */
-    public function getAdminHistory($intPosition = 0) {
+    public function getAdminHistory($intPosition = 0)
+    {
         return $this->getHistoryEntry($intPosition, self::STR_ADMIN_SESSION_KEY);
     }
 
@@ -122,7 +131,8 @@ class History {
      *
      * @return string[]
      */
-    public function getArrAdminHistory() {
+    public function getArrAdminHistory()
+    {
         return $this->objSession->getSession(self::STR_ADMIN_SESSION_KEY);
     }
 
@@ -131,7 +141,8 @@ class History {
      *
      * @return string[]
      */
-    public function getArrPortalHistory() {
+    public function getArrPortalHistory()
+    {
         return $this->objSession->getSession(self::STR_PORTAL_SESSION_KEY);
     }
 
@@ -139,9 +150,11 @@ class History {
      * Fetches an admin-url the current user loaded before
      *
      * @param int $intPosition
+     *
      * @return string
      */
-    public function getPortalHistory($intPosition = 0) {
+    public function getPortalHistory($intPosition = 0)
+    {
         return $this->getHistoryEntry($intPosition, self::STR_PORTAL_SESSION_KEY);
     }
 

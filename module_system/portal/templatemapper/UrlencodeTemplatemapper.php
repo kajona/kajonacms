@@ -6,6 +6,8 @@
 
 namespace Kajona\System\Portal\Templatemapper;
 
+use Kajona\System\Portal\TemplatemapperInterface;
+
 
 /**
  * A templatemapper passing the value through urlencode
@@ -14,7 +16,7 @@ namespace Kajona\System\Portal\Templatemapper;
  * @author sidler@mulchpropd.de
  * @since 4.6
  */
-class UrlencodeTemplatemapper implements interface_templatemapper {
+class UrlencodeTemplatemapper implements TemplatemapperInterface {
 
     /**
      * Converts the passed value to a formatted value.

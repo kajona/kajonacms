@@ -23,7 +23,8 @@ use class_module_rating_rate;
  *
  *
  */
-abstract class Model extends Root {
+abstract class Model extends Root
+{
 
 
     // --- RATING -------------------------------------------------------------------------------------------
@@ -31,24 +32,27 @@ abstract class Model extends Root {
      * Rating of the current file, if module rating is installed.
      *
      * @param bool $bitRound Rounds the rating or disables rounding
+     *
      * @see interface_sortable_rating
      * @return float
      *
      * @todo: with php5.4, ths could be moved to traits
      */
-    public function getFloatRating($bitRound = true) {
+    public function getFloatRating($bitRound = true)
+    {
         $floatRating = null;
         $objModule = SystemModule::getModuleByName("rating");
-        if($objModule != null) {
+        if ($objModule != null) {
             $objRating = \class_module_rating_rate::getRating($this->getSystemid());
-            if($objRating != null) {
+            if ($objRating != null) {
                 $floatRating = $objRating->getFloatRating();
-                if($bitRound) {
+                if ($bitRound) {
                     $floatRating = round($floatRating, 2);
                 }
             }
-            else
+            else {
                 $floatRating = 0.0;
+            }
         }
 
         return $floatRating;
@@ -61,15 +65,18 @@ abstract class Model extends Root {
      *
      * @todo: with php5.4, ths could be moved to traits
      */
-    public function isRateableByUser() {
+    public function isRateableByUser()
+    {
         $bitReturn = false;
         $objModule = SystemModule::getModuleByName("rating");
-        if($objModule != null) {
+        if ($objModule != null) {
             $objRating = class_module_rating_rate::getRating($this->getSystemid());
-            if($objRating != null)
-               $bitReturn = $objRating->isRateableByCurrentUser();
-            else
-               $bitReturn = true;
+            if ($objRating != null) {
+                $bitReturn = $objRating->isRateableByCurrentUser();
+            }
+            else {
+                $bitReturn = true;
+            }
         }
 
         return $bitReturn;
@@ -83,15 +90,18 @@ abstract class Model extends Root {
      *
      * @todo: with php5.4, ths could be moved to traits
      */
-    public function getIntRatingHits() {
+    public function getIntRatingHits()
+    {
         $intHits = 0;
         $objModule = SystemModule::getModuleByName("rating");
-        if($objModule != null) {
+        if ($objModule != null) {
             $objRating = class_module_rating_rate::getRating($this->getSystemid());
-            if($objRating != null)
-               $intHits = $objRating->getIntHits();
-            else
-               return 0;
+            if ($objRating != null) {
+                $intHits = $objRating->getIntHits();
+            }
+            else {
+                return 0;
+            }
         }
 
         return $intHits;

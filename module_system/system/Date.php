@@ -9,6 +9,9 @@
 
 namespace Kajona\System\System;
 
+use DateInterval;
+use DateTime;
+
 
 /**
  * The date class is used to handle all kind of date and time related operations.
@@ -21,7 +24,8 @@ namespace Kajona\System\System;
  * @package module_system
  * @author sidler@mulchprod.de
  */
-class Date {
+class Date
+{
 
     const INT_DAY_SUNDAY = 0;
     const INT_DAY_MONDAY = 1;
@@ -46,19 +50,21 @@ class Date {
      *
      * @param string|int|Date $longInitValue
      */
-    public function __construct($longInitValue = "") {
+    public function __construct($longInitValue = "")
+    {
 
-        if(is_object($longInitValue) && $longInitValue instanceof Date)
+        if (is_object($longInitValue) && $longInitValue instanceof Date) {
             $longInitValue = $longInitValue->getLongTimestamp();
+        }
 
-        if($longInitValue == "0") {
+        if ($longInitValue == "0") {
             $this->setLongTimestamp("00000000000000");
         }
-        else if($longInitValue == "") {
+        elseif ($longInitValue == "") {
             $this->setTimeInOldStyle(time());
         }
         else {
-            if(strlen($longInitValue) == 14) {
+            if (strlen($longInitValue) == 14) {
                 $this->setLongTimestamp($longInitValue);
             }
             else {
@@ -72,8 +78,9 @@ class Date {
      *
      * @return string
      */
-    public function __toString() {
-        return $this->longTimestamp . "";
+    public function __toString()
+    {
+        return $this->longTimestamp."";
     }
 
     /**
@@ -83,7 +90,8 @@ class Date {
      *
      * @return bool
      */
-    public function isSameDay(Date $objDateToCompare) {
+    public function isSameDay(Date $objDateToCompare)
+    {
         return uniSubstr($objDateToCompare->getLongTimestamp(), 0, 8) == uniSubstr($this->getLongTimestamp(), 0, 8);
     }
 
@@ -92,7 +100,8 @@ class Date {
      *
      * @return int
      */
-    public static function getCurrentTimestamp() {
+    public static function getCurrentTimestamp()
+    {
         return date("YmdHis");
     }
 
@@ -107,7 +116,8 @@ class Date {
      * @param string $strFieldname
      * @param array $arrParams
      */
-    public function generateDateFromParams($strFieldname, $arrParams) {
+    public function generateDateFromParams($strFieldname, $arrParams)
+    {
         $intYear = "0000";
         $intMonth = 00;
         $intDay = 00;
@@ -115,55 +125,55 @@ class Date {
         $intMinute = 00;
         $intSecond = 00;
 
-        if(isset($arrParams[$strFieldname . "_year"]) && $arrParams[$strFieldname . "_year"] != "") {
-            $intYear = (int)$arrParams[$strFieldname . "_year"];
+        if (isset($arrParams[$strFieldname."_year"]) && $arrParams[$strFieldname."_year"] != "") {
+            $intYear = (int)$arrParams[$strFieldname."_year"];
         }
 
-        if(isset($arrParams[$strFieldname . "_month"]) && $arrParams[$strFieldname . "_month"] != "") {
-            $intMonth = (int)$arrParams[$strFieldname . "_month"];
-            if($intMonth > 12) {
+        if (isset($arrParams[$strFieldname."_month"]) && $arrParams[$strFieldname."_month"] != "") {
+            $intMonth = (int)$arrParams[$strFieldname."_month"];
+            if ($intMonth > 12) {
                 $intMonth = 12;
             }
         }
 
-        if(isset($arrParams[$strFieldname . "_day"]) && $arrParams[$strFieldname . "_day"] != "") {
-            $intDay = (int)$arrParams[$strFieldname . "_day"];
-            if($intDay > 31) {
+        if (isset($arrParams[$strFieldname."_day"]) && $arrParams[$strFieldname."_day"] != "") {
+            $intDay = (int)$arrParams[$strFieldname."_day"];
+            if ($intDay > 31) {
                 $intDay = 31;
             }
         }
 
-        if(isset($arrParams[$strFieldname . "_hour"]) && $arrParams[$strFieldname . "_hour"] != "") {
-            $intHour = (int)$arrParams[$strFieldname . "_hour"];
-            if($intHour > 23) {
+        if (isset($arrParams[$strFieldname."_hour"]) && $arrParams[$strFieldname."_hour"] != "") {
+            $intHour = (int)$arrParams[$strFieldname."_hour"];
+            if ($intHour > 23) {
                 $intHour = 23;
             }
         }
 
-        if(isset($arrParams[$strFieldname . "_minute"]) && $arrParams[$strFieldname . "_minute"] != "") {
-            $intMinute = (int)$arrParams[$strFieldname . "_minute"];
-            if($intMinute > 59) {
+        if (isset($arrParams[$strFieldname."_minute"]) && $arrParams[$strFieldname."_minute"] != "") {
+            $intMinute = (int)$arrParams[$strFieldname."_minute"];
+            if ($intMinute > 59) {
                 $intMinute = 59;
             }
         }
 
-        if(isset($arrParams[$strFieldname . "_second"]) && $arrParams[$strFieldname . "_second"] != "") {
-            $intMinute = (int)$arrParams[$strFieldname . "_second"];
-            if($intMinute > 59) {
+        if (isset($arrParams[$strFieldname."_second"]) && $arrParams[$strFieldname."_second"] != "") {
+            $intMinute = (int)$arrParams[$strFieldname."_second"];
+            if ($intMinute > 59) {
                 $intMinute = 59;
             }
         }
 
         //see if the other parts may be read directly
-        if(isset($arrParams[$strFieldname])) {
+        if (isset($arrParams[$strFieldname])) {
 
-            if(strlen($arrParams[$strFieldname]) == strlen($this->strStringFormat)) {
+            if (strlen($arrParams[$strFieldname]) == strlen($this->strStringFormat)) {
                 $this->setLongTimestamp($arrParams[$strFieldname]);
                 return;
             }
 
-            $objDateTime = DateTime::createFromFormat(class_carrier::getInstance()->getObjLang()->getLang("dateStyleShort", "system"), $arrParams[$strFieldname]);
-            if($objDateTime) {
+            $objDateTime = DateTime::createFromFormat(Carrier::getInstance()->getObjLang()->getLang("dateStyleShort", "system"), $arrParams[$strFieldname]);
+            if ($objDateTime) {
                 $intTimestamp = $objDateTime->getTimestamp();
                 $intYear = strftime("%Y", $intTimestamp);
                 $intMonth = strftime("%m", $intTimestamp);
@@ -182,8 +192,9 @@ class Date {
     }
 
 
-    private function validateDate() {
-        if(!uniEreg("([0-9]){14}", $this->getLongTimestamp()) || $this->getLongTimestamp() < 0) {
+    private function validateDate()
+    {
+        if (!uniEreg("([0-9]){14}", $this->getLongTimestamp()) || $this->getLongTimestamp() < 0) {
             echo $this->__toString()."\n";
             if (function_exists("debug_backtrace")) {
                 $arrStack = debug_backtrace();
@@ -203,9 +214,10 @@ class Date {
      *
      * @param int $intTimestamp
      *
-     * @return \Date
+     * @return Date
      */
-    public function setTimeInOldStyle($intTimestamp) {
+    public function setTimeInOldStyle($intTimestamp)
+    {
         //parse timestamp in order to get schema.
         $this->longTimestamp = date($this->strParseFormat, (int)$intTimestamp);
 
@@ -218,7 +230,8 @@ class Date {
      *
      * @return int
      */
-    public function getTimeInOldStyle() {
+    public function getTimeInOldStyle()
+    {
         return mktime($this->getIntHour(), $this->getIntMin(), $this->getIntSec(), $this->getIntMonth(), $this->getIntDay(), $this->getIntYear());
     }
 
@@ -236,7 +249,8 @@ class Date {
      *
      * @return int
      */
-    public function getIntDayOfWeek() {
+    public function getIntDayOfWeek()
+    {
         return date('w', $this->getTimeInOldStyle());
     }
 
@@ -245,12 +259,13 @@ class Date {
      * Includes the handling of month / year shifts.
      *
      * @since 3.4
-     * @return \Date
+     * @return Date
      */
-    public function setPreviousDay() {
+    public function setPreviousDay()
+    {
         $objDate = DateTime::createFromFormat($this->strParseFormat, $this->getLongTimestamp());
-        if($objDate == null)  {
-            throw new class_exception("Can't parse date ".$this->getLongTimestamp(), class_exception::$level_ERROR);
+        if ($objDate == null) {
+            throw new Exception("Can't parse date ".$this->getLongTimestamp(), Exception::$level_ERROR);
         }
 
         $objDate->sub(DateInterval::createFromDateString('1 day'));
@@ -264,9 +279,10 @@ class Date {
      * Includes the handling of month / year shifts.
      *
      * @since 3.4
-     * @return \Date
+     * @return Date
      */
-    public function setNextDay() {
+    public function setNextDay()
+    {
         $objDate = DateTime::createFromFormat($this->strParseFormat, $this->getLongTimestamp());
         $objDate->add(DateInterval::createFromDateString('1 day'));
         $this->setTimeInOldStyle($objDate->getTimestamp());
@@ -279,19 +295,20 @@ class Date {
      * If the current month has 31 days, the next one only 30, the
      * logic will remain at 30.
      *
-     * @return \Date
+     * @return Date
      */
-    public function setNextMonth() {
+    public function setNextMonth()
+    {
         $objSourceDate = clone $this;
 
         $this->setNextDay();
         $intDaysAdded = 1;
-        while($this->getIntDay() != $objSourceDate->getIntDay()) {
+        while ($this->getIntDay() != $objSourceDate->getIntDay()) {
             $this->setNextDay();
             $intDaysAdded++;
 
             //if we skip a month border, roll back until the previous months last day
-            if($intDaysAdded > 31) {
+            if ($intDaysAdded > 31) {
                 $this->setIntDay(1);
                 $this->setPreviousDay();
                 //and jump out
@@ -313,19 +330,20 @@ class Date {
      * If the current month has 31 days, the previous one only 30, the
      * logic will remain at 30.
      *
-     * @return \Date
+     * @return Date
      */
-    public function setPreviousMonth() {
+    public function setPreviousMonth()
+    {
         $objSourceDate = clone $this;
 
         $this->setPreviousDay();
         $intDaysSubtracted = 1;
-        while($this->getIntDay() != $objSourceDate->getIntDay()) {
+        while ($this->getIntDay() != $objSourceDate->getIntDay()) {
             $this->setPreviousDay();
             $intDaysSubtracted++;
 
             //if we skip a month border, roll back until the next months last day
-            if($intDaysSubtracted > 31) {
+            if ($intDaysSubtracted > 31) {
                 $this->setNextMonth();
                 $this->setIntDay(1);
                 $this->setPreviousDay();
@@ -345,12 +363,13 @@ class Date {
     /**
      * Shifts the current year into the past by one.
      *
-     * @return \Date
+     * @return Date
      */
-    public function setPreviousYear() {
+    public function setPreviousYear()
+    {
         $intCurrentDay = $this->getIntDay();
         $this->setIntDay(1);
-        for($intI = 0; $intI < 12; $intI++) {
+        for ($intI = 0; $intI < 12; $intI++) {
             $this->setPreviousMonth();
         }
         $this->setIntDay($intCurrentDay);
@@ -361,12 +380,13 @@ class Date {
     /**
      * Shifts the current year into the future by one.
      *
-     * @return \Date
+     * @return Date
      */
-    public function setNextYear() {
+    public function setNextYear()
+    {
         $intCurrentDay = $this->getIntDay();
         $this->setIntDay(1);
-        for($intI = 0; $intI < 12; $intI++) {
+        for ($intI = 0; $intI < 12; $intI++) {
             $this->setNextMonth();
         }
         $this->setIntDay($intCurrentDay);
@@ -377,11 +397,13 @@ class Date {
     /**
      * Shifts the current date one week into the future, so seven days
      *
-     * @return \Date
+     * @return Date
      */
-    public function setNextWeek() {
-        for($intI = 1; $intI <= 7; $intI++)
+    public function setNextWeek()
+    {
+        for ($intI = 1; $intI <= 7; $intI++) {
             $this->setNextDay();
+        }
 
 //        $this->validateDate();
         return $this;
@@ -390,11 +412,13 @@ class Date {
     /**
      * Shifts the current date one week into the future, so seven days
      *
-     * @return \Date
+     * @return Date
      */
-    public function setPreviousWeek() {
-        for($intI = 1; $intI <= 7; $intI++)
+    public function setPreviousWeek()
+    {
+        for ($intI = 1; $intI <= 7; $intI++) {
             $this->setPreviousDay();
+        }
 
         //$this->validateDate();
         return $this;
@@ -403,18 +427,20 @@ class Date {
     /**
      * Sets the current time to the end of the day
      *
-     * @return \Date
+     * @return Date
      */
-    public function setEndOfDay() {
+    public function setEndOfDay()
+    {
         return $this->setIntHour(23)->setIntMin(59)->setIntSec(59);
     }
 
     /**
      * Sets the current time to the beginning of the day
      *
-     * @return \Date
+     * @return Date
      */
-    public function setBeginningOfDay() {
+    public function setBeginningOfDay()
+    {
         return $this->setIntHour(0)->setIntMin(0)->setIntSec(0);
     }
 
@@ -423,17 +449,19 @@ class Date {
      *
      * @param int $intYear
      *
-     * @return \Date
+     * @return Date
      */
-    public function setIntYear($intYear) {
-        if($intYear < 0)
+    public function setIntYear($intYear)
+    {
+        if ($intYear < 0) {
             return $this;
-
-        if(uniStrlen($intYear) == 2) {
-            $intYear = "20" . $intYear;
         }
-        if(uniStrlen($intYear) == 1) {
-            $intYear = "200" . $intYear;
+
+        if (uniStrlen($intYear) == 2) {
+            $intYear = "20".$intYear;
+        }
+        if (uniStrlen($intYear) == 1) {
+            $intYear = "200".$intYear;
         }
 
         $strYear = sprintf("%04s", $intYear);
@@ -448,10 +476,11 @@ class Date {
      *
      * @param int $intMonth
      *
-     * @return \Date
+     * @return Date
      */
-    public function setIntMonth($intMonth) {
-        if($intMonth < 1 || $intMonth > 12) {
+    public function setIntMonth($intMonth)
+    {
+        if ($intMonth < 1 || $intMonth > 12) {
             return $this;
         }
 
@@ -466,10 +495,11 @@ class Date {
      *
      * @param int $intDay
      *
-     * @return \Date
+     * @return Date
      */
-    public function setIntDay($intDay) {
-        if($intDay < 1 || $intDay > 31) {
+    public function setIntDay($intDay)
+    {
+        if ($intDay < 1 || $intDay > 31) {
             return $this;
         }
 
@@ -485,10 +515,11 @@ class Date {
      * @param int $intHour
      * @param bool $bitForce
      *
-     * @return \Date
+     * @return Date
      */
-    public function setIntHour($intHour, $bitForce = false) {
-        if(!$bitForce && ($intHour < 0 || $intHour > 23)) {
+    public function setIntHour($intHour, $bitForce = false)
+    {
+        if (!$bitForce && ($intHour < 0 || $intHour > 23)) {
             return $this;
         }
 
@@ -505,10 +536,11 @@ class Date {
      * @param int $intMin
      * @param bool $bitForce
      *
-     * @return \Date
+     * @return Date
      */
-    public function setIntMin($intMin, $bitForce = false) {
-        if(!$bitForce && ($intMin < 0 || $intMin > 59)) {
+    public function setIntMin($intMin, $bitForce = false)
+    {
+        if (!$bitForce && ($intMin < 0 || $intMin > 59)) {
             return $this;
         }
 
@@ -525,10 +557,11 @@ class Date {
      * @param int $intSec
      * @param bool $bitForce
      *
-     * @return \Date
+     * @return Date
      */
-    public function setIntSec($intSec, $bitForce = false) {
-        if(!$bitForce && ($intSec < 0 || $intSec > 59)) {
+    public function setIntSec($intSec, $bitForce = false)
+    {
+        if (!$bitForce && ($intSec < 0 || $intSec > 59)) {
             return $this;
         }
 
@@ -544,7 +577,8 @@ class Date {
      *
      * @return int
      */
-    public function getIntYear() {
+    public function getIntYear()
+    {
         return substr($this->longTimestamp, 0, 4);
     }
 
@@ -553,7 +587,8 @@ class Date {
      *
      * @return int
      */
-    public function getIntMonth() {
+    public function getIntMonth()
+    {
         return substr($this->longTimestamp, 4, 2);
     }
 
@@ -562,7 +597,8 @@ class Date {
      *
      * @return int
      */
-    public function getIntDay() {
+    public function getIntDay()
+    {
         return substr($this->longTimestamp, 6, 2);
     }
 
@@ -571,7 +607,8 @@ class Date {
      *
      * @return int
      */
-    public function getIntHour() {
+    public function getIntHour()
+    {
         return substr($this->longTimestamp, 8, 2);
     }
 
@@ -580,7 +617,8 @@ class Date {
      *
      * @return int
      */
-    public function getIntMin() {
+    public function getIntMin()
+    {
         return substr($this->longTimestamp, 10, 2);
     }
 
@@ -589,7 +627,8 @@ class Date {
      *
      * @return int
      */
-    public function getIntSec() {
+    public function getIntSec()
+    {
         return substr($this->longTimestamp, 12, 2);
     }
 
@@ -598,7 +637,8 @@ class Date {
      *
      * @return int
      */
-    public function getLongTimestamp() {
+    public function getLongTimestamp()
+    {
         return $this->longTimestamp;
     }
 
@@ -607,10 +647,11 @@ class Date {
      *
      * @param int $longTimestamp
      *
-     * @return \Date
+     * @return Date
      */
-    public function setLongTimestamp($longTimestamp) {
-        if(uniEreg("([0-9]){14}", $longTimestamp)) {
+    public function setLongTimestamp($longTimestamp)
+    {
+        if (uniEreg("([0-9]){14}", $longTimestamp)) {
             $this->longTimestamp = $longTimestamp;
         }
         return $this;

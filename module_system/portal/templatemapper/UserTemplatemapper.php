@@ -6,6 +6,9 @@
 
 namespace Kajona\System\Portal\Templatemapper;
 
+use Kajona\System\Portal\TemplatemapperInterface;
+use Kajona\System\System\UserUser;
+
 
 /**
  * A templatemapper to render a property linking to a users' systemid
@@ -14,7 +17,7 @@ namespace Kajona\System\Portal\Templatemapper;
  * @author sidler@mulchpropd.de
  * @since 4.6
  */
-class UserTemplatemapper implements interface_templatemapper {
+class UserTemplatemapper implements TemplatemapperInterface {
 
     /**
      * Converts the passed value to a formatted value.
@@ -27,7 +30,7 @@ class UserTemplatemapper implements interface_templatemapper {
     public function format($strValue) {
 
         if(validateSystemid($strValue)) {
-            $objUser = new class_module_user_user($strValue);
+            $objUser = new UserUser($strValue);
             return $objUser->getStrDisplayName();
         }
 

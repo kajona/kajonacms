@@ -10,7 +10,6 @@
 namespace Kajona\System\System;
 
 
-
 /**
  * BaseClass for admin / portal toolkits
  * Toolkits are there to serve small patterns used time by time
@@ -18,7 +17,8 @@ namespace Kajona\System\System;
  * @package module_system
  * @author sidler@mulchprod.de
  */
-class Toolkit {
+class Toolkit
+{
     protected $arrModul = array();
     protected $strSystemid = 0; //Current Systemid
     /**
@@ -32,7 +32,8 @@ class Toolkit {
     /**
      * Constructor
      */
-    public function __construct() {
+    public function __construct()
+    {
         $this->objTemplate = Carrier::getInstance()->getObjTemplate();
     }
 
@@ -44,7 +45,8 @@ class Toolkit {
      *
      * @return array[type, suffix, icon]
      */
-    public function mimeType($strFilename) {
+    public function mimeType($strFilename)
+    {
         $arrMime = array();
 
         $arrMime["doc"] = array("application/msword", "doc", "icon_word");
@@ -153,7 +155,7 @@ class Toolkit {
 
         //Determing the type
         $strType = "";
-        if(uniStrpos($strFilename, ".") !== false) {
+        if (uniStrpos($strFilename, ".") !== false) {
             $strType = uniSubstr($strFilename, uniStrrpos($strFilename, ".") + 1);
         }
         else {
@@ -163,7 +165,7 @@ class Toolkit {
         $strType = uniStrtolower($strType);
 
         //Known Type?
-        if(isset($arrMime[$strType])) {
+        if (isset($arrMime[$strType])) {
             $arrReturn = $arrMime[$strType];
         }
         else {

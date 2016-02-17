@@ -17,7 +17,8 @@ namespace Kajona\System\System;
  * @author sidler@mulchprod.de
  * @since 4.0
  */
-interface AdminGridableInterface extends AdminListable {
+interface AdminGridableInterface extends AdminListableInterface
+{
 
     /**
      * Returns the image the be used in a grid-view.

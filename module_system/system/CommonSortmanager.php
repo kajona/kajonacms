@@ -10,17 +10,19 @@ namespace Kajona\System\System;
 /**
  * The default implementation of the sortmanager, used by most modules and records.
  */
-class CommonSortmanager implements interface_sortmanager {
+class CommonSortmanager implements SortmanagerInterface
+{
 
     /**
-     * @var class_db
+     * @var Database
      */
     protected $objDB;
 
     protected $objSource;
 
-    public function __construct(class_root $objSource) {
-        $this->objDB = class_carrier::getInstance()->getObjDB();
+    public function __construct(Root $objSource)
+    {
+        $this->objDB = Carrier::getInstance()->getObjDB();
         $this->objSource = $objSource;
     }
 
@@ -35,15 +37,16 @@ class CommonSortmanager implements interface_sortmanager {
      *
      * @return void
      */
-    public function fixSortOnPrevIdChange($strOldPrevid, $strNewPrevid, $arrRestrictionModules = false) {
+    public function fixSortOnPrevIdChange($strOldPrevid, $strNewPrevid, $arrRestrictionModules = false)
+    {
         $this->objDB->flushQueryCache();
 
         $arrParams = array($strOldPrevid);
 
         $strWhere = "";
-        if($arrRestrictionModules && is_array($arrRestrictionModules)) {
+        if ($arrRestrictionModules && is_array($arrRestrictionModules)) {
             $arrMarks = array();
-            foreach($arrRestrictionModules as $strOneId) {
+            foreach ($arrRestrictionModules as $strOneId) {
                 $arrMarks[] = "?";
                 $arrParams[] = $strOneId;
             }
@@ -61,8 +64,8 @@ class CommonSortmanager implements interface_sortmanager {
         $arrSiblings = $this->objDB->getPArray($strQuery, $arrParams);
 
         $intI = 1;
-        foreach($arrSiblings as $arrOneSibling) {
-            if($arrOneSibling["system_sort"] != $intI) {
+        foreach ($arrSiblings as $arrOneSibling) {
+            if ($arrOneSibling["system_sort"] != $intI) {
                 $strQuery = "UPDATE "._dbprefix_."system SET system_sort = ? where system_id = ?";
                 $this->objDB->_pQuery($strQuery, array($intI, $arrOneSibling["system_id"]));
             }
@@ -93,16 +96,17 @@ class CommonSortmanager implements interface_sortmanager {
      *
      * @return mixed
      */
-    public function fixSortOnDelete($arrRestrictionModules = false) {
+    public function fixSortOnDelete($arrRestrictionModules = false)
+    {
 
 
         $arrParams = array();
         $arrParams[] = $this->objSource->getPrevId();
 
         $strWhere = "";
-        if($arrRestrictionModules && is_array($arrRestrictionModules)) {
+        if ($arrRestrictionModules && is_array($arrRestrictionModules)) {
             $arrMarks = array();
-            foreach($arrRestrictionModules as $strOneId) {
+            foreach ($arrRestrictionModules as $strOneId) {
                 $arrMarks[] = "?";
                 $arrParams[] = $strOneId;
             }
@@ -122,18 +126,21 @@ class CommonSortmanager implements interface_sortmanager {
         $arrIds = array();
 
         $bitHit = false;
-        foreach($arrSiblings as $arrOneSibling) {
+        foreach ($arrSiblings as $arrOneSibling) {
 
-            if($bitHit) {
+            if ($bitHit) {
                 $arrIds[] = $arrOneSibling["system_id"];
             }
 
-            if($arrOneSibling["system_id"] == $this->objSource->getSystemid())
+            if ($arrOneSibling["system_id"] == $this->objSource->getSystemid()) {
                 $bitHit = true;
+            }
         }
 
-        if(count($arrIds) > 0) {
-            $strQuery = "UPDATE "._dbprefix_."system SET system_sort = system_sort-1 where system_id IN (".implode(",", array_map(function($strVal) {return "?";}, $arrIds)).")";
+        if (count($arrIds) > 0) {
+            $strQuery = "UPDATE "._dbprefix_."system SET system_sort = system_sort-1 where system_id IN (".implode(",", array_map(function ($strVal) {
+                    return "?";
+                }, $arrIds)).")";
             $this->objDB->_pQuery($strQuery, $arrIds);
         }
     }
@@ -142,16 +149,20 @@ class CommonSortmanager implements interface_sortmanager {
      * Sets the Position of a SystemRecord in the current level one position upwards or downwards
      *
      * @param string $strDirection upwards || downwards
+     *
      * @return void
      * @deprecated
      */
-    public function setPosition($strDirection = "upwards") {
+    public function setPosition($strDirection = "upwards")
+    {
         //get the old pos
         $intPos = $this->objSource->getIntSort();
-        if($strDirection == "upwards")
+        if ($strDirection == "upwards") {
             $intPos--;
-        else
+        }
+        else {
             $intPos++;
+        }
 
         $this->setAbsolutePosition($intPos);
     }
@@ -163,24 +174,26 @@ class CommonSortmanager implements interface_sortmanager {
      * @param int $intNewPosition
      * @param array|bool $arrRestrictionModules If an array of module-ids is passed, the determination of siblings will be limited to the module-records matching one of the module-ids
      *
-     * @throws class_exception
+     * @throws Exception
      * @return void
      */
-    public function setAbsolutePosition($intNewPosition, $arrRestrictionModules = false) {
-        class_logger::getInstance()->addLogRow("move ".$this->objSource->getSystemid()." to new pos ".$intNewPosition, class_logger::$levelInfo);
+    public function setAbsolutePosition($intNewPosition, $arrRestrictionModules = false)
+    {
+        Logger::getInstance()->addLogRow("move ".$this->objSource->getSystemid()." to new pos ".$intNewPosition, Logger::$levelInfo);
         $this->objDB->flushQueryCache();
 
         //validate if object is sortable
-        if(!$this->objSource->getLockManager()->isAccessibleForCurrentUser())
-            throw new class_exception("Object is locked", class_exception::$level_ERROR);
+        if (!$this->objSource->getLockManager()->isAccessibleForCurrentUser()) {
+            throw new Exception("Object is locked", Exception::$level_ERROR);
+        }
 
         $arrParams = array();
         $arrParams[] = $this->objSource->getPrevId();
 
         $strWhere = "";
-        if($arrRestrictionModules && is_array($arrRestrictionModules)) {
+        if ($arrRestrictionModules && is_array($arrRestrictionModules)) {
             $arrMarks = array();
-            foreach($arrRestrictionModules as $strOneId) {
+            foreach ($arrRestrictionModules as $strOneId) {
                 $arrMarks[] = "?";
                 $arrParams[] = $strOneId;
             }
@@ -200,30 +213,35 @@ class CommonSortmanager implements interface_sortmanager {
         $arrElements = $this->objDB->getPArray($strQuery, $arrParams, null, null, false);
 
         //more than one record to set?
-        if(count($arrElements) <= 1)
+        if (count($arrElements) <= 1) {
             return;
+        }
 
         //senseless new pos?
-        if($intNewPosition <= 0 || $intNewPosition > count($arrElements))
+        if ($intNewPosition <= 0 || $intNewPosition > count($arrElements)) {
             return;
+        }
 
         $intCurPos = $this->objSource->getIntSort();
 
-        if($intNewPosition == $intCurPos)
+        if ($intNewPosition == $intCurPos) {
             return;
+        }
 
 
         //searching the current element to get to know if element should be sorted up- or downwards
         $bitSortDown = false;
         $bitSortUp = false;
-        if($intNewPosition < $intCurPos)
+        if ($intNewPosition < $intCurPos) {
             $bitSortUp = true;
-        else
+        }
+        else {
             $bitSortDown = true;
+        }
 
 
         //sort up?
-        if($bitSortUp) {
+        if ($bitSortUp) {
             //move the record to be shifted to the wanted pos
             $strQuery = "UPDATE "._dbprefix_."system
                                 SET system_sort=?
@@ -231,16 +249,16 @@ class CommonSortmanager implements interface_sortmanager {
             $this->objDB->_pQuery($strQuery, array(((int)$intNewPosition), $this->objSource->getSystemid()));
 
             //start at the pos to be reached and move all one down
-            for($intI = $intNewPosition; $intI < $intCurPos; $intI++) {
+            for ($intI = $intNewPosition; $intI < $intCurPos; $intI++) {
 
                 $strQuery = "UPDATE "._dbprefix_."system
                             SET system_sort=?
                             WHERE system_id=?";
-                $this->objDB->_pQuery($strQuery, array($intI+1, $arrElements[$intI-1]["system_id"]));
+                $this->objDB->_pQuery($strQuery, array($intI + 1, $arrElements[$intI - 1]["system_id"]));
             }
         }
 
-        if($bitSortDown) {
+        if ($bitSortDown) {
             //move the record to be shifted to the wanted pos
             $strQuery = "UPDATE "._dbprefix_."system
                                 SET system_sort=?
@@ -248,18 +266,18 @@ class CommonSortmanager implements interface_sortmanager {
             $this->objDB->_pQuery($strQuery, array(((int)$intNewPosition), $this->objSource->getSystemid()));
 
             //start at the pos to be reached and move all one up
-            for($intI = $intCurPos+1; $intI <= $intNewPosition; $intI++) {
+            for ($intI = $intCurPos + 1; $intI <= $intNewPosition; $intI++) {
 
                 $strQuery = "UPDATE "._dbprefix_."system
                             SET system_sort= ?
                             WHERE system_id=?";
-                $this->objDB->_pQuery($strQuery, array($intI-1, $arrElements[$intI-1]["system_id"]));
+                $this->objDB->_pQuery($strQuery, array($intI - 1, $arrElements[$intI - 1]["system_id"]));
             }
         }
 
         //flush the cache
         $this->objSource->flushCompletePagesCache();
-        class_carrier::getInstance()->flushCache(class_carrier::INT_CACHE_TYPE_DBQUERIES | class_carrier::INT_CACHE_TYPE_ORMCACHE);
+        Carrier::getInstance()->flushCache(Carrier::INT_CACHE_TYPE_DBQUERIES | Carrier::INT_CACHE_TYPE_ORMCACHE);
         $this->objSource->setIntSort($intNewPosition);
     }
 

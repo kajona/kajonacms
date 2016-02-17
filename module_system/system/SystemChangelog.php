@@ -479,7 +479,7 @@ class SystemChangelog {
      * @param null|int $intStart
      * @param null|int $intEnd
      *
-     * @return class_changelog_container[]
+     * @return ChangelogContainer[]
      */
     public static function getLogEntries($strSystemidFilter, $intStart = null, $intEnd = null) {
 
@@ -503,7 +503,7 @@ class SystemChangelog {
 
         $arrReturn = array();
         foreach($arrRows as $arrRow)
-            $arrReturn[] = new class_changelog_container(
+            $arrReturn[] = new ChangelogContainer(
                 $arrRow["change_date"],
                 $arrRow["change_systemid"],
                 $arrRow["change_user"],
@@ -555,7 +555,7 @@ class SystemChangelog {
      * @param string $strOldvalueFilter
      * @param string $strNewvalueFilter
      *
-     * @return class_changelog_container[]
+     * @return ChangelogContainer[]
      */
     public static function getSpecificEntries($strSystemidFilter = null, $strActionFilter = null, $strPropertyFilter = null, $strOldvalueFilter = null, $strNewvalueFilter = null) {
 
@@ -601,7 +601,7 @@ class SystemChangelog {
 
         $arrReturn = array();
         foreach($arrRows as $arrRow)
-            $arrReturn[] = new class_changelog_container(
+            $arrReturn[] = new ChangelogContainer(
                 $arrRow["change_date"],
                 $arrRow["change_systemid"],
                 $arrRow["change_user"],
@@ -957,7 +957,7 @@ class SystemChangelog {
  * Simple data-container for logentries.
  * Has no regular use.
  */
-final class class_changelog_container {
+final class ChangelogContainer {
     private $objDate;
     private $strSystemid;
     private $strUserId;

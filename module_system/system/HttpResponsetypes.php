@@ -15,7 +15,8 @@ namespace Kajona\System\System;
  *
  * @package module_system
  */
-class HttpResponsetypes {
+class HttpResponsetypes
+{
 
     /**
      * Default xml response type

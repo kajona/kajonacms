@@ -20,7 +20,8 @@ namespace Kajona\System\System;
  * @author sidler@mulchprod.de
  * @since 4.6
  */
-class OrmObjectinit extends OrmBase {
+class OrmObjectinit extends OrmBase
+{
 
 
     /**
@@ -30,13 +31,14 @@ class OrmObjectinit extends OrmBase {
      *
      * @return void
      */
-    public function initObjectFromDb() {
+    public function initObjectFromDb()
+    {
         //try to do a default init
         $objReflection = new Reflection($this->getObjObject());
 
-        if(validateSystemid($this->getObjObject()->getSystemid()) && $this->hasTargetTable()) {
+        if (validateSystemid($this->getObjObject()->getSystemid()) && $this->hasTargetTable()) {
 
-            if(OrmRowcache::getCachedInitRow($this->getObjObject()->getSystemid()) !== null) {
+            if (OrmRowcache::getCachedInitRow($this->getObjObject()->getSystemid()) !== null) {
                 $arrRow = OrmRowcache::getCachedInitRow($this->getObjObject()->getSystemid());
             }
             else {
@@ -47,30 +49,32 @@ class OrmObjectinit extends OrmBase {
                 $arrRow = Carrier::getInstance()->getObjDB()->getPRow($strQuery, array($this->getObjObject()->getSystemid()));
             }
 
-            if(method_exists($this->getObjObject(), "setArrInitRow"))
+            if (method_exists($this->getObjObject(), "setArrInitRow")) {
                 $this->getObjObject()->setArrInitRow($arrRow);
+            }
 
             //get the mapped properties
             $arrProperties = $objReflection->getPropertiesWithAnnotation(OrmBase::STR_ANNOTATION_TABLECOLUMN);
 
-            foreach($arrProperties as $strPropertyName => $strColumn) {
+            foreach ($arrProperties as $strPropertyName => $strColumn) {
 
                 $arrColumn = explode(".", $strColumn);
 
-                if(count($arrColumn) == 2)
+                if (count($arrColumn) == 2) {
                     $strColumn = $arrColumn[1];
+                }
 
-                if(!isset($arrRow[$strColumn])) {
+                if (!isset($arrRow[$strColumn])) {
                     continue;
                 }
 
                 //skip columns from the system-table, they are set later on
-                if(count($arrColumn) == 2 && $arrColumn[0] == "system") {
+                if (count($arrColumn) == 2 && $arrColumn[0] == "system") {
                     continue;
                 }
 
                 $strSetter = $objReflection->getSetter($strPropertyName);
-                if($strSetter !== null) {
+                if ($strSetter !== null) {
                     $this->getObjObject()->{$strSetter}($arrRow[$strColumn]);
                 }
             }
@@ -81,20 +85,22 @@ class OrmObjectinit extends OrmBase {
 
     /**
      * Injects the lazy loading objects for assignment properties into the current object
+     *
      * @return void
      */
-    private function initAssignmentProperties() {
+    private function initAssignmentProperties()
+    {
         $objReflection = new Reflection($this->getObjObject());
 
         //get the mapped properties
         $arrProperties = $objReflection->getPropertiesWithAnnotation(OrmBase::STR_ANNOTATION_OBJECTLIST, ReflectionEnum::PARAMS);
 
-        foreach($arrProperties as $strPropertyName => $arrValues) {
+        foreach ($arrProperties as $strPropertyName => $arrValues) {
 
             $objPropertyLazyLoader = new OrmAssignmentArray($this->getObjObject(), $strPropertyName, $this->getIntCombinedLogicalDeletionConfig());
 
             $strSetter = $objReflection->getSetter($strPropertyName);
-            if($strSetter !== null) {
+            if ($strSetter !== null) {
                 $this->getObjObject()->{$strSetter}($objPropertyLazyLoader);
             }
         }

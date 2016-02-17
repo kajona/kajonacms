@@ -27,7 +27,8 @@ class ReflectionEnum extends EnumBase
      *
      * @return string[]
      */
-    protected function getArrValues() {
+    protected function getArrValues()
+    {
         return array("VALUES", "PARAMS");
     }
 

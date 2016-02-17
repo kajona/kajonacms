@@ -18,7 +18,8 @@ namespace Kajona\System\System;
  * @package module_system
  * @author sidler@mulchprod.de
  */
-class Config {
+class Config
+{
     private $arrConfig = null;
     private $arrDebug = null;
 
@@ -29,10 +30,11 @@ class Config {
      *
      * @param string $strConfigFile the config-file to parse
      */
-    private function __construct($strConfigFile = "config.php") {
+    private function __construct($strConfigFile = "config.php")
+    {
 
         $this->readConfigFile($strConfigFile);
-        if($strConfigFile == "config.php") {
+        if ($strConfigFile == "config.php") {
             $this->setUpConstants();
         }
 
@@ -42,15 +44,17 @@ class Config {
      * Resolves, reads and merges the config-files
      *
      * @param string $strConfigFile
+     *
      * @return void
      */
-    private function readConfigFile($strConfigFile) {
+    private function readConfigFile($strConfigFile)
+    {
         $config = array();
         $debug = array();
 
         //Include the config-File
-        $strPath = class_resourceloader::getInstance()->getPathForFile("/system/config/" . $strConfigFile);
-        if($strPath !== false) {
+        $strPath = Resourceloader::getInstance()->getPathForFile("/system/config/".$strConfigFile);
+        if ($strPath !== false) {
             include($strPath);
         }
         else {
@@ -68,14 +72,15 @@ class Config {
      *
      * @return void
      */
-    private function setUpConstants() {
+    private function setUpConstants()
+    {
         define("_dbprefix_", $this->getConfig("dbprefix"));
         define("_templatepath_", $this->getConfig("dirtemplates"));
         define("_projectpath_", $this->getConfig("dirproject"));
         define("_filespath_", $this->getConfig("dirfiles"));
         define("_langpath_", $this->getConfig("dirlang"));
-        define("_indexpath_", _webpath_ . "/index.php");
-        define("_xmlpath_", _webpath_ . "/xml.php");
+        define("_indexpath_", _webpath_."/index.php");
+        define("_xmlpath_", _webpath_."/xml.php");
         define("_dblog_", $this->getDebug("dblog"));
         define("_timedebug_", $this->getDebug("time"));
         define("_dbnumber_", $this->getDebug("dbnumber"));
@@ -84,7 +89,7 @@ class Config {
         define("_cache_", $this->getDebug("cache"));
 
 
-        if($this->getConfig("images_cachepath") != "") {
+        if ($this->getConfig("images_cachepath") != "") {
             define("_images_cachepath_", $this->getConfig("images_cachepath"));
         }
         else {
@@ -104,17 +109,18 @@ class Config {
      * @return string
      * @since 3.4.0
      */
-    public static function readPlainConfigsFromFilesystem($strEntryName) {
+    public static function readPlainConfigsFromFilesystem($strEntryName)
+    {
 
         $config = array();
 
-        if(!@include __DIR__ . "/config/config.php") {
+        if (!@include __DIR__."/config/config.php") {
             die("Error reading config-file!");
         }
 
         //merge with projects-file
-        if(is_file(__DIR__ . "/../../../project/system/config/config.php")) {
-            if(!@include __DIR__ . "/../../../project/system/config/config.php") {
+        if (is_file(__DIR__."/../../../project/system/config/config.php")) {
+            if (!@include __DIR__."/../../../project/system/config/config.php") {
                 die("Error reading config-file!");
             }
         }
@@ -131,8 +137,9 @@ class Config {
      *
      * @return Config
      */
-    public static function getInstance($strConfigFile = "config.php") {
-        if(!isset(self::$arrInstances[$strConfigFile])) {
+    public static function getInstance($strConfigFile = "config.php")
+    {
+        if (!isset(self::$arrInstances[$strConfigFile])) {
             self::$arrInstances[$strConfigFile] = new Config($strConfigFile);
         }
 
@@ -146,8 +153,9 @@ class Config {
      *
      * @return string
      */
-    public function getConfig($strName) {
-        if(isset($this->arrConfig[$strName])) {
+    public function getConfig($strName)
+    {
+        if (isset($this->arrConfig[$strName])) {
             return $this->arrConfig[$strName];
         }
         else {
@@ -160,9 +168,11 @@ class Config {
      *
      * @param string $strName
      * @param string $strValue
+     *
      * @return void
      */
-    public function setConfig($strName, $strValue) {
+    public function setConfig($strName, $strValue)
+    {
         $this->arrConfig[$strName] = $strValue;
     }
 
@@ -173,8 +183,9 @@ class Config {
      *
      * @return string
      */
-    public function getDebug($strName) {
-        if(isset($this->arrDebug[$strName])) {
+    public function getDebug($strName)
+    {
+        if (isset($this->arrDebug[$strName])) {
             return $this->arrDebug[$strName];
         }
         else {
@@ -187,9 +198,11 @@ class Config {
      *
      * @param string $strName
      * @param string $strValue
+     *
      * @return void
      */
-    public function setDebug($strName, $strValue) {
+    public function setDebug($strName, $strValue)
+    {
         $this->arrDebug[$strName] = $strValue;
     }
 
@@ -200,7 +213,8 @@ class Config {
      *
      * @return string
      */
-    public function getPhpIni($strKey) {
+    public function getPhpIni($strKey)
+    {
         return ini_get($strKey);
     }
 
@@ -209,8 +223,9 @@ class Config {
      *
      * @return int
      */
-    public function getPhpMaxUploadSize() {
-        if(phpSizeToBytes($this->getPhpIni("post_max_size")) > phpSizeToBytes($this->getPhpIni("upload_max_filesize"))) {
+    public function getPhpMaxUploadSize()
+    {
+        if (phpSizeToBytes($this->getPhpIni("post_max_size")) > phpSizeToBytes($this->getPhpIni("upload_max_filesize"))) {
             return phpSizeToBytes($this->getPhpIni("upload_max_filesize"));
         }
         else {
@@ -223,20 +238,23 @@ class Config {
      *
      * @deprecated This Method may be removed from future releases. If you need filesystem-based configs,
      *             invoke this method on your own. This method is no longer called at system startup!
-     * @throws class_exception
+     * @throws Exception
      * @return void
      */
-    public function loadConfigsFilesystem() {
-        throw new class_exception("no longer supported", class_exception::$level_FATALERROR);
+    public function loadConfigsFilesystem()
+    {
+        throw new Exception("no longer supported", Exception::$level_FATALERROR);
     }
 
     /**
      * Loads all configs from the db and initializations the constants
      *
-     * @param class_db $objDB
+     * @param Database $objDB
+     *
      * @return void
      */
-    public function loadConfigsDatabase(class_db $objDB) {
+    public function loadConfigsDatabase(Database $objDB)
+    {
 //        if(count($objDB->getTables()) > 0) {
 //            $strQuery = "SELECT * FROM " . _dbprefix_ . "system_config ORDER BY system_config_module ASC";
 //            $arrConfigs = $objDB->getPArray($strQuery, array());
@@ -248,7 +266,7 @@ class Config {
 //        }
 
         //set the relevant values to the php env
-        if(defined("_system_timezone_") && _system_timezone_ != "") {
+        if (defined("_system_timezone_") && _system_timezone_ != "") {
             date_default_timezone_set(_system_timezone_);
         }
     }

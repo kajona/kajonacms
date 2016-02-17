@@ -17,7 +17,8 @@ namespace Kajona\System\System;
  * @module user
  * @moduleId _user_modul_id_
  */
-class UserLog  {
+class UserLog
+{
 
 
     /**
@@ -29,7 +30,8 @@ class UserLog  {
      * @return bool
      * @static
      */
-    public static function generateLog($intStatus = 1, $strOtherUsername = "") {
+    public static function generateLog($intStatus = 1, $strOtherUsername = "")
+    {
 
         $arrParams = array();
 
@@ -39,7 +41,7 @@ class UserLog  {
 
         $arrParams[] = generateSystemid();
 
-        if($strOtherUsername == "") {
+        if ($strOtherUsername == "") {
             $arrParams[] = (Carrier::getInstance()->getObjSession()->getUserID() == "" ? "0" : Carrier::getInstance()->getObjSession()->getUserID());
         }
         else {
@@ -56,10 +58,12 @@ class UserLog  {
 
     /**
      * Updates the users' log-entry with the current logout-timestamp
+     *
      * @static
      * @return bool
      */
-    public static function registerLogout() {
+    public static function registerLogout()
+    {
         $strQuery = "UPDATE "._dbprefix_."user_log
                         SET user_log_enddate = ?
                       WHERE user_log_sessid = ?";
@@ -79,7 +83,8 @@ class UserLog  {
      * @return mixed
      * @static
      */
-    public static function getLoginLogs($intStart = null, $intEnd = null) {
+    public static function getLoginLogs($intStart = null, $intEnd = null)
+    {
         $strQuery = "SELECT *
 				       FROM "._dbprefix_."user_log
 			      LEFT JOIN "._dbprefix_."user
@@ -93,7 +98,8 @@ class UserLog  {
      *
      * @return int
      */
-    public function getLoginLogsCount() {
+    public function getLoginLogsCount()
+    {
         $strQuery = "SELECT COUNT(*)
 						FROM "._dbprefix_."user_log as log";
         $arrRow = Carrier::getInstance()->getObjDB()->getPRow($strQuery, array());

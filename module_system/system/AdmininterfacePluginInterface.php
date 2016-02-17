@@ -15,7 +15,8 @@ use Kajona\System\Admin\ToolkitAdmin;
  * @package module_system
  * @deprecated
  */
-interface AdmininterfacePluginInterface {
+interface AdmininterfacePluginInterface
+{
 
     /**
      * Contructor, used to init the plugin
@@ -34,7 +35,7 @@ interface AdmininterfacePluginInterface {
 
     /**
      */
-    public function registerPlugin( $objPluginmanager);
+    public function registerPlugin($objPluginmanager);
 
     public function getPluginCommand();
 

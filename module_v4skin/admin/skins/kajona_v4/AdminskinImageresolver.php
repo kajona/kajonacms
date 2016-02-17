@@ -5,6 +5,9 @@
 *-------------------------------------------------------------------------------------------------------*
 *	$Id$                           *
 ********************************************************************************************************/
+namespace Kajona\V4Skin\Admin\Skins\Kajona_V4;
+
+use Kajona\System\Admin\AdminskinImageresolverInterface;
 
 /**
  * Class class_adminskin_imageresolver
@@ -13,7 +16,7 @@
  * @since 4.2
  * @package module_v4skin
  */
-class class_adminskin_imageresolver implements interface_adminskin_imageresolver {
+class AdminskinImageresolver implements AdminskinImageresolverInterface {
 
     /**
      * Converts the passed image-name into a real, resolvable code-fragment (such as an image-tag or an

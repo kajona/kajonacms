@@ -39,7 +39,8 @@ use Kajona\System\System\Imageplugins\ImageOperationInterface;
  *
  * @package module_system
  */
-class Image2 {
+class Image2
+{
 
     const FORMAT_PNG = "png";
     const FORMAT_JPG = "jpg";
@@ -60,9 +61,10 @@ class Image2 {
     /**
      * Default constructor
      */
-    public function __construct() {
+    public function __construct()
+    {
         // Try to overwrite PHP memory-limit so large images can be processed, too
-        if(Carrier::getInstance()->getObjConfig()->getPhpIni("memory_limit") < 128) {
+        if (Carrier::getInstance()->getObjConfig()->getPhpIni("memory_limit") < 128) {
             @ini_set("memory_limit", "128M");
         }
     }
@@ -70,7 +72,8 @@ class Image2 {
     /**
      * Default destructor
      */
-    public function __destruct() {
+    public function __destruct()
+    {
         if ($this->objResource != null) {
             imagedestroy($this->objResource);
         }
@@ -86,9 +89,11 @@ class Image2 {
      * * Decimal RGBA color (as above with alpha between 0.0 and 1.0): rgba(255,0,16,0.9)
      *
      * @param string $strColor Color string.
+     *
      * @return array RGB or RGBA values.
      */
-    public static function parseColorRgb($strColor) {
+    public static function parseColorRgb($strColor)
+    {
 
         // Hex RGB(A) value, e.g. #FF0000 or #FF000022
         if (preg_match("/#([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})?/i", $strColor, $arrMatches)) {
@@ -97,7 +102,7 @@ class Image2 {
             $intBlue = hexdec($arrMatches[3]);
             $arrColor = array($intRed, $intGreen, $intBlue);
 
-            if(isset($arrMatches[4])) {
+            if (isset($arrMatches[4])) {
                 // alpha is a value between 0 and 127
                 $intAlpha = (int)(hexdec($arrMatches[4]) / 2);
                 $arrColor[] = $intAlpha;
@@ -133,9 +138,11 @@ class Image2 {
      * Set whether caching is enabled (default) or disabled.
      *
      * @param bool $bitUseCache
+     *
      * @return void
      */
-    public function setUseCache($bitUseCache) {
+    public function setUseCache($bitUseCache)
+    {
         $this->bitUseCache = $bitUseCache;
     }
 
@@ -146,9 +153,11 @@ class Image2 {
      * and does not affect all other image processing.
      *
      * @param int $intJpegQuality
+     *
      * @return void
      */
-    public function setJpegQuality($intJpegQuality) {
+    public function setJpegQuality($intJpegQuality)
+    {
         $this->intJpegQuality = $intJpegQuality;
     }
 
@@ -157,9 +166,11 @@ class Image2 {
      *
      * @param int $intWidth
      * @param int $intHeight
+     *
      * @return void
      */
-    public function create($intWidth, $intHeight) {
+    public function create($intWidth, $intHeight)
+    {
         $this->strOriginalPath = null;
         $this->bitImageIsUpToDate = false;
         $this->intWidth = $intWidth;
@@ -173,12 +184,14 @@ class Image2 {
      * Returns false if the file does not exist.
      *
      * @param string $strPath
+     *
      * @return bool
      */
-    public function load($strPath) {
+    public function load($strPath)
+    {
         $bitReturn = false;
         $strPath = removeDirectoryTraversals($strPath);
-        if (is_file(_realpath_ . $strPath)) {
+        if (is_file(_realpath_.$strPath)) {
             $this->bitImageIsUpToDate = false;
             $this->strOriginalPath = $strPath;
             $this->arrOperations = array();
@@ -194,9 +207,11 @@ class Image2 {
      * Image operations must implement ImageOperationInterface.
      *
      * @param ImageOperationInterface $objOperation
+     *
      * @return void
      */
-    public function addOperation(ImageOperationInterface $objOperation) {
+    public function addOperation(ImageOperationInterface $objOperation)
+    {
         $this->arrOperations[] = $objOperation;
         $this->bitImageIsUpToDate = false;
     }
@@ -209,9 +224,11 @@ class Image2 {
      *
      * @param string $strPath
      * @param string $strFormat
+     *
      * @return bool
      */
-    public function save($strPath, $strFormat = null) {
+    public function save($strPath, $strFormat = null)
+    {
         $strPath = removeDirectoryTraversals($strPath);
 
         if ($strFormat == null) {
@@ -228,8 +245,8 @@ class Image2 {
         }
         else {
             $strCacheFile = $this->getCachePath($strFormat);
-            if (!file_exists(_realpath_ . $strPath) || filemtime(_realpath_ . $strCacheFile) > filemtime(_realpath_ . $strPath)) {
-                return copy(_realpath_ . $strCacheFile, _realpath_ . $strPath);
+            if (!file_exists(_realpath_.$strPath) || filemtime(_realpath_.$strCacheFile) > filemtime(_realpath_.$strPath)) {
+                return copy(_realpath_.$strCacheFile, _realpath_.$strPath);
             }
 
             return true;
@@ -243,15 +260,17 @@ class Image2 {
      * if no cached image is available.
      *
      * @param null $strFormat
+     *
      * @return bool
      */
-    public function sendToBrowser($strFormat = null) {
+    public function sendToBrowser($strFormat = null)
+    {
         if ($strFormat == null && $this->strOriginalPath != null) {
             $strFormat = self::getFormatFromFilename($this->strOriginalPath);
         }
-        
+
         $strResponseType = null;
-        switch($strFormat) {
+        switch ($strFormat) {
             case self::FORMAT_PNG:
                 $strResponseType = HttpResponsetypes::STR_TYPE_JPEG;
                 break;
@@ -278,7 +297,7 @@ class Image2 {
         }
         else {
             $strCacheFile = $this->getCachePath($strFormat);
-            $ptrFile = fopen(_realpath_ . $strCacheFile, 'rb');
+            $ptrFile = fopen(_realpath_.$strCacheFile, 'rb');
             fpassthru($ptrFile);
             return fclose($ptrFile);
         }
@@ -295,7 +314,8 @@ class Image2 {
      *
      * @return resource
      */
-    public function createGdResource() {
+    public function createGdResource()
+    {
         $bitSuccess = false;
 
         if (!$this->isCached(self::FORMAT_PNG)) {
@@ -303,7 +323,7 @@ class Image2 {
         }
         else {
             $strCacheFile = $this->getCachePath(self::FORMAT_PNG);
-            $this->objResource = imagecreatefrompng(_realpath_ . $strCacheFile);
+            $this->objResource = imagecreatefrompng(_realpath_.$strCacheFile);
             imagealphablending($this->objResource, false);
             imagesavealpha($this->objResource, true);
         }
@@ -318,7 +338,8 @@ class Image2 {
      *
      * @return mixed
      */
-    public function getCacheId() {
+    public function getCacheId()
+    {
         if (!$this->bitImageIsUpToDate) {
             $this->createGdResource();
         }
@@ -331,7 +352,8 @@ class Image2 {
      *
      * @return bool
      */
-    private function processImage($strFormat) {
+    private function processImage($strFormat)
+    {
         if (!$this->bitImageIsUpToDate) {
             $bitSuccess = $this->finalLoadOrCreate();
 
@@ -341,14 +363,15 @@ class Image2 {
 
             $this->saveCache($strFormat);
         }
-        
+
         return true;
     }
 
     /**
      * @return bool
      */
-    private function finalLoadOrCreate() {
+    private function finalLoadOrCreate()
+    {
         $bitReturn = false;
 
         if ($this->objResource != null) {
@@ -358,7 +381,7 @@ class Image2 {
         // Load existing file
         if ($this->strOriginalPath != null) {
             $strFormat = self::getFormatFromFilename($this->strOriginalPath);
-            $strAbsolutePath = _realpath_ . $this->strOriginalPath;
+            $strAbsolutePath = _realpath_.$this->strOriginalPath;
 
             switch ($strFormat) {
                 case self::FORMAT_PNG:
@@ -393,7 +416,8 @@ class Image2 {
     /**
      * @return bool
      */
-    private function applyOperations() {
+    private function applyOperations()
+    {
         $bitReturn = true;
 
         foreach ($this->arrOperations as $objOperation) {
@@ -415,9 +439,10 @@ class Image2 {
      *
      * @return bool
      */
-    private function outputImage($strFormat, $strPath = null) {
+    private function outputImage($strFormat, $strPath = null)
+    {
         if ($strPath != null) {
-            $strPath = _realpath_ . $strPath;
+            $strPath = _realpath_.$strPath;
         }
 
         switch ($strFormat) {
@@ -440,7 +465,8 @@ class Image2 {
      *
      * @return bool
      */
-    private function isCached($strFormat) {
+    private function isCached($strFormat)
+    {
         if (!$this->bitUseCache || $this->bitImageIsUpToDate) {
             return false;
         }
@@ -448,7 +474,7 @@ class Image2 {
         $this->initCacheId($strFormat);
         $strCachePath = $this->getCachePath($strFormat);
 
-        if (file_exists(_realpath_ . $strCachePath)) {
+        if (file_exists(_realpath_.$strCachePath)) {
             //echo "DEBUG: Cache hit!\n";
             return true;
         }
@@ -459,9 +485,11 @@ class Image2 {
 
     /**
      * @param string $strFormat
+     *
      * @return void
      */
-    private function saveCache($strFormat) {
+    private function saveCache($strFormat)
+    {
         if ($this->bitUseCache) {
             $strCachePath = $this->getCachePath($strFormat);
             //echo "DEBUG: Saving cache file: " . $strCachePath . "\n";
@@ -475,20 +503,23 @@ class Image2 {
      *
      * @return string
      */
-    private function getCachePath($strFormat) {
-        return $this->strCachePath . "c" . $this->strCacheId . "." . $strFormat;;
+    private function getCachePath($strFormat)
+    {
+        return $this->strCachePath."c".$this->strCacheId.".".$strFormat;;
     }
 
     /**
      * @param string $strFormat
+     *
      * @return void
      */
-    private function initCacheId($strFormat) {
+    private function initCacheId($strFormat)
+    {
         $arrayValues = array($this->intWidth, $this->intHeight, $strFormat);
 
         if ($this->strOriginalPath != null) {
             $arrayValues[] = $this->strOriginalPath;
-            $arrayValues[] = filemtime(_realpath_ . $this->strOriginalPath);
+            $arrayValues[] = filemtime(_realpath_.$this->strOriginalPath);
         }
 
         $strCacheId = self::buildCacheId("init", $arrayValues);
@@ -506,7 +537,8 @@ class Image2 {
     /**
      * @return void
      */
-    private function updateImageResource() {
+    private function updateImageResource()
+    {
         $this->intWidth = imagesx($this->objResource);
         $this->intHeight = imagesy($this->objResource);
         imagealphablending($this->objResource, false);
@@ -519,9 +551,10 @@ class Image2 {
      *
      * @return string
      */
-    private static function buildCacheId($strName, $arrValues) {
+    private static function buildCacheId($strName, $arrValues)
+    {
         $strValues = implode(",", $arrValues);
-        return $strName . "(" . $strValues  . ")";
+        return $strName."(".$strValues.")";
     }
 
     /**
@@ -529,7 +562,8 @@ class Image2 {
      *
      * @return string
      */
-    private static function getFormatFromFilename($strPath) {
+    private static function getFormatFromFilename($strPath)
+    {
         $strExtension = getFileExtension($strPath);
 
         if ($strExtension == ".jpeg") {

@@ -17,7 +17,8 @@ namespace Kajona\System\System;
  * @author sidler@mulchprod.de
  * @since 4.0
  */
-interface AdminListableInterface {
+interface AdminListableInterface
+{
 
     /**
      * Returns the icon the be used in lists.
@@ -33,6 +34,7 @@ interface AdminListableInterface {
 
     /**
      * In nearly all cases, the additional info is rendered left to the action-icons.
+     *
      * @abstract
      * @return string
      */
@@ -41,6 +43,7 @@ interface AdminListableInterface {
 
     /**
      * If not empty, the returned string is rendered below the common title.
+     *
      * @abstract
      * @return string
      */

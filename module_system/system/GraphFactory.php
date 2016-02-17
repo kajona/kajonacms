@@ -8,6 +8,8 @@
 
 namespace Kajona\System\System;
 
+use ReflectionClass;
+
 
 /**
  * Generates a graph-instance based on the current config.
@@ -33,20 +35,20 @@ class GraphFactory {
      *
      * @param string $strType
      *
-     * @throws class_exception
-     * @return interface_graph
+     * @throws Exception
+     * @return GraphInterface
      */
     public static function getGraphInstance($strType = "") {
 
         if($strType == "") {
-            if(class_module_system_setting::getConfigValue("_system_graph_type_") != "")
-                $strType = class_module_system_setting::getConfigValue("_system_graph_type_");
+            if(SystemSetting::getConfigValue("_system_graph_type_") != "")
+                $strType = SystemSetting::getConfigValue("_system_graph_type_");
             else
                 $strType = "jqplot";
         }
 
         $strClassname = "class_graph_".$strType;
-        $strPath = class_resourceloader::getInstance()->getPathForFile("/system/".$strClassname.".php");
+        $strPath = Resourceloader::getInstance()->getPathForFile("/system/".$strClassname.".php");
         if($strPath !== false) {
             $objReflection = new ReflectionClass($strClassname);
             if(!$objReflection->isAbstract() && $objReflection->implementsInterface("interface_graph"))
@@ -54,13 +56,13 @@ class GraphFactory {
         }
 
         $strClassname = "Graph".$strType;
-        $strPath = class_resourceloader::getInstance()->getPathForFile("/system/".$strClassname.".php");
+        $strPath = Resourceloader::getInstance()->getPathForFile("/system/".$strClassname.".php");
         if($strPath !== false) {
             $objReflection = new ReflectionClass($strClassname);
             if(!$objReflection->isAbstract() && $objReflection->implementsInterface("interface_graph"))
                 return $objReflection->newInstance();
         }
 
-        throw new class_exception("Requested charts-plugin ".$strType." not existing", class_exception::$level_FATALERROR);
+        throw new Exception("Requested charts-plugin ".$strType." not existing", Exception::$level_FATALERROR);
     }
 }

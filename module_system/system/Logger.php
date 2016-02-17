@@ -17,7 +17,8 @@ namespace Kajona\System\System;
  * @package module_system
  * @author sidler@mulchprod.de
  */
-final class Logger {
+final class Logger
+{
 
     const SYSTEMLOG = "systemlog.log";
     const DBLOG = "dblayer.log";
@@ -74,13 +75,15 @@ final class Logger {
      *
      * @param $strLogfile
      */
-    private function __construct($strLogfile) {
+    private function __construct($strLogfile)
+    {
         $this->strFilename = $strLogfile;
 
         $arrOverwriteLevel = Carrier::getInstance()->getObjConfig()->getDebug("debuglogging_overwrite");
         if (isset($arrOverwriteLevel[$strLogfile])) {
             $this->intLogLevel = $arrOverwriteLevel[$strLogfile];
-        } else {
+        }
+        else {
             $this->intLogLevel = Carrier::getInstance()->getObjConfig()->getDebug("debuglogging");
         }
     }
@@ -92,12 +95,13 @@ final class Logger {
      *
      * @return Logger
      */
-    public static function getInstance($strLogfile = "") {
-        if($strLogfile == "") {
+    public static function getInstance($strLogfile = "")
+    {
+        if ($strLogfile == "") {
             $strLogfile = self::SYSTEMLOG;
         }
 
-        if(!isset(self::$arrInstances[$strLogfile])) {
+        if (!isset(self::$arrInstances[$strLogfile])) {
             self::$arrInstances[$strLogfile] = new Logger($strLogfile);
         }
 
@@ -115,22 +119,23 @@ final class Logger {
      *
      * @return void
      */
-    public function addLogRow($strMessage, $intLevel, $bitSkipSessionData = false) {
+    public function addLogRow($strMessage, $intLevel, $bitSkipSessionData = false)
+    {
 
         //check, if there someting to write
-        if($this->intLogLevel == 0) {
+        if ($this->intLogLevel == 0) {
             return;
         }
         //errors in level >=1
-        if($intLevel == self::$levelError && $this->intLogLevel < 1) {
+        if ($intLevel == self::$levelError && $this->intLogLevel < 1) {
             return;
         }
         //warnings in level >=2
-        if($intLevel == self::$levelWarning && $this->intLogLevel < 2) {
+        if ($intLevel == self::$levelWarning && $this->intLogLevel < 2) {
             return;
         }
         //infos in level >=3
-        if($intLevel == self::$levelInfo && $this->intLogLevel < 3) {
+        if ($intLevel == self::$levelInfo && $this->intLogLevel < 3) {
             return;
         }
 
@@ -138,20 +143,20 @@ final class Logger {
         // YYYY-MM-DD HH:MM:SS LEVEL USERID (USERNAME) MESSAGE
         $strDate = strftime("%Y-%m-%d %H:%M:%S", time());
         $strLevel = "";
-        if($intLevel == self::$levelError) {
+        if ($intLevel == self::$levelError) {
             $strLevel = "ERROR";
         }
-        elseif($intLevel == self::$levelInfo) {
+        elseif ($intLevel == self::$levelInfo) {
             $strLevel = "INFO";
         }
-        elseif($intLevel == self::$levelWarning) {
+        elseif ($intLevel == self::$levelWarning) {
             $strLevel = "WARNING";
         }
 
         $strSessid = "";
-        if(!$bitSkipSessionData && Carrier::getInstance()->getObjSession()->getBitLazyLoaded()) {
+        if (!$bitSkipSessionData && Carrier::getInstance()->getObjSession()->getBitLazyLoaded()) {
             $strSessid = Carrier::getInstance()->getObjSession()->getInternalSessionId();
-            $strSessid .= " (" . Carrier::getInstance()->getObjSession()->getUsername() . ")";
+            $strSessid .= " (".Carrier::getInstance()->getObjSession()->getUsername().")";
         }
 
         $strMessage = uniStrReplace(array("\r", "\n"), array(" ", " "), $strMessage);
@@ -159,13 +164,13 @@ final class Logger {
         $strFileInfo = "";
         $arrStack = debug_backtrace();
 
-        if(isset($arrStack[1]) && isset($arrStack[1]["file"])) {
-            $strFileInfo = basename($arrStack[1]["file"]) . ":" . $arrStack[1]["function"] . ":" . $arrStack[1]["line"];
+        if (isset($arrStack[1]) && isset($arrStack[1]["file"])) {
+            $strFileInfo = basename($arrStack[1]["file"]).":".$arrStack[1]["function"].":".$arrStack[1]["line"];
         }
 
-        $strText = $strDate . " " . $strLevel . " " . $strSessid . " " . $strFileInfo . " " . $strMessage . "\r\n";
+        $strText = $strDate." ".$strLevel." ".$strSessid." ".$strFileInfo." ".$strMessage."\r\n";
 
-        $handle = fopen(_realpath_ . "/project/log/" . $this->strFilename, "a");
+        $handle = fopen(_realpath_."/project/log/".$this->strFilename, "a");
         fwrite($handle, $strText);
         fclose($handle);
     }
@@ -175,13 +180,14 @@ final class Logger {
      *
      * @return string
      */
-    public function getLogFileContent() {
+    public function getLogFileContent()
+    {
         $objFile = new Filesystem();
-        if(!is_file(_realpath_ . "/project/log/" . $this->strFilename)) {
+        if (!is_file(_realpath_."/project/log/".$this->strFilename)) {
             return "";
         }
 
-        $objFile->openFilePointer("/project/log/" . $this->strFilename, "r");
+        $objFile->openFilePointer("/project/log/".$this->strFilename, "r");
         return $objFile->readLastLinesFromFile(25);
     }
 
@@ -191,7 +197,8 @@ final class Logger {
      *
      * @return string
      */
-    public function getPhpLogFileContent() {
+    public function getPhpLogFileContent()
+    {
         $objFile = new Filesystem();
         $objFile->openFilePointer("/project/log/php.log", "r");
         return $objFile->readLastLinesFromFile(25);
@@ -202,14 +209,16 @@ final class Logger {
      *
      * @param $intLogLevel
      */
-    public function setIntLogLevel($intLogLevel) {
+    public function setIntLogLevel($intLogLevel)
+    {
         $this->intLogLevel = $intLogLevel;
     }
 
     /**
      * @return int
      */
-    public function getIntLogLevel() {
+    public function getIntLogLevel()
+    {
         return $this->intLogLevel;
     }
 }

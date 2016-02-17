@@ -22,7 +22,8 @@ namespace Kajona\System\System;
  *
  * @todo make settings "real" objects, so with a systemid
  */
-class SystemSetting extends Model implements ModelInterface, VersionableInterface {
+class SystemSetting extends Model implements ModelInterface, VersionableInterface
+{
 
     /**
      * @var SystemSetting[]
@@ -79,10 +80,11 @@ class SystemSetting extends Model implements ModelInterface, VersionableInterfac
     private $strOldValue = "";
 
 
-    private function initRowCache() {
-        $strQuery = "SELECT * FROM " . _dbprefix_ . "system_config";
+    private function initRowCache()
+    {
+        $strQuery = "SELECT * FROM "._dbprefix_."system_config";
         $arrRows = $this->objDB->getPArray($strQuery, array());
-        foreach($arrRows as $arrSingleRow) {
+        foreach ($arrRows as $arrSingleRow) {
             $arrSingleRow["system_id"] = $arrSingleRow["system_config_id"];
             OrmRowcache::addSingleInitRow($arrSingleRow);
         }
@@ -91,11 +93,13 @@ class SystemSetting extends Model implements ModelInterface, VersionableInterfac
 
     /**
      * Initalises the current object, if a systemid was given
+     *
      * @return void
      */
-    protected function initObjectInternal() {
+    protected function initObjectInternal()
+    {
         $arrRow = OrmRowcache::getCachedInitRow($this->getSystemid());
-        if($arrRow === null) {
+        if ($arrRow === null) {
             $this->initRowCache();
             $arrRow = OrmRowcache::getCachedInitRow($this->getSystemid());
         }
@@ -115,9 +119,10 @@ class SystemSetting extends Model implements ModelInterface, VersionableInterfac
     /**
      * Internal helper to trigger special events, e.g. to change phps runtime settings based on some config vars.
      */
-    private function specialConfigInits() {
-        if($this->strName == "_system_timezone_" && !defined("_system_timezone_")) {
-            if($this->getStrValue() != "") {
+    private function specialConfigInits()
+    {
+        if ($this->strName == "_system_timezone_" && !defined("_system_timezone_")) {
+            if ($this->getStrValue() != "") {
                 date_default_timezone_set($this->getStrValue());
                 define("_system_timezone_", $this->getStrValue());
             }
@@ -129,12 +134,14 @@ class SystemSetting extends Model implements ModelInterface, VersionableInterfac
      *
      * @return bool
      */
-    public function deleteObject() {
+    public function deleteObject()
+    {
         return true;
     }
 
-    public function deleteObjectFromDatabase() {
-        $strQuery = "DELETE FROM " . _dbprefix_ . "system_config WHERE system_config_id = ?";
+    public function deleteObjectFromDatabase()
+    {
+        $strQuery = "DELETE FROM "._dbprefix_."system_config WHERE system_config_id = ?";
         return Carrier::getInstance()->getObjDB()->_pQuery($strQuery, array($this->getSystemid()));
     }
 
@@ -144,7 +151,8 @@ class SystemSetting extends Model implements ModelInterface, VersionableInterfac
      *
      * @return string
      */
-    public function getStrDisplayName() {
+    public function getStrDisplayName()
+    {
         return $this->getStrName();
     }
 
@@ -155,7 +163,8 @@ class SystemSetting extends Model implements ModelInterface, VersionableInterfac
      *
      * @return bool
      */
-    protected function updateStateToDb() {
+    protected function updateStateToDb()
+    {
         return true;
     }
 
@@ -168,7 +177,8 @@ class SystemSetting extends Model implements ModelInterface, VersionableInterfac
      *
      * @return bool
      */
-    public function updateObjectToDb($strPrevId = false) {
+    public function updateObjectToDb($strPrevId = false)
+    {
 
         $objChangelog = new SystemChangelog();
         $objChangelog->createLogEntry($this, SystemChangelog::$STR_ACTION_EDIT);
@@ -176,19 +186,19 @@ class SystemSetting extends Model implements ModelInterface, VersionableInterfac
         self::$arrInstanceCache = null;
         self::$arrValueMap = null;
 
-        if(!SystemSetting::checkConfigExisting($this->getStrName())) {
-            Logger::getInstance()->addLogRow("new constant " . $this->getStrName() . " with value " . $this->getStrValue(), Logger::$levelInfo);
+        if (!SystemSetting::checkConfigExisting($this->getStrName())) {
+            Logger::getInstance()->addLogRow("new constant ".$this->getStrName()." with value ".$this->getStrValue(), Logger::$levelInfo);
 
-            $strQuery = "INSERT INTO " . _dbprefix_ . "system_config
+            $strQuery = "INSERT INTO "._dbprefix_."system_config
                         (system_config_id, system_config_name, system_config_value, system_config_type, system_config_module) VALUES
                         (?, ?, ?, ?, ?)";
             return $this->objDB->_pQuery($strQuery, array(generateSystemid(), $this->getStrName(), $this->getStrValue(), (int)$this->getIntType(), (int)$this->getIntModule()));
         }
         else {
 
-            Logger::getInstance()->addLogRow("updated constant " . $this->getStrName() . " to value " . $this->getStrValue(), Logger::$levelInfo);
+            Logger::getInstance()->addLogRow("updated constant ".$this->getStrName()." to value ".$this->getStrValue(), Logger::$levelInfo);
 
-            $strQuery = "UPDATE " . _dbprefix_ . "system_config
+            $strQuery = "UPDATE "._dbprefix_."system_config
                         SET system_config_value = ?
                       WHERE system_config_name = ?";
             return $this->objDB->_pQuery($strQuery, array($this->getStrValue(), $this->getStrName()));
@@ -203,10 +213,11 @@ class SystemSetting extends Model implements ModelInterface, VersionableInterfac
      *
      * @return bool
      */
-    public function renameConstant($strNewName) {
-        Logger::getInstance()->addLogRow("renamed constant " . $this->getStrName() . " to " . $strNewName, Logger::$levelInfo);
+    public function renameConstant($strNewName)
+    {
+        Logger::getInstance()->addLogRow("renamed constant ".$this->getStrName()." to ".$strNewName, Logger::$levelInfo);
 
-        $strQuery = "UPDATE " . _dbprefix_ . "system_config
+        $strQuery = "UPDATE "._dbprefix_."system_config
                     SET system_config_name = ? WHERE system_config_name = ?";
 
         $bitReturn = $this->objDB->_pQuery($strQuery, array($strNewName, $this->getStrName()));
@@ -220,15 +231,17 @@ class SystemSetting extends Model implements ModelInterface, VersionableInterfac
      * @return SystemSetting[]
      * @static
      */
-    public static function getAllConfigValues() {
-        if(self::$arrInstanceCache == null) {
+    public static function getAllConfigValues()
+    {
+        if (self::$arrInstanceCache == null) {
 
-            if(count(Database::getInstance()->getTables()) == 0)
+            if (count(Database::getInstance()->getTables()) == 0) {
                 return array();
+            }
 
-            $strQuery = "SELECT * FROM " . _dbprefix_ . "system_config ORDER BY system_config_module ASC, system_config_name DESC";
+            $strQuery = "SELECT * FROM "._dbprefix_."system_config ORDER BY system_config_module ASC, system_config_name DESC";
             $arrIds = Carrier::getInstance()->getObjDB()->getPArray($strQuery, array(), null, null, false);
-            foreach($arrIds as $arrOneId) {
+            foreach ($arrIds as $arrOneId) {
                 $arrOneId["system_id"] = $arrOneId["system_config_id"];
                 OrmRowcache::addSingleInitRow($arrOneId);
                 self::$arrInstanceCache[$arrOneId["system_config_name"]] = new SystemSetting($arrOneId["system_config_id"]);
@@ -236,8 +249,9 @@ class SystemSetting extends Model implements ModelInterface, VersionableInterfac
             }
         }
 
-        if(self::$arrInstanceCache == null)
+        if (self::$arrInstanceCache == null) {
             return array();
+        }
 
         return self::$arrInstanceCache;
     }
@@ -250,9 +264,10 @@ class SystemSetting extends Model implements ModelInterface, VersionableInterfac
      * @return SystemSetting|null
      * @static
      */
-    public static function getConfigByName($strName) {
+    public static function getConfigByName($strName)
+    {
         $arrSettings = self::getAllConfigValues();
-        if(isset($arrSettings[$strName])) {
+        if (isset($arrSettings[$strName])) {
             return $arrSettings[$strName];
         }
         return null;
@@ -266,8 +281,9 @@ class SystemSetting extends Model implements ModelInterface, VersionableInterfac
      *
      * @return boolean
      */
-    public static function checkConfigExisting($strName) {
-        $strQuery = "SELECT COUNT(*) FROM " . _dbprefix_ . "system_config WHERE system_config_name = ?";
+    public static function checkConfigExisting($strName)
+    {
+        $strQuery = "SELECT COUNT(*) FROM "._dbprefix_."system_config WHERE system_config_name = ?";
         $arrRow = Carrier::getInstance()->getObjDB()->getPRow($strQuery, array($strName));
         return $arrRow["COUNT(*)"] == 1;
     }
@@ -280,60 +296,73 @@ class SystemSetting extends Model implements ModelInterface, VersionableInterfac
      *
      * @return string or null
      */
-    public static function getConfigValue($strName) {
+    public static function getConfigValue($strName)
+    {
         self::getAllConfigValues();
-        if(isset(self::$arrValueMap[$strName])) {
+        if (isset(self::$arrValueMap[$strName])) {
             return self::$arrValueMap[$strName];
         }
 
         return null;
     }
 
-    public function getVersionActionName($strAction) {
+    public function getVersionActionName($strAction)
+    {
         return $strAction;
     }
 
-    public function renderVersionValue($strProperty, $strValue) {
+    public function renderVersionValue($strProperty, $strValue)
+    {
         return $strValue;
     }
 
-    public function getVersionPropertyName($strProperty) {
+    public function getVersionPropertyName($strProperty)
+    {
         return $strProperty;
     }
 
-    public function getVersionRecordName() {
+    public function getVersionRecordName()
+    {
         return Carrier::getInstance()->getObjLang()->getLang("change_type_setting", "system");
     }
 
-    public function getStrName() {
+    public function getStrName()
+    {
         return $this->strName;
     }
 
-    public function getStrValue() {
+    public function getStrValue()
+    {
         return $this->strValue;
     }
 
-    public function getIntType() {
+    public function getIntType()
+    {
         return $this->intType;
     }
 
-    public function getIntModule() {
+    public function getIntModule()
+    {
         return $this->intModule;
     }
 
-    public function setStrName($strName) {
+    public function setStrName($strName)
+    {
         $this->strName = $strName;
     }
 
-    public function setStrValue($strValue) {
+    public function setStrValue($strValue)
+    {
         $this->strValue = $strValue;
     }
 
-    public function setIntType($intType) {
+    public function setIntType($intType)
+    {
         $this->intType = $intType;
     }
 
-    public function setIntModule($intModule) {
+    public function setIntModule($intModule)
+    {
         $this->intModule = $intModule;
     }
 

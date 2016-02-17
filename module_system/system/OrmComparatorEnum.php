@@ -24,43 +24,46 @@ namespace Kajona\System\System;
  * @author sidler@mulchprod.de
  * @since 4.7
  */
-class OrmComparatorEnum extends EnumBase {
+class OrmComparatorEnum extends EnumBase
+{
     /**
      * Return the array of possible, so allowed values for the current enum
      *
      * @return string[]
      */
-    protected function getArrValues() {
+    protected function getArrValues()
+    {
         return array("GreaterThen", "GreaterThenEquals", "LessThen", "LessThenEquals", "Equal", "NotEqual", "Like");
     }
 
 
-    public function getEnumAsSqlString() {
-        if($this->equals(OrmComparatorEnum::GreaterThen())) {
+    public function getEnumAsSqlString()
+    {
+        if ($this->equals(OrmComparatorEnum::GreaterThen())) {
             return ">";
         }
 
-        if($this->equals(OrmComparatorEnum::GreaterThenEquals())) {
+        if ($this->equals(OrmComparatorEnum::GreaterThenEquals())) {
             return ">=";
         }
 
-        if($this->equals(OrmComparatorEnum::LessThen())) {
+        if ($this->equals(OrmComparatorEnum::LessThen())) {
             return "<";
         }
 
-        if($this->equals(OrmComparatorEnum::LessThenEquals())) {
+        if ($this->equals(OrmComparatorEnum::LessThenEquals())) {
             return "<=";
         }
 
-        if($this->equals(OrmComparatorEnum::Equal())) {
+        if ($this->equals(OrmComparatorEnum::Equal())) {
             return "=";
         }
 
-        if($this->equals(OrmComparatorEnum::NotEqual())) {
+        if ($this->equals(OrmComparatorEnum::NotEqual())) {
             return "!=";
         }
 
-        if($this->equals(OrmComparatorEnum::Like())) {
+        if ($this->equals(OrmComparatorEnum::Like())) {
             return "LIKE";
         }
 

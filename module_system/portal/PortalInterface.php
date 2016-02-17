@@ -4,27 +4,33 @@
 *   (c) 2007-2015 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
-*	$Id$                                          *
+*	$Id$                                         *
 ********************************************************************************************************/
 
-namespace Kajona\System\System;
+namespace Kajona\System\Portal;
 
 /**
- * Interface for all model-classes
+ * Interface for all portal-classes (modules)
+ * Ensures, that all needed methods are being implemented
  *
  * @package module_system
  */
-interface ModelInterface
-{
+interface PortalInterface {
 
     /**
-     * Returns the name to be used when rendering the current object, e.g. in admin-lists.
+     * Contstructor accepting Element-Data. Passed to the base-class
      *
-     * @abstract
-     * @todo move this to class_model, making this interface obsolete
-     * @return string
+     * @param mixed $arrElementData
      */
-    public function getStrDisplayName();
+    public function __construct($arrElementData);
+
+	/**
+	 * This method is being called from the element and controls all other actions
+	 * If given, the action passed in the GET-Array is being passed by param
+	 *
+	 * The method returns the content of the xml file, NOT the headers
+	 */
+	public function action();
 
 
 }

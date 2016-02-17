@@ -18,7 +18,8 @@ namespace Kajona\System\System;
  * @author stefan.meyer1@yahoo.de
  * @since 4.5
  */
-class ObjectvalidatorHelper {
+class ObjectvalidatorHelper
+{
 
 
     /**
@@ -33,12 +34,13 @@ class ObjectvalidatorHelper {
      *         -1, if $objDateLeft is less than $objDateRight
      *         null, if $objDateLeft or $objDateRight are null (then no comparison is possible)
      */
-    public static function compareDates(Date $objDateLeft = null, Date $objDateRight = null) {
-        if($objDateLeft != null && $objDateRight != null) {
-            if($objDateLeft->getLongTimestamp() < $objDateRight->getLongTimestamp()) {
+    public static function compareDates(Date $objDateLeft = null, Date $objDateRight = null)
+    {
+        if ($objDateLeft != null && $objDateRight != null) {
+            if ($objDateLeft->getLongTimestamp() < $objDateRight->getLongTimestamp()) {
                 return -1;//less;
             }
-            if($objDateLeft->getLongTimestamp() > $objDateRight->getLongTimestamp()) {
+            if ($objDateLeft->getLongTimestamp() > $objDateRight->getLongTimestamp()) {
                 return 1;//greater
             }
             else {

@@ -21,13 +21,15 @@ namespace Kajona\System\System;
  * @package module_system
  * @since 3.4.0
  */
-interface VersionableInterface {
+interface VersionableInterface
+{
 
 
     /**
      * Returns a human readable name of the action stored with the changeset.
      *
      * @param string $strAction the technical actionname
+     *
      * @return string the human readable name
      */
     public function getVersionActionName($strAction);
@@ -43,6 +45,7 @@ interface VersionableInterface {
      * Returns a human readable name of the property-name stored with the changeset.
      *
      * @param string $strProperty the technical property-name
+     *
      * @return string the human readable name
      */
     public function getVersionPropertyName($strProperty);
@@ -53,6 +56,7 @@ interface VersionableInterface {
      *
      * @param string $strProperty
      * @param string $strValue
+     *
      * @return string
      */
     public function renderVersionValue($strProperty, $strValue);
