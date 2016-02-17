@@ -14,6 +14,8 @@ use Pimple\Container;
  */
 class ObjectBuilder
 {
+    const ANNOTATION_INJECT = "@inject";
+
     /**
      * @var Container
      */
@@ -61,7 +63,7 @@ class ObjectBuilder
     {
         // read inject annotations
         $objReflection = new \class_reflection($objObject);
-        $arrValues = $objReflection->getPropertiesWithAnnotation("@Inject");
+        $arrValues = $objReflection->getPropertiesWithAnnotation(self::ANNOTATION_INJECT);
 
         // inject dependencies
         foreach ($arrValues as $strPropertyName => $strValue) {

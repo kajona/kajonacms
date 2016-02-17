@@ -58,6 +58,15 @@ class class_module_packagemanager_metadata implements interface_admin_listable {
     }
 
     /**
+     * Only to remain compatbible with the common list rendering
+     * @return int
+     */
+    public function getIntRecordDeleted()
+    {
+        return 0;
+    }
+
+    /**
      * In nearly all cases, the additional info is rendered left to the action-icons.
      *
      * @return string

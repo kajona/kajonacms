@@ -297,7 +297,8 @@ abstract class class_admin_evensimpler extends class_admin_simple {
 
                 $objForm->updateSourceObject();
                 $objRecord = $objForm->getObjSourceobject();
-                $objRecord->updateObjectToDb($strSystemId);
+
+                $this->persistModel($objRecord, $strSystemId);
 
                 $this->setSystemid($objRecord->getStrSystemid());
 
@@ -312,6 +313,17 @@ abstract class class_admin_evensimpler extends class_admin_simple {
         return $this->getLang("commons_error_permissions");
     }
 
+    /**
+     * Method which persists the record to the database
+     *
+     * @param class_model $objModel
+     * @param boolean $strPrevId
+     * @throws class_exception
+     */
+    protected function persistModel(class_model $objModel, $strPrevId = false)
+    {
+        $objModel->updateObjectToDb($strPrevId);
+    }
 
     /**
      * Builds the object-path of the currently selected record.

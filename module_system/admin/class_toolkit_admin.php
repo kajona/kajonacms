@@ -645,25 +645,35 @@ class class_toolkit_admin extends class_toolkit
     /**
      * Returns a input-file element
      *
-     * @param string $strName
+     * @param $strName
      * @param string $strTitle
      * @param string $strClass
-     *
+     * @param string $strFileName
+     * @param string $strFileHref
+     * @param bool $bitEnabled
      * @return string
      */
-    public function formInputUpload($strName, $strTitle = "", $strClass = "")
+    public function formInputUpload($strName, $strTitle = "", $strClass = "", $strFileName = null, $strFileHref = null, $bitEnabled = true)
     {
-
-        $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "input_upload");
         $arrTemplate = array();
         $arrTemplate["name"] = $strName;
         $arrTemplate["title"] = $strTitle;
         $arrTemplate["class"] = $strClass;
+        $arrTemplate["fileName"] = $strFileName;
+        $arrTemplate["fileHref"] = $strFileHref;
 
-        $objText = class_carrier::getInstance()->getObjLang();
-        $arrTemplate["maxSize"] = $objText->getLang("max_size", "mediamanager")." ".bytesToString(class_config::getInstance()->getPhpMaxUploadSize());
+        if ($bitEnabled) {
+            $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "input_upload");
+            $objText = class_carrier::getInstance()->getObjLang();
 
-        return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
+            $arrTemplate["maxSize"] = $objText->getLang("max_size", "mediamanager")." ".bytesToString(class_config::getInstance()->getPhpMaxUploadSize());
+
+            return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
+        } else {
+            $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "input_upload_disabled");
+
+            return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
+        }
     }
 
     /**
@@ -683,6 +693,8 @@ class class_toolkit_admin extends class_toolkit
             return ($this->warningBox("Module mediamanger is required for this multiple uploads"));
         }
 
+        $strUploadId = generateSystemid();
+
         $objConfig = class_carrier::getInstance()->getObjConfig();
         $objText = class_carrier::getInstance()->getObjLang();
 
@@ -690,6 +702,7 @@ class class_toolkit_admin extends class_toolkit
         $arrTemplate = array();
         $arrTemplate["name"] = $strName;
         $arrTemplate["mediamanagerRepoId"] = $strMediamangerRepoSystemId;
+        $arrTemplate["uploadId"] = $strUploadId;
 
         $strAllowedFileRegex = uniStrReplace(array(".", ","), array("", "|"), $strAllowedFileTypes);
         $strAllowedFileTypes = uniStrReplace(array(".", ","), array("", "', '"), $strAllowedFileTypes);
@@ -1307,7 +1320,8 @@ class class_toolkit_admin extends class_toolkit
             $objEntry->getStrAdditionalInfo(),
             $objEntry->getStrLongDescription(),
             $bitCheckbox,
-            $strCSSAddon
+            $strCSSAddon,
+            $objEntry->getIntRecordDeleted() != 1 ? "" : "1"
         );
     }
 
@@ -1326,7 +1340,7 @@ class class_toolkit_admin extends class_toolkit
      *
      * @return string
      */
-    public function genericAdminList($strId, $strName, $strIcon, $strActions, $intCount, $strAdditionalInfo = "", $strDescription = "", $bitCheckbox = false, $strCssAddon = "")
+    public function genericAdminList($strId, $strName, $strIcon, $strActions, $intCount, $strAdditionalInfo = "", $strDescription = "", $bitCheckbox = false, $strCssAddon = "", $strDeleted = "")
     {
         $arrTemplate = array();
         $arrTemplate["listitemid"] = $strId;
@@ -1336,6 +1350,7 @@ class class_toolkit_admin extends class_toolkit
         $arrTemplate["actions"] = $strActions;
         $arrTemplate["description"] = $strDescription;
         $arrTemplate["cssaddon"] = $strCssAddon;
+        $arrTemplate["deleted"] = $strDeleted;
 
         if ($bitCheckbox) {
             $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "generallist_checkbox");

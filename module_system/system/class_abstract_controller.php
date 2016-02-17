@@ -23,7 +23,7 @@ abstract class class_abstract_controller {
     /**
      * Object containing config-data
      *
-     * @Inject config
+     * @inject config
      * @var class_config
      */
     protected $objConfig;
@@ -31,7 +31,7 @@ abstract class class_abstract_controller {
     /**
      * Object containing the session-management
      *
-     * @Inject session
+     * @inject session
      * @var class_session
      */
     protected $objSession;
@@ -39,7 +39,7 @@ abstract class class_abstract_controller {
     /**
      * Object to handle templates
      *
-     * @Inject template
+     * @inject template
      * @var class_template
      */
     protected $objTemplate;
@@ -47,7 +47,7 @@ abstract class class_abstract_controller {
     /**
      * Object managing the lang-files
      *
-     * @Inject lang
+     * @inject lang
      * @var class_lang
      */
     protected $objLang;

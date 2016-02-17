@@ -32,37 +32,37 @@ abstract class class_admin_controller extends class_abstract_controller {
     private $arrOutput;
 
     /**
-     * @Inject admintoolkit
+     * @inject admintoolkit
      * @var class_toolkit_admin
      */
     protected $objToolkit;
 
     /**
-     * @Inject object_builder
+     * @inject object_builder
      * @var \Kajona\System\System\ObjectBuilder
      */
     protected $objBuilder;
 
     /**
-     * @Inject rights
+     * @inject rights
      * @var class_rights
      */
     protected $objRights;
 
     /**
-     * @Inject resource_loader
+     * @inject resource_loader
      * @var class_resourceloader
      */
     protected $objResourceLoader;
 
     /**
-     * @Inject class_loader
+     * @inject class_loader
      * @var class_classloader
      */
     protected $objClassLoader;
 
     /**
-     * @Inject object_factory
+     * @inject object_factory
      * @var class_objectfactory
      */
     protected $objFactory;

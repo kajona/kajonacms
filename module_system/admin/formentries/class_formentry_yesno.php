@@ -12,14 +12,21 @@
  * @since 4.0
  * @package module_formgenerator
  */
-class class_formentry_yesno extends class_formentry_base implements interface_formentry_printable {
+class class_formentry_yesno extends class_formentry_base implements interface_formentry_printable
+{
+    protected $strAddons;
 
     public function __construct($strFormName, $strSourceProperty, $objSourceObject = null) {
         parent::__construct($strFormName, $strSourceProperty, $objSourceObject);
 
         //set the default validator
         $this->setObjValidator(new class_text_validator());
-   }
+    }
+
+    public function setAddons($strAddons)
+    {
+        $this->strAddons = $strAddons;
+    }
 
     /**
      * Renders the field itself.
@@ -33,10 +40,11 @@ class class_formentry_yesno extends class_formentry_base implements interface_fo
         $arrYesNo = array(
             0 => $objLang->getLang("commons_no", "system"), 1 => $objLang->getLang("commons_yes", "system")
         );
+
         $strReturn = "";
         if($this->getStrHint() != null)
             $strReturn .= $objToolkit->formTextRow($this->getStrHint());
-        $strReturn .=  $objToolkit->formInputDropdown($this->getStrEntryName(), $arrYesNo, $this->getStrLabel(), $this->getStrValue(), "", !$this->getBitReadonly());
+        $strReturn .=  $objToolkit->formInputDropdown($this->getStrEntryName(), $arrYesNo, $this->getStrLabel(), $this->getStrValue(), "", !$this->getBitReadonly(), $this->strAddons);
         return $strReturn;
     }
 

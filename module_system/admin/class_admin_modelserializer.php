@@ -24,9 +24,9 @@ class class_admin_modelserializer {
      * @param interface_model $objModel
      * @return string
      */
-    public static function serialize(interface_model $objModel) {
+    public static function serialize(interface_model $objModel, $strAnnotation = class_orm_base::STR_ANNOTATION_TABLECOLUMN) {
         $objReflection = new class_reflection(get_class($objModel));
-        $arrProperties = $objReflection->getPropertiesWithAnnotation(class_orm_base::STR_ANNOTATION_TABLECOLUMN);
+        $arrProperties = $objReflection->getPropertiesWithAnnotation($strAnnotation);
         $arrJSON = array();
 
         foreach($arrProperties as $strAttributeName => $strAttributeValue) {
@@ -40,6 +40,8 @@ class class_admin_modelserializer {
             }
         }
 
+        $arrJSON[self::CLASS_KEY] = get_class($objModel);
+
         return json_encode($arrJSON);
     }
 
@@ -48,12 +50,12 @@ class class_admin_modelserializer {
      *
      * @return interface_model
      */
-    public static function unserialize($strData) {
+    public static function unserialize($strData, $strAnnotation = class_orm_base::STR_ANNOTATION_TABLECOLUMN) {
         $arrData = json_decode($strData, true);
         $objModel = self::getObjectFromJson($arrData);
 
         $objReflection = new class_reflection(get_class($objModel));
-        $arrProperties = $objReflection->getPropertiesWithAnnotation(class_orm_base::STR_ANNOTATION_TABLECOLUMN);
+        $arrProperties = $objReflection->getPropertiesWithAnnotation($strAnnotation);
 
         foreach($arrProperties as $strAttributeName => $strAttributeValue) {
             $strSetter = $objReflection->getSetter($strAttributeName);

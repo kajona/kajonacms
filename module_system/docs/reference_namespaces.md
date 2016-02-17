@@ -35,6 +35,11 @@ The class `NewsAdminController` has the `News` prefix since `AdminController` is
 module has an `AdminController`. The class `LockManager` has no prefix because it is very unlikely that we have many 
 lock managers.
 
+### Methods
+
+Like defined in PSR-2 method names must be in CamelCase with the first character as lowercase. If the method returns a
+boolean value it is recommended to use the is/has prefix to indicate the response type.
+
 ## Namespaces
 
 The namespace must start with a vendor name which is in our case `Kajona`. The next part is the module name which is the
