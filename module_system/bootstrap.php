@@ -32,16 +32,16 @@ date_default_timezone_set(date_default_timezone_get());
 if (!include_once __DIR__."/system/functions.php")
     rawIncludeError(__DIR__."/system/functions.php");
 
-if (!include_once __DIR__."/system/class_classloader.php")
-    rawIncludeError(__DIR__."/system/class_classloader.php");
+if (!include_once __DIR__."/system/Classloader.php")
+    rawIncludeError(__DIR__."/system/Classloader.php");
 
 // -- Auto-Loader for classes ------------------------------------------------------------------------------------------
 // Register autoloader
-spl_autoload_register(array(class_classloader::getInstance(), "loadClass"));
+spl_autoload_register(array(\Kajona\System\System\Classloader::getInstance(), "loadClass"));
 
 // -- Exception handler ------------------------------------------------------------------------------------------------
 // Register global exception handler for exceptions thrown but not catched (bad style ;) )
-set_exception_handler(array("class_exception", "globalExceptionHandler"));
+set_exception_handler(array("Kajona\\System\\System\\Exception", "globalExceptionHandler"));
 
 // -- Custom bootstrap -------------------------------------------------------------------------------------------------
 // See if there's a custom bootstrap.php to include
@@ -53,7 +53,7 @@ defineWebPath();
 
 // -- Include needed classes of each module ----------------------------------------------------------------------------
 // This registers all service providers of each module
-class_classloader::getInstance()->registerModuleServices(class_carrier::getInstance()->getContainer());
+class_classloader::getInstance()->registerModuleServices(\Kajona\System\System\Carrier::getInstance()->getContainer());
 
 // Now we include all classes which i.e. register event listeners
 class_classloader::getInstance()->includeClasses();
@@ -77,7 +77,7 @@ function rawIncludeError($strFileMissed)
 // Define web path
 function defineWebPath()
 {
-    require_once __DIR__."/system/class_config.php";
+    require_once __DIR__."/system/Config.php";
     $strHeaderName = class_config::readPlainConfigsFromFilesystem("https_header");
     $strHeaderValue = strtolower(class_config::readPlainConfigsFromFilesystem("https_header_value"));
 

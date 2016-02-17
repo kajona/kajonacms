@@ -20,7 +20,7 @@
  *
  * @formGenerator class_module_news_news_formgenerator
  */
-class class_module_news_news extends class_model implements interface_model, interface_admin_listable, interface_versionable, interface_search_portalobject {
+class class_module_news_news extends \Kajona\System\System\Model implements \Kajona\System\System\ModelInterface, interface_admin_listable, interface_versionable, interface_search_portalobject {
 
     /**
      * @var string
@@ -236,13 +236,13 @@ class class_module_news_news extends class_model implements interface_model, int
      * @param string $strFilter
      * @param int $intStart
      * @param int $intEnd
-     * @param class_date $objStartDate
-     * @param class_date $objEndDate
+     * @param \Kajona\System\System\Date $objStartDate
+     * @param \Kajona\System\System\Date $objEndDate
      *
      * @return class_module_news_news[]
      * @static
      */
-    public static function getObjectList($strFilter = "", $intStart = null, $intEnd = null, class_date $objStartDate = null, class_date $objEndDate = null) {
+    public static function getObjectList($strFilter = "", $intStart = null, $intEnd = null, \Kajona\System\System\Date $objStartDate = null, \Kajona\System\System\Date $objEndDate = null) {
         $arrParams = array();
 
         $strWhere = "";
@@ -367,7 +367,7 @@ class class_module_news_news extends class_model implements interface_model, int
      */
     public static function loadListNewsPortal($intMode, $strCat = 0, $intOrder = 0, $intStart = null, $intEnd = null) {
         $arrParams = array();
-        $longNow = class_date::getCurrentTimestamp();
+        $longNow = \Kajona\System\System\Date::getCurrentTimestamp();
         //Get Timeintervall
         if($intMode == "0") {
             //Regular news
@@ -501,7 +501,7 @@ class class_module_news_news extends class_model implements interface_model, int
      */
     public function renderVersionValue($strProperty, $strValue) {
         if(($strProperty == "objDateStart" || $strProperty == "objDateEnd" || $strProperty == "objDateSpecial") && $strValue > 0)
-            return dateToString(new class_date($strValue), false);
+            return dateToString(new \Kajona\System\System\Date($strValue), false);
 
         else if($strProperty == "assignedCategories" && validateSystemid($strValue)) {
             $objCategory = new class_module_news_category($strValue);
@@ -642,7 +642,7 @@ class class_module_news_news extends class_model implements interface_model, int
 
 
     /**
-     * @param class_date $objEndDate
+     * @param \Kajona\System\System\Date $objEndDate
      * @return void
      */
     public function setObjDateEnd($objEndDate) {
@@ -652,20 +652,20 @@ class class_module_news_news extends class_model implements interface_model, int
     }
 
     /**
-     * @return class_date
+     * @return \Kajona\System\System\Date
      */
     public function getObjDateEnd() {
         return $this->getObjEndDate();
     }
     /**
-     * @return class_date
+     * @return \Kajona\System\System\Date
      */
     public function getObjDateTimeEnd() {
         return $this->getObjEndDate();
     }
 
     /**
-     * @param class_date $objDateSpecial
+     * @param \Kajona\System\System\Date $objDateSpecial
      * @return void
      */
     public function setObjDateSpecial($objDateSpecial) {
@@ -675,20 +675,20 @@ class class_module_news_news extends class_model implements interface_model, int
     }
 
     /**
-     * @return class_date
+     * @return \Kajona\System\System\Date
      */
     public function getObjDateSpecial() {
         return $this->getObjSpecialDate();
     }
     /**
-     * @return class_date
+     * @return \Kajona\System\System\Date
      */
     public function getObjDateTimeSpecial() {
         return $this->getObjSpecialDate();
     }
 
     /**
-     * @param class_date $objStartDate
+     * @param \Kajona\System\System\Date $objStartDate
      * @return void
      */
     public function setObjDateStart($objStartDate) {
@@ -698,13 +698,13 @@ class class_module_news_news extends class_model implements interface_model, int
     }
 
     /**
-     * @return class_date
+     * @return \Kajona\System\System\Date
      */
     public function getObjDateStart() {
         return $this->getObjStartDate();
     }
     /**
-     * @return class_date
+     * @return \Kajona\System\System\Date
      */
     public function getObjDateTimeStart() {
         return $this->getObjStartDate();

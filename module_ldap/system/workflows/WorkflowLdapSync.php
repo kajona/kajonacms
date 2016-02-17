@@ -9,7 +9,7 @@
 namespace Kajona\Ldap\System\Workflows;
 
 use class_carrier;
-use class_date;
+use \Kajona\System\System\Date;
 use class_module_workflows_workflow;
 use class_usersources_source_ldap;
 use interface_workflows_handler;
@@ -99,7 +99,7 @@ class WorkflowLdapSync implements interface_workflows_handler {
      * @return void
      */
     public function schedule() {
-        $objDate = new class_date();
+        $objDate = new \Kajona\System\System\Date();
         $objDate->setNextDay();
         $objDate->setIntHour(3);
         $objDate->setIntMin(20);

@@ -7,7 +7,7 @@
 /**
  * @deprecated
  */
-class class_admin_simple extends Kajona\System\Admin\AdminSimple
+abstract class class_admin_simple extends Kajona\System\Admin\AdminSimple
 {
 
 }

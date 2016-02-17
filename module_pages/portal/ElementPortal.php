@@ -12,7 +12,7 @@ use class_cache;
 use class_carrier;
 use class_exception;
 use class_link;
-use class_model;
+use \Kajona\System\System\Model;
 use class_module_languages_language;
 use class_module_navigation_point;
 use class_module_system_setting;

@@ -29,9 +29,9 @@ class class_test_statsReportsTest extends class_testbase {
                 $arrReports[$objReport->getTitle()] = $objReport;
             }
 
-            $objStartDate = new class_date();
+            $objStartDate = new \Kajona\System\System\Date();
             $objStartDate->setPreviousDay();
-            $objEndDate = new class_date();
+            $objEndDate = new \Kajona\System\System\Date();
             $objEndDate->setNextDay();
             $intStartDate = mktime(0, 0, 0, $objStartDate->getIntMonth(), $objStartDate->getIntDay(), $objStartDate->getIntYear());
             $intEndDate = mktime(0, 0, 0, $objEndDate->getIntMonth(), $objEndDate->getIntDay(), $objEndDate->getIntYear());

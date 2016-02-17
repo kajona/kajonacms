@@ -5,6 +5,7 @@
 *-------------------------------------------------------------------------------------------------------*
 *    $Id$                        *
 ********************************************************************************************************/
+use Kajona\System\System\ModelInterface;
 
 /**
  * Admin class of the mediamanager-module. Used to sync the repos with the filesystem and to upload / manage
@@ -45,10 +46,10 @@ class class_module_mediamanager_admin extends class_admin_evensimpler implements
 
 
     /**
-     * @param class_model|class_module_mediamanager_repo|class_module_mediamanager_file $objListEntry
+     * @param \Kajona\System\System\Model|class_module_mediamanager_repo|class_module_mediamanager_file $objListEntry
      * @return array
      */
-    protected function renderAdditionalActions(class_model $objListEntry) {
+    protected function renderAdditionalActions(\Kajona\System\System\Model $objListEntry) {
 
         if($objListEntry instanceof class_module_mediamanager_repo && $objListEntry->rightView())
             return array($this->objToolkit->listButton(
@@ -84,11 +85,11 @@ class class_module_mediamanager_admin extends class_admin_evensimpler implements
     }
 
     /**
-     * @param interface_model $objListEntry
+     * @param \Kajona\System\System\ModelInterface $objListEntry
      *
      * @return string
      */
-    protected function renderDeleteAction(interface_model $objListEntry) {
+    protected function renderDeleteAction(ModelInterface $objListEntry) {
         if($objListEntry instanceof class_module_mediamanager_repo) {
             if($objListEntry->rightDelete()) {
 
@@ -163,12 +164,12 @@ class class_module_mediamanager_admin extends class_admin_evensimpler implements
     }
 
     /**
-     * @param class_model $objListEntry
+     * @param \Kajona\System\System\Model $objListEntry
      * @param bool $bitDialog
      *
      * @return string
      */
-    protected function renderEditAction(class_model $objListEntry, $bitDialog = false) {
+    protected function renderEditAction(\Kajona\System\System\Model $objListEntry, $bitDialog = false) {
         if($objListEntry instanceof class_module_mediamanager_file) {
             if($objListEntry->rightEdit()) {
                 if($this->getStrPeAddon() != "")
@@ -192,11 +193,11 @@ class class_module_mediamanager_admin extends class_admin_evensimpler implements
     }
 
     /**
-     * @param class_model $objListEntry
+     * @param \Kajona\System\System\Model $objListEntry
      *
      * @return string
      */
-    protected function renderCopyAction(class_model $objListEntry) {
+    protected function renderCopyAction(\Kajona\System\System\Model $objListEntry) {
         if($objListEntry instanceof class_module_mediamanager_file) {
             return "";
         }
@@ -238,7 +239,7 @@ class class_module_mediamanager_admin extends class_admin_evensimpler implements
     }
 
     /**
-     * @param class_model|interface_admin_listable|interface_model $objOneIterable
+     * @param \Kajona\System\System\Model|interface_admin_listable|\Kajona\System\System\ModelInterface $objOneIterable
      * @param string $strListIdentifier
      *
      * @return string
@@ -545,11 +546,11 @@ HTML;
     }
 
     /**
-     * @param interface_model|class_model $objInstance
+     * @param \Kajona\System\System\ModelInterface|\Kajona\System\System\Model $objInstance
      *
      * @return string
      */
-    protected function getOutputNaviEntry(interface_model $objInstance) {
+    protected function getOutputNaviEntry(ModelInterface $objInstance) {
         return class_link::getLinkAdmin($this->getArrModule("modul"), "openFolder", "&systemid=".$objInstance->getSystemid(), $objInstance->getStrDisplayName());
     }
 
@@ -801,13 +802,13 @@ HTML;
         if($this->getParam("flush") == "") {
             $strReturn .= $this->objToolkit->formHeader(class_link::getLinkAdminHref($this->getArrModule("modul"), "logbookFlush", "flush=1"));
             $strReturn .= $this->objToolkit->formTextRow($this->getLang("logbook_hint_date"));
-            $strReturn .= $this->objToolkit->formDateSingle("date", $this->getLang("commons_date"), new class_date());
+            $strReturn .= $this->objToolkit->formDateSingle("date", $this->getLang("commons_date"), new \Kajona\System\System\Date());
             $strReturn .= $this->objToolkit->formInputSubmit($this->getLang("commons_save"));
             $strReturn .= $this->objToolkit->formClose();
         }
         elseif ($this->getParam("flush") == "1") {
             //Build the date
-            $objDate = new class_date();
+            $objDate = new \Kajona\System\System\Date();
             $objDate->generateDateFromParams("date", $this->getAllParams());
 
             if(!class_module_mediamanager_logbook::deleteFromLogs($objDate->getTimeInOldStyle()))

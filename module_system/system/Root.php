@@ -569,7 +569,7 @@ abstract class Root {
     /**
      * Saves the current object to the database. Determines, whether the current object has to be inserted
      * or updated to the database.
-     * In case of an update, the objects' updateStateToDb() method is being called (as required by class_model).
+     * In case of an update, the objects' updateStateToDb() method is being called (as required by \Kajona\System\System\Model).
      * In the case of a new object, a blank record is being created. Therefore, all tables returned by class' doc comment
      * will be filled with a new record (using the same new systemid as the primary key).
      * The newly created systemid is being set as the current objects' one and can be used in the afterwards
@@ -579,7 +579,7 @@ abstract class Root {
      * @return bool
      * @since 3.3.0
      * @throws Exception
-     * @see interface_model
+     * @see \Kajona\System\System\ModelInterface
      *
      * @todo move to class_orm_objectupdate completely
      */
@@ -587,7 +587,7 @@ abstract class Root {
         $bitCommit = true;
         /** @var $this Root|ModelInterface */
         if(!$this instanceof ModelInterface)
-            throw new Exception("current object must implemented interface_model", Exception::$level_FATALERROR);
+            throw new Exception("current object must implemented \Kajona\System\System\ModelInterface", Exception::$level_FATALERROR);
 
         if(!$this->getLockManager()->isAccessibleForCurrentUser()) {
             $objUser  = new UserUser($this->getLockManager()->getLockId());

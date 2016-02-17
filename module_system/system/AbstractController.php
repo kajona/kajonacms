@@ -303,7 +303,7 @@ abstract class AbstractController
             $strStopSystemid = $this->getObjModule()->getSystemid();
         }
 
-        $objSystemCommon = new class_module_system_common();
+        $objSystemCommon = new SystemCommon();
         return $objSystemCommon->getPathArray($strSystemid, $strStopSystemid);
     }
 

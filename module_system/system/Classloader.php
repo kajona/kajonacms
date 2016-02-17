@@ -365,7 +365,7 @@ class Classloader
         }
 
         // blacklisting!
-        if (uniStrpos(basename($strFilename), "class_testbase") === 0) {
+        if (uniStrpos(basename($strFilename), "Testbase") === 0) {
             return null;
         }
 
@@ -408,7 +408,7 @@ class Classloader
             // if the class does not exist we simply include the filename and hope that the class is defined there. This
             // is the case where the filename is not equal to the class name i.e. installer_sc_zzlanguages.php
             if (!class_exists($strResolvedClassname)) {
-                if (!preg_match("/(class|interface|trait)(.*)$/i", $strResolvedClassname)) {
+                if ($strResolvedClassname[0] != strtoupper($strResolvedClassname[0]) && !preg_match("/(class|interface|trait)(.*)$/i", $strResolvedClassname)) {
                     $strResolvedClassname = "class_".$strResolvedClassname;
                 }
 

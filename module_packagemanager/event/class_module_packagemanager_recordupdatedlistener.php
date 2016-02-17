@@ -30,7 +30,7 @@ class class_module_packagemanager_recordupdatedlistener implements interface_gen
             if($objRecord->getIntRecordStatus() == 1) {
 
                 $objOrm = new class_orm_objectlist();
-                $objOrm->addWhereRestriction(new class_orm_objectlist_systemstatus_restriction(class_orm_comparator_enum::Equal(), 1));
+                $objOrm->addWhereRestriction(new class_orm_objectlist_systemstatus_restriction(\Kajona\System\System\OrmComparatorEnum::Equal(), 1));
                 $arrPacks = $objOrm->getObjectList("class_module_packagemanager_template");
 
                 foreach($arrPacks as $objPack) {

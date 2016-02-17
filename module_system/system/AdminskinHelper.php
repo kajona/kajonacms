@@ -110,7 +110,7 @@ class AdminskinHelper
             }
 
             $strFile = self::getPathForSkin(Carrier::getInstance()->getObjSession()->getAdminSkin())."/AdminskinImageresolver.php";
-            self::$objAdminImageResolver = Classloader::getInstance()->getInstanceFromFilename($strFile, "", "AdminskinImageresolverInterface");
+            self::$objAdminImageResolver = Classloader::getInstance()->getInstanceFromFilename($strFile);
         }
 
         return self::$objAdminImageResolver->getImage($strName, $strAlt, $bitBlockTooltip, $strEntryId);

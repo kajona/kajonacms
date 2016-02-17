@@ -78,7 +78,7 @@ class class_module_news_portal_xml extends class_portal_controller implements in
             if($objOneNews->rightView()) {
                 $objDate = $objOneNews->getObjStartDate();
                 if($objDate == null)
-                    $objDate = new class_date();
+                    $objDate = new \Kajona\System\System\Date();
 
                 $objFeed->addElement(
                     $objOneNews->getStrTitle(),

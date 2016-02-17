@@ -61,7 +61,7 @@ class class_object_serializer {
             $strGetter = $objReflection->getGetter($strOneProperty);
 
             $strValue = $this->objObject->{$strGetter}();
-            if ($strValue instanceof class_date) {
+            if ($strValue instanceof \Kajona\System\System\Date) {
                 $strValue = date(DateTime::ATOM, $strValue->getTimeInOldStyle());
             }
 

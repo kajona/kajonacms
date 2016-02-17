@@ -34,7 +34,7 @@ class class_event_repository
      *
      * @return class_event_entry[]
      */
-    public static function getEventsByCategoryAndDate($strCategory, class_date $objStartDate, class_date $objEndDate)
+    public static function getEventsByCategoryAndDate($strCategory, \Kajona\System\System\Date $objStartDate, \Kajona\System\System\Date $objEndDate)
     {
         $strKey = $strCategory . substr($objStartDate->getLongTimestamp(), 0, 8) . substr($objEndDate->getLongTimestamp(), 0, 8);
         if (isset(self::$events[$strKey])) {
@@ -62,7 +62,7 @@ class class_event_repository
      *
      * @return class_event_entry[]
      */
-    public static function getAllEventsByDate(class_date $objDate)
+    public static function getAllEventsByDate(\Kajona\System\System\Date $objDate)
     {
         $arrCategories = self::getAllCategories();
         $arrEvents = array();
@@ -110,8 +110,8 @@ class class_event_repository
     protected static function sortEvents(array &$arrEvents)
     {
         usort($arrEvents, function(class_event_entry $objEntryA, class_event_entry $objEntryB){
-            $intA = $objEntryA->getObjValidDate() instanceof class_date ? $objEntryA->getObjValidDate()->getTimeInOldStyle() : 0;
-            $intB = $objEntryB->getObjValidDate() instanceof class_date ? $objEntryB->getObjValidDate()->getTimeInOldStyle() : 0;
+            $intA = $objEntryA->getObjValidDate() instanceof \Kajona\System\System\Date ? $objEntryA->getObjValidDate()->getTimeInOldStyle() : 0;
+            $intB = $objEntryB->getObjValidDate() instanceof \Kajona\System\System\Date ? $objEntryB->getObjValidDate()->getTimeInOldStyle() : 0;
             if ($intA == $intB) {
                 return 0;
             }

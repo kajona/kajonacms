@@ -16,7 +16,7 @@
  *
  * @blockFromAutosave
  */
-class class_module_stats_worker extends class_model implements interface_model {
+class class_module_stats_worker extends \Kajona\System\System\Model implements \Kajona\System\System\ModelInterface {
 
     /**
      * Returns the name to be used when rendering the current object, e.g. in admin-lists.

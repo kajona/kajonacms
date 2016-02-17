@@ -10,13 +10,13 @@ namespace Kajona\Pages\System;
 
 use class_carrier;
 use class_link;
-use class_model;
+use \Kajona\System\System\Model;
 use class_module_system_changelog;
 use class_module_system_module;
 use class_objectfactory;
 use class_orm_objectlist;
 use interface_admin_listable;
-use interface_model;
+use \Kajona\System\System\ModelInterface;
 use interface_search_resultobject;
 use interface_versionable;
 
@@ -31,7 +31,7 @@ use interface_versionable;
  * @module pages
  * @moduleId _pages_folder_id_
  */
-class PagesFolder extends class_model implements interface_model, interface_versionable, interface_admin_listable, interface_search_resultobject
+class PagesFolder extends \Kajona\System\System\Model implements \Kajona\System\System\ModelInterface, interface_versionable, interface_admin_listable, interface_search_resultobject
 {
 
     /**

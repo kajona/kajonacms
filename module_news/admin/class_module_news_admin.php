@@ -62,11 +62,11 @@ class class_module_news_admin extends class_admin_evensimpler implements interfa
     }
 
     /**
-     * @param class_model $objListEntry
+     * @param \Kajona\System\System\Model $objListEntry
      *
      * @return array
      */
-    protected function renderAdditionalActions(class_model $objListEntry) {
+    protected function renderAdditionalActions(\Kajona\System\System\Model $objListEntry) {
         if($objListEntry instanceof class_module_news_category) {
             return array(
                 $this->objToolkit->listButton(class_link::getLinkAdmin($this->getArrModule("modul"), "listNewsAndCategories", "&filterId=" . $objListEntry->getSystemid(), "", $this->getLang("kat_anzeigen"), "icon_lens"))
@@ -88,7 +88,7 @@ class class_module_news_admin extends class_admin_evensimpler implements interfa
 
     /**
      * @param string $strAction
-     * @param interface_model $objInstance
+     * @param \Kajona\System\System\ModelInterface $objInstance
      *
      * @return string
      */
@@ -443,17 +443,17 @@ class class_module_news_admin extends class_admin_evensimpler implements interfa
             $objNews->setStrText($this->getParam("newstext"));
 
             if($this->getParam("startdate") > 0) {
-                $objDate = new class_date($this->getParam("startdate"));
+                $objDate = new \Kajona\System\System\Date($this->getParam("startdate"));
                 $objNews->setObjDateStart($objDate);
             }
 
             if($this->getParam("enddate") > 0) {
-                $objDate = new class_date($this->getParam("enddate"));
+                $objDate = new \Kajona\System\System\Date($this->getParam("enddate"));
                 $objNews->setObjDateEnd($objDate);
             }
 
             if($this->getParam("archivedate") > 0) {
-                $objDate = new class_date($this->getParam("archivedate"));
+                $objDate = new \Kajona\System\System\Date($this->getParam("archivedate"));
                 $objNews->setObjDateSpecial($objDate);
             }
 

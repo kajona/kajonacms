@@ -99,7 +99,7 @@ class SystemSession extends Model implements ModelInterface {
      * @param bool $strPrevId
      *
      * @return bool
-     * @overwrite class_model::updateObjectToDb() due to performance issues
+     * @overwrite \Kajona\System\System\Model::updateObjectToDb() due to performance issues
      */
     public function updateObjectToDb($strPrevId = false) {
 

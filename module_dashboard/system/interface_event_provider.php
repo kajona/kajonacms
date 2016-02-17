@@ -29,11 +29,11 @@ interface interface_event_provider extends interface_generic_plugin {
      * to display i.e. events on a calendar
      *
      * @param string $strCategory
-     * @param class_date $objStartDate
-     * @param class_date $objEndDate
+     * @param \Kajona\System\System\Date $objStartDate
+     * @param \Kajona\System\System\Date $objEndDate
      * @return class_event_entry[]
      */
-    public function getEventsByCategoryAndDate($strCategory, class_date $objStartDate, class_date $objEndDate);
+    public function getEventsByCategoryAndDate($strCategory, \Kajona\System\System\Date $objStartDate, \Kajona\System\System\Date $objEndDate);
 
     /**
      * Returns an array of all available categories

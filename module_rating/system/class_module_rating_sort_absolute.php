@@ -32,7 +32,7 @@ class class_module_rating_sort_absolute implements interface_module_rating_sorta
     public function doSorting() {
     	//move elements into a single array
     	$arrToSort = array();
-        /** @var class_model $objOneElement */
+        /** @var \Kajona\System\System\Model $objOneElement */
     	foreach($this->arrElements as $objOneElement) {
     		$floatRating = $objOneElement->getFloatRating();
             

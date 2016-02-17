@@ -127,8 +127,8 @@ class class_todo_repository
     protected static function sortTodos(array &$arrTodos)
     {
         usort($arrTodos, function(class_todo_entry $objEntryA, class_todo_entry $objEntryB){
-            $intA = $objEntryA->getObjValidDate() instanceof class_date ? $objEntryA->getObjValidDate()->getTimeInOldStyle() : 0;
-            $intB = $objEntryB->getObjValidDate() instanceof class_date ? $objEntryB->getObjValidDate()->getTimeInOldStyle() : 0;
+            $intA = $objEntryA->getObjValidDate() instanceof \Kajona\System\System\Date ? $objEntryA->getObjValidDate()->getTimeInOldStyle() : 0;
+            $intB = $objEntryB->getObjValidDate() instanceof \Kajona\System\System\Date ? $objEntryB->getObjValidDate()->getTimeInOldStyle() : 0;
             if ($intA == $intB) {
                 return 0;
             }

@@ -214,13 +214,13 @@ class class_module_search_admin extends class_admin_simple implements interface_
         }
 
         if ($this->getParam("search_changestartdate") != "") {
-            $objDate = new class_date();
+            $objDate = new \Kajona\System\System\Date();
             $objDate->generateDateFromParams("search_changestartdate", class_carrier::getAllParams());
             $objSearch->setObjChangeStartdate($objDate);
         }
 
         if ($this->getParam("search_changeenddate") != "") {
-            $objDate = new class_date();
+            $objDate = new \Kajona\System\System\Date();
             $objDate->generateDateFromParams("search_changeenddate", class_carrier::getAllParams());
             $objSearch->setObjChangeEnddate($objDate);
         }
@@ -263,7 +263,7 @@ class class_module_search_admin extends class_admin_simple implements interface_
 
 
     /**
-     * @param class_model|interface_admin_listable|interface_model $objOneIterable
+     * @param \Kajona\System\System\Model|interface_admin_listable|\Kajona\System\System\ModelInterface $objOneIterable
      * @param string $strListIdentifier
      *
      * @return string
@@ -330,7 +330,7 @@ class class_module_search_admin extends class_admin_simple implements interface_
 
         $objSearchFunc = function (class_search_result $objA, class_search_result $objB) {
             //first by module, second by score
-            if ($objA->getObjObject() instanceof class_model && $objB->getObjObject() instanceof class_model) {
+            if ($objA->getObjObject() instanceof \Kajona\System\System\Model && $objB->getObjObject() instanceof \Kajona\System\System\Model) {
                 $intCmp = strcmp($objA->getObjObject()->getArrModule("modul"), $objB->getObjObject()->getArrModule("modul"));
 
                 if ($intCmp != 0) {
@@ -503,11 +503,11 @@ JS;
     }
 
     /**
-     * @param class_model $objListEntry
+     * @param \Kajona\System\System\Model $objListEntry
      *
      * @return array
      */
-    protected function renderAdditionalActions(class_model $objListEntry)
+    protected function renderAdditionalActions(\Kajona\System\System\Model $objListEntry)
     {
         if ($objListEntry instanceof class_module_search_search) {
             return array(

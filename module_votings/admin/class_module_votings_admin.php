@@ -4,6 +4,7 @@
 *   (c) 2007-2015 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 ********************************************************************************************************/
+use Kajona\System\System\ModelInterface;
 
 
 /**
@@ -33,7 +34,7 @@ class class_module_votings_admin extends class_admin_evensimpler implements inte
         return $arrReturn;
     } 
 
-    protected function getOutputNaviEntry(interface_model $objInstance) {
+    protected function getOutputNaviEntry(ModelInterface $objInstance) {
         if($objInstance instanceof class_module_votings_answer) {
             return $objInstance->getStrDisplayName();
         }
@@ -44,7 +45,7 @@ class class_module_votings_admin extends class_admin_evensimpler implements inte
         return parent::getOutputNaviEntry($objInstance);
     }
 
-    protected function renderAdditionalActions(class_model $objListEntry) {
+    protected function renderAdditionalActions(\Kajona\System\System\Model $objListEntry) {
 
         if($objListEntry->rightEdit() && $objListEntry instanceof class_module_votings_voting) {
             return array(

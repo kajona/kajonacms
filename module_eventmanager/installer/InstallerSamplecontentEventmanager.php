@@ -6,7 +6,7 @@
 ********************************************************************************************************/
 
 namespace Kajona\Eventmanager\Installer;
-use class_date;
+use \Kajona\System\System\Date;
 use class_db;
 use class_module_eventmanager_event;
 use interface_sc_installer;
@@ -42,8 +42,8 @@ class InstallerSamplecontentEventmanager implements interface_sc_installer  {
         $strReturn .= "Creating event\n";
         $objEvent = new class_module_eventmanager_event();
         
-        $objEvent->setObjStartDate(new class_date());
-        $objEvent->setObjEndDate(new class_date(time()+3600));
+        $objEvent->setObjStartDate(new \Kajona\System\System\Date());
+        $objEvent->setObjEndDate(new \Kajona\System\System\Date(time()+3600));
         $objEvent->setIntRegistrationRequired(1);
         $objEvent->setIntEventStatus(2);
 

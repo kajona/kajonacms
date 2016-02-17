@@ -9,6 +9,12 @@
 
 namespace Kajona\System\Event;
 
+use Kajona\System\System\Carrier;
+use Kajona\System\System\CoreEventdispatcher;
+use Kajona\System\System\GenericeventListenerInterface;
+use Kajona\System\System\LanguagesLanguage;
+use Kajona\System\System\SystemEventidentifier;
+
 
 /**
  * Removes a languageset-entry if the matching record is deleted
@@ -17,7 +23,7 @@ namespace Kajona\System\Event;
  * @author sidler@mulchprod.de
  *
  */
-class LanguagesRecorddeletedlistener implements interface_genericevent_listener {
+class LanguagesRecorddeletedlistener implements GenericeventListenerInterface {
 
 
     /**
@@ -36,9 +42,9 @@ class LanguagesRecorddeletedlistener implements interface_genericevent_listener 
         //unwrap arguments
         list($strSystemid, $strSourceClass) = $arrArguments;
 
-        if($strSourceClass == "class_module_languages_language") {
+        if($strSourceClass == "Kajona\\System\\System\\LanguagesLanguage") {
             //if we have just one language remaining, set this one as default
-            $arrObjLanguages = class_module_languages_language::getObjectList();
+            $arrObjLanguages = LanguagesLanguage::getObjectList();
             if(count($arrObjLanguages) == 1) {
                 $objOneLanguage = $arrObjLanguages[0];
                 $objOneLanguage->setBitDefault(1);
@@ -48,9 +54,9 @@ class LanguagesRecorddeletedlistener implements interface_genericevent_listener 
 
 
             //check if the current active one was deleted. if, then reset. #kajona trace id 613
-            $objLanguage = new class_module_languages_language();
-            $arrLangs = class_module_languages_language::getObjectList();
-            $arrFiltered = array_filter($arrLangs, function(class_module_languages_language $objSingleLang) use ($objLanguage) {
+            $objLanguage = new LanguagesLanguage();
+            $arrLangs = LanguagesLanguage::getObjectList();
+            $arrFiltered = array_filter($arrLangs, function(LanguagesLanguage $objSingleLang) use ($objLanguage) {
                 return $objSingleLang->getStrName() == $objLanguage->getAdminLanguage();
             });
 
@@ -65,7 +71,7 @@ class LanguagesRecorddeletedlistener implements interface_genericevent_listener 
                   WHERE languageset_language = ?
                      OR languageset_systemid = ?";
 
-        class_carrier::getInstance()->getObjDB()->_pQuery($strQuery, array($strSystemid, $strSystemid));
+        Carrier::getInstance()->getObjDB()->_pQuery($strQuery, array($strSystemid, $strSystemid));
 
         return true;
     }
@@ -76,7 +82,7 @@ class LanguagesRecorddeletedlistener implements interface_genericevent_listener 
      * @return void
      */
     public static function staticConstruct() {
-        class_core_eventdispatcher::getInstance()->removeAndAddListener(class_system_eventidentifier::EVENT_SYSTEM_RECORDDELETED_LOGICALLY, new LanguagesRecorddeletedlistener());
+        CoreEventdispatcher::getInstance()->removeAndAddListener(SystemEventidentifier::EVENT_SYSTEM_RECORDDELETED_LOGICALLY, new LanguagesRecorddeletedlistener());
     }
 }
 

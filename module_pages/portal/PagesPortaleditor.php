@@ -6,7 +6,7 @@
 
 namespace Kajona\Pages\Portal;
 use class_carrier;
-use class_model;
+use \Kajona\System\System\Model;
 use class_module_system_setting;
 use class_objectfactory;
 use Kajona\Pages\System\PagesElement;
@@ -114,7 +114,7 @@ class PagesPortaleditor  {
             return $strOutput;
         }
 
-        /** @var class_model $objInstance */
+        /** @var \Kajona\System\System\Model $objInstance */
         $objInstance = class_objectfactory::getInstance()->getObject($strSystemid);
         if ($objInstance == null || class_module_system_setting::getConfigValue("_pages_portaleditor_") != "true") {
             return $strOutput;

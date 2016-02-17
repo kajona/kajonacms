@@ -165,8 +165,8 @@ class class_workflow_workflows_messagesummary implements interface_workflows_han
 
         $objDate->setIntHour($this->intSendTime)->setIntMin(0)->setIntSec(0);
 
-        if($objDate->getLongTimestamp() < class_date::getCurrentTimestamp()) {
-            $objDate = new class_date();
+        if($objDate->getLongTimestamp() < \Kajona\System\System\Date::getCurrentTimestamp()) {
+            $objDate = new \Kajona\System\System\Date();
             $objDate->setNextDay()->setIntHour($this->intSendTime)->setIntMin(0)->setIntSec(0);
         }
 

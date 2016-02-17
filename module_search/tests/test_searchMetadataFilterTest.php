@@ -13,7 +13,7 @@ class class_test_searchMetadataFilterTest extends class_testbase {
 
     protected function setUp() {
 
-        self::$objTimestamp1 = new class_date();
+        self::$objTimestamp1 = new \Kajona\System\System\Date();
         $objObject = $this->createObject("class_module_system_aspect", "");
         self::$arrObjectIds[] = $objObject->getSystemid();
         sleep(3);
@@ -29,7 +29,7 @@ class class_test_searchMetadataFilterTest extends class_testbase {
         $objSearchDocument_1->addContent("subtitle", "blub");
         $objSearchDocument_1->addContent("text2", "blub");
 
-        self::$objTimestamp2 = new class_date();
+        self::$objTimestamp2 = new \Kajona\System\System\Date();
         $objObject = $this->createObject("class_module_search_search", "");
         self::$arrObjectIds[] = $objObject->getSystemid();
         sleep(3);
@@ -40,7 +40,7 @@ class class_test_searchMetadataFilterTest extends class_testbase {
         $objSearchDocument_2->addContent("title", "hallo");
         $objSearchDocument_2->addContent("text", "welt");
 
-        self::$objTimestamp3 = new class_date();
+        self::$objTimestamp3 = new \Kajona\System\System\Date();
         $objObject = $this->createObject("class_module_system_aspect", "");
         self::$arrObjectIds[] = $objObject->getSystemid();
 

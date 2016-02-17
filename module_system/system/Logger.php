@@ -16,8 +16,9 @@ namespace Kajona\System\System;
  *
  * @package module_system
  * @author sidler@mulchprod.de
+ * @todo mark as final as soon as legacy layer is removed
  */
-final class Logger
+ class Logger
 {
 
     const SYSTEMLOG = "systemlog.log";

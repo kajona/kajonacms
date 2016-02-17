@@ -51,7 +51,7 @@ class class_workflows_controller   {
             //trigger the workflow
             class_logger::getInstance(self::STR_LOGFILE)->addLogRow("scheduling workflow ".$objOneWorkflow->getSystemid(), class_logger::$levelInfo);
             if($objOneWorkflow->getObjTriggerdate() == null)
-                $objOneWorkflow->setObjTriggerdate(new class_date());
+                $objOneWorkflow->setObjTriggerdate(new \Kajona\System\System\Date());
             $objHandler->schedule();
 
             class_logger::getInstance(self::STR_LOGFILE)->addLogRow(" scheduling finished, new state: scheduled", class_logger::$levelInfo);

@@ -19,7 +19,7 @@ class class_module_eventmanager_event_provider implements interface_event_provid
         return class_lang::getInstance()->getLang("modul_titel", "eventmanager");
     }
 
-    public function getEventsByCategoryAndDate($strCategory, class_date $objStartDate, class_date $objEndDate)
+    public function getEventsByCategoryAndDate($strCategory, \Kajona\System\System\Date $objStartDate, \Kajona\System\System\Date $objEndDate)
     {
         if ($strCategory != "calendarEvent") {
             return array();
@@ -33,7 +33,7 @@ class class_module_eventmanager_event_provider implements interface_event_provid
                 $objEvent->setStrIcon($objOneEvent->getStrIcon());
                 $objEvent->setStrCategory("calendarEvent");
                 $objEvent->setStrDisplayName($objOneEvent->getStrDisplayName());
-                $objEvent->setObjValidDate(new class_date($objOneEvent->getObjStartDate()));
+                $objEvent->setObjValidDate(new \Kajona\System\System\Date($objOneEvent->getObjStartDate()));
                 $objEvent->setStrHref(class_link::getLinkAdminHref("eventmanager", "edit", "&systemid=" . $objOneEvent->getStrSystemid(), "", "", "icon_edit"));
 
                 $arrResult[] = $objEvent;

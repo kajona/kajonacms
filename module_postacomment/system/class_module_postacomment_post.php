@@ -18,7 +18,7 @@
  * @module postacomment
  * @moduleId _postacomment_modul_id_
  */
-class class_module_postacomment_post extends class_model implements interface_model, interface_sortable_rating, interface_admin_listable, interface_search_portalobject {
+class class_module_postacomment_post extends \Kajona\System\System\Model implements \Kajona\System\System\ModelInterface, interface_sortable_rating, interface_admin_listable, interface_search_portalobject {
 
     /**
      * @var string

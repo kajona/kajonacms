@@ -93,7 +93,7 @@ class class_module_navigation_admin extends class_admin_simple implements interf
     }
 
 
-    protected function renderAdditionalActions(class_model $objListEntry) {
+    protected function renderAdditionalActions(\Kajona\System\System\Model $objListEntry) {
         $arrReturn = array();
 
         if($objListEntry instanceof class_module_navigation_tree) {

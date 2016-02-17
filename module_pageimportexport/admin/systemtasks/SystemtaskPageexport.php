@@ -8,7 +8,7 @@
 namespace Kajona\Pageimportexport\Admin\Systemtasks;
 
 use class_carrier;
-use class_date;
+use \Kajona\System\System\Date;
 use class_exception;
 use class_module_languages_language;
 use class_module_system_module;
@@ -119,7 +119,7 @@ class SystemtaskPageexport extends class_systemtask_base implements interface_ad
                 $strComment .= "   (c) Kajona, www.kajona.de\n";
                 $strComment .= "   Kernel version:  ".$objSystem->getStrVersion()."\n";
                 $strComment .= "   Schema version:  1.0\n";
-                $strComment .= "   Export Date:     ".dateToString(new class_date)."\n";
+                $strComment .= "   Export Date:     ".dateToString(new \Kajona\System\System\Date)."\n";
 
                 $objXmlWriter->text($strComment);
                 $objXmlWriter->endComment();

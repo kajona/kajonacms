@@ -782,7 +782,7 @@ class Rights
     {
 
         if (!$objObject instanceof Model) {
-            throw new Exception("automated permission-check only for instances of class_model", Exception::$level_ERROR);
+            throw new Exception("automated permission-check only for instances of \Kajona\System\System\Model", Exception::$level_ERROR);
         }
 
         if (trim($strPermissions) == "") {

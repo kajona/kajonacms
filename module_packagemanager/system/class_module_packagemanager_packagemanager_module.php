@@ -109,7 +109,7 @@ class class_module_packagemanager_packagemanager_module implements interface_pac
         //start with modules
         foreach($arrInstaller as $objInstance) {
 
-            if(!$objInstance instanceof class_installer_base)
+            if(!$objInstance instanceof \Kajona\System\System\InstallerBase)
                 continue;
 
             //skip element installers at first run

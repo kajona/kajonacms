@@ -25,7 +25,7 @@ interface class_search_eventidentifier {
      * a search-document.
      * The params-array contains two entries:
      *
-     * @param class_model $objInstance the record to be indexed
+     * @param \Kajona\System\System\Model $objInstance the record to be indexed
      * @param class_module_search_document $objSearchDocument the matching search document which may be extended
      *
      * @since 4.5

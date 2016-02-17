@@ -73,7 +73,7 @@ class class_workflow_workflows_dbdump implements interface_workflows_handler  {
         $newTriggerdate = $this->objWorkflow->getObjTriggerdate()->getTimeInOldStyle();
         $newTriggerdate = $newTriggerdate + $this->intIntervalHours * 3600;
 
-        $this->objWorkflow->setObjTriggerdate(new class_date($newTriggerdate));
+        $this->objWorkflow->setObjTriggerdate(new \Kajona\System\System\Date($newTriggerdate));
 
     }
 

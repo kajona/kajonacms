@@ -19,7 +19,7 @@
  *
  * @formGenerator class_module_faqs_formgenerator
  */
-class class_module_faqs_faq extends class_model implements interface_model, interface_sortable_rating, interface_admin_listable, interface_versionable, interface_search_portalobject {
+class class_module_faqs_faq extends \Kajona\System\System\Model implements \Kajona\System\System\ModelInterface, interface_sortable_rating, interface_admin_listable, interface_versionable, interface_search_portalobject {
 
     /**
      * @var string

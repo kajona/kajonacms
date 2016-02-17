@@ -23,7 +23,7 @@ class ObjectvalidatorHelper
 
 
     /**
-     * Compares two dates of type class_date.
+     * Compares two dates of type \Kajona\System\System\Date.
      *
      * @param Date $objDateLeft
      * @param Date $objDateRight

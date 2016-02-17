@@ -16,7 +16,7 @@
  * @module search
  * @moduleId _search_module_id_
  */
-class class_module_search_search extends class_model implements interface_model, interface_sortable_rating, interface_admin_listable
+class class_module_search_search extends \Kajona\System\System\Model implements \Kajona\System\System\ModelInterface, interface_sortable_rating, interface_admin_listable
 {
 
 
@@ -291,7 +291,7 @@ class class_module_search_search extends class_model implements interface_model,
     }
 
     /**
-     * @param class_date $objChangeEnddate
+     * @param \Kajona\System\System\Date $objChangeEnddate
      */
     public function setObjChangeEnddate($objChangeEnddate)
     {
@@ -299,7 +299,7 @@ class class_module_search_search extends class_model implements interface_model,
     }
 
     /**
-     * @return class_date
+     * @return \Kajona\System\System\Date
      */
     public function getObjChangeEnddate()
     {
@@ -307,7 +307,7 @@ class class_module_search_search extends class_model implements interface_model,
     }
 
     /**
-     * @param class_date $objChangeStartdate
+     * @param \Kajona\System\System\Date $objChangeStartdate
      */
     public function setObjChangeStartdate($objChangeStartdate)
     {
@@ -315,7 +315,7 @@ class class_module_search_search extends class_model implements interface_model,
     }
 
     /**
-     * @return class_date
+     * @return \Kajona\System\System\Date
      */
     public function getObjChangeStartdate()
     {

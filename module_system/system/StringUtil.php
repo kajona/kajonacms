@@ -2,7 +2,7 @@
 
 namespace Kajona\System\System;
 
-use class_date;
+use \Kajona\System\System\Date;
 
 /**
  * Util class for processing strings.
@@ -239,10 +239,10 @@ class StringUtil
     }
 
     /**
-     * Converts a string to a class_date
+     * Converts a string to a \Kajona\System\System\Date
      *
      * @param $strString
-     * @return class_date|null
+     * @return \Kajona\System\System\Date|null
      */
     public static function toDate($strString)
     {

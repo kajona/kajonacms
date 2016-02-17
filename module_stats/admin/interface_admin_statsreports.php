@@ -10,7 +10,7 @@
  *
  * @package module_stats
  */
-interface interface_admin_statsreports extends interface_generic_plugin {
+interface interface_admin_statsreports extends \Kajona\System\System\GenericPluginInterface {
 
     /**
      * Method used to fetch the report.

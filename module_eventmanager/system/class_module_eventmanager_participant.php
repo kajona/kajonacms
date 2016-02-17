@@ -19,7 +19,7 @@
  *
  * @formGenerator class_module_eventmanager_participant_formgenerator
  */
-class class_module_eventmanager_participant extends class_model implements interface_model, interface_versionable, interface_admin_listable  {
+class class_module_eventmanager_participant extends \Kajona\System\System\Model implements \Kajona\System\System\ModelInterface, interface_versionable, interface_admin_listable  {
 
     /**
      * @var string

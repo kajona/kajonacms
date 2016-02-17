@@ -9,17 +9,17 @@ namespace Kajona\Pages\System;
 
 use class_cache;
 use class_carrier;
-use class_date;
+use \Kajona\System\System\Date;
 use class_exception;
 use class_logger;
-use class_model;
+use \Kajona\System\System\Model;
 use class_objectfactory;
 use class_orm_base;
 use class_orm_objectlist;
 use class_orm_rowcache;
 use class_reflection;
 use interface_admin_listable;
-use interface_model;
+use \Kajona\System\System\ModelInterface;
 use Kajona\Pages\Admin\ElementAdmin;
 use Kajona\Pages\Portal\ElementPortal;
 
@@ -35,7 +35,7 @@ use Kajona\Pages\Portal\ElementPortal;
  *
  * @blockFromAutosave
  */
-class PagesPageelement extends class_model implements interface_model, interface_admin_listable
+class PagesPageelement extends \Kajona\System\System\Model implements \Kajona\System\System\ModelInterface, interface_admin_listable
 {
 
 
@@ -375,7 +375,7 @@ class PagesPageelement extends class_model implements interface_model, interface
     public static function getPlainElementsOnPage($strPageId, $bitJustActive = false, $strLanguage = "")
     {
         //Calculate the current day as a time-stamp. This improves database-caches e.g. the kajona or mysql-query-cache.
-        $objDate = new class_date();
+        $objDate = new \Kajona\System\System\Date();
         $objDate->setIntMin(0, true);
         $objDate->setIntSec(0, true);
         $objDate->setIntHour(0, true);

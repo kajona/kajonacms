@@ -63,7 +63,7 @@ class class_adminwidget_stats extends class_adminwidget implements interface_adm
         }
         if($this->getFieldValue("chart") == "checked") {
             //load the last view days
-            $objDate = new class_date();
+            $objDate = new \Kajona\System\System\Date();
             $objDate->setIntHour(0); 
             $objDate->setIntMin(0);
             $objDate->setIntSec(0);
@@ -101,7 +101,7 @@ class class_adminwidget_stats extends class_adminwidget implements interface_adm
         if($this->getFieldValue("day") == "checked") {
             //current day:
             //pass date to commons-object
-            $objDate = new class_date();
+            $objDate = new \Kajona\System\System\Date();
             $objDate->setIntHour(0);
             $objDate->setIntMin(0);
             $objDate->setIntSec(0);

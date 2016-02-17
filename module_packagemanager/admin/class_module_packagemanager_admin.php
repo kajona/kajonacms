@@ -675,35 +675,35 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
     }
 
     /**
-     * @param class_model $objListEntry
+     * @param \Kajona\System\System\Model $objListEntry
      * @param bool $bitDialog
      *
      * @return string
      */
-    protected function renderEditAction(class_model $objListEntry, $bitDialog = false)
+    protected function renderEditAction(\Kajona\System\System\Model $objListEntry, $bitDialog = false)
     {
         return "";
     }
 
     /**
-     * @param class_model $objListEntry
+     * @param \Kajona\System\System\Model $objListEntry
      *
      * @return string
      */
-    protected function renderCopyAction(class_model $objListEntry)
+    protected function renderCopyAction(\Kajona\System\System\Model $objListEntry)
     {
         return "";
     }
 
 
     /**
-     * @param class_model
+     * @param \Kajona\System\System\Model
      * @param string $strAltActive tooltip text for the icon if record is active
      * @param string $strAltInactive tooltip text for the icon if record is inactive
      *
      * @return string
      */
-    protected function renderStatusAction(class_model $objListEntry, $strAltActive = "", $strAltInactive = "")
+    protected function renderStatusAction(\Kajona\System\System\Model $objListEntry, $strAltActive = "", $strAltInactive = "")
     {
         if ($objListEntry->rightEdit()) {
             if (class_module_system_setting::getConfigValue("_packagemanager_defaulttemplate_") == $objListEntry->getStrName()) {
@@ -719,11 +719,11 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
 
 
     /**
-     * @param interface_model|class_root $objListEntry
+     * @param \Kajona\System\System\ModelInterface|class_root $objListEntry
      *
      * @return string
      */
-    protected function renderDeleteAction(interface_model $objListEntry)
+    protected function renderDeleteAction(\Kajona\System\System\ModelInterface $objListEntry)
     {
         if ($objListEntry->rightDelete() && $this->getObjModule()->rightDelete()) {
             if (class_module_system_setting::getConfigValue("_packagemanager_defaulttemplate_") == $objListEntry->getStrName()) {

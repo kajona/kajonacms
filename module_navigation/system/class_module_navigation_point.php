@@ -18,7 +18,7 @@ use Kajona\Pages\System\PagesPage;
  * @module navigation
  * @moduleId _navigation_modul_id_
  */
-class class_module_navigation_point extends class_model implements interface_model, interface_admin_listable {
+class class_module_navigation_point extends \Kajona\System\System\Model implements \Kajona\System\System\ModelInterface, interface_admin_listable {
 
     /**
      * @var string

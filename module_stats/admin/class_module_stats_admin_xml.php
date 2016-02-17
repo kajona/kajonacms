@@ -18,11 +18,11 @@
 class class_module_stats_admin_xml extends class_admin_controller implements interface_xml_admin {
 
     /**
-     * @var class_date
+     * @var \Kajona\System\System\Date
      */
     private $objDateStart;
     /**
-     * @var class_date
+     * @var \Kajona\System\System\Date
      */
     private $objDateEnd;
     private $intInterval;
@@ -36,12 +36,12 @@ class class_module_stats_admin_xml extends class_admin_controller implements int
 
         $intDateStart = class_carrier::getInstance()->getObjSession()->getSession(class_module_stats_admin::$STR_SESSION_KEY_DATE_START);
         //Start: first day of current month
-        $this->objDateStart = new class_date();
+        $this->objDateStart = new \Kajona\System\System\Date();
         $this->objDateStart->setTimeInOldStyle($intDateStart);
 
         //End: Current Day of month
         $intDateEnd = class_carrier::getInstance()->getObjSession()->getSession(class_module_stats_admin::$STR_SESSION_KEY_DATE_END);
-        $this->objDateEnd = new class_date();
+        $this->objDateEnd = new \Kajona\System\System\Date();
         $this->objDateEnd->setTimeInOldStyle($intDateEnd);
 
         $this->intInterval = class_carrier::getInstance()->getObjSession()->getSession(class_module_stats_admin::$STR_SESSION_KEY_INTERVAL);

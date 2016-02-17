@@ -17,7 +17,7 @@
  * @module packagemanager
  * @moduleId _packagemanager_module_id_
  */
-class class_module_packagemanager_template extends class_model implements interface_model, interface_admin_listable {
+class class_module_packagemanager_template extends \Kajona\System\System\Model implements \Kajona\System\System\ModelInterface, interface_admin_listable {
 
     /**
      * @var string

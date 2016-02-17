@@ -107,19 +107,19 @@ class class_module_jsonapi_admin extends class_admin_controller implements inter
 
             $strStartDate = $this->getParam('startDate');
             if(!empty($strStartDate)) {
-                $objStartDate = new class_date(strtotime($strStartDate));
+                $objStartDate = new \Kajona\System\System\Date(strtotime($strStartDate));
             } else {
                 $objStartDate = null;
             }
 
             $strEndDate = $this->getParam('endDate');
             if(!empty($strEndDate)) {
-                $objEndDate = new class_date(strtotime($strEndDate));
+                $objEndDate = new \Kajona\System\System\Date(strtotime($strEndDate));
             } else {
                 $objEndDate = null;
             }
 
-            /** @var interface_model[]|class_root[] $arrEntries */
+            /** @var \Kajona\System\System\ModelInterface[]|class_root[] $arrEntries */
             $arrEntries = $strClass::getObjectList($strFilter, $intStartIndex, $intCount, $objStartDate, $objEndDate);
             $arrResult = array();
 
@@ -152,7 +152,7 @@ class class_module_jsonapi_admin extends class_admin_controller implements inter
      * @xml
      */
     protected function actionPost() {
-        /** @var class_model $objObject */
+        /** @var \Kajona\System\System\Model $objObject */
         $objObject = $this->getCurrentObject();
 
         if(!class_module_system_module::getModuleByName($objObject->getArrModule("module"))->rightEdit()) {
@@ -183,7 +183,7 @@ class class_module_jsonapi_admin extends class_admin_controller implements inter
      * @xml
      */
     protected function actionPut() {
-        /** @var class_model $objObject */
+        /** @var \Kajona\System\System\Model $objObject */
         $objObject = $this->getCurrentObject($this->getSystemid());
 
         if(!$objObject->rightEdit()) {
@@ -211,7 +211,7 @@ class class_module_jsonapi_admin extends class_admin_controller implements inter
      * @xml
      */
     protected function actionDelete() {
-        /** @var class_model $objObject */
+        /** @var \Kajona\System\System\Model $objObject */
         $objObject = $this->getCurrentObject($this->getSystemid());
 
         if(!$objObject->rightDelete()) {
@@ -231,10 +231,10 @@ class class_module_jsonapi_admin extends class_admin_controller implements inter
      * searches in the model for @jsonExport annotations. The system id is 
      * always added
      *
-     * @param interface_model $objModel
+     * @param \Kajona\System\System\ModelInterface $objModel
      * @return array
      */
-    protected function serializeObject(interface_model $objModel) {
+    protected function serializeObject(\Kajona\System\System\ModelInterface $objModel) {
         $objSerializer = new class_object_serializer($objModel);
 
         return array_merge(
@@ -246,9 +246,9 @@ class class_module_jsonapi_admin extends class_admin_controller implements inter
     /**
      * Injects the request data into the model
      *
-     * @param interface_model $objModel
+     * @param \Kajona\System\System\ModelInterface $objModel
      */
-    protected function injectData(interface_model $objModel) {
+    protected function injectData(\Kajona\System\System\ModelInterface $objModel) {
         $arrData = $this->getRequestBody();
         $objSerializer = new class_object_serializer($objModel);
         $arrProperties = $objSerializer->getPropertyNames();
@@ -289,7 +289,7 @@ class class_module_jsonapi_admin extends class_admin_controller implements inter
      * exists
      *
      * @param string $strSystemId
-     * @return interface_model
+     * @return \Kajona\System\System\ModelInterface
      * @throws class_invalid_request_exception
      */
     protected function getCurrentObject($strSystemId = null) {
@@ -313,7 +313,7 @@ class class_module_jsonapi_admin extends class_admin_controller implements inter
             $objObject = new $strClassName();
         }
 
-        if(!$objObject instanceof interface_model) {
+        if(!$objObject instanceof \Kajona\System\System\ModelInterface) {
             throw new class_invalid_request_exception('Selected class must be a model', class_exception::$level_ERROR);
         }
 

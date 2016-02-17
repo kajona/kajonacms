@@ -1,7 +1,7 @@
 # Object-Validator
-In Kajona 4.6 we introduced the possibility to register an object validator for an object which is derived from class class_model.
+In Kajona 4.6 we introduced the possibility to register an object validator for an object which is derived from class \Kajona\System\System\Model.
 
-In Kajona 4.0 we already introduced field validators which validate the values of a single form field (e.g. the validator 'class_date_validator' validates if the value in the field is a date).
+In Kajona 4.0 we already introduced field validators which validate the values of a single form field (e.g. the validator '\Kajona\System\System\Date_validator' validates if the value in the field is a date).
 
 With the introduction of the object validator it ispossible to validate fields of an object which are dependent on each other (e.g. start date of an object must be before end date of an object).
 
@@ -31,10 +31,10 @@ Below the base class class_objectvalidator_base :
 		* while key could be the name of the formentry.
 		*
 		* @abstract
-		* @param class_model $objObject - the model object to the given form
+		* @param \Kajona\System\System\Model $objObject - the model object to the given form
 		* @return bool
 		*/
-		public abstract function validateObject(class_model $objObject);
+		public abstract function validateObject(\Kajona\System\System\Model $objObject);
 
 		/** * Adds an additional, user-specific validation-error to the current list of errors.
 		*
@@ -62,20 +62,20 @@ Like field validators, a concrete object validator class needs to be created in 
 
  
 	class class_objectvalidator_myobjectvalidator extends class_objectvalidator_base {
-	    public function validateObject(class_model $objObject) {
+	    public function validateObject(\Kajona\System\System\Model $objObject) {
 	        // Validation code here
 	    }
 	} 
 	 
 
-To register the object validator you have created  you need to add the class-annotation "@objectValidator" to a class which is derived from the class class_model. The value for this annotation is the classname of the created validator class.
+To register the object validator you have created  you need to add the class-annotation "@objectValidator" to a class which is derived from the class \Kajona\System\System\Model. The value for this annotation is the classname of the created validator class.
  
 	/**
 	 * .....
 	 * @objectValidator class_news_news_objectvalidator
 	 * .....
 	 */
-	class class_module_yourmodule_myobject extends class_model {
+	class class_module_yourmodule_myobject extends \Kajona\System\System\Model {
 	    //...object code here...
 	} 
  

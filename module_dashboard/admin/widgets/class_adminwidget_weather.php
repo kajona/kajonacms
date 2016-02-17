@@ -86,7 +86,7 @@ class class_adminwidget_weather extends class_adminwidget implements interface_a
 
 
             foreach($arrResponse["list"] as $arrOneForecast) {
-                $objDate = new class_date($arrOneForecast["dt"]);
+                $objDate = new \Kajona\System\System\Date($arrOneForecast["dt"]);
                 $strReturn .= "<div>";
                 $strReturn .= $this->widgetText("<div style='float: left;'>".dateToString($objDate, false).": ".round($arrOneForecast["temp"]["day"], 1)."°</div>");
                 $strReturn .= $this->widgetText("<img src='http://openweathermap.org/img/w/".$arrOneForecast["weather"][0]["icon"].".png' style='float: right;' />");

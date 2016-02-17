@@ -9,8 +9,8 @@ echo "+-------------------------------------------------------------------------
 
 
 
-$objStartDate = new class_date();
-$objEndDate = new class_date();
+$objStartDate = new \Kajona\System\System\Date();
+$objEndDate = new \Kajona\System\System\Date();
 
 
 echo str_pad("Month", 15);

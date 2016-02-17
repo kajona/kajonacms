@@ -21,7 +21,7 @@ interface ModelInterface
      * Returns the name to be used when rendering the current object, e.g. in admin-lists.
      *
      * @abstract
-     * @todo move this to class_model, making this interface obsolete
+     * @todo move this to \Kajona\System\System\Model, making this interface obsolete
      * @return string
      */
     public function getStrDisplayName();

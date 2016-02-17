@@ -21,7 +21,7 @@
  * @module tags
  * @moduleId _tags_modul_id_
  */
-class class_module_tags_tag extends class_model implements interface_model, interface_admin_listable, interface_search_resultobject {
+class class_module_tags_tag extends \Kajona\System\System\Model implements \Kajona\System\System\ModelInterface, interface_admin_listable, interface_search_resultobject {
 
     /**
      * @var string
@@ -255,7 +255,7 @@ class class_module_tags_tag extends class_model implements interface_model, inte
      *
      * @param int $intStart
      * @param int $intEnd
-     * @return class_model[]
+     * @return \Kajona\System\System\Model[]
      */
     public function getArrAssignedRecords($intStart = null, $intEnd = null) {
         $objORM = new class_orm_objectlist();

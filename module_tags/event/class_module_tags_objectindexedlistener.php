@@ -30,7 +30,7 @@ class class_module_tags_objectindexedlistener  implements interface_genericevent
     public function handleEvent($strEventName, array $arrArguments) {
 
         //unwrap arguments
-        /** @var class_model $objObject */
+        /** @var \Kajona\System\System\Model $objObject */
         $objObject = $arrArguments[0];
         /** @var class_module_search_document $objSearchDocument */
         $objSearchDocument = $arrArguments[1];

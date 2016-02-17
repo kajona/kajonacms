@@ -8,7 +8,7 @@
 namespace Kajona\Userlist\Portal\Elements;
 
 use class_csv;
-use class_date;
+use \Kajona\System\System\Date;
 use class_module_user_group;
 use class_module_user_user;
 use class_usersources_user_kajona;
@@ -71,7 +71,7 @@ class ElementUserlistPortal extends ElementPortal implements PortalElementInterf
                 $arrRow[] = $objTargetUser->getStrCity();
                 $arrRow[] = $objTargetUser->getStrTel();
                 $arrRow[] = $objTargetUser->getStrMobile();
-                $arrRow[] = uniStrlen($objTargetUser->getLongDate()) > 5 ? dateToString(new class_date($objTargetUser->getLongDate()), false) : "";
+                $arrRow[] = uniStrlen($objTargetUser->getLongDate()) > 5 ? dateToString(new \Kajona\System\System\Date($objTargetUser->getLongDate()), false) : "";
 
                 $arrCsvValues[] = $arrRow;
             }
@@ -109,7 +109,7 @@ class ElementUserlistPortal extends ElementPortal implements PortalElementInterf
                 $arrRow["userCity"] = $objTargetUser->getStrCity();
                 $arrRow["userPhone"] = $objTargetUser->getStrTel();
                 $arrRow["userMobile"] = $objTargetUser->getStrMobile();
-                $arrRow["userBirthday"] = uniStrlen($objTargetUser->getLongDate()) > 5 ? dateToString(new class_date($objTargetUser->getLongDate()), false) : "";
+                $arrRow["userBirthday"] = uniStrlen($objTargetUser->getLongDate()) > 5 ? dateToString(new \Kajona\System\System\Date($objTargetUser->getLongDate()), false) : "";
                 $strRows .= $this->fillTemplate($arrRow, $strTemplateRowID);
             }
 

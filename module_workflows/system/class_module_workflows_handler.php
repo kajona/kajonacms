@@ -22,7 +22,7 @@
  * @module workflows
  * @moduleId _workflows_module_id_
  */
-class class_module_workflows_handler extends class_model implements interface_model, interface_admin_listable  {
+class class_module_workflows_handler extends \Kajona\System\System\Model implements \Kajona\System\System\ModelInterface, interface_admin_listable  {
 
     /**
      * @var string

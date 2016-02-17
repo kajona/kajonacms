@@ -10,13 +10,13 @@ namespace Kajona\Pages\Admin;
 use class_admin_simple;
 use class_adminskin_helper;
 use class_carrier;
-use class_date;
+use \Kajona\System\System\Date;
 use class_exception;
 use class_http_statuscodes;
 use class_lang;
 use class_link;
 use class_lockmanager;
-use class_model;
+use \Kajona\System\System\Model;
 use class_module_languages_admin;
 use class_module_languages_language;
 use class_module_system_module;
@@ -28,7 +28,7 @@ use class_response_object;
 use class_template;
 use interface_admin;
 use interface_admin_listable;
-use interface_model;
+use \Kajona\System\System\ModelInterface;
 use Kajona\Pages\Admin\Elements\ElementBlockAdmin;
 use Kajona\Pages\Portal\PagesPortaleditor;
 use Kajona\Pages\System\PagesElement;
@@ -382,7 +382,7 @@ HTML;
 
 
     /**
-     * @param class_model|interface_admin_listable|interface_model|PagesPageelement $objOneIterable
+     * @param \Kajona\System\System\Model|interface_admin_listable|\Kajona\System\System\ModelInterface|PagesPageelement $objOneIterable
      * @param string $strListIdentifier
      *
      * @return string
@@ -829,8 +829,8 @@ JS;
                 $objElementData->setStrPlaceholder($this->getParam("placeholder"));
             }
 
-            $objStartDate = new class_date("0");
-            $objEndDate = new class_date("0");
+            $objStartDate = new \Kajona\System\System\Date("0");
+            $objEndDate = new \Kajona\System\System\Date("0");
             $objStartDate->generateDateFromParams("start", $this->getAllParams());
             $objEndDate->generateDateFromParams("end", $this->getAllParams());
 

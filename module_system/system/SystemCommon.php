@@ -31,7 +31,7 @@ class SystemCommon extends Model implements ModelInterface {
      * @param bool|int $intModuleFilter
      * @param bool $strClassFilter
      *
-     * @return array class_model[]
+     * @return array \Kajona\System\System\Model[]
      * @since 3.3.0
      * @deprecated will be removed in v5
      */

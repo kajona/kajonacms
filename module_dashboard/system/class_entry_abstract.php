@@ -13,7 +13,7 @@
  * @package module_dashboard
  * @author christoph.kappestein@gmail.com
  */
-abstract class class_entry_abstract implements interface_admin_listable, interface_model
+abstract class class_entry_abstract implements interface_admin_listable, \Kajona\System\System\ModelInterface
 {
     /**
      * @var string
@@ -46,7 +46,7 @@ abstract class class_entry_abstract implements interface_admin_listable, interfa
     protected $strLongDescription;
 
     /**
-     * @var class_date
+     * @var \Kajona\System\System\Date
      */
     protected $objValidDate;
 
@@ -123,7 +123,7 @@ abstract class class_entry_abstract implements interface_admin_listable, interfa
     }
 
     /**
-     * @return class_date
+     * @return \Kajona\System\System\Date
      */
     public function getObjValidDate()
     {
@@ -163,9 +163,9 @@ abstract class class_entry_abstract implements interface_admin_listable, interfa
     }
 
     /**
-     * @param class_date $objValidDate
+     * @param \Kajona\System\System\Date $objValidDate
      */
-    public function setObjValidDate(class_date $objValidDate = null)
+    public function setObjValidDate(\Kajona\System\System\Date $objValidDate = null)
     {
         $this->objValidDate = $objValidDate;
     }

@@ -16,7 +16,7 @@ namespace Kajona\System\System;
  * The languageswitch is capable to interact with a languageswitch and creates the switch-links
  * with the matching systemid.
  * Please note: Since a languageset only tights existing records together, it isn't in the regular
- * class_model hierarchy. This also means, that a languageset is not included within the regular
+ * \Kajona\System\System\Model hierarchy. This also means, that a languageset is not included within the regular
  * object lifecycle and has no representation in the system-table!
  * In most cases creating a new instance via the constructor is useless. Instead use one of the
  * factory methods.

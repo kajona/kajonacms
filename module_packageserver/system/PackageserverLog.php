@@ -7,9 +7,9 @@
 namespace Kajona\Packageserver\System;
 
 use class_carrier;
-use class_date;
-use class_model;
-use interface_model;
+use \Kajona\System\System\Date;
+use \Kajona\System\System\Model;
+use \Kajona\System\System\ModelInterface;
 
 
 /**
@@ -20,7 +20,7 @@ use interface_model;
  * @module mediamanager
  * @moduleId _packagemanager_module_id_
  */
-class PackageserverLog extends class_model implements interface_model {
+class PackageserverLog extends \Kajona\System\System\Model implements \Kajona\System\System\ModelInterface {
 
     /**
      * Generates an entry in the logtable
@@ -42,7 +42,7 @@ class PackageserverLog extends class_model implements interface_model {
                 $strQueryParams,
                 $strIp,
                 $strHostname,
-                class_date::getCurrentTimestamp()
+                \Kajona\System\System\Date::getCurrentTimestamp()
             )
         );
     }

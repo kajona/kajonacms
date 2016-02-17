@@ -15,8 +15,9 @@ namespace Kajona\System\System;
  *
  * @package module_system
  * @author sidler@mulchprod.de
+ * @todo mark final again
  */
-final class Session
+ class Session
 {
 
     private $objDB;

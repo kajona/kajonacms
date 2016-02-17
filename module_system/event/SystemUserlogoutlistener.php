@@ -9,6 +9,11 @@
 
 namespace Kajona\System\Event;
 
+use Kajona\System\System\CoreEventdispatcher;
+use Kajona\System\System\GenericeventListenerInterface;
+use Kajona\System\System\Lockmanager;
+use Kajona\System\System\SystemEventidentifier;
+
 
 /**
  * Unlocks all records currently locked by the user.
@@ -17,7 +22,7 @@ namespace Kajona\System\Event;
  * @author sidler@mulchprod.de
  *
  */
-class SystemUserlogoutlistener implements interface_genericevent_listener {
+class SystemUserlogoutlistener implements GenericeventListenerInterface {
 
 
     /**
@@ -32,7 +37,7 @@ class SystemUserlogoutlistener implements interface_genericevent_listener {
         //unwrap arguments
         list($strUserid) = $arrArguments;
 
-        foreach(class_lockmanager::getLockedRecordsForUser($strUserid) as $objOneLock) {
+        foreach(Lockmanager::getLockedRecordsForUser($strUserid) as $objOneLock) {
             $objOneLock->getLockManager()->unlockRecord();
         }
 
@@ -46,7 +51,7 @@ class SystemUserlogoutlistener implements interface_genericevent_listener {
      * @return void
      */
     public static function staticConstruct() {
-        class_core_eventdispatcher::getInstance()->removeAndAddListener(class_system_eventidentifier::EVENT_SYSTEM_USERLOGOUT, new SystemUserlogoutlistener());
+        CoreEventdispatcher::getInstance()->removeAndAddListener(SystemEventidentifier::EVENT_SYSTEM_USERLOGOUT, new SystemUserlogoutlistener());
     }
 }
 

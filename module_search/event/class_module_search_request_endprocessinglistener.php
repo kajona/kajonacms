@@ -106,7 +106,7 @@ class class_module_search_request_endprocessinglistener implements interface_gen
      * @param string $strSystemid
      */
     public static function addIdToIndex($strSystemid) {
-        if(is_object($strSystemid) && $strSystemid instanceof class_model) {
+        if(is_object($strSystemid) && $strSystemid instanceof \Kajona\System\System\Model) {
             if($strSystemid instanceof class_module_workflows_workflow && $strSystemid->getStrClass() == "class_workflow_search_deferredindexer")
                 return;
 

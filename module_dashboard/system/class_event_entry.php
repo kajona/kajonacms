@@ -46,7 +46,7 @@ class class_event_entry extends class_entry_abstract
     /**
      * @param mixed $objStartDate
      */
-    public function setObjStartDate(class_date $objStartDate)
+    public function setObjStartDate(\Kajona\System\System\Date $objStartDate)
     {
         $this->objStartDate = $objStartDate;
     }
@@ -62,7 +62,7 @@ class class_event_entry extends class_entry_abstract
     /**
      * @param mixed $objEndDate
      */
-    public function setObjEndDate(class_date $objEndDate)
+    public function setObjEndDate(\Kajona\System\System\Date $objEndDate)
     {
         $this->objEndDate = $objEndDate;
     }

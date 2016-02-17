@@ -48,17 +48,15 @@ class ServiceProvider implements ServiceProviderInterface
             // decide which class to load
             $strAdminToolkitClass = $c["config"]->getConfig("admintoolkit");
             if ($strAdminToolkitClass == "") {
-                $strAdminToolkitClass = "class_toolkit_admin";
+                $strAdminToolkitClass = "ToolkitAdmin";
             }
 
             $strPath = Resourceloader::getInstance()->getPathForFile("/admin/".$strAdminToolkitClass.".php");
-            include_once $strPath;
-
-            return new $strAdminToolkitClass();
+            return Classloader::getInstance()->getInstanceFromFilename($strPath);
         };
 
         $objContainer['portaltoolkit'] = function($c){
-            $strPath = Resourceloader::getInstance()->getPathForFile("/portal/class_toolkit_portal.php");
+            $strPath = Resourceloader::getInstance()->getPathForFile("/portal/ToolkitPortal.php");
             include_once $strPath;
 
             return new ToolkitPortal();

@@ -7,7 +7,7 @@
 /**
  * @deprecated
  */
-class class_installer_base extends Kajona\System\System\InstallerBase
+abstract class class_installer_base extends Kajona\System\System\InstallerBase
 {
 
 }

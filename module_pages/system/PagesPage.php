@@ -12,7 +12,7 @@ namespace Kajona\Pages\System;
 use class_carrier;
 use class_link;
 use class_logger;
-use class_model;
+use \Kajona\System\System\Model;
 use class_module_system_changelog;
 use class_module_system_module;
 use class_module_system_setting;
@@ -22,7 +22,7 @@ use class_orm_objectlist_orderby;
 use class_orm_objectlist_restriction;
 use class_search_result;
 use interface_admin_listable;
-use interface_model;
+use \Kajona\System\System\ModelInterface;
 use interface_search_portalobject;
 use interface_search_resultobject;
 use interface_versionable;
@@ -37,7 +37,7 @@ use interface_versionable;
  * @module pages
  * @moduleId _pages_modul_id_
  */
-class PagesPage extends class_model implements interface_model, interface_versionable, interface_admin_listable, interface_search_resultobject, interface_search_portalobject
+class PagesPage extends \Kajona\System\System\Model implements \Kajona\System\System\ModelInterface, interface_versionable, interface_admin_listable, interface_search_resultobject, interface_search_portalobject
 {
 
     public static $INT_TYPE_PAGE = 0;

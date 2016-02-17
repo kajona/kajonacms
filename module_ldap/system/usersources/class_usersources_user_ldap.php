@@ -18,7 +18,7 @@
  * @module ldap
  * @moduleId _ldap_module_id_
  */
-class class_usersources_user_ldap extends class_model implements interface_model, interface_usersources_user {
+class class_usersources_user_ldap extends \Kajona\System\System\Model implements \Kajona\System\System\ModelInterface, interface_usersources_user {
     
     private $strEmail = "";
     private $strFamilyname = "";

@@ -70,11 +70,11 @@ class class_module_votings_portal extends class_portal_controller implements int
                     $objDateEnd = $objVoting->getObjEndDate();
 
                     $bitDatesAllow = true;
-                    if($objDateStart != null && $objDateStart->getLongTimestamp() > class_date::getCurrentTimestamp()) {
+                    if($objDateStart != null && $objDateStart->getLongTimestamp() > \Kajona\System\System\Date::getCurrentTimestamp()) {
                         $bitDatesAllow = false;
                     }
 
-                    if($objDateEnd != null && $objDateEnd->getLongTimestamp() < class_date::getCurrentTimestamp()) {
+                    if($objDateEnd != null && $objDateEnd->getLongTimestamp() < \Kajona\System\System\Date::getCurrentTimestamp()) {
                         $bitDatesAllow = false;
                     }
 

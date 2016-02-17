@@ -18,7 +18,7 @@
  *
  * @formGenerator class_module_mediamanager_repo_formgenerator
  */
-class class_module_mediamanager_repo extends class_model implements interface_model, interface_admin_listable {
+class class_module_mediamanager_repo extends \Kajona\System\System\Model implements \Kajona\System\System\ModelInterface, interface_admin_listable {
 
     /**
      * @var string

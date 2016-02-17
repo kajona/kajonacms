@@ -37,7 +37,7 @@ class class_module_rating_recorddeletedlistener implements interface_genericeven
 
         //if another record was deleted, remove the ratings alltogether
         $objOrmList = new class_orm_objectlist();
-        $objOrmList->addWhereRestriction(new class_orm_objectlist_property_restriction("strRatingSystemid", class_orm_comparator_enum::Equal(), $strSystemid));
+        $objOrmList->addWhereRestriction(new class_orm_objectlist_property_restriction("strRatingSystemid", \Kajona\System\System\OrmComparatorEnum::Equal(), $strSystemid));
         $arrRatings = $objOrmList->getObjectList("class_module_rating_rate");
 
         foreach($arrRatings as $objRating) {

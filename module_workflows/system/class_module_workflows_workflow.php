@@ -21,7 +21,7 @@
  *
  * @blockFromAutosave
  */
-class class_module_workflows_workflow extends class_model implements interface_model, interface_admin_listable  {
+class class_module_workflows_workflow extends \Kajona\System\System\Model implements \Kajona\System\System\ModelInterface, interface_admin_listable  {
 
 
     public static $INT_STATE_NEW = 1;
@@ -209,7 +209,7 @@ class class_module_workflows_workflow extends class_model implements interface_m
         $objOrmMapper = new class_orm_objectlist();
 
         if($bitOnlyWithValidTriggerDate) {
-            $objOrmMapper->addWhereRestriction(new class_orm_objectlist_property_restriction("objStartDate", class_orm_comparator_enum::LessThen(), class_date::getCurrentTimestamp()));
+            $objOrmMapper->addWhereRestriction(new class_orm_objectlist_property_restriction("objStartDate", class_orm_comparator_enum::LessThen(), \Kajona\System\System\Date::getCurrentTimestamp()));
         }
 
         $objOrmMapper->addWhereRestriction(new class_orm_objectlist_property_restriction("intState", class_orm_comparator_enum::Equal(), (int)$intType));
@@ -256,7 +256,7 @@ class class_module_workflows_workflow extends class_model implements interface_m
 
         if($bitOnlyScheduled) {
             $objORM->addWhereRestriction(new class_orm_objectlist_restriction(" AND ( workflows_state = ? OR workflows_state = ? )", array((int)self::$INT_STATE_SCHEDULED, (int)self::$INT_STATE_NEW)));
-            $objORM->addWhereRestriction(new class_orm_objectlist_restriction(" AND ( system_date_start > ? OR system_date_start = 0 )", class_date::getCurrentTimestamp()));
+            $objORM->addWhereRestriction(new class_orm_objectlist_restriction(" AND ( system_date_start > ? OR system_date_start = 0 )", \Kajona\System\System\Date::getCurrentTimestamp()));
         }
 
         $objORM->addOrderBy(new class_orm_objectlist_orderby("system_date_start DESC"));
@@ -282,7 +282,7 @@ class class_module_workflows_workflow extends class_model implements interface_m
 
         if($bitOnlyScheduled) {
             $objOrmMapper->addWhereRestriction(new class_orm_objectlist_restriction("AND ( workflows_state = ? OR workflows_state = ? )", array((int)self::$INT_STATE_SCHEDULED, (int)self::$INT_STATE_NEW)));
-            $objOrmMapper->addWhereRestriction(new class_orm_objectlist_restriction("AND ( system_date_start > ? OR system_date_start = 0 )", array(class_date::getCurrentTimestamp())));
+            $objOrmMapper->addWhereRestriction(new class_orm_objectlist_restriction("AND ( system_date_start > ? OR system_date_start = 0 )", array(\Kajona\System\System\Date::getCurrentTimestamp())));
         }
 
         $objOrmMapper->addWhereRestriction(new class_orm_objectlist_property_restriction("strClass", class_orm_comparator_enum::Equal(), $strClass));
@@ -303,7 +303,7 @@ class class_module_workflows_workflow extends class_model implements interface_m
 
         if($bitOnlyScheduled) {
             $objOrmMapper->addWhereRestriction(new class_orm_objectlist_restriction("AND ( workflows_state = ? OR workflows_state = ? )", array((int)self::$INT_STATE_SCHEDULED, (int)self::$INT_STATE_NEW)));
-            $objOrmMapper->addWhereRestriction(new class_orm_objectlist_restriction("AND ( system_date_start > ? OR system_date_start = 0 )", array(class_date::getCurrentTimestamp())));
+            $objOrmMapper->addWhereRestriction(new class_orm_objectlist_restriction("AND ( system_date_start > ? OR system_date_start = 0 )", array(\Kajona\System\System\Date::getCurrentTimestamp())));
         }
 
         $objOrmMapper->addWhereRestriction(new class_orm_objectlist_property_restriction("strClass", class_orm_comparator_enum::Equal(), $strClass));
@@ -448,7 +448,7 @@ class class_module_workflows_workflow extends class_model implements interface_m
 
     /**
      *
-     * @return class_date
+     * @return \Kajona\System\System\Date
      */
     public function getObjTriggerdate() {
         return $this->getObjStartDate();

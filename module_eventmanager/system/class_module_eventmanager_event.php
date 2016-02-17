@@ -17,7 +17,7 @@
  * @module eventmanager
  * @moduleId _eventmanager_module_id_
  */
-class class_module_eventmanager_event extends class_model implements interface_model, interface_versionable, interface_admin_listable  {
+class class_module_eventmanager_event extends \Kajona\System\System\Model implements \Kajona\System\System\ModelInterface, interface_versionable, interface_admin_listable  {
 
     /**
      * @var string
@@ -118,7 +118,7 @@ class class_module_eventmanager_event extends class_model implements interface_m
 
     /**
      * For form generation only
-     * @var class_date
+     * @var \Kajona\System\System\Date
      * @versionable
      * @fieldType datetime
      * @fieldLabel event_start
@@ -130,7 +130,7 @@ class class_module_eventmanager_event extends class_model implements interface_m
 
     /**
      * For form-generation only
-     * @var class_date
+     * @var \Kajona\System\System\Date
      * @versionable
      * @fieldType datetime
      * @fieldLabel event_end
@@ -199,15 +199,15 @@ class class_module_eventmanager_event extends class_model implements interface_m
      *
      * @param bool|int $intStart
      * @param bool|int $intEnd
-     * @param class_date $objStartDate
-     * @param class_Date $objEndDate
+     * @param \Kajona\System\System\Date $objStartDate
+     * @param \Kajona\System\System\Date $objEndDate
      * @param bool $bitOnlyActive
      * @param int $intOrder
      * @param null $intStatusFilter
      *
      * @return class_module_eventmanager_event[]
      */
-    public static function getAllEvents($intStart = false, $intEnd = false, class_date $objStartDate = null, class_date $objEndDate = null, $bitOnlyActive = false, $intOrder = 0, $intStatusFilter = null) {
+    public static function getAllEvents($intStart = false, $intEnd = false, \Kajona\System\System\Date $objStartDate = null, \Kajona\System\System\Date $objEndDate = null, $bitOnlyActive = false, $intOrder = 0, $intStatusFilter = null) {
 
 
         $objORM = new class_orm_objectlist();
@@ -274,7 +274,7 @@ class class_module_eventmanager_event extends class_model implements interface_m
      */
     public function renderVersionValue($strProperty, $strValue) {
         if( ($strProperty == "objEndDate" || $strProperty == "objStartDate") && $strValue != "") {
-            return dateToString(new class_date($strValue));
+            return dateToString(new \Kajona\System\System\Date($strValue));
         }
         if($strProperty == "limitGiven" || $strProperty == "registrationRequired") {
             return $this->getLang("event_yesno_".$strValue, "eventmanager");

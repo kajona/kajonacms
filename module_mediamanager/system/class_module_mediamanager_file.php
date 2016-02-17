@@ -17,7 +17,7 @@
  *
  * @formGenerator class_module_mediamanager_file_formgenerator
  */
-class class_module_mediamanager_file extends class_model implements interface_model, interface_admin_gridable, interface_search_portalobject {
+class class_module_mediamanager_file extends \Kajona\System\System\Model implements \Kajona\System\System\ModelInterface, interface_admin_gridable, interface_search_portalobject {
 
 
     public static $INT_TYPE_FILE = 0;

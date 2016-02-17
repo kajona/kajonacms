@@ -12,7 +12,7 @@ namespace Kajona\Pages\Admin;
 use class_admin_controller;
 use class_admin_formgenerator;
 use class_carrier;
-use class_date;
+use \Kajona\System\System\Date;
 use class_exception;
 use class_formentry_date;
 use class_formentry_hidden;
@@ -159,13 +159,13 @@ abstract class ElementAdmin extends class_admin_controller implements interface_
 
         $objStartDate = null;
         if (isset($this->arrElementData["system_date_start"]) && $this->arrElementData["system_date_start"] > 0) {
-            $objStartDate = new class_date($this->arrElementData["system_date_start"]);
+            $objStartDate = new \Kajona\System\System\Date($this->arrElementData["system_date_start"]);
             $bitShow = true;
         }
 
         $objEndDate = null;
         if (isset($this->arrElementData["system_date_end"]) && $this->arrElementData["system_date_end"] > 0) {
-            $objEndDate = new class_date($this->arrElementData["system_date_end"]);
+            $objEndDate = new \Kajona\System\System\Date($this->arrElementData["system_date_end"]);
             $bitShow = true;
         }
 
@@ -245,13 +245,13 @@ abstract class ElementAdmin extends class_admin_controller implements interface_
 
         $objStartDate = null;
         if (isset($arrElementData["system_date_start"]) && $arrElementData["system_date_start"] > 0) {
-            $objStartDate = new class_date($arrElementData["system_date_start"]);
+            $objStartDate = new \Kajona\System\System\Date($arrElementData["system_date_start"]);
             $bitShow = true;
         }
 
         $objEndDate = null;
         if (isset($arrElementData["system_date_end"]) && $arrElementData["system_date_end"] > 0) {
-            $objEndDate = new class_date($arrElementData["system_date_end"]);
+            $objEndDate = new \Kajona\System\System\Date($arrElementData["system_date_end"]);
             $bitShow = true;
         }
 
@@ -347,7 +347,7 @@ abstract class ElementAdmin extends class_admin_controller implements interface_
             $strValue = $this->getParam($strFieldname);
 
             if ($strType == "date") {
-                $objDate = new class_date("0");
+                $objDate = new \Kajona\System\System\Date("0");
                 $objDate->generateDateFromParams($strFieldname, $this->getAllParams());
                 $strValue = $objDate;
             }

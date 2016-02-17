@@ -20,7 +20,7 @@ use Kajona\System\System\Logger;
  * @since 3.4.1
  * @package module_usersource
  */
-class UsersourcesSourceKajona implements UsersourcesUserInterface {
+class UsersourcesSourceKajona implements UsersourcesUsersourceInterface {
 
 
     private static $arrUserCache = array();

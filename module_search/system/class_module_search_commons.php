@@ -14,7 +14,7 @@
  * @module search
  * @moduleId _search_module_id_
  */
-class class_module_search_commons extends class_model implements interface_model
+class class_module_search_commons extends \Kajona\System\System\Model implements \Kajona\System\System\ModelInterface
 {
 
 

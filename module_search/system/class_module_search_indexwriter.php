@@ -104,11 +104,11 @@ class class_module_search_indexwriter {
     /**
      * Triggers the indexing of a single object.
      *
-     * @param class_model $objInstance
+     * @param \Kajona\System\System\Model $objInstance
      *
      * @return void
      */
-    public function indexObject(class_model $objInstance = null) {
+    public function indexObject(\Kajona\System\System\Model $objInstance = null) {
 
         if(!self::isIndexAvailable())
             return;

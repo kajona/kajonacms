@@ -19,7 +19,7 @@ class class_module_news_event_provider implements interface_event_provider
         return class_lang::getInstance()->getLang("modul_titel", "news");
     }
 
-    public function getEventsByCategoryAndDate($strCategory, class_date $objStartDate, class_date $objEndDate)
+    public function getEventsByCategoryAndDate($strCategory, \Kajona\System\System\Date $objStartDate, \Kajona\System\System\Date $objEndDate)
     {
         if ($strCategory != "calendarNews") {
             return array();
@@ -33,7 +33,7 @@ class class_module_news_event_provider implements interface_event_provider
                 $objEvent->setStrIcon($objOneNews->getStrIcon());
                 $objEvent->setStrCategory("calendarNews");
                 $objEvent->setStrDisplayName($objOneNews->getStrDisplayName());
-                $objEvent->setObjValidDate(new class_date($objOneNews->getObjStartDate()));
+                $objEvent->setObjValidDate(new \Kajona\System\System\Date($objOneNews->getObjStartDate()));
                 $objEvent->setStrHref(class_link::getLinkAdminHref("news", "edit", "&systemid=" . $objOneNews->getStrSystemid()));
 
                 $arrResult[] = $objEvent;

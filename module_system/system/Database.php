@@ -75,13 +75,15 @@ class Database
         //Load the defined db-driver
         $strDriver = $this->objConfig->getConfig("dbdriver");
         if ($strDriver != "%%defaultdriver%%") {
+
             //build a class-name & include the driver
-            $strClassname = "Db_".$strDriver;
-            if (class_exists($strClassname)) {
-                $this->objDbDriver = new $strClassname();
+            $strPath = Resourceloader::getInstance()->getPathForFile("/system/db/Db".ucfirst($strDriver).".php");
+            $objDriver = Classloader::getInstance()->getInstanceFromFilename($strPath);
+            if ($objDriver !== null) {
+                $this->objDbDriver = $objDriver;
             }
             else {
-                throw new Exception("db-driver ".$strClassname." could not be loaded", Exception::$level_FATALERROR);
+                throw new Exception("db-driver Db".ucfirst($strDriver)." could not be loaded", Exception::$level_FATALERROR);
             }
 
         }

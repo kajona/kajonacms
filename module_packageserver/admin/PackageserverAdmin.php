@@ -12,9 +12,9 @@ use class_admin_batchaction;
 use class_admin_controller;
 use class_adminskin_helper;
 use class_array_section_iterator;
-use class_date;
+use \Kajona\System\System\Date;
 use class_link;
-use class_model;
+use \Kajona\System\System\Model;
 use class_module_mediamanager_admin;
 use class_module_mediamanager_file;
 use class_module_packagemanager_admin;
@@ -109,22 +109,22 @@ class PackageserverAdmin extends class_module_mediamanager_admin implements inte
     }
 
     /**
-     * @param class_model $objListEntry
+     * @param \Kajona\System\System\Model $objListEntry
      * @param bool $bitDialog
      *
      * @return string
      */
-    protected function renderEditAction(class_model $objListEntry, $bitDialog = false)
+    protected function renderEditAction(\Kajona\System\System\Model $objListEntry, $bitDialog = false)
     {
         return "";
     }
 
     /**
-     * @param class_model $objListEntry
+     * @param \Kajona\System\System\Model $objListEntry
      *
      * @return array
      */
-    protected function renderAdditionalActions(class_model $objListEntry)
+    protected function renderAdditionalActions(\Kajona\System\System\Model $objListEntry)
     {
 
         if ($objListEntry instanceof class_module_mediamanager_file && $objListEntry->getIntType() == class_module_mediamanager_file::$INT_TYPE_FOLDER) {
@@ -240,7 +240,7 @@ class PackageserverAdmin extends class_module_mediamanager_admin implements inte
 
         $arrLogs = array();
         foreach ($objArraySectionIterator as $intKey => $arrOneLog) {
-            $arrLogs[$intKey][0] = dateToString(new class_date($arrOneLog["log_date"]));
+            $arrLogs[$intKey][0] = dateToString(new \Kajona\System\System\Date($arrOneLog["log_date"]));
             $arrLogs[$intKey][1] = $arrOneLog["log_ip"];
             $arrLogs[$intKey][2] = $arrOneLog["log_hostname"];
             $arrLogs[$intKey][3] = $arrOneLog["log_query"];

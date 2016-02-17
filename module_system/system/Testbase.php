@@ -159,7 +159,7 @@ abstract class Testbase extends PHPUnit_Framework_TestCase
                                 $objMethodValue = 1;
                             }
                         }
-                        elseif ($strDataType == "class_date") {
+                        elseif ($strDataType == "\Kajona\System\System\Date") {
                             $objMethodValue = new Date();
                         }
                         elseif ($strDataType == "bool") {

@@ -19,7 +19,7 @@
  *
  * @formGenerator class_module_news_feed_formgenerator
  */
-class class_module_news_feed extends class_model implements interface_model, interface_admin_listable {
+class class_module_news_feed extends \Kajona\System\System\Model implements \Kajona\System\System\ModelInterface, interface_admin_listable {
 
     /**
      * @var string
@@ -180,7 +180,7 @@ class class_module_news_feed extends class_model implements interface_model, int
      */
     public static function getNewsList($strFilter = "", $intAmount = 0) {
         $objORM = new class_orm_objectlist();
-        $intNow = class_date::getCurrentTimestamp();
+        $intNow = \Kajona\System\System\Date::getCurrentTimestamp();
         $arrParams = array($intNow, $intNow, $intNow);
         if($strFilter != "") {
             $strQuery = "SELECT *

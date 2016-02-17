@@ -6,6 +6,11 @@
 
 namespace Kajona\System\Event;
 
+use Kajona\System\System\CoreEventdispatcher;
+use Kajona\System\System\GenericeventListenerInterface;
+use Kajona\System\System\SystemAspect;
+use Kajona\System\System\SystemEventidentifier;
+
 
 /**
  * Updates the default aspect in case the default one was deleted
@@ -14,7 +19,7 @@ namespace Kajona\System\Event;
  * @author sidler@mulchprod.de
  *
  */
-class SystemAspectrecorddeletedlistener implements interface_genericevent_listener {
+class SystemAspectrecorddeletedlistener implements GenericeventListenerInterface {
 
 
     /**
@@ -28,12 +33,12 @@ class SystemAspectrecorddeletedlistener implements interface_genericevent_listen
         //unwrap arguments
         list($strSystemid, $strSourceClass) = $arrArguments;
 
-        if($strSourceClass == "class_module_system_aspect") {
+        if($strSourceClass == "Kajona\\System\\System\\SystemAspect") { //TODO test class check
 
             //if we have just one aspect remaining, set this one as default
-            if(class_module_system_aspect::getObjectCount() == 1) {
-                /** @var class_module_system_aspect[] $arrObjAspects */
-                $arrObjAspects = class_module_system_aspect::getObjectList();
+            if(SystemAspect::getObjectCount() == 1) {
+                /** @var SystemAspect[] $arrObjAspects */
+                $arrObjAspects = SystemAspect::getObjectList();
                 $objOneAspect = $arrObjAspects[0];
                 $objOneAspect->setBitDefault(1);
                 return $objOneAspect->updateObjectToDb();
@@ -46,4 +51,4 @@ class SystemAspectrecorddeletedlistener implements interface_genericevent_listen
 }
 
 //static inits
-class_core_eventdispatcher::getInstance()->removeAndAddListener(class_system_eventidentifier::EVENT_SYSTEM_RECORDDELETED_LOGICALLY, new SystemAspectrecorddeletedlistener());
+CoreEventdispatcher::getInstance()->removeAndAddListener(SystemEventidentifier::EVENT_SYSTEM_RECORDDELETED_LOGICALLY, new SystemAspectrecorddeletedlistener());

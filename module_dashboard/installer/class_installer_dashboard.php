@@ -28,7 +28,7 @@ class class_installer_dashboard extends class_installer_base implements interfac
         $this->registerModule("dashboard", _dashboard_module_id_, "", "class_module_dashboard_admin.php", $this->objMetadata->getStrVersion(), true, "", "class_module_dashboard_admin_xml.php");
 
         $strReturn .= "Setting dashboard to pos 1 in navigation.../n";
-        $objModule = class_module_system_module::getModuleByName("dashboard");
+        $objModule = \Kajona\System\System\SystemModule::getModuleByName("dashboard");
         $objModule->setAbsolutePosition(1);
 
 

@@ -71,7 +71,7 @@ class Pluginmanager
 
                     $objReflection = new ReflectionClass($strClassname);
 
-                    if ($objReflection->isInstantiable() && $objReflection->implementsInterface("interface_generic_plugin")) {
+                    if ($objReflection->isInstantiable() && $objReflection->implementsInterface("Kajona\\System\\System\\GenericPluginInterface")) {
                         if ($objReflection->hasMethod("getExtensionName") && $objReflection->getMethod("getExtensionName")->invoke(null) == $strPluginPoint) {
                             $strOneFile = $strClassname;
                             return;

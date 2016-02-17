@@ -19,7 +19,7 @@
  *
  * @sortManager class_common_sortmanager
  */
-class class_module_dashboard_widget extends class_model implements interface_model {
+class class_module_dashboard_widget extends \Kajona\System\System\Model implements \Kajona\System\System\ModelInterface {
 
     /**
      * @var string

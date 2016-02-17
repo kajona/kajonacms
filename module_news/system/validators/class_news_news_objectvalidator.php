@@ -18,10 +18,10 @@ class class_news_news_objectvalidator extends class_objectvalidator_base {
      * Validates a news start/end/archive date for a correct logical order.
      *
      *
-     * @param class_model $objObject - the model object to the given form
+     * @param \Kajona\System\System\Model $objObject - the model object to the given form
      * @return bool
      */
-    public function validateObject(class_model $objObject) {
+    public function validateObject(\Kajona\System\System\Model $objObject) {
         $objLang = class_carrier::getInstance()->getObjLang();
         $strModuleName = $objObject->getArrModule("modul");
 

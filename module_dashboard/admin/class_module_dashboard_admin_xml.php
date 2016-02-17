@@ -107,8 +107,8 @@ class class_module_dashboard_admin_xml extends class_admin_controller implements
 
         $arrEvents = array();
         $arrCategories = class_event_repository::getAllCategories();
-        $objStartDate = new class_date(strtotime($this->getParam("start")));
-        $objEndDate = new class_date(strtotime($this->getParam("end")));
+        $objStartDate = new \Kajona\System\System\Date(strtotime($this->getParam("start")));
+        $objEndDate = new \Kajona\System\System\Date(strtotime($this->getParam("end")));
 
         foreach ($arrCategories as $arrCategory) {
             foreach ($arrCategory as $strKey => $strValue) {
@@ -131,10 +131,10 @@ class class_module_dashboard_admin_xml extends class_admin_controller implements
                 "className" => array($objEvent->getStrCategory(), "calendar-event"),
             );
 
-            if ($objEvent->getObjStartDate() instanceof class_date && $objEvent->getObjEndDate() instanceof class_date) {
+            if ($objEvent->getObjStartDate() instanceof \Kajona\System\System\Date && $objEvent->getObjEndDate() instanceof \Kajona\System\System\Date) {
                 $arrRow["start"] = date("Y-m-d", $objEvent->getObjStartDate()->getTimeInOldStyle());
                 $arrRow["end"] = date("Y-m-d", $objEvent->getObjEndDate()->getTimeInOldStyle());
-            } elseif ($objEvent->getObjValidDate() instanceof class_date) {
+            } elseif ($objEvent->getObjValidDate() instanceof \Kajona\System\System\Date) {
                 $arrRow["start"] = date("Y-m-d", $objEvent->getObjValidDate()->getTimeInOldStyle());
             } else {
                 continue;

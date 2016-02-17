@@ -6,6 +6,7 @@
 *-------------------------------------------------------------------------------------------------------*
 *	$Id$                                  *
 ********************************************************************************************************/
+use Kajona\System\System\ModelInterface;
 
 /**
  * Admin-Part of the tags.
@@ -39,7 +40,7 @@ class class_module_tags_admin extends class_admin_evensimpler implements interfa
         return "";
     }
 
-    protected function renderAdditionalActions(class_model $objListEntry) {
+    protected function renderAdditionalActions(\Kajona\System\System\Model $objListEntry) {
         if($objListEntry instanceof class_module_tags_tag) {
             $arrButtons = array();
             $arrButtons[] = $this->objToolkit->listButton(
@@ -77,11 +78,11 @@ class class_module_tags_admin extends class_admin_evensimpler implements interfa
 
 
     /**
-     * @param interface_model|class_model $objListEntry
+     * @param \Kajona\System\System\ModelInterface|\Kajona\System\System\Model $objListEntry
      *
      * @return string
      */
-    protected function renderDeleteAction(interface_model $objListEntry) {
+    protected function renderDeleteAction(\Kajona\System\System\ModelInterface $objListEntry) {
         if($objListEntry instanceof class_module_tags_favorite) {
             if($objListEntry->rightDelete()) {
                 return $this->objToolkit->listDeleteButton(
@@ -171,7 +172,7 @@ class class_module_tags_admin extends class_admin_evensimpler implements interfa
         return $strTagContent;
     }
 
-    protected function getOutputNaviEntry(interface_model $objInstance) {
+    protected function getOutputNaviEntry(ModelInterface $objInstance) {
         if($objInstance instanceof class_module_tags_tag)
             return class_link::getLinkAdmin($this->getArrModule("modul"), "showAssignedRecords", "&systemid=" . $objInstance->getSystemid(), $objInstance->getStrName());
 

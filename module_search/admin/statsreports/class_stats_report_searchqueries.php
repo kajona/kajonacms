@@ -6,7 +6,9 @@
 *-------------------------------------------------------------------------------------------------------*
 *	$Id$                           *
 ********************************************************************************************************/
-
+use Kajona\System\Admin\ToolkitAdmin;
+use Kajona\System\System\Database;
+use Kajona\System\System\Lang;
 /**
  * This plugin shows the list of queries performed by the local searchengine
  *
@@ -32,7 +34,7 @@ class class_stats_report_searchqueries implements interface_admin_statsreports {
     /**
      * Constructor
      */
-    public function __construct(class_db $objDB, class_toolkit_admin $objToolkit, class_lang $objLang) {
+    public function __construct(Database $objDB, ToolkitAdmin $objToolkit, Lang $objLang) {
         $this->objLang = $objLang;
         $this->objToolkit = $objToolkit;
         $this->objDB = $objDB;

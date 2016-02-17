@@ -354,7 +354,7 @@ class MessagingMessage extends Model implements ModelInterface, AdminListableInt
     }
 
     /**
-     * @return \class_date
+     * @return \\Kajona\System\System\Date
      */
     public function getObjDate()
     {

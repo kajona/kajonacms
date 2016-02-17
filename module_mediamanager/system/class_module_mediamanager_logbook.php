@@ -14,7 +14,7 @@
  * @module mediamanager
  * @moduleId _mediamanager_module_id_
  */
-class class_module_mediamanager_logbook extends class_model implements interface_model {
+class class_module_mediamanager_logbook extends \Kajona\System\System\Model implements \Kajona\System\System\ModelInterface {
 
     /**
      * Generates an entry in the logbook an increases the hits-counter

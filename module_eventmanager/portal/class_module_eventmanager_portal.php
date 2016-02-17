@@ -45,12 +45,12 @@ class class_module_eventmanager_portal extends class_portal_controller implement
 
             if($this->getParam("event_filter_date_from") != "") {
                 $objDateTime = DateTime::createFromFormat("Y-m-d", $this->getParam("event_filter_date_from"));
-                $objFilterStartDate = new class_date();
+                $objFilterStartDate = new \Kajona\System\System\Date();
                 $objFilterStartDate->setTimeInOldStyle($objDateTime->getTimestamp());
             }
             if($this->getParam("event_filter_date_to") != "") {
                 $objDateTime = DateTime::createFromFormat("Y-m-d", $this->getParam("event_filter_date_to"));
-                $objFilterEndDate = new class_date();
+                $objFilterEndDate = new \Kajona\System\System\Date();
                 $objFilterEndDate->setTimeInOldStyle($objDateTime->getTimestamp());
             }
 
@@ -113,8 +113,8 @@ class class_module_eventmanager_portal extends class_portal_controller implement
         $objStartDate = null;
         $objEndDate = null;
         if($this->getParam("start") != "" && $this->getParam("end") != "") {
-            $objStartDate = new class_date($this->getParam("start"));
-            $objEndDate = new class_date($this->getParam("end"));
+            $objStartDate = new \Kajona\System\System\Date($this->getParam("start"));
+            $objEndDate = new \Kajona\System\System\Date($this->getParam("end"));
         }
 
         $arrEvents = class_module_eventmanager_event::getAllEvents(false, false, $objStartDate, $objEndDate, true);

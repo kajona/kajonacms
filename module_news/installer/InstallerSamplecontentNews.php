@@ -8,7 +8,7 @@
 namespace Kajona\News\Installer;
 
 use class_carrier;
-use class_date;
+use \Kajona\System\System\Date;
 use class_db;
 use class_module_news_category;
 use class_module_news_feed;
@@ -81,7 +81,7 @@ class InstallerSamplecontentNews implements interface_sc_installer  {
             $objNews->setStrIntro("Kajona installed successfully...");
         }
 
-        $objNews->setObjDateStart(new class_date());
+        $objNews->setObjDateStart(new \Kajona\System\System\Date());
         $objNews->setArrCats(array($strCategoryID));
         $objNews->updateObjectToDb();
         $strNewsId = $objNews->getSystemid();
@@ -95,7 +95,7 @@ class InstallerSamplecontentNews implements interface_sc_installer  {
         $objNews->setStrText("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non enim est, id hendrerit metus. Sed tempor quam sed ante viverra porta. Quisque sagittis egestas tortor, in euismod sapien iaculis at. Nullam vitae nunc tortor. Mauris justo lectus, bibendum et rutrum id, fringilla eget ipsum. Nullam volutpat sodales mollis. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Duis tempor ante eget justo blandit imperdiet. Praesent ut risus tempus metus sagittis fermentum eget eu elit. Mauris consequat ornare massa, a rhoncus enim sodales auctor. Duis lacinia dignissim eros vel mollis. Etiam metus tortor, pellentesque eu ultricies sit amet, elementum et dolor. Proin tincidunt nunc id magna volutpat lobortis. Vivamus metus quam, accumsan eget vestibulum vel, rutrum sit amet mauris. Phasellus lectus leo, vulputate eget molestie et, consectetur nec urna. ");
         $objNews->setStrIntro("Quisque sagittis egestas tortor");
 
-        $objNews->setObjDateStart(new class_date());
+        $objNews->setObjDateStart(new \Kajona\System\System\Date());
         $objNews->setArrCats(array($strCategoryID));
         $objNews->updateObjectToDb();
         $strNewsId = $objNews->getSystemid();

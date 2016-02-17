@@ -40,7 +40,7 @@ class class_module_guestbook_admin extends class_admin_evensimpler implements in
         return "";
     }
 
-    protected function renderAdditionalActions(class_model $objListEntry) {
+    protected function renderAdditionalActions(\Kajona\System\System\Model $objListEntry) {
         if($objListEntry instanceof class_module_guestbook_guestbook) {
             return array(
                 $this->objToolkit->listButton(

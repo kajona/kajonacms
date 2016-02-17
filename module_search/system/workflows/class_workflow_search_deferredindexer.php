@@ -111,7 +111,7 @@ class class_workflow_search_deferredindexer implements interface_workflows_handl
      * @return void
      */
     public function schedule() {
-        $this->objWorkflow->setObjTriggerdate(new class_date(time()+$this->intIntervall));
+        $this->objWorkflow->setObjTriggerdate(new \Kajona\System\System\Date(time()+$this->intIntervall));
     }
 
     /**

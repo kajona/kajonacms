@@ -7,7 +7,7 @@
 /**
  * @deprecated
  */
-class class_system_eventidentifier extends Kajona\System\System\SystemEventidentifier
+interface class_system_eventidentifier extends Kajona\System\System\SystemEventidentifier
 {
 
 }

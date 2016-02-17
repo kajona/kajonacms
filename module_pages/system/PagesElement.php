@@ -14,13 +14,13 @@ use class_carrier;
 use class_element_admin;
 use class_element_portal;
 use class_exception;
-use class_model;
+use \Kajona\System\System\Model;
 use class_module_pages_pageelement;
 use class_orm_objectlist;
 use class_orm_objectlist_restriction;
 use interface_admin_element;
 use interface_admin_listable;
-use interface_model;
+use \Kajona\System\System\ModelInterface;
 use interface_portal_element;
 
 /**
@@ -34,7 +34,7 @@ use interface_portal_element;
  *
  * @blockFromAutosave
  */
-class PagesElement extends class_model implements interface_model, interface_admin_listable
+class PagesElement extends \Kajona\System\System\Model implements \Kajona\System\System\ModelInterface, interface_admin_listable
 {
 
     /**

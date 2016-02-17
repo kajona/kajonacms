@@ -69,7 +69,7 @@ class OrmObjectdelete extends OrmBase
         $objDB = Carrier::getInstance()->getObjDB();
 
         //get the mapped properties
-        $arrProperties = $objReflection->getPropertiesWithAnnotation(OrmBase::STR_ANNOTATION_OBJECTLIST, Reflection::PARAMS);
+        $arrProperties = $objReflection->getPropertiesWithAnnotation(OrmBase::STR_ANNOTATION_OBJECTLIST, ReflectionEnum::PARAMS);
 
         foreach ($arrProperties as $strPropertyName => $arrValues) {
 

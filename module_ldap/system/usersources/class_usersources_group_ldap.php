@@ -19,7 +19,7 @@
  * @module ldap
  * @moduleId _ldap_module_id_
  */
-class class_usersources_group_ldap extends class_model implements interface_model, interface_usersources_group {
+class class_usersources_group_ldap extends \Kajona\System\System\Model implements \Kajona\System\System\ModelInterface, interface_usersources_group {
 
     /**
      * @var string

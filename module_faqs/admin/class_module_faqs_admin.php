@@ -4,6 +4,7 @@
 *   (c) 2007-2015 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 ********************************************************************************************************/
+use Kajona\System\System\ModelInterface;
 
 
 /**
@@ -38,7 +39,7 @@ class class_module_faqs_admin extends class_admin_evensimpler implements interfa
     }
 
 
-    protected function renderDeleteAction(interface_model $objListEntry) {
+    protected function renderDeleteAction(ModelInterface $objListEntry) {
         if($objListEntry instanceof class_module_faqs_category && $objListEntry->rightDelete()) {
             return $this->objToolkit->listDeleteButton(
                 $objListEntry->getStrDisplayName(), $this->getLang("commons_delete_category_question"), class_link::getLinkAdminHref($objListEntry->getArrModule("modul"), "delete", "&systemid=" . $objListEntry->getSystemid())
@@ -47,7 +48,7 @@ class class_module_faqs_admin extends class_admin_evensimpler implements interfa
         return parent::renderDeleteAction($objListEntry);
     }
 
-    protected function renderAdditionalActions(class_model $objListEntry) {
+    protected function renderAdditionalActions(\Kajona\System\System\Model $objListEntry) {
         if($objListEntry instanceof class_module_faqs_category) {
             return array(
                 $this->objToolkit->listButton(class_link::getLinkAdmin($this->getArrModule("modul"), "list", "&filterId=" . $objListEntry->getSystemid(), "", $this->getLang("kat_anzeigen"), "icon_lens"))
@@ -98,7 +99,7 @@ class class_module_faqs_admin extends class_admin_evensimpler implements interfa
 
 
 
-    protected function getOutputNaviEntry(interface_model $objInstance) {
+    protected function getOutputNaviEntry(ModelInterface $objInstance) {
         return class_link::getLinkAdmin($this->getArrModule("modul"), "edit", "&systemid=".$objInstance->getSystemid(), $objInstance->getStrDisplayName());
     }
 

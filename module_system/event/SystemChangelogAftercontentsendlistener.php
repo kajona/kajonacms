@@ -9,6 +9,11 @@
 
 namespace Kajona\System\Event;
 
+use Kajona\System\System\CoreEventdispatcher;
+use Kajona\System\System\GenericeventListenerInterface;
+use Kajona\System\System\SystemChangelog;
+use Kajona\System\System\SystemEventidentifier;
+
 
 /**
  * Creates changelog entries after sending content to the browser
@@ -19,7 +24,7 @@ namespace Kajona\System\Event;
  * @since 4.6
  *
  */
-class SystemChangelogAftercontentsendlistener implements interface_genericevent_listener {
+class SystemChangelogAftercontentsendlistener implements GenericeventListenerInterface {
 
 
     /**
@@ -35,7 +40,7 @@ class SystemChangelogAftercontentsendlistener implements interface_genericevent_
      * @return bool
      */
     public function handleEvent($strEventName, array $arrArguments) {
-        $objChangelog = new class_module_system_changelog();
+        $objChangelog = new SystemChangelog();
         return $objChangelog->processCachedInserts();
     }
 
@@ -47,4 +52,4 @@ class SystemChangelogAftercontentsendlistener implements interface_genericevent_
     public static function staticConstruct() {
     }
 }
-class_core_eventdispatcher::getInstance()->removeAndAddListener(class_system_eventidentifier::EVENT_SYSTEM_REQUEST_AFTERCONTENTSEND, new SystemChangelogAftercontentsendlistener());
+CoreEventdispatcher::getInstance()->removeAndAddListener(SystemEventidentifier::EVENT_SYSTEM_REQUEST_AFTERCONTENTSEND, new SystemChangelogAftercontentsendlistener());

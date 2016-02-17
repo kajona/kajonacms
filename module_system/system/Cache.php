@@ -291,6 +291,9 @@ class Cache
      */
     public static function flushCache($strSource = "", $strHash1 = "", $strHash2 = "")
     {
+        if(SystemModule::getModuleByName("system") == null) {
+            return;
+        }
         $strQuery = "DELETE FROM "._dbprefix_."cache ";
 
         $arrWhere = array();

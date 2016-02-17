@@ -19,11 +19,11 @@ class class_module_search_metadata_filter {
 
 
     /**
-     * @var class_date
+     * @var \Kajona\System\System\Date
      */
     private $objFilterChangeStartDate;
     /**
-     * @var class_date
+     * @var \Kajona\System\System\Date
      */
     private $objFilterChangeEndDate;
 
@@ -164,7 +164,7 @@ class class_module_search_metadata_filter {
 
 
     /**
-     * @param class_date $objChangeStartDate
+     * @param \Kajona\System\System\Date $objChangeStartDate
      * @return void
      */
     public function setFilterChangeStartDate($objChangeStartDate) {
@@ -179,7 +179,7 @@ class class_module_search_metadata_filter {
     }
 
     /**
-     * @param class_date $objChangeEndDate
+     * @param \Kajona\System\System\Date $objChangeEndDate
      * @return void
      */
     public function setFilterChangeEndDate($objChangeEndDate) {

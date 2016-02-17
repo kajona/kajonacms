@@ -21,7 +21,7 @@ $arrTimestampStart = gettimeofday();
 $objNaviTree = new class_module_navigation_tree();
 $objNaviTree->updateObjectToDb();
 
-/** @var class_model[] $arrRecords */
+/** @var \Kajona\System\System\Model[] $arrRecords */
 $arrRecords = array();
 for($intI = 0; $intI < 200; $intI++) {
     $objPoint = new class_module_navigation_point();
@@ -65,7 +65,7 @@ $arrTimestampStart = gettimeofday();
 $objRootAspect = new class_module_system_aspect();
 $objRootAspect->updateObjectToDb();
 
-/** @var class_model[] $arrRecords */
+/** @var \Kajona\System\System\Model[] $arrRecords */
 $arrRecords = array();
 for($intI = 0; $intI < 200; $intI++) {
     $objAspect = new class_module_system_aspect();

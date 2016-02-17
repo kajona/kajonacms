@@ -306,12 +306,12 @@ class class_module_workflows_admin extends class_admin_simple implements interfa
     }
 
     /**
-     * @param class_model $objListEntry
+     * @param \Kajona\System\System\Model $objListEntry
      * @param bool $bitDialog
      *
      * @return string
      */
-    protected function renderEditAction(class_model $objListEntry, $bitDialog = false) {
+    protected function renderEditAction(\Kajona\System\System\Model $objListEntry, $bitDialog = false) {
         if($objListEntry instanceof class_module_workflows_handler) {
             return $this->objToolkit->listButton(class_link::getLinkAdmin($this->getArrModule("modul"), "editHandler", "&systemid=" . $objListEntry->getSystemid(), "", $this->getLang("action_edit_handler"), "icon_edit"));
         }
@@ -321,11 +321,11 @@ class class_module_workflows_admin extends class_admin_simple implements interfa
 
 
     /**
-     * @param interface_model $objListEntry
+     * @param \Kajona\System\System\ModelInterface $objListEntry
      *
      * @return string
      */
-    protected function renderUnlockAction(interface_model $objListEntry) {
+    protected function renderUnlockAction(\Kajona\System\System\ModelInterface $objListEntry) {
         if($objListEntry instanceof class_module_workflows_handler) {
             return "";
         }
@@ -333,11 +333,11 @@ class class_module_workflows_admin extends class_admin_simple implements interfa
     }
 
     /**
-     * @param interface_model $objListEntry
+     * @param \Kajona\System\System\ModelInterface $objListEntry
      *
      * @return string
      */
-    protected function renderDeleteAction(interface_model $objListEntry) {
+    protected function renderDeleteAction(\Kajona\System\System\ModelInterface $objListEntry) {
         if($objListEntry instanceof class_module_workflows_handler) {
             return "";
         }
@@ -345,13 +345,13 @@ class class_module_workflows_admin extends class_admin_simple implements interfa
     }
 
     /**
-     * @param class_model $objListEntry
+     * @param \Kajona\System\System\Model $objListEntry
      * @param string $strAltActive tooltip text for the icon if record is active
      * @param string $strAltInactive tooltip text for the icon if record is inactive
      *
      * @return string
      */
-    protected function renderStatusAction(class_model $objListEntry, $strAltActive = "", $strAltInactive = "") {
+    protected function renderStatusAction(\Kajona\System\System\Model $objListEntry, $strAltActive = "", $strAltInactive = "") {
         if($objListEntry instanceof class_module_workflows_handler) {
             return "";
         }
@@ -375,11 +375,11 @@ class class_module_workflows_admin extends class_admin_simple implements interfa
     }
 
     /**
-     * @param class_model $objListEntry
+     * @param \Kajona\System\System\Model $objListEntry
      *
      * @return string
      */
-    protected function renderPermissionsAction(class_model $objListEntry) {
+    protected function renderPermissionsAction(\Kajona\System\System\Model $objListEntry) {
         if($objListEntry instanceof class_module_workflows_handler) {
             return "";
         }
@@ -387,11 +387,11 @@ class class_module_workflows_admin extends class_admin_simple implements interfa
     }
 
     /**
-     * @param class_model $objListEntry
+     * @param \Kajona\System\System\Model $objListEntry
      *
      * @return string
      */
-    protected function renderTagAction(class_model $objListEntry) {
+    protected function renderTagAction(\Kajona\System\System\Model $objListEntry) {
         if($objListEntry instanceof class_module_workflows_handler) {
             return "";
         }
@@ -399,20 +399,20 @@ class class_module_workflows_admin extends class_admin_simple implements interfa
     }
 
     /**
-     * @param class_model $objListEntry
+     * @param \Kajona\System\System\Model $objListEntry
      *
      * @return string
      */
-    protected function renderCopyAction(class_model $objListEntry) {
+    protected function renderCopyAction(\Kajona\System\System\Model $objListEntry) {
         return "";
     }
 
     /**
-     * @param class_model $objListEntry
+     * @param \Kajona\System\System\Model $objListEntry
      *
      * @return array
      */
-    protected function renderAdditionalActions(class_model $objListEntry) {
+    protected function renderAdditionalActions(\Kajona\System\System\Model $objListEntry) {
         if($objListEntry instanceof class_module_workflows_handler) {
             return array(
                 $this->objToolkit->listButton(class_link::getLinkAdmin($this->getArrModule("modul"), "instantiateHandler", "&systemid=" . $objListEntry->getSystemid(), "", $this->getLang("action_instantiate_handler"), "icon_workflowTrigger"))
@@ -444,11 +444,11 @@ class class_module_workflows_admin extends class_admin_simple implements interfa
     }
 
     /**
-     * @param class_model $objListEntry
+     * @param \Kajona\System\System\Model $objListEntry
      *
      * @return string
      */
-    protected function renderChangeHistoryAction(class_model $objListEntry) {
+    protected function renderChangeHistoryAction(\Kajona\System\System\Model $objListEntry) {
         if($objListEntry instanceof class_module_workflows_handler) {
             return "";
         }

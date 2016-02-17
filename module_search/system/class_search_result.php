@@ -141,13 +141,13 @@ class class_search_result {
     }
 
     /**
-     * @param class_model $objObject
+     * @param \Kajona\System\System\Model $objObject
      * @return void
      */
     public function setObjObject($objObject) {
         $this->objObject = $objObject;
 
-        if($objObject instanceof class_model) {
+        if($objObject instanceof \Kajona\System\System\Model) {
             if($this->strSystemid == "")
                 $this->strSystemid = $objObject->getSystemid();
 
@@ -158,7 +158,7 @@ class class_search_result {
     }
 
     /**
-     * @return class_model|interface_model|interface_search_resultobject|interface_search_portalobject
+     * @return \Kajona\System\System\Model|\Kajona\System\System\ModelInterface|interface_search_resultobject|interface_search_portalobject
      */
     public function getObjObject() {
         return $this->objObject;

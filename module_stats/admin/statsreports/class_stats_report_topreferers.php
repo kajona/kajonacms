@@ -6,7 +6,9 @@
 *-------------------------------------------------------------------------------------------------------*
 *	$Id$                           *
 ********************************************************************************************************/
-
+use Kajona\System\Admin\ToolkitAdmin;
+use Kajona\System\System\Database;
+use Kajona\System\System\Lang;
 
 /**
  * This plugin creates a view common numbers, such as "user online" oder "total pagehits"
@@ -28,7 +30,7 @@ class class_stats_report_topreferers implements interface_admin_statsreports {
     /**
      * Constructor
      */
-    public function __construct(class_db $objDB, class_toolkit_admin $objToolkit, class_lang $objTexts) {
+    public function __construct(Database $objDB, ToolkitAdmin $objToolkit, Lang $objTexts) {
         $this->objTexts = $objTexts;
         $this->objToolkit = $objToolkit;
         $this->objDB = $objDB;

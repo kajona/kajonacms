@@ -7,7 +7,7 @@
 
 namespace Kajona\Packageserver\Admin\Statsreports;
 
-use class_date;
+use \Kajona\System\System\Date;
 use class_db;
 use class_graph_factory;
 use class_lang;
@@ -15,6 +15,9 @@ use class_module_user_user;
 use class_session;
 use class_toolkit_admin;
 use interface_admin_statsreports;
+use Kajona\System\Admin\ToolkitAdmin;
+use Kajona\System\System\Database;
+use Kajona\System\System\Lang;
 
 
 /**
@@ -38,7 +41,7 @@ class StatsReportPackageserverqueries implements interface_admin_statsreports
     /**
      * Constructor
      */
-    public function __construct(class_db $objDB, class_toolkit_admin $objToolkit, class_lang $objTexts)
+    public function __construct(Database $objDB, ToolkitAdmin $objToolkit, Lang $objTexts)
     {
         $this->objLang = $objTexts;
         $this->objToolkit = $objToolkit;
@@ -139,8 +142,8 @@ class StatsReportPackageserverqueries implements interface_admin_statsreports
      */
     public function getTotalHitsInInterval()
     {
-        $objStart = new class_date($this->intDateStart);
-        $objEnd = new class_date($this->intDateEnd);
+        $objStart = new \Kajona\System\System\Date($this->intDateStart);
+        $objEnd = new \Kajona\System\System\Date($this->intDateEnd);
         $strQuery = "SELECT COUNT(*)
 						FROM "._dbprefix_."packageserver_log
 						WHERE log_date > ?
@@ -164,8 +167,8 @@ class StatsReportPackageserverqueries implements interface_admin_statsreports
      */
     public function getTotalUniqueHostsInInterval()
     {
-        $objStart = new class_date($this->intDateStart);
-        $objEnd = new class_date($this->intDateEnd);
+        $objStart = new \Kajona\System\System\Date($this->intDateStart);
+        $objEnd = new \Kajona\System\System\Date($this->intDateEnd);
         $strQuery = "SELECT log_hostname, COUNT(*) as anzahl
 						FROM "._dbprefix_."packageserver_log
 						WHERE log_date > ?

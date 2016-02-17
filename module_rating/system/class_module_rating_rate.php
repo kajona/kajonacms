@@ -15,7 +15,7 @@
  * @module rating
  * @moduleId _rating_modul_id_
  */
-class class_module_rating_rate extends class_model implements interface_model {
+class class_module_rating_rate extends \Kajona\System\System\Model implements \Kajona\System\System\ModelInterface {
 
     const RATING_COOKIE = "kj_ratingHistory";
 

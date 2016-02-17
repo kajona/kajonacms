@@ -30,7 +30,7 @@ use Kajona\System\System\Validators\SystemidValidator;
  * The admin-form generator is used to create, validate and manage forms for the backend.
  * Those forms are created as automatically as possible, so the setup of the field-types, validators
  * and more is done by reflection and code-inspection. Therefore, especially the annotations on the extending
- * class_model-objects are analyzed.
+ * \Kajona\System\System\Model-objects are analyzed.
  *
  * There are three ways of adding entries to the current form, each representing a different level of
  * automation.

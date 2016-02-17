@@ -26,11 +26,11 @@ class class_module_stats_admin extends class_admin_controller implements interfa
     public static $STR_PLUGIN_EXTENSION_POINT = "core.stats.admin.statsreport";
 
     /**
-     * @var class_date
+     * @var \Kajona\System\System\Date
      */
     private $objDateStart;
     /**
-     * @var class_date
+     * @var \Kajona\System\System\Date
      */
     private $objDateEnd;
     private $intInterval = 2;
@@ -56,7 +56,7 @@ class class_module_stats_admin extends class_admin_controller implements interfa
         }
 
         //Start: first day of current month
-        $this->objDateStart = new class_date();
+        $this->objDateStart = new \Kajona\System\System\Date();
         $this->objDateStart->setTimeInOldStyle($intDateStart);
 
         //End: Current Day of month
@@ -65,7 +65,7 @@ class class_module_stats_admin extends class_admin_controller implements interfa
             $intDateEnd = time() + 3600 * 24;
         }
 
-        $this->objDateEnd = new class_date();
+        $this->objDateEnd = new \Kajona\System\System\Date();
         $this->objDateEnd->setTimeInOldStyle($intDateEnd);
 
 
@@ -223,10 +223,10 @@ class class_module_stats_admin extends class_admin_controller implements interfa
 
         if($this->getParam("filter") == "true") {
 
-            $this->objDateStart = new class_date();
+            $this->objDateStart = new \Kajona\System\System\Date();
             $this->objDateStart->generateDateFromParams("start", $this->getAllParams());
 
-            $this->objDateEnd = new class_date();
+            $this->objDateEnd = new \Kajona\System\System\Date();
             $this->objDateEnd->generateDateFromParams("end", $this->getAllParams());
 
             class_carrier::getInstance()->getObjSession()->setSession(self::$STR_SESSION_KEY_DATE_START, $this->objDateStart->getTimeInOldStyle());
