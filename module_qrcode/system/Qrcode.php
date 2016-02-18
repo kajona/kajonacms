@@ -4,21 +4,23 @@
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 ********************************************************************************************************/
 
+namespace Kajona\Qrcode\System;
+
 
 /**
  * This class provides a wrapper to the qrcode-library.
  * It may be used to generate qr-code images
- * 
+ *
  * @package module_qrcode
  * @author mr.bashshell (aka STB)
- * 
+ *
  */
-class class_qrcode {
+class Qrcode
+{
 
     private $intSize = 2;
     private $strCorrectionLevel = "Q";
     private $intPadding = 4;
-
 
 
     /**
@@ -27,20 +29,22 @@ class class_qrcode {
      * @param $strContent
      * @return string the filename relative to the document root. If you want to use the image in the web, add _webpath_ to the filename.
      */
-    public function getImageForString($strContent) {
+    public function getImageForString($strContent)
+    {
 
-        $strFilename = "qr".md5($strContent.$this->strCorrectionLevel.$this->intSize.$this->intPadding).".png";
+        $strFilename = "qr" . md5($strContent . $this->strCorrectionLevel . $this->intSize . $this->intPadding) . ".png";
 
         //caching based on the current filename
-        if(is_file(_realpath_._images_cachepath_."/".$strFilename))
-            return _images_cachepath_."/".$strFilename;
+        if (is_file(_realpath_ . _images_cachepath_ . "/" . $strFilename)) {
+            return _images_cachepath_ . "/" . $strFilename;
+        }
 
 
-        require_once __DIR__."/../vendor/autoload.php";
+        require_once __DIR__ . "/../vendor/autoload.php";
 
-        \PHPQRCode\QRcode::png($strContent, _realpath_._images_cachepath_."/".$strFilename, $this->strCorrectionLevel, $this->intSize, $this->intPadding);
+        \PHPQRCode\QRcode::png($strContent, _realpath_ . _images_cachepath_ . "/" . $strFilename, $this->strCorrectionLevel, $this->intSize, $this->intPadding);
 
-        return _images_cachepath_."/".$strFilename;
+        return _images_cachepath_ . "/" . $strFilename;
     }
 
 
@@ -49,34 +53,41 @@ class class_qrcode {
      *
      * @param string $strQrURL
      * @return string
-     * @deprecated use class_qrcode::getImageForString() instead
+     * @deprecated use Qrcode::getImageForString() instead
      */
-    public function getQrCode4URL($strQrURL) {
+    public function getQrCode4URL($strQrURL)
+    {
         return $this->getImageForString($strQrURL);
     }
 
 
-    public function setStrCorrectionLevel($strCorrectionLevel) {
+    public function setStrCorrectionLevel($strCorrectionLevel)
+    {
         $this->strCorrectionLevel = $strCorrectionLevel;
     }
 
-    public function getStrCorrectionLevel() {
+    public function getStrCorrectionLevel()
+    {
         return $this->strCorrectionLevel;
     }
 
-    public function setIntPadding($strPadding) {
+    public function setIntPadding($strPadding)
+    {
         $this->intPadding = $strPadding;
     }
 
-    public function getIntPadding() {
+    public function getIntPadding()
+    {
         return $this->intPadding;
     }
 
-    public function setIntSize($strSize) {
+    public function setIntSize($strSize)
+    {
         $this->intSize = $strSize;
     }
 
-    public function getIntSize() {
+    public function getIntSize()
+    {
         return $this->intSize;
     }
 
