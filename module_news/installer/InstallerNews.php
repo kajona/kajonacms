@@ -54,7 +54,7 @@ class InstallerNews extends InstallerBase implements InstallerRemovableInterface
         );
 
         $strReturn .= "Installing news-element table...\n";
-        $objManager->createTable("class_element_news_admin");
+        $objManager->createTable("Kajona\\News\\Admin\\Elements\\ElementNewsAdmin");
 
 
         //Register the element
