@@ -21,7 +21,7 @@ use Kajona\System\System\SystemModule;
  *
  * @moduleId _dashboard_module_id_
  */
-class class_installer_dashboard extends InstallerBase implements InstallerInterface {
+class InstallerDashboard extends InstallerBase implements InstallerInterface {
 
 	public function install() {
 	    $strReturn = "";

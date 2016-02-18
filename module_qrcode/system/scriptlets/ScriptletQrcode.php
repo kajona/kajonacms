@@ -21,7 +21,7 @@ use Kajona\System\System\ScriptletInterface;
  * @since 4.0
  * @author sidler@mulchprod.de
  */
-class class_scriptlet_qrcode implements ScriptletInterface
+class ScriptletQrcode implements ScriptletInterface
 {
 
     /**
