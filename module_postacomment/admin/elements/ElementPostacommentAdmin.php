@@ -5,6 +5,11 @@
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 ********************************************************************************************************/
 
+namespace Kajona\Postacomment\Admin\Elements;
+
+use Kajona\Pages\Admin\AdminElementInterface;
+use Kajona\Pages\Admin\ElementAdmin;
+
 
 /**
  * Class representing the admin-part of the postacomment element
@@ -14,7 +19,8 @@
  *
  * @targetTable element_universal.content_id
  */
-class class_element_postacomment_admin extends class_element_admin implements interface_admin_element {
+class ElementPostacommentAdmin extends ElementAdmin implements AdminElementInterface
+{
 
 
     /**
@@ -49,49 +55,50 @@ class class_element_postacomment_admin extends class_element_admin implements in
     /**
      * @param string $strChar2
      */
-    public function setStrChar2($strChar2) {
+    public function setStrChar2($strChar2)
+    {
         $this->strChar2 = $strChar2;
     }
 
     /**
      * @return string
      */
-    public function getStrChar2() {
+    public function getStrChar2()
+    {
         return $this->strChar2;
     }
 
     /**
      * @param string $strChar1
      */
-    public function setStrChar1($strChar1) {
+    public function setStrChar1($strChar1)
+    {
         $this->strChar1 = $strChar1;
     }
 
     /**
      * @return string
      */
-    public function getStrChar1() {
+    public function getStrChar1()
+    {
         return $this->strChar1;
     }
 
     /**
      * @param int $intInt1
      */
-    public function setIntInt1($intInt1) {
+    public function setIntInt1($intInt1)
+    {
         $this->intInt1 = $intInt1;
     }
 
     /**
      * @return int
      */
-    public function getIntInt1() {
+    public function getIntInt1()
+    {
         return $this->intInt1;
     }
-
-
-
-
-
 
 
 }

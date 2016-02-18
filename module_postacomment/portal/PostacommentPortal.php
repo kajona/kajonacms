@@ -6,9 +6,25 @@
 *-------------------------------------------------------------------------------------------------------*
 *	$Id$							*
 ********************************************************************************************************/
+
+namespace Kajona\Postacomment\Portal;
+
+use class_module_rating_portal;
 use Kajona\Pages\Portal\PagesPortaleditor;
+use Kajona\Pages\System\PagesPage;
 use Kajona\Pages\System\PagesPortaleditorActionEnum;
 use Kajona\Pages\System\PagesPortaleditorSystemidAction;
+use Kajona\Postacomment\System\Messageproviders\MessageproviderPostacomment;
+use Kajona\Postacomment\System\PostacommentPost;
+use Kajona\System\Portal\PortalController;
+use Kajona\System\Portal\PortalInterface;
+use Kajona\System\System\ArraySectionIterator;
+use Kajona\System\System\Link;
+use Kajona\System\System\MessagingMessage;
+use Kajona\System\System\MessagingMessagehandler;
+use Kajona\System\System\Rights;
+use Kajona\System\System\SystemModule;
+use Kajona\System\System\UserGroup;
 
 /**
  * Portal-class of the postacomment. Handles the printing of postacomment lists / detail
@@ -19,7 +35,8 @@ use Kajona\Pages\System\PagesPortaleditorSystemidAction;
  * @module postacomment
  * @moduleId _postacomment_modul_id_
  */
-class class_module_postacomment_portal extends class_portal_controller implements interface_portal {
+class PostacommentPortal extends PortalController implements PortalInterface
+{
 
     private $strErrors = "";
     private $strPagefilter = null;
@@ -30,7 +47,8 @@ class class_module_postacomment_portal extends class_portal_controller implement
      * @return string
      * @permissions view
      */
-    protected function actionList() {
+    protected function actionList()
+    {
         $strReturn = "";
         $strPosts = "";
         $strForm = "";
@@ -40,31 +58,36 @@ class class_module_postacomment_portal extends class_portal_controller implement
         $strSystemidfilter = "";
         $strPagefilter = $this->strPagefilter;
 
-        if($this->getSystemid() != "")
+        if ($this->getSystemid() != "") {
             $strSystemidfilter = $this->getSystemid();
+        }
 
-        if($strPagefilter === null && class_module_pages_page::getPageByName($this->getPagename()) !== null)
-            $strPagefilter = class_module_pages_page::getPageByName($this->getPagename())->getSystemid();
+        if ($strPagefilter === null && PagesPage::getPageByName($this->getPagename()) !== null) {
+            $strPagefilter = PagesPage::getPageByName($this->getPagename())->getSystemid();
+        }
 
         $intNrOfPosts = isset($this->arrElementData["int1"]) ? $this->arrElementData["int1"] : 0;
 
         //Load all posts
-        $objArraySectionIterator = new class_array_section_iterator(class_module_postacomment_post::getNumberOfPostsAvailable(true, $strPagefilter, $strSystemidfilter, $this->getStrPortalLanguage()));
+        $objArraySectionIterator = new ArraySectionIterator(PostacommentPost::getNumberOfPostsAvailable(true, $strPagefilter, $strSystemidfilter, $this->getStrPortalLanguage()));
         $objArraySectionIterator->setIntElementsPerPage($intNrOfPosts);
         $objArraySectionIterator->setPageNumber((int)($this->getParam("pvPAC") != "" ? $this->getParam("pvPAC") : 1));
         $objArraySectionIterator->setArraySection(
-            class_module_postacomment_post::loadPostList(true, $strPagefilter, $strSystemidfilter, $this->getStrPortalLanguage(), $objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos())
+            PostacommentPost::loadPostList(true, $strPagefilter, $strSystemidfilter, $this->getStrPortalLanguage(), $objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos())
         );
 
 
         //params to add?
         $strAdd = "";
-        if($this->getParam("action") != "")
+        if ($this->getParam("action") != "") {
             $strAdd .= "&action=".$this->getParam("action");
-        if($this->getParam("systemid") != "")
+        }
+        if ($this->getParam("systemid") != "") {
             $strAdd .= "&systemid=".$this->getParam("systemid");
-        if($this->getParam("pv") != "")
+        }
+        if ($this->getParam("pv") != "") {
             $strAdd .= "&pv=".$this->getParam("pv");
+        }
 
         $arrComments = $this->objToolkit->simplePager($objArraySectionIterator, $this->getLang("commons_next"), $this->getLang("commons_back"), "", $this->getPagename(), $strAdd, "pvPAC");
 
@@ -72,13 +95,14 @@ class class_module_postacomment_portal extends class_portal_controller implement
         $strTemplateID = $this->objTemplate->readTemplate("/module_postacomment/".$this->arrElementData["char1"], "postacomment_post");
 
 
-        if(!$objArraySectionIterator->valid())
+        if (!$objArraySectionIterator->valid()) {
             $strPosts .= $this->getLang("postacomment_empty");
+        }
 
         //Check rights
-        /** @var class_module_postacomment_post $objOnePost */
-        foreach($objArraySectionIterator as $objOnePost) {
-            if($objOnePost->rightView()) {
+        /** @var PostacommentPost $objOnePost */
+        foreach ($objArraySectionIterator as $objOnePost) {
+            if ($objOnePost->rightView()) {
                 $strOnePost = "";
                 $arrOnePost = array();
                 $arrOnePost["postacomment_post_name"] = $objOnePost->getStrUsername();
@@ -87,9 +111,9 @@ class class_module_postacomment_portal extends class_portal_controller implement
                 $arrOnePost["postacomment_post_systemid"] = $objOnePost->getSystemid();
                 $arrOnePost["postacomment_post_date"] = timeToString($objOnePost->getIntDate(), true);
                 //ratings available?
-                if($objOnePost->getFloatRating() !== null) {
+                if ($objOnePost->getFloatRating() !== null) {
                     /** @var $objRating class_module_rating_portal */
-                    $objRating = class_module_system_module::getModuleByName("rating")->getPortalInstanceOfConcreteModule();
+                    $objRating = SystemModule::getModuleByName("rating")->getPortalInstanceOfConcreteModule();
                     $arrOnePost["postacomment_post_rating"] = $objRating->buildRatingBar(
                         $objOnePost->getFloatRating(), $objOnePost->getIntRatingHits(), $objOnePost->getSystemid(), $objOnePost->isRateableByUser(), $objOnePost->rightRight2()
                     );
@@ -101,23 +125,24 @@ class class_module_postacomment_portal extends class_portal_controller implement
                 //Add pe code
                 $strPosts .= PagesPortaleditor::addPortaleditorContentWrapper($strOnePost, $objOnePost->getSystemid());
                 PagesPortaleditor::getInstance()->registerAction(
-                    new PagesPortaleditorSystemidAction(PagesPortaleditorActionEnum::EDIT(), class_link::getLinkAdminHref($this->getArrModule("module"), "edit", "&systemid={$objOnePost->getSystemid()}"), $objOnePost->getSystemid())
+                    new PagesPortaleditorSystemidAction(PagesPortaleditorActionEnum::EDIT(), Link::getLinkAdminHref($this->getArrModule("module"), "edit", "&systemid={$objOnePost->getSystemid()}"), $objOnePost->getSystemid())
                 );
                 PagesPortaleditor::getInstance()->registerAction(
-                    new PagesPortaleditorSystemidAction(PagesPortaleditorActionEnum::DELETE(), class_link::getLinkAdminHref($this->getArrModule("module"), "delete", "&systemid={$objOnePost->getSystemid()}"), $objOnePost->getSystemid())
+                    new PagesPortaleditorSystemidAction(PagesPortaleditorActionEnum::DELETE(), Link::getLinkAdminHref($this->getArrModule("module"), "delete", "&systemid={$objOnePost->getSystemid()}"), $objOnePost->getSystemid())
                 );
             }
         }
 
         //Create form
-        if($this->getObjModule()->rightRight1()) {
+        if ($this->getObjModule()->rightRight1()) {
             $strTemplateID = $this->objTemplate->readTemplate("/module_postacomment/".$this->arrElementData["char1"], "postacomment_form");
             $arrForm = array();
 
-            if($this->getParam("comment_name") == "" && $this->objSession->isLoggedin())
+            if ($this->getParam("comment_name") == "" && $this->objSession->isLoggedin()) {
                 $this->setParam("comment_name", $this->objSession->getUsername());
+            }
 
-            $arrForm["formaction"] = class_link::getLinkPortalHref($this->getPagename(), "", "postComment", "", $this->getSystemid());
+            $arrForm["formaction"] = Link::getLinkPortalHref($this->getPagename(), "", "postComment", "", $this->getSystemid());
             $arrForm["comment_name"] = $this->getParam("comment_name");
             $arrForm["comment_subject"] = $this->getParam("comment_subject");
             $arrForm["comment_message"] = $this->getParam("comment_message");
@@ -126,8 +151,8 @@ class class_module_postacomment_portal extends class_portal_controller implement
             $arrForm["comment_page"] = $this->getPagename();
             $arrForm["validation_errors"] = $this->strErrors;
 
-            foreach($arrForm as $strKey => $strValue) {
-                if(uniStrpos($strKey, "comment_") !== false) {
+            foreach ($arrForm as $strKey => $strValue) {
+                if (uniStrpos($strKey, "comment_") !== false) {
                     $arrForm[$strKey] = htmlspecialchars($strValue, ENT_QUOTES, "UTF-8", false);
                 }
             }
@@ -164,21 +189,26 @@ class class_module_postacomment_portal extends class_portal_controller implement
      * @permissions right1
      * @return string
      */
-    protected function actionPostComment() {
+    protected function actionPostComment()
+    {
 
-        if(!$this->validateForm())
+        if (!$this->validateForm()) {
             return $this->actionList();
+        }
 
         $strSystemidfilter = "";
-        if($this->getSystemid() != "")
+        if ($this->getSystemid() != "") {
             $strSystemidfilter = $this->getSystemid();
+        }
 
-        if(class_module_pages_page::getPageByName($this->getPagename()) !== null)
-            $strPagefilter = class_module_pages_page::getPageByName($this->getPagename())->getSystemid();
-        else
+        if (PagesPage::getPageByName($this->getPagename()) !== null) {
+            $strPagefilter = PagesPage::getPageByName($this->getPagename())->getSystemid();
+        }
+        else {
             $strPagefilter = "";
+        }
 
-        $objPost = new class_module_postacomment_post();
+        $objPost = new PostacommentPost();
         $objPost->setStrUsername($this->getParam("comment_name"));
         $objPost->setStrTitle($this->getParam("comment_subject"));
         $objPost->setStrComment($this->getParam("comment_message"));
@@ -189,23 +219,24 @@ class class_module_postacomment_portal extends class_portal_controller implement
 
         $objPost->updateObjectToDb();
 
-        $this->flushPageFromPagesCache($this->getPagename());
+        $this->flushCompletePagesCache();
 
 
         $strMailtext = $this->getLang("new_comment_mail")."\r\n\r\n".$objPost->getStrComment()."\r\n";
-        $strMailtext .= class_link::getLinkAdminHref("postacomment", "edit", "&systemid=".$objPost->getSystemid(), false);
-        $objMessageHandler = new class_module_messaging_messagehandler();
+        $strMailtext .= Link::getLinkAdminHref("postacomment", "edit", "&systemid=".$objPost->getSystemid(), false);
+        $objMessageHandler = new MessagingMessagehandler();
         $arrGroups = array();
-        $allGroups = class_module_user_group::getObjectList();
-        foreach($allGroups as $objOneGroup) {
-            if(class_rights::getInstance()->checkPermissionForGroup($objOneGroup->getSystemid(), class_rights::$STR_RIGHT_EDIT, $this->getObjModule()->getSystemid()))
+        $allGroups = UserGroup::getObjectList();
+        foreach ($allGroups as $objOneGroup) {
+            if (Rights::getInstance()->checkPermissionForGroup($objOneGroup->getSystemid(), Rights::$STR_RIGHT_EDIT, $this->getObjModule()->getSystemid())) {
                 $arrGroups[] = $objOneGroup;
+            }
         }
 
 
-        $objMessage = new class_module_messaging_message();
+        $objMessage = new MessagingMessage();
         $objMessage->setStrBody($strMailtext);
-        $objMessage->setObjMessageProvider(new class_messageprovider_postacomment());
+        $objMessage->setObjMessageProvider(new MessageproviderPostacomment());
         $objMessageHandler->sendMessageObject($objMessage, $arrGroups);
 
         $this->portalReload(_indexpath_."?".$this->getHistory(1)/*."#comments"*/);
@@ -217,19 +248,20 @@ class class_module_postacomment_portal extends class_portal_controller implement
      *
      * @return bool
      */
-    private function validateForm() {
+    private function validateForm()
+    {
         $bitReturn = true;
 
         $strTemplateId = $this->objTemplate->readTemplate("/module_postacomment/".$this->arrElementData["char1"], "validation_error_row");
-        if(uniStrlen($this->getParam("comment_name")) < 2) {
+        if (uniStrlen($this->getParam("comment_name")) < 2) {
             $bitReturn = false;
             $this->strErrors .= $this->objTemplate->fillTemplate(array("error" => $this->getLang("validation_name")), $strTemplateId);
         }
-        if(uniStrlen($this->getParam("comment_message")) < 2) {
+        if (uniStrlen($this->getParam("comment_message")) < 2) {
             $bitReturn = false;
             $this->strErrors .= $this->objTemplate->fillTemplate(array("error" => $this->getLang("validation_message")), $strTemplateId);
         }
-        if($this->objSession->getCaptchaCode() != $this->getParam("form_captcha") || $this->getParam("form_captcha") == "") {
+        if ($this->objSession->getCaptchaCode() != $this->getParam("form_captcha") || $this->getParam("form_captcha") == "") {
             $bitReturn = false;
             $this->strErrors .= $this->objTemplate->fillTemplate(array("error" => $this->getLang("validation_code")), $strTemplateId);
         }
@@ -242,9 +274,11 @@ class class_module_postacomment_portal extends class_portal_controller implement
      * setter. Pass the systemid (!) of the page to load.
      *
      * @param string $strPagefilter
+     *
      * @return void
      */
-    public function setStrPagefilter($strPagefilter) {
+    public function setStrPagefilter($strPagefilter)
+    {
         $this->strPagefilter = $strPagefilter;
     }
 

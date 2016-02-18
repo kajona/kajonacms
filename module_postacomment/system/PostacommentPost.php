@@ -7,6 +7,19 @@
 *	$Id$                           *
 ********************************************************************************************************/
 
+namespace Kajona\Postacomment\System;
+
+use class_search_result;
+use Kajona\Pages\System\PagesPage;
+use Kajona\System\System\AdminListableInterface;
+use Kajona\System\System\Link;
+use Kajona\System\System\OrmObjectlist;
+use Kajona\System\System\OrmObjectlistOrderby;
+use Kajona\System\System\OrmObjectlistRestriction;
+use Kajona\System\System\SearchPortalobjectInterface;
+use Kajona\System\System\SortableRatingInterface;
+
+
 /**
  * Model for comment itself
  *
@@ -18,7 +31,8 @@
  * @module postacomment
  * @moduleId _postacomment_modul_id_
  */
-class class_module_postacomment_post extends \Kajona\System\System\Model implements \Kajona\System\System\ModelInterface, interface_sortable_rating, interface_admin_listable, interface_search_portalobject {
+class PostacommentPost extends \Kajona\System\System\Model implements \Kajona\System\System\ModelInterface, SortableRatingInterface, AdminListableInterface, SearchPortalobjectInterface
+{
 
     /**
      * @var string
@@ -88,7 +102,8 @@ class class_module_postacomment_post extends \Kajona\System\System\Model impleme
     /**
      * @return string
      */
-    public function getStrDisplayName() {
+    public function getStrDisplayName()
+    {
         return $this->getStrTitle();
     }
 
@@ -100,7 +115,8 @@ class class_module_postacomment_post extends \Kajona\System\System\Model impleme
      * @return string the name of the icon, not yet wrapped by getImageAdmin(). Alternatively, you may return an array containing
      *         [the image name, the alt-title]
      */
-    public function getStrIcon() {
+    public function getStrIcon()
+    {
         return "icon_comment";
     }
 
@@ -109,7 +125,8 @@ class class_module_postacomment_post extends \Kajona\System\System\Model impleme
      *
      * @return string
      */
-    public function getStrAdditionalInfo() {
+    public function getStrAdditionalInfo()
+    {
         return timeToString($this->intDate);
     }
 
@@ -118,7 +135,8 @@ class class_module_postacomment_post extends \Kajona\System\System\Model impleme
      *
      * @return string
      */
-    public function getStrLongDescription() {
+    public function getStrLongDescription()
+    {
         return uniStrTrim($this->strComment, 120);
     }
 
@@ -133,29 +151,30 @@ class class_module_postacomment_post extends \Kajona\System\System\Model impleme
      * @param bool $intStart
      * @param bool $intEnd
      *
-     * @return class_module_postacomment_post[]
+     * @return PostacommentPost[]
      */
-    public static function loadPostList($bitJustActive = true, $strPagefilter = "", $strSystemidfilter = "", $strLanguagefilter = "", $intStart = null, $intEnd = null) {
+    public static function loadPostList($bitJustActive = true, $strPagefilter = "", $strSystemidfilter = "", $strLanguagefilter = "", $intStart = null, $intEnd = null)
+    {
 
-        $objORM = new class_orm_objectlist();
-        if($strPagefilter != "") {
-            $objORM->addWhereRestriction(new class_orm_objectlist_restriction(" AND postacomment_page = ? ", $strPagefilter));
+        $objORM = new OrmObjectlist();
+        if ($strPagefilter != "") {
+            $objORM->addWhereRestriction(new OrmObjectlistRestriction(" AND postacomment_page = ? ", $strPagefilter));
         }
 
-        if($strSystemidfilter != "") {
-            $objORM->addWhereRestriction(new class_orm_objectlist_restriction(" AND postacomment_systemid = ? ", $strSystemidfilter));
+        if ($strSystemidfilter != "") {
+            $objORM->addWhereRestriction(new OrmObjectlistRestriction(" AND postacomment_systemid = ? ", $strSystemidfilter));
         }
 
-        if($strLanguagefilter != "") {//check against '' to remain backwards-compatible
-            $objORM->addWhereRestriction(new class_orm_objectlist_restriction(" AND (postacomment_language = ? OR postacomment_language = '')", $strLanguagefilter));
+        if ($strLanguagefilter != "") {//check against '' to remain backwards-compatible
+            $objORM->addWhereRestriction(new OrmObjectlistRestriction(" AND (postacomment_language = ? OR postacomment_language = '')", $strLanguagefilter));
         }
-        if($bitJustActive) {
-            $objORM->addWhereRestriction(new class_orm_objectlist_restriction(" AND system_status = ? ", 1));
+        if ($bitJustActive) {
+            $objORM->addWhereRestriction(new OrmObjectlistRestriction(" AND system_status = ? ", 1));
         }
 
-        $objORM->addOrderBy(new class_orm_objectlist_orderby("postacomment_page ASC"));
-        $objORM->addOrderBy(new class_orm_objectlist_orderby("postacomment_language ASC"));
-        $objORM->addOrderBy(new class_orm_objectlist_orderby("postacomment_date DESC"));
+        $objORM->addOrderBy(new OrmObjectlistOrderby("postacomment_page ASC"));
+        $objORM->addOrderBy(new OrmObjectlistOrderby("postacomment_language ASC"));
+        $objORM->addOrderBy(new OrmObjectlistOrderby("postacomment_date DESC"));
 
         return $objORM->getObjectList(get_called_class(), "", $intStart, $intEnd);
     }
@@ -170,22 +189,23 @@ class class_module_postacomment_post extends \Kajona\System\System\Model impleme
      *
      * @return int
      */
-    public static function getNumberOfPostsAvailable($bitJustActive = true, $strPageid = "", $strSystemidfilter = "", $strLanguagefilter = "") {
+    public static function getNumberOfPostsAvailable($bitJustActive = true, $strPageid = "", $strSystemidfilter = "", $strLanguagefilter = "")
+    {
 
-        $objORM = new class_orm_objectlist();
-        if($strPageid != "") {
-            $objORM->addWhereRestriction(new class_orm_objectlist_restriction(" AND postacomment_page = ? ", $strPageid));
+        $objORM = new OrmObjectlist();
+        if ($strPageid != "") {
+            $objORM->addWhereRestriction(new OrmObjectlistRestriction(" AND postacomment_page = ? ", $strPageid));
         }
 
-        if($strSystemidfilter != "") {
-            $objORM->addWhereRestriction(new class_orm_objectlist_restriction(" AND postacomment_systemid = ? ", $strSystemidfilter));
+        if ($strSystemidfilter != "") {
+            $objORM->addWhereRestriction(new OrmObjectlistRestriction(" AND postacomment_systemid = ? ", $strSystemidfilter));
         }
 
-        if($strLanguagefilter != "") {//check against '' to remain backwards-compatible
-            $objORM->addWhereRestriction(new class_orm_objectlist_restriction(" AND (postacomment_language = ? OR postacomment_language = '')", $strLanguagefilter));
+        if ($strLanguagefilter != "") {//check against '' to remain backwards-compatible
+            $objORM->addWhereRestriction(new OrmObjectlistRestriction(" AND (postacomment_language = ? OR postacomment_language = '')", $strLanguagefilter));
         }
-        if($bitJustActive) {
-            $objORM->addWhereRestriction(new class_orm_objectlist_restriction(" AND system_status = ? ", 1));
+        if ($bitJustActive) {
+            $objORM->addWhereRestriction(new OrmObjectlistRestriction(" AND system_status = ? ", 1));
         }
 
 
@@ -207,9 +227,10 @@ class class_module_postacomment_post extends \Kajona\System\System\Model impleme
      * @see getLinkPortalHref()
      * @return mixed
      */
-    public function updateSearchResult(class_search_result $objResult) {
-        $objPage = new class_module_pages_page($this->getStrAssignedPage());
-        $objResult->setStrPagelink(class_link::getLinkPortal($objPage->getStrName(), "", "_self", $this->getStrTitle() != "" ? $this->getStrTitle() : $objPage->getStrName(), "", "&highlight=".urlencode(html_entity_decode($objResult->getObjSearch()->getStrQuery(), ENT_QUOTES, "UTF-8"))));
+    public function updateSearchResult(class_search_result $objResult)
+    {
+        $objPage = new PagesPage($this->getStrAssignedPage());
+        $objResult->setStrPagelink(Link::getLinkPortal($objPage->getStrName(), "", "_self", $this->getStrTitle() != "" ? $this->getStrTitle() : $objPage->getStrName(), "", "&highlight=".urlencode(html_entity_decode($objResult->getObjSearch()->getStrQuery(), ENT_QUOTES, "UTF-8"))));
         $objResult->setStrPagename($objPage->getStrName());
         $objResult->setStrDescription($this->getStrComment());
     }
@@ -222,7 +243,8 @@ class class_module_postacomment_post extends \Kajona\System\System\Model impleme
      *
      * @return mixed
      */
-    public function getContentLang() {
+    public function getContentLang()
+    {
         return $this->getStrAssignedLanguage();
     }
 
@@ -233,7 +255,8 @@ class class_module_postacomment_post extends \Kajona\System\System\Model impleme
      * @see getLinkAdminHref()
      * @return mixed
      */
-    public function getSearchAdminLinkForObject() {
+    public function getSearchAdminLinkForObject()
+    {
         return "";
     }
 
@@ -241,29 +264,33 @@ class class_module_postacomment_post extends \Kajona\System\System\Model impleme
     /**
      * @return string
      */
-    public function getStrTitle() {
+    public function getStrTitle()
+    {
         return $this->strTitle;
     }
 
     /**
      * @return string
      */
-    public function getStrComment() {
+    public function getStrComment()
+    {
         return $this->strComment;
     }
 
     /**
      * @return string
      */
-    public function getStrUsername() {
+    public function getStrUsername()
+    {
         return $this->strUsername;
     }
 
     /**
      * @return int
      */
-    public function getIntDate() {
-        if($this->intDate == null || $this->intDate == "") {
+    public function getIntDate()
+    {
+        if ($this->intDate == null || $this->intDate == "") {
             $this->intDate = time();
         }
 
@@ -273,77 +300,94 @@ class class_module_postacomment_post extends \Kajona\System\System\Model impleme
     /**
      * @return string
      */
-    public function getStrAssignedPage() {
+    public function getStrAssignedPage()
+    {
         return $this->strAssignedPage;
     }
 
     /**
      * @return string
      */
-    public function getStrAssignedSystemid() {
+    public function getStrAssignedSystemid()
+    {
         return $this->strAssignedSystemid;
     }
 
     /**
      * @return string
      */
-    public function getStrAssignedLanguage() {
+    public function getStrAssignedLanguage()
+    {
         return $this->strAssignedLanguage;
     }
 
     /**
      * @param string $strTitle
+     *
      * @return void
      */
-    public function setStrTitle($strTitle) {
+    public function setStrTitle($strTitle)
+    {
         $this->strTitle = $strTitle;
     }
 
     /**
      * @param string $strComment
+     *
      * @return void
      */
-    public function setStrComment($strComment) {
+    public function setStrComment($strComment)
+    {
         $this->strComment = $strComment;
     }
 
     /**
      * @param string $strUsername
+     *
      * @return void
      */
-    public function setStrUsername($strUsername) {
+    public function setStrUsername($strUsername)
+    {
         $this->strUsername = $strUsername;
     }
 
     /**
      * @param int $intDate
+     *
      * @return void
      */
-    public function setIntDate($intDate) {
+    public function setIntDate($intDate)
+    {
         $this->intDate = $intDate;
     }
 
     /**
      * @param string $strAssignedPage
+     *
      * @return void
      */
-    public function setStrAssignedPage($strAssignedPage) {
+    public function setStrAssignedPage($strAssignedPage)
+    {
         $this->strAssignedPage = $strAssignedPage;
     }
 
     /**
      * @param string $strAssignedSystemid
+     *
      * @return void
      */
-    public function setStrAssignedSystemid($strAssignedSystemid) {
+    public function setStrAssignedSystemid($strAssignedSystemid)
+    {
         $this->strAssignedSystemid = $strAssignedSystemid;
     }
 
     /**
      * @param string $strAssignedLanguage
+     *
      * @return void
      */
-    public function setStrAssignedLanguage($strAssignedLanguage) {
+    public function setStrAssignedLanguage($strAssignedLanguage)
+    {
         $this->strAssignedLanguage = $strAssignedLanguage;
     }
 
