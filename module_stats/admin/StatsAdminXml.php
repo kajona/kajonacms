@@ -5,6 +5,13 @@
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 ********************************************************************************************************/
 
+namespace Kajona\Stats\Admin;
+
+use Kajona\System\Admin\AdminController;
+use Kajona\System\Admin\XmlAdminInterface;
+use Kajona\System\System\Carrier;
+use Kajona\System\System\Pluginmanager;
+
 
 /**
  * Admin class of the stats-module - xml based.
@@ -15,7 +22,8 @@
  * @module stats
  * @moduleId _stats_modul_id_
  */
-class class_module_stats_admin_xml extends class_admin_controller implements interface_xml_admin {
+class StatsAdminXml extends AdminController implements XmlAdminInterface
+{
 
     /**
      * @var \Kajona\System\System\Date
@@ -31,20 +39,21 @@ class class_module_stats_admin_xml extends class_admin_controller implements int
     /**
      * Constructor
      */
-    public function __construct() {
+    public function __construct()
+    {
         parent::__construct();
 
-        $intDateStart = class_carrier::getInstance()->getObjSession()->getSession(class_module_stats_admin::$STR_SESSION_KEY_DATE_START);
+        $intDateStart = Carrier::getInstance()->getObjSession()->getSession(StatsAdmin::$STR_SESSION_KEY_DATE_START);
         //Start: first day of current month
         $this->objDateStart = new \Kajona\System\System\Date();
         $this->objDateStart->setTimeInOldStyle($intDateStart);
 
         //End: Current Day of month
-        $intDateEnd = class_carrier::getInstance()->getObjSession()->getSession(class_module_stats_admin::$STR_SESSION_KEY_DATE_END);
+        $intDateEnd = Carrier::getInstance()->getObjSession()->getSession(StatsAdmin::$STR_SESSION_KEY_DATE_END);
         $this->objDateEnd = new \Kajona\System\System\Date();
         $this->objDateEnd->setTimeInOldStyle($intDateEnd);
 
-        $this->intInterval = class_carrier::getInstance()->getObjSession()->getSession(class_module_stats_admin::$STR_SESSION_KEY_INTERVAL);
+        $this->intInterval = Carrier::getInstance()->getObjSession()->getSession(StatsAdmin::$STR_SESSION_KEY_INTERVAL);
     }
 
 
@@ -54,23 +63,24 @@ class class_module_stats_admin_xml extends class_admin_controller implements int
      * @return string
      * @permissions view
      */
-    protected function actionGetReport() {
+    protected function actionGetReport()
+    {
         $strPlugin = $this->getParam("plugin");
         $strReturn = "";
 
-        $objPluginManager = new class_pluginmanager(class_module_stats_admin::$STR_PLUGIN_EXTENSION_POINT, "/admin/statsreports");
+        $objPluginManager = new Pluginmanager(StatsAdmin::$STR_PLUGIN_EXTENSION_POINT, "/admin/statsreports");
 
 
         $objPlugin = null;
-        foreach($objPluginManager->getPlugins(array(class_carrier::getInstance()->getObjDB(), $this->objToolkit, $this->getObjLang())) as $objOneReport) {
-            if(uniStrReplace("class_stats_report_", "", get_class($objOneReport)) == $strPlugin) {
+        foreach ($objPluginManager->getPlugins(array(Carrier::getInstance()->getObjDB(), $this->objToolkit, $this->getObjLang())) as $objOneReport) {
+            if ($this->getActionForReport($objOneReport) == $strPlugin) {
                 $objPlugin = $objOneReport;
                 break;
             }
         }
 
 
-        if($objPlugin !== null && $objPlugin instanceof interface_admin_statsreports) {
+        if ($objPlugin !== null && $objPlugin instanceof AdminStatsreportsInterface) {
             //get date-params as ints
             $intStartDate = mktime(0, 0, 0, $this->objDateStart->getIntMonth(), $this->objDateStart->getIntDay(), $this->objDateStart->getIntYear());
             $intEndDate = mktime(0, 0, 0, $this->objDateEnd->getIntMonth(), $this->objDateEnd->getIntDay(), $this->objDateEnd->getIntYear());
@@ -80,12 +90,12 @@ class class_module_stats_admin_xml extends class_admin_controller implements int
 
             $arrImage = $objPlugin->getReportGraph();
 
-            if(!is_array($arrImage)) {
+            if (!is_array($arrImage)) {
                 $arrImage = array($arrImage);
             }
 
-            foreach($arrImage as $strImage) {
-                if($strImage != "") {
+            foreach ($arrImage as $strImage) {
+                if ($strImage != "") {
                     $strReturn .= $this->objToolkit->getGraphContainer($strImage);
                 }
             }
@@ -96,6 +106,11 @@ class class_module_stats_admin_xml extends class_admin_controller implements int
         }
 
         return $strReturn;
+    }
+
+    private function getActionForReport(AdminStatsreportsInterface $objReport)
+    {
+        return uniStrtolower(uniSubstr(get_class($objReport), uniStrpos("StatsReport", get_class($objReport))+11));
     }
 
 }

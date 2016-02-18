@@ -5,6 +5,9 @@
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 ********************************************************************************************************/
 
+namespace Kajona\Stats\System;
+
+
 /**
  * Model for a stats-worker
  *
@@ -16,18 +19,21 @@
  *
  * @blockFromAutosave
  */
-class class_module_stats_worker extends \Kajona\System\System\Model implements \Kajona\System\System\ModelInterface {
+class StatsWorker extends \Kajona\System\System\Model implements \Kajona\System\System\ModelInterface
+{
 
     /**
      * Returns the name to be used when rendering the current object, e.g. in admin-lists.
      *
      * @return string
      */
-    public function getStrDisplayName() {
+    public function getStrDisplayName()
+    {
         return "";
     }
 
-    public function updateObjectToDb($strPrevId = false) {
+    public function updateObjectToDb($strPrevId = false)
+    {
         return true;
     }
 
@@ -37,9 +43,10 @@ class class_module_stats_worker extends \Kajona\System\System\Model implements \
      *
      * @return array
      */
-    public function hostnameLookupIpsToLookup() {
+    public function hostnameLookupIpsToLookup()
+    {
         $strQuery = "SELECT stats_ip
-                       FROM " . _dbprefix_ . "stats_data
+                       FROM "._dbprefix_."stats_data
                       WHERE stats_hostname IS NULL
                             OR stats_hostname = ''
                         AND stats_hostname != 'na'
@@ -56,8 +63,9 @@ class class_module_stats_worker extends \Kajona\System\System\Model implements \
      *
      * @return bool
      */
-    public function hostnameLookupSaveHostname($strHostname, $strIP) {
-        $strQuery = "UPDATE " . _dbprefix_ . "stats_data
+    public function hostnameLookupSaveHostname($strHostname, $strIP)
+    {
+        $strQuery = "UPDATE "._dbprefix_."stats_data
                                     SET stats_hostname = ?
                                   WHERE stats_ip = ? ";
         return $this->objDB->_pQuery($strQuery, array($strHostname, $strIP));
@@ -68,9 +76,10 @@ class class_module_stats_worker extends \Kajona\System\System\Model implements \
      *
      * @return bool
      */
-    public function hostnameLookupResetHostnames() {
+    public function hostnameLookupResetHostnames()
+    {
         //Reset all na hostnames
-        $strQuery = "UPDATE " . _dbprefix_ . "stats_data
+        $strQuery = "UPDATE "._dbprefix_."stats_data
                         SET stats_hostname = ''
                       WHERE stats_hostname = 'na'";
         return $this->objDB->_pQuery($strQuery, array());
@@ -89,11 +98,12 @@ class class_module_stats_worker extends \Kajona\System\System\Model implements \
      *
      * @return bool
      */
-    public function createStatsEntry($strIp, $intDate, $strPage, $strReferer, $strBrowser, $strLanguage = "", $strSession = "") {
-        if($strSession == "") {
+    public function createStatsEntry($strIp, $intDate, $strPage, $strReferer, $strBrowser, $strLanguage = "", $strSession = "")
+    {
+        if ($strSession == "") {
             $strSession = $this->objSession->getSessionId();
         }
-        $strQuery = "INSERT INTO " . _dbprefix_ . "stats_data
+        $strQuery = "INSERT INTO "._dbprefix_."stats_data
 		            (stats_id, stats_ip, stats_date, stats_page, stats_referer, stats_browser, stats_session, stats_language) VALUES
 		            (?, ?, ?, ?, ?, ?, ?, ?)";
 
@@ -109,9 +119,10 @@ class class_module_stats_worker extends \Kajona\System\System\Model implements \
      *
      * @return int
      */
-    public function getNumberOfIpsToLookup() {
+    public function getNumberOfIpsToLookup()
+    {
         $strQuery = "SELECT count(distinct stats_ip) as anzahl
-                       FROM " . _dbprefix_ . "stats_data
+                       FROM "._dbprefix_."stats_data
                       WHERE stats_hostname IS NULL
                             OR stats_hostname = ''
                         AND stats_hostname != 'na'";
@@ -125,10 +136,11 @@ class class_module_stats_worker extends \Kajona\System\System\Model implements \
      *
      * @return array
      */
-    public function getArrayOfIp2cLookups() {
+    public function getArrayOfIp2cLookups()
+    {
         $strQuery = "SELECT distinct stats_ip
-                       FROM " . _dbprefix_ . "stats_data
-                            LEFT JOIN " . _dbprefix_ . "stats_ip2country
+                       FROM "._dbprefix_."stats_data
+                            LEFT JOIN "._dbprefix_."stats_ip2country
                                    ON (stats_ip = ip2c_ip)  
                       WHERE ip2c_name IS NULL
                        /*   OR ip2c_name = '' 
@@ -144,10 +156,11 @@ class class_module_stats_worker extends \Kajona\System\System\Model implements \
      *
      * @return array
      */
-    public function getNumberOfIp2cLookups() {
+    public function getNumberOfIp2cLookups()
+    {
         $strQuery = "SELECT COUNT(*) as number FROM (SELECT distinct stats_ip
-                       FROM " . _dbprefix_ . "stats_data
-                            LEFT JOIN " . _dbprefix_ . "stats_ip2country
+                       FROM "._dbprefix_."stats_data
+                            LEFT JOIN "._dbprefix_."stats_ip2country
                                    ON (stats_ip = ip2c_ip)
                       WHERE ip2c_name IS NULL
                        /*   OR ip2c_name = ''
@@ -167,8 +180,9 @@ class class_module_stats_worker extends \Kajona\System\System\Model implements \
      *
      * @return bool
      */
-    public function saveIp2CountryRecord($strIp, $strCountry) {
-        $strQuery = "INSERT INTO " . _dbprefix_ . "stats_ip2country
+    public function saveIp2CountryRecord($strIp, $strCountry)
+    {
+        $strQuery = "INSERT INTO "._dbprefix_."stats_ip2country
     	               (ip2c_ip, ip2c_name) VALUES 
     	               (?, ?)";
 

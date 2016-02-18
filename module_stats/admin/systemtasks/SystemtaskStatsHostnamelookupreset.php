@@ -4,21 +4,31 @@
 *   (c) 2007-2015 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
-*   $Id$                                 *
+*   $Id$                                        *
 ********************************************************************************************************/
 
+namespace Kajona\Stats\Admin\Systemtasks;
+
+use Kajona\Stats\System\StatsWorker;
+use Kajona\System\Admin\Systemtasks\AdminSystemtaskInterface;
+use Kajona\System\Admin\Systemtasks\SystemtaskBase;
+use Kajona\System\System\SystemModule;
+
+
 /**
- * Resolves the country for a given ip-adress
+ * Resets erroneous hostnames
  *
  * @package module_stats
  */
-class class_systemtask_stats_browscapupdate extends class_systemtask_base implements interface_admin_systemtask {
+class SystemtaskStatsHostnamelookupreset extends SystemtaskBase implements AdminSystemtaskInterface
+{
 
 
     /**
      * contructor to call the base constructor
      */
-    public function __construct() {
+    public function __construct()
+    {
         parent::__construct();
         $this->setStrTextBase("stats");
     }
@@ -27,7 +37,8 @@ class class_systemtask_stats_browscapupdate extends class_systemtask_base implem
      * @see interface_admin_systemtast::getGroupIdenitfier()
      * @return string
      */
-    public function getGroupIdentifier() {
+    public function getGroupIdentifier()
+    {
         return "stats";
     }
 
@@ -35,38 +46,46 @@ class class_systemtask_stats_browscapupdate extends class_systemtask_base implem
      * @see interface_admin_systemtast::getStrInternalTaskName()
      * @return string
      */
-    public function getStrInternalTaskName() {
-        return "browscapupdate";
+    public function getStrInternalTaskName()
+    {
+        return "statshostnamelookupreset";
     }
 
     /**
      * @see interface_admin_systemtast::getStrTaskName()
      * @return string
      */
-    public function getStrTaskName() {
-        return $this->getLang("systemtask_browscapupdate_name");
+    public function getStrTaskName()
+    {
+        return $this->getLang("systemtask_hostnamelookupreset_name");
     }
 
     /**
      * @see interface_admin_systemtast::executeTask()
      * @return string
      */
-    public function executeTask() {
+    public function executeTask()
+    {
 
-        if(!class_module_system_module::getModuleByName("stats")->rightEdit())
+        if (!SystemModule::getModuleByName("stats")->rightEdit()) {
             return $this->getLang("commons_error_permissions");
+        }
 
-        $objBrowscap = new class_browscap();
-        $objBrowscap->updateBrowscap();
+        $strReturn = "";
+        $objWorker = new StatsWorker("");
+        $objWorker->hostnameLookupResetHostnames();
 
-        return $this->objToolkit->getTextRow($this->getLang("browscapupdate_end"));
+        $strReturn .= $this->objToolkit->getTextRow($this->getLang("worker_lookupReset_end"));
+
+        return $strReturn;
     }
 
     /**
      * @see interface_admin_systemtast::getAdminForm()
      * @return string
      */
-    public function getAdminForm() {
+    public function getAdminForm()
+    {
         return "";
     }
 

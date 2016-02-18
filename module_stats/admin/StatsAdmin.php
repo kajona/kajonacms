@@ -7,6 +7,14 @@
 *	$Id$                                  *
 ********************************************************************************************************/
 
+namespace Kajona\Stats\Admin;
+
+use Kajona\System\Admin\AdminController;
+use Kajona\System\Admin\AdminInterface;
+use Kajona\System\System\Carrier;
+use Kajona\System\System\Pluginmanager;
+
+
 /**
  * Admin-Part of the stats, generating all reports an handles requests to workers
  *
@@ -16,7 +24,8 @@
  * @module stats
  * @moduleId _stats_modul_id_
  */
-class class_module_stats_admin extends class_admin_controller implements interface_admin {
+class StatsAdmin extends AdminController implements AdminInterface
+{
 
 
     public static $STR_SESSION_KEY_DATE_START = "STR_SESSION_KEY_DATE_START";
@@ -36,7 +45,7 @@ class class_module_stats_admin extends class_admin_controller implements interfa
     private $intInterval = 2;
 
     /**
-     * @var class_pluginmanager
+     * @var Pluginmanager
      */
     private $objPluginManager;
 
@@ -44,15 +53,15 @@ class class_module_stats_admin extends class_admin_controller implements interfa
 
     /**
      * Constructor
-
      */
-    public function __construct() {
+    public function __construct()
+    {
         parent::__construct();
 
 
-        $intDateStart = class_carrier::getInstance()->getObjSession()->getSession(self::$STR_SESSION_KEY_DATE_START);
-        if($intDateStart == "") {
-            $intDateStart = strtotime(strftime("%Y-%m", time()) . "-01");
+        $intDateStart = Carrier::getInstance()->getObjSession()->getSession(self::$STR_SESSION_KEY_DATE_START);
+        if ($intDateStart == "") {
+            $intDateStart = strtotime(strftime("%Y-%m", time())."-01");
         }
 
         //Start: first day of current month
@@ -60,8 +69,8 @@ class class_module_stats_admin extends class_admin_controller implements interfa
         $this->objDateStart->setTimeInOldStyle($intDateStart);
 
         //End: Current Day of month
-        $intDateEnd = class_carrier::getInstance()->getObjSession()->getSession(self::$STR_SESSION_KEY_DATE_END);
-        if($intDateEnd == "") {
+        $intDateEnd = Carrier::getInstance()->getObjSession()->getSession(self::$STR_SESSION_KEY_DATE_END);
+        if ($intDateEnd == "") {
             $intDateEnd = time() + 3600 * 24;
         }
 
@@ -69,40 +78,42 @@ class class_module_stats_admin extends class_admin_controller implements interfa
         $this->objDateEnd->setTimeInOldStyle($intDateEnd);
 
 
-        $this->intInterval = class_carrier::getInstance()->getObjSession()->getSession(self::$STR_SESSION_KEY_INTERVAL);
-        if($this->intInterval == "") {
+        $this->intInterval = Carrier::getInstance()->getObjSession()->getSession(self::$STR_SESSION_KEY_INTERVAL);
+        if ($this->intInterval == "") {
             $this->intInterval = 2;
         }
 
-        class_carrier::getInstance()->getObjSession()->setSession(self::$STR_SESSION_KEY_DATE_START, $intDateStart);
-        class_carrier::getInstance()->getObjSession()->setSession(self::$STR_SESSION_KEY_DATE_END, $intDateEnd);
-        class_carrier::getInstance()->getObjSession()->setSession(self::$STR_SESSION_KEY_INTERVAL, $this->intInterval);
+        Carrier::getInstance()->getObjSession()->setSession(self::$STR_SESSION_KEY_DATE_START, $intDateStart);
+        Carrier::getInstance()->getObjSession()->setSession(self::$STR_SESSION_KEY_DATE_END, $intDateEnd);
+        Carrier::getInstance()->getObjSession()->setSession(self::$STR_SESSION_KEY_INTERVAL, $this->intInterval);
 
 
         //stats may take time -> increase the time available
-        if(@ini_get("max_execution_time") < 500 && @ini_get("max_execution_time") > 0)
+        if (@ini_get("max_execution_time") < 500 && @ini_get("max_execution_time") > 0) {
             @ini_set("max_execution_time", "500");
+        }
 
         //stats may consume a lot of memory, increase max mem limit
-        if(class_carrier::getInstance()->getObjConfig()->getPhpIni("memory_limit") < 30) {
+        if (Carrier::getInstance()->getObjConfig()->getPhpIni("memory_limit") < 30) {
             @ini_set("memory_limit", "60M");
         }
 
-        $this->objPluginManager = new class_pluginmanager(self::$STR_PLUGIN_EXTENSION_POINT, "/admin/statsreports");
+        $this->objPluginManager = new Pluginmanager(self::$STR_PLUGIN_EXTENSION_POINT, "/admin/statsreports");
 
         $this->setAction("list");
     }
 
 
-    public function getOutputModuleNavi() {
+    public function getOutputModuleNavi()
+    {
         $arrReturn = array();
         //Load all plugins available and create the navigation
-        if($this->objPluginManager != null) {
+        if ($this->objPluginManager != null) {
 
-            /** @var interface_admin_statsreports[] $arrReports */
+            /** @var AdminStatsreportsInterface[] $arrReports */
             $arrReports = $this->getArrReports();
 
-            foreach($arrReports as $objPlugin) {
+            foreach ($arrReports as $objPlugin) {
                 $arrReturn[] = array("view", getLinkAdmin($this->getArrModule("modul"), $this->getActionForReport($objPlugin), "", $objPlugin->getTitle(), "", "", true, "adminnavi"));
             }
         }
@@ -116,12 +127,13 @@ class class_module_stats_admin extends class_admin_controller implements interfa
      * @permissions view
      * @autoTestable
      */
-    protected function actionList() {
+    protected function actionList()
+    {
         //In every case, we should generate the date-selector
         $this->processDates();
 
         $strAction = $this->getParam("action");
-        if($strAction == "") {
+        if ($strAction == "") {
             $strAction = "common";
             $this->setParam("action", $strAction);
         }
@@ -135,11 +147,12 @@ class class_module_stats_admin extends class_admin_controller implements interfa
      *
      * @return array
      */
-    protected function getArrOutputNaviEntries() {
+    protected function getArrOutputNaviEntries()
+    {
         $arrPathLinks = parent::getArrOutputNaviEntries();
 
-        foreach($this->getArrReports() as $objOneReport) {
-            if($this->getActionForReport($objOneReport) == $this->getParam("action")) {
+        foreach ($this->getArrReports() as $objOneReport) {
+            if ($this->getActionForReport($objOneReport) == $this->getParam("action")) {
                 $arrPathLinks[] = getLinkAdmin($this->getArrModule("modul"), $this->getActionForReport($objOneReport), "", $objOneReport->getTitle());
             }
         }
@@ -156,21 +169,22 @@ class class_module_stats_admin extends class_admin_controller implements interfa
      *
      * @return string
      */
-    private function loadRequestedPlugin($strPlugin) {
+    private function loadRequestedPlugin($strPlugin)
+    {
         $strReturn = "";
 
         $objPlugin = null;
-        foreach($this->getArrReports() as $objOneReport) {
-            if($this->getActionForReport($objOneReport) == $strPlugin) {
+        foreach ($this->getArrReports() as $objOneReport) {
+            if ($this->getActionForReport($objOneReport) == $strPlugin) {
                 $objPlugin = $objOneReport;
                 break;
             }
         }
 
-        if($objPlugin) {
+        if ($objPlugin) {
             $strReturn .= $this->getInlineLoadingCode($objPlugin);
             //place date-selector before
-            $strReturn = $this->createDateSelector($objPlugin) . $strReturn;
+            $strReturn = $this->createDateSelector($objPlugin).$strReturn;
         }
         return $strReturn;
     }
@@ -183,7 +197,8 @@ class class_module_stats_admin extends class_admin_controller implements interfa
      *
      * @return string
      */
-    private function createDateSelector(interface_admin_statsreports $objReport = null) {
+    private function createDateSelector(AdminStatsreportsInterface $objReport = null)
+    {
         $strReturn = "";
 
         //And create the selector
@@ -195,9 +210,9 @@ class class_module_stats_admin extends class_admin_controller implements interfa
         $strReturn .= $this->objToolkit->formDateSingle("end", $this->getLang("ende"), $this->objDateEnd);
 
         //create interval dropdown?
-        if($objReport != null) {
-            if($objReport instanceof interface_admin_statsreports) {
-                if($objReport->isIntervalable()) {
+        if ($objReport != null) {
+            if ($objReport instanceof AdminStatsreportsInterface) {
+                if ($objReport->isIntervalable()) {
                     $arrOption = array();
                     $arrOption["1"] = $this->getLang("interval_1day");
                     $arrOption["2"] = $this->getLang("interval_2days");
@@ -211,7 +226,7 @@ class class_module_stats_admin extends class_admin_controller implements interfa
         }
         $strReturn .= $this->objToolkit->formInputSubmit($this->getLang("filtern"));
         $strReturn .= $this->objToolkit->formClose();
-        $strReturn = "<div class=\"dateSelector\">" . $strReturn . "</div>";
+        $strReturn = "<div class=\"dateSelector\">".$strReturn."</div>";
 
         return $strReturn;
     }
@@ -219,9 +234,10 @@ class class_module_stats_admin extends class_admin_controller implements interfa
     /**
      * Creates int-values of the passed date-values
      */
-    private function processDates() {
+    private function processDates()
+    {
 
-        if($this->getParam("filter") == "true") {
+        if ($this->getParam("filter") == "true") {
 
             $this->objDateStart = new \Kajona\System\System\Date();
             $this->objDateStart->generateDateFromParams("start", $this->getAllParams());
@@ -229,10 +245,10 @@ class class_module_stats_admin extends class_admin_controller implements interfa
             $this->objDateEnd = new \Kajona\System\System\Date();
             $this->objDateEnd->generateDateFromParams("end", $this->getAllParams());
 
-            class_carrier::getInstance()->getObjSession()->setSession(self::$STR_SESSION_KEY_DATE_START, $this->objDateStart->getTimeInOldStyle());
-            class_carrier::getInstance()->getObjSession()->setSession(self::$STR_SESSION_KEY_DATE_END, $this->objDateEnd->getTimeInOldStyle());
+            Carrier::getInstance()->getObjSession()->setSession(self::$STR_SESSION_KEY_DATE_START, $this->objDateStart->getTimeInOldStyle());
+            Carrier::getInstance()->getObjSession()->setSession(self::$STR_SESSION_KEY_DATE_END, $this->objDateEnd->getTimeInOldStyle());
 
-            if($this->getParam("interval") != "") {
+            if ($this->getParam("interval") != "") {
                 $this->intInterval = (int)$this->getParam("interval");
             }
             else {
@@ -240,7 +256,7 @@ class class_module_stats_admin extends class_admin_controller implements interfa
             }
 
 
-            class_carrier::getInstance()->getObjSession()->setSession(self::$STR_SESSION_KEY_INTERVAL, $this->intInterval);
+            Carrier::getInstance()->getObjSession()->setSession(self::$STR_SESSION_KEY_INTERVAL, $this->intInterval);
         }
     }
 
@@ -248,15 +264,16 @@ class class_module_stats_admin extends class_admin_controller implements interfa
     /**
      * Creates the code required to load the report via an ajax request
      *
-     * @param interface_admin_statsreports $objPlugin
+     * @param AdminStatsreportsInterface $objPlugin
      * @param string $strPv
      *
      * @return string
      */
-    private function getInlineLoadingCode($objPlugin, $strPv = "") {
+    private function getInlineLoadingCode($objPlugin, $strPv = "")
+    {
         $strReturn = "<script type=\"text/javascript\">
                             $(document).ready(function() {
-                                  KAJONA.admin.ajax.genericAjaxCall(\"stats\", \"getReport\", \"&plugin=" . $this->getActionForReport($objPlugin) . "&pv=" . $strPv . "\", function(data, status, jqXHR) {
+                                  KAJONA.admin.ajax.genericAjaxCall(\"stats\", \"getReport\", \"&plugin=".$this->getActionForReport($objPlugin)."&pv=".$strPv."\", function(data, status, jqXHR) {
 
                                     if(status == 'success')  {
                                         var intStart = data.indexOf(\"[CDATA[\")+7;
@@ -283,9 +300,10 @@ class class_module_stats_admin extends class_admin_controller implements interfa
         return $strReturn;
     }
 
-    protected function getOutputActionTitle() {
-        foreach($this->getArrReports() as $objOneReport) {
-            if($this->getActionForReport($objOneReport) == $this->getParam("action")) {
+    protected function getOutputActionTitle()
+    {
+        foreach ($this->getArrReports() as $objOneReport) {
+            if ($this->getActionForReport($objOneReport) == $this->getParam("action")) {
                 return $objOneReport->getTitle();
             }
         }
@@ -293,7 +311,8 @@ class class_module_stats_admin extends class_admin_controller implements interfa
         return parent::getOutputActionTitle();
     }
 
-    protected function getQuickHelp() {
+    protected function getQuickHelp()
+    {
         $strOldAction = $this->getAction();
         $this->setAction($this->getParam("action"));
         $strReturn = parent::getQuickHelp();
@@ -302,20 +321,23 @@ class class_module_stats_admin extends class_admin_controller implements interfa
     }
 
     /**
-     * @return interface_admin_statsreports[]
+     * @return AdminStatsreportsInterface[]
      */
-    private function getArrReports() {
-        if(self::$arrReports == null)
-            self::$arrReports = $this->objPluginManager->getPlugins(array(class_carrier::getInstance()->getObjDB(), $this->objToolkit, $this->getObjLang()));
+    private function getArrReports()
+    {
+        if (self::$arrReports == null) {
+            self::$arrReports = $this->objPluginManager->getPlugins(array(Carrier::getInstance()->getObjDB(), $this->objToolkit, $this->getObjLang()));
+        }
 
-        uasort(self::$arrReports, function(interface_admin_statsreports $objA, interface_admin_statsreports $objB) {
+        uasort(self::$arrReports, function (AdminStatsreportsInterface $objA, AdminStatsreportsInterface $objB) {
             return strcmp($objA->getTitle(), $objB->getTitle());
         });
 
         return self::$arrReports;
     }
 
-    private function getActionForReport(interface_admin_statsreports $objReport) {
-        return uniStrReplace("class_stats_report_", "", get_class($objReport));
+    private function getActionForReport(AdminStatsreportsInterface $objReport)
+    {
+        return uniStrtolower(uniSubstr(get_class($objReport), uniStrpos("StatsReport", get_class($objReport))+11));
     }
 }

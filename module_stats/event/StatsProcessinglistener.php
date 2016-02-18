@@ -4,6 +4,18 @@
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 ********************************************************************************************************/
 
+namespace Kajona\Stats\Event;
+
+use Kajona\Stats\System\StatsWorker;
+use Kajona\System\System\Carrier;
+use Kajona\System\System\CoreEventdispatcher;
+use Kajona\System\System\GenericeventListenerInterface;
+use Kajona\System\System\LanguagesLanguage;
+use Kajona\System\System\RequestEntrypointEnum;
+use Kajona\System\System\SystemEventidentifier;
+use Kajona\System\System\SystemModule;
+
+
 /**
  * An eventlistener to handle events of type core.system.request.aftercontentsend. Creates
  * an entry in the stats data table
@@ -13,7 +25,8 @@
  * @since 4.6
  * @author sidler@mulchprod.de
  */
-class class_module_stats_processinglistener implements interface_genericevent_listener {
+class StatsProcessinglistener implements GenericeventListenerInterface
+{
 
     /**
      * This generic method is called in case of dispatched events.
@@ -27,26 +40,27 @@ class class_module_stats_processinglistener implements interface_genericevent_li
      *
      * @return bool
      */
-    public function handleEvent($strEventIdentifier, array $arrArguments) {
-        /** @var class_request_entrypoint_enum $objEntrypoint */
+    public function handleEvent($strEventIdentifier, array $arrArguments)
+    {
+        /** @var RequestEntrypointEnum $objEntrypoint */
         $objEntrypoint = $arrArguments[0];
 
-        if($objEntrypoint->equals(class_request_entrypoint_enum::INDEX()) && class_carrier::getInstance()->getParam("admin") == "") {
+        if ($objEntrypoint->equals(RequestEntrypointEnum::INDEX()) && Carrier::getInstance()->getParam("admin") == "") {
 
             //process stats request
-            $objStats = class_module_system_module::getModuleByName("stats");
-            if($objStats != null) {
+            $objStats = SystemModule::getModuleByName("stats");
+            if ($objStats != null) {
                 //Collect Data
-                $objLanguage = new class_module_languages_language();
-                $objStats = new class_module_stats_worker();
+                $objLanguage = new LanguagesLanguage();
+                $objStats = new StatsWorker();
                 $objStats->createStatsEntry(
-                    getServer("REMOTE_ADDR"), time(), class_carrier::getInstance()->getParam("page"), rtrim(getServer("HTTP_REFERER"), "/"), getServer("HTTP_USER_AGENT"), $objLanguage->getPortalLanguage()
+                    getServer("REMOTE_ADDR"), time(), Carrier::getInstance()->getParam("page"), rtrim(getServer("HTTP_REFERER"), "/"), getServer("HTTP_USER_AGENT"), $objLanguage->getPortalLanguage()
                 );
-
 
             }
         }
     }
 
 }
-class_core_eventdispatcher::getInstance()->removeAndAddListener(class_system_eventidentifier::EVENT_SYSTEM_REQUEST_AFTERCONTENTSEND, new class_module_stats_processinglistener());
+
+CoreEventdispatcher::getInstance()->removeAndAddListener(SystemEventidentifier::EVENT_SYSTEM_REQUEST_AFTERCONTENTSEND, new StatsProcessinglistener());

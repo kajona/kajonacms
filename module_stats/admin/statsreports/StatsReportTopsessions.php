@@ -7,16 +7,24 @@
 *	$Id$                           *
 ********************************************************************************************************/
 
+namespace Kajona\Stats\Admin\Statsreports;
+
+
+use Kajona\Stats\Admin\AdminStatsreportsInterface;
 use Kajona\System\Admin\ToolkitAdmin;
 use Kajona\System\System\Database;
 use Kajona\System\System\Lang;
+use Kajona\System\System\Session;
+use Kajona\System\System\UserUser;
+
 /**
  * This plugin creates a view showing infos about the sessions
  *
  * @package module_stats
  * @author sidler@mulchprod.de
  */
-class class_stats_report_topsessions implements interface_admin_statsreports {
+class StatsReportTopsessions implements AdminStatsreportsInterface
+{
 
     //class vars
     private $intDateStart;
@@ -26,7 +34,7 @@ class class_stats_report_topsessions implements interface_admin_statsreports {
     private $objToolkit;
 
     /**
-     * @var class_db
+     * @var Database
      */
     private $objDB;
 
@@ -34,7 +42,8 @@ class class_stats_report_topsessions implements interface_admin_statsreports {
     /**
      * Constructor
      */
-    public function __construct(Database $objDB, ToolkitAdmin $objToolkit, Lang $objTexts) {
+    public function __construct(Database $objDB, ToolkitAdmin $objToolkit, Lang $objTexts)
+    {
         $this->objTexts = $objTexts;
         $this->objToolkit = $objToolkit;
         $this->objDB = $objDB;
@@ -45,52 +54,62 @@ class class_stats_report_topsessions implements interface_admin_statsreports {
      *
      * @return string
      */
-    public static function getExtensionName() {
+    public static function getExtensionName()
+    {
         return "core.stats.admin.statsreport";
     }
 
     /**
      * @param int $intEndDate
+     *
      * @return void
      */
-    public function setEndDate($intEndDate) {
+    public function setEndDate($intEndDate)
+    {
         $this->intDateEnd = $intEndDate;
     }
 
     /**
      * @param int $intStartDate
+     *
      * @return void
      */
-    public function setStartDate($intStartDate) {
+    public function setStartDate($intStartDate)
+    {
         $this->intDateStart = $intStartDate;
     }
 
     /**
      * @return string
      */
-    public function getTitle() {
+    public function getTitle()
+    {
         return $this->objTexts->getLang("topsessions", "stats");
     }
 
     /**
      * @return bool
      */
-    public function isIntervalable() {
+    public function isIntervalable()
+    {
         return false;
     }
 
     /**
      * @param int $intInterval
+     *
      * @return void
      */
-    public function setInterval($intInterval) {
+    public function setInterval($intInterval)
+    {
 
     }
 
     /**
      * @return string
      */
-    public function getReport() {
+    public function getReport()
+    {
         $strReturn = "";
         //Create Data-table
         $arrHeader = array();
@@ -99,11 +118,12 @@ class class_stats_report_topsessions implements interface_admin_statsreports {
         $arrSessions = $this->getTopSessions();
 
         $intI = 0;
-        $objUser = new class_module_user_user(class_session::getInstance()->getUserID());
-        foreach($arrSessions as $arrOneSession) {
+        $objUser = new UserUser(Session::getInstance()->getUserID());
+        foreach ($arrSessions as $arrOneSession) {
             //Escape?
-            if($intI >= $objUser->getIntItemsPerPage())
+            if ($intI >= $objUser->getIntItemsPerPage()) {
                 break;
+            }
 
             $arrValues[$intI] = array();
             $arrValues[$intI][] = $intI + 1;
@@ -133,9 +153,9 @@ class class_stats_report_topsessions implements interface_admin_statsreports {
      *
      * @return mixed
      */
-    public function getTopSessions() {
-        $objUser = new class_module_user_user(class_session::getInstance()->getUserID());
-        $objUser = new class_module_user_user(class_session::getInstance()->getUserID());
+    public function getTopSessions()
+    {
+        $objUser = new UserUser(Session::getInstance()->getUserID());
 
         $strQuery = "SELECT stats_session,
                             stats_ip,
@@ -155,9 +175,10 @@ class class_stats_report_topsessions implements interface_admin_statsreports {
         $arrSessions = $this->objDB->getPArray($strQuery, array($this->intDateStart, $this->intDateEnd), 0, $objUser->getIntItemsPerPage() - 1);
 
         $intI = 0;
-        foreach($arrSessions as $intKey => $arrOneSession) {
-            if($intI++ >= $objUser->getIntItemsPerPage())
+        foreach ($arrSessions as $intKey => $arrOneSession) {
+            if ($intI++ >= $objUser->getIntItemsPerPage()) {
                 break;
+            }
 
             //Load the details for all sessions
             $strDetails = "";
@@ -176,8 +197,9 @@ class class_stats_report_topsessions implements interface_admin_statsreports {
             $arrPages = $this->objDB->getPArray($strQuery, array($strSessionID));
 
             $strDetails .= $this->objTexts->getLang("top_session_detail_verlauf", "stats");
-            foreach($arrPages as $arrOnePage)
+            foreach ($arrPages as $arrOnePage) {
                 $strDetails .= $arrOnePage["stats_page"]." - ";
+            }
 
             $strDetails = uniSubstr($strDetails, 0, -2);
             $arrFolder = $this->objToolkit->getLayoutFolder($strDetails, $this->objTexts->getLang("top_session_detail", "stats"));
@@ -190,7 +212,8 @@ class class_stats_report_topsessions implements interface_admin_statsreports {
     /**
      * @return string
      */
-    public function getReportGraph() {
+    public function getReportGraph()
+    {
         return "";
     }
 

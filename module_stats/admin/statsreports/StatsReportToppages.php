@@ -4,9 +4,16 @@
 *   (c) 2007-2015 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 ********************************************************************************************************/
+
+namespace Kajona\Stats\Admin\Statsreports;
+
+use Kajona\Stats\Admin\AdminStatsreportsInterface;
 use Kajona\System\Admin\ToolkitAdmin;
 use Kajona\System\System\Database;
+use Kajona\System\System\GraphFactory;
 use Kajona\System\System\Lang;
+use Kajona\System\System\Session;
+use Kajona\System\System\UserUser;
 
 /**
  * This plugin creates a view common numbers, such as "user online" oder "total pagehits"
@@ -14,7 +21,8 @@ use Kajona\System\System\Lang;
  * @package module_stats
  * @author sidler@mulchprod.de
  */
-class class_stats_report_toppages implements interface_admin_statsreports {
+class StatsReportToppages implements AdminStatsreportsInterface
+{
 
     //class vars
     private $intDateStart;
@@ -29,7 +37,8 @@ class class_stats_report_toppages implements interface_admin_statsreports {
     /**
      * Constructor
      */
-    public function __construct(Database $objDB, ToolkitAdmin $objToolkit, Lang $objTexts) {
+    public function __construct(Database $objDB, ToolkitAdmin $objToolkit, Lang $objTexts)
+    {
         $this->objTexts = $objTexts;
         $this->objToolkit = $objToolkit;
         $this->objDB = $objDB;
@@ -40,52 +49,62 @@ class class_stats_report_toppages implements interface_admin_statsreports {
      *
      * @return string
      */
-    public static function getExtensionName() {
+    public static function getExtensionName()
+    {
         return "core.stats.admin.statsreport";
     }
 
     /**
      * @param int $intEndDate
+     *
      * @return void
      */
-    public function setEndDate($intEndDate) {
+    public function setEndDate($intEndDate)
+    {
         $this->intDateEnd = $intEndDate;
     }
 
     /**
      * @param int $intStartDate
+     *
      * @return void
      */
-    public function setStartDate($intStartDate) {
+    public function setStartDate($intStartDate)
+    {
         $this->intDateStart = $intStartDate;
     }
 
     /**
      * @return string
      */
-    public function getTitle() {
+    public function getTitle()
+    {
         return $this->objTexts->getLang("topseiten", "stats");
     }
 
     /**
      * @return bool
      */
-    public function isIntervalable() {
+    public function isIntervalable()
+    {
         return true;
     }
 
     /**
      * @param int $intInterval
+     *
      * @return void
      */
-    public function setInterval($intInterval) {
+    public function setInterval($intInterval)
+    {
         $this->intInterval = $intInterval;
     }
 
     /**
      * @return string
      */
-    public function getReport() {
+    public function getReport()
+    {
         $strReturn = "";
         //Create Data-table
         $arrHeader = array();
@@ -95,15 +114,17 @@ class class_stats_report_toppages implements interface_admin_statsreports {
 
         //calc a few values
         $intSum = 0;
-        foreach($arrPages as $arrOnePage)
+        foreach ($arrPages as $arrOnePage) {
             $intSum += $arrOnePage["anzahl"];
+        }
 
         $intI = 0;
-        $objUser = new class_module_user_user(class_session::getInstance()->getUserID());
-        foreach($arrPages as $arrOnePage) {
+        $objUser = new UserUser(Session::getInstance()->getUserID());
+        foreach ($arrPages as $arrOnePage) {
             //Escape?
-            if($intI >= $objUser->getIntItemsPerPage())
+            if ($intI >= $objUser->getIntItemsPerPage()) {
                 break;
+            }
             $arrValues[$intI] = array();
             $arrValues[$intI][] = $intI + 1;
             $arrValues[$intI][] = $arrOnePage["name"];
@@ -130,8 +151,9 @@ class class_stats_report_toppages implements interface_admin_statsreports {
      *
      * @return mixed
      */
-    public function getTopPages() {
-        $objUser = new class_module_user_user(class_session::getInstance()->getUserID());
+    public function getTopPages()
+    {
+        $objUser = new UserUser(Session::getInstance()->getUserID());
         $strQuery = "SELECT stats_page as name, count(*) as anzahl, stats_language as language
 						FROM "._dbprefix_."stats_data
 						WHERE stats_date > ?
@@ -145,7 +167,8 @@ class class_stats_report_toppages implements interface_admin_statsreports {
     /**
      * @return array|string
      */
-    public function getReportGraph() {
+    public function getReportGraph()
+    {
         $arrReturn = array();
         //collect data
         $arrPages = $this->getTopPages();
@@ -154,20 +177,21 @@ class class_stats_report_toppages implements interface_admin_statsreports {
         $arrPlots = array();
         $arrLabels = array();
         $intCount = 1;
-        foreach($arrPages as $arrOnePage) {
+        foreach ($arrPages as $arrOnePage) {
             $arrGraphData[] = $arrOnePage["anzahl"];
             $arrLabels[] = $intCount;
-            if($intCount <= 6) {
+            if ($intCount <= 6) {
                 $arrPlots[$arrOnePage["name"]] = array();
             }
 
-            if($intCount++ >= 9)
+            if ($intCount++ >= 9) {
                 break;
+            }
         }
 
-        if(count($arrGraphData) > 1) {
+        if (count($arrGraphData) > 1) {
             //generate a bar-chart
-            $objGraph = class_graph_factory::getGraphInstance();
+            $objGraph = GraphFactory::getGraphInstance();
             $objGraph->setArrXAxisTickLabels($arrLabels);
             $objGraph->addBarChartSet($arrGraphData, $this->objTexts->getLang("top_seiten_titel", "stats"));
             $objGraph->setStrXAxisTitle($this->objTexts->getLang("top_seiten_titel", "stats"));
@@ -186,14 +210,14 @@ class class_stats_report_toppages implements interface_admin_statsreports {
             $this->intDateEnd = $this->intDateStart + 60 * 60 * 24 * $this->intInterval;
 
             $intCount = 0;
-            while($this->intDateStart <= $intGlobalEnd) {
+            while ($this->intDateStart <= $intGlobalEnd) {
                 $arrPagesData = $this->getTopPages();
                 //init plot array for this period
                 $arrTickLabels[] = date("d.m.", $this->intDateStart);
-                foreach($arrPlots as $strPage => &$arrOnePlot) {
+                foreach ($arrPlots as $strPage => &$arrOnePlot) {
                     $arrOnePlot[$intCount] = 0;
-                    foreach($arrPagesData as $arrOnePage) {
-                        if($arrOnePage["name"] == $strPage) {
+                    foreach ($arrPagesData as $arrOnePage) {
+                        if ($arrOnePage["name"] == $strPage) {
                             $arrOnePlot[$intCount] += $arrOnePage["anzahl"];
                         }
                     }
@@ -204,11 +228,11 @@ class class_stats_report_toppages implements interface_admin_statsreports {
                 $intCount++;
             }
             //create graph
-            if($intCount > 1) {
-                $objGraph = class_graph_factory::getGraphInstance();
+            if ($intCount > 1) {
+                $objGraph = GraphFactory::getGraphInstance();
                 $objGraph->setArrXAxisTickLabels($arrTickLabels);
 
-                foreach($arrPlots as $arrPlotName => $arrPlotData) {
+                foreach ($arrPlots as $arrPlotName => $arrPlotData) {
                     $objGraph->addLinePlot($arrPlotData, $arrPlotName);
                 }
                 $arrReturn[] = $objGraph->renderGraph();
@@ -219,8 +243,9 @@ class class_stats_report_toppages implements interface_admin_statsreports {
 
             return $arrReturn;
         }
-        else
+        else {
             return "";
+        }
     }
 
 }

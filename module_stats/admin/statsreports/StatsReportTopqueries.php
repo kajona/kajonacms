@@ -5,16 +5,26 @@
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 ********************************************************************************************************/
 
+namespace Kajona\Stats\Admin\Statsreports;
+
+
+use Kajona\Stats\Admin\AdminStatsreportsInterface;
 use Kajona\System\Admin\ToolkitAdmin;
 use Kajona\System\System\Database;
+use Kajona\System\System\GraphFactory;
 use Kajona\System\System\Lang;
+use Kajona\System\System\Session;
+use Kajona\System\System\SystemSetting;
+use Kajona\System\System\UserUser;
+
 /**
  * This plugin creates a view common numbers, such as "user online" oder "total pagehits"
  *
  * @package module_stats
  * @author sidler@mulchprod.de
  */
-class class_stats_report_topqueries implements interface_admin_statsreports {
+class StatsReportTopqueries implements AdminStatsreportsInterface
+{
 
     //class vars
     private $intDateStart;
@@ -27,7 +37,8 @@ class class_stats_report_topqueries implements interface_admin_statsreports {
     /**
      * Constructor
      */
-    public function __construct(Database $objDB, ToolkitAdmin $objToolkit, Lang $objTexts) {
+    public function __construct(Database $objDB, ToolkitAdmin $objToolkit, Lang $objTexts)
+    {
 
         $this->objTexts = $objTexts;
         $this->objToolkit = $objToolkit;
@@ -39,52 +50,62 @@ class class_stats_report_topqueries implements interface_admin_statsreports {
      *
      * @return string
      */
-    public static function getExtensionName() {
+    public static function getExtensionName()
+    {
         return "core.stats.admin.statsreport";
     }
 
     /**
      * @param int $intEndDate
+     *
      * @return void
      */
-    public function setEndDate($intEndDate) {
+    public function setEndDate($intEndDate)
+    {
         $this->intDateEnd = $intEndDate;
     }
 
     /**
      * @param int $intStartDate
+     *
      * @return void
      */
-    public function setStartDate($intStartDate) {
+    public function setStartDate($intStartDate)
+    {
         $this->intDateStart = $intStartDate;
     }
 
     /**
      * @return string
      */
-    public function getTitle() {
+    public function getTitle()
+    {
         return $this->objTexts->getLang("topqueries", "stats");
     }
 
     /**
      * @return bool
      */
-    public function isIntervalable() {
+    public function isIntervalable()
+    {
         return false;
     }
 
     /**
      * @param int $intInterval
+     *
      * @return void
      */
-    public function setInterval($intInterval) {
+    public function setInterval($intInterval)
+    {
 
     }
 
     /**
      * @return string
      */
-    public function getReport() {
+    public function getReport()
+    {
         $strReturn = "";
         //Create Data-table
         $arrHeader = array();
@@ -94,15 +115,15 @@ class class_stats_report_topqueries implements interface_admin_statsreports {
 
         //calc a few values
         $intSum = 0;
-        foreach($arrStats as $intHits) {
+        foreach ($arrStats as $intHits) {
             $intSum += $intHits;
         }
 
         $intI = 0;
-        $objUser = new class_module_user_user(class_session::getInstance()->getUserID());
-        foreach($arrStats as $strKey => $intHits) {
+        $objUser = new UserUser(Session::getInstance()->getUserID());
+        foreach ($arrStats as $strKey => $intHits) {
             //Escape?
-            if($intI >= $objUser->getIntItemsPerPage()) {
+            if ($intI >= $objUser->getIntItemsPerPage()) {
                 break;
             }
             $arrValues[$intI] = array();
@@ -128,15 +149,16 @@ class class_stats_report_topqueries implements interface_admin_statsreports {
      *
      * @return mixed
      */
-    public function getTopQueries() {
+    public function getTopQueries()
+    {
         //Load all records in the passed interval
-        $arrBlocked = explode(",", class_module_system_setting::getConfigValue("_stats_exclusionlist_"));
+        $arrBlocked = explode(",", SystemSetting::getConfigValue("_stats_exclusionlist_"));
 
         $arrParams = array($this->intDateStart, $this->intDateEnd);
 
         $strExclude = "";
-        foreach($arrBlocked as $strBlocked) {
-            if($strBlocked != "") {
+        foreach ($arrBlocked as $strBlocked) {
+            if ($strBlocked != "") {
                 $strExclude .= " AND stats_referer NOT LIKE ? \n";
                 $arrParams[] = "%".str_replace("%", "\%", $strBlocked)."%";
             }
@@ -155,14 +177,14 @@ class class_stats_report_topqueries implements interface_admin_statsreports {
         $arrHits = array();
         //Suchpatterns: q=, query=
         $arrQuerypatterns = array("q=", "query=");
-        foreach($arrRecords as $arrOneRecord) {
-            foreach($arrQuerypatterns as $strOnePattern) {
-                if(uniStrpos($arrOneRecord["stats_referer"], $strOnePattern) !== false) {
+        foreach ($arrRecords as $arrOneRecord) {
+            foreach ($arrQuerypatterns as $strOnePattern) {
+                if (uniStrpos($arrOneRecord["stats_referer"], $strOnePattern) !== false) {
                     $strQueryterm = uniSubstr($arrOneRecord["stats_referer"], (uniStrpos($arrOneRecord["stats_referer"], $strOnePattern) + uniStrlen($strOnePattern)));
                     $strQueryterm = uniSubstr($strQueryterm, 0, uniStrpos($strQueryterm, "&"));
                     $strQueryterm = uniStrtolower(trim(urldecode($strQueryterm)));
-                    if($strQueryterm != "") {
-                        if(isset($arrHits[$strQueryterm])) {
+                    if ($strQueryterm != "") {
+                        if (isset($arrHits[$strQueryterm])) {
                             $arrHits[$strQueryterm]++;
                         }
                         else {
@@ -180,25 +202,26 @@ class class_stats_report_topqueries implements interface_admin_statsreports {
     /**
      * @return mixed|string
      */
-    public function getReportGraph() {
+    public function getReportGraph()
+    {
         //collect data
         $arrPages = $this->getTopQueries();
 
         $arrGraphData = array();
         $arrLabels = array();
         $intCount = 1;
-        foreach($arrPages as $intHits) {
+        foreach ($arrPages as $intHits) {
             $arrGraphData[$intCount] = $intHits;
             $arrLabels[] = $intCount;
-            if($intCount++ >= 8) {
+            if ($intCount++ >= 8) {
                 break;
             }
         }
 
 
         //generate a bar-chart
-        if(count($arrGraphData) > 1) {
-            $objGraph = class_graph_factory::getGraphInstance();
+        if (count($arrGraphData) > 1) {
+            $objGraph = GraphFactory::getGraphInstance();
 
             $objGraph->setArrXAxisTickLabels($arrLabels);
             $objGraph->addBarChartSet($arrGraphData, $this->objTexts->getLang("top_query_titel", "stats"));

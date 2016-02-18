@@ -5,6 +5,11 @@
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 ********************************************************************************************************/
 
+namespace Kajona\Stats\System;
+
+use phpbrowscap\Exception;
+
+
 /**
  * A simple wrapper to browscap-php
  *
@@ -14,14 +19,16 @@
  * @module stats
  * @moduleId _stats_modul_id_
  */
-class class_browscap  {
+class Browscap
+{
 
     /**
      * @var \phpbrowscap\Browscap
      */
     private $objBrowscap;
 
-    public function __construct() {
+    public function __construct()
+    {
         require_once __DIR__."/../vendor/autoload.php";
 
         $this->objBrowscap = new \phpbrowscap\Browscap(_realpath_._projectpath_."/temp");
@@ -33,13 +40,14 @@ class class_browscap  {
     /**
      * Returns the browser and version (e.g. chrome 39) for
      * the given useragent
+     *
      * @param $strUseragent
      *
      * @return mixed
-     * @throws Exception
      * @throws \phpbrowscap\Exception
      */
-    public function getBrowserForUseragent($strUseragent) {
+    public function getBrowserForUseragent($strUseragent)
+    {
         $objInfo = $this->objBrowscap->getBrowser($strUseragent);
         return $objInfo->Browser." ".$objInfo->Version;
     }
@@ -47,28 +55,30 @@ class class_browscap  {
     /**
      * Returns the platform and version (e.g. OsX 10.10) for
      * the given useragent
+     *
      * @param $strUseragent
      *
      * @return mixed
-     * @throws Exception
      * @throws \phpbrowscap\Exception
      */
-    public function getPlatformForUseragent($strUseragent) {
+    public function getPlatformForUseragent($strUseragent)
+    {
         $objInfo = $this->objBrowscap->getBrowser($strUseragent);
-        return $objInfo->Platform. " ".$objInfo->Platform_Version;
+        return $objInfo->Platform." ".$objInfo->Platform_Version;
     }
-
-
 
 
     /**
      * Updates the internal browscap.ini and the cache file
+     *
      * @throws \phpbrowscap\Exception
      */
-    public function updateBrowscap() {
+    public function updateBrowscap()
+    {
         try {
             $this->objBrowscap->updateCache();
-        } catch(Exception $objE) {
+        }
+        catch (Exception $objE) {
 
         }
     }

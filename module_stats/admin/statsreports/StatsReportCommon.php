@@ -7,16 +7,25 @@
 *	$Id$                                *
 ********************************************************************************************************/
 
+namespace Kajona\Stats\Admin\Statsreports;
+
+
+use Kajona\Stats\Admin\AdminStatsreportsInterface;
 use Kajona\System\Admin\ToolkitAdmin;
+use Kajona\System\System\Carrier;
 use Kajona\System\System\Database;
+use Kajona\System\System\GraphFactory;
 use Kajona\System\System\Lang;
+use Kajona\System\System\SystemSetting;
+
 /**
  * This plugin creates a view common numbers, such as "user online" or "total pagehits"
  *
  * @package module_stats
  * @author sidler@mulchprod.de
  */
-class class_stats_report_common implements interface_admin_statsreports {
+class StatsReportCommon implements AdminStatsreportsInterface
+{
 
     //class vars
     private $intDateStart;
@@ -31,14 +40,16 @@ class class_stats_report_common implements interface_admin_statsreports {
     /**
      * Constructor
      */
-    public function __construct(Database $objDB, ToolkitAdmin $objToolkit, Lang $objTexts) {
+    public function __construct(Database $objDB, ToolkitAdmin $objToolkit, Lang $objTexts)
+    {
 
         $this->objTexts = $objTexts;
         $this->objToolkit = $objToolkit;
         $this->objDB = $objDB;
 
-        if(class_carrier::getInstance()->getObjConfig()->getPhpIni("memory_limit") < 30)
+        if (Carrier::getInstance()->getObjConfig()->getPhpIni("memory_limit") < 30) {
             @ini_set("memory_limit", "30M");
+        }
     }
 
     /**
@@ -46,52 +57,62 @@ class class_stats_report_common implements interface_admin_statsreports {
      *
      * @return string
      */
-    public static function getExtensionName() {
+    public static function getExtensionName()
+    {
         return "core.stats.admin.statsreport";
     }
 
     /**
      * @param int $intEndDate
+     *
      * @return void
      */
-    public function setEndDate($intEndDate) {
+    public function setEndDate($intEndDate)
+    {
         $this->intDateEnd = $intEndDate;
     }
 
     /**
      * @param int $intStartDate
+     *
      * @return void
      */
-    public function setStartDate($intStartDate) {
+    public function setStartDate($intStartDate)
+    {
         $this->intDateStart = $intStartDate;
     }
 
     /**
      * @return string
      */
-    public function getTitle() {
+    public function getTitle()
+    {
         return $this->objTexts->getLang("allgemein", "stats");
     }
 
     /**
      * @return bool
      */
-    public function isIntervalable() {
+    public function isIntervalable()
+    {
         return true;
     }
 
     /**
      * @param int $intInterval
+     *
      * @return void
      */
-    public function setInterval($intInterval) {
+    public function setInterval($intInterval)
+    {
         $this->intInterval = $intInterval;
     }
 
     /**
      * @return string
      */
-    public function getReport() {
+    public function getReport()
+    {
         $strReturn = "";
 
         //Create Data-table
@@ -133,7 +154,8 @@ class class_stats_report_common implements interface_admin_statsreports {
      *
      * @return int
      */
-    public function getHits() {
+    public function getHits()
+    {
         $strQuery = "SELECT COUNT(*)
 						FROM "._dbprefix_."stats_data
 						WHERE stats_date > ?
@@ -153,7 +175,8 @@ class class_stats_report_common implements interface_admin_statsreports {
      *
      * @return array
      */
-    private function getHitsForOnePeriod($intStart, $intEnd) {
+    private function getHitsForOnePeriod($intStart, $intEnd)
+    {
         $strQuery = "SELECT COUNT(*)
 						FROM "._dbprefix_."stats_data
 						WHERE stats_date > ?
@@ -168,7 +191,8 @@ class class_stats_report_common implements interface_admin_statsreports {
      *
      * @return int
      */
-    public function getVisitors() {
+    public function getVisitors()
+    {
 
         $strQuery = "SELECT stats_ip , stats_browser
 						FROM "._dbprefix_."stats_data
@@ -189,7 +213,8 @@ class class_stats_report_common implements interface_admin_statsreports {
      *
      * @return array
      */
-    private function getVisitorsForOnePeriod($intStart, $intEnd) {
+    private function getVisitorsForOnePeriod($intStart, $intEnd)
+    {
         $strQuery = "SELECT stats_ip, stats_browser
 						FROM "._dbprefix_."stats_data
 						WHERE stats_date > ?
@@ -204,13 +229,15 @@ class class_stats_report_common implements interface_admin_statsreports {
      *
      * @return int
      */
-    private function getPagesPerVisit() {
+    private function getPagesPerVisit()
+    {
         $intReturn = 0;
         $intUser = $this->getVisitors();
         $intHits = $this->getHits();
 
-        if($intHits != 0)
+        if ($intHits != 0) {
             $intReturn = (int)($intHits / $intUser);
+        }
 
         return $intReturn;
     }
@@ -220,13 +247,14 @@ class class_stats_report_common implements interface_admin_statsreports {
      *
      * @return int
      */
-    public function getNumberOfCurrentUsers() {
+    public function getNumberOfCurrentUsers()
+    {
         $strQuery = "SELECT stats_ip, stats_browser, count(*)
 					  FROM "._dbprefix_."stats_data
 					  WHERE stats_date > ?
 					  GROUP BY stats_ip, stats_browser";
 
-        $arrRow = $this->objDB->getPArray($strQuery, array(time() - class_module_system_setting::getConfigValue("_stats_duration_online_")));
+        $arrRow = $this->objDB->getPArray($strQuery, array(time() - SystemSetting::getConfigValue("_stats_duration_online_")));
 
         return count($arrRow);
     }
@@ -236,7 +264,8 @@ class class_stats_report_common implements interface_admin_statsreports {
      *
      * @return int
      */
-    private function getTimePerVisit() {
+    private function getTimePerVisit()
+    {
         $strQuery = "SELECT MAX(stats_date) as max,
                             MIN(stats_date) as min,
                             MAX(stats_date)-MIN(stats_date) as dauer,
@@ -249,22 +278,25 @@ class class_stats_report_common implements interface_admin_statsreports {
 
         $arrSessions = $this->objDB->getPArray($strQuery, array($this->intDateStart, $this->intDateEnd));
         $intTime = 0;
-        foreach($arrSessions as $arrOneSession)
+        foreach ($arrSessions as $arrOneSession) {
             $intTime += $arrOneSession["dauer"];
+        }
 
-        if(count($arrSessions) > 0) {
+        if (count($arrSessions) > 0) {
             $intTime = $intTime / count($arrSessions);
 
             return ceil($intTime);
         }
-        else
+        else {
             return "0";
+        }
     }
 
     /**
      * @return array|string
      */
-    public function getReportGraph() {
+    public function getReportGraph()
+    {
         //load datasets, reloading after 30 days to limit memory consumption
         $arrHits = array();
         $arrUser = array();
@@ -276,7 +308,7 @@ class class_stats_report_common implements interface_admin_statsreports {
         $intDBEnd = ($intDBStart + $this->intInterval * 24 * 60 * 60);
 
 
-        while($intDBStart <= $this->intDateEnd) {
+        while ($intDBStart <= $this->intDateEnd) {
 
             $arrTickLabels[$intCount] = date("d.m.", $intDBStart);
             $arrHits[$intCount] = $this->getHitsForOnePeriod($intDBStart, $intDBEnd);
@@ -290,10 +322,10 @@ class class_stats_report_common implements interface_admin_statsreports {
         }
 
         //create a graph ->line-graph
-        if($intCount > 1) {
+        if ($intCount > 1) {
 
 
-            $objChart1 = class_graph_factory::getGraphInstance();
+            $objChart1 = GraphFactory::getGraphInstance();
             $objChart1->setStrGraphTitle($this->objTexts->getLang("graph_hitsPerDay", "stats"));
             $objChart1->setStrXAxisTitle($this->objTexts->getLang("graph_date", "stats"));
             $objChart1->setStrYAxisTitle($this->objTexts->getLang("graph_hits", "stats"));
@@ -303,7 +335,7 @@ class class_stats_report_common implements interface_admin_statsreports {
             $objChart1->addLinePlot($arrHits, "Hits");
             $objChart1->setBitRenderLegend(false);
 
-            $objChart2 = class_graph_factory::getGraphInstance();
+            $objChart2 = GraphFactory::getGraphInstance();
             $objChart2->setStrGraphTitle($this->objTexts->getLang("graph_visitorsPerDay", "stats"));
             $objChart2->setStrXAxisTitle($this->objTexts->getLang("graph_date", "stats"));
             $objChart2->setStrYAxisTitle($this->objTexts->getLang("graph_visitors", "stats"));
@@ -318,8 +350,9 @@ class class_stats_report_common implements interface_admin_statsreports {
             return array($objChart1->renderGraph(), $objChart2->renderGraph());
 
         }
-        else
+        else {
             return "";
+        }
     }
 
 }

@@ -6,9 +6,17 @@
 *-------------------------------------------------------------------------------------------------------*
 *	$Id$                           *
 ********************************************************************************************************/
+
+namespace Kajona\Stats\Admin\Statsreports;
+
+use Kajona\Stats\Admin\AdminStatsreportsInterface;
 use Kajona\System\Admin\ToolkitAdmin;
 use Kajona\System\System\Database;
 use Kajona\System\System\Lang;
+use Kajona\System\System\Link;
+use Kajona\System\System\Session;
+use Kajona\System\System\SystemSetting;
+use Kajona\System\System\UserUser;
 
 /**
  * This plugin creates a view common numbers, such as "user online" oder "total pagehits"
@@ -16,7 +24,8 @@ use Kajona\System\System\Lang;
  * @package module_stats
  * @author sidler@mulchprod.de
  */
-class class_stats_report_topreferers implements interface_admin_statsreports {
+class StatsReportTopreferers implements AdminStatsreportsInterface
+{
 
     //class vars
     private $intDateStart;
@@ -30,7 +39,8 @@ class class_stats_report_topreferers implements interface_admin_statsreports {
     /**
      * Constructor
      */
-    public function __construct(Database $objDB, ToolkitAdmin $objToolkit, Lang $objTexts) {
+    public function __construct(Database $objDB, ToolkitAdmin $objToolkit, Lang $objTexts)
+    {
         $this->objTexts = $objTexts;
         $this->objToolkit = $objToolkit;
         $this->objDB = $objDB;
@@ -41,52 +51,62 @@ class class_stats_report_topreferers implements interface_admin_statsreports {
      *
      * @return string
      */
-    public static function getExtensionName() {
+    public static function getExtensionName()
+    {
         return "core.stats.admin.statsreport";
     }
 
     /**
      * @param int $intEndDate
+     *
      * @return void
      */
-    public function setEndDate($intEndDate) {
+    public function setEndDate($intEndDate)
+    {
         $this->intDateEnd = $intEndDate;
     }
 
     /**
      * @param int $intStartDate
+     *
      * @return void
      */
-    public function setStartDate($intStartDate) {
+    public function setStartDate($intStartDate)
+    {
         $this->intDateStart = $intStartDate;
     }
 
     /**
      * @return string
      */
-    public function getTitle() {
+    public function getTitle()
+    {
         return $this->objTexts->getLang("topreferer", "stats");
     }
 
     /**
      * @return bool
      */
-    public function isIntervalable() {
+    public function isIntervalable()
+    {
         return false;
     }
 
     /**
      * @param int $intInterval
+     *
      * @return void
      */
-    public function setInterval($intInterval) {
+    public function setInterval($intInterval)
+    {
 
     }
 
     /**
      * @return string
      */
-    public function getReport() {
+    public function getReport()
+    {
         $strReturn = "";
 
         //Create Data-table
@@ -97,20 +117,24 @@ class class_stats_report_topreferers implements interface_admin_statsreports {
 
         //calc a few values
         $intSum = 0;
-        foreach($arrStats as $arrOneStat)
+        foreach ($arrStats as $arrOneStat) {
             $intSum += $arrOneStat["anzahl"];
+        }
 
         $intI = 0;
-        $objUser = new class_module_user_user(class_session::getInstance()->getUserID());
-        foreach($arrStats as $arrOneStat) {
+        $objUser = new UserUser(Session::getInstance()->getUserID());
+        foreach ($arrStats as $arrOneStat) {
             //Escape?
-            if($intI >= $objUser->getIntItemsPerPage())
+            if ($intI >= $objUser->getIntItemsPerPage()) {
                 break;
+            }
 
-            if($arrOneStat["refurl"] == "")
+            if ($arrOneStat["refurl"] == "") {
                 $arrOneStat["refurl"] = $this->objTexts->getLang("referer_direkt", "stats");
-            else
-                $arrOneStat["refurl"] = class_link::getLinkPortal("", $arrOneStat["refurl"], "_blank", uniStrTrim($arrOneStat["refurl"], 45));
+            }
+            else {
+                $arrOneStat["refurl"] = Link::getLinkPortal("", $arrOneStat["refurl"], "_blank", uniStrTrim($arrOneStat["refurl"], 45));
+            }
 
             $arrValues[$intI] = array();
             $arrValues[$intI][] = $intI + 1;
@@ -136,21 +160,22 @@ class class_stats_report_topreferers implements interface_admin_statsreports {
      *
      * @return mixed
      */
-    public function getTopReferer() {
+    public function getTopReferer()
+    {
         //Build excluded domains
-        $arrBlocked = explode(",", class_module_system_setting::getConfigValue("_stats_exclusionlist_"));
+        $arrBlocked = explode(",", SystemSetting::getConfigValue("_stats_exclusionlist_"));
 
         $arrParams = array("%".str_replace("%", "\%", _webpath_)."%", $this->intDateStart, $this->intDateEnd);
 
         $strExclude = "";
-        foreach($arrBlocked as $strBlocked) {
-            if($strBlocked != "") {
+        foreach ($arrBlocked as $strBlocked) {
+            if ($strBlocked != "") {
                 $strExclude .= " AND stats_referer NOT LIKE ? \n";
                 $arrParams[] = "%".str_replace("%", "\%", $strBlocked)."%";
             }
         }
 
-        $objUser = new class_module_user_user(class_session::getInstance()->getUserID());
+        $objUser = new UserUser(Session::getInstance()->getUserID());
         $strQuery = "SELECT stats_referer as refurl, COUNT(*) as anzahl
 						FROM "._dbprefix_."stats_data
 						WHERE stats_referer NOT LIKE ?
@@ -166,7 +191,8 @@ class class_stats_report_topreferers implements interface_admin_statsreports {
     /**
      * @return string
      */
-    public function getReportGraph() {
+    public function getReportGraph()
+    {
         return "";
     }
 

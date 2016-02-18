@@ -1,31 +1,40 @@
 <?php
 
-require_once (__DIR__."/../../module_system/system/class_testbase.php");
+namespace Kajona\Stats\Tests;
 
-class class_test_statsReportsTest extends class_testbase {
+use Kajona\Stats\Admin\AdminStatsreportsInterface;
+use Kajona\System\System\Carrier;
+use Kajona\System\System\Resourceloader;
+use Kajona\System\System\Testbase;
 
-    public function testReports() {
+class StatsReportTest extends Testbase
+{
 
-        if(!defined("_skinwebpath_"))
+    public function testReports()
+    {
+
+        if (!defined("_skinwebpath_")) {
             define("_skinwebpath_", "1");
+        }
 
         echo "processing reports...\n";
 
-        $arrReportsInFs = class_resourceloader::getInstance()->getFolderContent("/admin/statsreports", array(".php"), false, function($strOneFile) {
-            if(uniStripos($strOneFile, "class_stats_report") === false)
+        $arrReportsInFs = Resourceloader::getInstance()->getFolderContent("/admin/statsreports", array(".php"), false, function ($strOneFile) {
+            if (uniStripos($strOneFile, "class_stats_report") === false) {
                 return false;
+            }
 
             return true;
         },
-        function(&$strOneFile) {
-            $strOneFile = uniSubstr($strOneFile, 0, -4);
-            $strOneFile = new $strOneFile(class_carrier::getInstance()->getObjDB(), class_carrier::getInstance()->getObjToolkit("admin"), class_carrier::getInstance()->getObjLang());
-        });
+            function (&$strOneFile) {
+                $strOneFile = uniSubstr($strOneFile, 0, -4);
+                $strOneFile = new $strOneFile(Carrier::getInstance()->getObjDB(), Carrier::getInstance()->getObjToolkit("admin"), Carrier::getInstance()->getObjLang());
+            });
 
         $arrReports = array();
-        foreach($arrReportsInFs as $objReport) {
+        foreach ($arrReportsInFs as $objReport) {
 
-            if($objReport instanceof interface_admin_statsreports) {
+            if ($objReport instanceof AdminStatsreportsInterface) {
                 $arrReports[$objReport->getTitle()] = $objReport;
             }
 
@@ -40,15 +49,14 @@ class class_test_statsReportsTest extends class_testbase {
             $objReport->setInterval(2);
         }
 
-        /** @var interface_admin_statsreports $objReport */
-        foreach($arrReports as $objReport) {
+        /** @var AdminStatsreportsInterface $objReport */
+        foreach ($arrReports as $objReport) {
             ob_start();
             echo "processing report ".$objReport->getTitle()."\n";
 
             $objReport->getReport();
             $objReport->getReportGraph();
         }
-
 
     }
 }
