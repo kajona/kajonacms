@@ -9,8 +9,8 @@
 
 namespace Kajona\Dashboard\Admin\Widgets;
 
-use class_module_packagemanager_manager;
 use Kajona\Dashboard\System\DashboardWidget;
+use Kajona\Packagemanager\System\PackagemanagerManager;
 use Kajona\System\System\Carrier;
 use Kajona\System\System\SystemAspect;
 use Kajona\System\System\SystemModule;
@@ -74,7 +74,7 @@ class AdminwidgetSysteminfo extends Adminwidget implements AdminwidgetInterface 
         }
         if($this->getFieldValue("kajona") == "checked") {
 
-            $objManager = new class_module_packagemanager_manager();
+            $objManager = new PackagemanagerManager();
             $arrPackageMetadata = $objManager->getAvailablePackages();
 
 
@@ -124,7 +124,7 @@ class AdminwidgetSysteminfo extends Adminwidget implements AdminwidgetInterface 
      */
     private function getLatestKernelVersion() {
 
-        $objManager = new class_module_packagemanager_manager();
+        $objManager = new PackagemanagerManager();
         $arrPackages = $objManager->scanForUpdates();
 
         $strVersion = "n.a.";

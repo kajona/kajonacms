@@ -9,8 +9,8 @@
 
 namespace Kajona\Dashboard\Admin\Widgets;
 
-use class_module_packagemanager_manager;
 use Kajona\Dashboard\System\DashboardWidget;
+use Kajona\Packagemanager\System\PackagemanagerManager;
 use Kajona\System\System\Link;
 use Kajona\System\System\SystemAspect;
 use Kajona\System\System\SystemModule;
@@ -54,7 +54,7 @@ class AdminwidgetUpdatecheck extends Adminwidget implements AdminwidgetInterface
         if(!SystemModule::getModuleByName("packagemanager")->rightEdit())
             return $this->getLang("commons_error_permissions");
 
-        $objManager = new class_module_packagemanager_manager();
+        $objManager = new PackagemanagerManager();
         $arrRemotePackages = $objManager->scanForUpdates();
 
         $strSystemVersion = "n.a.";
