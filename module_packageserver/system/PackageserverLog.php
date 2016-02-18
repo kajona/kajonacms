@@ -6,10 +6,7 @@
 
 namespace Kajona\Packageserver\System;
 
-use class_carrier;
-use \Kajona\System\System\Date;
-use \Kajona\System\System\Model;
-use \Kajona\System\System\ModelInterface;
+use Kajona\System\System\Carrier;
 
 
 /**
@@ -20,7 +17,8 @@ use \Kajona\System\System\ModelInterface;
  * @module mediamanager
  * @moduleId _packagemanager_module_id_
  */
-class PackageserverLog extends \Kajona\System\System\Model implements \Kajona\System\System\ModelInterface {
+class PackageserverLog extends \Kajona\System\System\Model implements \Kajona\System\System\ModelInterface
+{
 
     /**
      * Generates an entry in the logtable
@@ -29,8 +27,9 @@ class PackageserverLog extends \Kajona\System\System\Model implements \Kajona\Sy
      * @param $strIp
      * @param $strHostname
      */
-    public static function generateDlLog($strQueryParams, $strIp, $strHostname) {
-        $objDB = class_carrier::getInstance()->getObjDB();
+    public static function generateDlLog($strQueryParams, $strIp, $strHostname)
+    {
+        $objDB = Carrier::getInstance()->getObjDB();
         $strQuery = "INSERT INTO "._dbprefix_."packageserver_log
 	                   (log_id, log_query, log_ip, log_hostname, log_date) VALUES
 	                   (?, ?, ?, ?, ?)";
@@ -57,11 +56,12 @@ class PackageserverLog extends \Kajona\System\System\Model implements \Kajona\Sy
      *
      * @return mixed AS ARRAY
      */
-    public static function getLogData($intStart = null, $intEnd = null) {
+    public static function getLogData($intStart = null, $intEnd = null)
+    {
         $strQuery = "SELECT *
 					  FROM "._dbprefix_."packageserver_log
 					  ORDER BY log_date DESC";
-        return class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array(), $intStart, $intEnd);
+        return Carrier::getInstance()->getObjDB()->getPArray($strQuery, array(), $intStart, $intEnd);
     }
 
     /**
@@ -69,7 +69,8 @@ class PackageserverLog extends \Kajona\System\System\Model implements \Kajona\Sy
      *
      * @return int
      */
-    public function getLogDataCount() {
+    public function getLogDataCount()
+    {
         $strQuery = "SELECT COUNT(*)
 					  FROM "._dbprefix_."packageserver_log";
         $arrTemp = $this->objDB->getPRow($strQuery, array());
@@ -83,7 +84,8 @@ class PackageserverLog extends \Kajona\System\System\Model implements \Kajona\Sy
      *
      * @return string
      */
-    public function getStrDisplayName() {
+    public function getStrDisplayName()
+    {
         return "";
     }
 }
