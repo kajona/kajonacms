@@ -7,6 +7,15 @@
 *	$Id$                                *
 ********************************************************************************************************/
 
+namespace Kajona\Faqs\System;
+
+use class_search_result;
+use Kajona\System\System\AdminListableInterface;
+use Kajona\System\System\Link;
+use Kajona\System\System\OrmObjectlist;
+use Kajona\System\System\SearchPortalobjectInterface;
+
+
 /**
  * Model for a faqs category
  *
@@ -17,7 +26,8 @@
  * @module faqs
  * @moduleId _faqs_module_id_
  */
-class class_module_faqs_category extends \Kajona\System\System\Model implements \Kajona\System\System\ModelInterface, interface_admin_listable, interface_search_portalobject {
+class FaqsCategory extends \Kajona\System\System\Model implements \Kajona\System\System\ModelInterface, AdminListableInterface, SearchPortalobjectInterface
+{
 
     /**
      * @var string
@@ -43,7 +53,8 @@ class class_module_faqs_category extends \Kajona\System\System\Model implements 
      * @return string the name of the icon, not yet wrapped by getImageAdmin(). Alternatively, you may return an array containing
      *         [the image name, the alt-title]
      */
-    public function getStrIcon() {
+    public function getStrIcon()
+    {
         return "icon_folderClosed";
     }
 
@@ -52,7 +63,8 @@ class class_module_faqs_category extends \Kajona\System\System\Model implements 
      *
      * @return string
      */
-    public function getStrAdditionalInfo() {
+    public function getStrAdditionalInfo()
+    {
         return "";
     }
 
@@ -61,7 +73,8 @@ class class_module_faqs_category extends \Kajona\System\System\Model implements 
      *
      * @return string
      */
-    public function getStrLongDescription() {
+    public function getStrLongDescription()
+    {
         return "";
     }
 
@@ -70,7 +83,8 @@ class class_module_faqs_category extends \Kajona\System\System\Model implements 
      *
      * @return string
      */
-    public function getStrDisplayName() {
+    public function getStrDisplayName()
+    {
         return $this->getStrTitle();
     }
 
@@ -86,11 +100,12 @@ class class_module_faqs_category extends \Kajona\System\System\Model implements 
      * @see getLinkPortalHref()
      * @return mixed
      */
-    public function updateSearchResult(class_search_result $objResult) {
+    public function updateSearchResult(class_search_result $objResult)
+    {
         //search for matching pages
         $arrReturn = array();
 
-        $objORM = new class_orm_objectlist();
+        $objORM = new OrmObjectlist();
 
         $strQuery = "SELECT page_name,  page_id
                        FROM " . _dbprefix_ . "element_faqs,
@@ -106,20 +121,20 @@ class class_module_faqs_category extends \Kajona\System\System\Model implements 
                         )
                         AND system_prev_id = page_id
                         AND system_status = 1
-                        ".$objORM->getDeletedWhereRestriction()."
+                        " . $objORM->getDeletedWhereRestriction() . "
                         AND page_element_ph_language = ? ";
 
         $arrRows = $this->objDB->getPArray($strQuery, array($this->getSystemid(), $objResult->getObjSearch()->getStrPortalLangFilter()));
 
-        foreach($arrRows as $arrOnePage) {
+        foreach ($arrRows as $arrOnePage) {
 
             //check, if the post is available on a page using the current language
-            if(!isset($arrOnePage["page_name"]) || $arrOnePage["page_name"] == "") {
+            if (!isset($arrOnePage["page_name"]) || $arrOnePage["page_name"] == "") {
                 continue;
             }
 
             $objCurResult = clone($objResult);
-            $objCurResult->setStrPagelink(class_link::getLinkPortal($arrOnePage["page_name"], "", "_self", $arrOnePage["page_name"], "", "&highlight=" . urlencode(html_entity_decode($objResult->getObjSearch()->getStrQuery(), ENT_QUOTES, "UTF-8"))));
+            $objCurResult->setStrPagelink(Link::getLinkPortal($arrOnePage["page_name"], "", "_self", $arrOnePage["page_name"], "", "&highlight=" . urlencode(html_entity_decode($objResult->getObjSearch()->getStrQuery(), ENT_QUOTES, "UTF-8"))));
             $objCurResult->setStrPagename($arrOnePage["page_name"]);
             $objCurResult->setStrDescription($this->getStrTitle());
             $arrReturn[] = $objCurResult;
@@ -136,7 +151,8 @@ class class_module_faqs_category extends \Kajona\System\System\Model implements 
      *
      * @return mixed
      */
-    public function getContentLang() {
+    public function getContentLang()
+    {
         return "";
     }
 
@@ -147,16 +163,19 @@ class class_module_faqs_category extends \Kajona\System\System\Model implements 
      * @see getLinkAdminHref()
      * @return mixed
      */
-    public function getSearchAdminLinkForObject() {
+    public function getSearchAdminLinkForObject()
+    {
         return "";
     }
 
 
-    public function getStrTitle() {
+    public function getStrTitle()
+    {
         return $this->strTitle;
     }
 
-    public function setStrTitle($strTitle) {
+    public function setStrTitle($strTitle)
+    {
         $this->strTitle = $strTitle;
     }
 
