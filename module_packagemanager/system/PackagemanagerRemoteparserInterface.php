@@ -6,6 +6,8 @@
 *	$Id$                                  *
 ********************************************************************************************************/
 
+namespace Kajona\Packagemanager\System;
+
 
 /**
  * A remote parser knows how to handle the result of a queried remote content provider.
@@ -15,7 +17,8 @@
  * @since 4.0
  * @package module_packagemanager
  */
-interface interface_packagemanager_remoteparser {
+interface PackagemanagerRemoteparserInterface
+{
 
     /**
      * Returns the array of packages within the boundary of start and end index.

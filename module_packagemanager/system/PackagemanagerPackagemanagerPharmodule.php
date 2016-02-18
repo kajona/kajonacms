@@ -5,8 +5,22 @@
 *-------------------------------------------------------------------------------------------------------*
 *	$Id$                                  *
 ********************************************************************************************************/
+
+namespace Kajona\Packagemanager\System;
+
+use Kajona\System\System\Cache;
+use Kajona\System\System\Classloader;
+use Kajona\System\System\Exception;
+use Kajona\System\System\Filesystem;
+use Kajona\System\System\InstallerBase;
+use Kajona\System\System\InstallerInterface;
+use Kajona\System\System\InstallerRemovableInterface;
+use Kajona\System\System\Logger;
 use Kajona\System\System\PharModule;
 use Kajona\System\System\StringUtil;
+use Kajona\System\System\SystemSetting;
+use Phar;
+use RecursiveIteratorIterator;
 
 
 /**
@@ -16,8 +30,8 @@ use Kajona\System\System\StringUtil;
  * @author sidler@mulchprod.de
  * @since 4.0
  */
-class class_module_packagemanager_packagemanager_pharmodule extends class_module_packagemanager_packagemanager_module {
-
+class PackagemanagerPackagemanagerPharmodule extends PackagemanagerPackagemanagerModule
+{
 
 
     /**
@@ -26,17 +40,19 @@ class class_module_packagemanager_packagemanager_pharmodule extends class_module
      *
      * @return mixed
      */
-    public function getStrTargetPath() {
+    public function getStrTargetPath()
+    {
 
         $strTarget = $this->objMetadata->getStrTarget();
-        if($strTarget == "") {
+        if ($strTarget == "") {
             $strTarget = uniStrtolower($this->objMetadata->getStrType()."_".createFilename($this->objMetadata->getStrTitle(), true)).".phar";
         }
 
-        $arrModules = array_flip(class_classloader::getInstance()->getArrModules());
+        $arrModules = array_flip(Classloader::getInstance()->getArrModules());
 
-        if(isset($arrModules[$strTarget]))
+        if (isset($arrModules[$strTarget])) {
             return "/".$arrModules[$strTarget];
+        }
 
         return "/core/".$strTarget;
     }
@@ -48,18 +64,20 @@ class class_module_packagemanager_packagemanager_pharmodule extends class_module
      * In most cases, this is either located at /core or at /templates.
      * The original should be deleted afterwards.
      *
-     * @throws class_exception
+     * @throws Exception
      * @return void
      */
-    public function move2Filesystem() {
+    public function move2Filesystem()
+    {
         $strSource = $this->objMetadata->getStrPath();
 
-        if(!\Kajona\System\System\PharModule::isPhar(_realpath_.$strSource))
-            throw new class_exception("current package ".$strSource." is not a phar.", class_exception::$level_ERROR);
+        if (!\Kajona\System\System\PharModule::isPhar(_realpath_.$strSource)) {
+            throw new Exception("current package ".$strSource." is not a phar.", Exception::$level_ERROR);
+        }
 
-        class_logger::getInstance(class_logger::PACKAGEMANAGEMENT)->addLogRow("moving ".$strSource." to ".$this->getStrTargetPath(), class_logger::$levelInfo);
+        Logger::getInstance(Logger::PACKAGEMANAGEMENT)->addLogRow("moving ".$strSource." to ".$this->getStrTargetPath(), Logger::$levelInfo);
 
-        $objFilesystem = new class_filesystem();
+        $objFilesystem = new Filesystem();
         //set a chmod before copying the files - at least try to
         $objFilesystem->chmod($this->getStrTargetPath(), 0777);
 
@@ -71,9 +89,9 @@ class class_module_packagemanager_packagemanager_pharmodule extends class_module
         $objFilesystem->fileDelete($strSource);
 
         //shift the cache buster
-        $objSetting = class_module_system_setting::getConfigByName("_system_browser_cachebuster_");
-        if($objSetting != null) {
-            $objSetting->setStrValue((int)$objSetting->getStrValue()+1);
+        $objSetting = SystemSetting::getConfigByName("_system_browser_cachebuster_");
+        if ($objSetting != null) {
+            $objSetting->setStrValue((int)$objSetting->getStrValue() + 1);
             $objSetting->updateObjectToDb();
         }
     }
@@ -83,17 +101,20 @@ class class_module_packagemanager_packagemanager_pharmodule extends class_module
      * Invokes the installer, if given.
      * The installer itself is capable of detecting whether an update or a plain installation is required.
      *
-     * @throws class_exception
+     * @throws Exception
      * @return string
      */
-    public function installOrUpdate() {
+    public function installOrUpdate()
+    {
         $strReturn = "";
 
-        if(uniStrpos($this->getObjMetadata()->getStrPath(), "core") === false)
-            throw new class_exception("Current module not located in a core directory.", class_exception::$level_ERROR);
+        if (uniStrpos($this->getObjMetadata()->getStrPath(), "core") === false) {
+            throw new Exception("Current module not located in a core directory.", Exception::$level_ERROR);
+        }
 
-        if(!$this->isInstallable())
-            throw new class_exception("Current module isn't installable, not all requirements are given", class_exception::$level_ERROR);
+        if (!$this->isInstallable()) {
+            throw new Exception("Current module isn't installable, not all requirements are given", Exception::$level_ERROR);
+        }
 
         //search for an existing installer
         $objPhar = new Phar(_realpath_.$this->objMetadata->getStrPath());
@@ -108,19 +129,19 @@ class class_module_packagemanager_packagemanager_pharmodule extends class_module
         $arrInstaller = $this->getInstaller($this->getObjMetadata());
 
         //start with modules
-        foreach($arrInstaller as $objInstance) {
+        foreach ($arrInstaller as $objInstance) {
 
-            if(!$objInstance instanceof class_installer_base) {
+            if (!$objInstance instanceof InstallerBase) {
                 continue;
             }
 
             //skip element installers at first run
-            class_logger::getInstance(class_logger::PACKAGEMANAGEMENT)->addLogRow("triggering updateOrInstall() on installer ".get_class($objInstance).", all requirements given", class_logger::$levelInfo);
+            Logger::getInstance(Logger::PACKAGEMANAGEMENT)->addLogRow("triggering updateOrInstall() on installer ".get_class($objInstance).", all requirements given", Logger::$levelInfo);
             //trigger update or install
             $strReturn .= $objInstance->installOrUpdate();
         }
 
-        class_cache::flushCache();
+        Cache::flushCache();
         $this->updateDefaultTemplate();
 
         return $strReturn;
@@ -130,12 +151,13 @@ class class_module_packagemanager_packagemanager_pharmodule extends class_module
     /**
      * @return bool
      */
-    public function updateDefaultTemplate() {
+    public function updateDefaultTemplate()
+    {
 
         //read the module and extract
         $objPharModule = new PharModule($this->objMetadata->getStrPath());
-        $objFilesystem = new class_filesystem();
-        foreach($objPharModule->getContentMap() as $strKey => $strFullPath) {
+        $objFilesystem = new Filesystem();
+        foreach ($objPharModule->getContentMap() as $strKey => $strFullPath) {
 
             foreach (array("js", "css", "pics") as $strOneSubfolder) {
 
@@ -154,8 +176,6 @@ class class_module_packagemanager_packagemanager_pharmodule extends class_module
     }
 
 
-
-
     /**
      * Removes the current package, if possible, from the system
      *
@@ -163,33 +183,34 @@ class class_module_packagemanager_packagemanager_pharmodule extends class_module
      *
      * @return bool
      */
-    public function remove(&$strLog) {
+    public function remove(&$strLog)
+    {
 
-        if(!$this->isRemovable()) {
+        if (!$this->isRemovable()) {
             return false;
         }
 
         $bitReturn = true;
 
         //if we reach up until here, each installer should be an instance of interface_installer_removable
-        foreach($this->getInstaller($this->getObjMetadata()) as $objOneInstaller) {
-            if($objOneInstaller instanceof interface_installer_removable) {
+        foreach ($this->getInstaller($this->getObjMetadata()) as $objOneInstaller) {
+            if ($objOneInstaller instanceof InstallerRemovableInterface) {
                 $bitReturn = $bitReturn && $objOneInstaller->remove($strLog);
             }
         }
 
         //finally: delete the the module on file-system level
-        if($bitReturn) {
+        if ($bitReturn) {
             $strLog .= "Deleting file-system parts...\n";
-            $objFilesystem = new class_filesystem();
+            $objFilesystem = new Filesystem();
             $bitReturn = $objFilesystem->fileDelete($this->getObjMetadata()->getStrPath());
 
-            if(!$bitReturn) {
+            if (!$bitReturn) {
                 $strLog .= "Error deleting file-system parts!. Please remove manually: ".$this->getObjMetadata()->getStrPath()."";
             }
         }
 
-        $strLog.= "\n\nRemoval finished ".($bitReturn ? "successfully" : " with errors")."\n";
+        $strLog .= "\n\nRemoval finished ".($bitReturn ? "successfully" : " with errors")."\n";
 
         return $bitReturn;
     }
@@ -198,18 +219,19 @@ class class_module_packagemanager_packagemanager_pharmodule extends class_module
     /**
      * Internal helper, fetches all installers located within the passed package
      *
-     * @param class_module_packagemanager_metadata $objMetadata
+     * @param PackagemanagerMetadata $objMetadata
      *
-     * @return interface_installer[]
+     * @return InstallerInterface[]
      */
-    protected function getInstaller(class_module_packagemanager_metadata $objMetadata) {
+    protected function getInstaller(PackagemanagerMetadata $objMetadata)
+    {
 
         $objPhar = new Phar(_realpath_.$objMetadata->getStrPath());
         $arrReturn = array();
         foreach (new RecursiveIteratorIterator($objPhar) as $objFile) {
             if (strpos($objFile->getPathname(), "/installer/") !== false && uniSubstr($objFile->getPathname(), -4) === ".php") {
-                /** @var $objInstaller interface_installer */
-                $objInstaller = class_classloader::getInstance()->getInstanceFromFilename($objFile->getPathname());
+                /** @var $objInstaller InstallerInterface */
+                $objInstaller = Classloader::getInstance()->getInstanceFromFilename($objFile->getPathname());
                 $arrReturn[] = $objInstaller;
             }
         }

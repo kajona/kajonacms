@@ -3,8 +3,11 @@
 *   (c) 2007-2015 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
-*	$Id: class_module_packagemanager_remoteparser_factory.php 5154 2012-10-26 08:17:12Z sidler          *
+*	$Id: PackagemanagerRemoteparserFactory.php 5154 2012-10-26 08:17:12Z sidler          *
 ********************************************************************************************************/
+
+namespace Kajona\Packagemanager\System;
+
 
 /**
  * This factory inspects a remote API result and finds the remote parser implementation being
@@ -14,7 +17,8 @@
  * @author flo@mediaskills.org
  * @since 4.0
  */
-class class_module_packagemanager_remoteparser_factory {
+class PackagemanagerRemoteparserFactory
+{
 
     /**
      * Returns the according remote parser implementation for an API result.
@@ -26,13 +30,14 @@ class class_module_packagemanager_remoteparser_factory {
      * @param string $strProviderName
      * @param string $strPagerAddon
      *
-     * @return interface_packagemanager_remoteparser
+     * @return PackagemanagerRemoteparserInterface
      */
-    public static function getRemoteParser(array $remoteResponse, $intPageNumber, $intStart, $intEnd, $strProviderName, $strPagerAddon = "") {
+    public static function getRemoteParser(array $remoteResponse, $intPageNumber, $intStart, $intEnd, $strProviderName, $strPagerAddon = "")
+    {
 
-        if(array_key_exists('protocolVersion', $remoteResponse)) {
-            if($remoteResponse["protocolVersion"] == 4) {
-                return new class_module_packagemanager_remoteparser_v4(
+        if (array_key_exists('protocolVersion', $remoteResponse)) {
+            if ($remoteResponse["protocolVersion"] == 4) {
+                return new PackagemanagerRemoteparserV4(
                     $remoteResponse,
                     $intPageNumber,
                     $intStart,
@@ -44,7 +49,7 @@ class class_module_packagemanager_remoteparser_factory {
         }
 
         if (array_key_exists('numberOfTotalItems', $remoteResponse) && array_key_exists('items', $remoteResponse)) {
-            return new class_module_packagemanager_remoteparser_v4(
+            return new PackagemanagerRemoteparserV4(
                 $remoteResponse,
                 $intPageNumber,
                 $intStart,
@@ -55,7 +60,7 @@ class class_module_packagemanager_remoteparser_factory {
         }
 
         //fallback: the v4 parser
-        return new class_module_packagemanager_remoteparser_v3($remoteResponse);
+        return new PackagemanagerRemoteparserV3($remoteResponse);
     }
 
 }

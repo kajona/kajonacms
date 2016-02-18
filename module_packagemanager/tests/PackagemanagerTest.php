@@ -1,14 +1,22 @@
 <?php
-require_once (__DIR__ . "/../../module_system/system/class_testbase.php");
 
-class class_test_packagemanager extends class_testbase  {
+namespace Kajona\Packagemanager\Tests;
+
+use Kajona\Packagemanager\System\PackagemanagerManager;
+use Kajona\Packagemanager\System\PackagemanagerMetadata;
+use Kajona\System\System\Filesystem;
+use Kajona\System\System\Resourceloader;
+use Kajona\System\System\Testbase;
+use Kajona\System\System\Zip;
+
+class PackagemanagerTest extends Testbase  {
 
 
 
     public function testMetadataReader() {
 
-        $objReader = new class_module_packagemanager_metadata();
-        $objReader->autoInit(class_resourceloader::getInstance()->getCorePathForModule("module_packagemanager")."/module_packagemanager");
+        $objReader = new PackagemanagerMetadata();
+        $objReader->autoInit(Resourceloader::getInstance()->getCorePathForModule("module_packagemanager")."/module_packagemanager");
 
         echo $objReader."\n\n";
     }
@@ -16,7 +24,7 @@ class class_test_packagemanager extends class_testbase  {
 
     public function testInstalledPackageList() {
 
-        $objManager = new class_module_packagemanager_manager();
+        $objManager = new PackagemanagerManager();
         $arrModules = $objManager->getAvailablePackages();
 
         foreach($arrModules as $intKey => $objOneModule) {
@@ -27,7 +35,7 @@ class class_test_packagemanager extends class_testbase  {
 
     public function testExtractAndMove() {
 
-        $objFilesystem = new class_filesystem();
+        $objFilesystem = new Filesystem();
 
         $objFilesystem->folderCreate(_projectpath_."/temp/moduletest");
 
@@ -36,7 +44,7 @@ class class_test_packagemanager extends class_testbase  {
         $objFilesystem->folderCreate(_projectpath_."/temp/moduletest/system");
         file_put_contents(_realpath_._projectpath_."/temp/moduletest/system/test.txt", $this->getStrMetadata());
 
-        $objZip = new class_zip();
+        $objZip = new Zip();
         $objZip->openArchiveForWriting(_projectpath_."/temp/autotest.zip");
         $objZip->addFile(_projectpath_."/temp/moduletest/metadata.xml", "/metadata.xml");
         $objZip->addFile(_projectpath_."/temp/moduletest/system/test.txt", "/system/test.txt");
@@ -45,7 +53,7 @@ class class_test_packagemanager extends class_testbase  {
         $objFilesystem->folderDeleteRecursive(_projectpath_."/temp/moduletest/");
 
 
-        $objManager = new class_module_packagemanager_manager();
+        $objManager = new PackagemanagerManager();
         $objPackageManager = $objManager->getPackageManagerForPath(_projectpath_."/temp/autotest.zip");
         $this->assertEquals(get_class($objPackageManager), "class_module_packagemanager_packagemanager_module");
 
@@ -57,7 +65,7 @@ class class_test_packagemanager extends class_testbase  {
         $this->assertFileExists(_realpath_."/core/module_autotest/metadata.xml");
         $this->assertFileExists(_realpath_."/core/module_autotest/system/test.txt");
 
-        $objMetadata = new class_module_packagemanager_metadata();
+        $objMetadata = new PackagemanagerMetadata();
         $objMetadata->autoInit("/core/module_autotest/");
 
         $this->assertEquals("Autotest", $objMetadata->getStrTitle());
@@ -65,7 +73,7 @@ class class_test_packagemanager extends class_testbase  {
         $this->assertEquals("3.9.1", $objMetadata->getStrVersion());
         $this->assertEquals("Kajona Team", $objMetadata->getStrAuthor());
         $this->assertEquals("module_autotest", $objMetadata->getStrTarget());
-        $this->assertEquals(class_module_packagemanager_manager::STR_TYPE_MODULE, $objMetadata->getStrType());
+        $this->assertEquals(PackagemanagerManager::STR_TYPE_MODULE, $objMetadata->getStrType());
         $this->assertEquals(false, $objMetadata->getBitProvidesInstaller());
 
         $arrRequired = $objMetadata->getArrRequiredModules();
@@ -89,7 +97,7 @@ class class_test_packagemanager extends class_testbase  {
 
 
     public function testProviderConfig() {
-        $objManager = new class_module_packagemanager_manager();
+        $objManager = new PackagemanagerManager();
         $arrProviders = $objManager->getContentproviders();
         $this->assertEquals(3, count($arrProviders));
         $this->assertEquals("class_module_packagemanager_contentprovider_local", get_class($arrProviders[2]));
@@ -97,13 +105,13 @@ class class_test_packagemanager extends class_testbase  {
 
 
     public function testUpdateOrInstall() {
-        $objManager = new class_module_packagemanager_manager();
-        $objHandler = $objManager->getPackageManagerForPath(class_resourceloader::getInstance()->getCorePathForModule("module_packagemanager")."/module_packagemanager");
+        $objManager = new PackagemanagerManager();
+        $objHandler = $objManager->getPackageManagerForPath(Resourceloader::getInstance()->getCorePathForModule("module_packagemanager")."/module_packagemanager");
         $this->assertTrue(!$objHandler->isInstallable());
     }
 
     public function testRequiredBy() {
-        $objManager = new class_module_packagemanager_manager();
+        $objManager = new PackagemanagerManager();
         $objSystem = $objManager->getPackage("system");
 
         $arrRequiredBy = $objManager->getArrRequiredBy($objSystem);

@@ -5,7 +5,39 @@
 *-------------------------------------------------------------------------------------------------------*
 *	$Id$                                  *
 ********************************************************************************************************/
+
+namespace Kajona\Packagemanager\Admin;
+
+
+use Kajona\Packagemanager\System\PackagemanagerManager;
+use Kajona\Packagemanager\System\PackagemanagerMetadata;
+use Kajona\Packagemanager\System\PackagemanagerPackagemanagerInterface;
+use Kajona\Packagemanager\System\PackagemanagerTemplate;
+use Kajona\System\Admin\AdminFormgenerator;
+use Kajona\System\Admin\AdminInterface;
+use Kajona\System\Admin\AdminSimple;
+use Kajona\System\Admin\Formentries\FormentryCheckbox;
+use Kajona\System\Admin\Formentries\FormentryHeadline;
+use Kajona\System\Admin\Formentries\FormentryText;
+use Kajona\System\System\AdminskinHelper;
+use Kajona\System\System\ArrayIterator;
+use Kajona\System\System\ArraySectionIterator;
+use Kajona\System\System\Carrier;
+use Kajona\System\System\Classloader;
+use Kajona\System\System\Exception;
+use Kajona\System\System\Filesystem;
+use Kajona\System\System\History;
+use Kajona\System\System\HttpResponsetypes;
+use Kajona\System\System\Link;
+use Kajona\System\System\Model;
+use Kajona\System\System\ModelInterface;
+use Kajona\System\System\Reflection;
+use Kajona\System\System\Resourceloader;
+use Kajona\System\System\ResponseObject;
+use Kajona\System\System\Root;
 use Kajona\System\System\StringUtil;
+use Kajona\System\System\SystemCommon;
+use Kajona\System\System\SystemSetting;
 
 /**
  * Admin-GUI of the packagemanager.
@@ -19,7 +51,7 @@ use Kajona\System\System\StringUtil;
  * @module packagemanager
  * @moduleId _packagemanager_module_id_
  */
-class class_module_packagemanager_admin extends class_admin_simple implements interface_admin
+class PackagemanagerAdmin extends AdminSimple implements AdminInterface
 {
 
     private $STR_FILTER_SESSION_KEY = "PACKAGELIST_FILTER_SESSION_KEY";
@@ -30,8 +62,8 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
     public function getOutputModuleNavi()
     {
         $arrReturn = array();
-        $arrReturn[] = array("view", class_link::getLinkAdmin($this->getArrModule("modul"), "list", "", $this->getLang("action_list"), "", "", true, "adminnavi"));
-        $arrReturn[] = array("view", class_link::getLinkAdmin($this->getArrModule("modul"), "listTemplates", "", $this->getLang("action_list_templates"), "", "", true, "adminnavi"));
+        $arrReturn[] = array("view", Link::getLinkAdmin($this->getArrModule("modul"), "list", "", $this->getLang("action_list"), "", "", true, "adminnavi"));
+        $arrReturn[] = array("view", Link::getLinkAdmin($this->getArrModule("modul"), "listTemplates", "", $this->getLang("action_list_templates"), "", "", true, "adminnavi"));
         return $arrReturn;
     }
 
@@ -50,35 +82,35 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
             $this->objSession->setSession($this->STR_FILTER_SESSION_KEY, $this->getParam("packagelist_filter"));
             $this->setParam("pv", 1);
 
-            $this->adminReload(class_link::getLinkAdminHref($this->getArrModule("modul"), "list"));
+            $this->adminReload(Link::getLinkAdminHref($this->getArrModule("modul"), "list"));
             return "";
         }
 
-        class_module_packagemanager_template::syncTemplatepacks();
+        PackagemanagerTemplate::syncTemplatepacks();
 
         $strReturn = "";
-        $strReturn .= $this->objToolkit->formHeader(class_link::getLinkAdminHref($this->getArrModule("modul")), "list");
+        $strReturn .= $this->objToolkit->formHeader(Link::getLinkAdminHref($this->getArrModule("modul")), "list");
         $strReturn .= $this->objToolkit->formInputText("packagelist_filter", $this->getLang("packagelist_filter"), $this->objSession->getSession($this->STR_FILTER_SESSION_KEY));
         $strReturn .= $this->objToolkit->formInputSubmit();
         $strReturn .= $this->objToolkit->formInputHidden("doFilter", "1");
         $strReturn .= $this->objToolkit->formClose();
 
 
-        $objManager = new class_module_packagemanager_manager();
+        $objManager = new PackagemanagerManager();
         $arrPackages = $objManager->getAvailablePackages($this->objSession->getSession($this->STR_FILTER_SESSION_KEY));
         $arrPackages = $objManager->sortPackages($arrPackages);
 
 
-        $objArrayIterator = new class_array_iterator($arrPackages);
+        $objArrayIterator = new ArrayIterator($arrPackages);
         $objArrayIterator->getElementsOnPage((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
 
-        $objArraySectionIterator = new class_array_section_iterator(count($arrPackages));
+        $objArraySectionIterator = new ArraySectionIterator(count($arrPackages));
         $objArraySectionIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
         $objArraySectionIterator->setArraySection($objArrayIterator->getElementsOnPage((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1)));
 
         $strReturn .= $this->objToolkit->listHeader();
         $intI = 0;
-        /** @var class_module_packagemanager_metadata $objOneMetadata */
+        /** @var PackagemanagerMetadata $objOneMetadata */
         foreach ($objArraySectionIterator as $objOneMetadata) {
 
             $strActions = "";
@@ -86,7 +118,7 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
 
             if ($objHandler->isInstallable()) {
                 $strActions .= $this->objToolkit->listButton(
-                    class_link::getLinkAdminDialog(
+                    Link::getLinkAdminDialog(
                         $this->getArrModule("modul"),
                         "processPackage",
                         "&package=".$objOneMetadata->getStrPath(),
@@ -98,32 +130,32 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
                 );
             }
 
-            if(!$objOneMetadata->getBitIsPhar()) {
+            if (!$objOneMetadata->getBitIsPhar()) {
                 $strActions .= $this->objToolkit->listButton(
-                    class_link::getLinkAdmin($this->getArrModule("modul"), "downloadAsPhar", "&package=".$objOneMetadata->getStrTitle(), $this->getLang("package_downloadasphar"), $this->getLang("package_downloadasphar"), "icon_downloads")
+                    Link::getLinkAdmin($this->getArrModule("modul"), "downloadAsPhar", "&package=".$objOneMetadata->getStrTitle(), $this->getLang("package_downloadasphar"), $this->getLang("package_downloadasphar"), "icon_downloads")
                 );
             }
 
             $strActions .= $this->objToolkit->listButton(
-                class_link::getLinkAdminDialog($this->getArrModule("modul"), "showInfo", "&package=".$objOneMetadata->getStrTitle(), $this->getLang("package_info"), $this->getLang("package_info"), "icon_lens", $objOneMetadata->getStrTitle())
+                Link::getLinkAdminDialog($this->getArrModule("modul"), "showInfo", "&package=".$objOneMetadata->getStrTitle(), $this->getLang("package_info"), $this->getLang("package_info"), "icon_lens", $objOneMetadata->getStrTitle())
             );
 
             if ($this->getObjModule()->rightDelete()) {
-                if ($objHandler->isRemovable($objOneMetadata)) {
-                    $strActions .= $this->objToolkit->listDeleteButton($objOneMetadata->getStrTitle(), $this->getLang("package_delete_question"), class_link::getLinkAdminHref($this->getArrModule("modul"), "deletePackage", "&package=".$objOneMetadata->getStrTitle()));
+                if ($objHandler->isRemovable()) {
+                    $strActions .= $this->objToolkit->listDeleteButton($objOneMetadata->getStrTitle(), $this->getLang("package_delete_question"), Link::getLinkAdminHref($this->getArrModule("modul"), "deletePackage", "&package=".$objOneMetadata->getStrTitle()));
                 }
                 else {
-                    $strActions .= $this->objToolkit->listButton(class_adminskin_helper::getAdminImage("icon_deleteLocked", $this->getLang("package_delete_locked")));
+                    $strActions .= $this->objToolkit->listButton(AdminskinHelper::getAdminImage("icon_deleteLocked", $this->getLang("package_delete_locked")));
                 }
             }
 
 
             $strActions .= $this->objToolkit->listButton(
-                "<span id=\"updateWrapper".createFilename($objOneMetadata->getStrTitle(), true)."\">".class_adminskin_helper::getAdminImage("loadingSmall", $this->getLang("package_searchupdate"))."</span>"
+                "<span id=\"updateWrapper".createFilename($objOneMetadata->getStrTitle(), true)."\">".AdminskinHelper::getAdminImage("loadingSmall", $this->getLang("package_searchupdate"))."</span>"
             );
             $strActions .= "<script type='text/javascript'>
             $(function() {
-                KAJONA.admin.loader.loadFile('".class_resourceloader::getInstance()->getCorePathForModule("module_packagemanager")."/module_packagemanager/admin/scripts/packagemanager.js', function() {
+                KAJONA.admin.loader.loadFile('".Resourceloader::getInstance()->getCorePathForModule("module_packagemanager")."/module_packagemanager/admin/scripts/packagemanager.js', function() {
                     KAJONA.admin.packagemanager.addPackageToTest('".$objOneMetadata->getStrTitle()."', '".createFilename($objOneMetadata->getStrTitle(), true)."');
                 }); });
             </script>";
@@ -134,14 +166,14 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
         $strAddActions = "";
         if ($this->getObjModule()->rightEdit()) {
             $strAddActions = $this->objToolkit->listButton(
-                class_link::getLinkAdminDialog($this->getArrModule("modul"), "addPackage", "", $this->getLang("action_upload_package"), $this->getLang("action_upload_package"), "icon_new", $this->getLang("action_upload_package"))
+                Link::getLinkAdminDialog($this->getArrModule("modul"), "addPackage", "", $this->getLang("action_upload_package"), $this->getLang("action_upload_package"), "icon_new", $this->getLang("action_upload_package"))
             );
         }
         $strReturn .= $this->objToolkit->genericAdminList(generateSystemid(), "", "", $strAddActions, $intI);
 
         $strReturn .= $this->objToolkit->listFooter();
 
-        $strCore = class_resourceloader::getInstance()->getCorePathForModule("module_packagemanager");
+        $strCore = Resourceloader::getInstance()->getCorePathForModule("module_packagemanager");
         $strReturn .= "<script type='text/javascript'>
             $(function() {
                 KAJONA.admin.loader.loadFile('{$strCore}/module_packagemanager/admin/scripts/packagemanager.js', function() {
@@ -168,7 +200,7 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
     protected function actionShowInfo()
     {
         $this->setArrModuleEntry("template", "/folderview.tpl");
-        $objManager = new class_module_packagemanager_manager();
+        $objManager = new PackagemanagerManager();
         $objHandler = $objManager->getPackage($this->getParam("package"));
         if ($objHandler !== null) {
             return $this->renderPackageDetails($objManager->getPackageManagerForPath($objHandler->getStrPath()), true);
@@ -191,7 +223,7 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
 
         $strPackages = $this->getParam("packages");
         $arrPackagesToCheck = explode(",", $strPackages);
-        $objManager = new class_module_packagemanager_manager();
+        $objManager = new PackagemanagerManager();
 
         //close session to avoid blocking
         $this->objSession->sessionClose();
@@ -202,7 +234,7 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
             $objMetadata = $objManager->getPackage($strOnePackage);
 
             if ($objMetadata == null || !isset($arrLatestVersion[$strOnePackage])) {
-                $arrReturn[$strOnePackage] = class_adminskin_helper::getAdminImage("icon_updateError", $this->getLang("package_noversion"));
+                $arrReturn[$strOnePackage] = AdminskinHelper::getAdminImage("icon_updateError", $this->getLang("package_noversion"));
                 continue;
             }
 
@@ -211,13 +243,13 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
             $bitUpdateAvailable = $objManager->updateAvailable($objHandler, $arrLatestVersion[$strOnePackage]);
 
             if ($bitUpdateAvailable === null) {
-                $arrReturn[$strOnePackage] = class_adminskin_helper::getAdminImage("icon_updateError", $this->getLang("package_noversion"));
+                $arrReturn[$strOnePackage] = AdminskinHelper::getAdminImage("icon_updateError", $this->getLang("package_noversion"));
             }
             else {
                 //compare the version to trigger additional actions
                 $strLatestVersion = $arrLatestVersion[$strOnePackage];
                 if ($bitUpdateAvailable) {
-                    $arrReturn[$strOnePackage] = class_link::getLinkAdminDialog(
+                    $arrReturn[$strOnePackage] = Link::getLinkAdminDialog(
                         $this->getArrModule("modul"),
                         "initPackageUpdate",
                         "&package=".$objHandler->getObjMetadata()->getStrPath(),
@@ -228,12 +260,12 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
                     );
                 }
                 else {
-                    $arrReturn[$strOnePackage] = class_adminskin_helper::getAdminImage("icon_updateDisabled", $this->getLang("package_noupdate")." ".$strLatestVersion);
+                    $arrReturn[$strOnePackage] = AdminskinHelper::getAdminImage("icon_updateDisabled", $this->getLang("package_noupdate")." ".$strLatestVersion);
                 }
             }
         }
 
-        class_response_object::getInstance()->setStrResponseType(class_http_responsetypes::STR_TYPE_JSON);
+        ResponseObject::getInstance()->setStrResponseType(HttpResponsetypes::STR_TYPE_JSON);
         return json_encode($arrReturn);
     }
 
@@ -251,7 +283,7 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
         $strReturn = "";
         $strFile = $this->getParam("package");
 
-        $objManager = new class_module_packagemanager_manager();
+        $objManager = new PackagemanagerManager();
         $objHandler = $objManager->getPackageManagerForPath($strFile);
 
         if ($objManager->validatePackage($strFile)) {
@@ -282,7 +314,7 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
                     $strReturn .= $this->objToolkit->warningBox($strWarning);
                 }
 
-                $strReturn .= $this->objToolkit->formHeader(class_link::getLinkAdminHref($this->getArrModule("modul"), "installPackage"));
+                $strReturn .= $this->objToolkit->formHeader(Link::getLinkAdminHref($this->getArrModule("modul"), "installPackage"));
                 $strReturn .= $this->objToolkit->formInputHidden("package", $strFile);
                 $strReturn .= $this->objToolkit->formInputSubmit($this->getLang("package_doinstall"));
                 $strReturn .= $this->objToolkit->formClose();
@@ -302,7 +334,7 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
         }
         else {
             $strError = $this->getLang("provider_error_package");
-            $strError .= class_link::getLinkAdminManual('href=\'javascript:history.back();\'', $this->getLang('back'));
+            $strError .= Link::getLinkAdminManual('href=\'javascript:history.back();\'', $this->getLang('back'));
             $strReturn .= $this->objToolkit->warningBox($strError);
         }
 
@@ -312,14 +344,14 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
     /**
      * Renders the summary of a single package
      *
-     * @param interface_packagemanager_packagemanager $objHandler
+     * @param PackagemanagerPackagemanagerInterface $objHandler
      * @param bool $bitIncludeRequiredBy
      *
      * @return string
      */
-    public function renderPackageDetails(interface_packagemanager_packagemanager $objHandler, $bitIncludeRequiredBy = false)
+    public function renderPackageDetails(PackagemanagerPackagemanagerInterface $objHandler, $bitIncludeRequiredBy = false)
     {
-        $objManager = new class_module_packagemanager_manager();
+        $objManager = new PackagemanagerManager();
 
         $strReturn = $this->objToolkit->formHeadline($objHandler->getObjMetadata()->getStrTitle());
         $strReturn .= $this->objToolkit->getTextRow($objHandler->getObjMetadata()->getStrDescription());
@@ -394,7 +426,7 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
      * Triggers the removal of a single package
      *
      * @permissions edit,delete
-     * @throws class_exception
+     * @throws Exception
      * @return string
      */
     protected function actionDeletePackage()
@@ -402,24 +434,24 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
         $strReturn = "";
 
         //fetch the package
-        $objManager = new class_module_packagemanager_manager();
+        $objManager = new PackagemanagerManager();
         $objPackage = $objManager->getPackage($this->getParam("package"));
 
         if ($objPackage == null) {
-            throw new class_exception("package not found", class_exception::$level_ERROR);
+            throw new Exception("package not found", Exception::$level_ERROR);
         }
 
         $strLog = $objManager->removePackage($objPackage);
 
         if ($strLog == "") {
-            $this->adminReload(class_link::getLinkAdminHref($this->getArrModule("modul"), "list"));
+            $this->adminReload(Link::getLinkAdminHref($this->getArrModule("modul"), "list"));
             return "";
         }
 
         $strReturn .= $this->objToolkit->formHeadline($this->getLang("package_removal_header"));
         $strReturn .= $this->objToolkit->getPreformatted(array($strLog));
 
-        $strReturn .= $this->objToolkit->formHeader(class_link::getLinkAdminHref($this->getArrModule("modul"), "list"), "", "");
+        $strReturn .= $this->objToolkit->formHeader(Link::getLinkAdminHref($this->getArrModule("modul"), "list"), "", "");
         $strReturn .= $this->objToolkit->formInputSubmit($this->getLang("commons_ok"));
         $strReturn .= $this->objToolkit->formClose();
 
@@ -441,7 +473,7 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
         $strLog = "";
         $strFile = $this->getParam("package");
 
-        $objManager = new class_module_packagemanager_manager();
+        $objManager = new PackagemanagerManager();
 
         if ($objManager->validatePackage($strFile)) {
 
@@ -449,15 +481,15 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
                 $objHandler = $objManager->getPackageManagerForPath($strFile);
                 $objHandler->move2Filesystem();
 
-                class_classloader::getInstance()->flushCache();
-                class_reflection::flushCache();
-                class_resourceloader::getInstance()->flushCache();
+                Classloader::getInstance()->flushCache();
+                Reflection::flushCache();
+                Resourceloader::getInstance()->flushCache();
 
                 //reload the module-ids
-                class_classloader::getInstance()->bootstrapIncludeModuleIds();
+                Classloader::getInstance()->bootstrapIncludeModuleIds();
 
                 //reload the current request in order to flush the class-loader
-                $this->adminReload(class_link::getLinkAdminHref("packagemanager", "installPackage", "&package=".$objHandler->getStrTargetPath()));
+                $this->adminReload(Link::getLinkAdminHref("packagemanager", "installPackage", "&package=".$objHandler->getStrTargetPath()));
                 return;
 
             }
@@ -479,7 +511,7 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
                 $strReturn .= $this->objToolkit->getPreformatted(array($strLog));
 
                 $strReturn .= $this->objToolkit->formHeader(
-                    class_link::getLinkAdminHref($this->getArrModule("modul"), "list"), "", "", "javascript:".$strOnSubmit
+                    Link::getLinkAdminHref($this->getArrModule("modul"), "list"), "", "", "javascript:".$strOnSubmit
                 );
                 $strReturn .= $this->objToolkit->formInputSubmit($this->getLang("commons_ok"));
                 $strReturn .= $this->objToolkit->formClose();
@@ -502,7 +534,7 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
     protected function actionInitPackageUpdate()
     {
         $strPackage = $this->getParam("package");
-        $objManager = new class_module_packagemanager_manager();
+        $objManager = new PackagemanagerManager();
         $objHandler = $objManager->getPackageManagerForPath($strPackage);
         return $objManager->updatePackage($objHandler);
 
@@ -522,7 +554,7 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
 
         $strReturn = "";
 
-        $objManager = new class_module_packagemanager_manager();
+        $objManager = new PackagemanagerManager();
         $arrContentProvider = $objManager->getContentproviders();
         if ($this->getParam("provider") == "") {
 
@@ -535,24 +567,13 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
                 $strReturn .= $this->objToolkit->genericAdminList(
                     generateSystemid(),
                     $objOneProvider->getDisplayTitle(),
-                    class_adminskin_helper::getAdminImage("icon_systemtask"),
-                    class_link::getLinkAdmin("packagemanager", "addPackage", "&provider=".get_class($objOneProvider), $this->getLang("provider_select"), $this->getLang("provider_select"), "icon_accept"),
+                    AdminskinHelper::getAdminImage("icon_systemtask"),
+                    Link::getLinkAdmin("packagemanager", "addPackage", "&provider=".get_class($objOneProvider), $this->getLang("provider_select"), $this->getLang("provider_select"), "icon_accept"),
                     $intI++
                 );
             }
             $strReturn .= $this->objToolkit->listFooter();
 
-            /* old tab code start ///////
-            $arrTabs = array();
-            foreach($arrContentProvider as $objOneProvider) {
-                $strIFrameSrc = getLinkAdminHref($this->getArrModule("modul"), "addPackage", "&provider=".get_class($objOneProvider));
-
-                $arrTabs[$objOneProvider->getDisplayTitle()] = $this->objToolkit->getIFrame($strIFrameSrc);
-            }
-
-            $strReturn .= $this->objToolkit->getTabbedContent($arrTabs, true);
-
-            ///////old tab code end */
             return $strReturn;
         }
 
@@ -572,7 +593,7 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
         try {
             $strReturn = $objProvider->renderPackageList();
         }
-        catch (class_exception $objEx) {
+        catch (Exception $objEx) {
             $strReturn = $this->objToolkit->warningBox($this->getLang("package_remote_errorloading")."<br />".$objEx->getMessage());
         }
         return $strReturn;
@@ -586,7 +607,7 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
     {
         $this->setArrModuleEntry("template", "/folderview.tpl");
 
-        $objManager = new class_module_packagemanager_manager();
+        $objManager = new PackagemanagerManager();
         $arrContentProvider = $objManager->getContentproviders();
 
         $strProvider = $this->getParam("provider");
@@ -608,12 +629,12 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
         }
 
         if (!$objManager->validatePackage($strFile)) {
-            $objFilesystem = new class_filesystem();
+            $objFilesystem = new Filesystem();
             $objFilesystem->fileDelete($strFile);
             return $this->getLang("provider_error_package", "packagemanager");
         }
 
-        $this->adminReload(class_link::getLinkAdminHref($this->getArrModule("modul"), "processPackage", "&package=".$strFile));
+        $this->adminReload(Link::getLinkAdminHref($this->getArrModule("modul"), "processPackage", "&package=".$strFile));
         return "";
     }
 
@@ -626,14 +647,14 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
     protected function renderError($strLangName, $strLangModule = null)
     {
         $strError = $this->getLang($strLangName, $strLangModule);
-        $objHistory = new class_history();
+        $objHistory = new History();
         $arrHistory = explode("&", $objHistory->getAdminHistory(0));
 
         if ($this->getArrModule("template") == "/folderview.tpl") {
-            $strError .= ' '.class_link::getLinkAdminManual('href="javascript:window.parent.location.reload();"', $this->getLang('commons_back'));
+            $strError .= ' '.Link::getLinkAdminManual('href="javascript:window.parent.location.reload();"', $this->getLang('commons_back'));
         }
         else {
-            $strError .= ' '.class_link::getLinkAdminManual("href=\"".$arrHistory[0]."&".$arrHistory[1]."\"", $this->getLang("commons_back"));
+            $strError .= ' '.Link::getLinkAdminManual("href=\"".$arrHistory[0]."&".$arrHistory[1]."\"", $this->getLang("commons_back"));
         }
         return $this->objToolkit->warningBox($strError);
     }
@@ -646,12 +667,12 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
     protected function actionListTemplates()
     {
 
-        class_module_packagemanager_template::syncTemplatepacks();
+        PackagemanagerTemplate::syncTemplatepacks();
 
-        $objArraySectionIterator = new class_array_section_iterator(class_module_packagemanager_template::getObjectCount());
+        $objArraySectionIterator = new ArraySectionIterator(PackagemanagerTemplate::getObjectCount());
         $objArraySectionIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
         $objArraySectionIterator->setArraySection(
-            class_module_packagemanager_template::getObjectList("", $objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos())
+            PackagemanagerTemplate::getObjectList("", $objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos())
         );
 
         return $this->renderList($objArraySectionIterator);
@@ -667,8 +688,8 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
     {
         $arrReturn = array();
         if ($this->getObjModule()->rightEdit()) {
-            $arrReturn[] = $this->objToolkit->listButton(class_link::getLinkAdminDialog($this->getArrModule("modul"), "addPackage", "&systemid=", $this->getLang("action_upload_package"), $this->getLang("action_upload_package"), "icon_upload", $this->getLang("action_upload_package")));
-            $arrReturn[] = $this->objToolkit->listButton(class_link::getLinkAdmin($this->getArrModule("modul"), "new", "", $this->getLang("action_new_copy"), $this->getLang("action_new_copy"), "icon_new"));
+            $arrReturn[] = $this->objToolkit->listButton(Link::getLinkAdminDialog($this->getArrModule("modul"), "addPackage", "&systemid=", $this->getLang("action_upload_package"), $this->getLang("action_upload_package"), "icon_upload", $this->getLang("action_upload_package")));
+            $arrReturn[] = $this->objToolkit->listButton(Link::getLinkAdmin($this->getArrModule("modul"), "new", "", $this->getLang("action_new_copy"), $this->getLang("action_new_copy"), "icon_new"));
         }
 
         return $arrReturn;
@@ -680,7 +701,7 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
      *
      * @return string
      */
-    protected function renderEditAction(\Kajona\System\System\Model $objListEntry, $bitDialog = false)
+    protected function renderEditAction(Model $objListEntry, $bitDialog = false)
     {
         return "";
     }
@@ -690,7 +711,7 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
      *
      * @return string
      */
-    protected function renderCopyAction(\Kajona\System\System\Model $objListEntry)
+    protected function renderCopyAction(Model $objListEntry)
     {
         return "";
     }
@@ -703,11 +724,11 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
      *
      * @return string
      */
-    protected function renderStatusAction(\Kajona\System\System\Model $objListEntry, $strAltActive = "", $strAltInactive = "")
+    protected function renderStatusAction(Model $objListEntry, $strAltActive = "", $strAltInactive = "")
     {
         if ($objListEntry->rightEdit()) {
-            if (class_module_system_setting::getConfigValue("_packagemanager_defaulttemplate_") == $objListEntry->getStrName()) {
-                return $this->objToolkit->listButton(class_adminskin_helper::getAdminImage("icon_enabled", $this->getLang("pack_active_no_status")));
+            if (SystemSetting::getConfigValue("_packagemanager_defaulttemplate_") == $objListEntry->getStrName()) {
+                return $this->objToolkit->listButton(AdminskinHelper::getAdminImage("icon_enabled", $this->getLang("pack_active_no_status")));
             }
             else {
                 return $this->objToolkit->listStatusButton($objListEntry, true);
@@ -719,19 +740,19 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
 
 
     /**
-     * @param \Kajona\System\System\ModelInterface|class_root $objListEntry
+     * @param ModelInterface|Root $objListEntry
      *
      * @return string
      */
-    protected function renderDeleteAction(\Kajona\System\System\ModelInterface $objListEntry)
+    protected function renderDeleteAction(ModelInterface $objListEntry)
     {
         if ($objListEntry->rightDelete() && $this->getObjModule()->rightDelete()) {
-            if (class_module_system_setting::getConfigValue("_packagemanager_defaulttemplate_") == $objListEntry->getStrName()) {
-                return $this->objToolkit->listButton(class_adminskin_helper::getAdminImage("icon_deleteDisabled", $this->getLang("pack_active_no_delete")));
+            if (SystemSetting::getConfigValue("_packagemanager_defaulttemplate_") == $objListEntry->getStrName()) {
+                return $this->objToolkit->listButton(AdminskinHelper::getAdminImage("icon_deleteDisabled", $this->getLang("pack_active_no_delete")));
             }
             else {
                 return $this->objToolkit->listDeleteButton(
-                    $objListEntry->getStrDisplayName(), $this->getLang("delete_question"), class_link::getLinkAdminHref($this->getArrModule("modul"), "deleteTemplate", "&systemid=".$objListEntry->getSystemid()."")
+                    $objListEntry->getStrDisplayName(), $this->getLang("delete_question"), Link::getLinkAdminHref($this->getArrModule("modul"), "deleteTemplate", "&systemid=".$objListEntry->getSystemid()."")
                 );
             }
         }
@@ -747,24 +768,25 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
     protected function actionDeleteTemplate()
     {
         parent::actionDelete();
-        $this->adminReload(class_link::getLinkAdminHref($this->getArrModule("modul"), "listTemplates"));
+        $this->adminReload(Link::getLinkAdminHref($this->getArrModule("modul"), "listTemplates"));
     }
 
     /**
      * Triggers a phar-creation and download of the generated phar
+     *
      * @permissions view,edit
      */
     protected function actionDownloadAsPhar()
     {
-        $objManager = new class_module_packagemanager_manager();
+        $objManager = new PackagemanagerManager();
         $objHandler = $objManager->getPackage($this->getParam("package"));
         if ($objHandler !== null) {
             /** @var \Kajona\Packagemanager\System\PackagemanagerPharGeneratorInterface $objPharService */
-            $objPharService = class_carrier::getInstance()->getContainer()->offsetGet("packagemanager_phargenerator");
+            $objPharService = Carrier::getInstance()->getContainer()->offsetGet("packagemanager_phargenerator");
             try {
                 $objPharService->generateAndStreamPhar(_realpath_.$objHandler->getStrPath());
             }
-            catch (class_exception $objEx) {
+            catch (Exception $objEx) {
                 return $this->objToolkit->warningBox($objEx->getMessage(), "alert-danger");
             }
         }
@@ -782,34 +804,34 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
     }
 
     /**
-     * @param \class_admin_formgenerator|null $objForm
+     * @param AdminFormgenerator|null $objForm
      *
      * @return string
      * @permissions edit
      */
-    protected function actionNew(class_admin_formgenerator $objForm = null)
+    protected function actionNew(AdminFormgenerator $objForm = null)
     {
         if ($objForm == null) {
             $objForm = $this->getPackAdminForm();
         }
 
-        $strReturn = $objForm->renderForm(class_link::getLinkAdminHref($this->getArrModule("modul"), "copyPack"));
+        $strReturn = $objForm->renderForm(Link::getLinkAdminHref($this->getArrModule("modul"), "copyPack"));
         return $strReturn;
     }
 
     /**
-     * @return class_admin_formgenerator
+     * @return AdminFormgenerator
      */
     private function getPackAdminForm()
     {
-        $objFormgenerator = new class_admin_formgenerator("pack", new class_module_system_common());
-        $objFormgenerator->addField(new class_formentry_text("pack", "name"))->setStrLabel($this->getLang("pack_name"))->setBitMandatory(true)->setStrValue($this->getParam("pack_name"));
-        $objFormgenerator->addField(new class_formentry_headline())->setStrValue($this->getLang("pack_copy_include"));
-        $arrModules = class_classloader::getInstance()->getArrModules();
+        $objFormgenerator = new AdminFormgenerator("pack", new SystemCommon());
+        $objFormgenerator->addField(new FormentryText("pack", "name"))->setStrLabel($this->getLang("pack_name"))->setBitMandatory(true)->setStrValue($this->getParam("pack_name"));
+        $objFormgenerator->addField(new FormentryHeadline())->setStrValue($this->getLang("pack_copy_include"));
+        $arrModules = Classloader::getInstance()->getArrModules();
         foreach ($arrModules as $strOneModule) {
             //validate if there's a template-folder existing
-            if (is_dir(class_resourceloader::getInstance()->getAbsolutePathForModule($strOneModule)."/templates")) {
-                $objFormgenerator->addField(new class_formentry_checkbox("pack", "modules[".$strOneModule."]"))->setStrLabel($strOneModule)->setStrValue($strOneModule == "module_pages");
+            if (is_dir(Resourceloader::getInstance()->getAbsolutePathForModule($strOneModule)."/templates")) {
+                $objFormgenerator->addField(new FormentryCheckbox("pack", "modules[".$strOneModule."]"))->setStrLabel($strOneModule)->setStrValue($strOneModule == "module_pages");
             }
 
         }
@@ -836,7 +858,7 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
         }
 
 
-        $objFilesystem = new class_filesystem();
+        $objFilesystem = new Filesystem();
         $objFilesystem->folderCreate(_templatepath_."/".$strPackName);
         $objFilesystem->folderCreate(_templatepath_."/".$strPackName."/tpl");
         $objFilesystem->folderCreate(_templatepath_."/".$strPackName."/css");
@@ -845,15 +867,15 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
         $arrModules = $this->getParam("pack_modules");
         foreach ($arrModules as $strName => $strValue) {
             if ($strValue != "") {
-                $objFilesystem->folderCopyRecursive(class_resourceloader::getInstance()->getAbsolutePathForModule($strName)."/templates/default", _templatepath_."/".$strPackName);
+                $objFilesystem->folderCopyRecursive(Resourceloader::getInstance()->getAbsolutePathForModule($strName)."/templates/default", _templatepath_."/".$strPackName);
             }
         }
 
-        class_resourceloader::getInstance()->flushCache();
-        class_classloader::getInstance()->flushCache();
-        class_reflection::flushCache();
+        Resourceloader::getInstance()->flushCache();
+        Classloader::getInstance()->flushCache();
+        Reflection::flushCache();
 
-        $this->adminReload(class_link::getLinkAdminHref($this->getArrModule("modul"), "listTemplates"));
+        $this->adminReload(Link::getLinkAdminHref($this->getArrModule("modul"), "listTemplates"));
         return "";
     }
 
@@ -871,7 +893,7 @@ class class_module_packagemanager_admin extends class_admin_simple implements in
             $arrErrors[] = $strFolder;
         }
 
-        $objFilesystem = new class_filesystem();
+        $objFilesystem = new Filesystem();
         $arrContent = $objFilesystem->getCompleteList($strFolder);
 
         foreach ($arrContent["files"] as $arrOneFile) {

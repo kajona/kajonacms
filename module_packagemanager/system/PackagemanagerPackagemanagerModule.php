@@ -6,6 +6,18 @@
 *	$Id$                                  *
 ********************************************************************************************************/
 
+namespace Kajona\Packagemanager\System;
+
+use Kajona\System\System\Cache;
+use Kajona\System\System\Classloader;
+use Kajona\System\System\Exception;
+use Kajona\System\System\Filesystem;
+use Kajona\System\System\InstallerInterface;
+use Kajona\System\System\InstallerRemovableInterface;
+use Kajona\System\System\Logger;
+use Kajona\System\System\SystemModule;
+use Kajona\System\System\SystemSetting;
+
 
 /**
  * Implementation to handle module-packages. List all installed module-packages and starts the installation / update.
@@ -14,10 +26,11 @@
  * @author sidler@mulchprod.de
  * @since 4.0
  */
-class class_module_packagemanager_packagemanager_module implements interface_packagemanager_packagemanager {
+class PackagemanagerPackagemanagerModule implements PackagemanagerPackagemanagerInterface
+{
 
     /**
-     * @var class_module_packagemanager_metadata
+     * @var PackagemanagerMetadata
      */
     protected $objMetadata;
 
@@ -26,21 +39,22 @@ class class_module_packagemanager_packagemanager_module implements interface_pac
      * Returns a list of installed packages, so a single metadata-entry
      * for each package.
      *
-     * @return class_module_packagemanager_metadata[]
+     * @return PackagemanagerMetadata[]
      */
-    public function getInstalledPackages() {
+    public function getInstalledPackages()
+    {
         $arrReturn = array();
 
         //loop all modules
-        $arrModules = class_classloader::getInstance()->getArrModules();
+        $arrModules = Classloader::getInstance()->getArrModules();
 
-        foreach($arrModules as $strPath => $strOneModule) {
+        foreach ($arrModules as $strPath => $strOneModule) {
             try {
-                $objMetadata = new class_module_packagemanager_metadata();
+                $objMetadata = new PackagemanagerMetadata();
                 $objMetadata->autoInit("/".$strPath);
                 $arrReturn[] = $objMetadata;
             }
-            catch(class_exception $objEx) {
+            catch (Exception $objEx) {
 
             }
         }
@@ -55,18 +69,20 @@ class class_module_packagemanager_packagemanager_module implements interface_pac
      * In most cases, this is either located at /core or at /templates.
      * The original should be deleted afterwards.
      *
-     * @throws class_exception
+     * @throws Exception
      * @return void
      */
-    public function move2Filesystem() {
+    public function move2Filesystem()
+    {
         $strSource = $this->objMetadata->getStrPath();
 
-        if(!is_dir(_realpath_.$strSource))
-            throw new class_exception("current package ".$strSource." is not a folder.", class_exception::$level_ERROR);
+        if (!is_dir(_realpath_.$strSource)) {
+            throw new Exception("current package ".$strSource." is not a folder.", Exception::$level_ERROR);
+        }
 
-        class_logger::getInstance(class_logger::PACKAGEMANAGEMENT)->addLogRow("moving ".$strSource." to ".$this->getStrTargetPath(), class_logger::$levelInfo);
+        Logger::getInstance(Logger::PACKAGEMANAGEMENT)->addLogRow("moving ".$strSource." to ".$this->getStrTargetPath(), Logger::$levelInfo);
 
-        $objFilesystem = new class_filesystem();
+        $objFilesystem = new Filesystem();
         //set a chmod before copying the files - at least try to
         $objFilesystem->chmod($this->getStrTargetPath(), 0777);
 
@@ -79,9 +95,9 @@ class class_module_packagemanager_packagemanager_module implements interface_pac
         $objFilesystem->folderDeleteRecursive($strSource);
 
         //shift the cache buster
-        $objSetting = class_module_system_setting::getConfigByName("_system_browser_cachebuster_");
-        if($objSetting != null) {
-            $objSetting->setStrValue((int)$objSetting->getStrValue()+1);
+        $objSetting = SystemSetting::getConfigByName("_system_browser_cachebuster_");
+        if ($objSetting != null) {
+            $objSetting->setStrValue((int)$objSetting->getStrValue() + 1);
             $objSetting->updateObjectToDb();
         }
     }
@@ -91,35 +107,39 @@ class class_module_packagemanager_packagemanager_module implements interface_pac
      * Invokes the installer, if given.
      * The installer itself is capable of detecting whether an update or a plain installation is required.
      *
-     * @throws class_exception
+     * @throws Exception
      * @return string
      */
-    public function installOrUpdate() {
+    public function installOrUpdate()
+    {
         $strReturn = "";
 
-        if(uniStrpos($this->getObjMetadata()->getStrPath(), "core") === false)
-            throw new class_exception("Current module not located in a core directory.", class_exception::$level_ERROR);
+        if (uniStrpos($this->getObjMetadata()->getStrPath(), "core") === false) {
+            throw new Exception("Current module not located in a core directory.", Exception::$level_ERROR);
+        }
 
-        if(!$this->isInstallable())
-            throw new class_exception("Current module isn't installable, not all requirements are given", class_exception::$level_ERROR);
+        if (!$this->isInstallable()) {
+            throw new Exception("Current module isn't installable, not all requirements are given", Exception::$level_ERROR);
+        }
 
         //search for an existing installer
         $arrInstaller = $this->getInstaller($this->getObjMetadata());
 
         //start with modules
-        foreach($arrInstaller as $objInstance) {
+        foreach ($arrInstaller as $objInstance) {
 
-            if(!$objInstance instanceof \Kajona\System\System\InstallerBase)
+            if (!$objInstance instanceof \Kajona\System\System\InstallerBase) {
                 continue;
+            }
 
             //skip element installers at first run
-            class_logger::getInstance(class_logger::PACKAGEMANAGEMENT)->addLogRow("triggering updateOrInstall() on installer ".get_class($objInstance).", all requirements given", class_logger::$levelInfo);
+            Logger::getInstance(Logger::PACKAGEMANAGEMENT)->addLogRow("triggering updateOrInstall() on installer ".get_class($objInstance).", all requirements given", Logger::$levelInfo);
             //trigger update or install
             $strReturn .= $objInstance->installOrUpdate();
             $this->updateDefaultTemplate();
         }
 
-        class_cache::flushCache();
+        Cache::flushCache();
 
         return $strReturn;
     }
@@ -128,33 +148,40 @@ class class_module_packagemanager_packagemanager_module implements interface_pac
     /**
      * @return bool
      */
-    public function updateDefaultTemplate() {
-        $objFilesystem = new class_filesystem();
-        class_logger::getInstance(class_logger::PACKAGEMANAGEMENT)->addLogRow("updating default template from /".$this->objMetadata->getStrPath(), class_logger::$levelInfo);
-        if(is_dir(_realpath_."/".$this->objMetadata->getStrPath()."/templates/default/js"))
+    public function updateDefaultTemplate()
+    {
+        $objFilesystem = new Filesystem();
+        Logger::getInstance(Logger::PACKAGEMANAGEMENT)->addLogRow("updating default template from /".$this->objMetadata->getStrPath(), Logger::$levelInfo);
+        if (is_dir(_realpath_."/".$this->objMetadata->getStrPath()."/templates/default/js")) {
             $objFilesystem->folderCopyRecursive($this->objMetadata->getStrPath()."/templates/default/js", "/templates/default/js", true);
+        }
 
-        if(is_dir(_realpath_."/".$this->objMetadata->getStrPath()."/templates/default/css"))
+        if (is_dir(_realpath_."/".$this->objMetadata->getStrPath()."/templates/default/css")) {
             $objFilesystem->folderCopyRecursive($this->objMetadata->getStrPath()."/templates/default/css", "/templates/default/css", true);
+        }
 
-        if(is_dir(_realpath_."/".$this->objMetadata->getStrPath()."/templates/default/pics"))
+        if (is_dir(_realpath_."/".$this->objMetadata->getStrPath()."/templates/default/pics")) {
             $objFilesystem->folderCopyRecursive($this->objMetadata->getStrPath()."/templates/default/pics", "/templates/default/pics", true);
+        }
 
         return true;
     }
 
     /**
-     * @param class_module_packagemanager_metadata $objMetadata
+     * @param PackagemanagerMetadata $objMetadata
+     *
      * @return void
      */
-    public function setObjMetadata($objMetadata) {
+    public function setObjMetadata($objMetadata)
+    {
         $this->objMetadata = $objMetadata;
     }
 
     /**
-     * @return class_module_packagemanager_metadata
+     * @return PackagemanagerMetadata
      */
-    public function getObjMetadata() {
+    public function getObjMetadata()
+    {
         return $this->objMetadata;
     }
 
@@ -164,46 +191,50 @@ class class_module_packagemanager_packagemanager_module implements interface_pac
      *
      * @return bool
      */
-    public function isInstallable() {
+    public function isInstallable()
+    {
 
-        if(!$this->getObjMetadata()->getBitProvidesInstaller())
+        if (!$this->getObjMetadata()->getBitProvidesInstaller()) {
             return false;
+        }
 
         //check if required modules are given in matching versions
         $arrRequiredModules = $this->objMetadata->getArrRequiredModules();
-        foreach($arrRequiredModules as $strOneModule => $strMinVersion) {
+        foreach ($arrRequiredModules as $strOneModule => $strMinVersion) {
 
-            if(trim($strOneModule) != "") {
-                $objModule = class_module_system_module::getModuleByName(trim($strOneModule));
-                if($objModule === null) {
+            if (trim($strOneModule) != "") {
+                $objModule = SystemModule::getModuleByName(trim($strOneModule));
+                if ($objModule === null) {
 
-                    $arrModules = class_classloader::getInstance()->getArrModules();
+                    $arrModules = Classloader::getInstance()->getArrModules();
                     $objMetadata = null;
-                    foreach($arrModules as $strPath => $strOneFolder) {
-                        if(uniStrpos($strOneFolder, $strOneModule) !== false) {
-                            $objMetadata = new class_module_packagemanager_metadata();
+                    foreach ($arrModules as $strPath => $strOneFolder) {
+                        if (uniStrpos($strOneFolder, $strOneModule) !== false) {
+                            $objMetadata = new PackagemanagerMetadata();
                             $objMetadata->autoInit("/".$strPath);
 
                             //but: if the package provides an installer and was not resolved by the previous calls,
                             //we shouldn't include it here
-                            if($objMetadata->getBitProvidesInstaller())
+                            if ($objMetadata->getBitProvidesInstaller()) {
                                 $objMetadata = null;
+                            }
                         }
 
                     }
 
                     //no package found
-                    if($objMetadata === null) {
+                    if ($objMetadata === null) {
                         return false;
                     }
 
                     //package found, but wrong version
-                    if(version_compare($strMinVersion, $objMetadata->getStrVersion(), ">"))
+                    if (version_compare($strMinVersion, $objMetadata->getStrVersion(), ">")) {
                         return false;
+                    }
 
                 }
                 //module found, but wrong version
-                elseif(version_compare($strMinVersion, $objModule->getStrVersion(), ">")) {
+                elseif (version_compare($strMinVersion, $objModule->getStrVersion(), ">")) {
                     return false;
                 }
             }
@@ -211,16 +242,18 @@ class class_module_packagemanager_packagemanager_module implements interface_pac
 
 
         //compare versions of installed elements
-        $objModule = class_module_system_module::getModuleByName($this->getObjMetadata()->getStrTitle());
-        if($objModule !== null) {
-            if(version_compare($this->objMetadata->getStrVersion(), $objModule->getStrVersion(), ">"))
+        $objModule = SystemModule::getModuleByName($this->getObjMetadata()->getStrTitle());
+        if ($objModule !== null) {
+            if (version_compare($this->objMetadata->getStrVersion(), $objModule->getStrVersion(), ">")) {
                 return true;
-            else
+            }
+            else {
                 return false;
+            }
         }
-        else
+        else {
             return true;
-
+        }
 
     }
 
@@ -230,13 +263,16 @@ class class_module_packagemanager_packagemanager_module implements interface_pac
      *
      * @return string|null
      */
-    public function getVersionInstalled() {
+    public function getVersionInstalled()
+    {
         //version compare - depending on module or element
-        $objModule = class_module_system_module::getModuleByName($this->getObjMetadata()->getStrTitle());
-        if($objModule !== null)
+        $objModule = SystemModule::getModuleByName($this->getObjMetadata()->getStrTitle());
+        if ($objModule !== null) {
             return $objModule->getStrVersion();
-        else
+        }
+        else {
             return null;
+        }
 
     }
 
@@ -246,17 +282,19 @@ class class_module_packagemanager_packagemanager_module implements interface_pac
      *
      * @return mixed
      */
-    public function getStrTargetPath() {
+    public function getStrTargetPath()
+    {
 
         $strTarget = $this->objMetadata->getStrTarget();
-        if($strTarget == "") {
+        if ($strTarget == "") {
             $strTarget = uniStrtolower($this->objMetadata->getStrType()."_".createFilename($this->objMetadata->getStrTitle(), true))."";
         }
 
-        $arrModules = array_flip(class_classloader::getInstance()->getArrModules());
+        $arrModules = array_flip(Classloader::getInstance()->getArrModules());
 
-        if(isset($arrModules[$strTarget]))
+        if (isset($arrModules[$strTarget])) {
             return "/".$arrModules[$strTarget];
+        }
 
         return "/core/".$strTarget;
     }
@@ -266,24 +304,27 @@ class class_module_packagemanager_packagemanager_module implements interface_pac
      *
      * @return bool
      */
-    public function isRemovable() {
-        $objManager = new class_module_packagemanager_manager();
+    public function isRemovable()
+    {
+        $objManager = new PackagemanagerManager();
 
-        if(count($objManager->getArrRequiredBy($this->getObjMetadata())) > 0)
+        if (count($objManager->getArrRequiredBy($this->getObjMetadata())) > 0) {
             return false;
+        }
 
-        if(!$this->getObjMetadata()->getBitProvidesInstaller())
+        if (!$this->getObjMetadata()->getBitProvidesInstaller()) {
             return true;
+        }
 
         //scan installers in order to query them on their removable status
         $bitIsRemovable = true;
-        foreach($this->getInstaller($this->getObjMetadata()) as $objOneInstaller) {
-            if(!$objOneInstaller instanceof interface_installer_removable) {
+        foreach ($this->getInstaller($this->getObjMetadata()) as $objOneInstaller) {
+            if (!$objOneInstaller instanceof InstallerRemovableInterface) {
                 $bitIsRemovable = false;
                 break;
             }
 
-            if(!$objOneInstaller->isRemovable()) {
+            if (!$objOneInstaller->isRemovable()) {
                 $bitIsRemovable = false;
                 break;
             }
@@ -299,33 +340,34 @@ class class_module_packagemanager_packagemanager_module implements interface_pac
      *
      * @return bool
      */
-    public function remove(&$strLog) {
+    public function remove(&$strLog)
+    {
 
-        if(!$this->isRemovable()) {
+        if (!$this->isRemovable()) {
             return false;
         }
 
         $bitReturn = true;
 
         //if we reach up until here, each installer should be an instance of interface_installer_removable
-        foreach($this->getInstaller($this->getObjMetadata()) as $objOneInstaller) {
-            if($objOneInstaller instanceof interface_installer_removable) {
+        foreach ($this->getInstaller($this->getObjMetadata()) as $objOneInstaller) {
+            if ($objOneInstaller instanceof InstallerRemovableInterface) {
                 $bitReturn = $bitReturn && $objOneInstaller->remove($strLog);
             }
         }
 
         //finally: delete the the module on file-system level
-        if($bitReturn) {
+        if ($bitReturn) {
             $strLog .= "Deleting file-system parts...\n";
-            $objFilesystem = new class_filesystem();
+            $objFilesystem = new Filesystem();
             $bitReturn = $objFilesystem->folderDeleteRecursive($this->getObjMetadata()->getStrPath());
 
-            if(!$bitReturn) {
+            if (!$bitReturn) {
                 $strLog .= "Error deleting file-system parts!. Please remove manually: ".$this->getObjMetadata()->getStrPath()."";
             }
         }
 
-        $strLog.= "\n\nRemoval finished ".($bitReturn ? "successfully" : " with errors")."\n";
+        $strLog .= "\n\nRemoval finished ".($bitReturn ? "successfully" : " with errors")."\n";
 
         return $bitReturn;
     }
@@ -334,21 +376,22 @@ class class_module_packagemanager_packagemanager_module implements interface_pac
     /**
      * Internal helper, fetches all installers located within the passed package
      *
-     * @param class_module_packagemanager_metadata $objMetadata
+     * @param PackagemanagerMetadata $objMetadata
      *
-     * @return interface_installer[]
+     * @return InstallerInterface[]
      */
-    protected function getInstaller(class_module_packagemanager_metadata $objMetadata) {
+    protected function getInstaller(PackagemanagerMetadata $objMetadata)
+    {
 
-        $objFilesystem = new class_filesystem();
+        $objFilesystem = new Filesystem();
         $arrInstaller = $objFilesystem->getFilelist($objMetadata->getStrPath()."/installer/", array(".php"));
 
         $arrReturn = array();
         //start with modules
-        foreach($arrInstaller as $strOneInstaller) {
+        foreach ($arrInstaller as $strOneInstaller) {
 
-            /** @var $objInstaller interface_installer */
-            $objInstaller = class_classloader::getInstance()->getInstanceFromFilename(_realpath_.$objMetadata->getStrPath()."/installer/".$strOneInstaller);
+            /** @var $objInstaller InstallerInterface */
+            $objInstaller = Classloader::getInstance()->getInstanceFromFilename(_realpath_.$objMetadata->getStrPath()."/installer/".$strOneInstaller);
             $arrReturn[] = $objInstaller;
         }
 

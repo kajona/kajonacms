@@ -4,6 +4,13 @@
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 ********************************************************************************************************/
 
+namespace Kajona\Packagemanager\System\Messageproviders;
+
+use Kajona\System\System\Carrier;
+use Kajona\System\System\Messageproviders\MessageproviderExtendedInterface;
+use Kajona\System\System\SystemModule;
+
+
 /**
  * The exceptions-messageprovider sends messages in case of exceptions.
  * By default, messages are sent to all members of the admin-group.
@@ -12,8 +19,8 @@
  * @package module_messaging
  * @since 4.0
  */
-class class_messageprovider_packageupdate implements interface_messageprovider_extended {
-
+class MessageproviderPackageupdate implements MessageproviderExtendedInterface
+{
 
 
     /**
@@ -21,8 +28,9 @@ class class_messageprovider_packageupdate implements interface_messageprovider_e
      *
      * @return string
      */
-    public function getStrName() {
-        return class_carrier::getInstance()->getObjLang()->getLang("messageprovider_packageupdate_name", "messaging");
+    public function getStrName()
+    {
+        return Carrier::getInstance()->getObjLang()->getLang("messageprovider_packageupdate_name", "messaging");
     }
 
     /**
@@ -31,7 +39,8 @@ class class_messageprovider_packageupdate implements interface_messageprovider_e
      *
      * @return bool
      */
-    public function isAlwaysActive() {
+    public function isAlwaysActive()
+    {
         return false;
     }
 
@@ -42,7 +51,8 @@ class class_messageprovider_packageupdate implements interface_messageprovider_e
      *
      * @return mixed
      */
-    public function isAlwaysByMail() {
+    public function isAlwaysByMail()
+    {
         return false;
     }
 
@@ -53,8 +63,9 @@ class class_messageprovider_packageupdate implements interface_messageprovider_e
      * @return bool
      * @since 4.5
      */
-    public function isVisibleInConfigView() {
-        return class_module_system_module::getModuleByName("packagemanager")->rightView();
+    public function isVisibleInConfigView()
+    {
+        return SystemModule::getModuleByName("packagemanager")->rightView();
     }
 
 }

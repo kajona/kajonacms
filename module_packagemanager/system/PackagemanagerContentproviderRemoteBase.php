@@ -6,6 +6,19 @@
 *	$Id$                                  *
 ********************************************************************************************************/
 
+namespace Kajona\Packagemanager\System;
+
+use Kajona\System\System\Carrier;
+use Kajona\System\System\Classloader;
+use Kajona\System\System\Exception;
+use Kajona\System\System\Reflection;
+use Kajona\System\System\Remoteloader;
+use Kajona\System\System\Resourceloader;
+use Kajona\System\System\ResponseObject;
+use Kajona\System\System\Session;
+use Kajona\System\System\UserUser;
+
+
 /**
  * A content-provider used to upload archives from remote repositories.
  * Provides both, a search and a download-part.
@@ -20,7 +33,8 @@
  * @author flo@mediaskills.org
  * @since 4.0
  */
-abstract class class_module_packagemanager_contentprovider_remote_base implements interface_packagemanager_contentprovider {
+abstract class PackagemanagerContentproviderRemoteBase implements PackagemanagerContentproviderInterface
+{
 
     private static $STR_MODULE_NAME = "packagemanager";
 
@@ -33,7 +47,8 @@ abstract class class_module_packagemanager_contentprovider_remote_base implement
     private $CLASS_NAME;
 
 
-    function __construct($strProviderName, $strBrowseHost, $strBrowseUrl, $strDownloadUrl, $strClassName, $strBrowseProtocol = "http://", $intBrowsePort = 80) {
+    function __construct($strProviderName, $strBrowseHost, $strBrowseUrl, $strDownloadUrl, $strClassName, $strBrowseProtocol = "http://", $intBrowsePort = 80)
+    {
         $this->STR_PROVIDER_NAME = $strProviderName;
         $this->STR_BROWSE_HOST = $strBrowseHost;
         $this->STR_BROWSE_URL = $strBrowseUrl;
@@ -49,8 +64,9 @@ abstract class class_module_packagemanager_contentprovider_remote_base implement
      *
      * @return mixed
      */
-    public function getDisplayTitle() {
-        return class_carrier::getInstance()->getObjLang()->getLang($this->STR_PROVIDER_NAME, self::$STR_MODULE_NAME);
+    public function getDisplayTitle()
+    {
+        return Carrier::getInstance()->getObjLang()->getLang($this->STR_PROVIDER_NAME, self::$STR_MODULE_NAME);
     }
 
     /**
@@ -65,18 +81,19 @@ abstract class class_module_packagemanager_contentprovider_remote_base implement
      * provider = class_name
      * The provider will be called using the processPackageUpload method.
      *
-     * @throws class_exception
+     * @throws Exception
      * @return string
      */
-    public function renderPackageList() {
+    public function renderPackageList()
+    {
 
-        $objUser = new class_module_user_user(class_session::getInstance()->getUserID());
+        $objUser = new UserUser(Session::getInstance()->getUserID());
         $intStart = ($this->getPageNumber() - 1) * $objUser->getIntItemsPerPage();
         $intEnd = $intStart + $objUser->getIntItemsPerPage() - 1;
 
-        $objToolkit = class_carrier::getInstance()->getObjToolkit("admin");
-        $objLang = class_carrier::getInstance()->getObjLang();
-        $objManager = new class_module_packagemanager_manager();
+        $objToolkit = Carrier::getInstance()->getObjToolkit("admin");
+        $objLang = Carrier::getInstance()->getObjLang();
+        $objManager = new PackagemanagerManager();
 
         $objRemoteloader = $this->getRemoteloader();
         $objRemoteloader->setStrQueryParams($this->buildQueryParams($intStart, $intEnd));
@@ -85,15 +102,16 @@ abstract class class_module_packagemanager_contentprovider_remote_base implement
         try {
             $strResponse = $objRemoteloader->getRemoteContent();
         }
-        catch (class_exception $objEx) {
+        catch (Exception $objEx) {
             return $objLang->getLang("package_remote_errorloading", self::$STR_MODULE_NAME);
         }
 
         $arrResponse = json_decode($strResponse, true);
-        if($arrResponse === null)
-            throw new class_exception("Error loading the remote package list. Got: <br />".htmlToString($strResponse, true), class_exception::$level_ERROR);
+        if ($arrResponse === null) {
+            throw new Exception("Error loading the remote package list. Got: <br />".htmlToString($strResponse, true), Exception::$level_ERROR);
+        }
 
-        $objRemoteParser = class_module_packagemanager_remoteparser_factory::getRemoteParser(
+        $objRemoteParser = PackagemanagerRemoteparserFactory::getRemoteParser(
             $arrResponse, $this->getPageNumber(), $intStart, $intEnd, get_class($this), "&name=".urlencode($this->getParam("name"))."&type=".$this->getParam("type")
         );
 
@@ -103,14 +121,15 @@ abstract class class_module_packagemanager_contentprovider_remote_base implement
 
         $strReturn .= $objToolkit->listHeader();
 
-        if(!$this->containsItems($arrPackages)) {
+        if (!$this->containsItems($arrPackages)) {
             $strReturn .= $objToolkit->getTextRow($objLang->getLang("commons_list_empty", null));
-        } else {
+        }
+        else {
             $intI = 0;
-            foreach($arrPackages as $arrOnePackage) {
+            foreach ($arrPackages as $arrOnePackage) {
 
                 //check if already installed locally
-                if($objManager->getPackage($arrOnePackage["title"]) !== null) {
+                if ($objManager->getPackage($arrOnePackage["title"]) !== null) {
                     $strAction = $objToolkit->listButton(getImageAdmin("icon_installDisabled", $objLang->getLang("package_noinstall_installed", self::$STR_MODULE_NAME)));
                 }
                 else {
@@ -129,8 +148,9 @@ abstract class class_module_packagemanager_contentprovider_remote_base implement
 
 
                 $strIcon = "icon_module";
-                if($arrOnePackage["type"] == "TEMPLATE")
+                if ($arrOnePackage["type"] == "TEMPLATE") {
                     $strIcon = "icon_dot";
+                }
 
 
                 $arrOnePackage["version"] = $objLang->getLang("type_".$arrOnePackage["type"], self::$STR_MODULE_NAME).", V ".$arrOnePackage["version"];
@@ -147,7 +167,8 @@ abstract class class_module_packagemanager_contentprovider_remote_base implement
         return $strReturn;
     }
 
-    private function buildQueryParams($intStart, $intEnd) {
+    private function buildQueryParams($intStart, $intEnd)
+    {
         $strQuery = $this->STR_BROWSE_URL;
         if ($this->getParam("name") != "") {
             // build search query with filters for name + paging + type
@@ -155,13 +176,13 @@ abstract class class_module_packagemanager_contentprovider_remote_base implement
         }
 
         $arrTypes = array(
-            class_module_packagemanager_manager::STR_TYPE_MODULE,
-            class_module_packagemanager_manager::STR_TYPE_TEMPLATE
+            PackagemanagerManager::STR_TYPE_MODULE,
+            PackagemanagerManager::STR_TYPE_TEMPLATE
         );
 
         if ($this->getParam("type") != "") {
             if (in_array($this->getParam("type"), $arrTypes)) {
-                $strQuery .= "&type=". $this->getParam("type");
+                $strQuery .= "&type=".$this->getParam("type");
             }
         }
 
@@ -169,19 +190,21 @@ abstract class class_module_packagemanager_contentprovider_remote_base implement
     }
 
 
-
-    private function getParam($strParamName) {
-        return class_carrier::getInstance()->getParam($strParamName);
+    private function getParam($strParamName)
+    {
+        return Carrier::getInstance()->getParam($strParamName);
     }
 
-    private function containsItems($arrResult) {
+    private function containsItems($arrResult)
+    {
         return $arrResult != null && count($arrResult) > 0;
     }
 
-    private function createFilterCriteria() {
+    private function createFilterCriteria()
+    {
 
-        $objToolkit = class_carrier::getInstance()->getObjToolkit("admin");
-        $objLang = class_carrier::getInstance()->getObjLang();
+        $objToolkit = Carrier::getInstance()->getObjToolkit("admin");
+        $objLang = Carrier::getInstance()->getObjLang();
 
         $strReturn = "";
 
@@ -195,8 +218,8 @@ abstract class class_module_packagemanager_contentprovider_remote_base implement
 
         $arrTypeOption = array();
         $arrTypeOption[""] = $objLang->getLang("all", self::$STR_MODULE_NAME);
-        $arrTypeOption[class_module_packagemanager_manager::STR_TYPE_TEMPLATE] = $objLang->getLang("template", self::$STR_MODULE_NAME);
-        $arrTypeOption[class_module_packagemanager_manager::STR_TYPE_MODULE] = $objLang->getLang("module", self::$STR_MODULE_NAME);
+        $arrTypeOption[PackagemanagerManager::STR_TYPE_TEMPLATE] = $objLang->getLang("template", self::$STR_MODULE_NAME);
+        $arrTypeOption[PackagemanagerManager::STR_TYPE_MODULE] = $objLang->getLang("module", self::$STR_MODULE_NAME);
         $strReturn .= $objToolkit->formInputDropdown("type", $arrTypeOption, $objLang->getLang("type", self::$STR_MODULE_NAME), $this->getParam("type"));
 
         $strReturn .= $objToolkit->formInputSubmit($objLang->getLang("filter", self::$STR_MODULE_NAME));
@@ -210,7 +233,8 @@ abstract class class_module_packagemanager_contentprovider_remote_base implement
      *
      * @return int
      */
-    private function getPageNumber() {
+    private function getPageNumber()
+    {
         return (int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1);
     }
 
@@ -220,7 +244,8 @@ abstract class class_module_packagemanager_contentprovider_remote_base implement
      *
      * @return string the filename of the package downloaded
      */
-    public function processPackageUpload() {
+    public function processPackageUpload()
+    {
 
         $strFilename = generateSystemid().".phar";
 
@@ -232,9 +257,9 @@ abstract class class_module_packagemanager_contentprovider_remote_base implement
         $strResponse = $objRemoteloader->getRemoteContent();
         file_put_contents(_realpath_._projectpath_."/temp/".$strFilename, $strResponse);
 
-        class_resourceloader::getInstance()->flushCache();
-        class_classloader::getInstance()->flushCache();
-        class_reflection::flushCache();
+        Resourceloader::getInstance()->flushCache();
+        Classloader::getInstance()->flushCache();
+        Reflection::flushCache();
 
 
         return _projectpath_."/temp/".$strFilename;
@@ -250,7 +275,8 @@ abstract class class_module_packagemanager_contentprovider_remote_base implement
      *
      * @return array
      */
-    public function searchPackage($strTitle) {
+    public function searchPackage($strTitle)
+    {
 
         $objRemoteloader = $this->getRemoteloader();
         $objRemoteloader->setStrQueryParams($this->STR_BROWSE_URL."&title=".urlencode($strTitle)."&domain=".urlencode(_webpath_));
@@ -258,7 +284,7 @@ abstract class class_module_packagemanager_contentprovider_remote_base implement
         try {
             $strPackages = $objRemoteloader->getRemoteContent();
         }
-        catch(class_exception $objEx) {
+        catch (Exception $objEx) {
             return array();
         }
 
@@ -276,28 +302,32 @@ abstract class class_module_packagemanager_contentprovider_remote_base implement
      *
      * @return mixed
      */
-    public function initPackageUpdate($strTitle) {
+    public function initPackageUpdate($strTitle)
+    {
         $arrMetadata = $this->searchPackage($strTitle);
 
-        if(count($arrMetadata) == 1)
+        if (count($arrMetadata) == 1) {
             $arrMetadata = $arrMetadata[0];
+        }
 
-        if(isset($arrMetadata["systemid"])) {
+        if (isset($arrMetadata["systemid"])) {
             $strUrl = getLinkAdminHref(self::$STR_MODULE_NAME, "uploadPackage", "&provider=".get_class($this)."&systemid=".$arrMetadata["systemid"]);
 
             $strUrl = str_replace("_webpath_", _webpath_, $strUrl);
             $strUrl = str_replace("_indexpath_", _indexpath_, $strUrl);
-            class_response_object::getInstance()->setStrRedirectUrl($strUrl);
+            ResponseObject::getInstance()->setStrRedirectUrl($strUrl);
         }
 
     }
 
     /**
      * Returns a fully set up remoteloader to start querying the package repo
-     * @return class_remoteloader
+     *
+     * @return Remoteloader
      */
-    private function getRemoteloader() {
-        $objRemoteloader = new class_remoteloader();
+    private function getRemoteloader()
+    {
+        $objRemoteloader = new Remoteloader();
         $objRemoteloader->setStrHost($this->STR_BROWSE_HOST);
         $objRemoteloader->setStrProtocolHeader($this->STR_PROTOCOL_HEADER);
         $objRemoteloader->setIntPort($this->INT_BROWSE_HOST_PORT);

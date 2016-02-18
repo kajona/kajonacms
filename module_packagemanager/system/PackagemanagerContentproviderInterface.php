@@ -6,6 +6,8 @@
 *	$Id$                                  *
 ********************************************************************************************************/
 
+namespace Kajona\Packagemanager\System;
+
 
 /**
  * A contentprovider is a single source, e.g. a fileupload or a remote-server providing
@@ -16,8 +18,8 @@
  * @since 4.0
  * @package module_packagemanager
  */
-interface interface_packagemanager_contentprovider {
-
+interface PackagemanagerContentproviderInterface
+{
 
 
     /**
@@ -62,6 +64,7 @@ interface interface_packagemanager_contentprovider {
      * has to be returned.
      *
      * @param string $strTitle
+     *
      * @return array
      * @abstract
      */
@@ -73,6 +76,7 @@ interface interface_packagemanager_contentprovider {
      * should be used.
      *
      * @param string $strTitle
+     *
      * @return mixed
      * @abstract
      */
