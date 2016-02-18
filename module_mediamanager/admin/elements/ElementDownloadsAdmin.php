@@ -7,6 +7,13 @@
 *	$Id$                                  *
 ********************************************************************************************************/
 
+namespace Kajona\Mediamanager\Admin\Elements;
+
+use Kajona\Mediamanager\System\MediamanagerRepo;
+use Kajona\Pages\Admin\AdminElementInterface;
+use Kajona\Pages\Admin\ElementAdmin;
+
+
 /**
  * Class representing the admin-part of the downloads element
  *
@@ -14,7 +21,8 @@
  * @author sidler@mulchprod.de
  * @targetTable element_downloads.content_id
  */
-class class_element_downloads_admin extends class_element_admin implements interface_admin_element {
+class ElementDownloadsAdmin extends ElementAdmin implements AdminElementInterface
+{
 
     /**
      * @var string
@@ -45,11 +53,12 @@ class class_element_downloads_admin extends class_element_admin implements inter
     private $intAmount;
 
 
-    public function getAdminForm() {
+    public function getAdminForm()
+    {
         //Load all archives
-        $arrObjArchs = class_module_mediamanager_repo::getObjectList();
+        $arrObjArchs = MediamanagerRepo::getObjectList();
         $arrArchives = array();
-        foreach($arrObjArchs as $objOneArchive) {
+        foreach ($arrObjArchs as $objOneArchive) {
             $arrArchives[$objOneArchive->getSystemid()] = $objOneArchive->getStrDisplayName();
         }
 
@@ -61,46 +70,50 @@ class class_element_downloads_admin extends class_element_admin implements inter
     /**
      * @param string $strTemplate
      */
-    public function setStrTemplate($strTemplate) {
+    public function setStrTemplate($strTemplate)
+    {
         $this->strTemplate = $strTemplate;
     }
 
     /**
      * @return string
      */
-    public function getStrTemplate() {
+    public function getStrTemplate()
+    {
         return $this->strTemplate;
     }
 
     /**
      * @param string $strRepo
      */
-    public function setStrRepo($strRepo) {
+    public function setStrRepo($strRepo)
+    {
         $this->strRepo = $strRepo;
     }
 
     /**
      * @return string
      */
-    public function getStrRepo() {
+    public function getStrRepo()
+    {
         return $this->strRepo;
     }
 
     /**
      * @param int $intAmount
      */
-    public function setIntAmount($intAmount) {
+    public function setIntAmount($intAmount)
+    {
         $this->intAmount = $intAmount;
     }
 
     /**
      * @return int
      */
-    public function getIntAmount() {
+    public function getIntAmount()
+    {
         return $this->intAmount;
     }
 
-
-    
 
 }

@@ -6,13 +6,23 @@
 *	$Id$                                            *
 ********************************************************************************************************/
 
+namespace Kajona\Mediamanager\Admin\Elements;
+
+use Kajona\Mediamanager\System\MediamanagerRepo;
+use Kajona\Pages\Admin\AdminElementInterface;
+use Kajona\Pages\Admin\ElementAdmin;
+use Kajona\System\Admin\Formentries\FormentryHeadline;
+use Kajona\System\Admin\Formentries\FormentryTextrow;
+
+
 /**
  * Class representing the admin-part of the gallery element
  *
  * @package module_mediamanager
  * @targetTable element_gallery.content_id
  */
-class class_element_gallery_admin extends class_element_admin implements interface_admin_element {
+class ElementGalleryAdmin extends ElementAdmin implements AdminElementInterface
+{
 
     /**
      * @var string
@@ -108,27 +118,27 @@ class class_element_gallery_admin extends class_element_admin implements interfa
     private $strGalleryOverlay;
 
 
-
-    public function getAdminForm() {
+    public function getAdminForm()
+    {
         $objForm = parent::getAdminForm();
 
-        $arrRawGals = class_module_mediamanager_repo::getObjectList();
+        $arrRawGals = MediamanagerRepo::getObjectList();
         $arrGalleries = array();
-        foreach($arrRawGals as $objOneGal) {
+        foreach ($arrRawGals as $objOneGal) {
             $arrGalleries[$objOneGal->getSystemid()] = $objOneGal->getStrDisplayName();
         }
         $objForm->getField("repo")->setArrKeyValues($arrGalleries);
 
-        $objForm->addField(new class_formentry_headline("h1"))->setStrValue($this->getLang("headline_list"));
+        $objForm->addField(new FormentryHeadline("h1"))->setStrValue($this->getLang("headline_list"));
         $objForm->setFieldToPosition("h1", 3);
 
-        $objForm->addField(new class_formentry_headline("h2"))->setStrValue($this->getLang("headline_detail"));
-        $objForm->addField(new class_formentry_textrow("t2"))->setStrValue($this->getLang("hint_detail"));
+        $objForm->addField(new FormentryHeadline("h2"))->setStrValue($this->getLang("headline_detail"));
+        $objForm->addField(new FormentryTextrow("t2"))->setStrValue($this->getLang("hint_detail"));
         $objForm->setFieldToPosition("h2", 5);
         $objForm->setFieldToPosition("t2", 6);
 
-        $objForm->addField(new class_formentry_headline("h3"))->setStrValue($this->getLang("headline_overlay"));
-        $objForm->addField(new class_formentry_textrow("t3"))->setStrValue($this->getLang("hint_text"));
+        $objForm->addField(new FormentryHeadline("h3"))->setStrValue($this->getLang("headline_overlay"));
+        $objForm->addField(new FormentryTextrow("t3"))->setStrValue($this->getLang("hint_text"));
         $objForm->setFieldToPosition("h3", 9);
         $objForm->setFieldToPosition("t3", 10);
 
@@ -136,151 +146,165 @@ class class_element_gallery_admin extends class_element_admin implements interfa
     }
 
 
-
-
     /**
      * @param int $intImagesPerPage
      */
-    public function setIntImagesPerPage($intImagesPerPage) {
+    public function setIntImagesPerPage($intImagesPerPage)
+    {
         $this->intImagesPerPage = $intImagesPerPage;
     }
 
     /**
      * @return int
      */
-    public function getIntImagesPerPage() {
+    public function getIntImagesPerPage()
+    {
         return $this->intImagesPerPage;
     }
 
     /**
      * @param int $intMaxHD
      */
-    public function setIntMaxHD($intMaxHD) {
+    public function setIntMaxHD($intMaxHD)
+    {
         $this->intMaxHD = $intMaxHD;
     }
 
     /**
      * @return int
      */
-    public function getIntMaxHD() {
+    public function getIntMaxHD()
+    {
         return $this->intMaxHD;
     }
 
     /**
      * @param int $intMaxWD
      */
-    public function setIntMaxWD($intMaxWD) {
+    public function setIntMaxWD($intMaxWD)
+    {
         $this->intMaxWD = $intMaxWD;
     }
 
     /**
      * @return int
      */
-    public function getIntMaxWD() {
+    public function getIntMaxWD()
+    {
         return $this->intMaxWD;
     }
 
     /**
      * @param int $intMode
      */
-    public function setIntGalleryMode($intMode) {
+    public function setIntGalleryMode($intMode)
+    {
         $this->intGalleryMode = $intMode;
     }
 
     /**
      * @return int
      */
-    public function getIntGalleryMode() {
+    public function getIntGalleryMode()
+    {
         return $this->intGalleryMode;
     }
 
     /**
      * @param int $intTextX
      */
-    public function setIntTextX($intTextX) {
+    public function setIntTextX($intTextX)
+    {
         $this->intTextX = $intTextX;
     }
 
     /**
      * @return int
      */
-    public function getIntTextX() {
+    public function getIntTextX()
+    {
         return $this->intTextX;
     }
 
     /**
      * @param int $intTextY
      */
-    public function setIntTextY($intTextY) {
+    public function setIntTextY($intTextY)
+    {
         $this->intTextY = $intTextY;
     }
 
     /**
      * @return int
      */
-    public function getIntTextY() {
+    public function getIntTextY()
+    {
         return $this->intTextY;
     }
 
     /**
      * @param int $strGalleryOverlay
      */
-    public function setStrGalleryOverlay($strGalleryOverlay) {
+    public function setStrGalleryOverlay($strGalleryOverlay)
+    {
         $this->strGalleryOverlay = $strGalleryOverlay;
     }
 
     /**
      * @return int
      */
-    public function getStrGalleryOverlay() {
+    public function getStrGalleryOverlay()
+    {
         return $this->strGalleryOverlay;
     }
 
     /**
      * @param string $strRepo
      */
-    public function setStrRepo($strRepo) {
+    public function setStrRepo($strRepo)
+    {
         $this->strRepo = $strRepo;
     }
 
     /**
      * @return string
      */
-    public function getStrRepo() {
+    public function getStrRepo()
+    {
         return $this->strRepo;
     }
 
     /**
      * @param string $strTemplate
      */
-    public function setStrTemplate($strTemplate) {
+    public function setStrTemplate($strTemplate)
+    {
         $this->strTemplate = $strTemplate;
     }
 
     /**
      * @return string
      */
-    public function getStrTemplate() {
+    public function getStrTemplate()
+    {
         return $this->strTemplate;
     }
 
     /**
      * @param int $strText
      */
-    public function setStrText($strText) {
+    public function setStrText($strText)
+    {
         $this->strText = $strText;
     }
 
     /**
      * @return int
      */
-    public function getStrText() {
+    public function getStrText()
+    {
         return $this->strText;
     }
-
-
-
-
 
 
 }

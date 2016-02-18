@@ -6,6 +6,13 @@
 *    $Id$                        *
 ********************************************************************************************************/
 
+namespace Kajona\Mediamanager\Admin;
+
+use Kajona\System\Admin\AdminFormgenerator;
+use Kajona\System\Admin\Formentries\FormentryHeadline;
+use Kajona\System\System\Carrier;
+
+
 /**
  * The formgenerator for a mediamanager repo
  *
@@ -14,28 +21,15 @@
  * @since 4.8
  *
  */
-class class_module_mediamanager_repo_formgenerator extends class_admin_formgenerator {
+class MediamanagerFileFormgenerator extends AdminFormgenerator {
     /**
      * @inheritDoc
      */
     public function generateFieldsFromObject() {
         parent::generateFieldsFromObject();
 
-        $this->getField("path")->setStrOpener(
-            class_link::getLinkAdminDialog(
-                "mediamanager",
-                "folderListFolderview",
-                "&form_element=".$this->getField("path")->getStrEntryName(),
-                $this->getLang("commons_open_browser"),
-                $this->getLang("commons_open_browser"),
-                "icon_externalBrowser",
-                $this->getLang("commons_open_browser")
-            )
-        )->setStrHint($this->getLang("mediamanager_path_h"));
-
-        $this->getField("uploadfilter")->setStrHint($this->getLang("mediamanager_upload_filter_h"));
-        $this->getField("viewfilter")->setStrHint($this->getLang("mediamanager_view_filter_h"));
-
+        $this->addField(new FormentryHeadline("", "source"))->setStrValue(Carrier::getInstance()->getParam("source"));
     }
+
 }
 

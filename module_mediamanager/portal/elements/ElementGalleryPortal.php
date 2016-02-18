@@ -6,6 +6,15 @@
 *	$Id$                                            *
 ********************************************************************************************************/
 
+namespace Kajona\Mediamanager\Portal\Elements;
+
+use class_module_rating_rate;
+use Kajona\Mediamanager\Portal\MediamanagerPortal;
+use Kajona\Pages\Portal\ElementPortal;
+use Kajona\Pages\Portal\PortalElementInterface;
+use Kajona\System\System\SystemModule;
+
+
 /**
  * Portal-part of the gallery-element
  *
@@ -14,7 +23,8 @@
  *
  * @targetTable element_gallery.content_id
  */
-class class_element_gallery_portal extends class_element_portal implements interface_portal_element {
+class ElementGalleryPortal extends ElementPortal implements PortalElementInterface
+{
 
 
     /**
@@ -22,12 +32,14 @@ class class_element_gallery_portal extends class_element_portal implements inter
      *
      * @param $objElementData
      */
-    public function __construct($objElementData) {
+    public function __construct($objElementData)
+    {
         parent::__construct($objElementData);
 
         //we support ratings, so add cache-busters
-        if(class_module_system_module::getModuleByName("rating") !== null)
+        if (SystemModule::getModuleByName("rating") !== null) {
             $this->setStrCacheAddon(getCookie(class_module_rating_rate::RATING_COOKIE));
+        }
     }
 
 
@@ -36,11 +48,12 @@ class class_element_gallery_portal extends class_element_portal implements inter
      *
      * @return string
      */
-    public function loadData() {
+    public function loadData()
+    {
         $strReturn = "";
 
-        $objMediamanagerModule = class_module_system_module::getModuleByName("mediamanager");
-        if($objMediamanagerModule != null) {
+        $objMediamanagerModule = SystemModule::getModuleByName("mediamanager");
+        if ($objMediamanagerModule != null) {
 
             $this->arrElementData["repo_id"] = $this->arrElementData["gallery_id"];
             $this->arrElementData["repo_elementsperpage"] = $this->arrElementData["gallery_imagesperpage"];
@@ -53,26 +66,29 @@ class class_element_gallery_portal extends class_element_portal implements inter
         return $strReturn;
     }
 
-    public static function providesNavigationEntries() {
+    public static function providesNavigationEntries()
+    {
         return true;
     }
 
-    public function getNavigationEntries() {
+    public function getNavigationEntries()
+    {
         $arrData = $this->getElementContent($this->getSystemid());
 
         //skip random galleries
-        if($arrData["gallery_mode"] == "1")
+        if ($arrData["gallery_mode"] == "1") {
             return false;
+        }
 
         $arrData["repo_id"] = $arrData["gallery_id"];
         $arrData["repo_elementsperpage"] = $arrData["gallery_imagesperpage"];
         $arrData["repo_template"] = $arrData["gallery_template"];
 
-        $objMediamanagerModule = class_module_system_module::getModuleByName("mediamanager");
+        $objMediamanagerModule = SystemModule::getModuleByName("mediamanager");
 
-        if($objMediamanagerModule != null) {
+        if ($objMediamanagerModule != null) {
 
-            /** @var $objDownloads class_module_mediamanager_portal */
+            /** @var $objDownloads MediamanagerPortal */
             $objDownloads = $objMediamanagerModule->getPortalInstanceOfConcreteModule($arrData);
             $arrReturn = $objDownloads->getNavigationNodes();
 

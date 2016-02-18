@@ -4,16 +4,24 @@
 *   (c) 2007-2015 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 ********************************************************************************************************/
+
+namespace Kajona\Mediamanager\Admin\Statsreports;
+
+use interface_admin_statsreports;
 use Kajona\System\Admin\ToolkitAdmin;
 use Kajona\System\System\Database;
 use Kajona\System\System\Lang;
+use Kajona\System\System\Session;
+use Kajona\System\System\UserUser;
+
 /**
  * This plugin show the list of download, served by the downloads-module
  *
  * @package module_mediamanager
  * @author sidler@mulchprod.de
  */
-class class_stats_report_downloads implements interface_admin_statsreports {
+class StatsReportDownloads implements interface_admin_statsreports
+{
 
     //class vars
     private $intDateStart;
@@ -26,7 +34,8 @@ class class_stats_report_downloads implements interface_admin_statsreports {
     /**
      * Constructor
      */
-    public function __construct(Database $objDB, ToolkitAdmin $objToolkit, Lang $objTexts) {
+    public function __construct(Database $objDB, ToolkitAdmin $objToolkit, Lang $objTexts)
+    {
         $this->objTexts = $objTexts;
         $this->objToolkit = $objToolkit;
         $this->objDB = $objDB;
@@ -37,62 +46,73 @@ class class_stats_report_downloads implements interface_admin_statsreports {
      *
      * @return string
      */
-    public static function getExtensionName() {
+    public static function getExtensionName()
+    {
         return "core.stats.admin.statsreport";
     }
 
     /**
      * @param int $intEndDate
+     *
      * @return void
      */
-    public function setEndDate($intEndDate) {
+    public function setEndDate($intEndDate)
+    {
         $this->intDateEnd = $intEndDate;
     }
 
     /**
      * @param int $intStartDate
+     *
      * @return void
      */
-    public function setStartDate($intStartDate) {
+    public function setStartDate($intStartDate)
+    {
         $this->intDateStart = $intStartDate;
     }
 
     /**
      * @return string
      */
-    public function getTitle() {
+    public function getTitle()
+    {
         return $this->objTexts->getLang("stats_title", "mediamanager");
     }
 
     /**
      * @return bool
      */
-    public function isIntervalable() {
+    public function isIntervalable()
+    {
         return false;
     }
 
     /**
      * @param int $intInterval
+     *
      * @return void
      */
-    public function setInterval($intInterval) {
+    public function setInterval($intInterval)
+    {
 
     }
 
     /**
      * @return string
      */
-    public function getReport() {
+    public function getReport()
+    {
         $strReturn = "";
 
         $arrLogsRaw = $this->getLogbookData();
         $arrLogs = array();
         $intI = 0;
 
-        $objUser = new class_module_user_user(class_session::getInstance()->getUserID());
-        foreach($arrLogsRaw as $intKey => $arrOneLog) {
-            if($intI++ >= $objUser->getIntItemsPerPage())
+        $objUser = new UserUser(Session::getInstance()->getUserID());
+        foreach ($arrLogsRaw as $intKey => $arrOneLog) {
+            if ($intI++ >= $objUser->getIntItemsPerPage()) {
                 break;
+            }
 
             $arrLogs[$intKey][0] = $intI;
             $arrLogs[$intKey][1] = $arrOneLog["downloads_log_id"];
@@ -119,8 +139,9 @@ class class_stats_report_downloads implements interface_admin_statsreports {
      *
      * @return mixed
      */
-    private function getLogbookData() {
-        $objUser = new class_module_user_user(class_session::getInstance()->getUserID());
+    private function getLogbookData()
+    {
+        $objUser = new UserUser(Session::getInstance()->getUserID());
         $strQuery = "SELECT *
 					  FROM "._dbprefix_."mediamanager_dllog
 					  WHERE downloads_log_date > ?
@@ -129,7 +150,7 @@ class class_stats_report_downloads implements interface_admin_statsreports {
 
         $arrReturn = $this->objDB->getPArray($strQuery, array($this->intDateStart, $this->intDateEnd), 0, ($objUser->getIntItemsPerPage() - 1));
 
-        foreach($arrReturn as &$arrOneRow) {
+        foreach ($arrReturn as &$arrOneRow) {
             //Load hostname, if available. faster, then mergin per LEFT JOIN
             $arrOneRow["stats_hostname"] = null;
             $strQuery = "SELECT stats_hostname
@@ -137,8 +158,9 @@ class class_stats_report_downloads implements interface_admin_statsreports {
     		             WHERE stats_ip = ?
     		             GROUP BY stats_hostname";
             $arrRow = $this->objDB->getPRow($strQuery, array($arrOneRow["downloads_log_ip"]));
-            if(isset($arrRow["stats_hostname"]))
+            if (isset($arrRow["stats_hostname"])) {
                 $arrOneRow["stats_hostname"] = $arrRow["stats_hostname"];
+            }
 
         }
 
@@ -148,7 +170,8 @@ class class_stats_report_downloads implements interface_admin_statsreports {
     /**
      * @return string
      */
-    public function getReportGraph() {
+    public function getReportGraph()
+    {
         return "";
     }
 

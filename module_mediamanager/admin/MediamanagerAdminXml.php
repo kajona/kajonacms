@@ -6,6 +6,22 @@
 *	$Id$                                            *
 ********************************************************************************************************/
 
+namespace Kajona\Mediamanager\Admin;
+
+use Kajona\Mediamanager\System\MediamanagerFile;
+use Kajona\Mediamanager\System\MediamanagerRepo;
+use Kajona\System\Admin\AdminController;
+use Kajona\System\Admin\XmlAdminInterface;
+use Kajona\System\System\Filesystem;
+use Kajona\System\System\HttpResponsetypes;
+use Kajona\System\System\HttpStatuscodes;
+use Kajona\System\System\Image2;
+use Kajona\System\System\Imageplugins\ImageCrop;
+use Kajona\System\System\Imageplugins\ImageRotate;
+use Kajona\System\System\Logger;
+use Kajona\System\System\Objectfactory;
+use Kajona\System\System\ResponseObject;
+
 
 /**
  * admin-class of the mediamanager-module
@@ -17,29 +33,35 @@
  * @module mediamanager
  * @moduleId _mediamanager_module_id_
  */
-class class_module_mediamanager_admin_xml extends class_admin_controller implements interface_xml_admin {
+class MediamanagerAdminXml extends AdminController implements XmlAdminInterface
+{
 
     /**
      * Create a new folder using the combination of passed folder & systemid
+     *
      * @return string
      * @permissions edit
      */
-    protected function actionCreateFolder() {
+    protected function actionCreateFolder()
+    {
         $strReturn = "";
 
-        /** @var class_module_mediamanager_repo|class_module_mediamanager_file $objInstance */
-        $objInstance = class_objectfactory::getInstance()->getObject($this->getSystemid());
+        /** @var MediamanagerRepo|MediamanagerFile $objInstance */
+        $objInstance = Objectfactory::getInstance()->getObject($this->getSystemid());
 
-        if($objInstance->rightEdit()) {
+        if ($objInstance->rightEdit()) {
 
-            if($objInstance instanceof class_module_mediamanager_file && $objInstance->getIntType() == class_module_mediamanager_file::$INT_TYPE_FOLDER)
+            if ($objInstance instanceof MediamanagerFile && $objInstance->getIntType() == MediamanagerFile::$INT_TYPE_FOLDER) {
                 $strPrevPath = $objInstance->getStrFilename();
+            }
 
-            else if($objInstance instanceof class_module_mediamanager_repo)
+            elseif ($objInstance instanceof MediamanagerRepo) {
                 $strPrevPath = $objInstance->getStrPath();
+            }
 
-            else
+            else {
                 return "";
+            }
 
             //create repo-instance
             $strFolder = $this->getParam("folder");
@@ -47,33 +69,31 @@ class class_module_mediamanager_admin_xml extends class_admin_controller impleme
             //Create the folder
             $strFolder = createFilename($strFolder, true);
             //folder already existing?
-            if(!is_dir(_realpath_."/".$strPrevPath."/".$strFolder)) {
+            if (!is_dir(_realpath_."/".$strPrevPath."/".$strFolder)) {
 
-                class_logger::getInstance()->addLogRow("creating folder ".$strPrevPath."/".$strFolder, class_logger::$levelInfo);
+                Logger::getInstance()->addLogRow("creating folder ".$strPrevPath."/".$strFolder, Logger::$levelInfo);
 
-                $objFilesystem = new class_filesystem();
-                if($objFilesystem->folderCreate($strPrevPath."/".$strFolder)) {
+                $objFilesystem = new Filesystem();
+                if ($objFilesystem->folderCreate($strPrevPath."/".$strFolder)) {
                     $strReturn = "<message>".xmlSafeString($this->getLang("folder_create_success"))."</message>";
                 }
                 else {
-                    class_response_object::getInstance()->setStrStatusCode(class_http_statuscodes::SC_INTERNAL_SERVER_ERROR);
+                    ResponseObject::getInstance()->setStrStatusCode(HttpStatuscodes::SC_INTERNAL_SERVER_ERROR);
                     $strReturn = "<message><error>".xmlSafeString($this->getLang("folder_create_error"))."</error></message>";
                 }
             }
             else {
-                class_response_object::getInstance()->setStrStatusCode(class_http_statuscodes::SC_INTERNAL_SERVER_ERROR);
+                ResponseObject::getInstance()->setStrStatusCode(HttpStatuscodes::SC_INTERNAL_SERVER_ERROR);
                 $strReturn = "<message><error>".xmlSafeString($this->getLang("folder_create_error"))."</error></message>";
             }
         }
         else {
-            class_response_object::getInstance()->setStrStatusCode(class_http_statuscodes::SC_UNAUTHORIZED);
+            ResponseObject::getInstance()->setStrStatusCode(HttpStatuscodes::SC_UNAUTHORIZED);
             $strReturn .= "<message><error>".xmlSafeString($this->getLang("commons_error_permissions"))."</error></message>";
         }
 
         return $strReturn;
     }
-
-
 
 
     /**
@@ -87,41 +107,43 @@ class class_module_mediamanager_admin_xml extends class_admin_controller impleme
      * @return string
      * @permissions right1
      */
-    protected function actionFileupload() {
+    protected function actionFileupload()
+    {
         $strReturn = "";
 
-        /** @var class_module_mediamanager_repo|class_module_mediamanager_file $objFile */
-        $objFile = class_objectfactory::getInstance()->getObject($this->getSystemid());
+        /** @var MediamanagerRepo|MediamanagerFile $objFile */
+        $objFile = Objectfactory::getInstance()->getObject($this->getSystemid());
 
         /**
-         * @var class_module_mediamanager_repo
+         * @var MediamanagerRepo
          */
         $objRepo = null;
 
-        if($objFile instanceof class_module_mediamanager_file) {
+        if ($objFile instanceof MediamanagerFile) {
             $strFolder = $objFile->getStrFilename();
-            if(!$objFile->rightEdit() || $objFile->getIntType() != class_module_mediamanager_file::$INT_TYPE_FOLDER) {
-                class_response_object::getInstance()->setStrStatusCode(class_http_statuscodes::SC_UNAUTHORIZED);
+            if (!$objFile->rightEdit() || $objFile->getIntType() != MediamanagerFile::$INT_TYPE_FOLDER) {
+                ResponseObject::getInstance()->setStrStatusCode(HttpStatuscodes::SC_UNAUTHORIZED);
                 $strReturn .= "<message><error>".xmlSafeString($this->getLang("commons_error_permissions"))."</error></message>";
                 return $strReturn;
             }
 
-            $objRepo = class_objectfactory::getInstance()->getObject($objFile->getPrevId());
-            while(!$objRepo instanceof class_module_mediamanager_repo)
-                $objRepo = class_objectfactory::getInstance()->getObject($objRepo->getPrevId());
+            $objRepo = Objectfactory::getInstance()->getObject($objFile->getPrevId());
+            while (!$objRepo instanceof MediamanagerRepo) {
+                $objRepo = Objectfactory::getInstance()->getObject($objRepo->getPrevId());
+            }
         }
-        elseif($objFile instanceof class_module_mediamanager_repo) {
+        elseif ($objFile instanceof MediamanagerRepo) {
             $objRepo = $objFile;
             $strFolder = $objFile->getStrPath();
-            if(!$objFile->rightEdit()) {
-                class_response_object::getInstance()->setStrStatusCode(class_http_statuscodes::SC_UNAUTHORIZED);
+            if (!$objFile->rightEdit()) {
+                ResponseObject::getInstance()->setStrStatusCode(HttpStatuscodes::SC_UNAUTHORIZED);
                 $strReturn .= "<message><error>".xmlSafeString($this->getLang("commons_error_permissions"))."</error></message>";
                 return $strReturn;
             }
 
         }
         else {
-            class_response_object::getInstance()->setStrStatusCode(class_http_statuscodes::SC_UNAUTHORIZED);
+            ResponseObject::getInstance()->setStrStatusCode(HttpStatuscodes::SC_UNAUTHORIZED);
             $strReturn .= "<message><error>".xmlSafeString($this->getLang("commons_error_permissions"))."</error></message>";
             return $strReturn;
         }
@@ -133,7 +155,7 @@ class class_module_mediamanager_admin_xml extends class_admin_controller impleme
         $bitJsonResponse = $this->getParam("jsonResponse") != "";
 
         $bitPostData = false;
-        if(is_array($arrSource)) {
+        if (is_array($arrSource)) {
             $strFilename = $arrSource["name"];
         }
         else {
@@ -142,21 +164,22 @@ class class_module_mediamanager_admin_xml extends class_admin_controller impleme
         }
 
         $strTarget = $strFolder."/".createFilename($strFilename);
-        $objFilesystem = new class_filesystem();
+        $objFilesystem = new Filesystem();
 
-        if(!file_exists(_realpath_."/".$strFolder))
+        if (!file_exists(_realpath_."/".$strFolder)) {
             $objFilesystem->folderCreate($strFolder, true);
+        }
 
-        if($objFilesystem->isWritable($strFolder)) {
+        if ($objFilesystem->isWritable($strFolder)) {
 
             //Check file for correct filters
             $arrAllowed = explode(",", $objRepo->getStrUploadFilter());
 
             $strSuffix = uniStrtolower(uniSubstr($strFilename, uniStrrpos($strFilename, ".")));
-            if($objRepo->getStrUploadFilter() == "" || in_array($strSuffix, $arrAllowed)) {
+            if ($objRepo->getStrUploadFilter() == "" || in_array($strSuffix, $arrAllowed)) {
 
-                if($bitPostData) {
-                    $objFilesystem = new class_filesystem();
+                if ($bitPostData) {
+                    $objFilesystem = new Filesystem();
                     $objFilesystem->openFilePointer($strTarget);
                     $bitCopySuccess = $objFilesystem->writeToFile(getPostRawData());
                     $objFilesystem->closeFilePointer();
@@ -164,46 +187,54 @@ class class_module_mediamanager_admin_xml extends class_admin_controller impleme
                 else {
                     $bitCopySuccess = $objFilesystem->copyUpload($strTarget, $arrSource["tmp_name"]);
                 }
-                if($bitCopySuccess) {
-                    if($bitJsonResponse)
+                if ($bitCopySuccess) {
+                    if ($bitJsonResponse) {
                         $strReturn = json_encode(array('success' => true));
-                    else
+                    }
+                    else {
                         $strReturn .= "<message>".$this->getLang("xmlupload_success")."</message>";
+                    }
 
-                    class_logger::getInstance()->addLogRow("uploaded file ".$strTarget, class_logger::$levelInfo);
+                    Logger::getInstance()->addLogRow("uploaded file ".$strTarget, Logger::$levelInfo);
 
                     $objRepo->syncRepo();
                 }
                 else {
-                    if($bitJsonResponse)
+                    if ($bitJsonResponse) {
                         $strReturn .= json_encode(array('error' => $this->getLang("xmlupload_error_copyUpload")));
-                    else
+                    }
+                    else {
                         $strReturn .= "<message><error>".$this->getLang("xmlupload_error_copyUpload")."</error></message>";
+                    }
                 }
             }
             else {
-                class_response_object::getInstance()->setStrStatusCode(class_http_statuscodes::SC_BADREQUEST);
+                ResponseObject::getInstance()->setStrStatusCode(HttpStatuscodes::SC_BADREQUEST);
 
-                if($bitJsonResponse)
+                if ($bitJsonResponse) {
                     $strReturn .= json_encode(array('error' => $this->getLang("xmlupload_error_filter")));
-                else
+                }
+                else {
                     $strReturn .= "<message><error>".$this->getLang("xmlupload_error_filter")."</error></message>";
+                }
             }
         }
         else {
-            class_response_object::getInstance()->setStrStatusCode(class_http_statuscodes::SC_INTERNAL_SERVER_ERROR);
+            ResponseObject::getInstance()->setStrStatusCode(HttpStatuscodes::SC_INTERNAL_SERVER_ERROR);
 
-            if($bitJsonResponse)
+            if ($bitJsonResponse) {
                 $strReturn .= json_encode(array('error' => $this->getLang("xmlupload_error_notWritable")));
-            else
+            }
+            else {
                 $strReturn .= "<message><error>".xmlSafeString($this->getLang("xmlupload_error_notWritable"))."</error></message>";
+            }
         }
 
 
-        if($bitJsonResponse) {
+        if ($bitJsonResponse) {
             //disabled for ie. otherwise the upload won't work due to the headers.
-            class_response_object::getInstance()->setStrResponseType(class_http_responsetypes::STR_TYPE_HTML);
-            //class_response_object::getInstance()->setStResponseType(class_http_responsetypes::STR_TYPE_JSON);
+            ResponseObject::getInstance()->setStrResponseType(HttpResponsetypes::STR_TYPE_HTML);
+            //ResponseObject::getInstance()->setStResponseType(class_http_responsetypes::STR_TYPE_JSON);
         }
         @unlink($arrSource["tmp_name"]);
         return $strReturn;
@@ -215,21 +246,25 @@ class class_module_mediamanager_admin_xml extends class_admin_controller impleme
      * @return string
      * @permissions edit
      */
-    protected function actionPartialSyncRepo() {
+    protected function actionPartialSyncRepo()
+    {
         $strReturn = "";
-		$strResult = "";
+        $strResult = "";
 
-        /** @var class_module_mediamanager_repo|class_module_mediamanager_file $objInstance */
-        $objInstance = class_objectfactory::getInstance()->getObject($this->getSystemid());
+        /** @var MediamanagerRepo|MediamanagerFile $objInstance */
+        $objInstance = Objectfactory::getInstance()->getObject($this->getSystemid());
 
-		if($objInstance instanceof class_module_mediamanager_file)
-            $arrSyncs = class_module_mediamanager_file::syncRecursive($objInstance->getSystemid(), $objInstance->getStrFilename());
+        if ($objInstance instanceof MediamanagerFile) {
+            $arrSyncs = MediamanagerFile::syncRecursive($objInstance->getSystemid(), $objInstance->getStrFilename());
+        }
 
-        else if($objInstance instanceof class_module_mediamanager_repo)
+        elseif ($objInstance instanceof MediamanagerRepo) {
             $arrSyncs = $objInstance->syncRepo();
+        }
 
-        else
+        else {
             return "";
+        }
 
 
         $strResult .= $this->getLang("sync_end")."<br />";
@@ -237,9 +272,9 @@ class class_module_mediamanager_admin_xml extends class_admin_controller impleme
 
         $strReturn .= "<repo>".xmlSafeString(strip_tags($strResult))."</repo>";
 
-        class_logger::getInstance()->addLogRow("synced gallery partially >".$this->getSystemid().": ".$strResult, class_logger::$levelInfo);
+        Logger::getInstance()->addLogRow("synced gallery partially >".$this->getSystemid().": ".$strResult, Logger::$levelInfo);
 
-		return $strReturn;
+        return $strReturn;
     }
 
     /**
@@ -248,30 +283,32 @@ class class_module_mediamanager_admin_xml extends class_admin_controller impleme
      * @return string
      * @permissions edit
      */
-    protected function actionSyncRepo() {
+    protected function actionSyncRepo()
+    {
         $strReturn = "";
         $strResult = "";
 
-        /** @var class_module_mediamanager_repo|class_module_mediamanager_file $objInstance */
-        $objInstance = class_objectfactory::getInstance()->getObject($this->getSystemid());
+        /** @var MediamanagerRepo|MediamanagerFile $objInstance */
+        $objInstance = Objectfactory::getInstance()->getObject($this->getSystemid());
         //close the session to avoid a blocking behaviour
         $this->objSession->sessionClose();
-        if($objInstance instanceof class_module_mediamanager_repo)
+        if ($objInstance instanceof MediamanagerRepo) {
             $arrSyncs = $objInstance->syncRepo();
+        }
 
-        else
+        else {
             return "<error>mediamanager repo could not be loaded</error>";
+        }
 
         $strResult = 0;
 
-        $strResult += $arrSyncs["insert"]+$arrSyncs["delete"];
+        $strResult += $arrSyncs["insert"] + $arrSyncs["delete"];
         $strReturn .= "<repo>".xmlSafeString(strip_tags($strResult))."</repo>";
 
-        class_logger::getInstance()->addLogRow("synced gallery partially >".$this->getSystemid().": ".$strResult, class_logger::$levelInfo);
+        Logger::getInstance()->addLogRow("synced gallery partially >".$this->getSystemid().": ".$strResult, Logger::$levelInfo);
 
         return $strReturn;
     }
-
 
 
     /**
@@ -282,24 +319,26 @@ class class_module_mediamanager_admin_xml extends class_admin_controller impleme
      * file = the file to crop
      * systemid = the repo-id
      * angle
+     *
      * @return string
      * @permissions edit
      */
-    protected function actionRotate(){
+    protected function actionRotate()
+    {
         $strReturn = "";
 
         $strFile = $this->getParam("file");
 
-        $objImage = new class_image2();
+        $objImage = new Image2();
         $objImage->setUseCache(false);
         $objImage->load($strFile);
-        $objImage->addOperation(new class_image_rotate($this->getParam("angle")));
+        $objImage->addOperation(new ImageRotate($this->getParam("angle")));
         if ($objImage->save($strFile)) {
-            class_logger::getInstance()->addLogRow("rotated file ".$strFile, class_logger::$levelInfo);
+            Logger::getInstance()->addLogRow("rotated file ".$strFile, Logger::$levelInfo);
             $strReturn .= "<message>".xmlSafeString($this->getLang("xml_rotate_success"))."</message>";
         }
         else {
-            class_response_object::getInstance()->setStrStatusCode(class_http_statuscodes::SC_UNAUTHORIZED);
+            ResponseObject::getInstance()->setStrStatusCode(HttpStatuscodes::SC_UNAUTHORIZED);
             $strReturn .= "<message><error>".xmlSafeString($this->getLang("commons_error_permissions"))."</error></message>";
         }
 
@@ -317,30 +356,31 @@ class class_module_mediamanager_admin_xml extends class_admin_controller impleme
      * intY
      * intWidth
      * intHeight
+     *
      * @return string
      * @permissions edit
      */
-    protected function actionSaveCropping() {
+    protected function actionSaveCropping()
+    {
         $strReturn = "";
 
         $strFile = $this->getParam("file");
 
-        $objImage = new class_image2();
+        $objImage = new Image2();
         $objImage->setUseCache(false);
         $objImage->load($strFile);
-        $objImage->addOperation(new class_image_crop($this->getParam("intX"), $this->getParam("intY"), $this->getParam("intWidth"), $this->getParam("intHeight")));
+        $objImage->addOperation(new ImageCrop($this->getParam("intX"), $this->getParam("intY"), $this->getParam("intWidth"), $this->getParam("intHeight")));
         if ($objImage->save($strFile)) {
-            class_logger::getInstance()->addLogRow("cropped file ".$strFile, class_logger::$levelInfo);
+            Logger::getInstance()->addLogRow("cropped file ".$strFile, Logger::$levelInfo);
             $strReturn .= "<message>".xmlSafeString($this->getLang("xml_cropping_success"))."</message>";
         }
         else {
-            class_response_object::getInstance()->setStrStatusCode(class_http_statuscodes::SC_UNAUTHORIZED);
+            ResponseObject::getInstance()->setStrStatusCode(HttpStatuscodes::SC_UNAUTHORIZED);
             $strReturn .= "<message><error>".xmlSafeString($this->getLang("commons_error_permissions"))."</error></message>";
         }
 
         return $strReturn;
     }
-
 
 
 }

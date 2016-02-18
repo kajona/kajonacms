@@ -7,6 +7,15 @@
 *	$Id$                                  *
 ********************************************************************************************************/
 
+namespace Kajona\Mediamanager\Portal\Elements;
+
+use class_module_rating_rate;
+use Kajona\Mediamanager\Portal\MediamanagerPortal;
+use Kajona\Pages\Portal\ElementPortal;
+use Kajona\Pages\Portal\PortalElementInterface;
+use Kajona\System\System\SystemModule;
+
+
 /**
  * Portal-part of the downloads-element
  *
@@ -15,19 +24,22 @@
  *
  * @targetTable element_downloads.content_id
  */
-class class_element_downloads_portal extends class_element_portal implements interface_portal_element {
+class ElementDownloadsPortal extends ElementPortal implements PortalElementInterface
+{
 
     /**
      * Contructor
      *
      * @param $objElementData
      */
-    public function __construct($objElementData) {
+    public function __construct($objElementData)
+    {
         parent::__construct($objElementData);
 
         //we support ratings, so add cache-busters
-        if(class_module_system_module::getModuleByName("rating") !== null)
+        if (SystemModule::getModuleByName("rating") !== null) {
             $this->setStrCacheAddon(getCookie(class_module_rating_rate::RATING_COOKIE));
+        }
     }
 
 
@@ -36,11 +48,12 @@ class class_element_downloads_portal extends class_element_portal implements int
      *
      * @return string
      */
-    public function loadData() {
+    public function loadData()
+    {
         $strReturn = "";
 
-        $objDownloadsModule = class_module_system_module::getModuleByName("mediamanager");
-        if($objDownloadsModule != null) {
+        $objDownloadsModule = SystemModule::getModuleByName("mediamanager");
+        if ($objDownloadsModule != null) {
 
             $this->arrElementData["repo_id"] = $this->arrElementData["download_id"];
             $this->arrElementData["repo_elementsperpage"] = $this->arrElementData["download_amount"];
@@ -54,23 +67,25 @@ class class_element_downloads_portal extends class_element_portal implements int
         return $strReturn;
     }
 
-    public static function providesNavigationEntries() {
+    public static function providesNavigationEntries()
+    {
         return true;
     }
 
 
-    public function getNavigationEntries() {
+    public function getNavigationEntries()
+    {
         $arrData = $this->getElementContent($this->getSystemid());
 
         $arrData["repo_id"] = $arrData["download_id"];
         $arrData["repo_elementsperpage"] = $arrData["download_amount"];
         $arrData["repo_template"] = $arrData["download_template"];
 
-        $objDownloadsModule = class_module_system_module::getModuleByName("mediamanager");
+        $objDownloadsModule = SystemModule::getModuleByName("mediamanager");
 
-        if($objDownloadsModule != null) {
+        if ($objDownloadsModule != null) {
 
-            /** @var $objDownloads class_module_mediamanager_portal */
+            /** @var $objDownloads MediamanagerPortal */
             $objDownloads = $objDownloadsModule->getPortalInstanceOfConcreteModule($arrData);
             $arrReturn = $objDownloads->getNavigationNodes();
 

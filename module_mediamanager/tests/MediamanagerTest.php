@@ -1,17 +1,24 @@
 <?php
-require_once (__DIR__ . "/../../module_system/system/class_testbase.php");
 
-class class_mediamanagerTest extends class_testbase  {
+namespace Kajona\Mediamanager\Tests;
+
+use Kajona\Mediamanager\System\MediamanagerFile;
+use Kajona\Mediamanager\System\MediamanagerRepo;
+use Kajona\System\System\Filesystem;
+use Kajona\System\System\SystemModule;
+use Kajona\System\System\Testbase;
+
+class MediamanagerTest extends Testbase  {
 
 
     public function testFileSync() {
 
         echo "test mediamanager...\n";
 
-        if(class_module_system_module::getModuleByName("samplecontent") == null || !is_file(_realpath_."/files/images/samples/IMG_3000.JPG"))
+        if(SystemModule::getModuleByName("samplecontent") == null || !is_file(_realpath_."/files/images/samples/IMG_3000.JPG"))
             return;
 
-        $objFilesystem = new class_filesystem();
+        $objFilesystem = new Filesystem();
         $objFilesystem->folderCreate(_filespath_."/images/autotest");
 
         $objFilesystem->fileCopy(_filespath_."/images/samples/IMG_3000.JPG", _filespath_."/images/autotest/IMG_3000.jpg");
@@ -19,14 +26,14 @@ class class_mediamanagerTest extends class_testbase  {
         $objFilesystem->fileCopy(_filespath_."/images/samples/IMG_3000.JPG", _filespath_."/images/autotest/PA021805.JPG");
         $objFilesystem->fileCopy(_filespath_."/images/samples/IMG_3000.JPG", _filespath_."/images/autotest/test.txt");
 
-        $objRepo = new class_module_mediamanager_repo();
+        $objRepo = new MediamanagerRepo();
         $objRepo->setStrPath(_filespath_."/images/autotest");
         $objRepo->setStrTitle("autotest repo");
         $objRepo->setStrViewFilter(".jpg,.png");
         $objRepo->updateObjectToDb();
         $objRepo->syncRepo();
 
-        $arrFiles = class_module_mediamanager_file::loadFilesDB($objRepo->getSystemid());
+        $arrFiles = MediamanagerFile::loadFilesDB($objRepo->getSystemid());
 
         $this->assertEquals(3, count($arrFiles));
         foreach($arrFiles as $objOneFile)

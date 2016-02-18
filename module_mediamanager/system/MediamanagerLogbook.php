@@ -5,6 +5,11 @@
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 ********************************************************************************************************/
 
+namespace Kajona\Mediamanager\System;
+
+use Kajona\System\System\Carrier;
+
+
 /**
  * Model for the downloads-logbook
  *
@@ -14,21 +19,23 @@
  * @module mediamanager
  * @moduleId _mediamanager_module_id_
  */
-class class_module_mediamanager_logbook extends \Kajona\System\System\Model implements \Kajona\System\System\ModelInterface {
+class MediamanagerLogbook extends \Kajona\System\System\Model implements \Kajona\System\System\ModelInterface
+{
 
     /**
      * Generates an entry in the logbook an increases the hits-counter
      *
      * @param \class_module_mediamanager_file $objFile
      */
-    public static function generateDlLog(class_module_mediamanager_file $objFile) {
-        $objDB = class_carrier::getInstance()->getObjDB();
+    public static function generateDlLog(MediamanagerFile $objFile)
+    {
+        $objDB = Carrier::getInstance()->getObjDB();
         $strQuery = "INSERT INTO "._dbprefix_."mediamanager_dllog
 	                   (downloads_log_id, downloads_log_date, downloads_log_file, downloads_log_user, downloads_log_ip) VALUES
 	                   (?, ?, ?, ?, ?)";
 
         $objDB->_pQuery($strQuery, array(generateSystemid(), (int)time(), basename($objFile->getStrFilename()),
-            class_carrier::getInstance()->getObjSession()->getUsername(), getServer("REMOTE_ADDR")));
+            Carrier::getInstance()->getObjSession()->getUsername(), getServer("REMOTE_ADDR")));
 
         $objFile->increaseHits();
     }
@@ -43,11 +50,12 @@ class class_module_mediamanager_logbook extends \Kajona\System\System\Model impl
      *
      * @return mixed AS ARRAY
      */
-    public static function getLogbookData($intStart = null, $intEnd = null) {
+    public static function getLogbookData($intStart = null, $intEnd = null)
+    {
         $strQuery = "SELECT *
 					  FROM "._dbprefix_."mediamanager_dllog
 					  ORDER BY downloads_log_date DESC";
-        return class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array(), $intStart, $intEnd);
+        return Carrier::getInstance()->getObjDB()->getPArray($strQuery, array(), $intStart, $intEnd);
 
     }
 
@@ -56,7 +64,8 @@ class class_module_mediamanager_logbook extends \Kajona\System\System\Model impl
      *
      * @return int
      */
-    public function getLogbookDataCount() {
+    public function getLogbookDataCount()
+    {
         $strQuery = "SELECT COUNT(*)
 					  FROM "._dbprefix_."mediamanager_dllog";
         $arrTemp = $this->objDB->getPRow($strQuery, array());
@@ -74,11 +83,12 @@ class class_module_mediamanager_logbook extends \Kajona\System\System\Model impl
      *
      * @return bool
      */
-    public static function deleteFromLogs($intOlderDate) {
+    public static function deleteFromLogs($intOlderDate)
+    {
         $strSql = "DELETE FROM "._dbprefix_."mediamanager_dllog
 			           WHERE downloads_log_date < ?";
 
-        return class_carrier::getInstance()->getObjDB()->_pQuery($strSql, array((int)$intOlderDate));
+        return Carrier::getInstance()->getObjDB()->_pQuery($strSql, array((int)$intOlderDate));
     }
 
     /**
@@ -86,7 +96,8 @@ class class_module_mediamanager_logbook extends \Kajona\System\System\Model impl
      *
      * @return string
      */
-    public function getStrDisplayName() {
+    public function getStrDisplayName()
+    {
         return "";
     }
 }

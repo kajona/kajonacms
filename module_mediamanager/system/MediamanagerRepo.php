@@ -6,6 +6,11 @@
 *	$Id$                                            *
 ********************************************************************************************************/
 
+namespace Kajona\Mediamanager\System;
+
+use Kajona\System\System\AdminListableInterface;
+
+
 /**
  * Model for a mediamanagers repo itself
  *
@@ -16,9 +21,10 @@
  * @module mediamanager
  * @moduleId _mediamanager_module_id_
  *
- * @formGenerator class_module_mediamanager_repo_formgenerator
+ * @formGenerator MediamanagerRepo_formgenerator
  */
-class class_module_mediamanager_repo extends \Kajona\System\System\Model implements \Kajona\System\System\ModelInterface, interface_admin_listable {
+class MediamanagerRepo extends \Kajona\System\System\Model implements \Kajona\System\System\ModelInterface, AdminListableInterface
+{
 
     /**
      * @var string
@@ -72,7 +78,8 @@ class class_module_mediamanager_repo extends \Kajona\System\System\Model impleme
      *
      * @return string the name of the icon, not yet wrapped by getImageAdmin()
      */
-    public function getStrIcon() {
+    public function getStrIcon()
+    {
         return "icon_folderOpen";
     }
 
@@ -81,7 +88,8 @@ class class_module_mediamanager_repo extends \Kajona\System\System\Model impleme
      *
      * @return string
      */
-    public function getStrAdditionalInfo() {
+    public function getStrAdditionalInfo()
+    {
         return "";
     }
 
@@ -90,7 +98,8 @@ class class_module_mediamanager_repo extends \Kajona\System\System\Model impleme
      *
      * @return string
      */
-    public function getStrLongDescription() {
+    public function getStrLongDescription()
+    {
         return $this->getStrPath();
     }
 
@@ -99,7 +108,8 @@ class class_module_mediamanager_repo extends \Kajona\System\System\Model impleme
      *
      * @return string
      */
-    public function getStrDisplayName() {
+    public function getStrDisplayName()
+    {
         return $this->getStrTitle();
     }
 
@@ -109,61 +119,72 @@ class class_module_mediamanager_repo extends \Kajona\System\System\Model impleme
      *
      * @return array [insert, delete]
      */
-    public function syncRepo() {
-        return class_module_mediamanager_file::syncRecursive($this->getSystemid(), $this->getStrPath());
+    public function syncRepo()
+    {
+        return MediamanagerFile::syncRecursive($this->getSystemid(), $this->getStrPath());
     }
 
-    public function deleteObjectFromDatabase() {
+    public function deleteObjectFromDatabase()
+    {
         $this->setParam("deleteMediamanagerRepo", true);
         return parent::deleteObjectFromDatabase();
     }
 
 
-    public function getStrPath() {
+    public function getStrPath()
+    {
         return $this->strPath;
     }
 
-    public function getStrTitle() {
+    public function getStrTitle()
+    {
         return $this->strTitle;
     }
 
 
-    public function setStrPath($strPath) {
-        if(uniStrpos(uniSubstr($strPath, 0, 7), "files") === false)
+    public function setStrPath($strPath)
+    {
+        if (uniStrpos(uniSubstr($strPath, 0, 7), "files") === false) {
             $strPath = "/files".$strPath;
+        }
 
         $this->strPath = $strPath;
     }
 
-    public function setStrTitle($strTitle) {
+    public function setStrTitle($strTitle)
+    {
         $this->strTitle = $strTitle;
     }
 
     /**
      * @param string $strUploadFilter
      */
-    public function setStrUploadFilter($strUploadFilter) {
+    public function setStrUploadFilter($strUploadFilter)
+    {
         $this->strUploadFilter = $strUploadFilter;
     }
 
     /**
      * @return string
      */
-    public function getStrUploadFilter() {
+    public function getStrUploadFilter()
+    {
         return $this->strUploadFilter;
     }
 
     /**
      * @param string $strViewFilter
      */
-    public function setStrViewFilter($strViewFilter) {
+    public function setStrViewFilter($strViewFilter)
+    {
         $this->strViewFilter = $strViewFilter;
     }
 
     /**
      * @return string
      */
-    public function getStrViewFilter() {
+    public function getStrViewFilter()
+    {
         return $this->strViewFilter;
     }
 
