@@ -9,7 +9,7 @@
 
 namespace Kajona\System\System;
 
-use class_search_result;
+use Kajona\Search\System\SearchResult;
 
 /**
  * A special interface to be implemented by all objects to be included into the
@@ -19,7 +19,8 @@ use class_search_result;
  * @author sidler@mulchprod.de
  * @since 4.5
  */
-interface SearchPortalobjectInterface extends SearchResultobjectInterface {
+interface SearchPortalobjectInterface extends SearchResultobjectInterface
+{
 
     /**
      * Return an on-lick link for the passed object.
@@ -31,18 +32,19 @@ interface SearchPortalobjectInterface extends SearchResultobjectInterface {
      * into the result set afterwards.
      * Make sure to return the passed result-object in this array, too.
      *
-     * @param class_search_result $objResult
+     * @param SearchResult $objResult
      *
      * @see getLinkPortalHref()
      * @return mixed
      */
-    public function updateSearchResult(class_search_result $objResult);
+    public function updateSearchResult(SearchResult $objResult);
 
     /**
      * Since the portal may be split in different languages,
      * return the content lang of the current record using the common
      * abbreviation such as "de" or "en".
      * If the content is not assigned to any language, return "" instead (e.g. a single image).
+     *
      * @return mixed
      */
     public function getContentLang();

@@ -7,21 +7,20 @@
 
 namespace Kajona\Pages\System;
 
-use class_cache;
-use class_carrier;
-use \Kajona\System\System\Date;
-use class_exception;
-use class_logger;
-use \Kajona\System\System\Model;
-use class_objectfactory;
-use class_orm_base;
-use class_orm_objectlist;
-use class_orm_rowcache;
-use class_reflection;
-use interface_admin_listable;
-use \Kajona\System\System\ModelInterface;
 use Kajona\Pages\Admin\ElementAdmin;
 use Kajona\Pages\Portal\ElementPortal;
+use Kajona\System\System\AdminListableInterface;
+use Kajona\System\System\Cache;
+use Kajona\System\System\Carrier;
+use Kajona\System\System\Classloader;
+use Kajona\System\System\Exception;
+use Kajona\System\System\Logger;
+use Kajona\System\System\Objectfactory;
+use Kajona\System\System\OrmBase;
+use Kajona\System\System\OrmObjectlist;
+use Kajona\System\System\OrmRowcache;
+use Kajona\System\System\Reflection;
+use Kajona\System\System\Resourceloader;
 
 /**
  * Model for a element assigned to a page. NOT the raw-element!
@@ -35,7 +34,7 @@ use Kajona\Pages\Portal\ElementPortal;
  *
  * @blockFromAutosave
  */
-class PagesPageelement extends \Kajona\System\System\Model implements \Kajona\System\System\ModelInterface, interface_admin_listable
+class PagesPageelement extends \Kajona\System\System\Model implements \Kajona\System\System\ModelInterface, AdminListableInterface
 {
 
 
@@ -142,7 +141,7 @@ class PagesPageelement extends \Kajona\System\System\Model implements \Kajona\Sy
     {
 
         //maybe
-        $arrRow = class_orm_rowcache::getCachedInitRow($this->getSystemid());
+        $arrRow = OrmRowcache::getCachedInitRow($this->getSystemid());
         if ($arrRow === null) {
             $strQuery = "SELECT *
                              FROM "._dbprefix_."page_element,
@@ -197,8 +196,8 @@ class PagesPageelement extends \Kajona\System\System\Model implements \Kajona\Sy
         $objElementdefinitionToCreate = PagesElement::getElement($this->getStrElement());
         if ($objElementdefinitionToCreate != null) {
 
-            $strFilename = \class_resourceloader::getInstance()->getPathForFile("/admin/elements/".$objElementdefinitionToCreate->getStrClassAdmin());
-            $objInstance = \class_classloader::getInstance()->getInstanceFromFilename($strFilename, "Kajona\\Pages\\Admin\\ElementAdmin", null, array(), true);
+            $strFilename = Resourceloader::getInstance()->getPathForFile("/admin/elements/".$objElementdefinitionToCreate->getStrClassAdmin());
+            $objInstance = Classloader::getInstance()->getInstanceFromFilename($strFilename, "Kajona\\Pages\\Admin\\ElementAdmin", null, array(), true);
 
             //and finally create the object
             if ($objInstance != null) {
@@ -239,8 +238,8 @@ class PagesPageelement extends \Kajona\System\System\Model implements \Kajona\Sy
             $this->setStrClassAdmin($objElementdefinitionToCreate->getStrClassAdmin());
         }
 
-        $strFilename = \class_resourceloader::getInstance()->getPathForFile("/admin/elements/".$this->getStrClassAdmin());
-        $objInstance = \class_classloader::getInstance()->getInstanceFromFilename($strFilename, "Kajona\\Pages\\Admin\\ElementAdmin", null, array(), true);
+        $strFilename = Resourceloader::getInstance()->getPathForFile("/admin/elements/".$this->getStrClassAdmin());
+        $objInstance = Classloader::getInstance()->getInstanceFromFilename($strFilename, "Kajona\\Pages\\Admin\\ElementAdmin", null, array(), true);
 
         //and finally create the object
         /** @var $objInstance ElementAdmin */
@@ -267,8 +266,8 @@ class PagesPageelement extends \Kajona\System\System\Model implements \Kajona\Sy
         }
 
 
-        $strFilename = \class_resourceloader::getInstance()->getPathForFile("/portal/elements/".$this->getStrClassPortal());
-        $objInstance = \class_classloader::getInstance()->getInstanceFromFilename($strFilename, "Kajona\\Pages\\Portal\\ElementPortal", null, array($this), true);
+        $strFilename = Resourceloader::getInstance()->getPathForFile("/portal/elements/".$this->getStrClassPortal());
+        $objInstance = Classloader::getInstance()->getInstanceFromFilename($strFilename, "Kajona\\Pages\\Portal\\ElementPortal", null, array($this), true);
 
         //and finally create the object
         /** @var $objInstance ElementPortal */
@@ -284,13 +283,13 @@ class PagesPageelement extends \Kajona\System\System\Model implements \Kajona\Sy
      * @param string $strNewPage
      * @param bool $bitChangeTitle
      *
-     * @throws class_exception
+     * @throws Exception
      * @return PagesPageelement the new element or null in case of an error
      */
     public function copyObject($strNewPage = "", $bitChangeTitle = true, $bitCopyChilds = true)
     {
 
-        class_logger::getInstance()->addLogRow("copy pageelement ".$this->getSystemid(), class_logger::$levelInfo);
+        Logger::getInstance()->addLogRow("copy pageelement ".$this->getSystemid(), Logger::$levelInfo);
         $this->objDB->transactionBegin();
 
         //fetch all values to insert after the general copy process - mainly the foreign table
@@ -309,8 +308,8 @@ class PagesPageelement extends \Kajona\System\System\Model implements \Kajona\Sy
         $objElement->setArrParamData($arrElementData);
 
         //try to find setters to inject the values
-        $objAnnotation = new class_reflection($objElement);
-        $arrMappedProperties = $objAnnotation->getPropertiesWithAnnotation(class_orm_base::STR_ANNOTATION_TABLECOLUMN);
+        $objAnnotation = new Reflection($objElement);
+        $arrMappedProperties = $objAnnotation->getPropertiesWithAnnotation(OrmBase::STR_ANNOTATION_TABLECOLUMN);
 
         foreach ($arrElementData as $strColumn => $strValue) {
             foreach ($arrMappedProperties as $strPropertyname => $strAnnotation) {
@@ -382,7 +381,7 @@ class PagesPageelement extends \Kajona\System\System\Model implements \Kajona\Sy
 
         $longToday = $objDate->getLongTimestamp();
         $arrParams = array($strPageId, $strLanguage);
-        $objORM = new class_orm_objectlist();
+        $objORM = new OrmObjectlist();
 
         $strAnd = "";
         if ($bitJustActive) {
@@ -412,10 +411,10 @@ class PagesPageelement extends \Kajona\System\System\Model implements \Kajona\Sy
                            page_element_ph_language ASC,
                            system_sort ASC";
 
-        $arrReturn = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, $arrParams);
+        $arrReturn = Carrier::getInstance()->getObjDB()->getPArray($strQuery, $arrParams);
 
         foreach ($arrReturn as $arrOneRow) {
-            class_orm_rowcache::addSingleInitRow($arrOneRow);
+            OrmRowcache::addSingleInitRow($arrOneRow);
         }
 
         return $arrReturn;
@@ -432,7 +431,7 @@ class PagesPageelement extends \Kajona\System\System\Model implements \Kajona\Sy
      */
     public static function getAllElementsOnPage($strPageId)
     {
-        $objORM = new class_orm_objectlist();
+        $objORM = new OrmObjectlist();
         $strQuery = "SELECT *
 						 FROM "._dbprefix_."page_element,
 						      "._dbprefix_."element,
@@ -449,11 +448,11 @@ class PagesPageelement extends \Kajona\System\System\Model implements \Kajona\Sy
 				               page_element_ph_language ASC,
 						 	   system_sort ASC";
 
-        $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array($strPageId));
-        class_orm_rowcache::addArrayOfInitRows($arrIds);
+        $arrIds = Carrier::getInstance()->getObjDB()->getPArray($strQuery, array($strPageId));
+        OrmRowcache::addArrayOfInitRows($arrIds);
         $arrReturn = array();
         foreach ($arrIds as $arrOneId) {
-            $arrReturn[] = class_objectfactory::getInstance()->getObject($arrOneId["system_id"]);
+            $arrReturn[] = Objectfactory::getInstance()->getObject($arrOneId["system_id"]);
         }
 
         return $arrReturn;
@@ -485,7 +484,7 @@ class PagesPageelement extends \Kajona\System\System\Model implements \Kajona\Sy
             $arrParams[] = time();
         }
 
-        $objORM = new class_orm_objectlist();
+        $objORM = new OrmObjectlist();
         $strQuery = "SELECT *
                          FROM "._dbprefix_."page_element,
                               "._dbprefix_."element,
@@ -503,11 +502,11 @@ class PagesPageelement extends \Kajona\System\System\Model implements \Kajona\Sy
                            ".$objORM->getDeletedWhereRestriction()."
                          ORDER BY system_sort ASC";
 
-        $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, $arrParams);
-        class_orm_rowcache::addArrayOfInitRows($arrIds);
+        $arrIds = Carrier::getInstance()->getObjDB()->getPArray($strQuery, $arrParams);
+        OrmRowcache::addArrayOfInitRows($arrIds);
         $arrReturn = array();
         foreach ($arrIds as $arrOneRow) {
-            $arrReturn[] = class_objectfactory::getInstance()->getObject($arrOneRow["system_id"]);
+            $arrReturn[] = Objectfactory::getInstance()->getObject($arrOneRow["system_id"]);
         }
 
         return $arrReturn;
@@ -523,7 +522,7 @@ class PagesPageelement extends \Kajona\System\System\Model implements \Kajona\Sy
     public function getSortedElementsAtPlaceholder()
     {
 
-        $objORM = new class_orm_objectlist();
+        $objORM = new OrmObjectlist();
         $strQuery = "SELECT *
 						 FROM "._dbprefix_."page_element,
 						      "._dbprefix_."element,
@@ -592,8 +591,7 @@ class PagesPageelement extends \Kajona\System\System\Model implements \Kajona\Sy
         parent::deleteObjectFromDatabase();
 
         //Loading the data of the corresponding site
-        $objPage = new PagesPage($this->getPrevId());
-        class_cache::flushCache("class_element_portal", $objPage->getStrName());
+        Cache::flushCache();
 
         return true;
     }
@@ -610,7 +608,7 @@ class PagesPageelement extends \Kajona\System\System\Model implements \Kajona\Sy
         //Load all non-assigned props
         $strQuery = "SELECT page_element_id FROM "._dbprefix_."page_element
                      WHERE page_element_ph_language = '' OR page_element_ph_language IS NULL";
-        $arrElementIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array());
+        $arrElementIds = Carrier::getInstance()->getObjDB()->getPArray($strQuery, array());
 
         foreach ($arrElementIds as $arrOneId) {
             $strId = $arrOneId["page_element_id"];
@@ -618,7 +616,7 @@ class PagesPageelement extends \Kajona\System\System\Model implements \Kajona\Sy
                           SET page_element_ph_language = ?
                           WHERE page_element_id = ?";
 
-            if (!class_carrier::getInstance()->getObjDB()->_pQuery($strUpdate, array($strTargetLanguage, $strId))) {
+            if (!Carrier::getInstance()->getObjDB()->_pQuery($strUpdate, array($strTargetLanguage, $strId))) {
                 return false;
             }
 
@@ -641,7 +639,7 @@ class PagesPageelement extends \Kajona\System\System\Model implements \Kajona\Sy
     {
         $bitReturn = true;
         //Fetch all pages
-        $objORM = new class_orm_objectlist();
+        $objORM = new OrmObjectlist();
         $arrObjPages = PagesPage::getAllPages();
         foreach ($arrObjPages as $objOnePage) {
             if ($objOnePage->getStrTemplate() == $strTemplate || $strTemplate == "-1") {
@@ -657,7 +655,7 @@ class PagesPageelement extends \Kajona\System\System\Model implements \Kajona\Sy
 						 ORDER BY page_element_ph_placeholder ASC,
 						 		system_sort ASC";
 
-                $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array($objOnePage->getSystemid()));
+                $arrIds = Carrier::getInstance()->getObjDB()->getPArray($strQuery, array($objOnePage->getSystemid()));
                 /** @var PagesPageelement[] $arrPageElements */
                 $arrPageElements = array();
                 foreach ($arrIds as $arrOneRow) {
@@ -710,7 +708,7 @@ class PagesPageelement extends \Kajona\System\System\Model implements \Kajona\Sy
      */
     public function getStrReadableName()
     {
-        $strName = class_carrier::getInstance()->getObjLang()->getLang("element_".$this->getStrElement()."_name", "elements");
+        $strName = Carrier::getInstance()->getObjLang()->getLang("element_".$this->getStrElement()."_name", "elements");
         if ($strName == "!element_".$this->getStrElement()."_name!") {
             $strName = $this->getStrElement();
         }

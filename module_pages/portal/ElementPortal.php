@@ -8,20 +8,8 @@
 ********************************************************************************************************/
 namespace Kajona\Pages\Portal;
 
-use class_cache;
-use class_carrier;
-use class_exception;
-use class_link;
-use \Kajona\System\System\Model;
-use class_module_languages_language;
-use class_module_navigation_point;
-use class_module_system_setting;
-use class_objectfactory;
-use class_orm_base;
-use class_portal_controller;
-use class_reflection;
-use class_scriptlet_helper;
-use interface_scriptlet;
+use Kajona\Navigation\System\NavigationPoint;
+use Kajona\System\Portal\PortalController;
 use Kajona\Pages\Admin\Elements\ElementBlockAdmin;
 use Kajona\Pages\Admin\Elements\ElementBlocksAdmin;
 use Kajona\Pages\Portal\Elements\ElementBlocksPortal;
@@ -32,6 +20,17 @@ use Kajona\Pages\System\PagesPageelement;
 use Kajona\Pages\System\PagesPortaleditorActionEnum;
 use Kajona\Pages\System\PagesPortaleditorPlaceholderAction;
 use Kajona\Pages\System\PagesPortaleditorSystemidAction;
+use Kajona\System\System\Cache;
+use Kajona\System\System\Carrier;
+use Kajona\System\System\Exception;
+use Kajona\System\System\LanguagesLanguage;
+use Kajona\System\System\Link;
+use Kajona\System\System\Objectfactory;
+use Kajona\System\System\OrmBase;
+use Kajona\System\System\Reflection;
+use Kajona\System\System\ScriptletHelper;
+use Kajona\System\System\ScriptletInterface;
+use Kajona\System\System\SystemSetting;
 
 /**
  * Base Class for all portal-elements
@@ -42,7 +41,7 @@ use Kajona\Pages\System\PagesPortaleditorSystemidAction;
  * @module elements
  * @moduleId _pages_elemente_modul_id_
  */
-abstract class ElementPortal extends class_portal_controller
+abstract class ElementPortal extends PortalController
 {
 
     private $strCacheAddon = "";
@@ -79,8 +78,8 @@ abstract class ElementPortal extends class_portal_controller
      */
     public function getTable()
     {
-        $objAnnotations = new class_reflection($this);
-        $arrTargetTables = $objAnnotations->getAnnotationValuesFromClass(class_orm_base::STR_ANNOTATION_TARGETTABLE);
+        $objAnnotations = new Reflection($this);
+        $arrTargetTables = $objAnnotations->getAnnotationValuesFromClass(OrmBase::STR_ANNOTATION_TARGETTABLE);
         if (count($arrTargetTables) != 0) {
             $arrTable = explode(".", $arrTargetTables[0]);
             return _dbprefix_.$arrTable[0];
@@ -105,7 +104,7 @@ abstract class ElementPortal extends class_portal_controller
             $strQuery = "SELECT *
     						FROM ".$this->getTable()."
     						WHERE content_id = ? ";
-            return class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array($strSystemid));
+            return Carrier::getInstance()->getObjDB()->getPRow($strQuery, array($strSystemid));
         }
         else {
             return array();
@@ -131,13 +130,13 @@ abstract class ElementPortal extends class_portal_controller
         try {
             $strReturn = $this->loadData();
         }
-        catch (class_exception $objEx) {
+        catch (Exception $objEx) {
             //FIXME: error handling is currently disabled
             //An error occurred during content generation. redirect to error page
             //$objEx->processException();
             //if available, show the error-page. on debugging-environments, the exception processing already die()d the process.
 //            if ($this->getPagename() != class_module_system_setting::getConfigValue("_pages_errorpage_")) {
-//                $this->portalReload(class_link::getLinkPortalHref(class_module_system_setting::getConfigValue("_pages_errorpage_")));
+//                $this->portalReload(Link::getLinkPortalHref(class_module_system_setting::getConfigValue("_pages_errorpage_")));
 //            }
 
             $strReturn = $objEx->getMessage();
@@ -147,8 +146,8 @@ abstract class ElementPortal extends class_portal_controller
         $strReturn = $this->getAnchorTag().$strReturn;
 
         //apply element-based scriptlets
-        $objScriptlets = new class_scriptlet_helper();
-        $strReturn = $objScriptlets->processString($strReturn, interface_scriptlet::BIT_CONTEXT_PORTAL_ELEMENT);
+        $objScriptlets = new ScriptletHelper();
+        $strReturn = $objScriptlets->processString($strReturn, ScriptletInterface::BIT_CONTEXT_PORTAL_ELEMENT);
 
         return $strReturn;
     }
@@ -167,7 +166,7 @@ abstract class ElementPortal extends class_portal_controller
         $strReturn = false;
 
         //load the matching cache-entry
-        $objCacheEntry = class_cache::getCachedEntry(__CLASS__, $this->getCacheHash1(), $this->getCacheHash2(), $this->getStrPortalLanguage());
+        $objCacheEntry = Cache::getCachedEntry(__CLASS__, $this->getCacheHash1(), $this->getCacheHash2(), $this->getStrPortalLanguage());
         if ($objCacheEntry != null && $this->onLoadFromCache()) {
             $strReturn = $objCacheEntry->getStrContent();
         }
@@ -205,7 +204,7 @@ abstract class ElementPortal extends class_portal_controller
         $strElementOutput = preg_replace('/data-kajona-editable=\"([a-zA-Z0-9#_]*)\"/i', "", $strElementOutput);
 
         //load the matching cache-entry
-        $objCacheEntry = class_cache::getCachedEntry(__CLASS__, $this->getCacheHash1(), $this->getCacheHash2(), $this->getStrPortalLanguage(), true);
+        $objCacheEntry = Cache::getCachedEntry(__CLASS__, $this->getCacheHash1(), $this->getCacheHash2(), $this->getStrPortalLanguage(), true);
         $objCacheEntry->setStrContent($strElementOutput);
         $objCacheEntry->setIntLeasetime(time() + $this->objElementData->getIntCachetime());
 
@@ -260,7 +259,7 @@ abstract class ElementPortal extends class_portal_controller
     public function getRenderedElementOutput($bitActivePortaleditor = false)
     {
 
-        if (class_module_system_setting::getConfigValue("_pages_cacheenabled_") == "true" && $this->getParam("preview") != "1" && $this->getPageData()->getStrName() != class_module_system_setting::getConfigValue("_pages_errorpage_")) {
+        if (SystemSetting::getConfigValue("_pages_cacheenabled_") == "true" && $this->getParam("preview") != "1" && $this->getPageData()->getStrName() != SystemSetting::getConfigValue("_pages_errorpage_")) {
             $strElementOutput = "";
             //if the portaleditor is disabled, do the regular cache lookups in storage. otherwise regenerate again and again :)
             if ($bitActivePortaleditor) {
@@ -282,7 +281,7 @@ abstract class ElementPortal extends class_portal_controller
         }
 
 
-        if($bitActivePortaleditor) {
+        if ($bitActivePortaleditor) {
             $strElementOutput = $this->addPortalEditorCode($strElementOutput);
         }
         else {
@@ -295,6 +294,7 @@ abstract class ElementPortal extends class_portal_controller
 
     /**
      * Adds the portal-editor code to the current elements' content
+     *
      * @param $strElementOutput
      *
      * @return string
@@ -307,6 +307,7 @@ abstract class ElementPortal extends class_portal_controller
 
     /**
      * Removes the portal-editor editable ids
+     *
      * @param $strElementOutput
      *
      * @return mixed
@@ -327,28 +328,28 @@ abstract class ElementPortal extends class_portal_controller
             return;
         }
 
-        $objParent = class_objectfactory::getInstance()->getObject($objPageelement->getPrevId());
-        if($objParent instanceof PagesPageelement) {
+        $objParent = Objectfactory::getInstance()->getObject($objPageelement->getPrevId());
+        if ($objParent instanceof PagesPageelement) {
             $objParent = $objParent->getConcreteAdminInstance();
         }
 
 
         //fetch the language to set the correct admin-lang
-        $objLanguages = new class_module_languages_language();
+        $objLanguages = new LanguagesLanguage();
         $strAdminLangParam = $objLanguages->getPortalLanguage();
 
 
         PagesPortaleditor::getInstance()->registerAction(
-            new PagesPortaleditorSystemidAction(PagesPortaleditorActionEnum::EDIT(), class_link::getLinkAdminHref("pages_content", "edit", "&systemid={$this->getSystemid()}&language={$strAdminLangParam}&pe=1"), $this->getSystemid())
+            new PagesPortaleditorSystemidAction(PagesPortaleditorActionEnum::EDIT(), Link::getLinkAdminHref("pages_content", "edit", "&systemid={$this->getSystemid()}&language={$strAdminLangParam}&pe=1"), $this->getSystemid())
         );
 
-        if(!$objParent instanceof ElementBlockAdmin) {
+        if (!$objParent instanceof ElementBlockAdmin) {
 
             PagesPortaleditor::getInstance()->registerAction(
-                new PagesPortaleditorSystemidAction(PagesPortaleditorActionEnum::COPY(), class_link::getLinkAdminHref("pages_content", "copyElement", "&systemid={$this->getSystemid()}&language={$strAdminLangParam}&pe=1"), $this->getSystemid())
+                new PagesPortaleditorSystemidAction(PagesPortaleditorActionEnum::COPY(), Link::getLinkAdminHref("pages_content", "copyElement", "&systemid={$this->getSystemid()}&language={$strAdminLangParam}&pe=1"), $this->getSystemid())
             );
             PagesPortaleditor::getInstance()->registerAction(
-                new PagesPortaleditorSystemidAction(PagesPortaleditorActionEnum::DELETE(), class_link::getLinkAdminHref("pages_content", "deleteElementFinal", "&systemid={$this->getSystemid()}&language={$strAdminLangParam}&pe=1"), $this->getSystemid())
+                new PagesPortaleditorSystemidAction(PagesPortaleditorActionEnum::DELETE(), Link::getLinkAdminHref("pages_content", "deleteElementFinal", "&systemid={$this->getSystemid()}&language={$strAdminLangParam}&pe=1"), $this->getSystemid())
             );
             PagesPortaleditor::getInstance()->registerAction(
                 new PagesPortaleditorSystemidAction(PagesPortaleditorActionEnum::MOVE(), "", $this->getSystemid())
@@ -356,10 +357,10 @@ abstract class ElementPortal extends class_portal_controller
 
 
             PagesPortaleditor::getInstance()->registerAction(
-                new PagesPortaleditorSystemidAction(PagesPortaleditorActionEnum::SETINACTIVE(), class_link::getLinkAdminHref("pages_content", "elementStatus", "&systemid={$this->getSystemid()}&language={$strAdminLangParam}&pe=1"), $this->getSystemid())
+                new PagesPortaleditorSystemidAction(PagesPortaleditorActionEnum::SETINACTIVE(), Link::getLinkAdminHref("pages_content", "elementStatus", "&systemid={$this->getSystemid()}&language={$strAdminLangParam}&pe=1"), $this->getSystemid())
             );
             PagesPortaleditor::getInstance()->registerAction(
-                new PagesPortaleditorSystemidAction(PagesPortaleditorActionEnum::SETACTIVE(), class_link::getLinkAdminHref("pages_content", "elementStatus", "&systemid={$this->getSystemid()}&language={$strAdminLangParam}&pe=1"), $this->getSystemid())
+                new PagesPortaleditorSystemidAction(PagesPortaleditorActionEnum::SETACTIVE(), Link::getLinkAdminHref("pages_content", "elementStatus", "&systemid={$this->getSystemid()}&language={$strAdminLangParam}&pe=1"), $this->getSystemid())
             );
 
         }
@@ -376,21 +377,16 @@ abstract class ElementPortal extends class_portal_controller
     public function getPortaleditorPlaceholderActions($bitElementIsExistingAtPlaceholder, PagesElement $objElement, $strPlaceholder, PagesPage $objPage)
     {
         //fetch the language to set the correct admin-lang
-        $objLanguages = new class_module_languages_language();
+        $objLanguages = new LanguagesLanguage();
         $strAdminLangParam = $objLanguages->getPortalLanguage();
 
 
         if ($objElement->getIntRepeat() == 1 || !$bitElementIsExistingAtPlaceholder) {
             PagesPortaleditor::getInstance()->registerAction(
-                new PagesPortaleditorPlaceholderAction(PagesPortaleditorActionEnum::CREATE(), class_link::getLinkAdminHref("pages_content", "new", "&systemid={$objPage->getSystemid()}&language={$strAdminLangParam}&placeholder={$strPlaceholder}&element={$objElement->getStrName()}&pe=1"), $strPlaceholder, $objElement->getStrName())
+                new PagesPortaleditorPlaceholderAction(PagesPortaleditorActionEnum::CREATE(), Link::getLinkAdminHref("pages_content", "new", "&systemid={$objPage->getSystemid()}&language={$strAdminLangParam}&placeholder={$strPlaceholder}&element={$objElement->getStrName()}&pe=1"), $strPlaceholder, $objElement->getStrName())
             );
         }
     }
-
-
-
-
-
 
 
     /**
@@ -462,7 +458,7 @@ abstract class ElementPortal extends class_portal_controller
      *
      * @see class_module_navigation_tree::getCompleteNaviStructure()
      * @see class_module_navigation_point::getDynamicNaviLayer()
-     * @return array|class_module_navigation_point[]|bool
+     * @return array|NavigationPoint[]|bool
      * @since 4.0
      */
     public function getNavigationEntries()

@@ -7,28 +7,28 @@
 
 namespace Kajona\Pages\Portal;
 
-use class_adminskin_helper;
-use class_cache;
-use class_carrier;
-use class_exception;
-use class_http_statuscodes;
-use class_link;
-use class_logger;
-use class_module_languages_language;
-use class_module_system_setting;
-use class_portal_controller;
-use class_resourceloader;
-use class_response_object;
-use class_scriptlet_helper;
-use class_session;
-use class_template;
-use interface_portal;
-use interface_scriptlet;
 use Kajona\Pages\System\PagesElement;
 use Kajona\Pages\System\PagesPage;
 use Kajona\Pages\System\PagesPageelement;
 use Kajona\Pages\System\PagesPortaleditorActionEnum;
 use Kajona\Pages\System\PagesPortaleditorPlaceholderAction;
+use Kajona\System\Portal\PortalController;
+use Kajona\System\Portal\PortalInterface;
+use Kajona\System\System\AdminskinHelper;
+use Kajona\System\System\Cache;
+use Kajona\System\System\Carrier;
+use Kajona\System\System\Exception;
+use Kajona\System\System\HttpStatuscodes;
+use Kajona\System\System\LanguagesLanguage;
+use Kajona\System\System\Link;
+use Kajona\System\System\Logger;
+use Kajona\System\System\Resourceloader;
+use Kajona\System\System\ResponseObject;
+use Kajona\System\System\ScriptletHelper;
+use Kajona\System\System\ScriptletInterface;
+use Kajona\System\System\Session;
+use Kajona\System\System\SystemSetting;
+use Kajona\System\System\Template;
 
 /**
  * Handles the loading of the pages - loads the elements, passes control to them and returns the complete
@@ -39,7 +39,7 @@ use Kajona\Pages\System\PagesPortaleditorPlaceholderAction;
  * @module pages
  * @moduleId _pages_modul_id_
  */
-class PagesPortalController extends class_portal_controller implements interface_portal
+class PagesPortalController extends PortalController implements PortalInterface
 {
 
     /**
@@ -54,7 +54,8 @@ class PagesPortalController extends class_portal_controller implements interface
     /**
      * @param array|mixed $arrElementData
      */
-    public function __construct($arrElementData = array(), $strSystemid = "") {
+    public function __construct($arrElementData = array(), $strSystemid = "")
+    {
         parent::__construct($arrElementData, $strSystemid);
         $this->setAction("generatePage");
     }
@@ -62,7 +63,7 @@ class PagesPortalController extends class_portal_controller implements interface
     /**
      * Handles the loading of a page, more in a functional than in an oop style
      *
-     * @throws class_exception
+     * @throws Exception
      * @return string the generated page
      * @permissions view
      */
@@ -109,7 +110,7 @@ class PagesPortalController extends class_portal_controller implements interface
         }
 
         //load the merged placeholder-list
-        $objPlaceholders = $this->objTemplate->parsePageTemplate("/module_pages/".$objPageData->getStrTemplate(), class_template::INT_ELEMENT_MODE_MASTER);
+        $objPlaceholders = $this->objTemplate->parsePageTemplate("/module_pages/".$objPageData->getStrTemplate(), Template::INT_ELEMENT_MODE_MASTER);
 
 
         //Load the template from the filesystem to get the placeholders
@@ -124,13 +125,13 @@ class PagesPortalController extends class_portal_controller implements interface
 
 
         //Initialize the caches internal cache :)
-        class_cache::fillInternalCache("class_element_portal", $this->getPagename(), null, $this->getStrPortalLanguage());
+        Cache::fillInternalCache("class_element_portal", $this->getPagename(), null, $this->getStrPortalLanguage());
 
 
         //try to load the additional title from cache
         $strAdditionalTitleFromCache = "";
         $intMaxCacheDuration = 0; //TODO find a better cache sum, in v4 determined by the elements
-        $objCachedTitle = class_cache::getCachedEntry(__CLASS__, $this->getPagename(), $this->generateHash2Sum(), $this->getStrPortalLanguage());
+        $objCachedTitle = Cache::getCachedEntry(__CLASS__, $this->getPagename(), $this->generateHash2Sum(), $this->getStrPortalLanguage());
         if ($objCachedTitle != null) {
             $strAdditionalTitleFromCache = $objCachedTitle->getStrContent();
             self::$strAdditionalTitle = $strAdditionalTitleFromCache;
@@ -195,26 +196,26 @@ class PagesPortalController extends class_portal_controller implements interface
         //pe-code to add new elements on unfilled block --> only if pe is visible
         if (PagesPortaleditor::isActive()) {
 
-            foreach($objPlaceholders->getArrBlocks() as $objOneBlocks) {
-                foreach($objOneBlocks->getArrBlocks() as $objOneBlock) {
+            foreach ($objPlaceholders->getArrBlocks() as $objOneBlocks) {
+                foreach ($objOneBlocks->getArrBlocks() as $objOneBlock) {
 
                     //register a new-action per block-element
                     if (PagesPortaleditor::isActive()) {
                         $strId = $objOneBlocks->getStrName();
-                        if(isset($arrBlocksIds[$objOneBlocks->getStrName()])) {
+                        if (isset($arrBlocksIds[$objOneBlocks->getStrName()])) {
                             $strId = $arrBlocksIds[$objOneBlocks->getStrName()];
                         }
 
                         PagesPortaleditor::getInstance()->registerAction(
                             new PagesPortaleditorPlaceholderAction(
                                 PagesPortaleditorActionEnum::CREATE(),
-                                class_link::getLinkAdminHref("pages_content", "newBlock", "&blocks={$strId}&block={$objOneBlock->getStrName()}&systemid={$objPageData->getSystemid()}&peClose=1"), "blocks_".$objOneBlocks->getStrName(),
+                                Link::getLinkAdminHref("pages_content", "newBlock", "&blocks={$strId}&block={$objOneBlock->getStrName()}&systemid={$objPageData->getSystemid()}&peClose=1"), "blocks_".$objOneBlocks->getStrName(),
                                 $objOneBlock->getStrName()
                             )
                         );
                     }
                 }
-                if(!isset($arrBlocks[$objOneBlocks->getStrName()])) {
+                if (!isset($arrBlocks[$objOneBlocks->getStrName()])) {
                     $arrBlocks[$objOneBlocks->getStrName()] = "";
                 }
                 $arrBlocks[$objOneBlocks->getStrName()] = PagesPortaleditor::getPlaceholderWrapper("blocks_".$objOneBlocks->getStrName(), $arrBlocks[$objOneBlocks->getStrName()]);
@@ -249,7 +250,7 @@ class PagesPortalController extends class_portal_controller implements interface
 
         //check if the additional title has to be saved to the cache
         if (self::$strAdditionalTitle != "" && self::$strAdditionalTitle != $strAdditionalTitleFromCache) {
-            $objCacheEntry = class_cache::getCachedEntry(__CLASS__, $this->getPagename(), $this->generateHash2Sum(), $this->getStrPortalLanguage(), true);
+            $objCacheEntry = Cache::getCachedEntry(__CLASS__, $this->getPagename(), $this->generateHash2Sum(), $this->getStrPortalLanguage(), true);
             $objCacheEntry->setStrContent(self::$strAdditionalTitle);
             $objCacheEntry->setIntLeasetime(time() + $intMaxCacheDuration);
 
@@ -261,15 +262,16 @@ class PagesPortalController extends class_portal_controller implements interface
         $arrTemplate["keywords"] = $objPageData->getStrKeywords();
         $arrTemplate["title"] = $objPageData->getStrBrowsername();
         $arrTemplate["additionalTitle"] = self::$strAdditionalTitle;
-        $arrTemplate["canonicalUrl"] = class_link::getLinkPortalHref($objPageData->getStrName(), "", $this->getParam("action"), "", $this->getParam("systemid"));
+        $arrTemplate["canonicalUrl"] = Link::getLinkPortalHref($objPageData->getStrName(), "", $this->getParam("action"), "", $this->getParam("systemid"));
 
         //Include the $arrGlobal Elements
         $arrGlobal = array();
-        $strPath = class_resourceloader::getInstance()->getPathForFile("/portal/global_includes.php");
+        $strPath = Resourceloader::getInstance()->getPathForFile("/portal/global_includes.php");
         if ($strPath !== false) {
             if (is_file($strPath)) {
                 include($strPath);
-            } else {
+            }
+            else {
                 include(_realpath_.$strPath);
             }
         }
@@ -310,7 +312,7 @@ class PagesPortalController extends class_portal_controller implements interface
      * Determines the page-data to load.
      * This includes the evaluation of the current page-data and the fallback to another language or even the error-page
      *
-     * @throws class_exception
+     * @throws Exception
      * @return PagesPage
      */
     private function getPageData()
@@ -337,7 +339,7 @@ class PagesPortalController extends class_portal_controller implements interface
                 $this->objTemplate->readTemplate("/module_pages/".$objPageData->getStrTemplate(), "", false, true);
             }
         }
-        catch (class_exception $objException) {
+        catch (Exception $objException) {
             $bitErrorpage = true;
         }
 
@@ -347,19 +349,19 @@ class PagesPortalController extends class_portal_controller implements interface
             //try to send the correct header
             //page not found
             if ($objPageData == null || $objPageData->getIntRecordStatus() != 1) {
-                class_response_object::getInstance()->setStrStatusCode(class_http_statuscodes::SC_NOT_FOUND);
+                ResponseObject::getInstance()->setStrStatusCode(HttpStatuscodes::SC_NOT_FOUND);
             }
 
             //user is not allowed to view the page
             if ($objPageData != null && !$objPageData->rightView()) {
-                class_response_object::getInstance()->setStrStatusCode(class_http_statuscodes::SC_FORBIDDEN);
+                ResponseObject::getInstance()->setStrStatusCode(HttpStatuscodes::SC_FORBIDDEN);
             }
 
             //check, if the page may be loaded using the default-language
             $strPreviousLang = $this->getStrPortalLanguage();
-            $objDefaultLang = class_module_languages_language::getDefaultLanguage();
+            $objDefaultLang = LanguagesLanguage::getDefaultLanguage();
             if ($this->getStrPortalLanguage() != $objDefaultLang->getStrName()) {
-                class_logger::getInstance()->addLogRow("Requested page ".$strPagename." not existing in language ".$this->getStrPortalLanguage().", switch to fallback lang", class_logger::$levelWarning);
+                Logger::getInstance()->addLogRow("Requested page ".$strPagename." not existing in language ".$this->getStrPortalLanguage().", switch to fallback lang", Logger::$levelWarning);
                 $objDefaultLang->setStrPortalLanguage($objDefaultLang->getStrName());
                 $objPageData = PagesPage::getPageByName($strPagename);
 
@@ -373,20 +375,20 @@ class PagesPortalController extends class_portal_controller implements interface
                         $bitErrorpage = true;
                     }
                 }
-                catch (class_exception $objException) {
+                catch (Exception $objException) {
                     $bitErrorpage = true;
                 }
 
                 if ($bitErrorpage) {
-                    $strPagename = class_module_system_setting::getConfigValue("_pages_errorpage_");
-                    $this->setParam("page", class_module_system_setting::getConfigValue("_pages_errorpage_"));
+                    $strPagename = SystemSetting::getConfigValue("_pages_errorpage_");
+                    $this->setParam("page", SystemSetting::getConfigValue("_pages_errorpage_"));
                     //revert to the old language - fallback didn't work
                     $objDefaultLang->setStrPortalLanguage($strPreviousLang);
                 }
             }
             else {
-                $strPagename = class_module_system_setting::getConfigValue("_pages_errorpage_");
-                $this->setParam("page", class_module_system_setting::getConfigValue("_pages_errorpage_"));
+                $strPagename = SystemSetting::getConfigValue("_pages_errorpage_");
+                $this->setParam("page", SystemSetting::getConfigValue("_pages_errorpage_"));
             }
 
             $objPageData = PagesPage::getPageByName($strPagename);
@@ -394,7 +396,7 @@ class PagesPortalController extends class_portal_controller implements interface
             //check, if the page is enabled and if the rights are given, too
             if ($objPageData == null || ($objPageData->getIntRecordStatus() != 1 || !$objPageData->rightView())) {
                 //Whoops. Nothing to output here
-                throw new class_exception("Requested Page ".$strPagename." not existing, no errorpage created or set!", class_exception::$level_FATALERROR);
+                throw new Exception("Requested Page ".$strPagename." not existing, no errorpage created or set!", Exception::$level_FATALERROR);
             }
 
         }
@@ -416,7 +418,7 @@ class PagesPortalController extends class_portal_controller implements interface
     private function renderPortalEditorCode(PagesPage $objPageData, $bitEditPermissionOnMasterPage, $strPageContent)
     {
         //add the portaleditor toolbar
-        if (class_module_system_setting::getConfigValue("_pages_portaleditor_") == "false") {
+        if (SystemSetting::getConfigValue("_pages_portaleditor_") == "false") {
             return $strPageContent;
         }
 
@@ -428,11 +430,11 @@ class PagesPortalController extends class_portal_controller implements interface
             return $strPageContent;
         }
 
-        class_adminskin_helper::defineSkinWebpath();
+        AdminskinHelper::defineSkinWebpath();
 
         //save back the current portal text language and set the admin-one
-        $strPortalLanguage = class_carrier::getInstance()->getObjLang()->getStrTextLanguage();
-        class_carrier::getInstance()->getObjLang()->setStrTextLanguage($this->objSession->getAdminLanguage());
+        $strPortalLanguage = Carrier::getInstance()->getObjLang()->getStrTextLanguage();
+        Carrier::getInstance()->getObjLang()->setStrTextLanguage($this->objSession->getAdminLanguage());
 
         $strPeToolbar = "";
 
@@ -442,9 +444,9 @@ class PagesPortalController extends class_portal_controller implements interface
         }
 
         //Add an iconbar
-        $strPageEditUrl = class_link::getLinkAdminHref("pages_content", "list", "&systemid=".$objPageData->getSystemid()."&language=".$strPortalLanguage, false);
-        $strEditUrl = class_link::getLinkAdminHref("pages", "editPage", "&systemid=".$objPageData->getSystemid()."&language=".$strPortalLanguage."&pe=1");
-        $strNewUrl = class_link::getLinkAdminHref("pages", "newPage", "&systemid=".$objPageData->getSystemid()."&language=".$strPortalLanguage."&pe=1");
+        $strPageEditUrl = Link::getLinkAdminHref("pages_content", "list", "&systemid=".$objPageData->getSystemid()."&language=".$strPortalLanguage, false);
+        $strEditUrl = Link::getLinkAdminHref("pages", "editPage", "&systemid=".$objPageData->getSystemid()."&language=".$strPortalLanguage."&pe=1");
+        $strNewUrl = Link::getLinkAdminHref("pages", "newPage", "&systemid=".$objPageData->getSystemid()."&language=".$strPortalLanguage."&pe=1");
 
         $strEditDate = timeToString($objPageData->getIntLmTime(), false);
         $strPageStatus = ($objPageData->getIntRecordStatus() == 1 ? $this->getLang("systemtask_systemstatus_active", "system") : $this->getLang("systemtask_systemstatus_inactive", "system"));
@@ -484,9 +486,9 @@ class PagesPortalController extends class_portal_controller implements interface
             });
 
             KAJONA.admin.portaleditor.RTE.config = {
-                language : '".(class_session::getInstance()->getAdminLanguage() != "" ? class_session::getInstance()->getAdminLanguage() : "en")."',
-                filebrowserBrowseUrl : '".uniStrReplace("&amp;", "&", class_link::getLinkAdminHref("folderview", "browserChooser", "&form_element=ckeditor"))."',
-                filebrowserImageBrowseUrl : '".uniStrReplace("&amp;", "&", class_link::getLinkAdminHref("mediamanager", "folderContentFolderviewMode", "systemid=".class_module_system_setting::getConfigValue("_mediamanager_default_imagesrepoid_")."&form_element=ckeditor&bit_link=1"))."',
+                language : '".(Session::getInstance()->getAdminLanguage() != "" ? Session::getInstance()->getAdminLanguage() : "en")."',
+                filebrowserBrowseUrl : '".uniStrReplace("&amp;", "&", Link::getLinkAdminHref("folderview", "browserChooser", "&form_element=ckeditor"))."',
+                filebrowserImageBrowseUrl : '".uniStrReplace("&amp;", "&", Link::getLinkAdminHref("mediamanager", "folderContentFolderviewMode", "systemid=".SystemSetting::getConfigValue("_mediamanager_default_imagesrepoid_")."&form_element=ckeditor&bit_link=1"))."',
                 customConfig : {$strConfigFile},
                 resize_minWidth : 640,
                 filebrowserWindowWidth : 400,
@@ -506,12 +508,11 @@ class PagesPortalController extends class_portal_controller implements interface
         </script>";
 
 
-
         //Load portaleditor styles
         $strPeToolbar .= $this->objToolkit->getPeToolbar();
 
-        $objScriptlets = new class_scriptlet_helper();
-        $strPeToolbar = $objScriptlets->processString($strPeToolbar, interface_scriptlet::BIT_CONTEXT_ADMIN);
+        $objScriptlets = new ScriptletHelper();
+        $strPeToolbar = $objScriptlets->processString($strPeToolbar, ScriptletInterface::BIT_CONTEXT_ADMIN);
 
         //The toolbar has to be added right after the body-tag - to generate correct html-code
         $strTemp = uniSubstr($strPageContent, uniStrpos($strPageContent, "<body"));
@@ -522,7 +523,7 @@ class PagesPortalController extends class_portal_controller implements interface
 
 
         //reset the portal texts language
-        class_carrier::getInstance()->getObjLang()->setStrTextLanguage($strPortalLanguage);
+        Carrier::getInstance()->getObjLang()->setStrTextLanguage($strPortalLanguage);
 
 
         return $strPageContent;

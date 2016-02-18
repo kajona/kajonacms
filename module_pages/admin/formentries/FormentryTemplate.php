@@ -6,13 +6,12 @@
 
 namespace Kajona\Pages\Admin\Formentries;
 
-use class_carrier;
-use class_formentry_base;
-use class_formentry_dropdown;
-use class_reflection;
-use class_resourceloader;
-use class_text_validator;
-use interface_formentry;
+use Kajona\System\Admin\Formentries\FormentryBase;
+use Kajona\System\Admin\FormentryInterface;
+use Kajona\System\System\Carrier;
+use Kajona\System\System\Reflection;
+use Kajona\System\System\Resourceloader;
+use Kajona\System\System\Validators\TextValidator;
 
 
 /**
@@ -22,7 +21,8 @@ use interface_formentry;
  * @author sidler@mulchprod.de
  * @since 4.3
  */
-class FormentryTemplate extends class_formentry_base implements interface_formentry {
+class FormentryTemplate extends FormentryBase implements FormentryInterface
+{
 
     /**
      * the path to the folder of matching templates
@@ -33,11 +33,12 @@ class FormentryTemplate extends class_formentry_base implements interface_formen
     private $arrKeyValues = array();
     private $strAddons = "";
 
-    public function __construct($strFormName, $strSourceProperty, $objSourceObject = null) {
+    public function __construct($strFormName, $strSourceProperty, $objSourceObject = null)
+    {
         parent::__construct($strFormName, $strSourceProperty, $objSourceObject);
 
         //set the default validator
-        $this->setObjValidator(new class_text_validator());
+        $this->setObjValidator(new TextValidator());
     }
 
     /**
@@ -46,50 +47,55 @@ class FormentryTemplate extends class_formentry_base implements interface_formen
      *
      * @return string
      */
-    public function renderField() {
-        $objToolkit = class_carrier::getInstance()->getObjToolkit("admin");
+    public function renderField()
+    {
+        $objToolkit = Carrier::getInstance()->getObjToolkit("admin");
         $strReturn = "";
-        if($this->getStrHint() != null)
+        if ($this->getStrHint() != null) {
             $strReturn .= $objToolkit->formTextRow($this->getStrHint());
+        }
 
-        if(count($this->arrKeyValues) == 1 && $this->getStrValue() == "") {
+        if (count($this->arrKeyValues) == 1 && $this->getStrValue() == "") {
             $arrKeys = array_keys($this->arrKeyValues);
             $this->setStrValue($arrKeys[0]);
         }
 
 
-        $strReturn .=  $objToolkit->formInputDropdown($this->getStrEntryName(), $this->arrKeyValues, $this->getStrLabel(), $this->getStrValue(), "", !$this->getBitReadonly(), $this->getStrAddons());
+        $strReturn .= $objToolkit->formInputDropdown($this->getStrEntryName(), $this->arrKeyValues, $this->getStrLabel(), $this->getStrValue(), "", !$this->getBitReadonly(), $this->getStrAddons());
         return $strReturn;
     }
 
     /**
      * Overwritten in order to load key-value pairs declared by annotations
      */
-    protected function updateValue() {
+    protected function updateValue()
+    {
         parent::updateValue();
 
-        if($this->getObjSourceObject() != null && $this->getStrSourceProperty() != "") {
-            $objReflection = new class_reflection($this->getObjSourceObject());
+        if ($this->getObjSourceObject() != null && $this->getStrSourceProperty() != "") {
+            $objReflection = new Reflection($this->getObjSourceObject());
 
             //try to find the matching source property
             $arrProperties = $objReflection->getPropertiesWithAnnotation(self::STR_TEMPLATEDIR_ANNOTATION);
             $strSourceProperty = null;
 
-            foreach($arrProperties as $strPropertyName => $strValue) {
-                if(uniSubstr(uniStrtolower($strPropertyName), (uniStrlen($this->getStrSourceProperty()))*-1) == $this->getStrSourceProperty())
+            foreach ($arrProperties as $strPropertyName => $strValue) {
+                if (uniSubstr(uniStrtolower($strPropertyName), (uniStrlen($this->getStrSourceProperty())) * -1) == $this->getStrSourceProperty()) {
                     $strSourceProperty = $strPropertyName;
+                }
             }
 
-            if($strSourceProperty == null)
+            if ($strSourceProperty == null) {
                 return;
+            }
 
             $strTemplateDir = $objReflection->getAnnotationValueForProperty($strSourceProperty, self::STR_TEMPLATEDIR_ANNOTATION);
 
             //load templates
-            $arrTemplates = class_resourceloader::getInstance()->getTemplatesInFolder($strTemplateDir);
+            $arrTemplates = Resourceloader::getInstance()->getTemplatesInFolder($strTemplateDir);
             $arrTemplatesDD = array();
-            if(count($arrTemplates) > 0) {
-                foreach($arrTemplates as $strTemplate) {
+            if (count($arrTemplates) > 0) {
+                foreach ($arrTemplates as $strTemplate) {
                     $arrTemplatesDD[$strTemplate] = $strTemplate;
                 }
             }
@@ -101,22 +107,27 @@ class FormentryTemplate extends class_formentry_base implements interface_formen
 
     /**
      * @param $arrKeyValues
+     *
      * @return FormentryTemplate
      */
-    public function setArrKeyValues($arrKeyValues) {
+    public function setArrKeyValues($arrKeyValues)
+    {
         $this->arrKeyValues = $arrKeyValues;
         return $this;
     }
 
-    public function getArrKeyValues() {
+    public function getArrKeyValues()
+    {
         return $this->arrKeyValues;
     }
 
     /**
      * @param string $strAddons
+     *
      * @return FormentryTemplate
      */
-    public function setStrAddons($strAddons) {
+    public function setStrAddons($strAddons)
+    {
         $this->strAddons = $strAddons;
         return $this;
     }
@@ -124,10 +135,10 @@ class FormentryTemplate extends class_formentry_base implements interface_formen
     /**
      * @return string
      */
-    public function getStrAddons() {
+    public function getStrAddons()
+    {
         return $this->strAddons;
     }
-
 
 
 }

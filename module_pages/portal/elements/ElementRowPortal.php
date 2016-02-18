@@ -19,7 +19,8 @@ use Kajona\Pages\Portal\PortalElementInterface;
  * @author sidler@mulchprod.de
  * @targetTable element_paragraph.content_id
  */
-class ElementRowPortal extends ElementPortal implements PortalElementInterface {
+class ElementRowPortal extends ElementPortal implements PortalElementInterface
+{
 
 
     /**
@@ -27,14 +28,15 @@ class ElementRowPortal extends ElementPortal implements PortalElementInterface {
      *
      * @return string
      */
-    public function loadData() {
+    public function loadData()
+    {
 
         $strReturn = "";
 
         $strTemplate = $this->arrElementData["paragraph_template"];
 
         //fallback
-        if($strTemplate == "") {
+        if ($strTemplate == "") {
             $strTemplate = "row.tpl";
         }
 

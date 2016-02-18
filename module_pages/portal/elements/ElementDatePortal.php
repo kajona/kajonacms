@@ -9,10 +9,10 @@
 
 namespace Kajona\Pages\Portal\Elements;
 
-use class_template_mapper;
 use Kajona\Pages\Portal\ElementPortal;
 use Kajona\Pages\Portal\PortalElementInterface;
 use Kajona\Pages\System\PagesPageelement;
+use Kajona\System\System\TemplateMapper;
 
 
 /**
@@ -21,18 +21,20 @@ use Kajona\Pages\System\PagesPageelement;
  * @author jschroeter@kajona.de
  * @targetTable element_universal.content_id
  */
-class ElementDatePortal extends ElementPortal implements PortalElementInterface {
+class ElementDatePortal extends ElementPortal implements PortalElementInterface
+{
 
     /**
      * Does a little "make-up" to the contents
      *
      * @return string
      */
-    public function loadData() {
+    public function loadData()
+    {
 
         $strTemplate = $this->arrElementData["char1"];
         //fallback
-        if($strTemplate == "") {
+        if ($strTemplate == "") {
             $strTemplate = "date.tpl";
         }
 
@@ -40,7 +42,7 @@ class ElementDatePortal extends ElementPortal implements PortalElementInterface 
         $objAdmin = $objPageElement->getConcreteAdminInstance();
         $objAdmin->loadElementData();
 
-        $objMapper = new class_template_mapper($objAdmin);
+        $objMapper = new TemplateMapper($objAdmin);
         return $objMapper->writeToTemplate("/element_date/".$strTemplate, "date");
     }
 

@@ -31,10 +31,10 @@ class InstallerPages extends InstallerBase implements InstallerInterface {
         $objManager = new OrmSchemamanager();
 
 		$strReturn .= "Installing table pages...\n";
-        $objManager->createTable("class_module_pages_page");
+        $objManager->createTable("Kajona\\Pages\\System\\PagesPage");
 
 		$strReturn .= "Installing table page_folder...\n";
-        $objManager->createTable("class_module_pages_folder");
+        $objManager->createTable("Kajona\\Pages\\System\\PagesFolder");
 
         //folder_properties
         $strReturn .= "Installing table page_properties...\n";
@@ -64,9 +64,9 @@ class InstallerPages extends InstallerBase implements InstallerInterface {
 		//Now we have to register module by module
 
 		//the pages
-		$this->registerModule("pages", _pages_modul_id_, "class_module_pages_portal.php", "class_module_pages_admin.php", $this->objMetadata->getStrVersion(), true);
+		$this->registerModule("pages", _pages_modul_id_, "PagesPortal.php", "PagesAdmin.php", $this->objMetadata->getStrVersion(), true);
 		//The pages_content
-		$this->registerModule("pages_content", _pages_content_modul_id_, "", "class_module_pages_content_admin.php", $this->objMetadata->getStrVersion(), false);
+		$this->registerModule("pages_content", _pages_content_modul_id_, "", "PagesContentAdmin.php", $this->objMetadata->getStrVersion(), false);
 
 
 		$strReturn .= "Registering system-constants...\n";
@@ -123,9 +123,9 @@ class InstallerPages extends InstallerBase implements InstallerInterface {
             "row" => array("ElementRowAdmin.php", "ElementRowPortal.php"),
             "paragraph" => array("ElementParagraphAdmin.php", "ElementParagraphPortal.php"),
             "image" => array("ElementImageAdmin.php", "ElementImagePortal.php"),
-            "downloads" => array("class_element_downloads_admin.php", "class_element_downloads_portal.php"),
-            "gallery" => array("class_element_gallery_admin.php", "class_element_gallery_portal.php"),
-            "galleryRandom" => array("class_element_galleryRandom_admin.php", "class_element_gallery_portal.php"),
+            "downloads" => array("ElementDownloadsAdmin.php", "ElementDownloadsPortal.php"),
+            "gallery" => array("ElementGalleryAdmin.php", "ElementGalleryPortal.php"),
+            "galleryRandom" => array("ElementGalleryRandomAdmin.php", "ElementGalleryPortal.php"),
             "blocks" => array("ElementBlocksAdmin.php", "ElementBlocksPortal.php"),
             "block" => array("ElementBlockAdmin.php", "ElementBlockPortal.php"),
             "date" => array("ElementDateAdmin.php", "ElementDatePortal.php"),

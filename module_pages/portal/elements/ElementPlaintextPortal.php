@@ -9,10 +9,10 @@
 
 namespace Kajona\Pages\Portal\Elements;
 
-use class_template_mapper;
 use Kajona\Pages\Portal\ElementPortal;
 use Kajona\Pages\Portal\PortalElementInterface;
 use Kajona\Pages\System\PagesPageelement;
+use Kajona\System\System\TemplateMapper;
 
 
 /**
@@ -40,7 +40,7 @@ class ElementPlaintextPortal extends ElementPortal implements PortalElementInter
         $objAdmin = $objPageElement->getConcreteAdminInstance();
         $objAdmin->loadElementData();
 
-        $objMapper = new class_template_mapper($objAdmin);
+        $objMapper = new TemplateMapper($objAdmin);
         return $objMapper->writeToTemplate("/element_plaintext/".$strTemplate, "plaintext");
     }
 

@@ -12,7 +12,8 @@ namespace Kajona\Pages\Portal;
  * Interface for the portal-classes of page-elements
  *
  */
-interface PortalElementInterface {
+interface PortalElementInterface
+{
 
     /**
      * Sucessor of getElementOutput()
