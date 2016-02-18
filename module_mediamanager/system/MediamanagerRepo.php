@@ -21,7 +21,7 @@ use Kajona\System\System\AdminListableInterface;
  * @module mediamanager
  * @moduleId _mediamanager_module_id_
  *
- * @formGenerator MediamanagerRepo_formgenerator
+ * @formGenerator Kajona\Mediamanager\Admin\MediamanagerRepoFormgenerator
  */
 class MediamanagerRepo extends \Kajona\System\System\Model implements \Kajona\System\System\ModelInterface, AdminListableInterface
 {
@@ -44,7 +44,7 @@ class MediamanagerRepo extends \Kajona\System\System\Model implements \Kajona\Sy
      * @tableColumn mediamanager_repo.repo_path
      * @tableColumnDatatype char254
      * @fieldMandatory
-     * @fieldValidator class_folder_validator
+     * @fieldValidator Kajona\System\System\Validators\FolderValidator
      * @fieldType text
      * @fieldLabel commons_path
      *

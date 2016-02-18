@@ -34,9 +34,8 @@ use Kajona\System\System\VersionableInterface;
  *
  * @module news
  * @moduleId _news_module_id_
- * @objectValidator class_news_news_objectvalidator
- *
- * @formGenerator NewsNews_formgenerator
+ * @objectValidator Kajona\News\System\Validators\NewsNewsObjectvalidator
+ * @formGenerator Kajona\News\Admin\NewsNewsFormgenerator
  */
 class NewsNews extends Model implements ModelInterface, AdminListableInterface, VersionableInterface, SearchPortalobjectInterface {
 

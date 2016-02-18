@@ -238,7 +238,7 @@ class WorkflowsWorkflow extends \Kajona\System\System\Model implements \Kajona\S
         $objOrmMapper->addWhereRestriction(new OrmObjectlistPropertyRestriction("intState", OrmComparatorEnum::Equal(), (int)$intType));
         $objOrmMapper->addOrderBy(new OrmObjectlistOrderby("system_date_start DESC"));
 
-        return $objOrmMapper->getObjectList("WorkflowsWorkflow");
+        return $objOrmMapper->getObjectList(__CLASS__);
     }
 
     /**
@@ -316,7 +316,7 @@ class WorkflowsWorkflow extends \Kajona\System\System\Model implements \Kajona\S
         $objOrmMapper->addWhereRestriction(new OrmObjectlistPropertyRestriction("strClass", OrmComparatorEnum::Equal(), $strClass));
         $objOrmMapper->addOrderBy(new OrmObjectlistOrderby("system_date_start DESC"));
 
-        return $objOrmMapper->getObjectList("WorkflowsWorkflow");
+        return $objOrmMapper->getObjectList(__CLASS__);
     }
 
     /**
@@ -340,7 +340,7 @@ class WorkflowsWorkflow extends \Kajona\System\System\Model implements \Kajona\S
         $objOrmMapper->addWhereRestriction(new OrmObjectlistPropertyRestriction("strClass", OrmComparatorEnum::Equal(), $strClass));
         $objOrmMapper->addOrderBy(new OrmObjectlistOrderby("system_date_start DESC"));
 
-        return $objOrmMapper->getObjectCount("WorkflowsWorkflow");
+        return $objOrmMapper->getObjectCount(__CLASS__);
     }
 
 
@@ -362,7 +362,7 @@ class WorkflowsWorkflow extends \Kajona\System\System\Model implements \Kajona\S
             $objOrmMapper->addWhereRestriction(new OrmObjectlistPropertyInRestriction("strClass", $arrClasses));
         }
 
-        return $objOrmMapper->getObjectCount("WorkflowsWorkflow");
+        return $objOrmMapper->getObjectCount(__CLASS__);
     }
 
     /**
@@ -388,7 +388,7 @@ class WorkflowsWorkflow extends \Kajona\System\System\Model implements \Kajona\S
         $objOrmMapper->addOrderBy(new OrmObjectlistOrderby("system_date_start DESC"));
         $objOrmMapper->addOrderBy(new OrmObjectlistOrderby("system_sort DESC"));
 
-        return $objOrmMapper->getObjectList("WorkflowsWorkflow", "", $intStart, $intEnd);
+        return $objOrmMapper->getObjectList(__CLASS__, "", $intStart, $intEnd);
     }
 
 
@@ -405,7 +405,7 @@ class WorkflowsWorkflow extends \Kajona\System\System\Model implements \Kajona\S
         $objOrmMapper = new OrmObjectlist();
         $objOrmMapper->addOrderBy(new OrmObjectlistOrderby("workflows_state ASC"));
         $objOrmMapper->addOrderBy(new OrmObjectlistOrderby("system_date_start DESC"));
-        return $objOrmMapper->getObjectList("WorkflowsWorkflow", "", $intStart, $intEnd);
+        return $objOrmMapper->getObjectList(__CLASS__, "", $intStart, $intEnd);
     }
 
     /**
