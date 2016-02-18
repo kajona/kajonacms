@@ -47,7 +47,7 @@ class GuestbookPost extends \Kajona\System\System\Model implements \Kajona\Syste
      * @tableColumnDatatype char254
      *
      * @fieldType text
-     * @fieldValidator class_email_validator
+     * @fieldValidator Kajona\System\System\Validators\EmailValidator
      *
      * @addSearchIndex
      */
