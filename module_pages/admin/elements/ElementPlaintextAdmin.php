@@ -21,7 +21,8 @@ use Kajona\Pages\Admin\ElementAdmin;
  *
  * @targetTable element_universal.content_id
  */
-class ElementPlaintextAdmin extends ElementAdmin implements AdminElementInterface {
+class ElementPlaintextAdmin extends ElementAdmin implements AdminElementInterface
+{
 
     /**
      * @var string
@@ -63,28 +64,32 @@ class ElementPlaintextAdmin extends ElementAdmin implements AdminElementInterfac
     /**
      * @param string $strTemplate
      */
-    public function setStrTemplate($strTemplate) {
+    public function setStrTemplate($strTemplate)
+    {
         $this->strTemplate = $strTemplate;
     }
 
     /**
      * @return string
      */
-    public function getStrTemplate() {
+    public function getStrTemplate()
+    {
         return $this->strTemplate;
     }
 
     /**
      * @param string $strText
      */
-    public function setStrText($strText) {
+    public function setStrText($strText)
+    {
         $this->strText = $strText;
     }
 
     /**
      * @return string
      */
-    public function getStrText() {
+    public function getStrText()
+    {
         return $this->strText;
     }
 

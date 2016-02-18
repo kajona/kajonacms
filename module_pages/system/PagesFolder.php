@@ -8,17 +8,16 @@
 
 namespace Kajona\Pages\System;
 
-use class_carrier;
-use class_link;
-use \Kajona\System\System\Model;
-use class_module_system_changelog;
-use class_module_system_module;
-use class_objectfactory;
-use class_orm_objectlist;
-use interface_admin_listable;
-use \Kajona\System\System\ModelInterface;
-use interface_search_resultobject;
-use interface_versionable;
+use Kajona\System\System\AdminListableInterface;
+use Kajona\System\System\Carrier;
+use Kajona\System\System\Link;
+use Kajona\System\System\Objectfactory;
+use Kajona\System\System\OrmObjectlist;
+use Kajona\System\System\SearchResultobjectInterface;
+use Kajona\System\System\SystemChangelog;
+use Kajona\System\System\SystemModule;
+use Kajona\System\System\VersionableInterface;
+
 
 /**
  * This class manages all stuff related with folders, used by pages. Folders just exist in the database,
@@ -31,7 +30,7 @@ use interface_versionable;
  * @module pages
  * @moduleId _pages_folder_id_
  */
-class PagesFolder extends \Kajona\System\System\Model implements \Kajona\System\System\ModelInterface, interface_versionable, interface_admin_listable, interface_search_resultobject
+class PagesFolder extends \Kajona\System\System\Model implements \Kajona\System\System\ModelInterface, VersionableInterface, AdminListableInterface, SearchResultobjectInterface
 {
 
     /**
@@ -57,7 +56,7 @@ class PagesFolder extends \Kajona\System\System\Model implements \Kajona\System\
      */
     public function getSearchAdminLinkForObject()
     {
-        return class_link::getLinkAdminHref("pages", "list", "&systemid=".$this->getSystemid());
+        return Link::getLinkAdminHref("pages", "list", "&systemid=".$this->getSystemid());
     }
 
 
@@ -129,7 +128,7 @@ class PagesFolder extends \Kajona\System\System\Model implements \Kajona\System\
     public static function getFolderList($strSystemid = "")
     {
         if (!validateSystemid($strSystemid)) {
-            $strSystemid = class_module_system_module::getModuleByName("pages")->getSystemid();
+            $strSystemid = SystemModule::getModuleByName("pages")->getSystemid();
         }
 
         return self::getObjectList($strSystemid);
@@ -146,7 +145,7 @@ class PagesFolder extends \Kajona\System\System\Model implements \Kajona\System\
     public static function getPagesInFolder($strFolderid = "")
     {
         if (!validateSystemid($strFolderid)) {
-            $strFolderid = class_module_system_module::getModuleByName("pages")->getSystemid();
+            $strFolderid = SystemModule::getModuleByName("pages")->getSystemid();
         }
 
         return PagesPage::getObjectList($strFolderid);
@@ -167,10 +166,10 @@ class PagesFolder extends \Kajona\System\System\Model implements \Kajona\System\
     public static function getPagesAndFolderList($strFolderid = "", $bitOnlyActive = false, $intStart = null, $intEnd = null)
     {
         if (!validateSystemid($strFolderid)) {
-            $strFolderid = class_module_system_module::getModuleByName("pages")->getSystemid();
+            $strFolderid = SystemModule::getModuleByName("pages")->getSystemid();
         }
 
-        $objORM = new class_orm_objectlist();
+        $objORM = new OrmObjectlist();
         $strQuery = "SELECT system_id, system_module_nr
 						FROM "._dbprefix_."system
 						WHERE system_prev_id=?
@@ -179,10 +178,10 @@ class PagesFolder extends \Kajona\System\System\Model implements \Kajona\System\
 	                      ".$objORM->getDeletedWhereRestriction()."
                     ORDER BY system_sort ASC";
 
-        $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array($strFolderid, _pages_modul_id_, _pages_folder_id_), $intStart, $intEnd);
+        $arrIds = Carrier::getInstance()->getObjDB()->getPArray($strQuery, array($strFolderid, _pages_modul_id_, _pages_folder_id_), $intStart, $intEnd);
         $arrReturn = array();
         foreach ($arrIds as $arrOneRecord) {
-            $objRecord = class_objectfactory::getInstance()->getObject($arrOneRecord["system_id"]);
+            $objRecord = Objectfactory::getInstance()->getObject($arrOneRecord["system_id"]);
             if ($objRecord instanceof PagesFolder || $objRecord instanceof PagesPage) {
                 $arrReturn[] = $objRecord;
             }
@@ -204,9 +203,9 @@ class PagesFolder extends \Kajona\System\System\Model implements \Kajona\System\
     public static function getPagesAndFolderListCount($strFolderid = "", $bitOnlyActive = false)
     {
         if (!validateSystemid($strFolderid)) {
-            $strFolderid = class_module_system_module::getModuleByName("pages")->getSystemid();
+            $strFolderid = SystemModule::getModuleByName("pages")->getSystemid();
         }
-        $objORM = new class_orm_objectlist();
+        $objORM = new OrmObjectlist();
         $strQuery = "SELECT COUNT(*)
 						FROM "._dbprefix_."system
 						WHERE system_prev_id=?
@@ -214,17 +213,17 @@ class PagesFolder extends \Kajona\System\System\Model implements \Kajona\System\
                          ".$objORM->getDeletedWhereRestriction()."
 	                      ".($bitOnlyActive ? " AND system_status = 1 " : "");
 
-        $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array($strFolderid, _pages_modul_id_, _pages_folder_id_));
+        $arrRow = Carrier::getInstance()->getObjDB()->getPRow($strQuery, array($strFolderid, _pages_modul_id_, _pages_folder_id_));
         return $arrRow["COUNT(*)"];
     }
 
 
     public function getVersionActionName($strAction)
     {
-        if ($strAction == class_module_system_changelog::$STR_ACTION_EDIT) {
+        if ($strAction == SystemChangelog::$STR_ACTION_EDIT) {
             return $this->getLang("pages_ordner_edit", "pages");
         }
-        elseif ($strAction == class_module_system_changelog::$STR_ACTION_DELETE) {
+        elseif ($strAction == SystemChangelog::$STR_ACTION_DELETE) {
             return $this->getLang("pages_ordner_delete", "pages");
         }
 
@@ -243,7 +242,7 @@ class PagesFolder extends \Kajona\System\System\Model implements \Kajona\System\
 
     public function getVersionRecordName()
     {
-        return class_carrier::getInstance()->getObjLang()->getLang("change_object_folder", "pages");
+        return Carrier::getInstance()->getObjLang()->getLang("change_object_folder", "pages");
     }
 
     /**

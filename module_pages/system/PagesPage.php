@@ -9,23 +9,22 @@
 
 namespace Kajona\Pages\System;
 
-use class_carrier;
-use class_link;
-use class_logger;
-use \Kajona\System\System\Model;
-use class_module_system_changelog;
-use class_module_system_module;
-use class_module_system_setting;
-use class_objectfactory;
-use class_orm_objectlist;
-use class_orm_objectlist_orderby;
-use class_orm_objectlist_restriction;
-use class_search_result;
-use interface_admin_listable;
-use \Kajona\System\System\ModelInterface;
-use interface_search_portalobject;
-use interface_search_resultobject;
-use interface_versionable;
+use Kajona\Search\System\SearchResult;
+use Kajona\System\System\AdminListableInterface;
+use Kajona\System\System\Carrier;
+use Kajona\System\System\Link;
+use Kajona\System\System\Logger;
+use Kajona\System\System\Objectfactory;
+use Kajona\System\System\OrmObjectlist;
+use Kajona\System\System\OrmObjectlistOrderby;
+use Kajona\System\System\OrmObjectlistRestriction;
+use Kajona\System\System\SearchPortalobjectInterface;
+use Kajona\System\System\SearchResultobjectInterface;
+use Kajona\System\System\SystemChangelog;
+use Kajona\System\System\SystemModule;
+use Kajona\System\System\SystemSetting;
+use Kajona\System\System\VersionableInterface;
+
 
 /**
  * Model for a page
@@ -37,7 +36,7 @@ use interface_versionable;
  * @module pages
  * @moduleId _pages_modul_id_
  */
-class PagesPage extends \Kajona\System\System\Model implements \Kajona\System\System\ModelInterface, interface_versionable, interface_admin_listable, interface_search_resultobject, interface_search_portalobject
+class PagesPage extends \Kajona\System\System\Model implements \Kajona\System\System\ModelInterface, VersionableInterface, AdminListableInterface, SearchResultobjectInterface, SearchPortalobjectInterface
 {
 
     public static $INT_TYPE_PAGE = 0;
@@ -177,7 +176,7 @@ class PagesPage extends \Kajona\System\System\Model implements \Kajona\System\Sy
      */
     public function getSearchAdminLinkForObject()
     {
-        return class_link::getLinkAdminHref("pages_content", "list", "&systemid=".$this->getSystemid());
+        return Link::getLinkAdminHref("pages_content", "list", "&systemid=".$this->getSystemid());
     }
 
     /**
@@ -186,14 +185,14 @@ class PagesPage extends \Kajona\System\System\Model implements \Kajona\System\Sy
      * make sure the link is a valid portal page.
      * If you want to suppress the entry from the result, return an empty string instead.
      *
-     * @param class_search_result $objResult
+     * @param SearchResult $objResult
      *
      * @see getLinkPortalHref()
      * @return mixed
      */
-    public function updateSearchResult(class_search_result $objResult)
+    public function updateSearchResult(SearchResult $objResult)
     {
-        $objResult->setStrPagelink(class_link::getLinkPortal($this->getStrName(), "", "_self", $this->getStrBrowsername(), "", "&highlight=".urlencode(html_entity_decode($objResult->getObjSearch()->getStrQuery(), ENT_QUOTES, "UTF-8"))));
+        $objResult->setStrPagelink(Link::getLinkPortal($this->getStrName(), "", "_self", $this->getStrBrowsername(), "", "&highlight=".urlencode(html_entity_decode($objResult->getObjSearch()->getStrQuery(), ENT_QUOTES, "UTF-8"))));
         $objResult->setStrPagename($this->getStrName());
     }
 
@@ -277,7 +276,7 @@ class PagesPage extends \Kajona\System\System\Model implements \Kajona\System\Sy
      */
     protected function initObjectInternal()
     {
-        $objORM = new class_orm_objectlist();
+        $objORM = new OrmObjectlist();
         $strQuery = "SELECT *
                           FROM "._dbprefix_."system_right,
                                "._dbprefix_."page,
@@ -356,7 +355,7 @@ class PagesPage extends \Kajona\System\System\Model implements \Kajona\System\Sy
     {
 
         //Create the system-record
-        if (class_module_system_setting::getConfigValue("_pages_newdisabled_") == "true") {
+        if (SystemSetting::getConfigValue("_pages_newdisabled_") == "true") {
             $this->setIntRecordStatus(0);
         }
 
@@ -388,8 +387,8 @@ class PagesPage extends \Kajona\System\System\Model implements \Kajona\System\Sy
         $this->setStrName($strName);
 
         //create change-logs
-        $objChanges = new class_module_system_changelog();
-        $objChanges->createLogEntry($this, class_module_system_changelog::$STR_ACTION_EDIT);
+        $objChanges = new SystemChangelog();
+        $objChanges->createLogEntry($this, SystemChangelog::$STR_ACTION_EDIT);
 
         $this->updatePath();
 
@@ -457,7 +456,7 @@ class PagesPage extends \Kajona\System\System\Model implements \Kajona\System\Sy
         $arrChildIds = $this->getChildNodesAsIdArray();
 
         foreach ($arrChildIds as $strChildId) {
-            $objInstance = class_objectfactory::getInstance()->getObject($strChildId);
+            $objInstance = Objectfactory::getInstance()->getObject($strChildId);
             $objInstance->updateObjectToDb();
         }
 
@@ -471,7 +470,7 @@ class PagesPage extends \Kajona\System\System\Model implements \Kajona\System\Sy
      */
     public function updatePath()
     {
-        $objPages = class_module_system_module::getModuleByName("pages");
+        $objPages = SystemModule::getModuleByName("pages");
         if ($objPages === null) {
             return;
         }
@@ -480,7 +479,7 @@ class PagesPage extends \Kajona\System\System\Model implements \Kajona\System\Sy
         $arrPathNames = array();
 
         foreach ($arrPathIds as $strParentId) {
-            $objInstance = class_objectfactory::getInstance()->getObject($strParentId);
+            $objInstance = Objectfactory::getInstance()->getObject($strParentId);
 
             if ($objInstance instanceof PagesPage) {
                 $arrPathNames[] = urlSafeString($objInstance->getStrBrowsername());
@@ -508,11 +507,11 @@ class PagesPage extends \Kajona\System\System\Model implements \Kajona\System\Sy
      */
     public static function getAllPages($intStart = null, $intEnd = null, $strFilter = "")
     {
-        $objORM = new class_orm_objectlist();
+        $objORM = new OrmObjectlist();
         if ($strFilter != "") {
-            $objORM->addWhereRestriction(new class_orm_objectlist_restriction("AND page_name LIKE ?", $strFilter."%"));
+            $objORM->addWhereRestriction(new OrmObjectlistRestriction("AND page_name LIKE ?", $strFilter."%"));
         }
-        $objORM->addOrderBy(new class_orm_objectlist_orderby("page_name ASC"));
+        $objORM->addOrderBy(new OrmObjectlistOrderby("page_name ASC"));
         return $objORM->getObjectList(get_called_class(), "", $intStart, $intEnd);
     }
 
@@ -531,8 +530,8 @@ class PagesPage extends \Kajona\System\System\Model implements \Kajona\System\Sy
             $strName = uniSubstr($strName, 0, uniStrpos($strName, "#"));
         }
 
-        $objORM = new class_orm_objectlist();
-        $objORM->addWhereRestriction(new class_orm_objectlist_restriction("AND page_name = ?", $strName));
+        $objORM = new OrmObjectlist();
+        $objORM->addWhereRestriction(new OrmObjectlistRestriction("AND page_name = ?", $strName));
         return $objORM->getSingleObject(get_called_class());
     }
 
@@ -545,10 +544,10 @@ class PagesPage extends \Kajona\System\System\Model implements \Kajona\System\Sy
      */
     public function getNumberOfElementsOnPage($bitJustActive = false)
     {
-        $objORM = new class_orm_objectlist();
-        $objORM->addWhereRestriction(new class_orm_objectlist_restriction("AND page_element_ph_language = ?", $this->getStrLanguage()));
+        $objORM = new OrmObjectlist();
+        $objORM->addWhereRestriction(new OrmObjectlistRestriction("AND page_element_ph_language = ?", $this->getStrLanguage()));
         if ($bitJustActive) {
-            $objORM->addWhereRestriction(new class_orm_objectlist_restriction("AND system_status = 1", array()));
+            $objORM->addWhereRestriction(new OrmObjectlistRestriction("AND system_status = 1", array()));
         }
 
         return $objORM->getObjectCount("class_module_pages_pageelement");
@@ -561,7 +560,7 @@ class PagesPage extends \Kajona\System\System\Model implements \Kajona\System\Sy
      */
     public function getNumberOfLockedElementsOnPage()
     {
-        $objORM = new class_orm_objectlist();
+        $objORM = new OrmObjectlist();
         //Check, if there are any Elements on this page
         $strQuery = "SELECT COUNT(*)
 						 FROM "._dbprefix_."system as system
@@ -591,7 +590,7 @@ class PagesPage extends \Kajona\System\System\Model implements \Kajona\System\Sy
         else {
             $strQuery = "SELECT pageproperties_id FROM "._dbprefix_."page_properties WHERE pageproperties_language = '' OR pageproperties_language IS NULL";
         }
-        $arrPropIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array());
+        $arrPropIds = Carrier::getInstance()->getObjDB()->getPArray($strQuery, array());
 
         foreach ($arrPropIds as $arrOneId) {
             $strId = $arrOneId["pageproperties_id"];
@@ -599,14 +598,14 @@ class PagesPage extends \Kajona\System\System\Model implements \Kajona\System\Sy
                                 FROM "._dbprefix_."page_properties
                                WHERE pageproperties_language = ?
                                  AND pageproperties_id = ? ";
-            $arrCount = class_carrier::getInstance()->getObjDB()->getPRow($strCountQuery, array($strTargetLanguage, $strId));
+            $arrCount = Carrier::getInstance()->getObjDB()->getPRow($strCountQuery, array($strTargetLanguage, $strId));
 
             if ((int)$arrCount["COUNT(*)"] == 0) {
                 $strUpdate = "UPDATE "._dbprefix_."page_properties
                               SET pageproperties_language = ?
                               WHERE pageproperties_id = ? ";
 
-                if (!class_carrier::getInstance()->getObjDB()->_pQuery($strUpdate, array($strTargetLanguage, $strId))) {
+                if (!Carrier::getInstance()->getObjDB()->_pQuery($strUpdate, array($strTargetLanguage, $strId))) {
                     return false;
                 }
             }
@@ -695,7 +694,7 @@ class PagesPage extends \Kajona\System\System\Model implements \Kajona\System\Sy
 
             if (!$this->objDB->_pQuery($strQuery, $arrValues, array(false, false, false, false, false, false, false, false))) {
                 $this->objDB->transactionRollback();
-                class_logger::getInstance()->addLogRow("error while copying page properties", class_logger::$levelError);
+                Logger::getInstance()->addLogRow("error while copying page properties", Logger::$levelError);
                 return false;
             }
         }
@@ -721,8 +720,8 @@ class PagesPage extends \Kajona\System\System\Model implements \Kajona\System\Sy
         //Filter blanks out of pagename
         $strName = str_replace(" ", "_", $strName);
 
-        $objORM = new class_orm_objectlist();
-        $objORM->addWhereRestriction(new class_orm_objectlist_restriction(" AND page_name = ?", $strName));
+        $objORM = new OrmObjectlist();
+        $objORM->addWhereRestriction(new OrmObjectlistRestriction(" AND page_name = ?", $strName));
         $objPage = $objORM->getSingleObject(get_called_class());
 
         if ($objPage !== null && !($bitAvoidSelfchek && $objPage->getSystemid() == $this->getSystemid())) {
@@ -731,8 +730,8 @@ class PagesPage extends \Kajona\System\System\Model implements \Kajona\System\Sy
             if ($objPage !== null && !($bitAvoidSelfchek && $objPage->getSystemid() == $this->getSystemid())) {
                 $strTemp = $strName."_".$intCount;
 
-                $objORM = new class_orm_objectlist();
-                $objORM->addWhereRestriction(new class_orm_objectlist_restriction(" AND page_name = ?", $strName));
+                $objORM = new OrmObjectlist();
+                $objORM->addWhereRestriction(new OrmObjectlistRestriction(" AND page_name = ?", $strName));
                 $objPage = $objORM->getSingleObject(get_called_class());
 
                 $intCount++;
@@ -750,10 +749,10 @@ class PagesPage extends \Kajona\System\System\Model implements \Kajona\System\Sy
      */
     public function getVersionActionName($strAction)
     {
-        if ($strAction == class_module_system_changelog::$STR_ACTION_EDIT) {
+        if ($strAction == SystemChangelog::$STR_ACTION_EDIT) {
             return $this->getLang("seite_bearbeiten", "pages");
         }
-        elseif ($strAction == class_module_system_changelog::$STR_ACTION_DELETE) {
+        elseif ($strAction == SystemChangelog::$STR_ACTION_DELETE) {
             return $this->getLang("seite_loeschen", "pages");
         }
 
@@ -786,7 +785,7 @@ class PagesPage extends \Kajona\System\System\Model implements \Kajona\System\Sy
      */
     public function getVersionRecordName()
     {
-        return class_carrier::getInstance()->getObjLang()->getLang("change_object_page", "pages");
+        return Carrier::getInstance()->getObjLang()->getLang("change_object_page", "pages");
     }
 
     /**
