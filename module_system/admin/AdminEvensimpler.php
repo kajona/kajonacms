@@ -163,7 +163,7 @@ abstract class AdminEvensimpler extends AdminSimple
         if (method_exists($this, $strMethod)) {
             $objRefl = new ReflectionMethod($this, $strMethod);
 
-            if ($objRefl->class != "AdminEvensimpler") {
+            if ($objRefl->class != "Kajona\\System\\Admin\\AdminEvensimpler") {
                 return true;
             }
             else {

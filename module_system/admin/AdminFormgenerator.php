@@ -567,6 +567,10 @@ class AdminFormgenerator
      */
     private function getValidatorInstance($strClassname)
     {
+        if (class_exists($strClassname)) {
+            return new $strClassname();
+        }
+
         if (uniStrpos($strClassname, "class_") === false) {
             $strClassname = "class_".$strClassname."_validator";
         }
