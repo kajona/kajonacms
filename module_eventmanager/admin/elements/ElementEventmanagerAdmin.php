@@ -7,6 +7,11 @@
 *	$Id$                                       *
 ********************************************************************************************************/
 
+namespace Kajona\Eventmanager\Admin\Elements;
+use Kajona\Pages\Admin\AdminElementInterface;
+use Kajona\Pages\Admin\ElementAdmin;
+
+
 /**
  * Class representing the admin-part of the eventmanager element
  *
@@ -16,7 +21,7 @@
  *
  * @targetTable element_universal.content_id
  */
-class class_element_eventmanager_admin extends class_element_admin implements interface_admin_element {
+class ElementEventmanagerAdmin extends ElementAdmin implements AdminElementInterface {
 
 
     /**

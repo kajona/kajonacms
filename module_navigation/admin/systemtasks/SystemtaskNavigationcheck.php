@@ -7,12 +7,21 @@
 *   $Id$                        *
 ********************************************************************************************************/
 
+namespace Kajona\Navigation\Admin\Systemtasks;
+
+use Kajona\Navigation\System\NavigationPoint;
+use Kajona\Navigation\System\NavigationTree;
+use Kajona\Pages\System\PagesPage;
+use Kajona\System\Admin\Systemtasks\AdminSystemtaskInterface;
+use Kajona\System\Admin\Systemtasks\SystemtaskBase;
+use Kajona\System\System\SystemModule;
+
 /**
  * Checkes the existing navigation-points for valid internal links.
  *
  * @package module_navigation
  */
-class class_systemtask_navigationcheck extends class_systemtask_base implements interface_admin_systemtask {
+class SystemtaskNavigationcheck extends SystemtaskBase implements AdminSystemtaskInterface {
 
 
     /**
@@ -54,13 +63,13 @@ class class_systemtask_navigationcheck extends class_systemtask_base implements 
      */
     public function executeTask() {
 
-        if(!class_module_system_module::getModuleByName("navigation")->rightEdit())
+        if(!SystemModule::getModuleByName("navigation")->rightEdit())
             return $this->getLang("commons_error_permissions");
 
         $strReturn = "";
 
         //load all navigation points, tree by tree
-        $arrTrees = class_module_navigation_tree::getObjectList();
+        $arrTrees = NavigationTree::getObjectList();
         foreach($arrTrees as $objOneTree) {
             $strReturn .= $this->getLang("systemtask_navigationcheck_treescan")." \"".$objOneTree->getStrName()."\"...<br />";
             if(validateSystemid($objOneTree->getStrFolderId()))
@@ -74,7 +83,7 @@ class class_systemtask_navigationcheck extends class_systemtask_base implements 
 
     private function processLevel($intParentId, $intLevel) {
         $strReturn = "";
-        $arrNaviPoints = class_module_navigation_point::getNaviLayer($intParentId);
+        $arrNaviPoints = NavigationPoint::getNaviLayer($intParentId);
         foreach($arrNaviPoints as $objOnePoint) {
             for($intI = 0; $intI<=$intLevel; $intI++)
                 $strReturn .= "&nbsp; &nbsp;";
@@ -87,7 +96,7 @@ class class_systemtask_navigationcheck extends class_systemtask_base implements 
     }
 
 
-    private function processSinglePoint(class_module_navigation_point $objPoint) {
+    private function processSinglePoint(NavigationPoint $objPoint) {
         $strReturn = "";
         $bitError = false;
 
@@ -103,7 +112,7 @@ class class_systemtask_navigationcheck extends class_systemtask_base implements 
         }
         else if($objPoint->getStrPageI() != "" && $objPoint->getStrPageE() == "") {
             //try to load internal page and check if it exists
-            $objPage = class_module_pages_page::getPageByName($objPoint->getStrPageI());
+            $objPage = PagesPage::getPageByName($objPoint->getStrPageI());
 
             if($objPage == null) {
                 $strReturn .= $this->getLang("systemtask_navigationcheck_invalidInternal")." ".$objPoint->getStrPageI().")";

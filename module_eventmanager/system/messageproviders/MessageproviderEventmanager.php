@@ -4,6 +4,11 @@
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 ********************************************************************************************************/
 
+namespace Kajona\Eventmanager\System\Messageproviders;
+use Kajona\System\System\Carrier;
+use Kajona\System\System\Messageproviders\MessageproviderInterface;
+
+
 /**
  * The eventmanager message-provider is able to send mails as soon as a new participant registered for a given event.
  * By default, all users with edit-permissions of the guestbook-module are notified.
@@ -12,7 +17,7 @@
  * @package module_eventmanager
  * @since 4.2
  */
-class class_messageprovider_eventmanager implements interface_messageprovider {
+class MessageproviderEventmanager implements MessageproviderInterface {
 
 
 
@@ -22,7 +27,7 @@ class class_messageprovider_eventmanager implements interface_messageprovider {
      * @return string
      */
     public function getStrName() {
-        return class_carrier::getInstance()->getObjLang()->getLang("messageprovider_eventmanager_name", "eventmanager");
+        return Carrier::getInstance()->getObjLang()->getLang("messageprovider_eventmanager_name", "eventmanager");
     }
 
     /**

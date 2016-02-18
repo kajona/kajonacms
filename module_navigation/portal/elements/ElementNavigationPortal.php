@@ -5,6 +5,12 @@
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 ********************************************************************************************************/
 
+namespace Kajona\Navigation\Portal\Elements;
+
+use Kajona\Pages\Portal\ElementPortal;
+use Kajona\Pages\Portal\PortalElementInterface;
+use Kajona\System\System\SystemModule;
+
 /**
  * Portal-class of the navigation element, loads the navigation-portal class
  *
@@ -13,7 +19,7 @@
  *
  * @targetTable element_navigation.content_id
  */
-class class_element_navigation_portal extends class_element_portal implements interface_portal_element {
+class ElementNavigationPortal extends ElementPortal implements PortalElementInterface {
 
     /**
      * Loads the navigation-class and passes control
@@ -23,7 +29,7 @@ class class_element_navigation_portal extends class_element_portal implements in
     public function loadData() {
         $strReturn = "";
 
-        $objNaviModule = class_module_system_module::getModuleByName("navigation");
+        $objNaviModule = SystemModule::getModuleByName("navigation");
         if($objNaviModule != null) {
             $objNavigation = $objNaviModule->getPortalInstanceOfConcreteModule($this->arrElementData);
             $strReturn = $objNavigation->action();

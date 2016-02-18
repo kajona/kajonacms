@@ -6,24 +6,21 @@
 ********************************************************************************************************/
 
 namespace Kajona\Eventmanager\Installer;
-use \Kajona\System\System\Date;
-use class_db;
-use class_module_eventmanager_event;
-use interface_sc_installer;
 use Kajona\Pages\System\PagesElement;
 use Kajona\Pages\System\PagesFolder;
 use Kajona\Pages\System\PagesPage;
 use Kajona\Pages\System\PagesPageelement;
+use Kajona\System\System\SamplecontentInstallerInterface;
 
 
 /**
  * Installer of the eventmanagers samplecontenht
  *
  */
-class InstallerSamplecontentEventmanager implements interface_sc_installer  {
+class InstallerSamplecontentEventmanager implements SamplecontentInstallerInterface  {
 
     /**
-     * @var class_db
+     * @var \Kajona\System\System\Database
      */
     private $objDB;
     private $strContentLanguage;
@@ -40,7 +37,7 @@ class InstallerSamplecontentEventmanager implements interface_sc_installer  {
 
 
         $strReturn .= "Creating event\n";
-        $objEvent = new class_module_eventmanager_event();
+        $objEvent = new EventmanagerEvent();
         
         $objEvent->setObjStartDate(new \Kajona\System\System\Date());
         $objEvent->setObjEndDate(new \Kajona\System\System\Date(time()+3600));

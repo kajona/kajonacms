@@ -5,6 +5,16 @@
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 ********************************************************************************************************/
 
+namespace Kajona\Navigation\System;
+
+use Kajona\System\System\AdminListableInterface;
+use Kajona\System\System\Model;
+use Kajona\System\System\ModelInterface;
+use Kajona\System\System\OrmComparatorEnum;
+use Kajona\System\System\OrmObjectlist;
+use Kajona\System\System\OrmObjectlistPropertyRestriction;
+use Kajona\System\System\SystemModule;
+
 /**
  * Model for a navigation tree itself
  *
@@ -15,7 +25,7 @@
  * @module navigation
  * @moduleId _navigation_modul_id_
  */
-class class_module_navigation_tree extends \Kajona\System\System\Model implements \Kajona\System\System\ModelInterface, interface_admin_listable {
+class NavigationTree extends Model implements ModelInterface, AdminListableInterface {
 
     /**
      * @var string
@@ -80,15 +90,15 @@ class class_module_navigation_tree extends \Kajona\System\System\Model implement
      * @param bool|int $intStart
      * @param bool|int $intEnd
      *
-     * @return class_module_navigation_tree[]
+     * @return NavigationTree[]
      * @static
      */
     public static function getObjectList($strPrevid = "", $intStart = false, $intEnd = false) {
-        return parent::getObjectList(class_module_system_module::getModuleIdByNr(_navigation_modul_id_), $intStart, $intEnd);
+        return parent::getObjectList(SystemModule::getModuleIdByNr(_navigation_modul_id_), $intStart, $intEnd);
     }
 
     public static function getObjectCount($strPrevid = "") {
-        return parent::getObjectCount(class_module_system_module::getModuleIdByNr(_navigation_modul_id_));
+        return parent::getObjectCount(SystemModule::getModuleIdByNr(_navigation_modul_id_));
     }
 
 
@@ -97,13 +107,13 @@ class class_module_navigation_tree extends \Kajona\System\System\Model implement
      *
      * @param string $strName
      *
-     * @return class_module_navigation_tree
+     * @return NavigationTree
      * @static
      */
     public static function getNavigationByName($strName) {
-        $objOrm = new class_orm_objectlist();
-        $objOrm->addWhereRestriction(new class_orm_objectlist_property_restriction("strName", class_orm_comparator_enum::Equal(), $strName));
-        $arrRows = $objOrm->getObjectList("class_module_navigation_tree", class_module_system_module::getModuleIdByNr(_navigation_modul_id_));
+        $objOrm = new OrmObjectlist();
+        $objOrm->addWhereRestriction(new OrmObjectlistPropertyRestriction("strName", OrmComparatorEnum::Equal(), $strName));
+        $arrRows = $objOrm->getObjectList("Kajona\\Navigation\\System\\NavigationTree", SystemModule::getModuleIdByNr(_navigation_modul_id_));
         if(count($arrRows) == 1)
             return $arrRows[0];
 
@@ -134,7 +144,7 @@ class class_module_navigation_tree extends \Kajona\System\System\Model implement
     private function loadSingleLevel($strParentNode) {
         $arrReturn = array();
 
-        $arrCurLevel = class_module_navigation_point::getDynamicNaviLayer($strParentNode);
+        $arrCurLevel = NavigationPoint::getDynamicNaviLayer($strParentNode);
 
         if(isset($arrCurLevel["node"]) && isset($arrCurLevel["subnodes"])) {
             //switch between added nodes and "real" nodes
@@ -146,7 +156,7 @@ class class_module_navigation_tree extends \Kajona\System\System\Model implement
 
         }
 
-        /** @var class_module_navigation_point $objOneNode */
+        /** @var NavigationPoint $objOneNode */
         foreach($arrCurLevel as $strKey => $objOneNode) {
 
             if($strKey !== "node" && $strKey !== "subnodes") {

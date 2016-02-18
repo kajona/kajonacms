@@ -4,7 +4,15 @@
 *   (c) 2007-2015 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 ********************************************************************************************************/
+
+namespace Kajona\Eventmanager\Admin;
+
+use Kajona\Eventmanager\System\EventmanagerEvent;
+use Kajona\Eventmanager\System\EventmanagerParticipant;
+use Kajona\System\Admin\AdminEvensimpler;
+use Kajona\System\Admin\AdminInterface;
 use Kajona\System\System\ModelInterface;
+use Kajona\System\System\Validators\EmailValidator;
 
 
 /**
@@ -15,13 +23,13 @@ use Kajona\System\System\ModelInterface;
  * @since 3.4
  *
  *
- * @objectList class_module_eventmanager_event
- * @objectNew class_module_eventmanager_event
- * @objectEdit class_module_eventmanager_event
+ * @objectList Kajona\Eventmanager\System\EventmanagerEvent
+ * @objectNew Kajona\Eventmanager\System\EventmanagerEvent
+ * @objectEdit Kajona\Eventmanager\System\EventmanagerEvent
  *
- * @objectListParticipant class_module_eventmanager_participant
- * @objectNewParticipant class_module_eventmanager_participant
- * @objectEditParticipant class_module_eventmanager_participant
+ * @objectListParticipant Kajona\Eventmanager\System\EventmanagerParticipant
+ * @objectNewParticipant Kajona\Eventmanager\System\EventmanagerParticipant
+ * @objectEditParticipant Kajona\Eventmanager\System\EventmanagerParticipant
  *
  *
  * @autoTestable list,new,newParticipant
@@ -30,7 +38,7 @@ use Kajona\System\System\ModelInterface;
  * @moduleId _eventmanager_module_id_
  *
  */
-class class_module_eventmanager_admin extends class_admin_evensimpler implements interface_admin {
+class EventmanagerAdmin extends AdminEvensimpler implements AdminInterface {
 
     const STR_CALENDAR_FILTER_EVENT = "STR_CALENDAR_FILTER_EVENT";
 
@@ -42,10 +50,10 @@ class class_module_eventmanager_admin extends class_admin_evensimpler implements
 
     protected function getOutputNaviEntry(ModelInterface $objInstance) {
 
-        if($objInstance instanceof class_module_eventmanager_event) {
+        if($objInstance instanceof EventmanagerEvent) {
             return getLinkAdmin($this->getArrModule("modul"), "listParticipant", "&systemid=" . $objInstance->getSystemid(), $objInstance->getStrDisplayName());
         }
-        if($objInstance instanceof class_module_eventmanager_participant) {
+        if($objInstance instanceof EventmanagerParticipant) {
             return getLinkAdmin($this->getArrModule("modul"), "listParticipant", "&systemid=" . $objInstance->getStrPrevId(), $objInstance->getStrDisplayName());
         }
 
@@ -54,16 +62,16 @@ class class_module_eventmanager_admin extends class_admin_evensimpler implements
 
 
     protected function renderAdditionalActions(\Kajona\System\System\Model $objListEntry) {
-        if($objListEntry->rightEdit() && $objListEntry instanceof class_module_eventmanager_event) {
+        if($objListEntry->rightEdit() && $objListEntry instanceof EventmanagerEvent) {
             return array(
                 $this->objToolkit->listButton(getLinkAdmin($this->getArrModule("modul"), "listParticipant", "&systemid=" . $objListEntry->getSystemid(), "", $this->getLang("action_list_participant"), "icon_group"))
             );
         }
 
-        if($objListEntry instanceof class_module_eventmanager_participant) {
+        if($objListEntry instanceof EventmanagerParticipant) {
             if($objListEntry->rightEdit()) {
-                $objValidator = new class_email_validator();
-                $objEvent = new class_module_eventmanager_event($objListEntry->getPrevId());
+                $objValidator = new EmailValidator();
+                $objEvent = new EventmanagerEvent($objListEntry->getPrevId());
                 if($objValidator->validate($objListEntry->getStrEmail())) {
                     $strPreset = "&mail_recipient=" . $objListEntry->getStrEmail();
                     $strPreset .= "&mail_subject=" . ($this->getLang("participant_mail_subject"));
@@ -91,7 +99,7 @@ class class_module_eventmanager_admin extends class_admin_evensimpler implements
      */
     protected function actionListParticipant() {
         $strReturn = "";
-        $objEvent = new class_module_eventmanager_event($this->getSystemid());
+        $objEvent = new EventmanagerEvent($this->getSystemid());
         if($objEvent->getIntRegistrationRequired() == "1" && $objEvent->getIntLimitGiven() == "1")
             $strReturn .= $this->objToolkit->getTextRow($this->getLang("participants_info_limit") . $objEvent->getIntParticipantsLimit());
         else
@@ -99,7 +107,7 @@ class class_module_eventmanager_admin extends class_admin_evensimpler implements
 
         $strReturn .= $this->objToolkit->divider();
         $this->setStrCurObjectTypeName("Participant");
-        $this->setCurObjectClassName("class_module_eventmanager_participant");
+        $this->setCurObjectClassName("Kajona\\Eventmanager\\System\\EventmanagerParticipant");
 
         $strReturn .= $this->actionList();
         return $strReturn;

@@ -7,24 +7,35 @@
 *   $Id$                                     *
 ********************************************************************************************************/
 
+namespace Kajona\Navigation\Installer;
+
+use Kajona\Navigation\System\NavigationTree;
+use Kajona\Pages\System\PagesElement;
+use Kajona\System\System\Exception;
+use Kajona\System\System\InstallerBase;
+use Kajona\System\System\InstallerRemovableInterface;
+use Kajona\System\System\OrmSchemamanager;
+use Kajona\System\System\SystemAspect;
+use Kajona\System\System\SystemModule;
+
 /**
  * Installer of the navigation
  *
  * @package module_navigation
  * @moduleId _navigation_modul_id_
  */
-class class_installer_navigation extends class_installer_base implements interface_installer_removable {
+class class_installer_navigation extends InstallerBase implements InstallerRemovableInterface {
 
     public function install() {
 
 		$strReturn = "Installing ".$this->objMetadata->getStrTitle()."...\n";
-        $objManager = new class_orm_schemamanager();
+        $objManager = new OrmSchemamanager();
 
 		$strReturn .= "Installing table navigation...\n";
         $objManager->createTable("class_module_navigation_point");
 
 		//register the module
-		$this->registerModule("navigation", _navigation_modul_id_, "class_module_navigation_portal.php", "class_module_navigation_admin.php", $this->objMetadata->getStrVersion() , true);
+		$this->registerModule("navigation", _navigation_modul_id_, "NavigationPortal.php", "NavigationAdmin.php", $this->objMetadata->getStrVersion() , true);
 
         $strReturn .= "Installing navigation-element table...\n";
         $objManager->createTable("class_element_navigation_admin");
@@ -34,15 +45,15 @@ class class_installer_navigation extends class_installer_base implements interfa
         //check, if not already existing
         $objElement = null;
         try {
-            $objElement = class_module_pages_element::getElement("navigation");
+            $objElement = PagesElement::getElement("navigation");
         }
-        catch (class_exception $objEx)  {
+        catch (Exception $objEx)  {
         }
         if($objElement == null) {
-            $objElement = new class_module_pages_element();
+            $objElement = new PagesElement();
             $objElement->setStrName("navigation");
-            $objElement->setStrClassAdmin("class_element_navigation_admin.php");
-            $objElement->setStrClassPortal("class_element_navigation_portal.php");
+            $objElement->setStrClassAdmin("ElementNavigationAdmin.php");
+            $objElement->setStrClassPortal("ElementNavigationPortal.php");
             $objElement->setIntCachetime(3600);
             $objElement->setIntRepeat(0);
             $objElement->setStrVersion($this->objMetadata->getStrVersion());
@@ -54,9 +65,9 @@ class class_installer_navigation extends class_installer_base implements interfa
         }
 
         $strReturn .= "Setting aspect assignments...\n";
-        if(class_module_system_aspect::getAspectByName("content") != null) {
-            $objModule = class_module_system_module::getModuleByName($this->objMetadata->getStrTitle());
-            $objModule->setStrAspect(class_module_system_aspect::getAspectByName("content")->getSystemid());
+        if(SystemAspect::getAspectByName("content") != null) {
+            $objModule = SystemModule::getModuleByName($this->objMetadata->getStrTitle());
+            $objModule->setStrAspect(SystemAspect::getAspectByName("content")->getSystemid());
             $objModule->updateObjectToDb();
         }
 
@@ -87,7 +98,7 @@ class class_installer_navigation extends class_installer_base implements interfa
     public function remove(&$strReturn) {
 
         //delete the page-element
-        $objElement = class_module_pages_element::getElement("navigation");
+        $objElement = PagesElement::getElement("navigation");
         if($objElement != null) {
             $strReturn .= "Deleting page-element 'navigation'...\n";
             $objElement->deleteObjectFromDatabase();
@@ -97,8 +108,8 @@ class class_installer_navigation extends class_installer_base implements interfa
             return false;
         }
 
-        /** @var class_module_navigation_tree $objOneObject */
-        foreach(class_module_navigation_tree::getObjectList() as $objOneObject) {
+        /** @var NavigationTree $objOneObject */
+        foreach(NavigationTree::getObjectList() as $objOneObject) {
             $strReturn .= "Deleting object '".$objOneObject->getStrDisplayName()."' ...\n";
             if(!$objOneObject->deleteObjectFromDatabase()) {
                 $strReturn .= "Error deleting object, aborting.\n";
@@ -108,7 +119,7 @@ class class_installer_navigation extends class_installer_base implements interfa
 
         //delete the module-node
         $strReturn .= "Deleting the module-registration...\n";
-        $objModule = class_module_system_module::getModuleByName($this->objMetadata->getStrTitle(), true);
+        $objModule = SystemModule::getModuleByName($this->objMetadata->getStrTitle(), true);
         if(!$objModule->deleteObjectFromDatabase()) {
             $strReturn .= "Error deleting module, aborting.\n";
             return false;
@@ -131,16 +142,16 @@ class class_installer_navigation extends class_installer_base implements interfa
     public function update() {
 	    $strReturn = "";
         //check installed version and to which version we can update
-        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
 
         $strReturn .= "Version found:\n\t Module: ".$arrModule["module_name"].", Version: ".$arrModule["module_version"]."\n\n";
 
-        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
         if($arrModule["module_version"] == "4.0") {
             $strReturn .= $this->update_40_41();
         }
 
-        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
         if($arrModule["module_version"] == "4.1") {
             $strReturn = "Updating 4.1 to 4.2...\n";
             $strReturn .= "Updating module-versions...\n";
@@ -149,7 +160,7 @@ class class_installer_navigation extends class_installer_base implements interfa
             $this->updateElementVersion("navigation", "4.2");
         }
 
-        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
         if($arrModule["module_version"] == "4.2") {
             $strReturn = "Updating 4.2 to 4.3...\n";
             $strReturn .= "Updating module-versions...\n";
@@ -158,28 +169,28 @@ class class_installer_navigation extends class_installer_base implements interfa
             $this->updateElementVersion("navigation", "4.3");
         }
 
-        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
         if($arrModule["module_version"] == "4.3") {
             $strReturn = "Updating 4.3 to 4.4...\n";
             $this->updateModuleVersion("navigation", "4.4");
             $this->updateElementVersion("navigation", "4.4");
         }
 
-        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
         if($arrModule["module_version"] == "4.4") {
             $strReturn = "Updating 4.4 to 4.5...\n";
             $this->updateModuleVersion("navigation", "4.5");
             $this->updateElementVersion("navigation", "4.5");
         }
 
-        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
         if($arrModule["module_version"] == "4.5") {
             $strReturn = "Updating 4.5 to 4.6...\n";
             $this->updateModuleVersion("navigation", "4.6");
             $this->updateElementVersion("navigation", "4.6");
         }
 
-        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
         if($arrModule["module_version"] == "4.6") {
             $strReturn = "Updating to 4.7...\n";
             $this->updateModuleVersion("navigation", "4.7");
