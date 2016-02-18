@@ -7,6 +7,10 @@
 *	$Id$                                   *
 ********************************************************************************************************/
 
+namespace Kajona\News\Admin;
+
+use Kajona\News\System\NewsCategory;
+use Kajona\System\Admin\AdminFormgenerator;
 
 /**
  * Formgenerator for a single news entry
@@ -18,15 +22,15 @@
  * @module news
  * @moduleId _news_module_id_
  */
-class class_module_news_feed_formgenerator extends class_admin_formgenerator  {
+class NewsFeedFormgenerator extends AdminFormgenerator  {
     /**
      * @inheritDoc
      */
     public function generateFieldsFromObject() {
         parent::generateFieldsFromObject();
 
-        /** @var class_module_news_category[] $arrNewsCats */
-        $arrNewsCats = class_module_news_category::getObjectList();
+        /** @var NewsCategory[] $arrNewsCats */
+        $arrNewsCats = NewsCategory::getObjectList();
         $arrCatsDD = array();
         foreach($arrNewsCats as $objOneCat) {
             $arrCatsDD[$objOneCat->getSystemid()] = $objOneCat->getStrTitle();

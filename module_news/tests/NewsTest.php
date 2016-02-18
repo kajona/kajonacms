@@ -1,15 +1,24 @@
 <?php
 
+namespace Kajona\News\Tests;
+
+use Kajona\News\Portal\NewsPortalXml;
+use Kajona\News\System\NewsCategory;
+use Kajona\News\System\NewsFeed;
+use Kajona\News\System\NewsNews;
+use Kajona\System\System\Testbase;
+use Kajona\System\System\XmlParser;
+
 require_once (__DIR__ . "/../../module_system/system/class_testbase.php");
 
-class class_test_news extends class_testbase  {
+class NewsTest extends Testbase {
 
 
 
     public function testCreateDelete() {
         echo "creating a news..\n";
         
-        $objNews = new class_module_news_news();
+        $objNews = new NewsNews();
         $objNews->setStrTitle("autotest");
         $objNews->setStrIntro("autotest");
         $objNews->setStrText("autotest");
@@ -17,13 +26,13 @@ class class_test_news extends class_testbase  {
         $this->assertTrue($objNews->updateObjectToDb(), __FILE__." save news");
         
         echo "creating category...\n";
-        $objCat = new class_module_news_category();
+        $objCat = new NewsCategory();
         $objCat->setStrTitle("autotest");
         $this->assertTrue($objCat->updateObjectToDb(), __FILE__." save cat");
         
         $this->flushDBCache();
-        $this->assertEquals(0, count(class_module_news_category::getNewsMember($objNews->getSystemid())), __FILE__." check cats for news");
-        $this->assertEquals(0, count(class_module_news_news::getObjectList($objCat->getSystemid())), __FILE__." check news for cat");
+        $this->assertEquals(0, count(NewsCategory::getNewsMember($objNews->getSystemid())), __FILE__." check cats for news");
+        $this->assertEquals(0, count(NewsNews::getObjectList($objCat->getSystemid())), __FILE__." check news for cat");
         
         
         
@@ -36,17 +45,17 @@ class class_test_news extends class_testbase  {
         
         $this->flushDBCache();
         
-        $objNews = new class_module_news_news($strNewsId);
-        $objCat = new class_module_news_category($strCatId);
+        $objNews = new NewsNews($strNewsId);
+        $objCat = new NewsCategory($strCatId);
         
-        $this->assertEquals(1, count(class_module_news_category::getNewsMember($objNews->getSystemid())), __FILE__." check cats for news");
-        $this->assertEquals(1, count(class_module_news_news::getObjectList($objCat->getSystemid())), __FILE__." check news for cat");
+        $this->assertEquals(1, count(NewsCategory::getNewsMember($objNews->getSystemid())), __FILE__." check cats for news");
+        $this->assertEquals(1, count(NewsNews::getObjectList($objCat->getSystemid())), __FILE__." check news for cat");
 
         echo "deleting news...\n";
         $this->assertTrue($objNews->deleteObjectFromDatabase(), __FILE__." delete news");
         
         $this->flushDBCache();
-        $this->assertEquals(0, count(class_module_news_news::getObjectList($objCat->getSystemid())), __FILE__." check news for cat");
+        $this->assertEquals(0, count(NewsNews::getObjectList($objCat->getSystemid())), __FILE__." check news for cat");
         
         $this->assertTrue($objCat->deleteObjectFromDatabase(), __FILE__." delete cat");
     }
@@ -57,21 +66,21 @@ class class_test_news extends class_testbase  {
     public function testRssFeed() {
         echo "creating news & category..\n";
         
-        $objNews = new class_module_news_news();
+        $objNews = new NewsNews();
         $objNews->setStrTitle("autotest");
         $objNews->setStrIntro("autotest");
         $objNews->setStrText("autotest");
         $this->assertTrue($objNews->updateObjectToDb(), __FILE__." save news");
         
         
-        $objNews2 = new class_module_news_news();
+        $objNews2 = new NewsNews();
         $objNews2->setStrTitle("autotest2");
         $objNews2->setStrIntro("autotest2");
         $objNews2->setStrText("autotest2");
         $this->assertTrue($objNews2->updateObjectToDb(), __FILE__." save news");
         
         echo "creating category...\n";
-        $objCat = new class_module_news_category();
+        $objCat = new NewsCategory();
         $objCat->setStrTitle("autotest");
         $this->assertTrue($objCat->updateObjectToDb(), __FILE__." save cat");
         $this->flushDBCache();
@@ -83,7 +92,7 @@ class class_test_news extends class_testbase  {
         
         
         echo "creating feed...\n";
-        $objFeed = new class_module_news_feed();
+        $objFeed = new NewsFeed();
         $objFeed->setStrTitle("testfeed");
         $objFeed->setStrCat($objCat->getSystemid());
         $objFeed->setStrUrlTitle("autotest");
@@ -92,20 +101,20 @@ class class_test_news extends class_testbase  {
         
         $this->flushDBCache();
         
-        $this->assertEquals(1, count(class_module_news_feed::getNewsList($objFeed->getStrCat())), __FILE__." check news for feed");
-        $this->assertEquals(1, count(class_module_news_feed::getNewsList($objFeed->getStrCat(), 1)), __FILE__." check news for feed");
+        $this->assertEquals(1, count(NewsFeed::getNewsList($objFeed->getStrCat())), __FILE__." check news for feed");
+        $this->assertEquals(1, count(NewsFeed::getNewsList($objFeed->getStrCat(), 1)), __FILE__." check news for feed");
 
 
 
         echo "generating feed by creating a fake request...\n";
 
-        $objNewsPortalXML = new class_module_news_portal_xml();
+        $objNewsPortalXML = new NewsPortalXml();
         $objNewsPortalXML->setParam("feedTitle", "autotest");
         $strFeed = $objNewsPortalXML->action("newsFeed");
         $this->assertTrue(uniStrpos($strFeed, "<title>autotest</title>") !== false, __FILE__." check rss feed");
         
         echo "parsing feed with xml parser...\n";
-        $objXmlParser = new class_xml_parser();
+        $objXmlParser = new XmlParser();
         $objXmlParser->loadString($strFeed);
         $arrFeed = $objXmlParser->xmlToArray();
         $intNrOfNews = count($arrFeed["rss"][0]["channel"][0]["item"]);
@@ -121,13 +130,13 @@ class class_test_news extends class_testbase  {
 
 
 
-        $objNewsPortalXML = new class_module_news_portal_xml();
+        $objNewsPortalXML = new NewsPortalXml();
         $objNewsPortalXML->setParam("feedTitle", "autotest");
         $strFeed = $objNewsPortalXML->action("newsFeed");
         $this->assertTrue(uniStrpos($strFeed, "<title>autotest</title>") !== false, __FILE__." check rss feed");
         
         echo "parsing feed with xml parser...\n";
-        $objXmlParser = new class_xml_parser();
+        $objXmlParser = new XmlParser();
         $objXmlParser->loadString($strFeed);
         $arrFeed = $objXmlParser->xmlToArray();
         //var_dump($arrFeed["rss"][0]["channel"][0]["item"]);

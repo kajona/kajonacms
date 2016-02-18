@@ -7,6 +7,12 @@
 *	$Id$                                       *
 ********************************************************************************************************/
 
+namespace Kajona\News\Admin\Elements;
+
+use Kajona\News\System\NewsCategory;
+use Kajona\Pages\Admin\AdminElementInterface;
+use Kajona\Pages\Admin\ElementAdmin;
+
 /**
  * Class representing the admin-part of the news element
  *
@@ -15,7 +21,7 @@
  *
  * @targetTable element_news.content_id
  */
-class class_element_news_admin extends class_element_admin implements interface_admin_element {
+class ElementNewsAdmin extends ElementAdmin implements AdminElementInterface {
 
     /**
      * @var string
@@ -99,7 +105,7 @@ class class_element_news_admin extends class_element_admin implements interface_
     public function getAdminForm() {
         $objForm = parent::getAdminForm();
 
-        $arrRawCats = class_module_news_category::getObjectList();
+        $arrRawCats = NewsCategory::getObjectList();
         $arrCats = array();
         $arrCats[0] = $this->getLang("commons_all_categories");
         foreach($arrRawCats as $objOneCat) {

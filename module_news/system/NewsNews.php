@@ -7,6 +7,24 @@
 *	$Id$                                    *
 ********************************************************************************************************/
 
+namespace Kajona\News\System;
+
+use class_search_result;
+use Kajona\Pages\System\PagesPage;
+use Kajona\System\System\AdminListableInterface;
+use Kajona\System\System\Carrier;
+use Kajona\System\System\LanguagesLanguage;
+use Kajona\System\System\LanguagesLanguageset;
+use Kajona\System\System\Link;
+use Kajona\System\System\Model;
+use Kajona\System\System\ModelInterface;
+use Kajona\System\System\Objectfactory;
+use Kajona\System\System\OrmObjectlist;
+use Kajona\System\System\OrmRowcache;
+use Kajona\System\System\SearchPortalobjectInterface;
+use Kajona\System\System\SystemSetting;
+use Kajona\System\System\VersionableInterface;
+
 /**
  * Model for a news itself
  *
@@ -18,9 +36,9 @@
  * @moduleId _news_module_id_
  * @objectValidator class_news_news_objectvalidator
  *
- * @formGenerator class_module_news_news_formgenerator
+ * @formGenerator NewsNews_formgenerator
  */
-class class_module_news_news extends \Kajona\System\System\Model implements \Kajona\System\System\ModelInterface, interface_admin_listable, interface_versionable, interface_search_portalobject {
+class NewsNews extends Model implements ModelInterface, AdminListableInterface, VersionableInterface, SearchPortalobjectInterface {
 
     /**
      * @var string
@@ -179,7 +197,7 @@ class class_module_news_news extends \Kajona\System\System\Model implements \Kaj
 
 
     /**
-     * @var class_module_news_category[]
+     * @var NewsCategory[]
      * @objectList news_member (source="newsmem_news", target="newsmem_category")
      * @fieldType checkboxarray
      * @versionable
@@ -213,7 +231,7 @@ class class_module_news_news extends \Kajona\System\System\Model implements \Kaj
      * @return string
      */
     public function getStrLongDescription() {
-        $strConfigValue = class_module_system_setting::getConfigValue("_news_news_datetime_");
+        $strConfigValue = SystemSetting::getConfigValue("_news_news_datetime_");
         return "S: " . dateToString($this->getObjStartDate(), $strConfigValue == "true")
             . ($this->getObjEndDate() != null ? " E: " . dateToString($this->getObjEndDate(), $strConfigValue == "true") : "")
             . ($this->getObjSpecialDate() != null ? " A: " . dateToString($this->getObjSpecialDate(), $strConfigValue == "true") : "");
@@ -239,7 +257,7 @@ class class_module_news_news extends \Kajona\System\System\Model implements \Kaj
      * @param \Kajona\System\System\Date $objStartDate
      * @param \Kajona\System\System\Date $objEndDate
      *
-     * @return class_module_news_news[]
+     * @return NewsNews[]
      * @static
      */
     public static function getObjectList($strFilter = "", $intStart = null, $intEnd = null, \Kajona\System\System\Date $objStartDate = null, \Kajona\System\System\Date $objEndDate = null) {
@@ -252,7 +270,7 @@ class class_module_news_news extends \Kajona\System\System\Model implements \Kaj
             $arrParams[] = $objEndDate->getLongTimestamp();
         }
 
-        $objOrm = new class_orm_objectlist();
+        $objOrm = new OrmObjectlist();
         $strWhere .= $objOrm->getDeletedWhereRestriction();
 
         if($strFilter != "") {
@@ -284,11 +302,11 @@ class class_module_news_news extends \Kajona\System\System\Model implements \Kaj
 							ORDER BY system_date_start DESC";
         }
 
-        $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, $arrParams, $intStart, $intEnd);
-        class_orm_rowcache::addArrayOfInitRows($arrIds);
+        $arrIds = Carrier::getInstance()->getObjDB()->getPArray($strQuery, $arrParams, $intStart, $intEnd);
+        OrmRowcache::addArrayOfInitRows($arrIds);
         $arrReturn = array();
         foreach($arrIds as $arrOneId) {
-            $arrReturn[] = class_objectfactory::getInstance()->getObject($arrOneId["system_id"]);
+            $arrReturn[] = Objectfactory::getInstance()->getObject($arrOneId["system_id"]);
         }
 
         return $arrReturn;
@@ -306,7 +324,7 @@ class class_module_news_news extends \Kajona\System\System\Model implements \Kaj
     public static function getObjectCount($strFilter = "") {
         $arrParams = array();
 
-        $objOrm = new class_orm_objectlist();
+        $objOrm = new OrmObjectlist();
         $strWhere = $objOrm->getDeletedWhereRestriction();
 
         if($strFilter != "") {
@@ -336,7 +354,7 @@ class class_module_news_news extends \Kajona\System\System\Model implements \Kaj
 							  " . $strWhere;
         }
 
-        $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, $arrParams);
+        $arrRow = Carrier::getInstance()->getObjDB()->getPRow($strQuery, $arrParams);
         return $arrRow["COUNT(*)"];
     }
 
@@ -362,7 +380,7 @@ class class_module_news_news extends \Kajona\System\System\Model implements \Kaj
      * @param int $intStart
      * @param int $intEnd
      *
-     * @return class_module_news_news[]
+     * @return NewsNews[]
      * @static
      */
     public static function loadListNewsPortal($intMode, $strCat = 0, $intOrder = 0, $intStart = null, $intEnd = null) {
@@ -381,7 +399,7 @@ class class_module_news_news extends \Kajona\System\System\Model implements \Kaj
             $strTime = "";
         }
 
-        $objOrm = new class_orm_objectlist();
+        $objOrm = new OrmObjectlist();
         $strWhere = $objOrm->getDeletedWhereRestriction();
 
         //check if news should be ordered de- or ascending
@@ -439,11 +457,11 @@ class class_module_news_news extends \Kajona\System\System\Model implements \Kaj
             $arrParams[] = $longNow;
         }
 
-        $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, $arrParams, $intStart, $intEnd);
-        class_orm_rowcache::addArrayOfInitRows($arrIds);
+        $arrIds = Carrier::getInstance()->getObjDB()->getPArray($strQuery, $arrParams, $intStart, $intEnd);
+        OrmRowcache::addArrayOfInitRows($arrIds);
         $arrReturn = array();
         foreach($arrIds as $arrOneId) {
-            $arrReturn[] = class_objectfactory::getInstance()->getObject($arrOneId["system_id"]);
+            $arrReturn[] = Objectfactory::getInstance()->getObject($arrOneId["system_id"]);
         }
 
         return $arrReturn;
@@ -504,7 +522,7 @@ class class_module_news_news extends \Kajona\System\System\Model implements \Kaj
             return dateToString(new \Kajona\System\System\Date($strValue), false);
 
         else if($strProperty == "assignedCategories" && validateSystemid($strValue)) {
-            $objCategory = new class_module_news_category($strValue);
+            $objCategory = new NewsCategory($strValue);
             return $objCategory->getStrTitle();
         }
 
@@ -527,7 +545,7 @@ class class_module_news_news extends \Kajona\System\System\Model implements \Kaj
      * @return mixed
      */
     public function updateSearchResult(class_search_result $objResult) {
-        $objORM = new class_orm_objectlist();
+        $objORM = new OrmObjectlist();
         $strQuery = "SELECT news_detailspage
                        FROM "._dbprefix_."element_news,
                             "._dbprefix_."news_member,
@@ -558,14 +576,14 @@ class class_module_news_news extends \Kajona\System\System\Model implements \Kaj
             if(!isset($arrOnePage["news_detailspage"]) || $arrOnePage["news_detailspage"] == "")
                 continue;
 
-            $objDetails = class_module_pages_page::getPageByName($arrOnePage["news_detailspage"]);
+            $objDetails = PagesPage::getPageByName($arrOnePage["news_detailspage"]);
 
             if($objDetails == null)
                 continue;
 
             //TODO: PV position
             $objOneResult = clone $objResult;
-            $objOneResult->setStrPagelink(class_link::getLinkPortal($arrOnePage["news_detailspage"], "", "_self", $this->getStrTitle(), "newsDetail", "&highlight=".urlencode(html_entity_decode($objResult->getObjSearch()->getStrQuery(), ENT_QUOTES, "UTF-8")), $this->getSystemid()));
+            $objOneResult->setStrPagelink(Link::getLinkPortal($arrOnePage["news_detailspage"], "", "_self", $this->getStrTitle(), "newsDetail", "&highlight=".urlencode(html_entity_decode($objResult->getObjSearch()->getStrQuery(), ENT_QUOTES, "UTF-8")), $this->getSystemid()));
             $objOneResult->setStrPagename($arrOnePage["news_detailspage"]);
             $objOneResult->setStrDescription($this->getStrIntro());
 
@@ -584,9 +602,9 @@ class class_module_news_news extends \Kajona\System\System\Model implements \Kaj
      */
     public function getContentLang() {
         //see if the entry is assigned to a language
-        $objSet = class_module_languages_languageset::getLanguagesetForSystemid($this->getSystemid());
+        $objSet = LanguagesLanguageset::getLanguagesetForSystemid($this->getSystemid());
         if($objSet != null && $objSet->getLanguageidForSystemid($this->getSystemid()) !== null) {
-            $objLang = new class_module_languages_language($objSet->getLanguageidForSystemid($this->getSystemid()));
+            $objLang = new LanguagesLanguage($objSet->getLanguageidForSystemid($this->getSystemid()));
             return $objLang->getStrName();
         }
 

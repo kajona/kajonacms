@@ -4,10 +4,19 @@
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 ********************************************************************************************************/
 
+namespace Kajona\News\System;
+
+use Kajona\Dashboard\System\EventEntry;
+use Kajona\Dashboard\System\EventProviderInterface;
+use Kajona\System\System\AdminskinHelper;
+use Kajona\System\System\Lang;
+use Kajona\System\System\Link;
+use Kajona\System\System\SystemModule;
+
 /**
  * @package module_news
  */
-class class_module_news_event_provider implements interface_event_provider
+class NewsEventProvider implements EventProviderInterface
 {
     public static function getExtensionName()
     {
@@ -16,7 +25,7 @@ class class_module_news_event_provider implements interface_event_provider
 
     public function getName()
     {
-        return class_lang::getInstance()->getLang("modul_titel", "news");
+        return Lang::getInstance()->getLang("modul_titel", "news");
     }
 
     public function getEventsByCategoryAndDate($strCategory, \Kajona\System\System\Date $objStartDate, \Kajona\System\System\Date $objEndDate)
@@ -26,15 +35,15 @@ class class_module_news_event_provider implements interface_event_provider
         }
 
         $arrResult = array();
-        $arrNews = class_module_news_news::getObjectList("", null, null, $objStartDate, $objEndDate);
+        $arrNews = NewsNews::getObjectList("", null, null, $objStartDate, $objEndDate);
         foreach($arrNews as $objOneNews) {
             if ($objOneNews->rightView()) {
-                $objEvent = new class_event_entry();
+                $objEvent = new EventEntry();
                 $objEvent->setStrIcon($objOneNews->getStrIcon());
                 $objEvent->setStrCategory("calendarNews");
                 $objEvent->setStrDisplayName($objOneNews->getStrDisplayName());
                 $objEvent->setObjValidDate(new \Kajona\System\System\Date($objOneNews->getObjStartDate()));
-                $objEvent->setStrHref(class_link::getLinkAdminHref("news", "edit", "&systemid=" . $objOneNews->getStrSystemid()));
+                $objEvent->setStrHref(Link::getLinkAdminHref("news", "edit", "&systemid=" . $objOneNews->getStrSystemid()));
 
                 $arrResult[] = $objEvent;
             }
@@ -45,16 +54,16 @@ class class_module_news_event_provider implements interface_event_provider
 
     public function getCategories()
     {
-        $objNews = new class_module_news_news();
-        $strIcon = class_adminskin_helper::getAdminImage($objNews->getStrIcon());
+        $objNews = new NewsNews();
+        $strIcon = AdminskinHelper::getAdminImage($objNews->getStrIcon());
 
         return array(
-            "calendarNews" => $strIcon . " " . class_lang::getInstance()->getLang("calendar_type_news", "news"),
+            "calendarNews" => $strIcon . " " . Lang::getInstance()->getLang("calendar_type_news", "news"),
         );
     }
 
     public function rightView()
     {
-        return class_module_system_module::getModuleByName("news")->rightView();
+        return SystemModule::getModuleByName("news")->rightView();
     }
 }

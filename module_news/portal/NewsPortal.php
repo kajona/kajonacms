@@ -6,10 +6,25 @@
 *-------------------------------------------------------------------------------------------------------*
 *	$Id$									*
 ********************************************************************************************************/
+
+namespace Kajona\News\Portal;
+
+use class_module_rating_portal;
+use Kajona\News\System\NewsCategory;
+use Kajona\News\System\NewsNews;
 use Kajona\Pages\Portal\PagesPortalController;
 use Kajona\Pages\Portal\PagesPortaleditor;
 use Kajona\Pages\System\PagesPortaleditorActionEnum;
 use Kajona\Pages\System\PagesPortaleditorSystemidAction;
+use Kajona\Postacomment\Portal\PostacommentPortal;
+use Kajona\Postacomment\System\PostacommentPost;
+use Kajona\System\Portal\PortalController;
+use Kajona\System\Portal\PortalInterface;
+use Kajona\System\System\ArraySectionIterator;
+use Kajona\System\System\Link;
+use Kajona\System\System\Objectfactory;
+use Kajona\System\System\SystemModule;
+use Kajona\System\System\TemplateMapper;
 
 /**
  * Portal-class of the news. Handles thd printing of news lists / detail
@@ -20,7 +35,7 @@ use Kajona\Pages\System\PagesPortaleditorSystemidAction;
  * @module news
  * @moduleId _news_module_id_
  */
-class class_module_news_portal extends class_portal_controller implements interface_portal {
+class NewsPortal extends PortalController implements PortalInterface {
 
     /**
      * Constructor
@@ -71,11 +86,11 @@ class class_module_news_portal extends class_portal_controller implements interf
 
 
         //Load all posts
-        $objArraySectionIterator = new class_array_section_iterator(class_module_news_news::getNewsCountPortal($this->arrElementData["news_mode"], $strFilterId));
+        $objArraySectionIterator = new ArraySectionIterator(NewsNews::getNewsCountPortal($this->arrElementData["news_mode"], $strFilterId));
         $objArraySectionIterator->setIntElementsPerPage($this->arrElementData["news_amount"]);
         $objArraySectionIterator->setPageNumber((int)$strPageview);
         $objArraySectionIterator->setArraySection(
-            class_module_news_news::loadListNewsPortal($this->arrElementData["news_mode"], $strFilterId, $this->arrElementData["news_order"], $objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos())
+            NewsNews::loadListNewsPortal($this->arrElementData["news_mode"], $strFilterId, $this->arrElementData["news_order"], $objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos())
         );
 
         $arrNews = $this->objToolkit->simplePager(
@@ -96,15 +111,15 @@ class class_module_news_portal extends class_portal_controller implements interf
             $strReturn .= $this->getLang("news_list_empty");
 
         foreach($objArraySectionIterator as $objOneNews) {
-            /** @var $objOneNews class_module_news_news */
-            if($objOneNews instanceof class_module_news_news && $objOneNews->rightView()) {
-                $objMapper = new class_template_mapper($objOneNews);
+            /** @var $objOneNews NewsNews */
+            if($objOneNews instanceof NewsNews && $objOneNews->rightView()) {
+                $objMapper = new TemplateMapper($objOneNews);
 
                 //generate a link to the details
                 $objMapper->addPlaceholder(
-                    "news_more_link", class_link::getLinkPortal($this->arrElementData["news_detailspage"], "", "", $this->getLang("news_mehr"), "newsDetail", "", $objOneNews->getSystemid(), "", "", $objOneNews->getStrTitle())
+                    "news_more_link", Link::getLinkPortal($this->arrElementData["news_detailspage"], "", "", $this->getLang("news_mehr"), "newsDetail", "", $objOneNews->getSystemid(), "", "", $objOneNews->getStrTitle())
                 );
-                $objMapper->addPlaceholder("news_more_link_href", class_link::getLinkPortalHref($this->arrElementData["news_detailspage"], "", "newsDetail", "", $objOneNews->getSystemid(), "", $objOneNews->getStrTitle()));
+                $objMapper->addPlaceholder("news_more_link_href", Link::getLinkPortalHref($this->arrElementData["news_detailspage"], "", "newsDetail", "", $objOneNews->getSystemid(), "", $objOneNews->getStrTitle()));
                 $objMapper->addPlaceholder("news_start_date", dateToString($objOneNews->getObjStartDate(), false));
                 $objMapper->addPlaceholder("news_id", $objOneNews->getSystemid());
                 $objMapper->addPlaceholder("news_title", $objOneNews->getStrTitle());
@@ -126,7 +141,7 @@ class class_module_news_portal extends class_portal_controller implements interf
                 //ratings
                 if($objOneNews->getFloatRating() !== null) {
                     /** @var $objRating class_module_rating_portal */
-                    $objRating = class_module_system_module::getModuleByName("rating")->getPortalInstanceOfConcreteModule();
+                    $objRating = SystemModule::getModuleByName("rating")->getPortalInstanceOfConcreteModule();
                     $objMapper->addPlaceholder(
                         "news_rating",
                         $objRating->buildRatingBar(
@@ -155,13 +170,13 @@ class class_module_news_portal extends class_portal_controller implements interf
                 $strReturn .= PagesPortaleditor::addPortaleditorContentWrapper($strOneNews, $objOneNews->getSystemid());
 
                 PagesPortaleditor::getInstance()->registerAction(
-                    new PagesPortaleditorSystemidAction(PagesPortaleditorActionEnum::EDIT(), class_link::getLinkAdminHref($this->getArrModule("module"), "editNews", "&systemid={$objOneNews->getSystemid()}"), $objOneNews->getSystemid())
+                    new PagesPortaleditorSystemidAction(PagesPortaleditorActionEnum::EDIT(), Link::getLinkAdminHref($this->getArrModule("module"), "editNews", "&systemid={$objOneNews->getSystemid()}"), $objOneNews->getSystemid())
                 );
                 PagesPortaleditor::getInstance()->registerAction(
-                    new PagesPortaleditorSystemidAction(PagesPortaleditorActionEnum::DELETE(), class_link::getLinkAdminHref($this->getArrModule("module"), "delete", "&systemid={$objOneNews->getSystemid()}"), $objOneNews->getSystemid())
+                    new PagesPortaleditorSystemidAction(PagesPortaleditorActionEnum::DELETE(), Link::getLinkAdminHref($this->getArrModule("module"), "delete", "&systemid={$objOneNews->getSystemid()}"), $objOneNews->getSystemid())
                 );
                 PagesPortaleditor::getInstance()->registerAction(
-                    new PagesPortaleditorSystemidAction(PagesPortaleditorActionEnum::CREATE(), class_link::getLinkAdminHref($this->getArrModule("module"), "newNews", ""), $objOneNews->getSystemid())
+                    new PagesPortaleditorSystemidAction(PagesPortaleditorActionEnum::CREATE(), Link::getLinkAdminHref($this->getArrModule("module"), "newNews", ""), $objOneNews->getSystemid())
                 );
             }
         }
@@ -182,18 +197,18 @@ class class_module_news_portal extends class_portal_controller implements interf
      */
     protected function actionNewsDetail() {
         $strReturn = "";
-        /** @var $objNews class_module_news_news */
-        $objNews = class_objectfactory::getInstance()->getObject($this->getSystemid());
-        if($objNews != null && $objNews instanceof class_module_news_news && $objNews->rightView() && $objNews->getIntRecordStatus() == "1") {
+        /** @var $objNews NewsNews */
+        $objNews = Objectfactory::getInstance()->getObject($this->getSystemid());
+        if($objNews != null && $objNews instanceof NewsNews && $objNews->rightView() && $objNews->getIntRecordStatus() == "1") {
 
             //see if we should generate a redirect instead
             if($objNews->getIntRedirectEnabled() == "1" && $objNews->getStrRedirectPage() != "") {
-                $this->portalReload(class_link::getLinkPortalHref($objNews->getStrRedirectPage()));
-                return "<script type='text/javascript'>window.location.replace('".class_link::getLinkPortalHref($objNews->getStrRedirectPage())."');</script>";
+                $this->portalReload(Link::getLinkPortalHref($objNews->getStrRedirectPage()));
+                return "<script type='text/javascript'>window.location.replace('".Link::getLinkPortalHref($objNews->getStrRedirectPage())."');</script>";
             }
 
             //Load record
-            $objMapper = new class_template_mapper($objNews);
+            $objMapper = new TemplateMapper($objNews);
 
             $objMapper->addPlaceholder("news_back_link", "<a href=\"javascript:history.back();\">" . $this->getLang("news_zurueck") . "</a>");
             $objMapper->addPlaceholder("news_start_date", dateToString($objNews->getObjStartDate(), false));
@@ -212,7 +227,7 @@ class class_module_news_portal extends class_portal_controller implements interf
             //ratings
             if($objNews->getFloatRating() !== null) {
                 /** @var $objRating class_module_rating_portal */
-                $objRating = class_module_system_module::getModuleByName("rating")->getPortalInstanceOfConcreteModule();
+                $objRating = SystemModule::getModuleByName("rating")->getPortalInstanceOfConcreteModule();
                 $objMapper->addPlaceholder(
                     "news_rating",
                     $objRating->buildRatingBar(
@@ -240,7 +255,7 @@ class class_module_news_portal extends class_portal_controller implements interf
             //Add pe code
             $strReturn = PagesPortaleditor::addPortaleditorContentWrapper($strReturn, $objNews->getSystemid());
             PagesPortaleditor::getInstance()->registerAction(
-                new PagesPortaleditorSystemidAction(PagesPortaleditorActionEnum::EDIT(), class_link::getLinkAdminHref($this->getArrModule("module"), "editNews", "&systemid={$this->getSystemid()}"), $this->getSystemid())
+                new PagesPortaleditorSystemidAction(PagesPortaleditorActionEnum::EDIT(), Link::getLinkAdminHref($this->getArrModule("module"), "editNews", "&systemid={$this->getSystemid()}"), $this->getSystemid())
             );
 
             //and count the hit
@@ -257,17 +272,17 @@ class class_module_news_portal extends class_portal_controller implements interf
 
     /**
      * Renders the news category titles
-     * @param class_module_news_news $objNews
+     * @param NewsNews $objNews
      *
      * @return string
      */
-    private function renderCategoryTitles(class_module_news_news $objNews) {
-        if(count(class_module_news_category::getNewsMember($objNews->getSystemid())) == 0)
+    private function renderCategoryTitles(NewsNews $objNews) {
+        if(count(NewsCategory::getNewsMember($objNews->getSystemid())) == 0)
             return "";
 
         $strCategories = "";
-        foreach(class_module_news_category::getNewsMember($objNews->getSystemid()) as $objCat) {
-            $objMapper = new class_template_mapper($objCat);
+        foreach(NewsCategory::getNewsMember($objNews->getSystemid()) as $objCat) {
+            $objMapper = new TemplateMapper($objCat);
             $strCategories .= $objMapper->writeToTemplate("/module_news/".$this->arrElementData["news_template"], "categories_category");
         }
 
@@ -286,14 +301,14 @@ class class_module_news_portal extends class_portal_controller implements interf
     private function loadPostacomments($strNewsSystemid, $strTemplateSection) {
         if($this->isPostacommentOnTemplate($this->arrElementData["news_template"], $strTemplateSection)) {
 
-            $objPacModule = class_module_system_module::getModuleByName("postacomment");
+            $objPacModule = SystemModule::getModuleByName("postacomment");
 
             $arrReturn = array();
             if($objPacModule != null) {
-                $arrComments = class_module_postacomment_post::loadPostList(false, "", $strNewsSystemid, $this->getStrPortalLanguage());
+                $arrComments = PostacommentPost::loadPostList(false, "", $strNewsSystemid, $this->getStrPortalLanguage());
 
                 //the rendered list
-                $objPacPortal = new class_module_postacomment_portal(array("char1" => "postacomment_ajax.tpl"));
+                $objPacPortal = new PostacommentPortal(array("char1" => "postacomment_ajax.tpl"));
                 $objPacPortal->setSystemid($strNewsSystemid);
                 $objPacPortal->setStrPagefilter("");
                 $strListCode = $objPacPortal->action();

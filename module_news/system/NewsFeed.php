@@ -7,6 +7,18 @@
 *	$Id$                                    *
 ********************************************************************************************************/
 
+namespace Kajona\News\System;
+
+use Kajona\System\System\AdminListableInterface;
+use Kajona\System\System\Carrier;
+use Kajona\System\System\Model;
+use Kajona\System\System\ModelInterface;
+use Kajona\System\System\Objectfactory;
+use Kajona\System\System\OrmObjectlist;
+use Kajona\System\System\OrmObjectlistRestriction;
+use Kajona\System\System\OrmRowcache;
+use Kajona\System\System\SystemSetting;
+
 /**
  * Model for a newsfeed itself
  *
@@ -17,9 +29,9 @@
  * @module news
  * @moduleId _news_module_id_
  *
- * @formGenerator class_module_news_feed_formgenerator
+ * @formGenerator NewsFeed_formgenerator
  */
-class class_module_news_feed extends \Kajona\System\System\Model implements \Kajona\System\System\ModelInterface, interface_admin_listable {
+class NewsFeed extends Model implements ModelInterface, AdminListableInterface {
 
     /**
      * @var string
@@ -126,7 +138,7 @@ class class_module_news_feed extends \Kajona\System\System\Model implements \Kaj
      * @return string
      */
     public function getStrLongDescription() {
-        if(class_module_system_setting::getConfigValue("_system_mod_rewrite_") == "true") {
+        if(SystemSetting::getConfigValue("_system_mod_rewrite_") == "true") {
             return _webpath_ . "/" . $this->getStrUrlTitle() . ".rss";
         }
         else {
@@ -148,12 +160,12 @@ class class_module_news_feed extends \Kajona\System\System\Model implements \Kaj
      *
      * @param string $strFeedTitle
      *
-     * @return class_module_news_feed
+     * @return NewsFeed
      * @static
      */
     public static function getFeedByUrlName($strFeedTitle) {
-        $objORM = new class_orm_objectlist();
-        $objORM->addWhereRestriction(new class_orm_objectlist_restriction("AND news_feed_urltitle = ? ", array($strFeedTitle)));
+        $objORM = new OrmObjectlist();
+        $objORM->addWhereRestriction(new OrmObjectlistRestriction("AND news_feed_urltitle = ? ", array($strFeedTitle)));
         return $objORM->getSingleObject(get_called_class());
     }
 
@@ -179,7 +191,7 @@ class class_module_news_feed extends \Kajona\System\System\Model implements \Kaj
      * @static
      */
     public static function getNewsList($strFilter = "", $intAmount = 0) {
-        $objORM = new class_orm_objectlist();
+        $objORM = new OrmObjectlist();
         $intNow = \Kajona\System\System\Date::getCurrentTimestamp();
         $arrParams = array($intNow, $intNow, $intNow);
         if($strFilter != "") {
@@ -226,11 +238,11 @@ class class_module_news_feed extends \Kajona\System\System\Model implements \Kaj
             $intEnd = $intAmount - 1;
         }
 
-        $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, $arrParams, $intStart, $intEnd);
-        class_orm_rowcache::addArrayOfInitRows($arrIds);
+        $arrIds = Carrier::getInstance()->getObjDB()->getPArray($strQuery, $arrParams, $intStart, $intEnd);
+        OrmRowcache::addArrayOfInitRows($arrIds);
         $arrReturn = array();
         foreach($arrIds as $arrOneId) {
-            $arrReturn[] = class_objectfactory::getInstance()->getObject($arrOneId["system_id"]);
+            $arrReturn[] = Objectfactory::getInstance()->getObject($arrOneId["system_id"]);
         }
 
         return $arrReturn;

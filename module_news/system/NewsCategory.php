@@ -7,6 +7,15 @@
 *	$Id$                                *
 ********************************************************************************************************/
 
+namespace Kajona\News\System;
+
+use Kajona\System\System\AdminListableInterface;
+use Kajona\System\System\Carrier;
+use Kajona\System\System\Link;
+use Kajona\System\System\Model;
+use Kajona\System\System\ModelInterface;
+use Kajona\System\System\SearchResultobjectInterface;
+
 /**
  * Model for a newscategory
  *
@@ -17,7 +26,7 @@
  * @module news
  * @moduleId _news_module_id_
  */
-class class_module_news_category extends \Kajona\System\System\Model implements \Kajona\System\System\ModelInterface, interface_admin_listable, interface_search_resultobject {
+class NewsCategory extends Model implements ModelInterface, AdminListableInterface, SearchResultobjectInterface {
 
     /**
      * @var string
@@ -41,7 +50,7 @@ class class_module_news_category extends \Kajona\System\System\Model implements 
      * @return mixed
      */
     public function getSearchAdminLinkForObject() {
-        return class_link::getLinkAdminHref("news", "listNewsAndCategories", "&filterid=".$this->getSystemid());
+        return Link::getLinkAdminHref("news", "listNewsAndCategories", "&filterid=".$this->getSystemid());
     }
 
 
@@ -89,17 +98,17 @@ class class_module_news_category extends \Kajona\System\System\Model implements 
      *
      * @param string $strSystemid
      *
-     * @return class_module_news_category[]
+     * @return NewsCategory[]
      * @static
      */
     public static function getNewsMember($strSystemid) {
         $strQuery = "SELECT newsmem_category as system_id
                        FROM " . _dbprefix_."news_member
 	                   WHERE newsmem_news = ? ";
-        $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array($strSystemid));
+        $arrIds = Carrier::getInstance()->getObjDB()->getPArray($strQuery, array($strSystemid));
         $arrReturn = array();
         foreach($arrIds as $arrOneId) {
-            $arrReturn[] = new class_module_news_category($arrOneId["system_id"]);
+            $arrReturn[] = new NewsCategory($arrOneId["system_id"]);
         }
 
         return $arrReturn;
