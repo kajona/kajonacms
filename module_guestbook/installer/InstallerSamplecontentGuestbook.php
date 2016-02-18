@@ -10,17 +10,19 @@ namespace Kajona\Guestbook\Installer;
 use class_db;
 use class_module_guestbook_guestbook;
 use interface_sc_installer;
+use Kajona\Guestbook\System\GuestbookGuestbook;
 use Kajona\Pages\System\PagesElement;
 use Kajona\Pages\System\PagesFolder;
 use Kajona\Pages\System\PagesPage;
 use Kajona\Pages\System\PagesPageelement;
+use Kajona\System\System\SamplecontentInstallerInterface;
 
 
 /**
  * Installer of the guestbook samplecontent
  *
  */
-class InstallerSamplecontentGuestbook implements interface_sc_installer
+class InstallerSamplecontentGuestbook implements SamplecontentInstallerInterface
 {
 
     /**
@@ -48,7 +50,7 @@ class InstallerSamplecontentGuestbook implements interface_sc_installer
         }
 
         $strReturn .= "Creating new guestbook...\n";
-        $objGuestbook = new class_module_guestbook_guestbook();
+        $objGuestbook = new GuestbookGuestbook();
         $objGuestbook->setStrGuestbookTitle("Guestbook");
         $objGuestbook->setIntGuestbookModerated(0);
         $objGuestbook->updateObjectToDb();

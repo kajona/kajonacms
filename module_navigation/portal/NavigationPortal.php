@@ -7,6 +7,7 @@
 
 namespace Kajona\Navigation\Portal;
 
+use Kajona\Navigation\Portal\Elements\ElementNavigationPortal;
 use Kajona\Navigation\System\NavigationPoint;
 use Kajona\Navigation\System\NavigationTree;
 use Kajona\Pages\Portal\PagesPortaleditor;
@@ -440,7 +441,7 @@ class NavigationPortal extends PortalController implements PortalInterface
                                     //wohooooo, an element was found.
                                     //check, if the current point is in the tree linked by the navigation - if it's a different navigation....
                                     //load the real-pageelement
-                                    $objRealElement = new NavigationPortal($objElement);
+                                    $objRealElement = new ElementNavigationPortal($objElement);
                                     $arrContent = $objRealElement->getElementContent($objElement->getSystemid());
                                     if (count($arrContent) == 0) {
                                         continue;

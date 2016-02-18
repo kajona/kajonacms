@@ -64,7 +64,7 @@ class InstallerPages extends InstallerBase implements InstallerInterface {
 		//Now we have to register module by module
 
 		//the pages
-		$this->registerModule("pages", _pages_modul_id_, "PagesPortal.php", "PagesAdmin.php", $this->objMetadata->getStrVersion(), true);
+		$this->registerModule("pages", _pages_modul_id_, "PagesPortalController.php", "PagesAdminController.php", $this->objMetadata->getStrVersion(), true);
 		//The pages_content
 		$this->registerModule("pages_content", _pages_content_modul_id_, "", "PagesContentAdmin.php", $this->objMetadata->getStrVersion(), false);
 

@@ -19,6 +19,7 @@ use Kajona\System\System\Carrier;
 use Kajona\System\System\Classloader;
 use Kajona\System\System\Exception;
 use Kajona\System\System\OrmObjectlist;
+use Kajona\System\System\OrmObjectlistRestriction;
 use Kajona\System\System\Resourceloader;
 
 

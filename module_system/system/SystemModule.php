@@ -346,19 +346,23 @@ class SystemModule extends Model implements ModelInterface, AdminListableInterfa
         /** @var \Kajona\System\System\ObjectBuilder $objBuilder */
         $objBuilder = Carrier::getInstance()->getContainer()->offsetGet("object_builder");
 
-        if ($this->getStrNameAdmin() != "" && uniStrpos($this->getStrNameAdmin(), ".php") !== false) {
-            //creating an instance of the wanted module
-            $strClassname = uniStrReplace(".php", "", $this->getStrNameAdmin());
+        $strClassname = $this->getStrNameAdmin();
+        if(uniStrpos($strClassname, ".php") !== false) {
+            $strFullpath = Resourceloader::getInstance()->getPathForFile("/admin/".$strClassname);
+            $strClassname = Classloader::getInstance()->getClassnameFromFilename($strFullpath);
+        }
+
+        if($strClassname != "") {
             if (validateSystemid($strSystemid)) {
-                $objModule = $objBuilder->factory($strClassname, array($strSystemid));
+                return $objBuilder->factory($strClassname, array($strSystemid));
             }
             else {
-                $objModule = $objBuilder->factory($strClassname);
+                return $objBuilder->factory($strClassname);
             }
-            return $objModule;
-        } else {
-            return null;
         }
+
+        return null;
+
     }
 
     /**
@@ -375,18 +379,23 @@ class SystemModule extends Model implements ModelInterface, AdminListableInterfa
         /** @var \Kajona\System\System\ObjectBuilder $objBuilder */
         $objBuilder = Carrier::getInstance()->getContainer()->offsetGet("object_builder");
 
-        if ($this->getStrNamePortal() != "" && uniStrpos($this->getStrNamePortal(), ".php") !== false) {
-            //creating an instance of the wanted module
-            $strClassname = uniStrReplace(".php", "", $this->getStrNamePortal());
-            if (is_array($arrElementData)) {
-                $objModule = $objBuilder->factory($strClassname, array($arrElementData));
-            } else {
-                $objModule = $objBuilder->factory($strClassname, array());
-            }
-            return $objModule;
-        } else {
-            return null;
+        $strClassname = $this->getStrNamePortal();
+        if(uniStrpos($strClassname, ".php") !== false) {
+            $strFullpath = Resourceloader::getInstance()->getPathForFile("/portal/".$strClassname);
+            $strClassname = Classloader::getInstance()->getClassnameFromFilename($strFullpath);
         }
+
+        if($strClassname != "") {
+            if (is_array($arrElementData)) {
+                return $objBuilder->factory($strClassname, array($arrElementData));
+            }
+            else {
+                return $objBuilder->factory($strClassname, array());
+            }
+        }
+
+        return null;
+
     }
 
     /**

@@ -12,19 +12,24 @@ use class_carrier;
 use class_module_mediamanager_repo;
 use class_module_system_module;
 use class_module_system_setting;
+use Kajona\Mediamanager\System\MediamanagerRepo;
 use Kajona\Pages\System\PagesElement;
 use Kajona\Pages\System\PagesFolder;
 use Kajona\Pages\System\PagesPage;
 use Kajona\Pages\System\PagesPageelement;
 use class_db;
 use interface_sc_installer;
+use Kajona\System\System\Carrier;
+use Kajona\System\System\SamplecontentInstallerInterface;
+use Kajona\System\System\SystemModule;
+use Kajona\System\System\SystemSetting;
 
 /**
  * Installer of the pages samplecontent
  *
  * @package module_pages
  */
-class InstallerSamplecontent01Pages implements interface_sc_installer  {
+class InstallerSamplecontent01Pages implements SamplecontentInstallerInterface  {
 
     /**
      * @var class_db
@@ -50,11 +55,11 @@ class InstallerSamplecontent01Pages implements interface_sc_installer  {
 
 
         $strReturn .= "Shifting pages to first position...\n";
-        $objPagesModule = class_module_system_module::getModuleByName("pages");
+        $objPagesModule = SystemModule::getModuleByName("pages");
         $objPagesModule->setAbsolutePosition(3);
 
         $strReturn .= "Setting default template...\n";
-        $objConstant = class_module_system_setting::getConfigByName("_pages_defaulttemplate_");
+        $objConstant = SystemSetting::getConfigByName("_pages_defaulttemplate_");
         $objConstant->setStrValue("standard.tpl");
         $objConstant->updateObjectToDb();
 
@@ -62,7 +67,7 @@ class InstallerSamplecontent01Pages implements interface_sc_installer  {
         $strReturn .= "Creating system folder...\n";
         $objFolder = new PagesFolder();
         $objFolder->setStrName("_system");
-        $objFolder->updateObjectToDb(class_module_system_module::getModuleByName("pages")->getSystemid());
+        $objFolder->updateObjectToDb(SystemModule::getModuleByName("pages")->getSystemid());
         $strSystemFolderID = $objFolder->getSystemid();
         $strReturn .= "ID of new folder: ".$strSystemFolderID."\n";
 
@@ -70,7 +75,7 @@ class InstallerSamplecontent01Pages implements interface_sc_installer  {
         $strReturn .= "Creating mainnavigation folder...\n";
         $objFolder = new PagesFolder();
         $objFolder->setStrName("mainnavigation");
-        $objFolder->updateObjectToDb(class_module_system_module::getModuleByName("pages")->getSystemid());
+        $objFolder->updateObjectToDb(SystemModule::getModuleByName("pages")->getSystemid());
         $strMainnavigationFolderID = $objFolder->getSystemid();
         $strReturn .= "ID of new folder: ".$strSystemFolderID."\n";
 
@@ -617,7 +622,7 @@ class InstallerSamplecontent01Pages implements interface_sc_installer  {
     public function installScDownloads() {
         $strReturn = "";
 
-        if(class_module_system_module::getModuleByName("mediamanager") == null)
+        if(SystemModule::getModuleByName("mediamanager") == null)
             return "Mediamanger not installed, skipping element\n";
 
         //fetch navifolder-id
@@ -630,7 +635,7 @@ class InstallerSamplecontent01Pages implements interface_sc_installer  {
 
 
         $strReturn .= "Creating new downloads...\n";
-        $objDownloads = new class_module_mediamanager_repo();
+        $objDownloads = new MediamanagerRepo();
         $objDownloads->setStrTitle("Sample downloads");
         $objDownloads->setStrPath("/files/downloads");
         $objDownloads->updateObjectToDb();
@@ -638,10 +643,10 @@ class InstallerSamplecontent01Pages implements interface_sc_installer  {
         $objDownloads->syncRepo();
 
         $strReturn .= "Adding download-permissions for guests...\n";
-        class_carrier::getInstance()->getObjRights()->addGroupToRight(class_module_system_setting::getConfigValue("_guests_group_id_"), $objDownloads->getSystemid(), "right2");
+        Carrier::getInstance()->getObjRights()->addGroupToRight(class_module_system_setting::getConfigValue("_guests_group_id_"), $objDownloads->getSystemid(), "right2");
 
         $strReturn .= "Adding rating-permissions for guests...\n";
-        class_carrier::getInstance()->getObjRights()->addGroupToRight(class_module_system_setting::getConfigValue("_guests_group_id_"), $objDownloads->getSystemid(), "right3");
+        Carrier::getInstance()->getObjRights()->addGroupToRight(class_module_system_setting::getConfigValue("_guests_group_id_"), $objDownloads->getSystemid(), "right3");
 
         $strReturn .= "Creating new downloads page...\n";
 
@@ -697,7 +702,7 @@ class InstallerSamplecontent01Pages implements interface_sc_installer  {
 
     public function installScGallery() {
 
-        if(class_module_system_module::getModuleByName("mediamanager") == null)
+        if(SystemModule::getModuleByName("mediamanager") == null)
             return "Mediamanger not installed, skipping element\n";
 
 
@@ -712,7 +717,7 @@ class InstallerSamplecontent01Pages implements interface_sc_installer  {
 
 
         $strReturn .= "Creating new gallery...\n";
-        $objGallery = new class_module_mediamanager_repo();
+        $objGallery = new MediamanagerRepo();
         $objGallery->setStrTitle("Sample Gallery");
         $objGallery->setStrPath(_filespath_."/images/samples");
         $objGallery->setStrUploadFilter(".jpg,.png,.gif,.jpeg");
@@ -722,7 +727,7 @@ class InstallerSamplecontent01Pages implements interface_sc_installer  {
         $strGalleryID = $objGallery->getSystemid();
 
         $strReturn .= "Modify rights to allow guests to rate images...\n";
-        class_carrier::getInstance()->getObjRights()->addGroupToRight(class_module_system_setting::getConfigValue("_guests_group_id_"), $objGallery->getSystemid(), "right3");
+        Carrier::getInstance()->getObjRights()->addGroupToRight(SystemSetting::getConfigValue("_guests_group_id_"), $objGallery->getSystemid(), "right3");
 
 
         $strReturn .= "Creating new gallery page...\n";

@@ -7,6 +7,15 @@
 *	$Id$                                  *
 ********************************************************************************************************/
 
+namespace Kajona\Samplecontent\Installer;
+
+use Kajona\System\System\Classloader;
+use Kajona\System\System\InstallerBase;
+use Kajona\System\System\InstallerRemovableInterface;
+use Kajona\System\System\Resourceloader;
+use Kajona\System\System\SamplecontentInstallerInterface;
+use Kajona\System\System\SystemModule;
+
 /**
  * Class providing an installer for the samplecontent.
  * Samplecontent is not installed as a module, it just creates a few default entries
@@ -15,7 +24,7 @@
  * @package module_samplecontent
  * @moduleId _samplecontent_modul_id_
  */
-class class_installer_samplecontent extends class_installer_base implements interface_installer_removable {
+class InstallerSamplecontent extends InstallerBase implements InstallerRemovableInterface {
 
 
     private $strContentLanguage;
@@ -36,8 +45,8 @@ class class_installer_samplecontent extends class_installer_base implements inte
         $this->registerModule($this->objMetadata->getStrTitle(), _samplecontent_modul_id_, "", "", $this->objMetadata->getStrVersion() , false);
 
 		//search for installers available
-        $arrTempInstaller = class_resourceloader::getInstance()->getFolderContent("/installer", array(".php"), false, null, function(&$strFilename, $strPath) {
-            $objInstance = class_classloader::getInstance()->getInstanceFromFilename($strPath, "interface_sc_installer");
+        $arrTempInstaller = Resourceloader::getInstance()->getFolderContent("/installer", array(".php"), false, null, function(&$strFilename, $strPath) {
+            $objInstance = Classloader::getInstance()->getInstanceFromFilename($strPath, "Kajona\\System\\System\\SamplecontentInstallerInterface");
 
             //See if a legacy class was stored in the file
             if($objInstance == null) {
@@ -73,7 +82,7 @@ class class_installer_samplecontent extends class_installer_base implements inte
         });
 
         $strReturn .= "Loading installers...\n";
-        /** @var $objInstaller interface_sc_installer|class_installer_base */
+        /** @var $objInstaller SamplecontentInstallerInterface|InstallerBase */
         foreach ($arrInstaller as $objInstaller) {
 
             if($objInstaller == null)
@@ -82,7 +91,7 @@ class class_installer_samplecontent extends class_installer_base implements inte
             $strReturn .= "\n\nInstaller found: ".get_class($objInstaller)."\n";
             $strModule = $objInstaller->getCorrespondingModule();
             $strReturn .= "Module ".$strModule."...\n";
-            $objModule = class_module_system_module::getModuleByName($strModule);
+            $objModule = SystemModule::getModuleByName($strModule);
             if($objModule == null) {
                 $strReturn .= "\t... not installed!\n";
             }
@@ -96,7 +105,7 @@ class class_installer_samplecontent extends class_installer_base implements inte
         $this->objDB->flushQueryCache();
 
         if(!file_exists(_realpath_."/favicon.ico")) {
-            if(!copy(class_resourceloader::getInstance()->getAbsolutePathForModule("module_samplecontent")."/favicon.ico.root", _realpath_."/favicon.ico"))
+            if(!copy(Resourceloader::getInstance()->getAbsolutePathForModule("module_samplecontent")."/favicon.ico.root", _realpath_."/favicon.ico"))
                 $strReturn .= "<b>Copying the favicon.ico.root to top level failed!!!</b>";
         }
 
@@ -129,7 +138,7 @@ class class_installer_samplecontent extends class_installer_base implements inte
 
         //delete the module-node
         $strReturn .= "Deleting the module-registration...\n";
-        $objModule = class_module_system_module::getModuleByName($this->objMetadata->getStrTitle(), true);
+        $objModule = SystemModule::getModuleByName($this->objMetadata->getStrTitle(), true);
         if(!$objModule->deleteObjectFromDatabase()) {
             $strReturn .= "Error deleting module, aborting.\n";
             return false;
@@ -143,53 +152,17 @@ class class_installer_samplecontent extends class_installer_base implements inte
     public function update() {
 	    $strReturn = "";
         //check installed version and to which version we can update
-        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
 
         $strReturn .= "Version found:\n\t Module: ".$arrModule["module_name"].", Version: ".$arrModule["module_version"]."\n\n";
 
-          $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModule["module_version"] == "3.4.9") {
-            $strReturn .= "Updating 3.4.9 to 4.0...\n";
-            $this->updateModuleVersion("samplecontent", "4.0");
-        }
-
-        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModule["module_version"] == "4.0") {
-            $strReturn .= "Updating 4.0 to 4.1...\n";
-            $this->updateModuleVersion("samplecontent", "4.1");
-        }
-
-        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModule["module_version"] == "4.1") {
-            $strReturn .= "Updating 4.1 to 4.2...\n";
-            $this->updateModuleVersion("samplecontent", "4.2");
-        }
-
-        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModule["module_version"] == "4.2") {
-            $strReturn .= "Updating 4.2 to 4.3...\n";
-            $this->updateModuleVersion("samplecontent", "4.3");
-        }
-
-        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModule["module_version"] == "4.3") {
-            $strReturn .= "Updating 4.3 to 4.4...\n";
-            $this->updateModuleVersion("samplecontent", "4.4");
-        }
-
-        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
-        if($arrModule["module_version"] == "4.4") {
-            $strReturn .= "Updating 4.4 to 4.5...\n";
-            $this->updateModuleVersion("samplecontent", "4.5");
-        }
-
-        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
         if($arrModule["module_version"] == "4.5") {
             $strReturn .= "Updating 4.5 to 4.6...\n";
             $this->updateModuleVersion("samplecontent", "4.6");
         }
 
-        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
         if($arrModule["module_version"] == "4.6") {
             $strReturn .= "Updating to 4.7...\n";
             $this->updateModuleVersion("samplecontent", "4.7");
