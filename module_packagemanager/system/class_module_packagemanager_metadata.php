@@ -46,6 +46,11 @@ class class_module_packagemanager_metadata implements interface_admin_listable {
 
     }
 
+    public function getIntRecordDeleted()
+    {
+        return 0;
+    }
+
     /**
      * @return mixed
      */
