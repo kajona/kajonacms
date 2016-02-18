@@ -47,20 +47,12 @@ class GraphFactory {
                 $strType = "jqplot";
         }
 
-        $strClassname = "class_graph_".$strType;
+        $strClassname = "Graph".ucfirst($strType);
         $strPath = Resourceloader::getInstance()->getPathForFile("/system/".$strClassname.".php");
         if($strPath !== false) {
-            $objReflection = new ReflectionClass($strClassname);
-            if(!$objReflection->isAbstract() && $objReflection->implementsInterface("interface_graph"))
-                return $objReflection->newInstance();
-        }
-
-        $strClassname = "Graph".$strType;
-        $strPath = Resourceloader::getInstance()->getPathForFile("/system/".$strClassname.".php");
-        if($strPath !== false) {
-            $objReflection = new ReflectionClass($strClassname);
-            if(!$objReflection->isAbstract() && $objReflection->implementsInterface("interface_graph"))
-                return $objReflection->newInstance();
+            $objGraph = Classloader::getInstance()->getInstanceFromFilename($strPath, null, "Kajona\\System\\System\\GraphInterface");
+            if($objGraph != null)
+                return $objGraph;
         }
 
         throw new Exception("Requested charts-plugin ".$strType." not existing", Exception::$level_FATALERROR);
