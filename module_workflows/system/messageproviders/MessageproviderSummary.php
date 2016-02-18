@@ -4,6 +4,11 @@
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 ********************************************************************************************************/
 
+namespace Kajona\Workflows\System\Messageproviders;
+
+use Kajona\System\System\Carrier;
+use Kajona\System\System\Messageproviders\MessageproviderInterface;
+
 
 /**
  * The summary message creates an overview of unread messages and sends them to the user.
@@ -13,8 +18,8 @@
  * @package module_workflows
  * @since 4.5
  */
-class class_messageprovider_summary implements interface_messageprovider_extended {
-
+class MessageproviderSummary implements MessageproviderInterface
+{
 
 
     /**
@@ -22,8 +27,9 @@ class class_messageprovider_summary implements interface_messageprovider_extende
      *
      * @return string
      */
-    public function getStrName() {
-        return class_carrier::getInstance()->getObjLang()->getLang("messageprovider_workflows_summary", "workflows");
+    public function getStrName()
+    {
+        return Carrier::getInstance()->getObjLang()->getLang("messageprovider_workflows_summary", "workflows");
     }
 
     /**

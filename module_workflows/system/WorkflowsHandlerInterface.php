@@ -5,6 +5,11 @@
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 ********************************************************************************************************/
 
+namespace Kajona\Workflows\System;
+
+use Kajona\System\Admin\AdminFormgenerator;
+
+
 /**
  * A single workflow has to implement this interface.
  *
@@ -33,7 +38,8 @@
  *
  * @package module_workflows
  */
-interface interface_workflows_handler {
+interface WorkflowsHandlerInterface
+{
 
     /**
      * The workflow is triggered to run.
@@ -59,18 +65,19 @@ interface interface_workflows_handler {
      * Holds all params relevant for the current object
      * and stores object-defined params and values.
      *
-     * @param class_module_workflows_workflow $objWorkflow
+     * @param WorkflowsWorkflow $objWorkflow
+     *
      * @return void
      */
     public function setObjWorkflow($objWorkflow);
-    
+
     /**
      * This method should schedule the workflow.
      * Do this by setting the trigger-date in class class_module_workflows_workflow
-     * 
+     *
      * This method is called by the controller. The workflows' state is set to scheduled afterwards.
      * The workflow-object itself is updated automatically, so no need to be done right here.
-     * 
+     *
      * @see class_module_workflows_workflow::setObjTriggerDate
      * @return void
      */
@@ -86,7 +93,7 @@ interface interface_workflows_handler {
      * It may get called by the workflow-engine at certain places.
      * The form-wrapper itself is created by the engine :)
      *
-     * @return string|class_admin_formgenerator
+     * @return string|AdminFormgenerator
      */
     public function getUserInterface();
 
@@ -105,8 +112,9 @@ interface interface_workflows_handler {
      * the engine invokes processUserInput(). Update your data according to the params.
      *
      * The workflow-object itself is updated automatically, so no need to be done right here.
-     * 
+     *
      * @param array $arrParams
+     *
      * @return void
      */
     public function processUserInput($arrParams);
@@ -145,7 +153,7 @@ interface interface_workflows_handler {
 
     /**
      * Should return an array of three values at maximum, indicating the default-values used to parametrize the handler itself.
-     * 
+     *
      * @return array
      */
     public function getDefaultValues();
