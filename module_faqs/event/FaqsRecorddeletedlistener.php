@@ -4,6 +4,14 @@
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 ********************************************************************************************************/
 
+namespace Kajona\Faqs\Event;
+
+use Kajona\System\System\Carrier;
+use Kajona\System\System\CoreEventdispatcher;
+use Kajona\System\System\GenericeventListenerInterface;
+use Kajona\System\System\SystemEventidentifier;
+
+
 /**
  * Removes category-assignments on record-deletions
  *
@@ -11,7 +19,8 @@
  * @author sidler@mulchprod.de
  *
  */
-class class_module_faqs_recorddeletedlistener implements interface_genericevent_listener {
+class FaqsRecorddeletedlistener implements GenericeventListenerInterface
+{
 
 
     /**
@@ -22,27 +31,28 @@ class class_module_faqs_recorddeletedlistener implements interface_genericevent_
      *
      * @return bool
      */
-    public function handleEvent($strEventName, array $arrArguments) {
+    public function handleEvent($strEventName, array $arrArguments)
+    {
         //unwrap arguments
         list($strSystemid, $strSourceClass) = $arrArguments;
 
-        if($strSourceClass == "class_module_faqs_category") {
-            return class_carrier::getInstance()->getObjDB()->_pQuery("DELETE FROM "._dbprefix_."faqs_member WHERE faqsmem_category = ? ", array($strSystemid));
+        if ($strSourceClass == "Kajona\\Faqs\\System\\FaqsCategory") {
+            return Carrier::getInstance()->getObjDB()->_pQuery("DELETE FROM " . _dbprefix_ . "faqs_member WHERE faqsmem_category = ? ", array($strSystemid));
         }
         return true;
     }
-
 
 
     /**
      * Internal init to register the event listener, called on file-inclusion, e.g. by the class-loader
      * @return void
      */
-    public static function staticConstruct() {
-        class_core_eventdispatcher::getInstance()->removeAndAddListener(class_system_eventidentifier::EVENT_SYSTEM_RECORDDELETED, new class_module_faqs_recorddeletedlistener());
+    public static function staticConstruct()
+    {
+        CoreEventdispatcher::getInstance()->removeAndAddListener(SystemEventidentifier::EVENT_SYSTEM_RECORDDELETED, new FaqsRecorddeletedlistener());
     }
 
 
 }
 
-class_module_faqs_recorddeletedlistener::staticConstruct();
+FaqsRecorddeletedlistener::staticConstruct();

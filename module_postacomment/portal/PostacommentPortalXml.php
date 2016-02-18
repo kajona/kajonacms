@@ -7,6 +7,21 @@
 *	$Id$						*
 ********************************************************************************************************/
 
+namespace Kajona\Postacomment\Portal;
+
+use Kajona\Pages\System\PagesPage;
+use Kajona\Postacomment\System\Messageproviders\MessageproviderPostacomment;
+use Kajona\Postacomment\System\PostacommentPost;
+use Kajona\System\Portal\PortalController;
+use Kajona\System\Portal\XmlPortalInterface;
+use Kajona\System\System\HttpResponsetypes;
+use Kajona\System\System\Link;
+use Kajona\System\System\MessagingMessagehandler;
+use Kajona\System\System\ResponseObject;
+use Kajona\System\System\Rights;
+use Kajona\System\System\UserGroup;
+
+
 /**
  * Portal-class of the postacomment-module
  * Serves xml-requests, e.g. saves a sent comment
@@ -17,7 +32,8 @@
  * @module postacomment
  * @moduleId _postacomment_modul_id_
  */
-class class_module_postacomment_portal_xml extends class_portal_controller implements interface_xml_portal {
+class PostacommentPortalXml extends PortalController implements XmlPortalInterface
+{
 
     private $strErrors;
 
@@ -28,16 +44,17 @@ class class_module_postacomment_portal_xml extends class_portal_controller imple
      * @return string
      * @permissons right1
      */
-    protected function actionSavePost() {
+    protected function actionSavePost()
+    {
 
         $strXMLContent = "";
 
         //validate needed fields
-        if(!$this->validateForm()) {
+        if (!$this->validateForm()) {
             //Create form to reenter values
             $strTemplateID = $this->objTemplate->readTemplate("/module_postacomment/".$this->getParam("comment_template"), "postacomment_form");
             $arrForm = array();
-            $arrForm["formaction"] = class_link::getLinkPortalHref($this->getPagename(), "", "postComment", "", $this->getSystemid());
+            $arrForm["formaction"] = Link::getLinkPortalHref($this->getPagename(), "", "postComment", "", $this->getSystemid());
             $arrForm["comment_name"] = $this->getParam("comment_name");
             $arrForm["comment_subject"] = $this->getParam("comment_subject");
             $arrForm["comment_message"] = $this->getParam("comment_message");
@@ -46,8 +63,8 @@ class class_module_postacomment_portal_xml extends class_portal_controller imple
             $arrForm["comment_page"] = $this->getParam("comment_page");
             $arrForm["validation_errors"] = $this->strErrors;
 
-            foreach($arrForm as $strKey => $strValue) {
-                if(uniStrpos($strKey, "comment_") !== false) {
+            foreach ($arrForm as $strKey => $strValue) {
+                if (uniStrpos($strKey, "comment_") !== false) {
                     $arrForm[$strKey] = htmlspecialchars($strValue, ENT_QUOTES, "UTF-8", false);
                 }
             }
@@ -67,12 +84,14 @@ class class_module_postacomment_portal_xml extends class_portal_controller imple
             //save the post to the db
             //pageid or systemid to filter?
             $strSystemidfilter = $this->getParam("comment_systemid");
-            if(class_module_pages_page::getPageByName($this->getParam("comment_page")) !== null)
-                $strPagefilter = class_module_pages_page::getPageByName($this->getParam("comment_page"))->getSystemid();
-            else
+            if (PagesPage::getPageByName($this->getParam("comment_page")) !== null) {
+                $strPagefilter = PagesPage::getPageByName($this->getParam("comment_page"))->getSystemid();
+            }
+            else {
                 $strPagefilter = "";
+            }
 
-            $objPost = new class_module_postacomment_post();
+            $objPost = new PostacommentPost();
             $objPost->setStrUsername($this->getParam("comment_name"));
             $objPost->setStrTitle($this->getParam("comment_subject"));
             $objPost->setStrComment($this->getParam("comment_message"));
@@ -82,18 +101,19 @@ class class_module_postacomment_portal_xml extends class_portal_controller imple
             $objPost->setStrAssignedLanguage($this->getStrPortalLanguage());
 
             $objPost->updateObjectToDb();
-            $this->flushPageFromPagesCache($this->getPagename());
+            $this->flushCompletePagesCache();
 
             $strMailtext = $this->getLang("new_comment_mail")."\r\n\r\n".$objPost->getStrComment()."\r\n";
-            $strMailtext .= class_link::getLinkAdminHref("postacomment", "edit", "&systemid=".$objPost->getSystemid(), false);
-            $objMessageHandler = new class_module_messaging_messagehandler();
+            $strMailtext .= Link::getLinkAdminHref("postacomment", "edit", "&systemid=".$objPost->getSystemid(), false);
+            $objMessageHandler = new MessagingMessagehandler();
             $arrGroups = array();
-            $allGroups = class_module_user_group::getObjectList();
-            foreach($allGroups as $objOneGroup) {
-                if(class_rights::getInstance()->checkPermissionForGroup($objOneGroup->getSystemid(), class_rights::$STR_RIGHT_EDIT, $this->getObjModule()->getSystemid()))
+            $allGroups = UserGroup::getObjectList();
+            foreach ($allGroups as $objOneGroup) {
+                if (Rights::getInstance()->checkPermissionForGroup($objOneGroup->getSystemid(), Rights::$STR_RIGHT_EDIT, $this->getObjModule()->getSystemid())) {
                     $arrGroups[] = $objOneGroup;
+                }
             }
-            $objMessageHandler->sendMessage($strMailtext, $arrGroups, new class_messageprovider_postacomment());
+            $objMessageHandler->sendMessage($strMailtext, $arrGroups, new MessageproviderPostacomment());
 
 
             //reinit post -> encoded entities
@@ -112,7 +132,7 @@ class class_module_postacomment_portal_xml extends class_portal_controller imple
             $strXMLContent .= $this->objTemplate->fillTemplate($arrOnePost, $strTemplateID);
         }
 
-        class_response_object::getInstance()->setStrResponseType(class_http_responsetypes::STR_TYPE_JSON);
+        ResponseObject::getInstance()->setStrResponseType(HttpResponsetypes::STR_TYPE_JSON);
         return $strXMLContent;
     }
 
@@ -122,19 +142,20 @@ class class_module_postacomment_portal_xml extends class_portal_controller imple
      *
      * @return bool
      */
-    private function validateForm() {
+    private function validateForm()
+    {
         $bitReturn = true;
 
         $strTemplateId = $this->objTemplate->readTemplate("/module_postacomment/".$this->getParam("comment_template"), "validation_error_row");
-        if(uniStrlen($this->getParam("comment_name")) < 2) {
+        if (uniStrlen($this->getParam("comment_name")) < 2) {
             $bitReturn = false;
             $this->strErrors .= $this->objTemplate->fillTemplate(array("error" => $this->getLang("validation_name")), $strTemplateId);
         }
-        if(uniStrlen($this->getParam("comment_message")) < 2) {
+        if (uniStrlen($this->getParam("comment_message")) < 2) {
             $bitReturn = false;
             $this->strErrors .= $this->objTemplate->fillTemplate(array("error" => $this->getLang("validation_message")), $strTemplateId);
         }
-        if($this->objSession->getCaptchaCode() != $this->getParam("form_captcha") || $this->getParam("form_captcha") == "") {
+        if ($this->objSession->getCaptchaCode() != $this->getParam("form_captcha") || $this->getParam("form_captcha") == "") {
             $bitReturn = false;
             $this->strErrors .= $this->objTemplate->fillTemplate(array("error" => $this->getLang("validation_code")), $strTemplateId);
         }

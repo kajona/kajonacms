@@ -7,6 +7,14 @@
 *	$Id$						               	*
 ********************************************************************************************************/
 
+namespace Kajona\Faqs\Portal\Elements;
+
+use class_module_rating_rate;
+use Kajona\Pages\Portal\ElementPortal;
+use Kajona\Pages\Portal\PortalElementInterface;
+use Kajona\System\System\SystemModule;
+
+
 /**
  * Portal-part of the faqs-element
  *
@@ -14,7 +22,8 @@
  * @author sidler@mulchprod.de
  * @targetTable element_faqs.content_id
  */
-class class_element_faqs_portal extends class_element_portal implements interface_portal_element {
+class ElementFaqsPortal extends ElementPortal implements PortalElementInterface
+{
 
 
     /**
@@ -22,11 +31,12 @@ class class_element_faqs_portal extends class_element_portal implements interfac
      *
      * @param mixed $objElementData
      */
-    public function __construct($objElementData) {
+    public function __construct($objElementData)
+    {
         parent::__construct($objElementData);
 
         //we support ratings, so add cache-busters
-        if(class_module_system_module::getModuleByName("rating") != null) {
+        if (SystemModule::getModuleByName("rating") != null) {
             $this->setStrCacheAddon(getCookie(class_module_rating_rate::RATING_COOKIE));
         }
     }
@@ -37,11 +47,12 @@ class class_element_faqs_portal extends class_element_portal implements interfac
      *
      * @return string
      */
-    public function loadData() {
+    public function loadData()
+    {
         $strReturn = "";
         //Load the data
-        $objFaqsModule = class_module_system_module::getModuleByName("faqs");
-        if($objFaqsModule != null) {
+        $objFaqsModule = SystemModule::getModuleByName("faqs");
+        if ($objFaqsModule != null) {
             $objFaqs = $objFaqsModule->getPortalInstanceOfConcreteModule($this->arrElementData);
             $strReturn = $objFaqs->action();
         }

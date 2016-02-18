@@ -4,6 +4,10 @@
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 ********************************************************************************************************/
 
+namespace Kajona\Faqs\Admin;
+use Kajona\Faqs\System\FaqsCategory;
+use Kajona\System\Admin\AdminFormgenerator;
+
 
 /**
  * The formgenerator for a single faqs object
@@ -11,7 +15,7 @@
  * @package module_faqs
  * @since 4.8
  */
-class class_module_faqs_formgenerator extends class_admin_formgenerator  {
+class FaqsFormgenerator extends AdminFormgenerator  {
 
     /**
      * @inheritdoc
@@ -20,10 +24,10 @@ class class_module_faqs_formgenerator extends class_admin_formgenerator  {
         parent::generateFieldsFromObject();
 
         //inject the categories formentries
-        $arrCats = class_module_faqs_category::getObjectList();
+        $arrCats = FaqsCategory::getObjectList();
         if(count($arrCats) > 0) {
             $arrKeyValues = array();
-            /** @var class_module_faqs_category $objOneCat */
+            /** @var FaqsCategory $objOneCat */
             foreach($arrCats as $objOneCat) {
                 $arrKeyValues[$objOneCat->getSystemid()] = $objOneCat->getStrDisplayName();
             }

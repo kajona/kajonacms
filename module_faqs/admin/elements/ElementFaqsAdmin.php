@@ -7,6 +7,13 @@
 *	$Id$                                       *
 ********************************************************************************************************/
 
+namespace Kajona\Faqs\Admin\Elements;
+
+use Kajona\Faqs\System\FaqsCategory;
+use Kajona\Pages\Admin\AdminElementInterface;
+use Kajona\Pages\Admin\ElementAdmin;
+
+
 /**
  * Class representing the admin-part of the faqs element
  *
@@ -15,7 +22,8 @@
  *
  * @targetTable element_faqs.content_id
  */
-class class_element_faqs_admin extends class_element_admin implements interface_admin_element {
+class ElementFaqsAdmin extends ElementAdmin implements AdminElementInterface
+{
 
     /**
      * @var string
@@ -37,15 +45,16 @@ class class_element_faqs_admin extends class_element_admin implements interface_
      */
     private $strTemplate;
 
-    public function getAdminForm() {
+    public function getAdminForm()
+    {
         $objForm = parent::getAdminForm();
 
-        $arrRawCats = class_module_faqs_category::getObjectList();
+        $arrRawCats = FaqsCategory::getObjectList();
         $arrCats = array();
         //addd an "i want all" cat ;)
         $arrCats["0"] = $this->getLang("commons_all_categories");
 
-        foreach($arrRawCats as $objOneCat) {
+        foreach ($arrRawCats as $objOneCat) {
             $arrCats[$objOneCat->getSystemid()] = $objOneCat->getStrDisplayName();
         }
 
@@ -56,34 +65,34 @@ class class_element_faqs_admin extends class_element_admin implements interface_
     /**
      * @param string $strTemplate
      */
-    public function setStrTemplate($strTemplate) {
+    public function setStrTemplate($strTemplate)
+    {
         $this->strTemplate = $strTemplate;
     }
 
     /**
      * @return string
      */
-    public function getStrTemplate() {
+    public function getStrTemplate()
+    {
         return $this->strTemplate;
     }
 
     /**
      * @param string $strCategory
      */
-    public function setStrCategory($strCategory) {
+    public function setStrCategory($strCategory)
+    {
         $this->strCategory = $strCategory;
     }
 
     /**
      * @return string
      */
-    public function getStrCategory() {
+    public function getStrCategory()
+    {
         return $this->strCategory;
     }
-
-
-
-
 
 
 }

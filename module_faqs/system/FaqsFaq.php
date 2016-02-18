@@ -7,6 +7,20 @@
 *	$Id$                                    *
 ********************************************************************************************************/
 
+namespace Kajona\Faqs\System;
+
+use class_search_result;
+use Kajona\System\System\AdminListableInterface;
+use Kajona\System\System\Carrier;
+use Kajona\System\System\Link;
+use Kajona\System\System\Objectfactory;
+use Kajona\System\System\OrmObjectlist;
+use Kajona\System\System\OrmRowcache;
+use Kajona\System\System\SearchPortalobjectInterface;
+use Kajona\System\System\SortableRatingInterface;
+use Kajona\System\System\VersionableInterface;
+
+
 /**
  * Model for a faq itself
  *
@@ -17,9 +31,10 @@
  * @module faqs
  * @moduleId _faqs_module_id_
  *
- * @formGenerator class_module_faqs_formgenerator
+ * @formGenerator Kajona\Faqs\Admin\FaqsFormgenerator
  */
-class class_module_faqs_faq extends \Kajona\System\System\Model implements \Kajona\System\System\ModelInterface, interface_sortable_rating, interface_admin_listable, interface_versionable, interface_search_portalobject {
+class FaqsFaq extends \Kajona\System\System\Model implements \Kajona\System\System\ModelInterface, SortableRatingInterface, AdminListableInterface, VersionableInterface, SearchPortalobjectInterface
+{
 
     /**
      * @var string
@@ -50,7 +65,7 @@ class class_module_faqs_faq extends \Kajona\System\System\Model implements \Kajo
     private $strAnswer = "";
 
     /**
-     * @var class_module_faqs_category[]
+     * @var FaqsCategory[]
      * @objectList faqs_member (source="faqsmem_faq", target="faqsmem_category")
      * @fieldType checkboxarray
      * @versionable
@@ -64,7 +79,8 @@ class class_module_faqs_faq extends \Kajona\System\System\Model implements \Kajo
      *
      * @return string the human readable name
      */
-    public function getVersionActionName($strAction) {
+    public function getVersionActionName($strAction)
+    {
         return $strAction;
     }
 
@@ -73,7 +89,8 @@ class class_module_faqs_faq extends \Kajona\System\System\Model implements \Kajo
      *
      * @return string the human readable name
      */
-    public function getVersionRecordName() {
+    public function getVersionRecordName()
+    {
         return "faq";
     }
 
@@ -84,7 +101,8 @@ class class_module_faqs_faq extends \Kajona\System\System\Model implements \Kajo
      *
      * @return string the human readable name
      */
-    public function getVersionPropertyName($strProperty) {
+    public function getVersionPropertyName($strProperty)
+    {
         return $strProperty;
     }
 
@@ -97,7 +115,8 @@ class class_module_faqs_faq extends \Kajona\System\System\Model implements \Kajo
      *
      * @return string
      */
-    public function renderVersionValue($strProperty, $strValue) {
+    public function renderVersionValue($strProperty, $strValue)
+    {
         return $strValue;
     }
 
@@ -109,7 +128,8 @@ class class_module_faqs_faq extends \Kajona\System\System\Model implements \Kajo
      * @return string the name of the icon, not yet wrapped by getImageAdmin(). Alternatively, you may return an array containing
      *         [the image name, the alt-title]
      */
-    public function getStrIcon() {
+    public function getStrIcon()
+    {
         return "icon_question";
     }
 
@@ -118,7 +138,8 @@ class class_module_faqs_faq extends \Kajona\System\System\Model implements \Kajo
      *
      * @return string
      */
-    public function getStrAdditionalInfo() {
+    public function getStrAdditionalInfo()
+    {
         return "";
     }
 
@@ -127,7 +148,8 @@ class class_module_faqs_faq extends \Kajona\System\System\Model implements \Kajo
      *
      * @return string
      */
-    public function getStrLongDescription() {
+    public function getStrLongDescription()
+    {
         return "";
     }
 
@@ -136,10 +158,10 @@ class class_module_faqs_faq extends \Kajona\System\System\Model implements \Kajo
      *
      * @return string
      */
-    public function getStrDisplayName() {
+    public function getStrDisplayName()
+    {
         return uniSubstr($this->getStrQuestion(), 0, 200);
     }
-
 
 
     /**
@@ -153,36 +175,36 @@ class class_module_faqs_faq extends \Kajona\System\System\Model implements \Kajo
      * @return mixed
      * @static
      */
-    public static function getObjectList($strFilter = "", $intStart = null, $intEnd = null) {
-        if($strFilter != "") {
+    public static function getObjectList($strFilter = "", $intStart = null, $intEnd = null)
+    {
+        if ($strFilter != "") {
 
-            $objORM = new class_orm_objectlist();
+            $objORM = new OrmObjectlist();
 
             $strQuery = "SELECT *
 							FROM " . _dbprefix_ . "faqs,
 							     " . _dbprefix_ . "faqs_member,
 							     " . _dbprefix_ . "system_right,
 							     " . _dbprefix_ . "system
-					   LEFT JOIN "._dbprefix_."system_date
+					   LEFT JOIN " . _dbprefix_ . "system_date
                                ON system_id = system_date_id
 							WHERE system_id = faqs_id
 							  AND system_id = right_id
 							  AND faqs_id = faqsmem_faq
 							  AND faqsmem_category = ?
-							  ".$objORM->getDeletedWhereRestriction()."
+							  " . $objORM->getDeletedWhereRestriction() . "
 							ORDER BY faqs_question ASC";
 
-            $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array($strFilter), $intStart, $intEnd);
+            $arrIds = Carrier::getInstance()->getObjDB()->getPArray($strQuery, array($strFilter), $intStart, $intEnd);
 
             $arrReturn = array();
-            foreach($arrIds as $arrOneId) {
-                class_orm_rowcache::addSingleInitRow($arrOneId);
-                $arrReturn[] = class_objectfactory::getInstance()->getObject($arrOneId["system_id"]);
+            foreach ($arrIds as $arrOneId) {
+                OrmRowcache::addSingleInitRow($arrOneId);
+                $arrReturn[] = Objectfactory::getInstance()->getObject($arrOneId["system_id"]);
             }
 
             return $arrReturn;
-        }
-        else {
+        } else {
             return parent::getObjectList("", $intStart, $intEnd);
         }
 
@@ -197,9 +219,10 @@ class class_module_faqs_faq extends \Kajona\System\System\Model implements \Kajo
      * @return mixed
      * @static
      */
-    public static function getObjectCount($strFilter = "") {
-        if($strFilter != "") {
-            $objORM = new class_orm_objectlist();
+    public static function getObjectCount($strFilter = "")
+    {
+        if ($strFilter != "") {
+            $objORM = new OrmObjectlist();
 
             $strQuery = "SELECT COUNT(*)
 							FROM " . _dbprefix_ . "faqs,
@@ -207,64 +230,63 @@ class class_module_faqs_faq extends \Kajona\System\System\Model implements \Kajo
 							     " . _dbprefix_ . "faqs_member
 							WHERE system_id = faqs_id
 							  AND faqs_id = faqsmem_faq
-							  ".$objORM->getDeletedWhereRestriction()."
+							  " . $objORM->getDeletedWhereRestriction() . "
 							  AND faqsmem_category = ?";
-            $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array($strFilter));
+            $arrRow = Carrier::getInstance()->getObjDB()->getPRow($strQuery, array($strFilter));
             return $arrRow["COUNT(*)"];
-        }
-        else {
+        } else {
             return parent::getObjectCount();
         }
 
     }
 
 
-     /**
+    /**
      * Loads all faqs from the db assigned to the passed cat
      *
      * @param string $strCat
      *
-     * @return class_module_faqs_faq[]
+     * @return FaqsFaq[]
      * @static
      */
-    public static function loadListFaqsPortal($strCat) {
+    public static function loadListFaqsPortal($strCat)
+    {
         $arrParams = array();
-        $objORM = new class_orm_objectlist();
-        if($strCat == 1) {
+        $objORM = new OrmObjectlist();
+        if ($strCat == 1) {
             $strQuery = "SELECT *
     						FROM " . _dbprefix_ . "faqs,
     		                     " . _dbprefix_ . "system_right,
     		                     " . _dbprefix_ . "system
-    		             LEFT JOIN "._dbprefix_."system_date
+    		             LEFT JOIN " . _dbprefix_ . "system_date
                                ON system_id = system_date_id
     		                WHERE system_id = faqs_id
     		                  AND system_status = 1
-    		                  ".$objORM->getDeletedWhereRestriction()."
+    		                  " . $objORM->getDeletedWhereRestriction() . "
     		                  AND system_id = right_id
     						ORDER BY faqs_question ASC";
-        }
-        else {
+        } else {
             $strQuery = "SELECT *
     						FROM " . _dbprefix_ . "faqs,
     						     " . _dbprefix_ . "faqs_member,
     		                     " . _dbprefix_ . "system_right,
     		                     " . _dbprefix_ . "system
-    		           LEFT JOIN "._dbprefix_."system_date
+    		           LEFT JOIN " . _dbprefix_ . "system_date
                                ON system_id = system_date_id
     		                WHERE system_id = faqs_id
     		                  AND faqs_id = faqsmem_faq
     		                  AND system_id = right_id
     		                  AND faqsmem_category = ?
     		                  AND system_status = 1
-    		                  ".$objORM->getDeletedWhereRestriction()."
+    		                  " . $objORM->getDeletedWhereRestriction() . "
     						ORDER BY faqs_question ASC";
             $arrParams[] = $strCat;
         }
-        $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, $arrParams);
+        $arrIds = Carrier::getInstance()->getObjDB()->getPArray($strQuery, $arrParams);
         $arrReturn = array();
-        foreach($arrIds as $arrOneId) {
-            class_orm_rowcache::addSingleInitRow($arrOneId);
-            $arrReturn[] = class_objectfactory::getInstance()->getObject($arrOneId["system_id"]);
+        foreach ($arrIds as $arrOneId) {
+            OrmRowcache::addSingleInitRow($arrOneId);
+            $arrReturn[] = Objectfactory::getInstance()->getObject($arrOneId["system_id"]);
         }
 
         return $arrReturn;
@@ -281,8 +303,9 @@ class class_module_faqs_faq extends \Kajona\System\System\Model implements \Kajo
      * @see getLinkPortalHref()
      * @return mixed
      */
-    public function updateSearchResult(class_search_result $objResult) {
-        $objORM = new class_orm_objectlist();
+    public function updateSearchResult(class_search_result $objResult)
+    {
+        $objORM = new OrmObjectlist();
         //search for matching pages
         $strQuery = "SELECT page_name,  page_id
                        FROM " . _dbprefix_ . "element_faqs,
@@ -302,22 +325,22 @@ class class_module_faqs_faq extends \Kajona\System\System\Model implements \Kajo
                         )
                         AND system_prev_id = page_id
                         AND system_status = 1
-                        ".$objORM->getDeletedWhereRestriction()."
+                        " . $objORM->getDeletedWhereRestriction() . "
                         AND page_element_ph_language = ? ";
 
         $arrRows = $this->objDB->getPArray($strQuery, array($this->getSystemid(), $objResult->getObjSearch()->getStrPortalLangFilter()));
 
         $arrReturn = array();
 
-        foreach($arrRows as $arrOnePage) {
+        foreach ($arrRows as $arrOnePage) {
 
             //check, if the post is available on a page using the current language
-            if(!isset($arrOnePage["page_name"]) || $arrOnePage["page_name"] == "") {
+            if (!isset($arrOnePage["page_name"]) || $arrOnePage["page_name"] == "") {
                 continue;
             }
 
             $objCurResult = clone($objResult);
-            $objCurResult->setStrPagelink(class_link::getLinkPortal($arrOnePage["page_name"], "", "_self", $arrOnePage["page_name"], "", "&highlight=" . urlencode(html_entity_decode($objResult->getObjSearch()->getStrQuery(), ENT_QUOTES, "UTF-8"))));
+            $objCurResult->setStrPagelink(Link::getLinkPortal($arrOnePage["page_name"], "", "_self", $arrOnePage["page_name"], "", "&highlight=" . urlencode(html_entity_decode($objResult->getObjSearch()->getStrQuery(), ENT_QUOTES, "UTF-8"))));
             $objCurResult->setStrPagename($arrOnePage["page_name"]);
             $objCurResult->setStrDescription($this->getStrQuestion());
             $arrReturn[] = $objCurResult;
@@ -335,7 +358,8 @@ class class_module_faqs_faq extends \Kajona\System\System\Model implements \Kajo
      *
      * @return mixed
      */
-    public function getContentLang() {
+    public function getContentLang()
+    {
         return "";
     }
 
@@ -346,33 +370,40 @@ class class_module_faqs_faq extends \Kajona\System\System\Model implements \Kajo
      * @see getLinkAdminHref()
      * @return mixed
      */
-    public function getSearchAdminLinkForObject() {
+    public function getSearchAdminLinkForObject()
+    {
         //the default, plz
         return "";
     }
 
 
-    public function getStrQuestion() {
+    public function getStrQuestion()
+    {
         return $this->strQuestion;
     }
 
-    public function getStrAnswer() {
+    public function getStrAnswer()
+    {
         return $this->strAnswer;
     }
 
-    public function getArrCats() {
+    public function getArrCats()
+    {
         return $this->arrCats;
     }
 
-    public function setStrAnswer($strAnswer) {
+    public function setStrAnswer($strAnswer)
+    {
         $this->strAnswer = $strAnswer;
     }
 
-    public function setStrQuestion($strQuestion) {
+    public function setStrQuestion($strQuestion)
+    {
         $this->strQuestion = $strQuestion;
     }
 
-    public function setArrCats($arrCats) {
+    public function setArrCats($arrCats)
+    {
         $this->arrCats = $arrCats;
     }
 
