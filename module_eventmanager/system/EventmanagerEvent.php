@@ -5,6 +5,17 @@
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 ********************************************************************************************************/
 
+namespace Kajona\Eventmanager\System;
+use Kajona\System\System\AdminListableInterface;
+use Kajona\System\System\OrmComparatorEnum;
+use Kajona\System\System\OrmObjectlist;
+use Kajona\System\System\OrmObjectlistOrderby;
+use Kajona\System\System\OrmObjectlistRestriction;
+use Kajona\System\System\OrmObjectlistSystemstatusRestriction;
+use Kajona\System\System\SystemChangelog;
+use Kajona\System\System\VersionableInterface;
+
+
 /**
  * Business object for a single event. Holds all values to control the event
  *
@@ -17,7 +28,7 @@
  * @module eventmanager
  * @moduleId _eventmanager_module_id_
  */
-class class_module_eventmanager_event extends \Kajona\System\System\Model implements \Kajona\System\System\ModelInterface, interface_versionable, interface_admin_listable  {
+class EventmanagerEvent extends \Kajona\System\System\Model implements \Kajona\System\System\ModelInterface, VersionableInterface, AdminListableInterface  {
 
     /**
      * @var string
@@ -110,7 +121,7 @@ class class_module_eventmanager_event extends \Kajona\System\System\Model implem
      * @versionable
      *
      * @fieldType text
-     * @fieldValidator class_posint_validator
+     * @fieldValidator Kajona\System\System\Validators\PosintValidator
      * @fieldLabel event_maxparticipants
      * @templateExport
      */
@@ -164,7 +175,7 @@ class class_module_eventmanager_event extends \Kajona\System\System\Model implem
             $strCenter .= " - ".dateToString($this->getObjEndDate());
 
         if($this->getIntRegistrationRequired()) {
-            $strCenter .= ", ". class_module_eventmanager_participant::getObjectCount($this->getSystemid())." ".$this->getLang("event_participant");
+            $strCenter .= ", ". EventmanagerParticipant::getObjectCount($this->getSystemid())." ".$this->getLang("event_participant");
         }
 
         $strCenter .= ")";
@@ -190,7 +201,7 @@ class class_module_eventmanager_event extends \Kajona\System\System\Model implem
     }
 
     public function isParticipant($strUserid) {
-        return class_module_eventmanager_participant::getParticipantByUserid($strUserid, $this->getSystemid()) !== null;
+        return EventmanagerParticipant::getParticipantByUserid($strUserid, $this->getSystemid()) !== null;
     }
 
 
@@ -205,27 +216,27 @@ class class_module_eventmanager_event extends \Kajona\System\System\Model implem
      * @param int $intOrder
      * @param null $intStatusFilter
      *
-     * @return class_module_eventmanager_event[]
+     * @return EventmanagerEvent[]
      */
     public static function getAllEvents($intStart = false, $intEnd = false, \Kajona\System\System\Date $objStartDate = null, \Kajona\System\System\Date $objEndDate = null, $bitOnlyActive = false, $intOrder = 0, $intStatusFilter = null) {
 
 
-        $objORM = new class_orm_objectlist();
+        $objORM = new OrmObjectlist();
 
         if($objStartDate != null && $objEndDate != null) {
-            $objORM->addWhereRestriction(new class_orm_objectlist_restriction("AND (system_date_start > ? AND system_date_start <= ?) ", array($objStartDate->getLongTimestamp(), $objEndDate->getLongTimestamp())));
+            $objORM->addWhereRestriction(new OrmObjectlistRestriction("AND (system_date_start > ? AND system_date_start <= ?) ", array($objStartDate->getLongTimestamp(), $objEndDate->getLongTimestamp())));
 
         }
         if($intStatusFilter != null) {
-            $objORM->addWhereRestriction(new class_orm_objectlist_restriction("AND em_ev_eventstatus = ?", array($intStatusFilter)));
+            $objORM->addWhereRestriction(new OrmObjectlistRestriction("AND em_ev_eventstatus = ?", array($intStatusFilter)));
         }
 
         if($bitOnlyActive) {
-            $objORM->addWhereRestriction(new class_orm_objectlist_systemstatus_restriction(class_orm_comparator_enum::Equal(), 1));
+            $objORM->addWhereRestriction(new OrmObjectlistSystemstatusRestriction(OrmComparatorEnum::Equal(), 1));
         }
 
-        $objORM->addOrderBy(new class_orm_objectlist_orderby("system_date_start ".($intOrder == "1" ? " ASC " : " DESC ")));
-        $objORM->addOrderBy(new class_orm_objectlist_orderby("em_ev_title  ASC "));
+        $objORM->addOrderBy(new OrmObjectlistOrderby("system_date_start ".($intOrder == "1" ? " ASC " : " DESC ")));
+        $objORM->addOrderBy(new OrmObjectlistOrderby("em_ev_title  ASC "));
         return $objORM->getObjectList(get_called_class(), "", $intStart, $intEnd);
     }
 
@@ -237,7 +248,7 @@ class class_module_eventmanager_event extends \Kajona\System\System\Model implem
      * @return string the human readable name
      */
     public function getVersionActionName($strAction) {
-        if($strAction == class_module_system_changelog::$STR_ACTION_EDIT)
+        if($strAction == SystemChangelog::$STR_ACTION_EDIT)
             return $this->getLang("event_edit");
 
         return $strAction;

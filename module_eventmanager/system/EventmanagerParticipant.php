@@ -5,6 +5,21 @@
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 ********************************************************************************************************/
 
+namespace Kajona\Eventmanager\System;
+use Kajona\Eventmanager\System\Messageproviders\MessageproviderEventmanager;
+use Kajona\System\System\AdminListableInterface;
+use Kajona\System\System\Link;
+use Kajona\System\System\MessagingMessage;
+use Kajona\System\System\MessagingMessagehandler;
+use Kajona\System\System\OrmObjectlist;
+use Kajona\System\System\OrmObjectlistRestriction;
+use Kajona\System\System\Rights;
+use Kajona\System\System\SystemChangelog;
+use Kajona\System\System\UserGroup;
+use Kajona\System\System\UserUser;
+use Kajona\System\System\VersionableInterface;
+
+
 /**
  * Business Object for a single participant, participating at an event.
  *
@@ -17,9 +32,9 @@
  * @module eventmanager
  * @moduleId _eventmanager_module_id_
  *
- * @formGenerator class_module_eventmanager_participant_formgenerator
+ * @formGenerator Kajona\Eventmanager\Admin\EventmanagerParticipantFormgenerator
  */
-class class_module_eventmanager_participant extends \Kajona\System\System\Model implements \Kajona\System\System\ModelInterface, interface_versionable, interface_admin_listable  {
+class EventmanagerParticipant extends \Kajona\System\System\Model implements \Kajona\System\System\ModelInterface, VersionableInterface, AdminListableInterface  {
 
     /**
      * @var string
@@ -59,7 +74,7 @@ class class_module_eventmanager_participant extends \Kajona\System\System\Model 
      * @listOrder
      *
      * @fieldType text
-     * @fieldValidator class_email_validator
+     * @fieldValidator Kajona\System\System\Validators\EmailValidator
      * @fieldMandatory
      * @fieldLabel participant_email
      *
@@ -156,7 +171,7 @@ class class_module_eventmanager_participant extends \Kajona\System\System\Model 
      */
     public function getStrDisplayName() {
         if(validateSystemid($this->getStrUserId())) {
-            $objUser = new class_module_user_user($this->getStrUserId());
+            $objUser = new UserUser($this->getStrUserId());
             $strName = $objUser->getStrDisplayName();
         }
         else
@@ -178,7 +193,7 @@ class class_module_eventmanager_participant extends \Kajona\System\System\Model 
      * @return string the human readable name
      */
     public function getVersionActionName($strAction) {
-        if($strAction == class_module_system_changelog::$STR_ACTION_EDIT)
+        if($strAction == SystemChangelog::$STR_ACTION_EDIT)
             return $this->getLang("participant_edit");
 
         return $strAction;
@@ -221,12 +236,12 @@ class class_module_eventmanager_participant extends \Kajona\System\System\Model 
      * @param string $strUserid
      * @param string $strEventId
      *
-     * @return class_module_eventmanager_participant
+     * @return EventmanagerParticipant
      */
     public static function getParticipantByUserid($strUserid, $strEventId) {
 
-        $objOrm = new class_orm_objectlist();
-        $objOrm->addWhereRestriction(new class_orm_objectlist_restriction("AND em_pt_userid = ?", array($strUserid)));
+        $objOrm = new OrmObjectlist();
+        $objOrm->addWhereRestriction(new OrmObjectlistRestriction("AND em_pt_userid = ?", array($strUserid)));
         return $objOrm->getSingleObject(get_called_class(), $strEventId);
     }
 
@@ -237,8 +252,8 @@ class class_module_eventmanager_participant extends \Kajona\System\System\Model 
      * @return int
      */
     public static function getActiveParticipantsCount($strEventId) {
-        $objOrm = new class_orm_objectlist();
-        $objOrm->addWhereRestriction(new class_orm_objectlist_restriction("AND em_pt_status != 2", array()));
+        $objOrm = new OrmObjectlist();
+        $objOrm->addWhereRestriction(new OrmObjectlistRestriction("AND em_pt_status != 2", array()));
         return $objOrm->getObjectCount(get_called_class(), $strEventId);
     }
 
@@ -249,24 +264,24 @@ class class_module_eventmanager_participant extends \Kajona\System\System\Model 
     protected function onInsertToDb() {
 
         //send a message to all registered editors
-        $objEvent = new class_module_eventmanager_event($this->getStrPrevId());
+        $objEvent = new EventmanagerEvent($this->getStrPrevId());
 
         $strMailtext = $this->getLang("new_participant_mail")."\n\n";
         $strMailtext .= $this->getLang("new_participant_participant")." ".$this->getStrDisplayName()."\n";
         $strMailtext .= $this->getLang("new_participant_event")." ".$objEvent->getStrDisplayName()."\n";
-        $strMailtext .= $this->getLang("new_participant_details")." ".class_link::getLinkAdminHref("eventmanager", "listParticipant", "&systemid=".$this->getStrPrevId(), false);
-        $objMessageHandler = new class_module_messaging_messagehandler();
+        $strMailtext .= $this->getLang("new_participant_details")." ".Link::getLinkAdminHref("eventmanager", "listParticipant", "&systemid=".$this->getStrPrevId(), false);
+        $objMessageHandler = new MessagingMessagehandler();
 
         $arrGroups = array();
-        $allGroups = class_module_user_group::getObjectList();
+        $allGroups = UserGroup::getObjectList();
         foreach($allGroups as $objOneGroup) {
-            if(class_rights::getInstance()->checkPermissionForGroup($objOneGroup->getSystemid(), class_rights::$STR_RIGHT_EDIT, $this->getSystemid()))
+            if(Rights::getInstance()->checkPermissionForGroup($objOneGroup->getSystemid(), Rights::$STR_RIGHT_EDIT, $this->getSystemid()))
                 $arrGroups[] = $objOneGroup;
         }
 
-        $objMessage = new class_module_messaging_message();
+        $objMessage = new MessagingMessage();
         $objMessage->setStrBody(strip_tags($strMailtext));
-        $objMessage->setObjMessageProvider(new class_messageprovider_eventmanager());
+        $objMessage->setObjMessageProvider(new MessageproviderEventmanager());
         $objMessageHandler->sendMessageObject($objMessage, $arrGroups);
 
         return true;
@@ -308,7 +323,7 @@ class class_module_eventmanager_participant extends \Kajona\System\System\Model 
      */
     public function getStrEmail() {
         if(validateSystemid($this->getStrUserId())) {
-            $objUser = new class_module_user_user($this->getStrUserId());
+            $objUser = new UserUser($this->getStrUserId());
             return $objUser->getStrEmail();
         }
         return $this->strEmail;

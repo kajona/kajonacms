@@ -6,6 +6,13 @@
 *-------------------------------------------------------------------------------------------------------*
 *	$Id$                                       *
 ********************************************************************************************************/
+use Kajona\Eventmanager\System\EventmanagerEvent;
+use Kajona\Pages\System\PagesElement;
+use Kajona\System\System\InstallerBase;
+use Kajona\System\System\InstallerRemovableInterface;
+use Kajona\System\System\OrmSchemamanager;
+use Kajona\System\System\SystemModule;
+use Kajona\System\System\SystemSetting;
 
 /**
  * Class providing an installer for the eventmanager module
@@ -14,39 +21,39 @@
  * @author sidler@mulchprod.de
  * @moduleId _eventmanager_module_id_
  */
-class class_installer_eventmanager extends class_installer_base implements interface_installer_removable {
+class InstallerEventmanager extends InstallerBase implements InstallerRemovableInterface {
 
     public function install() {
 		$strReturn = "";
-        $objManager = new class_orm_schemamanager();
+        $objManager = new OrmSchemamanager();
 
 		$strReturn .= "Installing table em_event...\n";
-        $objManager->createTable("class_module_eventmanager_event");
+        $objManager->createTable("Kajona\\Eventmanager\\System\\EventmanagerEvent");
 
         $strReturn .= "Installing table em_participant...\n";
-        $objManager->createTable("class_module_eventmanager_participant");
+        $objManager->createTable("Kajona\\Eventmanager\\System\\EventmanagerParticipant");
 
 		//register the module
 		$strSystemID = $this->registerModule(
             "eventmanager",
             _eventmanager_module_id_,
-            "class_module_eventmanager_portal.php",
-            "class_module_eventmanager_admin.php",
+            "EventmanagerPortal.php",
+            "EventmanagerAdmin.php",
             $this->objMetadata->getStrVersion(),
             true
         );
 
         //modify default rights to allow guests to participate
 		$strReturn .= "Modifying modules' rights node...\n";
-        class_carrier::getInstance()->getObjRights()->addGroupToRight(class_module_system_setting::getConfigValue("_guests_group_id_"), $strSystemID, "right1");
+        Carrier::getInstance()->getObjRights()->addGroupToRight(SystemSetting::getConfigValue("_guests_group_id_"), $strSystemID, "right1");
 
         $strReturn .= "Registering eventmanager-element...\n";
         //check, if not already existing
-        if(class_module_pages_element::getElement("eventmanager") == null) {
-            $objElement = new class_module_pages_element();
+        if(PagesElement::getElement("eventmanager") == null) {
+            $objElement = new PagesElement();
             $objElement->setStrName("eventmanager");
-            $objElement->setStrClassAdmin("class_element_eventmanager_admin.php");
-            $objElement->setStrClassPortal("class_element_eventmanager_portal.php");
+            $objElement->setStrClassAdmin("ElementEventmanagerAdmin.php");
+            $objElement->setStrClassPortal("ElementEventmanagerPortal.php");
             $objElement->setIntCachetime(-1);
             $objElement->setIntRepeat(1);
             $objElement->setStrVersion($this->objMetadata->getStrVersion());
@@ -57,9 +64,9 @@ class class_installer_eventmanager extends class_installer_base implements inter
             $strReturn .= "Element already installed!...\n";
 
         $strReturn .= "Setting aspect assignments...\n";
-        if(class_module_system_aspect::getAspectByName("content") != null) {
-            $objModule = class_module_system_module::getModuleByName($this->objMetadata->getStrTitle());
-            $objModule->setStrAspect(class_module_system_aspect::getAspectByName("content")->getSystemid());
+        if(SystemAspect::getAspectByName("content") != null) {
+            $objModule = SystemModule::getModuleByName($this->objMetadata->getStrTitle());
+            $objModule->setStrAspect(SystemAspect::getAspectByName("content")->getSystemid());
             $objModule->updateObjectToDb();
         }
 
@@ -89,7 +96,7 @@ class class_installer_eventmanager extends class_installer_base implements inter
     public function remove(&$strReturn) {
 
         //delete the page-element
-        $objElement = class_module_pages_element::getElement("eventmanager");
+        $objElement = PagesElement::getElement("eventmanager");
         if($objElement != null) {
             $strReturn .= "Deleting page-element 'eventmanager'...\n";
             $objElement->deleteObjectFromDatabase();
@@ -99,8 +106,8 @@ class class_installer_eventmanager extends class_installer_base implements inter
             return false;
         }
 
-        /** @var class_module_eventmanager_event $objOneObject */
-        foreach(class_module_eventmanager_event::getObjectList() as $objOneObject) {
+        /** @var \Kajona\Eventmanager\System\EventmanagerEvent $objOneObject */
+        foreach(EventmanagerEvent::getObjectList() as $objOneObject) {
             $strReturn .= "Deleting object '".$objOneObject->getStrDisplayName()."' ...\n";
             if(!$objOneObject->deleteObjectFromDatabase()) {
                 $strReturn .= "Error deleting object, aborting.\n";
@@ -110,7 +117,7 @@ class class_installer_eventmanager extends class_installer_base implements inter
 
         //delete the module-node
         $strReturn .= "Deleting the module-registration...\n";
-        $objModule = class_module_system_module::getModuleByName($this->objMetadata->getStrTitle(), true);
+        $objModule = SystemModule::getModuleByName($this->objMetadata->getStrTitle(), true);
         if(!$objModule->deleteObjectFromDatabase()) {
             $strReturn .= "Error deleting module, aborting.\n";
             return false;
@@ -135,15 +142,15 @@ class class_installer_eventmanager extends class_installer_base implements inter
     public function update() {
 	    $strReturn = "";
         //check installed version and to which version we can update
-        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
         $strReturn .= "Version found:\n\t Module: ".$arrModule["module_name"].", Version: ".$arrModule["module_version"]."\n\n";
 
-        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
         if($arrModule["module_version"] == "4.0") {
             $strReturn .= $this->update_40_41();
         }
 
-        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
         if($arrModule["module_version"] == "4.1") {
             $strReturn .= "Updating 4.1 to 4.2...\n";
             $strReturn .= "Updating module-versions...\n";
@@ -152,17 +159,17 @@ class class_installer_eventmanager extends class_installer_base implements inter
             $this->updateElementVersion("eventmanager", "4.2");
         }
 
-        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
         if($arrModule["module_version"] == "4.2") {
             $strReturn .= $this->update_42_421();
         }
 
-        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
         if($arrModule["module_version"] == "4.2.1") {
             $strReturn .= $this->update_421_422();
         }
 
-        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
         if($arrModule["module_version"] == "4.2.2") {
             $strReturn .= "Updating 4.2.2 to 4.3...\n";
             $strReturn .= "Updating module-versions...\n";
@@ -171,7 +178,7 @@ class class_installer_eventmanager extends class_installer_base implements inter
             $this->updateElementVersion("eventmanager", "4.3");
         }
 
-        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
         if($arrModule["module_version"] == "4.3") {
             $strReturn .= "Updating 4.3 to 4.4...\n";
             $this->updateModuleVersion("eventmanager", "4.4");
@@ -179,21 +186,21 @@ class class_installer_eventmanager extends class_installer_base implements inter
         }
 
 
-        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
         if($arrModule["module_version"] == "4.4") {
             $strReturn .= "Updating 4.4 to 4.5...\n";
             $this->updateModuleVersion("eventmanager", "4.5");
             $this->updateElementVersion("eventmanager", "4.5");
         }
 
-        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
         if($arrModule["module_version"] == "4.5") {
             $strReturn .= "Updating 4.5 to 4.6...\n";
             $this->updateModuleVersion("eventmanager", "4.6");
             $this->updateElementVersion("eventmanager", "4.6");
         }
 
-        $arrModule = class_module_system_module::getPlainModuleData($this->objMetadata->getStrTitle(), false);
+        $arrModule = SystemModule::getPlainModuleData($this->objMetadata->getStrTitle(), false);
         if($arrModule["module_version"] == "4.6") {
             $strReturn .= "Updating to 4.7...\n";
             $this->updateModuleVersion("eventmanager", "4.7");

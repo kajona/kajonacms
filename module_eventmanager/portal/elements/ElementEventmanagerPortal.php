@@ -7,6 +7,12 @@
 *	$Id$						               	*
 ********************************************************************************************************/
 
+namespace Kajona\Eventmanager\Portal\Elements;
+use Kajona\Pages\Portal\ElementPortal;
+use Kajona\Pages\Portal\PortalElementInterface;
+use Kajona\System\System\SystemModule;
+
+
 /**
  * Portal-part of the eventmanager-element
  *
@@ -15,7 +21,7 @@
  *
  * @targetTable element_universal.content_id
  */
-class class_element_eventmanager_portal extends class_element_portal implements interface_portal_element {
+class ElementEventmanagerPortal extends ElementPortal implements PortalElementInterface {
 
 
     /**
@@ -26,7 +32,7 @@ class class_element_eventmanager_portal extends class_element_portal implements 
     public function loadData() {
         $strReturn = "";
         //Load the data
-        $objEventmanagerModule = class_module_system_module::getModuleByName("eventmanager");
+        $objEventmanagerModule = SystemModule::getModuleByName("eventmanager");
         if($objEventmanagerModule != null) {
             $objEventmanager = $objEventmanagerModule->getPortalInstanceOfConcreteModule($this->arrElementData);
             $strReturn = $objEventmanager->action();

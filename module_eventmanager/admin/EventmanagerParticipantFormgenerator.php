@@ -5,6 +5,9 @@
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 ********************************************************************************************************/
 
+namespace Kajona\Eventmanager\Admin;
+use Kajona\System\Admin\AdminFormgenerator;
+
 
 /**
  * A formgenerator for eventmanager participant
@@ -14,7 +17,7 @@
  * @since 4.8
  *
  */
-class class_module_eventmanager_participant_formgenerator extends class_admin_formgenerator  {
+class EventmanagerParticipantFormgenerator extends AdminFormgenerator  {
     /**
      * @inheritDoc
      */

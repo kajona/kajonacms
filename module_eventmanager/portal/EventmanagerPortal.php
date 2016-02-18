@@ -5,6 +5,25 @@
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 ********************************************************************************************************/
 
+namespace Kajona\Eventmanager\Portal;
+use DateTime;
+use Kajona\Eventmanager\System\EventmanagerEvent;
+use Kajona\Eventmanager\System\EventmanagerParticipant;
+use Kajona\Pages\Portal\PagesPortalController;
+use Kajona\System\Portal\PortalController;
+use Kajona\System\Portal\PortalInterface;
+use Kajona\System\System\HttpResponsetypes;
+use Kajona\System\System\Link;
+use Kajona\System\System\Mail;
+use Kajona\System\System\ResponseObject;
+use Kajona\System\System\Rssfeed;
+use Kajona\System\System\ScriptletHelper;
+use Kajona\System\System\TemplateMapper;
+use Kajona\System\System\UserUser;
+use Kajona\System\System\Validators\EmailValidator;
+use Kajona\System\System\Validators\TextValidator;
+
+
 /**
  * Portal-class of the eventmanager. Handles the printing of eventmanager lists / detail
  *
@@ -15,7 +34,7 @@
  * @module eventmanager
  * @moduleId _eventmanager_module_id_
  */
-class class_module_eventmanager_portal extends class_portal_controller implements interface_portal {
+class EventmanagerPortal extends PortalController implements PortalInterface {
 
     /**
      * Creates the list of events available
@@ -56,10 +75,10 @@ class class_module_eventmanager_portal extends class_portal_controller implement
 
 
 
-            $arrEvents = class_module_eventmanager_event::getAllEvents(false, false, $objFilterStartDate, $objFilterEndDate, true, $this->arrElementData["int1"], $intFilterStatus);
+            $arrEvents = EventmanagerEvent::getAllEvents(false, false, $objFilterStartDate, $objFilterEndDate, true, $this->arrElementData["int1"], $intFilterStatus);
             foreach($arrEvents as $objOneEvent) {
                 if($objOneEvent->rightView()) {
-                    $objMapper = new class_template_mapper($objOneEvent);
+                    $objMapper = new TemplateMapper($objOneEvent);
 
                     //legacy support
                     $objMapper->addPlaceholder("dateTimeFrom", dateToString($objOneEvent->getObjStartDate(), true));
@@ -71,10 +90,10 @@ class class_module_eventmanager_portal extends class_portal_controller implement
                     $objMapper->addPlaceholder("location", $objOneEvent->getStrLocation());
                     $objMapper->addPlaceholder("eventStatus", $objOneEvent->getIntEventStatus());
                     $objMapper->addPlaceholder("systemid", $objOneEvent->getSystemid());
-                    $objMapper->addPlaceholder("detailsLinkHref", class_link::getLinkPortalHref($this->getPagename(), "", "eventDetails", "", $objOneEvent->getSystemid(), "", $objOneEvent->getStrTitle()));
+                    $objMapper->addPlaceholder("detailsLinkHref", Link::getLinkPortalHref($this->getPagename(), "", "eventDetails", "", $objOneEvent->getSystemid(), "", $objOneEvent->getStrTitle()));
 
                     if($objOneEvent->getIntRegistrationRequired() == "1" && $objOneEvent->rightRight1()) {
-                        $objMapper->addPlaceholder("registerLinkHref", class_link::getLinkPortalHref($this->getPagename(), "", "registerForEvent", "", $objOneEvent->getSystemid(), "", $objOneEvent->getStrTitle()));
+                        $objMapper->addPlaceholder("registerLinkHref", Link::getLinkPortalHref($this->getPagename(), "", "registerForEvent", "", $objOneEvent->getSystemid(), "", $objOneEvent->getStrTitle()));
                         $objMapper->addPlaceholder("registerLink",  $objMapper->writeToTemplate("/module_eventmanager/" . $this->arrElementData["char1"], "event_details_registerlink"));
                     }
                     $strEvents .= $objMapper->writeToTemplate("/module_eventmanager/" . $this->arrElementData["char1"], "event_list_entry");
@@ -87,7 +106,7 @@ class class_module_eventmanager_portal extends class_portal_controller implement
             $arrListTemplate = array(
                 "events" => $strEvents,
                 "rssurl" => $strRssUrl,
-                "formaction" => class_link::getLinkPortalHref($this->getPagename()),
+                "formaction" => Link::getLinkPortalHref($this->getPagename()),
                 "event_filter_status" => $intFilterStatus != null ? $intFilterStatus : "",
                 "event_filter_date_from" => $objFilterStartDate != null ? htmlspecialchars($this->getParam("event_filter_date_from"), ENT_QUOTES, "UTF-8", false) : "",
                 "event_filter_date_to" => $objFilterEndDate != null ? htmlspecialchars($this->getParam("event_filter_date_to"), ENT_QUOTES, "UTF-8", false) : ""
@@ -117,7 +136,7 @@ class class_module_eventmanager_portal extends class_portal_controller implement
             $objEndDate = new \Kajona\System\System\Date($this->getParam("end"));
         }
 
-        $arrEvents = class_module_eventmanager_event::getAllEvents(false, false, $objStartDate, $objEndDate, true);
+        $arrEvents = EventmanagerEvent::getAllEvents(false, false, $objStartDate, $objEndDate, true);
         foreach($arrEvents as $objOneEvent) {
             if($objOneEvent->rightView()) {
                 $arrSingleEvent = array();
@@ -125,12 +144,12 @@ class class_module_eventmanager_portal extends class_portal_controller implement
                 $arrSingleEvent["title"] = $objOneEvent->getStrTitle();
                 $arrSingleEvent["start"] = $objOneEvent->getObjStartDate()->getTimeInOldStyle();
                 $arrSingleEvent["end"] = $objOneEvent->getObjEndDate() != null ? $objOneEvent->getObjEndDate()->getTimeInOldStyle() : "";
-                $arrSingleEvent["url"] = uniStrReplace("&amp;", "&", class_link::getLinkPortalHref($this->getParam("page"), "", "eventDetails", "", $objOneEvent->getSystemid(), "", $objOneEvent->getStrTitle()));
+                $arrSingleEvent["url"] = uniStrReplace("&amp;", "&", Link::getLinkPortalHref($this->getParam("page"), "", "eventDetails", "", $objOneEvent->getSystemid(), "", $objOneEvent->getStrTitle()));
                 $arrPrintableEvents[] = $arrSingleEvent;
             }
         }
 
-        class_response_object::getInstance()->setStrResponseType(class_http_responsetypes::STR_TYPE_JSON);
+        ResponseObject::getInstance()->setStrResponseType(HttpResponsetypes::STR_TYPE_JSON);
         return json_encode($arrPrintableEvents);
     }
 
@@ -142,16 +161,16 @@ class class_module_eventmanager_portal extends class_portal_controller implement
      * @return string
      */
     protected function actionEventRssFeed() {
-        $arrEvents = class_module_eventmanager_event::getAllEvents(false, false, null, null, true);
+        $arrEvents = EventmanagerEvent::getAllEvents(false, false, null, null, true);
 
-        $objFeed = new class_rssfeed();
+        $objFeed = new Rssfeed();
         $objFeed->setStrTitle($this->getLang("modul_titel"));
 
         foreach($arrEvents as $objOneEvent) {
             if($objOneEvent->rightView()) {
                 $objFeed->addElement(
                     $objOneEvent->getStrTitle(),
-                    class_link::getLinkPortalHref($this->getParam("pagename"), "", "eventDetails", "", $objOneEvent->getSystemid(), "", $objOneEvent->getStrTitle()),
+                    Link::getLinkPortalHref($this->getParam("pagename"), "", "eventDetails", "", $objOneEvent->getSystemid(), "", $objOneEvent->getStrTitle()),
                     $objOneEvent->getSystemid(),
                     $objOneEvent->getStrDescription(),
                     $objOneEvent->getObjStartDate()->getTimeInOldStyle()
@@ -170,8 +189,8 @@ class class_module_eventmanager_portal extends class_portal_controller implement
      */
     protected function actionEventDetails() {
         $strReturn = "";
-        $objEvent = new class_module_eventmanager_event($this->getSystemid());
-        $objMapper = new class_template_mapper($objEvent);
+        $objEvent = new EventmanagerEvent($this->getSystemid());
+        $objMapper = new TemplateMapper($objEvent);
         
         
         //legacy support
@@ -186,25 +205,25 @@ class class_module_eventmanager_portal extends class_portal_controller implement
         $objMapper->addPlaceholder("eventStatus", $objEvent->getIntEventStatus());
         $objMapper->addPlaceholder("maximumParticipants", $objEvent->getIntParticipantsLimit());
         $objMapper->addPlaceholder("intMaximumParticipants", $objEvent->getIntParticipantsLimit());
-        $objMapper->addPlaceholder("currentParticipants", class_module_eventmanager_participant::getActiveParticipantsCount($this->getSystemid()));
+        $objMapper->addPlaceholder("currentParticipants", EventmanagerParticipant::getActiveParticipantsCount($this->getSystemid()));
 
         if($objEvent->getIntRegistrationRequired() == "1" && $objEvent->rightRight1()) {
             if($this->objSession->isLoggedin()
                 && $this->objTemplate->containsSection($this->objTemplate->readTemplate("/module_eventmanager/".$this->arrElementData["char1"]), "event_register_loggedin")
                 && $objEvent->isParticipant($this->objSession->getUserID())
             ) {
-                $objMapper->addPlaceholder("registerLinkHref", class_link::getLinkPortalHref($this->getPagename(), "", "registerForEvent", "", $objEvent->getSystemid(), "", $objEvent->getStrTitle()));
+                $objMapper->addPlaceholder("registerLinkHref", Link::getLinkPortalHref($this->getPagename(), "", "registerForEvent", "", $objEvent->getSystemid(), "", $objEvent->getStrTitle()));
                 $objMapper->addPlaceholder("registerLink", $objMapper->writeToTemplate("/module_eventmanager/" . $this->arrElementData["char1"], "event_details_updatelink"));
             }
             else {
 
-                $objMapper->addPlaceholder("registerLinkHref", class_link::getLinkPortalHref($this->getPagename(), "", "registerForEvent", "", $objEvent->getSystemid(), "", $objEvent->getStrTitle()));
+                $objMapper->addPlaceholder("registerLinkHref", Link::getLinkPortalHref($this->getPagename(), "", "registerForEvent", "", $objEvent->getSystemid(), "", $objEvent->getStrTitle()));
                 $objMapper->addPlaceholder("registerLink", $objMapper->writeToTemplate("/module_eventmanager/" . $this->arrElementData["char1"], "event_details_registerlink"));
             }
         }
         $strReturn .= $objMapper->writeToTemplate("/module_eventmanager/" . $this->arrElementData["char1"], "event_details");
 
-        class_module_pages_portal::registerAdditionalTitle($objEvent->getStrTitle());
+        PagesPortalController::registerAdditionalTitle($objEvent->getStrTitle());
 
         return $strReturn;
     }
@@ -217,9 +236,9 @@ class class_module_eventmanager_portal extends class_portal_controller implement
      */
     protected function actionRegisterForEvent($arrErrors = array()) {
         $strReturn = "";
-        $objEvent = new class_module_eventmanager_event($this->getSystemid());
+        $objEvent = new EventmanagerEvent($this->getSystemid());
 
-        if($objEvent->getIntLimitGiven() == "1" && $objEvent->getIntParticipantsLimit() <= class_module_eventmanager_participant::getActiveParticipantsCount($this->getSystemid())) {
+        if($objEvent->getIntLimitGiven() == "1" && $objEvent->getIntParticipantsLimit() <= EventmanagerParticipant::getActiveParticipantsCount($this->getSystemid())) {
             $strMessage = $this->getLang("participantLimitReached");
             $strWrapperID = $this->objTemplate->readTemplate("/module_eventmanager/" . $this->arrElementData["char1"], "event_register_message");
             $strReturn = $this->objTemplate->fillTemplate(array("title" => $objEvent->getStrTitle(), "message" => $strMessage), $strWrapperID);
@@ -231,14 +250,14 @@ class class_module_eventmanager_portal extends class_portal_controller implement
             $bitIsLoggedin = true;
 
             if($objEvent->isParticipant($this->objSession->getUserID())) {
-                $objParticpant = class_module_eventmanager_participant::getParticipantByUserid($this->objSession->getUserID(), $objEvent->getSystemid());
+                $objParticpant = EventmanagerParticipant::getParticipantByUserid($this->objSession->getUserID(), $objEvent->getSystemid());
                 $this->setParam("comment", $objParticpant->getStrComment());
                 $this->setParam("participant_status", $objParticpant->getIntParticipationStatus());
             }
         }
 
 
-        $objMapper = new class_template_mapper($objEvent);
+        $objMapper = new TemplateMapper($objEvent);
 
         $objMapper->addPlaceholder("forename", $this->getParam("forename"));
         $objMapper->addPlaceholder("lastname", $this->getParam("lastname"));
@@ -251,10 +270,10 @@ class class_module_eventmanager_portal extends class_portal_controller implement
         $objMapper->addPlaceholder("dateFrom", dateToString($objEvent->getObjStartDate(), false));
         $objMapper->addPlaceholder("dateTimeUntil", dateToString($objEvent->getObjEndDate(), true));
         $objMapper->addPlaceholder("dateUntil", dateToString($objEvent->getObjEndDate(), false));
-        $objMapper->addPlaceholder("formaction", class_link::getLinkPortalHref($this->getPagename(), "", "saveRegisterForEvent", "", $this->getSystemid(), "", $objEvent->getStrTitle()));
+        $objMapper->addPlaceholder("formaction", Link::getLinkPortalHref($this->getPagename(), "", "saveRegisterForEvent", "", $this->getSystemid(), "", $objEvent->getStrTitle()));
 
         if($bitIsLoggedin) {
-            $objUser = new class_module_user_user($this->objSession->getUserID());
+            $objUser = new UserUser($this->objSession->getUserID());
             $objMapper->addPlaceholder("username", $objUser->getStrUsername());
         }
 
@@ -269,7 +288,7 @@ class class_module_eventmanager_portal extends class_portal_controller implement
 
         $strReturn .= $objMapper->writeToTemplate("/module_eventmanager/" . $this->arrElementData["char1"], "event_register".($bitIsLoggedin ? "_loggedin" : ""));
 
-        class_module_pages_portal::registerAdditionalTitle($objEvent->getStrTitle());
+        PagesPortalController::registerAdditionalTitle($objEvent->getStrTitle());
 
         return $strReturn;
     }
@@ -283,8 +302,8 @@ class class_module_eventmanager_portal extends class_portal_controller implement
      */
     protected function actionSaveRegisterForEvent() {
         $strReturn = "";
-        $objEvent = new class_module_eventmanager_event($this->getSystemid());
-        class_module_pages_portal::registerAdditionalTitle($objEvent->getStrTitle());
+        $objEvent = new EventmanagerEvent($this->getSystemid());
+        PagesPortalController::registerAdditionalTitle($objEvent->getStrTitle());
 
 
         $bitIsLoggedin = false;
@@ -298,8 +317,8 @@ class class_module_eventmanager_portal extends class_portal_controller implement
 
         $arrErrors = array();
         //what to do?
-        $objTextValidator = new class_text_validator();
-        $objMailValidator = new class_email_validator();
+        $objTextValidator = new TextValidator();
+        $objMailValidator = new EmailValidator();
 
         if(!$bitIsLoggedin && !$objTextValidator->validate($this->getParam("forename"), 3))
             $arrErrors[] = $this->getLang("noForename");
@@ -321,7 +340,7 @@ class class_module_eventmanager_portal extends class_portal_controller implement
             return $this->actionRegisterForEvent($arrErrors);
 
 
-        if($objEvent->getIntLimitGiven() == "1" && $objEvent->getIntParticipantsLimit() <= class_module_eventmanager_participant::getActiveParticipantsCount($this->getSystemid())) {
+        if($objEvent->getIntLimitGiven() == "1" && $objEvent->getIntParticipantsLimit() <= EventmanagerParticipant::getActiveParticipantsCount($this->getSystemid())) {
             $strMessage = $this->getLang("participantLimitReached");
             $strWrapperID = $this->objTemplate->readTemplate("/module_eventmanager/" . $this->arrElementData["char1"], "event_register_message");
             $strReturn = $this->objTemplate->fillTemplate(array("title" => $objEvent->getStrTitle(), "message" => $strMessage), $strWrapperID);
@@ -329,9 +348,9 @@ class class_module_eventmanager_portal extends class_portal_controller implement
         }
 
         if($bitIsParticipant)
-            $objParticipant = class_module_eventmanager_participant::getParticipantByUserid($this->objSession->getUserID(), $objEvent->getSystemid());
+            $objParticipant = EventmanagerParticipant::getParticipantByUserid($this->objSession->getUserID(), $objEvent->getSystemid());
         else
-            $objParticipant = new class_module_eventmanager_participant();
+            $objParticipant = new EventmanagerParticipant();
 
         //here we go, create the complete event registration
         $objParticipant->setStrComment($this->getParam("comment"));
@@ -360,7 +379,7 @@ class class_module_eventmanager_portal extends class_portal_controller implement
         $objParticipant->setIntRecordStatus(0);
         $objParticipant->updateObjectToDb();
 
-        $objMail = new class_mail();
+        $objMail = new Mail();
         $objMail->setSubject($this->getLang("registerMailSubject"));
 
         $strBody = $this->getLang("registerMailBodyIntro");
@@ -368,10 +387,10 @@ class class_module_eventmanager_portal extends class_portal_controller implement
         $strBody .= dateToString($objEvent->getObjStartDate(), true) . "<br />";
         $strBody .= $objEvent->getStrLocation() . "<br />";
         $strBody .= "\n";
-        $strTemp = class_link::getLinkPortalHref($this->getPagename(), "", "participantConfirmation", "&participantId=" . $objParticipant->getSystemid(), $this->getSystemid(), "", $objEvent->getStrTitle());
+        $strTemp = Link::getLinkPortalHref($this->getPagename(), "", "participantConfirmation", "&participantId=" . $objParticipant->getSystemid(), $this->getSystemid(), "", $objEvent->getStrTitle());
         $strBody .= html_entity_decode("<a href=\"" . $strTemp . "\">" . $strTemp . "</a>");
 
-        $objScriptlet = new class_scriptlet_helper();
+        $objScriptlet = new ScriptletHelper();
         $strBody = $objScriptlet->processString($strBody);
 
         $objMail->setHtml($strBody);
@@ -395,10 +414,10 @@ class class_module_eventmanager_portal extends class_portal_controller implement
      */
     protected function actionParticipantConfirmation() {
         $strMessage = "";
-        $objEvent = new class_module_eventmanager_event($this->getSystemid());
+        $objEvent = new EventmanagerEvent($this->getSystemid());
         if(validateSystemid($this->getParam("participantId"))) {
 
-            $arrParticipants = class_module_eventmanager_participant::getObjectList($objEvent->getSystemid());
+            $arrParticipants = EventmanagerParticipant::getObjectList($objEvent->getSystemid());
             foreach($arrParticipants as $objOneParticipant) {
                 if($objOneParticipant->getSystemid() == $this->getParam("participantId")) {
                     $objOneParticipant->setIntRecordStatus(1);
@@ -412,7 +431,7 @@ class class_module_eventmanager_portal extends class_portal_controller implement
                 $strMessage = $this->getLang("participantErrorConfirmation");
             }
 
-            class_module_pages_portal::registerAdditionalTitle($objEvent->getStrTitle());
+            PagesPortalController::registerAdditionalTitle($objEvent->getStrTitle());
         }
         else {
             $strMessage = $this->getLang("commons_error_permissions");
