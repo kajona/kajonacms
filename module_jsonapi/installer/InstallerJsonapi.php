@@ -4,18 +4,24 @@
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 ********************************************************************************************************/
 
+namespace Kajona\Jsonapi\Installer;
+
+use Kajona\System\System\InstallerBase;
+use Kajona\System\System\InstallerRemovableInterface;
+use Kajona\System\System\SystemModule;
+
 /**
  * Class providing an installer for the jsonapi module
  *
  * @package module_jsonapi
  * @moduleId _jsonapi_module_id_
  */
-class class_installer_jsonapi extends class_installer_base implements interface_installer_removable {
+class InstallerJsonapi extends InstallerBase implements InstallerRemovableInterface {
 
     public function install() {
         $strReturn = "Registering module...\n";
         //register the module
-        $this->registerModule("jsonapi", _jsonapi_module_id_, "", "class_module_jsonapi_admin.php", $this->objMetadata->getStrVersion(), false);
+        $this->registerModule("jsonapi", _jsonapi_module_id_, "", "JsonapiAdmin.php", $this->objMetadata->getStrVersion(), false);
         return $strReturn;
 
     }
@@ -43,7 +49,7 @@ class class_installer_jsonapi extends class_installer_base implements interface_
 
         //delete the module-node
         $strReturn .= "Deleting the module-registration...\n";
-        $objModule = class_module_system_module::getModuleByName($this->objMetadata->getStrTitle(), true);
+        $objModule = SystemModule::getModuleByName($this->objMetadata->getStrTitle(), true);
         if(!$objModule->deleteObjectFromDatabase()) {
             $strReturn .= "Error deleting module, aborting.\n";
             return false;

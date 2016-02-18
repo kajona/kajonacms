@@ -1,11 +1,11 @@
 <?php
 /*"******************************************************************************************************
-*   (c) 2015 by Kajona, www.kajona.de                                                              *
+*   (c) 2016 by Kajona, www.kajona.de                                                                   *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 ********************************************************************************************************/
-
 /**
- * @package module_jsonapi
+ * @deprecated
  */
-class class_invalid_request_exception extends class_exception {
+class class_module_jsonapi_admin extends Kajona\Jsonapi\Admin\JsonapiAdmin
+{
 }

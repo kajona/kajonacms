@@ -4,8 +4,14 @@
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 ********************************************************************************************************/
 
+namespace Kajona\Jsonapi\System;
+
+use DateTime;
+use Kajona\System\System\Reflection;
+use Kajona\System\System\Root;
+
 /**
- * The class_object_serializer is based on the class_template_mapper. Returns 
+ * The ObjectSerializer is based on the class_template_mapper. Returns 
  * all properties of an class which has an @jsonExport annotation. These 
  * properties are exposed through the json api
  *
@@ -16,11 +22,11 @@
  *
  * @todo this class requires some cleanup, e.g. the removal of unused methods
  */
-class class_object_serializer {
+class ObjectSerializer {
 
     const STR_ANNOTATION_JSONEXPORT = "@jsonExport";
 
-    /** @var class_root */
+    /** @var Root */
     private $objObject = null;
 
     private $arrMapping = array();
@@ -42,7 +48,7 @@ class class_object_serializer {
      * @return array
      */
     public function getPropertyNames() {
-        $objReflection = new class_reflection($this->objObject);
+        $objReflection = new Reflection($this->objObject);
         $arrProperties = $objReflection->getPropertiesWithAnnotation(self::STR_ANNOTATION_JSONEXPORT);
 
         return array_keys($arrProperties);
@@ -54,7 +60,7 @@ class class_object_serializer {
      * @return void
      */
     private function readPropertiesFromObject() {
-        $objReflection = new class_reflection($this->objObject);
+        $objReflection = new Reflection($this->objObject);
         $properties = $this->getPropertyNames();
 
         foreach($properties as $strOneProperty) {
