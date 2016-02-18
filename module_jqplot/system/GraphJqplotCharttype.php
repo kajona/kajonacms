@@ -6,6 +6,9 @@
 *   $Id$                               *
 ********************************************************************************************************/
 
+namespace Kajona\Jqplot\System;
+
+
 /**
  * Constants for the flot series data types.
  *
@@ -13,7 +16,8 @@
  * @since 4.3
  * @author stefan.meyer1@yahoo.de
  */
-class class_graph_jqplot_charttype {
+class GraphJqplotCharttype
+{
     const BAR = 1;
     const STACKEDBAR = 2;
     const LINE = 4;

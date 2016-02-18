@@ -7,6 +7,17 @@
 *	$Id$					    *
 ********************************************************************************************************/
 
+namespace Kajona\Workflows\System;
+
+use Kajona\System\System\AdminListableInterface;
+use Kajona\System\System\Carrier;
+use Kajona\System\System\Classloader;
+use Kajona\System\System\Objectfactory;
+use Kajona\System\System\OrmRowcache;
+use Kajona\System\System\Resourceloader;
+use ReflectionClass;
+
+
 /**
  * A workflow handler stores all metadata of a single workflow-handler.
  * This means, this is not the real workflow-instance running, but rather a wrapper to
@@ -22,7 +33,8 @@
  * @module workflows
  * @moduleId _workflows_module_id_
  */
-class class_module_workflows_handler extends \Kajona\System\System\Model implements \Kajona\System\System\ModelInterface, interface_admin_listable  {
+class WorkflowsHandler extends \Kajona\System\System\Model implements \Kajona\System\System\ModelInterface, AdminListableInterface
+{
 
     /**
      * @var string
@@ -68,7 +80,8 @@ class class_module_workflows_handler extends \Kajona\System\System\Model impleme
      * @return string the name of the icon, not yet wrapped by getImageAdmin(). Alternatively, you may return an array containing
      *         [the image name, the alt-title]
      */
-    public function getStrIcon() {
+    public function getStrIcon()
+    {
         return "icon_workflow";
     }
 
@@ -77,11 +90,12 @@ class class_module_workflows_handler extends \Kajona\System\System\Model impleme
      *
      * @return string
      */
-    public function getStrAdditionalInfo() {
+    public function getStrAdditionalInfo()
+    {
         //count the number of instances
         $intCount = 0;
-        if($this->getObjInstanceOfHandler() != null) {
-            $intCount = class_module_workflows_workflow::getWorkflowsForClassCount(get_class($this->getObjInstanceOfHandler()), false);
+        if ($this->getObjInstanceOfHandler() != null) {
+            $intCount = WorkflowsWorkflow::getWorkflowsForClassCount(get_class($this->getObjInstanceOfHandler()), false);
         }
         return $this->getLang("handler_instances", "workflows", array($intCount));
     }
@@ -91,7 +105,8 @@ class class_module_workflows_handler extends \Kajona\System\System\Model impleme
      *
      * @return string
      */
-    public function getStrLongDescription() {
+    public function getStrLongDescription()
+    {
         return "";
     }
 
@@ -100,11 +115,14 @@ class class_module_workflows_handler extends \Kajona\System\System\Model impleme
      *
      * @return string
      */
-    public function getStrDisplayName() {
-        if($this->getObjInstanceOfHandler() != null)
+    public function getStrDisplayName()
+    {
+        if ($this->getObjInstanceOfHandler() != null) {
             return $this->getObjInstanceOfHandler()->getStrName();
-        else
+        }
+        else {
             return "";
+        }
     }
 
 
@@ -112,9 +130,11 @@ class class_module_workflows_handler extends \Kajona\System\System\Model impleme
      * Loads a single handler-class, identified by the mapped class
      *
      * @param string $strClass
-     * @return class_module_workflows_handler
+     *
+     * @return WorkflowsHandler
      */
-    public static function getHandlerByClass($strClass) {
+    public static function getHandlerByClass($strClass)
+    {
         $strQuery = "SELECT * FROM
                             "._dbprefix_."workflows_handler,
                             "._dbprefix_."system_right,
@@ -125,12 +145,14 @@ class class_module_workflows_handler extends \Kajona\System\System\Model impleme
                         AND workflows_handler_class = ?
                         AND system_id = right_id";
 
-        $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array($strClass));
-        class_orm_rowcache::addSingleInitRow($arrRow);
-        if(count($arrRow) > 0)
-            return class_objectfactory::getInstance()->getObject($arrRow["system_id"]);
-        else
+        $arrRow = Carrier::getInstance()->getObjDB()->getPRow($strQuery, array($strClass));
+        OrmRowcache::addSingleInitRow($arrRow);
+        if (count($arrRow) > 0) {
+            return Objectfactory::getInstance()->getObject($arrRow["system_id"]);
+        }
+        else {
             return null;
+        }
     }
 
     /**
@@ -139,23 +161,30 @@ class class_module_workflows_handler extends \Kajona\System\System\Model impleme
      * Adds or removes handlers from or to the database.
      *
      */
-    public static function synchronizeHandlerList() {
+    public static function synchronizeHandlerList()
+    {
         //load the list of handlers in the filesystem
-        $arrFiles = class_resourceloader::getInstance()->getFolderContent("/system/workflows", array(".php"));
-        foreach($arrFiles as $strPath => $strOneFile) {
+        $arrFiles = Resourceloader::getInstance()->getFolderContent("/system/workflows", array(".php"));
+        foreach ($arrFiles as $strPath => $strOneFile) {
 
-            $objInstance = class_classloader::getInstance()->getInstanceFromFilename($strPath, null, "interface_workflows_handler");
-            if($objInstance !== null) {
-                $objWorkflow = class_module_workflows_handler::getHandlerByClass(get_class($objInstance));
+            $objInstance = Classloader::getInstance()->getInstanceFromFilename($strPath, null, "interface_workflows_handler");
+            if ($objInstance !== null) {
+                $objWorkflow = WorkflowsHandler::getHandlerByClass(get_class($objInstance));
 
-                if($objWorkflow == null) {
-                    $objWorkflow = new class_module_workflows_handler();
+                if ($objWorkflow == null) {
+                    $objWorkflow = new WorkflowsHandler();
                     $objWorkflow->setStrHandlerClass(get_class($objInstance));
 
                     $arrDefault = $objWorkflow->getObjInstanceOfHandler()->getDefaultValues();
-                    if(isset($arrDefault[0]))   $objWorkflow->setStrConfigVal1($arrDefault[0]);
-                    if(isset($arrDefault[1]))   $objWorkflow->setStrConfigVal2($arrDefault[1]);
-                    if(isset($arrDefault[2]))   $objWorkflow->setStrConfigVal3($arrDefault[2]);
+                    if (isset($arrDefault[0])) {
+                        $objWorkflow->setStrConfigVal1($arrDefault[0]);
+                    }
+                    if (isset($arrDefault[1])) {
+                        $objWorkflow->setStrConfigVal2($arrDefault[1]);
+                    }
+                    if (isset($arrDefault[2])) {
+                        $objWorkflow->setStrConfigVal3($arrDefault[2]);
+                    }
 
                     $objWorkflow->updateObjectToDb();
                 }
@@ -164,34 +193,38 @@ class class_module_workflows_handler extends \Kajona\System\System\Model impleme
 
         //find workflows to remove
         $arrWorkflows = self::getObjectList();
-        /** @var class_module_workflows_handler $objOneWorkflow */
-        foreach($arrWorkflows as $objOneWorkflow) {
+        /** @var WorkflowsHandler $objOneWorkflow */
+        foreach ($arrWorkflows as $objOneWorkflow) {
 
             $strClassname = $objOneWorkflow->getStrHandlerClass();
-            if(uniStrrpos($objOneWorkflow->getStrHandlerClass(), "\\") > 0)
-                $strClassname = uniSubstr($objOneWorkflow->getStrHandlerClass(), uniStrrpos($objOneWorkflow->getStrHandlerClass(), "\\")+1);
+            if (uniStrrpos($objOneWorkflow->getStrHandlerClass(), "\\") > 0) {
+                $strClassname = uniSubstr($objOneWorkflow->getStrHandlerClass(), uniStrrpos($objOneWorkflow->getStrHandlerClass(), "\\") + 1);
+            }
 
-            if(!in_array($strClassname.".php", $arrFiles))
+            if (!in_array($strClassname.".php", $arrFiles)) {
                 $objOneWorkflow->deleteObjectFromDatabase();
+            }
         }
     }
 
     /**
      * Creates a non-initialized instance of the concrete handler
      *
-     * @return interface_workflows_handler
+     * @return WorkflowsHandlerInterface
      */
-    public function getObjInstanceOfHandler() {
+    public function getObjInstanceOfHandler()
+    {
 
         $strClassname = $this->getStrHandlerClass();
-        if(uniStrrpos($this->getStrHandlerClass(), "\\") > 0)
-            $strClassname = uniSubstr($this->getStrHandlerClass(), uniStrrpos($this->getStrHandlerClass(), "\\")+1);
+        if (uniStrrpos($this->getStrHandlerClass(), "\\") > 0) {
+            $strClassname = uniSubstr($this->getStrHandlerClass(), uniStrrpos($this->getStrHandlerClass(), "\\") + 1);
+        }
 
-        if($this->getStrHandlerClass() != "" && class_resourceloader::getInstance()->getPathForFile("/system/workflows/".$strClassname.".php") !== false) {
+        if ($this->getStrHandlerClass() != "" && Resourceloader::getInstance()->getPathForFile("/system/workflows/".$strClassname.".php") !== false) {
             $strClassname = uniStrReplace(".php", "", $this->getStrHandlerClass());
             $objReflection = new ReflectionClass($strClassname);
 
-            if(!$objReflection->isAbstract()) {
+            if (!$objReflection->isAbstract()) {
                 return new $strClassname();
             }
         }
@@ -200,36 +233,43 @@ class class_module_workflows_handler extends \Kajona\System\System\Model impleme
     }
 
 
-
-    public function getStrHandlerClass() {
+    public function getStrHandlerClass()
+    {
         return $this->strHandlerClass;
     }
 
-    public function setStrHandlerClass($strHandlerClass) {
+    public function setStrHandlerClass($strHandlerClass)
+    {
         $this->strHandlerClass = $strHandlerClass;
     }
 
-    public function getStrConfigVal1() {
+    public function getStrConfigVal1()
+    {
         return $this->strConfigVal1;
     }
 
-    public function setStrConfigVal1($strConfigVal1) {
+    public function setStrConfigVal1($strConfigVal1)
+    {
         $this->strConfigVal1 = $strConfigVal1;
     }
 
-    public function getStrConfigVal2() {
+    public function getStrConfigVal2()
+    {
         return $this->strConfigVal2;
     }
 
-    public function setStrConfigVal2($strConfigVal2) {
+    public function setStrConfigVal2($strConfigVal2)
+    {
         $this->strConfigVal2 = $strConfigVal2;
     }
 
-    public function getStrConfigVal3() {
+    public function getStrConfigVal3()
+    {
         return $this->strConfigVal3;
     }
 
-    public function setStrConfigVal3($strConfigVal3) {
+    public function setStrConfigVal3($strConfigVal3)
+    {
         $this->strConfigVal3 = $strConfigVal3;
     }
 

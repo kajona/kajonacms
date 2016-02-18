@@ -4,10 +4,19 @@
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 ********************************************************************************************************/
 
+namespace Kajona\Workflows\System;
+
+use Kajona\Dashboard\System\TodoEntry;
+use Kajona\Dashboard\System\TodoProviderInterface;
+use Kajona\System\System\Lang;
+use Kajona\System\System\Link;
+use Kajona\System\System\Session;
+
+
 /**
  * @package module_workflows
  */
-abstract class class_module_workflows_todo_provider_base implements interface_todo_provider
+abstract class WorkflowsTodoProviderBase implements TodoProviderInterface
 {
     public static function getExtensionName()
     {
@@ -18,7 +27,8 @@ abstract class class_module_workflows_todo_provider_base implements interface_to
     {
         if (in_array($strCategory, array_keys($this->getWorkflowClasses()))) {
             return $this->getPendingWorkflows($strCategory, $bitLimited);
-        } else {
+        }
+        else {
             return array();
         }
     }
@@ -30,25 +40,26 @@ abstract class class_module_workflows_todo_provider_base implements interface_to
 
     protected function getPendingWorkflows($strWorkflowClass, $bitLimited)
     {
-        $objLang = class_lang::getInstance();
-        $arrUsers = array_merge(array(class_session::getInstance()->getUserID()), class_session::getInstance()->getGroupIdsAsArray());
+        $objLang = Lang::getInstance();
+        $arrUsers = array_merge(array(Session::getInstance()->getUserID()), Session::getInstance()->getGroupIdsAsArray());
         $arrResult = array();
 
         if ($bitLimited) {
-            $arrWorkflows = class_module_workflows_workflow::getPendingWorkflowsForUser($arrUsers, 0, self::LIMITED_COUNT, array($strWorkflowClass));
-        } else {
-            $arrWorkflows = class_module_workflows_workflow::getPendingWorkflowsForUser($arrUsers, false, false, array($strWorkflowClass));
+            $arrWorkflows = WorkflowsWorkflow::getPendingWorkflowsForUser($arrUsers, 0, self::LIMITED_COUNT, array($strWorkflowClass));
+        }
+        else {
+            $arrWorkflows = WorkflowsWorkflow::getPendingWorkflowsForUser($arrUsers, false, false, array($strWorkflowClass));
         }
 
         foreach ($arrWorkflows as $objWorkflow) {
             if ($objWorkflow->getObjWorkflowHandler()->providesUserInterface()) {
-                /** @var class_module_workflows_workflow $objWorkflow */
-                $objTodo = new class_todo_entry();
+                /** @var WorkflowsWorkflow $objWorkflow */
+                $objTodo = new TodoEntry();
                 $objTodo->setStrIcon($objWorkflow->getStrIcon());
                 $objTodo->setStrCategory($strWorkflowClass);
                 $objTodo->setStrDisplayName($objWorkflow->getStrDisplayName());
                 $objTodo->setArrModuleNavi(array(
-                    class_link::getLinkAdmin("workflows", "showUI", "&systemid=" . $objWorkflow->getSystemid(), "", $objLang->getLang("workflow_ui", "workflows"), "icon_workflow_ui")
+                    Link::getLinkAdmin("workflows", "showUI", "&systemid=".$objWorkflow->getSystemid(), "", $objLang->getLang("workflow_ui", "workflows"), "icon_workflow_ui")
                 ));
 
                 $arrResult[] = $objTodo;

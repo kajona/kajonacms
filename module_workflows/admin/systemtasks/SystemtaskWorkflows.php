@@ -7,19 +7,29 @@
 *	$Id$					    *
 ********************************************************************************************************/
 
+namespace Kajona\Workflows\Admin\Systemtasks;
+
+use Kajona\System\Admin\Systemtasks\AdminSystemtaskInterface;
+use Kajona\System\Admin\Systemtasks\SystemtaskBase;
+use Kajona\System\System\SystemModule;
+use Kajona\Workflows\System\WorkflowsController;
+
+
 /**
  * Triggers the execution of the workflow-engine
  *
  * @package module_workflows
  * @author sidler@mulchprod.de
  */
-class class_systemtask_workflows extends class_systemtask_base implements interface_admin_systemtask {
+class SystemtaskWorkflows extends SystemtaskBase implements AdminSystemtaskInterface
+{
 
 
     /**
      * contructor to call the base constructor
      */
-    public function __construct() {
+    public function __construct()
+    {
         parent::__construct();
 
         $this->setStrTextBase("workflows");
@@ -29,7 +39,8 @@ class class_systemtask_workflows extends class_systemtask_base implements interf
      * @see interface_admin_systemtask::getGroupIdenitfier()
      * @return string
      */
-    public function getGroupIdentifier() {
+    public function getGroupIdentifier()
+    {
         return "";
     }
 
@@ -37,7 +48,8 @@ class class_systemtask_workflows extends class_systemtask_base implements interf
      * @see interface_admin_systemtask::getStrInternalTaskName()
      * @return string
      */
-    public function getStrInternalTaskName() {
+    public function getStrInternalTaskName()
+    {
         return "runworkflows";
     }
 
@@ -45,7 +57,8 @@ class class_systemtask_workflows extends class_systemtask_base implements interf
      * @see interface_admin_systemtask::getStrTaskName()
      * @return string
      */
-    public function getStrTaskName() {
+    public function getStrTaskName()
+    {
         return $this->getLang("systemtask_runworkflows_name");
     }
 
@@ -53,17 +66,19 @@ class class_systemtask_workflows extends class_systemtask_base implements interf
      * @see interface_admin_systemtask::executeTask()
      * @return string
      */
-    public function executeTask() {
+    public function executeTask()
+    {
 
-        if(!class_module_system_module::getModuleByName("workflows")->rightRight1())
+        if (!SystemModule::getModuleByName("workflows")->rightRight1()) {
             return $this->getLang("commons_error_permissions");
+        }
 
 
-        $objWorkflowController = new class_workflows_controller();
+        $objWorkflowController = new WorkflowsController();
 
         $objWorkflowController->scheduleWorkflows();
         $objWorkflowController->runWorkflows();
-        
+
 
         return "";
     }

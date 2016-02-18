@@ -5,18 +5,31 @@
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 ********************************************************************************************************/
 
+namespace Kajona\Workflows\System\Workflows;
+
+use Kajona\System\System\Carrier;
+use Kajona\System\System\Link;
+use Kajona\System\System\MessagingMessage;
+use Kajona\System\System\MessagingMessagehandler;
+use Kajona\System\System\UserUser;
+use Kajona\Workflows\System\Messageproviders\MessageproviderSummary;
+use Kajona\Workflows\System\WorkflowsHandlerInterface;
+use Kajona\Workflows\System\WorkflowsWorkflow;
+
+
 /**
  * This workflow creates a summary of new message for every user - if the user activated the summary provider
  *
  * @package module_workflows
  */
-class class_workflow_workflows_messagesummary implements interface_workflows_handler  {
+class WorkflowWorkflowsMessagesummary implements WorkflowsHandlerInterface
+{
 
     private $intIntervalDays = 1;
     private $intSendTime = 8;
 
     /**
-     * @var class_module_workflows_workflow
+     * @var WorkflowsWorkflow
      */
     private $objWorkflow = null;
 
@@ -24,10 +37,11 @@ class class_workflow_workflows_messagesummary implements interface_workflows_han
      * @see interface_workflows_handler::getConfigValueNames()
      * @return string[]
      */
-    public function getConfigValueNames() {
+    public function getConfigValueNames()
+    {
         return array(
-            class_carrier::getInstance()->getObjLang()->getLang("workflow_messagesummary_val1", "workflows"),
-            class_carrier::getInstance()->getObjLang()->getLang("workflow_messagesummary_val2", "workflows")
+            Carrier::getInstance()->getObjLang()->getLang("workflow_messagesummary_val1", "workflows"),
+            Carrier::getInstance()->getObjLang()->getLang("workflow_messagesummary_val2", "workflows")
         );
     }
 
@@ -39,12 +53,15 @@ class class_workflow_workflows_messagesummary implements interface_workflows_han
      * @see interface_workflows_handler::setConfigValues()
      * @return void
      */
-    public function setConfigValues($strVal1, $strVal2, $strVal3) {
-        if($strVal1 != "" && is_numeric($strVal1))
+    public function setConfigValues($strVal1, $strVal2, $strVal3)
+    {
+        if ($strVal1 != "" && is_numeric($strVal1)) {
             $this->intIntervalDays = $strVal1;
+        }
 
-        if($strVal2 != "" && is_numeric($strVal2))
+        if ($strVal2 != "" && is_numeric($strVal2)) {
             $this->intSendTime = $strVal2;
+        }
 
     }
 
@@ -52,51 +69,61 @@ class class_workflow_workflows_messagesummary implements interface_workflows_han
      * @see interface_workflows_handler::getDefaultValues()
      * @return string[]
      */
-    public function getDefaultValues() {
+    public function getDefaultValues()
+    {
         return array(1, 8); // by default the summary is sent at 8 o' clock every day
     }
 
     /**
-     * @param class_module_workflows_workflow $objWorkflow
+     * @param WorkflowsWorkflow $objWorkflow
+     *
      * @return void
      */
-    public function setObjWorkflow($objWorkflow) {
+    public function setObjWorkflow($objWorkflow)
+    {
         $this->objWorkflow = $objWorkflow;
     }
 
     /**
      * @return string
      */
-    public function getStrName() {
-        return class_carrier::getInstance()->getObjLang()->getLang("workflow_messagesummary_title", "workflows");
+    public function getStrName()
+    {
+        return Carrier::getInstance()->getObjLang()->getLang("workflow_messagesummary_title", "workflows");
     }
 
     /**
      * @return bool
      */
-    public function execute() {
+    public function execute()
+    {
 
         //loop all messages by user
-        foreach(class_module_user_user::getObjectList() as $objOneUser) {
+        foreach (UserUser::getObjectList() as $objOneUser) {
 
             //skip inactive users
-            if($objOneUser->getIntActive() == 0)
+            if ($objOneUser->getIntActive() == 0) {
                 continue;
-
-            if(class_module_messaging_message::getNumberOfMessagesForUser($objOneUser->getSystemid(), true) == 0)
-                continue;
-
-            $arrUnreadMessages = array();
-            foreach(class_module_messaging_message::getObjectList($objOneUser->getSystemid()) as $objOneMessage) {
-                if($objOneMessage->getBitRead() == 0 && !$objOneMessage->getObjMessageProvider() instanceof class_messageprovider_summary)
-                    $arrUnreadMessages[] = $objOneMessage;
-
-                if($objOneMessage->getBitRead() == 0 && $objOneMessage->getObjMessageProvider() instanceof class_messageprovider_summary)
-                    $objOneMessage->deleteObjectFromDatabase();
             }
 
-            if(count($arrUnreadMessages) > 0)
+            if (MessagingMessage::getNumberOfMessagesForUser($objOneUser->getSystemid(), true) == 0) {
+                continue;
+            }
+
+            $arrUnreadMessages = array();
+            foreach (MessagingMessage::getObjectList($objOneUser->getSystemid()) as $objOneMessage) {
+                if ($objOneMessage->getBitRead() == 0 && !$objOneMessage->getObjMessageProvider() instanceof MessageproviderSummary) {
+                    $arrUnreadMessages[] = $objOneMessage;
+                }
+
+                if ($objOneMessage->getBitRead() == 0 && $objOneMessage->getObjMessageProvider() instanceof MessageproviderSummary) {
+                    $objOneMessage->deleteObjectFromDatabase();
+                }
+            }
+
+            if (count($arrUnreadMessages) > 0) {
                 $this->createMessageForUser($objOneUser, $arrUnreadMessages);
+            }
         }
 
 
@@ -106,25 +133,26 @@ class class_workflow_workflows_messagesummary implements interface_workflows_han
     }
 
     /**
-     * @param class_module_user_user $objUser
-     * @param class_module_messaging_message[] $arrMessages
+     * @param UserUser $objUser
+     * @param MessagingMessage[] $arrMessages
      *
      * @return void
      */
-    private function createMessageForUser(class_module_user_user $objUser, array $arrMessages) {
+    private function createMessageForUser(UserUser $objUser, array $arrMessages)
+    {
 
-        $objLang = class_carrier::getInstance()->getObjLang();
+        $objLang = Carrier::getInstance()->getObjLang();
         $objLang->setStrTextLanguage($objUser->getStrAdminlanguage());
 
         $strBody = $objLang->getLang("message_messagesummary_intro", "workflows", array(count($arrMessages)))."\n\n";
 
         $intI = 0;
-        foreach($arrMessages as $objOneMessage) {
+        foreach ($arrMessages as $objOneMessage) {
 
             $strBody .= $objLang->getLang("message_messagesummary_body_indicator", "workflows", array(++$intI, count($arrMessages)))."\n";
 
             $strBody .= $objLang->getLang("message_subject", "messaging").": ".$objOneMessage->getStrTitle()."\n";
-            $strBody .= $objLang->getLang("message_link", "messaging").": ".class_link::getLinkAdminHref("messaging", "view", "&systemid=".$objOneMessage->getSystemid(), false)."\n";
+            $strBody .= $objLang->getLang("message_link", "messaging").": ".Link::getLinkAdminHref("messaging", "view", "&systemid=".$objOneMessage->getSystemid(), false)."\n";
             $strBody .= $objLang->getLang("message_body", "messaging").":\n".$objOneMessage->getStrBody()."\n";
 
             $strBody .= "\n";
@@ -134,12 +162,12 @@ class class_workflow_workflows_messagesummary implements interface_workflows_han
 
         $strSubject = $objLang->getLang("message_messagesummary_subject", "workflows", array(count($arrMessages)));
 
-        $objSummary = new class_module_messaging_message();
+        $objSummary = new MessagingMessage();
         $objSummary->setStrTitle($strSubject);
         $objSummary->setStrBody($strBody);
-        $objSummary->setObjMessageProvider(new class_messageprovider_summary());
+        $objSummary->setObjMessageProvider(new MessageproviderSummary());
 
-        $objMessaging = new class_module_messaging_messagehandler();
+        $objMessaging = new MessagingMessagehandler();
         $objMessaging->sendMessageObject($objSummary, $objUser);
 
     }
@@ -148,7 +176,8 @@ class class_workflow_workflows_messagesummary implements interface_workflows_han
     /**
      * @return void
      */
-    public function onDelete() {
+    public function onDelete()
+    {
 
     }
 
@@ -156,16 +185,18 @@ class class_workflow_workflows_messagesummary implements interface_workflows_han
     /**
      * @return void
      */
-    public function schedule() {
+    public function schedule()
+    {
 
         $objDate = clone $this->objWorkflow->getObjTriggerdate();
         //reschedule
-        for($intI = 0; $intI < $this->intIntervalDays; $intI++)
+        for ($intI = 0; $intI < $this->intIntervalDays; $intI++) {
             $objDate->setNextDay();
+        }
 
         $objDate->setIntHour($this->intSendTime)->setIntMin(0)->setIntSec(0);
 
-        if($objDate->getLongTimestamp() < \Kajona\System\System\Date::getCurrentTimestamp()) {
+        if ($objDate->getLongTimestamp() < \Kajona\System\System\Date::getCurrentTimestamp()) {
             $objDate = new \Kajona\System\System\Date();
             $objDate->setNextDay()->setIntHour($this->intSendTime)->setIntMin(0)->setIntSec(0);
         }
@@ -177,15 +208,18 @@ class class_workflow_workflows_messagesummary implements interface_workflows_han
     /**
      * @return void
      */
-    public function getUserInterface() {
+    public function getUserInterface()
+    {
 
     }
 
     /**
      * @param array $arrParams
+     *
      * @return void
      */
-    public function processUserInput($arrParams) {
+    public function processUserInput($arrParams)
+    {
         return;
 
     }
@@ -193,10 +227,10 @@ class class_workflow_workflows_messagesummary implements interface_workflows_han
     /**
      * @return bool
      */
-    public function providesUserInterface() {
+    public function providesUserInterface()
+    {
         return false;
     }
-
 
 
 }

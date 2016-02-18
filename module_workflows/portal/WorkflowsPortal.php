@@ -7,6 +7,17 @@
 *	$Id$									*
 ********************************************************************************************************/
 
+namespace Kajona\Workflows\Portal;
+
+use Kajona\System\Portal\PortalController;
+use Kajona\System\Portal\PortalInterface;
+use Kajona\System\System\Carrier;
+use Kajona\System\System\HttpStatuscodes;
+use Kajona\System\System\ResponseObject;
+use Kajona\System\System\SystemSetting;
+use Kajona\Workflows\System\WorkflowsController;
+
+
 /**
  * Portal-class of the workflows module. Used to provide an access point to trigger the workflow-engine.
  *
@@ -16,16 +27,18 @@
  * @module workflows
  * @moduleId _workflows_module_id_
  */
-class class_module_workflows_portal extends class_portal_controller implements interface_portal {
+class WorkflowsPortal extends PortalController implements PortalInterface
+{
 
     /**
      * Default implementation to avoid mail-spamming.
+     *
      * @return void
      */
-    protected function actionList() {
+    protected function actionList()
+    {
 
     }
-
 
 
     /**
@@ -34,10 +47,11 @@ class class_module_workflows_portal extends class_portal_controller implements i
      * @xml
      * @return string
      */
-    protected function actionTrigger() {
-        class_carrier::getInstance()->getObjSession()->setBitBlockDbUpdate(true);
-        if($this->getParam("authkey") == class_module_system_setting::getConfigValue("_workflows_trigger_authkey_")) {
-            $objWorkflowController = new class_workflows_controller();
+    protected function actionTrigger()
+    {
+        Carrier::getInstance()->getObjSession()->setBitBlockDbUpdate(true);
+        if ($this->getParam("authkey") == SystemSetting::getConfigValue("_workflows_trigger_authkey_")) {
+            $objWorkflowController = new WorkflowsController();
             $objWorkflowController->scheduleWorkflows();
             $objWorkflowController->runWorkflows();
 
@@ -45,7 +59,7 @@ class class_module_workflows_portal extends class_portal_controller implements i
         }
 
 
-        class_response_object::getInstance()->setStrStatusCode(class_http_statuscodes::SC_UNAUTHORIZED);
+        ResponseObject::getInstance()->setStrStatusCode(HttpStatuscodes::SC_UNAUTHORIZED);
         return "<message><error>Not authorized</error></message>";
     }
 

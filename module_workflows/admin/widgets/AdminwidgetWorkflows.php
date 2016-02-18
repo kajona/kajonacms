@@ -7,18 +7,30 @@
 *	$Id$                           *
 ********************************************************************************************************/
 
+namespace Kajona\Workflows\Admin\Widgets;
+
+use Kajona\Dashboard\Admin\Widgets\Adminwidget;
+use Kajona\Dashboard\System\DashboardWidget;
+use Kajona\System\Admin\AdminInterface;
+use Kajona\System\System\Carrier;
+use Kajona\System\System\SystemAspect;
+use Kajona\System\System\SystemModule;
+use Kajona\Workflows\System\WorkflowsWorkflow;
+
 
 /**
  * @package module_workflows
  * @author sidler@mulchprod.de
  */
-class class_adminwidget_workflows extends class_adminwidget implements interface_adminwidget {
+class AdminwidgetWorkflows extends Adminwidget implements AdminInterface
+{
 
     /**
      * Basic constructor, registers the fields to be persisted and loaded
      *
      */
-    public function __construct() {
+    public function __construct()
+    {
         parent::__construct();
     }
 
@@ -28,7 +40,8 @@ class class_adminwidget_workflows extends class_adminwidget implements interface
      *
      * @return string
      */
-    public function getEditForm() {
+    public function getEditForm()
+    {
         $strReturn = "";
         return $strReturn;
     }
@@ -40,10 +53,11 @@ class class_adminwidget_workflows extends class_adminwidget implements interface
      *
      * @return string
      */
-    public function getWidgetOutput() {
+    public function getWidgetOutput()
+    {
         $strReturn = "";
         $strReturn .= $this->widgetText($this->getLang("workflows_intro"));
-        $strReturn .= $this->widgetText(class_module_workflows_workflow::getPendingWorkflowsForUserCount(array_merge(array(class_carrier::getInstance()->getObjSession()->getUserID()), class_carrier::getInstance()->getObjSession()->getGroupIdsAsArray())));
+        $strReturn .= $this->widgetText(WorkflowsWorkflow::getPendingWorkflowsForUserCount(array_merge(array(Carrier::getInstance()->getObjSession()->getUserID()), Carrier::getInstance()->getObjSession()->getGroupIdsAsArray())));
         $strReturn .= $this->widgetText(getLinkAdmin("workflows", "myList", "", $this->getLang("workflows_show")));
         return $strReturn;
     }
@@ -57,14 +71,15 @@ class class_adminwidget_workflows extends class_adminwidget implements interface
      *
      * @return bool
      */
-    public function onFistLogin($strUserid) {
-        if(class_module_system_module::getModuleByName("workflows") !== null && class_module_system_aspect::getAspectByName("management") !== null) {
-            $objDashboard = new class_module_dashboard_widget();
+    public function onFistLogin($strUserid)
+    {
+        if (SystemModule::getModuleByName("workflows") !== null && SystemAspect::getAspectByName("management") !== null) {
+            $objDashboard = new DashboardWidget();
             $objDashboard->setStrColumn("column2");
             $objDashboard->setStrUser($strUserid);
             $objDashboard->setStrClass(__CLASS__);
             $objDashboard->setStrContent("");
-            return $objDashboard->updateObjectToDb(class_module_dashboard_widget::getWidgetsRootNodeForUser($strUserid, class_module_system_aspect::getAspectByName("management")->getSystemid()));
+            return $objDashboard->updateObjectToDb(DashboardWidget::getWidgetsRootNodeForUser($strUserid, SystemAspect::getAspectByName("management")->getSystemid()));
         }
 
         return true;
@@ -76,7 +91,8 @@ class class_adminwidget_workflows extends class_adminwidget implements interface
      *
      * @return string
      */
-    public function getWidgetName() {
+    public function getWidgetName()
+    {
         return $this->getLang("workflows_name");
     }
 
