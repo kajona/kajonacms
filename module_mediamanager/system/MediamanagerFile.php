@@ -8,6 +8,7 @@ namespace Kajona\Mediamanager\System;
 
 use class_search_result;
 use Kajona\Packagemanager\System\PackagemanagerMetadata;
+use Kajona\Search\System\SearchResult;
 use Kajona\System\System\AdminGridableInterface;
 use Kajona\System\System\Carrier;
 use Kajona\System\System\Filesystem;
@@ -159,12 +160,12 @@ class MediamanagerFile extends \Kajona\System\System\Model implements \Kajona\Sy
      * into the result set afterwards.
      * Make sure to return the passed result-object in this array, too.
      *
-     * @param class_search_result $objResult
+     * @param SearchResult $objResult
      *
      * @see getLinkPortalHref()
      * @return mixed
      */
-    public function updateSearchResult(class_search_result $objResult)
+    public function updateSearchResult(SearchResult $objResult)
     {
         $objLanguages = new LanguagesLanguage();
         $objORM = new OrmObjectlist();

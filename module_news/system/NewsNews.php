@@ -11,6 +11,7 @@ namespace Kajona\News\System;
 
 use class_search_result;
 use Kajona\Pages\System\PagesPage;
+use Kajona\Search\System\SearchResult;
 use Kajona\System\System\AdminListableInterface;
 use Kajona\System\System\Carrier;
 use Kajona\System\System\LanguagesLanguage;
@@ -538,12 +539,12 @@ class NewsNews extends Model implements ModelInterface, AdminListableInterface, 
      * into the result set afterwards.
      * Make sure to return the passed result-object in this array, too.
      *
-     * @param class_search_result $objResult
+     * @param SearchResult $objResult
      *
      * @see getLinkPortalHref()
      * @return mixed
      */
-    public function updateSearchResult(class_search_result $objResult) {
+    public function updateSearchResult(SearchResult $objResult) {
         $objORM = new OrmObjectlist();
         $strQuery = "SELECT news_detailspage
                        FROM "._dbprefix_."element_news,

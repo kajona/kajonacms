@@ -10,6 +10,7 @@
 namespace Kajona\Faqs\System;
 
 use class_search_result;
+use Kajona\Search\System\SearchResult;
 use Kajona\System\System\AdminListableInterface;
 use Kajona\System\System\Carrier;
 use Kajona\System\System\Link;
@@ -298,12 +299,12 @@ class FaqsFaq extends \Kajona\System\System\Model implements \Kajona\System\Syst
      * make sure the link is a valid portal page.
      * If you want to suppress the entry from the result, return an empty string instead.
      *
-     * @param class_search_result $objResult
+     * @param SearchResult $objResult
      *
      * @see getLinkPortalHref()
      * @return mixed
      */
-    public function updateSearchResult(class_search_result $objResult)
+    public function updateSearchResult(SearchResult $objResult)
     {
         $objORM = new OrmObjectlist();
         //search for matching pages
