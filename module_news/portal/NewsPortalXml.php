@@ -7,6 +7,15 @@
 *	$Id$									*
 ********************************************************************************************************/
 
+namespace Kajona\News\Portal;
+
+use Kajona\News\System\NewsFeed;
+use Kajona\News\System\NewsNews;
+use Kajona\System\Portal\PortalController;
+use Kajona\System\Portal\XmlPortalInterface;
+use Kajona\System\System\Link;
+use Kajona\System\System\Rssfeed;
+
 /**
  * Portal-class of the news.
  * Serves xml-requests, e.g. generates news-feeds
@@ -17,7 +26,7 @@
  * @module news
  * @moduleId _news_module_id_
  */
-class class_module_news_portal_xml extends class_portal_controller implements interface_xml_portal {
+class NewsPortalXml extends PortalController implements XmlPortalInterface {
 
     /**
      * This method loads all data to needed for a newsfeed
@@ -30,17 +39,17 @@ class class_module_news_portal_xml extends class_portal_controller implements in
         //if no sysid was given, try to load from feedname
         $objNewsfeed = null;
         if($this->getParam("feedTitle") != "") {
-            $objNewsfeed = class_module_news_feed::getFeedByUrlName($this->getParam("feedTitle"));
+            $objNewsfeed = NewsFeed::getFeedByUrlName($this->getParam("feedTitle"));
         }
 
         if($objNewsfeed != null) {
 
             //and load all news belonging to the selected category
             if($objNewsfeed->getStrCat() != "0") {
-                $arrNews = class_module_news_feed::getNewsList($objNewsfeed->getStrCat(), $objNewsfeed->getIntAmount());
+                $arrNews = NewsFeed::getNewsList($objNewsfeed->getStrCat(), $objNewsfeed->getIntAmount());
             }
             else {
-                $arrNews = class_module_news_feed::getNewsList("", $objNewsfeed->getIntAmount());
+                $arrNews = NewsFeed::getNewsList("", $objNewsfeed->getIntAmount());
             }
 
             $strReturn .= $this->createNewsfeedXML($objNewsfeed->getStrTitle(), $objNewsfeed->getStrLink(), $objNewsfeed->getStrDesc(), $objNewsfeed->getStrPage(), $arrNews);
@@ -63,13 +72,13 @@ class class_module_news_portal_xml extends class_portal_controller implements in
      * @param string $strLink
      * @param string $strDesc
      * @param string $strPage
-     * @param class_module_news_news[] $arrNews
+     * @param NewsNews[] $arrNews
      *
      * @return string
      */
     private function createNewsfeedXML($strTitle, $strLink, $strDesc, $strPage, $arrNews) {
 
-        $objFeed = new class_rssfeed();
+        $objFeed = new Rssfeed();
         $objFeed->setStrTitle($strTitle);
         $objFeed->setStrLink($strLink);
         $objFeed->setStrDesc($strDesc);
@@ -82,7 +91,7 @@ class class_module_news_portal_xml extends class_portal_controller implements in
 
                 $objFeed->addElement(
                     $objOneNews->getStrTitle(),
-                    getLinkPortalHref($strPage, "", "newsDetail", "", $objOneNews->getSystemid(), "", $objOneNews->getStrTitle()),
+                    Link::getLinkPortalHref($strPage, "", "newsDetail", "", $objOneNews->getSystemid(), "", $objOneNews->getStrTitle()),
                     $objOneNews->getSystemid(),
                     $objOneNews->getStrIntro(),
                     mktime($objDate->getIntHour(), $objDate->getIntMin(), $objDate->getIntSec(), $objDate->getIntMonth(), $objDate->getIntDay(), $objDate->getIntYear())

@@ -7,29 +7,28 @@
 
 namespace Kajona\News\Installer;
 
-use class_carrier;
-use \Kajona\System\System\Date;
-use class_db;
-use class_module_news_category;
-use class_module_news_feed;
-use class_module_news_news;
-use class_module_system_module;
-use class_module_system_setting;
-use class_rights;
-use interface_sc_installer;
+use Kajona\News\System\NewsCategory;
+use Kajona\News\System\NewsFeed;
+use Kajona\News\System\NewsNews;
 use Kajona\Pages\System\PagesElement;
 use Kajona\Pages\System\PagesFolder;
 use Kajona\Pages\System\PagesPage;
 use Kajona\Pages\System\PagesPageelement;
+use Kajona\System\System\Carrier;
+use Kajona\System\System\Database;
+use Kajona\System\System\Rights;
+use Kajona\System\System\SamplecontentInstallerInterface;
+use Kajona\System\System\SystemModule;
+use Kajona\System\System\SystemSetting;
 
 
 /**
  * Installer of the news samplecontenht
  *
  */
-class InstallerSamplecontentNews implements interface_sc_installer  {
+class InstallerSamplecontentNews implements SamplecontentInstallerInterface {
     /**
-     * @var class_db
+     * @var Database
      */
     private $objDB;
     private $strContentLanguage;
@@ -62,13 +61,13 @@ class InstallerSamplecontentNews implements interface_sc_installer  {
             $this->strMasterID = $objMaster->getSystemid();
 
         $strReturn .= "Creating new category...\n";
-        $objNewsCategory = new class_module_news_category();
+        $objNewsCategory = new NewsCategory();
         $objNewsCategory->setStrTitle("TOP-News");
         $objNewsCategory->updateObjectToDb();
         $strCategoryID = $objNewsCategory->getSystemid();
         $strReturn .= "ID of new category: ".$strCategoryID."\n";
         $strReturn .= "Creating news\n";
-        $objNews = new class_module_news_news();
+        $objNews = new NewsNews();
 
         if($this->strContentLanguage == "de") {
             $objNews->setStrTitle("Erfolgreich installiert");
@@ -89,7 +88,7 @@ class InstallerSamplecontentNews implements interface_sc_installer  {
 
 
         $strReturn .= "Creating news\n";
-        $objNews = new class_module_news_news();
+        $objNews = new NewsNews();
 
         $objNews->setStrTitle("Sed non enim est");
         $objNews->setStrText("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non enim est, id hendrerit metus. Sed tempor quam sed ante viverra porta. Quisque sagittis egestas tortor, in euismod sapien iaculis at. Nullam vitae nunc tortor. Mauris justo lectus, bibendum et rutrum id, fringilla eget ipsum. Nullam volutpat sodales mollis. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Duis tempor ante eget justo blandit imperdiet. Praesent ut risus tempus metus sagittis fermentum eget eu elit. Mauris consequat ornare massa, a rhoncus enim sodales auctor. Duis lacinia dignissim eros vel mollis. Etiam metus tortor, pellentesque eu ultricies sit amet, elementum et dolor. Proin tincidunt nunc id magna volutpat lobortis. Vivamus metus quam, accumsan eget vestibulum vel, rutrum sit amet mauris. Phasellus lectus leo, vulputate eget molestie et, consectetur nec urna. ");
@@ -239,7 +238,7 @@ class InstallerSamplecontentNews implements interface_sc_installer  {
 
 
         $strReturn .= "Creating news-feed\n";
-        $objNewsFeed = new class_module_news_feed();
+        $objNewsFeed = new NewsFeed();
         $objNewsFeed->setStrTitle("kajona news");
         $objNewsFeed->setStrUrlTitle("kajona_news");
         $objNewsFeed->setStrLink("http://www.kajona.de");
@@ -258,7 +257,7 @@ class InstallerSamplecontentNews implements interface_sc_installer  {
 
 
         $strReturn .= "Adding rating permissions...\n";
-        class_carrier::getInstance()->getObjRights()->addGroupToRight(class_module_system_setting::getConfigValue("_guests_group_id_"), class_module_system_module::getModuleByName("news")->getSystemid(), class_rights::$STR_RIGHT_RIGHT3);
+        Carrier::getInstance()->getObjRights()->addGroupToRight(SystemSetting::getConfigValue("_guests_group_id_"), SystemModule::getModuleByName("news")->getSystemid(), Rights::$STR_RIGHT_RIGHT3);
 
         return $strReturn;
     }

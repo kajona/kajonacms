@@ -4,6 +4,13 @@
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 ********************************************************************************************************/
 
+namespace Kajona\News\Event;
+
+use Kajona\System\System\Carrier;
+use Kajona\System\System\CoreEventdispatcher;
+use Kajona\System\System\GenericeventListenerInterface;
+use Kajona\System\System\SystemEventidentifier;
+
 /**
  * Removes category-assignments on record-deletions
  *
@@ -11,7 +18,7 @@
  * @author sidler@mulchprod.de
  *
  */
-class class_module_news_recorddeletedlistener implements interface_genericevent_listener {
+class NewsRecorddeletedlistener implements GenericeventListenerInterface {
 
 
     /**
@@ -27,7 +34,7 @@ class class_module_news_recorddeletedlistener implements interface_genericevent_
         list($strSystemid, $strSourceClass) = $arrArguments;
 
         if($strSourceClass == "class_module_news_category") {
-            return class_carrier::getInstance()->getObjDB()->_pQuery("DELETE FROM "._dbprefix_."news_member WHERE newsmem_category = ? ", array($strSystemid));
+            return Carrier::getInstance()->getObjDB()->_pQuery("DELETE FROM "._dbprefix_."news_member WHERE newsmem_category = ? ", array($strSystemid));
         }
         return true;
     }
@@ -39,10 +46,10 @@ class class_module_news_recorddeletedlistener implements interface_genericevent_
      * @return void
      */
     public static function staticConstruct() {
-        class_core_eventdispatcher::getInstance()->removeAndAddListener(class_system_eventidentifier::EVENT_SYSTEM_RECORDDELETED, new class_module_news_recorddeletedlistener());
+        CoreEventdispatcher::getInstance()->removeAndAddListener(SystemEventidentifier::EVENT_SYSTEM_RECORDDELETED, new NewsRecorddeletedlistener());
     }
 
 
 }
 
-class_module_news_recorddeletedlistener::staticConstruct();
+NewsRecorddeletedlistener::staticConstruct();
