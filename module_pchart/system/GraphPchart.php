@@ -8,11 +8,11 @@
 namespace Kajona\Pchart\System;
 
 
+use Kajona\System\System\Exception;
 use Kajona\System\System\GraphColorpalettes;
 use Kajona\System\System\GraphCommons;
 use Kajona\System\System\GraphInterface;
 use Kajona\System\System\Resourceloader;
-use Kajona\System\System\Exception;
 
 require_once(__DIR__."/pChart/pChart.class");
 require_once(__DIR__."/pChart/pData.class");

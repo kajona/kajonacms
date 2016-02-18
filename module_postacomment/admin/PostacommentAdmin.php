@@ -21,8 +21,8 @@ use Kajona\System\System\Exception;
  * @package module_postacomment
  * @author sidler@mulchprod.de
  *
- * @objectList Kajona\\Postacomment\\System\\PostacommentPost
- * @objectEdit Kajona\\Postacomment\\System\\PostacommentPost
+ * @objectList Kajona\Postacomment\System\PostacommentPost
+ * @objectEdit Kajona\Postacomment\System\PostacommentPost
  *
  * @module postacomment
  * @moduleId _postacomment_modul_id_

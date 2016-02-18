@@ -68,7 +68,7 @@ function DEBUG_getLegacyClassNames()
 function DEBUG_walkFolderRecursive($strStartFolder, $arrSearchPatterns, &$arrOccurences)
 {
     $objFilesystem = new class_filesystem();
-    $arrFilesAndFolders = $objFilesystem->getCompleteList($strStartFolder, array(".php"), array(), array(".", "..", ".svn", ".git", "vendor", "legacy"));
+    $arrFilesAndFolders = $objFilesystem->getCompleteList($strStartFolder, array(".php", ".md"), array(), array(".", "..", ".svn", ".git", "vendor", "legacy"));
 
     foreach($arrFilesAndFolders["files"] as $arrOneFile) {
         $strFilename = $arrOneFile["filename"];

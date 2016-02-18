@@ -38,48 +38,52 @@ use Kajona\System\System\Validators\EmailValidator;
  * @moduleId _eventmanager_module_id_
  *
  */
-class EventmanagerAdmin extends AdminEvensimpler implements AdminInterface {
+class EventmanagerAdmin extends AdminEvensimpler implements AdminInterface
+{
 
     const STR_CALENDAR_FILTER_EVENT = "STR_CALENDAR_FILTER_EVENT";
 
-    public function getOutputModuleNavi() {
+    public function getOutputModuleNavi()
+    {
         $arrReturn = array();
         $arrReturn[] = array("view", getLinkAdmin($this->getArrModule("modul"), "list", "", $this->getLang("commons_list"), "", "", true, "adminnavi"));
         return $arrReturn;
     }
 
-    protected function getOutputNaviEntry(ModelInterface $objInstance) {
+    protected function getOutputNaviEntry(ModelInterface $objInstance)
+    {
 
-        if($objInstance instanceof EventmanagerEvent) {
-            return getLinkAdmin($this->getArrModule("modul"), "listParticipant", "&systemid=" . $objInstance->getSystemid(), $objInstance->getStrDisplayName());
+        if ($objInstance instanceof EventmanagerEvent) {
+            return getLinkAdmin($this->getArrModule("modul"), "listParticipant", "&systemid=".$objInstance->getSystemid(), $objInstance->getStrDisplayName());
         }
-        if($objInstance instanceof EventmanagerParticipant) {
-            return getLinkAdmin($this->getArrModule("modul"), "listParticipant", "&systemid=" . $objInstance->getStrPrevId(), $objInstance->getStrDisplayName());
+        if ($objInstance instanceof EventmanagerParticipant) {
+            return getLinkAdmin($this->getArrModule("modul"), "listParticipant", "&systemid=".$objInstance->getStrPrevId(), $objInstance->getStrDisplayName());
         }
 
         return "";
     }
 
 
-    protected function renderAdditionalActions(\Kajona\System\System\Model $objListEntry) {
-        if($objListEntry->rightEdit() && $objListEntry instanceof EventmanagerEvent) {
+    protected function renderAdditionalActions(\Kajona\System\System\Model $objListEntry)
+    {
+        if ($objListEntry->rightEdit() && $objListEntry instanceof EventmanagerEvent) {
             return array(
-                $this->objToolkit->listButton(getLinkAdmin($this->getArrModule("modul"), "listParticipant", "&systemid=" . $objListEntry->getSystemid(), "", $this->getLang("action_list_participant"), "icon_group"))
+                $this->objToolkit->listButton(getLinkAdmin($this->getArrModule("modul"), "listParticipant", "&systemid=".$objListEntry->getSystemid(), "", $this->getLang("action_list_participant"), "icon_group"))
             );
         }
 
-        if($objListEntry instanceof EventmanagerParticipant) {
-            if($objListEntry->rightEdit()) {
+        if ($objListEntry instanceof EventmanagerParticipant) {
+            if ($objListEntry->rightEdit()) {
                 $objValidator = new EmailValidator();
                 $objEvent = new EventmanagerEvent($objListEntry->getPrevId());
-                if($objValidator->validate($objListEntry->getStrEmail())) {
-                    $strPreset = "&mail_recipient=" . $objListEntry->getStrEmail();
-                    $strPreset .= "&mail_subject=" . ($this->getLang("participant_mail_subject"));
-                    $strPreset .= "&mail_body=" .
-                        $this->getLang("participant_mail_intro") . "\n" .
-                        $this->getLang("event_title") . " " . $objEvent->getStrTitle() . "\n" .
-                        $this->getLang("event_location") . " " . $objEvent->getStrLocation() . "\n" .
-                        $this->getLang("event_start") . " " . dateToString($objEvent->getObjStartDate());
+                if ($objValidator->validate($objListEntry->getStrEmail())) {
+                    $strPreset = "&mail_recipient=".$objListEntry->getStrEmail();
+                    $strPreset .= "&mail_subject=".($this->getLang("participant_mail_subject"));
+                    $strPreset .= "&mail_body=".
+                        $this->getLang("participant_mail_intro")."\n".
+                        $this->getLang("event_title")." ".$objEvent->getStrTitle()."\n".
+                        $this->getLang("event_location")." ".$objEvent->getStrLocation()."\n".
+                        $this->getLang("event_start")." ".dateToString($objEvent->getObjStartDate());
 
                     return array(
                         $this->objToolkit->listButton(getLinkAdminDialog("system", "mailForm", $strPreset, "", $this->getLang("participant_mail"), "icon_mail"))
@@ -97,13 +101,16 @@ class EventmanagerAdmin extends AdminEvensimpler implements AdminInterface {
      * @return string
      * @permissions view
      */
-    protected function actionListParticipant() {
+    protected function actionListParticipant()
+    {
         $strReturn = "";
         $objEvent = new EventmanagerEvent($this->getSystemid());
-        if($objEvent->getIntRegistrationRequired() == "1" && $objEvent->getIntLimitGiven() == "1")
-            $strReturn .= $this->objToolkit->getTextRow($this->getLang("participants_info_limit") . $objEvent->getIntParticipantsLimit());
-        else
+        if ($objEvent->getIntRegistrationRequired() == "1" && $objEvent->getIntLimitGiven() == "1") {
+            $strReturn .= $this->objToolkit->getTextRow($this->getLang("participants_info_limit").$objEvent->getIntParticipantsLimit());
+        }
+        else {
             $strReturn .= $this->objToolkit->getTextRow($this->getLang("participants_info_nolimit"));
+        }
 
         $strReturn .= $this->objToolkit->divider();
         $this->setStrCurObjectTypeName("Participant");

@@ -18,12 +18,12 @@ use Kajona\System\Admin\AdminInterface;
  * @package module_guestbook
  * @author sidler@mulchprod.de
  *
- * @objectList Kajona\\Guestbook\\System\\GuestbookGuestbook
- * @objectNew Kajona\\Guestbook\\System\\GuestbookGuestbook
- * @objectEdit Kajona\\Guestbook\\System\\GuestbookGuestbook
+ * @objectList Kajona\Guestbook\System\GuestbookGuestbook
+ * @objectNew Kajona\Guestbook\System\GuestbookGuestbook
+ * @objectEdit Kajona\Guestbook\System\GuestbookGuestbook
  *
- * @objectListPost Kajona\\Guestbook\\System\\GuestbookPost
- * @objectEditPost Kajona\\Guestbook\\System\\GuestbookPost
+ * @objectListPost Kajona\Guestbook\System\GuestbookPost
+ * @objectEditPost Kajona\Guestbook\System\GuestbookPost
  *
  * @autoTestable list,new
  *

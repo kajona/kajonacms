@@ -20,7 +20,7 @@ use Kajona\Votings\System\VotingsVoting;
  *
  * @package module_votings
  * @author sidler@mulchprod.de
- * 
+ *
  * @objectList Kajona\Votings\System\VotingsVoting
  * @objectNew Kajona\Votings\System\VotingsVoting
  * @objectEdit Kajona\Votings\System\VotingsVoting
@@ -33,31 +33,35 @@ use Kajona\Votings\System\VotingsVoting;
  * @module votings
  * @moduleId _votings_module_id_
  */
-class VotingsAdmin extends AdminEvensimpler implements AdminInterface {
+class VotingsAdmin extends AdminEvensimpler implements AdminInterface
+{
 
 
-    public function getOutputModuleNavi() {
+    public function getOutputModuleNavi()
+    {
         $arrReturn = array();
         $arrReturn[] = array("view", Link::getLinkAdmin($this->getArrModule("modul"), "list", "", $this->getLang("commons_list"), "", "", true, "adminnavi"));
         return $arrReturn;
-    } 
+    }
 
-    protected function getOutputNaviEntry(ModelInterface $objInstance) {
-        if($objInstance instanceof VotingsAnswer) {
+    protected function getOutputNaviEntry(ModelInterface $objInstance)
+    {
+        if ($objInstance instanceof VotingsAnswer) {
             return $objInstance->getStrDisplayName();
         }
-        else if($objInstance instanceof VotingsVoting) {
-            return Link::getLinkAdmin($this->getArrModule("modul"), "listAnswers", "&systemid=" . $objInstance->getSystemid(), $objInstance->getStrDisplayName());
+        elseif ($objInstance instanceof VotingsVoting) {
+            return Link::getLinkAdmin($this->getArrModule("modul"), "listAnswers", "&systemid=".$objInstance->getSystemid(), $objInstance->getStrDisplayName());
         }
-        
+
         return parent::getOutputNaviEntry($objInstance);
     }
 
-    protected function renderAdditionalActions(Model $objListEntry) {
+    protected function renderAdditionalActions(Model $objListEntry)
+    {
 
-        if($objListEntry->rightEdit() && $objListEntry instanceof VotingsVoting) {
+        if ($objListEntry->rightEdit() && $objListEntry instanceof VotingsVoting) {
             return array(
-                $this->objToolkit->listButton(Link::getLinkAdmin($this->getArrModule("modul"), "listAnswers", "&systemid=" . $objListEntry->getSystemid(), "", $this->getLang("action_list_answers"), "icon_folderActionOpen"))
+                $this->objToolkit->listButton(Link::getLinkAdmin($this->getArrModule("modul"), "listAnswers", "&systemid=".$objListEntry->getSystemid(), "", $this->getLang("action_list_answers"), "icon_folderActionOpen"))
             );
         }
 

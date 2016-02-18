@@ -7,17 +7,13 @@
 
 namespace Kajona\Packageserver\Admin\Statsreports;
 
-use \Kajona\System\System\Date;
-use class_db;
-use class_graph_factory;
-use class_lang;
-use class_module_user_user;
-use class_session;
-use class_toolkit_admin;
-use interface_admin_statsreports;
+use Kajona\Stats\Admin\AdminStatsreportsInterface;
 use Kajona\System\Admin\ToolkitAdmin;
 use Kajona\System\System\Database;
+use Kajona\System\System\GraphFactory;
 use Kajona\System\System\Lang;
+use Kajona\System\System\Session;
+use Kajona\System\System\UserUser;
 
 
 /**
@@ -25,7 +21,7 @@ use Kajona\System\System\Lang;
  *
  * @author sidler@mulchprod.de
  */
-class StatsReportPackageserverqueries implements interface_admin_statsreports
+class StatsReportPackageserverqueries implements AdminStatsreportsInterface
 {
 
     //class vars
@@ -115,7 +111,7 @@ class StatsReportPackageserverqueries implements interface_admin_statsreports
 
         $arrLogs = array();
         $intI = 0;
-        $objUser = new class_module_user_user(class_session::getInstance()->getUserID());
+        $objUser = new UserUser(Session::getInstance()->getUserID());
         foreach ($arrData as $arrOneLog) {
             if ($intI++ >= $objUser->getIntItemsPerPage()) {
                 break;
@@ -210,7 +206,7 @@ class StatsReportPackageserverqueries implements interface_admin_statsreports
         }
         //create graph
         if ($intCount > 1) {
-            $objGraph = class_graph_factory::getGraphInstance();
+            $objGraph = GraphFactory::getGraphInstance();
             $objGraph->setArrXAxisTickLabels($arrTickLabels);
             $objGraph->addLinePlot($arrTotalHits, $this->objLang->getLang("packageservertopqueries_total", "packageserver"));
             $objGraph->addLinePlot($arrUniqueHits, $this->objLang->getLang("packageservertopqueries_unique", "packageserver"));
