@@ -1,7 +1,9 @@
 <?php
-require_once (__DIR__ . "/../../module_system/system/class_testbase.php");
 
-class class_test_charts_pchart extends class_testbase  {
+use Kajona\Pchart\System\GraphPchart;
+use Kajona\System\System\Testbase;
+
+class class_test_charts_pchart extends Testbase  {
 
     public function testCharts() {
         echo "test pchart...\n";
@@ -12,7 +14,7 @@ class class_test_charts_pchart extends class_testbase  {
 
 
         echo "\tstacked pie chart...\n";
-        $objGraph = new class_graph_pchart();
+        $objGraph = new GraphPchart();
         $objGraph->setBitRoundedCorners(true);
         $objGraph->setStrGraphTitle("Test Pie Chart");
 
@@ -23,7 +25,7 @@ class class_test_charts_pchart extends class_testbase  {
         echo $objGraph->renderGraph();
 
         echo "\tstacked bar chart...\n";
-        $objGraph = new class_graph_pchart();
+        $objGraph = new GraphPchart();
         $objGraph->setBitRoundedCorners(true);
         $objGraph->setStrXAxisTitle("x-axis");
         $objGraph->setStrYAxisTitle("y-axis");
@@ -38,7 +40,7 @@ class class_test_charts_pchart extends class_testbase  {
         echo $objGraph->renderGraph();
 
         echo "\tbar chart...\n";
-        $objGraph = new class_graph_pchart();
+        $objGraph = new GraphPchart();
         $objGraph->setArrColorPalette(class_graph_colorpalettes::$arrBlueColorPalette);
         $objGraph->setBitRoundedCorners(true);
         $objGraph->setStrXAxisTitle("x-axis");
@@ -55,7 +57,7 @@ class class_test_charts_pchart extends class_testbase  {
         echo $objGraph->renderGraph();
 
         echo "\tbar chart variation...\n";
-        $objGraph = new class_graph_pchart();
+        $objGraph = new GraphPchart();
         $objGraph->setArrColorPalette(class_graph_colorpalettes::$arrBlueColorPalette);
         $objGraph->setBitRoundedCorners(true);
         $objGraph->setStrXAxisTitle("x-axis");
@@ -74,7 +76,7 @@ class class_test_charts_pchart extends class_testbase  {
         echo $objGraph->renderGraph();
 
         echo "\tline chart...\n";
-        $objGraph = new class_graph_pchart();
+        $objGraph = new GraphPchart();
         $objGraph->setBitRoundedCorners(true);
         $objGraph->setStrXAxisTitle("x-axis");
         $objGraph->setStrYAxisTitle("y-axis");
@@ -90,7 +92,7 @@ class class_test_charts_pchart extends class_testbase  {
 
 
          echo "\tcombined line / bar chart...\n";
-        $objGraph = new class_graph_pchart();
+        $objGraph = new GraphPchart();
         $objGraph->setBitRoundedCorners(true);
         $objGraph->setStrXAxisTitle("x-axis");
         $objGraph->setStrYAxisTitle("y-axis");

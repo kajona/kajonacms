@@ -5,6 +5,15 @@
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 ********************************************************************************************************/
 
+namespace Kajona\Pchart\System;
+
+
+use Kajona\System\System\GraphColorpalettes;
+use Kajona\System\System\GraphCommons;
+use Kajona\System\System\GraphInterface;
+use Kajona\System\System\Resourceloader;
+use Kajona\System\System\Exception;
+
 require_once(__DIR__."/pChart/pChart.class");
 require_once(__DIR__."/pChart/pData.class");
 
@@ -17,7 +26,7 @@ require_once(__DIR__."/pChart/pData.class");
  * @since 3.3.0
  * @author sidler@mulchprod.de
  */
-class class_graph_pchart implements interface_graph {
+class GraphPchart implements GraphInterface {
 
 
 	private $strXAxisTitle = "";
@@ -88,7 +97,7 @@ class class_graph_pchart implements interface_graph {
 	public function __construct() {
         $this->objDataset = new pData();
         $this->objAdditionalDataset = new pData();
-        $this->arrDefaultColorPalette = class_graph_colorpalettes::$arrDefaultColorPalette;
+        $this->arrDefaultColorPalette = GraphColorpalettes::$arrDefaultColorPalette;
 	}
 
 
@@ -106,10 +115,10 @@ class class_graph_pchart implements interface_graph {
      *      $objGraph->addBarChartSet(array(1,2,4,5) "serie 1");
      *
      * //datapoints array
-     *      $objDataPoint1 = new class_graph_datapoint(1);
-     *      $objDataPoint2 = new class_graph_datapoint(2);
-     *      $objDataPoint3 = new class_graph_datapoint(4);
-     *      $objDataPoint4 = new class_graph_datapoint(5);
+     *      $objDataPoint1 = new GraphDatapoint(1);
+     *      $objDataPoint2 = new GraphDatapoint(2);
+     *      $objDataPoint3 = new GraphDatapoint(4);
+     *      $objDataPoint4 = new GraphDatapoint(5);
      *
      *      //set action handler example
      *      $objDataPoint1->setObjActionHandler("<javascript code here>");
@@ -118,27 +127,27 @@ class class_graph_pchart implements interface_graph {
      *      $objGraph->addBarChartSet(array($objDataPoint1, $objDataPoint2, $objDataPoint3, $objDataPoint4) "serie 1");
      *
      *
-     * @param array $arrValues - an array with simple values or an array of data points (class_graph_datapoint).
+     * @param array $arrValues - an array with simple values or an array of data points (GraphDatapoint).
      *                           The advantage of a data points are that action handlers can be defined for each data point which will be executed when clicking on the data point in the chart.
      * @param string $strLegend
      * @param bool $bitWriteValues Enables the rendering of values on top of the graphs
      *
-     * @throws class_exception
+     * @throws Exception
      * @return void
 	 */
 	public function addBarChartSet($arrValues, $strLegend, $bitWriteValues = false) {
-        $arrDataPoints = class_graph_commons::convertArrValuesToDataPointArray($arrValues);
+        $arrDataPoints = GraphCommons::convertArrValuesToDataPointArray($arrValues);
 
         if($this->intCurrentGraphMode > 0) {
             //only allow this method to be called again if in bar-mode
             if($this->intCurrentGraphMode != $this->GRAPH_TYPE_BAR)
-                throw new class_exception("Chart already initialized", class_exception::$level_ERROR);
+                throw new Exception("Chart already initialized", Exception::$level_ERROR);
         }
 
 		$this->intCurrentGraphMode = $this->GRAPH_TYPE_BAR;
         $strInternalSerieName = generateSystemid();
 
-        $this->objDataset->AddPoint(class_graph_commons::getDataPointFloatValues($arrDataPoints), $strInternalSerieName);
+        $this->objDataset->AddPoint(GraphCommons::getDataPointFloatValues($arrDataPoints), $strInternalSerieName);
         $this->objDataset->AddSerie($strInternalSerieName);
         if($bitWriteValues)
             $this->arrValueSeriesToRender[] = $strInternalSerieName;
@@ -162,10 +171,10 @@ class class_graph_pchart implements interface_graph {
      *      $objGraph->addStackedBarChartSet(array(1,2,4,5) "serie 2");
      *
      * //datapoints array
-     *      $objDataPoint1 = new class_graph_datapoint(1);
-     *      $objDataPoint2 = new class_graph_datapoint(2);
-     *      $objDataPoint3 = new class_graph_datapoint(4);
-     *      $objDataPoint4 = new class_graph_datapoint(5);
+     *      $objDataPoint1 = new GraphDatapoint(1);
+     *      $objDataPoint2 = new GraphDatapoint(2);
+     *      $objDataPoint3 = new GraphDatapoint(4);
+     *      $objDataPoint4 = new GraphDatapoint(5);
      *
      *      //set action handler example
      *      $objDataPoint1->setObjActionHandler("<javascript code here>");
@@ -174,26 +183,26 @@ class class_graph_pchart implements interface_graph {
      *      $objGraph->addStackedBarChartSet(array($objDataPoint1, $objDataPoint2, $objDataPoint3, $objDataPoint4) "serie 1");
      *
      *
-     * @param array $arrValues - an array with simple values or an array of data points (class_graph_datapoint).
+     * @param array $arrValues - an array with simple values or an array of data points (GraphDatapoint).
      *                           The advantage of a data points are that action handlers can be defined for each data point which will be executed when clicking on the data point in the chart.
      * @param string $strLegend
      *
-     * @throws class_exception
+     * @throws Exception
      * @return void
      */
     public function addStackedBarChartSet($arrValues, $strLegend) {
-        $arrDataPoints = class_graph_commons::convertArrValuesToDataPointArray($arrValues);
+        $arrDataPoints = GraphCommons::convertArrValuesToDataPointArray($arrValues);
 
         if($this->intCurrentGraphMode > 0) {
             //only allow this method to be called again if in stackedbar-mode
             if($this->intCurrentGraphMode != $this->GRAPH_TYPE_STACKEDBAR)
-                throw new class_exception("Chart already initialized", class_exception::$level_ERROR);
+                throw new Exception("Chart already initialized", Exception::$level_ERROR);
         }
 
 		$this->intCurrentGraphMode = $this->GRAPH_TYPE_STACKEDBAR;
         $strSerieName = generateSystemid();
 
-        $this->objDataset->AddPoint(class_graph_commons::getDataPointFloatValues($arrDataPoints), $strSerieName);
+        $this->objDataset->AddPoint(GraphCommons::getDataPointFloatValues($arrDataPoints), $strSerieName);
         $this->objDataset->AddSerie($strSerieName);
 
         $this->objDataset->SetSerieName($this->stripLegend($strLegend), $strSerieName);
@@ -216,10 +225,10 @@ class class_graph_pchart implements interface_graph {
      *      $objGraph->addLinePlot(array(1,4,6,7,4), "serie 1");
      *
      * //datapoints array
-     *      $objDataPoint1 = new class_graph_datapoint(1);
-     *      $objDataPoint2 = new class_graph_datapoint(2);
-     *      $objDataPoint3 = new class_graph_datapoint(4);
-     *      $objDataPoint4 = new class_graph_datapoint(5);
+     *      $objDataPoint1 = new GraphDatapoint(1);
+     *      $objDataPoint2 = new GraphDatapoint(2);
+     *      $objDataPoint3 = new GraphDatapoint(4);
+     *      $objDataPoint4 = new GraphDatapoint(5);
      *
      *      //set action handler example
      *      $objDataPoint1->setObjActionHandler("<javascript code here>");
@@ -228,15 +237,15 @@ class class_graph_pchart implements interface_graph {
      *      $objGraph->addLinePlot(array($objDataPoint1, $objDataPoint2, $objDataPoint3, $objDataPoint4) "serie 1");
      *
      *
-     * @param array $arrValues - an array with simple values or an array of data points (class_graph_datapoint).
+     * @param array $arrValues - an array with simple values or an array of data points (GraphDatapoint).
      *                           The advantage of a data points are that action handlers can be defined for each data point which will be executed when clicking on the data point in the chart.
      * @param string $strLegend the name of the single plot
      *
-     * @throws class_exception
+     * @throws Exception
      * @return void
      */
     public function addLinePlot($arrValues, $strLegend) {
-        $arrDataPoints = class_graph_commons::convertArrValuesToDataPointArray($arrValues);
+        $arrDataPoints = GraphCommons::convertArrValuesToDataPointArray($arrValues);
 
         if($this->intCurrentGraphMode > 0) {
 
@@ -245,7 +254,7 @@ class class_graph_pchart implements interface_graph {
                 $this->bitAdditionalDatasetAdded = true;
                 $strSerieName = generateSystemid();
 
-                $this->objAdditionalDataset->AddPoint(class_graph_commons::getDataPointFloatValues($arrDataPoints), $strSerieName);
+                $this->objAdditionalDataset->AddPoint(GraphCommons::getDataPointFloatValues($arrDataPoints), $strSerieName);
                 $this->objAdditionalDataset->AddSerie($strSerieName);
 
                 $this->objAdditionalDataset->SetSerieName($this->stripLegend($strLegend), $strSerieName);
@@ -255,7 +264,7 @@ class class_graph_pchart implements interface_graph {
             }
             //only allow this method to be called again if in line-mode
             else if($this->intCurrentGraphMode != $this->GRAPH_TYPE_LINE)
-                throw new class_exception("Chart already initialized", class_exception::$level_ERROR);
+                throw new Exception("Chart already initialized", Exception::$level_ERROR);
 
 
         }
@@ -264,7 +273,7 @@ class class_graph_pchart implements interface_graph {
 
         $strSerieName = generateSystemid();
 
-        $this->objDataset->AddPoint(class_graph_commons::getDataPointFloatValues($arrDataPoints), $strSerieName);
+        $this->objDataset->AddPoint(GraphCommons::getDataPointFloatValues($arrDataPoints), $strSerieName);
         $this->objDataset->AddSerie($strSerieName);
 
         $this->objDataset->SetSerieName($this->stripLegend($strLegend), $strSerieName);
@@ -286,10 +295,10 @@ class class_graph_pchart implements interface_graph {
      *      $objChart->createPieChart(array(2,6,7,3), array("val 1", "val 2", "val 3", "val 4"));
      *
      * //datapoints array
-     *      $objDataPoint1 = new class_graph_datapoint(1);
-     *      $objDataPoint2 = new class_graph_datapoint(2);
-     *      $objDataPoint3 = new class_graph_datapoint(4);
-     *      $objDataPoint4 = new class_graph_datapoint(5);
+     *      $objDataPoint1 = new GraphDatapoint(1);
+     *      $objDataPoint2 = new GraphDatapoint(2);
+     *      $objDataPoint3 = new GraphDatapoint(4);
+     *      $objDataPoint4 = new GraphDatapoint(5);
      *
      *      //set action handler example
      *      $objDataPoint1->setObjActionHandler("<javascript code here>");
@@ -298,25 +307,25 @@ class class_graph_pchart implements interface_graph {
      *      $objGraph->createPieChart(array($objDataPoint1, $objDataPoint2, $objDataPoint3, $objDataPoint4) , array("val 1", "val 2", "val 3", "val 4"), "serie 1");
      *
      *
-     * @param array $arrValues - an array with simple values or an array of data points (class_graph_datapoint).
+     * @param array $arrValues - an array with simple values or an array of data points (GraphDatapoint).
      *                           The advantage of a data points are that action handlers can be defined for each data point which will be executed when clicking on the data point in the chart.
      * @param array $arrLegends
      *
-     * @throws class_exception
+     * @throws Exception
      * @return void
      */
     public function createPieChart($arrValues, $arrLegends) {
-        $arrDataPoints = class_graph_commons::convertArrValuesToDataPointArray($arrValues);
+        $arrDataPoints = GraphCommons::convertArrValuesToDataPointArray($arrValues);
 
         if($this->intCurrentGraphMode > 0) {
-            throw new class_exception("Chart already initialized", class_exception::$level_ERROR);
+            throw new Exception("Chart already initialized", Exception::$level_ERROR);
         }
 
         $this->intCurrentGraphMode = $this->GRAPH_TYPE_PIE;
 
         $strSerieName = generateSystemid();
 
-        $this->objDataset->AddPoint(class_graph_commons::getDataPointFloatValues($arrDataPoints), $strSerieName);
+        $this->objDataset->AddPoint(GraphCommons::getDataPointFloatValues($arrDataPoints), $strSerieName);
         $this->objDataset->AddSerie($strSerieName);
 
         $strSerieName = generateSystemid();
@@ -403,7 +412,7 @@ class class_graph_pchart implements interface_graph {
         }
 
         $arrFontColors = hex2rgb($this->strFontColor);
-        $this->objChart->setFontProperties(class_resourceloader::getInstance()->getAbsolutePathForModule("module_system")."/system".$this->strFont, 8);
+        $this->objChart->setFontProperties(Resourceloader::getInstance()->getAbsolutePathForModule("module_system")."/system".$this->strFont, 8);
 
         //set up the axis-titles
         if($this->intCurrentGraphMode == $this->GRAPH_TYPE_BAR ||
@@ -447,7 +456,7 @@ class class_graph_pchart implements interface_graph {
         else if($this->intCurrentGraphMode == $this->GRAPH_TYPE_BAR) {
 
             //the zero-line
-            $this->objChart->setFontProperties(class_resourceloader::getInstance()->getAbsolutePathForModule("module_system")."/system".$this->strFont, 6);
+            $this->objChart->setFontProperties(Resourceloader::getInstance()->getAbsolutePathForModule("module_system")."/system".$this->strFont, 6);
             $this->objChart->drawBarGraph($this->objDataset->GetData(),$this->objDataset->GetDataDescription(), TRUE);
             $this->objChart->drawTreshold(0, 143,55,72, TRUE, TRUE);
 
@@ -463,7 +472,7 @@ class class_graph_pchart implements interface_graph {
         else if($this->intCurrentGraphMode == $this->GRAPH_TYPE_STACKEDBAR) {
 
             //the zero-line
-            $this->objChart->setFontProperties(class_resourceloader::getInstance()->getAbsolutePathForModule("module_system")."/system".$this->strFont, 6);
+            $this->objChart->setFontProperties(Resourceloader::getInstance()->getAbsolutePathForModule("module_system")."/system".$this->strFont, 6);
             $this->objChart->drawTreshold(0, 143,55,72, TRUE, TRUE);
             $this->objChart->drawStackedBarGraph($this->objDataset->GetData(),$this->objDataset->GetDataDescription(), 75);
         }
@@ -480,7 +489,7 @@ class class_graph_pchart implements interface_graph {
 
 
         // Finish the graph
-        $this->objChart->setFontProperties(class_resourceloader::getInstance()->getAbsolutePathForModule("module_system")."/system".$this->strFont, 7);
+        $this->objChart->setFontProperties(Resourceloader::getInstance()->getAbsolutePathForModule("module_system")."/system".$this->strFont, 7);
 
         //set up the legend
         if($this->bitRenderLegend) {
@@ -501,7 +510,7 @@ class class_graph_pchart implements interface_graph {
 
         //draw the title
         if($this->strGraphTitle != "") {
-        $this->objChart->setFontProperties(class_resourceloader::getInstance()->getAbsolutePathForModule("module_system")."/system".$this->strFont, 10);
+        $this->objChart->setFontProperties(Resourceloader::getInstance()->getAbsolutePathForModule("module_system")."/system".$this->strFont, 10);
             $this->objChart->drawTitle(0, $intTopMargin, $this->strGraphTitle, $arrFontColors[0], $arrFontColors[1], $arrFontColors[2], $this->intWidth, 10);
         }
 
@@ -531,7 +540,7 @@ class class_graph_pchart implements interface_graph {
 			$strFilename = _realpath_.$strFilename;
 
         if(strtolower(substr($strFilename, -3) != "png"))
-            throw new class_exception("Filename must be a png-file", class_exception::$level_ERROR);
+            throw new Exception("Filename must be a png-file", Exception::$level_ERROR);
 
         $this->objChart->Render($strFilename);
 	}
