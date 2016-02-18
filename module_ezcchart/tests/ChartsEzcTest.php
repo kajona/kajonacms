@@ -1,7 +1,10 @@
 <?php
-require_once (__DIR__ . "/../../module_system/system/class_testbase.php");
 
-class class_test_charts_ezcTest extends class_testbase  {
+namespace Kajona\Ezchart\Tests;
+
+use Kajona\System\System\Testbase;
+
+class ChartsEzcTest extends Testbase  {
 
     public function testCharts() {
 
